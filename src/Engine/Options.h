@@ -62,13 +62,13 @@ enum SaveSort
 	SORT_DATE_DESC	// 3
 };
 
-/// Enumeration for the path preview modes.
+/// Enumeration for the path preview modes (can be OR'd together).
 enum PathPreview
 {
-	PATH_NONE,		// 0
-	PATH_ARROWS,	// 1
-	PATH_TU_COST,	// 2
-	PATH_FULL		// 3
+	PATH_NONE		= 0x00,	// 0000 (must always be zero)
+	PATH_ARROWS		= 0x01,	// 0001
+	PATH_TU_COST	= 0x02,	// 0010
+	PATH_FULL		= 0x03	// 0011 (must always be all values combined)
 };
 
 /**

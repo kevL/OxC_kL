@@ -48,6 +48,8 @@ class InteractiveSurface
 private:
 	static const int NUM_BUTTONS = 7;
 
+	static const SDLKey SDLK_ANY;
+
 	Uint8 _buttonsPressed;
 
 
@@ -120,9 +122,9 @@ private:
 			void onMouseOut(ActionHandler handler);
 
 			/// Hooks an action handler to pressing a key when the surface is focused.
-			void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
+			void onKeyboardPress(ActionHandler handler, SDLKey key = SDLK_ANY);
 			/// Hooks an action handler to releasing a key when the surface is focused.
-			void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_UNKNOWN);
+			void onKeyboardRelease(ActionHandler handler, SDLKey key = SDLK_ANY);
 
 			/// Processes a mouse button press event.
 			virtual void mousePress(Action* action, State* state);

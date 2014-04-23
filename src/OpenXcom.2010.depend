@@ -249,7 +249,7 @@
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
-1396345655 f:\git\openxcom\src\engine\interactivesurface.h
+1398215562 f:\git\openxcom\src\engine\interactivesurface.h
 	<map>
 	<SDL.h>
 	"State.h"
@@ -4384,7 +4384,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1396745368 f:\git\openxcom\src\engine\options.h
+1398215671 f:\git\openxcom\src\engine\options.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -7178,7 +7178,8 @@
 1396296797 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1398162347 source:f:\git\openxcom\src\engine\surface.cpp
+1398172485 source:f:\git\openxcom\src\engine\surface.cpp
+	"Surface.h"
 	<fstream>
 	<vector>
 	<SDL_endian.h>
@@ -7191,7 +7192,6 @@
 	"Screen.h"
 	"ShaderDraw.h"
 	"ShaderMove.h"
-	"Surface.h"
 	<malloc.h>
 	<ppcinline/exec.h>
 
@@ -8364,9 +8364,9 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1397873303 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1398142777 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
-	"LoadState.h"
+	"ListLoadState.h"
 	"NewBattleState.h"
 	"NewGameState.h"
 	"OptionsVideoState.h"
@@ -8582,14 +8582,14 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1397451353 source:f:\git\openxcom\src\menu\pausestate.cpp
+1398142352 source:f:\git\openxcom\src\menu\pausestate.cpp
 	"PauseState.h"
 	"AbandonGameState.h"
-	"LoadState.h"
+	"ListLoadState.h"
+	"ListSaveState.h"
 	"OptionsBattlescapeState.h"
 	"OptionsGeoscapeState.h"
 	"OptionsVideoState.h"
-	"SaveState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -11496,7 +11496,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1396507502 source:f:\git\openxcom\src\menu\optionsgeoscapestate.cpp
+1398142867 source:f:\git\openxcom\src\menu\optionsgeoscapestate.cpp
 	"OptionsGeoscapeState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -11510,8 +11510,6 @@
 	"../Interface/TextButton.h"
 	"../Interface/ToggleTextButton.h"
 	"../Interface/Window.h"
-	"../Menu/LoadState.h"
-	"../Menu/SaveState.h"
 	"../Resource/ResourcePack.h"
 
 1397477203 source:f:\git\openxcom\src\menu\optionsmodsstate.cpp
@@ -11548,7 +11546,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1397254632 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
+1398142831 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
 	"OptionsAudioState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -11561,8 +11559,6 @@
 	"../Interface/Slider.h"
 	"../Interface/Text.h"
 	"../Interface/Window.h"
-	"../Menu/LoadState.h"
-	"../Menu/SaveState.h"
 	"../Resource/ResourcePack.h"
 
 1397478620 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
@@ -11657,5 +11653,24 @@
 	"../Interface/TextList.h"
 	"../Geoscape/GeoscapeState.h"
 	"../Savegame/SavedBattleGame.h"
+	"../Savegame/SavedGame.h"
+
+1398144255 source:f:\git\openxcom\src\menu\listsavestate.cpp
+	"ListSaveState.h"
+	<cstdio>
+	"DeleteGameState.h"
+	"ErrorMessageState.h"
+	"../Engine/Action.h"
+	"../Engine/CrossPlatform.h"
+	"../Engine/Exception.h"
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Engine/Logger.h"
+	"../Engine/Options.h"
+	"../Engine/Palette.h"
+	"../Engine/Screen.h"
+	"../Interface/TextButton.h"
+	"../Interface/TextEdit.h"
+	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 

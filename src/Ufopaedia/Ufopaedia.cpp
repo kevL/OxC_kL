@@ -123,47 +123,47 @@ ArticleState* Ufopaedia::createArticleState(
 		case UFOPAEDIA_TYPE_CRAFT:
 			return new ArticleStateCraft(
 									game,
-									static_cast<ArticleDefinitionCraft*>(article));
+									dynamic_cast<ArticleDefinitionCraft*>(article));
 //		break;
 		case UFOPAEDIA_TYPE_CRAFT_WEAPON:
 			return new ArticleStateCraftWeapon(
 									game,
-									static_cast<ArticleDefinitionCraftWeapon*>(article));
+									dynamic_cast<ArticleDefinitionCraftWeapon*>(article));
 //		break;
 		case UFOPAEDIA_TYPE_VEHICLE:
 			return new ArticleStateVehicle(
 									game,
-									static_cast<ArticleDefinitionVehicle*>(article));
+									dynamic_cast<ArticleDefinitionVehicle*>(article));
 //		break;
 		case UFOPAEDIA_TYPE_ITEM:
 			return new ArticleStateItem(
 									game,
-									static_cast<ArticleDefinitionItem*>(article));
+									dynamic_cast<ArticleDefinitionItem*>(article));
 //		break;
 		case UFOPAEDIA_TYPE_ARMOR:
 			return new ArticleStateArmor(
 									game,
-									static_cast<ArticleDefinitionArmor*>(article));
+									dynamic_cast<ArticleDefinitionArmor*>(article));
 //		break;
 		case UFOPAEDIA_TYPE_BASE_FACILITY:
 			return new ArticleStateBaseFacility(
 									game,
-									static_cast<ArticleDefinitionBaseFacility*>(article));
+									dynamic_cast<ArticleDefinitionBaseFacility*>(article));
 //		break;
 		case UFOPAEDIA_TYPE_TEXT:
 			return new ArticleStateText(
 									game,
-									static_cast<ArticleDefinitionText*>(article));
+									dynamic_cast<ArticleDefinitionText*>(article));
 //		break;
 		case UFOPAEDIA_TYPE_TEXTIMAGE:
 			return new ArticleStateTextImage(
 									game,
-									static_cast<ArticleDefinitionTextImage*>(article));
+									dynamic_cast<ArticleDefinitionTextImage*>(article));
 //		break;
 		case UFOPAEDIA_TYPE_UFO:
 			return new ArticleStateUfo(
 									game,
-									static_cast<ArticleDefinitionUfo*>(article));
+									dynamic_cast<ArticleDefinitionUfo*>(article));
 //		break;
 
 		default:
