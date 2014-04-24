@@ -3017,9 +3017,17 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 			)
 	{
 		if ((*i)->getGeoscapeSoldier())
+		{
+			if (_save->getSelectedUnit() == 0)
+				_save->setSelectedUnit(*i);
+
 			++i;
+		}
 		else
 		{
+			if (_save->getSelectedUnit() == *i)
+				_save->setSelectedUnit(0);
+
 			delete *i;
 			i = _save->getUnits()->erase(i);
 		}

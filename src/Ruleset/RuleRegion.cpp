@@ -95,22 +95,25 @@ void RuleRegion::load(const YAML::Node& node)
 				i != cities.end();
 				++i)
 		{
-			if (_missionZones.size() > 1)
+			if (_missionZones.size() > CITY_MISSION_ZONE)
 			{
 				MissionArea ma;
 				ma.lonMin = ma.lonMax = (*i)["lon"].as<double>(0.0);
 				ma.latMin = ma.latMax = (*i)["lat"].as<double>(0.0);
 				if (std::find(
-							_missionZones.at(3).areas.begin(),
-							_missionZones.at(3).areas.end(),
+							_missionZones.at(CITY_MISSION_ZONE).areas.begin(),
+							_missionZones.at(CITY_MISSION_ZONE).areas.end(),
 							ma)
-						== _missionZones.at(3).areas.end())
+						== _missionZones.at(CITY_MISSION_ZONE).areas.end())
 				{
-					_missionZones.at(3).areas.push_back(ma);
+					_missionZones.at(CITY_MISSION_ZONE).areas.push_back(ma);
 				}
 			}
 
-			City* rule = new City("", 0.0, 0.0);
+			City* rule = new City(
+								"",
+								0.0,
+								0.0);
 			rule->load(*i);
 			_cities.push_back(rule);
 		}

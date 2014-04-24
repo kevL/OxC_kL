@@ -602,7 +602,7 @@ void AlienMission::ufoReachedWaypoint(
 	{
 		if (ufo.getRules()->getType() == "STR_TERROR_SHIP"
 			&& _rule.getType() == "STR_ALIEN_TERROR"
-			&& trajectory.getZone(curWaypoint) == 0)
+			&& trajectory.getZone(curWaypoint) == RuleRegion::CITY_MISSION_ZONE)
 		{
 			// Specialized: STR_ALIEN_TERROR
 			// Remove UFO, replace with TerrorSite.

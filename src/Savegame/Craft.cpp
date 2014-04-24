@@ -214,8 +214,12 @@ void Craft::load(
 		{
 			CraftWeapon* w = new CraftWeapon(rule->getCraftWeapon(type), 0);
 			w->load(*i);
-			_weapons[j++] = w;
+			_weapons[j] = w;
 		}
+		else
+			_weapons[j] = 0;
+
+		j++;
 	}
 
 	_items->load(node["items"]);
@@ -245,7 +249,10 @@ void Craft::load(
 		std::string type = (*i)["type"].as<std::string>();
 		if (rule->getItem(type))
 		{
-			Vehicle* v = new Vehicle(rule->getItem(type), 0, 4);
+			Vehicle* v = new Vehicle(
+									rule->getItem(type),
+									0,
+									4);
 			v->load(*i);
 			_vehicles.push_back(v);
 		}
