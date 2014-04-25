@@ -68,6 +68,11 @@ private:
 		void btnOptionsClick(Action* action);
 		/// Handler for clicking the Quit button.
 		void btnQuitClick(Action* action);
+
+		/// Update the resolution settings, we just resized the window.
+		void resize(
+				int& dX,
+				int& dY);
 };
 
 }

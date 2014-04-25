@@ -125,10 +125,10 @@ BattlescapeState::BattlescapeState(Game* game)
 			10,
 			(BattleUnit*)(0));
 
-	int screenWidth = Options::baseXResolution;
-	int screenHeight = Options::baseYResolution;
-	int iconsWidth = 320;
-	int iconsHeight = 56;
+	int screenWidth		= Options::baseXResolution;
+	int screenHeight	= Options::baseYResolution;
+	int iconsWidth		= 320;
+	int iconsHeight		= Map::ICON_HEIGHT;
 
 	_mouseOverIcons = false;
 
@@ -2902,6 +2902,73 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 		}
 	}
 } */
+
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void BattlescapeState::resize(
+		int& dX,
+		int& dY)
+{
+	dX = Options::baseXResolution;
+	dY = Options::baseYResolution;
+
+	int divisor = 1;
+
+	switch (Options::battlescapeScale)
+	{
+		case SCALE_SCREEN_DIV_3:
+			divisor = 3;
+		break;
+		case SCALE_SCREEN_DIV_2:
+			divisor = 2;
+		break;
+		case SCALE_SCREEN:
+		break;
+
+		default:
+		return;
+	}
+
+	Options::baseXResolution = std::max(
+									Screen::ORIGINAL_WIDTH,
+									Options::displayWidth / divisor);
+	Options::baseYResolution = std::max(
+									Screen::ORIGINAL_HEIGHT,
+									Options::displayHeight / divisor);
+
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+
+	_map->setWidth(Options::baseXResolution);
+	_map->setHeight(Options::baseYResolution);
+	_map->getCamera()->resize();
+	_map->getCamera()->jumpXY(
+							dX / 2,
+							dY / 2);
+
+	for (std::vector<Surface*>::const_iterator
+			i = _surfaces.begin();
+			i != _surfaces.end();
+			++i)
+	{
+		if (*i != _map
+			&& (*i) != _btnPsi
+			&& *i != _btnLaunch
+			&& *i != _txtDebug)
+		{
+			(*i)->setX((*i)->getX() + dX / 2);
+			(*i)->setY((*i)->getY() + dY);
+		}
+		else if (*i != _map
+			&& *i != _txtDebug)
+		{
+			(*i)->setX((*i)->getX() + dX);
+		}
+	}
+}
 
 /**
  * kL. Returns the TurnCounter used by the game.

@@ -24,7 +24,7 @@
 1396419955 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
-1398090785 f:\git\openxcom\src\engine\state.h
+1398393003 f:\git\openxcom\src\engine\state.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -4384,7 +4384,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1398215671 f:\git\openxcom\src\engine\options.h
+1398394793 f:\git\openxcom\src\engine\options.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -4496,7 +4496,7 @@
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
-1398092535 f:\git\openxcom\src\menu\optionsbasestate.h
+1398394003 f:\git\openxcom\src\menu\optionsbasestate.h
 	<string>
 	"../Engine/State.h"
 
@@ -4529,7 +4529,7 @@
 1397447927 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1397448854 f:\git\openxcom\src\geoscape\geoscapestate.h
+1398393035 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<list>
 	"../Engine/State.h"
 
@@ -4860,7 +4860,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1396342805 f:\git\openxcom\src\geoscape\globe.h
+1398393234 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"
@@ -5602,7 +5602,7 @@
 1394398507 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1395004652 f:\git\openxcom\src\battlescape\battlescapestate.h
+1398392068 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5729,7 +5729,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1397875641 f:\git\openxcom\src\battlescape\map.h
+1398392592 f:\git\openxcom\src\battlescape\map.h
 	<set>
 	<vector>
 	"Position.h"
@@ -5807,7 +5807,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1394398507 f:\git\openxcom\src\battlescape\camera.h
+1398392348 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
 1397875570 f:\git\openxcom\src\battlescape\civilianbaistate.h
@@ -5866,7 +5866,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1398090133 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1398301164 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6242,7 +6242,7 @@
 1394398507 f:\git\openxcom\src\battlescape\promotionsstate.h
 	"../Engine/State.h"
 
-1397451177 f:\git\openxcom\src\menu\mainmenustate.h
+1398393910 f:\git\openxcom\src\menu\mainmenustate.h
 	"../Engine/State.h"
 
 1394398507 f:\git\openxcom\src\ruleset\rulecountry.h
@@ -7540,7 +7540,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1398088939 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1398301425 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -9186,7 +9186,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1397603559 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1398301568 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
 	<assert.h>
 	<math.h>
@@ -9279,7 +9279,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1397603681 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1398301627 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
@@ -9384,7 +9384,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1397604090 source:f:\git\openxcom\src\savegame\craft.cpp
+1398301833 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -11445,7 +11445,7 @@
 1398138059 f:\git\openxcom\src\menu\introstate.h
 	"../Engine/State.h"
 
-1398092896 f:\git\openxcom\src\menu\optionsvideostate.h
+1398394157 f:\git\openxcom\src\menu\optionsvideostate.h
 	<SDL.h>
 	"OptionsBaseState.h"
 	"../Engine/State.h"

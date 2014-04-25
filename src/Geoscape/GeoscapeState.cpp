@@ -152,7 +152,7 @@ GeoscapeState::GeoscapeState(Game* game)
 		_interLat(0.0)	// kL
 {
 	int
-		screenWidth		= Options::baseXGeoscape - Options::baseXGeoscape %4,
+		screenWidth		= Options::baseXGeoscape,
 		screenHeight	= Options::baseYGeoscape;
 
 	_bg		= new Surface(
@@ -3160,7 +3160,8 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 }
 
 /**
- *
+ * Handler for clicking on a timer button.
+ * @param action pointer to the mouse action.
  */
 void GeoscapeState::btnTimerClick(Action* action)
 {
@@ -3169,6 +3170,63 @@ void GeoscapeState::btnTimerClick(Action* action)
 	ev.button.button = SDL_BUTTON_LEFT;
 	Action a = Action(&ev, 0.0, 0.0, 0, 0);
 	action->getSender()->mousePress(&a, this);
+}
+
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void GeoscapeState::resize(
+		int& dX,
+		int& dY)
+{
+	if (_game->getSavedGame()->getSavedBattle())
+		return;
+
+	dX = Options::baseXResolution;
+	dY = Options::baseYResolution;
+
+	int divisor = 1;
+
+	switch (Options::geoscapeScale)
+	{
+		case SCALE_SCREEN_DIV_3:
+			divisor = 3;
+		break;
+		case SCALE_SCREEN_DIV_2:
+			divisor = 2;
+		break;
+		case SCALE_SCREEN:
+		break;
+
+		default:
+		return;
+	}
+
+	Options::baseXResolution = std::max(
+									Screen::ORIGINAL_WIDTH,
+									Options::displayWidth / divisor);
+	Options::baseYResolution = std::max(
+									Screen::ORIGINAL_HEIGHT,
+									Options::displayHeight / divisor);
+
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+
+	_globe->resize();
+
+	for (std::vector<Surface*>::const_iterator
+			i = _surfaces.begin();
+			i != _surfaces.end();
+			++i)
+	{
+		if (*i != _globe)
+		{
+			(*i)->setX((*i)->getX() + dX);
+			(*i)->setY((*i)->getY() + dY / 2);
+		}
+	}
 }
 
 }

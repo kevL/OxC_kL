@@ -295,6 +295,11 @@ private:
 		/// Handler for hiding tooltip.
 //		void txtTooltipOut(Action* action);
 
+		/// Update the resolution settings, we just resized the window.
+		void resize(
+				int& dX,
+				int& dY);
+
 		/// kL. Gets the TurnCounter.
 		TurnCounter* getTurnCounter() const;
 		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.

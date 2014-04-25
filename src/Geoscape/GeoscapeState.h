@@ -226,6 +226,11 @@ private:
 
 		/// Handles base defense
 		void handleBaseDefense(Base* base, Ufo* ufo);
+
+		/// Update the resolution settings, we just resized the window.
+		void resize(
+				int& dX,
+				int& dY);
 };
 
 }

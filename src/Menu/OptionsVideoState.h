@@ -135,8 +135,11 @@ private:
 		void updateBattlescapeScale(Action*);
 		/// Handler for updating the selected geoscape scale.
 		void updateGeoscapeScale(Action*);
+
 		/// Update the resolution settings, we just resized the window.
-		void resize();
+		void resize(
+				int &,
+				int &);
 };
 
 }

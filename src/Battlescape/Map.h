@@ -119,6 +119,8 @@ private:
 
 
 	public:
+		static const int ICON_HEIGHT = 56;
+
 		/// Creates a new map at the specified position and size.
 		Map(
 				Game* game,
@@ -208,6 +210,9 @@ private:
 
 		/// Sets the unitDying flag.
 		void setUnitDying(bool flag);
+
+		/// Special handling for updating map height.
+		void setHeight(int height);
 };
 
 }

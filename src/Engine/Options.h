@@ -71,6 +71,17 @@ enum PathPreview
 	PATH_FULL		= 0x03	// 0011 (must always be all values combined)
 };
 
+enum ScaleType
+{
+	SCALE_ORIGINAL,		// 0
+	SCALE_15X,			// 1
+	SCALE_2X,			// 2
+	SCALE_SCREEN_DIV_3,	// 3
+	SCALE_SCREEN_DIV_2,	// 4
+	SCALE_SCREEN		// 5
+};
+
+
 /**
  * Container for all the various global game options
  * and customizable settings.

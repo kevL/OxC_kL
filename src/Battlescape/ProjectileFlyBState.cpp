@@ -248,6 +248,7 @@ void ProjectileFlyBState::init()
 		_action.type = BA_HIT;
 	}
 
+	Tile* endTile = _parent->getSave()->getTile(_action.target);
 
 	switch (_action.type)
 	{
@@ -309,6 +310,13 @@ void ProjectileFlyBState::init()
 				_parent->popState();
 
 				return;
+			}
+
+			if (endTile
+				&& endTile->getTerrainLevel() == -24
+				&& endTile->getPosition().z + 1 < _parent->getSave()->getMapSizeZ())
+			{
+				_action.target.z += 1;
 			}
 
 			_projectileItem = _action.weapon;

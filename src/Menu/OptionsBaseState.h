@@ -36,17 +36,6 @@ enum OptionsOrigin
 };
 
 
-enum ScaleType
-{
-	SCALE_ORIGINAL,		// 0
-	SCALE_15X,			// 1
-	SCALE_2X,			// 2
-	SCALE_SCREEN_DIV_3,	// 3
-	SCALE_SCREEN_DIV_2,	// 4
-	SCALE_SCREEN		// 5
-};
-
-
 class Text;
 class TextButton;
 class Window;
@@ -114,14 +103,16 @@ protected:
 		void txtTooltipOut(Action* action);
 
 		/// update the game scale as required.
-		void updateScale(
+		static void updateScale(
 				int& type,
 				int selection,
 				int& x,
 				int& y,
 				bool change);
-		///
-		void resize();
+		/// Update the resolution settings, we just resized the window.
+		void resize(
+				int& dX,
+				int& dY);
 };
 
 }
