@@ -8086,7 +8086,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1397450291 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1398436013 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	<cmath>
 	"ConfirmCydoniaState.h"
@@ -8364,7 +8364,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1398142777 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1398435424 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	"ListLoadState.h"
 	"NewBattleState.h"
