@@ -2814,7 +2814,7 @@ void Globe::resize()
 
 	for (int
 			i = 0;
-			i < 3;
+			i < 4;
 			++i)
 	{
 		surfaces[i]->setWidth(width);

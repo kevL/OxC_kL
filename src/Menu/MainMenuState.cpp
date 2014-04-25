@@ -193,12 +193,6 @@ void MainMenuState::resize(
 	dY = Options::baseYResolution;
 
 	OptionsBaseState::updateScale(
-								Options::battlescapeScale,
-								Options::battlescapeScale,
-								Options::baseXBattlescape,
-								Options::baseYBattlescape,
-								false);
-	OptionsBaseState::updateScale(
 								Options::geoscapeScale,
 								Options::geoscapeScale,
 								Options::baseXGeoscape,

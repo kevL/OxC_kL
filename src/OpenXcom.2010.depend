@@ -4526,7 +4526,7 @@
 1397456938 f:\git\openxcom\src\geoscape\allocatepsitrainingstate.h
 	"../Engine/State.h"
 
-1397447927 f:\git\openxcom\src\geoscape\buildnewbasestate.h
+1398435160 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
 1398393035 f:\git\openxcom\src\geoscape\geoscapestate.h
@@ -5628,7 +5628,7 @@
 1394398507 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1397870668 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1398394928 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	<cmath>
 	<sstream>
@@ -5652,7 +5652,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1394398507 f:\git\openxcom\src\battlescape\actionmenustate.h
+1398391996 f:\git\openxcom\src\battlescape\actionmenustate.h
 	"BattlescapeGame.h"
 	"../Engine/State.h"
 
@@ -5986,7 +5986,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1398142433 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1398392327 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6140,7 +6140,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1397875498 source:f:\git\openxcom\src\battlescape\camera.cpp
+1398394884 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6262,7 +6262,7 @@
 1394398507 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1397872926 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1398392522 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6372,7 +6372,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1397875149 source:f:\git\openxcom\src\battlescape\map.cpp
+1398392652 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6594,7 +6594,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1398090372 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1398392776 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6939,7 +6939,7 @@
 	"Language.h"
 	"Surface.h"
 
-1398142486 source:f:\git\openxcom\src\engine\game.cpp
+1398435131 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7118,7 +7118,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1398090761 source:f:\git\openxcom\src\engine\screen.cpp
+1398392950 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -7153,7 +7153,7 @@
 	<map>
 	<string>
 
-1398090916 source:f:\git\openxcom\src\engine\state.cpp
+1398394721 source:f:\git\openxcom\src\engine\state.cpp
 	"State.h"
 	"Font.h"
 	"Game.h"
@@ -7367,7 +7367,7 @@
 	"../Engine/State.h"
 	"Globe.h"
 
-1397448001 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
+1398435588 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
 	"BuildNewBaseState.h"
 	<cmath>
 	"BaseNameState.h"
@@ -7629,10 +7629,10 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Waypoint.h"
 
-1397450190 f:\git\openxcom\src\geoscape\selectdestinationstate.h
+1398435303 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1398142573 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1398435217 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7787,7 +7787,7 @@
 	<string>
 	<vector>
 
-1397081444 source:f:\git\openxcom\src\geoscape\globe.cpp
+1398435264 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	<cmath>
 	<fstream>
@@ -8472,7 +8472,7 @@
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 
-1398092763 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1398394129 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	<SDL.h>
 	"MainMenuState.h"
@@ -8637,7 +8637,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1398138002 source:f:\git\openxcom\src\menu\startstate.cpp
+1398394270 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	<SDL_mixer.h>
 	"IntroState.h"
@@ -11527,7 +11527,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1398093096 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1398394199 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"

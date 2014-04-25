@@ -316,6 +316,19 @@ void Game::run()
 								dX = 0,
 								dY = 0;
 
+							OptionsBaseState::updateScale(
+													Options::battlescapeScale,
+													Options::battlescapeScale,
+													Options::baseXBattlescape,
+													Options::baseYBattlescape,
+													false);
+							OptionsBaseState::updateScale(
+													Options::geoscapeScale,
+													Options::geoscapeScale,
+													Options::baseXGeoscape,
+													Options::baseYGeoscape,
+													false);
+
 							for (std::list<State*>::iterator
 									i = _states.begin();
 									i != _states.end();

@@ -66,8 +66,9 @@ SelectDestinationState::SelectDestinationState(
 {
 	_screen = false;
 
-	int dx = _game->getScreen()->getDX();
-//kL	int dy = _game->getScreen()->getDY();
+	int
+		dx = _game->getScreen()->getDX();
+//kL		dy = _game->getScreen()->getDY();
 
 /*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
 	_btnRotateRight	= new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);
@@ -76,7 +77,7 @@ SelectDestinationState::SelectDestinationState(
 	_btnZoomIn		= new InteractiveSurface(23, 23, 295 + dx * 2, 156 + dy);
 	_btnZoomOut		= new InteractiveSurface(13, 17, 300 + dx * 2, 182 + dy); */
 
-	_window		= new Window(this, 256, 30, 0, 0);
+	_window = new Window(this, 256, 30, 0, 0);
 	_window->setX(dx);
 	_window->setDY(0);
 
@@ -369,6 +370,31 @@ void SelectDestinationState::btnCydoniaClick(Action*)
 		|| _craft->getNumVehicles() > 0)
 	{
 		_game->pushState(new ConfirmCydoniaState(_game, _craft));
+	}
+}
+
+/**
+ * Updates the scale.
+ * @param dX delta of X;
+ * @param dY delta of Y;
+ */
+void SelectDestinationState::resize(
+		int& dX,
+		int& dY)
+{
+	for (std::vector<Surface*>::const_iterator
+			i = _surfaces.begin();
+			i != _surfaces.end();
+			++i)
+	{
+		(*i)->setX((*i)->getX() + dX / 2);
+		if (*i != _window
+			&& *i != _btnCancel
+//kL			&& *i != _txtTitle
+			&& *i != _btnCydonia)
+		{
+			(*i)->setY((*i)->getY() + dY / 2);
+		}
 	}
 }
 
