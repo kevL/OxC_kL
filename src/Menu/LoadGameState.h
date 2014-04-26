@@ -1,5 +1,5 @@
 /*
- * Copyright 2010-2014 OpenXcom Developers.
+ * Copyright 2010-2013 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
  *
@@ -10,40 +10,40 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef OPENXCOM__LOADGAMESTATE
+#define OPENXCOM__LOADGAMESTATE
 
-#ifndef OPENXCOM__LISTLOADSTATE_H
-#define OPENXCOM__LISTLOADSTATE_H
-
-#include "ListGamesState.h"
-
+#include "../Engine/State.h"
+#include <string>
+#include "OptionsBaseState.h"
 
 namespace OpenXcom
 {
 
-/**
- * Load Game screen for listing info on available saved games and loading them.
- */
-class ListLoadState
-	:
-		public ListGamesState
-{
+class Text;
 
+/**
+ * Loads a saved game, with an optional message.
+ */
+class LoadGameState : public State
+{
+private:
+	OptionsOrigin _origin;
+	Text *_txtStatus;
+	std::string _filename;
 public:
 	/// Creates the Load Game state.
-	ListLoadState(
-			Game* game,
-			OptionsOrigin origin);
+	LoadGameState(Game *game, OptionsOrigin origin, const std::string &filename, bool showMsg = true);
 	/// Cleans up the Load Game state.
-	~ListLoadState();
-
-	/// Handler for clicking the Saves list.
-	void lstSavesPress(Action* action);
+	~LoadGameState();
+	/// Loads the game.
+	void init();
 };
 
 }

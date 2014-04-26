@@ -19,6 +19,8 @@
 
 #include "MainMenuState.h"
 
+#include <sstream>
+
 #include "ListLoadState.h"
 #include "NewBattleState.h"
 #include "NewGameState.h"

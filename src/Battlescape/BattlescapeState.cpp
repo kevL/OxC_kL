@@ -80,9 +80,9 @@
 #include "../Interface/Text.h"
 #include "../Interface/TurnCounter.h" // kL
 
-#include "../Menu/ListLoadState.h"
-#include "../Menu/ListSaveState.h"
+#include "../Menu/LoadGameState.h"
 #include "../Menu/PauseState.h"
+#include "../Menu/SaveGameState.h"
 
 #include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h" // sza_MusicRules
@@ -2130,21 +2130,22 @@ inline void BattlescapeState::handle(Action* action)
 			}
 			// quick save and quick load
 			// not works in debug mode to prevent conflict in hotkeys by default
-			else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave
-				&& Options::autosave == 1)
+			else if (!_game->getSavedGame()->isIronman())
 			{
-				_game->pushState(new ListSaveState(
-												_game,
-												OPT_BATTLESCAPE,
-												true));
-			}
-			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad
-				&& Options::autosave == 1)
-			{
-				_game->pushState(new ListLoadState(
-												_game,
-												OPT_BATTLESCAPE,
-												true));
+				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
+				{
+					_game->pushState(new SaveGameState(
+													_game,
+													OPT_BATTLESCAPE,
+													"quicksave"));
+				}
+				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
+				{
+					_game->pushState(new LoadGameState(
+													_game,
+													OPT_BATTLESCAPE,
+													"quicksave"));
+				}
 			}
 
 			// voxel view dump

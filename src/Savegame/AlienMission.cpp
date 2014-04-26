@@ -726,9 +726,12 @@ void AlienMission::ufoLifting(
 		case Ufo::LANDED:
 			{
 				//Log(LOG_INFO) << ". mission complete, addScore() + getTrajectory()";
-				if (_rule.getType() == "STR_ALIEN_HARVEST"
-					|| _rule.getType() == "STR_ALIEN_ABDUCTION"
-					|| _rule.getType() == "STR_ALIEN_TERROR")
+				// base missions only get points when they are completed.
+				if (_rule.getPoints() > 0
+					&& _rule.getType() != "STR_ALIEN_BASE")
+//				if (_rule.getType() == "STR_ALIEN_HARVEST"
+//					|| _rule.getType() == "STR_ALIEN_ABDUCTION"
+//					|| _rule.getType() == "STR_ALIEN_TERROR")
 				{
 					addScore(
 							ufo.getLongitude(),

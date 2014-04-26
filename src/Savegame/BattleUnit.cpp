@@ -104,7 +104,7 @@ BattleUnit::BattleUnit(
 		_dashing(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
-	_name			= soldier->getName();
+	_name			= soldier->getName(true);
 	_id				= soldier->getId();
 	_type			= "SOLDIER";
 	_rank			= soldier->getRankString();

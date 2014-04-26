@@ -105,7 +105,7 @@ SoldierArmorState::SoldierArmorState(
 
 	_txtSoldier->setColor(Palette::blockOffset(13)+5);
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(s->getName());
+	_txtSoldier->setText(s->getName(true));
 
 	_txtType->setColor(Palette::blockOffset(13)+5);
 	_txtType->setText(tr("STR_TYPE"));

@@ -471,7 +471,7 @@ void State::setPalette(
  * Returns the state's 8bpp palette.
  * @return, Pointer to the palette's colors.
  */
-const SDL_Color* const State::getPalette() const
+SDL_Color* const State::getPalette()
 {
 	return _palette;
 }

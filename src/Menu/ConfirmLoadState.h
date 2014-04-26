@@ -22,7 +22,6 @@
 
 #include <string>
 
-#include "ListLoadState.h"
 #include "OptionsBaseState.h"
 
 #include "../Engine/State.h"
@@ -36,6 +35,9 @@ class Window;
 class Text;
 
 
+/**
+ * Confirms loading a save with missing content.
+ */
 class ConfirmLoadState
 	:
 		public State
@@ -46,7 +48,6 @@ private:
 
 	std::string _fileName;
 
-	ListLoadState* _parent;
 	Text* _txtText;
 	TextButton
 		* _btnYes,
@@ -58,7 +59,6 @@ private:
 		ConfirmLoadState(
 				Game* game,
 				OptionsOrigin origin,
-				ListLoadState* parent,
 				std::string fileName);
 		/// Cleans up the confirmation state.
 		virtual ~ConfirmLoadState();

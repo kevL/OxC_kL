@@ -184,7 +184,7 @@ void SoldiersState::init()
 	{
 		_lstSoldiers->addRow(
 							3,
-							(*i)->getName().c_str(),
+							(*i)->getName(true).c_str(),
 							tr((*i)->getRankString()).c_str(),
 							(*i)->getCraftString(_game->getLanguage()).c_str());
 

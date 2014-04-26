@@ -21,6 +21,7 @@
 
 #include <SDL_mixer.h>
 
+#include "ErrorMessageState.h"
 #include "IntroState.h"
 #include "MainMenuState.h"
 
@@ -30,6 +31,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 
@@ -152,6 +154,7 @@ void StartState::think()
 
 			_game->getScreen()->clear();
 			blit();
+			_game->getScreen()->flip();
 
 			_load = LOADING_STARTED;
 		break;
@@ -171,7 +174,31 @@ void StartState::think()
 			{
 				Options::keepAspectRatio = _wasLetterBoxed;
 
-				_game->setState(new MainMenuState(_game));
+				State* state = new MainMenuState(_game);
+				_game->setState(state);
+
+				if (!Options::badMods.empty()) // Check for mod loading errors
+				{
+					std::wostringstream error;
+					error << tr("STR_MOD_UNSUCCESSFUL") << L'\x02';
+					for (std::vector<std::string>::iterator
+							i = Options::badMods.begin();
+							i != Options::badMods.end();
+							++i)
+					{
+						error << Language::fsToWstr(*i) << L'\n';
+					}
+
+					Options::badMods.clear();
+
+					_game->pushState(new ErrorMessageState(
+														_game,
+														error.str(),
+														state->getPalette(),
+														Palette::blockOffset(8)+10,
+														"BACK01.SCR",
+														6));
+				}
 
 				Options::reload = false;
 			}

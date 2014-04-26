@@ -61,6 +61,7 @@ class RuleTerrain;
 class RuleUfo;
 class SavedGame;
 class SoldierNamePool;
+class StatString;
 class UfoTrajectory;
 class Unit;
 
@@ -147,6 +148,9 @@ protected:
 	std::map<std::string, RuleTerrain*> _terrains;
 	std::map<std::string, RuleUfo*> _ufos;
 	std::map<std::string, UfoTrajectory*> _ufoTrajectories;
+
+	std::vector<StatString*> _statStrings;
+
 	std::map<std::string, Unit*> _units;
 
 	std::vector<std::pair<std::string, ExtraMusic*> > _extraMusic; // sza_ExtraMusic
@@ -279,6 +283,8 @@ protected:
 		std::vector<std::pair<std::string, ExtraMusic*> > getExtraMusic() const; // sza_ExtraMusic
 		/// Gets the list of external Strings.
 		std::map<std::string, ExtraStrings*> getExtraStrings() const;
+		/// Gets the list of StatStrings.
+    	std::vector<StatString*> getStatStrings() const;
 		/// Sorts all our lists according to their weight.
 		void sortLists();
 		/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)

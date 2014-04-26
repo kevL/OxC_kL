@@ -128,14 +128,16 @@ PauseState::PauseState(
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_OPTIONS_UC"));
 
-	if (Options::autosave > 1)
+	if (_origin == OPT_BATTLESCAPE)
+		applyBattlescapeTheme();
+
+	if (_game->getSavedGame()->isIronman())
 	{
 		_btnSave->setVisible(false);
 		_btnLoad->setVisible(false);
-	}
 
-	if (_origin == OPT_BATTLESCAPE)
-		applyBattlescapeTheme();
+		_btnAbandon->setText(tr("STR_SAVE_AND_ABANDON_GAME"));
+	}
 }
 
 /**

@@ -923,6 +923,22 @@ bool naturalCompare(
 #endif
 }
 
+/**
+ * Moves a file from one path to another,
+ * replacing any existing file.
+ * @param src Source path.
+ * @param dest Destination path.
+ * @return True if the operation succeeded, False otherwise.
+ */
+bool moveFile(const std::string &src, const std::string &dest)
+{
+#ifdef _WIN32
+	return (MoveFileExA(src.c_str(), dest.c_str(), MOVEFILE_REPLACE_EXISTING) != 0);
+#else
+	return (rename(src.c_str(), dest.c_str()) == 0);
+#endif
+}
+
 }
 
 }

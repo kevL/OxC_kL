@@ -905,9 +905,13 @@ void DebriefingState::prepareDebriefing()
 					soldierExit++;
 
 					if (soldier != 0)
+					{
 						recoverItems(
 								(*j)->getInventory(),
 								base);
+
+						soldier->calcStatString(_game->getRuleset()->getStatStrings()); // calculate new statString
+					}
 					else // not soldier -> tank
 					{
 						base->getItems()->addItem(type);

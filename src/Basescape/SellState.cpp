@@ -184,7 +184,7 @@ SellState::SellState(
 			_soldiers.push_back(*i);
 			_lstItems->addRow(
 							4,
-							(*i)->getName().c_str(),
+							(*i)->getName(true).c_str(),
 							L"1",
 							L"0",
 							Text::formatFunding(0).c_str());

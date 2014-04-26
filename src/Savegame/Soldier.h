@@ -24,6 +24,7 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "../Ruleset/StatString.h"
 #include "../Ruleset/Unit.h"
 
 
@@ -85,7 +86,9 @@ private:
 		_missions,
 		_recovery;
 
-	std::wstring _name;
+	std::wstring
+		_name,
+		_statString;
 
 	Armor* _armor;
 	Craft* _craft;
@@ -130,7 +133,9 @@ private:
 		int getId() const;
 
 		/// Gets the soldier's name.
-		std::wstring getName() const;
+		std::wstring getName(
+				bool statstring = false,
+				unsigned int maxLength = 24) const;
 		/// Sets the soldier's name.
 		void setName(const std::wstring& name);
 
@@ -198,6 +203,9 @@ private:
 		/// Kills the soldier and sends it to the dead soldiers' List.
 //kL		void die(SoldierDeath* death);
 		SoldierDead* die(SoldierDeath* death);
+
+		/// Calculate statString.
+		void calcStatString(const std::vector<StatString*>& statStrings);
 };
 
 }

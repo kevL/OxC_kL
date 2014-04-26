@@ -342,6 +342,8 @@
 #include "./Menu/ConfirmLoadState.h"
 #include "./Menu/ListLoadState.h"
 #include "./Menu/ListGamesState.h"
+#include "./Menu/LoadGameState.h"
+#include "./Menu/SaveGameState.h"
 #include "./Menu/NewGameState.h"
 #include "./Menu/MainMenuState.h"
 #include "./Menu/AbandonGameState.h"

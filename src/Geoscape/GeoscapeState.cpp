@@ -82,9 +82,9 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
+#include "../Menu/LoadGameState.h"
 #include "../Menu/PauseState.h"
-#include "../Menu/ListLoadState.h"
-#include "../Menu/ListSaveState.h"
+#include "../Menu/SaveGameState.h"
 
 #include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h" // sza_MusicRules
@@ -651,22 +651,24 @@ void GeoscapeState::handle(Action* action)
 			else
 				_txtDebug->setText(L"");
 		}
+
 		// quick save and quick load
-		else if (action->getDetails()->key.keysym.sym == Options::keyQuickSave
-			&& Options::autosave == 1)
+		if (!_game->getSavedGame()->isIronman())
 		{
-			_game->pushState(new ListSaveState(
-											_game,
-											OPT_GEOSCAPE,
-											true));
-		}
-		else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad
-			&& Options::autosave == 1)
-		{
-			_game->pushState(new ListLoadState(
-											_game,
-											OPT_GEOSCAPE,
-											true));
+			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
+			{
+				_game->pushState(new SaveGameState(
+												_game,
+												OPT_GEOSCAPE,
+												"quicksave"));
+			}
+			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
+			{
+				_game->pushState(new LoadGameState(
+												_game,
+												OPT_GEOSCAPE,
+												"quicksave"));
+			}
 		}
 	}
 
@@ -1717,7 +1719,7 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 	bool expired = true;
 	int
 		diff = _game->getSavedGame()->getDifficulty(),
-		pts = 500 + (diff * 200);
+		pts = (_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 50) + (diff * 200);
 
 	if (ts->getSecondsRemaining() >= 30 * 60)
 	{
@@ -2439,13 +2441,6 @@ void GeoscapeState::time1Day()
 				GenerateSupplyMission(
 									*_game->getRuleset(),
 									*_game->getSavedGame()));
-
-
-	if (Options::autosave > 1) // Autosave
-		_game->pushState(new ListSaveState(
-										_game,
-										OPT_GEOSCAPE,
-										false));
 
 	//Log(LOG_INFO) << "GeoscapeState::time1Day() EXIT";
 }

@@ -57,11 +57,6 @@ private:
 			ListSaveState(
 					Game* game,
 					OptionsOrigin origin);
-			/// Creates the Quick Save Game state.
-			ListSaveState(
-					Game* game,
-					OptionsOrigin origin,
-					bool showMsg);
 			/// Cleans up the Save Game state.
 			~ListSaveState();
 
@@ -77,8 +72,6 @@ private:
 
 			/// Save game.
 			void saveGame();
-			/// Quick save game.
-			void quickSave(const std::string& filename);
 };
 
 }

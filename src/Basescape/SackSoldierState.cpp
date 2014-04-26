@@ -97,7 +97,7 @@ SackSoldierState::SackSoldierState(
 
 	_txtSoldier->setColor(Palette::blockOffset(13)+10);
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(_base->getSoldiers()->at(_soldierId)->getName());
+	_txtSoldier->setText(_base->getSoldiers()->at(_soldierId)->getName(true));
 }
 
 /**

@@ -31,6 +31,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/SoldierNamePool.h"
+#include "../Ruleset/StatString.h"
 
 
 namespace OpenXcom
@@ -172,6 +173,8 @@ void Soldier::load(
 		_death = new SoldierDeath();
 		_death->load(node["death"]);
 	} */
+
+	calcStatString(rule->getStatStrings());
 }
 
 /**
@@ -258,12 +261,23 @@ int Soldier::getId() const
 }
 
 /**
- * Returns the soldier's full name.
+ * Returns the soldier's full name (and, optionally, statString).
  * @return, Soldier name.
  */
-std::wstring Soldier::getName() const
+std::wstring Soldier::getName(
+		bool statstring,
+		unsigned int maxLength) const
 {
-	return _name;
+	if (statstring
+		&& _statString != L"")
+	{
+		if (_name.length() + _statString.length() > maxLength)
+			return _name.substr(0, maxLength - _statString.length()) + L"/" + _statString;
+		else
+			return _name + L"/" + _statString;
+	}
+	else
+		return _name;
 }
 
 /**
@@ -665,6 +679,16 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 	return dead;
 //	SavedGame::getDeadSoldiers()->push_back(ds);
 	// kL_end.
+}
+
+/**
+ * Calculates the soldier's statString
+ */
+void Soldier::calcStatString(const std::vector<StatString*>& statStrings)
+{
+	_statString = StatString::calcStatString(
+										_currentStats,
+										statStrings);
 }
 
 }

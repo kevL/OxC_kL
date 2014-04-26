@@ -21,6 +21,9 @@
 
 #include <utility>
 
+#include "DeleteGameState.h"
+
+#include "../Engine/Action.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
@@ -104,7 +107,6 @@ ListGamesState::ListGamesState(
 
 	_lstSaves	= new TextList(285, 120, 16, 41); // when editing, the up/down arrow jogs a few px right.
 
-	_txtStatus	= new Text(320, 17, 0, 92);
 	_txtDetails = new Text(288, 9, 16, 165);
 
 	_btnCancel	= new TextButton(134, 16, 16, 177);
@@ -122,7 +124,6 @@ ListGamesState::ListGamesState(
 	add(_sortName);
 	add(_sortDate);
 	add(_lstSaves);
-	add(_txtStatus);
 	add(_txtDetails);
 	add(_btnCancel);
 
@@ -153,10 +154,6 @@ ListGamesState::ListGamesState(
 	_txtDate->setColor(Palette::blockOffset(15)-1);
 	_txtDate->setText(tr("STR_DATE"));
 
-	_txtStatus->setColor(Palette::blockOffset(6)+4);
-	_txtStatus->setBig();
-	_txtStatus->setAlign(ALIGN_CENTER);
-
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
 //	_lstSaves->setColumns(5, 168, 30, 26, 24, 28);
@@ -166,6 +163,7 @@ ListGamesState::ListGamesState(
 	_lstSaves->setMargin(8);
 	_lstSaves->onMouseOver((ActionHandler)& ListGamesState::lstSavesMouseOver);
 	_lstSaves->onMouseOut((ActionHandler)& ListGamesState::lstSavesMouseOut);
+	_lstSaves->onMousePress((ActionHandler)& ListGamesState::lstSavesPress);
 
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
@@ -184,48 +182,6 @@ ListGamesState::ListGamesState(
 }
 
 /**
- * Initializes the Quicksave notice.
- * @param game, Pointer to the core game.
- * @param origin, Game section that originated this state.
- * @param showMsg, True if need to show messages like "Loading game" or "Saving game".
- */
-ListGamesState::ListGamesState(
-		Game* game,
-		OptionsOrigin origin,
-		int firstValidRow,
-		bool showMsg)
-	:
-		State(game),
-		_origin(origin),
-		_showMsg(showMsg),
-		_noUI(true),
-		_firstValidRow(firstValidRow),
-		_inEditMode(false) // kL
-{
-	if (_showMsg)
-	{
-		_txtStatus = new Text(
-							320,
-							16,
-							_game->getScreen()->getDX(),
-//kL							_game->getScreen()->getDY() + 92);
-							_game->getScreen()->getDY() + 64); // kL
-		add(_txtStatus);
-
-		_txtStatus->setBig();
-		_txtStatus->setAlign(ALIGN_CENTER);
-
-		if (origin == OPT_BATTLESCAPE)
-		{
-			_txtStatus->setColor(Palette::blockOffset(13)+5);
-			_txtStatus->setHighContrast(true);
-		}
-		else
-			_txtStatus->setColor(Palette::blockOffset(11)+3);
-	}
-}
-
-/**
  *
  */
 ListGamesState::~ListGamesState()
@@ -233,20 +189,11 @@ ListGamesState::~ListGamesState()
 }
 
 /**
- * Resets the palette and refreshes saves.
+ * Refreshes the saves list.
  */
 void ListGamesState::init()
 {
-	if (_noUI)
-	{
-		_game->popState();
-
-		return;
-	}
-
 	State::init();
-
-	_txtStatus->setText(L"");
 
 	if (_origin == OPT_BATTLESCAPE)
 		applyBattlescapeTheme();
@@ -343,19 +290,6 @@ void ListGamesState::updateList()
 }
 
 /**
- * Updates the status message in the center of the screen.
- * @param msg New message ID.
- */
-void ListGamesState::updateStatus(const std::string& msg)
-{
-	_txtStatus->setText(tr(msg));
-
-	blit();
-
-	_game->getScreen()->flip();
-}
-
-/**
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
@@ -392,6 +326,22 @@ void ListGamesState::lstSavesMouseOut(Action*)
 {
 	if (!_inEditMode) // kL
 		_txtDetails->setText(tr("STR_DETAILS").arg(L""));
+}
+
+/**
+ * Deletes the selected save.
+ * @param action Pointer to an action.
+ */
+void ListGamesState::lstSavesPress(Action* action)
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
+		&& _lstSaves->getSelectedRow() >= _firstValidRow)
+	{
+		_game->pushState(new DeleteGameState(
+											_game,
+											_origin,
+											_saves[_lstSaves->getSelectedRow() - _firstValidRow].fileName));
+	}
 }
 
 /**

@@ -240,8 +240,7 @@ void OptionsAdvancedState::lstOptionsClick(Action* action)
 		int
 			min = 0,
 			max = 0;
-		if (i == &Options::battleExplosionHeight
-			|| i == &Options::autosave)
+		if (i == &Options::battleExplosionHeight)
 		{
 			min = 0;
 			max = 3;

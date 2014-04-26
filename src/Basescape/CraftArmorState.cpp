@@ -145,7 +145,7 @@ CraftArmorState::CraftArmorState(
 		//Log(LOG_INFO) << "CraftArmorState::CraftArmorState() iterate soldiers to createList";
 		_lstSoldiers->addRow(
 							3,
-							(*i)->getName().c_str(),
+							(*i)->getName(true).c_str(),
 							tr((*i)->getArmor()->getType()).c_str(),
 							(*i)->getCraftString(_game->getLanguage()).c_str());
 

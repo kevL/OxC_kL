@@ -92,6 +92,7 @@ class SavedGame
 private:
 	bool
 		_debug,
+		_ironman,
 		_warned;
 	int
 		_globeZoom,
@@ -169,6 +170,11 @@ private:
 		GameDifficulty getDifficulty() const;
 		/// Sets the game difficulty.
 		void setDifficulty(GameDifficulty difficulty);
+
+		/// Gets if the game is in ironman mode.
+		bool isIronman() const;
+		/// Sets if the game is in ironman mode.
+		void setIronman(bool ironman);
 
 		/// Gets the current globe longitude.
 		double getGlobeLongitude() const;

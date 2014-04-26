@@ -43,7 +43,7 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 
-#include "../Menu/ListSaveState.h"
+#include "../Menu/OptionsBaseState.h"
 #include "../Menu/TestState.h"
 
 #include "../Resource/ResourcePack.h"
@@ -479,17 +479,6 @@ void Game::run()
 		}
 	}
 
-	// Auto-save
-	if (_save != 0
-		&& _save->getMonthsPassed() > -1
-		&& Options::autosave == 3)
-	{
-		ListSaveState ss = ListSaveState(
-										this,
-										OPT_MENU,
-										false);
-	}
-
 	Options::save();
 }
 
@@ -678,11 +667,16 @@ Ruleset* Game::getRuleset() const
 }
 
 /**
- * Changes the ruleset currently in use by the game.
+ * Loads the rulesets specified in the game options.
  */
 void Game::loadRuleset()
 {
+	Options::badMods.clear();
+
 	_rules = new Ruleset();
+
+	if (Options::rulesets.empty())
+		Options::rulesets.push_back("Xcom1Ruleset");
 
 	for (std::vector<std::string>::iterator
 			i = Options::rulesets.begin();
@@ -698,8 +692,17 @@ void Game::loadRuleset()
 		catch (YAML::Exception &e)
 		{
 			Log(LOG_WARNING) << e.what();
+
+			Options::badMods.push_back(*i);
+			Options::badMods.push_back(e.what());
+
 			i = Options::rulesets.erase(i);
 		}
+	}
+
+	if (Options::rulesets.empty())
+	{
+		throw Exception("Failed to load ruleset");
 	}
 
 	_rules->sortLists();

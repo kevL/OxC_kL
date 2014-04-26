@@ -50,6 +50,7 @@
 #include "RuleTerrain.h"
 #include "RuleUfo.h"
 #include "SoldierNamePool.h"
+#include "StatString.h"
 #include "UfoTrajectory.h"
 #include "Unit.h"
 
@@ -825,8 +826,17 @@ void Ruleset::loadFile(const std::string& filename)
 		}
 	}
 
-	// refresh _psiRequirements for psiStrengthEval
-	for (std::vector<std::string>::const_iterator
+	for (YAML::const_iterator
+			i = doc["statStrings"].begin();
+			i != doc["statStrings"].end();
+			++i)
+	{
+		StatString* statString = new StatString();
+		statString->load(*i);
+		_statStrings.push_back(statString);
+	}
+
+	for (std::vector<std::string>::const_iterator // refresh _psiRequirements for psiStrengthEval
 			i = _facilitiesIndex.begin();
 			i != _facilitiesIndex.end();
 			++i)
@@ -1650,6 +1660,15 @@ std::vector<std::pair<std::string, ExtraMusic*> > Ruleset::getExtraMusic() const
 std::map<std::string, ExtraStrings*> Ruleset::getExtraStrings() const
 {
 	return _extraStrings;
+}
+
+/**
+ * Gets the list of StatStrings.
+ * @return, The list of StatStrings.
+ */
+std::vector<StatString*> Ruleset::getStatStrings() const
+{
+	return _statStrings;
 }
 
 /**
