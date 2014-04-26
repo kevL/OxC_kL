@@ -1062,6 +1062,8 @@ bool TileEngine::canTargetUnit(
 	// if there is an other unit on target tile, we assume we want to check against this unit's height
 		heightRange,
 		unitRadius = potentialUnit->getLoftemps(), // width == loft in default loftemps set
+		xOffset = potentialUnit->getPosition().x - tile->getPosition().x,
+		yOffset = potentialUnit->getPosition().y - tile->getPosition().y,
 		targetSize = potentialUnit->getArmor()->getSize() - 1;
 	if (targetSize > 0)
 		unitRadius = 3;
@@ -1142,8 +1144,8 @@ bool TileEngine::canTargetUnit(
 							++y)
 					{
 						// voxel of hit must be inside of scanned box
-						if (   _trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x
-							&& _trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y
+						if (   _trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
+							&& _trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
 							&& _trajectory.at(0).z >= targetMinHeight
 							&& _trajectory.at(0).z <= targetMaxHeight)
 						{
