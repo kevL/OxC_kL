@@ -2240,6 +2240,8 @@
 		<Unit filename="Menu/ListLoadState.h" />
 		<Unit filename="Menu/ListSaveState.cpp" />
 		<Unit filename="Menu/ListSaveState.h" />
+		<Unit filename="Menu/LoadGameState.cpp" />
+		<Unit filename="Menu/LoadGameState.h" />
 		<Unit filename="Menu/MainMenuState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2348,6 +2350,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Menu/SaveGameState.cpp" />
+		<Unit filename="Menu/SaveGameState.h" />
 		<Unit filename="Menu/StartState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2731,6 +2735,10 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/StatString.cpp" />
+		<Unit filename="Ruleset/StatString.h" />
+		<Unit filename="Ruleset/StatStringCondition.cpp" />
+		<Unit filename="Ruleset/StatStringCondition.h" />
 		<Unit filename="Ruleset/UfoTrajectory.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
