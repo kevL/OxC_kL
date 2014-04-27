@@ -19,8 +19,6 @@
 
 #include "ListSaveState.h"
 
-#include <cstdio>
-
 #include "SaveGameState.h"
 
 #include "../Engine/Action.h"
@@ -50,7 +48,8 @@ ListSaveState::ListSaveState(
 		ListGamesState(
 			game,
 			origin,
-			1),
+			1,
+			false),
 		_selected(L""),
 		_previousSelectedRow(-1),
 		_selectedRow(-1)
@@ -96,8 +95,10 @@ void ListSaveState::updateList()
 {
 	_lstSaves->addRow(
 					1,
-					tr("STR_NEW_SAVED_GAME").c_str());
-	_lstSaves->setRowColor(0, Palette::blockOffset(8)+5);
+					tr("STR_NEW_SAVED_GAME_SLOT").c_str());
+
+	if (_origin != OPT_BATTLESCAPE)
+		_lstSaves->setRowColor(0, Palette::blockOffset(8)+5);
 
 	ListGamesState::updateList();
 }
@@ -185,7 +186,7 @@ void ListSaveState::btnSaveGameClick(Action*)
 }
 
 /**
- *
+ * Saves the selected save.
  */
 void ListSaveState::saveGame()
 {
@@ -209,16 +210,16 @@ void ListSaveState::saveGame()
 	{
 		oldFilename = _saves[_selectedRow - 1].fileName;
 
-		if (oldFilename != newFilename)
+		if (oldFilename != newFilename + ".sav")
 		{
 			while (CrossPlatform::fileExists(Options::getUserFolder() + newFilename + ".sav"))
 				newFilename += "_";
 
-			std::string oldPath = Options::getUserFolder() + oldFilename + ".sav";
+			std::string oldPath = Options::getUserFolder() + oldFilename;
 			std::string newPath = Options::getUserFolder() + newFilename + ".sav";
-			rename(
-				oldPath.c_str(),
-				newPath.c_str());
+			CrossPlatform::moveFile(
+								oldPath,
+								newPath);
 		}
 	}
 
@@ -228,6 +229,7 @@ void ListSaveState::saveGame()
 			newFilename += "_";
 	}
 
+	newFilename += ".sav";
 	_game->pushState(new SaveGameState(
 									_game,
 									_origin,

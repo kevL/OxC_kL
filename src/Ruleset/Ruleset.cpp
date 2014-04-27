@@ -985,11 +985,12 @@ SavedGame* Ruleset::newSave() const
 			i < soldiers;
 			++i)
 	{
-		Soldier* soldier = new Soldier(
-									getSoldier("XCOM"),
-									getArmor("STR_NONE_UC"),
-									&_names,
-									save->getId("STR_SOLDIER"));
+		Soldier* soldier = genSoldier(save);
+//		Soldier* soldier = new Soldier(
+//									getSoldier("XCOM"),
+//									getArmor("STR_NONE_UC"),
+//									&_names,
+//									save->getId("STR_SOLDIER"));
 		soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
 	}
@@ -1874,6 +1875,53 @@ void Ruleset::sortLists()
 std::vector<std::string> Ruleset::getPsiRequirements()
 {
 	return _psiRequirements;
+}
+
+/**
+ * Creates a new randomly-generated soldier.
+ * @param save Saved game the soldier belongs to.
+ */
+Soldier* Ruleset::genSoldier(SavedGame* save) const
+{
+	Soldier* soldier = 0;
+	int newId = save->getId("STR_SOLDIER");
+
+	// Original X-COM gives up after 10 tries so might as well do the same here
+	bool duplicate = true;
+	for (int // Check for duplicates
+			i = 0;
+			i < 10
+				&& duplicate;
+			i++)
+	{
+		delete soldier;
+
+		soldier = new Soldier(
+							getSoldier("XCOM"),
+							getArmor("STR_NONE_UC"),
+							&_names,
+							newId);
+
+		duplicate = false;
+		for (std::vector<Base*>::iterator
+				i = save->getBases()->begin();
+				i != save->getBases()->end()
+					&& !duplicate;
+				++i)
+		{
+			for (std::vector<Soldier*>::iterator
+					j = (*i)->getSoldiers()->begin();
+					j != (*i)->getSoldiers()->end()
+						&& !duplicate;
+					++j)
+			{
+				if ((*j)->getName() == soldier->getName())
+					duplicate = true;
+			}
+		}
+	}
+
+	return soldier;
 }
 
 }

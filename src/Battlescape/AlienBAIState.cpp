@@ -39,6 +39,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"
@@ -2337,10 +2338,13 @@ bool AlienBAIState::psiAction()
 		return false;
 	}
 
-	RuleItem* itemRule = _save->getBattleState()->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");	// kL
-	int tuCost = itemRule->getTUUse();																	// kL
-	if (!itemRule->getFlatRate())																		// kL
-		tuCost = static_cast<int>(floor(static_cast<float>(_unit->getStats()->tu * tuCost) / 100.f));	// kL
+	RuleItem* itemRule = _save->getBattleState()->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
+
+	bool LOSRequired = itemRule->isLOSRequired();
+
+	int tuCost = itemRule->getTUUse();
+	if (!itemRule->getFlatRate())
+		tuCost = static_cast<int>(floor(static_cast<float>(_unit->getStats()->tu * tuCost) / 100.f));
 	//Log(LOG_INFO) << "AlienBAIState::psiAction() tuCost = " << tuCost;
 
 	if (_unit->getTimeUnits() < _escapeTUs + tuCost) // has the required TUs and can still make it to cover
@@ -2369,7 +2373,13 @@ bool AlienBAIState::psiAction()
 				&& validTarget(									// will check for Mc, Exposed, etc.
 							*i,
 							true,
-							false))
+							false)
+				&& (!LOSRequired
+					|| std::find(
+							_unit->getVisibleUnits()->begin(),
+							_unit->getVisibleUnits()->end(),
+							*i)
+						!= _unit->getVisibleUnits()->end()))
 			{
 				// is this gonna crash..................
 				Position

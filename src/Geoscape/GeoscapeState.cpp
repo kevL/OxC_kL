@@ -660,14 +660,14 @@ void GeoscapeState::handle(Action* action)
 				_game->pushState(new SaveGameState(
 												_game,
 												OPT_GEOSCAPE,
-												"quicksave"));
+												SavedGame::QUICKSAVE));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 			{
 				_game->pushState(new LoadGameState(
 												_game,
 												OPT_GEOSCAPE,
-												"quicksave"));
+												SavedGame::QUICKSAVE));
 			}
 		}
 	}
@@ -2442,6 +2442,13 @@ void GeoscapeState::time1Day()
 									*_game->getRuleset(),
 									*_game->getSavedGame()));
 
+	// Autosave every 10 days
+	// kL_note: Lets not. Thank you!!
+/*	int day = _game->getSavedGame()->getTime()->getDay();
+	if (day == 1 || day % 10 == 0)
+	{
+		_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+	} */
 	//Log(LOG_INFO) << "GeoscapeState::time1Day() EXIT";
 }
 

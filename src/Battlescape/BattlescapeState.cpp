@@ -1063,7 +1063,7 @@ void BattlescapeState::mapIn(Action*)
 {
 	//Log(LOG_INFO) << "BattlescapeState::mapIn()";
 	_isMouseScrolling = false;
-	_map->setButtonsPressed(SDL_BUTTON_RIGHT, false);
+	_map->setButtonsPressed(Options::battleDragScrollButton, false);
 
 	//Log(LOG_INFO) << "BattlescapeState::mapIn() EXIT";
 }
@@ -2137,14 +2137,14 @@ inline void BattlescapeState::handle(Action* action)
 					_game->pushState(new SaveGameState(
 													_game,
 													OPT_BATTLESCAPE,
-													"quicksave"));
+													SavedGame::QUICKSAVE));
 				}
 				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 				{
 					_game->pushState(new LoadGameState(
 													_game,
 													OPT_BATTLESCAPE,
-													"quicksave"));
+													SavedGame::QUICKSAVE));
 				}
 			}
 

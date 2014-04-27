@@ -100,6 +100,7 @@ RuleItem::RuleItem(const std::string& type)
 		_shotgunPellets(0),
 		_zombieUnit(""),
 		_strengthApplied(false),
+		_LOSRequired(false),
 		_noReaction(false), // kL
 		_meleeSound(39),
 		_meleePower(0)
@@ -238,6 +239,7 @@ void RuleItem::load(
 	_shotgunPellets			= node["shotgunPellets"].as<int>(_shotgunPellets);
 	_zombieUnit				= node["zombieUnit"].as<std::string>(_zombieUnit);
 	_strengthApplied		= node["strengthApplied"].as<bool>(_strengthApplied);
+	_LOSRequired			= node["LOSRequired"].as<bool>(_LOSRequired);
 	_noReaction				= node["noReaction"].as<bool>(_noReaction); // kL
 	_meleeSound				= node["meleeSound"].as<int>(_meleeSound);
 	_meleePower				= node["meleePower"].as<int>(_meleePower);
@@ -908,6 +910,15 @@ int RuleItem::getMeleeSound() const
 int RuleItem::getMeleePower() const
 {
 	return _meleePower;
+}
+
+/**
+ * Is line of sight required for this psionic weapon to function?
+ * @return, If line of sight is required.
+ */
+bool RuleItem::isLOSRequired() const
+{
+	return _LOSRequired;
 }
 
 }

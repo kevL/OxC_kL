@@ -100,13 +100,20 @@ LoadGameState::~LoadGameState()
  */
 void LoadGameState::init()
 {
-	State::init();
+	if (_filename == SavedGame::QUICKSAVE // Ignore quick loads without a save available
+		&& !CrossPlatform::fileExists(Options::getUserFolder() + _filename))
+	{
+		_game->popState();
+
+		return;
+	}
+
+	State::init(); // Make sure message is shown (if any)
 
 	blit();
 	_game->getScreen()->flip();
 	_game->popState();
 
-	_filename += ".sav";
 	SavedGame* s = new SavedGame();
 	try
 	{

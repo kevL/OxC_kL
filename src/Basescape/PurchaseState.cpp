@@ -532,11 +532,12 @@ void PurchaseState::btnOkClick(Action*)
 						s++)
 				{
 					Transfer* t = new Transfer(_game->getRuleset()->getPersonnelTime());
-					t->setSoldier(new Soldier(
-											_game->getRuleset()->getSoldier("XCOM"),
-											_game->getRuleset()->getArmor("STR_NONE_UC"),
-											&_game->getRuleset()->getPools(),
-											_game->getSavedGame()->getId("STR_SOLDIER")));
+					t->setSoldier(_game->getRuleset()->genSoldier(_game->getSavedGame()));
+//					t->setSoldier(new Soldier(
+//											_game->getRuleset()->getSoldier("XCOM"),
+//											_game->getRuleset()->getArmor("STR_NONE_UC"),
+//											&_game->getRuleset()->getPools(),
+//											_game->getSavedGame()->getId("STR_SOLDIER")));
 
 					_base->getTransfers()->push_back(t);
 				}

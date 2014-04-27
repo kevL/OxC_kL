@@ -1949,28 +1949,42 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		{
 			//Log(LOG_INFO) << ". . . . BA_USE -> BT_MINDPROBE";
 			if (_save->selectUnit(pos)
-				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction())
+				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction()
+				&& _save->selectUnit(pos)->getVisible())
 			{
-				if (_currentAction.actor->spendTimeUnits(_currentAction.TU)) // kL_note: Should this be getActionTUs() to account for flatRates?
+				if (!_currentAction.weapon->getRules()->isLOSRequired()
+					|| std::find(
+							_currentAction.actor->getVisibleUnits()->begin(),
+							_currentAction.actor->getVisibleUnits()->end(),
+							_save->selectUnit(pos))
+						!= _currentAction.actor->getVisibleUnits()->end())
 				{
-					_parentState->getGame()->getResourcePack()->getSound(
-																	"BATTLE.CAT",
-																	_currentAction.weapon->getRules()->getHitSound())
-																->play();
-					_parentState->getGame()->pushState(new UnitInfoState(
-																	_parentState->getGame(),
-																	_save->selectUnit(pos),
-																	_parentState,
-																	false,
-																	true));
+					if (_currentAction.actor->spendTimeUnits(_currentAction.TU)) // kL_note: Should this be getActionTUs() to account for flatRates?
+					{
+						_parentState->getGame()->getResourcePack()->getSound(
+																		"BATTLE.CAT",
+																		_currentAction.weapon->getRules()->getHitSound())
+																	->play();
+						_parentState->getGame()->pushState(new UnitInfoState(
+																		_parentState->getGame(),
+																		_save->selectUnit(pos),
+																		_parentState,
+																		false,
+																		true));
 
-					cancelCurrentAction();
-					// kL_note: where is updateSoldierInfo() - is that done when unitInfoState is dismissed?
+						cancelCurrentAction();
+						// kL_note: where is updateSoldierInfo() - is that done when unitInfoState is dismissed?
+					}
+					else
+					{
+						cancelCurrentAction(); // kL
+						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+					}
 				}
 				else
 				{
-					cancelCurrentAction(); // kL
-					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+//					cancelCurrentAction(); // kL
+					_parentState->warning("STR_NO_LINE_OF_FIRE");
 				}
 			}
 		}
@@ -1990,85 +2004,96 @@ void BattlescapeGame::primaryAction(const Position& pos)
 													_save->getCurrentItemId());
 				}
 
-//kL				_currentAction.TU = _currentAction.weapon->getRules()->getTUUse();
-				_currentAction.TU = _currentAction.actor->getActionTUs( // kL (in case PsiAmp is not set to flatRate)
-																	BA_USE, // or, _currentAction.type
+				_currentAction.TU = _currentAction.actor->getActionTUs(
+																	_currentAction.type,
 																	_currentAction.weapon);
 				_currentAction.target = pos;
-				// get the sound/animation started
-				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
-
-				//Log(LOG_INFO) << ". . . . . . new ProjectileFlyBState";
-				statePushBack(new ProjectileFlyBState(
-													this,
-													_currentAction));
-
-/*				if (_currentAction.actor->spendTimeUnits(_currentAction.TU)) // kL
+				if (!_currentAction.weapon->getRules()->isLOSRequired()
+					|| std::find(
+							_currentAction.actor->getVisibleUnits()->begin(),
+							_currentAction.actor->getVisibleUnits()->end(),
+							_save->selectUnit(pos))
+						!= _currentAction.actor->getVisibleUnits()->end())
 				{
-					_currentAction.TU = 0;	// kL. This is drastic....! it obviates checks done in ProjectileFlyBState.
-											// But it Fucking worked. which means ProjectileFlyBState could likely be pruned;
-											// and I still don't have a Fucking clue why throwing triggers reaction fire, otherwise
-											// while shooting does not. Ie. I don't know where else to look for Tu-expenditure for
-											// those (and likely other) actions (like Psi) other than popState() above.
-											// In a word, this code was written by chimpanzees on typewriters!!!!!
-*/
-				if (_currentAction.TU <= _currentAction.actor->getTimeUnits()) // kL_note: WAIT, check this *before* all the stuff above!!!
-				{
-					if (getTileEngine()->psiAttack(&_currentAction))
+					// get the sound/animation started
+//kL					getMap()->setCursorType(CT_NONE);
+//kL					_parentState->getGame()->getCursor()->setVisible(false);
+//kL					_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+
+					//Log(LOG_INFO) << ". . . . . . new ProjectileFlyBState";
+					statePushBack(new ProjectileFlyBState(
+														this,
+														_currentAction));
+
+					if (_currentAction.TU <= _currentAction.actor->getTimeUnits()) // kL_note: WAIT, check this *before* all the stuff above!!!
 					{
-						//Log(LOG_INFO) << ". . . . . . Psi successful";
-						// show a little infobox if it's successful
-						Game* game = _parentState->getGame();
-						if (_currentAction.type == BA_PANIC)
-							//Log(LOG_INFO) << ". . . . . . . . BA_Panic";
-							game->pushState(new InfoboxState(
-															game,
-															game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
-						else //if (_currentAction.type == BA_MINDCONTROL)
-							//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
-							game->pushState(new InfoboxState(
-															game,
-															game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
+						if (getTileEngine()->psiAttack(&_currentAction))
+						{
+							//Log(LOG_INFO) << ". . . . . . Psi successful";
+							Game* game = _parentState->getGame(); // show a little infobox if it's successful
+							if (_currentAction.type == BA_PANIC)
+							{
+								//Log(LOG_INFO) << ". . . . . . . . BA_Panic";
+								game->pushState(new InfoboxState(
+																game,
+																game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
+							}
+							else //if (_currentAction.type == BA_MINDCONTROL)
+							{
+								//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
+								game->pushState(new InfoboxState(
+																game,
+																game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
+							}
 
-						//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
-//kL						_parentState->updateSoldierInfo();
-						_parentState->updateSoldierInfo(false); // kL
-						//Log(LOG_INFO) << ". . . . . . updateSoldierInfo() DONE";
-
-
-						// kL_begin: BattlescapeGame::primaryAction(), not sure where this bit came from.....
-						// it doesn't seem to be in the official oXc but it might
-						// stop some (psi-related) crashes i'm getting; (no, it was something else..)
-						// but then it probably never runs because I doubt that selectedUnit can be other than xCom.
-						// (yes, selectedUnit is currently operating unit of *any* faction)
-//						if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
-//						{
-//						_currentAction.targeting = false;
-//						_currentAction.type = BA_NONE;
-//						}
-//						setupCursor();
+							//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
+//kL							_parentState->updateSoldierInfo();
+							_parentState->updateSoldierInfo(false); // kL
+							//Log(LOG_INFO) << ". . . . . . updateSoldierInfo() DONE";
 
 
-						// kL_note: might need to put a refresh (redraw/blit) cursor here;
-						// else it 'sticks' for a moment at its previous position.
-//						_parentState->getMap()->refreshSelectorPosition();			// kL
+							// kL_begin: BattlescapeGame::primaryAction(), not sure where this bit came from.....
+							// it doesn't seem to be in the official oXc but it might
+							// stop some (psi-related) crashes i'm getting; (no, it was something else..)
+							// but then it probably never runs because I doubt that selectedUnit can be other than xCom.
+							// (yes, selectedUnit is currently operating unit of *any* faction)
+//							if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
+//							{
+//							_currentAction.targeting = false;
+//							_currentAction.type = BA_NONE;
+//							}
+//							setupCursor();
 
-//						getMap()->setCursorType(CT_NONE);							// kL
-//						_parentState->getGame()->getCursor()->setVisible(false);	// kL
-//						_parentState->getMap()->refreshSelectorPosition();			// kL
-						// kL_end.
 
-						//Log(LOG_INFO) << ". . . . . . inVisible cursor, DONE";
+							// kL_note: might need to put a refresh (redraw/blit) cursor here;
+							// else it 'sticks' for a moment at its previous position.
+//							_parentState->getMap()->refreshSelectorPosition();			// kL
+
+//							getMap()->setCursorType(CT_NONE);							// kL
+//							_parentState->getGame()->getCursor()->setVisible(false);	// kL
+//							_parentState->getMap()->refreshSelectorPosition();			// kL
+							// kL_end.
+
+							//Log(LOG_INFO) << ". . . . . . inVisible cursor, DONE";
+						}
 					}
-
-					if (builtinpsi)
+					else													// kL
 					{
-						_save->removeItem(_currentAction.weapon);
-						_currentAction.weapon = 0;
+						cancelCurrentAction();								// kL
+						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");	// kL
 					}
 				}
-				// else give an Out-of-TU warning or something... or is that done elsewhere
-				// in which case don't check for TUs here!
+				else
+				{
+//					cancelCurrentAction();									// kL
+					_parentState->warning("STR_NO_LINE_OF_FIRE");
+				}
+
+				if (builtinpsi)
+				{
+					_save->removeItem(_currentAction.weapon);
+					_currentAction.weapon = 0;
+				}
 			}
 		}
 		else if (Options::battleConfirmFireMode

@@ -53,7 +53,7 @@ DeleteGameState::DeleteGameState(
 		State(game),
 		_origin(origin)
 {
-	_filename = Options::getUserFolder() + save + ".sav";
+	_filename = Options::getUserFolder() + save;
 	_screen = false;
 
 	_window		= new Window(this, 256, 100, 32, 50, POPUP_BOTH);

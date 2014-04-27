@@ -51,13 +51,24 @@ struct compareSaveName
 	:
 		public std::binary_function<SaveInfo&, SaveInfo&, bool>
 {
+	bool _reverse;
+
+	compareSaveName(bool reverse)
+		:
+			_reverse(reverse)
+			{
+			}
+
 	bool operator()(
 			const SaveInfo& a,
 			const SaveInfo& b) const
 	{
-		return CrossPlatform::naturalCompare(
-											a.displayName,
-											b.displayName);
+		if (a.reserved == b.reserved)
+			return CrossPlatform::naturalCompare(
+												a.displayName,
+												b.displayName);
+		else
+			return _reverse? b.reserved: a.reserved;
 	}
 };
 
@@ -66,11 +77,22 @@ struct compareSaveTimestamp
 	:
 		public std::binary_function<SaveInfo&, SaveInfo&, bool>
 {
+	bool _reverse;
+
+	compareSaveTimestamp(bool reverse)
+		:
+			_reverse(reverse)
+			{
+			}
+
 	bool operator()(
 			const SaveInfo& a,
 			const SaveInfo& b) const
 	{
-		return a.timestamp < b.timestamp;
+		if (a.reserved == b.reserved)
+			return a.timestamp < b.timestamp;
+		else
+			return _reverse? b.reserved: a.reserved;
 	}
 };
 
@@ -79,17 +101,21 @@ struct compareSaveTimestamp
  * Initializes all the elements in the Saved Game screen.
  * @param game, Pointer to the core game.
  * @param origin, Game section that originated this state.
+ * @param firstValidRow, First row containing saves.
+ * @param autoquick, Show auto/quick saved games?
  */
 ListGamesState::ListGamesState(
 		Game* game,
 		OptionsOrigin origin,
-		int firstValidRow)
+		int firstValidRow,
+		bool autoquick)
 	:
 		State(game),
 		_origin(origin),
 		_showMsg(true),
 		_noUI(false),
 		_firstValidRow(firstValidRow),
+		_autoquick(autoquick),
 		_inEditMode(false) // kL
 {
 	_screen = false;
@@ -200,7 +226,9 @@ void ListGamesState::init()
 
 	try
 	{
-		_saves = SavedGame::getList(_game->getLanguage());
+		_saves = SavedGame::getList(
+								_game->getLanguage(),
+								_autoquick);
 		_lstSaves->clearList();
 		sortList(Options::saveOrder);
 	}
@@ -246,25 +274,25 @@ void ListGamesState::sortList(SaveSort sort)
 			std::sort(
 					_saves.begin(),
 					_saves.end(),
-					compareSaveName());
+					compareSaveName(false));
 		break;
 		case SORT_NAME_DESC:
 			std::sort(
 					_saves.rbegin(),
 					_saves.rend(),
-					compareSaveName());
+					compareSaveName(true));
 		break;
 		case SORT_DATE_ASC:
 			std::sort(
 					_saves.begin(),
 					_saves.end(),
-					compareSaveTimestamp());
+					compareSaveTimestamp(false));
 		break;
 		case SORT_DATE_DESC:
 			std::sort(
 					_saves.rbegin(),
 					_saves.rend(),
-					compareSaveTimestamp());
+					compareSaveTimestamp(true));
 		break;
 	}
 
@@ -276,6 +304,8 @@ void ListGamesState::sortList(SaveSort sort)
  */
 void ListGamesState::updateList()
 {
+	int row = 0;
+
 	for (std::vector<SaveInfo>::const_iterator
 			i = _saves.begin();
 			i != _saves.end();
@@ -286,6 +316,13 @@ void ListGamesState::updateList()
 						i->displayName.c_str(),
 						i->isoDate.c_str(),
 						i->isoTime.c_str());
+		if (i->reserved
+			&& _origin != OPT_BATTLESCAPE)
+		{
+			_lstSaves->setRowColor(row, Palette::blockOffset(8)+5);
+		}
+
+		row++;
 	}
 }
 

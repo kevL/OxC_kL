@@ -33,6 +33,8 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
+//kL #include "../Menu/SaveGameState.h"
+
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 #include "../Interface/TurnCounter.h" // kL, global 'kL_TurnCount'
@@ -41,6 +43,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Savegame/SavedBattleGame.h"
+//kL #include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -180,6 +183,14 @@ void NextTurnState::close()
 	}
 	else
 		_state->btnCenterClick(0);
+
+		// Autosave every 5 turns -> kL_note: every turn
+		// actually let's just NOT autosave, Tks.
+/*		if ( //_battleGame->getTurn() %5 == 0 &&
+			_battleGame->getSide() == FACTION_PLAYER)
+		{
+			_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, SavedGame::AUTOSAVE_BATTLESCAPE));
+		} */
 }
 
 }

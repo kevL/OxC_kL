@@ -20,6 +20,7 @@
 #include "TextButton.h"
 
 #include <SDL.h>
+#include <SDL_mixer.h>
 
 #include "ComboBox.h"
 #include "Text.h"
@@ -315,7 +316,7 @@ void TextButton::mousePress(Action* action, State* state)
 			&& action->getDetails()->button.button != SDL_BUTTON_WHEELUP
 			&& action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
 		{
-			soundPress->play(0); // UI Fx channel
+			soundPress->play(Mix_GroupAvailable(0)); // UI Fx channels #0 & #1, see Game.cpp
 		}
 
 		if (_comboBox)

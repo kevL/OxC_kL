@@ -45,7 +45,8 @@ ListLoadState::ListLoadState(
 		ListGamesState(
 			game,
 			origin,
-			0)
+			0,
+			true)
 {
 	centerAllSurfaces();
 

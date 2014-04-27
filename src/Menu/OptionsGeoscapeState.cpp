@@ -108,7 +108,7 @@ OptionsGeoscapeState::OptionsGeoscapeState(
 
 	_cbxDragScroll->setColor(Palette::blockOffset(15)-1);
 	_cbxDragScroll->setOptions(dragScrolls);
-	_cbxDragScroll->setSelected(Options::globeScrollDragButton);
+	_cbxDragScroll->setSelected(Options::globeDragScrollButton);
 	_cbxDragScroll->onChange((ActionHandler)& OptionsGeoscapeState::cbxDragScrollChange);
 	_cbxDragScroll->setTooltip("STR_DRAG_SCROLL_DESC");
 	_cbxDragScroll->onMouseIn((ActionHandler)& OptionsGeoscapeState::txtTooltipIn);
@@ -199,7 +199,7 @@ OptionsGeoscapeState::~OptionsGeoscapeState()
  */
 void OptionsGeoscapeState::cbxDragScrollChange(Action*)
 {
-	Options::globeScrollDragButton = _cbxDragScroll->getSelected();
+	Options::globeDragScrollButton = _cbxDragScroll->getSelected();
 }
 
 /**

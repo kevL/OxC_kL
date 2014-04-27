@@ -449,11 +449,12 @@ void NewBattleState::initSave()
 			i < 30;
 			++i)
 	{
-		Soldier* soldier = new Soldier(
-									rule->getSoldier("XCOM"),
-									rule->getArmor("STR_NONE_UC"),
-									&rule->getPools(),
-									save->getId("STR_SOLDIER"));
+		Soldier* soldier = rule->genSoldier(save);
+//		Soldier* soldier = new Soldier(
+//									rule->getSoldier("XCOM"),
+//									rule->getArmor("STR_NONE_UC"),
+//									&rule->getPools(),
+//									save->getId("STR_SOLDIER"));
 
         for (int
 				n = 0;

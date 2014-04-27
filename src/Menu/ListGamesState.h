@@ -52,6 +52,7 @@ class ListGamesState
 
 	protected:
 		bool
+			_autoquick,
 			_inEditMode, // kL
 			_showMsg,
 			_noUI;
@@ -84,7 +85,8 @@ class ListGamesState
 			ListGamesState(
 					Game* game,
 					OptionsOrigin origin,
-					int firstValidRow);
+					int firstValidRow,
+					bool autoquick);
 			/// Cleans up the Saved Game state.
 			virtual ~ListGamesState();
 

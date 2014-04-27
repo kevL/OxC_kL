@@ -51,7 +51,7 @@ Soldier::Soldier(
 		int id)
 	:
 		_name(L""),
-		_id(0),
+		_id(id),
 		_improvement(0),
 		_rules(rules),
 		_initialStats(),
@@ -106,9 +106,6 @@ Soldier::Soldier(
 			_look	= (SoldierLook)RNG::generate(0, 3);
 		}
 	}
-
-	if (id != 0)
-		_id = id;
 }
 
 /**

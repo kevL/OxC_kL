@@ -63,6 +63,10 @@
 namespace OpenXcom
 {
 
+const std::string
+	SavedGame::AUTOSAVE_GEOSCAPE	= "_autogeo_.asav",
+	SavedGame::AUTOSAVE_BATTLESCAPE	= "_autobattle_.asav",
+	SavedGame::QUICKSAVE			= "_quick_.asav";
 
 struct findRuleResearch
 	:
@@ -233,78 +237,56 @@ SavedGame::~SavedGame()
 /**
  * Gets all the info of the saves found in the user folder.
  * @param lang Loaded language.
+ * @param autoquick Include autosaves and quicksaves.
  */
-std::vector<SaveInfo> SavedGame::getList(Language* lang)
+std::vector<SaveInfo> SavedGame::getList(
+		Language* lang,
+		bool autoquick)
 {
 	std::vector<SaveInfo> info;
 
-	std::vector<std::string> saves = CrossPlatform::getFolderContents(Options::getUserFolder(), "sav");
+	if (autoquick)
+	{
+		std::vector<std::string> saves = CrossPlatform::getFolderContents(
+																		Options::getUserFolder(),
+																		"asav");
+		for (std::vector<std::string>::iterator
+				i = saves.begin();
+				i != saves.end();
+				++i)
+		{
+			try
+			{
+				info.push_back(getSaveInfo(
+										*i,
+										lang));
+			}
+			catch (Exception &e)
+			{
+				Log(LOG_ERROR) << e.what();
+				continue;
+			}
+			catch (YAML::Exception &e)
+			{
+				Log(LOG_ERROR) << e.what();
+				continue;
+			}
+		}
+	}
+
+	std::vector<std::string> saves = CrossPlatform::getFolderContents(
+																	Options::getUserFolder(),
+																	"sav");
 	for (std::vector<std::string>::iterator
 			i = saves.begin();
 			i != saves.end();
 			++i)
 	{
-		std::string file = *i;
-		std::string fullname = Options::getUserFolder() + file;
 		try
 		{
-			YAML::Node doc = YAML::LoadFile(fullname);
-			SaveInfo save;
-
-			save.fileName = CrossPlatform::noExt(file);
-
-			if (doc["name"])
-				save.displayName = Language::utf8ToWstr(doc["name"].as<std::string>());
-			else
-				save.displayName = Language::fsToWstr(save.fileName);
-
-			save.timestamp = CrossPlatform::getDateModified(fullname);
-			std::pair<std::wstring, std::wstring> str = CrossPlatform::timeToString(save.timestamp);
-			save.isoDate = str.first;
-			save.isoTime = str.second;
-
-			std::wostringstream details;
-/*kL			if (doc["turn"])
-			{
-				details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L" ";
-				details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
-			}
-			else
-			{
-				GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
-				time.load(doc["time"]);
-				details << lang->getString("STR_GEOSCAPE") << L": ";
-				details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L" ";
-				details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
-			} */
-			// kL_begin:
-			if (doc["base"])
-			{
-				details << Language::utf8ToWstr(doc["base"].as<std::string>());
-				details << L" - ";
-			}
-
-			GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
-			time.load(doc["time"]);
-			details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L" ";
-			details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
-
-			if (doc["turn"])
-			{
-				details << L" - ";
-				details << lang->getString(doc["mission"].as<std::string>()) << L" ";
-				details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
-			} // kL_end.
-
-			if (doc["ironman"].as<bool>(false))
-				details << L" " << lang->getString("STR_IRONMAN");
-
-			save.details = details.str();
-
-			if (doc["rulesets"])
-				save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
-
-			info.push_back(save);
+			info.push_back(getSaveInfo(
+									*i,
+									lang));
 		}
 		catch (Exception &e)
 		{
@@ -319,6 +301,95 @@ std::vector<SaveInfo> SavedGame::getList(Language* lang)
 	}
 
 	return info;
+}
+
+/**
+ * Gets the info of a specific save file.
+ * @param file Save filename.
+ * @param lang Loaded language.
+ */
+SaveInfo SavedGame::getSaveInfo(
+		const std::string& file,
+		Language* lang)
+{
+	std::string fullname = Options::getUserFolder() + file;
+	YAML::Node doc = YAML::LoadFile(fullname);
+	SaveInfo save;
+
+	save.fileName = file;
+
+	if (save.fileName == QUICKSAVE)
+	{
+		save.displayName = lang->getString("STR_QUICK_SAVE_SLOT");
+		save.reserved = true;
+	}
+	else if (save.fileName == AUTOSAVE_GEOSCAPE)
+	{
+		save.displayName = lang->getString("STR_AUTO_SAVE_GEOSCAPE_SLOT");
+		save.reserved = true;
+	}
+	else if (save.fileName == AUTOSAVE_BATTLESCAPE)
+	{
+		save.displayName = lang->getString("STR_AUTO_SAVE_BATTLESCAPE_SLOT");
+		save.reserved = true;
+	}
+	else
+	{
+		if (doc["name"])
+			save.displayName = Language::utf8ToWstr(doc["name"].as<std::string>());
+		else
+			save.displayName = Language::fsToWstr(CrossPlatform::noExt(file));
+
+		save.reserved = false;
+	}
+
+	save.timestamp = CrossPlatform::getDateModified(fullname);
+	std::pair<std::wstring, std::wstring> str = CrossPlatform::timeToString(save.timestamp);
+	save.isoDate = str.first;
+	save.isoTime = str.second;
+
+	std::wostringstream details;
+/*kL	if (doc["turn"])
+	{
+		details << lang->getString("STR_BATTLESCAPE") << L": " << lang->getString(doc["mission"].as<std::string>()) << L" ";
+		details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
+	}
+	else
+	{
+		GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
+		time.load(doc["time"]);
+		details << lang->getString("STR_GEOSCAPE") << L": ";
+		details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L" ";
+		details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+	} */
+	// kL_begin:
+	if (doc["base"])
+	{
+		details << Language::utf8ToWstr(doc["base"].as<std::string>());
+		details << L" - ";
+	}
+
+	GameTime time = GameTime(6, 1, 1, 1999, 12, 0, 0);
+	time.load(doc["time"]);
+	details << time.getDayString(lang) << L" " << lang->getString(time.getMonthString()) << L" " << time.getYear() << L" ";
+	details << time.getHour() << L":" << std::setfill(L'0') << std::setw(2) << time.getMinute();
+
+	if (doc["turn"])
+	{
+		details << L" - ";
+		details << lang->getString(doc["mission"].as<std::string>()) << L" ";
+		details << lang->getString("STR_TURN").arg(doc["turn"].as<int>());
+	} // kL_end.
+
+	if (doc["ironman"].as<bool>(false))
+		details << L" " << lang->getString("STR_IRONMAN");
+
+	save.details = details.str();
+
+	if (doc["rulesets"])
+		save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
+
+	return save;
 }
 
 /**

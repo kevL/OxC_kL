@@ -156,7 +156,10 @@ private:
 
 
 	std::string _zombieUnit;
-	bool _strengthApplied;
+	bool
+		_LOSRequired,
+		_strengthApplied;
+
 	public:
 		/// Creates a blank item ruleset.
 		RuleItem(const std::string& type);
@@ -328,18 +331,26 @@ private:
 		int getMinRange() const;
 		/// Get the accuracy dropoff of this weapon.
 		int getDropoff() const;
+
 		/// Get the number of projectiles to trace.
 		int getShotgunPellets() const;
+
 		/// Gets a weapon's zombie unit, if any.
 		std::string getZombieUnit() const;
+
 		/// Gets if strength should be applied to the damage of this weapon.
 		bool isStrengthApplied() const;
+
 		/// kL. Used to determine if a weapon is capable of Reaction Fire.
 		bool canReactionFire() const; // kL
+
 		/// Gets the sound this weapon makes when you punch someone in the face with it.
 		int getMeleeSound() const;
 		/// Ok, so this isn't a melee type weapon but we're using it for melee anyway... Get its melee damage.
 		int getMeleePower() const;
+
+		/// Check if LOS is required to use this item (only applies to psionic type items)
+		bool isLOSRequired() const;
 };
 
 }

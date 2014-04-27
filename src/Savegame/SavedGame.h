@@ -70,6 +70,7 @@ enum GameDifficulty
  */
 struct SaveInfo
 {
+	bool reserved;
 	time_t timestamp;
 	std::string fileName;
 	std::wstring
@@ -143,16 +144,26 @@ private:
 			const RuleResearch* research,
 			const Ruleset* ruleset,
 			Base* base) const;
-
+	///
+	static SaveInfo getSaveInfo(
+			const std::string& file,
+			Language* lang);
 
 	public:
+		static const std::string
+			AUTOSAVE_GEOSCAPE,
+			AUTOSAVE_BATTLESCAPE,
+			QUICKSAVE;
+
 		/// Creates a new saved game.
 		SavedGame();
 		/// Cleans up the saved game.
 		~SavedGame();
 
 		/// Gets list of saves in the user directory.
-		static std::vector<SaveInfo> getList(Language* lang);
+		static std::vector<SaveInfo> getList(
+				Language* lang,
+				bool autoquick);
 
 		/// Loads a saved game from YAML.
 		void load(
