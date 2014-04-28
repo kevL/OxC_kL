@@ -105,7 +105,10 @@ void SaveGameState::init()
 	_game->popState();
 
 	if (_filename.find(".sav") != std::string::npos)	// manual save, close the save screen
+	{
 		_game->popState();
+		_game->popState();
+	}
 	else												// automatic save, give it a default name
 		_game->getSavedGame()->setName(Language::fsToWstr(_filename));
 

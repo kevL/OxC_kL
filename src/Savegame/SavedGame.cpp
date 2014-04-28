@@ -433,7 +433,7 @@ void SavedGame::load(
 	if (doc["rng"]
 		&& !Options::newSeedOnLoad)
 	{
-		RNG::setSeed(doc["rng"].as<int>());
+		RNG::setSeed(doc["rng"].as<uint64_t>());
 	}
 
 	_monthsPassed			= doc["monthsPassed"].as<int>(_monthsPassed);

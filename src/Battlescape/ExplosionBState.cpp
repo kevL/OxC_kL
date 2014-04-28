@@ -35,6 +35,7 @@
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -127,7 +128,17 @@ void ExplosionBState::init()
 
 		_areaOfEffect = true;
 	}
-	else // cyberdiscs!!!
+	else if (_unit  // cyberdiscs!!!
+		&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+	{
+		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
+		_power = RNG::generate(
+							_power * 2 / 3,
+							_power * 3 / 2); // kL
+
+		_areaOfEffect = true;
+	}
+	else // unhandled cyberdiscs!!! ( see Xcom1Ruleset.rul )
 	{
 		_power = RNG::generate(66, 138);
 		//Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
@@ -384,11 +395,18 @@ void ExplosionBState::explode()
 	}
 	else if (!_item) // explosion not caused by terrain or an item, must be by a unit (cyberdisc)
 	{
+		int radius = 6;
+		if (_unit
+			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+		{
+			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
+		}
+
 		tileEngine->explode(
 						_center,
 						_power,
 						DT_HE,
-						6);
+						radius);
 		terrainExplosion = true;
 	}
 

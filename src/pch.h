@@ -79,8 +79,8 @@
 
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
-//	#include <shlobj.h> // kL_reinstate
-//	#include <shlwapi.h> // kL_reinstate
+//	#include <shlobj.h> // kL_reinstate: No, causes conflict OR
+//	#include <shlwapi.h> // kL_reinstate: this causes conflict ...
 	#include <direct.h>
 #else // kL_reinstate end.
 //kL #ifndef _WIN32
@@ -112,9 +112,8 @@
 /*
 #include "./Engine/State.h"
 
-#include "./Basescape/TransferConfirmState.h"
-
 #include "./Engine/ShaderMove.h"
+#include "./Engine/AdlibMusic.h" // kL, Adlib subdir also
 #include "./Engine/Flc.h"
 #include "./Engine/Logger.h"
 #include "./Engine/Surface.h"
@@ -148,6 +147,7 @@
 #include "./Engine/Palette.h"
 #include "./Engine/Music.h"
 #include "./Engine/Language.h"
+#include "./Engine/LanguagePlurality.h" // kL
 #include "./Engine/ShaderDrawHelper.h"
 
 //kL #include "./dirent.h"
@@ -214,6 +214,7 @@
 #include "./Ufopaedia/ArticleStateVehicle.h"
 #include "./Ufopaedia/UfopaediaStartState.h"
 
+#include "./Basescape/TransferConfirmState.h"
 #include "./Basescape/TransferBaseState.h"
 #include "./Basescape/BuildFacilitiesState.h"
 #include "./Basescape/ResearchState.h"
@@ -391,6 +392,6 @@
 #include "./Savegame/AlienStrategy.h"
 #include "./Savegame/EquipmentLayoutItem.h"
 */
-// kL_note: Also, MatrixState, SoldierDead, SoldierDiedState, &tc.
+// kL_note: Also, MatrixState, SoldierDead, SoldierDiedState, &tc. TurnCounter ...
 
 #endif

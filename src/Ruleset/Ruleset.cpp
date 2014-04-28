@@ -63,6 +63,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/Transfer.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
@@ -1917,6 +1918,19 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 			{
 				if ((*j)->getName() == soldier->getName())
 					duplicate = true;
+			}
+
+			for (std::vector<Transfer*>::iterator
+					k = (*i)->getTransfers()->begin();
+					k != (*i)->getTransfers()->end()
+						&& !duplicate;
+					++k)
+			{
+				if ((*k)->getType() == TRANSFER_SOLDIER
+					&& (*k)->getSoldier()->getName() == soldier->getName())
+				{
+					duplicate = true;
+				}
 			}
 		}
 	}

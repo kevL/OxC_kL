@@ -114,15 +114,16 @@ ArticleStateArmor::ArticleStateArmor(
 			++i)
 	{
 		ItemDamageType dType = static_cast<ItemDamageType>(i);
-//kL		int vuln = (int)ceil(armor->getDamageModifier(dt) * 100);
-		int vuln = static_cast<int>(armor->getDamageModifier(dType) * 100.f); // kL
 		std::string damage = getDamageTypeText(dType);
-		if (//kL percentage != 100 &&
-			damage != "STR_UNKNOWN")
+		if (damage != "STR_UNKNOWN")
 		{
+//kL			int vulnera = (int)ceil(armor->getDamageModifier(dType) * 100);
+//kL			int vulnera = (int)floor((armor->getDamageModifier(dType) + 0.5f) * 100.0f);
+			int vulnera = static_cast<int>(armor->getDamageModifier(dType) * 100.f); // kL
+
 			addStat(
 				damage,
-				Text::formatPercentage(vuln));
+				Text::formatPercentage(vulnera));
 		}
 	}
 

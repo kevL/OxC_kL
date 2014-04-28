@@ -2338,7 +2338,8 @@ bool AlienBAIState::psiAction()
 		return false;
 	}
 
-	RuleItem* itemRule = _save->getBattleState()->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
+//	RuleItem *psiWeaponRules = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
+	RuleItem* itemRule = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
 
 	bool LOSRequired = itemRule->isLOSRequired();
 

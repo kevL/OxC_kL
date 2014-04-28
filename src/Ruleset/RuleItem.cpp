@@ -646,29 +646,23 @@ int RuleItem::getTUUse() const
  */
 int RuleItem::getExplosionRadius() const
 {
-	int radius = 0;
+	if (_blastRadius > -1)
+		return _blastRadius;
 
-	if (_blastRadius == -1)
-	{
-		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
-		// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid.
-		if (_damageType == DT_IN)
-			radius = _power / 30 + 1;
-		else if (_damageType == DT_HE
-			|| _damageType == DT_STUN
-			|| _damageType == DT_SMOKE)
-		{
-			radius = _power / 20 + 1;
-		}
-	}
-	else // unless a blast radius is actually defined.
-		radius = _blastRadius;
+	// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
+	// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid.
+	if (_damageType == DT_IN)
+		return _power / 30 + 1;	// kL_note: Should just reduce the power of IN in Xcom1Ruleset
+								// and be done with it.
 
-	// kL. I hate caps...
-//	if (radius > 11)
-//		radius = 11;
-
-	return radius;
+// kL_note: Removing these checks assumes only these remaining types
+// are getting checked for ExplosionRadii elsewhere ...
+//	if (_damageType == DT_HE
+//		|| _damageType == DT_STUN
+//		|| _damageType == DT_SMOKE)
+//	{
+	return _power / 20 + 1;
+//	}
 }
 
 /**

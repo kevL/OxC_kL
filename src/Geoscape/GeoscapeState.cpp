@@ -2442,13 +2442,15 @@ void GeoscapeState::time1Day()
 									*_game->getRuleset(),
 									*_game->getSavedGame()));
 
-	// Autosave every 10 days
-	// kL_note: Lets not. Thank you!!
-/*	int day = _game->getSavedGame()->getTime()->getDay();
-	if (day == 1 || day % 10 == 0)
-	{
+	// Autosave every 10 days. kL_note: every day.
+//kL	int day = _game->getSavedGame()->getTime()->getDay();
+//kL	if (day == 1 || day %10 == 0)
+//	{
+	if (_game->getSavedGame()->isIronman())
+	{}
+	else if (Options::autosave)
 		_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
-	} */
+//	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Day() EXIT";
 }
 

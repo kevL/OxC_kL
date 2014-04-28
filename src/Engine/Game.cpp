@@ -29,6 +29,8 @@
 #include <SDL_image.h>
 #include <SDL_mixer.h>
 
+#include "Adlib/adlplayer.h"
+
 #include "Action.h"
 #include "CrossPlatform.h"
 #include "Exception.h"
@@ -510,7 +512,10 @@ void Game::setVolume(
 			Mix_Volume(-1, sound); // kL_note: this, supposedly, sets volume on *all channels*
 
 		if (music >= 0)
+		{
 			Mix_VolumeMusic(music);
+			func_set_music_volume(music);
+		}
 
 		if (ui >= 0)
 		{

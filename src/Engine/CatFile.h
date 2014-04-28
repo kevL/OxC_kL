@@ -65,7 +65,9 @@ private:
 		}
 
 		/// Load an object into memory.
-		char* load(unsigned int i);
+		char* load(
+				unsigned int i,
+				bool name = false);
 };
 
 }
