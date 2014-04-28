@@ -122,7 +122,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		"PAL_BATTLEPEDIA"
 	};
 
-	for (int
+	for (size_t
 			i = 0;
 			i < sizeof(pal) / sizeof(pal[0]);
 			++i)
@@ -173,7 +173,7 @@ XcomResourcePack::XcomResourcePack( // kL
 			{  3,   3,   6, 0}
 		};
 
-		for (int
+		for (size_t
 				i = 0;
 				i < sizeof(gradient) / sizeof(gradient[0]);
 				++i)
@@ -305,7 +305,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		"TEXTURE.DAT"
 	};
 
-	for (int
+	for (size_t
 			i = 0;
 			i < sizeof(sets) / sizeof(sets[0]);
 			++i)
@@ -408,7 +408,7 @@ XcomResourcePack::XcomResourcePack( // kL
 	Polyline* l = 0;
 
 	int start = 0;
-	for (int
+	for (size_t
 			i = 0;
 			lines[i] > -19.999;
 			++i)
@@ -535,15 +535,23 @@ XcomResourcePack::XcomResourcePack( // kL
 //kL #ifndef __NO_MUSIC
 		// Check which music version is available
 		// Check if GM.CAT data is available // sza_MusicRules
-		CatFile* adlibcat = 0;
+		CatFile
+			* adlibcat = 0,
+			* aintrocat = 0;
 		GMCatFile* gmcat = 0;
 
 		std::string
 			musicAdlib	= "SOUND/ADLIB.CAT",
+			musicIntro	= "SOUND/AINTRO.CAT",
 			musicGM		= "SOUND/GM.CAT";
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicAdlib)))
+		{
 			adlibcat = new CatFile(CrossPlatform::getDataFile(musicAdlib).c_str());
+
+			if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicIntro)))
+				aintrocat = new CatFile(CrossPlatform::getDataFile(musicIntro).c_str());
+		}
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicGM)))
 			gmcat = new GMCatFile(CrossPlatform::getDataFile(musicGM).c_str());
@@ -556,13 +564,13 @@ XcomResourcePack::XcomResourcePack( // kL
 		{
 			std::string type = i->first;
 			std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = i->second;
-			for(std::map<std::string, std::vector<std::pair<std::string, int> > >::const_iterator
+			for (std::map<std::string, std::vector<std::pair<std::string, int> > >::const_iterator
 					j = assignment.begin();
 					j != assignment.end();
 					++j)
 			{
 				std::vector<std::pair<std::string, int> > filenames = j->second;
-				for(std::vector<std::pair<std::string, int> >::const_iterator
+				for (std::vector<std::pair<std::string, int> >::const_iterator
 						k = filenames.begin();
 						k != filenames.end();
 						++k)
@@ -595,7 +603,7 @@ XcomResourcePack::XcomResourcePack( // kL
 
 						// kL_note: This section may well be redundant w/ sza_MusicRules!!
 						// Load alternative digital track if there is an override
-						for (int
+						for (size_t
 								l = 0;
 								l < sizeof(mus) / sizeof(mus[0]);
 								++l)
@@ -642,7 +650,7 @@ XcomResourcePack::XcomResourcePack( // kL
 								".wav" // kL_add ( also add "." and remove them below )
 							}; // kL_end.
 
-							for (int
+							for (size_t
 									exti = 0;
 									exti < 3;
 									++exti)
@@ -669,11 +677,22 @@ XcomResourcePack::XcomResourcePack( // kL
 							&& Options::audioBitDepth == 16)
 						{
 							_musicFile[filename] = new AdlibMusic();
+
+//							if (tracks[i] < adlibcat->getAmount()) // kL_note: tracks[i] -> filename .....
+//							{
 							_musicFile[filename]->load(
 													adlibcat->load(midiIndex, true),
 													adlibcat->getObjectSize(midiIndex));
 
 							loaded = true;
+//							}
+//							else if (aintrocat) // separate intro music
+//							{
+//								int track = tracks[i] - adlibcat->getAmount();
+//								_musics[mus[i]]->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
+
+//								loaded = true;
+//							}
 						}
 						else if (gmcat) // Try GM music
 						{
@@ -704,7 +723,7 @@ XcomResourcePack::XcomResourcePack( // kL
 			}
 		}
 
-/*kL		for (int
+/*kL		for (size_t
 				i = 0;
 				i < sizeof(mus) / sizeof(mus[0]);
 				++i)
@@ -741,7 +760,7 @@ XcomResourcePack::XcomResourcePack( // kL
 
 			if (!loaded) // sza_End.
 
-			for (int // Try digital tracks
+			for (size_t // Try digital tracks
 					j = 0;
 					j < sizeof(exts) / sizeof(exts[0];
 					++j)
@@ -764,10 +783,19 @@ XcomResourcePack::XcomResourcePack( // kL
 					&& Options::audioBitDepth == 16)
 				{
 					_musics[mus[i]] = new AdlibMusic();
-					_musics[mus[i]]->load(
-										adlibcat->load(tracks[i], true),
-										adlibcat->getObjectSize(tracks[i]));
-					loaded = true;
+					if (tracks[i] < adlibcat->getAmount())
+					{
+						_musics[mus[i]]->load(
+											adlibcat->load(tracks[i], true),
+											adlibcat->getObjectSize(tracks[i]));
+						loaded = true;
+					}
+					else if (aintrocat) // separate intro music
+					{
+						int track = tracks[i] - adlibcat->getAmount();
+						_musics[mus[i]]->load(aintrocat->load(track, true), aintrocat->getObjectSize(track));
+						loaded = true;
+					}
 				}
 				else if (gmcat) // Try GM music
 				{
@@ -795,14 +823,15 @@ XcomResourcePack::XcomResourcePack( // kL
 		} */
 
 		delete adlibcat;
+		delete aintrocat;
 		delete gmcat;
 
-/*kL		for (int // Ok, now try to load the optional musics
+/*kL		for (size_t // Ok, now try to load the optional musics
 				i = 0;
 				i < sizeof(musOptional) / sizeof(musOptional[0]);
 				++i)
 		{
-			for (int // Try digital tracks
+			for (size_t // Try digital tracks
 					j = 0;
 					j < sizeof(exts) / sizeof(exts[0]);
 					++j)
@@ -858,7 +887,7 @@ XcomResourcePack::XcomResourcePack( // kL
 			wav = false;
 		}
 
-		for (int
+		for (size_t
 				i = 0;
 				i < sizeof(catsId) / sizeof(catsId[0]);
 				++i)
@@ -1269,7 +1298,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		"BLANKS.PCK"
 	};
 
-	for (int
+	for (size_t
 			i = 0;
 			i < sizeof(bsets) / sizeof(bsets[0]);
 			++i)
@@ -1320,7 +1349,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		"TAC00.SCR"
 	};
 
-	for (int
+	for (size_t
 			i = 0;
 			i < sizeof(scrs) / sizeof(scrs[0]);
 			++i)
@@ -1343,7 +1372,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		"UNIBORD.PCK"
 	};
 
-	for (int
+	for (size_t
 			i = 0;
 			i < sizeof(spks) / sizeof(spks[0]);
 			++i)

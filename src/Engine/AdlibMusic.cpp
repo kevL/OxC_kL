@@ -27,10 +27,7 @@
 #include "Options.h"
 
 #include "Adlib/adlplayer.h"
-extern "C"
-{
-	#include "Adlib/fmopl.h"
-}
+#include "Adlib/fmopl.h"
 
 
 extern FM_OPL* opl[2];
