@@ -74,16 +74,16 @@ ConfirmLoadState::ConfirmLoadState(
 
 	_btnYes->setColor(Palette::blockOffset(15)-1);
 	_btnYes->setText(tr("STR_YES"));
-	_btnYes->onMouseClick((ActionHandler)&ConfirmLoadState::btnYesClick);
+	_btnYes->onMouseClick((ActionHandler)& ConfirmLoadState::btnYesClick);
 	_btnYes->onKeyboardPress(
-					(ActionHandler)&ConfirmLoadState::btnYesClick,
+					(ActionHandler)& ConfirmLoadState::btnYesClick,
 					Options::keyOk);
 
 	_btnNo->setColor(Palette::blockOffset(15)-1);
 	_btnNo->setText(tr("STR_NO"));
-	_btnNo->onMouseClick((ActionHandler)&ConfirmLoadState::btnNoClick);
+	_btnNo->onMouseClick((ActionHandler)& ConfirmLoadState::btnNoClick);
 	_btnNo->onKeyboardPress(
-					(ActionHandler)&ConfirmLoadState::btnNoClick,
+					(ActionHandler)& ConfirmLoadState::btnNoClick,
 					Options::keyCancel);
 
 	_txtText->setColor(Palette::blockOffset(15)-1);

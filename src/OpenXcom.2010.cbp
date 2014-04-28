@@ -1142,21 +1142,11 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Engine/AdlibMusic.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="Engine/AdlibMusic.cpp" />
 		<Unit filename="Engine/AdlibMusic.h" />
-		<Unit filename="Engine/Adlib/adlplayer.cpp">
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="Engine/Adlib/adlplayer.cpp" />
 		<Unit filename="Engine/Adlib/adlplayer.h" />
-		<Unit filename="Engine/Adlib/fmopl.c">
-			<Option compilerVar="CC" />
-			<Option compile="0" />
-			<Option link="0" />
-		</Unit>
+		<Unit filename="Engine/Adlib/fmopl.cpp" />
 		<Unit filename="Engine/Adlib/fmopl.h" />
 		<Unit filename="Engine/CatFile.cpp">
 			<Option target="Debug Win32" />

@@ -127,7 +127,7 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstItemsLeftArrowClick_Armor);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstItemsRightArrowClick_Armor);
-	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick);
+	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick, 0);
 
 
 //kL	Craft* c = _base->getCrafts()->at(_craft);
@@ -228,6 +228,8 @@ void CraftArmorState::init()
 
 		row++;
 	}
+
+	_lstSoldiers->draw();
 }
 
 /**
@@ -235,7 +237,6 @@ void CraftArmorState::init()
  * @param action Pointer to an action.
  */
 void CraftArmorState::btnOkClick(Action*)
-//void CraftArmorState::btnOkClick(Action* action) // kL
 {
 	_game->popState();
 }
@@ -288,8 +289,8 @@ void CraftArmorState::lstItemsLeftArrowClick_Armor(Action* action)
 
 				if (row != _lstSoldiers->getScroll())
 					SDL_WarpMouse(
-							static_cast<Uint16>(action->getXMouse()),
-							static_cast<Uint16>(action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
+							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
+							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 				else
 					_lstSoldiers->scrollUp(false);
 			}
@@ -329,8 +330,8 @@ void CraftArmorState::lstItemsRightArrowClick_Armor(Action* action)
 
 				if (row != 15 + _lstSoldiers->getScroll())
 					SDL_WarpMouse(
-							static_cast<Uint16>(action->getXMouse()),
-							static_cast<Uint16>(action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
+							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
+							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 				else
 					_lstSoldiers->scrollDown(false);
 			}

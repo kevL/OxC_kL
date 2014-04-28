@@ -150,9 +150,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftSoldiersState::lstItemsLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftSoldiersState::lstItemsRightArrowClick);
-	_lstSoldiers->onMouseClick((ActionHandler)&CraftSoldiersState::lstSoldiersClick, 0);
-
-//	populateList();
+	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick, 0);
 }
 
 /**
@@ -218,7 +216,6 @@ void CraftSoldiersState::btnUnloadClick(Action*) // kL
 /**
  * Shows the soldiers in a list.
  */
-//void CraftSoldiersState::populateList()
 void CraftSoldiersState::init()
 {
 	State::init();
@@ -288,7 +285,6 @@ void CraftSoldiersState::lstItemsLeftArrowClick(Action* action)
 			}
 		}
 
-//		populateList();
 		init();
 	}
 }
@@ -330,7 +326,6 @@ void CraftSoldiersState::lstItemsRightArrowClick(Action* action)
 			}
 		}
 
-//		populateList();
 		init();
 	}
 }

@@ -157,7 +157,7 @@ SoldiersState::SoldiersState(
 	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstItemsLeftArrowClick_Soldier);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstItemsRightArrowClick_Soldier);
-	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick);
+	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick, 0);
 }
 
 /**
@@ -199,6 +199,8 @@ void SoldiersState::init()
 	{
 		_lstSoldiers->setScroll(0);
 	}
+
+	_lstSoldiers->draw();
 }
 
 /**
@@ -285,8 +287,8 @@ void SoldiersState::lstItemsLeftArrowClick_Soldier(Action* action)
 				if (row != _lstSoldiers->getScroll())
 				{
 					SDL_WarpMouse(
-							static_cast<Uint16>(action->getXMouse()),
-							static_cast<Uint16>(action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
+							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
+							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
 					_lstSoldiers->scrollUp(false);
@@ -328,8 +330,8 @@ void SoldiersState::lstItemsRightArrowClick_Soldier(Action* action)
 				if (row != 15 + _lstSoldiers->getScroll())
 				{
 					SDL_WarpMouse(
-							static_cast<Uint16>(action->getXMouse()),
-							static_cast<Uint16>(action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
+							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
+							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 				}
 				else
 					_lstSoldiers->scrollDown(false);

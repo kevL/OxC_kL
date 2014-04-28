@@ -30,9 +30,9 @@
 namespace OpenXcom
 {
 
+class Text;
 class TextButton;
 class Window;
-class Text;
 
 
 /**

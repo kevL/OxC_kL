@@ -42,8 +42,7 @@ class Window;
 
 
 /**
- * Base class for saved game screens which
- * provides the common layout and listing.
+ * Base class for saved game screens which provides the common layout and listing.
  */
 class ListGamesState
 	:
