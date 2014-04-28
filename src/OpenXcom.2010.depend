@@ -6863,7 +6863,7 @@
 1394398507 source:f:\git\openxcom\src\engine\action.cpp
 	"Action.h"
 
-1398656341 source:f:\git\openxcom\src\engine\catfile.cpp
+1398685792 source:f:\git\openxcom\src\engine\catfile.cpp
 	"CatFile.h"
 	<SDL.h>
 
@@ -9077,7 +9077,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1398662963 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1398686874 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Battlescape/Position.h"
@@ -11734,7 +11734,7 @@
 1398481998 source:f:\git\openxcom\src\ruleset\statstringcondition.cpp
 	"StatStringCondition.h"
 
-1398660613 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
+1398685671 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
 	<stdio.h>
 	<math.h>
 	<memory.h>
@@ -11743,7 +11743,7 @@
 1398655003 f:\git\openxcom\src\engine\adlib\fmopl.h
 	"ymdeltat.h"
 
-1398660451 source:f:\git\openxcom\src\engine\adlibmusic.cpp
+1398664975 source:f:\git\openxcom\src\engine\adlibmusic.cpp
 	"AdlibMusic.h"
 	<algorithm>
 	<fstream>
@@ -11760,4 +11760,12 @@
 	"Music.h"
 
 1398655003 f:\git\openxcom\src\engine\adlib\adlplayer.h
+
+1398664859 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
+	<stdio.h>
+	<stdlib.h>
+	<string.h>
+	<stdarg.h>
+	<math.h>
+	"fmopl.h"
 

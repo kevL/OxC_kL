@@ -381,38 +381,11 @@ Globe::Globe(
 
 	_mkCity = new Surface(3, 3);
 	_mkCity->lock();
-/*	_mkCity->setPixel(0, 0, 14);
-	_mkCity->setPixel(1, 0, 14);
-	_mkCity->setPixel(2, 0, 14);
-	_mkCity->setPixel(0, 1, 14);
-	_mkCity->setPixel(1, 1, 11);
-	_mkCity->setPixel(2, 1, 14);
-	_mkCity->setPixel(0, 2, 14);
-	_mkCity->setPixel(1, 2, 14);
-	_mkCity->setPixel(2, 2, 14); */
-/*	_mkCity->setPixel(0, 0, 86);	// blue border
-	_mkCity->setPixel(1, 0, 86);
-	_mkCity->setPixel(2, 0, 86);
-	_mkCity->setPixel(0, 1, 86);
-	_mkCity->setPixel(1, 1, 5);		// white center
-	_mkCity->setPixel(2, 1, 86);
-	_mkCity->setPixel(0, 2, 86);
-	_mkCity->setPixel(1, 2, 86);
-	_mkCity->setPixel(2, 2, 86); */
-/*	_mkCity->setPixel(0, 0, 5);		// white border
-	_mkCity->setPixel(1, 0, 5);
-	_mkCity->setPixel(2, 0, 5);
-	_mkCity->setPixel(0, 1, 5);
-	_mkCity->setPixel(1, 1, 86);	// blue center
-	_mkCity->setPixel(2, 1, 5);
-	_mkCity->setPixel(0, 2, 5);
-	_mkCity->setPixel(1, 2, 5);
-	_mkCity->setPixel(2, 2, 5); */
-	_mkCity->setPixel(0, 0, 6);		// gray border
+	_mkCity->setPixel(0, 0, 6);	// gray border
 	_mkCity->setPixel(1, 0, 6);
 	_mkCity->setPixel(2, 0, 6);
 	_mkCity->setPixel(0, 1, 6);
-	_mkCity->setPixel(1, 1, 3);		// red center
+	_mkCity->setPixel(1, 1, 3);	// red center
 	_mkCity->setPixel(2, 1, 6);
 	_mkCity->setPixel(0, 2, 6);
 	_mkCity->setPixel(1, 2, 6);
@@ -592,7 +565,7 @@ bool Globe::pointBack(
 		double lon,
 		double lat) const
 {
-	double c	= cos(_cenLat) * cos(lat) * cos(lon - _cenLon)
+	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon)
 				+ sin(_cenLat) * sin(lat);
 
 	return c < 0.0;
@@ -601,7 +574,7 @@ bool Globe::pointBack(
 
 /** Return latitude of last visible to player point on given longitude.
  * @param lon Longitude of the point.
- * @return Longitude of last visible point.
+ * @return, Longitude of last visible point.
  */
 double Globe::lastVisibleLat(double lon) const
 {
@@ -615,7 +588,7 @@ double Globe::lastVisibleLat(double lon) const
  * @param lon Longitude of the point.
  * @param lat Latitude of the point.
  * @param poly Pointer to the polygon.
- * @return True if it's inside, False if it's outside.
+ * @return, True if it's inside, False if it's outside.
  */
 bool Globe::insidePolygon(
 		double lon,
@@ -643,10 +616,11 @@ bool Globe::insidePolygon(
 	{
 		int j = (i + 1) %poly->getPoints();
 
-		/* double x = lon, y = lat,
-				x_i = poly->getLongitude(i), y_i = poly->getLatitude(i),
-				x_j = poly->getLongitude(j), y_j = poly->getLatitude(j); */
-
+/*		double
+			x = lon,
+			y = lat,
+			x_i = poly->getLongitude(i), y_i = poly->getLatitude(i),
+			x_j = poly->getLongitude(j), y_j = poly->getLatitude(j); */
 		double
 			x,
 			y,
@@ -654,6 +628,7 @@ bool Globe::insidePolygon(
 			x_j,
 			y_i,
 			y_j;
+
 		polarToCart(
 				poly->getLongitude(i),
 				poly->getLatitude(i),
@@ -695,8 +670,7 @@ void Globe::loadDat(
 		const std::string& filename,
 		std::list<Polygon*>* polygons)
 {
-	// Load file
-	std::ifstream mapFile(
+	std::ifstream mapFile( // Load file
 						filename.c_str(),
 						std::ios::in | std::ios::binary);
 	if (!mapFile)
@@ -728,13 +702,12 @@ void Globe::loadDat(
 
 		poly = new Polygon(points);
 
-		for (int
+		for (int // Correct X-Com degrees and convert to radians
 				i = 0,
 					j = 0;
 				i < points;
 				++i)
 		{
-			// Correct X-Com degrees and convert to radians
 			double lonRad = static_cast<double>(value[j++]) * 0.125f * M_PI / 180.0;
 			double latRad = static_cast<double>(value[j++]) * 0.125f * M_PI / 180.0;
 
@@ -1004,8 +977,6 @@ std::vector<Target*> Globe::getTargets(
 				i != _game->getSavedGame()->getBases()->end();
 				++i)
 		{
-//kL			if ((*i)->getLongitude() == 0.0
-//kL				&& (*i)->getLatitude() == 0.0)
 			if (AreSame((*i)->getLongitude(), 0.0)
 				&& AreSame((*i)->getLatitude(), 0.0))
 			{
@@ -1020,9 +991,6 @@ std::vector<Target*> Globe::getTargets(
 					j != (*i)->getCrafts()->end();
 					++j)
 			{
-//kL				if ((*j)->getLongitude() == (*i)->getLongitude()
-//kL						&& (*j)->getLatitude() == (*i)->getLatitude()
-//kL						&& (*j)->getDestination() == 0)
 				if ((*j)->getDestination() == 0
 					&& AreSame((*j)->getLongitude(), (*i)->getLongitude())
 					&& AreSame((*j)->getLatitude(), (*i)->getLatitude()))
@@ -1256,9 +1224,8 @@ void Globe::blink()
 }
 
 /**
- * Rotates the globe by a set amount. Necessary
- * since the globe keeps rotating while a button
- * is pressed down.
+ * Rotates the globe by a set amount. Necessary since the
+ * globe keeps rotating while a button is pressed down.
  */
 /* void Globe::rotate()
 {
@@ -1524,6 +1491,7 @@ void Globe::XuLine(
 
 /**
  * Draws the radar ranges of player bases on the globe.
+ * kL Rewrite!
  */
 void Globe::drawRadars()
 {
@@ -1535,17 +1503,12 @@ void Globe::drawRadars()
 	double
 		x,
 		y,
-//kL		testRange,
 		range,
 		lat,
 		lon;
-//kL	std::vector<double>
-//kL		ranges;
 
 	_radars->lock();
-
-
-	if (_hover // newBase build; store all potential radar ranges in a vector
+	if (_hover
 		&& Options::globeAllRadarsOnBaseBuild)
 	{
 		const std::vector<std::string>& facilities = _game->getRuleset()->getBaseFacilitiesList();
@@ -1563,20 +1526,17 @@ void Globe::drawRadars()
 						_hoverLat,
 						_hoverLon,
 						&x,
-						&y); // kL, not sure... see below.
+						&y);
 				drawGlobeCircle(
 							_hoverLat,
 							_hoverLon,
 							range,
 							48);
-
-//kL, above.				if (Options::globeAllRadarsOnBaseBuild)
-//kL				ranges.push_back(range);
 			}
 		}
 	}
 
-	for (std::vector<Base*>::iterator // Draw radars around bases
+	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -1584,37 +1544,7 @@ void Globe::drawRadars()
 		lat = (*i)->getLatitude();
 		lon = (*i)->getLongitude();
 
-		polarToCart( // kL, from below.
-				lon,
-				lat,
-				&x,&y);
-
-		// kL_begin: Globe::drawRadars(), redo radarCircles
-		for (std::vector<BaseFacility*>::iterator
-				j = (*i)->getFacilities()->begin();
-				j != (*i)->getFacilities()->end();
-				++j)
-		{
-			if ((*j)->getBuildTime() == 0)
-			{
-				range = static_cast<double>((*j)->getRules()->getRadarRange());
-				if (range > 0.0)
-				{
-					range = range * (1.0 / 60.0) * (M_PI / 180.0);
-					drawGlobeCircle(
-								lat,
-								lon,
-								range,
-								48);
-				}
-			} // kL_end.
-		}
-
-		// Cheap hack to hide bases when they haven't been placed yet
-//kL		if (!(AreSame(lon, 0.0) && AreSame(lat, 0.0))/* &&
-//kL			!pointBack((*i)->getLongitude(), (*i)->getLatitude())*/)
-//		if (!AreSame(lon, 0.0))			// kL: an even cheaper hack..
-/*		if (!(*i)->getName().empty())	// kL. So try this <-
+		if (!(AreSame(lon, 0.0) && AreSame(lat, 0.0)))
 		{
 			polarToCart(
 					lon,
@@ -1622,44 +1552,26 @@ void Globe::drawRadars()
 					&x,
 					&y);
 
-			if (_hover
-				&& globeAllRadarsOnBaseBuild)
+			for (std::vector<BaseFacility*>::iterator
+					j = (*i)->getFacilities()->begin();
+					j != (*i)->getFacilities()->end();
+					++j)
 			{
-				for (size_t
-						j = 0;
-						j < ranges.size();
-						j++)
+				if ((*j)->getBuildTime() == 0)
 				{
-					drawGlobeCircle(
-								lat,
-								lon,
-								ranges[j],
-								48);
-				}
-			}
-			else
-			{ *//*
-				range = 0;
-
-				for (std::vector<BaseFacility*>::iterator
-						j = (*i)->getFacilities()->begin();
-						j != (*i)->getFacilities()->end();
-						++j)
-				{
-					if ((*j)->getBuildTime() == 0)
+					range = static_cast<double>((*j)->getRules()->getRadarRange());
+					if (range > 0.0)
 					{
-						testRange = static_cast<double>((*j)->getRules()->getRadarRange());
-						if (testRange > range)
-							range = testRange;
+						range = range * (1.0 / 60.0) * (M_PI / 180.0);
+						drawGlobeCircle(
+									lat,
+									lon,
+									range,
+									48);
 					}
 				}
-
-				range = range * (1.0 / 60.0) * (M_PI / 180.0);
-
-				if (range > 0.0)
-					drawGlobeCircle(lat, lon, range, 48); */
-//			}
-//		}
+			}
+		}
 
 		for (std::vector<Craft*>::iterator
 				j = (*i)->getCrafts()->begin();
@@ -1690,7 +1602,6 @@ void Globe::drawRadars()
 			}
 		}
 	}
-
 	_radars->unlock();
 }
 

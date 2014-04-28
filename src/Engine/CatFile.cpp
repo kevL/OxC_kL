@@ -102,16 +102,19 @@ char* CatFile::load(
 		_offset[i],
 		std::ios::beg);
 
-	char namesize = peek();
+	unsigned char namesize = peek();
 
-	if (!name)
+	if (namesize <= 56)
 	{
-		seekg(
-			namesize + 1,
-			std::ios::cur);
+		if (!name)
+		{
+			seekg(
+				namesize + 1,
+				std::ios::cur);
+		}
+		else
+			_size[i] += namesize + 1;
 	}
-	else
-		_size[i] += namesize + 1;
 
 	char* object = new char[_size[i]];
 	read(

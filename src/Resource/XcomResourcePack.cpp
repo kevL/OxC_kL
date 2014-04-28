@@ -90,8 +90,8 @@ struct HairBleach
 
 
 /**
- * Initializes the resource pack by loading all the resources
- * contained in the original game folder.
+ * Initializes the resource pack by loading all the
+ * resources contained in the original game folder.
  */
 XcomResourcePack::XcomResourcePack( // kL
 		std::vector<std::pair<std::string, RuleMusic*> > musicRules,
@@ -112,6 +112,7 @@ XcomResourcePack::XcomResourcePack( // kL
 	:
 		ResourcePack()
 {
+
 	/* PALETTES */
 	const char* pal[] = // Load palettes
 	{
@@ -183,6 +184,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		}
 	}
 
+
 	/* FONTS */
 	// Load fonts
 	YAML::Node doc = YAML::LoadFile(CrossPlatform::getDataFile("Language/Font.dat"));
@@ -197,6 +199,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		font->load(*i);
 		_fonts[id] = font;
 	}
+
 
 	/* GRAPHICS */
 	{ // Load surfaces
@@ -334,11 +337,14 @@ XcomResourcePack::XcomResourcePack( // kL
 	_sets["SCANG.DAT"] = new SurfaceSet(4, 4);
 	std::ostringstream scang;
 	scang << "GEODATA/" << "SCANG.DAT";
-	_sets["SCANG.DAT"]->loadDat (CrossPlatform::getDataFile(scang.str()));
+	_sets["SCANG.DAT"]->loadDat(CrossPlatform::getDataFile(scang.str()));
 
 	std::ostringstream s; // Load polygons
 	s << "GEODATA/" << "WORLD.DAT";
-	Globe::loadDat(CrossPlatform::getDataFile(s.str()), &_polygons);
+	Globe::loadDat(
+				CrossPlatform::getDataFile(s.str()),
+				&_polygons);
+
 
 	/* LINES */
 	// Load polylines (extracted from game)
@@ -443,6 +449,7 @@ XcomResourcePack::XcomResourcePack( // kL
 	}
 
 	_polylines.push_back(l);
+
 
 	/* MUSICS */
 	if (!Options::mute)
@@ -849,7 +856,8 @@ XcomResourcePack::XcomResourcePack( // kL
 		} */
 #endif
 
-	/* SOUNDS fx */
+
+		/* SOUNDS fx */
 		std::string catsId[] = // Load sounds
 		{
 			"GEO.CAT",
@@ -922,14 +930,19 @@ XcomResourcePack::XcomResourcePack( // kL
 		}
 	}
 
+	// define GUI sound Fx
 	TextButton::soundPress	= getSound("GEO.CAT", 0); // bleep
 	Window::soundPopup[0]	= getSound("GEO.CAT", 1); // wahahahah
 	Window::soundPopup[1]	= getSound("GEO.CAT", 2); // swish1
 	Window::soundPopup[2]	= getSound("GEO.CAT", 3); // swish2
 
+
+	/* BATTLESCAPE RESOURCES */
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
 
+
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
+
 
 	/* EXTRA SPRITES */
 	for (std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator
@@ -1158,6 +1171,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		surface2->blit(surface1);
 	}
 
+
 	/* EXTRA SOUNDS */
 	for (std::vector<std::pair<std::string, ExtraSounds*> >::const_iterator
 			i = extraSounds.begin();
@@ -1259,38 +1273,47 @@ void XcomResourcePack::loadBattlescapeResources()
 	s << "UFOGRAPH/" << "CURSOR.PCK";
 	s2 << "UFOGRAPH/" << "CURSOR.TAB";
 	_sets["CURSOR.PCK"] = new SurfaceSet(32, 40);
-	_sets["CURSOR.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
+	_sets["CURSOR.PCK"]->loadPck(
+							CrossPlatform::getDataFile(s.str()),
+							CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
 	s2.str("");
 	s << "UFOGRAPH/" << "SMOKE.PCK";
 	s2 << "UFOGRAPH/" << "SMOKE.TAB";
 	_sets["SMOKE.PCK"] = new SurfaceSet(32, 40);
-	_sets["SMOKE.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
+	_sets["SMOKE.PCK"]->loadPck(
+							CrossPlatform::getDataFile(s.str()),
+							CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
 	s2.str("");
 	s << "UFOGRAPH/" << "HIT.PCK";
 	s2 << "UFOGRAPH/" << "HIT.TAB";
 	_sets["HIT.PCK"] = new SurfaceSet(32, 40);
-	_sets["HIT.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
+	_sets["HIT.PCK"]->loadPck(
+							CrossPlatform::getDataFile(s.str()),
+							CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
 	s2.str("");
 	s << "UFOGRAPH/" << "X1.PCK";
 	s2 << "UFOGRAPH/" << "X1.TAB";
 	_sets["X1.PCK"] = new SurfaceSet(128, 64);
-	_sets["X1.PCK"]->loadPck(CrossPlatform::getDataFile(s.str()), CrossPlatform::getDataFile(s2.str()));
+	_sets["X1.PCK"]->loadPck(
+							CrossPlatform::getDataFile(s.str()),
+							CrossPlatform::getDataFile(s2.str()));
 
 	s.str("");
 	_sets["MEDIBITS.DAT"] = new SurfaceSet(52, 58);
 	s << "UFOGRAPH/" << "MEDIBITS.DAT";
-	_sets["MEDIBITS.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
+	_sets["MEDIBITS.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
 
 	s.str("");
 	_sets["DETBLOB.DAT"] = new SurfaceSet(16, 16);
 	s << "UFOGRAPH/" << "DETBLOB.DAT";
-	_sets["DETBLOB.DAT"]->loadDat (CrossPlatform::getDataFile(s.str()));
+	_sets["DETBLOB.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
+
 
 	// Load Battlescape Terrain (only blanks are loaded, others are loaded just in time)
 	std::string bsets[] =
@@ -1318,6 +1341,7 @@ void XcomResourcePack::loadBattlescapeResources()
 							CrossPlatform::getDataFile(s2.str()));
 	}
 
+
 	// Load Battlescape units
 	std::string units = CrossPlatform::getDataFolder("UNITS/");
 	std::vector<std::string> usets = CrossPlatform::getFolderContents(units, "PCK");
@@ -1328,7 +1352,11 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		std::string path = units + *i;
 		std::string tab = CrossPlatform::getDataFile("UNITS/" + CrossPlatform::noExt(*i) + ".TAB");
-		std::transform(i->begin(), i->end(), i->begin(), toupper);
+		std::transform(
+					i->begin(),
+					i->end(),
+					i->begin(),
+					toupper);
 
 		if (*i != "BIGOBS.PCK")
 			_sets[*i] = new SurfaceSet(32, 40);
@@ -1383,6 +1411,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[spks[i]] = new Surface(320, 200);
 		_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
 	}
+
 
 	// Load Battlescape inventory
 	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
@@ -1466,7 +1495,7 @@ bool XcomResourcePack::isImageFile(std::string extension)
 			|| extension == ".PNG"
 			|| extension == ".TGA"
 			|| extension == ".TIF"
-			|| extension == "TIFF"; // kL_note: why not .TIFF
+			|| extension == "TIFF"; // kL_note: why not .TIFF (prob because only the last 4 chars are passed in)
 
 			/* // arbitrary limitation: let's not use these ones (although they're officially supported by sdl)
 			extension == ".ICO" ||
