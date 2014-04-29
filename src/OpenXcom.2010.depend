@@ -5692,7 +5692,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1398655288 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1398756107 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -6188,7 +6188,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1398491021 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1398751526 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6265,7 +6265,7 @@
 1394398507 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1398655835 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1398756107 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6600,7 +6600,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1398392776 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1398756107 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -7638,7 +7638,7 @@
 1398435303 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1398657783 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1398750983 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9164,7 +9164,7 @@
 	"MapData.h"
 	"MapDataSet.h"
 
-1394398507 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
+1398750333 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
@@ -9188,7 +9188,7 @@
 	<cmath>
 	"RuleItem.h"
 
-1398659291 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1398756107 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Surface.h"
@@ -9636,7 +9636,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1394398507 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
+1398752036 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 	<assert.h>
 	"../Engine/RNG.h"
@@ -11734,16 +11734,17 @@
 1398481998 source:f:\git\openxcom\src\ruleset\statstringcondition.cpp
 	"StatStringCondition.h"
 
-1398685671 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
-	<stdio.h>
+1398750685 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
 	<math.h>
 	<memory.h>
+	<stdio.h>
+	<stdint.h>
 	"fmopl.h"
 
-1398655003 f:\git\openxcom\src\engine\adlib\fmopl.h
+1398750327 f:\git\openxcom\src\engine\adlib\fmopl.h
 	"ymdeltat.h"
 
-1398664975 source:f:\git\openxcom\src\engine\adlibmusic.cpp
+1398750826 source:f:\git\openxcom\src\engine\adlibmusic.cpp
 	"AdlibMusic.h"
 	<algorithm>
 	<fstream>
@@ -11761,7 +11762,7 @@
 
 1398655003 f:\git\openxcom\src\engine\adlib\adlplayer.h
 
-1398664859 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
+1398751833 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

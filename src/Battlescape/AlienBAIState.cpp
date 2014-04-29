@@ -1814,10 +1814,10 @@ bool AlienBAIState::explosiveEfficacy(
 	int eff = (desperation + hurt) * 2;
 
 	int distance = _save->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
-	if (distance < radius + 1) // attacker inside blast zone
+//kL	if (distance < radius + 1) // attacker inside blast zone
+	if (distance < radius)
 	{
 //kL		eff -= 4;
-//		eff -= 50;		// kL
 		eff -= 35;		// kL
 		if (attackingUnit->getPosition().z == targetPos.z)
 			eff -= 15;		// kL
@@ -1855,7 +1855,8 @@ bool AlienBAIState::explosiveEfficacy(
 			&& _save->getTileEngine()->distance(
 											(*i)->getPosition(),
 											targetPos)
-										< radius + 1)
+//kL										< radius + 1)
+										< radius) // kL
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER
 				&& (*i)->getTurnsExposed() > _intelligence)
@@ -2154,7 +2155,8 @@ void AlienBAIState::projectileAction()
 {
 	_attackAction->target = _aggroTarget->getPosition();
 
-	if (!_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius()
+//kL	if (!_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius()
+	if (_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius() < 0 // kL
 		|| explosiveEfficacy(
 						_aggroTarget->getPosition(),
 						_unit,

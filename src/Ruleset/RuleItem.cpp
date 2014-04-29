@@ -657,12 +657,16 @@ int RuleItem::getExplosionRadius() const
 
 // kL_note: Removing these checks assumes only these remaining types
 // are getting checked for ExplosionRadii elsewhere ...
-//	if (_damageType == DT_HE
-//		|| _damageType == DT_STUN
-//		|| _damageType == DT_SMOKE)
-//	{
-	return _power / 20 + 1;
-//	}
+// ... which they aren't! Or may not be ..
+	if (_damageType == DT_HE
+		|| _damageType == DT_STUN
+		|| _damageType == DT_SMOKE)
+	{
+		return _power / 20 + 1;
+	}
+
+	return -1;	// Or perhaps return 0, then use another function getBlastRadius() to determine other(-1).
+				// -> Use 0 for the AI, TileEngine::setDangerZone()
 }
 
 /**

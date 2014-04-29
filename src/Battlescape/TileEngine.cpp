@@ -264,8 +264,7 @@ void TileEngine::addLight(
 		int power,
 		int layer)
 {
-	// only loop through the positive quadrant.
-	for (int
+	for (int // only loop through the positive quadrant.
 			x = 0;
 			x <= power;
 			++x)
@@ -1729,7 +1728,8 @@ bool TileEngine::tryReactionSnap(
 			unit->setAIState(aggro);
 		}
 
-		if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
+//kL		if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
+		if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() > -1 // kL
 			&& aggro->explosiveEfficacy(
 									action.target,
 									unit,
@@ -2347,7 +2347,8 @@ void TileEngine::explode(
 //			powerEff = _powerT;
 
 			while (_powerT > 0
-				&& r < r_Max) // incongruous <--- kL_note.
+				&& r - 1.0 < r_Max) // kL_note: Allows explosions of 0 radius(!), single tile only hypothetically.
+									// the idea is to show an explosion animation but affect only that one tile.
 			{
 				vx = centerX + r * sin_te * cos_fi;
 				vy = centerY + r * cos_te * cos_fi;

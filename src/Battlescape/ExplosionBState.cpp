@@ -117,9 +117,10 @@ void ExplosionBState::init()
 		// all the rest hits one point:
 		// AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE
-					&& _item->getRules()->getBattleType() != BT_PSIAMP	// kL
-					&& _item->getRules()->getExplosionRadius() != 0		// <- worrisome, kL_note.
-					&& !_pistolWhip;
+						&& _item->getRules()->getBattleType() != BT_PSIAMP		// kL
+//kL						&& _item->getRules()->getExplosionRadius() != 0		// <- worrisome, kL_note.
+						&& _item->getRules()->getExplosionRadius() > -1			// kL
+						&& !_pistolWhip;
 	}
 	else if (_tile)
 	{
@@ -161,17 +162,19 @@ void ExplosionBState::init()
 			Position posCenter_voxel = _center; // voxelspace
 			int
 				startFrame = 0, // less than 0 will delay anim-start (total 8 Frames)
-//				offset = _power / 2,
-//				animQty = _power / 14;
 				radius = 0;
 
 			if (_item)
+			{
 				radius = _item->getRules()->getExplosionRadius();
 				//Log(LOG_INFO) << ". . . getExplosionRadius() -> " << radius;
-//			if (radius < 1)
+			}
 			else
-				radius = _power / 8; // <- for cyberdiscs & terrain expl.... CTD if using getExplosionRadius(),
+				radius = _power / 8; // <- for cyberdiscs & terrain expl.
 			//Log(LOG_INFO) << ". . . radius = " << radius;
+
+			if (radius < 0)
+				radius = 0;
 
 			int
 				offset = radius * 5, // voxelspace
@@ -334,16 +337,19 @@ void ExplosionBState::explode()
 							_center,
 							_power,
 							_item->getRules()->getDamageType(),
-							_item->getRules()->getExplosionRadius(),
+							_item->getRules()->getExplosionRadius(),	// what about cyberdiscs/terrain explosions?
+																		// I need to introduce a _blastRadius class_var for ExplosionBState;
+																		// could use _areaOfEffect w/ -1 meaning !NOT!
+																		// Because I'd want to keep 0 for single tile explosions.
 							_unit);
 		}
 		else
 		{
 			//Log(LOG_INFO) << ". . not AoE, TileEngine::hit()";
-			bool hit = _pistolWhip										// kL
-					|| _item->getRules()->getBattleType() == BT_MELEE	// kL
-					|| _item->getRules()->getBattleType() == BT_PSIAMP;	// kL
-				// kL_note: basically, PsiAmp is needed 'round here only for its animation to play.
+			bool hit = _pistolWhip											// kL
+						|| _item->getRules()->getBattleType() == BT_MELEE	// kL
+						|| _item->getRules()->getBattleType() == BT_PSIAMP;	// kL
+			// kL_note: basically, PsiAmp is needed 'round here only for its animation to play.
 
 			ItemDamageType type = _item->getRules()->getDamageType();
 			if (_pistolWhip)

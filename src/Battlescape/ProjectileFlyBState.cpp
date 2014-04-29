@@ -871,7 +871,8 @@ void ProjectileFlyBState::think()
 					// projectiles generally move 2 voxels at a time
 					int offset = 0;
 					if (_ammo
-						&& _ammo->getRules()->getExplosionRadius() != 0
+//kL						&& _ammo->getRules()->getExplosionRadius() != 0
+						&& _ammo->getRules()->getExplosionRadius() > 0			// kL
 //						&& (_ammo->getRules()->getDamageType() == DT_HE			// kL
 //							|| _ammo->getRules()->getDamageType() == DT_IN)		// kL
 						&& _projectileImpact != VOXEL_UNIT)
