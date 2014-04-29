@@ -127,7 +127,7 @@ void ListSaveState::lstSavesPress(Action* action)
 				_lstSaves->setCellText(
 									_previousSelectedRow,
 									0,
-									tr("STR_NEW_SAVED_GAME"));
+									tr("STR_NEW_SAVED_GAME_SLOT"));
 			break;
 
 			default:
