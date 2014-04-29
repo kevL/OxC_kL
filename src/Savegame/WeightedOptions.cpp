@@ -41,9 +41,8 @@ const std::string WeightedOptions::choose() const
 	}
 
 	unsigned var = RNG::generate(0, _totalWeight);
-	std::map<std::string, unsigned>::const_iterator
-			ii = _choices.begin();
 
+	std::map<std::string, unsigned>::const_iterator ii = _choices.begin();
 	for (
 			;
 			ii != _choices.end();
@@ -60,6 +59,35 @@ const std::string WeightedOptions::choose() const
 }
 
 /**
+ * Select the most likely option.
+ * This MUST be called on non-empty objects.
+ * @return, The key of the selected choice.
+ */
+const std::string WeightedOptions::top() const
+{
+	if (_totalWeight == 0)
+	{
+		return "";
+	}
+
+	int max = 0;
+	std::map<std::string, unsigned>::const_iterator i = _choices.begin();
+	for (std::map<std::string, unsigned>::const_iterator
+			ii = _choices.begin();
+			ii != _choices.end();
+			++ii)
+	{
+		if (ii->second >= max)
+		{
+			max = ii->second;
+			i = ii;
+		}
+	}
+
+	return i->first; // We always have a valid iterator here.
+}
+
+/**
  * Set an option's weight.
  * If @a weight is set to 0, the option is removed from the list of choices.
  * If @a id already exists, the new weight replaces the old one, otherwise
@@ -67,7 +95,9 @@ const std::string WeightedOptions::choose() const
  * @param id, The option name.
  * @param weight, The option's new weight.
  */
-void WeightedOptions::set(const std::string& id, unsigned weight)
+void WeightedOptions::set(
+		const std::string& id,
+		unsigned weight)
 {
 	std::map<std::string, unsigned>::iterator
 			option = _choices.find(id);

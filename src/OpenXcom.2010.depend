@@ -4550,7 +4550,7 @@
 	"../aresame.h"
 	"../Savegame/WeightedOptions.h"
 
-1394398507 f:\git\openxcom\src\savegame\weightedoptions.h
+1398751086 f:\git\openxcom\src\savegame\weightedoptions.h
 	<string>
 	<map>
 	<yaml-cpp/yaml.h>
@@ -4642,7 +4642,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1398482985 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1398693946 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	<climits>
 	<string>
@@ -4819,7 +4819,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1398483069 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1398693946 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -5449,7 +5449,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1398483119 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1398693946 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -7278,7 +7278,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1397457039 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1398693946 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	<climits>
 	<sstream>
@@ -7779,7 +7779,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1397255779 f:\git\openxcom\src\ruleset\rulealienmission.h
+1398751069 f:\git\openxcom\src\ruleset\rulealienmission.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>

@@ -50,6 +50,8 @@ private:
 
 		/// Select from among the items.
 		const std::string choose() const;
+		/// Select the top item.
+		const std::string top() const;
 		/// Set an option's weight.
 		void set(const std::string& id, unsigned weight);
 		/// Is this empty, or not

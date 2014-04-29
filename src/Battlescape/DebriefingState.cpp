@@ -457,7 +457,6 @@ void ClearAlienBase::operator()(AlienMission* am) const
 void DebriefingState::prepareDebriefing()
 {
 	//Log(LOG_INFO) << "DebriefingState::prepareDebriefing()";
-
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED"));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED"));
 	_stats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED"));
@@ -638,7 +637,8 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-			if (!aborted)
+//kL			if ((*i)->getStatus() == Ufo::CRASHED || !aborted) // failed mission on UFO makes it disappear
+			if (!aborted) // kL, failed mission leaves UFO still crashed
 			{
 				delete *i;
 				save->getUfos()->erase(i);

@@ -21,12 +21,15 @@
  * X-COM Adlib Player by Volutar
  */
 
-#include <stdio.h>
 #include <math.h>
 #include <memory.h>
+#include <stdio.h>
+#include <stdint.h>
+
 #include "fmopl.h"
 
-const __int16 adl_gv_freq_table[] = { // 9 * 12 -- notes frequency
+
+const int16_t adl_gv_freq_table[] = { // 9 * 12 -- notes frequency
 	0x0B5,0x0C0,0x0CC,0x0D8,0x0E5,0x0F2,0x101,0x110,0x120,0x131,0x143,0x157,
 	0x16B,0x181,0x198,0x1B0,0x1CA,0x1E5,0x202,0x220,0x241,0x263,0x287,0x2AE,
 	0x16B,0x181,0x198,0x1B0,0x1CA,0x1E5,0x202,0x220,0x241,0x263,0x287,0x2AE,
@@ -37,7 +40,7 @@ const __int16 adl_gv_freq_table[] = { // 9 * 12 -- notes frequency
 	0x16B,0x181,0x198,0x1B0,0x1CA,0x1E5,0x202,0x220,0x241,0x263,0x287,0x2AE,
 	0x16B,0x181,0x198,0x1B0,0x1CA,0x1E5,0x202,0x220,0x241,0x263,0x287,0x2AE};
 
-const __int8 adl_gv_octave_table[] = { // 9 * 12 -- octaves of notes
+const int8_t adl_gv_octave_table[] = { // 9 * 12 -- octaves of notes
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
 	1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,
@@ -48,7 +51,7 @@ const __int8 adl_gv_octave_table[] = { // 9 * 12 -- octaves of notes
 	6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6,
 	7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7};
 
-const __int8 adl_gv_detune_table[] = { // 9 * 12 -- pitch bend scale values depending on note
+const int8_t adl_gv_detune_table[] = { // 9 * 12 -- pitch bend scale values depending on note
 	3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5,
 	3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5,
 	3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5,
@@ -59,7 +62,7 @@ const __int8 adl_gv_detune_table[] = { // 9 * 12 -- pitch bend scale values depe
 	3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5,
 	3, 3, 3, 3, 4, 4, 4, 4, 4, 5, 5, 5};
 
-const unsigned __int8 percus_samples[] = { // 16 * 11  //there was another 13 bytes of 0
+const uint8_t percus_samples[] = { // 16 * 11  //there was another 13 bytes of 0
 	0x0F,0x42,0x3F,0x3F,0xFA,0xFA,0x41,0x44,2,3,0x0F,
 	0x0F,0x02,0x3F,0x3F,0xFA,0xFA,0x51,0x44,2,3,0x0F,
 	0x0F,0x04,0x3F,0x3F,0xE7,0xDC,0x51,0x46,2,0,0x0F,
@@ -78,7 +81,7 @@ const unsigned __int8 percus_samples[] = { // 16 * 11  //there was another 13 by
 	0x10,0x10,0x32,0x3F,0xF8,0xD4,0x96,0x86,0,0,0x0F,
 	0x00,0x10,0x32,0x3F,0xF8,0xD4,0x96,0x86,2,0,0x0F};
 
-const unsigned __int8 percus_mapping[] = { // 32 * 3 -- percussion channel 9 map of buildin adlib samples
+const uint8_t percus_mapping[] = { // 32 * 3 -- percussion channel 9 map of buildin adlib samples
 	0x03,0x15,0x64, 0x03,0x17,0x64, 0x05,0x31,0x64, 0x0A,0x1C,0x55,
 	0x06,0x28,0x4D, 0x09,0x18,0x55, 0x04,0x1C,0x64, 0x07,0x52,0x4D,
 	0x04,0x1F,0x64, 0x07,0x52,0x4D, 0x0C,0x21,0x64, 0x08,0x52,0x4D,
@@ -88,11 +91,11 @@ const unsigned __int8 percus_mapping[] = { // 32 * 3 -- percussion channel 9 map
 	0x01,0x3F,0x4D, 0x0D,0x43,0x55, 0x0D,0x3D,0x55, 0x0E,0x3E,0x64,
 	0x0F,0x31,0x64, 0x0F,0x2C,0x55, 0x10,0x36,0x4D, 0x10,0x31,0x4D};
 
-const __int8 adl_gv_instr_order[] = {0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,9};
+const int8_t adl_gv_instr_order[] = {0,1,2,3,4,5,6,7,8,10,11,12,13,14,15,9};
 
-const __int8 adl_gv_operators1[] = {0,1,2, 8,9,10, 16,17,18, 24,25,26};
+const int8_t adl_gv_operators1[] = {0,1,2, 8,9,10, 16,17,18, 24,25,26};
 
-static const __int8 slot_array[32]=
+static const int8_t slot_array[32]=
 {
 	 0, 2, 4, 1, 3, 5,-1,-1,
 	 6, 8,10, 7, 9,11,-1,-1,
@@ -298,40 +301,28 @@ void adlib_reg(int i, int v)
 void adlib_reg(int i, int v)
 {
 	if (opl[0]==0) return;
-	int v2,i3,v3;
-//	adlib0(i,v);
-	i3=-1;
-/*
-	if (i>=0x80&&i<=0x9f)
-		if ((v&0x0f) >=0x00)
-			v=(v&0xf0) | 0x0f;
-*/
-	Transpose(i,v,&v2,&i3,&v3);
+	int v2, i3, v3;
+	i3 = -1;
+	Transpose(i, v, &v2, &i3, &v3);
 
-	OPLWrite(opl[0],0,i);
-	OPLWrite(opl[0],1,v);
-	OPLWrite(opl[1],0,i);
-	if (i>=0x20&&i<=0x3f) //no tremolo/vibrato
-		v2=(v2&0x3F);
-	if ((i>=0x60&&i<=0x7F)  && ((slot_array[i&0x1f]&1)==0)) //altered attack/decoy
-		v2=v2 ^ 0x55;
-	if (i>=0xE0&&i<=0xFC)
+	OPLWrite(opl[0], 0, i);
+	OPLWrite(opl[0], 1, v);
+	OPLWrite(opl[1], 0, i);
+	if (i >= 0x20 && i <= 0x3f) //no tremolo/vibrato
+		v2 = (v2 & 0x3F);
+	if (i >= 0xE0 && i <= 0xFC)
 	{
-		if ((slot_array[i&0x1f]&1)==0) //wave form
-		v2=v2 & 0x02 | 0x01;
-		else
-		v2=v2 & 0x02;
+		if ((slot_array[i & 0x1f] & 1) == 1) //wave form
+			v2 = v2 & 0x02;
 	}
-
-
-	OPLWrite(opl[1],1,v2);
-	if (i3!=-1)
+	if ((i >= 0x60 && i <= 0x7F) && ((slot_array[i & 0x1f] & 1) == 1)) //altered attack/decoy
+		v2 = v2 ^ 0x30;
+	OPLWrite(opl[1], 1, v2);
+	if (i3 != -1)
 	{
-		OPLWrite(opl[1],0,i3);
-		OPLWrite(opl[1],1,v3);
+		OPLWrite(opl[1], 0, i3);
+		OPLWrite(opl[1], 1, v3);
 	}
-//	YM3812Write(0, 0, i);
-//	YM3812Write(0, 1, v);
 }
 
 
@@ -401,7 +392,7 @@ void adlib_set_instrument_pitch(int instrument, int pitch)
 			int freq = get_pitched_freq_instr(note, instrument);
 			adlib_channels[i].cur_freq = freq;
 			adlib_reg(0xA0+i, freq & 0xff);
-			int hf=(freq>>8) & 0x03 | (adl_gv_octave_table[note]<<2);
+			int hf=((freq>>8) & 0x03) | (adl_gv_octave_table[note]<<2);
 			adlib_channels[i].hifreq = hf;
 			adlib_reg(0xB0+i, hf | 0x20);
 		}
@@ -477,7 +468,7 @@ void adlib_play_note(int note, int volume, int instrument)
 		}
 		return;
 	}
-
+	if (volume>127) volume=127;
 	channel = adlib_get_unused_channel(sample_id, &same_sample);
 	adlib_channels[channel].cur_volume = volume;
 	adlib_channels[channel].cur_note = note;

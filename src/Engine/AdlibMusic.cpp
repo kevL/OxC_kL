@@ -58,7 +58,7 @@ AdlibMusic::AdlibMusic()
 	if (!opl[1])
 		opl[1] = OPLCreate(
 						OPL_TYPE_YM3812,
-						3579545 * 0.985,
+						3579545,
 						Options::audioSampleRate);
 
 	// magic value - length of 1 tick per samplerate
@@ -170,6 +170,9 @@ void AdlibMusic::player(
 		int len)
 {
 #ifndef __NO_MUSIC
+	if (Options::musicVolume == 0)
+		return;
+
 	while (len != 0)
 	{
 		if (!opl[0] || !opl[1])
@@ -181,11 +184,13 @@ void AdlibMusic::player(
 			YM3812UpdateOne(
 						opl[0],
 						(INT16*)stream,
-						i / 2);
+						i / 2,
+						2);
 			YM3812UpdateOne(
 						opl[1],
 						((INT16*)stream) + 1,
-						i / 2);
+						i / 2,
+						2);
 			stream += i;
 			delay -= i;
 			len -= i;
