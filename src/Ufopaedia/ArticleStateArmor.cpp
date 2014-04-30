@@ -118,7 +118,7 @@ ArticleStateArmor::ArticleStateArmor(
 		if (damage != "STR_UNKNOWN")
 		{
 //kL			int vulnera = (int)ceil(armor->getDamageModifier(dType) * 100);
-//kL			int vulnera = (int)floor((armor->getDamageModifier(dType) + 0.5f) * 100.0f);
+//kL			int vulnera = (int)floor(armor->getDamageModifier(dt) * 100.0f + 0.5f);
 			int vulnera = static_cast<int>(armor->getDamageModifier(dType) * 100.f); // kL
 
 			addStat(

@@ -363,7 +363,7 @@ void TextList::addRow(
 			&& txt->getTextWidth() > txt->getWidth())
 		{
 			txt->setHeight(_font->getHeight() * 2 + _font->getSpacing());
-			txt->setWordWrap(true);
+			txt->setWordWrap(true, true);
 			rows = 2;
 		}
 
@@ -577,6 +577,7 @@ void TextList::initText(
 	_selector->setPalette(getPalette());
 	_selector->setVisible(false);
 
+	_visibleRows = 0;
 	for (int
 			y = 0;
 			y < getHeight();
@@ -584,6 +585,26 @@ void TextList::initText(
 	{
 		_visibleRows++;
 	}
+}
+
+/**
+ * Changes the height of the text list.
+ * @param height New height in pixels.
+ */
+void TextList::setHeight(int height)
+{
+	Surface::setHeight(height);
+
+	_visibleRows = 0;
+	for (int
+			y = 0;
+			y < getHeight();
+			y += _font->getHeight() + _font->getSpacing())
+	{
+		_visibleRows++;
+	}
+
+	setY(getY());
 }
 
 /**

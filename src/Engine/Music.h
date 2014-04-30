@@ -54,8 +54,8 @@ private:
 
 		/// Plays the music.
 		virtual void play(int loop = -1) const;
-		/// Stops the music.
-		virtual void stop() const;
+		/// Stops all music.
+		static void stop();
 };
 
 }

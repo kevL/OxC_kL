@@ -32,6 +32,8 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 
+#include "../Engine/Adlib/adlplayer.h"
+
 #include "../Resource/ResourcePack.h"
 
 
@@ -73,22 +75,22 @@ typedef struct
 // the pure MS-DOS experience
 static soundInFile introCatOnlySounds[] =
 {
-	{"INTRO.CAT", 0x0, 32},
-	{"INTRO.CAT", 0x1, 32},
-	{"INTRO.CAT", 0x2, 32},
-	{"INTRO.CAT", 0x3, 32},
-	{"INTRO.CAT", 0x4, 32},
-	{"INTRO.CAT", 0x5, 32},
-	{"INTRO.CAT", 0x6, 32},
-	{"INTRO.CAT", 0x7, 32},
-	{"INTRO.CAT", 0x8, 32},
-	{"INTRO.CAT", 0x9, 32},
-	{"INTRO.CAT", 0xa, 32},
-	{"INTRO.CAT", 0xb, 32},
-	{"INTRO.CAT", 0xc, 32},
-	{"INTRO.CAT", 0xd, 32},
-	{"INTRO.CAT", 0xe, 32},
-	{"INTRO.CAT", 0xf, 32},
+	{"INTRO.CAT",  0x0, 32},
+	{"INTRO.CAT",  0x1, 32},
+	{"INTRO.CAT",  0x2, 32},
+	{"INTRO.CAT",  0x3, 32},
+	{"INTRO.CAT",  0x4, 32},
+	{"INTRO.CAT",  0x5, 32},
+	{"INTRO.CAT",  0x6, 32},
+	{"INTRO.CAT",  0x7, 32},
+	{"INTRO.CAT",  0x8, 32},
+	{"INTRO.CAT",  0x9, 32},
+	{"INTRO.CAT",  0xa, 32},
+	{"INTRO.CAT",  0xb, 32},
+	{"INTRO.CAT",  0xc, 32},
+	{"INTRO.CAT",  0xd, 32},
+	{"INTRO.CAT",  0xe, 32},
+	{"INTRO.CAT",  0xf, 32},
 	{"INTRO.CAT", 0x10, 32},
 	{"INTRO.CAT", 0x11, 32},
 	{"INTRO.CAT", 0x12, 32},
@@ -104,32 +106,32 @@ static soundInFile introCatOnlySounds[] =
 
 static soundInFile sample3CatOnlySounds[] =
 {
-	{"SAMPLE3.CAT", 24, 32},	// machine gun
-	{"SAMPLE3.CAT", 5, 32},		// plasma rifle
-	{"SAMPLE3.CAT", 23, 32},	// rifle
-	{"SAMPLE3.CAT",  6, 32},	// some kind of death noise, urgh?
-	{"SAMPLE3.CAT", 9, 64},		// mutdie
-	{"SAMPLE3.CAT", 7, 64},		// dying alien
-	{"SAMPLE3.CAT", 27, 64},	// another dying alien
-	{"SAMPLE3.CAT", 4, 32},		// ??? ship flying? alien screech?
-	{"SAMPLE3.CAT", 0x8, 32},	// fscream
-	{"SAMPLE3.CAT", 11, 32},	// alarm
-	{"SAMPLE3.CAT", 4, 32},		// gun spinning up?
-	{"INTRO.CAT", 0xb, 32},		// reload; this one's not even in sample3
-	{"SAMPLE3.CAT",19, 48},		// whoosh
-	{"INTRO.CAT", 0xd, 32},		// feet, also not in sample3
-	{"SAMPLE3.CAT", 2, 32},		// low pulsating hum
-	{"SAMPLE3.CAT", 30, 32},	// energise
-	{"SAMPLE3.CAT", 21, 32},	// hatch
-	{"SAMPLE3.CAT", 0, 64},		// phizz -- no equivalent in sample3.cat?
-	{"SAMPLE3.CAT", 13, 32},	// warning
-	{"SAMPLE3.CAT", 14, 32},	// detected
-	{"SAMPLE3.CAT", 19, 64},	// UFO flyby whoosh?
-	{"SAMPLE3.CAT", 3, 32},		// growl
-	{"SAMPLE3.CAT", 15, 128},	// voice
-	{"SAMPLE3.CAT", 12, 32},	// beep 1
-	{"SAMPLE3.CAT", 18, 32},	// takeoff
-	{"SAMPLE3.CAT", 20, 32}		// another takeoff/landing sound?? if it exists?
+	{"SAMPLE3.CAT",	 24,  32},	// machine gun
+	{"SAMPLE3.CAT",	  5,  32},	// plasma rifle
+	{"SAMPLE3.CAT",	 23,  32},	// rifle
+	{"SAMPLE3.CAT",	  6,  32},	// some kind of death noise, urgh?
+	{"SAMPLE3.CAT",	  9,  64},	// mutdie
+	{"SAMPLE3.CAT",	  7,  64},	// dying alien
+	{"SAMPLE3.CAT",	 27,  64},	// another dying alien
+	{"SAMPLE3.CAT",	  4,  32},	// ??? ship flying? alien screech?
+	{"SAMPLE3.CAT",	0x8,  32},	// fscream
+	{"SAMPLE3.CAT",	 11,  32},	// alarm
+	{"SAMPLE3.CAT",	  4,  32},	// gun spinning up?
+	{"INTRO.CAT",	0xb,  32},	// reload; this one's not even in sample3
+	{"SAMPLE3.CAT",	 19,  48},	// whoosh
+	{"INTRO.CAT",	0xd,  32},	// feet, also not in sample3
+	{"SAMPLE3.CAT",	  2,  32},	// low pulsating hum
+	{"SAMPLE3.CAT",	 30,  32},	// energise
+	{"SAMPLE3.CAT",	 21,  32},	// hatch
+	{"SAMPLE3.CAT",	  0,  64},	// phizz -- no equivalent in sample3.cat?
+	{"SAMPLE3.CAT",	 13,  32},	// warning
+	{"SAMPLE3.CAT",	 14,  32},	// detected
+	{"SAMPLE3.CAT",	 19,  64},	// UFO flyby whoosh?
+	{"SAMPLE3.CAT",	  3,  32},	// growl
+	{"SAMPLE3.CAT",	 15, 128},	// voice
+	{"SAMPLE3.CAT",	 12,  32},	// beep 1
+	{"SAMPLE3.CAT",	 18,  32},	// takeoff
+	{"SAMPLE3.CAT",	 20,  32}	// another takeoff/landing sound?? if it exists?
 };
 
 
@@ -138,32 +140,32 @@ static soundInFile sample3CatOnlySounds[] =
 // probably only the Steam version of the game comes with both INTRO.CAT and SAMPLE3.CAT
 static soundInFile hybridIntroSounds[] =
 {
-	{"SAMPLE3.CAT", 24, 32},	// machine gun
-	{"SAMPLE3.CAT", 5, 32},		// plasma rifle
-	{"SAMPLE3.CAT", 23, 32},	// rifle
-	{"INTRO.CAT",  3, 32},		// some kind of death noise, urgh?
-	{"INTRO.CAT", 0x4, 64},		// mutdie
-	{"INTRO.CAT", 0x5, 64},		// dying alien
-	{"INTRO.CAT", 0x6, 64},		// another dying alien
-	{"INTRO.CAT", 0x7, 32},		// ??? ship flying? alien screech?
-	{"SAMPLE3.CAT", 0x8, 32},	// fscream
-	{"SAMPLE3.CAT", 11, 32},	// alarm
-	{"SAMPLE3.CAT", 4, 32},		// gun spinning up?
-	{"INTRO.CAT", 0xb, 32},		// reload; this one's not even in sample3
-	{"SAMPLE3.CAT",19, 48},		// whoosh
-	{"INTRO.CAT", 0xd, 32},		// feet, also not in sample3
-	{"INTRO.CAT", 0xe, 32},		// low pulsating hum
-	{"SAMPLE3.CAT", 30, 32},	// energise
-	{"SAMPLE3.CAT", 21, 32},	// hatch
-	{"INTRO.CAT", 0x11, 64},	// phizz
-	{"SAMPLE3.CAT", 13, 32},	// warning
-	{"SAMPLE3.CAT", 14, 32},	// detected
-	{"SAMPLE3.CAT", 19, 64},	// UFO flyby whoosh?
-	{"INTRO.CAT", 0x15, 32},	// growl
-	{"SAMPLE3.CAT", 15, 128},	// voice
-	{"SAMPLE3.CAT", 12, 32},	// beep 1
-	{"SAMPLE3.CAT", 18, 32},	// takeoff
-	{"SAMPLE3.CAT", 20, 32}		// another takeoff/landing sound?? if it exists?
+	{"SAMPLE3.CAT",   24,  32},	// machine gun
+	{"SAMPLE3.CAT",    5,  32},	// plasma rifle
+	{"SAMPLE3.CAT",   23,  32},	// rifle
+	{"INTRO.CAT",      3,  32},	// some kind of death noise, urgh?
+	{"INTRO.CAT",    0x4,  64},	// mutdie
+	{"INTRO.CAT",    0x5,  64},	// dying alien
+	{"INTRO.CAT",    0x6,  64},	// another dying alien
+	{"INTRO.CAT",    0x7,  32},	// ??? ship flying? alien screech?
+	{"SAMPLE3.CAT",  0x8,  32},	// fscream
+	{"SAMPLE3.CAT",   11,  32},	// alarm
+	{"SAMPLE3.CAT",    4,  32},	// gun spinning up?
+	{"INTRO.CAT",    0xb,  32},	// reload; this one's not even in sample3
+	{"SAMPLE3.CAT",   19,  48},	// whoosh
+	{"INTRO.CAT",    0xd,  32},	// feet, also not in sample3
+	{"INTRO.CAT",    0xe,  32},	// low pulsating hum
+	{"SAMPLE3.CAT",   30,  32},	// energise
+	{"SAMPLE3.CAT",   21,  32},	// hatch
+	{"INTRO.CAT",   0x11,  64},	// phizz
+	{"SAMPLE3.CAT",   13,  32},	// warning
+	{"SAMPLE3.CAT",   14,  32},	// detected
+	{"SAMPLE3.CAT",   19,  64},	// UFO flyby whoosh?
+	{"INTRO.CAT",   0x15,  32},	// growl
+	{"SAMPLE3.CAT",   15, 128},	// voice
+	{"SAMPLE3.CAT",   12,  32},	// beep 1
+	{"SAMPLE3.CAT",   18,  32},	// takeoff
+	{"SAMPLE3.CAT",   20,  32}	// another takeoff/landing sound?? if it exists?
 };
 // sample3: 18 is takeoff, 20 is landing; 19 is flyby whoosh sound, not sure for which craft
 
@@ -247,7 +249,7 @@ static introSoundEffect introSoundTrack[] =
 	{560, 0x407},
 	{577, 0x14},
 	{582, 0x405},
-	// {582, 0x18}, // landing! correcting to landing sound!
+//	{582, 0x18}, // landing! correcting to landing sound!
 	{582, 0x19},
 	{613, 0x407},
 	{615, 0x10},
@@ -301,8 +303,8 @@ static introSoundEffect introSoundTrack[] =
 	{780, 0x0},
 	{783, 0x0},
 	{786, 0x0},
-	{790, 0x15},
-	{790, 0x15},
+	{790, 0x15},	// big growl
+//	{790, 0x15},	// 2x loud growl
 	{807, 0x2},
 	{810, 0x2},
 	{812, 0x2},
@@ -311,8 +313,8 @@ static introSoundEffect introSoundTrack[] =
 	{819, 0x0},
 	{822, 0x0},
 	{824, 0x40A},
-	{824, 0x5},
-	{827, 0x6},
+//	{824, 0x5},		// out of place alien yell, gaaach
+//	{827, 0x6},		// out of place alien yell
 	{835, 0x0F},
 	{841, 0x0F},
 	{845, 0x0F},
@@ -331,10 +333,11 @@ static void musicDone()
 static struct AudioSequence
 {
 
-ResourcePack *rp;
-Music *m;
-Sound *s;
 int trackPosition;
+
+ResourcePack* rp;
+Music* m;
+Sound* s;
 
 
 AudioSequence(ResourcePack* resources)
@@ -390,18 +393,16 @@ void operator ()()
 				soundInFile* sf = (*sounds) + command;
 				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command;
 
-				// kL_note: uh, I think the SoundFx should play on channel -1 period.....
-//kL					int channel = trackPosition %4; // use at most four channels to play sound effects
-//kL					double ratio = static_cast<double>(Options::soundVolume) / static_cast<double>(MIX_MAX_VOLUME);
-
 				s = rp->getSound(
 								sf->catFile,
 								sf->sound);
 				if (s)
 				{
-					s->play(-1);
-//kL						s->play(channel);
-//kL						Mix_Volume(channel, static_cast<int>(static_cast<double>(sf->volume) * ratio));
+//kL					int channel = trackPosition %4; // use at most four channels to play sound effects
+//kL					s->play(channel);
+					s->play(-1); // kL
+//kL					double ratio = static_cast<double>(Options::soundVolume) / static_cast<double>(MIX_MAX_VOLUME);
+//kL					Mix_Volume(channel, static_cast<int>(static_cast<double>(sf->volume) * ratio));
 
 					break;
 				}
@@ -450,6 +451,7 @@ void IntroState::init()
 		if (Mix_GetMusicType(0) != MUS_MID)
 		{
 			Mix_FadeOutMusic(45 * 20);
+			func_fade();
 		} // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
 		else
 		{
@@ -497,8 +499,8 @@ void IntroState::init()
 					Options::uiVolume);
 
 #ifndef __NO_MUSIC
-		Mix_HaltChannel(-1);
-		Mix_HaltMusic();
+		Sound::stop();
+		Music::stop();
 #endif
 	}
 

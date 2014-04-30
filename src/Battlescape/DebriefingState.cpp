@@ -162,6 +162,7 @@ DebriefingState::DebriefingState(Game* game)
 
 	_txtQuantity->setColor(Palette::blockOffset(8)+5);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
+//kL	_txtQuantity->setAlign(ALIGN_RIGHT);
 
 	_txtScore->setColor(Palette::blockOffset(8)+5);
 	_txtScore->setText(tr("STR_SCORE"));

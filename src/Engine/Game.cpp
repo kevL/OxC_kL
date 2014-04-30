@@ -37,9 +37,11 @@
 #include "InteractiveSurface.h"
 #include "Language.h"
 #include "Logger.h"
+#include "Music.h"
 #include "Options.h"
 #include "Palette.h"
 #include "Screen.h"
+#include "Sound.h"
 #include "State.h"
 
 #include "../Interface/Cursor.h"
@@ -186,9 +188,8 @@ Game::Game(const std::string& title)
 Game::~Game()
 {
 	//Log(LOG_INFO) << "Delete Game";
-
-	Mix_HaltChannel(-1);
-	Mix_HaltMusic();
+	Sound::stop();
+	Music::stop();
 
 	for (std::list<State*>::iterator
 			i = _states.begin();

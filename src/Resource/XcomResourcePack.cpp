@@ -537,7 +537,8 @@ XcomResourcePack::XcomResourcePack( // kL
 			"wav"
 		};
 
-		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11}; */
+		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
+		float tracks_normalize[] = {0.76f, 0.83f, 1.19f, 1.0f, 0.74f, 0.8f, 0.8f, 0.8f, 1.0f, 0.92f, 0.81f, 1.0f, 1.14f, 0.84f}; */
 
 //kL #ifndef __NO_MUSIC
 		// Check which music version is available
@@ -789,7 +790,7 @@ XcomResourcePack::XcomResourcePack( // kL
 				if (adlibcat // Try Adlib music
 					&& Options::audioBitDepth == 16)
 				{
-					_musics[mus[i]] = new AdlibMusic();
+					_musics[mus[i]] = new AdlibMusic(tracks_normalize[i]);
 					if (tracks[i] < adlibcat->getAmount())
 					{
 						_musics[mus[i]]->load(

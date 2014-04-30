@@ -266,7 +266,8 @@ std::wstring Soldier::getName(
 		unsigned int maxLength) const
 {
 	if (statstring
-		&& _statString != L"")
+		&& _statString != L""
+		&& _missions > 0)
 	{
 		if (_name.length() + _statString.length() > maxLength)
 			return _name.substr(0, maxLength - _statString.length()) + L"/" + _statString;

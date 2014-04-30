@@ -255,7 +255,7 @@
 	"State.h"
 	"Surface.h"
 
-1398090974 f:\git\openxcom\src\engine\surface.h
+1398833745 f:\git\openxcom\src\engine\surface.h
 	<string>
 	<SDL.h>
 	<SDL_image.h>
@@ -4399,7 +4399,7 @@
 1394398507 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
 
-1394398507 f:\git\openxcom\src\interface\text.h
+1398833916 f:\git\openxcom\src\interface\text.h
 	<string>
 	<vector>
 	"../Engine/Surface.h"
@@ -4622,7 +4622,7 @@
 1394398507 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1397081665 f:\git\openxcom\src\interface\textlist.h
+1398834089 f:\git\openxcom\src\interface\textlist.h
 	<map>
 	<vector>
 	"Text.h"
@@ -5423,7 +5423,7 @@
 1396406189 f:\git\openxcom\src\basescape\soldiermemorialstate.h
 	"../Engine/State.h"
 
-1398656891 f:\git\openxcom\src\engine\music.h
+1398835561 f:\git\openxcom\src\engine\music.h
 	<string>
 	<SDL_mixer.h>
 
@@ -5856,7 +5856,7 @@
 	"BattlescapeGame.h"
 	"BattleState.h"
 
-1397481790 f:\git\openxcom\src\engine\sound.h
+1398833711 f:\git\openxcom\src\engine\sound.h
 	<string>
 	<SDL_mixer.h>
 
@@ -5989,7 +5989,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1398580504 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1398833034 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6188,7 +6188,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1398751526 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1398833287 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6476,7 +6476,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1397529955 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1398833174 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<sstream>
 	"Camera.h"
@@ -6945,7 +6945,7 @@
 	"Language.h"
 	"Surface.h"
 
-1398656836 source:f:\git\openxcom\src\engine\game.cpp
+1398833577 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -6959,9 +6959,11 @@
 	"InteractiveSurface.h"
 	"Language.h"
 	"Logger.h"
+	"Music.h"
 	"Options.h"
 	"Palette.h"
 	"Screen.h"
+	"Sound.h"
 	"State.h"
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
@@ -7031,12 +7033,13 @@
 	"LocalizedText.h"
 	"Language.h"
 
-1398656935 source:f:\git\openxcom\src\engine\music.cpp
+1398833688 source:f:\git\openxcom\src\engine\music.cpp
 	"Music.h"
 	"Exception.h"
 	"Language.h"
 	"Logger.h"
 	"Options.h"
+	"Adlib/adlplayer.h"
 
 1398137834 source:f:\git\openxcom\src\engine\opengl.cpp
 	"OpenGL.h"
@@ -7141,7 +7144,7 @@
 	"Timer.h"
 	"Zoom.h"
 
-1396286134 source:f:\git\openxcom\src\engine\sound.cpp
+1398832736 source:f:\git\openxcom\src\engine\sound.cpp
 	"Sound.h"
 	<SDL.h>
 	"Exception.h"
@@ -8226,7 +8229,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1396297725 source:f:\git\openxcom\src\interface\text.cpp
+1398834033 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -8254,7 +8257,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1397746020 source:f:\git\openxcom\src\interface\textlist.cpp
+1398834227 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<cmath>
 	<cstdarg>
@@ -8406,7 +8409,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1398582458 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1398834546 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	<cmath>
 	<fstream>
@@ -8645,9 +8648,8 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1398487721 source:f:\git\openxcom\src\menu\startstate.cpp
+1398836156 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
-	<SDL_mixer.h>
 	"ErrorMessageState.h"
 	"IntroState.h"
 	"MainMenuState.h"
@@ -8656,10 +8658,11 @@
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Logger.h"
+	"../Engine/Music.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Engine/Screen.h"
-	"../Engine/Surface.h"
+	"../Engine/Sound.h"
 	"../Interface/FpsCounter.h"
 	"../Interface/Cursor.h"
 	"../Resource/XcomResourcePack.h"
@@ -9077,7 +9080,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1398686874 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1398834761 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Battlescape/Position.h"
@@ -9551,7 +9554,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1398584127 source:f:\git\openxcom\src\savegame\soldier.cpp
+1398834852 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"SoldierDead.h"
@@ -9654,7 +9657,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleItem.h"
 
-1398659784 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
+1398834958 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
 	"ArticleStateArmor.h"
 	<sstream>
 	"Ufopaedia.h"
@@ -11432,7 +11435,7 @@
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
-1398088939 source:f:\git\openxcom\src\interface\combobox.cpp
+1398833849 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"
@@ -11442,7 +11445,7 @@
 	"../Engine/Language.h"
 	"../Engine/State.h"
 
-1398138142 source:f:\git\openxcom\src\menu\introstate.cpp
+1398835435 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	<SDL_mixer.h>
 	"MainMenuState.h"
@@ -11454,6 +11457,7 @@
 	"../Engine/Options.h"
 	"../Engine/Screen.h"
 	"../Engine/Sound.h"
+	"../Engine/Adlib/adlplayer.h"
 	"../Resource/ResourcePack.h"
 
 1398138059 f:\git\openxcom\src\menu\introstate.h
@@ -11541,7 +11545,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1398394199 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1398799681 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"
@@ -11661,7 +11665,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextList.h"
 
-1398582321 source:f:\git\openxcom\src\menu\listsavestate.cpp
+1398799647 source:f:\git\openxcom\src\menu\listsavestate.cpp
 	"ListSaveState.h"
 	"SaveGameState.h"
 	"../Engine/Action.h"
@@ -11744,7 +11748,7 @@
 1398750327 f:\git\openxcom\src\engine\adlib\fmopl.h
 	"ymdeltat.h"
 
-1398750826 source:f:\git\openxcom\src\engine\adlibmusic.cpp
+1398833473 source:f:\git\openxcom\src\engine\adlibmusic.cpp
 	"AdlibMusic.h"
 	<algorithm>
 	<fstream>
@@ -11754,7 +11758,7 @@
 	"Adlib/adlplayer.h"
 	"Adlib/fmopl.h"
 
-1398660126 f:\git\openxcom\src\engine\adlibmusic.h
+1398833342 f:\git\openxcom\src\engine\adlibmusic.h
 	<map>
 	<string>
 	<SDL_mixer.h>

@@ -63,6 +63,7 @@ class Text
 private:
 	bool
 		_contrast,
+		_indent,
 		_invert,
 		_wrap;
 	Uint8
@@ -130,7 +131,9 @@ private:
 		std::wstring getText() const;
 
 		/// Sets the text's wordwrap setting.
-		void setWordWrap(bool wrap);
+		void setWordWrap(
+				bool wrap,
+				bool indent = false);
 
 		/// Sets the text's color invert setting.
 		void setInvert(bool invert);

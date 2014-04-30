@@ -54,6 +54,8 @@ private:
 
 		/// Plays the sound.
 		void play(int channel = -1) const;
+		/// Stops all sounds.
+		static void stop();
 };
 
 }

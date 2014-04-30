@@ -868,13 +868,10 @@ void BattlescapeState::mapOver(Action* action)
 
 		_isMouseScrolled = true;
 
-		if (Options::dragScrollInvert)
-		{
-			// Set the mouse cursor back
-			SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-			SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
-			SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
-		}
+		// Set the mouse cursor back
+		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
+		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
+		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
 
 		// Check the threshold
 		_totalMouseMoveX += action->getDetails()->motion.xrel;
@@ -887,25 +884,24 @@ void BattlescapeState::mapOver(Action* action)
 		if (Options::dragScrollInvert)
 		{
 			_map->getCamera()->scrollXY(
-					-action->getDetails()->motion.xrel,
-					-action->getDetails()->motion.yrel, false);
-
-			// We don't want to look the mouse-cursor jumping :)
-			action->getDetails()->motion.x = _xBeforeMouseScrolling;
-			action->getDetails()->motion.y = _yBeforeMouseScrolling;
-
-			_game->getCursor()->handle(action);
+									-action->getDetails()->motion.xrel,
+									-action->getDetails()->motion.yrel, false);
 		}
 		else
 		{
 			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			_map->getCamera()->scrollXY(
-					static_cast<int>(static_cast<double>(_totalMouseMoveX) / action->getXScale()),
-					static_cast<int>(static_cast<double>(_totalMouseMoveY) / action->getYScale()),
-					false);
+								static_cast<int>(static_cast<double>(_totalMouseMoveX) / action->getXScale()),
+								static_cast<int>(static_cast<double>(_totalMouseMoveY) / action->getYScale()),
+								false);
 		}
-	}
 
+		// We don't want to look the mouse-cursor jumping :)
+		action->getDetails()->motion.x = _xBeforeMouseScrolling;
+		action->getDetails()->motion.y = _yBeforeMouseScrolling;
+
+		_game->getCursor()->handle(action);
+	}
 	//Log(LOG_INFO) << "BattlescapeState::mapOver() EXIT";
 }
 

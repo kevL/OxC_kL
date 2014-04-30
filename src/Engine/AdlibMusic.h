@@ -46,11 +46,12 @@ private:
 
 	char* _data;
 	size_t _size;
+	float _volume;
 
 
 	public:
 		/// Creates a blank music track.
-		AdlibMusic();
+		AdlibMusic(float volume = 1.0f);
 		/// Cleans up the music track.
 		~AdlibMusic();
 
@@ -63,8 +64,6 @@ private:
 
 		/// Plays the music.
 		void play(int loop = -1) const;
-		/// Stops the music.
-		void stop() const;
 
 		/// Adlib music player.
 		static void player(
