@@ -7187,7 +7187,7 @@
 1396296797 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1398172485 source:f:\git\openxcom\src\engine\surface.cpp
+1398926561 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	<fstream>
 	<vector>
@@ -9152,7 +9152,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 
-1394398507 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1398926714 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -11435,7 +11435,7 @@
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
-1398833849 source:f:\git\openxcom\src\interface\combobox.cpp
+1398926660 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"
@@ -11443,9 +11443,10 @@
 	"../Engine/Action.h"
 	"../Engine/Font.h"
 	"../Engine/Language.h"
+	"../Engine/Options.h"
 	"../Engine/State.h"
 
-1398835435 source:f:\git\openxcom\src\menu\introstate.cpp
+1398842924 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	<SDL_mixer.h>
 	"MainMenuState.h"

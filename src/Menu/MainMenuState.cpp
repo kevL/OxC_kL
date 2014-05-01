@@ -55,8 +55,16 @@ MainMenuState::MainMenuState(Game* game)
 	:
 		State(game)
 {
-	Options::baseXResolution = Options::baseXGeoscape;
-	Options::baseYResolution = Options::baseYGeoscape;
+	// This uses baseX/Y options for Geoscape & Basescape:
+	Options::baseXResolution = Options::baseXGeoscape; // kL
+	Options::baseYResolution = Options::baseYGeoscape; // kL
+	// This sets Geoscape and Basescape to default (320x200) IG and the config.
+/*kL	OptionsBaseState::updateScale(
+								Options::geoscapeScale,
+								Options::geoscapeScale,
+								Options::baseXGeoscape,
+								Options::baseYGeoscape,
+								true); */
 	_game->getScreen()->resetDisplay(false);
 
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);

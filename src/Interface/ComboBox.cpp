@@ -26,6 +26,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Font.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/State.h"
 
 
@@ -281,8 +282,9 @@ void ComboBox::setDropdown(int options)
 {
 	int items = std::min(options, MAX_ITEMS);
 	int h = _button->getFont()->getHeight() + _button->getFont()->getSpacing();
+	int dy = (Options::baseYResolution - 200) / 2;
 
-	while (_window->getY() + items * h + LIST_MARGIN * 2 > 200)
+	while (_window->getY() + items * h + LIST_MARGIN * 2 > 200 + dy)
 	{
 		items--;
 	}
