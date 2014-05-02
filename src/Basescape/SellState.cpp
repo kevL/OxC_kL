@@ -21,6 +21,7 @@
 
 #include <climits>
 #include <cmath>
+#include <iomanip>
 #include <sstream>
 
 #include "../Engine/Action.h"
@@ -59,10 +60,12 @@ namespace OpenXcom
  * Initializes all the elements in the Sell/Sack screen.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
+ * @param origin Game section that originated this state.
  */
 SellState::SellState(
 		Game* game,
-		Base* base)
+		Base* base,
+		OptionsOrigin origin)
 	:
 		State(game),
 		_base(base),
@@ -74,8 +77,24 @@ SellState::SellState(
 		_itemOffset(0),
 		_total(0),
 		_hasSci(0),
-		_hasEng(0)
+		_hasEng(0),
+		_spaceChange(0)
 {
+	bool overfull = Options::storageLimitsEnforced
+					&& _base->storesOverfull();
+
+/*	_window = new Window(this, 320, 200, 0, 0);
+	_btnOk = new TextButton(overfull? 288:148, 16, overfull? 16:8, 176);
+	_btnCancel = new TextButton(148, 16, 164, 176);
+	_txtTitle = new Text(310, 17, 5, 8);
+	_txtSales = new Text(150, 9, 10, 24);
+	_txtFunds = new Text(150, 9, 160, 24);
+	_txtSpaceUsed = new Text(150, 9, 160, 34);
+	_txtItem = new Text(130, 9, 10, Options::storageLimitsEnforced? 44:33);
+	_txtQuantity = new Text(54, 9, 126, Options::storageLimitsEnforced? 44:33);
+	_txtSell = new Text(96, 9, 180, Options::storageLimitsEnforced? 44:33);
+	_txtValue = new Text(40, 9, 260, Options::storageLimitsEnforced? 44:33);
+	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44); */
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
@@ -84,6 +103,7 @@ SellState::SellState(
 	_txtSales		= new Text(140, 9, 160, 24);
 
 	_txtItem		= new Text(130, 9, 16, 33);
+	_txtSpaceUsed	= new Text(150, 9, 160, 33);
 	_txtQuantity	= new Text(54, 9, 166, 33);
 	_txtSell		= new Text(20, 9, 226, 33);
 	_txtValue		= new Text(40, 9, 246, 33);
@@ -93,7 +113,24 @@ SellState::SellState(
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);
 
-	setPalette("PAL_BASESCAPE", 0);
+	if (origin == OPT_BATTLESCAPE)
+	{
+		setPalette("PAL_GEOSCAPE", 0);
+
+		_color		= Palette::blockOffset(15)-1;
+		_color2		= Palette::blockOffset(8)+10;
+		_color3		= Palette::blockOffset(8)+5;
+		_colorAmmo	= Palette::blockOffset(15)+6;
+	}
+	else
+	{
+		setPalette("PAL_BASESCAPE", 0);
+
+		_color		= Palette::blockOffset(13)+10;
+		_color2		= Palette::blockOffset(13);
+		_color3		= Palette::blockOffset(13)+5;
+		_colorAmmo	= Palette::blockOffset(15)+6;
+	}
 
 	add(_window);
 	add(_txtTitle);
@@ -101,6 +138,7 @@ SellState::SellState(
 	add(_txtFunds);
 	add(_txtSales);
 	add(_txtItem);
+	add(_txtSpaceUsed);
 	add(_txtQuantity);
 	add(_txtSell);
 	add(_txtValue);
@@ -110,55 +148,68 @@ SellState::SellState(
 
 	centerAllSurfaces();
 
-	_window->setColor(Palette::blockOffset(13)+10);
+	_window->setColor(_color);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
+	_btnOk->setColor(_color);
 	_btnOk->setText(tr("STR_SELL_SACK"));
 	_btnOk->onMouseClick((ActionHandler)& SellState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SellState::btnOkClick,
 					Options::keyOk);
-	_btnOk->setVisible(false);
+	_btnOk->setVisible(false); // kL
 
-	_btnCancel->setColor(Palette::blockOffset(13)+10);
+	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
 	_btnCancel->onMouseClick((ActionHandler)& SellState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SellState::btnCancelClick,
 					Options::keyCancel);
+	if (overfull)
+	{
+		_btnCancel->setVisible(false);
+//kL		_btnOk->setVisible(false);
+	}
 
-	_txtTitle->setColor(Palette::blockOffset(13)+10);
+	_txtTitle->setColor(_color);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELL_ITEMS_SACK_PERSONNEL"));
 
-	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
+	_txtBaseLabel->setColor(_color);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	_txtSales->setColor(Palette::blockOffset(13)+10);
-	_txtSales->setSecondaryColor(Palette::blockOffset(13));
+	_txtSales->setColor(_color);
+	_txtSales->setSecondaryColor(_color2);
 	_txtSales->setText(tr("STR_VALUE_OF_SALES")
 						.arg(Text::formatFunding(_total)));
 
-	_txtFunds->setColor(Palette::blockOffset(13)+10);
-	_txtFunds->setSecondaryColor(Palette::blockOffset(13));
+	_txtFunds->setColor(_color);
+	_txtFunds->setSecondaryColor(_color2);
 	_txtFunds->setText(tr("STR_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-	_txtItem->setColor(Palette::blockOffset(13)+10);
+	_txtItem->setColor(_color);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtQuantity->setColor(Palette::blockOffset(13)+10);
+	_txtSpaceUsed->setColor(_color);
+	_txtSpaceUsed->setSecondaryColor(_color2);
+	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
+	std::wostringstream ss1;
+	ss1 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
+//kL	_txtSpaceUsed->setText(ss1.str());
+	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
+
+	_txtQuantity->setColor(_color);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtSell->setColor(Palette::blockOffset(13)+10);
+	_txtSell->setColor(_color);
 	_txtSell->setText(tr("STR_SELL_SACK"));
 
-	_txtValue->setColor(Palette::blockOffset(13)+10);
+	_txtValue->setColor(_color);
 	_txtValue->setText(tr("STR_VALUE"));
 
-	_lstItems->setColor(Palette::blockOffset(13)+10);
+	_lstItems->setColor(_color);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 142, 60, 22, 53);
 	_lstItems->setSelectable(true);
@@ -278,7 +329,7 @@ SellState::SellState(
 								ss.str().c_str(),
 								L"0",
 								Text::formatFunding(rule->getSellCost()).c_str());
-				_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15) + 6);
+				_lstItems->setRowColor(_qtys.size() - 1, _colorAmmo);
 			}
 			else
 			{
@@ -289,12 +340,6 @@ SellState::SellState(
 								L"0",
 								Text::formatFunding(rule->getSellCost()).c_str());
 			}
-//			_lstItems->addRow(
-//							4,
-//							tr(*i).c_str(),
-//							ss.str().c_str(),
-//							L"0",
-//							Text::formatFunding(rule->getSellCost()).c_str());
 		}
 	}
 
@@ -505,11 +550,11 @@ void SellState::lstItemsLeftArrowRelease(Action* action)
 void SellState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		increaseByValue(INT_MAX);
+		changeByValue(INT_MAX, 1);
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		increaseByValue(1);
+		changeByValue(1, 1);
 
 		_timerInc->setInterval(280);
 		_timerDec->setInterval(280);
@@ -551,11 +596,11 @@ void SellState::lstItemsRightArrowRelease(Action* action)
 void SellState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		decreaseByValue(INT_MAX);
+		changeByValue(INT_MAX, -1);
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		decreaseByValue(1);
+		changeByValue(1, -1);
 
 		_timerInc->setInterval(280);
 		_timerDec->setInterval(280);
@@ -578,7 +623,7 @@ void SellState::lstItemsMousePress(Action* action)
 		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			increaseByValue(Options::changeValueByMouseWheel);
+			changeByValue(Options::changeValueByMouseWheel, 1);
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
@@ -589,7 +634,7 @@ void SellState::lstItemsMousePress(Action* action)
 		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
 			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
 		{
-			decreaseByValue(Options::changeValueByMouseWheel);
+			changeByValue(Options::changeValueByMouseWheel, -1);
 		}
 	}
 }
@@ -655,23 +700,7 @@ void SellState::increase()
 	_timerDec->setInterval(80);
 	_timerInc->setInterval(80);
 
-	increaseByValue(1);
-}
-
-/**
- * Increases the quantity of the selected item to sell by "change".
- * @param change How much we want to add.
- */
-void SellState::increaseByValue(int change)
-{
-	if (change < 1 || _qtys[_sel] >= getQuantity())
-		return;
-
-	change = std::min(getQuantity() - _qtys[_sel], change);
-	_qtys[_sel] += change;
-	_total += getPrice() * change;
-
-	updateItemStrings();
+	changeByValue(1, 1);
 }
 
 /**
@@ -682,21 +711,86 @@ void SellState::decrease()
 	_timerInc->setInterval(80);
 	_timerDec->setInterval(80);
 
-	decreaseByValue(1);
+	changeByValue(1, -1);
 }
 
 /**
- * Decreases the quantity of the selected item to sell by "change".
- * @param change How much we want to remove.
+ * Increases or decreases the quantity of the selected item to sell.
+ * @param change How much we want to add or remove.
+ * @param dir Direction to change, +1 to increase or -1 to decrease.
  */
-void SellState::decreaseByValue(int change)
+void SellState::changeByValue(
+		int change,
+		int dir)
 {
-	if (change < 1 || _qtys[_sel] < 1)
+	if (change < 1)
 		return;
 
-	change = std::min(_qtys[_sel], change);
-	_qtys[_sel] -= change;
-	_total -= getPrice() * change;
+	if (dir > 0)
+	{
+		if (_qtys[_sel] >= getQuantity())
+			return;
+
+		change = std::min(
+						getQuantity() - _qtys[_sel],
+						change);
+	}
+	else
+	{
+		if (_qtys[_sel] < 1)
+			return;
+
+		change = std::min(
+						_qtys[_sel],
+						change);
+	}
+
+	_qtys[_sel] += change * dir;
+	_total += getPrice() * change * dir;
+
+	// Calculate the change in storage space in tenths of an XCom storage unit.
+	Craft* craft;
+	RuleItem
+		* armor,
+		* item,
+		* weapon,
+		* ammo;
+	float total = 0.f;
+
+	switch (getType(_sel))
+	{
+		case SELL_SOLDIER:
+			if (_soldiers[_sel]->getArmor()->getStoreItem() != "STR_NONE")
+			{
+				armor = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
+				_spaceChange += static_cast<int>(armor->getSize() * 10.f * static_cast<float>(dir));
+			}
+		break;
+		case SELL_CRAFT:
+			craft = _crafts[getCraftIndex(_sel)];
+			for (std::vector<CraftWeapon*>::iterator
+					w = craft->getWeapons()->begin();
+					w != craft->getWeapons()->end();
+					++w)
+			{
+				weapon = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
+				total += weapon->getSize();
+
+				ammo = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
+				if (ammo)
+					total += static_cast<float>((*w)->getClipsLoaded(_game->getRuleset())) * ammo->getSize();
+			}
+
+			_spaceChange += static_cast<int>(total * 10.f * static_cast<float>(dir));
+		break;
+		case SELL_ITEM:
+			item = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
+			_spaceChange -= static_cast<int>(item->getSize() * 10.f * static_cast<float>(change * dir));
+		break;
+		case SELL_ENGINEER:
+		case SELL_SCIENTIST:
+		break;
+	}
 
 	updateItemStrings();
 }
@@ -708,7 +802,8 @@ void SellState::updateItemStrings()
 {
 	std::wostringstream
 		ss,
-		ss2;
+		ss2,
+		ss3;
 
 	ss << getQuantity() - _qtys[_sel];
 	_lstItems->setCellText(_sel, 1, ss.str());
@@ -719,10 +814,10 @@ void SellState::updateItemStrings()
 	_txtSales->setText(tr("STR_VALUE_OF_SALES").arg(Text::formatFunding(_total)));
 
 	if (_qtys[_sel] > 0)
-		_lstItems->setRowColor(_sel, Palette::blockOffset(13));
+		_lstItems->setRowColor(_sel, _color2);
 	else
 	{
-		_lstItems->setRowColor(_sel, Palette::blockOffset(13) + 10);
+		_lstItems->setRowColor(_sel, _color);
 
 		if (_sel > _itemOffset)
 		{
@@ -731,42 +826,53 @@ void SellState::updateItemStrings()
 				|| (rule->getBattleType() == BT_NONE
 					&& rule->getClipSize() > 0))
 			{
-				_lstItems->setRowColor(_sel, Palette::blockOffset(15) + 6);
+				_lstItems->setRowColor(_sel, _colorAmmo);
 			}
 		}
 	}
 
-	if (_total > 0) // or craft, soldier, scientist, engineer.
-	{
-		_btnOk->setVisible(true);
+	// kL_begin:
+	bool okVis = false;
 
-		return;
-	}
-	else
+	if (_total > 0)
+		okVis = true;
+	else // or craft, soldier, scientist, engineer.
 	{
 		for (size_t
 				i = 0;
-				i < _qtys.size();
+				i < _qtys.size()
+					&& !okVis;
 				++i)
 		{
 			if (_qtys[i] > 0)
 			{
-				switch (getType(static_cast<unsigned>(i)))
+				switch (getType(static_cast<size_t>(i)))
 				{
 					case SELL_CRAFT:
 					case SELL_SOLDIER:
 					case SELL_SCIENTIST:
 					case SELL_ENGINEER:
-						_btnOk->setVisible(true);
-
-						return;
-					break;
+						okVis = true;
 				}
 			}
 		}
-	}
+	} // kL_end.
 
-	_btnOk->setVisible(false);
+	ss3 << _base->getUsedStores();
+	if (_spaceChange != 0)
+	{
+		ss3 << "(";
+		if (_spaceChange > 0) ss3 << "+";
+		ss3 << std::fixed << std::setprecision(1) << static_cast<float>(_spaceChange) / 10.f << ")";
+	}
+	ss3 << ":" << _base->getAvailableStores();
+	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss3.str()));
+
+	if (Options::storageLimitsEnforced)
+//kL		_btnOk->setVisible(!_base->storesOverfull(_spaceChange));
+		okVis = !_base->storesOverfull(_spaceChange); // kL
+
+	_btnOk->setVisible(okVis); // kL
 }
 
 /**

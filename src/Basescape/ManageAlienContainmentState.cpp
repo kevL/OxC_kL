@@ -23,6 +23,8 @@
 #include <climits>
 #include <cmath>
 
+#include "SellState.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -66,13 +68,14 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	:
 		State(game),
 		_base(base),
+		_origin(origin),
 		_qtys(),
 		_aliens(),
 		_sel(0),
 		_aliensSold(0)
 //kL		_researchAliens(0)
 {
-	_overCrowded = Options::alienContainmentLimitEnforced
+	_overCrowded = Options::storageLimitsEnforced
 				&& _base->getAvailableContainment() < _base->getUsedContainment();
 
 /*kL	for (std::vector<ResearchProject*>::const_iterator
@@ -299,6 +302,32 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 	}
 
 	_game->popState();
+
+	if (Options::storageLimitsEnforced
+		&& _base->storesOverfull())
+	{
+		_game->pushState(new SellState(
+									_game,
+									_base,
+									_origin));
+
+		if (_origin == OPT_BATTLESCAPE)
+			_game->pushState(new ErrorMessageState(
+												_game,
+												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
+												_palette,
+												Palette::blockOffset(8)+5,
+												"BACK01.SCR",
+												0));
+		else
+			_game->pushState(new ErrorMessageState(
+												_game,
+												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
+												_palette,
+												Palette::blockOffset(15)+1,
+												"BACK13.SCR",
+												6));
+ 	}
 }
 
 /**
@@ -523,11 +552,10 @@ void ManageAlienContainmentState::updateStrings()
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
 
 
-//kL	bool enoughSpaceToExit = Options::alienContainmentLimitEnforced? spaces > -1: true;
+//kL	bool enoughSpaceToExit = Options::storageLimitsEnforced? spaces > -1: true;
 
-//kL	_btnCancel->setVisible(enoughSpaceToExit && !_overCrowded);
 //kL	_btnOk->setVisible(enoughSpaceToExit);
-	_btnCancel->setVisible(!_overCrowded);		// kL
+	_btnCancel->setVisible(!_overCrowded);
 	_btnOk->setVisible(_aliensSold > 0			// kL
 							&& spaces > -1);	// kL
 }

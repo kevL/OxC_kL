@@ -20,13 +20,12 @@
 #ifndef OPENXCOM_BASE_H
 #define OPENXCOM_BASE_H
 
-#include <cstdint> // kL, VC compiler in C::B wants 'uint8_t'/'Unit8' typedef'd... or something!!
+#include <cstdint>
 #include <string>
 #include <vector>
 
 #include <yaml-cpp/yaml.h>
 
-//#include "SDL_stdinc.h" // kL, VC compiler in C::B wants 'Unit8' typedef'd... or something!!
 #include "Target.h"
 
 
@@ -73,14 +72,17 @@ private:
 	std::wstring _name;
 
 	std::vector<BaseFacility*>
-		_defenses,
-		_facilities;
-	std::vector<Craft*> _crafts;
-	std::vector<Production*> _productions;
-	std::vector<ResearchProject*> _research;
-	std::vector<Soldier*> _soldiers;
-	std::vector<Transfer*> _transfers;
-	std::vector<Vehicle*> _vehicles;
+									_defenses,
+									_facilities;
+	std::vector<Craft*>				_crafts;
+	std::vector<Production*>		_productions;
+	std::vector<ResearchProject*>	_research;
+	std::vector<Soldier*>			_soldiers;
+	std::vector<Transfer*>			_transfers;
+	std::vector<Vehicle*>			_vehicles;
+
+	/// Determines space taken up by ammo clips about to rearm craft.
+	double getIgnoredStores();
 
 
 	public:
@@ -150,7 +152,10 @@ private:
 		int getAvailableQuarters() const;
 
 		/// Gets the base's used storage space.
-		int getUsedStores() const;
+		double getUsedStores();
+		/// Checks if the base's stores are overfull.
+		bool storesOverfull(int offset = 0);
+
 		/// Gets the base's available storage space.
 		int getAvailableStores() const;
 
@@ -210,8 +215,8 @@ private:
 		void removeResearch(
 				ResearchProject* project,
 				bool help = true); // kL
-		/// kL: Research Help ala XcomUtil.
-		void researchHelp(std::string aLien);
+		/// kL. Research Help ala XcomUtil.
+		void researchHelp(std::string aLien); // kL
 
 		/// Add a new Production to Base.
 		void addProduction(Production* prod);

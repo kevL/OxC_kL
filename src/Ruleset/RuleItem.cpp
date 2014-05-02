@@ -177,6 +177,13 @@ void RuleItem::load(
 			_hitSound		+= modIndex;
 	}
 
+	if (node["meleeSound"])
+	{
+		_meleeSound			= node["meleeSound"].as<int>(_meleeSound);
+		if (_meleeSound > 54) // BATTLE.CAT: 55 entries
+			_meleeSound		+= modIndex;
+	}
+
 	if (node["hitAnimation"])
 	{
 		_hitAnimation		= node["hitAnimation"].as<int>(_hitAnimation);
@@ -241,7 +248,6 @@ void RuleItem::load(
 	_strengthApplied		= node["strengthApplied"].as<bool>(_strengthApplied);
 	_LOSRequired			= node["LOSRequired"].as<bool>(_LOSRequired);
 	_noReaction				= node["noReaction"].as<bool>(_noReaction); // kL
-	_meleeSound				= node["meleeSound"].as<int>(_meleeSound);
 	_meleePower				= node["meleePower"].as<int>(_meleePower);
 
 	if (!_listOrder)

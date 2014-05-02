@@ -21,9 +21,10 @@
 
 #include <climits>
 #include <cmath>
+#include <iomanip>
 #include <sstream>
 
-#include "../aresame.h"
+//#include "../aresame.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -77,7 +78,7 @@ PurchaseState::PurchaseState(
 		_total(0),
 		_pQty(0),
 		_cQty(0),
-		_iQty(0.f)
+		_iQty(0)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
@@ -86,7 +87,13 @@ PurchaseState::PurchaseState(
 	_txtFunds		= new Text(140, 9, 16, 24);
 	_txtPurchases	= new Text(140, 9, 160, 24);
 
+/*	_txtSpaceUsed = new Text(150, 9, 160, 34);
+	_txtItem = new Text(140, 9, 10, Options::storageLimitsEnforced? 44:33);
+	_txtCost = new Text(102, 9, 152, Options::storageLimitsEnforced? 44:33);
+	_txtQuantity = new Text(60, 9, 256, Options::storageLimitsEnforced? 44:33);
+	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44); */
 	_txtItem		= new Text(140, 9, 16, 33);
+	_txtSpaceUsed	= new Text(150, 9, 160, 33);
 	_txtCost		= new Text(102, 9, 166, 33);
 	_txtQuantity	= new Text(60, 9, 267, 33);
 
@@ -103,6 +110,7 @@ PurchaseState::PurchaseState(
 	add(_txtFunds);
 	add(_txtPurchases);
 	add(_txtItem);
+	add(_txtSpaceUsed);
 	add(_txtCost);
 	add(_txtQuantity);
 	add(_lstItems);
@@ -149,6 +157,14 @@ PurchaseState::PurchaseState(
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
+
+	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
+	_txtSpaceUsed->setSecondaryColor(Palette::blockOffset(13));
+	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
+	std::wostringstream ss8;
+	ss8 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
+//kL	_txtSpaceUsed->setText(ss8.str());
+	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss8.str()));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setText(tr("STR_COST_PER_UNIT_UC"));
@@ -761,7 +777,8 @@ void PurchaseState::increase()
  */
 void PurchaseState::increaseByValue(int change)
 {
-	if (change < 1) return;
+	if (change < 1)
+		return;
 
 	if (_total + getPrice() > _game->getSavedGame()->getFunds())
 	{
@@ -801,7 +818,7 @@ void PurchaseState::increaseByValue(int change)
 	}
 	else if (_sel >= 3 + _crafts.size()
 		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize()
-				> _base->getAvailableStores() - _base->getUsedStores())
+				> (_base->getAvailableStores() * 10 - static_cast<int>(_base->getUsedStores() * 10 + 0.5)))
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(
@@ -829,18 +846,27 @@ void PurchaseState::increaseByValue(int change)
 			change = std::min(maxByHangars, change);
 			_cQty += change;
 		}
-		else if (_sel >= 3 + _crafts.size()) // Item count
+		else //if (_sel >= 3 + _crafts.size()) // Item count
 		{
-			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
-			float freeStores = static_cast<float>(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
+			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()]);
+
+//			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
+//			float freeStores = static_cast<float>(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
+			int storesNeededPerItem = static_cast<int>(rule->getSize() * 10.f);
+			int freeStores = static_cast<int>(static_cast<double>(_base->getAvailableStores()) * 10.0 - _base->getUsedStores() * 10.0 + 0.5) - _iQty; // kL_note: cf. TransferItemsState
 			int maxByStores;
-			if (AreSame(storesNeededPerItem, 0.f))
+//			if (AreSame(storesNeededPerItem, 0.f))
+			if (storesNeededPerItem == 0)
 		        maxByStores = INT_MAX;
 			else
-				maxByStores = static_cast<int>(floor(freeStores / storesNeededPerItem));
+//				maxByStores = static_cast<int>(floor(freeStores / storesNeededPerItem));
+				maxByStores = freeStores / storesNeededPerItem; /** kL_note: This is not right, because of int-truncation. */
 
-			change = std::min(maxByStores, change);
-			_iQty += (static_cast<float>(change) * storesNeededPerItem);
+			change = std::min(
+							maxByStores,
+							change);
+//			_iQty += (static_cast<float>(change) * storesNeededPerItem);
+			_iQty += change * storesNeededPerItem; /** kL_note: This is not right, because of int-truncation. */
 		}
 
 		_qtys[_sel] += change;
@@ -876,14 +902,15 @@ void PurchaseState::decreaseByValue(int change)
 	{
 		_pQty -= change;
 	}
-	else if (_sel >= 3 && _sel < 3 + _crafts.size()) // Craft count
+	else if (_sel >= 3 // Craft count
+		&& _sel < 3 + _crafts.size())
 	{
 		_cQty -= change;
 	}
 	else // Item count
 	{
-		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])
-										->getSize() * static_cast<float>(change);
+//		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * static_cast<float>(change);
+		_iQty -= static_cast<int>(_game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * 10.f * static_cast<float>(change));
 	}
 
 	_qtys[_sel] -= change;
@@ -900,7 +927,10 @@ void PurchaseState::updateItemStrings()
 	_txtPurchases->setText(tr("STR_COST_OF_PURCHASES")
 							.arg(Text::formatFunding(_total)));
 
-	std::wostringstream ss;
+	std::wostringstream
+		ss,
+		ss1;
+
 	ss << _qtys[_sel];
 	_lstItems->setCellText(_sel, 3, ss.str());
 
@@ -922,10 +952,17 @@ void PurchaseState::updateItemStrings()
 		}
 	}
 
-	if (_total > 0)
-		_btnOk->setVisible(true);
-	else
-		_btnOk->setVisible(false);
+	ss1 << _base->getUsedStores();
+	if (_iQty != 0)
+	{
+		ss1 << "(";
+		if (_iQty > 0) ss1 << "+";
+		ss1 << std::fixed << std::setprecision(1) << static_cast<float>(_iQty) / 10.f << ")";
+	}
+	ss1 << ":" << _base->getAvailableStores();
+	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
+
+	_btnOk->setVisible(_total > 0); // kL
 }
 
 }

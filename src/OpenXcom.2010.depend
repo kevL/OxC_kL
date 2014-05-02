@@ -4418,7 +4418,7 @@
 	<vector>
 	<SDL.h>
 
-1394398507 f:\git\openxcom\src\savegame\base.h
+1399020614 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
 	<string>
 	<vector>
@@ -4491,7 +4491,7 @@
 1394398507 f:\git\openxcom\src\basescape\dismantlefacilitystate.h
 	"../Engine/State.h"
 
-1397080562 f:\git\openxcom\src\basescape\managealiencontainmentstate.h
+1399007175 f:\git\openxcom\src\basescape\managealiencontainmentstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -4504,7 +4504,7 @@
 1397443900 f:\git\openxcom\src\basescape\manufacturestate.h
 	"../Engine/State.h"
 
-1397080850 f:\git\openxcom\src\basescape\purchasestate.h
+1399029026 f:\git\openxcom\src\basescape\purchasestate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -4512,10 +4512,11 @@
 1397444546 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1397250898 f:\git\openxcom\src\basescape\sellstate.h
+1399027556 f:\git\openxcom\src\basescape\sellstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
+	"../Menu/OptionsBaseState.h"
 
 1394398507 f:\git\openxcom\src\basescape\soldiersstate.h
 	"../Engine/State.h"
@@ -5190,12 +5191,12 @@
 1397881417 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1398577513 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1399030230 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	<climits>
 	<cmath>
+	<iomanip>
 	<sstream>
-	"../aresame.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -5512,7 +5513,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1397456764 f:\git\openxcom\src\basescape\transferitemsstate.h
+1399013066 f:\git\openxcom\src\basescape\transferitemsstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -5758,7 +5759,7 @@
 1397881347 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1394846483 f:\git\openxcom\src\battlescape\debriefingstate.h
+1399014355 f:\git\openxcom\src\battlescape\debriefingstate.h
 	<map>
 	<string>
 	<vector>
@@ -11424,7 +11425,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1398577316 f:\git\openxcom\src\engine\options.inc.h
+1399006348 f:\git\openxcom\src\engine\options.inc.h
 
 1396745312 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"

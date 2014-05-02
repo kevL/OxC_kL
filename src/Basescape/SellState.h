@@ -25,6 +25,8 @@
 
 #include "../Engine/State.h"
 
+#include "../Menu/OptionsBaseState.h"
+
 
 namespace OpenXcom
 {
@@ -62,10 +64,16 @@ private:
 	int
 		_hasSci,
 		_hasEng,
+		_spaceChange,
 		_total;
 	size_t
 		_itemOffset,
 		_sel;
+	Uint8
+		_color,
+		_color2,
+		_color3,
+		_colorAmmo;
 
 	Base* _base;
 	Text
@@ -75,6 +83,7 @@ private:
 		* _txtQuantity,
 		* _txtSales,
 		* _txtSell,
+		* _txtSpaceUsed,
 		* _txtTitle,
 		* _txtValue;
 	TextButton
@@ -107,7 +116,8 @@ private:
 		/// Creates the Sell state.
 		SellState(
 				Game* game,
-				Base* base);
+				Base* base,
+				OptionsOrigin origin = OPT_GEOSCAPE);
 		/// Cleans up the Sell state.
 		~SellState();
 
@@ -135,12 +145,12 @@ private:
 
 		/// Increases the quantity of an item by one.
 		void increase();
-		/// Increases the quantity of an item by the given value.
-		void increaseByValue(int change);
 		/// Decreases the quantity of an item by one.
 		void decrease();
-		/// Decreases the quantity of an item by the given value.
-		void decreaseByValue(int change);
+		/// Changes the quantity of an item by the given value.
+		void changeByValue(
+				int change,
+				int dir);
 
 		/// Updates the quantity-strings of the selected item.
 		void updateItemStrings();

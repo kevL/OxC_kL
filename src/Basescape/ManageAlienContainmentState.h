@@ -58,6 +58,8 @@ private:
 		_color,
 		_color2;
 
+	OptionsOrigin _origin;
+
 	Base* _base;
 	Text
 		* _txtAvailable,

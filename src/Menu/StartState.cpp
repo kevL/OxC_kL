@@ -60,6 +60,9 @@ StartState::StartState(Game* game)
 
 	_wasLetterBoxed = Options::keepAspectRatio;
 
+	Options::newDisplayWidth = Options::displayWidth;
+	Options::newDisplayHeight = Options::displayHeight;
+
 	if (!Options::useOpenGL)
 	{
 		Options::keepAspectRatio = false;

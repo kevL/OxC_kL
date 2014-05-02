@@ -85,7 +85,7 @@ private:
 		_destroyBase,
 		_manageContainment,
 		_noContainment;
-	int _containmentLimit;
+	int _limitsEnforced;
 
 	std::wstring _baseLabel; // kL
 

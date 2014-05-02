@@ -60,6 +60,7 @@
 #include "UfoLostState.h"
 
 #include "../Basescape/BasescapeState.h"
+#include "../Basescape/SellState.h"
 
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/BriefingState.h"
@@ -82,6 +83,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
+#include "../Menu/ErrorMessageState.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/PauseState.h"
 #include "../Menu/SaveGameState.h"
@@ -2061,8 +2063,24 @@ void GeoscapeState::time1Hour()
 												j->second));
 			}
 		}
-	}
 
+		if (Options::storageLimitsEnforced
+			&& (*i)->storesOverfull())
+		{
+			_game->pushState(new SellState(
+										_game,
+										*i));
+
+			setPalette("PAL_BASESCAPE", 1);
+			_game->pushState(new ErrorMessageState(
+												_game,
+												tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(),
+												_palette,
+												Palette::blockOffset(15)+1,
+												"BACK13.SCR",
+												6));
+		}
+	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Hour() EXIT";
 }
 

@@ -26,6 +26,7 @@
 #include "PromotionsState.h"
 
 #include "../Basescape/ManageAlienContainmentState.h"
+#include "../Basescape/SellState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -92,7 +93,7 @@ DebriefingState::DebriefingState(Game* game)
 		_noContainment(false),
 		_manageContainment(false),
 		_destroyBase(false),
-		_containmentLimit(0)
+		_limitsEnforced(0)
 {
 	//Log(LOG_INFO) << "Create DebriefingState";
 	Options::baseXResolution = Options::baseXGeoscape;
@@ -102,8 +103,8 @@ DebriefingState::DebriefingState(Game* game)
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
 
-	if (Options::alienContainmentLimitEnforced)
-		_containmentLimit = 1;
+	if (Options::storageLimitsEnforced)
+		_limitsEnforced = 1;
 
 	_window			= new Window(this, 320, 200, 0, 0);
 
@@ -372,6 +373,23 @@ void DebriefingState::btnOkClick(Action*)
 												_game,
 												tr("STR_CONTAINMENT_EXCEEDED")
 													.arg(_base->getName()).c_str(),
+												_palette,
+												Palette::blockOffset(8)+5,
+												"BACK01.SCR",
+												0));
+		}
+
+		if (!_manageContainment
+			&& Options::storageLimitsEnforced
+			&& _base->storesOverfull())
+		{
+			_game->pushState(new SellState(
+										_game,
+										_base,
+										OPT_BATTLESCAPE));
+			_game->pushState(new ErrorMessageState(
+												_game,
+												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 												_palette,
 												Palette::blockOffset(8)+5,
 												"BACK01.SCR",
@@ -1031,7 +1049,7 @@ void DebriefingState::prepareDebriefing()
 					{
 						base->getItems()->addItem(type);
 						_manageContainment = base->getAvailableContainment()
-												- (base->getUsedContainment() * _containmentLimit) < 0;
+												- (base->getUsedContainment() * _limitsEnforced) < 0;
 					}
 				}
 				else
@@ -1648,7 +1666,7 @@ void DebriefingState::recoverItems(
 							{
 								base->getItems()->addItem((*it)->getUnit()->getType());
 								_manageContainment = base->getAvailableContainment()
-														- (base->getUsedContainment() * _containmentLimit) < 0;
+														- (base->getUsedContainment() * _limitsEnforced) < 0;
 							}
 						}
 						else

@@ -49,12 +49,13 @@ class PurchaseState
 private:
 	int
 		_cQty,
+		_iQty,
 		_pQty,
 		_total;
 	size_t
 		_itemOffset,
 		_sel;
-	float _iQty;
+//	float _iQty;
 
 	Base* _base;
 	Text
@@ -64,6 +65,7 @@ private:
 		* _txtItem,
 		* _txtPurchases,
 		* _txtQuantity,
+		* _txtSpaceUsed,
 		* _txtTitle;
 	TextButton
 		* _btnCancel,

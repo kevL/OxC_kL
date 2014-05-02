@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2010-2014 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
@@ -29,6 +29,7 @@
 
 #include "BaseFacility.h"
 #include "Craft.h"
+#include "CraftWeapon.h"
 #include "ItemContainer.h"
 #include "Production.h"
 #include "ResearchProject.h"
@@ -45,6 +46,7 @@
 
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleManufacture.h"
@@ -561,16 +563,16 @@ uint8_t Base::detect(Target* target) const
 		else
 		{
 			Ufo* u = dynamic_cast<Ufo*>(target);
-			if (u != 0)
+/*			if (u != 0)
 			{
 				chance += static_cast<float>(u->getVisibility());
 				//Log(LOG_INFO) << ". . chance(base + ufo) = " << (int)chance;
 			}
 
 			// need to divide by 3, since Geoscape-detection was moved from 30m to 10m time-slot.
-			chance /= 3.f;
+			chance /= 3.f; */
 			// and convert to int:
-			int iChance = static_cast<int>(chance);
+/*			int iChance = static_cast<int>(chance);
 
 			if (iChance < 1)
 				return 0;
@@ -578,7 +580,19 @@ uint8_t Base::detect(Target* target) const
 			{
 				ret = static_cast<uint8_t>(RNG::percent(iChance));
 				//Log(LOG_INFO) << ". detected = " << (int)ret;
+			} */
+//			ret = static_cast<uint8_t>(RNG::percent(static_cast<int>(chance)));
+			// kL_note: If this doesn't detect anything but UFOs, could
+			// consolidate it within (u != 0) above. Like this:
+			if (u != 0)
+			{
+				chance += static_cast<float>(u->getVisibility());
+				//Log(LOG_INFO) << ". . chance(base + ufo) = " << (int)chance;
+				// need to divide by 3, since Geoscape-detection was moved from 30min to 10min time-slot.
+				chance /= 3.f;
+				ret = static_cast<uint8_t>(RNG::percent(static_cast<int>(chance)));
 			}
+//			else return 0;
 		}
 	}
 
@@ -588,8 +602,8 @@ uint8_t Base::detect(Target* target) const
 /**
  * Returns if a certain target is inside the base's
  * radar range, taking in account the positions of both.
- * @param target, Pointer to target to compare.
- * @return, Distance to ufo; -1.0 if outside range; -2.0 if within range of hyperwave facility
+ * @param target, Pointer to target.
+ * @return, Distance to ufo; -2.0 if outside range; -1.0 if within range of hyperwave facility
  */
 double Base::insideRadarRange(Target* target) const
 {
@@ -787,26 +801,28 @@ int Base::getAvailableQuarters() const
 }
 
 /**
- * Returns the amount of stores used up by equipment in the base.
+ * Returns the amount of stores used up
+ * by equipment in the base
+ * and equipment about to arrive.
  * @return, Storage space.
  */
-int Base::getUsedStores() const
+double Base::getUsedStores()
 {
-	float total = static_cast<float>(_items->getTotalSize(_rule));
+	double total = _items->getTotalSize(_rule);
 
 	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
 			i != _crafts.end();
 			++i)
 	{
-		total += static_cast<float>((*i)->getItems()->getTotalSize(_rule));
+		total += (*i)->getItems()->getTotalSize(_rule);
 
 		for (std::vector<Vehicle*>::const_iterator
 				j = (*i)->getVehicles()->begin();
 				j != (*i)->getVehicles()->end();
 				++j)
 		{
-			total += (*j)->getRules()->getSize();
+			total += static_cast<double>((*j)->getRules()->getSize());
 		}
 	}
 
@@ -816,10 +832,35 @@ int Base::getUsedStores() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
-			total += static_cast<float>((*i)->getQuantity()) * _rule->getItem((*i)->getItems())->getSize();
+		{
+			total += static_cast<double>(_rule->getItem((*i)->getItems())->getSize())
+					* static_cast<double>((*i)->getQuantity()); //(float * int)
+		}
+		else if ((*i)->getType() == TRANSFER_CRAFT)
+		{
+			Craft* craft = (*i)->getCraft();
+			total += craft->getItems()->getTotalSize(_rule);
+		}
 	}
 
-	return static_cast<int>(floor(total));
+	total -= getIgnoredStores();
+
+	return total;
+}
+
+/**
+ * Checks if the base's stores are overfull.
+ * Supplying an offset will add/subtract to the used capacity before performing the check.
+ * A positive offset simulates adding items to the stores, whereas a negative offset
+ * can be used to check whether sufficient items have been removed to stop the stores overflowing.
+ * @param offset Adjusts the used capacity, expressed in tenths of an XCom storage unit.
+ */
+bool Base::storesOverfull(int offset)
+{
+	int capacity = getAvailableStores() * 10;
+	int used = static_cast<int>(getUsedStores() * 10.0 + 0.5);
+
+	return (used + offset > capacity);
 }
 
 /**
@@ -840,6 +881,57 @@ int Base::getAvailableStores() const
 	}
 
 	return total;
+}
+
+/**
+ * Determines space taken up by ammo clips about to rearm craft.
+ * @return, Ignored storage space.
+ */
+double Base::getIgnoredStores()
+{
+	double space = 0.0;
+
+	for (std::vector<Craft*>::iterator
+			c = getCrafts()->begin();
+			c != getCrafts()->end();
+			++c)
+	{
+		if ((*c)->getStatus() == "STR_REARMING")
+		{
+			for (std::vector<CraftWeapon*>::iterator
+					w = (*c)->getWeapons()->begin();
+					w != (*c)->getWeapons()->end();
+					++w)
+			{
+				if (*w != 0
+					&& (*w)->isRearming())
+				{
+					std::string clip = (*w)->getRules()->getClipItem();
+					if (clip != "")
+					{
+						int baseQty = getItems()->getItem(clip);
+						if (baseQty > 0)
+						{
+							int clipSize = _rule->getItem(clip)->getClipSize();
+							if (clipSize > 0)
+							{
+								int toLoad = static_cast<int>(ceil(
+												static_cast<double>((*w)->getRules()->getAmmoMax() - (*w)->getAmmo())
+												/ static_cast<double>(clipSize)));
+
+								space += static_cast<double>(std::min(
+																	baseQty,
+																	toLoad))
+										* static_cast<double>(_rule->getItem(clip)->getSize());
+							}
+						}
+					}
+				}
+			}
+		}
+	}
+
+	return space;
 }
 
 /**
@@ -1320,7 +1412,7 @@ void Base::removeResearch(
 	if (i != _research.end())
 	{
 		// kL_begin: Add Research Help here. aLien must be interrogated
-		// at same Base as project-help applies to for now.
+		// at the same Base that project-help applies to, for now.
 		if (help)
 		{
 			std::string aLien = project->getRules()->getName();
@@ -2037,7 +2129,7 @@ int Base::getUsedContainment() const
 		}
 	}
 
-	if (Options::alienContainmentLimitEnforced)
+	if (Options::storageLimitsEnforced)
 	{
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
@@ -2175,7 +2267,6 @@ bool isCompleted::operator()(const BaseFacility* facility) const
 int Base::getDetectionChance(int difficulty) const
 {
 	//Log(LOG_INFO) << "Base::getDetectionChance()";
-
 	int facilities = static_cast<int>(std::count_if(
 												_facilities.begin(),
 												_facilities.end(),
@@ -2380,7 +2471,10 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 				i = _facilities.begin();
 				i != _facilities.end();
 				++i)
-			if ((*i) != remove) result.push_back(i);
+		{
+			if ((*i) != remove)
+				result.push_back(i);
+		}
 
 		return result;
 	}
@@ -2393,26 +2487,32 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 			x = 0;
 			x < BASE_SIZE;
 			++x)
+	{
 		for (int
 				y = 0;
 				y < BASE_SIZE;
 				++y)
+		{
 			grid[x][y] = 0;
-
+		}
+	}
 
 	// Ok, fill up the grid(+facilitiesConnStates), and search the lift
 	for (std::vector<BaseFacility*>::iterator
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
+	{
 		if ((*i) != remove)
 		{
 			if ((*i)->getRules()->isLift())
 				lift = *i;
+
 			for (int
 					x = 0;
 					x != (*i)->getRules()->getSize();
 					++x)
+			{
 				for (int
 						y = 0;
 						y != (*i)->getRules()->getSize();
@@ -2423,7 +2523,9 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 					facilitiesConnStates.push_back(p);
 					grid[(*i)->getX() + x][(*i)->getY() + y] = p;
 				}
+			}
 		}
+	}
 
 	// we're in real trouble if this happens...
 	if (lift == 0)
@@ -2441,11 +2543,12 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 		int
 			x = stack.top().first,
 			y = stack.top().second;
+
 		stack.pop();
 
-		if (x >= 0
+		if (x > -1
 			&& x < BASE_SIZE
-			&& y >= 0
+			&& y > -1
 			&& y < BASE_SIZE
 			&& grid[x][y] != 0
 			&& !grid[x][y]->second)
@@ -2454,10 +2557,10 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 
 			BaseFacility* fac = *(grid[x][y]->first);
 
-			BaseFacility* neighborLeft = (x - 1 >= 0 && grid[x - 1][y] != 0)? *(grid[x - 1][y]->first): 0;
+			BaseFacility* neighborLeft = (x - 1 > -1 && grid[x - 1][y] != 0)? *(grid[x - 1][y]->first): 0;
 			BaseFacility* neighborRight = (x + 1 < BASE_SIZE && grid[x + 1][y] != 0)? *(grid[x + 1][y]->first): 0;
 
-			BaseFacility* neighborTop = (y - 1 >= 0 && grid[x][y - 1] != 0)? *(grid[x][y - 1]->first): 0;
+			BaseFacility* neighborTop = (y - 1 > -1 && grid[x][y - 1] != 0)? *(grid[x][y - 1]->first): 0;
 			BaseFacility* neighborBottom = (y + 1 < BASE_SIZE && grid[x][y + 1] != 0)? *(grid[x][y + 1]->first): 0;
 
 			if (fac->getBuildTime() == 0
@@ -2465,7 +2568,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 					&& (neighborLeft == fac
 						|| neighborLeft->getBuildTime() > neighborLeft->getRules()->getBuildTime())))
 			{
-				stack.push(std::make_pair(x-1,y));
+				stack.push(std::make_pair(x - 1, y));
 			}
 
 			if (fac->getBuildTime() == 0
@@ -2473,7 +2576,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 					&& (neighborRight == fac
 						|| neighborRight->getBuildTime() > neighborRight->getRules()->getBuildTime())))
 			{
-				stack.push(std::make_pair(x+1,y));
+				stack.push(std::make_pair(x + 1, y));
 			}
 
 			if (fac->getBuildTime() == 0
@@ -2481,7 +2584,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 					&& (neighborTop == fac
 						|| neighborTop->getBuildTime() > neighborTop->getRules()->getBuildTime())))
 			{
-				stack.push(std::make_pair(x,y-1));
+				stack.push(std::make_pair(x, y - 1));
 			}
 
 			if (fac->getBuildTime() == 0
@@ -2489,7 +2592,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 					&& (neighborBottom == fac
 						|| neighborBottom->getBuildTime() > neighborBottom->getRules()->getBuildTime())))
 			{
-				stack.push(std::make_pair(x,y+1));
+				stack.push(std::make_pair(x, y + 1));
 			}
 		}
 	}
@@ -2697,7 +2800,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
 		if (!_transfers.empty()
-			&& getAvailableStores() - getUsedStores() - (*facility)->getRules()->getStorage() < 0)
+			&& getAvailableStores() - static_cast<int>(floor(getUsedStores() + 0.05)) - (*facility)->getRules()->getStorage() < 0)
 		{
 			for (std::vector<Transfer*>::iterator
 					i = _transfers.begin();
@@ -2707,7 +2810,6 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 				if ((*i)->getType() == TRANSFER_ITEM)
 				{
 					delete *i;
-
 					i = _transfers.erase(i);
 				}
 				else

@@ -22,6 +22,7 @@
 #include <sstream>
 
 #include "CraftInfoState.h"
+#include "SellState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -34,6 +35,8 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
+
+#include "../Menu/ErrorMessageState.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -282,6 +285,21 @@ std::wstring CraftsState::getAltStatus(Craft* craft)
 void CraftsState::btnOkClick(Action*)
 {
 	_game->popState();
+
+	if (Options::storageLimitsEnforced
+		&& _base->storesOverfull())
+	{
+		_game->pushState(new SellState(
+									_game,
+									_base));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
+											_palette,
+											Palette::blockOffset(15)+1,
+											"BACK01.SCR",
+											0));
+	}
 }
 
 /**

@@ -22,6 +22,7 @@
 *.sdf
 *.cscope_file_list
 *.nsh
+*.bat
 
 # -OpenXcom root
 *.ac

@@ -53,6 +53,7 @@ private:
 	int
 		_aQty,
 		_cQty,
+		_iQty,
 		_pQty,
 		_total,
 		_hasEng,
@@ -60,7 +61,7 @@ private:
 	size_t
 		_itemOffset,
 		_sel;
-	float _iQty;
+//	float _iQty;
 	double _distance;
 
 	Base
