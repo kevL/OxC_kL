@@ -61,7 +61,7 @@ TransfersState::TransfersState(
 
 	_txtItem		= new Text(114, 9, 16, 34);
 	_txtQuantity	= new Text(54, 9, 179, 34);
-	_txtArrivalTime	= new Text(112, 9, 254, 34);
+	_txtArrivalTime	= new Text(28, 9, 254, 34);
 
 	_lstTransfers	= new TextList(285, 120, 16, 45);
 

@@ -20,12 +20,14 @@
 #include "AbandonGameState.h"
 
 #include "MainMenuState.h"
+//kL #include "OptionsBaseState.h"
 
 #include "../Engine/Game.h"
 
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -51,11 +53,9 @@ AbandonGameState::AbandonGameState(
 {
 	_screen = false;
 
-	int x;
+	int x = 52;
 	if (_origin == OPT_GEOSCAPE)
 		x = 20;
-	else
-		x = 52;
 
 	_window		= new Window(this, 216, 160, x, 20, POPUP_BOTH);
 	_txtTitle	= new Text(206, 33, x + 5, 73);
@@ -114,6 +114,18 @@ AbandonGameState::~AbandonGameState()
  */
 void AbandonGameState::btnYesClick(Action*)
 {
+	// This uses baseX/Y options for Geoscape & Basescape:
+	Options::baseXResolution = Options::baseXGeoscape; // kL
+	Options::baseYResolution = Options::baseYGeoscape; // kL
+	// This sets Geoscape and Basescape to default (320x200) IG and the config.
+/*kL	OptionsBaseState::updateScale(
+							Options::geoscapeScale,
+							Options::geoscapeScale,
+							Options::baseXGeoscape,
+							Options::baseYGeoscape,
+							true); */
+	_game->getScreen()->resetDisplay(false);
+
 	_game->setState(new MainMenuState(_game));
 	_game->setSavedGame(0);
 }

@@ -92,10 +92,10 @@ PurchaseState::PurchaseState(
 	_txtCost = new Text(102, 9, 152, Options::storageLimitsEnforced? 44:33);
 	_txtQuantity = new Text(60, 9, 256, Options::storageLimitsEnforced? 44:33);
 	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44); */
-	_txtItem		= new Text(140, 9, 16, 33);
-	_txtSpaceUsed	= new Text(150, 9, 160, 33);
+	_txtItem		= new Text(30, 9, 16, 33);
+	_txtSpaceUsed	= new Text(85, 9, 70, 33);
 	_txtCost		= new Text(102, 9, 166, 33);
-	_txtQuantity	= new Text(60, 9, 267, 33);
+	_txtQuantity	= new Text(48, 9, 267, 33);
 
 	_lstItems		= new TextList(285, 128, 16, 44);
 
@@ -163,8 +163,8 @@ PurchaseState::PurchaseState(
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	std::wostringstream ss8;
 	ss8 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
-//kL	_txtSpaceUsed->setText(ss8.str());
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss8.str()));
+	_txtSpaceUsed->setText(ss8.str());
+//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss8.str()));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
 	_txtCost->setText(tr("STR_COST_PER_UNIT_UC"));
@@ -960,7 +960,8 @@ void PurchaseState::updateItemStrings()
 		ss1 << std::fixed << std::setprecision(1) << static_cast<float>(_iQty) / 10.f << ")";
 	}
 	ss1 << ":" << _base->getAvailableStores();
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
+	_txtSpaceUsed->setText(ss1.str()); // kL
+//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
 
 	_btnOk->setVisible(_total > 0); // kL
 }

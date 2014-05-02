@@ -102,7 +102,7 @@ TransferItemsState::TransferItemsState(
 
 	_txtItem				= new Text(128, 9, 16, 24);
 	_txtQuantity			= new Text(35, 9, 160, 24);
-	_txtAmountTransfer		= new Text(60, 9, 200, 24);
+	_txtAmountTransfer		= new Text(46, 9, 200, 24);
 	_txtAmountDestination	= new Text(62, 9, 247, 24);
 
 	_lstItems				= new TextList(285, 136, 16, 35);

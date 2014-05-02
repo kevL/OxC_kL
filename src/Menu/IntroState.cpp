@@ -22,6 +22,7 @@
 #include <SDL_mixer.h>
 
 #include "MainMenuState.h"
+//kL #include "OptionsBaseState.h"
 
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Flc.h"
@@ -461,7 +462,12 @@ void IntroState::init()
 
 		SDL_Color pal[256];
 		SDL_Color pal2[256];
-		memcpy(pal, _game->getScreen()->getPalette(), sizeof(SDL_Color)* 256);
+
+		memcpy(
+			pal,
+			_game->getScreen()->getPalette(),
+			sizeof(SDL_Color)* 256);
+
 		for (int
 				i = 20;
 				i > 0;
@@ -484,7 +490,11 @@ void IntroState::init()
 				pal2[color].b = (((int)pal[color].b) * i) / 20;
 			}
 
-			_game->getScreen()->setPalette(pal2, 0, 256, true);
+			_game->getScreen()->setPalette(
+										pal2,
+										0,
+										256,
+										true);
 			_game->getScreen()->flip();
 
 			SDL_Delay(45);
@@ -505,6 +515,18 @@ void IntroState::init()
 	}
 
 	Options::keepAspectRatio = _wasLetterBoxed;
+
+	// This uses baseX/Y options for Geoscape & Basescape:
+	Options::baseXResolution = Options::baseXGeoscape; // kL
+	Options::baseYResolution = Options::baseYGeoscape; // kL
+	// This sets Geoscape and Basescape to default (320x200) IG and the config.
+/*kL	OptionsBaseState::updateScale(
+							Options::geoscapeScale,
+							Options::geoscapeScale,
+							Options::baseXGeoscape,
+							Options::baseYGeoscape,
+							true); */
+	_game->getScreen()->resetDisplay(false);
 
 	_game->setState(new MainMenuState(_game));
 }

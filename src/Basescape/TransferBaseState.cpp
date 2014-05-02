@@ -126,7 +126,7 @@ TransferBaseState::TransferBaseState(
 
 	_lstBases->setColor(Palette::blockOffset(15) + 1);
 	_lstBases->setArrowColor(Palette::blockOffset(13) + 5);
-	_lstBases->setColumns(2, 128, 100);
+	_lstBases->setColumns(2, 128, 80);
 	_lstBases->setSelectable(true);
 	_lstBases->setBackground(_window);
 	_lstBases->setMargin(8);

@@ -389,11 +389,12 @@ void Screen::resetDisplay(bool resetVideo)
 {
 	int width = Options::displayWidth;
 	int height = Options::displayHeight;
+
 	makeVideoFlags();
 
 	if (!_surface
 		|| (_surface // don't reallocate _surface if not necessary, it's a waste of CPU cycles
-			&& (_surface->getSurface()->format->BitsPerPixel != _bpp
+			&& (_surface->getSurface()->format->BitsPerPixel != static_cast<Uint8>(_bpp)
 				|| _surface->getSurface()->w != _baseWidth
 				|| _surface->getSurface()->h != _baseHeight)))
 	{
@@ -447,13 +448,13 @@ void Screen::resetDisplay(bool resetVideo)
 	Options::displayWidth = getWidth();
 	Options::displayHeight = getHeight();
 
-	_scaleX = getWidth() / (double)_baseWidth;
-	_scaleY = getHeight() / (double)_baseHeight;
+	_scaleX = getWidth() / static_cast<double>(_baseWidth);
+	_scaleY = getHeight() / static_cast<double>(_baseHeight);
 
 	_clear.x = 0;
 	_clear.y = 0;
-	_clear.w = getWidth();
-	_clear.h = getHeight();
+	_clear.w = static_cast<Uint16>(getWidth());
+	_clear.h = static_cast<Uint16>(getHeight());
 
 	bool cursorInBlackBands;
 	if (!Options::keepAspectRatio)

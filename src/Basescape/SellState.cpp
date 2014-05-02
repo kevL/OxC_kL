@@ -102,11 +102,11 @@ SellState::SellState(
 	_txtFunds		= new Text(140, 9, 16, 24);
 	_txtSales		= new Text(140, 9, 160, 24);
 
-	_txtItem		= new Text(130, 9, 16, 33);
-	_txtSpaceUsed	= new Text(150, 9, 160, 33);
+	_txtItem		= new Text(30, 9, 16, 33);
+	_txtSpaceUsed	= new Text(85, 9, 70, 33);
 	_txtQuantity	= new Text(54, 9, 166, 33);
 	_txtSell		= new Text(20, 9, 226, 33);
-	_txtValue		= new Text(40, 9, 246, 33);
+	_txtValue		= new Text(40, 9, 248, 33);
 
 	_lstItems		= new TextList(285, 128, 16, 44);
 
@@ -197,8 +197,8 @@ SellState::SellState(
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	std::wostringstream ss1;
 	ss1 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
-//kL	_txtSpaceUsed->setText(ss1.str());
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
+	_txtSpaceUsed->setText(ss1.str());
+//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
 
 	_txtQuantity->setColor(_color);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
@@ -866,11 +866,13 @@ void SellState::updateItemStrings()
 		ss3 << std::fixed << std::setprecision(1) << static_cast<float>(_spaceChange) / 10.f << ")";
 	}
 	ss3 << ":" << _base->getAvailableStores();
-	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss3.str()));
+	_txtSpaceUsed->setText(ss3.str()); // kL
+//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss3.str()));
 
 	if (Options::storageLimitsEnforced)
 //kL		_btnOk->setVisible(!_base->storesOverfull(_spaceChange));
-		okVis = !_base->storesOverfull(_spaceChange); // kL
+		okVis = okVis
+				&& !_base->storesOverfull(_spaceChange); // kL
 
 	_btnOk->setVisible(okVis); // kL
 }
