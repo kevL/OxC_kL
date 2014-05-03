@@ -36,7 +36,8 @@ extern FM_OPL* opl[2];
 namespace OpenXcom
 {
 
-int AdlibMusic::delay = 0;
+int AdlibMusic::delay	= 0;
+int AdlibMusic::rate	= 0;
 
 std::map<int, int> AdlibMusic::delayRates;
 
@@ -74,6 +75,8 @@ AdlibMusic::AdlibMusic(float volume)
 		delayRates[44100]	= 629 * 4;
 		delayRates[48000]	= 685 * 4;
 	}
+
+	rate = Options::audioSampleRate;
 }
 
 /**
@@ -190,7 +193,7 @@ void AdlibMusic::player(
 
 		func_play_tick();
 
-		delay = delayRates[Options::audioSampleRate];
+		delay = delayRates[rate]; 
 	}
 #endif
 }

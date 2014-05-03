@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class Text;
 class TextButton;
+class ToggleTextButton;
 class Window;
 
 
@@ -44,15 +45,20 @@ class NewGameState
 {
 
 private:
+	Text
+		* _txtIronman,
+		* _txtTitle;
 	TextButton
 		* _btnBeginner,
 		* _btnExperienced,
 		* _btnVeteran,
 		* _btnGenius,
 		* _btnSuperhuman,
-		* _btnCancel;
+		* _btnCancel,
+		* _btnOk,
+		* _difficulty;
+	ToggleTextButton* _btnIronman;
 	Window* _window;
-	Text* _txtTitle;
 
 
 	public:
@@ -61,20 +67,9 @@ private:
 		/// Cleans up the New Game state.
 		~NewGameState();
 
-		/// Creates a new game.
-		void newGame(GameDifficulty diff);
-
-		/// Handler for clicking the Beginner button.
-		void btnBeginnerClick(Action* action);
-		/// Handler for clicking the Experienced button.
-		void btnExperiencedClick(Action* action);
-		/// Handler for clicking the Veteran button.
-		void btnVeteranClick(Action* action);
-		/// Handler for clicking the Genius button.
-		void btnGeniusClick(Action* action);
-		/// Handler for clicking the Superhuman button.
-		void btnSuperhumanClick(Action* action);
-		/// Handler for clicking the cancel button.
+		/// Handler for clicking the Ok button.
+		void btnOkClick(Action*);
+		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action*);
 };
 

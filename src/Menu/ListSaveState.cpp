@@ -55,19 +55,18 @@ ListSaveState::ListSaveState(
 		_selectedRow(-1)
 {
 	_edtSave		= new TextEdit(this, 168, 9, 0, 0);
-	_btnSaveGame	= new TextButton(134, 16, 170, 177);
+	_btnSaveGame	= new TextButton(134, 16, 170, 177); // kL
+//kL	_btnSaveGame	= new TextButton(_game->getSavedGame()->isIronman()? 200: 80, 16, 60, 172);
 
 	add(_edtSave);
 	add(_btnSaveGame);
 
-
-//	_btnSaveGame->setX(_btnSaveGame->getX() + Screen::getDX()); // kL
-//	_btnSaveGame->setY(_btnSaveGame->getY() + Screen::getDY()); // kL
-
-
 	_txtTitle->setText(tr("STR_SELECT_SAVE_POSITION"));
 
-//kL	_btnCancel->setX(180);
+/*	if (_game->getSavedGame()->isIronman())
+		_btnCancel->setVisible(false);
+	else
+		_btnCancel->setX(180); */
 
 	_btnSaveGame->setColor(Palette::blockOffset(8)+5);
 	_btnSaveGame->setText(tr("STR_OK"));

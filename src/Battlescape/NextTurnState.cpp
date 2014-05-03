@@ -190,9 +190,15 @@ void NextTurnState::close()
 			_battleGame->getSide() == FACTION_PLAYER)
 		{
 			if (_game->getSavedGame()->isIronman())
-			{}
+				_game->pushState(new SaveGameState(
+												_game,
+												OPT_GEOSCAPE,
+												SAVE_IRONMAN));
 			else if (Options::autosave)
-				_game->pushState(new SaveGameState(_game, OPT_BATTLESCAPE, SavedGame::AUTOSAVE_BATTLESCAPE));
+				_game->pushState(new SaveGameState(
+												_game,
+												OPT_GEOSCAPE,
+												SAVE_AUTO_BATTLESCAPE));
 		}
 	}
 }

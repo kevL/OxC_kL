@@ -66,6 +66,20 @@ enum GameDifficulty
 
 
 /**
+ * Enumerator for the various save types.
+ */
+enum SaveType
+{
+	SAVE_DEFAULT,			// 0
+	SAVE_QUICK,				// 1
+	SAVE_AUTO_GEOSCAPE,		// 2
+	SAVE_AUTO_BATTLESCAPE,	// 3
+	SAVE_IRONMAN,			// 4
+	SAVE_IRONMAN_END		// 5
+};
+
+
+/**
  * Container for savegame info displayed on listings.
  */
 struct SaveInfo

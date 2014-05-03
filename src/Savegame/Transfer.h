@@ -42,6 +42,7 @@ class Base;
 class Craft;
 class Language;
 class Ruleset;
+class SavedGame;
 class Soldier;
 
 
@@ -77,7 +78,8 @@ private:
 		bool load(
 				const YAML::Node& node,
 				Base* base,
-				const Ruleset* rule);
+				const Ruleset* rule,
+				SavedGame* save);
 		/// Saves the transfer to YAML.
 		YAML::Node save() const;
 

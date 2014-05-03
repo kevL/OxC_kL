@@ -41,7 +41,9 @@ class AdlibMusic
 {
 
 private:
-	static int delay;
+	static int
+		delay,
+		rate;
 	static std::map<int, int> delayRates;
 
 	char* _data;

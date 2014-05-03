@@ -26,6 +26,8 @@
 
 #include "../Engine/State.h"
 
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -53,11 +55,17 @@ private:
 		LoadGameState(
 				Game* game,
 				OptionsOrigin origin,
-				const std::string& filename,
-				bool showMsg = true);
+				const std::string& filename);
+		/// Creates the Load Game state.
+		LoadGameState(
+				Game* game,
+				OptionsOrigin origin,
+				SaveType type);
 		/// Cleans up the Load Game state.
 		~LoadGameState();
 
+		/// Creates the interface.
+		void buildUi();
 		/// Loads the game.
 		void init();
 };

@@ -2133,14 +2133,14 @@ inline void BattlescapeState::handle(Action* action)
 					_game->pushState(new SaveGameState(
 													_game,
 													OPT_BATTLESCAPE,
-													SavedGame::QUICKSAVE));
+													SAVE_QUICK));
 				}
 				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 				{
 					_game->pushState(new LoadGameState(
 													_game,
 													OPT_BATTLESCAPE,
-													SavedGame::QUICKSAVE));
+													SAVE_QUICK));
 				}
 			}
 

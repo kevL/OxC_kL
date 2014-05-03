@@ -226,7 +226,8 @@ void Base::load(
 							_rule->getArmor("STR_NONE_UC"));
 		s->load(
 				*i,
-				_rule);
+				_rule,
+				save);
 		s->setCraft(0);
 
 		if (const YAML::Node& craft = (*i)["craft"])
@@ -287,7 +288,8 @@ void Base::load(
 		if (t->load(
 				*i,
 				this,
-				_rule))
+				_rule,
+				save))
 		{
 			_transfers.push_back(t);
 		}

@@ -787,8 +787,10 @@ void SellState::changeByValue(
 			item = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 			_spaceChange -= static_cast<int>(item->getSize() * 10.f * static_cast<float>(change * dir));
 		break;
-		case SELL_ENGINEER:
-		case SELL_SCIENTIST:
+
+//		case SELL_ENGINEER:
+//		case SELL_SCIENTIST:
+		default:
 		break;
 	}
 

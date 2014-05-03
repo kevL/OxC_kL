@@ -683,7 +683,7 @@ void BasescapeState::handleKeyPress(Action* action)
 
 		int key = action->getDetails()->key.keysym.sym;
 
-		for (int
+		for (size_t
 				i = 0;
 				i < MiniBaseView::MAX_BASES;
 				++i)

@@ -431,7 +431,7 @@ void SavedGame::load(
 	//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << _difficulty;
 
 	if (doc["rng"]
-		&& !Options::newSeedOnLoad)
+		&& (_ironman || !Options::newSeedOnLoad))
 	{
 		RNG::setSeed(doc["rng"].as<uint64_t>());
 	}
@@ -592,7 +592,12 @@ void SavedGame::load(
 	{
 /*kL		Soldier* s = new Soldier(
 							rule->getSoldier("XCOM"),
-							rule->getArmor("STR_NONE_UC")); */
+							rule->getArmor("STR_NONE_UC"));
+		s->load(
+				*i,
+				rule,
+				this);
+		_deadSoldiers.push_back(s); */
 		SoldierDead* ds = new SoldierDead( // kL
 										L"",
 										0,
@@ -604,11 +609,7 @@ void SavedGame::load(
 										NULL,
 										UnitStats(),
 										UnitStats());
-/*kL		s->load(
-				*i,
-				rule); */
 		ds->load(*i);							// kL
-//kL		_deadSoldiers.push_back(s);
 		_deadSoldiers.push_back(ds);			// kL
 	}
 

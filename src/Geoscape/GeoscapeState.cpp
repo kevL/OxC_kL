@@ -84,6 +84,7 @@
 #include "../Interface/TextButton.h"
 
 #include "../Menu/ErrorMessageState.h"
+#include "../Menu/ListSaveState.h"
 #include "../Menu/LoadGameState.h"
 #include "../Menu/PauseState.h"
 #include "../Menu/SaveGameState.h"
@@ -653,23 +654,22 @@ void GeoscapeState::handle(Action* action)
 			else
 				_txtDebug->setText(L"");
 		}
-
 		// quick save and quick load
-		if (!_game->getSavedGame()->isIronman())
+		else if (!_game->getSavedGame()->isIronman())
 		{
 			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 			{
 				_game->pushState(new SaveGameState(
 												_game,
 												OPT_GEOSCAPE,
-												SavedGame::QUICKSAVE));
+												SAVE_QUICK));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 			{
 				_game->pushState(new LoadGameState(
 												_game,
 												OPT_GEOSCAPE,
-												SavedGame::QUICKSAVE));
+												SAVE_QUICK));
 			}
 		}
 	}
@@ -703,6 +703,15 @@ void GeoscapeState::init()
 //	_globe->rotateStop();
 	_globe->setFocus(true);
 	_globe->draw();
+
+	// Pop up save screen if it's a new ironman game
+	if (_game->getSavedGame()->isIronman()
+		&& _game->getSavedGame()->getName().empty())
+	{
+		popup(new ListSaveState(
+							_game,
+							OPT_GEOSCAPE));
+	}
 
 	if (_dogfights.empty() // set music if not already playing
 		&& !_dogfightStartTimer->isRunning())
@@ -2465,9 +2474,15 @@ void GeoscapeState::time1Day()
 //kL	if (day == 1 || day %10 == 0)
 //	{
 	if (_game->getSavedGame()->isIronman())
-	{}
+			_game->pushState(new SaveGameState(
+											_game,
+											OPT_GEOSCAPE,
+											SAVE_IRONMAN));
 	else if (Options::autosave)
-		_game->pushState(new SaveGameState(_game, OPT_GEOSCAPE, SavedGame::AUTOSAVE_GEOSCAPE));
+		_game->pushState(new SaveGameState(
+										_game,
+										OPT_GEOSCAPE,
+										SAVE_AUTO_GEOSCAPE));
 //	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Day() EXIT";
 }

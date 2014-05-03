@@ -62,6 +62,7 @@ class EquipmentLayoutItem;
 class Language;
 class Ruleset;
 class RuleSoldier;
+class SavedGame;
 class SoldierDead; // kL
 class SoldierDeath;
 class SoldierNamePool;
@@ -117,7 +118,8 @@ private:
 		/// Loads the soldier from YAML.
 		void load(
 				const YAML::Node& node,
-				const Ruleset* rule);
+				const Ruleset* rule,
+				SavedGame* save);
 		/// Saves the soldier to YAML.
 		YAML::Node save() const;
 
@@ -205,7 +207,9 @@ private:
 		SoldierDead* die(SoldierDeath* death);
 
 		/// Calculate statString.
-		void calcStatString(const std::vector<StatString*>& statStrings);
+		void calcStatString(
+				const std::vector<StatString*>& statStrings,
+				bool psiStrengthEval);
 };
 
 }

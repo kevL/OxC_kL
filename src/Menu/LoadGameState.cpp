@@ -40,7 +40,6 @@
 #include "../Interface/Text.h"
 
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -51,41 +50,57 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param filename Name of the save file without extension.
- * @param showMsg Show a message while loading the game.
  */
 LoadGameState::LoadGameState(
 		Game* game,
 		OptionsOrigin origin,
-		const std::string& filename,
-		bool showMsg)
+		const std::string& filename)
 	:
 		State(game),
 		_origin(origin),
 		_filename(filename)
 {
-	_screen = false;
+	buildUi();
+}
 
-	if (showMsg)
+/**
+ * Initializes all the elements in the Load Game screen.
+ * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
+ * @param type Type of auto-load being used.
+ */
+LoadGameState::LoadGameState(
+		Game* game,
+		OptionsOrigin origin,
+		SaveType type)
+	:
+		State(game),
+		_origin(origin)
+{
+	switch (type)
 	{
-		_txtStatus = new Text(320, 17, 0, 92);
+		case SAVE_QUICK:
+			_filename = SavedGame::QUICKSAVE;
+		break;
+		case SAVE_AUTO_GEOSCAPE:
+			_filename = SavedGame::AUTOSAVE_GEOSCAPE;
+		break;
+		case SAVE_AUTO_BATTLESCAPE:
+			_filename = SavedGame::AUTOSAVE_BATTLESCAPE;
+		break;
 
-		if (_origin == OPT_BATTLESCAPE)
-			setPalette("PAL_BATTLESCAPE");
-		else
-			setPalette("PAL_GEOSCAPE", 6);
-
-		add(_txtStatus);
-
-		centerAllSurfaces();
-
-		_txtStatus->setColor(Palette::blockOffset(8)+5);
-		_txtStatus->setBig();
-		_txtStatus->setAlign(ALIGN_CENTER);
-		_txtStatus->setText(tr("STR_LOADING_GAME"));
-
-		if (_origin == OPT_BATTLESCAPE)
-			applyBattlescapeTheme();
+		default: // can't auto-load ironman games
+		break;
 	}
+
+	// Ignore quick loads without a save available
+	if (type == SAVE_QUICK
+		&& !CrossPlatform::fileExists(Options::getUserFolder() + _filename))
+	{
+		_game->popState();
+	}
+	else
+		buildUi();
 }
 
 /**
@@ -96,18 +111,37 @@ LoadGameState::~LoadGameState()
 }
 
 /**
+ * Builds the interface.
+ */
+void LoadGameState::buildUi()
+{
+	_screen = false;
+
+	_txtStatus = new Text(320, 17, 0, 92);
+
+	if (_origin == OPT_BATTLESCAPE)
+		setPalette("PAL_BATTLESCAPE");
+	else
+		setPalette("PAL_GEOSCAPE", 6);
+
+	add(_txtStatus);
+
+	centerAllSurfaces();
+
+	_txtStatus->setColor(Palette::blockOffset(8)+5);
+	_txtStatus->setBig();
+	_txtStatus->setAlign(ALIGN_CENTER);
+	_txtStatus->setText(tr("STR_LOADING_GAME"));
+
+	if (_origin == OPT_BATTLESCAPE)
+		applyBattlescapeTheme();
+}
+
+/**
  * Loads the specified save.
  */
 void LoadGameState::init()
 {
-	if (_filename == SavedGame::QUICKSAVE // Ignore quick loads without a save available
-		&& !CrossPlatform::fileExists(Options::getUserFolder() + _filename))
-	{
-		_game->popState();
-
-		return;
-	}
-
 	State::init(); // Make sure message is shown (if any)
 
 	blit();

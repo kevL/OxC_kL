@@ -22,6 +22,7 @@
 #include <sstream>
 
 #include "ErrorMessageState.h"
+#include "MainMenuState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/CrossPlatform.h"
@@ -35,8 +36,6 @@
 
 #include "../Interface/Text.h"
 
-#include "../Savegame/SavedGame.h"
-
 
 namespace OpenXcom
 {
@@ -46,44 +45,56 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param filename Name of the save file without extension.
- * @param showMsg Show a message while saving the game.
  */
 SaveGameState::SaveGameState(
 		Game* game,
 		OptionsOrigin origin,
-		const std::string& filename,
-		bool showMsg)
+		const std::string& filename)
 	:
 		State(game),
 		_origin(origin),
-		_filename(filename)
+		_filename(filename),
+		_type(SAVE_DEFAULT)
 {
-	_screen = false;
+	buildUi();
+}
 
-	if (showMsg)
+/**
+ * Initializes all the elements in the Save Game screen.
+ * @param game Pointer to the core game.
+ * @param origin Game section that originated this state.
+ * @param type Type of auto-load being used.
+ */
+SaveGameState::SaveGameState(
+		Game* game,
+		OptionsOrigin origin,
+		SaveType type)
+	:
+		State(game),
+		_origin(origin),
+		_type(type)
+{
+	switch (type)
 	{
-		_txtStatus = new Text(320, 17, 0, 92);
+		case SAVE_QUICK:
+			_filename = SavedGame::QUICKSAVE;
+		break;
+		case SAVE_AUTO_GEOSCAPE:
+			_filename = SavedGame::AUTOSAVE_GEOSCAPE;
+		break;
+		case SAVE_AUTO_BATTLESCAPE:
+			_filename = SavedGame::AUTOSAVE_BATTLESCAPE;
+		break;
+		case SAVE_IRONMAN:
+		case SAVE_IRONMAN_END:
+			_filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
+		break;
 
-		if (_origin == OPT_BATTLESCAPE)
-			setPalette("PAL_BATTLESCAPE");
-		else
-			setPalette("PAL_GEOSCAPE", 6);
-
-		add(_txtStatus);
-//		add(_txtStatus);
-
-		centerAllSurfaces();
-
-		_txtStatus->setColor(Palette::blockOffset(8)+5);
-		_txtStatus->setBig();
-		_txtStatus->setAlign(ALIGN_CENTER);
-		_txtStatus->setText(tr("STR_SAVING_GAME"));
-
-		if (_origin == OPT_BATTLESCAPE)
-		{
-			applyBattlescapeTheme();
-		}
+		default:
+		break;
 	}
+
+	buildUi();
 }
 
 /**
@@ -94,23 +105,62 @@ SaveGameState::~SaveGameState()
 }
 
 /**
+ * Builds the interface.
+ */
+void SaveGameState::buildUi()
+{
+	_screen = false;
+
+	_txtStatus = new Text(320, 17, 0, 92);
+
+	if (_origin == OPT_BATTLESCAPE)
+		setPalette("PAL_BATTLESCAPE");
+	else
+		setPalette("PAL_GEOSCAPE", 6);
+
+	add(_txtStatus);
+
+	centerAllSurfaces();
+
+	_txtStatus->setColor(Palette::blockOffset(8)+5);
+	_txtStatus->setBig();
+	_txtStatus->setAlign(ALIGN_CENTER);
+	_txtStatus->setText(tr("STR_SAVING_GAME"));
+
+	if (_origin == OPT_BATTLESCAPE)
+		applyBattlescapeTheme();
+}
+
+/**
  * Saves the current save.
  */
 void SaveGameState::init()
 {
-	// Make sure message is shown (if any)
-	State::init();
+	State::init(); // Make sure message is shown (if any)
+
 	blit();
 	_game->getScreen()->flip();
+
 	_game->popState();
 
-	if (_filename.find(".sav") != std::string::npos)	// manual save, close the save screen
+	switch (_type)
 	{
-		_game->popState();
-		_game->popState();
+		case SAVE_DEFAULT: // manual save, close the save screen
+			_game->popState();
+
+			if (!_game->getSavedGame()->isIronman()) // and pause screen too
+				_game->popState();
+		break;
+
+		case SAVE_QUICK: // automatic save, give it a default name
+		case SAVE_AUTO_GEOSCAPE:
+		case SAVE_AUTO_BATTLESCAPE:
+			_game->getSavedGame()->setName(Language::fsToWstr(_filename));
+
+		default:
+		break;
 	}
-	else												// automatic save, give it a default name
-		_game->getSavedGame()->setName(Language::fsToWstr(_filename));
+
 
 	try // Save the game
 	{
@@ -121,6 +171,24 @@ void SaveGameState::init()
 		if (!CrossPlatform::moveFile(bakPath, fullPath))
 		{
 			throw Exception("Save backed up in " + backup);
+		}
+
+		if (_type == SAVE_IRONMAN_END)
+		{
+			// This uses baseX/Y options for Geoscape & Basescape:
+			Options::baseXResolution = Options::baseXGeoscape; // kL
+			Options::baseYResolution = Options::baseYGeoscape; // kL
+			// This sets Geoscape and Basescape to default (320x200) IG and the config.
+/*kL			OptionsBaseState::updateScale(
+									Options::geoscapeScale,
+									Options::geoscapeScale,
+									Options::baseXGeoscape,
+									Options::baseYGeoscape,
+									true); */
+			_game->getScreen()->resetDisplay(false);
+
+			_game->setState(new MainMenuState(_game));
+			_game->setSavedGame(0);
 		}
 	}
 	catch (Exception &e)

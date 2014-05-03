@@ -23,8 +23,10 @@
 #include "SoldierDead.h" // kL
 #include "SoldierDeath.h"
 #include "EquipmentLayoutItem.h"
+#include "SavedGame.h"
 
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 
 #include "../Ruleset/Armor.h"
@@ -128,10 +130,12 @@ Soldier::~Soldier()
  * Loads the soldier from a YAML file.
  * @param node YAML node.
  * @param rule Game ruleset.
+ * @param save Pointer to savegame.
  */
 void Soldier::load(
 		const YAML::Node& node,
-		const Ruleset* rule)
+		const Ruleset* rule,
+		SavedGame* save)
 {
 	_id				= node["id"].as<int>(_id);
 	_name			= Language::utf8ToWstr(node["name"].as<std::string>());
@@ -171,7 +175,10 @@ void Soldier::load(
 		_death->load(node["death"]);
 	} */
 
-	calcStatString(rule->getStatStrings());
+	calcStatString(
+			rule->getStatStrings(),
+			(Options::psiStrengthEval
+				&& save->isResearched(rule->getPsiRequirements())));
 }
 
 /**
@@ -682,11 +689,14 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 /**
  * Calculates the soldier's statString
  */
-void Soldier::calcStatString(const std::vector<StatString*>& statStrings)
+void Soldier::calcStatString(
+		const std::vector<StatString*>& statStrings,
+		bool psiStrengthEval)
 {
 	_statString = StatString::calcStatString(
 										_currentStats,
-										statStrings);
+										statStrings,
+										psiStrengthEval);
 }
 
 }
