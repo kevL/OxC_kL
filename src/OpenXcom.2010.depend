@@ -4753,7 +4753,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1397603731 f:\git\openxcom\src\savegame\battleunit.h
+1399139921 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -5194,7 +5194,7 @@
 1397881417 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1399038359 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1399042372 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	<climits>
 	<cmath>
@@ -5318,7 +5318,7 @@
 	"PlaceStartFacilityState.h"
 	"PlaceLiftState.h"
 
-1399038359 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1399042372 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	<climits>
 	<cmath>
@@ -5498,7 +5498,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 
-1397445018 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
+1399042072 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
 	"TransferBaseState.h"
 	<sstream>
 	"TransferItemsState.h"
@@ -5539,7 +5539,7 @@
 1394398507 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1399030230 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1399042253 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	<climits>
 	<cmath>
@@ -5570,7 +5570,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Vehicle.h"
 
-1397445349 source:f:\git\openxcom\src\basescape\transfersstate.cpp
+1399041922 source:f:\git\openxcom\src\basescape\transfersstate.cpp
 	"TransfersState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -5771,7 +5771,7 @@
 1394398507 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1398580387 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1399124637 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5873,7 +5873,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1398301164 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1399139921 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -9492,7 +9492,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1396905698 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1399139921 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>

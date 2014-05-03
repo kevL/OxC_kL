@@ -256,23 +256,22 @@ void SavedBattleGame::load(
 		int id = (*i)["soldierId"].as<int>();
 
 		BattleUnit* unit;
-		if (id < BattleUnit::MAX_SOLDIER_ID) // Unit is linked to a geoscape soldier
-			// look up the matching soldier
-			unit = new BattleUnit(
+		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
+			unit = new BattleUnit(				// look up the matching soldier
 								savedGame->getSoldier(id),
-								faction);
+								faction,
+								static_cast<int>(savedGame->getDifficulty())); // kL_add: For VictoryPts value per death.
 		else
 		{
 			std::string type	= (*i)["genUnitType"].as<std::string>();
 			std::string armor	= (*i)["genUnitArmor"].as<std::string>();
 
-			// create a new Unit.
-			unit = new BattleUnit(
+			unit = new BattleUnit( // create a new Unit, not-soldier but Vehicle, Civie, or aLien.
 								rule->getUnit(type),
 								faction,
 								id,
 								rule->getArmor(armor),
-								savedGame->getDifficulty());
+								static_cast<int>(savedGame->getDifficulty()));
 		}
 		//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
 

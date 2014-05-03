@@ -527,7 +527,8 @@ void BattlescapeGenerator::deployXCOM()
 			//Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
 			BattleUnit* unit = addXCOMUnit(new BattleUnit(
 														*i,
-														FACTION_PLAYER));
+														FACTION_PLAYER,
+														static_cast<int>(_game->getSavedGame()->getDifficulty()))); // kL_add: For VictoryPts value per death.
 
 			if (unit
 				&& !_save->getSelectedUnit())

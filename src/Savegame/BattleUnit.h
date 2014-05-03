@@ -213,7 +213,8 @@ private:
 		/// Creates a BattleUnit.
 		BattleUnit(
 				Soldier* soldier,
-				UnitFaction faction);
+				UnitFaction faction,
+				int diff); // kL_add: For VictoryPts value per death.
 		BattleUnit(
 				Unit* unit,
 				UnitFaction faction,

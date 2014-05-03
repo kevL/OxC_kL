@@ -54,10 +54,12 @@ namespace OpenXcom
  * Initializes a BattleUnit from a Soldier
  * @param soldier Pointer to the Soldier.
  * @param faction Which faction the units belongs to.
+ * @param diff For VictoryPts value per death.
  */
 BattleUnit::BattleUnit(
 		Soldier* soldier,
-		UnitFaction faction)
+		UnitFaction faction,
+		int diff) // kL_add.
 	:
 		_faction(faction),
 		_originalFaction(faction),
@@ -140,8 +142,8 @@ BattleUnit::BattleUnit(
 		default:				rankbonus =	0;	break;
 	}
 
-	_value		= 20 + soldier->getMissions() + rankbonus; // give this a difficulty multiplier.
-		// this is not in save/load ....
+//kL	_value		= 20 + soldier->getMissions() + rankbonus;
+	_value		= 20 + (soldier->getMissions() * (diff + 1)) + (rankbonus * (diff + 1)); // kL, heheheh
 
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
@@ -2849,7 +2851,7 @@ int BattleUnit::getMoveSound() const
  */
 bool BattleUnit::isWoundable() const
 {
-	return _type=="SOLDIER"
+	return _type == "SOLDIER"
 			|| (Options::alienBleeding
 				&& _faction != FACTION_PLAYER
 				&& _armor->getSize() == 1);
