@@ -6381,7 +6381,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1398491556 source:f:\git\openxcom\src\battlescape\map.cpp
+1399224452 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6496,7 +6496,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1399141261 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1399197943 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -8495,7 +8495,7 @@
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 
-1398535646 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1399198246 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	<SDL.h>
 	"MainMenuState.h"
@@ -11452,7 +11452,7 @@
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
-1398926660 source:f:\git\openxcom\src\interface\combobox.cpp
+1399198119 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"
@@ -11582,7 +11582,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1398657835 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
+1399198216 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
 	"OptionsAudioState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -11767,7 +11767,7 @@
 1399140748 f:\git\openxcom\src\engine\adlib\fmopl.h
 	"ymdeltat.h"
 
-1399141653 source:f:\git\openxcom\src\engine\adlibmusic.cpp
+1399198013 source:f:\git\openxcom\src\engine\adlibmusic.cpp
 	"AdlibMusic.h"
 	<algorithm>
 	<fstream>

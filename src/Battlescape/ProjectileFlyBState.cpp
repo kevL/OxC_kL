@@ -772,8 +772,11 @@ void ProjectileFlyBState::think()
 			if (!_action.actor->isOut())
 				_unit->setStatus(STATUS_STANDING);
 
-			if (_parent->getSave()->getSide() == FACTION_PLAYER)
+			if (_parent->getSave()->getSide() == FACTION_PLAYER
+				|| _parent->getSave()->getDebugMode())
+			{
 				_parent->setupCursor();
+			}
 
 			_parent->popState();
 		}

@@ -208,7 +208,7 @@ void ExplosionBState::init()
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
 
-//kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
+//kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 3);
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // kL
 
 			if (_power < 76)

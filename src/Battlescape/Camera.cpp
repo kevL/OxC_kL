@@ -458,7 +458,8 @@ void Camera::up()
 	if (_mapOffset.z < _mapsize_z - 1)
 	{
 		_mapOffset.z++;
-		_mapOffset.y += (_spriteHeight / 2) + 4;
+//kL		_mapOffset.y += _spriteHeight * 3 / 5;
+		_mapOffset.y += (_spriteHeight / 2) + 4; // kL
 
 		_map->draw();
 	}
@@ -472,7 +473,8 @@ void Camera::down()
 	if (_mapOffset.z > 0)
 	{
 		_mapOffset.z--;
-		_mapOffset.y -= (_spriteHeight / 2) + 4;
+//kL		_mapOffset.y -= _spriteHeight * 3 / 5;
+		_mapOffset.y -= (_spriteHeight / 2) + 4; // kL
 
 		_map->draw();
 	}
