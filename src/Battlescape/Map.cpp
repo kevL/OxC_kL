@@ -730,6 +730,7 @@ void Map::drawTerrain(Surface* surface)
 							tileNorthShade = 16;
 							bu = 0;
 						}
+						// kL_note: What about tileWestShade ...? (used in subscope below)
 
 						/*
 						 * Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
@@ -898,6 +899,15 @@ void Map::drawTerrain(Surface* surface)
 								if (tmpSurface
 									&& bu != unit)
 								{
+									if ((tileWest->getMapData(MapData::O_WESTWALL)->isDoor()
+											|| tileWest->getMapData(MapData::O_WESTWALL)->isUFODoor())
+										&& tileWest->isDiscovered(0))
+									{
+										wallShade = tileWest->getShade();
+									}
+									else
+										wallShade = tileWestShade;
+
 									tmpSurface->blitNShade(
 														surface,
 														screenPosition.x - tileOffset.x,
@@ -913,7 +923,7 @@ void Map::drawTerrain(Surface* surface)
 														surface,
 														screenPosition.x - tileOffset.x,
 														screenPosition.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y,
-														wallShade,
+														tileWestShade,
 														true);
 
 									// if the object in the tile to the west is a diagonal big wall, we need to cover up the black triangle at the bottom
@@ -1969,6 +1979,10 @@ void Map::calculateWalkingOffset(
 		else
 			midphase = 1;
 	}
+	else if (dir == 2)
+		midphase = 1;
+	else if (dir == 6)
+		midphase = endphase;
 
 	if (unit->getVerticalDirection())
 	{

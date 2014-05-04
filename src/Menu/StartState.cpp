@@ -176,6 +176,8 @@ void StartState::think()
 			{
 				Options::keepAspectRatio = _wasLetterBoxed;
 
+				_game->getScreen()->resetDisplay(false);
+
 				State* state = new MainMenuState(_game);
 				_game->setState(state);
 

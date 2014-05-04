@@ -6147,7 +6147,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1398394884 source:f:\git\openxcom\src\battlescape\camera.cpp
+1399222425 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6270,7 +6270,7 @@
 1394398507 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1398756107 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1399222529 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6605,7 +6605,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1398756107 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1399223906 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -8660,7 +8660,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1399014852 source:f:\git\openxcom\src\menu\startstate.cpp
+1399225101 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"ErrorMessageState.h"
 	"IntroState.h"
@@ -9385,7 +9385,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1399140281 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1399225165 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
