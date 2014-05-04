@@ -92,7 +92,11 @@ Soldier::Soldier(
 
 		_currentStats = _initialStats;
 
-		if (!names->empty())
+		_name	= L"Frank";								// kL
+		_gender	= (SoldierGender)RNG::generate(0, 1);	// kL
+		_look	= (SoldierLook)RNG::generate(0, 3);		// kL
+
+/*kL		if (!names->empty())
 		{
 			int nationality = RNG::generate(0, names->size() - 1);
 			_name = names->at(nationality)->genName(&_gender);
@@ -106,7 +110,7 @@ Soldier::Soldier(
 			_name	= L"";
 			_gender	= (SoldierGender)RNG::generate(0, 1);
 			_look	= (SoldierLook)RNG::generate(0, 3);
-		}
+		} */
 	}
 }
 
@@ -479,6 +483,7 @@ int Soldier::getWoundRecovery() const
 void Soldier::setWoundRecovery(int recovery)
 {
 	_recovery = recovery;
+
 	if (_recovery > 0) // dismiss from craft
 		_craft = 0;
 }

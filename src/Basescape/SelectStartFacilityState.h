@@ -16,37 +16,51 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SELECTSTARTFACILITYSTATE_H
 #define OPENXCOM_SELECTSTARTFACILITYSTATE_H
 
 #include "BuildFacilitiesState.h"
+
 
 namespace OpenXcom
 {
 
 class Globe;
 
+
 /**
- * Window shown with all the facilities
- * available to build.
+ * Window shown with all the facilities available to build.
  */
-class SelectStartFacilityState : public BuildFacilitiesState
+class SelectStartFacilityState
+	:
+		public BuildFacilitiesState
 {
+
 private:
-	Globe *_globe;
-public:
-	/// Creates the Build Facilities state.
-	SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe);
-	/// Cleans up the Build Facilities state.
-	~SelectStartFacilityState();
-	/// Populates the build option list.
-	virtual void populateBuildList();
-	/// Handler for clicking the Reset button.
-	void btnOkClick(Action *action);
-	/// Handler for clicking the Facilities list.
-	void lstFacilitiesClick(Action *action);
-	/// Handler for when the facility is actually built.
-	void facilityBuilt();
+	Globe* _globe;
+
+
+	public:
+		/// Creates the Build Facilities state.
+		SelectStartFacilityState(
+				Game* game,
+				Base* base,
+				State* state,
+				Globe* globe);
+		/// Cleans up the Build Facilities state.
+		~SelectStartFacilityState();
+
+		/// Populates the build option list.
+		virtual void populateBuildList();
+
+		/// Handler for clicking the Reset button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Facilities list.
+		void lstFacilitiesClick(Action* action);
+
+		/// Handler for when the facility is actually built.
+		void facilityBuilt();
 };
 
 }

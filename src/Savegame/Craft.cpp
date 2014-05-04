@@ -38,6 +38,7 @@
 
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
+#include "../Engine/RNG.h"
 
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
@@ -51,8 +52,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a craft of the specified type and
- * assigns it the latest craft ID available.
+ * Initializes a craft of the specified type and assigns it the latest craft ID available.
  * @param rules Pointer to ruleset.
  * @param base Pointer to base of origin.
  * @param ids List of craft IDs (Leave NULL for no ID).
@@ -332,8 +332,8 @@ YAML::Node Craft::saveId() const
 {
 	YAML::Node node = MovingTarget::saveId();
 
-	node["type"] = _rules->getType();
-	node["id"] = _id;
+	node["type"]	= _rules->getType();
+	node["id"]		= _id;
 
 	return node;
 }
@@ -454,13 +454,39 @@ std::string Craft::getAltitude() const
 {
 	Ufo* u = dynamic_cast<Ufo*>(_dest);
 
-	if (u
+	// kL_begin:
+	if (u)
+	{
+		if (u->getAltitude() != "STR_GROUND")
+			return u->getAltitude();
+		else
+			return "STR_VERY_LOW";
+	}
+	else
+	{
+		switch (RNG::generate(0, 3))
+		{
+			case 0:
+//				return "STR_VERY_LOW";
+			case 1:
+				return "STR_LOW_UC";
+			case 2:
+				return "STR_HIGH_UC";
+			case 3:
+				return"STR_VERY_HIGH";
+		}
+	}
+
+	return "STR_VERY_LOW";
+} // kL_end.
+
+/*kL	if (u
 		&& u->getAltitude() != "STR_GROUND")
 	{
 		return u->getAltitude();
 	}
 	else
-		return "STR_VERY_LOW";
+		return "STR_VERY_LOW"; */
 
 	// kL_begin: Craft::getAltitude(), add strings for based xCom craft.
 /*	if (u)
@@ -482,9 +508,7 @@ std::string Craft::getAltitude() const
 	else
 	{
 		return "STR_VERY_LOW";
-	} */
-	// kL_end.
-}
+	} */ // kL_end.
 
 /**
  * Changes the destination the craft is heading to.
@@ -622,7 +646,8 @@ void Craft::setFuel(int fuel)
 int Craft::getFuelPercentage() const
 {
 	return static_cast<int>(
-		floor((static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel())) * 100.0));
+			floor((static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel()))
+			* 100.0));
 }
 
 /**
@@ -654,7 +679,8 @@ void Craft::setDamage(int damage)
 int Craft::getDamagePercentage() const
 {
 	return static_cast<int>(
-		floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())) * 100.0));
+			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()))
+			* 100.0));
 }
 
 /**
@@ -692,11 +718,11 @@ double Craft::getDistanceFromBase() const
  */
 int Craft::getFuelConsumption() const
 {
-	if (_rules->getRefuelItem() != "")
+	if (_rules->getRefuelItem() != "") // Firestorm, Lightning, Avenger, etc.
 		return 1;
 
 	return static_cast<int>(
-		floor(static_cast<double>(_speed) / 100.0));
+			floor(static_cast<double>(_speed) / 100.0)); // Skyranger, Interceptor.
 }
 
 /**
@@ -718,8 +744,8 @@ int Craft::getFuelLimit(Base* base) const
 	double speedRadian = static_cast<double>(speed) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0; // kL
 
 	return static_cast<int>(
-//kL		floor((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (_speedRadian * 120.0)));
-		ceil((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (speedRadian * 120.0))); // kL
+//kL			floor((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (_speedRadian * 120.0)));
+			ceil((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (speedRadian * 120.0))); // kL
 }
 
 /**
@@ -887,6 +913,7 @@ void Craft::refuel()
 
 	if (_fuel >= _rules->getMaxFuel())
 	{
+		_fuel = _rules->getMaxFuel(); // kL
 		_status = "STR_READY";
 
 		for (std::vector<CraftWeapon*>::iterator

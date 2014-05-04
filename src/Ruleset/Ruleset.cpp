@@ -987,12 +987,7 @@ SavedGame* Ruleset::newSave() const
 			++i)
 	{
 		Soldier* soldier = genSoldier(save);
-//		Soldier* soldier = new Soldier(
-//									getSoldier("XCOM"),
-//									getArmor("STR_NONE_UC"),
-//									&_names,
-//									save->getId("STR_SOLDIER"));
-		soldier->setCraft(base->getCrafts()->front());
+//kL		soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
 	}
 

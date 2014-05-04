@@ -108,12 +108,13 @@ BaseNameState::~BaseNameState()
 }
 
 /**
- * Updates the base name and disables the OK button
- * if no name is entered.
+ * Updates the base name and disables the OK button if no name is entered.
  * @param action Pointer to an action.
  */
 void BaseNameState::edtNameChange(Action* action)
 {
+	_base->setName(_edtName->getText());
+
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
 		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{

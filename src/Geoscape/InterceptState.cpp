@@ -45,6 +45,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Target.h" // kL, why not
 #include "../Savegame/Ufo.h"
 
 
@@ -137,7 +138,6 @@ InterceptState::InterceptState(
 
 	_txtBase->setColor(Palette::blockOffset(8)+5);
 	_txtBase->setBig();
-//	_txtBase->setText(L"");
 	_txtBase->setText(tr("STR_INTERCEPT"));
 
 	_txtWeapons->setColor(Palette::blockOffset(8)+5);
@@ -370,8 +370,10 @@ void InterceptState::lstCraftsMouseOver(Action*)
 	std::wstring wsBase;
 
 	int sel = _lstCrafts->getSelectedRow();
-	if (sel < static_cast<int>(_bases.size()))
+	if (static_cast<size_t>(sel) < _bases.size())
 		wsBase = _bases[sel];
+	else
+		wsBase = tr("STR_INTERCEPT");
 
 	_txtBase->setText(wsBase);
 }
@@ -384,7 +386,6 @@ void InterceptState::lstCraftsMouseOut(Action*)
 	if (_base)
 		return;
 
-//	_txtBase->setText(L"");
 	_txtBase->setText(tr("STR_INTERCEPT"));
 } // kL_end.
 

@@ -50,16 +50,19 @@ NewGameState::NewGameState(Game* game)
 {
 	_window			= new Window(this, 192, 180, 64, 10, POPUP_VERTICAL);
 
-	_btnBeginner	= new TextButton(160, 18, 80, 32);
-	_btnExperienced	= new TextButton(160, 18, 80, 52);
-	_btnVeteran		= new TextButton(160, 18, 80, 72);
-	_btnGenius		= new TextButton(160, 18, 80, 92);
-	_btnSuperhuman	= new TextButton(160, 18, 80, 112);
-	_btnIronman		= new ToggleTextButton(78, 18, 80, 138);
-	_btnOk			= new TextButton(78, 16, 80, 164);
-	_btnCancel		= new TextButton(78, 16, 162, 164);
-	_txtTitle		= new Text(192, 9, 64, 20);
+	_txtTitle		= new Text(192, 17, 64, 18);
+
+	_btnBeginner	= new TextButton(160, 18, 80, 35);
+	_btnExperienced	= new TextButton(160, 18, 80, 55);
+	_btnVeteran		= new TextButton(160, 18, 80, 75);
+	_btnGenius		= new TextButton(160, 18, 80, 95);
+	_btnSuperhuman	= new TextButton(160, 18, 80, 115);
+
+	_btnIronman		= new ToggleTextButton(78, 18, 80, 139);
 	_txtIronman		= new Text(90, 24, 162, 135);
+
+	_btnCancel		= new TextButton(78, 16, 80, 164);
+	_btnOk			= new TextButton(78, 16, 162, 164);
 
 	_difficulty = _btnBeginner;
 /*	_txtTitle		= new Text(192, 17, 64, 21);
@@ -129,7 +132,7 @@ NewGameState::NewGameState(Game* game)
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
-//	_txtTitle->setBig(); // kL
+	_txtTitle->setBig(); // kL
 	_txtTitle->setText(tr("STR_SELECT_DIFFICULTY_LEVEL"));
 
 	_txtIronman->setColor(Palette::blockOffset(8)+10);

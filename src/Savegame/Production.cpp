@@ -202,8 +202,10 @@ ProdProgress Production::step(
 								continue;
 
 							if ((*c)->getRules()->getRefuelItem() == i->first
-								&& 100 > (*c)->getFuelPercentage())
+								&& (*c)->getFuelPercentage() < 100)
+							{
 								(*c)->setStatus("STR_REFUELLING");
+							}
 						}
 					}
 

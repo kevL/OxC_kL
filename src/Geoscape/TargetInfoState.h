@@ -57,7 +57,7 @@ private:
 	TextButton
 		* _btnIntercept,
 		* _btnOk;
-	TextEdit* _edtBase; // kL
+	TextEdit* _edtTarget; // kL
 	Window* _window;
 
 
@@ -72,8 +72,8 @@ private:
 		/// Cleans up the Target Info state.
 		~TargetInfoState();
 
-		/// kL. Handler for pressing a key on the Name edit.
-		void edtBaseKeyPress(Action* action); // kL
+		/// kL. Handler for changing the text in the Name edit.
+		void edtTargetChange(Action* action); // kL
 
 		/// Handler for clicking the Intercept button.
 		void btnInterceptClick(Action* action);

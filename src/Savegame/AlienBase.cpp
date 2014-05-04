@@ -148,7 +148,7 @@ void AlienBase::setAlienRace(const std::string& race)
  * kL. Returns textedit that the player has entered.
  * @return, Text.
  */
-std::string AlienBase::getEdit() const // kL
+std::string AlienBase::getLabel() const // kL
 {
 	return _edit;
 }
@@ -157,7 +157,7 @@ std::string AlienBase::getEdit() const // kL
  * kL. Changes textedit that the player has entered.
  * @param edit, User textedit.
  */
-void AlienBase::setEdit(const std::string& edit) // kL
+void AlienBase::setLabel(const std::string& edit) // kL
 {
 	_edit = edit;
 }

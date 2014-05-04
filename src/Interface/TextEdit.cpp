@@ -76,8 +76,7 @@ TextEdit::~TextEdit()
 	delete _caret;
 	delete _timer;
 
-	// In case it was left focused
-	SDL_EnableKeyRepeat(
+	SDL_EnableKeyRepeat( // In case it was left focused
 				0,
 				SDL_DEFAULT_REPEAT_INTERVAL);
 
@@ -89,9 +88,7 @@ TextEdit::~TextEdit()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void TextEdit::handle(
-		Action* action,
-		State* state)
+void TextEdit::handle(Action* action, State* state)
 {
 	InteractiveSurface::handle(action, state);
 
@@ -156,10 +153,10 @@ void TextEdit::setFocus(
  * Check if the player is currently typing in this box.
  * @return, True if the player is typing in this box.
  */
-bool TextEdit::isFocused()
+/* bool TextEdit::isFocused()
 {
 	return _isFocused;
-}
+} */
 
 /**
  * Changes the text edit to use the big-size font.
@@ -534,8 +531,10 @@ void TextEdit::keyboardPress(Action* action, State* state)
 			break;
 			case SDLK_BACKSPACE:
 				if (_caretPos > 0)
+				{
 					_value.erase(_caretPos - 1, 1);
 					_caretPos--;
+				}
 			break;
 			case SDLK_DELETE:
 				if (_caretPos < _value.length())

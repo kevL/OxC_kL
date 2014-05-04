@@ -218,18 +218,22 @@ void BuildNewBaseState::handle(Action* action)
  */
 void BuildNewBaseState::globeHover(Action* action)
 {
-	_mousex = (int)floor(action->getAbsoluteXMouse());
-	_mousey = (int)floor(action->getAbsoluteYMouse());
+	_mousex = static_cast<int>(floor(action->getAbsoluteXMouse()));
+	_mousey = static_cast<int>(floor(action->getAbsoluteYMouse()));
 
 	if (!_hoverTimer->isRunning())
 		_hoverTimer->start();
 }
 
+/**
+ *
+ */
 void BuildNewBaseState::hoverRedraw(void)
 {
 	double
 		lon,
 		lat;
+
 	_globe->cartToPolar(
 					_mousex,
 					_mousey,
@@ -271,16 +275,14 @@ void BuildNewBaseState::globeClick(Action* action)
 					&lon,
 					&lat);
 
-	// Ignore window clicks
-	if (mouseY < 28)
+	if (mouseY < 30) // Ignore window clicks
 	{
 		return;
 	}
 
-	// Clicking on land for a base location
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_globe->insideLand(lon, lat))
+		if (_globe->insideLand(lon, lat)) // Click on land for a base location
 		{
 			_base->setLongitude(lon);
 			_base->setLatitude(lat);
@@ -300,7 +302,7 @@ void BuildNewBaseState::globeClick(Action* action)
 												_game,
 												_base,
 												_globe,
-												_first));
+												true));
 			}
 			else
 			{

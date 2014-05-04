@@ -67,7 +67,7 @@ TargetInfoState::TargetInfoState(
 	_window			= new Window(this, 192, 120, 32, 40, POPUP_BOTH);
 	_txtTitle		= new Text(182, 17, 37, 54);
 
-	_edtBase		= new TextEdit(this, 50, 9, 38, 46); // kL
+	_edtTarget		= new TextEdit(this, 50, 9, 38, 46); // kL
 
 	_txtTargetted	= new Text(182, 9, 37, 71);
 	_txtFollowers	= new Text(182, 40, 37, 82);
@@ -79,7 +79,7 @@ TargetInfoState::TargetInfoState(
 
 	add(_window);
 	add(_txtTitle);
-	add(_edtBase); // kL
+	add(_edtTarget); // kL
 	add(_txtTargetted);
 	add(_txtFollowers);
 	add(_btnIntercept);
@@ -109,7 +109,7 @@ TargetInfoState::TargetInfoState(
 //kL	_txtTitle->setWordWrap(true);
 	_txtTitle->setText(_target->getName(_game->getLanguage()));
 
-	_edtBase->setVisible(false);
+	_edtTarget->setVisible(false);
 	for (std::vector<AlienBase*>::const_iterator
 			ab = _game->getSavedGame()->getAlienBases()->begin();
 			ab != _game->getSavedGame()->getAlienBases()->end();
@@ -119,13 +119,13 @@ TargetInfoState::TargetInfoState(
 		{
 			_ab = *ab;
 
-			std::wstring ws = Language::utf8ToWstr((*ab)->getEdit());
-			_edtBase->setText(ws);
+			std::wstring edit = Language::utf8ToWstr((*ab)->getLabel());
+			_edtTarget->setText(edit);
 
-			_edtBase->setColor(Palette::blockOffset(15)+1);
-			_edtBase->onKeyboardPress((ActionHandler)& TargetInfoState::edtBaseKeyPress);
+			_edtTarget->setColor(Palette::blockOffset(15)+1);
+			_edtTarget->onChange((ActionHandler)& TargetInfoState::edtTargetChange);
 
-			_edtBase->setVisible(true);
+			_edtTarget->setVisible(true);
 
 			break;
 		}
@@ -171,15 +171,60 @@ TargetInfoState::~TargetInfoState()
  * Changes the base name.
  * @param action Pointer to an action.
  */
-void TargetInfoState::edtBaseKeyPress(Action* action)
+void TargetInfoState::edtTargetChange(Action* action)
 {
+//	_edtTarget->setText(_editTarget->getText()); // NAH. This should be set auto via TextEdit
+
+	std::string edit = Language::wstrToUtf8(_edtTarget->getText());
+	_ab->setLabel(edit);
+
+
+/*	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
+		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	{
+		std::string s = Language::wstrToUtf8(_edtTarget->getText());
+		_ab->setEdit(s);
+	} */
+}
+/*
+ * Changes the soldier's name.
+ * @param action Pointer to an action.
+void SoldierInfoState::edtSoldierChange(Action* action)
+{
+	_soldier->setName(_edtSoldier->getText());
+}
+
+ * Changes the Craft name.
+ * @param action Pointer to an action.
+void CraftInfoState::edtCraftChange(Action* action)
+{
+	_craft->setName(_edtCraft->getText());
+
+	if (_craft->getName(_game->getLanguage()) == _defaultName)
+		_craft->setName(L"");
+
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
 		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
 	{
-		std::string s = Language::wstrToUtf8(_edtBase->getText());
-		_ab->setEdit(s);
+		_edtCraft->setText(_craft->getName(_game->getLanguage()));
 	}
 }
+
+ * Updates the base name and disables the OK button if no name is entered.
+ * @param action Pointer to an action.
+void BaseNameState::edtNameChange(Action* action)
+{
+	_base->setName(_edtName->getText());
+
+	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
+		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
+	{
+		if (!_edtName->getText().empty())
+			btnOkClick(action);
+	}
+	else
+		_btnOk->setVisible(!_edtName->getText().empty());
+} */
 
 /**
  * Pick a craft to intercept the UFO.
@@ -187,11 +232,11 @@ void TargetInfoState::edtBaseKeyPress(Action* action)
  */
 void TargetInfoState::btnInterceptClick(Action*)
 {
-	if (_ab)
+/*	if (_ab)
 	{
-		std::string s = Language::wstrToUtf8(_edtBase->getText());
+		std::string s = Language::wstrToUtf8(_edtTarget->getText());
 		_ab->setEdit(s);
-	}
+	} */ // kL
 
 	_state->timerReset();
 
@@ -209,11 +254,11 @@ void TargetInfoState::btnInterceptClick(Action*)
  */
 void TargetInfoState::btnOkClick(Action*)
 {
-	if (_ab)
+/*	if (_ab)
 	{
-		std::string s = Language::wstrToUtf8(_edtBase->getText());
+		std::string s = Language::wstrToUtf8(_edtTarget->getText());
 		_ab->setEdit(s);
-	}
+	} */ // kL
 
 	_game->popState();
 }

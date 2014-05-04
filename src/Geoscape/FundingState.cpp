@@ -60,8 +60,8 @@ FundingState::FundingState(Game* game)
 	_txtFunding		= new Text(100, 9, 138, 25);
 	_txtChange		= new Text(72, 9, 238, 25);
 
-	_lstCountries	= new TextList(290, 128, 24, 34);
-	_lstTotal		= new TextList(279, 9, 16, 165);
+	_lstCountries	= new TextList(277, 128, 24, 34);
+	_lstTotal		= new TextList(277, 9, 16, 165);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -110,7 +110,7 @@ FundingState::FundingState(Game* game)
 
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCountries->setColumns(3, 114, 100, 52);
+	_lstCountries->setColumns(3, 114, 100, 63);
 	_lstCountries->setDot(true);
 	for (std::vector<Country*>::iterator
 			i = _game->getSavedGame()->getCountries()->begin();
@@ -145,7 +145,7 @@ FundingState::FundingState(Game* game)
 
 	// kL_begin: FundingState, list Total.
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
-	_lstTotal->setColumns(3, 122, 100, 57);
+	_lstTotal->setColumns(3, 122, 100, 55);
 	_lstTotal->setDot(true);
 	_lstTotal->addRow(
 					3,

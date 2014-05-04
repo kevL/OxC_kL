@@ -16,23 +16,31 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "SelectStartFacilityState.h"
+
+#include "PlaceLiftState.h"
+#include "PlaceStartFacilityState.h"
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
+
 #include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
-#include "../Ruleset/Ruleset.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
 #include "../Ruleset/RuleBaseFacility.h"
-#include "../Savegame/SavedGame.h"
+#include "../Ruleset/Ruleset.h"
+
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
-#include "../Engine/Options.h"
-#include "PlaceStartFacilityState.h"
-#include "PlaceLiftState.h"
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -44,15 +52,25 @@ namespace OpenXcom
  * @param state Pointer to the base state to refresh.
  * @param globe Pointer to the globe to refresh.
  */
-SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State *state, Globe *globe) : BuildFacilitiesState(game, base, state), _globe(globe)
+SelectStartFacilityState::SelectStartFacilityState(
+		Game* game,
+		Base* base,
+		State* state,
+		Globe* globe)
+	:
+		BuildFacilitiesState(
+			game,
+			base,
+			state),
+		_globe(globe)
 {
 	_facilities = _game->getRuleset()->getCustomBaseFacilities();
 
 	_btnOk->setText(tr("STR_RESET"));
-	_btnOk->onMouseClick((ActionHandler)&SelectStartFacilityState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)& SelectStartFacilityState::btnOkClick);
 	_btnOk->onKeyboardPress(0, Options::keyCancel);
 
-	_lstFacilities->onMouseClick((ActionHandler)&SelectStartFacilityState::lstFacilitiesClick);
+	_lstFacilities->onMouseClick((ActionHandler)& SelectStartFacilityState::lstFacilitiesClick);
 
 	populateBuildList();
 }
@@ -62,7 +80,6 @@ SelectStartFacilityState::SelectStartFacilityState(Game *game, Base *base, State
  */
 SelectStartFacilityState::~SelectStartFacilityState()
 {
-
 }
 
 /**
@@ -71,7 +88,11 @@ SelectStartFacilityState::~SelectStartFacilityState()
 void SelectStartFacilityState::populateBuildList()
 {
 	_lstFacilities->clearList();
-	for (std::vector<RuleBaseFacility*>::iterator i = _facilities.begin(); i != _facilities.end(); ++i)
+
+	for (std::vector<RuleBaseFacility*>::iterator
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
 	{
 		_lstFacilities->addRow(1, tr((*i)->getType()).c_str());
 	}
@@ -81,25 +102,39 @@ void SelectStartFacilityState::populateBuildList()
  * Resets the base building.
  * @param action Pointer to an action.
  */
-void SelectStartFacilityState::btnOkClick(Action *)
+void SelectStartFacilityState::btnOkClick(Action*)
 {
-	for (std::vector<BaseFacility*>::iterator i = _base->getFacilities()->begin(); i != _base->getFacilities()->end(); ++i)
+	for (std::vector<BaseFacility*>::iterator
+			i = _base->getFacilities()->begin();
+			i != _base->getFacilities()->end();
+			++i)
 	{
 		delete *i;
 	}
+
 	_base->getFacilities()->clear();
+
 	_game->popState();
 	_game->popState();
-	_game->pushState(new PlaceLiftState(_game, _base, _globe, true));
+
+	_game->pushState(new PlaceLiftState(
+									_game,
+									_base,
+									_globe,
+									true));
 }
 
 /**
  * Places the selected facility.
  * @param action Pointer to an action.
  */
-void SelectStartFacilityState::lstFacilitiesClick(Action *)
+void SelectStartFacilityState::lstFacilitiesClick(Action*)
 {
-	_game->pushState(new PlaceStartFacilityState(_game, _base, this, _facilities[_lstFacilities->getSelectedRow()]));
+	_game->pushState(new PlaceStartFacilityState(
+											_game,
+											_base,
+											this,
+											_facilities[_lstFacilities->getSelectedRow()]));
 }
 
 /**
@@ -109,15 +144,14 @@ void SelectStartFacilityState::lstFacilitiesClick(Action *)
 void SelectStartFacilityState::facilityBuilt()
 {
 	_facilities.erase(_facilities.begin() + _lstFacilities->getSelectedRow());
-	if (_facilities.empty())
+
+	if (_facilities.empty()) // return to geoscape, force timer to start.
 	{
 		_game->popState();
-		_game->popState(); // return to geoscape, force timer to start.
+		_game->popState();
 	}
 	else
-	{
 		populateBuildList();
-	}
 }
 
 }
