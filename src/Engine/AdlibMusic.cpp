@@ -52,17 +52,19 @@ AdlibMusic::AdlibMusic(float volume)
 		_size(0),
 		_volume(volume)
 {
+	rate = Options::audioSampleRate;
+
 	if (!opl[0])
 		opl[0] = OPLCreate(
 						OPL_TYPE_YM3812,
 						3579545,
-						Options::audioSampleRate);
+						rate);
 
 	if (!opl[1])
 		opl[1] = OPLCreate(
 						OPL_TYPE_YM3812,
 						3579545,
-						Options::audioSampleRate);
+						rate);
 
 	// magic value - length of 1 tick per samplerate
 	if (delayRates.empty())
@@ -75,8 +77,6 @@ AdlibMusic::AdlibMusic(float volume)
 		delayRates[44100]	= 629 * 4;
 		delayRates[48000]	= 685 * 4;
 	}
-
-	rate = Options::audioSampleRate;
 }
 
 /**

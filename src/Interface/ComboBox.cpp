@@ -88,7 +88,7 @@ ComboBox::ComboBox(
 	_list->setAlign(ALIGN_CENTER);
 	_list->setScrolling(true, 0);
 
-	toggle();
+	toggle(true);
 }
 
 /**
@@ -396,14 +396,17 @@ void ComboBox::think()
 /**
  * Opens/closes the combo box list.
  */
-void ComboBox::toggle()
+void ComboBox::toggle(bool first)
 {
 	_window->setVisible(!_window->getVisible());
 	_list->setVisible(!_list->getVisible());
 	_state->setModal(_window->getVisible()? this: 0);
 
-	if (!_window->getVisible())
+	if (!first
+		&& !_window->getVisible())
+	{
 		_toggled = true;
+	}
 }
 
 /**

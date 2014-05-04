@@ -192,12 +192,12 @@ void NextTurnState::close()
 			if (_game->getSavedGame()->isIronman())
 				_game->pushState(new SaveGameState(
 												_game,
-												OPT_GEOSCAPE,
+												OPT_BATTLESCAPE,
 												SAVE_IRONMAN));
 			else if (Options::autosave)
 				_game->pushState(new SaveGameState(
 												_game,
-												OPT_GEOSCAPE,
+												OPT_BATTLESCAPE,
 												SAVE_AUTO_BATTLESCAPE));
 		}
 	}

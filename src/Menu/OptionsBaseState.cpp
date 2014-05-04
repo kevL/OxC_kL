@@ -136,7 +136,7 @@ OptionsBaseState::OptionsBaseState(
 	_btnMods->setColor(Palette::blockOffset(8)+5);
 	_btnMods->setText(tr("STR_MODS"));
 	_btnMods->onMousePress((ActionHandler)& OptionsBaseState::btnGroupPress);
-	_btnMods->setVisible(_origin == OPT_MENU);
+	_btnMods->setVisible(_origin == OPT_MENU); // Mods require a restart, don't enable them in-game
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
@@ -278,6 +278,7 @@ void OptionsBaseState::btnOkClick(Action*)
  */
 void OptionsBaseState::btnCancelClick(Action*)
 {
+	Options::reload = false;
 	Options::load();
 
 	updateScale(

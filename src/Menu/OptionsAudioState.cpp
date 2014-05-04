@@ -100,7 +100,7 @@ OptionsAudioState::OptionsAudioState(
 	_txtSoundVolume->setColor(Palette::blockOffset(8)+10);
 	_txtSoundVolume->setText(tr("STR_SFX_VOLUME"));
 
-	_slrSoundVolume->setColor(Palette::blockOffset(15) - 1);
+	_slrSoundVolume->setColor(Palette::blockOffset(15)-1);
 	_slrSoundVolume->setRange(0, SDL_MIX_MAXVOLUME);
 	_slrSoundVolume->setValue(Options::soundVolume);
 	_slrSoundVolume->onChange((ActionHandler)& OptionsAudioState::slrSoundVolumeChange);
@@ -190,6 +190,12 @@ OptionsAudioState::OptionsAudioState(
 	_cbxSampleRate->onChange((ActionHandler)& OptionsAudioState::cbxSampleRateChange);
 	_cbxSampleRate->onMouseIn((ActionHandler)& OptionsAudioState::txtTooltipIn);
 	_cbxSampleRate->onMouseOut((ActionHandler)& OptionsAudioState::txtTooltipOut);
+
+	// These options require a restart, so don't enable them in-game
+	_txtBitDepth->setVisible(_origin == OPT_MENU);
+	_cbxBitDepth->setVisible(_origin == OPT_MENU);
+	_txtSampleRate->setVisible(_origin == OPT_MENU);
+	_cbxSampleRate->setVisible(_origin == OPT_MENU);
 }
 
 /**
@@ -265,6 +271,7 @@ void OptionsAudioState::slrUiVolumeRelease(Action*)
 void OptionsAudioState::cbxBitDepthChange(Action*)
 {
 	Options::audioBitDepth = _bitDepths[_cbxBitDepth->getSelected()];
+	Options::reload = true;
 }
 
 /**
@@ -274,6 +281,7 @@ void OptionsAudioState::cbxBitDepthChange(Action*)
 void OptionsAudioState::cbxSampleRateChange(Action*)
 {
 	Options::audioSampleRate = _sampleRates[_cbxSampleRate->getSelected()];
+	Options::reload = true;
 }
 
 }
