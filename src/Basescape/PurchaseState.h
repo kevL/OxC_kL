@@ -49,13 +49,12 @@ class PurchaseState
 private:
 	int
 		_cQty,
-		_iQty,
 		_pQty,
 		_total;
 	size_t
 		_itemOffset,
 		_sel;
-//	float _iQty;
+	double _iQty;
 
 	Base* _base;
 	Text

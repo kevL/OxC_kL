@@ -43,6 +43,7 @@
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 
+#include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 
 #include "../Resource/ResourcePack.h"
@@ -74,10 +75,8 @@ namespace OpenXcom
 
 bool kL_reCenter = false;
 
-//Old const double Globe::QUAD_LONGITUDE	= 0.05;
-//Old const double Globe::QUAD_LATITUDE		= 0.2;
-//const double Globe::ROTATE_LONGITUDE		= 0.1;	// was, 0.25
-//const double Globe::ROTATE_LATITUDE		= 0.06;	// was, 0.15
+const double Globe::ROTATE_LONGITUDE	= 0.1;	// was, 0.25
+const double Globe::ROTATE_LATITUDE		= 0.06;	// was, 0.15
 
 namespace
 {
@@ -206,10 +205,8 @@ struct CreateShadow
 			const Sint16& noise)
 	{
 		Cord temp = earth;
-		// diff
-		temp -= sun;
-		// norm
-		temp.x *= temp.x;
+		temp -= sun; // diff
+		temp.x *= temp.x; // norm
 		temp.y *= temp.y;
 		temp.z *= temp.z;
 		temp.x += temp.z + temp.y;
@@ -233,13 +230,11 @@ struct CreateShadow
 			const int d = dest & helper::ColorGroup;
 			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
 			{
-				// this pixel is ocean
-				return Palette::blockOffset(12)+val;
+				return Palette::blockOffset(12)+val; // this pixel is ocean
 			}
 			else
 			{
-				// this pixel is land
-				if(dest==0) return static_cast<Uint8>(val);
+				if(dest==0) return static_cast<Uint8>(val); // this pixel is land
 
 				const int s = static_cast<int>(val) / 3;
 				const int e = static_cast<int>(dest) + s;
@@ -254,13 +249,11 @@ struct CreateShadow
 			const int d = static_cast<int>(dest & helper::ColorGroup);
 			if(static_cast<Uint8>(d) ==  Palette::blockOffset(12) || static_cast<Uint8>(d) ==  Palette::blockOffset(13))
 			{
-				// this pixel is ocean
-				return Palette::blockOffset(12);
+				return Palette::blockOffset(12); // this pixel is ocean
 			}
 			else
 			{
-				// this pixel is land
-				return dest;
+				return dest; // this pixel is land
 			}
 		}
 	}
@@ -320,7 +313,19 @@ Globe::Globe(
 		_blink(true),
 		_blinkVal(0),
 		_hover(false),
-		_cacheLand()
+		_cacheLand(),
+	// kL_begin:
+		_isMouseScrolled(false),
+		_isMouseScrolling(false),
+		_mouseMovedOverThreshold(false),
+		_xBeforeMouseScrolling(0),
+		_yBeforeMouseScrolling(0),
+		_totalMouseMoveX(0),
+		_totalMouseMoveY(0),
+		_lonBeforeMouseScrolling(0.0),
+		_latBeforeMouseScrolling(0.0),
+		_mouseScrollingStartTime(0)
+	// kL_end.
 {
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -708,8 +713,10 @@ void Globe::loadDat(
 				i < points;
 				++i)
 		{
-			double lonRad = static_cast<double>(value[j++]) * 0.125f * M_PI / 180.0;
-			double latRad = static_cast<double>(value[j++]) * 0.125f * M_PI / 180.0;
+//kL			double lonRad = static_cast<double>(value[j++]) * 0.125f * M_PI / 180.0;
+//kL			double latRad = static_cast<double>(value[j++]) * 0.125f * M_PI / 180.0;
+			double lonRad = static_cast<double>(value[j++]) * 0.125 * M_PI / 180.0; // kL
+			double latRad = static_cast<double>(value[j++]) * 0.125 * M_PI / 180.0; // kL
 
 			poly->setLongitude(i, lonRad);
 			poly->setLatitude(i, latRad);
@@ -1183,6 +1190,7 @@ void Globe::think()
  */
 void Globe::blink()
 {
+	// kL_begin:
 	int off = 0;
 	if (_blink)
 	{
@@ -1201,7 +1209,7 @@ void Globe::blink()
 
 		if (_blinkVal == 0)
 			_blink = true;
-	}
+	} // kL_end.
 
 /*	_blink = !_blink;
 
@@ -1617,14 +1625,14 @@ void Globe::drawGlobeCircle(
 	double
 		x,
 		y,
-		x2 = 0,
-		y2 = 0,
+		x2 = 0.0,
+		y2 = 0.0,
 		lat1,
 		lon1,
 		seg = M_PI / (static_cast<double>(segments) / 2.0);
 
 	for (double // 48 circle segments
-			az = 0;
+			az = 0.0;
 			az <= M_PI * 2.0 + 0.01;
 			az += seg)
 	{
@@ -1646,7 +1654,7 @@ void Globe::drawGlobeCircle(
 			continue;
 		}
 
-		if (!pointBack(lon1,lat1))
+		if (!pointBack(lon1, lat1))
 			XuLine(
 					_radars,
 					this,
@@ -2166,107 +2174,67 @@ void Globe::drawPath(
 		double lat2)
 {
 	double length;
-	Sint16 count;
-	Sint16 x1, y1, x2, y2;
-	CordPolar p1, p2;
-	Cord a(CordPolar(lon1, lat1));
-	Cord b(CordPolar(lon2, lat2));
+	Sint16
+		count,
+		x1,
+		y1,
+		x2,
+		y2;
+	CordPolar
+		p1,
+		p2;
+	Cord
+		a(CordPolar(lon1, lat1)),
+		b(CordPolar(lon2, lat2));
 
-	if(-b == a)
+	if (-b == a)
 		return;
 
 	b -= a;
 
-	//longer path have more parts
+	// longer path have more parts
 	length = b.norm();
-	length *= length*15;
+	length *= length * 15;
+
 	count = static_cast<Sint16>(length) + 1;
 	b /= count;
+
 	p1 = CordPolar(a);
-	polarToCart(p1.lon, p1.lat, &x1, &y1);
-	for(int i = 0; i < count; ++i)
+	polarToCart(
+				p1.lon,
+				p1.lat,
+				&x1,
+				&y1);
+	for (int
+			i = 0;
+			i < count;
+			++i)
 	{
 		a += b;
 		p2 = CordPolar(a);
-		polarToCart(p2.lon, p2.lat, &x2, &y2);
+		polarToCart(
+					p2.lon,
+					p2.lat,
+					&x2,
+					&y2);
 
-		if (!pointBack(p1.lon, p1.lat) && !pointBack(p2.lon, p2.lat))
+		if (!pointBack(p1.lon, p1.lat)
+			&& !pointBack(p2.lon, p2.lat))
 		{
-			XuLine(surface, this, x1, y1, x2, y2, 8);
+			XuLine(
+				surface,
+				this,
+				x1,
+				y1,
+				x2,
+				y2,
+				8);
 		}
 
 		p1 = p2;
 		x1 = x2;
 		y1 = y2;
 	}
-/*	double
-		sx = lon2 - lon1,
-		sy = lat2 - lat1,
-		ln1,
-		lt1,
-		ln2,
-		lt2,
-		dln,
-		dlt,
-		slen,
-		dlen;
-	int seg;
-	Sint16
-		x1,
-		y1,
-		x2,
-		y2;
-
-	if (sx<0) sx += 2*M_PI;
-
-	if (fabs(sx)<0.01)
-	{
-//kL		seg = abs( sy/(2*M_PI)*48 );
-		seg = abs( static_cast<int>(sy / (2.0 * M_PI) * 48.0) ); // kL
-		if (seg == 0) ++seg;
-	}
-	else
-	{
-//kL		seg = abs( sx/(2*M_PI)*96 );
-		seg = abs( static_cast<int>(sx / (2.0 * M_PI) * 96.0) ); // kL
-		if (seg == 0) ++seg;
-	}
-	sx /= seg;
-	sy /= seg;
-	slen = sqrt(sx * sx + sy * sy);
-
-	ln2 = lon1;
-	lt2 = lat1;
-
-	for (int
-			i = 0;
-			i < seg;
-			++i)
-	{
-		ln1 = ln2;
-		lt1 = lt2;
-		dln = sin(lon2 - ln1) * cos(lat2);
-		dlt = cos(lt1) * sin(lat2) - sin(lt1) * cos(lat2) * cos(lon2 - ln1);
-		dlen = sqrt(dln * dln + dlt * dlt);
-		dlt = dlt / dlen * slen;
-		dln = dln / dlen * slen / cos(lt1 + dlt);
-		ln2 = ln1 + dln;
-		lt2 = lt2 + dlt;
-
-		if (M_PI - fabs(fabs(lon2 - ln2) - M_PI) < 0.05 && M_PI - fabs(fabs(lat2 - lt2) - M_PI) < 0.05)
-		{
-			ln2 = lon2;
-			lt2 = lat2;
-			i = seg;
-		}
-
-		if (!pointBack(ln2, lt2) && !pointBack(ln1, lt1))
-		{
-			polarToCart(ln1,lt1,&x1,&y1);
-			polarToCart(ln2,lt2,&x2,&y2);
-			XuLine(surface, this, x1, y1, x2, y2, 8);
-		}
-	} */
 }
 
 /**
@@ -2275,15 +2243,11 @@ void Globe::drawPath(
 void Globe::drawFlights()
 {
 	//_radars->clear();
-
 	if (!Options::globeFlightPaths)
 		return;
 
-	// Lock the surface
 	_radars->lock();
-
-	// Draw the craft flight paths
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::iterator // Draw the craft flight paths
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -2293,10 +2257,9 @@ void Globe::drawFlights()
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
-			// Hide crafts docked at base
-			if ((*j)->getStatus() != "STR_OUT"
-				|| (*j)->getDestination() == 0 /*
-				|| pointBack((*j)->getLongitude(), (*j)->getLatitude())*/)
+			if ((*j)->getStatus() != "STR_OUT" // Hide crafts docked at base
+				|| (*j)->getDestination() == 0)
+//				|| pointBack((*j)->getLongitude(), (*j)->getLatitude()))
 			{
 				continue;
 			}
@@ -2310,14 +2273,11 @@ void Globe::drawFlights()
 			drawPath(_radars, lon1, lat1, lon2, lat2);
 		}
 	}
-
-	// Unlock the surface
 	_radars->unlock();
 }
 
 /**
- * Draws the markers of all the various things going
- * on around the world onto the globe.
+ * Draws the markers of all the various things going on around the world.
  */
 void Globe::drawMarkers()
 {
@@ -2520,6 +2480,100 @@ void Globe::blit(Surface* surface)
 }
 
 /**
+ * Ignores any mouse hovers that are outside the globe.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+void Globe::mouseOver(Action* action, State* state)
+{
+	double
+		lon,
+		lat;
+
+	cartToPolar(
+			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
+			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
+			&lon,
+			&lat);
+
+	if (lat == lat // Check for errors
+		&& lon == lon)
+	{
+		if (_isMouseScrolling
+			&& action->getDetails()->type == SDL_MOUSEMOTION)
+		{
+			// The following is the workaround for a rare problem where sometimes
+			// the mouse-release event is missed for any reason.
+			// (checking: is the dragScroll-mouse-button still pressed?)
+			// However if the SDL is also missed the release event, then it is to no avail :(
+			if ((SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+			{
+				// so we missed again the mouse-release :(
+				// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+				if (!_mouseMovedOverThreshold
+					&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+				{
+					center(
+						_lonBeforeMouseScrolling,
+						_latBeforeMouseScrolling);
+				}
+
+				_isMouseScrolled = _isMouseScrolling = false;
+
+				return;
+			}
+
+			_isMouseScrolled = true;
+
+			// Set the mouse cursor back
+			SDL_EventState(
+						SDL_MOUSEMOTION,
+						SDL_IGNORE);
+			SDL_WarpMouse(
+						static_cast<Uint16>(_xBeforeMouseScrolling),
+						static_cast<Uint16>(_yBeforeMouseScrolling));
+			SDL_EventState(
+						SDL_MOUSEMOTION,
+						SDL_ENABLE);
+
+			// Check the threshold
+			_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
+			_totalMouseMoveY += static_cast<int>(action->getDetails()->motion.yrel);
+
+			if (!_mouseMovedOverThreshold)
+				_mouseMovedOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
+										|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
+
+			// Scrolling
+			if (Options::dragScrollInvert)
+			{
+				double newLon = static_cast<double>(-action->getDetails()->motion.xrel) * ROTATE_LONGITUDE / 2.0;
+				double newLat = static_cast<double>(-action->getDetails()->motion.yrel) * ROTATE_LATITUDE / 2.0;
+				center(
+					_cenLon + newLon,
+					_cenLat + newLat);
+			}
+			else
+			{
+				double newLon = (static_cast<double>(_totalMouseMoveX) / action->getXScale()) * ROTATE_LONGITUDE / 2.0;
+				double newLat = (static_cast<double>(_totalMouseMoveY) / action->getYScale()) * ROTATE_LATITUDE / 2.0;
+				center(
+					_lonBeforeMouseScrolling + newLon,
+					_latBeforeMouseScrolling + newLat);
+			}
+
+			// We don't want to look the mouse-cursor jumping :)
+			action->getDetails()->motion.x = static_cast<Uint16>(_xBeforeMouseScrolling);
+			action->getDetails()->motion.y = static_cast<Uint16>(_yBeforeMouseScrolling);
+
+			_game->getCursor()->handle(action);
+		}
+
+		InteractiveSurface::mouseOver(action, state);
+	}
+}
+
+/**
  * Ignores any mouse clicks that are outside the globe.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
@@ -2539,6 +2593,25 @@ void Globe::mousePress(Action* action, State* state)
 	if (lat == lat // Check for errors
 		&& lon == lon)
 	{
+		if (action->getDetails()->button.button == Options::battleDragScrollButton)
+		{
+			_isMouseScrolling = true;
+			_isMouseScrolled = false;
+
+			SDL_GetMouseState(
+						&_xBeforeMouseScrolling,
+						&_yBeforeMouseScrolling);
+
+			_lonBeforeMouseScrolling = _cenLon;
+			_latBeforeMouseScrolling = _cenLat;
+
+			_totalMouseMoveX = 0;
+			_totalMouseMoveY = 0;
+
+			_mouseMovedOverThreshold = false;
+			_mouseScrollingStartTime = SDL_GetTicks();
+		}
+
 		InteractiveSurface::mousePress(action, state);
 	}
 }
@@ -2576,13 +2649,9 @@ void Globe::mouseRelease(Action* action, State* state)
 void Globe::mouseClick(Action* action, State* state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-	{
 		zoomIn();
-	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-	{
 		zoomOut();
-	}
 
 	double
 		lon,
@@ -2597,12 +2666,56 @@ void Globe::mouseClick(Action* action, State* state)
 	if (lat == lat // Check for errors
 		&& lon == lon)
 	{
+		// The following is the workaround for a rare problem where sometimes
+		// the mouse-release event is missed for any reason.
+		// However if the SDL is also missed the release event, then it is to no avail :(
+		// (this part handles the release if it is missed and now an other button is used)
+		if (_isMouseScrolling)
+		{
+			if (action->getDetails()->button.button != Options::battleDragScrollButton
+				&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+			{
+				// so we missed again the mouse-release :(
+				// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+				if (!_mouseMovedOverThreshold
+					&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+				{
+					center(
+						_lonBeforeMouseScrolling,
+						_latBeforeMouseScrolling);
+				}
+
+				_isMouseScrolled = _isMouseScrolling = false;
+			}
+		}
+
+		// DragScroll-Button release: release mouse-scroll-mode
+		if (_isMouseScrolling)
+		{
+			// While scrolling, other buttons are ineffective
+			if (action->getDetails()->button.button == Options::battleDragScrollButton)
+				_isMouseScrolling = false;
+			else
+				return;
+
+			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+			if (!_mouseMovedOverThreshold
+				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
+			{
+				_isMouseScrolled = false;
+				center(
+					_lonBeforeMouseScrolling,
+					_latBeforeMouseScrolling);
+			}
+
+			if (_isMouseScrolled)
+				return;
+		}
+
 		InteractiveSurface::mouseClick(action, state);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		{
 			center(lon, lat);
-		}
 	}
 }
 
@@ -2772,8 +2885,7 @@ void Globe::setupRadii(
 
 	_earthData.resize(_radius.size());
 
-	// filling normal field for each radius
-	for (size_t
+	for (size_t // filling normal field for each radius
 			r = 0;
 			r < _radius.size();
 			++r)

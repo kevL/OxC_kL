@@ -72,7 +72,7 @@ private:
 		_yBeforeMouseScrolling;
 	Uint32 _mouseScrollingStartTime;
 
-	std::string _currentTooltip;
+//	std::string _currentTooltip;
 
 	Bar
 		* _barTimeUnits,
@@ -108,7 +108,7 @@ private:
 		* _btnRightHandItem,
 
 		* _btnVisibleUnit[VISIBLE_MAX];
-	ImageButton* _reserve;
+//	ImageButton* _reserve;
 //	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	Map* _map;
 	NumberText

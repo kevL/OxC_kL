@@ -24,6 +24,8 @@
 #include <iomanip>
 #include <sstream>
 
+#include "../aresame.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -78,7 +80,7 @@ SellState::SellState(
 		_total(0),
 		_hasSci(0),
 		_hasEng(0),
-		_spaceChange(0)
+		_spaceChange(0.0)
 {
 	bool overfull = Options::storageLimitsEnforced
 					&& _base->storesOverfull();
@@ -620,8 +622,8 @@ void SellState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
+			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
 		{
 			changeByValue(Options::changeValueByMouseWheel, 1);
 		}
@@ -631,8 +633,8 @@ void SellState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
+			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
 		{
 			changeByValue(Options::changeValueByMouseWheel, -1);
 		}
@@ -670,10 +672,9 @@ int SellState::getPrice()
  */
 int SellState::getQuantity()
 {
-	// Soldiers/crafts are individual
 	switch (getType(_sel))
 	{
-		case SELL_SOLDIER:
+		case SELL_SOLDIER: // Soldiers/crafts are sold singly.
 		case SELL_CRAFT:
 			return 1;
 
@@ -748,14 +749,14 @@ void SellState::changeByValue(
 	_qtys[_sel] += change * dir;
 	_total += getPrice() * change * dir;
 
-	// Calculate the change in storage space in tenths of an XCom storage unit.
+	// Calculate the change in storage space in XCom storage units.
 	Craft* craft;
 	RuleItem
 		* armor,
 		* item,
 		* weapon,
 		* ammo;
-	float total = 0.f;
+	double total = 0.0;
 
 	switch (getType(_sel))
 	{
@@ -763,7 +764,7 @@ void SellState::changeByValue(
 			if (_soldiers[_sel]->getArmor()->getStoreItem() != "STR_NONE")
 			{
 				armor = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
-				_spaceChange += static_cast<int>(armor->getSize() * 10.f * static_cast<float>(dir));
+				_spaceChange += static_cast<double>(dir) * armor->getSize();
 			}
 		break;
 		case SELL_CRAFT:
@@ -778,14 +779,14 @@ void SellState::changeByValue(
 
 				ammo = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
 				if (ammo)
-					total += static_cast<float>((*w)->getClipsLoaded(_game->getRuleset())) * ammo->getSize();
+					total += static_cast<double>((*w)->getClipsLoaded(_game->getRuleset())) * ammo->getSize();
 			}
 
-			_spaceChange += static_cast<int>(total * 10.f * static_cast<float>(dir));
+			_spaceChange += static_cast<double>(dir) * total;
 		break;
 		case SELL_ITEM:
 			item = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-			_spaceChange -= static_cast<int>(item->getSize() * 10.f * static_cast<float>(change * dir));
+			_spaceChange -= static_cast<double>(dir * change) * item->getSize();
 		break;
 
 //		case SELL_ENGINEER:
@@ -861,20 +862,19 @@ void SellState::updateItemStrings()
 	} // kL_end.
 
 	ss3 << _base->getUsedStores();
-	if (_spaceChange != 0)
+	if (!AreSame(_spaceChange, 0.0))
 	{
 		ss3 << "(";
-		if (_spaceChange > 0) ss3 << "+";
-		ss3 << std::fixed << std::setprecision(1) << static_cast<float>(_spaceChange) / 10.f << ")";
+		if (_spaceChange > 0.0) ss3 << "+";
+		ss3 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}
 	ss3 << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(ss3.str()); // kL
 //kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss3.str()));
 
 	if (Options::storageLimitsEnforced)
-//kL		_btnOk->setVisible(!_base->storesOverfull(_spaceChange));
-		okVis = okVis
-				&& !_base->storesOverfull(_spaceChange); // kL
+		okVis = okVis // kL
+				&& !_base->storesOverfull(_spaceChange);
 
 	_btnOk->setVisible(okVis); // kL
 }

@@ -19,12 +19,13 @@
 
 #include "PurchaseState.h"
 
+#include <cfloat>
 #include <climits>
 #include <cmath>
 #include <iomanip>
 #include <sstream>
 
-//#include "../aresame.h"
+#include "../aresame.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -78,7 +79,7 @@ PurchaseState::PurchaseState(
 		_total(0),
 		_pQty(0),
 		_cQty(0),
-		_iQty(0)
+		_iQty(0.0)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
@@ -716,8 +717,8 @@ void PurchaseState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
+			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
 		{
 			increaseByValue(Options::changeValueByMouseWheel);
 		}
@@ -727,8 +728,8 @@ void PurchaseState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
+			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
 		{
 			decreaseByValue(Options::changeValueByMouseWheel);
 		}
@@ -753,7 +754,8 @@ int PurchaseState::getPrice()
 	{
 		return _game->getRuleset()->getEngineerCost() * 2;
 	}
-	else if (_sel >= 3 && _sel < 3 + _crafts.size()) // Craft cost
+	else if (_sel >= 3 // Craft cost
+		&& _sel < 3 + _crafts.size())
 	{
 		return _game->getRuleset()->getCraft(_crafts[_sel - 3])->getBuyCost();
 	}
@@ -821,7 +823,7 @@ void PurchaseState::increaseByValue(int change)
 	}
 	else if (_sel >= 3 + _crafts.size()
 		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize()
-				> (_base->getAvailableStores() * 10 - static_cast<int>(_base->getUsedStores() * 10 + 0.5)))
+			> static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores())
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(
@@ -843,7 +845,8 @@ void PurchaseState::increaseByValue(int change)
 			change = std::min(maxByQuarters, change);
 			_pQty += change;
 		}
-		else if (_sel >= 3 && _sel < 3 + _crafts.size()) // Craft count
+		else if (_sel >= 3
+			&& _sel < 3 + _crafts.size()) // Craft count
 		{
 			int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _cQty;
 			change = std::min(maxByHangars, change);
@@ -853,23 +856,20 @@ void PurchaseState::increaseByValue(int change)
 		{
 			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()]);
 
-//			float storesNeededPerItem = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize();
-//			float freeStores = static_cast<float>(_base->getAvailableStores() - _base->getUsedStores()) - _iQty;
-			int storesNeededPerItem = static_cast<int>(rule->getSize() * 10.f);
-			int freeStores = static_cast<int>(static_cast<double>(_base->getAvailableStores()) * 10.0 - _base->getUsedStores() * 10.0 + 0.5) - _iQty; // kL_note: cf. TransferItemsState
-			int maxByStores;
-//			if (AreSame(storesNeededPerItem, 0.f))
-			if (storesNeededPerItem == 0)
-		        maxByStores = INT_MAX;
-			else
-//				maxByStores = static_cast<int>(floor(freeStores / storesNeededPerItem));
-				maxByStores = freeStores / storesNeededPerItem; /** kL_note: This is not right, because of int-truncation. */
+			double
+				storesNeededPerItem = rule->getSize(),
+				freeStores = static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores() - _iQty,
+				maxByStores = DBL_MAX;
+
+			if (!AreSame(storesNeededPerItem, 0.0))
+			{
+				maxByStores = freeStores / storesNeededPerItem;
+			}
 
 			change = std::min(
-							maxByStores,
-							change);
-//			_iQty += (static_cast<float>(change) * storesNeededPerItem);
-			_iQty += change * storesNeededPerItem; /** kL_note: This is not right, because of int-truncation. */
+						static_cast<int>(maxByStores),
+						change);
+			_iQty += static_cast<double>(change) * storesNeededPerItem;
 		}
 
 		_qtys[_sel] += change;
@@ -902,19 +902,15 @@ void PurchaseState::decreaseByValue(int change)
 	change = std::min(_qtys[_sel], change);
 
 	if (_sel <= 2) // Personnel count
-	{
 		_pQty -= change;
-	}
 	else if (_sel >= 3 // Craft count
 		&& _sel < 3 + _crafts.size())
 	{
 		_cQty -= change;
 	}
 	else // Item count
-	{
-//		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * static_cast<float>(change);
-		_iQty -= static_cast<int>(_game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * 10.f * static_cast<float>(change));
-	}
+		_iQty -= _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize() * static_cast<double>(change);
+
 
 	_qtys[_sel] -= change;
 	_total -= getPrice() * change;
@@ -956,11 +952,11 @@ void PurchaseState::updateItemStrings()
 	}
 
 	ss1 << _base->getUsedStores();
-	if (_iQty != 0)
+	if (!AreSame(_iQty, 0.0))
 	{
 		ss1 << "(";
-		if (_iQty > 0) ss1 << "+";
-		ss1 << std::fixed << std::setprecision(1) << static_cast<float>(_iQty) / 10.f << ")";
+		if (_iQty > 0.0) ss1 << "+";
+		ss1 << std::fixed << std::setprecision(1) << _iQty << ")";
 	}
 	ss1 << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(ss1.str()); // kL

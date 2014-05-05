@@ -292,12 +292,21 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 										_aliens[i],
 										_qtys[i]);
 
-			// add the corpses
-			_base->getItems()->addItem(
-									_game->getRuleset()->getArmor(
-															_game->getRuleset()->getUnit(_aliens[i])->getArmor()
-														)->getCorpseGeoscape(),
-									_qtys[i]);
+			if (Options::canSellLiveAliens)
+			{
+				_game->getSavedGame()->setFunds(
+											_game->getSavedGame()->getFunds()
+											+ _game->getRuleset()->getItem(_aliens[i])->getSellCost()
+											* _qtys[i]);
+			}
+			else // add the corpses
+			{				
+				_base->getItems()->addItem(
+										_game->getRuleset()->getArmor(
+																_game->getRuleset()->getUnit(_aliens[i])->getArmor()
+															)->getCorpseGeoscape(),
+										_qtys[i]);
+			}
 		}
 	}
 

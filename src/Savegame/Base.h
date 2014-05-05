@@ -154,7 +154,7 @@ private:
 		/// Gets the base's used storage space.
 		double getUsedStores();
 		/// Checks if the base's stores are overfull.
-		bool storesOverfull(int offset = 0);
+		bool storesOverfull(double offset = 0.0);
 
 		/// Gets the base's available storage space.
 		int getAvailableStores() const;

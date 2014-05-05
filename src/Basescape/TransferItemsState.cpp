@@ -19,11 +19,14 @@
 
 #include "TransferItemsState.h"
 
+#include <cfloat>
 #include <climits>
 #include <cmath>
 #include <sstream>
 
 #include "TransferConfirmState.h"
+
+#include "../aresame.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -88,7 +91,7 @@ TransferItemsState::TransferItemsState(
 		_pQty(0),
 		_cQty(0),
 		_aQty(0),
-		_iQty(0),
+		_iQty(0.0),
 
 		_hasSci(0),
 		_hasEng(0),
@@ -943,8 +946,8 @@ void TransferItemsState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
+			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
 		{
 			increaseByValue(Options::changeValueByMouseWheel);
 		}
@@ -954,8 +957,8 @@ void TransferItemsState::lstItemsMousePress(Action* action)
 		_timerInc->stop();
 		_timerDec->stop();
 
-		if (action->getAbsoluteXMouse() >= _lstItems->getArrowsLeftEdge()
-			&& action->getAbsoluteXMouse() <= _lstItems->getArrowsRightEdge())
+		if (static_cast<int>(action->getAbsoluteXMouse()) >= _lstItems->getArrowsLeftEdge()
+			&& static_cast<int>(action->getAbsoluteXMouse()) <= _lstItems->getArrowsRightEdge())
 		{
 			decreaseByValue(Options::changeValueByMouseWheel);
 		}
@@ -969,26 +972,26 @@ void TransferItemsState::lstItemsMousePress(Action* action)
 int TransferItemsState::getCost() const
 {
 	// kL_note: All prices increased tenfold.
-	float cost = 0.f;
+	double cost = 0.0;
 
 	if (TRANSFER_ITEM == getType(_sel)) // Item cost
 	{
 		RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
 		if (rule->getType() == "STR_ALIEN_ALLOYS")
-			cost = 0.1f;
+			cost = 0.0;
 		else if (rule->getType() == "STR_ELERIUM_115")
-			cost = 1.f;
+			cost = 1.0;
 		else if (rule->getAlien())
-			cost = 250.f;
+			cost = 250.0;
 		else
-			cost = 10.f;
+			cost = 10.0;
 	}
 	else if (TRANSFER_CRAFT == getType(_sel)) // Craft cost
-		cost = 1000.f;
+		cost = 1000.0;
 	else // Personnel cost
-		cost = 100.f;
+		cost = 100.0;
 
-	return static_cast<int>(ceil(static_cast<float>(_distance) * cost));
+	return static_cast<int>(ceil(_distance * cost));
 }
 
 /**
@@ -1034,7 +1037,6 @@ void TransferItemsState::increaseByValue(int change)
 		return;
 	}
 
-
 	const enum TransferType selType = getType(_sel);
 
 	if ((selType == TRANSFER_SOLDIER // Check Living Quarters
@@ -1068,6 +1070,7 @@ void TransferItemsState::increaseByValue(int change)
 												0));
 			return;
 		}
+
 		if (_pQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 		{
 			_timerInc->stop();
@@ -1080,8 +1083,9 @@ void TransferItemsState::increaseByValue(int change)
 												0));
 			return;
 		}
+
 		if (Options::storageLimitsEnforced
-			&& _baseTo->storesOverfull(_iQty + static_cast<int>(craft->getItems()->getTotalSize(_game->getRuleset()) * 10.0 + 0.5)))
+			&& _baseTo->storesOverfull(_iQty + craft->getItems()->getTotalSize(_game->getRuleset())))
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
@@ -1104,8 +1108,7 @@ void TransferItemsState::increaseByValue(int change)
 	if (selType == TRANSFER_ITEM)
 	{
 		if (!selItem->getAlien()
-			&& _baseTo->storesOverfull(static_cast<int>(selItem->getSize() * 10.f + 0.5f) + _iQty))
-//			&& (_iQty + selItem->getSize()) > _baseTo->getAvailableStores() - _baseTo->getUsedStores())
+			&& _baseTo->storesOverfull(selItem->getSize() + _iQty))
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
@@ -1156,7 +1159,7 @@ void TransferItemsState::increaseByValue(int change)
 		Craft* craft = _crafts[_sel - _soldiers.size()];
 		_cQty++;
 		_pQty += craft->getNumSoldiers();
-		_iQty += static_cast<int>(craft->getItems()->getTotalSize(_game->getRuleset()) * 10.0);
+		_iQty += craft->getItems()->getTotalSize(_game->getRuleset());
 
 		_baseQty[_sel]--;
 		_destQty[_sel]++;
@@ -1172,27 +1175,20 @@ void TransferItemsState::increaseByValue(int change)
 	{
 		if (!selItem->getAlien()) // Item count
 		{
-//			float storesNeededPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize();
-//			float freeStores = static_cast<float>(_baseTo->getAvailableStores() - _baseTo->getUsedStores()) - _iQty;
-			int storesNeededPerItem = static_cast<int>(_game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize() * 10.f);
-// kL			int freeStores = static_cast<int>(static_cast<double>(_baseTo->getAvailableStores()) - _baseTo->getUsedStores() * 10.0) - _iQty;
-			int freeStores = static_cast<int>(static_cast<double>(_baseTo->getAvailableStores()) * 10.0 - _baseTo->getUsedStores() * 10.0 + 0.5) - _iQty; // kL, cf. PurchaseState
+			double
+				storesNeededPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize(),
+				freeStores = static_cast<double>(_baseTo->getAvailableStores()) - _baseTo->getUsedStores() - _iQty,
+				freeStoresForItem = DBL_MAX;
 
-			int freeStoresForItem;
-//			if (AreSame(storesNeededPerItem, 0.f))
-			if (storesNeededPerItem == 0)
-				freeStoresForItem = INT_MAX;
-			else
-//				freeStoresForItem = static_cast<int>(floor(freeStores / storesNeededPerItem));
-				freeStoresForItem = freeStores / storesNeededPerItem; /** kL_note: This is not right, because of int-truncation. */
+			if (!AreSame(storesNeededPerItem, 0.0))
+				freeStoresForItem = freeStores / storesNeededPerItem;
 
 			change = std::min(
 							std::min(
-									freeStoresForItem,
+									static_cast<int>(freeStoresForItem),
 									getQuantity() - _transferQty[_sel]),
 							change);
-//			_iQty += (static_cast<float>(change)) * storesNeededPerItem;
-			_iQty += storesNeededPerItem * change; /** kL_note: This is not right, because of int-truncation. */
+			_iQty += static_cast<double>(change) * storesNeededPerItem;
 			_baseQty[_sel] -= change;
 			_destQty[_sel] += change;
 			_transferQty[_sel] += change;
@@ -1260,14 +1256,13 @@ void TransferItemsState::decreaseByValue(int change)
 
 		_cQty--;
 		_pQty -= craft->getNumSoldiers();
-		_iQty -= static_cast<int>(craft->getItems()->getTotalSize(_game->getRuleset()) * 10.0);
+		_iQty -= craft->getItems()->getTotalSize(_game->getRuleset());
 	}
 	else if (selType == TRANSFER_ITEM) // Item count
 	{
 		const RuleItem* selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
 		if (!selItem->getAlien())
-//			_iQty -= selItem->getSize() * (static_cast<float>(change));
-			_iQty -= static_cast<int>(selItem->getSize() * 10.f * static_cast<float>(change));
+			_iQty -= selItem->getSize() * static_cast<double>(change);
 		else
 			_aQty -= change;
 	}

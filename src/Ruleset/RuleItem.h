@@ -141,7 +141,7 @@ private:
 		_handSprite,
 		_bulletSprite;
 
-	float _size;
+	double _size;
 
 	std::string
 		_type,
@@ -181,7 +181,7 @@ private:
 		const std::vector<std::string>& getRequirements() const;
 
 		/// Gets the item's size.
-		float getSize() const;
+		double getSize() const;
 
 		/// Gets the item's purchase cost.
 		int getBuyCost() const;

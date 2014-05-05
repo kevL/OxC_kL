@@ -60,23 +60,31 @@ private:
 	static const int NUM_SEASHADES	= 72;
 	static const int NEAR_RADIUS	= 25;
 
-//Old	static const double QUAD_LONGITUDE;
-//Old	static const double QUAD_LATITUDE;
-//	static const double ROTATE_LONGITUDE;
-//	static const double ROTATE_LATITUDE;
+	static const double ROTATE_LONGITUDE;
+	static const double ROTATE_LATITUDE;
 
 	bool
+		_blink,
 		_hover,
-		_blink;
-	int _blinkVal;
+		_isMouseScrolled,
+		_isMouseScrolling,
+		_mouseMovedOverThreshold;
+	int _blinkVal,
+		_xBeforeMouseScrolling,
+		_yBeforeMouseScrolling,
+		_totalMouseMoveX,
+		_totalMouseMoveY;
 	double
 		_cenLon,
 		_cenLat,
 		_hoverLon,
-		_hoverLat; //, _rotLon, _rotLat;
+		_hoverLat,
+		_lonBeforeMouseScrolling,
+		_latBeforeMouseScrolling; //, _rotLon, _rotLat;
 	Sint16
 		_cenX,
 		_cenY;
+	Uint32 _mouseScrollingStartTime;
 	size_t _zoom;
 
 	FastLineClip* _clipper;
@@ -276,6 +284,8 @@ private:
 		/// Blits the globe onto another surface.
 		void blit(Surface* surface);
 
+		/// Special handling for mouse hover.
+		void mouseOver(Action* action, State* state);
 		/// Special handling for mouse presses.
 		void mousePress(Action* action, State* state);
 		/// Special handling for mouse releases.

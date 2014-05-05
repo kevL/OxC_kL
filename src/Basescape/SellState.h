@@ -64,7 +64,6 @@ private:
 	int
 		_hasSci,
 		_hasEng,
-		_spaceChange,
 		_total;
 	size_t
 		_itemOffset,
@@ -74,6 +73,7 @@ private:
 		_color2,
 		_color3,
 		_colorAmmo;
+	double _spaceChange;
 
 	Base* _base;
 	Text

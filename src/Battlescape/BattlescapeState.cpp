@@ -117,7 +117,14 @@ BattlescapeState::BattlescapeState(Game* game)
 		_yBeforeMouseScrolling(0),
 		_totalMouseMoveX(0),
 		_totalMouseMoveY(0),
-		_mouseMovedOverThreshold(0)
+		_mouseMovedOverThreshold(false),
+	// kL_begin:
+		_firstInit(true),
+		_mouseOverIcons(false),
+		_isMouseScrolled(false),
+		_isMouseScrolling(false),
+		_mouseScrollingStartTime(0)
+	// kL_end.
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	std::fill_n(
@@ -130,10 +137,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	int iconsWidth		= 320;
 	int iconsHeight		= Map::ICON_HEIGHT;
 
-	_mouseOverIcons = false;
+//kL	_mouseOverIcons = false; // cTor.
 
 	_txtBaseLabel = new Text(80, 9, screenWidth - 81, 0); // kL
-
 
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons = new InteractiveSurface(
@@ -711,10 +717,10 @@ BattlescapeState::BattlescapeState(Game* game)
 									_save,
 									this);
 
-	_firstInit = true;
-	_isMouseScrolling = false;
-	_isMouseScrolled = false;
-	_currentTooltip = "";
+//kL	_firstInit = true;			// cTor.
+//kL	_isMouseScrolling = false;	// cTor.
+//kL	_isMouseScrolled = false;	// cTor.
+//	_currentTooltip = "";
 }
 
 
@@ -869,23 +875,30 @@ void BattlescapeState::mapOver(Action* action)
 		_isMouseScrolled = true;
 
 		// Set the mouse cursor back
-		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
-		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+		SDL_EventState(
+					SDL_MOUSEMOTION,
+					SDL_IGNORE);
+		SDL_WarpMouse(
+					static_cast<Uint16>(_xBeforeMouseScrolling),
+					static_cast<Uint16>(_yBeforeMouseScrolling));
+		SDL_EventState(
+					SDL_MOUSEMOTION,
+					SDL_ENABLE);
 
 		// Check the threshold
-		_totalMouseMoveX += action->getDetails()->motion.xrel;
-		_totalMouseMoveY += action->getDetails()->motion.yrel;
+		_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
+		_totalMouseMoveY += static_cast<int>(action->getDetails()->motion.yrel);
 		if (!_mouseMovedOverThreshold)
 			_mouseMovedOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
-										|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
+									|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 		// Scrolling
 		if (Options::dragScrollInvert)
 		{
 			_map->getCamera()->scrollXY(
-									-action->getDetails()->motion.xrel,
-									-action->getDetails()->motion.yrel, false);
+									static_cast<int>(-action->getDetails()->motion.xrel),
+									static_cast<int>(-action->getDetails()->motion.yrel),
+									false);
 		}
 		else
 		{
@@ -897,8 +910,8 @@ void BattlescapeState::mapOver(Action* action)
 		}
 
 		// We don't want to look the mouse-cursor jumping :)
-		action->getDetails()->motion.x = _xBeforeMouseScrolling;
-		action->getDetails()->motion.y = _yBeforeMouseScrolling;
+		action->getDetails()->motion.x = static_cast<Uint16>(_xBeforeMouseScrolling);
+		action->getDetails()->motion.y = static_cast<Uint16>(_yBeforeMouseScrolling);
 
 		_game->getCursor()->handle(action);
 	}
@@ -978,8 +991,10 @@ void BattlescapeState::mapClick(Action* action)
 		if (action->getDetails()->button.button == Options::battleDragScrollButton)
 			_isMouseScrolling = false;
 		else
+		{
 			//Log(LOG_INFO) << ". . isMouseScrolled = FALSE, return";
 			return;
+		}
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
 		if (!_mouseMovedOverThreshold
@@ -990,19 +1005,24 @@ void BattlescapeState::mapClick(Action* action)
 		}
 
 		if (_isMouseScrolled)
+		{
 			//Log(LOG_INFO) << ". . isMouseScrolled == TRUE, return";
 			return;
+		}
 	}
 
 	// right-click aborts walking state
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		if (_battleGame->cancelCurrentAction())
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
+		&& _battleGame->cancelCurrentAction())
+	{
 			//Log(LOG_INFO) << ". . cancelCurrentAction()";
 			return;
+	}
 
 	// don't handle mouseclicks below y=144px, because they are in the buttons area (it overlaps with map surface)
-	int my = int(action->getAbsoluteYMouse());
-	int mx = int(action->getAbsoluteXMouse());
+	int
+		my = static_cast<int>(action->getAbsoluteYMouse()),
+		mx = static_cast<int>(action->getAbsoluteXMouse());
 	if (my > _icons->getY()
 		&& my < _icons->getY()+_icons->getHeight()
 		&& mx > _icons->getX()
@@ -1044,9 +1064,11 @@ void BattlescapeState::mapClick(Action* action)
 			//Log(LOG_INFO) << ". . secondaryAction(pos) DONE";
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		{
 			//Log(LOG_INFO) << ". . playableUnit NOT Selected()";
 			_battleGame->primaryAction(pos);
 			//Log(LOG_INFO) << ". . primaryAction(pos) DONE";
+		}
 	}
 	//Log(LOG_INFO) << "BattlescapeState::mapClick() EXIT";
 }

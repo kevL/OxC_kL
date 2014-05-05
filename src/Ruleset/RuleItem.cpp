@@ -128,7 +128,7 @@ void RuleItem::load(
 	_type					= node["type"].as<std::string>(_type);
 	_name					= node["name"].as<std::string>(_name);
 	_requires				= node["requires"].as< std::vector<std::string> >(_requires);
-	_size					= node["size"].as<float>(_size);
+	_size					= node["size"].as<double>(_size);
 	_costBuy				= node["costBuy"].as<int>(_costBuy);
 	_costSell				= node["costSell"].as<int>(_costSell);
 	_transferTime			= node["transferTime"].as<int>(_transferTime);
@@ -286,7 +286,7 @@ const std::vector<std::string>& RuleItem::getRequirements() const
  * Gets the amount of space this item takes up in a storage facility.
  * @return, The storage size.
  */
-float RuleItem::getSize() const
+double RuleItem::getSize() const
 {
 	return _size;
 }
