@@ -170,6 +170,8 @@ void ProjectileFlyBState::init()
 		return;
 	}
 	else if (_parent->getPanicHandled()
+		&& _action.type != BA_HIT
+		&& _action.type != BA_STUN
 		&& _unit->getTimeUnits() < _action.TU)
 	{
 		//Log(LOG_INFO) << ". not enough time units, EXIT";
@@ -337,7 +339,10 @@ void ProjectileFlyBState::init()
 
 				return;
 			}
-		break;
+
+			performMeleeAttack();
+			return;
+//		break;
 		case BA_PANIC:
 		case BA_MINDCONTROL:
 			//Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
@@ -363,7 +368,8 @@ void ProjectileFlyBState::init()
 
 
 	if (_action.type == BA_LAUNCH
-		|| (SDL_GetModState() & KMOD_CTRL) != 0
+		|| ((SDL_GetModState() & KMOD_CTRL) != 0
+			&& _parent->getSave()->getSide() == FACTION_PLAYER)
 		|| !_parent->getPanicHandled())
 	{
 		// target nothing, targets the middle of the tile
@@ -769,7 +775,7 @@ void ProjectileFlyBState::think()
 														_action.TU); // kL
 			}
 
-			if (!_action.actor->isOut())
+			if (!_unit->isOut())
 				_unit->setStatus(STATUS_STANDING);
 
 			if (_parent->getSave()->getSide() == FACTION_PLAYER
@@ -1144,6 +1150,60 @@ void ProjectileFlyBState::setOriginVoxel(Position pos)
 void ProjectileFlyBState::targetFloor()
 {
 	_targetFloor = true;
+}
+
+/**
+ *
+ */
+void ProjectileFlyBState::performMeleeAttack()
+{
+	BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
+	int height = target->getFloatHeight() + (target->getHeight() / 2);
+
+	Position voxel;
+	_parent->getSave()->getPathfinding()->directionToVector(
+														_unit->getDirection(),
+														&voxel);
+	voxel = _action.target * Position(16, 16, 24) + Position(
+														8,
+														8,
+														height - _parent->getSave()->getTile(_action.target)->getTerrainLevel())
+													- voxel;
+	// set the soldier in an aiming position
+	_unit->aim(true);
+	_parent->getMap()->cacheUnit(_unit);
+
+	// and we have a lift-off!
+	if (_ammo->getRules()->getFireSound() != -1)
+	{
+		_parent->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										_ammo->getRules()->getFireSound())
+									->play();
+	}
+	else if (_action.weapon->getRules()->getFireSound() != -1)
+	{
+		_parent->getResourcePack()->getSound(
+										"BATTLE.CAT",
+										_action.weapon->getRules()->getFireSound())
+									->play();
+	}
+
+	if (!_parent->getSave()->getDebugMode()
+		&& _action.type != BA_LAUNCH
+		&& _ammo->spendBullet() == false)
+	{
+		_parent->getSave()->removeItem(_ammo);
+		_action.weapon->setAmmoItem(0);
+	}
+
+	_parent->getMap()->setCursorType(CT_NONE);
+
+	_parent->statePushNext(new ExplosionBState(
+											_parent,
+											voxel,
+											_action.weapon,
+											_action.actor));
 }
 
 }

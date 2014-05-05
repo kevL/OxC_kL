@@ -22,6 +22,7 @@
 #include <sstream>
 
 #include "SackSoldierState.h"
+#include "SellState.h"
 #include "SoldierArmorState.h"
 
 #include "../Engine/Action.h"
@@ -36,6 +37,8 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
+
+#include "../Menu/ErrorMessageState.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -739,6 +742,20 @@ void SoldierInfoState::btnOkClick(Action*)
 //	_edtSoldier->setFocus(false); // kL
 
 	_game->popState();
+	if (Options::storageLimitsEnforced
+		&& _base->storesOverfull())
+	{
+		_game->pushState(new SellState(
+									_game,
+									_base));
+		_game->pushState(new ErrorMessageState(
+											_game,
+											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
+											_palette,
+											Palette::blockOffset(15)+1,
+											"BACK01.SCR",
+											0));
+	}
 }
 
 /**

@@ -24,8 +24,6 @@
 #include <iomanip>
 #include <sstream>
 
-#include "../aresame.h"
-
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -749,7 +747,7 @@ void SellState::changeByValue(
 	_qtys[_sel] += change * dir;
 	_total += getPrice() * change * dir;
 
-	// Calculate the change in storage space in XCom storage units.
+	// Calculate the change in storage space.
 	Craft* craft;
 	RuleItem
 		* armor,
@@ -862,10 +860,10 @@ void SellState::updateItemStrings()
 	} // kL_end.
 
 	ss3 << _base->getUsedStores();
-	if (!AreSame(_spaceChange, 0.0))
+	if (std::abs(_spaceChange) > 0.05)
 	{
 		ss3 << "(";
-		if (_spaceChange > 0.0) ss3 << "+";
+		if (_spaceChange > 0.05) ss3 << "+";
 		ss3 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}
 	ss3 << ":" << _base->getAvailableStores();

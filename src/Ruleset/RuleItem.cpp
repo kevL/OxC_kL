@@ -100,6 +100,7 @@ RuleItem::RuleItem(const std::string& type)
 		_shotgunPellets(0),
 		_zombieUnit(""),
 		_strengthApplied(false),
+		_skillApplied(true),
 		_LOSRequired(false),
 		_noReaction(false), // kL
 		_meleeSound(39),
@@ -246,6 +247,7 @@ void RuleItem::load(
 	_shotgunPellets			= node["shotgunPellets"].as<int>(_shotgunPellets);
 	_zombieUnit				= node["zombieUnit"].as<std::string>(_zombieUnit);
 	_strengthApplied		= node["strengthApplied"].as<bool>(_strengthApplied);
+	_skillApplied			= node["skillApplied"].as<bool>(_skillApplied);
 	_LOSRequired			= node["LOSRequired"].as<bool>(_LOSRequired);
 	_noReaction				= node["noReaction"].as<bool>(_noReaction); // kL
 	_meleePower				= node["meleePower"].as<int>(_meleePower);
@@ -880,13 +882,22 @@ std::string RuleItem::getZombieUnit() const
 }
 
 /**
- * Used to determine if melee damage is based on a unit's strength
- * instead of the melee-item damage rule.
- * @return, bool True if melee damage is based on unit's Strength
+ * Used to determine if a unit's strength is added to melee damage.
+ * @return, True if unit strength is added to melee damage.
  */
 bool RuleItem::isStrengthApplied() const
 {
 	return _strengthApplied;
+}
+
+/**
+ * Used to determine if skill is applied to the accuracy of this weapon.
+ * This applies only to melee weapons.
+ * @return, True if skill is applied to accuracy.
+ */
+bool RuleItem::isSkillApplied() const
+{
+	return _skillApplied;
 }
 
 /**

@@ -158,6 +158,7 @@ private:
 	std::string _zombieUnit;
 	bool
 		_LOSRequired,
+		_skillApplied,
 		_strengthApplied;
 
 	public:
@@ -340,6 +341,8 @@ private:
 
 		/// Gets if strength should be applied to the damage of this weapon.
 		bool isStrengthApplied() const;
+		/// Is skill applied to the damage of this weapon?
+		bool isSkillApplied() const;
 
 		/// kL. Used to determine if a weapon is capable of Reaction Fire.
 		bool canReactionFire() const; // kL

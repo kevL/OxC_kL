@@ -1053,7 +1053,10 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-					BattleUnit* target = _save->getTile(_currentAction.target)->getUnit();
+					statePushBack(new ProjectileFlyBState(this, _currentAction));
+
+					return;
+/*					BattleUnit* target = _save->getTile(_currentAction.target)->getUnit();
 					int height = target->getFloatHeight() + (target->getHeight() / 2);
 					Position voxel = _currentAction.target * Position(16, 16, 24)
 									+ Position(
@@ -1064,7 +1067,7 @@ void BattlescapeGame::handleNonTargetAction()
 													this,
 													voxel,
 													_currentAction.weapon,
-													_currentAction.actor));
+													_currentAction.actor)); */ // kL
 				}
 				else
 					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");

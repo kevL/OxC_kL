@@ -25,8 +25,6 @@
 #include <iomanip>
 #include <sstream>
 
-#include "../aresame.h"
-
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -863,7 +861,7 @@ void PurchaseState::increaseByValue(int change)
 
 			if (!AreSame(storesNeededPerItem, 0.0))
 			{
-				maxByStores = freeStores / storesNeededPerItem;
+				maxByStores = (freeStores + 0.05) / storesNeededPerItem;
 			}
 
 			change = std::min(
@@ -952,10 +950,10 @@ void PurchaseState::updateItemStrings()
 	}
 
 	ss1 << _base->getUsedStores();
-	if (!AreSame(_iQty, 0.0))
+	if (std::abs(_iQty) > 0.05)
 	{
 		ss1 << "(";
-		if (_iQty > 0.0) ss1 << "+";
+		if (_iQty > 0.05) ss1 << "+";
 		ss1 << std::fixed << std::setprecision(1) << _iQty << ")";
 	}
 	ss1 << ":" << _base->getAvailableStores();

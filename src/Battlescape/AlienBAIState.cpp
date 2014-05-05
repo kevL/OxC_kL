@@ -396,6 +396,8 @@ void AlienBAIState::think(BattleAction* action)
 	{
 		case AI_ESCAPE:
 			//Log(LOG_INFO) << ". . . . AI_ESCAPE";
+			_unit->setCharging(0);
+
 			action->type		= _escapeAction->type;
 			action->target		= _escapeAction->target;
 			action->finalAction	= true;			// end this unit's turn.
@@ -408,6 +410,8 @@ void AlienBAIState::think(BattleAction* action)
 		break;
 		case AI_PATROL:
 			//Log(LOG_INFO) << ". . . . AI_PATROL";
+			_unit->setCharging(0);
+
 			action->type	= _patrolAction->type;
 			action->target	= _patrolAction->target;
 		break;
@@ -446,12 +450,14 @@ void AlienBAIState::think(BattleAction* action)
 		break;
 		case AI_AMBUSH:
 			//Log(LOG_INFO) << ". . . . AI_AMBUSH";
+			_unit->setCharging(0);
+
 			action->type		= _ambushAction->type;
 			action->target		= _ambushAction->target;
-			action->finalFacing	= _ambushAction->finalFacing;			// face where we think our target will appear.
-			action->finalAction	= true;									// end this unit's turn.
+			action->finalFacing	= _ambushAction->finalFacing;		// face where we think our target will appear.
+			action->finalAction	= true;								// end this unit's turn.
 
-			_save->getBattleGame()->setTUReserved(BA_NONE, false);		// we've factored in the reserved TUs already, so don't worry.
+			_save->getBattleGame()->setTUReserved(BA_NONE, false);	// we've factored in the reserved TUs already, so don't worry.
 		break;
 
 		default:

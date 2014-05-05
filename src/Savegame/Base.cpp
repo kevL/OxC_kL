@@ -855,7 +855,7 @@ double Base::getUsedStores()
  * Supplying an offset will add/subtract to the used capacity before performing the check.
  * A positive offset simulates adding items to the stores, whereas a negative offset
  * can be used to check whether sufficient items have been removed to stop the stores overflowing.
- * @param offset Adjusts the used capacity, expressed in tenths of an XCom storage unit.
+ * @param offset Adjusts the used capacity.
  */
 bool Base::storesOverfull(double offset)
 {
@@ -2802,7 +2802,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
 		if (!_transfers.empty()
-			&& getAvailableStores() - static_cast<int>(floor(getUsedStores() + 0.05)) - (*facility)->getRules()->getStorage() < 0)
+			&& storesOverfull((*facility)->getRules()->getStorage()))
 		{
 			for (std::vector<Transfer*>::iterator
 					i = _transfers.begin();

@@ -1181,7 +1181,7 @@ void TransferItemsState::increaseByValue(int change)
 				freeStoresForItem = DBL_MAX;
 
 			if (!AreSame(storesNeededPerItem, 0.0))
-				freeStoresForItem = freeStores / storesNeededPerItem;
+				freeStoresForItem = (freeStores + 0.05) / storesNeededPerItem;
 
 			change = std::min(
 							std::min(

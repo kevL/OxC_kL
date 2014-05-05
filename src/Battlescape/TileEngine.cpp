@@ -2196,10 +2196,12 @@ BattleUnit* TileEngine::hit(
 				if (buTarget->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not.
 					&& attacker											// shooter exists
 					&& attacker->getOriginalFaction() == FACTION_PLAYER	// shooter is Xcom
-					&& attacker->getFaction() == FACTION_PLAYER)		// shooter is not Mc'd Xcom
-//					&& type != DT_NONE)
+					&& attacker->getFaction() == FACTION_PLAYER			// shooter is not Mc'd Xcom
+//					&& type != DT_NONE
+					&& _save->getBattleGame()->getCurrentAction()->type != BA_HIT
+					&& _save->getBattleGame()->getCurrentAction()->type != BA_STUN)
 				{
-					//Log(LOG_INFO) << ". . addFiringExp() - huh, even for Melee?";
+					//Log(LOG_INFO) << ". . addFiringExp() - huh, even for Melee?"; // okay they're working on it ...
 					// kL_note: with my workaround for Stunrods above, this needs to check
 					// whether a StunLauncher fires or a melee attack has been done, and
 					// Exp altered accordingly:

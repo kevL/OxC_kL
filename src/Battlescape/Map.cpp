@@ -738,7 +738,8 @@ void Map::drawTerrain(Surface* surface)
 						if (bu
 							&& bu->getVisible()
 							&& bu->getStatus() == STATUS_WALKING
-							&& bu->getArmor()->getSize() != 1)
+							&& bu->getArmor()->getSize() != 1
+							&& tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
 						{
 							Position tileOffset = Position(16,-8, 0);
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
@@ -970,7 +971,9 @@ void Map::drawTerrain(Surface* surface)
 										tmpSurface->blitNShade(
 															surface,
 															screenPosition.x - tileOffset.x,
-															screenPosition.y + tileOffset.y,
+															screenPosition.y + tileOffset.y + getTerrainLevel(
+																										westUnit->getPosition(),
+																										westUnit->getArmor()->getSize()),
 															tileWestShade,
 															true);
 
@@ -981,7 +984,9 @@ void Map::drawTerrain(Surface* surface)
 											tmpSurface->blitNShade(
 																surface,
 																screenPosition.x - tileOffset.x,
-																screenPosition.y + tileOffset.y,
+																screenPosition.y + tileOffset.y + getTerrainLevel(
+																											westUnit->getPosition(),
+																											westUnit->getArmor()->getSize()),
 																0);
 										}
 									}

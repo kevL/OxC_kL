@@ -208,7 +208,7 @@ void ExplosionBState::init()
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
 
-//kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 3);
+//kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // kL
 
 			if (_power < 76)
@@ -320,6 +320,35 @@ void ExplosionBState::explode()
 	//Log(LOG_INFO) << "ExplosionBState::explode()";
 //kL	SavedBattleGame* save = _parent->getSave();
 	TileEngine* tileEngine = _parent->getSave()->getTileEngine(); // kL
+
+	// last minute adjustment: determine if we actually
+	if (_parent->getCurrentAction()->type == BA_HIT
+		|| _parent->getCurrentAction()->type == BA_STUN)
+	{
+		if (_unit
+			&& !_unit->isOut())
+		{
+			_unit->aim(false);
+		}
+
+		BattleUnit* targetUnit = _parent->getSave()->getTile(_center / Position(16, 16, 24))->getUnit();
+		if (!RNG::percent(static_cast<int>(_unit->getFiringAccuracy(
+												_parent->getCurrentAction()->type,
+												_item)
+											* 100.0)))
+		{
+			_parent->getMap()->cacheUnits();
+			_parent->popState();
+
+			return;
+		}
+		else if (targetUnit
+			&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
+			&& _unit->getOriginalFaction() == FACTION_PLAYER)
+		{
+			_unit->addMeleeExp();
+		}
+	}
 
 	if (_item)
 	{
