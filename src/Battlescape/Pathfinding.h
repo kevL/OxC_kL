@@ -55,6 +55,8 @@ private:
 	MovementType _movementType;
 	SavedBattleGame* _save;
 
+	std::vector<int> _path;
+
 	std::vector<PathfindingNode> _nodes;
 
 	/// Gets the node at a position.
@@ -108,8 +110,6 @@ private:
 			BIGWALLSOUTH,		// 7
 			BIGWALLEASTANDSOUTH	// 8
 		};
-
-		std::vector<int> _path;
 
 
 		/// cTor
@@ -191,6 +191,11 @@ private:
 
 		/// Gets the modifier setting.
 		bool isModifierUsed() const;
+
+		/// Gets a reference to the path.
+		const std::vector<int>& getPath();
+		/// Makes a copy to the path.
+		std::vector<int> copyPath() const;
 };
 
 }

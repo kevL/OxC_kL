@@ -4681,7 +4681,7 @@
 1394398507 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1399319597 f:\git\openxcom\src\ruleset\ruleitem.h
+1399376503 f:\git\openxcom\src\ruleset\ruleitem.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -4842,7 +4842,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1399007142 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1399376607 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -5368,7 +5368,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1399317968 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1399376652 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SackSoldierState.h"
@@ -5670,7 +5670,7 @@
 1397875679 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1397875780 f:\git\openxcom\src\battlescape\pathfinding.h
+1399377745 f:\git\openxcom\src\battlescape\pathfinding.h
 	<vector>
 	"PathfindingNode.h"
 	"Position.h"
@@ -5701,7 +5701,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1399318166 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1399379173 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -9209,7 +9209,7 @@
 	<cmath>
 	"RuleItem.h"
 
-1399015755 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1399319899 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Surface.h"
@@ -9349,7 +9349,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1399144559 source:f:\git\openxcom\src\savegame\base.cpp
+1399320037 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>

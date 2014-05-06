@@ -240,7 +240,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		return;
 	}
 
-	if (unit->getMainHandWeapon()
+/*	if (unit->getMainHandWeapon()
 		&& unit->getMainHandWeapon()->getRules()->getBattleType() == BT_FIREARM)
 	{
 		switch (unit->getAggression())
@@ -257,9 +257,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			default:
 			break;
 		}
-	}
+	} */ // kL, was moved to the aLienAI class.
 	//Log(LOG_INFO) << ". aggressionReserved DONE";
-
 
 	unit->setVisible(false);
 

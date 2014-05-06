@@ -339,9 +339,9 @@ private:
 		/// Gets a weapon's zombie unit, if any.
 		std::string getZombieUnit() const;
 
-		/// Gets if strength should be applied to the damage of this weapon.
+		/// Gets if strength should be applied to the damage of this melee weapon.
 		bool isStrengthApplied() const;
-		/// Is skill applied to the damage of this weapon?
+		/// Gets if skill is applied to the accuracy of this melee weapon.
 		bool isSkillApplied() const;
 
 		/// kL. Used to determine if a weapon is capable of Reaction Fire.

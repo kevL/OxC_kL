@@ -286,7 +286,8 @@ void CraftsState::btnOkClick(Action*)
 {
 	_game->popState();
 
-	if (Options::storageLimitsEnforced
+	if (_game->getSavedGame()->getMonthsPassed() > -1
+		&& Options::storageLimitsEnforced
 		&& _base->storesOverfull())
 	{
 		_game->pushState(new SellState(

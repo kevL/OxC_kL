@@ -467,14 +467,14 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, Done";
 
 							if ((visUnit->getFaction() == FACTION_HOSTILE
-									&& unit->getFaction() != FACTION_HOSTILE)	// kL_note: or not Neutral?
+									&& unit->getFaction() == FACTION_PLAYER)
 								|| (visUnit->getFaction() != FACTION_HOSTILE
-									&& unit->getFaction() == FACTION_HOSTILE))	// kL_note: what about Mc'd spooters?
+									&& unit->getFaction() == FACTION_HOSTILE))
 							{
 								//Log(LOG_INFO) << ". . . opposite Factions, add Tile & visUnit to visList";
 
 								// adds visUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
-								unit->addToVisibleUnits(visUnit); // kL_note: This returns a boolean; i can use that......
+								unit->addToVisibleUnits(visUnit); // kL_note: This returns a boolean; i can use that...... yeah, done & done.
 								unit->addToVisibleTiles(visUnit->getTile());
 
 								if (unit->getFaction() == FACTION_HOSTILE
@@ -483,7 +483,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 								{
 									//Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
 									visUnit->setTurnsExposed(0);	// note that xCom can be seen by enemies but *not* be Exposed. hehe
-																		// Only reactionFire should set them Exposed during xCom's turn.
+																	// Only reactionFire should set them Exposed during xCom's turn.
 								}
 							}
 							//Log(LOG_INFO) << ". . calculateFOV(), opposite Factions, Done";
