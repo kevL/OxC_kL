@@ -112,6 +112,8 @@ private:
 		_hitAnimation,
 		_meleeSound,
 		_meleePower,
+		_meleeAnimation,
+		_meleeHitSound,
 		_power,
 		_shotgunPellets,
 
@@ -347,10 +349,14 @@ private:
 		/// kL. Used to determine if a weapon is capable of Reaction Fire.
 		bool canReactionFire() const; // kL
 
+		/// Gets the sound this weapon makes when you swing it at someone.
+		int getMeleeAttackSound() const;
 		/// Gets the sound this weapon makes when you punch someone in the face with it.
-		int getMeleeSound() const;
+		int getMeleeHitSound() const;
 		/// Ok, so this isn't a melee type weapon but we're using it for melee anyway... Get its melee damage.
 		int getMeleePower() const;
+		/// Get the melee animation starting frame (comes from hit.pck).
+		int getMeleeAnimation() const;
 
 		/// Check if LOS is required to use this item (only applies to psionic type items)
 		bool isLOSRequired() const;

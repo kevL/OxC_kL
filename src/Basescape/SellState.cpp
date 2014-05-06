@@ -726,7 +726,7 @@ void SellState::changeByValue(
 		int change,
 		int dir)
 {
-	Log(LOG_INFO) << "changeByValue()";
+	//Log(LOG_INFO) << "changeByValue()";
 
 	if (change < 1)
 		return;
@@ -771,36 +771,39 @@ void SellState::changeByValue(
 			}
 		break;
 		case SELL_CRAFT:
-			Log(LOG_INFO) << ". SELL_CRAFT";
+			//Log(LOG_INFO) << ". SELL_CRAFT";
 
 			craft = _crafts[getCraftIndex(_sel)];
-			Log(LOG_INFO) << ". craft = " << getCraftIndex(_sel);
+			//Log(LOG_INFO) << ". craft = " << getCraftIndex(_sel);
 
 			for (std::vector<CraftWeapon*>::iterator
 					w = craft->getWeapons()->begin();
 					w != craft->getWeapons()->end();
 					++w)
 			{
-				Log(LOG_INFO) << ". . iter";
+				//Log(LOG_INFO) << ". . iter";
 
-				weapRule = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
-				Log(LOG_INFO) << ". . weapRule done";
+				if (*w != 0) // kL, Cheers
+				{
+					weapRule = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
+					//Log(LOG_INFO) << ". . weapRule done";
 
-//				if (weapRule) // kL, but shouldn't beneeded.
-				space += weapRule->getSize();
-				Log(LOG_INFO) << ". . space[1] = " << space;
+//					if (weapRule) // kL, but shouldn't beneeded.
+					space += weapRule->getSize();
+					//Log(LOG_INFO) << ". . space[1] = " << space;
 
-				ammoRule = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
-				Log(LOG_INFO) << ". . ammoRule done";
+					ammoRule = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
+					//Log(LOG_INFO) << ". . ammoRule done";
 
-				if (ammoRule)
-					space += static_cast<double>((*w)->getClipsLoaded(_game->getRuleset())) * ammoRule->getSize();
-				Log(LOG_INFO) << ". . space[2] = " << space;
+					if (ammoRule)
+						space += static_cast<double>((*w)->getClipsLoaded(_game->getRuleset())) * ammoRule->getSize();
+					//Log(LOG_INFO) << ". . space[2] = " << space;
+				}
 			}
-			Log(LOG_INFO) << ". iter done";
+			//Log(LOG_INFO) << ". iter done";
 
 			_spaceChange += static_cast<double>(dir) * space;
-			Log(LOG_INFO) << ". SELL_CRAFT done";
+			//Log(LOG_INFO) << ". SELL_CRAFT done";
 		break;
 		case SELL_ITEM:
 			itemRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
@@ -814,7 +817,7 @@ void SellState::changeByValue(
 	}
 
 	updateItemStrings();
-	Log(LOG_INFO) << "changeByValue() EXIT";
+	//Log(LOG_INFO) << "changeByValue() EXIT";
 }
 
 /**

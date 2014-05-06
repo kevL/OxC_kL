@@ -1169,23 +1169,26 @@ void ProjectileFlyBState::performMeleeAttack()
 														8,
 														height - _parent->getSave()->getTile(_action.target)->getTerrainLevel())
 													- voxel;
-	// set the soldier in an aiming position
-	_unit->aim(true);
+
+	_unit->aim(true); // set the soldier in an aiming position
 	_parent->getMap()->cacheUnit(_unit);
 
-	// and we have a lift-off!
-	if (_ammo->getRules()->getFireSound() != -1)
+	if (_ammo->getRules()->getMeleeAttackSound() != -1) // and we have a lift-off!
+//	if (_ammo->getRules()->getFireSound() != -1) // kL
 	{
 		_parent->getResourcePack()->getSound(
 										"BATTLE.CAT",
-										_ammo->getRules()->getFireSound())
+										_ammo->getRules()->getMeleeAttackSound())
+//										_ammo->getRules()->getFireSound()) // kL
 									->play();
 	}
-	else if (_action.weapon->getRules()->getFireSound() != -1)
+	else if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
+//	else if (_action.weapon->getRules()->getFireSound() != -1) // kL
 	{
 		_parent->getResourcePack()->getSound(
 										"BATTLE.CAT",
-										_action.weapon->getRules()->getFireSound())
+										_action.weapon->getRules()->getMeleeAttackSound())
+//										_action.weapon->getRules()->getFireSound()) // kL
 									->play();
 	}
 

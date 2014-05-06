@@ -104,7 +104,9 @@ RuleItem::RuleItem(const std::string& type)
 		_LOSRequired(false),
 		_noReaction(false), // kL
 		_meleeSound(39),
-		_meleePower(0)
+		_meleePower(0),
+		_meleeAnimation(0),
+		_meleeHitSound(-1)
 {
 }
 
@@ -190,6 +192,20 @@ void RuleItem::load(
 		_hitAnimation		= node["hitAnimation"].as<int>(_hitAnimation);
 		if (_hitAnimation > 55) // SMOKE.PCK: 56 entries
 			_hitAnimation	+= modIndex;
+	}
+
+	if (node["meleeAnimation"])
+	{
+		_meleeAnimation		= node["meleeAnimation"].as<int>(_meleeAnimation);
+		if (_meleeAnimation > 3) // HIT.PCK: 4 entries
+			_meleeAnimation	+= modIndex;
+	}
+
+	if (node["meleeHitSound"])
+	{
+		_meleeHitSound		= node["meleeHitSound"].as<int>(_meleeHitSound);
+		if (_meleeHitSound > 54) // BATTLE.CAT: 55 entries
+			_meleeHitSound	+= modIndex;
 	}
 
 	_power					= node["power"].as<int>(_power);
@@ -910,12 +926,21 @@ bool RuleItem::canReactionFire() const // kL
 }
 
 /**
- * The sound this weapon makes when you punch someone in the face with it.
- * @return, The weapon's melee sound.
+ * The sound this weapon makes when you swing it at someone.
+ * @return, The weapon's melee attack sound.
  */
-int RuleItem::getMeleeSound() const
+int RuleItem::getMeleeAttackSound() const
 {
 	return _meleeSound;
+}
+
+/**
+ * The sound this weapon makes when you punch someone in the face with it.
+ * @return, The weapon's melee hit sound.
+ */
+int RuleItem::getMeleeHitSound() const
+{
+	return _meleeHitSound;
 }
 
 /**
@@ -925,6 +950,15 @@ int RuleItem::getMeleeSound() const
 int RuleItem::getMeleePower() const
 {
 	return _meleePower;
+}
+
+/**
+ * The starting frame offset in hit.pck to use for the animation.
+ * @return, The starting frame offset in hit.pck to use for the animation.
+ */
+int RuleItem::getMeleeAnimation() const
+{
+	return _meleeAnimation;
 }
 
 /**

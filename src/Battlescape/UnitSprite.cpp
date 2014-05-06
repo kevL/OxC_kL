@@ -1287,9 +1287,9 @@ void UnitSprite::drawRoutine6()
 		}
 		else
 		{
-			itemA = _itemSurfaceB->getFrame(_itemA->getRules()->getHandSprite() + _unit->getDirection());
+			itemA = _itemSurfaceA->getFrame(_itemA->getRules()->getHandSprite() + _unit->getDirection());
 			itemA->setX(0);
-			itemA->setY(0);
+			itemA->setY(1);
 		}
 
 		// draw arms holding the item
@@ -1333,7 +1333,7 @@ void UnitSprite::drawRoutine6()
 		else
 		{
 			itemB->setX(0);
-			itemB->setY(0);
+			itemB->setY(1);
 			rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection());
 		}
 

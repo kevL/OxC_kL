@@ -75,8 +75,8 @@ namespace OpenXcom
 
 bool kL_reCenter = false;
 
-const double Globe::ROTATE_LONGITUDE	= 0.1;	// was, 0.25
-const double Globe::ROTATE_LATITUDE		= 0.06;	// was, 0.15
+const double Globe::ROTATE_LONGITUDE	= 0.007;
+const double Globe::ROTATE_LATITUDE		= 0.007;
 
 namespace
 {

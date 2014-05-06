@@ -994,6 +994,8 @@ void BattlescapeGame::handleNonTargetAction()
 
 	if (!_currentAction.targeting)
 	{
+		_currentAction.cameraPosition = Position(0, 0,-1);
+
 		if (_currentAction.type == BA_PRIME
 			&& _currentAction.value > -1)
 		{
