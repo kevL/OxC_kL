@@ -953,7 +953,8 @@ void PurchaseState::updateItemStrings()
 	if (std::abs(_iQty) > 0.05)
 	{
 		ss1 << "(";
-		if (_iQty > 0.05) ss1 << "+";
+		if (_iQty > 0.0) ss1 << "+"; // kL, >.05 already established; that just re-introduced a rounding error:
+//kL		if (_iQty > 0.05) ss1 << "+";
 		ss1 << std::fixed << std::setprecision(1) << _iQty << ")";
 	}
 	ss1 << ":" << _base->getAvailableStores();

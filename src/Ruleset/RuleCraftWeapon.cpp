@@ -29,19 +29,19 @@ namespace OpenXcom
  */
 RuleCraftWeapon::RuleCraftWeapon(const std::string& type)
 	:
-	_type(type),
-	_sprite(-1),
-	_sound(-1),
-	_damage(0),
-	_range(0),
-	_accuracy(0),
-	_reloadCautious(0),
-	_reloadStandard(0),
-	_reloadAggressive(0),
-	_ammoMax(0),
-	_rearmRate(1),
-	_projectileSpeed(0),
-	_projectileType(CWPT_CANNON_ROUND)
+		_type(type),
+		_sprite(-1),
+		_sound(-1),
+		_damage(0),
+		_range(0),
+		_accuracy(0),
+		_reloadCautious(0),
+		_reloadStandard(0),
+		_reloadAggressive(0),
+		_ammoMax(0),
+		_rearmRate(1),
+		_projectileSpeed(0),
+		_projectileType(CWPT_CANNON_ROUND)
 {
 }
 
@@ -219,7 +219,7 @@ std::string RuleCraftWeapon::getClipItem() const
 }
 
 /**
- * Gets the Projectile Type this weapon will fire
+ * Gets the Projectile Type this weapon will fire.
  * @return The projectile type.
  */
 CraftWeaponProjectileType RuleCraftWeapon::getProjectileType() const
@@ -228,7 +228,7 @@ CraftWeaponProjectileType RuleCraftWeapon::getProjectileType() const
 }
 
 /**
- * Gets the speed of the projectile fired by this weapon
+ * Gets the speed of the projectile fired by this weapon.
  * @return The projectile speed.
  */
 int RuleCraftWeapon::getProjectileSpeed() const

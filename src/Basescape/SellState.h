@@ -95,10 +95,10 @@ private:
 		* _timerInc;
 	Window* _window;
 
-	std::vector<int> _qtys;
-	std::vector<std::string> _items;
-	std::vector<Craft*> _crafts;
-	std::vector<Soldier*> _soldiers;
+	std::vector<int>			_qtys;
+	std::vector<std::string>	_items;
+	std::vector<Craft*>			_crafts;
+	std::vector<Soldier*>		_soldiers;
 
 	/// Gets selected price.
 	int getPrice();

@@ -27,6 +27,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
@@ -613,6 +614,9 @@ void SellState::lstItemsRightArrowClick(Action* action)
  */
 void SellState::lstItemsMousePress(Action* action)
 {
+	if (Options::changeValueByMouseWheel < 1)	// kL
+		return;									// kL
+
 	_sel = _lstItems->getSelectedRow();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
@@ -722,6 +726,8 @@ void SellState::changeByValue(
 		int change,
 		int dir)
 {
+	Log(LOG_INFO) << "changeByValue()";
+
 	if (change < 1)
 		return;
 
@@ -747,44 +753,58 @@ void SellState::changeByValue(
 	_qtys[_sel] += change * dir;
 	_total += getPrice() * change * dir;
 
-	// Calculate the change in storage space.
 	Craft* craft;
 	RuleItem
-		* armor,
-		* item,
-		* weapon,
-		* ammo;
-	double total = 0.0;
+		* armorRule,
+		* itemRule,
+		* weapRule,
+		* ammoRule;
+	double space = 0.0;
 
-	switch (getType(_sel))
+	switch (getType(_sel)) // Calculate the change in storage space.
 	{
 		case SELL_SOLDIER:
 			if (_soldiers[_sel]->getArmor()->getStoreItem() != "STR_NONE")
 			{
-				armor = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
-				_spaceChange += static_cast<double>(dir) * armor->getSize();
+				armorRule = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
+				_spaceChange += static_cast<double>(dir) * armorRule->getSize();
 			}
 		break;
 		case SELL_CRAFT:
+			Log(LOG_INFO) << ". SELL_CRAFT";
+
 			craft = _crafts[getCraftIndex(_sel)];
+			Log(LOG_INFO) << ". craft = " << getCraftIndex(_sel);
+
 			for (std::vector<CraftWeapon*>::iterator
 					w = craft->getWeapons()->begin();
 					w != craft->getWeapons()->end();
 					++w)
 			{
-				weapon = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
-				total += weapon->getSize();
+				Log(LOG_INFO) << ". . iter";
 
-				ammo = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
-				if (ammo)
-					total += static_cast<double>((*w)->getClipsLoaded(_game->getRuleset())) * ammo->getSize();
+				weapRule = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
+				Log(LOG_INFO) << ". . weapRule done";
+
+//				if (weapRule) // kL, but shouldn't beneeded.
+				space += weapRule->getSize();
+				Log(LOG_INFO) << ". . space[1] = " << space;
+
+				ammoRule = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
+				Log(LOG_INFO) << ". . ammoRule done";
+
+				if (ammoRule)
+					space += static_cast<double>((*w)->getClipsLoaded(_game->getRuleset())) * ammoRule->getSize();
+				Log(LOG_INFO) << ". . space[2] = " << space;
 			}
+			Log(LOG_INFO) << ". iter done";
 
-			_spaceChange += static_cast<double>(dir) * total;
+			_spaceChange += static_cast<double>(dir) * space;
+			Log(LOG_INFO) << ". SELL_CRAFT done";
 		break;
 		case SELL_ITEM:
-			item = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-			_spaceChange -= static_cast<double>(dir * change) * item->getSize();
+			itemRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
+			_spaceChange -= static_cast<double>(dir * change) * itemRule->getSize();
 		break;
 
 //		case SELL_ENGINEER:
@@ -794,6 +814,7 @@ void SellState::changeByValue(
 	}
 
 	updateItemStrings();
+	Log(LOG_INFO) << "changeByValue() EXIT";
 }
 
 /**
@@ -801,6 +822,7 @@ void SellState::changeByValue(
  */
 void SellState::updateItemStrings()
 {
+	//Log(LOG_INFO) << "updateItemStrings()";
 	std::wostringstream
 		ss,
 		ss2,
@@ -863,7 +885,8 @@ void SellState::updateItemStrings()
 	if (std::abs(_spaceChange) > 0.05)
 	{
 		ss3 << "(";
-		if (_spaceChange > 0.05) ss3 << "+";
+		if (_spaceChange > 0.0) ss3 << "+"; // kL, >.05 already established; that just re-introduced a rounding error:
+//kL		if (_spaceChange > 0.05) ss3 << "+";
 		ss3 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}
 	ss3 << ":" << _base->getAvailableStores();
@@ -875,6 +898,8 @@ void SellState::updateItemStrings()
 				&& !_base->storesOverfull(_spaceChange);
 
 	_btnOk->setVisible(okVis); // kL
+
+	//Log(LOG_INFO) << "updateItemStrings() EXIT";
 }
 
 /**

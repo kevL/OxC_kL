@@ -128,11 +128,9 @@ CraftWeaponsState::CraftWeaponsState(
 	_lstWeapons->setSelectable(true);
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setMargin(8);
-
 	_lstWeapons->addRow(
 						1,
 						tr("STR_NONE_UC").c_str());
-
 	_weapons.push_back(0);
 
 	const std::vector<std::string>& weapons = _game->getRuleset()->getCraftWeaponsList();
@@ -163,7 +161,6 @@ CraftWeaponsState::CraftWeaponsState(
 								ss2.str().c_str());
 		}
 	}
-
 	_lstWeapons->onMouseClick((ActionHandler)& CraftWeaponsState::lstWeaponsClick);
 }
 
