@@ -727,7 +727,6 @@ void SellState::changeByValue(
 		int dir)
 {
 	//Log(LOG_INFO) << "changeByValue()";
-
 	if (change < 1)
 		return;
 
@@ -772,10 +771,8 @@ void SellState::changeByValue(
 		break;
 		case SELL_CRAFT:
 			//Log(LOG_INFO) << ". SELL_CRAFT";
-
 			craft = _crafts[getCraftIndex(_sel)];
 			//Log(LOG_INFO) << ". craft = " << getCraftIndex(_sel);
-
 			for (std::vector<CraftWeapon*>::iterator
 					w = craft->getWeapons()->begin();
 					w != craft->getWeapons()->end();
@@ -787,14 +784,12 @@ void SellState::changeByValue(
 				{
 					weapRule = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
 					//Log(LOG_INFO) << ". . weapRule done";
-
 //					if (weapRule) // kL, but shouldn't beneeded.
 					space += weapRule->getSize();
 					//Log(LOG_INFO) << ". . space[1] = " << space;
 
 					ammoRule = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
 					//Log(LOG_INFO) << ". . ammoRule done";
-
 					if (ammoRule)
 						space += static_cast<double>((*w)->getClipsLoaded(_game->getRuleset())) * ammoRule->getSize();
 					//Log(LOG_INFO) << ". . space[2] = " << space;
@@ -901,7 +896,6 @@ void SellState::updateItemStrings()
 				&& !_base->storesOverfull(_spaceChange);
 
 	_btnOk->setVisible(okVis); // kL
-
 	//Log(LOG_INFO) << "updateItemStrings() EXIT";
 }
 
