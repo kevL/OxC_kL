@@ -339,7 +339,7 @@ Globe::Globe(
 	_blinkTimer->onTimer((SurfaceHandler)& Globe::blink);
 	_blinkTimer->start();
 
-//kL	_rotTimer = new Timer(Options::globeScrollSpeed);
+//kL	_rotTimer = new Timer(Options::geoScrollSpeed);
 //kL	_rotTimer->onTimer((SurfaceHandler)& Globe::rotate);
 
 	// Globe markers
@@ -2506,7 +2506,7 @@ void Globe::mouseOver(Action* action, State* state)
 			// the mouse-release event is missed for any reason.
 			// (checking: is the dragScroll-mouse-button still pressed?)
 			// However if the SDL is also missed the release event, then it is to no avail :(
-			if ((SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+			if ((SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::geoDragScrollButton)) == 0)
 			{
 				// so we missed again the mouse-release :(
 				// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
@@ -2593,7 +2593,7 @@ void Globe::mousePress(Action* action, State* state)
 	if (lat == lat // Check for errors
 		&& lon == lon)
 	{
-		if (action->getDetails()->button.button == Options::battleDragScrollButton)
+		if (action->getDetails()->button.button == Options::geoDragScrollButton)
 		{
 			_isMouseScrolling = true;
 			_isMouseScrolled = false;
@@ -2672,8 +2672,8 @@ void Globe::mouseClick(Action* action, State* state)
 		// (this part handles the release if it is missed and now an other button is used)
 		if (_isMouseScrolling)
 		{
-			if (action->getDetails()->button.button != Options::battleDragScrollButton
-				&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+			if (action->getDetails()->button.button != Options::geoDragScrollButton
+				&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::geoDragScrollButton)) == 0)
 			{
 				// so we missed again the mouse-release :(
 				// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
@@ -2693,7 +2693,7 @@ void Globe::mouseClick(Action* action, State* state)
 		if (_isMouseScrolling)
 		{
 			// While scrolling, other buttons are ineffective
-			if (action->getDetails()->button.button == Options::battleDragScrollButton)
+			if (action->getDetails()->button.button == Options::geoDragScrollButton)
 				_isMouseScrolling = false;
 			else
 				return;

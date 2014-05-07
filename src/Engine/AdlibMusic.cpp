@@ -143,8 +143,10 @@ void AdlibMusic::play(int loop) const
 	if (!Options::mute)
 	{
 		stop();
-		func_setup_music((unsigned char*)_data, _size);
-		func_set_music_volume(Options::musicVolume * _volume);
+//kL		func_setup_music((unsigned char*)_data, _size);
+//kL		func_set_music_volume(Options::musicVolume * _volume);
+		func_setup_music(reinterpret_cast<unsigned char*>(_data), static_cast<int>(_size));				// kL
+		func_set_music_volume(static_cast<int>(static_cast<float>(Options::musicVolume) * _volume));	// kL
 		Mix_HookMusic(player, NULL);
 	}
 #endif
@@ -193,7 +195,7 @@ void AdlibMusic::player(
 
 		func_play_tick();
 
-		delay = delayRates[rate]; 
+		delay = delayRates[rate];
 	}
 #endif
 }

@@ -48,19 +48,18 @@ private:
 	static const int LIST_MARGIN;
 	static const int MAX_ITEMS;
 
-	Surface* _arrow;
-	TextButton* _button;
-	TextList* _list;
-	Window* _window;
+	bool _toggled;
+	size_t _sel;
+	Uint8 _color;
 
 	ActionHandler _change;
 
-	bool _toggled;
-	int _sel;
-	Uint8 _color;
-
-	State* _state;
-	Language* _lang;
+	Language	* _lang;
+	State		* _state;
+	Surface		* _arrow;
+	TextButton	* _button;
+	TextList	* _list;
+	Window		* _window;
 
 	///
 	void drawArrow();
@@ -107,10 +106,13 @@ private:
 		/// Sets the high contrast color setting.
 		void setHighContrast(bool contrast);
 
+		/// Sets the arrow color of the text list.
+		void setArrowColor(Uint8 color);
+
 		/// Gets the selected option in the list.
-		int getSelected() const;
+		size_t getSelected() const;
 		/// Sets the selected option in the list.
-		void setSelected(int sel);
+		void setSelected(size_t sel);
 
 		/// Sets the list of options.
 		void setOptions(const std::vector<std::string>& options);

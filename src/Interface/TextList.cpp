@@ -19,6 +19,7 @@
 
 #include "TextList.h"
 
+#include <algorithm>
 #include <cmath>
 #include <cstdarg>
 
@@ -322,7 +323,7 @@ int TextList::getRowY(int row) const
  * Returns the amount of text rows stored in the list.
  * @return, Number of rows.
  */
-int TextList::getTexts() const
+size_t TextList::getTexts() const
 {
 	return _texts.size();
 }
@@ -331,7 +332,7 @@ int TextList::getTexts() const
  * Returns the amount of physical rows stored in the list.
  * @return, Number of rows.
  */
-int TextList::getRows() const
+size_t TextList::getRows() const
 {
 	return _rows.size();
 }
@@ -340,7 +341,7 @@ int TextList::getRows() const
  * Returns the amount of visible rows stored in the list.
  * @return Number of rows.
  */
-int TextList::getVisibleRows() const
+size_t TextList::getVisibleRows() const
 {
 	return _visibleRows;
 }
@@ -711,6 +712,8 @@ void TextList::setHighContrast(bool contrast)
 			(*j)->setHighContrast(contrast);
 		}
 	}
+
+	_scrollbar->setHighContrast(contrast);
 }
 
 /**
@@ -1388,9 +1391,16 @@ int TextList::getScroll()
  * set the scroll depth.
  * @param scroll set the scroll depth to this.
  */
-void TextList::scrollTo(int scroll)
+void TextList::scrollTo(size_t scroll)
 {
-	_scroll = scroll;
+	if (!_scrolling)
+		return;
+
+	_scroll = std::max(
+					0u,
+					std::min(
+						_rows.size() - _visibleRows,
+						scroll));
 
 	draw();
 	updateArrows();

@@ -368,6 +368,7 @@ void State::applyBattlescapeTheme()
 		if (combo)
 		{
 			combo->setColor(Palette::blockOffset(0)-1);
+			combo->setArrowColor(Palette::blockOffset(0));
 			combo->setHighContrast(true);
 		}
 	}
