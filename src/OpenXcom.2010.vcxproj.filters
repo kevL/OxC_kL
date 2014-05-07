@@ -865,6 +865,9 @@
     <ClCompile Include="Engine\Adlib\fmopl.cpp">
       <Filter>Engine\Adlib</Filter>
     </ClCompile>
+    <ClCompile Include="Interface\ScrollBar.cpp">
+      <Filter>Interface</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1749,6 +1752,9 @@
     <ClInclude Include="Engine\AdlibMusic.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Interface\ScrollBar.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
@@ -1789,9 +1795,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\media\openxcom.ico" />
+    <ResourceCompile Include="OpenXcom.rc" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="OpenXcom.rc" />
+    <None Include="..\res\windows\openxcom.ico" />
   </ItemGroup>
 </Project>

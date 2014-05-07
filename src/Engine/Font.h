@@ -73,6 +73,11 @@ private:
 		{
 			return (c == L' ' || c == L'\xA0');
 		}
+		/// Checks if a character is a word separator.
+		static inline bool isSeparator(wchar_t c)
+		{
+			return (c == L'-' || c == '/');
+		}
 		/// Checks if a character is a non-breaking space.
 		static inline bool isNonBreakableSpace(wchar_t c)
 		{

@@ -4604,7 +4604,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1398447692 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
+1399464928 source:f:\git\openxcom\src\basescape\buildfacilitiesstate.cpp
 	"BuildFacilitiesState.h"
 	"PlaceFacilityState.h"
 	"../Engine/Game.h"
@@ -4623,7 +4623,7 @@
 1394398507 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1398834089 f:\git\openxcom\src\interface\textlist.h
+1399465613 f:\git\openxcom\src\interface\textlist.h
 	<map>
 	<vector>
 	"Text.h"
@@ -5319,7 +5319,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1399390684 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1399406280 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	<climits>
 	<cmath>
@@ -5458,7 +5458,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1398693946 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1399464481 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -6346,7 +6346,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1397083565 f:\git\openxcom\src\engine\font.h
+1399464989 f:\git\openxcom\src\engine\font.h
 	<map>
 	<string>
 	<SDL.h>
@@ -7652,7 +7652,7 @@
 1398435303 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1399141955 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1399465032 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8196,7 +8196,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1394398507 source:f:\git\openxcom\src\interface\arrowbutton.cpp
+1399464481 source:f:\git\openxcom\src\interface\arrowbutton.cpp
 	"ArrowButton.h"
 	"TextList.h"
 	"../Engine/Action.h"
@@ -8234,18 +8234,16 @@
 	<sstream>
 	<string>
 
-1396380142 source:f:\git\openxcom\src\interface\slider.cpp
+1399465149 source:f:\git\openxcom\src\interface\slider.cpp
 	"Slider.h"
 	<algorithm>
 	<cmath>
-	<sstream>
 	"../Engine/Action.h"
-	"../Engine/Font.h"
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1398834033 source:f:\git\openxcom\src\interface\text.cpp
+1399465478 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -8273,12 +8271,13 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1398834227 source:f:\git\openxcom\src\interface\textlist.cpp
+1399466596 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<cmath>
 	<cstdarg>
 	"ArrowButton.h"
 	"ComboBox.h"
+	"ScrollBar.h"
 	"../Engine/Action.h"
 	"../Engine/Font.h"
 	"../Engine/Options.h"
@@ -8612,7 +8611,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1398487525 source:f:\git\openxcom\src\menu\pausestate.cpp
+1399466735 source:f:\git\openxcom\src\menu\pausestate.cpp
 	"PauseState.h"
 	"AbandonGameState.h"
 	"ListLoadState.h"
@@ -11459,7 +11458,7 @@
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
-1399198119 source:f:\git\openxcom\src\interface\combobox.cpp
+1399464481 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"
@@ -11659,7 +11658,7 @@
 	<string>
 	"ListGamesState.h"
 
-1398584561 source:f:\git\openxcom\src\menu\listgamesstate.cpp
+1399466699 source:f:\git\openxcom\src\menu\listgamesstate.cpp
 	"ListGamesState.h"
 	<utility>
 	"DeleteGameState.h"
@@ -11799,4 +11798,15 @@
 	<stdarg.h>
 	<math.h>
 	"fmopl.h"
+
+1399467495 source:f:\git\openxcom\src\interface\scrollbar.cpp
+	"ScrollBar.h"
+	<algorithm>
+	<cmath>
+	"../Engine/Action.h"
+	"../Engine/Palette.h"
+	"../Interface/TextList.h"
+
+1399467061 f:\git\openxcom\src\interface\scrollbar.h
+	"../Engine/InteractiveSurface.h"
 

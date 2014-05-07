@@ -69,6 +69,7 @@ BuildFacilitiesState::BuildFacilitiesState(
 								POPUP_VERTICAL);
 	_txtTitle		= new Text(118, 17, 197, 48);
 	_lstFacilities	= new TextList(112, 104, 200, 64);
+//	_lstFacilities	= new TextList(100, 104, 200, 64);
 	_btnOk			= new TextButton(112, 16, 200, 176);
 
 	setPalette("PAL_BASESCAPE", 6);
@@ -98,10 +99,11 @@ BuildFacilitiesState::BuildFacilitiesState(
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
+//	_lstFacilities->setColumns(1, 109);
 	_lstFacilities->setColumns(1, 109);
 	_lstFacilities->setSelectable(true);
 //kL	_lstFacilities->setScrolling(true, -12);
-	_lstFacilities->setScrolling(false); // kL
+//	_lstFacilities->setScrolling(false); // kL, removed when ScrollBar class introduced.
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(3);
 	_lstFacilities->setWordWrap(true);

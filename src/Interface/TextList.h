@@ -40,6 +40,7 @@ enum ArrowOrientation
 
 class ArrowButton;
 class ComboBox;
+class ScrollBar;
 
 
 /**
@@ -91,6 +92,7 @@ private:
 		* _font,
 		* _small;
 	Language* _lang;
+	ScrollBar* _scrollbar;
 	Surface
 		* _bg,
 		* _selector;
@@ -107,6 +109,8 @@ private:
 
 	/// Updates the arrow buttons.
 	void updateArrows();
+	/// Updates the visible rows.
+	void updateVisible();
 
 
 	public:
@@ -156,6 +160,10 @@ private:
 		int getColumnX(int column) const;
 		/// Gets the Y position of a certain row.
 		int getRowY(int row) const;
+		/// Gets the amount of text in the list.
+		int getTexts() const;
+		/// Gets the amount of visible rows in the list.
+		int getVisibleRows() const;
 		/// Gets the amount of rows in the list.
 		int getRows() const;
 
@@ -288,7 +296,7 @@ private:
 		/// get the scroll depth
 		int getScroll();
 		/// set the scroll depth
-		void setScroll(int scroll);
+		void scrollTo(int scroll);
 		/// Attaches this button to a combobox.
 		void setComboBox(ComboBox* comboBox);
 };

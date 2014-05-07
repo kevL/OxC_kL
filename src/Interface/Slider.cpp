@@ -21,10 +21,8 @@
 
 #include <algorithm>
 #include <cmath>
-#include <sstream>
 
 #include "../Engine/Action.h"
-#include "../Engine/Font.h"
 
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"
@@ -230,7 +228,8 @@ void Slider::handle(Action* action, State* state)
 	//_button->handle(action, state);
 	if (_pressed
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
-			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
+			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+		&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		int cursorX = static_cast<int>(floor(static_cast<double>(action->getDetails()->motion.x) / action->getXScale()));
 		double buttonX = static_cast<double>(std::min(
@@ -300,7 +299,7 @@ int Slider::getValue() const
 
 /**
  * Blits the slider contents.
- * to show when it's focused and editable.
+ * @param surface Pointer to surface to blit onto.
  */
 void Slider::blit(Surface* surface)
 {

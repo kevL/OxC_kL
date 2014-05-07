@@ -197,7 +197,7 @@ void SoldiersState::init()
 	if (row > 0
 		&& _lstSoldiers->getScroll() >= row)
 	{
-		_lstSoldiers->setScroll(0);
+		_lstSoldiers->scrollTo(0);
 	}
 
 	_lstSoldiers->draw();

@@ -63,6 +63,7 @@ PauseState::PauseState(
 	_window		= new Window(this, 216, 158, x, 20, POPUP_BOTH);
 
 	_txtTitle	= new Text(206, 15, x + 5, 30);
+//	_txtTitle	= new Text(206, 17, x + 5, 30);
 
 	_btnLoad	= new TextButton(180, 18, x + 18, 51);
 	_btnSave	= new TextButton(180, 18, x + 18, 73);
