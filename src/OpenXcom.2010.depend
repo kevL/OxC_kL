@@ -5820,7 +5820,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1398392348 f:\git\openxcom\src\battlescape\camera.h
+1399473184 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
 1397875570 f:\git\openxcom\src\battlescape\civilianbaistate.h
@@ -6721,7 +6721,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1399467880 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1399470407 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -9504,7 +9504,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1399467880 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1399470427 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>

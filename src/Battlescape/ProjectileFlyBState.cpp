@@ -509,7 +509,10 @@ void ProjectileFlyBState::init()
 	}
 
 	if (createNewProjectile())
+	{
 		_parent->getMap()->setCursorType(CT_NONE);
+		_parent->getMap()->getCamera()->stopMouseScrolling();
+	}
 	//Log(LOG_INFO) << "ProjectileFlyBState::init() EXIT";
 }
 

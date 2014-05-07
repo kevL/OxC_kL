@@ -168,6 +168,9 @@ private:
 
 		/// Resize the viewable area.
 		void resize();
+
+		/// stop mouse scrolling.
+		void stopMouseScrolling();
 };
 
 }
