@@ -1418,6 +1418,7 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 	{
 		setSelectedUnit(0);
 		_battleState->getBattleGame()->cancelCurrentAction(true);
+
 		_battleState->getBattleGame()->requestEndTurn();
 	}
 }
