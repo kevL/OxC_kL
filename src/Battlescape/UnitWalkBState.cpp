@@ -195,6 +195,7 @@ void UnitWalkBState::think()
 //				int dirStrafe = dir; // kL
 
 				_unit->setDirection(_unit->getFaceDirection());
+				_unit->setCache(0); // kL, might play around with Strafe anim's ......
 				_parent->getMap()->cacheUnit(_unit); // draw unit.
 
 				_unit->setDirection(dirStrafe);
@@ -203,6 +204,7 @@ void UnitWalkBState::think()
 			else
 			{
 				//Log(LOG_INFO) << ". . no strafe, cacheUnit()";
+				_unit->setCache(0); // kL, might play around with non-Strafe anim's ......
 				_parent->getMap()->cacheUnit(_unit);
 			}
 		}
@@ -604,6 +606,7 @@ bool UnitWalkBState::doStatusStand()
 //				int dirStrafe = dir; // kL
 
 				_unit->setDirection(_unit->getFaceDirection());
+//				_unit->setCache(0); // kL
 //				_parent->getMap()->cacheUnit(_unit); // kL ( see far above, re. strafe fake-out moonwalking )
 
 				_unit->setDirection(dirStrafe);
@@ -908,13 +911,13 @@ void UnitWalkBState::doStatusTurn()
 
 	_unit->turn();
 
-	if (_onScreen) // make sure the unit sprites are up to date
-	{
+//	if (_onScreen) // kL, old code. // make sure the unit sprites are up to date
+//	{
 		//Log(LOG_INFO) << ". cacheUnit()";
 
-		_unit->setCache(0);
-		_parent->getMap()->cacheUnit(_unit);
-	}
+	_unit->setCache(0);
+	_parent->getMap()->cacheUnit(_unit);
+//	}
 
 	// calculateFOV() is unreliable for setting the _newUnitSpotted bool,
 	// as it can be called from various other places in the code, ie:
@@ -1008,9 +1011,9 @@ void UnitWalkBState::postPathProcedures()
 				// kL_note: might need newVis/newUnitSpotted -> abort
 			}
 
-			_unit->setCache(0);
-			_parent->getMap()->cacheUnit(_unit);
-
+			// kL_note: These should prob be done before this pt.
+//			_unit->setCache(0);						// kL
+//			_parent->getMap()->cacheUnit(_unit);	// kL
 		}
 	}
 	else if (!_parent->getPanicHandled())

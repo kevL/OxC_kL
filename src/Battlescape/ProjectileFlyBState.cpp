@@ -594,6 +594,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
 		{
 //kL			_unit->aim(true); // set the celatid in an aiming position <- yeah right. not.
+//kL			_unit->setCache(0);
 //kL			_parent->getMap()->cacheUnit(_unit);
 
 			// and we have a lift-off
@@ -643,6 +644,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 		// Can soldiers swing a club, graphically??
 //		_unit->aim(true); // set the soldier in an aiming position
+//		_unit->setCache(0);
 //		_parent->getMap()->cacheUnit(_unit);
 
 		// and we have a hit!
@@ -680,6 +682,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			//Log(LOG_INFO) << ". . _projectileImpact !";
 			_unit->aim(true); // set the soldier in an aiming position
+			_unit->setCache(0);
 			_parent->getMap()->cacheUnit(_unit);
 
 			// and we have a lift-off
@@ -759,6 +762,7 @@ void ProjectileFlyBState::think()
 			{
 //kL				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 				_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
+				_parent->getMap()->invalidate();
 			}
 
 			if (_action.actor->getFaction() == _parent->getSave()->getSide() // kL
@@ -984,6 +988,7 @@ void ProjectileFlyBState::think()
 					|| !_action.weapon->getAmmoItem())
 				{
 					_unit->aim(false);
+					_unit->setCache(0);
 					_parent->getMap()->cacheUnits();
 				}
 			}
@@ -1171,6 +1176,7 @@ void ProjectileFlyBState::performMeleeAttack()
 													- voxel;
 
 	_unit->aim(true); // set the soldier in an aiming position
+	_unit->setCache(0);
 	_parent->getMap()->cacheUnit(_unit);
 
 	if (_ammo->getRules()->getMeleeAttackSound() != -1) // and we have a lift-off!

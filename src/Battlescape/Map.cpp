@@ -1413,6 +1413,8 @@ void Map::drawTerrain(Surface* surface)
 									0);
 
 							// UFOExtender Accuracy: display adjusted accuracy value on crosshair.
+//kL							if (Options::battleUFOExtenderAccuracy)
+//							{
 							if (_cursorType == CT_AIM) // indicator for Firing.
 							{
 								// kL_note: Use stuff from ProjectileFlyBState::init()
@@ -1420,16 +1422,14 @@ void Map::drawTerrain(Surface* surface)
 								// to turn accuracy to 'red 0' if target is out of LoS/LoF.
 
 								BattleAction* action = _save->getBattleGame()->getCurrentAction();
-								int accuracy = static_cast<int>(
-													_save->getSelectedUnit()->getFiringAccuracy(
-																						action->type,
-																						action->weapon)
-																					* 100.0);
-//kL								int accuracy = _save->getSelectedUnit()->getFiringAccuracy( // Wb.140214
-//kL																						action->type,
-//kL																						action->weapon);
-//kL								if (Options::battleUFOExtenderAccuracy)
-//								{
+
+//kL								int accuracy = action->actor->getFiringAccuracy(action->type, action->weapon);
+								int accuracy = static_cast<int>( // _save->getSelectedUnit()->
+														action->actor->getFiringAccuracy(
+																					action->type,
+																					action->weapon)
+																				* 100.0);
+
 								RuleItem* weapon = action->weapon->getRules();
 
 								int
@@ -1536,6 +1536,7 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.y,
 													0);
 							}
+//							}
 						}
 						else if (_camera->getViewLevel() > itZ)
 						{
