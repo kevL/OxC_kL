@@ -8393,7 +8393,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1399520449 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1399521290 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	<sstream>
 	"ListLoadState.h"
@@ -8405,7 +8405,6 @@
 	"../Engine/Language.h"
 	"../Engine/Music.h"
 	"../Engine/Palette.h"
-	"../Engine/Screen.h"
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
 	"../Interface/Text.h"
@@ -11449,7 +11448,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1399501440 f:\git\openxcom\src\engine\options.inc.h
+1399545197 f:\git\openxcom\src\engine\options.inc.h
 
 1396745312 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"

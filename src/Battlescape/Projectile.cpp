@@ -155,7 +155,8 @@ int Projectile::calculateTrajectory(
 		&& !_trajectory.empty()
 		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
 		&& _action.autoShotCount == 1
-		&& (SDL_GetModState() & KMOD_CTRL) == 0
+		&& ((SDL_GetModState() & KMOD_CTRL) == 0 
+			|| !Options::forceFire)
 		&& _save->getBattleGame()->getPanicHandled()
 		&& _action.type != BA_LAUNCH)
 	{

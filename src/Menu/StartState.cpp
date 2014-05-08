@@ -74,7 +74,6 @@ StartState::StartState(Game* game)
 
 	// Set palette (set to {0} here to ensure all fields are initialized)
 	SDL_Color bnw[3] = {{0}};
-
 	bnw[0].r = 0;
 	bnw[0].g = 0;
 	bnw[0].b = 0;
@@ -84,7 +83,6 @@ StartState::StartState(Game* game)
 	bnw[2].r = 255;
 	bnw[2].g = 255;
 	bnw[2].b = 0;
-
 	setPalette(bnw, 0, 3);
 
 	add(_surface);

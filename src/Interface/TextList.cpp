@@ -1379,8 +1379,8 @@ void TextList::mouseOut(Action* action, State* state)
 }
 
 /*
- * get the scroll depth.
- * @return scroll depth.
+ * Get the scroll depth.
+ * @return, scroll depth.
  */
 int TextList::getScroll()
 {
@@ -1388,7 +1388,7 @@ int TextList::getScroll()
 }
 
 /*
- * set the scroll depth.
+ * Set the scroll depth.
  * @param scroll set the scroll depth to this.
  */
 void TextList::scrollTo(size_t scroll)
@@ -1402,7 +1402,7 @@ void TextList::scrollTo(size_t scroll)
 						_rows.size() - _visibleRows,
 						scroll));
 
-	draw();
+	draw(); // can't just set _redraw here because reasons
 	updateArrows();
 }
 
