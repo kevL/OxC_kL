@@ -5614,7 +5614,7 @@
 1394398507 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1399298036 f:\git\openxcom\src\battlescape\battlescapestate.h
+1399519809 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5999,7 +5999,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1399298143 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1399519813 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -8393,7 +8393,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1399037829 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1399520449 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	<sstream>
 	"ListLoadState.h"
@@ -8405,6 +8405,7 @@
 	"../Engine/Language.h"
 	"../Engine/Music.h"
 	"../Engine/Palette.h"
+	"../Engine/Screen.h"
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
 	"../Interface/Text.h"
@@ -8667,7 +8668,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1399225101 source:f:\git\openxcom\src\menu\startstate.cpp
+1399519903 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"ErrorMessageState.h"
 	"IntroState.h"
@@ -11741,7 +11742,7 @@
 	"../Interface/Text.h"
 	"../Savegame/SavedBattleGame.h"
 
-1399146014 source:f:\git\openxcom\src\menu\savegamestate.cpp
+1399520429 source:f:\git\openxcom\src\menu\savegamestate.cpp
 	"SaveGameState.h"
 	<sstream>
 	"ErrorMessageState.h"
@@ -11774,7 +11775,7 @@
 1399140748 f:\git\openxcom\src\engine\adlib\fmopl.h
 	"ymdeltat.h"
 
-1399198013 source:f:\git\openxcom\src\engine\adlibmusic.cpp
+1399503659 source:f:\git\openxcom\src\engine\adlibmusic.cpp
 	"AdlibMusic.h"
 	<algorithm>
 	<fstream>

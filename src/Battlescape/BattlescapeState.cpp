@@ -614,6 +614,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnStats->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnPersonalLightingClick,
 					Options::keyBattlePersonalLighting);
+	_btnStats->onKeyboardPress( // kL, replaces _btnZeroUTs functionality.
+					(ActionHandler)& BattlescapeState::btnZeroTUsClick,
+					Options::keyBattleZeroTUs);
 
 	SDLKey buttons[] = {Options::keyBattleCenterEnemy1,
 						Options::keyBattleCenterEnemy2,
@@ -925,17 +928,9 @@ void BattlescapeState::mapOver(Action* action)
 void BattlescapeState::mapPress(Action* action)
 {
 	//Log(LOG_INFO) << "BattlescapeState::mapPress()";
-
-	// don't handle mouseclicks below 140, because they are in the buttons area (it overlaps with map surface)
-	int my = int(action->getAbsoluteYMouse());
-	int mx = int(action->getAbsoluteXMouse());
-	if (my > _icons->getY()
-		&& my < _icons->getY()+_icons->getHeight()
-		&& mx > _icons->getX()
-		&& mx < _icons->getX()+_icons->getWidth())
-	{
+	// don't handle mouseclicks over the buttons (it overlaps with map surface)
+	if (_mouseOverIcons)
 		return;
-	}
 
 	if (action->getDetails()->button.button == Options::battleDragScrollButton)
 	{
@@ -1019,17 +1014,9 @@ void BattlescapeState::mapClick(Action* action)
 			return;
 	}
 
-	// don't handle mouseclicks below y=144px, because they are in the buttons area (it overlaps with map surface)
-	int
-		my = static_cast<int>(action->getAbsoluteYMouse()),
-		mx = static_cast<int>(action->getAbsoluteXMouse());
-	if (my > _icons->getY()
-		&& my < _icons->getY()+_icons->getHeight()
-		&& mx > _icons->getX()
-		&& mx < _icons->getX()+_icons->getWidth())
-	{
+	// don't handle mouseclicks over the buttons (it overlaps with map surface)
+	if (_mouseOverIcons)
 		return;
-	}
 
 	// don't accept leftclicks if there is no cursor or there is an action busy
 	if (_map->getCursorType() == CT_NONE
@@ -2874,7 +2861,7 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
  * Removes all time units.
  * @param action Pointer to an action.
  */
-/* void BattlescapeState::btnZeroTUsClick(Action* action)
+void BattlescapeState::btnZeroTUsClick(Action* action)
 {
 	if (allowButtons())
 	{
@@ -2892,7 +2879,7 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 			updateSoldierInfo();
 		}
 	}
-} */
+}
 
 /**
 * Shows a tooltip for the appropriate button.

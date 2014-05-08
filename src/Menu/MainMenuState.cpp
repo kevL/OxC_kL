@@ -24,6 +24,7 @@
 #include "ListLoadState.h"
 #include "NewBattleState.h"
 #include "NewGameState.h"
+// #include "OptionsBaseState.h" // kL
 #include "OptionsVideoState.h"
 
 #include "../version.h"
@@ -32,7 +33,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
 #include "../Engine/Palette.h"
-//kL#include "../Engine/Screen.h"
+//kL #include "../Engine/Screen.h"
 
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
@@ -55,7 +56,9 @@ MainMenuState::MainMenuState(Game* game)
 	:
 		State(game)
 {
-	// kL_note: These screen calls were displaced to IntroState & AbandonGameState
+	// kL_note: These screen calls were displaced to IntroState &
+	// AbandonGameState & StartState & SaveGameState & MainMenuState::resize()
+	//
 	// This uses baseX/Y options for Geoscape & Basescape:
 //	Options::baseXResolution = Options::baseXGeoscape; // kL
 //	Options::baseYResolution = Options::baseYGeoscape; // kL
@@ -203,12 +206,17 @@ void MainMenuState::resize(
 	dX = Options::baseXResolution;
 	dY = Options::baseYResolution;
 
-	OptionsBaseState::updateScale(
+	// This uses baseX/Y options for Geoscape & Basescape:
+	Options::baseXResolution = Options::baseXGeoscape; // kL
+	Options::baseYResolution = Options::baseYGeoscape; // kL
+	// This sets Geoscape and Basescape to default (320x200) IG and the config.
+/*	OptionsBaseState::updateScale(
 								Options::geoscapeScale,
 								Options::geoscapeScale,
 								Options::baseXGeoscape,
 								Options::baseYGeoscape,
-								true);
+								true); */
+//	_game->getScreen()->resetDisplay(false); // kL: this resets options.cfg!
 
 	dX = Options::baseXResolution - dX;
 	dY = Options::baseYResolution - dY;

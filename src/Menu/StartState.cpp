@@ -22,6 +22,7 @@
 #include "ErrorMessageState.h"
 #include "IntroState.h"
 #include "MainMenuState.h"
+//kL #include "OptionsBaseState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Exception.h"
@@ -176,6 +177,16 @@ void StartState::think()
 			{
 				Options::keepAspectRatio = _wasLetterBoxed;
 
+				// This uses baseX/Y options for Geoscape & Basescape:
+				Options::baseXResolution = Options::baseXGeoscape; // kL
+				Options::baseYResolution = Options::baseYGeoscape; // kL
+				// This sets Geoscape and Basescape to default (320x200) IG and the config.
+/*kL			OptionsBaseState::updateScale(
+									Options::geoscapeScale,
+									Options::geoscapeScale,
+									Options::baseXGeoscape,
+									Options::baseYGeoscape,
+									true); */
 				_game->getScreen()->resetDisplay(false);
 
 				State* state = new MainMenuState(_game);
