@@ -1400,7 +1400,7 @@ void TextList::scrollTo(size_t scroll)
 		return;
 
 	_scroll = std::max(
-					0u,
+					static_cast<size_t>(0),
 					std::min(
 						_rows.size() - _visibleRows,
 						scroll));

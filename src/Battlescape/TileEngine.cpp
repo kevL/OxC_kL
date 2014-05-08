@@ -1939,7 +1939,7 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
  * @param power, Power of the hit/explosion.
  * @param type, The damage type of the hit.
  * @param attacker, The unit that caused the hit.
- * @param hit, True if no projectile, trajectory, etc. is needed. kL
+ * @param melee, True if no projectile, trajectory, etc. is needed. kL
  * @return, The Unit that got hit.
  */
 BattleUnit* TileEngine::hit(
@@ -1947,7 +1947,7 @@ BattleUnit* TileEngine::hit(
 		int power,
 		ItemDamageType type,
 		BattleUnit* attacker,
-		bool hit) // kL add.
+		bool melee) // kL add.
 {
 	//Log(LOG_INFO) << "TileEngine::hit() by ID " << attacker->getId() << " @ " << attacker->getPosition()
 	//		<< " : power = " << power
@@ -1982,14 +1982,14 @@ BattleUnit* TileEngine::hit(
 		// and take out the 'hit' parameter from voxelCheck() unless
 		// I want to flesh-out melee & psi attacks more than they are.
 		int part = VOXEL_UNIT; // kL, no longer const
-		if (!hit) // kL
+		if (!melee) // kL
 			part = voxelCheck(
 							pTarget_voxel,
 							attacker,
 							false,
 							false,
 							0,
-							hit); // kL
+							melee); // kL
 		//Log(LOG_INFO) << ". voxelCheck() part = " << part;
 
 		if (VOXEL_EMPTY < part && part < VOXEL_UNIT	// 4 terrain parts ( 0..3 )
@@ -2056,6 +2056,20 @@ BattleUnit* TileEngine::hit(
 			if (buTarget)
 			{
 				//Log(LOG_INFO) << ". . . buTarget Valid ID = " << buTarget->getId();
+
+				// kL_note: This section needs adjusting ...!
+				const int wounds = buTarget->getFatalWounds();
+				// "adjustedDamage = buTarget->damage(relative, rndPower, type);" -> GOES HERE
+				// if it's going to bleed to death and it's not a player, give credit for the kill.
+				// kL_note: not just if not a player; Give Credit!!!
+				// NOTE: Move this code-chunk below(s).
+//kL				if (unit
+//kL					&& buTarget->getFaction() != FACTION_PLAYER
+//					&& buTarget->getOriginalFaction() != FACTION_PLAYER // kL
+//kL					&& wounds < buTarget->getFatalWounds())
+//				{
+//kL					buTarget->killedBy(unit->getFaction());
+//				} // kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
 
 /*kL				const int size = buTarget->getArmor()->getSize() * 8;
 				const Position targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
@@ -2141,22 +2155,35 @@ BattleUnit* TileEngine::hit(
 													ignoreArmor);
 				//Log(LOG_INFO) << ". . . adjustedDamage = " << adjustedDamage;
 
-				if (adjustedDamage > 0
-					&& !buTarget->isOut())
+				if (adjustedDamage > 0)
+//					&& !buTarget->isOut()
 				{
-					const int bravery = (110 - buTarget->getStats()->bravery) / 10;
-					if (bravery > 0)
+					// kL_begin:
+					if (attacker
+						&& wounds < buTarget->getFatalWounds())
 					{
-						int modifier = 100;
-						if (buTarget->getOriginalFaction() == FACTION_PLAYER)
-							modifier = _save->getMoraleModifier();
-						else if (buTarget->getOriginalFaction() == FACTION_HOSTILE)
-							modifier = _save->getMoraleModifier(0, false);
+						buTarget->killedBy(attacker->getFaction());
+					} // kL_end.
+					// kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
+					// I mean, shouldn't that be checking that the thing actually DIES?
+					// And, prob don't have to state if killed by aLiens: probly assumed in DebriefingState.
 
-						const int morale_loss = 10 * adjustedDamage * bravery / modifier;
-						//Log(LOG_INFO) << ". . . . morale_loss = " << morale_loss;
+					if (buTarget->getHealth() > 0)
+					{
+						const int bravery = (110 - buTarget->getStats()->bravery) / 10;
+						if (bravery > 0)
+						{
+							int modifier = 100;
+							if (buTarget->getOriginalFaction() == FACTION_PLAYER)
+								modifier = _save->getMoraleModifier();
+							else if (buTarget->getOriginalFaction() == FACTION_HOSTILE)
+								modifier = _save->getMoraleModifier(0, false);
 
-						buTarget->moraleChange(-morale_loss);
+							const int morale_loss = 10 * adjustedDamage * bravery / modifier;
+							//Log(LOG_INFO) << ". . . . morale_loss = " << morale_loss;
+
+							buTarget->moraleChange(-morale_loss);
+						}
 					}
 				}
 
@@ -2388,14 +2415,14 @@ void TileEngine::explode(
 				}
 
 				testPower -= (10 // explosive damage decreases by 10 per tile
-						+ horizontalBlockage( // not *2
+						+ horizontalBlockage( // not *2 -> try *2
 										origin,
 										destTile,
-										type)
-						+ verticalBlockage( // not *2
+										type) * 2
+						+ verticalBlockage( // not *2 -> try *2
 										origin,
 										destTile,
-										type));
+										type) * 2);
 
 				if (testPower < 1)
 					break;
@@ -2419,16 +2446,25 @@ void TileEngine::explode(
 					if (origin->getPosition().z != tileZ) // 3d explosion factor
 						_powerT -= vertdec;
 
+					BattleUnit* targetUnit = destTile->getUnit();
+
+					int wounds = 0;
+					if (unit
+						&& targetUnit)
+					{
+						wounds = targetUnit->getFatalWounds();
+					}
+
 					switch (type)
 					{
 						case DT_STUN: // power 0 - 200%
 						{
 							int powerVsUnit = RNG::generate(
-															1,
-															_powerT * 2);
-//															powerEff * 2); // kL
+														1,
+														_powerT * 2);
+//														powerEff * 2); // kL
 
-							if (destTile->getUnit())
+							if (targetUnit)
 							{
 								if (distance(
 											destTile->getPosition(),
@@ -2439,21 +2475,21 @@ void TileEngine::explode(
 										< 2)
 								{
 									//Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN, GZ";
-									destTile->getUnit()->damage(
-															Position(0, 0, 0),
-															powerVsUnit,
-															DT_STUN);
+									targetUnit->damage(
+													Position(0, 0, 0),
+													powerVsUnit,
+													DT_STUN);
 								}
 								else
 								{
 									//Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN, not GZ";
-									destTile->getUnit()->damage(
-															Position(
-																static_cast<int>(centerX),
-																static_cast<int>(centerY),
-																static_cast<int>(centerZ)) - destTile->getPosition(),
-															powerVsUnit,
-															DT_STUN);
+									targetUnit->damage(
+													Position(
+														static_cast<int>(centerX),
+														static_cast<int>(centerY),
+														static_cast<int>(centerZ)) - destTile->getPosition(),
+													powerVsUnit,
+													DT_STUN);
 								}
 							}
 
@@ -2476,7 +2512,6 @@ void TileEngine::explode(
 						case DT_HE: // power 50 - 150%, 65% of that if kneeled. 85% @ GZ
 						{
 							//Log(LOG_INFO) << ". . type == DT_HE";
-							BattleUnit* targetUnit = destTile->getUnit();
 							if (targetUnit)
 							{
 								int powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
@@ -2558,7 +2593,6 @@ void TileEngine::explode(
 									}
 								}
 							}
-
 /*							Log(LOG_INFO) << "TileEngine::explode(), HE vs items on tile";
 							int i = 0;
 							// So i made some adjustments....
@@ -2629,7 +2663,6 @@ void TileEngine::explode(
 
 								// kL_note: fire damage is also caused by BattlescapeGame::endTurn()
 								// -- but previously by BattleUnit::prepareNewTurn()!!!!
-								BattleUnit* targetUnit = destTile->getUnit();
 								if (targetUnit)
 								{
 									float modifier = targetUnit->getArmor()->getDamageModifier(DT_IN);
@@ -2666,18 +2699,26 @@ void TileEngine::explode(
 						break;
 					}
 
-					if (unit
-						&& destTile->getUnit()
-						&& unit->getOriginalFaction() == FACTION_PLAYER						// kL, shooter is Xcom
-						&& unit->getFaction() == FACTION_PLAYER								// kL, shooter is not Mc'd Xcom
-						&& destTile->getUnit()->getOriginalFaction() == FACTION_HOSTILE		// kL, target is aLien Mc'd or not.
-																							//		no Xp for shooting civies...
-						&& type != DT_SMOKE)												// sorry, no Xp for smoke!
-//							&& destTile->getUnit()->getFaction() != unit->getFaction())
-					{
-						unit->addFiringExp();
-					}
 
+					if (unit
+						&& targetUnit)
+					{
+						// if it's going to bleed to death and it's not a player, give credit for the kill.
+						// kL_note: See Above^
+						if (wounds < targetUnit->getFatalWounds())
+						{
+							targetUnit->killedBy(unit->getFaction());
+						}
+
+						if (unit->getOriginalFaction() == FACTION_PLAYER			// kL, shooter is Xcom
+							&& unit->getFaction() == FACTION_PLAYER					// kL, shooter is not Mc'd Xcom
+							&& targetUnit->getOriginalFaction() == FACTION_HOSTILE	// kL, target is aLien Mc'd or not; no Xp for shooting civies...
+							&& type != DT_SMOKE)									// sorry, no Xp for smoke!
+//							&& targetUnit->getFaction() != unit->getFaction())
+						{
+							unit->addFiringExp();
+						}
+					}
 				}// add a new tile.
 
 
