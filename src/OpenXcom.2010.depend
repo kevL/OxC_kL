@@ -4623,7 +4623,7 @@
 1394398507 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1399502052 f:\git\openxcom\src\interface\textlist.h
+1399546953 f:\git\openxcom\src\interface\textlist.h
 	<map>
 	<vector>
 	"Text.h"
@@ -6587,7 +6587,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1397875939 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1399544992 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -6611,7 +6611,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1399473325 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1399545105 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -7013,7 +7013,7 @@
 	"Action.h"
 	"Options.h"
 
-1397876059 source:f:\git\openxcom\src\engine\language.cpp
+1399545175 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	<locale>
 	<fstream>
@@ -7063,7 +7063,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1399501440 source:f:\git\openxcom\src\engine\options.cpp
+1399544333 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -8243,7 +8243,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1399465478 source:f:\git\openxcom\src\interface\text.cpp
+1399545605 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -8502,7 +8502,7 @@
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 
-1399198246 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1399545888 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	<SDL.h>
 	"MainMenuState.h"
@@ -8531,7 +8531,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1397531568 source:f:\git\openxcom\src\menu\optionsbattlescapestate.cpp
+1399545907 source:f:\git\openxcom\src\menu\optionsbattlescapestate.cpp
 	"OptionsBattlescapeState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -11459,7 +11459,7 @@
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
-1399502813 source:f:\git\openxcom\src\interface\combobox.cpp
+1399545305 source:f:\git\openxcom\src\interface\combobox.cpp
 	"ComboBox.h"
 	"TextButton.h"
 	"TextList.h"
@@ -11539,7 +11539,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1399502708 source:f:\git\openxcom\src\menu\optionsgeoscapestate.cpp
+1399545949 source:f:\git\openxcom\src\menu\optionsgeoscapestate.cpp
 	"OptionsGeoscapeState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -11570,7 +11570,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1398799681 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1399545988 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"
@@ -11589,7 +11589,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1399198216 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
+1399545737 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
 	"OptionsAudioState.h"
 	<sstream>
 	"../Engine/Action.h"

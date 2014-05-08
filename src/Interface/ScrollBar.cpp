@@ -55,7 +55,7 @@ ScrollBar::ScrollBar(
 		_contrast(false),
 		_bg(0)
 {
-	_track = new Surface(width, height, x, y);
+	_track = new Surface(width - 2, height + 1, x, y);
 	_thumb = new Surface(width, height, x, y);
 
 	_thumbRect.x = 0;
@@ -81,7 +81,7 @@ void ScrollBar::setX(int x)
 {
 	Surface::setX(x);
 
-	_track->setX(x);
+	_track->setX(x + 1);
 	_thumb->setX(x);
 }
 
@@ -184,11 +184,6 @@ void ScrollBar::setPalette(
 void ScrollBar::handle(Action* action, State* state)
 {
 	InteractiveSurface::handle(action, state);
-	if (_visible
-		&& !_hidden)
-	{
-		_redraw = true; // dumb hack
-	}
 
 	if (_pressed
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
@@ -222,6 +217,8 @@ void ScrollBar::blit(Surface* surface)
 	{
 		_track->blit(surface);
 		_thumb->blit(surface);
+
+		invalidate();
 	}
 }
 
@@ -271,6 +268,8 @@ void ScrollBar::drawTrack()
 
 		if (_contrast)
 			_track->offset(-5, 1);
+		else if (_list->getComboBox())
+			_track->offset(+1, Palette::backPos);
 		else
 			_track->offset(-5, Palette::backPos);
 	}

@@ -1084,6 +1084,7 @@ void TextList::updateArrows()
 
 	_scrollbar->setVisible(_rows.size() > _visibleRows);
 	_scrollbar->invalidate();
+	_scrollbar->blit(this);
 }
 
 /**
@@ -1351,6 +1352,8 @@ void TextList::mouseOver(Action* action, State* state)
 
 			if (_contrast)
 				_selector->offset(-10, 1);
+			else if (_comboBox)
+				_selector->offset(+1, Palette::backPos);
 			else
 				_selector->offset(-10, Palette::backPos);
 
@@ -1413,6 +1416,15 @@ void TextList::scrollTo(size_t scroll)
 void TextList::setComboBox(ComboBox* comboBox)
 {
 	_comboBox = comboBox;
+}
+
+/**
+ * Gets the combobox that this list is attached to, if any.
+ * @return the attached combobox.
+ */
+ComboBox* TextList::getComboBox() const
+{
+	return _comboBox;
 }
 
 }
