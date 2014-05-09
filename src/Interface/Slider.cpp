@@ -254,7 +254,7 @@ void Slider::handle(Action* action, State* state)
 void Slider::setPosition(double pos)
 {
 	_pos = pos;
-	_button->setX((int)floor(_minX + (_maxX - _minX) * _pos));
+	_button->setX(static_cast<int>(floor(_minX + (_maxX - _minX) * _pos)));
 //	_button->setX(static_cast<int>(floor(static_cast<double>(getX()) + (static_cast<double>(_maxX - _minX) * _value)))); // kL
 }
 

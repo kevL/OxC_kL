@@ -76,8 +76,8 @@ UnitInfoState::UnitInfoState(
 	_txtName		= new Text(288, 17, 16, 4);
 
 	int
-		step = 9,	// 10;
-		yPos = 31;	// 38;
+		step = 9,
+		yPos = 38;
 
 	_txtTimeUnits	= new Text(140, 9, 8, yPos);
 	_numTimeUnits	= new Text(18, 9, 151, yPos);
@@ -266,6 +266,7 @@ UnitInfoState::UnitInfoState(
 	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setHighContrast(true);
 
+
 	_txtTimeUnits->setColor(Palette::blockOffset(3));
 	_txtTimeUnits->setHighContrast(true);
 	_txtTimeUnits->setText(tr("STR_TIME_UNITS"));
@@ -276,6 +277,7 @@ UnitInfoState::UnitInfoState(
 	_barTimeUnits->setColor(Palette::blockOffset(4));
 	_barTimeUnits->setScale(1.0);
 
+
 	_txtEnergy->setColor(Palette::blockOffset(3));
 	_txtEnergy->setHighContrast(true);
 	_txtEnergy->setText(tr("STR_ENERGY"));
@@ -285,6 +287,7 @@ UnitInfoState::UnitInfoState(
 
 	_barEnergy->setColor(Palette::blockOffset(9));
 	_barEnergy->setScale(1.0);
+
 
 	_txtHealth->setColor(Palette::blockOffset(3));
 	_txtHealth->setHighContrast(true);
@@ -297,6 +300,7 @@ UnitInfoState::UnitInfoState(
 	_barHealth->setColor2(Palette::blockOffset(5)+2);
 	_barHealth->setScale(1.0);
 
+
 	_txtFatalWounds->setColor(Palette::blockOffset(3));
 	_txtFatalWounds->setHighContrast(true);
 	_txtFatalWounds->setText(tr("STR_FATAL_WOUNDS"));
@@ -306,6 +310,7 @@ UnitInfoState::UnitInfoState(
 
 	_barFatalWounds->setColor(Palette::blockOffset(2));
 	_barFatalWounds->setScale(1.0);
+
 
 	_txtBravery->setColor(Palette::blockOffset(3));
 	_txtBravery->setHighContrast(true);
@@ -317,6 +322,7 @@ UnitInfoState::UnitInfoState(
 	_barBravery->setColor(Palette::blockOffset(12));
 	_barBravery->setScale(1.0);
 
+
 	_txtMorale->setColor(Palette::blockOffset(3));
 	_txtMorale->setHighContrast(true);
 	_txtMorale->setText(tr("STR_MORALE"));
@@ -326,6 +332,7 @@ UnitInfoState::UnitInfoState(
 
 	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale(1.0);
+
 
 	_txtReactions->setColor(Palette::blockOffset(3));
 	_txtReactions->setHighContrast(true);
@@ -337,6 +344,7 @@ UnitInfoState::UnitInfoState(
 	_barReactions->setColor(Palette::blockOffset(9));
 	_barReactions->setScale(1.0);
 
+
 	_txtFiring->setColor(Palette::blockOffset(3));
 	_txtFiring->setHighContrast(true);
 	_txtFiring->setText(tr("STR_FIRING_ACCURACY"));
@@ -346,6 +354,7 @@ UnitInfoState::UnitInfoState(
 
 	_barFiring->setColor(Palette::blockOffset(8));
 	_barFiring->setScale(1.0);
+
 
 	_txtThrowing->setColor(Palette::blockOffset(3));
 	_txtThrowing->setHighContrast(true);
@@ -357,6 +366,7 @@ UnitInfoState::UnitInfoState(
 	_barThrowing->setColor(Palette::blockOffset(6));
 	_barThrowing->setScale(1.0);
 
+
 	_txtMelee->setColor(Palette::blockOffset(3));
 	_txtMelee->setHighContrast(true);
 	_txtMelee->setText(tr("STR_MELEE_ACCURACY"));
@@ -366,6 +376,7 @@ UnitInfoState::UnitInfoState(
 
 	_barMelee->setColor(Palette::blockOffset(14));
 	_barMelee->setScale(1.0);
+
 
 	_txtStrength->setColor(Palette::blockOffset(3));
 	_txtStrength->setHighContrast(true);
@@ -377,6 +388,7 @@ UnitInfoState::UnitInfoState(
 	_barStrength->setColor(Palette::blockOffset(3));
 	_barStrength->setScale(1.0);
 
+
 	_txtPsiStrength->setColor(Palette::blockOffset(3));
 	_txtPsiStrength->setHighContrast(true);
 	_txtPsiStrength->setText(tr("STR_PSIONIC_STRENGTH"));
@@ -386,6 +398,7 @@ UnitInfoState::UnitInfoState(
 
 	_barPsiStrength->setColor(Palette::blockOffset(12));
 	_barPsiStrength->setScale(1.0);
+
 
 	_txtPsiSkill->setColor(Palette::blockOffset(3));
 	_txtPsiSkill->setHighContrast(true);
@@ -397,6 +410,7 @@ UnitInfoState::UnitInfoState(
 	_barPsiSkill->setColor(Palette::blockOffset(12));
 	_barPsiSkill->setScale(1.0);
 
+
 	_txtFrontArmor->setColor(Palette::blockOffset(3));
 	_txtFrontArmor->setHighContrast(true);
 	_txtFrontArmor->setText(tr("STR_FRONT_ARMOR_UC"));
@@ -406,6 +420,7 @@ UnitInfoState::UnitInfoState(
 
 	_barFrontArmor->setColor(Palette::blockOffset(5));
 	_barFrontArmor->setScale(1.0);
+
 
 	_txtLeftArmor->setColor(Palette::blockOffset(3));
 	_txtLeftArmor->setHighContrast(true);
@@ -417,6 +432,7 @@ UnitInfoState::UnitInfoState(
 	_barLeftArmor->setColor(Palette::blockOffset(5));
 	_barLeftArmor->setScale(1.0);
 
+
 	_txtRightArmor->setColor(Palette::blockOffset(3));
 	_txtRightArmor->setHighContrast(true);
 	_txtRightArmor->setText(tr("STR_RIGHT_ARMOR_UC"));
@@ -426,6 +442,7 @@ UnitInfoState::UnitInfoState(
 
 	_barRightArmor->setColor(Palette::blockOffset(5));
 	_barRightArmor->setScale(1.0);
+
 
 	_txtRearArmor->setColor(Palette::blockOffset(3));
 	_txtRearArmor->setHighContrast(true);
@@ -437,6 +454,7 @@ UnitInfoState::UnitInfoState(
 	_barRearArmor->setColor(Palette::blockOffset(5));
 	_barRearArmor->setScale(1.0);
 
+
 	_txtUnderArmor->setColor(Palette::blockOffset(3));
 	_txtUnderArmor->setHighContrast(true);
 	_txtUnderArmor->setText(tr("STR_UNDER_ARMOR_UC"));
@@ -446,6 +464,7 @@ UnitInfoState::UnitInfoState(
 
 	_barUnderArmor->setColor(Palette::blockOffset(5));
 	_barUnderArmor->setScale(1.0);
+
 
 	if (!_mindProbe)
 	{
@@ -561,6 +580,7 @@ void UnitInfoState::init()
 	arbitraryVariable = static_cast<double>(_unit->getStats()->melee);
 	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
 	ss.str(L"");
+	ss << stat;
 	_numMelee->setText(ss.str());
 	_barMelee->setMax(arbitraryVariable);
 	_barMelee->setValue(static_cast<double>(stat));

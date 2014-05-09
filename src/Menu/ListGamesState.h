@@ -54,6 +54,7 @@ class ListGamesState
 			_autoquick,
 			_inEditMode, // kL
 			_showMsg,
+			_sortable,
 			_noUI;
 		int _firstValidRow;
 
@@ -111,6 +112,9 @@ class ListGamesState
 			void sortNameClick(Action* action);
 			/// Handler for clicking the Date arrow.
 			void sortDateClick(Action* action);
+
+			/// disables the sort buttons.
+			void disableSort();
 };
 
 }

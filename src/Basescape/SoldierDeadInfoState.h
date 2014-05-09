@@ -58,6 +58,7 @@ private:
 		* _barReactions,
 		* _barFiring,
 		* _barThrowing,
+		* _barMelee,
 		* _barStrength,
 		* _barPsiStrength,
 		* _barPsiSkill;
@@ -77,6 +78,7 @@ private:
 		* _txtReactions,
 		* _txtFiring,
 		* _txtThrowing,
+		* _txtMelee,
 		* _txtStrength,
 		* _txtPsiStrength,
 		* _txtPsiSkill,
@@ -88,6 +90,7 @@ private:
 		* _numReactions,
 		* _numFiring,
 		* _numThrowing,
+		* _numMelee,
 		* _numStrength,
 		* _numPsiStrength,
 		* _numPsiSkill;

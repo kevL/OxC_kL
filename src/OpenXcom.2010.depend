@@ -4531,7 +4531,7 @@
 1398435160 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1398393035 f:\git\openxcom\src\geoscape\geoscapestate.h
+1399669070 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<list>
 	"../Engine/State.h"
 
@@ -4623,7 +4623,7 @@
 1394398507 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1399546953 f:\git\openxcom\src\interface\textlist.h
+1399672759 f:\git\openxcom\src\interface\textlist.h
 	<map>
 	<vector>
 	"Text.h"
@@ -5350,7 +5350,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1399661171 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
+1399671351 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
 	"SoldierArmorState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -7652,7 +7652,7 @@
 1398435303 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1399465032 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1399670256 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8667,8 +8667,10 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1399546542 source:f:\git\openxcom\src\menu\startstate.cpp
+1399668696 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
+	<SDL_syswm.h>
+	<SDL_thread.h>
 	"ErrorMessageState.h"
 	"IntroState.h"
 	"MainMenuState.h"
@@ -9099,7 +9101,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1398834761 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1399665673 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Battlescape/Position.h"
@@ -9314,7 +9316,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1398488099 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1399665723 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
@@ -9535,7 +9537,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1399145943 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1399666780 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9746,7 +9748,7 @@
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/Ruleset.h"
 
-1397452647 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
+1399665812 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
 	"ArticleStateItem.h"
 	<algorithm>
 	<sstream>
@@ -11488,7 +11490,7 @@
 1398138059 f:\git\openxcom\src\menu\introstate.h
 	"../Engine/State.h"
 
-1398394157 f:\git\openxcom\src\menu\optionsvideostate.h
+1399669813 f:\git\openxcom\src\menu\optionsvideostate.h
 	<SDL.h>
 	"OptionsBaseState.h"
 	"../Engine/State.h"
@@ -11570,7 +11572,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1399545988 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1399670041 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"
@@ -11604,7 +11606,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1397478620 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
+1399671627 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
 	"SoldierDeadInfoState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -11623,7 +11625,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/SoldierDead.h"
 
-1396407236 f:\git\openxcom\src\basescape\soldierdeadinfostate.h
+1399671676 f:\git\openxcom\src\basescape\soldierdeadinfostate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -11647,7 +11649,7 @@
 1398486457 f:\git\openxcom\src\menu\listloadstate.h
 	"ListGamesState.h"
 
-1398691853 f:\git\openxcom\src\menu\listgamesstate.h
+1399669655 f:\git\openxcom\src\menu\listgamesstate.h
 	<string>
 	<vector>
 	"OptionsBaseState.h"
@@ -11659,7 +11661,7 @@
 	<string>
 	"ListGamesState.h"
 
-1399466699 source:f:\git\openxcom\src\menu\listgamesstate.cpp
+1399669764 source:f:\git\openxcom\src\menu\listgamesstate.cpp
 	"ListGamesState.h"
 	<utility>
 	"DeleteGameState.h"
@@ -11690,7 +11692,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextList.h"
 
-1399142467 source:f:\git\openxcom\src\menu\listsavestate.cpp
+1399668946 source:f:\git\openxcom\src\menu\listsavestate.cpp
 	"ListSaveState.h"
 	"SaveGameState.h"
 	"../Engine/Action.h"

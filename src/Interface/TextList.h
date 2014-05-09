@@ -202,7 +202,7 @@ private:
 
 		/// Sets the text list's high contrast color setting.
 		void setHighContrast(bool contrast);
-		/// Sets the contrast of a certain cell.
+		/// kL. Sets the contrast of a certain cell.
 		void setCellHighContrast( // kL
 				int row,
 				int column,

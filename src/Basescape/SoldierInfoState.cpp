@@ -99,62 +99,62 @@ SoldierInfoState::SoldierInfoState(
 
 
 	int
-		step = 11, // 12;
-		yPos = 82; // 80;
+		step = 11,
+		yPos = 80;
 
 	_txtTimeUnits	= new Text(120, 9, 6, yPos);
 	_numTimeUnits	= new Text(18, 9, 131, yPos);
-	_barTimeUnits	= new Bar(170, 7, 150, yPos);
+	_barTimeUnits	= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtStamina		= new Text(120, 9, 5, yPos);
 	_numStamina		= new Text(18, 9, 131, yPos);
-	_barStamina		= new Bar(170, 7, 150, yPos);
+	_barStamina		= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtHealth		= new Text(120, 9, 6, yPos);
 	_numHealth		= new Text(18, 9, 131, yPos);
-	_barHealth		= new Bar(170, 7, 150, yPos);
+	_barHealth		= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtBravery		= new Text(120, 9, 6, yPos);
 	_numBravery		= new Text(18, 9, 131, yPos);
-	_barBravery		= new Bar(170, 7, 150, yPos);
+	_barBravery		= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtReactions	= new Text(120, 9, 6, yPos);
 	_numReactions	= new Text(18, 9, 131, yPos);
-	_barReactions	= new Bar(170, 7, 150, yPos);
+	_barReactions	= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtFiring		= new Text(120, 9, 6, yPos);
 	_numFiring		= new Text(18, 9, 131, yPos);
-	_barFiring		= new Bar(170, 7, 150, yPos);
+	_barFiring		= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtThrowing	= new Text(120, 9, 6, yPos);
 	_numThrowing	= new Text(18, 9, 131, yPos);
-	_barThrowing	= new Bar(170, 7, 150, yPos);
+	_barThrowing	= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtMelee		= new Text(120, 9, 6, yPos);
 	_numMelee		= new Text(18, 9, 131, yPos);
-	_barMelee		= new Bar(170, 7, 150, yPos);
+	_barMelee		= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtStrength	= new Text(120, 9, 6, yPos);
 	_numStrength	= new Text(18, 9, 131, yPos);
-	_barStrength	= new Bar(170, 7, 150, yPos);
+	_barStrength	= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtPsiStrength	= new Text(120, 9, 6, yPos);
 	_numPsiStrength	= new Text(18, 9, 131, yPos);
-	_barPsiStrength	= new Bar(170, 7, 150, yPos);
+	_barPsiStrength	= new Bar(170, 7, 150, yPos + 1);
 
 	yPos += step;
 	_txtPsiSkill	= new Text(120, 9, 6, yPos);
 	_numPsiSkill	= new Text(18, 9, 131, yPos);
-	_barPsiSkill	= new Bar(170, 7, 150, yPos);
+	_barPsiSkill	= new Bar(170, 7, 150, yPos + 1);
 
 	setPalette("PAL_BASESCAPE");
 

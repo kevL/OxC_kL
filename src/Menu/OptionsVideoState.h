@@ -91,7 +91,6 @@ private:
 		* _txtDisplayHeight;
 	ToggleTextButton
 		* _btnLetterbox,
-		* _btnResize,
 		* _btnLockMouse;
 
 	InteractiveSurface* _displaySurface;
@@ -127,8 +126,6 @@ private:
 		void updateDisplayMode(Action* action);
 		/// Handler for clicking the Letterboxed button.
 		void btnLetterboxClick(Action* action);
-		/// Handler for clicking the Resizable button.
-		void btnResizeClick(Action* action);
 		/// Handler for clicking the Lock Mouse button.
 		void btnLockMouseClick(Action* action);
 		/// Handler for updating the selected battlescape scale.

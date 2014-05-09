@@ -65,12 +65,10 @@ SoldierArmorState::SoldierArmorState(
 	_window			= new Window(this, 192, 120, 64, 40, POPUP_BOTH);
 
 //kL	_txtTitle		= new Text(182, 9, 69, 48);
-
 	_txtSoldier		= new Text(182, 9, 69, 55);
 
 	_txtType		= new Text(102, 9, 84, 72);
 	_txtQuantity	= new Text(42, 9, 194, 72);
-//	_lstArmor->setColumns(2, 110, 42);		// TEMP.
 
 	_lstArmor		= new TextList(168, 40, 76, 88);
 
@@ -79,12 +77,12 @@ SoldierArmorState::SoldierArmorState(
 	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
-	add(_btnCancel);
 //kL	add(_txtTitle);
 	add(_txtSoldier);
 	add(_txtType);
 	add(_txtQuantity);
 	add(_lstArmor);
+	add(_btnCancel);
 
 	centerAllSurfaces();
 
@@ -101,7 +99,7 @@ SoldierArmorState::SoldierArmorState(
 	Soldier* s = _base->getSoldiers()->at(_soldier);
 /*kL	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
-//kL	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(s->getName())); */
+	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(s->getName())); */
 
 	_txtSoldier->setColor(Palette::blockOffset(13)+5);
 	_txtSoldier->setAlign(ALIGN_CENTER);
@@ -121,31 +119,34 @@ SoldierArmorState::SoldierArmorState(
 	_lstArmor->setMargin(8);
 
 	const std::vector<std::string>& armors = _game->getRuleset()->getArmorsList();
-	for (std::vector<std::string>::const_iterator i = armors.begin(); i != armors.end(); ++i)
+	for (std::vector<std::string>::const_iterator
+			i = armors.begin();
+			i != armors.end();
+			++i)
 	{
-		Armor* a = _game->getRuleset()->getArmor(*i);
-		if (_base->getItems()->getItem(a->getStoreItem()) > 0)
+		Armor* armor = _game->getRuleset()->getArmor(*i);
+		if (_base->getItems()->getItem(armor->getStoreItem()) > 0)
 		{
-			_armors.push_back(a);
+			_armors.push_back(armor);
 
 			std::wostringstream ss;
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
-				ss << _base->getItems()->getItem(a->getStoreItem());
+				ss << _base->getItems()->getItem(armor->getStoreItem());
 			else
 				ss << "-";
 
 			_lstArmor->addRow(
 							2,
-							tr(a->getType()).c_str(),
+							tr(armor->getType()).c_str(),
 							ss.str().c_str());
 		}
-		else if (a->getStoreItem() == "STR_NONE")
+		else if (armor->getStoreItem() == "STR_NONE")
 		{
-			_armors.push_back(a);
+			_armors.push_back(armor);
 
 			_lstArmor->addRow(
 							1,
-							tr(a->getType()).c_str());
+							tr(armor->getType()).c_str());
 		}
 	}
 

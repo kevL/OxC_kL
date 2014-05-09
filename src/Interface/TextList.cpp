@@ -392,8 +392,7 @@ void TextList::addRow(
 
 		txt->setText(va_arg(args, wchar_t*));
 
-		// Wordwrap text if necessary
-		if (_wrap
+		if (_wrap // Wordwrap text if necessary
 			&& txt->getTextWidth() > txt->getWidth())
 		{
 			txt->setHeight(_font->getHeight() * 2 + _font->getSpacing());
@@ -401,8 +400,7 @@ void TextList::addRow(
 			rows = 2;
 		}
 
-		// Places dots between text
-		if (_dot
+		if (_dot // Places dots between text
 			&& i < cols - 1)
 		{
 			std::wstring buf = txt->getText();
@@ -434,10 +432,11 @@ void TextList::addRow(
 		_rows.push_back(_texts.size() - 1);
 	}
 
-	// Place arrow buttons
-	if (_arrowPos != -1)
+	if (_arrowPos != -1) // Place arrow buttons
 	{
-		ArrowShape shape1, shape2;
+		ArrowShape
+			shape1,
+			shape2;
 
 		if (_arrowType == ARROW_VERTICAL)
 		{
@@ -728,7 +727,7 @@ void TextList::setWordWrap(bool wrap)
 }
 
 /**
- * Changes the contrast of a specific Text object in the list.
+ * kL. Changes the contrast of a specific Text object in the list.
  * @param row, Row number.
  * @param column, Column number.
  * @param contrast, Contrast setting.
@@ -1163,14 +1162,16 @@ void TextList::draw()
  */
 void TextList::blit(Surface* surface)
 {
-	if (_visible && !_hidden)
+	if (_visible
+		&& !_hidden)
 	{
 		_selector->blit(surface);
 	}
 
 	Surface::blit(surface);
 
-	if (_visible && !_hidden)
+	if (_visible
+		&& !_hidden)
 	{
 		if (_arrowPos != -1)
 		{
@@ -1281,7 +1282,7 @@ void TextList::mousePress(Action* action, State* state)
 		InteractiveSurface::mousePress(action, state);
 }
 
-/*
+/**
  * Ignores any mouse clicks that aren't on a row.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
@@ -1381,7 +1382,7 @@ void TextList::mouseOut(Action* action, State* state)
 	InteractiveSurface::mouseOut(action, state);
 }
 
-/*
+/**
  * Get the scroll depth.
  * @return, scroll depth.
  */
@@ -1390,7 +1391,7 @@ int TextList::getScroll()
 	return _scroll;
 }
 
-/*
+/**
  * Set the scroll depth.
  * @param scroll set the scroll depth to this.
  */

@@ -747,10 +747,11 @@ void GeoscapeState::think()
 		_game->getSavedGame()->addMonth();
 
 		determineAlienMissions(true);
+		setupTerrorMission();
 
 		_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds()
-									- _game->getSavedGame()->getBaseMaintenance()
-									- _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance());
+										- _game->getSavedGame()->getBaseMaintenance()
+										- _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance());
 	}
 
 	if (_popups.empty()
@@ -2495,16 +2496,17 @@ void GeoscapeState::time1Month()
 	//Log(LOG_INFO) << "GeoscapeState::time1Month()";
 	_game->getSavedGame()->addMonth();
 
-	// kL_note: Used for determining % retaliation & % agents discovering aLienBases.
-	int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()); // kL
-
-
 	determineAlienMissions(); // determine alien mission for this month.
 
 	int monthsPassed = _game->getSavedGame()->getMonthsPassed();
 //kL	if (monthsPassed > 5)
 	if (RNG::percent(monthsPassed * 2)) // kL
-		determineAlienMissions();
+		determineAlienMissions(); // kL_note: determine another one, I guess.
+
+	setupTerrorMission();
+
+	// kL_note: Used for determining % retaliation & % agents discovering aLienBases.
+	int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()); // kL
 
 	bool newRetaliation = false;
 //kL	if (monthsPassed > 13 - static_cast<int>(_game->getSavedGame()->getDifficulty())
@@ -2727,11 +2729,9 @@ void GeoscapeState::btnBasesClick(Action*)
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		//Log(LOG_INFO) << "GeoscapeState::btnBasesClick() getBases !empty";
-//kL		_game->pushState(new BasescapeState(_game, _game->getSavedGame()->getSelectedBase(), _globe));
 
-		unsigned int totalBases = _game->getSavedGame()->getBases()->size();
+		size_t totalBases = _game->getSavedGame()->getBases()->size();
 		//Log(LOG_INFO) << ". . totalBases = " << totalBases;
-
 		if (kL_currentBase == 0
 			|| kL_currentBase >= totalBases)
 		{
@@ -3121,33 +3121,6 @@ void GeoscapeState::handleBaseDefense(
  */
 void GeoscapeState::determineAlienMissions(bool atGameStart)
 {
-	//
-	// One terror mission per month
-	//
-
-	// Determine a random region with at least one city.
-	RuleRegion* region = 0;
-	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
-	do
-	{
-		region = _game->getRuleset()->getRegion(regions[RNG::generate(
-																	0,
-																	regions.size() - 1)]);
-	}
-	while (region->getCities()->empty());
-
-	// Choose race for terror mission.
-	const RuleAlienMission& terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
-	const std::string& terrorRace = terrorRules.generateRace(_game->getSavedGame()->getMonthsPassed());
-
-	AlienMission* terrorMission = new AlienMission(terrorRules);
-	terrorMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
-	terrorMission->setRegion(region->getType(), *_game->getRuleset());
-	terrorMission->setRace(terrorRace);
-	terrorMission->start(150);
-
-	_game->getSavedGame()->getAlienMissions().push_back(terrorMission);
-
 	if (!atGameStart)
 	{
 		//
@@ -3196,6 +3169,47 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 		// Make sure this combination never comes up again.
 		strategy.removeMission(targetRegion, research);
 	}
+}
+
+/**
+ *
+ */
+void GeoscapeState::setupTerrorMission()
+{
+	// Determine a random region with at least one city and no currently running terror mission.
+	RuleRegion* region = 0;
+	int counter = 0;
+	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
+
+	do // we try 40 times to pick a valid zone for a terror mission
+	{
+		if (counter == 40)
+			return;
+
+		region = _game->getRuleset()->getRegion(regions[RNG::generate(
+																	0,
+																	static_cast<int>(regions.size()) - 1)]);
+
+		counter++;
+	}
+	while (region->getCities()->empty()
+		&& !_game->getSavedGame()->getAlienMission(
+												region->getType(),
+												"STR_ALIEN_TERROR"));
+
+	// Choose race for terror mission.
+	const RuleAlienMission& terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
+	const std::string& terrorRace = terrorRules.generateRace(_game->getSavedGame()->getMonthsPassed());
+
+	AlienMission* terrorMission = new AlienMission(terrorRules);
+	terrorMission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
+	terrorMission->setRegion(
+						region->getType(),
+						*_game->getRuleset());
+	terrorMission->setRace(terrorRace);
+	terrorMission->start(150);
+
+	_game->getSavedGame()->getAlienMissions().push_back(terrorMission);
 }
 
 /**

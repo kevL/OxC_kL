@@ -116,6 +116,7 @@ ListGamesState::ListGamesState(
 		_noUI(false),
 		_firstValidRow(firstValidRow),
 		_autoquick(autoquick),
+		_sortable(true),
 		_inEditMode(false) // kL
 {
 	_screen = false;
@@ -388,15 +389,18 @@ void ListGamesState::lstSavesPress(Action* action)
  */
 void ListGamesState::sortNameClick(Action*)
 {
-	if (Options::saveOrder == SORT_NAME_ASC)
-		Options::saveOrder = SORT_NAME_DESC;
-	else
-		Options::saveOrder = SORT_NAME_ASC;
+	if (_sortable)
+	{
+		if (Options::saveOrder == SORT_NAME_ASC)
+			Options::saveOrder = SORT_NAME_DESC;
+		else
+			Options::saveOrder = SORT_NAME_ASC;
 
-	updateArrows();
-	_lstSaves->clearList();
+		updateArrows();
+		_lstSaves->clearList();
 
-	sortList(Options::saveOrder);
+		sortList(Options::saveOrder);
+	}
 }
 
 /**
@@ -405,15 +409,26 @@ void ListGamesState::sortNameClick(Action*)
  */
 void ListGamesState::sortDateClick(Action*)
 {
-	if (Options::saveOrder == SORT_DATE_ASC)
-		Options::saveOrder = SORT_DATE_DESC;
-	else
-		Options::saveOrder = SORT_DATE_ASC;
+	if (_sortable)
+	{
+		if (Options::saveOrder == SORT_DATE_ASC)
+			Options::saveOrder = SORT_DATE_DESC;
+		else
+			Options::saveOrder = SORT_DATE_ASC;
 
-	updateArrows();
-	_lstSaves->clearList();
+		updateArrows();
+		_lstSaves->clearList();
 
-	sortList(Options::saveOrder);
+		sortList(Options::saveOrder);
+	}
+}
+
+/**
+ *
+ */
+void ListGamesState::disableSort()
+{
+	_sortable = false;
 }
 
 }

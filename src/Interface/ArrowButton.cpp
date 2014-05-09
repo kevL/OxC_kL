@@ -113,8 +113,7 @@ void ArrowButton::draw()
 	ImageButton::draw();
 	lock();
 
-	// Draw button
-	SDL_Rect square;
+	SDL_Rect square; // Draw button
 	int color = _color + 2;
 
 	square.x = 0;
@@ -146,16 +145,14 @@ void ArrowButton::draw()
 	{
 		case OpenXcom::ARROW_BIG_UP:
 		{
-			// Draw arrow square
-			square.x = 5;
+			square.x = 5; // Draw arrow square
 			square.y = 8;
 			square.w = 3;
 			square.h = 3;
 
 			drawRect(&square, color);
 
-			// Draw arrow triangle
-			square.x = 2;
+			square.x = 2; // Draw arrow triangle
 			square.y = 7;
 			square.w = 9;
 			square.h = 1;
@@ -172,16 +169,14 @@ void ArrowButton::draw()
 		break;
 		case OpenXcom::ARROW_BIG_DOWN:
 		{
-			// Draw arrow square
-			square.x = 5;
+			square.x = 5; // Draw arrow square
 			square.y = 3;
 			square.w = 3;
 			square.h = 3;
 
 			drawRect(&square, color);
 
-			// Draw arrow triangle
-			square.x = 2;
+			square.x = 2; // Draw arrow triangle
 			square.y = 6;
 			square.w = 9;
 			square.h = 1;
@@ -198,8 +193,7 @@ void ArrowButton::draw()
 		break;
 		case OpenXcom::ARROW_SMALL_UP:
 		{
-			// Draw arrow triangle 1
-			square.x = 1;
+			square.x = 1; // Draw arrow triangle 1
 			square.y = 5;
 			square.w = 9;
 			square.h = 1;
@@ -213,8 +207,7 @@ void ArrowButton::draw()
 
 			drawRect(&square, color + 2);
 
-			// Draw arrow triangle 2
-			square.x = 2;
+			square.x = 2; // Draw arrow triangle 2
 			square.y = 5;
 			square.w = 7;
 			square.h = 1;
@@ -231,8 +224,7 @@ void ArrowButton::draw()
 		break;
 		case OpenXcom::ARROW_SMALL_DOWN:
 		{
-			// Draw arrow triangle 1
-			square.x = 1;
+			square.x = 1; // Draw arrow triangle 1
 			square.y = 2;
 			square.w = 9;
 			square.h = 1;
@@ -246,8 +238,7 @@ void ArrowButton::draw()
 
 			drawRect(&square, color + 2);
 
-			// Draw arrow triangle 2
-			square.x = 2;
+			square.x = 2; // Draw arrow triangle 2
 			square.y = 2;
 			square.w = 7;
 			square.h = 1;
@@ -264,8 +255,7 @@ void ArrowButton::draw()
 		break;
 		case OpenXcom::ARROW_SMALL_LEFT:
 		{
-			// Draw arrow triangle 1
-			square.x = 2;
+			square.x = 2; // Draw arrow triangle 1
 			square.y = 4;
 			square.w = 2;
 			square.h = 1;
@@ -280,8 +270,7 @@ void ArrowButton::draw()
 			square.w = 1;
 			drawRect(&square, color + 2);
 
-			// Draw arrow triangle 2
-			square.x = 3;
+			square.x = 3; // Draw arrow triangle 2
 			square.y = 4;
 			square.w = 2;
 			square.h = 1;
@@ -299,8 +288,7 @@ void ArrowButton::draw()
 		break;
 		case OpenXcom::ARROW_SMALL_RIGHT:
 		{
-			// Draw arrow triangle 1
-			square.x = 7;
+			square.x = 7; // Draw arrow triangle 1
 			square.y = 4;
 			square.w = 2;
 			square.h = 1;
@@ -316,8 +304,7 @@ void ArrowButton::draw()
 			square.w = 1;
 			drawRect(&square, color + 2);
 
-			// Draw arrow triangle 2
-			square.x = 6;
+			square.x = 6; // Draw arrow triangle 2
 			square.y = 4;
 			square.w = 2;
 			square.h = 1;
@@ -338,7 +325,6 @@ void ArrowButton::draw()
 		default:
 		break;
 	}
-
 	unlock();
 }
 
@@ -381,7 +367,7 @@ void ArrowButton::mousePress(Action* action, State* state)
 	}
 }
 
-/*
+/**
  * Stops scrolling the associated list.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
@@ -397,7 +383,7 @@ void ArrowButton::mouseRelease(Action* action, State* state)
 	}
 }
 
-/*
+/**
  * Scrolls the associated list to top or bottom.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
