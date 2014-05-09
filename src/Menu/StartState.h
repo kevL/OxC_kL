@@ -31,10 +31,10 @@ class Surface;
 
 enum LoadingPhase
 {
-	LOADING_NONE,		// 0
-	LOADING_STARTED,	// 1
-	LOADING_FAILED,		// 2
-	LOADING_SUCCESSFUL	// 3
+	LOADING_STARTED,	// 0
+	LOADING_FAILED,		// 1
+	LOADING_SUCCESSFUL,	// 2
+	LOADING_DONE		// 3
 };
 
 
@@ -49,21 +49,31 @@ class StartState
 private:
 	bool _wasLetterBoxed;
 
+	SDL_Thread* _thread;
 	Surface *_surface;
-	LoadingPhase _load;
 
 
 	public:
+		static LoadingPhase loading;
+		static std::string error;
+
 		/// Creates the Start state.
 		StartState(Game* game);
 		/// Cleans up the Start state.
 		~StartState();
 
-		/// Loads the game resources.
+		/// Reset everything.
+		void init();
+		/// Displays messages.
 		void think();
 
 		/// Handles key clicks.
 		void handle(Action* action);
+
+		/// Flash the window.
+		void flash();
+		/// Loads the game resources.
+		static int load(void* game_ptr);
 };
 
 }

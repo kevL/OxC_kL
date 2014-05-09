@@ -370,10 +370,14 @@ void ArrowButton::mousePress(Action* action, State* state)
 {
 	ImageButton::mousePress(action, state);
 
-	if (_list != 0
-		&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (_list != 0)
 	{
-		_timer->start();
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+			_timer->start();
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+			_list->scrollUp(false);
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+			_list->scrollDown(false);
 	}
 }
 
@@ -402,7 +406,7 @@ void ArrowButton::mouseClick(Action* action, State* state)
 {
 	ImageButton::mouseClick(action, state);
 
-	if (0 != _list
+	if (_list != 0
 		&& SDL_BUTTON_RIGHT == action->getDetails()->button.button)
 	{
 		if (_shape == ARROW_BIG_UP)

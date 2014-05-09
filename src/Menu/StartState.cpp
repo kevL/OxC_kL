@@ -19,6 +19,9 @@
 
 #include "StartState.h"
 
+#include <SDL_syswm.h>
+#include <SDL_thread.h>
+
 #include "ErrorMessageState.h"
 #include "IntroState.h"
 #include "MainMenuState.h"
@@ -46,14 +49,17 @@
 namespace OpenXcom
 {
 
+LoadingPhase StartState::loading	= LOADING_STARTED;
+std::string StartState::error		= "";
+
+
 /**
  * Initializes all the elements in the Loading screen.
  * @param game Pointer to the core game.
  */
 StartState::StartState(Game* game)
 	:
-		State(game),
-		_load(LOADING_NONE)
+		State(game)
 {
 	int
 		dx = (Options::baseXResolution - 320) / 2,
@@ -94,72 +100,62 @@ StartState::StartState(Game* game)
 }
 
 /**
- *
+ * Kill the thread in case the game is quit early.
  */
 StartState::~StartState()
 {
+	SDL_KillThread(_thread);
 }
 
 /**
- * Waits a cycle to load the resources so the screen is blitted first.
+ * Reset and reload data.
+ */
+void StartState::init()
+{
+	State::init();
+
+	// Silence!
+	Sound::stop();
+	Music::stop();
+
+	// Load the game data in a separate thread
+	_thread = SDL_CreateThread(
+							load,
+							(void*)_game);
+
+	if (_thread == 0)
+	{
+		// If we can't create the thread, just load it as usual
+		load((void*)_game);
+	}
+}
+
+/**
  * If the loading fails, it shows an error, otherwise moves on to the game.
  */
 void StartState::think()
 {
 	State::think();
 
-	switch (_load)
+	switch (loading)
 	{
-		case LOADING_STARTED:
-			try
-			{
-				Log(LOG_INFO) << "Loading ruleset...";
-				_game->loadRuleset();
-				Log(LOG_INFO) << "Ruleset loaded.";
+		case LOADING_FAILED:
+			flash();
 
-				Log(LOG_INFO) << "Loading resources...";
-				Ruleset* ruleset = _game->getRuleset(); // kL
-				_game->setResourcePack(new XcomResourcePack( // kL sza_MusicRules, sza_ExtraMusic
-														ruleset->getMusic(),
-														ruleset->getExtraSprites(),
-														ruleset->getExtraSounds(),
-														ruleset->getExtraMusic()));
-//kL				_game->setResourcePack(new XcomResourcePack(
-//kL														_game->getRuleset()->getExtraSprites(),
-//kL														_game->getRuleset()->getExtraSounds()));
-				Log(LOG_INFO) << "Resources loaded.";
+			_surface->clear();
+			_surface->drawString(1, 9, "ERROR:", 2);
+			_surface->drawString(1, 17, error.c_str(), 2);
+			_surface->drawString(1, 49, "Make sure you installed OpenXcom", 1);
+			_surface->drawString(1, 57, "correctly.", 1);
+			_surface->drawString(1, 73, "Check the requirements and", 1);
+			_surface->drawString(1, 81, "documentation for more details.", 1);
+			_surface->drawString(75, 183, "Press any key to quit", 1);
 
-				Log(LOG_INFO) << "Loading language...";
-				_game->defaultLanguage();
-				Log(LOG_INFO) << "Language loaded.";
-
-				_load = LOADING_SUCCESSFUL;
-			}
-			catch (Exception &e)
-			{
-				_load = LOADING_FAILED;
-				_surface->clear();
-				_surface->drawString(1, 9, "ERROR:", 2);
-				_surface->drawString(1, 17, e.what(), 2);
-				_surface->drawString(1, 49, "Make sure you installed OpenXcom", 1);
-				_surface->drawString(1, 57, "correctly.", 1);
-				_surface->drawString(1, 73, "Check the requirements and", 1);
-				_surface->drawString(1, 81, "documentation for more details.", 1);
-				_surface->drawString(75, 183, "Press any key to quit", 1);
-				Log(LOG_ERROR) << e.what();
-			}
-		break;
-		case LOADING_NONE:
-			Sound::stop();
-			Music::stop();
-
-			_game->getScreen()->clear();
-			blit();
-			_game->getScreen()->flip();
-
-			_load = LOADING_STARTED;
+			loading = LOADING_DONE;
 		break;
 		case LOADING_SUCCESSFUL:
+			flash();
+
 			Log(LOG_INFO) << "OpenXcom started!";
 			if (!Options::reload
 				&& Options::playIntro)
@@ -233,11 +229,69 @@ void StartState::think()
 void StartState::handle(Action *action)
 {
 	State::handle(action);
-	if (_load == LOADING_FAILED)
+	if (loading == LOADING_DONE)
 	{
 		if (action->getDetails()->type == SDL_KEYDOWN)
 			_game->quit();
 	}
+}
+
+/**
+ * Notifies the user that maybe he should have a look.
+ */
+void StartState::flash()
+{
+#ifdef _WIN32
+	SDL_SysWMinfo wminfo;
+	SDL_VERSION(&wminfo.version)
+	if (SDL_GetWMInfo(&wminfo))
+	{
+		HWND hwnd = wminfo.window;
+		FlashWindow(hwnd, true);
+	}
+#endif
+}
+
+/**
+ * Loads game data and updates status accordingly.
+ * @param game_ptr Pointer to the game.
+ */
+int StartState::load(void* game_ptr)
+{
+	Game* game = (Game*)game_ptr;
+	try
+	{
+		Log(LOG_INFO) << "Loading ruleset...";
+		game->loadRuleset();
+		Log(LOG_INFO) << "Ruleset loaded.";
+
+		Log(LOG_INFO) << "Loading resources...";
+		Ruleset* ruleset = game->getRuleset();		// kL
+		game->setResourcePack(new XcomResourcePack(	// kL sza_MusicRules, sza_ExtraMusic
+												ruleset->getMusic(),
+												ruleset->getExtraSprites(),
+												ruleset->getExtraSounds(),
+												ruleset->getExtraMusic()));
+//kL		game->setResourcePack(new XcomResourcePack(
+//kL												game->getRuleset()->getExtraSprites(),
+//kL												game->getRuleset()->getExtraSounds()));
+		Log(LOG_INFO) << "Resources loaded.";
+
+		Log(LOG_INFO) << "Loading language...";
+		game->defaultLanguage();
+		Log(LOG_INFO) << "Language loaded successfully.";
+
+		loading = LOADING_SUCCESSFUL;
+	}
+	catch (Exception &e)
+	{
+		error = e.what();
+		Log(LOG_ERROR) << error;
+
+		loading = LOADING_FAILED;
+	}
+
+	return 0;
 }
 
 }

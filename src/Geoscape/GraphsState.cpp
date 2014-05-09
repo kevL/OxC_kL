@@ -220,10 +220,10 @@ GraphsState::GraphsState(Game* game)
 
 	_regionToggles.push_back(new GraphBtnInfo(
 											tr("STR_TOTAL_UC"),
-											22));
+											18)); // 22
 
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
-	_btnRegionTotal->setInvertColor(22);
+	_btnRegionTotal->setInvertColor(18); // 22
 	_btnRegionTotal->setText(tr("STR_TOTAL_UC"));
 	_btnRegionTotal->onMousePress((ActionHandler)& GraphsState::btnRegionListClick);
 
@@ -1677,14 +1677,14 @@ void GraphsState::drawRegionLines()
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset(9));
+						Palette::blockOffset(9)-8); //+0
 			else
 				_xcomRegionLines.back()->drawLine(
 						x,
 						y,
 						x + 17,
 						newLineVector.at(newLineVector.size() - 2),
-						Palette::blockOffset(9));
+						Palette::blockOffset(9)-8); //+0
 		}
 	}
 

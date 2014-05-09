@@ -319,7 +319,6 @@ MonthlyReportState::~MonthlyReportState()
  */
 void MonthlyReportState::calculateChanges()
 {
-	// initialize all variables.
 	_ratingLastMonth = 0;
 
 	int
@@ -356,7 +355,9 @@ void MonthlyReportState::calculateChanges()
 	// So, hey, I'll take it out for you.. just a sec.
 	xComTotal = _game->getSavedGame()->getResearchScores().at(monthOffset) + xComSubTotal;
 
-	_game->getSavedGame()->getResearchScores().at(monthOffset) += 400; // what's this "400" for...? See below, too.
+	// the council is more lenient after the first month
+//kL	if (_game->getSavedGame()->getMonthsPassed() > 1)
+//kL		_game->getSavedGame()->getResearchScores().at(monthOffset) += 400;
 
 	if (_game->getSavedGame()->getResearchScores().size() > 2)
 		_ratingLastMonth += _game->getSavedGame()->getResearchScores().at(lastMonthOffset);
@@ -402,7 +403,7 @@ void MonthlyReportState::calculateChanges()
 	}
 
 	// calculate total.
-	_ratingTotal = xComTotal - aLienTotal + 400; // what's this "400" for...? See above, too.
+	_ratingTotal = xComTotal - aLienTotal;
 }
 
 /**

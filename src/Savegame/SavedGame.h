@@ -324,7 +324,7 @@ private:
 		/// sets the research score for the month
 		void addResearchScore(int score);
 		/// gets the list of research scores
-		std::vector<int> getResearchScores();
+		std::vector<int>& getResearchScores();
 
 		/// gets whether or not the player has been warned
 		bool getWarned() const;

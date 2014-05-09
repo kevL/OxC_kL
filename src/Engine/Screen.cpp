@@ -441,6 +441,7 @@ void Screen::resetDisplay(bool resetVideo)
 				throw Exception(SDL_GetError());
 			}
 		}
+		Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
 	}
 	else
 		clear();
@@ -522,8 +523,6 @@ void Screen::resetDisplay(bool resetVideo)
 		OpenGL::checkErrors = Options::checkOpenGLErrors;
 #endif
 	}
-
-	Log(LOG_INFO) << "Display set to " << getWidth() << "x" << getHeight() << "x" << (int)_screen->format->BitsPerPixel << ".";
 
 	if (_screen->format->BitsPerPixel == 8)
 		setPalette(getPalette());

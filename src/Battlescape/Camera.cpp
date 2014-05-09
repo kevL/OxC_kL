@@ -169,8 +169,8 @@ void Camera::mouseRelease(Action* action, State*)
  */
 void Camera::mouseOver(Action* action, State*)
 {
-	if (_map->getCursorType() == CT_NONE) return;
-
+	if (_map->getCursorType() == CT_NONE)
+		return;
 
 	if (Options::battleEdgeScroll == SCROLL_AUTO
 		|| _scrollTrigger)
@@ -215,7 +215,7 @@ void Camera::mouseOver(Action* action, State*)
 			_scrollMouseY = scrollSpeed;
 
 			// if close to left or right edge, also scroll diagonally
-//kL			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX > 0) // up left
+//kL			if (posX < (SCROLL_DIAGONAL_EDGE * action->getXScale()) && posX >= 0) // up left
 			if (posX < SCROLL_DIAGONAL_EDGE * action->getXScale()) // kL
 			{
 				_scrollMouseX = scrollSpeed;

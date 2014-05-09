@@ -217,15 +217,13 @@ ArticleStateItem::ArticleStateItem(
 	switch (item->getBattleType())
 	{
 		case BT_FIREARM:
-//kL			_txtDamage = new Text(82, 10, 194, 7);
-			_txtDamage = new Text(80, 10, 199, 7);		// kL
+			_txtDamage = new Text(80, 10, 199, 7);
 			add(_txtDamage);
 			_txtDamage->setColor(Palette::blockOffset(14)+15);
 			_txtDamage->setAlign(ALIGN_CENTER);
 			_txtDamage->setText(tr("STR_DAMAGE_UC"));
 
-//kL			_txtAmmo = new Text(42, 10, 272, 7);
-			_txtAmmo = new Text(45, 10, 271, 7);		// kL
+			_txtAmmo = new Text(45, 10, 271, 7);
 			add(_txtAmmo);
 			_txtAmmo->setColor(Palette::blockOffset(14)+15);
 			_txtAmmo->setAlign(ALIGN_CENTER);
