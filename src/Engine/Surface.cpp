@@ -528,8 +528,7 @@ void Surface::offset(
 		{
 			p = min;
 		}
-
-		if (max != -1
+		else if (max != -1
 			&& p > max)
 		{
 			p = max;

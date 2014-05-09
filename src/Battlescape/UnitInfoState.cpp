@@ -630,7 +630,15 @@ void UnitInfoState::handle(Action* action)
 
 			_game->popState();
 		}
-		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
+		// kL_begin:
+		else if (!_mindProbe)
+		{
+			if (action->getDetails()->button.button == SDL_BUTTON_X1)
+				btnNextClick(action);
+			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
+				btnPrevClick(action);
+		} // kL_end.
+/*kL		else if (action->getDetails()->button.button == SDL_BUTTON_X1)
 		{
 			if (!_mindProbe)
 				btnNextClick(action);
@@ -639,22 +647,12 @@ void UnitInfoState::handle(Action* action)
 		{
 			if (!_mindProbe)
 				btnPrevClick(action);
-		}
+		} */
 	}
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		if (action->getDetails()->key.keysym.sym == Options::keyBattleNextUnit)
-		{
-			if (!_mindProbe)
-				btnNextClick(action);
-		}
-		else if (action->getDetails()->key.keysym.sym == Options::keyBattlePrevUnit)
-		{
-			if (!_mindProbe)
-				btnPrevClick(action);
-		}
-		else if (action->getDetails()->key.keysym.sym == Options::keyCancel
+		if (action->getDetails()->key.keysym.sym == Options::keyCancel
 			|| action->getDetails()->key.keysym.sym == Options::keyBattleStats)
 		{
 			if (_fromInventory
@@ -665,6 +663,19 @@ void UnitInfoState::handle(Action* action)
 
 			_game->popState();
 		}
+
+		// kL_note: The two following cases have been removed to prevent TAB from
+		// jumping to every second soldier when cycling through units:
+/*		else if (action->getDetails()->key.keysym.sym == Options::keyBattleNextUnit)
+		{
+			if (!_mindProbe)
+				btnNextClick(action);
+		}
+		else if (action->getDetails()->key.keysym.sym == Options::keyBattlePrevUnit)
+		{
+			if (!_mindProbe)
+				btnPrevClick(action);
+		} */
 	}
 }
 

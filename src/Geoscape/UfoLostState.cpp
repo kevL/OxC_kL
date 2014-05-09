@@ -50,7 +50,7 @@ UfoLostState::UfoLostState(
 
 
 	_window		= new Window(this, 192, 104, 32, 48, POPUP_BOTH);
-	_txtTitle	= new Text(160, 30, 48, 72);
+	_txtTitle	= new Text(160, 32, 48, 72);
 	_btnOk		= new TextButton(80, 14, 88, 114);
 
 	setPalette("PAL_GEOSCAPE", 7);

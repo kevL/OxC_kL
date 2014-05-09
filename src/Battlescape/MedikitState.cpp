@@ -84,7 +84,7 @@ MedikitTitle::MedikitTitle(
 		int y,
 		const std::wstring& title)
 	:
-		Text (60, 16, 192, y)
+		Text(73, 9, 186, y) //(60, 16, 192, y)
 {
 	this->setText(title);
 	this->setHighContrast(true);
@@ -109,13 +109,13 @@ class MedikitTxt
  */
 MedikitTxt::MedikitTxt(int y)
 	:
-		Text(30, 22, 220, y)
+		Text(33, 17, 220, y) //(30, 22, 220, y)
 {
 	// Note: we can't set setBig here. The needed font is only set when added to State
 	this->setColor(Palette::blockOffset(1));
 	this->setHighContrast(true);
 	this->setAlign(ALIGN_CENTER);
-	this->setVerticalAlign(ALIGN_MIDDLE);
+//	this->setVerticalAlign(ALIGN_MIDDLE); // kL
 }
 
 /**
@@ -176,8 +176,10 @@ MedikitState::MedikitState(
 		_surface->drawRect(&current, Palette::blockOffset(15)+15);
 	}
 
-	_partTxt		= new Text(50, 15, 90, 120);
-	_woundTxt		= new Text(10, 15, 145, 120);
+//	_partTxt		= new Text(50, 15, 90, 120);	// kL
+//	_woundTxt		= new Text(10, 15, 145, 120);	// kL
+	_partTxt		= new Text(62, 9, 82, 120);
+	_woundTxt		= new Text(14, 9, 145, 120);
 	_medikitView	= new MedikitView(
 									52, 58, 95, 60,
 									_game,
@@ -190,9 +192,12 @@ MedikitState::MedikitState(
 	InteractiveSurface* pkButton		= new MedikitButton(48);
 	InteractiveSurface* healButton		= new MedikitButton(120);
 
-	_pkText			= new MedikitTxt(50);
-	_stimulantTxt	= new MedikitTxt(85);
-	_healTxt		= new MedikitTxt(120);
+//	_pkText			= new MedikitTxt(50);
+//	_stimulantTxt	= new MedikitTxt(85);
+//	_healTxt		= new MedikitTxt(120);
+	_pkText			= new MedikitTxt(52);
+	_stimulantTxt	= new MedikitTxt(88);
+	_healTxt		= new MedikitTxt(124);
 
 	add(_surface);
 	add(_medikitView);
