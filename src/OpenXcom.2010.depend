@@ -6000,7 +6000,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1399715410 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1399719000 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6488,7 +6488,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1399715367 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1399719000 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<sstream>
 	"Camera.h"
@@ -8321,7 +8321,7 @@
 	"Engine/Screen.h"
 	"Menu/StartState.h"
 
-1399668359 f:\git\openxcom\src\menu\startstate.h
+1399719931 f:\git\openxcom\src\menu\startstate.h
 	"../Engine/State.h"
 
 1399502322 source:f:\git\openxcom\src\menu\abandongamestate.cpp

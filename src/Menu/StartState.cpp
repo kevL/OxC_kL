@@ -65,20 +65,12 @@ StartState::StartState(Game* game)
 		dx = (Options::baseXResolution - 320) / 2,
 		dy = (Options::baseYResolution - 200) / 2;
 
-	_wasLetterBoxed = Options::keepAspectRatio;
-
 	Options::newDisplayWidth = Options::displayWidth;
 	Options::newDisplayHeight = Options::displayHeight;
 
 	_thread = 0;
 	loading = LOADING_STARTED;
 	error = "";
-
-	if (!Options::useOpenGL)
-	{
-		Options::keepAspectRatio = false;
-		game->getScreen()->resetDisplay(false);
-	}
 
 	_surface = new Surface(320, 200, dx, dy);
 
@@ -165,17 +157,17 @@ void StartState::think()
 			if (!Options::reload
 				&& Options::playIntro)
 			{
+				bool letterbox = Options::keepAspectRatio;
 				Options::keepAspectRatio = true;
+
 				_game->getScreen()->resetDisplay(false);
 
 				_game->setState(new IntroState(
 											_game,
-											_wasLetterBoxed));
+											letterbox));
 			}
 			else
 			{
-				Options::keepAspectRatio = _wasLetterBoxed;
-
 				// This uses baseX/Y options for Geoscape & Basescape:
 				Options::baseXResolution = Options::baseXGeoscape; // kL
 				Options::baseYResolution = Options::baseYGeoscape; // kL

@@ -47,10 +47,8 @@ class StartState
 {
 
 private:
-	bool _wasLetterBoxed;
-
 	SDL_Thread* _thread;
-	Surface *_surface;
+	Surface* _surface;
 
 
 	public:

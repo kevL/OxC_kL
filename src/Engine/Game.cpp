@@ -246,7 +246,7 @@ void Game::run()
 	};
 
 	// this will avoid processing SDL's resize event on startup, workaround for the heap allocation error it causes.
-	bool stupidityFlag = Options::allowResize;
+	bool startupEvent = Options::allowResize;
 
 	while (!_quit)
 	{
@@ -310,7 +310,7 @@ void Game::run()
 				case SDL_VIDEORESIZE:
 					if (Options::allowResize)
 					{
-						if (!stupidityFlag)
+						if (!startupEvent)
 						{
 							Options::newDisplayWidth	= Options::displayWidth = std::max(
 																						Screen::ORIGINAL_WIDTH,
@@ -346,7 +346,7 @@ void Game::run()
 							_screen->resetDisplay();
 						}
 						else
-							stupidityFlag = false;
+							startupEvent = false;
 					}
 				break;
 				case SDL_MOUSEMOTION:

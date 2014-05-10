@@ -431,6 +431,8 @@ void IntroState::init()
 {
 	State::init();
 
+	Options::keepAspectRatio = _wasLetterBoxed;
+
 	if (CrossPlatform::fileExists(_introFile)
 		&& (CrossPlatform::fileExists(_introSoundFileDOS)
 			|| CrossPlatform::fileExists(_introSoundFileWin)))
@@ -513,8 +515,6 @@ void IntroState::init()
 		Music::stop();
 #endif
 	}
-
-	Options::keepAspectRatio = _wasLetterBoxed;
 
 	// This uses baseX/Y options for Geoscape & Basescape:
 	Options::baseXResolution = Options::baseXGeoscape; // kL
