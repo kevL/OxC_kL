@@ -877,8 +877,8 @@ void BattlescapeState::mapOver(Action* action)
 
 		_isMouseScrolled = true;
 
-		// Set the mouse cursor back
-		SDL_EventState(
+		// Set the mouse cursor back ( or not )
+/*kL		SDL_EventState(
 					SDL_MOUSEMOTION,
 					SDL_IGNORE);
 		SDL_WarpMouse(
@@ -886,7 +886,7 @@ void BattlescapeState::mapOver(Action* action)
 					static_cast<Uint16>(_yBeforeMouseScrolling));
 		SDL_EventState(
 					SDL_MOUSEMOTION,
-					SDL_ENABLE);
+					SDL_ENABLE); */
 
 		// Check the threshold
 		_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
@@ -896,7 +896,8 @@ void BattlescapeState::mapOver(Action* action)
 									|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 		// Scrolling
-		if (Options::dragScrollInvert)
+//kL		if (Options::dragScrollInvert)
+		if (!Options::dragScrollInvert) // kL
 		{
 			_map->getCamera()->scrollXY(
 									static_cast<int>(-action->getDetails()->motion.xrel),

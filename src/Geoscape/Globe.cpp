@@ -2525,8 +2525,8 @@ void Globe::mouseOver(Action* action, State* state)
 
 			_isMouseScrolled = true;
 
-			// Set the mouse cursor back
-			SDL_EventState(
+			// Set the mouse cursor back ( or not )
+/*kL			SDL_EventState(
 						SDL_MOUSEMOTION,
 						SDL_IGNORE);
 			SDL_WarpMouse(
@@ -2534,7 +2534,7 @@ void Globe::mouseOver(Action* action, State* state)
 						static_cast<Uint16>(_yBeforeMouseScrolling));
 			SDL_EventState(
 						SDL_MOUSEMOTION,
-						SDL_ENABLE);
+						SDL_ENABLE); */
 
 			// Check the threshold
 			_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
@@ -2819,7 +2819,7 @@ void Globe::toggleRadarLines()
 	drawRadars();
 }
 
-/*
+/**
  * Resizes the geoscape.
  */
 void Globe::resize()
@@ -2856,7 +2856,7 @@ void Globe::resize()
 	cachePolygons();
 }
 
-/*
+/**
  * Set up the Radius of earth at the various zoom levels.
  * @param width the new width of the globe.
  * @param height the new height of the globe.

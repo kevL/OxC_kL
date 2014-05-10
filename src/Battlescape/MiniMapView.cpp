@@ -424,14 +424,20 @@ void MiniMapView::mouseOver(Action* action, State* state)
 
 		_isMouseScrolled = true;
 
-		// Set the mouse cursor back
-		SDL_EventState(SDL_MOUSEMOTION, SDL_IGNORE);
-		SDL_WarpMouse(_xBeforeMouseScrolling, _yBeforeMouseScrolling);
-		SDL_EventState(SDL_MOUSEMOTION, SDL_ENABLE);
+		// Set the mouse cursor back ( or not )
+/*kL		SDL_EventState(
+					SDL_MOUSEMOTION,
+					SDL_IGNORE);
+		SDL_WarpMouse(
+					static_cast<Uint16>(_xBeforeMouseScrolling),
+					static_cast<Uint16>(_yBeforeMouseScrolling));
+		SDL_EventState(
+					SDL_MOUSEMOTION,
+					SDL_ENABLE); */
 
 		// Check the threshold
-		_totalMouseMoveX += action->getDetails()->motion.xrel;
-		_totalMouseMoveY += action->getDetails()->motion.yrel;
+		_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
+		_totalMouseMoveY += static_cast<int>(action->getDetails()->motion.yrel);
 		if (!_mouseMovedOverThreshold)
 			_mouseMovedOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
 									|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
@@ -441,23 +447,26 @@ void MiniMapView::mouseOver(Action* action, State* state)
 			newX,
 			newY;
 
-		if (Options::dragScrollInvert)
+//kL		if (Options::dragScrollInvert)
+		if (!Options::dragScrollInvert) // kL
 		{
-			_mouseScrollX += action->getDetails()->motion.xrel;
-			_mouseScrollY += action->getDetails()->motion.yrel;
+			_mouseScrollX += static_cast<int>(action->getDetails()->motion.xrel);
+			_mouseScrollY += static_cast<int>(action->getDetails()->motion.yrel);
 			newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
 			newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
 
 			// Keep the limits...
-			if (newX < -1 || _camera->getMapSizeX() < newX)
+			if (newX < -1
+				|| _camera->getMapSizeX() < newX)
 			{
-				_mouseScrollX -= action->getDetails()->motion.xrel;
+				_mouseScrollX -= static_cast<int>(action->getDetails()->motion.xrel);
 				newX = _posBeforeMouseScrolling.x + _mouseScrollX / 4;
 			}
 
-			if (newY < -1 || _camera->getMapSizeY() < newY)
+			if (newY < -1
+				|| _camera->getMapSizeY() < newY)
 			{
-				_mouseScrollY -= action->getDetails()->motion.yrel;
+				_mouseScrollY -= static_cast<int>(action->getDetails()->motion.yrel);
 				newY = _posBeforeMouseScrolling.y + _mouseScrollY / 4;
 			}
 		}
@@ -469,11 +478,13 @@ void MiniMapView::mouseOver(Action* action, State* state)
 													static_cast<double>(_totalMouseMoveY) / action->getYScale() / 4.0);
 
 			// Keep the limits...
-			if (newX < -1) newX = -1;
+			if (newX < -1)
+				newX = -1;
 			else if (_camera->getMapSizeX() < newX)
 				newX = _camera->getMapSizeX();
 
-			if (newY < -1) newY = -1;
+			if (newY < -1)
+				newY = -1;
 			else if (_camera->getMapSizeY() < newY)
 				newY = _camera->getMapSizeY();
 		}
@@ -486,8 +497,8 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		_redraw = true;
 
 		// We don't want to look the mouse-cursor jumping :)
-		action->getDetails()->motion.x = _xBeforeMouseScrolling;
-		action->getDetails()->motion.y = _yBeforeMouseScrolling;
+		action->getDetails()->motion.x = static_cast<Uint16>(_xBeforeMouseScrolling);
+		action->getDetails()->motion.y = static_cast<Uint16>(_yBeforeMouseScrolling);
 
 		_game->getCursor()->handle(action);
 	}
