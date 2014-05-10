@@ -80,8 +80,10 @@ PurchaseState::PurchaseState(
 		_iQty(0.0)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
+
 	_txtTitle		= new Text(310, 17, 5, 9);
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
+	_txtSpaceUsed	= new Text(85, 9, 219, 9);
 
 	_txtFunds		= new Text(140, 9, 16, 24);
 	_txtPurchases	= new Text(140, 9, 160, 24);
@@ -91,8 +93,9 @@ PurchaseState::PurchaseState(
 	_txtCost = new Text(102, 9, 152, Options::storageLimitsEnforced? 44:33);
 	_txtQuantity = new Text(60, 9, 256, Options::storageLimitsEnforced? 44:33);
 	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44); */
+
 	_txtItem		= new Text(30, 9, 16, 33);
-	_txtSpaceUsed	= new Text(85, 9, 70, 33);
+//	_txtSpaceUsed	= new Text(85, 9, 70, 33);
 	_txtCost		= new Text(102, 9, 166, 33);
 	_txtQuantity	= new Text(48, 9, 267, 33);
 
@@ -160,6 +163,7 @@ PurchaseState::PurchaseState(
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
 	_txtSpaceUsed->setSecondaryColor(Palette::blockOffset(13));
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
+	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
 	std::wostringstream ss8;
 	ss8 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(ss8.str());

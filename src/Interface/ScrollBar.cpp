@@ -55,7 +55,8 @@ ScrollBar::ScrollBar(
 		_contrast(false),
 		_bg(0)
 {
-	_track = new Surface(width - 2, height + 1, x, y);
+//kL	_track = new Surface(width - 2, height + 1, x, y);
+	_track = new Surface(width - 2, height, x, y); // kL
 	_thumb = new Surface(width, height, x, y);
 
 	_thumbRect.x = 0;
@@ -176,8 +177,7 @@ void ScrollBar::setPalette(
 }
 
 /**
- * Automatically updates the scrollbar
- * when the mouse moves.
+ * Automatically updates the scrollbar when the mouse moves.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -189,15 +189,15 @@ void ScrollBar::handle(Action* action, State* state)
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
 			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
-		int cursorY = static_cast<int>(floor(action->getDetails()->motion.y / action->getYScale()));
+		int cursorY = static_cast<int>(floor(static_cast<double>(action->getDetails()->motion.y) / action->getYScale()));
 		int y = std::min(
 					std::max(
-							cursorY - getY() - _thumbRect.h / 2,
+							cursorY - getY() - static_cast<int>(_thumbRect.h) / 2,
 							0),
-					getHeight() - _thumbRect.h + 1);
+					getHeight() - static_cast<int>(_thumbRect.h) + 1);
 
-		double scale = static_cast<double>(_list->getRows() / getHeight());
-		int scroll = static_cast<int>(floor(y * scale));
+		double scale = static_cast<double>(static_cast<int>(_list->getRows()) / getHeight());
+		size_t scroll = static_cast<size_t>(floor(static_cast<double>(y) * scale));
 
 		_list->scrollTo(scroll);
 	}
@@ -274,7 +274,7 @@ void ScrollBar::drawTrack()
 		if (_contrast)
 			_track->offset(-5, 1);
 		else if (_list->getComboBox())
-			_track->offset(+1, Palette::backPos);
+			_track->offset(1, Palette::backPos);
 		else
 			_track->offset(-5, Palette::backPos);
 	}
@@ -285,19 +285,18 @@ void ScrollBar::drawTrack()
  */
 void ScrollBar::drawThumb()
 {
-	double scale = static_cast<double>(getHeight() / _list->getRows());
+	double scale = static_cast<double>(getHeight()) / static_cast<double>(_list->getRows());
 
 	_thumbRect.x = 0;
-	_thumbRect.y = static_cast<int>(floor(_list->getScroll() * scale));
-	_thumbRect.w = _thumb->getWidth();
-	_thumbRect.h = static_cast<int>(ceil(_list->getVisibleRows() * scale));
+	_thumbRect.y = static_cast<Sint16>(floor(static_cast<double>(_list->getScroll()) * scale));
+	_thumbRect.w = static_cast<Uint16>(_thumb->getWidth());
+	_thumbRect.h = static_cast<Uint16>(ceil(static_cast<double>(_list->getVisibleRows()) * scale));
 
-	// Draw base button
 	_thumb->clear();
 	_thumb->lock();
 
-	SDL_Rect square = _thumbRect;
-	int color = _color + 2;
+	SDL_Rect square = _thumbRect; // Draw filled button
+	Uint8 color = _color + 2;
 
 	square.w--;
 	square.h--;
@@ -329,8 +328,7 @@ void ScrollBar::drawThumb()
 				_thumbRect.y,
 				_color + 4);
 
-	// Hollow it out
-	color = _color + 5;
+	color = _color + 5; // Hollow it out
 
 	square.x++;
 	square.y++;

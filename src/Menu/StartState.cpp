@@ -49,8 +49,8 @@
 namespace OpenXcom
 {
 
-LoadingPhase StartState::loading	= LOADING_STARTED;
-std::string StartState::error		= "";
+LoadingPhase StartState::loading;
+std::string StartState::error;
 
 
 /**
@@ -69,6 +69,10 @@ StartState::StartState(Game* game)
 
 	Options::newDisplayWidth = Options::displayWidth;
 	Options::newDisplayHeight = Options::displayHeight;
+
+	_thread = 0;
+	loading = LOADING_STARTED;
+	error = "";
 
 	if (!Options::useOpenGL)
 	{
@@ -104,7 +108,8 @@ StartState::StartState(Game* game)
  */
 StartState::~StartState()
 {
-	SDL_KillThread(_thread);
+	if (_thread != 0)
+		SDL_KillThread(_thread);
 }
 
 /**

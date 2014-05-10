@@ -96,15 +96,18 @@ SellState::SellState(
 	_txtSell = new Text(96, 9, 180, Options::storageLimitsEnforced? 44:33);
 	_txtValue = new Text(40, 9, 260, Options::storageLimitsEnforced? 44:33);
 	_lstItems = new TextList(287, Options::storageLimitsEnforced? 112:120, 8, Options::storageLimitsEnforced? 55:44); */
+
 	_window			= new Window(this, 320, 200, 0, 0);
+
 	_txtTitle		= new Text(310, 17, 5, 9);
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
+	_txtSpaceUsed	= new Text(85, 9, 219, 9);
 
 	_txtFunds		= new Text(140, 9, 16, 24);
 	_txtSales		= new Text(140, 9, 160, 24);
 
 	_txtItem		= new Text(30, 9, 16, 33);
-	_txtSpaceUsed	= new Text(85, 9, 70, 33);
+//	_txtSpaceUsed	= new Text(85, 9, 70, 33);
 	_txtQuantity	= new Text(54, 9, 166, 33);
 	_txtSell		= new Text(20, 9, 226, 33);
 	_txtValue		= new Text(40, 9, 248, 33);
@@ -196,6 +199,7 @@ SellState::SellState(
 	_txtSpaceUsed->setColor(_color);
 	_txtSpaceUsed->setSecondaryColor(_color2);
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
+	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
 	std::wostringstream ss1;
 	ss1 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
 	_txtSpaceUsed->setText(ss1.str());

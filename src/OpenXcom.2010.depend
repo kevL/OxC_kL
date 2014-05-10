@@ -5194,7 +5194,7 @@
 1397881417 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1399383786 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1399706722 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	<cfloat>
 	<climits>
@@ -5319,7 +5319,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1399406280 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1399706722 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	<climits>
 	<cmath>
@@ -7653,7 +7653,7 @@
 1398435303 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1399670256 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1399703253 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8503,19 +8503,20 @@
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 
-1399545888 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1399703520 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	<SDL.h>
 	"MainMenuState.h"
-	"OptionsVideoState.h"
-	"OptionsAudioState.h"
-	"OptionsControlsState.h"
-	"OptionsGeoscapeState.h"
-	"OptionsBattlescapeState.h"
 	"OptionsAdvancedState.h"
-	"OptionsModsState.h"
-	"OptionsDefaultsState.h"
+	"OptionsAudioState.h"
+	"OptionsBattlescapeState.h"
 	"OptionsConfirmState.h"
+	"OptionsControlsState.h"
+	"OptionsDefaultsState.h"
+	"OptionsGeoscapeState.h"
+	"OptionsModsState.h"
+	"OptionsNoAudioState.h"
+	"OptionsVideoState.h"
 	"StartState.h"
 	"../Battlescape/BattlescapeState.h"
 	"../Engine/Action.h"
@@ -8668,7 +8669,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1399668696 source:f:\git\openxcom\src\menu\startstate.cpp
+1399704418 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	<SDL_syswm.h>
 	<SDL_thread.h>
@@ -11803,7 +11804,7 @@
 	<math.h>
 	"fmopl.h"
 
-1399673756 source:f:\git\openxcom\src\interface\scrollbar.cpp
+1399705349 source:f:\git\openxcom\src\interface\scrollbar.cpp
 	"ScrollBar.h"
 	<algorithm>
 	<cmath>
@@ -11813,4 +11814,15 @@
 
 1399467061 f:\git\openxcom\src\interface\scrollbar.h
 	"../Engine/InteractiveSurface.h"
+
+1399703663 f:\git\openxcom\src\menu\optionsnoaudiostate.h
+	"OptionsBaseState.h"
+
+1399703716 source:f:\git\openxcom\src\menu\optionsnoaudiostate.cpp
+	"OptionsNoAudioState.h"
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Engine/Palette.h"
+	"../Interface/Text.h"
+	"../Resource/ResourcePack.h"
 
