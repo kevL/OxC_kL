@@ -22,15 +22,16 @@
 #include <SDL.h>
 
 #include "MainMenuState.h"
-#include "OptionsVideoState.h"
-#include "OptionsAudioState.h"
-#include "OptionsControlsState.h"
-#include "OptionsGeoscapeState.h"
-#include "OptionsBattlescapeState.h"
 #include "OptionsAdvancedState.h"
-#include "OptionsModsState.h"
-#include "OptionsDefaultsState.h"
+#include "OptionsAudioState.h"
+#include "OptionsBattlescapeState.h"
 #include "OptionsConfirmState.h"
+#include "OptionsControlsState.h"
+#include "OptionsDefaultsState.h"
+#include "OptionsGeoscapeState.h"
+#include "OptionsModsState.h"
+#include "OptionsNoAudioState.h"
+#include "OptionsVideoState.h"
 #include "StartState.h"
 
 #include "../Battlescape/BattlescapeState.h"
@@ -343,9 +344,18 @@ void OptionsBaseState::btnGroupPress(Action* action)
 											_game,
 											_origin));
 	else if (sender == _btnAudio)
-		_game->pushState(new OptionsAudioState(
-											_game,
-											_origin));
+	{
+		if (!Options::mute)
+		{
+			_game->pushState(new OptionsAudioState(
+												_game,
+												_origin));
+		}
+		else
+			_game->pushState(new OptionsNoAudioState(
+												_game,
+												_origin));
+	}
 	else if (sender == _btnControls)
 		_game->pushState(new OptionsControlsState(
 											_game,

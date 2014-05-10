@@ -5350,7 +5350,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1399671351 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
+1399687779 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
 	"SoldierArmorState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -5459,7 +5459,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1399677544 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1399686291 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -8272,7 +8272,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1399679320 source:f:\git\openxcom\src\interface\textlist.cpp
+1399687817 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>

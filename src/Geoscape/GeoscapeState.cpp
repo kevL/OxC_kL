@@ -3193,9 +3193,10 @@ void GeoscapeState::setupTerrorMission()
 		counter++;
 	}
 	while (region->getCities()->empty()
-		&& !_game->getSavedGame()->getAlienMission(
+		|| _game->getSavedGame()->getAlienMission(
 												region->getType(),
-												"STR_ALIEN_TERROR"));
+												"STR_ALIEN_TERROR")
+											!= 0);
 
 	// Choose race for terror mission.
 	const RuleAlienMission& terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");
