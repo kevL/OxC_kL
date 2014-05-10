@@ -1391,13 +1391,11 @@ void BattlescapeState::btnHelpClick(Action*)
 void BattlescapeState::btnEndTurnClick(Action*)
 {
 	//Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick()";
-
 	if (allowButtons())
 	{
 //		_txtTooltip->setText(L"");
 		_battleGame->requestEndTurn();
 	}
-
 	//Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick() EXIT";
 }
 
@@ -1415,7 +1413,6 @@ void BattlescapeState::btnAbortClick(Action*)
 											_save,
 											this));
 	}
-
 	//Log(LOG_INFO) << "BattlescapeState::btnAbortClick() EXIT";
 }
 

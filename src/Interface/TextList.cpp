@@ -1354,7 +1354,7 @@ void TextList::mouseOver(Action* action, State* state)
 			if (_contrast)
 				_selector->offset(-10, 1);
 			else if (_comboBox)
-				_selector->offset(+1, Palette::backPos);
+				_selector->offset(1, Palette::backPos);
 			else
 				_selector->offset(-10, Palette::backPos);
 
@@ -1386,25 +1386,26 @@ void TextList::mouseOut(Action* action, State* state)
  */
 int TextList::getScroll()
 {
-	return _scroll;
+	return static_cast<int>(_scroll);
 }
 
 /**
  * Set the scroll depth.
- * @param scroll set the scroll depth to this.
+ * @param scroll Set the scroll depth to this.
  */
 void TextList::scrollTo(size_t scroll)
 {
 	if (!_scrolling)
 		return;
 
-	_scroll = std::max(
-					static_cast<size_t>(0),
-					std::min(
-						_rows.size() - _visibleRows,
-						scroll));
+	_scroll = static_cast<size_t>(std::max(
+										0,
+										std::min(
+												static_cast<int>(_rows.size() - _visibleRows),
+												static_cast<int>(scroll))));
 
 	draw(); // can't just set _redraw here because reasons
+
 	updateArrows();
 }
 

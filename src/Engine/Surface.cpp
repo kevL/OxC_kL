@@ -1038,12 +1038,13 @@ void Surface::setTooltip(const std::string& tooltip)
 
 /**
  * Recreates the surface with a new size.
- * Old contents will not be altered, and may be
- * cropped to fit the new size.
+ * Old contents will not be altered, and may be cropped to fit the new size.
  * @param width Width in pixels.
  * @param height Height in pixels.
  */
-void Surface::resize(int width, int height)
+void Surface::resize(
+		int width,
+		int height)
 {
 	// Set up new surface
 	Uint8 bpp = _surface->format->BitsPerPixel;

@@ -183,7 +183,7 @@ void ScrollBar::setPalette(
  */
 void ScrollBar::handle(Action* action, State* state)
 {
-	InteractiveSurface::handle(action, state);
+/*kL	InteractiveSurface::handle(action, state); // screw it.
 
 	if (_pressed
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
@@ -200,7 +200,7 @@ void ScrollBar::handle(Action* action, State* state)
 		size_t scroll = static_cast<size_t>(floor(static_cast<double>(y) * scale));
 
 		_list->scrollTo(scroll);
-	}
+	} */
 }
 
 /**

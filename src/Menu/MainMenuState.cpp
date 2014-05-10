@@ -112,6 +112,7 @@ MainMenuState::MainMenuState(Game* game)
 	_btnOptions->setColor(Palette::blockOffset(8)+5);
 	_btnOptions->setText(tr("STR_OPTIONS"));
 	_btnOptions->onMouseClick((ActionHandler)& MainMenuState::btnOptionsClick);
+	_btnOptions->setVisible(false); // kL
 
 	_btnQuit->setColor(Palette::blockOffset(8)+5);
 	_btnQuit->setText(tr("STR_QUIT"));

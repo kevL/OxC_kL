@@ -267,7 +267,7 @@ protected:
 			}
 
 			return static_cast<Uint8*>(_surface->pixels)
-					[(y * static_cast<int>(_surface->pitch))
+					[ (y * static_cast<int>(_surface->pitch))
 					+ (x * static_cast<int>(_surface->format->BytesPerPixel))];
 		}
 
