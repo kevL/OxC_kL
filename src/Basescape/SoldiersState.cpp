@@ -157,7 +157,8 @@ SoldiersState::SoldiersState(
 	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstItemsLeftArrowClick_Soldier);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstItemsRightArrowClick_Soldier);
-	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick, 0);
+//kL	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick, 0);
+	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick); // kL
 }
 
 /**

@@ -1032,6 +1032,7 @@ void TextList::clearList()
 
 	_texts.clear();
 	_rows.clear();
+	scrollTo(0);
 
 	_redraw = true;
 }
@@ -1375,9 +1376,7 @@ void TextList::mouseOver(Action* action, State* state)
 void TextList::mouseOut(Action* action, State* state)
 {
 	if (_selectable)
-	{
 		_selector->setVisible(false);
-	}
 
 	InteractiveSurface::mouseOut(action, state);
 }

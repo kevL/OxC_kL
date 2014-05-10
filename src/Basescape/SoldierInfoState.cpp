@@ -244,6 +244,7 @@ SoldierInfoState::SoldierInfoState(
 					(ActionHandler)& SoldierInfoState::btnNextClick,
 					Options::keyBattleNextUnit);
 
+
 	_btnArmor->setColor(Palette::blockOffset(15)+6);
 	_btnArmor->onMouseClick((ActionHandler)& SoldierInfoState::btnArmorClick);
 
@@ -757,6 +758,7 @@ void SoldierInfoState::btnOkClick(Action*)
 //	_edtSoldier->setFocus(false); // kL
 
 	_game->popState();
+
 	if (_game->getSavedGame()->getMonthsPassed() > -1
 		&& Options::storageLimitsEnforced
 		&& _base != 0
@@ -765,6 +767,7 @@ void SoldierInfoState::btnOkClick(Action*)
 		_game->pushState(new SellState(
 									_game,
 									_base));
+
 		_game->pushState(new ErrorMessageState(
 											_game,
 											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),

@@ -458,6 +458,13 @@ void SoldierDeadInfoState::init()
 	_barThrowing->setValue2(initial->throwing);
 
 	ss.str(L"");
+	ss << current->melee;
+	_numMelee->setText(ss.str());
+	_barMelee->setMax(current->melee);
+	_barMelee->setValue(current->melee);
+	_barMelee->setValue2(initial->melee);
+
+	ss.str(L"");
 	ss << current->strength;
 	_numStrength->setText(ss.str());
 	if (current->strength > initial->strength)

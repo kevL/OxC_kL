@@ -761,6 +761,7 @@ void UnitInfoState::btnNextClick(Action*)
 										true); // no tanks.
 
 	_unit = _battleGame->getSelectedUnit();
+
 	if (_unit != 0)
 		init();
 	else

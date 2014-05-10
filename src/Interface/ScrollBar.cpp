@@ -187,8 +187,7 @@ void ScrollBar::handle(Action* action, State* state)
 
 	if (_pressed
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
-			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
-		&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
+			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
 		int cursorY = static_cast<int>(floor(action->getDetails()->motion.y / action->getYScale()));
 		int y = std::min(
@@ -202,10 +201,6 @@ void ScrollBar::handle(Action* action, State* state)
 
 		_list->scrollTo(scroll);
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-		_list->scrollUp(false);
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-		_list->scrollDown(false);
 }
 
 /**
@@ -235,7 +230,12 @@ void ScrollBar::mousePress(Action* action, State* state)
 {
 	InteractiveSurface::mousePress(action, state);
 
-	_pressed = true;
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_pressed = true;
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+		_list->scrollUp(false);
+	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+		_list->scrollDown(false);
 }
 
 /**
@@ -247,7 +247,8 @@ void ScrollBar::mouseRelease(Action* action, State* state)
 {
 	InteractiveSurface::mouseRelease(action, state);
 
-	_pressed = false;
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+		_pressed = false;
 }
 
 /**

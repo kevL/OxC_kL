@@ -25,6 +25,7 @@
 //kL #include "SoldierInfoState.h"
 #include "SoldierDeadInfoState.h" // kL
 
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
@@ -140,6 +141,7 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
+//	_lstSoldiers->onMouseClick((ActionHandler)& SoldierMemorialState::lstSoldiersClick, 0);
 	_lstSoldiers->onMouseClick((ActionHandler)& SoldierMemorialState::lstSoldiersClick);
 
 	//Log(LOG_INFO) << "SoldierMemorialState::SoldierMemorialState() -> getDeadSoldiers";
@@ -198,13 +200,9 @@ void SoldierMemorialState::btnOkClick(Action*)
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
  */
-void SoldierMemorialState::lstSoldiersClick(Action*)
+void SoldierMemorialState::lstSoldiersClick(Action* action)
 {
-/*kL	_game->pushState(new SoldierInfoState(
-										_game,
-										0,
-										_lstSoldiers->getSelectedRow())); */
-	_game->pushState(new SoldierDeadInfoState( // kL
+	_game->pushState(new SoldierDeadInfoState(
 											_game,
 											_lstSoldiers->getSelectedRow()));
 }

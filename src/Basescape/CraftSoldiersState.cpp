@@ -150,7 +150,8 @@ CraftSoldiersState::CraftSoldiersState(
 	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftSoldiersState::lstItemsLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftSoldiersState::lstItemsRightArrowClick);
-	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick, 0);
+//kL	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick, 0);
+	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick); // kL
 }
 
 /**

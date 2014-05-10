@@ -127,7 +127,8 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->setMargin(8);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstItemsLeftArrowClick_Armor);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstItemsRightArrowClick_Armor);
-	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick, 0);
+//kL	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick, 0);
+	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick); // kL
 
 
 //kL	Craft* c = _base->getCrafts()->at(_craft);
