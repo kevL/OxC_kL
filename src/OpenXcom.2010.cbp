@@ -2339,6 +2339,8 @@
 		<Unit filename="Menu/OptionsGeoscapeState.h" />
 		<Unit filename="Menu/OptionsModsState.cpp" />
 		<Unit filename="Menu/OptionsModsState.h" />
+		<Unit filename="Menu/OptionsNoAudioState.cpp" />
+		<Unit filename="Menu/OptionsNoAudioState.h" />
 		<Unit filename="Menu/OptionsVideoState.cpp" />
 		<Unit filename="Menu/OptionsVideoState.h" />
 		<Unit filename="Menu/PauseState.cpp">

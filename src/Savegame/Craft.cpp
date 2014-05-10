@@ -208,18 +208,21 @@ void Craft::load(
 			i != node["weapons"].end();
 			++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		if (type != "0"
-			&& rule->getCraftWeapon(type))
+		if (_rules->getWeapons() > static_cast<int>(j))
 		{
-			CraftWeapon* w = new CraftWeapon(rule->getCraftWeapon(type), 0);
-			w->load(*i);
-			_weapons[j] = w;
-		}
-		else
-			_weapons[j] = 0;
+			std::string type = (*i)["type"].as<std::string>();
+			if (type != "0"
+				&& rule->getCraftWeapon(type))
+			{
+				CraftWeapon* w = new CraftWeapon(rule->getCraftWeapon(type), 0);
+				w->load(*i);
+				_weapons[j] = w;
+			}
+			else
+				_weapons[j] = 0;
 
-		j++;
+			j++;
+		}
 	}
 
 	_items->load(node["items"]);

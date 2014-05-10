@@ -6957,7 +6957,7 @@
 	"Language.h"
 	"Surface.h"
 
-1399141700 source:f:\git\openxcom\src\engine\game.cpp
+1399720094 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -8669,7 +8669,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1399704418 source:f:\git\openxcom\src\menu\startstate.cpp
+1399720073 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	<SDL_syswm.h>
 	<SDL_thread.h>
@@ -9425,7 +9425,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1399171918 source:f:\git\openxcom\src\savegame\craft.cpp
+1399728503 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -11474,7 +11474,7 @@
 	"../Engine/Options.h"
 	"../Engine/State.h"
 
-1399037538 source:f:\git\openxcom\src\menu\introstate.cpp
+1399720138 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	<SDL_mixer.h>
 	"MainMenuState.h"
