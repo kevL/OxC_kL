@@ -43,18 +43,26 @@ class SoldierArmorState
 		public State
 {
 private:
-	Base* _base;
 	size_t _soldier;
 
+	Base* _base;
+	Text
+		* _txtQuantity,
+		* _txtSoldier,
+//		* _txtTitle,
+		* _txtType;
 	TextButton* _btnCancel;
-	Window* _window;
-	Text* _txtTitle, * _txtSoldier, * _txtType, * _txtQuantity;
 	TextList* _lstArmor;
+	Window* _window;
+
 	std::vector<Armor*> _armors;
 
 	public:
 		/// Creates the Soldier Armor state.
-		SoldierArmorState(Game* game, Base* base, size_t soldier);
+		SoldierArmorState(
+				Game* game,
+				Base* base,
+				size_t soldier);
 		/// Cleans up the Soldier Armor state.
 		~SoldierArmorState();
 

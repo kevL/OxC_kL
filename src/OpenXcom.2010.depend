@@ -4667,7 +4667,7 @@
 1394398507 f:\git\openxcom\src\basescape\craftarmorstate.h
 	"../Engine/State.h"
 
-1394398507 f:\git\openxcom\src\basescape\soldierarmorstate.h
+1399687870 f:\git\openxcom\src\basescape\soldierarmorstate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -5369,7 +5369,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1399671173 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1399681083 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SackSoldierState.h"
