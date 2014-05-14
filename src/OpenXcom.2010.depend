@@ -7815,7 +7815,7 @@
 	<string>
 	<vector>
 
-1400095027 source:f:\git\openxcom\src\geoscape\globe.cpp
+1400102809 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	<cmath>
 	<fstream>
@@ -9327,11 +9327,12 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1400035650 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1400095134 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
 	<assert.h>
+	<math.h>
 	"../aresame.h"
 	"AlienBase.h"
 	"Base.h"
@@ -9347,6 +9348,7 @@
 	"../Engine/Logger.h"
 	"../Engine/RNG.h"
 	"../Geoscape/Globe.h"
+	"../Ruleset/City.h"
 	"../Ruleset/RuleAlienMission.h"
 	"../Ruleset/RuleCountry.h"
 	"../Ruleset/RuleRegion.h"

@@ -32,7 +32,7 @@
 namespace OpenXcom
 {
 
-const double Window::POPUP_SPEED = 0.05;
+const double Window::POPUP_SPEED = 0.095;
 
 Sound* Window::soundPopup[3] = {0, 0, 0};
 

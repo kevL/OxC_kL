@@ -75,8 +75,9 @@ namespace OpenXcom
 
 bool kL_reCenter = false;
 
-const double Globe::ROTATE_LONGITUDE	= 0.007;
-const double Globe::ROTATE_LATITUDE		= 0.007;
+const double
+	Globe::ROTATE_LONGITUDE	= 0.176,
+	Globe::ROTATE_LATITUDE	= 0.176;
 
 namespace
 {
@@ -2551,16 +2552,16 @@ void Globe::mouseOver(Action* action, State* state)
 				double newLon = (static_cast<double>(_totalMouseMoveX) / action->getXScale()) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.0;
 				double newLat = (static_cast<double>(_totalMouseMoveY) / action->getYScale()) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.0;
 				center(
-					_lonBeforeMouseScrolling + newLon / static_cast<double>(Options::geoScrollSpeed) / 10.0,
-					_latBeforeMouseScrolling + newLat / static_cast<double>(Options::geoScrollSpeed) / 10.0);
+					_lonBeforeMouseScrolling + newLon / static_cast<double>(Options::geoScrollSpeed), //kL / 10.0,
+					_latBeforeMouseScrolling + newLat / static_cast<double>(Options::geoScrollSpeed)); //kL / 10.0);
 			}
 			else
 			{
 				double newLon = static_cast<double>(-action->getDetails()->motion.xrel) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.0;
 				double newLat = static_cast<double>(-action->getDetails()->motion.yrel) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.0;
 				center(
-					_cenLon + newLon / static_cast<double>(Options::geoScrollSpeed) / 10.0,
-					_cenLat + newLat / static_cast<double>(Options::geoScrollSpeed) / 10.0);
+					_cenLon + newLon / static_cast<double>(Options::geoScrollSpeed), //kL / 10.0,
+					_cenLat + newLat / static_cast<double>(Options::geoScrollSpeed)); //kL / 10.0);
 			}
 
 			// We don't want to look the mouse-cursor jumping :)
