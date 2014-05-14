@@ -43,13 +43,19 @@ class OptionsAudioState
 {
 
 private:
+	static const std::wstring
+		musFormats[],
+		sndFormats[];
+
 	std::vector<int>
 		_bitDepths,
 		_sampleRates;
 
 	ComboBox
 		* _cbxBitDepth,
-		* _cbxSampleRate;
+		* _cbxSampleRate,
+		* _cbxMusicFormat,
+		* _cbxSoundFormat;
 	Slider
 		* _slrMusicVolume,
 		* _slrSoundVolume,
@@ -59,7 +65,12 @@ private:
 		* _txtSoundVolume,
 		* _txtUiVolume,
 		* _txtBitDepth,
-		* _txtSampleRate;
+		* _txtSampleRate,
+
+		* _txtMusicFormat,
+		* _txtCurrentMusic,
+		* _txtSoundFormat,
+		* _txtCurrentSound;
 
 
 	public:
@@ -80,10 +91,14 @@ private:
 	    void slrUiVolumeChange(Action*);
 		/// Handler for sound slider button release.
 	    void slrUiVolumeRelease(Action*);
-		/// Handler for changing the Language combobox.
+		/// Handler for changing the Bit Depth combobox.
 		void cbxBitDepthChange(Action* action);
-		/// Handler for changing the Filter combobox.
+		/// Handler for changing the Sample Rate combobox.
 		void cbxSampleRateChange(Action* action);
+		/// Handler for changing the Music Format combobox.
+		void cbxMusicFormatChange(Action* action);
+		/// Handler for changing the Sound Format combobox.
+		void cbxSoundFormatChange(Action* action);
 };
 
 }

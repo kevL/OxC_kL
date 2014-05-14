@@ -189,7 +189,8 @@ void ScrollBar::handle(Action* action, State* state)
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
 			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
-		int cursorY = static_cast<int>(floor(static_cast<double>(action->getDetails()->motion.y) / action->getYScale()));
+//		int cursorY = static_cast<int>(floor(static_cast<double>(action->getDetails()->motion.y) / action->getYScale())); // kL
+		int cursorY = static_cast<int>(action->getAbsoluteYMouse());
 		int y = std::min(
 					std::max(
 							cursorY - getY() - static_cast<int>(_thumbRect.h) / 2,

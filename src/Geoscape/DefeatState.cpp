@@ -21,10 +21,12 @@
 
 #include <sstream>
 
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
 
@@ -96,6 +98,12 @@ DefeatState::DefeatState(Game* game)
 	_timer->start();
 
 	screenClick(0);
+
+	if (_game->getSavedGame()->isIronman()) // Ironman is over
+	{
+		std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
+		CrossPlatform::deleteFile(Options::getUserFolder() + filename);
+	}
 }
 
 /**

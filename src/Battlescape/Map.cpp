@@ -1987,7 +1987,7 @@ void Map::calculateWalkingOffset(
 	}
 	else if (dir == 2)
 		midphase = 1;
-	else if (dir == 6)
+	else if (dir == 6 || dir == 0)
 		midphase = endphase;
 
 	if (unit->getVerticalDirection())

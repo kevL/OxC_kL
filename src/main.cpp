@@ -72,10 +72,10 @@ int main(
 //kL		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 		title << "OxC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
 		game = new Game(title.str());
-		game->setVolume(
-					Options::soundVolume,
-					Options::musicVolume,
-					Options::uiVolume);
+//		game->setVolume( // kL
+//					Options::soundVolume,
+//					Options::musicVolume,
+//					Options::uiVolume);
 		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG

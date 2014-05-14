@@ -2470,9 +2470,9 @@ void GeoscapeState::time1Day()
 									*_game->getRuleset(),
 									*_game->getSavedGame()));
 
-	// Autosave every 10 days. kL_note: every day.
+	// Autosave 3 times a month. kL_note: every day.
 //kL	int day = _game->getSavedGame()->getTime()->getDay();
-//kL	if (day == 1 || day %10 == 0)
+//kL	if (day == 10 || day == 20)
 //	{
 	if (_game->getSavedGame()->isIronman())
 			_game->pushState(new SaveGameState(

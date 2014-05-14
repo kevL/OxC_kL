@@ -617,9 +617,22 @@ void AlienMission::ufoReachedWaypoint(
 			terrorSite->setId(game.getId("STR_TERROR_SITE"));
 			terrorSite->setSecondsRemaining(4 * 3600 + RNG::generate(0, 6) * 3600);	// 4hr. + (0 to 6) hrs.
 			terrorSite->setAlienRace(_race);
-			assert(rules.locateCity(
+
+			if (!rules.locateCity(
 								ufo.getLongitude(),
-								ufo.getLatitude()));
+								ufo.getLatitude()))
+			{
+				std::stringstream error;
+				error << "Mission number: " << getId()
+						<< " in region: " << getRegion()
+						<< " trying to land at lon: " << ufo.getLongitude()
+						<< " lat: " << ufo.getLatitude()
+						<< " ufo is on flightpath: " << ufo.getTrajectory().getID()
+						<< " at point: " << ufo.getTrajectoryPoint()
+						<< ", no city found.";
+				Log(LOG_FATAL) << error.str();
+				assert(0 && error.str().c_str());
+			}
 
 			game.getTerrorSites()->push_back(terrorSite);
 
@@ -874,11 +887,10 @@ void AlienMission::spawnAlienBase(
 	// Once the last UFO is spawned, the aliens build their base.
 	const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
-	unsigned zone = 4;
 	std::pair<double, double> pos = getLandPoint(
 												globe,
 												regionRules,
-												zone);
+												RuleRegion::ALIEN_BASE_ZONE);
 
 	AlienBase* ab = new AlienBase();
 	ab->setAlienRace(_race);

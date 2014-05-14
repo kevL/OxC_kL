@@ -2358,64 +2358,57 @@ void Base::setupDefenses()
 			)
 	{
 		std::string itemId = (i)->first;
-		int iqty = (i)->second;
+		int itemQty = (i)->second;
 
-		RuleItem* rule = _rule->getItem(itemId);
-		if (rule->isFixed())
+		RuleItem* itemRule = _rule->getItem(itemId);
+		if (itemRule->isFixed())
 		{
 			int size = 4;
 			if (_rule->getUnit(itemId))
 				size = _rule->getArmor(_rule->getUnit(itemId)->getArmor())->getSize();
 
-			if (rule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
+			if (itemRule->getCompatibleAmmo()->empty()) // so this vehicle does not need ammo
 			{
 				for (int
 						j = 0;
-						j < iqty;
-						++j) _vehicles.push_back(new Vehicle(
-															rule,
-															rule->getClipSize(),
-															size));
+						j < itemQty;
+						++j)
+				{
+					_vehicles.push_back(new Vehicle(
+												itemRule,
+												itemRule->getClipSize(),
+												size));
+				}
 
 				_items->removeItem(
 								itemId,
-								iqty);
+								itemQty);
 			}
 			else // so this vehicle needs ammo
 			{
-				RuleItem* ammo = _rule->getItem(rule->getCompatibleAmmo()->front());
+				RuleItem* ammoRule = _rule->getItem(itemRule->getCompatibleAmmo()->front());
+				int ammoPerVehicle = ammoRule->getClipSize();
 
-				int baqty = _items->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
-				if (baqty < 1
-					|| iqty < 1)
+				int baseQty = _items->getItem(ammoRule->getType()) / ammoPerVehicle;
+				if (!baseQty)
 				{
 					++i;
-
 					continue;
 				}
 
-				int canBeAdded = std::min(iqty, baqty);
-				int newAmmoPerVehicle = std::min(baqty / canBeAdded, ammo->getClipSize());
-				int remainder = 0;
-
-				if (ammo->getClipSize() > newAmmoPerVehicle) remainder = baqty - (canBeAdded * newAmmoPerVehicle);
-				int newAmmo;
+				int canBeAdded = std::min(itemQty, baseQty);
 				for (int
 						j = 0;
 						j < canBeAdded;
 						++j)
 				{
-					newAmmo = newAmmoPerVehicle;
-					if (j < remainder)
-						++newAmmo;
-
 					_vehicles.push_back(new Vehicle(
-												rule,
-												newAmmo,
+												itemRule,
+												ammoPerVehicle,
 												size));
 					_items->removeItem(
-									ammo->getType(),
-									newAmmo);
+									ammoRule->getType(),
+									ammoPerVehicle);
 				}
 
 				_items->removeItem(

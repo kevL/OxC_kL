@@ -33,6 +33,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
+#include "../Interface/ComboBox.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Slider.h"
 #include "../Interface/Text.h"
@@ -54,12 +55,13 @@ TestState::TestState(Game* game)
 	:
 		State(game)
 {
-	_window	= new Window(this, 300, 180, 10, 10);
-	_text	= new Text(280, 120, 20, 50);
-	_button	= new TextButton(100, 20, 110, 150);
-	_list	= new TextList(300, 180, 10, 10);
-	_number	= new NumberText(50, 5, 200, 25);
-	_slider	= new Slider(100, 15, 50, 50);
+	_window		= new Window(this, 300, 180, 10, 10);
+	_text		= new Text(280, 120, 20, 50);
+	_button		= new TextButton(100, 20, 110, 150);
+	_list		= new TextList(300, 180, 10, 10);
+	_number		= new NumberText(50, 5, 200, 25);
+	_slider		= new Slider(100, 15, 50, 50);
+	_comboBox	= new ComboBox(this, 80, 16, 98, 100);
 
 	_set = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	_set->getFrame(1);
@@ -72,6 +74,7 @@ TestState::TestState(Game* game)
 	add(_list);
 	add(_number);
 	add(_slider);
+	add(_comboBox);
 
 	centerAllSurfaces();
 
@@ -98,6 +101,22 @@ TestState::TestState(Game* game)
 	_number->setValue(1234567890);
 
 	_slider->setColor(Palette::blockOffset(15)+1);
+
+	std::vector<std::string> difficulty;
+	for (int
+			i = 0;
+			i != 3;
+			++i)
+	{
+		difficulty.push_back("STR_1_BEGINNER");
+		difficulty.push_back("STR_2_EXPERIENCED");
+		difficulty.push_back("STR_3_VETERAN");
+		difficulty.push_back("STR_4_GENIUS");
+		difficulty.push_back("STR_5_SUPERHUMAN");
+	}
+
+	_comboBox->setColor(Palette::blockOffset(15)+1);
+	_comboBox->setOptions(difficulty);
 
 	_i = 0;
 

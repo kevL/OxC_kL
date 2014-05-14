@@ -511,36 +511,9 @@ XcomResourcePack::XcomResourcePack( // kL
 			"GMWIN"
 		};
 
-/*		std::string musOptional[] =
-		{
-			"GMGEO3",
-			"GMGEO4",
-			"GMGEO5",
-			"GMGEO6",
-			"GMGEO7",
-			"GMGEO8",
-			"GMGEO9",
-			"GMTACTIC2",
-			"GMTACTIC3",
-			"GMTACTIC4",
-			"GMTACTIC5",
-			"GMTACTIC6",
-			"GMTACTIC7",
-			"GMTACTIC8",
-			"GMTACTIC9"};
-		std::string exts[] =
-		{
-			"flac",
-			"ogg",
-			"mp3",
-			"mod",
-			"wav"
-		};
-
-		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
+/*		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
 		float tracks_normalize[] = {0.76f, 0.83f, 1.19f, 1.0f, 0.74f, 0.8f, 0.8f, 0.8f, 1.0f, 0.92f, 0.81f, 1.0f, 1.14f, 0.84f}; */
 
-//kL #ifndef __NO_MUSIC
 		// Check which music version is available
 		// Check if GM.CAT data is available // sza_MusicRules
 		CatFile
@@ -731,12 +704,24 @@ XcomResourcePack::XcomResourcePack( // kL
 			}
 		}
 
-/*kL		for (size_t
+/*kL		for (size_t // newest: 140513, replaces all below to delete's
 				i = 0;
 				i < sizeof(mus) / sizeof(mus[0]);
 				++i)
 		{
-			bool loaded = false;
+			Music *music = 0;
+			for (size_t j = 0; j < sizeof(priority)/sizeof(priority[0]) && music == 0; ++j)
+			{
+				music = loadMusic(priority[j], mus[i], tracks[i], tracks_normalize[i], adlibcat, aintrocat, gmcat);
+			}
+			if (!music)
+			{
+				throw Exception(mus[i] + " not found");
+			}
+			_musics[mus[i]] = music; */
+
+
+/*			bool loaded = false;
 
 			// sza_ExtraMusic_BEGIN:
 			// Load alternative digital track if there is an override
@@ -834,26 +819,42 @@ XcomResourcePack::XcomResourcePack( // kL
 		delete aintrocat;
 		delete gmcat;
 
+/*		std::string musOptional[] = {"GMGEO3",
+									 "GMGEO4",
+									 "GMGEO5",
+									 "GMGEO6",
+									 "GMGEO7",
+									 "GMGEO8",
+									 "GMGEO9",
+									 "GMTACTIC2",
+									 "GMTACTIC3",
+									 "GMTACTIC4",
+									 "GMTACTIC5",
+									 "GMTACTIC6",
+									 "GMTACTIC7",
+									 "GMTACTIC8",
+									 "GMTACTIC9"}; */
+
 /*kL		for (size_t // Ok, now try to load the optional musics
 				i = 0;
 				i < sizeof(musOptional) / sizeof(musOptional[0]);
 				++i)
 		{
-			for (size_t // Try digital tracks
+			Music* music = 0;
+			for (size_t
 					j = 0;
-					j < sizeof(exts) / sizeof(exts[0]);
+					j < sizeof(priority) / sizeof(priority[0])
+						&& music == 0;
 					++j)
 			{
-				std::ostringstream s;
-				s << "SOUND/" << musOptional[i] << "." << exts[j];
-				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
-				{
-					_musics[musOptional[i]] = new Music();
-					_musics[musOptional[i]]->load(CrossPlatform::getDataFile(s.str()));
-
-					break;
-				}
+				music = loadMusic(
+								priority[j],
+								musOptional[i],
+								0, 0, 0, 0, 0);
 			}
+
+			if (music)
+				_musics[musOptional[i]] = music;
 		} */
 #endif
 
@@ -875,45 +876,60 @@ XcomResourcePack::XcomResourcePack( // kL
 			"SAMPLE2.CAT"
 		};
 
-		// Check which sound version is available
-		std::string* cats = 0;
-		bool wav = true;
-
-		std::ostringstream
-			win,
-			dos;
-		win << "SOUND/" << catsWin[0];
-		dos << "SOUND/" << catsDos[0];
-
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(win.str())))
+		// Try the preferred format first, otherwise use the default priority
+		std::string* cats[] =
 		{
-			cats = catsWin;
-			wav = true;
-		}
-		else if (CrossPlatform::fileExists(CrossPlatform::getDataFile(dos.str())))
-		{
-			cats = catsDos;
-			wav = false;
-		}
+			0,
+			catsWin,
+			catsDos
+		};
+
+		if (Options::preferredSound == SOUND_14)
+			cats[0] = catsWin;
+		else if (Options::preferredSound == SOUND_10)
+			cats[1] = catsDos;
+
+		Options::currentSound = SOUND_AUTO;
 
 		for (size_t
 				i = 0;
 				i < sizeof(catsId) / sizeof(catsId[0]);
 				++i)
 		{
-			if (cats == 0)
+			SoundSet* sound = 0;
+
+			for (size_t
+					j = 0;
+					j < sizeof(cats) / sizeof(cats[0])
+						&& sound == 0;
+					++j)
 			{
-				std::ostringstream ss;
-				ss << catsDos[i] << " not found";
-				throw Exception(ss.str());
+				bool wav = true;
+
+				if (cats[j] == 0)
+					continue;
+				else if (cats[j] == catsDos)
+					wav = false;
+
+				std::ostringstream s;
+				s << "SOUND/" << cats[j][i];
+				std::string file = CrossPlatform::getDataFile(s.str());
+				if (CrossPlatform::fileExists(file))
+				{
+					sound = new SoundSet();
+					sound->loadCat(file, wav);
+
+					Options::currentSound = (wav)? SOUND_14: SOUND_10;
+				}
+			}
+
+			if (sound == 0)
+			{
+				throw Exception(catsWin[i] + " not found");
 			}
 			else
 			{
-				std::ostringstream s;
-				s << "SOUND/" << cats[i];
-
-				_sounds[catsId[i]] = new SoundSet();
-				_sounds[catsId[i]]->loadCat(CrossPlatform::getDataFile(s.str()), wav);
+				_sounds[catsId[i]] = sound;
 			}
 		}
 
@@ -926,7 +942,6 @@ XcomResourcePack::XcomResourcePack( // kL
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT")))
 		{
 			SoundSet* s = _sounds["SAMPLE3.CAT"] = new SoundSet();
-			wav = true;
 			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
 		}
 	}
@@ -1294,7 +1309,7 @@ XcomResourcePack::~XcomResourcePack()
 }
 
 /**
- *
+ * Loads the resources required by the Battlescape.
  */
 void XcomResourcePack::loadBattlescapeResources()
 {
@@ -1400,6 +1415,16 @@ void XcomResourcePack::loadBattlescapeResources()
 			_sets[*i] = new SurfaceSet(32, 48);
 
 		_sets[*i]->loadPck(path, tab);
+	}
+
+	if (!_sets["CHRYS.PCK"]->getFrame(225)) // incomplete chryssalid set: 1.0 data: stop loading.
+	{
+		Log(LOG_FATAL) << "Version 1.0 data detected." << std::endl << std::endl
+				<< "please install the official patches" << std::endl
+				<< "from http://www.strategycore.co.uk/files/ufo-1.2/" << std::endl
+				<< "and http://www.strategycore.co.uk/files/ufo-1.4/" << std::endl;
+
+		throw Exception("Invalid data, please check logfile.");
 	}
 
 	s.str("");
@@ -1513,7 +1538,8 @@ void XcomResourcePack::loadBattlescapeResources()
 }
 
 /**
- *
+ * Determines if an image file is an acceptable format for the game.
+ * @param extension Image file extension.
  */
 bool XcomResourcePack::isImageFile(std::string extension)
 {
@@ -1545,6 +1571,97 @@ bool XcomResourcePack::isImageFile(std::string extension)
 			// excluding jpeg to avoid inevitable issues due to compression
 			extension == ".JPG" ||
 			extension == "JPEG" || */
+}
+
+/**
+ * Loads the specified music file format.
+ * @param fmt Format of the music.
+ * @param file Filename of the music.
+ * @param track Track number of the music, if stored in a CAT.
+ * @param volume Volume modifier of the music, if stored in a CAT.
+ * @param adlibcat Pointer to ADLIB.CAT if available.
+ * @param aintrocat Pointer to AINTRO.CAT if available.
+ * @param gmcat Pointer to GM.CAT if available.
+ * @return, Pointer to the music file, or NULL if it couldn't be loaded.
+ */
+Music* XcomResourcePack::loadMusic(
+		MusicFormat fmt,
+		const std::string& file,
+		int track,
+		float volume,
+		CatFile* adlibcat,
+		CatFile* aintrocat,
+		GMCatFile* gmcat)
+{
+/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
+	static const std::string exts[] =
+	{
+		"",
+		"flac",
+		"ogg",
+		"mp3",
+		"mod",
+		"wav",
+		"",
+		"mid"
+	};
+
+	Music* music = 0;
+
+	try
+	{
+		if (fmt == MUSIC_ADLIB) // Try Adlib music
+		{
+			if (adlibcat
+				&& Options::audioBitDepth == 16)
+			{
+				music = new AdlibMusic(volume);
+
+				if (track < adlibcat->getAmount())
+					music->load(adlibcat->load(track, true), adlibcat->getObjectSize(track));
+				else if (aintrocat) // separate intro music
+				{
+					track -= adlibcat->getAmount();
+					music->load(
+							aintrocat->load(track, true),
+							aintrocat->getObjectSize(track));
+				}
+			}
+		}
+		else if (fmt == MUSIC_MIDI) // Try MIDI music
+		{
+			if (gmcat) // DOS MIDI
+				music = gmcat->loadMIDI(track);
+			else // Windows MIDI
+			{
+				std::ostringstream s;
+				s << "SOUND/" << file << "." << exts[fmt];
+				if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+				{
+					music = new Music();
+					music->load(CrossPlatform::getDataFile(s.str()));
+				}
+			}
+		}
+		else // Try digital tracks
+		{
+			std::ostringstream s;
+			s << "SOUND/" << file << "." << exts[fmt];
+			if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+			{
+				music = new Music();
+				music->load(CrossPlatform::getDataFile(s.str()));
+			}
+		}
+	}
+	catch (Exception &e)
+	{
+		Log(LOG_INFO) << e.what();
+		if (music) delete music;
+		music = 0;
+	}
+
+	return music;
 }
 
 }

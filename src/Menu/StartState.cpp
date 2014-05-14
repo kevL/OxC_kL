@@ -19,6 +19,7 @@
 
 #include "StartState.h"
 
+#include <SDL_mixer.h>
 #include <SDL_syswm.h>
 #include <SDL_thread.h>
 
@@ -114,6 +115,14 @@ void StartState::init()
 	// Silence!
 	Sound::stop();
 	Music::stop();
+
+	_game->setResourcePack(0);
+	if (!Options::mute
+		&& Options::reload)
+	{
+		Mix_CloseAudio();
+		_game->initAudio();
+	}
 
 	// Load the game data in a separate thread
 	_thread = SDL_CreateThread(

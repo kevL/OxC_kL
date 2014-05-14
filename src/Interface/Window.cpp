@@ -67,7 +67,8 @@ Window::Window(
 		_popupStep(0.0),
 		_state(state),
 		_contrast(false),
-		_screen(false)
+		_screen(false),
+		_thinBorder(false)
 {
 	_timer = new Timer(10);
 	_timer->onTimer((SurfaceHandler)& Window::popup);
@@ -226,30 +227,70 @@ void Window::draw()
 
 	Uint8 color = _color + 3 * mult;
 
-	for (int
-			i = 0;
-			i < 5;
-			++i)
+	if (_thinBorder)
 	{
-		drawRect(&square, color);
+		color = _color + 1 * mult;
+		for (int
+				i = 0;
+				i < 5;
+				++i)
+		{
+			drawRect(&square, color);
 
-		if (i < 2)
-			color -= 1 * mult;
-		else
-			color += 1 * mult;
+			if (i %2 == 0)
+			{
+				square.x++;
+				square.y++;
+			}
+			square.w--;
+			square.h--;
 
-		square.x++;
-		square.y++;
+			switch (i)
+			{
+				case 0:
+					color = _color + 5 * mult;
+					setPixel(square.w, 0, color);
+				break;
+				case 1:
+					color = _color + 2 * mult;
+				break;
+				case 2:
+					color = _color + 4 * mult;
+					setPixel(square.w+1, 1, color);
+				break;
+				case 3:
+					color = _color + 3 * mult;
+				break;
+			}
+		}
+	}
+	else
+	{
+		for (int
+				i = 0;
+				i < 5;
+				++i)
+		{
+			drawRect(&square, color);
 
-		if (square.w >= 2)
-			square.w -= 2;
-		else
-			square.w = 1;
+			if (i < 2)
+				color -= 1 * mult;
+			else
+				color += 1 * mult;
 
-		if (square.h >= 2)
-			square.h -= 2;
-		else
-			square.h = 1;
+			square.x++;
+			square.y++;
+
+			if (square.w >= 2)
+				square.w -= 2;
+			else
+				square.w = 1;
+
+			if (square.h >= 2)
+				square.h -= 2;
+			else
+				square.h = 1;
+		}
 	}
 
 	if (_bg != 0)
@@ -282,6 +323,14 @@ void Window::setDX(int dx)
 void Window::setDY(int dy)
 {
 	_dy = dy;
+}
+
+/**
+ * Changes the window to have a thin border.
+ */
+void Window::setThinBorder()
+{
+	_thinBorder = true;
 }
 
 }

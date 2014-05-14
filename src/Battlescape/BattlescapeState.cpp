@@ -2933,6 +2933,8 @@ void BattlescapeState::resize(
 		break;
 
 		default:
+			dX = 0;
+			dY = 0;
 		return;
 	}
 

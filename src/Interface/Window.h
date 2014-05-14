@@ -59,7 +59,8 @@ private:
 
 	bool
 		_contrast,
-		_screen;
+		_screen,
+		_thinBorder;
 	int
 		_dx,
 		_dy;
@@ -103,10 +104,13 @@ private:
 		/// Draws the window.
 		void draw();
 
-		///
+		/// sets the X delta.
 		void setDX(int dx);
-		///
+		/// sets the Y delta.
 		void setDY(int dy);
+
+		/// Give this window a thin border.
+		void setThinBorder();
 };
 
 }

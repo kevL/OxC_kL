@@ -53,6 +53,8 @@ private:
 		_init,
 		_mouseActive,
 		_quit;
+	int _delaytime;
+	unsigned int _framestarttime;
 
 	Cursor* _cursor;
 	FpsCounter* _fpsCounter;
@@ -66,15 +68,6 @@ private:
 	std::list<State*>
 		_deleted,
 		_states;
-
-// not sure if i can remove this ifdef, morphos users please advise.
-#ifdef __MORPHOS__
-	Uint32 framestarttime;// = 0;
-	Sint32 delaytime;
-#else
-	unsigned int framestarttime;
-	int delaytime;
-#endif
 
 
 	public:
@@ -139,6 +132,9 @@ private:
 
 		/// Sets up the default language.
 		void defaultLanguage();
+
+		/// Sets up the audio.
+		void initAudio();
 };
 
 }

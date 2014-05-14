@@ -22,13 +22,18 @@
 
 #include "ResourcePack.h"
 
+#include "../Engine/Options.h"
+
 
 namespace OpenXcom
 {
 
+class CatFile;
 class ExtraMusic; // sza_ExtraMusic
 class ExtraSounds;
 class ExtraSprites;
+class GMCatFile;
+class Music;
 class RuleMusic; // sza_MusicRules
 
 
@@ -78,8 +83,18 @@ public:
 	/// Loads battlescape specific resources
 	void loadBattlescapeResources();
 
-	///
+	/// Checks if an extension is a valid image file.
 	bool isImageFile(std::string extension);
+
+	/// Loads a specified music file.
+	Music* loadMusic(
+			MusicFormat fmt,
+			const std::string& file,
+			int track,
+			float volume,
+			CatFile* adlibcat,
+			CatFile* aintrocat,
+			GMCatFile* gmcat);
 };
 
 }

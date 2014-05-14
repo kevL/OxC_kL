@@ -636,60 +636,40 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 			if (!itemRule->getCompatibleAmmo()->empty()) // if there is compatible ammo
 			{
-				// We want to redistribute all the available ammo among the vehicles,
-				// so first we note the total number of vehicles we want in the craft
-				int oldVehiclesCount = c->getVehicleCount(_items[_sel]);
-				int newVehiclesCount = oldVehiclesCount + change;
-				// ...and we move back all of this vehicle-type to the base.
-				if (oldVehiclesCount > 0)
-					moveLeftByValue(INT_MAX);
-
 				// And now let's see if we can add the total number of vehicles.
-				RuleItem* ammo = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front()); // here's the ammo
+				RuleItem* ammoRule = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
+				int ammoPerVehicle = ammoRule->getClipSize();
 
-				int baQty = _base->getItems()->getItem(ammo->getType()); // Ammo Quantity for this vehicle-type on the base
+				int baseQty = _base->getItems()->getItem(ammoRule->getType()) / ammoPerVehicle;
+				if (_game->getSavedGame()->getMonthsPassed() == -1)
+					baseQty = 1;
 
-				int canBeAdded = std::min(newVehiclesCount, baQty);
+				int canBeAdded = std::min(change, baseQty);
 				if (canBeAdded > 0)
 				{
-					int newAmmoPerVehicle = std::min(baQty / canBeAdded, ammo->getClipSize());
-					int remainder = 0;
-
-					if (ammo->getClipSize() > newAmmoPerVehicle)
-						remainder = baQty - (canBeAdded * newAmmoPerVehicle);
-
-					int newAmmo;
 					for (int
 							i = 0;
 							i < canBeAdded;
 							++i)
 					{
-						newAmmo = newAmmoPerVehicle;
-
-						if (i < remainder)
-							++newAmmo;
-
 						if (_game->getSavedGame()->getMonthsPassed() != -1)
 						{
-							_base->getItems()->removeItem(ammo->getType(), newAmmo);
+							_base->getItems()->removeItem(ammoRule->getType(), ammoPerVehicle);
 							_base->getItems()->removeItem(_items[_sel]);
 						}
-						else
-							newAmmo = ammo->getClipSize();
 
 						c->getVehicles()->push_back(new Vehicle(
 															itemRule,
-															newAmmo,
+															ammoPerVehicle,
 															size));
 					}
 				}
-
-				if (oldVehiclesCount >= canBeAdded)
+				else
 				{
 					// So we haven't managed to increase the count of vehicles because of the ammo
 					_timerRight->stop();
 
-					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammo->getType())));
+					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammoRule->getType())));
 					_game->pushState(new ErrorMessageState(
 														_game,
 														msg,

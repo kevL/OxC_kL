@@ -32,7 +32,7 @@ namespace OpenXcom
 {
 
 /**
- * Enumeration for the battlescape drag scrolling types.
+ * Battlescape drag scrolling types.
  */
 enum ScrollType
 {
@@ -42,7 +42,7 @@ enum ScrollType
 };
 
 /**
- * Enumeration for the keyboard input modes.
+ * Keyboard input modes.
  */
 enum KeyboardType
 {
@@ -52,7 +52,7 @@ enum KeyboardType
 };
 
 /**
- * Enumeration for the savegame sorting modes.
+ * Savegame sorting modes.
  */
 enum SaveSort
 {
@@ -62,7 +62,34 @@ enum SaveSort
 	SORT_DATE_DESC	// 3
 };
 
-/// Enumeration for the path preview modes (can be OR'd together).
+/**
+ * Music format preferences.
+ */
+enum MusicFormat
+{
+	MUSIC_AUTO,		// 0
+	MUSIC_FLAC,		// 1
+	MUSIC_OGG,		// 2
+	MUSIC_MP3,		// 3
+	MUSIC_MOD,		// 4
+	MUSIC_WAV,		// 5
+	MUSIC_ADLIB,	// 6
+	MUSIC_MIDI		// 7
+};
+
+/**
+ * Sound format preferences.
+ */
+enum SoundFormat
+{
+	SOUND_AUTO,	// 0
+	SOUND_14,	// 1
+	SOUND_10	// 2
+};
+
+/**
+ * Path preview modes (can be OR'd together).
+ */
 enum PathPreview
 {
 	PATH_NONE		= 0x00,	// 0000 (must always be zero)
@@ -71,6 +98,9 @@ enum PathPreview
 	PATH_FULL		= 0x03	// 0011 (must always be all values combined)
 };
 
+/**
+ * Screen scaling modes.
+ */
 enum ScaleType
 {
 	SCALE_ORIGINAL,		// 0

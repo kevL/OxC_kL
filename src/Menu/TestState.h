@@ -24,6 +24,7 @@
 namespace OpenXcom
 {
 
+class ComboBox;
 class NumberText;
 class Slider;
 class Surface;
@@ -50,6 +51,7 @@ class TestState
 private:
 	int _i;
 
+	ComboBox* _comboBox;
 	NumberText* _number;
 	Slider* _slider;
 	SurfaceSet* _set;

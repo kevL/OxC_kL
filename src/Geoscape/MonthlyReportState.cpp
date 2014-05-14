@@ -34,6 +34,8 @@
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
+#include "../Menu/SaveGameState.h"
+
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -418,6 +420,21 @@ void MonthlyReportState::btnOkClick(Action*)
 
 		if (_psi)
 			_game->pushState(new PsiTrainingState(_game));
+
+		if (_game->getSavedGame()->isIronman()) // Autosave
+		{
+			_game->pushState(new SaveGameState(
+											_game,
+											OPT_GEOSCAPE,
+											SAVE_IRONMAN));
+		}
+		else if (Options::autosave)
+		{
+			_game->pushState(new SaveGameState(
+											_game,
+											OPT_GEOSCAPE,
+											SAVE_AUTO_GEOSCAPE));
+		}
 	}
 	else
 	{
