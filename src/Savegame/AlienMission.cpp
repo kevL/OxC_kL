@@ -17,12 +17,14 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define _USE_MATH_DEFINES
 #include "AlienMission.h"
 
 #include <algorithm>
 #include <functional>
 
 #include <assert.h>
+#include <math.h>
 
 #include "../aresame.h"
 
@@ -631,7 +633,22 @@ void AlienMission::ufoReachedWaypoint(
 						<< " at point: " << ufo.getTrajectoryPoint()
 						<< ", no city found.";
 				Log(LOG_FATAL) << error.str();
-				assert(0 && error.str().c_str());
+				std::vector<MissionArea> cityZones = engine.getRuleset()->getRegion(getRegion())->getMissionZones().at(RuleRegion::CITY_MISSION_ZONE).areas;
+				for (int
+						i = 0;
+						i != cityZones.size();
+						++i)
+				{
+					error.str("");
+					error << "Zone " << i
+							<< ": Longitudes: " << cityZones.at(i).lonMin * M_PI / 180.0
+							<< " to " << cityZones.at(i).lonMax * M_PI / 180.0
+							<< " Latitudes: " << cityZones.at(i).latMin * M_PI / 180.0
+							<< " to " << cityZones.at(i).latMax * M_PI / 180.0;
+					Log(LOG_INFO) << error.str();
+				}
+
+				assert(0 && "Terror Mission failed to find a city, please check your log file for more details");
 			}
 
 			game.getTerrorSites()->push_back(terrorSite);
