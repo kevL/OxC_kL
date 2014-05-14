@@ -447,8 +447,7 @@ void MiniMapView::mouseOver(Action* action, State* state)
 			newX,
 			newY;
 
-//kL		if (Options::dragScrollInvert)
-		if (!Options::dragScrollInvert) // kL
+		if (Options::battleDragScrollInvert)
 		{
 			_mouseScrollX += static_cast<int>(action->getDetails()->motion.xrel);
 			_mouseScrollY += static_cast<int>(action->getDetails()->motion.yrel);

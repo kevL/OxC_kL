@@ -45,6 +45,7 @@
 
 #include "../Geoscape/Globe.h"
 
+#include "../Ruleset/City.h"
 #include "../Ruleset/RuleAlienMission.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleRegion.h"
@@ -584,6 +585,30 @@ void AlienMission::ufoReachedWaypoint(
 											nextWaypoint,
 											globe,
 											*rules.getRegion(_region));
+
+	// screw it, we're not taking any chances, use the city's lon/lat info instead of the region's
+	// TODO: find out why there is a discrepency between generated city mission zones and the cities that generated them.
+	// honolulu: 3.6141230952747376, -0.37332941766009109
+	// UFO: lon: 3.61412 lat: -0.373329
+	// Zone: Longitudes: 3.61412 to 3.61412 Latitudes: -0.373329 to -0.373329
+	// http://openxcom.org/bugs/openxcom/issues/615#comment_3292
+	if (ufo.getRules()->getType() == "STR_TERROR_SHIP"
+		&& _rule.getType() == "STR_ALIEN_TERROR"
+		&& trajectory.getZone(nextWaypoint) == RuleRegion::CITY_MISSION_ZONE)
+	{
+		while (!rules.locateCity(
+								pos.first,
+								pos.second))
+		{
+			Log(LOG_DEBUG) << "Longitude: " << pos.first << "Lattitude: " << pos.second << " invalid";
+			size_t city = RNG::generate(
+									0,
+									rules.getRegion(_region)->getCities()->size() - 1);
+			pos.first = rules.getRegion(_region)->getCities()->at(city)->getLongitude();
+			pos.second = rules.getRegion(_region)->getCities()->at(city)->getLatitude();
+		}
+	}
+
 	Waypoint* wp = new Waypoint();
 	wp->setLongitude(pos.first);
 	wp->setLatitude(pos.second);
@@ -633,7 +658,7 @@ void AlienMission::ufoReachedWaypoint(
 						<< " at point: " << ufo.getTrajectoryPoint()
 						<< ", no city found.";
 				Log(LOG_FATAL) << error.str();
-				std::vector<MissionArea> cityZones = engine.getRuleset()->getRegion(getRegion())->getMissionZones().at(RuleRegion::CITY_MISSION_ZONE).areas;
+				std::vector<MissionArea> cityZones = rules.getRegion(getRegion())->getMissionZones().at(RuleRegion::CITY_MISSION_ZONE).areas;
 				for (int
 						i = 0;
 						i != cityZones.size();
@@ -645,6 +670,18 @@ void AlienMission::ufoReachedWaypoint(
 							<< " to " << cityZones.at(i).lonMax * M_PI / 180.0
 							<< " Latitudes: " << cityZones.at(i).latMin * M_PI / 180.0
 							<< " to " << cityZones.at(i).latMax * M_PI / 180.0;
+					Log(LOG_INFO) << error.str();
+				}
+
+				for (std::vector<City*>::const_iterator
+						i = rules.getRegion(getRegion())->getCities()->begin();
+						i != rules.getRegion(getRegion())->getCities()->end();
+						++i)
+				{
+					error.str("");
+					error << "City: " << (*i)->getName()
+							<< " Longitude: " << (*i)->getLongitude()
+							<< " Latitude: " << (*i)->getLatitude();
 					Log(LOG_INFO) << error.str();
 				}
 

@@ -896,8 +896,7 @@ void BattlescapeState::mapOver(Action* action)
 									|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 		// Scrolling
-//kL		if (Options::dragScrollInvert)
-		if (!Options::dragScrollInvert) // kL
+		if (Options::battleDragScrollInvert)
 		{
 			_map->getCamera()->scrollXY(
 									static_cast<int>(-action->getDetails()->motion.xrel),

@@ -6001,7 +6001,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1400029995 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1400092535 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6489,7 +6489,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1399719000 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1400092595 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<sstream>
 	"Camera.h"
@@ -7066,7 +7066,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1400028940 source:f:\git\openxcom\src\engine\options.cpp
+1400092367 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7815,7 +7815,7 @@
 	<string>
 	<vector>
 
-1400032886 source:f:\git\openxcom\src\geoscape\globe.cpp
+1400095027 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	<cmath>
 	<fstream>
@@ -9232,7 +9232,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1398301568 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1400060375 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
 	<assert.h>
 	<math.h>
@@ -11461,7 +11461,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1400032328 f:\git\openxcom\src\engine\options.inc.h
+1400092433 f:\git\openxcom\src\engine\options.inc.h
 
 1396745312 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"

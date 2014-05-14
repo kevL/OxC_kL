@@ -339,7 +339,8 @@ Globe::Globe(
 	_blinkTimer->onTimer((SurfaceHandler)& Globe::blink);
 	_blinkTimer->start();
 
-//kL	_rotTimer = new Timer(Options::geoScrollSpeed);
+//kL	_rotTimer = new Timer(10);
+//kL	_rotTimer = new Timer(Options::geoScrollSpeed); // old.
 //kL	_rotTimer->onTimer((SurfaceHandler)& Globe::rotate);
 
 	// Globe markers
@@ -1237,8 +1238,8 @@ void Globe::blink()
  */
 /* void Globe::rotate()
 {
-	_cenLon += _rotLon;
-	_cenLat += _rotLat;
+	_cenLon += _rotLon * ((110 - Options::geoScrollSpeed) / 100.0);
+	_cenLat += _rotLat * ((110 - Options::geoScrollSpeed) / 100.0);
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
 
@@ -2545,21 +2546,21 @@ void Globe::mouseOver(Action* action, State* state)
 										|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 			// Scrolling
-			if (Options::dragScrollInvert)
-			{
-				double newLon = static_cast<double>(-action->getDetails()->motion.xrel) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.0;
-				double newLat = static_cast<double>(-action->getDetails()->motion.yrel) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.0;
-				center(
-					_cenLon + newLon,
-					_cenLat + newLat);
-			}
-			else
+			if (Options::geoDragScrollInvert)
 			{
 				double newLon = (static_cast<double>(_totalMouseMoveX) / action->getXScale()) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.0;
 				double newLat = (static_cast<double>(_totalMouseMoveY) / action->getYScale()) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.0;
 				center(
-					_lonBeforeMouseScrolling + newLon,
-					_latBeforeMouseScrolling + newLat);
+					_lonBeforeMouseScrolling + newLon / static_cast<double>(Options::geoScrollSpeed) / 10.0,
+					_latBeforeMouseScrolling + newLat / static_cast<double>(Options::geoScrollSpeed) / 10.0);
+			}
+			else
+			{
+				double newLon = static_cast<double>(-action->getDetails()->motion.xrel) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.0;
+				double newLat = static_cast<double>(-action->getDetails()->motion.yrel) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.0;
+				center(
+					_cenLon + newLon / static_cast<double>(Options::geoScrollSpeed) / 10.0,
+					_cenLat + newLat / static_cast<double>(Options::geoScrollSpeed) / 10.0);
 			}
 
 			// We don't want to look the mouse-cursor jumping :)
