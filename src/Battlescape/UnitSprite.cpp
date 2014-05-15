@@ -670,11 +670,18 @@ void UnitSprite::drawRoutine0()
 			rightArm->blit(this);
 		break;
 		case 1:
-		case 2:
 			leftArm->blit(this);
 			legs->blit(this);
 			itemB ? itemB->blit(this) : void();
 			torso->blit(this);
+			itemA ? itemA->blit(this) : void();
+			rightArm->blit(this);
+		break;
+		case 2:
+			leftArm->blit(this);
+			legs->blit(this);
+			torso->blit(this);
+			itemB ? itemB->blit(this) : void();
 			itemA ? itemA->blit(this) : void();
 			rightArm->blit(this);
 		break;

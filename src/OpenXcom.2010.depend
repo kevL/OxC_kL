@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1399007024 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1400179419 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
