@@ -296,6 +296,8 @@ void OptionsBaseState::btnCancelClick(Action*)
 	Options::reload = false;
 	Options::load();
 
+	SDL_WM_GrabInput(Options::captureMouse);
+
 	updateScale(
 			Options::battlescapeScale,
 			Options::newBattlescapeScale,

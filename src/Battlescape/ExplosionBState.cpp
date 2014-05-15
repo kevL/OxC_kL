@@ -334,6 +334,7 @@ void ExplosionBState::explode()
 			&& !_unit->isOut())
 		{
 			_unit->aim(false);
+			_unit->setCache(0);
 		}
 
 		BattleUnit* targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
@@ -471,6 +472,7 @@ void ExplosionBState::explode()
 		&& _lowerWeapon)
 	{
 		_unit->aim(false);
+		_unit->setCache(0);
 	}
 
 	_parent->getMap()->cacheUnits();

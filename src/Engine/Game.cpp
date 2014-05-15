@@ -228,25 +228,21 @@ void Game::run()
 
 	while (!_quit)
 	{
-		// Clean up states
-		while (!_deleted.empty())
+		while (!_deleted.empty()) // Clean up states
 		{
 			delete _deleted.back();
 
 			_deleted.pop_back();
 		}
 
-		// Initialize active state
-		if (!_init)
+		if (!_init) // Initialize active state
 		{
 			_init = true;
 			_states.back()->init();
 
-			// Unpress buttons
-			_states.back()->resetAll();
+			_states.back()->resetAll(); // Unpress buttons
 
-			// Refresh mouse position
-			SDL_Event ev;
+			SDL_Event ev; // Refresh mouse position
 			int x, y;
 			SDL_GetMouseState(&x, &y);
 			ev.type = SDL_MOUSEMOTION;
@@ -262,8 +258,7 @@ void Game::run()
 			_states.back()->handle(&action);
 		}
 
-		// Process events
-		while (SDL_PollEvent(&_event))
+		while (SDL_PollEvent(&_event)) // Process events
 		{
 			if (CrossPlatform::isQuitShortcut(_event))
 				_event.type = SDL_QUIT;
@@ -330,9 +325,11 @@ void Game::run()
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
-					if (!_mouseActive) continue;	// Skip mouse events if they're disabled
-					runningState = RUNNING;			// re-gain focus on mouse-over or keypress.
-													// Go on, feed the event to others
+					if (!_mouseActive)		// Skip mouse events if they're disabled
+						continue;
+
+					runningState = RUNNING;	// re-gain focus on mouse-over or keypress.
+											// Go on, feed the event to others
 				default:
 					Action action = Action(
 										&_event,
@@ -353,8 +350,14 @@ void Game::run()
 						{
 							setState(new TestState(this));
 						}
-						// "ctrl-u" debug UI
-						else if (action.getDetails()->key.keysym.sym == SDLK_u
+
+						if (action.getDetails()->key.keysym.sym == SDLK_l // "ctrl-l" un/lock mouse from window
+							&& (SDL_GetModState() & KMOD_CTRL) != 0)
+						{
+							Options::captureMouse = (SDL_GrabMode)(!Options::captureMouse);
+							SDL_WM_GrabInput(Options::captureMouse);
+						}
+						else if (action.getDetails()->key.keysym.sym == SDLK_u // "ctrl-u" debug UI
 							&& (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
 							Options::debugUi = !Options::debugUi;
@@ -366,11 +369,9 @@ void Game::run()
 			}
 		}
 
-		// Process rendering
-		if (runningState != PAUSED)
+		if (runningState != PAUSED) // Process rendering
 		{
-			// Process logic
-			_fpsCounter->think();
+			_fpsCounter->think(); // Process logic
 			_states.back()->think();
 
 			if (_init)
@@ -400,17 +401,14 @@ void Game::run()
 			_screen->flip();
 		}
 
-		// Initialize active state
-		if (!_init)
+		if (!_init) // Initialize active state
 		{
 			_init = true;
 			_states.back()->init();
 
-			// Unpress buttons
-			_states.back()->resetAll();
+			_states.back()->resetAll(); // Unpress buttons
 
-			// Refresh mouse position
-			SDL_Event ev;
+			SDL_Event ev; // Refresh mouse position
 			int
 				x,
 				y;
@@ -427,8 +425,7 @@ void Game::run()
 			_states.back()->handle(&action);
 		}
 
-		// Save on CPU
-		switch (runningState)
+		switch (runningState) // Save on CPU
 		{
 			case RUNNING:
 				if (Options::FPS > 0
@@ -462,8 +459,7 @@ void Game::run()
  */
 void Game::quit()
 {
-	// Always save ironman
-	if (_save != 0
+	if (_save != 0 // Always save ironman
 		&& _save->isIronman()
 		&& !_save->getName().empty())
 	{
@@ -487,16 +483,16 @@ void Game::setVolume(
 {
 	if (!Options::mute)
 	{
-		if (sound >= 0)
+		if (sound > -1)
 			Mix_Volume(-1, sound); // kL_note: this, supposedly, sets volume on *all channels*
 
-		if (music >= 0)
+		if (music > -1)
 		{
 			Mix_VolumeMusic(music);
 			func_set_music_volume(music);
 		}
 
-		if (ui >= 0)
+		if (ui > -1)
 		{
 			Mix_Volume(0, ui); // kL_note: then this sets channel-0 to ui-Volume ...
 			Mix_Volume(1, ui); // and this sets channel-1 to ui-Volume!

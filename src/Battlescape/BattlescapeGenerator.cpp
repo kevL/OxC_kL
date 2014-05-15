@@ -655,6 +655,10 @@ void BattlescapeGenerator::deployXCOM()
 	//Log(LOG_INFO) << ". addItem(s) DONE";
 
 
+	// load weapons before distribution, even before loadouts;
+	// loading weapons takes priority over extra clips.
+//kL	loadWeapons();
+
 
 	// kL_note: ALL ITEMS SEEM TO STAY ON THE GROUNDTILE, _craftInventoryTile,
 	// IN THAT INVENTORY(vector) UNTIL EVERYTHING IS EQUIPPED & LOADED. Then
@@ -1223,8 +1227,7 @@ bool BattlescapeGenerator::addItem(
 	bool placed = false;
 //	bool loaded = false;
 
-/* Wb's 131220 code:
-	switch (item->getRules()->getBattleType())
+/*kL	switch (item->getRules()->getBattleType())
 	{
 		case BT_FIREARM:
 		case BT_MELEE:
@@ -1233,30 +1236,6 @@ bool BattlescapeGenerator::addItem(
 				|| !unit->hasInventory())					// is a large unit
 			{
 				loaded = true;
-			}
-
-			if (unit->getFaction() == FACTION_PLAYER)
-			{
-				// let's try to load this weapon, whether we equip it or not.
-				for (std::vector<BattleItem*>::iterator
-						i = _craftInventoryTile->getInventory()->begin();
-						i != _craftInventoryTile->getInventory()->end()
-							&& !loaded;
-						++i)
-				{
-					if ((*i)->getSlot() == ground
-						&& item->setAmmoItem((*i)) == 0)
-					{
-						_save->getItems()->push_back(*i);
-
-						(*i)->setXCOMProperty(true);
-						(*i)->setSlot(rightHand);
-						weight += (*i)->getRules()->getWeight();
-
-						loaded = true;
-						// note: soldier is not owner of the ammo, we are using this fact when saving equipments
-					}
-				}
 			}
 
 			if (loaded && (unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
@@ -1301,7 +1280,7 @@ bool BattlescapeGenerator::addItem(
 		default:
 		if ((unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
 		{
-			if (unit->getStats()->strength >= weight)
+			if (unit->getStats()->strength >= weight) // weight is always considered 0 for aliens
 			{
 				for (std::vector<std::string>::const_iterator
 						i = _game->getRuleset()->getInvsList().begin();
@@ -3037,6 +3016,60 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 	delete data;
 	delete set;
 	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory() EXIT";
+}
+
+/**
+ * Loads all XCom weaponry before anything else is distributed.
+ */
+void BattlescapeGenerator::loadWeapons()
+{
+	// let's try to load this weapon, whether we equip it or not.
+	for (std::vector<BattleItem*>::iterator
+			i = _craftInventoryTile->getInventory()->begin();
+			i != _craftInventoryTile->getInventory()->end();
+			++i)
+	{
+		if (!(*i)->getRules()->isFixed()
+			&& !(*i)->getRules()->getCompatibleAmmo()->empty()
+			&& (*i)->getAmmoItem() == 0
+			&& ((*i)->getRules()->getBattleType() == BT_FIREARM
+				|| (*i)->getRules()->getBattleType() == BT_MELEE))
+		{
+			bool loaded = false;
+
+			for (std::vector<BattleItem*>::iterator
+					j = _craftInventoryTile->getInventory()->begin();
+					j != _craftInventoryTile->getInventory()->end()
+						&& !loaded;
+					++j)
+			{
+				if ((*j)->getSlot() == _game->getRuleset()->getInventory("STR_GROUND")
+					&& (*i)->setAmmoItem((*j)) == 0)
+				{
+					_save->getItems()->push_back(*j);
+					(*j)->setXCOMProperty(true);
+					(*j)->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+
+					loaded = true;
+				}
+			}
+		}
+	}
+
+	for (std::vector<BattleItem*>::iterator
+			i = _craftInventoryTile->getInventory()->begin();
+			i != _craftInventoryTile->getInventory()->end();
+			)
+	{
+		if ((*i)->getSlot() != _game->getRuleset()->getInventory("STR_GROUND"))
+		{
+			i = _craftInventoryTile->getInventory()->erase(i);
+
+			continue;
+		}
+
+		++i;
+	}
 }
 
 }

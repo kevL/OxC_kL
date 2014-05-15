@@ -137,6 +137,9 @@ private:
 		void resize(
 				int &,
 				int &);
+
+		/// Handles keypresses.
+		void handle(Action* action);
 };
 
 }

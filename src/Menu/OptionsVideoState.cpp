@@ -78,10 +78,10 @@ OptionsVideoState::OptionsVideoState(
 
 	_txtMode					= new Text(114, 9, 210, 22);
 	_cbxDisplayMode				= new ComboBox(this, 100, 16, 210, 32);
-	
+
 	_txtGeoScale				= new Text(114, 9, 94, 82);
 	_cbxGeoScale				= new ComboBox(this, 100, 16, 94, 92);
-	
+
 	_txtBattleScale				= new Text(114, 9, 94, 112);
 	_cbxBattleScale				= new ComboBox(this, 100, 16, 94, 122);
 
@@ -140,7 +140,7 @@ OptionsVideoState::OptionsVideoState(
 
     add(_cbxFilter);
 	add(_cbxDisplayMode);
-	
+
 	add(_txtBattleScale);
 	add(_cbxBattleScale);
 
@@ -308,10 +308,10 @@ OptionsVideoState::OptionsVideoState(
 	_cbxDisplayMode->setTooltip("STR_DISPLAY_MODE_DESC");
 	_cbxDisplayMode->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
 	_cbxDisplayMode->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
-	
+
 	_txtGeoScale->setColor(Palette::blockOffset(8)+10);
 	_txtGeoScale->setText(tr("STR_GEOSCAPE_SCALE"));
-	
+
 	std::vector<std::string> scales;
 	scales.push_back("STR_ORIGINAL");
 	scales.push_back("STR_1.5X");
@@ -327,10 +327,10 @@ OptionsVideoState::OptionsVideoState(
 	_cbxGeoScale->setTooltip("STR_GEOSCAPESCALE_SCALE_DESC");
 	_cbxGeoScale->onMouseIn((ActionHandler)& OptionsVideoState::txtTooltipIn);
 	_cbxGeoScale->onMouseOut((ActionHandler)& OptionsVideoState::txtTooltipOut);
-	
+
 	_txtBattleScale->setColor(Palette::blockOffset(8)+10);
 	_txtBattleScale->setText(tr("STR_BATTLESCAPE_SCALE"));
-	
+
 	_cbxBattleScale->setColor(Palette::blockOffset(15)-1);
 	_cbxBattleScale->setOptions(scales);
 	_cbxBattleScale->setSelected(Options::battlescapeScale);
@@ -558,6 +558,7 @@ void OptionsVideoState::btnLetterboxClick(Action*)
 void OptionsVideoState::btnLockMouseClick(Action*)
 {
 	Options::captureMouse = (SDL_GrabMode)_btnLockMouse->getPressed();
+	SDL_WM_GrabInput(Options::captureMouse);
 }
 
 /**
@@ -596,6 +597,21 @@ void OptionsVideoState::resize(
 	ss.str(L"");
 	ss << Options::displayHeight;
 	_txtDisplayHeight->setText(ss.str());
+}
+
+/**
+ * Takes care of any events from the core game engine.
+ * @param action Pointer to an action.
+ */
+void OptionsVideoState::handle(Action* action)
+{
+	State::handle(action);
+
+	if (action->getDetails()->key.keysym.sym == SDLK_l
+		&& (SDL_GetModState() & KMOD_CTRL) != 0)
+	{
+		_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);
+	}
 }
 
 }

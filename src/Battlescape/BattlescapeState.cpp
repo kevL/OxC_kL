@@ -2093,9 +2093,9 @@ inline void BattlescapeState::handle(Action* action)
 					_save->setDebugMode();
 					debug(L"Debug Mode");
 				}
-				// "ctrl-l" - reset tile visibility
+				// "ctrl-v" - reset tile visibility
 				else if (_save->getDebugMode()
-					&& action->getDetails()->key.keysym.sym == SDLK_l
+					&& action->getDetails()->key.keysym.sym == SDLK_v
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					debug(L"Resetting tile visibility");

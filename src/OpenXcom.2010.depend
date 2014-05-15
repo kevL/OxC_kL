@@ -21,7 +21,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1396419955 f:\git\openxcom\src\basescape\baseinfostate.h
+1400174407 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
 1398484296 f:\git\openxcom\src\engine\state.h
@@ -4726,7 +4726,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1397602702 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1400174584 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
 1396247195 f:\git\openxcom\src\battlescape\inventorystate.h
@@ -5880,7 +5880,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1399139921 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1400175045 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6001,7 +6001,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1400092535 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1400175119 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6278,7 +6278,7 @@
 1394398507 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1399388171 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1400174297 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6795,7 +6795,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1399386619 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1400177151 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -6958,7 +6958,7 @@
 	"Language.h"
 	"Surface.h"
 
-1400031978 source:f:\git\openxcom\src\engine\game.cpp
+1400179218 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7815,7 +7815,7 @@
 	<string>
 	<vector>
 
-1400102809 source:f:\git\openxcom\src\geoscape\globe.cpp
+1400107390 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	<cmath>
 	<fstream>
@@ -8302,7 +8302,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1400039371 source:f:\git\openxcom\src\interface\window.cpp
+1400107390 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	<SDL.h>
 	<SDL_mixer.h>
@@ -8510,7 +8510,7 @@
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 
-1399703520 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1400177187 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	<SDL.h>
 	"MainMenuState.h"
@@ -11503,7 +11503,7 @@
 1398138059 f:\git\openxcom\src\menu\introstate.h
 	"../Engine/State.h"
 
-1399669813 f:\git\openxcom\src\menu\optionsvideostate.h
+1400177225 f:\git\openxcom\src\menu\optionsvideostate.h
 	<SDL.h>
 	"OptionsBaseState.h"
 	"../Engine/State.h"
@@ -11585,7 +11585,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1399670041 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1400179344 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"
