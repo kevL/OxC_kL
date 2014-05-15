@@ -6795,7 +6795,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1400177151 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1400181824 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -11780,7 +11780,7 @@
 1398481998 source:f:\git\openxcom\src\ruleset\statstringcondition.cpp
 	"StatStringCondition.h"
 
-1398750685 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
+1400179873 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
 	<math.h>
 	<memory.h>
 	<stdio.h>

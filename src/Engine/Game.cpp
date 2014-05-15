@@ -342,27 +342,27 @@ void Game::run()
 					_fpsCounter->handle(&action);
 					_states.back()->handle(&action);
 
-					if (action.getDetails()->type == SDL_KEYDOWN
-						&& Options::debug)
+					if (action.getDetails()->type == SDL_KEYDOWN)
 					{
-						if (action.getDetails()->key.keysym.sym == SDLK_t
-							&& (SDL_GetModState() & KMOD_CTRL) != 0)
-						{
-							setState(new TestState(this));
-						}
-
-						if (action.getDetails()->key.keysym.sym == SDLK_l // "ctrl-l" un/lock mouse from window
+						if (action.getDetails()->key.keysym.sym == SDLK_g // "ctrl-g" grab input
 							&& (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
 							Options::captureMouse = (SDL_GrabMode)(!Options::captureMouse);
 							SDL_WM_GrabInput(Options::captureMouse);
 						}
-						else if (action.getDetails()->key.keysym.sym == SDLK_u // "ctrl-u" debug UI
-							&& (SDL_GetModState() & KMOD_CTRL) != 0)
+						else if (Options::debug)
 						{
-							Options::debugUi = !Options::debugUi;
-
-							_states.back()->redrawText();
+							if (action.getDetails()->key.keysym.sym == SDLK_t
+								&& (SDL_GetModState() & KMOD_CTRL) != 0)
+							{
+								setState(new TestState(this));
+							}
+							else if (action.getDetails()->key.keysym.sym == SDLK_u // "ctrl-u" debug UI
+								&& (SDL_GetModState() & KMOD_CTRL) != 0)
+							{
+								Options::debugUi = !Options::debugUi;
+								_states.back()->redrawText();
+							}
 						}
 					}
 				break;
