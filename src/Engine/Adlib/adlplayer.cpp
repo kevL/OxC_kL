@@ -652,7 +652,8 @@ int decode_op(int instrument, bool* another_loop)
 				arg2 = *(music_ptr++);
 					//printf("Opcode [%d] CONTROLLER: %02Xh, %d\n", instrument, arg1, arg2);
 				if (arg1 == 0 && arg2 != 0) //tempo change
-					adl_gv_tempo = arg2 * 0.8;
+//kL					adl_gv_tempo = arg2 * 0.8;
+					adl_gv_tempo = static_cast<int>(static_cast<double>(arg2) * 0.8); // kL
 				else if (arg1 == 7) //channel volume change
 				{
 					instr1->volume = arg2;
@@ -826,7 +827,8 @@ void func_setup_music(unsigned char* music_ptr, int length)
 	init_music();
 	adlib_init();
 	adlib_reset_channels();
-	adl_gv_tempo *= 0.4;
+//kL	adl_gv_tempo *= 0.4;
+	adl_gv_tempo = static_cast<int>(static_cast<double>(adl_gv_tempo) * 0.4); // kL
 	adl_gv_tempo_run = adl_gv_tempo;
 	adl_gv_music_playing = true;
 }

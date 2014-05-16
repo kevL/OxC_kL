@@ -489,7 +489,7 @@ void Game::setVolume(
 		if (music > -1)
 		{
 			Mix_VolumeMusic(music);
-			func_set_music_volume(music);
+//			func_set_music_volume(music);
 		}
 
 		if (ui > -1)

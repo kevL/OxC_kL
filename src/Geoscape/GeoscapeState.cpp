@@ -1899,6 +1899,7 @@ void GeoscapeState::time30Minutes()
 	int
 		diff = static_cast<int>(_game->getSavedGame()->getDifficulty()),
 		pts = 0;
+//	pts = pts * _game->getRuleset()->getAlienMission("STR_ALIEN_*")->getPoints() / 100; // kL_stuff
 
 	for (std::vector<Ufo*>::iterator // handle UFO detection and give aliens points
 			u = _game->getSavedGame()->getUfos()->begin();
@@ -2419,7 +2420,8 @@ void GeoscapeState::time1Day()
 
 
 	int pts = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
-	pts *= 5;
+//	pts *= 5;
+	pts = pts * _game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 100;
 
 	for (std::vector<AlienBase*>::const_iterator // handle regional and country points for alien bases
 			b = _game->getSavedGame()->getAlienBases()->begin();
@@ -2439,8 +2441,9 @@ void GeoscapeState::time1Day()
 											lon,
 											lat))
 			{
-				(*r)->addActivityAlien(pts);
-				(*r)->recentActivity(); // kL
+// kL				(*r)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
+				(*r)->addActivityAlien(pts);	// kL
+				(*r)->recentActivity();			// kL
 
 				break;
 			}
@@ -2455,8 +2458,9 @@ void GeoscapeState::time1Day()
 											lon,
 											lat))
 			{
-				(*c)->addActivityAlien(pts);
-				(*c)->recentActivity(); // kL
+//kL				(*c)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
+				(*c)->addActivityAlien(pts);	// kL
+				(*c)->recentActivity();			// kL
 
 				break;
 			}

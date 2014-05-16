@@ -144,9 +144,9 @@ void AdlibMusic::play(int loop) const
 	{
 		stop();
 //kL		func_setup_music((unsigned char*)_data, _size);
-//kL		func_set_music_volume(Options::musicVolume * _volume);
-		func_setup_music(reinterpret_cast<unsigned char*>(_data), static_cast<int>(_size));				// kL
-		func_set_music_volume(static_cast<int>(static_cast<float>(Options::musicVolume) * _volume));	// kL
+//kL		func_set_music_volume(127 * _volume);
+		func_setup_music(reinterpret_cast<unsigned char*>(_data), static_cast<int>(_size));	// kL
+		func_set_music_volume(static_cast<int>(127.f * _volume));							// kL
 		Mix_HookMusic(player, NULL);
 	}
 #endif
@@ -175,16 +175,20 @@ void AdlibMusic::player(
 		int i = std::min(delay, len);
 		if (i)
 		{
+			float volume = static_cast<float>(exp(4.606 / 128.0 * static_cast<double>(Options::musicVolume)) / 100.0);
 			YM3812UpdateOne(
 						opl[0],
 						(INT16*)stream,
 						i / 2,
-						2);
+						2,
+						volume);
 			YM3812UpdateOne(
 						opl[1],
 						((INT16*)stream) + 1,
 						i / 2,
-						2);
+						2,
+						volume);
+
 			stream += i;
 			delay -= i;
 			len -= i;
