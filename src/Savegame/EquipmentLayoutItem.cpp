@@ -55,8 +55,6 @@ EquipmentLayoutItem::EquipmentLayoutItem(
  */
 EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node& node)
 {
-	_fuseTimer = -1; // for compatibility
-
 	load(node);
 }
 
@@ -75,10 +73,10 @@ void EquipmentLayoutItem::load(const YAML::Node &node)
 {
 	_itemType		= node["itemType"].as<std::string>(_itemType);
 	_slot			= node["slot"].as<std::string>(_slot);
-	_slotX			= node["slotX"].as<int>(_slotX);
-	_slotY			= node["slotY"].as<int>(_slotY);
-	_ammoItem		= node["ammoItem"].as<std::string>(_ammoItem);
-	_fuseTimer		= node["fuseTimer"].as<int>(_fuseTimer);
+	_slotX			= node["slotX"].as<int>(0);
+	_slotY			= node["slotY"].as<int>(0);
+	_ammoItem		= node["ammoItem"].as<std::string>("NONE");
+	_fuseTimer		= node["fuseTimer"].as<int>(-1);
 }
 
 /**
@@ -91,10 +89,16 @@ YAML::Node EquipmentLayoutItem::save() const
 
 	node["itemType"]	= _itemType;
 	node["slot"]		= _slot;
-	node["slotX"]		= _slotX;
-	node["slotY"]		= _slotY;
-	node["ammoItem"]	= _ammoItem;
-	node["fuseTimer"]	= _fuseTimer;
+
+	// only save this info if it's needed, reduce clutter in saves
+	if (_slotX != 0)
+		node["slotX"]		= _slotX;
+	if (_slotY != 0)
+		node["slotY"]		= _slotY;
+	if (_ammoItem != "NONE")
+		node["ammoItem"]	= _ammoItem;
+	if (_fuseTimer >= 0)
+		node["fuseTimer"]	= _fuseTimer;
 
 	return node;
 }

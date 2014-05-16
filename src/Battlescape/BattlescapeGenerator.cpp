@@ -1073,7 +1073,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 		{
 			// skip the vehicles, we need only X-Com soldiers WITH equipment-layout
 			if ((*i)->getArmor()->getSize() > 1
-				|| (*i)->getGeoscapeSoldier() == 0
+				|| !(*i)->getGeoscapeSoldier()
 				|| (*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
 			{
 				continue;
@@ -1100,6 +1100,11 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 				if ((*j)->getAmmoItem() == "NONE")
 					loaded = true;
 				else
+					loaded = item->getAmmoItem()
+							|| item->getRules()->getCompatibleAmmo()->empty();
+/*				if ((*j)->getAmmoItem() == "NONE")
+					loaded = true;
+				else
 				{
 					loaded = false;
 
@@ -1116,7 +1121,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 																// WHAT OTHER _craftInventoryTile IS THERE BUT THE GROUND TILE!!??!!!1
 							&& item->setAmmoItem(*k) == 0)		// okay, so load the damn item.
 						{
-							(*k)->setXCOMProperty(true);
+-> note this ->				(*k)->setXCOMProperty(true);
 							(*k)->setSlot(righthand);			// why are you putting ammo in his right hand.....
 																// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
 							_save->getItems()->push_back(*k);
@@ -1125,7 +1130,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
 						}
 					}
-				}
+				} */ // kL
 
 				// only place the weapon (or any other item..) onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
