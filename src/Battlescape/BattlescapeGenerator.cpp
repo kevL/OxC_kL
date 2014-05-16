@@ -655,11 +655,6 @@ void BattlescapeGenerator::deployXCOM()
 	//Log(LOG_INFO) << ". addItem(s) DONE";
 
 
-	// load weapons before distribution, even before loadouts;
-	// loading weapons takes priority over extra clips.
-//kL	loadWeapons();
-
-
 	// kL_note: ALL ITEMS SEEM TO STAY ON THE GROUNDTILE, _craftInventoryTile,
 	// IN THAT INVENTORY(vector) UNTIL EVERYTHING IS EQUIPPED & LOADED. Then
 	// the inventory-tile is cleaned up at the end of this function....
@@ -671,7 +666,26 @@ void BattlescapeGenerator::deployXCOM()
 			i != _craftInventoryTile->getInventory()->end();
 			++i)
 	{
+		// don't let the soldiers take extra ammo yet
+		if ((*i)->getRules()->getBattleType() == BT_AMMO)
+			continue;
+
+		placeItemByLayout(*i);
+	}
+
+	// load weapons before loadouts take extra clips.
+//kL	loadWeapons();
+
+	for (std::vector<BattleItem*>::iterator
+			i = _craftInventoryTile->getInventory()->begin();
+			i != _craftInventoryTile->getInventory()->end();
+			++i)
+	{
 		//Log(LOG_INFO) << ". placeItemByLayout(*item)";
+		// we only need to distribute extra ammo at this point.
+		if ((*i)->getRules()->getBattleType() != BT_AMMO)
+			continue;
+
 		placeItemByLayout(*i);
 	}
 	//Log(LOG_INFO) << ". placeItemByLayout all DONE";
@@ -1100,11 +1114,6 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 				if ((*j)->getAmmoItem() == "NONE")
 					loaded = true;
 				else
-					loaded = item->getAmmoItem()
-							|| item->getRules()->getCompatibleAmmo()->empty();
-/*				if ((*j)->getAmmoItem() == "NONE")
-					loaded = true;
-				else
 				{
 					loaded = false;
 
@@ -1121,7 +1130,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 																// WHAT OTHER _craftInventoryTile IS THERE BUT THE GROUND TILE!!??!!!1
 							&& item->setAmmoItem(*k) == 0)		// okay, so load the damn item.
 						{
--> note this ->				(*k)->setXCOMProperty(true);
+							(*k)->setXCOMProperty(true);
 							(*k)->setSlot(righthand);			// why are you putting ammo in his right hand.....
 																// maybe just to get it off the ground so it doesn't get loaded into another weapon later.
 							_save->getItems()->push_back(*k);
@@ -1130,7 +1139,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 							// note: soldier is not owner of the ammo, we are using this fact when saving equipments
 						}
 					}
-				} */ // kL
+				}
 
 				// only place the weapon (or any other item..) onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
