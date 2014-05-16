@@ -91,8 +91,9 @@ InventoryState::InventoryState(
 	_txtFAcc	= new Text(40, 9, 245, 32);
 	_txtReact	= new Text(40, 9, 245, 40);
 	_txtThrow	= new Text(40, 9, 245, 48); // kL
-	_txtPStr	= new Text(40, 9, 245, 56);
-	_txtPSkill	= new Text(40, 9, 245, 64);
+	_txtMelee	= new Text(40, 9, 245, 56); // kL
+	_txtPStr	= new Text(40, 9, 245, 64);
+	_txtPSkill	= new Text(40, 9, 245, 72);
 
 	_txtItem	= new Text(160, 9, 128, 140);
 	_txtAmmo	= new Text(66, 24, 254, 64);
@@ -132,6 +133,7 @@ InventoryState::InventoryState(
 	add(_txtFAcc);
 	add(_txtReact);
 	add(_txtThrow); // kL
+	add(_txtMelee); // kL
 	add(_txtPStr);
 	add(_txtPSkill);
 
@@ -174,6 +176,10 @@ InventoryState::InventoryState(
 	_txtThrow->setColor(Palette::blockOffset(4));			// kL
 	_txtThrow->setSecondaryColor(Palette::blockOffset(1));	// kL
 	_txtThrow->setHighContrast(true);						// kL
+
+	_txtMelee->setColor(Palette::blockOffset(4));			// kL
+	_txtMelee->setSecondaryColor(Palette::blockOffset(1));	// kL
+	_txtMelee->setHighContrast(true);						// kL
 
 	_txtPStr->setColor(Palette::blockOffset(4));
 	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
@@ -219,11 +225,14 @@ InventoryState::InventoryState(
 
 	_txtWeight->setVisible(Options::showMoreStatsInInventoryView);
 	_txtTus->setVisible(_tu);
-	_txtFAcc->setVisible(Options::showMoreStatsInInventoryView && !_tu);
-	_txtReact->setVisible(Options::showMoreStatsInInventoryView && !_tu);
-	_txtThrow->setVisible(Options::showMoreStatsInInventoryView && !_tu); // kL
-	_txtPStr->setVisible(Options::showMoreStatsInInventoryView && !_tu);
-	_txtPSkill->setVisible(Options::showMoreStatsInInventoryView && !_tu);
+
+	bool vis = (Options::showMoreStatsInInventoryView && !_tu);
+	_txtFAcc->setVisible(vis);
+	_txtReact->setVisible(vis);
+	_txtThrow->setVisible(vis); // kL
+	_txtMelee->setVisible(vis); // kL
+	_txtPStr->setVisible(vis);
+	_txtPSkill->setVisible(vis);
 
 	//Log(LOG_INFO) << "Create InventoryState EXIT";
 }
@@ -358,6 +367,7 @@ void InventoryState::updateStats()
 			_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg(unit->getStats()->firing));
 			_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
 			_txtThrow->setText(tr("STR_THROWACC_SHORT").arg(unit->getStats()->throwing)); // kL
+			_txtMelee->setText(tr("STR_MELEEACC_SHORT").arg(unit->getStats()->melee)); // kL
 
 			int minPsi = 0;
 			if (unit->getType() == "SOLDIER")
@@ -600,25 +610,56 @@ void InventoryState::invClick(Action*)
 
 	if (item != 0)
 	{
+		RuleItem* itemRule = item->getRules();
+
+		// kL_begin:
+		std::wostringstream label;
+
 		if (item->getUnit()
+			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+		{
+			label << item->getUnit()->getName(_game->getLanguage());
+		}
+		else
+		{
+			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()))
+				label << tr(itemRule->getName());
+			else
+				label << tr("STR_ALIEN_ARTIFACT");
+		}
+
+		BattleItem* ammo = item->getAmmoItem();
+		int wt = itemRule->getWeight();
+
+		if (ammo
+			&& ammo != item)
+		{
+			wt += ammo->getRules()->getWeight();
+		}
+
+		label << " (" << wt << ")";
+		_txtItem->setText(label.str());
+		// kL_end.
+
+/*		if (item->getUnit()
 			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 		{
 			_txtItem->setText(item->getUnit()->getName(_game->getLanguage()));
 		}
 		else
 		{
-			if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
-				_txtItem->setText(tr(item->getRules()->getName()));
+			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()))
+				_txtItem->setText(tr(itemRule->getName()));
 			else
 				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
-		}
+		} */
 
 		std::wstring sAmmo;
 
-		if (item->getAmmoItem() != 0
+		if (ammo != 0
 			&& item->needsAmmo())
 		{
-			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
+			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
 
 			SDL_Rect r;
 			r.x = 0;
@@ -635,16 +676,16 @@ void InventoryState::invClick(Action*)
 
 			_selAmmo->drawRect(&r, 0);
 
-			item->getAmmoItem()->getRules()->drawHandSprite(
-														_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
-														_selAmmo);
+			ammo->getRules()->drawHandSprite(
+										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+										_selAmmo);
 		}
 		else if (item->getAmmoQuantity() != 0
 			&& item->needsAmmo())
 		{
 			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
-		else if (item->getRules()->getBattleType() == BT_MEDIKIT)
+		else if (itemRule->getBattleType() == BT_MEDIKIT)
 			sAmmo = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 						.arg(item->getPainKillerQuantity())
 						.arg(item->getStimulantQuantity())

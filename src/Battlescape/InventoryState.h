@@ -69,6 +69,7 @@ private:
 		* _txtFAcc,
 		* _txtReact,
 		* _txtThrow, // kL
+		* _txtMelee, // kL
 		* _txtPSkill,
 		* _txtPStr;
 

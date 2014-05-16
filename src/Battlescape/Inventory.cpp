@@ -251,8 +251,7 @@ void Inventory::drawGrid()
 			}
 		}
 
-		// Draw label
-		text.setX(i->second->getX());
+		text.setX(i->second->getX()); // Draw label
 		text.setY(
 				i->second->getY()
 					- text.getFont()->getHeight()
@@ -274,8 +273,7 @@ void Inventory::drawItems()
 	{
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 
-		// Soldier items
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::iterator // Soldier items
 				i = _selUnit->getInventory()->begin();
 				i != _selUnit->getInventory()->end();
 				++i)
@@ -312,8 +310,7 @@ void Inventory::drawItems()
 										0);
 		stackLayer->setPalette(getPalette());
 
-		// Ground items
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::iterator // Ground items
 				i = _selUnit->getTile()->getInventory()->begin();
 				i != _selUnit->getTile()->getInventory()->end();
 				++i)
@@ -363,9 +360,7 @@ void Inventory::drawItems()
 			}
 		}
 
-		// give it a border
-		// this is the "darker" shade that goes in the corners.
-		for (int
+		for (int // give it a border, this is the "darker" shade that goes in the corners.
 				x = -1;
 				x <= 1;
 				x += 2)
@@ -379,8 +374,7 @@ void Inventory::drawItems()
 			}
 		}
 
-		// this is the "slightly darker" version that goes in four cardinals.
-		for (int
+		for (int // this is the "slightly darker" version that goes in four cardinals.
 				z = -1;
 				z <= 1;
 				z += 2)
@@ -389,8 +383,7 @@ void Inventory::drawItems()
 			stackLayer->blitNShade(_items, 0, z, 8);
 		}
 
-		// and finally the number itself
-		stackLayer->blit(_items);
+		stackLayer->blit(_items); // and finally the number itself
 
 		delete stackLayer;
 	}

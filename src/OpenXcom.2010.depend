@@ -4729,7 +4729,7 @@
 1400174584 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
-1396247195 f:\git\openxcom\src\battlescape\inventorystate.h
+1400213231 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 
 1394398507 f:\git\openxcom\src\engine\logger.h
@@ -6321,7 +6321,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1397750477 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1400213886 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6354,7 +6354,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1399673604 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1400224907 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6958,7 +6958,7 @@
 	"Language.h"
 	"Surface.h"
 
-1400179218 source:f:\git\openxcom\src\engine\game.cpp
+1400182254 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -11585,7 +11585,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1400179344 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1400182286 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"
