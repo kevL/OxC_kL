@@ -889,6 +889,48 @@ int Pathfinding::getTUCost(
 					}
 				}
 
+				// kL_note: Code that is supposed to stop units from walking around doors
+				// (close door instead and walk through it)
+				// But this doesn't follow my advanced wallcost algorithm above!!!
+/*				switch (direction)
+				{
+					case 7: // northwest
+						// tile west of start
+						wallcost += _save->getTile(startTile->getPosition() + Position(-1, 0, 0))
+									->getTUCost(MapData::O_NORTHWALL, _movementType);
+						// tile north of start
+						wallcost += _save->getTile(startTile->getPosition() + Position(0,-1, 0))
+									->getTUCost(MapData::O_WESTWALL, _movementType);
+					break;
+					case 3: // southeast
+						// tile south of start
+						wallcost += _save->getTile(startTile->getPosition() + Position(0, 1, 0))
+									->getTUCost(MapData::O_NORTHWALL, _movementType);
+						// tile east of start
+						wallcost += _save->getTile(startTile->getPosition() + Position(1, 0, 0))
+									->getTUCost(MapData::O_WESTWALL, _movementType);
+					break;
+					case 1: // northeast
+						// tile east of start
+						wallcost += _save->getTile(startTile->getPosition() + Position(1, 0, 0))
+									->getTUCost(MapData::O_NORTHWALL, _movementType);
+						// tile east of start
+						wallcost += _save->getTile(startTile->getPosition() + Position(1, 0, 0))
+									->getTUCost(MapData::O_WESTWALL, _movementType);
+					break;
+					case 5: // southwest
+						// tile south of start
+						wallcost += _save->getTile(startTile->getPosition() + Position(0, 1, 0))
+									->getTUCost(MapData::O_NORTHWALL, _movementType);
+						// tile south of start
+						wallcost += _save->getTile(startTile->getPosition() + Position(0, 1, 0))
+									->getTUCost(MapData::O_WESTWALL, _movementType);
+					break;
+
+					default:
+					break;
+				} */
+
 				// diagonal walking (uneven directions) costs 50% more tu's
 				// kL_note: this is moved up so that objects don't cost +150% tu;
 				// instead, let them keep a flat +100% to step onto
