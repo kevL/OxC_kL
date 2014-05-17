@@ -5703,7 +5703,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1399379173 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1400350511 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5963,7 +5963,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1394398507 f:\git\openxcom\src\ruleset\mcdpatch.h
+1400349444 f:\git\openxcom\src\ruleset\mcdpatch.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -6131,7 +6131,7 @@
 1394398507 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1397872167 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1400349861 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	<sstream>
 	"AliensCrashState.h"
@@ -6589,7 +6589,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1399544992 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1400350443 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -9242,7 +9242,7 @@
 1394398507 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1399197157 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1400321720 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -11503,7 +11503,7 @@
 1398138059 f:\git\openxcom\src\menu\introstate.h
 	"../Engine/State.h"
 
-1400177225 f:\git\openxcom\src\menu\optionsvideostate.h
+1400349632 f:\git\openxcom\src\menu\optionsvideostate.h
 	<SDL.h>
 	"OptionsBaseState.h"
 	"../Engine/State.h"

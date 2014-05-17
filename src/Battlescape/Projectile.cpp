@@ -155,7 +155,7 @@ int Projectile::calculateTrajectory(
 		&& !_trajectory.empty()
 		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
 		&& _action.autoShotCount == 1
-		&& ((SDL_GetModState() & KMOD_CTRL) == 0 
+		&& ((SDL_GetModState() & KMOD_CTRL) == 0
 			|| !Options::forceFire)
 		&& _save->getBattleGame()->getPanicHandled()
 		&& _action.type != BA_LAUNCH)
@@ -752,7 +752,12 @@ Position Projectile::getPosition(int offset) const
  */
 int Projectile::getParticle(int i) const
 {
-	if (_action.weapon->getRules()->getBulletSprite() == -1)
+	if (_action.weapon->getAmmoItem()
+		&& _action.weapon->getAmmoItem()->getRules()->getBulletSprite() != -1)
+	{
+		return _action.weapon->getAmmoItem()->getRules()->getBulletSprite() + i;
+	}
+	else if (_action.weapon->getRules()->getBulletSprite() == -1)
 		return -1;
 	else
 		return _action.weapon->getRules()->getBulletSprite() + i;

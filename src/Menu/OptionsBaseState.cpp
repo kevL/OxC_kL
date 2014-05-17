@@ -234,6 +234,9 @@ void OptionsBaseState::setCategory(TextButton* button)
  */
 void OptionsBaseState::btnOkClick(Action*)
 {
+	int dX = Options::baseXResolution;
+	int dY = Options::baseYResolution;
+
 	updateScale(
 			Options::battlescapeScale,
 			Options::newBattlescapeScale,
@@ -247,8 +250,11 @@ void OptionsBaseState::btnOkClick(Action*)
 			Options::baseYGeoscape,
 			_origin != OPT_BATTLESCAPE);
 
-	Options::switchDisplay();
+	dX = Options::baseXResolution - dX;
+	dY = Options::baseYResolution - dY;
+	recenter(dX, dY);
 
+	Options::switchDisplay();
 	Options::save();
 
 	_game->loadLanguage(Options::language);

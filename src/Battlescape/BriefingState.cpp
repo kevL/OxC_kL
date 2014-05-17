@@ -64,7 +64,7 @@ BriefingState::BriefingState(
 		State(game)
 {
 	//Log(LOG_INFO) << "Create BriefingState";
-	_screen = false;
+	_screen = true;
 
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(288, 17, 16, 22);

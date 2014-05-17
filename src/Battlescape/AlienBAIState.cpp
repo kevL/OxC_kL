@@ -1904,6 +1904,7 @@ bool AlienBAIState::explosiveEfficacy(
 		eff += 50;
 	}
 
+//kL	efficacy += diff / 2;
 
 //kL	int affected = 0;
 

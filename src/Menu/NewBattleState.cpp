@@ -267,6 +267,7 @@ NewBattleState::NewBattleState(Game* game)
 					Options::keyCancel);
 
 	load();
+	cbxMissionChange(NULL);
 }
 
 /**

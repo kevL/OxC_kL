@@ -28,7 +28,6 @@
 namespace OpenXcom
 {
 
-class Ruleset;
 class MapDataSet;
 
 /**
@@ -39,13 +38,15 @@ class MCDPatch
 
 private:
 	std::vector<std::pair<size_t, int> >
+		_armors,
 		_bigWalls,
+		_deathTiles,
+		_explosives,
+		_specialTypes,
+		_terrainHeight,
 		_TUWalks,
 		_TUFlys,
-		_TUSlides,
-		_deathTiles,
-		_terrainHeight,
-		_specialTypes;
+		_TUSlides;
 	std::vector<std::pair<size_t, std::vector<int> > > _LOFTS;
 
 

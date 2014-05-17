@@ -4566,13 +4566,15 @@ int TileEngine::voxelCheck(
 		return VOXEL_EMPTY;
 	}
 
-	if (pTarget_voxel.z %24 == 0
+	if ((pTarget_voxel.z %24 == 0
+			|| pTarget_voxel.z %24 == 1)
 		&& tTarget->getMapData(MapData::O_FLOOR)
 		&& tTarget->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		if (tTarget_below
-			&& tTarget_below->getMapData(MapData::O_FLOOR)
-			&& !tTarget_below->getMapData(MapData::O_FLOOR)->isGravLift())
+		if (tTarget->getPosition().z == 0
+			|| (tTarget_below
+				&& tTarget_below->getMapData(MapData::O_FLOOR)
+				&& !tTarget_below->getMapData(MapData::O_FLOOR)->isGravLift()))
 		{
 			//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret 0";
 			return VOXEL_FLOOR;

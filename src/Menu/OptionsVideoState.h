@@ -98,8 +98,6 @@ private:
 
 	///
 	void updateDisplayResolution();
-	///
-	void updateGameResolution();
 
 
 	public:

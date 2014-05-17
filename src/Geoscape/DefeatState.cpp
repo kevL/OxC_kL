@@ -28,11 +28,13 @@
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
 
 #include "../Menu/MainMenuState.h"
+#include "../Menu/OptionsBaseState.h"
 
 #include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h" // sza_MusicRules
@@ -52,6 +54,10 @@ DefeatState::DefeatState(Game* game)
 		State(game),
 		_screen(-1)
 {
+	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	game->getScreen()->resetDisplay(false);
+
 	const char* files[] =
 	{
 		"PICT4.LBM",
@@ -88,7 +94,7 @@ DefeatState::DefeatState(Game* game)
 		_text[i]->setWordWrap(true);
 		_text[i]->setVisible(false);
 	}
-	
+
 //	_game->getResourcePack()->playMusic("GMLOSE");
 	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE); // kL, sza_MusicRules
 
@@ -146,6 +152,15 @@ void DefeatState::screenClick(Action*)
 	else // quit game
 	{
 		_game->popState();
+
+		OptionsBaseState::updateScale(
+								Options::geoscapeScale,
+								Options::geoscapeScale,
+								Options::baseXGeoscape,
+								Options::baseYGeoscape,
+								true);
+		_game->getScreen()->resetDisplay(false);
+
 		_game->setState(new MainMenuState(_game));
 		_game->setSavedGame(0);
 	}
