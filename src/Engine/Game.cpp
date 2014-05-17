@@ -90,6 +90,13 @@ Game::Game(const std::string& title)
 	}
 	Log(LOG_INFO) << "SDL initialized.";
 
+	if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GM.CAT"))
+		&& !CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GMDEFEND.MID"))
+		&& Options::audioBitDepth == 8)
+	{
+		Options::audioBitDepth = 16;
+	}
+
 	// Initialize SDL_mixer
 	if (SDL_InitSubSystem(SDL_INIT_AUDIO) < 0)
 	{

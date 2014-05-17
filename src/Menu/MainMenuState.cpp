@@ -70,7 +70,6 @@ MainMenuState::MainMenuState(Game* game)
 								Options::baseYGeoscape,
 								true); kL */
 //	_game->getScreen()->resetDisplay(false); // kL
-
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_txtTitle		= new Text(256, 30, 32, 56);
 

@@ -1005,6 +1005,21 @@ void Inventory::mouseClick(Action* action, State* state)
  */
 bool Inventory::unload()
 {
+	if (_selItem == 0) // Must be holding an item
+		return false;
+
+	if (_selItem->getAmmoItem() == 0 // Item must be loaded
+		&& !_selItem->getRules()->getCompatibleAmmo()->empty())
+	{
+		_warning->showMessage(_game->getLanguage()->getString("STR_NO_AMMUNITION_LOADED"));
+	}
+
+	if (_selItem->getAmmoItem() == 0
+		|| !_selItem->needsAmmo())
+	{
+		return false;
+	}
+
 	for (std::vector<BattleItem*>::iterator
 			i = _selUnit->getInventory()->begin();
 			i != _selUnit->getInventory()->end();
@@ -1013,6 +1028,8 @@ bool Inventory::unload()
 		if ((*i)->getSlot()->getType() == INV_HAND
 			&& *i != _selItem)
 		{
+			_warning->showMessage(_game->getLanguage()->getString("STR_BOTH_HANDS_MUST_BE_EMPTY"));
+
 			return false; // Hands must be free
 		}
 	}

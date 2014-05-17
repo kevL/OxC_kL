@@ -24,6 +24,7 @@
 #include <SDL_mixer.h>
 
 #include "../Engine/Action.h"
+#include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -181,6 +182,12 @@ OptionsAudioState::OptionsAudioState(
 
 		if (Options::audioBitDepth == bits[i])
 			_cbxBitDepth->setSelected(i);
+	}
+
+	if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GM.CAT"))
+		&& !CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/GMDEFEND.MID")))
+	{
+		_cbxBitDepth->setVisible(false);
 	}
 
 	int samples[] =

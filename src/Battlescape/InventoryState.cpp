@@ -559,9 +559,7 @@ void InventoryState::btnNextClick(Action*)
  */
 void InventoryState::btnUnloadClick(Action*)
 {
-	if (_inv->getSelectedItem() != 0
-		&& _inv->getSelectedItem()->getAmmoItem() != 0
-		&& _inv->getSelectedItem()->needsAmmo())
+	if (_inv->unload())
 	{
 		_inv->unload();
 		_txtItem->setText(L"");
