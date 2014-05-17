@@ -1519,6 +1519,8 @@ const std::vector<std::string>& Ruleset::getAlienMissionList() const
 	return _alienMissionsIndex;
 }
 
+#define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
+
 /**
  * @brief Match a city based on coordinates.
  * This function object compares a city's coordinates with the stored coordinates.
@@ -1546,10 +1548,15 @@ private:
 		}
 
 		/// Compares with stored coordinates.
-		bool operator()(const City* city) const
+/*		bool operator()(const City* city) const
 		{
 			return AreSame(city->getLongitude(), _lon)
 				&& AreSame(city->getLatitude(), _lat);
+		} */
+		bool operator()(const City* city) const
+		{
+			return (fabs(city->getLongitude() - _lon) < CITY_EPSILON)
+				&& (fabs(city->getLatitude() - _lat) < CITY_EPSILON);
 		}
 };
 

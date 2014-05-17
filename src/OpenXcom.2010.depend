@@ -6321,7 +6321,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1400213886 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1400293869 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6354,7 +6354,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1400224907 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1400293927 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6958,7 +6958,7 @@
 	"Language.h"
 	"Surface.h"
 
-1400259246 source:f:\git\openxcom\src\engine\game.cpp
+1400294093 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -8401,7 +8401,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1399713060 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1400293960 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	<sstream>
 	"ListLoadState.h"
@@ -11604,11 +11604,12 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1400035151 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
+1400294015 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
 	"OptionsAudioState.h"
 	<sstream>
 	<SDL_mixer.h>
 	"../Engine/Action.h"
+	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
