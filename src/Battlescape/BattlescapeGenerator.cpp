@@ -100,6 +100,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftInventoryTile(0),
 		_alienRace(""),
 		_alienItemLevel(0),
+		_baseInventory(false),
 		_craftX(0),
 		_craftY(0),
 		_craftZ(0),
@@ -3005,7 +3006,7 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 	//Log(LOG_INFO) << ". deployXCOM() DONE";
 
 	// ok, now remove any vehicles that may have somehow ended up in our battlescape
-	for (std::vector<BattleUnit*>::iterator
+/*	for (std::vector<BattleUnit*>::iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			)
@@ -3025,7 +3026,7 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 			delete *i;
 			i = _save->getUnits()->erase(i);
 		}
-	}
+	} */ // kL, they took this out.
 
 	delete data;
 	delete set;
