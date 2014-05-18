@@ -82,66 +82,6 @@ ManufactureStartState::ManufactureStartState(
 	_btnStart				= new TextButton(130, 16, 170, 160);
 	// kL_end.
 
-/*kL	int width = 320;										// 320
-	int height = 170;										// 170
-	int max_width = 320;									// 320
-	int max_height = 200;									// 200
-	int start_x = (max_width - width) / 2;					// 0
-	int start_y = (max_height - height) / 2;				// 15
-	int button_x_border = 10;								// 10
-	int button_y_border = 10;								// 10
-	int button_height = 16;									// 16
-	int button_width = (width - 5 * button_x_border) / 2;	// 135
-
-	_window			= new Window(this, width, height, start_x, start_y);
-
-	_btnCancel		= new TextButton(button_width,
-										button_height,
-										start_x + button_x_border,
-										start_y + height - button_height - button_y_border);
-	_txtTitle		= new Text(width - 4 * button_x_border,
-										button_height * 2,
-										start_x + button_x_border,
-										start_y + button_y_border);
-	_txtManHour		= new Text(width - 4 * button_x_border,
-										button_height,
-										start_x + button_x_border * 2,
-										start_y + button_y_border * 3);
-	_txtCost		= new Text(width - 4 * button_x_border,
-										button_height,
-										start_x + button_x_border * 2,
-										start_y + button_y_border * 4);
-	_txtWorkSpace	= new Text(width - 4 * button_x_border,
-										button_height,
-										start_x + button_x_border * 2,
-										start_y + button_y_border * 5);
-
-	_txtRequiredItemsTitle	= new Text(width - 4 * button_x_border,
-										button_height,
-										start_x + button_x_border * 2,
-										start_y + button_y_border * 6);
-	_txtItemNameColumn		= new Text(6 * button_x_border,
-										button_height,
-										start_x + button_x_border * 3,
-										start_y + button_y_border * 7);
-	_txtUnitRequiredColumn	= new Text(6 * button_x_border,
-										button_height,
-										start_x + button_x_border * 14,
-										start_y + button_y_border * 7);
-	_txtUnitAvailableColumn	= new Text(6 * button_x_border,
-										button_height,
-										start_x + button_x_border * 22,
-										start_y + button_y_border * 7);
-	_lstRequiredItems		= new TextList(width - 8 * button_x_border,
-										height - (start_y + button_y_border * 11),
-										start_x + button_x_border * 3,
-										start_y + button_y_border * 9);
-
-	_btnStart				= new TextButton(button_width,
-										button_height,
-										width - button_width - button_x_border,
-										start_y + height - button_height - button_y_border); */
-
 	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
@@ -160,7 +100,6 @@ ManufactureStartState::ManufactureStartState(
 	add(_btnStart);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
@@ -193,8 +132,8 @@ ManufactureStartState::ManufactureStartState(
 
 	const std::map<std::string, int>& requiredItems (_item->getRequiredItems());
 	int availableWorkSpace = _base->getFreeWorkshops();
-	bool productionPossible (game->getSavedGame()->getFunds() > _item->getManufactureCost());
-	productionPossible &= (availableWorkSpace > 0);
+	bool productionPossible (game->getSavedGame()->getFunds() > _item->getManufactureCost());	// init
+	productionPossible &= (availableWorkSpace > 0);												// nifty.
 
 	_txtRequiredItemsTitle->setColor(Palette::blockOffset(13)+10);
 	_txtRequiredItemsTitle->setText(tr("STR_SPECIAL_MATERIALS_REQUIRED"));
@@ -212,7 +151,6 @@ ManufactureStartState::ManufactureStartState(
 	_txtUnitAvailableColumn->setText(tr("STR_UNITS_AVAILABLE"));
 	_txtUnitAvailableColumn->setWordWrap(true);
 
-//kL	_lstRequiredItems->setColumns(3, 12 * button_x_border, 8 * button_x_border, 8 * button_x_border);
 	_lstRequiredItems->setColumns(3, 140, 60, 40);
 	_lstRequiredItems->setBackground(_window);
 	_lstRequiredItems->setColor(Palette::blockOffset(13));
@@ -237,9 +175,7 @@ ManufactureStartState::ManufactureStartState(
 								s1.str().c_str(),
 								s2.str().c_str());
 		_lstRequiredItems->setCellColor(row, 0, Palette::blockOffset(13)+10);
-//kL		_lstRequiredItems->addRow(1, L"");
 
-//kL		row += 2;
 		row++;
 	}
 

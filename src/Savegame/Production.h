@@ -31,43 +31,82 @@ class Base;
 class SavedGame;
 class Ruleset;
 
+
 enum ProdProgress
 {
-	PROGRESS_NOT_COMPLETE,
-	PROGRESS_COMPLETE,
-	PROGRESS_NOT_ENOUGH_MONEY,
-	PROGRESS_NOT_ENOUGH_MATERIALS,
-	PROGRESS_MAX,
-	PROGRESS_CONSTRUCTION
+	PROGRESS_NOT_COMPLETE,			// 0
+	PROGRESS_COMPLETE,				// 1
+	PROGRESS_NOT_ENOUGH_MONEY,		// 2
+	PROGRESS_NOT_ENOUGH_MATERIALS,	// 3
+	PROGRESS_MAX,					// 4
+	PROGRESS_CONSTRUCTION			// 5
 };
+
 
 class Production
 {
+
 private:
 	const RuleManufacture* _rules;
-	int _amount;
-	int _timeSpent;
-	int _engineers;
+
+	bool _sell;
+	int
+		_amount,
+		_engineers,
+		_timeSpent;
+
 	bool enoughMoney(SavedGame* g);
 	bool enoughMaterials(Base* b);
 
+
 	public:
-		Production(const RuleManufacture* rules, int amount);
+		///
+		Production(
+				const RuleManufacture* rules,
+				int amount);
 		// kL_note: no dTor !
 
+		///
 		void load(const YAML::Node& node);
+		///
 		YAML::Node save() const;
 
+		///
 		int getAmountTotal() const;
-		void setAmountTotal(int);
+		///
+		void setAmountTotal(int amount);
+
+		///
 		int getTimeSpent() const;
-		void setTimeSpent(int);
+		///
+		void setTimeSpent(int done);
+
+		///
 		int getAmountProduced() const;
+
+		///
 		int getAssignedEngineers() const;
-		void setAssignedEngineers(int);
-		ProdProgress step(Base* b, SavedGame* g, const Ruleset* r);
+		///
+		void setAssignedEngineers(int engineers);
+
+		///
+		bool getSellItems() const;
+		///
+		void setSellItems(bool sell);
+
+		///
+		ProdProgress step(
+				Base* b,
+				SavedGame* g,
+				const Ruleset* r);
+
+		///
 		const RuleManufacture* getRules() const;
-		void startItem(Base* b, SavedGame* g);
+
+		///
+		void startItem(
+				Base* b,
+				SavedGame* g);
 };
 
 }

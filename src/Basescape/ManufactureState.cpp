@@ -236,8 +236,9 @@ void ManufactureState::fillProductionList()
 		s1 << (*i)->getAssignedEngineers();
 
 		s2 << (*i)->getAmountProduced() << "/";
-		if (Options::allowAutoSellProduction
-			&& (*i)->getAmountTotal() == std::numeric_limits<int>::max())
+/*		if (Options::allowAutoSellProduction
+			&& (*i)->getAmountTotal() == std::numeric_limits<int>::max()) */
+		if ((*i)->getSellItems())
 		{
 			s2 << "$$";
 		}
@@ -249,8 +250,9 @@ void ManufactureState::fillProductionList()
 		if ((*i)->getAssignedEngineers() > 0)
 		{
 			int timeLeft;
-			if (Options::allowAutoSellProduction
-				&& (*i)->getAmountTotal() == std::numeric_limits<int>::max())
+/*			if (Options::allowAutoSellProduction
+				&& (*i)->getAmountTotal() == std::numeric_limits<int>::max()) */
+			if ((*i)->getSellItems())
 			{
 				timeLeft = ((*i)->getAmountProduced() + 1) * (*i)->getRules()->getManufactureTime()
 							- (*i)->getTimeSpent();

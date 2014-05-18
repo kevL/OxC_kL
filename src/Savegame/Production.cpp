@@ -49,7 +49,8 @@ Production::Production(
 		_rules(rules),
 		_amount(amount),
 		_timeSpent(0),
-		_engineers(0)
+		_engineers(0),
+		_sell(false)
 {
 }
 
@@ -104,6 +105,22 @@ void Production::setAssignedEngineers(int engineers)
 /**
  *
  */
+bool Production::getSellItems() const
+{
+	return _sell;
+}
+
+/**
+ *
+ */
+void Production::setSellItems(bool sell)
+{
+	_sell = sell;
+}
+
+/**
+ *
+ */
 bool Production::enoughMoney(SavedGame* g)
 {
 	return (g->getFunds() >= _rules->getManufactureCost());
@@ -140,7 +157,10 @@ ProdProgress Production::step(
 	if (done < getAmountProduced())
 	{
 		// std::min is required because we don't want to overproduce
-		int produced = std::min(getAmountProduced(), _amount) - done;
+		int produced = std::min(
+							getAmountProduced(),
+							_amount)
+						- done;
 		int count = 0;
 
 		do
@@ -209,8 +229,9 @@ ProdProgress Production::step(
 						}
 					}
 
-					if (Options::allowAutoSellProduction
-						&& getAmountTotal() == std::numeric_limits<int>::max())
+/*					if (Options::allowAutoSellProduction
+						&& getAmountTotal() == std::numeric_limits<int>::max()) */
+					if (getSellItems())
 					{
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
 						b->setCashIncome(r->getItem(i->first)->getSellCost() * i->second); // kL
@@ -298,9 +319,17 @@ void Production::startItem(
  */
 void Production::load(const YAML::Node& node)
 {
-	setAssignedEngineers(node["assigned"].as<int>());
-	setTimeSpent(node["spent"].as<int>());
-	setAmountTotal(node["amount"].as<int>());
+	setAssignedEngineers(node["assigned"].as<int>(getAssignedEngineers()));
+	setTimeSpent(node["spent"].as<int>(getTimeSpent()));
+
+	setAmountTotal(node["amount"].as<int>(getAmountTotal()));
+	setSellItems(node["sell"].as<bool>(getSellItems()));
+
+	if (getAmountTotal() == std::numeric_limits<int>::max())
+	{
+		setAmountTotal(999);
+		setSellItems(true);
+	}
 }
 
 /**
@@ -310,10 +339,13 @@ YAML::Node Production::save() const
 {
 	YAML::Node node;
 
-	node["item"]		= getRules ()->getName();
+	node["item"]		= getRules()->getName();
 	node["assigned"]	= getAssignedEngineers();
 	node["spent"]		= getTimeSpent();
 	node["amount"]		= getAmountTotal();
+
+	if (getSellItems())
+		node["sell"]	= getSellItems();
 
 	return node;
 }

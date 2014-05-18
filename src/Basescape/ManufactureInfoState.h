@@ -34,6 +34,7 @@ class RuleManufacture;
 class Text;
 class TextButton;
 class Timer;
+class ToggleTextButton;
 class Window;
 
 
@@ -77,6 +78,7 @@ private:
 		* _timerLessUnit,
 		* _timerMoreEngineer,
 		* _timerMoreUnit;
+	ToggleTextButton* _btnSell;
 	Window* _window;
 
 	/// Handler for the Stop button.

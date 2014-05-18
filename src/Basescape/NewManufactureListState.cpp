@@ -60,24 +60,7 @@ NewManufactureListState::NewManufactureListState(
 		State(game),
 		_base(base)
 {
-/*kL	int width = 320;
-	int height = 140;
-	int max_width = 320;
-	int max_height = 200;
-	int start_x = (max_width - width) / 2;		// 0
-	int start_y = (max_height - height) / 2;	// 30
-	int button_x_border = 8;
-	int button_y_border = 8;
-	int button_height = 16; */
-
 	_screen = false;
-
-/*kL	_window			= new Window(this, width, height, start_x, start_y, POPUP_BOTH);
-	_txtTitle		= new Text (width - 2 * button_x_border, button_height, start_x + button_x_border + 2, start_y + button_y_border);
-	_txtItem		= new Text (10 * button_x_border, button_height / 2, start_x + button_x_border + 2, start_y + 3 * button_y_border);
-	_txtCategory	= new Text (10 * button_x_border, button_height / 2, start_x + 20.75f * button_x_border, start_y + 3 * button_y_border);
-	_lstManufacture	= new TextList(width - 4 * button_x_border, height - 3.75f * button_height - 2 * button_y_border, start_x + button_x_border, start_y + 5 * button_y_border);
-	_btnOk			= new TextButton (width - 2 * button_x_border, button_height, start_x + button_x_border, start_y + height - button_height - button_y_border); */
 
 	_window			= new Window(this, 320, 140, 0, 30, POPUP_BOTH);
 	_txtTitle		= new Text(300, 16, 10, 39);
@@ -115,7 +98,6 @@ NewManufactureListState::NewManufactureListState(
 	_txtCategory->setColor(Palette::blockOffset(15)+1);
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
-//kL	_lstManufacture->setColumns(2, int(19.5f * button_x_border), int(16.25f * button_x_border));
 	_lstManufacture->setColumns(2, 148, 129);
 	_lstManufacture->setSelectable(true);
 	_lstManufacture->setBackground(_window);

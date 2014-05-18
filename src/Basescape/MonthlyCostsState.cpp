@@ -58,7 +58,6 @@ MonthlyCostsState::MonthlyCostsState(
 	_window			= new Window(this, 320, 200, 0, 0);
 
 	_txtTitle		= new Text(300, 17, 11, 10);
-//	_txtBaseLabel	= new Text(80, 9, 224, 10);
 
 	_txtCost		= new Text(80, 9, 141, 31);
 	_txtQuantity	= new Text(55, 9, 211, 31);
@@ -73,7 +72,7 @@ MonthlyCostsState::MonthlyCostsState(
 	_lstMaintenance	= new TextList(293, 9, 16, 142);
 
 	_txtIncome		= new Text(150, 9, 16, 159);
-	_lstTotal		= new TextList(98, 9, 206, 159);
+	_lstTotal		= new TextList(100, 9, 200, 159);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -81,7 +80,6 @@ MonthlyCostsState::MonthlyCostsState(
 
 	add(_window);
 	add(_txtTitle);
-//	add(_txtBaseLabel);
 	add(_txtCost);
 	add(_txtQuantity);
 	add(_txtTotal);
@@ -112,12 +110,7 @@ MonthlyCostsState::MonthlyCostsState(
 
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setBig();
-//	_txtTitle->setText(tr("STR_MONTHLY_COSTS"));
 	_txtTitle->setText(tr("STR_MONTHLY_COSTS_").arg(_base->getName()));
-
-//	_txtBaseLabel->setColor(Palette::blockOffset(15)+1);
-//	_txtBaseLabel->setAlign(ALIGN_RIGHT);
-//	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(tr("STR_COST_PER_UNIT"));
@@ -211,7 +204,7 @@ MonthlyCostsState::MonthlyCostsState(
 	_lstMaintenance->setCellColor(0, 0, Palette::blockOffset(15)+1);
 
 	_lstTotal->setColor(Palette::blockOffset(13));
-	_lstTotal->setColumns(2, 44, 55);
+	_lstTotal->setColumns(2, 45, 55);
 	_lstTotal->setDot(true);
 	_lstTotal->addRow(
 					2,

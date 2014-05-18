@@ -25,6 +25,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
+#include "../Interface/ToggleTextButton.h"
 #include "../Interface/Window.h"
 
 #include "../Engine/Action.h"
@@ -101,113 +102,40 @@ ManufactureInfoState::~ManufactureInfoState() // not implemented yet.
  */
 void ManufactureInfoState::buildUi()
 {
-	_screen				= false;
+	_screen = false;
 
-	int width			= 320;
-	int height			= 170;
-	int max_width		= 320;
-	int max_height		= 200;
-	int start_x			= (max_width - width) / 2;
-	int start_y			= (max_height - height) / 2;
-	int button_x_border	= 10;
-	int button_y_border	= 10;
-	int button_height	= 16;
-	int button_width	= (width - 5 * button_x_border) / 2;
+	_window					= new Window(this, 320, 170, 0, 15, POPUP_BOTH);
 
-	_window					= new Window(this, width, height, start_x, start_y);
-	_txtTitle				= new Text(width - 4 * button_x_border,
-									button_height * 2,
-									start_x + button_x_border,
-									start_y + button_y_border);
+	_txtTitle				= new Text(280, 17, 20, 25);
 
-	_btnOk					= new TextButton(button_width,
-									button_height,
-									width - button_width - button_x_border,
-									start_y + height - button_height - button_y_border);
-	_btnStop				= new TextButton(button_width,
-									button_height,
-									start_x + button_x_border,
-									start_y + height - button_height - button_y_border);
+	_btnSell				= new ToggleTextButton(60, 16, 244, 56);
 
-	_txtAvailableEngineer	= new Text(width - 4 * button_x_border,
-									button_height,
-									start_x + button_x_border,
-									start_y + 2 * button_height);
-	_txtAvailableSpace		= new Text(width - 4 * button_x_border,
-									button_height,
-									start_x + button_x_border,
-									start_y + (int)(2.7f * (float)button_height));
+	_txtAvailableEngineer	= new Text(100, 9, 16, 47);
+	_txtAvailableSpace		= new Text(100, 9, 16, 57);
 
-	_txtAllocatedEngineer	= new Text(button_width - button_x_border,
-									2 * button_height,
-									start_x + button_x_border,
-									start_y + (int)(3.5f * (float)button_height));
-	_txtUnitToProduce		= new Text(button_width - 4 * button_x_border,
-									2 * button_height,
-									width - button_width - button_x_border,
-									start_y + (int)(3.5f * (float)button_height));
+	_txtAllocatedEngineer	= new Text(84, 17, 16, 80);
+	_txtAllocated			= new Text(50, 17, 100, 80);
 
-	_txtEngineerUp			= new Text(button_width,
-									2 * button_height,
-									start_x + 3 * button_x_border,
-									start_y + 6 * button_height);
-	_txtEngineerDown		= new Text(button_width,
-									2 * button_height,
-									start_x + 3 * button_x_border,
-									start_y + (int)(7.5f * (float)button_height));
+	_txtUnitToProduce		= new Text(84, 17, 176, 80);
+	_txtTodo				= new Text(50, 17, 260, 80);
 
-	_txtUnitUp				= new Text(button_width,
-									2 * button_height,
-									width - button_width - button_x_border + 3 * button_x_border,
-									start_y + 6 * button_height);
-	_txtUnitDown			= new Text(button_width,
-									2 * button_height,
-									width - button_width - button_x_border + 3 * button_x_border,
-									start_y + (int)(7.5f * (float)button_height));
+	_txtEngineerUp			= new Text(100, 17, 32, 111);
+	_btnEngineerUp			= new ArrowButton(ARROW_BIG_UP, 14, 14, 145, 111);
+	_txtEngineerDown		= new Text(100, 17, 32, 135);
+	_btnEngineerDown		= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 145, 135);
 
-	_btnEngineerUp			= new ArrowButton(ARROW_BIG_UP,
-									(int)(1.4f * (float)button_x_border),
-									button_height - 2,
-									width - button_width - 4 * button_x_border,
-									start_y + 6 * button_height);
-	_btnEngineerDown		= new ArrowButton(ARROW_BIG_DOWN,
-									(int)(1.4f * (float)button_x_border),
-									button_height - 2,
-									width - button_width - 4 * button_x_border,
-									start_y + (int)(7.5f * (float)button_height));
+	_txtUnitUp				= new Text(100, 17, 205, 111);
+	_btnUnitUp				= new ArrowButton(ARROW_BIG_UP, 14, 14, 280, 111);
+	_txtUnitDown			= new Text(100, 17, 205, 135);
+	_btnUnitDown			= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 280, 135);
 
-	_btnUnitUp				= new ArrowButton(ARROW_BIG_UP,
-									(int)(1.4f * (float)button_x_border),
-									button_height - 2,
-									width - 4 * button_x_border,
-									start_y + 6 * button_height);
-	_btnUnitDown			= new ArrowButton(ARROW_BIG_DOWN,
-									(int)(1.4f * (float)button_x_border),
-									button_height - 2,
-									width - 4 * button_x_border,
-									start_y + (int)(7.5f * (float)button_height));
+	_btnOk					= new TextButton(135, 16, 175, 159);
+	_btnStop				= new TextButton(135, 16, 10, 159);
 
-	_txtAllocated			= new Text(button_width,
-									2 * button_height,
-									width - button_width - 5 * button_x_border,
-									start_y + 4 * button_height);
-	_txtTodo				= new Text(button_width,
-									2 * button_height,
-									width - 5 * button_x_border,
-									start_y + 4 * button_height);
-
-	_surfaceEngineers = new InteractiveSurface(
-								(_btnEngineerUp->getX() + _btnEngineerUp->getWidth() + _txtUnitToProduce->getX()) / 2,
-								height,
-								start_x,
-								start_y);
+	_surfaceEngineers = new InteractiveSurface(152, 70, 16, 75);
 	_surfaceEngineers->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelEngineer, 0);
 
-	_surfaceUnits = new InteractiveSurface(
-								_surfaceEngineers->getWidth(),
-								height,
-								start_x + _surfaceEngineers->getWidth(),
-								start_y);
+	_surfaceUnits = new InteractiveSurface(152, 70, 168, 75);
 	_surfaceUnits->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
 
 	setPalette("PAL_BASESCAPE", 6);
@@ -232,9 +160,9 @@ void ManufactureInfoState::buildUi()
 	add(_btnUnitDown);
 	add(_btnOk);
 	add(_btnStop);
+	add(_btnSell);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
@@ -252,6 +180,7 @@ void ManufactureInfoState::buildUi()
 	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
 	_txtAllocatedEngineer->setWordWrap(true);
+//kL	_txtAllocatedEngineer->setVerticalAlign(ALIGN_MIDDLE);
 
 	_txtAllocated->setColor(Palette::blockOffset(15)+1);
 	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
@@ -265,11 +194,13 @@ void ManufactureInfoState::buildUi()
 	_txtUnitToProduce->setText(tr("STR_UNITS_TO_PRODUCE"));
 	_txtUnitToProduce->setBig();
 	_txtUnitToProduce->setWordWrap(true);
+//kL	_txtUnitToProduce->setVerticalAlign(ALIGN_MIDDLE);
 
 	_txtEngineerUp->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
 	_txtEngineerDown->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerDown->setText(tr("STR_DECREASE_UC"));
+
 	_btnEngineerUp->setColor(Palette::blockOffset(15)+1);
 	_btnEngineerUp->onMousePress((ActionHandler)& ManufactureInfoState::moreEngineerPress);
 	_btnEngineerUp->onMouseRelease((ActionHandler)& ManufactureInfoState::moreEngineerRelease);
@@ -279,6 +210,11 @@ void ManufactureInfoState::buildUi()
 	_btnEngineerDown->onMousePress((ActionHandler)& ManufactureInfoState::lessEngineerPress);
 	_btnEngineerDown->onMouseRelease((ActionHandler)& ManufactureInfoState::lessEngineerRelease);
 	_btnEngineerDown->onMouseClick((ActionHandler)& ManufactureInfoState::lessEngineerClick, 0);
+
+	_txtUnitUp->setColor(Palette::blockOffset(15)+1);
+	_txtUnitUp->setText(tr("STR_INCREASE_UC"));
+	_txtUnitDown->setColor(Palette::blockOffset(15)+1);
+	_txtUnitDown->setText(tr("STR_DECREASE_UC"));
 
 	_btnUnitUp->setColor(Palette::blockOffset(15)+1);
 	_btnUnitUp->onMousePress((ActionHandler)& ManufactureInfoState::moreUnitPress);
@@ -290,10 +226,8 @@ void ManufactureInfoState::buildUi()
 	_btnUnitDown->onMouseRelease((ActionHandler)& ManufactureInfoState::lessUnitRelease);
 	_btnUnitDown->onMouseClick((ActionHandler)& ManufactureInfoState::lessUnitClick, 0);
 
-	_txtUnitUp->setColor(Palette::blockOffset(15)+1);
-	_txtUnitUp->setText(tr("STR_INCREASE_UC"));
-	_txtUnitDown->setColor(Palette::blockOffset(15)+1);
-	_txtUnitDown->setText(tr("STR_DECREASE_UC"));
+	_btnSell->setColor(Palette::blockOffset(15)+1);
+	_btnSell->setText(tr("STR_SELL_PRODUCTION"));
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
@@ -319,10 +253,12 @@ void ManufactureInfoState::buildUi()
 
 	setAssignedEngineer();
 
-	_timerMoreEngineer = new Timer(280);
-	_timerLessEngineer = new Timer(280);
-	_timerMoreUnit = new Timer(280);
-	_timerLessUnit = new Timer(280);
+	_btnSell->setPressed(_production->getSellItems());
+
+	_timerMoreEngineer	= new Timer(280);
+	_timerLessEngineer	= new Timer(280);
+	_timerMoreUnit		= new Timer(280);
+	_timerLessUnit		= new Timer(280);
 
 	_timerMoreEngineer->onTimer((StateHandler)& ManufactureInfoState::onMoreEngineer);
 	_timerLessEngineer->onTimer((StateHandler)& ManufactureInfoState::onLessEngineer);
@@ -354,6 +290,8 @@ void ManufactureInfoState::btnOkClick(Action*)
 							_game->getSavedGame());
 	}
 
+	_production->setSellItems(_btnSell->getPressed());
+
 	exitState();
 }
 
@@ -384,14 +322,14 @@ void ManufactureInfoState::setAssignedEngineer()
 	_txtAllocated->setText(s3.str());
 
 	std::wostringstream s4;
-	s4 << L"> \x01";
-	if (Options::allowAutoSellProduction
+	s4 << L"> \x01" << _production->getAmountTotal();
+/*	if (Options::allowAutoSellProduction
 		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
 	{
 		s4 << "$$";
 	}
 	else
-		s4 << _production->getAmountTotal();
+		s4 << _production->getAmountTotal(); */ // kL
 
 	_txtTodo->setText(s4.str());
 
@@ -574,13 +512,15 @@ void ManufactureInfoState::moreUnitRelease(Action* action)
 }
 
 /**
- * Increases the units to produce to 999 or to $$$ when allowAutoSellProduction is true.
+ * Increases the units to produce to 999.
+ * [Increases the units to produce to 999 or to $$$ when allowAutoSellProduction is true.]
  * @param action A pointer to an Action.
  */
 void ManufactureInfoState::moreUnitClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		moreUnit(Options::allowAutoSellProduction? std::numeric_limits<int>::max(): 999 - _production->getAmountTotal());
+//		moreUnit(Options::allowAutoSellProduction? std::numeric_limits<int>::max(): 999 - _production->getAmountTotal());
+		moreUnit(999 - _production->getAmountTotal());
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		moreUnit(1);
 }
@@ -594,15 +534,17 @@ void ManufactureInfoState::lessUnit(int change)
 	if (change < 1)
 		return;
 
-	if (Options::allowAutoSellProduction
+/*	if (Options::allowAutoSellProduction
 		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
 	{
 		_production->setAmountTotal(std::max(_production->getAmountProduced() + 1, 999));
-	}
+	} */
 
 	int units = _production->getAmountTotal();
-	change = std::min(units-(_production->getAmountProduced() + 1), change);
-	_production->setAmountTotal(units-change);
+	change = std::min(
+					units - _production->getAmountProduced() + 1,
+					change);
+	_production->setAmountTotal(units - change);
 
 	setAssignedEngineer();
 }
