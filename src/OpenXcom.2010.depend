@@ -4953,7 +4953,7 @@
 1394398507 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
-1400391577 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1400394291 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	<limits>
 	"../Interface/ArrowButton.h"
