@@ -3782,7 +3782,7 @@ int TileEngine::unitOpensDoor(
 					&& door == -1;
 				y++)
 		{
-			std::vector<std::pair<Position, int> > checkPositions;
+/*			std::vector<std::pair<Position, int> > checkPositions;
 			Tile* tile = _save->getTile(
 									unit->getPosition()
 										+ Position(x, y, z));
@@ -3863,7 +3863,120 @@ int TileEngine::unitOpensDoor(
 											i->second);
 					}
 				}
+			} */ // kL: above code allows doors to be opened from side-angles.
+
+			// while below code forces orthogonal door-openers:
+			std::pair<Position, int> checkPosition = std::make_pair(
+																Position(0, 0, 0),
+																0);
+			Tile* tile = _save->getTile(unit->getPosition() + Position(x, y, z));
+			if (!tile)
+				continue;
+
+			switch (dir)
+			{
+				case 0: // north
+					checkPosition = std::make_pair( // origin
+												Position(0, 0, 0),
+												MapData::O_NORTHWALL);
+				break;
+				case 1: // north east
+					if (_save->getTile(unit->getPosition() + Position(1,-1, 0))->getMapData(MapData::O_WESTWALL))
+					{
+						checkPosition = std::make_pair( // one tile east
+													Position(1, 0, 0),
+													MapData::O_WESTWALL);
+					}
+					else if (_save->getTile(unit->getPosition() + Position(1, 0, 0))->getMapData(MapData::O_NORTHWALL))
+					{
+						checkPosition = std::make_pair( // origin
+													Position(0, 0, 0),
+													MapData::O_NORTHWALL);
+					}
+				break;
+				case 2: // east
+					checkPosition = std::make_pair( // one tile east
+												Position(1, 0, 0),
+												MapData::O_WESTWALL);
+				break;
+				case 3: // south-east
+					if (_save->getTile(unit->getPosition() + Position(1, 1, 0))->getMapData(MapData::O_WESTWALL))
+					{
+						checkPosition = std::make_pair( // one tile east
+													Position(1, 0, 0),
+													MapData::O_WESTWALL);
+					}
+					else if (_save->getTile(unit->getPosition() + Position(1, 1, 0))->getMapData(MapData::O_NORTHWALL))
+					{
+						checkPosition = std::make_pair( // one tile south
+													Position(0, 1, 0),
+													MapData::O_NORTHWALL);
+					}
+				break;
+				case 4: // south
+					checkPosition = std::make_pair( // one tile south
+												Position(0, 1, 0),
+												MapData::O_NORTHWALL);
+				break;
+				case 5: // south-west
+					if (_save->getTile(unit->getPosition() + Position(-1, 1, 0))->getMapData(MapData::O_NORTHWALL))
+					{
+						checkPosition = std::make_pair( // one tile south
+													Position(0, 1, 0),
+													MapData::O_NORTHWALL);
+					}
+					else if (_save->getTile(unit->getPosition() + Position(0, 1, 0))->getMapData(MapData::O_WESTWALL))
+					{
+						checkPosition = std::make_pair( // origin
+													Position(0, 0, 0),
+													MapData::O_WESTWALL);
+					}
+				break;
+				case 6: // west
+					checkPosition = std::make_pair( // origin
+												Position(0, 0, 0),
+												MapData::O_WESTWALL);
+				break;
+				case 7: // north-west
+					if (_save->getTile(unit->getPosition() + Position(0,-1, 0))->getMapData(MapData::O_WESTWALL))
+					{
+						checkPosition = std::make_pair( // origin
+													Position(0, 0, 0),
+													MapData::O_WESTWALL);
+					}
+					else if (_save->getTile(unit->getPosition() + Position(-1, 0, 0))->getMapData(MapData::O_NORTHWALL))
+					{
+						checkPosition = std::make_pair( // origin
+													Position(0, 0, 0),
+													MapData::O_NORTHWALL);
+					}
+				break;
+
+				default:
+				break;
 			}
+
+			int part = 0;
+
+			tile = _save->getTile(unit->getPosition() + Position(x, y, z) + checkPosition.first);
+			if (tile)
+			{
+				door = tile->openDoor(
+								checkPosition.second,
+								unit,
+								_save->getBattleGame()->getReservedAction());
+
+				if (door != -1)
+				{
+					part = checkPosition.second;
+					if (door == 1)
+					{
+						checkAdjacentDoors(
+										unit->getPosition() + Position(x, y, z) + checkPosition.first,
+										checkPosition.second);
+					}
+				}
+			} // end orthogonal door-opening.
 
 			if (door == 0
 				&& rClick)

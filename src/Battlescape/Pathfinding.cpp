@@ -929,7 +929,7 @@ int Pathfinding::getTUCost(
 
 					default:
 					break;
-				} */
+				} */ // kL_note: haha, even YOU removed it ....
 
 				// diagonal walking (uneven directions) costs 50% more tu's
 				// kL_note: this is moved up so that objects don't cost +150% tu;

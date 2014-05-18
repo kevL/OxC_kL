@@ -5778,7 +5778,7 @@
 1394398507 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1399387199 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1400366864 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6537,7 +6537,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1400284875 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1400366961 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -7548,7 +7548,7 @@
 1397448505 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
-1400032473 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
+1400350588 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
 	"DefeatState.h"
 	<sstream>
 	"../Engine/CrossPlatform.h"
@@ -7558,9 +7558,11 @@
 	"../Engine/Music.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
+	"../Engine/Screen.h"
 	"../Engine/Timer.h"
 	"../Interface/Text.h"
 	"../Menu/MainMenuState.h"
+	"../Menu/OptionsBaseState.h"
 	"../Resource/ResourcePack.h"
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
@@ -8187,7 +8189,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1400033808 source:f:\git\openxcom\src\geoscape\victorystate.cpp
+1400350207 source:f:\git\openxcom\src\geoscape\victorystate.cpp
 	"VictoryState.h"
 	<sstream>
 	"../Engine/CrossPlatform.h"
@@ -8197,9 +8199,11 @@
 	"../Engine/Music.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
+	"../Engine/Screen.h"
 	"../Engine/Timer.h"
 	"../Interface/Text.h"
 	"../Menu/MainMenuState.h"
+	"../Menu/OptionsBaseState.h"
 	"../Resource/ResourcePack.h"
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
@@ -8435,7 +8439,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1398834546 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1400349320 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	<cmath>
 	<fstream>
@@ -8510,7 +8514,7 @@
 	"OptionsBaseState.h"
 	"../Engine/OptionInfo.h"
 
-1400177187 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
+1400349839 source:f:\git\openxcom\src\menu\optionsbasestate.cpp
 	"OptionsBaseState.h"
 	<SDL.h>
 	"MainMenuState.h"
@@ -9194,7 +9198,7 @@
 	"../Engine/Exception.h"
 	"../Engine/SurfaceSet.h"
 
-1394398507 source:f:\git\openxcom\src\ruleset\mcdpatch.cpp
+1400349584 source:f:\git\openxcom\src\ruleset\mcdpatch.cpp
 	"MCDPatch.h"
 	"MapData.h"
 	"MapDataSet.h"
@@ -11585,7 +11589,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1400182286 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1400349717 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"

@@ -1537,24 +1537,24 @@ bool BattlescapeGame::checkReservedTU(
 	if (_save->getSide() != FACTION_PLAYER)
 	{
 		if (_save->getSide() == FACTION_NEUTRAL)
-			return (tu < bu->getTimeUnits());
+			return (tu <= bu->getTimeUnits());
 
 		// kL_note: This could use some tweaking, for the poor aLiens:
 		switch (effectiveTuReserved)
 		{
 			case BA_SNAPSHOT:
-				return (tu + (bu->getStats()->tu / 3) < bu->getTimeUnits());		// 33%
+				return (tu + (bu->getStats()->tu / 3) <= bu->getTimeUnits());		// 33%
 			break;
 			case BA_AUTOSHOT:
-//kL				return (tu + ((bu->getStats()->tu / 5) * 2) < bu->getTimeUnits());
-				return (tu + ((bu->getStats()->tu * 2) / 5) < bu->getTimeUnits());	// 40%
+//kL				return (tu + ((bu->getStats()->tu / 5) * 2) <= bu->getTimeUnits());
+				return (tu + ((bu->getStats()->tu * 2) / 5) <= bu->getTimeUnits());	// 40%
 			break;
 			case BA_AIMEDSHOT:
-				return (tu + (bu->getStats()->tu / 2) < bu->getTimeUnits());		// 50%
+				return (tu + (bu->getStats()->tu / 2) <= bu->getTimeUnits());		// 50%
 			break;
 
 			default:
-				return (tu < bu->getTimeUnits());
+				return (tu <= bu->getTimeUnits());
 			break;
 		}
 	}
