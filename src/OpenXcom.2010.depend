@@ -4726,7 +4726,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1400174584 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1400384364 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
 1400213231 f:\git\openxcom\src\battlescape\inventorystate.h
@@ -5880,7 +5880,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1400274257 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1400384435 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6688,7 +6688,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Interface/Text.h"
 
-1399560277 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1400368678 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6958,7 +6958,7 @@
 	"Language.h"
 	"Surface.h"
 
-1400294093 source:f:\git\openxcom\src\engine\game.cpp
+1400383623 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -11512,7 +11512,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1400034721 f:\git\openxcom\src\menu\optionsaudiostate.h
+1400384391 f:\git\openxcom\src\menu\optionsaudiostate.h
 	<vector>
 	"OptionsBaseState.h"
 
@@ -11608,12 +11608,11 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1400294015 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
+1400383968 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
 	"OptionsAudioState.h"
 	<sstream>
 	<SDL_mixer.h>
 	"../Engine/Action.h"
-	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"

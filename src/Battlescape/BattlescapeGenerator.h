@@ -55,8 +55,7 @@ class BattlescapeGenerator
 private:
 	bool
 		_allowAutoLoadout,
-		_baseCraftEquip, // kL
-		_baseInventory;
+		_baseCraftEquip; // kL
 	int
 		_alienItemLevel,
 		_craftX,

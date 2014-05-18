@@ -47,8 +47,7 @@ private:
 		musFormats[],
 		sndFormats[];
 
-	std::vector<int>
-		_sampleRates;
+	std::vector<int> _sampleRates;
 
 	ComboBox
 		* _cbxSampleRate,

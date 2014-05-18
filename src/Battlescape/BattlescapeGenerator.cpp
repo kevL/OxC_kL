@@ -100,7 +100,6 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftInventoryTile(0),
 		_alienRace(""),
 		_alienItemLevel(0),
-		_baseInventory(false),
 		_craftX(0),
 		_craftY(0),
 		_craftZ(0),
