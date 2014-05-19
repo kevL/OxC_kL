@@ -174,7 +174,7 @@ void Inventory::drawGrid()
 {
 	_grid->clear();
 
-	Text text = Text(48, 9, 0, 0);
+	Text text = Text(16, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
 	text.initText(
 				_game->getResourcePack()->getFont("FONT_BIG"),
@@ -230,9 +230,15 @@ void Inventory::drawGrid()
 		}
 		else if (i->second->getType() == INV_GROUND)
 		{
-			for (int x = i->second->getX(); x <= 320; x += RuleInventory::SLOT_W)
+			for (int
+					x = i->second->getX();
+					x <= 320;
+					x += RuleInventory::SLOT_W)
 			{
-				for (int y = i->second->getY(); y <= 200; y += RuleInventory::SLOT_H)
+				for (int
+						y = i->second->getY();
+						y <= 200;
+						y += RuleInventory::SLOT_H)
 				{
 					SDL_Rect r;
 

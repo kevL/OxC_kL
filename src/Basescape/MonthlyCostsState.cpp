@@ -59,9 +59,9 @@ MonthlyCostsState::MonthlyCostsState(
 
 	_txtTitle		= new Text(300, 17, 11, 10);
 
-	_txtCost		= new Text(80, 9, 141, 31);
-	_txtQuantity	= new Text(55, 9, 211, 31);
-	_txtTotal		= new Text(60, 9, 255, 31);
+	_txtCost		= new Text(70, 9, 141, 31);
+	_txtQuantity	= new Text(44, 9, 211, 31);
+	_txtTotal		= new Text(54, 9, 255, 31);
 
 	_txtRental		= new Text(150, 9, 16, 46);
 	_lstCrafts		= new TextList(293, 40, 16, 57);

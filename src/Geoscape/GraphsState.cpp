@@ -104,7 +104,7 @@ GraphsState::GraphsState(Game* game)
 	_txtYears		= new TextList(200, 8, 121, 191);
 
 //	_numScore		= new NumberText(24, 16, 58, 83);
-	_numScore		= new Text(24, 16, 58, 82);
+	_numScore		= new Text(36, 9, 46, 82);
 
 
 	_blinkTimer = new Timer(250);								// kL
@@ -134,8 +134,8 @@ GraphsState::GraphsState(Game* game)
 			++scaleText)
 	{
 		_txtScale.push_back(new Text(
-									36,
-									16,
+									32,
+									10,
 									86,
 									171 - (scaleText * 14)));
 

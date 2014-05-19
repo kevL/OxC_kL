@@ -240,7 +240,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnPsi->setVisible(false);
 
 	// Create soldier stats summary
-	_txtName		= new Text(136, 10, _icons->getX() + 135, _icons->getY() + 32);
+	_txtName		= new Text(136, 9, _icons->getX() + 135, _icons->getY() + 32);
 
 //	_numTUSnap		= new NumberText(12, 10, _icons->getX() + 258, _icons->getY() + 34);
 	_numTUAim		= new NumberText(8, 10, _icons->getX() + 241, _icons->getY() + 34);

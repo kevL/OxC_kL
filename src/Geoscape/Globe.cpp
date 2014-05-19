@@ -1429,74 +1429,102 @@ void Globe::XuLine(
 		double y1,
 		double x2,
 		double y2,
-		int shade)
+		int shade,
+		bool flight) // kL_add.
 {
-	if (_clipper->LineClip(&x1,&y1,&x2,&y2) != 1) return; //empty line
+	if (_clipper->LineClip(
+						&x1,
+						&y1,
+						&x2,
+						&y2)
+					!= 1) // empty line
+	{
+		return;
+	}
 
-
-	double deltax = x2-x1, deltay = y2-y1;
 	bool inv;
 	Sint16 tcol;
-	double len,x0,y0,SX,SY;
-	if (abs((int)y2-(int)y1) > abs((int)x2-(int)x1))
+	double
+		delta_x = x2 - x1,
+		delta_y = y2 - y1,
+		len,
+		x0,
+		y0,
+		SX,
+		SY;
+
+	if (abs(static_cast<int>(y2) - static_cast<int>(y1)) > abs(static_cast<int>(x2) - static_cast<int>(x1)))
 	{
-		len=abs((int)y2-(int)y1);
-		inv=false;
+		len = abs(static_cast<int>(y2) - static_cast<int>(y1));
+		inv = false;
 	}
 	else
 	{
-		len=abs((int)x2-(int)x1);
-		inv=true;
+		len = abs(static_cast<int>(x2) - static_cast<int>(x1));
+		inv = true;
 	}
 
-	if (y2<y1)
-		SY=-1;
-	else if (AreSame(deltay, 0.0))
-		SY=0;
+	if (y2 < y1)
+		SY = -1;
+	else if (AreSame(delta_y, 0.0))
+		SY = 0;
 	else
-		SY=1;
+		SY = 1;
 
-	if (x2<x1)
-		SX=-1;
-	else if (AreSame(deltax, 0.0))
-		SX=0;
+	if (x2 < x1)
+		SX = -1;
+	else if (AreSame(delta_x, 0.0))
+		SX = 0;
 	else
-		SX=1;
+		SX = 1;
 
-	x0=x1; y0=y1;
+	x0 = x1;
+	y0 = y1;
 
 	if (inv)
-		SY=(deltay/len);
+		SY = (delta_y / len);
 	else
-		SX=(deltax/len);
+		SX = (delta_x / len);
 
-	while(len>0)
+	while (len > 0.0)
 	{
 //		if (x0>0 && y0>0 && x0<surface->getWidth() && y0<surface->getHeight())
 //		{
 //			tcol=src->getPixel((int)x0,(int)y0);
-		tcol=src->getPixel((int)x0,(int)y0);
+		tcol = src->getPixel(
+						static_cast<int>(x0),
+						static_cast<int>(y0));
 		if (tcol)
 		{
-			const int d = tcol & helper::ColorGroup;
-			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
-			{
-				//this pixel is ocean
-				tcol = Palette::blockOffset(12) + shade + 8;
-			}
+			if (flight)								// kL
+				tcol = Palette::blockOffset(10)+6;	// kL
 			else
 			{
-				const int e = tcol + shade;
-				if(e > d + helper::ColorShade)
-					tcol = d + helper::ColorShade;
-				else tcol = e;
+				const int d = tcol & helper::ColorGroup;
+				if (d == Palette::blockOffset(12)
+					|| d == Palette::blockOffset(13))
+				{
+					tcol = Palette::blockOffset(12) + shade + 8; // this pixel is ocean
+				}
+				else
+				{
+					const int e = tcol + shade;
+					if (e > d + helper::ColorShade)
+						tcol = d + helper::ColorShade;
+					else
+						tcol = e;
+				}
 			}
-			surface->setPixel((int)x0, (int)y0, (Uint8)tcol);
+
+			surface->setPixel(
+						static_cast<int>(x0),
+						static_cast<int>(y0),
+						static_cast<Uint8>(tcol));
 		}
 
-		x0+=SX;
-		y0+=SY;
-		len-=1.0;
+		x0 += SX;
+		y0 += SY;
+		len -= 1.0;
 	}
 }
 
@@ -2196,7 +2224,8 @@ void Globe::drawPath(
 		double lon1,
 		double lat1,
 		double lon2,
-		double lat2)
+		double lat2,
+		bool flight) // kL_add.
 {
 	double length;
 	Sint16
@@ -2253,7 +2282,8 @@ void Globe::drawPath(
 				y1,
 				x2,
 				y2,
-				8);
+				8,
+				flight); // kL_add.
 		}
 
 		p1 = p2;
@@ -2267,7 +2297,7 @@ void Globe::drawPath(
  */
 void Globe::drawFlights()
 {
-	//_radars->clear();
+//	_radars->clear();
 	if (!Options::globeFlightPaths)
 		return;
 
@@ -2295,7 +2325,13 @@ void Globe::drawFlights()
 				lat1 = (*j)->getLatitude(),
 				lat2 = (*j)->getDestination()->getLatitude();
 
-			drawPath(_radars, lon1, lat1, lon2, lat2);
+			drawPath(
+					_radars,
+					lon1,
+					lat1,
+					lon2,
+					lat2,
+					true);
 		}
 	}
 	_radars->unlock();

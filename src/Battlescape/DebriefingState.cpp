@@ -111,9 +111,9 @@ DebriefingState::DebriefingState(Game* game)
 	_txtTitle		= new Text(280, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 216, 8);
 
-	_txtItem		= new Text(180, 9, 16, 24);
+	_txtItem		= new Text(184, 9, 16, 24);
 	_txtQuantity	= new Text(60, 9, 200, 24);
-	_txtScore		= new Text(55, 9, 260, 24);
+	_txtScore		= new Text(36, 9, 260, 24);
 
 	_lstStats		= new TextList(288, 80, 16, 32);
 
@@ -175,18 +175,18 @@ DebriefingState::DebriefingState(Game* game)
 
 	_lstStats->setColor(Palette::blockOffset(15)-1);
 	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstStats->setColumns(3, 176, 60, 64);
+	_lstStats->setColumns(3, 176, 60, 36);
 	_lstStats->setDot(true);
 	_lstStats->setMargin(8);
 
 	_lstRecovery->setColor(Palette::blockOffset(15)-1);
 	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstRecovery->setColumns(3, 176, 60, 64);
+	_lstRecovery->setColumns(3, 176, 60, 36);
 	_lstRecovery->setDot(true);
 	_lstRecovery->setMargin(8);
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
-	_lstTotal->setColumns(2, 244, 64);
+	_lstTotal->setColumns(2, 244, 36);
 	_lstTotal->setDot(true);
 
 

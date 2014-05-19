@@ -152,7 +152,8 @@ private:
 			double y1,
 			double x2,
 			double y2,
-			int shade);
+			int shade,
+			bool flight = false); // kL_add.
 	void drawVHLine(
 			Surface* surface,
 			double lon1,
@@ -166,7 +167,8 @@ private:
 			double lon1,
 			double lat1,
 			double lon2,
-			double lat2);
+			double lat2,
+			bool flight = false); // kL_add.
 
 
 	public:

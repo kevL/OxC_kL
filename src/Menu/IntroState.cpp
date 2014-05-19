@@ -52,13 +52,13 @@ IntroState::IntroState(
 		State(game),
 		_wasLetterBoxed(wasLetterBoxed)
 {
-	_oldVolume = Options::musicVolume;
+//kL	_oldVolume = Options::musicVolume;
+//kL	Options::musicVolume = Options::soundVolume;
 
-	Options::musicVolume = Options::soundVolume;
 	_game->setVolume(
 				Options::soundVolume,
 //kL				Options::musicVolume / 2,
-				Options::musicVolume / 3,
+				Options::musicVolume, // kL
 				-1);
 	_introFile			= CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
 	_introSoundFileDOS	= CrossPlatform::getDataFile("SOUND/INTRO.CAT");
@@ -513,7 +513,7 @@ void IntroState::init()
 		_game->getScreen()->clear();
 		_game->getScreen()->flip();
 
-		Options::musicVolume = _oldVolume;
+//kL		Options::musicVolume = _oldVolume;
 		_game->setVolume(
 					Options::soundVolume,
 					Options::musicVolume,

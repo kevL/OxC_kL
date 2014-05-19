@@ -67,18 +67,13 @@ CraftWeaponsState::CraftWeaponsState(
 {
 	_screen = false;
 
-	_window			= new Window(
-								this,
-								220,
-								160,
-								50,
-								20,
-								POPUP_BOTH);
+	_window			= new Window(this, 220, 160, 50, 20, POPUP_BOTH);
+
 	_txtTitle		= new Text(200, 17, 60, 32);
 
 	_txtArmament	= new Text(98, 9, 66, 53);
 	_txtQuantity	= new Text(30, 9, 164, 53);
-	_txtAmmunition	= new Text(76, 9, 194, 53);
+	_txtAmmunition	= new Text(50, 9, 194, 53);
 
 	_lstWeapons		= new TextList(204, 88, 58, 68);
 
@@ -124,7 +119,7 @@ CraftWeaponsState::CraftWeaponsState(
 
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
 	_lstWeapons->setArrowColor(Palette::blockOffset(15)+6);
-	_lstWeapons->setColumns(3, 98, 30, 76);
+	_lstWeapons->setColumns(3, 98, 30, 50);
 	_lstWeapons->setSelectable(true);
 	_lstWeapons->setBackground(_window);
 	_lstWeapons->setMargin(8);

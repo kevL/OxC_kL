@@ -71,27 +71,28 @@ OptionsVideoState::OptionsVideoState(
 	_btnDisplayResolutionDown	= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 186, 36);
 
 	_txtLanguage				= new Text(114, 9, 94, 52);
-	_cbxLanguage				= new ComboBox(this, 100, 16, 94, 62);
+	_cbxLanguage				= new ComboBox(this, 104, 16, 94, 62);
 
-	_txtFilter					= new Text(114, 9, 210, 52);
-	_cbxFilter					= new ComboBox(this, 100, 16, 210, 62);
+	_txtFilter					= new Text(114, 9, 206, 52);
+	_cbxFilter					= new ComboBox(this, 104, 16, 206, 62);
 
-	_txtMode					= new Text(114, 9, 210, 22);
-	_cbxDisplayMode				= new ComboBox(this, 100, 16, 210, 32);
+	_txtMode					= new Text(114, 9, 206, 22);
+	_cbxDisplayMode				= new ComboBox(this, 104, 16, 206, 32);
 
 	_txtGeoScale				= new Text(114, 9, 94, 82);
-	_cbxGeoScale				= new ComboBox(this, 100, 16, 94, 92);
+	_cbxGeoScale				= new ComboBox(this, 104, 16, 94, 92);
 
 	_txtBattleScale				= new Text(114, 9, 94, 112);
-	_cbxBattleScale				= new ComboBox(this, 100, 16, 94, 122);
+	_cbxBattleScale				= new ComboBox(this, 104, 16, 94, 122);
 
-	_txtOptions					= new Text(114, 9, 210, 82);
-	_btnLetterbox				= new ToggleTextButton(100, 16, 210, 92);
-	_btnLockMouse				= new ToggleTextButton(100, 16, 210, 110);
+	_txtOptions					= new Text(114, 9, 206, 82);
+	_btnLetterbox				= new ToggleTextButton(104, 16, 206, 92);
+	_btnLockMouse				= new ToggleTextButton(104, 16, 206, 110);
 
 	/* Get available fullscreen modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
-	if (_res > (SDL_Rect**)0)
+	if (_res != (SDL_Rect**) - 1
+		&& (SDL_Rect**)0)
 	{
 		_resCurrent = -1;
 
@@ -386,9 +387,11 @@ void OptionsVideoState::btnDisplayResolutionDownClick(Action*)
  */
 void OptionsVideoState::updateDisplayResolution()
 {
-	std::wostringstream ssW, ssH;
-	ssW << (int)_res[_resCurrent]->w;
-	ssH << (int)_res[_resCurrent]->h;
+	std::wostringstream
+		ssW,
+		ssH;
+	ssW << static_cast<int>(_res[_resCurrent]->w);
+	ssH << static_cast<int>(_res[_resCurrent]->h);
 	_txtDisplayWidth->setText(ssW.str());
 	_txtDisplayHeight->setText(ssH.str());
 
@@ -473,24 +476,24 @@ void OptionsVideoState::updateDisplayMode(Action*)
 	switch(_cbxDisplayMode->getSelected())
 	{
 		case 0:
-			Options::fullscreen = false;
-			Options::borderless = false;
-			Options::allowResize = false;
+			Options::fullscreen		= false;
+			Options::borderless		= false;
+			Options::allowResize	= false;
 		break;
 		case 1:
-			Options::fullscreen = true;
-			Options::borderless = false;
-			Options::allowResize = false;
+			Options::fullscreen		= true;
+			Options::borderless		= false;
+			Options::allowResize	= false;
 		break;
 		case 2:
-			Options::fullscreen = false;
-			Options::borderless = true;
-			Options::allowResize = false;
+			Options::fullscreen		= false;
+			Options::borderless		= true;
+			Options::allowResize	= false;
 		break;
 		case 3:
-			Options::fullscreen = false;
-			Options::borderless = false;
-			Options::allowResize = true;
+			Options::fullscreen		= false;
+			Options::borderless		= false;
+			Options::allowResize	= true;
 		break;
 
 		default:

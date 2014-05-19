@@ -115,7 +115,6 @@ OptionsAdvancedState::OptionsAdvancedState(
  */
 OptionsAdvancedState::~OptionsAdvancedState()
 {
-	
 }
 
 /**
