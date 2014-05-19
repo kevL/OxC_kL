@@ -826,13 +826,16 @@ int Pathfinding::getTUCost(
 					cost = 4;
 				}
 
-				int wallcost = 0;	// walking through walls
+				int wallcost = 0;	// walking through rubble walls,
+									// but don't charge for walking diagonally past doors (which is impossible), they're a special case unto themselves.
 				int sides = 0;		// how many walls we cross when moving diagonally
 				int wallTU = 0;		// used to check if there's a wall that costs +TU.
 
-				if (direction == 7
-					|| direction == 0
-					|| direction == 1)
+				if (direction == 0
+					|| ((direction == 7
+							|| direction == 1)
+						&& startTile->getMapData(MapData::O_NORTHWALL)
+						&& !startTile->getMapData(MapData::O_NORTHWALL)->isDoor()))
 				{
 					wallTU = startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
 					if (wallTU > 0)
@@ -847,9 +850,11 @@ int Pathfinding::getTUCost(
 					}
 				}
 
-				if (direction == 1
-					|| direction == 2
-					|| direction == 3)
+				if (direction == 2
+					|| ((direction == 1
+							|| direction == 3)
+						&& destTile->getMapData(MapData::O_WESTWALL)
+						&& !destTile->getMapData(MapData::O_WESTWALL)->isDoor()))
 				{
 					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below.
 					{
@@ -862,9 +867,11 @@ int Pathfinding::getTUCost(
 					}
 				}
 
-				if (direction == 3
-					|| direction == 4
-					|| direction == 5)
+				if (direction == 4
+					|| ((direction == 3
+							|| direction == 5)
+						&& destTile->getMapData(MapData::O_NORTHWALL)
+						&& !destTile->getMapData(MapData::O_NORTHWALL)->isDoor()))
 				{
 					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below.
 					{
@@ -877,9 +884,11 @@ int Pathfinding::getTUCost(
 					}
 				}
 
-				if (direction == 5
-					|| direction == 6
-					|| direction == 7)
+				if (direction == 6
+					|| ((direction == 5
+							|| direction == 7)
+						&& startTile->getMapData(MapData::O_WESTWALL)
+						&& !startTile->getMapData(MapData::O_WESTWALL)->isDoor()))
 				{
 					wallTU = startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 					if (wallTU > 0)
@@ -888,48 +897,6 @@ int Pathfinding::getTUCost(
 						sides ++;
 					}
 				}
-
-				// kL_note: Code that is supposed to stop units from walking around doors
-				// (close door instead and walk through it)
-				// But this doesn't follow my advanced wallcost algorithm above!!!
-/*				switch (direction)
-				{
-					case 7: // northwest
-						// tile west of start
-						wallcost += _save->getTile(startTile->getPosition() + Position(-1, 0, 0))
-									->getTUCost(MapData::O_NORTHWALL, _movementType);
-						// tile north of start
-						wallcost += _save->getTile(startTile->getPosition() + Position(0,-1, 0))
-									->getTUCost(MapData::O_WESTWALL, _movementType);
-					break;
-					case 3: // southeast
-						// tile south of start
-						wallcost += _save->getTile(startTile->getPosition() + Position(0, 1, 0))
-									->getTUCost(MapData::O_NORTHWALL, _movementType);
-						// tile east of start
-						wallcost += _save->getTile(startTile->getPosition() + Position(1, 0, 0))
-									->getTUCost(MapData::O_WESTWALL, _movementType);
-					break;
-					case 1: // northeast
-						// tile east of start
-						wallcost += _save->getTile(startTile->getPosition() + Position(1, 0, 0))
-									->getTUCost(MapData::O_NORTHWALL, _movementType);
-						// tile east of start
-						wallcost += _save->getTile(startTile->getPosition() + Position(1, 0, 0))
-									->getTUCost(MapData::O_WESTWALL, _movementType);
-					break;
-					case 5: // southwest
-						// tile south of start
-						wallcost += _save->getTile(startTile->getPosition() + Position(0, 1, 0))
-									->getTUCost(MapData::O_NORTHWALL, _movementType);
-						// tile south of start
-						wallcost += _save->getTile(startTile->getPosition() + Position(0, 1, 0))
-									->getTUCost(MapData::O_WESTWALL, _movementType);
-					break;
-
-					default:
-					break;
-				} */ // kL_note: haha, even YOU removed it ....
 
 				// diagonal walking (uneven directions) costs 50% more tu's
 				// kL_note: this is moved up so that objects don't cost +150% tu;
@@ -964,27 +931,6 @@ int Pathfinding::getTUCost(
 				if (size)
 					// 4-tile units not supported, Turn off strafe move and continue
 					_strafeMove = false;
-/*kL				else
-				{
-					if (std::min(
-								abs(8 + direction - _unit->getDirection()),
-								std::min(
-										abs(_unit->getDirection() - direction),
-										abs(8 + _unit->getDirection() - direction)))
-							> 2)
-					{
-						// Strafing backwards-ish currently unsupported, turn it off and continue.
-						// kL_note: Try it anyway.
-						_strafeMove = false;
-					}
-					else
-					{
-						if (_unit->getDirection() != direction)
-						{
-							cost += 1;
-						}
-					}
-				} */
 				// kL_begin:
 				else if (_unit->getDirection() != direction)
 				{
@@ -1008,7 +954,6 @@ int Pathfinding::getTUCost(
 	// for bigger sized units, check the path between part 1,1 and part 0,0 at end position
 	if (size)
 	{
-//kL		totalCost /= (size + 1) * (size + 1); // ie. /=4
 		double fTCost = ceil(static_cast<double>(totalCost) / static_cast<double>((size + 1) * (size + 1))); // kL
 		totalCost = static_cast<int>(fTCost); // kL: round those tanks up!
 
