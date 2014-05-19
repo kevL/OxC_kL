@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM__LISTSAVESTATE_H
-#define OPENXCOM__LISTSAVESTATE_H
+#ifndef OPENXCOM_LISTSAVESTATE_H
+#define OPENXCOM_LISTSAVESTATE_H
 
 #include <string>
 

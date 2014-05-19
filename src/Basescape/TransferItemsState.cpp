@@ -24,9 +24,9 @@
 #include <cmath>
 #include <sstream>
 
-#include "TransferConfirmState.h"
+#include "../fmath.h"
 
-#include "../aresame.h"
+#include "TransferConfirmState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"

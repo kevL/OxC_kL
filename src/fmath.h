@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef ARESAME_H
-#define ARESAME_H
+#ifndef OPENXCOM_FMATH_H
+#define OPENXCOM_FMATH_H
 
 #include <limits>
 #include <cmath>
@@ -30,6 +30,13 @@ inline bool AreSame(
 		const _Tx& r)
 {
 	return std::fabs(l - r) <= std::numeric_limits<_Tx>::epsilon();
+}
+
+
+template <class _Tx>
+inline _Tx Round(const _Tx& x)
+{
+	return x < 0.0? std::ceil(x - 0.5): std::floor(x + 0.5);
 }
 
 #endif

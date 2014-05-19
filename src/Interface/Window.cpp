@@ -22,7 +22,7 @@
 #include <SDL.h>
 #include <SDL_mixer.h>
 
-#include "../aresame.h"
+#include "../fmath.h"
 
 #include "../Engine/RNG.h"
 #include "../Engine/Sound.h"

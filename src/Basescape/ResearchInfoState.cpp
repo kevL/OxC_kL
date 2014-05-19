@@ -89,93 +89,38 @@ ResearchInfoState::ResearchInfoState(
 }
 
 /**
- * kL_begin: Cleans up the ResearchInfo state.
+ * kL. Cleans up the ResearchInfo state.
  */
-ResearchInfoState::~ResearchInfoState() // not implemented yet.
+ResearchInfoState::~ResearchInfoState() // kL
 {
 	delete _timerMore;
 	delete _timerLess;
-} // kL_end.
+}
 
 /**
  * Builds dialog.
  */
 void ResearchInfoState::buildUi()
 {
-	int width = 230;
-	int height = 140;
-	int max_width = 320;
-	int max_height = 200;
-	int start_x = (max_width - width) / 2;
-	int start_y = (max_height - height) / 2;
-
-	_surfaceScientists = new InteractiveSurface(
-									width,
-									height,
-									start_x,
-									start_y);
-	_surfaceScientists->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
-
-	int button_x_border = 16;
-	int button_y_border = 10;
-	int button_height = 16;
-	int footer_button_width = width / 2 - (4 + button_x_border);
-
 	_screen = false;
 
-	_window					= new Window(
-										this,
-										width,
-										height,
-										start_x,
-										start_y);
+	_window					= new Window(this, 230, 140, 45, 30);
 
-	_txtTitle				= new Text(width - 2 * button_x_border,
-										button_height,
-										start_x + button_x_border,
-										start_y + button_y_border);
+	_txtTitle				= new Text(198, 16, 61, 40);
+	_txtAvailableScientist	= new Text(198, 16, 61, 60);
+	_txtAvailableSpace		= new Text(198, 16, 61, 70);
+	_txtAllocatedScientist	= new Text(198, 16, 61, 80);
+	_txtMore				= new Text(134, 16, 93, 100);
+	_txtLess				= new Text(134, 16, 93, 120);
+	_btnCancel				= new TextButton(95, 16, 61, 144);
+	_btnOk					= new TextButton(95, 16, 164, 144);
 
-	_txtAvailableScientist	= new Text(width - 2 * button_x_border,
-										button_height,
-										start_x + button_x_border,
-										start_y + (3 * button_y_border));
-	_txtAvailableSpace		= new Text(width - 2 * button_x_border,
-										button_height,
-										start_x + button_x_border,
-										start_y + (4 * button_y_border));
-	_txtAllocatedScientist	= new Text(width - 2 * button_x_border,
-										button_height,
-										start_x + button_x_border,
-										start_y + (5 * button_y_border));
-	_txtMore				= new Text(width - 6 * button_x_border,
-										button_height,
-										start_x + static_cast<int>(2.5f * static_cast<float>(button_x_border)) + 8,
-										start_y + (7 * button_y_border));
-	_txtLess				= new Text(width - 6 * button_x_border,
-										button_height,
-										start_x + static_cast<int>(2.5f * static_cast<float>(button_x_border)) + 8,
-										start_y + (9 * button_y_border));
-	_btnCancel				= new TextButton(footer_button_width,
-										button_height,
-										start_x + button_x_border,
-										start_y + height - button_height - button_y_border);
-	_btnOk					= new TextButton(footer_button_width,
-										button_height,
-										start_x + button_x_border + footer_button_width + 8,
-										start_y + height - button_height - button_y_border);
+	_btnMore				= new ArrowButton(ARROW_BIG_UP, 13, 14, 205, 100);
+	_btnLess				= new ArrowButton(ARROW_BIG_DOWN, 13, 14, 205, 120);
 
-	_btnMore				= new ArrowButton(ARROW_BIG_UP,
-										button_x_border - 3,
-										button_height - 2,
-										start_x + (10 * button_x_border),
-										start_y + (7 * button_y_border));
-	_btnLess				= new ArrowButton(ARROW_BIG_DOWN,
-										button_x_border - 3,
-										button_height - 2,
-										start_x + (10 * button_x_border),
-										start_y + (9 * button_y_border));
+	_surfaceScientists = new InteractiveSurface(230, 140, 45, 30);
+	_surfaceScientists->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
 
-	// Set palette
 	setPalette("PAL_BASESCAPE", 1);
 
 	add(_surfaceScientists);
@@ -424,7 +369,8 @@ void ResearchInfoState::more()
  */
 void ResearchInfoState::moreByValue(int change)
 {
-	if (change < 1) return;
+	if (change < 1)
+		return;
 
 //kL	int freeScientist = _base->getAvailableScientists();
 	int freeScientist = _base->getScientists(); // kL
@@ -455,7 +401,8 @@ void ResearchInfoState::less()
  */
 void ResearchInfoState::lessByValue(int change)
 {
-	if (change < 1) return;
+	if (change < 1)
+		return;
 
 	int assigned = _project->getAssigned();
 	if (assigned > 0)

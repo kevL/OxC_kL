@@ -151,8 +151,6 @@ void InteractiveSurface::handle(
 							getX(),
 							getY());
 
-	// Modern system mouse handling: Press/releases are only triggered by button up/down events
-	// Classic X-Com mouse handling: Press/releases occur automatically with mouse movement
 	if (action->isMouseAction())
 	{
 		if (action->getAbsoluteXMouse() >= getX()

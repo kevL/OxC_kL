@@ -1445,7 +1445,8 @@ bool SavedGame::isResearchAvailable(
 
 	bool liveAlien = (ruleset->getUnit(r->getName()) != 0);
 
-	if (std::find(
+	if (_debug
+		|| std::find(
 				unlocked.begin(),
 				unlocked.end(),
 				r)

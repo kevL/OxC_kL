@@ -50,6 +50,7 @@ private:
 		_minX,
 		_max,
 		_maxX,
+		_offsetX,
 		_value;
 	double _pos;
 

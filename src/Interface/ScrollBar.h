@@ -39,6 +39,7 @@ class ScrollBar
 
 private:
 	bool _pressed, _contrast;
+	int _offset;
 	Uint8 _color;
 
 	SDL_Rect _thumbRect;

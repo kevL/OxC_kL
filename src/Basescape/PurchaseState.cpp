@@ -25,6 +25,8 @@
 #include <iomanip>
 #include <sstream>
 
+#include "../fmath.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"

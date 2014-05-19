@@ -24,7 +24,7 @@
 #include <cmath>
 #include <sstream>
 
-#include "../aresame.h"
+#include "../fmath.h"
 
 #include "AlienBase.h"
 #include "Base.h"

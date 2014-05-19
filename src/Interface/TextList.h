@@ -265,9 +265,13 @@ private:
 		void clearList();
 
 		/// Scrolls the list up.
-		void scrollUp(bool toMax);
+		void scrollUp(
+				bool toMax,
+				bool scrollByWheel = false);
 		/// Scrolls the list down.
-		void scrollDown(bool toMax);
+		void scrollDown(
+				bool toMax,
+				bool scrollByWheel = false);
 		/// Sets the list scrolling.
 		void setScrolling(
 				bool scrolling,

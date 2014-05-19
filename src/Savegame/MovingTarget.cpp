@@ -23,7 +23,7 @@
 
 #include <cmath>
 
-#include "../aresame.h"
+#include "../fmath.h"
 
 
 namespace OpenXcom

@@ -905,10 +905,9 @@ void BattlescapeState::mapOver(Action* action)
 		}
 		else
 		{
-			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
 			_map->getCamera()->scrollXY(
-								static_cast<int>(static_cast<double>(_totalMouseMoveX) / action->getXScale()),
-								static_cast<int>(static_cast<double>(_totalMouseMoveY) / action->getYScale()),
+								static_cast<int>(action->getDetails()->motion.xrel),
+								static_cast<int>(action->getDetails()->motion.yrel),
 								false);
 		}
 

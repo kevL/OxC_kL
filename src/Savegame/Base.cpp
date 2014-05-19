@@ -25,7 +25,7 @@
 #include <cmath>
 #include <stack>
 
-#include "../aresame.h"
+#include "../fmath.h"
 
 #include "BaseFacility.h"
 #include "Craft.h"

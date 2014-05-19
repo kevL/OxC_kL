@@ -40,7 +40,7 @@ const std::string WeightedOptions::choose() const
 		return "";
 	}
 
-	unsigned var = RNG::generate(0, _totalWeight);
+	unsigned int var = RNG::generate(0, _totalWeight);
 
 	std::map<std::string, unsigned>::const_iterator ii = _choices.begin();
 	for (
@@ -70,7 +70,8 @@ const std::string WeightedOptions::top() const
 		return "";
 	}
 
-	int max = 0;
+	unsigned int max = 0;
+
 	std::map<std::string, unsigned>::const_iterator i = _choices.begin();
 	for (std::map<std::string, unsigned>::const_iterator
 			ii = _choices.begin();

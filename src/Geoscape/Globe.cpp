@@ -21,13 +21,13 @@
 
 #include "Globe.h"
 
+#include "../fmath.h"
+
 #include <cmath>
 #include <fstream>
 
 #include "Polygon.h"
 #include "Polyline.h"
-
-#include "../aresame.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Exception.h"

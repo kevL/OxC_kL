@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM__LISTLOADSTATE_H
-#define OPENXCOM__LISTLOADSTATE_H
+#ifndef OPENXCOM_LISTLOADSTATE_H
+#define OPENXCOM_LISTLOADSTATE_H
 
 #include "ListGamesState.h"
 

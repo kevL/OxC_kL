@@ -144,6 +144,73 @@ struct UnitStats
 						psiSkill	+ stats.psiSkill,
 						melee		+ stats.melee);
 		}
+
+		UnitStats& operator-=(const UnitStats& stats)
+		{
+			if (this != &stats) // kL: cf. Position.h
+			{
+				tu			-= stats.tu;
+				stamina		-= stats.stamina;
+				health		-= stats.health;
+				bravery		-= stats.bravery;
+				reactions	-= stats.reactions;
+				firing		-= stats.firing;
+				throwing	-= stats.throwing;
+				strength	-= stats.strength;
+				psiStrength	-= stats.psiStrength;
+				psiSkill	-= stats.psiSkill;
+				melee		-= stats.melee;
+			}
+
+			return *this;
+		}
+
+		UnitStats operator-(const UnitStats& stats) const
+		{
+			return UnitStats(
+						tu			- stats.tu,
+						stamina		- stats.stamina,
+						health		- stats.health,
+						bravery		- stats.bravery,
+						reactions	- stats.reactions,
+						firing		- stats.firing,
+						throwing	- stats.throwing,
+						strength	- stats.strength,
+						psiStrength	- stats.psiStrength,
+						psiSkill	- stats.psiSkill,
+						melee		- stats.melee);
+		}
+
+		UnitStats operator-() const
+		{
+			return UnitStats(
+						-tu,
+						-stamina,
+						-health,
+						-bravery,
+						-reactions,
+						-firing,
+						-throwing,
+						-strength,
+						-psiStrength,
+						-psiSkill,
+						-melee);
+		}
+
+		void merge(const UnitStats& stats)
+		{
+			tu			= (stats.tu? stats.tu: tu);
+			stamina		= (stats.stamina? stats.stamina: stamina);
+			health		= (stats.health? stats.health: health);
+			bravery		= (stats.bravery? stats.bravery: bravery);
+			reactions	= (stats.reactions? stats.reactions: reactions);
+			firing		= (stats.firing? stats.firing: firing);
+			throwing	= (stats.throwing? stats.throwing: throwing);
+			strength	= (stats.strength? stats.strength: strength);
+			psiStrength	= (stats.psiStrength? stats.psiStrength: psiStrength);
+			psiSkill	= (stats.psiSkill? stats.psiSkill: psiSkill);
+			melee		= (stats.melee? stats.melee: melee);
+		};
 };
 
 

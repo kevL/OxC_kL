@@ -26,7 +26,7 @@
 #include <assert.h>
 #include <math.h>
 
-#include "../aresame.h"
+#include "../fmath.h"
 
 #include "AlienBase.h"
 #include "Base.h"

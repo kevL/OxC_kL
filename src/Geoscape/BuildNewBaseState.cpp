@@ -21,11 +21,12 @@
 
 #include <cmath>
 
+#include "../fmath.h"
+
 #include "BaseNameState.h"
 #include "ConfirmNewBaseState.h"
 #include "Globe.h"
 
-#include "../aresame.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"

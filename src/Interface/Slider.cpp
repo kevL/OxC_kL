@@ -20,7 +20,8 @@
 #include "Slider.h"
 
 #include <algorithm>
-#include <cmath>
+
+#include "../fmath.h"
 
 #include "../Engine/Action.h"
 
@@ -54,7 +55,8 @@ Slider::Slider(
 		_min(0),
 		_max(100),
 		_pressed(false),
-		_change(0)
+		_change(0),
+		_offsetX(0)
 {
 	_thickness = 5;
 	_textness = 8;
@@ -225,21 +227,20 @@ void Slider::setPalette(
 void Slider::handle(Action* action, State* state)
 {
 	InteractiveSurface::handle(action, state);
-	//_button->handle(action, state);
+//	_button->handle(action, state);
 	if (_pressed
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
 			|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN))
 	{
-//		int cursorX = static_cast<int>(floor(static_cast<double>(action->getDetails()->motion.x) / action->getXScale())); // kL
 		int cursorX = static_cast<int>(action->getAbsoluteXMouse());
 		double buttonX = static_cast<double>(std::min(
 													std::max(
 															_minX,
-															cursorX - _button->getWidth() / 2),
+															cursorX + _offsetX),
 													_maxX));
 		double pos = (buttonX - static_cast<double>(_minX)) / static_cast<double>(_maxX - _minX);
 
-		int value = static_cast<int>(static_cast<double>(_min + (_max - _min)) * pos);
+		int value = _min + static_cast<int>(Round(static_cast<double>(_max - _min) * pos));
 		setValue(value);
 
 		if (_change)
@@ -254,8 +255,7 @@ void Slider::handle(Action* action, State* state)
 void Slider::setPosition(double pos)
 {
 	_pos = pos;
-	_button->setX(static_cast<int>(floor(_minX + (_maxX - _minX) * _pos)));
-//	_button->setX(static_cast<int>(floor(static_cast<double>(getX()) + (static_cast<double>(_maxX - _minX) * _value)))); // kL
+	_button->setX(static_cast<int>(floor(static_cast<double>(_minX) + static_cast<double>(_maxX - _minX) * _pos)));
 }
 
 /**
@@ -326,7 +326,18 @@ void Slider::mousePress(Action* action, State* state)
 	InteractiveSurface::mousePress(action, state);
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
 		_pressed = true;
+
+		int cursorX = static_cast<int>(action->getAbsoluteXMouse());
+		if (cursorX >= _button->getX()
+			&& cursorX < _button->getX() + _button->getWidth())
+		{
+			_offsetX = _button->getX() - cursorX;
+		}
+		else
+			_offsetX = -_button->getWidth() / 2;
+	}
 }
 
 /**
@@ -339,7 +350,10 @@ void Slider::mouseRelease(Action* action, State* state)
 	InteractiveSurface::mouseRelease(action, state);
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
 		_pressed = false;
+		_offsetX = 0;
+	}
 }
 
 /**

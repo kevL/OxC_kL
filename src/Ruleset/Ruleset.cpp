@@ -22,7 +22,7 @@
 #include <algorithm>
 #include <fstream>
 
-#include "../aresame.h"
+#include "../fmath.h"
 
 #include "AlienRace.h"
 #include "AlienDeployment.h"

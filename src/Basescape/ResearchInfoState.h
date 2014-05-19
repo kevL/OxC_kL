@@ -86,9 +86,8 @@ private:
 				Game* game,
 				Base* base,
 				ResearchProject* project);
-		/// kL_begin: Cleans up the ResearchInfo state.
-		~ResearchInfoState(); // not implemented yet.
-		// kL_end.
+		/// kL. Cleans up the ResearchInfo state.
+		~ResearchInfoState(); // kL
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

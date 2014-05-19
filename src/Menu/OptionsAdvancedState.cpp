@@ -256,10 +256,10 @@ void OptionsAdvancedState::lstOptionsClick(Action* action)
 			min = 0;
 			max = 120;
 		}
-		else if (i == &Options::FPS)
+		else if (i == &Options::mousewheelSpeed)
 		{
-			min = 0;
-			max = 120;
+			min = 1;
+			max = 7;
 		}
 
 		if (*i < min)

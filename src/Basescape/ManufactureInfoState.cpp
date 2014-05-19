@@ -132,10 +132,10 @@ void ManufactureInfoState::buildUi()
 	_btnOk					= new TextButton(135, 16, 175, 159);
 	_btnStop				= new TextButton(135, 16, 10, 159);
 
-	_surfaceEngineers = new InteractiveSurface(152, 70, 16, 75);
+	_surfaceEngineers = new InteractiveSurface(160, 150, 0, 25);
 	_surfaceEngineers->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelEngineer, 0);
 
-	_surfaceUnits = new InteractiveSurface(152, 70, 168, 75);
+	_surfaceUnits = new InteractiveSurface(160, 150, 160, 25);
 	_surfaceUnits->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
 
 	setPalette("PAL_BASESCAPE", 6);

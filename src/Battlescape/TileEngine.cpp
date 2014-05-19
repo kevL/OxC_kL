@@ -39,7 +39,7 @@
 #include "ProjectileFlyBState.h"
 #include "UnitTurnBState.h"
 
-#include "../aresame.h"
+#include "../fmath.h"
 
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
@@ -279,7 +279,7 @@ void TileEngine::addLight(
 					z < _save->getMapSizeZ();
 					z++)
 			{
-				int distance = static_cast<int>(floor(sqrt(static_cast<float>(x * x + y * y))));
+				int distance = static_cast<int>(Round(sqrt(static_cast<float>(x * x + y * y))));
 
 				if (_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z)))
 					_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z))->addLight(power - distance, layer);
@@ -2285,9 +2285,9 @@ void TileEngine::explode(
 		return;
 
 	double
-		centerX = static_cast<double>(voxelTarget.x / 16 + 0.5),
-		centerY = static_cast<double>(voxelTarget.y / 16 + 0.5),
-		centerZ = static_cast<double>(voxelTarget.z / 24 + 0.5);
+		centerX = static_cast<double>(voxelTarget.x / 16) + 0.5,
+		centerY = static_cast<double>(voxelTarget.y / 16) + 0.5,
+		centerZ = static_cast<double>(voxelTarget.z / 24) + 0.5;
 
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator, bool> tilePair;
@@ -4783,13 +4783,11 @@ int TileEngine::distance(
 {
 	int x = pos1.x - pos2.x;
 	int y = pos1.y - pos2.y;
-	int z = pos1.z - pos2.z;	// kL
+	int z = pos1.z - pos2.z; // kL
 
-//kL	return (int)floor(sqrt(float(x * x + y * y)) + 0.5f);	// kL, why the +0.5 ???
-//	return (int)floor(sqrt(float(x * x + y * y)));
 	return static_cast<int>(
-					floor(
-						sqrt(static_cast<float>(x * x + y * y + z * z)))); // 3-d
+						Round(
+							sqrt(static_cast<float>(x * x + y * y + z * z)))); // kL: 3-d
 }
 
 /**
