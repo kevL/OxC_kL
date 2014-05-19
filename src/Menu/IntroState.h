@@ -36,6 +36,7 @@ class IntroState
 
 private:
 	bool _wasLetterBoxed;
+	int _oldVolume;
 
 	std::string
 		_introFile,

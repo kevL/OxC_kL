@@ -278,7 +278,7 @@
 1394398507 f:\git\openxcom\src\engine\action.h
 	<SDL.h>
 
-1400031562 f:\git\openxcom\src\engine\game.h
+1400522609 f:\git\openxcom\src\engine\game.h
 	<list>
 	<string>
 	<SDL.h>
@@ -9685,7 +9685,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1398752036 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
+1400489191 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 	<assert.h>
 	"../Engine/RNG.h"
@@ -11508,7 +11508,7 @@
 	"../Engine/Adlib/adlplayer.h"
 	"../Resource/ResourcePack.h"
 
-1398138059 f:\git\openxcom\src\menu\introstate.h
+1400523248 f:\git\openxcom\src\menu\introstate.h
 	"../Engine/State.h"
 
 1400349632 f:\git\openxcom\src\menu\optionsvideostate.h
@@ -11824,7 +11824,7 @@
 	<math.h>
 	"fmopl.h"
 
-1400486111 source:f:\git\openxcom\src\interface\scrollbar.cpp
+1400489191 source:f:\git\openxcom\src\interface\scrollbar.cpp
 	"ScrollBar.h"
 	<algorithm>
 	"../fmath.h"

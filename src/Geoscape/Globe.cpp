@@ -741,7 +741,7 @@ void Globe::loadDat(
  */
 /* void Globe::rotateLeft()
 {
-	_rotLon = -ROTATE_LONGITUDE / (_zoom+1);
+	_rotLon = -ROTATE_LONGITUDE;
 
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 } */
@@ -751,7 +751,7 @@ void Globe::loadDat(
  */
 /* void Globe::rotateRight()
 {
-	_rotLon = ROTATE_LONGITUDE / (_zoom+1);
+	_rotLon = ROTATE_LONGITUDE;
 
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 } */
@@ -761,7 +761,7 @@ void Globe::loadDat(
  */
 /* void Globe::rotateUp()
 {
-	_rotLat = -ROTATE_LATITUDE / (_zoom+1);
+	_rotLat = -ROTATE_LATITUDE;
 
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 } */
@@ -771,7 +771,7 @@ void Globe::loadDat(
  */
 /* void Globe::rotateDown()
 {
-	_rotLat = ROTATE_LATITUDE / (_zoom+1);
+	_rotLat = ROTATE_LATITUDE;
 
 	if (!_rotTimer->isRunning()) _rotTimer->start();
 } */
@@ -817,7 +817,7 @@ void Globe::zoomIn()
 		_zoom++;
 		_game->getSavedGame()->setGlobeZoom(_zoom);
 
-		cachePolygons();
+		invalidate();
 	}
 }
 
@@ -831,7 +831,7 @@ void Globe::zoomOut()
 		_zoom--;
 		_game->getSavedGame()->setGlobeZoom(_zoom);
 
-		cachePolygons();
+		invalidate();
 	}
 }
 
@@ -843,7 +843,7 @@ void Globe::zoomOut()
 	_zoom = 0;
 	_game->getSavedGame()->setGlobeZoom(_zoom);
 
-	cachePolygons();
+	invalidate();
 } */
 
 /**
@@ -854,7 +854,7 @@ void Globe::zoomOut()
 	_zoom = _radius.size() - 1;
 	_game->getSavedGame()->setGlobeZoom(_zoom);
 
-	cachePolygons();
+	invalidate();
 } */
 
 /**
@@ -879,7 +879,7 @@ void Globe::center(
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
 
-	cachePolygons();
+	invalidate();
 }
 
 /**
@@ -1075,8 +1075,6 @@ void Globe::cachePolygons()
 	cache(
 		_game->getResourcePack()->getPolygons(),
 		&_cacheLand);
-
-	_redraw = true;
 }
 
 /**
@@ -1239,12 +1237,12 @@ void Globe::blink()
  */
 /* void Globe::rotate()
 {
-	_cenLon += _rotLon * ((110 - Options::geoScrollSpeed) / 100.0);
-	_cenLat += _rotLat * ((110 - Options::geoScrollSpeed) / 100.0);
+	_cenLon += _rotLon * ((110 - Options::geoScrollSpeed) / 100.0) / (_zoom + 1);
+	_cenLat += _rotLat * ((110 - Options::geoScrollSpeed) / 100.0) / (_zoom + 1);
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
 
-	cachePolygons();
+	invalidate();
 } */
 
 /**
@@ -1252,6 +1250,9 @@ void Globe::blink()
  */
 void Globe::draw()
 {
+	if (_redraw)
+		cachePolygons();
+
 	Surface::draw();
 
 	drawOcean();
@@ -2877,7 +2878,7 @@ void Globe::resize()
 
 	setupRadii(width, height);
 
-	cachePolygons();
+	invalidate();
 }
 
 /**

@@ -49,6 +49,8 @@ class Game
 {
 
 private:
+	static const double VOLUME_GRADIENT;
+
 	bool
 		_init,
 		_mouseActive,
@@ -86,6 +88,8 @@ private:
 				int sound,
 				int music,
 				int ui);
+		/// Adjusts a linear volume level to an exponential one.
+		static float volumeExponent(int volume);
 
 		/// Gets the game's display screen.
 		Screen* getScreen() const;

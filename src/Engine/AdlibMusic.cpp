@@ -23,6 +23,7 @@
 #include <fstream>
 
 #include "Exception.h"
+#include "Game.h"
 #include "Logger.h"
 #include "Options.h"
 
@@ -175,7 +176,7 @@ void AdlibMusic::player(
 		int i = std::min(delay, len);
 		if (i)
 		{
-			float volume = static_cast<float>(exp(4.606 / 128.0 * static_cast<double>(Options::musicVolume)) / 100.0);
+			float volume = Game::volumeExponent(Options::musicVolume);
 			YM3812UpdateOne(
 						opl[0],
 						(INT16*)stream,
