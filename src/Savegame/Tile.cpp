@@ -401,7 +401,11 @@ int Tile::getFootstepSound(Tile* tileBelow) const
 /**
  * Open a door on this tile.
  * @param part
- * @return a value: 0(normal door), 1(ufo door) or -1 if no door opened or 3 if ufo door(=animated) is still opening 4 if not enough TUs
+ * @return, Value: -1 no door opened
+ *					0 normal door
+ *					1 ufo door
+ *					3 ufo door is still opening (animated)
+ *					4 not enough TUs
  */
 int Tile::openDoor(
 		int part,
@@ -417,8 +421,8 @@ int Tile::openDoor(
 		if (unit
 			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
 										+ unit->getActionTUs(
-															reserve,
-															unit->getMainHandWeapon(false)))
+														reserve,
+														unit->getMainHandWeapon(false)))
 		{
 			return 4;
 		}
@@ -438,7 +442,9 @@ int Tile::openDoor(
 	{
 		if (unit
 			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
-					+ unit->getActionTUs(reserve, unit->getMainHandWeapon(false)))
+										+ unit->getActionTUs(
+														reserve,
+														unit->getMainHandWeapon(false)))
 		{
 			return 4;
 		}

@@ -198,7 +198,8 @@ typedef struct
 static introSoundEffect introSoundTrack[] =
 {
 	{0, 0x200}, // inserting this to keep the code simple
-	{149, 0x11},
+	{149, 0x11}, // searchlight *whoosh*
+	{149, 0x11}, // kL, doubling
 	{173, 0x0C},
 	{183, 0x0E},
 	{205, 0x15},
@@ -250,7 +251,8 @@ static introSoundEffect introSoundTrack[] =
 	{501, 0x16},
 //kL	{512, 0xd},  // feet -- not in original
 //kL	{514, 0xd},  // feet -- not in original
-	{522, 0x0B}, // rifle grab
+//kL	{522, 0x0B}, // rifle grab
+	{521, 0x0B}, // kL
 //kL	{523, 0xd},  // feet -- not in original
 //kL	{525, 0xd},  // feet -- not in original
 	{534, 0x18},

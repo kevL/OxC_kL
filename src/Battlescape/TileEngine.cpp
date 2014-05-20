@@ -3743,7 +3743,7 @@ int TileEngine::blockage(
  * @param unit Unit.
  * @param rClick Whether the player right clicked.
  * @param dir Direction.
- * @return -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
+ * @return, -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
  *			0 normal door opened, make a squeaky sound and you can walk through;
  *			1 ufo door is starting to open, make a whoosh sound, don't walk through;
  *			3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
@@ -3790,6 +3790,8 @@ int TileEngine::unitOpensDoor(
 			if (!tile)
 				continue;
 
+			Position posUnit = unit->getPosition(); // kL
+
 			switch (dir)
 			{
 				case 0: // north
@@ -3832,7 +3834,8 @@ int TileEngine::unitOpensDoor(
 						checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_WESTWALL));	// origin
 				break;
 				case 7: // north-west
-					if (rClick)
+					if (rClick
+						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 2)) // kL
 					{
 						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
 						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_NORTHWALL));	// origin
@@ -3845,7 +3848,7 @@ int TileEngine::unitOpensDoor(
 				break;
 			}
 
-			int part = 0;
+			int wall = 0;
 			for (std::vector<std::pair<Position, int> >::const_iterator
 					i = checkPositions.begin();
 					i != checkPositions.end()
@@ -3864,10 +3867,10 @@ int TileEngine::unitOpensDoor(
 										_save->getBattleGame()->getReservedAction());
 					if (door != -1)
 					{
-						part = i->second;
+						wall = i->second;
 
 						if (door == 1)
-							checkAdjacentDoors(
+							openAdjacentDoors(
 											unit->getPosition()
 												+ Position(x, y, z)
 												+ i->first,
@@ -3879,20 +3882,20 @@ int TileEngine::unitOpensDoor(
 			if (door == 0
 				&& rClick)
 			{
-				if (part == MapData::O_WESTWALL)
-					part = MapData::O_NORTHWALL;
+				if (wall == MapData::O_WESTWALL)
+					wall = MapData::O_NORTHWALL;
 				else
-					part = MapData::O_WESTWALL;
+					wall = MapData::O_WESTWALL;
 
 				TUCost = tile->getTUCost(
-									part,
+									wall,
 									unit->getArmor()->getMovementType());
 			}
 			else if (door == 1
 				|| door == 4)
 			{
 				TUCost = tile->getTUCost(
-									part,
+									wall,
 									unit->getArmor()->getMovementType());
 			}
 		}
@@ -3935,17 +3938,57 @@ int TileEngine::unitOpensDoor(
 }
 
 /**
- * Opens any doors connected to this part at this position,
- * Keeps processing til it hits a non-ufo-door.
+ * kL. Checks for a door connected to this wall at this position
+ * so that units can walk through double doors diagonally.
  * @param pos The starting position
- * @param part The part to open, defines which direction to check.
+ * @param wall The wall to test
+ * @param dir The cardinal direction to check out ( not unit direction )
  */
-void TileEngine::checkAdjacentDoors(
+bool TileEngine::testAdjacentDoor( // kL
 		Position pos,
-		int part)
+		int wall,
+		int dir)
 {
 	Position offset;
-	bool westSide = (part == 1);
+	switch (dir)
+	{
+		case 0: // westwall to north
+		break;
+		case 2: // northwall to east
+			offset = Position(0,-1, 0);
+		break;
+		case 4: // westwall to south
+		break;
+		case 6: // northwall to west
+		break;
+
+		default:
+		break;
+	}
+
+	Tile* tile = _save->getTile(pos + offset);
+	if (tile
+		&& tile->getMapData(wall)
+		&& tile->getMapData(wall)->isUFODoor())
+	{
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * Opens any doors connected to this wall at this position,
+ * Keeps processing till it hits a non-ufo-door.
+ * @param pos The starting position
+ * @param wall The wall to open, defines which direction to check.
+ */
+void TileEngine::openAdjacentDoors(
+		Position pos,
+		int wall)
+{
+	Position offset;
+	bool westSide = (wall == 1);
 
 	for (int
 			i = 1;
@@ -3955,10 +3998,10 @@ void TileEngine::checkAdjacentDoors(
 		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
 		Tile* tile = _save->getTile(pos + offset);
 		if (tile
-			&& tile->getMapData(part)
-			&& tile->getMapData(part)->isUFODoor())
+			&& tile->getMapData(wall)
+			&& tile->getMapData(wall)->isUFODoor())
 		{
-			tile->openDoor(part);
+			tile->openDoor(wall);
 		}
 		else
 			break;
@@ -3972,10 +4015,10 @@ void TileEngine::checkAdjacentDoors(
 		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
 		Tile* tile = _save->getTile(pos + offset);
 		if (tile
-			&& tile->getMapData(part)
-			&& tile->getMapData(part)->isUFODoor())
+			&& tile->getMapData(wall)
+			&& tile->getMapData(wall)->isUFODoor())
 		{
-			tile->openDoor(part);
+			tile->openDoor(wall);
 		}
 		else
 			break;
@@ -3990,8 +4033,7 @@ int TileEngine::closeUfoDoors()
 {
 	int doorsclosed = 0;
 
-	// prepare a list of tiles on fire/smoke & close any ufo doors
-	for (int
+	for (int // prepare a list of tiles on fire/smoke & close any ufo doors
 			i = 0;
 			i < _save->getMapSizeXYZ();
 			++i)

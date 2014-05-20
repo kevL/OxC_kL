@@ -185,10 +185,15 @@ private:
 				BattleUnit* unit,
 				bool rClick = false,
 				int dir = -1);
-		/// Opens any doors this door is connected to.
-		void checkAdjacentDoors(
+		/// kL. Checks for a door connected to this wall at this position.
+		bool TileEngine::testAdjacentDoor( // kL
 				Position pos,
-				int part);
+				int wall,
+				int dir);
+		/// Opens any doors this door is connected to.
+		void openAdjacentDoors(
+				Position pos,
+				int wall);
 		/// Closes ufo doors.
 		int closeUfoDoors();
 
