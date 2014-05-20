@@ -39,7 +39,7 @@ class ImageButton; // kL
 class Surface;
 class TerrorSite;
 class Text;
-//kL class TextButton;
+class TextButton;
 class Timer;
 class Ufo;
 

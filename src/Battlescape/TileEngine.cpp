@@ -3755,6 +3755,7 @@ int TileEngine::unitOpensDoor(
 		bool rClick,
 		int dir)
 {
+	//Log(LOG_INFO) << "unitOpensDoor()";
 	int
 		TUCost = 0,
 		door = -1;
@@ -3798,7 +3799,8 @@ int TileEngine::unitOpensDoor(
 						checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
 				break;
 				case 1: // north east
-					if (rClick)
+					if (rClick
+						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 1)) // kL
 					{
 						checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
 						checkPositions.push_back(std::make_pair(Position(1,-1, 0), MapData::O_WESTWALL));	// one tile north-east
@@ -3810,7 +3812,8 @@ int TileEngine::unitOpensDoor(
 						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
 				break;
 				case 3: // south-east
-					if (rClick)
+					if (rClick
+						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 3)) // kL
 					{
 						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
 						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
@@ -3822,7 +3825,8 @@ int TileEngine::unitOpensDoor(
 						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
 				break;
 				case 5: // south-west
-					if (rClick)
+					if (rClick
+						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 5)) // kL
 					{
 						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
 						checkPositions.push_back(std::make_pair(Position( 0, 1, 0), MapData::O_WESTWALL));	// one tile south
@@ -3835,8 +3839,9 @@ int TileEngine::unitOpensDoor(
 				break;
 				case 7: // north-west
 					if (rClick
-						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 2)) // kL
+						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 7)) // kL
 					{
+						//Log(LOG_INFO) << ". north-west";
 						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
 						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_NORTHWALL));	// origin
 						checkPositions.push_back(std::make_pair(Position( 0,-1, 0), MapData::O_WESTWALL));	// one tile north
@@ -3856,7 +3861,7 @@ int TileEngine::unitOpensDoor(
 					++i)
 			{
 				tile = _save->getTile(
-									unit->getPosition()
+									posUnit
 										+ Position(x, y, z)
 										+ i->first);
 				if (tile)
@@ -3871,7 +3876,7 @@ int TileEngine::unitOpensDoor(
 
 						if (door == 1)
 							openAdjacentDoors(
-											unit->getPosition()
+											posUnit
 												+ Position(x, y, z)
 												+ i->first,
 											i->second);
@@ -3939,10 +3944,10 @@ int TileEngine::unitOpensDoor(
 
 /**
  * kL. Checks for a door connected to this wall at this position
- * so that units can walk through double doors diagonally.
+ * so that units can open double doors diagonally.
  * @param pos The starting position
  * @param wall The wall to test
- * @param dir The cardinal direction to check out ( not unit direction )
+ * @param dir The direction to check out
  */
 bool TileEngine::testAdjacentDoor( // kL
 		Position pos,
@@ -3952,14 +3957,18 @@ bool TileEngine::testAdjacentDoor( // kL
 	Position offset;
 	switch (dir)
 	{
-		case 0: // westwall to north
+		// only Northwall-doors are handled at present
+		case 1: // northwall in tile to east
+			offset = Position(1, 0, 0);
 		break;
-		case 2: // northwall to east
-			offset = Position(0,-1, 0);
+		case 3: // northwall in tile to south-east
+			offset = Position(1, 1, 0);
 		break;
-		case 4: // westwall to south
+		case 5: // northwall in tile to south-west
+			offset = Position(-1, 1, 0);
 		break;
-		case 6: // northwall to west
+		case 7: // northwall in tile to west
+			offset = Position(-1, 0, 0);
 		break;
 
 		default:
@@ -4027,7 +4036,7 @@ void TileEngine::openAdjacentDoors(
 
 /**
  * Closes ufo doors.
- * @return Whether doors are closed.
+ * @return, Whether doors are closed.
  */
 int TileEngine::closeUfoDoors()
 {
@@ -4328,7 +4337,6 @@ int TileEngine::calculateParabola(
 				const Position delta)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateParabola()";
-
 	double
 		ro = sqrt(static_cast<double>(
 				  (target.x - origin.x) * (target.x - origin.x)
@@ -4416,7 +4424,7 @@ int TileEngine::calculateParabola(
  * @param targetVoxel The target point of the action.
  * @param curve The curvature of the throw.
  * @param voxelType The type of voxel at which this parabola terminates.
- * @return Validity of action.
+ * @return, Validity of action.
  */
 bool TileEngine::validateThrow(
 						BattleAction& action,
@@ -4427,7 +4435,7 @@ bool TileEngine::validateThrow(
 {
 	//Log(LOG_INFO) << "TileEngine::validateThrow()";
 //kL	double arc = 0.5;
-	double arc = 1.3; // kL
+	double arc = 1.2; // kL
 
 	if (action.type == BA_THROW)
 	{

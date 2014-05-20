@@ -168,7 +168,8 @@ OptionsBattlescapeState::OptionsBattlescapeState(
 	_txtXcomSpeed->setText(tr("STR_PLAYER_MOVEMENT_SPEED"));
 
 	_slrXcomSpeed->setColor(Palette::blockOffset(15)-1);
-	_slrXcomSpeed->setRange(40, 1);
+//kL	_slrXcomSpeed->setRange(40, 1);
+	_slrXcomSpeed->setRange(80, 1); // kL
 	_slrXcomSpeed->setValue(Options::battleXcomSpeed);
 	_slrXcomSpeed->onChange((ActionHandler)& OptionsBattlescapeState::slrXcomSpeedChange);
 	_slrXcomSpeed->setTooltip("STR_PLAYER_MOVEMENT_SPEED_DESC");

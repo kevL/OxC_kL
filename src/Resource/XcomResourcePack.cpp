@@ -145,7 +145,8 @@ XcomResourcePack::XcomResourcePack( // kL
 							128);
 	}
 
-	{ // Correct Battlescape palette
+	{
+		// Correct Battlescape palette
 		std::string s1 = "GEODATA/PALETTES.DAT";
 		std::string s2 = "PAL_BATTLESCAPE";
 		_palettes[s2] = new Palette();
@@ -202,7 +203,8 @@ XcomResourcePack::XcomResourcePack( // kL
 
 
 	/* GRAPHICS */
-	{ // Load surfaces
+	{
+		// Load surfaces
 		std::ostringstream s;
 		s << "GEODATA/" << "INTERWIN.DAT";
 		_surfaces["INTERWIN.DAT"] = new Surface(160, 556);
@@ -226,25 +228,36 @@ XcomResourcePack::XcomResourcePack( // kL
 		_surfaces[*i]->loadScr(path);
 	}
 
-	// bigger geoscape background
-	int newWidth = 320 - 64, newHeight = 200;
-	Surface *newGeo = new Surface(newWidth*3, newHeight*3);
-	Surface *oldGeo = _surfaces["GEOBORD.SCR"];
-	for (int x = 0; x < newWidth; ++x)
+	// bigger Geoscape background
+	int
+		newWidth = 320 - 64,
+		newHeight = 200;
+	Surface* newGeo = new Surface(
+								newWidth * 3,
+								newHeight * 3);
+	Surface* oldGeo = _surfaces["GEOBORD.SCR"];
+
+	for (int
+			x = 0;
+			x < newWidth;
+			++x)
 	{
-		for (int y = 0; y < newHeight; ++y)
+		for (int
+				y = 0;
+				y < newHeight;
+				++y)
 		{
-			newGeo->setPixel(newWidth+x, newHeight+y, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth-x-1, newHeight+y, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth*3-x-1, newHeight+y, oldGeo->getPixel(x, y));
-			
-			newGeo->setPixel(newWidth+x, newHeight-y-1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth-x-1, newHeight-y-1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth*3-x-1, newHeight-y-1, oldGeo->getPixel(x, y));
-			
-			newGeo->setPixel(newWidth+x, newHeight*3-y-1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth-x-1, newHeight*3-y-1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth*3-x-1, newHeight*3-y-1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth + x, newHeight + y, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth - x - 1, newHeight + y, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth * 3 - x - 1, newHeight + y, oldGeo->getPixel(x, y));
+
+			newGeo->setPixel(newWidth + x, newHeight - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth * 3 - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
+
+			newGeo->setPixel(newWidth + x, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixel(newWidth * 3 - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
 		}
 	}
 	_surfaces["ALTGEOBORD.SCR"] = newGeo;

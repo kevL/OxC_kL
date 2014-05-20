@@ -400,7 +400,7 @@ int Tile::getFootstepSound(Tile* tileBelow) const
 
 /**
  * Open a door on this tile.
- * @param part
+ * @param wall A tile part
  * @return, Value: -1 no door opened
  *					0 normal door
  *					1 ufo door
@@ -408,18 +408,17 @@ int Tile::getFootstepSound(Tile* tileBelow) const
  *					4 not enough TUs
  */
 int Tile::openDoor(
-		int part,
+		int wall,
 		BattleUnit* unit,
 		BattleActionType reserve)
 {
-	if (!_objects[part])
+	if (!_objects[wall])
 		return -1;
 
-
-	if (_objects[part]->isDoor())
+	if (_objects[wall]->isDoor())
 	{
 		if (unit
-			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
+			&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
 										+ unit->getActionTUs(
 														reserve,
 														unit->getMainHandWeapon(false)))
@@ -428,20 +427,20 @@ int Tile::openDoor(
 		}
 
 		setMapData(
-				_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
-				_objects[part]->getAltMCD(),
-				_mapDataSetID[part],
-				_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
-		setMapData(0,-1,-1, part);
+				_objects[wall]->getDataset()->getObjects()->at(_objects[wall]->getAltMCD()),
+				_objects[wall]->getAltMCD(),
+				_mapDataSetID[wall],
+				_objects[wall]->getDataset()->getObjects()->at(_objects[wall]->getAltMCD())->getObjectType());
+		setMapData(0,-1,-1, wall);
 
 		return 0;
 	}
 
-	if (_objects[part]->isUFODoor()
-		&& _currFrame[part] == 0) // ufo door part 0 - door is closed
+	if (_objects[wall]->isUFODoor()
+		&& _currFrame[wall] == 0) // ufo door wall 0 - door is closed
 	{
 		if (unit
-			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
+			&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
 										+ unit->getActionTUs(
 														reserve,
 														unit->getMainHandWeapon(false)))
@@ -449,13 +448,13 @@ int Tile::openDoor(
 			return 4;
 		}
 
-		_currFrame[part] = 1; // start opening door
+		_currFrame[wall] = 1; // start opening door
 
 		return 1;
 	}
 
-	if (_objects[part]->isUFODoor()
-		&& _currFrame[part] != 7) // ufo door != part 7 - door is still opening
+	if (_objects[wall]->isUFODoor()
+		&& _currFrame[wall] != 7) // ufo door != wall 7 -> door is still opening
 	{
 		return 3;
 	}

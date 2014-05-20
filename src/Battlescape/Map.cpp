@@ -126,7 +126,7 @@ Map::Map(
 		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
-//kL	_smoothCamera	= Options::battleSmoothCamera;
+//kL	_smoothCamera = Options::battleSmoothCamera;
 
 	_previewSetting	= Options::battleNewPreviewPath;
 	if (Options::traceAI) // turn everything on because we want to see the markers.
@@ -1421,7 +1421,7 @@ void Map::drawTerrain(Surface* surface)
 
 									BattleAction* action = _save->getBattleGame()->getCurrentAction();
 
-	//kL								int accuracy = action->actor->getFiringAccuracy(action->type, action->weapon);
+//kL								int accuracy = action->actor->getFiringAccuracy(action->type, action->weapon);
 									int accuracy = static_cast<int>( // _save->getSelectedUnit()->
 															action->actor->getFiringAccuracy(
 																						action->type,
@@ -1456,26 +1456,26 @@ void Map::drawTerrain(Surface* surface)
 										break;
 									}
 
-									Uint8 color = 51; //Palette::blockOffset(3)+3; // green
+									Uint8 color = Palette::blockOffset(3)+3; // green
 
 									if (distance > upperLimit)
 									{
 										accuracy -= (distance - upperLimit) * weapon->getDropoff();
-										color = 18; //Palette::blockOffset(1)+2; // orange
+										color = Palette::blockOffset(1)+2; // orange
 									}
 									else if (distance < lowerLimit)
 									{
 										accuracy -= (lowerLimit - distance) * weapon->getDropoff();
-										color = 18; //Palette::blockOffset(1)+2; // orange
+										color = Palette::blockOffset(1)+2; // orange
 									}
 
 									if (accuracy < 1 // zero accuracy or out of range: set it red.
 										|| distance > weapon->getMaxRange())
 									{
 										accuracy = 0;
-										color = 35; //Palette::blockOffset(2)+3; // red
+										color = Palette::blockOffset(2)+3; // red
 									}
-	//								}
+//									}
 
 									//Log(LOG_INFO) << "Map::drawTerrain(), accuracy = " << accuracy;
 									_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
@@ -1510,9 +1510,8 @@ void Map::drawTerrain(Surface* surface)
 									//Log(LOG_INFO) << ". originVoxel = " << originVoxel;
 									//Log(LOG_INFO) << ". targetVoxel = " << targetVoxel;
 
-
-									int accuracy = 0;
-									Uint8 color = 35; //Palette::blockOffset(2)+3; // red
+									unsigned accuracy = 0;
+									Uint8 color = Palette::blockOffset(2)+3; // red
 
 									bool canThrow = _save->getTileEngine()->validateThrow(
 																						*action,
@@ -1521,11 +1520,11 @@ void Map::drawTerrain(Surface* surface)
 									//Log(LOG_INFO) << ". canThrow = " << canThrow;
 									if (canThrow)
 									{
-										int accuracy = static_cast<int>(_save->getSelectedUnit()->getThrowingAccuracy() * 100.0);
-										Uint8 color = 51; //Palette::blockOffset(3)+3; // green
+										accuracy = static_cast<unsigned>(_save->getSelectedUnit()->getThrowingAccuracy() * 100.0);
+										color = Palette::blockOffset(3)+3; // green
 									}
 
-									_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
+									_txtAccuracy->setValue(accuracy);
 									_txtAccuracy->setColor(color);
 									_txtAccuracy->draw();
 									_txtAccuracy->blitNShade(

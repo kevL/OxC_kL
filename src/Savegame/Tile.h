@@ -167,20 +167,20 @@ protected:
 
 		/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
 		int openDoor(
-				int part,
+				int wall,
 				BattleUnit* Unit = 0,
 				BattleActionType reserve = BA_NONE);
 		/**
 		 * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
 		 * This function assumes that there never are 2 doors on 1 tile or a door and another wall on 1 tile.
-		 * @param part
+		 * @param wall
 		 * @return bool
 		 */
-		bool isUfoDoorOpen(int part) const
+		bool isUfoDoorOpen(int wall) const
 		{
-			return _objects[part]
-					&& _objects[part]->isUFODoor()
-					&& _currFrame[part] != 0;
+			return _objects[wall]
+					&& _objects[wall]->isUFODoor()
+					&& _currFrame[wall] != 0;
 		}
 		/// Close ufo door.
 		int closeUfoDoor();
@@ -228,7 +228,7 @@ protected:
 
 		/**
 		 * Get the (alive) unit on this tile.
-		 * @return BattleUnit.
+		 * @return, BattleUnit.
 		 */
 		BattleUnit* getUnit() const
 		{
