@@ -119,7 +119,8 @@ private:
 
 
 	public:
-		static const int ICON_HEIGHT = 56;
+		static const int ICON_WIDTH		= 320;
+		static const int ICON_HEIGHT	= 56;
 
 		/// Creates a new map at the specified position and size.
 		Map(

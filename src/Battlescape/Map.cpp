@@ -710,8 +710,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 
-					// special handling for a moving large unit.
-					if (mapPosition.y > 0)
+					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
 						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
 						BattleUnit* bu = tileNorth->getUnit();
@@ -738,7 +737,6 @@ void Map::drawTerrain(Surface* surface)
 						if (bu
 							&& bu->getVisible()
 							&& bu->getStatus() == STATUS_WALKING
-							&& bu->getArmor()->getSize() != 1
 							&& tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
 						{
 							Position tileOffset = Position(16,-8, 0);
@@ -1985,10 +1983,6 @@ void Map::calculateWalkingOffset(
 		else
 			midphase = 1;
 	}
-	else if (dir == 2)
-		midphase = 1;
-	else if (dir == 6 || dir == 0)
-		midphase = endphase;
 
 	if (unit->getVerticalDirection())
 	{

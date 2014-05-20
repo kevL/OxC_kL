@@ -697,10 +697,12 @@ bool Camera::isOnScreen(const Position& mapPos) const
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
 
-/*kL	return screenPos.x >= -40
+/*kL	return screenPos.x >= -32
 			&& screenPos.x <= _screenWidth + 24
 			&& screenPos.y >= -32
-			&& screenPos.y <= _screenHeight - 48; */ // kL:
+			&& ((screenPos.y <= _screenHeight + 8
+				&& (screenPos.x <= _screenWidth / 2 - Map::ICON_WIDTH / 2
+					|| screenPos.x >= _screenWidth / 2 + Map::ICON_WIDTH / 2 - 32)) */ // kL:
 	return screenPos.x > 0
 			&& screenPos.x < _screenWidth
 			&& screenPos.y > 0

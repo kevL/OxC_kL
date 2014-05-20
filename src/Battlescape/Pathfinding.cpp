@@ -826,8 +826,10 @@ int Pathfinding::getTUCost(
 					cost = 4;
 				}
 
-				int wallcost = 0;	// walking through rubble walls,
-									// but don't charge for walking diagonally past doors (which is impossible), they're a special case unto themselves.
+				int wallcost = 0;	// walking through rubble walls --
+									// but don't charge for walking diagonally through doors (which is impossible);
+									// they're a special case unto themselves, if we can walk past them diagonally,
+									// it means we can go around since there is no wall blocking us.
 				int sides = 0;		// how many walls we cross when moving diagonally
 				int wallTU = 0;		// used to check if there's a wall that costs +TU.
 

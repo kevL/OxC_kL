@@ -83,7 +83,9 @@ private:
 		* _btnDetail,
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
-	Surface* _bg;
+	Surface
+		* _sidebar,
+		* _bg;
 	Text
 		* _txtDebug,
 		* _txtFunds,
@@ -96,8 +98,11 @@ private:
 		* _txtDay,
 		* _txtMonth,
 		* _txtYear;
+	TextButton
+		* _btnTop,
+		* _btnBottom;
 	Timer
-		* _timer,
+		* _gameTimer,
 		* _zoomInEffectTimer,
 		* _zoomOutEffectTimer,
 		* _dogfightStartTimer;

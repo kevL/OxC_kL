@@ -642,10 +642,6 @@ void BattleUnit::keepWalking(
 			else
 				middle = 1;
 		}
-		else if (_direction == 2)
-			middle = 1;
-		else if (_direction == 6 || _direction == 0)
-			middle = end;
 	}
 
 	if (!cache) // ie. not onScreen

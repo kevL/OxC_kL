@@ -134,7 +134,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	int screenWidth		= Options::baseXResolution;
 	int screenHeight	= Options::baseYResolution;
-	int iconsWidth		= 320;
+	int iconsWidth		= Map::ICON_WIDTH;
 	int iconsHeight		= Map::ICON_HEIGHT;
 
 //kL	_mouseOverIcons = false; // cTor.

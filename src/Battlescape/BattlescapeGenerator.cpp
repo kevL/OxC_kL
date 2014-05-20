@@ -2859,6 +2859,22 @@ void BattlescapeGenerator::explodePowerSources()
 										21);
 		}
 	}
+
+	Tile* tile = _save->getTileEngine()->checkForTerrainExplosions();
+	while (tile)
+	{
+		Position pos = Position(
+							tile->getPosition().x * 16,
+							tile->getPosition().y * 16,
+							tile->getPosition().z * 24);
+		pos += Position(8, 8, 0);
+		_save->getTileEngine()->explode(
+									pos,
+									tile->getExplosive(),
+									DT_HE,
+									tile->getExplosive() / 10);
+		tile = _save->getTileEngine()->checkForTerrainExplosions();
+	}
 }
 
 /**

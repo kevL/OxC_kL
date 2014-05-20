@@ -158,12 +158,19 @@ GeoscapeState::GeoscapeState(Game* game)
 		screenWidth		= Options::baseXGeoscape,
 		screenHeight	= Options::baseYGeoscape;
 
-	_bg		= new Surface(
-						320,
+	Surface* hd	= _game->getResourcePack()->getSurface("ALTGEOBORD.SCR");
+	_bg			= new Surface(
+						hd->getWidth(),
+						hd->getHeight(),
+						0,
+						0);
+	_sidebar	= new Surface(
+						64,
 						200,
-						screenWidth - 320,
+						screenWidth - 64,
 						screenHeight / 2 - 100);
-	_globe	= new Globe(
+
+	_globe		= new Globe(
 						_game,
 						(screenWidth - 64) / 2,
 						screenHeight / 2,
@@ -172,7 +179,10 @@ GeoscapeState::GeoscapeState(Game* game)
 						0,
 						0);
 
-	// the old globe-view buttons are now become the Detail toggle.
+	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
+	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
+
+	// kL: the old globe-view buttons are now become the Detail toggle.
 	_btnDetail = new ImageButton(63, 46, screenWidth - 63, screenHeight / 2 + 54);
 
 /*kL	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
@@ -212,6 +222,18 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomIn		= new InteractiveSurface(23, 23, screenWidth-25, screenHeight/2+56);
 	_btnZoomOut		= new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82); */
 
+	int height	= (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
+	_btnTop		= new TextButton(
+							63,
+							height,
+							screenWidth - 63,
+							_sidebar->getY() - height - 1);
+	_btnBottom	= new TextButton(
+							63,
+							height,
+							screenWidth - 63,
+							_sidebar->getY() + _sidebar->getHeight() + 1);
+
 /*kL	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
 	_txtHourSep		= new Text(4, 17, screenWidth - 41, screenHeight / 2 - 26);
 	_txtMin			= new Text(20, 17, screenWidth - 37, screenHeight / 2 - 26);
@@ -246,7 +268,7 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	_timeSpeed = _btn5Secs;
 
-	_timer				= new Timer(Options::geoClockSpeed);
+	_gameTimer			= new Timer(Options::geoClockSpeed);
 	_zoomInEffectTimer	= new Timer(100);
 	_zoomOutEffectTimer	= new Timer(100);
 	_dogfightStartTimer	= new Timer(50);
@@ -259,6 +281,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 
 	add(_bg);
+	add(_sidebar);
 	add(_globe);
 
 	add(_btnDetail);
@@ -284,6 +307,9 @@ GeoscapeState::GeoscapeState(Game* game)
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
+	add(_btnTop);
+	add(_btnBottom);
+
 	if (Options::showFundsOnGeoscape)
 		add(_txtFunds);
 
@@ -299,7 +325,11 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	add(_txtDebug);
 
-	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);
+	Surface* geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
+	geobord->setX(_sidebar->getX() - geobord->getWidth() + _sidebar->getWidth());
+	geobord->setY(_sidebar->getY());
+	_sidebar->copy(geobord);
+	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg);
 
 /*kL	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnIntercept->setColor(Palette::blockOffset(15)+6);
@@ -516,6 +546,9 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomOut->onMouseClick((ActionHandler)& GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut); */
 
+	_btnTop->setColor(Palette::blockOffset(15)+6);
+	_btnBottom->setColor(Palette::blockOffset(15)+6);
+
 	if (Options::showFundsOnGeoscape)
 	{
 		_txtFunds->setSmall();
@@ -573,8 +606,8 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	_txtDebug->setColor(Palette::blockOffset(15)+4);
 
-	_timer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
-	_timer->start();
+	_gameTimer->onTimer((StateHandler)& GeoscapeState::timeAdvance);
+	_gameTimer->start();
 
 	_zoomInEffectTimer->onTimer((StateHandler)& GeoscapeState::zoomInEffect);
 	_zoomOutEffectTimer->onTimer((StateHandler)& GeoscapeState::zoomOutEffect);
@@ -588,7 +621,7 @@ GeoscapeState::GeoscapeState(Game* game)
  */
 GeoscapeState::~GeoscapeState()
 {
-	delete _timer;
+	delete _gameTimer;
 	delete _zoomInEffectTimer;
 	delete _zoomOutEffectTimer;
 	delete _dogfightStartTimer;
@@ -659,17 +692,17 @@ void GeoscapeState::handle(Action* action)
 		{
 			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 			{
-				_game->pushState(new SaveGameState(
-												_game,
-												OPT_GEOSCAPE,
-												SAVE_QUICK));
+				popup(new SaveGameState(
+									_game,
+									OPT_GEOSCAPE,
+									SAVE_QUICK));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 			{
-				_game->pushState(new LoadGameState(
-												_game,
-												OPT_GEOSCAPE,
-												SAVE_QUICK));
+				popup(new LoadGameState(
+									_game,
+									OPT_GEOSCAPE,
+									SAVE_QUICK));
 			}
 		}
 	}
@@ -761,7 +794,7 @@ void GeoscapeState::think()
 		&& (!_zoomOutEffectTimer->isRunning()
 			|| _zoomOutEffectDone))
 	{
-		_timer->think(this, 0); // Handle timers
+		_gameTimer->think(this, 0); // Handle timers
 	}
 	else
 	{
@@ -2078,18 +2111,16 @@ void GeoscapeState::time1Hour()
 		if (Options::storageLimitsEnforced
 			&& (*i)->storesOverfull())
 		{
-			_game->pushState(new SellState(
-										_game,
-										*i));
-
-			setPalette("PAL_BASESCAPE", 1);
-			_game->pushState(new ErrorMessageState(
-												_game,
-												tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(),
-												_palette,
-												Palette::blockOffset(15)+1,
-												"BACK13.SCR",
-												6));
+			popup(new ErrorMessageState(
+									_game,
+									tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(),
+									_palette,
+									Palette::blockOffset(15)+1,
+									"BACK13.SCR",
+									6));
+			popup(new SellState(
+							_game,
+							*i));
 		}
 	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Hour() EXIT";
@@ -2479,15 +2510,15 @@ void GeoscapeState::time1Day()
 //kL	if (day == 10 || day == 20)
 //	{
 	if (_game->getSavedGame()->isIronman())
-			_game->pushState(new SaveGameState(
-											_game,
-											OPT_GEOSCAPE,
-											SAVE_IRONMAN));
+		popup(new SaveGameState(
+							_game,
+							OPT_GEOSCAPE,
+							SAVE_IRONMAN));
 	else if (Options::autosave)
-		_game->pushState(new SaveGameState(
-										_game,
-										OPT_GEOSCAPE,
-										SAVE_AUTO_GEOSCAPE));
+		popup(new SaveGameState(
+							_game,
+							OPT_GEOSCAPE,
+							SAVE_AUTO_GEOSCAPE));
 //	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Day() EXIT";
 }
@@ -2973,7 +3004,7 @@ void GeoscapeState::handleDogfights()
 	if (_dogfights.size() == _minimizedDogfights)
 	{
 		_pause = false;
-		_timer->think(this, 0);
+		_gameTimer->think(this, 0);
 	}
 
 	_minimizedDogfights = 0; // handle dogfights logic.
@@ -3287,6 +3318,15 @@ void GeoscapeState::resize(
 			(*i)->setY((*i)->getY() + dY / 2);
 		}
 	}
+
+	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
+	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
+
+	int height = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2 + 10;
+	_btnTop->setHeight(height);
+	_btnTop->setY(_sidebar->getY() - height - 1);
+	_btnBottom->setHeight(height);
+	_btnBottom->setY(_sidebar->getY() + _sidebar->getHeight() + 1);
 }
 
 }
