@@ -489,20 +489,20 @@ void Game::setVolume(
 	{
 		if (sound > -1)
 		{
-			sound = volumeExponent(sound) * static_cast<double>(SDL_MIX_MAXVOLUME);
+			sound = static_cast<int>(volumeExponent(sound) * static_cast<float>(SDL_MIX_MAXVOLUME));
 			Mix_Volume(-1, sound); // kL_note: this, supposedly, sets volume on *all channels*
 		}
 
 		if (music > -1)
 		{
-			music = volumeExponent(music) * static_cast<double>(SDL_MIX_MAXVOLUME);
+			music = static_cast<int>(volumeExponent(music) * static_cast<float>(SDL_MIX_MAXVOLUME));
 			Mix_VolumeMusic(music);
 //			func_set_music_volume(music);
 		}
 
 		if (ui > -1)
 		{
-			ui = volumeExponent(ui) * static_cast<double>(SDL_MIX_MAXVOLUME);
+			ui = static_cast<int>(volumeExponent(ui) * static_cast<float>(SDL_MIX_MAXVOLUME));
 			Mix_Volume(0, ui); // kL_note: then this sets channel-0 to ui-Volume ...
 			Mix_Volume(1, ui); // and this sets channel-1 to ui-Volume!
 		}

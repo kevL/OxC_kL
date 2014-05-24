@@ -412,14 +412,24 @@ int Tile::openDoor(
 		BattleUnit* unit,
 		BattleActionType reserve)
 {
+	// kL_note: Am parsing this tighter with if/else's
+	// May lead to ambiguity, esp. if isDoor() & isUFODoor() are not exclusive;
+	// or if setMapData() is doing something ...... -> to UFO doors.
+
 	if (!_objects[wall])
 		return -1;
-
-	if (_objects[wall]->isDoor())
+	else if (_objects[wall]->isDoor())
 	{
+		if (_unit
+			&& _unit != unit
+			&& _unit->getPosition() != getPosition())
+		{
+			return -1;
+		}
+
 		if (unit
 			&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
-										+ unit->getActionTUs(
+									+ unit->getActionTUs(
 														reserve,
 														unit->getMainHandWeapon(false)))
 		{
@@ -435,28 +445,27 @@ int Tile::openDoor(
 
 		return 0;
 	}
-
-	if (_objects[wall]->isUFODoor()
-		&& _currFrame[wall] == 0) // ufo door wall 0 - door is closed
+	else if (_objects[wall]->isUFODoor())
 	{
-		if (unit
-			&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
-										+ unit->getActionTUs(
-														reserve,
-														unit->getMainHandWeapon(false)))
+		if (_currFrame[wall] == 0) // ufo door wall 0 - door is closed
 		{
-			return 4;
+			if (unit
+				&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
+										+ unit->getActionTUs(
+															reserve,
+															unit->getMainHandWeapon(false)))
+			{
+				return 4;
+			}
+
+			_currFrame[wall] = 1; // start opening door
+
+			return 1;
 		}
-
-		_currFrame[wall] = 1; // start opening door
-
-		return 1;
-	}
-
-	if (_objects[wall]->isUFODoor()
-		&& _currFrame[wall] != 7) // ufo door != wall 7 -> door is still opening
-	{
-		return 3;
+		else if (_currFrame[wall] != 7) // ufo door != wall 7 -> door is still opening
+		{
+			return 3;
+		}
 	}
 
 	return -1;

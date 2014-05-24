@@ -69,8 +69,8 @@ void Cursor::handle(Action *action)
 {
 	if (action->getDetails()->type == SDL_MOUSEMOTION)
 	{
-		setX(static_cast<int>(floor((action->getDetails()->motion.x - action->getLeftBlackBand()) / action->getXScale())));
-		setY(static_cast<int>(floor((action->getDetails()->motion.y - action->getTopBlackBand()) / action->getYScale())));
+		setX(static_cast<int>(floor(static_cast<double>(static_cast<int>(action->getDetails()->motion.x) - action->getLeftBlackBand()) / action->getXScale())));
+		setY(static_cast<int>(floor(static_cast<double>(static_cast<int>(action->getDetails()->motion.y) - action->getTopBlackBand()) / action->getYScale())));
 	}
 }
 
@@ -135,7 +135,7 @@ void Cursor::draw()
 		color++;
 	}
 
-	this->setPixel(4, 8, --color);
+	this->setPixelColor(4, 8, --color);
 	unlock();
 }
 

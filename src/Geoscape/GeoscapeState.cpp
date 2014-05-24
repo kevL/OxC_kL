@@ -150,7 +150,7 @@ GeoscapeState::GeoscapeState(Game* game)
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
-		_zoomInter(0),	// kL
+		_zoomIntercept(0),	// kL
 		_interLon(0.0),	// kL
 		_interLat(0.0)	// kL
 {
@@ -158,34 +158,37 @@ GeoscapeState::GeoscapeState(Game* game)
 		screenWidth		= Options::baseXGeoscape,
 		screenHeight	= Options::baseYGeoscape;
 
+/*	_bg		= new Surface(
+						320,
+						200,
+						screenWidth - 320,
+						screenHeight / 2 - 100); */
 	Surface* hd	= _game->getResourcePack()->getSurface("ALTGEOBORD.SCR");
 	_bg			= new Surface(
 						hd->getWidth(),
 						hd->getHeight(),
 						0,
 						0);
-	_sidebar	= new Surface(
+/*	_sidebar	= new Surface(
 						64,
 						200,
 						screenWidth - 64,
-						screenHeight / 2 - 100);
+						screenHeight / 2 - 100); */
 
 	_globe		= new Globe(
-						_game,
-						(screenWidth - 64) / 2,
-						screenHeight / 2,
-						screenWidth - 64,
-						screenHeight,
-						0,
-						0);
+						_game,					// GLOBE:
+						(screenWidth - 64) / 2,	// center_x	= 160 pixels
+						screenHeight / 2,		// center_y	= 120
+						screenWidth - 64,		// x_width	= 320
+						screenHeight,			// y_height	= 120
+						0,						// start_x
+						0);						// start_y
+																// BACKGROUND
+	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);		// (160 - 768) / 2	= -304	= x
+	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);	// (120 - 600) / 2	= -240	= y
 
-	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
-	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
-
-	// kL: the old globe-view buttons are now become the Detail toggle.
-	_btnDetail = new ImageButton(63, 46, screenWidth - 63, screenHeight / 2 + 54);
-
-/*kL	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
+/*kL
+	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
 	_btnBases		= new TextButton(63, 11, screenWidth-63, screenHeight/2-88);
 	_btnGraphs		= new TextButton(63, 11, screenWidth-63, screenHeight/2-76);
 	_btnUfopaedia	= new TextButton(63, 11, screenWidth-63, screenHeight/2-64);
@@ -213,6 +216,10 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btn30Mins		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 26);
 	_btn1Hour		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 40);
 	_btn1Day		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 40);
+
+	// The old rotate buttons are now become the Detail toggle.
+	_btnDetail		= new ImageButton(63, 46, screenWidth - 63, screenHeight / 2 + 54);
+
 	// kL_end.
 
 /*kL	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
@@ -222,7 +229,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomIn		= new InteractiveSurface(23, 23, screenWidth-25, screenHeight/2+56);
 	_btnZoomOut		= new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82); */
 
-	int height	= (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
+/*	int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
 	_btnTop		= new TextButton(
 							63,
 							height,
@@ -232,13 +239,15 @@ GeoscapeState::GeoscapeState(Game* game)
 							63,
 							height,
 							screenWidth - 63,
-							_sidebar->getY() + _sidebar->getHeight() + 1);
+							_sidebar->getY() + _sidebar->getHeight() + 1); */
 
 /*kL	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
 	_txtHourSep		= new Text(4, 17, screenWidth - 41, screenHeight / 2 - 26);
 	_txtMin			= new Text(20, 17, screenWidth - 37, screenHeight / 2 - 26);
 	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
 	_txtSec			= new Text(11, 8, screenWidth - 13, screenHeight / 2 - 20); */
+
+	_srfTime		= new Surface(63, 39, screenWidth - 63, screenHeight / 2 - 28);
 
 	_txtHour		= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
 	_txtHourSep		= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
@@ -265,7 +274,6 @@ GeoscapeState::GeoscapeState(Game* game)
 //kL		_txtSec->		setX(_txtSec->		getX() - 10);
 	}
 
-
 	_timeSpeed = _btn5Secs;
 
 	_gameTimer			= new Timer(Options::geoClockSpeed);
@@ -281,7 +289,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 
 	add(_bg);
-	add(_sidebar);
+//	add(_sidebar);
 	add(_globe);
 
 	add(_btnDetail);
@@ -307,8 +315,10 @@ GeoscapeState::GeoscapeState(Game* game)
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-	add(_btnTop);
-	add(_btnBottom);
+//	add(_btnTop);
+//	add(_btnBottom);
+
+	add(_srfTime); // kL
 
 	if (Options::showFundsOnGeoscape)
 		add(_txtFunds);
@@ -325,10 +335,11 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	add(_txtDebug);
 
-	Surface* geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
+//kL	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg); // kL
+/*	Surface* geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
 	geobord->setX(_sidebar->getX() - geobord->getWidth() + _sidebar->getWidth());
 	geobord->setY(_sidebar->getY());
-	_sidebar->copy(geobord);
+	_sidebar->copy(geobord); */
 	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg);
 
 /*kL	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
@@ -421,7 +432,100 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btn1Day->setGroup(&_timeSpeed);
 	_btn1Day->onKeyboardPress((ActionHandler)& GeoscapeState::btnTimerClick, Options::keyGeoSpeed6); */
 
-	_btnDetail->copy(_bg);
+	// kL_begin: GeoscapeState() revert to ImageButtons.
+	Surface* geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
+	geobord->setX(screenWidth - geobord->getWidth());
+	geobord->setY((screenHeight - geobord->getHeight()) / 2);
+
+	_btnIntercept->copy(geobord);
+	_btnIntercept->setColor(Palette::blockOffset(15)+5);
+	_btnIntercept->onMouseClick((ActionHandler)& GeoscapeState::btnInterceptClick);
+	_btnIntercept->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnInterceptClick,
+					Options::keyGeoIntercept);
+
+	_btnBases->copy(geobord);
+	_btnBases->setColor(Palette::blockOffset(15)+5);
+	_btnBases->onMouseClick((ActionHandler)& GeoscapeState::btnBasesClick);
+	_btnBases->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnBasesClick,
+					Options::keyGeoBases);
+
+	_btnGraphs->copy(geobord);
+	_btnGraphs->setColor(Palette::blockOffset(15)+5);
+	_btnGraphs->onMouseClick((ActionHandler)& GeoscapeState::btnGraphsClick);
+	_btnGraphs->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnGraphsClick,
+					Options::keyGeoGraphs);
+
+	_btnUfopaedia->copy(geobord);
+	_btnUfopaedia->setColor(Palette::blockOffset(15)+5);
+	_btnUfopaedia->onMouseClick((ActionHandler)& GeoscapeState::btnUfopaediaClick);
+	_btnUfopaedia->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnUfopaediaClick,
+					Options::keyGeoUfopedia);
+
+	_btnOptions->copy(geobord);
+	_btnOptions->setColor(Palette::blockOffset(15)+5);
+	_btnOptions->onMouseClick((ActionHandler)& GeoscapeState::btnOptionsClick);
+	_btnOptions->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnOptionsClick,
+					Options::keyGeoOptions);
+
+	_btnFunding->copy(geobord);
+	_btnFunding->setColor(Palette::blockOffset(15)+5);
+	_btnFunding->onMouseClick((ActionHandler)& GeoscapeState::btnFundingClick);
+	_btnFunding->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnFundingClick,
+					Options::keyGeoFunding);
+
+
+	_srfTime->copy(geobord);
+
+	_btn5Secs->copy(geobord);
+	_btn5Secs->setColor(Palette::blockOffset(15)+5);
+	_btn5Secs->setGroup(&_timeSpeed);
+	_btn5Secs->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					Options::keyGeoSpeed1);
+
+	_btn1Min->copy(geobord);
+	_btn1Min->setColor(Palette::blockOffset(15)+5);
+	_btn1Min->setGroup(&_timeSpeed);
+	_btn1Min->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					Options::keyGeoSpeed2);
+
+	_btn5Mins->copy(geobord);
+	_btn5Mins->setColor(Palette::blockOffset(15)+5);
+	_btn5Mins->setGroup(&_timeSpeed);
+	_btn5Mins->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					Options::keyGeoSpeed3);
+
+	_btn30Mins->copy(geobord);
+	_btn30Mins->setColor(Palette::blockOffset(15)+5);
+	_btn30Mins->setGroup(&_timeSpeed);
+	_btn30Mins->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					Options::keyGeoSpeed4);
+
+	_btn1Hour->copy(geobord);
+	_btn1Hour->setColor(Palette::blockOffset(15)+5);
+	_btn1Hour->setGroup(&_timeSpeed);
+	_btn1Hour->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					Options::keyGeoSpeed5);
+
+	_btn1Day->copy(geobord);
+	_btn1Day->setColor(Palette::blockOffset(15)+5);
+	_btn1Day->setGroup(&_timeSpeed);
+	_btn1Day->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnTimerClick,
+					Options::keyGeoSpeed6);
+
+
+	_btnDetail->copy(geobord);
 //	_btnDetail->setColor(Palette::blockOffset(15)+5);
 	_btnDetail->onMouseClick(
 					(ActionHandler)& GeoscapeState::btnDetailClick,
@@ -430,92 +534,6 @@ GeoscapeState::GeoscapeState(Game* game)
 					(ActionHandler)& GeoscapeState::btnDetailClick,
 					SDL_BUTTON_RIGHT);
 //	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnDetailClick, keyGeoToggleDetail);
-
-	// kL_begin: revert to ImageButtons.
-	_btnIntercept->copy(_bg);
-	_btnIntercept->setColor(Palette::blockOffset(15)+5);
-	_btnIntercept->onMouseClick((ActionHandler)& GeoscapeState::btnInterceptClick);
-	_btnIntercept->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnInterceptClick,
-					Options::keyGeoIntercept);
-
-	_btnBases->copy(_bg);
-	_btnBases->setColor(Palette::blockOffset(15)+5);
-	_btnBases->onMouseClick((ActionHandler)& GeoscapeState::btnBasesClick);
-	_btnBases->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnBasesClick,
-					Options::keyGeoBases);
-
-	_btnGraphs->copy(_bg);
-	_btnGraphs->setColor(Palette::blockOffset(15)+5);
-	_btnGraphs->onMouseClick((ActionHandler)& GeoscapeState::btnGraphsClick);
-	_btnGraphs->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnGraphsClick,
-					Options::keyGeoGraphs);
-
-	_btnUfopaedia->copy(_bg);
-	_btnUfopaedia->setColor(Palette::blockOffset(15)+5);
-	_btnUfopaedia->onMouseClick((ActionHandler)& GeoscapeState::btnUfopaediaClick);
-	_btnUfopaedia->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnUfopaediaClick,
-					Options::keyGeoUfopedia);
-
-	_btnOptions->copy(_bg);
-	_btnOptions->setColor(Palette::blockOffset(15)+5);
-	_btnOptions->onMouseClick((ActionHandler)& GeoscapeState::btnOptionsClick);
-	_btnOptions->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnOptionsClick,
-					Options::keyGeoOptions);
-
-	_btnFunding->copy(_bg);
-	_btnFunding->setColor(Palette::blockOffset(15)+5);
-	_btnFunding->onMouseClick((ActionHandler)& GeoscapeState::btnFundingClick);
-	_btnFunding->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnFundingClick,
-					Options::keyGeoFunding);
-
-
-	_btn5Secs->copy(_bg);
-	_btn5Secs->setColor(Palette::blockOffset(15)+5);
-	_btn5Secs->setGroup(&_timeSpeed);
-	_btn5Secs->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
-					Options::keyGeoSpeed1);
-
-	_btn1Min->copy(_bg);
-	_btn1Min->setColor(Palette::blockOffset(15)+5);
-	_btn1Min->setGroup(&_timeSpeed);
-	_btn1Min->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
-					Options::keyGeoSpeed2);
-
-	_btn5Mins->copy(_bg);
-	_btn5Mins->setColor(Palette::blockOffset(15)+5);
-	_btn5Mins->setGroup(&_timeSpeed);
-	_btn5Mins->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
-					Options::keyGeoSpeed3);
-
-	_btn30Mins->copy(_bg);
-	_btn30Mins->setColor(Palette::blockOffset(15)+5);
-	_btn30Mins->setGroup(&_timeSpeed);
-	_btn30Mins->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
-					Options::keyGeoSpeed4);
-
-	_btn1Hour->copy(_bg);
-	_btn1Hour->setColor(Palette::blockOffset(15)+5);
-	_btn1Hour->setGroup(&_timeSpeed);
-	_btn1Hour->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
-					Options::keyGeoSpeed5);
-
-	_btn1Day->copy(_bg);
-	_btn1Day->setColor(Palette::blockOffset(15)+5);
-	_btn1Day->setGroup(&_timeSpeed);
-	_btn1Day->onKeyboardPress(
-					(ActionHandler)& GeoscapeState::btnTimerClick,
-					Options::keyGeoSpeed6);
 	// kL_end.
 
 /*kL	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
@@ -546,8 +564,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomOut->onMouseClick((ActionHandler)& GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut); */
 
-	_btnTop->setColor(Palette::blockOffset(15)+6);
-	_btnBottom->setColor(Palette::blockOffset(15)+6);
+//	_btnTop->setColor(Palette::blockOffset(15)+6);
+//	_btnBottom->setColor(Palette::blockOffset(15)+6);
 
 	if (Options::showFundsOnGeoscape)
 	{
@@ -675,8 +693,7 @@ void GeoscapeState::handle(Action* action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		// "ctrl-d" - enable debug mode
-		if (Options::debug
+		if (Options::debug // "ctrl-d" - enable debug mode
 			&& action->getDetails()->key.keysym.sym == SDLK_d
 			&& (SDL_GetModState() & KMOD_CTRL) != 0)
 		{
@@ -687,8 +704,7 @@ void GeoscapeState::handle(Action* action)
 			else
 				_txtDebug->setText(L"");
 		}
-		// quick save and quick load
-		else if (!_game->getSavedGame()->isIronman())
+		else if (!_game->getSavedGame()->isIronman()) // quick save and quick load
 		{
 			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 			{
@@ -2978,9 +2994,9 @@ void GeoscapeState::zoomInEffect()
 void GeoscapeState::zoomOutEffect()
 {
 	if (_globe->isZoomedOutToMax()
-		|| _game->getSavedGame()->getGlobeZoom() <= _zoomInter) // kL
+		|| _game->getSavedGame()->getGlobeZoom() <= _zoomIntercept) // kL
 	{
-		_zoomInter = 0; // kL
+		_zoomIntercept = 0; // kL
 
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
@@ -3064,8 +3080,8 @@ int GeoscapeState::minimizedDogfightsCount()
  */
 void GeoscapeState::startDogfight()
 {
-	if (_zoomInter == 0)
-		_zoomInter = _game->getSavedGame()->getGlobeZoom();	// kL
+	if (_zoomIntercept == 0)
+		_zoomIntercept = _game->getSavedGame()->getGlobeZoom();	// kL
 
 	if (!_globe->isZoomedInToMax())
 	{
@@ -3322,11 +3338,11 @@ void GeoscapeState::resize(
 	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
 	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
 
-	int height = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2 + 10;
+/*	int height = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2 + 10;
 	_btnTop->setHeight(height);
 	_btnTop->setY(_sidebar->getY() - height - 1);
 	_btnBottom->setHeight(height);
-	_btnBottom->setY(_sidebar->getY() + _sidebar->getHeight() + 1);
+	_btnBottom->setY(_sidebar->getY() + _sidebar->getHeight() + 1); */
 }
 
 }

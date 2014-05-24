@@ -179,7 +179,7 @@ void MiniBaseView::draw()
 
 				r.x--;
 				r.y--;
-				setPixel(r.x, r.y, Palette::blockOffset(pal)+1);
+				setPixelColor(r.x, r.y, Palette::blockOffset(pal)+1);
 			}
 
 			unlock();

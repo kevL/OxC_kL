@@ -207,7 +207,7 @@ protected:
 		 * @param y, Y position of the pixel.
 		 * @param pixel, New color for the pixel.
 		 */
-		void setPixel( // setPixelColor
+		void setPixelColor( // setPixelColor
 				int x,
 				int y,
 				Uint8 pixel)
@@ -220,10 +220,9 @@ protected:
 				return;
 			}
 
-			static_cast<Uint8*>(_surface->pixels)
-						[(y * static_cast<int>(_surface->pitch))
-						+ (x * static_cast<int>(_surface->format->BytesPerPixel))]
-					= pixel;
+			static_cast<Uint8*>(_surface->pixels)[(y * static_cast<int>(_surface->pitch))
+												+ (x * static_cast<int>(_surface->format->BytesPerPixel))]
+											= pixel;
 		}
 
 		/**
@@ -238,7 +237,7 @@ protected:
 				int* y,
 				Uint8 pixel)
 		{
-			setPixel(*x, *y, pixel);
+			setPixelColor(*x, *y, pixel);
 
 			(*x)++;
 			if (*x == getWidth())
@@ -254,7 +253,7 @@ protected:
 		 * @param y Y position of the pixel.
 		 * @return Color of the pixel.
 		 */
-		Uint8 getPixel( // getPixelColor
+		Uint8 getPixelColor( // getPixelColor
 				int x,
 				int y) const
 		{

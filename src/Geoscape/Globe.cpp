@@ -347,92 +347,92 @@ Globe::Globe(
 	// Globe markers
 	_mkXcomBase = new Surface(3, 3);
 	_mkXcomBase->lock();
-	_mkXcomBase->setPixel(0, 0, 9);
-	_mkXcomBase->setPixel(1, 0, 9);
-	_mkXcomBase->setPixel(2, 0, 9);
-	_mkXcomBase->setPixel(0, 1, 9);
-	_mkXcomBase->setPixel(2, 1, 9);
-	_mkXcomBase->setPixel(0, 2, 9);
-	_mkXcomBase->setPixel(1, 2, 9);
-	_mkXcomBase->setPixel(2, 2, 9);
+	_mkXcomBase->setPixelColor(0, 0, 9);
+	_mkXcomBase->setPixelColor(1, 0, 9);
+	_mkXcomBase->setPixelColor(2, 0, 9);
+	_mkXcomBase->setPixelColor(0, 1, 9);
+	_mkXcomBase->setPixelColor(2, 1, 9);
+	_mkXcomBase->setPixelColor(0, 2, 9);
+	_mkXcomBase->setPixelColor(1, 2, 9);
+	_mkXcomBase->setPixelColor(2, 2, 9);
 	_mkXcomBase->unlock();
 
 	_mkAlienBase = new Surface(3, 3);
 	_mkAlienBase->lock();
-	_mkAlienBase->setPixel(0, 0, 1);
-	_mkAlienBase->setPixel(1, 0, 1);
-	_mkAlienBase->setPixel(2, 0, 1);
-	_mkAlienBase->setPixel(0, 1, 1);
-	_mkAlienBase->setPixel(2, 1, 1);
-	_mkAlienBase->setPixel(0, 2, 1);
-	_mkAlienBase->setPixel(1, 2, 1);
-	_mkAlienBase->setPixel(2, 2, 1);
+	_mkAlienBase->setPixelColor(0, 0, 1);
+	_mkAlienBase->setPixelColor(1, 0, 1);
+	_mkAlienBase->setPixelColor(2, 0, 1);
+	_mkAlienBase->setPixelColor(0, 1, 1);
+	_mkAlienBase->setPixelColor(2, 1, 1);
+	_mkAlienBase->setPixelColor(0, 2, 1);
+	_mkAlienBase->setPixelColor(1, 2, 1);
+	_mkAlienBase->setPixelColor(2, 2, 1);
 	_mkAlienBase->unlock();
 
 	_mkCraft = new Surface(3, 3);
 	_mkCraft->lock();
-	_mkCraft->setPixel(1, 0, 11);
-	_mkCraft->setPixel(0, 1, 11);
-	_mkCraft->setPixel(2, 1, 11);
-	_mkCraft->setPixel(1, 2, 11);
+	_mkCraft->setPixelColor(1, 0, 11);
+	_mkCraft->setPixelColor(0, 1, 11);
+	_mkCraft->setPixelColor(2, 1, 11);
+	_mkCraft->setPixelColor(1, 2, 11);
 	_mkCraft->unlock();
 
 	_mkWaypoint = new Surface(3, 3);
 	_mkWaypoint->lock();
-	_mkWaypoint->setPixel(0, 0, 3);
-	_mkWaypoint->setPixel(0, 2, 3);
-	_mkWaypoint->setPixel(1, 1, 3);
-	_mkWaypoint->setPixel(2, 0, 3);
-	_mkWaypoint->setPixel(2, 2, 3);
+	_mkWaypoint->setPixelColor(0, 0, 3);
+	_mkWaypoint->setPixelColor(0, 2, 3);
+	_mkWaypoint->setPixelColor(1, 1, 3);
+	_mkWaypoint->setPixelColor(2, 0, 3);
+	_mkWaypoint->setPixelColor(2, 2, 3);
 	_mkWaypoint->unlock();
 
 	_mkCity = new Surface(3, 3);
 	_mkCity->lock();
-	_mkCity->setPixel(0, 0, 6);	// gray border
-	_mkCity->setPixel(1, 0, 6);
-	_mkCity->setPixel(2, 0, 6);
-	_mkCity->setPixel(0, 1, 6);
-	_mkCity->setPixel(1, 1, 3);	// red center
-	_mkCity->setPixel(2, 1, 6);
-	_mkCity->setPixel(0, 2, 6);
-	_mkCity->setPixel(1, 2, 6);
-	_mkCity->setPixel(2, 2, 6);
+	_mkCity->setPixelColor(0, 0, 6);	// gray border
+	_mkCity->setPixelColor(1, 0, 6);
+	_mkCity->setPixelColor(2, 0, 6);
+	_mkCity->setPixelColor(0, 1, 6);
+	_mkCity->setPixelColor(1, 1, 3);	// red center
+	_mkCity->setPixelColor(2, 1, 6);
+	_mkCity->setPixelColor(0, 2, 6);
+	_mkCity->setPixelColor(1, 2, 6);
+	_mkCity->setPixelColor(2, 2, 6);
 	_mkCity->unlock();
 
 	_mkFlyingUfo = new Surface(3, 3);
 	_mkFlyingUfo->lock();
-	_mkFlyingUfo->setPixel(1, 0, 13);
-	_mkFlyingUfo->setPixel(0, 1, 13);
-	_mkFlyingUfo->setPixel(1, 1, 13);
-	_mkFlyingUfo->setPixel(2, 1, 13);
-	_mkFlyingUfo->setPixel(1, 2, 13);
+	_mkFlyingUfo->setPixelColor(1, 0, 13);
+	_mkFlyingUfo->setPixelColor(0, 1, 13);
+	_mkFlyingUfo->setPixelColor(1, 1, 13);
+	_mkFlyingUfo->setPixelColor(2, 1, 13);
+	_mkFlyingUfo->setPixelColor(1, 2, 13);
 	_mkFlyingUfo->unlock();
 
 	_mkLandedUfo = new Surface(3, 3);
 	_mkLandedUfo->lock();
-	_mkLandedUfo->setPixel(0, 0, 7);
-	_mkLandedUfo->setPixel(0, 2, 7);
-	_mkLandedUfo->setPixel(1, 1, 7);
-	_mkLandedUfo->setPixel(2, 0, 7);
-	_mkLandedUfo->setPixel(2, 2, 7);
+	_mkLandedUfo->setPixelColor(0, 0, 7);
+	_mkLandedUfo->setPixelColor(0, 2, 7);
+	_mkLandedUfo->setPixelColor(1, 1, 7);
+	_mkLandedUfo->setPixelColor(2, 0, 7);
+	_mkLandedUfo->setPixelColor(2, 2, 7);
 	_mkLandedUfo->unlock();
 
 	_mkCrashedUfo = new Surface(3, 3);
 	_mkCrashedUfo->lock();
-	_mkCrashedUfo->setPixel(0, 0, 5);
-	_mkCrashedUfo->setPixel(0, 2, 5);
-	_mkCrashedUfo->setPixel(1, 1, 5);
-	_mkCrashedUfo->setPixel(2, 0, 5);
-	_mkCrashedUfo->setPixel(2, 2, 5);
+	_mkCrashedUfo->setPixelColor(0, 0, 5);
+	_mkCrashedUfo->setPixelColor(0, 2, 5);
+	_mkCrashedUfo->setPixelColor(1, 1, 5);
+	_mkCrashedUfo->setPixelColor(2, 0, 5);
+	_mkCrashedUfo->setPixelColor(2, 2, 5);
 	_mkCrashedUfo->unlock();
 
 	_mkAlienSite = new Surface(3, 3);
 	_mkAlienSite->lock();
-	_mkAlienSite->setPixel(1, 0, 1);
-	_mkAlienSite->setPixel(0, 1, 1);
-	_mkAlienSite->setPixel(1, 1, 1);
-	_mkAlienSite->setPixel(2, 1, 1);
-	_mkAlienSite->setPixel(1, 2, 1);
+	_mkAlienSite->setPixelColor(1, 0, 1);
+	_mkAlienSite->setPixelColor(0, 1, 1);
+	_mkAlienSite->setPixelColor(1, 1, 1);
+	_mkAlienSite->setPixelColor(2, 1, 1);
+	_mkAlienSite->setPixelColor(1, 2, 1);
 	_mkAlienSite->unlock();
 
 	_cenLon = _game->getSavedGame()->getGlobeLongitude();
@@ -1490,10 +1490,10 @@ void Globe::XuLine(
 	{
 //		if (x0>0 && y0>0 && x0<surface->getWidth() && y0<surface->getHeight())
 //		{
-//			tcol=src->getPixel((int)x0,(int)y0);
-		tcol = src->getPixel(
-						static_cast<int>(x0),
-						static_cast<int>(y0));
+//			tcol=src->getPixelColor((int)x0,(int)y0);
+		tcol = src->getPixelColor(
+							static_cast<int>(x0),
+							static_cast<int>(y0));
 		if (tcol)
 		{
 			if (flight)								// kL
@@ -1516,10 +1516,10 @@ void Globe::XuLine(
 				}
 			}
 
-			surface->setPixel(
-						static_cast<int>(x0),
-						static_cast<int>(y0),
-						static_cast<Uint8>(tcol));
+			surface->setPixelColor(
+							static_cast<int>(x0),
+							static_cast<int>(y0),
+							static_cast<Uint8>(tcol));
 		}
 
 		x0 += SX;

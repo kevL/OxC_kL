@@ -228,10 +228,9 @@ XcomResourcePack::XcomResourcePack( // kL
 		_surfaces[*i]->loadScr(path);
 	}
 
-	// bigger Geoscape background
-	int
-		newWidth = 320 - 64,
-		newHeight = 200;
+	int // bigger Geoscape background
+		newWidth	= 320 - 64,
+		newHeight	= 200;
 	Surface* newGeo = new Surface(
 								newWidth * 3,
 								newHeight * 3);
@@ -247,17 +246,44 @@ XcomResourcePack::XcomResourcePack( // kL
 				y < newHeight;
 				++y)
 		{
-			newGeo->setPixel(newWidth + x, newHeight + y, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth - x - 1, newHeight + y, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth * 3 - x - 1, newHeight + y, oldGeo->getPixel(x, y));
+			newGeo->setPixelColor(
+							newWidth + x,
+							newHeight + y,
+							oldGeo->getPixelColor(x, y));
+			newGeo->setPixelColor(
+							newWidth - x - 1,
+							newHeight + y,
+							oldGeo->getPixelColor(x, y));
+			newGeo->setPixelColor(
+							newWidth * 3 - x - 1,
+							newHeight + y,
+							oldGeo->getPixelColor(x, y));
 
-			newGeo->setPixel(newWidth + x, newHeight - y - 1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth * 3 - x - 1, newHeight - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixelColor(
+							newWidth + x,
+							newHeight - y - 1,
+							oldGeo->getPixelColor(x, y));
+			newGeo->setPixelColor(
+							newWidth - x - 1,
+							newHeight - y - 1,
+							oldGeo->getPixelColor(x, y));
+			newGeo->setPixelColor(
+							newWidth * 3 - x - 1,
+							newHeight - y - 1,
+							oldGeo->getPixelColor(x, y));
 
-			newGeo->setPixel(newWidth + x, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
-			newGeo->setPixel(newWidth * 3 - x - 1, newHeight * 3 - y - 1, oldGeo->getPixel(x, y));
+			newGeo->setPixelColor(
+							newWidth + x,
+							newHeight * 3 - y - 1,
+							oldGeo->getPixelColor(x, y));
+			newGeo->setPixelColor(
+							newWidth - x - 1,
+							newHeight * 3 - y - 1,
+							oldGeo->getPixelColor(x, y));
+			newGeo->setPixelColor(
+							newWidth * 3 - x - 1,
+							newHeight * 3 - y - 1,
+							oldGeo->getPixelColor(x, y));
 		}
 	}
 	_surfaces["ALTGEOBORD.SCR"] = newGeo;
@@ -273,10 +299,10 @@ XcomResourcePack::XcomResourcePack( // kL
 				x = 5;
 				x <= 314;
 				++x)
-			_surfaces["ALTBACK07.SCR"]->setPixel(
+			_surfaces["ALTBACK07.SCR"]->setPixelColor(
 												x,
 												y + 4,
-												_surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y));
 
 	for (int
 			y = 147;
@@ -286,10 +312,10 @@ XcomResourcePack::XcomResourcePack( // kL
 				x = 5;
 				x <= 314;
 				++x)
-			_surfaces["ALTBACK07.SCR"]->setPixel(
+			_surfaces["ALTBACK07.SCR"]->setPixelColor(
 												x,
 												y + 9,
-												_surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y));
 
 	for (int
 			y = 132;
@@ -299,10 +325,10 @@ XcomResourcePack::XcomResourcePack( // kL
 				x = 5;
 				x <= 314;
 				++x)
-			_surfaces["ALTBACK07.SCR"]->setPixel(
+			_surfaces["ALTBACK07.SCR"]->setPixelColor(
 												x,
 												y + 10,
-												_surfaces["ALTBACK07.SCR"]->getPixel(x, y));
+												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y));
 
 	std::vector<std::string> spks = CrossPlatform::getFolderContents(geograph, "SPK");
 	for (std::vector<std::string>::iterator
@@ -999,33 +1025,49 @@ XcomResourcePack::XcomResourcePack( // kL
 	// erase the old lines, copying from a +2 offset to account for the dithering
 	for (int y = 91; y < 199; y += 12)
 		for (int x = 0; x < 149; ++x)
-			_surfaces["BACK06.SCR"]->setPixel(x, y, _surfaces["BACK06.SCR"]->getPixel(x,y+2));
+			_surfaces["BACK06.SCR"]->setPixelColor(
+												x,
+												y,
+												_surfaces["BACK06.SCR"]->getPixelColor(x, y + 2));
 	// drawn new lines, use the bottom row of pixels as a basis
 	for (int y = 89; y < 199; y += 11)
 		for (int x = 0; x < 149; ++x)
-			_surfaces["BACK06.SCR"]->setPixel(x, y, _surfaces["BACK06.SCR"]->getPixel(x,199));
+			_surfaces["BACK06.SCR"]->setPixelColor(
+												x,
+												y,
+												_surfaces["BACK06.SCR"]->getPixelColor(x, 199));
 	// finally, move the top of the graph up by one pixel, offset for the last iteration again due to dithering.
 	for (int y = 72; y < 80; ++y)
 		for (int x = 0; x < 320; ++x)
-		{
-			_surfaces["BACK06.SCR"]->setPixel(x, y, _surfaces["BACK06.SCR"]->getPixel(x,y + (y == 79 ? 2 : 1)));
-		}
+			_surfaces["BACK06.SCR"]->setPixelColor(
+												x,
+												y,
+												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79? 2: 1)));
 
 	// now, let's adjust the battlescape info screen.
 	// erase the old lines, no need to worry about dithering on this one.
 	for (int y = 39; y < 199; y += 10)
 		for (int x = 0; x < 169; ++x)
-			_surfaces["UNIBORD.PCK"]->setPixel(x, y, _surfaces["UNIBORD.PCK"]->getPixel(x,30));
+			_surfaces["UNIBORD.PCK"]->setPixelColor(
+												x,
+												y,
+												_surfaces["UNIBORD.PCK"]->getPixelColor(x, 30));
 	// drawn new lines, use the bottom row of pixels as a basis
 	for (int y = 190; y > 37; y -= 9)
 		for (int x = 0; x < 169; ++x)
-			_surfaces["UNIBORD.PCK"]->setPixel(x, y, _surfaces["UNIBORD.PCK"]->getPixel(x,199));
+			_surfaces["UNIBORD.PCK"]->setPixelColor(
+												x,
+												y,
+												_surfaces["UNIBORD.PCK"]->getPixelColor(x, 199));
 	// move the top of the graph down by eight pixels to erase the row we don't need (we actually created ~1.8 extra rows earlier)
 	for (int y = 37; y > 29; --y)
 		for (int x = 0; x < 320; ++x)
 		{
-			_surfaces["UNIBORD.PCK"]->setPixel(x, y, _surfaces["UNIBORD.PCK"]->getPixel(x,y-8));
-			_surfaces["UNIBORD.PCK"]->setPixel(x, y-8, 0);
+			_surfaces["UNIBORD.PCK"]->setPixelColor(
+												x,
+												y,
+												_surfaces["UNIBORD.PCK"]->getPixelColor(x, y - 8));
+			_surfaces["UNIBORD.PCK"]->setPixelColor(x, y - 8, 0);
 		}
 
 

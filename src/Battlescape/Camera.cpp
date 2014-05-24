@@ -119,10 +119,14 @@ void Camera::minMaxInt(
  */
 void Camera::mousePress(Action* action, State*)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
-		down();
-	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
-		up();
+	if (Options::battleDragScrollButton != SDL_BUTTON_MIDDLE
+		|| (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
+	{
+		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
+			down();
+		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
+			up();
+	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		&& Options::battleEdgeScroll == SCROLL_TRIGGER)
 	{

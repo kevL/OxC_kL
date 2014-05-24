@@ -1038,10 +1038,12 @@ void DebriefingState::prepareDebriefing()
 						1,
 						value * 2); // kL, duplicated in function below.
 
-				if (save->isResearchAvailable(
-						_game->getRuleset()->getResearch(type),
-						save->getDiscoveredResearch(),
-						_game->getRuleset()))
+				RuleResearch* research = _game->getRuleset()->getResearch(type);
+				if (research != 0
+					&& save->isResearchAvailable(
+											research,
+											save->getDiscoveredResearch(),
+											_game->getRuleset()))
 				{
 					addStat( // more points if it's not researched
 							"STR_LIVE_ALIENS_RECOVERED",

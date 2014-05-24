@@ -199,11 +199,12 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	for (int
 			i = 0,
-				offset_x = 0;		// kL
+				offset_x = 0; // kL
 			i < VISIBLE_MAX;
 			++i)
 	{
-		if (i > 9) offset_x = 20;	// kL
+		if (i > 9)
+			offset_x = 20; // kL
 
 		_btnVisibleUnit[i] = new InteractiveSurface(
 												15,
@@ -811,7 +812,6 @@ void BattlescapeState::init()
 void BattlescapeState::think()
 {
 	//Log(LOG_INFO) << "BattlescapeState::think()";
-
 	static bool popped = false;
 
 	if (_gameTimer->isRunning())
@@ -851,7 +851,6 @@ void BattlescapeState::think()
 void BattlescapeState::mapOver(Action* action)
 {
 	//Log(LOG_INFO) << "BattlescapeState::mapOver()";
-
 	if (_isMouseScrolling
 		&& action->getDetails()->type == SDL_MOUSEMOTION)
 	{
@@ -871,6 +870,7 @@ void BattlescapeState::mapOver(Action* action)
 			}
 
 			_isMouseScrolled = _isMouseScrolling = false;
+			stopScrolling(action);
 
 			return;
 		}
@@ -878,12 +878,17 @@ void BattlescapeState::mapOver(Action* action)
 		_isMouseScrolled = true;
 
 		// Set the mouse cursor back ( or not )
-/*kL		SDL_EventState(
+		// kL_note: I had removed these to get mousecursor to jump back to prescroll position,
+		// but they're going to try a better method I guess ... l8r, their method don't work.
+/*		SDL_EventState(
 					SDL_MOUSEMOTION,
 					SDL_IGNORE);
+//		SDL_WarpMouse(
+//					static_cast<Uint16>(_xBeforeMouseScrolling),
+//					static_cast<Uint16>(_yBeforeMouseScrolling)); // kL
 		SDL_WarpMouse(
-					static_cast<Uint16>(_xBeforeMouseScrolling),
-					static_cast<Uint16>(_yBeforeMouseScrolling));
+					_game->getScreen()->getWidth() / 2,
+					_game->getScreen()->getHeight() / 2 - Map::ICON_HEIGHT / 2);
 		SDL_EventState(
 					SDL_MOUSEMOTION,
 					SDL_ENABLE); */
@@ -950,7 +955,7 @@ void BattlescapeState::mapPress(Action* action)
 }
 
 /**
- * Processes any clicks on the map to command units.
+ * Processes any clicks.
  * @param action Pointer to an action.
  */
 void BattlescapeState::mapClick(Action* action)
@@ -975,6 +980,7 @@ void BattlescapeState::mapClick(Action* action)
 			}
 
 			_isMouseScrolled = _isMouseScrolling = false;
+			stopScrolling(action);
 		}
 	}
 
@@ -983,7 +989,10 @@ void BattlescapeState::mapClick(Action* action)
 	{
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == Options::battleDragScrollButton)
+		{
 			_isMouseScrolling = false;
+			stopScrolling(action);
+		}
 		else
 		{
 			//Log(LOG_INFO) << ". . isMouseScrolled = FALSE, return";
@@ -995,7 +1004,8 @@ void BattlescapeState::mapClick(Action* action)
 			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 		{
 			_isMouseScrolled = false;
-			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+//			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling); // kL
+			stopScrolling(action);
 		}
 
 		if (_isMouseScrolled)
@@ -1068,7 +1078,6 @@ void BattlescapeState::mapIn(Action*)
 	//Log(LOG_INFO) << "BattlescapeState::mapIn()";
 	_isMouseScrolling = false;
 	_map->setButtonsPressed(Options::battleDragScrollButton, false);
-
 	//Log(LOG_INFO) << "BattlescapeState::mapIn() EXIT";
 }
 
@@ -1424,6 +1433,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 	if (playableUnitSelected())
 	{
 		bool edge = false;
+
 		if (SCROLL_TRIGGER == Options::battleEdgeScroll
 			&& SDL_MOUSEBUTTONUP == action->getDetails()->type
 			&& SDL_BUTTON_LEFT == action->getDetails()->button.button)
@@ -1530,8 +1540,7 @@ void BattlescapeState::btnVisibleUnitClick(Action* action)
 {
 	int btnID = -1;
 
-	// got to find out which button was pressed
-	for (int
+	for (int // got to find out which button was pressed
 			i = 0;
 			i < VISIBLE_MAX
 				&& btnID == -1;
@@ -1982,9 +1991,8 @@ void BattlescapeState::animate()
  */
 void BattlescapeState::handleItemClick(BattleItem* item)
 {
-	// make sure there is an item, and the battlescape is in an idle state
-	if (item
-		&& !_battleGame->isBusy())
+	if (item						// make sure there is an item
+		&& !_battleGame->isBusy())	// and the battlescape is in an idle state
 	{
 		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements())
 			|| _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
@@ -2073,6 +2081,13 @@ inline void BattlescapeState::handle(Action* action)
 	{
 		State::handle(action);
 
+/*		if (_isMouseScrolling)
+		{
+			_map->setSelectorPosition(
+								static_cast<int>(static_cast<double>(_xBeforeMouseScrolling) / action->getXScale()),
+								static_cast<int>(static_cast<double>(_yBeforeMouseScrolling) / action->getYScale()));
+		} */
+
 		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)
@@ -2085,23 +2100,20 @@ inline void BattlescapeState::handle(Action* action)
 		{
 			if (Options::debug)
 			{
-				// "ctrl-d" - enable debug mode
-				if (action->getDetails()->key.keysym.sym == SDLK_d
+				if (action->getDetails()->key.keysym.sym == SDLK_d		// "ctrl-d" - enable debug mode
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					_save->setDebugMode();
 					debug(L"Debug Mode");
 				}
-				// "ctrl-v" - reset tile visibility
-				else if (_save->getDebugMode()
+				else if (_save->getDebugMode()							// "ctrl-v" - reset tile visibility
 					&& action->getDetails()->key.keysym.sym == SDLK_v
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					debug(L"Resetting tile visibility");
 					_save->resetTiles();
 				}
-				// "ctrl-k" - kill all aliens
-				else if (_save->getDebugMode()
+				else if (_save->getDebugMode()							// "ctrl-k" - kill all aliens
 					&& action->getDetails()->key.keysym.sym == SDLK_k
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
@@ -2119,20 +2131,17 @@ inline void BattlescapeState::handle(Action* action)
 						}
 					}
 				}
-				// f11 - voxel map dump
-				else if (action->getDetails()->key.keysym.sym == SDLK_F11)
+				else if (action->getDetails()->key.keysym.sym == SDLK_F11)	// f11 - voxel map dump
 					saveVoxelMap();
-				// f9 - ai
-				else if (action->getDetails()->key.keysym.sym == SDLK_F9
+				else if (action->getDetails()->key.keysym.sym == SDLK_F9	// f9 - ai
 					&& Options::traceAI)
 				{
 					saveAIMap();
 				}
 			}
-			// quick save and quick load
-			// not works in debug mode to prevent conflict in hotkeys by default
-			else if (!_game->getSavedGame()->isIronman())
+			else if (!_game->getSavedGame()->isIronman())					// quick save and quick load
 			{
+				// not works in debug mode to prevent conflict in hotkeys by default
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 				{
 					_game->pushState(new SaveGameState(
@@ -2149,9 +2158,8 @@ inline void BattlescapeState::handle(Action* action)
 				}
 			}
 
-			// voxel view dump
 			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)
-				saveVoxelView();
+				saveVoxelView(); // voxel view dump
 		}
 	}
 }
@@ -2438,16 +2446,16 @@ void BattlescapeState::saveVoxelView()
 			y < 256 + 32;
 			++y)
 	{
-		ang_y = (((double)y)/640*M_PI+M_PI/2);
+		ang_y = (((double)y) / 640 * M_PI + M_PI / 2);
 //		ang_y = (static_cast<double>(y)) / 640. * M_PI + M_PI / 2.;	// kL
 		for (int x = -256; x < 256; ++x)
 		{
-			ang_x = ((double)x/1024)*M_PI+dir;
+			ang_x = ((double)x / 1024) * M_PI + dir;
 //			ang_x = (static_cast<double>(x / 1024)) * M_PI + dir;	//kL, getting way too confusing here.
 
-			targetVoxel.x=originVoxel.x + (int)(-sin(ang_x) * 1024 * sin(ang_y));
-			targetVoxel.y=originVoxel.y + (int)(cos(ang_x) * 1024 * sin(ang_y));
-			targetVoxel.z=originVoxel.z + (int)(cos(ang_y) * 1024);
+			targetVoxel.x = originVoxel.x + (int)(-sin(ang_x) * 1024 * sin(ang_y));
+			targetVoxel.y = originVoxel.y + (int)(cos(ang_x) * 1024 * sin(ang_y));
+			targetVoxel.z = originVoxel.z + (int)(cos(ang_y) * 1024);
 
 			_trajectory.clear();
 			test = _save->getTileEngine()->calculateLine(
@@ -2462,7 +2470,10 @@ void BattlescapeState::saveVoxelView()
 			black = true;
 			if (test != 0 && test != 6)
 			{
-				tile = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24));
+				tile = _save->getTile(Position(
+											_trajectory.at(0).x / 16,
+											_trajectory.at(0).y / 16,
+											_trajectory.at(0).z / 24));
 				if (_debug
 					|| (tile->isDiscovered(0) && test == 2)
 					|| (tile->isDiscovered(1) && test == 3)
@@ -2473,25 +2484,35 @@ void BattlescapeState::saveVoxelView()
 					{
 						if (tile->getUnit())
 						{
-							if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
-							else if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+							if (tile->getUnit()->getFaction() == FACTION_NEUTRAL)
+								test = 9;
+							else if (tile->getUnit()->getFaction() == FACTION_PLAYER)
+								test = 8;
 						}
 						else
 						{
-							tile = _save->getTile(Position(_trajectory.at(0).x/16, _trajectory.at(0).y/16, _trajectory.at(0).z/24-1));
+							tile = _save->getTile(Position(
+														_trajectory.at(0).x / 16,
+														_trajectory.at(0).y / 16,
+														_trajectory.at(0).z / 24 - 1));
 							if (tile && tile->getUnit())
 							{
-								if (tile->getUnit()->getFaction()==FACTION_NEUTRAL) test=9;
-								else if (tile->getUnit()->getFaction()==FACTION_PLAYER) test=8;
+								if (tile->getUnit()->getFaction() == FACTION_NEUTRAL)
+									test = 9;
+								else if (tile->getUnit()->getFaction() == FACTION_PLAYER)
+									test = 8;
 							}
 						}
 					}
 
-					hitPos = Position(_trajectory.at(0).x, _trajectory.at(0).y, _trajectory.at(0).z);
+					hitPos = Position(
+									_trajectory.at(0).x,
+									_trajectory.at(0).y,
+									_trajectory.at(0).z);
 					dist = sqrt(static_cast<double>(
-							(hitPos.x-originVoxel.x) * (hitPos.x-originVoxel.x)
-								+ (hitPos.y-originVoxel.y) * (hitPos.y-originVoxel.y)
-								+ (hitPos.z-originVoxel.z) * (hitPos.z-originVoxel.z)));
+								  (hitPos.x - originVoxel.x) * (hitPos.x - originVoxel.x)
+								+ (hitPos.y - originVoxel.y) * (hitPos.y - originVoxel.y)
+								+ (hitPos.z - originVoxel.z) * (hitPos.z - originVoxel.z)));
 
 					black = false;
 				}
@@ -2527,9 +2548,9 @@ void BattlescapeState::saveVoxelView()
 				if (tile) dist *= (16.0 - static_cast<double>(tile->getShade())) / 16.0;
 			}
 
-			image.push_back((int)((float)(pal[test*3+0])*dist));
-			image.push_back((int)((float)(pal[test*3+1])*dist));
-			image.push_back((int)((float)(pal[test*3+2])*dist));
+			image.push_back((int)((float)(pal[test * 3 + 0]) * dist));
+			image.push_back((int)((float)(pal[test * 3 + 1]) * dist));
+			image.push_back((int)((float)(pal[test * 3 + 2]) * dist));
 		}
 	}
 
@@ -2678,10 +2699,9 @@ void BattlescapeState::finishBattle(
 		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
 	}
 
-	if (nextStage != ""
-		&& inExitArea)
+	if (nextStage != ""	// if there is a next mission stage
+		&& inExitArea)	// we have people in exit area OR we killed all aliens, load the next stage
 	{
-		// if there is a next mission stage + we have people in exit area OR we killed all aliens, load the next stage
 		_popups.clear();
 		_save->setMissionType(nextStage);
 
@@ -2699,7 +2719,6 @@ void BattlescapeState::finishBattle(
 	else
 	{
 		//Log(LOG_INFO) << ". stopTimers, popState";
-
 		_popups.clear();
 		_animTimer->stop();
 		_gameTimer->stop();
@@ -2959,7 +2978,7 @@ void BattlescapeState::resize(
 			++i)
 	{
 		if (*i != _map
-			&& (*i) != _btnPsi
+			&& *i != _btnPsi
 			&& *i != _btnLaunch
 			&& *i != _txtDebug)
 		{
@@ -2972,6 +2991,26 @@ void BattlescapeState::resize(
 			(*i)->setX((*i)->getX() + dX);
 		}
 	}
+}
+
+/**
+ * Move the mouse back to where it started after we finish drag scrolling.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::stopScrolling(Action* action)
+{
+//	SDL_WarpMouse( // kL
+//			_xBeforeMouseScrolling + _totalMouseMoveX,
+//			_yBeforeMouseScrolling + _totalMouseMoveY);
+//kL	SDL_WarpMouse(
+//kL			_xBeforeMouseScrolling,
+//kL			_yBeforeMouseScrolling);
+
+	action->setMouseAction(
+					_xBeforeMouseScrolling,
+					_yBeforeMouseScrolling,
+					_map->getHeight(),
+					_map->getWidth());
 }
 
 /**

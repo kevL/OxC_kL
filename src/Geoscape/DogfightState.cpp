@@ -495,7 +495,7 @@ DogfightState::DogfightState(
 				x <= x1 + 18;
 				x += 2)
 		{
-			range->setPixel(
+			range->setPixelColor(
 						x,
 						rangeY,
 						color);
@@ -521,7 +521,7 @@ DogfightState::DogfightState(
 				y <= maxY;
 				++y)
 		{
-			range->setPixel(
+			range->setPixelColor(
 						x1 + x2,
 						y,
 						color);
@@ -532,7 +532,7 @@ DogfightState::DogfightState(
 				x <= x2 + 2;
 				++x)
 		{
-			range->setPixel(
+			range->setPixelColor(
 						x,
 						connectY,
 						color);
@@ -621,7 +621,7 @@ DogfightState::DogfightState(
 			++y)
 	{
 		// kL_begin:
-		Uint8 pixelColor = _damage->getPixel(11, y);
+		Uint8 pixelColor = _damage->getPixelColor(11, y);
 		bool isCraftColor = pixelColor >= Palette::blockOffset(10)
 						&& pixelColor < Palette::blockOffset(11);
 
@@ -636,7 +636,7 @@ DogfightState::DogfightState(
 			++_craftHeight_pre;
 		// kL_end.
 
-/*		Uint8 pixelColor = _damage->getPixel(x, y);
+/*		Uint8 pixelColor = _damage->getPixelColor(x, y);
 		if (pixelColor >= Palette::blockOffset(10)
 			|| pixelColor < Palette::blockOffset(11))
 		{
@@ -751,12 +751,12 @@ void DogfightState::drawCraftDamage()
 					x < 23;
 					++x)
 			{
-				int pixelColor = _damage->getPixel(x, y);
+				int pixelColor = _damage->getPixelColor(x, y);
 
 				if (pixelColor > 10
 					&& pixelColor < 16)
 				{
-					_damage->setPixel(
+					_damage->setPixelColor(
 									x,
 									y,
 									_currentCraftDamageColor);
@@ -764,7 +764,7 @@ void DogfightState::drawCraftDamage()
 				else if (pixelColor >= Palette::blockOffset(10)
 					&& pixelColor < Palette::blockOffset(11))
 				{
-					_damage->setPixel(
+					_damage->setPixelColor(
 									x,
 									y,
 									_currentCraftDamageColor);
@@ -792,7 +792,7 @@ void DogfightState::animate()
 				y < _window->getHeight();
 				++y)
 		{
-			Uint8 radarPixelColor = _window->getPixel(x, y);
+			Uint8 radarPixelColor = _window->getPixelColor(x, y);
 			if (radarPixelColor >= Palette::blockOffset(7)
 				&& radarPixelColor < Palette::blockOffset(8))
 			{
@@ -801,7 +801,7 @@ void DogfightState::animate()
 				if (radarPixelColor >= Palette::blockOffset(8))
 					radarPixelColor = Palette::blockOffset(7);
 
-				_window->setPixel(
+				_window->setPixelColor(
 								x,
 								y,
 								radarPixelColor);
@@ -1790,14 +1790,14 @@ void DogfightState::drawUfo()
 					pixelOffset *= 2;
 				}
 
-				Uint8 radarPixelColor = _window->getPixel(
+				Uint8 radarPixelColor = _window->getPixelColor(
 													currentUfoXposition + x + 3,
 													currentUfoYposition + y + 3); // + 3 'cause of the window frame
 				Uint8 color = radarPixelColor - pixelOffset;
 				if (color < 108)
 					color = 108;
 
-				_battle->setPixel(
+				_battle->setPixelColor(
 							currentUfoXposition + x,
 							currentUfoYposition + y,
 							color);
@@ -1836,17 +1836,17 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 					continue;
 				else
 				{
-					Uint8 radarPixelColor = _window->getPixel(
-															xPos + x + 3,
-															yPos + y + 3); // + 3 cause of the window frame
+					Uint8 radarPixelColor = _window->getPixelColor(
+																xPos + x + 3,
+																yPos + y + 3); // + 3 cause of the window frame
 					Uint8 color = radarPixelColor - pixelOffset;
 					if (color < 108)
 						color = 108;
 
-					_battle->setPixel(
-									xPos + x,
-									yPos + y,
-									color);
+					_battle->setPixelColor(
+										xPos + x,
+										yPos + y,
+										color);
 				}
 			}
 		}
@@ -1862,12 +1862,12 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 				y > yEnd;
 				--y)
 		{
-			Uint8 radarPixelColor = _window->getPixel(xPos + 3, y + 3);
+			Uint8 radarPixelColor = _window->getPixelColor(xPos + 3, y + 3);
 			Uint8 color = radarPixelColor - pixelOffset;
 			if (color < 108)
 				color = 108;
 
-			_battle->setPixel(xPos, y, color);
+			_battle->setPixelColor(xPos, y, color);
 		}
 	}
 }

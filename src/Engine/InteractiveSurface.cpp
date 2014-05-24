@@ -28,6 +28,7 @@ namespace OpenXcom
 
 const SDLKey InteractiveSurface::SDLK_ANY = (SDLKey)-1; // using an unused keycode to represent an "any key"
 
+
 /**
  * Sets up a blank interactive surface with the specified size and position.
  * @param width Width in pixels.
@@ -69,14 +70,14 @@ InteractiveSurface::~InteractiveSurface()
 bool InteractiveSurface::isButtonHandled(Uint8 button)
 {
 	bool handled = (_click.find(0) != _click.end()
-					|| _press.find(0) != _press.end()
-					|| _release.find(0) != _release.end());
+				|| _press.find(0) != _press.end()
+				|| _release.find(0) != _release.end());
 
 	if (!handled && button != 0)
 	{
 		handled = (_click.find(button) != _click.end()
-					|| _press.find(button) != _press.end()
-					|| _release.find(button) != _release.end());
+				|| _press.find(button) != _press.end()
+				|| _release.find(button) != _release.end());
 	}
 
 	return handled;

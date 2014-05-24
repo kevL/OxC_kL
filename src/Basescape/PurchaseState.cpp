@@ -166,9 +166,9 @@ PurchaseState::PurchaseState(
 	_txtSpaceUsed->setSecondaryColor(Palette::blockOffset(13));
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
-	std::wostringstream ss8;
-	ss8 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
-	_txtSpaceUsed->setText(ss8.str());
+//kL	std::wostringstream ss8;
+//kL	ss8 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
+//kL	_txtSpaceUsed->setText(ss8.str());
 //kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss8.str()));
 
 	_txtCost->setColor(Palette::blockOffset(13)+10);
@@ -199,7 +199,8 @@ PurchaseState::PurchaseState(
 		ss4,
 		ss5,
 		ss6,
-		ss7;
+		ss7,
+		ss8;
 
 	ss1 << _base->getTotalSoldiers();
 	_lstItems->addRow(
@@ -241,7 +242,7 @@ PurchaseState::PurchaseState(
 
 		RuleCraft* rule = _game->getRuleset()->getCraft(*i);
 
-		if (rule->getBuyCost() > 0
+		if (rule->getBuyCost() != 0
 			&& _game->getSavedGame()->isResearched(rule->getRequirements()))
 		{
 			_qtys.push_back(0);
@@ -391,7 +392,7 @@ PurchaseState::PurchaseState(
 
 		RuleItem* rule = _game->getRuleset()->getItem(*i);
 
-		if (rule->getBuyCost() > 0
+		if (rule->getBuyCost() != 0
 			&& !isExcluded(*i))
 		{
 			_qtys.push_back(0);
@@ -482,6 +483,9 @@ PurchaseState::PurchaseState(
 								L"0");
 		}
 	}
+
+	ss8 << _base->getAvailableStores() << ":" << static_cast<int>(_base->getUsedStores()); // kL
+	_txtSpaceUsed->setText(ss8.str());
 
 	_timerInc = new Timer(280);
 	_timerInc->onTimer((StateHandler)& PurchaseState::increase);
@@ -955,17 +959,18 @@ void PurchaseState::updateItemStrings()
 		}
 	}
 
+	ss1 << _base->getAvailableStores() << ":";
 	ss1 << _base->getUsedStores();
 	if (std::abs(_iQty) > 0.05)
 	{
 		ss1 << "(";
-		if (_iQty > 0.0) ss1 << "+"; // kL, >.05 already established; that just re-introduced a rounding error:
 //kL		if (_iQty > 0.05) ss1 << "+";
+		if (_iQty > 0.0) ss1 << "+"; // kL, >.05 already established; that just re-introduced a rounding error
 		ss1 << std::fixed << std::setprecision(1) << _iQty << ")";
 	}
-	ss1 << ":" << _base->getAvailableStores();
-	_txtSpaceUsed->setText(ss1.str()); // kL
+//kL	ss1 << ":" << _base->getAvailableStores();
 //kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
+	_txtSpaceUsed->setText(ss1.str()); // kL
 
 	_btnOk->setVisible(_total > 0); // kL
 }

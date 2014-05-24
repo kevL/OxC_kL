@@ -59,7 +59,7 @@ private:
 		_pause,
 		_zoomInEffectDone,
 		_zoomOutEffectDone;
-	int _zoomInter; // kL
+	int _zoomIntercept; // kL
 	size_t _minimizedDogfights;
 	double
 		_interLon,
@@ -72,8 +72,8 @@ private:
 		* _btnGraphs,
 		* _btnUfopaedia,
 		* _btnOptions,
-		* _btnFunding;
-	ImageButton
+		* _btnFunding,
+
 		* _btn5Secs,
 		* _btn1Min,
 		* _btn5Mins,
@@ -84,8 +84,9 @@ private:
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	Surface
-		* _sidebar,
-		* _bg;
+//		* _sidebar,
+		* _bg,
+		* _srfTime; // kL
 	Text
 		* _txtDebug,
 		* _txtFunds,
@@ -98,9 +99,9 @@ private:
 		* _txtDay,
 		* _txtMonth,
 		* _txtYear;
-	TextButton
-		* _btnTop,
-		* _btnBottom;
+//	TextButton
+//		* _btnTop,
+//		* _btnBottom;
 	Timer
 		* _gameTimer,
 		* _zoomInEffectTimer,

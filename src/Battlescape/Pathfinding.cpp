@@ -194,11 +194,19 @@ void Pathfinding::calculate(
 				if (x || y)
 				{
 					Tile* checkTile = _save->getTile(endPosition + Position(x, y, 0));
-					if (isBlocked(
-								destTile,
-								checkTile,
-								dir[i],
-								_unit)
+					if (x && y
+						&& ((checkTile->getMapData(MapData::O_NORTHWALL)
+								&& checkTile->getMapData(MapData::O_NORTHWALL)->isDoor())
+							||  (checkTile->getMapData(MapData::O_WESTWALL)
+								&& checkTile->getMapData(MapData::O_WESTWALL)->isDoor())))
+					{
+						return;
+					}
+					else if (isBlocked(
+									destTile,
+									checkTile,
+									dir[i],
+									_unit)
 						&& isBlocked(
 									destTile,
 									checkTile,
@@ -207,8 +215,7 @@ void Pathfinding::calculate(
 					{
 						return;
 					}
-
-					if (checkTile->getUnit())
+					else if (checkTile->getUnit())
 					{
 						BattleUnit* checkUnit = checkTile->getUnit();
 						if (checkUnit != _unit
@@ -218,15 +225,6 @@ void Pathfinding::calculate(
 							return;
 						}
 					}
-/*kL, ^					if ((isBlocked(destTile, checkTile, dir[its], unit)
-							&& isBlocked(destTile, checkTile, dir[its], target))
-						|| (checkTile->getUnit()
-							&& checkTile->getUnit() != unit
-							&& checkTile->getUnit()->getVisible()
-							&& checkTile->getUnit() != target))
-					{
-						return;
-					} */
 
 					++i;
 				}

@@ -185,7 +185,7 @@ void ScrollBar::setPalette(
  */
 void ScrollBar::handle(Action* action, State* state)
 {
-	InteractiveSurface::handle(action, state); // kL_note: screw it. Okay, try it again ...
+/*	InteractiveSurface::handle(action, state); // kL_note: screw it. Okay, try it again ... nah Screw it.
 
 	if (_pressed
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
@@ -202,7 +202,7 @@ void ScrollBar::handle(Action* action, State* state)
 		size_t scroll = static_cast<size_t>(Round(static_cast<double>(y) * scale));
 
 		_list->scrollTo(scroll);
-	}
+	} */
 }
 
 /**
@@ -331,18 +331,18 @@ void ScrollBar::drawThumb()
 
 	_thumb->drawRect(&square, color);
 
-	_thumb->setPixel(
-				_thumbRect.x,
-				_thumbRect.y,
-				_color + 1);
-	_thumb->setPixel(
-				_thumbRect.x,
-				_thumbRect.y + _thumbRect.h - 1,
-				_color + 4);
-	_thumb->setPixel(
-				_thumbRect.x + _thumbRect.w - 1,
-				_thumbRect.y,
-				_color + 4);
+	_thumb->setPixelColor(
+					_thumbRect.x,
+					_thumbRect.y,
+					_color + 1);
+	_thumb->setPixelColor(
+					_thumbRect.x,
+					_thumbRect.y + _thumbRect.h - 1,
+					_color + 4);
+	_thumb->setPixelColor(
+					_thumbRect.x + _thumbRect.w - 1,
+					_thumbRect.y,
+					_color + 4);
 
 	color = _color + 5; // Hollow it out
 
@@ -365,18 +365,18 @@ void ScrollBar::drawThumb()
 
 	_thumb->drawRect(&square, color);
 
-	_thumb->setPixel(
-				_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
-				_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
-				_color + 1);
-	_thumb->setPixel(
-				_thumbRect.x + 2,
-				_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
-				_color + 4);
-	_thumb->setPixel(
-				_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
-				_thumbRect.y + 2,
-				_color + 4);
+	_thumb->setPixelColor(
+					_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
+					_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
+					_color + 1);
+	_thumb->setPixelColor(
+					_thumbRect.x + 2,
+					_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
+					_color + 4);
+	_thumb->setPixelColor(
+					_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
+					_thumbRect.y + 2,
+					_color + 4);
 
 	_thumb->unlock();
 }

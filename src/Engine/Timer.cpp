@@ -35,20 +35,31 @@ const Uint32 accurate = 4;
 
 Uint32 slowTick()
 {
+/*kL
 	static Uint32 old_time = SDL_GetTicks();
 	static Uint64 false_time = static_cast<Uint64>(old_time) << accurate;
 	Uint64 new_time = ((Uint64)SDL_GetTicks()) << accurate;
 	false_time += (new_time - old_time) / Timer::gameSlowSpeed;
 	old_time = new_time;
 
+	return false_time >> accurate; */
+
+	// kL_begin: slowTick() casts.
+	static Uint32 old_time		= SDL_GetTicks();
+	static Uint32 false_time	= old_time << accurate;
+	Uint32 new_time				= SDL_GetTicks() << accurate;
+	false_time				   += (new_time - old_time) / Timer::gameSlowSpeed;
+	old_time					= new_time;
+
 	return false_time >> accurate;
+	// kL_end.
 }
 
 }
 
 
-Uint32 Timer::gameSlowSpeed = 1;
-int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS.
+Uint32 Timer::gameSlowSpeed	= 1;
+int Timer::maxFrameSkip		= 8; // this is a pretty good default at 60FPS.
 
 
 /**

@@ -332,9 +332,9 @@ void OpenGL::refresh(
 
 	glBegin(GL_TRIANGLE_STRIP);
 	glTexCoord2f(0, 0); glVertex3i(u1, v1, 0);
-	glTexCoord2f(w, 0); glVertex3i(u2, v1, 0);
-	glTexCoord2f(0, h); glVertex3i(u1, v2, 0);
-	glTexCoord2f(w, h); glVertex3i(u2, v2, 0);
+	glTexCoord2f(static_cast<float>(w), 0); glVertex3i(u2, v1, 0); // kL: casting here.
+	glTexCoord2f(0, static_cast<float>(h)); glVertex3i(u1, v2, 0);
+	glTexCoord2f(static_cast<float>(w), static_cast<float>(h)); glVertex3i(u2, v2, 0);
 	glEnd();
 
 	glErrorCheck();

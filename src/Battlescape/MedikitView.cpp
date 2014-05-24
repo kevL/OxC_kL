@@ -155,7 +155,7 @@ void MedikitView::mouseClick(Action* action, State*)
 			i++)
 	{
 		Surface* surface = set->getFrame(i);
-		if (surface->getPixel(x, y))
+		if (surface->getPixelColor(x, y))
 		{
 			_selectedPart = i;
 			_redraw = true;

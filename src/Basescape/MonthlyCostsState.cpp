@@ -143,7 +143,7 @@ MonthlyCostsState::MonthlyCostsState(
 			++i)
 	{
 		RuleCraft* craft = _game->getRuleset()->getCraft(*i);
-		if (craft->getRentCost() > 0
+		if (craft->getRentCost() != 0
 			&& _game->getSavedGame()->isResearched(craft->getRequirements()))
 		{
 			std::wostringstream ss2;

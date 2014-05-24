@@ -127,7 +127,7 @@ void Font::init()
 						&& left == -1;
 					++y)
 			{
-				Uint8 pixel = _surface->getPixel(x, y);
+				Uint8 pixel = _surface->getPixelColor(x, y);
 				if (pixel != 0)
 					left = x;
 			}
@@ -144,7 +144,7 @@ void Font::init()
 						&& right == -1;
 					)
 			{
-				Uint8 pixel = _surface->getPixel(x, y);
+				Uint8 pixel = _surface->getPixelColor(x, y);
 				if (pixel != 0)
 					right = x;
 			}

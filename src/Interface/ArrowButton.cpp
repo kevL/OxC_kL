@@ -135,9 +135,9 @@ void ArrowButton::draw()
 
 	drawRect(&square, color);
 
-	setPixel(0, 0, _color + 1);
-	setPixel(0, getHeight() - 1, _color + 4);
-	setPixel(getWidth() - 1, 0, _color + 4);
+	setPixelColor(0, 0, _color + 1);
+	setPixelColor(0, getHeight() - 1, _color + 4);
+	setPixelColor(getWidth() - 1, 0, _color + 4);
 
 	color = _color + 1;
 

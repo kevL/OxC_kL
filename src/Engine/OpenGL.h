@@ -26,19 +26,19 @@ class Surface;
 
 
 #ifndef __APPLE__
-extern PFNGLCREATEPROGRAMPROC glCreateProgram;
-extern PFNGLUSEPROGRAMPROC glUseProgram;
-extern PFNGLCREATESHADERPROC glCreateShader;
-extern PFNGLDELETESHADERPROC glDeleteShader;
-extern PFNGLSHADERSOURCEPROC glShaderSource;
-extern PFNGLCOMPILESHADERPROC glCompileShader;
-extern PFNGLATTACHSHADERPROC glAttachShader;
-extern PFNGLDETACHSHADERPROC glDetachShader;
-extern PFNGLLINKPROGRAMPROC glLinkProgram;
-extern PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
-extern PFNGLUNIFORM1IPROC glUniform1i;
-extern PFNGLUNIFORM2FVPROC glUniform2fv;
-extern PFNGLUNIFORM4FVPROC glUniform4fv;
+	extern PFNGLCREATEPROGRAMPROC glCreateProgram;
+	extern PFNGLUSEPROGRAMPROC glUseProgram;
+	extern PFNGLCREATESHADERPROC glCreateShader;
+	extern PFNGLDELETESHADERPROC glDeleteShader;
+	extern PFNGLSHADERSOURCEPROC glShaderSource;
+	extern PFNGLCOMPILESHADERPROC glCompileShader;
+	extern PFNGLATTACHSHADERPROC glAttachShader;
+	extern PFNGLDETACHSHADERPROC glDetachShader;
+	extern PFNGLLINKPROGRAMPROC glLinkProgram;
+	extern PFNGLGETUNIFORMLOCATIONPROC glGetUniformLocation;
+	extern PFNGLUNIFORM1IPROC glUniform1i;
+	extern PFNGLUNIFORM2FVPROC glUniform2fv;
+	extern PFNGLUNIFORM4FVPROC glUniform4fv;
 #endif
 
 std::string strGLError(GLenum glErr);

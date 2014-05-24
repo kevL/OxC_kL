@@ -279,7 +279,7 @@ void TileEngine::addLight(
 					z < _save->getMapSizeZ();
 					z++)
 			{
-				int distance = static_cast<int>(Round(sqrt(static_cast<float>(x * x + y * y))));
+				int distance = static_cast<int>(Round(sqrt(static_cast<double>(x * x + y * y))));
 
 				if (_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z)))
 					_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z))->addLight(power - distance, layer);
@@ -4735,7 +4735,7 @@ int TileEngine::distance(
 
 	return static_cast<int>(
 						Round(
-							sqrt(static_cast<float>(x * x + y * y + z * z)))); // kL: 3-d
+							sqrt(static_cast<double>(x * x + y * y + z * z)))); // kL: 3-d
 }
 
 /**

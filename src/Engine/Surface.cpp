@@ -129,7 +129,7 @@ inline void DeleteAligned(void* buffer)
 	}
 }
 
-} //namespace
+}
 
 
 /**
@@ -515,8 +515,8 @@ void Surface::offset(
 				&& y < getHeight();
 			)
 	{
-		Uint8 pixel = getPixel(x, y);	// getPixelColor
-		int p;							// the new color
+		Uint8 pixel = getPixelColor(x, y);	// getPixelColor
+		int p;								// the new color
 
 		if (off > 0)
 			p = (pixel * mult) + off;
@@ -557,7 +557,7 @@ void Surface::invert(Uint8 mid)
 				&& y < getHeight();
 			)
 	{
-		Uint8 pixel = getPixel(x, y);
+		Uint8 pixel = getPixelColor(x, y);
 		if (pixel > 0)
 			setPixelIterative(
 							&x,
@@ -639,10 +639,10 @@ void Surface::blit(Surface* surface)
 void Surface::copy(Surface* surface)
 {
 	SDL_Rect from;
-	from.x = getX() - surface->getX();
-	from.y = getY() - surface->getY();
 	from.w = getWidth();
 	from.h = getHeight();
+	from.x = getX() - surface->getX();
+	from.y = getY() - surface->getY();
 
 	SDL_BlitSurface(
 				surface->getSurface(),

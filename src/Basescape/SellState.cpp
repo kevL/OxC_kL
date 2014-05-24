@@ -82,7 +82,7 @@ SellState::SellState(
 		_spaceChange(0.0)
 {
 	bool overfull = Options::storageLimitsEnforced
-					&& _base->storesOverfull();
+				&& _base->storesOverfull();
 
 /*	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(overfull? 288:148, 16, overfull? 16:8, 176);
@@ -200,9 +200,8 @@ SellState::SellState(
 	_txtSpaceUsed->setSecondaryColor(_color2);
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
-	std::wostringstream ss1;
-	ss1 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
-	_txtSpaceUsed->setText(ss1.str());
+//kL	std::wostringstream ss1;
+//kL	ss1 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
 //kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
 
 	_txtQuantity->setColor(_color);
@@ -347,6 +346,10 @@ SellState::SellState(
 			}
 		}
 	}
+
+	std::wostringstream ss1;
+	ss1 << _base->getAvailableStores() << ":" << static_cast<int>(_base->getUsedStores());
+	_txtSpaceUsed->setText(ss1.str());
 
 	_timerInc = new Timer(280);
 	_timerInc->onTimer((StateHandler)& SellState::increase);
@@ -883,17 +886,18 @@ void SellState::updateItemStrings()
 		}
 	} // kL_end.
 
+	ss3 << _base->getAvailableStores() << ":";
 	ss3 << _base->getUsedStores();
 	if (std::abs(_spaceChange) > 0.05)
 	{
 		ss3 << "(";
-		if (_spaceChange > 0.0) ss3 << "+"; // kL, >.05 already established; that just re-introduced a rounding error:
 //kL		if (_spaceChange > 0.05) ss3 << "+";
+		if (_spaceChange > 0.0) ss3 << "+"; // kL, >.05 already established; that just re-introduced a rounding error
 		ss3 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}
-	ss3 << ":" << _base->getAvailableStores();
-	_txtSpaceUsed->setText(ss3.str()); // kL
+//kL	ss3 << ":" << _base->getAvailableStores();
 //kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss3.str()));
+	_txtSpaceUsed->setText(ss3.str()); // kL
 
 	if (Options::storageLimitsEnforced)
 		okVis = okVis // kL
@@ -935,10 +939,10 @@ enum SellType SellState::getType(size_t selected) const
 int SellState::getItemIndex(size_t selected) const
 {
 	return static_cast<int>(selected)
-			- static_cast<int>(_soldiers.size())
-			- static_cast<int>(_crafts.size())
-			- _hasSci
-			- _hasEng;
+		- static_cast<int>(_soldiers.size())
+		- static_cast<int>(_crafts.size())
+		- _hasSci
+		- _hasEng;
 }
 
 }

@@ -224,10 +224,10 @@ void Map::init()
 				x < 9;
 				++x)
 		{
-			_arrow->setPixel(
-							x,
-							y,
-							pixels[x + (y * 9)]);
+			_arrow->setPixelColor(
+								x,
+								y,
+								pixels[x + (y * 9)]);
 		}
 	}
 	_arrow->unlock();
@@ -1911,9 +1911,9 @@ void Map::animate(bool redraw)
 }
 
 /**
- * Sets the selector to a certain tile on the map.
- * @param mx mouse x position.
- * @param my mouse y position.
+ * Sets the rectangular selector to a certain tile.
+ * @param mx Mouse x position.
+ * @param my Mouse y position.
  */
 void Map::setSelectorPosition(
 		int mx,
@@ -1922,9 +1922,6 @@ void Map::setSelectorPosition(
 	int
 		oldX = _selectorX,
 		oldY = _selectorY;
-
-	if (!mx && !my)
-		return; // cursor is offscreen
 
 	_camera->convertScreenToMap(
 								mx,
@@ -1940,7 +1937,7 @@ void Map::setSelectorPosition(
 }
 
 /**
- * Draws the rectangle selector.
+ * Gets the position of the rectangular selector.
  * @param pos Pointer to a position.
  */
 void Map::getSelectorPosition(Position* pos) const
@@ -1951,7 +1948,7 @@ void Map::getSelectorPosition(Position* pos) const
 }
 
 /**
- * Calculates the offset of a soldier, when it is walking in the middle of 2 tiles.
+ * Calculates the offset of a soldier, when it is walking between 2 tiles.
  * @param unit, Pointer to BattleUnit.
  * @param offset, Pointer to the offset to return the calculation.
  */

@@ -300,6 +300,9 @@ private:
 				int& dX,
 				int& dY);
 
+		/// Move the mouse back to where it started after we finish drag scrolling.
+		void stopScrolling(Action* action);
+
 		/// kL. Gets the TurnCounter.
 		TurnCounter* getTurnCounter() const;
 		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.

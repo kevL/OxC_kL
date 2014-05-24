@@ -119,7 +119,7 @@ ArticleStateArmor::ArticleStateArmor(
 		std::string damage = getDamageTypeText(dType);
 		if (damage != "STR_UNKNOWN")
 		{
-			int vulnera = static_cast<int>(Round(armor->getDamageModifier(dType) * 100.f));
+			int vulnera = static_cast<int>(Round(static_cast<double>(armor->getDamageModifier(dType)) * 100.0));
 
 			addStat(
 				damage,

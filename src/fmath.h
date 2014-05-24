@@ -24,6 +24,9 @@
 #include <cmath>
 
 
+/**
+ *
+ */
 template <class _Tx>
 inline bool AreSame(
 		const _Tx& l,
@@ -33,6 +36,9 @@ inline bool AreSame(
 }
 
 
+/**
+ *
+ */
 template <class _Tx>
 inline _Tx Round(const _Tx& x)
 {
