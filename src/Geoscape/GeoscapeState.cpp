@@ -163,17 +163,23 @@ GeoscapeState::GeoscapeState(Game* game)
 						200,
 						screenWidth - 320,
 						screenHeight / 2 - 100); */
-	Surface* hd	= _game->getResourcePack()->getSurface("ALTGEOBORD.SCR");
+/*	Surface* hd	= _game->getResourcePack()->getSurface("ALTGEOBORD.SCR");
 	_bg			= new Surface(
 						hd->getWidth(),
 						hd->getHeight(),
 						0,
-						0);
+						0); */
 /*	_sidebar	= new Surface(
 						64,
 						200,
 						screenWidth - 64,
 						screenHeight / 2 - 100); */
+
+	_srfSpace	= new Surface( // kL
+							screenWidth - 64,
+							screenHeight,
+							0,
+							0);
 
 	_globe		= new Globe(
 						_game,					// GLOBE:
@@ -184,8 +190,8 @@ GeoscapeState::GeoscapeState(Game* game)
 						0,						// start_x
 						0);						// start_y
 																// BACKGROUND
-	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);		// (160 - 768) / 2	= -304	= x
-	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);	// (120 - 600) / 2	= -240	= y
+//kL	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);		// (160 - 768) / 2	= -304	= x
+//kL	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);	// (120 - 600) / 2	= -240	= y
 
 /*kL
 	_btnIntercept	= new TextButton(63, 11, screenWidth-63, screenHeight/2-100);
@@ -217,7 +223,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btn1Hour		= new ImageButton(31, 13, screenWidth - 63, screenHeight / 2 + 40);
 	_btn1Day		= new ImageButton(31, 13, screenWidth - 31, screenHeight / 2 + 40);
 
-	// The old rotate buttons are now become the Detail toggle.
+	// The old rotate buttons have now become the Detail toggle.
 	_btnDetail		= new ImageButton(63, 46, screenWidth - 63, screenHeight / 2 + 54);
 
 	// kL_end.
@@ -229,8 +235,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomIn		= new InteractiveSurface(23, 23, screenWidth-25, screenHeight/2+56);
 	_btnZoomOut		= new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82); */
 
-/*	int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
-	_btnTop		= new TextButton(
+//	int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
+/*	_btnTop		= new TextButton(
 							63,
 							height,
 							screenWidth - 63,
@@ -240,28 +246,40 @@ GeoscapeState::GeoscapeState(Game* game)
 							height,
 							screenWidth - 63,
 							_sidebar->getY() + _sidebar->getHeight() + 1); */
+	int height = ((screenHeight - Screen::ORIGINAL_HEIGHT) / 2) - 1;
+	_btnTop		= new TextButton(
+							63,
+							height,
+							screenWidth - 63,
+							0);
+	_btnBottom	= new TextButton(
+							63,
+							height,
+							screenWidth - 63,
+							screenHeight - height + 1);
 
-/*kL	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
+/*kL
+	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
 	_txtHourSep		= new Text(4, 17, screenWidth - 41, screenHeight / 2 - 26);
 	_txtMin			= new Text(20, 17, screenWidth - 37, screenHeight / 2 - 26);
 	_txtMinSep		= new Text(4, 17, screenWidth - 17, screenHeight / 2 - 26);
 	_txtSec			= new Text(11, 8, screenWidth - 13, screenHeight / 2 - 20); */
 
-	_srfTime		= new Surface(63, 39, screenWidth - 63, screenHeight / 2 - 28);
+	_srfTime	= new Surface(63, 39, screenWidth - 63, screenHeight / 2 - 28);
 
-	_txtHour		= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
-	_txtHourSep		= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
-	_txtMin			= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 26);
-//kL	_txtHour		= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
-//kL	_txtHourSep		= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
-//kL	_txtMin			= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
-//kL	_txtMinSep		= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
-//kL	_txtSec			= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
+	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
+	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
+	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 26);
+//kL	_txtHour	= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
+//kL	_txtHourSep	= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
+//kL	_txtMin		= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
+//kL	_txtMinSep	= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
+//kL	_txtSec		= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
 
-	_txtWeekday		= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
-	_txtDay			= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
-	_txtMonth		= new Text(29, 8, screenWidth - 32, screenHeight / 2 - 6);
-	_txtYear		= new Text(59, 8, screenWidth - 61, screenHeight / 2 + 1);
+	_txtWeekday	= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
+	_txtDay		= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
+	_txtMonth	= new Text(29, 8, screenWidth - 32, screenHeight / 2 - 6);
+	_txtYear	= new Text(59, 8, screenWidth - 61, screenHeight / 2 + 1);
 
 	if (Options::showFundsOnGeoscape)
 	{
@@ -288,7 +306,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 
-	add(_bg);
+	add(_srfSpace);	// kL
+//	add(_bg);
 //	add(_sidebar);
 	add(_globe);
 
@@ -315,10 +334,10 @@ GeoscapeState::GeoscapeState(Game* game)
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-//	add(_btnTop);
-//	add(_btnBottom);
+	add(_btnTop);
+	add(_btnBottom);
 
-	add(_srfTime); // kL
+	add(_srfTime);	// kL
 
 	if (Options::showFundsOnGeoscape)
 		add(_txtFunds);
@@ -335,12 +354,14 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	add(_txtDebug);
 
+	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_srfSpace); // kL
+
 //kL	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg); // kL
 /*	Surface* geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
 	geobord->setX(_sidebar->getX() - geobord->getWidth() + _sidebar->getWidth());
 	geobord->setY(_sidebar->getY());
-	_sidebar->copy(geobord); */
-	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg);
+	_sidebar->copy(geobord);
+	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg); */
 
 /*kL	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnIntercept->setColor(Palette::blockOffset(15)+6);
@@ -526,7 +547,7 @@ GeoscapeState::GeoscapeState(Game* game)
 
 
 	_btnDetail->copy(geobord);
-//	_btnDetail->setColor(Palette::blockOffset(15)+5);
+	_btnDetail->setColor(Palette::blockOffset(15)+9);
 	_btnDetail->onMouseClick(
 					(ActionHandler)& GeoscapeState::btnDetailClick,
 					SDL_BUTTON_LEFT);
@@ -564,8 +585,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomOut->onMouseClick((ActionHandler)& GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut); */
 
-//	_btnTop->setColor(Palette::blockOffset(15)+6);
-//	_btnBottom->setColor(Palette::blockOffset(15)+6);
+	_btnTop->setColor(Palette::blockOffset(15)+6);
+	_btnBottom->setColor(Palette::blockOffset(15)+6);
 
 	if (Options::showFundsOnGeoscape)
 	{
@@ -3335,10 +3356,19 @@ void GeoscapeState::resize(
 		}
 	}
 
-	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
-	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
+//kL	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
+//kL	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
 
-/*	int height = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2 + 10;
+// kL_begin:
+	int height = ((Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2) - 1;
+	_btnTop->setHeight(height);
+	_btnTop->setY(0);
+	_btnBottom->setHeight(height);
+	_btnBottom->setY(Options::baseYResolution - height + 1);
+// kL_end.
+
+/*kL
+	int height = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2 + 10;
 	_btnTop->setHeight(height);
 	_btnTop->setY(_sidebar->getY() - height - 1);
 	_btnBottom->setHeight(height);
