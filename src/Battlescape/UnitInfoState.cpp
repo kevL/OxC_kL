@@ -772,11 +772,8 @@ void UnitInfoState::btnNextClick(Action*)
  */
 void UnitInfoState::exit()
 {
-	if (_fromInventory)
+	if (!_fromInventory)
 	{
-		if (!_unit->hasInventory())
-			_game->popState(); // tanks require double pop here.
-
 /*		Screen::updateScale(
 						Options::battlescapeScale,
 						Options::battlescapeScale,
@@ -785,6 +782,8 @@ void UnitInfoState::exit()
 						true);
 		_game->getScreen()->resetDisplay(false); */
 	}
+	else if (!_unit->hasInventory())
+		_game->popState(); // tanks require double pop here.
 
 	_game->popState();
 }

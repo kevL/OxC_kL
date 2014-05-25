@@ -3077,9 +3077,9 @@ void GeoscapeState::handleDogfights()
 	while (d != _dogfights.end())
 	{
 		if ((*d)->isMinimized())
-		{
 			_minimizedDogfights++;
-		}
+//kL	else
+//kL		_globe->rotateStop();
 
 		(*d)->think();
 
@@ -3135,7 +3135,10 @@ void GeoscapeState::startDogfight()
 	if (!_globe->isZoomedInToMax())
 	{
 		if (!_zoomInEffectTimer->isRunning())
+		{
 			_zoomInEffectTimer->start();
+//			_globe->rotateStop();
+		}
 	}
 	else
 	{

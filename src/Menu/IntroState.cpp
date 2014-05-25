@@ -51,8 +51,9 @@ IntroState::IntroState(
 		State(game),
 		_wasLetterBoxed(wasLetterBoxed)
 {
-//kL	_oldVolume = Options::musicVolume;
-//kL	Options::musicVolume = Options::soundVolume;
+//kL	_oldMusic = Options::musicVolume;
+//kL	_oldSound = Options::soundVolume;
+//kL	Options::musicVolume = Options::soundVolume = std::max(_oldMusic, _oldSound);
 
 	_game->setVolume(
 				Options::soundVolume,
@@ -515,7 +516,8 @@ void IntroState::init()
 		_game->getScreen()->clear();
 		_game->getScreen()->flip();
 
-//kL		Options::musicVolume = _oldVolume;
+//kL		Options::musicVolume = _oldMusic;
+//kL		Options::soundVolume = _oldSound;
 		_game->setVolume(
 					Options::soundVolume,
 					Options::musicVolume,
