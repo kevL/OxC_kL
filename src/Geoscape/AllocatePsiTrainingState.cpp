@@ -131,8 +131,8 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
-//kL	_lstSoldiers->setArrowColumn(-1, ARROW_VERTICAL);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL); // kL
+//kL	_lstSoldiers->setAlign(ALIGN_RIGHT, 3);
 	_lstSoldiers->setColumns(4, 118, 48, 78, 34);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
@@ -160,7 +160,8 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 			|| (Options::psiStrengthEval
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
-			ssStr << ((*soldier)->getCurrentStats()->psiStrength);
+//kL			ssStr << L"   " << (*soldier)->getCurrentStats()->psiStrength;
+			ssStr << ((*soldier)->getCurrentStats()->psiStrength); // kL
 		}
 		else
 			ssStr << tr("STR_UNKNOWN").c_str();

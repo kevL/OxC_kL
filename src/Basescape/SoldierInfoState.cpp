@@ -604,7 +604,9 @@ void SoldierInfoState::init()
 		_numPsiSkill->setText(ss.str());
 		_barPsiSkill->setMax(current->psiSkill);
 		_barPsiSkill->setValue(current->psiSkill);
-		_barPsiSkill->setValue2(initial->psiSkill);
+		_barPsiSkill->setValue2(0.0); // kL
+//		_barPsiSkill->setValue2(current->psiSkill); // kL
+//kL		_barPsiSkill->setValue2(current->psiSkill - _soldier->getImprovement());
 
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);

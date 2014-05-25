@@ -58,9 +58,13 @@ private:
 		YAML::Node save() const;
 
 		/// Adds an item to the container.
-		void addItem(const std::string& id, int qty = 1);
+		void addItem(
+				const std::string& id,
+				int qty = 1);
 		/// Removes an item from the container.
-		void removeItem(const std::string& id, int qty = 1);
+		void removeItem(
+				const std::string& id,
+				int qty = 1);
 
 		/// Gets an item in the container.
 		int getItem(const std::string& id) const;

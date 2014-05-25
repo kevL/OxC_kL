@@ -484,7 +484,7 @@ PurchaseState::PurchaseState(
 		}
 	}
 
-	ss8 << _base->getAvailableStores() << ":" << static_cast<int>(_base->getUsedStores()); // kL
+	ss8 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores(); // kL
 	_txtSpaceUsed->setText(ss8.str());
 
 	_timerInc = new Timer(280);
@@ -959,8 +959,7 @@ void PurchaseState::updateItemStrings()
 		}
 	}
 
-	ss1 << _base->getAvailableStores() << ":";
-	ss1 << _base->getUsedStores();
+	ss1 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
 	if (std::abs(_iQty) > 0.05)
 	{
 		ss1 << "(";

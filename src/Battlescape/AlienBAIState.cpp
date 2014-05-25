@@ -1922,11 +1922,14 @@ bool AlienBAIState::explosiveEfficacy(
 	{
 		if (!(*i)->isOut(true)
 			&& *i != attackingUnit
-			&& (*i)->getPosition().z == targetPos.z
+//			&& *i != target
+			&& ((*i)->getPosition().z >= targetPos.z + Options::battleExplosionHeight
+				|| (*i)->getPosition().z <= targetPos.z - Options::battleExplosionHeight)
+//			&& (*i)->getPosition().z == targetPos.z
 			&& _save->getTileEngine()->distance(
 											(*i)->getPosition(),
 											targetPos)
-//kL										< radius + 1)
+//kL									< radius + 1)
 										< radius) // kL
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER

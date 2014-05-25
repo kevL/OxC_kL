@@ -133,9 +133,9 @@ int ResearchProject::getCost() const
  */
 void ResearchProject::load(const YAML::Node& node)
 {
-	setAssigned(node["assigned"].as<int>());
-	setSpent(node["spent"].as<int>());
-	setCost(node["cost"].as<int>());
+	setAssigned(node["assigned"].as<int>(getAssigned()));
+	setSpent(node["spent"].as<int>(getSpent()));
+	setCost(node["cost"].as<int>(getCost()));
 }
 
 /**

@@ -348,7 +348,7 @@ SellState::SellState(
 	}
 
 	std::wostringstream ss1;
-	ss1 << _base->getAvailableStores() << ":" << static_cast<int>(_base->getUsedStores());
+	ss1 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores(); // kL
 	_txtSpaceUsed->setText(ss1.str());
 
 	_timerInc = new Timer(280);
@@ -886,8 +886,7 @@ void SellState::updateItemStrings()
 		}
 	} // kL_end.
 
-	ss3 << _base->getAvailableStores() << ":";
-	ss3 << _base->getUsedStores();
+	ss3 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
 	if (std::abs(_spaceChange) > 0.05)
 	{
 		ss3 << "(";
@@ -901,7 +900,7 @@ void SellState::updateItemStrings()
 
 	if (Options::storageLimitsEnforced)
 		okVis = okVis // kL
-				&& !_base->storesOverfull(_spaceChange);
+			&& !_base->storesOverfull(_spaceChange);
 
 	_btnOk->setVisible(okVis); // kL
 	//Log(LOG_INFO) << "updateItemStrings() EXIT";

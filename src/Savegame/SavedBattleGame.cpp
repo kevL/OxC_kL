@@ -140,6 +140,14 @@ SavedBattleGame::~SavedBattleGame()
 		delete *i;
 	}
 
+	for (std::vector<BattleItem*>::iterator
+			i = _deleted.begin();
+			i != _deleted.end();
+			++i)
+	{
+		delete *i;
+	}
+
 	delete _pathfinding;
 	delete _tileEngine;
 }
@@ -1342,7 +1350,8 @@ void SavedBattleGame::removeItem(BattleItem* item)
 			}
 		}
 	}
-	else if (b)
+
+	if (b)
 	{
 		for (std::vector<BattleItem*>::iterator
 				it = b->getInventory()->begin();
@@ -1371,6 +1380,8 @@ void SavedBattleGame::removeItem(BattleItem* item)
 			return;
 		}
 	}
+
+	_deleted.push_back(item);
 
 /*	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{

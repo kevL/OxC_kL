@@ -824,7 +824,8 @@ double Base::getUsedStores()
 				j != (*i)->getVehicles()->end();
 				++j)
 		{
-			total += static_cast<double>((*j)->getRules()->getSize());
+//			total += static_cast<double>((*j)->getRules()->getSize());
+			total += (*j)->getRules()->getSize();
 		}
 	}
 
@@ -835,8 +836,10 @@ double Base::getUsedStores()
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-			total += static_cast<double>(_rule->getItem((*i)->getItems())->getSize())
-					* static_cast<double>((*i)->getQuantity()); //(float * int)
+//			total += static_cast<double>(_rule->getItem((*i)->getItems())->getSize())
+//				* static_cast<double>((*i)->getQuantity()); //(float * int)
+			total += _rule->getItem((*i)->getItems())->getSize()
+				* static_cast<double>((*i)->getQuantity());
 		}
 		else if ((*i)->getType() == TRANSFER_CRAFT)
 		{
@@ -859,7 +862,8 @@ double Base::getUsedStores()
  */
 bool Base::storesOverfull(double offset)
 {
-	double capacity = getAvailableStores();
+//kL	double capacity = static_cast<double>(getAvailableStores());
+	double capacity = static_cast<double>(getAvailableStores()) + 0.1; // kL (damn!)
 	double used = getUsedStores();
 
 	return (used + offset > capacity);
@@ -1038,6 +1042,7 @@ int Base::getUsedHangars() const
 			++i)
 	{
 		if ((*i)->getRules()->getCategory() == "STR_CRAFT")
+			// This should be fixed on the case when (*i)->getInfiniteAmount() == TRUE
 			total += ((*i)->getAmountTotal() - (*i)->getAmountProduced());
 	}
 

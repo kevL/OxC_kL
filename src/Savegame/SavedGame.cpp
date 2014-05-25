@@ -1440,6 +1440,9 @@ bool SavedGame::isResearchAvailable(
 		const std::vector<const RuleResearch*>& unlocked,
 		const Ruleset* ruleset) const
 {
+	if (r == 0)
+		return false;
+
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch*>& discovered(getDiscoveredResearch());
 

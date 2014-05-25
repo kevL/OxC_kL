@@ -569,7 +569,8 @@ void Soldier::trainPsi1Day()
 {
 	_improvement = 0; // was used in AllocatePsiTrainingState.
 
-	if (!_psiTraining) return;
+	if (!_psiTraining)
+		return;
 
 	int const psiSkill = _currentStats.psiSkill;
 	int const rulesMin = _rules->getMinStats().psiSkill;

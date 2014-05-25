@@ -100,9 +100,9 @@ private:
 		* _txtDay,
 		* _txtMonth,
 		* _txtYear;
-	TextButton
-		* _btnTop,
-		* _btnBottom;
+//	TextButton
+//		* _btnTop,
+//		* _btnBottom;
 	Timer
 		* _gameTimer,
 		* _zoomInEffectTimer,

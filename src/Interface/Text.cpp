@@ -518,7 +518,7 @@ int Text::getLineX(int line) const
 				break;
 				case ALIGN_CENTER:
 					x = static_cast<int>(
-							ceil(static_cast<double>(getWidth() - 1 - _lineWidth[line]) / 2.0));
+							ceil(static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.0));
 				break;
 				case ALIGN_RIGHT:
 					x = getWidth() - 1 - _lineWidth[line];
@@ -533,7 +533,7 @@ int Text::getLineX(int line) const
 				break;
 				case ALIGN_CENTER:
 					x = getWidth() - static_cast<int>(
-							ceil(static_cast<double>(getWidth() - 1 - _lineWidth[line]) / 2.0));
+							ceil(static_cast<double>(getWidth() + _font->getSpacing() - _lineWidth[line]) / 2.0));
 				break;
 				case ALIGN_RIGHT:
 					x = _lineWidth[line];

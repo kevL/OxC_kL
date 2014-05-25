@@ -68,17 +68,15 @@ YAML::Node ItemContainer::save() const
  * @param id Item ID.
  * @param qty Item quantity.
  */
-void ItemContainer::addItem(const std::string& id, int qty)
+void ItemContainer::addItem(
+		const std::string& id,
+		int qty)
 {
 	if (id.empty())
-	{
 		return;
-	}
 
 	if (_qty.find(id) == _qty.end())
-	{
 		_qty[id] = 0;
-	}
 
 	_qty[id] += qty;
 }
@@ -88,21 +86,20 @@ void ItemContainer::addItem(const std::string& id, int qty)
  * @param id Item ID.
  * @param qty Item quantity.
  */
-void ItemContainer::removeItem(const std::string& id, int qty)
+void ItemContainer::removeItem(
+		const std::string& id,
+		int qty)
 {
-	if (id.empty() || _qty.find(id) == _qty.end())
+	if (id.empty()
+		|| _qty.find(id) == _qty.end())
 	{
 		return;
 	}
 
 	if (qty < _qty[id])
-	{
 		_qty[id] -= qty;
-	}
 	else
-	{
 		_qty.erase(id);
-	}
 }
 
 /**
@@ -113,19 +110,13 @@ void ItemContainer::removeItem(const std::string& id, int qty)
 int ItemContainer::getItem(const std::string& id) const
 {
 	if (id.empty())
-	{
 		return 0;
-	}
 
 	std::map<std::string, int>::const_iterator it = _qty.find(id);
 	if (it == _qty.end())
-	{
 		return 0;
-	}
 	else
-	{
 		return it->second;
-	}
 }
 
 /**
@@ -135,7 +126,11 @@ int ItemContainer::getItem(const std::string& id) const
 int ItemContainer::getTotalQuantity() const
 {
 	int total = 0;
-	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); ++i)
+
+	for (std::map<std::string, int>::const_iterator
+			i = _qty.begin();
+			i != _qty.end();
+			++i)
 	{
 		total += i->second;
 	}
@@ -151,7 +146,11 @@ int ItemContainer::getTotalQuantity() const
 double ItemContainer::getTotalSize(const Ruleset* rule) const
 {
 	double total = 0;
-	for (std::map<std::string, int>::const_iterator i = _qty.begin(); i != _qty.end(); ++i)
+
+	for (std::map<std::string, int>::const_iterator
+			i = _qty.begin();
+			i != _qty.end();
+			++i)
 	{
 		total += rule->getItem(i->first)->getSize() * i->second;
 	}

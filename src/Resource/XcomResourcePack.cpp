@@ -33,6 +33,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h" // kL
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/Sound.h"
@@ -228,12 +229,45 @@ XcomResourcePack::XcomResourcePack( // kL
 		_surfaces[*i]->loadScr(path);
 	}
 
-	int // bigger Geoscape background
-		newWidth	= 320 - 64,
-		newHeight	= 200;
+
+	Surface* kL_Geo = new Surface(
+								Screen::ORIGINAL_WIDTH - 64,	// 256
+								Screen::ORIGINAL_HEIGHT);		// 200
+	Surface* oldGeo = _surfaces["GEOBORD.SCR"];
+	for (int
+			x = 0;
+			x < Screen::ORIGINAL_WIDTH - 64;
+			++x)
+	{
+		for (int
+				y = 0;
+				y < Screen::ORIGINAL_HEIGHT;
+				++y)
+		{
+			kL_Geo->setPixelColor(x, y, oldGeo->getPixelColor(x, y));
+		}
+	}
+	_surfaces["LGEOBORD.SCR"] = kL_Geo;
+
+	// bigger Geoscape background
+/*	int
+//		newWidth	= 320 - 64,
+//		newHeight	= 200;
+		newWidth	= Screen::ORIGINAL_WIDTH - 64,
+		newHeight	= Screen::ORIGINAL_HEIGHT;
+	double
+		mult_x = static_cast<double>(Options::baseXGeoscape) / static_cast<double>(Screen::ORIGINAL_WIDTH),
+		mult_y = static_cast<double>(Options::baseYGeoscape) / static_cast<double>(Screen::ORIGINAL_HEIGHT);
+
+	int
+		width_mult = static_cast<int>(static_cast<double>(newWidth) * mult_x),
+		height_mult = static_cast<int>(static_cast<double>(newHeight) * mult_y);
+
 	Surface* newGeo = new Surface(
-								newWidth * 3,
-								newHeight * 3);
+//								newWidth * 3,
+//								newHeight * 3);
+								width_mult,
+								height_mult);
 	Surface* oldGeo = _surfaces["GEOBORD.SCR"];
 
 	for (int
@@ -255,7 +289,8 @@ XcomResourcePack::XcomResourcePack( // kL
 							newHeight + y,
 							oldGeo->getPixelColor(x, y));
 			newGeo->setPixelColor(
-							newWidth * 3 - x - 1,
+//							newWidth * 3 - x - 1,
+							width_mult - x - 1,
 							newHeight + y,
 							oldGeo->getPixelColor(x, y));
 
@@ -268,25 +303,30 @@ XcomResourcePack::XcomResourcePack( // kL
 							newHeight - y - 1,
 							oldGeo->getPixelColor(x, y));
 			newGeo->setPixelColor(
-							newWidth * 3 - x - 1,
+//							newWidth * 3 - x - 1,
+							width_mult - x - 1,
 							newHeight - y - 1,
 							oldGeo->getPixelColor(x, y));
 
 			newGeo->setPixelColor(
 							newWidth + x,
-							newHeight * 3 - y - 1,
+//							newHeight * 3 - y - 1,
+							height_mult - y - 1,
 							oldGeo->getPixelColor(x, y));
 			newGeo->setPixelColor(
 							newWidth - x - 1,
-							newHeight * 3 - y - 1,
+//							newHeight * 3 - y - 1,
+							height_mult - y - 1,
 							oldGeo->getPixelColor(x, y));
 			newGeo->setPixelColor(
-							newWidth * 3 - x - 1,
-							newHeight * 3 - y - 1,
+//							newWidth * 3 - x - 1,
+//							newHeight * 3 - y - 1,
+							width_mult - x - 1,
+							height_mult - y - 1,
 							oldGeo->getPixelColor(x, y));
 		}
 	}
-	_surfaces["ALTGEOBORD.SCR"] = newGeo;
+	_surfaces["ALTGEOBORD.SCR"] = newGeo; */
 
 	// here we create an "alternate" background surface for the base info screen.
 	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);

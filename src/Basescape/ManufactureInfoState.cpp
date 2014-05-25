@@ -284,11 +284,9 @@ void ManufactureInfoState::btnStopClick(Action*)
 void ManufactureInfoState::btnOkClick(Action*)
 {
 	if (_item)
-	{
 		_production->startItem(
 							_base,
 							_game->getSavedGame());
-	}
 
 	_production->setSellItems(_btnSell->getPressed());
 
@@ -303,9 +301,7 @@ void ManufactureInfoState::exitState()
 	_game->popState();
 
 	if (_item)
-	{
 		_game->popState();
-	}
 }
 
 /**
@@ -317,26 +313,21 @@ void ManufactureInfoState::setAssignedEngineer()
 	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getEngineers())); // kL
 	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
 
-	std::wostringstream s3;
-	s3 << L"> \x01" << _production->getAssignedEngineers();
-	_txtAllocated->setText(s3.str());
+	std::wostringstream s1;
+	s1 << L"> \x01" << _production->getAssignedEngineers();
+	_txtAllocated->setText(s1.str());
 
-	std::wostringstream s4;
-	s4 << L"> \x01" << _production->getAmountTotal();
-/*	if (Options::allowAutoSellProduction
-		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
-	{
-		s4 << "$$";
-	}
+	std::wostringstream s2;
+	s2 << L"> \x01";
+	if (_production->getInfiniteAmount())
+//kL		s2 << Language::utf8ToWstr("∞");
+		s2 << "inf"; // kL
 	else
-		s4 << _production->getAmountTotal(); */ // kL
+		s2 << _production->getAmountTotal();
 
-	_txtTodo->setText(s4.str());
+	_txtTodo->setText(s2.str());
 
-	if (_production->getAmountTotal() == 0)
-		_btnOk->setVisible(false);
-	else
-		_btnOk->setVisible(true);
+	_btnOk->setVisible(_production->getAmountTotal() > 0);
 }
 
 /**
@@ -345,7 +336,8 @@ void ManufactureInfoState::setAssignedEngineer()
  */
 void ManufactureInfoState::moreEngineer(int change)
 {
-	if (change < 1) return;
+	if (change < 1)
+		return;
 
 //kL	int availableEngineer = _base->getAvailableEngineers();
 	int availableEngineer = _base->getEngineers(); // kL
@@ -354,9 +346,13 @@ void ManufactureInfoState::moreEngineer(int change)
 	if (availableEngineer > 0
 		&& availableWorkSpace > 0)
 	{
-		change = std::min(std::min(availableEngineer, availableWorkSpace), change);
-		_production->setAssignedEngineers(_production->getAssignedEngineers()+change);
-		_base->setEngineers(_base->getEngineers()-change);
+		change = std::min(
+						std::min(
+								availableEngineer,
+								availableWorkSpace),
+						change);
+		_production->setAssignedEngineers(_production->getAssignedEngineers() + change);
+		_base->setEngineers(_base->getEngineers() - change);
 
 		setAssignedEngineer();
 	}
@@ -457,7 +453,8 @@ void ManufactureInfoState::lessEngineerClick(Action* action)
  */
 void ManufactureInfoState::moreUnit(int change)
 {
-	if (change < 1) return;
+	if (change < 1)
+		return;
 
 	if (_production->getRules()->getCategory() == "STR_CRAFT"
 		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
@@ -512,15 +509,20 @@ void ManufactureInfoState::moreUnitRelease(Action* action)
 }
 
 /**
- * Increases the units to produce to 999.
- * [Increases the units to produce to 999 or to $$$ when allowAutoSellProduction is true.]
+ * Increases the units to produce, in the case of a right-click, to infinite, and 1 on left-click.
  * @param action A pointer to an Action.
  */
 void ManufactureInfoState::moreUnitClick(Action* action)
 {
+	if (_production->getInfiniteAmount())
+		return; // We can't increase over infinite :) [cf. Cantor]
+
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-//		moreUnit(Options::allowAutoSellProduction? std::numeric_limits<int>::max(): 999 - _production->getAmountTotal());
-		moreUnit(999 - _production->getAmountTotal());
+	{
+		_production->setInfiniteAmount(true);
+
+		setAssignedEngineer();
+	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		moreUnit(1);
 }
@@ -534,17 +536,12 @@ void ManufactureInfoState::lessUnit(int change)
 	if (change < 1)
 		return;
 
-/*	if (Options::allowAutoSellProduction
-		&& _production->getAmountTotal() == std::numeric_limits<int>::max())
-	{
-		_production->setAmountTotal(std::max(_production->getAmountProduced() + 1, 999));
-	} */
-
 	int units = _production->getAmountTotal();
-	change = std::min(
-					units - _production->getAmountProduced() + 1,
-					change);
-	_production->setAmountTotal(units - change);
+//	change = std::min(
+//					units - _production->getAmountProduced() + 1,
+//					change);
+//	_production->setAmountTotal(units - change);
+	_production->setAmountTotal(units - change + 1); // kL
 
 	setAssignedEngineer();
 }
@@ -578,10 +575,23 @@ void ManufactureInfoState::lessUnitRelease(Action* action)
  */
 void ManufactureInfoState::lessUnitClick(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		lessUnit(std::numeric_limits<int>::max());
-	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		lessUnit(1);
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
+		|| action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	{
+		_production->setInfiniteAmount(false);
+
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
+			|| _production->getAmountTotal() <= _production->getAmountProduced())
+		{
+			// so the number-to-produce is now below the produced items OR it was a right-click
+			_production->setAmountTotal(_production->getAmountProduced() + 1);
+
+			setAssignedEngineer();
+		}
+
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+			lessUnit(1);
+	}
 }
 
 /**

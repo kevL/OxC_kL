@@ -28,15 +28,15 @@
 
 enum AlienRank
 {
-	AR_HUMAN = -1,
-	AR_COMMANDER,
-	AR_LEADER,
-	AR_ENGINEER,
-	AR_MEDIC,
-	AR_NAVIGATOR,
-	AR_SOLDIER,
-	AR_TERRORIST,
-	AR_TERRORIST2
+	AR_HUMAN = -1,	// -1
+	AR_COMMANDER,	//  0
+	AR_LEADER,		//  1
+	AR_ENGINEER,	//  2
+	AR_MEDIC,		//  3
+	AR_NAVIGATOR,	//  4
+	AR_SOLDIER,		//  5
+	AR_TERRORIST,	//  6
+	AR_TERRORIST2	//  7
 };
 
 
@@ -49,9 +49,13 @@ namespace OpenXcom
  */
 class AlienRace
 {
+
 private:
+	bool _retaliation;
+
 	std::string _id;
 	std::vector<std::string> _members;
+
 
 	public:
 		/// Creates a blank alien race ruleset.
@@ -66,6 +70,9 @@ private:
 		std::string getId() const;
 		/// Gets a certain member of this alien race family.
 		std::string getMember(int id) const;
+
+		/// Gets if the race can retaliate.
+		bool canRetaliate() const;
 };
 
 }

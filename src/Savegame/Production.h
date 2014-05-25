@@ -49,7 +49,9 @@ class Production
 private:
 	const RuleManufacture* _rules;
 
-	bool _sell;
+	bool
+		_infinite,
+		_sell;
 	int
 		_amount,
 		_engineers,
@@ -75,6 +77,11 @@ private:
 		int getAmountTotal() const;
 		///
 		void setAmountTotal(int amount);
+
+		///
+		bool getInfiniteAmount() const;
+		///
+		void setInfiniteAmount(bool infinite);
 
 		///
 		int getTimeSpent() const;

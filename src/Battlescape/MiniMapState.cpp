@@ -55,10 +55,10 @@ MiniMapState::MiniMapState(
 {
 	_surface		= new InteractiveSurface(320, 200);
 	_miniMapView	= new MiniMapView(
-									222,
-									150,
-									49,
-									15,
+									221,
+									148,
+									48,
+									16,
 									game,
 									camera,
 									battleGame);
@@ -143,6 +143,8 @@ void MiniMapState::handle(Action* action)
 			btnLevelDownClick(action);
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 			btnLevelUpClick(action);
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+			btnOkClick(action);
 	}
 }
 

@@ -235,40 +235,37 @@ void ManufactureState::fillProductionList()
 
 		s1 << (*i)->getAssignedEngineers();
 
-		s2 << (*i)->getAmountProduced() << "/";
-/*		if (Options::allowAutoSellProduction
-			&& (*i)->getAmountTotal() == std::numeric_limits<int>::max()) */
 		if ((*i)->getSellItems())
-		{
-			s2 << "$$";
-		}
+			s2 << "$";
+		s2 << (*i)->getAmountProduced() << "/";
+		if ((*i)->getInfiniteAmount())
+//kL			s2 << Language::utf8ToWstr("∞");
+			s2 << "inf"; // kL
 		else
 			s2 << (*i)->getAmountTotal();
+		if ((*i)->getSellItems())
+			s2 << "$";
 
 		s3 << Text::formatFunding((*i)->getRules()->getManufactureCost());
 
 		if ((*i)->getAssignedEngineers() > 0)
 		{
 			int timeLeft;
-/*			if (Options::allowAutoSellProduction
-				&& (*i)->getAmountTotal() == std::numeric_limits<int>::max()) */
+
 			if ((*i)->getSellItems())
 			{
 				timeLeft = ((*i)->getAmountProduced() + 1) * (*i)->getRules()->getManufactureTime()
-							- (*i)->getTimeSpent();
+						- (*i)->getTimeSpent();
 			}
 			else
 			{
 				timeLeft = (*i)->getAmountTotal() * (*i)->getRules()->getManufactureTime()
-							- (*i)->getTimeSpent();
+						- (*i)->getTimeSpent();
 			}
 
 			timeLeft /= (*i)->getAssignedEngineers();
-//kL			float dayLeft = static_cast<float>(timeLeft) / 24.f;	// <- too clever by half.
 			int daysLeft = timeLeft / 24;
-//kL			int hours = (dayLeft - static_cast<int>(dayLeft)) * 24;	// <- too clever by half.
 			int hoursLeft = timeLeft %24;
-//kL			s4 << static_cast<int>(daysLeft) << "/" << hoursLeft;	// <- too clever by half.
 			s4 << daysLeft << "/" << hoursLeft;
 		}
 		else

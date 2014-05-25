@@ -92,6 +92,7 @@
 #include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
+#include "../Ruleset/AlienRace.h"
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/City.h"
@@ -176,10 +177,12 @@ GeoscapeState::GeoscapeState(Game* game)
 						screenHeight / 2 - 100); */
 
 	_srfSpace	= new Surface( // kL
-							screenWidth - 64,
-							screenHeight,
-							0,
-							0);
+//							screenWidth - 64,
+//							screenHeight,
+							256,
+							200,
+							32,
+							10);
 
 	_globe		= new Globe(
 						_game,					// GLOBE:
@@ -228,15 +231,17 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	// kL_end.
 
-/*kL	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
+/*kL
+	_btnRotateLeft	= new InteractiveSurface(12, 10, screenWidth-61, screenHeight/2+76);
 	_btnRotateRight	= new InteractiveSurface(12, 10, screenWidth-37, screenHeight/2+76);
 	_btnRotateUp	= new InteractiveSurface(13, 12, screenWidth-49, screenHeight/2+62);
 	_btnRotateDown	= new InteractiveSurface(13, 12, screenWidth-49, screenHeight/2+87);
 	_btnZoomIn		= new InteractiveSurface(23, 23, screenWidth-25, screenHeight/2+56);
 	_btnZoomOut		= new InteractiveSurface(13, 17, screenWidth-20, screenHeight/2+82); */
 
-//	int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
-/*	_btnTop		= new TextButton(
+/*kL
+	int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
+	_btnTop		= new TextButton(
 							63,
 							height,
 							screenWidth - 63,
@@ -246,7 +251,7 @@ GeoscapeState::GeoscapeState(Game* game)
 							height,
 							screenWidth - 63,
 							_sidebar->getY() + _sidebar->getHeight() + 1); */
-	int height = ((screenHeight - Screen::ORIGINAL_HEIGHT) / 2) - 1;
+/*	int height = ((screenHeight - Screen::ORIGINAL_HEIGHT) / 2) - 1;
 	_btnTop		= new TextButton(
 							63,
 							height,
@@ -256,7 +261,7 @@ GeoscapeState::GeoscapeState(Game* game)
 							63,
 							height,
 							screenWidth - 63,
-							screenHeight - height + 1);
+							screenHeight - height + 1); */ // kL
 
 /*kL
 	_txtHour		= new Text(20, 17, screenWidth - 61, screenHeight / 2 - 26);
@@ -334,10 +339,10 @@ GeoscapeState::GeoscapeState(Game* game)
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-	add(_btnTop);
-	add(_btnBottom);
+//kL	add(_btnTop);
+//kL	add(_btnBottom);
 
-	add(_srfTime);	// kL
+	add(_srfTime); // kL
 
 	if (Options::showFundsOnGeoscape)
 		add(_txtFunds);
@@ -354,14 +359,16 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	add(_txtDebug);
 
-	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_srfSpace); // kL
+	_game->getResourcePack()->getSurface("LGEOBORD.SCR")->blit(_srfSpace);		// kL
+//	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_srfSpace);	// kL
+//	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);				// kL
 
-//kL	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg); // kL
 /*	Surface* geobord = _game->getResourcePack()->getSurface("GEOBORD.SCR");
 	geobord->setX(_sidebar->getX() - geobord->getWidth() + _sidebar->getWidth());
 	geobord->setY(_sidebar->getY());
 	_sidebar->copy(geobord);
 	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg); */
+
 
 /*kL	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnIntercept->setColor(Palette::blockOffset(15)+6);
@@ -585,8 +592,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomOut->onMouseClick((ActionHandler)& GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut); */
 
-	_btnTop->setColor(Palette::blockOffset(15)+6);
-	_btnBottom->setColor(Palette::blockOffset(15)+6);
+//kL	_btnTop->setColor(Palette::blockOffset(15)+6);
+//kL	_btnBottom->setColor(Palette::blockOffset(15)+6);
 
 	if (Options::showFundsOnGeoscape)
 	{
@@ -2148,12 +2155,16 @@ void GeoscapeState::time1Hour()
 		if (Options::storageLimitsEnforced
 			&& (*i)->storesOverfull())
 		{
+			timerReset(); // kL
+
 			popup(new ErrorMessageState(
 									_game,
 									tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(),
 									_palette,
-									Palette::blockOffset(15)+1,
-									"BACK13.SCR",
+//kL									Palette::blockOffset(15)+1,
+									Palette::blockOffset(6)+4, // kL
+//kL									"BACK13.SCR",
+									"BACK12.SCR", // kL
 									6));
 			popup(new SellState(
 							_game,
@@ -2617,12 +2628,29 @@ void GeoscapeState::time1Month()
 										(*i)->getRules()->getType(),
 										*_game->getRuleset());
 
-						int race = RNG::generate(
+/*						int race = RNG::generate(
 											0,
 											static_cast<int>(
 													_game->getRuleset()->getAlienRacesList().size())
 												- 2); // -2 to avoid "MIXED" race
-						mission->setRace(_game->getRuleset()->getAlienRacesList().at(race));
+						mission->setRace(_game->getRuleset()->getAlienRacesList().at(race)); */
+						// get races for retaliation missions
+						std::vector<std::string> races = _game->getRuleset()->getAlienRacesList();
+						for (std::vector<std::string>::iterator
+								i = races.begin();
+								i != races.end();
+								)
+						{
+							if (_game->getRuleset()->getAlienRace(*i)->canRetaliate())
+								i++;
+							else
+								i = races.erase(i);
+						}
+
+						int race = RNG::generate(
+												0,
+												static_cast<int>(races.size()) - 1);
+						mission->setRace(races[race]);
 						mission->start(150);
 						_game->getSavedGame()->getAlienMissions().push_back(mission);
 
@@ -3359,6 +3387,7 @@ void GeoscapeState::resize(
 //kL	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);
 //kL	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);
 
+/*
 // kL_begin:
 	int height = ((Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2) - 1;
 	_btnTop->setHeight(height);
@@ -3366,7 +3395,7 @@ void GeoscapeState::resize(
 	_btnBottom->setHeight(height);
 	_btnBottom->setY(Options::baseYResolution - height + 1);
 // kL_end.
-
+*/
 /*kL
 	int height = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2 + 10;
 	_btnTop->setHeight(height);

@@ -88,7 +88,9 @@ private:
 
 	std::list<BattleUnit*> _fallingUnits;
 
-	std::vector<BattleItem*> _items;
+	std::vector<BattleItem*>
+		_deleted,
+		_items;
 	std::vector<BattleUnit*>
 //kL		_exposedUnits,
 		_units;

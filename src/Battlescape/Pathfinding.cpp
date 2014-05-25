@@ -238,7 +238,7 @@ void Pathfinding::calculate(
 		if (startPosition.z == endPosition.z) Log(LOG_INFO)				<< "strafe z-level true";
 		if (abs(startPosition.x - endPosition.x) <= 1) Log(LOG_INFO)	<< "strafe Pos.x true";
 		if (abs(startPosition.y - endPosition.y) <= 1) Log(LOG_INFO)	<< "strafe Pos.y true";
-	*/// kL_end_TEST.
+	*/ // kL_end_TEST.
 
 	// Strafing move allowed only to adjacent squares on same z;
 	// "same z" rule mainly to simplify walking render.
@@ -304,7 +304,6 @@ bool Pathfinding::bresenhamPath(
 		int maxTUCost)
 {
 	//Log(LOG_INFO) << "Pathfinding::bresenhamPath()";
-
 	int
 		xd[8] = { 0, 1, 1, 1, 0,-1,-1,-1},
 		yd[8] = {-1,-1, 0, 1, 1, 1, 0,-1},
@@ -529,7 +528,6 @@ bool Pathfinding::aStarPath(
 			return true;
 		}
 
-
 		for (int // Try all reachable neighbours.
 				direction = 0;
 				direction < 10; // dir 0 thro 7, up/down
@@ -649,6 +647,18 @@ int Pathfinding::getTUCost(
 				return 255;
 			}
 
+			// don't let tanks phase through doors.
+			if (x && y)
+			{
+				if ((destTile->getMapData(MapData::O_NORTHWALL)
+						&& destTile->getMapData(MapData::O_NORTHWALL)->isDoor())
+					|| (destTile->getMapData(MapData::O_WESTWALL)
+						&& destTile->getMapData(MapData::O_WESTWALL)->isDoor()))
+				{
+					return 255;
+				}
+			}
+
 			if (direction < DIR_UP
 				&& startTile->getTerrainLevel() > -16)
 			{
@@ -666,7 +676,7 @@ int Pathfinding::getTUCost(
 					return 255;
 			}
 
-			// this will later be used to re-cast the start tile again.
+			// this will later be used to re-init the start tile again.
 			Position verticalOffset(0, 0, 0);
 
 			// if we are on a stairs try to go up a level
@@ -832,10 +842,8 @@ int Pathfinding::getTUCost(
 				int wallTU = 0;		// used to check if there's a wall that costs +TU.
 
 				if (direction == 0
-					|| ((direction == 7
-							|| direction == 1)
-						&& startTile->getMapData(MapData::O_NORTHWALL)
-						&& !startTile->getMapData(MapData::O_NORTHWALL)->isDoor()))
+					|| direction == 7
+					|| direction == 1)
 				{
 					wallTU = startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
 					if (wallTU > 0)
@@ -851,10 +859,8 @@ int Pathfinding::getTUCost(
 				}
 
 				if (direction == 2
-					|| ((direction == 1
-							|| direction == 3)
-						&& destTile->getMapData(MapData::O_WESTWALL)
-						&& !destTile->getMapData(MapData::O_WESTWALL)->isDoor()))
+					|| direction == 1
+					|| direction == 3)
 				{
 					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below.
 					{
@@ -868,10 +874,8 @@ int Pathfinding::getTUCost(
 				}
 
 				if (direction == 4
-					|| ((direction == 3
-							|| direction == 5)
-						&& destTile->getMapData(MapData::O_NORTHWALL)
-						&& !destTile->getMapData(MapData::O_NORTHWALL)->isDoor()))
+					|| direction == 3
+					|| direction == 5)
 				{
 					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below.
 					{
@@ -885,10 +889,8 @@ int Pathfinding::getTUCost(
 				}
 
 				if (direction == 6
-					|| ((direction == 5
-							|| direction == 7)
-						&& startTile->getMapData(MapData::O_WESTWALL)
-						&& !startTile->getMapData(MapData::O_WESTWALL)->isDoor()))
+					|| direction == 5
+					|| direction == 7)
 				{
 					wallTU = startTile->getTUCost(MapData::O_WESTWALL, _movementType);
 					if (wallTU > 0)

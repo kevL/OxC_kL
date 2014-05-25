@@ -30,7 +30,8 @@ namespace OpenXcom
 AlienRace::AlienRace(const std::string& id)
 	:
 		_id(id),
-		_members()
+		_members(),
+		_retaliation(true)
 {
 }
 
@@ -47,14 +48,15 @@ AlienRace::~AlienRace()
  */
 void AlienRace::load(const YAML::Node& node)
 {
-	_id			= node["id"].as<std::string>(_id);
-	_members	= node["members"].as< std::vector<std::string> >(_members);
+	_id				= node["id"].as<std::string>(_id);
+	_members		= node["members"].as< std::vector<std::string> >(_members);
+	_retaliation	= node["retaliation"].as<bool>(_retaliation);
 }
 
 /**
  * Returns the language string that names
  * this alien race. Each race has a unique name.
- * @return Race name.
+ * @return, Race name.
  */
 std::string AlienRace::getId() const
 {
@@ -69,6 +71,15 @@ std::string AlienRace::getId() const
 std::string AlienRace::getMember(int id) const
 {
 	return _members[id];
+}
+
+/**
+ * Returns if the race can participate in retaliation missions.
+ * @return, True if it can retaliate.
+ */
+bool AlienRace::canRetaliate() const
+{
+	return _retaliation;
 }
 
 }

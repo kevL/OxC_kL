@@ -48,6 +48,7 @@ Production::Production(
 	:
 		_rules(rules),
 		_amount(amount),
+		_infinite(false),
 		_timeSpent(0),
 		_engineers(0),
 		_sell(false)
@@ -68,6 +69,22 @@ int Production::getAmountTotal() const
 void Production::setAmountTotal(int amount)
 {
 	_amount = amount;
+}
+
+/**
+ *
+ */
+bool Production::getInfiniteAmount() const
+{
+	return _infinite;
+}
+
+/**
+ *
+ */
+void Production::setInfiniteAmount(bool infinite)
+{
+	_infinite = infinite;
 }
 
 /**
@@ -160,7 +177,7 @@ ProdProgress Production::step(
 		int produced = std::min(
 							getAmountProduced(),
 							_amount)
-						- done;
+					- done;
 		int count = 0;
 
 		do
@@ -229,9 +246,7 @@ ProdProgress Production::step(
 						}
 					}
 
-/*					if (Options::allowAutoSellProduction
-						&& getAmountTotal() == std::numeric_limits<int>::max()) */
-					if (getSellItems())
+					if (getSellItems()) // <- this may be Fucked. kL_note
 					{
 						g->setFunds(g->getFunds() + (r->getItem(i->first)->getSellCost() * i->second));
 						b->setCashIncome(r->getItem(i->first)->getSellCost() * i->second); // kL
@@ -254,14 +269,19 @@ ProdProgress Production::step(
 				if (!enoughMaterials(b))
 					return PROGRESS_NOT_ENOUGH_MATERIALS;
 
+				// kL_note: NOT ENOUGH HANGAR SPACE!!!
+
 				startItem(b, g);
 			}
 		}
 		while (count < produced);
 	}
 
-	if (getAmountProduced() >= _amount)
+	if (getAmountProduced() >= _amount
+		&& !getInfiniteAmount())
+	{
 		return PROGRESS_COMPLETE;
+	}
 
 	if (done < getAmountProduced())
 	{
@@ -271,6 +291,8 @@ ProdProgress Production::step(
 
 		if (!enoughMaterials(b))
 			return PROGRESS_NOT_ENOUGH_MATERIALS;
+
+		// kL_note: NOT ENOUGH HANGAR SPACE!!!
 
 		startItem(b, g);
 	}
@@ -323,13 +345,17 @@ void Production::load(const YAML::Node& node)
 	setTimeSpent(node["spent"].as<int>(getTimeSpent()));
 
 	setAmountTotal(node["amount"].as<int>(getAmountTotal()));
+	setInfiniteAmount(node["infinite"].as<bool>(getInfiniteAmount()));
 	setSellItems(node["sell"].as<bool>(getSellItems()));
 
+	// backwards compatiblity
+/*kL
 	if (getAmountTotal() == std::numeric_limits<int>::max())
 	{
 		setAmountTotal(999);
+		setInfiniteAmount(true);
 		setSellItems(true);
-	}
+	} */
 }
 
 /**
@@ -343,6 +369,7 @@ YAML::Node Production::save() const
 	node["assigned"]	= getAssignedEngineers();
 	node["spent"]		= getTimeSpent();
 	node["amount"]		= getAmountTotal();
+	node["infinite"]	= getInfiniteAmount();
 
 	if (getSellItems())
 		node["sell"]	= getSellItems();
