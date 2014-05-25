@@ -24,6 +24,8 @@
 #include <assert.h>
 #include <math.h>
 
+#include "../fmath.h"
+
 #include "City.h"
 
 #include "../Engine/RNG.h"
@@ -134,10 +136,10 @@ void RuleRegion::load(const YAML::Node& node)
 						&& !matching;
 					++j)
 			{
-				matching = ((*j)->getLatitude() == (*i).latMin * M_PI / 180.0
-							&& (*j)->getLongitude() == (*i).lonMin * M_PI / 180.0
-							&& (*i).latMax == (*i).latMin
-							&& (*i).lonMax == (*i).lonMin);
+				matching = (AreSame((*j)->getLatitude(), (*i).latMin * M_PI / 180.0)
+							&& AreSame((*j)->getLongitude(), (*i).lonMin * M_PI / 180.0)
+							&& AreSame((*i).latMax, (*i).latMin)
+							&& AreSame((*i).lonMax, (*i).lonMin));
 			}
 
 			if (matching)

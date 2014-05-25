@@ -1101,19 +1101,24 @@ void Globe::cache(
 			i != polygons->end();
 			++i)
 	{
-		bool backFace = true;
-		for (int // Is quad on the back face?
+		double closest = 0.0; // Is quad on the back face?
+		double furthest = 0.0;
+		double z;
+
+		for (int
 				j = 0;
 				j < (*i)->getPoints();
 				++j)
 		{
-			backFace = backFace && pointBack(
-										(*i)->getLongitude(j),
-										(*i)->getLatitude(j));
+			z = cos(_cenLat) * cos((*i)->getLatitude(j)) * cos((*i)->getLongitude(j) - _cenLon) + sin(_cenLat) * sin((*i)->getLatitude(j));
+			if (z > closest)
+				closest = z;
+			else if (z < furthest)
+				furthest = z;
 		}
 
-		if (backFace) continue;
-
+		if (-furthest > closest)
+			continue;
 
 		Polygon* p = new Polygon(**i);
 

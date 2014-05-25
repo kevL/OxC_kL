@@ -22,7 +22,6 @@
 #include <SDL_mixer.h>
 
 #include "MainMenuState.h"
-//kL #include "OptionsBaseState.h"
 
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Flc.h"
@@ -316,6 +315,7 @@ static introSoundEffect introSoundTrack[] =
 	{786, 0x0},
 	{790, 0x15},	// big growl
 //	{790, 0x15},	// 2x loud growl
+	{792, 0x15},	// 2x loud growl, kL:chorus
 	{807, 0x2},
 	{810, 0x2},
 	{812, 0x2},
@@ -531,12 +531,12 @@ void IntroState::init()
 	Options::baseXResolution = Options::baseXGeoscape; // kL
 	Options::baseYResolution = Options::baseYGeoscape; // kL
 	// This sets Geoscape and Basescape to default (320x200) IG and the config.
-/*kL	OptionsBaseState::updateScale(
-							Options::geoscapeScale,
-							Options::geoscapeScale,
-							Options::baseXGeoscape,
-							Options::baseYGeoscape,
-							true); */
+/*kL	Screen::updateScale(
+					Options::geoscapeScale,
+					Options::geoscapeScale,
+					Options::baseXGeoscape,
+					Options::baseYGeoscape,
+					true); */
 	_game->getScreen()->resetDisplay(false);
 
 	_game->setState(new MainMenuState(_game));

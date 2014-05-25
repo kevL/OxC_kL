@@ -53,6 +53,10 @@ MiniMapState::MiniMapState(
 	:
 		State(game)
 {
+/*	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	_game->getScreen()->resetDisplay(false); */
+
 	_surface		= new InteractiveSurface(320, 200);
 	_miniMapView	= new MiniMapView(
 									221,
@@ -79,7 +83,6 @@ MiniMapState::MiniMapState(
 	add(_txtLevel);
 
 	centerAllSurfaces();
-
 
 	if (_game->getScreen()->getDY() > 50)
 	{
@@ -143,8 +146,8 @@ void MiniMapState::handle(Action* action)
 			btnLevelDownClick(action);
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 			btnLevelUpClick(action);
-		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-			btnOkClick(action);
+//kL		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+//kL			btnOkClick(action);
 	}
 }
 
@@ -154,6 +157,14 @@ void MiniMapState::handle(Action* action)
  */
 void MiniMapState::btnOkClick(Action*)
 {
+/*	Screen::updateScale(
+					Options::battlescapeScale,
+					Options::battlescapeScale,
+					Options::baseXBattlescape,
+					Options::baseYBattlescape,
+					true);
+	_game->getScreen()->resetDisplay(false); */
+
 	_game->popState();
 }
 

@@ -46,6 +46,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -67,13 +68,10 @@ CraftInfoState::CraftInfoState(
 		_craftId(craftId)
 {
 	//Log(LOG_INFO) << "Create CraftInfoState";
-	_window			= new Window(
-								this,
-								320,
-								200,
-								0,
-								0,
-								POPUP_BOTH);
+	if (_game->getSavedGame()->getMonthsPassed() != -1)
+		_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
+	else
+		_window		= new Window(this, 320, 200, 0, 0, POPUP_NONE);
 
 	_edtCraft		= new TextEdit(this, 160, 16, 80, 10);
 	_txtBaseLabel	= new Text(80, 9, 16, 10);

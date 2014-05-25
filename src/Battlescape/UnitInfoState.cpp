@@ -29,6 +29,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+//kL #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 
 #include "../Interface/Bar.h"
@@ -70,6 +71,10 @@ UnitInfoState::UnitInfoState(
 		_fromInventory(fromInventory),
 		_mindProbe(mindProbe)
 {
+/*	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	_game->getScreen()->resetDisplay(false); */
+
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
 	_bg				= new Surface(320, 200, 0, 0);
@@ -682,38 +687,32 @@ void UnitInfoState::handle(Action* action)
 
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+/*		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+			exit();
+		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			if (_fromInventory
-				&& !_unit->hasInventory())
-			{
-				_game->popState(); // tanks require double pop here.
-			}
-
-			_game->popState();
+			if (static_cast<int>(action->getRelativeYMouse()) > 20)
+				exit();
+		} */
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+			|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			exit();
 		}
-		// kL_begin:
 		else if (!_mindProbe)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)
 				btnNextClick(action);
 			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
 				btnPrevClick(action);
-		} // kL_end.
+		}
 	}
-
-	if (action->getDetails()->type == SDL_KEYDOWN)
+	else if (action->getDetails()->type == SDL_KEYDOWN)
 	{
 		if (action->getDetails()->key.keysym.sym == Options::keyCancel
 			|| action->getDetails()->key.keysym.sym == Options::keyBattleStats)
 		{
-			if (_fromInventory
-				&& !_unit->hasInventory())
-			{
-				_game->popState(); // tanks require double pop here.
-			}
-
-			_game->popState();
+			exit();
 		}
 	}
 }
@@ -740,7 +739,7 @@ void UnitInfoState::btnPrevClick(Action*)
 	if (_unit != 0)
 		init();
 	else
-		_game->popState();
+		exit();
 }
 
 /**
@@ -765,7 +764,29 @@ void UnitInfoState::btnNextClick(Action*)
 	if (_unit != 0)
 		init();
 	else
-		_game->popState();
+		exit();
+}
+
+/**
+ *
+ */
+void UnitInfoState::exit()
+{
+	if (_fromInventory)
+	{
+		if (!_unit->hasInventory())
+			_game->popState(); // tanks require double pop here.
+
+/*		Screen::updateScale(
+						Options::battlescapeScale,
+						Options::battlescapeScale,
+						Options::baseXBattlescape,
+						Options::baseYBattlescape,
+						true);
+		_game->getScreen()->resetDisplay(false); */
+	}
+
+	_game->popState();
 }
 
 }

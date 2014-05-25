@@ -299,18 +299,18 @@ void Game::run()
 								dX = 0,
 								dY = 0;
 
-							OptionsBaseState::updateScale(
-													Options::battlescapeScale,
-													Options::battlescapeScale,
-													Options::baseXBattlescape,
-													Options::baseYBattlescape,
-													false);
-							OptionsBaseState::updateScale(
-													Options::geoscapeScale,
-													Options::geoscapeScale,
-													Options::baseXGeoscape,
-													Options::baseYGeoscape,
-													false);
+							Screen::updateScale(
+											Options::battlescapeScale,
+											Options::battlescapeScale,
+											Options::baseXBattlescape,
+											Options::baseYBattlescape,
+											false);
+							Screen::updateScale(
+											Options::geoscapeScale,
+											Options::geoscapeScale,
+											Options::baseXGeoscape,
+											Options::baseYGeoscape,
+											false);
 
 							for (std::list<State*>::iterator
 									i = _states.begin();
@@ -753,8 +753,7 @@ void Game::defaultLanguage()
 {
 	std::string defaultLang = "en-US";
 
-	// No language set, detect based on system
-	if (Options::language.empty())
+	if (Options::language.empty()) // No language set, detect based on system
 	{
 		std::string locale = CrossPlatform::getLocale();
 		std::string lang = locale.substr(0, locale.find_first_of('-'));

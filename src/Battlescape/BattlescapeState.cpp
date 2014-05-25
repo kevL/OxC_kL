@@ -904,15 +904,15 @@ void BattlescapeState::mapOver(Action* action)
 		if (Options::battleDragScrollInvert)
 		{
 			_map->getCamera()->scrollXY(
-									static_cast<int>(-action->getDetails()->motion.xrel),
-									static_cast<int>(-action->getDetails()->motion.yrel),
+									static_cast<int>(-action->getDetails()->motion.xrel) / 3,
+									static_cast<int>(-action->getDetails()->motion.yrel) / 3,
 									false);
 		}
 		else
 		{
 			_map->getCamera()->scrollXY(
-								static_cast<int>(action->getDetails()->motion.xrel),
-								static_cast<int>(action->getDetails()->motion.yrel),
+								static_cast<int>(action->getDetails()->motion.xrel) / 3,
+								static_cast<int>(action->getDetails()->motion.yrel) / 3,
 								false);
 		}
 

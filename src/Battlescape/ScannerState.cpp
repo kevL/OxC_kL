@@ -29,6 +29,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
+//kL #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
@@ -58,9 +59,19 @@ ScannerState::ScannerState(
 		State(game),
 		_action(action)
 {
+/*	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+	_game->getScreen()->resetDisplay(false); */
+
 	_surface1		= new InteractiveSurface(320, 200);
 	_surface2		= new InteractiveSurface(320, 200);
-	_scannerView	= new ScannerView(152, 152, 56, 24, _game, _action->actor);
+	_scannerView	= new ScannerView(
+									152,
+									152,
+									56,
+									24,
+									_game,
+									_action->actor);
 
 	if (_game->getScreen()->getDY() > 50)
 		_screen = false;
@@ -99,6 +110,14 @@ void ScannerState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
+/*		Screen::updateScale(
+						Options::battlescapeScale,
+						Options::battlescapeScale,
+						Options::baseXBattlescape,
+						Options::baseYBattlescape,
+						true);
+		_game->getScreen()->resetDisplay(false); */
+
 		_game->popState();
 	}
 }
@@ -108,7 +127,7 @@ void ScannerState::handle(Action* action)
  */
 void ScannerState::update()
 {
-	//_scannerView->draw();
+//	_scannerView->draw();
 }
 
 /**

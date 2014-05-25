@@ -23,7 +23,6 @@
 
 #include "ErrorMessageState.h"
 #include "MainMenuState.h"
-// #include "OptionsBaseState.h" // kL
 
 #include "../Engine/Action.h"
 #include "../Engine/CrossPlatform.h"
@@ -177,16 +176,16 @@ void SaveGameState::init()
 		if (_type == SAVE_IRONMAN_END)
 		{
 			// This uses baseX/Y options for Geoscape & Basescape:
-			Options::baseXResolution = Options::baseXGeoscape; // kL
-			Options::baseYResolution = Options::baseYGeoscape; // kL
+//			Options::baseXResolution = Options::baseXGeoscape; // kL
+//			Options::baseYResolution = Options::baseYGeoscape; // kL
 			// This sets Geoscape and Basescape to default (320x200) IG and the config.
-/*kL			OptionsBaseState::updateScale(
-									Options::geoscapeScale,
-									Options::geoscapeScale,
-									Options::baseXGeoscape,
-									Options::baseYGeoscape,
-									true); */
-			_game->getScreen()->resetDisplay(false);
+/*kL			Screen::updateScale(
+							Options::geoscapeScale,
+							Options::geoscapeScale,
+							Options::baseXGeoscape,
+							Options::baseYGeoscape,
+							true); */
+//			_game->getScreen()->resetDisplay(false);
 
 			_game->setState(new MainMenuState(_game));
 			_game->setSavedGame(0);

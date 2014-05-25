@@ -181,8 +181,8 @@ GeoscapeState::GeoscapeState(Game* game)
 //							screenHeight,
 							256,
 							200,
-							32,
-							10);
+							30,
+							12);
 
 	_globe		= new Globe(
 						_game,					// GLOBE:

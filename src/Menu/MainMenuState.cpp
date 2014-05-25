@@ -24,7 +24,6 @@
 #include "ListLoadState.h"
 #include "NewBattleState.h"
 #include "NewGameState.h"
-// #include "OptionsBaseState.h" // kL
 #include "OptionsVideoState.h"
 
 #include "../version.h"
@@ -32,6 +31,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 //kL #include "../Engine/Screen.h"
 
@@ -63,12 +63,12 @@ MainMenuState::MainMenuState(Game* game)
 //	Options::baseXResolution = Options::baseXGeoscape; // kL
 //	Options::baseYResolution = Options::baseYGeoscape; // kL
 	// This sets Geoscape and Basescape to default (320x200) IG and the config.
-/*	OptionsBaseState::updateScale(
-								Options::geoscapeScale,
-								Options::geoscapeScale,
-								Options::baseXGeoscape,
-								Options::baseYGeoscape,
-								true); kL */
+/*	Screen::updateScale(
+					Options::geoscapeScale,
+					Options::geoscapeScale,
+					Options::baseXGeoscape,
+					Options::baseYGeoscape,
+					true); kL */
 //	_game->getScreen()->resetDisplay(false); // kL
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_txtTitle		= new Text(256, 30, 32, 56);
@@ -203,25 +203,25 @@ void MainMenuState::resize(
 		int& dX,
 		int& dY)
 {
-	dX = Options::baseXResolution;
-	dY = Options::baseYResolution;
+/*	dX = Options::baseXResolution;
+	dY = Options::baseYResolution; */
 
 	// This uses baseX/Y options for Geoscape & Basescape:
-	Options::baseXResolution = Options::baseXGeoscape; // kL
-	Options::baseYResolution = Options::baseYGeoscape; // kL
+//	Options::baseXResolution = Options::baseXGeoscape; // kL
+//	Options::baseYResolution = Options::baseYGeoscape; // kL
 	// This sets Geoscape and Basescape to default (320x200) IG and the config.
-/*	OptionsBaseState::updateScale(
-								Options::geoscapeScale,
-								Options::geoscapeScale,
-								Options::baseXGeoscape,
-								Options::baseYGeoscape,
-								true); */
+/*	Screen::updateScale(
+					Options::geoscapeScale,
+					Options::geoscapeScale,
+					Options::baseXGeoscape,
+					Options::baseYGeoscape,
+					true); */
 //	_game->getScreen()->resetDisplay(false); // kL: this resets options.cfg!
 
-	dX = Options::baseXResolution - dX;
+/*	dX = Options::baseXResolution - dX;
 	dY = Options::baseYResolution - dY;
 
-	State::resize(dX, dY);
+	State::resize(dX, dY); */
 }
 
 }

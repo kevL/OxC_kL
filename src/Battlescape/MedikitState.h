@@ -50,12 +50,12 @@ private:
 		* _targetUnit,
 		* _unit;
 	InteractiveSurface* _surface;
-	MedikitView* _medikitView;
+	MedikitView* _mediView;
 	Text
 		* _healTxt,
 		* _partTxt,
-		* _pkText,
-		* _stimulantTxt,
+		* _painText,
+		* _stimTxt,
 		* _woundTxt;
 
 	/// Handler for the end button.

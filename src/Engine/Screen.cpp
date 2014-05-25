@@ -387,8 +387,8 @@ int Screen::getHeight() const
  */
 void Screen::resetDisplay(bool resetVideo)
 {
-	int width = Options::displayWidth;
-	int height = Options::displayHeight;
+	int width	= Options::displayWidth;
+	int height	= Options::displayHeight;
 
 #ifdef __linux__
 	Uint32 oldFlags = _flags;
@@ -405,7 +405,6 @@ void Screen::resetDisplay(bool resetVideo)
 		if (_surface)
 			delete _surface;
 
-		// only HQX needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
 		_surface = new Surface( // only HQX needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
 							_baseWidth,
 							_baseHeight,
@@ -466,11 +465,11 @@ void Screen::resetDisplay(bool resetVideo)
 	else
 		clear();
 
-	Options::displayWidth = getWidth();
-	Options::displayHeight = getHeight();
+	Options::displayWidth	= getWidth();
+	Options::displayHeight	= getHeight();
 
-	_scaleX = getWidth() / static_cast<double>(_baseWidth);
-	_scaleY = getHeight() / static_cast<double>(_baseHeight);
+	_scaleX = static_cast<double>(getWidth()) / static_cast<double>(_baseWidth);
+	_scaleY = static_cast<double>(getHeight()) / static_cast<double>(_baseHeight);
 
 	_clear.x = 0;
 	_clear.y = 0;
@@ -508,7 +507,7 @@ void Screen::resetDisplay(bool resetVideo)
 		else
 			_cursorLeftBlackBand = 0;
 	}
-	else if (_scaleY > _scaleX
+	else if (_scaleX < _scaleY
 		&& Options::keepAspectRatio)
 	{
 		int targetHeight = static_cast<int>(floor(_scaleX * static_cast<double>(_baseHeight)));
@@ -700,6 +699,68 @@ int Screen::getDX()
 int Screen::getDY()
 {
 	return (_baseHeight - ORIGINAL_HEIGHT) / 2;
+}
+
+/**
+* Changes a given scale, and if necessary, switch the current base resolution.
+* @param type reference to which scale option we are using, battlescape or geoscape.
+* @param selection the new scale level.
+* @param width reference to which x scale to adjust.
+* @param height reference to which y scale to adjust.
+* @param change should we change the current scale.
+*/
+void Screen::updateScale(
+		int& type,
+		int selection,
+		int& width,
+		int& height,
+		bool change)
+{
+	type = selection;
+	switch (type)
+	{
+		case SCALE_15X:
+			width	= static_cast<int>(static_cast<double>(Screen::ORIGINAL_WIDTH) * 1.5);
+			height	= static_cast<int>(static_cast<double>(Screen::ORIGINAL_HEIGHT) * 1.5);
+		break;
+		case SCALE_2X:
+			width	= Screen::ORIGINAL_WIDTH * 2;
+			height	= Screen::ORIGINAL_HEIGHT * 2;
+		break;
+		case SCALE_SCREEN_DIV_3:
+			width	= Options::newDisplayWidth / 3;
+			height	= Options::newDisplayHeight / 3;
+		break;
+		case SCALE_SCREEN_DIV_2:
+			width	= Options::newDisplayWidth / 2;
+			height	= Options::newDisplayHeight / 2;
+		break;
+		case SCALE_SCREEN:
+			width	= Options::newDisplayWidth;
+			height	= Options::newDisplayHeight;
+		break;
+
+		case SCALE_ORIGINAL:
+		default:
+			width	= Screen::ORIGINAL_WIDTH;
+			height	= Screen::ORIGINAL_HEIGHT;
+		break;
+	}
+
+	width	= std::max(
+					width,
+					Screen::ORIGINAL_WIDTH);
+	height	= std::max(
+					height,
+					Screen::ORIGINAL_HEIGHT);
+
+	if (change
+		&& (Options::baseXResolution != width
+			|| Options::baseYResolution != height))
+	{
+		Options::baseXResolution = width;
+		Options::baseYResolution = height;
+	}
 }
 
 }

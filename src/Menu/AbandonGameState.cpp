@@ -20,7 +20,6 @@
 #include "AbandonGameState.h"
 
 #include "MainMenuState.h"
-//kL #include "OptionsBaseState.h"
 #include "SaveGameState.h"
 
 #include "../Engine/Game.h"
@@ -28,7 +27,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//kL #include "../Engine/Screen.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -121,16 +120,16 @@ void AbandonGameState::btnYesClick(Action*)
 	if (!_game->getSavedGame()->isIronman())
 	{
 		// This uses baseX/Y options for Geoscape & Basescape:
-		Options::baseXResolution = Options::baseXGeoscape; // kL
-		Options::baseYResolution = Options::baseYGeoscape; // kL
+//		Options::baseXResolution = Options::baseXGeoscape; // kL
+//		Options::baseYResolution = Options::baseYGeoscape; // kL
 		// This sets Geoscape and Basescape to default (320x200) IG and the config.
-/*kL		OptionsBaseState::updateScale(
-								Options::geoscapeScale,
-								Options::geoscapeScale,
-								Options::baseXGeoscape,
-								Options::baseYGeoscape,
-								true); */
-		_game->getScreen()->resetDisplay(false);
+/*kL		Screen::updateScale(
+						Options::geoscapeScale,
+						Options::geoscapeScale,
+						Options::baseXGeoscape,
+						Options::baseYGeoscape,
+						true); */
+//		_game->getScreen()->resetDisplay(false);
 
 		_game->setState(new MainMenuState(_game));
 		_game->setSavedGame(0);

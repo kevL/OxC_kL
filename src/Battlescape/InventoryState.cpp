@@ -34,9 +34,10 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
+//kL #include "../Engine/Logger.h"
+//kL #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+//kL #include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -78,6 +79,10 @@ InventoryState::InventoryState(
 		_parent(parent)
 {
 	//Log(LOG_INFO) << "Create InventoryState";
+//	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+//	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+//	_game->getScreen()->resetDisplay(false);
+
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	//Log(LOG_INFO) << ". _battleGame = " << _battleGame;
 
@@ -470,6 +475,14 @@ void InventoryState::btnOkClick(Action*)
 		// kL_begin: This for early exit because access is via CraftEquip screen.
 		if (_parent == 0)
 		{
+/*			Screen::updateScale(
+							Options::geoscapeScale,
+							Options::geoscapeScale,
+							Options::baseXGeoscape,
+							Options::baseYGeoscape,
+							true);
+			_game->getScreen()->resetDisplay(false); */
+
 			//Log(LOG_INFO) << ". early out <- CraftEquip ( no BattlescapeState )";
 			return;
 		} // kL_end.
@@ -492,6 +505,7 @@ void InventoryState::btnOkClick(Action*)
 //	if (tileEngine) // kL_note: not needed, CraftEquip is handled above w/ early return.
 //	{
 //	tileEngine->applyGravity(_battleGame->getSelectedUnit()->getTile());
+
 	tileEngine->applyGravity(inventoryTile);
 	tileEngine->calculateTerrainLighting(); // dropping / picking up flares
 	tileEngine->recalculateFOV();
@@ -504,6 +518,15 @@ void InventoryState::btnOkClick(Action*)
 			getTileEngine()->calculateFOV(position);
 		} */
 //	}
+
+/*	Screen::updateScale(
+					Options::battlescapeScale,
+					Options::battlescapeScale,
+					Options::baseXBattlescape,
+					Options::baseYBattlescape,
+					true);
+	_game->getScreen()->resetDisplay(false); */
+
 	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }
 
