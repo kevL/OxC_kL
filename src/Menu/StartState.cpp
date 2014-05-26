@@ -99,7 +99,7 @@ StartState::StartState(Game* game)
 
 	add(_surface);
 
-	_surface->drawString(120, 96, "Loading ...", 1);
+	_surface->drawString(120, 96, "Loading...", 1);
 
 	_game->getCursor()->setVisible(false);
 	_game->getFpsCounter()->setVisible(false);

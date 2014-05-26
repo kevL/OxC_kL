@@ -8321,7 +8321,7 @@
 	<stdlib.h>
 	<fstream>
 
-1401099757 source:f:\git\openxcom\src\main.cpp
+1401106656 source:f:\git\openxcom\src\main.cpp
 	<exception>
 	<sstream>
 	"version.h"
@@ -8682,7 +8682,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1401106457 source:f:\git\openxcom\src\menu\startstate.cpp
+1401107338 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	<SDL_mixer.h>
 	<SDL_syswm.h>
