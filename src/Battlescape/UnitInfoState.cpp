@@ -71,9 +71,13 @@ UnitInfoState::UnitInfoState(
 		_fromInventory(fromInventory),
 		_mindProbe(mindProbe)
 {
-/*	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-	_game->getScreen()->resetDisplay(false); */
+/*kL
+	if (Options::maximizeInfoScreens)
+	{
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+		_game->getScreen()->resetDisplay(false);
+	} */
 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
@@ -770,16 +774,20 @@ void UnitInfoState::exit()
 {
 	if (!_fromInventory)
 	{
-/*		Screen::updateScale(
-						Options::battlescapeScale,
-						Options::battlescapeScale,
-						Options::baseXBattlescape,
-						Options::baseYBattlescape,
-						true);
-		_game->getScreen()->resetDisplay(false); */
+/*kL
+		if (Options::maximizeInfoScreens)
+		{
+			Screen::updateScale(
+							Options::battlescapeScale,
+							Options::battlescapeScale,
+							Options::baseXBattlescape,
+							Options::baseYBattlescape,
+							true);
+			_game->getScreen()->resetDisplay(false);
+		} */
 	}
-	else if (!_unit->hasInventory())
-		_game->popState(); // tanks require double pop here.
+	else if (!_unit->hasInventory())	// kL
+		_game->popState();				// kL, tanks require double pop here.
 
 	_game->popState();
 }

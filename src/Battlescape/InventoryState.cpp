@@ -79,12 +79,26 @@ InventoryState::InventoryState(
 		_parent(parent)
 {
 	//Log(LOG_INFO) << "Create InventoryState";
-//	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-//	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-//	_game->getScreen()->resetDisplay(false);
-
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	//Log(LOG_INFO) << ". _battleGame = " << _battleGame;
+
+/*kL
+	if (Options::maximizeInfoScreens)
+	{
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+		_game->getScreen()->resetDisplay(false);
+	}
+	else if (!_battleGame->getTileEngine())
+	{
+		Screen::updateScale(
+						Options::battlescapeScale,
+						Options::battlescapeScale,
+						Options::baseXBattlescape,
+						Options::baseYBattlescape,
+						true);
+		_game->getScreen()->resetDisplay(false);
+	} */
 
 	_bg			= new Surface(320, 200, 0, 0);
 	_soldier	= new Surface(320, 200, 0, 0);
@@ -475,7 +489,8 @@ void InventoryState::btnOkClick(Action*)
 		// kL_begin: This for early exit because access is via CraftEquip screen.
 		if (_parent == 0)
 		{
-/*			Screen::updateScale(
+/*kL
+			Screen::updateScale(
 							Options::geoscapeScale,
 							Options::geoscapeScale,
 							Options::baseXGeoscape,
@@ -519,13 +534,17 @@ void InventoryState::btnOkClick(Action*)
 		} */
 //	}
 
-/*	Screen::updateScale(
-					Options::battlescapeScale,
-					Options::battlescapeScale,
-					Options::baseXBattlescape,
-					Options::baseYBattlescape,
-					true);
-	_game->getScreen()->resetDisplay(false); */
+/*kL
+	if (Options::maximizeInfoScreens)
+	{
+		Screen::updateScale(
+						Options::battlescapeScale,
+						Options::battlescapeScale,
+						Options::baseXBattlescape,
+						Options::baseYBattlescape,
+						true);
+		_game->getScreen()->resetDisplay(false);
+	} */
 
 	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }

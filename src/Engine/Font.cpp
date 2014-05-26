@@ -20,7 +20,9 @@
 #include "Font.h"
 
 #include "CrossPlatform.h"
+#include "DosFont.h"
 #include "Language.h"
+#include "Logger.h"
 #include "Surface.h"
 
 
@@ -44,8 +46,9 @@ Font::Font()
 		_surface(0),
 		_width(0),
 		_height(0),
+		_spacing(0),
 		_chars(),
-		_spacing(0)
+		_monospace(false)
 {
 }
 
@@ -75,6 +78,7 @@ void Font::load(const YAML::Node& node)
 	_width		= node["width"].as<int>(_width);
 	_height		= node["height"].as<int>(_height);
 	_spacing	= node["spacing"].as<int>(_spacing);
+	_monospace	= node["monospace"].as<bool>(_monospace);
 
 	std::string image = "Language/" + node["image"].as<std::string>();
 
@@ -95,6 +99,42 @@ void Font::load(const YAML::Node& node)
 }
 
 /**
+ * Generates a pre-defined Codepage 437 (MS-DOS terminal) font.
+ */
+void Font::loadTerminal()
+{
+	_width		= 9;
+	_height		= 16;
+	_spacing	= 0;
+	_monospace	= true;
+
+	SDL_RWops* rw = SDL_RWFromConstMem(
+									dosFont,
+									DOSFONT_SIZE);
+	SDL_Surface* s = SDL_LoadBMP_RW(rw, 0);
+	SDL_FreeRW(rw);
+
+	_surface = new Surface(s->w, s->h);
+	SDL_Color terminal[2] =
+	{
+		{  0,   0,   0, 0},
+		{185, 185, 185, 0}
+	};
+
+	_surface->setPalette(terminal, 0, 2);
+
+	SDL_BlitSurface(s, 0, _surface->getSurface(), 0);
+	SDL_FreeSurface(s);
+
+	std::wstring temp = _index;
+	_index = L" !\"#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~";
+
+	init();
+
+	_index = temp;
+}
+
+/**
  * Calculates the real size and position of each character in the surface and
  * stores them in SDL_Rect's for future use by other classes.
  */
@@ -103,59 +143,84 @@ void Font::init()
 	_surface->lock();
 
 	int length = (_surface->getWidth() / _width);
-	for (size_t
-			i = 0;
-			i < _index.length();
-			++i)
+
+	if (_monospace)
 	{
-		SDL_Rect rect;
-
-		int
-			left = -1,
-			right = -1,
-			startX = i % length * _width,
-			startY = i / length * _height;
-
-		for (int
-				x = startX;
-				x < startX + _width;
-				++x)
+		for (size_t
+				i = 0;
+				i < _index.length();
+				++i)
 		{
-			for (int
-					y = startY;
-					y < startY + _height
-						&& left == -1;
-					++y)
-			{
-				Uint8 pixel = _surface->getPixelColor(x, y);
-				if (pixel != 0)
-					left = x;
-			}
-		}
+			SDL_Rect rect;
 
-		for (int
-				x = startX + _width - 1;
-				x >= startX;
-				--x)
+			int
+				startX = i %length * _width,
+				startY = i / length * _height;
+
+			rect.x = startX;
+			rect.y = startY;
+			rect.w = _width;
+			rect.h = _height;
+
+			_chars[_index[i]] = rect;
+		}
+	}
+	else
+	{
+		for (size_t
+				i = 0;
+				i < _index.length();
+				++i)
 		{
+			SDL_Rect rect;
+
+			int
+				left = -1,
+				right = -1,
+				startX = i %length * _width,
+				startY = i / length * _height;
+
 			for (int
-					y = startY + _height;
-					y-- != startY
-						&& right == -1;
-					)
+					x = startX;
+					x < startX + _width;
+					++x)
 			{
-				Uint8 pixel = _surface->getPixelColor(x, y);
-				if (pixel != 0)
-					right = x;
+				for (int
+						y = startY;
+						y < startY + _height
+							&& left == -1;
+						++y)
+				{
+					Uint8 pixel = _surface->getPixelColor(x, y);
+					if (pixel != 0)
+						left = x;
+				}
 			}
+
+			for (int
+					x = startX + _width - 1;
+					x >= startX;
+					--x)
+			{
+				for (int
+						y = startY + _height;
+						y-- != startY
+							&& right == -1;
+						)
+				{
+						Uint8 pixel = _surface->getPixelColor(x, y);
+					if (pixel != 0)
+						right = x;
+				}
+			}
+
+			rect.x = left;
+			rect.y = startY;
+			rect.w = right - left + 1;
+			rect.h = _height;
+
+			_chars[_index[i]] = rect;
 		}
-
-		rect.x = left;
-		rect.y = startY;
-		rect.w = right - left + 1;
-		rect.h = _height;
-
-		_chars[_index[i]] = rect;
 	}
 
 	_surface->unlock();
@@ -225,7 +290,9 @@ SDL_Rect Font::getCharSize(wchar_t c)
 	}
 	else
 	{
-		if (isNonBreakableSpace(c))
+		if (_monospace)
+			size.w = _width + _spacing;
+		else if (isNonBreakableSpace(c))
 			size.w = _width / 4;
 		else
 			size.w = _width / 2;

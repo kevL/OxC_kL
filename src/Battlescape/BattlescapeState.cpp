@@ -3009,12 +3009,12 @@ void BattlescapeState::stopScrolling(Action* action)
 	action->setMouseAction(
 					_xBeforeMouseScrolling,
 					_yBeforeMouseScrolling,
-					_map->getHeight(),
-					_map->getWidth());
+					_map->getX(),
+					_map->getY());
 }
 
 /**
- * kL. Returns the TurnCounter used by the game.
+ * kL. Returns the TurnCounter used by the Battlescape.
  * @return, Pointer to the TurnCounter.
  */
 TurnCounter* BattlescapeState::getTurnCounter() const

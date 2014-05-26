@@ -114,7 +114,7 @@ void AdlibMusic::load(const std::string& filename)
 	}
 
 	file.seekg(0, std::ifstream::end);
-	_size = file.tellg();
+	_size = static_cast<size_t>(file.tellg());
 	file.seekg(0);
 
 	_data = new char[_size];

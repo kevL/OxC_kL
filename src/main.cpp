@@ -65,17 +65,21 @@ int main(
 		if (!Options::init(argc, argv))
 			return EXIT_SUCCESS;
 
-		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+//kL		Options::baseXResolution = Options::displayWidth;
+//kL		Options::baseYResolution = Options::displayHeight;
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;	// kL
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;	// kL
 
 		std::ostringstream title;
-//kL		title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
+//kL	title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 		title << "OxC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
 		game = new Game(title.str());
+
 //		game->setVolume( // kL
 //					Options::soundVolume,
 //					Options::musicVolume,
 //					Options::uiVolume);
+
 		game->setState(new StartState(game));
 		game->run();
 #ifndef _DEBUG
@@ -92,6 +96,7 @@ int main(
 	delete game;
 	// Uncomment to check memory leaks in VS
 	//_CrtDumpMemoryLeaks();
+
 	return EXIT_SUCCESS;
 }
 

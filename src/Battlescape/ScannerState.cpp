@@ -59,9 +59,13 @@ ScannerState::ScannerState(
 		State(game),
 		_action(action)
 {
-/*	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-	_game->getScreen()->resetDisplay(false); */
+/*kL
+	if (Options::maximizeInfoScreens)
+	{
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+		_game->getScreen()->resetDisplay(false);
+	} */
 
 	_surface1		= new InteractiveSurface(320, 200);
 	_surface2		= new InteractiveSurface(320, 200);
@@ -110,13 +114,17 @@ void ScannerState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-/*		Screen::updateScale(
-						Options::battlescapeScale,
-						Options::battlescapeScale,
-						Options::baseXBattlescape,
-						Options::baseYBattlescape,
-						true);
-		_game->getScreen()->resetDisplay(false); */
+/*kL
+		if (Options::maximizeInfoScreens)
+		{
+			Screen::updateScale(
+							Options::battlescapeScale,
+							Options::battlescapeScale,
+							Options::baseXBattlescape,
+							Options::baseYBattlescape,
+							true);
+			_game->getScreen()->resetDisplay(false);
+		} */
 
 		_game->popState();
 	}

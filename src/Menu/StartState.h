@@ -20,13 +20,18 @@
 #ifndef OPENXCOM_STARTSTATE_H
 #define OPENXCOM_STARTSTATE_H
 
+#include <sstream>
+
 #include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class Surface;
+//kL class Font;
+//kL class Text;
+//kL class Timer;
+class Surface; // kL
 
 
 enum LoadingPhase
@@ -47,8 +52,16 @@ class StartState
 {
 
 private:
+//kL	Font* _font;
+//kL	Text
+//kL		* _cursor,
+//kL		* _text;
+//kL	Timer* _timer;
+
 	SDL_Thread* _thread;
-	Surface* _surface;
+	Surface* _surface; // kL
+
+//kL	std::wstringstream _output;
 
 
 	public:
@@ -70,6 +83,13 @@ private:
 
 		/// Flash the window.
 		void flash();
+
+		/// Blinks the cursor.
+//kL		void blinkCursor();
+
+		/// Adds a line of text.
+//kL		void addLine(const std::wstring& str);
+
 		/// Loads the game resources.
 		static int load(void* game_ptr);
 };

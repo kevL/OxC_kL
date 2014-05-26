@@ -155,9 +155,13 @@ MedikitState::MedikitState(
 		_targetUnit(targetUnit),
 		_action(action)
 {
-/*	Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-	Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-	_game->getScreen()->resetDisplay(false); */
+/*kL
+	if (Options::maximizeInfoScreens)
+	{
+		Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+		_game->getScreen()->resetDisplay(false);
+	} */
 
 	_unit = action->actor;
 	_item = action->weapon;
@@ -262,13 +266,17 @@ void MedikitState::handle(Action* action)
  */
 void MedikitState::onEndClick(Action*)
 {
-/*	Screen::updateScale(
-					Options::battlescapeScale,
-					Options::battlescapeScale,
-					Options::baseXBattlescape,
-					Options::baseYBattlescape,
-					true);
-	_game->getScreen()->resetDisplay(false); */
+/*kL
+	if (Options::maximizeInfoScreens)
+	{
+		Screen::updateScale(
+						Options::battlescapeScale,
+						Options::battlescapeScale,
+						Options::baseXBattlescape,
+						Options::baseYBattlescape,
+						true);
+		_game->getScreen()->resetDisplay(false);
+	} */
 
 	_game->popState();
 }

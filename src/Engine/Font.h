@@ -31,6 +31,7 @@
 namespace OpenXcom
 {
 
+class Palette;
 class Surface;
 
 /**
@@ -47,6 +48,7 @@ private:
 	static std::wstring _index;
 	static SDL_Color _palette[6];
 
+	bool _monospace;
 	int
 		_width,
 		_height,
@@ -89,6 +91,9 @@ private:
 
 		/// Loads the font from YAML.
 		void load(const YAML::Node& node);
+
+		/// Generate the terminal font.
+		void loadTerminal();
 
 		/// Determines the size and position of each character in the font.
 		void init();

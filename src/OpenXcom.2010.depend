@@ -4399,7 +4399,7 @@
 1394398507 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
 
-1398833916 f:\git\openxcom\src\interface\text.h
+1401100995 f:\git\openxcom\src\interface\text.h
 	<string>
 	<vector>
 	"../Engine/Surface.h"
@@ -4865,7 +4865,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1400537318 f:\git\openxcom\src\geoscape\globe.h
+1401100438 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"
@@ -6004,7 +6004,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1401027786 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1401102562 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6351,13 +6351,13 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1399464989 f:\git\openxcom\src\engine\font.h
+1401099897 f:\git\openxcom\src\engine\font.h
 	<map>
 	<string>
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1401020927 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1401102866 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6436,7 +6436,7 @@
 1396249789 f:\git\openxcom\src\battlescape\unitsprite.h
 	"../Engine/Surface.h"
 
-1401021497 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
+1401102939 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
 	"MedikitState.h"
 	<iostream>
 	<sstream>
@@ -6470,7 +6470,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/BattleUnit.h"
 
-1401024995 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
+1401102994 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
 	"MiniMapState.h"
 	<iostream>
 	<sstream>
@@ -6655,7 +6655,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1401021671 source:f:\git\openxcom\src\battlescape\scannerstate.cpp
+1401103045 source:f:\git\openxcom\src\battlescape\scannerstate.cpp
 	"ScannerState.h"
 	<iostream>
 	<sstream>
@@ -6768,7 +6768,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1401074017 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1401103172 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	<sstream>
 	"BattlescapeGame.h"
@@ -6953,10 +6953,12 @@
 	<SDL.h>
 	"OpenGL.h"
 
-1400963237 source:f:\git\openxcom\src\engine\font.cpp
+1401100376 source:f:\git\openxcom\src\engine\font.cpp
 	"Font.h"
 	"CrossPlatform.h"
+	"DosFont.h"
 	"Language.h"
+	"Logger.h"
 	"Surface.h"
 
 1401022399 source:f:\git\openxcom\src\engine\game.cpp
@@ -7068,7 +7070,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1401020055 source:f:\git\openxcom\src\engine\options.cpp
+1401099532 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7086,6 +7088,7 @@
 	"Logger.h"
 	"Screen.h"
 	"Options.inc.h"
+	"TargetConditionals.h"
 
 1400029166 f:\git\openxcom\src\version.h
 
@@ -7392,7 +7395,7 @@
 	"../Engine/State.h"
 	"Globe.h"
 
-1400482577 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
+1401103291 source:f:\git\openxcom\src\geoscape\buildnewbasestate.cpp
 	"BuildNewBaseState.h"
 	<cmath>
 	"../fmath.h"
@@ -7817,7 +7820,7 @@
 	<string>
 	<vector>
 
-1401058979 source:f:\git\openxcom\src\geoscape\globe.cpp
+1401100959 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<cmath>
@@ -8252,7 +8255,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1400999261 source:f:\git\openxcom\src\interface\text.cpp
+1401101231 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -8318,7 +8321,7 @@
 	<stdlib.h>
 	<fstream>
 
-1400029257 source:f:\git\openxcom\src\main.cpp
+1401099757 source:f:\git\openxcom\src\main.cpp
 	<exception>
 	<sstream>
 	"version.h"
@@ -8329,7 +8332,8 @@
 	"Engine/Screen.h"
 	"Menu/StartState.h"
 
-1399719931 f:\git\openxcom\src\menu\startstate.h
+1401105797 f:\git\openxcom\src\menu\startstate.h
+	<sstream>
 	"../Engine/State.h"
 
 1401022771 source:f:\git\openxcom\src\menu\abandongamestate.cpp
@@ -8678,7 +8682,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1401023717 source:f:\git\openxcom\src\menu\startstate.cpp
+1401106457 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	<SDL_mixer.h>
 	<SDL_syswm.h>
@@ -8688,6 +8692,7 @@
 	"MainMenuState.h"
 	"../Engine/Action.h"
 	"../Engine/Exception.h"
+	"../Engine/Font.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Logger.h"
@@ -9114,7 +9119,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1401013851 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1401102429 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Battlescape/Position.h"
@@ -11468,7 +11473,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1400481334 f:\git\openxcom\src\engine\options.inc.h
+1401099532 f:\git\openxcom\src\engine\options.inc.h
 
 1396745312 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
@@ -11795,7 +11800,7 @@
 1400258761 f:\git\openxcom\src\engine\adlib\fmopl.h
 	"ymdeltat.h"
 
-1400522536 source:f:\git\openxcom\src\engine\adlibmusic.cpp
+1401103947 source:f:\git\openxcom\src\engine\adlibmusic.cpp
 	"AdlibMusic.h"
 	<algorithm>
 	<fstream>
@@ -11847,4 +11852,6 @@
 1400964627 f:\git\openxcom\src\fmath.h
 	<limits>
 	<cmath>
+
+1401099531 f:\git\openxcom\src\engine\dosfont.h
 
