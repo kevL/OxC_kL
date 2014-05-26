@@ -549,7 +549,7 @@ void OptionsVideoState::resize(
 {
 	OptionsBaseState::resize(dX, dY);
 
-	std::wstringstream ss;
+	std::wostringstream ss;
 	ss << Options::displayWidth;
 	_txtDisplayWidth->setText(ss.str());
 

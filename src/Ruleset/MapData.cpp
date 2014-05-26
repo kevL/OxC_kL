@@ -267,6 +267,15 @@ void MapData::setBlock(
 }
 
 /**
+ * Sets the amount of HE blockage.
+ * @param HEBlock The high explosive blockage.
+ */
+void MapData::setHEBlock(int HEBlock)
+{
+	_block[2] = HEBlock;
+}
+
+/**
  * Gets the Y offset for drawing.
  * @return The height in pixels.
  */

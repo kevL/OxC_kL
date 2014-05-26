@@ -110,6 +110,24 @@ void MCDPatch::load(const YAML::Node& node)
 			_armors.push_back(std::make_pair(MCDIndex, armor));
 		}
 
+		if ((*i)["flammability"])
+		{
+			int flammability = (*i)["flammability"].as<int>();
+			_flammabilities.push_back(std::make_pair(MCDIndex, flammability));
+		}
+
+		if ((*i)["fuel"])
+		{
+			int fuel = (*i)["fuel"].as<int>();
+			_fuels.push_back(std::make_pair(MCDIndex, fuel));
+		}
+
+		if ((*i)["HEBlock"])
+		{
+			int HEBlock = (*i)["HEBlock"].as<int>();
+			_HEBlocks.push_back(std::make_pair(MCDIndex, HEBlock));
+		}
+
 		if ((*i)["LOFTS"])
 		{
 			std::vector<int> lofts = (*i)["LOFTS"].as< std::vector<int> >();
@@ -196,6 +214,30 @@ void MCDPatch::modifyData(MapDataSet* dataSet) const
 			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setArmor(i->second);
+	}
+
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _flammabilities.begin();
+			i != _flammabilities.end();
+			++i)
+	{
+		dataSet->getObjects()->at(i->first)->setFlammable(i->second);
+	}
+
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _fuels.begin();
+			i != _fuels.end();
+			++i)
+	{
+		dataSet->getObjects()->at(i->first)->setFuel(i->second);
+	}
+
+	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _HEBlocks.begin();
+			i != _HEBlocks.end();
+			++i)
+	{
+		dataSet->getObjects()->at(i->first)->setHEBlock(i->second);
 	}
 
 	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator

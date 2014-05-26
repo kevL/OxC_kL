@@ -308,7 +308,7 @@ void CraftInfoState::init()
 			_txtW1Name->setText(tr(w1->getRules()->getType()));
 //			_txtW1Ammo->setText(tr("STR_AMMO_").arg(w1->getAmmo()));
 //			_txtW1Max->setText(tr("STR_MAX").arg(w1->getRules()->getAmmoMax()));
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(w1->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(w1->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING"
@@ -351,7 +351,7 @@ void CraftInfoState::init()
 			_txtW2Name->setText(tr(w2->getRules()->getType()));
 //			_txtW2Ammo->setText(tr("STR_AMMO_").arg(w2->getAmmo()));
 //			_txtW2Max->setText(tr("STR_MAX").arg(w2->getRules()->getAmmoMax()));
-			std::wstringstream ss;
+			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(w2->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(w2->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING"

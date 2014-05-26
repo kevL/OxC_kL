@@ -61,7 +61,7 @@ private:
 	SDL_Thread* _thread;
 	Surface* _surface; // kL
 
-//kL	std::wstringstream _output;
+//kL	std::wostringstream _output;
 
 
 	public:

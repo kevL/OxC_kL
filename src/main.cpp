@@ -26,7 +26,7 @@
 #include "Engine/Game.h"
 #include "Engine/Logger.h"
 #include "Engine/Options.h"
-#include "Engine/Screen.h"
+#include "Engine/Screen.h" // kL
 
 #include "Menu/StartState.h"
 
@@ -102,5 +102,5 @@ int main(
 
 
 #ifdef __MORPHOS__
-const char Version[] = "$VER: OpenXCom " OPENXCOM_VERSION_SHORT " (" __AMIGADATE__  ")";
+	const char Version[] = "$VER: OpenXCom " OPENXCOM_VERSION_SHORT " (" __AMIGADATE__  ")";
 #endif

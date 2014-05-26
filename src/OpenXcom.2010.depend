@@ -4678,7 +4678,7 @@
 	"MapData.h"
 	"Unit.h"
 
-1394398507 f:\git\openxcom\src\ruleset\mapdata.h
+1401140200 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
 1399386819 f:\git\openxcom\src\ruleset\ruleitem.h
@@ -4777,7 +4777,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1401016239 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1401140521 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -5966,7 +5966,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1400349444 f:\git\openxcom\src\ruleset\mcdpatch.h
+1401139612 f:\git\openxcom\src\ruleset\mcdpatch.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -5994,7 +5994,7 @@
 	<yaml-cpp/yaml.h>
 	"Target.h"
 
-1396233091 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
+1401138672 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
 	"BattlescapeMessage.h"
 	"../Engine/Palette.h"
 	"../Interface/Text.h"
@@ -8321,7 +8321,7 @@
 	<stdlib.h>
 	<fstream>
 
-1401106656 source:f:\git\openxcom\src\main.cpp
+1401140659 source:f:\git\openxcom\src\main.cpp
 	<exception>
 	<sstream>
 	"version.h"
@@ -8332,7 +8332,7 @@
 	"Engine/Screen.h"
 	"Menu/StartState.h"
 
-1401105797 f:\git\openxcom\src\menu\startstate.h
+1401140400 f:\git\openxcom\src\menu\startstate.h
 	<sstream>
 	"../Engine/State.h"
 

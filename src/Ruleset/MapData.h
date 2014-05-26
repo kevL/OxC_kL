@@ -168,6 +168,8 @@ private:
 				int smokeBlock,
 				int fireBlock,
 				int gasBlock);
+		/// Sets the amount of HE blockage.
+		void setHEBlock(int HEBlock);
 
 		/// Gets the offset on the Y axis when drawing this object.
 		int getYOffset() const;
