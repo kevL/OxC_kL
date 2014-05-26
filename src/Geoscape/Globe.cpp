@@ -35,6 +35,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+// #include "../Engine/Logger.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
@@ -315,8 +316,7 @@ Globe::Globe(
 		_blinkVal(0),
 		_hover(false),
 		_cacheLand(),
-	// kL_begin:
-		_isMouseScrolled(false),
+		_isMouseScrolled(false),	// kL_begin:
 		_isMouseScrolling(false),
 		_mouseMovedOverThreshold(false),
 		_xBeforeMouseScrolling(0),
@@ -325,8 +325,7 @@ Globe::Globe(
 		_totalMouseMoveY(0),
 		_lonBeforeMouseScrolling(0.0),
 		_latBeforeMouseScrolling(0.0),
-		_mouseScrollingStartTime(0)
-	// kL_end.
+		_mouseScrollingStartTime(0)	// kL_end.
 {
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -388,11 +387,11 @@ Globe::Globe(
 
 	_mkCity = new Surface(3, 3);
 	_mkCity->lock();
-	_mkCity->setPixelColor(0, 0, 6);	// gray border
+	_mkCity->setPixelColor(0, 0, 6); // gray border
 	_mkCity->setPixelColor(1, 0, 6);
 	_mkCity->setPixelColor(2, 0, 6);
 	_mkCity->setPixelColor(0, 1, 6);
-	_mkCity->setPixelColor(1, 1, 3);	// red center
+	_mkCity->setPixelColor(1, 1, 3); // red center
 	_mkCity->setPixelColor(2, 1, 6);
 	_mkCity->setPixelColor(0, 2, 6);
 	_mkCity->setPixelColor(1, 2, 6);
@@ -1812,10 +1811,14 @@ void Globe::drawVHLine(
  */
 void Globe::drawDetail()
 {
+	//Log(LOG_INFO) << "Globe::drawDetail()";
 	_countries->clear();
 
 	if (!Options::globeDetail)
+	{
+		//Log(LOG_INFO) << ". OFF, return";
 		return;
+	}
 
 	// kL_begin: Draw xCom base labels.
 	Text* label = new Text(80, 9, 0, 0);
@@ -2219,6 +2222,7 @@ void Globe::drawDetail()
 			canSwitchDebugType = false;
 		}
 	}
+	//Log(LOG_INFO) << "Globe::drawDetail() EXIT";
 }
 
 /**

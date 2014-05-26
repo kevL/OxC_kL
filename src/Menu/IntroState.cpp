@@ -251,8 +251,8 @@ static introSoundEffect introSoundTrack[] =
 	{501, 0x16},
 //kL	{512, 0xd},  // feet -- not in original
 //kL	{514, 0xd},  // feet -- not in original
-//kL	{522, 0x0B}, // rifle grab
 	{521, 0x0B}, // kL
+//kL	{522, 0x0B}, // rifle grab
 //kL	{523, 0xd},  // feet -- not in original
 //kL	{525, 0xd},  // feet -- not in original
 	{534, 0x18},
@@ -314,9 +314,10 @@ static introSoundEffect introSoundTrack[] =
 	{780, 0x0},
 	{783, 0x0},
 	{786, 0x0},
-	{790, 0x15},	// big growl
+	{789, 0x15},	// big growl
+//	{790, 0x15},	// big growl
 //	{790, 0x15},	// 2x loud growl
-	{792, 0x15},	// 2x loud growl, kL:chorus
+	{790, 0x15},	// 2x loud growl, kL:chorus
 	{807, 0x2},
 	{810, 0x2},
 	{812, 0x2},

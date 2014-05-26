@@ -1159,7 +1159,7 @@ int Base::getDefenseValue() const
  * Returns the total amount of short range detection facilities in the base.
  * @return, Short Range Detection value.
  */
-int Base::getShortRangeDetection() const
+/*kL int Base::getShortRangeDetection() const
 {
 	int
 		total = 0,
@@ -1183,13 +1183,13 @@ int Base::getShortRangeDetection() const
 	}
 
 	return total;
-}
+} */
 
 /**
  * kL. Returns the total %value of short range detection facilities in the base.
  * @return, Short Range Detection %value.
  */
-int Base::getShortRangeValue() const
+int Base::getShortRangeValue() const // kL
 {
 	int
 		total = 0,
@@ -1208,6 +1208,9 @@ int Base::getShortRangeValue() const
 				&& range < 1501)
 			{
 				total += (*i)->getRules()->getRadarChance();
+
+				if (total > 99)
+					return 100;
 			}
 		}
 	}
@@ -1219,7 +1222,7 @@ int Base::getShortRangeValue() const
  * Returns the total amount of long range detection facilities in the base.
  * @return, Long Range Detection value.
  */
-int Base::getLongRangeDetection() const
+/*kL int Base::getLongRangeDetection() const
 {
 	int total = 0;
 
@@ -1237,13 +1240,13 @@ int Base::getLongRangeDetection() const
 	}
 
 	return total;
-}
+} */
 
 /**
- * Returns the total %value of long range detection facilities in the base.
+ * kL. Returns the total %value of long range detection facilities in the base.
  * @return, Long Range Detection %value.
  */
-int Base::getLongRangeValue() const
+int Base::getLongRangeValue() const // kL
 {
 	int total = 0;
 
@@ -1257,6 +1260,9 @@ int Base::getLongRangeValue() const
 				// kL_note: that should be based off a string or Ruleset value.
 		{
 			total += (*i)->getRules()->getRadarChance();
+
+			if (total > 99)
+				return 100;
 		}
 	}
 
@@ -2197,7 +2203,7 @@ void Base::setInBattlescape(bool inBattle)
  * Mark the base as a valid alien retaliation target.
  * @param mark Mark (if @c true) or unmark (if @c false) the base.
  */
-void Base::setRetaliationStatus(bool mark)
+void Base::setIsRetaliationTarget(bool mark)
 {
 	_retaliationTarget = mark;
 }
@@ -2206,7 +2212,7 @@ void Base::setRetaliationStatus(bool mark)
  * Get the base's retaliation status.
  * @return, If the base is a valid target for alien retaliation.
  */
-bool Base::getRetaliationStatus() const
+bool Base::getIsRetaliationTarget() const
 {
 	return _retaliationTarget;
 }

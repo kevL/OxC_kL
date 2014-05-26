@@ -180,7 +180,7 @@ BriefingState::BriefingState(
 	_txtBriefing->setText(tr(briefingtext.str()));
 
 	if (mission == "STR_BASE_DEFENSE")
-		base->setRetaliationStatus(false); // And make sure the base is unmarked.
+		base->setIsRetaliationTarget(false); // And make sure the base is unmarked.
 }
 
 /**

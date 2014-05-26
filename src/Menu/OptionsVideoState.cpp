@@ -91,8 +91,8 @@ OptionsVideoState::OptionsVideoState(
 
 	/* Get available fullscreen modes */
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
-	if (_res != (SDL_Rect**) - 1
-		&& (SDL_Rect**)0)
+	if (_res != (SDL_Rect**)-1
+		&& _res != (SDL_Rect**)0)
 	{
 		_resCurrent = -1;
 

@@ -297,13 +297,15 @@ BaseInfoState::BaseInfoState(
 	_txtShortRange->setText(tr("STR_SHORT_RANGE_DETECTION"));
 	_numShortRange->setColor(Palette::blockOffset(13));
 	_barShortRange->setColor(Palette::blockOffset(8));
-	_barShortRange->setScale(25.0);
+//kL	_barShortRange->setScale(25.0);
+	_barShortRange->setScale(1.25); // kL
 
 	_txtLongRange->setColor(Palette::blockOffset(13)+5);
 	_txtLongRange->setText(tr("STR_LONG_RANGE_DETECTION"));
 	_numLongRange->setColor(Palette::blockOffset(13));
 	_barLongRange->setColor(Palette::blockOffset(8));
-	_barLongRange->setScale(25.0);
+//kL	_barLongRange->setScale(25.0);
+	_barLongRange->setScale(1.25); // kL
 }
 
 /**
@@ -417,16 +419,24 @@ void BaseInfoState::init()
 	_barDefense->setMax(var);
 	_barDefense->setValue(var);
 
-	var = _base->getShortRangeDetection();
+	var = _base->getShortRangeValue();
+//kL	var = _base->getShortRangeDetection();
 //kL	ss11 << _base->getShortRangeDetection();
-	ss11 << _base->getShortRangeValue(); // kL
+//	ss11 << _base->getShortRangeValue(); // kL
+	ss11 << var; // kL
 	_numShortRange->setText(ss11.str());
 	_barShortRange->setMax(var);
 	_barShortRange->setValue(var);
 
-	var = _base->getLongRangeDetection();
+
+	if (_base->getHyperDetection())
+		_barLongRange->setColor(Palette::blockOffset(4)+4);
+
+	var = _base->getLongRangeValue();
+//kL	var = _base->getLongRangeDetection();
 //kL	ss12 << _base->getLongRangeDetection();
-	ss12 << _base->getLongRangeValue(); // kL
+//	ss12 << _base->getLongRangeValue(); // kL
+	ss12 << var; // kL
 	_numLongRange->setText(ss12.str());
 	_barLongRange->setMax(var);
 	_barLongRange->setValue(var);

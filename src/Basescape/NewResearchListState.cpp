@@ -61,7 +61,9 @@ NewResearchListState::NewResearchListState(
 
 	_window			= new Window(this, 230, 136, 45, 32, POPUP_BOTH);
 	_txtTitle		= new Text(214, 16, 53, 40);
-	_lstResearch	= new TextList(198, 88, 53, 52);
+
+	_lstResearch	= new TextList(190, 88, 61, 52);
+
 	_btnCancel		= new TextButton(214, 16, 53, 144);
 
 	setPalette("PAL_BASESCAPE", 1);
@@ -88,7 +90,7 @@ NewResearchListState::NewResearchListState(
 	_txtTitle->setText(tr("STR_NEW_RESEARCH_PROJECTS"));
 
 	_lstResearch->setColor(Palette::blockOffset(13));
-	_lstResearch->setColumns(1, 198);
+	_lstResearch->setColumns(1, 180);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(8);
@@ -153,9 +155,7 @@ void NewResearchListState::fillProjectList()
 			++it;
 		}
 		else
-		{
 			it = _projects.erase(it);
-		}
 	}
 }
 

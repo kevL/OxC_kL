@@ -186,14 +186,15 @@ private:
 
 		/// Gets the base's defense value.
 		int getDefenseValue() const;
+
 		/// Gets the base's short range detection.
-		int getShortRangeDetection() const;
+//kL		int getShortRangeDetection() const;
 		/// kL. Gets the base's short range detection value.
-		int getShortRangeValue() const;
+		int getShortRangeValue() const; // kL
 		/// Gets the base's long range detection.
-		int getLongRangeDetection() const;
+//kL		int getLongRangeDetection() const;
 		/// kL. Gets the base's long range detection.
-		int getLongRangeValue() const;
+		int getLongRangeValue() const; // kL
 
 		/// Gets the base's crafts of a certain type.
 		int getCraftCount(const std::string& craft) const;
@@ -246,9 +247,9 @@ private:
 		bool isInBattlescape() const;
 
 		/// Mark this base for alien retaliation.
-		void setRetaliationStatus(bool mark = true);
+		void setIsRetaliationTarget(bool mark = true);
 		/// Gets the retaliation status of this base.
-		bool getRetaliationStatus() const;
+		bool getIsRetaliationTarget() const;
 
 		/// Get the detection chance for this base.
 //kL		unsigned getDetectionChance() const;

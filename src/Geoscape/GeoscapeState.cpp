@@ -181,7 +181,7 @@ GeoscapeState::GeoscapeState(Game* game)
 //							screenHeight,
 							256,
 							200,
-							30,
+							32,
 							12);
 
 	_globe		= new Globe(
@@ -1507,7 +1507,7 @@ struct SetRetaliationStatus
 	/// Mark as a valid retaliation target.
 	void operator()(const argument_type& iter) const
 	{
-		iter.second->setRetaliationStatus(true);
+		iter.second->setIsRetaliationTarget();
 	}
 };
 
@@ -1592,7 +1592,7 @@ void GeoscapeState::time10Minutes()
 			if (u != _game->getSavedGame()->getUfos()->end())
 			{
 				//Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
-				(*b)->setRetaliationStatus(true);
+				(*b)->setIsRetaliationTarget();
 			}
 		}
 	}

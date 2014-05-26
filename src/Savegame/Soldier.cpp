@@ -92,7 +92,7 @@ Soldier::Soldier(
 
 		_currentStats = _initialStats;
 
-		_name	= L"Frank";								// kL
+		_name	= L"Frittz";							// kL
 		_gender	= (SoldierGender)RNG::generate(0, 1);	// kL
 		_look	= (SoldierLook)RNG::generate(0, 3);		// kL
 

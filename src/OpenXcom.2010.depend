@@ -4418,7 +4418,7 @@
 	<vector>
 	<SDL.h>
 
-1399294335 f:\git\openxcom\src\savegame\base.h
+1401061865 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
 	<string>
 	<vector>
@@ -6134,7 +6134,7 @@
 1394398507 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1400349861 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1401059968 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	<sstream>
 	"AliensCrashState.h"
@@ -6768,7 +6768,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1401024323 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1401028845 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	<sstream>
 	"BattlescapeGame.h"
@@ -7658,7 +7658,7 @@
 1398435303 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1401025566 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1401060211 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7817,7 +7817,7 @@
 	<string>
 	<vector>
 
-1401019512 source:f:\git\openxcom\src\geoscape\globe.cpp
+1401058979 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<cmath>
@@ -9331,7 +9331,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1400484541 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1401059983 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
@@ -9369,7 +9369,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1401010758 source:f:\git\openxcom\src\savegame\base.cpp
+1401061864 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9595,7 +9595,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1401001221 source:f:\git\openxcom\src\savegame\soldier.cpp
+1401062080 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"SoldierDead.h"
@@ -11490,7 +11490,7 @@
 	"../Engine/Options.h"
 	"../Engine/State.h"
 
-1401026504 source:f:\git\openxcom\src\menu\introstate.cpp
+1401059231 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	<SDL_mixer.h>
 	"MainMenuState.h"
@@ -11590,7 +11590,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1400530476 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1401055618 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"

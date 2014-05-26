@@ -687,18 +687,14 @@ void UnitInfoState::handle(Action* action)
 
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-/*		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 			exit();
-		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+/*		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
+			// kL_note: This for Next/Previous btns (but requires more than 20 pixels)
 			if (static_cast<int>(action->getRelativeYMouse()) > 20)
 				exit();
 		} */
-		if (action->getDetails()->button.button == SDL_BUTTON_LEFT
-			|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		{
-			exit();
-		}
 		else if (!_mindProbe)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)

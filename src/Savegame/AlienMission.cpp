@@ -245,7 +245,7 @@ private:
 			return _region.insideRegion(
 									base->getLongitude(),
 									base->getLatitude())
-				&& base->getRetaliationStatus();
+				&& base->getIsRetaliationTarget();
 		}
 };
 
