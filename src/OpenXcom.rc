@@ -73,7 +73,7 @@ BEGIN
             VALUE "FileDescription", "oXc_kL"
             VALUE "FileVersion", OPENXCOM_VERSION_LONG
 
-            VALUE "InternalName", "OpenXcom"
+            VALUE "InternalName", "OpenXcom.exe"
 
             VALUE "LegalCopyright", "Copyright 2010-2014 OpenXcom Developers"
 

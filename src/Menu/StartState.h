@@ -52,6 +52,8 @@ class StartState
 {
 
 private:
+//kL	int _anim;
+
 //kL	Font* _font;
 //kL	Text
 //kL		* _cursor,
@@ -84,11 +86,11 @@ private:
 		/// Flash the window.
 		void flash();
 
-		/// Blinks the cursor.
-//kL		void blinkCursor();
+		/// Animates the terminal.
+//kL	void animate();
 
 		/// Adds a line of text.
-//kL		void addLine(const std::wstring& str);
+//kL	void addLine(const std::wstring& str);
 
 		/// Loads the game resources.
 		static int load(void* game_ptr);

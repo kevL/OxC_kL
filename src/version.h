@@ -16,18 +16,20 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_VERSION_H
 #define OPENXCOM_VERSION_H
 
-//kL #define OPENXCOM_VERSION_SHORT "0.9"
-#define OPENXCOM_VERSION_SHORT "0.9kL"
-//kL #define OPENXCOM_VERSION_LONG "0.9.0.0"
-#define OPENXCOM_VERSION_LONG "0.9.0.kL"
-#define OPENXCOM_VERSION_NUMBER 0,9,0,0
+//kL #define OPENXCOM_VERSION_SHORT "1.0"
+#define OPENXCOM_VERSION_SHORT "1.kL"
+//kL #define OPENXCOM_VERSION_LONG "1.0.0.0"
+#define OPENXCOM_VERSION_LONG "1.0.0.kL"
+#define OPENXCOM_VERSION_NUMBER 1,0,0,0
+//#define OPENXCOM_VERSION_NUMBER 1,0,0,kL
+
 #ifndef OPENXCOM_VERSION_GIT
-//	#define OPENXCOM_VERSION_NUMBER 0,9,0,kL
 //kL	#define OPENXCOM_VERSION_GIT ""
-	#define OPENXCOM_VERSION_GIT "oXc_kL" // kL
+	#define OPENXCOM_VERSION_GIT "oXc_kL"
 #endif
 
 #endif

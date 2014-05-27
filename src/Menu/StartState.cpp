@@ -65,6 +65,7 @@ std::string StartState::error;
 StartState::StartState(Game* game)
 	:
 		State(game)
+//kL		_anim(0)
 {
 	// updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
 //kL	Options::newDisplayWidth	= Options::displayWidth;
@@ -135,7 +136,7 @@ StartState::StartState(Game* game)
 	_cursor->setColor(0);
 	_cursor->setText(L"_");
 
-	_timer->onTimer((StateHandler)& StartState::blinkCursor);
+	_timer->onTimer((StateHandler)& StartState::animate);
 	_timer->start();
 
 	// Hide UI
@@ -150,20 +151,20 @@ StartState::StartState(Game* game)
 	else
 	{
 		addLine(L"C:\\GAMES\\OPENXCOM>openxcom");
-		addLine(L"");
-		addLine(L"OpenXcom initialisation");
-		addLine(L"");
+//		addLine(L"");
+//		addLine(L"OpenXcom initialisation");
+//		addLine(L"");
 
-		if (Options::mute)
-			addLine(L"No Sound Detected");
-		else
-		{
-			addLine(L"SoundBlaster Sound Effects");
-			addLine(L"SoundBlaster Music");
-			addLine(L"Base Port 220  Irq 5  Dma 1");
-		}
+//		if (Options::mute)
+//			addLine(L"No Sound Detected");
+//		else
+//		{
+//			addLine(L"SoundBlaster Sound Effects");
+//			addLine(L"SoundBlaster Music");
+//			addLine(L"Base Port 220  Irq 5  Dma 1");
+//		}
 
-		addLine(L"");
+//		addLine(L"");
 	} */
 }
 
@@ -199,9 +200,10 @@ void StartState::init()
 	}
 
 /*kL
-	std::wostringstream ss;
-	ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
-	addLine(ss.str()); */
+//	std::wostringstream ss;
+//	ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
+//	addLine(ss.str());
+*/
 
 	// Load the game data in a separate thread
 	_thread = SDL_CreateThread(
@@ -243,7 +245,9 @@ void StartState::think()
 			addLine(L"");
 			addLine(L"ERROR: " + Language::utf8ToWstr(error));
 			addLine(L"Make sure you installed OpenXcom correctly.");
-			addLine(L"Check the wiki documentation for more details."); */
+			addLine(L"Check the wiki documentation for more details.");
+			addLine(L"");
+			addLine(L"Press any key to continue."); */
 
 			loading = LOADING_DONE;
 		break;
@@ -251,8 +255,9 @@ void StartState::think()
 			flash();
 
 /*kL
-			addLine(L"");
-			addLine(L"OpenXcom initialised"); */
+//			addLine(L"");
+//			addLine(L"OpenXcom initialised");
+*/
 
 			Log(LOG_INFO) << "OpenXcom started!";
 			if (!Options::reload
@@ -353,11 +358,57 @@ void StartState::flash()
 }
 
 /**
- * Blinks the cursor on the terminal output.
+ * Blinks the cursor and spreads out terminal output.
  */
-/*kL void StartState::blinkCursor()
+/*kL void StartState::animate()
 {
 	_cursor->setVisible(!_cursor->getVisible());
+	_anim++;
+
+	if (loading == LOADING_STARTED)
+	{
+		std::wostringstream ss;
+		ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
+		if (Options::reload)
+		{
+			if (_anim == 2)
+				addLine(ss.str());
+		}
+		else
+		{
+			switch (_anim)
+			{
+				case 1:
+					addLine(L"DOS/4GW Protected Mode Run-time  Version 1.9");
+					addLine(L"Copyright (c) Rational Systems, Inc. 1990-1993");
+				break;
+				case 6:
+					addLine(L"");
+					addLine(L"OpenXcom initialisation");
+				break;
+				case 7:
+					addLine(L"");
+					if (Options::mute)
+					{
+						addLine(L"No Sound Detected");
+					}
+					else
+					{
+						addLine(L"SoundBlaster Sound Effects");
+						if (Options::preferredMusic == MUSIC_MIDI)
+							addLine(L"General MIDI Music");
+						else
+							addLine(L"SoundBlaster Music");
+						addLine(L"Base Port 220  Irq 7  Dma 1");
+					}
+					addLine(L"");
+				break;
+				case 9:
+					addLine(ss.str());
+				break;
+			}
+		}
+	}
 } */
 
 /**
@@ -408,6 +459,13 @@ int StartState::load(void* game_ptr)
 		loading = LOADING_SUCCESSFUL;
 	}
 	catch (Exception &e)
+	{
+		error = e.what();
+		Log(LOG_ERROR) << error;
+
+		loading = LOADING_FAILED;
+	}
+	catch (YAML::Exception &e)
 	{
 		error = e.what();
 		Log(LOG_ERROR) << error;
