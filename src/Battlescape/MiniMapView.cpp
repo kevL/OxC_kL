@@ -229,34 +229,34 @@ void MiniMapView::draw()
 
 
 	// kL_note: looks like the crosshairs for the MiniMap
-	int centerX = (getWidth() / 2) - 1;
-	int centerY = (getHeight() / 2) - 1;
-	int xOffset = CELL_WIDTH / 2;
-	int yOffset = CELL_HEIGHT / 2;
+	Sint16 centerX = static_cast<Sint16>((getWidth() / 2));
+	Sint16 centerY = static_cast<Sint16>((getHeight() / 2));
+	Sint16 xOffset = static_cast<Sint16>(CELL_WIDTH / 2);
+	Sint16 yOffset = static_cast<Sint16>(CELL_HEIGHT / 2);
 
-	Uint8 color = 1 + _frame * 3;
+	Uint8 color = 1 + static_cast<Uint8>(_frame) * 3;
 
 	drawLine( // top left
-			centerX - CELL_WIDTH,
-			centerY - CELL_HEIGHT,
+			centerX - static_cast<Sint16>(CELL_WIDTH),
+			centerY - static_cast<Sint16>(CELL_HEIGHT),
 			centerX - xOffset,
 			centerY - yOffset,
 			color);
 	drawLine( // top right
 			centerX + xOffset,
 			centerY - yOffset,
-			centerX + CELL_WIDTH,
-			centerY - CELL_HEIGHT,
+			centerX + static_cast<Sint16>(CELL_WIDTH),
+			centerY - static_cast<Sint16>(CELL_HEIGHT),
 			color);
 	drawLine( // bottom left
-			centerX - CELL_WIDTH,
-			centerY + CELL_HEIGHT,
+			centerX - static_cast<Sint16>(CELL_WIDTH),
+			centerY + static_cast<Sint16>(CELL_HEIGHT),
 			centerX - xOffset,
 			centerY + yOffset,
 			color);
 	drawLine( // bottom right
-			centerX + CELL_WIDTH,
-			centerY + CELL_HEIGHT,
+			centerX + static_cast<Sint16>(CELL_WIDTH),
+			centerY + static_cast<Sint16>(CELL_HEIGHT),
 			centerX + xOffset,
 			centerY + yOffset,
 			color);
