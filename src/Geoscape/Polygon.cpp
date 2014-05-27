@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Polygon.h"
+
 
 namespace OpenXcom
 {
@@ -25,13 +27,20 @@ namespace OpenXcom
  * Initializes the polygon with arrays to store each point's coordinates.
  * @param points Number of points.
  */
-Polygon::Polygon(int points) : _points(points), _texture(0)
+Polygon::Polygon(int points)
+	:
+		_points(points),
+		_texture(0)
 {
 	_lat = new double[_points];
 	_lon = new double[_points];
 	_x = new Sint16[_points];
 	_y = new Sint16[_points];
-	for (int i = 0; i < _points; ++i)
+
+	for (int
+			i = 0;
+			i < _points;
+			++i)
 	{
 		_lat[i] = 0.0;
 		_lon[i] = 0.0;
@@ -46,18 +55,23 @@ Polygon::Polygon(int points) : _points(points), _texture(0)
  */
 Polygon::Polygon(const Polygon& other)
 {
-	_points = other._points;
-	_lat = new double[_points];
-	_lon = new double[_points];
-	_x = new Sint16[_points];
-	_y = new Sint16[_points];
-	for (int i = 0; i < _points; ++i)
+	_points	= other._points;
+	_lat	= new double[_points];
+	_lon	= new double[_points];
+	_x		= new Sint16[_points];
+	_y		= new Sint16[_points];
+
+	for (int
+			i = 0;
+			i < _points;
+			++i)
 	{
-		_lat[i] = other._lat[i];
-		_lon[i] = other._lon[i];
-		_x[i] = other._x[i];
-		_y[i] = other._y[i];
+		_lat[i]	= other._lat[i];
+		_lon[i]	= other._lon[i];
+		_x[i]	= other._x[i];
+		_y[i]	= other._y[i];
 	}
+
 	_texture = other._texture;
 }
 
@@ -87,7 +101,9 @@ double Polygon::getLatitude(int i) const
  * @param i Point number (0-max).
  * @param lat Point's latitude.
  */
-void Polygon::setLatitude(int i, double lat)
+void Polygon::setLatitude(
+		int i,
+		double lat)
 {
 	_lat[i] = lat;
 }
@@ -107,7 +123,9 @@ double Polygon::getLongitude(int i) const
  * @param i Point number (0-max).
  * @param lon Point's longitude.
  */
-void Polygon::setLongitude(int i, double lon)
+void Polygon::setLongitude(
+		int i,
+		double lon)
 {
 	_lon[i] = lon;
 }
@@ -127,7 +145,9 @@ Sint16 Polygon::getX(int i) const
  * @param i Point number (0-max).
  * @param x Point's X coordinate.
  */
-void Polygon::setX(int i, Sint16 x)
+void Polygon::setX(
+		int i,
+		Sint16 x)
 {
 	_x[i] = x;
 }
@@ -147,7 +167,9 @@ Sint16 Polygon::getY(int i) const
  * @param i Point number (0-max).
  * @param y Point's Y coordinate.
  */
-void Polygon::setY(int i, Sint16 y)
+void Polygon::setY(
+		int i,
+		Sint16 y)
 {
 	_y[i] = y;
 }

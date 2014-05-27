@@ -116,11 +116,11 @@ void ExplosionBState::init()
 		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
 		// all the rest hits one point:
 		// AP, melee (stun or AP), laser, plasma, acid
-		_areaOfEffect = _item->getRules()->getBattleType() != BT_MELEE
+		_areaOfEffect = !_pistolWhip
+						&& _item->getRules()->getBattleType() != BT_MELEE
 						&& _item->getRules()->getBattleType() != BT_PSIAMP		// kL
 //kL						&& _item->getRules()->getExplosionRadius() != 0		// <- worrisome, kL_note.
-						&& _item->getRules()->getExplosionRadius() > -1			// kL
-						&& !_pistolWhip;
+						&& _item->getRules()->getExplosionRadius() > -1;		// kL
 	}
 	else if (_tile)
 	{
@@ -201,14 +201,14 @@ void ExplosionBState::init()
 
 //				Explosion* explosion = new Explosion(p, startFrame, true);
 				Explosion* explosion = new Explosion( // animation
-													posCenter_voxel + Position(10, 10, 0), // jogg the anim down a few pixels. Tks.
-													startFrame,
-													true);
+												posCenter_voxel + Position(10, 10, 0), // jogg the anim down a few pixels. Tks.
+												startFrame,
+												true);
 
 				_parent->getMap()->getExplosions()->insert(explosion); // add the explosion on the map
 			}
 
-//kL			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
+//kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // kL
 
 			if (_power < 76)
@@ -235,8 +235,8 @@ void ExplosionBState::init()
 		_parent->setStateInterval(std::max(
 										1,
 										((BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
-//kL										((BattlescapeState::DEFAULT_ANIM_SPEED / 2) - (10 * _item->getRules()->getExplosionSpeed()))));
-//kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
+//kL									((BattlescapeState::DEFAULT_ANIM_SPEED / 2) - (10 * _item->getRules()->getExplosionSpeed()))));
+//kL	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 //		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
 
 		bool hit = _pistolWhip
@@ -249,7 +249,7 @@ void ExplosionBState::init()
 		if (hit)
 		{
 			anim = _item->getRules()->getMeleeAnimation();
-//			sound = _item->getRules()->getMeleeSound(); // kL
+//			sound = _item->getRules()->getMeleeHitSound(); // kL, but this mutes Psi-hit sound.
 		}
 
 		if (sound != -1) // bullet hit sound
@@ -267,7 +267,7 @@ void ExplosionBState::init()
 										hit);
 		_parent->getMap()->getExplosions()->insert(explosion);
 
-		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
+//kL		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
 //		BattleUnit* target = tileCenter->getUnit();
 //		BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
@@ -293,11 +293,11 @@ void ExplosionBState::think()
 {
 	for (std::set<Explosion*>::const_iterator
 			i = _parent->getMap()->getExplosions()->begin(),
-				inext = i;
+				next = i;
 			i != _parent->getMap()->getExplosions()->end();
-			i = inext)
+			i = next)
 	{
-		++inext;
+		++next;
 
 		if (!(*i)->animate())
 		{
@@ -317,8 +317,12 @@ void ExplosionBState::cancel()
 }
 
 /**
- * Calculates the effects of the explosion.
+ * Calculates the effects of an attack.
  * After the animation is done, the real explosion/hit takes place here!
+ * kL_note: This function passes to TileEngine::explode() or TileEngine::hit()
+ * depending on if it came from a bullet/psi/melee/spit or an actual explosion;
+ * that is, "explode" here means "attack has happened". Typically called from
+ * either ProjectileFlyBState::think() or BattlescapeGame::endTurn()/checkForProximityGrenades()
  */
 void ExplosionBState::explode()
 {
@@ -357,6 +361,7 @@ void ExplosionBState::explode()
 			_unit->addMeleeExp();
 		}
 
+		// kL_note: This should play only on a successful hit; there's another sound for the attack-swing.
 		if (_item->getRules()->getMeleeHitSound() != -1)
 		{
 			_parent->getResourcePack()->getSound(

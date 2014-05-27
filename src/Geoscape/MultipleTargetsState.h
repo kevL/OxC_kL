@@ -51,6 +51,7 @@ private:
 	Craft* _craft;
 	GeoscapeState* _state;
 
+	TextButton* _btnCancel; // kL
 	Window* _window;
 
 	std::vector<Target*> _targets;

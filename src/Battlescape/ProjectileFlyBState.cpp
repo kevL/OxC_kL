@@ -966,12 +966,24 @@ void ProjectileFlyBState::think()
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 						_parent->getSave()->getTile(_action.target)->ignite(15);
 
-					if (_projectileImpact == 4)
+					// kL_note: Could take this section out (i had removed it for a while ..)
+					// ... Let's try something
+/*kL
+					if (_projectileImpact == VOXEL_UNIT)
 					{
 						BattleUnit* victim = _parent->getSave()->getTile(
 																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
 																->getUnit();
-/*kL						if (victim
+						// kL_begin:
+						if (victim
+							&& !victim->isOut(true, true)
+							&& victim->getOriginalFaction() == FACTION_PLAYER
+							&& _unit->getFaction() == FACTION_HOSTILE)
+						{
+							_unit->setTurnsExposed(0);
+						} */ // kL_end. But this is entirely unnecessary, since aLien has already seen and logged the soldier.
+/*kL
+						if (victim
 							&& !victim->isOut(true, true)
 							&& victim->getFaction() == FACTION_HOSTILE)
 						{
@@ -979,12 +991,13 @@ void ProjectileFlyBState::think()
 							if (aggro != 0)
 							{
 								aggro->setWasHit();
-//kL								_unit->setTurnsExposed(0); // kL_note: might want to remark this! Ok.
+								_unit->setTurnsExposed(0); // kL_note: might want to remark this! Ok.
 								// technically, in the original as I remember it, only
-								// a BlasterLaunch would set an xCom soldier Exposed here!
+								// a BlasterLaunch (by xCom) would set an xCom soldier Exposed here!
+								// ( Those aLiens had a way of tracing a BL back to its origin ....)
 							}
-						} */
-					}
+						}
+					} */
 				}
 				else if (_action.type != BA_AUTOSHOT
 					|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()

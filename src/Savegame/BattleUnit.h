@@ -111,7 +111,8 @@ private:
 		_kneeled,
 		_stopShot, // kL, to stop a unit from firing/throwing if it spots a new opponent during turning
 		_visible,
-		_dashing; // kL
+		_dashing, // kL
+		_taken; // kL, used to stop large units from taking damage for each part.
 	int
 		_coverReserve,
 		_currentArmor[5],
@@ -673,6 +674,11 @@ private:
 		void setDashing(bool dash);
 		/// Get if a unit is dashing.
 		bool getDashing() const;
+
+		/// Set a unit as having been damaged in a single explosion.
+		void setTaken(bool damaged);
+		/// Get if a unit was aleady damaged in a single explosion.
+		bool getTaken() const;
 		// kL_end.
 
 		/// Is this unit selectable?

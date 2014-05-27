@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Polyline.h"
+
 
 namespace OpenXcom
 {
@@ -25,7 +27,9 @@ namespace OpenXcom
  * Initializes the polyline with arrays to store each point's coordinates.
  * @param points Number of points.
  */
-Polyline::Polyline(int points) : _points(points)
+Polyline::Polyline(int points)
+	:
+		_points(points)
 {
 	_lat = new double[points];
 	_lon = new double[points];
@@ -55,7 +59,9 @@ double Polyline::getLatitude(int i) const
  * @param i Point number (0-max).
  * @param lat Point's latitude.
  */
-void Polyline::setLatitude(int i, double lat)
+void Polyline::setLatitude(
+		int i,
+		double lat)
 {
 	_lat[i] = lat;
 }
@@ -75,7 +81,9 @@ double Polyline::getLongitude(int i) const
  * @param i Point number (0-max).
  * @param lon Point's longitude.
  */
-void Polyline::setLongitude(int i, double lon)
+void Polyline::setLongitude(
+		int i,
+		double lon)
 {
 	_lon[i] = lon;
 }

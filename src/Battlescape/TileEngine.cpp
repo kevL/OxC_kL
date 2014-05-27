@@ -2010,8 +2010,7 @@ BattleUnit* TileEngine::hit(
 				{
 					_save->getModuleMap()
 									[(pTarget_voxel.x / 16) / 10]
-									[(pTarget_voxel.y / 16) / 10]
-								.second--;
+									[(pTarget_voxel.y / 16) / 10].second--;
 				}
 			}
 
@@ -2080,10 +2079,10 @@ BattleUnit* TileEngine::hit(
 				const Position relPos = pTarget_voxel - targetPos - Position(0, 0, verticaloffset); */
 				int const size = buTarget->getArmor()->getSize() * 8;
 				Position const targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
-											+ Position(
-													size,
-													size,
-													buTarget->getFloatHeight() - tile->getTerrainLevel());
+										+ Position(
+												size,
+												size,
+												buTarget->getFloatHeight() - tile->getTerrainLevel());
 				Position const relPos = pTarget_voxel
 									- targetPos
 									- Position(
@@ -2191,14 +2190,14 @@ BattleUnit* TileEngine::hit(
 				//Log(LOG_INFO) << ". . health = " << buTarget->getHealth();
 				//Log(LOG_INFO) << ". . stunLevel = " << buTarget->getStunlevel();
 				if (buTarget->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
-					&& buTarget->getHealth() == 0)		// kL
+					&& (buTarget->getHealth() == 0
+						|| buTarget->getHealth() <= buTarget->getStunlevel()))
 //					&& !buTarget->isOut(false, true))	// kL. don't explode if stunned. Maybe... wrong!!!
 														// Cannot be STATUS_DEAD OR STATUS_UNCONSCIOUS!
-//kL					(buTarget->getHealth() == 0 || buTarget->getStunlevel() >= buTarget->getHealth()))
 				{
 					//Log(LOG_INFO) << ". . . Cyberdisc down!!";
 					if (type != DT_STUN		// don't explode if stunned. Maybe... see above.
-						&& type != DT_HE)	// don't explode if taken down w/ explosives
+						&& type != DT_HE)	// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
 					{
 						//Log(LOG_INFO) << ". . . . new ExplosionBState(), !DT_STUN & !DT_HE";
 						// kL_note: wait a second. hit() creates an ExplosionBState,
@@ -2215,8 +2214,7 @@ BattleUnit* TileEngine::hit(
 																			_save->getBattleGame(),
 																			unitPos,
 																			0,
-																			buTarget,
-																			0));
+																			buTarget));
 					}
 				}
 
@@ -2273,7 +2271,6 @@ BattleUnit* TileEngine::hit(
  * @param maxRadius, The maximum radius of the explosion.
  * @param unit, The unit that caused the explosion.
  */
-/*
 void TileEngine::explode(
 			const Position& voxelTarget,
 			int power,
@@ -2320,8 +2317,10 @@ void TileEngine::explode(
 	}
 
 	if (type == DT_IN)
+	{
 		power /= 2;
 		//Log(LOG_INFO) << ". DT_IN power = " << power;
+	}
 
 	Tile
 		* origin	= 0,
@@ -2372,9 +2371,8 @@ void TileEngine::explode(
 										static_cast<int>(centerZ)));
 			r = 0.0,
 
-//kL			_powerT = power + 1;
+//kL		_powerT = power + 1;
 			_powerT = power; // kL: re-initialize _powerT, for each ray.
-//			powerEff = _powerT;
 
 			while (_powerT > 0
 				&& r - 1.0 < r_Max) // kL_note: Allows explosions of 0 radius(!), single tile only hypothetically.
@@ -2396,11 +2394,15 @@ void TileEngine::explode(
 				if (!destTile) // out of map!
 					break;
 
+				//Log(LOG_INFO)
+				//		<< ". _powerT = "	<< _powerT
+				//		<< ", dir = "		<< dir
+				//		<< ", origin "		<< origin->getPosition()
+				//		<< " dest "			<< destTile->getPosition();
+
 				//Log(LOG_INFO) << ". r = " << r;
 				r += 1.0;
 
-
-				// TEST:
 				testPower = _powerT;
 				if (type == DT_IN)
 				{
@@ -2427,17 +2429,12 @@ void TileEngine::explode(
 
 				if (testPower < 1)
 					break;
-				// TEST_end.
 
 
-
-//kL				if (powerEff > 0)
-//				{
-					//Log(LOG_INFO) << ". _powerT > 0";
+				//Log(LOG_INFO) << ". _powerT > 0";
 				if (type == DT_HE) // explosions do 50% damage to terrain and 50% to 150% damage to units
 				{
 					destTile->setExplosive(_powerT);
-//						destTile->setExplosive(powerEff); // kL
 				}
 
 				tilePair = tilesAffected.insert(destTile); // check if we had this tile already
@@ -2448,6 +2445,11 @@ void TileEngine::explode(
 						_powerT -= vertdec;
 
 					BattleUnit* targetUnit = destTile->getUnit();
+					if (targetUnit
+						&& targetUnit->getTaken())
+					{
+						targetUnit = NULL;
+					}
 
 					int wounds = 0;
 					if (unit
@@ -2463,7 +2465,6 @@ void TileEngine::explode(
 							int powerVsUnit = RNG::generate(
 														1,
 														_powerT * 2);
-//														powerEff * 2); // kL
 
 							if (targetUnit)
 							{
@@ -2518,8 +2519,6 @@ void TileEngine::explode(
 								int powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
 														static_cast<double>(_powerT) * 0.5,
 														static_cast<double>(_powerT) * 1.5));
-//															static_cast<double>(powerEff) * 0.5,	// kL
-//															static_cast<double>(powerEff) * 1.5));	// kL
 
 								if (distance(
 											destTile->getPosition(),
@@ -2531,7 +2530,6 @@ void TileEngine::explode(
 								{
 									// ground zero effect is in effect
 									//Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, GZ";
-
 									if (targetUnit->isKneeled())
 									{
 										powerVsUnit = powerVsUnit * 17 / 20; // 85% damage
@@ -2594,51 +2592,7 @@ void TileEngine::explode(
 									}
 								}
 							}
-*/
-
-
-/* Old
-							Log(LOG_INFO) << "TileEngine::explode(), HE vs items on tile";
-							int i = 0;
-							// So i made some adjustments....
-							for (std::vector<BattleItem*>::iterator
-									item = destTile->getInventory()->begin();
-									item != destTile->getInventory()->end();
-									++item)
-							{
-								unsigned vectSize = static_cast<unsigned>(destTile->getInventory()->size());
-//								unsigned vectIter = static_cast<unsigned>(item);
-								i++;
-								Log(LOG_INFO) << ". item #" << i << ", total items = " << vectSize;
-
-
-								if ((*item)->getRules()
-									&& (*item)->getRules()->getArmor() < _powerT)
-//									if (powerEff > (*item)->getRules()->getArmor()) // kL
-								{
-									Log(LOG_INFO) << ". . item Destroyed";
-
-									if ((*item)->getUnit()
-										&& (*item)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-									{
-										Log(LOG_INFO) << ". . . Frankie blow'd up.";
-										(*item)->getUnit()->instaKill();
-									}
-
-									_save->removeItem(*item);
-
-//									if (item > 1)
-									--item;
-
-//									vectIter = item;
-									Log(LOG_INFO) << ". . next (inside removeItem)"; // = " << item;
-								}
-								Log(LOG_INFO) << ". next (outside removeItem)"; // = " << item;
-							}
-							Log(LOG_INFO) << "TileEngine::explode(), HE vs items on tile DONE";
-Old_end */
-
-/*						}
+						}
 						break;
 						case DT_SMOKE:	// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
 										// kL_note: Could do instant smoke inhalation damage here (sorta like Fire or Stun).
@@ -2678,8 +2632,6 @@ Old_end */
 										int firePower = RNG::generate( // kL: 25% - 75%
 																	_powerT / 4,
 																	_powerT * 3 / 4);
-//																	powerEff / 4,		// kL
-//																	powerEff * 3 / 4);	// kL
 
 										targetUnit->damage(
 														Position(
@@ -2725,49 +2677,13 @@ Old_end */
 							unit->addFiringExp();
 						}
 					}
+
+					if (targetUnit)
+						targetUnit->setTaken(true);
 				}// add a new tile.
-*/
 
-/* Old
-Do all this at the top ... w/ testPower.
-then set _powerT=testPower.
-
-				if (type == DT_IN)
-				{
-					int dir;
-					Pathfinding::vectorToDirection(
-//kL											origin->getPosition() - destTile->getPosition(),
-											destTile->getPosition() - origin->getPosition(), // kL
-											dir);
-					if (dir != -1
-						&& dir %2)
-					{
-						_powerT -= 5; // diagonal movement costs an extra 50% for fire.
-					}
-				}
-				// TEST:
-//				int dir; // -> test result: Looks like this returns the direction *from which the blast came from*** ( ie. Opposite dir )
-//				Pathfinding::vectorToDirection(
-//										destTile->getPosition() - origin->getPosition(),
-//										dir); // TEST_end.
-
-
-				_powerT -= (10 // explosive damage decreases by 10 per tile
-						+ horizontalBlockage( // not *2
-										origin,
-										destTile,
-										type)
-						+ verticalBlockage( // not *2
-										origin,
-										destTile,
-										type));
-				//Log(LOG_INFO) << ". _powerT = " << _powerT << ", dir = " << dir << ", pos " << origin->getPosition() << " dest " << destTile->getPosition();
-Old_end */
-
-
-/*				_powerT = testPower;
+				_powerT = testPower;
 				origin = destTile;
-
 			}// power & radius left. (length ray)
 
 		}// 360 degrees
@@ -2804,7 +2720,7 @@ Old_end */
 	recalculateFOV(); // kL
 	//Log(LOG_INFO) << "TileEngine::explode() EXIT";
 
-} */
+}
 
 /**
  * Handles explosions.
@@ -2818,12 +2734,7 @@ Old_end */
  * @param maxRadius The maximum radius othe explosion.
  * @param unit The unit that caused the explosion.
  */
-/* void TileEngine::explode(
-			const Position& voxelTarget,
-			int power,
-			ItemDamageType type,
-			int maxRadius,
-			BattleUnit* unit) */
+/* stock code:
 void TileEngine::explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit)
 {
 	double centerZ = center.z / 24 + 0.5;
@@ -3054,7 +2965,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
 	calculateSunShading(); // roofs could have been destroyed
 	calculateTerrainLighting(); // fires could have been started
 	calculateFOV(center / Position(16,16,24));
-}
+} */
 
 /**
  * Applies the explosive power to the tile parts.
@@ -3117,11 +3028,13 @@ bool TileEngine::detonate(Tile* tile)
 				&& tiles[i]->getMapData(parts[i]))
 			{
 				remainingPower = explosive;
-				while (remainingPower > -1
+//kL				while (remainingPower > -1
+				while (remainingPower > 0 // kL
 					&& tiles[i]->getMapData(parts[i]))
 				{
 					remainingPower -= 2 * tiles[i]->getMapData(parts[i])->getArmor();
-					if (remainingPower >= 0)
+//kL					if (remainingPower > -1)
+					if (remainingPower > 0) // kL
 					{
 						int volume = 0;
 						for (int // get the volume of the object by checking its loftemps objects.
@@ -3219,14 +3132,12 @@ Tile* TileEngine::checkForTerrainExplosions()
  * @param type, The type of power/damage
  * @return, Amount of blockage of this power
  */
-/*
 int TileEngine::verticalBlockage(
 		Tile* startTile,
 		Tile* endTile,
 		ItemDamageType type)
 {
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage()";
-
 	if (startTile == 0 // safety check
 		|| endTile == 0)
 	{
@@ -3339,7 +3250,7 @@ int TileEngine::verticalBlockage(
 
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage() EXIT ret = " << block;
 	return block;
-} */
+}
 
 /**
  * Calculates the amount of power that is blocked going from one tile to another on a different level.
@@ -3349,6 +3260,7 @@ int TileEngine::verticalBlockage(
  * @param type The type of power/damage.
  * @return Amount of blockage of this power.
  */
+/* stock code:
 int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
 {
 	int block = 0;
@@ -3404,7 +3316,7 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
 	}
 
 	return block;
-}
+} */
 
 /**
  * Calculates the amount of power that is blocked going from one tile to another on the same level.
@@ -3413,7 +3325,6 @@ int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType 
  * @param type, The type of power/damage.
  * @return, Amount of blockage (-1 for Big Wall tile, 0 on noBlock or ERROR).
  */
-/*
 int TileEngine::horizontalBlockage(
 		Tile* startTile,
 		Tile* endTile,
@@ -3848,7 +3759,7 @@ int TileEngine::horizontalBlockage(
 
 	//Log(LOG_INFO) << "TileEngine::horizontalBlockage() EXIT, ret = " << block;
 	return block;
-} */
+}
 
 /**
  * Calculates the amount of power that is blocked going from one tile to another on the same level.
@@ -3857,6 +3768,7 @@ int TileEngine::horizontalBlockage(
  * @param type The type of power/damage.
  * @return Amount of blockage.
  */
+/* stock code:
 int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type)
 {
 	static const Position oneTileNorth = Position(0, -1, 0);
@@ -4008,7 +3920,7 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
 	}
 
 	return block;
-}
+} */
 
 /**
  * Calculates the amount of damage-power or FoV that certain types of
@@ -4020,7 +3932,6 @@ int TileEngine::horizontalBlockage(Tile *startTile, Tile *endTile, ItemDamageTyp
  * @param dirTest, Direction for not blocking FoV when gazing down a wall (default -1)
  * @return, Amount of power/damage that gets blocked.
  */
-/*
 int TileEngine::blockage(
 		Tile* tile,
 		const int part,
@@ -4061,7 +3972,7 @@ int TileEngine::blockage(
 					return 255; // hardblock.
 				}
 				else
-					return 0; */
+					return 0;
 
 /* Old
 				if (!tile->getMapData(part)->stopLOS()
@@ -4089,7 +4000,6 @@ int TileEngine::blockage(
 				}
 Old_end */
 
-/*
 			}
 			else if (_powerT < tile->getMapData(part)->getArmor())
 				return 255;
@@ -4227,7 +4137,7 @@ Old_end */
 
 	//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0";
 	return 0;
-} */
+}
 
 /**
  * Calculates the amount this certain wall or floor-part of the tile blocks.
@@ -4237,6 +4147,7 @@ Old_end */
  * @param direction Direction the power travels.
  * @return Amount of blockage.
  */
+/* stock code:
 int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int direction, bool checkingFromOrigin)
 {
 	int blockage = 0;
@@ -4350,7 +4261,7 @@ int TileEngine::blockage(Tile *tile, const int part, ItemDamageType type, int di
 		blockage = 0;
 
 	return blockage;
-}
+} */
 
 /**
  * Opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.

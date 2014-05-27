@@ -16,8 +16,10 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_POLYLINE_H
 #define OPENXCOM_POLYLINE_H
+
 
 namespace OpenXcom
 {
@@ -29,24 +31,35 @@ namespace OpenXcom
  */
 class Polyline
 {
+
 private:
-	double *_lat, *_lon;
 	const int _points;
-public:
-	/// Creates a polyline with a number of points.
-	Polyline(int points);
-	/// Cleans up the polyline.
-	~Polyline();
-	/// Gets the latitude of a point.
-	double getLatitude(int i) const;
-	/// Sets the latitude of a point.
-	void setLatitude(int i, double lat);
-	/// Gets the longitude of a point.
-	double getLongitude(int i) const;
-	/// Sets the longitude of a point.
-	void setLongitude(int i, double lon);
-	/// Gets the number of points of the polyline.
-	int getPoints() const;
+	double
+		* _lat,
+		* _lon;
+
+
+	public:
+		/// Creates a polyline with a number of points.
+		Polyline(int points);
+		/// Cleans up the polyline.
+		~Polyline();
+
+		/// Gets the latitude of a point.
+		double getLatitude(int i) const;
+		/// Sets the latitude of a point.
+		void setLatitude(
+				int i,
+				double lat);
+		/// Gets the longitude of a point.
+		double getLongitude(int i) const;
+		/// Sets the longitude of a point.
+		void setLongitude(
+				int i,
+				double lon);
+
+		/// Gets the number of points of the polyline.
+		int getPoints() const;
 };
 
 }

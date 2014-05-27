@@ -21,7 +21,7 @@
 
 #include "BattlescapeState.h"
 #include "Camera.h"
-#include "ExplosionBState.h"
+//kL #include "ExplosionBState.h"
 #include "InfoboxOKState.h"
 #include "InfoboxState.h"
 #include "Map.h"

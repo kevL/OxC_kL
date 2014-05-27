@@ -3468,6 +3468,22 @@ void BattleUnit::setDashing(bool dash)
 bool BattleUnit::getDashing() const
 {
 	return _dashing;
+}
+
+/**
+ * Set a unit as having been damaged in a single explosion.
+ */
+void BattleUnit::setTaken(bool damaged)
+{
+	_taken = damaged;
+}
+
+/**
+ * Get if a unit was aleady damaged in a single explosion.
+ */
+bool BattleUnit::getTaken() const
+{
+	return _taken;
 } // kL_end.
 
 /**

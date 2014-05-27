@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_POLYGON_H
 #define OPENXCOM_POLYGON_H
 
 #include <SDL.h>
+
 
 namespace OpenXcom
 {
@@ -31,39 +33,60 @@ namespace OpenXcom
  */
 class Polygon
 {
+
 private:
-	double *_lat, *_lon;
-	Sint16 *_x, *_y;
-	int _points, _texture;
-public:
-	/// Creates a polygon with a number of points.
-	Polygon(int points);
-	/// Creates a new polygon from an existing one.
-	Polygon(const Polygon& other);
-	/// Cleans up the polygon.
-	~Polygon();
-	/// Gets the latitude of a point.
-	double getLatitude(int i) const;
-	/// Sets the latitude of a point.
-	void setLatitude(int i, double lat);
-	/// Gets the longitude of a point.
-	double getLongitude(int i) const;
-	/// Sets the longitude of a point.
-	void setLongitude(int i, double lon);
-	/// Gets the X coordinate of a point.
-	Sint16 getX(int i) const;
-	/// Sets the X coordinate of a point.
-	void setX(int i, Sint16 x);
-	/// Gets the Y coordinate of a point.
-	Sint16 getY(int i) const;
-	/// Sets the Y coordinate of a point.
-	void setY(int i, Sint16 y);
-	/// Gets the texture of the polygon.
-	int getTexture() const;
-	/// Sets the texture of the polygon.
-	void setTexture(int tex);
-	/// Gets the number of points of the polygon.
-	int getPoints() const;
+	int
+		_points,
+		_texture;
+	Sint16
+		* _x,
+		* _y;
+	double
+		* _lat,
+		* _lon;
+
+
+	public:
+		/// Creates a polygon with a number of points.
+		Polygon(int points);
+		/// Creates a new polygon from an existing one.
+		Polygon(const Polygon& other);
+		/// Cleans up the polygon.
+		~Polygon();
+
+		/// Gets the latitude of a point.
+		double getLatitude(int i) const;
+		/// Sets the latitude of a point.
+		void setLatitude(
+				int i,
+				double lat);
+		/// Gets the longitude of a point.
+		double getLongitude(int i) const;
+		/// Sets the longitude of a point.
+		void setLongitude(
+				int i,
+				double lon);
+
+		/// Gets the X coordinate of a point.
+		Sint16 getX(int i) const;
+		/// Sets the X coordinate of a point.
+		void setX(
+				int i,
+				Sint16 x);
+		/// Gets the Y coordinate of a point.
+		Sint16 getY(int i) const;
+		/// Sets the Y coordinate of a point.
+		void setY(
+				int i,
+				Sint16 y);
+
+		/// Gets the texture of the polygon.
+		int getTexture() const;
+		/// Sets the texture of the polygon.
+		void setTexture(int tex);
+
+		/// Gets the number of points of the polygon.
+		int getPoints() const;
 };
 
 }

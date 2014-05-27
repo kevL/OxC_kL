@@ -1751,7 +1751,7 @@ void Map::drawTerrain(Surface* surface)
 
 	delete _numWaypid;
 
-	if (_explosionInFOV) // check if we got big explosions
+	if (_explosionInFOV) // check if we got hit or explosion animations
 	{
 		for (std::set<Explosion*>::const_iterator
 				i = _explosions.begin();

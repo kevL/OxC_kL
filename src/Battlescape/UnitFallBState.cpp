@@ -22,7 +22,7 @@
 #include "BattleAIState.h"
 #include "BattlescapeState.h"
 #include "Camera.h"
-#include "ExplosionBState.h"
+//kL #include "ExplosionBState.h"
 #include "Map.h"
 #include "Pathfinding.h"
 #include "ProjectileFlyBState.h"
