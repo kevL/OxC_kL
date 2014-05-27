@@ -972,17 +972,18 @@ void Inventory::mouseClick(Action* action, State* state)
 					//Log(LOG_INFO) << ". in Battle";
 					_game->popState(); // Closes the inventory window on right-click (if not in preBattle equip screen!)
 
+/*kL: now done in InventoryState::dTor()
 					// but Does NOT applyGravity(), so from InventoryState::btnOkClick()
 					SavedBattleGame* battleGame = _game->getSavedGame()->getSavedBattle();
 					TileEngine* tileEngine = battleGame->getTileEngine();
 
 					tileEngine->applyGravity(battleGame->getSelectedUnit()->getTile());
 					tileEngine->calculateTerrainLighting(); // dropping / picking up flares
-					tileEngine->recalculateFOV();
-
+					tileEngine->recalculateFOV(); */
+/*
 					// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
 					// could figure it out via what's on Ground but meh.
-/*					if (item->getRules()->getBattleType() == BT_FLARE)
+					if (item->getRules()->getBattleType() == BT_FLARE)
 					{
 						getTileEngine()->calculateTerrainLighting();
 						getTileEngine()->calculateFOV(position);

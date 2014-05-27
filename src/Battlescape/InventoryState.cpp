@@ -252,7 +252,6 @@ InventoryState::InventoryState(
 	_txtMelee->setVisible(vis); // kL
 	_txtPStr->setVisible(vis);
 	_txtPSkill->setVisible(vis);
-
 	//Log(LOG_INFO) << "Create InventoryState EXIT";
 }
 
@@ -261,6 +260,39 @@ InventoryState::InventoryState(
  */
 InventoryState::~InventoryState()
 {
+	Tile* unitTile = _battleGame->getSelectedUnit()->getTile();
+//	if (_battleGame->getTileEngine())
+//	{
+//		if (Options::maximizeInfoScreens)
+//		{
+//			Screen::updateScale(
+//							Options::battlescapeScale,
+//							Options::battlescapeScale,
+//							Options::baseXBattlescape,
+//							Options::baseYBattlescape,
+//							true);
+//			_game->getScreen()->resetDisplay(false);
+//		}
+
+	TileEngine* tileEngine = _battleGame->getTileEngine();	// kL
+	tileEngine->applyGravity(unitTile);						// kL
+	tileEngine->calculateTerrainLighting();					// kL
+	tileEngine->recalculateFOV();							// kL
+//kL	_battleGame->getTileEngine()->applyGravity(unitTile);
+//kL	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
+//kL	_battleGame->getTileEngine()->recalculateFOV();
+
+//	}
+//	else
+//	{
+//		Screen::updateScale(
+//						Options::geoscapeScale,
+//						Options::geoscapeScale,
+//						Options::baseXGeoscape,
+//						Options::baseYGeoscape,
+//						true);
+//		_game->getScreen()->resetDisplay(false);
+//	}
 }
 
 /**
@@ -489,15 +521,6 @@ void InventoryState::btnOkClick(Action*)
 		// kL_begin: This for early exit because access is via CraftEquip screen.
 		if (_parent == 0)
 		{
-/*kL
-			Screen::updateScale(
-							Options::geoscapeScale,
-							Options::geoscapeScale,
-							Options::baseXGeoscape,
-							Options::baseYGeoscape,
-							true);
-			_game->getScreen()->resetDisplay(false); */
-
 			//Log(LOG_INFO) << ". early out <- CraftEquip ( no BattlescapeState )";
 			return;
 		} // kL_end.
@@ -507,45 +530,14 @@ void InventoryState::btnOkClick(Action*)
 		if (_battleGame->getTurn() == 1)
 		{
 			_battleGame->randomizeItemLocations(inventoryTile);
+/*kL
 			if (inventoryTile->getUnit())
 			{
 				// make sure we select the unit closest to the ramp.
 				_battleGame->setSelectedUnit(inventoryTile->getUnit());
-			}
+			} */
 		}
 	}
-
-
-	TileEngine* tileEngine = _battleGame->getTileEngine();
-//	if (tileEngine) // kL_note: not needed, CraftEquip is handled above w/ early return.
-//	{
-//	tileEngine->applyGravity(_battleGame->getSelectedUnit()->getTile());
-
-	tileEngine->applyGravity(inventoryTile);
-	tileEngine->calculateTerrainLighting(); // dropping / picking up flares
-	tileEngine->recalculateFOV();
-
-		// from BattlescapeGame::dropItem() but can't really use this because I don't know exactly what dropped...
-		// could figure it out via what's on Ground but meh.
-/*		if (item->getRules()->getBattleType() == BT_FLARE)
-		{
-			getTileEngine()->calculateTerrainLighting();
-			getTileEngine()->calculateFOV(position);
-		} */
-//	}
-
-/*kL
-	if (Options::maximizeInfoScreens)
-	{
-		Screen::updateScale(
-						Options::battlescapeScale,
-						Options::battlescapeScale,
-						Options::baseXBattlescape,
-						Options::baseYBattlescape,
-						true);
-		_game->getScreen()->resetDisplay(false);
-	} */
-
 	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }
 
@@ -680,8 +672,8 @@ void InventoryState::invClick(Action*)
 		label << " (" << wt << ")";
 		_txtItem->setText(label.str());
 		// kL_end.
-
-/*		if (item->getUnit()
+/*kL
+		if (item->getUnit()
 			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 		{
 			_txtItem->setText(item->getUnit()->getName(_game->getLanguage()));
