@@ -26,11 +26,11 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
+#include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 //kL #include "../Engine/Screen.h"
-#include "../Engine/Surface.h"
 
 #include "../Interface/Bar.h"
 #include "../Interface/Text.h"
@@ -81,8 +81,9 @@ UnitInfoState::UnitInfoState(
 
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 
-	_bg				= new Surface(320, 200, 0, 0);
-	_txtName		= new Text(288, 17, 16, 4);
+	_bg			= new Surface(320, 200, 0, 0);
+	_exit		= new InteractiveSurface(320, 180, 0, 20);
+	_txtName	= new Text(288, 17, 16, 4);
 
 	int
 		step = 9,
@@ -186,6 +187,7 @@ UnitInfoState::UnitInfoState(
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_bg);
+	add(_exit);
 	add(_txtName);
 
 	add(_txtTimeUnits);
@@ -269,6 +271,14 @@ UnitInfoState::UnitInfoState(
 	centerAllSurfaces();
 
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
+
+	_exit->onMouseClick((ActionHandler)& UnitInfoState::exitClick);
+	_exit->onKeyboardPress(
+					(ActionHandler)& UnitInfoState::exitClick,
+					Options::keyCancel);
+	_exit->onKeyboardPress(
+					(ActionHandler)& UnitInfoState::exitClick,
+					Options::keyBattleStats);
 
 	_txtName->setAlign(ALIGN_CENTER);
 	_txtName->setBig();
@@ -692,13 +702,7 @@ void UnitInfoState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-			exit();
-/*		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		{
-			// kL_note: This for Next/Previous btns (but requires more than 20 pixels)
-			if (static_cast<int>(action->getRelativeYMouse()) > 20)
-				exit();
-		} */
+			exitClick(action);
 		else if (!_mindProbe)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)
@@ -707,21 +711,13 @@ void UnitInfoState::handle(Action* action)
 				btnPrevClick(action);
 		}
 	}
-	else if (action->getDetails()->type == SDL_KEYDOWN)
-	{
-		if (action->getDetails()->key.keysym.sym == Options::keyCancel
-			|| action->getDetails()->key.keysym.sym == Options::keyBattleStats)
-		{
-			exit();
-		}
-	}
 }
 
 /**
 * Selects the previous unit.
 * @param action Pointer to an action.
 */
-void UnitInfoState::btnPrevClick(Action*)
+void UnitInfoState::btnPrevClick(Action* action)
 {
 	if (_parent) // so we are here from a Battlescape Game
 		_parent->selectPreviousFactionUnit(
@@ -739,14 +735,14 @@ void UnitInfoState::btnPrevClick(Action*)
 	if (_unit != 0)
 		init();
 	else
-		exit();
+		exitClick(action);
 }
 
 /**
-* Selects the next unit.
-* @param action Pointer to an action.
-*/
-void UnitInfoState::btnNextClick(Action*)
+ * Selects the next unit.
+ * @param action Pointer to an action.
+ */
+void UnitInfoState::btnNextClick(Action* action)
 {
 	if (_parent) // so we are here from a Battlescape Game
 		_parent->selectNextFactionUnit(
@@ -764,13 +760,14 @@ void UnitInfoState::btnNextClick(Action*)
 	if (_unit != 0)
 		init();
 	else
-		exit();
+		exitClick(action);
 }
 
 /**
- *
+ * Exits the screen.
+ * @param action Pointer to an action.
  */
-void UnitInfoState::exit()
+void UnitInfoState::exitClick(Action*)
 {
 	if (!_fromInventory)
 	{

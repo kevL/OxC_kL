@@ -26,8 +26,8 @@
 namespace OpenXcom
 {
 
-class InteractiveSurface;
 class ScannerView;
+class Surface;
 class Timer;
 
 struct BattleAction;
@@ -43,10 +43,9 @@ class ScannerState
 
 private:
 	BattleAction* _action;
-	InteractiveSurface
-		* _surface1,
-		* _surface2;
+	InteractiveSurface* _bg;
 	ScannerView* _scannerView;
+	Surface* _scan;
 	Timer* _timerAnimate;
 
 	/// Updates scanner interface.
@@ -68,6 +67,9 @@ private:
 
 		/// Handles timers.
 		void think();
+
+		/// Handler for exiting the state.
+		void exitClick(Action* action);
 };
 
 }

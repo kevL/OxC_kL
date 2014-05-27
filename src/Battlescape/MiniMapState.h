@@ -47,9 +47,9 @@ private:
 	InteractiveSurface
 		* _btnLvlDwn,
 		* _btnLvlUp,
-		* _btnOk,
-		* _surface;
-	MiniMapView* _miniMapView;
+		* _btnOk;
+	MiniMapView* _miniView;
+	Surface* _bg;
 	Text* _txtLevel;
 	Timer* _timerAnimate;
 

@@ -70,6 +70,7 @@ private:
 		* _barUnderArmor;
 	BattlescapeState* _parent;
 	BattleUnit* _unit;
+	InteractiveSurface* _exit;
 	SavedBattleGame *_battleGame;
 	Surface* _bg;
 	Text
@@ -140,8 +141,8 @@ private:
 		/// Handler for clicking the Next button.
 		void btnNextClick(Action* action);
 
-		/// exit the state.
-		void exit();
+		/// Handler for exiting the state.
+		void exitClick(Action* action);
 };
 
 }

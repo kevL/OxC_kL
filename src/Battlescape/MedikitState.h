@@ -49,8 +49,13 @@ private:
 	BattleUnit
 		* _targetUnit,
 		* _unit;
-	InteractiveSurface* _surface;
+	InteractiveSurface
+		* _endButton,
+		* _healButton,
+		* _painButton,
+		* _stimButton;
 	MedikitView* _mediView;
+	Surface* _bg;
 	Text
 		* _healTxt,
 		* _partTxt,

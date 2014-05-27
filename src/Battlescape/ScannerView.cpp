@@ -16,16 +16,22 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "ScannerView.h"
+
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/SurfaceSet.h"
-#include "../Resource/ResourcePack.h"
-#include "../Engine/Action.h"
-#include "../Savegame/BattleUnit.h"
-#include "../Savegame/Tile.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/SavedBattleGame.h"
+
 #include "../Interface/Text.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Tile.h"
+
 
 namespace OpenXcom
 {
@@ -39,37 +45,69 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param unit The current unit.
  */
-ScannerView::ScannerView (int w, int h, int x, int y, Game * game, BattleUnit *unit) : InteractiveSurface(w, h, x, y), _game(game), _unit(unit), _frame(0)
+ScannerView::ScannerView(
+		int w,
+		int h,
+		int x,
+		int y,
+		Game* game,
+		BattleUnit* unit)
+	:
+		InteractiveSurface(w, h, x, y),
+		_game(game),
+		_unit(unit),
+		_frame(0)
 {
 	_redraw = true;
 }
 
 /**
- * Draws the ScannerView view.
+ * Draws a Scanner.
  */
 void ScannerView::draw()
 {
-	SurfaceSet *set = _game->getResourcePack()->getSurfaceSet("DETBLOB.DAT");
-	Surface *surface = 0;
+	SurfaceSet* set = _game->getResourcePack()->getSurfaceSet("DETBLOB.DAT");
+	Surface* surface = 0;
 
 	clear();
 
 	this->lock();
-	for (int x = -9; x < 10; x++)
+	for (int
+			x = -9;
+			x < 10;
+			x++)
 	{
-		for (int y = -9; y < 10; y++)
+		for (int
+				y = -9;
+				y < 10;
+				y++)
 		{
-			for (int z = 0; z < _game->getSavedGame()->getSavedBattle()->getMapSizeZ(); z++)
+			for (int
+					z = 0;
+					z < _game->getSavedGame()->getSavedBattle()->getMapSizeZ();
+					z++)
 			{
-				Tile *t = _game->getSavedGame()->getSavedBattle()->getTile(Position(x,y,z) + Position(_unit->getPosition().x, _unit->getPosition().y, 0));
-				if (t && t->getUnit() && t->getUnit()->getMotionPoints())
+				Tile* t = _game->getSavedGame()->getSavedBattle()->getTile(Position(x, y, z)
+						+ Position(
+								_unit->getPosition().x,
+								_unit->getPosition().y,
+								0));
+				if (t
+					&& t->getUnit()
+					&& t->getUnit()->getMotionPoints())
 				{
 					int frame = (t->getUnit()->getMotionPoints() / 5);
-					if (frame >= 0)
+					if (frame > -1)
 					{
-						if (frame > 5) frame = 5;
+						if (frame > 5)
+							frame = 5;
+
 						surface = set->getFrame(frame + _frame);
-						surface->blitNShade(this, Surface::getX()+((9+x)*8)-4, Surface::getY()+((9+y)*8)-4, 0);
+						surface->blitNShade(
+										this,
+										Surface::getX() + ((9 + x) * 8) - 4,
+										Surface::getY() + ((9 + y) * 8) - 4,
+										0);
 					}
 				}
 			}
@@ -78,8 +116,11 @@ void ScannerView::draw()
 
 	// the arrow of the direction the unit is pointed
 	surface = set->getFrame(7 + _unit->getDirection());
-
-	surface->blitNShade(this, Surface::getX()+(9*8)-4, Surface::getY()+(9*8)-4, 0);
+	surface->blitNShade(
+					this,
+					Surface::getX() + (9 * 8) - 4,
+					Surface::getY() + (9 * 8) - 4,
+					0);
 	this->unlock();
 
 
@@ -90,7 +131,7 @@ void ScannerView::draw()
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
-void ScannerView::mouseClick (Action *, State *)
+void ScannerView::mouseClick(Action*, State*)
 {
 }
 
@@ -100,10 +141,10 @@ void ScannerView::mouseClick (Action *, State *)
 void ScannerView::animate()
 {
 	_frame++;
-	if(_frame > 1)
-	{
+
+	if (_frame > 1)
 		_frame = 0;
-	}
+
 	_redraw = true;
 }
 

@@ -990,7 +990,7 @@ void ProjectileFlyBState::think()
 							AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(victim->getCurrentAIState());
 							if (aggro != 0)
 							{
-								aggro->setWasHit();
+								aggro->setWasHit(); // kL_note: is used only for spotting on RA.
 								_unit->setTurnsExposed(0); // kL_note: might want to remark this! Ok.
 								// technically, in the original as I remember it, only
 								// a BlasterLaunch (by xCom) would set an xCom soldier Exposed here!

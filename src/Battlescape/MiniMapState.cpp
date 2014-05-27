@@ -61,15 +61,12 @@ MiniMapState::MiniMapState(
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_surface		= new InteractiveSurface(320, 200);
-	_miniMapView	= new MiniMapView(
-									221,
-									148,
-									48,
-									16,
-									game,
-									camera,
-									battleGame);
+	_bg			= new InteractiveSurface(320, 200);
+	_miniView	= new MiniMapView(
+								221, 148, 48, 16,
+								game,
+								camera,
+								battleGame);
 
 	_btnLvlUp	= new InteractiveSurface(18, 20, 24, 62);
 	_btnLvlDwn	= new InteractiveSurface(18, 20, 24, 88);
@@ -79,8 +76,8 @@ MiniMapState::MiniMapState(
 
 	setPalette("PAL_BATTLESCAPE");
 
-	add(_surface);
-	add(_miniMapView);
+	add(_bg);
+	add(_miniView);
 	add(_btnLvlUp);
 	add(_btnLvlDwn);
 	add(_btnOk);
@@ -97,10 +94,10 @@ MiniMapState::MiniMapState(
 		current.h = 151;
 		current.x = 46;
 		current.y = 14;
-		_surface->drawRect(&current, Palette::blockOffset(15)+15);
+		_bg->drawRect(&current, Palette::blockOffset(15)+15);
 	}
 
-	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_surface);
+	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
 
 
 	_btnLvlUp->onMouseClick((ActionHandler)& MiniMapState::btnLevelUpClick);
@@ -125,7 +122,7 @@ MiniMapState::MiniMapState(
 	_timerAnimate->onTimer((StateHandler)& MiniMapState::animate);
 	_timerAnimate->start();
 
-	_miniMapView->draw();
+	_miniView->draw();
 }
 
 /**
@@ -183,7 +180,7 @@ void MiniMapState::btnOkClick(Action*)
 void MiniMapState::btnLevelUpClick(Action*)
 {
 	std::wostringstream s;
-	s << _miniMapView->up();
+	s << _miniView->up();
 	_txtLevel->setText(s.str());
 }
 
@@ -194,7 +191,7 @@ void MiniMapState::btnLevelUpClick(Action*)
 void MiniMapState::btnLevelDownClick(Action*)
 {
 	std::wostringstream s;
-	s << _miniMapView->down();
+	s << _miniView->down();
 	_txtLevel->setText(s.str());
 }
 
@@ -203,7 +200,7 @@ void MiniMapState::btnLevelDownClick(Action*)
  */
 void MiniMapState::animate()
 {
-	_miniMapView->animate();
+	_miniView->animate();
 }
 
 /**

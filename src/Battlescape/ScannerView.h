@@ -16,10 +16,12 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SCANNERVIEW_H
 #define OPENXCOM_SCANNERVIEW_H
 
 #include "../Engine/InteractiveSurface.h"
+
 
 namespace OpenXcom
 {
@@ -27,23 +29,41 @@ namespace OpenXcom
 class BattleUnit;
 class Game;
 
+
 /**
  * Displays a view of units movement.
  */
-class ScannerView : public InteractiveSurface
+class ScannerView
+	:
+		public InteractiveSurface
 {
-	Game * _game;
-	/// Handle clicking
-	void mouseClick (Action *action, State *state);
-	BattleUnit *_unit;
+
+private:
 	int _frame;
-public:
-	/// Create the ScannerView
-	ScannerView (int w, int h, int x, int y, Game * game, BattleUnit *unit);
-	/// Draw the scanner view
-	void draw();
-	void animate();
+
+	BattleUnit* _unit;
+	Game* _game;
+
+	///
+	void mouseClick(Action* action, State* state);
+
+
+	public:
+		/// Create a ScannerView.
+		ScannerView(
+				int w,
+				int h,
+				int x,
+				int y,
+				Game* game,
+				BattleUnit* unit);
+
+		/// Draw the scanner.
+		void draw();
+		/// Animate the blobs.
+		void animate();
 };
+
 }
 
 #endif

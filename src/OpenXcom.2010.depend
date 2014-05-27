@@ -5672,7 +5672,7 @@
 	"BattlescapeGame.h"
 	"../Engine/State.h"
 
-1401021298 f:\git\openxcom\src\battlescape\medikitstate.h
+1401229650 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
 1399377745 f:\git\openxcom\src\battlescape\pathfinding.h
@@ -5684,7 +5684,7 @@
 1397875896 f:\git\openxcom\src\battlescape\primegrenadestate.h
 	"../Engine/State.h"
 
-1397875970 f:\git\openxcom\src\battlescape\scannerstate.h
+1401230338 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
 1401200414 f:\git\openxcom\src\battlescape\tileengine.h
@@ -5854,7 +5854,7 @@
 1394398507 f:\git\openxcom\src\battlescape\unitfallbstate.h
 	"BattleState.h"
 
-1401017052 f:\git\openxcom\src\battlescape\unitinfostate.h
+1401230605 f:\git\openxcom\src\battlescape\unitinfostate.h
 	"../Engine/State.h"
 
 1394398507 f:\git\openxcom\src\battlescape\unitpanicbstate.h
@@ -6083,7 +6083,7 @@
 1394398507 f:\git\openxcom\src\battlescape\briefingstate.h
 	"../Engine/State.h"
 
-1394398507 f:\git\openxcom\src\battlescape\minimapstate.h
+1401231131 f:\git\openxcom\src\battlescape\minimapstate.h
 	"../Engine/State.h"
 
 1394398507 f:\git\openxcom\src\battlescape\warningmessage.h
@@ -6674,20 +6674,20 @@
 	"../Savegame/BattleItem.h"
 	"../Savegame/BattleUnit.h"
 
-1394398507 f:\git\openxcom\src\battlescape\scannerview.h
+1401231404 f:\git\openxcom\src\battlescape\scannerview.h
 	"../Engine/InteractiveSurface.h"
 
-1394398507 source:f:\git\openxcom\src\battlescape\scannerview.cpp
+1401231656 source:f:\git\openxcom\src\battlescape\scannerview.cpp
 	"ScannerView.h"
+	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/SurfaceSet.h"
-	"../Resource/ResourcePack.h"
-	"../Engine/Action.h"
-	"../Savegame/BattleUnit.h"
-	"../Savegame/Tile.h"
-	"../Savegame/SavedGame.h"
-	"../Savegame/SavedBattleGame.h"
 	"../Interface/Text.h"
+	"../Resource/ResourcePack.h"
+	"../Savegame/BattleUnit.h"
+	"../Savegame/SavedBattleGame.h"
+	"../Savegame/SavedGame.h"
+	"../Savegame/Tile.h"
 
 1401203926 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"

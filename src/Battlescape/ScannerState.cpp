@@ -29,7 +29,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-//kL #include "../Engine/Options.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
@@ -67,8 +67,8 @@ ScannerState::ScannerState(
 		_game->getScreen()->resetDisplay(false);
 	} */
 
-	_surface1		= new InteractiveSurface(320, 200);
-	_surface2		= new InteractiveSurface(320, 200);
+	_bg				= new InteractiveSurface(320, 200);
+	_scan			= new InteractiveSurface(320, 200);
 	_scannerView	= new ScannerView(
 									152,
 									152,
@@ -82,22 +82,30 @@ ScannerState::ScannerState(
 
 	setPalette("PAL_BATTLESCAPE");
 
-	add(_surface2);
+	add(_scan);
 	add(_scannerView);
-	add(_surface1);
+	add(_bg);
 
 	centerAllSurfaces();
 
-	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_surface1);
-	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_surface2);
+	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_bg);
+	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_scan);
+
+	_bg->onMouseClick((ActionHandler)& ScannerState::exitClick);
+	_bg->onKeyboardPress(
+					(ActionHandler)& ScannerState::exitClick,
+					Options::keyCancel);
 
 	_timerAnimate = new Timer(125);
-	_timerAnimate->onTimer((StateHandler)&ScannerState::animate);
+	_timerAnimate->onTimer((StateHandler)& ScannerState::animate);
 	_timerAnimate->start();
 
 	update();
 }
 
+/**
+ *
+ */
 ScannerState::~ScannerState()
 {
 	delete _timerAnimate;
@@ -114,19 +122,7 @@ void ScannerState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-/*kL
-		if (Options::maximizeInfoScreens)
-		{
-			Screen::updateScale(
-							Options::battlescapeScale,
-							Options::battlescapeScale,
-							Options::baseXBattlescape,
-							Options::baseYBattlescape,
-							true);
-			_game->getScreen()->resetDisplay(false);
-		} */
-
-		_game->popState();
+		exitClick(action);
 	}
 }
 
@@ -153,6 +149,27 @@ void ScannerState::think()
 {
 	State::think();
 	_timerAnimate->think(this, 0);
+}
+
+/**
+ * Exits the screen.
+ * @param action Pointer to an action.
+ */
+void ScannerState::exitClick(Action*)
+{
+/*kL
+	if (Options::maximizeInfoScreens)
+	{
+		Screen::updateScale(
+						Options::battlescapeScale,
+						Options::battlescapeScale,
+						Options::baseXBattlescape,
+						Options::baseYBattlescape,
+						true);
+		_game->getScreen()->resetDisplay(false);
+	} */
+
+	_game->popState();
 }
 
 }

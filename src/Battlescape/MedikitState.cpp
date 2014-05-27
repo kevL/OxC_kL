@@ -166,7 +166,7 @@ MedikitState::MedikitState(
 	_unit = action->actor;
 	_item = action->weapon;
 
-	_surface = new InteractiveSurface(320, 200);
+	_bg = new Surface(320, 200);
 
 	setPalette("PAL_BATTLESCAPE");
 
@@ -179,8 +179,7 @@ MedikitState::MedikitState(
 		current.h = 100;
 		current.x = 67;
 		current.y = 44;
-
-		_surface->drawRect(&current, Palette::blockOffset(15)+15);
+		_bg->drawRect(&current, Palette::blockOffset(15)+15);
 	}
 
 //	_partTxt	= new Text(50, 15, 90, 120);	// kL
@@ -194,10 +193,10 @@ MedikitState::MedikitState(
 								_partTxt,
 								_woundTxt);
 
-	InteractiveSurface* endButton	= new InteractiveSurface(20, 20, 220, 140);
-	InteractiveSurface* stimButton	= new MedikitButton(84);
-	InteractiveSurface* painButton	= new MedikitButton(48);
-	InteractiveSurface* healButton	= new MedikitButton(120);
+	_stimButton	= new MedikitButton(84);
+	_painButton	= new MedikitButton(48);
+	_healButton	= new MedikitButton(120);
+	_endButton	= new InteractiveSurface(20, 20, 220, 140);
 
 //	_painText	= new MedikitTxt(50);
 //	_stimTxt	= new MedikitTxt(85);
@@ -206,17 +205,17 @@ MedikitState::MedikitState(
 	_stimTxt	= new MedikitTxt(88);
 	_healTxt	= new MedikitTxt(124);
 
-	add(_surface);
+	add(_bg);
 	add(_mediView);
-	add(endButton);
+	add(_endButton);
 
 	add(new MedikitTitle(37, tr("STR_PAIN_KILLER")));
 	add(new MedikitTitle(73, tr("STR_STIMULANT")));
 	add(new MedikitTitle(109, tr("STR_HEAL")));
 
-	add(healButton);
-	add(stimButton);
-	add(painButton);
+	add(_healButton);
+	add(_stimButton);
+	add(_painButton);
 	add(_painText);
 	add(_stimTxt);
 	add(_healTxt);
@@ -225,7 +224,7 @@ MedikitState::MedikitState(
 
 	centerAllSurfaces();
 
-	_game->getResourcePack()->getSurface("MEDIBORD.PCK")->blit(_surface);
+	_game->getResourcePack()->getSurface("MEDIBORD.PCK")->blit(_bg);
 	_painText->setBig();
 	_stimTxt->setBig();
 	_healTxt->setBig();
@@ -234,13 +233,13 @@ MedikitState::MedikitState(
 	_woundTxt->setColor(Palette::blockOffset(2));
 	_woundTxt->setHighContrast(true);
 
-	endButton->onMouseClick((ActionHandler)& MedikitState::onEndClick);
-	endButton->onKeyboardPress(
+	_endButton->onMouseClick((ActionHandler)& MedikitState::onEndClick);
+	_endButton->onKeyboardPress(
 					(ActionHandler)& MedikitState::onEndClick,
 					Options::keyCancel);
-	healButton->onMouseClick((ActionHandler)& MedikitState::onHealClick);
-	stimButton->onMouseClick((ActionHandler)& MedikitState::onStimulantClick);
-	painButton->onMouseClick((ActionHandler)& MedikitState::onPainKillerClick);
+	_healButton->onMouseClick((ActionHandler)& MedikitState::onHealClick);
+	_stimButton->onMouseClick((ActionHandler)& MedikitState::onStimulantClick);
+	_painButton->onMouseClick((ActionHandler)& MedikitState::onPainKillerClick);
 
 	update();
 }
