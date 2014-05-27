@@ -21,6 +21,7 @@
 #define OPENXCOM_PALETTE_H
 
 #include <string>
+
 #include <SDL.h>
 
 
@@ -36,11 +37,14 @@ class Palette
 {
 
 private:
-	SDL_Color* _colors;
 	int _count;
+	SDL_Color* _colors;
 
 
 	public:
+		/// Position of the background colors block in an X-Com palette (used for background images in screens).
+		static const int backPos = 224;
+
 		/// Creates a blank palette.
 		Palette();
 		/// Cleans up the palette.
@@ -83,9 +87,6 @@ private:
 		{
 			return block * 16;
 		}
-
-		/// Position of the background colors block in an X-Com palette (used for background images in screens).
-		static const int backPos = 224;
 };
 
 }

@@ -496,12 +496,8 @@ void Map::drawTerrain(Surface* surface)
 
 				if (!_smoothingEngaged)
 				{
-//					Position origin = _projectile->getOrigin(); // kL
-					Position target = _projectile->getTarget(); // kL
-					if (!_camera->isOnScreen(target) // kL
-						/*   std::abs(origin.x - target.x) > 1 // kL
-						|| std::abs(origin.y - target.y) > 1 // kL
-						|| std::abs(origin.z - target.z) > 1 // kL */
+					Position target = _projectile->getTarget();	// kL
+					if (!_camera->isOnScreen(target)			// kL
 						|| bulletScreen.x < 1
 						|| bulletScreen.x > surface->getWidth() - 1
 						|| bulletScreen.y < 1

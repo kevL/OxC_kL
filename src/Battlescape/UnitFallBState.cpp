@@ -103,7 +103,7 @@ void UnitFallBState::think()
 		if ((*unit)->getStatus() == STATUS_TURNING)
 		{
 			//Log(LOG_INFO) << ". STATUS_TURNING, abortTurn()";
-//kL			(*unit)->abortTurn();
+//kL		(*unit)->abortTurn();
 			(*unit)->setStatus(STATUS_STANDING); // kL
 		}
 
@@ -113,7 +113,9 @@ void UnitFallBState::think()
 		int size = (*unit)->getArmor()->getSize() - 1;
 
 		bool onScreen = (*unit)->getVisible()
-						&& _parent->getMap()->getCamera()->isOnScreen((*unit)->getPosition());
+						&& _parent->getMap()->getCamera()->isOnScreen(
+																(*unit)->getPosition());
+//kL															true);
 
 		Tile* tBelow = 0;
 

@@ -110,9 +110,10 @@ private:
 		_ironman,
 		_warned;
 	int
-		_globeZoom,
+//kL		_globeZoom,
 		_monthsPassed;
 //kL		_selectedBase;
+	size_t _globeZoom;
 	double
 		_globeLat,
 		_globeLon;
@@ -211,9 +212,9 @@ private:
 		void setGlobeLatitude(double lat);
 
 		/// Gets the current globe zoom.
-		int getGlobeZoom() const;
+		size_t getGlobeZoom() const;
 		/// Sets the new globe zoom.
-		void setGlobeZoom(int zoom);
+		void setGlobeZoom(size_t zoom);
 
 		/// Handles monthly funding.
 		void monthlyFunding();

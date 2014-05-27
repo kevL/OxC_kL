@@ -60,6 +60,8 @@ private:
 	static const int NUM_SEASHADES	= 72;
 	static const int NEAR_RADIUS	= 25;
 
+//kL	static const size_t DOGFIGHT_ZOOM = 5; // kL, was 3
+
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
@@ -80,12 +82,18 @@ private:
 		_hoverLon,
 		_hoverLat,
 		_lonBeforeMouseScrolling,
-		_latBeforeMouseScrolling; //, _rotLon, _rotLat;
+		_latBeforeMouseScrolling,
+//		_rotLon,
+//		_rotLat;
+		_radius,
+		_radiusStep;
 	Sint16
 		_cenX,
 		_cenY;
 	Uint32 _mouseScrollingStartTime;
-	size_t _zoom;
+	size_t
+		_zoom,
+		_zoomPre;
 
 	FastLineClip* _clipper;
 	Game* _game;
@@ -111,8 +119,11 @@ private:
 	/// data sample used for noise in shading
 	std::vector<Sint16> _randomNoiseData;
 	/// list of dimension of earth on screen per zoom level
-	std::vector<double> _radius;
+	std::vector<double> _zoomRadii;
 
+
+	/// Sets the globe zoom factor.
+	void setZoom(size_t zoom);
 
 	/// Checks if a point is behind the globe.
 	bool pointBack(
@@ -224,6 +235,7 @@ private:
 //		void rotateStopLon();
 		/// Stops latitude rotation of the globe.
 //		void rotateStopLat();
+
 		/// Zooms the globe in.
 		void zoomIn();
 		/// Zooms the globe out.
@@ -232,6 +244,17 @@ private:
 //		void zoomMin();
 		/// Zooms the globe maximum.
 //		void zoomMax();
+
+		/// Saves the zoom level for dogfights.
+		void saveDogfightZoom();
+		/// Zooms the globe in for dogfights.
+		bool zoomDogfightIn();
+		/// Zooms the globe out for dogfights.
+		bool zoomDogfightOut();
+		/// Gets the current zoom.
+		size_t getZoom() const;
+		/// kL. Gets the number of zoom levels available.
+		size_t getZoomLevels() const; // kL
 
 		/// Centers the globe on a point.
 		void center(
@@ -303,13 +326,6 @@ private:
 				double lat,
 				int* texture,
 				int* shade) const;
-
-		/// Checks if current globe zoom level is at maximum.
-		bool isZoomedInToMax() const;
-		/// Checks if current globe zoom level is at minimum.
-		bool isZoomedOutToMax() const;
-		/// kL. Checks if the globe is zoomed to a certain level.
-//		bool isZoomedToLevel(size_t level) const;
 
 		/// Get the localized text.
 		const LocalizedText& tr(const std::string& id) const;

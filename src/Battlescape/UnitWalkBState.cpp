@@ -137,8 +137,8 @@ void UnitWalkBState::think()
 	}
 
 	_onScreen = _unit->getVisible();
-//				&& (_walkCam->isOnScreen(_unit->getPosition())
-//					|| _walkCam->isOnScreen(_unit->getDestination())); // kL
+//				&& (_walkCam->isOnScreen(_unit->getPosition(), true)
+//					|| _walkCam->isOnScreen(_unit->getDestination(), true)); // kL
 	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 
@@ -168,7 +168,9 @@ void UnitWalkBState::think()
 			{
 				int dest_z = _unit->getDestination().z;
 				if (_unit->getFaction() != FACTION_PLAYER
-					&& !_walkCam->isOnScreen(_unit->getPosition()))
+					&& !_walkCam->isOnScreen(
+										_unit->getPosition()))
+//kL									true))
 				{
 					_walkCam->centerOnPosition(_unit->getPosition());
 				}
@@ -221,7 +223,9 @@ void UnitWalkBState::think()
 		{
 			int pos_z = _unit->getPosition().z;
 			if (_unit->getFaction() != FACTION_PLAYER
-				&& !_walkCam->isOnScreen(_unit->getPosition()))
+				&& !_walkCam->isOnScreen(
+									_unit->getPosition()))
+//kL								true))
 			{
 				_walkCam->centerOnPosition(_unit->getPosition());
 			}
@@ -781,9 +785,9 @@ bool UnitWalkBState::doStatusWalk()
 
 		// kL_note: try moving this up into think().
 		// kL_note: Let's try this, maintain camera focus centered on Visible aliens during (un)hidden movement
-/*		if (_unit->getVisible()								// kL
-			&& _unit->getFaction() != FACTION_PLAYER		// kL
-			&& !_walkCam->isOnScreen(_unit->getPosition())) // kL_TEST!
+/*		if (_unit->getVisible()										// kL
+			&& _unit->getFaction() != FACTION_PLAYER				// kL
+			&& !_walkCam->isOnScreen(_unit->getPosition(), true))	// kL_TEST!
 		{
 			_walkCam->centerOnPosition(_unit->getPosition());
 		}
@@ -1087,8 +1091,8 @@ void UnitWalkBState::playMovementSound()
 {
 	if (!_unit->getVisible()
 		&& !_parent->getSave()->getDebugMode())
-//kL		|| (!_walkCam->isOnScreen(_unit->getPosition())
-//kL			&& !_walkCam->isOnScreen(_unit->getDestination())))
+//kL		|| (!_walkCam->isOnScreen(_unit->getPosition(), true)
+//kL			&& !_walkCam->isOnScreen(_unit->getDestination(), true)))
 	{
 		return;
 	}

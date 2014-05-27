@@ -58,7 +58,8 @@ private:
 		_damage,
 		_fuel,
 		_id,
-		_interceptionOrder;
+		_interceptionOrder,
+		_takeoff;
 
 	std::string _status;
 	std::wstring _name;

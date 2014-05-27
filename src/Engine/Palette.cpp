@@ -59,11 +59,14 @@ void Palette::loadDat(
 		int ncolors,
 		int offset)
 {
-	if(_colors != 0)
+	if (_colors != 0)
+	{
 		throw Exception("loadDat can be run only once");
+	}
 
 	_count = ncolors;
 	_colors = new SDL_Color[_count];
+
 	memset(
 		_colors,
 		0,
@@ -90,7 +93,9 @@ void Palette::loadDat(
 		_colors[i].r = value[0] * 4;
 		_colors[i].g = value[1] * 4;
 		_colors[i].b = value[2] * 4;
+		_colors[i].unused = 255;
 	}
+	_colors[0].unused = 0;
 
 	palFile.close();
 }

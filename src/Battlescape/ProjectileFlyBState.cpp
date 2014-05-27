@@ -1019,6 +1019,7 @@ void ProjectileFlyBState::cancel()
 										pos.x / 16,
 										pos.y / 16,
 										pos.z / 24)))
+//kL										false))
 		{
 			camera->centerOnPosition(Position(
 											pos.x / 16,

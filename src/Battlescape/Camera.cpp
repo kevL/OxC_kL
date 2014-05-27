@@ -692,7 +692,9 @@ bool Camera::getShowAllLayers() const
  * @param mapPos, Coordinates to check.
  * @return, True if the map coordinates are on screen.
  */
-bool Camera::isOnScreen(const Position& mapPos) const
+bool Camera::isOnScreen(
+		const Position& mapPos) const
+//kL		const bool unitWalking) const
 {
 	Position screenPos;
 	convertMapToScreen(
@@ -701,16 +703,29 @@ bool Camera::isOnScreen(const Position& mapPos) const
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
 
-/*kL	return screenPos.x >= -32
-			&& screenPos.x <= _screenWidth + 24
-			&& screenPos.y >= -32
-			&& ((screenPos.y <= _screenHeight + 8
-				&& (screenPos.x <= _screenWidth / 2 - Map::ICON_WIDTH / 2
-					|| screenPos.x >= _screenWidth / 2 + Map::ICON_WIDTH / 2 - 32)) */ // kL:
-	return screenPos.x > 0
+	return screenPos.x > 0 // kL_etc:
 			&& screenPos.x < _screenWidth
 			&& screenPos.y > 0
 			&& screenPos.y < _screenHeight - 72; // <- icons.
+
+/*kL
+	if (unitWalking)
+	{
+		return screenPos.x >= -32
+				&& screenPos.x <= _screenWidth + 24
+				&& screenPos.y >= -32
+				&& ((screenPos.y <= _screenHeight + 8
+						&& (screenPos.x <= _screenWidth / 2 - Map::ICON_WIDTH / 2
+							|| screenPos.x >= _screenWidth / 2 + Map::ICON_WIDTH / 2 - 32))
+					|| screenPos.y <= _screenHeight - 16)
+	}
+	else
+	{
+		return screenPos.x > -1
+				&& screenPos.x < _screenWidth - 9
+				&& screenPos.y > -1
+				&& screenPos.y < _screenHeight - 9;
+	} */
 }
 
 /**

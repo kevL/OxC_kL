@@ -23,6 +23,7 @@
 
 #include "../fmath.h"
 
+#include <algorithm>
 #include <cmath>
 #include <fstream>
 
@@ -83,7 +84,7 @@ const double
 namespace
 {
 
-/// helper class for Globe for drawing earth globe with shadows
+/// A helper class/struct for drawing shadows & noise on the Globe.
 struct GlobeStaticData
 {
 	/// array of shading gradient
@@ -107,24 +108,29 @@ struct GlobeStaticData
 			double x,
 			double y)
 	{
-		const double limit = r*r;
-		const double norm = 1./r;
+		const double
+			limit = r * r,
+			norm = 1.0 / r;
+
 		Cord ret;
-		ret.x = (x-ox);
-		ret.y = (y-oy);
-		const double temp = (ret.x)*(ret.x) + (ret.y)*(ret.y);
-		if(limit > temp)
+		ret.x = (x - ox);
+		ret.y = (y - oy);
+
+		const double temp = (ret.x) * (ret.x) + (ret.y) * (ret.y);
+		if (limit > temp)
 		{
 			ret.x *= norm;
 			ret.y *= norm;
-			ret.z = sqrt(limit - temp)*norm;
+			ret.z = sqrt(limit - temp) * norm;
+
 			return ret;
 		}
 		else
 		{
-			ret.x = 0.;
-			ret.y = 0.;
-			ret.z = 0.;
+			ret.x = 0.0;
+			ret.y = 0.0;
+			ret.z = 0.0;
+
 			return ret;
 		}
 	}
@@ -135,51 +141,37 @@ struct GlobeStaticData
 			random_surf_size(60)
 	{
 		// filling terminator gradient LUT
-		for (int i = 0; i < 240; ++i)
+		for (int
+				i = 0;
+				i < 240;
+				++i)
 		{
 			int j = i - 120;
 
-			if (j<-66) j=-16;
-			else
-			if (j<-48) j=-15;
-			else
-			if (j<-33) j=-14;
-			else
-			if (j<-22) j=-13;
-			else
-			if (j<-15) j=-12;
-			else
-			if (j<-11) j=-11;
-			else
-			if (j<-9) j=-10;
+			if		(j < -66) j = -16;
+			else if (j < -48) j = -15;
+			else if (j < -33) j = -14;
+			else if (j < -22) j = -13;
+			else if (j < -15) j = -12;
+			else if (j < -11) j = -11;
+			else if (j <  -9) j = -10;
 
-			if (j>120) j=19;
-			else
-			if (j>98) j=18;
-			else
-			if (j>86) j=17;
-			else
-			if (j>74) j=16;
-			else
-			if (j>54) j=15;
-			else
-			if (j>38) j=14;
-			else
-			if (j>26) j=13;
-			else
-			if (j>18) j=12;
-			else
-			if (j>13) j=11;
-			else
-			if (j>10) j=10;
-			else
-			if (j>8) j=9;
+			if		(j > 120) j =  19;
+			else if (j >  98) j =  18;
+			else if (j >  86) j =  17;
+			else if (j >  74) j =  16;
+			else if (j >  54) j =  15;
+			else if (j >  38) j =  14;
+			else if (j >  26) j =  13;
+			else if (j >  18) j =  12;
+			else if (j >  13) j =  11;
+			else if (j >  10) j =  10;
+			else if (j >   8) j =   9;
 
-			shade_gradient[i]= j+16;
+			shade_gradient[i] = j + 16;
 		}
 	}
 };
-
 
 GlobeStaticData static_data;
 
@@ -217,30 +209,33 @@ struct CreateShadow
 		temp.x -= 2.0;
 		temp.x *= 125.0;
 
-		if(temp.x < -110.0)
+		if (temp.x < -110.0)
 			temp.x = -31.0;
-		else if(temp.x > 120.0)
+		else if (temp.x > 120.0)
 			temp.x = 50.0;
 		else
 			temp.x = static_data.shade_gradient[static_cast<Sint16>(temp.x) + 120];
 
 		temp.x -= noise;
 
-		if(temp.x > 0.0)
+		if (temp.x > 0.0)
 		{
 			const Sint16 val = (temp.x > 31.0)? 31: static_cast<Sint16>(temp.x);
 			const int d = dest & helper::ColorGroup;
-			if(d ==  Palette::blockOffset(12) || d ==  Palette::blockOffset(13))
+			if (   d == Palette::blockOffset(12)
+				|| d == Palette::blockOffset(13))
 			{
 				return Palette::blockOffset(12)+val; // this pixel is ocean
 			}
 			else
 			{
-				if(dest==0) return static_cast<Uint8>(val); // this pixel is land
+				if (dest == 0)
+					return static_cast<Uint8>(val); // this pixel is land
 
-				const int s = static_cast<int>(val) / 3;
-				const int e = static_cast<int>(dest) + s;
-				if(static_cast<Uint8>(e) > static_cast<Uint8>(d) + helper::ColorShade)
+				const int
+					s = static_cast<int>(val) / 3,
+					e = static_cast<int>(dest) + s;
+				if (static_cast<Uint8>(e) > static_cast<Uint8>(d) + helper::ColorShade)
 					return static_cast<Uint8>(d) + helper::ColorShade;
 
 				return static_cast<Uint8>(e);
@@ -249,14 +244,13 @@ struct CreateShadow
 		else
 		{
 			const int d = static_cast<int>(dest & helper::ColorGroup);
-			if(static_cast<Uint8>(d) ==  Palette::blockOffset(12) || static_cast<Uint8>(d) ==  Palette::blockOffset(13))
+			if (   static_cast<Uint8>(d) == Palette::blockOffset(12)
+				|| static_cast<Uint8>(d) == Palette::blockOffset(13))
 			{
 				return Palette::blockOffset(12); // this pixel is ocean
 			}
 			else
-			{
 				return dest; // this pixel is land
-			}
 		}
 	}
 
@@ -267,7 +261,7 @@ struct CreateShadow
 			const Sint16& noise,
 			const int&)
 	{
-		if(dest && earth.z)
+		if (dest && earth.z)
 			dest = getShadowValue(
 								dest,
 								earth,
@@ -319,13 +313,17 @@ Globe::Globe(
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),
 		_mouseMovedOverThreshold(false),
+		_mouseScrollingStartTime(0),
 		_xBeforeMouseScrolling(0),
 		_yBeforeMouseScrolling(0),
 		_totalMouseMoveX(0),
 		_totalMouseMoveY(0),
 		_lonBeforeMouseScrolling(0.0),
 		_latBeforeMouseScrolling(0.0),
-		_mouseScrollingStartTime(0)
+		_radius(0.0),
+		_radiusStep(0.0)
+//		_zoom(0),
+//		_zoomPre(0)
 {
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -438,6 +436,7 @@ Globe::Globe(
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 
 	_zoom = _game->getSavedGame()->getGlobeZoom();
+	_zoomPre = _zoom;
 
 	setupRadii(width, height);
 
@@ -501,8 +500,8 @@ void Globe::polarToCart(
 		Sint16* y) const
 {
 	// Orthographic projection
-	*x = _cenX + (Sint16)floor(_radius[_zoom] * cos(lat) * sin(lon - _cenLon));
-	*y = _cenY + (Sint16)floor(_radius[_zoom] * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
+	*x = _cenX + static_cast<Sint16>(floor(_radius * cos(lat) * sin(lon - _cenLon)));
+	*y = _cenY + static_cast<Sint16>(floor(_radius * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon))));
 }
 
 /**
@@ -515,8 +514,8 @@ void Globe::polarToCart(
 		double* y) const
 {
 	// Orthographic projection
-	*x = _cenX + _radius[_zoom] * cos(lat) * sin(lon - _cenLon);
-	*y = _cenY + _radius[_zoom] * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon));
+	*x = _cenX + static_cast<Sint16>(_radius * cos(lat) * sin(lon - _cenLon));
+	*y = _cenY + static_cast<Sint16>(_radius * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
 }
 
 /**
@@ -527,18 +526,17 @@ void Globe::polarToCart(
  * @param lon, Pointer to the output longitude.
  * @param lat, Pointer to the output latitude.
  */
-void Globe::cartToPolar(
+void Globe::cartToPolar( // Orthographic Projection
 		Sint16 x,
 		Sint16 y,
 		double* lon,
 		double* lat) const
 {
-	// Orthographic projection
 	x -= _cenX;
 	y -= _cenY;
 
 	double rho = sqrt(static_cast<double>(x * x + y * y));
-	double c = asin(rho / static_cast<double>(_radius[_zoom]));
+	double c = asin(rho / static_cast<double>(_radius));
 	if (AreSame(rho, 0.0))
 	{
 		*lat = _cenLat;
@@ -553,8 +551,7 @@ void Globe::cartToPolar(
 				+ _cenLon;
 	}
 
-	// Keep between 0 and 2xPI
-	while (*lon < 0.0)
+	while (*lon < 0.0) // keep between 0 and 2xPI
 		*lon += 2.0 * M_PI;
 	while (*lon > 2.0 * M_PI)
 		*lon -= 2.0 * M_PI;
@@ -572,7 +569,7 @@ bool Globe::pointBack(
 		double lat) const
 {
 	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon)
-				+ sin(_cenLat) * sin(lat);
+			+ sin(_cenLat) * sin(lat);
 
 	return c < 0.0;
 }
@@ -586,6 +583,7 @@ double Globe::lastVisibleLat(double lon) const
 {
 //	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
 //	tan(lat) = -cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat);
+
 	return atan(-cos(_cenLat) * cos(lon - _cenLon) / sin(_cenLat));
 }
 
@@ -599,22 +597,27 @@ double Globe::lastVisibleLat(double lon) const
 bool Globe::insidePolygon(
 		double lon,
 		double lat,
-		Polygon *poly) const
+		Polygon* poly) const
 {
 	bool backFace = true;
+
 	for (int
 			i = 0;
 			i < poly->getPoints();
 			++i)
 	{
-		backFace = backFace && pointBack(
-									poly->getLongitude(i),
-									poly->getLatitude(i));
+		backFace = backFace
+				&& pointBack(
+							poly->getLongitude(i),
+							poly->getLatitude(i));
 	}
+
 	if (backFace != pointBack(lon, lat))
 		return false;
 
+
 	bool odd = false;
+
 	for (int
 			i = 0;
 			i < poly->getPoints();
@@ -622,11 +625,7 @@ bool Globe::insidePolygon(
 	{
 		int j = (i + 1) %poly->getPoints();
 
-/*		double
-			x = lon,
-			y = lat,
-			x_i = poly->getLongitude(i), y_i = poly->getLatitude(i),
-			x_j = poly->getLongitude(j), y_j = poly->getLatitude(j); */
+//		double x = lon, y = lat, x_i = poly->getLongitude(i), y_i = poly->getLatitude(i), x_j = poly->getLongitude(j), y_j = poly->getLatitude(j);
 		double
 			x,
 			y,
@@ -714,10 +713,8 @@ void Globe::loadDat(
 				i < points;
 				++i)
 		{
-//kL			double lonRad = static_cast<double>(value[j++]) * 0.125f * M_PI / 180.0;
-//kL			double latRad = static_cast<double>(value[j++]) * 0.125f * M_PI / 180.0;
-			double lonRad = static_cast<double>(value[j++]) * 0.125 * M_PI / 180.0; // kL
-			double latRad = static_cast<double>(value[j++]) * 0.125 * M_PI / 180.0; // kL
+			double lonRad = static_cast<double>(value[j++]) * 0.125 * M_PI / 180.0;
+			double latRad = static_cast<double>(value[j++]) * 0.125 * M_PI / 180.0;
 
 			poly->setLongitude(i, lonRad);
 			poly->setLatitude(i, latRad);
@@ -807,17 +804,30 @@ void Globe::loadDat(
 } */
 
 /**
+ * Changes the current globe zoom factor.
+ * @param zoom New zoom.
+ */
+void Globe::setZoom(size_t zoom)
+{
+	_zoom = std::min(
+					std::max(
+							zoom,
+							static_cast<size_t>(0u)),
+					_zoomRadii.size() - 1);
+
+	_radius = _zoomRadii[_zoom];
+	_game->getSavedGame()->setGlobeZoom(_zoom);
+
+	invalidate();
+}
+
+/**
  * Increases the zoom level on the globe.
  */
 void Globe::zoomIn()
 {
-	if (_zoom < _radius.size() - 1)
-	{
-		_zoom++;
-		_game->getSavedGame()->setGlobeZoom(_zoom);
-
-		invalidate();
-	}
+	if (_zoom < _zoomRadii.size() - 1)
+		setZoom(_zoom + 1);
 }
 
 /**
@@ -826,12 +836,7 @@ void Globe::zoomIn()
 void Globe::zoomOut()
 {
 	if (_zoom > 0)
-	{
-		_zoom--;
-		_game->getSavedGame()->setGlobeZoom(_zoom);
-
-		invalidate();
-	}
+		setZoom(_zoom - 1);
 }
 
 /**
@@ -839,10 +844,10 @@ void Globe::zoomOut()
  */
 /* void Globe::zoomMin()
 {
-	_zoom = 0;
-	_game->getSavedGame()->setGlobeZoom(_zoom);
-
-	invalidate();
+	if (_zoom > 0)
+	{
+		setZoom(0);
+	}
 } */
 
 /**
@@ -850,19 +855,82 @@ void Globe::zoomOut()
  */
 /* void Globe::zoomMax()
 {
-	_zoom = _radius.size() - 1;
-	_game->getSavedGame()->setGlobeZoom(_zoom);
-
-	invalidate();
+	if (_zoom < _zoomRadii.size() - 1)
+	{
+		setZoom(_zoomRadii.size() - 1);
+	}
 } */
 
 /**
- * kL. Gets the globe's current zoom level.
+ * Stores the zoom used before a dogfight.
  */
-/* size_t Globe::getZoomLevel()
+void Globe::saveDogfightZoom()
 {
-	return _zoom;
-} */
+	_zoomPre = _zoom;
+}
+
+/**
+ * Zooms the globe smoothly into dogfight level.
+ * @return Is the globe already zoomed in?
+ */
+bool Globe::zoomDogfightIn()
+{
+	size_t dogfightZoom = _zoomRadii.size() - 1; // kL
+
+//kL	if (_zoom < DOGFIGHT_ZOOM)
+	if (_zoom < dogfightZoom) // kL
+	{
+		double radius = _radius;
+//kL		if (radius + _radiusStep >= _zoomRadii[DOGFIGHT_ZOOM])
+		if (radius + _radiusStep >= _zoomRadii[dogfightZoom]) // kL
+		{
+//kL			setZoom(DOGFIGHT_ZOOM);
+			setZoom(dogfightZoom); // kL
+		}
+		else
+		{
+			if (radius + _radiusStep >= _zoomRadii[_zoom + 1])
+				_zoom++;
+
+			setZoom(_zoom);
+
+			_radius = radius + _radiusStep;
+		}
+
+		return false;
+	}
+
+	return true;
+}
+
+/**
+ * Zooms the globe smoothly out of dogfight level.
+ * @return Is the globe already zoomed out?
+ */
+bool Globe::zoomDogfightOut()
+{
+	if (_zoom > _zoomPre)
+	{
+		double radius = _radius;
+		if (radius - _radiusStep <= _zoomRadii[_zoomPre])
+		{
+			setZoom(_zoomPre);
+		}
+		else
+		{
+			if (radius - _radiusStep <= _zoomRadii[_zoom - 1])
+				_zoom--;
+
+			setZoom(_zoom);
+
+			_radius = radius - _radiusStep;
+		}
+
+		return false;
+	}
+
+	return true;
+}
 
 /**
  * Rotates the globe to center on a certain polar point on the world map.
@@ -1277,7 +1345,7 @@ void Globe::drawOcean()
 	drawCircle(
 			_cenX + 1,
 			_cenY,
-			static_cast<Sint16>(_radius[_zoom]) + 20,
+			static_cast<Sint16>(_radius) + 20,
 			Palette::blockOffset(12));
 //	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
@@ -2901,7 +2969,7 @@ void Globe::mouseClick(Action* action, State* state)
 
 	double lon, lat;
 	cartToPolar((Sint16)floor(action->getAbsoluteXMouse()), (Sint16)floor(action->getAbsoluteYMouse()), &lon, &lat);
-	
+
 	// The following is the workaround for a rare problem where sometimes
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
@@ -3029,21 +3097,20 @@ void Globe::getPolygonTextureAndShade(
 }
 
 /**
- * Checks if the globe is zoomed in to its maximum.
- * @return, Returns true if globe is at max zoom, otherwise returns false.
+ * Gets the current globeZoom level.
+ * @return, Globe zoomLevel
  */
-bool Globe::isZoomedInToMax() const
+size_t Globe::getZoom() const
 {
-	return (_zoom == _radius.size() - 1);
+	return _zoom;
 }
 
 /**
- * Checks if the globe is zoomed out to its maximum.
- * @return, Returns true if globe is at max zoom, otherwise returns false.
+ * kL. Gets the number of zoom levels available.
  */
-bool Globe::isZoomedOutToMax() const
+size_t Globe::getZoomLevels() const // kL
 {
-	return (_zoom == 0);
+	return _zoomRadii.size();
 }
 
 /**
@@ -3102,29 +3169,33 @@ void Globe::setupRadii(
 		int width,
 		int height)
 {
-	_radius.clear();
+	_zoomRadii.clear();
 
 	// kL_begin: These are the globe-zoom magnifications, stored as a <vector> of 6 (doubles).
-	_radius.push_back(0.47 * static_cast<double>(height));	// 0 - Zoomed all out	// no detail
-	_radius.push_back(0.60 * static_cast<double>(height));	// 1					// country borders
-	_radius.push_back(0.85 * static_cast<double>(height));	// 2					// country labels
-	_radius.push_back(1.39 * static_cast<double>(height));	// 3					// city markers
-	_radius.push_back(2.13 * static_cast<double>(height));	// 4					// city labels & all detail
-	_radius.push_back(3.42 * static_cast<double>(height));	// 5 - Zoomed all in
+	_zoomRadii.push_back(0.47 * static_cast<double>(height)); // 0 - Zoomed all out	// no detail
+	_zoomRadii.push_back(0.60 * static_cast<double>(height)); // 1					// country borders
+	_zoomRadii.push_back(0.85 * static_cast<double>(height)); // 2					// country labels
+	_zoomRadii.push_back(1.39 * static_cast<double>(height)); // 3					// city markers
+	_zoomRadii.push_back(2.13 * static_cast<double>(height)); // 4					// city labels & all detail
+	_zoomRadii.push_back(3.42 * static_cast<double>(height)); // 5 - Zoomed all in
 	// kL_end.
 
-//kL	_radius.push_back(0.45 * height);
-//kL	_radius.push_back(0.60 * height);
-//kL	_radius.push_back(0.90 * height);
-//kL	_radius.push_back(1.40 * height);
-//kL	_radius.push_back(2.25 * height);
-//kL	_radius.push_back(3.60 * height);
+//kL	_zoomRadii.push_back(0.45 * height);
+//kL	_zoomRadii.push_back(0.60 * height);
+//kL	_zoomRadii.push_back(0.90 * height);
+//kL	_zoomRadii.push_back(1.40 * height);
+//kL	_zoomRadii.push_back(2.25 * height);
+//kL	_zoomRadii.push_back(3.60 * height);
 
-	_earthData.resize(_radius.size());
+	_radius = _zoomRadii[_zoom];
+//kL	_radiusStep = (_zoomRadii[DOGFIGHT_ZOOM] - _zoomRadii[0]) / 10.0;
+	_radiusStep = (_zoomRadii[_zoomRadii.size() - 1] - _zoomRadii[0]) / 10.0; // kL
+
+	_earthData.resize(_zoomRadii.size());
 
 	for (size_t // filling normal field for each radius
 			r = 0;
-			r < _radius.size();
+			r < _zoomRadii.size();
 			++r)
 	{
 		_earthData[r].resize(width * height);
@@ -3140,11 +3211,11 @@ void Globe::setupRadii(
 					++i)
 			{
 				_earthData[r][width * j + i] = static_data.circle_norm(
-																	static_cast<double>(width / 2),
-																	static_cast<double>(height / 2),
-																	static_cast<double>(_radius[r]),
-																	static_cast<double>(i) + 0.5,
-																	static_cast<double>(j) + 0.5);
+																static_cast<double>(width / 2),
+																static_cast<double>(height / 2),
+																static_cast<double>(_zoomRadii[r]),
+																static_cast<double>(i) + 0.5,
+																static_cast<double>(j) + 0.5);
 			}
 		}
 	}

@@ -59,7 +59,6 @@ private:
 		_pause,
 		_zoomInEffectDone,
 		_zoomOutEffectDone;
-	int _zoomIntercept; // kL
 	size_t _minimizedDogfights;
 	double
 		_interLon,

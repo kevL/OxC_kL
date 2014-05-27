@@ -69,6 +69,7 @@ Craft::Craft(
 		_fuel(0),
 		_damage(0),
 		_interceptionOrder(0),
+		_takeoff(0),
 		_weapons(),
 		_status("STR_READY"),
 		_lowFuel(false),
@@ -265,6 +266,7 @@ void Craft::load(
 	_lowFuel			= node["lowFuel"].as<bool>(_lowFuel);
 	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
 	_interceptionOrder	= node["interceptionOrder"].as<int>(_interceptionOrder);
+	_takeoff			= node["takeoff"].as<int>(_takeoff);
 
 	if (const YAML::Node name = node["name"])
 		_name = Language::utf8ToWstr(name.as<std::string>());
@@ -320,6 +322,9 @@ YAML::Node Craft::save() const
 		node["inBattlescape"] = _inBattlescape;
 
 	node["interceptionOrder"] = _interceptionOrder;
+
+	if (_takeoff != 0)
+		node["takeoff"] = _takeoff;
 
 	if (!_name.empty())
 		node["name"] = Language::wstrToUtf8(_name);
@@ -519,6 +524,9 @@ std::string Craft::getAltitude() const
  */
 void Craft::setDestination(Target* dest)
 {
+	if (_status != "STR_OUT")
+		_takeoff = 60;
+
 	if (dest == 0)
 		setSpeed(_rules->getMaxSpeed() / 2);
 	else
@@ -764,7 +772,10 @@ void Craft::returnToBase()
  */
 void Craft::think()
 {
-	move();
+	if (_takeoff == 0)
+		move();
+	else
+		_takeoff--;
 
 	if (reachedDestination()
 		&& _dest == (Target*)_base)
@@ -774,6 +785,7 @@ void Craft::think()
 		setDestination(0);
 		setSpeed(0);
 		_lowFuel = false;
+		_takeoff = 0;
 	}
 }
 

@@ -57,9 +57,10 @@ IntroState::IntroState(
 
 	_game->setVolume(
 				Options::soundVolume,
-//kL				Options::musicVolume / 2,
+//kL			Options::musicVolume / 2,
 				Options::musicVolume, // kL
 				-1);
+
 	_introFile			= CrossPlatform::getDataFile("UFOINTRO/UFOINT.FLI");
 	_introSoundFileDOS	= CrossPlatform::getDataFile("SOUND/INTRO.CAT");
 	_introSoundFileWin	= CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT");
@@ -482,7 +483,7 @@ void IntroState::init()
 			_game->getScreen()->getPalette(),
 			sizeof(SDL_Color)* 256);
 
-		for (int
+		for (Uint8
 				i = 20;
 				i > 0;
 				--i)
@@ -499,9 +500,10 @@ void IntroState::init()
 					color < 256;
 					++color)
 			{
-				pal2[color].r = (((int)pal[color].r) * i) / 20;
-				pal2[color].g = (((int)pal[color].g) * i) / 20;
-				pal2[color].b = (((int)pal[color].b) * i) / 20;
+				pal2[color].r = pal[color].r * i / 20;
+				pal2[color].g = pal[color].g * i / 20;
+				pal2[color].b = pal[color].b * i / 20;
+				pal2[color].unused = pal[color].unused;
 			}
 
 			_game->getScreen()->setPalette(

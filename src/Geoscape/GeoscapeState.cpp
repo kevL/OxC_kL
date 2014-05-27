@@ -151,7 +151,6 @@ GeoscapeState::GeoscapeState(Game* game)
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
-		_zoomIntercept(0),	// kL
 		_interLon(0.0),	// kL
 		_interLat(0.0)	// kL
 {
@@ -300,9 +299,9 @@ GeoscapeState::GeoscapeState(Game* game)
 	_timeSpeed = _btn5Secs;
 
 	_gameTimer			= new Timer(Options::geoClockSpeed);
-	_zoomInEffectTimer	= new Timer(100);
-	_zoomOutEffectTimer	= new Timer(100);
-	_dogfightStartTimer	= new Timer(50);
+	_zoomInEffectTimer	= new Timer(Options::dogfightSpeed + 10);
+	_zoomOutEffectTimer	= new Timer(Options::dogfightSpeed + 10);
+	_dogfightStartTimer	= new Timer(Options::dogfightSpeed + 10);
 
 	_txtDebug			= new Text(200, 18, 0, 0);
 
@@ -2311,8 +2310,10 @@ void GeoscapeState::time1Day()
 							discovered = _game->getSavedGame()->getDiscoveredResearch().begin();
 							discovered != _game->getSavedGame()->getDiscoveredResearch().end();
 							++discovered)
+					{
 						if (*gof == (*discovered)->getName())
 							newFound = false;
+					}
 
 					if (newFound)
 						possibilities.push_back(*gof);
@@ -3028,9 +3029,7 @@ void GeoscapeState::btnDetailClick(Action* action)
  */
 void GeoscapeState::zoomInEffect()
 {
-	_globe->zoomIn();
-
-	if (_globe->isZoomedInToMax())
+	if (_globe->zoomDogfightIn())
 	{
 		_zoomInEffectDone = true;
 		_zoomInEffectTimer->stop();
@@ -3042,18 +3041,13 @@ void GeoscapeState::zoomInEffect()
  */
 void GeoscapeState::zoomOutEffect()
 {
-	if (_globe->isZoomedOutToMax()
-		|| _game->getSavedGame()->getGlobeZoom() <= _zoomIntercept) // kL
+	if (_globe->zoomDogfightOut())
 	{
-		_zoomIntercept = 0; // kL
-
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
 
 		init();
 	}
-	else
-		_globe->zoomOut();
 
 	_globe->center( // kL
 				_interLon,
@@ -3086,23 +3080,17 @@ void GeoscapeState::handleDogfights()
 		if ((*d)->dogfightEnded())
 		{
 			if ((*d)->isMinimized())
-			{
 				_minimizedDogfights--;
-			}
 
 			delete *d;
 			d = _dogfights.erase(d);
 		}
 		else
-		{
 			++d;
-		}
 	}
 
 	if (_dogfights.empty())
-	{
 		_zoomOutEffectTimer->start();
-	}
 }
 
 /**
@@ -3129,15 +3117,14 @@ int GeoscapeState::minimizedDogfightsCount()
  */
 void GeoscapeState::startDogfight()
 {
-	if (_zoomIntercept == 0)
-		_zoomIntercept = _game->getSavedGame()->getGlobeZoom();	// kL
-
-	if (!_globe->isZoomedInToMax())
+//kL	if (_globe->getZoom() < 3)
+	if (_globe->getZoom() < _globe->getZoomLevels() - 1) // kL
 	{
 		if (!_zoomInEffectTimer->isRunning())
 		{
-			_zoomInEffectTimer->start();
+			_globe->saveDogfightZoom();
 //			_globe->rotateStop();
+			_zoomInEffectTimer->start();
 		}
 	}
 	else
@@ -3160,7 +3147,9 @@ void GeoscapeState::startDogfight()
 				d = _dogfights.begin();
 				d != _dogfights.end();
 				++d)
+		{
 			(*d)->setInterceptionsCount(_dogfights.size());
+		}
 	}
 }
 
