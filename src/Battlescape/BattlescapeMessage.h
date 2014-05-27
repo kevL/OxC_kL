@@ -78,6 +78,9 @@ private:
 				int ncolors = 256);
 		/// Blits the warning message.
 		void blit(Surface* surface);
+
+		/// Special handling for setting the height of the battlescape message.
+		void setHeight(int height);
 };
 
 }

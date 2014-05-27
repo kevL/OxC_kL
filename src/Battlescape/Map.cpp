@@ -2329,7 +2329,9 @@ void Map::setHeight(int height)
 	Surface::setHeight(height);
 
 	_visibleMapHeight = height - ICON_HEIGHT;
-	_message->setY(height / 2 - _message->getHeight() / 2);
+//	_message->setY(height / 2 - _message->getHeight() / 2);
+	_message->setHeight((_visibleMapHeight < 200)? _visibleMapHeight: 200);
+	_message->setY((_visibleMapHeight - _message->getHeight()) / 2);
 }
 
 /**
@@ -2339,7 +2341,10 @@ void Map::setHeight(int height)
 void Map::setWidth(int width)
 {
 	Surface::setWidth(width);
-	_message->setX(width / 2 - _message->getWidth() / 2);
+
+//	_message->setX(width / 2 - _message->getWidth() / 2);
+	int dX = width - getWidth();
+	_message->setX(_message->getX() + dX / 2);
 }
 
 }

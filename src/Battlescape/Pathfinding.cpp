@@ -998,9 +998,9 @@ void Pathfinding::directionToVector(
 		int const direction,
 		Position* vector)
 {
-	int x[10] = { 0,  1,  1,  1,  0, -1, -1, -1,  0,  0};
-	int y[10] = {-1, -1,  0,  1,  1,  1,  0, -1,  0,  0};
-	int z[10] = { 0,  0,  0,  0,  0,  0,  0,  0,  1, -1};
+	int x[10] = { 0, 1, 1, 1, 0,-1,-1,-1, 0, 0};
+	int y[10] = {-1,-1, 0, 1, 1, 1, 0,-1, 0, 0};
+	int z[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 1,-1};
 
 	vector->x = x[direction];
 	vector->y = y[direction];
@@ -1026,7 +1026,7 @@ void Pathfinding::vectorToDirection(
 			i < 8;
 			++i)
 	{
-		if (x[i] == vector.x
+		if (   x[i] == vector.x
 			&& y[i] == vector.y)
 		{
 			dir = i;

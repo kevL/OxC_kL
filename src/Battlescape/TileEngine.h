@@ -67,13 +67,14 @@ private:
 			int power,
 			int layer);
 	///
-	int blockage(
+/*	int blockage(
 			Tile* tile,
 			const int part,
 			ItemDamageType type,
 			int dir = -1, // kL_note: should change this to 'bool isObject'-type
 			int dirTest = -1, // kL_add.
-			bool checkingFromOrigin = false);
+			bool checkingFromOrigin = false); */
+	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
 
 
 	public:
@@ -159,12 +160,13 @@ private:
 				BattleUnit* attacker,
 				bool melee = false); // kL add.
 		/// Handles explosions.
-		void explode(
+/*		void explode(
 				const Position& voxelTarget,
 				int power,
 				ItemDamageType type,
 				int maxRadius,
-				BattleUnit* unit = 0);
+				BattleUnit* unit = 0); */
+		void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
 		/// Blows this tile up.
 		bool detonate(Tile* tile);
 		/// Checks if a destroyed tile starts an explosion.
