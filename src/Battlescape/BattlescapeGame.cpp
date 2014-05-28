@@ -769,7 +769,7 @@ void BattlescapeGame::checkForCasualties(
 		bool hidden,
 		bool terrain)
 {
-	Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
+	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
 	for (std::vector<BattleUnit*>::iterator
 			buCasualty = _save->getUnits()->begin();
 			buCasualty != _save->getUnits()->end();
@@ -779,8 +779,12 @@ void BattlescapeGame::checkForCasualties(
 
 		if (victim->getHealth() == 0
 			&& victim->getStatus() != STATUS_DEAD
-			&& victim->getStatus() != STATUS_COLLAPSING)
+			&& victim->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
+			&& victim->getStatus() != STATUS_TURNING	// kL: may be set by UnitDieBState cTor
+			&& victim->getStatus() != STATUS_DISABLED)	// kL
 		{
+			(*buCasualty)->setStatus(STATUS_DISABLED);	// kL
+
 //kL		BattleUnit* victim = *buCasualty;
 			//Log(LOG_INFO) << ". DEAD victim = " << victim->getId();
 
@@ -948,13 +952,16 @@ void BattlescapeGame::checkForCasualties(
 				}
 			}
 		}
-		else if (victim->getStunlevel() >= (*buCasualty)->getHealth()
+		else if (victim->getStunlevel() > victim->getHealth() - 1
 			&& victim->getStatus() != STATUS_DEAD
 			&& victim->getStatus() != STATUS_UNCONSCIOUS
-			&& victim->getStatus() != STATUS_COLLAPSING
-			&& victim->getStatus() != STATUS_TURNING)
+			&& victim->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....
+			&& victim->getStatus() != STATUS_TURNING	// kL_note: may be set by UnitDieBState cTor
+			&& victim->getStatus() != STATUS_DISABLED)	// kL
 		{
 			//Log(LOG_INFO) << ". STUNNED victim = " << victim->getId();
+			(*buCasualty)->setStatus(STATUS_DISABLED);	// kL
+
 			statePushNext(new UnitDieBState( // kL_note: This is where units get set to STUNNED
 										this,
 										*buCasualty,

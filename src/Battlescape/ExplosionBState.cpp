@@ -326,7 +326,7 @@ void ExplosionBState::cancel()
  */
 void ExplosionBState::explode()
 {
-	Log(LOG_INFO) << "ExplosionBState::explode()";
+	//Log(LOG_INFO) << "ExplosionBState::explode()";
 	SavedBattleGame* save = _parent->getSave();
 	TileEngine* tileEngine = save->getTileEngine(); // kL
 

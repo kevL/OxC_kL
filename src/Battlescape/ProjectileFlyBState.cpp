@@ -112,7 +112,7 @@ ProjectileFlyBState::~ProjectileFlyBState()
  */
 void ProjectileFlyBState::init()
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::init()";
+	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
 	if (_initialized)
 	{
 		//Log(LOG_INFO) << ". already initialized, EXIT";

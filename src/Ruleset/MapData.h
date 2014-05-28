@@ -60,12 +60,12 @@ enum MovementType
 enum VoxelType
 {
 	VOXEL_EMPTY = -1,	// -1
-	VOXEL_FLOOR,		// 0
-	VOXEL_WESTWALL,		// 1
-	VOXEL_NORTHWALL,	// 2
-	VOXEL_OBJECT,		// 3
-	VOXEL_UNIT,			// 4
-	VOXEL_OUTOFBOUNDS	// 5
+	VOXEL_FLOOR,		//  0
+	VOXEL_WESTWALL,		//  1
+	VOXEL_NORTHWALL,	//  2
+	VOXEL_OBJECT,		//  3
+	VOXEL_UNIT,			//  4
+	VOXEL_OUTOFBOUNDS	//  5
 };
 
 

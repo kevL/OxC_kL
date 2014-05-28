@@ -1116,9 +1116,10 @@ int BattleUnit::getMorale() const
 
 /**
  * Do an amount of damage.
- * @param position, The position defines which part of armor and/or bodypart is hit.
+ * @param position, The position defines which part of armor and/or bodypart is hit (voxelSpace, for headshots only).
  * @param power
  * @param type
+ * @param ignoreArmor, For stun & smoke damage (no armor damage, although armor vulnerability is factored in)
  * @return, Damage done after adjustment
  */
 int BattleUnit::damage(
@@ -1135,8 +1136,7 @@ int BattleUnit::damage(
 	if (power < 1)
 		return 0;
 
-	power = static_cast<int>(
-					floor(static_cast<float>(power) * _armor->getDamageModifier(type)));
+	power = static_cast<int>(floor(static_cast<double>(power) * static_cast<double>(_armor->getDamageModifier(type))));
 	//Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type << " ModifiedPower " << power;
 
 	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage
@@ -1148,46 +1148,49 @@ int BattleUnit::damage(
 			side = SIDE_UNDER;
 		else
 		{
-			int relativeDirection;
-			const int abs_x = abs(relative.x);
-			const int abs_y = abs(relative.y);
+			int relativeDir;
+
+			const int
+				abs_x = abs(relative.x),
+				abs_y = abs(relative.y);
+
 			if (abs_y > abs_x * 2)
-				relativeDirection = 8 + 4 * (relative.y > 0);
+				relativeDir = 8 + 4 * (relative.y > 0);
 			else if (abs_x > abs_y * 2)
-				relativeDirection = 10 + 4 * (relative.x < 0);
+				relativeDir = 10 + 4 * (relative.x < 0);
 			else
 			{
 				if (relative.x < 0)
 				{
 					if (relative.y > 0)
-						relativeDirection = 13;
+						relativeDir = 13;
 					else
-						relativeDirection = 15;
+						relativeDir = 15;
 				}
 				else
 				{
 					if (relative.y > 0)
-						relativeDirection = 11;
+						relativeDir = 11;
 					else
-						relativeDirection = 9;
+						relativeDir = 9;
 				}
 			}
 
-			switch ((relativeDirection - _direction) %8)
+			switch ((relativeDir - _direction) %8)
 			{
-				case 0:	side = SIDE_FRONT; 									break;
+				case 0:	side = SIDE_FRONT;									break;
 				case 1:	side = RNG::percent(50)? SIDE_FRONT: SIDE_RIGHT;	break;
-				case 2:	side = SIDE_RIGHT; 									break;
+				case 2:	side = SIDE_RIGHT;									break;
 				case 3:	side = RNG::percent(50)? SIDE_REAR: SIDE_RIGHT;		break;
-				case 4:	side = SIDE_REAR; 									break;
+				case 4:	side = SIDE_REAR;									break;
 				case 5:	side = RNG::percent(50)? SIDE_REAR: SIDE_LEFT; 		break;
-				case 6:	side = SIDE_LEFT; 									break;
+				case 6:	side = SIDE_LEFT;									break;
 				case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
 			}
 
-			if (relative.z > getHeight())
+			if (relative.z > getHeight() - 4)
 				bodypart = BODYPART_HEAD;
-			else if (relative.z > 4)
+			else if (relative.z > 5)
 			{
 				switch (side)
 				{
@@ -1287,7 +1290,7 @@ void BattleUnit::knockOut(BattlescapeGame* battle)
 		BattleUnit* newUnit = battle->convertUnit(
 												this,
 												_spawnUnit);
-		newUnit->knockOut(battle);
+		newUnit->knockOut(battle); // -> STATUS_UNCONSCIOUS
 	}
 	else
 		_stunlevel = _health;

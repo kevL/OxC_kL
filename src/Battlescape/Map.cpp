@@ -2303,6 +2303,7 @@ void Map::setButtonsPressed(
 
 /**
  * Sets the unitDying flag.
+ * This reveals the dying unit during Hidden Movement.
  * @param flag, True if the unit is dying.
  */
 void Map::setUnitDying(bool flag)

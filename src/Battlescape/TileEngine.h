@@ -169,20 +169,20 @@ private:
 				BattleUnit* unit = 0);
 //stock:
 //		void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
-		/// Blows this tile up.
-		bool detonate(Tile* tile);
-		/// Checks if a destroyed tile starts an explosion.
-		Tile* checkForTerrainExplosions();
-		/// Checks the vertical blockage of a tile.
-		int verticalBlockage(
-				Tile* startTile,
-				Tile* endTile,
-				ItemDamageType type);
 		/// Checks the horizontal blockage of a tile.
 		int horizontalBlockage(
 				Tile* startTile,
 				Tile* endTile,
 				ItemDamageType type);
+		/// Checks the vertical blockage of a tile.
+		int verticalBlockage(
+				Tile* startTile,
+				Tile* endTile,
+				ItemDamageType type);
+		/// Blows this tile up.
+		bool detonate(Tile* tile);
+		/// Checks if a destroyed tile starts an explosion.
+		Tile* checkForTerrainExplosions();
 
 		/// Unit opens door?
 		int unitOpensDoor(

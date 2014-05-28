@@ -62,7 +62,8 @@ enum UnitStatus
 	STATUS_DEAD,		// 6
 	STATUS_UNCONSCIOUS,	// 7
 	STATUS_PANICKING,	// 8
-	STATUS_BERSERK		// 9
+	STATUS_BERSERK,		// 9
+	STATUS_DISABLED		// 10 kL, dead or stunned but doesn't know it yet.
 };
 
 

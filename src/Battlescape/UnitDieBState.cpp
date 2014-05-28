@@ -68,15 +68,13 @@ UnitDieBState::UnitDieBState(
 		_damageType(damageType),
 		_noSound(noSound)
 {
-	Log(LOG_INFO) << "Create UnitDieBState ID = " << _unit->getId();
+	//Log(LOG_INFO) << "Create UnitDieBState ID = " << _unit->getId();
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
 	_originalDir = _unit->getDirection();
 	_unit->setDirection(_originalDir);
 	_unit->setSpinPhase(-1);
-
-
 
 	if (!_noSound)
 		playDeathSound();
@@ -93,27 +91,25 @@ UnitDieBState::UnitDieBState(
 		if (!_unit->getSpawnUnit().empty())
 		{
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);
-			_unit->lookAt(3);
+			_unit->lookAt(3); // inits STATUS_TURNING if not facing correctly. Else STATUS_STANDING
 		}
 		else
 		{
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
-			_unit->initDeathSpin();
+			_unit->initDeathSpin(); // inits STATUS_TURNING
 		}
 	}
 	else
 	{
 		if (_unit->getHealth() == 0)
-			_unit->instaKill();
+			_unit->instaKill(); // STATUS_DEAD
 		else
-			_unit->knockOut();
+			_unit->knockOut(); // STATUS_UNCONSCIOUS if has SPECAB::spawnUnit. Else sets health0 / stun=health
 	}
-
-
 
 	if (_unit->getFaction() == FACTION_HOSTILE)
 	{
-		Log(LOG_INFO) << ". . unit is Faction_Hostile";
+		//Log(LOG_INFO) << ". . unit is Faction_Hostile";
 		std::vector<Node*>* nodes = _parent->getSave()->getNodes();
 		if (!nodes)
 			return; // this better not happen.
@@ -132,7 +128,7 @@ UnitDieBState::UnitDieBState(
 			}
 		}
 	}
-	Log(LOG_INFO) << "Create UnitDieBState EXIT cTor";
+	//Log(LOG_INFO) << "Create UnitDieBState EXIT cTor";
 }
 
 /**
@@ -140,7 +136,7 @@ UnitDieBState::UnitDieBState(
  */
 UnitDieBState::~UnitDieBState()
 {
-	Log(LOG_INFO) << "Delete UnitDieBState";
+	//Log(LOG_INFO) << "Delete UnitDieBState";
 }
 
 /**
@@ -149,6 +145,8 @@ UnitDieBState::~UnitDieBState()
 void UnitDieBState::init()
 {
 	//Log(LOG_INFO) << "UnitDieBState::init()";
+	// This moved into cTor:
+	// ( else units don't know when they're dead, re. Explosions )
 /*	if (!_noSound)
 		playDeathSound();
 
@@ -188,7 +186,7 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
+	//Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
 // #1
 //kL	if (_unit->getDirection() != 3 && _damageType != DT_HE)
 	if (_unit->getStatus() == STATUS_TURNING)
@@ -206,7 +204,7 @@ void UnitDieBState::think()
 		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() )
 	}
 // #2
-	else if (!_unit->isOut()) // this ought be Status_Standing also.
+	else if (!_unit->isOut()) // this ought be Status_Standing/Disabled also.
 	{
 		//Log(LOG_INFO) << ". . !isOut";
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
@@ -305,7 +303,7 @@ void UnitDieBState::think()
 	}
 
 	_parent->getMap()->cacheUnit(_unit);
-	Log(LOG_INFO) << "UnitDieBState::think() EXIT";
+	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }
 
 /**
@@ -320,7 +318,7 @@ void UnitDieBState::cancel()
  */
 void UnitDieBState::convertUnitToCorpse()
 {
-	Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() ID = " << _unit->getId() << " pos " << _unit->getPosition();
+	//Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() ID = " << _unit->getId() << " pos " << _unit->getPosition();
 	_parent->getSave()->getBattleState()->showPsiButton(false);
 	_parent->getSave()->removeUnconsciousBodyItem(_unit); // in case the unit was unconscious
 
@@ -391,7 +389,7 @@ void UnitDieBState::convertUnitToCorpse()
 			i++;
 		}
 	}
-	Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() EXIT";
+	//Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() EXIT";
 }
 
 /**
@@ -399,7 +397,7 @@ void UnitDieBState::convertUnitToCorpse()
  */
 void UnitDieBState::playDeathSound()
 {
-	Log(LOG_INFO) << "UnitDieBState::playDeathSound()";
+	//Log(LOG_INFO) << "UnitDieBState::playDeathSound()";
 	if ((_unit->getType() == "SOLDIER"
 			&& _unit->getGender() == GENDER_MALE)
 		|| _unit->getType() == "MALE_CIVILIAN")

@@ -16,7 +16,9 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "MapData.h"
+
 
 namespace OpenXcom
 {
@@ -523,7 +525,9 @@ int MapData::getLoftID(int layer) const
  * @param loft The loft index.
  * @param layer The layer.
  */
-void MapData::setLoftID(int loft, int layer)
+void MapData::setLoftID(
+		int loft,
+		int layer)
 {
 	_loftID[layer] = loft;
 }
