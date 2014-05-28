@@ -790,21 +790,6 @@
     <ClCompile Include="Basescape\SoldierMemorialState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Savegame\SoldierDead.cpp">
-      <Filter>Savegame</Filter>
-    </ClCompile>
-    <ClCompile Include="Geoscape\SoldierDiedState.cpp">
-      <Filter>Geoscape</Filter>
-    </ClCompile>
-    <ClCompile Include="Basescape\StoresMatrixState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
-    <ClCompile Include="Ruleset\ExtraMusic.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
-    <ClCompile Include="Ruleset\RuleMusic.cpp">
-      <Filter>Ruleset</Filter>
-    </ClCompile>
     <ClCompile Include="Menu\OptionsVideoState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
@@ -831,6 +816,21 @@
     </ClCompile>
     <ClCompile Include="Menu\IntroState.cpp">
       <Filter>Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="Savegame\SoldierDead.cpp">
+      <Filter>Savegame</Filter>
+    </ClCompile>
+    <ClCompile Include="Geoscape\SoldierDiedState.cpp">
+      <Filter>Geoscape</Filter>
+    </ClCompile>
+    <ClCompile Include="Basescape\StoresMatrixState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\ExtraMusic.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
+    <ClCompile Include="Ruleset\RuleMusic.cpp">
+      <Filter>Ruleset</Filter>
     </ClCompile>
     <ClCompile Include="Menu\ConfirmLoadState.cpp">
       <Filter>Menu</Filter>
@@ -871,6 +871,7 @@
     <ClCompile Include="Menu\OptionsNoAudioState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\SoldierDeadInfoState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1706,19 +1707,19 @@
     <ClInclude Include="Engine\Options.inc.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Savegame\SoldierDead.h" />
+    <ClInclude Include="Savegame\SoldierDead.h">
       <Filter>Savegame</Filter>
     </ClInclude>
-    <ClInclude Include="Geoscape\SoldierDiedState.h" />
+    <ClInclude Include="Geoscape\SoldierDiedState.h">
       <Filter>Geoscape</Filter>
     </ClInclude>
-    <ClInclude Include="Basescape\StoresMatrixState.h" />
+    <ClInclude Include="Basescape\StoresMatrixState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\ExtraMusic.h" />
+    <ClInclude Include="Ruleset\ExtraMusic.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
-    <ClInclude Include="Ruleset\RuleMusic.h" />
+    <ClInclude Include="Ruleset\RuleMusic.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
     <ClInclude Include="Menu\ConfirmLoadState.h">
@@ -1764,6 +1765,7 @@
     <ClInclude Include="Engine\DosFont.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Basescape\SoldierDeadInfoState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
