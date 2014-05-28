@@ -1949,9 +1949,10 @@ BattleUnit* TileEngine::hit(
 		BattleUnit* attacker,
 		bool melee) // kL add.
 {
-	//Log(LOG_INFO) << "TileEngine::hit() by ID " << attacker->getId() << " @ " << attacker->getPosition()
-	//		<< " : power = " << power
-	//		<< " : type = " << static_cast<int>(type);
+	Log(LOG_INFO) << "TileEngine::hit() by ID " << attacker->getId()
+				<< " @ " << attacker->getPosition()
+				<< " : power = " << power
+				<< " : type = " << (int)type;
 
 	if (type != DT_NONE) // TEST for Psi-attack.
 	{
@@ -2278,7 +2279,9 @@ void TileEngine::explode(
 			int maxRadius,
 			BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "TileEngine::explode() power = " << power << ", type = " << (int)type << ", maxRadius = " << maxRadius;
+	Log(LOG_INFO) << "TileEngine::explode() power = " << power
+				<< ", type = " << (int)type
+				<< ", maxRadius = " << maxRadius;
 	if (power == 0) // kL, quick out.
 		return;
 
@@ -2369,10 +2372,10 @@ void TileEngine::explode(
 										static_cast<int>(centerX),
 										static_cast<int>(centerY),
 										static_cast<int>(centerZ)));
-			r = 0.0,
 
 //kL		_powerT = power + 1;
 			_powerT = power; // kL: re-initialize _powerT, for each ray.
+			r = 0.0;
 
 			while (_powerT > 0
 				&& r - 1.0 < r_Max) // kL_note: Allows explosions of 0 radius(!), single tile only hypothetically.
@@ -2394,9 +2397,8 @@ void TileEngine::explode(
 				if (!destTile) // out of map!
 					break;
 
-				//Log(LOG_INFO)
-				//		<< ". _powerT = "	<< _powerT
-				//		<< ", dir = "		<< dir
+				//Log(LOG_INFO) << ". _powerT = "	<< _powerT;
+				//		<< ", dir = "		<< dir;
 				//		<< ", origin "		<< origin->getPosition()
 				//		<< " dest "			<< destTile->getPosition();
 
@@ -2440,13 +2442,18 @@ void TileEngine::explode(
 				tilePair = tilesAffected.insert(destTile); // check if we had this tile already
 				if (tilePair.second) // true if a new tile was inserted.
 				{
-					//Log(LOG_INFO) << ". . new tile TRUE";
+					Log(LOG_INFO) << ". . new tile TRUE"
+								<< ". _powerT = " << _powerT
+								<< ". r = " << r - 1
+								<< ". origin " << origin->getPosition()
+								<< " dest " << destTile->getPosition();
+
 					if (origin->getPosition().z != tileZ) // 3d explosion factor
 						_powerT -= vertdec;
 
 					BattleUnit* targetUnit = destTile->getUnit();
 					if (targetUnit
-						&& targetUnit->getTaken())
+						&& targetUnit->getTaken()) // -> THIS NEEDS TO BE REMOVED LATER (or earlier) !!!
 					{
 						targetUnit = NULL;
 					}
@@ -2976,8 +2983,7 @@ void TileEngine::explode(const Position &center, int power, ItemDamageType type,
  */
 bool TileEngine::detonate(Tile* tile)
 {
-	//Log(LOG_INFO) << "TileEngine::detonate()";
-
+	Log(LOG_INFO) << "TileEngine::detonate()";
 	int explosive = tile->getExplosive();
 	tile->setExplosive(0, true);
 

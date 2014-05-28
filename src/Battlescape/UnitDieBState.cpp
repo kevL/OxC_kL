@@ -68,8 +68,7 @@ UnitDieBState::UnitDieBState(
 		_damageType(damageType),
 		_noSound(noSound)
 {
-	//Log(LOG_INFO) << "Create UnitDieBState";
-
+	Log(LOG_INFO) << "Create UnitDieBState ID = " << _unit->getId();
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
@@ -77,43 +76,8 @@ UnitDieBState::UnitDieBState(
 	_unit->setDirection(_originalDir);
 	_unit->setSpinPhase(-1);
 
-	if (_unit->getFaction() == FACTION_HOSTILE)
-	{
-		//Log(LOG_INFO) << ". . unit is Faction_Hostile";
-		std::vector<Node*>* nodes = _parent->getSave()->getNodes();
-		if (!nodes) return; // this better not happen.
 
-		for (std::vector<Node*>::iterator
-				node = nodes->begin();
-				node != nodes->end();
-				++node)
-		{
-			if (_parent->getSave()->getTileEngine()->distanceSq(
-															(*node)->getPosition(),
-															_unit->getPosition())
-														< 4)
-			{
-				(*node)->setType((*node)->getType() | Node::TYPE_DANGEROUS);
-			}
-		}
-	}
-	//Log(LOG_INFO) << "Create UnitDieBState EXIT cTor";
-}
 
-/**
- * Deletes the UnitDieBState.
- */
-UnitDieBState::~UnitDieBState()
-{
-	//Log(LOG_INFO) << "Delete UnitDieBState";
-}
-
-/**
- *
- */
-void UnitDieBState::init()
-{
-	//Log(LOG_INFO) << "UnitDieBState::init()";
 	if (!_noSound)
 		playDeathSound();
 
@@ -144,6 +108,78 @@ void UnitDieBState::init()
 		else
 			_unit->knockOut();
 	}
+
+
+
+	if (_unit->getFaction() == FACTION_HOSTILE)
+	{
+		Log(LOG_INFO) << ". . unit is Faction_Hostile";
+		std::vector<Node*>* nodes = _parent->getSave()->getNodes();
+		if (!nodes)
+			return; // this better not happen.
+
+		for (std::vector<Node*>::iterator
+				node = nodes->begin();
+				node != nodes->end();
+				++node)
+		{
+			if (_parent->getSave()->getTileEngine()->distanceSq(
+															(*node)->getPosition(),
+															_unit->getPosition())
+														< 4)
+			{
+				(*node)->setType((*node)->getType() | Node::TYPE_DANGEROUS);
+			}
+		}
+	}
+	Log(LOG_INFO) << "Create UnitDieBState EXIT cTor";
+}
+
+/**
+ * Deletes the UnitDieBState.
+ */
+UnitDieBState::~UnitDieBState()
+{
+	Log(LOG_INFO) << "Delete UnitDieBState";
+}
+
+/**
+ *
+ */
+void UnitDieBState::init()
+{
+	//Log(LOG_INFO) << "UnitDieBState::init()";
+/*	if (!_noSound)
+		playDeathSound();
+
+	if (_unit->getVisible())
+	{
+		Camera* deathCam = _parent->getMap()->getCamera();
+		if (!deathCam->isOnScreen(_unit->getPosition()))
+			deathCam->centerOnPosition(_unit->getPosition());
+
+		if (_unit->getFaction() == FACTION_PLAYER)
+			_parent->getMap()->setUnitDying(true);
+
+		if (!_unit->getSpawnUnit().empty())
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);
+			_unit->lookAt(3);
+		}
+		else
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
+			_unit->initDeathSpin();
+		}
+	}
+	else
+	{
+		if (_unit->getHealth() == 0)
+			_unit->instaKill();
+		else
+			_unit->knockOut();
+	} */
+	//Log(LOG_INFO) << "UnitDieBState::init() EXIT";
 }
 
 /**
@@ -152,7 +188,7 @@ void UnitDieBState::init()
  */
 void UnitDieBState::think()
 {
-	//Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
+	Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
 // #1
 //kL	if (_unit->getDirection() != 3 && _damageType != DT_HE)
 	if (_unit->getStatus() == STATUS_TURNING)
@@ -269,7 +305,7 @@ void UnitDieBState::think()
 	}
 
 	_parent->getMap()->cacheUnit(_unit);
-	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
+	Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }
 
 /**
@@ -284,6 +320,7 @@ void UnitDieBState::cancel()
  */
 void UnitDieBState::convertUnitToCorpse()
 {
+	Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() ID = " << _unit->getId() << " pos " << _unit->getPosition();
 	_parent->getSave()->getBattleState()->showPsiButton(false);
 	_parent->getSave()->removeUnconsciousBodyItem(_unit); // in case the unit was unconscious
 
@@ -291,8 +328,8 @@ void UnitDieBState::convertUnitToCorpse()
 	int size = _unit->getArmor()->getSize();
 
 	bool dropItems = !Options::weaponSelfDestruction
-						|| _unit->getOriginalFaction() != FACTION_HOSTILE
-						|| _unit->getStatus() == STATUS_UNCONSCIOUS;
+					|| _unit->getOriginalFaction() != FACTION_HOSTILE
+					|| _unit->getStatus() == STATUS_UNCONSCIOUS;
 
 	// move inventory from unit to the ground for non-large units
 	if (size == 1
@@ -354,6 +391,7 @@ void UnitDieBState::convertUnitToCorpse()
 			i++;
 		}
 	}
+	Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() EXIT";
 }
 
 /**
@@ -361,6 +399,7 @@ void UnitDieBState::convertUnitToCorpse()
  */
 void UnitDieBState::playDeathSound()
 {
+	Log(LOG_INFO) << "UnitDieBState::playDeathSound()";
 	if ((_unit->getType() == "SOLDIER"
 			&& _unit->getGender() == GENDER_MALE)
 		|| _unit->getType() == "MALE_CIVILIAN")

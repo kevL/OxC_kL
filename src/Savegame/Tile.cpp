@@ -646,15 +646,15 @@ bool Tile::destroy(int part)
 	return _objective;
 }
 
-/* damage terrain  - check against armor
- * @return bool, Return true objective was destroyed
+/**
+ * damage terrain  - check against terrain-part armor
+ * @return, True if objective was destroyed
  */
 bool Tile::damage(
 		int part,
 		int power)
 {
 	//Log(LOG_INFO) << "Tile::destroy()";
-
 	bool objective = false;
 
 	if (power >= _objects[part]->getArmor())

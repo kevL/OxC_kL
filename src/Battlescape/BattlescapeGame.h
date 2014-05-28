@@ -186,10 +186,10 @@ private:
 		void setStateInterval(Uint32 interval);
 		/// Checks for casualties in battle.
 		void checkForCasualties(
-				BattleItem* murderweapon,
-				BattleUnit* killer,
-				bool hiddenExplosion = false,
-				bool terrainExplosion = false);
+				BattleItem* weapon,
+				BattleUnit* slayer,
+				bool hidden = false,
+				bool terrain = false);
 		/// Checks if a unit panics.
 //kL		void checkForPanic(BattleUnit *unit);
 		/// Checks reserved tu.
