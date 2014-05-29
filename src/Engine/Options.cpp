@@ -50,13 +50,19 @@ namespace Options
 #include "Options.inc.h"
 #undef OPT
 
-std::string _dataFolder = "";
-std::vector<std::string> _dataList;
-std::string _userFolder = "";
-std::string _configFolder = "";
-std::vector<std::string> _userList;
-std::map<std::string, std::string> _commandLine;
-std::vector<OptionInfo> _info;
+
+std::string
+	_configFolder = "",
+	_dataFolder = "",
+	_userFolder = "";
+std::vector<std::string>
+	_dataList,
+	_userList;
+std::vector<OptionInfo>
+	_info;
+std::map<std::string, std::string>
+	_commandLine;
+
 
 /**
  * Sets up the options by creating their OptionInfo metadata.
@@ -306,7 +312,7 @@ void resetDefault()
  */
 void loadArgs(
 		int argc,
-		char *argv[])
+		char* argv[])
 {
 	for (int
 			i = 1;
@@ -344,7 +350,7 @@ void loadArgs(
 					_commandLine[argname]= argv[i + 1];
 			}
 			else
-				Log(LOG_WARNING) << "Unknown option: " << argname;
+				Log(LOG_WARNING) << "Unknown option : " << argname;
 		}
 	}
 }
@@ -356,21 +362,21 @@ void loadArgs(
  */
 bool showHelp(
 		int argc,
-		char *argv[])
+		char* argv[])
 {
 	std::ostringstream help;
 
 	help << "OpenXcom v" << OPENXCOM_VERSION_SHORT << std::endl;
-	help << "Usage: openxcom [OPTION]..." << std::endl << std::endl;
+	help << "Usage: openxcom [OPTION] ..." << std::endl << std::endl;
 	help << "-data PATH" << std::endl;
-	help << "        use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
+	help << "    use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-user PATH" << std::endl;
-	help << "        use PATH as the default User Folder instead of auto-detecting" << std::endl << std::endl;
+	help << "    use PATH as the default User Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-KEY VALUE" << std::endl;
-	help << "        set option KEY to VALUE instead of default/loaded value (eg. -displayWidth 640)" << std::endl << std::endl;
+	help << "    set option KEY to VALUE instead of default/loaded value (eg. -displayWidth 640)" << std::endl << std::endl;
 	help << "-help" << std::endl;
 	help << "-?" << std::endl;
-	help << "        show command-line help" << std::endl;
+	help << "    show command-line help" << std::endl;
 
 	for (int
 			i = 1;
@@ -386,10 +392,10 @@ bool showHelp(
 			if (arg[1] == '-'
 				&& arg.length() > 2)
 			{
-				argname = arg.substr(2, arg.length()-1);
+				argname = arg.substr(2, arg.length() - 1);
 			}
 			else
-				argname = arg.substr(1, arg.length()-1);
+				argname = arg.substr(1, arg.length() - 1);
 
 			std::transform(
 						argname.begin(),
@@ -419,7 +425,7 @@ bool showHelp(
  */
 bool init(
 		int argc,
-		char *argv[])
+		char* argv[])
 {
 	if (showHelp(argc, argv))
 		return false;
@@ -441,19 +447,19 @@ bool init(
 
 	fflush(file);
 	fclose(file);
-	Log(LOG_INFO) << "Data folder is: " << _dataFolder;
-	Log(LOG_INFO) << "Data search is: ";
+	Log(LOG_INFO) << "Data folder : " << _dataFolder;
+	Log(LOG_INFO) << "Data search : ";
 
 	for (std::vector<std::string>::iterator
 			i = _dataList.begin();
 			i != _dataList.end();
 			++i)
 	{
-		Log(LOG_INFO) << "- " << *i;
+		Log(LOG_INFO) << "    " << *i;
 	}
 
-	Log(LOG_INFO) << "User folder is: " << _userFolder;
-	Log(LOG_INFO) << "Config folder is: " << _configFolder;
+	Log(LOG_INFO) << "User folder : " << _userFolder;
+	Log(LOG_INFO) << "Config folder : " << _configFolder;
 	Log(LOG_INFO) << "Options loaded.";
 
 	return true;
@@ -514,8 +520,7 @@ void setFolders()
  */
 void updateOptions()
 {
-	// Load existing options
-	if (CrossPlatform::folderExists(_configFolder))
+	if (CrossPlatform::folderExists(_configFolder)) // Load existing options
 	{
 		try
 		{
@@ -526,8 +531,7 @@ void updateOptions()
 			Log(LOG_ERROR) << e.what();
 		}
 	}
-	// Create config folder and save options
-	else
+	else // Create config folder and save options
 	{
 		CrossPlatform::createFolder(_configFolder);
 		save();
@@ -554,8 +558,8 @@ void load(const std::string& filename)
 	try
 	{
 		YAML::Node doc = YAML::LoadFile(s);
-		// Ignore old options files
-		if (doc["options"]["NewBattleMission"])
+
+		if (doc["options"]["NewBattleMission"]) // Ignore old options files
 			return;
 
 		for (std::vector<OptionInfo>::iterator

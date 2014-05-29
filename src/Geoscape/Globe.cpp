@@ -1888,53 +1888,9 @@ void Globe::drawDetail()
 		return;
 	}
 
-	// kL_begin: Draw xCom base labels.
-	Text* label = new Text(80, 9, 0, 0);
-	label->setPalette(getPalette());
-	label->initText(
-				_game->getResourcePack()->getFont("FONT_BIG"),
-				_game->getResourcePack()->getFont("FONT_SMALL"),
-				_game->getLanguage());
-//	label->setAlign(ALIGN_LEFT);
-	label->setColor(Palette::blockOffset(11)+2);
-
-	Sint16
-		x,
-		y;
-
-	for (std::vector<Base*>::iterator // Draw the base labels
-			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end();
-			++i)
-	{
-		// Cheap hack to hide a base when it hasn't been placed yet
-		if (((*i)->getLongitude() != 0.0
-				|| (*i)->getLatitude() != 0.0)
-			&& !pointBack( // Don't draw if city is facing back
-						(*i)->getLongitude(),
-						(*i)->getLatitude()))
-		{
-			polarToCart( // Convert coordinates
-					(*i)->getLongitude(),
-					(*i)->getLatitude(),
-					&x,
-					&y);
-
-			label->setX(x - 3);
-			label->setY(y - 10);
-			label->setText((*i)->getName());
-
-			label->blit(_countries);
-		}
-	}
-
-	delete label;
-	// kL_end.
-
 	if (_zoom > 0) // Draw the country borders
 	{
 		_countries->lock(); // Lock the surface
-
 		for (std::list<Polyline*>::iterator
 				i = _game->getResourcePack()->getPolylines()->begin();
 				i != _game->getResourcePack()->getPolylines()->end();
@@ -1978,7 +1934,6 @@ void Globe::drawDetail()
 								Palette::blockOffset(10)+2);
 			}
 		}
-
 		_countries->unlock(); // Unlock the surface
 	}
 
@@ -2095,7 +2050,8 @@ void Globe::drawDetail()
 	} */
 
 	// kL_begin: Globe::drawDetail(), separate city markers from labels for zoomLevels
-	if (_zoom > 2) // Draw the city markers
+//	if (_zoom > 2) // Draw the city markers
+	if (_zoom > 1) // Draw the city markers
 	{
 		Sint16
 			x,
@@ -2181,6 +2137,49 @@ void Globe::drawDetail()
 
 		delete label;
 	} // kL_end.
+
+	// kL_begin: Draw xCom base labels.
+	Text* label = new Text(80, 9, 0, 0);
+	label->setPalette(getPalette());
+	label->initText(
+				_game->getResourcePack()->getFont("FONT_BIG"),
+				_game->getResourcePack()->getFont("FONT_SMALL"),
+				_game->getLanguage());
+//	label->setAlign(ALIGN_LEFT);
+	label->setColor(Palette::blockOffset(11)+2);
+
+	Sint16
+		x,
+		y;
+
+	for (std::vector<Base*>::iterator // Draw the base labels
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
+	{
+		// Cheap hack to hide a base when it hasn't been placed yet
+		if (((*i)->getLongitude() != 0.0
+				|| (*i)->getLatitude() != 0.0)
+			&& !pointBack( // Don't draw if city is facing back
+						(*i)->getLongitude(),
+						(*i)->getLatitude()))
+		{
+			polarToCart( // Convert coordinates
+					(*i)->getLongitude(),
+					(*i)->getLatitude(),
+					&x,
+					&y);
+
+			label->setX(x - 3);
+			label->setY(y - 10);
+			label->setText((*i)->getName());
+
+			label->blit(_countries);
+		}
+	}
+
+	delete label;
+	// kL_end.
 
 
 	// debug stuff follows...

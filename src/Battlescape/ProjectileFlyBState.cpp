@@ -406,7 +406,7 @@ void ProjectileFlyBState::init()
 			if (_origin == _action.target
 				|| targetTile->getUnit() == _unit)
 			{
-				_targetVoxel = Position( // don't shoot at yourself but shoot at the floor
+				_targetVoxel = Position( // don't shoot yourself but shoot at the floor
 									_action.target.x * 16 + 8,
 									_action.target.y * 16 + 8,
 									_action.target.z * 24);
@@ -447,7 +447,7 @@ void ProjectileFlyBState::init()
 				_targetVoxel = Position(
 									_action.target.x * 16 + 8,
 									_action.target.y * 16 + 8,
-									_action.target.z * 24 + 10);
+									_action.target.z * 24 + 8);
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
@@ -463,7 +463,7 @@ void ProjectileFlyBState::init()
 				_targetVoxel = Position(
 									_action.target.x * 16 + 8,
 									_action.target.y * 16,
-									_action.target.z * 24 + 9);
+									_action.target.z * 24 + 10);
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
@@ -479,7 +479,7 @@ void ProjectileFlyBState::init()
 				_targetVoxel = Position(
 									_action.target.x * 16,
 									_action.target.y * 16 + 8,
-									_action.target.z * 24 + 9);
+									_action.target.z * 24 + 10);
 			}
 		}
 		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)

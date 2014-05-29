@@ -75,7 +75,7 @@ void MapDataSet::load(const YAML::Node& node)
 
 /**
  * Gets the MapDataSet name (string).
- * @return The MapDataSet name.
+ * @return, The MapDataSet name.
  */
 std::string MapDataSet::getName() const
 {
@@ -84,7 +84,7 @@ std::string MapDataSet::getName() const
 
 /**
  * Gets the MapDataSet size.
- * @return The size in number of records.
+ * @return, The size in number of records.
  */
 int MapDataSet::getSize() const
 {
@@ -93,7 +93,7 @@ int MapDataSet::getSize() const
 
 /**
  * Gets the objects in this dataset.
- * @return Pointer to the objects.
+ * @return, Pointer to the objects.
  */
 std::vector<MapData*>* MapDataSet::getObjects()
 {
@@ -102,7 +102,7 @@ std::vector<MapData*>* MapDataSet::getObjects()
 
 /**
  * Gets the surfaces in this dataset.
- * @return Pointer to the surfaceset.
+ * @return, Pointer to the surfaceset.
  */
 SurfaceSet* MapDataSet::getSurfaceset() const
 {
@@ -125,49 +125,49 @@ void MapDataSet::loadData()
 #pragma pack(push, 1)
 	struct MCD // this struct helps to read the .MCD file format
 	{
-		unsigned char Frame[8];
-		unsigned char LOFT[12];
-		unsigned short ScanG;
-		unsigned char u23;
-		unsigned char u24;
-		unsigned char u25;
-		unsigned char u26;
-		unsigned char u27;
-		unsigned char u28;
-		unsigned char u29;
-		unsigned char u30;
-		unsigned char UFO_Door;
-		unsigned char Stop_LOS;
-		unsigned char No_Floor;
-		unsigned char Big_Wall;
-		unsigned char Gravlift;
-		unsigned char Door;
-		unsigned char Block_Fire;
-		unsigned char Block_Smoke;
-		unsigned char u39;
-		unsigned char TU_Walk;
-		unsigned char TU_Slide;
-		unsigned char TU_Fly;
-		unsigned char Armor;
-		unsigned char HE_Block;
-		unsigned char Die_MCD;
-		unsigned char Flammable;
-		unsigned char Alt_MCD;
-		unsigned char u48;
-		signed char T_Level;
-		unsigned char P_Level;
-		unsigned char u51;
-		unsigned char Light_Block;
-		unsigned char Footstep;
-		unsigned char Tile_Type;
-		unsigned char HE_Type;
-		unsigned char HE_Strength;
-		unsigned char Smoke_Blockage;
-		unsigned char Fuel;
-		unsigned char Light_Source;
-		unsigned char Target_Type;
-		unsigned char Xcom_Base;
-		unsigned char u62;
+		unsigned char	Frame[8];
+		unsigned char	LOFT[12];
+		unsigned short	ScanG;
+		unsigned char	u23;
+		unsigned char	u24;
+		unsigned char	u25;
+		unsigned char	u26;
+		unsigned char	u27;
+		unsigned char	u28;
+		unsigned char	u29;
+		unsigned char	u30;
+		unsigned char	UFO_Door;
+		unsigned char	Stop_LOS;
+		unsigned char	No_Floor;
+		unsigned char	Big_Wall;
+		unsigned char	Gravlift;
+		unsigned char	Door;
+		unsigned char	Block_Fire;
+		unsigned char	Block_Smoke;
+		unsigned char	u39;
+		unsigned char	TU_Walk;
+		unsigned char	TU_Slide;
+		unsigned char	TU_Fly;
+		unsigned char	Armor;
+		unsigned char	HE_Block;
+		unsigned char	Die_MCD;
+		unsigned char	Flammable;
+		unsigned char	Alt_MCD;
+		unsigned char	u48;
+		signed char		T_Level;
+		unsigned char	P_Level;
+		unsigned char	u51;
+		unsigned char	Light_Block;
+		unsigned char	Footstep;
+		unsigned char	Tile_Type;
+		unsigned char	HE_Type;
+		unsigned char	HE_Strength;
+		unsigned char	Smoke_Blockage;
+		unsigned char	Fuel;
+		unsigned char	Light_Source;
+		unsigned char	Target_Type;
+		unsigned char	Xcom_Base;
+		unsigned char	u62;
 	};
 #pragma pack(pop)
 
@@ -278,12 +278,12 @@ void MapDataSet::loadData()
 		{
 			int armor = (*i)->getArmor();
 			(*i)->setBlock(
-						1,
-						1,
-						armor,
-						1,
-						1,
-						armor);
+						1,		// light
+						1,		// LoS
+						armor,	// HE
+						1,		// smoke
+						1,		// fire
+						armor);	// gas
 
 			if ((*i)->getDieMCD())
 				_objects.at((*i)->getDieMCD())->setBlock(

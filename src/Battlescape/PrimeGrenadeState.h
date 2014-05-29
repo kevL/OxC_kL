@@ -53,7 +53,9 @@ private:
 	Frame* _frame;
 	InteractiveSurface* _button[24];
 	Inventory* _inventory; // kL
-	Surface* _bg;
+	Surface
+		* _bg,
+		* _bgTop; // kL
 	Text
 		* _number[24],
 		* _title;

@@ -1129,7 +1129,6 @@ int BattleUnit::damage(
 		bool ignoreArmor)
 {
 	//Log(LOG_INFO) << "BattleUnit::damage(), ID " << getId();
-
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
 

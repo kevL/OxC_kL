@@ -22,7 +22,6 @@
 #include <cmath>
 #include <sstream>
 
-//#include "WarningMessage.h" // kL
 #include "Inventory.h" // kL
 
 #include "../Engine/Action.h"
@@ -64,22 +63,15 @@ PrimeGrenadeState::PrimeGrenadeState(
 {
 	_screen = false;
 
-	_title		= new Text(192, 24, 65, 43);
 	_frame		= new Frame(192, 27, 65, 37);
+	_title		= new Text(192, 24, 65, 43);
 	_bg			= new Surface(192, 93, 65, 45);
-//	_warning	= new WarningMessage(224, 24, 48, 176); // kL
+	_bgTop		= new Surface(22, 93, 65, 47); // kL
 
-	// kL_begin:
-/*	_warning->initText(
-					_game->getResourcePack()->getFont("FONT_BIG"),
-					_game->getResourcePack()->getFont("FONT_SMALL"),
-					_game->getLanguage());
-	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1) - 1); */
-	// kL_end.
+	int
+		x = 67,
+		y = 68;
 
-	int x = 67;
-	int y = 68;
 	for (int
 			i = 0;
 			i < 24;
@@ -106,6 +98,16 @@ PrimeGrenadeState::PrimeGrenadeState(
 	square.h = _bg->getHeight();
 	add(_bg);
 	_bg->drawRect(&square, Palette::blockOffset(6)+9);
+
+	// kL_begin:
+	SDL_Rect squareTop;
+	squareTop.x = 0;
+	squareTop.y = 0;
+	squareTop.w = _bgTop->getWidth();
+	squareTop.h = _bgTop->getHeight();
+	add(_bgTop);
+	_bgTop->drawRect(&squareTop, Palette::blockOffset(8)+4);
+	// kL_end.
 
 	add(_frame);
 	_frame->setColor(Palette::blockOffset(6)+3);
@@ -161,7 +163,6 @@ PrimeGrenadeState::PrimeGrenadeState(
  */
 PrimeGrenadeState::~PrimeGrenadeState()
 {
-//	delete _warning; // kL
 }
 
 /**
@@ -212,23 +213,9 @@ void PrimeGrenadeState::btnClick(Action* action)
 
 	if (btnID != -1)
 	{
-		// kL_begin:
-/*		std::wstring activated = L"";
-		if (btnID > 0)
-			activated += Text::formatNumber(btnID) + L" ";
-
-		activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
-
-		if (btnID > 0)
-			activated += L" " + Text::formatNumber(btnID);
-
-		_warning->showMessage(activated); */
-		// kL_end.
-
 		if (_inInventoryView)
 		{
 			_grenadeInInventory->setFuseTimer(btnID);
-
 			_inventory->setPrimeGrenade(btnID); // kL
 		}
 		else

@@ -583,7 +583,6 @@ int Tile::getShade() const
 bool Tile::destroy(int part)
 {
 	//Log(LOG_INFO) << "Tile::destroy()";
-
 	bool _objective = false;
 
 	if (_objects[part])
@@ -658,8 +657,10 @@ bool Tile::damage(
 	bool objective = false;
 
 	if (power >= _objects[part]->getArmor())
+	{
 		//Log(LOG_INFO) << ". . destroy(part)";
 		objective = destroy(part);
+	}
 
 	//Log(LOG_INFO) << ". ret = " << objective;
 	return objective;

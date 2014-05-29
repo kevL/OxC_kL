@@ -1670,16 +1670,16 @@ void SavedBattleGame::prepareNewTurn()
 				{
 					Position pos;
 					Pathfinding::directionToVector(dir, &pos);
-					Tile* t = getTile((*i)->getPosition() + pos);
+					Tile* tile = getTile((*i)->getPosition() + pos);
 
-					if (t
+					if (tile
 						&& getTileEngine()->horizontalBlockage(
 															*i,
-															t,
+															tile,
 															DT_IN)
 														== 0) // if there's no wall blocking the path of the flames...
 					{
-						t->ignite((*i)->getSmoke()); // attempt to set this tile on fire
+						tile->ignite((*i)->getSmoke()); // attempt to set this tile on fire
 					}
 				}
 			}
@@ -1739,19 +1739,19 @@ void SavedBattleGame::prepareNewTurn()
 				{
 					Position pos;
 					Pathfinding::directionToVector(dir, &pos);
-					Tile* t = getTile((*i)->getPosition() + pos);
-					if (t
+					Tile* tile = getTile((*i)->getPosition() + pos);
+					if (tile
 						&& getTileEngine()->horizontalBlockage( // as long as there are no blocking walls
 															*i,
-															t,
+															tile,
 															DT_SMOKE)
 														== 0)
 					{
-						if (t->getSmoke() == 0				// add smoke only to smokeless tiles,
-							|| (t->getFire() == 0			// or tiles with no fire
-								&& t->getOverlaps() != 0))	// and no smoke that was added this turn
+						if (tile->getSmoke() == 0				// add smoke only to smokeless tiles,
+							|| (tile->getFire() == 0			// or tiles with no fire
+								&& tile->getOverlaps() != 0))	// and no smoke that was added this turn
 						{
-							t->addSmoke((*i)->getSmoke());
+							tile->addSmoke((*i)->getSmoke());
 						}
 					}
 				}
@@ -1760,11 +1760,11 @@ void SavedBattleGame::prepareNewTurn()
 		else
 		{
 			Position pos = Position(0, 0, 1); // smoke from fire spreads upwards one level if there's no floor blocking it.
-			Tile* t = getTile((*i)->getPosition() + pos);
-			if (t
-				&& t->hasNoFloor(*i))
+			Tile* tile = getTile((*i)->getPosition() + pos);
+			if (tile
+				&& tile->hasNoFloor(*i))
 			{
-				t->addSmoke((*i)->getSmoke() / 2); // only add smoke equal to half the intensity of the fire
+				tile->addSmoke((*i)->getSmoke() / 2); // only add smoke equal to half the intensity of the fire
 			}
 
 			for (int
@@ -1773,15 +1773,15 @@ void SavedBattleGame::prepareNewTurn()
 					dir += 2) // then it spreads in the four cardinal directions.
 			{
 				Pathfinding::directionToVector(dir, &pos);
-				t = getTile((*i)->getPosition() + pos);
-				if (t
+				tile = getTile((*i)->getPosition() + pos);
+				if (tile
 					&& getTileEngine()->horizontalBlockage(
 														*i,
-														t,
+														tile,
 														DT_SMOKE)
 													== 0)
 				{
-					t->addSmoke((*i)->getSmoke() / 2);
+					tile->addSmoke((*i)->getSmoke() / 2);
 				}
 			}
 		}

@@ -2188,9 +2188,8 @@ void AlienBAIState::wayPointAction()
 															voxelPosA,
 															voxelPosB,
 															false,
-															0,
-															_unit,
-															true);
+															NULL,
+															_unit);
 
 			if (collision > VOXEL_EMPTY
 				&& collision < VOXEL_UNIT)

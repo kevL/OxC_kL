@@ -71,11 +71,8 @@ private:
 			Tile* tile,
 			const int part,
 			ItemDamageType type,
-			int dir = -1, // kL_note: should change this to 'bool isObject'-type
-			int dirTest = -1, // kL_add.
-			bool checkingFromOrigin = false);
-//stock:
-//	int blockage(Tile *tile, const int part, ItemDamageType type, int direction = -1, bool checkingFromOrigin = false);
+			int dir = -1,
+			bool checkingOrigin = false);
 
 
 	public:
@@ -167,8 +164,6 @@ private:
 				ItemDamageType type,
 				int maxRadius,
 				BattleUnit* unit = 0);
-//stock:
-//		void explode(const Position &center, int power, ItemDamageType type, int maxRadius, BattleUnit *unit = 0);
 		/// Checks the horizontal blockage of a tile.
 		int horizontalBlockage(
 				Tile* startTile,
@@ -206,8 +201,7 @@ private:
 				const Position& origin,
 				const Position& target,
 				bool storeTrajectory,
-				std::vector<Position>*
-				trajectory,
+				std::vector<Position>* trajectory,
 				BattleUnit* excludeUnit,
 				bool doVoxelCheck = true,
 				bool onlyVisible = false,

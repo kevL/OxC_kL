@@ -77,7 +77,7 @@ const int MapData::O_OBJECT		= 3;
 
 /**
  * Gets the dataset this object belongs to.
- * @return Pointer to MapDataSet.
+ * @return, Pointer to MapDataSet.
  */
 MapDataSet* MapData::getDataset() const
 {
@@ -87,7 +87,7 @@ MapDataSet* MapData::getDataset() const
 /**
  * Gets the sprite index.
  * @param frameID Animation frame 0-7.
- * @return The original sprite index.
+ * @return, The original sprite index.
  */
 int MapData::getSprite(int frameID) const
 {
@@ -190,7 +190,7 @@ void MapData::setFlags(
 		bool isUfoDoor,
 		bool stopLOS,
 		bool isNoFloor,
-		int bigWall,
+		int  bigWall,
 		bool isGravLift,
 		bool isDoor,
 		bool blockFire,
@@ -211,7 +211,7 @@ void MapData::setFlags(
 /**
  * Gets the amount of blockage of a certain type.
  * @param type Type.
- * @return The blockage (0-255).
+ * @return, The blockage (0-255).
  */
 int MapData::getBlock(ItemDamageType type) const
 {
@@ -223,11 +223,11 @@ int MapData::getBlock(ItemDamageType type) const
 		case DT_IN:		return _block[4];
 		case DT_STUN:	return _block[5]; */
 
-		case DT_NONE:	return _block[1];
+		case DT_NONE:	return _block[1]; // stop LoS [bool], was [0 or 255]
 		case DT_HE:
 		case DT_IN:
-		case DT_STUN:	return _block[2];
-		case DT_SMOKE:	return _block[3];
+		case DT_STUN:	return _block[2]; // HE block [int]
+		case DT_SMOKE:	return _block[3]; // blocks smoke [0 or 256]
 
 		default:
 		break;
@@ -238,12 +238,12 @@ int MapData::getBlock(ItemDamageType type) const
 
 /**
  * Sets the amount of blockage for all types.
- * @param lightBlock The light blockage.
- * @param visionBlock The vision blockage.
- * @param HEBlock The high explosive blockage.
- * @param smokeBlock The smoke blockage.
- * @param fireBlock The fire blockage.
- * @param gasBlock The gas blockage.
+ * @param lightBlock The light blockage.		- Light_Block
+ * @param visionBlock The vision blockage.		- Stop_LOS
+ * @param HEBlock The high explosive blockage.	- HE_Block
+ * @param smokeBlock The smoke blockage.		- Block_Smoke
+ * @param fireBlock The fire blockage.			- Flammable (lower = more flammable)
+ * @param gasBlock The gas blockage.			- HE_Block
  */
 void MapData::setBlock(
 		int lightBlock,
@@ -260,10 +260,11 @@ void MapData::setBlock(
 	_block[4] = fireBlock == 1? 255: 0;
 	_block[5] = gasBlock == 1? 255: 0; */
 
-	_block[0] = lightBlock; // not used...
-	_block[1] = visionBlock == 1? 255: 0;
+	_block[0] = lightBlock; // not used
+//kL	_block[1] = visionBlock == 1? 255: 0; // <- why? kL_note.
+	_block[1] = visionBlock; // kL
 	_block[2] = HEBlock;
-	_block[3] = smokeBlock == 1? 256: 0;
+	_block[3] = smokeBlock == 1? 256: 0; // <- why? kL_note.
 	_block[4] = fireBlock;
 	_block[5] = gasBlock;
 }
@@ -279,7 +280,7 @@ void MapData::setHEBlock(int HEBlock)
 
 /**
  * Gets the Y offset for drawing.
- * @return The height in pixels.
+ * @return, The height in pixels.
  */
 int MapData::getYOffset() const
 {
@@ -297,7 +298,7 @@ void MapData::setYOffset(int value)
 
 /**
  * Gets the type of object.
- * @return The object type (0-3).
+ * @return, The object type (0-3).
  */
 int MapData::getObjectType() const
 {
@@ -306,7 +307,7 @@ int MapData::getObjectType() const
 
 /**
  * Gets info about special tile types.
- * @return The special tile type.
+ * @return, The special tile type.
  */
 SpecialTileType MapData::getSpecialType() const
 {
@@ -329,7 +330,7 @@ void MapData::setSpecialType(
 /**
  * Gets the TU cost to walk over the object.
  * @param movementType The movement type.
- * @return The TU cost.
+ * @return, The TU cost.
  */
 int MapData::getTUCost(MovementType movementType) const
 {
@@ -364,7 +365,7 @@ void MapData::setTUCosts(
 
 /**
  * Adds this to the graphical Y offset of units or objects on this tile.
- * @return The Y offset.
+ * @return, The Y offset.
  */
 int MapData::getTerrainLevel() const
 {
@@ -382,7 +383,7 @@ void MapData::setTerrainLevel(int value)
 
 /**
  * Gets the index to the footstep sound.
- * @return The sound ID.
+ * @return, The sound ID.
  */
 int MapData::getFootstepSound() const
 {
@@ -400,7 +401,7 @@ void MapData::setFootstepSound(int value)
 
 /**
  * Gets the alternative object ID.
- * @return The alternative object ID.
+ * @return, The alternative object ID.
  */
 int MapData::getAltMCD() const
 {
@@ -418,7 +419,7 @@ void MapData::setAltMCD(int value)
 
 /**
  * Gets the dead object ID.
- * @return The dead object ID.
+ * @return, The dead object ID.
  */
 int MapData::getDieMCD() const
 {
@@ -436,13 +437,12 @@ void MapData::setDieMCD(int value)
 
 /**
  * Gets the amount of light the object is emitting.
- * @return The amount of light emitted.
+ * @return, The amount of light emitted.
  */
 int MapData::getLightSource() const
 {
-	// lamp posts have 1, but they should emit more light
-	if (_lightSource == 1)
-		return 15;
+	if (_lightSource == 1)	// lamp posts have 1,
+		return 15;			// but they should emit more light
 	else
 		return _lightSource - 1;
 }
@@ -458,7 +458,8 @@ void MapData::setLightSource(int value)
 
 /**
  * Gets the amount of armor.
- * @return The amount of armor.
+ * Total hitpoints of a tile before destroyed.
+ * @return, The amount of armor.
  */
 int MapData::getArmor() const
 {
@@ -467,6 +468,7 @@ int MapData::getArmor() const
 
 /**
  * Sets the amount of armor.
+ * Total hitpoints of a tile before destroyed.
  * @param value The amount of armor.
  */
 void MapData::setArmor(int value)
@@ -476,7 +478,7 @@ void MapData::setArmor(int value)
 
 /**
  * Gets the amount of flammable (how flammable this object is).
- * @return The amount of flammable.
+ * @return, The amount of flammable.
  */
 int MapData::getFlammable() const
 {
@@ -494,7 +496,7 @@ void MapData::setFlammable(int value)
 
 /**
  * Gets the amount of fuel.
- * @return The amount of fuel.
+ * @return, The amount of fuel.
  */
 int MapData::getFuel() const
 {
@@ -513,7 +515,7 @@ void MapData::setFuel(int value)
 /**
  * Gets the loft index for a certain layer.
  * @param layer The layer.
- * @return The loft index.
+ * @return, The loft index.
  */
 int MapData::getLoftID(int layer) const
 {
@@ -534,7 +536,7 @@ void MapData::setLoftID(
 
 /**
  * Gets the amount of explosive.
- * @return The amount of explosive.
+ * @return, The amount of explosive.
  */
 int MapData::getExplosive() const
 {
@@ -561,7 +563,7 @@ void MapData::setMiniMapIndex(unsigned short i)
 
 /**
  * Gets the SCANG.DAT index for minimap.
- * @return The minimap index.
+ * @return, The minimap index.
  */
 unsigned short MapData::getMiniMapIndex() const
 {

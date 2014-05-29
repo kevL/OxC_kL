@@ -151,7 +151,7 @@ private:
 				bool isUfoDoor,
 				bool stopLOS,
 				bool isNoFloor,
-				int bigWall,
+				int  bigWall,
 				bool isGravLift,
 				bool isDoor,
 				bool blockFire,

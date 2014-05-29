@@ -454,7 +454,7 @@ int StartState::load(void* game_ptr)
 
 		Log(LOG_INFO) << "Loading language...";
 		game->defaultLanguage();
-		Log(LOG_INFO) << "Language loaded successfully.";
+		Log(LOG_INFO) << "Language loaded.";
 
 		loading = LOADING_SUCCESSFUL;
 	}

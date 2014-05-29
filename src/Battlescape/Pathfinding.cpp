@@ -1010,7 +1010,7 @@ void Pathfinding::directionToVector(
 /**
  * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
  * @param vector, Reference to a position (which acts as a vector)
- * @param dir, Reference to a direction
+ * @param dir, Reference to a direction (up/down & same-tile returns -1)
  */
 void Pathfinding::vectorToDirection(
 		const Position& vector,
@@ -1095,7 +1095,7 @@ bool Pathfinding::isBlocked(
 		//Log(LOG_INFO) << ". part is Bigwall";
 		if (tile->getMapData(MapData::O_OBJECT)
 			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != 0
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() <= BIGWALLNWSE
+			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() <= BIGWALL_NWSE
 			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != bigWallExclusion)
 		{
 			return true; // blocking part
@@ -1108,7 +1108,7 @@ bool Pathfinding::isBlocked(
 	{
 		//Log(LOG_INFO) << ". part is Westwall";
 		if (tile->getMapData(MapData::O_OBJECT)
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLWEST)
+			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_WEST)
 		{
 			return true; // blocking part
 		}
@@ -1118,8 +1118,8 @@ bool Pathfinding::isBlocked(
 			return true; // do not look outside of map
 
 		if (tileWest->getMapData(MapData::O_OBJECT)
-			&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEAST
-				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
+			&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_EAST
+				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
 		{
 			return true; // blocking part
 		}
@@ -1129,7 +1129,7 @@ bool Pathfinding::isBlocked(
 	{
 		//Log(LOG_INFO) << ". part is Northwall";
 		if (tile->getMapData(MapData::O_OBJECT)
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLNORTH)
+			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_NORTH)
 		{
 			return true; // blocking part
 		}
@@ -1139,8 +1139,8 @@ bool Pathfinding::isBlocked(
 			return true; // do not look outside of map
 
 		if (tileNorth->getMapData(MapData::O_OBJECT)
-			&& (tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLSOUTH
-				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALLEASTANDSOUTH))
+			&& (tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_SOUTH
+				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
 		{
 			return true; // blocking part
 		}
@@ -1303,7 +1303,7 @@ bool Pathfinding::isBlocked(
 						_save->getTile(currentPosition + oneTileEast),
 						O_BIGWALL,
 						missileTarget,
-						BIGWALLNESW)
+						BIGWALL_NESW)
 				|| isBlocked(
 						_save->getTile(currentPosition + oneTileEast + oneTileNorth),
 						MapData::O_WESTWALL,
@@ -1312,7 +1312,7 @@ bool Pathfinding::isBlocked(
 						_save->getTile(currentPosition + oneTileNorth),
 						O_BIGWALL,
 						missileTarget,
-						BIGWALLNESW))
+						BIGWALL_NESW))
 			{
 				return true;
 			}
@@ -1337,7 +1337,7 @@ bool Pathfinding::isBlocked(
 						_save->getTile(currentPosition + oneTileEast),
 						O_BIGWALL,
 						missileTarget,
-						BIGWALLNWSE)
+						BIGWALL_NWSE)
 				|| isBlocked(
 						_save->getTile(currentPosition + oneTileEast + oneTileSouth),
 						MapData::O_NORTHWALL,
@@ -1354,7 +1354,7 @@ bool Pathfinding::isBlocked(
 						_save->getTile(currentPosition + oneTileSouth),
 						O_BIGWALL,
 						missileTarget,
-						BIGWALLNWSE))
+						BIGWALL_NWSE))
 			{
 				return true;
 			}
@@ -1387,7 +1387,7 @@ bool Pathfinding::isBlocked(
 						_save->getTile(currentPosition + oneTileSouth),
 						O_BIGWALL,
 						missileTarget,
-						BIGWALLNESW)
+						BIGWALL_NESW)
 				|| isBlocked(
 						_save->getTile(currentPosition + oneTileSouth + oneTileWest),
 						MapData::O_NORTHWALL,
@@ -1396,7 +1396,7 @@ bool Pathfinding::isBlocked(
 						_save->getTile(currentPosition + oneTileWest),
 						O_BIGWALL,
 						missileTarget,
-						BIGWALLNESW))
+						BIGWALL_NESW))
 			{
 				return true;
 			}
@@ -1429,7 +1429,7 @@ bool Pathfinding::isBlocked(
 						_save->getTile(currentPosition + oneTileWest),
 						O_BIGWALL,
 						missileTarget,
-						BIGWALLNWSE)
+						BIGWALL_NWSE)
 				|| isBlocked(
 						_save->getTile(currentPosition + oneTileNorth),
 						MapData::O_WESTWALL,
@@ -1438,7 +1438,7 @@ bool Pathfinding::isBlocked(
 						_save->getTile(currentPosition + oneTileNorth),
 						O_BIGWALL,
 						missileTarget,
-						BIGWALLNWSE))
+						BIGWALL_NWSE))
 			{
 				return true;
 			}
@@ -1461,9 +1461,9 @@ bool Pathfinding::isBlocked(
 				return true;
 			if (isBlocked(_save->getTile(currentPosition + oneTileEast), MapData::O_NORTHWALL, missileTarget))
 				return true;
-			if (isBlocked(_save->getTile(currentPosition + oneTileEast), O_BIGWALL, missileTarget, BIGWALLNESW))
+			if (isBlocked(_save->getTile(currentPosition + oneTileEast), O_BIGWALL, missileTarget, BIGWALL_NESW))
 				return true;
-			if (isBlocked(_save->getTile(currentPosition + oneTileNorth), O_BIGWALL, missileTarget, BIGWALLNESW))
+			if (isBlocked(_save->getTile(currentPosition + oneTileNorth), O_BIGWALL, missileTarget, BIGWALL_NESW))
 				return true;
 		break;
 		case 2: // east
@@ -1482,9 +1482,9 @@ bool Pathfinding::isBlocked(
 				return true;
 			if (isBlocked(_save->getTile(currentPosition + oneTileSouth + oneTileEast), MapData::O_WESTWALL, missileTarget))
 				return true;
-			if (isBlocked(_save->getTile(currentPosition + oneTileEast), O_BIGWALL, missileTarget, BIGWALLNWSE))
+			if (isBlocked(_save->getTile(currentPosition + oneTileEast), O_BIGWALL, missileTarget, BIGWALL_NWSE))
 				return true;
-			if (isBlocked(_save->getTile(currentPosition + oneTileSouth), O_BIGWALL, missileTarget, BIGWALLNWSE))
+			if (isBlocked(_save->getTile(currentPosition + oneTileSouth), O_BIGWALL, missileTarget, BIGWALL_NWSE))
 				return true;
 		break;
 		case 4: // south
@@ -1500,9 +1500,9 @@ bool Pathfinding::isBlocked(
 				return true;
 			if (isBlocked(_save->getTile(currentPosition + oneTileSouth), MapData::O_NORTHWALL, missileTarget))
 				return true;
-			if (isBlocked(_save->getTile(currentPosition + oneTileSouth), O_BIGWALL, missileTarget, BIGWALLNESW))
+			if (isBlocked(_save->getTile(currentPosition + oneTileSouth), O_BIGWALL, missileTarget, BIGWALL_NESW))
 				return true;
-			if (isBlocked(_save->getTile(currentPosition + oneTileWest), O_BIGWALL, missileTarget, BIGWALLNESW))
+			if (isBlocked(_save->getTile(currentPosition + oneTileWest), O_BIGWALL, missileTarget, BIGWALL_NESW))
 				return true;
 			if (isBlocked(_save->getTile(currentPosition + oneTileSouth + oneTileWest), MapData::O_NORTHWALL, missileTarget))
 				return true;
@@ -1522,9 +1522,9 @@ bool Pathfinding::isBlocked(
 				return true;
 			if (isBlocked(_save->getTile(currentPosition + oneTileNorth), MapData::O_WESTWALL, missileTarget))
 				return true;
-			if (isBlocked(_save->getTile(currentPosition + oneTileNorth), O_BIGWALL, missileTarget, BIGWALLNWSE))
+			if (isBlocked(_save->getTile(currentPosition + oneTileNorth), O_BIGWALL, missileTarget, BIGWALL_NWSE))
 				return true;
-			if (isBlocked(_save->getTile(currentPosition + oneTileWest), O_BIGWALL, missileTarget, BIGWALLNWSE))
+			if (isBlocked(_save->getTile(currentPosition + oneTileWest), O_BIGWALL, missileTarget, BIGWALL_NWSE))
 				return true;
 		break;
 	} */

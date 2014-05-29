@@ -101,14 +101,15 @@ private:
 
 		enum bigWallTypes
 		{
-			BLOCK = 1,			// 1
-			BIGWALLNESW,		// 2
-			BIGWALLNWSE,		// 3
-			BIGWALLWEST,		// 4
-			BIGWALLNORTH,		// 5
-			BIGWALLEAST,		// 6
-			BIGWALLSOUTH,		// 7
-			BIGWALLEASTANDSOUTH	// 8
+			BIGWALL_NONE,		// 0
+			BIGWALL_BLOCK,		// 1
+			BIGWALL_NESW,		// 2
+			BIGWALL_NWSE,		// 3
+			BIGWALL_WEST,		// 4
+			BIGWALL_NORTH,		// 5
+			BIGWALL_EAST,		// 6
+			BIGWALL_SOUTH,		// 7
+			BIGWALL_E_S			// 8
 		};
 
 
