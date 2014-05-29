@@ -6357,7 +6357,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1401232756 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1401358511 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6573,7 +6573,7 @@
 1401232756 source:f:\git\openxcom\src\battlescape\position.cpp
 	"Position.h"
 
-1401232756 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
+1401356468 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
 	"PrimeGrenadeState.h"
 	<cmath>
 	<sstream>

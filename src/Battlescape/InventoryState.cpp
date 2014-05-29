@@ -260,7 +260,16 @@ InventoryState::InventoryState(
  */
 InventoryState::~InventoryState()
 {
-	Tile* unitTile = _battleGame->getSelectedUnit()->getTile();
+	// kL_begin:
+	if (_parent)
+	{
+		TileEngine* tileEngine = _battleGame->getTileEngine();
+		Tile* tile = _battleGame->getSelectedUnit()->getTile();
+
+		tileEngine->applyGravity(tile);
+		tileEngine->calculateTerrainLighting();
+		tileEngine->recalculateFOV();
+	} // kL_end.
 //	if (_battleGame->getTileEngine())
 //	{
 //		if (Options::maximizeInfoScreens)
@@ -274,10 +283,6 @@ InventoryState::~InventoryState()
 //			_game->getScreen()->resetDisplay(false);
 //		}
 
-	TileEngine* tileEngine = _battleGame->getTileEngine();	// kL
-	tileEngine->applyGravity(unitTile);						// kL
-	tileEngine->calculateTerrainLighting();					// kL
-	tileEngine->recalculateFOV();							// kL
 //kL	_battleGame->getTileEngine()->applyGravity(unitTile);
 //kL	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 //kL	_battleGame->getTileEngine()->recalculateFOV();
@@ -519,7 +524,7 @@ void InventoryState::btnOkClick(Action*)
 		saveEquipmentLayout();
 
 		// kL_begin: This for early exit because access is via CraftEquip screen.
-		if (_parent == 0)
+		if (_parent == NULL)
 		{
 			//Log(LOG_INFO) << ". early out <- CraftEquip ( no BattlescapeState )";
 			return;

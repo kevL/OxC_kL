@@ -66,7 +66,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 	_frame		= new Frame(192, 27, 65, 37);
 	_title		= new Text(192, 24, 65, 43);
 	_bg			= new Surface(192, 93, 65, 45);
-	_bgTop		= new Surface(22, 93, 65, 47); // kL
+	_bgTop		= new Surface(192, 22, 65, 47); // kL
 
 	int
 		x = 67,
