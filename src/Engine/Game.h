@@ -55,8 +55,10 @@ private:
 		_init,
 		_mouseActive,
 		_quit;
-	int _delaytime;
-	unsigned int _framestarttime;
+	int
+		_delaytime,
+		_timeUntilNextFrame;
+	unsigned int _timeOfLastFrame;
 
 	Cursor* _cursor;
 	FpsCounter* _fpsCounter;

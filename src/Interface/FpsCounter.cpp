@@ -45,7 +45,6 @@ FpsCounter::FpsCounter(
 		int x,
 		int y)
 	:
-//kL	Surface(width, height, x, y),
 		Surface( // kL
 			width,
 			height,
@@ -115,7 +114,6 @@ void FpsCounter::handle(Action* action)
  */
 void FpsCounter::think()
 {
-	_frames++;
 	_timer->think(0, this);
 }
 
@@ -124,8 +122,9 @@ void FpsCounter::think()
  */
 void FpsCounter::update()
 {
-	int fps = (int)floor((double)_frames / _timer->getTime() * 1000);
+	int fps = static_cast<int>(floor(static_cast<double>(_frames * 1000 / _timer->getTime())));
 	_text->setValue(fps);
+
 	_frames = 0;
 	_redraw = true;
 }
@@ -137,6 +136,14 @@ void FpsCounter::draw()
 {
 	Surface::draw();
 	_text->blit(this);
+}
+
+/**
+ *
+ */
+void FpsCounter::addFrame()
+{
+	_frames++;
 }
 
 }

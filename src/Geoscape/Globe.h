@@ -70,12 +70,13 @@ private:
 		_hover,
 		_isMouseScrolled,
 		_isMouseScrolling,
-		_mouseMovedOverThreshold;
-	int _blinkVal,
-		_xBeforeMouseScrolling,
-		_yBeforeMouseScrolling,
+		_mouseOverThreshold;
+	int
+		_blinkVal,
 		_totalMouseMoveX,
-		_totalMouseMoveY;
+		_totalMouseMoveY,
+		_xBeforeMouseScrolling,
+		_yBeforeMouseScrolling;
 	double
 		_cenLon,
 		_cenLat,
@@ -83,8 +84,7 @@ private:
 		_hoverLat,
 		_lonBeforeMouseScrolling,
 		_latBeforeMouseScrolling,
-//		_rotLon,
-//		_rotLat;
+//		_rotLon, _rotLat;
 		_radius,
 		_radiusStep;
 	Sint16
@@ -320,6 +320,9 @@ private:
 		/// Special handling for key presses.
 		void keyboardPress(Action* action, State* state);
 
+		/// Move the mouse back to where it started after we finish drag scrolling.
+		void stopScrolling(Action* action);
+
 		/// Get the polygons texture and shade at the given point.
 		void getPolygonTextureAndShade(
 				double lon,
@@ -356,9 +359,6 @@ private:
 		void setupRadii(
 				int width,
 				int height);
-
-		/// Move the mouse back to where it started after we finish drag scrolling.
-		void stopScrolling(Action* action);
 };
 
 }

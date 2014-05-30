@@ -64,7 +64,7 @@ private:
 		_firstInit,
 		_isMouseScrolled,
 		_isMouseScrolling,
-		_mouseMovedOverThreshold;
+		_mouseOverThreshold;
 	int
 		_totalMouseMoveX,
 		_totalMouseMoveY,
@@ -125,7 +125,9 @@ private:
 		* _numLayers,
 		* _numAmmoLeft,
 		* _numAmmoRight;
-	Position _mapOffsetBeforeMouseScrolling;
+	Position
+		_cursorPosition,
+		_mapOffsetBeforeDragScroll;
 	SavedBattleGame* _save;
 	Surface
 		* _rank,
@@ -151,7 +153,7 @@ private:
 
 
 	public:
-		static const int DEFAULT_ANIM_SPEED = 87;
+		static const int DEFAULT_ANIM_SPEED = 88;
 
 		/// Creates the Battlescape state.
 		BattlescapeState(Game* game);
@@ -182,6 +184,12 @@ private:
 		void mapClick(Action* action);
 		/// Handler for entering with mouse to the map surface.
 		void mapIn(Action* action);
+
+		/// Move the mouse back to where it started after we finish drag scrolling.
+		void stopScrolling(Action* action);
+
+		/// Handles keypresses.
+		void handle(Action* action);
 
 		/// Handler for clicking the Unit Up button.
 		void btnUnitUpClick(Action* action);
@@ -238,12 +246,14 @@ private:
 		bool playableUnitSelected();
 		/// Updates soldier name/rank/tu/energy/health/morale.
 		void updateSoldierInfo(bool calcFoV = true);
+
 		/// Animates map objects on the map, also smoke,fire, ...
 		void animate();
 		/// Handles the battle game state.
 		void handleState();
 		/// Sets the state timer interval.
 		void setStateInterval(Uint32 interval);
+
 		/// Gets game.
 		Game* getGame() const;
 		/// Gets map.
@@ -258,34 +268,40 @@ private:
 				const bool useArg = false,
 				const int arg = -1);
 
-		/// Handles keypresses.
-		void handle(Action* action);
 		/// Displays a popup window.
 		void popup(State* state);
+
 		/// Finishes a battle.
 		void finishBattle(bool abort, int inExitArea);
+
 		/// Show the launch button.
 		void showLaunchButton(bool show);
 		/// Shows the PSI button.
 		void showPsiButton(bool show);
+
 		/// Clears mouse-scrolling state.
 		void clearMouseScrollingState();
+
 		/// Returns a pointer to the battlegame, in case we need its functions.
 		BattlescapeGame* getBattleGame();
+
 		/// Saves a map as used by the AI.
 		void saveAIMap();
 		/// Saves each layer of voxels on the bettlescape as a png.
 		void saveVoxelMap();
 		/// Saves a first-person voxel view of the battlescape.
 		void saveVoxelView();
+
 		/// Handler for the mouse moving over the icons, disables the tile selection cube.
 		void mouseInIcons(Action* action);
 		/// Handler for the mouse going out of the icons, enabling the tile selection cube.
 		void mouseOutIcons(Action* action);
 		/// Checks if the mouse is over the icons.
 		bool getMouseOverIcons() const;
+
 		/// Is the player allowed to press buttons?
 		bool allowButtons(bool allowSaving = false) const;
+
 		/// Handler for clicking the reserve TUs to kneel button.
 //		void btnReserveKneelClick(Action* action);
 		/// Handler for clicking the expend all TUs button.
@@ -299,9 +315,6 @@ private:
 		void resize(
 				int& dX,
 				int& dY);
-
-		/// Move the mouse back to where it started after we finish drag scrolling.
-		void stopScrolling(Action* action);
 
 		/// kL. Gets the TurnCounter.
 		TurnCounter* getTurnCounter() const;

@@ -49,16 +49,18 @@ private:
 	bool _inInventoryView;
 
 	BattleAction* _action;
-	BattleItem* _grenadeInInventory;
-	Frame* _frame;
-	InteractiveSurface* _button[24];
+	BattleItem* _grenade;
+	Frame* _fraTop;
+	InteractiveSurface
+		* _isfBtn0, // kL
+		* _isfBtn[24];
 	Inventory* _inventory; // kL
 	Surface
-		* _bg,
-		* _bgTop; // kL
+		* _srfBG;
 	Text
-		* _number[24],
-		* _title;
+		* _txtTurn0, // kL
+		* _txtTurn[24],
+		* _txtTitle;
 
 
 	public:
@@ -67,7 +69,7 @@ private:
 				Game* game,
 				BattleAction* action,
 				bool inInventoryView,
-				BattleItem* grenadeInInventory,
+				BattleItem* grenade,
 				Inventory* inventory = NULL); // kL_add.
 		/// Cleans up the Prime Grenade state.
 		~PrimeGrenadeState();

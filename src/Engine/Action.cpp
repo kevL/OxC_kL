@@ -152,7 +152,6 @@ double Action::getAbsoluteXMouse() const
 		return -1;
 
 	return static_cast<double>(_mouseX) / _scaleX;
-//	return _mouseX / _scaleX;
 }
 
 /**
@@ -166,11 +165,10 @@ double Action::getAbsoluteYMouse() const
 		return -1;
 
 	return static_cast<double>(_mouseY) / _scaleY;
-//	return _mouseY / _scaleY;
 }
 
 /**
- * Returns the relative X position of the mouse cursor relative to the
+ * Returns the X position of the mouse cursor relative to the
  * surface that triggered the action, corrected for screen scaling.
  * @return Mouse's relative X position.
  */
@@ -183,9 +181,9 @@ double Action::getRelativeXMouse() const
 }
 
 /**
- * Returns the relative X position of the mouse cursor relative to the
+ * Returns the Y position of the mouse cursor relative to the
  * surface that triggered the action, corrected for screen scaling.
- * @return Mouse's relative X position.
+ * @return Mouse's relative Y position.
  */
 double Action::getRelativeYMouse() const
 {

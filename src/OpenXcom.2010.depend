@@ -278,7 +278,7 @@
 1401232755 f:\git\openxcom\src\engine\action.h
 	<SDL.h>
 
-1401232755 f:\git\openxcom\src\engine\game.h
+1401390654 f:\git\openxcom\src\engine\game.h
 	<list>
 	<string>
 	<SDL.h>
@@ -4865,7 +4865,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1401232754 f:\git\openxcom\src\geoscape\globe.h
+1401480468 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"
@@ -5618,7 +5618,7 @@
 1401232756 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1401232756 f:\git\openxcom\src\battlescape\battlescapestate.h
+1401480467 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5681,7 +5681,7 @@
 	"Position.h"
 	"../Ruleset/MapData.h"
 
-1401356803 f:\git\openxcom\src\battlescape\primegrenadestate.h
+1401400735 f:\git\openxcom\src\battlescape\primegrenadestate.h
 	"../Engine/State.h"
 
 1401232756 f:\git\openxcom\src\battlescape\scannerstate.h
@@ -6004,12 +6004,13 @@
 	<string>
 	"../Engine/Surface.h"
 
-1401232756 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1401481764 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
 	<iomanip>
 	<SDL_gfxPrimitives.h>
+	"../fmath.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
 	"AlienBAIState.h"
@@ -6103,7 +6104,7 @@
 1401232753 f:\git\openxcom\src\geoscape\victorystate.h
 	"../Engine/State.h"
 
-1401232753 f:\git\openxcom\src\interface\fpscounter.h
+1401390434 f:\git\openxcom\src\interface\fpscounter.h
 	"../Engine/Surface.h"
 
 1401232753 f:\git\openxcom\src\interface\numbertext.h
@@ -6390,7 +6391,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1401252782 source:f:\git\openxcom\src\battlescape\map.cpp
+1401392912 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6486,18 +6487,21 @@
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
 
-1401232756 f:\git\openxcom\src\battlescape\minimapview.h
+1401480468 f:\git\openxcom\src\battlescape\minimapview.h
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1401232756 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1401481810 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
+	<cmath>
 	<sstream>
+	"../fmath.h"
 	"Camera.h"
 	"Map.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Options.h"
+	"../Engine/Screen.h"
 	"../Engine/SurfaceSet.h"
 	"../Interface/Cursor.h"
 	"../Resource/ResourcePack.h"
@@ -6573,7 +6577,7 @@
 1401232756 source:f:\git\openxcom\src\battlescape\position.cpp
 	"Position.h"
 
-1401356468 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
+1401410161 source:f:\git\openxcom\src\battlescape\primegrenadestate.cpp
 	"PrimeGrenadeState.h"
 	<cmath>
 	<sstream>
@@ -6872,7 +6876,7 @@
 	"../Engine/Timer.h"
 	"../Interface/Text.h"
 
-1401232755 source:f:\git\openxcom\src\engine\action.cpp
+1401406635 source:f:\git\openxcom\src\engine\action.cpp
 	"Action.h"
 
 1401232755 source:f:\git\openxcom\src\engine\catfile.cpp
@@ -6959,7 +6963,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1401354714 source:f:\git\openxcom\src\engine\game.cpp
+1401396887 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -6982,7 +6986,6 @@
 	"State.h"
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
-	"../Menu/OptionsBaseState.h"
 	"../Menu/TestState.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Ruleset.h"
@@ -7818,7 +7821,7 @@
 	<string>
 	<vector>
 
-1401354263 source:f:\git\openxcom\src\geoscape\globe.cpp
+1401480468 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -7835,6 +7838,7 @@
 	"../Engine/LocalizedText.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
+	"../Engine/Screen.h"
 	"../Engine/ShaderMove.h"
 	"../Engine/ShaderRepeat.h"
 	"../Engine/SurfaceSet.h"
@@ -8224,7 +8228,7 @@
 	<SDL.h>
 	"../Engine/Action.h"
 
-1401232753 source:f:\git\openxcom\src\interface\fpscounter.cpp
+1401396324 source:f:\git\openxcom\src\interface\fpscounter.cpp
 	"FpsCounter.h"
 	<cmath>
 	"NumberText.h"
@@ -8305,7 +8309,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1401232753 source:f:\git\openxcom\src\interface\window.cpp
+1401411187 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	<SDL.h>
 	<SDL_mixer.h>
@@ -11818,7 +11822,7 @@
 
 1398655003 f:\git\openxcom\src\engine\adlib\adlplayer.h
 
-1400258763 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
+1401396490 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

@@ -70,6 +70,8 @@ private:
 		void update();
 		/// Draws the FPS counter.
 		void draw();
+		///
+		void addFrame();
 };
 
 }

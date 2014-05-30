@@ -52,106 +52,127 @@ PrimeGrenadeState::PrimeGrenadeState(
 		Game* game,
 		BattleAction* action,
 		bool inInventoryView,
-		BattleItem* grenadeInInventory,
+		BattleItem* grenade,
 		Inventory* inventory) // kL_add.
 	:
 		State(game),
 		_action(action),
 		_inInventoryView(inInventoryView),
-		_grenadeInInventory(grenadeInInventory),
+		_grenade(grenade),
 		_inventory(inventory) // kL_add.
 {
 	_screen = false;
 
-	_frame		= new Frame(192, 27, 65, 37);
-	_title		= new Text(192, 24, 65, 43);
-	_bg			= new Surface(192, 93, 65, 45);
-	_bgTop		= new Surface(192, 22, 65, 47); // kL
+	_fraTop		= new Frame(192, 27, 65, 37);
+	_txtTitle	= new Text(192, 18, 65, 43);
+
+	_srfBG		= new Surface(192, 92, 65, 45);
+
+	_txtTurn0	= new Text(190, 18, 66, 67); // kL
+	_isfBtn0	= new InteractiveSurface(190, 22, 66, 65); // kL
 
 	int
 		x = 67,
-		y = 68;
+		y = 92;
 
 	for (int
 			i = 0;
-			i < 24;
+			i < 16;
 			++i)
 	{
-		_button[i] = new InteractiveSurface(
+		_isfBtn[i] = new InteractiveSurface(
 											22,
 											22,
 											x - 1 + ((i %8) * 24),
-											y - 4 + ((i / 8) * 25));
-		_number[i] = new Text(
+											y - 4 + ((i / 8) * 24));
+		_txtTurn[i] = new Text(
 							20,
 							20,
-							x + (((i %8) * 24) - 1),
-							y + ((i / 8) * 25) - 3);
+							x + (((i %8) * 24)),
+							y + ((i / 8) * 24) - 3);
 	}
 
 	setPalette("PAL_BATTLESCAPE");
 
 	SDL_Rect square;
+
+	add(_srfBG);
 	square.x = 0;
 	square.y = 0;
-	square.w = _bg->getWidth();
-	square.h = _bg->getHeight();
-	add(_bg);
-	_bg->drawRect(&square, Palette::blockOffset(6)+9);
+	square.w = _srfBG->getWidth();
+	square.h = _srfBG->getHeight();
+	_srfBG->drawRect(&square, Palette::blockOffset(6)+9);
+
+	add(_fraTop);
+	_fraTop->setColor(Palette::blockOffset(6)+3);
+//kL	_fraTop->setBackground(Palette::blockOffset(6)+12);
+	_fraTop->setBackground(Palette::blockOffset(8)+4); // kL
+	_fraTop->setThickness(3);
+	_fraTop->setHighContrast(true);
+
+	add(_txtTitle);
+	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
+	_txtTitle->setText(tr("STR_SET_TIMER"));
+	_txtTitle->setColor(Palette::blockOffset(1)-1);
+	_txtTitle->setHighContrast(true);
 
 	// kL_begin:
-	SDL_Rect squareTop;
-	squareTop.x = 0;
-	squareTop.y = 0;
-	squareTop.w = _bgTop->getWidth();
-	squareTop.h = _bgTop->getHeight();
-	add(_bgTop);
-	_bgTop->drawRect(&squareTop, Palette::blockOffset(8)+4);
+	add(_isfBtn0);
+	_isfBtn0->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
+
+	square.x = 0; // dark border
+	square.y = 0;
+	square.w = _isfBtn0->getWidth();
+	square.h = _isfBtn0->getHeight();
+	_isfBtn0->drawRect(&square, Palette::blockOffset(0)+15);
+
+	square.x = 1; // inside fill
+	square.y = 1;
+	square.w = _isfBtn0->getWidth() - 2;
+	square.h = _isfBtn0->getHeight() - 2;
+	_isfBtn0->drawRect(&square, Palette::blockOffset(6)+12);
+
+	add(_txtTurn0);
+	std::wostringstream ss0;
+	ss0 << 0;
+	_txtTurn0->setText(ss0.str());
+	_txtTurn0->setBig();
+	_txtTurn0->setColor(Palette::blockOffset(1)-1);
+	_txtTurn0->setHighContrast(true);
+	_txtTurn0->setAlign(ALIGN_CENTER);
+	_txtTurn0->setVerticalAlign(ALIGN_MIDDLE);
 	// kL_end.
-
-	add(_frame);
-	_frame->setColor(Palette::blockOffset(6)+3);
-	_frame->setBackground(Palette::blockOffset(6)+12);
-	_frame->setThickness(3);
-	_frame->setHighContrast(true);
-
-	add(_title);
-	_title->setAlign(ALIGN_CENTER);
-	_title->setBig();
-	_title->setText(tr("STR_SET_TIMER"));
-	_title->setColor(Palette::blockOffset(1)-1);
-	_title->setHighContrast(true);
 
 	for (int
 			i = 0;
-			i < 24;
+			i < 16;
 			++i)
 	{
-		add(_button[i]);
-		_button[i]->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
+		add(_isfBtn[i]);
+		_isfBtn[i]->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
 
-		square.x = 0;
+		square.x = 0; // dark border
 		square.y = 0;
-		square.w = _button[i]->getWidth();
-		square.h = _button[i]->getHeight();
-		_button[i]->drawRect(&square, Palette::blockOffset(0)+15);
+		square.w = _isfBtn[i]->getWidth();
+		square.h = _isfBtn[i]->getHeight();
+		_isfBtn[i]->drawRect(&square, Palette::blockOffset(0)+15);
 
-		square.x = 1;
+		square.x = 1; // inside fill
 		square.y = 1;
-		square.w = _button[i]->getWidth() - 2;
-		square.h = _button[i]->getHeight() - 2;
-		_button[i]->drawRect(&square, Palette::blockOffset(6)+12);
+		square.w = _isfBtn[i]->getWidth() - 2;
+		square.h = _isfBtn[i]->getHeight() - 2;
+		_isfBtn[i]->drawRect(&square, Palette::blockOffset(6)+12);
 
+		add(_txtTurn[i]);
 		std::wostringstream ss;
-		ss << i;
-		add(_number[i]);
-
-		_number[i]->setBig();
-		_number[i]->setText(ss.str());
-		_number[i]->setColor(Palette::blockOffset(1)-1);
-		_number[i]->setHighContrast(true);
-		_number[i]->setAlign(ALIGN_CENTER);
-		_number[i]->setVerticalAlign(ALIGN_MIDDLE);
+		ss << i + 1;
+		_txtTurn[i]->setText(ss.str());
+//		_txtTurn[i]->setBig();
+		_txtTurn[i]->setColor(Palette::blockOffset(1)-1);
+		_txtTurn[i]->setHighContrast(true);
+		_txtTurn[i]->setAlign(ALIGN_CENTER);
+		_txtTurn[i]->setVerticalAlign(ALIGN_MIDDLE);
 	}
 
 	centerAllSurfaces();
@@ -173,7 +194,7 @@ void PrimeGrenadeState::handle(Action* action)
 {
 	State::handle(action);
 
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
+	if (action->getDetails()->type == SDL_MOUSEBUTTONUP
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (!_inInventoryView)
@@ -191,31 +212,37 @@ void PrimeGrenadeState::btnClick(Action* action)
 {
 	int btnID = -1;
 
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	if (action->getDetails()->type == SDL_MOUSEBUTTONUP
+		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		if (!_inInventoryView)
-			_action->value = btnID;
+			_action->value = -1;
 
 		_game->popState();
 
 		return;
 	}
 
-	for (int // got to find out which button was pressed
-			i = 0;
-			i < 24
-				&& btnID == -1;
-			++i)
+	if (action->getSender() == _isfBtn0)
+		btnID = 0;
+	else
 	{
-		if (action->getSender() == _button[i])
-			btnID = i;
+		for (int // got to find out which button was pressed
+				i = 0;
+				i < 16
+					&& btnID == -1;
+				++i)
+		{
+			if (action->getSender() == _isfBtn[i])
+				btnID = i + 1;
+		}
 	}
 
 	if (btnID != -1)
 	{
 		if (_inInventoryView)
 		{
-			_grenadeInInventory->setFuseTimer(btnID);
+			_grenade->setFuseTimer(btnID);
 			_inventory->setPrimeGrenade(btnID); // kL
 		}
 		else

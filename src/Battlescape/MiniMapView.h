@@ -44,9 +44,9 @@ class MiniMapView
 
 private:
 	bool
-		_isMouseScrolled,
-		_isMouseScrolling,
-		_mouseMovedOverThreshold;
+		_isMouseScrolled,	// required for drag-scroll
+		_isMouseScrolling,	// required for drag-scroll
+		_mouseOverThreshold;
 
 	int
 		_frame,
@@ -62,8 +62,10 @@ private:
 	SavedBattleGame* _battleGame;
 	SurfaceSet* _set;
 
-	// these two are required for right-button scrolling on the minimap
-	Position _posBeforeMouseScrolling;
+
+	Position
+		_cursorPosition,
+		_posBeforeDragScroll;
 	Uint32 _mouseScrollingStartTime;
 
 	/// Handles pressing on the MiniMap.
@@ -74,6 +76,8 @@ private:
 	void mouseOver(Action* action, State* state);
 	/// Handles moving the mouse into the MiniMap surface.
 	void mouseIn(Action* action, State* state);
+	///
+	void stopScrolling(Action* action);
 
 
 	public:

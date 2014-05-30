@@ -27,6 +27,8 @@
 
 #include <SDL_gfxPrimitives.h>
 
+#include "../fmath.h"
+
 #include "AbortMissionState.h"
 #include "ActionMenuState.h"
 #include "AlienBAIState.h"
@@ -117,7 +119,7 @@ BattlescapeState::BattlescapeState(Game* game)
 		_yBeforeMouseScrolling(0),
 		_totalMouseMoveX(0),
 		_totalMouseMoveY(0),
-		_mouseMovedOverThreshold(false),
+		_mouseOverThreshold(false),
 	// kL_begin:
 		_firstInit(true),
 		_mouseOverIcons(false),
@@ -850,7 +852,6 @@ void BattlescapeState::think()
  */
 void BattlescapeState::mapOver(Action* action)
 {
-	//Log(LOG_INFO) << "BattlescapeState::mapOver()";
 	if (_isMouseScrolling
 		&& action->getDetails()->type == SDL_MOUSEMOTION)
 	{
@@ -859,70 +860,87 @@ void BattlescapeState::mapOver(Action* action)
 		// (checking: is the dragScroll-mouse-button still pressed?)
 		// However if the SDL is also missed the release event, then it is to no avail :(
 		if ((SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
-		// so we missed again the mouse-release :(
 		{
-			// Check if we have to revoke the scrolling, because it
-			// was too short in time, so it was a click
-			if (!_mouseMovedOverThreshold
+			// so we missed again the mouse-release :(
+			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
+			if (!_mouseOverThreshold
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
-				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+				_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll);
 			}
 
 			_isMouseScrolled = _isMouseScrolling = false;
-			stopScrolling(action);
+			stopScrolling(action); // newScroll
 
 			return;
 		}
 
 		_isMouseScrolled = true;
 
+/*kL
 		// Set the mouse cursor back ( or not )
-		// kL_note: I had removed these to get mousecursor to jump back to prescroll position,
-		// but they're going to try a better method I guess ... l8r, their method don't work.
-/*		SDL_EventState(
+		SDL_EventState(
 					SDL_MOUSEMOTION,
 					SDL_IGNORE);
-//		SDL_WarpMouse(
-//					static_cast<Uint16>(_xBeforeMouseScrolling),
-//					static_cast<Uint16>(_yBeforeMouseScrolling)); // kL
 		SDL_WarpMouse(
-					_game->getScreen()->getWidth() / 2,
-					_game->getScreen()->getHeight() / 2 - Map::ICON_HEIGHT / 2);
+					static_cast<Uint16>(_xBeforeMouseScrolling),
+					static_cast<Uint16>(_yBeforeMouseScrolling));
+//		SDL_WarpMouse( // newScroll
+//					_game->getScreen()->getWidth() / 2,
+//					_game->getScreen()->getHeight() / 2 - Map::ICON_HEIGHT / 2);
 		SDL_EventState(
 					SDL_MOUSEMOTION,
 					SDL_ENABLE); */
 
-		// Check the threshold
+
 		_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
 		_totalMouseMoveY += static_cast<int>(action->getDetails()->motion.yrel);
-		if (!_mouseMovedOverThreshold)
-			_mouseMovedOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
+
+		if (!_mouseOverThreshold) // check threshold
+			_mouseOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
 									|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
-		// Scrolling
-		if (Options::battleDragScrollInvert)
+
+		if (Options::battleDragScrollInvert) // scroll
 		{
 			_map->getCamera()->scrollXY(
-									static_cast<int>(-action->getDetails()->motion.xrel) / 3,
-									static_cast<int>(-action->getDetails()->motion.yrel) / 3,
+									static_cast<int>(static_cast<double>(-action->getDetails()->motion.xrel) / action->getXScale()),
+									static_cast<int>(static_cast<double>(-action->getDetails()->motion.yrel) / action->getYScale()),
 									false);
+
+			// We don't want to look the mouse-cursor jumping :)
+//			action->getDetails()->motion.x = static_cast<Uint16>(_xBeforeMouseScrolling);
+//			action->getDetails()->motion.y = static_cast<Uint16>(_yBeforeMouseScrolling);
+
+			_map->setCursorType(CT_NONE);
 		}
 		else
 		{
 			_map->getCamera()->scrollXY(
-								static_cast<int>(action->getDetails()->motion.xrel) / 3,
-								static_cast<int>(action->getDetails()->motion.yrel) / 3,
+								static_cast<int>(static_cast<double>(action->getDetails()->motion.xrel) * 3.0 / action->getXScale()),
+								static_cast<int>(static_cast<double>(action->getDetails()->motion.yrel) * 3.0 / action->getYScale()),
 								false);
-		}
 
-		// We don't want to look the mouse-cursor jumping :)
-		action->getDetails()->motion.x = static_cast<Uint16>(_xBeforeMouseScrolling);
-		action->getDetails()->motion.y = static_cast<Uint16>(_yBeforeMouseScrolling);
+			Position delta	= _map->getCamera()->getMapOffset();
+			delta			= _map->getCamera()->getMapOffset() - delta;
+			_cursorPosition.x = std::min(
+									_game->getScreen()->getWidth() - static_cast<int>(Round(action->getXScale())),
+									std::max(
+											0,
+											_cursorPosition.x + static_cast<int>(Round(static_cast<double>(delta.x) * action->getXScale()))));
+			_cursorPosition.y = std::min(
+									_game->getScreen()->getHeight() - static_cast<int>(Round(action->getYScale())),
+									std::max(
+											0,
+											_cursorPosition.y + static_cast<int>(Round(static_cast<double>(delta.y) * action->getYScale()))));
+
+			// We don't want to look the mouse-cursor jumping :)
+//			action->getDetails()->motion.x = static_cast<Uint16>(_cursorPosition.x);
+//			action->getDetails()->motion.y = static_cast<Uint16>(_cursorPosition.y);
+		}
 
 		_game->getCursor()->handle(action);
 	}
-	//Log(LOG_INFO) << "BattlescapeState::mapOver() EXIT";
 }
 
 /**
@@ -931,7 +949,6 @@ void BattlescapeState::mapOver(Action* action)
  */
 void BattlescapeState::mapPress(Action* action)
 {
-	//Log(LOG_INFO) << "BattlescapeState::mapPress()";
 	// don't handle mouseclicks over the buttons (it overlaps with map surface)
 	if (_mouseOverIcons)
 		return;
@@ -945,13 +962,23 @@ void BattlescapeState::mapPress(Action* action)
 					&_xBeforeMouseScrolling,
 					&_yBeforeMouseScrolling);
 
-		_mapOffsetBeforeMouseScrolling = _map->getCamera()->getMapOffset();
+		_mapOffsetBeforeDragScroll = _map->getCamera()->getMapOffset();
+
+/*kL
+		if (!Options::battleDragScrollInvert
+			&& _cursorPosition.z == 0)
+		{
+			_cursorPosition.x = static_cast<int>(action->getDetails()->motion.x);
+			_cursorPosition.y = static_cast<int>(action->getDetails()->motion.y);
+			// the Z is irrelevant to our mouse position, but we can use it as a boolean to check if the position is set or not
+			_cursorPosition.z = 1;
+		} */
+
 		_totalMouseMoveX = 0;
 		_totalMouseMoveY = 0;
-		_mouseMovedOverThreshold = false;
+		_mouseOverThreshold = false;
 		_mouseScrollingStartTime = SDL_GetTicks();
 	}
-	//Log(LOG_INFO) << "BattlescapeState::mapPress() EXIT";
 }
 
 /**
@@ -960,8 +987,6 @@ void BattlescapeState::mapPress(Action* action)
  */
 void BattlescapeState::mapClick(Action* action)
 {
-	//Log(LOG_INFO) << "BattlescapeState::mapClick()";
-
 	// The following is the workaround for a rare problem where sometimes
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
@@ -970,56 +995,48 @@ void BattlescapeState::mapClick(Action* action)
 	{
 		if (action->getDetails()->button.button != Options::battleDragScrollButton
 			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
-			// so we missed again the mouse-release :(
 		{
+			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if (!_mouseMovedOverThreshold
+			if (!_mouseOverThreshold
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
-				_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+				_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll);
 			}
 
 			_isMouseScrolled = _isMouseScrolling = false;
-			stopScrolling(action);
+			stopScrolling(action); // newScroll
 		}
 	}
 
-	// DragScroll-Button release: release mouse-scroll-mode
-	if (_isMouseScrolling)
+	if (_isMouseScrolling) // DragScroll-Button release: release mouse-scroll-mode
 	{
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == Options::battleDragScrollButton)
 		{
 			_isMouseScrolling = false;
-			stopScrolling(action);
+			stopScrolling(action); // newScroll
 		}
 		else
-		{
-			//Log(LOG_INFO) << ". . isMouseScrolled = FALSE, return";
 			return;
-		}
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if (!_mouseMovedOverThreshold
+		if (!_mouseOverThreshold
 			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 		{
 			_isMouseScrolled = false;
-//			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling); // kL
-			stopScrolling(action);
+//			_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll); // oldScroll
+			stopScrolling(action); // newScroll
 		}
 
 		if (_isMouseScrolled)
-		{
-			//Log(LOG_INFO) << ". . isMouseScrolled == TRUE, return";
 			return;
-		}
 	}
 
 	// right-click aborts walking state
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
 		&& _battleGame->cancelCurrentAction())
 	{
-			//Log(LOG_INFO) << ". . cancelCurrentAction()";
 			return;
 	}
 
@@ -1031,13 +1048,11 @@ void BattlescapeState::mapClick(Action* action)
 	if (_map->getCursorType() == CT_NONE
 		|| _battleGame->isBusy())
 	{
-		//Log(LOG_INFO) << ". . _map->getCursorType() == CT_NONE || _battleGame->isBusy()";
 		return;
 	}
 
 	Position pos;
 	_map->getSelectorPosition(&pos);
-	//Log(LOG_INFO) << ". getSelectorPosition() DONE";
 
 	if (_save->getDebugMode())
 	{
@@ -1046,27 +1061,19 @@ void BattlescapeState::mapClick(Action* action)
 		debug(ss.str());
 	}
 
-	if (_save->getTile(pos) != 0) // don't allow to click into void
+	// don't allow to click into void
+	if (_save->getTile(pos) != 0)
 	{
-		//Log(LOG_INFO) << ". . getTile(pos) != 0";
 		if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT
 				|| (action->getDetails()->button.button == SDL_BUTTON_LEFT
 					&& (SDL_GetModState() & KMOD_ALT) != 0))
 			&& playableUnitSelected())
 		{
-			//Log(LOG_INFO) << ". . playableUnitSelected()";
-
 			_battleGame->secondaryAction(pos);
-			//Log(LOG_INFO) << ". . secondaryAction(pos) DONE";
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		{
-			//Log(LOG_INFO) << ". . playableUnit NOT Selected()";
 			_battleGame->primaryAction(pos);
-			//Log(LOG_INFO) << ". . primaryAction(pos) DONE";
-		}
 	}
-	//Log(LOG_INFO) << "BattlescapeState::mapClick() EXIT";
 }
 
 /**
@@ -1075,10 +1082,147 @@ void BattlescapeState::mapClick(Action* action)
  */
 void BattlescapeState::mapIn(Action*)
 {
-	//Log(LOG_INFO) << "BattlescapeState::mapIn()";
 	_isMouseScrolling = false;
 	_map->setButtonsPressed(Options::battleDragScrollButton, false);
-	//Log(LOG_INFO) << "BattlescapeState::mapIn() EXIT";
+}
+
+/**
+ * Move the mouse back to where it started after we finish drag scrolling.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::stopScrolling(Action* action)
+{
+/*kL
+	if (Options::battleDragScrollInvert)
+	{
+		SDL_WarpMouse(
+				static_cast<Uint16>(_xBeforeMouseScrolling),
+				static_cast<Uint16>(_yBeforeMouseScrolling));
+		action->setMouseAction(
+				_xBeforeMouseScrolling,
+				_yBeforeMouseScrolling,
+				_map->getX(),
+				_map->getY());
+
+		_battleGame->setupCursor();
+	}
+	else
+	{
+		SDL_WarpMouse(
+				static_cast<Uint16>(_cursorPosition.x),
+				static_cast<Uint16>(_cursorPosition.y));
+		action->setMouseAction(
+				static_cast<int>(static_cast<double>(_cursorPosition.x) / action->getXScale()),
+				static_cast<int>(static_cast<double>(_cursorPosition.y) / action->getYScale()),
+				_game->getScreen()->getSurface()->getX(),
+				_game->getScreen()->getSurface()->getY());
+
+		_map->setSelectorPosition(
+							static_cast<int>(static_cast<double>(_cursorPosition.x) / action->getXScale()),
+							static_cast<int>(static_cast<double>(_cursorPosition.y) / action->getYScale()));
+	}
+
+	// reset our "mouse position stored" flag
+	_cursorPosition.z = 0; */
+}
+
+/**
+ * Takes care of any events from the core game engine.
+ * @param action, Pointer to an action.
+ */
+inline void BattlescapeState::handle(Action* action)
+{
+	if (_game->getCursor()->getVisible()
+		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		State::handle(action);
+
+/*kL
+		if (_isMouseScrolling
+			&& !Options::battleDragScrollInvert) // newScroll
+		{
+			_map->setSelectorPosition( // newScroll
+								static_cast<int>(static_cast<double>(_cursorPosition.x) / action->getXScale()),
+								static_cast<int>(static_cast<double>(_cursorPosition.y) / action->getYScale()));
+//			_map->setSelectorPosition(
+//								static_cast<int>(static_cast<double>(_xBeforeMouseScrolling) / action->getXScale()),
+//								static_cast<int>(static_cast<double>(_yBeforeMouseScrolling) / action->getYScale()));
+		} */
+
+		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
+		{
+			if (action->getDetails()->button.button == SDL_BUTTON_X1)
+				btnNextSoldierClick(action);
+			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
+				btnPrevSoldierClick(action);
+		}
+
+		if (action->getDetails()->type == SDL_KEYDOWN)
+		{
+			if (Options::debug)
+			{
+				if (action->getDetails()->key.keysym.sym == SDLK_d		// "ctrl-d" - enable debug mode
+					&& (SDL_GetModState() & KMOD_CTRL) != 0)
+				{
+					_save->setDebugMode();
+					debug(L"Debug Mode");
+				}
+				else if (_save->getDebugMode()							// "ctrl-v" - reset tile visibility
+					&& action->getDetails()->key.keysym.sym == SDLK_v
+					&& (SDL_GetModState() & KMOD_CTRL) != 0)
+				{
+					debug(L"Resetting tile visibility");
+					_save->resetTiles();
+				}
+				else if (_save->getDebugMode()							// "ctrl-k" - kill all aliens
+					&& action->getDetails()->key.keysym.sym == SDLK_k
+					&& (SDL_GetModState() & KMOD_CTRL) != 0)
+				{
+					debug(L"Influenza bacterium dispersed");
+					for (std::vector<BattleUnit*>::iterator
+							i = _save->getUnits()->begin();
+							i !=_save->getUnits()->end();
+							++i)
+					{
+						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
+						{
+							(*i)->instaKill();
+							if ((*i)->getTile())
+								(*i)->getTile()->setUnit(0);
+						}
+					}
+				}
+				else if (action->getDetails()->key.keysym.sym == SDLK_F11)	// f11 - voxel map dump
+					saveVoxelMap();
+				else if (action->getDetails()->key.keysym.sym == SDLK_F9	// f9 - ai
+					&& Options::traceAI)
+				{
+					saveAIMap();
+				}
+			}
+			else if (!_game->getSavedGame()->isIronman())					// quick save and quick load
+			{
+				// not works in debug mode to prevent conflict in hotkeys by default
+				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
+				{
+					_game->pushState(new SaveGameState(
+													_game,
+													OPT_BATTLESCAPE,
+													SAVE_QUICK));
+				}
+				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
+				{
+					_game->pushState(new LoadGameState(
+													_game,
+													OPT_BATTLESCAPE,
+													SAVE_QUICK));
+				}
+			}
+
+			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)
+				saveVoxelView();											// voxel view dump
+		}
+	}
 }
 
 /**
@@ -1764,23 +1908,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		texture->getFrame(s->getRankSprite())->blit(_rank);
 	}
 
-/*	_numTimeUnits	->setValue(selectedUnit->getTimeUnits());
-	_barTimeUnits	->setMax(selectedUnit->getStats()->tu);
-	_barTimeUnits	->setValue(selectedUnit->getTimeUnits());
-
-	_numEnergy		->setValue(selectedUnit->getEnergy());
-	_barEnergy		->setMax(selectedUnit->getStats()->stamina);
-	_barEnergy		->setValue(selectedUnit->getEnergy());
-
-	_numHealth		->setValue(selectedUnit->getHealth());
-	_barHealth		->setMax(selectedUnit->getStats()->health);
-	_barHealth		->setValue(selectedUnit->getHealth());
-	_barHealth		->setValue2(selectedUnit->getStunlevel());
-
-	_numMorale		->setValue(selectedUnit->getMorale());
-	_barMorale		->setMax(100.0);
-	_barMorale		->setValue(selectedUnit->getMorale()); */
-
 	double stat = static_cast<double>(selectedUnit->getStats()->tu);
 	int tu = selectedUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
@@ -1965,10 +2092,9 @@ void BattlescapeState::blinkVisibleUnitButtons()
 		}
 	}
 
-//kL	if (color == 44) delta = -2;
 	if (color == 45) // reached darkish red
 		delta = -1;
-	if (color == 34) // reached lightest red
+	if (color == 34) // reached lightish red
 		delta = 1;
 
 	color += delta;
@@ -2071,106 +2197,11 @@ void BattlescapeState::warning( // kL
 }
 
 /**
- * Takes care of any events from the core game engine.
- * @param action, Pointer to an action.
- */
-inline void BattlescapeState::handle(Action* action)
-{
-	if (_game->getCursor()->getVisible()
-		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		State::handle(action);
-
-/*		if (_isMouseScrolling)
-		{
-			_map->setSelectorPosition(
-								static_cast<int>(static_cast<double>(_xBeforeMouseScrolling) / action->getXScale()),
-								static_cast<int>(static_cast<double>(_yBeforeMouseScrolling) / action->getYScale()));
-		} */
-
-		if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
-		{
-			if (action->getDetails()->button.button == SDL_BUTTON_X1)
-				btnNextSoldierClick(action);
-			else if (action->getDetails()->button.button == SDL_BUTTON_X2)
-				btnPrevSoldierClick(action);
-		}
-
-		if (action->getDetails()->type == SDL_KEYDOWN)
-		{
-			if (Options::debug)
-			{
-				if (action->getDetails()->key.keysym.sym == SDLK_d		// "ctrl-d" - enable debug mode
-					&& (SDL_GetModState() & KMOD_CTRL) != 0)
-				{
-					_save->setDebugMode();
-					debug(L"Debug Mode");
-				}
-				else if (_save->getDebugMode()							// "ctrl-v" - reset tile visibility
-					&& action->getDetails()->key.keysym.sym == SDLK_v
-					&& (SDL_GetModState() & KMOD_CTRL) != 0)
-				{
-					debug(L"Resetting tile visibility");
-					_save->resetTiles();
-				}
-				else if (_save->getDebugMode()							// "ctrl-k" - kill all aliens
-					&& action->getDetails()->key.keysym.sym == SDLK_k
-					&& (SDL_GetModState() & KMOD_CTRL) != 0)
-				{
-					debug(L"Influenza bacterium dispersed");
-					for (std::vector<BattleUnit*>::iterator
-							i = _save->getUnits()->begin();
-							i !=_save->getUnits()->end();
-							++i)
-					{
-						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
-						{
-							(*i)->instaKill();
-							if ((*i)->getTile())
-								(*i)->getTile()->setUnit(0);
-						}
-					}
-				}
-				else if (action->getDetails()->key.keysym.sym == SDLK_F11)	// f11 - voxel map dump
-					saveVoxelMap();
-				else if (action->getDetails()->key.keysym.sym == SDLK_F9	// f9 - ai
-					&& Options::traceAI)
-				{
-					saveAIMap();
-				}
-			}
-			else if (!_game->getSavedGame()->isIronman())					// quick save and quick load
-			{
-				// not works in debug mode to prevent conflict in hotkeys by default
-				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
-				{
-					_game->pushState(new SaveGameState(
-													_game,
-													OPT_BATTLESCAPE,
-													SAVE_QUICK));
-				}
-				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
-				{
-					_game->pushState(new LoadGameState(
-													_game,
-													OPT_BATTLESCAPE,
-													SAVE_QUICK));
-				}
-			}
-
-			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)
-				saveVoxelView(); // voxel view dump
-		}
-	}
-}
-
-/**
  * Saves a map as used by the AI.
  */
 void BattlescapeState::saveAIMap()
 {
-	// kL_note: Not used:
-	Uint32 start = SDL_GetTicks();
+//kL	Uint32 start = SDL_GetTicks(); // kL_note: Not used.
 
 	BattleUnit* unit = _save->getSelectedUnit();
 	if (!unit)
@@ -2991,26 +3022,6 @@ void BattlescapeState::resize(
 			(*i)->setX((*i)->getX() + dX);
 		}
 	}
-}
-
-/**
- * Move the mouse back to where it started after we finish drag scrolling.
- * @param action Pointer to an action.
- */
-void BattlescapeState::stopScrolling(Action* action)
-{
-//	SDL_WarpMouse( // kL
-//			_xBeforeMouseScrolling + _totalMouseMoveX,
-//			_yBeforeMouseScrolling + _totalMouseMoveY);
-//kL	SDL_WarpMouse(
-//kL			_xBeforeMouseScrolling,
-//kL			_yBeforeMouseScrolling);
-
-	action->setMouseAction(
-					_xBeforeMouseScrolling,
-					_yBeforeMouseScrolling,
-					_map->getX(),
-					_map->getY());
 }
 
 /**

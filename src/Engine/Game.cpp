@@ -48,7 +48,6 @@
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
 
-#include "../Menu/OptionsBaseState.h"
 #include "../Menu/TestState.h"
 
 #include "../Resource/ResourcePack.h"
@@ -81,7 +80,8 @@ Game::Game(const std::string& title)
 		_rules(0),
 		_quit(false),
 		_init(false),
-		_mouseActive(true)
+		_mouseActive(true),
+		_timeUntilNextFrame(0)
 {
 	//Log(LOG_INFO) << "Create Game";
 	Options::reload = false;
@@ -161,7 +161,7 @@ Game::Game(const std::string& title)
 	// Create blank language
 	_lang = new Language();
 
-	_framestarttime = 0;
+	_timeOfLastFrame = 0;
 }
 
 /**
@@ -375,11 +375,32 @@ void Game::run()
 
 		if (runningState != PAUSED) // Process rendering
 		{
-			_fpsCounter->think(); // Process logic
 			_states.back()->think();
+			_fpsCounter->think(); // Process logic
 
-			if (_init)
+			if (Options::FPS > 0
+				&& !(
+					Options::useOpenGL && Options::vSyncForOpenGL))
 			{
+				// Update our FPS delay time based on the time of the last draw.
+//kL			_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame) - 1;
+				_timeUntilNextFrame = static_cast<int>( // kL
+										(1000.0f / static_cast<float>(Options::FPS))
+										- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)))
+										- 1;
+			}
+			else
+			{
+				_timeUntilNextFrame = 0;
+			}
+
+			if (_init
+				&& _timeUntilNextFrame <= 0)
+			{
+				// make a note of when this frame update occured.
+				_timeOfLastFrame = SDL_GetTicks();
+				_fpsCounter->addFrame();
+
 				_screen->clear();
 
 				std::list<State*>::iterator i = _states.end();
@@ -432,21 +453,7 @@ void Game::run()
 		switch (runningState) // Save on CPU
 		{
 			case RUNNING:
-				if (Options::FPS > 0
-					&& !(
-						Options::useOpenGL
-							&& Options::vSyncForOpenGL))
-				{
-					_delaytime = static_cast<int>(
-									(1000.0f / static_cast<float>(Options::FPS))
-									- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_framestarttime)));
-					if (_delaytime > 0)
-						SDL_Delay(static_cast<Uint32>(_delaytime));
-
-					_framestarttime = SDL_GetTicks();
-				}
-				else
-					SDL_Delay(1); // Save CPU from going 100%
+				SDL_Delay(1); // Save CPU from going 100%
 			break;
 			case SLOWED:
 			case PAUSED:

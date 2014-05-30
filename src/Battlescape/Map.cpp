@@ -575,13 +575,13 @@ void Map::drawTerrain(Surface* surface)
 							&d,
 							&beginY);
 	_camera->convertScreenToMap(
-							surface->getWidth(),
-							surface->getHeight(),
+							surface->getWidth() + _spriteWidth,
+							surface->getHeight() + _spriteHeight,
 							&endX,
 							&d);
 	_camera->convertScreenToMap(
 							0,
-							surface->getHeight(),
+							surface->getHeight() + _spriteHeight,
 							&d,
 							&endY);
 
