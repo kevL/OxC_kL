@@ -756,7 +756,7 @@ bool Ufo::getHyperDetected() const
 
 /**
  * Changes whether this UFO has been detected by hyper-wave.
- * @param detected Detection status.
+ * @param hyperdetected Detection status.
  */
 void Ufo::setHyperDetected(bool hyperdetected)
 {

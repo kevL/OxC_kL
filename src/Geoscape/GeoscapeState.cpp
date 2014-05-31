@@ -1774,8 +1774,8 @@ private:
 	public:
 		/// Store the parameters.
 		/**
-		 * @param game, The game engine.
-		 * @param globe, The globe object.
+		 * @param game	- reference to the game engine
+		 * @param globe	- reference to the globe object
 		 */
 		callThink(
 				Game& game,
@@ -1799,7 +1799,7 @@ private:
 /** @brief Process a TerrorSite.
  * This function object will count down towards expiring a TerrorSite,
  * and handle expired TerrorSites.
- * @param ts, Pointer to a TerrorSite
+ * @param ts - pointer to a TerrorSite
  * @return, True if terror is finished ( w/out xCom mission success )
  */
 bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
@@ -3155,6 +3155,7 @@ void GeoscapeState::startDogfight()
 
 /**
  * Returns the first free dogfight slot.
+ * @return, free slot
  */
 int GeoscapeState::getFirstFreeDogfightSlot()
 {

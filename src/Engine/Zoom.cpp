@@ -61,9 +61,13 @@ namespace OpenXcom
 {
 
 /**
- *  Optimized 8 bit zoomer for resizing by a factor of 2. Doesn't flip.
- *  Used internally by _zoomSurfaceY() below.
- *  source and dest. widths must be multiples of 8 bytes for 64-bit access
+ * Optimized 8-bit zoomer for resizing by a factor of 2. Doesn't flip.
+ * Used internally by _zoomSurfaceY() below.
+ * Source and destination widths must be multiples of 8 bytes for 64-bit access.
+ *
+ * @param src - Pointer to a surface to zoom (input).
+ * @param dst - Pointer to the zoomed surface (output).
+ * @return, 0 for success or -1 for error.
  */
 static int zoomSurface2X_64bit(
 		SDL_Surface* src,
@@ -142,11 +146,14 @@ static int zoomSurface2X_64bit(
 #if defined(__WORDSIZE) && (__WORDSIZE == 64) || defined(SIZE_MAX) && (SIZE_MAX > 0xFFFFFFFF)
 #else
 /**
- *  Optimized 8 bit zoomer for resizing by a factor of 2. Doesn't flip.
- *  32-bit version for sad old x86 chips which run out of registers
- *  with the 64-bit version.
- *  Used internally by _zoomSurfaceY() below.
- *  source and dest. widths must be multiples of 4 bytes for 32-bit access
+ * Optimized 8-bit zoomer for resizing by a factor of 2. Doesn't flip.
+ * 32-bit version for sad old x86 chips which run out of registers with the 64-bit version.
+ * Used internally by _zoomSurfaceY() below.
+ * Source and destination widths must be multiples of 4 bytes for 32-bit access.
+ *
+ * @param src - Pointer to a surface to zoom (input).
+ * @param dst - Pointer to the zoomed surface (output).
+ * @return, 0 for success or -1 for error.
  */
 static int zoomSurface2X_32bit(
 		SDL_Surface* src,
@@ -211,9 +218,13 @@ static int zoomSurface2X_32bit(
 #endif
 
 /**
- *  Optimized 8 bit zoomer for resizing by a factor of 4. Doesn't flip.
- *  Used internally by _zoomSurfaceY() below.
- *  source and dest. widths must be multiples of 8 bytes for 64-bit access
+ * Optimized 8-bit zoomer for resizing by a factor of 4. Doesn't flip.
+ * Used internally by _zoomSurfaceY() below.
+ * Source and destination widths must be multiples of 8 bytes for 64-bit access.
+ *
+ * @param src - Pointer to a surface to zoom (input).
+ * @param dst - Pointer to the zoomed surface (output).
+ * @return, 0 for success or -1 for error.
  */
 static int zoomSurface4X_64bit(
 		SDL_Surface* src,
@@ -272,10 +283,14 @@ static int zoomSurface4X_64bit(
 #if defined(__WORDSIZE) && (__WORDSIZE == 64) || defined(SIZE_MAX) && (SIZE_MAX > 0xFFFFFFFF)
 #else
 /**
- *  Optimized 8 bit zoomer for resizing by a factor of 4. Doesn't flip.
- *  32-bit version.
- *  Used internally by _zoomSurfaceY() below.
- *  source and dest. widths must be multiples of 4 bytes for 32-bit access
+ * Optimized 8-bit zoomer for resizing by a factor of 4. Doesn't flip.
+ * 32-bit version.
+ * Used internally by _zoomSurfaceY() below.
+ * Source and destination widths must be multiples of 4 bytes for 32-bit access.
+ *
+ * @param src - Pointer to a surface to zoom (input).
+ * @param dst - Pointer to the zoomed surface (output).
+ * @return, 0 for success or -1 for error.
  */
 static int zoomSurface4X_32bit(
 		SDL_Surface* src,
@@ -329,10 +344,14 @@ static int zoomSurface4X_32bit(
 #endif
 
 /**
- *  Optimized 8 bit zoomer for resizing by a factor of 4. Doesn't flip.
- *  32-bit version.
- *  Used internally by _zoomSurfaceY() below.
- *  source and dest. widths must be multiples of 4 bytes for 32-bit access
+ * Optimized 8-bit zoomer for resizing by a factor of 2. Doesn't flip.
+ * 32-bit version.
+ * Used internally by _zoomSurfaceY() below.
+ * Source and destination widths must be multiples of 4 bytes for 32-bit access.
+ *
+ * @param src - Pointer to a surface to zoom (input).
+ * @param dst - Pointer to the zoomed surface (output).
+ * @return, 0 for success or -1 for error.
  */
 static int zoomSurface2X_XAxis_32bit(
 		SDL_Surface* src,
@@ -417,10 +436,14 @@ static int zoomSurface2X_XAxis_32bit(
 
 
 /**
- *  Optimized 8 bit zoomer for resizing by a factor of 2. Doesn't flip.
- *  32-bit version.
- *  Used internally by _zoomSurfaceY() below.
- *  source and dest. widths must be multiples of 4 bytes for 32-bit access
+ * Optimized 8-bit zoomer for resizing by a factor of 4. Doesn't flip.
+ * 32-bit version.
+ * Used internally by _zoomSurfaceY() below.
+ * Source and destination widths must be multiples of 4 bytes for 32-bit access.
+ *
+ * @param src - Pointer to a surface to zoom (input).
+ * @param dst - Pointer to the zoomed surface (output).
+ * @return, 0 for success or -1 for error.
  */
 static int zoomSurface4X_XAxis_32bit(
 		SDL_Surface* src,
@@ -505,11 +528,15 @@ static int zoomSurface4X_XAxis_32bit(
 
 #ifdef __SSE2__
 /**
- *  Optimized 8 bit zoomer for resizing by a factor of 4. Doesn't flip.
- *  Used internally by _zoomSurfaceY() below.
- *	This is an SSE2 version written with Intel intrinsics.
- *  source and dest. widths must be multiples of 16 bytes for 128-bit access
- *  and it would help if they were aligned properly... :(
+ * Optimized 8-bit zoomer for resizing by a factor of 4. Doesn't flip.
+ * Used internally by _zoomSurfaceY() below.
+ * This is an SSE2 version written with Intel intrinsics.
+ * Source and destination widths must be multiples of 16 bytes for 128-bit access.
+ * and it would help if they were aligned properly... :(
+ *
+ * @param src - Pointer to a surface to zoom (input).
+ * @param dst - Pointer to the zoomed surface (output).
+ * @return, 0 for success or -1 for error.
  */
 static int zoomSurface4X_SSE2(
 		SDL_Surface* src,
@@ -569,11 +596,15 @@ static int zoomSurface4X_SSE2(
 }
 
 /**
- *  Optimized 8 bit zoomer for resizing by a factor of 2. Doesn't flip.
- *  Used internally by _zoomSurfaceY() below.
- *	This is an SSE2 version written with Intel intrinsics.
- *  source and dest. widths must be multiples of 16 bytes for 128-bit access
- *  and it would help if they were aligned properly... :(
+ * Optimized 8-bit zoomer for resizing by a factor of 2. Doesn't flip.
+ * Used internally by _zoomSurfaceY() below.
+ * This is an SSE2 version written with Intel intrinsics.
+ * Source and destination widths must be multiples of 16 bytes for 128-bit access.
+ * and it would help if they were aligned properly... :(
+ *
+ * @param src - Pointer to a surface to zoom (input).
+ * @param dst - Pointer to the zoomed surface (output).
+ * @return, 0 for success or -1 for error.
  */
 static int zoomSurface2X_SSE2(
 		SDL_Surface* src,
@@ -619,7 +650,8 @@ static int zoomSurface2X_SSE2(
 	return 0;
 }
 
-/** Checks the SSE2 feature bit returned by the CPUID instruction
+/**
+ * Checks the SSE2 feature bit returned by the CPUID instruction
  */
 bool Zoom::haveSSE2()
 {
@@ -641,6 +673,14 @@ bool Zoom::haveSSE2()
 /**
  * Wrapper around various software and OpenGL screen buffer pushing functions which zoom.
  * Basically called just from Screen::flip()
+ *
+ * @param src				- pointer to a surface to zoom (input).
+ * @param dst				- pointer to the zoomed surface (output).
+ * @param topBlackBand		- size of top black band in pixels (letterboxing).
+ * @param bottomBlackBand	- size of bottom black band in pixels (letterboxing).
+ * @param leftBlackBand		- size of left black band in pixels (letterboxing).
+ * @param rightBlackBand	- size of right black band in pixels (letterboxing).
+ * @param glOut				- pointer to OpenGL output.
  */
 void Zoom::flipWithZoom(
 		SDL_Surface* src,
@@ -702,18 +742,18 @@ void Zoom::flipWithZoom(
 
 
 /**
- * Internal 8 bit Zoomer without smoothing.
+ * Internal 8-bit Zoomer without smoothing.
  * Source code originally from SDL_gfx (LGPL) with permission by author.
  *
- * Zooms 8bit palette/Y 'src' surface to 'dst' surface.
- * Assumes src and dst surfaces are of 8 bit depth.
- * Assumes dst surface was allocated with the correct dimensions.
+ * Zooms 8-bit palette/Y 'src' surface to 'dst' surface.
+ * 	- assumes src and dst surfaces are of 8-bit depth.
+ *	- assumes dst surface was allocated with the correct dimensions.
  *
- * @param src The surface to zoom (input).
- * @param dst The zoomed surface (output).
- * @param flipx Flag indicating if the image should be horizontally flipped.
- * @param flipy Flag indicating if the image should be vertically flipped.
- * @return 0 for success or -1 for error.
+ * @param src	- pointer to a surface to zoom (input)
+ * @param dst	- pointer to the zoomed surface (output)
+ * @param flipx	- flag indicating if the image should be horizontally flipped
+ * @param flipy	- flag indicating if the image should be vertically flipped
+ * @return, 0 for success or -1 for error.
  */
 int Zoom::_zoomSurfaceY(
 		SDL_Surface* src,

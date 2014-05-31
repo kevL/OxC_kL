@@ -50,6 +50,8 @@ namespace OpenXcom
 
 /**
  * Sets up a UnitWalkBState.
+ * @param parent - Pointer to the Battlescape.
+ * @param action - A battle action struct.
  */
 UnitWalkBState::UnitWalkBState(
 		BattlescapeGame* parent,

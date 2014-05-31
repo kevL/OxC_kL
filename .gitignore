@@ -77,3 +77,7 @@ CMakeLists.txt
 # -temp
 /temp/
 #/temp/*
+
+# -xcode
+/xcode/
+#/xcode/*

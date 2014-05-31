@@ -65,7 +65,7 @@ ArticleStateCraft::ArticleStateCraft(
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
-	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+	_txtTitle->setText(tr(defs->title));
 
 	_txtInfo = new Text(
 					defs->rect_text.width,
@@ -76,7 +76,7 @@ ArticleStateCraft::ArticleStateCraft(
 
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
 	_txtInfo->setWordWrap(true);
-	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+	_txtInfo->setText(tr(defs->text));
 
 	_txtStats = new Text(
 						defs->rect_stats.width,

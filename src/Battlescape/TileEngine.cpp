@@ -4417,11 +4417,11 @@ int TileEngine::calculateParabola(
 
 /**
  * Validates a throw action.
- * @param action The action to validate.
- * @param originVoxel The origin point of the action.
- * @param targetVoxel The target point of the action.
- * @param curve The curvature of the throw.
- * @param voxelType The type of voxel at which this parabola terminates.
+ * @param action		- Reference to the action to validate.
+ * @param originVoxel	- The origin point of the action.
+ * @param targetVoxel	- The target point of the action.
+ * @param curve			- Pointer to a curvature of the throw.
+ * @param voxelType		- Pointer to a type of voxel at which this parabola terminates.
  * @return, Validity of action.
  */
 bool TileEngine::validateThrow(
@@ -5101,12 +5101,12 @@ bool TileEngine::validMeleeRange(
 
 /**
  * Validates the melee range between a tile and a unit.
- * @param pos, Position to check from
- * @param direction, Direction to check
- * @param size, For large units, we have to do extra checks
- * @param target, The unit we want to attack, 0 for any unit
- * @param dest, destination
- * @return, True when the range is valid
+ * @param pos		- Position to check from
+ * @param direction	- Direction to check
+ * @param attacker	- Pointer to an attacking unit.
+ * @param target	- Pointer to a unit we want to attack, 0 for any unit
+ * @param dest		- Pointer to destination position
+ * @return, True if the range is valid
  */
 bool TileEngine::validMeleeRange(
 		Position pos,
@@ -5209,7 +5209,8 @@ bool TileEngine::validMeleeRange(
 
 /**
  * Gets the AI to look through a window.
- * @return Direction or -1 when no window found.
+ * @param position	- Reference to the current position
+ * @return, Direction or -1 when no window found.
  */
 int TileEngine::faceWindow(const Position& position)
 {
@@ -5254,6 +5255,8 @@ int TileEngine::faceWindow(const Position& position)
 /**
  * Returns the direction from origin to target.
  * kL_note: This function is almost identical to BattleUnit::directionTo().
+ * @param origin - Reference to the origin point of the action.
+ * @param target - Reference to the target point of the action.
  * @return, direction.
  */
 int TileEngine::getDirectionTo(
@@ -5304,9 +5307,9 @@ int TileEngine::getDirectionTo(
 }
 
 /**
- * Get the origin-voxel of a shot or missile.
- * @param action, Reference to the BattleAction
- * @param tile, Pointer to the start tile
+ * Gets the origin-voxel of a shot or missile.
+ * @param action	- Reference to the BattleAction
+ * @param tile		- Pointer to a start tile
  * @return, Position of the origin in voxel-space
  */
 Position TileEngine::getOriginVoxel(

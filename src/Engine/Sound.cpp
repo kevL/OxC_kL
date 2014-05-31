@@ -84,6 +84,7 @@ void Sound::load(
 
 /**
  * Plays the contained sound effect.
+ * @param channel Use specified channel, -1 to use any channel
  */
 void Sound::play(int channel) const
 {

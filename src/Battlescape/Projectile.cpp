@@ -62,6 +62,7 @@ namespace OpenXcom
  * @param save Pointer to battlesavegame.
  * @param action An action.
  * @param origin Position the projectile originates from.
+ * @param targetVoxel Position the projectile is targeting.
  */
 Projectile::Projectile(
 		ResourcePack* res,

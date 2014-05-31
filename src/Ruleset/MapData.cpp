@@ -572,7 +572,7 @@ unsigned short MapData::getMiniMapIndex() const
 
 /**
  * Sets the bigWall value.
- * @param value The new bigWall value.
+ * @param bigWall The new bigWall value.
  */
 void MapData::setBigWall(const int bigWall)
 {
@@ -581,7 +581,7 @@ void MapData::setBigWall(const int bigWall)
 
 /**
  * Sets the TUWalk value.
- * @param value The new TUWalk value.
+ * @param TUWalk The new TUWalk value.
  */
 void MapData::setTUWalk(const int TUWalk)
 {
@@ -590,7 +590,7 @@ void MapData::setTUWalk(const int TUWalk)
 
 /**
  * Sets the TUFly value.
- * @param value The new TUFly value.
+ * @param TUFly The new TUFly value.
  */
 void MapData::setTUFly(const int TUFly)
 {
@@ -599,7 +599,7 @@ void MapData::setTUFly(const int TUFly)
 
 /**
  * Sets the TUSlide value.
- * @param value The new TUSlide value.
+ * @param TUSlide The new TUSlide value.
  */
 void MapData::setTUSlide(const int TUSlide)
 {

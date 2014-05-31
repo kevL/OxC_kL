@@ -126,9 +126,9 @@ private:
 		/// Gets soldier rules.
 		RuleSoldier* getRules() const;
 
-		/// Get pointer to initial stats.
+		/// Gets a pointer to initial stats.
 		UnitStats* getInitStats();
-		/// Get pointer to current stats.
+		/// Gets a pointer to current stats.
 		UnitStats* getCurrentStats();
 
 		/// Gets the soldier's unique ID.
@@ -137,7 +137,7 @@ private:
 		/// Gets the soldier's name.
 		std::wstring getName(
 				bool statstring = false,
-				unsigned int maxLength = 24) const;
+				unsigned int maxLength = 20) const;
 		/// Sets the soldier's name.
 		void setName(const std::wstring& name);
 

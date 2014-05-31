@@ -44,13 +44,16 @@ namespace OpenXcom
 
 /**
  * Sets up a CivilianBAIState.
+ * @param save Pointer to the battle game.
+ * @param unit Pointer to the unit.
+ * @param node Pointer to the node the unit originates from.
  */
 CivilianBAIState::CivilianBAIState(
-		SavedBattleGame* game,
+		SavedBattleGame* save,
 		BattleUnit* unit,
 		Node* node)
 	:
-		BattleAIState(game, unit),
+		BattleAIState(save, unit),
 		_aggroTarget(0),
 		_escapeTUs(0),
 		_AIMode(0),
@@ -101,15 +104,18 @@ void CivilianBAIState::load(const YAML::Node& node)
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return, YAML node.
  */
 YAML::Node CivilianBAIState::save() const
 {
-	int fromNodeID = -1, toNodeID = -1;
+	int
+		fromNodeID = -1,
+		toNodeID = -1;
+
 	if (_fromNode)
-		fromNodeID = _fromNode->getID();
+		fromNodeID	= _fromNode->getID();
 	if (_toNode)
-		toNodeID = _toNode->getID();
+		toNodeID	= _toNode->getID();
 
 	YAML::Node node;
 
@@ -139,13 +145,12 @@ void CivilianBAIState::exit()
 }
 
 /**
- * Runs any code the state needs to keep updating every
- * AI cycle.
+ * Runs any code the state needs to keep updating every AI cycle.
+ * @param action (possible) AI action to execute after thinking is done.
  */
 void CivilianBAIState::think(BattleAction* action)
 {
 	//Log(LOG_INFO) << "CivilianBAIState::think()";
-
  	action->type = BA_RETHINK;
 	action->actor = _unit;
 
@@ -246,7 +251,6 @@ void CivilianBAIState::think(BattleAction* action)
 	{
 		_escapeTUs = 0;
 	}
-
 	//Log(LOG_INFO) << "CivilianBAIState::think() EXIT";
 }
 

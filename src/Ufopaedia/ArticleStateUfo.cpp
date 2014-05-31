@@ -66,7 +66,7 @@ ArticleStateUfo::ArticleStateUfo(
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
-	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+	_txtTitle->setText(tr(defs->title));
 
 	_image = new Surface(160, 52, 160, 6);
 	add(_image);
@@ -106,7 +106,7 @@ ArticleStateUfo::ArticleStateUfo(
 
 	_txtInfo->setColor(Palette::blockOffset(8)+5);
 	_txtInfo->setWordWrap(true);
-	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+	_txtInfo->setText(tr(defs->text));
 
 	_lstInfo = new TextList(300, 64, 10, 68);
 

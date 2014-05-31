@@ -127,9 +127,9 @@ private:
 		/// Handler for clicking the Lock Mouse button.
 		void btnLockMouseClick(Action* action);
 		/// Handler for updating the selected battlescape scale.
-		void updateBattlescapeScale(Action*);
+		void updateBattlescapeScale(Action* action);
 		/// Handler for updating the selected geoscape scale.
-		void updateGeoscapeScale(Action*);
+		void updateGeoscapeScale(Action* action);
 
 		/// Update the resolution settings, we just resized the window.
 		void resize(

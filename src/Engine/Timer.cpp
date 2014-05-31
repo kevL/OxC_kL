@@ -65,6 +65,7 @@ int Timer::maxFrameSkip		= 8; // this is a pretty good default at 60FPS.
 /**
  * Initializes a new timer with a set interval.
  * @param interval Time interval in milliseconds.
+ * @param frameSkipping Use frameskipping.
  */
 Timer::Timer(
 		Uint32 interval,
@@ -213,8 +214,10 @@ void Timer::onTimer(SurfaceHandler handler)
 	_surface = handler;
 }
 
-
-/// Sets frame skipping on or off
+/**
+ * Sets frame skipping on or off
+ * @param skip Enable frameskipping.
+ */
 void Timer::setFrameSkipping(bool skip)
 {
 	_frameSkipping = skip;

@@ -1874,6 +1874,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 
 /**
  * Toggles usage of weapon number 1.
+ * @param action Pointer to an action.
  */
 void DogfightState::weapon1Click(Action*)
 {
@@ -1884,6 +1885,7 @@ void DogfightState::weapon1Click(Action*)
 
 /**
  * Toggles usage of weapon number 2.
+ * @param action Pointer to an action.
  */
 void DogfightState::weapon2Click(Action*)
 {
@@ -1940,6 +1942,7 @@ void DogfightState::recolor(
 
 /**
  * Returns true if state is minimized. Otherwise returns false.
+ * @return Is the dogfight minimized?
  */
 bool DogfightState::isMinimized() const
 {
@@ -1948,6 +1951,7 @@ bool DogfightState::isMinimized() const
 
 /**
  * Sets the state to minimized/maximized status.
+ * @param minimized Is the dogfight minimized?
  */
 void DogfightState::setMinimized(const bool minimized)
 {
@@ -1956,6 +1960,7 @@ void DogfightState::setMinimized(const bool minimized)
 
 /**
  * Maximizes the interception window.
+ * @param action Pointer to an action.
  */
 void DogfightState::btnMinimizedIconClick(Action*)
 {
@@ -1987,6 +1992,7 @@ void DogfightState::btnMinimizedIconClick(Action*)
 
 /**
  * Sets interception number. Used to draw proper number when window minimized.
+ * @param number ID number.
  */
 void DogfightState::setInterceptionNumber(const int number)
 {
@@ -1995,6 +2001,7 @@ void DogfightState::setInterceptionNumber(const int number)
 
 /**
  * Sets interceptions count. Used to properly position the window.
+ * @param count Amount of interception windows.
  */
 void DogfightState::setInterceptionsCount(const int count)
 {
@@ -2178,6 +2185,7 @@ void DogfightState::endDogfight()
 
 /**
  * Returns interception number.
+ * @return interception number
  */
 int DogfightState::getInterceptionNumber() const
 {

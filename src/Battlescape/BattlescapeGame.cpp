@@ -1539,6 +1539,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * Checks against reserved time units.
  * @param bu, Pointer to the unit.
  * @param tu, Number of time units to check.
+ * @param justChecking, True to suppress error messages, false otherwise.
  * @return bool, Whether or not *bu has enough time units.
  */
 bool BattlescapeGame::checkReservedTU(
@@ -2431,7 +2432,7 @@ void BattlescapeGame::dropItem(
  * Converts a unit into a unit of another type.
  * @param unit The unit to convert.
  * @param newType The type of unit to convert to.
- * @param Pointer to the new unit.
+ * @return, Pointer to the new unit.
  */
 BattleUnit* BattlescapeGame::convertUnit(
 		BattleUnit* unit,

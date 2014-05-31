@@ -4375,7 +4375,7 @@
 	<sstream>
 	<string>
 
-1401232751 f:\git\openxcom\src\savegame\soldier.h
+1401505681 f:\git\openxcom\src\savegame\soldier.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"../Ruleset/StatString.h"
@@ -4567,7 +4567,7 @@
 1401232751 f:\git\openxcom\src\savegame\movingtarget.h
 	"Target.h"
 
-1401232751 f:\git\openxcom\src\savegame\region.h
+1401503308 f:\git\openxcom\src\savegame\region.h
 	<vector>
 	<yaml-cpp/yaml.h>
 
@@ -5827,7 +5827,7 @@
 1401232756 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
-1401232756 f:\git\openxcom\src\battlescape\civilianbaistate.h
+1401490201 f:\git\openxcom\src\battlescape\civilianbaistate.h
 	<yaml-cpp/yaml.h>
 	"BattleAIState.h"
 	"Position.h"
@@ -7817,7 +7817,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1401232751 f:\git\openxcom\src\ufopaedia\ufopaedia.h
+1401508814 f:\git\openxcom\src\ufopaedia\ufopaedia.h
 	<string>
 	<vector>
 
@@ -8434,7 +8434,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1401232753 f:\git\openxcom\src\menu\newgamestate.h
+1401494273 f:\git\openxcom\src\menu\newgamestate.h
 	"../Savegame/SavedGame.h"
 	"../Engine/State.h"
 
@@ -11516,12 +11516,12 @@
 1401232753 f:\git\openxcom\src\menu\introstate.h
 	"../Engine/State.h"
 
-1401232752 f:\git\openxcom\src\menu\optionsvideostate.h
+1401494332 f:\git\openxcom\src\menu\optionsvideostate.h
 	<SDL.h>
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1401232753 f:\git\openxcom\src\menu\optionsaudiostate.h
+1401494314 f:\git\openxcom\src\menu\optionsaudiostate.h
 	<vector>
 	"OptionsBaseState.h"
 

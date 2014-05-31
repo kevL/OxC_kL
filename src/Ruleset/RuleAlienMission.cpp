@@ -174,6 +174,7 @@ RuleAlienMission::~RuleAlienMission()
 
 /**
  * Returns the Alien score for this mission.
+ * @return Amount of points.
  */
 int RuleAlienMission::getPoints() const
 {

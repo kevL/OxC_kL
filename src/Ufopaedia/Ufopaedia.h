@@ -27,9 +27,12 @@
 namespace OpenXcom
 {
 
-class Game;
+
 class ArticleDefinition;
 class ArticleState;
+class Game;
+class Ruleset;
+class SavedGame;
 
 
 /// definition of an article list
@@ -67,11 +70,14 @@ protected:
 	static int _current_index; // kL
 	/// get index of the given article id in the visible list.
 //kL	static size_t getArticleIndex(Game* game, std::string& article_id);
-	static int getArticleIndex(
-			Game* game,
-			std::string& article_id); // kL
+	static int getArticleIndex( // kL
+			SavedGame* save,
+			Ruleset* rule,
+			std::string& article_id);
 	/// get list of researched articles
-	static ArticleDefinitionList getAvailableArticles(Game* game);
+	static ArticleDefinitionList getAvailableArticles(
+			SavedGame* save,
+			Ruleset* rule);
 	/// create a new state object from article definition.
 	static ArticleState* createArticleState(
 			Game* game,
@@ -81,7 +87,7 @@ protected:
 	public:
 		/// check, if a specific article is currently available.
 		static bool isArticleAvailable(
-				Game* game,
+				SavedGame* save,
 				ArticleDefinition* article);
 		/// open Ufopaedia on a certain entry.
 		static void openArticle(
@@ -99,15 +105,10 @@ protected:
 		static void prev(Game* game);
 		/// load a vector with article ids that are currently visible of a given section.
 		static void list(
-				Game* game,
+				SavedGame* save,
+				Ruleset* rule,
 				const std::string& section,
 				ArticleDefinitionList& data);
-		/// build a text string from a string template using current game settings.
-		static std::wstring buildText(
-				Game* game,
-				std::string& str_template);
-		/// TO BE REMOVED! run in test mode during development only.
-//kL		static void runStandalone(Game* game);
 };
 
 }

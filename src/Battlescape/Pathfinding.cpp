@@ -1010,7 +1010,7 @@ void Pathfinding::directionToVector(
 /**
  * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
  * @param vector, Reference to a position (which acts as a vector)
- * @param dir, Reference to a direction (up/down & same-tile returns -1)
+ * @param dir, Reference to the resulting direction (up/down & same-tile returns -1)
  */
 void Pathfinding::vectorToDirection(
 		const Position& vector,

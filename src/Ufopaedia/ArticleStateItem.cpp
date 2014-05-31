@@ -68,7 +68,7 @@ ArticleStateItem::ArticleStateItem(
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
 	_txtTitle->setWordWrap(true);
-	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+	_txtTitle->setText(tr(defs->title));
 
 
 	_image = new Surface(32, 48, 157, 5);
@@ -183,7 +183,7 @@ ArticleStateItem::ArticleStateItem(
 	add(_txtInfo);
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
 	_txtInfo->setWordWrap(true);
-	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+	_txtInfo->setText(tr(defs->text));
 
 
 	// AMMO column
@@ -251,8 +251,9 @@ ArticleStateItem::ArticleStateItem(
 						++i)
 				{
 					ArticleDefinition* ammo_article = _game->getRuleset()->getUfopaediaArticle((*ammo_data)[i]);
-
-					if (Ufopaedia::isArticleAvailable(_game, ammo_article))
+					if (Ufopaedia::isArticleAvailable(
+												_game->getSavedGame(),
+												ammo_article))
 					{
 						RuleItem* ammo_rule = _game->getRuleset()->getItem((*ammo_data)[i]);
 						_txtAmmoType[i]->setText(tr(getDamageTypeText(ammo_rule->getDamageType())));

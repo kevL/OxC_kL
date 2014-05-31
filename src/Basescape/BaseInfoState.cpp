@@ -455,6 +455,23 @@ void BaseInfoState::edtBaseChange(Action* action)
  * Selects a new base to display.
  * @param action Pointer to an action.
  */
+void BaseInfoState::miniClick(Action*)
+{
+	size_t base = _mini->getHoveredBase();
+	if (base < _game->getSavedGame()->getBases()->size())
+	{
+		_mini->setSelectedBase(base);
+		_base = _game->getSavedGame()->getBases()->at(base);
+		_state->setBase(_base);
+
+		init();
+	}
+}
+
+/**
+ * Selects a new base to display.
+ * @param action Pointer to an action.
+ */
 void BaseInfoState::handleKeyPress(Action* action)
 {
 	if (action->getDetails()->type == SDL_KEYDOWN)
@@ -490,29 +507,12 @@ void BaseInfoState::handleKeyPress(Action* action)
 		if (base > -1
 			&& base < static_cast<int>(_game->getSavedGame()->getBases()->size()))
 		{
-			_mini->setSelectedBase(base);
+//			_mini->setSelectedBase(base);
 			_base = _game->getSavedGame()->getBases()->at(base);
-			_state->setBase(_base);
+//			_state->setBase(_base);
 
 			init();
 		}
-	}
-}
-
-/**
- * Selects a new base to display.
- * @param action Pointer to an action.
- */
-void BaseInfoState::miniClick(Action*)
-{
-	size_t base = _mini->getHoveredBase();
-	if (base < _game->getSavedGame()->getBases()->size())
-	{
-		_mini->setSelectedBase(base);
-		_base = _game->getSavedGame()->getBases()->at(base);
-		_state->setBase(_base);
-
-		init();
 	}
 }
 

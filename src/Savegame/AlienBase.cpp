@@ -163,8 +163,8 @@ void AlienBase::setLabel(const std::string& edit) // kL
 }
 
 /**
- * Gets the alien base's battlescape status.
- * @return bool
+ * Gets an alien base's battlescape status.
+ * @return, true if this base is in the battlescape
  */
 bool AlienBase::isInBattlescape() const
 {
@@ -172,8 +172,8 @@ bool AlienBase::isInBattlescape() const
 }
 
 /**
- * Sets the alien base's battlescape status.
- * @param inbattle
+ * Sets an alien base's battlescape status.
+ * @param inbattle - true if this base is in battle
  */
 void AlienBase::setInBattlescape(bool inbattle)
 {
@@ -181,8 +181,8 @@ void AlienBase::setInBattlescape(bool inbattle)
 }
 
 /**
- * Gets the alien base's battlescape status.
- * @return bool
+ * Gets an alien base's geoscape status.
+ * @return, true if this base has been discovered
  */
 bool AlienBase::isDiscovered() const
 {
@@ -190,8 +190,8 @@ bool AlienBase::isDiscovered() const
 }
 
 /**
- * Sets the alien base's discovered status.
- * @param discovered
+ * Sets an alien base's discovered status.
+ * @param discovered - true if this base has been discovered
  */
 void AlienBase::setDiscovered(bool discovered)
 {

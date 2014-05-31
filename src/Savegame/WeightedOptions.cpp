@@ -127,9 +127,9 @@ void WeightedOptions::set(
 }
 
 /**
- * Add the weighted options from a YAML::Node to a WeightedOptions.
+ * Adds the weighted options from a YAML::Node to a WeightedOptions.
  * The weight option list is not replaced, only values in @a nd will be added / changed.
- * @param nd, The YAML node (containing a map) with the new values.
+ * @param nd - a YAML node (containing a map) with the new values
  */
 void WeightedOptions::load(const YAML::Node& nd)
 {
@@ -146,8 +146,8 @@ void WeightedOptions::load(const YAML::Node& nd)
 }
 
 /**
- * Send the WeightedOption contents to a YAML::Emitter.
- * @param out, The YAML emitter.
+ * Sends the WeightedOption contents to a YAML::Emitter.
+ * @return, YAML node
  */
 YAML::Node WeightedOptions::save() const
 {

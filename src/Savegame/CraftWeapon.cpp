@@ -78,8 +78,8 @@ YAML::Node CraftWeapon::save() const
 }
 
 /**
- * Returns the ruleset for the craft weapon's type.
- * @return Pointer to ruleset.
+ * Gets the ruleset for a craft weapon's type.
+ * @return, pointer to the ruleset
  */
 RuleCraftWeapon* CraftWeapon::getRules() const
 {
@@ -87,8 +87,8 @@ RuleCraftWeapon* CraftWeapon::getRules() const
 }
 
 /**
- * Returns the ammo contained in this craft weapon.
- * @return, Weapon ammo
+ * Gets the amount of ammo contained in this craft weapon.
+ * @return, amount of ammo
  */
 int CraftWeapon::getAmmo() const
 {
@@ -96,10 +96,10 @@ int CraftWeapon::getAmmo() const
 }
 
 /**
- * Changes the ammo contained in this craft weapon.
+ * Sets the amount of ammo contained in this craft weapon.
  * Also maintains min/max levels.
- * @param ammo, Weapon ammo
- * @return bool, True if there was enough ammo to fire.
+ * @param ammo - amount of ammo
+ * @return, true if there was enough ammo to fire a round off
  */
 bool CraftWeapon::setAmmo(int ammo)
 {
@@ -120,8 +120,8 @@ bool CraftWeapon::setAmmo(int ammo)
 }
 
 /**
- * Returns whether this craft weapon needs rearming.
- * @return, Rearming status
+ * Gets whether this craft weapon needs rearming.
+ * @return, rearming status
  */
 bool CraftWeapon::isRearming() const
 {
@@ -129,9 +129,9 @@ bool CraftWeapon::isRearming() const
 }
 
 /**
- * Changes whether this craft weapon needs rearming
+ * Sets whether this craft weapon needs rearming
  * (for example, in case there's no more ammo).
- * @param rearming, Rearming status
+ * @param rearming - rearming status
  */
 void CraftWeapon::setRearming(bool rearming)
 {

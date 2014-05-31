@@ -75,8 +75,9 @@ Text::~Text()
 
 /**
  * Takes an integer value and formats it as number with separators (spacing the thousands).
- * @param value, The value.
- * @return, The formatted string.
+ * @param value		- a value
+ * @param currency	- currency symbol
+ * @return, formatted string
  */
 std::wstring Text::formatNumber(
 		int value,

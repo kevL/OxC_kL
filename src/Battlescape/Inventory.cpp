@@ -62,7 +62,7 @@ namespace OpenXcom
  * @param height, Height in pixels.
  * @param x, X position in pixels.
  * @param y, Y position in pixels.
- * @param base, True if being accessed from the CraftEquip screen.
+ * @param base, True if inventory is accessed from Basescape's CraftEquip screen.
  */
 Inventory::Inventory(
 		Game* game,
@@ -455,8 +455,9 @@ void Inventory::moveItem(
 /**
  * Checks if an item in a certain slot position would
  * overlap with any other inventory item.
+ * @param unit Pointer to current unit.
  * @param item Pointer to battle item.
- * @param slot Inventory slot, or NULL if none.
+ * @param slot Pointer to inventory slot, or NULL if none.
  * @param x X position in slot.
  * @param y Y position in slot.
  * @return If there's overlap.

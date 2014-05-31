@@ -52,10 +52,10 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a craft of the specified type and assigns it the latest craft ID available.
- * @param rules Pointer to ruleset.
- * @param base Pointer to base of origin.
- * @param ids List of craft IDs (Leave NULL for no ID).
+ * Creates a craft of the specified type and assigns it the latest craft ID available.
+ * @param rules	- pointer to ruleset
+ * @param base	- pointer to base of origin
+ * @param id	- ID to assign to the craft ( NULL for no id ).
  */
 Craft::Craft(
 		RuleCraft* rules,
@@ -118,9 +118,10 @@ Craft::~Craft()
 }
 
 /**
- * Loads the craft from a YAML file.
- * @param node YAML node.
- * @param rule Ruleset for the saved game.
+ * Loads a craft from a YAML file.
+ * @param node - YAML node
+ * @param rule - ruleset for the saved game
+ * @param save - pointer to the saved game
  */
 void Craft::load(
 		const YAML::Node& node,
@@ -356,9 +357,9 @@ RuleCraft* Craft::getRules() const
 }
 
 /**
- * Changes the ruleset for the craft's type.
- * @return Pointer to ruleset.
- * @note NOT TO BE USED IN NORMAL CIRCUMSTANCES.
+ * Changes the ruleset for a craft's type.
+ * @param rules - pointer to a different ruleset
+ * @warning NOT TO BE USED IN NORMAL CIRCUMSTANCES
  */
 void Craft::setRules(RuleCraft* rules)
 {
@@ -375,8 +376,8 @@ void Craft::setRules(RuleCraft* rules)
 }
 
 /**
- * Returns the craft's unique ID. Each craft can be identified by its type and ID.
- * @return Unique ID.
+ * Gets a craft's unique ID. Each craft can be identified by its type and ID.
+ * @return, Unique ID
  */
 int Craft::getId() const
 {
@@ -384,10 +385,10 @@ int Craft::getId() const
 }
 
 /**
- * Returns the craft's unique identifying name.
+ * Gets a craft's unique identifying name.
  * If there's no custom name, the language default is used.
- * @param lang Language to get strings from.
- * @return Full name.
+ * @param lang - pointer to a language to get strings from
+ * @return, full name of craft
  */
 std::wstring Craft::getName(Language* lang) const
 {
@@ -398,8 +399,8 @@ std::wstring Craft::getName(Language* lang) const
 }
 
 /**
- * Changes the craft's custom name.
- * @param newName New custom name. If set to blank, the language default is used.
+ * Sets a craft's custom name.
+ * @param newName - new custom name; if blank, the language default is used
  */
 void Craft::setName(const std::wstring& newName)
 {
@@ -747,7 +748,8 @@ int Craft::getFuelLimit() const
 
 /**
  * Returns the minimum required fuel for the craft to go to a base.
- * @return Fuel amount.
+ * @param base - pointer to a target base
+ * @return, fuel amount
  */
 int Craft::getFuelLimit(Base* base) const
 {
@@ -869,7 +871,8 @@ void Craft::repair()
 /**
  * Rearms the craft's weapons by adding ammo every hour
  * while it's docked at the base. kL_note: now every half-hour.
- * @return, The ammo ID missing for rearming, or "" if none.
+ * @param rules - pointer to a ruleset
+ * @return, the ammo ID missing for rearming, or "" if none
  */
 std::string Craft::rearm(Ruleset* rules)
 {
@@ -1047,6 +1050,7 @@ void Craft::setInDogfight(bool inDogfight)
 
 /**
  * Sets interception order (first craft to leave the base gets 1, second 2, etc.).
+ * @param order - interception order
  */
 void Craft::setInterceptionOrder(const int order)
 {
@@ -1055,6 +1059,7 @@ void Craft::setInterceptionOrder(const int order)
 
 /**
  * Gets interception order.
+ * @return, interception order
  */
 int Craft::getInterceptionOrder() const
 {

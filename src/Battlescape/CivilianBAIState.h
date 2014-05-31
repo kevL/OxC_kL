@@ -67,7 +67,7 @@ private:
 		public:
 			/// Creates a new BattleAIState linked to the game and a certain unit.
 			CivilianBAIState(
-					SavedBattleGame* game,
+					SavedBattleGame* save,
 					BattleUnit* unit,
 					Node* node);
 			/// Cleans up the BattleAIState.

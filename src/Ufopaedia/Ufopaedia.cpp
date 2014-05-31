@@ -32,15 +32,11 @@
 #include "UfopaediaStartState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Language.h"
 
 #include "../Ruleset/ArticleDefinition.h"
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/SavedGame.h"
-
-// these are for runStandalone...
-#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
@@ -51,30 +47,33 @@ int Ufopaedia::_current_index = 0; // kL
 
 /**
  * Checks if an article has already been released.
- * @param game Pointer to actual game.
+ * @param save Pointer to saved game.
  * @param article Article definition to release.
  * @returns true, if the article is available.
  */
 bool Ufopaedia::isArticleAvailable(
-		Game* game,
+		SavedGame *save,
 		ArticleDefinition* article)
 {
-	return game->getSavedGame()->isResearched(article->requires);
+	return save->isResearched(article->requires);
 }
 
 /**
  * Gets the index of the selected article_id in the visible list.
  * If the id is not found, returns -1.
+ * @param save Pointer to saved game.
+ * @param rule Pointer to ruleset.
  * @param article_id Article id to find.
  * @returns Index of the given article id in the internal list, -1 if not found.
  */
 //kL size_t Ufopaedia::getArticleIndex(Game *game, std::string &article_id)
-int Ufopaedia::getArticleIndex(
-		Game* game,
-		std::string& article_id) // kL
+int Ufopaedia::getArticleIndex( // kL
+		SavedGame* save,
+		Ruleset* rule,
+		std::string& article_id)
 {
 	std::string UC_ID = article_id + "_UC";
-	ArticleDefinitionList articles = getAvailableArticles(game);
+	ArticleDefinitionList articles = getAvailableArticles(save, rule);
 
 	for (size_t
 			it = 0;
@@ -118,7 +117,7 @@ ArticleState* Ufopaedia::createArticleState(
 		Game* game,
 		ArticleDefinition* article)
 {
-	switch(article->getType())
+	switch (article->getType())
 	{
 		case UFOPAEDIA_TYPE_CRAFT:
 			return new ArticleStateCraft(
@@ -182,7 +181,10 @@ void Ufopaedia::openArticle(
 		Game* game,
 		ArticleDefinition* article)
 {
-	_current_index = getArticleIndex(game, article->id);
+	_current_index = getArticleIndex(
+								game->getSavedGame(),
+								game->getRuleset(),
+								article->id);
 //kL	if (_current_index != (size_t)-1)
 	if (_current_index != -1) // kL
 		game->pushState(createArticleState(game, article));
@@ -198,7 +200,10 @@ void Ufopaedia::openArticle(
 		Game* game,
 		std::string& article_id)
 {
-	_current_index = getArticleIndex(game, article_id);
+	_current_index = getArticleIndex(
+								game->getSavedGame(),
+								game->getRuleset(),
+								article_id);
 //kL	if (_current_index != (size_t) -1)
 	if (_current_index != -1) // kL
 	{
@@ -222,7 +227,9 @@ void Ufopaedia::open(Game* game)
  */
 void Ufopaedia::next(Game* game)
 {
-	ArticleDefinitionList articles = getAvailableArticles(game);
+	ArticleDefinitionList articles = getAvailableArticles(
+														game->getSavedGame(),
+														game->getRuleset());
 //kL	if (_current_index >= articles.size() - 1)
 	if (_current_index >= static_cast<int>(articles.size()) - 1) // kL
 		_current_index = 0; // goto first
@@ -241,7 +248,9 @@ void Ufopaedia::next(Game* game)
  */
 void Ufopaedia::prev(Game* game)
 {
-	ArticleDefinitionList articles = getAvailableArticles(game);
+	ArticleDefinitionList articles = getAvailableArticles(
+														game->getSavedGame(),
+														game->getRuleset());
 	if (_current_index == 0)
 //kL		_current_index = articles.size() - 1; // goto last
 		_current_index = static_cast<int>(articles.size()) - 1; // kL
@@ -256,16 +265,18 @@ void Ufopaedia::prev(Game* game)
 
 /**
  * Fill an ArticleList with the currently visible ArticleIds of the given section.
- * @param game Pointer to actual game.
+ * @param save Pointer to saved game.
+ * @param rule Pointer to ruleset.
  * @param section Article section to find, e.g. "XCOM Crafts & Armaments", "Alien Lifeforms", etc.
  * @param data Article definition list object to fill data in.
  */
 void Ufopaedia::list(
-		Game* game,
+		SavedGame* save,
+		Ruleset* rule,
 		const std::string& section,
 		ArticleDefinitionList& data)
 {
-	ArticleDefinitionList articles = getAvailableArticles(game);
+	ArticleDefinitionList articles = getAvailableArticles(save, rule);
 	for (ArticleDefinitionList::iterator
 			it = articles.begin();
 			it != articles.end();
@@ -278,11 +289,15 @@ void Ufopaedia::list(
 
 /**
  * Return an ArticleList with all the currently visible ArticleIds.
- * @param game Pointer to actual game.
+ * @param save Pointer to saved game.
+ * @param rule Pointer to ruleset.
+ * @return List of visible ArticleDefinitions.
  */
-ArticleDefinitionList Ufopaedia::getAvailableArticles(Game* game)
+ArticleDefinitionList Ufopaedia::getAvailableArticles(
+													SavedGame* save,
+													Ruleset* rule)
 {
-	const std::vector<std::string>& list = game->getRuleset()->getUfopaediaList();
+	const std::vector<std::string>& list = rule->getUfopaediaList();
 	ArticleDefinitionList articles;
 
 	for (std::vector<std::string>::const_iterator
@@ -290,8 +305,8 @@ ArticleDefinitionList Ufopaedia::getAvailableArticles(Game* game)
 			it != list.end();
 			++it)
 	{
-		ArticleDefinition* article = game->getRuleset()->getUfopaediaArticle(*it);
-		if (isArticleAvailable(game, article)
+		ArticleDefinition* article = rule->getUfopaediaArticle(*it);
+		if (isArticleAvailable(save, article)
 			&& article->section != UFOPAEDIA_NOT_AVAILABLE)
 		{
 			articles.push_back(article);
@@ -300,34 +315,5 @@ ArticleDefinitionList Ufopaedia::getAvailableArticles(Game* game)
 
 	return articles;
 }
-
-/**
- * Build a string from a string template. A template can be a concatenation of string ids,
- * f.i. "STR_SECTOID + STR_AUTOPSY". Maybe must add constant for whitespace also.
- * @param game Pointer to actual game.
- * @param str_template String containing the text constants
- * @returns The string built using the text constant(s).
- */
-std::wstring Ufopaedia::buildText(
-		Game* game,
-		std::string& str_template)
-{
-	// TODO: actually parse the template string.
-	return game->getLanguage()->getString(str_template);
-}
-
-/**
- * Open Ufopaedia to test it without starting a whole game.
- * @param game Pointer to actual game.
- */
-/*kL void Ufopaedia::runStandalone(Game* game)
-{
-	game->loadLanguage("English"); // set game language
-
-	game->loadRuleset(); // init game
-	game->setSavedGame(game->getRuleset()->newSave());
-
-	open(game); // open Ufopaedia
-} */
 
 }

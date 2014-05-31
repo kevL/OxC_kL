@@ -26,8 +26,6 @@ namespace OpenXcom
 /**
  * Creates a certain type of unit.
  * @param type String defining the type.
- * @param race String defining the race.
- * @param rank String defining the rank.
  */
 Unit::Unit(const std::string& type)
 	:
@@ -64,6 +62,7 @@ Unit::~Unit()
 
 /**
  * Loads the unit from a YAML file.
+ * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
  * @param node YAML node.
  */
 void Unit::load(

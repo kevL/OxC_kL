@@ -84,6 +84,7 @@ RuleRegion* Region::getRules() const
 
 /**
  * Adds to the region's xcom activity level.
+ * @param activity - amount to add
  */
 void Region::addActivityXcom(int activity)
 {
@@ -92,6 +93,7 @@ void Region::addActivityXcom(int activity)
 
 /**
  * Adds to the region's alien activity level.
+ * @param activity - amount to add
  */
 void Region::addActivityAlien(int activity)
 {

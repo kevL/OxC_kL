@@ -1290,6 +1290,7 @@ void SavedBattleGame::resetUnitTiles()
 
 /**
  * Gives access to the "storage space" vector, for distribution of items in base defense missions.
+ * @return, reference to a vector of storage positions
  */
 std::vector<Position>& SavedBattleGame::getStorageSpace()
 {
@@ -1505,9 +1506,10 @@ Node* SavedBattleGame::getSpawnNode(
 
 /**
  * Finds a fitting node where a unit can patrol to.
- * @param nodeRank Rank of the node (this is not the rank of the alien!).
- * @param unit Pointer to the unit (to get its position).
- * @return Pointer to the choosen node.
+ * @param scout		- true if the unit is scouting
+ * @param unit		- pointer to a unit, to get its position
+ * @param fromNode	- pointer to the node the unit is currently at
+ * @return, pointer to the chosen node
  */
 Node* SavedBattleGame::getPatrolNode(
 		bool scout,
@@ -2054,8 +2056,9 @@ bool SavedBattleGame::placeUnitNearPosition(
 } */
 
 /**
- * Adds this unit to the vector of falling units.
- * @param unit The unit.
+ * Adds this unit to the vector of falling units, if it doesn't already exist there.
+ * @param unit - the unit to add
+ * @return, true if the unit was added
  */
 bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
@@ -2069,6 +2072,8 @@ bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 	{
 		if (unit == *i)
 			add = false;
+
+			break;
 	}
 
 	if (add)
@@ -2371,11 +2376,11 @@ void SavedBattleGame::setKneelReserved(bool reserved)
 }
 
 /**
- * Return a reference to the base module destruction map
- * this map contains information on how many destructible base modules
+ * Gets a reference to the base module destruction map.
+ * This map contains information on how many destructible base modules
  * remain at any given grid reference in the basescape, using [x][y] format.
  * -1 for "no items" 0 for "destroyed" and any actual number represents how many left.
- * @Return the base module damage map.
+ * @return, reference to a vector of vectors containing pairs that make up base module damage maps
  */
 std::vector<std::vector<std::pair<int, int> > >& SavedBattleGame::getModuleMap()
 {
@@ -2383,17 +2388,17 @@ std::vector<std::vector<std::pair<int, int> > >& SavedBattleGame::getModuleMap()
 }
 
 /**
- * Calculate the number of map modules remaining by counting the map objects
+ * Calculates the number of map modules remaining by counting the map objects
  * on the top floor who have the baseModule flag set. We store this data in the grid
  * as outlined in the comments above, in pairs representing intial and current values.
  */
 void SavedBattleGame::calculateModuleMap()
 {
 	_baseModules.resize(
-				_mapsize_x / 10,
-				std::vector<std::pair<int, int> >(
-											_mapsize_y / 10,
-											std::make_pair(-1, -1)));
+					_mapsize_x / 10,
+					std::vector<std::pair<int, int> >(
+													_mapsize_y / 10,
+													std::make_pair(-1,-1)));
 
 	for (int
 			x = 0;

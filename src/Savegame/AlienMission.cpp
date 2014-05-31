@@ -875,9 +875,10 @@ const AlienBase* AlienMission::getAlienBase() const
 }
 
 /**
- * Add alien points to the country and region at the coordinates given
- * @param lon, Longitudinal coordinates to check
- * @param lat, Latitudinal coordinates to check
+ * Add alien points to the country and region at the coordinates given.
+ * @param lon		- longitudinal coordinates to check
+ * @param lat		- latitudinal coordinates to check
+ * @param engine	- reference to the game engine, required to get access to game data and game rules
  */
 void AlienMission::addScore(
 		const double lon,

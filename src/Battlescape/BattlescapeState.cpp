@@ -2826,6 +2826,7 @@ void BattlescapeState::clearMouseScrollingState()
 
 /**
  * Returns a pointer to the battlegame, in case we need its functions.
+ * @return, Pointer to BattlescapeGame
  */
 BattlescapeGame* BattlescapeState::getBattleGame()
 {
@@ -2834,6 +2835,7 @@ BattlescapeGame* BattlescapeState::getBattleGame()
 
 /**
  * Handler for the mouse moving over the icons, disabling the tile selection cube.
+ * @param action Pointer to an action.
  */
 void BattlescapeState::mouseInIcons(Action*)
 {
@@ -2842,6 +2844,7 @@ void BattlescapeState::mouseInIcons(Action*)
 
 /**
  * Handler for the mouse going out of the icons, enabling the tile selection cube.
+ * @param action Pointer to an action.
  */
 void BattlescapeState::mouseOutIcons(Action*)
 {
@@ -2850,7 +2853,7 @@ void BattlescapeState::mouseOutIcons(Action*)
 
 /**
  * Checks if the mouse is over the icons.
- * @return True, if the mouse is over the icons.
+ * @return, True if the mouse is over the icons.
  */
 bool BattlescapeState::getMouseOverIcons() const
 {
@@ -2864,6 +2867,7 @@ bool BattlescapeState::getMouseOverIcons() const
  * The save button is an exception as we want to still be able to save if something
  * goes wrong during the alien turn, and submit the save file for dissection.
  * @param allowSaving, True if the help button was clicked.
+ * @return, True if the player can still press buttons.
  */
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {

@@ -384,6 +384,7 @@ int Screen::getHeight() const
 /**
  * Resets the screen surfaces based on the current display options,
  * as they don't automatically take effect.
+ * @param resetVideo - True to reset display surface.
  */
 void Screen::resetDisplay(bool resetVideo)
 {
@@ -646,8 +647,10 @@ void Screen::screenshot(const std::string& filename) const
 }
 
 
-/** Check whether useHQXFilter is set in Options
+/** 
+ * Check whether useHQXFilter is set in Options
  * and a compatible resolution has been selected.
+ * @return, True if HQXFilter is enabled
  */
 bool Screen::isHQXEnabled()
 {
@@ -671,8 +674,8 @@ bool Screen::isHQXEnabled()
 }
 
 /**
- * Check if openGl is enabled.
- * @return if it is enabled.
+ * Check if OpenGL is enabled.
+ * @return, True if if OpenGL is enabled
  */
 bool Screen::isOpenGLEnabled()
 {
@@ -685,7 +688,7 @@ bool Screen::isOpenGLEnabled()
 
 /**
  * Gets the Horizontal offset from the mid-point of the screen, in pixels.
- * @return the horizontal offset.
+ * @return, The horizontal offset
  */
 int Screen::getDX()
 {
@@ -694,7 +697,7 @@ int Screen::getDX()
 
 /**
  * Gets the Vertical offset from the mid-point of the screen, in pixels.
- * @return the vertical offset.
+ * @return, The vertical offset.
  */
 int Screen::getDY()
 {
@@ -703,11 +706,11 @@ int Screen::getDY()
 
 /**
 * Changes a given scale, and if necessary, switch the current base resolution.
-* @param type reference to which scale option we are using, battlescape or geoscape.
-* @param selection the new scale level.
-* @param width reference to which x scale to adjust.
-* @param height reference to which y scale to adjust.
-* @param change should we change the current scale.
+* @param type		- reference to which scale option we are using, battlescape or geoscape
+* @param selection	- the new scale level
+* @param width		- reference to which x scale to adjust.
+* @param height		- reference to which y scale to adjust.
+* @param change		- true to change the current scale.
 */
 void Screen::updateScale(
 		int& type,

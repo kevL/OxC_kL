@@ -236,8 +236,9 @@ SavedGame::~SavedGame()
 
 /**
  * Gets all the info of the saves found in the user folder.
- * @param lang Loaded language.
- * @param autoquick Include autosaves and quicksaves.
+ * @param lang		- pointer to a loaded language
+ * @param autoquick	- true to include autosaves and quicksaves
+ * @return, vector of saves info
  */
 std::vector<SaveInfo> SavedGame::getList(
 		Language* lang,
@@ -786,8 +787,8 @@ void SavedGame::save(const std::string& filename) const
 }
 
 /**
- * Returns the game's name shown in Save screens.
- * @return Difficulty level.
+ * Gets the game's name shown in Save screens.
+ * @return, save name
  */
 std::wstring SavedGame::getName() const
 {
@@ -795,8 +796,8 @@ std::wstring SavedGame::getName() const
 }
 
 /**
- * Changes the game's name shown in Save screens.
- * @param difficulty New difficulty.
+ * Sets the game's name shown in Save screens.
+ * @param name - reference to the new save name
  */
 void SavedGame::setName(const std::wstring& name)
 {
@@ -804,8 +805,8 @@ void SavedGame::setName(const std::wstring& name)
 }
 
 /**
- * Returns the game's difficulty level.
- * @return Difficulty level.
+ * Gets the game's difficulty setting.
+ * @return, difficulty level
  */
 GameDifficulty SavedGame::getDifficulty() const
 {
@@ -813,8 +814,8 @@ GameDifficulty SavedGame::getDifficulty() const
 }
 
 /**
- * Changes the game's difficulty to a new level.
- * @param difficulty New difficulty.
+ * Sets the game's difficulty to a new level.
+ * @param difficulty - new difficulty setting
  */
 void SavedGame::setDifficulty(GameDifficulty difficulty)
 {
@@ -1167,8 +1168,9 @@ void SavedGame::setBattleGame(SavedBattleGame* battleGame)
 }
 
 /**
- * Add a ResearchProject to the list of already discovered ResearchProject
- * @param r The newly found ResearchProject
+ * Adds a ResearchProject to the list of already discovered ResearchProjects.
+ * @param r			- the newly found ResearchProject
+ * @param ruleset	- the game Ruleset
  */
 void SavedGame::addFinishedResearch(
 		const RuleResearch* r,
@@ -1233,8 +1235,8 @@ void SavedGame::addFinishedResearch(
 }
 
 /**
- * Returns the list of already discovered ResearchProject
- * @return, the list of already discovered ResearchProject
+ * Gets the list of already discovered ResearchProjects.
+ * @return, the list of already discovered ResearchProjects
  */
 const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
 {
@@ -1242,10 +1244,10 @@ const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
 }
 
 /**
- * Get the list of RuleResearch which can be researched in a Base.
- * @param projects the list of ResearchProject which are available.
- * @param ruleset the Game Ruleset
- * @param base a pointer to a Base
+ * Gets the list of RuleResearch which can be researched in a Base.
+ * @param projects	- reference to a vector of pointers to the ResearchProjects that are available
+ * @param ruleset	- pointer to the game Ruleset
+ * @param base		- pointer to a Base
  */
 void SavedGame::getAvailableResearchProjects(
 		std::vector<RuleResearch*>& projects,
@@ -1430,10 +1432,11 @@ void SavedGame::getAvailableProductions(
 }
 
 /**
- * Check whether a ResearchProject can be researched.
- * @param r the RuleResearch to test.
- * @param unlocked the list of currently unlocked RuleResearch
- * @return true if the RuleResearch can be researched
+ * Checks whether a ResearchProject can be researched.
+ * @param r			- pointer to a RuleResearch to test
+ * @param unlocked	- reference to a vector of pointers to the currently unlocked RuleResearch
+ * @param ruleset	- pointer to the current Ruleset
+ * @return, true if the RuleResearch can be researched
  */
 bool SavedGame::isResearchAvailable(
 		RuleResearch* r,
@@ -1528,12 +1531,12 @@ bool SavedGame::isResearchAvailable(
 }
 
 /**
- * Get the list of newly available research projects once a ResearchProject
- * has been completed. This function checks for fake ResearchProject.
- * @param dependables the list of RuleResearch which are now available.
- * @param research The RuleResearch which has just been discovered
- * @param ruleset the Game Ruleset
- * @param base a pointer to a Base
+ * Gets a list of newly available research projects once a ResearchProject
+ * has been completed. This function checks for fake ResearchProjects.
+ * @param dependables	- reference to a vector of pointers to the RuleResearches that are now available
+ * @param research		- pointer to the RuleResearch that has just been discovered
+ * @param ruleset		- pointer to the game Ruleset
+ * @param base			- pointer to a Base
  */
 void SavedGame::getDependableResearch(
 		std::vector<RuleResearch*>& dependables,
@@ -1571,12 +1574,12 @@ void SavedGame::getDependableResearch(
 }
 
 /**
- * Get the list of newly available research projects once a ResearchProject
- * has been completed. This function doesn't check for fake ResearchProject.
- * @param dependables the list of RuleResearch which are now available.
- * @param research The RuleResearch which has just been discovered
- * @param ruleset the Game Ruleset
- * @param base a pointer to a Base
+ * Gets the list of newly available research projects once a ResearchProject
+ * has been completed. This function doesn't check for fake ResearchProjects.
+ * @param dependables	- reference to a vector of pointers to the RuleResearches that are now available
+ * @param research		- pointer to the RuleResearch that has just been discovered
+ * @param ruleset		- pointer to the game Ruleset
+ * @param base			- pointer to a Base
  */
 void SavedGame::getDependableResearchBasic(
 		std::vector<RuleResearch*>& dependables,
@@ -1619,12 +1622,12 @@ void SavedGame::getDependableResearchBasic(
 }
 
 /**
- * Get the list of newly available manufacture projects once a ResearchProject
- * has been completed. This function checks for fake ResearchProject.
- * @param dependables the list of RuleManufacture which are now available.
- * @param research The RuleResearch which has just been discovered
- * @param ruleset the Game Ruleset
- * @param base a pointer to a Base
+ * Gets the list of newly available manufacture projects once a ResearchProject
+ * has been completed. This function checks for fake ResearchProjects.
+ * @param dependables	- reference to a vector of pointers to the RuleResearches that are now available
+ * @param research		- pointer to the RuleResearch that has just been discovered
+ * @param ruleset		- pointer to the game Ruleset
+ * @param base			- pointer to a Base
  */
 void SavedGame::getDependableManufacture(
 		std::vector<RuleManufacture*>& dependables,
@@ -1863,9 +1866,9 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 
 /**
  * Checks how many soldiers of a rank exist and which one has the highest score.
- * @param Pointer to an int to store the total in.
- * @param Rank to inspect.
- * @return The highest scoring soldier of that rank.
+ * @param highestRanked - pointer to a pointer to store the highest-scoring soldier of that rank in
+ * @param total			- pointer to store the total in
+ * @param rank			- rank to inspect
  */
 void SavedGame::inspectSoldiers(
 		Soldier** highestRanked,
@@ -2269,7 +2272,7 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
 
 /**
  * Returns the last selected player base.
- * @return, Pointer to base.
+ * @return, pointer to base
  */
 /*kL Base* SavedGame::getSelectedBase()
 {
@@ -2282,7 +2285,7 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
 
 /**
  * Sets the last selected player base.
- * @param base, # of the base.
+ * @param base - # of the base
  */
 /*kL void SavedGame::setSelectedBase(int base)
 {

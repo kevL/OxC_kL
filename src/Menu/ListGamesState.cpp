@@ -266,7 +266,8 @@ void ListGamesState::updateArrows()
 }
 
 /**
- * Updates the save game list with the current list of available savegames.
+ * Sorts the save game list.
+ * @param sort - order to sort the games in
  */
 void ListGamesState::sortList(SaveSort sort)
 {

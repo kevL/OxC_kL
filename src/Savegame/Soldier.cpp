@@ -269,8 +269,10 @@ int Soldier::getId() const
 }
 
 /**
- * Returns the soldier's full name (and, optionally, statString).
- * @return, Soldier name.
+ * Gets the soldier's full name (and, optionally, statString).
+ * @param statstring	- true to add stat string
+ * @param maxLength		- restrict length to this value
+ * @return, soldier name
  */
 std::wstring Soldier::getName(
 		bool statstring,
@@ -506,7 +508,7 @@ std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
 }
 
 /**
- * Trains a soldier's Psychic abilities
+ * Trains a soldier's Psychic abilities after 1 month.
  * kL_note: called from GeoscapeState, per 1month
  * kL_note: I don't use this, btw.
  */
@@ -562,7 +564,7 @@ void Soldier::trainPsi()
 }
 
 /**
- * Trains a soldier's Psychic abilities ('anytimePsiTraining' option)
+ * Trains a soldier's Psychic abilities ('anytimePsiTraining' option) after 1 day.
  * kL_note: called from GeoscapeState, per 1day. Re-write done.
  */
 void Soldier::trainPsi1Day()
@@ -608,7 +610,8 @@ void Soldier::trainPsi1Day()
 }
 
 /**
- * returns whether or not the unit is in psi training
+ * Gets whether or not a soldier is in psi training.
+ * @return, true if training
  */
 bool Soldier::isInPsiTraining()
 {
@@ -616,7 +619,7 @@ bool Soldier::isInPsiTraining()
 }
 
 /**
- * changes whether or not the unit is in psi training
+ * Toggles whether or not a soldier is in psi training.
  */
 void Soldier::setPsiTraining()
 {
@@ -624,7 +627,8 @@ void Soldier::setPsiTraining()
 }
 
 /**
- * returns this soldier's psionic improvement score for this month.
+ * Gets this soldier's psionic improvement score during the current month.
+ * @return, psi-skill improvement
  */
 int Soldier::getImprovement()
 {
@@ -693,7 +697,9 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 }
 
 /**
- * Calculates the soldier's statString
+ * Calculates a soldier's statString.
+ * @param statStrings		- reference to a vector of pointers to statString rules
+ * @param psiStrengthEval	- true if psi stats are available
  */
 void Soldier::calcStatString(
 		const std::vector<StatString*>& statStrings,

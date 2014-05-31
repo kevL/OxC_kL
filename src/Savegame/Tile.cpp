@@ -145,7 +145,8 @@ void Tile::load(const YAML::Node& node)
 
 /**
  * Load the tile from binary.
- * @param buffer pointer to buffer.
+ * @param buffer - pointer to buffer
+ * @param serKey - serialization key
  */
 void Tile::loadBinary(
 		Uint8* buffer,
@@ -252,10 +253,11 @@ void Tile::saveBinary(Uint8** buffer) const
 }
 
 /**
- * Set the MapData references of part 0 to 3.
- * @param dat pointer to the data object
- * @param newObjectID The ID in the total list of the objects of this battlegame.
- * @param part the part number
+ * Sets the MapData references of parts 0 to 3.
+ * @param dat			- pointer to the data object
+ * @param mapDataID		- mapDataID
+ * @param mapDataSetID	- mapDataSetID
+ * @param part			- the part number
  */
 void Tile::setMapData(
 		MapData* dat,
@@ -269,9 +271,11 @@ void Tile::setMapData(
 }
 
 /**
- * get the MapData references of part 0 to 3.
- * @param part the part number
- * @return the object ID
+ * Gets the MapData references of parts 0 to 3.
+ * @param mapDataID		- pointer to mapDataID
+ * @param mapDataSetID	- pointer to mapDataSetID
+ * @param part			- the part number
+ * @return, the object ID
  */
 void Tile::getMapData(
 		int* mapDataID,
@@ -324,8 +328,9 @@ int Tile::getTUCost(
 }
 
 /**
- * Whether this tile has a floor or not. If no object defined as floor, it has no floor.
- * @return bool
+ * Gets whether this tile has a floor or not. If no object defined as floor, it has no floor.
+ * @param tileBelow - the tile below this tile
+ * @return, true if tile has no floor
  */
 bool Tile::hasNoFloor(Tile* tileBelow) const
 {
@@ -342,8 +347,8 @@ bool Tile::hasNoFloor(Tile* tileBelow) const
 }
 
 /**
- * Whether this tile has a big wall.
- * @return bool
+ * Gets whether this tile has a bigwall.
+ * @return, true if the content-object in this tile has a bigwall ( see Big Wall enum )
  */
 bool Tile::isBigWall() const
 {
@@ -371,8 +376,9 @@ int Tile::getTerrainLevel() const
 }
 
 /**
- * Gets the tile's footstep sound.
- * @return sound ID
+ * Gets a tile's footstep sound.
+ * @param tileBelow - pointer to the tile below this tile
+ * @return, sound ID
  */
 int Tile::getFootstepSound(Tile* tileBelow) const
 {
@@ -400,7 +406,9 @@ int Tile::getFootstepSound(Tile* tileBelow) const
 
 /**
  * Open a door on this tile.
- * @param wall A tile part
+ * @param wall		- a tile part
+ * @param unit		- pointer to a unit
+ * @param reserve	- see BA_* enum for TU reserves
  * @return, Value: -1 no door opened
  *					0 normal door
  *					1 ufo door
@@ -646,8 +654,10 @@ bool Tile::destroy(int part)
 }
 
 /**
- * damage terrain  - check against terrain-part armor
- * @return, True if objective was destroyed
+ * Damages terrain ( check against terrain-part armor/hitpoints/constitution )
+ * @param part	- part of tile to check
+ * @param power	- power of the damage
+ * @return, true if an objective was destroyed
  */
 bool Tile::damage(
 		int part,
@@ -667,9 +677,10 @@ bool Tile::damage(
 }
 
 /**
- * Set a "virtual" explosive on this tile. We mark a tile this way to detonate it later.
- * We do it this way, because the same tile can be visited multiple times by an "explosion ray".
- * The explosive power on the tile is some kind of moving MAXIMUM of the explosive rays that pass it.
+ * Sets a "virtual" explosive on this tile. We mark a tile this way to
+ * detonate it later, because the same tile can be visited multiple times
+ * by "explosion rays". The explosive power that gets set on a tile is
+ * that of the most powerful ray that passes through it -- see TileEngine::explode().
  * @param power
  */
 void Tile::setExplosive(
@@ -684,8 +695,10 @@ void Tile::setExplosive(
 }
 
 /**
- * Gets if this tile is ready to explode.
- * @return, How big the BOOM will be
+ * Gets if & how powerfully this tile will explode.
+ * Don't confuse this with a tile's inherent explosive power;
+ * this value is set by explosions external to the tile itself.
+ * @return, how big the BOOM will be / how much tile-destruction there will be
  */
 int Tile::getExplosive() const
 {
@@ -726,8 +739,9 @@ int Tile::getFuel() const
 
 /**
  * Ignite starts fire on a tile, it will burn <fuel> rounds.
- * Fuel of a tile is the highest fuel of its objects.
+ * Fuel of a tile is the highest fuel of its objects,
  * NOT the sum of the fuel of the objects!
+ * @param power - i think this is <fuel> rounds ...
  */
 void Tile::ignite(int power)
 {
@@ -822,8 +836,9 @@ Surface* Tile::getSprite(int part) const
 }
 
 /**
- * Set a unit on this tile.
- * @param unit
+ * Sets a unit on this tile.
+ * @param unit		- pointer to a unit
+ * @param tileBelow	- pointer to the tile below this tile
  */
 void Tile::setUnit(
 		BattleUnit* unit,
@@ -1044,7 +1059,7 @@ void Tile::prepareNewTurn()
 }
 
 /**
- * Get the inventory on this tile.
+ * Gets the inventory on this tile.
  * @return pointer to a vector of battleitems.
  */
 std::vector<BattleItem*>* Tile::getInventory()
@@ -1053,7 +1068,7 @@ std::vector<BattleItem*>* Tile::getInventory()
 }
 
 /**
- * Set the marker color on this tile.
+ * Sets the marker color on this tile.
  * @param color
  */
 void Tile::setMarkerColor(int color)
@@ -1062,7 +1077,7 @@ void Tile::setMarkerColor(int color)
 }
 
 /**
- * Get the marker color on this tile.
+ * Gets the marker color on this tile.
  * @return color
  */
 int Tile::getMarkerColor()
@@ -1071,7 +1086,8 @@ int Tile::getMarkerColor()
 }
 
 /**
- * Set the tile visible flag.
+ * Sets the tile visible flag.
+ * @param visibility - true if visible
  */
 //kL void Tile::setVisible(int visibility)
 void Tile::setVisible(bool isVis) // kL
@@ -1081,7 +1097,8 @@ void Tile::setVisible(bool isVis) // kL
 }
 
 /**
- * Get the tile visible flag.
+ * Gets the tile visible flag.
+ * @return, true if visible
  */
 //kL int Tile::getVisible()
 bool Tile::getVisible() // kL
@@ -1090,7 +1107,8 @@ bool Tile::getVisible() // kL
 }
 
 /**
- * set the direction used for path previewing.
+ * Sets a direction used for path previewing.
+ * @param dir - a direction
  */
 void Tile::setPreview(int dir)
 {
@@ -1098,7 +1116,8 @@ void Tile::setPreview(int dir)
 }
 
 /**
- * retrieve the direction stored by the pathfinding.
+ * Gets the preview-direction stored by pathfinding.
+ * @return, preview direction
  */
 int Tile::getPreview() const
 {
@@ -1106,7 +1125,8 @@ int Tile::getPreview() const
 }
 
 /**
- * set the number to be displayed for pathfinding preview.
+ * Sets a number to be displayed by pathfinding preview.
+ * @param tu - # of TUs left if/when this tile is reached
  */
 void Tile::setTUMarker(int tu)
 {
@@ -1114,7 +1134,8 @@ void Tile::setTUMarker(int tu)
 }
 
 /**
- * get the number to be displayed for pathfinding preview.
+ * Gets the number to be displayed for pathfinding preview.
+ * @return, # of TUs left if/when this tile is reached
  */
 int Tile::getTUMarker() const
 {
@@ -1122,7 +1143,8 @@ int Tile::getTUMarker() const
 }
 
 /**
- * get the overlap value of this tile.
+ * Gets the overlap value of this tile.
+ * @return, overlap
  */
 int Tile::getOverlaps() const
 {
@@ -1130,7 +1152,7 @@ int Tile::getOverlaps() const
 }
 
 /**
- * increment the overlap value on this tile.
+ * Increments the overlap value on this tile.
  */
 void Tile::addOverlap()
 {
@@ -1138,7 +1160,8 @@ void Tile::addOverlap()
 }
 
 /**
- * set the danger flag on this tile.
+ * Sets the danger flag true on this tile.
+ * kL_note: Is this removed anywhere .....
  */
 void Tile::setDangerous()
 {
@@ -1146,7 +1169,8 @@ void Tile::setDangerous()
 }
 
 /**
- * @return, the danger flag for this tile.
+ * Gets the danger flag on this tile.
+ * @return, true if the tile is considered dangerous to aLiens
  */
 bool Tile::getDangerous()
 {

@@ -137,7 +137,7 @@ void AlienBAIState::load(const YAML::Node& node)
 
 /**
  * Saves the AI state to a YAML file.
- * @param out YAML emitter.
+ * @return YAML node.
  */
 YAML::Node AlienBAIState::save() const
 {
@@ -1746,6 +1746,7 @@ void AlienBAIState::evaluateAIMode()
 /**
  * Find a position where we can see our target, and move there.
  * check the 11x11 grid for a position nearby where we can potentially target him.
+ * @return, True if a possible position was found.
  */
 bool AlienBAIState::findFirePoint()
 {
@@ -1847,10 +1848,11 @@ bool AlienBAIState::findFirePoint()
 
 /**
  * Decides if it's worth our while to create an explosion here.
- * @param targetPos, The target's position.
- * @param attackingUnit, The attacking unit.
- * @param radius, How big the explosion will be.
- * @param diff, Game difficulty.
+ * @param targetPos		- The target's position.
+ * @param attackingUnit	- The attacking unit.
+ * @param radius		- How big the explosion will be.
+ * @param diff			- Game difficulty.
+ * @param grenade		- Is the explosion coming from a grenade?
  * @return, True if it is worthwile creating an explosion in the target position.
  */
 bool AlienBAIState::explosiveEfficacy(
@@ -2092,7 +2094,7 @@ void AlienBAIState::meleeAction()
 
 /**
  * Attempts to fire a waypoint projectile at an enemy that is seen (by any aLien).
- * Waypoint targetting: pick from any units currently spotted by our allies.
+ * Waypoint targeting: pick from any units currently spotted by our allies.
  */
 void AlienBAIState::wayPointAction()
 {
@@ -2224,7 +2226,7 @@ void AlienBAIState::wayPointAction()
 
 /**
  * Attempts to fire at an enemy we can see.
- * Regular targetting: we can see an enemy, we have a gun, let's try to shoot.
+ * Regular targeting: we can see an enemy, we have a gun, let's try to shoot.
  */
 void AlienBAIState::projectileAction()
 {
@@ -2337,7 +2339,6 @@ void AlienBAIState::selectFireMethod()
 
 /**
  * Evaluates whether to throw a grenade at an enemy (or group of enemies) we can see.
- * @param action Pointer to an action.
  */
 void AlienBAIState::grenadeAction()
 {
@@ -2404,7 +2405,7 @@ void AlienBAIState::grenadeAction()
  * Psionic targetting: pick from any of the exposed units.
  * Exposed means they have been previously spotted, and are therefore known to the AI,
  * regardless of whether we can see them or not, because we're psycho.
- * @return bool, True if a psionic attack is performed.
+ * @return, True if a psionic attack is performed.
  */
 bool AlienBAIState::psiAction()
 {

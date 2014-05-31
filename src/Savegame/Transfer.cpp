@@ -67,6 +67,7 @@ Transfer::~Transfer()
  * @param base Destination base.
  * @param rule Game ruleset.
  * @param save Pointer to savegame.
+ * @return Was the transfer content valid?
  */
 bool Transfer::load(
 		const YAML::Node& node,

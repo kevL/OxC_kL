@@ -122,7 +122,8 @@ void UfopaediaSelectState::loadSelectionList()
 {
 	_article_list.clear();
 	Ufopaedia::list(
-				_game,
+				_game->getSavedGame(),
+				_game->getRuleset(),
 				_section,
 				_article_list);
 
@@ -134,9 +135,7 @@ void UfopaediaSelectState::loadSelectionList()
 	{
 		_lstSelection->addRow(
 							1,
-							Ufopaedia::buildText(
-												_game,
-												(*it)->title).c_str());
+							tr((*it)->title).c_str());
 	}
 }
 

@@ -24,8 +24,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a death event.
- * @time, Time when the death occurred.
+ * Creates a death-event-time.
  */
 SoldierDeath::SoldierDeath()
 	:
@@ -34,7 +33,7 @@ SoldierDeath::SoldierDeath()
 }
 
 /**
- * Clean up timer.
+ * dTor.
  */
 SoldierDeath::~SoldierDeath()
 {

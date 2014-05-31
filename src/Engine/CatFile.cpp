@@ -87,8 +87,8 @@ CatFile::~CatFile()
 
 /**
  * Loads an object into memory.
- * @param i Object number to load.
- * @param filename Preserve internal file name.
+ * @param i		- Object number to load.
+ * @param name	- True to preserve internal file name.
  * @return, Pointer to the loaded object.
  */
 char* CatFile::load(

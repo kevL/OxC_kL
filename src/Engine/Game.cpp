@@ -735,8 +735,9 @@ void Game::setMouseActive(bool active)
 }
 
 /**
- * @brief Returns whether current state is *state
- * @param state, The state to test against the stack state
+ * Returns whether current state is *state
+ * @param state - Pointer to a state to test against the stack state
+ * @return, True if *state is the current state
  */
 bool Game::isState(State* state) const
 {
@@ -745,7 +746,8 @@ bool Game::isState(State* state) const
 }
 
 /**
- * @return whether the game is shutting down or not.
+ * Checks if the game is currently quitting.
+ * @return, True if the game is in the process of shutting down.
  */
 bool Game::isQuitting() const
 {
@@ -753,8 +755,7 @@ bool Game::isQuitting() const
 }
 
 /**
- * Loads the most appropriate language
- * given current system and game options.
+ * Loads the most appropriate language given current system and game options.
  */
 void Game::defaultLanguage()
 {

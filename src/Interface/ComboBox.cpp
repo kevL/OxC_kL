@@ -280,7 +280,7 @@ size_t ComboBox::getSelected() const
 
 /**
  * Changes the currently selected option.
- * @return Selected row.
+ * @param sel Selected row.
  */
 void ComboBox::setSelected(size_t sel)
 {
@@ -291,8 +291,9 @@ void ComboBox::setSelected(size_t sel)
 }
 
 /**
- * Sets the size of the dropdown list based on
+ * Updates the size of the dropdown list based on
  * the number of options available.
+ * @param options Number of options.
  */
 void ComboBox::setDropdown(int options)
 {
@@ -413,6 +414,7 @@ void ComboBox::think()
 
 /**
  * Opens/closes the combo box list.
+ * @param first Is it the initialization toggle?
  */
 void ComboBox::toggle(bool first)
 {

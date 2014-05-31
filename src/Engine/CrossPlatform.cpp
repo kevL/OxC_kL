@@ -695,10 +695,11 @@ bool deleteFile(const std::string& path)
 }
 
 /**
-* Gets the base filename of a path.
-* @param path Full path to file.
-* @return Base filename.
-*/
+ * Gets the base filename of a path.
+ * @param path		- Referenct to the full path of file
+ * @param transform	- Optional function to transform the filename.
+ * @return, The base filename.
+ */
 std::string baseFilename(
 		const std::string& path,
 		int (*transform)(int))
@@ -724,10 +725,10 @@ std::string baseFilename(
 }
 
 /**
-* Replaces invalid filesystem characters with _.
-* @param filename Original filename.
-* @return Filename without invalid characters
-*/
+ * Replaces invalid filesystem characters with "_".
+ * @param filename	- Reference to the original filename
+ * @return, The filename without invalid characters
+ */
 std::string sanitizeFilename(const std::string& filename)
 {
 	std::string newFilename = filename;

@@ -68,7 +68,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
-	_txtTitle->setText(Ufopaedia::buildText(_game, defs->title));
+	_txtTitle->setText(tr(defs->title));
 
 
 	int tile_size = 32;
@@ -131,7 +131,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(
 
 	_txtInfo->setColor(Palette::blockOffset(13)+10);
 	_txtInfo->setWordWrap(true);
-	_txtInfo->setText(Ufopaedia::buildText(_game, defs->text));
+	_txtInfo->setText(tr(defs->text));
 
 	_lstInfo = new TextList(200, 42, 10, 42);
 	add(_lstInfo);
