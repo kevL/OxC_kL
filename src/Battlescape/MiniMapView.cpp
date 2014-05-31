@@ -538,8 +538,8 @@ void MiniMapView::mouseOver(Action* action, State* state)
 //		newY = _posBeforeDragScroll.y + (_mouseScrollY / 4);
 		_mouseScrollX -= static_cast<int>(action->getDetails()->motion.xrel);
 		_mouseScrollY -= static_cast<int>(action->getDetails()->motion.yrel);
-		newX = _posBeforeDragScroll.x + (_mouseScrollX / 10);
-		newY = _posBeforeDragScroll.y + (_mouseScrollY / 10);
+		newX = _posBeforeDragScroll.x + (_mouseScrollX / 11);
+		newY = _posBeforeDragScroll.y + (_mouseScrollY / 11);
 
 /*kL
 		// keep the limits...

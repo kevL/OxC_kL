@@ -313,7 +313,8 @@ int Tile::getTUCost(
 	if (_objects[part])
 	{
 		if (_objects[part]->isUFODoor()
-			&& _currFrame[part] == 7)
+//kL			&& _currFrame[part] == 7)
+			&& _currFrame[part] > 1) // cfailde:doorcost
 		{
 			return 0;
 		}

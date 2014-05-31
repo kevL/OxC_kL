@@ -41,6 +41,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
+#include "../Geoscape/GeoscapeState.h" // kL
 #include "../Geoscape/Globe.h"
 #include "../Geoscape/Polygon.h"
 #include "../Geoscape/Polyline.h"
@@ -1054,10 +1055,10 @@ XcomResourcePack::XcomResourcePack( // kL
 
 	// define GUI sound Fx
 	TextButton::soundPress	= getSound("GEO.CAT", 0); // bleep
-	Window::soundPopup[0]	= getSound("GEO.CAT", 1); // wahahahah
+//kL	Window::soundPopup[0]	= getSound("GEO.CAT", 1); // wahahahah
 	Window::soundPopup[1]	= getSound("GEO.CAT", 2); // swish1
 	Window::soundPopup[2]	= getSound("GEO.CAT", 3); // swish2
-
+	GeoscapeState::soundPop	= getSound("GEO.CAT", 1); // wahahahah // kL, used for Geo->Base & Geo->Graphs
 
 	/* BATTLESCAPE RESOURCES */
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?

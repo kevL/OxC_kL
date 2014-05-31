@@ -74,6 +74,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Screen.h"
+#include "../Engine/Sound.h" // kL
 #include "../Engine/Surface.h"
 #include "../Engine/Timer.h"
 
@@ -134,7 +135,8 @@
 namespace OpenXcom
 {
 
-size_t kL_currentBase = 0;
+size_t kL_currentBase = 0;			// kL
+Sound* GeoscapeState::soundPop = 0;	// kL
 
 
 /**
@@ -2825,6 +2827,8 @@ void GeoscapeState::btnInterceptClick(Action*)
  */
 void GeoscapeState::btnBasesClick(Action*)
 {
+	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1, see Game.cpp
+
 	timerReset();
 
 	if (!_game->getSavedGame()->getBases()->empty())
@@ -2866,6 +2870,8 @@ void GeoscapeState::btnBasesClick(Action*)
  */
 void GeoscapeState::btnGraphsClick(Action*)
 {
+	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1, see Game.cpp
+
 	timerReset(); // kL
 
 	_game->pushState(new GraphsState(_game));

@@ -3680,15 +3680,15 @@ Tile* TileEngine::checkForTerrainExplosions()
 
 /**
  * Opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
- * @param unit Unit.
- * @param rClick Whether the player right clicked.
- * @param dir Direction.
+ * @param unit		- pointer to a battleunit
+ * @param rClick	- true if the player right-clicked
+ * @param dir		- direction to check for a door
  * @return, -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
- *			0 normal door opened, make a squeaky sound and you can walk through;
- *			1 ufo door is starting to open, make a whoosh sound, don't walk through;
- *			3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
- *			4 not enough TUs
- *			5 would contravene fire reserve
+ *			 0 normal door opened, make a squeaky sound and you can walk through;
+ *			 1 ufo door is starting to open, make a whoosh sound, don't walk through;
+ *			 3 ufo door is still opening, don't walk through it yet. (have patience, futuristic technology...)
+ *			 4 not enough TUs
+ *			 5 would contravene fire reserve
  */
 int TileEngine::unitOpensDoor(
 		BattleUnit* unit,
@@ -3710,6 +3710,8 @@ int TileEngine::unitOpensDoor(
 	if (dir == -1)
 		dir = unit->getDirection();
 
+	Tile* tile; // cfailde:doorcost
+
 	int z = unit->getTile()->getTerrainLevel() < -12? 1: 0; // if we're standing on stairs, check the tile above instead.
 	for (int
 			x = 0;
@@ -3724,9 +3726,9 @@ int TileEngine::unitOpensDoor(
 				y++)
 		{
 			std::vector<std::pair<Position, int> > checkPositions;
-			Tile* tile = _save->getTile(
-									unit->getPosition()
-										+ Position(x, y, z));
+			tile = _save->getTile(
+								unit->getPosition()
+								+ Position(x, y, z));
 
 			if (!tile)
 				continue;
@@ -3890,6 +3892,8 @@ int TileEngine::unitOpensDoor(
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
+				tile->animate(); // cfailde:doorcost : ensures frame advances for ufo doors to update TU cost
+
 				calculateFOV(unit->getPosition());
 
 				// look from the other side (may be need check reaction fire?)

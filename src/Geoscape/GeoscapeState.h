@@ -36,6 +36,7 @@ class DogfightState;
 class Globe;
 class ImageButton; // kL
 //kL class InteractiveSurface;
+class Sound; // kL
 class Surface;
 class TerrorSite;
 class Text;
@@ -120,6 +121,7 @@ private:
 
 
 	public:
+		static Sound* soundPop; // kL
 
 		/// Creates the Geoscape state.
 		GeoscapeState(Game* game);

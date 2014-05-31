@@ -1634,16 +1634,15 @@ bool Pathfinding::canFallDown(
 } */
 
 /**
- * Checks, for the up/down button, if the movement is valid. Either
- * there is a grav lift or the unit can fly and there are no obstructions.
- * @param bu, Pointer to unit.
- * @param startPosition, Unit starting position.
- * @param direction, Up or Down
- * @return int,
-				0:blocked (stop),
-				1:gravLift (go),
-				2:flying (go unless blocked),
-				-1:kneeling (stop unless on gravLift).
+ * Checks if a movement is valid via the Up/Down buttons.
+ * Either there is a grav lift or the unit can fly, and there are no obstructions.
+ * @param bu			- oointer to a unit
+ * @param startPosition	- starting position
+ * @param direction		- up or down
+ * @return,	-1 kneeling (stop unless on gravLift)
+			 0 blocked (stop)
+			 1 gravLift (go)
+			 2 flying (go unless blocked)
  */
 int Pathfinding::validateUpDown(
 		BattleUnit* bu,
@@ -1665,26 +1664,27 @@ int Pathfinding::validateUpDown(
 		&& destTile->getMapData(MapData::O_FLOOR)
 		&& destTile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		return 1; // gravLift, kneeling or not, flying or not: Go
+		return 1; // gravLift.
 	}
 	else if (bu->isKneeled())
-		return -1; // stop.
+		return -1; // kneeled.
 	else if (bu->getArmor()->getMovementType() == MT_FLY)
 	{
 		Tile* belowStart = _save->getTile(startPosition + Position(0, 0,-1));
-
 		if ((direction == DIR_UP
 				&& destTile
 				&& !destTile->getMapData(MapData::O_FLOOR)) // flying up only possible when there is no roof
 			|| (direction == DIR_DOWN
 				&& destTile
-				&& startTile->hasNoFloor(belowStart))) // falling down only possible when there is no floor
+				&& startTile->hasNoFloor(belowStart))) // flying down only possible when there is no floor
 		{
-			return 2;
+			return 2; // flying.
 		}
+		else
+			return 0; // blocked.
 	}
 
-	return 0; // not gravLift, not flying, or blocked (not kneeling too, friend). Stop!
+	return -2; // no flying suit.
 }
 
 /**

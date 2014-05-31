@@ -1135,12 +1135,9 @@ int BattleUnit::getMorale() const
 
 /**
  * Do an amount of damage.
- * @param power The amount of damage to inflict.
- * @param type The type of damage being inflicted.
- * @param ignoreArmor Should the damage ignore armor resistance?
- * @param relative		- reference to a position that defines which part of armor and/or bodypart is hit (voxelSpace, & for headshots only).
+ * @param relative		- reference to a position (voxel) that defines which part of armor and/or bodypart is hit (for headshots only)
  * @param power			- the amount of damage to inflict
- * @param type			- the type of damage being inflicted
+ * @param type			- the type of damage being inflicted ( DT_* enum )
  * @param ignoreArmor	- true for stun & smoke damage; no armor reduction, although vulnerability is still factored
  * @return, damage done after adjustment
  */

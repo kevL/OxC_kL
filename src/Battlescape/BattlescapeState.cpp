@@ -917,8 +917,8 @@ void BattlescapeState::mapOver(Action* action)
 		else
 		{
 			_map->getCamera()->scrollXY(
-								static_cast<int>(static_cast<double>(action->getDetails()->motion.xrel) * 3.0 / action->getXScale()),
-								static_cast<int>(static_cast<double>(action->getDetails()->motion.yrel) * 3.0 / action->getYScale()),
+								static_cast<int>(static_cast<double>(action->getDetails()->motion.xrel) * 3.62 / action->getXScale()),
+								static_cast<int>(static_cast<double>(action->getDetails()->motion.yrel) * 3.62 / action->getYScale()),
 								false);
 
 			Position delta	= _map->getCamera()->getMapOffset();
@@ -1246,9 +1246,11 @@ void BattlescapeState::btnUnitUpClick(Action*)
 							_save->getSelectedUnit(),
 							Pathfinding::DIR_UP);
 	}
-	else if (valid == -1) // kneeling
+	else if (valid == -2)	// no flight suit
+		warning("STR_ACTION_NOT_ALLOWED_FLIGHT");
+	else if (valid == -1)	// kneeling
 		warning("STR_ACTION_NOT_ALLOWED_KNEEL");
-	else // blocked, roof
+	else					// valid == 0 : blocked by roof
 		warning("STR_ACTION_NOT_ALLOWED_ROOF");
 }
 

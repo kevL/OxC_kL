@@ -483,9 +483,9 @@ void Game::quit()
 
 /**
  * Changes the audio volume of the music and sound effect channels.
- * @param sound Sound volume, from 0 to MIX_MAX_VOLUME.
- * @param music Music volume, from 0 to MIX_MAX_VOLUME.
- * @param ui UI volume, from 0 to MIX_MAX_VOLUME.
+ * @param sound	- sound volume, from 0 to MIX_MAX_VOLUME
+ * @param music	- music volume, from 0 to MIX_MAX_VOLUME
+ * @param ui	- ui volume, from 0 to MIX_MAX_VOLUME
  */
 void Game::setVolume(
 		int sound,
@@ -494,17 +494,17 @@ void Game::setVolume(
 {
 	if (!Options::mute)
 	{
-		if (sound > -1)
-		{
-			sound = static_cast<int>(volumeExponent(sound) * static_cast<float>(SDL_MIX_MAXVOLUME));
-			Mix_Volume(-1, sound); // kL_note: this, supposedly, sets volume on *all channels*
-		}
-
 		if (music > -1)
 		{
 			music = static_cast<int>(volumeExponent(music) * static_cast<float>(SDL_MIX_MAXVOLUME));
 			Mix_VolumeMusic(music);
 //			func_set_music_volume(music);
+		}
+
+		if (sound > -1)
+		{
+			sound = static_cast<int>(volumeExponent(sound) * static_cast<float>(SDL_MIX_MAXVOLUME));
+			Mix_Volume(-1, sound); // kL_note: this, supposedly, sets volume on *all channels*
 		}
 
 		if (ui > -1)
@@ -814,10 +814,12 @@ void Game::initAudio()
 	}
 	else
 	{
-		Mix_AllocateChannels(16);
+//kL	Mix_AllocateChannels(16);
+		Mix_AllocateChannels(12); // kL
 		// Set up UI channels
 		Mix_ReserveChannels(2);
-		Mix_GroupChannels(1, 2, 0);
+//kL	Mix_GroupChannels(1, 2, 0);
+		Mix_GroupChannels(0, 1, 0); // kL
 		Log(LOG_INFO) << "SDL_mixer initialized.";
 
 		setVolume(

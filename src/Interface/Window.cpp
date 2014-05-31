@@ -160,11 +160,12 @@ void Window::popup()
 {
 	if (AreSame(_popupStep, 0.0))
 	{
-		int sound = RNG::generate(0, 2);
-		if (soundPopup[sound] != 0)
+//kL	int sound = RNG::generate(0, 2);
+		int sound = RNG::generate(1, 2);
+//kL		if (soundPopup[sound] != 0)
 //			soundPopup[sound]->play(0);
 //			soundPopup[sound]->play(1); // yeeeeeeahhhh. Cool, it works!
-			soundPopup[sound]->play(Mix_GroupAvailable(0)); // UI Fx channels #0 & #1
+		soundPopup[sound]->play(Mix_GroupAvailable(0)); // UI Fx channels #0 & #1
 	}
 
 	if (_popupStep < 1.0)
