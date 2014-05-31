@@ -702,12 +702,39 @@ void GeoscapeState::blit()
 {
 	State::blit();
 
+	_game->getScreen()->getSurface()->drawLine(
+//kL										_btnTop->getX() - 1,
+											Options::baseXGeoscape - 64, // kL
+											0,
+//kL										_btnTop->getX() - 1,
+											Options::baseXGeoscape - 64, // kL
+											_game->getScreen()->getSurface()->getHeight(),
+											15);
+	_game->getScreen()->getSurface()->drawLine(
+//kL										_btnTop->getX(),
+											Options::baseXGeoscape - 63, // kL
+//kL										_sidebar->getY() - 1,
+											Options::baseYGeoscape / 2 - 101, // kL
+											_game->getScreen()->getSurface()->getWidth(),
+//kL										_sidebar->getY() - 1,
+											Options::baseYGeoscape / 2 - 101, // kL
+											15);
+	_game->getScreen()->getSurface()->drawLine(
+//kL										_btnBottom->getX(),
+											Options::baseXGeoscape - 63, // kL
+//kL										_btnBottom->getY() - 1,
+											Options::baseYGeoscape / 2 + 100, // kL
+											_game->getScreen()->getSurface()->getWidth(),
+//kL										_btnBottom->getY() - 1,
+											Options::baseYGeoscape / 2 + 100, // kL
+											15);
+
 	for (std::list<DogfightState*>::iterator
-			it = _dogfights.begin();
-			it != _dogfights.end();
-			++it)
+			i = _dogfights.begin();
+			i != _dogfights.end();
+			++i)
 	{
-		(*it)->blit();
+		(*i)->blit();
 	}
 }
 

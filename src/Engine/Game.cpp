@@ -383,11 +383,10 @@ void Game::run()
 					Options::useOpenGL && Options::vSyncForOpenGL))
 			{
 				// Update our FPS delay time based on the time of the last draw.
-//kL			_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame) - 1;
+//kL			_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame);
 				_timeUntilNextFrame = static_cast<int>( // kL
 										(1000.0f / static_cast<float>(Options::FPS))
-										- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)))
-										- 1;
+										- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)));
 			}
 			else
 			{
@@ -421,9 +420,10 @@ void Game::run()
 
 				_fpsCounter->blit(_screen->getSurface());
 				_cursor->blit(_screen->getSurface());
+
+				_screen->flip();
 			}
 
-			_screen->flip();
 		}
 
 		if (!_init) // Initialize active state
