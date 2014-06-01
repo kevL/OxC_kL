@@ -6542,7 +6542,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1401536907 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1401590926 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6694,7 +6694,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1401584452 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1401604069 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
