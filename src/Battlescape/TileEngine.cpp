@@ -529,7 +529,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									size_t trajSize = _trajectory.size();
 
 //kL								if (test > 127) // last tile is blocked thus must be cropped
-									if (test < 0) // kL
+									if (test == -1) // kL
 										--trajSize;
 
 									//Log(LOG_INFO) << ". . . trace Trajectory.";
@@ -2275,28 +2275,15 @@ void TileEngine::explode(
 			int maxRadius,
 			BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "TileEngine::explode() power = " << power
-	//			<< ", type = " << (int)type
-	//			<< ", maxRadius = " << maxRadius;
+	//Log(LOG_INFO) << "TileEngine::explode() power = " << power << ", type = " << (int)type << ", maxRadius = " << maxRadius;
 	if (power == 0) // kL, quick out.
 		return;
 
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator, bool> tilePair;
 
-/*	double
-		centerX = static_cast<double>(voxelTarget.x / 16) + 0.5,
-		centerY = static_cast<double>(voxelTarget.y / 16) + 0.5,
-		centerZ = static_cast<double>(voxelTarget.z / 24) + 0.5; */
-	int
-		z_Dec = 1000; // default flat explosion
-//		height = Options::battleExplosionHeight;
-/*		height = std::max(
-						0,
-						std::min(
-							3,
-							Options::battleExplosionHeight)); */
-//	switch (height)
+	int z_Dec = 1000; // default flat explosion
+
 	switch (Options::battleExplosionHeight)
 	{
 		case 3:
@@ -2334,8 +2321,6 @@ void TileEngine::explode(
 		tileY,
 		tileZ;
 
-//		testPower; // this is test power to see if _powerT bursts into the next tile.
-
 	double
 		r,
 		r_Max = static_cast<double>(maxRadius),
@@ -2349,8 +2334,6 @@ void TileEngine::explode(
 		sin_fi,
 		cos_fi;
 
-
-//	_powerT = 0; // this is damaging power in the current tile
 
 //	for (int fi = 0; fi == 0; ++fi) // kL_note: Looks like a TEST ray. ( 0 == horizontal )
 	for (int
@@ -2369,16 +2352,11 @@ void TileEngine::explode(
 			sin_fi = sin(static_cast<double>(fi) * M_PI / 180.0);
 			cos_fi = cos(static_cast<double>(fi) * M_PI / 180.0);
 
-/*			origin = _save->getTile(Position(
-										static_cast<int>(centerX),
-										static_cast<int>(centerY),
-										static_cast<int>(centerZ))); */
 			origin = _save->getTile(Position(
 										centerX,
 										centerY,
 										centerZ));
 
-//kL		_powerT = power + 1;
 			_powerT = power;	// initialize _powerT for each ray.
 			r = 0.0;			// initialize radial length, also.
 
@@ -2508,15 +2486,14 @@ void TileEngine::explode(
 
 									targetUnit->damage( // Directional damage relative to explosion position.
 													Position(
-														centerX * 16 - destTile->getPosition().x * 16,
-														centerY * 16 - destTile->getPosition().y * 16,
-														centerZ * 24 - destTile->getPosition().z * 24),
+															centerX * 16 - destTile->getPosition().x * 16,
+															centerY * 16 - destTile->getPosition().y * 16,
+															centerZ * 24 - destTile->getPosition().z * 24),
 													powerVsUnit,
 													DT_HE);
 								}
 							}
 
-							// kL_note: REVERT,
 							bool done = false;
 							while (!done)
 							{
@@ -2631,10 +2608,9 @@ void TileEngine::explode(
 
 					if (targetUnit)
 						targetUnit->setTaken(true);
-				}// add a new tile.
+				}
 
 
-//				testPower = _powerT;
 				if (type == DT_IN)
 				{
 					int dir;
@@ -2644,12 +2620,10 @@ void TileEngine::explode(
 					if (dir != -1
 						&& dir %2)
 					{
-//						testPower -= 5; // diagonal movement costs an extra 50% for fire.
 						_powerT -= 5; // diagonal movement costs an extra 50% for fire.
 					}
 				}
 
-//				testPower -= (10 // explosive damage decreases by 10 per tile + blockage
 				int horiBlock = horizontalBlockage(
 												origin,
 												destTile,
@@ -2673,7 +2647,6 @@ void TileEngine::explode(
 				if (horiBlock > 0)
 				{
 					_powerT -= horiBlock * 2; // terrain takes 200% power to destruct.
-
 					if (_powerT < 1)
 						break;
 				}
@@ -2681,43 +2654,20 @@ void TileEngine::explode(
 				if (vertBlock > 0)
 				{
 					_powerT -= vertBlock * 2; // terrain takes 200% power to destruct.
-
 					if (_powerT < 1)
 						break;
 				}
 
-//				_powerT -= 10 + horiBlock + vertBlock;
-/*				_powerT -= (10
-						+ horizontalBlockage( // not *2 -> try *2
-										origin,
-										destTile,
-										type) * 2
-						+ verticalBlockage( // not *2 -> try *2
-										origin,
-										destTile,
-										type) * 2); */
-
-				//Log(LOG_INFO) << ". _powerT = " << _powerT;
-//				if (testPower < 1)
-//				if (_powerT < 1)
-//					break;
-				else
-				{
-//					_powerT = testPower;
-
-					origin = destTile;
-					r += 1.0;
-				}
-			}// power & radius left. (length ray)
-
-		}// 360 degrees
-
-	}// +- 90 degrees
+				origin = destTile;
+				r += 1.0;
+			}
+		}
+	}
 
 	_powerT = -1;
 
-	// now detonate the tiles affected with HE
-	if (type == DT_HE)
+
+	if (type == DT_HE) // detonate tiles affected with HE
 	{
 		//Log(LOG_INFO) << ". explode Tiles";
 		for (std::set<Tile*>::iterator
@@ -2747,13 +2697,14 @@ void TileEngine::explode(
 }
 
 /**
- * Calculates the amount of power that is blocked going from one tile to another on the same z-level.
- * @param startTile	- Pointer to tile where the power starts
- * @param endTile	- Pointer to adjacent tile where the power ends
- * @param type		- The type of power: damageType
- * @return, (int)Blockage:	  # variable power blocked
- *							  0 noBlock
- *							 <0 tile that stops LoS / damagePower
+ * Calculates the amount of power that is blocked as it passes
+ * from one tile to another on the same z-level.
+ * @param startTile	- pointer to tile where the power starts
+ * @param endTile	- pointer to adjacent tile where the power ends
+ * @param type		- the type of power (DT_* RuleItem.h)
+ * @return, (int)block	  # variable power blocked
+ *						  0 noBlock
+ *						 <0 tile that stops LoS / Power
  */
 int TileEngine::horizontalBlockage(
 		Tile* startTile,
@@ -2772,10 +2723,10 @@ int TileEngine::horizontalBlockage(
 	//bool debug = type == DT_HE;
 
 	int dir;
-	Pathfinding::vectorToDirection(
+	Pathfinding::vectorToDirection( // Set&Get direction by reference
 							endTile->getPosition() - startTile->getPosition(),
 							dir);
-	if (dir == -1) // startTile == endTile ( or straight up/down )
+	if (dir == -1) // startTile == endTile ( or up/down )
 		return 0;
 
 
@@ -3179,7 +3130,8 @@ int TileEngine::horizontalBlockage(
 					< 0) // kL, ==-1
 			{
 				//Log(LOG_INFO) << "TileEngine::horizontalBlockage() EXIT, ret = -1";
-				return -1; // hit bigwall, reveal bigwall tile
+//TEST				return -1; // hit bigwall, reveal bigwall tile
+				return -2; // special case for calculateFOV() to not subtract last tile in trajectory.
 			}
 		}
 	}
@@ -3319,15 +3271,16 @@ int TileEngine::verticalBlockage(
 }
 
 /**
- * Calculates the amount of damage-power or FoV that certain types of
- * wall/bigwall or floor or object parts of a tile blocks.
- * @param startTile	- Pointer to tile where the power starts
- * @param part		- The part of the tile that the power needs to go through
- * @param type		- The type of power : damageType
- * @param dir		- Direction the power travels (default -1)
- * @return, (int)Blockage:	 # amount of power/damage that gets blocked
- *							 0 no block
- *							<0 for hardblock / stop LoS
+ * Calculates the amount of power or LoS/FoV/LoF that various types of
+ * walls/bigwalls or floors or object parts of a tile blocks.
+ * @param startTile	- pointer to tile where the power starts
+ * @param part		- the part of the tile that the power tries to go through
+ * @param type		- the type of power (RuleItem.h) DT_NONE if line-of-vision
+ * @param dir		- direction the power travels	-1	walls & floors (default)
+ *													 0+	big-walls & content
+ * @return, (int)block	 # amount of power/damage that gets blocked
+ *						 0 no block
+ *						<0 for hardblock / stop LoS
  */
 int TileEngine::blockage(
 		Tile* tile,
@@ -3337,14 +3290,14 @@ int TileEngine::blockage(
 		bool checkingOrigin)
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
-
-	// open ufo doors are actually still closed behind the scenes. So a special
-	// trick is needed to see if they are open. If they are open, block=0
 	if (tile == 0) // probably outside the map here
 	{
+		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret -1 ( no tile )";
 		return -1;
 	}
 
+	// Open ufo doors are actually still closed behind the scenes,
+	// so this trick is needed to see if they are open.
 	if (tile->isUfoDoorOpen(part))
 	{
 		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( ufoDoorOpen )";
@@ -3353,13 +3306,15 @@ int TileEngine::blockage(
 
 	if (tile->getMapData(part))
 	{
+		bool visLike = type == DT_NONE
+					|| type == DT_SMOKE
+					|| type == DT_STUN
+					|| type == DT_IN;
+
 		//Log(LOG_INFO) << ". getMapData(part) stopLOS() = " << tile->getMapData(part)->stopLOS();
-		if (dir == -1) // regular west/north wall (not BigWall), or it's a floor.
+		if (dir == -1) // regular north/west wall (not BigWall), or it's a floor.
 		{
-			if (type == DT_NONE
-				|| type == DT_SMOKE
-				|| type == DT_STUN
-				|| type == DT_IN)
+			if (visLike)
 			{
 //				int dirTest;
 //				Pathfinding::vectorToDirection(
@@ -3383,18 +3338,27 @@ int TileEngine::blockage(
 				return ret;
 			}
 		}
-		else // dir != -1 -> OBJECT part. ( BigWalls & content )
+		else // dir > -1 -> OBJECT part. ( BigWalls & content )
 		{
 			int bigWall = tile->getMapData(MapData::O_OBJECT)->getBigWall(); // 0..8 or, per MCD.
+			if (bigWall == 0
+				&& visLike)
+//				&& type == DT_NONE)
+			{
+				bigWall = tile->getMapData(part)->stopLOS() // tile block
+						|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR;
+			}
 			//Log(LOG_INFO) << ". bigWall = " << bigWall;
 
-			if (checkingOrigin // kL (the ContentOBJECT already got hit as the previous endTile...)
+			if (checkingOrigin) // kL (the ContentOBJECT already got hit as the previous endTile...)
 //				&& type != DT_NONE
-				&& bigWall == Pathfinding::BIGWALL_NONE)
+//				&& bigWall == Pathfinding::BIGWALL_NONE)
 //kL			&& (bigWall == Pathfinding::BIGWALL_NESW
 //kL				|| bigWall == Pathfinding::BIGWALL_NWSE)))
 			{
-				return 0;
+				if (bigWall == Pathfinding::BIGWALL_NONE) // requires closer inspection ...
+					return 0;
+//				else return -1;
 			}
 
 			switch (dir)
@@ -3485,28 +3449,31 @@ int TileEngine::blockage(
 				case 8: // up
 				case 9: // down
 				default:
-					if (bigWall != Pathfinding::BIGWALL_BLOCK)
+					if (bigWall == Pathfinding::BIGWALL_BLOCK) // includes stopLoS & floors
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 8,9 up,down )";
-						return 0;
+						return -1;
 					}
+					else //
+						return 0;
 				break;
 			}
 
-			if (tile->getMapData(part)->stopLOS() // if (bigWall or Content && ...
-				&& (type == DT_NONE
-					|| type == DT_SMOKE
-					|| type == DT_STUN
-					|| type == DT_IN
-					|| (_powerT > -1
-						&& _powerT < tile->getMapData(part)->getArmor() * 2))) // terrain absorbs 200% damage from DT_HE!
+			// might be Content or bigWall block here
+			if ((visLike
+//					&& tile->getMapData(part)->stopLOS())
+					&& bigWall > 0)
+				|| (!visLike
+					&&_powerT > -1
+					&& _powerT < tile->getMapData(part)->getArmor() * 2)) // terrain absorbs 200% damage from DT_HE!
 			{
 				return -1;
 			}
+//			else return 0;
 		}
 
 		// note: This is all probably redundant (ie, handled above).
-		if (type != DT_NONE) // FoV is blocked above, or gets a pass here ( ie. vs Content )
+/*		if (type != DT_NONE) // FoV is blocked above, or gets a pass here ( ie. vs Content )
 		{
 			if (_powerT < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
 				return -1;
@@ -3516,7 +3483,7 @@ int TileEngine::blockage(
 				//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
 				return ret;
 			}
-		}
+		} */
 	}
 
 	//Log(LOG_INFO) << "TileEngine::blockage() EXIT, (no valid part) ret 0";
@@ -4058,15 +4025,16 @@ int TileEngine::closeUfoDoors()
 
 /**
  * Calculates a line trajectory, using bresenham algorithm in 3D.
- * @param origin, Origin (voxel??).
- * @param target, Target (also voxel??).
- * @param storeTrajectory, True will store the whole trajectory - otherwise it just stores the last position.
- * @param trajectory, A vector of positions in which the trajectory is stored.
- * @param excludeUnit, Excludes this unit in the collision detection.
- * @param doVoxelCheck, Check against voxel or tile blocking? (first one for unit visibility and line of fire, second one for terrain visibility).
- * @param onlyVisible, Skip invisible units? used in FPS view.
- * @param excludeAllBut, [Optional] The only unit to be considered for ray hits.
- * @return, The objectnumber(0-3) or unit(4) or out-of-map(5) or -1(hit nothing).
+ * @param origin			- origin (voxel?)
+ * @param target			- target (voxel?)
+ * @param storeTrajectory	- true will store the whole trajectory - otherwise it just stores the last position
+ * @param trajectory		- vector of positions in which the trajectory is stored
+ * @param excludeUnit		- excludes this unit in the collision detection
+ * @param doVoxelCheck		- check against voxel or tile blocking? (first one for unit visibility and line of fire, second one for terrain visibility)
+ * @param onlyVisible		- skip invisible units? used in FPS view
+ * @param excludeAllBut		- the only unit to be considered for ray hits [optional]
+ * @return, the objectnumber(0-3) or unit(4) or out-of-map(5) or -1(hit nothing)
+ *								   -2 special case for calculateFOV() such as to not remove the last tile of the trajectory
  *			VOXEL_EMPTY			// -1
  *			VOXEL_FLOOR			//  0
  *			VOXEL_WESTWALL		//  1
@@ -4215,8 +4183,9 @@ int TileEngine::calculateLine(
 				//Log(LOG_INFO) << ". [3]ret = " << result;
 				return result; */
 // original_End.
-
-			if (result < 0
+			if (result == -2)
+				return -2;
+			else if (result < 0
 				&& result2 < 0)
 			{
 				return -1;
