@@ -220,7 +220,8 @@ void CraftInfoState::init()
 		ss2;
 
 	ss1 << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
-	if (_craft->getStatus() == "STR_REPAIRS")
+	if (_craft->getStatus() == "STR_REPAIRS"
+		&& _craft->getDamage() > 0)
 	{
 		int damageHrs = static_cast<int>(
 							ceil(static_cast<double>(_craft->getDamage())
@@ -232,7 +233,8 @@ void CraftInfoState::init()
 	_txtDamage->setText(ss1.str());
 
 	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
-	if (_craft->getStatus() == "STR_REFUELLING")
+	if (_craft->getStatus() == "STR_REFUELLING"
+		&& _craft->getRules()->getMaxFuel() - _craft->getFuel() > 0)
 	{
 		int fuelHrs = static_cast<int>(
 							ceil(static_cast<double>(_craft->getRules()->getMaxFuel() - _craft->getFuel())

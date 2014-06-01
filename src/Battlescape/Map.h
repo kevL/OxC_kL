@@ -107,7 +107,7 @@ private:
 						* _scrollMouseTimer,
 						* _scrollKeyTimer;
 
-	std::set<Explosion*>	_explosions;
+	std::list<Explosion*>	_explosions;
 	std::vector<Position>	_waypoints;
 
 	///
@@ -190,7 +190,7 @@ private:
 		Projectile* getProjectile() const;
 
 		/// Gets explosion set.
-		std::set<Explosion*>* getExplosions();
+		std::list<Explosion*>* getExplosions();
 
 		/// Gets the pointer to the camera.
 		Camera* getCamera();

@@ -948,7 +948,7 @@ void ProjectileFlyBState::think()
 																		false,
 																		false);
 
-									_parent->getMap()->getExplosions()->insert(explosion);
+									_parent->getMap()->getExplosions()->push_back(explosion);
 									_parent->getSave()->getTileEngine()->hit(
 																			proj->getPosition(1),
 																			_ammo->getRules()->getPower(),

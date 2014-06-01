@@ -4763,7 +4763,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1401240331 f:\git\openxcom\src\battlescape\battlescapegame.h
+1401605032 f:\git\openxcom\src\battlescape\battlescapegame.h
 	<list>
 	<string>
 	<vector>
@@ -5746,7 +5746,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1401232756 f:\git\openxcom\src\battlescape\map.h
+1401605749 f:\git\openxcom\src\battlescape\map.h
 	<set>
 	<vector>
 	"Position.h"
@@ -5937,7 +5937,7 @@
 	<string>
 	"../Engine/InteractiveSurface.h"
 
-1401232755 f:\git\openxcom\src\engine\crossplatform.h
+1401605993 f:\git\openxcom\src\engine\crossplatform.h
 	<SDL.h>
 	<string>
 	<utility>
@@ -8336,7 +8336,7 @@
 	"Engine/Screen.h"
 	"Menu/StartState.h"
 
-1401232934 f:\git\openxcom\src\menu\startstate.h
+1401607107 f:\git\openxcom\src\menu\startstate.h
 	<sstream>
 	"../Engine/State.h"
 

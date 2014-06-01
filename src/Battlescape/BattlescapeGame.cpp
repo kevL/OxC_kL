@@ -116,6 +116,21 @@ BattlescapeGame::BattlescapeGame(
 BattlescapeGame::~BattlescapeGame()
 {
 	//Log(LOG_INFO) << "Delete BattlescapeGame";
+	for (std::list<BattleState*>::iterator
+			i = _states.begin();
+			i != _states.end();
+			++i)
+	{
+		delete *i;
+	}
+
+	for (std::list<BattleState*>::iterator
+			i = _deleted.begin();
+			i != _deleted.end();
+			++i)
+	{
+		delete *i;
+	}
 }
 
 /**
@@ -553,6 +568,15 @@ bool BattlescapeGame::kneel(
 void BattlescapeGame::endTurn()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::endTurn()";
+	for (std::list<BattleState*>::iterator
+			i = _deleted.begin();
+			i != _deleted.end();
+			++i)
+	{
+		delete *i;
+	}
+	_deleted.clear();
+
 	_tuReserved		= _playerTUReserved;
 	_debugPlay		= false;
 	_AISecondMove	= false;
@@ -1282,6 +1306,8 @@ void BattlescapeGame::popState()
 			}
 		} // kL_end.
 	}
+
+	_deleted.push_back(_states.front());
 
 	//Log(LOG_INFO) << ". states.Popfront";
 	_states.pop_front();

@@ -933,6 +933,13 @@ void BattlescapeState::mapOver(Action* action)
 									std::max(
 											0,
 											_cursorPosition.y + static_cast<int>(Round(static_cast<double>(delta.y) * action->getYScale()))));
+/*kL
+			int barWidth = _game->getScreen()->getCursorLeftBlackBand();
+			int barHeight = _game->getScreen()->getCursorTopBlackBand();
+			int cursorX = _cursorPosition.x + Round(delta.x * action->getXScale());
+			int cursorY = _cursorPosition.y + Round(delta.y * action->getYScale());
+			_cursorPosition.x = std::min(_game->getScreen()->getWidth() - barWidth - (int)(Round(action->getXScale())), std::max(barWidth, cursorX));
+			_cursorPosition.y = std::min(_game->getScreen()->getHeight() - barHeight - (int)(Round(action->getYScale())), std::max(barHeight, cursorY)); */
 
 			// We don't want to look the mouse-cursor jumping :)
 //			action->getDetails()->motion.x = static_cast<Uint16>(_cursorPosition.x);
@@ -1141,9 +1148,10 @@ inline void BattlescapeState::handle(Action* action)
 		if (_isMouseScrolling
 			&& !Options::battleDragScrollInvert) // newScroll
 		{
-			_map->setSelectorPosition( // newScroll
-								static_cast<int>(static_cast<double>(_cursorPosition.x) / action->getXScale()),
-								static_cast<int>(static_cast<double>(_cursorPosition.y) / action->getYScale()));
+			_map->setSelectorPosition((_cursorPosition.x - _game->getScreen()->getCursorLeftBlackBand()) / action->getXScale(), (_cursorPosition.y - _game->getScreen()->getCursorTopBlackBand()) / action->getYScale());
+//			_map->setSelectorPosition( // newScroll
+//								static_cast<int>(static_cast<double>(_cursorPosition.x) / action->getXScale()),
+//								static_cast<int>(static_cast<double>(_cursorPosition.y) / action->getYScale()));
 //			_map->setSelectorPosition(
 //								static_cast<int>(static_cast<double>(_xBeforeMouseScrolling) / action->getXScale()),
 //								static_cast<int>(static_cast<double>(_yBeforeMouseScrolling) / action->getYScale()));

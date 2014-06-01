@@ -29,6 +29,7 @@ namespace OpenXcom
 {
 
 //kL class Font;
+//kL class Language;
 //kL class Text;
 //kL class Timer;
 class Surface; // kL
@@ -55,6 +56,7 @@ private:
 //kL	int _anim;
 
 //kL	Font* _font;
+//kL	Language* _lang;
 //kL	Text
 //kL		* _cursor,
 //kL		* _text;
@@ -82,9 +84,6 @@ private:
 
 		/// Handles key clicks.
 		void handle(Action* action);
-
-		/// Flash the window.
-		void flash();
 
 		/// Animates the terminal.
 //kL	void animate();

@@ -563,6 +563,8 @@ void NewBattleState::btnOkClick(Action*)
 		_craft->setDestination(t);
 		bgen.setTerrorSite(t);
 		bgen.setCraft(_craft);
+
+		_game->getSavedGame()->getTerrorSites()->push_back(t);
 	}
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
 	{
@@ -575,6 +577,7 @@ void NewBattleState::btnOkClick(Action*)
 		_craft->setDestination(b);
 		bgen.setAlienBase(b);
 		bgen.setCraft(_craft);
+
 		_game->getSavedGame()->getAlienBases()->push_back(b);
 	}
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_MARS_CYDONIA_LANDING"
@@ -598,6 +601,8 @@ void NewBattleState::btnOkClick(Action*)
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
 		else
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
+
+		_game->getSavedGame()->getUfos()->push_back(u);
 	}
 
 	if (_craft)

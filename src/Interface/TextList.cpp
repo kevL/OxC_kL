@@ -1358,12 +1358,23 @@ void TextList::mouseOver(Action* action, State* state)
 		if (_selRow < _texts.size())
 		{
 			Text* selText = _texts[_rows[_selRow]].front();
+			int
+				y = getY() + selText->getY(),
+				h = selText->getHeight() + _font->getSpacing();
 
-			_selector->setY(getY() + selText->getY());
+			if (y < getY()
+				|| y + h > getY() + getHeight())
+			{
+				h /= 2;
+			}
 
-			if (_selector->getHeight() != selText->getHeight() + _font->getSpacing())
-				_selector->setHeight(selText->getHeight() + _font->getSpacing());
+			if (y < getY())
+				y = getY();
 
+			if (_selector->getHeight() != h)
+				_selector->setHeight(h);
+
+			_selector->setY(y);
 			_selector->copy(_bg);
 
 			if (_contrast)

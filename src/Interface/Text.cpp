@@ -195,13 +195,10 @@ void Text::initText(
 		Font* small,
 		Language* lang)
 {
-	_big		= big;
-	_small		= small;
-	if (lang == 0)
-		_lang	= new Language();
-	else
-		_lang	= lang;
-	_font		= _small;
+	_big	= big;
+	_small	= small;
+	_lang	= lang;
+	_font	= _small;
 
 	processText();
 }
@@ -406,7 +403,8 @@ int Text::getTextWidth(int line) const
  */
 void Text::processText()
 {
-	if (_font == 0)
+	if (_font == 0
+		|| _lang == 0)
 		return;
 
 	std::wstring* str = &_text;

@@ -290,7 +290,8 @@ BattleUnit::~BattleUnit()
 		if (_cache[i])
 			delete _cache[i];
 	}
-//	delete _currentAIState;
+
+	delete _currentAIState;
 }
 
 /**

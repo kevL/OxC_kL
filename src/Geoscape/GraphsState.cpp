@@ -562,14 +562,18 @@ GraphsState::~GraphsState()
 			++i)
 	{
 		graphRegionToggles.push_back(_regionToggles[i]->_pushed? '1': '0');
+		delete _regionToggles[i];
 	}
+
 	for (size_t
 			i = 0;
 			i < _countryToggles.size();
 			++i)
 	{
 		graphCountryToggles.push_back(_countryToggles[i]->_pushed? '1': '0');
+		delete _countryToggles[i];
 	}
+
 	for (size_t
 			i = 0;
 			i < _financeToggles.size();

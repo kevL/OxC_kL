@@ -55,6 +55,9 @@ int main(
 		int argc,
 		char *argv[])
 {
+	// Uncomment to check memory leaks in VS
+	//_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+
 #ifndef _DEBUG
 	try
 	{
@@ -94,8 +97,6 @@ int main(
 
 	// Comment this for faster exit.
 	delete game;
-	// Uncomment to check memory leaks in VS
-	//_CrtDumpMemoryLeaks();
 
 	return EXIT_SUCCESS;
 }

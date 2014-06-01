@@ -116,6 +116,24 @@ SavedBattleGame::~SavedBattleGame()
 	}
 	delete[] _tiles;
 
+	for (std::vector<MapDataSet*>::iterator
+			i = _mapDataSets.begin();
+			i != _mapDataSets.end();
+			++i)
+	{
+		for (std::vector<MapDataSet*>::iterator
+				j = i + 1;
+				j != _mapDataSets.end();
+				)
+		{
+			if (*i == *j)
+				j = _mapDataSets.erase(j);
+			else
+				++j;
+		}
+		delete *i;
+	}
+
 	for (std::vector<Node*>::iterator
 			i = _nodes.begin();
 			i != _nodes.end();

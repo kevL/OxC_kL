@@ -140,7 +140,9 @@ private:
 		_playerTUReserved;
 	BattleAction _currentAction;
 
-	std::list<BattleState*> _states;
+	std::list<BattleState*>
+		_deleted,
+		_states;
 	std::vector<InfoboxOKState*> _infoboxQueue;
 
 	/// Ends the turn.
