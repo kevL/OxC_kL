@@ -214,7 +214,7 @@ void Ufo::load(
  * Saves the UFO to a YAML file.
  * @return YAML node.
  */
-YAML::Node Ufo::save() const
+YAML::Node Ufo::save(bool newBattle) const
 {
 	YAML::Node node = MovingTarget::save();
 
@@ -240,9 +240,13 @@ YAML::Node Ufo::save() const
 		node["secondsRemaining"]	= _secondsRemaining;
 	if (_inBattlescape)
 		node["inBattlescape"]		= _inBattlescape;
-	node["mission"]			= _mission->getId();
-	node["trajectory"]		= _trajectory->getID();
-	node["trajectoryPoint"]	= _trajectoryPoint;
+
+	if (!newBattle)
+	{
+		node["mission"]			= _mission->getId();
+		node["trajectory"]		= _trajectory->getID();
+		node["trajectoryPoint"]	= _trajectoryPoint;
+	}
 
 	return node;
 }

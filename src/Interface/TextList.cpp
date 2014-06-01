@@ -1372,7 +1372,10 @@ void TextList::mouseOver(Action* action, State* state)
 				y = getY();
 
 			if (_selector->getHeight() != h)
+			{
+				_selector->clear();
 				_selector->setHeight(h);
+			}
 
 			_selector->setY(y);
 			_selector->copy(_bg);

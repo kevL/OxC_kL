@@ -4763,7 +4763,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1401605032 f:\git\openxcom\src\battlescape\battlescapegame.h
+1401630778 f:\git\openxcom\src\battlescape\battlescapegame.h
 	<list>
 	<string>
 	<vector>
@@ -4878,7 +4878,7 @@
 
 1394398507 f:\git\openxcom\src\engine\fastlineclip.h
 
-1401232751 f:\git\openxcom\src\savegame\ufo.h
+1401631223 f:\git\openxcom\src\savegame\ufo.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"MovingTarget.h"

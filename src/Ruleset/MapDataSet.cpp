@@ -318,12 +318,15 @@ void MapDataSet::unloadData()
 		for (std::vector<MapData*>::iterator
 				i = _objects.begin();
 				i != _objects.end();
-				++i)
+				)
 		{
 			delete *i;
+			i = _objects.erase(i);
 		}
 
 		delete _surfaceSet;
+
+		_loaded = false;
 	}
 }
 

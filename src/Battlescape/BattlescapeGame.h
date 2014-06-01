@@ -292,6 +292,9 @@ private:
 		/// Checks for and triggers proximity grenades.
 		bool checkForProximityGrenades(BattleUnit* unit);
 
+		///
+		void cleanupDeleted();
+
 		/// kL. Gets the BattlescapeState.
 		BattlescapeState* getBattlescapeState() const;
 };
