@@ -92,7 +92,7 @@ private:
 		int getFuseTimer() const;
 		/// Sets turns until it explodes.
 		void setFuseTimer(int turn);
-		/// Spend one bullet.
+		/// Spends one bullet.
 		bool spendBullet();
 		/// Gets the item's owner.
 		BattleUnit* getOwner() const;
@@ -132,26 +132,28 @@ private:
 		BattleUnit* getUnit() const;
 		/// Sets the corpse's unit.
 		void setUnit(BattleUnit* unit);
-		/// Set medikit Heal quantity
+		/// Sets medikit Heal quantity
 		void setHealQuantity(int heal);
-		/// Get medikit heal quantity
+		/// Gets medikit heal quantity
 		int getHealQuantity() const;
-		/// Set medikit pain killers quantity
+		/// Sets medikit pain killers quantity
 		void setPainKillerQuantity(int pk);
-		/// Get medikit pain killers quantity
+		/// Gets medikit pain killers quantity
 		int getPainKillerQuantity() const;
-		/// Set medikit stimulant quantity
+		/// Sets medikit stimulant quantity
 		void setStimulantQuantity(int stimulant);
-		/// Get medikit stimulant quantity
+		/// Gets medikit stimulant quantity
 		int getStimulantQuantity() const;
-		/// Set xcom property flag
+		/// Sets xcom property flag
 		void setXCOMProperty(bool flag);
-		/// Get xcom property flag
+		/// Gets xcom property flag
 		bool getXCOMProperty() const;
-		/// get the flag representing "not dropped on player turn"
+		/// Gets the flag representing "not dropped on player turn"
 		bool getTurnFlag() const;
-		/// set the flag representing "not dropped on player turn"
+		/// Sets the flag representing "not dropped on player turn"
 		void setTurnFlag(bool flag);
+		/// Sets the item's ruleset.
+		void convertToCorpse(RuleItem* rules);
 };
 
 }
