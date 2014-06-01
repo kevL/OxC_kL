@@ -1918,6 +1918,8 @@ bool Pathfinding::previewPath(bool bRemove)
 					y--)
 			{
 				tile = _save->getTile(pos + Position(x, y, 0));
+				Tile* tileAbove = _save->getTile(pos + Position(x, y, 1));
+
 				if (!bRemove)
 				{
 					if (i == _path.rend() - 1)
@@ -1929,6 +1931,13 @@ bool Pathfinding::previewPath(bool bRemove)
 					}
 
 					tile->setTUMarker(tus);
+					if (tileAbove // unit fell down, retroactively make the tileAbove's direction marker to DOWN
+						&& tileAbove->getPreview() == 0
+						&& tu == 0
+						&& _movementType != MT_FLY)
+					{
+						tileAbove->setPreview(DIR_DOWN);
+					}
 				}
 				else
 				{

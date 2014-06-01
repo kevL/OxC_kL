@@ -4034,7 +4034,7 @@ int TileEngine::closeUfoDoors()
  * @param onlyVisible		- skip invisible units? used in FPS view
  * @param excludeAllBut		- the only unit to be considered for ray hits [optional]
  * @return, the objectnumber(0-3) or unit(4) or out-of-map(5) or -1(hit nothing)
- *								   -2 special case for calculateFOV() such as to not remove the last tile of the trajectory
+ *								   -2 special case for calculateFOV() so as not to remove the last tile of the trajectory
  *			VOXEL_EMPTY			// -1
  *			VOXEL_FLOOR			//  0
  *			VOXEL_WESTWALL		//  1
