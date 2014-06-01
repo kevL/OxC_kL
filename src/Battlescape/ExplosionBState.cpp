@@ -205,7 +205,8 @@ void ExplosionBState::init()
 												startFrame,
 												true);
 
-				_parent->getMap()->getExplosions()->push_back(explosion); // add the explosion on the map
+//				_parent->getMap()->getExplosions()->insert(explosion); // kL
+				_parent->getMap()->getExplosions()->push_back(explosion); // add the explosion on the map // new CTD
 			}
 
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
@@ -265,7 +266,8 @@ void ExplosionBState::init()
 										anim,
 										false,
 										hit);
-		_parent->getMap()->getExplosions()->push_back(explosion);
+//		_parent->getMap()->getExplosions()->insert(explosion); // kL
+		_parent->getMap()->getExplosions()->push_back(explosion); // new CTD
 
 //kL		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
@@ -291,15 +293,19 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
-	for (std::list<Explosion*>::const_iterator
+//	for (std::list<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(), inext = i; i != _parent->getMap()->getExplosions()->end(); i = inext) // kL
+	for (std::list<Explosion*>::const_iterator // new CTD
 			i = _parent->getMap()->getExplosions()->begin();
 			i != _parent->getMap()->getExplosions()->end();
 			)
 	{
+//		++inext; // kL
 		if (!(*i)->animate())
 		{
 			delete *i;
-			i = _parent->getMap()->getExplosions()->erase(i);
+//			_parent->getMap()->getExplosions()->erase(i); // kL
+			i = _parent->getMap()->getExplosions()->erase(i); // new CTD
+
 			if (_parent->getMap()->getExplosions()->empty())
 			{
 				explode();
@@ -307,7 +313,7 @@ void ExplosionBState::think()
 				return;
 			}
 		}
-		else
+		else // new CTD
 			++i;
 	}
 }

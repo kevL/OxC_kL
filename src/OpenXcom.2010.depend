@@ -5781,7 +5781,7 @@
 1401489084 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1401605219 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1401631147 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6391,7 +6391,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1401605815 source:f:\git\openxcom\src\battlescape\map.cpp
+1401634187 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6509,7 +6509,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1401232756 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1401632264 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6618,7 +6618,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1401605947 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1401634241 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6694,7 +6694,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1401630043 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1401633292 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -8290,7 +8290,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1401607025 source:f:\git\openxcom\src\interface\textlist.cpp
+1401631197 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>
@@ -9199,7 +9199,7 @@
 1401489083 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 
-1401338840 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1401631328 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -9536,7 +9536,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1401607524 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1401631436 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>
@@ -9566,7 +9566,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1401505612 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1401630708 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9667,7 +9667,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1401489082 source:f:\git\openxcom\src\savegame\ufo.cpp
+1401631276 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	<sstream>
 	<algorithm>

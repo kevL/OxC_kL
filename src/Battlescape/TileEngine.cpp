@@ -4709,15 +4709,15 @@ bool TileEngine::validateThrow(
 {
 	//Log(LOG_INFO) << "TileEngine::validateThrow()";
 //kL	double arc = 0.5;
-	double arc = 1.2; // kL
+	double arc = 1.2; // kL, for acid spit only .......
 
 	if (action.type == BA_THROW)
 	{
 		double kneel = 0.0;
 		if (action.actor->isKneeled())
-			kneel = 0.1;
+			kneel = 0.13;
 
-		arc = std::max(
+		arc = std::max( // kL_note: this is for throwing (instead of spitting...)
 					0.48,
 					1.73 / sqrt(
 								sqrt(
