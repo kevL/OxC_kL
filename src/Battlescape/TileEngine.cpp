@@ -2334,6 +2334,7 @@ void TileEngine::explode(
 		sin_fi,
 		cos_fi;
 
+		int testPow = 0;
 
 //	for (int fi = 0; fi == 0; ++fi) // kL_note: Looks like a TEST ray. ( 0 == horizontal )
 	for (int
@@ -2380,19 +2381,77 @@ void TileEngine::explode(
 												tileY,
 												tileZ));
 
-				if (!destTile) // out of map!
+				if (destTile == NULL) // out of map!
 					break;
+
+
+				testPow = _powerT;
+
+				if (type == DT_IN)
+				{
+					int dir;
+					Pathfinding::vectorToDirection(
+											destTile->getPosition() - origin->getPosition(), // kL
+											dir);
+					if (dir != -1
+						&& dir %2)
+					{
+						testPow -= 5; // diagonal movement costs an extra 50% for fire.
+					}
+				}
+
+				testPow -= 10;
+				if (testPow < 1)
+					break;
+
+				int horiBlock = horizontalBlockage(
+												origin,
+												destTile,
+												type);
+				//Log(LOG_INFO) << ". horiBlock = " << horiBlock;
+//				if (horiBlock < 0)
+//					break;
+
+				int vertBlock = verticalBlockage(
+											origin,
+											destTile,
+											type);
+				//Log(LOG_INFO) << ". vertBlock = " << vertBlock;
+//				if (vertBlock < 0)
+//					break;
+
+				if (horiBlock < 0
+					&& vertBlock < 0)
+				{
+					break;
+				}
+
+				if (horiBlock > 0)
+				{
+					testPow -= horiBlock * 2; // terrain takes 200% power to destruct.
+					if (testPow < 1)
+						break;
+				}
+
+				if (vertBlock > 0)
+				{
+					testPow -= vertBlock * 2; // terrain takes 200% power to destruct.
+					if (testPow < 1)
+						break;
+				}
+
 
 				if (type == DT_HE) // explosions do 50% damage to terrain and 50% to 150% damage to units
 				{
-					destTile->setExplosive(_powerT / 2);
+					destTile->setExplosive(_powerT);
 				}
 
+				//Log(LOG_INFO) << "TileEngine::explode() pre insert Tile";
 				tilePair = tilesAffected.insert(destTile);	// check if we had this tile already
+				//Log(LOG_INFO) << ". post insert Tile";
 				if (tilePair.second)						// true if a new tile was inserted.
 				{
 					//Log(LOG_INFO) << ". . new tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition() << ". _powerT = " << _powerT << ". r = " << r;
-
 					if (origin->getPosition().z != tileZ) // z-axis explosion decrease
 						_powerT -= z_Dec;
 
@@ -2611,7 +2670,7 @@ void TileEngine::explode(
 				}
 
 
-				if (type == DT_IN)
+/*				if (type == DT_IN)
 				{
 					int dir;
 					Pathfinding::vectorToDirection(
@@ -2624,25 +2683,31 @@ void TileEngine::explode(
 					}
 				}
 
+				_powerT -= 10;
+				if (_powerT < 1)
+					break;
+
 				int horiBlock = horizontalBlockage(
 												origin,
 												destTile,
 												type);
 				//Log(LOG_INFO) << ". horiBlock = " << horiBlock;
+//				if (horiBlock < 0)
+//					break;
+
 				int vertBlock = verticalBlockage(
 											origin,
 											destTile,
 											type);
 				//Log(LOG_INFO) << ". vertBlock = " << vertBlock;
+//				if (vertBlock < 0)
+//					break;
+
 				if (horiBlock < 0
 					&& vertBlock < 0)
 				{
 					break;
 				}
-
-				_powerT -= 10;
-				if (_powerT < 1)
-					break;
 
 				if (horiBlock > 0)
 				{
@@ -2656,8 +2721,9 @@ void TileEngine::explode(
 					_powerT -= vertBlock * 2; // terrain takes 200% power to destruct.
 					if (_powerT < 1)
 						break;
-				}
+				} */
 
+				_powerT = testPow;
 				origin = destTile;
 				r += 1.0;
 			}
@@ -2693,7 +2759,6 @@ void TileEngine::explode(
 //kL	calculateFOV(voxelTarget / Position(16, 16, 24));
 	recalculateFOV(); // kL
 	//Log(LOG_INFO) << "TileEngine::explode() EXIT";
-
 }
 
 /**
@@ -2703,7 +2768,7 @@ void TileEngine::explode(
  * @param endTile	- pointer to adjacent tile where the power ends
  * @param type		- the type of power (DT_* RuleItem.h)
  * @return, (int)block	-9 special case for Content & bigWalls to block vision and still get revealed, and for invalid tiles also
- *						-1 hardblock power / vision
+ *						-1 hardblock power / vision (can be less than -1)
  *						 0 no block
  *						 1+ variable power blocked
  */
@@ -2760,7 +2825,12 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							startTile,
 							MapData::O_NORTHWALL,
-							type);
+							type)
+					+ blockage(
+							endTile,
+							MapData::O_OBJECT,
+							type,
+							4);
 		break;
 		case 1: // north east
 //			if (type == DT_NONE) // this is two-way diagonal visibility check
@@ -2810,23 +2880,56 @@ int TileEngine::horizontalBlockage(
 								type) / 2
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileEast),
-								MapData::O_WESTWALL,
+								MapData::O_NORTHWALL,
 								type) / 2
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileEast),
-								MapData::O_NORTHWALL,
+								MapData::O_WESTWALL,
 								type) / 2
+
+						+ blockage(
+								startTile,
+								MapData::O_OBJECT,
+								type,
+								4) / 2
+						+ blockage(
+								startTile,
+								MapData::O_OBJECT,
+								type,
+								6) / 2
 
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_OBJECT,
 								type,
-								3) / 2 // checks Content/bigWalls
+								4) / 2 // checks Content/bigWalls
+						+ blockage(
+								_save->getTile(startTile->getPosition() + tileNorth),
+								MapData::O_OBJECT,
+								type,
+								2) / 2 // checks Content/bigWalls
+
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileEast),
 								MapData::O_OBJECT,
 								type,
-								7) / 2; // checks Content/bigWalls
+								6) / 2 // checks Content/bigWalls
+						+ blockage(
+								_save->getTile(startTile->getPosition() + tileEast),
+								MapData::O_OBJECT,
+								type,
+								0) / 2 // checks Content/bigWalls
+
+						+ blockage(
+								endTile,
+								MapData::O_OBJECT,
+								type,
+								6) / 2 // checks Content/bigWalls
+						+ blockage(
+								endTile,
+								MapData::O_OBJECT,
+								type,
+								4) / 2; // checks Content/bigWalls
 /*				if (endTile->getMapData(MapData::O_OBJECT) == NULL) // Content & bigWalls in endTile are taken care of after this switch() is done.
 				{
 					block += (blockage(
@@ -2859,7 +2962,12 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							endTile,
 							MapData::O_WESTWALL,
-							type);
+							type)
+					+ blockage(
+							startTile,
+							MapData::O_OBJECT,
+							type,
+							2);
 		break;
 		case 3: // south east
 //			if (type == DT_NONE) // this is two-way diagonal visibility check
@@ -2917,15 +3025,48 @@ int TileEngine::horizontalBlockage(
 								type) / 2
 
 						+ blockage(
+								startTile,
+								MapData::O_OBJECT,
+								type,
+								2) / 2 // checks Content/bigWalls
+						+ blockage(
+								startTile,
+								MapData::O_OBJECT,
+								type,
+								4) / 2 // checks Content/bigWalls
+
+						+ blockage(
 								_save->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_OBJECT,
 								type,
-								1) / 2 // checks Content/bigWalls
+								2) / 2 // checks Content/bigWalls
+						+ blockage(
+								_save->getTile(startTile->getPosition() + tileSouth),
+								MapData::O_OBJECT,
+								type,
+								0) / 2 // checks Content/bigWalls
+
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileEast),
 								MapData::O_OBJECT,
 								type,
-								5) / 2; // checks Content/bigWalls
+								6) / 2 // checks Content/bigWalls
+						+ blockage(
+								_save->getTile(startTile->getPosition() + tileEast),
+								MapData::O_OBJECT,
+								type,
+								4) / 2 // checks Content/bigWalls
+
+						+ blockage(
+								endTile,
+								MapData::O_OBJECT,
+								type,
+								0) / 2 // checks Content/bigWalls
+						+ blockage(
+								endTile,
+								MapData::O_OBJECT,
+								type,
+								6) / 2; // checks Content/bigWalls
 /*				if (endTile->getMapData(MapData::O_OBJECT) == NULL) // Content & bigWalls in endTile are taken care of after this switch() is done.
 				{
 					block += (blockage(
@@ -2953,7 +3094,12 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							endTile,
 							MapData::O_NORTHWALL,
-							type);
+							type)
+					+ blockage(
+							startTile,
+							MapData::O_OBJECT,
+							type,
+							4);
 		break;
 		case 5: // south west
 //			if (type == DT_NONE) // this is two-way diagonal visibility check
@@ -3011,15 +3157,48 @@ int TileEngine::horizontalBlockage(
 								type) / 2
 
 						+ blockage(
+								startTile,
+								MapData::O_OBJECT,
+								type,
+								6) / 2 // checks Content/bigWalls
+						+ blockage(
+								startTile,
+								MapData::O_OBJECT,
+								type,
+								4) / 2 // checks Content/bigWalls
+
+						+ blockage(
 								_save->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_OBJECT,
 								type,
-								7) / 2 // checks Content/bigWalls
+								0) / 2 // checks Content/bigWalls
+						+ blockage(
+								_save->getTile(startTile->getPosition() + tileSouth),
+								MapData::O_OBJECT,
+								type,
+								6) / 2 // checks Content/bigWalls
+
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileWest),
 								MapData::O_OBJECT,
 								type,
-								3) / 2; // checks Content/bigWalls
+								2) / 2 // checks Content/bigWalls
+						+ blockage(
+								_save->getTile(startTile->getPosition() + tileWest),
+								MapData::O_OBJECT,
+								type,
+								0) / 2 // checks Content/bigWalls
+
+						+ blockage(
+								endTile,
+								MapData::O_OBJECT,
+								type,
+								0) / 2 // checks Content/bigWalls
+						+ blockage(
+								endTile,
+								MapData::O_OBJECT,
+								type,
+								2) / 2; // checks Content/bigWalls
 /*				if (endTile->getMapData(MapData::O_OBJECT) == NULL) // Content & bigWalls in endTile are taken care of after this switch() is done.
 				{
 					block += (blockage(
@@ -3052,7 +3231,12 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							startTile,
 							MapData::O_WESTWALL,
-							type);
+							type)
+					+ blockage(
+							endTile,
+							MapData::O_OBJECT,
+							type,
+							2);
 		break;
 		case 7: // north west
 //			if (type == DT_NONE) // this is two-way diagonal visibility check
@@ -3110,12 +3294,45 @@ int TileEngine::horizontalBlockage(
 								type) / 2
 
 						+ blockage(
+								startTile,
+								MapData::O_OBJECT,
+								type,
+								0) / 2
+						+ blockage(
+								startTile,
+								MapData::O_OBJECT,
+								type,
+								6) / 2
+
+						+ blockage(
 								_save->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_OBJECT,
 								type,
-								5) / 2
+								6) / 2
+						+ blockage(
+								_save->getTile(startTile->getPosition() + tileNorth),
+								MapData::O_OBJECT,
+								type,
+								4) / 2
+
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileWest),
+								MapData::O_OBJECT,
+								type,
+								0) / 2
+						+ blockage(
+								_save->getTile(startTile->getPosition() + tileWest),
+								MapData::O_OBJECT,
+								type,
+								2) / 2
+
+						+ blockage(
+								endTile,
+								MapData::O_OBJECT,
+								type,
+								4) / 2
+						+ blockage(
+								endTile,
 								MapData::O_OBJECT,
 								type,
 								2) / 2;
@@ -3171,7 +3388,6 @@ int TileEngine::horizontalBlockage(
 			return -9;	// special case for calculateFOV() to not subtract last tile in trajectory.
 						// hit bigwall or stopLOS Content ... reveal tile ...
 						// ... reveal tile by not decrementing the trajectory vector in calculateFOV()
-
 		}
 	}
 	else // !visLike
@@ -3229,8 +3445,8 @@ int TileEngine::horizontalBlockage(
  * @param startTile	- Pointer to tile where the power starts
  * @param endTile	- Pointer to adjacent tile where the power ends
  * @param type		- The type of power: damageType
- * @return, (int)block	-2 special case for Content-objects to block vision, and for invalid tiles
- *						-1 hardblock power / vision
+ * @return, (int)block	-9 special case for Content-objects to block vision, and for invalid tiles
+ *						-1 hardblock power / vision (can be less than -1)
  *						 0 no block
  *						 1+ variable power blocked
  */
@@ -3243,7 +3459,7 @@ int TileEngine::verticalBlockage(
 	if (startTile == 0 // safety check
 		|| endTile == 0)
 	{
-		return -1;
+		return -9;
 	}
 
 	int dirZ = endTile->getPosition().z - startTile->getPosition().z;
@@ -3275,7 +3491,7 @@ int TileEngine::verticalBlockage(
 							9); // Pathfinding::DIR_DOWN
 		}
 
-		if (   x != endTile->getPosition().x
+		if (x != endTile->getPosition().x
 			|| y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
@@ -3321,7 +3537,7 @@ int TileEngine::verticalBlockage(
 							8); // Pathfinding::DIR_UP
 		}
 
-		if (   x != endTile->getPosition().x
+		if (x != endTile->getPosition().x
 			|| y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
@@ -3414,14 +3630,17 @@ int TileEngine::blockage(
 				else
 					return 0;
 			}
-			else if (_powerT < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
+			else if (_powerT > -1
+				&& _powerT < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
+			{
 				return -1;
-			else
+			}
+/*			else
 			{
 				int ret = tile->getMapData(part)->getBlock(type);
 				//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
 				return ret;
-			}
+			} */
 		}
 		else // dir > -1 -> OBJECT part. ( BigWalls & content )
 		{
@@ -3430,7 +3649,7 @@ int TileEngine::blockage(
 				&& visLike)
 //				&& type == DT_NONE)
 			{
-				bigWall = tile->getMapData(part)->stopLOS() // tile block
+				bigWall = tile->getMapData(part)->stopLOS() // blocked by Content
 						|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR;
 			}
 			//Log(LOG_INFO) << ". bigWall = " << bigWall;
@@ -3534,38 +3753,40 @@ int TileEngine::blockage(
 				case 8: // up
 				case 9: // down
 				default:
-					if (bigWall == Pathfinding::BIGWALL_BLOCK) // includes stopLoS & floors
+					if (bigWall != Pathfinding::BIGWALL_BLOCK) // includes stopLoS & floors
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 8,9 up,down )";
-						return -1;
-					}
-					else //
 						return 0;
+					}
 				break;
 			}
 
 			// might be Content or remaining-bigWalls block here
-			if (bigWall > 0
-				&& (visLike
-					|| (_powerT > -1
-						&& _powerT < tile->getMapData(part)->getArmor() * 2))) // terrain absorbs 200% damage from DT_HE!
+			if (bigWall > 0)
 			{
-				return -1;
+				if (visLike)
+				{
+					return -1;
+				}
+				else if (_powerT > -1
+					&& _powerT < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
+				{
+					return 500;
+				}
 			}
 		}
 
-		// note: This is all probably redundant (ie, handled above).
-/*		if (type != DT_NONE) // FoV is blocked above, or gets a pass here ( ie. vs Content )
+
+		if (!visLike) // visibility is blocked above, or gets a pass here
 		{
-			if (_powerT < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
-				return -1;
-			else
-			{
-				int ret = tile->getMapData(part)->getBlock(type);
-				//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
-				return ret;
-			}
-		} */
+//			if (_powerT < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
+//				return -1;
+//			else ...
+
+			int ret = tile->getMapData(part)->getBlock(type);
+			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
+			return ret;
+		}
 	}
 
 	//Log(LOG_INFO) << "TileEngine::blockage() EXIT, (no valid part) ret 0";

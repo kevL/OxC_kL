@@ -76,6 +76,7 @@
 
 namespace OpenXcom
 {
+
 namespace CrossPlatform
 {
 

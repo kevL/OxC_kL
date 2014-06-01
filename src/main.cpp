@@ -55,8 +55,8 @@ int main(
 		int argc,
 		char *argv[])
 {
-	// Uncomment to check memory leaks in VS
-	//_CrtSetDbgFlag ( _CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF );
+	// To check memory leaks in VS
+//	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
 
 #ifndef _DEBUG
 	try
@@ -76,6 +76,7 @@ int main(
 		std::ostringstream title;
 //kL	title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 		title << "OxC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
+
 		game = new Game(title.str());
 
 //		game->setVolume( // kL
@@ -93,11 +94,15 @@ int main(
 		exit(EXIT_FAILURE);
 	}
 #endif
-	Options::save();
+//kL	Options::save();	// -> wtf keeps rewriting my options.cfg .....
+							// yet it works fine Game::run() before quitting.
+							// Ps. why are they even doing Options::save() twice
+							// ... now they both fuck up.
 
 	// Comment this for faster exit.
 	delete game;
 
+	Log(LOG_INFO) << "OpenXcom has shut down."; // kL
 	return EXIT_SUCCESS;
 }
 

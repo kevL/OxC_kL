@@ -441,7 +441,10 @@ void Game::run()
 		}
 	}
 
-	Options::save();
+//kL	Options::save();	// kL_note: why this work here but not at main() EXIT,
+							// where it clears & rewrites my options.cfg
+							// Ps. why are they even doing Options::save() twice
+							// ... now they both fuck up.
 }
 
 /**

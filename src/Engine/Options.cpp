@@ -594,6 +594,8 @@ void save(const std::string& filename)
 		return;
 	}
 
+	Log(LOG_INFO) << "Saving Options to " << filename << ".cfg"; // kL
+
 	YAML::Emitter out;
 	YAML::Node
 		doc,
