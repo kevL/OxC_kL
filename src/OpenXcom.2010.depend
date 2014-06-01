@@ -6004,7 +6004,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1401537501 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1401584995 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6491,7 +6491,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1401537467 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1401585012 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<cmath>
 	<sstream>
@@ -6729,7 +6729,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1401254206 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1401586638 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6847,7 +6847,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1401491483 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1401589065 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -9414,7 +9414,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1401489083 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1401584942 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"

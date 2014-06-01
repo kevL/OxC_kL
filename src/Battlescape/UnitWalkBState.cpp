@@ -127,7 +127,6 @@ void UnitWalkBState::init()
 void UnitWalkBState::think()
 {
 	//Log(LOG_INFO) << "\n***** UnitWalkBState::think() : " << _unit->getId();
-
 	if (_unit->isOut(true, true))
 	{
 		//Log(LOG_INFO) << ". . isOut() abort.";
@@ -676,6 +675,7 @@ bool UnitWalkBState::doStatusWalk()
 					_unit->getTurretType() != -1);
 
 		_pf->abortPath();
+		_unit->setStatus(STATUS_STANDING); // kL
 	}
 
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
@@ -912,8 +912,8 @@ bool UnitWalkBState::doStatusStand_end()
 void UnitWalkBState::doStatusTurn()
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusTurn() : " << _unit->getId();
-	if (_turnBeforeFirstStep) // except before the first step.
-		_preMovementCost++;
+	if (_turnBeforeFirstStep)	// turning during walking costs no tu
+		_preMovementCost++;		// except before the first step.
 
 	_unit->turn();
 
@@ -942,6 +942,7 @@ void UnitWalkBState::doStatusTurn()
 		_unit->_hidingForTurn = false;
 
 		_pf->abortPath();
+		_unit->setStatus(STATUS_STANDING);
 
 		_unit->setCache(0);
 		_parent->getMap()->cacheUnit(_unit);
