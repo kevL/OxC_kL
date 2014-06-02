@@ -2275,7 +2275,7 @@ void TileEngine::explode(
 			int maxRadius,
 			BattleUnit* unit)
 {
-	Log(LOG_INFO) << "TileEngine::explode() power = " << power << ", type = " << (int)type << ", maxRadius = " << maxRadius;
+	//Log(LOG_INFO) << "TileEngine::explode() power = " << power << ", type = " << (int)type << ", maxRadius = " << maxRadius;
 	if (power == 0) // kL, quick out.
 		return;
 
@@ -2335,7 +2335,7 @@ void TileEngine::explode(
 		cos_fi;
 
 	int testPow = 0;
-	int testIter = 0; // TEST.
+	//int testIter = 0; // TEST.
 
 //	for (int fi = 0; fi == 0; ++fi) // kL_note: Looks like a TEST ray. ( 0 == horizontal )
 	for (int
@@ -2382,12 +2382,12 @@ void TileEngine::explode(
 												tileY,
 												tileZ));
 
-				++testIter;
-				Log(LOG_INFO) << ". testIter = " << testIter;
+				//++testIter;
+				//Log(LOG_INFO) << ". testIter = " << testIter;
 
 				if (destTile == NULL) // out of map!
 				{
-					Log(LOG_INFO) << ". destTile NOT Valid " << Position(tileX, tileY, tileZ);
+					//Log(LOG_INFO) << ". destTile NOT Valid " << Position(tileX, tileY, tileZ);
 					break;
 				}
 
@@ -2453,13 +2453,21 @@ void TileEngine::explode(
 					destTile->setExplosive(_powerT);
 				}
 
+
 				//Log(LOG_INFO) << "TileEngine::explode() pre insert Tile";
-				Log(LOG_INFO) << ". pre insert Tile " << Position(tileX, tileY, tileZ);
-
+				//Log(LOG_INFO) << ". pre insert Tile " << Position(tileX, tileY, tileZ);
 				tilePair = tilesAffected.insert(destTile); // check if we had this tile already
-
+/*				try
+				{
+					tilePair = tilesAffected.insert(destTile); // check if we had this tile already
+					throw 99;
+				}
+				catch(int e)
+				{
+					Log(LOG_INFO) << ". EXCEPTION adding tilePair (" << e << ")";
+					return;
+				} */
 				//Log(LOG_INFO) << ". post insert Tile";
-				Log(LOG_INFO) << ". post insert Tile";
 
 
 				if (tilePair.second) // true if a new tile was inserted.
