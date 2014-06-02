@@ -181,6 +181,11 @@ private:
 				const size_t nextWaypoint,
 				const Globe& globe,
 				const RuleRegion& region);
+		/// Get a random landing point inside the given region zone.
+		std::pair<double, double> getLandPoint(
+				const Globe& globe,
+				const RuleRegion& region,
+				size_t zone);
 };
 
 }

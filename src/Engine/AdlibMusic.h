@@ -62,7 +62,7 @@ private:
 		/// Loads music from a chunk of memory.
 		void load(
 				const void* data,
-				size_t size);
+				int size);
 
 		/// Plays the music.
 		void play(int loop = -1) const;

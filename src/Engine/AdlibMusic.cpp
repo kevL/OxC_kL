@@ -129,10 +129,10 @@ void AdlibMusic::load(const std::string& filename)
  */
 void AdlibMusic::load(
 		const void* data,
-		size_t size)
+		int size)
 {
 	_data = (char*)data;
-	_size = size;
+	_size = static_cast<size_t>(size);
 }
 
 /**

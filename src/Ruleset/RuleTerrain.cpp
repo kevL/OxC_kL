@@ -222,7 +222,7 @@ MapData* RuleTerrain::getMapData(
 	{
 		mdf = *i;
 
-		if (*id - mdf->getSize() < 0)
+		if (*id < static_cast<int>(mdf->getSize()))
 			break;
 
 		*id -= mdf->getSize();
