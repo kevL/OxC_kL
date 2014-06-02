@@ -19,11 +19,13 @@
 
 #include "Game.h"
 
-/*#ifdef _WIN32
+// kL_begin: from Older
+/* #ifdef _WIN32
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
 	#include <SDL_syswm.h>
-#endif */
+#endif */ // kL_end.
+
 
 #include <cmath>
 #include <sstream>
@@ -82,7 +84,7 @@ Game::Game(const std::string& title)
 		_mouseActive(true),
 		_timeUntilNextFrame(0)
 {
-	//Log(LOG_INFO) << "Create Game";
+	Log(LOG_INFO) << "Create Game";
 	Options::reload = false;
 	Options::mute = false;
 
@@ -148,7 +150,7 @@ Game::Game(const std::string& title)
  */
 Game::~Game()
 {
-	//Log(LOG_INFO) << "Delete Game";
+	Log(LOG_INFO) << "Delete Game";
 	Sound::stop();
 	Music::stop();
 
@@ -226,7 +228,9 @@ void Game::run()
 			_states.back()->resetAll(); // Unpress buttons
 
 			SDL_Event ev; // Refresh mouse position
-			int x, y;
+			int
+				x,
+				y;
 			SDL_GetMouseState(&x, &y);
 			ev.type = SDL_MOUSEMOTION;
 			ev.motion.x = x;
@@ -354,8 +358,8 @@ void Game::run()
 
 		if (runningState != PAUSED) // Process rendering
 		{
-			_states.back()->think();
-			_fpsCounter->think(); // Process logic
+			_states.back()->think(); // Process logic
+			_fpsCounter->think();
 
 			if (Options::FPS > 0
 				&& !(

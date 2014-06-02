@@ -4763,7 +4763,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1401630778 f:\git\openxcom\src\battlescape\battlescapegame.h
+1401711645 f:\git\openxcom\src\battlescape\battlescapegame.h
 	<list>
 	<string>
 	<vector>
@@ -5781,7 +5781,7 @@
 1401489084 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1401631147 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1401711878 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6004,7 +6004,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1401605459 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1401714075 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>

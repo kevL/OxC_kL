@@ -90,7 +90,7 @@ BattlescapeGame::BattlescapeGame(
 		_endTurnRequested(false),
 		_kneelReserved(false)
 {
-	//Log(LOG_INFO) << "Create BattlescapeGame";
+	Log(LOG_INFO) << "Create BattlescapeGame";
 	_tuReserved				= BA_NONE;
 	_playerTUReserved		= BA_NONE;
 	_debugPlay				= false;
@@ -115,7 +115,7 @@ BattlescapeGame::BattlescapeGame(
  */
 BattlescapeGame::~BattlescapeGame()
 {
-	//Log(LOG_INFO) << "Delete BattlescapeGame";
+	Log(LOG_INFO) << "Delete BattlescapeGame";
 	for (std::list<BattleState*>::iterator
 			i = _states.begin();
 			i != _states.end();
@@ -1348,8 +1348,8 @@ void BattlescapeGame::popState()
 				// after throwing, the cursor returns to default cursor, after shooting it stays in
 				// targeting mode and the player can shoot again in the same mode (autoshot/snap/aimed)
 				// kL_note: unless he/she is out of tu's
-
-/*kL				if ((action.type == BA_THROW || action.type == BA_LAUNCH) && !actionFailed)
+/*kL
+				if ((action.type == BA_THROW || action.type == BA_LAUNCH) && !actionFailed)
 				{
 					// clean up the waypoints
 					if (action.type == BA_LAUNCH)

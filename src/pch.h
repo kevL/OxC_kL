@@ -71,7 +71,8 @@
 #include <utility>
 #include <vector>
 
-// kL_reinstate begin:
+// kL_reinstate begin: see Engine::CrossPlatform.cpp
+/*
 #ifdef _WIN32
 	#ifndef NOMINMAX
 		#define NOMINMAX
@@ -82,8 +83,8 @@
 //	#include <shlobj.h>		// kL_reinstate: No, causes conflict OR
 //	#include <shlwapi.h>	// kL_reinstate: this causes conflict ...
 	#include <direct.h>
-#else // kL_reinstate end.
-//kL #ifndef _WIN32
+#else */ // kL_reinstate end.
+#ifndef _WIN32
 	#include <unistd.h>
 	#include <sys/param.h>
 	#include <pwd.h>

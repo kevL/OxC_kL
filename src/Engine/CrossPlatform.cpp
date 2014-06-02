@@ -955,6 +955,7 @@ void flashWindow()
 #ifdef _WIN32
 	SDL_SysWMinfo wminfo;
 	SDL_VERSION(&wminfo.version)
+
 	if (SDL_GetWMInfo(&wminfo))
 	{
 		HWND hwnd = wminfo.window;
