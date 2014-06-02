@@ -72,7 +72,7 @@ private:
 		_hitFrame,
 		_shotDownByCraftId,
 		_crashPS; // kL
-	unsigned
+	size_t
 		_secondsRemaining,
 		_trajectoryPoint;
 
@@ -132,9 +132,9 @@ private:
 		void setDetected(bool detected);
 
 		/// Gets the UFO's seconds left on the ground.
-		int getSecondsRemaining() const;
+		size_t getSecondsRemaining() const;
 		/// Sets the UFO's seconds left on the ground.
-		void setSecondsRemaining(int seconds);
+		void setSecondsRemaining(size_t seconds);
 
 		/// Gets the UFO's direction.
 		std::string getDirection() const;
@@ -188,12 +188,12 @@ private:
 		void setHyperDetected(bool hyperdetected);
 
 		/// Gets the UFO's progress on the trajectory track.
-		unsigned getTrajectoryPoint() const
+		size_t getTrajectoryPoint() const
 		{
 			return _trajectoryPoint;
 		}
 		/// Sets the UFO's progress on the trajectory track.
-		void setTrajectoryPoint(unsigned np)
+		void setTrajectoryPoint(size_t np)
 		{
 			_trajectoryPoint = np;
 		}

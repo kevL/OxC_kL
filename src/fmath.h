@@ -42,7 +42,7 @@ inline bool AreSame(
 template <class _Tx>
 inline _Tx Round(const _Tx& x)
 {
-	return x < 0.0? std::ceil(x - 0.5): std::floor(x + 0.5);
+	return (x < static_cast<_Tx>(0))? std::ceil(x - static_cast<_Tx>(0.5)): std::floor(x + static_cast<_Tx>(0.5)); // kL_note: finally got around to that, hun?
 }
 
 #endif

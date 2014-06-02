@@ -99,7 +99,7 @@ private:
 
 	std::map<int, TextHAlign> _align;
 
-	std::vector<int>
+	std::vector<size_t>
 		_columns,
 		_rows;
 	std::vector<std::vector<Text*> > _texts;
@@ -138,28 +138,28 @@ private:
 
 		/// Sets the text color of a certain cell.
 		void setCellColor(
-				int row,
-				int column,
+				size_t row,
+				size_t column,
 				Uint8 color);
 		/// Sets the text color of a certain row.
 		void setRowColor(
-				int row,
+				size_t row,
 				Uint8 color);
 
 		/// Gets the text of a certain cell.
 		std::wstring getCellText(
-				int row,
-				int column) const;
+				size_t row,
+				size_t column) const;
 		/// Sets the text of a certain cell.
 		void setCellText(
-				int row,
-				int column,
+				size_t row,
+				size_t column,
 				const std::wstring& text);
 
 		/// Gets the X position of a certain column.
-		int getColumnX(int column) const;
+		int getColumnX(size_t column) const;
 		/// Gets the Y position of a certain row.
-		int getRowY(int row) const;
+		int getRowY(size_t row) const;
 
 		/// Gets the amount of text in the list.
 		size_t getTexts() const;
@@ -299,7 +299,7 @@ private:
 		void mouseOut(Action* action, State* state);
 
 		/// get the scroll depth
-		int getScroll();
+		size_t getScroll();
 		/// set the scroll depth
 		void scrollTo(size_t scroll);
 

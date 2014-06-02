@@ -74,7 +74,7 @@ private:
 		/// Gets the dataset name (used for MAP generation).
 		std::string getName() const;
 		/// Gets the dataset size.
-		int getSize() const;
+		size_t getSize() const;
 		/// Gets the objects in this dataset.
 		std::vector<MapData*>* getObjects();
 		/// Gets the surfaces in this dataset.

@@ -77,7 +77,7 @@ public:
 	int getHeight() const;
 
 	/// Gets the total frames in the set.
-	int getTotalFrames() const;
+	size_t getTotalFrames() const;
 
 	/// Sets the surface set's palette.
 	void setPalette(

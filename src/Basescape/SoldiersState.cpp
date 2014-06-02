@@ -177,7 +177,7 @@ void SoldiersState::init()
 
 	_lstSoldiers->clearList();
 
-	int row = 0;
+	size_t row = 0;
 	for (std::vector<Soldier*>::iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();

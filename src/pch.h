@@ -79,8 +79,8 @@
 
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
-//	#include <shlobj.h> // kL_reinstate: No, causes conflict OR
-//	#include <shlwapi.h> // kL_reinstate: this causes conflict ...
+//	#include <shlobj.h>		// kL_reinstate: No, causes conflict OR
+//	#include <shlwapi.h>	// kL_reinstate: this causes conflict ...
 	#include <direct.h>
 #else // kL_reinstate end.
 //kL #ifndef _WIN32

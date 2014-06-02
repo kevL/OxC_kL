@@ -96,9 +96,10 @@ Soldier::Soldier(
 		_gender	= (SoldierGender)RNG::generate(0, 1);	// kL
 		_look	= (SoldierLook)RNG::generate(0, 3);		// kL
 
-/*kL		if (!names->empty())
+/*kL
+		if (!names->empty())
 		{
-			int nationality = RNG::generate(0, names->size() - 1);
+			size_t nationality = RNG::generate(0, names->size() - 1);
 			_name = names->at(nationality)->genName(&_gender);
 
 			// Once we add the ability to mod in extra looks, this will

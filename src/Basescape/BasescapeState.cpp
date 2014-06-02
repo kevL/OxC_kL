@@ -334,7 +334,7 @@ void BasescapeState::setBase(Base* base)
 			{
 				_base = base;
 				_mini->setSelectedBase(i);
-//kL				_game->getSavedGame()->setSelectedBase(i);
+//kL			_game->getSavedGame()->setSelectedBase(i);
 				exists = true;
 
 				break;
@@ -345,14 +345,14 @@ void BasescapeState::setBase(Base* base)
 		{
 			_base = _game->getSavedGame()->getBases()->front();
 			_mini->setSelectedBase(0);
-//kL			_game->getSavedGame()->setSelectedBase(0);
+//kL		_game->getSavedGame()->setSelectedBase(0);
 		}
 	}
 	else // Use a blank base for special case when player has no bases
 	{
 		_base = new Base(_game->getRuleset());
 		_mini->setSelectedBase(0);
-//kL		_game->getSavedGame()->setSelectedBase(0);
+//kL	_game->getSavedGame()->setSelectedBase(0);
 	}
 }
 
@@ -680,29 +680,20 @@ void BasescapeState::handleKeyPress(Action* action)
 			Options::keyBaseSelect8
 		};
 
-		int base = -1;
-
 		int key = action->getDetails()->key.keysym.sym;
 
 		for (size_t
 				i = 0;
-				i < MiniBaseView::MAX_BASES;
+				i < _game->getSavedGame()->getBases()->size();
 				++i)
 		{
 			if (key == baseKeys[i])
 			{
-				base = i;
+				_base = _game->getSavedGame()->getBases()->at(i);
+				init();
 
 				break;
 			}
-		}
-
-		if (base > -1
-			&& static_cast<size_t>(base) < _game->getSavedGame()->getBases()->size())
-		{
-			_base = _game->getSavedGame()->getBases()->at(base);
-
-			init();
 		}
 	}
 }

@@ -2287,7 +2287,7 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
  * Sets the last selected player base.
  * @param base - # of the base
  */
-/*kL void SavedGame::setSelectedBase(int base)
+/*kL void SavedGame::setSelectedBase(size_t base)
 {
 	_selectedBase = base;
 } */

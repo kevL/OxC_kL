@@ -76,12 +76,12 @@ private:
 		_craftHeight_pre,
 		_currentCraftDamageColor,
 		_interceptionNumber,
-		_interceptionsCount,
 
 		_x,
 		_y,
 		_minimizedIconX,
 		_minimizedIconY;
+	size_t _interceptionsCount;
 	Uint32 _ufoFireInterval;
 
 	std::vector<CraftWeaponProjectile*> _projectiles;
@@ -209,7 +209,7 @@ private:
 		/// Sets interception number.
 		void setInterceptionNumber(const int number);
 		/// Sets interceptions count.
-		void setInterceptionsCount(const int count);
+		void setInterceptionsCount(const size_t count);
 
 		/// Calculates window position according to opened interception windows.
 		void calculateWindowPosition();

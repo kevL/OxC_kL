@@ -156,9 +156,12 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 			i != _mapBlocks.end();
 			++i)
 	{
-		if (((force && (*i)->getSizeX() == maxsize)
-				|| (!force && (*i)->getSizeX() <= maxsize))
-			&& ((*i)->getType() == type || (*i)->getSubType() == type))
+		if (((force
+					&& (*i)->getSizeX() == maxsize)
+				|| (!force
+					&& (*i)->getSizeX() <= maxsize))
+			&& ((*i)->getType() == type
+				|| (*i)->getSubType() == type))
 		{
 			for (int
 					j = 0;
@@ -170,14 +173,15 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 		}
 	}
 
-	if (compliantMapBlocks.empty()) return 0;
+	if (compliantMapBlocks.empty())
+		return 0;
 
-	int n = RNG::generate(0, compliantMapBlocks.size() - 1);
+	int block = RNG::generate(0, static_cast<int>(compliantMapBlocks.size()) - 1);
 
 	if (type == MT_DEFAULT)
-		compliantMapBlocks[n]->markUsed();
+		compliantMapBlocks[block]->markUsed();
 
-	return compliantMapBlocks[n];
+	return compliantMapBlocks[block];
 }
 
 /**

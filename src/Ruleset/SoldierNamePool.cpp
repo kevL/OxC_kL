@@ -140,7 +140,7 @@ std::wstring SoldierNamePool::genName(SoldierGender* gender) const
  * @param numLooks, The maximum index.
  * @return, The index of the soldier's look.
  */
-int SoldierNamePool::genLook(size_t numLooks)
+size_t SoldierNamePool::genLook(size_t numLooks)
 {
 	int look = 0;
 	// minimum chance of a look being selected if it isn't enumerated.

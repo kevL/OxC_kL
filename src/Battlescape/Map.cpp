@@ -1746,7 +1746,7 @@ void Map::drawTerrain(Surface* surface)
 								+ offset.y
 								- _arrow->getHeight()
 								+ static_cast<int>(
-									4.0 * sin((static_cast<double>(_animFrame) * 6.28) / 8.0)),
+									4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
 							0);
 	}
 

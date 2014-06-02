@@ -2350,7 +2350,9 @@ void GeoscapeState::time1Day()
 
 				if (possibilities.size() != 0)
 				{
-					int pick = RNG::generate(0, possibilities.size() - 1);
+					size_t pick = static_cast<size_t>(RNG::generate(
+																0,
+																static_cast<int>(possibilities.size() - 1)));
 					std::string sel = possibilities.at(pick);
 					bonus = _game->getRuleset()->getResearch(sel);
 
@@ -2677,9 +2679,9 @@ void GeoscapeState::time1Month()
 								i = races.erase(i);
 						}
 
-						int race = RNG::generate(
-												0,
-												static_cast<int>(races.size()) - 1);
+						size_t race = static_cast<size_t>(RNG::generate(
+																	0,
+																	static_cast<int>(races.size()) - 1));
 						mission->setRace(races[race]);
 						mission->start(150);
 						_game->getSavedGame()->getAlienMissions().push_back(mission);

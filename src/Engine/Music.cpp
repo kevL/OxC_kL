@@ -77,7 +77,7 @@ void Music::load(const std::string& filename)
  */
 void Music::load(
 		const void* data,
-		size_t size)
+		int size)
 {
 #ifndef __NO_MUSIC
 	SDL_RWops* rwops = SDL_RWFromConstMem(data, size);

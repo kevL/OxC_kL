@@ -107,9 +107,9 @@ private:
 	/// Gets the Type of the selected item.
 	enum SellType getType(size_t selected) const;
 	/// Gets the index of selected item.
-	int getItemIndex(size_t selected) const;
+	size_t getItemIndex(size_t selected) const;
 	/// Gets the index of the selected craft.
-	int getCraftIndex(size_t selected) const;
+	size_t getCraftIndex(size_t selected) const;
 
 
 	public:

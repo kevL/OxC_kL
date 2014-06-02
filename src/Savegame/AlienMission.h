@@ -51,7 +51,7 @@ class AlienMission
 
 private:
 	int _uniqueID;
-	unsigned
+	size_t
 		_liveUfos,
 		_nextUfoCounter,
 		_nextWave,
@@ -114,12 +114,12 @@ private:
 		}
 
 		/// Gets the minutes until next wave spawns.
-		unsigned getWaveCountdown() const
+		size_t getWaveCountdown() const
 		{
 			return _spawnCountdown;
 		}
 		/// Sets the minutes until next wave spawns.
-		void setWaveCountdown(unsigned minutes);
+		void setWaveCountdown(size_t minutes);
 
 		/// Sets the unique ID for this mission.
 		void setId(int id);
@@ -140,7 +140,7 @@ private:
 				Game& engine,
 				const Globe& globe);
 		/// Initialize with values from rules.
-		void start(unsigned initialCount = 0);
+		void start(size_t initialCount = 0);
 
 		/// Increase number of live UFOs.
 		void increaseLiveUfos()
@@ -178,7 +178,7 @@ private:
 		/// Select a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
 		std::pair<double, double> getWaypoint(
 				const UfoTrajectory& trajectory,
-				const unsigned int nextWaypoint,
+				const size_t nextWaypoint,
 				const Globe& globe,
 				const RuleRegion& region);
 };

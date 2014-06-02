@@ -64,7 +64,7 @@ namespace
 std::pair<double, double> getLandPoint(
 		const OpenXcom::Globe& globe,
 		const OpenXcom::RuleRegion& region,
-		unsigned zone)
+		size_t zone)
 {
 	std::pair<double, double> pos;
 	do
@@ -146,10 +146,10 @@ void AlienMission::load(
 {
 	_region			= node["region"].as<std::string>(_region);
 	_race			= node["race"].as<std::string>(_race);
-	_nextWave		= node["nextWave"].as<unsigned>(_nextWave);
-	_nextUfoCounter	= node["nextUfoCounter"].as<unsigned>(_nextUfoCounter);
-	_spawnCountdown	= node["spawnCountdown"].as<unsigned>(_spawnCountdown);
-	_liveUfos		= node["liveUfos"].as<unsigned>(_liveUfos);
+	_nextWave		= node["nextWave"].as<size_t>(_nextWave);
+	_nextUfoCounter	= node["nextUfoCounter"].as<size_t>(_nextUfoCounter);
+	_spawnCountdown	= node["spawnCountdown"].as<size_t>(_spawnCountdown);
+	_liveUfos		= node["liveUfos"].as<size_t>(_liveUfos);
 	_uniqueID		= node["uniqueID"].as<int>(_uniqueID);
 
 	if (const YAML::Node& base = node["alienBase"])
@@ -498,7 +498,7 @@ Ufo* AlienMission::spawnUfo(
 /**
  *
  */
-void AlienMission::start(unsigned initialCount)
+void AlienMission::start(size_t initialCount)
 {
 	_nextWave = 0;
 	_nextUfoCounter = 0;
@@ -506,8 +506,8 @@ void AlienMission::start(unsigned initialCount)
 
 	if (initialCount == 0)
 	{
-		int spawnTimer = static_cast<int>(_rule.getWave(0).spawnTimer / 30);
-		_spawnCountdown = static_cast<unsigned int>(((spawnTimer / 2) + RNG::generate(0, spawnTimer)) * 30);
+		size_t spawnTimer = static_cast<size_t>(_rule.getWave(0).spawnTimer / 30);
+		_spawnCountdown = static_cast<size_t>(((spawnTimer / 2) + RNG::generate(0, spawnTimer)) * 30);
 	}
 	else
 		_spawnCountdown = initialCount;
@@ -565,8 +565,8 @@ void AlienMission::ufoReachedWaypoint(
 	const Ruleset& rules = *engine.getRuleset();
 	SavedGame& game = *engine.getSavedGame();
 
-	const unsigned int curWaypoint = ufo.getTrajectoryPoint();
-	const unsigned int nextWaypoint = curWaypoint + 1;
+	const size_t curWaypoint = ufo.getTrajectoryPoint();
+	const size_t nextWaypoint = curWaypoint + 1;
 	const UfoTrajectory& trajectory = ufo.getTrajectory();
 
 	if (nextWaypoint == trajectory.getWaypointCount())
@@ -823,7 +823,7 @@ void AlienMission::ufoLifting(
  * Calling this on a finished mission has no effect.
  * @param minutes The minutes until the next UFO wave will spawn.
  */
-void AlienMission::setWaveCountdown(unsigned minutes)
+void AlienMission::setWaveCountdown(size_t minutes)
 {
 	assert(minutes != 0 && minutes %30 == 0);
 
@@ -989,7 +989,7 @@ void AlienMission::setRegion(
  */
 std::pair<double, double> AlienMission::getWaypoint(
 		const UfoTrajectory& trajectory,
-		const unsigned int nextWaypoint,
+		const size_t nextWaypoint,
 		const Globe& globe,
 		const RuleRegion &region)
 {

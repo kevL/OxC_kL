@@ -36,8 +36,8 @@ namespace OpenXcom
 class WeightedOptions
 {
 private:
-	std::map<std::string, unsigned> _choices; //!< Options and weights
-	unsigned _totalWeight; //!< The total weight of all options.
+	std::map<std::string, size_t> _choices; //!< Options and weights
+	size_t _totalWeight; //!< The total weight of all options.
 
 	public:
 		/// Create an empty set.
@@ -53,7 +53,7 @@ private:
 		/// Select the top item.
 		const std::string top() const;
 		/// Set an option's weight.
-		void set(const std::string& id, unsigned weight);
+		void set(const std::string& id, size_t weight);
 		/// Is this empty, or not
 		bool empty() const
 		{

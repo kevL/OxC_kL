@@ -383,7 +383,7 @@ void SellState::think()
  * @param selected Selected craft.
  * @return Index of the selected craft.
  */
-int SellState::getCraftIndex(size_t selected) const
+size_t SellState::getCraftIndex(size_t selected) const
 {
 	return selected - _soldiers.size();
 }
@@ -935,7 +935,7 @@ enum SellType SellState::getType(size_t selected) const
  * @param selected Currently selected item.
  * @return Index of the selected item.
  */
-int SellState::getItemIndex(size_t selected) const
+size_t SellState::getItemIndex(size_t selected) const
 {
 	return static_cast<int>(selected)
 		- static_cast<int>(_soldiers.size())

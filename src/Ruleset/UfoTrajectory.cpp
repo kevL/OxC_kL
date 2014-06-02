@@ -88,7 +88,7 @@ UfoTrajectory::UfoTrajectory(const std::string& id)
 void UfoTrajectory::load(const YAML::Node& node)
 {
 	_id				= node["id"].as<std::string>(_id);
-	_groundTimer	= node["groundTimer"].as<unsigned>(_groundTimer);
+	_groundTimer	= node["groundTimer"].as<size_t>(_groundTimer);
 	_waypoints		= node["waypoints"].as<std::vector<TrajectoryWaypoint> >(_waypoints);
 }
 
@@ -97,7 +97,7 @@ void UfoTrajectory::load(const YAML::Node& node)
  * @param wp The waypoint.
  * @return The altitude.
  */
-std::string UfoTrajectory::getAltitude(unsigned wp) const
+std::string UfoTrajectory::getAltitude(size_t wp) const
 {
 	return altitudeString[_waypoints[wp].altitude];
 }

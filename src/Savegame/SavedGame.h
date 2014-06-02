@@ -110,10 +110,11 @@ private:
 		_ironman,
 		_warned;
 	int
-//kL		_globeZoom,
 		_monthsPassed;
+//kL		_globeZoom,
+	size_t
+		_globeZoom; // kL
 //kL		_selectedBase;
-	size_t _globeZoom;
 	double
 		_globeLat,
 		_globeLon;
@@ -404,7 +405,7 @@ private:
 		/// Gets the last selected player base.
 //kL		Base* getSelectedBase();
 		/// Set the last selected player base.
-//kL		void setSelectedBase(int base);
+//kL		void setSelectedBase(size_t base);
 
 		/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 		int getSoldierScore(Soldier* soldier);

@@ -61,7 +61,7 @@ struct GraphBtnInfo
 
 	GraphBtnInfo(
 			const LocalizedText& name,
-			int color)
+			Uint8 color)
 		:
 			_name(name),
 			_color(color),

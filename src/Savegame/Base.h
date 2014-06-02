@@ -174,9 +174,9 @@ private:
 		/// Gets the base's available hangars.
 		int getAvailableHangars() const;
 
-		/// Get the number of available space lab (not used by a ResearchProject).
+		/// Gets the number of available space lab (not used by a ResearchProject).
 		int getFreeLaboratories () const;
-		/// Get the number of available space lab (not used by a Production).
+		/// Gets the number of available space lab (not used by a Production).
 		int getFreeWorkshops() const;
 
 		///
@@ -207,11 +207,11 @@ private:
 		/// Gets the base's total monthly maintenance.
 		int getMonthlyMaintenace() const;
 
-		/// Get the list of base's ResearchProject.
+		/// Gets the list of base's ResearchProject.
 		const std::vector<ResearchProject*>& getResearch() const;
-		/// Add a new ResearchProject to the Base.
+		/// Adds a new ResearchProject to the Base.
 		void addResearch(ResearchProject* project);
-		/// Remove a ResearchProject from the Base.
+		/// Removes a ResearchProject from the Base.
 //kL		void removeResearch(ResearchProject*);
 		void removeResearch(
 				ResearchProject* project,
@@ -219,11 +219,11 @@ private:
 		/// kL. Research Help ala XcomUtil.
 		void researchHelp(std::string aLien); // kL
 
-		/// Add a new Production to Base.
+		/// Adds a new Production to Base.
 		void addProduction(Production* prod);
-		/// Remove a Base's Production.
+		/// Removes a Base's Production.
 		void removeProduction(Production* prod);
-		/// Get the list of Base's Production.
+		/// Gets the list of Base's Production.
 		const std::vector<Production*>& getProductions() const;
 
 		/// Checks if this base is hyper-wave equipped.
@@ -246,20 +246,20 @@ private:
 		/// Gets if the craft is in battlescape.
 		bool isInBattlescape() const;
 
-		/// Mark this base for alien retaliation.
+		/// Marks this base for alien retaliation.
 		void setIsRetaliationTarget(bool mark = true);
 		/// Gets the retaliation status of this base.
 		bool getIsRetaliationTarget() const;
 
-		/// Get the detection chance for this base.
-//kL		unsigned getDetectionChance() const;
+		/// Gets the detection chance for this base.
+//kL	size_t getDetectionChance() const;
 		int getDetectionChance(int difficulty) const;
 
 		/// Gets how many Grav Shields the base has
 		int getGravShields() const;
-		///
+		/// Sets up base defenses.
 		void setupDefenses();
-		/// Get a list of Defensive Facilities
+		/// Gets a list of Defensive Facilities
 		std::vector<BaseFacility*>* getDefenses();
 
 		/// Gets the base's vehicles.
@@ -268,17 +268,17 @@ private:
 		void destroyDisconnectedFacilities();
 		/// Gets a sorted list of the facilities(=iterators) NOT connected to the Access Lift.
 		std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility* remove);
-		/// destroy a facility and deal with the side effects.
+		/// Destroys a facility and deals with the side effects.
 		void destroyFacility(std::vector<BaseFacility*>::iterator facility);
 
 		// kL_begin: Base, for GraphsState monthly expenditures etc.
-		/// Increase (or decrease) the base's total income amount.
+		/// Increases (or decreases) the base's total income amount.
 		void setCashIncome(int cash);
-		/// Get the base's total income amount.
+		/// Gets the base's total income amount.
 		int getCashIncome() const;
-		/// Increase (or decrease) the base's total spent amount.
+		/// Increases (or decreases) the base's total spent amount.
 		void setCashSpent(int cash);
-		/// Get the base's total spent amount.
+		/// Gets the base's total spent amount.
 		int getCashSpent() const;
 		// kL_end.
 };

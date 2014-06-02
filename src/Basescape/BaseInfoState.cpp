@@ -488,30 +488,20 @@ void BaseInfoState::handleKeyPress(Action* action)
 			Options::keyBaseSelect8
 		};
 
-		int base = -1;
 		int key = action->getDetails()->key.keysym.sym;
 
 		for (size_t
 				i = 0;
-				i < MiniBaseView::MAX_BASES;
+				i != _game->getSavedGame()->getBases()->size();
 				++i)
 		{
 			if (key == baseKeys[i])
 			{
-				base = i;
+				_base = _game->getSavedGame()->getBases()->at(i);
+				init();
 
 				break;
 			}
-		}
-
-		if (base > -1
-			&& base < static_cast<int>(_game->getSavedGame()->getBases()->size()))
-		{
-//			_mini->setSelectedBase(base);
-			_base = _game->getSavedGame()->getBases()->at(base);
-//			_state->setBase(_base);
-
-			init();
 		}
 	}
 }

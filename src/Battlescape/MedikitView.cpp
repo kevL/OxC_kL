@@ -96,7 +96,7 @@ void MedikitView::draw()
 		color = 0;
 
 	this->lock();
-	for (int
+	for (size_t
 			i = 0;
 			i < set->getTotalFrames();
 			i++)
@@ -149,7 +149,7 @@ void MedikitView::mouseClick(Action* action, State*)
 		x = static_cast<int>(action->getRelativeXMouse() / action->getXScale()),
 		y = static_cast<int>(action->getRelativeYMouse() / action->getYScale());
 
-	for (int
+	for (size_t
 			i = 0;
 			i < set->getTotalFrames();
 			i++)

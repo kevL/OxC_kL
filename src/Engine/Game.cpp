@@ -478,21 +478,21 @@ void Game::setVolume(
 	{
 		if (music > -1)
 		{
-			music = static_cast<int>(volumeExponent(music) * static_cast<float>(SDL_MIX_MAXVOLUME));
+			music = static_cast<int>(volumeExponent(music) * static_cast<double>(SDL_MIX_MAXVOLUME));
 			Mix_VolumeMusic(music);
 //			func_set_music_volume(music);
 		}
 
 		if (sound > -1)
 		{
-			sound = static_cast<int>(volumeExponent(sound) * static_cast<float>(SDL_MIX_MAXVOLUME));
+			sound = static_cast<int>(volumeExponent(sound) * static_cast<double>(SDL_MIX_MAXVOLUME));
 			Mix_Volume(-1, sound); // kL_note: this, supposedly, sets volume on *all channels*
 		}
 
 		if (ui > -1)
 		{
-			ui = static_cast<int>(volumeExponent(ui) * static_cast<float>(SDL_MIX_MAXVOLUME));
-			Mix_Volume(0, ui); // kL_note: then this sets channel-0 to ui-Volume ...
+			ui = static_cast<int>(volumeExponent(ui) * static_cast<double>(SDL_MIX_MAXVOLUME));
+			Mix_Volume(0, ui); // kL_note: then this sets channel-0 to ui-Volume ... they use channels #1 & #2 btw. and group them accordingly elsewhere
 			Mix_Volume(1, ui); // and this sets channel-1 to ui-Volume!
 		}
 	}
@@ -501,12 +501,12 @@ void Game::setVolume(
 /**
  *
  */
-float Game::volumeExponent(int volume)
+double Game::volumeExponent(int volume)
 {
-	return static_cast<float>((exp(
-									log(Game::VOLUME_GRADIENT + 1.0) * static_cast<double>(volume) / static_cast<double>(SDL_MIX_MAXVOLUME))
-								-1.0)
-							/ Game::VOLUME_GRADIENT);
+	return (exp(
+				log(Game::VOLUME_GRADIENT + 1.0) * static_cast<double>(volume) / static_cast<double>(SDL_MIX_MAXVOLUME))
+					-1.0)
+				/ Game::VOLUME_GRADIENT;
 }
 
 /**

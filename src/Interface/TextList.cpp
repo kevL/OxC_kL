@@ -241,8 +241,8 @@ void TextList::unpress(State* state)
  * @param color Text color.
  */
 void TextList::setCellColor(
-		int row,
-		int column,
+		size_t row,
+		size_t column,
 		Uint8 color)
 {
 	_texts[row][column]->setColor(color);
@@ -256,7 +256,7 @@ void TextList::setCellColor(
  * @param color Text color.
  */
 void TextList::setRowColor(
-		int row,
+		size_t row,
 		Uint8 color)
 {
 	for (std::vector<Text*>::iterator
@@ -277,8 +277,8 @@ void TextList::setRowColor(
  * @return, Text string.
  */
 std::wstring TextList::getCellText(
-		int row,
-		int column) const
+		size_t row,
+		size_t column) const
 {
 	return _texts[row][column]->getText();
 }
@@ -290,8 +290,8 @@ std::wstring TextList::getCellText(
  * @param text Text string.
  */
 void TextList::setCellText(
-		int row,
-		int column,
+		size_t row,
+		size_t column,
 		const std::wstring& text)
 {
 	_texts[row][column]->setText(text);
@@ -304,7 +304,7 @@ void TextList::setCellText(
  * @param column Column number.
  * @return, X position in pixels.
  */
-int TextList::getColumnX(int column) const
+int TextList::getColumnX(size_t column) const
 {
 	return getX() + _texts[0][column]->getX();
 }
@@ -314,7 +314,7 @@ int TextList::getColumnX(int column) const
  * @param row Row number.
  * @return Y position in pixels.
  */
-int TextList::getRowY(int row) const
+int TextList::getRowY(size_t row) const
 {
 	return getY() + _texts[row][0]->getY();
 }
@@ -405,10 +405,10 @@ void TextList::addRow(
 		{
 			std::wstring buf = txt->getText();
 
-			int w = txt->getTextWidth();
-			while (w < _columns[i])
+			int width = txt->getTextWidth();
+			while (width < static_cast<int>(_columns[i]))
 			{
-				w += _font->getChar('.')->getCrop()->w + _font->getSpacing();
+				width += _font->getChar('.')->getCrop()->w + _font->getSpacing(); // this is fucked 'round here.
 				buf += '.';
 			}
 
@@ -1411,11 +1411,11 @@ void TextList::mouseOut(Action* action, State* state)
 
 /**
  * Get the scroll depth.
- * @return, scroll depth.
+ * @return, scroll depth
  */
-int TextList::getScroll()
+size_t TextList::getScroll()
 {
-	return static_cast<int>(_scroll);
+	return _scroll;
 }
 
 /**

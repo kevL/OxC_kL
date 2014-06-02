@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1401489516 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1401673638 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -278,7 +278,7 @@
 1401232755 f:\git\openxcom\src\engine\action.h
 	<SDL.h>
 
-1401390654 f:\git\openxcom\src\engine\game.h
+1401674445 f:\git\openxcom\src\engine\game.h
 	<list>
 	<string>
 	<SDL.h>
@@ -4418,7 +4418,7 @@
 	<vector>
 	<SDL.h>
 
-1401232752 f:\git\openxcom\src\savegame\base.h
+1401676376 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
 	<string>
 	<vector>
@@ -4430,13 +4430,13 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1401232751 f:\git\openxcom\src\savegame\savedgame.h
+1401676746 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
 	<string>
 	<vector>
 	<time.h>
 
-1401489572 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1401673890 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4512,7 +4512,7 @@
 1401232757 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1401232757 f:\git\openxcom\src\basescape\sellstate.h
+1401673929 f:\git\openxcom\src\basescape\sellstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -4544,14 +4544,14 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1401232752 f:\git\openxcom\src\ruleset\ruleregion.h
+1401675616 f:\git\openxcom\src\ruleset\ruleregion.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
 	"../fmath.h"
 	"../Savegame/WeightedOptions.h"
 
-1398751086 f:\git\openxcom\src\savegame\weightedoptions.h
+1401677067 f:\git\openxcom\src\savegame\weightedoptions.h
 	<string>
 	<map>
 	<yaml-cpp/yaml.h>
@@ -4593,7 +4593,7 @@
 	"State.h"
 	"Surface.h"
 
-1401232754 f:\git\openxcom\src\engine\surfaceset.h
+1401674905 f:\git\openxcom\src\engine\surfaceset.h
 	<map>
 	<string>
 	<vector>
@@ -4623,7 +4623,7 @@
 1401232757 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1401232753 f:\git\openxcom\src\interface\textlist.h
+1401675360 f:\git\openxcom\src\interface\textlist.h
 	<map>
 	<vector>
 	"Text.h"
@@ -4878,7 +4878,7 @@
 
 1394398507 f:\git\openxcom\src\engine\fastlineclip.h
 
-1401631223 f:\git\openxcom\src\savegame\ufo.h
+1401676986 f:\git\openxcom\src\savegame\ufo.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"MovingTarget.h"
@@ -5322,7 +5322,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1401604986 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1401673039 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	<climits>
 	<cmath>
@@ -5409,7 +5409,7 @@
 	<string>
 	"../Ruleset/Unit.h"
 
-1401232757 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1401674033 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	<iomanip>
 	<sstream>
@@ -5436,7 +5436,7 @@
 1401232757 f:\git\openxcom\src\basescape\soldiermemorialstate.h
 	"../Engine/State.h"
 
-1401232755 f:\git\openxcom\src\engine\music.h
+1401674761 f:\git\openxcom\src\engine\music.h
 	<string>
 	<SDL_mixer.h>
 
@@ -5462,7 +5462,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1401232757 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1401678103 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -5525,7 +5525,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1401232756 f:\git\openxcom\src\basescape\transferitemsstate.h
+1401674055 f:\git\openxcom\src\basescape\transferitemsstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -5547,7 +5547,7 @@
 1401232756 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1401232756 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1401673039 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	<cfloat>
 	<climits>
@@ -5960,7 +5960,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1401232752 f:\git\openxcom\src\ruleset\mapdataset.h
+1401675450 f:\git\openxcom\src\ruleset\mapdataset.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -5989,7 +5989,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1401232751 f:\git\openxcom\src\savegame\terrorsite.h
+1401676919 f:\git\openxcom\src\savegame\terrorsite.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"Target.h"
@@ -6269,7 +6269,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1401232752 f:\git\openxcom\src\savegame\alienmission.h
+1401677641 f:\git\openxcom\src\savegame\alienmission.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -6391,7 +6391,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1401638680 source:f:\git\openxcom\src\battlescape\map.cpp
+1401674202 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6459,7 +6459,7 @@
 1401232756 f:\git\openxcom\src\battlescape\medikitview.h
 	"../Engine/InteractiveSurface.h"
 
-1401232756 source:f:\git\openxcom\src\battlescape\medikitview.cpp
+1401678025 source:f:\git\openxcom\src\battlescape\medikitview.cpp
 	"MedikitView.h"
 	<iostream>
 	"../Engine/Action.h"
@@ -6694,7 +6694,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1401633292 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1401674372 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6967,7 +6967,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1401635275 source:f:\git\openxcom\src\engine\game.cpp
+1401678025 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7054,7 +7054,7 @@
 	"LocalizedText.h"
 	"Language.h"
 
-1401232755 source:f:\git\openxcom\src\engine\music.cpp
+1401674804 source:f:\git\openxcom\src\engine\music.cpp
 	"Music.h"
 	"Exception.h"
 	"Language.h"
@@ -7150,7 +7150,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1401492347 source:f:\git\openxcom\src\engine\screen.cpp
+1401674842 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -7227,7 +7227,7 @@
 	<malloc.h>
 	<ppcinline/exec.h>
 
-1401232754 source:f:\git\openxcom\src\engine\surfaceset.cpp
+1401673039 source:f:\git\openxcom\src\engine\surfaceset.cpp
 	"SurfaceSet.h"
 	<fstream>
 	<SDL_endian.h>
@@ -7573,7 +7573,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1401489083 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1401673039 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7610,7 +7610,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1401232754 f:\git\openxcom\src\geoscape\dogfightstate.h
+1401678184 f:\git\openxcom\src\geoscape\dogfightstate.h
 	<vector>
 	<string>
 	"../Engine/State.h"
@@ -7665,7 +7665,7 @@
 1401232753 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1401544305 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1401675186 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7811,12 +7811,12 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1398751069 f:\git\openxcom\src\ruleset\rulealienmission.h
+1401675515 f:\git\openxcom\src\ruleset\rulealienmission.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1397426842 f:\git\openxcom\src\ruleset\ufotrajectory.h
+1401675693 f:\git\openxcom\src\ruleset\ufotrajectory.h
 	<vector>
 	<string>
 	<yaml-cpp/yaml.h>
@@ -7878,7 +7878,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1401606720 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1401675239 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -8290,7 +8290,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1401631197 source:f:\git\openxcom\src\interface\textlist.cpp
+1401678544 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>
@@ -9101,7 +9101,7 @@
 	<string>
 	"../Engine/State.h"
 
-1401232752 f:\git\openxcom\src\ruleset\soldiernamepool.h
+1401673039 f:\git\openxcom\src\ruleset\soldiernamepool.h
 	<string>
 	<vector>
 	"../Savegame/Soldier.h"
@@ -9199,7 +9199,7 @@
 1401489083 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 
-1401631328 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1401673039 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -9214,7 +9214,7 @@
 	"MapData.h"
 	"MapDataSet.h"
 
-1401489083 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
+1401675587 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
@@ -9247,7 +9247,7 @@
 1401232752 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1401489083 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1401675637 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
 	<assert.h>
 	<math.h>
@@ -9310,7 +9310,7 @@
 1401232752 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
-1401232752 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
+1401679599 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
 	"MapBlock.h"
 	"MapDataSet.h"
 	"Ruleset.h"
@@ -9321,7 +9321,7 @@
 	"RuleTerrain.h"
 	"RuleUfo.h"
 
-1401232752 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
+1401673039 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
 	"SoldierNamePool.h"
 	<iostream>
 	<sstream>
@@ -9332,7 +9332,7 @@
 	"../Engine/Exception.h"
 	"../Engine/CrossPlatform.h"
 
-1398487941 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
+1401675721 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
 1401489083 source:f:\git\openxcom\src\ruleset\unit.cpp
@@ -9343,7 +9343,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1401494812 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1401678458 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
@@ -9381,7 +9381,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1401495244 source:f:\git\openxcom\src\savegame\base.cpp
+1401676633 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9566,7 +9566,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1401630708 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1401676846 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9607,7 +9607,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1401506028 source:f:\git\openxcom\src\savegame\soldier.cpp
+1401676895 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"SoldierDead.h"
@@ -9638,7 +9638,7 @@
 	"Craft.h"
 	"../Engine/Language.h"
 
-1401232751 source:f:\git\openxcom\src\savegame\terrorsite.cpp
+1401676945 source:f:\git\openxcom\src\savegame\terrorsite.cpp
 	"TerrorSite.h"
 	<sstream>
 	"../Engine/Language.h"
@@ -9667,7 +9667,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1401631276 source:f:\git\openxcom\src\savegame\ufo.cpp
+1401677020 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	<sstream>
 	<algorithm>
@@ -9694,7 +9694,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1401508203 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
+1401677194 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
 	<assert.h>
 	"../Engine/RNG.h"
@@ -11755,7 +11755,7 @@
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1401232753 source:f:\git\openxcom\src\menu\loadgamestate.cpp
+1401673039 source:f:\git\openxcom\src\menu\loadgamestate.cpp
 	"LoadGameState.h"
 	<sstream>
 	"ErrorMessageState.h"
@@ -11789,7 +11789,7 @@
 	"../Engine/Screen.h"
 	"../Interface/Text.h"
 
-1401489077 source:f:\git\openxcom\src\ruleset\statstring.cpp
+1401673033 source:f:\git\openxcom\src\ruleset\statstring.cpp
 	"StatString.h"
 	<vector>
 
@@ -11806,7 +11806,7 @@
 1400258761 f:\git\openxcom\src\engine\adlib\fmopl.h
 	"ymdeltat.h"
 
-1401489084 source:f:\git\openxcom\src\engine\adlibmusic.cpp
+1401678025 source:f:\git\openxcom\src\engine\adlibmusic.cpp
 	"AdlibMusic.h"
 	<algorithm>
 	<fstream>
@@ -11855,7 +11855,7 @@
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
 
-1401232751 f:\git\openxcom\src\fmath.h
+1401673282 f:\git\openxcom\src\fmath.h
 	<limits>
 	<cmath>
 

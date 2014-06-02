@@ -40,9 +40,9 @@ const std::string WeightedOptions::choose() const
 		return "";
 	}
 
-	unsigned int var = RNG::generate(0, _totalWeight);
+	size_t var = RNG::generate(0, _totalWeight);
 
-	std::map<std::string, unsigned>::const_iterator ii = _choices.begin();
+	std::map<std::string, size_t>::const_iterator ii = _choices.begin();
 	for (
 			;
 			ii != _choices.end();
@@ -70,10 +70,10 @@ const std::string WeightedOptions::top() const
 		return "";
 	}
 
-	unsigned int max = 0;
+	size_t max = 0;
 
-	std::map<std::string, unsigned>::const_iterator i = _choices.begin();
-	for (std::map<std::string, unsigned>::const_iterator
+	std::map<std::string, size_t>::const_iterator i = _choices.begin();
+	for (std::map<std::string, size_t>::const_iterator
 			ii = _choices.begin();
 			ii != _choices.end();
 			++ii)
@@ -98,9 +98,9 @@ const std::string WeightedOptions::top() const
  */
 void WeightedOptions::set(
 		const std::string& id,
-		unsigned weight)
+		size_t weight)
 {
-	std::map<std::string, unsigned>::iterator
+	std::map<std::string, size_t>::iterator
 			option = _choices.find(id);
 
 	if (option != _choices.end())
@@ -139,9 +139,9 @@ void WeightedOptions::load(const YAML::Node& nd)
 			++val)
 	{
 		std::string id = val->first.as<std::string>();
-		unsigned w = val->second.as<unsigned>();
+		size_t weight = val->second.as<size_t>();
 
-		set(id, w);
+		set(id, weight);
 	}
 }
 
@@ -153,7 +153,7 @@ YAML::Node WeightedOptions::save() const
 {
 	YAML::Node node;
 
-	for (std::map<std::string, unsigned>::const_iterator
+	for (std::map<std::string, size_t>::const_iterator
 			ii = _choices.begin();
 			ii != _choices.end();
 			++ii)
