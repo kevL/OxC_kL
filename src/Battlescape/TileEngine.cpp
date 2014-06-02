@@ -2275,7 +2275,7 @@ void TileEngine::explode(
 			int maxRadius,
 			BattleUnit* unit)
 {
-	//Log(LOG_INFO) << "TileEngine::explode() power = " << power << ", type = " << (int)type << ", maxRadius = " << maxRadius;
+	Log(LOG_INFO) << "TileEngine::explode() power = " << power << ", type = " << (int)type << ", maxRadius = " << maxRadius;
 	if (power == 0) // kL, quick out.
 		return;
 
@@ -2334,7 +2334,8 @@ void TileEngine::explode(
 		sin_fi,
 		cos_fi;
 
-		int testPow = 0;
+	int testPow = 0;
+	int testIter = 0; // TEST.
 
 //	for (int fi = 0; fi == 0; ++fi) // kL_note: Looks like a TEST ray. ( 0 == horizontal )
 	for (int
@@ -2381,8 +2382,14 @@ void TileEngine::explode(
 												tileY,
 												tileZ));
 
+				++testIter;
+				Log(LOG_INFO) << ". testIter = " << testIter;
+
 				if (destTile == NULL) // out of map!
+				{
+					Log(LOG_INFO) << ". destTile NOT Valid " << Position(tileX, tileY, tileZ);
 					break;
+				}
 
 
 				testPow = _powerT;
@@ -2447,9 +2454,15 @@ void TileEngine::explode(
 				}
 
 				//Log(LOG_INFO) << "TileEngine::explode() pre insert Tile";
-				tilePair = tilesAffected.insert(destTile);	// check if we had this tile already
+				Log(LOG_INFO) << ". pre insert Tile " << Position(tileX, tileY, tileZ);
+
+				tilePair = tilesAffected.insert(destTile); // check if we had this tile already
+
 				//Log(LOG_INFO) << ". post insert Tile";
-				if (tilePair.second)						// true if a new tile was inserted.
+				Log(LOG_INFO) << ". post insert Tile";
+
+
+				if (tilePair.second) // true if a new tile was inserted.
 				{
 					//Log(LOG_INFO) << ". . new tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition() << ". _powerT = " << _powerT << ". r = " << r;
 					if (origin->getPosition().z != tileZ) // z-axis explosion decrease
@@ -2624,7 +2637,7 @@ void TileEngine::explode(
 																_powerT * 3 / 4);
 
 										targetUnit->damage(
-														Position(0, 0, 0 /*12 - destTile->getTerrainLevel()*/ ),
+														Position(0, 0, 0), // 12 - destTile->getTerrainLevel()
 														firePower,
 														DT_IN,
 														true);

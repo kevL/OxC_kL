@@ -245,7 +245,7 @@ void Transpose(int reg, int val, int*val2, int *reg3, int*val3)
 			iValue = (iValue & ~0x1F) | (iNewBlock << 2) | ((iNewFNum >> 8) & 0x03);
 
 			iCurrentTweakedBlock[iChannel] = iNewBlock; // save it so we don't have to update register 0xB0 later on
-			iCurrentFNum[iChannel] = iNewFNum;
+			iCurrentFNum[iChannel] = static_cast<UINT8>(iNewFNum);
 
 			if (iTweakedFMReg[0xA0 + iChannel] != (iNewFNum & 0xFF)) {
 				// Need to write out low bits
@@ -719,14 +719,14 @@ void init_music_data(unsigned char* music_ptr,int length)
 	adl_gv_samples_addr = music_ptr+1; //samples
 	music_ptr += ((*music_ptr) * 24) +1; //moving to next section - subtracks
 	adl_gv_subtracks_count = *(music_ptr++);
-	for(i=0; i<adl_gv_subtracks_count; ++i)
+	for(i=0; i<static_cast<unsigned int>(adl_gv_subtracks_count); ++i)
 	{
 		to_add = *((unsigned short*)music_ptr); //reading 16bit length
 		adl_gv_subtracks[i] = music_ptr+4; //store subtrack pointers
 		music_ptr += to_add;
 	}
 	adl_gv_instruments_count = *(music_ptr++);
-	for (i=0; i<adl_gv_instruments_count; ++i)
+	for (i=0; i<static_cast<unsigned int>(adl_gv_instruments_count); ++i)
 	{
 		to_add = *((unsigned short*)music_ptr); //reading 16bit length
 		if (adl_gv_FORMAT==1)

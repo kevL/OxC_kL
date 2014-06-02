@@ -5746,7 +5746,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1401605749 f:\git\openxcom\src\battlescape\map.h
+1401638698 f:\git\openxcom\src\battlescape\map.h
 	<set>
 	<vector>
 	"Position.h"
@@ -6282,7 +6282,7 @@
 1401232756 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1401605713 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1401638654 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6391,7 +6391,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1401634187 source:f:\git\openxcom\src\battlescape\map.cpp
+1401638680 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6618,7 +6618,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1401634241 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1401638711 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6967,7 +6967,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1401616281 source:f:\git\openxcom\src\engine\game.cpp
+1401635275 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -11796,7 +11796,7 @@
 1401489077 source:f:\git\openxcom\src\ruleset\statstringcondition.cpp
 	"StatStringCondition.h"
 
-1401232755 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
+1401670418 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
 	<math.h>
 	<memory.h>
 	<stdio.h>
@@ -11825,7 +11825,7 @@
 
 1398655003 f:\git\openxcom\src\engine\adlib\adlplayer.h
 
-1401396490 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
+1401670418 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>

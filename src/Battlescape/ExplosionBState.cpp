@@ -293,16 +293,21 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
-//	for (std::list<Explosion*>::const_iterator i = _parent->getMap()->getExplosions()->begin(), inext = i; i != _parent->getMap()->getExplosions()->end(); i = inext) // kL
+//	for (std::set<Explosion*>::const_iterator // kL
+//			i = _parent->getMap()->getExplosions()->begin(),
+//				next = i;
+//			i != _parent->getMap()->getExplosions()->end();
+//			i = next)
 	for (std::list<Explosion*>::const_iterator // new CTD
 			i = _parent->getMap()->getExplosions()->begin();
 			i != _parent->getMap()->getExplosions()->end();
 			)
 	{
-//		++inext; // kL
+//		++next; // kL
+
 		if (!(*i)->animate())
 		{
-			delete *i;
+			delete *i; // new CTD
 //			_parent->getMap()->getExplosions()->erase(i); // kL
 			i = _parent->getMap()->getExplosions()->erase(i); // new CTD
 

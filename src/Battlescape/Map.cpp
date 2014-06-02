@@ -279,7 +279,7 @@ void Map::draw()
 	_explosionInFOV = _save->getDebugMode();
 	if (!_explosions.empty())
 	{
-//		for (std::set<Explosion*>::iterator i = _explosions.begin(); i != _explosions.end(); ++i) // kL
+//		for (std::set<Explosion*>::iterator // kL
 		for (std::list<Explosion*>::iterator // new CTD
 				i = _explosions.begin();
 				i != _explosions.end();
@@ -1754,7 +1754,7 @@ void Map::drawTerrain(Surface* surface)
 
 	if (_explosionInFOV) // check if we got hit or explosion animations
 	{
-//		for (std::set<Explosion*>::const_iterator i = _explosions.begin(); i != _explosions.end(); ++i) // kL
+//		for (std::set<Explosion*>::const_iterator // kL
 		for (std::list<Explosion*>::const_iterator // new CTD
 				i = _explosions.begin();
 				i != _explosions.end();
@@ -2252,7 +2252,7 @@ Projectile* Map::getProjectile() const
  * Gets a list of explosion sprites on the map.
  * @return A list of explosion sprites.
  */
-// std::set<Explosion*> *Map::getExplosions() // kL
+//std::set<Explosion*>* Map::getExplosions() // kL
 std::list<Explosion*>* Map::getExplosions() // new CTD
 {
 	return &_explosions;
