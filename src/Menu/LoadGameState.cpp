@@ -93,14 +93,7 @@ LoadGameState::LoadGameState(
 		break;
 	}
 
-	// Ignore quick loads without a save available
-	if (type == SAVE_QUICK
-		&& !CrossPlatform::fileExists(Options::getUserFolder() + _filename))
-	{
-		_game->popState();
-	}
-	else
-		buildUi();
+	buildUi();
 }
 
 /**
@@ -142,9 +135,18 @@ void LoadGameState::buildUi()
  */
 void LoadGameState::init()
 {
-	State::init(); // Make sure message is shown (if any)
+	State::init();
 
-	blit();
+	// Ignore quick loads without a save available
+	if (_filename == SavedGame::QUICKSAVE
+		&& !CrossPlatform::fileExists(Options::getUserFolder() + _filename))
+	{
+		_game->popState();
+
+		return;
+	}
+
+	blit(); // Make sure message is shown (if any)
 	_game->getScreen()->flip();
 	_game->popState();
 

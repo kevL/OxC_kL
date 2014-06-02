@@ -6886,7 +6886,7 @@
 1401232755 f:\git\openxcom\src\engine\catfile.h
 	<fstream>
 
-1401611627 source:f:\git\openxcom\src\engine\crossplatform.cpp
+1401716741 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"CrossPlatform.h"
 	<algorithm>
 	<iostream>
@@ -6967,7 +6967,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1401678025 source:f:\git\openxcom\src\engine\game.cpp
+1401716049 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
