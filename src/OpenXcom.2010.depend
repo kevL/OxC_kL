@@ -4436,7 +4436,7 @@
 	<vector>
 	<time.h>
 
-1401673890 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1401679827 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -8290,7 +8290,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1401678544 source:f:\git\openxcom\src\interface\textlist.cpp
+1401680402 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>
