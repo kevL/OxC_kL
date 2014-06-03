@@ -108,7 +108,7 @@ private:
 						* _scrollKeyTimer;
 
 //	std::set<Explosion*>	_explosions; // kL
-	std::list<Explosion*>	_explosions; // new CTD
+	std::list<Explosion*>	_explosions; // expl CTD
 	std::vector<Position>	_waypoints;
 
 	///
@@ -192,7 +192,7 @@ private:
 
 		/// Gets explosion set.
 //		std::set<Explosion*>* getExplosions(); // kL
-		std::list<Explosion*>* getExplosions(); // new CTD
+		std::list<Explosion*>* getExplosions(); // expl CTD
 
 		/// Gets the pointer to the camera.
 		Camera* getCamera();

@@ -141,7 +141,7 @@ private:
 	BattleAction _currentAction;
 
 	std::list<BattleState*>
-		_deleted,
+		_deleted, // delete CTD
 		_states;
 	std::vector<InfoboxOKState*> _infoboxQueue;
 

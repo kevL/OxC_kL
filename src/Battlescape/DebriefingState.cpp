@@ -103,6 +103,17 @@ DebriefingState::DebriefingState(Game* game)
 	// Restore the cursor in case something weird happened
 	_game->getCursor()->setVisible(true);
 
+	// kL_begin: Clean up the leftover states from BattlescapeGame
+	// ( was done in ~BattlescapeGame, but that causes CTD under reLoad situation )
+	// Now done here and in NextTurnState. (not ideal: should find a safe place
+	// when BattlescapeGame is really dTor'd, and not reLoaded ...... ) uh, i guess.
+//	if (_game->getSavedGame()->getSavedBattle()->getBattleGame())
+//	{
+		//Log(LOG_INFO) << "DebriefingState : Saved Battle Game EXISTS";
+	_game->getSavedGame()->getSavedBattle()->getBattleGame()->cleanupDeleted(); // kL, delete CTD
+//	}
+
+
 	if (Options::storageLimitsEnforced)
 		_limitsEnforced = 1;
 

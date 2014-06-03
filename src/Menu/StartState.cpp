@@ -19,11 +19,7 @@
 
 #include "StartState.h"
 
-#include <SDL_mixer.h>
-//#include <SDL_syswm.h>
-#include <SDL_thread.h>
-
-//kL #include "../version.h"
+#include "../version.h" // load CTD
 
 #include "ErrorMessageState.h"
 #include "IntroState.h"
@@ -32,7 +28,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
-//kL #include "../Engine/Font.h"
+#include "../Engine/Font.h" // load CTD
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
@@ -41,15 +37,19 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
-//kL #include "../Engine/Timer.h"
+//kL #include "../Engine/Surface.h"
+#include "../Engine/Timer.h" // load CTD
 
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
-//kL #include "../Interface/Text.h"
+#include "../Interface/Text.h" // load CTD
 
 #include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/Ruleset.h"
+
+#include <SDL_mixer.h>
+#include <SDL_thread.h>
 
 
 namespace OpenXcom
@@ -65,8 +65,9 @@ std::string StartState::error;
  */
 StartState::StartState(Game* game)
 	:
-		State(game)
-//kL		_anim(0)
+		State(game),
+		_anim(0), // load CTD
+		_output(L"") // kL, load CTD
 {
 	// updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
 //kL	Options::newDisplayWidth	= Options::displayWidth;
@@ -79,7 +80,7 @@ StartState::StartState(Game* game)
 	int
 		dx = (Options::baseXResolution - 320) / 2,	// kL
 		dy = (Options::baseYResolution - 200) / 2;	// kL
-	_surface = new Surface(320, 200, dx, dy);		// kL
+//	_surface = new Surface(320, 200, dx, dy);		// kL
 
 	_thread = 0;
 	loading = LOADING_STARTED;
@@ -87,7 +88,7 @@ StartState::StartState(Game* game)
 
 	// kL_begin: Old Loading screen ... pre 2014 may 26.
 	// Set palette (set to {0} here to ensure all fields are initialized)
-	SDL_Color bnw[3] = {{0}};
+/*	SDL_Color bnw[3] = {{0}};
 	bnw[0].r = 0;
 	bnw[0].g = 0;
 	bnw[0].b = 0;
@@ -104,25 +105,30 @@ StartState::StartState(Game* game)
 	_surface->drawString(120, 96, "Loading...", 1);
 
 	_game->getCursor()->setVisible(false);
-	_game->getFpsCounter()->setVisible(false);
+	_game->getFpsCounter()->setVisible(false); */
 	// kL_end.
 
-/*kL
-	_font = new Font();
+// load CTD_begin:
+	_font	= new Font();
 	_font->loadTerminal();
-	_lang = new Language();
+
+	_lang	= new Language();
 
 	_text	= new Text(
-					Options::baseXResolution,
-					Options::baseYResolution,
-					0,
-					0);
+//kL					Options::baseXResolution,
+//kL					Options::baseYResolution,
+//kL					0,
+//kL					0);
+					320,
+					200,
+					dx,
+					dy);
 	_cursor	= new Text(
 					_font->getWidth(),
 					_font->getHeight(),
 					0,
 					0);
-	_timer	= new Timer(150);
+	_timer	= new Timer(200);
 
 	setPalette(_font->getSurface()->getPalette(), 0, 2);
 
@@ -167,7 +173,8 @@ StartState::StartState(Game* game)
 //		}
 
 //		addLine(L"");
-	} */
+	}
+// load CTD_end.
 }
 
 /**
@@ -178,9 +185,9 @@ StartState::~StartState()
 	if (_thread != 0)
 		SDL_KillThread(_thread);
 
-//kL	delete _font;
-//kL	delete _timer;
-//kL	delete _lang;
+	delete _font; // load CTD
+	delete _timer; // load CTD
+	delete _lang; // load CTD
 }
 
 /**
@@ -202,20 +209,16 @@ void StartState::init()
 		_game->initAudio();
 	}
 
-/*kL
-//	std::wostringstream ss;
-//	ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
-//	addLine(ss.str());
-*/
+/*	std::wostringstream ss;
+	ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
+	addLine(ss.str());
+*/ // kL
 
-	// Load the game data in a separate thread
-	_thread = SDL_CreateThread(
+	_thread = SDL_CreateThread( // Load the game data in a separate thread
 							load,
 							(void*)_game);
-
-	if (_thread == 0)
+	if (_thread == 0) // If we can't create the thread, just load it as usual
 	{
-		// If we can't create the thread, just load it as usual
 		load((void*)_game);
 	}
 }
@@ -226,7 +229,7 @@ void StartState::init()
 void StartState::think()
 {
 	State::think();
-//kL	_timer->think(this, 0);
+	_timer->think(this, 0); // load CTD
 
 	switch (loading)
 	{
@@ -234,7 +237,7 @@ void StartState::think()
 			CrossPlatform::flashWindow();
 
 			// kL_begin: Old Loading ... screen.
-			_surface->clear();
+/*			_surface->clear();
 			_surface->drawString(1, 9, "ERROR:", 2);
 			_surface->drawString(1, 17, error.c_str(), 2);
 			_surface->drawString(1, 49, "Make sure you installed OpenXcom", 1);
@@ -242,26 +245,24 @@ void StartState::think()
 			_surface->drawString(1, 73, "Check the requirements and", 1);
 			_surface->drawString(1, 81, "documentation for more details.", 1);
 			_surface->drawString(75, 183, "Press any key to quit", 1);
-			// kL_end.
+*/			// kL_end.
 
-/*kL
+// load CTD_begin
 			addLine(L"");
 			addLine(L"ERROR: " + Language::utf8ToWstr(error));
 			addLine(L"Make sure you installed OpenXcom correctly.");
 			addLine(L"Check the wiki documentation for more details.");
 			addLine(L"");
-			addLine(L"Press any key to continue."); */
+			addLine(L"Press any key to continue.");
+// load CTD_end.
 
 			loading = LOADING_DONE;
 		break;
 		case LOADING_SUCCESSFUL:
 			CrossPlatform::flashWindow();
 
-/*kL
-//			addLine(L"");
-//			addLine(L"OpenXcom initialised");
-*/
-
+/*			addLine(L"");
+			addLine(L"OpenXcom initialised"); */ // kL
 			Log(LOG_INFO) << "OpenXcom started!";
 			if (!Options::reload
 				&& Options::playIntro)
@@ -269,9 +270,9 @@ void StartState::think()
 				bool letterbox = Options::keepAspectRatio;
 				Options::keepAspectRatio = true;
 
-//kL				Options::baseXResolution = Screen::ORIGINAL_WIDTH;
-//kL				Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
-//kL				_game->getScreen()->resetDisplay(false);
+//kL			Options::baseXResolution = Screen::ORIGINAL_WIDTH;
+//kL			Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
+//kL			_game->getScreen()->resetDisplay(false);
 
 				_game->setState(new IntroState(
 											_game,
@@ -330,9 +331,9 @@ void StartState::think()
 }
 
 /**
- * The game quits if the player presses any key when an error
- * message is on display.
- * @param action Pointer to an action.
+ * The game quits if the player presses any
+ * key when an error message is on display.
+ * @param action Pointer to an action
  */
 void StartState::handle(Action *action)
 {
@@ -347,7 +348,8 @@ void StartState::handle(Action *action)
 /**
  * Blinks the cursor and spreads out terminal output.
  */
-/*kL void StartState::animate()
+// load CTD_begin:
+void StartState::animate()
 {
 	_cursor->setVisible(!_cursor->getVisible());
 	_anim++;
@@ -396,14 +398,15 @@ void StartState::handle(Action *action)
 			}
 		}
 	}
-} */
+}
+// load CTD_end.
 
 /**
- * Adds a line of text to the terminal and moves
- * the cursor appropriately.
+ * Adds a line of text to the terminal and moves the cursor appropriately.
  * @param str Text line to add.
  */
-/*kL void StartState::addLine(const std::wstring& str)
+// load CTD_begin:
+void StartState::addLine(const std::wstring& str)
 {
 	_output << L"\n" << str;
 	_text->setText(_output.str());
@@ -413,7 +416,8 @@ void StartState::handle(Action *action)
 		x = _text->getTextWidth(y / _font->getHeight());
 	_cursor->setX(x);
 	_cursor->setY(y);
-} */
+}
+// load CTD_end.
 
 /**
  * Loads game data and updates status accordingly.

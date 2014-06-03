@@ -166,7 +166,8 @@ void NextTurnState::think()
  */
 void NextTurnState::close()
 {
-	_battleGame->getBattleGame()->cleanupDeleted();
+	// Done here and in DebriefingState, but removed from ~BattlescapeGame (see)
+	_battleGame->getBattleGame()->cleanupDeleted(); // delete CTD
 
 	_game->popState();
 

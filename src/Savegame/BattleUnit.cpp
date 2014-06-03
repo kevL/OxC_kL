@@ -291,7 +291,7 @@ BattleUnit::~BattleUnit()
 			delete _cache[i];
 	}
 
-	delete _currentAIState;
+	delete _currentAIState; // delete CTD
 }
 
 /**

@@ -562,7 +562,7 @@ GraphsState::~GraphsState()
 			++i)
 	{
 		graphRegionToggles.push_back(_regionToggles[i]->_pushed? '1': '0');
-		delete _regionToggles[i];
+		delete _regionToggles[i]; // delete CTD
 	}
 
 	for (size_t
@@ -571,7 +571,7 @@ GraphsState::~GraphsState()
 			++i)
 	{
 		graphCountryToggles.push_back(_countryToggles[i]->_pushed? '1': '0');
-		delete _countryToggles[i];
+		delete _countryToggles[i]; // delete CTD
 	}
 
 	for (size_t

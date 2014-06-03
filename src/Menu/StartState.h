@@ -28,11 +28,11 @@
 namespace OpenXcom
 {
 
-//kL class Font;
-//kL class Language;
-//kL class Text;
-//kL class Timer;
-class Surface; // kL
+class Font; // load CTD
+class Language; // load CTD
+class Text; // load CTD
+class Timer; // load CTD
+//class Surface; // kL
 
 
 enum LoadingPhase
@@ -53,19 +53,21 @@ class StartState
 {
 
 private:
-//kL	int _anim;
+	// load CTD
+	int _anim;
 
-//kL	Font* _font;
-//kL	Language* _lang;
-//kL	Text
-//kL		* _cursor,
-//kL		* _text;
-//kL	Timer* _timer;
+	Font* _font;
+	Language* _lang;
+	Text
+		* _cursor,
+		* _text;
+	Timer* _timer;
+	// load CTD_end.
 
 	SDL_Thread* _thread;
-	Surface* _surface; // kL
+//	Surface* _surface; // kL
 
-//kL	std::wostringstream _output;
+	std::wostringstream _output; // load CTD
 
 
 	public:
@@ -86,10 +88,9 @@ private:
 		void handle(Action* action);
 
 		/// Animates the terminal.
-//kL	void animate();
-
+		void animate(); // load CTD
 		/// Adds a line of text.
-//kL	void addLine(const std::wstring& str);
+		void addLine(const std::wstring& str); // load CTD
 
 		/// Loads the game resources.
 		static int load(void* game_ptr);

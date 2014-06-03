@@ -147,8 +147,6 @@ void MiniMapState::handle(Action* action)
 			btnLevelDownClick(action);
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 			btnLevelUpClick(action);
-//kL		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-//kL			btnOkClick(action);
 	}
 }
 

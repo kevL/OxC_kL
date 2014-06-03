@@ -903,6 +903,21 @@ void BattlescapeState::mapOver(Action* action)
 
 		if (Options::battleDragScrollInvert) // scroll
 		{
+/*fenyo1
+			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+			int scrollX = -(int)((double)_totalMouseMoveX / action->getXScale());
+			int scrollY = -(int)((double)_totalMouseMoveY / action->getYScale());
+			Position delta2 = _map->getCamera()->getMapOffset();
+			_map->getCamera()->scrollXY(scrollX, scrollY, true);
+			delta2 = _map->getCamera()->getMapOffset() - delta2;
+
+			// Keep the limits...
+			if (scrollX != delta2.x || scrollY != delta2.y)
+			{
+				_totalMouseMoveX = -(int) (delta2.x * action->getXScale());
+				_totalMouseMoveY = -(int) (delta2.y * action->getYScale());
+			} */
+
 			_map->getCamera()->scrollXY(
 									static_cast<int>(static_cast<double>(-action->getDetails()->motion.xrel) / action->getXScale()),
 									static_cast<int>(static_cast<double>(-action->getDetails()->motion.yrel) / action->getYScale()),
@@ -916,6 +931,27 @@ void BattlescapeState::mapOver(Action* action)
 		}
 		else
 		{
+/*fenyo1
+			Position delta = _map->getCamera()->getMapOffset();
+			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
+
+			int scrollX = (int)((double)_totalMouseMoveX / action->getXScale());
+			int scrollY = (int)((double)_totalMouseMoveY / action->getYScale());
+
+			Position delta2 = _map->getCamera()->getMapOffset();
+
+			_map->getCamera()->scrollXY(scrollX, scrollY, true);
+
+			delta2 = _map->getCamera()->getMapOffset() - delta2;
+			delta = _map->getCamera()->getMapOffset() - delta;
+
+			// Keep the limits...
+			if (scrollX != delta2.x || scrollY != delta2.y)
+			{
+				_totalMouseMoveX = (int)(delta2.x * action->getXScale());
+				_totalMouseMoveY = (int)(delta2.y * action->getYScale());
+			} */
+
 			_map->getCamera()->scrollXY(
 								static_cast<int>(static_cast<double>(action->getDetails()->motion.xrel) * 3.62 / action->getXScale()),
 								static_cast<int>(static_cast<double>(action->getDetails()->motion.yrel) * 3.62 / action->getYScale()),

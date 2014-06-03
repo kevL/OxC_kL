@@ -116,6 +116,7 @@ SavedBattleGame::~SavedBattleGame()
 	}
 	delete[] _tiles;
 
+// delete CTD_begin:
 	for (std::vector<MapDataSet*>::iterator
 			i = _mapDataSets.begin();
 			i != _mapDataSets.end();
@@ -123,6 +124,7 @@ SavedBattleGame::~SavedBattleGame()
 	{
 		(*i)->unloadData();
 	}
+// delete CTD_end.
 
 	for (std::vector<Node*>::iterator
 			i = _nodes.begin();

@@ -26,6 +26,7 @@
 
 #include "Camera.h"
 #include "Map.h"
+#include "MiniMapState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -409,8 +410,9 @@ void MiniMapView::mouseClick(Action* action, State* state)
 										_camera->getViewLevel()));
 		_redraw = true;
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)	// kL
-		_game->popState(); // Closes the window on right-click.			// kL
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		((MiniMapState*)(state))->btnOkClick(action); // kL_note: Close the state.
+//		_game->popState(); // Closes the window on right-click. // kL
 }
 
 /**
@@ -470,7 +472,8 @@ void MiniMapView::mouseOver(Action* action, State* state)
 									|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 		// Calculate the move
-/*		int
+/*Old
+		int
 			newX,
 			newY;
 
@@ -523,19 +526,19 @@ void MiniMapView::mouseOver(Action* action, State* state)
 /*kL
 		if (Options::battleDragScrollInvert)
 		{
-			scrollX = static_cast<int>(static_cast<double>(action->getDetails()->motion.xrel) / action->getXScale());
-			scrollY = static_cast<int>(static_cast<double>(action->getDetails()->motion.yrel) / action->getYScale());
+			scrollX = static_cast<int>(static_cast<double>(action->getDetails()->motion.xrel));
+			scrollY = static_cast<int>(static_cast<double>(action->getDetails()->motion.yrel));
 		}
 		else
 		{
-			scrollX = static_cast<int>(static_cast<double>(-action->getDetails()->motion.xrel) / action->getXScale());
-			scrollY = static_cast<int>(static_cast<double>(-action->getDetails()->motion.yrel) / action->getYScale());
+			scrollX = static_cast<int>(static_cast<double>(-action->getDetails()->motion.xrel));
+			scrollY = static_cast<int>(static_cast<double>(-action->getDetails()->motion.yrel));
 		} */
 
 //		_mouseScrollX += static_cast<int>(action->getDetails()->motion.xrel);
 //		_mouseScrollY += static_cast<int>(action->getDetails()->motion.yrel);
-//		newX = _posBeforeDragScroll.x + (_mouseScrollX / 4);
-//		newY = _posBeforeDragScroll.y + (_mouseScrollY / 4);
+//		newX = _posBeforeDragScroll.x + (_mouseScrollX / action->getXScale() / 4);
+//		newY = _posBeforeDragScroll.y + (_mouseScrollY / action->getYScale() / 4);
 		_mouseScrollX -= static_cast<int>(action->getDetails()->motion.xrel);
 		_mouseScrollY -= static_cast<int>(action->getDetails()->motion.yrel);
 		newX = _posBeforeDragScroll.x + (_mouseScrollX / 11);

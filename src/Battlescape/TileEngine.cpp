@@ -1481,43 +1481,43 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 
 	std::vector<BattleUnit*> spotters;
 	for (std::vector<BattleUnit*>::const_iterator
-			bu = _save->getUnits()->begin();
-			bu != _save->getUnits()->end();
-			++bu)
+			spotter = _save->getUnits()->begin();
+			spotter != _save->getUnits()->end();
+			++spotter)
 	{
-		if ((*bu)->getFaction() != _save->getSide()
-			&& !(*bu)->isOut(true, true))
+		if ((*spotter)->getFaction() != _save->getSide()
+			&& !(*spotter)->isOut(true, true))
 		{
-/*kL			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*bu)->getCurrentAIState());
+/*kL			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*spotter)->getCurrentAIState());
 			if (((aggro != 0
 						&& aggro->getWasHit()) // set in ProjectileFlyBState...
-					|| (*bu)->getFaction() == FACTION_HOSTILE // note: doesn't this cover the aggro-thing, like totally
-					|| (*bu)->checkViewSector(unit->getPosition())) // aLiens see all directions, btw. */
-			if (((*bu)->getFaction() == FACTION_HOSTILE
-					|| ((*bu)->getFaction() == FACTION_PLAYER
-						&& (*bu)->checkViewSector(unit->getPosition())))
-				&& visible(*bu, tile))
+					|| (*spotter)->getFaction() == FACTION_HOSTILE // note: doesn't this cover the aggro-thing, like totally
+					|| (*spotter)->checkViewSector(unit->getPosition())) // aLiens see all directions, btw. */
+			if (((*spotter)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units
+					|| ((*spotter)->getOriginalFaction() == FACTION_PLAYER		// but Mc'd aLiens won't RF on other aLiens ...
+						&& (*spotter)->checkViewSector(unit->getPosition())))
+				&& visible(*spotter, tile))
 			{
-				//Log(LOG_INFO) << ". check ID " << (*bu)->getId();
+				//Log(LOG_INFO) << ". check ID " << (*spotter)->getId();
 
-				if ((*bu)->getFaction() == FACTION_HOSTILE)
+				if ((*spotter)->getFaction() == FACTION_HOSTILE)
 					unit->setTurnsExposed(0);
 
 				// these two calls should already be done in calculateFOV()
-//				if ((*bu)->getFaction() == FACTION_PLAYER)
+//				if ((*spotter)->getFaction() == FACTION_PLAYER)
 //					unit->setVisible(true);
-//				(*bu)->addToVisibleUnits(unit);
+//				(*spotter)->addToVisibleUnits(unit);
 					// as long as calculateFOV is always done right between
 					// walking, kneeling, shooting, throwing .. and checkReactionFire()
 					// If so, then technically, visible() above can be replaced
-					// by checking (*bu)'s _visibleUnits vector. But this is working good per.
+					// by checking (*spotter)'s _visibleUnits vector. But this is working good per.
 
-				if (canMakeSnap(*bu, unit))
+				if (canMakeSnap(*spotter, unit))
 				{
-					//Log(LOG_INFO) << ". . . reactor ID " << (*bu)->getId()
-					//		<< " : initi = " << (int)(*bu)->getInitiative();
+					//Log(LOG_INFO) << ". . . reactor ID " << (*spotter)->getId()
+					//		<< " : initi = " << (int)(*spotter)->getInitiative();
 
-					spotters.push_back(*bu);
+					spotters.push_back(*spotter);
 				}
 			}
 		}

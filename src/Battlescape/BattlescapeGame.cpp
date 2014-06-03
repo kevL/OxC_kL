@@ -116,6 +116,12 @@ BattlescapeGame::BattlescapeGame(
 BattlescapeGame::~BattlescapeGame()
 {
 	Log(LOG_INFO) << "Delete BattlescapeGame";
+
+// delete CTD_begin:
+// THIS CAUSES ctd BECAUSE, WHEN RELOADING FROM Main-Menu,
+// A new BATTLESCAPE_GAME IS CREATED *BEFORE* THE OLD ONE IS dTor'D
+// ( i think ) So this loop 'deletes' the fresh BattlescapeGame's states .....
+// leaving the old states that should (have) be(en) deleted intact.
 	for (std::list<BattleState*>::iterator
 			i = _states.begin();
 			i != _states.end();
@@ -123,8 +129,11 @@ BattlescapeGame::~BattlescapeGame()
 	{
 		delete *i;
 	}
+// *cough* so much for that hypothesis
 
-	cleanupDeleted();
+//kL	cleanupDeleted();	// <- there it is ! Yet it works in NextTurnState ???
+							// Added it to DebriefingState instead of here. (see)
+// delete CTD_end.
 }
 
 /**
@@ -511,7 +520,6 @@ bool BattlescapeGame::kneel(
 		bool calcFoV)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::kneel()";
-
 	if (bu->getType() == "SOLDIER")
 	{
 		if (!bu->isFloating()) // kL_note: This prevents flying soldiers from 'kneeling' .....
@@ -565,7 +573,15 @@ bool BattlescapeGame::kneel(
 void BattlescapeGame::endTurn()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::endTurn()";
-	// maybe should put cleanUpDeleted() here .... idiots.
+
+// delete CTD_begin:
+// THIS MOVED TO NEXT_TURN_STATE
+/*	for (std::list<BattleState*>::iterator i = _deleted.begin(); i != _deleted.end(); ++i)
+	{
+		delete *i;
+	}
+	_deleted.clear(); */
+// delete CTD_end.
 
 	_tuReserved		= _playerTUReserved;
 	_debugPlay		= false;
@@ -1242,7 +1258,6 @@ void BattlescapeGame::statePushBack(BattleState* bs)
 void BattlescapeGame::popState()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::popState()";
-
 	if (Options::traceAI)
 	{
 		Log(LOG_INFO) << "BattlescapeGame::popState() #" << _AIActionCounter << " with "
@@ -1297,7 +1312,7 @@ void BattlescapeGame::popState()
 		} // kL_end.
 	}
 
-	_deleted.push_back(_states.front());
+	_deleted.push_back(_states.front()); // delete CTD
 
 	//Log(LOG_INFO) << ". states.Popfront";
 	_states.pop_front();
