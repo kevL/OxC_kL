@@ -756,15 +756,21 @@ void ProjectileFlyBState::think()
 				|| unitCanFly))
 		{
 			createNewProjectile();
+
+			if (_action.cameraPosition.z != -1) // new behavior here (14 jun 2):
+			{
+				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+				_parent->getMap()->invalidate();
+			}
 		}
 		else // end think()
 		{
 			// kL_note: Don't return camera to its pre-firing position.
-			// that is, leave it wherever the projectile hits... (or try to.)
+			// that is, leave it wherever the projectile hits... (or try to.) REVERTED
 			if (_action.cameraPosition.z != -1)
 			{
-//kL				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
-				_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
+				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+//				_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
 				_parent->getMap()->invalidate();
 			}
 

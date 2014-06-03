@@ -6510,7 +6510,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1401769611 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1401773882 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
