@@ -57,7 +57,9 @@ private:
 	static const int heightFromCenter[11];
 
 	bool _personalLighting;
-	int _powerT; // kL
+	int
+		_powerE, // kL, effective power that actually explodes on a tile that's hit by HE.
+		_powerT; // kL, test power that checks if _powerE actually makes it to the next tile.
 	SavedBattleGame* _save;
 	std::vector<Uint16>* _voxelData;
 
