@@ -27,10 +27,6 @@
 #include <stdint.h>
 #include <string>
 
-#include <SDL.h>
-#include <SDL_syswm.h>
-#include <SDL_image.h>
-
 #include <sys/stat.h>
 
 #include "../dirent.h"
@@ -40,17 +36,17 @@
 #include "Logger.h"
 #include "Options.h"
 
-#ifdef _WIN32
+#ifdef _WIN32 // kL_note: see pch.h ...
 	#ifndef NOMINMAX
 		#define NOMINMAX
 	#endif
 
 	#define WIN32_LEAN_AND_MEAN
 
-	#include <direct.h>
+//kL	#include <direct.h>
 	#include <shlobj.h>
 	#include <shlwapi.h>
-	#include <windows.h>
+//kL	#include <windows.h>
 
 	#ifndef SHGFP_TYPE_CURRENT
 		#define SHGFP_TYPE_CURRENT 0
@@ -61,17 +57,20 @@
 		#pragma comment(lib, "shell32.lib")
 		#pragma comment(lib, "shlwapi.lib")
 	#endif
-	#else
-		#include <cstdio>
-		#include <cstdlib>
-		#include <cstring>
-		#include <pwd.h>
-		#include <unistd.h>
+#else
+	#include <cstdio>
+	#include <cstdlib>
+	#include <cstring>
+	#include <pwd.h>
+	#include <unistd.h>
 
-		#include <sys/param.h>
-		#include <sys/types.h>
+	#include <sys/param.h>
+	#include <sys/types.h>
 #endif
 
+#include <SDL.h>
+#include <SDL_syswm.h>
+#include <SDL_image.h>
 
 
 namespace OpenXcom
@@ -105,13 +104,13 @@ void showError(const std::string& error)
  * Gets the user's home folder according to the system.
  * @return Absolute path to home folder.
  */
-static char const *getHome()
+static char const* getHome()
 {
-	char const *home = getenv("HOME");
-#ifndef _WIN32
+	char const* home = getenv("HOME");
+#ifndef _WIN32 // kL_note: wot.
 	if (!home)
 	{
-		struct passwd *const pwd = getpwuid(getuid());
+		struct passwd* const pwd = getpwuid(getuid());
 		home = pwd->pw_dir;
 	}
 #endif
@@ -123,7 +122,7 @@ static char const *getHome()
 /**
  * Builds a list of predefined paths for the Data folder
  * according to the running system.
- * @return List of data paths.
+ * @return, List of data paths.
  */
 std::vector<std::string> findDataFolders()
 {
@@ -158,14 +157,14 @@ std::vector<std::string> findDataFolders()
 		list.push_back(path);
 	}
 #else
-	char const *home = getHome();
+	char const* home = getHome();
 #ifdef __HAIKU__
 	list.push_back("/boot/apps/OpenXcom/data/");
 #endif
 	char path[MAXPATHLEN];
 
 	// Get user-specific data folders
-	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
+	if (char const* const xdg_data_home = getenv("XDG_DATA_HOME"))
  	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/data/", xdg_data_home);
  	}
@@ -180,9 +179,9 @@ std::vector<std::string> findDataFolders()
  	list.push_back(path);
 
 	// Get global data folders
-	if (char *xdg_data_dirs = getenv("XDG_DATA_DIRS"))
+	if (char* xdg_data_dirs = getenv("XDG_DATA_DIRS"))
 	{
-		char *dir = strtok(xdg_data_dirs, ":");
+		char* dir = strtok(xdg_data_dirs, ":");
 		while (dir != 0)
 		{
 			snprintf(path, MAXPATHLEN, "%s/openxcom/data/", dir);
@@ -253,11 +252,11 @@ std::vector<std::string> findUserFolders()
 #ifdef __HAIKU__
 	list.push_back("/boot/apps/OpenXcom/");
 #endif
-	char const *home = getHome();
+	char const* home = getHome();
 	char path[MAXPATHLEN];
 
 	// Get user folders
-	if (char const *const xdg_data_home = getenv("XDG_DATA_HOME"))
+	if (char const* const xdg_data_home = getenv("XDG_DATA_HOME"))
  	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
  	}
@@ -284,7 +283,7 @@ std::vector<std::string> findUserFolders()
 
 /**
  * Finds the Config folder according to the running system.
- * @return Config path.
+ * @return, Config path.
  */
 std::string findConfigFolder()
 {
@@ -297,10 +296,10 @@ std::string findConfigFolder()
 #elif defined (__HAIKU__)
 	return "/boot/home/config/settings/openxcom/";
 #else
-	char const *home = getHome();
+	char const* home = getHome();
 	char path[MAXPATHLEN];
 	// Get config folders
-	if (char const *const xdg_config_home = getenv("XDG_CONFIG_HOME"))
+	if (char const* const xdg_config_home = getenv("XDG_CONFIG_HOME"))
 	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_config_home);
 
@@ -316,8 +315,7 @@ std::string findConfigFolder()
 }
 
 /**
- * Takes a path and tries to find it based on the
- * system's case-sensitivity.
+ * Takes a path and tries to find it based on the system's case-sensitivity.
  * @param base Base unaltered path.
  * @param path Full path to check for casing.
  * @return Correct filename or "" if it doesn't exist.
@@ -358,8 +356,7 @@ std::string caseInsensitive(
 }
 
 /**
- * Takes a path and tries to find it based on the
- * system's case-sensitivity.
+ * Takes a path and tries to find it based on the system's case-sensitivity.
  * @param base Base unaltered path.
  * @param path Full path to check for casing.
  * @return Correct foldername or "" if it doesn't exist.
@@ -510,7 +507,7 @@ bool createFolder(const std::string& path)
 std::string endPath(const std::string& path)
 {
 	if (!path.empty()
-		&& path.at(path.size()-1) != PATH_SEPARATOR)
+		&& path.at(path.size() - 1) != PATH_SEPARATOR)
 	{
 		return path + PATH_SEPARATOR;
 	}
@@ -519,8 +516,7 @@ std::string endPath(const std::string& path)
 }
 
 /**
- * Gets the name of all the files
- * contained in a certain folder.
+ * Gets the name of all the files contained in a certain folder.
  * @param path Full path to folder.
  * @param ext Extension of files ("" if it doesn't matter).
  * @return Ordered list of all the files.
@@ -537,7 +533,7 @@ std::vector<std::string> getFolderContents(
 				extl.begin(),
 				::tolower);
 
-	DIR *dp = opendir(path.c_str());
+	DIR* dp = opendir(path.c_str());
 	if (dp == 0)
 	{
 	#ifdef __MORPHOS__
@@ -548,7 +544,7 @@ std::vector<std::string> getFolderContents(
 	#endif
 	}
 
-	struct dirent *dirp;
+	struct dirent* dirp;
 	while ((dirp = readdir(dp)) != 0)
 	{
 		std::string file = dirp->d_name;
@@ -635,24 +631,24 @@ std::vector<std::string> getDataContents(
 
 //kL	files = std::vector<std::string>(unique.begin(), unique.end());
 //kL	return files;
-
-	return std::vector<std::string>(unique.begin(), unique.end());
+	return std::vector<std::string>(unique.begin(), unique.end()); // kL
 }
 
 /**
  * Checks if a certain path exists and is a folder.
  * @param path Full path to folder.
- * @return Does it exist?
+ * @return, true if it exists
  */
 bool folderExists(const std::string& path)
 {
 #ifdef _WIN32
 	return (PathIsDirectoryA(path.c_str()) != FALSE);
 #elif __MORPHOS__
-	BPTR l = Lock( path.c_str(), SHARED_LOCK );
-	if (l != NULL )
+	BPTR l = Lock(path.c_str(), SHARED_LOCK);
+	if (l != NULL)
 	{
-		UnLock( l );
+		UnLock(l);
+
 		return 1;
 	}
 
@@ -667,22 +663,24 @@ bool folderExists(const std::string& path)
 /**
  * Checks if a certain path exists and is a file.
  * @param path Full path to file.
- * @return Does it exist?
+ * @return, true if it exists
  */
 bool fileExists(const std::string& path)
 {
 #ifdef _WIN32
 	return (PathFileExistsA(path.c_str()) != FALSE);
 #elif __MORPHOS__
-	BPTR l = Lock( path.c_str(), SHARED_LOCK );
-	if (l != NULL )
+	BPTR l = Lock(path.c_str(), SHARED_LOCK);
+	if (l != NULL)
 	{
-		UnLock( l );
+		UnLock(l);
 		return 1;
 	}
+
 	return 0;
 #else
 	struct stat info;
+
 	return (stat(path.c_str(), &info) == 0 && S_ISREG(info.st_mode));
 #endif
 }
@@ -705,7 +703,7 @@ bool deleteFile(const std::string& path)
  * Gets the base filename of a path.
  * @param path		- Referenct to the full path of file
  * @param transform	- Optional function to transform the filename.
- * @return, The base filename.
+ * @return, base filename
  */
 std::string baseFilename(
 		const std::string& path,
@@ -732,9 +730,9 @@ std::string baseFilename(
 }
 
 /**
- * Replaces invalid filesystem characters with "_".
- * @param filename	- Reference to the original filename
- * @return, The filename without invalid characters
+ * Replaces invalid filesystem characters with an underscore "_".
+ * @param filename - reference to the original filename
+ * @return, filename without invalid characters
  */
 std::string sanitizeFilename(const std::string& filename)
 {
@@ -780,7 +778,9 @@ std::string noExt(const std::string& filename)
 std::string getLocale()
 {
 #ifdef _WIN32
-	char language[9], country[9];
+	char
+		language[9],
+		country[9];
 
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO639LANGNAME, language, 9);
 	GetLocaleInfoA(LOCALE_USER_DEFAULT, LOCALE_SISO3166CTRYNAME, country, 9);
@@ -789,12 +789,11 @@ std::string getLocale()
 	locale << language << "-" << country;
 
 	return locale.str();
-	/*
-	wchar_t locale[LOCALE_NAME_MAX_LENGTH];
+
+/*	wchar_t locale[LOCALE_NAME_MAX_LENGTH];
 	LCIDToLocaleName(GetUserDefaultUILanguage(), locale, LOCALE_NAME_MAX_LENGTH, 0);
 
-	return Language::wstrToUtf8(locale);
-	*/
+	return Language::wstrToUtf8(locale); */
 #else
 	std::locale l("");
 	std::string name = l.name();
@@ -821,8 +820,8 @@ std::string getLocale()
 
 /**
  * Checks if the system's default quit shortcut was pressed.
- * @param ev SDL event.
- * @return Is quitting necessary?
+ * @param - ev SDL event
+ * @return, true to quit
  */
 bool isQuitShortcut(const SDL_Event& ev)
 {
@@ -846,7 +845,8 @@ bool isQuitShortcut(const SDL_Event& ev)
  */
 time_t getDateModified(const std::string& path)
 {
-/*#ifdef _WIN32
+/*
+#ifdef _WIN32
 	WIN32_FILE_ATTRIBUTE_DATA info;
 	if (GetFileAttributesExA(path.c_str(), GetFileExInfoStandard, &info))
 	{
@@ -857,10 +857,9 @@ time_t getDateModified(const std::string& path)
 		return li.QuadPart;
 	}
 	else
-	{
 		return 0;
-	}
-#endif*/
+#endif
+*/
 	struct stat info;
 	if (stat(path.c_str(), &info) == 0)
 		return info.st_mtime;
@@ -876,9 +875,11 @@ time_t getDateModified(const std::string& path)
  */
 std::pair<std::wstring, std::wstring> timeToString(time_t time)
 {
-	wchar_t localDate[25], localTime[25];
-
-/*#ifdef _WIN32
+	wchar_t
+		localDate[25],
+		localTime[25];
+/*
+#ifdef _WIN32
 	LARGE_INTEGER li;
 	li.QuadPart = time;
 	FILETIME ft;
@@ -890,8 +891,8 @@ std::pair<std::wstring, std::wstring> timeToString(time_t time)
 
 	GetDateFormatW(LOCALE_USER_DEFAULT, DATE_SHORTDATE, &st, NULL, localDate, 25);
 	GetTimeFormatW(LOCALE_USER_DEFAULT, TIME_NOSECONDS, &st, NULL, localTime, 25);
-#endif*/
-
+#endif
+*/
 	struct tm* timeinfo = localtime(&(time));
 	wcsftime(localDate, 25, L"%Y-%m-%d", timeinfo);
 	wcsftime(localTime, 25, L"%H:%M", timeinfo);
@@ -932,11 +933,10 @@ bool naturalCompare(
 }
 
 /**
- * Moves a file from one path to another,
- * replacing any existing file.
- * @param src Source path.
- * @param dest Destination path.
- * @return True if the operation succeeded, False otherwise.
+ * Moves a file from one path to another, replacing any existing file.
+ * @param src	- source path
+ * @param dest	- destination path
+ * @return, true if the operation succeeded
  */
 bool moveFile(const std::string &src, const std::string &dest)
 {
@@ -967,43 +967,49 @@ void flashWindow()
 /**
  * Gets the executable path in DOS-style (short) form.
  * For non-Windows systems, just use a dummy path.
- * @return Executable path.
+ * @return, executable path
  */
 std::string getDosPath()
 {
 #ifdef _WIN32
-	std::string path, bufstr;
+	std::string
+		path,
+		bufstr;
 	char buf[MAX_PATH];
+
 	if (GetModuleFileNameA(0, buf, MAX_PATH) != 0)
 	{
 		bufstr = buf;
 		size_t c1 = bufstr.find_first_of('\\');
-		path += bufstr.substr(0, c1+1);
-		size_t c2 = bufstr.find_first_of('\\', c1+1);
+		path += bufstr.substr(0, c1 + 1);
+		size_t c2 = bufstr.find_first_of('\\', c1 + 1);
 		while (c2 != std::string::npos)
 		{
-			std::string dirname = bufstr.substr(c1+1, c2-c1-1);
+			std::string dirname = bufstr.substr(c1 + 1, c2 - c1 - 1);
 			if (dirname == "..")
 			{
-				path = path.substr(0, path.find_last_of('\\', path.length()-2));
+				path = path.substr(0, path.find_last_of('\\', path.length() - 2));
 			}
 			else
 			{
 				if (dirname.length() > 8)
 					dirname = dirname.substr(0, 6) + "~1";
-				std::transform(dirname.begin(), dirname.end(), dirname.begin(), toupper);
+				std::transform(
+							dirname.begin(),
+							dirname.end(),
+							dirname.begin(),
+							toupper);
 				path += dirname;
 			}
 			c1 = c2;
-			c2 = bufstr.find_first_of('\\', c1+1);
+			c2 = bufstr.find_first_of('\\', c1 + 1);
 			if (c2 != std::string::npos)
 				path += '\\';
 		}
 	}
 	else
-	{
 		path = "C:\\GAMES\\OPENXCOM";
-	}
+
 	return path;
 #else
 	return "C:\\GAMES\\OPENXCOM";
@@ -1020,6 +1026,7 @@ void setWindowIcon(
 
 	SDL_SysWMinfo wminfo;
 	SDL_VERSION(&wminfo.version)
+
 	if (SDL_GetWMInfo(&wminfo))
 	{
 		HWND hwnd = wminfo.window;
@@ -1029,7 +1036,7 @@ void setWindowIcon(
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
 	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(CrossPlatform::getDataFile(unixPath)));
-	SDL_Surface *icon = IMG_Load(utf8.c_str());
+	SDL_Surface* icon = IMG_Load(utf8.c_str());
 	if (icon != 0)
 	{
 		SDL_WM_SetIcon(icon, NULL);

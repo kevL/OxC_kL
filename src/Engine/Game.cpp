@@ -19,7 +19,7 @@
 
 #include "Game.h"
 
-// kL_begin: from Older
+// kL_begin: Old
 /* #ifdef _WIN32
 	#define WIN32_LEAN_AND_MEAN
 	#include <windows.h>
