@@ -1719,7 +1719,8 @@ void DebriefingState::recoverItems(
 					{
 						BattleItem* clip = (*it)->getAmmoItem();
 						if (clip
-							&& clip->getRules()->getClipSize() > 0)
+							&& clip->getRules()->getClipSize() > 0
+							&& clip != *it)
 						{
 							_rounds[clip->getRules()] += clip->getAmmoQuantity();
 						}

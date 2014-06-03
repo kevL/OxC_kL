@@ -2289,15 +2289,9 @@ void TileEngine::explode(
 
 	switch (Options::battleExplosionHeight)
 	{
-		case 3:
-			z_Dec = 10;
-		break;
-		case 2:
-			z_Dec = 20;
-		break;
-		case 1:
-			z_Dec = 30;
-		break;
+		case 3: z_Dec = 10; break;
+		case 2: z_Dec = 20; break;
+		case 1: z_Dec = 30; break;
 
 		case 0: // default flat explosion
 		default:
@@ -2394,7 +2388,7 @@ void TileEngine::explode(
 				}
 
 
-				if (r > 0.5) // no need to block epicentrum.
+				if (r > 0.5) // don't block epicentrum.
 				{
 					_powerT = _powerE;
 
@@ -2425,6 +2419,7 @@ void TileEngine::explode(
 													origin,
 													destTile,
 													type);
+//					int horiBlock = 0;
 					//Log(LOG_INFO) << ". horiBlock = " << horiBlock;
 //					if (horiBlock < 0)
 //						break;
@@ -2433,6 +2428,7 @@ void TileEngine::explode(
 												origin,
 												destTile,
 												type);
+//					int vertBlock = 0;
 					//Log(LOG_INFO) << ". vertBlock = " << vertBlock;
 //					if (vertBlock < 0)
 //						break;
@@ -2458,6 +2454,8 @@ void TileEngine::explode(
 								break;
 						}
 					}
+
+					_powerE = _powerT;
 				}
 
 
@@ -2765,12 +2763,6 @@ int TileEngine::horizontalBlockage(
 		ItemDamageType type)
 {
 	//Log(LOG_INFO) << "TileEngine::horizontalBlockage()";
-	if (startTile == NULL // safety checks
-		|| endTile == NULL)
-	{
-		return -9;
-	}
-
 /*	DT_NONE,	// 0
 	DT_AP,		// 1
 	DT_IN,		// 2
@@ -2785,6 +2777,15 @@ int TileEngine::horizontalBlockage(
 				|| type == DT_IN
 				|| type == DT_STUN
 				|| type == DT_SMOKE;
+
+	if (startTile == NULL // safety checks
+		|| endTile == NULL)
+	{
+		if (visLike)
+			return -9;
+		else
+			return 500;
+	}
 
 	if (startTile->getPosition().z != endTile->getPosition().z)
 	{
@@ -2884,12 +2885,14 @@ int TileEngine::horizontalBlockage(
 								startTile,
 								MapData::O_OBJECT,
 								type,
-								0) / 2
+								0,
+								true) / 2
 						+ blockage(
 								startTile,
 								MapData::O_OBJECT,
 								type,
-								2) / 2
+								2,
+								true) / 2
 
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileNorth),
@@ -3021,12 +3024,14 @@ int TileEngine::horizontalBlockage(
 								startTile,
 								MapData::O_OBJECT,
 								type,
-								2) / 2 // checks Content/bigWalls
+								2,
+								true) / 2 // checks Content/bigWalls
 						+ blockage(
 								startTile,
 								MapData::O_OBJECT,
 								type,
-								4) / 2 // checks Content/bigWalls
+								4,
+								true) / 2 // checks Content/bigWalls
 
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileSouth),
@@ -3153,12 +3158,14 @@ int TileEngine::horizontalBlockage(
 								startTile,
 								MapData::O_OBJECT,
 								type,
-								6) / 2 // checks Content/bigWalls
+								6,
+								true) / 2 // checks Content/bigWalls
 						+ blockage(
 								startTile,
 								MapData::O_OBJECT,
 								type,
-								4) / 2 // checks Content/bigWalls
+								4,
+								true) / 2 // checks Content/bigWalls
 
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileSouth),
@@ -3290,12 +3297,14 @@ int TileEngine::horizontalBlockage(
 								startTile,
 								MapData::O_OBJECT,
 								type,
-								0) / 2
+								0,
+								true) / 2
 						+ blockage(
 								startTile,
 								MapData::O_OBJECT,
 								type,
-								6) / 2
+								6,
+								true) / 2
 
 						+ blockage(
 								_save->getTile(startTile->getPosition() + tileNorth),
@@ -3457,16 +3466,19 @@ int TileEngine::verticalBlockage(
 		ItemDamageType type)
 {
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage()";
-	if (startTile == 0 // safety check
-		|| endTile == 0)
-	{
-		return -9;
-	}
-
 	bool visLike = type == DT_NONE
 				|| type == DT_IN
 				|| type == DT_STUN
 				|| type == DT_SMOKE;
+
+	if (startTile == NULL // safety check
+		|| endTile == NULL)
+	{
+		if (visLike)
+			return -9;
+		else
+			return 500;
+	}
 
 	int dirZ = endTile->getPosition().z - startTile->getPosition().z;
 	if (dirZ == 0)
@@ -3484,53 +3496,7 @@ int TileEngine::verticalBlockage(
 
 		block = 0;
 
-	if (dirZ < 0) // down
-	{
-		for (
-				;
-				z > endTile->getPosition().z;
-				z--)
-		{
-			block += blockage(
-							_save->getTile(Position(x, y, z)),
-							MapData::O_FLOOR,
-							type)
-					+ blockage(
-							_save->getTile(Position(x, y, z)),
-							MapData::O_OBJECT,
-							type,
-							9); // Pathfinding::DIR_DOWN
-		}
-
-		if (x != endTile->getPosition().x
-			|| y != endTile->getPosition().y)
-		{
-			x = endTile->getPosition().x;
-			y = endTile->getPosition().y;
-			z = startTile->getPosition().z;
-
-			block += horizontalBlockage(
-									startTile,
-									_save->getTile(Position(x, y, z)),
-									type);
-
-			for (
-					;
-					z > endTile->getPosition().z;
-					z--)
-			{
-				block += blockage(
-								_save->getTile(Position(x, y, z)),
-								MapData::O_FLOOR,
-								type)
-						+ blockage(
-								_save->getTile(Position(x, y, z)),
-								MapData::O_OBJECT,
-								type); // note: no Dir vs typeOBJECT
-			}
-		}
-	}
-	else if (dirZ > 0) // up
+	if (dirZ > 0) // up
 	{
 		for (
 				z += 1;
@@ -3576,6 +3542,52 @@ int TileEngine::verticalBlockage(
 			}
 		}
 	}
+	else if (dirZ < 0) // down
+	{
+		for (
+				;
+				z > endTile->getPosition().z;
+				z--)
+		{
+			block += blockage(
+							_save->getTile(Position(x, y, z)),
+							MapData::O_FLOOR,
+							type)
+					+ blockage(
+							_save->getTile(Position(x, y, z)),
+							MapData::O_OBJECT,
+							type,
+							9); // Pathfinding::DIR_DOWN
+		}
+
+		if (x != endTile->getPosition().x
+			|| y != endTile->getPosition().y)
+		{
+			x = endTile->getPosition().x;
+			y = endTile->getPosition().y;
+			z = startTile->getPosition().z;
+
+			block += horizontalBlockage(
+									startTile,
+									_save->getTile(Position(x, y, z)),
+									type);
+
+			for (
+					;
+					z > endTile->getPosition().z;
+					z--)
+			{
+				block += blockage(
+								_save->getTile(Position(x, y, z)),
+								MapData::O_FLOOR,
+								type)
+						+ blockage(
+								_save->getTile(Position(x, y, z)),
+								MapData::O_OBJECT,
+								type); // note: no Dir vs typeOBJECT
+			}
+		}
+	}
 
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage() EXIT ret = " << block;
 	return block;
@@ -3602,10 +3614,18 @@ int TileEngine::blockage(
 		bool checkingOrigin)
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
-	if (tile == 0) // probably outside the map here
+	bool visLike = type == DT_NONE
+				|| type == DT_SMOKE
+				|| type == DT_STUN
+				|| type == DT_IN;
+
+	if (tile == NULL) // probably outside the map here
 	{
-		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret -2 ( no tile )";
-		return -9;
+		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret ( no tile )";
+		if (visLike)
+			return -9;
+		else
+			return 500;
 	}
 
 	// Open ufo doors are actually still closed behind the scenes,
@@ -3618,11 +3638,6 @@ int TileEngine::blockage(
 
 	if (tile->getMapData(part))
 	{
-		bool visLike = type == DT_NONE
-					|| type == DT_SMOKE
-					|| type == DT_STUN
-					|| type == DT_IN;
-
 		//Log(LOG_INFO) << ". getMapData(part) stopLOS() = " << tile->getMapData(part)->stopLOS();
 		if (dir == -1) // regular north/west wall (not BigWall), or it's a floor, or a Content-object vs upward-diagonal.
 		{
@@ -3815,34 +3830,13 @@ int TileEngine::blockage(
 bool TileEngine::detonate(Tile* tile)
 {
 	//Log(LOG_INFO) << "TileEngine::detonate()";
-	int explosive = tile->getExplosive();
-	tile->setExplosive(0, true);
-
 	bool objective = false;
 
-	static const int parts[7] = {0, 1, 2, 0, 1, 2, 3};
-	Position pos = tile->getPosition();
-
-	Tile* tiles[7];
-	tiles[0] = _save->getTile(Position( // ceiling
-									pos.x,
-									pos.y,
-									pos.z + 1));
-	tiles[1] = _save->getTile(Position( // east wall
-									pos.x + 1,
-									pos.y,
-									pos.z));
-	tiles[2] = _save->getTile(Position( // south wall
-									pos.x,
-									pos.y + 1,
-									pos.z));
-	tiles[3]	= tiles[4]
-				= tiles[5]
-				= tiles[6]
-				= tile;
-
+	int explosive = tile->getExplosive();
 	if (explosive)
 	{
+		tile->setExplosive(0, true);
+
 		// explosions create smoke which only stays 1 or 2 turns; kL_note: or 3
 		// smoke added to an already smoking tile will increase smoke to max.15
 		tile->setSmoke(
@@ -3852,9 +3846,31 @@ bool TileEngine::detonate(Tile* tile)
 									tile->getSmoke() + RNG::generate(0, 3),
 									15)));
 
-		int fuel = tile->getFuel() + 1;
-		int flam = tile->getFlammability();
-		int remainingPower = explosive;
+		Position pos = tile->getPosition();
+		Tile* tiles[7];
+		tiles[0] = _save->getTile(Position( // ceiling
+										pos.x,
+										pos.y,
+										pos.z + 1));
+		tiles[1] = _save->getTile(Position( // east wall
+										pos.x + 1,
+										pos.y,
+										pos.z));
+		tiles[2] = _save->getTile(Position( // south wall
+										pos.x,
+										pos.y + 1,
+										pos.z));
+		tiles[3] = tiles[4]
+				 = tiles[5]
+				 = tiles[6]
+				 = tile;
+
+		int
+			fuel = tile->getFuel() + 1,
+			flam = tile->getFlammability(),
+			power = explosive;
+
+		static const int parts[7] = {0, 1, 2, 0, 1, 2, 3};
 
 		for (int
 				i = 0;
@@ -3864,14 +3880,14 @@ bool TileEngine::detonate(Tile* tile)
 			if (tiles[i]
 				&& tiles[i]->getMapData(parts[i]))
 			{
-				remainingPower = explosive;
-//kL			while (remainingPower > -1
-				while (remainingPower > 0 // kL
+				power = explosive;
+				while (power > -1
+//				while (power > 0 // kL
 					&& tiles[i]->getMapData(parts[i]))
 				{
-					remainingPower -= 2 * tiles[i]->getMapData(parts[i])->getArmor();
-//kL				if (remainingPower > -1)
-					if (remainingPower > 0) // kL
+					power -= 2 * tiles[i]->getMapData(parts[i])->getArmor();
+					if (power > -1)
+//					if (power > 0) // kL
 					{
 						int volume = 0;
 						for (int // get the volume of the object by checking its loftemps objects.
@@ -3921,7 +3937,7 @@ bool TileEngine::detonate(Tile* tile)
 				}
 
 				if (i > 3
-					&& remainingPower > flam * 2
+					&& power > flam * 2
 					&& (tile->getMapData(MapData::O_FLOOR)
 						|| tile->getMapData(MapData::O_OBJECT)))
 				{

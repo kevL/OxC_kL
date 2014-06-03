@@ -854,8 +854,8 @@ void Tile::setUnit(
 }
 
 /**
- * Set the amount of turns this tile will be on fire. 0 = no fire.
- * @param (int)fire, Amount of turns this tile will be on fire
+ * Sets the number of turns this tile will be on fire.
+ * @param fire - number of turns for this tile to burn (0 = no fire)
  */
 void Tile::setFire(int fire)
 {
@@ -864,8 +864,8 @@ void Tile::setFire(int fire)
 }
 
 /**
- * Get the amount of turns this tile is on fire. 0 = no fire.
- * @return int, Amount of turns this tile will be on fire
+ * Gets the number of turns left for this tile to be on fire.
+ * @return, number of turns left for this tile to burn (0 = no fire)
  */
 int Tile::getFire() const
 {
@@ -873,8 +873,8 @@ int Tile::getFire() const
 }
 
 /**
- * Set the amount of turns this tile is smoking. 0 = no smoke.
- * @param (int)smoke, Amount of turns this tile will be smoking
+ * Sets the number of turns this tile will smoke for; adds to any smoke already on a tile.
+ * @param smoke - number of turns for this tile to smoke (0 = no smoke)
  */
 void Tile::addSmoke(int smoke)
 {
@@ -896,8 +896,8 @@ void Tile::addSmoke(int smoke)
 }
 
 /**
- * Set the amount of turns this tile will be smoking. 0 = no smoke.
- * @param (int)smoke, Amount of turns this tile will be smoking
+ * Sets the number of turns this tile will smoke for.
+ * @param smoke - number of turns for this tile to smoke (0 = no smoke)
  */
 void Tile::setSmoke(int smoke)
 {
@@ -906,8 +906,8 @@ void Tile::setSmoke(int smoke)
 }
 
 /**
- * Get the amount of turns this tile will be smoking. 0 = no smoke.
- * @return int, Amount of turns this tile will be smoking
+ * Gets the number of turns left for this tile to smoke.
+ * @return, number of turns left for this tile to smoke (0 = no smoke)
  */
 int Tile::getSmoke() const
 {

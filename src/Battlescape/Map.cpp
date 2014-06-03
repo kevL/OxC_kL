@@ -197,8 +197,8 @@ Map::~Map()
  */
 void Map::init()
 {
-	// load the tiny arrow into a surface
-	int f = Palette::blockOffset(1)+1;	// yellow
+	// load the unit-selected bobbing-arrow into a surface
+	int f = Palette::blockOffset(1);	// yellow
 	int b = 15;							// black
 	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
