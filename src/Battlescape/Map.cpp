@@ -713,7 +713,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 
-/*					if (mapPosition.y > 0) // special handling for a moving unit.
+					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
 						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
 						BattleUnit* bu = tileNorth->getUnit();
@@ -730,7 +730,7 @@ void Map::drawTerrain(Surface* surface)
 						else
 						{
 							tileNorthShade = 16;
-							bu = 0;
+							bu = NULL;
 						}
 						// kL_note: What about tileWestShade ...? (used in subscope below)
 
@@ -744,7 +744,7 @@ void Map::drawTerrain(Surface* surface)
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 							int part = 0;
 							part += tileNorth->getPosition().x - bu->getPosition().x;
-							part += (tileNorth->getPosition().y - bu->getPosition().y)*2;
+							part += (tileNorth->getPosition().y - bu->getPosition().y) * 2;
 
 							tmpSurface = bu->getCache(&invalid, part);
 							if (tmpSurface)
@@ -992,16 +992,16 @@ void Map::drawTerrain(Surface* surface)
 												// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 												// fire:	0..7	-> 8 frames
 												// smoke:	8..19	-> 12 frames
-//									int fire = tile->getFire();	// fire is grouped [0..3] & [4..7] ( latter is for units onFire )
+//									int fire = tileWest->getFire();	// fire is grouped [0..3] & [4..7] ( latter is for units onFire )
 																// smoke runs consecutively. [8..19] ( since I adulterated the Smoke.Pck graphics )
-									if (tile->getFire() == 0) // then use Smoke frames.
+									if (tileWest->getFire() == 0) // then use Smoke frames.
 									{
 										// smoke sprites start at #8 on the spritesheet:
-										frame = 8 + ((tile->getSmoke() + 1) / 2); // getSmoke = 1..15 -> frame = 8..16
+										frame = 8 + ((tileWest->getSmoke() + 1) / 2); // getSmoke = 1..15 -> frame = 8..16
 									}
 
 									// _animFrame = 1..8 -> 0..4, offset = 0..3 -> spriteOffset = 0..7 (0..4, 1..5, 2..6, 3..7)
-									int spriteOffset = ((_animFrame + 1) / 2) + tile->getAnimationOffset();
+									int spriteOffset = ((_animFrame + 1) / 2) + tileWest->getAnimationOffset();
 									if (spriteOffset > 3)
 										frame += spriteOffset - 4;
 									else
@@ -1019,7 +1019,6 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.y,
 											0);
 								} // kL_end.
-*/
 /*kL
 								{
 									frame = 0;
@@ -1039,9 +1038,9 @@ void Map::drawTerrain(Surface* surface)
 														screenPosition.y + tileOffset.y,
 														0);
 								} */
-/*							}
+							}
 						}
-					} */
+					}
 
 					// Draw walls
 					if (!tile->isVoid())
