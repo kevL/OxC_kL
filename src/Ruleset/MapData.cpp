@@ -607,8 +607,17 @@ void MapData::setTUSlide(const int TUSlide)
 }
 
 /**
+ * Sets the "no floor" flag.
+ * @param isNoFloor - true if the tile has no floor part
+ */
+void MapData::setNoFloor(bool isNoFloor)
+{
+	_isNoFloor = isNoFloor;
+}
+
+/**
  * Check if this is an xcom base object.
- * @return, True if it is a base object.
+ * @return, true if it is a base object
  */
 bool MapData::isBaseModule()
 {

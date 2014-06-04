@@ -305,14 +305,14 @@ void OptionsBaseState::btnCancelClick(Action*)
 	SDL_WM_GrabInput(Options::captureMouse);
 
 	Screen::updateScale(
-					Options::battlescapeScale,
 					Options::newBattlescapeScale,
+					Options::battlescapeScale,
 					Options::baseXBattlescape,
 					Options::baseYBattlescape,
 					_origin == OPT_BATTLESCAPE);
 	Screen::updateScale(
-					Options::geoscapeScale,
 					Options::newGeoscapeScale,
+					Options::geoscapeScale,
 					Options::baseXGeoscape,
 					Options::baseYGeoscape,
 					_origin != OPT_BATTLESCAPE);

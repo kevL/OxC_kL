@@ -50,6 +50,7 @@ private:
 		_TUWalks,
 		_TUFlys,
 		_TUSlides;
+	std::vector<std::pair<size_t, bool> > _noFloors;
 	std::vector<std::pair<size_t, std::vector<int> > > _LOFTS;
 
 

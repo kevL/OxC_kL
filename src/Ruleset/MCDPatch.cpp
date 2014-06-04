@@ -128,6 +128,12 @@ void MCDPatch::load(const YAML::Node& node)
 			_HEBlocks.push_back(std::make_pair(MCDIndex, HEBlock));
 		}
 
+		if ((*i)["noFloor"])
+		{
+			bool noFloor = (*i)["noFloor"].as<bool>();
+			_noFloors.push_back(std::make_pair(MCDIndex, noFloor));
+		}
+
 		if ((*i)["LOFTS"])
 		{
 			std::vector<int> lofts = (*i)["LOFTS"].as< std::vector<int> >();
@@ -238,6 +244,14 @@ void MCDPatch::modifyData(MapDataSet* dataSet) const
 			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setHEBlock(i->second);
+	}
+
+	for (std::vector<std::pair<size_t, bool> >::const_iterator
+			i = _noFloors.begin();
+			i != _noFloors.end();
+			++i)
+	{
+		dataSet->getObjects()->at(i->first)->setNoFloor(i->second);
 	}
 
 	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator

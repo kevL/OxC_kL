@@ -259,6 +259,9 @@ private:
 		/// Sets the TUSlide value.
 		void setTUSlide(const int TUSlide);
 
+		/// Sets this tile as not a floor (water, etc.)
+		void setNoFloor(bool isNoFloor);
+
 		/// Check if this is an xcom base object.
 		bool isBaseModule();
 };
