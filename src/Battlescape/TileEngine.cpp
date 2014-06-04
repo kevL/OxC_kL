@@ -2263,11 +2263,11 @@ BattleUnit* TileEngine::hit(
  * HE destroys an object if its armor is lower than the explosive power,
  * then its HE blockage is applied for further propagation.
  * See http://www.ufopaedia.org/index.php?title=Explosions for more info.
- * @param voxelTarget, Center of the explosion in voxelspace.
- * @param power, Power of the explosion.
- * @param type, The damage type of the explosion.
- * @param maxRadius, The maximum radius of the explosion.
- * @param unit, The unit that caused the explosion.
+ * @param voxelTarget	- reference to the center of explosion in voxelspace
+ * @param power			- power of explosion
+ * @param type			- damage type of explosion (enum ItemDamageType)
+ * @param maxRadius		- maximum radius of explosion
+ * @param unit			- pointer to a unit that caused explosion
  */
 void TileEngine::explode(
 			const Position& voxelTarget,
@@ -2334,16 +2334,17 @@ void TileEngine::explode(
 //	int testIter = 0; // TEST.
 
 //	for (int fi = 0; fi == 0; ++fi) // kL_note: Looks like a TEST ray. ( 0 == horizontal )
-	for (int
+	for (int fi = 90; fi == 90; ++fi) // kL_note: Looks like a TEST ray. ( 0 == horizontal )
+/*	for (int
 			fi = -90;
 			fi <= 90;
-			fi += 5)
+			fi += 5) */
 	{
-//		for (int te = 180; te == 180; ++te) // kL_note: Looks like a TEST ray. ( 0 == south, 180 == north )
-		for (int // raytracing every 3 degrees makes sure we cover all tiles in a circle.
+		for (int te = 180; te == 180; ++te) // kL_note: Looks like a TEST ray. ( 0 == south, 180 == north )
+/*		for (int // raytracing every 3 degrees makes sure we cover all tiles in a circle.
 				te = 0;
 				te <= 360;
-				te += 3)
+				te += 3) */
 		{
 			sin_te = sin(static_cast<double>(te) * M_PI / 180.0);
 			cos_te = cos(static_cast<double>(te) * M_PI / 180.0);
@@ -2362,8 +2363,11 @@ void TileEngine::explode(
 				&& r - 1.0 < r_Max) // kL_note: Allows explosions of 0 radius(!), single tile only hypothetically.
 									// the idea is to show an explosion animation but affect only that one tile.
 			{
-				//Log(LOG_INFO) << ". _powerE > 0";
-				//Log(LOG_INFO) << ". r = " << r << ", r_Max = " << r_Max;
+				Log(LOG_INFO) << ". . . . .";
+				//++testIter;
+				//Log(LOG_INFO) << ". i = " << testIter;
+				Log(LOG_INFO) << ". r = " << r << ", r_Max = " << r_Max;
+				Log(LOG_INFO) << ". _powerE = " << _powerE;
 
 				vect_x = static_cast<double>(centerX) + r * sin_te * cos_fi;
 				vect_y = static_cast<double>(centerY) + r * cos_te * cos_fi;
@@ -2378,12 +2382,9 @@ void TileEngine::explode(
 												tileY,
 												tileZ));
 
-				//++testIter;
-				//Log(LOG_INFO) << ". testIter = " << testIter;
-
 				if (destTile == NULL) // out of map!
 				{
-					//Log(LOG_INFO) << ". destTile NOT Valid " << Position(tileX, tileY, tileZ);
+					Log(LOG_INFO) << ". destTile NOT Valid " << Position(tileX, tileY, tileZ);
 					break;
 				}
 
@@ -2407,20 +2408,27 @@ void TileEngine::explode(
 
 					_powerT -= 10;
 					if (_powerT < 1)
+					{
+						Log(LOG_INFO) << ". _powerT < 1 BREAK[hori] " << Position(tileX, tileY, tileZ);
 						break;
+					}
 
 					if (origin->getPosition().z != tileZ) // up/down explosion decrease
+					{
 						_powerT -= z_Dec;
-
-					if (_powerT < 1)
-						break;
+						if (_powerT < 1)
+						{
+							Log(LOG_INFO) << ". _powerT < 1 BREAK[vert] " << Position(tileX, tileY, tileZ);
+							break;
+						}
+					}
 
 					int horiBlock = horizontalBlockage(
 													origin,
 													destTile,
 													type);
 //					int horiBlock = 0;
-					//Log(LOG_INFO) << ". horiBlock = " << horiBlock;
+					Log(LOG_INFO) << ". horiBlock = " << horiBlock;
 //					if (horiBlock < 0)
 //						break;
 
@@ -2429,7 +2437,7 @@ void TileEngine::explode(
 												destTile,
 												type);
 //					int vertBlock = 0;
-					//Log(LOG_INFO) << ". vertBlock = " << vertBlock;
+					Log(LOG_INFO) << ". vertBlock = " << vertBlock;
 //					if (vertBlock < 0)
 //						break;
 
@@ -2444,14 +2452,20 @@ void TileEngine::explode(
 						{
 							_powerT -= horiBlock * 2; // terrain takes 200% power to destruct.
 							if (_powerT < 1)
+							{
+								Log(LOG_INFO) << ". horiBlock BREAK " << Position(tileX, tileY, tileZ);
 								break;
+							}
 						}
 
 						if (vertBlock > 0) // only !visLike will return > 0 for these breaks here.
 						{
 							_powerT -= vertBlock * 2; // terrain takes 200% power to destruct.
 							if (_powerT < 1)
+							{
+								Log(LOG_INFO) << ". vertBlock BREAK " << Position(tileX, tileY, tileZ);
 								break;
+							}
 						}
 					}
 
@@ -2469,7 +2483,8 @@ void TileEngine::explode(
 				//Log(LOG_INFO) << ". post insert Tile";
 				if (tilePair.second) // true if a new tile was inserted.
 				{
-					//Log(LOG_INFO) << ". . new tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition() << ". _powerE = " << _powerE << ". r = " << r;
+					Log(LOG_INFO) << ". _powerE = " << _powerE;
+					Log(LOG_INFO) << ". . tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition(); //<< ". _powerE = " << _powerE << ". r = " << r;
 					targetUnit = destTile->getUnit();
 					if (targetUnit
 						&& targetUnit->getTaken()) // -> THIS NEEDS TO BE REMOVED LATER (or earlier) !!! Done Below !
@@ -2722,18 +2737,18 @@ void TileEngine::explode(
 	{
 		//Log(LOG_INFO) << ". explode Tiles";
 		for (std::set<Tile*>::iterator
-				tiles = tilesAffected.begin();
-				tiles != tilesAffected.end();
-				++tiles)
+				explTile = tilesAffected.begin();
+				explTile != tilesAffected.end();
+				++explTile)
 		{
-			if (detonate(*tiles))
+			if (detonate(*explTile))
 				_save->setObjectiveDestroyed(true);
 
-			applyGravity(*tiles);
+			applyGravity(*explTile);
 
-			Tile* aboveTile = _save->getTile((*tiles)->getPosition() + Position(0, 0, 1));
-			if (aboveTile)
-				applyGravity(aboveTile);
+			Tile* tileAbove = _save->getTile((*explTile)->getPosition() + Position(0, 0, 1));
+			if (tileAbove)
+				applyGravity(tileAbove);
 		}
 		//Log(LOG_INFO) << ". explode Tiles DONE";
 	}
@@ -2781,7 +2796,8 @@ int TileEngine::horizontalBlockage(
 	if (startTile == NULL // safety checks
 		|| endTile == NULL)
 	{
-		if (visLike)
+//		if (visLike)
+		if (type == DT_NONE)
 			return -9;
 		else
 			return 500;
@@ -2789,7 +2805,8 @@ int TileEngine::horizontalBlockage(
 
 	if (startTile->getPosition().z != endTile->getPosition().z)
 	{
-		if (visLike)
+//		if (visLike)
+		if (type == DT_NONE)
 			return -1;
 		else
 			return 0;
@@ -3474,7 +3491,8 @@ int TileEngine::verticalBlockage(
 	if (startTile == NULL // safety check
 		|| endTile == NULL)
 	{
-		if (visLike)
+//		if (visLike)
+		if (type == DT_NONE)
 			return -9;
 		else
 			return 500;
@@ -3483,7 +3501,8 @@ int TileEngine::verticalBlockage(
 	int dirZ = endTile->getPosition().z - startTile->getPosition().z;
 	if (dirZ == 0)
 	{
-		if (visLike)
+//		if (visLike)
+		if (type == DT_NONE)
 			return -1;
 		else
 			return 0;
@@ -3622,7 +3641,8 @@ int TileEngine::blockage(
 	if (tile == NULL) // probably outside the map here
 	{
 		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret ( no tile )";
-		if (visLike)
+//		if (visLike)
+		if (type == DT_NONE)
 			return -9;
 		else
 			return 500;
@@ -3696,7 +3716,7 @@ int TileEngine::blockage(
 //				else return -1;
 			}
 
-			switch (dir)
+			switch (dir) // -> OBJECT part. ( BigWalls & content )
 			{
 				case 0: // north
 					if (bigWall == Pathfinding::BIGWALL_WEST
@@ -3822,10 +3842,10 @@ int TileEngine::blockage(
 
 /**
  * Applies the explosive power to the tile parts.
- * This is where the actual destruction takes place.
- * Must affect 7 objects (6 box sides and the object inside).
- * @param tile, Tile affected.
- * @return, True if the objective was destroyed.
+ * This is where the actual destruction takes place, and it
+ * affects 7 objects (6 box sides and the object inside).
+ * @param tile - tile affected
+ * @return, true if an objective was destroyed
  */
 bool TileEngine::detonate(Tile* tile)
 {
@@ -3841,7 +3861,7 @@ bool TileEngine::detonate(Tile* tile)
 		// smoke added to an already smoking tile will increase smoke to max.15
 		tile->setSmoke(
 					std::max(
-							1,
+							1, // kL, was 1 : TEST
 							std::min(
 									tile->getSmoke() + RNG::generate(0, 3),
 									15)));
@@ -3903,11 +3923,10 @@ bool TileEngine::detonate(Tile* tile)
 						{
 							tiles[i]->setFire(0);
 
-							int
-								smoke = RNG::generate(
+							int smoke = RNG::generate(
 													0,
 													(volume / 2) + 2);
-								smoke += (volume / 2) + 1;
+							smoke += (volume / 2) + 1;
 
 							if (smoke > tiles[i]->getSmoke())
 								tiles[i]->setSmoke(std::max(

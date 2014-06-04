@@ -128,7 +128,7 @@ BattlescapeState::BattlescapeState(Game* game)
 		_mouseScrollingStartTime(0)
 	// kL_end.
 {
-	Log(LOG_INFO) << "Create BattlescapeState";
+	//Log(LOG_INFO) << "Create BattlescapeState";
 	std::fill_n(
 			_visibleUnit,
 			10,
@@ -735,7 +735,7 @@ BattlescapeState::BattlescapeState(Game* game)
  */
 BattlescapeState::~BattlescapeState()
 {
-	Log(LOG_INFO) << "Delete BattlescapeState";
+	//Log(LOG_INFO) << "Delete BattlescapeState";
 	delete _animTimer;
 	delete _gameTimer;
 	delete _battleGame;

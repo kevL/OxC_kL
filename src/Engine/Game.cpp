@@ -84,7 +84,7 @@ Game::Game(const std::string& title)
 		_mouseActive(true),
 		_timeUntilNextFrame(0)
 {
-	Log(LOG_INFO) << "Create Game";
+	//Log(LOG_INFO) << "Create Game";
 	Options::reload = false;
 	Options::mute = false;
 
@@ -150,7 +150,7 @@ Game::Game(const std::string& title)
  */
 Game::~Game()
 {
-	Log(LOG_INFO) << "Delete Game";
+	//Log(LOG_INFO) << "Delete Game";
 	Sound::stop();
 	Music::stop();
 

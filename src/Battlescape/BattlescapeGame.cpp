@@ -90,7 +90,7 @@ BattlescapeGame::BattlescapeGame(
 		_endTurnRequested(false),
 		_kneelReserved(false)
 {
-	Log(LOG_INFO) << "Create BattlescapeGame";
+	//Log(LOG_INFO) << "Create BattlescapeGame";
 	_tuReserved				= BA_NONE;
 	_playerTUReserved		= BA_NONE;
 	_debugPlay				= false;
@@ -115,7 +115,7 @@ BattlescapeGame::BattlescapeGame(
  */
 BattlescapeGame::~BattlescapeGame()
 {
-	Log(LOG_INFO) << "Delete BattlescapeGame";
+	//Log(LOG_INFO) << "Delete BattlescapeGame";
 
 // delete CTD_begin:
 // THIS CAUSES ctd BECAUSE, WHEN RELOADING FROM Main-Menu,

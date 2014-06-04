@@ -76,10 +76,10 @@ Tile::Tile(const Position& pos)
 			i < 4;
 			++i)
 	{
-		_objects[i] = 0;
-		_mapDataID[i] = -1;
-		_mapDataSetID[i] = -1;
-		_currFrame[i] = 0;
+		_objects[i]			=  0;
+		_mapDataID[i]		= -1;
+		_mapDataSetID[i]	= -1;
+		_currFrame[i]		=  0;
 	}
 
 	for (int
@@ -87,8 +87,8 @@ Tile::Tile(const Position& pos)
 			layer < LIGHTLAYERS;
 			layer++)
 	{
-		_light[layer] = 0;
-		_lastLight[layer] = -1;
+		_light[layer]		=  0;
+		_lastLight[layer]	= -1;
 	}
 
 	for (int
@@ -472,9 +472,7 @@ int Tile::openDoor(
 			return 1;
 		}
 		else if (_currFrame[wall] != 7) // ufo door != wall 7 -> door is still opening
-		{
 			return 3;
-		}
 	}
 
 	return -1;
@@ -609,7 +607,7 @@ bool Tile::destroy(int part)
 
 		int originalMapDataSetID = _mapDataSetID[part];
 		setMapData(
-				0,
+				 0,
 				-1,
 				-1,
 				part);
@@ -896,7 +894,7 @@ void Tile::addSmoke(int smoke)
 }
 
 /**
- * Sets the number of turns this tile will smoke for.
+ * Sets the number of turns this tile will smoke for. (May include fire?)
  * @param smoke - number of turns for this tile to smoke (0 = no smoke)
  */
 void Tile::setSmoke(int smoke)
@@ -906,7 +904,7 @@ void Tile::setSmoke(int smoke)
 }
 
 /**
- * Gets the number of turns left for this tile to smoke.
+ * Gets the number of turns left for this tile to smoke. (May include fire?)
  * @return, number of turns left for this tile to smoke (0 = no smoke)
  */
 int Tile::getSmoke() const

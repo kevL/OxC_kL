@@ -261,8 +261,6 @@ void StartState::think()
 		case LOADING_SUCCESSFUL:
 			CrossPlatform::flashWindow();
 
-/*			addLine(L"");
-			addLine(L"OpenXcom initialised"); */ // kL
 			Log(LOG_INFO) << "OpenXcom started!";
 			if (!Options::reload
 				&& Options::playIntro)
@@ -388,7 +386,8 @@ void StartState::animate()
 							addLine(L"General MIDI Music");
 						else
 							addLine(L"SoundBlaster Music");
-						addLine(L"Base Port 220  Irq 7  Dma 1");
+
+						addLine(L"Base Port 220  Irq 5  Dma 1");
 					}
 					addLine(L"");
 				break;

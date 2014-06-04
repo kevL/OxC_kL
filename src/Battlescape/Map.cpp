@@ -713,7 +713,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 
-					if (mapPosition.y > 0) // special handling for a moving unit.
+/*					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
 						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
 						BattleUnit* bu = tileNorth->getUnit();
@@ -721,7 +721,7 @@ void Map::drawTerrain(Surface* surface)
 						int
 							tileNorthShade,
 							tileTwoNorthShade,
-//kL							tileWestShade,
+//kL						tileWestShade,
 							tileNorthWestShade,
 							tileSouthWestShade;
 
@@ -734,9 +734,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 						// kL_note: What about tileWestShade ...? (used in subscope below)
 
-						/*
-						 * Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
-						 */
+						// Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
 						if (bu
 							&& bu->getVisible()
 							&& bu->getStatus() == STATUS_WALKING
@@ -771,10 +769,8 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							/*
-							 * Phase II: rerender any east wall type objects in the tile to the north of the unit
-							 * only applies to movement in the north/south direction.
-							 */
+							// Phase II: rerender any east wall type objects in the tile to the north of the unit
+							// only applies to movement in the north/south direction.
 							if ((bu->getDirection() == 0
 									|| bu->getDirection() == 4)
 								&& mapPosition.y >= 2)
@@ -797,9 +793,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							/*
-							 * Phase III: render any south wall type objects in the tile to the northWest
-							 */
+							// Phase III: render any south wall type objects in the tile to the northWest
 							if (mapPosition.x > 0)
 							{
 								Tile* tileNorthWest = _save->getTile(mapPosition - Position(1, 1, 0));
@@ -820,9 +814,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 
-							/*
-							 * Phase IV: render any south or east wall type objects in the tile to the north
-							 */
+							// Phase IV: render any south or east wall type objects in the tile to the north
 							if (tileNorth->getMapData(MapData::O_OBJECT)
 								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
 							{
@@ -837,11 +829,9 @@ void Map::drawTerrain(Surface* surface)
 
 							if (mapPosition.x > 0)
 							{
-								/*
-								 * Phase V: re-render objects in the tile to the south west
-								 * only render half so it won't overlap other areas that are already drawn
-								 * and only apply this to movement in a north easterly or south westerly direction.
-								 */
+								// Phase V: re-render objects in the tile to the south west
+								// only render half so it won't overlap other areas that are already drawn
+								// and only apply this to movement in a north easterly or south westerly direction.
 								if ((bu->getDirection() == 1
 										|| bu->getDirection() == 5)
 									&& mapPosition.y < endY - 1)
@@ -862,9 +852,7 @@ void Map::drawTerrain(Surface* surface)
 															true);
 								}
 
-								/*
-								 * Phase VI: we need to re-render everything in the tile to the west.
-								 */
+								// Phase VI: we need to re-render everything in the tile to the west.
 								Tile* tileWest = _save->getTile(mapPosition - Position(1, 0, 0));
 								BattleUnit* westUnit = tileWest->getUnit();
 
@@ -995,8 +983,44 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw smoke/fire
-								if (tileWest->getSmoke()
+								if (tileWest->getSmoke() // includes tiles on Fire? must...
 									&& tileWest->isDiscovered(2))
+								// kL_begin: copied from its regular place way below.
+								{
+									// oXc _animFrames cycle from 0..7
+									frame = 0;	// this will be the SPRITE # on the orig SpriteSheet
+												// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+												// fire:	0..7	-> 8 frames
+												// smoke:	8..19	-> 12 frames
+//									int fire = tile->getFire();	// fire is grouped [0..3] & [4..7] ( latter is for units onFire )
+																// smoke runs consecutively. [8..19] ( since I adulterated the Smoke.Pck graphics )
+									if (tile->getFire() == 0) // then use Smoke frames.
+									{
+										// smoke sprites start at #8 on the spritesheet:
+										frame = 8 + ((tile->getSmoke() + 1) / 2); // getSmoke = 1..15 -> frame = 8..16
+									}
+
+									// _animFrame = 1..8 -> 0..4, offset = 0..3 -> spriteOffset = 0..7 (0..4, 1..5, 2..6, 3..7)
+									int spriteOffset = ((_animFrame + 1) / 2) + tile->getAnimationOffset();
+									if (spriteOffset > 3)
+										frame += spriteOffset - 4;
+									else
+										frame += spriteOffset;
+
+									//Log(LOG_INFO) << "Map::drawTerrain() smokeFrames";
+									//Log(LOG_INFO) << ". frame = " << frame;
+
+									// smokeFrames in smoke.pck: 8..19 (12 frames)
+									// fireFrames in smoke.pck: 0..7 (8 frames, separated into 2 x 4-frame sets)
+									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
+									tmpSurface->blitNShade(
+											surface,
+											screenPosition.x,
+											screenPosition.y,
+											0);
+								} // kL_end.
+*/
+/*kL
 								{
 									frame = 0;
 
@@ -1014,10 +1038,10 @@ void Map::drawTerrain(Surface* surface)
 														screenPosition.x - tileOffset.x,
 														screenPosition.y + tileOffset.y,
 														0);
-								}
-							}
+								} */
+/*							}
 						}
-					}
+					} */
 
 					// Draw walls
 					if (!tile->isVoid())
@@ -1295,15 +1319,21 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// Draw smoke/fire
-					if (tile->getSmoke()
+					if (tile->getSmoke() // includes tiles on Fire? must...
 						&& tile->isDiscovered(2))
 					{
 						// oXc _animFrames cycle from 0..7
 						frame = 0;	// this will be the SPRITE # on the orig SpriteSheet
 									// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-						if (!tile->getFire())
+									// fire:	0..7	-> 8 frames
+									// smoke:	8..19	-> 12 frames
+//						int fire = tile->getFire();	// fire is grouped [0..3] & [4..7] ( latter is for units onFire )
+													// smoke runs consecutively. [8..19] ( since I adulterated the Smoke.Pck graphics )
+						if (tile->getFire() == 0) // then use Smoke frames.
+						{
 							// smoke sprites start at #8 on the spritesheet:
-							frame = 8 + (tile->getSmoke() / 2); // getSmoke = 1..15 -> frame = 8..15
+							frame = 8 + ((tile->getSmoke() + 1) / 2); // getSmoke = 1..15 -> frame = 8..16
+						}
 
 						// _animFrame = 1..8 -> 0..4, offset = 0..3 -> spriteOffset = 0..7 (0..4, 1..5, 2..6, 3..7)
 						int spriteOffset = ((_animFrame + 1) / 2) + tile->getAnimationOffset();
@@ -1732,8 +1762,13 @@ void Map::drawTerrain(Surface* surface)
 		calculateWalkingOffset(
 							unit,
 							&offset);
+
+		offset.y += 19 - unit->getHeight();
+
 		if (unit->getArmor()->getSize() > 1)
-			offset.y += 4;
+			offset.y += 9;
+
+		if (unit->isKneeled()) offset.y -= 6;
 
 		if (this->getCursorType() != CT_NONE)
 			_arrow->blitNShade(

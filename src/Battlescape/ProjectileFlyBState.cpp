@@ -766,11 +766,14 @@ void ProjectileFlyBState::think()
 		else // end think()
 		{
 			// kL_note: Don't return camera to its pre-firing position.
-			// that is, leave it wherever the projectile hits... (or try to.) REVERTED
+			// that is, leave it wherever the projectile hits... (or try to.)
 			if (_action.cameraPosition.z != -1)
 			{
-				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
-//				_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
+				if (_action.type == BA_THROW) // kL, don't jump screen after throw.
+					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
+				else // jump screen back to pre-shot position
+					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+
 				_parent->getMap()->invalidate();
 			}
 
