@@ -383,7 +383,7 @@ void Map::setPalette(
 
 /**
  * Draw the terrain.
- * Keep this function as optimised as possible. It's big to minimise overhead of function calls.
+ * Keep this function as optimised as possible. It's big so minimise overhead of function calls.
  * @param surface, The surface to draw on.
  */
 void Map::drawTerrain(Surface* surface)
@@ -398,6 +398,7 @@ void Map::drawTerrain(Surface* surface)
 	Surface* tmpSurface		= 0;
 	Tile* tile				= 0;
 
+//kL	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
 	bool invalid = false;
 	int
 		bulletLowX	= 16000,
@@ -983,8 +984,8 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw smoke/fire
-								if (tileWest->getSmoke() // includes tiles on Fire? must...
-									&& tileWest->isDiscovered(2))
+								if (tileWest->getSmoke())
+//TEST									&& tileWest->isDiscovered(2))
 								// kL_begin: copied from its regular place way below.
 								{
 									// oXc _animFrames cycle from 0..7
@@ -993,7 +994,7 @@ void Map::drawTerrain(Surface* surface)
 												// fire:	0..7	-> 8 frames
 												// smoke:	8..19	-> 12 frames
 //									int fire = tileWest->getFire();	// fire is grouped [0..3] & [4..7] ( latter is for units onFire )
-																// smoke runs consecutively. [8..19] ( since I adulterated the Smoke.Pck graphics )
+																	// smoke runs consecutively. [8..19] ( since I adulterated the Smoke.Pck graphics )
 									if (tileWest->getFire() == 0) // then use Smoke frames.
 									{
 										// smoke sprites start at #8 on the spritesheet:
@@ -1002,10 +1003,11 @@ void Map::drawTerrain(Surface* surface)
 
 									// _animFrame = 1..8 -> 0..4, offset = 0..3 -> spriteOffset = 0..7 (0..4, 1..5, 2..6, 3..7)
 									int spriteOffset = ((_animFrame + 1) / 2) + tileWest->getAnimationOffset();
+
 									if (spriteOffset > 3)
-										frame += spriteOffset - 4;
-									else
-										frame += spriteOffset;
+										spriteOffset -= 4;
+
+									frame += spriteOffset;
 
 									//Log(LOG_INFO) << "Map::drawTerrain() smokeFrames";
 									//Log(LOG_INFO) << ". frame = " << frame;
@@ -1318,8 +1320,8 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// Draw smoke/fire
-					if (tile->getSmoke() // includes tiles on Fire? must...
-						&& tile->isDiscovered(2))
+					if (tile->getSmoke()) // includes tiles on Fire? must...
+//TEST						&& tile->isDiscovered(2))
 					{
 						// oXc _animFrames cycle from 0..7
 						frame = 0;	// this will be the SPRITE # on the orig SpriteSheet
@@ -1336,10 +1338,11 @@ void Map::drawTerrain(Surface* surface)
 
 						// _animFrame = 1..8 -> 0..4, offset = 0..3 -> spriteOffset = 0..7 (0..4, 1..5, 2..6, 3..7)
 						int spriteOffset = ((_animFrame + 1) / 2) + tile->getAnimationOffset();
+
 						if (spriteOffset > 3)
-							frame += spriteOffset - 4;
-						else
-							frame += spriteOffset;
+							spriteOffset -= 4;
+
+						frame += spriteOffset;
 
 						//Log(LOG_INFO) << "Map::drawTerrain() smokeFrames";
 						//Log(LOG_INFO) << ". frame = " << frame;
@@ -1762,12 +1765,13 @@ void Map::drawTerrain(Surface* surface)
 							unit,
 							&offset);
 
-		offset.y += 19 - unit->getHeight();
+		offset.y += 22 - unit->getHeight();
 
 		if (unit->getArmor()->getSize() > 1)
-			offset.y += 9;
+			offset.y += 8;
 
-		if (unit->isKneeled()) offset.y -= 6;
+		if (unit->isKneeled())
+			offset.y -= 6;
 
 		if (this->getCursorType() != CT_NONE)
 			_arrow->blitNShade(
@@ -1779,7 +1783,8 @@ void Map::drawTerrain(Surface* surface)
 							screenPosition.y
 								+ offset.y
 								- _arrow->getHeight()
-								+ static_cast<int>(
+//kL							+ arrowBob[_animFrame],
+								+ static_cast<int>( // kL
 									4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
 							0);
 	}

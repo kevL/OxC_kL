@@ -3859,14 +3859,16 @@ bool TileEngine::detonate(Tile* tile)
 
 		// explosions create smoke which only stays 1 or 2 turns; kL_note: or 3
 		// smoke added to an already smoking tile will increase smoke to max.15
-		tile->setSmoke(
-					std::max(
+		int smoke = std::max(
 							1, // kL, was 1 : TEST
 							std::min(
 									tile->getSmoke() + RNG::generate(0, 3),
-									15)));
+									15));
+		tile->setSmoke(smoke);
 
 		Position pos = tile->getPosition();
+		//Log(LOG_INFO) << "detonate() " << smoke << " " << pos;
+
 		Tile* tiles[7];
 		tiles[0] = _save->getTile(Position( // ceiling
 										pos.x,

@@ -520,7 +520,7 @@ void Tile::setDiscovered(
 			_discovered[1] = true;
 		}
 
-		// if light on tile changes, units and objects on it change light too
+		// if light/visibility on tile changes, units and objects on it change light too
 		if (_unit != 0)
 			_unit->setCache(0);
 	}
@@ -528,8 +528,10 @@ void Tile::setDiscovered(
 
 /**
  * Get the black fog of war state of this tile.
- * @param part, 0-2 westwall/northwall/content+floor
- * @return, bool True = discovered the tile.
+ * @param part - 0 westwall
+ *				 1 northwall
+ *				 2 content+floor
+ * @return, true if tilepart has been discovered
  */
 bool Tile::isDiscovered(int part) const
 {
