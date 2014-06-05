@@ -209,6 +209,12 @@ void ActionMenuState::addItem(
 		s1,
 		s2;
 
+	int tu = _action->actor->getActionTUs(
+										baType,
+										_action->weapon);
+	s1 = tr("STR_TIME_UNITS_SHORT").arg(tu);
+
+
 	if (baType == BA_THROW
 		|| baType == BA_AIMEDSHOT
 		|| baType == BA_SNAPSHOT
@@ -229,15 +235,10 @@ void ActionMenuState::addItem(
 																		_action->weapon)
 																	* 100.0));
 
-//kL		s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acc));
-		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acc); // kL
+//kL		s2 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acc));
+		s2 = tr("STR_ACCURACY_SHORT_KL").arg(acc); // kL
 	}
 
-
-	int tu = _action->actor->getActionTUs(
-										baType,
-										_action->weapon);
-	s2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
 
 	_actionMenu[*id]->setAction(
 							baType,

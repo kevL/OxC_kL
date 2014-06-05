@@ -1612,12 +1612,14 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		bool outside)
 {
 	int difficulty = static_cast<int>(_game->getSavedGame()->getDifficulty());
+	int month = _game->getSavedGame()->getMonthsPassed();
 	BattleUnit* unit = new BattleUnit(
 									rules,
 									FACTION_HOSTILE,
 									_unitSequence++,
 									_game->getRuleset()->getArmor(rules->getArmor()),
-									difficulty);
+									difficulty,
+									month); // kL_add.
 
 	/* following data is the order in which certain alien ranks spawn on certain node ranks */
 	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
@@ -1672,7 +1674,7 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		else
 			unit->setDirection(RNG::generate(0, 7));
 
-		if (!difficulty)
+		if (difficulty == 0)
 			unit->halveArmor();
 
 		// we only add a unit if it has a node to spawn on.
@@ -1682,7 +1684,7 @@ BattleUnit* BattlescapeGenerator::addAlien(
 	else
 	{
 		delete unit;
-		unit = 0;
+		unit = NULL;
 	}
 
 	return unit;

@@ -1021,6 +1021,9 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.y,
 											0);
 								} // kL_end.
+							}
+						}
+					}
 /*kL
 								{
 									frame = 0;
@@ -1040,9 +1043,6 @@ void Map::drawTerrain(Surface* surface)
 														screenPosition.y + tileOffset.y,
 														0);
 								} */
-							}
-						}
-					}
 
 					// Draw walls
 					if (!tile->isVoid())

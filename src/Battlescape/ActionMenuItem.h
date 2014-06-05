@@ -55,8 +55,8 @@ private:
 	Frame* _frame;
 	Text
 		* _txtDesc,
-		* _txtAcc,
-		* _txtTU;
+		* _txtTU,
+		* _txtAcc;
 
 
 	public:
@@ -73,8 +73,8 @@ private:
 		void setAction(
 				BattleActionType action,
 				std::wstring description,
-				std::wstring accuracy,
 				std::wstring timeunits,
+				std::wstring accuracy,
 				int tu);
 		/// Gets the assigned action.
 		BattleActionType getAction() const;

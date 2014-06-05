@@ -767,12 +767,39 @@ void ProjectileFlyBState::think()
 		{
 			// kL_note: Don't return camera to its pre-firing position.
 			// that is, leave it wherever the projectile hits... (or try to.)
-			if (_action.cameraPosition.z != -1)
+/*	BA_NONE,		// 0
+	BA_TURN,		// 1
+	BA_WALK,		// 2
+	BA_PRIME,		// 3
+	BA_THROW,		// 4
+	BA_AUTOSHOT,	// 5
+	BA_SNAPSHOT,	// 6
+	BA_AIMEDSHOT,	// 7
+	BA_STUN,		// 8
+	BA_HIT,			// 9
+	BA_USE,			// 10
+	BA_LAUNCH,		// 11
+	BA_MINDCONTROL,	// 12
+	BA_PANIC,		// 13
+	BA_RETHINK		// 14 */
+			if (_action.cameraPosition.z != -1) // kL_note: a bit of overkill here
 			{
-				if (_action.type == BA_THROW) // kL, don't jump screen after throw.
+				if (_action.type == BA_THROW // kL, don't jump screen after these.
+					|| _action.type == BA_STUN
+					|| _action.type == BA_HIT
+					|| _action.type == BA_USE
+					|| _action.type == BA_LAUNCH
+					|| _action.type == BA_MINDCONTROL
+					|| _action.type == BA_PANIC)
+				{
 					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
-				else // jump screen back to pre-shot position
+				}
+				else if (_action.type == BA_AUTOSHOT // kL, jump screen back to pre-shot position
+					|| _action.type == BA_SNAPSHOT
+					|| _action.type == BA_AIMEDSHOT)
+				{
 					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+				}
 
 				_parent->getMap()->invalidate();
 			}

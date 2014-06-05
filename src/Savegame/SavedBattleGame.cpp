@@ -308,7 +308,9 @@ void SavedBattleGame::load(
 			// silly hack to fix mind controlled aliens
 			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
 			if (unit->getOriginalFaction() == FACTION_HOSTILE)
-				unit->adjustStats(savedGame->getDifficulty());
+				unit->adjustStats(
+								savedGame->getDifficulty(),
+								savedGame->getMonthsPassed()); // kL_add.
 		}
 
 		if (unit->getStatus() != STATUS_DEAD)

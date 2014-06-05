@@ -98,7 +98,7 @@ enum UnitBodyPart
 
 /**
  * Represents a moving unit in the battlescape, player controlled or AI controlled
- * it holds info about it's position, items carrying, stats, etc
+ * it holds info about its position, items carrying, stats, etc
  */
 class BattleUnit
 {
@@ -222,7 +222,8 @@ private:
 				UnitFaction faction,
 				int id,
 				Armor* armor,
-				int diff);
+				int diff,
+				int month = 0); // kL_add: For upping aLien stats as time progresses.
 		/// Cleans up the BattleUnit.
 		~BattleUnit();
 
@@ -635,7 +636,9 @@ private:
 		bool checkViewSector(Position pos) const;
 
 		/// adjust this unit's stats according to difficulty.
-		void adjustStats(const int diff);
+		void adjustStats(
+				const int diff,
+				const int month); // kL_add.
 		/// Halve the unit's armor values.
 		void halveArmor();
 /*kL

@@ -169,7 +169,7 @@ BattleUnit::BattleUnit(
 }
 
 /**
- * Creates a battleUnit from a (non-player) unit object.
+ * Creates a battleUnit from a (non-Soldier) unit object.
  * @param unit			- pointer to a unit object
  * @param faction		- faction the unit belongs to
  * @param id			- the unit's unique ID
@@ -181,7 +181,8 @@ BattleUnit::BattleUnit(
 		UnitFaction faction,
 		int id,
 		Armor* armor,
-		int diff)
+		int diff,
+		int month) // kL_add.
 	:
 		_faction(faction),
 		_originalFaction(faction),
@@ -236,7 +237,9 @@ BattleUnit::BattleUnit(
 	_stats	= *unit->getStats();
 	_stats	+= *_armor->getStats();	// armors may modify effective stats
 	if (faction == FACTION_HOSTILE)
-		adjustStats(diff);
+		adjustStats(
+					diff,
+					month); // kL_add
 
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
@@ -3299,9 +3302,12 @@ bool BattleUnit::checkViewSector(Position pos) const
 
 /**
  * Adjusts a unit's stats according to difficulty setting (used by aLiens only).
- * @param diff - the current game's difficulty setting
+ * @param diff	- the current game's difficulty setting
+ * @param month	- the number of months that have progressed
  */
-void BattleUnit::adjustStats(const int diff)
+void BattleUnit::adjustStats(
+		const int diff,
+		const int month) // kL_add.
 {
 	// adjust the unit's stats according to the difficulty level.
 	_stats.tu			+= 4 * diff * _stats.tu / 100;
@@ -3310,8 +3316,20 @@ void BattleUnit::adjustStats(const int diff)
 	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0? 1: 2);
 	_stats.strength		+= 2 * diff * _stats.strength / 100;
 	_stats.melee		+= 4 * diff * _stats.melee / 100;
-	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
 	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
+	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
+
+	// kL_begin:
+	_stats.tu			+= month;
+	_stats.stamina		+= month;
+	_stats.reactions	+= month;
+	_stats.firing		+= month;
+	_stats.strength		+= month;
+	_stats.melee		+= month;
+	_stats.psiStrength	+= month;
+	if (_stats.psiSkill > 0)
+		_stats.psiSkill	+= month;
+	// kL_end.
 
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), unitID = " << getId();
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.tu = " << _stats.tu;
