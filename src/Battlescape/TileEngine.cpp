@@ -2710,26 +2710,6 @@ void TileEngine::explode(
 							}
 						}
 					}
-/*					if (unit
-						&& targetUnit)
-					{
-						// if it's going to bleed to death and it's not a player, give credit for the kill.
-						// kL_note: See Above^
-						if (wounds < targetUnit->getFatalWounds())
-							targetUnit->killedBy(unit->getFaction());
-
-						if (unit->getOriginalFaction() == FACTION_PLAYER			// kL, shooter is Xcom
-							&& unit->getFaction() == FACTION_PLAYER					// kL, shooter is not Mc'd Xcom
-							&& targetUnit->getOriginalFaction() == FACTION_HOSTILE	// kL, target is aLien Mc'd or not; no Xp for shooting civies...
-							&& type != DT_SMOKE)									// sorry, no Xp for smoke!
-//							&& targetUnit->getFaction() != unit->getFaction())
-						{
-							unit->addFiringExp();
-						}
-					}
-
-					if (targetUnit)
-						targetUnit->setTaken(true); */
 				}
 
 
@@ -3794,7 +3774,7 @@ int TileEngine::blockage(
 				case 1: // north east
 					if (bigWall == Pathfinding::BIGWALL_WEST
 						|| bigWall == Pathfinding::BIGWALL_SOUTH
-						|| bigWall == Pathfinding::BIGWALL_NESW)
+						|| bigWall == Pathfinding::BIGWALL_NWSE)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 1 northeast )";
 						return 0;
@@ -3814,7 +3794,7 @@ int TileEngine::blockage(
 				case 3: // south east
 					if (bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_WEST
-						|| bigWall == Pathfinding::BIGWALL_NWSE)
+						|| bigWall == Pathfinding::BIGWALL_NESW)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 3 southeast )";
 						return 0;
@@ -3834,7 +3814,7 @@ int TileEngine::blockage(
 				case 5: // south west
 					if (bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
-						|| bigWall == Pathfinding::BIGWALL_NESW)
+						|| bigWall == Pathfinding::BIGWALL_NWSE)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 5 southwest )";
 						return 0;
@@ -3856,7 +3836,7 @@ int TileEngine::blockage(
 					if (bigWall == Pathfinding::BIGWALL_SOUTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
 						|| bigWall == Pathfinding::BIGWALL_E_S
-						|| bigWall == Pathfinding::BIGWALL_NWSE)
+						|| bigWall == Pathfinding::BIGWALL_NESW)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 7 northwest )";
 						return 0;
@@ -3886,7 +3866,7 @@ int TileEngine::blockage(
 						if (bigWall == Pathfinding::BIGWALL_NESW
 							|| bigWall == Pathfinding::BIGWALL_NWSE)
 						{
-							return -99;
+							return -1;// -99;
 						}
 						else
 							return -1;
@@ -4543,23 +4523,26 @@ int TileEngine::closeUfoDoors()
 
 /**
  * Calculates a line trajectory, using bresenham algorithm in 3D.
- * @param origin			- origin (voxel?)
- * @param target			- target (voxel?)
+ * @param origin			- reference to the origin (voxelspace for 'doVoxelCheck'; tilespace otherwise)
+ * @param target			- reference to the target (voxelspace for 'doVoxelCheck'; tilespace otherwise)
  * @param storeTrajectory	- true will store the whole trajectory - otherwise it just stores the last position
- * @param trajectory		- vector of positions in which the trajectory is stored
- * @param excludeUnit		- excludes this unit in the collision detection
+ * @param trajectory		- pointer to a vector of positions in which the trajectory will be stored
+ * @param excludeUnit		- pointer to a unit to be excluded from collision detection
  * @param doVoxelCheck		- check against voxel or tile blocking? (first one for unit visibility and line of fire, second one for terrain visibility)
  * @param onlyVisible		- skip invisible units? used in FPS view
- * @param excludeAllBut		- the only unit to be considered for ray hits [optional]
- * @return, the tile-part(0-3) or unit(4) or out-of-map(5) or -1(hit nothing)
- *								   -99 special case for calculateFOV() so as not to remove the last tile of the trajectory
- *			VOXEL_EMPTY			// -1
- *			VOXEL_FLOOR			//  0
- *			VOXEL_WESTWALL		//  1
- *			VOXEL_NORTHWALL		//  2
- *			VOXEL_OBJECT		//  3
- *			VOXEL_UNIT			//  4
- *			VOXEL_OUTOFBOUNDS	//  5
+ * @param excludeAllBut		- pointer to a unit that's to be considered exclusively for ray hits [optional]
+ * @return,  -1 hit nothing
+ *			0-3 tile-part
+ *			  4 unit
+ *			  5 out-of-map
+ *			-99 special case for calculateFOV() so as not to remove the last tile of the trajectory
+ * VOXEL_EMPTY			// -1
+ * VOXEL_FLOOR			//  0
+ * VOXEL_WESTWALL		//  1
+ * VOXEL_NORTHWALL		//  2
+ * VOXEL_OBJECT			//  3
+ * VOXEL_UNIT			//  4
+ * VOXEL_OUTOFBOUNDS	//  5
  */
 int TileEngine::calculateLine(
 				const Position& origin,
@@ -4567,7 +4550,7 @@ int TileEngine::calculateLine(
 				bool storeTrajectory,
 				std::vector<Position>* trajectory,
 				BattleUnit* excludeUnit,
-				bool doVoxelCheck, // used only for calculateFOV() <- false
+				bool doVoxelCheck, // false is used only for calculateFOV()
 				bool onlyVisible,
 				BattleUnit* excludeAllBut)
 {
@@ -4706,8 +4689,8 @@ int TileEngine::calculateLine(
 			{
 				return -99;
 			}
-			else if (result < 0
-				|| result2 < 0)
+			else if (result <= -1
+				|| result2 <= -1)
 			{
 				return -1;
 			}
@@ -4799,23 +4782,27 @@ int TileEngine::calculateLine(
 		}
 	}
 
+//	if (!doVoxelCheck)	// kL, terrain Visibility for Fog of War / FoV
+//		return -1;		// kL
+
 	//Log(LOG_INFO) << ". EXIT ret -1";
 	return VOXEL_EMPTY;
 }
 
 /**
  * Calculates a parabola trajectory, used for throwing items.
- * @param origin, Orign in voxelspace.
- * @param target, Target in voxelspace.
- * @param storeTrajectory, True will store the whole trajectory - otherwise it just stores the last position.
- * @param trajectory, A vector of positions in which the trajectory is stored.
- * @param excludeUnit, Makes sure the trajectory does not hit the shooter itself.
- * @param arc, How high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example.
-
- * @param acu, Is the deviation of the angles it should take into account. 1.0 is perfection. // this is superceded by @param delta...
-Wb.131129 * @param delta Is the deviation of the angles it should take into account, 0,0,0 is perfection.
-
- * @return, The objectnumber(0-3) or unit(4) or out of map (5) or -1(hit nothing).
+ * @param origin			- reference to the origin in voxelspace
+ * @param target			- reference to the target in voxelspace
+ * @param storeTrajectory	- true will store the whole trajectory - otherwise it stores the last position only
+ * @param trajectory		- poniter to a vector of positions in which the trajectory will be stored
+ * @param excludeUnit		- pointer to a unit to exclude - makes sure the trajectory does not hit the shooter itself
+ * @param arc				- how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
+ * @param acu				- the deviation of the angles that should be taken into account. 1.0 is perfection. // now superceded by @param delta...
+ * @param delta				- the deviation of the angles that should be taken into account, (0,0,0) is perfection
+ * @return,	-1 hit nothing
+ *			 0-3 the objectnumber
+ *			 4 unit
+ *			 5 out-of-map
  */
 int TileEngine::calculateParabola(
 				const Position& origin,
