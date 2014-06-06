@@ -501,9 +501,11 @@ int Tile::closeUfoDoor()
 }
 
 /**
- * Sets the tile's cache flag. - TODO: set this for each object separately?
- * @param flag, true/false
- * @param part, 0-2 westwall/northwall/content+floor
+ * Sets the tile's parts' cache flag.
+ * @param flag - true/false
+ * @param part - 0 westwall
+ *				 1 northwall
+ *				 2 content+floor
  */
 void Tile::setDiscovered(
 		bool flag,
@@ -1091,10 +1093,10 @@ int Tile::getMarkerColor()
  * @param visibility - true if visible
  */
 //kL void Tile::setVisible(int visibility)
-void Tile::setVisible(bool isVis) // kL
+void Tile::setVisible(bool vis) // kL
 {
 //kL	_visible += visibility;
-	_visible = isVis; // kL
+	_visible = vis; // kL
 }
 
 /**

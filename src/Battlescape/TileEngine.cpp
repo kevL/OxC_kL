@@ -510,12 +510,12 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										yPlayer++)
 								{
 									//Log(LOG_INFO) << ". . . . calculateLine() inside [2]for Loop";
+									_trajectory.clear();
+
 									Position pPlayer = unitPos + Position(
 																		xPlayer,
 																		yPlayer,
 																		0);
-
-									_trajectory.clear();
 
 									//Log(LOG_INFO) << ". . calculateLine()";
 									int test = calculateLine(
@@ -542,11 +542,11 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										//Log(LOG_INFO) << ". . . . calculateLine() inside TRAJECTORY Loop";
 										Position pTraj = _trajectory.at(i);
 
-										// mark every tile of line as visible (as in original)
+										// mark every tile of line as visible
 										// this is needed because of bresenham narrow stroke.
 //kL										_save->getTile(pTraj)->setVisible(+1);
 										_save->getTile(pTraj)->setVisible(true); // kL
-										_save->getTile(pTraj)->setDiscovered(true, 2); // sprite caching for floor+content
+										_save->getTile(pTraj)->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
 
 										// walls to the east or south of a visible tile, we see that too
 										// kL_note: Yeh, IF there's walls or an appropriate BigWall object!
@@ -560,29 +560,27 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										{
 											//Log(LOG_INFO) << "calculateFOV() East tile VALID";
 											for (int
-													part = 0;
+													part = 1;
 													part < 4; //tile->getMapData(fuck)->getDataset()->getSize();
-													++part)
+													part += 2)
 											{
 												//Log(LOG_INFO) << "part = " << part;
 												if (tile->getMapData(part))
 												{
 													//Log(LOG_INFO) << ". getMapData(part) VALID";
-													if (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL)
+													if (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL) // #1
 													{
 														//Log(LOG_INFO) << ". . MapData: WestWall VALID";
 														tile->setDiscovered(true, 0);
-
 //														break;
 													}
-													else if (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT
+													else if (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
 														&& tile->getMapData(MapData::O_OBJECT)
-														&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == 1			// bigBlock
-															|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == 4))	// westBlock
+														&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+															|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST))
 													{
 														//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 4";
-														tile->setDiscovered(true, 2);
-
+														tile->setDiscovered(true, 2); // reveal entire tile
 //														break;
 													}
 												}
@@ -599,7 +597,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										{
 											//Log(LOG_INFO) << "calculateFOV() South tile VALID";
 											for (int
-													part = 0;
+													part = 2;
 													part < 4; //tile->getMapData(fuck)->getDataset()->getSize();
 													++part)
 											{
@@ -607,21 +605,19 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 												if (tile->getMapData(part))
 												{
 													//Log(LOG_INFO) << ". getMapData(part) VALID";
-													if (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL)
+													if (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL) // #2
 													{
 														//Log(LOG_INFO) << ". . MapData: NorthWall VALID";
 														tile->setDiscovered(true, 1);
-
 //														break;
 													}
-													else if (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT
+													else if (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
 														&& tile->getMapData(MapData::O_OBJECT)
-														&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == 1		// bigBlock
-															|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == 5))	// northBlock
+														&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+															|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH))
 													{
 														//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 5";
-														tile->setDiscovered(true, 2);
-
+														tile->setDiscovered(true, 2); // reveal entire tile
 //														break;
 													}
 												}
@@ -1142,7 +1138,7 @@ bool TileEngine::canTargetUnit(
 							++y)
 					{
 						// voxel of hit must be inside of scanned box
-						if (   _trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
+						if (_trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
 							&& _trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
 							&& _trajectory.at(0).z >= targetMinHeight
 							&& _trajectory.at(0).z <= targetMaxHeight)
@@ -1187,10 +1183,12 @@ bool TileEngine::canTargetTile(
 		8,4, 10,4, 12,4, 12,6, 12,8, 12,10, 12,12, 10,12, 8,12, 6,12, 4,12, 4,10, 4,8, 4,6, 4,4, 6,4,	// second circle
 		8,1, 12,1, 15,1, 15,4, 15,8, 15,12, 15,15, 12,15, 8,15, 4,15, 1,15, 1,12, 1,8, 1,4, 1,1, 4,1	// third circle
 	};
+
 	static int northWallSpiral[14] =
 	{
 		7,0, 9,0, 6,0, 11,0, 4,0, 13,0, 2,0
 	};
+
 	static int westWallSpiral[14] =
 	{
 		0,7, 0,9, 0,6, 0,11, 0,4, 0,13, 0,2
@@ -1328,8 +1326,10 @@ bool TileEngine::canTargetTile(
 	}
 
 	if (!maxZfound)
+	{
 		//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False (!maxZfound)";
 		return false; // it's impossible to get there
+	}
 
 	if (minZ > maxZ)
 		minZ = maxZ;
@@ -3548,7 +3548,7 @@ int TileEngine::verticalBlockage(
 				z <= endTile->getPosition().z;
 				z++)
 		{
-			block += blockage(
+			block += blockage( // these check directly up.
 							_save->getTile(Position(x, y, z)),
 							MapData::O_FLOOR,
 							type)
@@ -3566,7 +3566,7 @@ int TileEngine::verticalBlockage(
 			y = endTile->getPosition().y;
 			z = startTile->getPosition().z;
 
-			block += horizontalBlockage(
+			block += horizontalBlockage( // this checks horizontally to beneath the endTile
 									startTile,
 									_save->getTile(Position(x, y, z)),
 									type);
@@ -3576,7 +3576,7 @@ int TileEngine::verticalBlockage(
 					z <= endTile->getPosition().z;
 					z++)
 			{
-				block += blockage(
+				block += blockage( // these check the tile above the startTile
 								_save->getTile(Position(x, y, z)),
 								MapData::O_FLOOR,
 								type)
@@ -3594,7 +3594,7 @@ int TileEngine::verticalBlockage(
 				z > endTile->getPosition().z;
 				z--)
 		{
-			block += blockage(
+			block += blockage( // these check directly down.
 							_save->getTile(Position(x, y, z)),
 							MapData::O_FLOOR,
 							type)
@@ -3612,7 +3612,7 @@ int TileEngine::verticalBlockage(
 			y = endTile->getPosition().y;
 			z = startTile->getPosition().z;
 
-			block += horizontalBlockage(
+			block += horizontalBlockage( // this checks horizontally to above the endTile
 									startTile,
 									_save->getTile(Position(x, y, z)),
 									type);
@@ -3622,7 +3622,7 @@ int TileEngine::verticalBlockage(
 					z > endTile->getPosition().z;
 					z--)
 			{
-				block += blockage(
+				block += blockage( // these check the tile beneath the startTile
 								_save->getTile(Position(x, y, z)),
 								MapData::O_FLOOR,
 								type)
@@ -3669,7 +3669,7 @@ int TileEngine::blockage(
 		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret ( no tile )";
 //		if (visLike)
 		if (type == DT_NONE)
-			return -99;
+			return -99; // maybe should be -1 .. etc below -99 -> -1
 		else
 			return 500;
 	}
@@ -3689,10 +3689,10 @@ int TileEngine::blockage(
 		{
 			if (visLike)
 			{
-				if (tile->getMapData(part)->stopLOS()
-					|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
-					|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL
-					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR)
+				if ((tile->getMapData(part)->stopLOS()
+						&& (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
+							|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL))
+					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR) // all floors that block LoS should have their stopLOS flag set true. (duh - because they aren't.)
 				{
 					if (type == DT_NONE)
 						return -1; // hardblock.
@@ -3718,11 +3718,12 @@ int TileEngine::blockage(
 
 			if (visLike)
 			{
-				if (// bigWall == 0 &&					// not a bigWall ... (fortunately there are no see-through bigWalls)
-					tile->getMapData(part)->stopLOS())	// yet blocked by Content-object
+				if (bigWall == 0							// not a bigWall ... (fortunately there are no see-through bigWalls)
+					&& tile->getMapData(part)->stopLOS())	// yet blocked by Content-object
+															// note that this is likely a problem for verticalBlockage() at a diagonal ...!
 				{
 					if (type == DT_NONE)
-						return -1; // hardblock.
+						return -99; // hardblock.
 					else
 						return 500;
 				}
@@ -3741,17 +3742,22 @@ int TileEngine::blockage(
 								// requires closer inspection ...
 //				&& type != DT_NONE
 			{
-				if (bigWall == Pathfinding::BIGWALL_NONE) // if (Content-part == true)
+				if (bigWall == 0) // if (Content-part == true)
 //					|| (dir =	// this would need to check which side the *missile* is coming from first
 								// but grenades that land on this diagonal bigWall would be exempt regardless!!!
 								// so, just can it (for now): HardBlock!
 //						&& bigWall == Pathfinding::BIGWALL_NESW)
 //					|| bigWall == Pathfinding::BIGWALL_NWSE)
 				{
-//					if (type == DT_NONE)
 					return 0;
 				}
-//				else return -1;
+				else if (visLike)
+				{
+					if (type == DT_NONE)
+						return -99;
+					else
+						return 500;
+				}
 			}
 
 			switch (dir) // -> OBJECT part. ( BigWalls & content )
@@ -3849,10 +3855,23 @@ int TileEngine::blockage(
 			}
 
 			// might be Content-part or remaining-bigWalls block here
-			if (tile->getMapData(part)->stopLOS())
+			if (tile->getMapData(part)->stopLOS()) // use stopLOS to hinder explosions from propagating through bigWalls.
 			{
 				if (visLike)
-					return -1;
+				{
+					if (type == DT_NONE)
+					{
+						if (bigWall == Pathfinding::BIGWALL_NESW
+							|| bigWall == Pathfinding::BIGWALL_NWSE)
+						{
+							return -99;
+						}
+						else
+							return -1;
+					}
+					else
+						return 500;
+				}
 				else if (_powerE > -1
 					&& _powerE < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
 				{
@@ -3862,7 +3881,7 @@ int TileEngine::blockage(
 		}
 
 
-		if (!visLike) // visibility is blocked above, or gets a pass here
+		if (!visLike) // only non-visLike can get partly blocked; other damage-types are either completely blocked or get a pass here
 		{
 //			if (_powerE < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
 //				return -1;
@@ -3872,6 +3891,15 @@ int TileEngine::blockage(
 			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
 			return ret;
 		}
+/*		int ret = tile->getMapData(part)->getBlock(type);
+		if (visLike
+			&& tile->getMapData(part)->stopLOS() // this may be redundant ..... or a conflict
+			&& ret > 0)
+		{
+			ret = -99;
+		}
+
+		return ret; */
 	}
 
 	//Log(LOG_INFO) << "TileEngine::blockage() EXIT, (no valid part) ret 0";
@@ -4651,14 +4679,16 @@ int TileEngine::calculateLine(
 				//Log(LOG_INFO) << ". [3]ret = " << result;
 				return result; */
 // original_End.
-			if (result < -99)
+			if (result <= -99
+				|| result2 <= -99)
+			{
 				return -99;
+			}
 			else if (result < 0
-				&& result2 < 0)
+				|| result2 < 0)
 			{
 				return -1;
 			}
-
 /*
 			if (result + result2 < 0)
 				return -1;
@@ -4675,7 +4705,6 @@ int TileEngine::calculateLine(
 			if (result < 0) // kL
 				return -1; // kL
 */
-
 
 			lastPoint = Position(cx, cy, cz);
 		}

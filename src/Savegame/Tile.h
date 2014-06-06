@@ -276,7 +276,7 @@ protected:
 
 		/// Set the tile visible flag.
 //kL		void setVisible(int visibility);
-		void setVisible(bool isVis); // kL
+		void setVisible(bool vis); // kL
 		/// Get the tile visible flag.
 //kL		int getVisible();
 		bool getVisible(); // kL
