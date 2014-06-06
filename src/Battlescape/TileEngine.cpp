@@ -537,25 +537,26 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									for (size_t
 											i = 0;
 											i < trajSize;
-											i++)
+											++i)
 									{
 										//Log(LOG_INFO) << ". . . . calculateLine() inside TRAJECTORY Loop";
 										Position pTraj = _trajectory.at(i);
 
 										// mark every tile of line as visible
 										// this is needed because of bresenham narrow stroke.
-//kL										_save->getTile(pTraj)->setVisible(+1);
+//kL									_save->getTile(pTraj)->setVisible(+1);
 										_save->getTile(pTraj)->setVisible(true); // kL
 										_save->getTile(pTraj)->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
 
 										// walls to the east or south of a visible tile, we see that too
 										// kL_note: Yeh, IF there's walls or an appropriate BigWall object!
+										// TODO: THIS COULD/SHOULD BE CHECKING ALL 4 CARDINAL DIRECTIONS, not just east & south:
 										Tile* tile = _save->getTile(Position(
 																		pTraj.x + 1,
 																		pTraj.y,
 																		pTraj.z));
 										if (tile)
-//kL											tile->setDiscovered(true, 0);
+//kL										tile->setDiscovered(true, 0);
 										// kL_begin:
 										{
 											//Log(LOG_INFO) << "calculateFOV() East tile VALID";
@@ -592,7 +593,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 																pTraj.y + 1,
 																pTraj.z));
 										if (tile)
-//kL											tile->setDiscovered(true, 1);
+//kL										tile->setDiscovered(true, 1);
 										// kL_begin:
 										{
 											//Log(LOG_INFO) << "calculateFOV() South tile VALID";
@@ -2820,7 +2821,7 @@ int TileEngine::horizontalBlockage(
 	{
 //		if (visLike)
 		if (type == DT_NONE)
-			return -1;
+			return 0;
 		else
 			return 0;
 	}
@@ -3494,7 +3495,7 @@ int TileEngine::horizontalBlockage(
 
 /**
  * Calculates the amount of power that is blocked going from one tile to another on a different z-level.
- * Can cross more than one level. Only floor & object tiles are taken into account.
+ * Can cross more than one level (used for lighting). Only floor & object tiles are taken into account ... not really!
  * @param startTile	- Pointer to tile where the power starts
  * @param endTile	- Pointer to adjacent tile where the power ends
  * @param type		- The type of power: damageType
@@ -3524,12 +3525,15 @@ int TileEngine::verticalBlockage(
 			return 500;
 	}
 
+	if (startTile == endTile)
+		return 0;
+
 	int dirZ = endTile->getPosition().z - startTile->getPosition().z;
 	if (dirZ == 0)
 	{
 //		if (visLike)
 		if (type == DT_NONE)
-			return -1;
+			return 0;
 		else
 			return 0;
 	}
@@ -3559,14 +3563,14 @@ int TileEngine::verticalBlockage(
 							8); // Pathfinding::DIR_UP
 		}
 
-		if (x != endTile->getPosition().x
+		if (x != endTile->getPosition().x // if endTile is offset on x/y-plane
 			|| y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
 			z = startTile->getPosition().z;
 
-			block += horizontalBlockage( // this checks horizontally to beneath the endTile
+			block += horizontalBlockage( // this checks for ANY Block horizontally to a tile beneath the endTile
 									startTile,
 									_save->getTile(Position(x, y, z)),
 									type);
@@ -3574,9 +3578,9 @@ int TileEngine::verticalBlockage(
 			for (
 					z += 1;
 					z <= endTile->getPosition().z;
-					z++)
+					++z)
 			{
-				block += blockage( // these check the tile above the startTile
+				block += blockage( // these check the endTile
 								_save->getTile(Position(x, y, z)),
 								MapData::O_FLOOR,
 								type)
@@ -3605,14 +3609,14 @@ int TileEngine::verticalBlockage(
 							9); // Pathfinding::DIR_DOWN
 		}
 
-		if (x != endTile->getPosition().x
+		if (x != endTile->getPosition().x // if endTile is offset on x/y-plane
 			|| y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
 			z = startTile->getPosition().z;
 
-			block += horizontalBlockage( // this checks horizontally to above the endTile
+			block += horizontalBlockage( // this checks for ANY Block horizontally to a tile above the endTile
 									startTile,
 									_save->getTile(Position(x, y, z)),
 									type);
@@ -3620,9 +3624,9 @@ int TileEngine::verticalBlockage(
 			for (
 					;
 					z > endTile->getPosition().z;
-					z--)
+					--z)
 			{
-				block += blockage( // these check the tile beneath the startTile
+				block += blockage( // these check the endTile
 								_save->getTile(Position(x, y, z)),
 								MapData::O_FLOOR,
 								type)
@@ -3690,9 +3694,10 @@ int TileEngine::blockage(
 			if (visLike)
 			{
 				if ((tile->getMapData(part)->stopLOS()
-						&& (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
+						&& (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // this one is for verticalBlockage() only.
+							|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
 							|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL))
-					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR) // all floors that block LoS should have their stopLOS flag set true. (duh - because they aren't.)
+					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR) // all floors that block LoS should have their stopLOS flag set true. (because they aren't.)
 				{
 					if (type == DT_NONE)
 						return -1; // hardblock.
@@ -3712,37 +3717,16 @@ int TileEngine::blockage(
 				return ret;
 			} */
 		}
-		else // dir > -1 -> OBJECT part. ( BigWalls & content )
+		else // dir > -1 -> OBJECT part. ( BigWalls & content ) *always* an OBJECT-part gets passed in through here, and *with* a direction.
 		{
-			int bigWall = tile->getMapData(MapData::O_OBJECT)->getBigWall(); // 0..8 or, per MCD.
-
-			if (visLike)
-			{
-				if (bigWall == 0							// not a bigWall ... (fortunately there are no see-through bigWalls)
-					&& tile->getMapData(part)->stopLOS())	// yet blocked by Content-object
-															// note that this is likely a problem for verticalBlockage() at a diagonal ...!
-				{
-					if (type == DT_NONE)
-						return -99; // hardblock.
-					else
-						return 500;
-				}
-			}
-
-/*			if (bigWall == 0
-				&& visLike)
-//				&& type == DT_NONE)
-			{
-				bigWall = tile->getMapData(part)->stopLOS() // blocked by Content
-						|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR;
-			} */
+//			int bigWall = tile->getMapData(MapData::O_OBJECT)->getBigWall();	// 0..8 or, per MCD.
+			int bigWall = tile->getMapData(part)->getBigWall();					// 0..8 or, per MCD.
 			//Log(LOG_INFO) << ". bigWall = " << bigWall;
 
 			if (checkingOrigin)	// kL (the ContentOBJECT already got hit as the previous endTile...)
-								// requires closer inspection ...
 //				&& type != DT_NONE
 			{
-				if (bigWall == 0) // if (Content-part == true)
+				if (bigWall == 0) // if (only Content-part == true)
 //					|| (dir =	// this would need to check which side the *missile* is coming from first
 								// but grenades that land on this diagonal bigWall would be exempt regardless!!!
 								// so, just can it (for now): HardBlock!
@@ -3751,13 +3735,50 @@ int TileEngine::blockage(
 				{
 					return 0;
 				}
-				else if (visLike)
+				else if (!visLike
+					&& (bigWall == Pathfinding::BIGWALL_NESW
+						|| bigWall == Pathfinding::BIGWALL_NWSE))
+				{
+//					if (type == DT_NONE)
+//						return -99; // or -1 ?
+//					else
+					return 500;
+				}
+/*				else if (type != DT_NONE
+						&& (bigWall == Pathfinding::BIGWALL_NESW
+							|| bigWall == Pathfinding::BIGWALL_NWSE))
+				{
+					return 500;
+				} */
+/*				else if (visLike) // & bigWall
 				{
 					if (type == DT_NONE)
-						return -99;
+						return -1; // these backwards?
 					else
 						return 500;
+				} */
+			}
+
+/*			if (type == DT_NONE
+				&& (bigWall == Pathfinding::BIGWALL_NESW
+					|| bigWall == Pathfinding::BIGWALL_NWSE))
+			{
+				return -1; // -99 reveals an extra tile beyond ...
+			} */
+
+			if (visLike // hardblock for visLike
+				&& tile->getMapData(part)->stopLOS()
+				&& bigWall == 0)
+			{
+				if (type == DT_NONE)
+				{
+//					if (bigWall == 0)
+//						return -99;
+//					else
+					return -1;
 				}
+				else
+					return 500;
 			}
 
 			switch (dir) // -> OBJECT part. ( BigWalls & content )
@@ -3775,7 +3796,8 @@ int TileEngine::blockage(
 
 				case 1: // north east
 					if (bigWall == Pathfinding::BIGWALL_WEST
-						|| bigWall == Pathfinding::BIGWALL_SOUTH)
+						|| bigWall == Pathfinding::BIGWALL_SOUTH
+						|| bigWall == Pathfinding::BIGWALL_NESW)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 1 northeast )";
 						return 0;
@@ -3794,7 +3816,8 @@ int TileEngine::blockage(
 
 				case 3: // south east
 					if (bigWall == Pathfinding::BIGWALL_NORTH
-						|| bigWall == Pathfinding::BIGWALL_WEST)
+						|| bigWall == Pathfinding::BIGWALL_WEST
+						|| bigWall == Pathfinding::BIGWALL_NWSE)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 3 southeast )";
 						return 0;
@@ -3813,7 +3836,8 @@ int TileEngine::blockage(
 
 				case 5: // south west
 					if (bigWall == Pathfinding::BIGWALL_NORTH
-						|| bigWall == Pathfinding::BIGWALL_EAST)
+						|| bigWall == Pathfinding::BIGWALL_EAST
+						|| bigWall == Pathfinding::BIGWALL_NESW)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 5 southwest )";
 						return 0;
@@ -3834,7 +3858,8 @@ int TileEngine::blockage(
 				case 7: // north west
 					if (bigWall == Pathfinding::BIGWALL_SOUTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
-						|| bigWall == Pathfinding::BIGWALL_E_S)
+						|| bigWall == Pathfinding::BIGWALL_E_S
+						|| bigWall == Pathfinding::BIGWALL_NWSE)
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 7 northwest )";
 						return 0;
@@ -3861,13 +3886,13 @@ int TileEngine::blockage(
 				{
 					if (type == DT_NONE)
 					{
-						if (bigWall == Pathfinding::BIGWALL_NESW
+/*						if (bigWall == Pathfinding::BIGWALL_NESW
 							|| bigWall == Pathfinding::BIGWALL_NWSE)
 						{
 							return -99;
 						}
-						else
-							return -1;
+						else */
+						return -1;
 					}
 					else
 						return 500;

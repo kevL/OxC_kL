@@ -1924,10 +1924,8 @@ bool AlienBAIState::explosiveEfficacy(
 	{
 		if (!(*i)->isOut(true)
 			&& *i != attackingUnit
-//			&& *i != target
-			&& ((*i)->getPosition().z >= targetPos.z + Options::battleExplosionHeight
-				|| (*i)->getPosition().z <= targetPos.z - Options::battleExplosionHeight)
-//			&& (*i)->getPosition().z == targetPos.z
+//kL		&& *i != target
+			&& abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight
 			&& _save->getTileEngine()->distance(
 											(*i)->getPosition(),
 											targetPos)

@@ -991,8 +991,8 @@ int Pathfinding::getTUCost(
 
 /**
  * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
- * @param direction, Source direction
- * @param vector, Pointer to a position (which acts as a vector)
+ * @param direction	- source direction
+ * @param vector	- pointer to a position (which acts as a vector)
  */
 void Pathfinding::directionToVector(
 		int const direction,
@@ -1008,9 +1008,9 @@ void Pathfinding::directionToVector(
 }
 
 /**
- * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
- * @param vector, Reference to a position (which acts as a vector)
- * @param dir, Reference to the resulting direction (up/down & same-tile returns -1)
+ * Converts vector to a direction. Direction starts north = 0 and goes clockwise.
+ * @param vector	- reference to a position (which acts as a vector)
+ * @param dir		- reference to the resulting direction (up/down & same-tile sets dir = -1)
  */
 void Pathfinding::vectorToDirection(
 		const Position& vector,
@@ -1026,7 +1026,7 @@ void Pathfinding::vectorToDirection(
 			i < 8;
 			++i)
 	{
-		if (   x[i] == vector.x
+		if (x[i] == vector.x
 			&& y[i] == vector.y)
 		{
 			dir = i;
