@@ -62,7 +62,9 @@ Text::Text(
 		_align(ALIGN_LEFT),
 		_valign(ALIGN_TOP),
 		_color(0),
-		_color2(0)
+		_color2(0),
+		_lineHeight(),	// kL
+		_lineWidth()	// kL
 {
 }
 
@@ -350,8 +352,8 @@ Uint8 Text::getSecondaryColor() const
 
 /**
  * Returns the rendered text's height. Useful to check if wordwrap applies.
- * @param line Line to get the height, or -1 to get whole text height.
- * @return Height in pixels.
+ * @param line - line to get the height of, or -1 to get whole text height
+ * @return, height in pixels
  */
 int Text::getTextHeight(int line) const
 {
@@ -374,8 +376,8 @@ int Text::getTextHeight(int line) const
 
 /**
  * Returns the rendered text's width.
- * @param line Line to get the width, or -1 to get whole text width.
- * @return Width in pixels.
+ * @param line - line to get the width of, or -1 to get whole text width
+ * @return, width in pixels
  */
 int Text::getTextWidth(int line) const
 {

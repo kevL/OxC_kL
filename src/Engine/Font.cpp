@@ -121,7 +121,7 @@ void Font::loadTerminal()
 	SDL_Color terminal[2] =
 	{
 		{  0,   0,   0,   0},
-		{185, 185, 185, 255}
+		{192, 192, 192, 255}
 	};
 
 	_surface->setPalette(terminal, 0, 2);

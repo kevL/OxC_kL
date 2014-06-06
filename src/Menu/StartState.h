@@ -90,7 +90,7 @@ private:
 		/// Animates the terminal.
 		void animate(); // load CTD
 		/// Adds a line of text.
-		void addLine(const std::wstring& str); // load CTD
+		void addLine(const std::wstring& line); // load CTD
 
 		/// Loads the game resources.
 		static int load(void* game_ptr);

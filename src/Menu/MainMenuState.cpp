@@ -33,7 +33,7 @@
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-//kL #include "../Engine/Screen.h"
+#include "../Engine/Screen.h"
 
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
@@ -60,8 +60,8 @@ MainMenuState::MainMenuState(Game* game)
 	// AbandonGameState & StartState & SaveGameState & MainMenuState::resize()
 	//
 	// This uses baseX/Y options for Geoscape & Basescape:
-//	Options::baseXResolution = Options::baseXGeoscape; // kL
-//	Options::baseYResolution = Options::baseYGeoscape; // kL
+	Options::baseXResolution = Options::baseXGeoscape; // kL
+	Options::baseYResolution = Options::baseYGeoscape; // kL
 	// This sets Geoscape and Basescape to default (320x200) IG and the config.
 /*	Screen::updateScale(
 					Options::geoscapeScale,
@@ -69,7 +69,8 @@ MainMenuState::MainMenuState(Game* game)
 					Options::baseXGeoscape,
 					Options::baseYGeoscape,
 					true); kL */
-//	_game->getScreen()->resetDisplay(false); // kL
+	_game->getScreen()->resetDisplay(false); // kL
+
 	_window			= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
 	_txtTitle		= new Text(256, 30, 32, 56);
 
