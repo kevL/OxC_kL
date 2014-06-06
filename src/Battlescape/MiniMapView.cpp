@@ -108,12 +108,13 @@ void MiniMapView::draw()
 	if (!_set)
 		return;
 
-	SDL_Rect current;
+/*	SDL_Rect current;
 	current.x = 0;
 	current.y = 0;
 	current.w = getWidth();
 	current.h = getHeight();
-	drawRect(&current, 0);
+	drawRect(&current, 0); */
+	drawRect(0, 0, getWidth(), getHeight(), 0);
 
 	this->lock();
 	for (int

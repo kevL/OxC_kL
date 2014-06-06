@@ -283,7 +283,8 @@ InventoryState::~InventoryState()
 //			_game->getScreen()->resetDisplay(false);
 //		}
 
-//kL	_battleGame->getTileEngine()->applyGravity(unitTile);
+//kL	Tile* tile = _battleGame->getSelectedUnit()->getTile();
+//kL	_battleGame->getTileEngine()->applyGravity(tile);
 //kL	_battleGame->getTileEngine()->calculateTerrainLighting(); // dropping/picking up flares
 //kL	_battleGame->getTileEngine()->recalculateFOV();
 

@@ -174,12 +174,13 @@ MedikitState::MedikitState(
 	{
 		_screen = false;
 
-		SDL_Rect current;
+/*		SDL_Rect current;
 		current.w = 190;
 		current.h = 100;
 		current.x = 67;
 		current.y = 44;
-		_bg->drawRect(&current, Palette::blockOffset(15)+15);
+		_bg->drawRect(&current, Palette::blockOffset(15)+15); */
+		_bg->drawRect(67, 44, 190, 100, Palette::blockOffset(15)+15);
 	}
 
 //	_partTxt	= new Text(50, 15, 90, 120);	// kL

@@ -39,7 +39,7 @@ class Camera
 {
 
 private:
-	static const int SCROLL_INTERVAL = 50;
+//	static const int SCROLL_INTERVAL = 50; // kL
 
 	bool
 		_scrollTrigger,

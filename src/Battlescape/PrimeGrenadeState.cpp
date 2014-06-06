@@ -96,14 +96,14 @@ PrimeGrenadeState::PrimeGrenadeState(
 
 	setPalette("PAL_BATTLESCAPE");
 
-	SDL_Rect square;
-
-	add(_srfBG);
+/*	SDL_Rect square;
 	square.x = 0;
 	square.y = 0;
 	square.w = _srfBG->getWidth();
 	square.h = _srfBG->getHeight();
-	_srfBG->drawRect(&square, Palette::blockOffset(6)+9);
+	_srfBG->drawRect(&square, Palette::blockOffset(6)+9); */
+	add(_srfBG);
+	_srfBG->drawRect(0, 0, _srfBG->getWidth(), _srfBG->getHeight(), Palette::blockOffset(6)+9);
 
 	add(_fraTop);
 	_fraTop->setColor(Palette::blockOffset(6)+3);
@@ -123,17 +123,19 @@ PrimeGrenadeState::PrimeGrenadeState(
 	add(_isfBtn0);
 	_isfBtn0->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
 
-	square.x = 0; // dark border
+/*	square.x = 0; // dark border
 	square.y = 0;
 	square.w = _isfBtn0->getWidth();
 	square.h = _isfBtn0->getHeight();
-	_isfBtn0->drawRect(&square, Palette::blockOffset(0)+15);
+	_isfBtn0->drawRect(&square, Palette::blockOffset(0)+15); */
+	_isfBtn0->drawRect(0, 0, _isfBtn0->getWidth(), _isfBtn0->getHeight(), Palette::blockOffset(0)+15);
 
-	square.x = 1; // inside fill
+/*	square.x = 1; // inside fill
 	square.y = 1;
 	square.w = _isfBtn0->getWidth() - 2;
 	square.h = _isfBtn0->getHeight() - 2;
-	_isfBtn0->drawRect(&square, Palette::blockOffset(6)+12);
+	_isfBtn0->drawRect(&square, Palette::blockOffset(6)+12); */
+	_isfBtn0->drawRect(1, 1, _isfBtn0->getWidth() - 2, _isfBtn0->getHeight() - 2, Palette::blockOffset(6)+12);
 
 	add(_txtTurn0);
 	std::wostringstream ss0;
@@ -154,16 +156,18 @@ PrimeGrenadeState::PrimeGrenadeState(
 		add(_isfBtn[i]);
 		_isfBtn[i]->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
 
+		SDL_Rect square;
+
 		square.x = 0; // dark border
 		square.y = 0;
 		square.w = _isfBtn[i]->getWidth();
 		square.h = _isfBtn[i]->getHeight();
 		_isfBtn[i]->drawRect(&square, Palette::blockOffset(0)+15);
 
-		square.x = 1; // inside fill
-		square.y = 1;
-		square.w = _isfBtn[i]->getWidth() - 2;
-		square.h = _isfBtn[i]->getHeight() - 2;
+		square.x++; // inside fill
+		square.y++;
+		square.w -= 2;
+		square.h -= 2;
 		_isfBtn[i]->drawRect(&square, Palette::blockOffset(6)+12);
 
 		add(_txtTurn[i]);

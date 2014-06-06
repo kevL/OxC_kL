@@ -89,12 +89,13 @@ MiniMapState::MiniMapState(
 	{
 		_screen = false;
 
-		SDL_Rect current;
+/*		SDL_Rect current;
 		current.w = 223;
 		current.h = 151;
 		current.x = 46;
 		current.y = 14;
-		_bg->drawRect(&current, Palette::blockOffset(15)+15);
+		_bg->drawRect(&current, Palette::blockOffset(15)+15); */
+		_bg->drawRect(46, 14, 223, 151, Palette::blockOffset(15)+15);
 	}
 
 	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);

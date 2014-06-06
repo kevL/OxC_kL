@@ -171,6 +171,11 @@ GeoscapeState::GeoscapeState(Game* game)
 						hd->getHeight(),
 						0,
 						0); */
+	_sideLine	= new Surface(
+						64,
+						screenHeight,
+						screenWidth - 64,
+						0);
 /*	_sidebar	= new Surface(
 						64,
 						200,
@@ -242,12 +247,12 @@ GeoscapeState::GeoscapeState(Game* game)
 
 /*kL
 	int height = (screenHeight - Screen::ORIGINAL_HEIGHT) / 2 + 10;
-	_btnTop		= new TextButton(
+	_sideTop	= new TextButton(
 							63,
 							height,
 							screenWidth - 63,
 							_sidebar->getY() - height - 1);
-	_btnBottom	= new TextButton(
+	_sideBottom	= new TextButton(
 							63,
 							height,
 							screenWidth - 63,
@@ -314,6 +319,7 @@ GeoscapeState::GeoscapeState(Game* game)
 
 	add(_srfSpace);	// kL
 //	add(_bg);
+	add(_sideLine);
 //	add(_sidebar);
 	add(_globe);
 
@@ -340,8 +346,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	add(_btnZoomIn);
 	add(_btnZoomOut); */
 
-//kL	add(_btnTop);
-//kL	add(_btnBottom);
+//kL	add(_sideTop);
+//kL	add(_sideBottom);
 
 	add(_srfTime); // kL
 
@@ -370,6 +376,7 @@ GeoscapeState::GeoscapeState(Game* game)
 	_sidebar->copy(geobord);
 	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg); */
 
+	_sideLine->drawRect(0, 0, _sideLine->getWidth(), _sideLine->getHeight(), 15);
 
 /*kL	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnIntercept->setColor(Palette::blockOffset(15)+6);
@@ -593,8 +600,8 @@ GeoscapeState::GeoscapeState(Game* game)
 	_btnZoomOut->onMouseClick((ActionHandler)& GeoscapeState::btnZoomOutRightClick, SDL_BUTTON_RIGHT);
 	_btnZoomOut->onKeyboardPress((ActionHandler)&GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut); */
 
-//kL	_btnTop->setColor(Palette::blockOffset(15)+6);
-//kL	_btnBottom->setColor(Palette::blockOffset(15)+6);
+//kL	_sideTop->setColor(Palette::blockOffset(15)+6);
+//kL	_sideBottom->setColor(Palette::blockOffset(15)+6);
 
 	if (Options::showFundsOnGeoscape)
 	{
@@ -702,32 +709,24 @@ void GeoscapeState::blit()
 {
 	State::blit();
 
-	_game->getScreen()->getSurface()->drawLine(
-//kL										_btnTop->getX() - 1,
+/*	_game->getScreen()->getSurface()->drawLine(
 											Options::baseXGeoscape - 64, // kL
 											0,
-//kL										_btnTop->getX() - 1,
 											Options::baseXGeoscape - 64, // kL
 											_game->getScreen()->getSurface()->getHeight(),
 											15);
 	_game->getScreen()->getSurface()->drawLine(
-//kL										_btnTop->getX(),
 											Options::baseXGeoscape - 63, // kL
-//kL										_sidebar->getY() - 1,
 											Options::baseYGeoscape / 2 - 101, // kL
 											_game->getScreen()->getSurface()->getWidth(),
-//kL										_sidebar->getY() - 1,
 											Options::baseYGeoscape / 2 - 101, // kL
 											15);
 	_game->getScreen()->getSurface()->drawLine(
-//kL										_btnBottom->getX(),
 											Options::baseXGeoscape - 63, // kL
-//kL										_btnBottom->getY() - 1,
 											Options::baseYGeoscape / 2 + 100, // kL
 											_game->getScreen()->getSurface()->getWidth(),
-//kL										_btnBottom->getY() - 1,
 											Options::baseYGeoscape / 2 + 100, // kL
-											15);
+											15); */
 
 	for (std::list<DogfightState*>::iterator
 			i = _dogfights.begin();
@@ -3418,18 +3417,22 @@ void GeoscapeState::resize(
 /*
 // kL_begin:
 	int height = ((Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2) - 1;
-	_btnTop->setHeight(height);
-	_btnTop->setY(0);
-	_btnBottom->setHeight(height);
-	_btnBottom->setY(Options::baseYResolution - height + 1);
+	_sideTop->setHeight(height);
+	_sideTop->setY(0);
+	_sideBottom->setHeight(height);
+	_sideBottom->setY(Options::baseYResolution - height + 1);
 // kL_end.
 */
 /*kL
 	int height = (Options::baseYResolution - Screen::ORIGINAL_HEIGHT) / 2 + 10;
-	_btnTop->setHeight(height);
-	_btnTop->setY(_sidebar->getY() - height - 1);
-	_btnBottom->setHeight(height);
-	_btnBottom->setY(_sidebar->getY() + _sidebar->getHeight() + 1); */
+	_sideTop->setHeight(height);
+	_sideTop->setY(_sidebar->getY() - height - 1);
+	_sideBottom->setHeight(height);
+	_sideBottom->setY(_sidebar->getY() + _sidebar->getHeight() + 1);
+
+	_sideLine->setHeight(Options::baseYResolution);
+	_sideLine->setY(0);
+	_sideLine->drawRect(0, 0, _sideLine->getWidth(), _sideLine->getHeight(), 15); */
 }
 
 }

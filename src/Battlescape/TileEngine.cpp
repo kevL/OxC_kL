@@ -3772,10 +3772,7 @@ int TileEngine::blockage(
 			{
 				if (type == DT_NONE)
 				{
-//					if (bigWall == 0)
-//						return -99;
-//					else
-					return -1;
+					return -99;
 				}
 				else
 					return 500;
@@ -3886,13 +3883,13 @@ int TileEngine::blockage(
 				{
 					if (type == DT_NONE)
 					{
-/*						if (bigWall == Pathfinding::BIGWALL_NESW
+						if (bigWall == Pathfinding::BIGWALL_NESW
 							|| bigWall == Pathfinding::BIGWALL_NWSE)
 						{
 							return -99;
 						}
-						else */
-						return -1;
+						else
+							return -1;
 					}
 					else
 						return 500;

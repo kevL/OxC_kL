@@ -372,9 +372,7 @@ void Game::run()
 										- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)));
 			}
 			else
-			{
 				_timeUntilNextFrame = 0;
-			}
 
 			if (_init
 				&& _timeUntilNextFrame <= 0)
@@ -406,10 +404,9 @@ void Game::run()
 
 				_screen->flip();
 			}
-
 		}
 
-		if (!_init) // Initialize active state
+/*		if (!_init) // Initialize active state
 		{
 			_init = true;
 			_states.back()->init();
@@ -431,7 +428,7 @@ void Game::run()
 								_screen->getCursorTopBlackBand(),
 								_screen->getCursorLeftBlackBand());
 			_states.back()->handle(&action);
-		}
+		} */
 
 		switch (runningState) // Save on CPU
 		{

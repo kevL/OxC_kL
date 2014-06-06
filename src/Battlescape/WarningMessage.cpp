@@ -166,16 +166,20 @@ void WarningMessage::draw()
 {
 	Surface::draw();
 
-	SDL_Rect square1;
+/*	SDL_Rect square1;
 	square1.x = 0;
 	square1.y = 0;
 	square1.w = getWidth();
-	square1.h = getHeight();
-//kL	drawRect(&square1, _color + (_fade > 12? 12: _fade));
+	square1.h = getHeight(); */
+//kL	drawRect(0, 0, getWidth(), getHeight(), _color + (_fade > 12? 12: _fade));
 
-	Uint8 color = _color + 1 + _fade;	// kL
-	if (_fade == 15) color -= 1;		// kL
-	drawRect(&square1, color);			// kL
+	// kL_begin:
+	Uint8 color = _color + 1 + _fade;
+	if (_fade == 15)
+		color -= 1;
+//	drawRect(&square1, color);
+	drawRect(0, 0, getWidth(), getHeight(), color);
+	// kL_end.
 
 	_text->blit(this);
 }

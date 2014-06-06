@@ -85,6 +85,7 @@ private:
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	Surface
 //		* _sidebar,
+		* _sideLine,
 //		* _bg,
 		* _srfSpace,	// kL
 		* _srfTime;		// kL
@@ -101,8 +102,8 @@ private:
 		* _txtMonth,
 		* _txtYear;
 //	TextButton
-//		* _btnTop,
-//		* _btnBottom;
+//		* _sideTop,
+//		* _sideBottom;
 	Timer
 		* _gameTimer,
 		* _zoomInEffectTimer,

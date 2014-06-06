@@ -621,16 +621,18 @@ void SoldierInfoState::init()
 
 	_btnSack->setVisible(!
 						(_soldier->getCraft()
-						&& _soldier->getCraft()->getStatus() == "STR_OUT"));
+							&& _soldier->getCraft()->getStatus() == "STR_OUT")
+						&& _game->getSavedGame()->getMonthsPassed() > -1);
 
-/*kL	if (_base == 0) // dead don't talk
+/*kL
+	if (_base == 0) // dead don't talk
 	{
 		_btnArmor->setVisible(false);
-//kL		_btnSack->setVisible(false);
+		_btnSack->setVisible(false);
 		_txtCraft->setVisible(false);
-
-		_btnAutoStat->setVisible(false); // kL
-	} */
+	}
+	else
+		_btnSack->setVisible(_game->getSavedGame()->getMonthsPassed() > -1); */
 }
 
 /**

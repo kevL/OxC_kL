@@ -2114,7 +2114,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
 		delta = 1,
 		color = 34;
 
-	SDL_Rect square1; // black border
+/*	SDL_Rect square1; // black border
 	square1.x = 0;
 	square1.y = 0;
 	square1.w = 15;
@@ -2124,7 +2124,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	square2.x = 1;
 	square2.y = 1;
 	square2.w = 13;
-	square2.h = 10;
+	square2.h = 10; */
 
 	for (int
 			i = 0;
@@ -2133,8 +2133,10 @@ void BattlescapeState::blinkVisibleUnitButtons()
 	{
 		if (_btnVisibleUnit[i]->getVisible() == true)
 		{
-			_btnVisibleUnit[i]->drawRect(&square1, 15);		// black border
-			_btnVisibleUnit[i]->drawRect(&square2, color);	// inner red square
+//			_btnVisibleUnit[i]->drawRect(&square1, 15);		// black border
+//			_btnVisibleUnit[i]->drawRect(&square2, color);	// inner red square
+			_btnVisibleUnit[i]->drawRect(0, 0, 15, 12, 15);		// black border
+			_btnVisibleUnit[i]->drawRect(1, 1, 13, 10, color);	// inner red square
 		}
 	}
 

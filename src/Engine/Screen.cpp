@@ -422,7 +422,7 @@ void Screen::resetDisplay(bool resetVideo)
 				0,
 				0);
 
-	if (resetVideo)
+	if (resetVideo || _screen->format->BitsPerPixel != _bpp)
 	{
 #ifdef __linux__
 		// Workaround for segfault when switching to opengl
