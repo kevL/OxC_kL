@@ -2830,8 +2830,10 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							startTile,
 							MapData::O_NORTHWALL,
-							type)
-					+ blockage(
+							type);
+
+			if (!visLike) // visLike does this after the switch()
+				block += blockage(
 							endTile,
 							MapData::O_OBJECT,
 							type,
@@ -2872,6 +2874,7 @@ int TileEngine::horizontalBlockage(
 								MapData::O_OBJECT,
 								type,
 								7); // checks Content/bigWalls
+
 			}
 			else // dt_NE
 			{
@@ -2969,8 +2972,10 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							endTile,
 							MapData::O_WESTWALL,
-							type)
-					+ blockage(
+							type);
+
+			if (!visLike) // visLike does this after the switch()
+				block += blockage(
 							startTile,
 							MapData::O_OBJECT,
 							type,
@@ -3104,8 +3109,10 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							endTile,
 							MapData::O_NORTHWALL,
-							type)
-					+ blockage(
+							type);
+
+			if (!visLike) // visLike does this after the switch()
+				block += blockage(
 							startTile,
 							MapData::O_OBJECT,
 							type,
@@ -3244,8 +3251,10 @@ int TileEngine::horizontalBlockage(
 			block = blockage(
 							startTile,
 							MapData::O_WESTWALL,
-							type)
-					+ blockage(
+							type);
+
+			if (!visLike) // visLike does this after the switch()
+				block += blockage(
 							endTile,
 							MapData::O_OBJECT,
 							type,
@@ -3396,13 +3405,15 @@ int TileEngine::horizontalBlockage(
 						MapData::O_OBJECT,
 						type,
 						dir, // checks Content/bigWalls
-						true);
-
-		block += blockage(
+						true,
+						true)
+				+ blockage(
 						endTile,
 						MapData::O_OBJECT,
 						type,
-						(dir + 4) %8);
+						(dir + 4) %8,
+						false,
+						false);
 
 // backward formulation (positive form above):
 /*		if (block > -1 // block > -99
@@ -3625,11 +3636,16 @@ int TileEngine::verticalBlockage(
 /**
  * Calculates the amount of power or LoS/FoV/LoF that various types of
  * walls/bigwalls or floors or object parts of a tile blocks.
- * @param startTile	- pointer to tile where the power starts
- * @param part		- the part of the tile that the power tries to go through
- * @param type		- the type of power (RuleItem.h) DT_NONE if line-of-vision
- * @param dir		- direction the power travels	-1	walls & floors (default)
- *													 0+	big-walls & content
+ * @param startTile			- pointer to tile where the power starts
+ * @param part				- the part of the tile that the power tries to go through
+ * @param type				- the type of power (RuleItem.h) DT_NONE if line-of-vision
+ * @param dir				- direction the power travels	-1	walls & floors (default)
+ *															 0+	big-walls & content
+ * @param checkingOrigin	- true if the origin tile is being examined for bigWalls;
+ *								used only when dir is specified (default: false)
+ * @param trueDir			- for checking if dir is *really* from the direction of sight (true)
+ *								or, in the case of some bigWall determinations, perpendicular to it (false);
+ *								used only when dir is specified (default: false)
  * @return, (int)block	-99 special case for invalid tiles
  *						-1 hardblock power / vision
  *						 0 no block
@@ -3640,7 +3656,8 @@ int TileEngine::blockage(
 		const int part,
 		ItemDamageType type,
 		int dir,
-		bool checkingOrigin)
+		bool checkingOrigin,
+		bool trueDir) // kL_add
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
 	bool visLike = type == DT_NONE
@@ -3774,7 +3791,8 @@ int TileEngine::blockage(
 				case 1: // north east
 					if (bigWall == Pathfinding::BIGWALL_WEST
 						|| bigWall == Pathfinding::BIGWALL_SOUTH
-						|| bigWall == Pathfinding::BIGWALL_NWSE)
+						|| (bigWall == Pathfinding::BIGWALL_NWSE
+							&& !trueDir))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 1 northeast )";
 						return 0;
@@ -3794,7 +3812,8 @@ int TileEngine::blockage(
 				case 3: // south east
 					if (bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_WEST
-						|| bigWall == Pathfinding::BIGWALL_NESW)
+						|| (bigWall == Pathfinding::BIGWALL_NESW
+							&& !trueDir))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 3 southeast )";
 						return 0;
@@ -3814,7 +3833,8 @@ int TileEngine::blockage(
 				case 5: // south west
 					if (bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
-						|| bigWall == Pathfinding::BIGWALL_NWSE)
+						|| (bigWall == Pathfinding::BIGWALL_NWSE
+							&& !trueDir))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 5 southwest )";
 						return 0;
@@ -3836,7 +3856,8 @@ int TileEngine::blockage(
 					if (bigWall == Pathfinding::BIGWALL_SOUTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
 						|| bigWall == Pathfinding::BIGWALL_E_S
-						|| bigWall == Pathfinding::BIGWALL_NESW)
+						|| (bigWall == Pathfinding::BIGWALL_NESW
+							&& !trueDir))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 7 northwest )";
 						return 0;
