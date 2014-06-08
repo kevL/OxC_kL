@@ -742,7 +742,7 @@ void ProjectileFlyBState::think()
 	{
 		Tile
 			* t = _parent->getSave()->getTile(_action.actor->getPosition()),
-			* tBelow = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0, 0, -1));
+			* tBelow = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0, 0,-1));
 
 		bool
 			hasFloor = t && !t->hasNoFloor(tBelow),
@@ -792,7 +792,7 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_MINDCONTROL
 					|| _action.type == BA_PANIC)
 				{
-					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
+//					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
 				}
 				else if (_action.type == BA_AUTOSHOT // kL, jump screen back to pre-shot position
 					|| _action.type == BA_SNAPSHOT

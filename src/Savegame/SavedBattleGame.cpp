@@ -289,7 +289,8 @@ void SavedBattleGame::load(
 								faction,
 								id,
 								rule->getArmor(armor),
-								static_cast<int>(savedGame->getDifficulty()));
+								static_cast<int>(savedGame->getDifficulty()),
+								savedGame->getMonthsPassed()); // kL_add.
 		}
 		//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
 
@@ -299,7 +300,7 @@ void SavedBattleGame::load(
 		if (faction == FACTION_PLAYER)
 		{
 			if (unit->getId() == selectedUnit
-				|| (_selectedUnit == 0
+				|| (_selectedUnit == NULL
 					&& !unit->isOut()))
 			{
 				_selectedUnit = unit;
@@ -309,7 +310,7 @@ void SavedBattleGame::load(
 			// TODO: save stats instead? maybe some kind of weapon will affect them at some point.
 			if (unit->getOriginalFaction() == FACTION_HOSTILE)
 				unit->adjustStats(
-								savedGame->getDifficulty(),
+								static_cast<int>(savedGame->getDifficulty()),
 								savedGame->getMonthsPassed()); // kL_add.
 		}
 

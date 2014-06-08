@@ -135,6 +135,8 @@ void Region::newMonth()
 
 /**
  * kL. Handles recent alien activity in this region for GraphsState blink.
+ * @param activity	- true to reset the startcounter
+ * @param graphs	- not sure lol
  */
 bool Region::recentActivity( // kL
 		bool activity,
@@ -150,7 +152,8 @@ bool Region::recentActivity( // kL
 		{
 			++_activityRecent;
 
-			if (_activityRecent == 24)
+			if (_activityRecent == 24) // aLien bases show activity every 24 hrs.
+//			if (_activityRecent >= 12) // use this until my shorten kicks in ...
 				_activityRecent = -1;
 		}
 	}

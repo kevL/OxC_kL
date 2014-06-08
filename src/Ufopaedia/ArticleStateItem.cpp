@@ -206,7 +206,7 @@ ArticleStateItem::ArticleStateItem(
 		_txtAmmoDamage[i] = new Text(90, 16, 190, 40 + (i * 49));
 		add(_txtAmmoDamage[i]);
 //kL		_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
-		_txtAmmoDamage[i]->setColor(Palette::blockOffset(2)+6);		// kL
+		_txtAmmoDamage[i]->setColor(Palette::blockOffset(2)+5); // kL
 		_txtAmmoDamage[i]->setAlign(ALIGN_CENTER);
 		_txtAmmoDamage[i]->setBig();
 

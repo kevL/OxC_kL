@@ -57,6 +57,7 @@ namespace OpenXcom
 
 LoadingPhase StartState::loading;
 std::string StartState::error;
+bool StartState::kL_ready; // kL
 
 
 /**
@@ -66,8 +67,10 @@ std::string StartState::error;
 StartState::StartState(Game* game)
 	:
 		State(game),
-		_anim(0)		// load CTD
+		_anim(0),		// load CTD
+//		_ready(false)	// kL
 //		_output(L"")	// kL, load CTD
+		_dosart(L"")	// kL
 {
 	// updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
 //kL	Options::newDisplayWidth	= Options::displayWidth;
@@ -86,8 +89,8 @@ StartState::StartState(Game* game)
 		dy = 20;	// kL
 //	_surface = new Surface(320, 200, dx, dy);		// kL
 
-	_thread = 0;
 	loading = LOADING_STARTED;
+	_thread = 0;
 	error = "";
 
 	// kL_begin: Old Loading screen ... pre 2014 may 26.
@@ -132,7 +135,8 @@ StartState::StartState(Game* game)
 					_font->getHeight(),
 					0,
 					0);
-	_timer	= new Timer(220);
+
+	_timer	= new Timer(37);
 
 	setPalette(_font->getSurface()->getPalette(), 0, 2);
 
@@ -152,7 +156,6 @@ StartState::StartState(Game* game)
 	_timer->onTimer((StateHandler)& StartState::animate);
 	_timer->start();
 
-	// Hide UI
 	_game->getCursor()->setVisible(false);
 	_game->getFpsCounter()->setVisible(false);
 
@@ -334,13 +337,13 @@ void StartState::think()
 }
 
 /**
- * The game quits if the player presses any
- * key when an error message is on display.
+ * The game quits if the player presses any key when an error message is on display.
  * @param action Pointer to an action
  */
 void StartState::handle(Action* action)
 {
 	State::handle(action);
+
 	if (loading == LOADING_DONE)
 	{
 		if (action->getDetails()->type == SDL_KEYDOWN)
@@ -354,58 +357,187 @@ void StartState::handle(Action* action)
 // load CTD_begin:
 void StartState::animate()
 {
-	_cursor->setVisible(!_cursor->getVisible());
 	_anim++;
+
+	if (_anim %5 == 0) // kL
+		_cursor->setVisible(!_cursor->getVisible());
 
 	if (loading == LOADING_STARTED)
 	{
 		std::wostringstream ss;
+		ss << L"Loading " << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "..."; // kL
 //kL		ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
-		ss << L"Loading OpenXcom ver." << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "..."; // kL
 		if (Options::reload)
 		{
 			if (_anim == 2)
 				addLine(ss.str());
+
+			// NOTE: may need to set this:
+//			if (kL_ready)
+//				loading = LOADING_SUCCESSFUL;
+//			else
+//				kL_ready = true;
 		}
+/*		if (Options::reload)
+		{
+			if (_anim == 1)
+				addLine_kL();
+
+			if (_anim < 20)
+			{
+				addLine_kL();
+				_dosart = L"Loading oXc_kL ..."; // 18 chars
+				addChar_kL(_anim - 2);
+			}
+			else
+				addCursor();
+
+			// NOTE: may need to set this:
+//			if (kL_ready)
+//				loading = LOADING_SUCCESSFUL;
+//			else
+//				kL_ready = true;
+		} */
 		else
 		{
+/*kL
 			switch (_anim)
 			{
-				case 1:
+				case 0:
 					addLine(L"DOS/4GW Protected Mode Run-time  Version 1.9");
 				break;
 				case 3:
 					addLine(L"Copyright (c) Rational Systems, Inc. 1990-1993");
 				break;
-				case 8:
+				case 9:
 					addLine(L"");
 					addLine(L"OpenXcom initialisation");
 				break;
-				case 12:
+				case 14:
 					addLine(L"");
 					if (Options::mute)
 						addLine(L"No Sound Detected");
 					else
-					{
 						addLine(L"SoundBlaster Sound Effects");
-					}
 				break;
-				case 13:
+				case 17:
 					if (Options::preferredMusic == MUSIC_MIDI)
 						addLine(L"General MIDI Music");
 					else
-					{
 						addLine(L"SoundBlaster Music");
-					}
 				break;
-				case 15:
+				case 20:
 					if (Options::preferredMusic != MUSIC_MIDI)
 						addLine(L"Base Port 220  Irq 5  Dma 1");
 				break;
-				case 18:
+				case 22:
 					addLine(L"");
 					addLine(ss.str());
 				break;
+
+				// kL_begin:
+				case 27:
+					if (kL_ready)
+						loading = LOADING_SUCCESSFUL;
+					else
+						kL_ready = true;
+				break; // kL_end.
+			} */
+
+			if (_anim == 1 // start.
+				|| _anim == 44
+				|| _anim == 91
+				|| _anim == 115
+				|| _anim == 142
+				|| _anim == 161
+				|| _anim == 187)
+			{
+				addLine_kL();
+			}
+
+			if (_anim == 1)
+				addCursor_kL();
+
+			if (_anim < 44) // 1..43
+			{
+				_dosart = L"DOS/4GW Protected Mode Run-time Version 1.9"; // 43 chars
+				addChar_kL(_anim - 1);
+			}
+			else if (_anim == 44)
+				addCursor_kL();
+
+			else if (_anim < 91) // 45..90
+			{
+				_dosart = L"Copyright (c) Rational Systems, Inc. 1990-1993"; // 46 chars
+				addChar_kL(_anim - 45);
+			}
+			else if (_anim == 91)
+			{
+				addLine_kL();
+				addCursor_kL();
+			}
+
+			else if (_anim < 115) // 92..114
+			{
+				_dosart = L"OpenXcom initialisation"; // 23 chars <-
+				addChar_kL(_anim - 92);
+			}
+			else if (_anim == 115)
+			{
+				addLine_kL();
+				addCursor_kL();
+			}
+
+			else if (_anim < 142) // 116..141
+			{
+/*				if (Options::mute)
+					_dosart = L"No Sound Detected";
+				else */
+				_dosart = L"SoundBlaster Sound Effects"; // 26 chars
+				addChar_kL(_anim - 116);
+			}
+			else if (_anim == 142)
+				addCursor_kL();
+
+			else if (_anim < 161) // 143..160
+			{
+/*				if (Options::preferredMusic == MUSIC_MIDI)
+					_dosart = L"General MIDI Music";
+				else */
+				_dosart = L"SoundBlaster Music"; // 18 chars
+				addChar_kL(_anim - 143);
+			}
+			else if (_anim == 161)
+				addCursor_kL();
+
+			else if (_anim < 187) // 162..186
+			{
+/*				if (Options::preferredMusic != MUSIC_MIDI)
+					_dosart = L"Base Port 220  Irq 5  Dma 1";
+				else */
+				_dosart = L"Base Port 220 Irq 5 Dma 1"; // 25 chars
+				addChar_kL(_anim - 162);
+			}
+			else if (_anim == 187)
+			{
+				addLine_kL();
+				addCursor_kL();
+			}
+
+			else if (_anim < 206) // 188..205
+			{
+				_dosart = L"Loading oXc_kL ..."; // 18 chars
+				addChar_kL(_anim - 188);
+			}
+			else if (_anim == 206)
+				addCursor_kL();
+
+			else if (_anim == 239)
+			{
+				if (kL_ready)
+					loading = LOADING_SUCCESSFUL;
+				else
+					kL_ready = true;
 			}
 		}
 	}
@@ -423,15 +555,51 @@ void StartState::addLine(const std::wstring& line)
 	_text->setText(_output.str());
 
 	int
-//		x = _text->getTextWidth((_text->getTextHeight() - _font->getHeight()) / _font->getHeight() + 20), // kL
-		x = _text->getTextWidth((_text->getTextHeight() - _font->getHeight()) / _font->getHeight()) + 20, // kL
-		y = _text->getTextHeight() - _font->getHeight() + 20; // kL
-//		y = _text->getTextHeight() - _font->getHeight(),
-//		x = _text->getTextWidth(y / _font->getHeight());
+//kL	y = _text->getTextHeight() - _font->getHeight(),
+//kL	x = _text->getTextWidth(y / _font->getHeight());
+		x = _text->getTextWidth((_text->getTextHeight() - _font->getHeight()) / _font->getHeight()) + 20,	// kL
+		y = _text->getTextHeight() - _font->getHeight() + 20;												// kL
 	_cursor->setX(x);
 	_cursor->setY(y);
 }
 // load CTD_end.
+
+// kL_begin:
+/**
+ * kL.
+ */
+void StartState::addLine_kL() // kL
+{
+	_output << L"\n";
+}
+
+/**
+ * kL.
+ */
+void StartState::addChar_kL(const size_t nextChar) // kL
+{
+//	substr(size_type pos = 0, size_type len = npos) const;
+/*	for (size_t
+			i = 0;
+			i < _dosart.length();
+			++i) */
+
+	_output << _dosart.at(nextChar);
+	_text->setText(_output.str());
+}
+
+/**
+ * kL.
+ */
+void StartState::addCursor_kL() // kL
+{
+	int
+		x = _text->getTextWidth((_text->getTextHeight() - _font->getHeight()) / _font->getHeight()) + 20,	// kL
+		y = _text->getTextHeight() - _font->getHeight() + 20;												// kL
+
+	_cursor->setX(x);
+	_cursor->setY(y);
+} // kL_end.
 
 /**
  * Loads game data and updates status accordingly.
@@ -463,7 +631,10 @@ int StartState::load(void* game_ptr)
 		game->defaultLanguage();
 		Log(LOG_INFO) << "Language loaded.";
 
-		loading = LOADING_SUCCESSFUL;
+		if (kL_ready)						// kL
+			loading = LOADING_SUCCESSFUL;
+		else								// kL
+			kL_ready = true;				// kL
 	}
 	catch (Exception &e)
 	{

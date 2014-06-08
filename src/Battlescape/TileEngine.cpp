@@ -512,14 +512,14 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									//Log(LOG_INFO) << ". . . . calculateLine() inside [2]for Loop";
 									_trajectory.clear();
 
-									Position pPlayer = unitPos + Position(
+									Position posPlayer = unitPos + Position(
 																		xPlayer,
 																		yPlayer,
 																		0);
 
 									//Log(LOG_INFO) << ". . calculateLine()";
 									int test = calculateLine(
-														pPlayer,
+														posPlayer,
 														testPos,
 														true,
 														&_trajectory,
@@ -540,21 +540,20 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 											++i)
 									{
 										//Log(LOG_INFO) << ". . . . calculateLine() inside TRAJECTORY Loop";
-										Position pTraj = _trajectory.at(i);
+										Position posTraj = _trajectory.at(i);
 
-										// mark every tile of line as visible
-										// this is needed because of bresenham narrow stroke.
-//kL									_save->getTile(pTraj)->setVisible(+1);
-										_save->getTile(pTraj)->setVisible(true); // kL
-										_save->getTile(pTraj)->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
+										// mark every tile of line as visible; this is needed because of bresenham narrow stroke.
+//kL									_save->getTile(posTraj)->setVisible(+1);
+										_save->getTile(posTraj)->setVisible(true); // kL
+										_save->getTile(posTraj)->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
 
 										// walls to the east or south of a visible tile, we see that too
 										// kL_note: Yeh, IF there's walls or an appropriate BigWall object!
 										// TODO: THIS COULD/SHOULD BE CHECKING ALL 4 CARDINAL DIRECTIONS, not just east & south:
 										Tile* tile = _save->getTile(Position(
-																		pTraj.x + 1,
-																		pTraj.y,
-																		pTraj.z));
+																		posTraj.x + 1,
+																		posTraj.y,
+																		posTraj.z));
 										if (tile)
 //kL										tile->setDiscovered(true, 0);
 										// kL_begin:
@@ -572,7 +571,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 													if (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL) // #1
 													{
 														//Log(LOG_INFO) << ". . MapData: WestWall VALID";
-														tile->setDiscovered(true, 0);
+														tile->setDiscovered(true, 0); // reveal westwall
 //														break;
 													}
 													else if (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
@@ -589,9 +588,9 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										} // kL_end.
 
 										tile = _save->getTile(Position(
-																pTraj.x,
-																pTraj.y + 1,
-																pTraj.z));
+																posTraj.x,
+																posTraj.y + 1,
+																posTraj.z));
 										if (tile)
 //kL										tile->setDiscovered(true, 1);
 										// kL_begin:
@@ -609,7 +608,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 													if (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL) // #2
 													{
 														//Log(LOG_INFO) << ". . MapData: NorthWall VALID";
-														tile->setDiscovered(true, 1);
+														tile->setDiscovered(true, 1); // reveal northwall
 //														break;
 													}
 													else if (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
@@ -622,6 +621,50 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 //														break;
 													}
 												}
+											}
+										}
+/*
+parts:
+#0 - floor
+#1 - westwall
+#2 - northwall
+#3 - object (content)
+*/
+										tile = _save->getTile(Position(
+																posTraj.x - 1,
+																posTraj.y,
+																posTraj.z));
+										if (tile)
+										{
+											//Log(LOG_INFO) << "calculateFOV() West tile VALID";
+											//Log(LOG_INFO) << "part = 3";
+											if (tile->getMapData(MapData::O_OBJECT) // #3
+												&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
+													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
+											{
+												//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 6 or 8";
+												tile->setDiscovered(true, 2); // reveal entire tile
+//												break;
+											}
+										}
+
+										tile = _save->getTile(Position(
+																posTraj.x,
+																posTraj.y - 1,
+																posTraj.z));
+										if (tile)
+										{
+											//Log(LOG_INFO) << "calculateFOV() North tile VALID";
+											//Log(LOG_INFO) << "part = 3";
+											if (tile->getMapData(MapData::O_OBJECT) // #3
+												&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH
+													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
+											{
+												//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 7 or 8";
+												tile->setDiscovered(true, 2); // reveal entire tile
+//												break;
 											}
 										} // kL_end.
 										//Log(LOG_INFO) << "calculateFOV() DONE tile reveal";
@@ -2793,6 +2836,7 @@ int TileEngine::horizontalBlockage(
 //		if (visLike)
 		if (type == DT_NONE)
 			return -99;
+//			return 0; // TEST.
 		else
 			return 500;
 	}
@@ -3698,6 +3742,7 @@ int TileEngine::blockage(
 				{
 					if (type == DT_NONE)
 						return -1; // hardblock.
+//						return -99; // TEST, +1 tile
 					else
 						return 500;
 				}
@@ -3768,9 +3813,7 @@ int TileEngine::blockage(
 				&& bigWall == 0)
 			{
 				if (type == DT_NONE)
-				{
 					return -99;
-				}
 				else
 					return 500;
 			}
@@ -3887,7 +3930,12 @@ int TileEngine::blockage(
 						if (bigWall == Pathfinding::BIGWALL_NESW
 							|| bigWall == Pathfinding::BIGWALL_NWSE)
 						{
-							return -1;// -99;
+/*							if (dir %2 == 0) // cardinal direction
+								return -99;
+							else */
+								// darn, why does one diagonal wall reveal itself, but not the one right next to it ...
+								// Or, if -99 is specified, it shows but then the one next to it shows the tile beyond ...
+							return -1;
 						}
 						else
 							return -1;
@@ -4679,13 +4727,27 @@ int TileEngine::calculateLine(
 		}
 		else // for Terrain visibility, ie. FoV & Fog of War.
 		{
+			// kL_begin:
+			Tile* startTile = _save->getTile(lastPoint);
+			Tile* endTile = _save->getTile(Position(cx, cy, cz));
+/*			if (startTile == NULL
+				|| endTile == NULL)
+			{
+//				return -99; // nope ...
+				return 0;
+			} */ // kL_end.
+
 			result = horizontalBlockage(
-									_save->getTile(lastPoint),
-									_save->getTile(Position(cx, cy, cz)),
+//kL									_save->getTile(lastPoint),
+//kL									_save->getTile(Position(cx, cy, cz)),
+									startTile,	// kL
+									endTile,	// kL
 									DT_NONE);
 			result2 = verticalBlockage(
-									_save->getTile(lastPoint),
-									_save->getTile(Position(cx, cy, cz)),
+//kL									_save->getTile(lastPoint),
+//kL									_save->getTile(Position(cx, cy, cz)),
+									startTile,	// kL
+									endTile,	// kL
 									DT_NONE);
 
 // original:
@@ -4698,7 +4760,6 @@ int TileEngine::calculateLine(
 					//Log(LOG_INFO) << ". [2]ret = " << result;
 					return result; // We hit a big wall. kL_note: BigWall? or just ... wall or other visBlock object
 			}
-
 			result += result2;
 			if (result > 127) // kL_note: huh?
 				//Log(LOG_INFO) << "TileEngine::calculateLine(), odd return2, could be Big Wall = " << result;
@@ -4714,9 +4775,9 @@ int TileEngine::calculateLine(
 				|| result2 <= -1)
 			{
 				return -1;
+//				return -99; // TEST.
 			}
-/*
-			if (result + result2 < 0)
+/*			if (result + result2 < 0)
 				return -1;
 			else if (result < 0) // kL
 			{
@@ -4731,7 +4792,6 @@ int TileEngine::calculateLine(
 			if (result < 0) // kL
 				return -1; // kL
 */
-
 			lastPoint = Position(cx, cy, cz);
 		}
 
@@ -4804,7 +4864,7 @@ int TileEngine::calculateLine(
 	}
 
 //	if (!doVoxelCheck)	// kL, terrain Visibility for Fog of War / FoV
-//		return -1;		// kL
+//		return -99;		// kL
 
 	//Log(LOG_INFO) << ". EXIT ret -1";
 	return VOXEL_EMPTY;

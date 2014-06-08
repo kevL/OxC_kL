@@ -236,10 +236,13 @@ BattleUnit::BattleUnit(
 
 	_stats	= *unit->getStats();
 	_stats	+= *_armor->getStats();	// armors may modify effective stats
+
 	if (faction == FACTION_HOSTILE)
+//	if (_originalFaction == FACTION_HOSTILE) // kL (note: overriding initialization above.)
 		adjustStats(
 					diff,
 					month); // kL_add
+
 
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
@@ -3309,7 +3312,7 @@ void BattleUnit::adjustStats(
 		const int diff,
 		const int month) // kL_add.
 {
-	// adjust the unit's stats according to the difficulty level.
+	// adjust the unit's stats according to the difficulty level. Note, Throwing is not affected.
 	_stats.tu			+= 4 * diff * _stats.tu / 100;
 	_stats.stamina		+= 4 * diff * _stats.stamina / 100;
 	_stats.reactions	+= 6 * diff * _stats.reactions / 100;
@@ -3320,16 +3323,20 @@ void BattleUnit::adjustStats(
 	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
 
 	// kL_begin:
-	_stats.tu			+= month;
-	_stats.stamina		+= month;
-	_stats.reactions	+= month;
-	_stats.firing		+= month;
-	_stats.strength		+= month;
-	_stats.melee		+= month;
-	_stats.psiStrength	+= month;
-	if (_stats.psiSkill > 0)
-		_stats.psiSkill	+= month;
-	// kL_end.
+	if (month > 0)
+	{
+//		_stats.tu			+= month;
+//		_stats.stamina		+= month;
+		_stats.reactions	+= month;
+		_stats.firing		+= month;
+//		_stats.strength		+= month;
+		_stats.melee		+= month;
+		_stats.psiStrength	+= (month * 2);
+//		if (_stats.psiSkill > 0)
+//			_stats.psiSkill	+= month;
+
+		_stats.health		+= (month / 2);
+	}
 
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), unitID = " << getId();
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.tu = " << _stats.tu;
@@ -3340,6 +3347,10 @@ void BattleUnit::adjustStats(
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.melee = " << _stats.melee;
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiSkill = " << _stats.psiSkill;
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiStrength = " << _stats.psiStrength;
+
+	if (!diff)			// kL, moved here from BattlescapeGenerator::addAlien() & BattlescapeGame::convertUnit()
+		halveArmor();	// kL
+	// kL_end.
 }
 
 /**

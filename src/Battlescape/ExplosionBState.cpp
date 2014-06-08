@@ -304,7 +304,6 @@ void ExplosionBState::think()
 			)
 	{
 //		++next; // kL
-
 		if (!(*i)->animate())
 		{
 			delete *i; // delete CTD

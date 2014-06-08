@@ -984,6 +984,8 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw smoke/fire
+/*kL: This smoke is redrawing in an awkward way .....
+
 								if (tileWest->getSmoke())
 //TEST									&& tileWest->isDiscovered(2))
 								// kL_begin: copied from its regular place way below.
@@ -1020,7 +1022,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x,
 											screenPosition.y,
 											0);
-								} // kL_end.
+								} */ // kL_end.
 							}
 						}
 					}

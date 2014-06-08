@@ -603,7 +603,7 @@ void Soldier::trainPsi1Day()
 	}
 	else // start here
 	{
-		if (RNG::percent(2))
+		if (RNG::percent(3)) // 3% per day per soldier (to become psionic-active)
 			_currentStats.psiSkill = rulesMin - 1;
 //		else
 //			_currentStats.psiSkill = rulesMin - 2;

@@ -54,7 +54,8 @@ class StartState
 
 private:
 	// load CTD
-	int _anim;
+//kL	int _anim;
+	size_t _anim; // kL
 
 	Font* _font;
 	Language* _lang;
@@ -68,11 +69,13 @@ private:
 //	Surface* _surface; // kL
 
 	std::wostringstream _output; // load CTD
+	std::wstring _dosart; // kL
 
 
 	public:
 		static LoadingPhase loading;
 		static std::string error;
+		static bool kL_ready; // kL
 
 		/// Creates the Start state.
 		StartState(Game* game);
@@ -91,6 +94,12 @@ private:
 		void animate(); // load CTD
 		/// Adds a line of text.
 		void addLine(const std::wstring& line); // load CTD
+		/// kL.
+		void addLine_kL(); // kL
+		/// kL.
+		void addChar_kL(const size_t nextChar); // kL
+		/// kL.
+		void addCursor_kL(); // kL
 
 		/// Loads the game resources.
 		static int load(void* game_ptr);

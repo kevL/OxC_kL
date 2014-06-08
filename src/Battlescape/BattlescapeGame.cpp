@@ -2461,9 +2461,9 @@ void BattlescapeGame::dropItem(
 
 /**
  * Converts a unit into a unit of another type.
- * @param unit The unit to convert.
- * @param newType The type of unit to convert to.
- * @return, Pointer to the new unit.
+ * @param unit		- pointer to a unit to convert
+ * @param newType	- the type of unit to convert to
+ * @return, pointer to the new unit
  */
 BattleUnit* BattlescapeGame::convertUnit(
 		BattleUnit* unit,
@@ -2491,39 +2491,43 @@ BattleUnit* BattlescapeGame::convertUnit(
 			i != unit->getInventory()->end();
 			++i)
 	{
-		dropItem(unit->getPosition(), (*i));
+		dropItem(
+				unit->getPosition(),
+				*i);
 		(*i)->setOwner(0);
 	}
 
 	unit->getInventory()->clear();
 
 	// remove unit-tile link
-	unit->setTile(0);
+	unit->setTile(NULL);
 	getSave()->getTile(unit->getPosition())->setUnit(0);
+
 
 	std::ostringstream newArmor;
 	newArmor << getRuleset()->getUnit(newType)->getArmor();
+
 	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
 	RuleItem* newItem = getRuleset()->getItem(terroristWeapon);
 
 	int difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty());
+	int month = _parentState->getGame()->getSavedGame()->getMonthsPassed(); // kL
 	BattleUnit* newUnit = new BattleUnit(
 									getRuleset()->getUnit(newType),
 									FACTION_HOSTILE,
 									_save->getUnits()->back()->getId() + 1,
 									getRuleset()->getArmor(newArmor.str()),
-									difficulty);
+									difficulty,
+									month); // kL_add.
 	// kL_note: what about setting _zombieUnit=true ? It's not generic but it's the only case, afaict
 
-	if (!difficulty)
-	{
-		newUnit->halveArmor();
-	}
+//kL	if (!difficulty) // kL_note: moved to BattleUnit::adjustStats()
+//kL		newUnit->halveArmor();
 
 	getSave()->getTile(unit->getPosition())->setUnit(
 												newUnit,
-												_save->getTile(unit->getPosition() + Position(0, 0, -1)));
+												_save->getTile(unit->getPosition() + Position(0, 0,-1)));
 	newUnit->setPosition(unit->getPosition());
 	newUnit->setDirection(3);
 //	newUnit->setDirection(origDir);		// kL

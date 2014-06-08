@@ -1674,8 +1674,8 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		else
 			unit->setDirection(RNG::generate(0, 7));
 
-		if (difficulty == 0)
-			unit->halveArmor();
+//kL		if (difficulty == 0) // kL_note: moved to BattleUnit::adjustStats()
+//kL			unit->halveArmor();
 
 		// we only add a unit if it has a node to spawn on.
 		// (stops them spawning at 0,0,0)

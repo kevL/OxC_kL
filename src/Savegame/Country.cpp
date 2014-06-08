@@ -326,6 +326,8 @@ bool Country::getPact() const
 
 /**
  * kL. Handles recent alien activity in this country for GraphsState blink.
+ * @param activity	- true to reset the startcounter
+ * @param graphs	- not sure lol
  */
 bool Country::recentActivity( // kL
 		bool activity,
@@ -341,7 +343,8 @@ bool Country::recentActivity( // kL
 		{
 			++_activityRecent;
 
-			if (_activityRecent == 24)
+			if (_activityRecent == 24) // aLien bases show activity every 24 hrs.
+//			if (_activityRecent >= 12) // use this until my shorten kicks in ...
 				_activityRecent = -1;
 		}
 	}
