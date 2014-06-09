@@ -5883,7 +5883,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1402120204 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1402249584 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -9259,7 +9259,7 @@
 	"City.h"
 	"../Engine/RNG.h"
 
-1401232752 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
+1402249355 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
 1401489083 source:f:\git\openxcom\src\ruleset\ruleset.cpp
@@ -9782,7 +9782,7 @@
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/Ruleset.h"
 
-1402153833 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
+1402249317 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
 	"ArticleStateItem.h"
 	<algorithm>
 	<sstream>

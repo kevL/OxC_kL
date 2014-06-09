@@ -1560,7 +1560,6 @@ items:
     invWidth: 1
     invHeight: 2
     armor: 20
-    attraction: 1
   - type: STR_PISTOL_CLIP
     size: 0.1
     costBuy: 75
@@ -1575,7 +1574,6 @@ items:
     clipSize: 9
     battleType: 2
     armor: 12
-    attraction: 1
   - type: STR_RIFLE
     size: 0.3
     costBuy: 3250
@@ -1648,7 +1646,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_HC_HE_AMMO
     size: 0.2
     costBuy: 690
@@ -1664,7 +1661,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
     blastRadius: 4
   - type: STR_HC_I_AMMO
     size: 0.2
@@ -1681,7 +1677,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_AUTO_CANNON
     size: 0.5
     costBuy: 12750
@@ -1752,7 +1747,6 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
-    attraction: 1
   - type: STR_ROCKET_LAUNCHER
     size: 0.7
     costBuy: 4300
@@ -2266,7 +2260,7 @@ items:
     invHeight: 2
     tuUse: 50
     recoveryPoints: 1
-    attraction: 1
+    attraction: 2
   - type: STR_ALIEN_FOOD
     size: 0.3
     costSell: 2500

@@ -4766,6 +4766,8 @@ int TileEngine::calculateLine(
 				//Log(LOG_INFO) << ". [3]ret = " << result;
 				return result; */
 // original_End.
+//			return -99; // ! TEST ! well that workes
+
 			if (result <= -99
 				|| result2 <= -99)
 			{
