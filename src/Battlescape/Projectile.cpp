@@ -156,8 +156,8 @@ int Projectile::calculateTrajectory(
 		&& !_trajectory.empty()
 		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
 		&& _action.autoShotCount == 1
-		&& ((SDL_GetModState() & KMOD_CTRL) == 0
-			|| !Options::forceFire)
+		&& (!Options::forceFire
+			|| (SDL_GetModState() & KMOD_CTRL) == 0)
 		&& _save->getBattleGame()->getPanicHandled()
 		&& _action.type != BA_LAUNCH)
 	{
@@ -237,7 +237,7 @@ int Projectile::calculateTrajectory(
 	if (targetUnit						// kL
 		&& targetUnit->getDashing())	// kL
 	{
-		accuracy -= 0.35;				// kL
+		accuracy -= 0.34;				// kL
 		//Log(LOG_INFO) << ". . . . targetUnit " << targetUnit->getId() << " is Dashing!!! accuracy = " << accuracy;
 	}
 
@@ -808,7 +808,7 @@ Position Projectile::getOrigin()
 /**
  * Gets the INTENDED target for this projectile.
  * It is important to note that we do not use the final position
- * of the projectile here, but rather the targetted tile.
+ * of the projectile here, but rather the targeted tile.
  * @return, target as a tile position.
  */
 //kL Position Projectile::getTarget()

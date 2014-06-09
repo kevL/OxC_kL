@@ -107,8 +107,8 @@ ProjectileFlyBState::~ProjectileFlyBState()
 
 /**
  * Initializes the sequence:
- * - checks if the shot is valid,
- * - calculates the base accuracy.
+ * - checks if the shot is valid
+ * - calculates the base accuracy
  */
 void ProjectileFlyBState::init()
 {
@@ -325,7 +325,7 @@ void ProjectileFlyBState::init()
 		}
 		break;
 		case BA_HIT:
-			//Log(LOG_INFO) << ". . BA_HIT";
+			Log(LOG_INFO) << ". . BA_HIT performMeleeAttack()";
 			if (!_parent->getTileEngine()->validMeleeRange(
 													_action.actor->getPosition(),
 													_action.actor->getDirection(),
@@ -340,9 +340,10 @@ void ProjectileFlyBState::init()
 				return;
 			}
 
-			performMeleeAttack();
-			return;
-//		break;
+//kL			performMeleeAttack();
+			Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
+//kL			return;
+		break;
 		case BA_PANIC:
 		case BA_MINDCONTROL:
 			//Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
@@ -523,7 +524,9 @@ void ProjectileFlyBState::init()
  */
 bool ProjectileFlyBState::createNewProjectile()
 {
-	//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
+	Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
+	Log(LOG_INFO) << ". _action_type = " << _action.type;
+
 	++_action.autoShotCount;
 
 	Projectile* projectile = new Projectile(
@@ -628,7 +631,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_action.TU = 0; // kL
-//kL			_unit->abortTurn();
+//kL		_unit->abortTurn();
 			_unit->setStatus(STATUS_STANDING); // kL
 			_parent->popState();
 
@@ -637,12 +640,13 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else if (_action.type == BA_HIT) // kL. Let's not calculate anything we don't have to for meleeHits!
 	{
+		Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
 		// validMeleeRange/target has been validated.
 //		_projectileImpact = 4;
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon));
-//kL																			/ 100.0); // Wb.140214
+//kL																		/ 100.0);
 		//Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
 
 		// Can soldiers swing a club, graphically??
@@ -651,10 +655,13 @@ bool ProjectileFlyBState::createNewProjectile()
 //		_parent->getMap()->cacheUnit(_unit);
 
 		// and we have a hit!
-		if (_action.weapon->getRules()->getFireSound() != -1)
+		Log(LOG_INFO) << ". melee attack! Play fireSound";// part = " << _projectileImpact;
+//		if (_action.weapon->getRules()->getFireSound() != -1)
+		if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
 			_parent->getResourcePack()->getSound(
 											"BATTLE.CAT",
-											_action.weapon->getRules()->getFireSound())
+//											_action.weapon->getRules()->getFireSound())
+											_action.weapon->getRules()->getMeleeAttackSound())
 										->play();
 	}
 	else // shoot weapon / was do melee attack too
@@ -716,7 +723,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(0);
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_action.TU = 0; // kL
-//kL			_unit->abortTurn();
+//kL		_unit->abortTurn();
 			_unit->setStatus(STATUS_STANDING); // kL
 			_parent->popState();
 
@@ -724,7 +731,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 	}
 
-	//Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
+	Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
 	return true;
 }
 
@@ -1216,6 +1223,8 @@ void ProjectileFlyBState::targetFloor()
  */
 void ProjectileFlyBState::performMeleeAttack()
 {
+	Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack()";
+
 	BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
 	int height = target->getFloatHeight() + (target->getHeight() / 2);
 
@@ -1267,6 +1276,8 @@ void ProjectileFlyBState::performMeleeAttack()
 											voxel,
 											_action.weapon,
 											_action.actor));
+
+	Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack() EXIT";
 }
 
 }

@@ -64,8 +64,8 @@ ActionMenuItem::ActionMenuItem(
 						0,
 						0);
 	_txtDesc	= new Text(160, 20, 10, 13);
-	_txtTU		= new Text(50, 20, 151, 13);
-	_txtAcc		= new Text(63, 20, 201, 13);
+	_txtAcc		= new Text(63, 20, 151, 13);
+	_txtTU		= new Text(50, 20, 214, 13);
 
 	_frame->setHighContrast(true);
 	_frame->setColor(Palette::blockOffset(0)+7);
@@ -78,15 +78,15 @@ ActionMenuItem::ActionMenuItem(
 	_txtDesc->setColor(Palette::blockOffset(0)-1);
 	_txtDesc->setVisible(true);
 
-	_txtTU->initText(big, small, lang);
-	_txtTU->setBig();
-	_txtTU->setHighContrast(true);
-	_txtTU->setColor(Palette::blockOffset(0)-1);
-
 	_txtAcc->initText(big, small, lang);
 	_txtAcc->setBig();
 	_txtAcc->setHighContrast(true);
 	_txtAcc->setColor(Palette::blockOffset(0)-1);
+
+	_txtTU->initText(big, small, lang);
+	_txtTU->setBig();
+	_txtTU->setHighContrast(true);
+	_txtTU->setColor(Palette::blockOffset(0)-1);
 }
 
 /**
@@ -111,14 +111,14 @@ ActionMenuItem::~ActionMenuItem()
 void ActionMenuItem::setAction(
 		BattleActionType action,
 		std::wstring description,
-		std::wstring timeunits,
 		std::wstring accuracy,
+		std::wstring timeunits,
 		int tu)
 {
 	_action = action;
 	_txtDesc->setText(description);
-	_txtTU->setText(timeunits);
 	_txtAcc->setText(accuracy);
+	_txtTU->setText(timeunits);
 
 	_tu = tu;
 

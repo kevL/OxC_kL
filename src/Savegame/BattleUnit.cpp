@@ -3317,8 +3317,9 @@ void BattleUnit::adjustStats(
 	_stats.stamina		+= 4 * diff * _stats.stamina / 100;
 	_stats.reactions	+= 6 * diff * _stats.reactions / 100;
 	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0? 1: 2);
-	_stats.strength		+= 2 * diff * _stats.strength / 100;
+	_stats.throwing		+= 4 * diff * _stats.throwing / 100; // kL
 	_stats.melee		+= 4 * diff * _stats.melee / 100;
+	_stats.strength		+= 2 * diff * _stats.strength / 100;
 	_stats.psiStrength	+= 4 * diff * _stats.psiStrength / 100;
 	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
 
@@ -3329,8 +3330,9 @@ void BattleUnit::adjustStats(
 //		_stats.stamina		+= month;
 		_stats.reactions	+= month;
 		_stats.firing		+= month;
-//		_stats.strength		+= month;
+		_stats.throwing		+= month;
 		_stats.melee		+= month;
+//		_stats.strength		+= month;
 		_stats.psiStrength	+= (month * 2);
 //		if (_stats.psiSkill > 0)
 //			_stats.psiSkill	+= month;

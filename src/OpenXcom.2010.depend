@@ -5629,7 +5629,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1401938273 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
+1402284406 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
 	"ActionMenuItem.h"
 	"../Engine/Game.h"
 	"../Engine/Palette.h"
@@ -5637,14 +5637,14 @@
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
 
-1401938233 f:\git\openxcom\src\battlescape\actionmenuitem.h
+1402284304 f:\git\openxcom\src\battlescape\actionmenuitem.h
 	"BattlescapeGame.h"
 	"../Engine/InteractiveSurface.h"
 
 1401232753 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1401938361 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1402284565 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	<cmath>
 	<sstream>
@@ -6595,7 +6595,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1401489084 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1402291272 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -6619,7 +6619,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1402106823 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1402291676 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6695,7 +6695,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1402209144 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1402250599 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6730,7 +6730,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1401586638 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1402289173 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -8689,7 +8689,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1402182576 source:f:\git\openxcom\src\menu\startstate.cpp
+1402280753 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"../version.h"
 	"ErrorMessageState.h"
@@ -9427,7 +9427,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1402187648 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1402279403 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

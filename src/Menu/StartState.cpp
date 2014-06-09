@@ -136,7 +136,7 @@ StartState::StartState(Game* game)
 					0,
 					0);
 
-	_timer	= new Timer(37);
+	_timer	= new Timer(33);
 
 	setPalette(_font->getSurface()->getPalette(), 0, 2);
 
@@ -400,50 +400,6 @@ void StartState::animate()
 		} */
 		else
 		{
-/*kL
-			switch (_anim)
-			{
-				case 0:
-					addLine(L"DOS/4GW Protected Mode Run-time  Version 1.9");
-				break;
-				case 3:
-					addLine(L"Copyright (c) Rational Systems, Inc. 1990-1993");
-				break;
-				case 9:
-					addLine(L"");
-					addLine(L"OpenXcom initialisation");
-				break;
-				case 14:
-					addLine(L"");
-					if (Options::mute)
-						addLine(L"No Sound Detected");
-					else
-						addLine(L"SoundBlaster Sound Effects");
-				break;
-				case 17:
-					if (Options::preferredMusic == MUSIC_MIDI)
-						addLine(L"General MIDI Music");
-					else
-						addLine(L"SoundBlaster Music");
-				break;
-				case 20:
-					if (Options::preferredMusic != MUSIC_MIDI)
-						addLine(L"Base Port 220  Irq 5  Dma 1");
-				break;
-				case 22:
-					addLine(L"");
-					addLine(ss.str());
-				break;
-
-				// kL_begin:
-				case 27:
-					if (kL_ready)
-						loading = LOADING_SUCCESSFUL;
-					else
-						kL_ready = true;
-				break; // kL_end.
-			} */
-
 			if (_anim == 1 // start.
 				|| _anim == 44
 				|| _anim == 91
@@ -513,7 +469,7 @@ void StartState::animate()
 			else if (_anim < 187) // 162..186
 			{
 /*				if (Options::preferredMusic != MUSIC_MIDI)
-					_dosart = L"Base Port 220  Irq 5  Dma 1";
+					_dosart = L"Base Port 220 Irq 5 Dma 1";
 				else */
 				_dosart = L"Base Port 220 Irq 5 Dma 1"; // 25 chars
 				addChar_kL(_anim - 162);
@@ -535,7 +491,10 @@ void StartState::animate()
 			else if (_anim == 239)
 			{
 				if (kL_ready)
+				{
+					kL_ready = false;
 					loading = LOADING_SUCCESSFUL;
+				}
 				else
 					kL_ready = true;
 			}
@@ -632,7 +591,10 @@ int StartState::load(void* game_ptr)
 		Log(LOG_INFO) << "Language loaded.";
 
 		if (kL_ready)						// kL
+		{
+			kL_ready = false;				// kL
 			loading = LOADING_SUCCESSFUL;
+		}
 		else								// kL
 			kL_ready = true;				// kL
 	}

@@ -51,11 +51,11 @@ namespace OpenXcom
 {
 
 /**
- * Sets up an UnitDieBState.
- * @param parent Pointer to the Battlescape.
- * @param unit Dying unit.
- * @param damageType Type of damage that caused the death.
- * @param noSound Whether to disable the death sound.
+ * Creates a UnitDieBState.
+ * @param parent		- pointer to the battlescape
+ * @param unit			- pointer to a dying unit
+ * @param damageType	- type of damage that caused the death (RuleItem.h)
+ * @param noSound		- true to disable the death sound (for pre-battle powersource explosions)
  */
 UnitDieBState::UnitDieBState(
 		BattlescapeGame* parent,
@@ -215,6 +215,8 @@ void UnitDieBState::think()
 	if (_unit->isOut()) // and this ought be Status_Dead.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
+		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL, just to be sure. See !_unit->isOut() above.
+
 		_parent->getMap()->setUnitDying(false);
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
