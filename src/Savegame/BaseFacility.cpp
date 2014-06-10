@@ -41,7 +41,7 @@ BaseFacility::BaseFacility(
 		_x(-1),
 		_y(-1),
 		_buildTime(0),
-		_craftForDrawing(0)
+		_craftForDrawing(NULL)
 {
 }
 
@@ -188,7 +188,7 @@ bool BaseFacility::inUse() const
 
 /**
  * Gets craft, used for drawing facility.
- * @return craft
+ * @return, pointer to the craft
  */
 Craft* BaseFacility::getCraft() const
 {
@@ -197,7 +197,7 @@ Craft* BaseFacility::getCraft() const
 
 /**
  * Sets craft, used for drawing facility.
- * @param craft for drawing hangar.
+ * @param craft - pointer to a craft for drawing in hangar
  */
 void BaseFacility::setCraft(Craft* craft)
 {

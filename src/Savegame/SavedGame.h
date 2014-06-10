@@ -227,11 +227,11 @@ private:
 		/// Sets new funds.
 		void setFunds(int funds);
 
-		/// return a list of maintenance costs
+		/// Returns a list of maintenance costs
 		std::vector<int> getMaintenances();
-		/// kL. Return the list of monthly income values.
+		/// kL. Returns the list of monthly income values.
 		std::vector<int> getIncomeList(); // kL
-		/// kL. Return the list of monthly expenditure values.
+		/// kL. Returns the list of monthly expenditure values.
 		std::vector<int> getExpenditureList(); // kL
 
 		/// Gets the current game time.
@@ -333,7 +333,6 @@ private:
 		/// sets whether or not the player has been warned
 		void setWarned(bool warned);
 		/// Full access to the alien strategy data.
-
 		AlienStrategy& getAlienStrategy()
 		{
 			return *_alienStrategy;

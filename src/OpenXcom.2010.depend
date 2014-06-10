@@ -4430,13 +4430,13 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1401750704 f:\git\openxcom\src\savegame\savedgame.h
+1402366759 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
 	<string>
 	<vector>
 	<time.h>
 
-1401750703 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1402372806 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4462,6 +4462,7 @@
 	"../Geoscape/AllocatePsiTrainingState.h"
 	"../Geoscape/BuildNewBaseState.h"
 	"../Geoscape/GeoscapeState.h"
+	"../Geoscape/Globe.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextEdit.h"
@@ -4571,7 +4572,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1401232757 source:f:\git\openxcom\src\basescape\baseview.cpp
+1402372092 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	<cmath>
 	<limits>
@@ -6391,7 +6392,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1402335720 source:f:\git\openxcom\src\battlescape\map.cpp
+1402361703 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6510,7 +6511,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1401773882 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1402361612 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6695,7 +6696,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1402336464 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1402365842 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7361,7 +7362,7 @@
 1401232754 f:\git\openxcom\src\geoscape\basedestroyedstate.h
 	"../Engine/State.h"
 
-1401232754 source:f:\git\openxcom\src\geoscape\basedestroyedstate.cpp
+1402367212 source:f:\git\openxcom\src\geoscape\basedestroyedstate.cpp
 	"BaseDestroyedState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -7824,7 +7825,7 @@
 	<string>
 	<vector>
 
-1401480468 source:f:\git\openxcom\src\geoscape\globe.cpp
+1402367050 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9347,7 +9348,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1401750704 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1402361867 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
@@ -9415,7 +9416,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1401232751 source:f:\git\openxcom\src\savegame\basefacility.cpp
+1402371724 source:f:\git\openxcom\src\savegame\basefacility.cpp
 	"BaseFacility.h"
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
@@ -11624,7 +11625,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1401232753 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
+1402361396 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
 	"OptionsAudioState.h"
 	<sstream>
 	<SDL_mixer.h>

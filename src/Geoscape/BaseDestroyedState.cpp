@@ -93,7 +93,9 @@ BaseDestroyedState::BaseDestroyedState(
 			r != _game->getSavedGame()->getRegions()->end();
 			++r)
 	{
-		if ((*r)->getRules()->insideRegion((base)->getLongitude(), (base)->getLatitude()))
+		if ((*r)->getRules()->insideRegion(
+										base->getLongitude(),
+										base->getLatitude()))
 		{
 			break;
 		}
@@ -110,9 +112,7 @@ BaseDestroyedState::BaseDestroyedState(
 			u = _game->getSavedGame()->getUfos()->erase(u);
 		}
 		else
-		{
 			++u;
-		}
 	}
 
 	for (std::vector<AlienMission*>::iterator

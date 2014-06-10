@@ -45,6 +45,7 @@
 #include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Geoscape/GeoscapeState.h"
+#include "../Geoscape/Globe.h" // kL, kL_reCenter
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -318,7 +319,7 @@ void BasescapeState::init()
 
 /**
  * Changes the base currently displayed on screen.
- * @param base, Pointer to new base to display.
+ * @param base - pointer to new base to display
  */
 void BasescapeState::setBase(Base* base)
 {
@@ -357,8 +358,8 @@ void BasescapeState::setBase(Base* base)
 }
 
 /**
- * Goes to the Manage Alien Containment screen.
- * @param action Pointer to an action.
+ * kL. Goes to the Manage Alien Containment screen.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnAliens(Action*) // kL
 {
@@ -370,7 +371,7 @@ void BasescapeState::btnAliens(Action*) // kL
 
 /**
  * Goes to the Build New Base screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnNewBaseClick(Action*)
 {
@@ -386,7 +387,7 @@ void BasescapeState::btnNewBaseClick(Action*)
 
 /**
  * Goes to the Base Info screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnBaseInfoClick(Action*)
 {
@@ -398,7 +399,7 @@ void BasescapeState::btnBaseInfoClick(Action*)
 
 /**
  * Goes to the Soldiers screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnSoldiersClick(Action*)
 {
@@ -409,7 +410,7 @@ void BasescapeState::btnSoldiersClick(Action*)
 
 /**
  * Goes to the Crafts screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnCraftsClick(Action*)
 {
@@ -420,7 +421,7 @@ void BasescapeState::btnCraftsClick(Action*)
 
 /**
  * Opens the Build Facilities window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnFacilitiesClick(Action*)
 {
@@ -432,7 +433,7 @@ void BasescapeState::btnFacilitiesClick(Action*)
 
 /**
  * Goes to the Research screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnResearchClick(Action*)
 {
@@ -443,7 +444,7 @@ void BasescapeState::btnResearchClick(Action*)
 
 /**
  * Goes to the Manufacture screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnManufactureClick(Action*)
 {
@@ -454,7 +455,7 @@ void BasescapeState::btnManufactureClick(Action*)
 
 /**
  * Goes to the Purchase screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnPurchaseClick(Action*)
 {
@@ -465,7 +466,7 @@ void BasescapeState::btnPurchaseClick(Action*)
 
 /**
  * Goes to the Sell screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnSellClick(Action*)
 {
@@ -476,7 +477,7 @@ void BasescapeState::btnSellClick(Action*)
 
 /**
  * Goes to the Select Destination Base window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnTransferClick(Action*)
 {
@@ -487,7 +488,7 @@ void BasescapeState::btnTransferClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::btnGeoscapeClick(Action*)
 {
@@ -496,7 +497,7 @@ void BasescapeState::btnGeoscapeClick(Action*)
 
 /**
  * Processes clicking on facilities.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::viewLeftClick(Action*)
 {
@@ -536,29 +537,32 @@ void BasescapeState::viewLeftClick(Action*)
 
 /**
  * Processes right clicking on facilities.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::viewRightClick(Action*)
 {
-	BaseFacility* f = _view->getSelectedFacility();
-	if (f == 0)
+	BaseFacility* fac = _view->getSelectedFacility();
+	if (fac == NULL)
 		_game->pushState(new BaseInfoState(
 										_game,
 										_base,
 										this));
-	else if (f->getRules()->getCrafts() > 0)
+	else if (fac->getRules()->getCrafts() > 0)
 	{
-		if (f->getCraft() == 0)
+/*		if (fac->getCraft() == 0)
+		{
 			_game->pushState(new CraftsState(
 											_game,
 											_base));
+		}
 		else
+		{
 			for (size_t
 					craft = 0;
 					craft < _base->getCrafts()->size();
 					++craft)
 			{
-				if (f->getCraft() == _base->getCrafts()->at(craft))
+				if (fac->getCraft() == _base->getCrafts()->at(craft))
 				{
 					_game->pushState(new CraftInfoState(
 													_game,
@@ -568,68 +572,124 @@ void BasescapeState::viewRightClick(Action*)
 					break;
 				}
 			}
+		} */
+		if (_base->getCrafts()->size() == 0) // no Craft at base
+		{
+			_game->pushState(new CraftsState(
+											_game,
+											_base));
+		}
+		else
+		{
+			for (size_t // kL_begin:
+					i = 0;
+					i < _base->getCrafts()->size();
+					++i)
+			{
+				Craft* craft = _base->getCrafts()->at(i);
+
+				if (fac->getCraft() == NULL) // Empty hangar, craft currently out
+				{
+					if (craft->getStatus() == "STR_OUT")
+					{
+						_game->getSavedGame()->setGlobeLongitude(craft->getLongitude());
+						_game->getSavedGame()->setGlobeLatitude(craft->getLatitude());
+
+						kL_reCenter = true;
+
+						_game->popState(); // pop to Geoscape.
+
+						break; // might not be needed here
+					}
+					else // Empty hangar, no craft for it; however, base has at least one craft (docked or out)
+					{
+						_game->pushState(new CraftsState(
+														_game,
+														_base));
+
+						break;
+					}
+				}
+				else if (fac->getCraft() == craft) // craft is docked here
+				{
+					_game->pushState(new CraftInfoState(
+													_game,
+													_base,
+													i));
+
+					break;
+				}
+			}
+		} // kL_end.
 	}
-	else if (f->getRules()->getStorage() > 0)
+	else if (fac->getRules()->getStorage() > 0)
 //kL		_game->pushState(new SellState(
 //kL									_game,
 //kL									_base));
 		_game->pushState(new StoresState(
 									_game,
 									_base));
-	else if (f->getRules()->getPersonnel() > 0)
+	else if (fac->getRules()->getPersonnel() > 0)
 		_game->pushState(new SoldiersState(
 										_game,
 										_base));
-	else if (f->getRules()->getPsiLaboratories() > 0
+	else if (fac->getRules()->getPsiLaboratories() > 0
 			&& Options::anytimePsiTraining
 			&& _base->getAvailablePsiLabs() > 0)
 		_game->pushState(new AllocatePsiTrainingState(
 													_game,
 													_base));
-	else if (f->getRules()->getLaboratories() > 0)
+	else if (fac->getRules()->getLaboratories() > 0)
 		_game->pushState(new ResearchState(
 										_game,
 										_base));
-	else if (f->getRules()->getWorkshops() > 0)
+	else if (fac->getRules()->getWorkshops() > 0)
 		_game->pushState(new ManufactureState(
 											_game,
 											_base));
-	else if (f->getRules()->getAliens() > 0)
+	else if (fac->getRules()->getAliens() > 0)
 		_game->pushState(new ManageAlienContainmentState(
 														_game,
 														_base,
 														OPT_GEOSCAPE));
-	else if (f->getRules()->isLift())
+	else if (fac->getRules()->isLift())
 		_game->pushState(new MonthlyCostsState(
 											_game,
 											_base));
-	else if (f->getRules()->getRadarRange() > 0)
+	else if (fac->getRules()->getRadarRange() > 0)
+	{
+		_game->getSavedGame()->setGlobeLongitude(_base->getLongitude());
+		_game->getSavedGame()->setGlobeLatitude(_base->getLatitude());
+
+		kL_reCenter = true;
+
 		_game->popState();
+	}
 }
 
 /**
  * Displays the name of the facility the mouse is over.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::viewMouseOver(Action*)
 {
 	std::wostringstream ss;
 
-	BaseFacility* f = _view->getSelectedFacility();
-	if (f != 0)
+	BaseFacility* fac = _view->getSelectedFacility();
+	if (fac != 0)
 	{
-		if (f->getRules()->getCrafts() == 0
-			|| f->getBuildTime() > 0)
+		if (fac->getRules()->getCrafts() == 0
+			|| fac->getBuildTime() > 0)
 		{
-			ss << tr(f->getRules()->getType());
+			ss << tr(fac->getRules()->getType());
 		}
 		else
 		{
-			ss << tr(f->getRules()->getType());
+			ss << tr(fac->getRules()->getType());
 
-			if (f->getCraft() != 0)
+			if (fac->getCraft() != 0)
 				ss << L" " << tr("STR_CRAFT_")
-								.arg(f->getCraft()->getName(_game->getLanguage()));
+								.arg(fac->getCraft()->getName(_game->getLanguage()));
 		}
 	}
 
@@ -638,7 +698,7 @@ void BasescapeState::viewMouseOver(Action*)
 
 /**
  * Clears the facility name.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::viewMouseOut(Action*)
 {
@@ -647,7 +707,7 @@ void BasescapeState::viewMouseOut(Action*)
 
 /**
  * Selects a new base to display.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::miniClick(Action*)
 {
@@ -662,7 +722,7 @@ void BasescapeState::miniClick(Action*)
 
 /**
  * Selects a new base to display.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::handleKeyPress(Action* action)
 {
@@ -700,7 +760,7 @@ void BasescapeState::handleKeyPress(Action* action)
 
 /**
  * Changes the Base name.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void BasescapeState::edtBaseChange(Action* action)
 {

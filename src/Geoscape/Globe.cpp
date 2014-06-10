@@ -1258,7 +1258,7 @@ void Globe::think()
 	{
 		kL_reCenter = false;
 
-		center( // -> from Basescape crafts screen
+		center( // -> from Basescape\CraftsState (crafts screen) & ...
 			_game->getSavedGame()->getGlobeLongitude(),
 			_game->getSavedGame()->getGlobeLatitude());
 	}

@@ -2738,6 +2738,7 @@ void TileEngine::explode(
 
 					if (targetUnit)
 					{
+						takenUnit = targetUnit;
 						targetUnit->setTaken(true);
 						Log(LOG_INFO) << ". . unitTaken, set TRUE";
 
