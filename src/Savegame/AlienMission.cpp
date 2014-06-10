@@ -538,7 +538,7 @@ void AlienMission::ufoReachedWaypoint(
 	const size_t nextWaypoint = curWaypoint + 1;
 	const UfoTrajectory& trajectory = ufo.getTrajectory();
 
-	if (nextWaypoint == trajectory.getWaypointCount())
+	if (nextWaypoint >= trajectory.getWaypointCount())
 	{
 		ufo.setDetected(false);
 		ufo.setStatus(Ufo::DESTROYED);

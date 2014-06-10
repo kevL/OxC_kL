@@ -218,6 +218,9 @@ private:
 		void setHeight(int height);
 		/// Special handling for updating map width.
 		void setWidth(int width);
+
+		/// Get the vertical position of the hidden movement screen.
+		int getMessageY();
 };
 
 }

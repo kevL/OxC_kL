@@ -82,6 +82,15 @@ NextTurnState::NextTurnState(
 
 	centerAllSurfaces();
 
+	// make this screen line up with the hidden movement screen
+	int y = state->getMap()->getMessageY();
+
+	_window->setY(y);
+	_txtTitle->setY(y + 68);
+	_txtTurn->setY(y + 93);
+	_txtSide->setY(y + 109);
+	_txtMessage->setY(y + 149);
+
 	_window->setColor(Palette::blockOffset(0)-1);
 	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));

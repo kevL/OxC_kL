@@ -2427,4 +2427,13 @@ void Map::setWidth(int width)
 	_message->setX(_message->getX() + dX / 2);
 }
 
+/*
+ * Get the hidden movement screen's vertical position.
+ * @return, the vertical position of the hidden movement window
+ */
+int Map::getMessageY()
+{
+	return _message->getY();
+}
+
 }
