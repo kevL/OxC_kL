@@ -124,6 +124,7 @@ private:
 	public:
 		static Sound* soundPop; // kL
 
+
 		/// Creates the Geoscape state.
 		GeoscapeState(Game* game);
 		/// Cleans up the Geoscape state.

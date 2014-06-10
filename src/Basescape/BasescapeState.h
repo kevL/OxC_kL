@@ -30,6 +30,7 @@ class Base;
 class BaseView;
 class Globe;
 class MiniBaseView;
+class Sound; // kL
 class Text;
 class TextButton;
 class TextEdit;
@@ -70,6 +71,9 @@ private:
 
 
 	public:
+		static Sound* soundPop; // kL
+
+
 		/// Creates the Basescape state.
 		BasescapeState(
 				Game* game,

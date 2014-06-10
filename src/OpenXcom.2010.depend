@@ -242,7 +242,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1401232757 f:\git\openxcom\src\basescape\basescapestate.h
+1402376131 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1401232757 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4436,7 +4436,7 @@
 	<vector>
 	<time.h>
 
-1402372806 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1402381308 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4459,6 +4459,7 @@
 	"../Engine/Language.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
+	"../Engine/Sound.h"
 	"../Geoscape/AllocatePsiTrainingState.h"
 	"../Geoscape/BuildNewBaseState.h"
 	"../Geoscape/GeoscapeState.h"
@@ -4532,7 +4533,7 @@
 1401232754 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1402035696 f:\git\openxcom\src\geoscape\geoscapestate.h
+1402376050 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<list>
 	"../Engine/State.h"
 
@@ -9130,9 +9131,10 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1401541512 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1402381374 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
+	"../Basescape/BasescapeState.h"
 	"../Battlescape/Position.h"
 	"../Engine/AdlibMusic.h"
 	"../Engine/CrossPlatform.h"

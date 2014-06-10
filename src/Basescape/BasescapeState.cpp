@@ -41,6 +41,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Sound.h" // kL
 
 #include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Geoscape/BuildNewBaseState.h"
@@ -67,6 +68,9 @@
 
 namespace OpenXcom
 {
+
+Sound* BasescapeState::soundPop = 0;	// kL
+
 
 /**
  * Initializes all the elements in the Basescape screen.
@@ -541,38 +545,18 @@ void BasescapeState::viewLeftClick(Action*)
  */
 void BasescapeState::viewRightClick(Action*)
 {
+	bool bPop = true;
+
 	BaseFacility* fac = _view->getSelectedFacility();
 	if (fac == NULL)
+	{
 		_game->pushState(new BaseInfoState(
 										_game,
 										_base,
 										this));
+	}
 	else if (fac->getRules()->getCrafts() > 0)
 	{
-/*		if (fac->getCraft() == 0)
-		{
-			_game->pushState(new CraftsState(
-											_game,
-											_base));
-		}
-		else
-		{
-			for (size_t
-					craft = 0;
-					craft < _base->getCrafts()->size();
-					++craft)
-			{
-				if (fac->getCraft() == _base->getCrafts()->at(craft))
-				{
-					_game->pushState(new CraftInfoState(
-													_game,
-													_base,
-													craft));
-
-					break;
-				}
-			}
-		} */
 		if (_base->getCrafts()->size() == 0) // no Craft at base
 		{
 			_game->pushState(new CraftsState(
@@ -612,6 +596,8 @@ void BasescapeState::viewRightClick(Action*)
 				}
 				else if (fac->getCraft() == craft) // craft is docked here
 				{
+					bPop = false; // plays window-'swish' instead.
+
 					_game->pushState(new CraftInfoState(
 													_game,
 													_base,
@@ -665,6 +651,9 @@ void BasescapeState::viewRightClick(Action*)
 
 		_game->popState();
 	}
+
+	if (bPop)
+		soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1, see Game.cpp
 }
 
 /**
