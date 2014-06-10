@@ -292,10 +292,10 @@ void Tile::getMapData(
  */
 bool Tile::isVoid() const
 {
-	return _objects[0] == 0
-			&& _objects[1] == 0
-			&& _objects[2] == 0
-			&& _objects[3] == 0
+	return _objects[0] == NULL
+			&& _objects[1] == NULL
+			&& _objects[2] == NULL
+			&& _objects[3] == NULL
 			&& _smoke == 0
 			&& _inventory.empty();
 }
@@ -511,12 +511,13 @@ void Tile::setDiscovered(
 		bool flag,
 		int part)
 {
+//	if (this->isVoid()) return; // kL
+
 	if (_discovered[part] != flag)
 	{
 		_discovered[part] = flag;
 
-		if (part == 2
-			&& flag == true)
+		if (part == 2 && flag)
 		{
 			_discovered[0] = true;
 			_discovered[1] = true;

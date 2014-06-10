@@ -103,7 +103,8 @@ BattleUnit::BattleUnit(
 		_turretType(-1),
 		_hidingForTurn(false),
 		_stopShot(false), // kL
-		_dashing(false) // kL
+		_dashing(false), // kL
+		_taken(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 	_name			= soldier->getName(true);
@@ -1167,81 +1168,82 @@ int BattleUnit::damage(
 	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage
 		type = DT_STUN;
 
-	if (!ignoreArmor)
+//	if (!ignoreArmor) // kL
+//	{
+	if (relative == Position(0, 0, 0))
+		side = SIDE_UNDER;
+	else
 	{
-		if (relative == Position(0, 0, 0))
-			side = SIDE_UNDER;
+		int relativeDir;
+
+		const int
+			abs_x = abs(relative.x),
+			abs_y = abs(relative.y);
+
+		if (abs_y > abs_x * 2)
+			relativeDir = 8 + 4 * (relative.y > 0);
+		else if (abs_x > abs_y * 2)
+			relativeDir = 10 + 4 * (relative.x < 0);
 		else
 		{
-			int relativeDir;
-
-			const int
-				abs_x = abs(relative.x),
-				abs_y = abs(relative.y);
-
-			if (abs_y > abs_x * 2)
-				relativeDir = 8 + 4 * (relative.y > 0);
-			else if (abs_x > abs_y * 2)
-				relativeDir = 10 + 4 * (relative.x < 0);
-			else
+			if (relative.x < 0)
 			{
-				if (relative.x < 0)
-				{
-					if (relative.y > 0)
-						relativeDir = 13;
-					else
-						relativeDir = 15;
-				}
+				if (relative.y > 0)
+					relativeDir = 13;
 				else
-				{
-					if (relative.y > 0)
-						relativeDir = 11;
-					else
-						relativeDir = 9;
-				}
-			}
-
-			switch ((relativeDir - _direction) %8)
-			{
-				case 0:	side = SIDE_FRONT;									break;
-				case 1:	side = RNG::percent(50)? SIDE_FRONT: SIDE_RIGHT;	break;
-				case 2:	side = SIDE_RIGHT;									break;
-				case 3:	side = RNG::percent(50)? SIDE_REAR: SIDE_RIGHT;		break;
-				case 4:	side = SIDE_REAR;									break;
-				case 5:	side = RNG::percent(50)? SIDE_REAR: SIDE_LEFT; 		break;
-				case 6:	side = SIDE_LEFT;									break;
-				case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
-			}
-
-			if (relative.z > getHeight() - 4)
-				bodypart = BODYPART_HEAD;
-			else if (relative.z > 5)
-			{
-				switch (side)
-				{
-					case SIDE_LEFT:		bodypart = BODYPART_LEFTARM;	break;
-					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM;	break;
-
-					default:			bodypart = BODYPART_TORSO;
-				}
+					relativeDir = 15;
 			}
 			else
 			{
-				switch (side)
-				{
-					case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
-					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
-
-					default:
-						bodypart = (UnitBodyPart)RNG::generate(
-															BODYPART_RIGHTLEG,
-															BODYPART_LEFTLEG);
-				}
+				if (relative.y > 0)
+					relativeDir = 11;
+				else
+					relativeDir = 9;
 			}
 		}
 
-		power -= getArmor(side);
+		switch ((relativeDir - _direction) %8)
+		{
+			case 0:	side = SIDE_FRONT;									break;
+			case 1:	side = RNG::percent(50)? SIDE_FRONT: SIDE_RIGHT;	break;
+			case 2:	side = SIDE_RIGHT;									break;
+			case 3:	side = RNG::percent(50)? SIDE_REAR: SIDE_RIGHT;		break;
+			case 4:	side = SIDE_REAR;									break;
+			case 5:	side = RNG::percent(50)? SIDE_REAR: SIDE_LEFT; 		break;
+			case 6:	side = SIDE_LEFT;									break;
+			case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
+		}
+
+		if (relative.z > getHeight() - 4)
+			bodypart = BODYPART_HEAD;
+		else if (relative.z > 5)
+		{
+			switch (side)
+			{
+				case SIDE_LEFT:		bodypart = BODYPART_LEFTARM;	break;
+				case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM;	break;
+
+				default:			bodypart = BODYPART_TORSO;
+			}
+		}
+		else
+		{
+			switch (side)
+			{
+				case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
+				case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
+
+				default:
+					bodypart = (UnitBodyPart)RNG::generate(
+														BODYPART_RIGHTLEG,
+														BODYPART_LEFTLEG);
+			}
+		}
 	}
+
+	if (!ignoreArmor)
+		power -= getArmor(side);
+//	}
 
 	if (power > 0)
 	{
@@ -1253,20 +1255,25 @@ int BattleUnit::damage(
 			if (_health < 0)
 				_health = 0;
 
-			if (type != DT_IN)
-			{
-				if (_armor->getSize() == 1) // conventional weapons can cause additional stun damage
-					_stunlevel += RNG::generate(0, power / 4);
+//			if (type != DT_IN)
+//			{
+			if (_armor->getSize() == 1) // add some stun damage to not-large units
+				_stunlevel += RNG::generate(0, power / 3); // kL_note: was, 4
 
+//			if (type != DT_IN) // kL
+			if (!ignoreArmor) // kL
+			{
 				if (isWoundable()) // fatal wounds
 				{
-					if (RNG::generate(0, 10) < power)
-						_fatalWounds[bodypart] += RNG::generate(1, 3);
-
-					if (_fatalWounds[bodypart])
-						moraleChange(-_fatalWounds[bodypart]);
+					if (RNG::generate(0, 10) < power) // kL: refactor this.
+					{
+						int wounds = RNG::generate(1, 3);
+						_fatalWounds[bodypart] += wounds;
+						moraleChange(-wounds * 3);
+					}
 				}
 
+//				if (!ignoreArmor) // kL
 				setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
 			}
 		}
@@ -3549,9 +3556,9 @@ bool BattleUnit::getDashing() const
 /**
  * Set a unit as having been damaged in a single explosion.
  */
-void BattleUnit::setTaken(bool damaged)
+void BattleUnit::setTaken(bool beenhit)
 {
-	_taken = damaged;
+	_taken = beenhit;
 }
 
 /**

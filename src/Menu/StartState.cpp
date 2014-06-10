@@ -136,7 +136,7 @@ StartState::StartState(Game* game)
 					0,
 					0);
 
-	_timer	= new Timer(33);
+	_timer	= new Timer(12);
 
 	setPalette(_font->getSurface()->getPalette(), 0, 2);
 
@@ -359,7 +359,7 @@ void StartState::animate()
 {
 	_anim++;
 
-	if (_anim %5 == 0) // kL
+	if (_anim %15 == 0) // kL
 		_cursor->setVisible(!_cursor->getVisible());
 
 	if (loading == LOADING_STARTED)
@@ -480,16 +480,20 @@ void StartState::animate()
 				addCursor_kL();
 			}
 
-			else if (_anim < 206) // 188..205
+//			else if (_anim < 206) // 188..205
+			else if (_anim < 240) // 188..239
 			{
-				_dosart = L"Loading oXc_kL ..."; // 18 chars
+//				_dosart = L"Loading oXc_kL ..."; // 18 chars
+				_dosart = L"Loading oXc_kL ... .. ..... . ... ..... ... ... . .."; // 52 chars
 				addChar_kL(_anim - 188);
 			}
-			else if (_anim == 206)
+//			else if (_anim == 206)
+//				addCursor_kL();
+
+			else if (_anim == 240)
+			{
 				addCursor_kL();
 
-			else if (_anim == 239)
-			{
 				if (kL_ready)
 				{
 					kL_ready = false;

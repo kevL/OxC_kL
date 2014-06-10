@@ -680,7 +680,7 @@ private:
 		bool getDashing() const;
 
 		/// Set a unit as having been damaged in a single explosion.
-		void setTaken(bool damaged);
+		void setTaken(bool beenhit);
 		/// Get if a unit was aleady damaged in a single explosion.
 		bool getTaken() const;
 		// kL_end.

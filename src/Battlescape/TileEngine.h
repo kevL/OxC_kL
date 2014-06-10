@@ -139,7 +139,7 @@ private:
 		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
 		BattleUnit* getReactor(
 				std::vector<BattleUnit*> spotters,
-				BattleUnit* unit,
+				BattleUnit* defender,
 				int tuSpent = 0); // kL
 		/// Tries to perform a reaction snap shot to this location.
 		bool tryReactionSnap(

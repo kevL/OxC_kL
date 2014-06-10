@@ -42,7 +42,7 @@ class Surface;
 
 
 /**
- * Basic element of which a battle map is build.
+ * Basic element of which a battle map is built.
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  */
 class Tile
@@ -69,7 +69,7 @@ protected:
 		_preview,
 		_smoke,
 		_tuMarker;
-//kL		_visible;
+//kL	_visible;
 
 	BattleUnit* _unit;
 	MapData* _objects[4];
@@ -99,12 +99,12 @@ protected:
 		/// Cleans up a tile.
 		~Tile();
 
-		/// Load the tile from yaml
+		/// Loads the tile from yaml
 		void load(const YAML::Node& node);
 		/// Saves the tile to yaml
 		YAML::Node save() const;
 
-		/// Load the tile from binary buffer in memory
+		/// Loads the tile from binary buffer in memory
 		void loadBinary(
 				Uint8* buffer,
 				Tile::SerializationKey& serializationKey);
@@ -112,7 +112,7 @@ protected:
 		void saveBinary(Uint8** buffer) const;
 
 		/**
-		 * Get the MapData pointer of a part of the tile.
+		 * Gets the MapData pointer of a part of the tile.
 		 * @param part, The part 0-3.
 		 * @return, Pointer to mapdata
 		 */
@@ -139,7 +139,7 @@ protected:
 		/// Gets whether this tile has no objects
 		bool isVoid() const;
 
-		/// Get the TU cost to walk over a certain part of the tile.
+		/// Gets the TU cost to walk over a certain part of the tile.
 		int getTUCost(
 				int part,
 				MovementType movementType) const;
@@ -150,12 +150,12 @@ protected:
 		/// Checks if this tile is a big wall.
 		bool isBigWall() const;
 
-		/// Get terrain level.
+		/// Gets terrain level.
 		int getTerrainLevel() const;
 
 		/**
 		 * Gets the tile's position.
-		 * @return position
+		 * @return, position
 		 */
 		const Position& getPosition() const
 		{
@@ -165,13 +165,13 @@ protected:
 		/// Gets the floor object footstep sound.
 		int getFootstepSound(Tile* tileBelow) const;
 
-		/// Open a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
+		/// Opens a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
 		int openDoor(
 				int wall,
 				BattleUnit* Unit = 0,
 				BattleActionType reserve = BA_NONE);
 		/**
-		 * Check if the ufo door is open or opening. Used for visibility/light blocking checks.
+		 * Checks if the ufo door is open or opening. Used for visibility/light blocking checks.
 		 * This function assumes that there never are 2 doors on 1 tile or a door and another wall on 1 tile.
 		 * @param wall
 		 * @return bool
@@ -182,7 +182,7 @@ protected:
 					&& _objects[wall]->isUFODoor()
 					&& _currFrame[wall] != 0;
 		}
-		/// Close ufo door.
+		/// Closes ufo door.
 		int closeUfoDoor();
 
 		/// Sets the black fog of war status of this tile.
@@ -192,42 +192,42 @@ protected:
 		/// Gets the black fog of war status of this tile.
 		bool isDiscovered(int part) const;
 
-		/// Reset light to zero for this tile.
+		/// Resets light to zero for this tile.
 		void resetLight(int layer);
-		/// Add light to this tile.
+		/// Adds light to this tile.
 		void addLight(
 				int light,
 				int layer);
-		/// Get the shade amount.
+		/// Gets the shade amount.
 		int getShade() const;
 
-		/// Destroy a tile part.
+		/// Destroys a tile part.
 		bool destroy(int part);
-		/// Damage a tile part.
+		/// Damages a tile part.
 		bool damage(int part, int power);
 
-		/// Set a "virtual" explosive on this tile, to detonate later.
+		/// Sets a "virtual" explosive on this tile, to detonate later.
 		void setExplosive(
 				int power,
 				bool force = false);
-		/// Get explosive power of this tile.
+		/// Gets explosive power of this tile.
 		int getExplosive() const;
 
-		/// Animated the tile parts.
+		/// Animates the tile parts.
 		void animate();
-		/// Get fire and smoke animation offset.
+		/// Gets fire and smoke animation offset.
 		int getAnimationOffset() const;
 
-		/// Get object sprites.
+		/// Gets object sprites.
 		Surface* getSprite(int part) const;
 
-		/// Set a unit on this tile.
+		/// Sets a unit on this tile.
 		void setUnit(
 				BattleUnit* unit,
 				Tile* tileBelow = 0);
 
 		/**
-		 * Get the (alive) unit on this tile.
+		 * Gets the (alive) unit on this tile.
 		 * @return, BattleUnit.
 		 */
 		BattleUnit* getUnit() const
@@ -235,69 +235,69 @@ protected:
 			return _unit;
 		}
 
-		/// Set fire, does not increment overlaps.
+		/// Sets fire, does not increment overlaps.
 		void setFire(int fire);
-		/// Get fire.
+		/// Gets fire.
 		int getFire() const;
-		/// Add smoke, increments overlap.
+		/// Adds smoke, increments overlap.
 		void addSmoke(int smoke);
-		/// Set smoke, does not increment overlaps.
+		/// Sets smoke, does not increment overlaps.
 		void setSmoke(int smoke);
-		/// Get smoke.
+		/// Gets smoke.
 		int getSmoke() const;
 
-		/// Get flammability.
+		/// Gets flammability.
 		int getFlammability() const;
-		/// Get turns to burn
+		/// Gets turns to burn
 		int getFuel() const;
 		/// attempt to set the tile on fire, sets overlaps to one if successful.
 		void ignite(int power);
 
-		/// Add item
+		/// Adds item
 		void addItem(
 				BattleItem* item,
 				RuleInventory* ground);
-		/// Remove item
+		/// Removes item
 		void removeItem(BattleItem* item);
 
-		/// Get top-most item-sprite
+		/// Gets top-most item-sprite
 		int getTopItemSprite();
 
 		/// New turn preparations.
 		void prepareNewTurn();
 
-		/// Get inventory on this tile.
+		/// Gets inventory on this tile.
 		std::vector<BattleItem*>* getInventory();
 
-		/// Set the tile marker color.
+		/// Sets the tile marker color.
 		void setMarkerColor(int color);
-		/// Get the tile marker color.
+		/// Gets the tile marker color.
 		int getMarkerColor();
 
-		/// Set the tile visible flag.
+		/// Sets the tile visible flag.
 //kL		void setVisible(int visibility);
 		void setVisible(bool vis); // kL
-		/// Get the tile visible flag.
+		/// Gets the tile visible flag.
 //kL		int getVisible();
 		bool getVisible(); // kL
 
-		/// set the direction (used for path previewing)
+		/// Sets the direction (used for path previewing)
 		void setPreview(int dir);
-		/// retrieve the direction stored by the pathfinding.
+		/// Gets the direction stored by the pathfinding.
 		int getPreview() const;
-		/// set the number to be displayed for pathfinding preview.
+		/// Sets the number to be displayed for pathfinding preview.
 		void setTUMarker(int tu);
-		/// get the number to be displayed for pathfinding preview.
+		/// Gets the number to be displayed for pathfinding preview.
 		int getTUMarker() const;
 
 		/// how many times has this tile been overlapped with smoke/fire (runtime only)
 		int getOverlaps() const;
-		/// increment the overlap value on this tile.
+		/// increments the overlap value on this tile.
 		void addOverlap();
 
-		/// set the danger flag on this tile (so the AI will avoid it).
+		/// Sets the danger flag on this tile (so the AI will avoid it).
 		void setDangerous();
-		/// check the danger flag on this tile.
+		/// Checks the danger flag on this tile.
 		bool getDangerous();
 };
 

@@ -233,6 +233,39 @@ void Map::init()
 	_arrow->unlock();
 
 	_projectile = 0;
+
+/*	int // kL_begin:
+		size_x = _save->getMapSizeX(),
+		size_y = _save->getMapSizeY(),
+		size_z = _save->getMapSizeZ();
+
+	for (int
+			x = 0;
+			x < size_x;
+			++x)
+	{
+		for (int
+				y = 0;
+				y < size_y;
+				++y)
+		{
+			for (int
+					z = 0;
+					z < size_z;
+					++z)
+			{
+				if (x == 0
+					|| y == 0
+					|| x == size_x - 1
+					|| y == size_y - 1)
+				{
+					Tile* tile = _save->getTile(Position(x, y, z));
+					if (tile)
+						tile->setDiscovered(true, 2);
+				}
+			}
+		}
+	} */ // kL_end.
 }
 
 /**
@@ -250,6 +283,7 @@ void Map::think()
 void Map::draw()
 {
 	//Log(LOG_INFO) << "Map::draw()";
+
 	// kL_note: removed setting this in BattlescapeGame::handleState().
 /*kL	if (!_redraw)
 		return; */
@@ -389,14 +423,14 @@ void Map::setPalette(
 void Map::drawTerrain(Surface* surface)
 {
 	//Log(LOG_INFO) << "Map::drawTerrain()";
-	BattleUnit* unit		= 0;
-	NumberText* _numWaypid	= 0;
+	BattleUnit* unit		= NULL;
+	NumberText* _numWaypid	= NULL;
+	Surface* tmpSurface		= NULL;
+	Tile* tile				= NULL;
 	Position
 		mapPosition,
 		screenPosition,
 		bulletScreen;
-	Surface* tmpSurface		= 0;
-	Tile* tile				= 0;
 
 //kL	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
 	bool invalid = false;
@@ -646,7 +680,7 @@ void Map::drawTerrain(Surface* surface)
 					else
 					{
 						tileShade = 16;
-						unit = 0;
+						unit = NULL;
 					}
 
 					tileColor = tile->getMarkerColor();
@@ -742,7 +776,8 @@ void Map::drawTerrain(Surface* surface)
 							&& tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
 						{
 							Position tileOffset = Position(16,-8, 0);
-							// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
+							// the part is 0 for small units, large units have parts 1,2 & 3 depending
+							// on the relative x/y position of this tile vs the actual unit position.
 							int part = 0;
 							part += tileNorth->getPosition().x - bu->getPosition().x;
 							part += (tileNorth->getPosition().y - bu->getPosition().y) * 2;
@@ -1145,7 +1180,7 @@ void Map::drawTerrain(Surface* surface)
 								&& voxelPos.x / 16 <= itX + 1
 								&& voxelPos.y / 16 <= itY + 1
 								&& voxelPos.z / 24 == itZ)
-//kL								&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+//kL							&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
 								_camera->convertVoxelToScreen(
 															voxelPos,
@@ -1164,7 +1199,7 @@ void Map::drawTerrain(Surface* surface)
 								&& voxelPos.x / 16 <= itX + 1
 								&& voxelPos.y / 16 <= itY + 1
 								&& voxelPos.z / 24 == itZ)
-//kL								&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+//kL							&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 							{
 								_camera->convertVoxelToScreen(
 															voxelPos,
@@ -1198,7 +1233,7 @@ void Map::drawTerrain(Surface* surface)
 										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
 											&& voxelPos.z / 24 == itZ)
-//kL											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+//kL										&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(
 																		voxelPos,
@@ -1218,7 +1253,7 @@ void Map::drawTerrain(Surface* surface)
 										if (   voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
 											&& voxelPos.z / 24 == itZ)
-//kL											&& _save->getTileEngine()->isVoxelVisible(voxelPos))
+//kL										&& _save->getTileEngine()->isVoxelVisible(voxelPos))
 										{
 											_camera->convertVoxelToScreen(
 																		voxelPos,
@@ -1904,7 +1939,7 @@ void Map::mouseOver(Action* action, State* state)
 
 /**
  * Handles animating tiles. 8 Frames per animation.
- * @param redraw, Redraw the battlescape?
+ * @param redraw - true to redraw the battlescape map
  */
 void Map::animate(bool redraw)
 {

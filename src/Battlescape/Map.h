@@ -77,7 +77,7 @@ private:
 		_launch,
 		_explosionInFOV,
 		_projectileInFOV,
-//kL		_smoothCamera,
+//kL	_smoothCamera,
 		_smoothingEngaged,
 		_unitDying;
 	int

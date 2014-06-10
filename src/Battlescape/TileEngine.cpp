@@ -299,65 +299,56 @@ void TileEngine::addLight(
 
 /**
  * Calculates line of sight of a BattleUnit.
- * @param unit, Unit to check line of sight of.
- * @return, True when new aliens are spotted.
+ * @param unit - pointer to battleunit to check line of sight for
+ * @return, true when new aliens are spotted
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateFOV() for ID " << unit->getId();
-	unit->clearVisibleUnits(); // kL:below
-	unit->clearVisibleTiles(); // kL:below
+	unit->clearVisibleUnits();
+	unit->clearVisibleTiles();
 
-	if (unit->isOut(true, true)) // kL:below (check health, check stun, check status)
+	if (unit->isOut(true, true)) // check health, check stun, check status
 		return false;
 
-	bool ret = false; // kL
+	bool ret = false;
 
 	size_t preVisUnits = unit->getUnitsSpottedThisTurn().size();
 	//Log(LOG_INFO) << ". . . . preVisUnits = " << (int)preVisUnits;
 
-	int direction;
+	int dir;
 	if (Options::strafe
 		&& unit->getTurretType() > -1)
 	{
-		direction = unit->getTurretDirection();
+		dir = unit->getTurretDirection();
 	}
 	else
-		direction = unit->getDirection();
-	//Log(LOG_INFO) << ". direction = " << direction;
+		dir = unit->getDirection();
+	//Log(LOG_INFO) << ". dir = " << dir;
 
-	bool swap = (direction == 0 || direction == 4);
+	bool swap = (dir == 0 || dir == 4);
 
 	int
 		sign_x[8] = { 1, 1, 1, 1,-1,-1,-1,-1},
-//kL	int sign_y[8] = {-1, -1, -1, +1, +1, +1, -1, -1}; // is this right? (ie. 3pos & 5neg, why not 4pos & 4neg )
-		sign_y[8] = {-1,-1, 1, 1, 1, 1,-1,-1}; // kL: note it does not matter.
+		sign_y[8] = {-1,-1, 1, 1, 1, 1,-1,-1};
 
 	bool diag = false;
 	int
 		y1 = 0,
 		y2 = 0;
 
-	if (direction %2)
+	if (dir %2)
 	{
 		diag = true;
-
-//		y1 = 0;
 		y2 = MAX_VIEW_DISTANCE;
 	}
 
-/*kL:above	unit->clearVisibleUnits();
-	unit->clearVisibleTiles();
-
-	if (unit->isOut()) return false; */
-
 	std::vector<Position> _trajectory;
 
-//	Position center = unit->getPosition();
 	Position unitPos = unit->getPosition();
+	//Log(LOG_INFO) << ". posUnit " << unitPos;
 	Position testPos;
 
-//kL	if (unit->getHeight() + unit->getFloatHeight() + -_save->getTile(unit->getPosition())->getTerrainLevel() >= 24 + 4)
 	if (unit->getHeight()
 				+ unit->getFloatHeight()
 				- _save->getTile(unitPos)->getTerrainLevel()
@@ -368,33 +359,14 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 	for (int
 			x = 0; // kL_note: does the unit itself really need checking...
-//			x = 1;
 			x <= MAX_VIEW_DISTANCE;
 			++x)
 	{
-/*		if (direction %2)
-		{
-			y1 = 0;
-			y2 = MAX_VIEW_DISTANCE;
-		}
-		else
-		{
-			y1 = -x;
-			y2 = x;
-		} */
 		if (!diag)
 		{
 			//Log(LOG_INFO) << ". not Diagonal";
-/*			if (x == 0)
-			{
-				y1 = -MAX_VIEW_DISTANCE;
-				y2 = MAX_VIEW_DISTANCE;
-			}
-			else
-			{ */
 			y1 = -x;
 			y2 = x;
-//			}
 		}
 
 		for (int
@@ -409,7 +381,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 			{
 				//Log(LOG_INFO) << "for (int z = 0; z < _save->getMapSizeZ(); z++), z = " << z;
 
-//	int dist = distance(position, (*i)->getPosition());
+//				int dist = distance(position, (*i)->getPosition());
 				const int distSqr = x * x + y * y;
 //				const int distSqr = x * x + y * y + z * z; // kL
 				//Log(LOG_INFO) << "distSqr = " << distSqr << " ; x = " << x << " ; y = " << y << " ; z = " << z; // <- HUGE write to file.
@@ -421,15 +393,14 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 				{
 					//Log(LOG_INFO) << "inside distSqr";
 
-//kL					testPos.x = center.x + sign_x[direction] * (swap? y: x);
-//kL					testPos.y = center.y + sign_y[direction] * (swap? x: y);
-					int deltaPos_x = (sign_x[direction] * (swap? y: x));
-					int deltaPos_y = (sign_y[direction] * (swap? x: y));
+					int deltaPos_x = (sign_x[dir] * (swap? y: x));
+					int deltaPos_y = (sign_y[dir] * (swap? x: y));
 					testPos.x = unitPos.x + deltaPos_x;
 					testPos.y = unitPos.y + deltaPos_y;
 					//Log(LOG_INFO) << "testPos.x = " << testPos.x;
 					//Log(LOG_INFO) << "testPos.y = " << testPos.y;
 					//Log(LOG_INFO) << "testPos.z = " << testPos.z;
+					//Log(LOG_INFO) << ". testPos " << testPos;
 
 
 					if (_save->getTile(testPos))
@@ -458,7 +429,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
 								//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, set spottedTile & spottedUnit visible";
-//kL								visUnit->getTile()->setVisible(+1);
+//kL							visUnit->getTile()->setVisible(+1);
 								visUnit->getTile()->setVisible(true); // kL
 								visUnit->getTile()->setDiscovered(true, 2); // kL_below. sprite caching for floor+content: DO I WANT THIS.
 								if (!visUnit->getVisible()) // kL
@@ -1637,74 +1608,75 @@ bool TileEngine::canMakeSnap(
 }
 
 /**
- * Gets the unit with the highest reaction score from the spotter vector.
+ * Gets the unit with the highest reaction score from the spotters vector.
  * NOTE: the tuSpent parameter is needed because popState() doesn't
  * subtract TU until after the Initiative has been calculated.
- * @param spotters, The vector of spotting units.
- * @param unit, The unit to check scores against.
- * @param tuSpent, The unit's expenditure of TU if firing or throwing. kL
- * @return, The unit with initiative.
+ * @param spotters	- vector of the pointers to spotting battleunits
+ * @param defender	- pointer to the defending battleunit to check reaction scores against
+ * @param tuSpent	- defending battleunit's expenditure of TU that had caused reaction checks - kL
+ * @return, pointer to battleunit with the initiative (next up!)
  */
 BattleUnit* TileEngine::getReactor(
 		std::vector<BattleUnit*> spotters,
-		BattleUnit* unit,
+		BattleUnit* defender,
 		int tuSpent) // kL
 {
-	//Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << unit->getId();
-
-	BattleUnit* reactor = 0;
-	int bestScore = -1;
+	//Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << defender->getId();
+	BattleUnit* nextReactor = NULL;
+	int highestInit = -1;
 
 	for (std::vector<BattleUnit*>::iterator
 			spotter = spotters.begin();
 			spotter != spotters.end();
 			++spotter)
 	{
-		//Log(LOG_INFO) << ". . reactor ID " << (*spotter)->getId();
+		//Log(LOG_INFO) << ". . nextReactor ID " << (*spotter)->getId();
+		if ((*spotter)->isOut(true, true))
+			continue;
 
-		if (!(*spotter)->isOut(true, true)
-			&& (*spotter)->getInitiative() > bestScore)
+		if ((*spotter)->getInitiative() > highestInit)
 		{
-			bestScore = static_cast<int>((*spotter)->getInitiative());
-			reactor = *spotter;
+			highestInit = static_cast<int>((*spotter)->getInitiative());
+			nextReactor = *spotter;
 		}
 	}
 
 
 //	BattleAction action = _save->getAction();
 /*	BattleItem* weapon;// = BattleState::getAction();
-	if (unit->getFaction() == FACTION_PLAYER
-		&& unit->getOriginalFaction() == FACTION_PLAYER)
+	if (defender->getFaction() == FACTION_PLAYER
+		&& defender->getOriginalFaction() == FACTION_PLAYER)
 	{
-		weapon = unit->getItem(unit->getActiveHand());
+		weapon = defender->getItem(defender->getActiveHand());
 	}
 	else
-		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
+		weapon = defender->getMainHandWeapon(); // kL_note: no longer returns grenades. good
 //	if (!weapon) return false;  // it *has* to be there by now!
 		// note these calc's should be refactored; this calc happens what 3 times now!!!
 		// Ought get the BattleAction* and just toss it around among these RF determinations.
 
-	int tuShoot = unit->getActionTUs(BA_AUTOSHOT, weapon) */
+	int tuShoot = defender->getActionTUs(BA_AUTOSHOT, weapon) */
 
 
-	//Log(LOG_INFO) << ". ID " << unit->getId() << " initi = " << static_cast<int>(unit->getInitiative(tuSpent));
+	//Log(LOG_INFO) << ". ID " << defender->getId() << " initi = " << static_cast<int>(defender->getInitiative(tuSpent));
 
-	// reactor has to *best* unit.Initi to get initiative
-	// Analysis: It appears that unit's tu for firing/throwing
+	// nextReactor has to *best* defender.Initi to get initiative
+	// Analysis: It appears that defender's tu for firing/throwing
 	// are not subtracted before getInitiative() is called.
-	if (bestScore > static_cast<int>(unit->getInitiative(tuSpent)))
+	if (nextReactor
+		&& highestInit > static_cast<int>(defender->getInitiative(tuSpent)))
 	{
-		if (reactor->getOriginalFaction() == FACTION_PLAYER)
-			reactor->addReactionExp();
+		if (nextReactor->getOriginalFaction() == FACTION_PLAYER)
+			nextReactor->addReactionExp();
 	}
 	else
 	{
-		//Log(LOG_INFO) << ". . initi returns to ID " << unit->getId();
-		reactor = unit;
+		//Log(LOG_INFO) << ". . initi returns to ID " << defender->getId();
+		nextReactor = defender;
 	}
 
-	//Log(LOG_INFO) << ". bestScore (reactor) = " << bestScore;
-	return reactor;
+	//Log(LOG_INFO) << ". highestInit (nextReactor) = " << highestInit;
+	return nextReactor;
 }
 
 /**
@@ -2336,7 +2308,9 @@ void TileEngine::explode(
 	if (power == 0) // kL, quick out.
 		return;
 
-	BattleUnit* targetUnit = NULL;
+	BattleUnit
+		* targetUnit = NULL,
+		* takenUnit = NULL;
 
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator, bool> tilePair;
@@ -2544,8 +2518,11 @@ void TileEngine::explode(
 					//Log(LOG_INFO) << ". . tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition(); //<< ". _powerE = " << _powerE << ". r = " << r;
 					targetUnit = destTile->getUnit();
 					if (targetUnit
-						&& targetUnit->getTaken()) // -> THIS NEEDS TO BE REMOVED LATER (or earlier) !!! Done Below !
+						&& targetUnit->getTaken()) // -> THIS NEEDS TO BE REMOVED LATER (or earlier) !!! Done Below!
 					{
+						Log(LOG_INFO) << ". . unitTaken, set Unit = NULL";
+
+						takenUnit = targetUnit;
 						targetUnit = NULL;
 					}
 
@@ -2556,15 +2533,17 @@ void TileEngine::explode(
 						wounds = targetUnit->getFatalWounds();
 					}
 
+					int powerVsUnit = 0;
+
 					switch (type)
 					{
 						case DT_STUN: // power 0 - 200%
 						{
-							int powerVsUnit = RNG::generate(
-														1,
-														_powerE * 2);
 							if (targetUnit)
 							{
+								powerVsUnit = RNG::generate(
+														1,
+														_powerE * 2);
 								//Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN";
 								targetUnit->damage(
 												Position(0, 0, 0),
@@ -2580,6 +2559,9 @@ void TileEngine::explode(
 							{
 								if ((*item)->getUnit())
 								{
+									powerVsUnit = RNG::generate(
+															1,
+															_powerE * 2);
 									//Log(LOG_INFO) << ". . . . powerVsUnit (corpse) = " << powerVsUnit << " DT_STUN";
 									(*item)->getUnit()->damage(
 															Position(0, 0, 0),
@@ -2595,9 +2577,10 @@ void TileEngine::explode(
 							//Log(LOG_INFO) << ". . type == DT_HE";
 							if (targetUnit)
 							{
-								int powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
-														static_cast<double>(_powerE) * 0.5,
-														static_cast<double>(_powerE) * 1.5));
+								powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
+													static_cast<double>(_powerE) * 0.5,
+													static_cast<double>(_powerE) * 1.5));
+								Log(LOG_INFO) << ". . power = " << powerVsUnit;
 
 								if (distance(
 											destTile->getPosition(),
@@ -2650,6 +2633,10 @@ void TileEngine::explode(
 										it != destTile->getInventory()->end();
 										)
 								{
+									powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
+														static_cast<double>(_powerE) * 0.5,
+														static_cast<double>(_powerE) * 1.5));
+
 									if (_powerE > (*it)->getRules()->getArmor())
 									{
 										if ((*it)->getUnit()
@@ -2672,12 +2659,29 @@ void TileEngine::explode(
 						}
 						break;
 						case DT_SMOKE:	// smoke from explosions always stay 6 to 14 turns - power of a smoke grenade is 60
-										// kL_note: Could do instant smoke inhalation damage here (sorta like Fire or Stun).
 							if (destTile->getSmoke() < 10
 								&& destTile->getTerrainLevel() > -24)
 							{
 								destTile->setFire(0);
 								destTile->setSmoke(RNG::generate(7, 15));
+							}
+
+							if (targetUnit) // kL: add this in for smoke inhalation
+							{
+								float modifier = targetUnit->getArmor()->getDamageModifier(DT_SMOKE);
+								if (modifier > 0.f)
+								{
+									powerVsUnit = RNG::generate( // 10% to 20%
+															_powerE / 10,
+															_powerE / 5);
+
+									targetUnit->damage(
+													Position(0, 0, 0), // 12 - destTile->getTerrainLevel()
+													powerVsUnit,
+													DT_SMOKE,
+													true);
+									//Log(LOG_INFO) << ". . DT_IN : " << targetUnit->getId() << " takes " << firePower << " firePower";
+								}
 							}
 						break;
 						case DT_IN:
@@ -2706,13 +2710,13 @@ void TileEngine::explode(
 									if (modifier > 0.f)
 									{
 //kL									int fire = RNG::generate(4, 11);
-										int firePower = RNG::generate( // kL: 25% - 75%
+										powerVsUnit = RNG::generate( // kL: 25% - 75%
 																_powerE / 4,
 																_powerE * 3 / 4);
 
 										targetUnit->damage(
 														Position(0, 0, 0), // 12 - destTile->getTerrainLevel()
-														firePower,
+														powerVsUnit,
 														DT_IN,
 														true);
 										//Log(LOG_INFO) << ". . DT_IN : " << targetUnit->getId() << " takes " << firePower << " firePower";
@@ -2735,6 +2739,7 @@ void TileEngine::explode(
 					if (targetUnit)
 					{
 						targetUnit->setTaken(true);
+						Log(LOG_INFO) << ". . unitTaken, set TRUE";
 
 						// if it's going to bleed to death and it's not a player, give credit for the kill.
 						// kL_note: See Above^
@@ -2755,7 +2760,6 @@ void TileEngine::explode(
 					}
 				}
 
-
 //				_powerE = _powerT;
 				origin = destTile;
 				r += 1.0;
@@ -2766,8 +2770,11 @@ void TileEngine::explode(
 
 	_powerE = _powerT = -1;
 
-	if (targetUnit)
-		targetUnit->setTaken(false);
+	if (takenUnit)
+	{
+		Log(LOG_INFO) << ". . unitTaken, reset";
+		takenUnit->setTaken(false);
+	}
 
 
 	if (type == DT_HE) // detonate tiles affected with HE
@@ -4737,6 +4744,15 @@ int TileEngine::calculateLine(
 				return 0;
 			} */ // kL_end.
 
+			if (cx == 0
+				|| cy == 0
+				|| cx == _save->getMapSizeX() - 1
+				|| cy == _save->getMapSizeY() - 1)
+			{
+				return -99;
+			}
+
+
 			result = horizontalBlockage(
 //kL									_save->getTile(lastPoint),
 //kL									_save->getTile(Position(cx, cy, cz)),
@@ -4749,11 +4765,31 @@ int TileEngine::calculateLine(
 									startTile,	// kL
 									endTile,	// kL
 									DT_NONE);
+			//Log(LOG_INFO) << "calculateLine, hori = " << result;
+			//Log(LOG_INFO) << "calculateLine, vert = " << result2;
+
+/*new
+			if (result == -1)
+			{
+				if (result2 == -99)
+					return -1;
+				else
+					return -99;
+			}
+			else if (result2 == -99)
+			{
+				if (result == -1)
+					return -1;
+				else
+					return -99;
+			} */
+
 
 // original:
-/*			if (result == -1) // hit bigwall tile
+			// -1 means we have a regular wall, and anything over 0 means we have a bigwall. (kL: from blockage())
+/*			if (result == -1) // hit bigwall tile (kL: not?)
 			{
-				if (result2 > 127) // kL_note: huh?
+				if (result2 > 127) // kL_note: huh? blocked (by non-bigWall?)
 					result = 0;
 				else
 					//Log(LOG_INFO) << "TileEngine::calculateLine(), odd return1, could be Big Wall = " << result;
@@ -4761,13 +4797,13 @@ int TileEngine::calculateLine(
 					return result; // We hit a big wall. kL_note: BigWall? or just ... wall or other visBlock object
 			}
 			result += result2;
-			if (result > 127) // kL_note: huh?
+			if (result > 127) // kL_note: huh? blocked (by non-bigWall?)
 				//Log(LOG_INFO) << "TileEngine::calculateLine(), odd return2, could be Big Wall = " << result;
 				//Log(LOG_INFO) << ". [3]ret = " << result;
 				return result; */
 // original_End.
-//			return -99; // ! TEST ! well that workes
 
+//			return -99; // ! TEST ! well that workes
 			if (result <= -99
 				|| result2 <= -99)
 			{
@@ -4779,6 +4815,9 @@ int TileEngine::calculateLine(
 				return -1;
 //				return -99; // TEST.
 			}
+
+
+
 /*			if (result + result2 < 0)
 				return -1;
 			else if (result < 0) // kL

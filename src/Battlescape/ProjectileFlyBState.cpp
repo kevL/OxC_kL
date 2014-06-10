@@ -325,7 +325,7 @@ void ProjectileFlyBState::init()
 		}
 		break;
 		case BA_HIT:
-			Log(LOG_INFO) << ". . BA_HIT performMeleeAttack()";
+			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack()";
 			if (!_parent->getTileEngine()->validMeleeRange(
 													_action.actor->getPosition(),
 													_action.actor->getDirection(),
@@ -341,7 +341,7 @@ void ProjectileFlyBState::init()
 			}
 
 //kL			performMeleeAttack();
-			Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
+			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 //kL			return;
 		break;
 		case BA_PANIC:
@@ -524,8 +524,8 @@ void ProjectileFlyBState::init()
  */
 bool ProjectileFlyBState::createNewProjectile()
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
-	Log(LOG_INFO) << ". _action_type = " << _action.type;
+	//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
+	//Log(LOG_INFO) << ". _action_type = " << _action.type;
 
 	++_action.autoShotCount;
 
@@ -640,7 +640,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else if (_action.type == BA_HIT) // kL. Let's not calculate anything we don't have to for meleeHits!
 	{
-		Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
+		//Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
 		// validMeleeRange/target has been validated.
 //		_projectileImpact = 4;
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
@@ -655,7 +655,7 @@ bool ProjectileFlyBState::createNewProjectile()
 //		_parent->getMap()->cacheUnit(_unit);
 
 		// and we have a hit!
-		Log(LOG_INFO) << ". melee attack! Play fireSound";// part = " << _projectileImpact;
+		//Log(LOG_INFO) << ". melee attack! Play fireSound";// part = " << _projectileImpact;
 //		if (_action.weapon->getRules()->getFireSound() != -1)
 		if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
 			_parent->getResourcePack()->getSound(
@@ -731,7 +731,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		}
 	}
 
-	Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
+	//Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
 	return true;
 }
 
@@ -1223,8 +1223,7 @@ void ProjectileFlyBState::targetFloor()
  */
 void ProjectileFlyBState::performMeleeAttack()
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack()";
-
+	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack()";
 	BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
 	int height = target->getFloatHeight() + (target->getHeight() / 2);
 
@@ -1276,8 +1275,7 @@ void ProjectileFlyBState::performMeleeAttack()
 											voxel,
 											_action.weapon,
 											_action.actor));
-
-	Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack() EXIT";
+	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack() EXIT";
 }
 
 }
