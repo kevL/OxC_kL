@@ -64,16 +64,18 @@ namespace OpenXcom
 ManageAlienContainmentState::ManageAlienContainmentState(
 		Game* game,
 		Base* base,
-		OptionsOrigin origin)
+		OptionsOrigin origin,
+		bool allowHelp) // kL_add.
 	:
 		State(game),
 		_base(base),
 		_origin(origin),
+		_allowHelp(allowHelp), // kL
 		_qtys(),
 		_aliens(),
 		_sel(0),
 		_aliensSold(0)
-//kL		_researchAliens(0)
+//kL	_researchAliens(0)
 {
 	_overCrowded = Options::storageLimitsEnforced
 				&& _base->getAvailableContainment() < _base->getUsedContainment();
@@ -271,20 +273,22 @@ void ManageAlienContainmentState::think()
  */
 void ManageAlienContainmentState::btnOkClick(Action*)
 {
-	for (size_t
+	for (size_t // iterate as many times as there are aliens queued.
 			i = 0;
 			i < _qtys.size();
-			++i)				// iterate as many times as there are aliens queued.
+			++i)
 	{
-		if (_qtys[i] > 0)		// if _qtys<vector>(int) at position[i]
+		if (_qtys[i] > 0) // if _qtys<vector>(int) at position[i]
 		{
-			// kL_begin:
-			for (int
-					j = 0;
-					j <	_qtys[i];
-					++j)
+			if (_allowHelp) // kL_begin:
 			{
-				_base->researchHelp(_aliens[i]);
+				for (int
+						j = 0;
+						j <	_qtys[i];
+						++j)
+				{
+					_base->researchHelp(_aliens[i]);
+				}
 			} // kL_end.
 
 			// remove the aliens
@@ -300,7 +304,7 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 											* _qtys[i]);
 			}
 			else // add the corpses
-			{				
+			{
 				_base->getItems()->addItem(
 										_game->getRuleset()->getArmor(
 																_game->getRuleset()->getUnit(_aliens[i])->getArmor()

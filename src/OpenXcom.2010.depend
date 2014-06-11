@@ -4436,7 +4436,7 @@
 	<vector>
 	<time.h>
 
-1402381308 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1402381867 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4493,7 +4493,7 @@
 1401232757 f:\git\openxcom\src\basescape\dismantlefacilitystate.h
 	"../Engine/State.h"
 
-1401232757 f:\git\openxcom\src\basescape\managealiencontainmentstate.h
+1402412066 f:\git\openxcom\src\basescape\managealiencontainmentstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -4921,7 +4921,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1401232757 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
+1402412222 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
 	"ManageAlienContainmentState.h"
 	<sstream>
 	<climits>
@@ -5689,7 +5689,7 @@
 1401232756 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1402301186 f:\git\openxcom\src\battlescape\tileengine.h
+1402418317 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -6206,7 +6206,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1401805650 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1402412112 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6597,7 +6597,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1402293845 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1402416092 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -6621,7 +6621,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1402302094 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1402416618 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -8314,12 +8314,11 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1401541814 source:f:\git\openxcom\src\interface\window.cpp
+1402409123 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	<SDL.h>
 	<SDL_mixer.h>
 	"../fmath.h"
-	"../Engine/RNG.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
 
@@ -9115,7 +9114,7 @@
 1401232751 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1401232752 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1402409899 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	<SDL_mixer.h>
 	"../Engine/Font.h"
@@ -9127,11 +9126,10 @@
 	"../Geoscape/Polygon.h"
 	"../Geoscape/Polyline.h"
 	"../Engine/Options.h"
-	"../Engine/RNG.h"
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1402381374 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1402381394 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9388,7 +9386,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1401750704 source:f:\git\openxcom\src\savegame\base.cpp
+1402411409 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>

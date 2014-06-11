@@ -208,7 +208,7 @@ private:
 				BattleUnit* excludeUnit,
 				bool doVoxelCheck = true,
 				bool onlyVisible = false,
-				BattleUnit* excludeAllBut = 0);
+				BattleUnit* excludeAllBut = NULL);
 		/// Calculates a parabola trajectory.
 		int calculateParabola(
 				const Position& origin,
@@ -223,8 +223,8 @@ private:
 				BattleAction& action,
 				Position originVoxel,
 				Position targetVoxel,
-				double* curve = 0,
-				int* voxelType = 0);
+				double* curve = NULL,
+				int* voxelType = NULL);
 
 		/// Checks the distance between two positions.
 		int distance(
@@ -263,9 +263,9 @@ private:
 
 		/// Checks the visibility of a given voxel.
 		bool isVoxelVisible(const Position& voxel);
-		/// Checks what type of voxel occupies pTarget_voxel space.
+		/// Checks what type of voxel occupies targetPos in voxel space.
 		int voxelCheck(
-				const Position& pTarget_voxel,
+				const Position& targetPos,
 				BattleUnit* excludeUnit,
 				bool excludeAllUnits = false,
 				bool onlyVisible = false,

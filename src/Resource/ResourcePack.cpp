@@ -32,7 +32,7 @@
 #include "../Geoscape/Polyline.h"
 
 #include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h" // Old, for random music
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
 
@@ -279,9 +279,9 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 			return _muteMusic;
 
 		std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
-		std::pair<std::string, int> randomCode = musicCodes[RNG::generate(
-																		0,
-																		musicCodes.size() - 1)];
+		int musicRand = SDL_GetTicks() %musicCodes.size();				// kL
+		std::pair<std::string, int> randomCode = musicCodes[musicRand];	// kL
+//		std::pair<std::string, int> randomCode = musicCodes[RNG::generate(0, musicCodes.size() - 1)];
 		Log(LOG_DEBUG) << "MUSIC - Chose " << randomCode.first;
 
 		Music* music = _musicFile.at(randomCode.first);
@@ -301,9 +301,8 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 		if (_musics.empty())
 			return _muteMusic;
 		else
-			return music[RNG::generate(
-									0,
-									static_cast<int>(music.size()) - 1)];
+			return music[SDL_GetTicks() %music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
+//			return music[RNG::generate(0, static_cast<int>(music.size()) - 1)]; // Old
 	} */
 }
 

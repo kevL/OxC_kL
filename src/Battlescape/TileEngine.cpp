@@ -2520,7 +2520,7 @@ void TileEngine::explode(
 					if (targetUnit
 						&& targetUnit->getTaken()) // -> THIS NEEDS TO BE REMOVED LATER (or earlier) !!! Done Below!
 					{
-						Log(LOG_INFO) << ". . unitTaken, set Unit = NULL";
+						//Log(LOG_INFO) << ". . unitTaken, set Unit = NULL";
 
 						takenUnit = targetUnit;
 						targetUnit = NULL;
@@ -2580,7 +2580,7 @@ void TileEngine::explode(
 								powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
 													static_cast<double>(_powerE) * 0.5,
 													static_cast<double>(_powerE) * 1.5));
-								Log(LOG_INFO) << ". . power = " << powerVsUnit;
+								//Log(LOG_INFO) << ". . power = " << powerVsUnit;
 
 								if (distance(
 											destTile->getPosition(),
@@ -2740,7 +2740,7 @@ void TileEngine::explode(
 					{
 						takenUnit = targetUnit;
 						targetUnit->setTaken(true);
-						Log(LOG_INFO) << ". . unitTaken, set TRUE";
+						//Log(LOG_INFO) << ". . unitTaken, set TRUE";
 
 						// if it's going to bleed to death and it's not a player, give credit for the kill.
 						// kL_note: See Above^
@@ -2773,7 +2773,7 @@ void TileEngine::explode(
 
 	if (takenUnit)
 	{
-		Log(LOG_INFO) << ". . unitTaken, reset";
+		//Log(LOG_INFO) << ". . unitTaken, reset";
 		takenUnit->setTaken(false);
 	}
 
@@ -4735,56 +4735,27 @@ int TileEngine::calculateLine(
 		}
 		else // for Terrain visibility, ie. FoV & Fog of War.
 		{
-			// kL_begin:
-			Tile* startTile = _save->getTile(lastPoint);
-			Tile* endTile = _save->getTile(Position(cx, cy, cz));
-/*			if (startTile == NULL
-				|| endTile == NULL)
-			{
-//				return -99; // nope ...
-				return 0;
-			} */ // kL_end.
-
-			if (cx == 0
+			if (cx == 0 // kL_begin: if LoS hits the edge of the Map reveal it!
 				|| cy == 0
 				|| cx == _save->getMapSizeX() - 1
 				|| cy == _save->getMapSizeY() - 1)
 			{
 				return -99;
-			}
+			} // kL_end. that was easy
 
+			Tile* startTile = _save->getTile(lastPoint);
+			Tile* endTile = _save->getTile(Position(cx, cy, cz));
 
 			result = horizontalBlockage(
-//kL									_save->getTile(lastPoint),
-//kL									_save->getTile(Position(cx, cy, cz)),
-									startTile,	// kL
-									endTile,	// kL
+									startTile,
+									endTile,
 									DT_NONE);
 			result2 = verticalBlockage(
-//kL									_save->getTile(lastPoint),
-//kL									_save->getTile(Position(cx, cy, cz)),
-									startTile,	// kL
-									endTile,	// kL
+									startTile,
+									endTile,
 									DT_NONE);
 			//Log(LOG_INFO) << "calculateLine, hori = " << result;
 			//Log(LOG_INFO) << "calculateLine, vert = " << result2;
-
-/*new
-			if (result == -1)
-			{
-				if (result2 == -99)
-					return -1;
-				else
-					return -99;
-			}
-			else if (result2 == -99)
-			{
-				if (result == -1)
-					return -1;
-				else
-					return -99;
-			} */
-
 
 // original:
 			// -1 means we have a regular wall, and anything over 0 means we have a bigwall. (kL: from blockage())
@@ -4804,8 +4775,7 @@ int TileEngine::calculateLine(
 				return result; */
 // original_End.
 
-//			return -99; // ! TEST ! well that workes
-			if (result <= -99
+			if (result <= -99 // kL_begin:
 				|| result2 <= -99)
 			{
 				return -99;
@@ -4814,26 +4784,8 @@ int TileEngine::calculateLine(
 				|| result2 <= -1)
 			{
 				return -1;
-//				return -99; // TEST.
-			}
+			} // kL_end.
 
-
-
-/*			if (result + result2 < 0)
-				return -1;
-			else if (result < 0) // kL
-			{
-				if (result2 < 0) // kL
-//					result = -1; // kL
-					return -1; // kL
-				else
-//					return -1; // kL
-					return 0; // kL
-			}
-			result += result2;
-			if (result < 0) // kL
-				return -1; // kL
-*/
 			lastPoint = Position(cx, cy, cz);
 		}
 
@@ -4905,9 +4857,6 @@ int TileEngine::calculateLine(
 		}
 	}
 
-//	if (!doVoxelCheck)	// kL, terrain Visibility for Fog of War / FoV
-//		return -99;		// kL
-
 	//Log(LOG_INFO) << ". EXIT ret -1";
 	return VOXEL_EMPTY;
 }
@@ -4922,10 +4871,17 @@ int TileEngine::calculateLine(
  * @param arc				- how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
  * @param acu				- the deviation of the angles that should be taken into account. 1.0 is perfection. // now superceded by @param delta...
  * @param delta				- the deviation of the angles that should be taken into account, (0,0,0) is perfection
- * @return,	-1 hit nothing
- *			 0-3 the objectnumber
- *			 4 unit
- *			 5 out-of-map
+ * @return,  -1 hit nothing
+ *			0-3 tile-part (floor / westwall / northwall / content)
+ *			  4 unit
+ *			  5 out-of-map
+ * VOXEL_EMPTY			// -1
+ * VOXEL_FLOOR			//  0
+ * VOXEL_WESTWALL		//  1
+ * VOXEL_NORTHWALL		//  2
+ * VOXEL_OBJECT			//  3
+ * VOXEL_UNIT			//  4
+ * VOXEL_OUTOFBOUNDS	//  5
  */
 int TileEngine::calculateParabola(
 				const Position& origin,
@@ -4985,7 +4941,7 @@ int TileEngine::calculateParabola(
 								lastPosition,
 								nextPosition,
 								false,
-								0,
+								NULL,
 								excludeUnit);
 //		int test = voxelCheck(
 //							Position(x, y, z),
@@ -4996,7 +4952,7 @@ int TileEngine::calculateParabola(
 				test = VOXEL_OUTOFBOUNDS;
 
 			if (!storeTrajectory // store only the position of impact
-				&& trajectory != 0)
+				&& trajectory != NULL)
 			{
 				trajectory->push_back(nextPosition);
 			}
@@ -5009,7 +4965,7 @@ int TileEngine::calculateParabola(
 	}
 
 	if (!storeTrajectory // store only the position of impact
-		&& trajectory != 0)
+		&& trajectory != NULL)
 	{
 		trajectory->push_back(Position(x, y, z));
 	}
@@ -5019,12 +4975,12 @@ int TileEngine::calculateParabola(
 
 /**
  * Validates a throw action.
- * @param action		- Reference to the action to validate.
- * @param originVoxel	- The origin point of the action.
- * @param targetVoxel	- The target point of the action.
- * @param curve			- Pointer to a curvature of the throw.
- * @param voxelType		- Pointer to a type of voxel at which this parabola terminates.
- * @return, Validity of action.
+ * @param action		- reference to the action to validate
+ * @param originVoxel	- the origin point of the action
+ * @param targetVoxel	- the target point of the action
+ * @param curve			- pointer to a curvature of the throw
+ * @param voxelType		- pointer to a type of voxel at which this parabola terminates
+ * @return, true if action is valid
  */
 bool TileEngine::validateThrow(
 						BattleAction& action,
@@ -5033,7 +4989,7 @@ bool TileEngine::validateThrow(
 						double* curve,
 						int* voxelType)
 {
-	//Log(LOG_INFO) << "TileEngine::validateThrow()";
+	//Log(LOG_INFO) << "TileEngine::validateThrow(), cf Projectile::calculateThrow()";
 //kL	double arc = 0.5;
 	double arc = 1.2; // kL, for acid spit only .......
 
@@ -5041,7 +4997,7 @@ bool TileEngine::validateThrow(
 	{
 		double kneel = 0.0;
 		if (action.actor->isKneeled())
-			kneel = 0.13;
+			kneel = 0.15;
 
 		arc = std::max( // kL_note: this is for throwing (instead of spitting...)
 					0.48,
@@ -5073,8 +5029,8 @@ bool TileEngine::validateThrow(
 	while (!found
 		&& arc < 5.0)
 	{
-		std::vector<Position> trajectory;
 		int test = VOXEL_OUTOFBOUNDS;
+		std::vector<Position> trajectory;
 		test = calculateParabola(
 							originVoxel,
 							targetVoxel,
@@ -5182,17 +5138,27 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 }
 
 /**
- * Checks if we hit a pTarget_voxel.
- * @param pTarget_voxel, The voxel to check.
- * @param excludeUnit, Don't do checks on this unit.
- * @param excludeAllUnits, Don't do checks on any unit.
- * @param onlyVisible, Whether to consider only visible units.
- * @param excludeAllBut, If set, the only unit to be considered for ray hits.
- * @param hit, True if no projectile, trajectory, etc. is needed. kL
- * @return, The objectnumber(0-3) or unit(4) or out of map (5) or -1 (hit nothing).
+ * Checks if we hit a targetPos in voxel space.
+ * @param targetPos			- reference to the voxel to check
+ * @param excludeUnit		- pointer to unit NOT to do checks for
+ * @param excludeAllUnits	- true to NOT do checks on any unit
+ * @param onlyVisible		- true to consider only visible units
+ * @param excludeAllBut		- pointer to an only unit to be considered
+ * @param hit				- true if no projectile, trajectory, or any of this is needed - kL
+ * @return,  -1 hit nothing
+ *			0-3 tile-part (floor / westwall / northwall / content)
+ *			  4 unit
+ *			  5 out-of-map
+ * VOXEL_EMPTY			// -1
+ * VOXEL_FLOOR			//  0
+ * VOXEL_WESTWALL		//  1
+ * VOXEL_NORTHWALL		//  2
+ * VOXEL_OBJECT			//  3
+ * VOXEL_UNIT			//  4
+ * VOXEL_OUTOFBOUNDS	//  5
  */
 int TileEngine::voxelCheck(
-		const Position& pTarget_voxel,
+		const Position& targetPos,
 		BattleUnit* excludeUnit,
 		bool excludeAllUnits,
 		bool onlyVisible,
@@ -5200,44 +5166,48 @@ int TileEngine::voxelCheck(
 		bool hit) // kL add.
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
-
 	if (hit)
 		return VOXEL_UNIT; // kL; i think Wb may have this covered now.
 
 
-	Tile* tTarget = _save->getTile(pTarget_voxel / Position(16, 16, 24)); // converts to tilespace -> Tile
-	//Log(LOG_INFO) << ". tTarget " << tTarget->getPosition();
+	Tile* targetTile = _save->getTile(targetPos / Position(16, 16, 24)); // converts to tilespace -> Tile
+	//Log(LOG_INFO) << ". targetTile " << targetTile->getPosition();
 	// check if we are out of the map
-	if (tTarget == 0
-		|| pTarget_voxel.x < 0
-		|| pTarget_voxel.y < 0
-		|| pTarget_voxel.z < 0)
+	if (targetTile == NULL
+		|| targetPos.x < 0
+		|| targetPos.y < 0
+		|| targetPos.z < 0)
 	{
 		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret 5";
 		return VOXEL_OUTOFBOUNDS;
 	}
 
-	Tile* tTarget_below = _save->getTile(tTarget->getPosition() + Position(0, 0, -1));
-	if (tTarget->isVoid()
-		&& tTarget->getUnit() == 0
-		&& (!tTarget_below
-			|| tTarget_below->getUnit() == 0))
+	Tile* belowTile = _save->getTile(targetTile->getPosition() + Position(0, 0,-1));
+	if (targetTile->isVoid()
+		&& targetTile->getUnit() == NULL
+		&& (!belowTile
+			|| belowTile->getUnit() == NULL))
 	{
 		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret(1) -1";
 		return VOXEL_EMPTY;
 	}
 
-	if ((pTarget_voxel.z %24 == 0
-			|| pTarget_voxel.z %24 == 1)
-		&& tTarget->getMapData(MapData::O_FLOOR)
-		&& tTarget->getMapData(MapData::O_FLOOR)->isGravLift())
+	// kL_note: should allow items to be thrown through a gravLift down to the floor below
+	if ((targetPos.z %24 == 0
+			|| targetPos.z %24 == 1)
+		&& targetTile->getMapData(MapData::O_FLOOR)
+		&& targetTile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
-		if (tTarget->getPosition().z == 0
-			|| (tTarget_below
-				&& tTarget_below->getMapData(MapData::O_FLOOR)
-				&& !tTarget_below->getMapData(MapData::O_FLOOR)->isGravLift()))
+		//Log(LOG_INFO) << "voxelCheck() isGravLift";
+		//Log(LOG_INFO) << ". level = " << targetTile->getPosition().z;
+
+		if (targetTile->getPosition().z == 0
+			|| (belowTile
+				&& belowTile->getMapData(MapData::O_FLOOR)
+				&& !belowTile->getMapData(MapData::O_FLOOR)->isGravLift()))
 		{
 			//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret 0";
+			//Log(LOG_INFO) << ". . EXIT, ret Voxel_Floor";
 			return VOXEL_FLOOR;
 		}
 	}
@@ -5249,16 +5219,16 @@ int TileEngine::voxelCheck(
 			i < 4;
 			++i)
 	{
-		if (tTarget->isUfoDoorOpen(i))
+		if (targetTile->isUfoDoorOpen(i))
 			continue;
 
-		MapData* dataTarget = tTarget->getMapData(i);
-		if (dataTarget != 0)
+		MapData* dataTarget = targetTile->getMapData(i);
+		if (dataTarget)
 		{
-			int x = 15 - pTarget_voxel.x %16;	// x-direction is reversed
-			int y = pTarget_voxel.y %16;		// y-direction is standard
+			int x = 15 - targetPos.x %16;	// x-direction is reversed
+			int y = targetPos.y %16;		// y-direction is standard
 
-			int LoftIdx = ((dataTarget->getLoftID((pTarget_voxel.z %24) / 2) * 16) + y); // wtf
+			int LoftIdx = ((dataTarget->getLoftID((targetPos.z %24) / 2) * 16) + y); // wtf
 			if (_voxelData->at(LoftIdx) & (1 << x))
 			{
 				//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret i = " << i;
@@ -5269,39 +5239,39 @@ int TileEngine::voxelCheck(
 
 	if (!excludeAllUnits)
 	{
-		BattleUnit* buTarget = tTarget->getUnit();
+		BattleUnit* buTarget = targetTile->getUnit();
 		// sometimes there is unit on the tile below, but sticks up into this tile with its head.
-		if (buTarget == 0
-			&& tTarget->hasNoFloor(0))
+		if (buTarget == NULL
+			&& targetTile->hasNoFloor(0))
 		{
-			tTarget = _save->getTile(Position( // tileBelow
-										pTarget_voxel.x / 16,
-										pTarget_voxel.y / 16,
-										pTarget_voxel.z / 24 - 1));
-			if (tTarget)
-				buTarget = tTarget->getUnit();
+			targetTile = _save->getTile(Position( // tileBelow
+										targetPos.x / 16,
+										targetPos.y / 16,
+										targetPos.z / 24 - 1));
+			if (targetTile)
+				buTarget = targetTile->getUnit();
 		}
 
-		if (buTarget != 0
+		if (buTarget
 			&& buTarget != excludeUnit
 			&& (!excludeAllBut || buTarget == excludeAllBut)
 			&& (!onlyVisible || buTarget->getVisible()))
 		{
 			Position pTarget_bu = buTarget->getPosition();
-			int tz = (pTarget_bu.z * 24) + buTarget->getFloatHeight() - tTarget->getTerrainLevel(); // floor-level voxel
+			int tz = (pTarget_bu.z * 24) + buTarget->getFloatHeight() - targetTile->getTerrainLevel(); // floor-level voxel
 
-			if (pTarget_voxel.z > tz
-				&& pTarget_voxel.z <= tz + buTarget->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
+			if (targetPos.z > tz
+				&& targetPos.z <= tz + buTarget->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
 			{
 				int entry = 0;
 
-				int x = pTarget_voxel.x %16; // where on the x-axis
-				int y = pTarget_voxel.y %16; // where on the y-axis
+				int x = targetPos.x %16; // where on the x-axis
+				int y = targetPos.y %16; // where on the y-axis
 					// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction(), if (_currentAction.type == BA_HIT)
 
 				if (buTarget->getArmor()->getSize() > 1) // for large units...
 				{
-					Position pTarget_tile = tTarget->getPosition();
+					Position pTarget_tile = targetTile->getPosition();
 					entry = ((pTarget_tile.x - pTarget_bu.x) + ((pTarget_tile.y - pTarget_bu.y) * 2));
 				}
 
@@ -5360,84 +5330,68 @@ int TileEngine::distanceSq(
 
 /**
  * Attempts a panic or mind-control action.
- * @param action, Pointer to a BattleAction.
- * @return bool, True if it succeeded.
+ * @param action - pointer to a BattleAction (BattlescapeGame.h)
+ * @return, true if attack succeeds
  */
 bool TileEngine::psiAttack(BattleAction* action)
 {
 	//Log(LOG_INFO) << "TileEngine::psiAttack()";
 	//Log(LOG_INFO) << ". attackerID " << action->actor->getId();
-
-//	bool ret = false;
-
-	Tile* t = _save->getTile(action->target);
-	if (t
-		&& t->getUnit())
+	Tile* tile = _save->getTile(action->target);
+	if (tile
+		&& tile->getUnit())
 	{
 		//Log(LOG_INFO) << ". . tile EXISTS, so does Unit";
-		BattleUnit* victim = t->getUnit();
+		BattleUnit* victim = tile->getUnit();
 		//Log(LOG_INFO) << ". . defenderID " << victim->getId();
 		//Log(LOG_INFO) << ". . target(pos) " << action->target;
 
-
-		double attackStr = static_cast<double>(action->actor->getStats()->psiStrength)
+		double attack = static_cast<double>(action->actor->getStats()->psiStrength)
 							* static_cast<double>(action->actor->getStats()->psiSkill)
 							/ 50.0;
-		//Log(LOG_INFO) << ". . . attackStr = " << (int)attackStr;
+		//Log(LOG_INFO) << ". . . attack = " << (int)attack;
 
-		double defenseStr = static_cast<double>(victim->getStats()->psiStrength)
+		double defense = static_cast<double>(victim->getStats()->psiStrength)
 							+ (static_cast<double>(victim->getStats()->psiSkill)
 								/ 5.0);
-		//Log(LOG_INFO) << ". . . defenseStr = " << (int)defenseStr;
+		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
 
-		double d = static_cast<double>(distance(
+		double dist = static_cast<double>(distance(
 											action->actor->getPosition(),
 											action->target));
-		//Log(LOG_INFO) << ". . . d = " << d;
+		//Log(LOG_INFO) << ". . . dist = " << dist;
 
-//kL		attackStr -= d;
-		attackStr -= d * 2; // kL
+//kL	attack -= dist;
+		attack -= dist * 2; // kL
 
-		attackStr -= defenseStr;
+		attack -= defense;
 		if (action->type == BA_MINDCONTROL)
-//kL			attackStr += 25.0;
-			attackStr += 15.0; // kL
+//kL		attack += 25.0;
+			attack += 15.0; // kL
 		else
-			attackStr += 45.0;
+			attack += 45.0;
 
-		attackStr *= 100.0;
-		attackStr /= 56.0;
+		attack *= 100.0;
+		attack /= 56.0;
 
 		if (action->actor->getOriginalFaction() == FACTION_PLAYER)
 			action->actor->addPsiExp();
 
-		int chance = static_cast<int>(attackStr);
-
-//TEMP!!!		if (_save->getSide() == FACTION_PLAYER)
-//		{
-//			std::string& info = tr("STR_UFO_").arg(ufo->getId())
-/*			std::stringstream info;
-			if (action->type == BA_PANIC)
-				info << "panic ";
-			else
-				info << "control ";
-			info << chance;
-			// note: this is a bit borky 'cause it's looking for a string in YAML ...
-			_save->getBattleState()->warning(info.str()); */// kL, info.
+		int success = static_cast<int>(attack);
 
 		std::string info = "";
 		if (action->type == BA_PANIC)
 			info = "STR_PANIC";
 		else
 			info = "STR_CONTROL";
+
 		_save->getBattleState()->warning(
 										info,
 										true,
-										chance);
-//		}
+										success);
 
-		//Log(LOG_INFO) << ". . . attackStr Success @ " << chance;
-		if (RNG::percent(chance))
+		//Log(LOG_INFO) << ". . . attack Success @ " << success;
+		if (RNG::percent(success))
 		{
 			//Log(LOG_INFO) << ". . Success";
 			if (action->actor->getOriginalFaction() == FACTION_PLAYER)
@@ -5454,7 +5408,6 @@ bool TileEngine::psiAttack(BattleAction* action)
 			else //if (action->type == BA_MINDCONTROL)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
-
 				victim->convertToFaction(action->actor->getFaction());
 				victim->setTimeUnits(victim->getStats()->tu);
 				victim->setEnergy(victim->getStats()->stamina); // kL
@@ -5469,7 +5422,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 					&& Options::battleAutoEnd
 					&& Options::allowPsionicCapture)
 				{
-					//Log(LOG_INFO) << ". . . . inside tallyUnits codeblock";
+					//Log(LOG_INFO) << ". . . . inside tallyUnits";
 
 					int liveAliens = 0;
 					int liveSoldiers = 0;
@@ -5488,43 +5441,12 @@ bool TileEngine::psiAttack(BattleAction* action)
 						_save->getBattleGame()->requestEndTurn();
 					}
 				}
-				//Log(LOG_INFO) << ". . . tallyUnits codeblock DONE";
+				//Log(LOG_INFO) << ". . . tallyUnits DONE";
 			}
-
 			//Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
 			return true;
 		}
 	}
-//	else // kL_begin:
-//	{
-		//Log(LOG_INFO) << ". victim not found";
-//		return false;
-//	}
-
-
-	// kL_note: double check this... because of my extra check, if victim=Valid up at the top.
-	// Can prob. take it out from just above ..... barring the return=TRUE clause there
-
-	// if all units from either faction are mind controlled - auto-end the mission.
-/*	if (_save->getSide() == FACTION_PLAYER
-		&& Options::getBool("battleAutoEnd")
-		&& Options::getBool("allowPsionicCapture"))
-	{
-		//Log(LOG_INFO) << ". . inside tallyUnits codeblock 2";
-
-		int liveAliens = 0;
-		int liveSoldiers = 0;
-
-		_save->getBattleState()->getBattleGame()->tallyUnits(liveAliens, liveSoldiers, false);
-
-		if (liveAliens == 0 || liveSoldiers == 0)
-		{
-			_save->setSelectedUnit(0);
-			_save->getBattleState()->getBattleGame()->requestEndTurn();
-		}
-		//Log(LOG_INFO) << ". . tallyUnits codeblock 2 DONE";
-	} // kL_end.
-*/
 	//Log(LOG_INFO) << "TileEngine::psiAttack() ret FALSE";
 	return false;
 }

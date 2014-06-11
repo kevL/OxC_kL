@@ -24,7 +24,7 @@
 
 #include "../fmath.h"
 
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h" // Old, for window popups
 #include "../Engine/Sound.h"
 #include "../Engine/Timer.h"
 
@@ -160,11 +160,12 @@ void Window::popup()
 {
 	if (AreSame(_popupStep, 0.0))
 	{
+//kL	int sound = SDL_GetTicks() %3; // this is a hack to avoid calling RNG::generate(0, 2) and skewing our seed.
+		int sound = (SDL_GetTicks() %2) + 1; // kL
 //kL	int sound = RNG::generate(0, 2);
-		int sound = RNG::generate(1, 2);
-//kL		if (soundPopup[sound] != 0)
-//			soundPopup[sound]->play(0);
-//			soundPopup[sound]->play(1); // yeeeeeeahhhh. Cool, it works!
+//		int sound = RNG::generate(1, 2); // kL, Old
+
+//kL	if (soundPopup[sound] != 0)
 		soundPopup[sound]->play(Mix_GroupAvailable(0)); // UI Fx channels #0 & #1
 	}
 

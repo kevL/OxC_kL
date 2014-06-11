@@ -1088,10 +1088,10 @@ void ProjectileFlyBState::cancel()
 
 /**
  * Validates the throwing range.
- * @param action, Pointer to The BattleAction struct
- * @param origin, Position of origin in voxelspace
- * @param target, Pointer to the target Tile
- * @return, True if the range is valid
+ * @param action - pointer to BattleAction struct (BattlescapeGame.h)
+ * @param origin - position of origin in voxelspace
+ * @param target - pointer to the targeted Tile
+ * @return, true if the range is valid
  */
 bool ProjectileFlyBState::validThrowRange(
 		BattleAction* action,
@@ -1156,11 +1156,10 @@ bool ProjectileFlyBState::validThrowRange(
 
 /**
  * Validates the throwing range.
- * @param weight the weight of the object.
- * @param strength the strength of the thrower.
- * @param level the difference in height between the thrower and the target.
- * @return the maximum throwing range.
-
+ * @param weight	- the weight of the object
+ * @param strength	- the strength of the thrower
+ * @param level		- the difference in height between the thrower and the target
+ * @return, the maximum throwing range
  */
 int ProjectileFlyBState::getMaxThrowDistance(
 		int weight,
