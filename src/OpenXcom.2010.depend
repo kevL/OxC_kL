@@ -5238,7 +5238,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1402457811 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
+1402509186 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
 	<limits>
 	<sstream>
@@ -5264,7 +5264,7 @@
 	<algorithm>
 	<stdint.h>
 
-1402457811 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1402509762 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -5646,7 +5646,7 @@
 1402457812 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1402493506 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	<cmath>
 	<sstream>
@@ -6512,11 +6512,12 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1402493676 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
 	"DebriefingState.h"
+	"DelayedSaveState.h"
 	"Map.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -6697,7 +6698,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1402472420 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1402499212 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6938,7 +6939,7 @@
 1402457812 source:f:\git\openxcom\src\engine\fastlineclip.cpp
 	"FastLineClip.h"
 
-1402457812 source:f:\git\openxcom\src\engine\flc.cpp
+1402492882 source:f:\git\openxcom\src\engine\flc.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -7666,7 +7667,7 @@
 1402457812 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1402462532 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1402508181 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7795,7 +7796,7 @@
 	"../Engine/State.h"
 	"../Savegame/Production.h"
 
-1402457812 f:\git\openxcom\src\geoscape\researchcompletestate.h
+1402500775 f:\git\openxcom\src\geoscape\researchcompletestate.h
 	"../Engine/State.h"
 
 1402457812 f:\git\openxcom\src\geoscape\researchrequiredstate.h
@@ -8095,7 +8096,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1402457812 source:f:\git\openxcom\src\geoscape\researchcompletestate.cpp
+1402508209 source:f:\git\openxcom\src\geoscape\researchcompletestate.cpp
 	"ResearchCompleteState.h"
 	<algorithm>
 	"../Engine/Game.h"
@@ -9260,7 +9261,7 @@
 	"City.h"
 	"../Engine/RNG.h"
 
-1402457813 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
+1402504036 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
 1402457813 source:f:\git\openxcom\src\ruleset\ruleset.cpp
@@ -9386,7 +9387,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1402457813 source:f:\git\openxcom\src\savegame\base.cpp
+1402505899 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9534,7 +9535,7 @@
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
-1402457813 source:f:\git\openxcom\src\savegame\researchproject.cpp
+1402511111 source:f:\git\openxcom\src\savegame\researchproject.cpp
 	"ResearchProject.h"
 	<algorithm>
 	"../Interface/Text.h"
@@ -9859,7 +9860,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/Unit.h"
 
-1402457813 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1402504392 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"

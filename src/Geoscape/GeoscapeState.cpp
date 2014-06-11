@@ -2381,23 +2381,24 @@ void GeoscapeState::time1Day()
 			}
 		}
 
+
 		std::vector<ResearchProject*> finished; // handle science projects
+
 		for (std::vector<ResearchProject*>::const_iterator
 				rp = (*b)->getResearch().begin();
 				rp != (*b)->getResearch().end();
 				++rp)
 		{
 			if ((*rp)->step())
-			{
-				timerReset(); // kL
-
 				finished.push_back(*rp);
-			}
 		}
 
-		std::vector<State*> researchCompleteEvents; // myk002_begin:
-		std::vector<NewPossibleResearchInfo> newPossibleResearchEvents;
-		std::vector<NewPossibleManufactureInfo> newPossibleManufactureEvents; // myk002_end.
+		if (!finished.empty())	// kL
+			timerReset();		// kL
+
+		std::vector<State*> researchCompleteEvents;								// myk002
+		std::vector<NewPossibleResearchInfo> newPossibleResearchEvents;			// myk002
+		std::vector<NewPossibleManufactureInfo> newPossibleManufactureEvents;	// myk002
 
 		for (std::vector<ResearchProject*>::const_iterator
 				rp = finished.begin();
@@ -2406,52 +2407,55 @@ void GeoscapeState::time1Day()
 		{
 			(*b)->removeResearch(*rp);
 
-			RuleResearch* bonus = 0;
+			RuleResearch* bonus = NULL;
 			const RuleResearch* research = (*rp)->getRules();
+			//if (research) Log(LOG_INFO) << ". research Valid";
+			//else Log(LOG_INFO) << ". research NOT valid"; // end_TEST
 
-			// If "researched" the live alien, his body sent to the stores.
-			if (Options::spendResearchedItems
+			if (Options::spendResearchedItems // if "researched" the live alien, his body sent to the stores.
 				&& research->needItem()
 				&& _game->getRuleset()->getUnit(research->getName()))
 			{
 				(*b)->getItems()->addItem(
-						_game->getRuleset()->getArmor(
-								_game->getRuleset()->getUnit(
-										research->getName())
-								->getArmor())
-						->getCorpseGeoscape());
+									_game->getRuleset()->getArmor(
+															_game->getRuleset()->getUnit(
+																					research->getName())->getArmor())
+									->getCorpseGeoscape());
 				// ;) -> kL_note: heh i noticed that.
 			}
 
-			if ((*rp)->getRules()->getGetOneFree().size() != 0)
+//kL		if ((*rp)->getRules()->getGetOneFree().size() != 0)
+			if (!(*rp)->getRules()->getGetOneFree().empty()) // kL
 			{
 				std::vector<std::string> possibilities;
+
 				for (std::vector<std::string>::const_iterator
 						gof = (*rp)->getRules()->getGetOneFree().begin();
 						gof != (*rp)->getRules()->getGetOneFree().end();
 						++gof)
 				{
-					bool newFound = true;
+					bool oneFree = true;
+
 					for (std::vector<const RuleResearch*>::const_iterator
 							discovered = _game->getSavedGame()->getDiscoveredResearch().begin();
 							discovered != _game->getSavedGame()->getDiscoveredResearch().end();
 							++discovered)
 					{
 						if (*gof == (*discovered)->getName())
-							newFound = false;
+							oneFree = false;
 					}
 
-					if (newFound)
+					if (oneFree)
 						possibilities.push_back(*gof);
 				}
 
 				if (possibilities.size() != 0)
 				{
-					size_t pick = static_cast<size_t>(RNG::generate(
+					size_t randFree = static_cast<size_t>(RNG::generate(
 																0,
 																static_cast<int>(possibilities.size() - 1)));
-					std::string sel = possibilities.at(pick);
-					bonus = _game->getRuleset()->getResearch(sel);
+					std::string free = possibilities.at(randFree);
+					bonus = _game->getRuleset()->getResearch(free);
 
 					_game->getSavedGame()->addFinishedResearch(
 															bonus,
@@ -2465,16 +2469,25 @@ void GeoscapeState::time1Day()
 			}
 
 			const RuleResearch* newResearch = research;
+			//if (newResearch) Log(LOG_INFO) << ". newResearch Valid";
+			//else Log(LOG_INFO) << ". newResearch NOT valid"; // end_TEST
 
-//kL			std::string name = research->getLookup() == ""? research->getName(): research->getLookup();
-			std::string name =  research->getLookup();
-			if (name == "") research->getName();
+//kL		std::string name = research->getLookup() == ""? research->getName(): research->getLookup();
+			std::string name = research->getLookup();
+			if (name == "")
+				name = research->getName(); // duh!
+			//Log(LOG_INFO) << ". Research = " << name;
+
 			if (_game->getSavedGame()->isResearched(name))
-				newResearch = 0;
+			{
+				//Log(LOG_INFO) << ". newResearch NULL, already been researched";
+				newResearch = NULL;
+			}
 
 			_game->getSavedGame()->addFinishedResearch(
 													research,
 													_game->getRuleset());
+
 			if (research->getLookup() != "")
 				_game->getSavedGame()->addFinishedResearch(
 														_game->getRuleset()->getResearch(research->getLookup()),
@@ -2546,7 +2559,6 @@ void GeoscapeState::time1Day()
 																		newPossibleResearch,
 																		true));
 			} // myk002_end.
-
 /*myk002
 			popup(new NewPossibleResearchState(
 											_game,
@@ -2561,7 +2573,6 @@ void GeoscapeState::time1Day()
 				newPossibleManufactureEvents.push_back(NewPossibleManufactureInfo(
 																				newPossibleManufacture,
 																				true)); // myk002_end.
-
 /*myk002
 				popup(new NewPossibleManufactureState(
 													_game,
@@ -2580,7 +2591,7 @@ void GeoscapeState::time1Day()
 						++rp2)
 				{
 					if ((*rp)->getRules()->getName() == (*rp2)->getRules()->getName()
-						&& _game->getRuleset()->getUnit((*rp2)->getRules()->getName()) == 0)
+						&& _game->getRuleset()->getUnit((*rp2)->getRules()->getName()) == NULL)
 					{
 						(*b2)->removeResearch(
 											*rp2,
@@ -2591,7 +2602,7 @@ void GeoscapeState::time1Day()
 				}
 			}
 
-			delete *rp;
+			delete *rp; // DONE Research.
 		}
 
 		//Log(LOG_INFO) << "Base " << *(*b)->getName().c_str(); // this is weird.
@@ -2718,7 +2729,6 @@ void GeoscapeState::time1Day()
 
 
 	int pts = static_cast<int>(_game->getSavedGame()->getDifficulty()) + 1;
-//	pts *= 5;
 	pts = pts * _game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 100;
 
 	for (std::vector<AlienBase*>::const_iterator // handle regional and country points for alien bases
@@ -2765,12 +2775,13 @@ void GeoscapeState::time1Day()
 		}
 	}
 
+
 	std::for_each( // handle supply of alien bases.
-				_game->getSavedGame()->getAlienBases()->begin(),
-				_game->getSavedGame()->getAlienBases()->end(),
-				GenerateSupplyMission(
-									*_game->getRuleset(),
-									*_game->getSavedGame()));
+			_game->getSavedGame()->getAlienBases()->begin(),
+			_game->getSavedGame()->getAlienBases()->end(),
+			GenerateSupplyMission(
+								*_game->getRuleset(),
+								*_game->getSavedGame()));
 
 	// Autosave 3 times a month. kL_note: every day.
 //kL	int day = _game->getSavedGame()->getTime()->getDay();

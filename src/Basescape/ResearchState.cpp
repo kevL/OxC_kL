@@ -71,10 +71,11 @@ ResearchState::ResearchState(
 	_txtSpace		= new Text(100, 9, 16, 34);
 
 	_txtProject		= new Text(110, 9, 16, 47);
-	_txtScientists	= new Text(55, 9, 173, 47);
-	_txtProgress	= new Text(55, 9, 232, 47);
+	_txtScientists	= new Text(55, 9, 161, 47);
+	_txtProgress	= new Text(55, 9, 219, 47);
 
-	_lstResearch	= new TextList(285, 112, 16, 62);
+//	_lstResearch	= new TextList(285, 112, 16, 62);
+	_lstResearch	= new TextList(288, 112, 16, 62);
 
 	_btnAliens		= new TextButton(92, 16, 16, 177); // kL
 	_btnNew			= new TextButton(92, 16, 114, 177);
@@ -146,7 +147,8 @@ ResearchState::ResearchState(
 
 	_lstResearch->setColor(Palette::blockOffset(15)+6);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
-	_lstResearch->setColumns(4, 149, 59, 48, 17);
+//	_lstResearch->setColumns(4, 149, 59, 48, 17);
+	_lstResearch->setColumns(4, 137, 58, 48, 34);
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(8);
@@ -220,21 +222,22 @@ void ResearchState::init()
 
 	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
 	for (std::vector<ResearchProject*>::const_iterator
-			i = baseProjects.begin();
-			i != baseProjects.end();
-			++i)
+			proj = baseProjects.begin();
+			proj != baseProjects.end();
+			++proj)
 	{
-		std::wostringstream sstr;
-		sstr << (*i)->getAssigned();
-		const RuleResearch* r = (*i)->getRules();
+		std::wostringstream assigned;
+		assigned << (*proj)->getAssigned();
 
-		std::wstring wstr = tr(r->getName());
+		const RuleResearch* resRule = (*proj)->getRules();
+		std::wstring research = tr(resRule->getName());
+
 		_lstResearch->addRow(
 							4,
-							wstr.c_str(),
-							sstr.str().c_str(),
-							tr((*i)->getResearchProgress()).c_str(),
-							(*i)->getCostCompleted().c_str());
+							research.c_str(),
+							assigned.str().c_str(),
+							tr((*proj)->getResearchProgress()).c_str(),
+							(*proj)->getCostCompleted().c_str());
 	}
 
 	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE")
@@ -247,11 +250,11 @@ void ResearchState::init()
 	// kL_begin:
 	_btnAliens->setVisible(false);
 	for (std::vector<BaseFacility*>::iterator
-			i = _base->getFacilities()->begin();
-			i != _base->getFacilities()->end();
-			++i)
+			fac = _base->getFacilities()->begin();
+			fac != _base->getFacilities()->end();
+			++fac)
 	{
-		if ((*i)->getRules()->getAliens() > 0)
+		if ((*fac)->getRules()->getAliens() > 0)
 		{
 			_btnAliens->setVisible(true);
 

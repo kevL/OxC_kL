@@ -1444,7 +1444,7 @@ void Base::removeResearch(
 
 /**
  * kL: Research Help ala XcomUtil.
- * @param aLien, Name of the alien that got interrogated
+ * @param aLien - name of the alien that got interrogated
  */
 void Base::researchHelp(std::string aLien)
 {

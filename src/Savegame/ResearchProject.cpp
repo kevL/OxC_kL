@@ -155,90 +155,61 @@ YAML::Node ResearchProject::save() const
 }
 
 /**
- * Return a string describing Research progress.
- * @return, A string describing Research progress.
-*/
-/*kL
-std::string ResearchProject::getResearchProgress() const
-{
-	float progress = (float)getSpent() / getRules()->getCost();
-
-	if (getAssigned() == 0)
-	{
-		return "STR_NONE";
-	}
-	else if (progress < PROGRESS_LIMIT_UNKNOWN) // 0.2f
-	{
-		return "STR_UNKNOWN";
-	}
-	else
-	{
-		float rating = (float)getAssigned();
-		rating /= getRules()->getCost();
-
-		if (rating < PROGRESS_LIMIT_POOR) // 0.1f
-		{
-			return "STR_POOR";
-		}
-		else if (rating < PROGRESS_LIMIT_AVERAGE) // 0.25f
-		{
-			return "STR_AVERAGE";
-		}
-		else if (rating < PROGRESS_LIMIT_GOOD) // 0.5f
-		{
-			return "STR_GOOD";
-		}
-
-		return "STR_EXCELLENT";
-	}
-} */
-
-// kL_begin: ResearchProject::getResearchProgress(), rewrite so it makes sense.
-/**
- * Return a string describing Research progress.
- * @return, A string describing Research progress.
+ * kL. Returns a string describing Research progress.
+ * @return, description of research progress
 */
 std::string ResearchProject::getResearchProgress() const
 {
 	float progress = static_cast<float>(getSpent()) / static_cast<float>(getCost());
 
 	if (getAssigned() == 0)
-	{
 		return "STR_NONE";
-	}
-	else if (progress < PROGRESS_LIMIT_UNKNOWN)		// 0.1f
-	{
+	else if (progress < PROGRESS_LIMIT_UNKNOWN)		// < 0.1f
 		return "STR_UNKNOWN";
-	}
-	else if (progress < PROGRESS_LIMIT_POOR)		// 0.2f
-	{
+	else if (progress < PROGRESS_LIMIT_POOR)		// < 0.2f
 		return "STR_POOR";
-	}
-	else if (progress < PROGRESS_LIMIT_AVERAGE)		// 0.5f
-	{
+	else if (progress < PROGRESS_LIMIT_AVERAGE)		// < 0.5f
 		return "STR_AVERAGE";
-	}
-	else if (progress < PROGRESS_LIMIT_GOOD)		// 0.8f
-	{
+	else if (progress < PROGRESS_LIMIT_GOOD)		// < 0.8f
 		return "STR_GOOD";
-	}
 	else											// > 0.8f
-	{
 		return "STR_EXCELLENT";
-	}
+/*kL
+	float progress = (float)getSpent() / getRules()->getCost();
+
+	if (getAssigned() == 0)
+		return "STR_NONE";
+	else if (progress < PROGRESS_LIMIT_UNKNOWN) // 0.2f
+		return "STR_UNKNOWN";
+	else
+	{
+		float rating = (float)getAssigned();
+		rating /= getRules()->getCost();
+
+		if (rating < PROGRESS_LIMIT_POOR) // 0.1f
+			return "STR_POOR";
+		else if (rating < PROGRESS_LIMIT_AVERAGE) // 0.25f
+			return "STR_AVERAGE";
+		else if (rating < PROGRESS_LIMIT_GOOD) // 0.5f
+			return "STR_GOOD";
+
+		return "STR_EXCELLENT";
+	} */
 }
 
 /**
- * Get a string of cost completed as a per cent value.
+ * kL. Returns research time completed as a wide string. But try this differently ...
+ * @return, time completed
  */
-std::wstring ResearchProject::getCostCompleted() const
+std::wstring ResearchProject::getCostCompleted() const // kL
 {
-	float fProg = static_cast<float>(getSpent()) / static_cast<float>(getCost());
+/*	float fProg = static_cast<float>(getSpent()) / static_cast<float>(getCost());
 	int iProg = static_cast<int>(fProg * 100.f); // truncate to 2 places
-//	std::wstring sProgress = std::to_wstring(static_cast<long long>(iProg));
-	std::wstring wsProgress = Text::formatPercentage(iProg);
+	std::wstring wsProgress = Text::formatPercentage(iProg); */
+
+	std::wstring wsProgress = Text::formatNumber(getSpent(), L"", false);
 
 	return wsProgress;
-} // kL_end.
+}
 
 }

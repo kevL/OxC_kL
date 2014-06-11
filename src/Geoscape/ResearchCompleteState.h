@@ -35,29 +35,39 @@ class RuleResearch;
 
 /**
  * Window which inform the player that a research project is finished.
- * Allow him to view information about the project(Ufopaedia).
+ * Allow him to view information about the project (its Ufopaedia entry).
  */
 class ResearchCompleteState
 	:
 		public State
 {
+
+private:
+	Text
+		* _txtResearch,
+		* _txtTitle;
+    TextButton
+		* _btnOk,
+		* _btnReport;
 	Window* _window;
-	Text* _txtTitle, * _txtResearch;
-    TextButton* _btnReport, * _btnOk;
-	const RuleResearch* _research, * _bonus;
 
-public:
-	/// Creates the EndResearch state.
-	ResearchCompleteState(
-			Game* game,
-			const RuleResearch* research,
-			const RuleResearch* bonus);
-	// kL_note: WHERE IS THE dTor???
+	const RuleResearch
+		* _research,
+		* _bonus;
 
-	/// Handler for clicking the OK button.
-	void btnOkClick(Action* action);
-	/// Handler for clicking the Report button.
-	void btnReportClick(Action* action);
+
+	public:
+		/// Creates the EndResearch state.
+		ResearchCompleteState(
+				Game* game,
+				const RuleResearch* research,
+				const RuleResearch* bonus);
+		// kL_note: WHERE IS THE dTor???
+
+		/// Handler for clicking the OK button.
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Report button.
+		void btnReportClick(Action* action);
 };
 
 }

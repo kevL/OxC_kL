@@ -23,6 +23,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+//#include "../Engine/Logger.h" // kL
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
@@ -43,10 +44,10 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the EndResearch screen.
- * @param game Pointer to the core game.
- * @param research Pointer to the completed research.
- * @param bonus Pointer to bonus unlocked research.
+ * Initializes all the elements in the ResearchComplete screen.
+ * @param game		- pointer to the core game
+ * @param research	- pointer to the completed research
+ * @param bonus		- pointer to bonus unlocked research
  */
 ResearchCompleteState::ResearchCompleteState(
 		Game* game,
@@ -109,8 +110,8 @@ ResearchCompleteState::ResearchCompleteState(
 }
 
 /**
- * return to the previous screen
- * @param action Pointer to an action.
+ * Returns to the previous screen
+ * @param action - pointer to an action
  */
 void ResearchCompleteState::btnOkClick(Action*)
 {
@@ -118,33 +119,46 @@ void ResearchCompleteState::btnOkClick(Action*)
 }
 
 /**
- * open the Ufopaedia to the entry about the Research.
- * @param action Pointer to an action.
+ * Opens the Ufopaedia to the entry about the Research.
+ * @param action - pointer to an action
  */
 void ResearchCompleteState::btnReportClick(Action*)
 {
+	//Log(LOG_INFO) << "ResearchCompleteState::btnReportClick()";
+	//if (_research) Log(LOG_INFO) << ". There IS _research";
+
+	//Log(LOG_INFO) << ". popState";
 	_game->popState();
+	//Log(LOG_INFO) << ". popState DONE";
 
 	if (_bonus)
 	{
+		//Log(LOG_INFO) << ". . in Bonus";
+
 		std::string bonusName;
 		if (_bonus->getLookup() == "")
 			bonusName = _bonus->getName();
 		else
 			bonusName = _bonus->getLookup();
 
-		Ufopaedia::openArticle(_game, bonusName);
+		Ufopaedia::openArticle(
+							_game,
+							bonusName);
 	}
 
 	if (_research)
 	{
+		//Log(LOG_INFO) << ". . in Research";
+
 		std::string name;
 		if (_research->getLookup() == "")
 			name = _research->getName();
 		else
 			name = _research->getLookup();
 
-		Ufopaedia::openArticle(_game, name);
+		Ufopaedia::openArticle(
+							_game,
+							name);
 	}
 }
 

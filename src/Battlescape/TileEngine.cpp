@@ -513,132 +513,137 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										//Log(LOG_INFO) << ". . . . calculateLine() inside TRAJECTORY Loop";
 										Position posTraj = _trajectory.at(i);
 
-										// mark every tile of line as visible; this is needed because of bresenham narrow stroke.
-//kL									_save->getTile(posTraj)->setVisible(+1);
-										_save->getTile(posTraj)->setVisible(true); // kL
-										_save->getTile(posTraj)->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
+										// mark every tile of line as visible (this is needed because of bresenham narrow stroke).
+										Tile* visTile = _save->getTile(posTraj);
+//kL									visTile->setVisible(+1);
+										visTile->setVisible(true); // kL
+										visTile->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
 
 										// walls to the east or south of a visible tile, we see that too
 										// kL_note: Yeh, IF there's walls or an appropriate BigWall object!
-										// TODO: THIS COULD/SHOULD BE CHECKING ALL 4 CARDINAL DIRECTIONS, not just east & south:
-										Tile* tile = _save->getTile(Position(
+										/*	parts:
+											#0 - floor
+											#1 - westwall
+											#2 - northwall
+											#3 - object (content) */
+										Tile* edgeTile = _save->getTile(Position(
 																		posTraj.x + 1,
 																		posTraj.y,
 																		posTraj.z));
-										if (tile)
-//kL										tile->setDiscovered(true, 0);
+										if (edgeTile) // show Tile EAST
+//kL										edgeTile->setDiscovered(true, 0);
 										// kL_begin:
 										{
-											//Log(LOG_INFO) << "calculateFOV() East tile VALID";
+											//Log(LOG_INFO) << "calculateFOV() East edgeTile VALID";
 											for (int
 													part = 1;
-													part < 4; //tile->getMapData(fuck)->getDataset()->getSize();
+													part < 4; //edgeTile->getMapData(fuck)->getDataset()->getSize();
 													part += 2)
 											{
 												//Log(LOG_INFO) << "part = " << part;
-												if (tile->getMapData(part))
+												if (edgeTile->getMapData(part))
 												{
 													//Log(LOG_INFO) << ". getMapData(part) VALID";
-													if (tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL) // #1
+													if (edgeTile->getMapData(part)->getObjectType() == MapData::O_WESTWALL) // #1
 													{
 														//Log(LOG_INFO) << ". . MapData: WestWall VALID";
-														tile->setDiscovered(true, 0); // reveal westwall
+														edgeTile->setDiscovered(true, 0); // reveal westwall
 //														break;
 													}
-													else if (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
-														&& tile->getMapData(MapData::O_OBJECT)
-														&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-															|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST))
+													else if (edgeTile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
+														&& edgeTile->getMapData(MapData::O_OBJECT)
+														&& (edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+															|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_WEST))
 													{
 														//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 4";
-														tile->setDiscovered(true, 2); // reveal entire tile
+														edgeTile->setDiscovered(true, 2); // reveal entire edgeTile
 //														break;
 													}
 												}
 											}
 										} // kL_end.
 
-										tile = _save->getTile(Position(
+										edgeTile = _save->getTile(Position(
 																posTraj.x,
 																posTraj.y + 1,
 																posTraj.z));
-										if (tile)
-//kL										tile->setDiscovered(true, 1);
+										if (edgeTile) // show Tile SOUTH
+//kL										edgeTile->setDiscovered(true, 1);
 										// kL_begin:
 										{
-											//Log(LOG_INFO) << "calculateFOV() South tile VALID";
+											//Log(LOG_INFO) << "calculateFOV() South edgeTile VALID";
 											for (int
 													part = 2;
-													part < 4; //tile->getMapData(fuck)->getDataset()->getSize();
+													part < 4; //edgeTile->getMapData(fuck)->getDataset()->getSize();
 													++part)
 											{
 												//Log(LOG_INFO) << "part = " << part;
-												if (tile->getMapData(part))
+												if (edgeTile->getMapData(part))
 												{
 													//Log(LOG_INFO) << ". getMapData(part) VALID";
-													if (tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL) // #2
+													if (edgeTile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL) // #2
 													{
 														//Log(LOG_INFO) << ". . MapData: NorthWall VALID";
-														tile->setDiscovered(true, 1); // reveal northwall
+														edgeTile->setDiscovered(true, 1); // reveal northwall
 //														break;
 													}
-													else if (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
-														&& tile->getMapData(MapData::O_OBJECT)
-														&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-															|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH))
+													else if (edgeTile->getMapData(part)->getObjectType() == MapData::O_OBJECT // #3
+														&& edgeTile->getMapData(MapData::O_OBJECT)
+														&& (edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+															|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NORTH))
 													{
 														//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 5";
-														tile->setDiscovered(true, 2); // reveal entire tile
+														edgeTile->setDiscovered(true, 2); // reveal entire edgeTile
 //														break;
 													}
 												}
 											}
 										}
-/*
-parts:
-#0 - floor
-#1 - westwall
-#2 - northwall
-#3 - object (content)
-*/
-										tile = _save->getTile(Position(
+
+										edgeTile = _save->getTile(Position(
 																posTraj.x - 1,
 																posTraj.y,
 																posTraj.z));
-										if (tile)
+										if (edgeTile) // show Tile WEST
 										{
-											//Log(LOG_INFO) << "calculateFOV() West tile VALID";
+											//Log(LOG_INFO) << "calculateFOV() West edgeTile VALID";
 											//Log(LOG_INFO) << "part = 3";
-											if (tile->getMapData(MapData::O_OBJECT) // #3
-												&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
-													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
+											if (visTile->getMapData(MapData::O_WESTWALL) == NULL)
 											{
-												//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 6 or 8";
-												tile->setDiscovered(true, 2); // reveal entire tile
-//												break;
+												if (edgeTile->getMapData(MapData::O_OBJECT) // #3
+													&& (edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+														|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_EAST
+														|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
+												{
+													//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 6 or 8";
+													edgeTile->setDiscovered(true, 2); // reveal entire edgeTile
+//													break;
+												}
 											}
 										}
 
-										tile = _save->getTile(Position(
+										edgeTile = _save->getTile(Position(
 																posTraj.x,
 																posTraj.y - 1,
 																posTraj.z));
-										if (tile)
+										if (edgeTile) // show Tile NORTH
 										{
-											//Log(LOG_INFO) << "calculateFOV() North tile VALID";
+											//Log(LOG_INFO) << "calculateFOV() North edgeTile VALID";
 											//Log(LOG_INFO) << "part = 3";
-											if (tile->getMapData(MapData::O_OBJECT) // #3
-												&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
-													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH
-													|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
+											if (visTile->getMapData(MapData::O_NORTHWALL) == NULL)
 											{
-												//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 7 or 8";
-												tile->setDiscovered(true, 2); // reveal entire tile
-//												break;
+												if (edgeTile->getMapData(MapData::O_OBJECT) // #3
+													&& (edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_BLOCK
+														|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_SOUTH
+														|| edgeTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_E_S))
+												{
+													//Log(LOG_INFO) << ". . MapData: Object VALID, bigWall 1 or 7 or 8";
+													edgeTile->setDiscovered(true, 2); // reveal entire edgeTile
+//													break;
+												}
 											}
 										} // kL_end.
-										//Log(LOG_INFO) << "calculateFOV() DONE tile reveal";
+										//Log(LOG_INFO) << "calculateFOV() DONE edgeTile reveal";
 									}
 								}
 							}

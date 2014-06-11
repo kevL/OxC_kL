@@ -187,12 +187,13 @@ void Ufopaedia::openArticle(
 								article->id);
 //kL	if (_current_index != (size_t)-1)
 	if (_current_index != -1) // kL
-		game->pushState(createArticleState(game, article));
+		game->pushState(createArticleState(
+										game,
+										article));
 }
 
 /**
  * Checks if selected article_id is available -> if yes, open it.
- * Otherwise, open start state!
  * @param game Pointer to actual game.
  * @param article_id Article id to find.
  */
@@ -208,7 +209,9 @@ void Ufopaedia::openArticle(
 	if (_current_index != -1) // kL
 	{
 		ArticleDefinition* article = game->getRuleset()->getUfopaediaArticle(article_id);
-		game->pushState(createArticleState(game, article));
+		game->pushState(createArticleState(
+										game,
+										article));
 	}
 }
 

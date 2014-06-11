@@ -62,8 +62,8 @@ ResearchInfoState::ResearchInfoState(
 		State(game),
 		_base(base),
 		_project(new ResearchProject( // time = 70 to 130%
-									rule,
-									(rule->getCost() * RNG::generate(70, 130)) / 100)),
+								rule,
+								(rule->getCost() * RNG::generate(70, 130)) / 100)),
 		_rule(rule)
 {
 	buildUi();
@@ -170,15 +170,14 @@ void ResearchInfoState::buildUi()
 		_base->addResearch(_project);
 
 		if (_rule->needItem()
-			&& (_game->getRuleset()->getUnit(_rule->getName())
-				|| Options::spendResearchedItems))
+			&& (Options::spendResearchedItems
+				|| _game->getRuleset()->getUnit(_rule->getName())))
 		{
 			_base->getItems()->removeItem(_rule->getName());
 		}
 	}
 
 	setAssignedScientist();
-
 
 	_btnMore->setColor(Palette::blockOffset(13)+5);
 	_btnMore->onMousePress((ActionHandler)& ResearchInfoState::morePress);
