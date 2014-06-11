@@ -545,20 +545,25 @@ void BasescapeState::viewLeftClick(Action*)
  */
 void BasescapeState::viewRightClick(Action*)
 {
-	bool bPop = true;
+	bool bPop = false; // play "wha-wha" sound
 
 	BaseFacility* fac = _view->getSelectedFacility();
 	if (fac == NULL)
 	{
-		_game->pushState(new BaseInfoState(
-										_game,
-										_base,
-										this));
+		bPop = true;
+//		_game->pushState(new BaseInfoState(
+//										_game,
+//										_base,
+//										this));
+		_game->pushState(new MonthlyCostsState(
+											_game,
+											_base));
 	}
 	else if (fac->getRules()->getCrafts() > 0)
 	{
 		if (_base->getCrafts()->size() == 0) // no Craft at base
 		{
+			bPop = true;
 			_game->pushState(new CraftsState(
 											_game,
 											_base));
@@ -574,6 +579,8 @@ void BasescapeState::viewRightClick(Action*)
 
 				if (fac->getCraft() == NULL) // Empty hangar, craft currently out
 				{
+					bPop = true;
+
 					if (craft->getStatus() == "STR_OUT")
 					{
 						_game->getSavedGame()->setGlobeLongitude(craft->getLongitude());
@@ -596,8 +603,7 @@ void BasescapeState::viewRightClick(Action*)
 				}
 				else if (fac->getCraft() == craft) // craft is docked here
 				{
-					bPop = false; // plays window-'swish' instead.
-
+//					bPop = false; // plays window-'swish' instead.
 					_game->pushState(new CraftInfoState(
 													_game,
 													_base,
@@ -609,41 +615,64 @@ void BasescapeState::viewRightClick(Action*)
 		} // kL_end.
 	}
 	else if (fac->getRules()->getStorage() > 0)
+	{
 //kL		_game->pushState(new SellState(
 //kL									_game,
 //kL									_base));
+		bPop = true;
 		_game->pushState(new StoresState(
 									_game,
 									_base));
+	}
 	else if (fac->getRules()->getPersonnel() > 0)
+	{
+		bPop = true;
 		_game->pushState(new SoldiersState(
 										_game,
 										_base));
+	}
 	else if (fac->getRules()->getPsiLaboratories() > 0
 			&& Options::anytimePsiTraining
 			&& _base->getAvailablePsiLabs() > 0)
+	{
+		bPop = true;
 		_game->pushState(new AllocatePsiTrainingState(
 													_game,
 													_base));
+	}
 	else if (fac->getRules()->getLaboratories() > 0)
+	{
+		bPop = true;
 		_game->pushState(new ResearchState(
 										_game,
 										_base));
+	}
 	else if (fac->getRules()->getWorkshops() > 0)
+	{
+		bPop = true;
 		_game->pushState(new ManufactureState(
 											_game,
 											_base));
+	}
 	else if (fac->getRules()->getAliens() > 0)
+	{
+		bPop = true;
 		_game->pushState(new ManageAlienContainmentState(
 														_game,
 														_base,
 														OPT_GEOSCAPE));
-	else if (fac->getRules()->isLift())
+	}
+/*	else if (fac->getRules()->isLift()) // my Lift has a radar range ... (see next)
+	{
+		bPop = true;
 		_game->pushState(new MonthlyCostsState(
 											_game,
 											_base));
+	} */
 	else if (fac->getRules()->getRadarRange() > 0)
 	{
+		bPop = true;
+
 		_game->getSavedGame()->setGlobeLongitude(_base->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(_base->getLatitude());
 

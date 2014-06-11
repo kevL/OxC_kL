@@ -5783,7 +5783,7 @@
 1401489084 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1402120185 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1402451986 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6798,7 +6798,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1401232756 source:f:\git\openxcom\src\battlescape\unitpanicbstate.cpp
+1402451413 source:f:\git\openxcom\src\battlescape\unitpanicbstate.cpp
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
