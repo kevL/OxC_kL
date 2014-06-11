@@ -52,7 +52,8 @@ namespace OpenXcom
 NewPossibleResearchState::NewPossibleResearchState(
 		Game* game,
 		Base* base,
-		const std::vector<RuleResearch*>& possibilities)
+		const std::vector<RuleResearch*>& possibilities,
+		bool showResearchButton) // myk002_add.
 	:
 		State (game),
 		_base(base)
@@ -79,7 +80,8 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
+//myk002	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr(showResearchButton? "STR_OK": "STR_MORE")); // myk002
 	_btnOk->onMouseClick((ActionHandler)& NewPossibleResearchState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& NewPossibleResearchState::btnOkClick,
@@ -87,6 +89,7 @@ NewPossibleResearchState::NewPossibleResearchState(
 
 	_btnResearch->setColor(Palette::blockOffset(8)+5);
 	_btnResearch->setText(tr("STR_ALLOCATE_RESEARCH"));
+	_btnResearch->setVisible(showResearchButton); // myk002
 	_btnResearch->onMouseClick((ActionHandler)& NewPossibleResearchState::btnResearchClick);
 	_btnResearch->onKeyboardPress(
 					(ActionHandler)& NewPossibleResearchState::btnResearchClick,

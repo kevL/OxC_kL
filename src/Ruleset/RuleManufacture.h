@@ -33,12 +33,14 @@ namespace OpenXcom
  */
 class RuleManufacture
 {
+
 private:
 	std::string _name, _category;
 	std::vector<std::string> _requires;
 	int _space, _time, _cost;
 	std::map<std::string, int> _requiredItems, _producedItems;
 	int _listOrder;
+
 
 	public:
 		/// Creates a new manufacture.

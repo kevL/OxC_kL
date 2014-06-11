@@ -47,7 +47,8 @@ namespace OpenXcom
 NewPossibleManufactureState::NewPossibleManufactureState(
 		Game* game,
 		Base* base,
-		const std::vector<RuleManufacture*>& possibilities)
+		const std::vector<RuleManufacture*>& possibilities,
+		bool showManufactureButton) // myk002_add.
 	:
 		State (game),
 		_base(base)
@@ -74,7 +75,8 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
+//myk002	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr(showManufactureButton? "STR_OK": "STR_MORE")); // myk002
 	_btnOk->onMouseClick((ActionHandler)& NewPossibleManufactureState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& NewPossibleManufactureState::btnOkClick,
@@ -82,10 +84,12 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 
 	_btnManufacture->setColor(Palette::blockOffset(8)+5);
 	_btnManufacture->setText(tr("STR_ALLOCATE_MANUFACTURE"));
+	_btnManufacture->setVisible(showManufactureButton); // myk002
 	_btnManufacture->onMouseClick((ActionHandler)& NewPossibleManufactureState::btnManufactureClick);
 	_btnManufacture->onKeyboardPress(
 					(ActionHandler)& NewPossibleManufactureState::btnManufactureClick,
 					Options::keyOk);
+
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();

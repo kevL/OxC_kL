@@ -58,7 +58,8 @@ private:
 		NewPossibleResearchState(
 				Game* game,
 				Base* base,
-				const std::vector<RuleResearch*>& possibilities);
+				const std::vector<RuleResearch*>& possibilities,
+				bool showResearchButton); // myk002_add.
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

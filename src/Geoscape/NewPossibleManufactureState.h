@@ -59,7 +59,8 @@ private:
 		NewPossibleManufactureState(
 				Game* game,
 				Base* base,
-				const std::vector<RuleManufacture*>& possibilities);
+				const std::vector<RuleManufacture*>& possibilities,
+				bool showManufactureButton); // myk002_add.
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

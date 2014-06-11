@@ -56,6 +56,7 @@ ProductionCompleteState::ProductionCompleteState(
 		Base* base,
 		const std::wstring& item,
 		GeoscapeState* state,
+		bool showGotoBaseButton, // myk002_add.
 		ProdProgress endType)
 	:
 		State(game),
@@ -86,7 +87,8 @@ ProductionCompleteState::ProductionCompleteState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
+//myk002	_btnOk->setText(tr("STR_OK"));
+	_btnOk->setText(tr(showGotoBaseButton? "STR_OK": "STR_MORE")); // myk002
 	_btnOk->onMouseClick((ActionHandler)& ProductionCompleteState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& ProductionCompleteState::btnOkClick,
@@ -104,6 +106,7 @@ ProductionCompleteState::ProductionCompleteState(
 		_btnGotoBase->setText(tr("STR_ALLOCATE_MANUFACTURE"));
 	else */
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
+	_btnGotoBase->setVisible(showGotoBaseButton); // myk002
 	_btnGotoBase->onMouseClick((ActionHandler)& ProductionCompleteState::btnGotoBaseClick);
 	_btnGotoBase->onKeyboardPress(
 					(ActionHandler)& ProductionCompleteState::btnGotoBaseClick,

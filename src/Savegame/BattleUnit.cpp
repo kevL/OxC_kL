@@ -104,7 +104,7 @@ BattleUnit::BattleUnit(
 		_hidingForTurn(false),
 		_stopShot(false), // kL
 		_dashing(false), // kL
-		_taken(false) // kL
+		_takenExpl(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 	_name			= soldier->getName(true);
@@ -3556,17 +3556,17 @@ bool BattleUnit::getDashing() const
 /**
  * Set a unit as having been damaged in a single explosion.
  */
-void BattleUnit::setTaken(bool beenhit)
+void BattleUnit::setTakenExpl(bool beenhit)
 {
-	_taken = beenhit;
+	_takenExpl = beenhit;
 }
 
 /**
  * Get if a unit was aleady damaged in a single explosion.
  */
-bool BattleUnit::getTaken() const
+bool BattleUnit::getTakenExpl() const
 {
-	return _taken;
+	return _takenExpl;
 } // kL_end.
 
 /**

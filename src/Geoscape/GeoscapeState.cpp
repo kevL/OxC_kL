@@ -139,6 +139,61 @@ size_t kL_currentBase = 0;			// kL
 Sound* GeoscapeState::soundPop = 0;	// kL
 
 
+// myk002_begin: struct definitions used when enqueuing notification events
+struct ProductionCompleteInfo
+{
+	std::wstring item;
+	bool showGotoBaseButton;
+
+//kL	productionProgress_e endType;
+	ProdProgress endType; // kL
+
+	ProductionCompleteInfo(
+			const std::wstring& a_item,
+			bool a_showGotoBaseButton,
+//kL			productionProgress_e a_endType)
+			ProdProgress a_endType) // kL
+		:
+			item(a_item),
+			showGotoBaseButton(a_showGotoBaseButton),
+			endType(a_endType)
+	{
+	}
+};
+
+struct NewPossibleResearchInfo
+{
+	std::vector<RuleResearch*> newPossibleResearch;
+	bool showResearchButton;
+
+	NewPossibleResearchInfo(
+			const std::vector<RuleResearch*>& a_newPossibleResearch,
+			bool a_showResearchButton)
+		:
+			newPossibleResearch(
+				a_newPossibleResearch),
+				showResearchButton(a_showResearchButton)
+	{
+	}
+};
+
+struct NewPossibleManufactureInfo
+{
+	std::vector<RuleManufacture*> newPossibleManufacture;
+	bool showManufactureButton;
+
+	NewPossibleManufactureInfo(
+			const std::vector<RuleManufacture*>& a_newPossibleManufacture,
+			bool a_showManufactureButton)
+		:
+			newPossibleManufacture(
+				a_newPossibleManufacture),
+				showManufactureButton(a_showManufactureButton)
+	{
+	}
+}; // myk002_end.
+
+
 /**
  * Initializes all the elements in the Geoscape screen.
  * @param game Pointer to the core game.
@@ -2144,12 +2199,15 @@ void GeoscapeState::time1Hour()
 								_game,
 								this));
 
+	std::vector<ProductionCompleteInfo> events; // myk002
+
 	for (std::vector<Base*>::iterator // handle Production
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
 		std::map<Production*, ProdProgress> toRemove;
+
 		for (std::vector<Production*>::const_iterator
 				j = (*i)->getProductions().begin();
 				j != (*i)->getProductions().end();
@@ -2170,12 +2228,20 @@ void GeoscapeState::time1Hour()
 			{
 				(*i)->removeProduction(j->first);
 
+				if (!events.empty()) // myk002_begin: only show the action button for the last completion notification
+					events.back().showGotoBaseButton = false;
+
+				events.push_back(ProductionCompleteInfo(
+													tr(j->first->getRules()->getName()),
+													true,
+													j->second)); // myk002_end.
+/*myk002
 				popup(new ProductionCompleteState(
 												_game,
 												*i,
 												tr(j->first->getRules()->getName()),
 												this,
-												j->second));
+												j->second)); */
 			}
 		}
 
@@ -2196,6 +2262,20 @@ void GeoscapeState::time1Hour()
 			popup(new SellState(
 							_game,
 							*i));
+		}
+
+		for (std::vector<ProductionCompleteInfo>::iterator // myk002_begin:
+				eventIt = events.begin();
+				eventIt != events.end();
+				++eventIt)
+		{
+			popup(new ProductionCompleteState(
+											_game,
+											*i,
+											eventIt->item,
+											this,
+											eventIt->showGotoBaseButton,
+											eventIt->endType)); // myk002_end.
 		}
 	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Hour() EXIT";
@@ -2268,6 +2348,10 @@ void GeoscapeState::time1Day()
 			b != _game->getSavedGame()->getBases()->end();
 			++b)
 	{
+		// myk002_begin: create list of pending events for this base so we can
+		// show a slightly different dialog layout for the last event of each type
+		std::vector<ProductionCompleteInfo> productionCompleteEvents; // myk002_end.
+
 		for (std::vector<BaseFacility*>::iterator // handle facility construction
 				f = (*b)->getFacilities()->begin();
 				f != (*b)->getFacilities()->end();
@@ -2278,16 +2362,26 @@ void GeoscapeState::time1Day()
 				(*f)->build();
 
 				if ((*f)->getBuildTime() == 0)
+				{
+					if (!productionCompleteEvents.empty()) // myk002_begin: only show the action button for the last completion notification
+						productionCompleteEvents.back().showGotoBaseButton = false;
+
+					productionCompleteEvents.push_back(
+													ProductionCompleteInfo(tr((*f)->getRules()->getType()),
+													true,
+													PROGRESS_CONSTRUCTION)); // myk002_end.
+/*myk002
 					popup(new ProductionCompleteState(
 													_game,
 													*b,
 													tr((*f)->getRules()->getType()),
 													this,
-													PROGRESS_CONSTRUCTION));
+													PROGRESS_CONSTRUCTION)); */
+				}
 			}
 		}
 
-		std::vector<ResearchProject*> finished; // handle science project
+		std::vector<ResearchProject*> finished; // handle science projects
 		for (std::vector<ResearchProject*>::const_iterator
 				rp = (*b)->getResearch().begin();
 				rp != (*b)->getResearch().end();
@@ -2300,6 +2394,10 @@ void GeoscapeState::time1Day()
 				finished.push_back(*rp);
 			}
 		}
+
+		std::vector<State*> researchCompleteEvents; // myk002_begin:
+		std::vector<NewPossibleResearchInfo> newPossibleResearchEvents;
+		std::vector<NewPossibleManufactureInfo> newPossibleManufactureEvents; // myk002_end.
 
 		for (std::vector<ResearchProject*>::const_iterator
 				rp = finished.begin();
@@ -2382,10 +2480,15 @@ void GeoscapeState::time1Day()
 														_game->getRuleset()->getResearch(research->getLookup()),
 														_game->getRuleset());
 
+			researchCompleteEvents.push_back(new ResearchCompleteState( // myk002
+																	_game,
+																	newResearch,
+																	bonus));
+/*myk002
 			popup(new ResearchCompleteState(
 										_game,
 										newResearch,
-										bonus));
+										bonus)); */
 
 			std::vector<RuleResearch*> newPossibleResearch;
 			_game->getSavedGame()->getDependableResearch(
@@ -2422,41 +2525,71 @@ void GeoscapeState::time1Day()
 									!= req.end()
 							&& !_game->getSavedGame()->isResearched(manRule->getRequirements()))
 						{
+							researchCompleteEvents.push_back(new ResearchRequiredState( // myk002
+																					_game,
+																					item));
+/*myk002
 							popup(new ResearchRequiredState(
 														_game,
-														item));
+														item)); */
 						}
 					}
 				}
 			}
 
+			if (!newPossibleResearch.empty()) // myk002_begin: only show the "allocate research" button for the last notification
+			{
+				if (!newPossibleResearchEvents.empty())
+					newPossibleResearchEvents.back().showResearchButton = false;
+
+				newPossibleResearchEvents.push_back(NewPossibleResearchInfo(
+																		newPossibleResearch,
+																		true));
+			} // myk002_end.
+
+/*myk002
 			popup(new NewPossibleResearchState(
 											_game,
 											*b,
-											newPossibleResearch));
+											newPossibleResearch)); */
 
 			if (!newPossibleManufacture.empty())
+			{
+				if (!newPossibleManufactureEvents.empty()) // myk002_begin: only show the "allocate production" button for the last notification
+					newPossibleManufactureEvents.back().showManufactureButton = false;
+
+				newPossibleManufactureEvents.push_back(NewPossibleManufactureInfo(
+																				newPossibleManufacture,
+																				true)); // myk002_end.
+
+/*myk002
 				popup(new NewPossibleManufactureState(
 													_game,
 													*b,
-													newPossibleManufacture));
+													newPossibleManufacture)); */
+			}
 
 			for (std::vector<Base*>::iterator // now iterate through all the bases and remove this project from their labs
 					b2 = _game->getSavedGame()->getBases()->begin();
 					b2 != _game->getSavedGame()->getBases()->end();
 					++b2)
+			{
 				for (std::vector<ResearchProject*>::const_iterator
 						rp2 = (*b2)->getResearch().begin();
 						rp2 != (*b2)->getResearch().end();
 						++rp2)
+				{
 					if ((*rp)->getRules()->getName() == (*rp2)->getRules()->getName()
 						&& _game->getRuleset()->getUnit((*rp2)->getRules()->getName()) == 0)
 					{
 						(*b2)->removeResearch(
 											*rp2,
 											false);
+
 						break;
 					}
+				}
+			}
 
 			delete *rp;
 		}
@@ -2526,6 +2659,61 @@ void GeoscapeState::time1Day()
 				(*s)->trainPsi1Day();
 			}
 		}
+
+		// myk002_begin: if research has been completed but no new research
+		// events are triggered, show an empty NewPossibleResearchState so
+		// players have a chance to allocate the now-free scientists
+		if (!researchCompleteEvents.empty() && newPossibleResearchEvents.empty())
+		{
+			newPossibleResearchEvents.push_back(NewPossibleResearchInfo(std::vector<RuleResearch *>(), true));
+		}
+
+		// show events
+		for (std::vector<ProductionCompleteInfo>::iterator
+				pceIt = productionCompleteEvents.begin();
+				pceIt != productionCompleteEvents.end();
+				++pceIt)
+		{
+			popup(new ProductionCompleteState(
+											_game,
+											*b,
+											pceIt->item,
+											this,
+											pceIt->showGotoBaseButton,
+											pceIt->endType));
+		}
+
+		for (std::vector<State*>::iterator
+				rceIt = researchCompleteEvents.begin();
+				rceIt != researchCompleteEvents.end();
+				++rceIt)
+		{
+			popup(*rceIt);
+		}
+
+		for (std::vector<NewPossibleResearchInfo>::iterator
+				npreIt = newPossibleResearchEvents.begin();
+				npreIt != newPossibleResearchEvents.end();
+				++npreIt)
+		{
+			popup(new NewPossibleResearchState(
+											_game,
+											*b,
+											npreIt->newPossibleResearch,
+											npreIt->showResearchButton));
+		}
+
+		for (std::vector<NewPossibleManufactureInfo>::iterator
+				npmeIt = newPossibleManufactureEvents.begin();
+				npmeIt != newPossibleManufactureEvents.end();
+				++npmeIt)
+		{
+			popup(new NewPossibleManufactureState(
+												_game,
+												*b,
+												npmeIt->newPossibleManufacture,
+												npmeIt->showManufactureButton));
+		} // myk002_end.
 	}
 
 
@@ -2551,7 +2739,7 @@ void GeoscapeState::time1Day()
 											lon,
 											lat))
 			{
-// kL				(*r)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
+// kL			(*r)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
 				(*r)->addActivityAlien(pts);	// kL
 				(*r)->recentActivity();			// kL
 
@@ -2568,7 +2756,7 @@ void GeoscapeState::time1Day()
 											lon,
 											lat))
 			{
-//kL				(*c)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
+//kL			(*c)->addActivityAlien(_game->getRuleset()->getAlienMission("STR_ALIEN_BASE")->getPoints() / 10);
 				(*c)->addActivityAlien(pts);	// kL
 				(*c)->recentActivity();			// kL
 

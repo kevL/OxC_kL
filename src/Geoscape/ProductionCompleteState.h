@@ -66,6 +66,7 @@ private:
 				Base* base,
 				const std::wstring& item,
 				GeoscapeState* state,
+				bool showGotoBaseButton, // myk002_add.
 				ProdProgress endType = PROGRESS_COMPLETE);
 		/// Cleans up the Production Complete state.
 		~ProductionCompleteState();

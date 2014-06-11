@@ -2308,9 +2308,7 @@ void TileEngine::explode(
 	if (power == 0) // kL, quick out.
 		return;
 
-	BattleUnit
-		* targetUnit = NULL,
-		* takenUnit = NULL;
+	BattleUnit* targetUnit = NULL;
 
 	std::set<Tile*> tilesAffected;
 	std::pair<std::set<Tile*>::iterator, bool> tilePair;
@@ -2518,11 +2516,9 @@ void TileEngine::explode(
 					//Log(LOG_INFO) << ". . tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition(); //<< ". _powerE = " << _powerE << ". r = " << r;
 					targetUnit = destTile->getUnit();
 					if (targetUnit
-						&& targetUnit->getTaken()) // -> THIS NEEDS TO BE REMOVED LATER (or earlier) !!! Done Below!
+						&& targetUnit->getTakenExpl()) // hit large units only once ... stop experience exploitation near the end of this loop, also. Lulz
 					{
-						//Log(LOG_INFO) << ". . unitTaken, set Unit = NULL";
-
-						takenUnit = targetUnit;
+						//Log(LOG_INFO) << ". . targetUnit ID " << targetUnit->getId() << ", set Unit = NULL";
 						targetUnit = NULL;
 					}
 
@@ -2580,7 +2576,7 @@ void TileEngine::explode(
 								powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
 													static_cast<double>(_powerE) * 0.5,
 													static_cast<double>(_powerE) * 1.5));
-								//Log(LOG_INFO) << ". . power = " << powerVsUnit;
+								//Log(LOG_INFO) << ". . DT_HE power = " << powerVsUnit << ", vs ID " << targetUnit->getId();
 
 								if (distance(
 											destTile->getPosition(),
@@ -2601,6 +2597,7 @@ void TileEngine::explode(
 													Position(0, 0, 0),
 													powerVsUnit,
 													DT_HE);
+									//Log(LOG_INFO) << ". . . realDamage = " << damage << " DT_HE, GZ";
 								}
 								else
 								{
@@ -2620,6 +2617,7 @@ void TileEngine::explode(
 															centerZ * 24 - destTile->getPosition().z * 24),
 													powerVsUnit,
 													DT_HE);
+									//Log(LOG_INFO) << ". . . realDamage = " << damage << " DT_HE, not GZ";
 								}
 							}
 
@@ -2738,9 +2736,8 @@ void TileEngine::explode(
 
 					if (targetUnit)
 					{
-						takenUnit = targetUnit;
-						targetUnit->setTaken(true);
-						//Log(LOG_INFO) << ". . unitTaken, set TRUE";
+						//Log(LOG_INFO) << ". . targetUnit ID " << targetUnit->getId() << ", setTaken TRUE";
+						targetUnit->setTakenExpl(true);
 
 						// if it's going to bleed to death and it's not a player, give credit for the kill.
 						// kL_note: See Above^
@@ -2771,11 +2768,22 @@ void TileEngine::explode(
 
 	_powerE = _powerT = -1;
 
-	if (takenUnit)
+	for (std::vector<BattleUnit*>::iterator
+			bu = _save->getUnits()->begin();
+			bu != _save->getUnits()->end();
+			++bu)
 	{
-		//Log(LOG_INFO) << ". . unitTaken, reset";
-		takenUnit->setTaken(false);
+		if ((*bu)->getTakenExpl())
+		{
+			//Log(LOG_INFO) << ". . unitTaken ID " << (*bu)->getId() << ", reset Taken";
+			(*bu)->setTakenExpl(false);
+		}
 	}
+/*	if (takenUnit)
+	{
+		Log(LOG_INFO) << ". . unitTaken ID " << takenUnit->getId() << ", reset";
+		takenUnit->setTakenExpl(false);
+	} */
 
 
 	if (type == DT_HE) // detonate tiles affected with HE
