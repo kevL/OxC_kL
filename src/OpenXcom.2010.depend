@@ -6697,7 +6697,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1402472420 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -11865,4 +11865,14 @@
 	<cmath>
 
 1401099531 f:\git\openxcom\src\engine\dosfont.h
+
+1402494118 source:f:\git\openxcom\src\battlescape\delayedsavestate.cpp
+	"DelayedSaveState.h"
+	"BattlescapeState.h"
+	"../Engine/Game.h"
+	"../Menu/SaveGameState.h"
+
+1402493965 f:\git\openxcom\src\battlescape\delayedsavestate.h
+	"BattleState.h"
+	"../Savegame/SavedGame.h"
 

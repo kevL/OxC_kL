@@ -871,7 +871,12 @@
     <ClCompile Include="Menu\OptionsNoAudioState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\SoldierDeadInfoState.cpp" />
+    <ClCompile Include="Basescape\SoldierDeadInfoState.cpp">
+      <Filter>Basescape</Filter>
+    </ClCompile>
+    <ClCompile Include="Battlescape\DelayedSaveState.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1765,7 +1770,12 @@
     <ClInclude Include="Engine\DosFont.h">
       <Filter>Engine</Filter>
     </ClInclude>
+    <ClInclude Include="Battlescape\DelayedSaveState.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
     <ClInclude Include="Basescape\SoldierDeadInfoState.h" />
+      <Filter>Basescape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

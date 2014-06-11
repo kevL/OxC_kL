@@ -23,6 +23,7 @@
 
 #include "BattlescapeState.h"
 #include "DebriefingState.h"
+#include "DelayedSaveState.h"
 #include "Map.h" // kL, global 'kL_preReveal'
 
 #include "../Engine/Action.h"
@@ -202,15 +203,23 @@ void NextTurnState::close()
 			_battleGame->getSide() == FACTION_PLAYER)
 		{
 			if (_game->getSavedGame()->isIronman())
-				_game->pushState(new SaveGameState(
-												_game,
-												OPT_BATTLESCAPE,
-												SAVE_IRONMAN));
+				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(
+																			_battleGame->getBattleGame(),
+																			_game,
+																			SAVE_IRONMAN));
+//				_game->pushState(new SaveGameState(
+//												_game,
+//												OPT_BATTLESCAPE,
+//												SAVE_IRONMAN));
 			else if (Options::autosave)
-				_game->pushState(new SaveGameState(
-												_game,
-												OPT_BATTLESCAPE,
-												SAVE_AUTO_BATTLESCAPE));
+				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(
+																			_battleGame->getBattleGame(),
+																			_game,
+																			SAVE_AUTO_BATTLESCAPE));
+//				_game->pushState(new SaveGameState(
+//												_game,
+//												OPT_BATTLESCAPE,
+//												SAVE_AUTO_BATTLESCAPE));
 		}
 	}
 }
