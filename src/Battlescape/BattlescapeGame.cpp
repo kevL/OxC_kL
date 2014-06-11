@@ -1718,8 +1718,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 	//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();
 	_save->setSelectedUnit(unit);
-
 //	unit->setVisible(true); // kL
+
+	_parentState->getMap()->setCursorType(CT_NONE);
 
 	// show a little infobox with the name of the unit and "... is panicking"
 	Game* game = _parentState->getGame();
@@ -1878,7 +1879,6 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::cancelCurrentAction()";
-
 	bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
 
 	if (_save->getPathfinding()->removePreview()
@@ -2067,9 +2067,9 @@ void BattlescapeGame::primaryAction(const Position& pos)
 						!= _currentAction.actor->getVisibleUnits()->end())
 				{
 					// get the sound/animation started
-//kL					getMap()->setCursorType(CT_NONE);
-//kL					_parentState->getGame()->getCursor()->setVisible(false);
-//kL					_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+//kL				getMap()->setCursorType(CT_NONE);
+//kL				_parentState->getGame()->getCursor()->setVisible(false);
+//kL				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
 
 					//Log(LOG_INFO) << ". . . . . . new ProjectileFlyBState";
 					statePushBack(new ProjectileFlyBState(
@@ -2098,7 +2098,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 							}
 
 							//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
-//kL							_parentState->updateSoldierInfo();
+//kL						_parentState->updateSoldierInfo();
 							_parentState->updateSoldierInfo(false); // kL
 							//Log(LOG_INFO) << ". . . . . . updateSoldierInfo() DONE";
 
@@ -2344,7 +2344,6 @@ void BattlescapeGame::moveUpDown(
 		int dir)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::moveUpDown()";
-
 	_currentAction.target = unit->getPosition();
 	if (dir == Pathfinding::DIR_UP)
 		_currentAction.target.z++;
@@ -2378,7 +2377,6 @@ void BattlescapeGame::moveUpDown(
 void BattlescapeGame::requestEndTurn()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::requestEndTurn()";
-
 	cancelCurrentAction();
 
 	if (!_endTurnRequested)
@@ -2664,9 +2662,9 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 		if ((*i)->getSlot()
 			&& (*i)->getSlot()->getId() == "STR_GROUND"
 			&& (*i)->getTile()
-			&& ((*i)->getTile()->getUnit() == 0 // kL
-				|| (*i)->getTile()->getUnit() == action->actor) // kL
-//kL			&& (*i)->getTurnFlag()
+			&& ((*i)->getTile()->getUnit() == NULL				// kL
+				|| (*i)->getTile()->getUnit() == action->actor)	// kL
+//kL		&& (*i)->getTurnFlag()
 			&& (*i)->getRules()->getAttraction())
 		{
 			droppedItems.push_back(*i);
@@ -2845,10 +2843,10 @@ int BattlescapeGame::takeItemFromGround(
 {
 	//Log(LOG_INFO) << "BattlescapeGame::takeItemFromGround()";
 	const int TAKEITEM_ERROR	= -1;
-	const int TAKEITEM_SUCCESS	= 0;
-	const int TAKEITEM_NOTU		= 1;
-	const int TAKEITEM_NOSPACE	= 2;
-	const int TAKEITEM_NOFIT	= 3;
+	const int TAKEITEM_SUCCESS	=  0;
+	const int TAKEITEM_NOTU		=  1;
+	const int TAKEITEM_NOSPACE	=  2;
+	const int TAKEITEM_NOFIT	=  3;
 
 	int freeSlots = 25;
 
@@ -2903,12 +2901,11 @@ bool BattlescapeGame::takeItem(
 
 	switch (item->getRules()->getBattleType())
 	{
-		case BT_AMMO:
-			// find equipped weapons that can be loaded with this ammo
+		case BT_AMMO: // find equipped weapons that can be loaded with this ammo
 			if (action->actor->getItem("STR_RIGHT_HAND")
-				&& action->actor->getItem("STR_RIGHT_HAND")->getAmmoItem() == 0)
+				&& action->actor->getItem("STR_RIGHT_HAND")->getAmmoItem() == NULL)
 			{
-				if (action->actor->getItem("STR_RIGHT_HAND")->setAmmoItem(item) == 0)
+				if (action->actor->getItem("STR_RIGHT_HAND")->setAmmoItem(item) == NULL)
 					placed = true;
 			}
 			else
@@ -3007,7 +3004,6 @@ void BattlescapeGame::tallyUnits(
 		bool convert)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::tallyUnits()";
-
 	liveSoldiers = 0;
 	liveAliens = 0;
 
@@ -3018,7 +3014,7 @@ void BattlescapeGame::tallyUnits(
 				j != _save->getUnits()->end();
 				++j)
 		{
-//kL			if ((*j)->getHealth() > 0
+//kL		if ((*j)->getHealth() > 0
 			if ((*j)->getSpecialAbility() == SPECAB_RESPAWN)
 			{
 				//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
