@@ -1857,11 +1857,11 @@ bool AlienBAIState::findFirePoint()
 
 /**
  * Decides if it's worth our while to create an explosion.
- * @param targetPos		- target's position
+ * @param targetPos	- target's position
  * @param attacker	- pointer to the attacking unit
- * @param radius		- radius of explosion in tile space
- * @param diff			- game difficulty (default -1)
- * @param grenade		- true if explosion will be from a grenade
+ * @param radius	- radius of explosion in tile space
+ * @param diff		- game difficulty (default -1)
+ * @param grenade	- true if explosion will be from a grenade
  * @return, true if it's worthwile creating an explosion at the target position
  */
 bool AlienBAIState::explosiveEfficacy(

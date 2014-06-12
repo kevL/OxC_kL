@@ -32,7 +32,7 @@ class SavedGame;
 class Ruleset;
 
 
-enum ProdProgress
+enum ProductProgress
 {
 	PROGRESS_NOT_COMPLETE,			// 0
 	PROGRESS_COMPLETE,				// 1
@@ -102,7 +102,7 @@ private:
 		void setSellItems(bool sell);
 
 		///
-		ProdProgress step(
+		ProductProgress step(
 				Base* b,
 				SavedGame* g,
 				const Ruleset* r);

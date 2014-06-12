@@ -57,7 +57,7 @@ ProductionCompleteState::ProductionCompleteState(
 		const std::wstring& item,
 		GeoscapeState* state,
 		bool showGotoBaseButton, // myk002_add.
-		ProdProgress endType)
+		ProductProgress endType)
 	:
 		State(game),
 		_base(base),
@@ -102,10 +102,10 @@ ProductionCompleteState::ProductionCompleteState(
 					Options::keyGeoSpeed1);
 
 	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
-/*kL	if (_endType != PROGRESS_CONSTRUCTION)
-		_btnGotoBase->setText(tr("STR_ALLOCATE_MANUFACTURE"));
-	else */
+//	if (_endType == PROGRESS_CONSTRUCTION)			// <- construct facility done.
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
+//	else //if (_endType != PROGRESS_CONSTRUCTION)	// <- kL_note: i inverted those
+//		_btnGotoBase->setText(tr("STR_ALLOCATE_MANUFACTURE"));
 	_btnGotoBase->setVisible(showGotoBaseButton); // myk002
 	_btnGotoBase->onMouseClick((ActionHandler)& ProductionCompleteState::btnGotoBaseClick);
 	_btnGotoBase->onKeyboardPress(
@@ -118,31 +118,32 @@ ProductionCompleteState::ProductionCompleteState(
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
 
-	std::wstring s;
+	std::wstring str;
 	switch (_endType)
 	{
 		case PROGRESS_CONSTRUCTION:
-			s = tr("STR_CONSTRUCTION_OF_FACILITY_AT_BASE_IS_COMPLETE")
+			str = tr("STR_CONSTRUCTION_OF_FACILITY_AT_BASE_IS_COMPLETE")
 					.arg(item).arg(base->getName());
 		break;
 		case PROGRESS_COMPLETE:
-			s = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE")
+			str = tr("STR_PRODUCTION_OF_ITEM_AT_BASE_IS_COMPLETE")
 					.arg(item).arg(base->getName());
 		break;
 		case PROGRESS_NOT_ENOUGH_MONEY:
-			s = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE")
+			str = tr("STR_NOT_ENOUGH_MONEY_TO_PRODUCE_ITEM_AT_BASE")
 					.arg(item).arg(base->getName());
 		break;
 		case PROGRESS_NOT_ENOUGH_MATERIALS:
-			s = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE")
+			str = tr("STR_NOT_ENOUGH_SPECIAL_MATERIALS_TO_PRODUCE_ITEM_AT_BASE")
 					.arg(item).arg(base->getName());
 		break;
 
 		default:
 			assert(false);
+		break;
 	}
 
-	_txtMessage->setText(s);
+	_txtMessage->setText(str);
 }
 
 /**

@@ -163,7 +163,7 @@ bool Production::enoughMaterials(Base* b)
 /**
  *
  */
-ProdProgress Production::step(
+ProductProgress Production::step(
 		Base* b,
 		SavedGame* g,
 		const Ruleset* r)

@@ -82,6 +82,7 @@ private:
 		_unitDying;
 	int
 		_animFrame,
+//kL		_cursorFrame, // DarkDefender
 		_cursorSize,
 		_mouseX,
 		_mouseY,
@@ -101,8 +102,10 @@ private:
 	Projectile			* _projectile;
 	ResourcePack		* _res;
 	SavedBattleGame		* _save;
-	Surface				* _arrow;
-//kL	Text* _txtAccuracy;
+	Surface
+						* _arrow,
+						* _arrow_kneel; // DarkDefender
+//kL	Text				* _txtAccuracy;
 	Timer
 						* _scrollMouseTimer,
 						* _scrollKeyTimer;

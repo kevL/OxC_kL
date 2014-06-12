@@ -116,13 +116,14 @@ Map::Map(
 		_cursorType(CT_NORMAL),
 		_cursorSize(1),
 		_animFrame(0),
+//kL		_cursorFrame(0), // DarkDefender
 		_projectile(0),
 		_projectileInFOV(false),
 		_explosionInFOV(false),
 		_launch(false),
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
-		_reveal(0),
+		_reveal(0), // kL
 		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
@@ -198,8 +199,8 @@ Map::~Map()
 void Map::init()
 {
 	// load the unit-selected bobbing-arrow into a surface
-	int f = Palette::blockOffset(1);	// yellow
-	int b = 15;							// black
+	int f = Palette::blockOffset(1);	// yellow,	Fill
+	int b = 15;							// black,	Border
 	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
 				       0, 0, b, f, f, f, b, 0, 0,
@@ -232,9 +233,42 @@ void Map::init()
 	}
 	_arrow->unlock();
 
+	// DarkDefender_begin:
+	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							 0, 0, b, b, b, b, b, 0, 0,
+							 0, 0, b, f, f, f, b, 0, 0,
+							 b, b, b, f, f, f, b, b, b,
+							 b, f, f, f, f, f, f, f, b,
+							 0, b, f, f, f, f, f, b, 0,
+							 0, 0, b, f, f, f, b, 0, 0,
+							 0, 0, 0, b, f, b, 0, 0, 0,
+							 0, 0, 0, 0, b, 0, 0, 0, 0 };
+
+	_arrow_kneel = new Surface(9, 9);
+	_arrow_kneel->setPalette(this->getPalette());
+
+	_arrow_kneel->lock();
+	for (int
+			y = 0;
+			y < 9;
+			++y)
+	{
+		for (int
+				x = 0;
+				x < 9;
+				++x)
+		{
+			_arrow_kneel->setPixelColor(
+									x,
+									y,
+									pixels_kneel[x + (y * 9)]);
+		}
+	}
+	_arrow_kneel->unlock(); // DarkDefender_end.
+
 	_projectile = 0;
 
-/*	int // kL_begin:
+/*	int // kL_begin: reveal map's border tiles.
 		size_x = _save->getMapSizeX(),
 		size_y = _save->getMapSizeY(),
 		size_z = _save->getMapSizeZ();
@@ -336,7 +370,8 @@ void Map::draw()
 	}
 
 	//Log(LOG_INFO) << ". . kL_preReveal = " << kL_preReveal;
-/*kL	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
+/*kL
+	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
 		|| _unitDying
 		|| _save->getSelectedUnit() == 0
 		|| _save->getDebugMode()
@@ -354,14 +389,20 @@ void Map::draw()
 		|| _save->getDebugMode()
 		|| _projectileInFOV
 		|| _explosionInFOV
-		|| (_reveal && !kL_preReveal))
+		|| (_reveal > 0
+			&& !kL_preReveal))
 	{
-		if (_reveal && !kL_preReveal)
+		if (_reveal > 0
+			&& !kL_preReveal)
+		{
 			_reveal--;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
+		}
 		else
-			_reveal = 3;
+		{
+			_reveal = 4;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
+		}
 
 		if (_save->getSide() == FACTION_PLAYER)
 			_save->getBattleState()->toggleIcons(true);
@@ -433,6 +474,8 @@ void Map::drawTerrain(Surface* surface)
 		bulletScreen;
 
 //kL	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
+//kL	static const int arrowBob[10] = {0,2,3,3,2,0,-2,-3,-3,-2}; // DarkDefender
+
 	bool invalid = false;
 	int
 		bulletLowX	= 16000,
@@ -1807,9 +1850,25 @@ void Map::drawTerrain(Surface* surface)
 		if (unit->getArmor()->getSize() > 1)
 			offset.y += 8;
 
-		if (unit->isKneeled())
+		if (unit->isKneeled()
+			&& this->getCursorType() != CT_NONE) // DarkDefender
+		{
 			offset.y -= 6;
-
+			_arrow_kneel->blitNShade( // DarkDefender
+								surface,
+								screenPosition.x
+									+ offset.x
+									+ (_spriteWidth / 2)
+									- (_arrow->getWidth() / 2),
+								screenPosition.y
+									+ offset.y
+									- _arrow->getHeight()
+//kL								+ arrowBob[_cursorFrame],
+									+ static_cast<int>( // kL
+										4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
+								0);
+		}
+		else // DarkDefender
 		if (this->getCursorType() != CT_NONE)
 			_arrow->blitNShade(
 							surface,
@@ -1821,6 +1880,7 @@ void Map::drawTerrain(Surface* surface)
 								+ offset.y
 								- _arrow->getHeight()
 //kL							+ arrowBob[_animFrame],
+//kL							+ arrowBob[_cursorFrame], // DarkDefender
 								+ static_cast<int>( // kL
 									4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
 							0);
@@ -1944,8 +2004,12 @@ void Map::mouseOver(Action* action, State* state)
 void Map::animate(bool redraw)
 {
 	_animFrame++;
-	if (_animFrame == 8)
+ 	if (_animFrame == 8)
 		_animFrame = 0;
+
+//kL	_cursorFrame++;			// DarkDefender
+//kL	if (_cursorFrame == 10)	// DarkDefender
+//kL		_cursorFrame = 0;	// DarkDefender
 
 	// kL_begin:
 /*	if (_animUp)

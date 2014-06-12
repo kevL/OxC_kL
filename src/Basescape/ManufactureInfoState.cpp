@@ -472,9 +472,14 @@ void ManufactureInfoState::moreUnit(int change)
 	{
 		int units = _production->getAmountTotal();
 
-		change = std::min(std::numeric_limits<int>::max() - units, change);
+		change = std::min(
+						std::numeric_limits<int>::max() - units,
+						change);
+
 		if (_production->getRules()->getCategory() == "STR_CRAFT")
-			change = std::min(_base->getAvailableHangars() - _base->getUsedHangars(), change);
+			change = std::min(
+							_base->getAvailableHangars() - _base->getUsedHangars(),
+							change);
 
 		_production->setAmountTotal(units + change);
 
@@ -528,8 +533,8 @@ void ManufactureInfoState::moreUnitClick(Action* action)
 }
 
 /**
- * Removes the given number of units to produce from the project if possible.
- * @param change How much we want to subtract.
+ * Removes the given number of units to produce from the total if possible.
+ * @param change - how many to subtract
  */
 void ManufactureInfoState::lessUnit(int change)
 {
@@ -537,11 +542,10 @@ void ManufactureInfoState::lessUnit(int change)
 		return;
 
 	int units = _production->getAmountTotal();
-//	change = std::min(
-//					units - _production->getAmountProduced() + 1,
-//					change);
-//	_production->setAmountTotal(units - change);
-	_production->setAmountTotal(units - change + 1); // kL
+	change = std::min(
+					units - (_production->getAmountProduced() + 1),
+					change);
+	_production->setAmountTotal(units - change);
 
 	setAssignedEngineer();
 }
@@ -634,7 +638,7 @@ void ManufactureInfoState::onMoreUnit()
 }
 
 /**
- * Builds one less unit( if possible).
+ * Builds one less unit (if possible).
  */
 void ManufactureInfoState::onLessUnit()
 {

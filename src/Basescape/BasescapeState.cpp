@@ -561,14 +561,15 @@ void BasescapeState::viewRightClick(Action*)
 	}
 	else if (fac->getRules()->getCrafts() > 0)
 	{
-		if (_base->getCrafts()->size() == 0) // no Craft at base
+/*		if (_base->getCrafts()->size() == 0) // no Craft at base
 		{
 			bPop = true;
 			_game->pushState(new CraftsState(
 											_game,
 											_base));
 		}
-		else
+		else */
+		if (_base->getCrafts()->size() > 0) // Craft at base
 		{
 			for (size_t // kL_begin:
 					i = 0;
@@ -581,7 +582,7 @@ void BasescapeState::viewRightClick(Action*)
 				{
 					bPop = true;
 
-					if (craft->getStatus() == "STR_OUT")
+/*					if (craft->getStatus() == "STR_OUT")
 					{
 						_game->getSavedGame()->setGlobeLongitude(craft->getLongitude());
 						_game->getSavedGame()->setGlobeLatitude(craft->getLatitude());
@@ -593,13 +594,13 @@ void BasescapeState::viewRightClick(Action*)
 						break; // might not be needed here
 					}
 					else // Empty hangar, no craft for it; however, base has at least one craft (docked or out)
-					{
-						_game->pushState(new CraftsState(
-														_game,
-														_base));
+					{ */
+					_game->pushState(new CraftsState(
+													_game,
+													_base));
 
-						break;
-					}
+					break;
+//					}
 				}
 				else if (fac->getCraft() == craft) // craft is docked here
 				{
@@ -680,6 +681,7 @@ void BasescapeState::viewRightClick(Action*)
 
 		_game->popState();
 	}
+
 
 	if (bPop)
 		soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1, see Game.cpp

@@ -1530,7 +1530,6 @@ Node* SavedBattleGame::getPatrolNode(
 		Node* fromNode)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getPatrolNode()";
-
 	if (fromNode == 0)
 	{
 		if (Options::traceAI) Log(LOG_INFO) << "This alien got lost. :(";

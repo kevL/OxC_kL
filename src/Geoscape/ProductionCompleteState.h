@@ -50,7 +50,7 @@ private:
 	Base* _base;
 	GeoscapeState* _state;
 
-	ProdProgress _endType;
+	ProductProgress _endType;
 	Text* _txtMessage;
 	TextButton
 		* _btnGotoBase,
@@ -67,7 +67,7 @@ private:
 				const std::wstring& item,
 				GeoscapeState* state,
 				bool showGotoBaseButton, // myk002_add.
-				ProdProgress endType = PROGRESS_COMPLETE);
+				ProductProgress endType = PROGRESS_COMPLETE);
 		/// Cleans up the Production Complete state.
 		~ProductionCompleteState();
 

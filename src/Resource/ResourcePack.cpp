@@ -206,8 +206,8 @@ std::list<Polyline*>* ResourcePack::getPolylines()
 
 /**
  * Returns a specific music from the resource set.
- * @param name, Name of the music.
- * @return,, Pointer to the music.
+ * @param name - reference to the name of the music
+ * @return, pointer to Music
  */
 Music* ResourcePack::getMusic(const std::string& name) const
 {
@@ -228,13 +228,14 @@ Music* ResourcePack::getMusic(const std::string& name) const
 
 /**
  * Plays the specified track if it's not already playing.
- * @param name Name of the music.
- * @param random Pick a random track?
+ * @param name		- reference to the name of the music
+ * @param random	- true to pick a random track
  */
 void ResourcePack::playMusic(	// kL_note: Should put 'terrain' string input here, for sza_MusicRules
 								// and then change the BattlescapeState ->play() call to a regular playMusic() call.
 		const std::string& name,
-		bool random)
+		bool random,
+		const std::string& terrain) // kL, sza_MusicRules
 {
 	if (!Options::mute
 		&& _playingMusic != name)
@@ -246,7 +247,7 @@ void ResourcePack::playMusic(	// kL_note: Should put 'terrain' string input here
 
 		if (random)
 //kL			getRandomMusic(name)->play();
-			getRandomMusic(name, "")->play(); // kL: sza_MusicRules
+			getRandomMusic(name, terrain)->play(); // kL: sza_MusicRules
 		else
 			getMusic(name)->play();
 	}

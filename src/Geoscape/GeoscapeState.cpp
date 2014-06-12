@@ -146,13 +146,13 @@ struct ProductionCompleteInfo
 	bool showGotoBaseButton;
 
 //kL	productionProgress_e endType;
-	ProdProgress endType; // kL
+	ProductProgress endType; // kL
 
 	ProductionCompleteInfo(
 			const std::wstring& a_item,
 			bool a_showGotoBaseButton,
 //kL			productionProgress_e a_endType)
-			ProdProgress a_endType) // kL
+			ProductProgress a_endType) // kL
 		:
 			item(a_item),
 			showGotoBaseButton(a_showGotoBaseButton),
@@ -170,9 +170,8 @@ struct NewPossibleResearchInfo
 			const std::vector<RuleResearch*>& a_newPossibleResearch,
 			bool a_showResearchButton)
 		:
-			newPossibleResearch(
-				a_newPossibleResearch),
-				showResearchButton(a_showResearchButton)
+			newPossibleResearch(a_newPossibleResearch),
+			showResearchButton(a_showResearchButton)
 	{
 	}
 };
@@ -186,9 +185,8 @@ struct NewPossibleManufactureInfo
 			const std::vector<RuleManufacture*>& a_newPossibleManufacture,
 			bool a_showManufactureButton)
 		:
-			newPossibleManufacture(
-				a_newPossibleManufacture),
-				showManufactureButton(a_showManufactureButton)
+			newPossibleManufacture(a_newPossibleManufacture),
+			showManufactureButton(a_showManufactureButton)
 	{
 	}
 }; // myk002_end.
@@ -2155,38 +2153,39 @@ void GeoscapeState::time1Hour()
 	//Log(LOG_INFO) << "GeoscapeState::time1Hour()";
 	// kL_begin:
 	for (std::vector<Region*>::iterator
-			k = _game->getSavedGame()->getRegions()->begin();
-			k != _game->getSavedGame()->getRegions()->end();
-			++k)
+			region = _game->getSavedGame()->getRegions()->begin();
+			region != _game->getSavedGame()->getRegions()->end();
+			++region)
 	{
-		(*k)->recentActivity(false);
+		(*region)->recentActivity(false);
 	}
 
 	for (std::vector<Country*>::iterator
-			k = _game->getSavedGame()->getCountries()->begin();
-			k != _game->getSavedGame()->getCountries()->end();
-			++k)
+			country = _game->getSavedGame()->getCountries()->begin();
+			country != _game->getSavedGame()->getCountries()->end();
+			++country)
 	{
-		(*k)->recentActivity(false);
+		(*country)->recentActivity(false);
 	} // kL_end.
 
 
 	//Log(LOG_INFO) << ". arrivals";
 	bool arrivals = false;
+
 	for (std::vector<Base*>::iterator // handle transfers
-			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end();
-			++i)
+			base = _game->getSavedGame()->getBases()->begin();
+			base != _game->getSavedGame()->getBases()->end();
+			++base)
 	{
 		for (std::vector<Transfer*>::iterator
-				j = (*i)->getTransfers()->begin();
-				j != (*i)->getTransfers()->end();
-				++j)
+				transfer = (*base)->getTransfers()->begin();
+				transfer != (*base)->getTransfers()->end();
+				++transfer)
 		{
-			(*j)->advance(*i);
+			(*transfer)->advance(*base);
 
-			if (!arrivals
-				&& (*j)->getHours() == 0)
+			if ((*transfer)->getHours() == 0
+				&& !arrivals)
 			{
 				arrivals = true;
 			}
@@ -2199,60 +2198,61 @@ void GeoscapeState::time1Hour()
 								_game,
 								this));
 
+
 	std::vector<ProductionCompleteInfo> events; // myk002
 
 	for (std::vector<Base*>::iterator // handle Production
-			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end();
-			++i)
+			base = _game->getSavedGame()->getBases()->begin();
+			base != _game->getSavedGame()->getBases()->end();
+			++base)
 	{
-		std::map<Production*, ProdProgress> toRemove;
+		std::map<Production*, ProductProgress> toRemove;
 
 		for (std::vector<Production*>::const_iterator
-				j = (*i)->getProductions().begin();
-				j != (*i)->getProductions().end();
-				++j)
+				product = (*base)->getProductions().begin();
+				product != (*base)->getProductions().end();
+				++product)
 		{
-			toRemove[*j] = (*j)->step(
-									*i,
-									_game->getSavedGame(),
-									_game->getRuleset());
+			toRemove[*product] = (*product)->step(
+												*base,
+												_game->getSavedGame(),
+												_game->getRuleset());
 		}
 
-		for (std::map<Production*, ProdProgress>::iterator
-				j = toRemove.begin();
-				j != toRemove.end();
-				++j)
+		for (std::map<Production*, ProductProgress>::iterator
+				product = toRemove.begin();
+				product != toRemove.end();
+				++product)
 		{
-			if (j->second > PROGRESS_NOT_COMPLETE)
+			if (product->second > PROGRESS_NOT_COMPLETE)
 			{
-				(*i)->removeProduction(j->first);
+				(*base)->removeProduction(product->first);
 
 				if (!events.empty()) // myk002_begin: only show the action button for the last completion notification
 					events.back().showGotoBaseButton = false;
 
 				events.push_back(ProductionCompleteInfo(
-													tr(j->first->getRules()->getName()),
+													tr(product->first->getRules()->getName()),
 													true,
-													j->second)); // myk002_end.
+													product->second)); // myk002_end.
 /*myk002
 				popup(new ProductionCompleteState(
 												_game,
-												*i,
-												tr(j->first->getRules()->getName()),
+												*base,
+												tr(product->first->getRules()->getName()),
 												this,
-												j->second)); */
+												product->second)); */
 			}
 		}
 
 		if (Options::storageLimitsEnforced
-			&& (*i)->storesOverfull())
+			&& (*base)->storesOverfull())
 		{
 			timerReset(); // kL
 
 			popup(new ErrorMessageState(
 									_game,
-									tr("STR_STORAGE_EXCEEDED").arg((*i)->getName()).c_str(),
+									tr("STR_STORAGE_EXCEEDED").arg((*base)->getName()).c_str(),
 									_palette,
 //kL									Palette::blockOffset(15)+1,
 									Palette::blockOffset(6)+4, // kL
@@ -2261,21 +2261,24 @@ void GeoscapeState::time1Hour()
 									6));
 			popup(new SellState(
 							_game,
-							*i));
+							*base));
 		}
 
 		for (std::vector<ProductionCompleteInfo>::iterator // myk002_begin:
-				eventIt = events.begin();
-				eventIt != events.end();
-				++eventIt)
+				event = events.begin();
+				event != events.end();
+//kL			++event
+				)
 		{
 			popup(new ProductionCompleteState(
 											_game,
-											*i,
-											eventIt->item,
+											*base,
+											event->item,
 											this,
-											eventIt->showGotoBaseButton,
-											eventIt->endType)); // myk002_end.
+											event->showGotoBaseButton,
+											event->endType)); // myk002_end.
+
+			event = events.erase(event); // kL
 		}
 	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Hour() EXIT";
@@ -2681,54 +2684,68 @@ void GeoscapeState::time1Day()
 		// players have a chance to allocate the now-free scientists
 		if (!researchCompleteEvents.empty() && newPossibleResearchEvents.empty())
 		{
-			newPossibleResearchEvents.push_back(NewPossibleResearchInfo(std::vector<RuleResearch *>(), true));
+			newPossibleResearchEvents.push_back(NewPossibleResearchInfo(
+																	std::vector<RuleResearch *>(),
+																	true));
 		}
 
 		// show events
 		for (std::vector<ProductionCompleteInfo>::iterator
-				pceIt = productionCompleteEvents.begin();
-				pceIt != productionCompleteEvents.end();
-				++pceIt)
+				pcEvent = productionCompleteEvents.begin();
+				pcEvent != productionCompleteEvents.end();
+//kL			++pcEvent
+				)
 		{
 			popup(new ProductionCompleteState(
 											_game,
 											*b,
-											pceIt->item,
+											pcEvent->item,
 											this,
-											pceIt->showGotoBaseButton,
-											pceIt->endType));
+											pcEvent->showGotoBaseButton,
+											pcEvent->endType));
+
+			pcEvent = productionCompleteEvents.erase(pcEvent); // kL
 		}
 
 		for (std::vector<State*>::iterator
-				rceIt = researchCompleteEvents.begin();
-				rceIt != researchCompleteEvents.end();
-				++rceIt)
+				rcEvent = researchCompleteEvents.begin();
+				rcEvent != researchCompleteEvents.end();
+//kL			++rcEvent
+				)
 		{
-			popup(*rceIt);
+			popup(*rcEvent);
+
+			rcEvent = researchCompleteEvents.erase(rcEvent); // kL
 		}
 
 		for (std::vector<NewPossibleResearchInfo>::iterator
-				npreIt = newPossibleResearchEvents.begin();
-				npreIt != newPossibleResearchEvents.end();
-				++npreIt)
+				resEvent = newPossibleResearchEvents.begin();
+				resEvent != newPossibleResearchEvents.end();
+//kL			++resEvent
+				)
 		{
 			popup(new NewPossibleResearchState(
 											_game,
 											*b,
-											npreIt->newPossibleResearch,
-											npreIt->showResearchButton));
+											resEvent->newPossibleResearch,
+											resEvent->showResearchButton));
+
+			resEvent = newPossibleResearchEvents.erase(resEvent); // kL
 		}
 
 		for (std::vector<NewPossibleManufactureInfo>::iterator
-				npmeIt = newPossibleManufactureEvents.begin();
-				npmeIt != newPossibleManufactureEvents.end();
-				++npmeIt)
+				manEvent = newPossibleManufactureEvents.begin();
+				manEvent != newPossibleManufactureEvents.end();
+//kL			++manEvent
+				)
 		{
 			popup(new NewPossibleManufactureState(
 												_game,
 												*b,
-												npmeIt->newPossibleManufacture,
-												npmeIt->showManufactureButton));
+												manEvent->newPossibleManufacture,
+												manEvent->showManufactureButton));
+
+			manEvent = newPossibleManufactureEvents.erase(manEvent); // kL
 		} // myk002_end.
 	}
 
