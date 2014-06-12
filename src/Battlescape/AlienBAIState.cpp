@@ -1856,97 +1856,86 @@ bool AlienBAIState::findFirePoint()
 }
 
 /**
- * Decides if it's worth our while to create an explosion here.
- * @param targetPos		- The target's position.
- * @param attackingUnit	- The attacking unit.
- * @param radius		- How big the explosion will be.
- * @param diff			- Game difficulty.
- * @param grenade		- Is the explosion coming from a grenade?
- * @return, True if it is worthwile creating an explosion in the target position.
+ * Decides if it's worth our while to create an explosion.
+ * @param targetPos		- target's position
+ * @param attacker	- pointer to the attacking unit
+ * @param radius		- radius of explosion in tile space
+ * @param diff			- game difficulty (default -1)
+ * @param grenade		- true if explosion will be from a grenade
+ * @return, true if it's worthwile creating an explosion at the target position
  */
 bool AlienBAIState::explosiveEfficacy(
 		Position targetPos,
-		BattleUnit* attackingUnit,
+		BattleUnit* attacker,
 		int radius,
 		int diff) const
 //		bool grenade) const
 {
 	//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy()";
-
 	if (diff == -1)
 		diff = static_cast<int>(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 
-	// i hate the player and i want him dead, but i don't want to piss him off:
-//kL	if (_save->getTurn() < 3) return false;
-	if (_save->getTurn() < 5 - diff) // kL
+	// i hate the player and i want him dead, but i don't want to piss him off
+	if (_save->getTurn() < 5 - diff)
 		return false;
 
 
-	// if we're below 1/3 health, let's assume things are dire, and increase desperation.
-	int desperation = (100 - attackingUnit->getMorale()) / 10;
-//kL	int hurt = attackingUnit->getStats()->health - attackingUnit->getHealth();
-	int hurt = 10 -
-			static_cast<int>(
-				static_cast<float>(attackingUnit->getHealth()) / static_cast<float>(attackingUnit->getStats()->health) * 10.f);
-//kL	if (hurt > attackingUnit->getStats()->health * 2 / 3)
-//kL		desperation += 3;
+	// if attacker is hurt, assume things are dire and increase desperation
+	int desperation = (100 - attacker->getMorale()) / 10;
+	int hurt = 10 - static_cast<int>(
+						static_cast<float>(attacker->getHealth()) / static_cast<float>(attacker->getStats()->health) * 10.f);
+	int effect = (desperation + hurt) * 3;
 
-//kL	int eff = desperation + affected; // kL_note: no affected yet...
-	int eff = (desperation + hurt) * 2;
-
-	int distance = _save->getTileEngine()->distance(attackingUnit->getPosition(), targetPos);
-//kL	if (distance < radius + 1) // attacker inside blast zone
-	if (distance < radius)
+	// but don't go kamikaze unless we're already doomed
+	int distance = _save->getTileEngine()->distance(
+												attacker->getPosition(),
+												targetPos);
+	if (distance < radius) // attacker inside blast zone
 	{
-//kL		eff -= 4;
-		eff -= 35;		// kL
-		if (attackingUnit->getPosition().z == targetPos.z)
-			eff -= 15;		// kL
+		effect -= 35;
+
+		if (abs(attacker->getPosition().z - targetPos.z) <= Options::battleExplosionHeight)
+			effect -= 15;
 	}
 
-	// we don't want to ruin our own base, but we do want to ruin XCom's day.
+	// don't want to ruin our own base, but do ruin xCom's day
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
-//kL		eff -= 3;
-		eff -= 25;
+		effect -= 25;
 	else if (_save->getMissionType() == "STR_BASE_DEFENSE"
 		|| _save->getMissionType() == "STR_TERROR_MISSION")
 	{
-//kL		eff += 3;
-		eff += 50;
+		effect += 50;
 	}
 
-//kL	efficacy += diff / 2;
+	// allow difficulty to have an influence
+	effect += diff;
 
-//kL	int affected = 0;
-
+	// account for the targeted unit -> excludeUnit when calculatingLine below.
 	BattleUnit* target = _save->getTile(targetPos)->getUnit();
-/*	if (target)
-	{
-		++enemiesAffected;
-		++efficacy;
-	} */
 
 	for (std::vector<BattleUnit*>::iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if (!(*i)->isOut(true)
-			&& *i != attackingUnit
-//kL		&& *i != target
+		if (!(*i)->isOut(true)	// don't grenade dead guys
+			&& *i != attacker	// don't count ourself twice
+//			&& *i != target		// don't count the target twice (kL_note: not been coconutted yet)
+			// don't count units that probably won't be affected cause they're out of range
 			&& abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight
 			&& _save->getTileEngine()->distance(
 											(*i)->getPosition(),
 											targetPos)
-//kL									< radius + 1)
-										< radius) // kL
+										< radius)
 		{
-			if ((*i)->getFaction() == FACTION_PLAYER
-				&& (*i)->getTurnsExposed() > _intelligence)
+			if ((*i)->getTile()->getDangerous()				// don't count people who were already grenaded this turn
+				|| ((*i)->getFaction() == FACTION_PLAYER	// don't count units we don't know about
+					&& (*i)->getTurnsExposed() > _intelligence))
 			{
 				continue;
 			}
 
+			// trace a line from the grenade origin to targetPos
 			Position voxelPosA = Position(
 									(targetPos.x * 16) + 8,
 									(targetPos.y * 16) + 8,
@@ -1956,15 +1945,6 @@ bool AlienBAIState::explosiveEfficacy(
 									((*i)->getPosition().y * 16) + 8,
 									((*i)->getPosition().z * 24) + 12);
 
-/*			int collision = _save->getTileEngine()->calculateLine(
-																voxelPosA,
-																voxelPosB,
-																false,
-																0,
-																target,
-																true,
-																false,
-																*i); */
 			std::vector<Position> traj;
 			int collision = _save->getTileEngine()->calculateLine(
 																voxelPosA,
@@ -1979,40 +1959,20 @@ bool AlienBAIState::explosiveEfficacy(
 				&& traj.front() / Position(16, 16, 24) == (*i)->getPosition())
 			{
 				if ((*i)->getFaction() == FACTION_PLAYER)
-					eff += 10;
-//kL					++eff;
-//kL					++affected;
-//kL				else if ((*i)->getFaction() == attackingUnit->getFaction())
-				else if ((*i)->getOriginalFaction() == attackingUnit->getFaction()) // kL
-//kL					eff -= 2;	// friendlies count double
-					eff -= 5;		// true friendlies count half
+					effect += 10;
+				else if ((*i)->getOriginalFaction() == attacker->getFaction())
+					effect -= 5; // true friendlies count half
 			}
 		}
 	}
 
-	// spice things up a bit by adding a random number based on difficulty level
-//	eff += RNG::generate(0, diff + 1) - RNG::generate(0, 5);
-//	if (eff > 0 || affected >= 10)
-//	if (eff > 0)
-//		|| affected >= 3)	// kL
-
-	// don't throw grenades at single targets, unless morale is in the danger zone,
-	// or we're halfway towards panicking while bleeding to death.
-//kL	if (grenade
-//kL		&& desperation < 6
-//kL		&& enemiesAffected < 2)
-//kL	{
-//kL		return false;
-//kL	}
-
-//	if (//eff > 0 &&		// kL
-	if (RNG::percent(eff))	// kL
+	if (RNG::percent(effect))
 	{
-		//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy() EXIT true, eff = " << eff;
+		//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy() EXIT true, effect = " << effect;
 		return true;
 	}
 
-	//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy() EXIT false, eff = " << eff;
+	//Log(LOG_INFO) << "AlienBAIState::explosiveEfficacy() EXIT false, effect = " << effect;
 	return false;
 }
 

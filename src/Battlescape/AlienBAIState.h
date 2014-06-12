@@ -140,9 +140,9 @@ protected:
 		/// Decides if we should throw a grenade/launch a missile to this position.
 		bool explosiveEfficacy(
 				Position targetPos,
-				BattleUnit* attackingUnit,
+				BattleUnit* attacker,
 				int radius,
-				int diff) const;
+				int diff = -1) const;
 //				bool grenade = false) const;
 
 		/// Attempts to take a melee attack/charge an enemy we can see.
