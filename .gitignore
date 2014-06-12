@@ -4,6 +4,7 @@
 [Dd]esktop.ini
 
 #*.dll
+.dirstamp
 *.o
 *.obj
 *.exe

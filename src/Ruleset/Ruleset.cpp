@@ -1908,6 +1908,7 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 							newId);
 
 		duplicate = false;
+
 		for (std::vector<Base*>::iterator
 				i = save->getBases()->begin();
 				i != save->getBases()->end()
@@ -1938,6 +1939,11 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 			}
 		}
 	}
+
+	soldier->calcStatString( // calculate new statString
+						getStatStrings(),
+						(Options::psiStrengthEval
+							&& save->isResearched(getPsiRequirements())));
 
 	return soldier;
 }

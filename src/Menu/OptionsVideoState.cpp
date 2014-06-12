@@ -89,7 +89,7 @@ OptionsVideoState::OptionsVideoState(
 	_btnLetterbox				= new ToggleTextButton(104, 16, 206, 92);
 	_btnLockMouse				= new ToggleTextButton(104, 16, 206, 110);
 
-	/* Get available fullscreen modes */
+	// Get available fullscreen modes
 	_res = SDL_ListModes(NULL, SDL_FULLSCREEN);
 	if (_res != (SDL_Rect**)-1
 		&& _res != (SDL_Rect**)0)
@@ -257,7 +257,8 @@ OptionsVideoState::OptionsVideoState(
 	}
 #endif
 
-	int selFilter = 0;
+	size_t selFilter = 0;
+
 	if (Screen::isOpenGLEnabled())
 	{
 #ifndef __NO_OPENGL
@@ -410,6 +411,28 @@ void OptionsVideoState::txtDisplayWidthChange(Action*)
 	ss << std::dec << _txtDisplayWidth->getText();
 	ss >> std::dec >> width;
 	Options::newDisplayWidth = width;
+
+	// Update resolution mode
+	if (_res != (SDL_Rect**)-1
+		&& _res != (SDL_Rect**)0)
+	{
+		int i;
+		_resCurrent = -1;
+
+		for (
+				i = 0;
+				_res[i];
+				++i)
+		{
+			if (_resCurrent == -1
+				&& ((_res[i]->w == Options::newDisplayWidth
+						&& _res[i]->h <= Options::newDisplayHeight)
+					|| _res[i]->w < Options::newDisplayWidth))
+			{
+				_resCurrent = i;
+			}
+		}
+	}
 }
 
 /**
@@ -423,6 +446,28 @@ void OptionsVideoState::txtDisplayHeightChange(Action*)
 	ss << std::dec << _txtDisplayHeight->getText();
 	ss >> std::dec >> height;
 	Options::newDisplayHeight = height;
+
+	// Update resolution mode
+	if (_res != (SDL_Rect**)-1
+		&& _res != (SDL_Rect**)0)
+	{
+		int i;
+		_resCurrent = -1;
+
+		for (
+				i = 0;
+				_res[i];
+				++i)
+		{
+			if (_resCurrent == -1
+				&& ((_res[i]->w == Options::newDisplayWidth
+						&& _res[i]->h <= Options::newDisplayHeight)
+					|| _res[i]->w < Options::newDisplayWidth))
+			{
+				_resCurrent = i;
+			}
+		}
+	}
 }
 
 /**

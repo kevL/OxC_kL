@@ -2668,6 +2668,11 @@ void GeoscapeState::time1Day()
 					++s)
 			{
 				(*s)->trainPsi1Day();
+
+				(*s)->calcStatString(
+								_game->getRuleset()->getStatStrings(),
+								(Options::psiStrengthEval
+									&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
 			}
 		}
 
@@ -2904,6 +2909,11 @@ void GeoscapeState::time1Month()
 			{
 				if ((*s)->isInPsiTraining())
 					(*s)->trainPsi();
+
+					(*s)->calcStatString(
+									_game->getRuleset()->getStatStrings(),
+									(Options::psiStrengthEval
+										&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
 			}
 		}
 	}

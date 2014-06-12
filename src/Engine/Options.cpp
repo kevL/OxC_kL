@@ -345,9 +345,11 @@ void loadArgs(
 					_dataFolder = CrossPlatform::endPath(argv[i + 1]);
 				else if (argname == "user")
 					_userFolder = CrossPlatform::endPath(argv[i + 1]);
+				else if (argname == "cfg")
+					_configFolder = CrossPlatform::endPath(argv[i + 1]);
 				else
-					//save this command line option for now, we will apply it later
-					_commandLine[argname]= argv[i + 1];
+					// save this command line option for now, we will apply it later
+					_commandLine[argname] = argv[i + 1];
 			}
 			else
 				Log(LOG_WARNING) << "Unknown option : " << argname;
@@ -372,6 +374,8 @@ bool showHelp(
 	help << "    use PATH as the default Data Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-user PATH" << std::endl;
 	help << "    use PATH as the default User Folder instead of auto-detecting" << std::endl << std::endl;
+	help << "-cfg PATH" << std::endl;
+	help << "    use PATH as the default Config Folder instead of auto-detecting" << std::endl << std::endl;
 	help << "-KEY VALUE" << std::endl;
 	help << "    set option KEY to VALUE instead of default/loaded value (eg. -displayWidth 640)" << std::endl << std::endl;
 	help << "-help" << std::endl;

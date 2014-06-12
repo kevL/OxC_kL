@@ -5264,7 +5264,7 @@
 	<algorithm>
 	<stdint.h>
 
-1402509762 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1402512407 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -9264,7 +9264,7 @@
 1402504036 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1402457813 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1402543791 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
