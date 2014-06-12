@@ -1567,10 +1567,10 @@ bool BattleUnit::getVisible() const
 }
 
 /**
- * Adds a unit to a vector of spotted and/or visible units.
- * @param unit, A seen unit.
- * @return, True if the seen unit was NOT previously flagged as visible.
- * @note, xCom soldiers are always considered 'visible'; only aLiens go vis/inVis
+ * Adds a unit to a vector of spotted and/or visible units (they're different).
+ * xCom soldiers are always considered 'visible'; only aLiens go vis/unVis.
+ * @param unit - pointer to a seen unit
+ * @return, true if the seen unit was NOT previously flagged as visible
  */
 bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
@@ -1608,8 +1608,8 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 }
 
 /**
- * Gets the pointer to the vector of visible units.
- * @return pointer to vector.
+ * Gets the pointer to a vector of visible units.
+ * @return, pointer to a vector of pointers to visible units
  */
 std::vector<BattleUnit*>* BattleUnit::getVisibleUnits()
 {
@@ -1625,9 +1625,9 @@ void BattleUnit::clearVisibleUnits()
 }
 
 /**
- * Adds this unit to the list of visible tiles. Returns true, or chrashes.
- * @param tile
- * @return
+ * Adds a tile to the list of visible tiles.
+ * @param tile - pointer to a tile to add
+ * @return, true or CTD
  */
 bool BattleUnit::addToVisibleTiles(Tile* tile)
 {
@@ -1638,7 +1638,7 @@ bool BattleUnit::addToVisibleTiles(Tile* tile)
 
 /**
  * Gets the pointer to the vector of visible tiles.
- * @return pointer to vector.
+ * @return, pointer to a vector of pointers to visible tiles
  */
 std::vector<Tile*>* BattleUnit::getVisibleTiles()
 {

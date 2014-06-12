@@ -5708,7 +5708,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1402552088 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -7076,7 +7076,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1402457812 source:f:\git\openxcom\src\engine\options.cpp
+1402543041 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7667,7 +7667,7 @@
 1402457812 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1402508181 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1402543283 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9429,7 +9429,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1402469112 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1402550649 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9613,7 +9613,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1402457813 source:f:\git\openxcom\src\savegame\soldier.cpp
+1402543674 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"SoldierDead.h"
@@ -11607,7 +11607,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1402457812 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1402543465 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"

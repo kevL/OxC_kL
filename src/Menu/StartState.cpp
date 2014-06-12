@@ -136,7 +136,7 @@ StartState::StartState(Game* game)
 					0,
 					0);
 
-	_timer	= new Timer(12);
+	_timer	= new Timer(8);
 
 	setPalette(_font->getSurface()->getPalette(), 0, 2);
 
