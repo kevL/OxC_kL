@@ -75,6 +75,8 @@ private:
 		_colorAmmo;
 	double _spaceChange;
 
+	OptionsOrigin _origin;
+
 	Base* _base;
 	Text
 		* _txtFunds,

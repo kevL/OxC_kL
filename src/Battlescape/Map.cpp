@@ -1020,7 +1020,8 @@ void Map::drawTerrain(Surface* surface)
 														surface,
 														screenPosition.x - tileOffset.x,
 														screenPosition.y + tileWest->getTerrainLevel() + tileOffset.y,
-														tileWestShade);
+														tileWestShade,
+														true);
 								}
 
 								// Draw soldier
@@ -1058,7 +1059,8 @@ void Map::drawTerrain(Surface* surface)
 																screenPosition.y + tileOffset.y + getTerrainLevel(
 																											westUnit->getPosition(),
 																											westUnit->getArmor()->getSize()),
-																0);
+																0,
+																true);
 										}
 									}
 								}
@@ -1100,7 +1102,8 @@ void Map::drawTerrain(Surface* surface)
 											surface,
 											screenPosition.x,
 											screenPosition.y,
-											0);
+											0,
+											true);
 								} // kL_end.
 							}
 						}
@@ -1122,7 +1125,8 @@ void Map::drawTerrain(Surface* surface)
 														surface,
 														screenPosition.x - tileOffset.x,
 														screenPosition.y + tileOffset.y,
-														0);
+														0,
+														true);
 								} */
 // END ADVANCED DRAWING CYCLE
 

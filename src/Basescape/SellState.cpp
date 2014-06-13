@@ -52,6 +52,7 @@
 #include "../Savegame/ItemContainer.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/Transfer.h"
 
 
 namespace OpenXcom
@@ -79,7 +80,8 @@ SellState::SellState(
 		_total(0),
 		_hasSci(0),
 		_hasEng(0),
-		_spaceChange(0.0)
+		_spaceChange(0.0),
+		_origin(origin)
 {
 	bool overfull = Options::storageLimitsEnforced
 				&& _base->storesOverfull();
@@ -311,6 +313,28 @@ SellState::SellState(
 			++i)
 	{
 		int qty = _base->getItems()->getItem(*i);
+
+		if (Options::storageLimitsEnforced
+			&& origin == OPT_BATTLESCAPE)
+		{
+			for (std::vector<Transfer*>::iterator
+					j = _base->getTransfers()->begin();
+					j != _base->getTransfers()->end();
+					++j)
+			{
+				if ((*j)->getItems() == *i)
+					qty += (*j)->getQuantity();
+			}
+
+			for (std::vector<Craft*>::iterator
+					j = _base->getCrafts()->begin();
+					j != _base->getCrafts()->end();
+					++j)
+			{
+				qty += (*j)->getItems()->getItem(*i);
+			}
+		}
+
 		if (qty > 0
 			&& (Options::canSellLiveAliens
 				|| !_game->getRuleset()->getItem(*i)->getAlien()))
@@ -505,7 +529,71 @@ void SellState::btnOkClick(Action*)
 					_base->setEngineers(_base->getEngineers() - _qtys[i]);
 				break;
 				case SELL_ITEM:
-					_base->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
+					if (_base->getItems()->getItem(_items[getItemIndex(i)]) < _qtys[i])
+					{
+						const std::string itemName = _items[getItemIndex(i)];
+						int toRemove = _qtys[i] - _base->getItems()->getItem(itemName);
+
+						_base->getItems()->removeItem( // remove all of said items from base
+													itemName,
+													INT_MAX);
+
+						// if we still need to remove any, remove them from the crafts first, and keep a running tally
+						for (std::vector<Craft*>::iterator
+								j = _base->getCrafts()->begin();
+								j != _base->getCrafts()->end()
+									&& toRemove;
+								++j)
+						{
+							if ((*j)->getItems()->getItem(itemName) < toRemove)
+							{
+								toRemove -= (*j)->getItems()->getItem(itemName);
+
+								(*j)->getItems()->removeItem(
+														itemName,
+														INT_MAX);
+							}
+							else
+							{
+								(*j)->getItems()->removeItem(
+														itemName,
+														toRemove);
+
+								toRemove = 0;
+							}
+						}
+
+						// if there are STILL any left to remove, take them from the transfers, and if necessary, delete it.
+						for (std::vector<Transfer*>::iterator
+								j = _base->getTransfers()->begin();
+								j != _base->getTransfers()->end()
+									&& toRemove;
+								)
+						{
+							if ((*j)->getItems() == itemName)
+							{
+								if ((*j)->getQuantity() <= toRemove)
+								{
+									toRemove -= (*j)->getQuantity();
+
+									delete *j;
+									j = _base->getTransfers()->erase(j);
+								}
+								else
+								{
+									(*j)->setItems(
+												(*j)->getItems(),
+												(*j)->getQuantity() - toRemove);
+
+									toRemove = 0;
+								}
+							}
+							else
+								++j;
+						}
+					}
+					else
+						_base->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
 				break;
 			}
 		}
@@ -681,6 +769,8 @@ int SellState::getPrice()
  */
 int SellState::getQuantity()
 {
+	int qty = 0;
+
 	switch (getType(_sel))
 	{
 		case SELL_SOLDIER: // Soldiers/crafts are sold singly.
@@ -696,7 +786,30 @@ int SellState::getQuantity()
 			return _base->getEngineers(); // kL
 
 		case SELL_ITEM:
-			return _base->getItems()->getItem(_items[getItemIndex(_sel)]);
+			qty = _base->getItems()->getItem(_items[getItemIndex(_sel)]);
+
+			if (Options::storageLimitsEnforced
+				&& _origin == OPT_BATTLESCAPE)
+			{
+				for (std::vector<Transfer*>::iterator
+						j = _base->getTransfers()->begin();
+						j != _base->getTransfers()->end();
+						++j)
+				{
+					if ((*j)->getItems() == _items[getItemIndex(_sel)])
+						qty += (*j)->getQuantity();
+				}
+
+				for (std::vector<Craft*>::iterator
+						j = _base->getCrafts()->begin();
+						j != _base->getCrafts()->end();
+						++j)
+				{
+					qty += (*j)->getItems()->getItem(_items[getItemIndex(_sel)]);
+				}
+			}
+
+			return qty;
 	}
 
 	return 0;

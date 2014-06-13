@@ -4514,7 +4514,7 @@
 1402457811 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1402457811 f:\git\openxcom\src\basescape\sellstate.h
+1402630393 f:\git\openxcom\src\basescape\sellstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -5324,7 +5324,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1402457811 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1402631103 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	<climits>
 	<cmath>
@@ -5354,6 +5354,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
+	"../Savegame/Transfer.h"
 
 1402457811 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
 	"SoldierArmorState.h"
@@ -6393,7 +6394,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1402584182 source:f:\git\openxcom\src\battlescape\map.cpp
+1402631246 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6890,7 +6891,7 @@
 1402457811 f:\git\openxcom\src\engine\catfile.h
 	<fstream>
 
-1402457811 source:f:\git\openxcom\src\engine\crossplatform.cpp
+1402631282 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"CrossPlatform.h"
 	<algorithm>
 	<iostream>
@@ -8292,7 +8293,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1402457812 source:f:\git\openxcom\src\interface\textlist.cpp
+1402631474 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>

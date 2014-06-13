@@ -1147,12 +1147,17 @@ void TextList::draw()
 {
 	Surface::draw();
 
-	int y = _scroll * -(_font->getHeight() + _font->getSpacing());
+	int y = 0;
+	if (_scroll > 0
+		&& _rows[_scroll] == _rows[_scroll - 1])
+	{
+		y -= _font->getHeight() + _font->getSpacing();
+	}
 
 	for (size_t
-			i = 0;
+			i = _rows[_scroll];
 			i < _texts.size()
-				&& i < _scroll + _visibleRows;
+				&& i < _rows[_scroll] + _visibleRows;
 			++i)
 	{
 		for (std::vector<Text*>::iterator
@@ -1191,9 +1196,9 @@ void TextList::blit(Surface* surface)
 		if (_arrowPos != -1)
 		{
 			for (size_t
-					i = _scroll;
+					i = _rows[_scroll];
 					i < _texts.size()
-						&& i < _scroll + _visibleRows;
+						&& i < _rows[_scroll] + _visibleRows;
 					++i)
 			{
 				_arrowLeft[i]->setY(getY() + (i - _scroll) * (_font->getHeight() + _font->getSpacing()));
@@ -1226,9 +1231,9 @@ void TextList::handle(Action* action, State* state)
 	if (_arrowPos != -1)
 	{
 		for (size_t
-				i = _scroll;
+				i = _rows[_scroll];
 				i < _texts.size()
-					&& i < _scroll + _visibleRows;
+					&& i < _rows[_scroll] + _visibleRows;
 				++i)
 		{
 			_arrowLeft[i]->handle(action, state);
