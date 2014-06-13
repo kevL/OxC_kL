@@ -4436,7 +4436,7 @@
 	<vector>
 	<time.h>
 
-1402457811 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1402582932 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -6393,7 +6393,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1402577461 source:f:\git\openxcom\src\battlescape\map.cpp
+1402584182 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
