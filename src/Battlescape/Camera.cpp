@@ -704,21 +704,18 @@ bool Camera::isOnScreen(
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
 
-	return screenPos.x > 0 // kL_etc:
+	return screenPos.x > -1 // kL_etc:
 			&& screenPos.x < _screenWidth
-			&& screenPos.y > 0
+			&& screenPos.y > -1
 			&& screenPos.y < _screenHeight - 72; // <- icons.
 
 /*kL
 	if (unitWalking)
 	{
-		return screenPos.x >= -32
+		return screenPos.x >= -48
 				&& screenPos.x <= _screenWidth + 24
-				&& screenPos.y >= -32
-				&& ((screenPos.y <= _screenHeight + 8
-						&& (screenPos.x <= _screenWidth / 2 - Map::ICON_WIDTH / 2
-							|| screenPos.x >= _screenWidth / 2 + Map::ICON_WIDTH / 2 - 32))
-					|| screenPos.y <= _screenHeight - 16)
+				&& screenPos.y >= -56
+				&& screenPos.y <= _screenHeight + 12;
 	}
 	else
 	{

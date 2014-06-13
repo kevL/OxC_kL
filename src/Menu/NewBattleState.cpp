@@ -653,13 +653,30 @@ void NewBattleState::btnCancelClick(Action*)
  */
 void NewBattleState::btnRandomClick(Action*)
 {
-	_cbxMission->setSelected(RNG::generate(0, _missionTypes.size() - 1));
-	_cbxCraft->setSelected(RNG::generate(0, _crafts.size() - 1));
-	_slrDarkness->setValue(RNG::generate(0, 15));
-	_cbxTerrain->setSelected(RNG::generate(0, _terrainTypes.size() - 1));
-	_cbxAlienRace->setSelected(RNG::generate(0, _alienRaces.size() - 1));
-	_cbxDifficulty->setSelected(RNG::generate(0, 4));
-	_slrAlienTech->setValue(RNG::generate(0, _game->getRuleset()->getAlienItemLevels().size() - 1));
+	_cbxMission->setSelected(RNG::generate(
+										0,
+										_missionTypes.size() - 1));
+	_cbxCraft->setSelected(RNG::generate(
+										0,
+										_crafts.size() - 1));
+	_slrDarkness->setValue(RNG::generate(
+										0,
+										15));
+	_cbxTerrain->setSelected(RNG::generate(
+										0,
+										_terrainTypes.size() - 1));
+	_cbxAlienRace->setSelected(RNG::generate(
+										0,
+										_alienRaces.size() - 1));
+	_cbxDifficulty->setSelected(RNG::generate(
+										0,
+										4));
+	_slrAlienTech->setValue(RNG::generate(
+										0,
+										_game->getRuleset()->getAlienItemLevels().size() - 1));
+
+	cbxMissionChange(0);
+	cbxCraftChange(0);
 
 	initSave();
 }

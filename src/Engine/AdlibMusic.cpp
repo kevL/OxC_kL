@@ -149,7 +149,7 @@ void AdlibMusic::play(int loop) const
 //kL		func_set_music_volume(127 * _volume);
 		func_setup_music(reinterpret_cast<unsigned char*>(_data), static_cast<int>(_size));	// kL
 		func_set_music_volume(static_cast<int>(127.f * _volume));							// kL
-		Mix_HookMusic(player, NULL);
+		Mix_HookMusic(player, (void*)this);
 	}
 #endif
 }
@@ -168,6 +168,14 @@ void AdlibMusic::player(
 #ifndef __NO_MUSIC
 	if (Options::musicVolume == 0)
 		return;
+
+	if (!func_is_music_playing())
+	{
+		AdlibMusic* music = (AdlibMusic*)udata;
+		music->play();
+
+		return;
+	}
 
 	while (len != 0)
 	{
