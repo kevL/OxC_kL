@@ -35,9 +35,8 @@ class Surface;
 
 /**
  * Container of a set of surfaces.
- * Used to manage single images that contain series of
- * frames inside, like animated sprites, making them easier
- * to access without constant cropping.
+ * Used to manage single images that contain series of frames inside, like
+ * animated sprites, making them easier to access without constant cropping.
  */
 class SurfaceSet
 {
@@ -46,47 +45,48 @@ private:
 	int
 		_height,
 		_width;
+
 	std::map<int, Surface*> _frames;
 
 
-public:
-	/// Creates a surface set with frames of the specified size.
-	SurfaceSet
-			(int width,
-			int height);
-	/// Creates a surface set from an existing one.
-	SurfaceSet(const SurfaceSet& other);
-	/// Cleans up the surface set.
-	~SurfaceSet();
+	public:
+		/// Creates a surface set with frames of the specified size.
+		SurfaceSet(
+				int width,
+				int height);
+		/// Creates a surface set from an existing one.
+		SurfaceSet(const SurfaceSet& other);
+		/// Cleans up the surface set.
+		~SurfaceSet();
 
-	/// Loads an X-Com set of PCK/TAB image files.
-	void loadPck(
-			const std::string& pck,
-			const std::string& tab = "");
-	/// Loads an X-Com DAT image file.
-	void loadDat(const std::string& filename);
+		/// Loads an X-Com set of PCK/TAB image files.
+		void loadPck(
+				const std::string& pck,
+				const std::string& tab = "");
+		/// Loads an X-Com DAT image file.
+		void loadDat(const std::string& filename);
 
-	/// Gets a particular frame from the set.
-	Surface* getFrame(int i);
-	/// Creates a new surface and returns a pointer to it.
-	Surface* addFrame(int i);
+		/// Gets a particular frame from the set.
+		Surface* getFrame(int i);
+		/// Creates a new surface and returns a pointer to it.
+		Surface* addFrame(int i);
 
-	/// Gets the width of all frames.
-	int getWidth() const;
-	/// Gets the height of all frames.
-	int getHeight() const;
+		/// Gets the width of all frames.
+		int getWidth() const;
+		/// Gets the height of all frames.
+		int getHeight() const;
 
-	/// Gets the total frames in the set.
-	size_t getTotalFrames() const;
+		/// Gets the total frames in the set.
+		size_t getTotalFrames() const;
 
-	/// Sets the surface set's palette.
-	void setPalette(
-			SDL_Color* colors,
-			int firstcolor = 0,
-			int ncolors = 256);
+		/// Sets the surface set's palette.
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 
-	///
-	std::map<int, Surface*>* getFrames();
+		///
+		std::map<int, Surface*>* getFrames();
 };
 
 }

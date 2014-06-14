@@ -405,9 +405,9 @@ Palette* ResourcePack::getPalette(const std::string& name) const
 
 /**
  * Changes the palette of all the graphics in the resource set.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void ResourcePack::setPalette(
 		SDL_Color* colors,

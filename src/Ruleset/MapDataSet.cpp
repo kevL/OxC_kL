@@ -315,16 +315,15 @@ void MapDataSet::loadData()
 	// kL_begin: Let extraSprites override terrain sprites.
 	Log(LOG_INFO) << ". terrain_PCK = " << _name;
 
-	std::ostringstream nameTest;
-	nameTest << _name << ".PCK";
-
-	SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(nameTest.str());
+	std::ostringstream test;
+	test << _name << ".PCK";
+	SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(test.str());
 
 //	if (!_game) Log(LOG_INFO) << ". no Game";
 //	if (!_game->getResourcePack()) Log(LOG_INFO) << ". no ResourcePack";
 //	if (!_game->getResourcePack()->getSurfaceSet(_name)) Log(LOG_INFO) << ". no SurfaceSet";
 
-	if (srfSet != NULL)
+	if (srfSet)
 	{
 		Log(LOG_INFO) << ". . Overriding terrain SurfaceSet";
 		_surfaceSet = srfSet;
@@ -357,7 +356,22 @@ void MapDataSet::unloadData()
 			i = _objects.erase(i);
 		}
 
-		delete _surfaceSet;
+		// kL_begin: but don't delete the extraSprites for terrain!!!
+		// hm what about deleting only the Pointer?? ie, leave the ResourcePack's surfaceSet intact?
+		std::ostringstream test;
+		test << _name << ".PCK";
+		SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(test.str());
+
+		if (srfSet)
+		{
+			Log(LOG_INFO) << ". Deleting terrain SurfaceSet POINTER";
+			delete &_surfaceSet;
+		}
+		else // kL_end.
+		{
+			Log(LOG_INFO) << ". Deleting terrain SurfaceSet";
+			delete _surfaceSet;
+		}
 
 		_loaded = false;
 	}

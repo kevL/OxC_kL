@@ -131,6 +131,7 @@ private:
 					SDL_Color* colors,
 					int firstcolor = 0,
 					int ncolors = 256);
+
 			/// Gets list of voxel data.
 			std::vector<Uint16>* getVoxelData();
 };

@@ -1,0 +1,85 @@
+extraSprites:
+  - type: AVENGER.PCK
+    files:
+      0: Resources/Sprites/Terrain/avenger/
+  - type: BARN.PCK
+    files:
+      0: Resources/Sprites/Terrain/barn/
+  - type: BRAIN.PCK
+    files:
+      0: Resources/Sprites/Terrain/brain/
+  - type: CULTIVAT.PCK
+    files:
+      0: Resources/Sprites/Terrain/cultivat/
+  - type: DESERT.PCK
+    files:
+      0: Resources/Sprites/Terrain/desert/
+  - type: FIRES.PCK
+    files:
+      0: Resources/Sprites/Terrain/fires/
+  - type: FOREST.PCK
+    files:
+      0: Resources/Sprites/Terrain/forest/
+  - type: FRNITURE.PCK
+    files:
+      0: Resources/Sprites/Terrain/frniture/
+  - type: INTERC.PCK
+    files:
+      0: Resources/Sprites/Terrain/interc/
+  - type: JUNGLE.PCK
+    files:
+      0: Resources/Sprites/Terrain/jungle/
+  - type: LIGHTNIN.PCK
+    files:
+      0: Resources/Sprites/Terrain/lightnin/
+  - type: MARS.PCK
+    files:
+      0: Resources/Sprites/Terrain/mars/
+  - type: MOUNT.PCK
+    files:
+      0: Resources/Sprites/Terrain/mount/
+  - type: PLANE.PCK
+    files:
+      0: Resources/Sprites/Terrain/plane/
+  - type: POLAR.PCK
+    files:
+      0: Resources/Sprites/Terrain/polar/
+  - type: ROADS.PCK
+    files:
+      0: Resources/Sprites/Terrain/roads/
+  - type: U_BASE.PCK
+    files:
+      0: Resources/Sprites/Terrain/u_base/
+  - type: U_BITS.PCK
+    files:
+      0: Resources/Sprites/Terrain/u_bits/
+  - type: U_DISEC2.PCK
+    files:
+      0: Resources/Sprites/Terrain/u_disec2/
+  - type: U_EXT02.PCK
+    files:
+      0: Resources/Sprites/Terrain/u_ext02/
+  - type: U_OPER2.PCK
+    files:
+      0: Resources/Sprites/Terrain/u_oper2/
+  - type: U_PODS.PCK
+    files:
+      0: Resources/Sprites/Terrain/u_pods/
+  - type: U_WALL02.PCK
+    files:
+      0: Resources/Sprites/Terrain/u_wall02/
+  - type: UFO1.PCK
+    files:
+      0: Resources/Sprites/Terrain/ufo1/
+  - type: URBAN.PCK
+    files:
+      0: Resources/Sprites/Terrain/urban/
+  - type: URBITS.PCK
+    files:
+      0: Resources/Sprites/Terrain/urbits/
+  - type: XBASE1.PCK
+    files:
+      0: Resources/Sprites/Terrain/xbase1/
+  - type: XBASE2.PCK
+    files:
+      0: Resources/Sprites/Terrain/xbase2/

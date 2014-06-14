@@ -1773,7 +1773,7 @@
     <ClInclude Include="Battlescape\DelayedSaveState.h">
       <Filter>Battlescape</Filter>
     </ClInclude>
-    <ClInclude Include="Basescape\SoldierDeadInfoState.h" />
+    <ClInclude Include="Basescape\SoldierDeadInfoState.h">
       <Filter>Basescape</Filter>
     </ClInclude>
   </ItemGroup>
