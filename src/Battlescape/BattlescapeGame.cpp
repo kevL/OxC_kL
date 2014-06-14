@@ -1568,15 +1568,15 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
 
 /**
  * Checks against reserved time units.
- * @param bu, Pointer to the unit.
- * @param tu, Number of time units to check.
- * @param justChecking, True to suppress error messages, false otherwise.
- * @return bool, Whether or not *bu has enough time units.
+ * @param bu	- pointer to a unit
+ * @param tu	- # of time units to check against
+ * @param test	- true to suppress error messages
+ * @return, true if unit has tu+ time units
  */
 bool BattlescapeGame::checkReservedTU(
 		BattleUnit* bu,
 		int tu,
-		bool justChecking)
+		bool test)
 {
     BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
@@ -1637,9 +1637,9 @@ bool BattlescapeGame::checkReservedTU(
 			|| _kneelReserved)
 		&& tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits()
 		&& (tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits()
-			|| justChecking))
+			|| test))
 	{
-		if (!justChecking)
+		if (!test)
 		{
 			if (tuKneel)
 			{

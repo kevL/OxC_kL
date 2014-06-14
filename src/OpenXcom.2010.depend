@@ -4765,7 +4765,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1402457811 f:\git\openxcom\src\battlescape\battlescapegame.h
+1402695919 f:\git\openxcom\src\battlescape\battlescapegame.h
 	<list>
 	<string>
 	<vector>
@@ -5709,7 +5709,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1402556895 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1402676328 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5784,7 +5784,7 @@
 1402457811 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1402695925 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6162,7 +6162,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\camera.cpp
+1402676543 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6547,7 +6547,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1402696599 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -7077,7 +7077,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1402543041 source:f:\git\openxcom\src\engine\options.cpp
+1402693557 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -8293,7 +8293,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1402631474 source:f:\git\openxcom\src\interface\textlist.cpp
+1402676858 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>
@@ -8450,7 +8450,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1402457812 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1402676972 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	<algorithm>
 	<cmath>
@@ -9116,7 +9116,7 @@
 1402457813 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1402565217 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1402694083 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	<SDL_mixer.h>
 	"../Engine/Font.h"
@@ -11486,7 +11486,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1402457812 f:\git\openxcom\src\engine\options.inc.h
+1402693557 f:\git\openxcom\src\engine\options.inc.h
 
 1402457812 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
@@ -11813,7 +11813,7 @@
 1400258761 f:\git\openxcom\src\engine\adlib\fmopl.h
 	"ymdeltat.h"
 
-1402457811 source:f:\git\openxcom\src\engine\adlibmusic.cpp
+1402693777 source:f:\git\openxcom\src\engine\adlibmusic.cpp
 	"AdlibMusic.h"
 	<algorithm>
 	<fstream>

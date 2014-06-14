@@ -985,8 +985,10 @@ int Pathfinding::getTUCost(
 	if (missile)
 		return 0;
 	else
+	{
 		//Log(LOG_INFO) << "Pathfinding::getTUCost() ret = " << totalCost;
 		return totalCost;
+	}
 }
 
 /**
@@ -1796,28 +1798,34 @@ bool Pathfinding::previewPath(bool bRemove)
 		pos = _unit->getPosition(),
 		destination;
 
-	int tus = _unit->getTimeUnits();
+	int currentTU	= _unit->getTimeUnits(),
+		usedTU		= 0, // only for soldiers reserving TUs
+		tu			= 0, // cost per tile
+
+		energy		= _unit->getEnergy(),
+		energyStop	= energy,
+
+		size		= _unit->getArmor()->getSize() - 1,
+
+		dir			= -1,
+		color		= 0;
+
 	if (_unit->isKneeled()) // -> and not on gravLift, and not moving an x/y direction.
 							// ie. up/down or gravLift:floor to gravLift:floor
-		tus -= 8;
+	{
+		currentTU -= 8;
 		// That is not right when going up/down GravLifts kneeled ...!
 		// note: Neither is energy, below.
 
-	int
-		energy		= _unit->getEnergy(),
-		energyStop	= energy,
-		size		= _unit->getArmor()->getSize() - 1,
-		dir			= -1,
-		total		= 0,
-		tu			= 0,
-		color		= 0;
+		usedTU += 8;
+	}
 
 	bool switchBack = false;
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
 	{
 		switchBack = true;
 		_save->getBattleGame()->setTUReserved(
-//kL											BA_AUTOSHOT,
+//kL										BA_AUTOSHOT,
 											BA_SNAPSHOT, // kL
 											false);
 	}
@@ -1835,9 +1843,9 @@ bool Pathfinding::previewPath(bool bRemove)
 		bPowered	= armorType == "STR_POWER_SUIT_UC",
 		bPowered2	= armorType == "STR_FLYING_SUIT_UC",
 		gravLift	= false,
-		reserve		= false;
-		// kL_note: Ought to create a factor for those in ruleArmor class & RuleSets ( _burden ). Or 'enum' those,
-		// as in
+		reserveOk	= false;
+		// kL_note: Ought to create a factor for those in ruleArmor class & RuleSets ( _burden ).
+		// Or 'enum' those, as in
 /* enum ArmorBurden
 {
 	AB_LOW,		// -1
@@ -1899,11 +1907,11 @@ bool Pathfinding::previewPath(bool bRemove)
 //			energy = 0;
 
 
-		tus -= tu;
-		total += tu;
-		reserve = _save->getBattleGame()->checkReservedTU(
+		currentTU -= tu;
+		usedTU += tu;
+		reserveOk = _save->getBattleGame()->checkReservedTU(
 														_unit,
-														total,
+														usedTU,
 														true);
 
 		pos = destination;
@@ -1930,7 +1938,7 @@ bool Pathfinding::previewPath(bool bRemove)
 						tile->setPreview(nextDir);
 					}
 
-					tile->setTUMarker(tus);
+					tile->setTUMarker(currentTU);
 					if (tileAbove // unit fell down, retroactively make the tileAbove's direction marker to DOWN
 						&& tileAbove->getPreview() == 0
 						&& tu == 0
@@ -1948,10 +1956,10 @@ bool Pathfinding::previewPath(bool bRemove)
 				color = 0;
 				if (!bRemove)
 				{
-					if (tus > -1
+					if (currentTU > -1
 						&& energy > -1)
 					{
-						if (reserve)
+						if (reserveOk)
 							color = 4; // green
 						else
 							color = 10; // yellow

@@ -240,16 +240,24 @@ void ResourcePack::playMusic(	// kL_note: Should put 'terrain' string input here
 	if (!Options::mute
 		&& _playingMusic != name)
 	{
+		int loop = -1;
 		_playingMusic = name;
 
 		if (name == "GMGEO1")
 			_playingMusic = "GMGEO"; // hack (kL_note: for non-campaign Battles i guess)
+		else if (!Options::musicAlwaysLoop // another hack
+			&& (name == "GMSTORY"
+				|| name == "GMWIN"
+				|| name == "GMLOSE"))
+		{
+			loop = 0;
+		}
 
 		if (random)
-//kL			getRandomMusic(name)->play();
-			getRandomMusic(name, terrain)->play(); // kL: sza_MusicRules
+//kL			getRandomMusic(name)->play(loop);
+			getRandomMusic(name, terrain)->play(loop); // kL: sza_MusicRules
 		else
-			getMusic(name)->play();
+			getMusic(name)->play(loop);
 	}
 }
 

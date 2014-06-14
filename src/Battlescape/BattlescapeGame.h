@@ -198,7 +198,7 @@ private:
 		bool checkReservedTU(
 				BattleUnit* bu,
 				int tu,
-				bool justChecking = false);
+				bool test = false);
 		/// Handles unit AI.
 		void handleAI(BattleUnit* unit);
 		/// Drops an item and affects it with gravity.

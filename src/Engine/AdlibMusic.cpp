@@ -169,7 +169,8 @@ void AdlibMusic::player(
 	if (Options::musicVolume == 0)
 		return;
 
-	if (!func_is_music_playing())
+	if (Options::musicAlwaysLoop
+		&& !func_is_music_playing())
 	{
 		AdlibMusic* music = (AdlibMusic*)udata;
 		music->play();
