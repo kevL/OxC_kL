@@ -120,6 +120,7 @@ XcomResourcePack::XcomResourcePack( // kL
 	:
 		ResourcePack()
 {
+	Log(LOG_INFO) << "Create XcomResourcePack";
 
 	/* PALETTES */
 	const char* pal[] = // Load palettes
@@ -1128,6 +1129,8 @@ XcomResourcePack::XcomResourcePack( // kL
 			++i)
 	{
 		std::string sheetName = i->first;
+		Log(LOG_INFO) << ". sheetName = " << i->first;
+
 		ExtraSprites* spritePack = i->second;
 		bool subdivision = spritePack->getSubX() != 0
 						&& spritePack->getSubY() != 0;
@@ -1452,6 +1455,8 @@ XcomResourcePack::~XcomResourcePack()
  */
 void XcomResourcePack::loadBattlescapeResources()
 {
+	Log(LOG_INFO) << "XcomResourcePack::loadBattlescapeResources()";
+
 	// Load Battlescape ICONS
 	std::ostringstream s;
 	s << "UFOGRAPH/" << "SPICONS.DAT";
@@ -1524,6 +1529,8 @@ void XcomResourcePack::loadBattlescapeResources()
 
 		std::string tab = CrossPlatform::noExt(bsets[i]) + ".TAB";
 		s2 << "TERRAIN/" << tab;
+
+		Log(LOG_INFO) << ". bset = " << s;
 
 		_sets[bsets[i]] = new SurfaceSet(32, 40);
 		_sets[bsets[i]]->loadPck(

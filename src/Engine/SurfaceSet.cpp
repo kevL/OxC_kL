@@ -26,6 +26,8 @@
 #include "Surface.h"
 #include "Exception.h"
 
+#include "Logger.h" // kL
+
 
 namespace OpenXcom
 {
@@ -90,6 +92,7 @@ void SurfaceSet::loadPck(
 		const std::string& pck,
 		const std::string& tab)
 {
+	Log(LOG_INFO) << "SurfaceSet::loadPck() " << pck;
 	int nframes = 0;
 
 	// Load TAB and get image offsets

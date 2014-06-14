@@ -57,6 +57,8 @@ ResourcePack::ResourcePack()
 		_musicFile(), // sza_MusicRules
 		_musicAssignment() // sza_MusicRules
 {
+	Log(LOG_INFO) << "Create ResourcePack";
+
 	_muteMusic = new Music();
 	_muteSound = new Sound();
 }
@@ -150,7 +152,8 @@ ResourcePack::~ResourcePack()
 Font* ResourcePack::getFont(const std::string& name) const
 {
 	std::map<std::string, Font*>::const_iterator i = _fonts.find(name);
-	if (_fonts.end() != i)
+
+	if (i != _fonts.end())
 		return i->second;
 	else
 		return 0;
@@ -165,7 +168,7 @@ Surface* ResourcePack::getSurface(const std::string& name) const
 {
 	std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
 
-	if (_surfaces.end() != i)
+	if (i != _surfaces.end())
 		return i->second;
 	else
 		return 0;
@@ -178,12 +181,16 @@ Surface* ResourcePack::getSurface(const std::string& name) const
  */
 SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 {
+	Log(LOG_INFO) << "ResourcePack::getSurfaceSet()";
 	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
 
-	if (_sets.end() != i)
+	if (i != _sets.end())
+	{
+		Log(LOG_INFO) << ". _set = " << i->second;
 		return i->second;
+	}
 	else
-		return 0;
+		return NULL;
 }
 
 /**

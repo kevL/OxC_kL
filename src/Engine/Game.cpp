@@ -84,7 +84,8 @@ Game::Game(const std::string& title)
 		_mouseActive(true),
 		_timeUntilNextFrame(0)
 {
-	//Log(LOG_INFO) << "Create Game";
+	Log(LOG_INFO) << "Create Game";
+
 	Options::reload = false;
 	Options::mute = false;
 
@@ -670,7 +671,8 @@ void Game::loadRuleset()
 {
 	Options::badMods.clear();
 
-	_rules = new Ruleset();
+//kL	_rules = new Ruleset();
+	_rules = new Ruleset(this); // kL
 
 	if (Options::rulesets.empty())
 		Options::rulesets.push_back("Xcom1Ruleset");

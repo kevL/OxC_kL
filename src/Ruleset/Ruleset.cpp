@@ -78,8 +78,10 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-Ruleset::Ruleset()
+//kL Ruleset::Ruleset()
+Ruleset::Ruleset(Game* game) // kL
 	:
+		_game(game), // kL
 		_costSoldier(0),
 		_costEngineer(0),
 		_costScientist(0),
@@ -102,6 +104,8 @@ Ruleset::Ruleset()
 		_ufopaediaListOrder(0),
 		_invListOrder(0)
 {
+	Log(LOG_INFO) << "Create Ruleset";
+
 	std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
 
 	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam"); // Add soldier names
@@ -988,7 +992,7 @@ SavedGame* Ruleset::newSave() const
 			++i)
 	{
 		Soldier* soldier = genSoldier(save);
-//kL		soldier->setCraft(base->getCrafts()->front());
+//kL	soldier->setCraft(base->getCrafts()->front());
 		base->getSoldiers()->push_back(soldier);
 	}
 
@@ -1209,7 +1213,9 @@ MapDataSet* Ruleset::getMapDataSet(const std::string& name)
 	std::map<std::string, MapDataSet*>::iterator map = _mapDataSets.find(name);
 	if (map == _mapDataSets.end())
 	{
-		MapDataSet* set = new MapDataSet(name);
+		MapDataSet* set = new MapDataSet(
+										name,
+										_game); // kL_add
 		_mapDataSets[name] = set;
 
 		return set;

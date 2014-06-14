@@ -42,6 +42,7 @@ class ExtraMusic; // sza_ExtraMusic
 class ExtraSounds;
 class ExtraSprites;
 class ExtraStrings;
+class Game; // kL
 class MapDataSet;
 class MCDPatch;
 class ResourcePack;
@@ -98,6 +99,8 @@ protected:
 	GameTime _startingTime;
 	YAML::Node _startingBase;
 
+	Game* _game; // kL
+
 	std::vector<std::string>
 		_alienMissionsIndex,
 		_aliensIndex,
@@ -128,36 +131,36 @@ protected:
 
 	std::vector<SoldierNamePool*> _names;
 
-	std::map<std::string, AlienDeployment*> _alienDeployments;
-	std::map<std::string, AlienRace*> _alienRaces;
-	std::map<std::string, Armor*> _armors;
-	std::map<std::string, ArticleDefinition*> _ufopaediaArticles;
-	std::map<std::string, ExtraStrings*> _extraStrings;
-	std::map<std::string, MapDataSet*> _mapDataSets;
-	std::map<std::string, MCDPatch*> _MCDPatches;
-	std::map<std::string, RuleAlienMission*> _alienMissions;
-	std::map<std::string, RuleBaseFacility*> _facilities;
-	std::map<std::string, RuleCountry*> _countries;
-	std::map<std::string, RuleCraft*> _crafts;
-	std::map<std::string, RuleCraftWeapon*> _craftWeapons;
-	std::map<std::string, RuleInventory*> _invs;
-	std::map<std::string, RuleItem*> _items;
-	std::map<std::string, RuleManufacture*> _manufacture;
-	std::map<std::string, RuleRegion*> _regions;
-	std::map<std::string, RuleResearch*> _research;
-	std::map<std::string, RuleSoldier*> _soldiers;
-	std::map<std::string, RuleTerrain*> _terrains;
-	std::map<std::string, RuleUfo*> _ufos;
-	std::map<std::string, UfoTrajectory*> _ufoTrajectories;
+	std::map<std::string, AlienDeployment*>		_alienDeployments;
+	std::map<std::string, AlienRace*>			_alienRaces;
+	std::map<std::string, Armor*>				_armors;
+	std::map<std::string, ArticleDefinition*>	_ufopaediaArticles;
+	std::map<std::string, ExtraStrings*>		_extraStrings;
+	std::map<std::string, MapDataSet*>			_mapDataSets;
+	std::map<std::string, MCDPatch*>			_MCDPatches;
+	std::map<std::string, RuleAlienMission*>	_alienMissions;
+	std::map<std::string, RuleBaseFacility*>	_facilities;
+	std::map<std::string, RuleCountry*>			_countries;
+	std::map<std::string, RuleCraft*>			_crafts;
+	std::map<std::string, RuleCraftWeapon*>		_craftWeapons;
+	std::map<std::string, RuleInventory*>		_invs;
+	std::map<std::string, RuleItem*>			_items;
+	std::map<std::string, RuleManufacture*>		_manufacture;
+	std::map<std::string, RuleRegion*>			_regions;
+	std::map<std::string, RuleResearch*>		_research;
+	std::map<std::string, RuleSoldier*>			_soldiers;
+	std::map<std::string, RuleTerrain*>			_terrains;
+	std::map<std::string, RuleUfo*>				_ufos;
+	std::map<std::string, UfoTrajectory*>		_ufoTrajectories;
 
 	std::vector<StatString*> _statStrings;
 
 	std::map<std::string, Unit*> _units;
 
-	std::vector<std::pair<std::string, ExtraMusic*> > _extraMusic; // sza_ExtraMusic
-	std::vector<std::pair<std::string, ExtraSounds*> > _extraSounds;
-	std::vector<std::pair<std::string, ExtraSprites*> > _extraSprites;
-	std::vector<std::pair<std::string, RuleMusic*> > _music; // sza_MusicRules
+	std::vector<std::pair<std::string, ExtraMusic*> >	_extraMusic; // sza_ExtraMusic
+	std::vector<std::pair<std::string, ExtraSounds*> >	_extraSounds;
+	std::vector<std::pair<std::string, ExtraSprites*> >	_extraSprites;
+	std::vector<std::pair<std::string, RuleMusic*> >	_music; // sza_MusicRules
 
 
 	/// Loads a ruleset from a YAML file.
@@ -174,7 +177,8 @@ protected:
 
 	public:
 		/// Creates a blank ruleset.
-		Ruleset();
+//kL		Ruleset();
+		Ruleset(Game* game); // kL
 		/// Cleans up the ruleset.
 		~Ruleset();
 

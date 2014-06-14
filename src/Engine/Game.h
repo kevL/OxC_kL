@@ -60,13 +60,14 @@ private:
 		_timeUntilNextFrame;
 	unsigned int _timeOfLastFrame;
 
-	Cursor* _cursor;
-	FpsCounter* _fpsCounter;
-	Language* _lang;
+	Cursor		* _cursor;
+	FpsCounter	* _fpsCounter;
+	Language	* _lang;
 	ResourcePack* _res;
-	Ruleset* _rules;
-	SavedGame* _save;
-	Screen* _screen;
+	Ruleset		* _rules;
+	SavedGame	* _save;
+	Screen		* _screen;
+
 	SDL_Event _event;
 
 	std::list<State*>

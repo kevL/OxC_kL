@@ -833,8 +833,8 @@ int Tile::getAnimationOffset() const
  */
 Surface* Tile::getSprite(int part) const
 {
-	if (_objects[part] == 0)
-		return 0;
+	if (_objects[part] == NULL)
+		return NULL;
 
 	return _objects[part]->getDataset()->getSurfaceset()->getFrame(_objects[part]->getSprite(_currFrame[part]));
 }
@@ -848,7 +848,7 @@ void Tile::setUnit(
 		BattleUnit* unit,
 		Tile* tileBelow)
 {
-	if (unit != 0)
+	if (unit != NULL)
 		unit->setTile(
 					this,
 					tileBelow);

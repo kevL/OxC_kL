@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1402457811 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1402739590 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -278,7 +278,7 @@
 1402457811 f:\git\openxcom\src\engine\action.h
 	<SDL.h>
 
-1402457812 f:\git\openxcom\src\engine\game.h
+1402744767 f:\git\openxcom\src\engine\game.h
 	<list>
 	<string>
 	<SDL.h>
@@ -4634,7 +4634,7 @@
 1402457812 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1402457813 f:\git\openxcom\src\ruleset\ruleset.h
+1402744906 f:\git\openxcom\src\ruleset\ruleset.h
 	<map>
 	<string>
 	<vector>
@@ -5886,7 +5886,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1402457811 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1402741925 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -5903,7 +5903,6 @@
 	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/RNG.h"
-	"../Resource/XcomResourcePack.h"
 	"../Ruleset/AlienDeployment.h"
 	"../Ruleset/AlienRace.h"
 	"../Ruleset/Armor.h"
@@ -5963,7 +5962,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1402457813 f:\git\openxcom\src\ruleset\mapdataset.h
+1402743148 f:\git\openxcom\src\ruleset\mapdataset.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -6970,7 +6969,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1402457812 source:f:\git\openxcom\src\engine\game.cpp
+1402744804 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7230,12 +7229,13 @@
 	<malloc.h>
 	<ppcinline/exec.h>
 
-1402457812 source:f:\git\openxcom\src\engine\surfaceset.cpp
+1402736783 source:f:\git\openxcom\src\engine\surfaceset.cpp
 	"SurfaceSet.h"
 	<fstream>
 	<SDL_endian.h>
 	"Surface.h"
 	"Exception.h"
+	"Logger.h"
 
 1402457812 source:f:\git\openxcom\src\engine\timer.cpp
 	"Timer.h"
@@ -9116,7 +9116,7 @@
 1402457813 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1402694083 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1402748306 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	<SDL_mixer.h>
 	"../Engine/Font.h"
@@ -9131,7 +9131,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1402457813 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1402748434 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9206,7 +9206,7 @@
 1402457813 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 
-1402457813 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1402749217 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -9214,7 +9214,10 @@
 	"MapData.h"
 	"../Engine/CrossPlatform.h"
 	"../Engine/Exception.h"
+	"../Engine/Game.h"
+	"../Engine/Logger.h"
 	"../Engine/SurfaceSet.h"
+	"../Resource/ResourcePack.h"
 
 1402457813 source:f:\git\openxcom\src\ruleset\mcdpatch.cpp
 	"MCDPatch.h"
@@ -9265,7 +9268,7 @@
 1402504036 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1402543791 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1402745101 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9543,7 +9546,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1402563789 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1402742561 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>
@@ -9573,7 +9576,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1402457813 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1402730798 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9650,7 +9653,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1402457813 source:f:\git\openxcom\src\savegame\tile.cpp
+1402737854 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"

@@ -327,7 +327,7 @@ DebriefingState::~DebriefingState()
 {
 	//Log(LOG_INFO) << "Delete DebriefingState";
 	if (_game->isQuitting())
-		_game->getSavedGame()->setBattleGame(0);
+		_game->getSavedGame()->setBattleGame(NULL);
 
 	for (std::vector<DebriefingStat*>::iterator
 			i = _stats.begin();
@@ -357,7 +357,7 @@ void DebriefingState::btnOkClick(Action*)
 			participants.push_back((*i)->getGeoscapeSoldier());
 	}
 
-	_game->getSavedGame()->setBattleGame(0);
+	_game->getSavedGame()->setBattleGame(NULL);
 	_game->popState();
 
 	if (_game->getSavedGame()->getMonthsPassed() == -1)

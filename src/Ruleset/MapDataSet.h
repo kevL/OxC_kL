@@ -31,6 +31,7 @@
 namespace OpenXcom
 {
 
+class Game; // kL
 class MapData;
 class ResourcePack;
 class SurfaceSet;
@@ -53,6 +54,7 @@ private:
 	static MapData* _blankTile;
 	static MapData* _scorchedTile;
 
+	Game* _game; // kL
 	SurfaceSet* _surfaceSet;
 
 	std::vector<MapData*> _objects;
@@ -60,7 +62,9 @@ private:
 
 	public:
 		///
-		MapDataSet(const std::string& name);
+		MapDataSet(
+				const std::string& name,
+				Game* game = NULL); // kL_add
 		///
 		~MapDataSet();
 
@@ -71,18 +75,24 @@ private:
 		static void loadLOFTEMPS(
 				const std::string& filename,
 				std::vector<Uint16>* voxelData);
+
 		/// Gets the dataset name (used for MAP generation).
 		std::string getName() const;
+
 		/// Gets the dataset size.
 		size_t getSize() const;
+
 		/// Gets the objects in this dataset.
 		std::vector<MapData*>* getObjects();
+
 		/// Gets the surfaces in this dataset.
 		SurfaceSet* getSurfaceset() const;
+
 		/// Loads the objects from an MCD file.
 		void loadData();
 		///	Unloads to free memory.
 		void unloadData();
+
 		/// Gets a blank floor tile.
 		static MapData* getBlankFloorTile();
 		/// Gets a scorched earth tile.

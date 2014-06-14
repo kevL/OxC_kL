@@ -28,7 +28,11 @@
 
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
+#include "../Engine/Game.h" // kL
+#include "../Engine/Logger.h" // kL
 #include "../Engine/SurfaceSet.h"
+
+#include "../Resource/ResourcePack.h" // kL
 
 
 namespace OpenXcom
@@ -41,13 +45,17 @@ MapData* MapDataSet::_scorchedTile = 0;
 /**
  * MapDataSet construction.
  */
-MapDataSet::MapDataSet(const std::string& name)
+MapDataSet::MapDataSet(
+		const std::string& name,
+		Game* game) // kL
 	:
 		_name(name),
+		_game(game), // kL_add.
 		_objects(),
-		_surfaceSet(0),
+		_surfaceSet(NULL),
 		_loaded(false)
 {
+	Log(LOG_INFO) << "Create MapDataSet";
 }
 
 /**
@@ -115,6 +123,7 @@ SurfaceSet* MapDataSet::getSurfaceset() const
  */
 void MapDataSet::loadData()
 {
+	Log(LOG_INFO) << "MapDataSet::loadData()";
 	if (_loaded) // prevents loading twice
 		return;
 
@@ -302,10 +311,32 @@ void MapDataSet::loadData()
 		s2;
 	s1 << "TERRAIN/" << _name << ".PCK";
 	s2 << "TERRAIN/" << _name << ".TAB";
-	_surfaceSet = new SurfaceSet(32, 40);
-	_surfaceSet->loadPck(
-					CrossPlatform::getDataFile(s1.str()),
-					CrossPlatform::getDataFile(s2.str()));
+
+	// kL_begin: Let extraSprites override terrain sprites.
+	Log(LOG_INFO) << ". terrain_PCK = " << _name;
+
+	std::ostringstream nameTest;
+	nameTest << _name << ".PCK";
+
+	SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(nameTest.str());
+
+//	if (!_game) Log(LOG_INFO) << ". no Game";
+//	if (!_game->getResourcePack()) Log(LOG_INFO) << ". no ResourcePack";
+//	if (!_game->getResourcePack()->getSurfaceSet(_name)) Log(LOG_INFO) << ". no SurfaceSet";
+
+	if (srfSet != NULL)
+	{
+		Log(LOG_INFO) << ". . Overriding terrain SurfaceSet";
+		_surfaceSet = srfSet;
+	}
+	else // kL_end.
+	{
+		Log(LOG_INFO) << ". . Creating new terrain SurfaceSet";
+		_surfaceSet = new SurfaceSet(32, 40);
+		_surfaceSet->loadPck(
+						CrossPlatform::getDataFile(s1.str()),
+						CrossPlatform::getDataFile(s2.str()));
+	}
 }
 
 /**
@@ -313,6 +344,8 @@ void MapDataSet::loadData()
  */
 void MapDataSet::unloadData()
 {
+	Log(LOG_INFO) << "MapDataSet::unloadData()";
+
 	if (_loaded)
 	{
 		for (std::vector<MapData*>::iterator
@@ -328,6 +361,8 @@ void MapDataSet::unloadData()
 
 		_loaded = false;
 	}
+
+	Log(LOG_INFO) << "MapDataSet::unloadData() EXIT";
 }
 
 /**
