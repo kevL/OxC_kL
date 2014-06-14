@@ -3360,7 +3360,7 @@ int TileEngine::horizontalBlockage(
 
 	if (visLike)
 	{
-		block += blockage( // from above^ -> && block > -1 <-
+		block += blockage(
 						startTile,
 						MapData::O_OBJECT,
 						type,
@@ -3371,9 +3371,7 @@ int TileEngine::horizontalBlockage(
 						endTile,
 						MapData::O_OBJECT,
 						type,
-						(dir + 4) %8,
-						false,
-						false);
+						(dir + 4) %8);
 	}
 
 	//Log(LOG_INFO) << "TileEngine::horizontalBlockage() EXIT, ret = " << block;

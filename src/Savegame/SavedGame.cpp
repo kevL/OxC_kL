@@ -131,7 +131,7 @@ SavedGame::SavedGame()
 		_graphRegionToggles(""),
 		_graphCountryToggles(""),
 		_graphFinanceToggles("")
-//kL		_selectedBase(0)
+//kL	_selectedBase(0)
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
 	_alienStrategy = new AlienStrategy();
