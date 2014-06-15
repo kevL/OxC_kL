@@ -411,10 +411,10 @@ void Map::draw()
 	}
 	else // "hidden movement"
 	{
-		if (kL_preReveal)				// kL
+		if (kL_preReveal)
 		{
-			kL_preReveal = false;		// kL
-			_reveal = 0;				// kL
+			kL_preReveal = false;
+			_reveal = 0;
 			//Log(LOG_INFO) << ". . . . . . kL_preReveal, set " << kL_preReveal;
 			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
 		}

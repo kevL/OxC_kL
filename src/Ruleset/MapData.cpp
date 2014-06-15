@@ -176,15 +176,15 @@ bool MapData::isGravLift() const
 
 /**
  * Sets all kinds of flags.
- * @param isUfoDoor, True if this is a ufo door.
- * @param stopLOS, True if this stops line of sight.
- * @param isNoFloor, True if this is *not* a floor.
- * @param bigWall, Type of a bigWall.
- * @param isGravLift, True if this is a grav lift.
- * @param isDoor, True if this is a normal door.
- * @param blockFire, True if this blocks fire.
- * @param blockSmoke, True if this blocks smoke.
- * @param baseModule, True if this is a base module (objective) item.
+ * @param isUfoDoor		- true if this is a ufo door
+ * @param stopLOS		- true if this stops line of sight
+ * @param isNoFloor		- true if this is *not* a floor
+ * @param bigWall		- type of a bigWall
+ * @param isGravLift	- true if this is a grav lift
+ * @param isDoor		- true if this is a normal door
+ * @param blockFire		- true if this blocks fire
+ * @param blockSmoke	- true if this blocks smoke
+ * @param baseModule	- true if this is a base module (objective) item
  */
 void MapData::setFlags(
 		bool isUfoDoor,
@@ -222,12 +222,12 @@ int MapData::getBlock(ItemDamageType type) const
 		case DT_SMOKE:	return _block[3];
 		case DT_IN:		return _block[4];
 		case DT_STUN:	return _block[5]; */
-
-		case DT_NONE:	return _block[1]; // stop LoS [bool], was [0 or 255]
+											// see setBlock() below.
+		case DT_NONE:	return _block[1];	// stop LoS [bool], was [0 or 255]
 		case DT_HE:
 		case DT_IN:
-		case DT_STUN:	return _block[2]; // HE block [int]
-		case DT_SMOKE:	return _block[3]; // blocks smoke [0 or 256]
+		case DT_STUN:	return _block[2];	// HE block [int]
+		case DT_SMOKE:	return _block[3];	// blocks smoke [0 or 256]
 
 		default:
 		break;
@@ -238,12 +238,12 @@ int MapData::getBlock(ItemDamageType type) const
 
 /**
  * Sets the amount of blockage for all types.
- * @param lightBlock The light blockage.		- Light_Block
- * @param visionBlock The vision blockage.		- Stop_LOS
- * @param HEBlock The high explosive blockage.	- HE_Block
- * @param smokeBlock The smoke blockage.		- Block_Smoke
- * @param fireBlock The fire blockage.			- Flammable (lower = more flammable)
- * @param gasBlock The gas blockage.			- HE_Block
+ * @param lightBlock	- light blockage			- Light_Block
+ * @param visionBlock	- vision blockage			- Stop_LOS
+ * @param HEBlock		- high explosive blockage	- HE_Block
+ * @param smokeBlock	- smoke blockage			- Block_Smoke
+ * @param fireBlock		- fire blockage				- Flammable (lower = more flammable)
+ * @param gasBlock		- gas blockage				- HE_Block
  */
 void MapData::setBlock(
 		int lightBlock,

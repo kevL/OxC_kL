@@ -446,7 +446,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 								// adds revealUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
 								unit->addToVisibleUnits(revealUnit); // note: This returns a boolean; i can use that...... yeah, done & done.
-//								unit->addToVisibleTiles(revealUnit->getTile()); // this reveals the TILE (ie. no 'shadowed' aLiens)
+								unit->addToVisibleTiles(revealUnit->getTile()); // this reveals the TILE (ie. no 'shadowed' aLiens)?
 
 								if (unit->getFaction() == FACTION_HOSTILE
 									&& revealUnit->getFaction() != FACTION_HOSTILE
