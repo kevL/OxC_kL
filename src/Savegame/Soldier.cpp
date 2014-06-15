@@ -59,7 +59,7 @@ Soldier::Soldier(
 		_initialStats(),
 		_currentStats(),
 		_rank(RANK_ROOKIE),
-		_craft(0),
+		_craft(NULL),
 		_gender(GENDER_MALE),
 		_look(LOOK_BLONDE),
 		_missions(0),
@@ -69,7 +69,7 @@ Soldier::Soldier(
 		_psiTraining(false),
 		_armor(armor),
 		_equipmentLayout()
-//kL		_death(0)
+//kL	_death(0)
 {
 	if (names != 0)
 	{
@@ -87,12 +87,13 @@ Soldier::Soldier(
 		_initialStats.psiStrength	= RNG::generate(minStats.psiStrength, maxStats.psiStrength);
 		_initialStats.melee			= RNG::generate(minStats.melee, maxStats.melee);
 
-//kL		_initialStats.psiSkill = minStats.psiSkill;
-		_initialStats.psiSkill = minStats.psiSkill - 2; // kL
+//kL	_initialStats.psiSkill = minStats.psiSkill;
+//		_initialStats.psiSkill = minStats.psiSkill - 2; // kL
+		_initialStats.psiSkill = 0; // kL
 
 		_currentStats = _initialStats;
 
-		_name	= L"Frittz";							// kL
+		_name	= L"Fritz";								// kL
 		_gender	= (SoldierGender)RNG::generate(0, 1);	// kL
 		_look	= (SoldierLook)RNG::generate(0, 3);		// kL
 
@@ -199,7 +200,7 @@ YAML::Node Soldier::save() const
 	node["initialStats"]	= _initialStats;
 	node["currentStats"]	= _currentStats;
 	node["rank"]			= (int)_rank;
-	if (_craft != 0)
+	if (_craft != NULL)
 		node["craft"]		= _craft->saveId();
 	node["gender"]			= (int)_gender;
 	node["look"]			= (int)_look;
@@ -579,7 +580,7 @@ void Soldier::trainPsi1Day()
 
 	if (psiSkill >= _rules->getStatCaps().psiSkill) // hard cap.
 		return;
-	else if (psiSkill >= rulesMin) // farther along
+	else if (psiSkill >= rulesMin) // Psi unlocked.
 	{
 		int chance = std::max(
 							1,
@@ -592,7 +593,7 @@ void Soldier::trainPsi1Day()
 			++_currentStats.psiSkill;
 		}
 	}
-	else if (psiSkill == rulesMin - 1) // ready to go
+/*	else if (psiSkill == rulesMin - 1) // ready to go
 	{
 		_improvement = RNG::generate(
 								rulesMin,
@@ -606,6 +607,17 @@ void Soldier::trainPsi1Day()
 			_currentStats.psiSkill = rulesMin - 1;
 //		else
 //			_currentStats.psiSkill = rulesMin - 2;
+	} */
+	else // start here.
+	{
+		if (RNG::percent(3)) // 3% per day per soldier (to become psionic-active)
+		{
+			_improvement = RNG::generate(
+									rulesMin,
+									_rules->getMaxStats().psiSkill);
+
+			_currentStats.psiSkill =_initialStats.psiSkill = _improvement;
+		}
 	}
 }
 
