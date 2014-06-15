@@ -306,22 +306,12 @@ void MapDataSet::loadData()
 	}
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
-	std::ostringstream
-		s1,
-		s2;
-	s1 << "TERRAIN/" << _name << ".PCK";
-	s2 << "TERRAIN/" << _name << ".TAB";
-
 	// kL_begin: Let extraSprites override terrain sprites.
 	Log(LOG_INFO) << ". terrain_PCK = " << _name;
 
 	std::ostringstream test;
 	test << _name << ".PCK";
 	SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(test.str());
-
-//	if (!_game) Log(LOG_INFO) << ". no Game";
-//	if (!_game->getResourcePack()) Log(LOG_INFO) << ". no ResourcePack";
-//	if (!_game->getResourcePack()->getSurfaceSet(_name)) Log(LOG_INFO) << ". no SurfaceSet";
 
 	if (srfSet)
 	{
@@ -331,6 +321,12 @@ void MapDataSet::loadData()
 	else // kL_end.
 	{
 		Log(LOG_INFO) << ". . Creating new terrain SurfaceSet";
+		std::ostringstream
+			s1,
+			s2;
+		s1 << "TERRAIN/" << _name << ".PCK";
+		s2 << "TERRAIN/" << _name << ".TAB";
+
 		_surfaceSet = new SurfaceSet(32, 40);
 		_surfaceSet->loadPck(
 						CrossPlatform::getDataFile(s1.str()),
@@ -343,8 +339,7 @@ void MapDataSet::loadData()
  */
 void MapDataSet::unloadData()
 {
-	Log(LOG_INFO) << "MapDataSet::unloadData()";
-
+	//Log(LOG_INFO) << "MapDataSet::unloadData()";
 	if (_loaded)
 	{
 		for (std::vector<MapData*>::iterator
@@ -358,6 +353,7 @@ void MapDataSet::unloadData()
 
 		// kL_begin: but don't delete the extraSprites for terrain!!!
 		// hm what about deleting only the Pointer?? ie, leave the ResourcePack's surfaceSet intact?
+		// Conclusion, seems to work
 		std::ostringstream test;
 		test << _name << ".PCK";
 		SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(test.str());
@@ -375,8 +371,7 @@ void MapDataSet::unloadData()
 
 		_loaded = false;
 	}
-
-	Log(LOG_INFO) << "MapDataSet::unloadData() EXIT";
+	//Log(LOG_INFO) << "MapDataSet::unloadData() EXIT";
 }
 
 /**

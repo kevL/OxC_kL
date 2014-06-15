@@ -181,12 +181,12 @@ Surface* ResourcePack::getSurface(const std::string& name) const
  */
 SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 {
-	Log(LOG_INFO) << "ResourcePack::getSurfaceSet()";
+	//Log(LOG_INFO) << "ResourcePack::getSurfaceSet()";
 	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
 
 	if (i != _sets.end())
 	{
-		Log(LOG_INFO) << ". _set = " << i->second;
+		//Log(LOG_INFO) << ". _set = " << i->second;
 		return i->second;
 	}
 	else

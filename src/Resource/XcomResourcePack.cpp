@@ -1129,7 +1129,7 @@ XcomResourcePack::XcomResourcePack( // kL
 			++i)
 	{
 		std::string sheetName = i->first;
-		Log(LOG_INFO) << ". sheetName = " << i->first;
+		//Log(LOG_INFO) << ". sheetName = " << i->first;
 
 		ExtraSprites* spritePack = i->second;
 		bool subdivision = spritePack->getSubX() != 0

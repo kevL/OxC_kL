@@ -2198,9 +2198,21 @@ void Map::calculateWalkingOffset(
 		}
 	}
 	else
+	{
 		offset->y += getTerrainLevel(
 								unit->getPosition(),
 								size);
+
+		if (unit->getArmor()->getDrawingRoutine() == 0
+			|| unit->getArmor()->getDrawingRoutine() == 1
+			|| unit->getArmor()->getDrawingRoutine() == 4
+			|| unit->getArmor()->getDrawingRoutine() == 6
+			|| unit->getArmor()->getDrawingRoutine() == 10)
+		{
+			if (unit->getStatus() == STATUS_AIMING)
+				offset->x = -16;
+		}
+	}
 }
 
 /**
@@ -2284,9 +2296,8 @@ void Map::cacheUnits()
 void Map::cacheUnit(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
-
 	UnitSprite* unitSprite = new UnitSprite(
-										_spriteWidth,
+										unit->getStatus() == STATUS_AIMING? _spriteWidth * 2: _spriteWidth,
 										_spriteHeight,
 										0,
 										0);
@@ -2325,7 +2336,9 @@ void Map::cacheUnit(BattleUnit* unit)
 				//Log(LOG_INFO) << ". . . end (!cache)";
 			}
 
-			//Log(LOG_INFO) << ". . setBattleUnit()";
+			//Log(LOG_INFO) << ". . cache Sprite & setBattleUnit()";
+			cache->setWidth(unitSprite->getWidth());
+
 			unitSprite->setBattleUnit(unit, i);
 
 			//Log(LOG_INFO) << ". . getItem()";

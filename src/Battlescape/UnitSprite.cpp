@@ -301,6 +301,7 @@ void UnitSprite::drawRoutine0()
 	const int offY7[8]			= {-4, -6, -1,  0,  3,  0,  1,  0}; // for the left handed rifles (muton)
 
 	const int offYKneel = 4;
+	const int offXAiming = 16;
 
 /*kL	if (_unit->isOut())
 	{
@@ -389,16 +390,10 @@ void UnitSprite::drawRoutine0()
 		rightArm = _unitSurface->getFrame(rarmWalk[unitDir] + walkPhase);
 
 		// kL_note: This needs to be removed because I already changed the sprites:
-/*		if (_drawingRoutine == 10)
+/*		if (_drawingRoutine == 10
+			&& unitDir == 3)
 		{
-			if (unitDir == 2)
-			{
-				rightArm->setX(-6);
-			}
-			else if (unitDir == 3)
-			{
-				leftArm->setY(-1);
-			}
+			leftArm->setY(-1);
 		} */ // kL_note_end.
 	}
 	else
@@ -656,6 +651,25 @@ void UnitSprite::drawRoutine0()
 		}
 	}
 
+	if (_unit->getStatus() == STATUS_AIMING)
+	{
+		torso->setX(offXAiming);
+		legs->setX(offXAiming);
+		leftArm->setX(offXAiming);
+		rightArm->setX(offXAiming);
+		if (itemA)
+			itemA->setX(itemA->getX() + offXAiming);
+		if (itemB)
+			itemB->setX(itemB->getX() + offXAiming);
+	}
+	// kL_note: This needs to be removed because I already changed the sprites:
+/*	else if (_drawingRoutine == 10
+		&& _unit->getStatus() == STATUS_WALKING
+		&& unitDir == 2)
+	{
+		rightArm->setX(-6);
+	} */ // kL_note_end.
+
 
 	// blit order depends on unit direction
 	// and whether we are holding a 2 handed weapon.
@@ -775,6 +789,15 @@ void UnitSprite::drawRoutine0()
 		break;
 	}
 
+	torso->setX(0);
+	legs->setX(0);
+	leftArm->setX(0);
+	rightArm->setX(0);
+	if (itemA)
+		itemA->setX(0);
+	if (itemB)
+		itemB->setX(0);
+
 	delete newTorso;
 	delete newLegs;
 	delete newLeftArm;
@@ -811,6 +834,7 @@ void UnitSprite::drawRoutine1()
 	const int offY2[8] = { 1, -4, -1, 0, 3, 3, 5, 0 };		// for the weapons
 	const int offX3[8] = { 0, 6, 6, 12, -4, -5, -5, -13 };	// for the left handed rifles
 	const int offY3[8] = { -4, -4, -1, 0, 5, 0, 1, 0 };		// for the left handed rifles
+	const int offXAiming = 16;
 
 /*kL	if (_unit->isOut())
 	{
@@ -932,6 +956,17 @@ void UnitSprite::drawRoutine1()
 		torso->setY(0);
 	}
 
+	if (_unit->getStatus() == STATUS_AIMING)
+	{
+		torso->setX(offXAiming);
+		leftArm->setX(offXAiming);
+		rightArm->setX(offXAiming);
+		if (itemA)
+			itemA->setX(itemA->getX() + offXAiming);
+		if (itemB)
+			itemB->setX(itemB->getX() + offXAiming);
+	}
+
 	// blit order depends on unit direction.
 	switch (_unit->getDirection())
 	{
@@ -980,6 +1015,14 @@ void UnitSprite::drawRoutine1()
 			torso->blit(this);
 		break;
 	}
+
+	torso->setX(0);
+	leftArm->setX(0);
+	rightArm->setX(0);
+	if (itemA)
+		itemA->setX(0);
+	if (itemB)
+		itemB->setX(0);
 }
 
 /**
@@ -1082,6 +1125,7 @@ void UnitSprite::drawRoutine4()
 		offY2[8]	= { 1, -4, -2,  0,  3,   3,  5,   0},	// for the weapons
 		offX3[8]	= { 0,  6,  6, 12, -4,  -5, -5, -13},	// for the left handed rifles
 		offY3[8]	= {-4, -4, -1,  0,  5,   0,  1,   0};	// for the left handed rifles
+	const int offXAiming = 16;
 
 /*kL	if (_unit->isOut())
 	{
@@ -1162,6 +1206,15 @@ void UnitSprite::drawRoutine4()
 		}
 	}
 
+	if (_unit->getStatus() == STATUS_AIMING)
+	{
+		s->setX(offXAiming);
+		if (itemA)
+			itemA->setX(itemA->getX() + offXAiming);
+		if (itemB)
+			itemB->setX(itemB->getX() + offXAiming);
+	}
+
 	switch (_unit->getDirection())
 	{
 		case 0:
@@ -1197,6 +1250,12 @@ void UnitSprite::drawRoutine4()
 			s->blit(this);
 		break;
 	}
+
+	s->setX(0);
+	if (itemA)
+		itemA->setX(0);
+	if (itemB)
+		itemB->setX(0);
 }
 
 /**
@@ -1270,6 +1329,7 @@ void UnitSprite::drawRoutine6()
 		offY2[8]		= { 1, -4, -2,  0,  3,  3,  5,  0}, // for the weapons
 		offX3[8]		= { 0,  6,  6, 12, -4, -5, -5,-13}, // for the left handed rifles
 		offY3[8]		= {-4, -4, -1,  0,  5,  0,  1,  0}; // for the left handed rifles
+	const int offXAiming = 16;
 
 /*kL	if (_unit->isOut())
 	{
@@ -1415,6 +1475,18 @@ void UnitSprite::drawRoutine6()
 		torso->setY(0);
 	}
 
+	if (_unit->getStatus() == STATUS_AIMING)
+	{
+		torso->setX(offXAiming);
+		legs->setX(offXAiming);
+		leftArm->setX(offXAiming);
+		rightArm->setX(offXAiming);
+		if (itemA)
+			itemA->setX(itemA->getX() + offXAiming);
+		if (itemB)
+			itemB->setX(itemB->getX() + offXAiming);
+	}
+
 	// blit order depends on unit direction.
 	switch (_unit->getDirection())
 	{
@@ -1476,6 +1548,15 @@ void UnitSprite::drawRoutine6()
 			torso->blit(this);
 		break;
 	}
+
+	torso->setX(0);
+	legs->setX(0);
+	leftArm->setX(0);
+	rightArm->setX(0);
+	if (itemA)
+		itemA->setX(itemA->getX() + 0);
+	if (itemB)
+		itemB->setX(itemB->getX() + 0);
 }
 
 /**
