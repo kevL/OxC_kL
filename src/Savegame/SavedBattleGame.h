@@ -92,7 +92,7 @@ private:
 		_deleted,
 		_items;
 	std::vector<BattleUnit*>
-//kL		_exposedUnits,
+//kL	_exposedUnits,
 		_units;
 	std::vector<MapDataSet*> _mapDataSets;
 	std::vector<Node*> _nodes;
@@ -293,15 +293,15 @@ private:
 		/// Sets the pointer to the BattlescapeState.
 		void setBattleState(BattlescapeState* bs);
 		/// Gets the highest ranked, living XCom unit.
-//kL		BattleUnit* getHighestRankedXCom();
+//kL	BattleUnit* getHighestRankedXCom();
 		/// Gets the highest ranked, living unit of faction.
 		BattleUnit* getHighestRanked(bool xcom = true);		// kL
 		/// Gets the morale modifier for XCom based on the highest ranked, living XCom unit, or the modifier for the unit passed to this function.
-//kL		int getMoraleModifier(BattleUnit* unit = 0);
+//kL	int getMoraleModifier(BattleUnit* unit = 0);
 		/// Gets the morale modifier based on the highest ranked, living xcom/alien unit, or for a unit passed into this function.
 		int getMoraleModifier(BattleUnit* unit = 0, bool xcom = true);	// kL
 		/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
-//kL		bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
+//kL	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
 		/// Resets the turn counter.
 		void resetTurnCounter();
 		/// Resets the visibility of all tiles on the map.

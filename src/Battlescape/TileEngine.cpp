@@ -70,18 +70,18 @@ const int TileEngine::heightFromCenter[11] = { 0,-2, 2,-4, 4,-6, 6,-8, 8,-12, 12
 
 /**
  * Sets up a TileEngine.
- * @param save Pointer to SavedBattleGame object.
- * @param voxelData List of voxel data.
+ * @param battleSave	- pointer to SavedBattleGame object
+ * @param voxelData		- pointer to a vector of voxel data
  */
 TileEngine::TileEngine(
-		SavedBattleGame* save,
+		SavedBattleGame* battleSave,
 		std::vector<Uint16>* voxelData)
 	:
-		_save(save),
+		_battleSave(battleSave),
 		_voxelData(voxelData),
 		_personalLighting(true),
-		_powerE(-1), // kL
-		_powerT(-1) // kL
+		_powerE(-1),	// kL
+		_powerT(-1)		// kL
 {
 }
 
@@ -101,11 +101,11 @@ void TileEngine::calculateSunShading()
 
 	for (int
 			i = 0;
-			i < _save->getMapSizeXYZ();
+			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
-		_save->getTiles()[i]->resetLight(layer);
-		calculateSunShading(_save->getTiles()[i]);
+		_battleSave->getTiles()[i]->resetLight(layer);
+		calculateSunShading(_battleSave->getTiles()[i]);
 	}
 }
 
@@ -118,16 +118,16 @@ void TileEngine::calculateSunShading(Tile* tile)
 	//Log(LOG_INFO) << "TileEngine::calculateSunShading()";
 	const int layer = 0; // Ambient lighting layer.
 
-	int power = 15 - _save->getGlobalShade();
+	int power = 15 - _battleSave->getGlobalShade();
 
 	// At night/dusk sun isn't dropping shades blocked by roofs
-	if (_save->getGlobalShade() < 5)
+	if (_battleSave->getGlobalShade() < 5)
 	{
 		if (verticalBlockage(
-						_save->getTile(Position(
+						_battleSave->getTile(Position(
 											tile->getPosition().x,
 											tile->getPosition().y,
-											_save->getMapSizeZ() - 1)),
+											_battleSave->getMapSizeZ() - 1)),
 						tile,
 						DT_NONE)) // !=0
 		{
@@ -151,50 +151,50 @@ void TileEngine::calculateTerrainLighting()
 
 	for (int // reset all light to 0 first
 			i = 0;
-			i < _save->getMapSizeXYZ();
+			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
-		_save->getTiles()[i]->resetLight(layer);
+		_battleSave->getTiles()[i]->resetLight(layer);
 	}
 
 	for (int // add lighting of terrain
 			i = 0;
-			i < _save->getMapSizeXYZ();
+			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
 		// only floors and objects can light up
-		if (_save->getTiles()[i]->getMapData(MapData::O_FLOOR)
-			&& _save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource())
+		if (_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)
+			&& _battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource())
 		{
 			addLight(
-					_save->getTiles()[i]->getPosition(),
-					_save->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource(),
+					_battleSave->getTiles()[i]->getPosition(),
+					_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getLightSource(),
 					layer);
 		}
 
-		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
-			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource())
+		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)
+			&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource())
 		{
 			addLight(
-					_save->getTiles()[i]->getPosition(),
-					_save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource(),
+					_battleSave->getTiles()[i]->getPosition(),
+					_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getLightSource(),
 					layer);
 		}
 
-		if (_save->getTiles()[i]->getFire())
+		if (_battleSave->getTiles()[i]->getFire())
 			addLight(
-					_save->getTiles()[i]->getPosition(),
+					_battleSave->getTiles()[i]->getPosition(),
 					fireLightPower,
 					layer);
 
 		for (std::vector<BattleItem*>::iterator
-				it = _save->getTiles()[i]->getInventory()->begin();
-				it != _save->getTiles()[i]->getInventory()->end();
+				it = _battleSave->getTiles()[i]->getInventory()->begin();
+				it != _battleSave->getTiles()[i]->getInventory()->end();
 				++it)
 		{
 			if ((*it)->getRules()->getBattleType() == BT_FLARE)
 				addLight(
-						_save->getTiles()[i]->getPosition(),
+						_battleSave->getTiles()[i]->getPosition(),
 						(*it)->getRules()->getPower(),
 						layer);
 		}
@@ -213,15 +213,15 @@ void TileEngine::calculateUnitLighting()
 
 	for (int // reset all light to 0 first
 			i = 0;
-			i < _save->getMapSizeXYZ();
+			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
-		_save->getTiles()[i]->resetLight(layer);
+		_battleSave->getTiles()[i]->resetLight(layer);
 	}
 
 	for (std::vector<BattleUnit*>::iterator
-			i = _save->getUnits()->begin();
-			i != _save->getUnits()->end();
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
 			++i)
 	{
 		if (_personalLighting // add lighting of soldiers
@@ -276,22 +276,22 @@ void TileEngine::addLight(
 		{
 			for (int
 					z = 0;
-					z < _save->getMapSizeZ();
+					z < _battleSave->getMapSizeZ();
 					z++)
 			{
 				int distance = static_cast<int>(Round(sqrt(static_cast<double>(x * x + y * y))));
 
-				if (_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z)))
-					_save->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z))->addLight(power - distance, layer);
+				if (_battleSave->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z)))
+					_battleSave->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z))->addLight(power - distance, layer);
 
-				if (_save->getTile(Position(voxelTarget.x - x, voxelTarget.y - y, z)))
-					_save->getTile(Position(voxelTarget.x - x, voxelTarget.y - y, z))->addLight(power - distance, layer);
+				if (_battleSave->getTile(Position(voxelTarget.x - x, voxelTarget.y - y, z)))
+					_battleSave->getTile(Position(voxelTarget.x - x, voxelTarget.y - y, z))->addLight(power - distance, layer);
 
-				if (_save->getTile(Position(voxelTarget.x + x, voxelTarget.y - y, z)))
-					_save->getTile(Position(voxelTarget.x + x, voxelTarget.y - y, z))->addLight(power - distance, layer);
+				if (_battleSave->getTile(Position(voxelTarget.x + x, voxelTarget.y - y, z)))
+					_battleSave->getTile(Position(voxelTarget.x + x, voxelTarget.y - y, z))->addLight(power - distance, layer);
 
-				if (_save->getTile(Position(voxelTarget.x - x, voxelTarget.y + y, z)))
-					_save->getTile(Position(voxelTarget.x - x, voxelTarget.y + y, z))->addLight(power - distance, layer);
+				if (_battleSave->getTile(Position(voxelTarget.x - x, voxelTarget.y + y, z)))
+					_battleSave->getTile(Position(voxelTarget.x - x, voxelTarget.y + y, z))->addLight(power - distance, layer);
 			}
 		}
 	}
@@ -351,7 +351,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 	if (unit->getHeight()
 				+ unit->getFloatHeight()
-				- _save->getTile(unitPos)->getTerrainLevel()
+				- _battleSave->getTile(unitPos)->getTerrainLevel()
 			>= 24 + 4)
 	{
 		++unitPos.z;
@@ -376,10 +376,10 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 		{
 			for (int
 					z = 0;
-					z < _save->getMapSizeZ();
+					z < _battleSave->getMapSizeZ();
 					++z)
 			{
-				//Log(LOG_INFO) << "for (int z = 0; z < _save->getMapSizeZ(); z++), z = " << z;
+				//Log(LOG_INFO) << "for (int z = 0; z < _battleSave->getMapSizeZ(); z++), z = " << z;
 
 //				int dist = distance(position, (*i)->getPosition());
 				const int distSqr = x * x + y * y;
@@ -403,17 +403,17 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 					//Log(LOG_INFO) << ". testPos " << testPos;
 
 
-					if (_save->getTile(testPos))
+					if (_battleSave->getTile(testPos))
 					{
 						//Log(LOG_INFO) << "inside getTile(testPos)";
-						BattleUnit* revealUnit = _save->getTile(testPos)->getUnit();
+						BattleUnit* revealUnit = _battleSave->getTile(testPos)->getUnit();
 
 						//Log(LOG_INFO) << ". . calculateFOV(), visible() CHECK.. " << revealUnit->getId();
 						if (revealUnit
 							&& !revealUnit->isOut(true, true)
 							&& visible(
 									unit,
-									_save->getTile(testPos))) // reveal units & tiles <- This seems uneven.
+									_battleSave->getTile(testPos))) // reveal units & tiles <- This seems uneven.
 						{
 							//Log(LOG_INFO) << ". . visible() TRUE : unitID = " << unit->getId() << " ; visID = " << revealUnit->getId();
 							//Log(LOG_INFO) << ". . calcFoV, distance = " << distance(unit->getPosition(), revealUnit->getPosition());
@@ -450,7 +450,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 								if (unit->getFaction() == FACTION_HOSTILE
 									&& revealUnit->getFaction() != FACTION_HOSTILE
-									&& _save->getSide() == FACTION_HOSTILE) // per Original.
+									&& _battleSave->getSide() == FACTION_HOSTILE) // per Original.
 								{
 									//Log(LOG_INFO) << ". . calculateFOV(), spotted Unit FACTION_HOSTILE, setTurnsExposed()";
 									revealUnit->setTurnsExposed(0);	// note that xCom can be seen by enemies but *not* be Exposed. hehe
@@ -514,7 +514,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										Position posTraj = _trajectory.at(i);
 
 										// mark every tile of line as visible (this is needed because of bresenham narrow stroke).
-										Tile* visTile = _save->getTile(posTraj);
+										Tile* visTile = _battleSave->getTile(posTraj);
 //kL									visTile->setVisible(+1);
 										visTile->setVisible(true); // kL
 										visTile->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
@@ -526,7 +526,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 											#1 - westwall
 											#2 - northwall
 											#3 - object (content) */
-										Tile* edgeTile = _save->getTile(Position(
+										Tile* edgeTile = _battleSave->getTile(Position(
 																		posTraj.x + 1,
 																		posTraj.y,
 																		posTraj.z));
@@ -568,7 +568,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 											}
 										} // kL_end.
 
-										edgeTile = _save->getTile(Position(
+										edgeTile = _battleSave->getTile(Position(
 																posTraj.x,
 																posTraj.y + 1,
 																posTraj.z));
@@ -610,7 +610,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 											}
 										}
 
-										edgeTile = _save->getTile(Position(
+										edgeTile = _battleSave->getTile(Position(
 																posTraj.x - 1,
 																posTraj.y,
 																posTraj.z));
@@ -635,7 +635,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 											}
 										}
 
-										edgeTile = _save->getTile(Position(
+										edgeTile = _battleSave->getTile(Position(
 																posTraj.x,
 																posTraj.y - 1,
 																posTraj.z));
@@ -710,8 +710,8 @@ void TileEngine::calculateFOV(const Position& position)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateFOV(Pos&)";
 	for (std::vector<BattleUnit*>::iterator
-			i = _save->getUnits()->begin();
-			i != _save->getUnits()->end();
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
 			++i)
 	{
 		//Log(LOG_INFO) << ". iterate ID = " << (*i)->getId();
@@ -736,8 +736,8 @@ void TileEngine::recalculateFOV()
 {
 	//Log(LOG_INFO) << "TileEngine::recalculateFOV(), calculateFOV() calls";
 	for (std::vector<BattleUnit*>::iterator
-			bu = _save->getUnits()->begin();
-			bu != _save->getUnits()->end();
+			bu = _battleSave->getUnits()->begin();
+			bu != _battleSave->getUnits()->end();
 			++bu)
 	{
 		if ((*bu)->getTile() != 0)
@@ -839,7 +839,7 @@ bool TileEngine::visible(
 		//Log(LOG_INFO) << ". . . dist = " << dist;
 		//Log(LOG_INFO) << ". . . factor = " << factor;
 
-		Tile* t = _save->getTile(unit->getPosition()); // origin tile
+		Tile* t = _battleSave->getTile(unit->getPosition()); // origin tile
 
 //		for (uint16_t
 		for (size_t
@@ -848,12 +848,12 @@ bool TileEngine::visible(
 				i++)
 		{
 			//Log(LOG_INFO) << ". . . . . . tracing Trajectory...";
-			if (t != _save->getTile(Position(
+			if (t != _battleSave->getTile(Position(
 										_trajectory.at(i).x / 16,
 										_trajectory.at(i).y / 16,
 										_trajectory.at(i).z / 24)))
 			{
-				t = _save->getTile(Position(
+				t = _battleSave->getTile(Position(
 										_trajectory.at(i).x / 16,
 										_trajectory.at(i).y / 16,
 										_trajectory.at(i).z / 24));
@@ -882,7 +882,7 @@ bool TileEngine::visible(
 		if (unitIsSeen)
 		{
 			// have to check if targetUnit is poking its head up from tileBelow
-			Tile* tBelow = _save->getTile(t->getPosition() + Position(0, 0, -1));
+			Tile* tBelow = _battleSave->getTile(t->getPosition() + Position(0, 0, -1));
 			if (!
 				(t->getUnit() == targetUnit
 					|| (tBelow // could add a check for && t->hasNoFloor() around here.
@@ -914,12 +914,12 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* unit)
 
 	originVoxel.z += unit->getHeight()
 					+ unit->getFloatHeight()
-					- _save->getTile(unit->getPosition())->getTerrainLevel()
+					- _battleSave->getTile(unit->getPosition())->getTerrainLevel()
 					- 2; // two voxels lower (nose level)
 		// kL_note: Can make this equivalent to LoF origin, perhaps.....
 		// hey, here's an idea: make Snaps & Auto shoot from hip, Aimed from shoulders or eyes.
 
-	Tile* tileAbove = _save->getTile(unit->getPosition() + Position(0, 0, 1));
+	Tile* tileAbove = _battleSave->getTile(unit->getPosition() + Position(0, 0, 1));
 
 	// kL_note: let's stop this. Tanks appear to make their FoV etc. Checks from all four quadrants anyway.
 /*	if (unit->getArmor()->getSize() > 1)
@@ -1075,11 +1075,11 @@ bool TileEngine::canTargetUnit(
 
 	std::vector<Position> _trajectory;
 
-	bool hypothetical = (potentialUnit != 0);
-	if (potentialUnit == 0)
+	bool hypothetical = (potentialUnit != NULL);
+	if (potentialUnit == NULL)
 	{
 		potentialUnit = tile->getUnit();
-		if (potentialUnit == 0)
+		if (potentialUnit == NULL)
 			return false; // no unit in this tile, even if it's elevated and appearing in it.
 	}
 
@@ -1430,13 +1430,13 @@ bool TileEngine::checkReactionFire(
 {
 	//Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID " << unit->getId();
 
-	if (_save->getSide() == FACTION_NEUTRAL) // no reaction on civilian turn.
+	if (_battleSave->getSide() == FACTION_NEUTRAL) // no reaction on civilian turn.
 		return false;
 
 
 	// trigger reaction fire only when the spotted unit is of the
 	// currently playing side, and is still on the map, alive
-	if (unit->getFaction() != _save->getSide()
+	if (unit->getFaction() != _battleSave->getSide()
 		|| unit->getTile() == 0
 		|| unit->isOut(true, true))	// kL (note getTile() may return false for corpses anyway)
 	{
@@ -1518,11 +1518,11 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 
 	std::vector<BattleUnit*> spotters;
 	for (std::vector<BattleUnit*>::const_iterator
-			spotter = _save->getUnits()->begin();
-			spotter != _save->getUnits()->end();
+			spotter = _battleSave->getUnits()->begin();
+			spotter != _battleSave->getUnits()->end();
 			++spotter)
 	{
-		if ((*spotter)->getFaction() != _save->getSide()
+		if ((*spotter)->getFaction() != _battleSave->getSide()
 			&& !(*spotter)->isOut(true, true))
 		{
 /*kL			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*spotter)->getCurrentAIState());
@@ -1600,7 +1600,7 @@ bool TileEngine::canMakeSnap(
 
 	if (weapon->getRules()->canReactionFire() // kL add.
 		&& (unit->getOriginalFaction() == FACTION_HOSTILE				// is aLien, or has researched weapon.
-			|| _save->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements()))
+			|| _battleSave->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements()))
 		&& ((weapon->getRules()->getBattleType() == BT_MELEE			// has a melee weapon
 				&& validMeleeRange(
 								unit,
@@ -1663,7 +1663,7 @@ BattleUnit* TileEngine::getReactor(
 	}
 
 
-//	BattleAction action = _save->getAction();
+//	BattleAction action = _battleSave->getAction();
 /*	BattleItem* weapon;// = BattleState::getAction();
 	if (defender->getFaction() == FACTION_PLAYER
 		&& defender->getOriginalFaction() == FACTION_PLAYER)
@@ -1756,7 +1756,7 @@ bool TileEngine::tryReactionSnap(
 		if (aggro == 0) // should not happen, but just in case...
 		{
 			aggro = new AlienBAIState(
-									_save,
+									_battleSave,
 									unit,
 									0);
 			unit->setAIState(aggro);
@@ -1782,13 +1782,13 @@ bool TileEngine::tryReactionSnap(
 		//Log(LOG_INFO) << ". Reaction Fire by ID " << unit->getId();
 
 		action.TU = 0;
-		action.cameraPosition = _save->getBattleState()->getMap()->getCamera()->getMapOffset();	// kL, was above under "BattleAction action;"
+		action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();	// kL, was above under "BattleAction action;"
 
-		_save->getBattleGame()->statePushBack(new UnitTurnBState(
-															_save->getBattleGame(),
+		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
+															_battleSave->getBattleGame(),
 															action));
-		_save->getBattleGame()->statePushBack(new ProjectileFlyBState(
-																_save->getBattleGame(),
+		_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
+																_battleSave->getBattleGame(),
 																action));
 
 //		if (unit->getFaction() == FACTION_PLAYER)
@@ -1822,7 +1822,7 @@ bool TileEngine::testFireMethod(
 	//Log(LOG_INFO) << ". tuSnap = " << unit->getActionTUs(BA_SNAPSHOT, weapon);
 	//Log(LOG_INFO) << ". tuAimed = " << unit->getActionTUs(BA_AIMEDSHOT, weapon);
 
-	int distance = _save->getTileEngine()->distance(
+	int distance = _battleSave->getTileEngine()->distance(
 												unit->getPosition(),
 												target->getPosition());
 	//Log(LOG_INFO) << ". distance = " << distance;
@@ -1900,7 +1900,7 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 
 	int
 		tuUnit = action.actor->getTimeUnits(),
-		distance = _save->getTileEngine()->distance(
+		distance = _battleSave->getTileEngine()->distance(
 												action.actor->getPosition(),
 												action.target);
 //	if (distance < 7)
@@ -1991,7 +1991,7 @@ BattleUnit* TileEngine::hit(
 	if (type != DT_NONE) // TEST for Psi-attack.
 	{
 		//Log(LOG_INFO) << "DT_ type = " << static_cast<int>(type);
-		Tile* tile = _save->getTile(Position(
+		Tile* tile = _battleSave->getTile(Position(
 										pTarget_voxel.x / 16,
 										pTarget_voxel.y / 16,
 										pTarget_voxel.z / 24));
@@ -2038,12 +2038,12 @@ BattleUnit* TileEngine::hit(
 			//Log(LOG_INFO) << ". . RNG::generate(power) = " << power;
 
 			if (part == VOXEL_OBJECT
-				&& _save->getMissionType() == "STR_BASE_DEFENSE")
+				&& _battleSave->getMissionType() == "STR_BASE_DEFENSE")
 			{
 				if (power >= tile->getMapData(MapData::O_OBJECT)->getArmor()
 					&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
 				{
-					_save->getModuleMap()
+					_battleSave->getModuleMap()
 									[(pTarget_voxel.x / 16) / 10]
 									[(pTarget_voxel.y / 16) / 10].second--;
 				}
@@ -2054,7 +2054,7 @@ BattleUnit* TileEngine::hit(
 							part,
 							power))
 			{
-				_save->setObjectiveDestroyed(true);
+				_battleSave->setObjectiveDestroyed(true);
 			}
 
 			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
@@ -2075,7 +2075,7 @@ BattleUnit* TileEngine::hit(
 				// it's possible we have a unit below the actual tile, when he
 				// stands on a stairs and sticks his head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
-				Tile* tileBelow = _save->getTile(Position(
+				Tile* tileBelow = _battleSave->getTile(Position(
 														pTarget_voxel.x / 16,
 														pTarget_voxel.y / 16,
 														pTarget_voxel.z / 24 - 1));
@@ -2210,9 +2210,9 @@ BattleUnit* TileEngine::hit(
 						{
 							int modifier = 100;
 							if (buTarget->getOriginalFaction() == FACTION_PLAYER)
-								modifier = _save->getMoraleModifier();
+								modifier = _battleSave->getMoraleModifier();
 							else if (buTarget->getOriginalFaction() == FACTION_HOSTILE)
-								modifier = _save->getMoraleModifier(0, false);
+								modifier = _battleSave->getMoraleModifier(0, false);
 
 							const int morale_loss = 10 * adjustedDamage * bravery / modifier;
 							//Log(LOG_INFO) << ". . . . morale_loss = " << morale_loss;
@@ -2246,8 +2246,8 @@ BattleUnit* TileEngine::hit(
 												buTarget->getPosition().y * 16 + 8, // kL
 												buTarget->getPosition().z * 24);
 
-						_save->getBattleGame()->statePushNext(new ExplosionBState(
-																			_save->getBattleGame(),
+						_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
+																			_battleSave->getBattleGame(),
 																			unitPos,
 																			0,
 																			buTarget));
@@ -2259,8 +2259,8 @@ BattleUnit* TileEngine::hit(
 					&& attacker->getOriginalFaction() == FACTION_PLAYER	// shooter is Xcom
 					&& attacker->getFaction() == FACTION_PLAYER			// shooter is not Mc'd Xcom
 //					&& type != DT_NONE
-					&& _save->getBattleGame()->getCurrentAction()->type != BA_HIT
-					&& _save->getBattleGame()->getCurrentAction()->type != BA_STUN)
+					&& _battleSave->getBattleGame()->getCurrentAction()->type != BA_HIT
+					&& _battleSave->getBattleGame()->getCurrentAction()->type != BA_STUN)
 				{
 					//Log(LOG_INFO) << ". . addFiringExp() - huh, even for Melee?"; // okay they're working on it ...
 					// kL_note: with my workaround for Stunrods above, this needs to check
@@ -2401,7 +2401,7 @@ void TileEngine::explode(
 			sin_fi = sin(static_cast<double>(fi) * M_PI / 180.0);
 			cos_fi = cos(static_cast<double>(fi) * M_PI / 180.0);
 
-			origin = _save->getTile(Position(
+			origin = _battleSave->getTile(Position(
 										centerX,
 										centerY,
 										centerZ));
@@ -2427,7 +2427,7 @@ void TileEngine::explode(
 				tileY = static_cast<int>(floor(vect_y));
 				tileZ = static_cast<int>(floor(vect_z));
 
-				destTile = _save->getTile(Position(
+				destTile = _battleSave->getTile(Position(
 												tileX,
 												tileY,
 												tileZ));
@@ -2658,7 +2658,7 @@ void TileEngine::explode(
 											(*it)->getUnit()->instaKill();
 										}
 
-										_save->removeItem((*it));
+										_battleSave->removeItem((*it));
 
 										break;
 									}
@@ -2784,8 +2784,8 @@ void TileEngine::explode(
 	_powerE = _powerT = -1;
 
 	for (std::vector<BattleUnit*>::iterator
-			bu = _save->getUnits()->begin();
-			bu != _save->getUnits()->end();
+			bu = _battleSave->getUnits()->begin();
+			bu != _battleSave->getUnits()->end();
 			++bu)
 	{
 		if ((*bu)->getTakenExpl())
@@ -2805,11 +2805,11 @@ void TileEngine::explode(
 				++explTile)
 		{
 			if (detonate(*explTile))
-				_save->setObjectiveDestroyed(true);
+				_battleSave->setObjectiveDestroyed(true);
 
 			applyGravity(*explTile);
 
-			Tile* tileAbove = _save->getTile((*explTile)->getPosition() + Position(0, 0, 1));
+			Tile* tileAbove = _battleSave->getTile((*explTile)->getPosition() + Position(0, 0, 1));
 			if (tileAbove)
 				applyGravity(tileAbove);
 		}
@@ -2916,7 +2916,7 @@ int TileEngine::horizontalBlockage(
 								MapData::O_WESTWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileNorth),
+								_battleSave->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_OBJECT,
 								type,
 								3); // checks Content/bigWalls
@@ -2926,15 +2926,15 @@ int TileEngine::horizontalBlockage(
 
 //				block = blockage( // right+up
 				block += blockage( // right+up
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_NORTHWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_WESTWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_OBJECT,
 								type,
 								7); // checks Content/bigWalls
@@ -2951,11 +2951,11 @@ int TileEngine::horizontalBlockage(
 								MapData::O_WESTWALL,
 								type) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_NORTHWALL,
 								type) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_WESTWALL,
 								type) / 2
 
@@ -2973,23 +2973,23 @@ int TileEngine::horizontalBlockage(
 								true) / 2
 
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileNorth),
+								_battleSave->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_OBJECT,
 								type,
 								4) / 2 // checks Content/bigWalls
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileNorth),
+								_battleSave->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_OBJECT,
 								type,
 								2) / 2 // checks Content/bigWalls
 
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_OBJECT,
 								type,
 								6) / 2 // checks Content/bigWalls
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_OBJECT,
 								type,
 								0) / 2 // checks Content/bigWalls
@@ -3025,7 +3025,7 @@ int TileEngine::horizontalBlockage(
 			if (visLike)
 			{
 				block = blockage( // down+right
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_NORTHWALL,
 								type)
 						+ blockage(
@@ -3033,7 +3033,7 @@ int TileEngine::horizontalBlockage(
 								MapData::O_WESTWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_OBJECT,
 								type,
 								1); // checks Content/bigWalls
@@ -3043,7 +3043,7 @@ int TileEngine::horizontalBlockage(
 
 //				block = blockage( // right+down
 				block += blockage( // right+down
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_WESTWALL,
 								type)
 						+ blockage(
@@ -3051,7 +3051,7 @@ int TileEngine::horizontalBlockage(
 								MapData::O_NORTHWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_OBJECT,
 								type,
 								5); // checks Content/bigWalls
@@ -3067,11 +3067,11 @@ int TileEngine::horizontalBlockage(
 								MapData::O_NORTHWALL,
 								type) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_WESTWALL,
 								type) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_NORTHWALL,
 								type) / 2
 
@@ -3089,23 +3089,23 @@ int TileEngine::horizontalBlockage(
 								true) / 2 // checks Content/bigWalls
 
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_OBJECT,
 								type,
 								2) / 2 // checks Content/bigWalls
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_OBJECT,
 								type,
 								0) / 2 // checks Content/bigWalls
 
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_OBJECT,
 								type,
 								6) / 2 // checks Content/bigWalls
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileEast),
+								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_OBJECT,
 								type,
 								4) / 2 // checks Content/bigWalls
@@ -3141,15 +3141,15 @@ int TileEngine::horizontalBlockage(
 			if (visLike)
 			{
 				block = blockage( // down+left
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_NORTHWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_WESTWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_OBJECT,
 								type,
 								7); // checks Content/bigWalls
@@ -3167,7 +3167,7 @@ int TileEngine::horizontalBlockage(
 								MapData::O_NORTHWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileWest),
+								_battleSave->getTile(startTile->getPosition() + tileWest),
 								MapData::O_OBJECT,
 								type,
 								3);
@@ -3183,11 +3183,11 @@ int TileEngine::horizontalBlockage(
 								MapData::O_WESTWALL,
 								type) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_WESTWALL,
 								type) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_NORTHWALL,
 								type) / 2
 
@@ -3205,23 +3205,23 @@ int TileEngine::horizontalBlockage(
 								true) / 2 // checks Content/bigWalls
 
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_OBJECT,
 								type,
 								0) / 2 // checks Content/bigWalls
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileSouth),
+								_battleSave->getTile(startTile->getPosition() + tileSouth),
 								MapData::O_OBJECT,
 								type,
 								6) / 2 // checks Content/bigWalls
 
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileWest),
+								_battleSave->getTile(startTile->getPosition() + tileWest),
 								MapData::O_OBJECT,
 								type,
 								2) / 2 // checks Content/bigWalls
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileWest),
+								_battleSave->getTile(startTile->getPosition() + tileWest),
 								MapData::O_OBJECT,
 								type,
 								4) / 2 // checks Content/bigWalls
@@ -3260,11 +3260,11 @@ int TileEngine::horizontalBlockage(
 								MapData::O_NORTHWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileNorth),
+								_battleSave->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_WESTWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileNorth),
+								_battleSave->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_OBJECT,
 								type,
 								5);
@@ -3278,11 +3278,11 @@ int TileEngine::horizontalBlockage(
 								MapData::O_WESTWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileWest),
+								_battleSave->getTile(startTile->getPosition() + tileWest),
 								MapData::O_NORTHWALL,
 								type)
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileWest),
+								_battleSave->getTile(startTile->getPosition() + tileWest),
 								MapData::O_OBJECT,
 								type,
 								1);
@@ -3298,11 +3298,11 @@ int TileEngine::horizontalBlockage(
 								MapData::O_NORTHWALL,
 								type) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileNorth),
+								_battleSave->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_WESTWALL,
 								type) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileWest),
+								_battleSave->getTile(startTile->getPosition() + tileWest),
 								MapData::O_NORTHWALL,
 								type) / 2
 
@@ -3320,23 +3320,23 @@ int TileEngine::horizontalBlockage(
 								true) / 2
 
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileNorth),
+								_battleSave->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_OBJECT,
 								type,
 								6) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileNorth),
+								_battleSave->getTile(startTile->getPosition() + tileNorth),
 								MapData::O_OBJECT,
 								type,
 								4) / 2
 
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileWest),
+								_battleSave->getTile(startTile->getPosition() + tileWest),
 								MapData::O_OBJECT,
 								type,
 								0) / 2
 						+ blockage(
-								_save->getTile(startTile->getPosition() + tileWest),
+								_battleSave->getTile(startTile->getPosition() + tileWest),
 								MapData::O_OBJECT,
 								type,
 								2) / 2
@@ -3366,12 +3366,16 @@ int TileEngine::horizontalBlockage(
 						type,
 						dir, // checks Content/bigWalls
 						true,
-						true)
-				+ blockage(
-						endTile,
-						MapData::O_OBJECT,
-						type,
-						(dir + 4) %8);
+						true);
+		if (block > -1		// if, no vision block yet ...
+			&& blockage(	// so check for content @endTile & reveal it
+					endTile,
+					MapData::O_OBJECT,
+					type,
+					(dir + 4) %8) < 0)
+		{
+			return -99;
+		}
 	}
 
 	//Log(LOG_INFO) << "TileEngine::horizontalBlockage() EXIT, ret = " << block;
@@ -3395,10 +3399,10 @@ int TileEngine::verticalBlockage(
 		ItemDamageType type)
 {
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage()";
-	bool visLike = type == DT_NONE
+/*	bool visLike = type == DT_NONE
 				|| type == DT_IN
 				|| type == DT_STUN
-				|| type == DT_SMOKE;
+				|| type == DT_SMOKE; */
 
 	if (startTile == NULL // safety check
 		|| endTile == NULL)
@@ -3428,7 +3432,8 @@ int TileEngine::verticalBlockage(
 		y = startTile->getPosition().y,
 		z = startTile->getPosition().z,
 
-		block = 0;
+		block = 0,
+		block2 = 0;
 
 	if (dirZ > 0) // up
 	{
@@ -3438,11 +3443,11 @@ int TileEngine::verticalBlockage(
 				z++)
 		{
 			block += blockage( // these check directly up.
-							_save->getTile(Position(x, y, z)),
+							_battleSave->getTile(Position(x, y, z)),
 							MapData::O_FLOOR,
 							type)
 					+ blockage(
-							_save->getTile(Position(x, y, z)),
+							_battleSave->getTile(Position(x, y, z)),
 							MapData::O_OBJECT,
 							type,
 							8); // Pathfinding::DIR_UP
@@ -3457,8 +3462,10 @@ int TileEngine::verticalBlockage(
 
 			block += horizontalBlockage( // this checks for ANY Block horizontally to a tile beneath the endTile
 									startTile,
-									_save->getTile(Position(x, y, z)),
+									_battleSave->getTile(Position(x, y, z)),
 									type);
+			if (block < 0)
+				return -1;
 
 			for (
 					z += 1;
@@ -3466,11 +3473,11 @@ int TileEngine::verticalBlockage(
 					++z)
 			{
 				block += blockage( // these check the endTile
-								_save->getTile(Position(x, y, z)),
+								_battleSave->getTile(Position(x, y, z)),
 								MapData::O_FLOOR,
 								type)
 						+ blockage(
-								_save->getTile(Position(x, y, z)),
+								_battleSave->getTile(Position(x, y, z)),
 								MapData::O_OBJECT,
 								type); // note: no Dir vs typeOBJECT
 			}
@@ -3484,11 +3491,11 @@ int TileEngine::verticalBlockage(
 				z--)
 		{
 			block += blockage( // these check directly down.
-							_save->getTile(Position(x, y, z)),
+							_battleSave->getTile(Position(x, y, z)),
 							MapData::O_FLOOR,
 							type)
 					+ blockage(
-							_save->getTile(Position(x, y, z)),
+							_battleSave->getTile(Position(x, y, z)),
 							MapData::O_OBJECT,
 							type,
 							9, // Pathfinding::DIR_DOWN
@@ -3504,8 +3511,10 @@ int TileEngine::verticalBlockage(
 
 			block += horizontalBlockage( // this checks for ANY Block horizontally to a tile above the endTile
 									startTile,
-									_save->getTile(Position(x, y, z)),
+									_battleSave->getTile(Position(x, y, z)),
 									type);
+			if (block < 0)
+				return -1;
 
 			for (
 					;
@@ -3513,16 +3522,20 @@ int TileEngine::verticalBlockage(
 					--z)
 			{
 				block += blockage( // these check the endTile
-								_save->getTile(Position(x, y, z)),
+								_battleSave->getTile(Position(x, y, z)),
 								MapData::O_FLOOR,
 								type)
 						+ blockage(
-								_save->getTile(Position(x, y, z)),
+								_battleSave->getTile(Position(x, y, z)),
 								MapData::O_OBJECT,
 								type); // note: no Dir vs typeOBJECT
 			}
 		}
 	}
+
+
+	if (block < 0)
+		return -1;
 
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage() EXIT ret = " << block;
 	return block;
@@ -3584,11 +3597,13 @@ int TileEngine::blockage(
 		{
 			if (visLike)
 			{
-				if ((tile->getMapData(part)->stopLOS()
+				if (tile->getMapData(part)->stopLOS()
 						&& (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // this one is for verticalBlockage() only.
 							|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
-							|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL))
-					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR) // all floors that block LoS should have their stopLOS flag set true. (because they aren't.)
+							|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL)
+					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR)	// all floors that block LoS should have their stopLOS flag set true.
+																					// because they aren't. But stock OxC code sets them stopLOS=true anyway ...
+																					// HA, maybe not ......
 				{
 					if (type == DT_NONE)
 						return -1; // hardblock.
@@ -3757,18 +3772,13 @@ int TileEngine::blockage(
 				{
 					if (type == DT_NONE)
 					{
-						if (bigWall == Pathfinding::BIGWALL_NESW
+/*						if (bigWall == Pathfinding::BIGWALL_NESW
 							|| bigWall == Pathfinding::BIGWALL_NWSE)
 						{
-/*							if (dir %2 == 0) // cardinal direction
-								return -99;
-							else */
-								// darn, why does one diagonal wall reveal itself, but not the one right next to it ...
-								// Or, if -99 is specified, it shows but then the one next to it shows the tile beyond ...
 							return -1;
 						}
-						else
-							return -1;
+						else */
+						return -1;
 					}
 					else
 						return 500;
@@ -3827,15 +3837,15 @@ bool TileEngine::detonate(Tile* tile)
 		//Log(LOG_INFO) << "detonate() " << smoke << " " << pos;
 
 		Tile* tiles[7];
-		tiles[0] = _save->getTile(Position( // ceiling
+		tiles[0] = _battleSave->getTile(Position( // ceiling
 										pos.x,
 										pos.y,
 										pos.z + 1));
-		tiles[1] = _save->getTile(Position( // east wall
+		tiles[1] = _battleSave->getTile(Position( // east wall
 										pos.x + 1,
 										pos.y,
 										pos.z));
-		tiles[2] = _save->getTile(Position( // south wall
+		tiles[2] = _battleSave->getTile(Position( // south wall
 										pos.x,
 										pos.y + 1,
 										pos.z));
@@ -3892,12 +3902,12 @@ bool TileEngine::detonate(Tile* tile)
 															15)));
 					}
 
-					if (_save->getMissionType() == "STR_BASE_DEFENSE"
+					if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
 						&& i == 6
 						&& tile->getMapData(MapData::O_OBJECT)
 						&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
 					{
-						_save->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
+						_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
 					}
 
 					if (tiles[i]->getMapData(parts[i]))
@@ -3969,12 +3979,12 @@ bool TileEngine::detonate(Tile* tile)
 																15)));
 						}
 
-						if (_save->getMissionType() == "STR_BASE_DEFENSE"
+						if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
 							&& i == 6
 							&& tile->getMapData(MapData::O_OBJECT)
 							&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
 						{
-							_save->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
+							_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
 						}
 
 						if (tiles[i]->getMapData(parts[i]))
@@ -4018,11 +4028,11 @@ Tile* TileEngine::checkForTerrainExplosions()
 {
 	for (int
 			i = 0;
-			i < _save->getMapSizeXYZ();
+			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
-		if (_save->getTiles()[i]->getExplosive())
-			return _save->getTiles()[i];
+		if (_battleSave->getTiles()[i]->getExplosive())
+			return _battleSave->getTiles()[i];
 	}
 
 	return NULL;
@@ -4076,7 +4086,7 @@ int TileEngine::unitOpensDoor(
 				y++)
 		{
 			std::vector<std::pair<Position, int> > checkPositions;
-			tile = _save->getTile(
+			tile = _battleSave->getTile(
 								unit->getPosition()
 								+ Position(x, y, z));
 
@@ -4190,7 +4200,7 @@ int TileEngine::unitOpensDoor(
 						&& door == -1;
 					++i)
 			{
-				tile = _save->getTile(
+				tile = _battleSave->getTile(
 									posUnit
 										+ Position(x, y, z)
 										+ i->first);
@@ -4199,7 +4209,7 @@ int TileEngine::unitOpensDoor(
 					door = tile->openDoor(
 										i->second,
 										unit,
-										_save->getBattleGame()->getReservedAction());
+										_battleSave->getBattleGame()->getReservedAction());
 					if (door != -1)
 					{
 						wall = i->second;
@@ -4238,7 +4248,7 @@ int TileEngine::unitOpensDoor(
 
 	if (TUCost != 0)
 	{
-		if (_save->getBattleGame()->checkReservedTU(unit, TUCost))
+		if (_battleSave->getBattleGame()->checkReservedTU(unit, TUCost))
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
@@ -4307,7 +4317,7 @@ bool TileEngine::testAdjacentDoor( // kL
 		break;
 	}
 
-	Tile* tile = _save->getTile(pos + offset);
+	Tile* tile = _battleSave->getTile(pos + offset);
 	if (tile
 		&& tile->getMapData(wall)
 		&& tile->getMapData(wall)->isUFODoor())
@@ -4337,7 +4347,7 @@ void TileEngine::openAdjacentDoors(
 			++i)
 	{
 		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
-		Tile* tile = _save->getTile(pos + offset);
+		Tile* tile = _battleSave->getTile(pos + offset);
 		if (tile
 			&& tile->getMapData(wall)
 			&& tile->getMapData(wall)->isUFODoor())
@@ -4354,7 +4364,7 @@ void TileEngine::openAdjacentDoors(
 			--i)
 	{
 		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
-		Tile* tile = _save->getTile(pos + offset);
+		Tile* tile = _battleSave->getTile(pos + offset);
 		if (tile
 			&& tile->getMapData(wall)
 			&& tile->getMapData(wall)->isUFODoor())
@@ -4376,17 +4386,17 @@ int TileEngine::closeUfoDoors()
 
 	for (int // prepare a list of tiles on fire/smoke & close any ufo doors
 			i = 0;
-			i < _save->getMapSizeXYZ();
+			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
-		if (_save->getTiles()[i]->getUnit()
-			&& _save->getTiles()[i]->getUnit()->getArmor()->getSize() > 1)
+		if (_battleSave->getTiles()[i]->getUnit()
+			&& _battleSave->getTiles()[i]->getUnit()->getArmor()->getSize() > 1)
 		{
-			BattleUnit* bu = _save->getTiles()[i]->getUnit();
+			BattleUnit* bu = _battleSave->getTiles()[i]->getUnit();
 
-			Tile* tile = _save->getTiles()[i];
-			Tile* tileNorth = _save->getTile(tile->getPosition() + Position(0,-1, 0));
-			Tile* tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
+			Tile* tile = _battleSave->getTiles()[i];
+			Tile* tileNorth = _battleSave->getTile(tile->getPosition() + Position(0,-1, 0));
+			Tile* tileWest = _battleSave->getTile(tile->getPosition() + Position(-1, 0, 0));
 			if ((tile->isUfoDoorOpen(MapData::O_NORTHWALL)
 					&& tileNorth
 					&& tileNorth->getUnit()
@@ -4400,7 +4410,7 @@ int TileEngine::closeUfoDoors()
 			}
 		}
 
-		doorsclosed += _save->getTiles()[i]->closeUfoDoor();
+		doorsclosed += _battleSave->getTiles()[i]->closeUfoDoor();
 	}
 
 	return doorsclosed;
@@ -4440,6 +4450,13 @@ int TileEngine::calculateLine(
 				BattleUnit* excludeAllBut)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateLine()";
+/*	BattleUnit* selUnit = _battleSave->getSelectedUnit();
+	if (selUnit
+		&& selUnit->getId() == 375)
+	{
+		Log(LOG_INFO) << "";
+	} */
+
 	int
 		x, x0, x1,
 		delta_x, step_x,
@@ -4545,14 +4562,14 @@ int TileEngine::calculateLine(
 		{
 			if (cx == 0 // kL_begin: if LoS hits the edge of the Map reveal it!
 				|| cy == 0
-				|| cx == _save->getMapSizeX() - 1
-				|| cy == _save->getMapSizeY() - 1)
+				|| cx == _battleSave->getMapSizeX() - 1
+				|| cy == _battleSave->getMapSizeY() - 1)
 			{
 				return -99;
 			} // kL_end. that was easy
 
-			Tile* startTile = _save->getTile(lastPoint);
-			Tile* endTile = _save->getTile(Position(cx, cy, cz));
+			Tile* startTile = _battleSave->getTile(lastPoint);
+			Tile* endTile = _battleSave->getTile(Position(cx, cy, cz));
 
 			result = horizontalBlockage(
 									startTile,
@@ -4564,6 +4581,27 @@ int TileEngine::calculateLine(
 									DT_NONE);
 			//Log(LOG_INFO) << "calculateLine, hori = " << result;
 			//Log(LOG_INFO) << "calculateLine, vert = " << result2;
+
+			// kL_TEST:
+//			BattleUnit* selUnit = _battleSave->getSelectedUnit();
+/*			if (selUnit
+				&& selUnit->getId() == 375
+				&& startTile != endTile)
+//				&& selUnit->getFaction() == FACTION_PLAYER
+//				&& _battleSave->getDebugMode())
+//				&& _battleSave->getTurn() > 1)
+			{
+				Position posUnit = selUnit->getPosition();
+				if ((posUnit.x == cx
+						&& abs(posUnit.y - cy) > 4)
+					|| (posUnit.y == cy
+						&& abs(posUnit.x - cx) > 4))
+				{
+					Log(LOG_INFO) << "start " << lastPoint << " hori = " << result;
+					Log(LOG_INFO) << ". end " << Position(cx, cy, cz) << " vert = " << result2;
+				}
+			} */
+			// kL_TEST_end.
 
 // original:
 			// -1 means we have a regular wall, and anything over 0 means we have a bigwall. (kL: from blockage())
@@ -4593,6 +4631,23 @@ int TileEngine::calculateLine(
 			{
 				return -1;
 			} // kL_end.
+
+
+/*			if (result <= -99)		// bigWall or content block ...
+			{
+				if (result2 > -1)	// but no vert-block
+					return -99;		// ( don't cut the trajectory )
+				else				// or there is vert-block
+					return -1;		// ( cut the trajectory as normal )
+//					result = -1;	// ( cut the trajectory as normal, unless ... )
+			}
+
+			result += result2;
+			if (result < 0)
+			{
+				return result;
+			} */
+
 
 			lastPoint = Position(cx, cy, cz);
 		}
@@ -4817,7 +4872,7 @@ bool TileEngine::validateThrow(
 	}
 	//Log(LOG_INFO) << ". starting arc = " << arc;
 
-	Tile* targetTile = _save->getTile(action.target);
+	Tile* targetTile = _battleSave->getTile(action.target);
 	if (/*kL (action.type == BA_THROW
 			&& targetTile
 			&& targetTile->getMapData(MapData::O_OBJECT)
@@ -4882,7 +4937,7 @@ int TileEngine::castedShade(const Position& voxel)
 	int zstart = voxel.z;
 	Position tmpCoord = voxel / Position(16, 16, 24);
 
-	Tile* t = _save->getTile(tmpCoord);
+	Tile* t = _battleSave->getTile(tmpCoord);
 	while (t
 		&& t->isVoid()
 		&& !t->getUnit())
@@ -4890,7 +4945,7 @@ int TileEngine::castedShade(const Position& voxel)
 		zstart = tmpCoord.z * 24;
 		--tmpCoord.z;
 
-		t = _save->getTile(tmpCoord);
+		t = _battleSave->getTile(tmpCoord);
 	}
 
 	Position tmpVoxel = voxel;
@@ -4978,7 +5033,7 @@ int TileEngine::voxelCheck(
 		return VOXEL_UNIT; // kL; i think Wb may have this covered now.
 
 
-	Tile* targetTile = _save->getTile(targetPos / Position(16, 16, 24)); // converts to tilespace -> Tile
+	Tile* targetTile = _battleSave->getTile(targetPos / Position(16, 16, 24)); // converts to tilespace -> Tile
 	//Log(LOG_INFO) << ". targetTile " << targetTile->getPosition();
 	// check if we are out of the map
 	if (targetTile == NULL
@@ -4990,7 +5045,7 @@ int TileEngine::voxelCheck(
 		return VOXEL_OUTOFBOUNDS;
 	}
 
-	Tile* belowTile = _save->getTile(targetTile->getPosition() + Position(0, 0,-1));
+	Tile* belowTile = _battleSave->getTile(targetTile->getPosition() + Position(0, 0,-1));
 	if (targetTile->isVoid()
 		&& targetTile->getUnit() == NULL
 		&& (!belowTile
@@ -5052,7 +5107,7 @@ int TileEngine::voxelCheck(
 		if (buTarget == NULL
 			&& targetTile->hasNoFloor(0))
 		{
-			targetTile = _save->getTile(Position( // tileBelow
+			targetTile = _battleSave->getTile(Position( // tileBelow
 										targetPos.x / 16,
 										targetPos.y / 16,
 										targetPos.z / 24 - 1));
@@ -5145,7 +5200,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 {
 	//Log(LOG_INFO) << "TileEngine::psiAttack()";
 	//Log(LOG_INFO) << ". attackerID " << action->actor->getId();
-	Tile* tile = _save->getTile(action->target);
+	Tile* tile = _battleSave->getTile(action->target);
 	if (tile
 		&& tile->getUnit())
 	{
@@ -5193,7 +5248,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 		else
 			info = "STR_CONTROL";
 
-		_save->getBattleState()->warning(
+		_battleSave->getBattleState()->warning(
 										info,
 										true,
 										success);
@@ -5226,7 +5281,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 				calculateFOV(victim->getPosition());
 
 				// if all units from either faction are mind controlled - auto-end the mission.
-				if (_save->getSide() == FACTION_PLAYER
+				if (_battleSave->getSide() == FACTION_PLAYER
 					&& Options::battleAutoEnd
 					&& Options::allowPsionicCapture)
 				{
@@ -5235,7 +5290,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 					int liveAliens = 0;
 					int liveSoldiers = 0;
 
-					_save->getBattleGame()->tallyUnits(
+					_battleSave->getBattleGame()->tallyUnits(
 													liveAliens,
 													liveSoldiers,
 													false);
@@ -5243,10 +5298,10 @@ bool TileEngine::psiAttack(BattleAction* action)
 					if (liveAliens == 0
 						|| liveSoldiers == 0)
 					{
-						_save->setSelectedUnit(0);
-						_save->getBattleGame()->cancelCurrentAction(true);
+						_battleSave->setSelectedUnit(0);
+						_battleSave->getBattleGame()->cancelCurrentAction(true);
 
-						_save->getBattleGame()->requestEndTurn();
+						_battleSave->getBattleGame()->requestEndTurn();
 					}
 				}
 				//Log(LOG_INFO) << ". . . tallyUnits DONE";
@@ -5301,11 +5356,11 @@ Tile* TileEngine::applyGravity(Tile* t)
 							&& canFall;
 						++x)
 				{
-					rt = _save->getTile(Position(
+					rt = _battleSave->getTile(Position(
 											unitPos.x + x,
 											unitPos.y + y,
 											unitPos.z));
-					rtb = _save->getTile(Position( // below
+					rtb = _battleSave->getTile(Position( // below
 											unitPos.x + x,
 											unitPos.y + y,
 											unitPos.z - 1));
@@ -5332,7 +5387,7 @@ Tile* TileEngine::applyGravity(Tile* t)
 					occupant->startWalking(
 									occupant->getDirection(),
 									occupant->getPosition(),
-									_save->getTile(occupant->getPosition() + Position(0, 0,-1)),
+									_battleSave->getTile(occupant->getPosition() + Position(0, 0,-1)),
 									true);
 					// and set our status to standing (rather than walking or flying) to avoid weirdness.
 					occupant->setStatus(STATUS_STANDING);
@@ -5342,10 +5397,10 @@ Tile* TileEngine::applyGravity(Tile* t)
 					occupant->startWalking(
 									Pathfinding::DIR_DOWN,
 									occupant->getPosition() + Position(0, 0,-1),
-									_save->getTile(occupant->getPosition() + Position(0, 0,-1)),
+									_battleSave->getTile(occupant->getPosition() + Position(0, 0,-1)),
 									true);
 					//Log(LOG_INFO) << "TileEngine::applyGravity(), addFallingUnit() ID " << occupant->getId();
-					_save->addFallingUnit(occupant);
+					_battleSave->addFallingUnit(occupant);
 				}
 			}
 			else if (occupant->isOut(true, true))
@@ -5362,7 +5417,7 @@ Tile* TileEngine::applyGravity(Tile* t)
 							x >= 0;
 							--x)
 					{
-						_save->getTile(origin + Position(x, y, 0))->setUnit(0);
+						_battleSave->getTile(origin + Position(x, y, 0))->setUnit(0);
 					}
 				}
 
@@ -5377,8 +5432,8 @@ Tile* TileEngine::applyGravity(Tile* t)
 	while (p.z >= 0
 		&& canFall)
 	{
-		rt = _save->getTile(p);
-		rtb = _save->getTile(Position( // below
+		rt = _battleSave->getTile(p);
+		rtb = _battleSave->getTile(Position( // below
 									p.x,
 									p.y,
 									p.z - 1));
@@ -5473,14 +5528,14 @@ bool TileEngine::validMeleeRange(
 				y <= size;
 				++y)
 		{
-			tileOrigin = _save->getTile(Position(pos + Position(x, y, 0)));
-			tileTarget = _save->getTile(Position(pos + Position(x, y, 0) + p));
+			tileOrigin = _battleSave->getTile(Position(pos + Position(x, y, 0)));
+			tileTarget = _battleSave->getTile(Position(pos + Position(x, y, 0) + p));
 
 			if (tileOrigin
 				&& tileTarget)
 			{
-				tileTarget_above = _save->getTile(Position(pos + Position(x, y, 1) + p));
-				tileTarget_below = _save->getTile(Position(pos + Position(x, y,-1) + p));
+				tileTarget_above = _battleSave->getTile(Position(pos + Position(x, y, 1) + p));
+				tileTarget_below = _battleSave->getTile(Position(pos + Position(x, y,-1) + p));
 
 				if (!tileTarget->getUnit()) // kL
 				{
@@ -5549,7 +5604,7 @@ int TileEngine::faceWindow(const Position& position)
 	static const Position tileEast = Position(1, 0, 0);
 	static const Position tileSouth = Position(0, 1, 0);
 
-	Tile* tile = _save->getTile(position);
+	Tile* tile = _battleSave->getTile(position);
 	if (tile
 		&& tile->getMapData(MapData::O_NORTHWALL)
 		&& !tile->getMapData(MapData::O_NORTHWALL)->stopLOS())
@@ -5557,7 +5612,7 @@ int TileEngine::faceWindow(const Position& position)
 		return 0;
 	}
 
-	tile = _save->getTile(position + tileEast);
+	tile = _battleSave->getTile(position + tileEast);
 	if (tile
 		&& tile->getMapData(MapData::O_WESTWALL)
 		&& !tile->getMapData(MapData::O_WESTWALL)->stopLOS())
@@ -5565,7 +5620,7 @@ int TileEngine::faceWindow(const Position& position)
 		return 2;
 	}
 
-	tile = _save->getTile(position + tileSouth);
+	tile = _battleSave->getTile(position + tileSouth);
 	if (tile
 		&& tile->getMapData(MapData::O_NORTHWALL)
 		&& !tile->getMapData(MapData::O_NORTHWALL)->stopLOS())
@@ -5573,7 +5628,7 @@ int TileEngine::faceWindow(const Position& position)
 		return 4;
 	}
 
-	tile = _save->getTile(position);
+	tile = _battleSave->getTile(position);
 	if (tile
 		&& tile->getMapData(MapData::O_WESTWALL)
 		&& !tile->getMapData(MapData::O_WESTWALL)->stopLOS())
@@ -5680,7 +5735,7 @@ Position TileEngine::getOriginVoxel(
 
 		if (originVoxel.z >= (origin.z + 1) * 24)
 		{
-			Tile* tileAbove = _save->getTile(origin + Position(0, 0, 1));
+			Tile* tileAbove = _battleSave->getTile(origin + Position(0, 0, 1));
 			if (tileAbove
 				&& tileAbove->hasNoFloor(0))
 			{
@@ -5744,7 +5799,7 @@ void TileEngine::setDangerZone(
 		int radius,
 		BattleUnit* unit)
 {
-	Tile* tile = _save->getTile(pos);
+	Tile* tile = _battleSave->getTile(pos);
 	if (!tile)
 		return;
 
@@ -5773,7 +5828,7 @@ void TileEngine::setDangerZone(
 				// make sure it's within the radius
 				if ((x * x) + (y * y) <= radius * radius)
 				{
-					tile = _save->getTile(pos + Position(x, y, 0));
+					tile = _battleSave->getTile(pos + Position(x, y, 0));
 					if (tile)
 					{
 						targetVoxel = ((pos + Position(x, y, 0)) * Position(16, 16, 24))

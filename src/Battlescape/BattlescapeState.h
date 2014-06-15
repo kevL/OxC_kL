@@ -70,6 +70,7 @@ private:
 		_totalMouseMoveY,
 		_xBeforeMouseScrolling,
 		_yBeforeMouseScrolling;
+
 	Uint32 _mouseScrollingStartTime;
 
 //	std::string _currentTooltip;
@@ -90,26 +91,30 @@ private:
 		* _btnMapDown,
 		* _btnShowMap,
 		* _btnKneel,
-
 		* _btnInventory,
 		* _btnCenter,
 		* _btnNextSoldier,
 		* _btnNextStop,
 		* _btnShowLayers,
 		* _btnOptions,
-
 		* _btnEndTurn,
 		* _btnAbort,
+
 		* _btnStats,
+
 		* _btnLaunch,
 		* _btnPsi,
 
 		* _btnLeftHandItem,
 		* _btnRightHandItem,
 
-		* _btnVisibleUnit[VISIBLE_MAX];
+		* _btnVisibleUnit[VISIBLE_MAX],
+
+		* _btnZeroTUs; // kL
+
 //	ImageButton* _reserve;
 //	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
+
 	Map* _map;
 	NumberText
 		* _numVisibleUnit[VISIBLE_MAX],
@@ -153,7 +158,7 @@ private:
 
 
 	public:
-		static const int DEFAULT_ANIM_SPEED = 88;
+		static const int DEFAULT_ANIM_SPEED = 89;
 
 		/// Creates the Battlescape state.
 		BattlescapeState(Game* game);
@@ -223,22 +228,28 @@ private:
 		void btnEndTurnClick(Action* action);
 		/// Handler for clicking the Abort button.
 		void btnAbortClick(Action* action);
+
 		/// Handler for clicking the stats.
 		void btnStatsClick(Action* action);
+
 		/// Handler for clicking the left hand item button.
 		void btnLeftHandItemClick(Action* action);
 		/// Handler for clicking the right hand item button.
 		void btnRightHandItemClick(Action* action);
+
 		/// Handler for clicking a visible unit button.
 		void btnVisibleUnitClick(Action* action);
+
 		/// Handler for clicking the launch rocket button.
 		void btnLaunchClick(Action* action);
 		/// Handler for clicking the use psi button.
 		void btnPsiClick(Action* action);
+
 		/// Handler for clicking a reserved button.
 //		void btnReserveClick(Action* action);
 		/// Handler for clicking the reload button.
 //		void btnReloadClick(Action* action);
+
 		/// Handler for clicking the lighting button.
 		void btnPersonalLightingClick(Action* action);
 

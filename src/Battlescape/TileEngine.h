@@ -60,7 +60,9 @@ private:
 	int
 		_powerE, // kL, effective power that actually explodes on a tile that's hit by HE.
 		_powerT; // kL, test power that checks if _powerE actually makes it to the next tile.
-	SavedBattleGame* _save;
+
+	SavedBattleGame* _battleSave;
+
 	std::vector<Uint16>* _voxelData;
 
 	///
@@ -81,7 +83,7 @@ private:
 	public:
 		/// Creates a new TileEngine class.
 		TileEngine(
-				SavedBattleGame* save,
+				SavedBattleGame* battleSave,
 				std::vector<Uint16>* voxelData);
 		/// Cleans up the TileEngine.
 		~TileEngine();
@@ -111,14 +113,14 @@ private:
 		/// Gets the origin voxel of a unit's eyesight.
 		Position getSightOriginVoxel(BattleUnit* currentUnit);
 		/// Checks a unit's % exposure on a tile.
-//kL		int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
+//kL	int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
 		/// Checks validity for targetting a unit.
 		bool canTargetUnit(
 				Position* originVoxel,
 				Tile* tile,
 				Position* scanVoxel,
 				BattleUnit* excludeUnit,
-				BattleUnit* potentialUnit = 0);
+				BattleUnit* potentialUnit = NULL);
 		/// Check validity for targetting a tile.
 		bool canTargetTile(Position* originVoxel,
 				Tile* tile,

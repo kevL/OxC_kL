@@ -61,18 +61,18 @@ namespace OpenXcom
  */
 SavedBattleGame::SavedBattleGame()
 	:
-		_battleState(0),
+		_battleState(NULL),
 		_mapsize_x(0),
 		_mapsize_y(0),
 		_mapsize_z(0),
 		_tiles(),
-		_selectedUnit(0),
-		_lastSelectedUnit(0),
+		_selectedUnit(NULL),
+		_lastSelectedUnit(NULL),
 		_nodes(),
 		_units(),
 		_items(),
-		_pathfinding(0),
-		_tileEngine(0),
+		_pathfinding(NULL),
+		_tileEngine(NULL),
 		_missionType(""),
 		_globalShade(0),
 		_side(FACTION_PLAYER),

@@ -194,6 +194,8 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnReserveKneel	= new ImageButton(10, 23, _icons->getX() + 96, _icons->getY() + 33);
 	_btnZeroTUs			= new ImageButton(10, 23, _icons->getX() + 49, _icons->getY() + 33); */
 
+	_btnZeroTUs			= new InteractiveSurface(57, 23, _icons->getX() + 49, _icons->getY() + 33); // kL
+
 	_btnLeftHandItem	= new InteractiveSurface(32, 48, _icons->getX() +   8, _icons->getY() + 5);
 	_btnRightHandItem	= new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
 	_numAmmoLeft		= new NumberText(30, 5, _icons->getX() +   8, _icons->getY() + 4);
@@ -309,8 +311,8 @@ BattlescapeState::BattlescapeState(Game* game)
 	add(_btnReserveSnap);
 	add(_btnReserveAimed);
 	add(_btnReserveAuto);
-	add(_btnReserveKneel);
-	add(_btnZeroTUs); */
+	add(_btnReserveKneel); */
+	add(_btnZeroTUs);
 	add(_btnLeftHandItem);
 	add(_numAmmoLeft);
 	add(_btnRightHandItem);
@@ -345,7 +347,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_txtBaseLabel->setColor(Palette::blockOffset(9)+1);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
-	Base* base = 0;
+	Base* base = NULL;
 	std::wstring baseLabel = L"";
 
 	//Log(LOG_INFO) << ". iterate start";
@@ -598,7 +600,7 @@ BattlescapeState::BattlescapeState(Game* game)
 					Options::keyBattleReserveKneel);
 	_btnReserveKneel->setTooltip("STR_RESERVE_TIME_UNITS_FOR_KNEEL");
 	_btnReserveKneel->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
-	_btnReserveKneel->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
+	_btnReserveKneel->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut); */
 
 	_btnZeroTUs->onMouseClick(
 					(ActionHandler)& BattlescapeState::btnZeroTUsClick,
@@ -606,9 +608,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnZeroTUs->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnZeroTUsClick,
 					Options::keyBattleZeroTUs);
-	_btnZeroTUs->setTooltip("STR_EXPEND_ALL_TIME_UNITS");
-	_btnZeroTUs->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
-	_btnZeroTUs->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut); */
+//	_btnZeroTUs->setTooltip("STR_EXPEND_ALL_TIME_UNITS");
+//	_btnZeroTUs->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
+//	_btnZeroTUs->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
 	// shortcuts without a specific button
 //	_btnStats->onKeyboardPress(
@@ -617,9 +619,9 @@ BattlescapeState::BattlescapeState(Game* game)
 	_btnStats->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnPersonalLightingClick,
 					Options::keyBattlePersonalLighting);
-	_btnStats->onKeyboardPress( // kL, replaces _btnZeroUTs functionality.
+/*	_btnStats->onKeyboardPress( // kL, replaces _btnZeroUTs functionality.
 					(ActionHandler)& BattlescapeState::btnZeroTUsClick,
-					Options::keyBattleZeroTUs);
+					Options::keyBattleZeroTUs); */
 
 	SDLKey buttons[] = {Options::keyBattleCenterEnemy1,
 						Options::keyBattleCenterEnemy2,

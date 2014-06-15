@@ -4746,7 +4746,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1402457813 f:\git\openxcom\src\savegame\savedbattlegame.h
+1402812933 f:\git\openxcom\src\savegame\savedbattlegame.h
 	<algorithm>
 	<iostream>
 	<string>
@@ -5621,7 +5621,7 @@
 1402457811 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1402457811 f:\git\openxcom\src\battlescape\battlescapestate.h
+1402816280 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5690,7 +5690,7 @@
 1402457811 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1402457811 f:\git\openxcom\src\battlescape\tileengine.h
+1402812247 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -6006,7 +6006,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1402565014 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1402816706 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6698,7 +6698,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1402807519 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1402845903 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9203,7 +9203,7 @@
 1402457813 source:f:\git\openxcom\src\ruleset\mapblock.cpp
 	"MapBlock.h"
 
-1402457813 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1402808825 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 
 1402774880 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
@@ -9546,7 +9546,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1402742561 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1402812497 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>
