@@ -4779,7 +4779,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1402457811 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1402846826 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -6698,7 +6698,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1402845903 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1402846462 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>

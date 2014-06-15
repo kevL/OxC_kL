@@ -403,7 +403,8 @@ std::wstring CraftInfoState::formatTime(int total)
 	ss << L"\n(";
 
 	if (days > 0)
-		ss << tr("STR_DAY", days) << L"/";
+//kl		ss << tr("STR_DAY", days) << L"/";
+		ss << tr("STR_DAY", days) << L" "; // kL
 
 	if (hours > 0)
 		ss << tr("STR_HOUR", hours);
