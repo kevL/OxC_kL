@@ -735,8 +735,7 @@ void Map::drawTerrain(Surface* surface)
 								surface,
 								screenPosition.x,
 								screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(),
-								tileShade,
-								false);
+								tileShade);
 
 					unit = tile->getUnit();
 
@@ -793,7 +792,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 // START ADVANCED DRAWING CYCLE:
-					if (mapPosition.y > 0) // special handling for a moving unit.
+/*					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
 						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
 						BattleUnit* bu = tileNorth->getUnit();
@@ -1107,7 +1106,7 @@ void Map::drawTerrain(Surface* surface)
 								} // kL_end.
 							}
 						}
-					}
+					} */
 /*kL - their tileWest SMOKE:
 								{
 									frame = 0;
@@ -1151,8 +1150,7 @@ void Map::drawTerrain(Surface* surface)
 									surface,
 									screenPosition.x,
 									screenPosition.y - tile->getMapData(MapData::O_WESTWALL)->getYOffset(),
-									wallShade,
-									false);
+									wallShade);
 						}
 
 						// Draw north wall
@@ -1180,8 +1178,7 @@ void Map::drawTerrain(Surface* surface)
 										surface,
 										screenPosition.x,
 										screenPosition.y - tile->getMapData(MapData::O_NORTHWALL)->getYOffset(),
-										wallShade,
-										false);
+										wallShade);
 						}
 
 						// Draw object
@@ -1194,8 +1191,7 @@ void Map::drawTerrain(Surface* surface)
 										surface,
 										screenPosition.x,
 										screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(),
-										tileShade,
-										false);
+										tileShade);
 						}
 
 						// draw an item on top of the floor (if any)
@@ -1207,8 +1203,7 @@ void Map::drawTerrain(Surface* surface)
 									surface,
 									screenPosition.x,
 									screenPosition.y + tile->getTerrainLevel(),
-									tileShade,
-									false);
+									tileShade);
 						}
 					}
 
@@ -1225,7 +1220,7 @@ void Map::drawTerrain(Surface* surface)
 							Position voxelPos = _projectile->getPosition();
 							// draw shadow on the floor
 							voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-							if (   voxelPos.x / 16 >= itX
+							if (voxelPos.x / 16 >= itX
 								&& voxelPos.y / 16 >= itY
 								&& voxelPos.x / 16 <= itX + 1
 								&& voxelPos.y / 16 <= itY + 1
@@ -1244,7 +1239,7 @@ void Map::drawTerrain(Surface* surface)
 
 							voxelPos = _projectile->getPosition();
 							// draw thrown object
-							if (   voxelPos.x / 16 >= itX
+							if (voxelPos.x / 16 >= itX
 								&& voxelPos.y / 16 >= itY
 								&& voxelPos.x / 16 <= itX + 1
 								&& voxelPos.y / 16 <= itY + 1
@@ -1264,7 +1259,7 @@ void Map::drawTerrain(Surface* surface)
 						else // fired projectile ( a bullet-sprite, not a thrown item )
 						{
 							// draw bullet on the correct tile
-							if (   itX >= bulletLowX
+							if (itX >= bulletLowX
 								&& itX <= bulletHighX
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
@@ -1280,7 +1275,7 @@ void Map::drawTerrain(Surface* surface)
 										Position voxelPos = _projectile->getPosition(1 - i);
 										// draw shadow on the floor
 										voxelPos.z = _save->getTileEngine()->castedShade(voxelPos);
-										if (   voxelPos.x / 16 == itX
+										if (voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
 											&& voxelPos.z / 24 == itZ)
 //kL										&& _save->getTileEngine()->isVoxelVisible(voxelPos))
@@ -1300,7 +1295,7 @@ void Map::drawTerrain(Surface* surface)
 
 										// draw bullet itself
 										voxelPos = _projectile->getPosition(1 - i);
-										if (   voxelPos.x / 16 == itX
+										if (voxelPos.x / 16 == itX
 											&& voxelPos.y / 16 == itY
 											&& voxelPos.z / 24 == itZ)
 //kL										&& _save->getTileEngine()->isVoxelVisible(voxelPos))
@@ -1326,7 +1321,8 @@ void Map::drawTerrain(Surface* surface)
 					// Draw soldier
 					unit = tile->getUnit();
 					if (unit
-						&& (unit->getVisible() || _save->getDebugMode()))
+						&& (unit->getVisible()
+							|| _save->getDebugMode()))
 					{
 						// the part is 0 for small units, large units have parts 1,2 & 3 depending
 						// on the relative x/y position of this tile vs the actual unit position.
@@ -1478,7 +1474,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 
-					if (!tile->isVoid())
+					if (!tile->isVoid()) // THIS CAME BEFORE Draw Path Preview above in Old builds.
 					{
 						// Draw object
 						if (tile->getMapData(MapData::O_OBJECT)
@@ -1490,8 +1486,7 @@ void Map::drawTerrain(Surface* surface)
 													surface,
 													screenPosition.x,
 													screenPosition.y - tile->getMapData(MapData::O_OBJECT)->getYOffset(),
-													tileShade,
-													false);
+													tileShade);
 						}
 					}
 
