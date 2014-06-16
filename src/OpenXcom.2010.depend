@@ -9617,7 +9617,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1402543674 source:f:\git\openxcom\src\savegame\soldier.cpp
+1402856028 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"SoldierDead.h"

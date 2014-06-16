@@ -430,7 +430,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							{
 								//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, set spottedTile & spottedUnit visible";
 								revealUnit->getTile()->setVisible(true);
-								revealUnit->getTile()->setDiscovered(true, 2); // kL_below. sprite caching for floor+content: DO I WANT THIS.
+//								revealUnit->getTile()->setDiscovered(true, 2); // kL_below. sprite caching for floor+content: DO I WANT THIS.
 
 								if (!revealUnit->getVisible())
 									revealUnit->setVisible(true);
