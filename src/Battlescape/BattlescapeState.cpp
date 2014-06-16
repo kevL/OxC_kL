@@ -394,7 +394,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	// Add in custom reserve buttons
 	Surface* icons = _game->getResourcePack()->getSurface("ICONS.PCK");
-	Surface* tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve");
+	Surface* tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve"); // 'Resources/UI/reserve.png'
 	tftdIcons->setX(48);
 	tftdIcons->setY(176);
 	tftdIcons->blit(icons);

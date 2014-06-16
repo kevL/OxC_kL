@@ -81,7 +81,8 @@ TileEngine::TileEngine(
 		_voxelData(voxelData),
 		_personalLighting(true),
 		_powerE(-1),	// kL
-		_powerT(-1)		// kL
+		_powerT(-1),	// kL
+		_debug(false) // kL
 {
 }
 
@@ -3372,7 +3373,8 @@ int TileEngine::horizontalBlockage(
 					endTile,
 					MapData::O_OBJECT,
 					type,
-					(dir + 4) %8) < 0)
+					(dir + 4) %8) // opposite direction
+				< 0)
 		{
 			return -99;
 		}
@@ -3410,6 +3412,7 @@ int TileEngine::verticalBlockage(
 //		if (visLike)
 		if (type == DT_NONE)
 			return -99;
+//			return -1; // cut off last trajectory position if not on same z-level.
 		else
 			return 500;
 	}
@@ -3577,7 +3580,7 @@ int TileEngine::blockage(
 	{
 		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret ( no tile )";
 		if (type == DT_NONE)
-			return -99; // maybe should be -1 .. etc below -99 -> -1
+			return -99;
 		else
 			return 500;
 	}
@@ -4558,15 +4561,60 @@ int TileEngine::calculateLine(
 				return result;
 			}
 		}
-		else // for Terrain visibility, ie. FoV & Fog of War.
+		else // for Terrain visibility, ie. FoV / Fog of War.
 		{
+			if (cx == 0 && cy == 0 && cz == 0)
+			{
+				Log(LOG_INFO) << ". position " << Position(cx, cy, cz);
+				_debug = true; // kL, input tilePosition to debug.
+			}
+			if (cx == 1 && cy == 0 && cz == 0)
+			{
+				Log(LOG_INFO) << ". position " << Position(cx, cy, cz);
+				_debug = true; // kL, input tilePosition to debug.
+			}
+			if (cx == 0 && cy == 1 && cz == 0)
+			{
+				Log(LOG_INFO) << ". position " << Position(cx, cy, cz);
+				_debug = true; // kL, input tilePosition to debug.
+			}
+			if (cx == 1 && cy == 1 && cz == 0)
+			{
+				Log(LOG_INFO) << ". position " << Position(cx, cy, cz);
+				_debug = true; // kL, input tilePosition to debug.
+			}
+
+
 			if (cx == 0 // kL_begin: if LoS hits the edge of the Map reveal it!
 				|| cy == 0
 				|| cx == _battleSave->getMapSizeX() - 1
 				|| cy == _battleSave->getMapSizeY() - 1)
 			{
-				return -99;
-			} // kL_end. that was easy
+				if (_debug) Log(LOG_INFO) << "calculateLine() out of x/y bounds, ret -1/-99\n";
+
+				if ((cx == 0 && cy == 1)
+					|| (cy == 0 && cx == 1) // -> this could still stop a pure diagonal from seeing the NW corner
+
+					|| (cx == _battleSave->getMapSizeX() - 1 && cy == 1) // like wise for the rest of these
+					|| (cy == 0 && cx == _battleSave->getMapSizeX() - 2)
+
+					|| (cx == 0 && cy == _battleSave->getMapSizeY() - 2)
+					|| (cy == _battleSave->getMapSizeY() - 1 && cx == 1)
+
+					|| (cx == _battleSave->getMapSizeX() - 1 && cy == _battleSave->getMapSizeY() - 2)
+					|| (cy == _battleSave->getMapSizeY() - 1 && cx == _battleSave->getMapSizeX() - 2))
+				{
+					if (_debug) _debug = false; // kL
+					return -99;
+				}
+				else
+//				if (excludeUnit
+//					&& excludeUnit->getPosition().z != cz) // <- cuts off vision of upper/lower edgetiles.
+				{
+					if (_debug) _debug = false; // kL
+					return -1;
+				}
+			} // kL_end. that was easy ... too easy ...
 
 			Tile* startTile = _battleSave->getTile(lastPoint);
 			Tile* endTile = _battleSave->getTile(Position(cx, cy, cz));
@@ -4581,6 +4629,8 @@ int TileEngine::calculateLine(
 									DT_NONE);
 			//Log(LOG_INFO) << "calculateLine, hori = " << result;
 			//Log(LOG_INFO) << "calculateLine, vert = " << result2;
+			if (_debug) Log(LOG_INFO) << "calculateLine() hori = " << result << " vert = " << result2;
+
 
 			// kL_TEST:
 //			BattleUnit* selUnit = _battleSave->getSelectedUnit();
@@ -4624,11 +4674,13 @@ int TileEngine::calculateLine(
 			if (result <= -99 // kL_begin:
 				|| result2 <= -99)
 			{
+				if (_debug) _debug = false; // kL
 				return -99;
 			}
 			else if (result <= -1
 				|| result2 <= -1)
 			{
+				if (_debug) _debug = false; // kL
 				return -1;
 			} // kL_end.
 
@@ -4650,6 +4702,8 @@ int TileEngine::calculateLine(
 
 
 			lastPoint = Position(cx, cy, cz);
+
+			if (_debug) _debug = false; // kL
 		}
 
 		drift_xy = drift_xy - delta_y; // update progress in other planes

@@ -62,20 +62,19 @@ ResearchState::ResearchState(
 		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-	_txtTitle		= new Text(300, 17, 16, 9);
-	_txtBaseLabel	= new Text(80, 9, 16, 9);
+	_txtTitle		= new Text(300, 17, 16, 10);
+	_txtBaseLabel	= new Text(80, 9, 16, 10);
 
-	_txtAllocated	= new Text(140, 9, 16, 25);
-	_txtAvailable	= new Text(140, 9, 160, 25);
+	_txtAllocated	= new Text(140, 9, 16, 26);
+	_txtAvailable	= new Text(140, 9, 160, 26);
 
-	_txtSpace		= new Text(100, 9, 16, 34);
+	_txtSpace		= new Text(100, 9, 16, 35);
 
-	_txtProject		= new Text(110, 9, 16, 47);
-	_txtScientists	= new Text(55, 9, 161, 47);
-	_txtProgress	= new Text(55, 9, 219, 47);
+	_txtProject		= new Text(110, 9, 16, 48);
+	_txtScientists	= new Text(55, 9, 161, 48);
+	_txtProgress	= new Text(55, 9, 219, 48);
 
-//	_lstResearch	= new TextList(285, 112, 16, 62);
-	_lstResearch	= new TextList(288, 112, 16, 62);
+	_lstResearch	= new TextList(288, 112, 16, 63);
 
 	_btnAliens		= new TextButton(92, 16, 16, 177); // kL
 	_btnNew			= new TextButton(92, 16, 114, 177);

@@ -199,8 +199,8 @@ Map::~Map()
 void Map::init()
 {
 	// load the unit-selected bobbing-arrow into a surface
-	int f = Palette::blockOffset(1);	// yellow,	Fill
-	int b = 15;							// black,	Border
+	int f = Palette::blockOffset(1);	// Fill,	yellow
+	int b = 14;							// Border,	black
 	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
 				       0, 0, b, f, f, f, b, 0, 0,
@@ -234,7 +234,7 @@ void Map::init()
 	_arrow->unlock();
 
 	// DarkDefender_begin:
-	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
+/*	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
 							 0, 0, b, b, b, b, b, 0, 0,
 							 0, 0, b, f, f, f, b, 0, 0,
 							 b, b, b, f, f, f, b, b, b,
@@ -242,7 +242,16 @@ void Map::init()
 							 0, b, f, f, f, f, f, b, 0,
 							 0, 0, b, f, f, f, b, 0, 0,
 							 0, 0, 0, b, f, b, 0, 0, 0,
-							 0, 0, 0, 0, b, 0, 0, 0, 0 };
+							 0, 0, 0, 0, b, 0, 0, 0, 0 }; */
+	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, // kL
+							 0, 0, 0, 0, b, 0, 0, 0, 0,
+							 0, 0, 0, b, f, b, 0, 0, 0,
+							 0, 0, b, f, f, f, b, 0, 0,
+							 0, b, f, f, f, f, f, b, 0,
+							 b, f, f, f, f, f, f, f, b,
+							 b, b, b, f, f, f, b, b, b,
+							 0, 0, b, f, f, f, b, 0, 0,
+							 0, 0, b, b, b, b, b, 0, 0 };
 
 	_arrow_kneel = new Surface(9, 9);
 	_arrow_kneel->setPalette(this->getPalette());

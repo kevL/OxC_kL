@@ -93,7 +93,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	} */
 
 	_window			= new Window(this, 320, 200, 0, 0);
-	_txtTitle		= new Text(310, 17, 5, 10);
+	_txtTitle		= new Text(300, 17, 10, 10);
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
 
 	_txtUsed		= new Text(144, 9, 16, 30);

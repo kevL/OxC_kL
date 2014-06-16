@@ -82,7 +82,7 @@ private:
 		_unitDying;
 	int
 		_animFrame,
-//kL		_cursorFrame, // DarkDefender
+//kL	_cursorFrame, // DarkDefender
 		_cursorSize,
 		_mouseX,
 		_mouseY,

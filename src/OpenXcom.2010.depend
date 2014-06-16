@@ -4921,7 +4921,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1402457811 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
+1402923749 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
 	"ManageAlienContainmentState.h"
 	<sstream>
 	<climits>
@@ -5264,7 +5264,7 @@
 	<algorithm>
 	<stdint.h>
 
-1402512407 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1402923803 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -5621,7 +5621,7 @@
 1402457811 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1402816280 f:\git\openxcom\src\battlescape\battlescapestate.h
+1402920767 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5690,7 +5690,7 @@
 1402457811 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1402812247 f:\git\openxcom\src\battlescape\tileengine.h
+1402948409 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -5749,7 +5749,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1402560860 f:\git\openxcom\src\battlescape\map.h
+1402911429 f:\git\openxcom\src\battlescape\map.h
 	<set>
 	<vector>
 	"Position.h"
@@ -6006,7 +6006,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1402816706 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1402944860 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6393,7 +6393,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1402899023 source:f:\git\openxcom\src\battlescape\map.cpp
+1402918401 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6698,7 +6698,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1402860748 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1402933533 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
