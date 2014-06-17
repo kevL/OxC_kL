@@ -1044,7 +1044,6 @@ void GeoscapeState::time5Seconds()
 		{
 			case Ufo::FLYING:
 				//Log(LOG_INFO) << "GeoscapeState::time5Seconds(), Ufo::FLYING";
-
 				if (!_zoomInEffectTimer->isRunning()
 					&& !_zoomOutEffectTimer->isRunning())
 				{
@@ -1248,7 +1247,7 @@ void GeoscapeState::time5Seconds()
 			if ((*j)->getDestination() != 0)
 			{
 				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
-				if (u != 0
+				if (u != NULL
 					&& !u->getDetected())
 				{
 					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
@@ -1275,7 +1274,7 @@ void GeoscapeState::time5Seconds()
 					}
 				}
 
-				if (u != 0
+				if (u != NULL
 					&& u->getStatus() == Ufo::DESTROYED)
 				{
 					(*j)->returnToBase();
@@ -1295,7 +1294,7 @@ void GeoscapeState::time5Seconds()
 				TerrorSite* t	= dynamic_cast<TerrorSite*>((*j)->getDestination());
 				AlienBase* b	= dynamic_cast<AlienBase*>((*j)->getDestination());
 
-				if (u != 0)
+				if (u != NULL)
 				{
 					switch (u->getStatus())
 					{
@@ -1370,7 +1369,7 @@ void GeoscapeState::time5Seconds()
 						break;
 					}
 				}
-				else if (w != 0)
+				else if (w != NULL)
 				{
 					timerReset(); // kL
 					popup(new CraftPatrolState(
@@ -1379,7 +1378,7 @@ void GeoscapeState::time5Seconds()
 											_globe));
 					(*j)->setDestination(0);
 				}
-				else if (t != 0)
+				else if (t != NULL)
 				{
 					if ((*j)->getNumSoldiers() > 0)
 					{
@@ -1403,7 +1402,7 @@ void GeoscapeState::time5Seconds()
 					else
 						(*j)->returnToBase();
 				}
-				else if (b != 0)
+				else if (b != NULL)
 				{
 					if (b->isDiscovered())
 					{
@@ -1516,8 +1515,8 @@ private:
 
 /**
  * Only UFOs within detection range of the base have a chance to detect it.
- * @param ufo, Pointer to the UFO attempting detection.
- * @return, If the base is detected by @a ufo.
+ * @param ufo - pointer to the UFO attempting detection
+ * @return, true if base is detected by the ufo
  */
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {

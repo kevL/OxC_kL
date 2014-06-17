@@ -65,8 +65,7 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain
- * type of deployment data.
+ * Creates a blank ruleset for a certain type of deployment data.
  * @param type, String defining the type.
  */
 AlienDeployment::AlienDeployment(const std::string& type)

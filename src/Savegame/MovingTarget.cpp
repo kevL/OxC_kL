@@ -114,7 +114,7 @@ Target* MovingTarget::getDestination() const
  */
 void MovingTarget::setDestination(Target* dest)
 {
-	if (_dest != 0) // Remove moving target from old destination's followers
+	if (_dest != NULL) // Remove moving target from old destination's followers
 	{
 		for (std::vector<Target*>::iterator
 				i = _dest->getFollowers()->begin();
@@ -131,7 +131,7 @@ void MovingTarget::setDestination(Target* dest)
 	}
 
 	_dest = dest;
-	if (_dest != 0) // Add moving target to new destination's followers
+	if (_dest != NULL) // Add moving target to new destination's followers
 		_dest->getFollowers()->push_back(this);
 
 	calculateSpeed();

@@ -742,10 +742,12 @@ const std::string& Ufo::getMissionType() const
  * Sets the mission information of the UFO.
  * The UFO will start at the first point of the trajectory. The actual UFO information
  * is not changed here, this only sets the information kept on behalf of the mission.
- * @param mission, Pointer to the actual mission object.
- * @param trajectory, Pointer to the actual mission trajectory.
+ * @param mission		- pointer to the actual mission object
+ * @param trajectory	- pointer to the actual mission trajectory
  */
-void Ufo::setMissionInfo(AlienMission* mission, const UfoTrajectory* trajectory)
+void Ufo::setMissionInfo(
+		AlienMission* mission,
+		const UfoTrajectory* trajectory)
 {
 	assert(!_mission && mission && trajectory);
 

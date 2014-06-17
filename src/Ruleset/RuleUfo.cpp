@@ -41,7 +41,7 @@ RuleUfo::RuleUfo(const std::string& type)
 		_score(0),
 		_reload(0),
 		_breakOffTime(0),
-		_battlescapeTerrainData(0),
+		_battlescapeTerrainData(NULL),
 		_modSprite("")
 {
 }

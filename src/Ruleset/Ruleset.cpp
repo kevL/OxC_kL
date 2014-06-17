@@ -376,7 +376,7 @@ void Ruleset::loadFile(const std::string& filename)
 									*i,
 									&_countries,
 									&_countriesIndex);
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(*i);
 	}
 
@@ -389,7 +389,7 @@ void Ruleset::loadFile(const std::string& filename)
 								*i,
 								&_regions,
 								&_regionsIndex);
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(*i);
 	}
 
@@ -402,7 +402,7 @@ void Ruleset::loadFile(const std::string& filename)
 										*i,
 										&_facilities,
 										&_facilitiesIndex);
-		if (rule != 0)
+		if (rule != NULL)
 		{
 			_facilityListOrder += 100;
 			rule->load(
@@ -421,7 +421,7 @@ void Ruleset::loadFile(const std::string& filename)
 								*i,
 								&_crafts,
 								&_craftsIndex);
-		if (rule != 0)
+		if (rule != NULL)
 		{
 			_craftListOrder += 100;
 			rule->load(
@@ -441,7 +441,7 @@ void Ruleset::loadFile(const std::string& filename)
 									*i,
 									&_craftWeapons,
 									&_craftWeaponsIndex);
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(
 					*i,
 					_modIndex);
@@ -456,7 +456,7 @@ void Ruleset::loadFile(const std::string& filename)
 								*i,
 								&_items,
 								&_itemsIndex);
-		if (rule != 0)
+		if (rule != NULL)
 		{
 			_itemListOrder += 100;
 			rule->load(
@@ -475,7 +475,7 @@ void Ruleset::loadFile(const std::string& filename)
 							*i,
 							&_ufos,
 							&_ufosIndex);
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(
 					*i,
 					this);
@@ -491,7 +491,7 @@ void Ruleset::loadFile(const std::string& filename)
 									&_invs,
 									&_invsIndex,
 									"id");
-		if (rule != 0)
+		if (rule != NULL)
 		{
 			_invListOrder += 10;
 			rule->load(
@@ -510,7 +510,7 @@ void Ruleset::loadFile(const std::string& filename)
 									&_terrains,
 									&_terrainIndex,
 									"name");
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(
 					*i,
 					this);
@@ -542,7 +542,7 @@ void Ruleset::loadFile(const std::string& filename)
 							*i,
 							&_armors,
 							&_armorsIndex);
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(*i);
 	}
 
@@ -554,7 +554,7 @@ void Ruleset::loadFile(const std::string& filename)
 		RuleSoldier* rule = loadRule(
 								*i,
 								&_soldiers);
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(*i);
 	}
 
@@ -566,7 +566,7 @@ void Ruleset::loadFile(const std::string& filename)
 		Unit* rule = loadRule(
 							*i,
 							&_units);
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(
 					*i,
 					_modIndex);
@@ -582,7 +582,7 @@ void Ruleset::loadFile(const std::string& filename)
 								&_alienRaces,
 								&_aliensIndex,
 								"id");
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(*i);
 	}
 
@@ -595,7 +595,7 @@ void Ruleset::loadFile(const std::string& filename)
 									*i,
 									&_alienDeployments,
 									&_deploymentsIndex);
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(*i);
 	}
 
@@ -609,7 +609,7 @@ void Ruleset::loadFile(const std::string& filename)
 									&_research,
 									&_researchIndex,
 									"name");
-		if (rule != 0)
+		if (rule != NULL)
 		{
 			_researchListOrder += 100;
 			rule->load(
@@ -628,7 +628,7 @@ void Ruleset::loadFile(const std::string& filename)
 									&_manufacture,
 									&_manufactureIndex,
 									"name");
-		if (rule != 0)
+		if (rule != NULL)
 		{
 			_manufactureListOrder += 100;
 			rule->load(
@@ -665,7 +665,7 @@ void Ruleset::loadFile(const std::string& filename)
 					case UFOPAEDIA_TYPE_UFO:			rule = new ArticleDefinitionUfo();			break;
 
 					default:
-						rule = 0;
+						rule = NULL;
 					break;
 				}
 
@@ -723,9 +723,9 @@ void Ruleset::loadFile(const std::string& filename)
 		UfoTrajectory* rule = loadRule(
 									*i,
 									&_ufoTrajectories,
-									0,
+									NULL,
 									"id");
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(*i);
 	}
 
@@ -738,7 +738,7 @@ void Ruleset::loadFile(const std::string& filename)
 										*i,
 										&_alienMissions,
 										&_alienMissionsIndex);
-		if (rule != 0)
+		if (rule != NULL)
 			rule->load(*i);
 	}
 
@@ -847,7 +847,7 @@ void Ruleset::loadFile(const std::string& filename)
 			++i)
 	{
 		RuleBaseFacility* rule = getBaseFacility(*i);
-		if (0 < rule->getPsiLaboratories())
+		if (rule->getPsiLaboratories() > 0)
 		{
 			_psiRequirements = rule->getRequirements();
 
@@ -889,7 +889,7 @@ T* Ruleset::loadRule(
 		std::vector<std::string>* index,
 		const std::string& key)
 {
-	T* rule = 0;
+	T* rule = NULL;
 	if (node[key])
 	{
 		std::string type = node[key].as<std::string>();
@@ -1023,7 +1023,7 @@ RuleCountry* Ruleset::getCountry(const std::string& id) const
 	if (_countries.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1046,7 +1046,7 @@ RuleRegion* Ruleset::getRegion(const std::string& id) const
 	if (_regions.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1070,7 +1070,7 @@ RuleBaseFacility* Ruleset::getBaseFacility(const std::string& id) const
 	if (_facilities.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1094,7 +1094,7 @@ RuleCraft* Ruleset::getCraft(const std::string& id) const
 	if (_crafts.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1118,7 +1118,7 @@ RuleCraftWeapon* Ruleset::getCraftWeapon(const std::string& id) const
 	if (_craftWeapons.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1141,7 +1141,7 @@ RuleItem* Ruleset::getItem(const std::string& id) const
 	if (_items.find(id) != _items.end())
 		return _items.find(id)->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1165,7 +1165,7 @@ RuleUfo* Ruleset::getUfo(const std::string& id) const
 	if (_ufos.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1200,7 +1200,7 @@ RuleTerrain* Ruleset::getTerrain(const std::string& name) const
 	if (_terrains.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1235,7 +1235,7 @@ RuleSoldier* Ruleset::getSoldier(const std::string& name) const
 	if (_soldiers.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1249,7 +1249,7 @@ Unit* Ruleset::getUnit(const std::string& name) const
 	if (_units.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1263,7 +1263,7 @@ AlienRace* Ruleset::getAlienRace(const std::string& name) const
 	if (_alienRaces.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1287,7 +1287,7 @@ AlienDeployment* Ruleset::getDeployment(const std::string& name) const
 	if (_alienDeployments.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1311,7 +1311,7 @@ Armor* Ruleset::getArmor(const std::string& name) const
 	if (_armors.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1374,7 +1374,7 @@ ArticleDefinition* Ruleset::getUfopaediaArticle(const std::string& name) const
 	if (_ufopaediaArticles.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1407,7 +1407,7 @@ RuleInventory* Ruleset::getInventory(const std::string& id) const
 	if (_invs.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1430,7 +1430,7 @@ RuleResearch* Ruleset::getResearch(const std::string& id) const
 	if (_research.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1453,7 +1453,7 @@ RuleManufacture* Ruleset::getManufacture(const std::string& id) const
 	if (_manufacture.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1500,7 +1500,7 @@ const UfoTrajectory* Ruleset::getUfoTrajectory(const std::string& id) const
 	if (_ufoTrajectories.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1514,7 +1514,7 @@ const RuleAlienMission* Ruleset::getAlienMission(const std::string& id) const
 	if (_alienMissions.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1594,7 +1594,7 @@ const City* Ruleset::locateCity(
 			return *citer;
 	}
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -1626,7 +1626,7 @@ MCDPatch* Ruleset::getMCDPatch(const std::string id) const
 	if (_MCDPatches.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -1894,7 +1894,7 @@ std::vector<std::string> Ruleset::getPsiRequirements() const
  */
 Soldier* Ruleset::genSoldier(SavedGame* save) const
 {
-	Soldier* soldier = 0;
+	Soldier* soldier = NULL;
 	int newId = save->getId("STR_SOLDIER");
 
 	// Original X-COM gives up after 10 tries so might as well do the same here

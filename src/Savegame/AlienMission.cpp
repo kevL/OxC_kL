@@ -214,7 +214,7 @@ private:
 			return _region.insideRegion(
 									base->getLongitude(),
 									base->getLatitude())
-				&& base->getIsRetaliationTarget();
+					&& base->getIsRetaliationTarget();
 		}
 };
 
@@ -311,12 +311,12 @@ void AlienMission::think(
  * This function will spawn a UFO according the the mission rules.
  * Some code is duplicated between cases, that's ok for now. It's on different
  * code paths and the function is MUCH easier to read written this way.
- * @param game, The saved game information.
- * @param ruleset, The ruleset.
- * @param globe, The globe, for land checks.
- * @param ufoRule, The rule for the desired UFO.
- * @param trajectory, The rule for the desired trajectory.
- * @return, Pointer to the spawned UFO. If the mission does not desire to spawn a UFO, 0 is returned.
+ * @param game			- reference to the saved game information
+ * @param ruleset		- reference to the ruleset
+ * @param globe			- reference to the globe, for land checks
+ * @param ufoRule		- reference to the rule for the desired UFO
+ * @param trajectory	- reference to the rule for the desired trajectory
+ * @return, pointer to the spawned UFO; if the mission does not desire to spawn a UFO, 0 is returned
  */
 Ufo* AlienMission::spawnUfo(
 		const SavedGame& game,
@@ -328,7 +328,8 @@ Ufo* AlienMission::spawnUfo(
 	//Log(LOG_INFO) << "AlienMission::spawnUfo()";
 	if (_rule.getType() == "STR_ALIEN_RETALIATION")
 	{
-		//Log(LOG_INFO) << ". STR_ALIEN_RETALIATION";
+		Log(LOG_INFO) << ". STR_ALIEN_RETALIATION";
+
 		const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
 		std::vector<Base*>::const_iterator found = std::find_if(
@@ -338,29 +339,30 @@ Ufo* AlienMission::spawnUfo(
 		if (found != game.getBases()->end())
 		{
 			//Log(LOG_INFO) << ". . xCom base found marked. Battleship INC!!!";
-
 			// Spawn a battleship straight for the XCOM base.
 			const RuleUfo& battleshipRule = *ruleset.getUfo("STR_BATTLESHIP");
-			const UfoTrajectory& assaultTrajectory = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
+			const UfoTrajectory& trajAssault = *ruleset.getUfoTrajectory("__RETALIATION_ASSAULT_RUN");
 			Ufo* ufo = new Ufo(const_cast<RuleUfo*>(&battleshipRule));
 			ufo->setMissionInfo(
 							this,
-							&assaultTrajectory);
+							&trajAssault);
 
 			std::pair<double, double> pos;
 			if (trajectory.getAltitude(0) == "STR_GROUND")
+			{
 				pos = getLandPoint(
 								globe,
 								regionRules,
 								trajectory.getZone(0));
+			}
 			else
 				pos = regionRules.getRandomPoint(trajectory.getZone(0));
 
-			ufo->setAltitude(assaultTrajectory.getAltitude(0));
-			ufo->setSpeed(static_cast<int>(
-							assaultTrajectory.getSpeedPercentage(0) * static_cast<float>(ufoRule.getMaxSpeed())));
-//			ufo->setAltitude("STR_VERY_LOW");		// kL. heh
-//			ufo->setSpeed(ufoRule.getMaxSpeed());	// kL. heh
+			ufo->setAltitude(trajAssault.getAltitude(0));
+			ufo->setSpeed(static_cast<int>(ceil(
+							static_cast<double>(trajAssault.getSpeedPercentage(0)) * static_cast<double>(battleshipRule.getMaxSpeed()))));
+//			ufo->setAltitude("STR_VERY_LOW");		// kL. heh -> changed in Xcom1Ruleset.rul
+//			ufo->setSpeed(battleshipRule.getMaxSpeed());	// kL. heh -> fixed above.
 			ufo->setLongitude(pos.first);
 			ufo->setLatitude(pos.second);
 
@@ -379,7 +381,7 @@ Ufo* AlienMission::spawnUfo(
 			&& !_base)
 		{
 			//Log(LOG_INFO) << ". . No base to supply!";
-			return 0; // No base to supply!
+			return NULL; // No base to supply!
 		}
 
 		// Our destination is always an alien base.
@@ -399,8 +401,8 @@ Ufo* AlienMission::spawnUfo(
 			pos = regionRules.getRandomPoint(trajectory.getZone(0));
 
 		ufo->setAltitude(trajectory.getAltitude(0));
-		ufo->setSpeed(static_cast<int>(
-						trajectory.getSpeedPercentage(0) * static_cast<float>(ufoRule.getMaxSpeed())));
+		ufo->setSpeed(static_cast<int>(ceil(
+						static_cast<double>(trajectory.getSpeedPercentage(0)) * static_cast<double>(ufoRule.getMaxSpeed()))));
 		ufo->setLongitude(pos.first);
 		ufo->setLatitude(pos.second);
 
@@ -414,10 +416,12 @@ Ufo* AlienMission::spawnUfo(
 				pos.second = _base->getLatitude();
 			}
 			else // Other ships can land where they want.
+			{
 				pos = getLandPoint(
 								globe,
 								regionRules,
 								trajectory.getZone(1));
+			}
 		}
 		else
 			pos = regionRules.getRandomPoint(trajectory.getZone(1));
@@ -429,6 +433,7 @@ Ufo* AlienMission::spawnUfo(
 		return ufo;
 	}
 
+	//Log(LOG_INFO) << ". spawn non-Retaliation/Supply UFO";
 	// Spawn according to sequence.
 	Ufo* ufo = new Ufo(const_cast<RuleUfo*>(&ufoRule));
 	ufo->setMissionInfo(this, &trajectory);
@@ -444,8 +449,8 @@ Ufo* AlienMission::spawnUfo(
 	if (trajectory.getAltitude(0) == "STR_GROUND")
 		ufo->setSecondsRemaining(trajectory.groundTimer());
 
-	ufo->setSpeed(static_cast<int>(
-						trajectory.getSpeedPercentage(0) * static_cast<float>(ufoRule.getMaxSpeed())));
+	ufo->setSpeed(static_cast<int>(ceil(
+					static_cast<double>(trajectory.getSpeedPercentage(0)) * static_cast<double>(ufoRule.getMaxSpeed()))));
 	ufo->setLongitude(pos.first);
 	ufo->setLatitude(pos.second);
 
@@ -522,9 +527,9 @@ private:
  * It takes care of sending the UFO to the next waypoint, landing UFOs and
  * marking them for removal as required. It must set the game data
  * in a way that the rest of the code understands what to do.
- * @param ufo, The UFO that reached its waypoint.
- * @param engine, The game engine, required to get access to game data and game rules.
- * @param globe, The earth globe, required to get access to land checks.
+ * @param ufo		- the UFO that reached its waypoint
+ * @param engine	- the game engine, required to get access to game data and game rules
+ * @param globe		- the earth globe, required to get access to land checks
  */
 void AlienMission::ufoReachedWaypoint(
 		Ufo& ufo,
@@ -588,9 +593,16 @@ void AlienMission::ufoReachedWaypoint(
 		if (ufo.getLandId() != 0)
 			ufo.setLandId(0);
 
+		// kL_begin:
+//		if (_rule.getType() == "STR_ALIEN_RETALIATION" &&
+/*		if (trajectory.getID() == "__RETALIATION_ASSAULT_RUN")
+		{
+			ufo.setSpeed(ufo.getRules()->getMaxSpeed());
+		}
+		else */ // kL_end. Nope not it !
 		ufo.setSpeed(static_cast<int>(
-							(static_cast<float>(ufo.getRules()->getMaxSpeed())
-									* trajectory.getSpeedPercentage(nextWaypoint))));
+						(static_cast<float>(ufo.getRules()->getMaxSpeed())
+							* trajectory.getSpeedPercentage(nextWaypoint))));
 	}
 	else // UFO landed.
 	{
@@ -683,11 +695,12 @@ void AlienMission::ufoReachedWaypoint(
 			ufo.setDetected(false);
 
 			std::vector<Base*>::const_iterator found =
-					std::find_if(game.getBases()->begin(),
-					game.getBases()->end(),
-					MatchBaseCoordinates(
-									ufo.getLongitude(),
-									ufo.getLatitude()));
+					std::find_if(
+							game.getBases()->begin(),
+							game.getBases()->end(),
+							MatchBaseCoordinates(
+										ufo.getLongitude(),
+										ufo.getLatitude()));
 			if (found == game.getBases()->end())
 			{
 				ufo.setStatus(Ufo::DESTROYED);

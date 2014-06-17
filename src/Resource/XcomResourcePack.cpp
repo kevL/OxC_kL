@@ -238,6 +238,7 @@ XcomResourcePack::XcomResourcePack( // kL
 	}
 
 
+	// kL_begin:
 	Surface* kL_Geo = new Surface(
 								Screen::ORIGINAL_WIDTH - 64,	// 256
 								Screen::ORIGINAL_HEIGHT);		// 200
@@ -255,7 +256,7 @@ XcomResourcePack::XcomResourcePack( // kL
 			kL_Geo->setPixelColor(x, y, oldGeo->getPixelColor(x, y));
 		}
 	}
-	_surfaces["LGEOBORD.SCR"] = kL_Geo;
+	_surfaces["LGEOBORD.SCR"] = kL_Geo; // kL_end.
 
 	// bigger Geoscape background
 /*	int
@@ -521,7 +522,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		-20
 	};
 
-	Polyline* l = 0;
+	Polyline* line = 0;
 
 	int start = 0;
 	for (size_t
@@ -532,8 +533,8 @@ XcomResourcePack::XcomResourcePack( // kL
 		if (lines[i] < -9.999
 			&& lines[i] > -10.001)
 		{
-			if (l != 0)
-				_polylines.push_back(l);
+			if (line != 0)
+				_polylines.push_back(line);
 
 			int points = 0;
 			for (int
@@ -545,20 +546,20 @@ XcomResourcePack::XcomResourcePack( // kL
 			}
 
 			points /= 2;
-			l = new Polyline(points);
+			line = new Polyline(points);
 
 			start = i + 1;
 		}
 		else
 		{
 			if ((i - start) %2 == 0)
-				l->setLongitude((i - start) / 2, lines[i]);
+				line->setLongitude((i - start) / 2, lines[i]);
 			else
-				l->setLatitude((i - start) / 2, lines[i]);
+				line->setLatitude((i - start) / 2, lines[i]);
 		}
 	}
 
-	_polylines.push_back(l);
+	_polylines.push_back(line);
 
 
 	/* MUSICS */
