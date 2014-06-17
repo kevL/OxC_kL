@@ -119,8 +119,8 @@ Craft::~Craft()
 
 /**
  * Loads a craft from a YAML file.
- * @param node - YAML node
- * @param rule - ruleset for the saved game
+ * @param node - reference to a YAML node
+ * @param rule - pointer to ruleset for the saved game
  * @param save - pointer to the saved game
  */
 void Craft::load(
@@ -757,7 +757,7 @@ int Craft::getFuelLimit(Base* base) const
 	double speedRadian = static_cast<double>(speed) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0; // kL
 
 	return static_cast<int>(
-//kL			floor((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (_speedRadian * 120.0)));
+//kL		floor((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (_speedRadian * 120.0)));
 			ceil((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (speedRadian * 120.0))); // kL
 }
 

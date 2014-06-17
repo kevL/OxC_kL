@@ -5550,7 +5550,7 @@
 1402457811 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1402457811 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1402994923 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	<cfloat>
 	<climits>
@@ -5690,7 +5690,7 @@
 1402457811 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1402948409 f:\git\openxcom\src\battlescape\tileengine.h
+1403008313 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -5784,7 +5784,7 @@
 1402457811 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1402695925 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1402987498 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6698,7 +6698,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1402961998 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1403009000 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7668,7 +7668,7 @@
 1402457812 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1402563078 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1403010660 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9203,7 +9203,7 @@
 1402457813 source:f:\git\openxcom\src\ruleset\mapblock.cpp
 	"MapBlock.h"
 
-1402961458 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1403008229 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 
 1402774880 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
@@ -9236,7 +9236,7 @@
 	<math.h>
 	"../Engine/RNG.h"
 
-1402457813 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
+1403010143 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
@@ -9462,7 +9462,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1402457813 source:f:\git\openxcom\src\savegame\craft.cpp
+1403010518 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9757,7 +9757,7 @@
 	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/Ruleset.h"
 
-1402457813 source:f:\git\openxcom\src\ufopaedia\articlestatecraft.cpp
+1403013011 source:f:\git\openxcom\src\ufopaedia\articlestatecraft.cpp
 	"ArticleStateCraft.h"
 	<sstream>
 	"Ufopaedia.h"
@@ -9830,7 +9830,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1402457813 source:f:\git\openxcom\src\ufopaedia\articlestateufo.cpp
+1403009998 source:f:\git\openxcom\src\ufopaedia\articlestateufo.cpp
 	"ArticleStateUfo.h"
 	<sstream>
 	"Ufopaedia.h"

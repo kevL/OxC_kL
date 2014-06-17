@@ -61,18 +61,20 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_screen = false;
 
 	_window				= new Window(this, 288, 180, 16, 10);
+	_txtTitle			= new Text(288, 40, 16, 20);
+
+	_lstPossibilities	= new TextList(288, 80, 16, 56);
+
 	_btnOk				= new TextButton(160, 14, 80, 149);
 	_btnResearch		= new TextButton(160, 14, 80, 165);
-	_txtTitle			= new Text(288, 40, 16, 20);
-	_lstPossibilities	= new TextList(288, 80, 16, 56);
 
 	setPalette("PAL_GEOSCAPE", 1);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnResearch);
 	add(_txtTitle);
 	add(_lstPossibilities);
+	add(_btnOk);
+	add(_btnResearch);
 
 	centerAllSurfaces();
 

@@ -49,7 +49,7 @@ RuleCraft::RuleCraft(const std::string& type)
 		_radarRange(600),
 		_transferTime(0),
 		_score(0),
-		_battlescapeTerrainData(0),
+		_battlescapeTerrainData(NULL),
 		_spacecraft(false),
 		_listOrder(0)
 {

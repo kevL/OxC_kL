@@ -35,6 +35,8 @@
 
 #include "../Ruleset/RuleManufacture.h"
 
+#include "../Savegame/Base.h" // kL
+
 
 namespace OpenXcom
 {
@@ -56,10 +58,12 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_screen = false;
 
 	_window				= new Window(this, 288, 180, 16, 10);
+	_txtTitle			= new Text(288, 40, 16, 20);
+
+	_lstPossibilities	= new TextList(288, 80, 16, 56);
+
 	_btnOk				= new TextButton(160, 14, 80, 149);
 	_btnManufacture		= new TextButton(160, 14, 80, 165);
-	_txtTitle			= new Text(288, 40, 16, 20);
-	_lstPossibilities	= new TextList(288, 80, 16, 56);
 
 	setPalette("PAL_GEOSCAPE", 6);
 
@@ -89,7 +93,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_btnManufacture->onKeyboardPress(
 					(ActionHandler)& NewPossibleManufactureState::btnManufactureClick,
 					Options::keyOk);
-
+	_btnManufacture->setVisible(base->getAvailableWorkshops() > 0); // kL
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -108,7 +112,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	{
 		_lstPossibilities->addRow(
 								1,
-								tr((*iter)->getName ()).c_str());
+								tr((*iter)->getName()).c_str());
 	}
 }
 

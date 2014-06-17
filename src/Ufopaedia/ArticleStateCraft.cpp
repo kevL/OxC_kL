@@ -47,7 +47,7 @@ ArticleStateCraft::ArticleStateCraft(
 	:
 		ArticleState(game, defs->id)
 {
-	RuleCraft* craft = _game->getRuleset()->getCraft(defs->id);
+	RuleCraft* craftRule = _game->getRuleset()->getCraft(defs->id);
 
 	_txtTitle = new Text(155, 32, 5, 24);
 
@@ -88,14 +88,20 @@ ArticleStateCraft::ArticleStateCraft(
 	_txtStats->setColor(Palette::blockOffset(14)+15);
 	_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
 
+	// kL_begin:
+	int range = craftRule->getMaxSpeed() * craftRule->getMaxFuel() / 6; // six doses per hour on Geoscape.
+	if (craftRule->getRefuelItem() == "") // <- gasoline-powered (speed is already factored into consumption)
+		range = craftRule->getMaxFuel() * 100 / 6; // kL_end.
+
 	std::wostringstream ss;
-	ss << tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(craft->getMaxSpeed())) << L'\n';
-	ss << tr("STR_ACCELERATION").arg(craft->getAcceleration()) << L'\n';
-	ss << tr("STR_FUEL_CAPACITY").arg(Text::formatNumber(craft->getMaxFuel())) << L'\n';
-	ss << tr("STR_WEAPON_PODS").arg(craft->getWeapons()) << L'\n';
-	ss << tr("STR_DAMAGE_CAPACITY_UC").arg(Text::formatNumber(craft->getMaxDamage())) << L'\n';
-	ss << tr("STR_CARGO_SPACE").arg(craft->getSoldiers()) << L'\n';
-	ss << tr("STR_HWP_CAPACITY").arg(craft->getVehicles());
+	ss << tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(craftRule->getMaxSpeed(), L"", false)) << L'\n';
+	ss << tr("STR_ACCELERATION").arg(craftRule->getAcceleration()) << L'\n';
+//kL	ss << tr("STR_FUEL_CAPACITY").arg(Text::formatNumber(craftRule->getMaxFuel(), L"", false)) << L'\n';
+	ss << tr("STR_FUEL_CAPACITY").arg(Text::formatNumber(range, L"", false)) << L'\n';
+	ss << tr("STR_WEAPON_PODS").arg(craftRule->getWeapons()) << L'\n';
+	ss << tr("STR_DAMAGE_CAPACITY_UC").arg(Text::formatNumber(craftRule->getMaxDamage(), L"", false)) << L'\n';
+	ss << tr("STR_CARGO_SPACE").arg(craftRule->getSoldiers()) << L'\n';
+	ss << tr("STR_HWP_CAPACITY").arg(craftRule->getVehicles());
 	_txtStats->setText(ss.str());
 
 	centerAllSurfaces();

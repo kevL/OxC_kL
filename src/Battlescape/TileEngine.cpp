@@ -81,8 +81,7 @@ TileEngine::TileEngine(
 		_voxelData(voxelData),
 		_personalLighting(true),
 		_powerE(-1),	// kL
-		_powerT(-1),	// kL
-		_debug(false) // kL
+		_powerT(-1)		// kL
 {
 }
 
@@ -2934,7 +2933,6 @@ int TileEngine::horizontalBlockage(
 								MapData::O_OBJECT,
 								type,
 								7); // checks Content/bigWalls
-
 			}
 			else // dt_NE
 			{
@@ -3586,7 +3584,7 @@ int TileEngine::blockage(
 //					if (type == DT_NONE)
 //						return 1;// hardblock.
 //					else
-						return 500;
+					return 500;
 				}
 			}
 			else if (_powerE > -1
@@ -3633,7 +3631,7 @@ int TileEngine::blockage(
 //				if (type == DT_NONE)
 //					return -1;
 //				else
-					return 500;
+				return 500;
 			}
 
 			switch (dir) // -> OBJECT part. ( BigWalls & content )
@@ -3746,10 +3744,11 @@ int TileEngine::blockage(
 			// might be Content-part or remaining-bigWalls block here
 			if (tile->getMapData(MapData::O_OBJECT)->stopLOS()) // use stopLOS to hinder explosions from propagating through bigWalls freely.
 			{
-				if (visLike)
+/*				if (visLike)
 				{
 //					if (type == DT_NONE)
 //					{
+
 /*						if (bigWall == Pathfinding::BIGWALL_NESW
 							|| bigWall == Pathfinding::BIGWALL_NWSE)
 						{
@@ -3759,10 +3758,17 @@ int TileEngine::blockage(
 //						return -1;
 //					}
 //					else
-						return 500;
+/*
+					return 500;
 				}
 				else if (_powerE > -1
 					&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
+				{
+					return 500; // this is a hardblock for HE; hence it has to be higher than the highest HE power in the Rulesets.
+				} */
+				if (visLike
+					|| (_powerE > -1
+						&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2)) // terrain absorbs 200% damage from DT_HE!
 				{
 					return 500; // this is a hardblock for HE; hence it has to be higher than the highest HE power in the Rulesets.
 				}
@@ -3771,9 +3777,9 @@ int TileEngine::blockage(
 
 		if (!visLike) // only non-visLike can get partly blocked; other damage-types are either completely blocked or get a pass here
 		{
-			int ret = tile->getMapData(part)->getBlock(type);
+//			int ret = tile->getMapData(part)->getBlock(type);
 			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << ret;
-			return ret;
+			return tile->getMapData(part)->getBlock(type);
 		}
 	}
 
@@ -4573,17 +4579,6 @@ int TileEngine::calculateLine(
 			horiBlock += vertBlock;
 			if (horiBlock > 0)
 				return horiBlock;
-/*			if (horiBlock < 0) // hit content-object
-			{
-				if (vertBlock < 1)
-					return horiBlock; // -1
-				else
-					horiBlock = 0; // Does vertical blockage by bigWall not act the same as horizontal blockage by bigWall? ie. Do cut the traj for Vert???
-			}
-
-			horiBlock += vertBlock;
-			if (horiBlock > 0)
-				return horiBlock; */
 
 			lastPoint = Position(cx, cy, cz);
 		}

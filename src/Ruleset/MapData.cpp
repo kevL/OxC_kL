@@ -261,11 +261,19 @@ void MapData::setBlock(
 	_block[5] = gasBlock == 1? 255: 0; */
 
 	_block[0] = lightBlock; // not used
-//kL	_block[1] = visionBlock == 1? 255: 0; // <- why? kL_note. haha
 //	_block[1] = visionBlock; // kL
+//kL	_block[1] = visionBlock == 1? 255: 0; // <- why? kL_note. haha
 	_block[1] = visionBlock == 1? 100: 0; // kL
+		// stopLoS==true needs to be a significantly large integer (only about 10+ really)
+		// so that if a directionally opposite Field of View check includes a "-1",
+		// meaning block by bigWall or other content-object, the result is not reduced
+		// to zero (no block at all) when added to regular stopLoS by a standard wall.
+		//
+		// It would be unnecessary to use that jigger-pokery if TileEngine::
+		// horizontalBlockage() & blockage() were coded differently [verticalBlockage()
+		// too, perhaps]
 	_block[2] = HEBlock;
-	_block[3] = smokeBlock == 1? 256: 0; // <- why? kL_note.
+	_block[3] = smokeBlock == 1? 256: 0; // <- why? kL_note. I basically use visionBlock for smoke ....
 	_block[4] = fireBlock;
 	_block[5] = gasBlock;
 }

@@ -57,8 +57,7 @@ private:
 	static const int heightFromCenter[11];
 
 	bool
-		_personalLighting,
-		_debug; // for debugging the Fog of War.
+		_personalLighting;
 	int
 		_powerE, // kL, effective power that actually explodes on a tile that's hit by HE.
 		_powerT; // kL, test power that checks if _powerE actually makes it to the next tile.
