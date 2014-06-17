@@ -71,14 +71,14 @@ const double Game::VOLUME_GRADIENT = 10.0;
  */
 Game::Game(const std::string& title)
 	:
-		_screen(0),
-		_cursor(0),
-		_lang(0),
+		_screen(NULL),
+		_cursor(NULL),
+		_lang(NULL),
 		_states(),
 		_deleted(),
-		_res(0),
-		_save(0),
-		_rules(0),
+		_res(NULL),
+		_save(NULL),
+		_rules(NULL),
 		_quit(false),
 		_init(false),
 		_mouseActive(true),
@@ -113,7 +113,7 @@ Game::Game(const std::string& title)
 	CrossPlatform::setWindowIcon(103, "openxcom.png");
 
 	// Set the window caption
-	SDL_WM_SetCaption(title.c_str(), 0);
+	SDL_WM_SetCaption(title.c_str(), NULL);
 
 	SDL_EnableUNICODE(1);
 

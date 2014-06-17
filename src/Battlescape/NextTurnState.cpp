@@ -64,7 +64,7 @@ NextTurnState::NextTurnState(
 		State(game),
 		_battleGame(battleGame),
 		_state(state),
-		_timer(0)
+		_timer(NULL)
 {
 	//Log(LOG_INFO) << "Create NextTurnState";
 	_window		= new Window(this, 320, 200, 0, 0);
@@ -168,7 +168,7 @@ void NextTurnState::handle(Action* action)
 void NextTurnState::think()
 {
 	if (_timer)
-		_timer->think(this, 0);
+		_timer->think(this, NULL);
 }
 
 /**
@@ -196,12 +196,16 @@ void NextTurnState::close()
 	}
 	else
 	{
-		_state->btnCenterClick(0);
+		_state->btnCenterClick(NULL);
 
 		// Autosave every 5 turns -> kL_note: every turn
 		if ( //_battleGame->getTurn() %5 == 0 &&
 			_battleGame->getSide() == FACTION_PLAYER)
 		{
+			_state->getBattleGame()->getMap()->refreshSelectorPosition();	// kL
+			_state->getGame()->getCursor()->setVisible(true);				// kL
+			_state->getBattleGame()->setupCursor();							// kL
+
 			if (_game->getSavedGame()->isIronman())
 				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(
 																			_battleGame->getBattleGame(),
@@ -221,6 +225,8 @@ void NextTurnState::close()
 //												OPT_BATTLESCAPE,
 //												SAVE_AUTO_BATTLESCAPE));
 		}
+		else
+			_state->getGame()->getCursor()->setVisible(false); // kL
 	}
 }
 

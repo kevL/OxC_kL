@@ -273,7 +273,7 @@ private:
 		/// Show debug message.
 		void debug(const std::wstring& message);
 		/// Show warning message.
-//kL		void warning(const std::string& message);
+//kL	void warning(const std::string& message);
 		void warning( // kL
 				const std::string& message,
 				const bool useArg = false,
