@@ -261,8 +261,9 @@ void MapData::setBlock(
 	_block[5] = gasBlock == 1? 255: 0; */
 
 	_block[0] = lightBlock; // not used
-//kL	_block[1] = visionBlock == 1? 255: 0; // <- why? kL_note.
-	_block[1] = visionBlock; // kL
+//kL	_block[1] = visionBlock == 1? 255: 0; // <- why? kL_note. haha
+//	_block[1] = visionBlock; // kL
+	_block[1] = visionBlock == 1? 100: 0; // kL
 	_block[2] = HEBlock;
 	_block[3] = smokeBlock == 1? 256: 0; // <- why? kL_note.
 	_block[4] = fireBlock;

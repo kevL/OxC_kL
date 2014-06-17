@@ -502,7 +502,9 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									size_t trajSize = _trajectory.size();
 
 //kL								if (test > 127) // last tile is blocked thus must be cropped
-									if (test > -99) // kL
+									if (test > 0)	// kL: -1 - do NOT crop trajectory (ie. hit content-object)
+													//		0 - expose Tile ( should never return this, unless out-of-bounds )
+													//		1 - crop the trajectory ( hit regular wall )
 										--trajSize;
 
 									//Log(LOG_INFO) << ". . . trace Trajectory.";
@@ -2858,15 +2860,8 @@ int TileEngine::horizontalBlockage(
 				|| type == DT_SMOKE;
 
 	if (startTile == NULL // safety checks
-		|| endTile == NULL)
-	{
-		if (type == DT_NONE)
-			return -99;
-		else
-			return 500;
-	}
-
-	if (startTile->getPosition().z != endTile->getPosition().z)
+		|| endTile == NULL
+		|| startTile->getPosition().z != endTile->getPosition().z)
 	{
 		return 0;
 	}
@@ -3368,15 +3363,15 @@ int TileEngine::horizontalBlockage(
 						dir, // checks Content/bigWalls
 						true,
 						true);
-		if (block > -1		// if, no vision block yet ...
-			&& blockage(	// so check for content @endTile & reveal it
+		if (block == 0		// if, no vision block yet ...
+			&& blockage(	// so check for content @endTile & reveal it by not cutting trajectory.
 					endTile,
 					MapData::O_OBJECT,
 					type,
 					(dir + 4) %8) // opposite direction
-				< 0)
+				!= 0) // should always be, < 1; ie. this conditions checks [if -1]
 		{
-			return -99;
+			return -1;
 		}
 	}
 
@@ -3407,57 +3402,49 @@ int TileEngine::verticalBlockage(
 				|| type == DT_SMOKE; */
 
 	if (startTile == NULL // safety check
-		|| endTile == NULL)
+		|| endTile == NULL
+		|| startTile == endTile)
 	{
-//		if (visLike)
-		if (type == DT_NONE)
-			return -99;
-//			return -1; // cut off last trajectory position if not on same z-level.
-		else
-			return 500;
-	}
-
-	if (startTile == endTile)
 		return 0;
+	}
 
 	int dirZ = endTile->getPosition().z - startTile->getPosition().z;
 	if (dirZ == 0)
-	{
-//		if (visLike)
-//		if (type == DT_NONE)
-//			return 0;
-//		else
 		return 0;
-	}
 
 	int
 		x = startTile->getPosition().x,
 		y = startTile->getPosition().y,
 		z = startTile->getPosition().z,
 
-		block = 0,
-		block2 = 0;
+		block = 0;
 
 	if (dirZ > 0) // up
 	{
-		for (
-				z += 1;
-				z <= endTile->getPosition().z;
-				z++)
+		if (x == endTile->getPosition().x
+			&& y == endTile->getPosition().y)
 		{
-			block += blockage( // these check directly up.
-							_battleSave->getTile(Position(x, y, z)),
-							MapData::O_FLOOR,
-							type)
-					+ blockage(
-							_battleSave->getTile(Position(x, y, z)),
-							MapData::O_OBJECT,
-							type,
-							8); // Pathfinding::DIR_UP
-		}
+			for ( // this checks directly up.
+					z += 1;
+					z <= endTile->getPosition().z;
+					z++)
+			{
+				block += blockage(
+								_battleSave->getTile(Position(x, y, z)),
+								MapData::O_FLOOR,
+								type)
+						+ blockage(
+								_battleSave->getTile(Position(x, y, z)),
+								MapData::O_OBJECT,
+								type,
+								8); // Pathfinding::DIR_UP
+			}
 
-		if (x != endTile->getPosition().x // if endTile is offset on x/y-plane
-			|| y != endTile->getPosition().y)
+			return block;
+		}
+		else
+//		if (x != endTile->getPosition().x // if endTile is offset on x/y-plane
+//			|| y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
@@ -3467,8 +3454,6 @@ int TileEngine::verticalBlockage(
 									startTile,
 									_battleSave->getTile(Position(x, y, z)),
 									type);
-			if (block < 0)
-				return -1;
 
 			for (
 					z += 1;
@@ -3488,25 +3473,31 @@ int TileEngine::verticalBlockage(
 	}
 	else if (dirZ < 0) // down
 	{
-		for (
-				;
-				z > endTile->getPosition().z;
-				z--)
+		if (x == endTile->getPosition().x
+			&& y == endTile->getPosition().y)
 		{
-			block += blockage( // these check directly down.
-							_battleSave->getTile(Position(x, y, z)),
-							MapData::O_FLOOR,
-							type)
-					+ blockage(
-							_battleSave->getTile(Position(x, y, z)),
-							MapData::O_OBJECT,
-							type,
-							9, // Pathfinding::DIR_DOWN
-							true); // kL_add. ( should be false for LoS, btw )
-		}
+			for ( // this checks directly down.
+					;
+					z > endTile->getPosition().z;
+					z--)
+			{
+				block += blockage(
+								_battleSave->getTile(Position(x, y, z)),
+								MapData::O_FLOOR,
+								type)
+						+ blockage(
+								_battleSave->getTile(Position(x, y, z)),
+								MapData::O_OBJECT,
+								type,
+								9, // Pathfinding::DIR_DOWN
+								true); // kL_add. ( should be false for LoS, btw )
+			}
 
-		if (x != endTile->getPosition().x // if endTile is offset on x/y-plane
-			|| y != endTile->getPosition().y)
+			return block;
+		}
+		else
+//		if (x != endTile->getPosition().x // if endTile is offset on x/y-plane
+//			|| y != endTile->getPosition().y)
 		{
 			x = endTile->getPosition().x;
 			y = endTile->getPosition().y;
@@ -3516,8 +3507,6 @@ int TileEngine::verticalBlockage(
 									startTile,
 									_battleSave->getTile(Position(x, y, z)),
 									type);
-			if (block < 0)
-				return -1;
 
 			for (
 					;
@@ -3535,10 +3524,6 @@ int TileEngine::verticalBlockage(
 			}
 		}
 	}
-
-
-	if (block < 0)
-		return -1;
 
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage() EXIT ret = " << block;
 	return block;
@@ -3576,20 +3561,10 @@ int TileEngine::blockage(
 				|| type == DT_STUN
 				|| type == DT_IN;
 
-	if (tile == NULL) // probably outside the map here
+	if (tile == NULL					// probably outside the map here
+		|| tile->isUfoDoorOpen(part))	// open ufo doors are actually still closed behind the scenes
 	{
-		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret ( no tile )";
-		if (type == DT_NONE)
-			return -99;
-		else
-			return 500;
-	}
-
-	// Open ufo doors are actually still closed behind the scenes,
-	// so this trick is needed to see if they are open.
-	if (tile->isUfoDoorOpen(part))
-	{
-		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( ufoDoorOpen )";
+		//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret ( no tile OR ufo-door open )";
 		return 0;
 	}
 
@@ -3608,9 +3583,9 @@ int TileEngine::blockage(
 																					// because they aren't. But stock OxC code sets them stopLOS=true anyway ...
 																					// HA, maybe not ......
 				{
-					if (type == DT_NONE)
-						return -1; // hardblock.
-					else
+//					if (type == DT_NONE)
+//						return 1;// hardblock.
+//					else
 						return 500;
 				}
 			}
@@ -3655,9 +3630,9 @@ int TileEngine::blockage(
 				&& tile->getMapData(MapData::O_OBJECT)->stopLOS()
 				&& bigWall == 0)
 			{
-				if (type == DT_NONE)
-					return -99;
-				else
+//				if (type == DT_NONE)
+//					return -1;
+//				else
 					return 500;
 			}
 
@@ -3773,17 +3748,17 @@ int TileEngine::blockage(
 			{
 				if (visLike)
 				{
-					if (type == DT_NONE)
-					{
+//					if (type == DT_NONE)
+//					{
 /*						if (bigWall == Pathfinding::BIGWALL_NESW
 							|| bigWall == Pathfinding::BIGWALL_NWSE)
 						{
 							return -1;
 						}
 						else */
-						return -1;
-					}
-					else
+//						return -1;
+//					}
+//					else
 						return 500;
 				}
 				else if (_powerE > -1
@@ -4453,13 +4428,6 @@ int TileEngine::calculateLine(
 				BattleUnit* excludeAllBut)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateLine()";
-/*	BattleUnit* selUnit = _battleSave->getSelectedUnit();
-	if (selUnit
-		&& selUnit->getId() == 375)
-	{
-		Log(LOG_INFO) << "";
-	} */
-
 	int
 		x, x0, x1,
 		delta_x, step_x,
@@ -4476,7 +4444,7 @@ int TileEngine::calculateLine(
 
 		cx, cy, cz,
 
-		result, result2;
+		result, horiBlock, vertBlock;
 
 	Position lastPoint (origin);
 
@@ -4563,75 +4531,17 @@ int TileEngine::calculateLine(
 		}
 		else // for Terrain visibility, ie. FoV / Fog of War.
 		{
-			if (cx == 0 && cy == 0 && cz == 0)
-			{
-				Log(LOG_INFO) << ". position " << Position(cx, cy, cz);
-				_debug = true; // kL, input tilePosition to debug.
-			}
-			if (cx == 1 && cy == 0 && cz == 0)
-			{
-				Log(LOG_INFO) << ". position " << Position(cx, cy, cz);
-				_debug = true; // kL, input tilePosition to debug.
-			}
-			if (cx == 0 && cy == 1 && cz == 0)
-			{
-				Log(LOG_INFO) << ". position " << Position(cx, cy, cz);
-				_debug = true; // kL, input tilePosition to debug.
-			}
-			if (cx == 1 && cy == 1 && cz == 0)
-			{
-				Log(LOG_INFO) << ". position " << Position(cx, cy, cz);
-				_debug = true; // kL, input tilePosition to debug.
-			}
-
-
-			if (cx == 0 // kL_begin: if LoS hits the edge of the Map reveal it!
-				|| cy == 0
-				|| cx == _battleSave->getMapSizeX() - 1
-				|| cy == _battleSave->getMapSizeY() - 1)
-			{
-				if (_debug) Log(LOG_INFO) << "calculateLine() out of x/y bounds, ret -1/-99\n";
-
-				if ((cx == 0 && cy == 1)
-					|| (cy == 0 && cx == 1) // -> this could still stop a pure diagonal from seeing the NW corner
-
-					|| (cx == _battleSave->getMapSizeX() - 1 && cy == 1) // like wise for the rest of these
-					|| (cy == 0 && cx == _battleSave->getMapSizeX() - 2)
-
-					|| (cx == 0 && cy == _battleSave->getMapSizeY() - 2)
-					|| (cy == _battleSave->getMapSizeY() - 1 && cx == 1)
-
-					|| (cx == _battleSave->getMapSizeX() - 1 && cy == _battleSave->getMapSizeY() - 2)
-					|| (cy == _battleSave->getMapSizeY() - 1 && cx == _battleSave->getMapSizeX() - 2))
-				{
-					if (_debug) _debug = false; // kL
-					return -99;
-				}
-				else
-//				if (excludeUnit
-//					&& excludeUnit->getPosition().z != cz) // <- cuts off vision of upper/lower edgetiles.
-				{
-					if (_debug) _debug = false; // kL
-					return -1;
-				}
-			} // kL_end. that was easy ... too easy ...
-
 			Tile* startTile = _battleSave->getTile(lastPoint);
 			Tile* endTile = _battleSave->getTile(Position(cx, cy, cz));
 
-			result = horizontalBlockage(
+			horiBlock = horizontalBlockage(
 									startTile,
 									endTile,
 									DT_NONE);
-			result2 = verticalBlockage(
+			vertBlock = verticalBlockage(
 									startTile,
 									endTile,
 									DT_NONE);
-			//Log(LOG_INFO) << "calculateLine, hori = " << result;
-			//Log(LOG_INFO) << "calculateLine, vert = " << result2;
-			if (_debug) Log(LOG_INFO) << "calculateLine() hori = " << result << " vert = " << result2;
-
-
 			// kL_TEST:
 //			BattleUnit* selUnit = _battleSave->getSelectedUnit();
 /*			if (selUnit
@@ -4650,60 +4560,32 @@ int TileEngine::calculateLine(
 					Log(LOG_INFO) << "start " << lastPoint << " hori = " << result;
 					Log(LOG_INFO) << ". end " << Position(cx, cy, cz) << " vert = " << result2;
 				}
-			} */
-			// kL_TEST_end.
+			} */ // kL_TEST_end.
 
-// original:
-			// -1 means we have a regular wall, and anything over 0 means we have a bigwall. (kL: from blockage())
-/*			if (result == -1) // hit bigwall tile (kL: not?)
+			if (horiBlock < 0) // hit content-object
 			{
-				if (result2 > 127) // kL_note: huh? blocked (by non-bigWall?)
-					result = 0;
+				if (vertBlock > 0)
+					horiBlock = 0;
 				else
-					//Log(LOG_INFO) << "TileEngine::calculateLine(), odd return1, could be Big Wall = " << result;
-					//Log(LOG_INFO) << ". [2]ret = " << result;
-					return result; // We hit a big wall. kL_note: BigWall? or just ... wall or other visBlock object
-			}
-			result += result2;
-			if (result > 127) // kL_note: huh? blocked (by non-bigWall?)
-				//Log(LOG_INFO) << "TileEngine::calculateLine(), odd return2, could be Big Wall = " << result;
-				//Log(LOG_INFO) << ". [3]ret = " << result;
-				return result; */
-// original_End.
-
-			if (result <= -99 // kL_begin:
-				|| result2 <= -99)
-			{
-				if (_debug) _debug = false; // kL
-				return -99;
-			}
-			else if (result <= -1
-				|| result2 <= -1)
-			{
-				if (_debug) _debug = false; // kL
-				return -1;
-			} // kL_end.
-
-
-/*			if (result <= -99)		// bigWall or content block ...
-			{
-				if (result2 > -1)	// but no vert-block
-					return -99;		// ( don't cut the trajectory )
-				else				// or there is vert-block
-					return -1;		// ( cut the trajectory as normal )
-//					result = -1;	// ( cut the trajectory as normal, unless ... )
+					return horiBlock;
 			}
 
-			result += result2;
-			if (result < 0)
+			horiBlock += vertBlock;
+			if (horiBlock > 0)
+				return horiBlock;
+/*			if (horiBlock < 0) // hit content-object
 			{
-				return result;
-			} */
+				if (vertBlock < 1)
+					return horiBlock; // -1
+				else
+					horiBlock = 0; // Does vertical blockage by bigWall not act the same as horizontal blockage by bigWall? ie. Do cut the traj for Vert???
+			}
 
+			horiBlock += vertBlock;
+			if (horiBlock > 0)
+				return horiBlock; */
 
 			lastPoint = Position(cx, cy, cz);
-
-			if (_debug) _debug = false; // kL
 		}
 
 		drift_xy = drift_xy - delta_y; // update progress in other planes
