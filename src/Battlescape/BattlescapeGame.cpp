@@ -788,10 +788,10 @@ void BattlescapeGame::endTurn()
 
 /**
  * Checks for casualties and adjusts morale accordingly.
- * @param weapon, Need to know this, for a HE explosion there is an instant death.
- * @param slayer, This is needed for credits for the kill.
- * @param hidden, Set to true for the explosions of UFO Power sources at start of battlescape.
- * @param terrain, Set to true for the explosions of terrain.
+ * @param weapon	- need to know this; for a HE explosion there is an instant death
+ * @param slayer	- this is needed to credit the kill
+ * @param hidden	- true for UFO Power Source explosions at the start of battlescape
+ * @param terrain	- true for terrain explosions
  */
 void BattlescapeGame::checkForCasualties(
 		BattleItem* weapon,
@@ -814,8 +814,6 @@ void BattlescapeGame::checkForCasualties(
 			&& victim->getStatus() != STATUS_DISABLED)	// kL
 		{
 			(*buCasualty)->setStatus(STATUS_DISABLED);	// kL
-
-//kL		BattleUnit* victim = *buCasualty;
 			//Log(LOG_INFO) << ". DEAD victim = " << victim->getId();
 
 			if (slayer
@@ -828,7 +826,6 @@ void BattlescapeGame::checkForCasualties(
 				if (slayer->getOriginalFaction() == FACTION_PLAYER)
 				{
 					slayer->addKillCount();
-
 					bonus = _save->getMoraleModifier();
 				}
 				else if (slayer->getOriginalFaction() == FACTION_HOSTILE)
@@ -873,79 +870,79 @@ void BattlescapeGame::checkForCasualties(
 
 			// cycle through units and do all faction
 //kL		if (victim->getFaction() != FACTION_NEUTRAL) // civie deaths now affect other Factions.
+//			{
+			// penalty for the death of a unit; civilians return standard 100.
+			int solo = _save->getMoraleModifier(victim);
+			// these two are faction bonuses ('losers' mitigates the loss of solo, 'winners' boosts solo)
+			int
+				losers = 100,
+				winners = 100;
+
+			if (victim->getOriginalFaction() == FACTION_HOSTILE)
 			{
-				// penalty for the death of a unit; civilians return standard 100.
-				int solo = _save->getMoraleModifier(victim);
-				// these two are faction bonuses ('losers' mitigates the loss of solo, 'winners' boosts solo)
-				int
-					losers = 100,
-					winners = 100;
+				losers = _save->getMoraleModifier(0, false);
+				winners = _save->getMoraleModifier();
+			}
+			else
+			{
+				losers = _save->getMoraleModifier();
+				winners = _save->getMoraleModifier(0, false);
+			}
+			// civilians are unaffected by leadership above. They use standard 100.
 
-				if (victim->getOriginalFaction() == FACTION_HOSTILE)
+			// do bystander FACTION changes:
+			for (std::vector<BattleUnit*>::iterator
+					buOther = _save->getUnits()->begin();
+					buOther != _save->getUnits()->end();
+					++buOther)
+			{
+				if (!(*buOther)->isOut(true, true)
+//					&& (*buOther)->getArmor()->getSize() == 1) // not a large unit
+					&& (*buOther)->getTurretType() == -1) // not a Tank.
 				{
-					losers = _save->getMoraleModifier(0, false);
-					winners = _save->getMoraleModifier();
-				}
-				else
-				{
-					losers = _save->getMoraleModifier();
-					winners = _save->getMoraleModifier(0, false);
-				}
-				// civilians are unaffected by leadership above. They use standard 100.
-
-				// do bystander FACTION changes:
-				for (std::vector<BattleUnit*>::iterator
-						buOther = _save->getUnits()->begin();
-						buOther != _save->getUnits()->end();
-						++buOther)
-				{
-					if (!(*buOther)->isOut(true, true)
-//						&& (*buOther)->getArmor()->getSize() == 1) // not a large unit
-						&& (*buOther)->getTurretType() == -1) // not a Tank.
+					if (victim->getOriginalFaction() == (*buOther)->getOriginalFaction()
+						|| (victim->getOriginalFaction() == FACTION_NEUTRAL				// for civie-death,
+							&& (*buOther)->getFaction() == FACTION_PLAYER				// non-Mc'd xCom takes hit
+							&& (*buOther)->getOriginalFaction() != FACTION_HOSTILE)		// but not Mc'd aLiens
+						|| (victim->getOriginalFaction() == FACTION_PLAYER				// for death of xCom unit,
+							&& (*buOther)->getOriginalFaction() == FACTION_NEUTRAL))	// civies take hit.
 					{
-						if (victim->getOriginalFaction() == (*buOther)->getOriginalFaction()
-							|| (victim->getOriginalFaction() == FACTION_NEUTRAL				// for civie-death,
-								&& (*buOther)->getFaction() == FACTION_PLAYER				// non-Mc'd xCom takes hit
-								&& (*buOther)->getOriginalFaction() != FACTION_HOSTILE)		// but not Mc'd aLiens
-							|| (victim->getOriginalFaction() == FACTION_PLAYER				// for death of xCom unit,
-								&& (*buOther)->getOriginalFaction() == FACTION_NEUTRAL))	// civies take hit.
+						// losing team(s) all get a morale loss,
+						// based on their individual Bravery & rank of unit that was killed
+						int bravery = (110 - (*buOther)->getStats()->bravery) / 10;
+						if (bravery > 0)
 						{
-							// losing team(s) all get a morale loss,
-							// based on their individual Bravery & rank of unit that was killed
-							int bravery = (110 - (*buOther)->getStats()->bravery) / 10;
-							if (bravery > 0)
-							{
-								bravery = solo * 2 * bravery / losers;
-								(*buOther)->moraleChange(-bravery);
-							}
-
-							//Log(LOG_INFO) << ". . . loser -" << bravery;
-
-/*kL							if (slayer
-								&& slayer->getFaction() == FACTION_PLAYER
-								&& victim->getFaction() == FACTION_HOSTILE)
-							{
-								slayer->setTurnsExposed(0); // interesting
-								//Log(LOG_INFO) << ". . . . slayer Exposed";
-							} */
+							bravery = solo * 2 * bravery / losers;
+							(*buOther)->moraleChange(-bravery);
 						}
-						// note this is unaffected by the rank of the dead unit...
-						else if ((victim->getOriginalFaction() == FACTION_HOSTILE
-								&& ((*buOther)->getOriginalFaction() == FACTION_PLAYER
-									|| (*buOther)->getOriginalFaction() == FACTION_NEUTRAL))
-							|| ((*buOther)->getOriginalFaction() == FACTION_HOSTILE
-								&& (victim->getOriginalFaction() == FACTION_PLAYER
-									|| victim->getOriginalFaction() == FACTION_NEUTRAL)))
+
+						//Log(LOG_INFO) << ". . . loser -" << bravery;
+/*kL
+						if (slayer
+							&& slayer->getFaction() == FACTION_PLAYER
+							&& victim->getFaction() == FACTION_HOSTILE)
 						{
-							// winning team(s) all get a morale boost
-							int boost = winners / 10;
-							(*buOther)->moraleChange(boost);
+							slayer->setTurnsExposed(0); // interesting
+							//Log(LOG_INFO) << ". . . . slayer Exposed";
+						} */
+					}
+					// note this is unaffected by the rank of the dead unit...
+					else if ((victim->getOriginalFaction() == FACTION_HOSTILE
+							&& ((*buOther)->getOriginalFaction() == FACTION_PLAYER
+								|| (*buOther)->getOriginalFaction() == FACTION_NEUTRAL))
+						|| ((*buOther)->getOriginalFaction() == FACTION_HOSTILE
+							&& (victim->getOriginalFaction() == FACTION_PLAYER
+								|| victim->getOriginalFaction() == FACTION_NEUTRAL)))
+					{
+						// winning team(s) all get a morale boost
+						int boost = winners / 10;
+						(*buOther)->moraleChange(boost);
 
-							//Log(LOG_INFO) << ". . . winner +" << boost;
-						}
+						//Log(LOG_INFO) << ". . . winner +" << boost;
 					}
 				}
 			}
+//			}
 
 			if (weapon)
 				statePushNext(new UnitDieBState( // kL_note: This is where units get sent to DEATH!

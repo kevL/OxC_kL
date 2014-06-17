@@ -978,11 +978,11 @@ int TransferItemsState::getCost() const
 	{
 		RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
 		if (rule->getType() == "STR_ALIEN_ALLOYS")
-			cost = 0.0;
+			cost = 0.1;
 		else if (rule->getType() == "STR_ELERIUM_115")
 			cost = 1.0;
 		else if (rule->getAlien())
-			cost = 250.0;
+			cost = 200.0;
 		else
 			cost = 10.0;
 	}
@@ -1240,7 +1240,7 @@ void TransferItemsState::decreaseByValue(int change)
 					_transferQty[_sel],
 					change);
 
-	Craft* craft = 0;
+	Craft* craft = NULL;
 
 	const enum TransferType selType = getType(_sel);
 
@@ -1272,7 +1272,7 @@ void TransferItemsState::decreaseByValue(int change)
 	_transferQty[_sel] -= change;
 
 	if (!Options::canTransferCraftsWhileAirborne
-		|| craft == 0
+		|| craft == NULL
 		|| craft->getStatus() != "STR_OUT")
 	{
 		_total -= getCost() * change;
