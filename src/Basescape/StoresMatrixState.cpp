@@ -50,8 +50,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Matrix window.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
+ * @param game - pointer to the core game
+ * @param base - pointer to the accessing base
  */
 StoresMatrixState::StoresMatrixState(
 		Game* game,
@@ -65,14 +65,15 @@ StoresMatrixState::StoresMatrixState(
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
 	_txtItem		= new Text(100, 9, 16, 25);
-	_txtBase_1		= new Text(21, 9, 116, 25);
-	_txtBase_2		= new Text(21, 9, 138, 25);
-	_txtBase_3		= new Text(21, 9, 160, 25);
-	_txtBase_4		= new Text(21, 9, 182, 25);
-	_txtBase_5		= new Text(21, 9, 204, 25);
-	_txtBase_6		= new Text(21, 9, 226, 25);
-	_txtBase_7		= new Text(21, 9, 248, 25);
-	_txtBase_8		= new Text(21, 9, 270, 25);
+
+	_txtBase_0		= new Text(21, 9, 116, 25);
+	_txtBase_1		= new Text(21, 9, 138, 25);
+	_txtBase_2		= new Text(21, 9, 160, 25);
+	_txtBase_3		= new Text(21, 9, 182, 25);
+	_txtBase_4		= new Text(21, 9, 204, 25);
+	_txtBase_5		= new Text(21, 9, 226, 25);
+	_txtBase_6		= new Text(21, 9, 248, 25);
+	_txtBase_7		= new Text(21, 9, 270, 25);
 
 	_lstMatrix		= new TextList(285, 136, 16, 36);
 
@@ -84,6 +85,7 @@ StoresMatrixState::StoresMatrixState(
 	add(_txtTitle);
 	add(_txtBaseLabel);
 	add(_txtItem);
+	add(_txtBase_0);
 	add(_txtBase_1);
 	add(_txtBase_2);
 	add(_txtBase_3);
@@ -91,7 +93,6 @@ StoresMatrixState::StoresMatrixState(
 	add(_txtBase_5);
 	add(_txtBase_6);
 	add(_txtBase_7);
-	add(_txtBase_8);
 	add(_lstMatrix);
 	add(_btnOk);
 
@@ -121,51 +122,94 @@ StoresMatrixState::StoresMatrixState(
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
 
-	_txtBase_1->setColor(Palette::blockOffset(13)+10);
-	_txtBase_1->setText(_game->getSavedGame()->getBases()->at(0)->getName());
 
-	_txtBase_2->setColor(Palette::blockOffset(13)+10);
-	_txtBase_2->setText(_game->getSavedGame()->getBases()->at(1)->getName());
+	std::wstring wstr;
 
-	_txtBase_3->setColor(Palette::blockOffset(13)+10);
-	_txtBase_3->setText(_game->getSavedGame()->getBases()->at(2)->getName());
+	if (_game->getSavedGame()->getBases()->at(0)) // always true, but hey.
+	{
+		_txtBase_0->setColor(Palette::blockOffset(13)+10);
 
-	_txtBase_4->setColor(Palette::blockOffset(13)+10);
-	_txtBase_4->setText(_game->getSavedGame()->getBases()->at(3)->getName());
+		wstr = _game->getSavedGame()->getBases()->at(0)->getName().substr(0, 3);
+		_txtBase_0->setText(wstr);
+	}
 
-	_txtBase_5->setColor(Palette::blockOffset(13)+10);
-	_txtBase_5->setText(_game->getSavedGame()->getBases()->at(4)->getName());
+	if (_game->getSavedGame()->getBases()->at(1)) // always true, but hey.
+	{
+		_txtBase_1->setColor(Palette::blockOffset(13)+10);
 
-	_txtBase_6->setColor(Palette::blockOffset(13)+10);
-	_txtBase_6->setText(_game->getSavedGame()->getBases()->at(5)->getName());
+		wstr = _game->getSavedGame()->getBases()->at(1)->getName().substr(0, 3);
+		_txtBase_1->setText(wstr);
+	}
 
-	_txtBase_7->setColor(Palette::blockOffset(13)+10);
-	_txtBase_7->setText(_game->getSavedGame()->getBases()->at(6)->getName());
+	if (_game->getSavedGame()->getBases()->at(2))
+	{
+		_txtBase_2->setColor(Palette::blockOffset(13)+10);
 
-	_txtBase_8->setColor(Palette::blockOffset(13)+10);
-	_txtBase_8->setText(_game->getSavedGame()->getBases()->at(7)->getName());
+		wstr = _game->getSavedGame()->getBases()->at(2)->getName().substr(0, 3);
+		_txtBase_2->setText(wstr);
+	}
+
+	if (_game->getSavedGame()->getBases()->at(3))
+	{
+		_txtBase_3->setColor(Palette::blockOffset(13)+10);
+
+		wstr = _game->getSavedGame()->getBases()->at(3)->getName().substr(0, 3);
+		_txtBase_3->setText(wstr);
+	}
+
+	if (_game->getSavedGame()->getBases()->at(4))
+	{
+		_txtBase_4->setColor(Palette::blockOffset(13)+10);
+
+		wstr = _game->getSavedGame()->getBases()->at(4)->getName().substr(0, 3);
+		_txtBase_4->setText(wstr);
+	}
+
+	if (_game->getSavedGame()->getBases()->at(5))
+	{
+		_txtBase_5->setColor(Palette::blockOffset(13)+10);
+
+		wstr = _game->getSavedGame()->getBases()->at(5)->getName().substr(0, 3);
+		_txtBase_5->setText(wstr);
+	}
+
+	if (_game->getSavedGame()->getBases()->at(6))
+	{
+		_txtBase_6->setColor(Palette::blockOffset(13)+10);
+
+		wstr = _game->getSavedGame()->getBases()->at(6)->getName().substr(0, 3);
+		_txtBase_6->setText(wstr);
+	}
+
+	if (_game->getSavedGame()->getBases()->at(7))
+	{
+		_txtBase_7->setColor(Palette::blockOffset(13)+10);
+
+		wstr = _game->getSavedGame()->getBases()->at(7)->getName().substr(0, 3);
+		_txtBase_7->setText(wstr);
+	}
 
 	_lstMatrix->setColor(Palette::blockOffset(13)+10);
 	_lstMatrix->setColumns(9, 100, 22, 22, 22, 22, 22, 22, 22, 22);
 	_lstMatrix->setSelectable(true);
 	_lstMatrix->setBackground(_window);
-//	_lstMatrix->setMargin(8);
+
 
 	bool isAmmo = false;
 	int
 		row		= 0,
 		iter	= 0,
-		qty[8]	= {0, 0, 0, 0, 0, 0, 0, 0};
+		qty[8]	= { 0, 0, 0, 0, 0, 0, 0, 0 };
 
 	std::wostringstream
+		ss0,
 		ss1,
 		ss2,
 		ss3,
 		ss4,
 		ss5,
 		ss6,
-		ss7,
-		ss8;
+		ss7;
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator
@@ -186,6 +230,7 @@ StoresMatrixState::StoresMatrixState(
 			item.insert(0, L"  ");
 		}
 
+		ss0.str(L"");
 		ss1.str(L"");
 		ss2.str(L"");
 		ss3.str(L"");
@@ -193,7 +238,6 @@ StoresMatrixState::StoresMatrixState(
 		ss5.str(L"");
 		ss6.str(L"");
 		ss7.str(L"");
-		ss8.str(L"");
 
 		iter = 0;
 
@@ -202,8 +246,6 @@ StoresMatrixState::StoresMatrixState(
 				b != _game->getSavedGame()->getBases()->end();
 				++b)
 		{
-			++iter;
-
 			qty[iter] = (*b)->getItems()->getItem(*i);
 
 			// Add qty of items in transit to theMatrix.
@@ -262,35 +304,37 @@ StoresMatrixState::StoresMatrixState(
 					}
 				}
 			}
+
+			++iter;
 		}
 
-		if (qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] + qty[8] > 0)
+		if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
 		{
-			ss1 << qty[1];
-			ss2 << qty[2];
-			ss3 << qty[3];
-			ss4 << qty[4];
-			ss5 << qty[5];
-			ss6 << qty[6];
-			ss7 << qty[7];
-			ss8 << qty[8];
+			if (qty[0] > 0) ss0 << qty[0];
+			if (qty[1] > 0) ss1 << qty[1];
+			if (qty[2] > 0) ss2 << qty[2];
+			if (qty[3] > 0) ss3 << qty[3];
+			if (qty[4] > 0) ss4 << qty[4];
+			if (qty[5] > 0) ss5 << qty[5];
+			if (qty[6] > 0) ss6 << qty[6];
+			if (qty[7] > 0) ss7 << qty[7];
 
 			_lstMatrix->addRow(
 							9,
 							item.c_str(),
+							ss0.str().c_str(),
 							ss1.str().c_str(),
 							ss2.str().c_str(),
 							ss3.str().c_str(),
 							ss4.str().c_str(),
 							ss5.str().c_str(),
 							ss6.str().c_str(),
-							ss7.str().c_str(),
-							ss8.str().c_str());
+							ss7.str().c_str());
 
 			if (isAmmo)
 				_lstMatrix->setRowColor(row, Palette::blockOffset(15)+6);
 
-			row++;
+			++row;
 		}
 	}
 }

@@ -46,6 +46,7 @@ private:
 	Base* _base;
 	Text
 		* _txtBaseLabel,
+		* _txtBase_0,
 		* _txtBase_1,
 		* _txtBase_2,
 		* _txtBase_3,
@@ -53,7 +54,6 @@ private:
 		* _txtBase_5,
 		* _txtBase_6,
 		* _txtBase_7,
-		* _txtBase_8,
 		* _txtItem,
 		* _txtTitle;
 	TextButton* _btnOk;
@@ -70,7 +70,7 @@ private:
 		~StoresMatrixState();
 
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
+		void btnOkClick(Action*);
 };
 
 }
