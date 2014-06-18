@@ -6972,7 +6972,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1403047581 source:f:\git\openxcom\src\engine\game.cpp
+1403098638 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7232,7 +7232,7 @@
 	<malloc.h>
 	<ppcinline/exec.h>
 
-1402736783 source:f:\git\openxcom\src\engine\surfaceset.cpp
+1403098816 source:f:\git\openxcom\src\engine\surfaceset.cpp
 	"SurfaceSet.h"
 	<fstream>
 	<SDL_endian.h>
@@ -7542,10 +7542,11 @@
 	<string>
 	"../Engine/State.h"
 
-1402457812 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1403120154 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
 	<string>
 	"GeoscapeCraftState.h"
+	"Globe.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -7557,10 +7558,10 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Target.h"
 
-1402457812 f:\git\openxcom\src\geoscape\craftpatrolstate.h
+1403120010 f:\git\openxcom\src\geoscape\craftpatrolstate.h
 	"../Engine/State.h"
 
-1402457812 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
+1403118931 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
 1402457812 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
@@ -7644,7 +7645,7 @@
 1402457812 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1402457812 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1403119833 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
 	"Globe.h"
@@ -7671,7 +7672,7 @@
 1402457812 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1403035100 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1403118906 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9120,7 +9121,7 @@
 1402457813 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1402774880 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1403098749 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	<SDL_mixer.h>
 	"../Engine/Font.h"
@@ -9135,7 +9136,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1403027676 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1403099100 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9210,7 +9211,7 @@
 1403016316 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 
-1402774880 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1403098728 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -9272,7 +9273,7 @@
 1402504036 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1403038126 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1403098671 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>

@@ -139,7 +139,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnCenter->setColor(Palette::blockOffset(8)+5);
-	_btnCenter->setText(_game->getLanguage()->getString("STR_CENTER"));
+//	_btnCenter->setText(_game->getLanguage()->getString("STR_CENTER"));
+	_btnCenter->setText(tr("STR_CENTER"));
 	_btnCenter->onMouseClick((ActionHandler)& GeoscapeCraftState::btnCenterClick);
 
 	_btnBase->setColor(Palette::blockOffset(8)+5);
@@ -165,6 +166,13 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtTitle->setBig();
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
+	std::wostringstream
+		ss1,
+		ss2,
+		ss3;
+
+	ss1 << tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed(), L"", false));
+
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
 //kL	_txtStatus->setWordWrap(true);
@@ -187,22 +195,26 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 	// Could add "Damaged - returning to base" around here.
 	// kL_end.
-	else if (_craft->getDestination() == 0)
+	else if (_craft->getDestination() == NULL)
 		status = tr("STR_PATROLLING");
 	else if (_craft->getDestination() == dynamic_cast<Target*>(_craft->getBase()))
 		status = tr("STR_RETURNING_TO_BASE");
 	else
 	{
-		Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-		if (u != 0)
+		Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+		if (ufo != NULL)
 		{
 			if (_craft->isInDogfight())
+			{
 				status = tr("STR_TAILING_UFO");
-			else if (u->getStatus() == Ufo::FLYING)
-				status = tr("STR_INTERCEPTING_UFO").arg(u->getId());
+				ss1 << tr("STR_SPEED_").arg(Text::formatNumber(ufo->getSpeed(), L"", false)); // kL
+					// kL: NOTE THIS DOES NOT CHANGE THE SPEED OF the xCom CRAFT. ( ie. it should )
+			}
+			else if (ufo->getStatus() == Ufo::FLYING)
+				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
 			else
 				status = tr("STR_DESTINATION_UC_")
-							.arg(u->getName(_game->getLanguage()));
+							.arg(ufo->getName(_game->getLanguage()));
 		}
 		else
 			status = tr("STR_DESTINATION_UC_")
@@ -219,7 +231,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 //kL	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed())));
 
 	// kL_begin: set craftSpeed to UFO when in chase.
-	std::wostringstream
+/*	std::wostringstream
 		ss1,
 		ss2,
 		ss3;
@@ -228,7 +240,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 		ss1 << tr("STR_SPEED_").arg("UFO");
 	// kL_note: If in dogfight or more accurately in chase_mode, insert UFO speed.
 	else
-		ss1 << tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed()));
+		ss1 << tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed(), L"", false)); */
 
 	_txtSpeed->setText(ss1.str());
 	// kL_end.
@@ -290,7 +302,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 	else
 	{
-//kL		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr("STR_NONE_UC")));
+//kL	_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr("STR_NONE_UC")));
 		_txtW1Name->setVisible(false); // kL
 		_txtW1Ammo->setVisible(false);
 	}
@@ -310,7 +322,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 	else
 	{
-//kL		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
+//kL	_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
 		_txtW2Name->setVisible(false); // kL
 		_txtW2Ammo->setVisible(false);
 	}
@@ -321,7 +333,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtRedirect->setAlign(ALIGN_CENTER);
 	_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
 
-	if (_waypoint == 0)
+	if (_waypoint == NULL)
 		_txtRedirect->setVisible(false);
 	else
 		_btnCancel->setText(tr("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
@@ -347,7 +359,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 		if (_craft->getDestination() == dynamic_cast<Target*>(_craft->getBase()))
 			_btnBase->setVisible(false);
 
-		if (_craft->getDestination() == 0)
+		if (_craft->getDestination() == NULL)
 			_btnPatrol->setVisible(false);
 	}
 
@@ -372,10 +384,9 @@ GeoscapeCraftState::~GeoscapeCraftState()
 {
 }
 
-// kL_begin: center craft on Globe.
 /**
  * Centers the craft on the globe.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeCraftState::btnCenterClick(Action*)
 {
@@ -386,7 +397,7 @@ void GeoscapeCraftState::btnCenterClick(Action*)
 	_globe->center(
 				_craft->getLongitude(),
 				_craft->getLatitude());
-} // kL_end.
+}
 
 /**
  * Returns the craft back to its base.
@@ -442,7 +453,7 @@ void GeoscapeCraftState::btnPatrolClick(Action*)
  */
 void GeoscapeCraftState::btnCancelClick(Action*) // kL_note: "scout"/go to last known UFO position
 {
-	if (_waypoint != 0) // Go to the last known UFO position
+	if (_waypoint != NULL) // Go to the last known UFO position
 	{
 		_waypoint->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
 		_game->getSavedGame()->getWaypoints()->push_back(_waypoint);

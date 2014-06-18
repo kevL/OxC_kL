@@ -50,6 +50,7 @@ private:
 		* _txtPatrolling;
 	TextButton
 		* _btnOk,
+		* _btnCenter, // kL
 		* _btnRedirect;
 	Window* _window;
 
@@ -64,9 +65,11 @@ private:
 		~CraftPatrolState();
 
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action* action);
+		void btnOkClick(Action*);
+		/// kL. Handler for clicking the Center button.
+		void btnCenterClick(Action*); // kL
 		/// Handler for clicking the Redirect Craft button.
-		void btnRedirectClick(Action* action);
+		void btnRedirectClick(Action*);
 };
 
 }

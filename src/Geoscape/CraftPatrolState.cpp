@@ -22,6 +22,7 @@
 #include <string>
 
 #include "GeoscapeCraftState.h"
+#include "Globe.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -60,10 +61,11 @@ CraftPatrolState::CraftPatrolState(
 
 	_window			= new Window(this, 224, 168, 16, 16, POPUP_BOTH);
 
-	_txtDestination	= new Text(224, 84, 16, 32);
-	_txtPatrolling	= new Text(224, 17, 16, 119);
+	_txtDestination	= new Text(224, 78, 16, 32);
+	_txtPatrolling	= new Text(224, 17, 16, 100);
 
-	_btnOk			= new TextButton(144, 16, 58, 140);
+	_btnOk			= new TextButton(144, 16, 58, 121);
+	_btnCenter		= new TextButton(144, 16, 58, 140);
 	_btnRedirect	= new TextButton(144, 16, 58, 159);
 
 	setPalette("PAL_GEOSCAPE", 4);
@@ -72,26 +74,13 @@ CraftPatrolState::CraftPatrolState(
 	add(_txtDestination);
 	add(_txtPatrolling);
 	add(_btnOk);
+	add(_btnCenter);
 	add(_btnRedirect);
 
 	centerAllSurfaces();
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
-
-	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& CraftPatrolState::btnOkClick);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& CraftPatrolState::btnOkClick,
-					Options::keyCancel);
-
-	_btnRedirect->setColor(Palette::blockOffset(8)+5);
-	_btnRedirect->setText(tr("STR_REDIRECT_CRAFT"));
-	_btnRedirect->onMouseClick((ActionHandler)& CraftPatrolState::btnRedirectClick);
-	_btnRedirect->onKeyboardPress(
-					(ActionHandler)& CraftPatrolState::btnRedirectClick,
-					Options::keyOk);
 
 	_txtDestination->setColor(Palette::blockOffset(15)-1);
 	_txtDestination->setBig();
@@ -101,10 +90,31 @@ CraftPatrolState::CraftPatrolState(
 								 .arg(_craft->getName(_game->getLanguage()))
 								 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
-	_txtPatrolling->setColor(Palette::blockOffset(15)-1);
+//kL	_txtPatrolling->setColor(Palette::blockOffset(15)-1);
+	_txtPatrolling->setColor(Palette::blockOffset(15)+11); // kL
 	_txtPatrolling->setBig();
 	_txtPatrolling->setAlign(ALIGN_CENTER);
 	_txtPatrolling->setText(tr("STR_NOW_PATROLLING"));
+
+	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& CraftPatrolState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftPatrolState::btnOkClick,
+					Options::keyCancel);
+
+	// kL_begin:
+	_btnCenter->setColor(Palette::blockOffset(8)+5);
+	_btnCenter->setText(tr("STR_CENTER"));
+	_btnCenter->onMouseClick((ActionHandler)& CraftPatrolState::btnCenterClick);
+	// kL_end.
+
+	_btnRedirect->setColor(Palette::blockOffset(8)+5);
+	_btnRedirect->setText(tr("STR_REDIRECT_CRAFT"));
+	_btnRedirect->onMouseClick((ActionHandler)& CraftPatrolState::btnRedirectClick);
+	_btnRedirect->onKeyboardPress(
+					(ActionHandler)& CraftPatrolState::btnRedirectClick,
+					Options::keyOk);
 }
 
 /**
@@ -116,7 +126,7 @@ CraftPatrolState::~CraftPatrolState()
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftPatrolState::btnOkClick(Action*)
 {
@@ -124,12 +134,26 @@ void CraftPatrolState::btnOkClick(Action*)
 }
 
 /**
+ * kL. Centers the craft on the globe.
+ * @param action - pointer to an action
+ */
+void CraftPatrolState::btnCenterClick(Action*) // kL
+{
+	_game->popState();
+
+	_globe->center(
+				_craft->getLongitude(),
+				_craft->getLatitude());
+}
+
+/**
  * Opens up the Craft window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftPatrolState::btnRedirectClick(Action*)
 {
 	_game->popState();
+
 	_game->pushState(new GeoscapeCraftState(
 										_game,
 										_craft,

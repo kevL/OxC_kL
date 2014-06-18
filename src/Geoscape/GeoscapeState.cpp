@@ -1020,8 +1020,7 @@ void GeoscapeState::timeAdvance()
 }
 
 /**
- * Takes care of any game logic that has to
- * run every game second, like craft movement.
+ * Takes care of any game logic that has to run every game second.
  */
 void GeoscapeState::time5Seconds()
 {
@@ -1246,13 +1245,13 @@ void GeoscapeState::time5Seconds()
 
 			if ((*j)->getDestination() != 0)
 			{
-				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
-				if (u != NULL
-					&& !u->getDetected())
+				Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestination());
+				if (ufo != NULL
+					&& !ufo->getDetected())
 				{
-					if (u->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
-						&& (u->getStatus() == Ufo::LANDED
-							|| u->getStatus() == Ufo::DESTROYED))
+					if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
+						&& (ufo->getStatus() == Ufo::LANDED
+							|| ufo->getStatus() == Ufo::DESTROYED))
 					{
 						(*j)->returnToBase();
 					}
@@ -1260,22 +1259,22 @@ void GeoscapeState::time5Seconds()
 					{
 						(*j)->setDestination(0);
 
-						Waypoint* w = new Waypoint();
-						w->setLongitude(u->getLongitude());
-						w->setLatitude(u->getLatitude());
-						w->setId(u->getId());
+						Waypoint* wp = new Waypoint();
+						wp->setLongitude(ufo->getLongitude());
+						wp->setLatitude(ufo->getLatitude());
+						wp->setId(ufo->getId());
 
 						timerReset(); // kL
 						popup(new GeoscapeCraftState(
 													_game,
 													*j,
 													_globe,
-													w));
+													wp));
 					}
 				}
 
-				if (u != NULL
-					&& u->getStatus() == Ufo::DESTROYED)
+				if (ufo != NULL
+					&& ufo->getStatus() == Ufo::DESTROYED)
 				{
 					(*j)->returnToBase();
 				}
@@ -1289,18 +1288,17 @@ void GeoscapeState::time5Seconds()
 
 			if ((*j)->reachedDestination())
 			{
-				Ufo* u			= dynamic_cast<Ufo*>((*j)->getDestination());
-				Waypoint* w		= dynamic_cast<Waypoint*>((*j)->getDestination());
-				TerrorSite* t	= dynamic_cast<TerrorSite*>((*j)->getDestination());
-				AlienBase* b	= dynamic_cast<AlienBase*>((*j)->getDestination());
+				Ufo* ufo		= dynamic_cast<Ufo*>((*j)->getDestination());
+				Waypoint* wp	= dynamic_cast<Waypoint*>((*j)->getDestination());
+				TerrorSite* ts	= dynamic_cast<TerrorSite*>((*j)->getDestination());
+				AlienBase* ab	= dynamic_cast<AlienBase*>((*j)->getDestination());
 
-				if (u != NULL)
+				if (ufo != NULL)
 				{
-					switch (u->getStatus())
+					switch (ufo->getStatus())
 					{
 						case Ufo::FLYING:
-							// Not more than 4 interceptions at a time.
-							// kL_note: I thought you could do 6 in orig.
+							// Not more than 4 interceptions at a time. kL_note: I thought you could do 6 in orig.
 							if (_dogfights.size() + _dogfightsToBeStarted.size() >= 4)
 							{
 								++j;
@@ -1309,13 +1307,13 @@ void GeoscapeState::time5Seconds()
 							}
 
 							if (!(*j)->isInDogfight()
-								&& !(*j)->getDistance(u)) // we ran into a UFO
+								&& !(*j)->getDistance(ufo)) // we ran into a UFO
 							{
 								_dogfightsToBeStarted.push_back(new DogfightState(
 																				_game,
 																				_globe,
 																				*j,
-																				u));
+																				ufo));
 
 								if (!_dogfightStartTimer->isRunning())
 								{
@@ -1351,12 +1349,11 @@ void GeoscapeState::time5Seconds()
 										texture,
 										shade;
 									_globe->getPolygonTextureAndShade(
-																	u->getLongitude(),
-																	u->getLatitude(),
+																	ufo->getLongitude(),
+																	ufo->getLatitude(),
 																	&texture,
 																	&shade);
 									timerReset();
-
 									popup(new ConfirmLandingState(
 																_game,
 																*j,
@@ -1364,12 +1361,12 @@ void GeoscapeState::time5Seconds()
 																shade));
 								}
 							}
-							else if (u->getStatus() != Ufo::LANDED)
+							else if (ufo->getStatus() != Ufo::LANDED)
 								(*j)->returnToBase();
 						break;
 					}
 				}
-				else if (w != NULL)
+				else if (wp != NULL)
 				{
 					timerReset(); // kL
 					popup(new CraftPatrolState(
@@ -1378,7 +1375,7 @@ void GeoscapeState::time5Seconds()
 											_globe));
 					(*j)->setDestination(0);
 				}
-				else if (t != NULL)
+				else if (ts != NULL)
 				{
 					if ((*j)->getNumSoldiers() > 0)
 					{
@@ -1386,13 +1383,12 @@ void GeoscapeState::time5Seconds()
 							texture,
 							shade;
 						_globe->getPolygonTextureAndShade(
-														t->getLongitude(),
-														t->getLatitude(),
+														ts->getLongitude(),
+														ts->getLatitude(),
 														&texture,
 														&shade);
 
 						timerReset();
-
 						popup(new ConfirmLandingState(
 													_game,
 													*j,
@@ -1402,9 +1398,9 @@ void GeoscapeState::time5Seconds()
 					else
 						(*j)->returnToBase();
 				}
-				else if (b != NULL)
+				else if (ab != NULL)
 				{
-					if (b->isDiscovered())
+					if (ab->isDiscovered())
 					{
 						if ((*j)->getNumSoldiers() > 0)
 						{
@@ -1412,13 +1408,12 @@ void GeoscapeState::time5Seconds()
 								texture,
 								shade;
 							_globe->getPolygonTextureAndShade(
-															b->getLongitude(),
-															b->getLatitude(),
+															ab->getLongitude(),
+															ab->getLatitude(),
 															&texture,
 															&shade);
 
 							timerReset();
-
 							popup(new ConfirmLandingState(
 														_game,
 														*j,
