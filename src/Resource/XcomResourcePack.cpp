@@ -567,7 +567,7 @@ XcomResourcePack::XcomResourcePack( // kL
 	{
 #ifndef __NO_MUSIC // sza_MusicRules
 		// Load musics
-		// We gather the assignments first.
+		// gather the assignments first.
 		for (std::vector<std::pair<std::string, RuleMusic*> >::const_iterator
 				i = musicRules.begin();
 				i != musicRules.end();

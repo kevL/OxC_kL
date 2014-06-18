@@ -222,7 +222,6 @@ Music* ResourcePack::getMusic(const std::string& name) const
 	else
 	{
 		return getRandomMusic(name, ""); // sza_MusicRules
-
 /*		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
 
 		if (_musics.end() != i)
@@ -295,14 +294,15 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 
 		std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
 		int musicRand = SDL_GetTicks() %musicCodes.size();				// kL
-		std::pair<std::string, int> randomCode = musicCodes[musicRand];	// kL
-//		std::pair<std::string, int> randomCode = musicCodes[RNG::generate(0, musicCodes.size() - 1)];
-		Log(LOG_DEBUG) << "MUSIC - Chose " << randomCode.first;
+		std::pair<std::string, int> randMusic = musicCodes[musicRand];	// kL
+//		std::pair<std::string, int> randMusic = musicCodes[RNG::generate(0, musicCodes.size() - 1)];
+		Log(LOG_DEBUG) << "MUSIC - Chose " << randMusic.first;
 
-		Music* music = _musicFile.at(randomCode.first);
+		Music* music = _musicFile.at(randMusic.first);
 
 		return music;
 	}
+}
 /*		std::vector<Music*> music;
 		for (std::map<std::string, Music*>::const_iterator
 				i = _musics.begin();
@@ -319,7 +319,6 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 			return music[SDL_GetTicks() %music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
 //			return music[RNG::generate(0, static_cast<int>(music.size()) - 1)]; // Old
 	} */
-}
 
 /**
  * Clear a music assignment.
