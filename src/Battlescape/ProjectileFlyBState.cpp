@@ -529,12 +529,21 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	++_action.autoShotCount;
 
+	int bulletSprite = -1;
+	if (_action.type != BA_THROW)
+	{
+		bulletSprite = _ammo->getRules()->getBulletSprite();
+		if (bulletSprite == -1)
+			bulletSprite = _action.weapon->getRules()->getBulletSprite();
+	}
+
 	Projectile* projectile = new Projectile(
 										_parent->getResourcePack(),
 										_parent->getSave(),
 										_action,
 										_origin,
-										_targetVoxel);
+										_targetVoxel,
+										bulletSprite);
 
 	_parent->getMap()->setProjectile(projectile); // add the projectile on the map
 
@@ -955,19 +964,22 @@ void ProjectileFlyBState::think()
 					if (_ammo
 						&& _ammo->getRules()->getShotgunPellets() != 0)
 					{
+						int bulletSprite = _ammo->getRules()->getBulletSprite();
+						if (bulletSprite == -1)
+							bulletSprite = _action.weapon->getRules()->getBulletSprite();
+
 						int i = 1;
 						while (i != _ammo->getRules()->getShotgunPellets())
 						{
-							// create a projectile
-							Projectile* proj = new Projectile(
+							Projectile* proj = new Projectile( // create a projectile
 														_parent->getResourcePack(),
 														_parent->getSave(),
 														_action,
 														_origin,
-														_targetVoxel);
+														_targetVoxel,
+														bulletSprite);
 
-							// let it trace to the point where it hits
-							_projectileImpact = proj->calculateTrajectory(
+							_projectileImpact = proj->calculateTrajectory( // let it trace to the point where it hits
 																	std::max(
 																			0.0,
 																			_unit->getFiringAccuracy(
@@ -979,11 +991,9 @@ void ProjectileFlyBState::think()
 
 							if (_projectileImpact != VOXEL_EMPTY)
 							{
-								// as above: skip the shot to the end of its path
-								proj->skipTrajectory();
+								proj->skipTrajectory(); // as above: skip the shot to the end of its path
 
-								// insert an explosion and hit
-								if (_projectileImpact != VOXEL_OUTOFBOUNDS)
+								if (_projectileImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
 								{
 									Explosion* explosion = new Explosion(
 																		proj->getPosition(1),

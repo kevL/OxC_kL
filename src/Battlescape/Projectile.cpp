@@ -66,14 +66,16 @@ Projectile::Projectile(
 		SavedBattleGame* save,
 		BattleAction action,
 		Position origin,
-		Position targetVoxel)
+		Position targetVoxel,
+		int bulletSprite)
 	:
 		_res(res),
 		_save(save),
 		_action(action),
 		_origin(origin),
 		_targetVoxel(targetVoxel),
-		_position(0)
+		_position(0),
+		_bulletSprite(bulletSprite)
 {
 	_speed = Options::battleFireSpeed; // this is the number of pixels the sprite will move between frames
 
@@ -768,15 +770,10 @@ Position Projectile::getPosition(int offset) const
  */
 int Projectile::getParticle(int i) const
 {
-	if (_action.weapon->getAmmoItem()
-		&& _action.weapon->getAmmoItem()->getRules()->getBulletSprite() != -1)
-	{
-		return _action.weapon->getAmmoItem()->getRules()->getBulletSprite() + i;
-	}
-	else if (_action.weapon->getRules()->getBulletSprite() == -1)
-		return -1;
+	if (_bulletSprite != -1)
+		return _bulletSprite + i;
 	else
-		return _action.weapon->getRules()->getBulletSprite() + i;
+		return -1;
 }
 
 /**

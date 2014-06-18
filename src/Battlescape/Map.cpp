@@ -997,6 +997,7 @@ void Map::drawTerrain(Surface* surface)
 
 								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
 								if (tmpSurface
+									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6
 									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 3)
 								{
 									tmpSurface->blitNShade(
@@ -1113,6 +1114,19 @@ void Map::drawTerrain(Surface* surface)
 											0,
 											true);
 								} // kL_end.
+
+								// Draw object
+								if (tileWest->getMapData(MapData::O_OBJECT)
+									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+								{
+									tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
+									tmpSurface->blitNShade(
+											surface,
+											screenPosition.x - tileOffset.x,
+											screenPosition.y - tileWest->getMapData(MapData::O_OBJECT)->getYOffset() + tileOffset.y,
+											tileWestShade,
+											true);
+								}
 							}
 						}
 					} */

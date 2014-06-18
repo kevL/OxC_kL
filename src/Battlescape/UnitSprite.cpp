@@ -663,7 +663,8 @@ void UnitSprite::drawRoutine0()
 			itemB->setX(itemB->getX() + offXAiming);
 	}
 	// kL_note: This needs to be removed because I already changed the sprites:
-/*	else if (_drawingRoutine == 10
+/*	else if (!itemA
+		&& _drawingRoutine == 10
 		&& _unit->getStatus() == STATUS_WALKING
 		&& unitDir == 2)
 	{

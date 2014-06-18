@@ -520,21 +520,18 @@ void setFolders()
 }
 
 /**
- * Updates the game's options with those in the configuation file, if it exists
- * yet, and any supplied on the command line.
+ * Updates the game's options with those in the configuration file,
+ * if it exists yet, and any supplied on the command line.
  */
 void updateOptions()
 {
 	if (CrossPlatform::folderExists(_configFolder)) // Load existing options
 	{
-		try
-		{
+		if (CrossPlatform::fileExists(_configFolder + "options.cfg"))
 			load();
-		}
-		catch (YAML::Exception &e)
-		{
-			Log(LOG_ERROR) << e.what();
-		}
+		else
+
+			save();
 	}
 	else // Create config folder and save options
 	{
@@ -601,25 +598,33 @@ void save(const std::string& filename)
 
 	Log(LOG_INFO) << "Saving Options to " << filename << ".cfg"; // kL
 
-	YAML::Emitter out;
-	YAML::Node
-		doc,
-		node;
-
-	for (std::vector<OptionInfo>::iterator
-			i = _info.begin();
-			i != _info.end();
-			++i)
+	try
 	{
-		i->save(node);
+		YAML::Emitter out;
+		YAML::Node
+			doc,
+			node;
+
+		for (std::vector<OptionInfo>::iterator
+				i = _info.begin();
+				i != _info.end();
+				++i)
+		{
+			i->save(node);
+		}
+
+		doc["options"]				= node;
+		doc["purchaseexclusions"]	= purchaseExclusions;
+		doc["rulesets"]				= rulesets;
+		out << doc;
+
+		sav << out.c_str();
+	}
+	catch (YAML::Exception e)
+	{
+		Log(LOG_WARNING) << e.what();
 	}
 
-	doc["options"]				= node;
-	doc["purchaseexclusions"]	= purchaseExclusions;
-	doc["rulesets"]				= rulesets;
-	out << doc;
-
-	sav << out.c_str();
 	sav.close();
 }
 

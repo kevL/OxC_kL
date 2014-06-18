@@ -44,7 +44,9 @@ class Projectile
 {
 
 private:
-	int _speed;
+	int
+		_bulletSprite,
+		_speed;
 	size_t _position;
 
 	BattleAction _action;
@@ -74,7 +76,8 @@ private:
 				SavedBattleGame* save,
 				BattleAction action,
 				Position origin,
-				Position target);
+				Position target,
+				int bulletSprite);
 		/// Cleans up the Projectile.
 		~Projectile();
 
