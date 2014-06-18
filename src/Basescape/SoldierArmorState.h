@@ -21,6 +21,7 @@
 #define OPENXCOM_SOLDIERARMORSTATE_H
 
 #include <vector>
+
 #include "../Engine/State.h"
 
 
@@ -34,14 +35,15 @@ class Text;
 class TextList;
 class Armor;
 
+
 /**
- * Select Armor window that allows changing
- * of the armor equipped on a soldier.
+ * Select Armor window that allows changing of the armor equipped on a soldier.
  */
 class SoldierArmorState
 	:
 		public State
 {
+
 private:
 	size_t _soldier;
 
@@ -56,6 +58,7 @@ private:
 	Window* _window;
 
 	std::vector<Armor*> _armors;
+
 
 	public:
 		/// Creates the Soldier Armor state.

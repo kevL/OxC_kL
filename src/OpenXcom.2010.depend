@@ -4487,7 +4487,7 @@
 1402457811 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
-1402457811 f:\git\openxcom\src\basescape\craftsstate.h
+1403082271 f:\git\openxcom\src\basescape\craftsstate.h
 	"../Engine/State.h"
 
 1402457811 f:\git\openxcom\src\basescape\dismantlefacilitystate.h
@@ -4520,14 +4520,14 @@
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
-1402457811 f:\git\openxcom\src\basescape\soldiersstate.h
+1403096079 f:\git\openxcom\src\basescape\soldiersstate.h
 	"../Engine/State.h"
 
 1402457811 f:\git\openxcom\src\basescape\transferbasestate.h
 	<vector>
 	"../Engine/State.h"
 
-1402457812 f:\git\openxcom\src\geoscape\allocatepsitrainingstate.h
+1403095453 f:\git\openxcom\src\geoscape\allocatepsitrainingstate.h
 	"../Engine/State.h"
 
 1402457812 f:\git\openxcom\src\geoscape\buildnewbasestate.h
@@ -4645,7 +4645,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1402457811 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1403095273 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	<climits>
 	<string>
@@ -4666,10 +4666,10 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1402457811 f:\git\openxcom\src\basescape\craftarmorstate.h
+1403093595 f:\git\openxcom\src\basescape\craftarmorstate.h
 	"../Engine/State.h"
 
-1402457811 f:\git\openxcom\src\basescape\soldierarmorstate.h
+1403095347 f:\git\openxcom\src\basescape\soldierarmorstate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -4804,7 +4804,7 @@
 	"../Savegame/CraftWeapon.h"
 	"../Savegame/SavedGame.h"
 
-1402457811 f:\git\openxcom\src\basescape\craftsoldiersstate.h
+1403091738 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
 1402457811 f:\git\openxcom\src\basescape\craftweaponsstate.h
@@ -4823,7 +4823,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1402457811 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1403095231 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -4832,6 +4832,7 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/LocalizedText.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
@@ -4845,13 +4846,15 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1402457811 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1403094522 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
 	"SellState.h"
+	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Geoscape/Globe.h"
@@ -5465,7 +5468,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1402457811 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1403096035 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -6512,7 +6515,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1403046363 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1403047581 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6969,7 +6972,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1402744804 source:f:\git\openxcom\src\engine\game.cpp
+1403047581 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7307,7 +7310,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1402457812 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1403095850 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	<climits>
 	<sstream>
@@ -8294,7 +8297,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1402676858 source:f:\git\openxcom\src\interface\textlist.cpp
+1403086020 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>

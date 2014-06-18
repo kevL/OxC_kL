@@ -79,9 +79,9 @@ private:
 		void lstSoldiersClick(Action* action);
 
 		/// kL. Handler for clicking the Soldiers reordering button.
-		void lstItemsLeftArrowClick_Psi(Action* action); // kL
+		void lstLeftArrowClick(Action* action); // kL
 		/// kL. Handler for clicking the Soldiers reordering button.
-		void lstItemsRightArrowClick_Psi(Action* action); // kL
+		void lstRightArrowClick(Action* action); // kL
 };
 
 }

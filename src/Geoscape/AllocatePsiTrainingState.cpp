@@ -137,8 +137,8 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onLeftArrowClick((ActionHandler)& AllocatePsiTrainingState::lstItemsLeftArrowClick_Psi);
-	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstItemsRightArrowClick_Psi);
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& AllocatePsiTrainingState::lstLeftArrowClick);
+	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstRightArrowClick);
 //kL	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick, 0);
 	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick); // kL
 
@@ -209,8 +209,8 @@ AllocatePsiTrainingState::~AllocatePsiTrainingState()
 void AllocatePsiTrainingState::reinit()
 {
 	_lstSoldiers->clearList();
-
 	int row = 0;
+
 	for (std::vector<Soldier*>::const_iterator
 			soldier = _base->getSoldiers()->begin();
 			soldier != _base->getSoldiers()->end();
@@ -287,13 +287,13 @@ void AllocatePsiTrainingState::btnOkClick(Action*)
  */
 void AllocatePsiTrainingState::lstSoldiersClick(Action* action)
 {
-	// kL: Taken from CraftSoldiersState::lstSoldiersClick()
+	// kL_begin:
 	double mx = action->getAbsoluteXMouse();
 	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
-	} // end_kL.
+	} // kL_end.
 
 	_sel = _lstSoldiers->getSelectedRow();
 
@@ -324,89 +324,80 @@ void AllocatePsiTrainingState::lstSoldiersClick(Action* action)
 }
 
 /**
- * Reorders a soldier. kL_Taken from CraftSoldiersState.
- * @param action Pointer to an action.
+ * kL. Reorders a soldier up.
+ * @param action - pointer to an action
  */
-void AllocatePsiTrainingState::lstItemsLeftArrowClick_Psi(Action* action)
+void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
 {
-	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
-		|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
+	int row = _lstSoldiers->getSelectedRow();
+	if (row > 0)
 	{
-		int row = _lstSoldiers->getSelectedRow();
-		if (row > 0)
+		Soldier* soldier = _base->getSoldiers()->at(row);
+
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			Soldier* soldier = _base->getSoldiers()->at(row);
+			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
+			_base->getSoldiers()->at(row - 1) = soldier;
 
-			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
+			if (row != static_cast<int>(_lstSoldiers->getScroll()))
 			{
-				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
-				_base->getSoldiers()->at(row - 1) = soldier;
-
-				if (row != _lstSoldiers->getScroll())
-				{
-					SDL_WarpMouse(
-							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
-				}
-				else
-				{
-					_lstSoldiers->scrollUp(false);
-				}
+				SDL_WarpMouse(
+						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
-			{
-				_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
-				_base->getSoldiers()->insert(_base->getSoldiers()->begin(), soldier);
-			}
+				_lstSoldiers->scrollUp(false);
 		}
-
-		reinit();
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
+			_base->getSoldiers()->insert(
+									_base->getSoldiers()->begin(),
+									soldier);
+		}
 	}
+
+	reinit();
 }
 
 /**
- * Reorders a soldier. kL_Taken from CraftSoldiersState.
- * @param action Pointer to an action.
+ * kL. Reorders a soldier down.
+ * @param action - pointer to an action
  */
-void AllocatePsiTrainingState::lstItemsRightArrowClick_Psi(Action* action)
+void AllocatePsiTrainingState::lstRightArrowClick(Action* action) // kL
 {
-	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
-		|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
+	int row = _lstSoldiers->getSelectedRow();
+	size_t numSoldiers = _base->getSoldiers()->size();
+	if (numSoldiers > 0
+		&& numSoldiers <= INT_MAX
+		&& row < static_cast<int>(numSoldiers) - 1)
 	{
-		int row = _lstSoldiers->getSelectedRow();
-		size_t numSoldiers = _base->getSoldiers()->size();
+		Soldier* soldier = _base->getSoldiers()->at(row);
 
-		if (0 < numSoldiers
-			&& INT_MAX >= numSoldiers
-			&& row < static_cast<int>(numSoldiers) - 1)
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			Soldier* soldier = _base->getSoldiers()->at(row);
+			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
+			_base->getSoldiers()->at(row + 1) = soldier;
 
-			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
+			if (row != static_cast<int>(_lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll()))
 			{
-				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
-				_base->getSoldiers()->at(row + 1) = soldier;
-
-				if (row != 15 + _lstSoldiers->getScroll())
-				{
-					SDL_WarpMouse(
-							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
-				}
-				else
-				{
-					_lstSoldiers->scrollDown(false);
-				}
+				SDL_WarpMouse(
+						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
-			{
-				_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
-				_base->getSoldiers()->insert(_base->getSoldiers()->end(), soldier);
-			}
+				_lstSoldiers->scrollDown(false);
 		}
-
-		reinit();
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
+			_base->getSoldiers()->insert(
+									_base->getSoldiers()->end(),
+									soldier);
+		}
 	}
+
+	reinit();
 }
 
 }

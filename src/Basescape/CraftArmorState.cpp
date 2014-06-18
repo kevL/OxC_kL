@@ -125,8 +125,8 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstItemsLeftArrowClick_Armor);
-	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstItemsRightArrowClick_Armor);
+	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstLeftArrowClick);
+	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstRightArrowClick);
 //kL	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick, 0);
 	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick); // kL
 
@@ -249,18 +249,18 @@ void CraftArmorState::btnOkClick(Action*)
 // void CraftArmorState::lstSoldiersClick(Action*)
 void CraftArmorState::lstSoldiersClick(Action* action) // kL
 {
-	// kL: Taken from CraftSoldiersState::lstSoldiersClick()
+	// kL_begin:
 	double mx = action->getAbsoluteXMouse();
 	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
-	} // end_kL.
+	} // kL_end.
 
-	Soldier* s = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
+	Soldier* soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (!
-		(s->getCraft()
-			&& s->getCraft()->getStatus() == "STR_OUT"))
+		(soldier->getCraft()
+			&& soldier->getCraft()->getStatus() == "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(
 											_game,
@@ -270,81 +270,80 @@ void CraftArmorState::lstSoldiersClick(Action* action) // kL
 }
 
 /**
- * Reorders a soldier. kL_Taken from CraftSoldiersState.
+ * kL. Reorders a soldier up.
  * @param action Pointer to an action.
  */
-void CraftArmorState::lstItemsLeftArrowClick_Armor(Action* action)
+void CraftArmorState::lstLeftArrowClick(Action* action) // kL
 {
-	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
-		|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
+	int row = _lstSoldiers->getSelectedRow();
+	if (row > 0)
 	{
-		int row = _lstSoldiers->getSelectedRow();
-		if (row > 0)
+		Soldier* soldier = _base->getSoldiers()->at(row);
+
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			Soldier* s = _base->getSoldiers()->at(row);
+			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
+			_base->getSoldiers()->at(row - 1) = soldier;
 
-			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
+			if (row != static_cast<int>(_lstSoldiers->getScroll()))
 			{
-				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
-				_base->getSoldiers()->at(row - 1) = s;
-
-				if (row != _lstSoldiers->getScroll())
-					SDL_WarpMouse(
-							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
-				else
-					_lstSoldiers->scrollUp(false);
+				SDL_WarpMouse(
+						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
-			{
-				_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
-				_base->getSoldiers()->insert(_base->getSoldiers()->begin(), s);
-			}
+				_lstSoldiers->scrollUp(false);
 		}
-
-		init();
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
+			_base->getSoldiers()->insert(
+									_base->getSoldiers()->begin(),
+									soldier);
+		}
 	}
+
+	init();
 }
 
 /**
- * Reorders a soldier. kL_Taken from CraftSoldiersState.
+ * kL. Reorders a soldier down.
  * @param action Pointer to an action.
  */
-void CraftArmorState::lstItemsRightArrowClick_Armor(Action* action)
+void CraftArmorState::lstRightArrowClick(Action* action) // kL
 {
-	if (SDL_BUTTON_LEFT == action->getDetails()->button.button
-		|| SDL_BUTTON_RIGHT == action->getDetails()->button.button)
+	int row = _lstSoldiers->getSelectedRow();
+	size_t numSoldiers = _base->getSoldiers()->size();
+	if (numSoldiers > 0
+		&& numSoldiers <= INT_MAX
+		&& row < static_cast<int>(numSoldiers) - 1)
 	{
-		int row = _lstSoldiers->getSelectedRow();
-		size_t numSoldiers = _base->getSoldiers()->size();
+		Soldier* soldier = _base->getSoldiers()->at(row);
 
-		if (0 < numSoldiers
-			&& INT_MAX >= numSoldiers
-			&& row < static_cast<int>(numSoldiers) - 1)
+		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
-			Soldier* s = _base->getSoldiers()->at(row);
+			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
+			_base->getSoldiers()->at(row + 1) = soldier;
 
-			if (SDL_BUTTON_LEFT == action->getDetails()->button.button)
+			if (row != static_cast<int>(_lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll()))
 			{
-				_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
-				_base->getSoldiers()->at(row + 1) = s;
-
-				if (row != 15 + _lstSoldiers->getScroll())
-					SDL_WarpMouse(
-							static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-							static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
-				else
-					_lstSoldiers->scrollDown(false);
+				SDL_WarpMouse(
+						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
-			{
-				_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
-				_base->getSoldiers()->insert(_base->getSoldiers()->end(), s);
-			}
+				_lstSoldiers->scrollDown(false);
 		}
-
-		init();
+		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		{
+			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
+			_base->getSoldiers()->insert(
+									_base->getSoldiers()->end(),
+									soldier);
+		}
 	}
+
+	init();
 }
 
 }

@@ -74,12 +74,10 @@ private:
 		/// Handler for clicking the Soldiers list.
 		void lstSoldiersClick(Action* action);
 
-		// kL_begin: re-order soldiers, taken from CraftSoldiersState.
-		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsLeftArrowClick_Armor(Action* action);
-		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsRightArrowClick_Armor(Action* action);
-		// kL_end.
+		/// kL. Handler for clicking the Soldiers reordering button.
+		void lstLeftArrowClick(Action* action); // kL
+		/// kL. Handler for clicking the Soldiers reordering button.
+		void lstRightArrowClick(Action* action); // kL
 };
 
 }

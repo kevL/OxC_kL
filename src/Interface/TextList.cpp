@@ -1054,25 +1054,28 @@ void TextList::scrollUp(
 		if (toMax)
 			scrollTo(0);
 		else
+		{
 			if (scrollByWheel)
 				scrollTo(_scroll - std::min(
 										static_cast<size_t>(Options::mousewheelSpeed),
 										_scroll));
 			else
 				scrollTo(_scroll - 1);
+		}
 	}
 }
 
 /**
  * Scrolls the text in the list down by one row or to the bottom.
- * @param toMax If true then scrolls to the bottom of the list. false => one row down
- * @param scrollByWheel If true then use wheel scroll, otherwise scroll normally.
+ * @param toMax			- true to scroll to the bottom of the list. false = one row down
+ * @param scrollByWheel	- true to use wheel scroll
  */
 void TextList::scrollDown(
 		bool toMax,
 		bool scrollByWheel)
 {
-	if (!_scrolling) return;
+	if (!_scrolling)
+		return;
 
 	if (_rows.size() > _visibleRows
 		&& _scroll < _rows.size() - _visibleRows)
@@ -1080,11 +1083,12 @@ void TextList::scrollDown(
 		if (toMax)
 			scrollTo(_rows.size() - _visibleRows);
 		else
+		{
 			if (scrollByWheel)
 				scrollTo(_scroll + Options::mousewheelSpeed);
 			else
-
 				scrollTo(_scroll + 1);
+		}
 	}
 }
 
@@ -1362,11 +1366,18 @@ void TextList::mouseOver(Action* action, State* state)
 		int y = _font->getHeight() + _font->getSpacing();
 		_selRow = std::max(
 						0,
-						static_cast<int>(
+/*						static_cast<int>(static_cast<double>(_scroll)
+						+ floor(action->getRelativeYMouse()
+								/ (static_cast<double>(y) * action->getYScale())))); */
+						static_cast<int>(_scroll)
+						+ static_cast<int>(
+										floor(action->getRelativeYMouse()
+										/ (static_cast<double>(y) * action->getYScale()))));
+/*						static_cast<int>(
 							static_cast<int>(_scroll)
 							+ static_cast<int>(
 											floor(action->getRelativeYMouse()
-											/ (static_cast<double>(y) * action->getYScale())))));
+											/ (static_cast<double>(y) * action->getYScale()))))); */
 
 		if (_selRow < _texts.size())
 		{

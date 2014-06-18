@@ -82,14 +82,14 @@ private:
 //		/// Shows Soldiers in a list.
 //		void populateList();
 		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsLeftArrowClick(Action* action);
+		void lstLeftArrowClick(Action* action);
 		/// Moves a soldier up.
 /*		void moveSoldierUp(
 				Action* action,
 				int row,
 				bool max = false); */
 		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsRightArrowClick(Action* action);
+		void lstRightArrowClick(Action* action);
 		/// Moves a soldier down.
 /*		void moveSoldierDown(
 				Action* action,

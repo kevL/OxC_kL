@@ -76,17 +76,17 @@ private:
 		void btnOkClick(Action* action);
 		/// Handler for clicking the PsiTraining button.
 		void btnPsiTrainingClick(Action* action);
-		/// Handler for clicking the Armor button.
-		void btnArmorClick_Soldier(Action* action);
+		/// kL. Handler for clicking the Armor button.
+		void btnArmorClick(Action* action); // kL
 		/// Handler for clicking the Memorial button.
 		void btnMemorialClick(Action* action);
 		/// Handler for clicking the Soldiers list.
 		void lstSoldiersClick(Action* action);
 
-		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsLeftArrowClick_Soldier(Action* action);
-		/// Handler for clicking the Soldiers reordering button.
-		void lstItemsRightArrowClick_Soldier(Action* action);
+		/// kL. Handler for clicking the Soldiers reordering button.
+		void lstLeftArrowClick(Action* action); // kL
+		/// kL. Handler for clicking the Soldiers reordering button.
+		void lstRightArrowClick(Action* action); // kL
 };
 
 }
