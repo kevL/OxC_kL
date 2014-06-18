@@ -6396,7 +6396,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1402918401 source:f:\git\openxcom\src\battlescape\map.cpp
+1403097245 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6434,7 +6434,7 @@
 	"../Ruleset/MapDataSet.h"
 	"../Ruleset/RuleItem.h"
 
-1402457811 f:\git\openxcom\src\battlescape\projectile.h
+1403097327 f:\git\openxcom\src\battlescape\projectile.h
 	<vector>
 	"BattlescapeGame.h"
 	"Position.h"
@@ -6601,7 +6601,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1403097471 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -6625,7 +6625,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1403097778 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6806,7 +6806,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1402779855 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1403097855 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -7079,7 +7079,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1402693557 source:f:\git\openxcom\src\engine\options.cpp
+1403097041 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>

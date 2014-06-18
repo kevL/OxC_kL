@@ -55,7 +55,7 @@ MapDataSet::MapDataSet(
 		_surfaceSet(NULL),
 		_loaded(false)
 {
-	Log(LOG_INFO) << "Create MapDataSet";
+	//Log(LOG_INFO) << "Create MapDataSet";
 }
 
 /**
@@ -123,7 +123,7 @@ SurfaceSet* MapDataSet::getSurfaceset() const
  */
 void MapDataSet::loadData()
 {
-	Log(LOG_INFO) << "MapDataSet::loadData()";
+	//Log(LOG_INFO) << "MapDataSet::loadData()";
 	if (_loaded) // prevents loading twice
 		return;
 
@@ -307,7 +307,7 @@ void MapDataSet::loadData()
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
 	// kL_begin: Let extraSprites override terrain sprites.
-	Log(LOG_INFO) << ". terrain_PCK = " << _name;
+	//Log(LOG_INFO) << ". terrain_PCK = " << _name;
 
 	std::ostringstream test;
 	test << _name << ".PCK";
@@ -315,12 +315,12 @@ void MapDataSet::loadData()
 
 	if (srfSet)
 	{
-		Log(LOG_INFO) << ". . Overriding terrain SurfaceSet";
+		//Log(LOG_INFO) << ". . Overriding terrain SurfaceSet";
 		_surfaceSet = srfSet;
 	}
 	else // kL_end.
 	{
-		Log(LOG_INFO) << ". . Creating new terrain SurfaceSet";
+		//Log(LOG_INFO) << ". . Creating new terrain SurfaceSet";
 		std::ostringstream
 			s1,
 			s2;
@@ -360,12 +360,12 @@ void MapDataSet::unloadData()
 
 		if (srfSet)
 		{
-			Log(LOG_INFO) << ". Deleting terrain SurfaceSet POINTER";
+			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet POINTER";
 			delete &_surfaceSet;
 		}
 		else // kL_end.
 		{
-			Log(LOG_INFO) << ". Deleting terrain SurfaceSet";
+			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet";
 			delete _surfaceSet;
 		}
 

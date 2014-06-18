@@ -104,8 +104,7 @@ Ruleset::Ruleset(Game* game) // kL
 		_ufopaediaListOrder(0),
 		_invListOrder(0)
 {
-	Log(LOG_INFO) << "Create Ruleset";
-
+	//Log(LOG_INFO) << "Create Ruleset";
 	std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
 
 	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam"); // Add soldier names

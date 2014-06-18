@@ -120,7 +120,7 @@ XcomResourcePack::XcomResourcePack( // kL
 	:
 		ResourcePack()
 {
-	Log(LOG_INFO) << "Create XcomResourcePack";
+	//Log(LOG_INFO) << "Create XcomResourcePack";
 
 	/* PALETTES */
 	const char* pal[] = // Load palettes
@@ -1121,7 +1121,8 @@ XcomResourcePack::XcomResourcePack( // kL
 		}
 
 
-	Log(LOG_INFO) << "Loading extra resources from ruleset...";
+	Log(LOG_DEBUG) << "Loading extra resources from ruleset..."; // kL
+	//Log(LOG_INFO) << "Loading extra resources from ruleset...";
 
 	/* EXTRA SPRITES */
 	for (std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator
@@ -1140,15 +1141,15 @@ XcomResourcePack::XcomResourcePack( // kL
 		{
 			if (_surfaces.find(sheetName) == _surfaces.end())
 			{
-//				Log(LOG_DEBUG) << "Creating new single image: " << sheetName;
-				Log(LOG_INFO) << "Creating new single image: " << sheetName;
+				Log(LOG_DEBUG) << "Creating new single image: " << sheetName;
+				//Log(LOG_INFO) << "Creating new single image: " << sheetName;
 
 				_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
 			}
 			else
 			{
-//				Log(LOG_DEBUG) << "Adding/Replacing single image: " << sheetName;
-				Log(LOG_INFO) << "Adding/Replacing single image: " << sheetName;
+				Log(LOG_DEBUG) << "Adding/Replacing single image: " << sheetName;
+				//Log(LOG_INFO) << "Adding/Replacing single image: " << sheetName;
 
 				delete _surfaces[sheetName];
 
@@ -1167,8 +1168,8 @@ XcomResourcePack::XcomResourcePack( // kL
 
 			if (_sets.find(sheetName) == _sets.end())
 			{
-//				Log(LOG_DEBUG) << "Creating new surface set: " << sheetName;
-				Log(LOG_INFO) << "Creating new surface set: " << sheetName;
+				Log(LOG_DEBUG) << "Creating new surface set: " << sheetName;
+				//Log(LOG_INFO) << "Creating new surface set: " << sheetName;
 
 				adding = true;
 
@@ -1182,15 +1183,15 @@ XcomResourcePack::XcomResourcePack( // kL
 													spritePack->getHeight());
 			}
 			else
-//				Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
-				Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
+				Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
+				//Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
 
 			if (subdivision)
 			{
 				int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
 
-//				Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
-				Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
+				Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
+				//Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
 			}
 
 			for (std::map<int, std::string>::iterator
@@ -1204,8 +1205,8 @@ XcomResourcePack::XcomResourcePack( // kL
 				std::string fileName = j->second;
 				if (fileName.substr(fileName.length() - 1, 1) == "/")
 				{
-//					Log(LOG_DEBUG) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
-					Log(LOG_INFO) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
+					Log(LOG_DEBUG) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
+					//Log(LOG_INFO) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
 
 					int offset = startFrame;
 
@@ -1227,8 +1228,8 @@ XcomResourcePack::XcomResourcePack( // kL
 
 							if (_sets[sheetName]->getFrame(offset))
 							{
-//								Log(LOG_DEBUG) << "Replacing frame: " << offset;
-								Log(LOG_INFO) << "Replacing frame: " << offset;
+								Log(LOG_DEBUG) << "Replacing frame: " << offset;
+								//Log(LOG_INFO) << "Replacing frame: " << offset;
 
 								_sets[sheetName]->getFrame(offset)->loadImage(s.str());
 							}
@@ -1238,8 +1239,8 @@ XcomResourcePack::XcomResourcePack( // kL
 									_sets[sheetName]->addFrame(offset)->loadImage(s.str());
 								else
 								{
-//									Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
-									Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
+									Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
+									//Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 
 									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(s.str());
 								}
@@ -1262,15 +1263,15 @@ XcomResourcePack::XcomResourcePack( // kL
 
 						if (_sets[sheetName]->getFrame(startFrame))
 						{
-//							Log(LOG_DEBUG) << "Replacing frame: " << startFrame;
-							Log(LOG_INFO) << "Replacing frame: " << startFrame;
+							Log(LOG_DEBUG) << "Replacing frame: " << startFrame;
+							//Log(LOG_INFO) << "Replacing frame: " << startFrame;
 
 							_sets[sheetName]->getFrame(startFrame)->loadImage(s.str());
 						}
 						else
 						{
-//							Log(LOG_DEBUG) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
-							Log(LOG_INFO) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
+							Log(LOG_DEBUG) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
+							//Log(LOG_INFO) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
 
 							_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(s.str());
 						}
@@ -1299,8 +1300,8 @@ XcomResourcePack::XcomResourcePack( // kL
 							{
 								if (_sets[sheetName]->getFrame(offset))
 								{
-//									Log(LOG_DEBUG) << "Replacing frame: " << offset;
-									Log(LOG_INFO) << "Replacing frame: " << offset;
+									Log(LOG_DEBUG) << "Replacing frame: " << offset;
+									//Log(LOG_INFO) << "Replacing frame: " << offset;
 
 									_sets[sheetName]->getFrame(offset)->clear();
 
@@ -1324,8 +1325,8 @@ XcomResourcePack::XcomResourcePack( // kL
 									}
 									else
 									{
-//										Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
-										Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
+										Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
+										//Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
 										temp->blitNShade(
@@ -1456,7 +1457,7 @@ XcomResourcePack::~XcomResourcePack()
  */
 void XcomResourcePack::loadBattlescapeResources()
 {
-	Log(LOG_INFO) << "XcomResourcePack::loadBattlescapeResources()";
+	//Log(LOG_INFO) << "XcomResourcePack::loadBattlescapeResources()";
 
 	// Load Battlescape ICONS
 	std::ostringstream s;
@@ -1531,8 +1532,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		std::string tab = CrossPlatform::noExt(bsets[i]) + ".TAB";
 		s2 << "TERRAIN/" << tab;
 
-		Log(LOG_INFO) << ". bset = " << s;
-
+		//Log(LOG_INFO) << ". bset = " << s;
 		_sets[bsets[i]] = new SurfaceSet(32, 40);
 		_sets[bsets[i]]->loadPck(
 							CrossPlatform::getDataFile(s.str()),

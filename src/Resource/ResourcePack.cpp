@@ -57,8 +57,7 @@ ResourcePack::ResourcePack()
 		_musicFile(), // sza_MusicRules
 		_musicAssignment() // sza_MusicRules
 {
-	Log(LOG_INFO) << "Create ResourcePack";
-
+	//Log(LOG_INFO) << "Create ResourcePack";
 	_muteMusic = new Music();
 	_muteSound = new Sound();
 }
