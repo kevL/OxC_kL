@@ -78,8 +78,8 @@ Inventory::Inventory(
 			x,
 			y),
 		_game(game),
-		_selUnit(0),
-		_selItem(0),
+		_selUnit(NULL),
+		_selItem(NULL),
 		_tu(true),
 		_base(base),
 		_groundOffset(0),
@@ -275,7 +275,7 @@ void Inventory::drawItems()
 	_items->clear();
 
 
-	if (_selUnit != 0)
+	if (_selUnit != NULL)
 	{
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 
@@ -409,12 +409,12 @@ void Inventory::moveItem(
 		int x,
 		int y)
 {
-	if (slot == 0) // Make items vanish (eg. ammo in weapons)
+	if (slot == NULL) // Make items vanish (eg. ammo in weapons)
 	{
 		if (item->getSlot()->getType() == INV_GROUND)
 			_selUnit->getTile()->removeItem(item);
 		else
-			item->moveToOwner(0);
+			item->moveToOwner(NULL);
 	}
 	else
 	{
@@ -422,7 +422,7 @@ void Inventory::moveItem(
 		{
 			if (slot->getType() == INV_GROUND)
 			{
-				item->moveToOwner(0);
+				item->moveToOwner(NULL);
 				_selUnit->getTile()->addItem(item, item->getSlot());
 
 				if (item->getUnit()
@@ -431,7 +431,7 @@ void Inventory::moveItem(
 					item->getUnit()->setPosition(_selUnit->getPosition());
 				}
 			}
-			else if (item->getSlot() == 0
+			else if (item->getSlot() == NULL
 				|| item->getSlot()->getType() == INV_GROUND)
 			{
 				item->moveToOwner(_selUnit);
@@ -483,7 +483,7 @@ bool Inventory::overlapItems(
 			}
 		}
 	}
-	else if (unit->getTile() != 0)
+	else if (unit->getTile() != NULL)
 	{
 		for (std::vector<BattleItem*>::const_iterator
 				i = unit->getTile()->getInventory()->begin();
@@ -517,7 +517,7 @@ RuleInventory* Inventory::getSlotInPosition(
 			return i->second;
 	}
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -535,8 +535,8 @@ BattleItem* Inventory::getSelectedItem() const
  */
 void Inventory::setSelectedItem(BattleItem* item)
 {
-	_selItem = (item && !item->getRules()->isFixed())? item: 0;
-	if (_selItem == 0)
+	_selItem = (item && !item->getRules()->isFixed())? item: NULL;
+	if (_selItem == NULL)
 		_selection->clear();
 	else
 	{
@@ -549,6 +549,24 @@ void Inventory::setSelectedItem(BattleItem* item)
 	}
 
 	drawItems();
+}
+
+/**
+ * Returns the item currently under mouse cursor.
+ * @return Pointer to selected item, or 0 if none.
+ */
+BattleItem* Inventory::getMouseOverItem() const
+{
+	return _mouseOverItem;
+}
+
+/**
+ * Changes the item currently under mouse cursor.
+ * @param item Pointer to selected item, or NULL if none.
+ */
+void Inventory::setMouseOverItem(BattleItem* item)
+{
+	_mouseOverItem = (item && !item->getRules()->isFixed())? item: 0;
 }
 
 /**
@@ -604,6 +622,33 @@ void Inventory::mouseOver(Action* action, State* state)
 	_selection->setY(static_cast<int>(
 						floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
 
+
+	if (_selUnit == NULL)
+		return;
+
+	int
+		x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
+		y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
+
+	RuleInventory* slot = getSlotInPosition(&x, &y);
+	if (slot != NULL)
+	{
+		if (slot->getType() == INV_GROUND)
+			x += _groundOffset;
+
+		BattleItem* item = _selUnit->getItem(slot, x, y);
+		setMouseOverItem(item);
+	}
+	else
+		setMouseOverItem(NULL);
+
+//	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2 - getX());
+//	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2 - getY());
+	_selection->setX(static_cast<int>(
+						floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
+	_selection->setY(static_cast<int>(
+						floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
+
 	InteractiveSurface::mouseOver(action, state);
 }
 
@@ -616,17 +661,17 @@ void Inventory::mouseClick(Action* action, State* state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_selUnit == 0)
+		if (_selUnit == NULL)
 			return;
 
-		if (_selItem == 0) // Pickup item
+		if (_selItem == NULL) // Pickup item
 		{
 			int
 				x = static_cast<int>(floor(action->getAbsoluteXMouse())) - getX(),
 				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
 
 			RuleInventory* slot = getSlotInPosition(&x, &y);
-			if (slot != 0)
+			if (slot != NULL)
 			{
 				if (slot->getType() == INV_GROUND)
 					x += _groundOffset;
@@ -635,7 +680,7 @@ void Inventory::mouseClick(Action* action, State* state)
 													slot,
 													x,
 													y);
-				if (item != 0)
+				if (item != NULL)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
@@ -764,7 +809,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						+ RuleInventory::SLOT_H / 2;
 
 			RuleInventory* slot = getSlotInPosition(&x, &y);
-			if (slot != 0)
+			if (slot != NULL)
 			{
 				if (slot->getType() == INV_GROUND)
 					x += _groundOffset;
@@ -779,7 +824,7 @@ void Inventory::mouseClick(Action* action, State* state)
 												item,
 												_selItem));
 
-				if (item == 0 // Put item in empty slot, or stack it, if possible.
+				if (item == NULL // Put item in empty slot, or stack it, if possible.
 					|| item == _selItem
 					|| canStack)
 				{
@@ -801,7 +846,7 @@ void Inventory::mouseClick(Action* action, State* state)
 							if (slot->getType() == INV_GROUND)
 								_stackLevel[x][y] += 1;
 
-							setSelectedItem(0);
+							setSelectedItem(NULL);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
@@ -818,7 +863,7 @@ void Inventory::mouseClick(Action* action, State* state)
 									item->getSlotX(),
 									item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
-							setSelectedItem(0);
+							setSelectedItem(NULL);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
@@ -845,19 +890,19 @@ void Inventory::mouseClick(Action* action, State* state)
 						_warning->showMessage(_game->getLanguage()->getString("STR_WRONG_AMMUNITION_FOR_THIS_WEAPON"));
 					else
 					{
-						if (item->getAmmoItem() != 0)
+						if (item->getAmmoItem() != NULL)
 							_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_IS_ALREADY_LOADED"));
 						else if (!_tu
 							|| _selUnit->spendTimeUnits(15))
 						{
 							moveItem(
 									_selItem,
-									0,
+									NULL,
 									0,
 									0);
 							item->setAmmoItem(_selItem);
-							_selItem->moveToOwner(0);
-							setSelectedItem(0);
+							_selItem->moveToOwner(NULL);
+							setSelectedItem(NULL);
 							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
 
 							if (item->getSlot()->getType() == INV_GROUND)
@@ -876,7 +921,7 @@ void Inventory::mouseClick(Action* action, State* state)
 				y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
 
 				slot = getSlotInPosition(&x, &y);
-				if (slot != 0
+				if (slot != NULL
 					&& slot->getType() == INV_GROUND)
 				{
 					x += _groundOffset;
@@ -895,7 +940,7 @@ void Inventory::mouseClick(Action* action, State* state)
 									item->getSlotX(),
 									item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
-							setSelectedItem(0);
+							setSelectedItem(NULL);
 
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
@@ -909,7 +954,7 @@ void Inventory::mouseClick(Action* action, State* state)
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		//Log(LOG_INFO) << "Inventory: SDL_BUTTON_RIGHT";
-		if (_selItem == 0)
+		if (_selItem == NULL)
 		{
 			//Log(LOG_INFO) << ". no selected item";
 			if (!_base
@@ -925,13 +970,13 @@ void Inventory::mouseClick(Action* action, State* state)
 						y = static_cast<int>(floor(action->getAbsoluteYMouse())) - getY();
 
 					RuleInventory* slot = getSlotInPosition(&x, &y);
-					if (slot != 0)
+					if (slot != NULL)
 					{
 						if (slot->getType() == INV_GROUND)
 							x += _groundOffset;
 
 						BattleItem* item = _selUnit->getItem(slot, x, y);
-						if (item != 0)
+						if (item != NULL)
 						{
 							BattleType itemType = item->getRules()->getBattleType();
 							if (BT_GRENADE == itemType
@@ -954,7 +999,7 @@ void Inventory::mouseClick(Action* action, State* state)
 										// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
 										_game->pushState(new PrimeGrenadeState(
 																			_game,
-																			0,
+																			NULL,
 																			true,
 																			item,
 																			this)); // kL_add.
@@ -999,7 +1044,7 @@ void Inventory::mouseClick(Action* action, State* state)
 			if (_selItem->getSlot()->getType() == INV_GROUND)
 				_stackLevel[_selItem->getSlotX()][_selItem->getSlotY()] += 1;
 
-			setSelectedItem(0); // Return item to original position
+			setSelectedItem(NULL); // Return item to original position
 		}
 	}
 
@@ -1009,20 +1054,20 @@ void Inventory::mouseClick(Action* action, State* state)
 /**
  * Unloads the selected weapon, placing the gun
  * on the right hand and the ammo on the left hand.
- * @return The success of the weapon being unlaoded.
+ * @return The success of the weapon being unloaded.
  */
 bool Inventory::unload()
 {
-	if (_selItem == 0) // Must be holding an item
+	if (_selItem == NULL) // Must be holding an item
 		return false;
 
-	if (_selItem->getAmmoItem() == 0 // Item must be loaded
+	if (_selItem->getAmmoItem() == NULL // Item must be loaded
 		&& !_selItem->getRules()->getCompatibleAmmo()->empty())
 	{
 		_warning->showMessage(_game->getLanguage()->getString("STR_NO_AMMUNITION_LOADED"));
 	}
 
-	if (_selItem->getAmmoItem() == 0
+	if (_selItem->getAmmoItem() == NULL
 		|| !_selItem->needsAmmo())
 	{
 		return false;
@@ -1057,8 +1102,8 @@ bool Inventory::unload()
 				0,
 				0);
 		_selItem->moveToOwner(_selUnit);
-		_selItem->setAmmoItem(0);
-		setSelectedItem(0);
+		_selItem->setAmmoItem(NULL);
+		setSelectedItem(NULL);
 	}
 	else
 	{
@@ -1090,7 +1135,7 @@ void Inventory::arrangeGround(bool alterOffset)
 
 	_stackLevel.clear();
 
-	if (_selUnit != 0)
+	if (_selUnit != NULL)
 	{
 		// first move all items out of the way - a big number in X direction
 		for (std::vector<BattleItem*>::iterator
@@ -1136,7 +1181,7 @@ void Inventory::arrangeGround(bool alterOffset)
 																ground,
 																x + xd,
 																y + yd);
-							ok = (item == 0);
+							ok = (item == NULL);
 
 							if (canBeStacked(item, *i))
 								ok = true;
@@ -1249,17 +1294,26 @@ bool Inventory::canBeStacked(
 		BattleItem* itemA,
 		BattleItem* itemB)
 {
-	return (itemA != 0 && itemB != 0																	// both items actually exist
+	return (itemA != NULL && itemB != NULL																	// both items actually exist
 		&& itemA->getRules() == itemB->getRules()														// both items have the same ruleset
 		&& ((!itemA->getAmmoItem() && !itemB->getAmmoItem())											// either they both have no ammo
 			|| (itemA->getAmmoItem() && itemB->getAmmoItem()											// or they both have ammo
 				&& itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules()					// and the same ammo type
 				&& itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity()))	// and the same ammo quantity
 		&& itemA->getFuseTimer() == -1 && itemB->getFuseTimer() == -1									// and neither is set to explode
-		&& itemA->getUnit() == 0 && itemB->getUnit() == 0												// and neither is a corpse or unconscious unit
+		&& itemA->getUnit() == NULL && itemB->getUnit() == NULL												// and neither is a corpse or unconscious unit
 		&& itemA->getPainKillerQuantity() == itemB->getPainKillerQuantity()								// and if it's a medkit, it has the same number of charges
 		&& itemA->getHealQuantity() == itemB->getHealQuantity()
 		&& itemA->getStimulantQuantity() == itemB->getStimulantQuantity());
+}
+
+/**
+ * Shows a warning message.
+ * @param msg The message to show.
+ */
+void Inventory::showWarning(const std::wstring& msg)
+{
+	_warning->showMessage(msg);
 }
 
 /**

@@ -54,7 +54,8 @@ Soldier::Soldier(
 	:
 		_name(L""),
 		_id(id),
-		_improvement(0),
+		_gainPsiSkl(0),
+		_gainPsiStr(0),
 		_rules(rules),
 		_initialStats(),
 		_currentStats(),
@@ -154,7 +155,8 @@ void Soldier::load(
 	_kills			= node["kills"].as<int>(_kills);
 	_recovery		= node["recovery"].as<int>(_recovery);
 	_psiTraining	= node["psiTraining"].as<bool>(_psiTraining);
-	_improvement	= node["improvement"].as<int>(_improvement);
+	_gainPsiSkl		= node["gainPsiSkl"].as<int>(_gainPsiSkl);
+	_gainPsiStr		= node["gainPsiStr"].as<int>(_gainPsiStr);
 
 	Armor* armor = rule->getArmor(node["armor"].as<std::string>());
 	if (armor == 0)
@@ -211,7 +213,8 @@ YAML::Node Soldier::save() const
 	node["armor"]			= _armor->getType();
 	if (_psiTraining)
 		node["psiTraining"]	= _psiTraining;
-	node["improvement"]		= _improvement;
+	node["gainPsiSkl"]		= _gainPsiSkl;
+	node["gainPsiStr"]		= _gainPsiStr;
 
 	if (!_equipmentLayout.empty())
 	{
@@ -515,6 +518,35 @@ std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
  */
 void Soldier::trainPsi()
 {
+	int psiSkillCap = _rules->getStatCaps().psiSkill;
+	int psiStrengthCap = _rules->getStatCaps().psiStrength;
+
+	_gainPsiSkl = _gainPsiStr = 0;
+	// -10 days - tolerance threshold for switch from anytimePsiTraining option.
+	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
+	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
+		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
+	else if(_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
+	{
+		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
+		_gainPsiSkl = RNG::generate(_rules->getMaxStats().psiSkill, max);
+	}
+	else
+	{
+		if(_currentStats.psiSkill <= (psiSkillCap / 2)) _gainPsiSkl = RNG::generate(5, 12);
+		else if(_currentStats.psiSkill < psiSkillCap) _gainPsiSkl = RNG::generate(1, 3);
+
+		if (Options::allowPsiStrengthImprovement)
+		{
+			if(_currentStats.psiStrength <= (psiStrengthCap / 2)) _gainPsiStr = RNG::generate(5, 12);
+			else if(_currentStats.psiStrength < psiStrengthCap) _gainPsiStr = RNG::generate(1, 3);
+		}
+	}
+	_currentStats.psiSkill += _gainPsiSkl;
+	_currentStats.psiStrength += _gainPsiStr;
+	if(_currentStats.psiSkill > psiSkillCap) _currentStats.psiSkill = psiSkillCap;
+	if(_currentStats.psiStrength > psiStrengthCap) _currentStats.psiStrength = psiStrengthCap;
+/* kL_begin:
 // http://www.ufopaedia.org/index.php?title=Psi_Skill
 // -End of Month PsiLab Increase-
 // Skill	Range	Average
@@ -522,7 +554,7 @@ void Soldier::trainPsi()
 // 17-50	5-12	8.5
 // 51+		1-3		2.0
 
-	_improvement = 0;
+	_gainPsiSkl = 0;
 	int const psiCap = _rules->getStatCaps().psiSkill; // kL
 
 	// -10 days : tolerance threshold for switch from anytimePsiTraining option.
@@ -536,22 +568,22 @@ void Soldier::trainPsi()
 	else if (_currentStats.psiSkill < 17) // kL
 	{
 //kL		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
-//kL		_improvement = RNG::generate(_rules->getMaxStats().psiSkill, max);
-		_improvement = RNG::generate(16, 24);
+//kL		_gainPsiSkl = RNG::generate(_rules->getMaxStats().psiSkill, max);
+		_gainPsiSkl = RNG::generate(16, 24);
 	}
 //kL	else if (_currentStats.psiSkill <= _rules->getStatCaps().psiSkill / 2)
 //	else if (_currentStats.psiSkill <= _rules->getStatCaps().psiSkill / 4)		// kL
 	else if (_currentStats.psiSkill < 51)										// kL
 	{
-		_improvement = RNG::generate(5, 12);
+		_gainPsiSkl = RNG::generate(5, 12);
 	}
 //kL	else if (_currentStats.psiSkill < _rules->getStatCaps().psiSkill)
 	else if (_currentStats.psiSkill < psiCap)
 	{
-		_improvement = RNG::generate(1, 3);
+		_gainPsiSkl = RNG::generate(1, 3);
 	}
 
-	_currentStats.psiSkill += _improvement;
+	_currentStats.psiSkill += _gainPsiSkl;
 
 	if (_currentStats.psiSkill > psiCap)	// kL
 	{
@@ -562,6 +594,7 @@ void Soldier::trainPsi()
 	// when it was over 100 is to keep the soldier in training.
 //kL	if (_currentStats.psiSkill > 100)
 //kL		_currentStats.psiSkill = 100;
+*/ // kL_end.
 }
 
 /**
@@ -570,7 +603,7 @@ void Soldier::trainPsi()
  */
 void Soldier::trainPsi1Day()
 {
-	_improvement = 0; // was used in AllocatePsiTrainingState.
+	_gainPsiSkl = 0; // was used in AllocatePsiTrainingState.
 
 	if (!_psiTraining)
 		return;
@@ -578,7 +611,7 @@ void Soldier::trainPsi1Day()
 	int const psiSkill = _currentStats.psiSkill;
 	int const rulesMin = _rules->getMinStats().psiSkill;
 
-	if (psiSkill >= _rules->getStatCaps().psiSkill) // hard cap.
+	if (psiSkill >= _rules->getStatCaps().psiSkill) // hard cap. Note this auto-caps psiStrength also
 		return;
 	else if (psiSkill >= rulesMin) // Psi unlocked.
 	{
@@ -589,34 +622,34 @@ void Soldier::trainPsi1Day()
 									500 / psiSkill));
 		if (RNG::percent(chance))
 		{
-			++_improvement;
+			++_gainPsiSkl;
 			++_currentStats.psiSkill;
 		}
-	}
-/*	else if (psiSkill == rulesMin - 1) // ready to go
-	{
-		_improvement = RNG::generate(
-								rulesMin,
-								_rules->getMaxStats().psiSkill);
 
-		_currentStats.psiSkill = _improvement;
+		if (Options::allowPsiStrengthImprovement)
+		{
+			int const psiStrength = _currentStats.psiStrength;
+			chance = std::max(
+							1,
+							std::min(
+									100,
+									500 / psiStrength));
+			if (RNG::percent(chance))
+			{
+				++_gainPsiStr;
+				++_currentStats.psiStrength;
+			}
+		}
 	}
-	else // start here
-	{
-		if (RNG::percent(3)) // 3% per day per soldier (to become psionic-active)
-			_currentStats.psiSkill = rulesMin - 1;
-//		else
-//			_currentStats.psiSkill = rulesMin - 2;
-	} */
 	else // start here.
 	{
 		if (RNG::percent(3)) // 3% per day per soldier (to become psionic-active)
 		{
-			_improvement = RNG::generate(
+			_gainPsiSkl = RNG::generate(
 									rulesMin,
 									_rules->getMaxStats().psiSkill);
 
-			_currentStats.psiSkill =_initialStats.psiSkill = _improvement;
+			_currentStats.psiSkill =_initialStats.psiSkill = _gainPsiSkl;
 		}
 	}
 }
@@ -639,12 +672,21 @@ void Soldier::setPsiTraining()
 }
 
 /**
- * Gets this soldier's psionic improvement score during the current month.
+ * Gets this soldier's psiSkill improvement during the current month.
  * @return, psi-skill improvement
  */
 int Soldier::getImprovement()
 {
-	return _improvement;
+	return _gainPsiSkl;
+}
+
+/**
+ * Gets this soldier's psiStrength improvement during the current month.
+ * @return, psi-strength improvement
+ */
+int Soldier::getPsiStrImprovement()
+{
+	return _gainPsiStr;
 }
 
 /**
@@ -673,7 +715,7 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 	_psiTraining = false;
 	_recentlyPromoted = false;
 	_recovery = 0;
-	_improvement = 0; // kL
+	_gainPsiSkl = 0; // kL
 */
 
 	for (std::vector<EquipmentLayoutItem*>::iterator

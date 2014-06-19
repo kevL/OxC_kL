@@ -123,7 +123,7 @@ double Bar::getMax() const
  */
 void Bar::setValue(double value)
 {
-	_value = value;
+	_value = (value < 0.0)? 0.0 : value;
 	_redraw = true;
 }
 
@@ -142,7 +142,7 @@ double Bar::getValue() const
  */
 void Bar::setValue2(double value)
 {
-	_value2 = value;
+	_value2 = (value < 0.0)? 0.0 : value;
 	_redraw = true;
 }
 

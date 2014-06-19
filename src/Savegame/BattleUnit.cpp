@@ -89,6 +89,7 @@ BattleUnit::BattleUnit(
 		_expFiring(0),
 		_expThrowing(0),
 		_expPsiSkill(0),
+		_expPsiStrength(0),
 		_expMelee(0),
 		_motionPoints(0),
 		_kills(0),
@@ -326,6 +327,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_expFiring			= node["expFiring"].as<int>(_expFiring);
 	_expThrowing		= node["expThrowing"].as<int>(_expThrowing);
 	_expPsiSkill		= node["expPsiSkill"].as<int>(_expPsiSkill);
+	_expPsiStrength		= node["expPsiStrength"].as<int>(_expPsiStrength);
 	_expMelee			= node["expMelee"].as<int>(_expMelee);
 	_turretType			= node["turretType"].as<int>(_turretType);
 	_visible			= node["visible"].as<bool>(_visible);
@@ -379,6 +381,7 @@ YAML::Node BattleUnit::save() const
 	node["expFiring"]		= _expFiring;
 	node["expThrowing"]		= _expThrowing;
 	node["expPsiSkill"]		= _expPsiSkill;
+	node["expPsiStrength"]	= _expPsiStrength;
 	node["expMelee"]		= _expMelee;
 	node["turretType"]		= _turretType;
 	node["visible"]			= _visible;
@@ -2493,12 +2496,23 @@ void BattleUnit::addThrowingExp()
 }
 
 /**
- * Adds qty to the psionic exp counter.
- * @param (int)qty, Amount to add.
+ * Adds qty to the psiSkill exp counter.
+ * @param qty - amount to add
  */
-void BattleUnit::addPsiExp(int qty)
+void BattleUnit::addPsiSkillExp(int qty) // kL
 {
-	_expPsiSkill++;
+//kL	_expPsiSkill++;
+	_expPsiSkill += qty; // kL
+}
+
+/**
+ * Adds qty to the psiStrength exp counter.
+ * @param qty - amount to add
+ */
+void BattleUnit::addPsiStrengthExp(int qty) // kL
+{
+//kL	_expPsiStrength++;
+	_expPsiStrength += qty; // kL
 }
 
 /**
@@ -2573,6 +2587,12 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		stats->psiSkill += improveStat(_expPsiSkill);
 	}
 
+	if (_expPsiStrength
+		&& stats->psiStrength < caps.psiStrength)
+	{
+		stats->psiStrength += improveStat(_expPsiStrength);
+	}
+
 	if (_expThrowing
 		&& stats->throwing < caps.throwing)
 	{
@@ -2582,8 +2602,9 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 	if (_expBravery
 		|| _expReactions
 		|| _expFiring
-		|| _expMelee
-		|| _expPsiSkill)
+		|| _expMelee)
+//kL	|| _expPsiSkill
+//kL	|| _expPsiStrength)
 	{
 		if (soldier->getRank() == RANK_ROOKIE)
 			soldier->promoteRank();

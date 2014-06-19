@@ -53,7 +53,8 @@ private:
 	bool
 		_inBattlescape,
 		_inDogfight,
-		_lowFuel;
+		_lowFuel,
+		_mission;
 	int
 		_damage,
 		_fuel,
@@ -94,7 +95,7 @@ private:
 		/// Gets the craft's ruleset.
 		RuleCraft* getRules() const;
 		/// Sets the craft's ruleset.
-		void setRules(RuleCraft* rules);
+		void changeRules(RuleCraft* rules);
 
 		/// Gets the craft's ID.
 		int getId() const;
@@ -106,9 +107,9 @@ private:
 		/// Gets the craft's base.
 		Base* getBase() const;
 		/// Sets the craft's base.
-		void setBase(Base* base);
-		/// Sets the craft's base. (without setting the craft's coordinates)
-		void setBaseOnly(Base* base);
+		void setBase(
+				Base* base,
+				bool transfer = true);
 
 		/// Gets the craft's status.
 		std::string getStatus() const;
@@ -156,6 +157,12 @@ private:
 		bool getLowFuel() const;
 		/// Sets whether the craft is running out of fuel.
 		void setLowFuel(bool low);
+
+
+		/// Gets whether the craft has just finished a mission.
+		bool getMissionComplete() const;
+		/// Sets whether the craft has just finished a mission.
+		void setMissionComplete(bool mission);
 
 		/// Gets the craft's distance from its base.
 		double getDistanceFromBase() const;

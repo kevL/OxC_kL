@@ -124,6 +124,7 @@ private:
 		_expFiring,
 		_expMelee,
 		_expPsiSkill,
+		_expPsiStrength,
 		_expReactions,
 		_expThrowing,
 		_faceDirection, // used only during strafeing moves
@@ -486,8 +487,10 @@ private:
 		void addFiringExp();
 		/// Adds one to the throwing exp counter.
 		void addThrowingExp();
-		/// Adds qty to the psi exp counter.
-		void addPsiExp(int qty = 1); // kL
+		/// Adds qty to the psiSkill exp counter.
+		void addPsiSkillExp(int qty = 1); // kL
+		/// Adds qty to the psiStrength exp counter.
+		void addPsiStrengthExp(int qty = 1); // kL
 		/// Adds one to the melee exp counter.
 		void addMeleeExp();
 

@@ -166,6 +166,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtTitle->setBig();
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
+
 	std::wostringstream
 		ss1,
 		ss2,
@@ -176,29 +177,25 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
 //kL	_txtStatus->setWordWrap(true);
+
+	// kL: the Following has been re-worked.
 	std::string stat = _craft->getStatus();
 	std::wstring status;
-/*	if (_waypoint != 0)
-		status = tr("STR_INTERCEPTING_UFO").arg(_waypoint->getId());
-	else */
+
 	bool lowFuel = _craft->getLowFuel();
-	if (lowFuel)
-		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
-	// kL_begin: craft string, Based
-	else if (stat != "STR_OUT")
-/*				stat == "STR_READY"
-				|| stat == "STR_REPAIRS"
-				|| stat == "STR_REFUELLING"
-				|| stat == "STR_REARMING") */
-	{
+	bool missionComplete = _craft->getMissionComplete();
+
+	// note: Could add "DAMAGED - Return to Base" around here.
+	if (stat != "STR_OUT")
 		status = tr("STR_BASED");
-	}
-	// Could add "Damaged - returning to base" around here.
-	// kL_end.
-	else if (_craft->getDestination() == NULL)
-		status = tr("STR_PATROLLING");
+	else if (lowFuel)
+		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
+	else if (missionComplete)
+		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
 	else if (_craft->getDestination() == dynamic_cast<Target*>(_craft->getBase()))
 		status = tr("STR_RETURNING_TO_BASE");
+	else if (_craft->getDestination() == NULL)
+		status = tr("STR_PATROLLING");
 	else
 	{
 		Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
@@ -229,7 +226,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
 //kL	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed())));
-
 	// kL_begin: set craftSpeed to UFO when in chase.
 /*	std::wostringstream
 		ss1,
@@ -241,7 +237,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 	// kL_note: If in dogfight or more accurately in chase_mode, insert UFO speed.
 	else
 		ss1 << tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed(), L"", false)); */
-
 	_txtSpeed->setText(ss1.str());
 	// kL_end.
 
@@ -341,7 +336,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 	// kL_begin: set Base button visibility FALSE for already-Based crafts.
 	// note these could be set up there where status was set.....
 	if (stat != "STR_OUT"
-		|| lowFuel)
+		|| lowFuel
+		|| missionComplete)
 	{
 		_btnBase->setVisible(false);
 		_btnPatrol->setVisible(false);

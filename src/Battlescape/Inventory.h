@@ -54,7 +54,9 @@ private:
 		_groundOffset,
 		_primeGrenade; // kL
 
-	BattleItem* _selItem;
+	BattleItem
+		* _mouseOverItem,
+		* _selItem;
 	BattleUnit* _selUnit;
 	Game* _game;
 	NumberText* _stackNumber;
@@ -114,6 +116,11 @@ private:
 		/// Sets the currently selected item.
 		void setSelectedItem(BattleItem* item);
 
+		/// Gets the mouse over item.
+		BattleItem* getMouseOverItem() const;
+		/// Sets the mouse over item.
+		void setMouseOverItem(BattleItem* item);
+
 		/// Handles timers.
 		void think();
 
@@ -147,6 +154,9 @@ private:
 				RuleInventory* slot,
 				int x = 0,
 				int y = 0);
+
+		/// Shows a warning message.
+		void showWarning(const std::wstring& msg);
 
 		/// kL. Set grenade to show a warning in Inventory.
 		void setPrimeGrenade(int turn); // kL

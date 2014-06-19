@@ -22,6 +22,11 @@
 
 #include "../Engine/State.h"
 
+#include "../Interface/TextButton.h"
+
+#include "../Savegame/BattleItem.h"
+#include "../Savegame/EquipmentLayoutItem.h"
+
 
 namespace OpenXcom
 {
@@ -44,7 +49,7 @@ class InventoryState
 {
 
 private:
-	bool _tu;
+	const bool _tu;
 
 	BattlescapeState* _parent;
 	InteractiveSurface
@@ -53,7 +58,9 @@ private:
 		* _btnOk,
 		* _btnPrev,
 		* _btnRank,
-		* _btnUnload;
+		* _btnUnload,
+		* _btnCreateTemplate,
+		* _btnApplyTemplate;
 	Inventory* _inv;
 	SavedBattleGame* _battleGame;
 	Surface
@@ -73,6 +80,8 @@ private:
 		* _txtPSkill,
 		* _txtPStr;
 
+	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
+
 
 	public:
 		/// Creates the Inventory state.
@@ -87,23 +96,40 @@ private:
 		void init();
 		/// Updates the soldier info (Weight, TU).
 		void updateStats();
+
 		/// Saves the soldiers' equipment-layout.
 		void saveEquipmentLayout();
-		/// Handler for clicking the OK button.
 
+		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+
 		/// Handler for clicking the Previous soldier button.
 		void btnPrevClick(Action* action);
 		/// Handler for clicking the Next soldier button.
 		void btnNextClick(Action* action);
+
 		/// Handler for clicking the Unload weapon button.
 		void btnUnloadClick(Action* action);
+
 		/// Handler for clicking on the Ground -> button.
 		void btnGroundClick(Action* action);
+
 		/// Handler for clicking the Rank button.
 		void btnRankClick(Action* action);
+
+		/// Handler for clicking on the Create Template button.
+		void btnCreateTemplateClick(Action* action);
+		/// Handler for clicking the Apply Template button.
+		void btnApplyTemplateClick(Action* action);
+
 		/// Handler for clicking on inventory items.
 		void invClick(Action* action);
+
+		/// Handler for showing item info.
+		void invMouseOver(Action* action);
+		/// Handler for hiding item info.
+		void invMouseOut(Action* action);
+
 		/// Handles keypresses.
 		void handle(Action* action);
 };

@@ -520,10 +520,10 @@ void DebriefingState::prepareDebriefing()
 		aborted = battle->isAborted(),
 		success = !aborted;
 
-	Craft* craft = 0;
+	Craft* craft = NULL;
 	std::vector<Craft*>::iterator craftIterator;
 
-	Base* base = 0;
+	Base* base = NULL;
 
 	int soldierExit = 0; // if this stays 0 the craft is lost...
 	int soldierLive = 0; // if this stays 0 the craft is lost...
@@ -580,14 +580,14 @@ void DebriefingState::prepareDebriefing()
 				craft = *j;
 				craftIterator = j;
 				craft->returnToBase();
-				craft->setLowFuel(true);
+				craft->setMissionComplete(true);
 				craft->setInBattlescape(false);
 			}
 			else if ((*j)->getDestination() != 0)
 			{
-				Ufo* u = dynamic_cast<Ufo*>((*j)->getDestination());
-				if (u != 0
-					&& u->isInBattlescape())
+				Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestination());
+				if (ufo != NULL
+					&& ufo->isInBattlescape())
 				{
 					(*j)->returnToBase();
 				}
@@ -851,7 +851,7 @@ void DebriefingState::prepareDebriefing()
 			else if (origFaction == FACTION_PLAYER)
 			{
 				Soldier* soldier = save->getSoldier((*j)->getId());
-				if (soldier != 0) // xCom soldier.
+				if (soldier != NULL) // xCom soldier.
 				{
 					addStat(
 							"STR_XCOM_OPERATIVES_KILLED",
@@ -940,7 +940,7 @@ void DebriefingState::prepareDebriefing()
 
 					soldierExit++;
 
-					if (soldier != 0)
+					if (soldier != NULL)
 					{
 						recoverItems(
 								(*j)->getInventory(),
@@ -959,7 +959,7 @@ void DebriefingState::prepareDebriefing()
 						BattleItem* ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
 
 						if (!tankRule->getCompatibleAmmo()->empty()
-							&& ammoItem != 0
+							&& ammoItem != NULL
 							&& ammoItem->getAmmoQuantity() > 0)
 						{
 							base->getItems()->addItem(
@@ -975,7 +975,7 @@ void DebriefingState::prepareDebriefing()
 							1,
 							-value);
 
-					if (soldier != 0)
+					if (soldier != NULL)
 					{
 						for (std::vector<Soldier*>::iterator
 								i = base->getSoldiers()->begin();
@@ -1048,10 +1048,10 @@ void DebriefingState::prepareDebriefing()
 				addStat(
 						"STR_LIVE_ALIENS_RECOVERED",
 						1,
-						value * 2); // kL, duplicated in function below.
+						value); // kL, duplicated in function below.
 
 				RuleResearch* research = _game->getRuleset()->getResearch(type);
-				if (research != 0
+				if (research != NULL
 					&& save->isResearchAvailable(
 											research,
 											save->getDiscoveredResearch(),
@@ -1060,7 +1060,7 @@ void DebriefingState::prepareDebriefing()
 					addStat( // more points if it's not researched
 							"STR_LIVE_ALIENS_RECOVERED",
 							0,
-							value * 3); // kL, duplicated in function below.
+							value * 2); // kL, duplicated in function below.
 
 					if (base->getAvailableContainment() == 0)
 					{
@@ -1103,7 +1103,7 @@ void DebriefingState::prepareDebriefing()
 		}
 	}
 
-	if (craft != 0
+	if (craft != NULL
 		&& ((soldierExit == 0
 				&& aborted)
 			|| soldierLive == 0))
@@ -1132,7 +1132,7 @@ void DebriefingState::prepareDebriefing()
 		// all vehicle objects in the craft are also referenced by base->getVehicles() !!)
 		delete craft;
 
-		craft = 0; // To avoid a crash down there!!
+		craft = NULL; // To avoid a crash down there!!
 		base->getCrafts()->erase(craftIterator);
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 
@@ -1652,7 +1652,7 @@ void DebriefingState::recoverItems(
 					addStat(
 							"STR_ALIEN_CORPSES_RECOVERED",
 							1,
-							(*it)->getUnit()->getValue() / 5); // kL
+							(*it)->getUnit()->getValue() / 3); // kL
 
 					base->getItems()->addItem((*it)->getRules()->getName());
 				}
@@ -1664,7 +1664,7 @@ void DebriefingState::recoverItems(
 						addStat(
 								"STR_LIVE_ALIENS_RECOVERED",
 								1,
-								(*it)->getUnit()->getValue() * 2); // kL, duplicated above.
+								(*it)->getUnit()->getValue()); // kL, duplicated above.
 
 						if (_game->getSavedGame()->isResearchAvailable(
 								_game->getRuleset()->getResearch((*it)->getUnit()->getType()),
@@ -1674,7 +1674,7 @@ void DebriefingState::recoverItems(
 							addStat( // more points if it's not researched
 									"STR_LIVE_ALIENS_RECOVERED",
 									0,
-									(*it)->getUnit()->getValue() * 3); // kL, duplicated above.
+									(*it)->getUnit()->getValue() * 2); // kL, duplicated above.
 
 							if (base->getAvailableContainment() == 0)
 							{

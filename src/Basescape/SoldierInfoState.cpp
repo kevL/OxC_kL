@@ -431,112 +431,193 @@ void SoldierInfoState::init()
 //kL	_edtSoldier->setBig();
 	_edtSoldier->setText(_soldier->getName());
 
-	UnitStats* initial = _soldier->getInitStats();
-	UnitStats* current = _soldier->getCurrentStats();
-
 	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_soldier->getRankSprite())->setX(0);
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
 
+
+	UnitStats* initial = _soldier->getInitStats();
+	UnitStats* current = _soldier->getCurrentStats();
+
+	UnitStats armored (*current); // init.
+	armored += *(_soldier->getArmor()->getStats());
+
+	// kL: special handling for stats that could go below initial setting.
 	std::wostringstream ss;
 
-	ss << current->tu;
+	ss << armored.tu;
 	_numTimeUnits->setText(ss.str());
-	if (current->tu > initial->tu)
-	{
-		_barTimeUnits->setMax(current->tu);
-		_barTimeUnits->setValue2(initial->tu);
-	}
-	else
-	{
+	_barTimeUnits->setValue(armored.tu);
+	if (initial->tu > current->tu)
 		_barTimeUnits->setMax(initial->tu);
-		_barTimeUnits->setValue2(current->tu);
+	else
+		_barTimeUnits->setMax(current->tu);
+
+	if (armored.tu > initial->tu)
+		_barTimeUnits->setValue2(initial->tu);
+	else
+	{
+		if (armored.tu > current->tu)
+			_barTimeUnits->setValue2(current->tu);
+		else
+			_barTimeUnits->setValue2(armored.tu);
 	}
-	_barTimeUnits->setValue(current->tu);
 
 	ss.str(L"");
-	ss << current->stamina;
+	ss << armored.stamina;
 	_numStamina->setText(ss.str());
-	if (current->stamina > initial->stamina)
-	{
-		_barStamina->setMax(current->stamina);
-		_barStamina->setValue2(initial->stamina);
-	}
-	else
-	{
+	_barStamina->setValue(armored.stamina);
+	if (initial->stamina > current->stamina)
 		_barStamina->setMax(initial->stamina);
-		_barStamina->setValue2(current->stamina);
+	else
+		_barStamina->setMax(current->stamina);
+
+	if (armored.stamina > initial->stamina)
+		_barStamina->setValue2(initial->stamina);
+	else
+	{
+		if (armored.stamina > current->stamina)
+			_barStamina->setValue2(current->stamina);
+		else
+			_barStamina->setValue2(armored.stamina);
 	}
-	_barStamina->setValue(current->stamina);
 
 	ss.str(L"");
-	ss << current->health;
+	ss << armored.health;
 	_numHealth->setText(ss.str());
-	if (current->health > initial->health)
-	{
-		_barHealth->setMax(current->health);
-		_barHealth->setValue2(initial->health);
-	}
-	else
-	{
+	_barHealth->setValue(armored.health);
+	if (initial->health > current->health)
 		_barHealth->setMax(initial->health);
-		_barHealth->setValue2(current->health);
-	}
-	_barHealth->setValue(current->health);
+	else
+		_barHealth->setMax(current->health);
 
-	ss.str(L"");
-	ss << current->bravery;
-	_numBravery->setText(ss.str());
-	_barBravery->setMax(current->bravery);
-	_barBravery->setValue(current->bravery);
-	_barBravery->setValue2(initial->bravery);
-
-	ss.str(L"");
-	ss << current->reactions;
-	_numReactions->setText(ss.str());
-	_barReactions->setMax(current->reactions);
-	_barReactions->setValue(current->reactions);
-	_barReactions->setValue2(initial->reactions);
-
-	ss.str(L"");
-	ss << current->firing;
-	_numFiring->setText(ss.str());
-	_barFiring->setMax(current->firing);
-	_barFiring->setValue(current->firing);
-	_barFiring->setValue2(initial->firing);
-
-	ss.str(L"");
-	ss << current->throwing;
-	_numThrowing->setText(ss.str());
-	_barThrowing->setMax(current->throwing);
-	_barThrowing->setValue(current->throwing);
-	_barThrowing->setValue2(initial->throwing);
-
-	ss.str(L"");
-	ss << current->melee;
-	_numMelee->setText(ss.str());
-	_barMelee->setMax(current->melee);
-	_barMelee->setValue(current->melee);
-	_barMelee->setValue2(initial->melee);
-
-	ss.str(L"");
-	ss << current->strength;
-	_numStrength->setText(ss.str());
-	if (current->strength > initial->strength)
-	{
-		_barStrength->setMax(current->strength);
-		_barStrength->setValue2(initial->strength);
-	}
+	if (armored.health > initial->health)
+		_barHealth->setValue2(initial->health);
 	else
 	{
-		_barStrength->setMax(initial->strength);
-		_barStrength->setValue2(current->strength);
+		if (armored.health > current->health)
+			_barHealth->setValue2(current->health);
+		else
+			_barHealth->setValue2(armored.health);
 	}
-	_barStrength->setValue(current->strength);
+
+	ss.str(L"");
+	ss << armored.bravery;
+	_numBravery->setText(ss.str());
+	_barBravery->setValue(armored.bravery);
+	if (initial->bravery > current->bravery)
+		_barBravery->setMax(initial->bravery);
+	else
+		_barBravery->setMax(current->bravery);
+
+	if (armored.bravery > initial->bravery)
+		_barBravery->setValue2(initial->bravery);
+	else
+	{
+		if (armored.bravery > current->bravery)
+			_barBravery->setValue2(current->bravery);
+		else
+			_barBravery->setValue2(armored.bravery);
+	}
+
+	ss.str(L"");
+	ss << armored.reactions;
+	_numReactions->setText(ss.str());
+	_barReactions->setValue(armored.reactions);
+	if (initial->reactions > current->reactions)
+		_barReactions->setMax(initial->reactions);
+	else
+		_barReactions->setMax(current->reactions);
+
+	if (armored.reactions > initial->reactions)
+		_barReactions->setValue2(initial->reactions);
+	else
+	{
+		if (armored.reactions > current->reactions)
+			_barReactions->setValue2(current->reactions);
+		else
+			_barReactions->setValue2(armored.reactions);
+	}
+
+	ss.str(L"");
+	ss << armored.firing;
+	_numFiring->setText(ss.str());
+	_barFiring->setValue(armored.firing);
+	if (initial->firing > current->firing)
+		_barFiring->setMax(initial->firing);
+	else
+		_barFiring->setMax(current->firing);
+
+	if (armored.firing > initial->firing)
+		_barFiring->setValue2(initial->firing);
+	else
+	{
+		if (armored.firing > current->firing)
+			_barFiring->setValue2(current->firing);
+		else
+			_barFiring->setValue2(armored.firing);
+	}
+
+	ss.str(L"");
+	ss << armored.throwing;
+	_numThrowing->setText(ss.str());
+	_barThrowing->setValue(armored.throwing);
+	if (initial->throwing > current->throwing)
+		_barThrowing->setMax(initial->throwing);
+	else
+		_barThrowing->setMax(current->throwing);
+
+	if (armored.throwing > initial->throwing)
+		_barThrowing->setValue2(initial->throwing);
+	else
+	{
+		if (armored.throwing > current->throwing)
+			_barThrowing->setValue2(current->throwing);
+		else
+			_barThrowing->setValue2(armored.throwing);
+	}
+
+	ss.str(L"");
+	ss << armored.melee;
+	_numMelee->setText(ss.str());
+	_barMelee->setValue(armored.melee);
+	if (initial->melee > current->melee)
+		_barMelee->setMax(initial->melee);
+	else
+		_barMelee->setMax(current->melee);
+
+	if (armored.melee > initial->melee)
+		_barMelee->setValue2(initial->melee);
+	else
+	{
+		if (armored.melee > current->melee)
+			_barMelee->setValue2(current->melee);
+		else
+			_barMelee->setValue2(armored.melee);
+	}
+
+	ss.str(L"");
+	ss << armored.strength;
+	_numStrength->setText(ss.str());
+	_barStrength->setValue(armored.strength);
+	if (initial->strength > current->strength)
+		_barStrength->setMax(initial->strength);
+	else
+		_barStrength->setMax(current->strength);
+
+	if (armored.strength > initial->strength)
+		_barStrength->setValue2(initial->strength);
+	else
+	{
+		if (armored.strength > current->strength)
+			_barStrength->setValue2(current->strength);
+		else
+			_barStrength->setValue2(armored.strength);
+	}
 
 
-//	if (_base != 0) // kL
+//	if (_base != NULL) // kL
 //	{
 	std::wstring
 		armor,
@@ -548,12 +629,12 @@ void SoldierInfoState::init()
 	if (_soldier->getCraft()
 		&& _soldier->getCraft()->getStatus() == "STR_OUT")
 	{
-		_btnArmor->setColor(Palette::blockOffset(4)+9);
+		_btnArmor->setColor(Palette::blockOffset(4)+8);
 	}
 	else
 		_btnArmor->setColor(Palette::blockOffset(15)+6);
 
-	if (_soldier->getCraft() == 0)
+	if (_soldier->getCraft() == NULL)
 		craft = tr("STR_NONE_UC");
 	else
 		craft = _soldier->getCraft()->getName(_game->getLanguage());
@@ -580,11 +661,23 @@ void SoldierInfoState::init()
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
 		ss.str(L"");
-		ss << current->psiStrength;
+		ss << armored.psiStrength;
 		_numPsiStrength->setText(ss.str());
-		_barPsiStrength->setMax(current->psiStrength);
-		_barPsiStrength->setValue(current->psiStrength);
-		_barPsiStrength->setValue2(initial->psiStrength);
+		_barPsiStrength->setValue(armored.psiStrength);
+		if (initial->psiStrength > current->psiStrength)
+			_barPsiStrength->setMax(initial->psiStrength);
+		else
+			_barPsiStrength->setMax(current->psiStrength);
+
+		if (armored.psiStrength > initial->psiStrength)
+			_barPsiStrength->setValue2(initial->psiStrength);
+		else
+		{
+			if (armored.psiStrength > current->psiStrength)
+				_barPsiStrength->setValue2(current->psiStrength);
+			else
+				_barPsiStrength->setValue2(armored.psiStrength);
+		}
 
 		_txtPsiStrength->setVisible(true);
 		_numPsiStrength->setVisible(true);
@@ -600,13 +693,24 @@ void SoldierInfoState::init()
 	if (current->psiSkill >= minPsi)
 	{
 		ss.str(L"");
-		ss << current->psiSkill;
+		ss << armored.psiSkill;
 		_numPsiSkill->setText(ss.str());
-		_barPsiSkill->setMax(current->psiSkill);
-		_barPsiSkill->setValue(current->psiSkill);
-		_barPsiSkill->setValue2(0.0); // kL
-//		_barPsiSkill->setValue2(current->psiSkill); // kL
-//kL		_barPsiSkill->setValue2(current->psiSkill - _soldier->getImprovement());
+		_barPsiSkill->setValue(armored.psiSkill);
+//		_barPsiSkill->setValue2(0.0); // kL
+		if (initial->psiSkill > current->psiSkill)
+			_barPsiSkill->setMax(initial->psiSkill);
+		else
+			_barPsiSkill->setMax(current->psiSkill);
+
+		if (armored.psiSkill > initial->psiSkill)
+			_barPsiSkill->setValue2(initial->psiSkill);
+		else
+		{
+			if (armored.psiSkill > current->psiSkill)
+				_barPsiSkill->setValue2(current->psiSkill);
+			else
+				_barPsiSkill->setValue2(armored.psiSkill);
+		}
 
 		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);

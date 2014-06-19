@@ -73,6 +73,7 @@ Craft::Craft(
 		_weapons(),
 		_status("STR_READY"),
 		_lowFuel(false),
+		_mission(false),
 		_inBattlescape(false),
 		_inDogfight(false),
 		_name(L"")
@@ -265,6 +266,7 @@ void Craft::load(
 
 	_status				= node["status"].as<std::string>(_status);
 	_lowFuel			= node["lowFuel"].as<bool>(_lowFuel);
+	_mission			= node["mission"].as<bool>(_mission);
 	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
 	_interceptionOrder	= node["interceptionOrder"].as<int>(_interceptionOrder);
 	_takeoff			= node["takeoff"].as<int>(_takeoff);
@@ -319,10 +321,14 @@ YAML::Node Craft::save() const
 	if (_lowFuel)
 		node["lowFuel"] = _lowFuel;
 
+	if (_mission)
+		node["mission"] = _mission;
+
 	if (_inBattlescape)
 		node["inBattlescape"] = _inBattlescape;
 
-	node["interceptionOrder"] = _interceptionOrder;
+	if (_interceptionOrder != 0)
+		node["interceptionOrder"] = _interceptionOrder;
 
 	if (_takeoff != 0)
 		node["takeoff"] = _takeoff;
@@ -359,9 +365,9 @@ RuleCraft* Craft::getRules() const
 /**
  * Changes the ruleset for a craft's type.
  * @param rules - pointer to a different ruleset
- * @warning NOT TO BE USED IN NORMAL CIRCUMSTANCES
+ * @warning ONLY FOR NEW BATTLE USE!
  */
-void Craft::setRules(RuleCraft* rules)
+void Craft::changeRules(RuleCraft* rules)
 {
 	_rules = rules;
 	_weapons.clear();
@@ -418,23 +424,20 @@ Base* Craft::getBase() const
 
 /**
  * Changes the base the craft belongs to.
- * @param base Pointer to base.
+ * @param base		- pointer to base
+ * @param transfer	- move the craft to the base coordinates
  */
-void Craft::setBase(Base* base)
+void Craft::setBase(
+		Base* base,
+		bool transfer)
 {
 	_base = base;
 
-	_lon = base->getLongitude();
-	_lat = base->getLatitude();
-}
-
-/**
- * Changes the base the craft belongs to (without setting the craft's coordinates).
- * @param base Pointer to base.
- */
-void Craft::setBaseOnly(Base* base)
-{
-	_base = base;
+	if (transfer)
+	{
+		_lon = base->getLongitude();
+		_lat = base->getLatitude();
+	}
 }
 
 /**
@@ -716,6 +719,26 @@ void Craft::setLowFuel(bool low)
 }
 
 /**
+ * Returns whether the craft has just done a ground mission,
+ * and is forced to return to base.
+ * @return True if it's returning, false otherwise.
+ */
+bool Craft::getMissionComplete() const
+{
+	return _mission;
+}
+
+/**
+ * Changes whether the craft has just done a ground mission,
+ * and is forced to return to base.
+ * @param mission True if it's returning, false otherwise.
+ */
+void Craft::setMissionComplete(bool mission)
+{
+	_mission = mission;
+}
+
+/**
  * Returns the current distance between the craft and the base it belongs to.
  * @return Distance in radian.
  */
@@ -787,6 +810,7 @@ void Craft::think()
 		setDestination(0);
 		setSpeed(0);
 		_lowFuel = false;
+		_mission = false;
 		_takeoff = 0;
 	}
 }

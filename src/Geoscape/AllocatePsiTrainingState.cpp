@@ -142,9 +142,9 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 //kL	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick, 0);
 	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick); // kL
 
-	reinit(); // kL
-
-/*kL	int row = 0;
+	reinit(); // kL -> might not need this at all ... is init() called auto by the engine
+/*kL
+	int row = 0;
 	for (std::vector<Soldier*>::const_iterator
 			soldier = base->getSoldiers()->begin();
 			soldier != base->getSoldiers()->end();
@@ -160,7 +160,10 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 			|| (Options::psiStrengthEval
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
-//kL			ssStr << L"   " << (*soldier)->getCurrentStats()->psiStrength;
+//kL		ssStr << L"   " << (*soldier)->getCurrentStats()->psiStrength;
+//kL		if (Options::allowPsiStrengthImprovement)
+//kL			ssStr << "/+" << (*s)->getPsiStrImprovement();
+
 			ssStr << ((*soldier)->getCurrentStats()->psiStrength); // kL
 		}
 		else
@@ -169,7 +172,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(
 		if ((*soldier)->getCurrentStats()->psiSkill > 0)
 			ssSkl << (*soldier)->getCurrentStats()->psiSkill; //kL << "/+" << (*soldier)->getImprovement();
 		else
-			ssSkl << "0";
+			ssSkl << "0"; // <- L"" ?
 
 		if ((*soldier)->isInPsiTraining())
 		{
@@ -208,7 +211,10 @@ AllocatePsiTrainingState::~AllocatePsiTrainingState()
  */
 void AllocatePsiTrainingState::reinit()
 {
+	State::init(); // kL
+
 	_lstSoldiers->clearList();
+
 	int row = 0;
 
 	for (std::vector<Soldier*>::const_iterator
@@ -225,7 +231,7 @@ void AllocatePsiTrainingState::reinit()
 
 		int minPsi = (*soldier)->getRules()->getMinStats().psiSkill; // kL
 
-//kL		if ((*soldier)->getCurrentStats()->psiSkill > 0
+//kL	if ((*soldier)->getCurrentStats()->psiSkill > 0
 		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi // kL
 			|| (Options::psiStrengthEval
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
@@ -235,12 +241,12 @@ void AllocatePsiTrainingState::reinit()
 		else
 			ssStr << tr("STR_UNKNOWN").c_str();
 
-//kL		if ((*soldier)->getCurrentStats()->psiSkill > 0)
+//kL	if ((*soldier)->getCurrentStats()->psiSkill > 0)
 		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi) // kL
 			ssSkl << (*soldier)->getCurrentStats()->psiSkill; //kL << "/+" << (*soldier)->getImprovement();
 		else
 		{
-//kL			ssSkl << "0/+0";
+//kL		ssSkl << "0/+0";
 //			ssSkl << "0"; // kL
 			ssSkl << tr("STR_UNKNOWN").c_str(); // kL
 		}

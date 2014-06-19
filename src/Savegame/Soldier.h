@@ -82,7 +82,8 @@ private:
 		_recentlyPromoted;
 	int
 		_id,
-		_improvement,
+		_gainPsiSkl,
+		_gainPsiStr,
 		_kills,
 		_missions,
 		_recovery;
@@ -195,10 +196,12 @@ private:
 		void trainPsi1Day();
 		/// Returns whether the unit is in psi training or not
 		bool isInPsiTraining();
-		/// set the psi training status
+		/// Sets the psi training status
 		void setPsiTraining();
-		/// returns this soldier's psionic improvement score for this month.
+		/// Gets this soldier's psiSkill improvement score for this month.
 		int getImprovement();
+		/// Gets this soldier's psiStrength improvement score for this month.
+		int getPsiStrImprovement();
 
 		/// Gets the soldier death time.
 //kL		SoldierDeath* getDeath() const;
@@ -206,7 +209,7 @@ private:
 //kL		void die(SoldierDeath* death);
 		SoldierDead* die(SoldierDeath* death);
 
-		/// Calculate statString.
+		/// Calculates a statString.
 		void calcStatString(
 				const std::vector<StatString*>& statStrings,
 				bool psiStrengthEval);

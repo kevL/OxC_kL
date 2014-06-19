@@ -5169,7 +5169,13 @@ bool TileEngine::psiAttack(BattleAction* action)
 		attack /= 56.0;
 
 		if (action->actor->getOriginalFaction() == FACTION_PLAYER)
-			action->actor->addPsiExp();
+			action->actor->addPsiSkillExp();
+
+		if (victim->getOriginalFaction() == FACTION_PLAYER
+			&& Options::allowPsiStrengthImprovement)
+		{
+			victim->addPsiStrengthExp();
+		}
 
 		int success = static_cast<int>(attack);
 
@@ -5189,7 +5195,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 		{
 			//Log(LOG_INFO) << ". . Success";
 			if (action->actor->getOriginalFaction() == FACTION_PLAYER)
-				action->actor->addPsiExp(2);
+				action->actor->addPsiSkillExp(2);
 
 			if (action->type == BA_PANIC)
 			{
@@ -5239,6 +5245,11 @@ bool TileEngine::psiAttack(BattleAction* action)
 			}
 			//Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
 			return true;
+		}
+		else if (victim->getOriginalFaction() == FACTION_PLAYER
+			&& Options::allowPsiStrengthImprovement)
+		{
+			victim->addPsiStrengthExp(2);
 		}
 	}
 	//Log(LOG_INFO) << "TileEngine::psiAttack() ret FALSE";

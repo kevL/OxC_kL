@@ -38,6 +38,7 @@
 //kL #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 //kL #include "../Engine/Screen.h"
+#include "../Engine/Sound.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -51,9 +52,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 
-#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Savegame/EquipmentLayoutItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
@@ -62,6 +61,11 @@
 
 namespace OpenXcom
 {
+
+static const int _templateBtnX			= 288;
+static const int _createTemplateBtnY	= 90;
+static const int _applyTemplateBtnY		= 113;
+
 
 /**
  * Initializes all the elements in the Inventory screen.
@@ -127,6 +131,9 @@ InventoryState::InventoryState(
 
 	_btnRank	= new InteractiveSurface(26, 23, 0, 0);
 
+	_btnCreateTemplate	= new InteractiveSurface(32, 22, _templateBtnX, _createTemplateBtnY);
+	_btnApplyTemplate	= new InteractiveSurface(32, 22, _templateBtnX, _applyTemplateBtnY);
+
 	_selAmmo	= new Surface(
 						RuleInventory::HAND_W * RuleInventory::SLOT_W,
 						RuleInventory::HAND_H * RuleInventory::SLOT_H,
@@ -164,6 +171,8 @@ InventoryState::InventoryState(
 	add(_btnUnload);
 	add(_btnGround);
 	add(_btnRank);
+	add(_btnCreateTemplate);
+	add(_btnApplyTemplate);
 	add(_selAmmo);
 	add(_inv);
 
@@ -237,10 +246,39 @@ InventoryState::InventoryState(
 	_btnGround->onMouseClick((ActionHandler)& InventoryState::btnGroundClick);
 	_btnRank->onMouseClick((ActionHandler)& InventoryState::btnRankClick);
 
+	_btnCreateTemplate->onMouseClick((ActionHandler)& InventoryState::btnCreateTemplateClick);
+	_btnCreateTemplate->onKeyboardPress(
+						(ActionHandler)& InventoryState::btnCreateTemplateClick,
+						Options::keyInvCreateTemplate);
+	_btnApplyTemplate->onMouseClick((ActionHandler)& InventoryState::btnApplyTemplateClick);
+	_btnApplyTemplate->onKeyboardPress(
+						(ActionHandler)& InventoryState::btnApplyTemplateClick,
+						Options::keyInvApplyTemplate);
+
+	if (_tu) // only use copy/paste buttons in setup (i.e. non-tu) mode
+	{
+		_btnCreateTemplate->setVisible(false);
+		_btnApplyTemplate->setVisible(false);
+	}
+	else
+	{
+		Surface* createTemplateIcon = _game->getResourcePack()->getSurface("InvCopy");
+		createTemplateIcon->setX(_templateBtnX);
+		createTemplateIcon->setY(_createTemplateBtnY);
+		createTemplateIcon->blit(_bg);
+
+		Surface* applyTemplateIcon = _game->getResourcePack()->getSurface("InvPasteEmpty");
+		applyTemplateIcon->setX(_templateBtnX);
+		applyTemplateIcon->setY(_applyTemplateBtnY);
+		applyTemplateIcon->blit(_bg);
+	}
+
 	_inv->draw();
 	_inv->setTuMode(_tu);
 	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)& InventoryState::invClick, 0);
+	_inv->onMouseOver((ActionHandler)& InventoryState::invMouseOver);
+	_inv->onMouseOut((ActionHandler)& InventoryState::invMouseOut);
 
 	_txtWeight->setVisible(Options::showMoreStatsInInventoryView);
 	_txtTus->setVisible(_tu);
@@ -258,8 +296,26 @@ InventoryState::InventoryState(
 /**
  *
  */
+static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*>& inventoryTemplate)
+{
+	std::vector<EquipmentLayoutItem*>::iterator i;
+	for (
+			i = inventoryTemplate.begin();
+			i != inventoryTemplate.end();
+			)
+	{
+		delete *i;
+		i = inventoryTemplate.erase(i);
+	}
+}
+
+/**
+ *
+ */
 InventoryState::~InventoryState()
 {
+	_clearInventoryTemplate(_curInventoryTemplate);
+
 	// kL_begin:
 	if (_parent)
 	{
@@ -310,9 +366,9 @@ void InventoryState::init()
 	State::init();
 
 	BattleUnit* unit = _battleGame->getSelectedUnit();
-	if (unit == 0) // no selected unit, close inventory
+	if (unit == NULL) // no selected unit, close inventory
 	{
-		btnOkClick(0);
+		btnOkClick(NULL);
 
 		//Log(LOG_INFO) << ". early out <- no selectedUnit";
 		return;
@@ -336,7 +392,7 @@ void InventoryState::init()
 		if (//kL _battleGame->getSelectedUnit() == 0 ||			// no available unit, Checked above.
 			 !_battleGame->getSelectedUnit()->hasInventory())	// so close inventory
 		{
-			btnOkClick(0);
+			btnOkClick(NULL);
 
 			//Log(LOG_INFO) << ". . . early out <- no selectedUnit w/ Inventory";
 			return; // starting a mission with just vehicles
@@ -513,7 +569,7 @@ void InventoryState::saveEquipmentLayout()
 void InventoryState::btnOkClick(Action*)
 {
 	//Log(LOG_INFO) << "InventoryState::btnOkClick()";
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != NULL)
 		return;
 
 	_game->popState();
@@ -553,7 +609,7 @@ void InventoryState::btnOkClick(Action*)
  */
 void InventoryState::btnPrevClick(Action*)
 {
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != NULL)
 		return;
 
 	if (_parent)
@@ -576,7 +632,7 @@ void InventoryState::btnPrevClick(Action*)
  */
 void InventoryState::btnNextClick(Action*)
 {
-	if (_inv->getSelectedItem() != 0)
+	if (_inv->getSelectedItem() != NULL)
 		return;
 
 	if (_parent)
@@ -634,18 +690,160 @@ void InventoryState::btnRankClick(Action*)
 }
 
 /**
+ *
+ */
+void InventoryState::btnCreateTemplateClick(Action* action)
+{
+	if (_inv->getSelectedItem() != NULL) // don't accept clicks when moving items
+		return;
+
+	_clearInventoryTemplate(_curInventoryTemplate); // clear current template
+
+	// Copy inventory instead of just keeping a pointer to it. This way
+	// create/apply can be used as an undo button for a single unit and will
+	// also work as expected if inventory is modified after 'create' is clicked.
+	std::vector<BattleItem*>* unitInv = _battleGame->getSelectedUnit()->getInventory();
+	for (std::vector<BattleItem*>::iterator
+			j = unitInv->begin();
+			j != unitInv->end();
+			++j)
+	{
+		std::string ammo;
+		if ((*j)->needsAmmo()
+			&& (*j)->getAmmoItem())
+		{
+			ammo = (*j)->getAmmoItem()->getRules()->getType();
+		}
+		else
+			ammo = "NONE";
+
+		_curInventoryTemplate.push_back(new EquipmentLayoutItem(
+															(*j)->getRules()->getType(),
+															(*j)->getSlot()->getId(),
+															(*j)->getSlotX(),
+															(*j)->getSlotY(),
+															ammo,
+															(*j)->getFuseTimer()));
+	}
+
+	if (_curInventoryTemplate.empty()) // use "empty template" icons
+	{
+		Surface* createTemplateIcon = _game->getResourcePack()->getSurface("InvCopy");
+		createTemplateIcon->setX(_templateBtnX);
+		createTemplateIcon->setY(_createTemplateBtnY);
+		createTemplateIcon->blit(_bg);
+
+		Surface* applyTemplateIcon = _game->getResourcePack()->getSurface("InvPasteEmpty");
+		applyTemplateIcon->setX(_templateBtnX);
+		applyTemplateIcon->setY(_applyTemplateBtnY);
+		applyTemplateIcon->blit(_bg);
+	}
+	else // use "active template" icons
+	{
+		Surface* createTemplateIcon = _game->getResourcePack()->getSurface("InvCopyActive");
+		createTemplateIcon->setX(_templateBtnX);
+		createTemplateIcon->setY(_createTemplateBtnY);
+		createTemplateIcon->blit(_bg);
+
+		Surface* applyTemplateIcon = _game->getResourcePack()->getSurface("InvPaste");
+		applyTemplateIcon->setX(_templateBtnX);
+		applyTemplateIcon->setY(_applyTemplateBtnY);
+		applyTemplateIcon->blit(_bg);
+	}
+}
+
+/**
+ *
+ */
+void InventoryState::btnApplyTemplateClick(Action* action)
+{
+	if (_inv->getSelectedItem() != NULL) // don't accept clicks when moving items
+		return;
+
+	BattleUnit* unit = _battleGame->getSelectedUnit();
+	std::vector<BattleItem*>* unitInv = unit->getInventory();
+
+	Tile* groundTile = unit->getTile();
+	std::vector<BattleItem*>* groundInv = groundTile->getInventory();
+
+	RuleInventory* groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
+
+	for (std::vector<BattleItem*>::iterator // clear unit's inventory (i.e. move everything to the ground)
+			i = unitInv->begin();
+			i != unitInv->end();
+			)
+	{
+		(*i)->setOwner(NULL);
+		groundTile->addItem(
+						*i,
+						groundRuleInv);
+
+		i = unitInv->erase(i);
+	}
+
+	// Attempt to replicate inventory template by grabbing corresponding items
+	// from the ground. If any item is not found on the ground, display warning
+	// message, but continue attempting to fulfill the template as best we can.
+	bool itemMissing = false;
+
+	std::vector<EquipmentLayoutItem*>::iterator i;
+	for (
+			i = _curInventoryTemplate.begin();
+			i != _curInventoryTemplate.end();
+			++i)
+	{
+		bool found = false; // search for template item in ground inventory
+
+		std::vector<BattleItem*>::iterator j;
+		for (
+				j = groundInv->begin();
+				j != groundInv->end();
+				++j)
+		{
+			if ((*i)->getItemType() == (*j)->getRules()->getType())
+			{
+				// Move matched item from ground to the appropriate inv slot.
+				// Note that this doesn't attempt to match the isLoaded status of
+				// ammo-bearing weapons; presumably as many weapons as possible
+				// were already loaded when the battlescape was generated.
+				(*j)->setOwner(unit);
+				(*j)->setSlot(_game->getRuleset()->getInventory((*i)->getSlot()));
+				(*j)->setSlotX((*i)->getSlotX());
+				(*j)->setSlotY((*i)->getSlotY());
+
+				unitInv->push_back(*j);
+				groundInv->erase(j);
+
+				found = true;
+
+				break;
+			}
+		}
+
+		if (!found)
+			itemMissing = true;
+	}
+
+	if (itemMissing)
+	{
+		// TODO: _inv.showWarning(_game->getLanguage()->getString("STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE"));
+//		_inv->showWarning(L"Equipment on ground insufficient to fulfill requested template");
+		_inv->showWarning(L"lack of ground equipment");
+	}
+
+	_inv->arrangeGround(false); // refresh ui
+	updateStats();
+
+	_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play(); // give audio feedback
+}
+
+/**
  * Updates item info.
  * @param action, Pointer to an action.
  */
 void InventoryState::invClick(Action*)
 {
 	BattleItem* item = _inv->getSelectedItem();
-
-	_txtItem->setText(L"");
-	_txtAmmo->setText(L"");
-
-	_selAmmo->clear();
-
 	if (item != 0)
 	{
 		RuleItem* itemRule = item->getRules();
@@ -666,9 +864,9 @@ void InventoryState::invClick(Action*)
 				label << tr("STR_ALIEN_ARTIFACT");
 		}
 
-		BattleItem* ammo = item->getAmmoItem();
 		int wt = itemRule->getWeight();
 
+		BattleItem* ammo = item->getAmmoItem();
 		if (ammo
 			&& ammo != item)
 		{
@@ -724,15 +922,113 @@ void InventoryState::invClick(Action*)
 			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
 		else if (itemRule->getBattleType() == BT_MEDIKIT)
+		{
 			sAmmo = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 						.arg(item->getPainKillerQuantity())
 						.arg(item->getStimulantQuantity())
 						.arg(item->getHealQuantity());
+		}
 
 		_txtAmmo->setText(sAmmo);
 	}
+	else
+	{
+		_txtItem->setText(L"");
+		_txtAmmo->setText(L"");
+
+		_selAmmo->clear();
+	}
 
 	updateStats();
+}
+
+/**
+ * Shows item info.
+ * @param action Pointer to an action.
+ */
+void InventoryState::invMouseOver(Action*)
+{
+	if (_inv->getSelectedItem() != NULL)
+		return;
+
+	BattleItem* item = _inv->getMouseOverItem();
+	if (item != NULL)
+	{
+		if (item->getUnit()
+			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+		{
+			_txtItem->setText(item->getUnit()->getName(_game->getLanguage()));
+		}
+		else
+		{
+			if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
+				_txtItem->setText(tr(item->getRules()->getName()));
+			else
+				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
+		}
+
+		std::wstring s;
+		if (item->getAmmoItem() != 0
+			&& item->needsAmmo())
+		{
+			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
+
+			SDL_Rect r;
+			r.x = 0;
+			r.y = 0;
+			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
+			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
+			_selAmmo->drawRect(&r, Palette::blockOffset(0)+8);
+
+			r.x++;
+			r.y++;
+			r.w -= 2;
+			r.h -= 2;
+			_selAmmo->drawRect(&r, Palette::blockOffset(0)+15);
+
+			item->getAmmoItem()->getRules()->drawHandSprite(
+														_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
+														_selAmmo);
+		}
+		else
+			_selAmmo->clear();
+
+		if (item->getAmmoQuantity() != 0
+			&& item->needsAmmo())
+		{
+			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
+		}
+		else if (item->getRules()->getBattleType() == BT_MEDIKIT)
+		{
+			s = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
+					.arg(item->getPainKillerQuantity())
+					.arg(item->getStimulantQuantity())
+					.arg(item->getHealQuantity());
+		}
+
+		_txtAmmo->setText(s);
+	}
+	else
+	{
+		_txtItem->setText(L"");
+		_txtAmmo->setText(L"");
+
+		_selAmmo->clear();
+	}
+}
+
+/**
+ * Hides item info.
+ * @param action Pointer to an action.
+ */
+void InventoryState::invMouseOut(Action*)
+{
+	if (_inv->getSelectedItem() != NULL)
+		return;
+
+	_txtItem->setText(L"");
+	_txtAmmo->setText(L"");
+	_selAmmo->clear();
 }
 
 /**
