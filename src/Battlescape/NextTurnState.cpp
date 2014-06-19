@@ -198,32 +198,34 @@ void NextTurnState::close()
 	{
 		_state->btnCenterClick(NULL);
 
-		// Autosave every 5 turns -> kL_note: every turn
-		if ( //_battleGame->getTurn() %5 == 0 &&
-			_battleGame->getSide() == FACTION_PLAYER)
+		if (_battleGame->getSide() == FACTION_PLAYER)
 		{
 			_state->getBattleGame()->getMap()->refreshSelectorPosition();	// kL
 			_state->getGame()->getCursor()->setVisible(true);				// kL
 			_state->getBattleGame()->setupCursor();							// kL
 
-			if (_game->getSavedGame()->isIronman())
-				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(
-																			_battleGame->getBattleGame(),
-																			_game,
-																			SAVE_IRONMAN));
-//				_game->pushState(new SaveGameState(
-//												_game,
-//												OPT_BATTLESCAPE,
-//												SAVE_IRONMAN));
-			else if (Options::autosave)
-				_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(
-																			_battleGame->getBattleGame(),
-																			_game,
-																			SAVE_AUTO_BATTLESCAPE));
-//				_game->pushState(new SaveGameState(
-//												_game,
-//												OPT_BATTLESCAPE,
-//												SAVE_AUTO_BATTLESCAPE));
+			// Autosave every set amount of turns
+			if (_battleGame->getTurn() %Options::autosaveFrequency == 0)
+			{
+				if (_game->getSavedGame()->isIronman())
+					_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(
+																				_battleGame->getBattleGame(),
+																				_game,
+																				SAVE_IRONMAN));
+//					_game->pushState(new SaveGameState(
+//													_game,
+//													OPT_BATTLESCAPE,
+//													SAVE_IRONMAN));
+				else if (Options::autosave)
+					_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(
+																				_battleGame->getBattleGame(),
+																				_game,
+																				SAVE_AUTO_BATTLESCAPE));
+//					_game->pushState(new SaveGameState(
+//													_game,
+//													OPT_BATTLESCAPE,
+//													SAVE_AUTO_BATTLESCAPE));
+			}
 		}
 		else
 			_state->getGame()->getCursor()->setVisible(false); // kL

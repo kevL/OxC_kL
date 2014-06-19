@@ -1345,15 +1345,7 @@ void BattleUnit::keepFalling()
 {
 	_fallPhase++;
 
-	int endFrame = 3;
-	if (_spawnUnit != ""
-		&& _specab != SPECAB_RESPAWN) // <- is a Zombie! kL_note
-	// kL_note: so.. units with a spawnUnit string but not specAb 3 set get the transformation anim.
-	{
-		endFrame = 18;
-	}
-
-	if (_fallPhase == endFrame)
+	if (_fallPhase == _armor->getDeathFrames())
 	{
 		_fallPhase--;
 

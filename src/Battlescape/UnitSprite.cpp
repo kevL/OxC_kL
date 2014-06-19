@@ -196,6 +196,16 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine8,
 										&UnitSprite::drawRoutine9,
 										&UnitSprite::drawRoutine0};
+/*										&UnitSprite::drawRoutine11,
+										&UnitSprite::drawRoutine12,
+										&UnitSprite::drawRoutine0,
+										&UnitSprite::drawRoutine0,
+										&UnitSprite::drawRoutine12,
+										&UnitSprite::drawRoutine4,
+										&UnitSprite::drawRoutine4,
+										&UnitSprite::drawRoutine18,
+										&UnitSprite::drawRoutine19,
+										&UnitSprite::drawRoutine20}; */
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
 /*	switch (_drawingRoutine)
@@ -237,7 +247,10 @@ void UnitSprite::draw()
 }
 
 /**
- * Drawing routine for XCom soldiers in overalls and Sectoids and Mutons (routine 10).
+ * Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
+ * mutons (routine 10),
+ * aquanauts (routine 13),
+ * aquatoids, calcinites, deep ones, gill men, lobster men, tasoths (routine 14).
  */
 void UnitSprite::drawRoutine0()
 {
@@ -258,6 +271,65 @@ void UnitSprite::drawRoutine0()
 			* itemB		= 0;
 
 	// magic numbers
+/*	const int legsStand = 16, legsKneel = 24;
+	int maleTorso, femaleTorso, die, rarm1H, larm2H, rarm2H, rarmShoot, legsFloat;
+	if (_drawingRoutine <= 10)
+	{
+		die = 264; // ufo:eu death frame
+		maleTorso = 32;
+		femaleTorso = 267;
+		rarm1H = 232;
+		larm2H = 240;
+		rarm2H = 248;
+		rarmShoot = 256;
+		legsFloat = 275;
+	}
+	else if (_drawingRoutine == 13)
+	{ */
+/*		if (_depth > 0)
+		{
+			die = 259; // aquanaut underwater death frame
+			maleTorso = 32; // aquanaut underwater ion armour torso
+            if ( (_unit->getArmor()->getType() == "STR_NONE_UC") || 
+			     (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC") )
+			{
+				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso
+			}
+			else
+			{
+				femaleTorso = 286; // aquanaut underwater magnetic ion armour torso
+			}
+			rarm1H = 248;
+			larm2H = 232;
+			rarm2H = rarmShoot = 240;
+			legsFloat = 294;
+		}*/
+//		else
+/*		{
+			die = 256; // aquanaut land death frame
+			// aquanaut land torso
+			maleTorso = 270;
+			femaleTorso = 262;
+			rarm1H = 248;
+			larm2H = 232;
+			rarm2H = rarmShoot = 240;
+			legsFloat = 294;
+		}
+	}
+	else
+	{
+		die = 256; // tftd unit death frame
+		// tftd unit torso
+		maleTorso = 32;
+		femaleTorso = 262;
+		rarm1H = 248;
+		larm2H = 232;
+		rarm2H = rarmShoot = 240;
+		legsFloat = 294;
+	}
+	const int larmStand = 0, rarmStand = 8;
+*/
+// pre-TFTD:	
 	const int
 		maleTorso	=  32,
 		femaleTorso	= 267,
@@ -1100,7 +1172,8 @@ void UnitSprite::drawRoutine3()
 }
 
 /**
- * Drawing routine for civilians and ethereals.
+ * Drawing routine for civilians, ethereals, zombies (routine 4),
+ * tftd civilians, tftd zombies (routine 16), more tftd civilians (routine 17).
  * Very easy: first 8 is standing positions, then 8 walking sequences of 8, finally death sequence of 3
  */
 void UnitSprite::drawRoutine4()
@@ -1115,9 +1188,10 @@ void UnitSprite::drawRoutine4()
 		* itemA = 0,
 		* itemB = 0;
 
+//	int stand = 0, walk = 8, die = 72; // TFTD
 	const int
 		stand = 0,
-//kL		walk = 8,
+//kL	walk = 8,
 		die = 72,
 
 		offX[8]		= { 8, 10,  7,  4, -9, -11, -7,  -3},	// for the weapons
@@ -1126,15 +1200,23 @@ void UnitSprite::drawRoutine4()
 		offY2[8]	= { 1, -4, -2,  0,  3,   3,  5,   0},	// for the weapons
 		offX3[8]	= { 0,  6,  6, 12, -4,  -5, -5, -13},	// for the left handed rifles
 		offY3[8]	= {-4, -4, -1,  0,  5,   0,  1,   0};	// for the left handed rifles
+//	const int standConvert[8] = { 3, 2, 1, 0, 7, 6, 5, 4 }; // array for converting stand frames for some TFTD civilians
 	const int offXAiming = 16;
 
-/*kL	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} */
-
 	const int unitDir = _unit->getDirection();
+
+/*TFTD
+	if (_drawingRoutine == 16) // tftd civilian - first set
+	{
+		stand = 64;
+		walk = 0;
+	}
+	else if (_drawingRoutine == 17) // tftd civilian - second set
+	{
+		stand = 140;
+		walk = 76;
+		die = 148;
+	} */
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -1147,10 +1229,16 @@ void UnitSprite::drawRoutine4()
 //kL	{
 //kL		s = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
 //kL	}
-	else
+	else // if (_drawingRoutine != 16) // TFTD
 	{
 		s = _unitSurface->getFrame(stand + _unit->getDirection());
 	}
+/*TFTD
+	else
+	{
+		s = _unitSurface->getFrame(stand + standConvert[unitDir]);
+	} */
+
 
 	sortRifles();
 
@@ -1725,6 +1813,194 @@ void UnitSprite::drawRoutine9()
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
 
 	torso->blit(this);
+}
+
+// kL_note: TFTD down to sortRifles()
+/**
+* Drawing routine for terror tanks.
+*/
+void UnitSprite::drawRoutine11()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	int hoverTank = 0;
+	if (_unit->getArmor()->getMovementType() == MT_FLY)
+	{
+		hoverTank = 128;
+	}
+	const int offY[8] = { 6, 1, 4, 1, 4, 1, 6, 1 }; // tank offset
+	const int offTurretX[8] = { -3, -2, 0, 0, 0, 2, 3, 0 }; // turret offsets
+	const int offTurretY[8] = { -3, -5, -4, -2, -4, -5, -3, -3 }; // turret offsets
+
+	Surface *s = 0;
+	int turret = _unit->getTurretType();
+
+	if (hoverTank != 0)
+	{
+		// draw the displacer
+		s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + _animationFrame / 2);
+		s->setY(offY[_unit->getDirection()]);
+		s->blit(this);
+	}
+	else
+	{
+		// draw the coelacanth
+		if (_unit->getStatus() == STATUS_WALKING)
+		{
+			s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + (_unit->getWalkingPhase() % 4));
+		}
+		else
+		{
+			s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection());
+		}
+		s->setY(offY[_unit->getDirection()]);
+		s->blit(this);
+	}
+
+	int turretOffsetX;
+	int turretOffsetY;
+	switch (_part)
+	{
+		case 0:
+			turretOffsetX = 0;
+			turretOffsetY = 0;
+			break;
+		case 1:
+			turretOffsetX = -16;
+			turretOffsetY = -8;
+			break;
+		case 2:
+			turretOffsetX = 16;
+			turretOffsetY = -8;
+			break;
+		case 3:
+			turretOffsetX = 0;
+			turretOffsetY = -16;
+			break;
+	}
+
+	// draw the turret, overlapping all 4 parts
+	if (turret != -1)
+	{
+		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
+		turretOffsetX += offTurretX[_unit->getDirection()];
+		turretOffsetY += offTurretY[_unit->getDirection()];
+		turretOffsetY += offY[_unit->getDirection()];
+		s->setX(turretOffsetX);
+		s->setY(turretOffsetY);
+		s->blit(this);
+	}
+
+}
+
+/**
+* Drawing routine for hallucinoids (routine 12) and biodrones (routine 15).
+*/
+void UnitSprite::drawRoutine12()
+{
+	const int die = 8;
+
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+	s = _unitSurface->getFrame((_part * 8) + _animationFrame);
+	_redraw = true;
+
+	if ( (_unit->getStatus() == STATUS_COLLAPSING) && (_drawingRoutine == 15) )
+	{
+		// biodrone death frames
+		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		s->blit(this);
+		return;
+	}
+
+	s->blit(this);
+}
+
+/**
+ * Drawing routine for tentaculats.
+ */
+void UnitSprite::drawRoutine18()
+{
+	Surface *s = 0;
+	// magic numbers
+	const int stand = 0, move = 8, die = 16;
+
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	if (_unit->getStatus() == STATUS_COLLAPSING)
+	{
+		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		s->blit(this);
+		return;
+	}
+
+	if (_unit->getStatus() == STATUS_WALKING)
+	{
+		s = _unitSurface->getFrame(move + _unit->getDirection());
+	}
+	else
+	{
+		s = _unitSurface->getFrame(stand + _unit->getDirection());
+	}
+
+	s->blit(this);
+}
+
+/**
+ * Drawing routine for triscenes.
+ */
+void UnitSprite::drawRoutine19()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+
+	if (_unit->getStatus() == STATUS_WALKING)
+	{
+		s = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20) + 1 + ((_unit->getWalkingPhase() / 2) % 4));
+	}
+	else
+	{
+		s = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20));
+	}
+
+	s->blit(this);
+}
+
+/**
+ * Drawing routine for xarquids.
+ */
+void UnitSprite::drawRoutine20()
+{
+	if (_unit->isOut())
+	{
+		// unit is drawn as an item
+		return;
+	}
+
+	Surface *s = 0;
+
+	s = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame % 4));
+	_redraw = true;
+
+	s->blit(this);
 }
 
 /**

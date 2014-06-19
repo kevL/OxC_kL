@@ -43,7 +43,8 @@ Armor::Armor(const std::string& type)
 		_drawingRoutine(0),
 		_movementType(MT_WALK),
 		_size(1),
-		_weight(0)
+		_weight(0),
+		_deathFrames(3)
 {
 	_stats.tu			= 0;
 	_stats.stamina		= 0;
@@ -122,9 +123,9 @@ void Armor::load(const YAML::Node& node)
 
 	_loftempsSet = node["loftempsSet"].as<std::vector<int> >(_loftempsSet);
 	if (node["loftemps"])
-	{
 		_loftempsSet.push_back(node["loftemps"].as<int>());
-	}
+
+	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
 }
 
 /**
@@ -281,6 +282,15 @@ UnitStats* Armor::getStats()
 int Armor::getWeight()
 {
 	return _weight;
+}
+
+/**
+ * Gets number of death frames.
+ * @return number of death frames.
+ */
+int Armor::getDeathFrames()
+{
+	return _deathFrames;
 }
 
 }

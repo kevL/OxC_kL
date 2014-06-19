@@ -52,6 +52,7 @@ private:
 		_corpseGeo,
 		_storeItem;
 	int
+		_deathFrames,
 		_frontArmor,
 		_sideArmor,
 		_rearArmor,
@@ -112,6 +113,8 @@ private:
 		UnitStats* getStats();
 		/// Gets the armor's weight.
 		int getWeight();
+		/// Gets number of death frames.
+		int getDeathFrames();
 };
 
 }

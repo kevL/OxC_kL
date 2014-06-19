@@ -4412,6 +4412,7 @@ armors:
       - 0.86
       - 0.0
     loftempsSet: [ 3 ]
+    deathFrames: 18
   - type: SILACOID_ARMOR
     spriteSheet: SILACOID.PCK
     corpseBattle:
