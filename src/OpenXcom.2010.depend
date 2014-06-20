@@ -6366,7 +6366,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1403178142 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1403254464 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6703,7 +6703,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1403170819 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1403222460 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7582,7 +7582,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1402457812 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1403252506 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -8457,7 +8457,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1403171728 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1403252780 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	<algorithm>
 	<cmath>
@@ -8468,6 +8468,7 @@
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/BriefingState.h"
 	"../Engine/Action.h"
+	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Logger.h"

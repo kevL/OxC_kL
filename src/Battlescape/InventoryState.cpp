@@ -178,7 +178,6 @@ InventoryState::InventoryState(
 
 	centerAllSurfaces();
 
-
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
 
 	_txtName->setColor(Palette::blockOffset(4));
@@ -255,23 +254,11 @@ InventoryState::InventoryState(
 						(ActionHandler)& InventoryState::btnApplyTemplateClick,
 						Options::keyInvApplyTemplate);
 
-	if (_tu) // only use copy/paste buttons in setup (i.e. non-tu) mode
-	{
-		_btnCreateTemplate->setVisible(false);
-		_btnApplyTemplate->setVisible(false);
-	}
-	else
-	{
-		Surface* createTemplateIcon = _game->getResourcePack()->getSurface("InvCopy");
-		createTemplateIcon->setX(_templateBtnX);
-		createTemplateIcon->setY(_createTemplateBtnY);
-		createTemplateIcon->blit(_bg);
-
-		Surface* applyTemplateIcon = _game->getResourcePack()->getSurface("InvPasteEmpty");
-		applyTemplateIcon->setX(_templateBtnX);
-		applyTemplateIcon->setY(_applyTemplateBtnY);
-		applyTemplateIcon->blit(_bg);
-	}
+	// only use copy/paste layout-template buttons in setup (i.e. non-tu) mode
+	_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
+	_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
+	_btnCreateTemplate->setVisible(!_tu);
+	_btnApplyTemplate->setVisible(!_tu);
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
@@ -298,14 +285,12 @@ InventoryState::InventoryState(
  */
 static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*>& inventoryTemplate)
 {
-	std::vector<EquipmentLayoutItem*>::iterator i;
-	for (
+	for (std::vector<EquipmentLayoutItem*>::iterator
 			i = inventoryTemplate.begin();
 			i != inventoryTemplate.end();
 			)
 	{
 		delete *i;
-		i = inventoryTemplate.erase(i);
 	}
 }
 
@@ -326,6 +311,7 @@ InventoryState::~InventoryState()
 		tileEngine->calculateTerrainLighting();
 		tileEngine->recalculateFOV();
 	} // kL_end.
+}
 //	if (_battleGame->getTileEngine())
 //	{
 //		if (Options::maximizeInfoScreens)
@@ -355,7 +341,6 @@ InventoryState::~InventoryState()
 //						true);
 //		_game->getScreen()->resetDisplay(false);
 //	}
-}
 
 /**
  * Updates all soldier stats when the soldier changes.
@@ -728,27 +713,13 @@ void InventoryState::btnCreateTemplateClick(Action* action)
 
 	if (_curInventoryTemplate.empty()) // use "empty template" icons
 	{
-		Surface* createTemplateIcon = _game->getResourcePack()->getSurface("InvCopy");
-		createTemplateIcon->setX(_templateBtnX);
-		createTemplateIcon->setY(_createTemplateBtnY);
-		createTemplateIcon->blit(_bg);
-
-		Surface* applyTemplateIcon = _game->getResourcePack()->getSurface("InvPasteEmpty");
-		applyTemplateIcon->setX(_templateBtnX);
-		applyTemplateIcon->setY(_applyTemplateBtnY);
-		applyTemplateIcon->blit(_bg);
+		_game->getResourcePack()->getSurface("InvCopy")->blit(_btnCreateTemplate);
+		_game->getResourcePack()->getSurface("InvPasteEmpty")->blit(_btnApplyTemplate);
 	}
 	else // use "active template" icons
 	{
-		Surface* createTemplateIcon = _game->getResourcePack()->getSurface("InvCopyActive");
-		createTemplateIcon->setX(_templateBtnX);
-		createTemplateIcon->setY(_createTemplateBtnY);
-		createTemplateIcon->blit(_bg);
-
-		Surface* applyTemplateIcon = _game->getResourcePack()->getSurface("InvPaste");
-		applyTemplateIcon->setX(_templateBtnX);
-		applyTemplateIcon->setY(_applyTemplateBtnY);
-		applyTemplateIcon->blit(_bg);
+		_game->getResourcePack()->getSurface("InvCopyActive")->blit(_btnCreateTemplate);
+		_game->getResourcePack()->getSurface("InvPaste")->blit(_btnApplyTemplate);
 	}
 }
 
@@ -804,7 +775,7 @@ void InventoryState::btnApplyTemplateClick(Action* action)
 			{
 				// Move matched item from ground to the appropriate inv slot.
 				// Note that this doesn't attempt to match the isLoaded status of
-				// ammo-bearing weapons; presumably as many weapons as possible
+				// ammo-bearing weapons; assumedly, as many weapons as possible
 				// were already loaded when the battlescape was generated.
 				(*j)->setOwner(unit);
 				(*j)->setSlot(_game->getRuleset()->getInventory((*i)->getSlot()));
@@ -825,11 +796,8 @@ void InventoryState::btnApplyTemplateClick(Action* action)
 	}
 
 	if (itemMissing)
-	{
-		// TODO: _inv.showWarning(_game->getLanguage()->getString("STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE"));
-//		_inv->showWarning(L"Equipment on ground insufficient to fulfill requested template");
-		_inv->showWarning(L"lack of ground equipment");
-	}
+		_inv->showWarning(tr("STR_NOT_ENOUGH_ITEMS_FOR_TEMPLATE"));
+
 
 	_inv->arrangeGround(false); // refresh ui
 	updateStats();
@@ -843,8 +811,13 @@ void InventoryState::btnApplyTemplateClick(Action* action)
  */
 void InventoryState::invClick(Action*)
 {
+	// kL_note: This function has only updateStats() in the stock code,
+	// since induction of Copy/Paste Inventory Layouts ... that is, the
+	// vast majority of this function has been subsumed into invMouseOver().
+	// But i'm leaving it in anyway ...
+
 	BattleItem* item = _inv->getSelectedItem();
-	if (item != 0)
+	if (item != NULL)
 	{
 		RuleItem* itemRule = item->getRules();
 
@@ -890,27 +863,26 @@ void InventoryState::invClick(Action*)
 				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
 		} */
 
-		std::wstring sAmmo;
+		std::wstring wstr;
 
-		if (ammo != 0
+		if (ammo != NULL
 			&& item->needsAmmo())
 		{
-			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
+			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(ammo->getAmmoQuantity());
 
 			SDL_Rect r;
+
 			r.x = 0;
 			r.y = 0;
 			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
 			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
-
 			_selAmmo->drawRect(&r, Palette::blockOffset(0)+8);
 
 			r.x++;
 			r.y++;
 			r.w -= 2;
 			r.h -= 2;
-
-			_selAmmo->drawRect(&r, 0);
+			_selAmmo->drawRect(&r, Palette::blockOffset(0)+15);
 
 			ammo->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
@@ -919,25 +891,25 @@ void InventoryState::invClick(Action*)
 		else if (item->getAmmoQuantity() != 0
 			&& item->needsAmmo())
 		{
-			sAmmo = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
+			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
 		else if (itemRule->getBattleType() == BT_MEDIKIT)
 		{
-			sAmmo = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
+			wstr = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 						.arg(item->getPainKillerQuantity())
 						.arg(item->getStimulantQuantity())
 						.arg(item->getHealQuantity());
 		}
 
-		_txtAmmo->setText(sAmmo);
+		_txtAmmo->setText(wstr);
 	}
-	else
+/*	else
 	{
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
 
 		_selAmmo->clear();
-	}
+	} */
 
 	updateStats();
 }
@@ -954,6 +926,37 @@ void InventoryState::invMouseOver(Action*)
 	BattleItem* item = _inv->getMouseOverItem();
 	if (item != NULL)
 	{
+		RuleItem* itemRule = item->getRules();
+
+		// kL_begin:
+		std::wostringstream label;
+
+		if (item->getUnit()
+			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+		{
+			label << item->getUnit()->getName(_game->getLanguage());
+		}
+		else
+		{
+			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()))
+				label << tr(itemRule->getName());
+			else
+				label << tr("STR_ALIEN_ARTIFACT");
+		}
+
+		int wt = itemRule->getWeight();
+
+		BattleItem* ammo = item->getAmmoItem();
+		if (ammo
+			&& ammo != item)
+		{
+			wt += ammo->getRules()->getWeight();
+		}
+
+		label << " (" << wt << ")";
+		_txtItem->setText(label.str());
+		// kL_end.
+/*kL
 		if (item->getUnit()
 			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 		{
@@ -961,17 +964,17 @@ void InventoryState::invMouseOver(Action*)
 		}
 		else
 		{
-			if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements()))
-				_txtItem->setText(tr(item->getRules()->getName()));
+			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()))
+				_txtItem->setText(tr(itemRule->getName()));
 			else
 				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
-		}
+		} */
 
-		std::wstring s;
+		std::wstring wstr;
 		if (item->getAmmoItem() != 0
 			&& item->needsAmmo())
 		{
-			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
+			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
 
 			SDL_Rect r;
 			r.x = 0;
@@ -989,24 +992,31 @@ void InventoryState::invMouseOver(Action*)
 			item->getAmmoItem()->getRules()->drawHandSprite(
 														_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
 														_selAmmo);
+			_btnCreateTemplate->setVisible(false);
+			_btnApplyTemplate->setVisible(false);
 		}
 		else
+		{
 			_selAmmo->clear();
+
+			_btnCreateTemplate->setVisible(!_tu);
+			_btnApplyTemplate->setVisible(!_tu);
+		}
 
 		if (item->getAmmoQuantity() != 0
 			&& item->needsAmmo())
 		{
-			s = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
+			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoQuantity());
 		}
 		else if (item->getRules()->getBattleType() == BT_MEDIKIT)
 		{
-			s = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
+			wstr = tr("STR_MEDI_KIT_QUANTITIES_LEFT")
 					.arg(item->getPainKillerQuantity())
 					.arg(item->getStimulantQuantity())
 					.arg(item->getHealQuantity());
 		}
 
-		_txtAmmo->setText(s);
+		_txtAmmo->setText(wstr);
 	}
 	else
 	{
@@ -1014,6 +1024,9 @@ void InventoryState::invMouseOver(Action*)
 		_txtAmmo->setText(L"");
 
 		_selAmmo->clear();
+
+		_btnCreateTemplate->setVisible(!_tu);
+		_btnApplyTemplate->setVisible(!_tu);
 	}
 }
 
@@ -1023,12 +1036,12 @@ void InventoryState::invMouseOver(Action*)
  */
 void InventoryState::invMouseOut(Action*)
 {
-	if (_inv->getSelectedItem() != NULL)
-		return;
-
 	_txtItem->setText(L"");
 	_txtAmmo->setText(L"");
 	_selAmmo->clear();
+
+	_btnCreateTemplate->setVisible(!_tu);
+	_btnApplyTemplate->setVisible(!_tu);
 }
 
 /**

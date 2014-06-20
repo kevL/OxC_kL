@@ -876,7 +876,6 @@ void DogfightState::move()
 		if (_ufo->getSpeed() > _craft->getSpeed())
 		{
 			_ufoBreakingOff = true;
-			finalRun = true;
 		}
 	}
 
@@ -1172,6 +1171,12 @@ void DogfightState::move()
 		}
 
 		endDogfight();
+	}
+
+	if (_currentDist > 640
+		&& _ufoBreakingOff)
+	{
+		finalRun = true;
 	}
 
 	if (!_end // end dogfight if craft is destroyed.
