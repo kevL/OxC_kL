@@ -4849,7 +4849,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1403094522 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1403201315 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -5696,7 +5696,7 @@
 1402457811 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1403016316 f:\git\openxcom\src\battlescape\tileengine.h
+1403212097 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -9255,7 +9255,7 @@
 	<cmath>
 	"RuleItem.h"
 
-1402457813 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1403210046 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Surface.h"
@@ -9440,7 +9440,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1403172314 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1403215025 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

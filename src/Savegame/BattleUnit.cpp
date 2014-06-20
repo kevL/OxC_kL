@@ -2241,13 +2241,14 @@ BattleItem* BattleUnit::getItem(
 
 /**
  * Get the "main hand weapon" from the unit.
- * @param quickest, Whether to get the quickest weapon, default true
- * @return, Pointer to BattleItem.
+ * @param quickest - true to choose the quickest weapon (default = true)
+ * @return, pointer to BattleItem
  */
 BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
-	//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon()";
+	// kL_note: This gets called way too much, from somewhere, when just walking around.
 
+	//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon()";
 	BattleItem* weaponRight = getItem("STR_RIGHT_HAND");
 	BattleItem* weaponLeft = getItem("STR_LEFT_HAND");
 
@@ -2265,7 +2266,7 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	//Log(LOG_INFO) << ". isLeft = " << isLeft;
 
 	if (!isRight && !isLeft)
-		return 0;
+		return NULL;
 	else if (isRight && !isLeft)
 		return weaponRight;
 	else if (!isRight && isLeft)
@@ -2288,7 +2289,7 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 		//Log(LOG_INFO) << ". . tuLeft = " << tuLeft;
 
 		if (!tuRight && !tuLeft)
-			return 0;
+			return NULL;
 		else if (tuRight && !tuLeft)
 			return weaponRight;
 		else if (!tuRight && tuLeft)
@@ -2322,7 +2323,7 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 
 	// kL_note: should exit this by setting ActiveHand.
 	//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon() EXIT 0, no weapon";
-	return 0;
+	return NULL;
 }
 /*	BattleItem *weaponRightHand = getItem("STR_RIGHT_HAND");
 	BattleItem *weaponLeftHand = getItem("STR_LEFT_HAND");

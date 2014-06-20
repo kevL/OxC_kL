@@ -253,7 +253,7 @@ private:
 		/// Returns validity of a melee attack from a given position.
 		bool validMeleeRange(
 				Position pos,
-				int direction,
+				int dir,
 				BattleUnit* attacker,
 				BattleUnit* target,
 				Position* dest);

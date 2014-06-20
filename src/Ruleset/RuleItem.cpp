@@ -918,7 +918,7 @@ bool RuleItem::isSkillApplied() const
 
 /**
  * kL. Used to determine if a weapon is capable of Reaction Fire.
- * @return, bool True if a weapon can react during opponent's turn
+ * @return, true if a weapon can react during opponent's turn
  */
 bool RuleItem::canReactionFire() const // kL
 {

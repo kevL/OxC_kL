@@ -133,7 +133,7 @@ CraftsState::CraftsState(
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
-	_lstCrafts->setArrowColumn(264, ARROW_VERTICAL); // kL
+	_lstCrafts->setArrowColumn(265, ARROW_VERTICAL); // kL
 	_lstCrafts->setColumns(5, 94, 76, 44, 27, 39); // -8 for margin
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
