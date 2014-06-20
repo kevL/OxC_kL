@@ -272,7 +272,7 @@ Surface* SurfaceSet::getFrame(int i)
 	if (_frames.find(i) != _frames.end())
 		return _frames[i];
 
-	return 0;
+	return NULL;
 }
 
 /**

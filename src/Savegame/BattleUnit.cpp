@@ -1146,7 +1146,7 @@ int BattleUnit::getMorale() const
 
 /**
  * Do an amount of damage.
- * @param relative		- reference to a position (voxel) that defines which part of armor and/or bodypart is hit (for headshots only)
+ * @param relative		- reference to a position (voxel) that defines which part of armor and/or bodypart is hit
  * @param power			- the amount of damage to inflict
  * @param type			- the type of damage being inflicted ( DT_* enum )
  * @param ignoreArmor	- true for stun & smoke damage; no armor reduction, although vulnerability is still factored

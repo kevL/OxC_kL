@@ -1122,7 +1122,7 @@ XcomResourcePack::XcomResourcePack( // kL
 
 
 	Log(LOG_DEBUG) << "Loading extra resources from ruleset..."; // kL
-	//Log(LOG_INFO) << "Loading extra resources from ruleset...";
+	Log(LOG_INFO) << "Loading extra resources from ruleset...";
 
 	/* EXTRA SPRITES */
 	for (std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator

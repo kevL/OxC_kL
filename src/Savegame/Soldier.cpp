@@ -629,15 +629,18 @@ void Soldier::trainPsi1Day()
 		if (Options::allowPsiStrengthImprovement)
 		{
 			int const psiStrength = _currentStats.psiStrength;
-			chance = std::max(
-							1,
-							std::min(
-									100,
-									500 / psiStrength));
-			if (RNG::percent(chance))
+			if (psiStrength < _rules->getStatCaps().psiStrength)
 			{
-				++_gainPsiStr;
-				++_currentStats.psiStrength;
+				chance = std::max(
+								1,
+								std::min(
+										100,
+										500 / psiStrength));
+				if (RNG::percent(chance))
+				{
+					++_gainPsiStr;
+					++_currentStats.psiStrength;
+				}
 			}
 		}
 	}

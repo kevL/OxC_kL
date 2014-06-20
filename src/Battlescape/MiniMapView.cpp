@@ -136,9 +136,9 @@ void MiniMapView::draw()
 					x < getWidth() + Surface::getX();
 					x += CELL_WIDTH)
 			{
-				MapData* data = 0;
+				MapData* data = NULL;
 
-				Tile* tile = 0;
+				Tile* tile = NULL;
 //				Position p (px, py, lvl); // <- initialization. kL_note
 				Position p = Position(px, py, lvl); // kL (supposedly not as efficient)
 				tile = _battleGame->getTile(p);
@@ -159,25 +159,26 @@ void MiniMapView::draw()
 						i < 4;
 						i++)
 				{
-					Surface* s = 0;
+					Surface* srf = NULL;
 
 					data = tile->getMapData(i);
 					if (data
 						&& data->getMiniMapIndex())
 					{
-						s = _set->getFrame(data->getMiniMapIndex() + 35);
+						srf = _set->getFrame(data->getMiniMapIndex() + 35);
 					}
 
-					if (s)
-						s->blitNShade(
+					if (srf)
+						srf->blitNShade(
 									this,
 									x,
 									y,
 									tileShade);
 				}
 
-				if (tile->getUnit()
-					&& tile->getUnit()->getVisible()) // visible, alive units
+				BattleUnit* unit = tile->getUnit();
+				if (unit
+					&& unit->getVisible()) // visible, alive units
 				{
 					int
 						size	= tile->getUnit()->getArmor()->getSize(),
@@ -186,11 +187,27 @@ void MiniMapView::draw()
 								+ ((tile->getPosition().y - tile->getUnit()->getPosition().y) * size)
 								+ (_frame * size * size);
 
-					Surface* s = _set->getFrame(frame);
+					Surface* srf = _set->getFrame(frame);
+
 					// kL_begin:
+					int baseColor = 0;
+
+					if (unit == _battleGame->getSelectedUnit())				// selected unit
+						baseColor = 4; // pale green
+					else if (unit->getFaction() == FACTION_PLAYER			// Mc'd aLien
+						&& unit->getOriginalFaction() == FACTION_HOSTILE)
+					{
+						baseColor = 11; // 11 = brown
+					}
+					else if (unit->getFaction() == FACTION_HOSTILE			// Mc'd xCom
+						&& unit->getOriginalFaction() == FACTION_PLAYER)
+					{
+						baseColor = 8; // steel blue
+					}
+/*old
 					if (tile->getUnit() == _battleGame->getSelectedUnit())
 					{
-						s->blitNShade(
+						srf->blitNShade(
 									this,
 									x,
 									y,
@@ -205,14 +222,14 @@ void MiniMapView::draw()
 //									8);		// blue again. % > 8
 //									25);	// pale blue % > 9
 					}
-					else // kL_end.
-					{
-						s->blitNShade(
-									this,
-									x,
-									y,
-									0);
-					}
+					else */ // kL_end.
+					srf->blitNShade(
+								this,
+								x,
+								y,
+								0,
+								false,
+								baseColor); // kL_add.
 				}
 
 				if (tile->isDiscovered(2)
@@ -220,8 +237,8 @@ void MiniMapView::draw()
 				{
 					int frame = 9 + _frame;
 
-					Surface* s = _set->getFrame(frame);
-					s->blitNShade(
+					Surface* srf = _set->getFrame(frame);
+					srf->blitNShade(
 								this,
 								x,
 								y,

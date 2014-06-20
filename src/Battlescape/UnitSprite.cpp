@@ -65,12 +65,12 @@ UnitSprite::UnitSprite(
 			height,
 			x,
 			y),
-		_unit(0),
-		_itemA(0),
-		_itemB(0),
-		_unitSurface(0),
-		_itemSurfaceA(0),
-		_itemSurfaceB(0),
+		_unit(NULL),
+		_itemA(NULL),
+		_itemB(NULL),
+		_unitSurface(NULL),
+		_itemSurfaceA(NULL),
+		_itemSurfaceB(NULL),
 		_part(0),
 		_animationFrame(0),
 		_drawingRoutine(0)
@@ -122,8 +122,7 @@ void UnitSprite::setBattleUnit(
  * Links this sprite to a BattleItem to get the data for rendering.
  * @param item Pointer to the BattleItem.
  */
-void UnitSprite::setBattleItem(
-		BattleItem* item)
+void UnitSprite::setBattleItem(BattleItem* item)
 {
 	if (item)
 	{
@@ -185,17 +184,20 @@ void UnitSprite::draw()
 	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
 	//Log(LOG_INFO) << "UnitSprite::draw() Routine " << _drawingRoutine;
 	// Array of drawing routines
-	void (UnitSprite::*routines[])() = {&UnitSprite::drawRoutine0,
-										&UnitSprite::drawRoutine1,
-										&UnitSprite::drawRoutine2,
-										&UnitSprite::drawRoutine3,
-										&UnitSprite::drawRoutine4,
-										&UnitSprite::drawRoutine5,
-										&UnitSprite::drawRoutine6,
-										&UnitSprite::drawRoutine7,
-										&UnitSprite::drawRoutine8,
-										&UnitSprite::drawRoutine9,
-										&UnitSprite::drawRoutine0};
+	void (UnitSprite::*routines[])() =
+	{
+		&UnitSprite::drawRoutine0,
+		&UnitSprite::drawRoutine1,
+		&UnitSprite::drawRoutine2,
+		&UnitSprite::drawRoutine3,
+		&UnitSprite::drawRoutine4,
+		&UnitSprite::drawRoutine5,
+		&UnitSprite::drawRoutine6,
+		&UnitSprite::drawRoutine7,
+		&UnitSprite::drawRoutine8,
+		&UnitSprite::drawRoutine9,
+		&UnitSprite::drawRoutine0
+	};
 /*										&UnitSprite::drawRoutine11,
 										&UnitSprite::drawRoutine12,
 										&UnitSprite::drawRoutine0,
@@ -255,20 +257,16 @@ void UnitSprite::draw()
 void UnitSprite::drawRoutine0()
 {
 	//Log(LOG_INFO) << "** UnitSprite::drawRoutine0()";
-	// kL_begin:
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} // kL_end.
+		return; // unit is drawn as an item
 
 	Surface
-			* torso		= 0,
-			* legs		= 0,
-			* leftArm	= 0,
-			* rightArm	= 0,
-			* itemA		= 0,
-			* itemB		= 0;
+			* torso		= NULL,
+			* legs		= NULL,
+			* leftArm	= NULL,
+			* rightArm	= NULL,
+			* itemA		= NULL,
+			* itemB		= NULL;
 
 	// magic numbers
 /*	const int legsStand = 16, legsKneel = 24;
@@ -290,7 +288,7 @@ void UnitSprite::drawRoutine0()
 		{
 			die = 259; // aquanaut underwater death frame
 			maleTorso = 32; // aquanaut underwater ion armour torso
-            if ( (_unit->getArmor()->getType() == "STR_NONE_UC") || 
+            if ( (_unit->getArmor()->getType() == "STR_NONE_UC") ||
 			     (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC") )
 			{
 				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso
@@ -329,7 +327,7 @@ void UnitSprite::drawRoutine0()
 	}
 	const int larmStand = 0, rarmStand = 8;
 */
-// pre-TFTD:	
+// pre-TFTD:
 	const int
 		maleTorso	=  32,
 		femaleTorso	= 267,
@@ -375,11 +373,6 @@ void UnitSprite::drawRoutine0()
 	const int offYKneel = 4;
 	const int offXAiming = 16;
 
-/*kL	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} */
 
 	const int unitDir	= _unit->getDirection();
 	const int walkPhase	= _unit->getWalkingPhase();
@@ -883,19 +876,15 @@ void UnitSprite::drawRoutine0()
  */
 void UnitSprite::drawRoutine1()
 {
-	// kL_begin:
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} // kL_end.
+		return; // unit is drawn as an item
 
 	Surface
-			* torso = 0,
-			* leftArm = 0,
-			* rightArm = 0,
-			* itemA = 0,
-			* itemB = 0;
+			* torso		= NULL,
+			* leftArm	= NULL,
+			* rightArm	= NULL,
+			* itemA		= NULL,
+			* itemB		= NULL;
 
 	// magic numbers
 	const int stand = 16, walk = 24, die = 64;
@@ -909,11 +898,6 @@ void UnitSprite::drawRoutine1()
 	const int offY3[8] = { -4, -4, -1, 0, 5, 0, 1, 0 };		// for the left handed rifles
 	const int offXAiming = 16;
 
-/*kL	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} */
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -1104,15 +1088,12 @@ void UnitSprite::drawRoutine1()
 void UnitSprite::drawRoutine2()
 {
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+		return; // unit is drawn as an item
 
 	const int offX[8] = {-2,-7,-5, 0, 5, 7, 2, 0}; // hovertank offsets
 	const int offy[8] = {-1,-3,-4,-5,-4,-3,-1,-1};
 
-	Surface* s = 0;
+	Surface* srf = NULL;
 
 	const int hoverTank	= _unit->getArmor()->getMovementType() == MT_FLY? 32: 0;
 	const int turret	= _unit->getTurretType();
@@ -1120,18 +1101,18 @@ void UnitSprite::drawRoutine2()
 	// draw the animated propulsion below the hwp
 	if (_part > 0 && hoverTank != 0)
 	{
-		s = _unitSurface->getFrame(104 + ((_part-1) * 8) + _animationFrame);
-		s->blit(this);
+		srf = _unitSurface->getFrame(104 + ((_part-1) * 8) + _animationFrame);
+		srf->blit(this);
 	}
 
 	// draw the tank itself
-	s = _unitSurface->getFrame(hoverTank + (_part * 8) + _unit->getDirection());
-	s->blit(this);
+	srf = _unitSurface->getFrame(hoverTank + (_part * 8) + _unit->getDirection());
+	srf->blit(this);
 
 	// draw the turret, together with the last part
 	if (_part == 3 && turret != -1)
 	{
-		s = _unitSurface->getFrame(64 + (turret * 8) + _unit->getTurretDirection());
+		srf = _unitSurface->getFrame(64 + (turret * 8) + _unit->getTurretDirection());
 		int turretOffsetX = 0;
 		int turretOffsetY = -4;
 		if(hoverTank)
@@ -1140,9 +1121,9 @@ void UnitSprite::drawRoutine2()
 			turretOffsetY += offy[_unit->getDirection()];
 		}
 
-		s->setX(turretOffsetX);
-		s->setY(turretOffsetY);
-		s->blit(this);
+		srf->setX(turretOffsetX);
+		srf->setY(turretOffsetY);
+		srf->blit(this);
 	}
 }
 
@@ -1152,23 +1133,20 @@ void UnitSprite::drawRoutine2()
 void UnitSprite::drawRoutine3()
 {
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+		return; // unit is drawn as an item
 
-	Surface* s = 0;
+	Surface* srf = NULL;
 
 	// draw the animated propulsion below the hwp
 	if (_part > 0)
 	{
-		s = _unitSurface->getFrame(32 + ((_part-1) * 8) + _animationFrame);
-		s->blit(this);
+		srf = _unitSurface->getFrame(32 + ((_part-1) * 8) + _animationFrame);
+		srf->blit(this);
 	}
 
-	s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
+	srf = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
 
-	s->blit(this);
+	srf->blit(this);
 }
 
 /**
@@ -1179,14 +1157,12 @@ void UnitSprite::drawRoutine3()
 void UnitSprite::drawRoutine4()
 {
 	if (_unit->isOut())
-	{
 		return; // unit is drawn as an item
-	}
 
 	Surface
-		* s = 0,
-		* itemA = 0,
-		* itemB = 0;
+		* srf	= NULL,
+		* itemA	= NULL,
+		* itemB	= NULL;
 
 //	int stand = 0, walk = 8, die = 72; // TFTD
 	const int
@@ -1220,23 +1196,23 @@ void UnitSprite::drawRoutine4()
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
-		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		s->blit(this);
+		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		srf->blit(this);
 
 		return;
 	}
-//kL	else if (_unit->getStatus() == STATUS_WALKING)
+//kL	else if (_unit->getStatus() == STATUS_WALKING) // needs to be changed to: if (ethereal) ...
 //kL	{
-//kL		s = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
+//kL		srf = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
 //kL	}
 	else // if (_drawingRoutine != 16) // TFTD
 	{
-		s = _unitSurface->getFrame(stand + _unit->getDirection());
+		srf = _unitSurface->getFrame(stand + _unit->getDirection());
 	}
 /*TFTD
 	else
 	{
-		s = _unitSurface->getFrame(stand + standConvert[unitDir]);
+		srf = _unitSurface->getFrame(stand + standConvert[unitDir]);
 	} */
 
 
@@ -1297,7 +1273,7 @@ void UnitSprite::drawRoutine4()
 
 	if (_unit->getStatus() == STATUS_AIMING)
 	{
-		s->setX(offXAiming);
+		srf->setX(offXAiming);
 		if (itemA)
 			itemA->setX(itemA->getX() + offXAiming);
 		if (itemB)
@@ -1309,38 +1285,39 @@ void UnitSprite::drawRoutine4()
 		case 0:
 			itemB ? itemB->blit(this) : void();
 			itemA ? itemA->blit(this) : void();
-			s->blit(this);
+			srf->blit(this);
 		break;
 		case 1:
 			itemB ? itemB->blit(this) : void();
-			s->blit(this);
+			srf->blit(this);
 			itemA ? itemA->blit(this) : void();
 		break;
 		case 2:
-			s->blit(this);
+			srf->blit(this);
 			itemB ? itemB->blit(this) : void();
 			itemA ? itemA->blit(this) : void();
 		break;
 		case 3:
 		case 4:
-			s->blit(this);
+			srf->blit(this);
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
 		break;
 		case 5:
-		case 6:
+//kL	case 6:
 			itemA ? itemA->blit(this) : void();
-			s->blit(this);
+			srf->blit(this);
 			itemB ? itemB->blit(this) : void();
 		break;
+		case 6: // kL
 		case 7:
 			itemA ? itemA->blit(this) : void();
 			itemB ? itemB->blit(this) : void();
-			s->blit(this);
+			srf->blit(this);
 		break;
 	}
 
-	s->setX(0);
+	srf->setX(0);
 	if (itemA)
 		itemA->setX(0);
 	if (itemB)
@@ -1353,23 +1330,20 @@ void UnitSprite::drawRoutine4()
 void UnitSprite::drawRoutine5()
 {
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+		return; // unit is drawn as an item
 
-	Surface* s = 0;
+	Surface* srf = NULL;
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		s = _unitSurface->getFrame( 32 + (_unit->getDirection() * 16) + (_part * 4) + ((_unit->getWalkingPhase() / 2) %4));
+		srf = _unitSurface->getFrame(32 + (_unit->getDirection() * 16) + (_part * 4) + ((_unit->getWalkingPhase() / 2) %4));
 	}
 	else
 	{
-		s = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
+		srf = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
 	}
 
-	s->blit(this);
+	srf->blit(this);
 }
 
 /**
@@ -1377,20 +1351,16 @@ void UnitSprite::drawRoutine5()
  */
 void UnitSprite::drawRoutine6()
 {
-	// kL_begin:
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} // kL_end.
+		return; // unit is drawn as an item
 
 	Surface
-			* torso = 0,
-			* legs = 0,
-			* leftArm = 0,
-			* rightArm = 0,
-			* itemA = 0,
-			* itemB = 0;
+			* torso		= NULL,
+			* legs		= NULL,
+			* leftArm	= NULL,
+			* rightArm	= NULL,
+			* itemA		= NULL,
+			* itemB		= NULL;
 
 	// magic numbers
 	const int
@@ -1418,13 +1388,9 @@ void UnitSprite::drawRoutine6()
 		offY2[8]		= { 1, -4, -2,  0,  3,  3,  5,  0}, // for the weapons
 		offX3[8]		= { 0,  6,  6, 12, -4, -5, -5,-13}, // for the left handed rifles
 		offY3[8]		= {-4, -4, -1,  0,  5,  0,  1,  0}; // for the left handed rifles
+
 	const int offXAiming = 16;
 
-/*kL	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} */
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -1653,18 +1619,14 @@ void UnitSprite::drawRoutine6()
  */
 void UnitSprite::drawRoutine7()
 {
-	// kL_begin:
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} // kL_end.
+		return; // unit is drawn as an item
 
 	Surface
-			* torso = 0,
-			* legs = 0,
-			* leftArm = 0,
-			* rightArm = 0;
+			* torso		= NULL,
+			* legs		= NULL,
+			* leftArm	= NULL,
+			* rightArm	= NULL;
 
 	// magic numbers
 	const int Torso = 24, legsStand = 16, die = 224;
@@ -1674,11 +1636,6 @@ void UnitSprite::drawRoutine7()
 	const int rarmWalk[8] = { 40, 40+24, 40+24*2, 40+24*3, 40+24*4, 40+24*5, 40+24*6, 40+24*7 };
 	const int yoffWalk[8] = {1, 0, -1, 0, 1, 0, -1, 0}; // bobbing up and down
 
-/*kL	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} */
 
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
@@ -1752,24 +1709,15 @@ void UnitSprite::drawRoutine7()
  */
 void UnitSprite::drawRoutine8()
 {
-	// kL_begin:
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} // kL_end.
+		return; // unit is drawn as an item
 
-	Surface* legs = 0;
+	Surface* legs = NULL;
 
 	// magic numbers
 	const int body = 0, aim = 5, die = 6;
 	const int pulsate[8] = { 0, 1, 2, 3, 4, 3, 2, 1 };
 
-/*kL	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} */
 
 	legs = _unitSurface->getFrame(body + pulsate[_animationFrame]);
 	_redraw = true;
@@ -1788,23 +1736,14 @@ void UnitSprite::drawRoutine8()
  */
 void UnitSprite::drawRoutine9()
 {
-	// kL_begin:
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} // kL_end.
+		return; // unit is drawn as an item
 
-	Surface* torso = 0;
+	Surface* torso = NULL;
 
 	// magic numbers
 	const int body = 0, die = 25;
 
-/*kL	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	} */
 
 	torso = _unitSurface->getFrame(body + _animationFrame);
 	_redraw = true;
@@ -1822,10 +1761,7 @@ void UnitSprite::drawRoutine9()
 void UnitSprite::drawRoutine11()
 {
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+		return; // unit is drawn as an item
 
 	int hoverTank = 0;
 	if (_unit->getArmor()->getMovementType() == MT_FLY)
@@ -1836,29 +1772,29 @@ void UnitSprite::drawRoutine11()
 	const int offTurretX[8] = { -3, -2, 0, 0, 0, 2, 3, 0 }; // turret offsets
 	const int offTurretY[8] = { -3, -5, -4, -2, -4, -5, -3, -3 }; // turret offsets
 
-	Surface *s = 0;
+	Surface* srf = NULL;
 	int turret = _unit->getTurretType();
 
 	if (hoverTank != 0)
 	{
 		// draw the displacer
-		s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + _animationFrame / 2);
-		s->setY(offY[_unit->getDirection()]);
-		s->blit(this);
+		srf = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + _animationFrame / 2);
+		srf->setY(offY[_unit->getDirection()]);
+		srf->blit(this);
 	}
 	else
 	{
 		// draw the coelacanth
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + (_unit->getWalkingPhase() % 4));
+			srf = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + (_unit->getWalkingPhase() % 4));
 		}
 		else
 		{
-			s = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection());
+			srf = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection());
 		}
-		s->setY(offY[_unit->getDirection()]);
-		s->blit(this);
+		srf->setY(offY[_unit->getDirection()]);
+		srf->blit(this);
 	}
 
 	int turretOffsetX;
@@ -1886,13 +1822,13 @@ void UnitSprite::drawRoutine11()
 	// draw the turret, overlapping all 4 parts
 	if (turret != -1)
 	{
-		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
+		srf = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
 		turretOffsetX += offTurretX[_unit->getDirection()];
 		turretOffsetY += offTurretY[_unit->getDirection()];
 		turretOffsetY += offY[_unit->getDirection()];
-		s->setX(turretOffsetX);
-		s->setY(turretOffsetY);
-		s->blit(this);
+		srf->setX(turretOffsetX);
+		srf->setY(turretOffsetY);
+		srf->blit(this);
 	}
 
 }
@@ -1902,27 +1838,24 @@ void UnitSprite::drawRoutine11()
 */
 void UnitSprite::drawRoutine12()
 {
+	if (_unit->isOut())
+		return; // unit is drawn as an item
+
 	const int die = 8;
 
-	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
-
-	Surface *s = 0;
-	s = _unitSurface->getFrame((_part * 8) + _animationFrame);
+	Surface* srf = NULL;
+	srf = _unitSurface->getFrame((_part * 8) + _animationFrame);
 	_redraw = true;
 
-	if ( (_unit->getStatus() == STATUS_COLLAPSING) && (_drawingRoutine == 15) )
+	if (_unit->getStatus() == STATUS_COLLAPSING && _drawingRoutine == 15)
 	{
 		// biodrone death frames
-		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		s->blit(this);
+		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		srf->blit(this);
 		return;
 	}
 
-	s->blit(this);
+	srf->blit(this);
 }
 
 /**
@@ -1930,33 +1863,31 @@ void UnitSprite::drawRoutine12()
  */
 void UnitSprite::drawRoutine18()
 {
-	Surface *s = 0;
+	if (_unit->isOut())
+		return; // unit is drawn as an item
+
+	Surface* srf = NULL;
 	// magic numbers
 	const int stand = 0, move = 8, die = 16;
 
-	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
-
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 	{
-		s = _unitSurface->getFrame(die + _unit->getFallingPhase());
-		s->blit(this);
+		srf = _unitSurface->getFrame(die + _unit->getFallingPhase());
+		srf->blit(this);
+
 		return;
 	}
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		s = _unitSurface->getFrame(move + _unit->getDirection());
+		srf = _unitSurface->getFrame(move + _unit->getDirection());
 	}
 	else
 	{
-		s = _unitSurface->getFrame(stand + _unit->getDirection());
+		srf = _unitSurface->getFrame(stand + _unit->getDirection());
 	}
 
-	s->blit(this);
+	srf->blit(this);
 }
 
 /**
@@ -1965,23 +1896,20 @@ void UnitSprite::drawRoutine18()
 void UnitSprite::drawRoutine19()
 {
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+		return; // unit is drawn as an item
 
-	Surface *s = 0;
+	Surface* srf = NULL;
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		s = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20) + 1 + ((_unit->getWalkingPhase() / 2) % 4));
+		srf = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20) + 1 + ((_unit->getWalkingPhase() / 2) % 4));
 	}
 	else
 	{
-		s = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20));
+		srf = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20));
 	}
 
-	s->blit(this);
+	srf->blit(this);
 }
 
 /**
@@ -1990,17 +1918,14 @@ void UnitSprite::drawRoutine19()
 void UnitSprite::drawRoutine20()
 {
 	if (_unit->isOut())
-	{
-		// unit is drawn as an item
-		return;
-	}
+		return; // unit is drawn as an item
 
-	Surface *s = 0;
+	Surface* srf = NULL;
 
-	s = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame % 4));
+	srf = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame % 4));
 	_redraw = true;
 
-	s->blit(this);
+	srf->blit(this);
 }
 
 /**
@@ -2019,11 +1944,11 @@ void UnitSprite::sortRifles()
 				_itemA = _itemB;
 			}
 
-			_itemB = 0;
+			_itemB = NULL;
 		}
 		else if (_unit->getStatus() != STATUS_AIMING)
 		{
-			_itemB = 0;
+			_itemB = NULL;
 		}
 	}
 //kL	else if (_itemB && _itemB->getRules()->isTwoHanded())
@@ -2031,7 +1956,7 @@ void UnitSprite::sortRifles()
 	{
 		if (_unit->getStatus() != STATUS_AIMING)
 		{
-			_itemA = 0;
+			_itemA = NULL;
 		}
 	}
 }
