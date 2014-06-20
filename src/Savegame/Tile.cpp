@@ -438,7 +438,7 @@ int Tile::openDoor(
 
 		if (unit
 			&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
-									+ unit->getActionTUs(
+										+ unit->getActionTUs(
 														reserve,
 														unit->getMainHandWeapon(false)))
 		{
@@ -460,7 +460,7 @@ int Tile::openDoor(
 		{
 			if (unit
 				&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
-										+ unit->getActionTUs(
+											+ unit->getActionTUs(
 															reserve,
 															unit->getMainHandWeapon(false)))
 			{

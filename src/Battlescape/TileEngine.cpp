@@ -4269,8 +4269,7 @@ int TileEngine::unitOpensDoor(
 
 				calculateFOV(unit->getPosition());
 
-				// look from the other side (may be need check reaction fire?)
-				// kL_note: and what about mutual surprise rule?
+				// look from the other side (may need check reaction fire)
 				std::vector<BattleUnit*>* visUnits = unit->getVisibleUnits();
 				for (size_t
 						i = 0;

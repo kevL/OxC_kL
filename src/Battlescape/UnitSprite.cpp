@@ -208,44 +208,9 @@ void UnitSprite::draw()
 										&UnitSprite::drawRoutine18,
 										&UnitSprite::drawRoutine19,
 										&UnitSprite::drawRoutine20}; */
+
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
-/*	switch (_drawingRoutine)
-	{
-		case 0:
-			drawRoutine0();
-		break;
-		case 1:
-			drawRoutine1();
-		break;
-		case 2:
-			drawRoutine2();
-		break;
-		case 3:
-			drawRoutine3();
-		break;
-		case 4:
-			drawRoutine4();
-		break;
-		case 5:
-			drawRoutine5();
-		break;
-		case 6:
-			drawRoutine6();
-		break;
-		case 7:
-			drawRoutine7();
-		break;
-		case 8:
-			drawRoutine8();
-		break;
-		case 9:
-			drawRoutine9();
-		break;
-		case 10: // muton
-			drawRoutine0();
-		break;
-	} */
 }
 
 /**

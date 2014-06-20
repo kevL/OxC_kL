@@ -51,12 +51,13 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 	:
 		_save(save),
 		_nodes(),
-		_unit(0),
+		_unit(NULL),
 		_pathPreviewed(false),
 		_strafeMove(false),
 		_totalTUCost(0),
 		_modifierUsed(false),
-		_movementType(MT_WALK)
+		_movementType(MT_WALK),
+		_openDoor(false) // kL
 {
 	_size = _save->getMapSizeXYZ();
 	_nodes.reserve(_size); // initialize one node per tile.
@@ -133,7 +134,7 @@ void Pathfinding::calculate(
 	}
 
 
-	if (target != 0
+	if (target != NULL
 		&& maxTUCost == -1) // pathfinding for missile
 	{
 		maxTUCost = 10000;
@@ -437,7 +438,7 @@ bool Pathfinding::bresenhamPath(
 			else
 				return false;
 
-			if (targetUnit == 0
+			if (targetUnit == NULL
 				&& tuCost != 255)
 			{
 				lastTUCost = tuCost;
@@ -585,13 +586,13 @@ bool Pathfinding::aStarPath(
  * Gets the TU cost to move from 1 tile to the other (ONE STEP ONLY).
  * But also updates the endPosition, because it is possible
  * the unit goes upstairs or falls down while walking.
- * @param startPosition, The position to start from.
- * @param direction, The direction we are facing.
- * @param endPosition, The position we want to reach.
- * @param unit, The unit moving.
- * @param target, The target unit.
- * @param missile, Is this a guided missile?
- * @return, TU cost or 255 if movement is impossible.
+ * @param startPosition	- reference to the start position
+ * @param direction		- direction facing
+ * @param endPosition	- pointer to destination position
+ * @param unit			- pointer to unit
+ * @param target		- pointer to target unit for missiles
+ * @param missile		- true if a guided missile
+ * @return, TU cost or 255 if movement is impossible
  */
 int Pathfinding::getTUCost(
 		const Position& startPosition,
@@ -641,8 +642,8 @@ int Pathfinding::getTUCost(
 			Tile* aboveDestination	= _save->getTile(*endPosition + offset + Position(0, 0, 1));
 
 			// this means the destination is probably outside the map
-			if (startTile == 0
-				|| destTile == 0)
+			if (startTile == NULL
+				|| destTile == NULL)
 			{
 				return 255;
 			}
@@ -677,7 +678,7 @@ int Pathfinding::getTUCost(
 			}
 
 			// this will later be used to re-init the start tile again.
-			Position verticalOffset(0, 0, 0);
+			Position vertOffset(0, 0, 0);
 
 			// if we are on a stairs try to go up a level
 			if (direction < DIR_UP
@@ -688,7 +689,7 @@ int Pathfinding::getTUCost(
 				partsGoingUp++;
 				if (partsGoingUp > size)	// kL_note: seems that partsGoingUp can never
 				{							// be greater than size... if large unit.
-					verticalOffset.z++;
+					vertOffset.z++;
 					endPosition->z++;
 					destTile = _save->getTile(*endPosition + offset);
 					belowDestination = _save->getTile(*endPosition + Position(x, y,-1));
@@ -778,7 +779,7 @@ int Pathfinding::getTUCost(
 				}
 			}
 
-			startTile = _save->getTile(startTile->getPosition() + verticalOffset);
+			startTile = _save->getTile(startTile->getPosition() + vertOffset);
 
 			if (direction < DIR_UP
 				&& partsGoingUp != 0)
@@ -813,23 +814,27 @@ int Pathfinding::getTUCost(
 
 			if (direction < DIR_UP)
 			{
-				cost += destTile->getTUCost(MapData::O_FLOOR, _movementType);
+				cost += destTile->getTUCost(
+										MapData::O_FLOOR,
+										_movementType);
 
 				if (!fellDown
 					&& !triedStairs
 					&& destTile->getMapData(MapData::O_OBJECT))
 				{
-					cost += destTile->getTUCost(MapData::O_OBJECT, _movementType);
+					cost += destTile->getTUCost(
+											MapData::O_OBJECT,
+											_movementType);
 				}
 
 				// climbing up a level costs one extra
-				if (verticalOffset.z > 0)
+				if (vertOffset.z > 0)
 					cost++;
 
 				// if we don't want to fall down and there is no floor,
 				// we can't know the TUs so it defaults to 4
 				if (!fellDown
-					&& destTile->hasNoFloor(0))
+					&& destTile->hasNoFloor(NULL))
 				{
 					cost = 4;
 				}
@@ -841,11 +846,15 @@ int Pathfinding::getTUCost(
 				int sides = 0;		// how many walls we cross when moving diagonally
 				int wallTU = 0;		// used to check if there's a wall that costs +TU.
 
-				if (direction == 0
-					|| direction == 7
+				_openDoor = false;
+
+				if (direction == 7
+					|| direction == 0
 					|| direction == 1)
 				{
-					wallTU = startTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+					wallTU = startTile->getTUCost(
+												MapData::O_NORTHWALL,
+												_movementType); // ( bigWalls not incl. yet )
 					if (wallTU > 0)
 					{
 //						if (direction &1) // would use this to increase diagonal wall-crossing by +50%
@@ -854,49 +863,79 @@ int Pathfinding::getTUCost(
 //						}
 
 						wallcost += wallTU;
-						sides ++;
+						sides++;
+
+						if (startTile->getMapData(MapData::O_NORTHWALL)->isDoor()
+							|| startTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
+						{
+							_openDoor = true;
+						}
 					}
 				}
 
-				if (direction == 2
-					|| direction == 1
+				if (direction == 1
+					|| direction == 2
 					|| direction == 3)
 				{
-					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below.
+					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below. ( bigWalls not incl. yet )
 					{
-						wallTU = destTile->getTUCost(MapData::O_WESTWALL, _movementType);
+						wallTU = destTile->getTUCost(
+												MapData::O_WESTWALL,
+												_movementType);
 						if (wallTU > 0)
 						{
 							wallcost += wallTU;
-							sides ++;
+							sides++;
+
+							if (destTile->getMapData(MapData::O_WESTWALL)->isDoor()
+								|| destTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
+							{
+								_openDoor = true;
+							}
 						}
 					}
 				}
 
-				if (direction == 4
-					|| direction == 3
+				if (direction == 3
+					|| direction == 4
 					|| direction == 5)
 				{
-					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below.
+					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below. ( bigWalls not incl. yet )
 					{
-						wallTU = destTile->getTUCost(MapData::O_NORTHWALL, _movementType);
+						wallTU = destTile->getTUCost(
+												MapData::O_NORTHWALL,
+												_movementType);
 						if (wallTU > 0)
 						{
 							wallcost += wallTU;
-							sides ++;
+							sides++;
+
+							if (destTile->getMapData(MapData::O_NORTHWALL)->isDoor()
+								|| destTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
+							{
+								_openDoor = true;
+							}
 						}
 					}
 				}
 
-				if (direction == 6
-					|| direction == 5
+				if (direction == 5
+					|| direction == 6
 					|| direction == 7)
 				{
-					wallTU = startTile->getTUCost(MapData::O_WESTWALL, _movementType);
+					wallTU = startTile->getTUCost(
+												MapData::O_WESTWALL,
+												_movementType); // ( bigWalls not incl. yet )
 					if (wallTU > 0)
 					{
 						wallcost += wallTU;
-						sides ++;
+						sides++;
+
+						if (startTile->getMapData(MapData::O_WESTWALL)->isDoor()
+							|| startTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
+						{
+							_openDoor = true;
+						}
 					}
 				}
 
@@ -1076,10 +1115,10 @@ void Pathfinding::abortPath()
 
 /**
  * Determines whether a certain part of a tile blocks movement.
- * @param tile, Specified tile, can be a null pointer.
- * @param part, Part of the tile.
- * @param missileTarget, Target for a missile.
- * @return, True if the movement is blocked.
+ * @param tile			- pointer to a specified tile, can be a null pointer
+ * @param part			- part of the tile
+ * @param missileTarget	- pointer to target for a missile
+ * @return, true if movement is blocked
  */
 // private
 bool Pathfinding::isBlocked(
@@ -1089,7 +1128,7 @@ bool Pathfinding::isBlocked(
 		int bigWallExclusion)
 {
 	//Log(LOG_INFO) << "Pathfinding::isBlocked() #2";
-	if (tile == 0) // probably outside the map here
+	if (tile == NULL) // probably outside the map here
 		return true;
 
 	if (part == O_BIGWALL)
@@ -1186,7 +1225,7 @@ bool Pathfinding::isBlocked(
 				return true;
 			}
 		}
-		else if (tile->hasNoFloor(0) // this whole section is devoted to making large units not take part in any kind of falling behaviour
+		else if (tile->hasNoFloor(NULL) // this whole section is devoted to making large units not take part in any kind of falling behaviour
 			&& _movementType != MT_FLY)
 		{
 			Position pos = tile->getPosition();
@@ -1216,7 +1255,7 @@ bool Pathfinding::isBlocked(
 				}
 
 				// not gonna fall any further, so we can stop checking.
-				if (!t->hasNoFloor(0))
+				if (!t->hasNoFloor(NULL))
 					break;
 
 				pos.z--;
@@ -1225,7 +1264,7 @@ bool Pathfinding::isBlocked(
 	}
 
 	// missiles can't pathfind through closed doors.
-	if (missileTarget != 0
+	if (missileTarget != NULL
 		&& tile->getMapData(part)
 		&& (tile->getMapData(part)->isDoor()
 			|| (tile->getMapData(part)->isUFODoor()
@@ -1247,11 +1286,11 @@ bool Pathfinding::isBlocked(
 
 /**
  * Determines whether going from one tile to another blocks movement.
- * @param startTile, The tile to start from.
- * @param endTile, The tile we want to reach.
- * @param direction, The direction we are facing.
- * @param missileTarget, Target for a missile.
- * @return, True if the movement is blocked.
+ * @param startTile		- pointer to a start tile
+ * @param endTile		- pointer to the destination tile
+ * @param direction		- direction facing
+ * @param missileTarget	- pointer to target for a missile
+ * @return, true if movement is blocked
  */
 // public:
 bool Pathfinding::isBlocked(
@@ -1690,8 +1729,8 @@ int Pathfinding::validateUpDown(
 }
 
 /**
- * Checks if going one step from start to destination in the given direction requires
- * going through a closed UFO door.
+ * Checks if going one step from start to destination in the
+ * given direction requires going through a closed UFO door.
  * @param direction The direction of travel.
  * @param start The starting position of the travel.
  * @param destination Where the travel ends.
@@ -1778,8 +1817,8 @@ int Pathfinding::validateUpDown(
 
 /**
  * Marks tiles for the path preview.
- * @param bRemove, To remove preview or not
- * @return, True if a path is previewed
+ * @param bRemove - true remove preview
+ * @return, true if a path is previewed
  */
 bool Pathfinding::previewPath(bool bRemove)
 {
@@ -1795,8 +1834,8 @@ bool Pathfinding::previewPath(bool bRemove)
 	_pathPreviewed = !bRemove;
 
 	Position
-		pos = _unit->getPosition(),
-		destination;
+		start = _unit->getPosition(),
+		dest;
 
 	int currentTU	= _unit->getTimeUnits(),
 		usedTU		= 0, // only for soldiers reserving TUs
@@ -1836,7 +1875,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	bool
 		dash = Options::strafe
 				&& _modifierUsed
-				&& !size
+				&& size == 0
 				&& _path.size() > 1,	// <- not exactly true. If moving around a corner +2 tiles, it
 										// will strafe (potential conflict). See WalkBState also or ...
 		bLaden		= armorType == "STR_PERSONAL_ARMOR_UC",
@@ -1854,9 +1893,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	AB_HIGH		// 2
 }; */
 
-	Tile
-		* tileLift,
-		* tile;
+	Tile* tile;
 
 	for (std::vector<int>::reverse_iterator
 			i = _path.rbegin();
@@ -1867,24 +1904,28 @@ bool Pathfinding::previewPath(bool bRemove)
 
 		// gets tu cost, but also gets the destination position.
 		tu = getTUCost(
-					pos,
+					start,
 					dir,
-					&destination,
+					&dest,
 					_unit,
 					0,
 					false);
 		energyStop = energy;
 
-		tileLift = _save->getTile(pos);
 		gravLift = dir >= DIR_UP
-				&& tileLift->getMapData(MapData::O_FLOOR)
-				&& tileLift->getMapData(MapData::O_FLOOR)->isGravLift();
+					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)
+					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)->isGravLift();
 		if (!gravLift)
 		{
 			if (dash)
 			{
 				energy -= tu * 3 / 2;
 				tu = tu * 3 / 4;
+
+				if (_openDoor)
+					tu++;	// kludge. Assumes: all doors take 4 TU to open ....
+							// Otherwise, have to separate TU for opening doors
+							// (no dash bonus) from TU for stepping on the floors.
 			}
 			else
 				energy -= tu;
@@ -1906,6 +1947,7 @@ bool Pathfinding::previewPath(bool bRemove)
 //		else // gravLift
 //			energy = 0;
 
+//		_openDoor = false;
 
 		currentTU -= tu;
 		usedTU += tu;
@@ -1914,7 +1956,7 @@ bool Pathfinding::previewPath(bool bRemove)
 														usedTU,
 														true);
 
-		pos = destination;
+		start = dest;
 		for (int
 				x = size;
 				x > -1;
@@ -1925,8 +1967,8 @@ bool Pathfinding::previewPath(bool bRemove)
 					y > -1;
 					y--)
 			{
-				tile = _save->getTile(pos + Position(x, y, 0));
-				Tile* tileAbove = _save->getTile(pos + Position(x, y, 1));
+				tile = _save->getTile(start + Position(x, y, 0));
+				Tile* tileAbove = _save->getTile(start + Position(x, y, 1));
 
 				if (!bRemove)
 				{

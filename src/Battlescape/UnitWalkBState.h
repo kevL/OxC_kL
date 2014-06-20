@@ -49,8 +49,8 @@ private:
 		_falling,
 		_onScreen,
 		_tileSwitchDone, // kL
-		_turnBeforeFirstStep;
-	int _preMovementCost;
+		_preStepTurn;
+	int _preStepCost;
 	size_t _unitsSpotted;
 
 	BattleUnit* _unit;

@@ -669,7 +669,7 @@ void Camera::setMapOffset(Position pos)
 
 /**
  * Toggles showing all map layers.
- * @return, New layer setting.
+ * @return, new layer setting
  */
 int Camera::toggleShowAllLayers()
 {
@@ -680,7 +680,7 @@ int Camera::toggleShowAllLayers()
 
 /**
  * Checks if the camera is showing all map layers.
- * @return Current layer setting.
+ * @return, current layer setting
  */
 bool Camera::getShowAllLayers() const
 {
@@ -689,9 +689,9 @@ bool Camera::getShowAllLayers() const
 
 /**
  * Checks if map coordinates X,Y,Z are on screen.
- * @param mapPos, Coordinates to check.
- * @param unitWalking, True to offset coordinates for a unit walking.
- * @return, True if the map coordinates are on screen.
+ * @param mapPos		- reference to coordinates to check
+ * @param unitWalking	- true to offset coordinates for a unit walking
+ * @return, true if the map coordinates are on screen
  */
 bool Camera::isOnScreen(
 		const Position& mapPos) const
@@ -704,11 +704,14 @@ bool Camera::isOnScreen(
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
 
-	return screenPos.x > -1 // kL_etc:
-			&& screenPos.x < _screenWidth
-			&& screenPos.y > -1
-			&& screenPos.y < _screenHeight - 72; // <- icons.
-
+//	return screenPos.x > -1 // kL_etc:
+//			&& screenPos.x < _screenWidth
+//			&& screenPos.y > -1
+//			&& screenPos.y < _screenHeight - 72; // <- icons.
+	return screenPos.x > 8 // kL_etc:
+			&& screenPos.x < _screenWidth - 8
+			&& screenPos.y > 8
+			&& screenPos.y < _screenHeight - 72 - 8; // <- icons.
 /*kL
 	if (unitWalking)
 	{
@@ -737,6 +740,9 @@ void Camera::resize()
 	_visibleMapHeight = _map->getHeight() - Map::ICON_HEIGHT;
 }
 
+/**
+ *
+ */
 void Camera::stopMouseScrolling()
 {
 	_scrollMouseTimer->stop();

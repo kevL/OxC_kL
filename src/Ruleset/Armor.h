@@ -41,8 +41,9 @@ namespace OpenXcom
 class Armor
 {
 
-	public:
-		static const int DAMAGE_TYPES = 10;
+public:
+	static const int DAMAGE_TYPES = 10;
+
 
 private:
 	std::string
@@ -61,6 +62,7 @@ private:
 		_drawingRoutine,
 		_size,
 		_weight;
+
 	float _damageModifier[DAMAGE_TYPES];
 
 	MovementType _movementType;

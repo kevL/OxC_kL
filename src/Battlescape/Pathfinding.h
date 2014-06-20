@@ -44,6 +44,7 @@ class Pathfinding
 
 private:
 	bool
+		_openDoor, // kL, to give accurate preview # when dashing through doors.
 		_modifierUsed,
 		_pathPreviewed,
 		_strafeMove;
