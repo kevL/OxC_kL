@@ -98,10 +98,10 @@ PathfindingNode* Pathfinding::getNode(const Position& pos)
 
 /**
  * Calculates the shortest path; tries bresenham then A* paths.
- * @param unit, Unit taking the path.
- * @param endPosition, The position we want to reach.
- * @param target, Target of the path.
- * @param maxTUCost, Maximum time units the path can cost.
+ * @param unit			- pointer to a unit
+ * @param endPosition	- destination position
+ * @param target		- pointer to a targeted unit
+ * @param maxTUCost		- maximum time units this path can cost
  */
 void Pathfinding::calculate(
 		BattleUnit* unit,
@@ -252,8 +252,12 @@ void Pathfinding::calculate(
 				&& startPosition.z == endPosition.z
 				&& abs(startPosition.x - endPosition.x) < 2
 				&& abs(startPosition.y - endPosition.y) < 2;
+		// kL_note. Ok let's advance that: allow the 90deg. corner shuggle!
+		// See below ...!!!
+
 //	if (_strafeMove) Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";
 //	else Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID";
+
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	bool sneak = _unit->getFaction() == FACTION_HOSTILE
@@ -270,8 +274,15 @@ void Pathfinding::calculate(
 				_path.begin(),
 				_path.end());
 
-		if (_path.size() > 1)		// kL
-			_strafeMove = false;	// kL
+		// kL_begin:
+		if (_path.size() > 1
+			&& !
+				(_path.size() == 2
+					&& startPosition.x != endPosition.x
+					&& startPosition.y != endPosition.y))
+		{
+			_strafeMove = false;
+		} // kL_end.
 
 		return;
 	}
@@ -292,8 +303,15 @@ void Pathfinding::calculate(
 		abortPath();
 	}
 
-	if (_path.size() > 1)		// kL
-		_strafeMove = false;	// kL
+	// kL_begin:
+	if (_path.size() > 1
+		&& !
+			(_path.size() == 2
+				&& startPosition.x != endPosition.x
+				&& startPosition.y != endPosition.y))
+	{
+		_strafeMove = false;
+	} // kL_end.
 }
 
 /**
@@ -1889,6 +1907,16 @@ bool Pathfinding::previewPath(bool bRemove)
 				&& size == 0
 				&& _path.size() > 1,	// <- not exactly true. If moving around a corner +2 tiles, it
 										// will strafe (potential conflict). See WalkBState also or ...
+		// kL_begin:
+/*		if (_path.size() > 1
+			&& !
+				(_path.size() == 2
+					&& startPosition.x != endPosition.x
+					&& startPosition.y != endPosition.y))
+		{
+			_strafeMove = false;
+		} */ // kL_end.
+
 		bLaden		= armorType == "STR_PERSONAL_ARMOR_UC",
 		bPowered	= armorType == "STR_POWER_SUIT_UC",
 		bPowered2	= armorType == "STR_FLYING_SUIT_UC",
