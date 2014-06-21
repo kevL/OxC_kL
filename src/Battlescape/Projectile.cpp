@@ -75,7 +75,8 @@ Projectile::Projectile(
 		_origin(origin),
 		_targetVoxel(targetVoxel),
 		_position(0),
-		_bulletSprite(bulletSprite)
+		_bulletSprite(bulletSprite),
+		_reversed(false)
 {
 	_speed = Options::battleFireSpeed; // this is the number of pixels the sprite will move between frames
 
@@ -103,6 +104,9 @@ Projectile::Projectile(
 			}
 		}
 	}
+
+	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) >= 0)
+		_reversed = true;
 }
 
 /**
@@ -826,6 +830,14 @@ Position Projectile::getOrigin()
 Position Projectile::getTarget() const // kL
 {
 	return _action.target;
+}
+
+/**
+ *
+ */
+bool Projectile::isReversed() const
+{
+	return _reversed;
 }
 
 /**

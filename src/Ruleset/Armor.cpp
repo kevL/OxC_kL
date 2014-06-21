@@ -44,7 +44,9 @@ Armor::Armor(const std::string& type)
 		_movementType(MT_WALK),
 		_size(1),
 		_weight(0),
-		_deathFrames(3)
+		_deathFrames(3),
+		_constantAnimation(false),
+		_canHoldWeapon(false)
 {
 	_stats.tu			= 0;
 	_stats.stamina		= 0;
@@ -126,6 +128,22 @@ void Armor::load(const YAML::Node& node)
 		_loftempsSet.push_back(node["loftemps"].as<int>());
 
 	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
+	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
+
+	if (_drawingRoutine == 0
+		|| _drawingRoutine == 1
+		|| _drawingRoutine == 4
+		|| _drawingRoutine == 6
+		|| _drawingRoutine == 10
+		|| _drawingRoutine == 13
+		|| _drawingRoutine == 14
+		|| _drawingRoutine == 16
+		|| _drawingRoutine == 17)
+	{
+		_canHoldWeapon = true;
+	}
+	else
+		_canHoldWeapon = false;
 }
 
 /**
@@ -291,6 +309,24 @@ int Armor::getWeight()
 int Armor::getDeathFrames()
 {
 	return _deathFrames;
+}
+
+/*
+ * Gets if armor uses constant animation.
+ * @return if it uses constant animation
+ */
+bool Armor::getConstantAnimation()
+{
+	return _constantAnimation;
+}
+
+/*
+ * Gets if armor can hold weapon.
+ * @return if it can hold weapon
+ */
+bool Armor::getCanHoldWeapon()
+{
+	return _canHoldWeapon;
 }
 
 }

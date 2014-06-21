@@ -133,12 +133,13 @@ private:
 		_playerPanicHandled;
 	int _AIActionCounter;
 
-	SavedBattleGame* _save;
+	BattleAction _currentAction;
+
 	BattlescapeState* _parentState;
 	BattleActionType
 		_tuReserved,
 		_playerTUReserved;
-	BattleAction _currentAction;
+	SavedBattleGame* _save;
 
 	std::list<BattleState*>
 		_deleted, // delete CTD

@@ -1412,7 +1412,7 @@ bool AlienBAIState::selectRandomTarget()
 /**
  * Selects a point near enough to our target to perform a melee attack.
  * @param target - pointer to a target
- * @param maxTUs - maximum time units the path to the target can cost
+ * @param maxTUs - maximum time units that the path to the target can cost
  * @return, true if a point was found
  */
 bool AlienBAIState::selectPointNearTarget(
@@ -1487,7 +1487,7 @@ bool AlienBAIState::selectPointNearTarget(
 							ret = true;
 
 							_attackAction->target = checkPath;
-							distance = _save->getPathfinding()->getPath().size();
+							distance = static_cast<int>(_save->getPathfinding()->getPath().size());
 //							distance = _save->getTileEngine()->distance(
 //																	checkPath,
 //																	_unit->getPosition());

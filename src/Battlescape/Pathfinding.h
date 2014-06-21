@@ -189,7 +189,7 @@ private:
 		void setUnit(BattleUnit* unit);
 
 		/// Determines whether the unit is going up a stairs.
-//kL		bool isOnStairs(const Position& startPosition, const Position& endPosition);
+//kL	bool isOnStairs(const Position& startPosition, const Position& endPosition);
 
 		/// Gets the modifier setting.
 		bool isModifierUsed() const;

@@ -241,8 +241,11 @@ void Pathfinding::calculate(
 		if (abs(startPosition.y - endPosition.y) <= 1) Log(LOG_INFO)	<< "strafe Pos.y true";
 	*/ // kL_end_TEST.
 
-	// Strafing move allowed only to adjacent squares on same z;
-	// "same z" rule mainly to simplify walking render.
+	// Strafing allowed only to adjacent squares on same z
+	// ( z-rule mainly to simplify walking render ).
+	// kL_note: This is 'bugged'/featured because it allows soldiers to strafe
+	// around a corner (ie, dest is only 1 tile distant but move is actually
+	// across 2 tiles at 90deg. path-angle)
 	Position startPosition = _unit->getPosition();
 	_strafeMove = Options::strafe
 				&& (SDL_GetModState() & KMOD_CTRL) != 0
@@ -267,6 +270,9 @@ void Pathfinding::calculate(
 				_path.begin(),
 				_path.end());
 
+		if (_path.size() > 1)		// kL
+			_strafeMove = false;	// kL
+
 		return;
 	}
 	else
@@ -285,6 +291,9 @@ void Pathfinding::calculate(
 	{
 		abortPath();
 	}
+
+	if (_path.size() > 1)		// kL
+		_strafeMove = false;	// kL
 }
 
 /**
@@ -964,15 +973,18 @@ int Pathfinding::getTUCost(
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
 			}
 
-			// Strafing costs +1 for forwards-ish or sidewards, propose +2 for backwards-ish directions
-			// Maybe if flying then it makes no difference?
+			// Propose: if flying then no extra TU cost
 			if (Options::strafe
 				&& _strafeMove)
 			{
 				if (size)
+				{
 					// 4-tile units not supported, Turn off strafe move and continue
 					_strafeMove = false;
-				// kL_begin:
+				}
+				// kL_begin: extra TU for strafe-moves ->	1 0 1
+				//											2 ^ 2
+				//											3 2 3
 				else if (_unit->getDirection() != direction)
 				{
 					int delta = std::min(
@@ -1849,13 +1861,12 @@ bool Pathfinding::previewPath(bool bRemove)
 		dir			= -1,
 		color		= 0;
 
-	if (_unit->isKneeled()) // -> and not on gravLift, and not moving an x/y direction.
-							// ie. up/down or gravLift:floor to gravLift:floor
+	bool stand = false;
+	if (_unit->isKneeled())
 	{
-		currentTU -= 8;
-		// That is not right when going up/down GravLifts kneeled ...!
-		// note: Neither is energy, below.
+		stand = true;
 
+		currentTU -= 8;
 		usedTU += 8;
 	}
 
@@ -1944,10 +1955,15 @@ bool Pathfinding::previewPath(bool bRemove)
 			if (energy > energyStop)
 				energy = energyStop;
 		}
-//		else // gravLift
-//			energy = 0;
+		else if (_unit->isKneeled()	// is gravLift, give back TU if kneeled,
+			&& dir >= DIR_UP		// AND moving up/down
+			&& stand == true)		// and has Not stood up yet.
+		{
+			stand = false;
 
-//		_openDoor = false;
+			currentTU += 8;
+			usedTU -= 8;
+		}
 
 		currentTU -= tu;
 		usedTU += tu;
@@ -1955,8 +1971,8 @@ bool Pathfinding::previewPath(bool bRemove)
 														_unit,
 														usedTU,
 														true);
-
 		start = dest;
+
 		for (int
 				x = size;
 				x > -1;

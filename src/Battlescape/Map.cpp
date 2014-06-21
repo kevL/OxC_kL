@@ -1287,10 +1287,24 @@ void Map::drawTerrain(Surface* surface)
 								&& itY >= bulletLowY
 								&& itY <= bulletHighY)
 							{
+//								for (int
+//										i = 0;
+//										i < BULLET_SPRITES;
+//										++i)
+								int begin = 0;
+								int end = BULLET_SPRITES;
+								int direction = 1;
+								if (_projectile->isReversed())
+								{
+									begin = BULLET_SPRITES - 1;
+									end = -1;
+									direction = -1;
+								}
+
 								for (int
-										i = 0;
-										i < BULLET_SPRITES;
-										++i)
+										i = begin;
+										i != end;
+										i += direction)
 								{
 									tmpSurface = _res->getSurfaceSet("Projectiles")->getFrame(_projectile->getParticle(i));
 									if (tmpSurface)
@@ -2065,13 +2079,14 @@ void Map::animate(bool redraw)
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if (((*i)->getArmor()->getSize() > 1
+/*		if (((*i)->getArmor()->getSize() > 1
 				&& (*i)->getArmor()->getMovementType() == MT_FLY)
 			|| (*i)->getArmor()->getDrawingRoutine() == 8
 			|| (*i)->getArmor()->getDrawingRoutine() == 9
 			|| (*i)->getArmor()->getDrawingRoutine() == 12
 			|| (*i)->getArmor()->getDrawingRoutine() == 15
-			|| (*i)->getArmor()->getDrawingRoutine() == 20)
+			|| (*i)->getArmor()->getDrawingRoutine() == 20) */
+		if ((*i)->getArmor()->getConstantAnimation())
 		{
 			(*i)->setCache(0);
 			cacheUnit(*i);
@@ -2224,11 +2239,12 @@ void Map::calculateWalkingOffset(
 								unit->getPosition(),
 								size);
 
-		if (unit->getArmor()->getDrawingRoutine() == 0
+/*		if (unit->getArmor()->getDrawingRoutine() == 0
 			|| unit->getArmor()->getDrawingRoutine() == 1
 			|| unit->getArmor()->getDrawingRoutine() == 4
 			|| unit->getArmor()->getDrawingRoutine() == 6
-			|| unit->getArmor()->getDrawingRoutine() == 10)
+			|| unit->getArmor()->getDrawingRoutine() == 10) */
+		if (unit->getArmor()->getCanHoldWeapon())
 		{
 			if (unit->getStatus() == STATUS_AIMING)
 				offset->x = -16;

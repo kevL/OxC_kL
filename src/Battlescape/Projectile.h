@@ -44,6 +44,7 @@ class Projectile
 {
 
 private:
+	bool _reversed;
 	int
 		_bulletSprite,
 		_speed;
@@ -107,8 +108,11 @@ private:
 		/// Gets the Position of origin for the projectile.
 		Position getOrigin();
 		/// Gets the targetted tile for the projectile.
-//kL		Position getTarget();
+//kL	Position getTarget();
 		Position getTarget() const; // kL
+
+		///
+		bool isReversed() const;
 
 		/// kL. Gets a pointer to the BattleAction actor directly.
 		BattleUnit* getActor() const; // kL

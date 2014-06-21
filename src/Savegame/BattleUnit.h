@@ -417,7 +417,7 @@ private:
 		int getFatalWounds() const;
 
 		/// Get the current reaction score.
-//kL		double getInitiative();
+//kL	double getInitiative();
 		double getInitiative(int tuSpent = 0); // kL
 
 		/// Prepare for a new turn.
@@ -609,7 +609,7 @@ private:
 		BattleUnit* getCharging();
 
 		/// Get the carried weight in strength units.
-		int getCarriedWeight(BattleItem* draggingItem = 0) const;
+		int getCarriedWeight(BattleItem* draggingItem = NULL) const;
 
 		/// Set how many turns this unit will be exposed for.
 		void setTurnsExposed(int turns);

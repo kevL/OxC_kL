@@ -2220,10 +2220,12 @@ void BattlescapeGame::primaryAction(const Position& pos)
 									&& _save->getSelectedUnit()->getTurretType() == -1;
 
 			if (_currentAction.strafe
-				&& _save->getTileEngine()->distance(
-													_currentAction.actor->getPosition(),
-													pos)
-												> 1)
+//				&& getPathfinding()->getStrafeMove())		// kL <- NO.
+				&& getPathfinding()->getPath().size() > 1)	// kL
+//				&& _save->getTileEngine()->distance(
+//													_currentAction.actor->getPosition(),
+//													pos)
+//												> 1)
 			{
 				_currentAction.actor->setDashing(true); // kL
 				_currentAction.run = true;

@@ -171,7 +171,11 @@ void Soldier::load(
 				i != layout.end();
 				++i)
 		{
-			_equipmentLayout.push_back(new EquipmentLayoutItem(*i));
+			EquipmentLayoutItem* layoutItem = new EquipmentLayoutItem(*i);
+			if (rule->getInventory(layoutItem->getSlot()))
+				_equipmentLayout.push_back(layoutItem);
+			else
+				delete layoutItem;
 		}
 	}
 

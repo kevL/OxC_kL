@@ -1143,7 +1143,7 @@ void UnitSprite::drawRoutine4()
 //	int stand = 0, walk = 8, die = 72; // TFTD
 	const int
 		stand	= 0,
-//kL	walk	= 8,
+		walk	= 8,
 		die		= 72,
 
 		offX[8]			= { 8, 10,  7,  4, -9,-11, -7, -3 }, // for the weapons
@@ -1178,10 +1178,11 @@ void UnitSprite::drawRoutine4()
 
 		return;
 	}
-//kL	else if (_unit->getStatus() == STATUS_WALKING) // needs to be changed to: if (ethereal) ...
-//kL	{
-//kL		srf = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
-//kL	}
+	else if (_unit->getStatus() == STATUS_WALKING
+		&& _unit->getRaceString() != "STR_ETHEREAL") // kL
+	{
+		srf = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
+	}
 	else // if (_drawingRoutine != 16) // TFTD
 	{
 		srf = _unitSurface->getFrame(stand + _unit->getDirection());
@@ -1758,7 +1759,7 @@ void UnitSprite::drawRoutine11()
 		hoverTank = 128;
 	}
 	const int
-		offY[8]			= { 6, 1, 4, 1, 4, 1, 6, 1 }, // tank offset
+		offY[8]			= { 6, 1, 4, 1, 4, 1, 6, 1 }, // coelacanth offset
 		offTurretX[8]	= {-3,-2, 0, 0, 0, 2, 3, 0 }, // turret offsets
 		offTurretY[8]	= {-3,-5,-4,-2,-4,-5,-3,-3 }; // turret offsets
 
@@ -1769,7 +1770,6 @@ void UnitSprite::drawRoutine11()
 	{
 		// draw the displacer
 		srf = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + _animationFrame / 2);
-		srf->setY(offY[_unit->getDirection()]);
 		srf->blit(this);
 	}
 	else
@@ -1777,7 +1777,7 @@ void UnitSprite::drawRoutine11()
 		// draw the coelacanth
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			srf = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + (_unit->getWalkingPhase() % 4));
+			srf = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + (_unit->getWalkingPhase() %4));
 		}
 		else
 		{
@@ -1895,7 +1895,7 @@ void UnitSprite::drawRoutine19()
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		srf = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20) + 1 + ((_unit->getWalkingPhase() / 2) % 4));
+		srf = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20) + 1 + ((_unit->getWalkingPhase() / 2) %4));
 	}
 	else
 	{
@@ -1915,7 +1915,7 @@ void UnitSprite::drawRoutine20()
 
 	Surface* srf = NULL;
 
-	srf = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame % 4));
+	srf = _unitSurface->getFrame((_part * 4) + (_unit->getDirection() * 16) + (_animationFrame %4));
 	_redraw = true;
 
 	srf->blit(this);

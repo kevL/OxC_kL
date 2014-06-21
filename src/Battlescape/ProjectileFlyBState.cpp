@@ -556,7 +556,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	if (_action.type == BA_THROW)
 	{
-		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
+		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy() / 100.0);
 		//Log(LOG_INFO) << ". BA_THROW, part = " << _projectileImpact;
 		if (_projectileImpact == VOXEL_FLOOR
 			|| _projectileImpact == VOXEL_UNIT

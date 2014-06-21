@@ -52,6 +52,9 @@ private:
 		_spriteInv,
 		_corpseGeo,
 		_storeItem;
+	bool
+		_canHoldWeapon,
+		_constantAnimation;
 	int
 		_deathFrames,
 		_frontArmor,
@@ -117,6 +120,10 @@ private:
 		int getWeight();
 		/// Gets number of death frames.
 		int getDeathFrames();
+		/// Gets if armor uses constant animation.
+		bool getConstantAnimation();
+		/// Gets if armor can hold weapon.
+		bool getCanHoldWeapon();
 };
 
 }
