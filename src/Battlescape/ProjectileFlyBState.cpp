@@ -834,8 +834,11 @@ void ProjectileFlyBState::think()
 														_action.TU); // kL
 			}
 
-			if (!_unit->isOut())
+			if (!_unit->isOut()
+				&& _action.type != BA_HIT) // kL_note: huh?
+			{
 				_unit->setStatus(STATUS_STANDING);
+			}
 
 			if (_parent->getSave()->getSide() == FACTION_PLAYER
 				|| _parent->getSave()->getDebugMode())

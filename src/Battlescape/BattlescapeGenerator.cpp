@@ -2700,6 +2700,18 @@ int BattlescapeGenerator::loadMAP(
 				// kL_note: might want to change this to how it was in UFO:orig.
 		}
 
+		if (craft
+			&& _craftZ == z)
+		{
+			for (int
+					z2 = _save->getMapSizeZ() - 1;
+					z2 >= _craftZ;
+					--z2)
+			{
+				_save->getTile(Position(x, y, z2))->setDiscovered(true, 2);
+			}
+		}
+
 		_save->getTile(Position(x, y, z))->setDiscovered(discovered, 2);
 
 		x++;

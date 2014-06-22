@@ -124,6 +124,7 @@ Screen::Screen()
 		_baseHeight(ORIGINAL_HEIGHT),
 		_scaleX(1.0),
 		_scaleY(1.0),
+		_flags(0),
 		_numColors(0),
 		_firstColor(0),
 		_pushPalette(false),
