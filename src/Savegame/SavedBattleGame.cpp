@@ -1034,7 +1034,6 @@ int SavedBattleGame::getTurn() const
 void SavedBattleGame::endTurn()
 {
 	//Log(LOG_INFO) << "SavedBattleGame::endTurn()";
-
 	if (_side == FACTION_PLAYER) // end of Xcom turn.
 	{
 		//Log(LOG_INFO) << ". end Faction_Player";
@@ -1046,7 +1045,7 @@ void SavedBattleGame::endTurn()
 		}
 
 		_side = FACTION_HOSTILE;
-		_selectedUnit = 0;
+		_selectedUnit = NULL;
 
 		// kL_begin: sbg::endTurn() no Reselect xCom units at endTurn!!!
 		for (std::vector<BattleUnit*>::iterator
@@ -1055,7 +1054,10 @@ void SavedBattleGame::endTurn()
 				++i)
 		{
 			if ((*i)->getFaction() == FACTION_PLAYER)
+			{
 				(*i)->dontReselect(); // either zero tu's or set no reselect
+				(*i)->setDashing(false); // no longer dashing; dash is effective vs. Reaction Fire only.
+			}
 		} // kL_end.
 	}
 	else if (_side == FACTION_HOSTILE) // end of Alien turn.
@@ -1066,7 +1068,7 @@ void SavedBattleGame::endTurn()
 
 		// if there is no neutral team, we skip this section
 		// and instantly prepare the new turn for the player.
-		if (selectNextFactionUnit() == 0) // this will now cycle through NEUTRAL units
+		if (selectNextFactionUnit() == NULL) // this will now cycle through NEUTRAL units
 			// so shouldn't that really be 'selectNextFactionUnit()'???!
 			// see selectFactionUnit() -> isSelectable()
 		{
@@ -1120,7 +1122,7 @@ void SavedBattleGame::endTurn()
 			&& _selectedUnit->getFaction() != FACTION_PLAYER)
 		{
 			//Log(LOG_INFO) << ". . . finding a Unit to select";
-//kL			selectNextFactionUnit();
+//kL		selectNextFactionUnit();
 			selectNextFactionUnit(true); // kL
 		}
 	}
@@ -1157,11 +1159,16 @@ void SavedBattleGame::endTurn()
 			i != _units.end();
 			++i)
 	{
-		if ((*i)->getFaction() == _side)	// this causes an Mc'd unit to lose its turn.
-			(*i)->prepareNewTurn();			// reverts faction, tu/stun recovery, Fire damage, etc
+		if ((*i)->getFaction() == _side)	// this causes an Mc'd unit to lose its turn. Because its faction
+											// hasn't reverted until *after* bu->prepareNewTurn() runs. So it
+											// actually switches at the _end_ of its original faction's turn ...
+			(*i)->prepareNewTurn();			// Reverts faction, tu/stun recovery, Fire damage, etc.
+
 
 		if ((*i)->getFaction() == FACTION_PLAYER) // including units Mc'd by xCom
 		{
+//			(*i)->setDashing(false); // no longer dashing; dash is effective vs. Reaction Fire only. MOVED UP ^
+
 			if ((*i)->isOut(true, true))
 				(*i)->setTurnsExposed(255);
 			else if (_cheating
@@ -1182,7 +1189,7 @@ void SavedBattleGame::endTurn()
 
 			if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
 				(*i)->setTurnsExposed(0);	// aLiens always know where their buddies are,
-												// Mc'd or not.
+											// Mc'd or not.
 		}
 
 //		if ((*i)->getFaction() == _side)
@@ -1530,17 +1537,19 @@ Node* SavedBattleGame::getPatrolNode(
 		Node* fromNode)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getPatrolNode()";
-	if (fromNode == 0)
+	if (fromNode == NULL)
 	{
 		if (Options::traceAI) Log(LOG_INFO) << "This alien got lost. :(";
 
-		fromNode = getNodes()->at(RNG::generate(0, static_cast<int>(getNodes()->size()) - 1));
+		fromNode = getNodes()->at(RNG::generate(
+											0,
+											static_cast<int>(getNodes()->size()) - 1));
 	}
 
 
 	std::vector<Node*> legitNodes;
-	Node* bestNode = 0;
-	Node* node = 0;
+	Node* bestNode = NULL;
+	Node* node = NULL;
 
 	// scouts roam all over while all others shuffle around to adjacent nodes at most:
 //kL	int const linksEnd = scout? getNodes()->size(): fromNode->getNodeLinks()->size();
@@ -1617,16 +1626,18 @@ Node* SavedBattleGame::getPatrolNode(
 		}
 		else
 			//Log(LOG_INFO) << " . legitNodes is NOT Empty.";
-			//Log(LOG_INFO) << " . return 0";
-			return 0;
+			//Log(LOG_INFO) << " . return NULL";
+			return NULL;
 	}
 
 	if (scout) // picks a random destination
 	{
 		//Log(LOG_INFO) << " . scout";
 
-//kL		return legitNodes[RNG::generate(0, static_cast<int>(legitNodes.size()) - 1)];
-		size_t legit = static_cast<size_t>(RNG::generate(0, static_cast<int>(legitNodes.size()) - 1));
+//kL	return legitNodes[RNG::generate(0, static_cast<int>(legitNodes.size()) - 1)];
+		size_t legit = static_cast<size_t>(RNG::generate(
+													0,
+													static_cast<int>(legitNodes.size()) - 1));
 
 		//Log(LOG_INFO) << " . return legitNodes @ " << legit;
 		return legitNodes[legit];
@@ -1635,8 +1646,8 @@ Node* SavedBattleGame::getPatrolNode(
 	{
 		//Log(LOG_INFO) << " . !scout";
 		if (!bestNode)
-			//Log(LOG_INFO) << " . no bestNode, return 0";
-			return 0;
+			//Log(LOG_INFO) << " . no bestNode, return NULL";
+			return NULL;
 
 		// non-scout patrols to highest value unoccupied node that's not fromNode
 		if (Options::traceAI) Log(LOG_INFO) << "Choosing node flagged " << bestNode->getFlags();

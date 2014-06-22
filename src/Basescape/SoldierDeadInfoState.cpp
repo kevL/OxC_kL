@@ -542,9 +542,11 @@ void SoldierDeadInfoState::btnOkClick(Action*)
 
 /**
  * Goes to the previous soldier.
+ * kL: reversed these because SoldierMemorialState uses a reversed vector.
  * @param action Pointer to an action.
  */
-void SoldierDeadInfoState::btnPrevClick(Action*)
+void SoldierDeadInfoState::btnNextClick(Action*)
+// void SoldierDeadInfoState::btnPrevClick(Action*)
 {
 	if (_soldierId == 0)
 		_soldierId = _list->size() - 1;
@@ -556,9 +558,11 @@ void SoldierDeadInfoState::btnPrevClick(Action*)
 
 /**
  * Goes to the next soldier.
+ * kL: reversed these because SoldierMemorialState uses a reversed vector.
  * @param action Pointer to an action.
  */
-void SoldierDeadInfoState::btnNextClick(Action*)
+void SoldierDeadInfoState::btnPrevClick(Action*)
+//void SoldierDeadInfoState::btnNextClick(Action*)
 {
 	_soldierId++;
 

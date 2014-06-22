@@ -1887,7 +1887,7 @@ double BattleUnit::getInitiative(int tuSpent) // kL
 	// (Reactions Stat) x (Current Time Units / Max TUs)
 	return static_cast<double>(
 				getStats()->reactions * (getTimeUnits() - tuSpent))
-			/ static_cast<double>(getStats()->tu);
+				/ static_cast<double>(getStats()->tu);
 }
 
 /**

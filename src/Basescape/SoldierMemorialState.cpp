@@ -145,14 +145,14 @@ SoldierMemorialState::SoldierMemorialState(Game* game)
 	_lstSoldiers->onMouseClick((ActionHandler)& SoldierMemorialState::lstSoldiersClick);
 
 	//Log(LOG_INFO) << "SoldierMemorialState::SoldierMemorialState() -> getDeadSoldiers";
-/*	for (std::vector<SoldierDead*>::reverse_iterator // kL
+	for (std::vector<SoldierDead*>::reverse_iterator // kL
 			i = _game->getSavedGame()->getDeadSoldiers()->rbegin();
 			i != _game->getSavedGame()->getDeadSoldiers()->rend();
-			++i) */
-	for (std::vector<SoldierDead*>::const_iterator // kL
+			++i)
+/*	for (std::vector<SoldierDead*>::const_iterator // kL
 			i = _game->getSavedGame()->getDeadSoldiers()->begin();
 			i != _game->getSavedGame()->getDeadSoldiers()->end();
-			++i)
+			++i) */
 	{
 		//Log(LOG_INFO) << ". dead soldier, getSoldierDeath & addRow etc";
 		SoldierDeath* death = (*i)->getDeath();
@@ -202,9 +202,11 @@ void SoldierMemorialState::btnOkClick(Action*)
  */
 void SoldierMemorialState::lstSoldiersClick(Action* action)
 {
+	size_t row = _game->getSavedGame()->getDeadSoldiers()->size() - 1 - _lstSoldiers->getSelectedRow();
 	_game->pushState(new SoldierDeadInfoState(
 											_game,
-											_lstSoldiers->getSelectedRow()));
+											row));
+//											_lstSoldiers->getSelectedRow()));
 }
 
 }

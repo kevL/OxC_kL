@@ -64,9 +64,9 @@ ProjectileFlyBState::ProjectileFlyBState(
 		BattleState(
 			parent,
 			action),
-		_unit(0),
-		_ammo(0),
-		_projectileItem(0),
+		_unit(NULL),
+		_ammo(NULL),
+		_projectileItem(NULL),
 		_origin(origin),
 		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
 		_projectileImpact(0),
@@ -86,10 +86,10 @@ ProjectileFlyBState::ProjectileFlyBState(
 		BattleState(
 			parent,
 			action),
-		_unit(0),
-		_ammo(0),
+		_unit(NULL),
+		_ammo(NULL),
 		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
-		_projectileItem(0),
+		_projectileItem(NULL),
 		_origin(action.actor->getPosition()),
 		_projectileImpact(0),
 		_initialized(false),
@@ -123,14 +123,14 @@ void ProjectileFlyBState::init()
 
 
 	// kL_begin:
-	BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
+/*	BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
 	if (targetUnit
 		&& targetUnit->getFaction() != _parent->getSave()->getSide()
 		&& targetUnit->getDashing()) // this really doesn't have to be left here <-
 	{
 		//Log(LOG_INFO) << ". targetUnit was dashing -> now set FALSE";
 		targetUnit->setDashing(false);
-	} // kL_end.
+	} */ // kL_end. -> I moved this to SavedBattleGame::prepareNewTurn()
 
 
 //kL	BattleItem* weapon = _action.weapon; // < was a pointer!! kL_note.
@@ -199,6 +199,7 @@ void ProjectileFlyBState::init()
 	}
 	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
 	{
+		BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
 		if (targetUnit)
 		{
 			if (_ammo == 0
