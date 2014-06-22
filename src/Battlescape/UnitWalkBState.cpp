@@ -505,7 +505,7 @@ bool UnitWalkBState::doStatusStand()
 		// we are not using the turn state, because turning during walking costs no tu
 		else if (dir != _unit->getDirection()
 			&& dir < _pf->DIR_UP
-			&& !_pf->getStrafeMove())
+			&& _pf->getStrafeMove() == false)
 		{
 			//Log(LOG_INFO) << ". . dir != _unit->getDirection() -> turn";
 			_unit->lookAt(dir);

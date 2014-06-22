@@ -105,29 +105,42 @@ BattleUnit::BattleUnit(
 		_hidingForTurn(false),
 		_stopShot(false), // kL
 		_dashing(false), // kL
-		_takenExpl(false) // kL
+		_takenExpl(false), // kL
+		_race(""), // kL
+
+		_deathSound(0), // kL, moved these here from def'ns below.
+		_aggroSound(-1),
+		_moveSound(-1),
+		_intelligence(2),
+		_aggression(1),
+		_specab(SPECAB_NONE),
+		_faceDirection(-1),
+		_morale(100),
+		_stunlevel(0),
+		_type("SOLDIER"),
+		_activeHand("STR_RIGHT_HAND")
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 	_name			= soldier->getName(true);
 	_id				= soldier->getId();
-	_type			= "SOLDIER";
+//	_type			= "SOLDIER";
 	_rank			= soldier->getRankString();
 	_stats			= *soldier->getCurrentStats();
 
 	_standHeight	= soldier->getRules()->getStandHeight();
 	_kneelHeight	= soldier->getRules()->getKneelHeight();
 	_floatHeight	= soldier->getRules()->getFloatHeight();
-	_deathSound		= 0; // this one is hardcoded
-	_aggroSound		= -1;
-	_moveSound		= -1; // this one is hardcoded
-	_intelligence	= 2;
-	_aggression		= 1;
-	_specab			= SPECAB_NONE;
+//	_deathSound		= 0; // this one is hardcoded
+//	_aggroSound		= -1;
+//	_moveSound		= -1; // this one is hardcoded
+//	_intelligence	= 2;
+//	_aggression		= 1;
+//	_specab			= SPECAB_NONE;
 	_armor			= soldier->getArmor();
 	_stats			+= *_armor->getStats();	// armors may modify effective stats
 	_loftempsSet	= _armor->getLoftempsSet();
 	_gender			= soldier->getGender();
-	_faceDirection	= -1;
+//	_faceDirection	= -1;
 
 	int rankbonus = 0;
 	switch (soldier->getRank())
@@ -150,8 +163,8 @@ BattleUnit::BattleUnit(
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
 	_health		= _stats.health;
-	_morale		= 100;
-	_stunlevel	= 0;
+//	_morale		= 100;
+//	_stunlevel	= 0;
 
 	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
 	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
@@ -164,7 +177,7 @@ BattleUnit::BattleUnit(
 	for (int i = 0; i < 5; ++i)
 		_cache[i] = 0;
 
-	_activeHand = "STR_RIGHT_HAND";
+//	_activeHand = "STR_RIGHT_HAND";
 
 	lastCover = Position(-1,-1,-1);
 	//Log(LOG_INFO) << "Create BattleUnit 1, DONE";
@@ -191,7 +204,7 @@ BattleUnit::BattleUnit(
 		_killedBy(faction),
 		_id(id),
 		_pos(Position()),
-		_tile(0),
+		_tile(NULL),
 		_lastPos(Position()),
 		_direction(0),
 		_toDirection(0),
@@ -206,7 +219,7 @@ BattleUnit::BattleUnit(
 		_floating(false),
 		_dontReselect(false),
 		_fire(0),
-		_currentAIState(0),
+		_currentAIState(NULL),
 		_visible(false),
 		_cacheInvalid(true),
 		_expBravery(0),
@@ -217,20 +230,25 @@ BattleUnit::BattleUnit(
 		_expMelee(0),
 		_motionPoints(0),
 		_kills(0),
-//kL		_hitByFire(false),
+//kL	_hitByFire(false),
 		_moraleRestored(0),
 		_coverReserve(0),
-		_charging(0),
+		_charging(NULL),
 		_turnsExposed(255),
 		_armor(armor),
-		_geoscapeSoldier(0),
+		_geoscapeSoldier(NULL),
 		_unitRules(unit),
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false),
 		_stopShot(false), // kL
-		_dashing(false) // kL
-{
+		_dashing(false), // kL
+		_takenExpl(false), // kL
+
+		_morale(100), // kL, moved these here from def'ns below.
+		_stunlevel(0),
+		_activeHand("STR_RIGHT_HAND")
+ {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 	_type	= unit->getType();
 	_rank	= unit->getRank();
@@ -249,8 +267,8 @@ BattleUnit::BattleUnit(
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
 	_health		= _stats.health;
-	_morale		= 100;
-	_stunlevel	= 0;
+//	_morale		= 100;
+//	_stunlevel	= 0;
 
 	_standHeight	= unit->getStandHeight();
 	_kneelHeight	= unit->getKneelHeight();
@@ -278,9 +296,9 @@ BattleUnit::BattleUnit(
 	for (int i = 0; i < 5; ++i)
 		_cache[i] = 0;
 
-	_activeHand = "STR_RIGHT_HAND";
+//	_activeHand = "STR_RIGHT_HAND";
 
-	lastCover = Position(-1, -1, -1);
+	lastCover = Position(-1,-1,-1);
 	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
 }
 
@@ -338,11 +356,12 @@ void BattleUnit::load(const YAML::Node& node)
 	_originalFaction	= (UnitFaction)node["originalFaction"].as<int>(_originalFaction);
 	_kills				= node["kills"].as<int>(_kills);
 	_dontReselect		= node["dontReselect"].as<bool>(_dontReselect);
-	_charging			= 0;
+	_charging			= NULL;
 	_specab				= (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit			= node["spawnUnit"].as<std::string>(_spawnUnit);
 	_motionPoints		= node["motionPoints"].as<int>(0);
 	_activeHand			= node["activeHand"].as<std::string>(_activeHand); // kL
+	_dashing			= node["dashing"].as<bool>(_dashing); // kL
 
 	for (int i = 0; i < 5; i++)
 		_currentArmor[i]	= node["armor"][i].as<int>(_currentArmor[i]);
@@ -393,6 +412,7 @@ YAML::Node BattleUnit::save() const
 	node["motionPoints"]	= _motionPoints;
 	// could put (if not tank) here:
 	node["activeHand"]		= _activeHand; // kL
+	node["dashing"]			= _dashing; // kL
 
 	for (int i = 0; i < 5; i++)
 		node["armor"].push_back(_currentArmor[i]);
@@ -984,7 +1004,7 @@ void BattleUnit::setCache(
 		Surface* cache,
 		int part)
 {
-	if (cache == 0)
+	if (cache == NULL)
 		_cacheInvalid = true;
 	else
 	{
@@ -1437,7 +1457,7 @@ int BattleUnit::getActionTUs(
 		BattleActionType actionType,
 		BattleItem* item)
 {
-	if (item == 0)
+	if (item == NULL)
 		return 0;
 
 	int cost = 0;
@@ -1949,7 +1969,7 @@ void BattleUnit::prepareNewTurn()
 
 		delete _currentAIState;
 
-		_currentAIState = 0;
+		_currentAIState = NULL;
 	}
 
 	if (_stunlevel > 0)
@@ -2177,7 +2197,7 @@ BattleItem* BattleUnit::getItem(
 			}
 		}
 	}
-	else if (_tile != 0) // Ground items
+	else if (_tile != NULL) // Ground items
 	{
 		for (std::vector<BattleItem*>::const_iterator
 				i = _tile->getInventory()->begin();
@@ -2191,7 +2211,7 @@ BattleItem* BattleUnit::getItem(
 		}
 	}
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -2221,7 +2241,7 @@ BattleItem* BattleUnit::getItem(
 			}
 		}
 	}
-	else if (_tile != 0) // Ground items
+	else if (_tile != NULL) // Ground items
 	{
 		for (std::vector<BattleItem*>::const_iterator
 				i = _tile->getInventory()->begin();
@@ -2236,7 +2256,7 @@ BattleItem* BattleUnit::getItem(
 		}
 	}
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -2376,12 +2396,10 @@ BattleItem* BattleUnit::getGrenadeFromBelt() const
 			++i)
 	{
 		if ((*i)->getRules()->getBattleType() == BT_GRENADE)
-		{
 			return *i;
-		}
 	}
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -2395,12 +2413,12 @@ bool BattleUnit::checkAmmo()
 
 	BattleItem* weapon = getItem("STR_RIGHT_HAND");
 	if (!weapon
-		|| weapon->getAmmoItem() != 0
+		|| weapon->getAmmoItem() != NULL
 		|| weapon->getRules()->getBattleType() == BT_MELEE)
 	{
 		weapon = getItem("STR_LEFT_HAND");
 		if (!weapon
-			|| weapon->getAmmoItem() != 0
+			|| weapon->getAmmoItem() != NULL
 			|| weapon->getRules()->getBattleType() == BT_MELEE)
 		{
 
@@ -2412,7 +2430,7 @@ bool BattleUnit::checkAmmo()
 	// we might need to look for ammo then ...
 	bool wrongAmmo = true;
 
-	BattleItem* ammo = 0;
+	BattleItem* ammo = NULL;
 
 	for (std::vector<BattleItem*>::iterator
 			i = getInventory()->begin();
@@ -2442,7 +2460,7 @@ bool BattleUnit::checkAmmo()
 
 	spendTimeUnits(15);
 	weapon->setAmmoItem(ammo);
-	ammo->moveToOwner(0);
+	ammo->moveToOwner(NULL);
 
 	//Log(LOG_INFO) << "BattleUnit::checkAmmo() EXIT";
 	return true;
@@ -2542,7 +2560,7 @@ void BattleUnit::updateGeoscapeStats(Soldier* soldier)
 bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 {
 	Soldier* soldier = geoscape->getSoldier(_id);
-	if (soldier == 0)
+	if (soldier == NULL)
 		return false;
 
 
@@ -2809,7 +2827,7 @@ std::wstring BattleUnit::getName(
 		bool debugAppendId) const
 {
 	if (_type != "SOLDIER"
-		&& lang != 0)
+		&& lang != NULL)
 	{
 		std::wstring ret;
 

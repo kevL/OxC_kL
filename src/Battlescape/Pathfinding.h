@@ -152,9 +152,9 @@ private:
 
 		/// Gets the TU cost to move from 1 tile to the other.
 		int getTUCost(
-				const Position& startPosition,
-				const int direction,
-				Position* endPosition,
+				const Position& startPos,
+				const int dir,
+				Position* endPos,
 				BattleUnit* unit,
 				BattleUnit* target,
 				bool missile);

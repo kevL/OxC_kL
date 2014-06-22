@@ -2215,17 +2215,17 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 			_currentAction.actor->setDashing(false); // kL
 			_currentAction.run = false;
+
 			_currentAction.strafe = Options::strafe
 									&& modifierPressed
 									&& _save->getSelectedUnit()->getTurretType() == -1;
-
 			if (_currentAction.strafe
 //				&& getPathfinding()->getStrafeMove())		// kL <- NO.
-				&& getPathfinding()->getPath().size() > 1)	// kL
-//				&& _save->getTileEngine()->distance(
-//													_currentAction.actor->getPosition(),
-//													pos)
-//												> 1)
+//				&& getPathfinding()->getPath().size() > 1)	// kL <- yes, but think of the shuggle
+				&& _save->getTileEngine()->distance(
+													_currentAction.actor->getPosition(),
+													pos)
+												> 1)
 			{
 				_currentAction.actor->setDashing(true); // kL
 				_currentAction.run = true;
