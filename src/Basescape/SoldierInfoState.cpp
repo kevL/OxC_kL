@@ -71,7 +71,7 @@ SoldierInfoState::SoldierInfoState(
 		State(game),
 		_base(base),
 		_soldierId(soldierId),
-		_soldier(0) // kL
+		_soldier(NULL) // kL
 {
 	_list = _base->getSoldiers();
 
@@ -256,9 +256,17 @@ SoldierInfoState::SoldierInfoState(
 	_btnSack->setText(tr("STR_SACK"));
 	_btnSack->onMouseClick((ActionHandler)& SoldierInfoState::btnSackClick);
 
+	// kL_begin:
 	_btnAutoStat->setColor(Palette::blockOffset(15)+6);
 	_btnAutoStat->setText(tr("STR_AUTOSTAT"));
-	_btnAutoStat->onMouseClick((ActionHandler)& SoldierInfoState::btnAutoStat);
+//	_btnAutoStat->onMouseClick((ActionHandler)& SoldierInfoState::btnAutoStat);
+	_btnAutoStat->onMouseClick(
+					(ActionHandler)& SoldierInfoState::btnAutoStat,
+					SDL_BUTTON_LEFT);
+	_btnAutoStat->onMouseClick(
+					(ActionHandler)& SoldierInfoState::btnAutoStatAll,
+					SDL_BUTTON_RIGHT);
+	// kL_end.
 
 	_txtArmor->setColor(Palette::blockOffset(13));
 	_txtArmor->setText(tr("STR_ARMOR"));
@@ -741,6 +749,7 @@ void SoldierInfoState::init()
 
 /**
  * kL. Automatically renames a soldier according to its statistics.
+ * Left-click on the Auto-stat button.
  */
 void SoldierInfoState::btnAutoStat(Action*)
 {
@@ -833,6 +842,26 @@ void SoldierInfoState::btnAutoStat(Action*)
 	//Log(LOG_INFO) << ". re-init";
 	init();
 	//Log(LOG_INFO) << "SoldierInfoState::btnAutoStat() EXIT";
+}
+
+/**
+ * kL. Automatically renames all soldiers according to their statistics.
+ * Right-click on the Auto-stat button.
+ */
+void SoldierInfoState::btnAutoStatAll(Action*)
+{
+	Soldier* soldier = _soldier;
+
+	for (size_t
+			i = 0;
+			i < _list->size();
+			++i)
+	{
+		_soldier = _list->at(i);
+		btnAutoStat(NULL);
+	}
+
+	_soldier = soldier;
 }
 
 /**

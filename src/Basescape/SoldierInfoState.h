@@ -109,7 +109,9 @@ private:
 	TextEdit* _edtSoldier;
 
 	/// kL. Automatically renames a soldier according to its statistics.
-	void btnAutoStat(Action* action);
+	void btnAutoStat(Action*);
+	/// kL. Automatically renames all soldiers according to their statistics.
+	void btnAutoStatAll(Action*);
 
 
 	public:

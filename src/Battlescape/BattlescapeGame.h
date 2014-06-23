@@ -61,7 +61,8 @@ enum BattleActionType
 	BA_LAUNCH,		// 11
 	BA_MINDCONTROL,	// 12
 	BA_PANIC,		// 13
-	BA_RETHINK		// 14
+	BA_RETHINK,		// 14
+	BA_DEFUSE		// 15, kL_add.
 };
 
 

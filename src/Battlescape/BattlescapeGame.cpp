@@ -1033,45 +1033,46 @@ void BattlescapeGame::showInfoBoxQueue()
 void BattlescapeGame::handleNonTargetAction()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction()";
-
 	if (!_currentAction.targeting)
 	{
 		_currentAction.cameraPosition = Position(0, 0,-1);
 
 		if (_currentAction.type == BA_PRIME
-			&& _currentAction.value > -1)
+			|| _currentAction.type == BA_DEFUSE)
+//			&& _currentAction.value > -1)
 		{
 			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_PRIME";
 			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 			{
 				_currentAction.weapon->setFuseTimer(_currentAction.value);
 
-/* kL_begin: This might be useful ...
-				int explTurn = _currentAction.weapon->getExplodeTurn();
-				if (explTurn > -1)
-				{
-					std::wstring activated = Text::formatNumber(explTurn) + L" ";
-					activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
-					activated += L" " + Text::formatNumber(explTurn);
-					_warning->showMessage(activated);
-				} */
-//kL				_parentState->warning("STR_GRENADE_IS_ACTIVATED");
-				int explTurn = _currentAction.weapon->getFuseTimer();	// kL
-				if (!explTurn)											// kL
-					_parentState->warning("STR_GRENADE_IS_ACTIVATED");	// kL
+				if (_currentAction.value == -1)
+					_parentState->warning("STR_GRENADE_IS_DEACTIVATED");
+				else if (_currentAction.value == 0)
+					_parentState->warning("STR_GRENADE_IS_ACTIVATED");
 				else
 					_parentState->warning(
 										"STR_GRENADE_IS_ACTIVATED_",
 										true,
-										explTurn); // kL
-//					_parentState->warning(_game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED")); // kL
+										_currentAction.value);
 			}
 			else
 				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
-//				_parentState->warning(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS")); // kL
 		}
-		else // kL
-		if (_currentAction.type == BA_USE
+/*		else if (_currentAction.type == BA_DEFUSE // kL_begin:
+			&& _currentAction.value == -1)// a bit redundant ...
+		{
+			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_DEFUSE";
+			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
+			{
+				_currentAction.weapon->setFuseTimer(_currentAction.value);
+
+				_parentState->warning("STR_GRENADE_IS_DEACTIVATED");
+			}
+			else
+				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+		} */ // kL_end.
+		else if (_currentAction.type == BA_USE
 			|| _currentAction.type == BA_LAUNCH)
 		{
 			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_USE or BA_LAUNCH";
@@ -1083,8 +1084,7 @@ void BattlescapeGame::handleNonTargetAction()
 
 			_save->reviveUnconsciousUnits();
 		}
-		else // kL
-		if (_currentAction.type == BA_HIT)
+		else if (_currentAction.type == BA_HIT)
 		{
 			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_HIT";
 			if (_currentAction.result.length() > 0)
@@ -1096,7 +1096,9 @@ void BattlescapeGame::handleNonTargetAction()
 			{
 				if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 				{
-					statePushBack(new ProjectileFlyBState(this, _currentAction));
+					statePushBack(new ProjectileFlyBState(
+														this,
+														_currentAction));
 
 					return;
 /*					BattleUnit* target = _save->getTile(_currentAction.target)->getUnit();

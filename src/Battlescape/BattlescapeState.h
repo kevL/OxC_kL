@@ -138,7 +138,8 @@ private:
 	SavedBattleGame* _save;
 	Surface
 		* _rank,
-		* _kneel;
+		* _kneel, // kL
+		* _srfWounds; // kL
 	Text
 		* _txtBaseLabel, // kL
 		* _txtDebug, //* _txtTooltip;
@@ -156,7 +157,9 @@ private:
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
 	/// kL. Draws the kneel indicator.
-	void drawKneelIndicator(); // kL
+//	void drawKneelIndicator(); // kL
+	/// kL. Draws the fatal wounds indicator.
+//	void drawWoundIndicator(); // kL
 
 
 	public:
@@ -220,8 +223,8 @@ private:
 		void btnNextStopClick(Action* action);
 		/// Handler for clicking the Previous Soldier button.
 		void btnPrevSoldierClick(Action* action);
-		/// Handler for clicking the Previous Stop button.	// kL
-		void btnPrevStopClick(Action* action);				// kL
+		/// kL. Handler for clicking the Previous Stop button.
+		void btnPrevStopClick(Action* action); // kL
 		/// Handler for clicking the Show Layers button.
 		void btnShowLayersClick(Action* action);
 		/// Handler for clicking the Help button.
@@ -330,11 +333,11 @@ private:
 				int& dY);
 
 		/// kL. Gets the TurnCounter.
-		TurnCounter* getTurnCounter() const;
+		TurnCounter* getTurnCounter() const; // kL
 		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.
-		void toggleIcons(bool vis);
+		void toggleIcons(bool vis); // kL
 		/// kL. Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
-		void refreshVisUnits();
+		void refreshVisUnits(); // kL
 };
 
 }

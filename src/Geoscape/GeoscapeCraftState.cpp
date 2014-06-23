@@ -76,7 +76,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_window			= new Window(this, 224, 174, 16, 8, POPUP_BOTH);
 	_txtTitle		= new Text(192, 17, 32, 16);
 
-	_sprite			= new Surface(32, 38, 220, -11); // kL
+//	_sprite			= new Surface(32, 38, 220, -11); // kL
+	_sprite			= new Surface(32, 38, 225, -2); // kL
 
 	_txtStatus		= new Text(192, 17, 32, 31);
 
@@ -368,10 +369,15 @@ GeoscapeCraftState::GeoscapeCraftState(
 	// kL_end.
 
 	// kL_begin ( was in init() ):
-	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
-	texture->getFrame(_craft->getRules()->getSprite() + 33)->setY(0);
-	texture->getFrame(_craft->getRules()->getSprite() + 33)->blit(_sprite);
+//	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+//	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
+//	texture->getFrame(_craft->getRules()->getSprite() + 33)->setY(0);
+//	texture->getFrame(_craft->getRules()->getSprite() + 33)->blit(_sprite);
+	int craftSprite = _craft->getRules()->getSprite();
+	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
+//	texture->getFrame(craftSprite + 11)->setX(0);
+//	texture->getFrame(craftSprite + 11)->setY(0);
+	texture->getFrame(craftSprite + 11)->blit(_sprite);
 	// kL_end.
 }
 

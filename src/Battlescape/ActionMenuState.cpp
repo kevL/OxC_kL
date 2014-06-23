@@ -67,9 +67,9 @@ ActionMenuState::ActionMenuState(
 		State(game),
 		_action(action)
 {
-	_screen = false;
-
 	setPalette("PAL_BATTLESCAPE");
+
+	_screen = false;
 
 	for (int
 			i = 0;
@@ -97,7 +97,7 @@ ActionMenuState::ActionMenuState(
 				"STR_THROW",
 				&id);
 
-	if ((weapon->getBattleType() == BT_GRENADE
+/*	if ((weapon->getBattleType() == BT_GRENADE
 			|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
 		&& _action->weapon->getFuseTimer() == -1) // priming
 	{
@@ -105,6 +105,24 @@ ActionMenuState::ActionMenuState(
 				BA_PRIME,
 				"STR_PRIME_GRENADE",
 				&id);
+	} */
+	if (weapon->getBattleType() == BT_GRENADE
+		|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
+	{
+		if (_action->weapon->getFuseTimer() == -1) // priming
+		{
+			addItem(
+					BA_PRIME,
+					"STR_PRIME_GRENADE",
+					&id);
+		}
+		else
+		{
+			addItem(
+					BA_DEFUSE,
+					"STR_DEFUSE_GRENADE",
+					&id);
+		}
 	}
 
 	if (weapon->getTUMelee())
@@ -196,9 +214,9 @@ ActionMenuState::~ActionMenuState()
 
 /**
  * Adds a new menu item for an action.
- * @param baType, Action type.
- * @param desc, Action description.
- * @param id, Pointer to the new item ID.
+ * @param baType	- action type (BattlescapeGame.h)
+ * @param desc		- reference to the action description
+ * @param id		- pointer to the new item-action ID
  */
 void ActionMenuState::addItem(
 		BattleActionType baType,
@@ -213,12 +231,12 @@ void ActionMenuState::addItem(
 		|| baType == BA_AIMEDSHOT
 		|| baType == BA_SNAPSHOT
 		|| baType == BA_AUTOSHOT
-//kL		|| baType == BA_LAUNCH
+//kL	|| baType == BA_LAUNCH
 		|| baType == BA_HIT)
 	{
 		int acc = 0;
 		if (baType == BA_THROW)
-//kL			acc = _action->actor->getThrowingAccuracy(); // Wb.140214
+//kL		acc = _action->actor->getThrowingAccuracy(); // Wb.140214
 			acc = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100.0)); // kL
 		else
 //			acc = _action->actor->getFiringAccuracy( // Wb.140214
@@ -252,14 +270,28 @@ void ActionMenuState::addItem(
 }
 
 /**
- * Closes the window on right-click.
+ * Closes the window on click.
  * @param action Pointer to an action.
  */
 void ActionMenuState::handle(Action* action)
 {
 	State::handle(action);
 
-//kL	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN &&
+	// kL: safeties from BattlescapeGame::handleNonTargetAction()
+//	_action->type = BA_NONE;
+//	_parentState->updateSoldierInfo();
+
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
+		|| (action->getDetails()->type == SDL_KEYDOWN
+			&& (action->getDetails()->key.keysym.sym == Options::keyCancel
+				|| action->getDetails()->key.keysym.sym == Options::keyBattleUseLeftHand
+				|| action->getDetails()->key.keysym.sym == Options::keyBattleUseRightHand)))
+	{
+		_game->popState();
+	}
+}
+/*kL
+	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN &&
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		_game->popState();
 	else if (action->getDetails()->type == SDL_KEYDOWN
@@ -268,8 +300,7 @@ void ActionMenuState::handle(Action* action)
 			|| action->getDetails()->key.keysym.sym == Options::keyBattleUseRightHand))
 	{
 		_game->popState();
-	}
-}
+	} */
 
 /**
  * Executes the action corresponding to this action menu item.
@@ -302,6 +333,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 0;
+
 				_game->popState();
 			}
 			else
@@ -309,7 +341,13 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 													_game,
 													_action,
 													false,
-													0));
+													NULL));
+		}
+		else if (_action->type == BA_DEFUSE) // kL_add.
+		{
+			_action->value = -1;
+
+			_game->popState();
 		}
 		else if (_action->type == BA_USE
 			&& weapon->getBattleType() == BT_MEDIKIT)
@@ -386,7 +424,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 		{
 			if (_action->TU > _action->actor->getTimeUnits())
 				_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-			else if (_action->weapon->getAmmoItem() == 0
+			else if (_action->weapon->getAmmoItem() == NULL
 				|| (_action->weapon->getAmmoItem()
 					&& _action->weapon->getAmmoItem()->getAmmoQuantity() == 0))
 			{
@@ -404,7 +442,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 																					_action->actor->getPosition(),
 																					_action->actor->getDirection(),
 																					_action->actor,
-																					0,
+																					NULL,
 																					&_action->target))
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";

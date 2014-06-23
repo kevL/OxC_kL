@@ -1449,9 +1449,9 @@ bool BattleUnit::isOut(
 
 /**
  * Gets the number of time units a certain action takes.
- * @param actionType
- * @param item
- * @return TUs
+ * @param actionType	- type of battle action (BattlescapeGame.h)
+ * @param item			- pointer to an item for TU-cost
+ * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
 		BattleActionType actionType,
@@ -1465,11 +1465,14 @@ int BattleUnit::getActionTUs(
 	switch (actionType)
 	{
 		case BA_PRIME: // kL_note: Should put "tuPrime" yaml-entry in Xcom1Ruleset, under various grenade-types.
-//kL			cost = 50; // maybe this should go in the ruleset
+//kL		cost = 50; // maybe this should go in the ruleset
 			cost = 45; // kL
 		break;
+		case BA_DEFUSE: // kL_add.
+			cost = 15; // do this flatrate!
+		break;
 		case BA_THROW:
-//kL			cost = 25; // maybe this should go in the ruleset
+//kL		cost = 25; // maybe this should go in the ruleset
 			cost = 23; // kL
 		break;
 		case BA_AUTOSHOT:
@@ -1498,9 +1501,10 @@ int BattleUnit::getActionTUs(
 	}
 
 	// if it's a percentage, apply it to unit TUs
-	if (!item->getRules()->getFlatRate()
-		|| actionType == BA_PRIME
-		|| actionType == BA_THROW)
+	if ((!item->getRules()->getFlatRate()
+			|| actionType == BA_PRIME
+			|| actionType == BA_THROW)
+		&& actionType != BA_DEFUSE) // kL
 	{
 		cost = static_cast<int>(floor(static_cast<float>(getStats()->tu * cost) / 100.f));
 	}

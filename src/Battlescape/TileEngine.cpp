@@ -2945,11 +2945,11 @@ int TileEngine::horizontalBlockage(
 								type,
 								3); // checks Content/bigWalls
 
-//				if (block == 0) // this way is opened
-//					break;
+				if (block == 0) // this way is opened
+					break;
 
-//				block = blockage( // right+up
-				block += blockage( // right+up
+				block = blockage( // right+up
+//				block += blockage( // right+up
 								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_NORTHWALL,
 								type)
@@ -3061,11 +3061,11 @@ int TileEngine::horizontalBlockage(
 								type,
 								1); // checks Content/bigWalls
 
-//				if (block == 0) // this way is opened
-//					break;
+				if (block == 0) // this way is opened
+					break;
 
-//				block = blockage( // right+down
-				block += blockage( // right+down
+				block = blockage( // right+down
+//				block += blockage( // right+down
 								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_WESTWALL,
 								type)
@@ -3177,11 +3177,11 @@ int TileEngine::horizontalBlockage(
 								type,
 								7); // checks Content/bigWalls
 
-//				if (block == 0) // this way is opened
-//					break;
+				if (block == 0) // this way is opened
+					break;
 
-//				block = blockage( // left+down
-				block += blockage( // left+down
+				block = blockage( // left+down
+//				block += blockage( // left+down
 								startTile,
 								MapData::O_WESTWALL,
 								type)
@@ -3292,11 +3292,11 @@ int TileEngine::horizontalBlockage(
 								type,
 								5);
 
-//				if (block == 0) // this way is opened
-//					break;
+				if (block == 0) // this way is opened
+					break;
 
-//				block = blockage( // left+up
-				block += blockage( // left+up
+				block = blockage( // left+up
+//				block += blockage( // left+up
 								startTile,
 								MapData::O_WESTWALL,
 								type)

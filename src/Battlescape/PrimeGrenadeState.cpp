@@ -45,10 +45,11 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Prime Grenade window.
- * @param game Pointer to the core game.
- * @param action Pointer to the action.
- * @param inInventoryView Called from inventory?
- * @param grenadeInInventory Pointer to associated grenade.
+ * @param game				- pointer to the core game
+ * @param action			- pointer to the action
+ * @param inInventoryView	- true if called from inventory
+ * @param grenade			- pointer to associated grenade
+ * @param inventory			- pointer to the inventory
  */
 PrimeGrenadeState::PrimeGrenadeState(
 		Game* game,
@@ -254,7 +255,7 @@ void PrimeGrenadeState::btnClick(Action* action)
 		else
 			_action->value = btnID;
 
-		_game->popState(); // get rid of the Timer menu
+		_game->popState(); // get rid of the Set Timer menu
 
 		if (!_inInventoryView)
 			_game->popState(); // get rid of the Action menu.
