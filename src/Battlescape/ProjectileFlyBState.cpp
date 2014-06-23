@@ -1288,11 +1288,13 @@ void ProjectileFlyBState::performMeleeAttack()
 											_parent,
 											voxel,
 											_action.weapon,
-											_action.actor));
+											_action.actor,
+											NULL,
+											true));
 
-	_unit->aim(false);						// ajschult: take soldier out of aiming position <- hm, this also sets cacheInvalid ...
-	_unit->setCache(NULL);					// kL
-	_parent->getMap()->cacheUnit(_unit);	// kL
+//	_unit->aim(false);						// ajschult: take soldier out of aiming position <- hm, this also sets cacheInvalid ...
+//	_unit->setCache(NULL);					// kL
+//	_parent->getMap()->cacheUnit(_unit);	// kL
 	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack() EXIT";
 }
 

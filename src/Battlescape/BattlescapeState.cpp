@@ -113,6 +113,7 @@ namespace OpenXcom
 BattlescapeState::BattlescapeState(Game* game)
 	:
 		State(game),
+//kL	_reserve(0),
 		_popups(),
 		_xBeforeMouseScrolling(0),
 		_yBeforeMouseScrolling(0),
