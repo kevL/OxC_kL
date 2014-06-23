@@ -375,10 +375,10 @@ SellState::SellState(
 	ss1 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores(); // kL
 	_txtSpaceUsed->setText(ss1.str());
 
-	_timerInc = new Timer(280);
+	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)& SellState::increase);
 
-	_timerDec = new Timer(280);
+	_timerDec = new Timer(250);
 	_timerDec->onTimer((StateHandler)& SellState::decrease);
 }
 
@@ -652,8 +652,8 @@ void SellState::lstItemsLeftArrowClick(Action* action)
 	{
 		changeByValue(1, 1);
 
-		_timerInc->setInterval(280);
-		_timerDec->setInterval(280);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
 	}
 }
 
@@ -698,8 +698,8 @@ void SellState::lstItemsRightArrowClick(Action* action)
 	{
 		changeByValue(1, -1);
 
-		_timerInc->setInterval(280);
-		_timerDec->setInterval(280);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
 	}
 }
 

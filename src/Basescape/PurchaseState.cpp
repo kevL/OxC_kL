@@ -487,10 +487,10 @@ PurchaseState::PurchaseState(
 	ss8 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores(); // kL
 	_txtSpaceUsed->setText(ss8.str());
 
-	_timerInc = new Timer(280);
+	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)& PurchaseState::increase);
 
-	_timerDec = new Timer(280);
+	_timerDec = new Timer(250);
 	_timerDec->onTimer((StateHandler)& PurchaseState::decrease);
 }
 
@@ -663,8 +663,8 @@ void PurchaseState::lstItemsLeftArrowClick(Action* action)
 	{
 		increaseByValue(1);
 
-		_timerInc->setInterval(280);
-		_timerDec->setInterval(280);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
 	}
 }
 
@@ -707,8 +707,8 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
 	{
 		decreaseByValue(1);
 
-		_timerInc->setInterval(280);
-		_timerDec->setInterval(280);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
 	}
 }
 

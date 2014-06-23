@@ -1836,7 +1836,8 @@ void Map::drawTerrain(Surface* surface)
 										tile->getMarkerColor());
 						}
 
-						if (_previewSetting & PATH_TU_COST)
+						if ((_previewSetting & PATH_TU_COST)
+							&& tile->getTUMarker() > -1)
 						{
 							Uint8 wpColor = 1; // white
 							// kL_note: Set pathfinder/ pathPreview number color.
@@ -1845,15 +1846,22 @@ void Map::drawTerrain(Surface* surface)
 							_numWaypid->setColor(wpColor); // kL
 //							_numWaypid->setColor(Palette::blockOffset(12)+8); // kL, lavender
 
-							int tuMarker = std::max(
-												0,
-												tile->getTUMarker());
-							_numWaypid->setValue(tuMarker);
+//							int tuMarker = std::max(
+//												0,
+//												tile->getTUMarker());
+//							_numWaypid->setValue(tuMarker);
+							_numWaypid->setValue(tile->getTUMarker());
 							_numWaypid->draw();
 
 							int off = 2;
 							if (tile->getTUMarker() > 9)
 								int off = 4;
+
+							if (_save->getSelectedUnit()
+								&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
+							{
+								adjustment += 8;
+							}
 
 							_numWaypid->blitNShade(
 									surface,

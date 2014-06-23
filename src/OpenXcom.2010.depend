@@ -6012,13 +6012,14 @@
 	<string>
 	"../Engine/Surface.h"
 
-1402944860 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1403487140 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
 	<iomanip>
 	<SDL_gfxPrimitives.h>
 	"../fmath.h"
+	"../lodepng.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
 	"AlienBAIState.h"
@@ -6043,7 +6044,6 @@
 	"UnitTurnBState.h"
 	"UnitWalkBState.h"
 	"WarningMessage.h"
-	"../lodepng.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
@@ -6398,7 +6398,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1403452283 source:f:\git\openxcom\src\battlescape\map.cpp
+1403512921 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6551,7 +6551,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1403473401 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1403513197 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6628,7 +6628,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1403479846 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1403487307 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -9663,7 +9663,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1403473401 source:f:\git\openxcom\src\savegame\tile.cpp
+1403513232 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	"BattleItem.h"
 	"BattleUnit.h"

@@ -189,10 +189,10 @@ void ResearchInfoState::buildUi()
 	_btnLess->onMouseRelease((ActionHandler)& ResearchInfoState::lessRelease);
 	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
 
-	_timerMore = new Timer(280); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerMore = new Timer(250); // kL_note: SHOULD THESE TIMERS BE delete'd
 	_timerMore->onTimer((StateHandler)& ResearchInfoState::more);
 
-	_timerLess = new Timer(280); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerLess = new Timer(250); // kL_note: SHOULD THESE TIMERS BE delete'd
 	_timerLess->onTimer((StateHandler)& ResearchInfoState::less);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
@@ -299,7 +299,7 @@ void ResearchInfoState::moreRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMore->setInterval(280);
+		_timerMore->setInterval(250);
 		_timerMore->stop();
 	}
 }
@@ -335,7 +335,7 @@ void ResearchInfoState::lessRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLess->setInterval(280);
+		_timerLess->setInterval(250);
 		_timerLess->stop();
 	}
 }

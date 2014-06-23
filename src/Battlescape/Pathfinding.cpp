@@ -2071,7 +2071,12 @@ bool Pathfinding::previewPath(bool bRemove)
 						tile->setPreview(nextDir);
 					}
 
-					tile->setTUMarker(currentTU);
+					if ((x && y)
+						|| size == 0)
+					{
+						tile->setTUMarker(currentTU);
+					}
+
 					if (tileAbove // unit fell down, retroactively make the tileAbove's direction marker to DOWN
 						&& tileAbove->getPreview() == 0
 						&& tu == 0
@@ -2083,7 +2088,7 @@ bool Pathfinding::previewPath(bool bRemove)
 				else
 				{
 					tile->setPreview(-1);
-					tile->setTUMarker(0);
+					tile->setTUMarker(-1);
 				}
 
 				color = 0;

@@ -412,10 +412,10 @@ TransferItemsState::TransferItemsState(
 
 	_distance = getDistance();
 
-	_timerInc = new Timer(280);
+	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)& TransferItemsState::increase);
 
-	_timerDec = new Timer(280);
+	_timerDec = new Timer(250);
 	_timerDec->onTimer((StateHandler)& TransferItemsState::decrease);
 }
 
@@ -884,8 +884,8 @@ void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 	{
 		increaseByValue(1);
 
-		_timerInc->setInterval(280);
-		_timerDec->setInterval(280);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
 	}
 }
 
@@ -928,8 +928,8 @@ void TransferItemsState::lstItemsRightArrowClick(Action* action)
 	{
 		decreaseByValue(1);
 
-		_timerInc->setInterval(280);
-		_timerDec->setInterval(280);
+		_timerInc->setInterval(250);
+		_timerDec->setInterval(250);
 	}
 }
 

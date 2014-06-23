@@ -255,10 +255,10 @@ void ManufactureInfoState::buildUi()
 
 	_btnSell->setPressed(_production->getSellItems());
 
-	_timerMoreEngineer	= new Timer(280);
-	_timerLessEngineer	= new Timer(280);
-	_timerMoreUnit		= new Timer(280);
-	_timerLessUnit		= new Timer(280);
+	_timerMoreEngineer	= new Timer(250);
+	_timerLessEngineer	= new Timer(250);
+	_timerMoreUnit		= new Timer(250);
+	_timerLessUnit		= new Timer(250);
 
 	_timerMoreEngineer->onTimer((StateHandler)& ManufactureInfoState::onMoreEngineer);
 	_timerLessEngineer->onTimer((StateHandler)& ManufactureInfoState::onLessEngineer);
@@ -376,7 +376,7 @@ void ManufactureInfoState::moreEngineerRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMoreEngineer->setInterval(280);
+		_timerMoreEngineer->setInterval(250);
 		_timerMoreEngineer->stop();
 	}
 }
@@ -430,7 +430,7 @@ void ManufactureInfoState::lessEngineerRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLessEngineer->setInterval(280);
+		_timerLessEngineer->setInterval(250);
 		_timerLessEngineer->stop();
 	}
 }
@@ -508,7 +508,7 @@ void ManufactureInfoState::moreUnitRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerMoreUnit->setInterval(280);
+		_timerMoreUnit->setInterval(250);
 		_timerMoreUnit->stop();
 	}
 }
@@ -568,7 +568,7 @@ void ManufactureInfoState::lessUnitRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_timerLessUnit->setInterval(280);
+		_timerLessUnit->setInterval(250);
 		_timerLessUnit->stop();
 	}
 }

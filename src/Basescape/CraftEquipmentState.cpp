@@ -254,10 +254,10 @@ CraftEquipmentState::CraftEquipmentState(
 		}
 	}
 
-	_timerLeft = new Timer(280);
+	_timerLeft = new Timer(250);
 	_timerLeft->onTimer((StateHandler)& CraftEquipmentState::moveLeft);
 
-	_timerRight = new Timer(280);
+	_timerRight = new Timer(250);
 	_timerRight->onTimer((StateHandler)& CraftEquipmentState::moveRight);
 }
 
@@ -346,8 +346,8 @@ void CraftEquipmentState::lstEquipmentLeftArrowClick(Action* action)
 	{
 		moveLeftByValue(1);
 
-		_timerRight->setInterval(280);
-		_timerLeft->setInterval(280);
+		_timerRight->setInterval(250);
+		_timerLeft->setInterval(250);
 	}
 }
 
@@ -389,8 +389,8 @@ void CraftEquipmentState::lstEquipmentRightArrowClick(Action* action)
 	{
 		moveRightByValue(1);
 
-		_timerRight->setInterval(280);
-		_timerLeft->setInterval(280);
+		_timerRight->setInterval(250);
+		_timerLeft->setInterval(250);
 	}
 }
 

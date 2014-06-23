@@ -67,7 +67,7 @@ Tile::Tile(const Position& pos)
 		_markerColor(0),
 		_visible(false),
 		_preview(-1),
-		_tuMarker(0),
+		_tuMarker(-1),
 		_overlaps(0),
 		_danger(false)
 {
