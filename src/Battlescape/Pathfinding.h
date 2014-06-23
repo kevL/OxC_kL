@@ -122,7 +122,7 @@ private:
 		/// Calculates the shortest path.
 		void calculate(
 				BattleUnit* unit,
-				Position endPosition,
+				Position endPos,
 				BattleUnit* missileTarget = 0,
 				int maxTUCost = 1000);
 
@@ -130,7 +130,7 @@ private:
 		bool isBlocked(
 				Tile* startTile,
 				Tile* endTile,
-				const int direction,
+				const int dir,
 				BattleUnit* missileTarget);
 
 		/// Aborts the current path.
@@ -167,8 +167,8 @@ private:
 		/// Checks if the movement is valid, for the up/down button.
 		int validateUpDown(
 				BattleUnit* bu,
-				Position startPosition,
-				int const direction);
+				Position startPos,
+				int const dir);
 
 		/// Gets all reachable tiles, based on cost.
 		std::vector<int> findReachable(

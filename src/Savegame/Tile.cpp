@@ -301,7 +301,7 @@ bool Tile::isVoid() const
 }
 
 /**
- * Get the TU cost to walk over a certain part of the tile.
+ * Get the TU cost to move over a certain part of the tile.
  * @param part
  * @param movementType
  * @return TU cost
@@ -310,6 +310,7 @@ int Tile::getTUCost(
 		int part,
 		MovementType movementType) const
 {
+	//Log(LOG_INFO) << "Tile::getTUCost() part = " << part << " MT = " << (int)movementType;
 	if (_objects[part])
 	{
 		if (_objects[part]->isUFODoor()
@@ -322,6 +323,9 @@ int Tile::getTUCost(
 		if (_objects[part]->getBigWall() >= 4)
 			return 0;
 
+		//int ret = _objects[part]->getTUCost(movementType); // kL
+		//Log(LOG_INFO) << ". ret = " << ret;
+		//return ret;
 		return _objects[part]->getTUCost(movementType);
 	}
 	else
@@ -335,7 +339,7 @@ int Tile::getTUCost(
  */
 bool Tile::hasNoFloor(Tile* tileBelow) const
 {
-	if (tileBelow != 0
+	if (tileBelow != NULL
 		&& tileBelow->getTerrainLevel() == -24)
 	{
 		return false;

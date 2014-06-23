@@ -155,8 +155,9 @@ void MapDataSet::loadData()
 		unsigned char	Block_Smoke;
 		unsigned char	u39;
 		unsigned char	TU_Walk;
-		unsigned char	TU_Slide;
+//kL	unsigned char	TU_Slide;
 		unsigned char	TU_Fly;
+		unsigned char	TU_Slide; // kL
 		unsigned char	Armor;
 		unsigned char	HE_Block;
 		unsigned char	Die_MCD;

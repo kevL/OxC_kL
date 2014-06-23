@@ -24,6 +24,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+//#include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
@@ -40,6 +41,7 @@
 
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SoldierDead.h"
+#include "../Savegame/SoldierDeath.h"
 
 
 namespace OpenXcom
@@ -65,11 +67,15 @@ SoldierDeadInfoState::SoldierDeadInfoState(
 
 	_rank			= new Surface(26, 23, 4, 4);
 
+	_txtSoldier		= new Text(179, 16, 40, 9);
+
 	_btnPrev		= new TextButton(29, 16, 0, 32);
 	_btnOk			= new TextButton(49, 16, 30, 32);
 	_btnNext		= new TextButton(29, 16, 80, 32);
 
-	_txtSoldier		= new Text(179, 16, 40, 9);
+	_txtDeath		= new Text(60, 9, 130, 36);
+	_txtDate		= new Text(80, 9, 196, 36);
+
 	_txtRank		= new Text(130, 9, 0, 49);
 	_txtMissions	= new Text(100, 9, 130, 49);
 	_txtKills		= new Text(100, 9, 230, 49);
@@ -143,6 +149,8 @@ SoldierDeadInfoState::SoldierDeadInfoState(
 	add(_txtRank);
 	add(_txtMissions);
 	add(_txtKills);
+	add(_txtDate);
+	add(_txtDeath);
 
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
@@ -225,6 +233,11 @@ SoldierDeadInfoState::SoldierDeadInfoState(
 
 	_txtKills->setColor(Palette::blockOffset(13)+10);
 	_txtKills->setSecondaryColor(Palette::blockOffset(13));
+
+	_txtDeath->setColor(Palette::blockOffset(13)+10);
+	_txtDeath->setText(tr("STR_DATE_UC"));
+
+	_txtDate->setColor(Palette::blockOffset(13));
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
@@ -382,6 +395,17 @@ void SoldierDeadInfoState::init()
 	texture->getFrame(_soldier->getRankSprite())->setX(0);
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
+
+
+	SoldierDeath* death = _soldier->getDeath();
+	std::wostringstream date;
+	date << death->getTime()->getDayString(_game->getLanguage());
+	date << L" ";
+	date << tr(death->getTime()->getMonthString());
+	date << L" ";
+	date << death->getTime()->getYear();
+	_txtDate->setText(date.str());
+
 
 	std::wostringstream ss;
 

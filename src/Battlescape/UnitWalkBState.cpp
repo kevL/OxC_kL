@@ -742,7 +742,7 @@ bool UnitWalkBState::doStatusWalk()
 				//Log(LOG_INFO) << ". . remove unit from previous tile";
 				_parent->getSave()->getTile(
 										_unit->getLastPosition() + Position(x, y, 0))
-									->setUnit(0);
+									->setUnit(NULL);
 			}
 		} // -> might move to doStatusStand_end()
 

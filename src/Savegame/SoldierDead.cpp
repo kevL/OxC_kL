@@ -120,8 +120,7 @@ std::wstring SoldierDead::getName() const
 }
 
 /**
- * Returns a localizable-string representation of
- * the dead soldier's military rank.
+ * Returns a localizable-string representation of the dead soldier's military rank.
  * @return, String ID for rank.
  */
 std::string SoldierDead::getRankString() const

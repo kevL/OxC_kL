@@ -224,7 +224,7 @@ protected:
 		/// Sets a unit on this tile.
 		void setUnit(
 				BattleUnit* unit,
-				Tile* tileBelow = 0);
+				Tile* tileBelow = NULL);
 
 		/**
 		 * Gets the (alive) unit on this tile.

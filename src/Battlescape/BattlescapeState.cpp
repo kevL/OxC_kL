@@ -28,6 +28,7 @@
 #include <SDL_gfxPrimitives.h>
 
 #include "../fmath.h"
+#include "../lodepng.h"
 
 #include "AbortMissionState.h"
 #include "ActionMenuState.h"
@@ -53,8 +54,6 @@
 #include "UnitTurnBState.h"
 #include "UnitWalkBState.h"
 #include "WarningMessage.h"
-
-#include "../lodepng.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/CrossPlatform.h"
@@ -167,7 +166,8 @@ BattlescapeState::BattlescapeState(Game* game)
 	_rank		= new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
 	_kneel		= new Surface( 2,  2, _icons->getX() + 115, _icons->getY() + 19);
 
-	// Create buttons
+	_numWounds	= new NumberText(6, 5, _rank->getX(), _rank->getY() + 9); // kL, X gets adjusted in updateSoldierInfo()
+
 	_btnUnitUp			= new InteractiveSurface(32,  16, _icons->getX() +  48, _icons->getY());
 	_btnUnitDown		= new InteractiveSurface(32,  16, _icons->getX() +  48, _icons->getY() + 16);
 	_btnMapUp			= new InteractiveSurface(32,  16, _icons->getX() +  80, _icons->getY());
@@ -244,10 +244,9 @@ BattlescapeState::BattlescapeState(Game* game)
 					25);
 	_btnPsi->setVisible(false);
 
-	// Create soldier stats summary
+
 	_txtName		= new Text(136, 9, _icons->getX() + 135, _icons->getY() + 32);
 
-//	_numTUSnap		= new NumberText(12, 10, _icons->getX() + 258, _icons->getY() + 34);
 	_numTUAim		= new NumberText(8, 10, _icons->getX() + 241, _icons->getY() + 34);
 	_numTUAuto		= new NumberText(8, 10, _icons->getX() + 252, _icons->getY() + 34);
 	_numTUSnap		= new NumberText(8, 10, _icons->getX() + 263, _icons->getY() + 34);
@@ -280,6 +279,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	add(_numLayers);
 	add(_rank);
 	add(_kneel);
+	add(_numWounds); // kL
 	add(_btnUnitUp);
 	add(_btnUnitDown);
 	add(_btnMapUp);
@@ -410,6 +410,10 @@ BattlescapeState::BattlescapeState(Game* game)
 
 	_numLayers->setColor(Palette::blockOffset(5)+12);
 	_numLayers->setValue(1);
+
+	_numWounds->setColor(Palette::blockOffset(2)+8);
+	_numWounds->setValue(0);
+	_numWounds->setVisible(false);
 
 	_numAmmoLeft->setColor(3);
 	_numAmmoLeft->setValue(999);
@@ -1869,6 +1873,8 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_numTUAuto	->setVisible(false);
 	_numTUSnap	->setVisible(false);
 
+	_numWounds	->setVisible(false);
+
 
 	bool isPlayable = playableUnitSelected(); // not aLien or civilian; ie. xCom Soldier
 	//Log(LOG_INFO) << ". isPlayable = " << isPlayable;
@@ -1922,12 +1928,12 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	BattleUnit* selectedUnit = 0;
+	BattleUnit* selectedUnit = NULL;
 	if (_save->getSelectedUnit())
 		selectedUnit = _save->getSelectedUnit();
 		//Log(LOG_INFO) << ". . selectedUnit ID " << selectedUnit->getId();
 	else // safety.
-		//Log(LOG_INFO) << ". . selectedUnit = 0 return";
+		//Log(LOG_INFO) << ". . selectedUnit = NULL return";
 		return;
 
 
@@ -1951,11 +1957,19 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	_txtName->setText(selectedUnit->getName(_game->getLanguage(), false));
 
-	Soldier* s = _game->getSavedGame()->getSoldier(selectedUnit->getId());
-	if (s != 0)
+	int wounds = selectedUnit->getFatalWounds();
+	_numWounds->setValue(wounds);
+	_numWounds->setVisible(wounds > 0);
+	if (wounds > 9)
+		_numWounds->setX(_rank->getX() + 9);
+	else
+		_numWounds->setX(_rank->getX() + 11);
+
+	Soldier* soldier = _game->getSavedGame()->getSoldier(selectedUnit->getId());
+	if (soldier != NULL)
 	{
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-		texture->getFrame(s->getRankSprite())->blit(_rank);
+		texture->getFrame(soldier->getRankSprite())->blit(_rank);
 	}
 
 	double stat = static_cast<double>(selectedUnit->getStats()->tu);

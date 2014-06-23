@@ -19,6 +19,8 @@
 
 #include "MapData.h"
 
+#include "../Engine/Logger.h"
+
 
 namespace OpenXcom
 {
@@ -337,17 +339,26 @@ void MapData::setSpecialType(
 }
 
 /**
- * Gets the TU cost to walk over the object.
- * @param movementType The movement type.
- * @return, The TU cost.
+ * Gets the TU cost to move over the object.
+ * @param movementType - the movement type
+ * @return, the TU cost
  */
 int MapData::getTUCost(MovementType movementType) const
 {
+	//Log(LOG_INFO) << "MapData::getTUCost()";
 	switch (movementType)
 	{
-		case MT_WALK:	return _TUWalk;
-		case MT_FLY:	return _TUFly;
-		case MT_SLIDE:	return _TUSlide;
+		case MT_WALK:
+			//Log(LOG_INFO) << ". MT_WALK ret = " << _TUWalk;
+		return _TUWalk;
+
+		case MT_FLY:
+			//Log(LOG_INFO) << ". MT_FLY ret = " << _TUFly;
+		return _TUFly;
+
+		case MT_SLIDE:
+			//Log(LOG_INFO) << ". MT_SLIDE ret = " << _TUSlide;
+		return _TUSlide;
 
 		default:
 		break;
@@ -358,9 +369,9 @@ int MapData::getTUCost(MovementType movementType) const
 
 /**
  * Sets the TU cost to move over the object.
- * @param walk The walking TU cost.
- * @param fly The flying TU cost.
- * @param slide The sliding TU cost.
+ * @param walk	- the walking TU cost
+ * @param fly	- the flying TU cost
+ * @param slide	- the sliding TU cost
  */
 void MapData::setTUCosts(
 		int walk,

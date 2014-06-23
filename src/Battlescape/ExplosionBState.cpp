@@ -148,11 +148,11 @@ void ExplosionBState::init()
 	}
 
 
-	Position posCenter = Position(
+	Position centerPos = Position(
 								_center.x / 16,
 								_center.y / 16,
 								_center.z / 24);
-//	Tile* tileCenter = _parent->getSave()->getTile(posCenter);
+//	Tile* tileCenter = _parent->getSave()->getTile(centerPos);
 
 	if (_areaOfEffect)
 	{
@@ -170,7 +170,7 @@ void ExplosionBState::init()
 				//Log(LOG_INFO) << ". . . getExplosionRadius() -> " << radius;
 			}
 			else
-				radius = _power / 8; // <- for cyberdiscs & terrain expl.
+				radius = _power / 9; // <- for cyberdiscs & terrain expl.
 			//Log(LOG_INFO) << ". . . radius = " << radius;
 
 			if (radius < 0)
@@ -219,12 +219,12 @@ void ExplosionBState::init()
 
 			// kL_begin:
 			Camera* explodeCam = _parent->getMap()->getCamera();
-			if (!explodeCam->isOnScreen(posCenter))
+			if (!explodeCam->isOnScreen(centerPos))
 				explodeCam->centerOnPosition(
-											posCenter,
+											centerPos,
 											false);
-			else if (explodeCam->getViewLevel() != posCenter.z)
-				explodeCam->setViewLevel(posCenter.z);
+			else if (explodeCam->getViewLevel() != centerPos.z)
+				explodeCam->setViewLevel(centerPos.z);
 			// kL_end.
 		}
 		else
@@ -276,12 +276,12 @@ void ExplosionBState::init()
 //		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		// kL_begin:
 		Camera* explodeCam = _parent->getMap()->getCamera();
-		if (!explodeCam->isOnScreen(posCenter))
+		if (!explodeCam->isOnScreen(centerPos))
 			explodeCam->centerOnPosition(
-										posCenter,
+										centerPos,
 										false);
-		else if (explodeCam->getViewLevel() != posCenter.z)
-			explodeCam->setViewLevel(posCenter.z);
+		else if (explodeCam->getViewLevel() != centerPos.z)
+			explodeCam->setViewLevel(centerPos.z);
 		// kL_end.
 	}
 	//Log(LOG_INFO) << "ExplosionBState::init() EXIT";

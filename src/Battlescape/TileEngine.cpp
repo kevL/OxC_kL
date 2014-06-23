@@ -1754,9 +1754,9 @@ bool TileEngine::tryReactionSnap(
 		return false;
 	}
 
-//kL	action.type = BA_SNAPSHOT;									// reaction fire is ALWAYS snap shot.
-																// kL_note: not true in Orig. aliens did auto at times
-																// kL_note: changed to ALL shot-modes!
+//kL	action.type = BA_SNAPSHOT;	// reaction fire is ALWAYS snap shot.
+									// kL_note: not true in Orig. aliens did auto at times
+									// kL_note: changed to ALL shot-modes!
 
 	action.actor = unit; // kL, was above under "BattleAction action;"
 	action.target = target->getPosition();
@@ -1811,7 +1811,7 @@ bool TileEngine::tryReactionSnap(
 		//Log(LOG_INFO) << ". Reaction Fire by ID " << unit->getId();
 
 		action.TU = 0;
-		action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();	// kL, was above under "BattleAction action;"
+		action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset(); // kL, was above under "BattleAction action;"
 
 		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
 															_battleSave->getBattleGame(),

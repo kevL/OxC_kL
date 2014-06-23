@@ -2067,6 +2067,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 //kL				getMap()->setCursorType(CT_NONE);
 //kL				_parentState->getGame()->getCursor()->setVisible(false);
 //kL				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+					_currentAction.cameraPosition = Position(0, 0,-1); // kL (don't adjust the camera when coming out of ProjectileFlyB/ExplosionB states)
+
 
 					//Log(LOG_INFO) << ". . . . . . new ProjectileFlyBState";
 					statePushBack(new ProjectileFlyBState(

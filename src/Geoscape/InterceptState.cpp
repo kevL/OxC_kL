@@ -253,7 +253,7 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 	std::wstring status;
 
 /*	Waypoint* wayPt = dynamic_cast<Waypoint*>(craft->getDestination());
-	if (wayPt != 0)
+	if (wayPt != NULL)
 		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
 	else */
 	if (craft->getLowFuel())
@@ -261,7 +261,12 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
 		_cellColor = Palette::blockOffset(9)+4;
 	}
-	else if (craft->getDestination() == 0)
+	else if (craft->getMissionComplete())
+	{
+		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
+		_cellColor = Palette::blockOffset(9)+6;
+	}
+	else if (craft->getDestination() == NULL)
 	{
 		status = tr("STR_PATROLLING");
 		_cellColor = Palette::blockOffset(5)+3;
@@ -274,7 +279,7 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 	else
 	{
 		Ufo* ufo = dynamic_cast<Ufo*>(craft->getDestination());
-		if (ufo != 0)
+		if (ufo != NULL)
 		{
 			if (craft->isInDogfight()) // chase
 			{
@@ -340,7 +345,7 @@ void InterceptState::lstCraftsLeftClick(Action*)
 										_game,
 										c,
 										_globe,
-										0,
+										NULL,
 										true)); // kL_add.
 }
 

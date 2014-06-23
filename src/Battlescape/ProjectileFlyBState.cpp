@@ -202,7 +202,7 @@ void ProjectileFlyBState::init()
 		BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
 		if (targetUnit)
 		{
-			if (_ammo == 0
+			if (_ammo == NULL
 				|| targetUnit->isOut(true, true)
 				|| targetUnit != _parent->getSave()->getSelectedUnit())
 			{
@@ -260,7 +260,7 @@ void ProjectileFlyBState::init()
 		case BA_AUTOSHOT:
 		case BA_LAUNCH:
 			//Log(LOG_INFO) << ". . BA_SNAPSHOT, AIMEDSHOT, AUTOSHOT, or LAUNCH";
-			if (_ammo == 0)
+			if (_ammo == NULL)
 			{
 				//Log(LOG_INFO) << ". . . no ammo, EXIT";
 				_action.result = "STR_NO_AMMUNITION_LOADED";
@@ -302,7 +302,7 @@ void ProjectileFlyBState::init()
 			//Log(LOG_INFO) << ". . BA_THROW";
 			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																		_action,
-																		0);
+																		NULL);
 			if (!validThrowRange(
 							&_action,
 							originVoxel,
@@ -331,7 +331,7 @@ void ProjectileFlyBState::init()
 													_action.actor->getPosition(),
 													_action.actor->getDirection(),
 													_action.actor,
-													0,
+													NULL,
 													&_action.target))
 			{
 				//Log(LOG_INFO) << ". . . out of hit range, EXIT";
@@ -341,7 +341,7 @@ void ProjectileFlyBState::init()
 				return;
 			}
 
-//kL			performMeleeAttack();
+//kL		performMeleeAttack();
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 //kL			return;
 		break;
@@ -402,7 +402,7 @@ void ProjectileFlyBState::init()
 		Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																	_action,
 																	_parent->getSave()->getTile(_origin));
-		if (targetTile->getUnit() != 0)
+		if (targetTile->getUnit() != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has unit";
 			if (_origin == _action.target
@@ -436,7 +436,7 @@ void ProjectileFlyBState::init()
 								_action.target.y * 16 + 8,
 								_action.target.z * 24 + 12);
 		} // kL_end.
-		else if (targetTile->getMapData(MapData::O_OBJECT) != 0)
+		else if (targetTile->getMapData(MapData::O_OBJECT) != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has content-object";
 			if (!_parent->getTileEngine()->canTargetTile(
@@ -452,7 +452,7 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 8);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_NORTHWALL) != 0)
+		else if (targetTile->getMapData(MapData::O_NORTHWALL) != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has northwall";
 			if (!_parent->getTileEngine()->canTargetTile(
@@ -468,7 +468,7 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_WESTWALL) != 0)
+		else if (targetTile->getMapData(MapData::O_WESTWALL) != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has westwall";
 			if (!_parent->getTileEngine()->canTargetTile(
@@ -484,7 +484,7 @@ void ProjectileFlyBState::init()
 									_action.target.z * 24 + 10);
 			}
 		}
-		else if (targetTile->getMapData(MapData::O_FLOOR) != 0)
+		else if (targetTile->getMapData(MapData::O_FLOOR) != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has floor";
 			if (!_parent->getTileEngine()->canTargetTile(
@@ -569,8 +569,8 @@ bool ProjectileFlyBState::createNewProjectile()
 				_projectileItem->setFuseTimer(0);
 			}
 
-			_projectileItem->moveToOwner(0);
-			_unit->setCache(0);
+			_projectileItem->moveToOwner(NULL);
+			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
 			_parent->getResourcePack()->getSound(
@@ -589,7 +589,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			//Log(LOG_INFO) << ". . no throw, Voxel_Empty or _Wall or _OutofBounds";
 			delete projectile;
 
-			_parent->getMap()->setProjectile(0);
+			_parent->getMap()->setProjectile(NULL);
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_action.TU = 0;
 			_unit->setStatus(STATUS_STANDING); // kL
@@ -630,7 +630,7 @@ bool ProjectileFlyBState::createNewProjectile()
 				&& _ammo->spendBullet() == false)
 			{
 				_parent->getSave()->removeItem(_ammo);
-				_action.weapon->setAmmoItem(0);
+				_action.weapon->setAmmoItem(NULL);
 			}
 		}
 		else // no line of fire
@@ -638,7 +638,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			//Log(LOG_INFO) << ". . no spit, no LoF, Voxel_Empty";
 			delete projectile;
 
-			_parent->getMap()->setProjectile(0);
+			_parent->getMap()->setProjectile(NULL);
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_action.TU = 0; // kL
 //kL		_unit->abortTurn();
@@ -754,8 +754,9 @@ void ProjectileFlyBState::think()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::think()";
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
-	/* TODO refactoring : store the projectile in this state, instead of getting it from the map each time? */
-	if (_parent->getMap()->getProjectile() == 0)
+
+	// TODO refactoring : store the projectile in this state, instead of getting it from the map each time.
+	if (_parent->getMap()->getProjectile() == NULL)
 	{
 		Tile
 			* t = _parent->getSave()->getTile(_action.actor->getPosition()),
@@ -958,7 +959,7 @@ void ProjectileFlyBState::think()
 															_parent->getMap()->getProjectile()->getPosition(offset),
 															_ammo,
 															_action.actor,
-															0,
+															NULL,
 															_action.type != BA_AUTOSHOT
 																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
 																|| !_action.weapon->getAmmoItem()));
@@ -1011,7 +1012,7 @@ void ProjectileFlyBState::think()
 																			proj->getPosition(1),
 																			_ammo->getRules()->getPower(),
 																			_ammo->getRules()->getDamageType(),
-																			0); // kL_note: was _unit
+																			NULL); // kL_note: was _unit
 								}
 
 								++i;
@@ -1062,13 +1063,13 @@ void ProjectileFlyBState::think()
 					|| !_action.weapon->getAmmoItem())
 				{
 					_unit->aim(false);
-					_unit->setCache(0);
+					_unit->setCache(NULL);
 					_parent->getMap()->cacheUnits();
 				}
 			}
 
 			delete _parent->getMap()->getProjectile();
-			_parent->getMap()->setProjectile(0);
+			_parent->getMap()->setProjectile(NULL);
 		}
 	}
 	//Log(LOG_INFO) << "ProjectileFlyBState::think() EXIT";
@@ -1250,8 +1251,8 @@ void ProjectileFlyBState::performMeleeAttack()
 														height - _parent->getSave()->getTile(_action.target)->getTerrainLevel())
 													- voxel;
 
-	_unit->aim(true); // set the soldier in an aiming position
-	_unit->setCache(0);
+	_unit->aim(true); // set the soldier in an aiming position <- hm, this also sets cacheInvalid ...
+	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 
 	if (_ammo->getRules()->getMeleeAttackSound() != -1) // and we have a lift-off!
@@ -1278,7 +1279,7 @@ void ProjectileFlyBState::performMeleeAttack()
 		&& _ammo->spendBullet() == false)
 	{
 		_parent->getSave()->removeItem(_ammo);
-		_action.weapon->setAmmoItem(0);
+		_action.weapon->setAmmoItem(NULL);
 	}
 
 	_parent->getMap()->setCursorType(CT_NONE);
@@ -1288,6 +1289,10 @@ void ProjectileFlyBState::performMeleeAttack()
 											voxel,
 											_action.weapon,
 											_action.actor));
+
+	_unit->aim(false);						// ajschult: take soldier out of aiming position <- hm, this also sets cacheInvalid ...
+	_unit->setCache(NULL);					// kL
+	_parent->getMap()->cacheUnit(_unit);	// kL
 	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack() EXIT";
 }
 

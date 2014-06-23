@@ -66,6 +66,8 @@ private:
 		* _bg,
 		* _rank;
 	Text
+		* _txtDate,
+		* _txtDeath,
 		* _txtKills,
 		* _txtMissions,
 		* _txtRank,

@@ -279,7 +279,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	_txtDamage->setColor(Palette::blockOffset(15)-1);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
-	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage())));
+//kL	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage())));
+	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercentage()))); // kL
 
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
@@ -345,7 +346,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 		if (stat == "STR_REPAIRS"
 			|| stat == "STR_REFUELLING"
 			|| stat == "STR_REARMING"
-			|| lowFuel)
+			|| lowFuel
+			|| missionComplete)
 		{
 			_btnTarget->setVisible(false);
 		}
@@ -438,7 +440,7 @@ void GeoscapeCraftState::btnPatrolClick(Action*)
 		_game->popState();	// kL
 
 	_game->popState();
-	_craft->setDestination(0);
+	_craft->setDestination(NULL);
 
 	delete _waypoint;
 }

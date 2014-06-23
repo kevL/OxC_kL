@@ -85,19 +85,19 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_game(game),
 		_save(game->getSavedGame()->getSavedBattle()),
 		_res(_game->getResourcePack()),
-		_craft(0),
-		_ufo(0),
-		_base(0),
-		_terror(0),
-		_alienBase(0),
-		_terrain(0),
+		_craft(NULL),
+		_ufo(NULL),
+		_base(NULL),
+		_terror(NULL),
+		_alienBase(NULL),
+		_terrain(NULL),
 		_mapsize_x(0),
 		_mapsize_y(0),
 		_mapsize_z(0),
 		_worldTexture(0),
 		_worldShade(0),
 		_unitSequence(0),
-		_craftInventoryTile(0),
+		_craftInventoryTile(NULL),
 		_alienRace(""),
 		_alienItemLevel(0),
 		_craftX(0),
@@ -2915,15 +2915,15 @@ void BattlescapeGenerator::setAlienBase(AlienBase* base)
  */
 bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
 {
-	Position entryPoint = Position(-1, -1, -1);
+	Position entryPoint = Position(-1,-1,-1);
 //kL	int tries = 100;
 	int tries = 2; // kL: these guys were getting too cramped up.
-	while (entryPoint == Position(-1, -1, -1)
+	while (entryPoint == Position(-1,-1,-1)
 		&& tries)
 	{
 		BattleUnit* k = _save->getUnits()->at(RNG::generate(0, static_cast<int>(_save->getUnits()->size()) - 1));
 		if (k->getFaction() == unit->getFaction()
-			&& k->getPosition() != Position(-1, -1, -1)
+			&& k->getPosition() != Position(-1,-1,-1)
 			&& k->getArmor()->getSize() == 1)
 		{
 			entryPoint = k->getPosition();
@@ -2951,7 +2951,7 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 		int tex,
 		double lat)
 {
-	RuleTerrain* t = 0;
+	RuleTerrain* terrain = NULL;
 
 	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
 	for (std::vector<std::string>::const_iterator
@@ -2959,27 +2959,27 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 			i != terrains.end();
 			++i)
 	{
-		t = _game->getRuleset()->getTerrain(*i);
+		terrain = _game->getRuleset()->getTerrain(*i);
 		for (std::vector<int>::iterator
-				j = t->getTextures()->begin();
-				j != t->getTextures()->end();
+				j = terrain->getTextures()->begin();
+				j != terrain->getTextures()->end();
 				++j)
 		{
 			if (*j == tex
-				&& (t->getHemisphere() == 0
-					|| (t->getHemisphere() < 0
+				&& (terrain->getHemisphere() == 0
+					|| (terrain->getHemisphere() < 0
 						&& lat < 0.0)
-					|| (t->getHemisphere() > 0
+					|| (terrain->getHemisphere() > 0
 						&& lat >= 0.0)))
 			{
-				return t;
+				return terrain;
 			}
 		}
 	}
 
 	assert(0 && "No matching terrain for globe texture");
 
-	return t;
+	return terrain;
 }
 
 /**

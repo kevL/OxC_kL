@@ -2088,7 +2088,7 @@ void Map::animate(bool redraw)
 			|| (*i)->getArmor()->getDrawingRoutine() == 20) */
 		if ((*i)->getArmor()->getConstantAnimation())
 		{
-			(*i)->setCache(0);
+			(*i)->setCache(NULL);
 			cacheUnit(*i);
 		}
 	}

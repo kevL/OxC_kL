@@ -845,7 +845,7 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 		bool checkInventory)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::selectFactionUnit()";
-	if (_selectedUnit != 0
+	if (_selectedUnit != NULL
 		&& setDontReselect)
 	{
 		//Log(LOG_INFO) << ". dontReselect";
@@ -854,11 +854,11 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 
 	if (_units.empty())
 	{
-		//Log(LOG_INFO) << ". units.Empty, ret 0";
-		_selectedUnit = 0;		// kL
-		_lastSelectedUnit = 0;	// kL
+		//Log(LOG_INFO) << ". units.Empty, ret NULL";
+		_selectedUnit = NULL;		// kL
+		_lastSelectedUnit = NULL;	// kL
 
-		return 0;
+		return NULL;
 	}
 
 	std::vector<BattleUnit*>::iterator
@@ -911,18 +911,19 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 			if (checkReselect
 				&& !_selectedUnit->reselectAllowed())
 			{
-				//Log(LOG_INFO) << ". . . negative, ret 0";
-				_selectedUnit = 0;
+				//Log(LOG_INFO) << ". . . negative, ret NULL";
+				_selectedUnit = NULL;
 			}
 
 			//Log(LOG_INFO) << ". . ret selectedUnit";
 			return _selectedUnit;
 		}
-		else if (_selectedUnit == 0
+		else if (_selectedUnit == NULL
 			&& i == begin)
 		{
-			//Log(LOG_INFO) << ". . finish do, ret selectedUnit = 0";
-			return _selectedUnit;
+			//Log(LOG_INFO) << ". . finish do, ret selectedUnit = NULL";
+//kL			return _selectedUnit;
+			return NULL; // kL
 		}
 	}
 	while (!(*i)->isSelectable(
@@ -940,7 +941,7 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 /**
  * Selects the unit at the given position on the map.
  * @param pos Position.
- * @return Pointer to a BattleUnit, or 0 when none is found.
+ * @return Pointer to a BattleUnit, or NULL when none is found.
  */
 BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
 {
@@ -949,7 +950,7 @@ BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
 	if (bu
 		&& bu->isOut())
 	{
-		return 0;
+		return NULL;
 	}
 	else
 		return bu;

@@ -311,7 +311,7 @@ int Armor::getDeathFrames()
 	return _deathFrames;
 }
 
-/*
+/**
  * Gets if armor uses constant animation.
  * @return if it uses constant animation
  */
@@ -320,7 +320,7 @@ bool Armor::getConstantAnimation()
 	return _constantAnimation;
 }
 
-/*
+/**
  * Gets if armor can hold weapon.
  * @return if it can hold weapon
  */

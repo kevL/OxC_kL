@@ -129,7 +129,9 @@ private:
 		* _numMorale,
 		* _numLayers,
 		* _numAmmoLeft,
-		* _numAmmoRight;
+		* _numAmmoRight,
+
+		* _numWounds; // kL
 	Position
 		_cursorPosition,
 		_mapOffsetBeforeDragScroll;
