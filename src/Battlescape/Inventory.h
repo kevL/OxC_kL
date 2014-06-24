@@ -52,6 +52,7 @@ private:
 		_tu;
 	int
 		_groundOffset,
+		_tuCost, // kL
 		_primeGrenade; // kL
 
 	BattleItem
@@ -142,7 +143,8 @@ private:
 		bool fitItem(
 				RuleInventory* newSlot,
 				BattleItem* item,
-				std::string& warning);
+				std::string& warning,
+				bool test = false); // kL_add.
 		/// Checks if two items can be stacked on one another.
 		bool canBeStacked(
 				BattleItem* itemA,
@@ -160,6 +162,9 @@ private:
 
 		/// kL. Set grenade to show a warning in Inventory.
 		void setPrimeGrenade(int turn); // kL
+
+		/// kL. Get the TU cost for moving items around.
+		int getTUCost() const; // kL
 };
 
 }

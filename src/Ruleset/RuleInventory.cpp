@@ -27,30 +27,33 @@
 namespace YAML
 {
 
-	template<>
-	struct convert<OpenXcom::RuleSlot>
+template<>
+struct convert<OpenXcom::RuleSlot>
+{
+	///
+	static Node encode(const OpenXcom::RuleSlot& rhs)
 	{
-		static Node encode(const OpenXcom::RuleSlot& rhs)
-		{
-			Node node;
+		Node node;
 
-			node.push_back(rhs.x);
-			node.push_back(rhs.y);
+		node.push_back(rhs.x);
+		node.push_back(rhs.y);
 
-			return node;
-		}
+		return node;
+	}
 
-		static bool decode(const Node& node, OpenXcom::RuleSlot& rhs)
-		{
-			if (!node.IsSequence() || node.size() != 2)
-				return false;
+	///
+	static bool decode(const Node& node, OpenXcom::RuleSlot& rhs)
+	{
+		if (!node.IsSequence() || node.size() != 2)
+			return false;
 
-			rhs.x = node[0].as<int>();
-			rhs.y = node[1].as<int>();
+		rhs.x = node[0].as<int>();
+		rhs.y = node[1].as<int>();
 
-			return true;
-		}
-	};
+		return true;
+	}
+};
+
 }
 
 
@@ -132,7 +135,7 @@ int RuleInventory::getY() const
  * Slot-based contain a limited number of slots.
  * Hands only contain one slot but can hold any item.
  * Ground can hold infinite items but don't attach to soldiers.
- * @return The inventory type.
+ * @return, The inventory type.
  */
 InventoryType RuleInventory::getType() const
 {
@@ -224,11 +227,11 @@ bool RuleInventory::checkSlotInPosition(
 }
 
 /**
- * Checks if an item completely fits when placed in a certain slot.
- * @param item, Pointer to item ruleset.
- * @param x, Slot X position.
- * @param y, Slot Y position.
- * @return, True if there's a slot there.
+ * Checks if an item completely fits in a certain slot.
+ * @param item	- pointer to item ruleset
+ * @param x		- slot X position
+ * @param y		- slot Y position
+ * @return, true if there's room there
  */
 bool RuleInventory::fitItemInSlot(
 		RuleItem* item,
@@ -236,9 +239,7 @@ bool RuleInventory::fitItemInSlot(
 		int y) const
 {
 	if (_type == INV_HAND)
-	{
 		return true;
-	}
 	else if (_type == INV_GROUND)
 	{
 		int width	= (320 - _x) / SLOT_W;

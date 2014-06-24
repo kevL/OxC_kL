@@ -83,7 +83,8 @@ Inventory::Inventory(
 		_tu(true),
 		_base(base),
 		_groundOffset(0),
-		_primeGrenade(-1) // kL
+		_primeGrenade(-1), // kL
+		_tuCost(-1) // kL
 {
 	_grid			= new Surface(width, height, x, y);
 	_items			= new Surface(width, height, x, y);
@@ -100,7 +101,7 @@ Inventory::Inventory(
 					_game->getResourcePack()->getFont("FONT_SMALL"),
 					_game->getLanguage());
 	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1) - 1);
+	_warning->setTextColor(Palette::blockOffset(1)-1);
 }
 
 /**
@@ -132,6 +133,7 @@ void Inventory::setPalette(
 	_items->setPalette(colors, firstcolor, ncolors);
 	_selection->setPalette(colors, firstcolor, ncolors);
 	_warning->setPalette(colors, firstcolor, ncolors);
+
 	_stackNumber->setPalette(getPalette());
 }
 
@@ -396,8 +398,7 @@ void Inventory::drawItems()
 }
 
 /**
- * Moves an item to a specified slot in the
- * selected player's inventory.
+ * Moves an item to a specified slot in the selected player's inventory.
  * @param item Pointer to battle item.
  * @param slot Inventory slot, or NULL if none.
  * @param x X position in slot.
@@ -453,14 +454,13 @@ void Inventory::moveItem(
 }
 
 /**
- * Checks if an item in a certain slot position would
- * overlap with any other inventory item.
- * @param unit Pointer to current unit.
- * @param item Pointer to battle item.
- * @param slot Pointer to inventory slot, or NULL if none.
- * @param x X position in slot.
- * @param y Y position in slot.
- * @return If there's overlap.
+ * Checks if an item in a certain slot position would overlap with any other inventory item.
+ * @param unit	- pointer to current unit
+ * @param item	- pointer to battle item
+ * @param slot	- pointer to inventory slot, or NULL if none
+ * @param x		- X position in slot
+ * @param y		- Y position in slot
+ * @return, true if there's overlap
  */
 bool Inventory::overlapItems(
 		BattleUnit* unit,
@@ -536,6 +536,7 @@ BattleItem* Inventory::getSelectedItem() const
 void Inventory::setSelectedItem(BattleItem* item)
 {
 	_selItem = (item && !item->getRules()->isFixed())? item: NULL;
+
 	if (_selItem == NULL)
 		_selection->clear();
 	else
@@ -553,7 +554,7 @@ void Inventory::setSelectedItem(BattleItem* item)
 
 /**
  * Returns the item currently under mouse cursor.
- * @return Pointer to selected item, or 0 if none.
+ * @return Pointer to item, or NULL if none.
  */
 BattleItem* Inventory::getMouseOverItem() const
 {
@@ -562,11 +563,11 @@ BattleItem* Inventory::getMouseOverItem() const
 
 /**
  * Changes the item currently under mouse cursor.
- * @param item Pointer to selected item, or NULL if none.
+ * @param item Pointer to item, or NULL if none.
  */
 void Inventory::setMouseOverItem(BattleItem* item)
 {
-	_mouseOverItem = (item && !item->getRules()->isFixed())? item: 0;
+	_mouseOverItem = (item && !item->getRules()->isFixed())? item: NULL;
 }
 
 /**
@@ -611,7 +612,17 @@ void Inventory::blit(Surface* surface)
 }
 
 /**
- * Moves the selected item.
+ * kL. Handles the cursor out.
+ * @param action Pointer to an action.
+ * @param state State that the action handlers belong to.
+ */
+/* void Inventory::mouseOut(Action* action, State* state) // kL
+{
+	_tuCost->setVisible(false);
+} */
+
+/**
+ * Handles the cursor over.
  * @param action Pointer to an action.
  * @param state State that the action handlers belong to.
  */
@@ -621,7 +632,6 @@ void Inventory::mouseOver(Action* action, State* state)
 						floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
 	_selection->setY(static_cast<int>(
 						floor(action->getAbsoluteYMouse())) - (_selection->getHeight() / 2) - getY());
-
 
 	if (_selUnit == NULL)
 		return;
@@ -633,17 +643,36 @@ void Inventory::mouseOver(Action* action, State* state)
 	RuleInventory* slot = getSlotInPosition(&x, &y);
 	if (slot != NULL)
 	{
-		if (slot->getType() == INV_GROUND)
-			x += _groundOffset;
+		// kL_begin:
+		std::string warning = "";
+		if (_tu
+			&& _selItem != NULL
+			&& fitItem(
+					slot,
+					_selItem,
+					warning,
+					true))
+		{
+			_tuCost = _selItem->getSlot()->getCost(slot);
+		}
+		else
+		{
+			_tuCost = -1; // kL_end.
 
-		BattleItem* item = _selUnit->getItem(slot, x, y);
-		setMouseOverItem(item);
+			if (slot->getType() == INV_GROUND)
+				x += _groundOffset;
+
+			BattleItem* item = _selUnit->getItem(slot, x, y);
+			setMouseOverItem(item);
+		}
 	}
 	else
-		setMouseOverItem(NULL);
+	{
+		_tuCost = -1; // kL
 
-//	_selection->setX((int)floor(action->getAbsoluteXMouse()) - _selection->getWidth()/2 - getX());
-//	_selection->setY((int)floor(action->getAbsoluteYMouse()) - _selection->getHeight()/2 - getY());
+		setMouseOverItem(NULL);
+	}
+
 	_selection->setX(static_cast<int>(
 						floor(action->getAbsoluteXMouse())) - (_selection->getWidth() / 2) - getX());
 	_selection->setY(static_cast<int>(
@@ -653,7 +682,7 @@ void Inventory::mouseOver(Action* action, State* state)
 }
 
 /**
- * Picks up / drops an item.
+ * Handles the cursor click. Picks up / drops an item.
  * @param action, Pointer to an action.
  * @param state, State that the action handlers belong to.
  */
@@ -837,6 +866,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (!_tu
 							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
 						{
+							_tuCost = -1; // kL
+
 							moveItem(
 									_selItem,
 									slot,
@@ -857,6 +888,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (!_tu
 							|| _selUnit->spendTimeUnits(_selItem->getSlot()->getCost(slot)))
 						{
+							_tuCost = -1; // kL
+
 							moveItem(
 									_selItem,
 									slot,
@@ -895,6 +928,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						else if (!_tu
 							|| _selUnit->spendTimeUnits(15))
 						{
+							_tuCost = -1; // kL
+
 							moveItem(
 									_selItem,
 									NULL,
@@ -953,6 +988,8 @@ void Inventory::mouseClick(Action* action, State* state)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
+		_tuCost = -1; // kL
+
 		//Log(LOG_INFO) << "Inventory: SDL_BUTTON_RIGHT";
 		if (_selItem == NULL)
 		{
@@ -1227,17 +1264,20 @@ void Inventory::arrangeGround(bool alterOffset)
 
 /**
  * Attempts to place the item in the inventory slot.
- * @param newSlot, Where to place the item.
- * @param item, Item to be placed.
- * @param warning, Warning message if item could not be placed.
- * @return, True if the item was successfully placed in the inventory.
+ * @param newSlot	- pointer to where to place the item
+ * @param item		- item to be placed
+ * @param warning	- warning message if item could not be placed
+ * @param test		- true if only doing a test (no move happens)
+ * @return, true if the item was successfully placed in the inventory
  */
 bool Inventory::fitItem(
 		RuleInventory* newSlot,
 		BattleItem* item,
-		std::string& warning)
+		std::string& warning,
+		bool test) // kL_add
 {
 	bool placed = false;
+
 	for (int
 			y2 = 0;
 			y2 <= newSlot->getY() / RuleInventory::SLOT_H
@@ -1250,7 +1290,7 @@ bool Inventory::fitItem(
 					&& !placed;
 				++x2)
 		{
-			if (!overlapItems(
+/*			if (!overlapItems(
 							_selUnit,
 							item,
 							newSlot,
@@ -1261,10 +1301,16 @@ bool Inventory::fitItem(
 										x2,
 										y2))
 			{
-				if (!_tu
+				if (_tu // kL_begin:
+					&& test == true)
+				{
+					placed = true; // kL end.
+				}
+				else if (!_tu
 					|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
 				{
 					placed = true;
+
 					moveItem(
 							item,
 							newSlot,
@@ -1275,8 +1321,44 @@ bool Inventory::fitItem(
 
 					drawItems();
 				}
-				else
+				else if (test == false) // kL_alter.
 					warning = "STR_NOT_ENOUGH_TIME_UNITS";
+			} */
+			if (newSlot->fitItemInSlot(
+										item->getRules(),
+										x2,
+										y2))
+			{
+				if (_tu
+					&& test == true)
+				{
+					placed = true;
+				}
+				else if (!overlapItems(
+									_selUnit,
+									item,
+									newSlot,
+									x2,
+									y2))
+				{
+					if (!_tu
+						|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
+					{
+						placed = true;
+
+						moveItem(
+								item,
+								newSlot,
+								x2,
+								y2);
+
+						_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+
+						drawItems();
+					}
+					else if (test == false)
+						warning = "STR_NOT_ENOUGH_TIME_UNITS";
+				}
 			}
 		}
 	}
@@ -1294,14 +1376,14 @@ bool Inventory::canBeStacked(
 		BattleItem* itemA,
 		BattleItem* itemB)
 {
-	return (itemA != NULL && itemB != NULL																	// both items actually exist
+	return (itemA != NULL && itemB != NULL																// both items actually exist
 		&& itemA->getRules() == itemB->getRules()														// both items have the same ruleset
 		&& ((!itemA->getAmmoItem() && !itemB->getAmmoItem())											// either they both have no ammo
 			|| (itemA->getAmmoItem() && itemB->getAmmoItem()											// or they both have ammo
 				&& itemA->getAmmoItem()->getRules() == itemB->getAmmoItem()->getRules()					// and the same ammo type
 				&& itemA->getAmmoItem()->getAmmoQuantity() == itemB->getAmmoItem()->getAmmoQuantity()))	// and the same ammo quantity
 		&& itemA->getFuseTimer() == -1 && itemB->getFuseTimer() == -1									// and neither is set to explode
-		&& itemA->getUnit() == NULL && itemB->getUnit() == NULL												// and neither is a corpse or unconscious unit
+		&& itemA->getUnit() == NULL && itemB->getUnit() == NULL											// and neither is a corpse or unconscious unit
 		&& itemA->getPainKillerQuantity() == itemB->getPainKillerQuantity()								// and if it's a medkit, it has the same number of charges
 		&& itemA->getHealQuantity() == itemB->getHealQuantity()
 		&& itemA->getStimulantQuantity() == itemB->getStimulantQuantity());
@@ -1323,6 +1405,14 @@ void Inventory::showWarning(const std::wstring& msg)
 void Inventory::setPrimeGrenade(int turn) // kL
 {
 	_primeGrenade = turn;
+}
+
+/**
+ * kL. Get the TU cost for moving items around.
+ */
+int Inventory::getTUCost() const // kL
+{
+	return _tuCost;
 }
 
 }

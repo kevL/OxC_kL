@@ -1059,19 +1059,6 @@ void BattlescapeGame::handleNonTargetAction()
 			else
 				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 		}
-/*		else if (_currentAction.type == BA_DEFUSE // kL_begin:
-			&& _currentAction.value == -1)// a bit redundant ...
-		{
-			//Log(LOG_INFO) << "BattlescapeGame::handleNonTargetAction() BA_DEFUSE";
-			if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
-			{
-				_currentAction.weapon->setFuseTimer(_currentAction.value);
-
-				_parentState->warning("STR_GRENADE_IS_DEACTIVATED");
-			}
-			else
-				_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
-		} */ // kL_end.
 		else if (_currentAction.type == BA_USE
 			|| _currentAction.type == BA_LAUNCH)
 		{

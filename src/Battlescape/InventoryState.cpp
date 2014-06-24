@@ -34,7 +34,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-//kL #include "../Engine/Logger.h"
+#include "../Engine/Logger.h"
 //kL #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 //kL #include "../Engine/Screen.h"
@@ -43,6 +43,7 @@
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Text.h"
+#include "../Interface/NumberText.h" // kL
 
 #include "../Resource/ResourcePack.h"
 
@@ -118,6 +119,8 @@ InventoryState::InventoryState(
 	_txtPStr	= new Text(40, 9, 245, 64);
 	_txtPSkill	= new Text(40, 9, 245, 72);
 
+	_tuCost		= new NumberText(7, 5, 310, 60); // kL
+
 	_txtItem	= new Text(160, 9, 128, 140);
 	_txtAmmo	= new Text(66, 24, 254, 64);
 
@@ -163,6 +166,7 @@ InventoryState::InventoryState(
 	add(_txtPStr);
 	add(_txtPSkill);
 
+	add(_tuCost); // kL
 	add(_txtItem);
 	add(_txtAmmo);
 	add(_btnOk);
@@ -215,6 +219,11 @@ InventoryState::InventoryState(
 	_txtPSkill->setColor(Palette::blockOffset(4));
 	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
 	_txtPSkill->setHighContrast(true);
+
+
+	_tuCost->setColor(1);		// kL
+	_tuCost->setValue(0);		// kL
+	_tuCost->setVisible(false);	// kL
 
 	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast(true);
@@ -390,7 +399,7 @@ void InventoryState::init()
 //kL	if (_parent)
 //kL		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
 
-	unit->setCache(0);
+	unit->setCache(NULL);
 	_soldier->clear();
 	_btnRank->clear();
 
@@ -811,6 +820,8 @@ void InventoryState::btnApplyTemplateClick(Action* action)
  */
 void InventoryState::invClick(Action*)
 {
+	_tuCost->setVisible(false); // kL
+
 	// kL_note: This function has only updateStats() in the stock code,
 	// since induction of Copy/Paste Inventory Layouts ... that is, the
 	// vast majority of this function has been subsumed into invMouseOver().
@@ -918,14 +929,21 @@ void InventoryState::invClick(Action*)
  * Shows item info.
  * @param action Pointer to an action.
  */
-void InventoryState::invMouseOver(Action*)
+void InventoryState::invMouseOver(Action* action)
 {
 	if (_inv->getSelectedItem() != NULL)
+	{
+		_tuCost->setValue(_inv->getTUCost());				// kL
+		_tuCost->setVisible(_tu
+							&& _inv->getTUCost() > 0);	// kL
+
 		return;
+	}
 
 	BattleItem* item = _inv->getMouseOverItem();
 	if (item != NULL)
 	{
+//		_tuCost->setVisible(false); // kL
 		RuleItem* itemRule = item->getRules();
 
 		// kL_begin:
@@ -971,7 +989,7 @@ void InventoryState::invMouseOver(Action*)
 		} */
 
 		std::wstring wstr;
-		if (item->getAmmoItem() != 0
+		if (item->getAmmoItem() != NULL
 			&& item->needsAmmo())
 		{
 			wstr = tr("STR_AMMO_ROUNDS_LEFT").arg(item->getAmmoItem()->getAmmoQuantity());
@@ -1038,10 +1056,13 @@ void InventoryState::invMouseOut(Action*)
 {
 	_txtItem->setText(L"");
 	_txtAmmo->setText(L"");
+
 	_selAmmo->clear();
 
 	_btnCreateTemplate->setVisible(!_tu);
 	_btnApplyTemplate->setVisible(!_tu);
+
+	_tuCost->setVisible(false); // kL
 }
 
 /**

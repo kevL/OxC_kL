@@ -277,10 +277,6 @@ void ActionMenuState::handle(Action* action)
 {
 	State::handle(action);
 
-	// kL: safeties from BattlescapeGame::handleNonTargetAction()
-//	_action->type = BA_NONE;
-//	_parentState->updateSoldierInfo();
-
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
 		|| (action->getDetails()->type == SDL_KEYDOWN
 			&& (action->getDetails()->key.keysym.sym == Options::keyCancel
@@ -290,17 +286,6 @@ void ActionMenuState::handle(Action* action)
 		_game->popState();
 	}
 }
-/*kL
-	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN &&
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		_game->popState();
-	else if (action->getDetails()->type == SDL_KEYDOWN
-		&& (action->getDetails()->key.keysym.sym == Options::keyCancel
-			|| action->getDetails()->key.keysym.sym == Options::keyBattleUseLeftHand
-			|| action->getDetails()->key.keysym.sym == Options::keyBattleUseRightHand))
-	{
-		_game->popState();
-	} */
 
 /**
  * Executes the action corresponding to this action menu item.

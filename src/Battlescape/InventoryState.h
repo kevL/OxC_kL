@@ -35,6 +35,7 @@ class BattlescapeState;
 class BattleUnit;
 class InteractiveSurface;
 class Inventory;
+class NumberText; // kL
 class SavedBattleGame;
 class Surface;
 class Text;
@@ -62,6 +63,7 @@ private:
 		* _btnCreateTemplate,
 		* _btnApplyTemplate;
 	Inventory* _inv;
+	NumberText* _tuCost; // kL
 	SavedBattleGame* _battleGame;
 	Surface
 		* _bg,

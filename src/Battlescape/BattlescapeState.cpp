@@ -168,7 +168,7 @@ BattlescapeState::BattlescapeState(Game* game)
 	_kneel		= new Surface( 2,  2, _icons->getX() + 115, _icons->getY() + 19); // kL
 
 	_srfWounds	= new Surface(14, 11, _rank->getX() + 14, _rank->getY() - 1); // kL
-	_numWounds	= new NumberText(6, 5, _rank->getX(), _rank->getY() + 2); // kL, X gets adjusted in updateSoldierInfo()
+	_numWounds	= new NumberText(7, 5, _rank->getX(), _rank->getY() + 2); // kL, X gets adjusted in updateSoldierInfo()
 //	_numWounds	= new NumberText(3, 5, _rank->getX() + 12, _rank->getY() + 10); // kL
 
 	_btnUnitUp			= new InteractiveSurface(32,  16, _icons->getX() +  48, _icons->getY());
