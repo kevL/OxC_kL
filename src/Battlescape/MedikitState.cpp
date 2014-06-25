@@ -256,7 +256,7 @@ void MedikitState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		onEndClick(0);
+		onEndClick(NULL);
 	}
 }
 
@@ -309,7 +309,7 @@ void MedikitState::onHealClick(Action*)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//kL		onEndClick(0);
+//kL	onEndClick(0);
 	}
 }
 
@@ -326,7 +326,9 @@ void MedikitState::onStimulantClick(Action*)
 	RuleItem* rule = _item->getRules();
 	if (_unit->spendTimeUnits(rule->getTUUse()))
 	{
-		_targetUnit->stimulant(rule->getEnergyRecovery(), rule->getStunRecovery());
+		_targetUnit->stimulant(
+							rule->getEnergyRecovery(),
+							rule->getStunRecovery());
 		_item->setStimulantQuantity(--stimulant);
 
 		update();
@@ -335,13 +337,13 @@ void MedikitState::onStimulantClick(Action*)
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
 			&& _targetUnit->getStunlevel() < _targetUnit->getHealth())
 		{
-			onEndClick(0);
+			onEndClick(NULL);
 		}
 	}
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//kL		onEndClick(0);
+//kL	onEndClick(0);
 	}
 }
 
@@ -366,7 +368,7 @@ void MedikitState::onPainKillerClick(Action*)
 	else
 	{
 		_action->result = "STR_NOT_ENOUGH_TIME_UNITS";
-//kL		onEndClick(0);
+//kL	onEndClick(0);
 	}
 }
 

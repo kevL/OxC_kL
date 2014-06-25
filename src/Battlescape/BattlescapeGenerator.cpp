@@ -359,7 +359,7 @@ void BattlescapeGenerator::nextStage()
 void BattlescapeGenerator::run()
 {
 //kL	AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment(_ufo? _ufo->getRules()->getType(): _save->getMissionType());
-	AlienDeployment* ruleDeploy = 0;
+	AlienDeployment* ruleDeploy = NULL;
 	if (_ufo)
 		ruleDeploy = _game->getRuleset()->getDeployment(_ufo->getRules()->getType());
 	else
@@ -406,8 +406,23 @@ void BattlescapeGenerator::run()
 
 	_save->setTerrain(_terrain->getName()); // sza_MusicRules
 
-	if (_craft != 0
-		|| _base != 0)
+	// kL_begin: blow up PowerSources after aLiens & civies spawn, but before xCom spawn. (i hope)
+/*	deployAliens(
+			_game->getRuleset()->getAlienRace(_alienRace),
+			ruleDeploy);
+	deployCivilians(ruleDeploy->getCivilians());
+
+	fuelPowerSources();
+	if (_save->getMissionType() ==  "STR_UFO_CRASH_RECOVERY")
+		explodePowerSources();
+
+	if (_craft != NULL
+		|| _base != NULL)
+	{
+		deployXCOM();
+	} */ // kL_end.
+	if (_craft != NULL
+		|| _base != NULL)
 	{
 		deployXCOM();
 	}
@@ -2856,21 +2871,19 @@ void BattlescapeGenerator::explodePowerSources()
 			pos.y = _save->getTiles()[i]->getPosition().y * 16;
 			pos.z = _save->getTiles()[i]->getPosition().z * 24 + 12;
 
-			int
-				percDamage = _ufo->getCrashPS(), // ( range: 50+ to 100- )
-				altDamage = 0;
-			//Log(LOG_INFO) << ". crashPS = " << percDamage;
-			if (RNG::percent(percDamage / 2)) // chance for full range Explosion (even if crash took low damage)
+			int hullDamage = _ufo->getCrashPS(); // ( range: 50+ to 100- )
+			//Log(LOG_INFO) << ". crashPS = " << hullDamage;
+			if (RNG::percent(hullDamage / 2)) // chance for full range Explosion (even if crash took low damage)
 			{
-				altDamage = RNG::generate(1, 100);
-				//Log(LOG_INFO) << ". . Alt percDamage = " << percDamage;
+				hullDamage = RNG::generate(1, 100);
+				//Log(LOG_INFO) << ". . Alt hullDamage = " << hullDamage;
 			}
 
-			double rand = RNG::generate(0.1, 2.0) * static_cast<double>(percDamage);
-			//Log(LOG_INFO) << ". rand = " << (int)rand;
+			double explForce = RNG::generate(0.1, 2.0) * static_cast<double>(hullDamage);
+			//Log(LOG_INFO) << ". explForce = " << (int)explForce;
 
-//			int power = static_cast<int>(((pow(rand, 3)) / 32000.0) + (static_cast<double>(percDamage) - 50.0));
-			int power = static_cast<int>(((pow(rand, 2)) / 160.0) + (static_cast<double>(percDamage)));
+//			int power = static_cast<int>(((pow(explForce, 3)) / 32000.0) + (static_cast<double>(hullDamage) - 50.0));
+			int power = static_cast<int>(((pow(explForce, 2)) / 160.0) + (static_cast<double>(hullDamage)));
 			//Log(LOG_INFO) << ". power = " << power;
 
 			_save->getTileEngine()->explode(

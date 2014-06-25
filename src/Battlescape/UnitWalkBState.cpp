@@ -841,6 +841,8 @@ bool UnitWalkBState::doStatusStand_end()
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand_end() : " << _unit->getId();
 
+	_parent->getSave()->getBattleState()->updateSoldierInfo(false); // update the TU display. NEW!!140525
+
 	_tileSwitchDone = false; // kL
 
 	if (_unit->getFaction() != FACTION_PLAYER)

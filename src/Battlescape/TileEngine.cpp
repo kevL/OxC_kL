@@ -2957,11 +2957,10 @@ int TileEngine::horizontalBlockage(
 								type,
 								3); // checks Content/bigWalls
 
-				if (block == 0) // this way is opened
-					break;
+				if (block == 0) break; // this way is opened
 
 				block = blockage( // right+up
-//				block += blockage( // right+up
+//				block += blockage(
 								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_NORTHWALL,
 								type)
@@ -3078,11 +3077,10 @@ int TileEngine::horizontalBlockage(
 								type,
 								1); // checks Content/bigWalls
 
-				if (block == 0) // this way is opened
-					break;
+				if (block == 0) break; // this way is opened
 
 				block = blockage( // right+down
-//				block += blockage( // right+down
+//				block += blockage(
 								_battleSave->getTile(startTile->getPosition() + tileEast),
 								MapData::O_WESTWALL,
 								type)
@@ -3199,11 +3197,10 @@ int TileEngine::horizontalBlockage(
 								type,
 								7); // checks Content/bigWalls
 
-				if (block == 0) // this way is opened
-					break;
+				if (block == 0) break; // this way is opened
 
 				block = blockage( // left+down
-//				block += blockage( // left+down
+//				block += blockage(
 								startTile,
 								MapData::O_WESTWALL,
 								type)
@@ -3322,11 +3319,10 @@ int TileEngine::horizontalBlockage(
 								type,
 								5);
 
-				if (block == 0) // this way is opened
-					break;
+				if (block == 0) break; // this way is opened
 
 				block = blockage( // left+up
-//				block += blockage( // left+up
+//				block += blockage(
 								startTile,
 								MapData::O_WESTWALL,
 								type)
@@ -3428,7 +3424,10 @@ int TileEngine::horizontalBlockage(
 					(dir + 4) %8) // opposite direction
 				!= 0) // should always be, < 1; ie. this conditions checks [if -1]
 		{
-			return -1;
+			if (type == DT_NONE)
+				return -1;
+			else
+				return 500; // this is a hardblock and should be greater than the most powerful explosions.
 		}
 	}
 
