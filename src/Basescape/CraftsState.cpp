@@ -191,10 +191,11 @@ void CraftsState::init()
 //		if ((*j)->getStatus() == "STR_READY")
 //			_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
 //		colorStatusCell();
-		_lstCrafts->setCellHighContrast(
-									row,
-									1,
-									true);
+
+//		_lstCrafts->setCellHighContrast(
+//									row,
+//									1,
+//									true);
 
 		row++;
 	}

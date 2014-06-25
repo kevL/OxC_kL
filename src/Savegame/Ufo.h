@@ -124,7 +124,7 @@ private:
 		/// Sets the UFO's amount of damage.
 		void setDamage(int damage);
 		/// kL. Gets the UFO's percentage of damage.
-		int getDamagePercentage() const;
+		int getDamagePercentage() const; // kL
 
 		/// Gets the UFO's detection status.
 		bool getDetected() const;

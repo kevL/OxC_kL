@@ -1892,15 +1892,15 @@ void Map::drawTerrain(Surface* surface)
 							unit,
 							&offset);
 
-		offset.y += 22 - unit->getHeight();
+		offset.y += 20 - unit->getHeight();
 
 		if (unit->getArmor()->getSize() > 1)
-			offset.y += 8;
+			offset.y += 6;
 
 		if (unit->isKneeled()
-			&& this->getCursorType() != CT_NONE) // DarkDefender
+			&& getCursorType() != CT_NONE) // DarkDefender
 		{
-			offset.y -= 6;
+			offset.y -= 5;
 			_arrow_kneel->blitNShade( // DarkDefender
 								surface,
 								screenPosition.x
@@ -1916,7 +1916,7 @@ void Map::drawTerrain(Surface* surface)
 								0);
 		}
 		else // DarkDefender
-		if (this->getCursorType() != CT_NONE)
+		if (getCursorType() != CT_NONE)
 			_arrow->blitNShade(
 							surface,
 							screenPosition.x

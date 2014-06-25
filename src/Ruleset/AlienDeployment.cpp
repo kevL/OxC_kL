@@ -24,40 +24,44 @@
 
 namespace YAML
 {
-	template<>
-	struct convert<OpenXcom::DeploymentData>
+
+template<>
+struct convert<OpenXcom::DeploymentData>
+{
+	///
+	static Node encode(const OpenXcom::DeploymentData& rhs)
 	{
-		static Node encode(const OpenXcom::DeploymentData& rhs)
-		{
-			Node node;
+		Node node;
 
-			node["alienRank"]				= rhs.alienRank;
-			node["lowQty"]					= rhs.lowQty;
-			node["highQty"]					= rhs.highQty;
-			node["dQty"]					= rhs.dQty;
-			node["percentageOutsideUfo"]	= rhs.percentageOutsideUfo;
-			node["itemSets"]				= rhs.itemSets;
+		node["alienRank"]				= rhs.alienRank;
+		node["lowQty"]					= rhs.lowQty;
+		node["highQty"]					= rhs.highQty;
+		node["dQty"]					= rhs.dQty;
+		node["percentageOutsideUfo"]	= rhs.percentageOutsideUfo;
+		node["itemSets"]				= rhs.itemSets;
 
-			return node;
-		}
+		return node;
+	}
 
-		static bool decode(
-				const Node& node,
-				OpenXcom::DeploymentData& rhs)
-		{
-			if (!node.IsMap())
-				return false;
+	///
+	static bool decode(
+			const Node& node,
+			OpenXcom::DeploymentData& rhs)
+	{
+		if (!node.IsMap())
+			return false;
 
-			rhs.alienRank				= node["alienRank"].as<int>(rhs.alienRank);
-			rhs.lowQty					= node["lowQty"].as<int>(rhs.lowQty);
-			rhs.highQty					= node["highQty"].as<int>(rhs.highQty);
-			rhs.dQty					= node["dQty"].as<int>(rhs.dQty);
-			rhs.percentageOutsideUfo	= node["percentageOutsideUfo"].as<int>(rhs.percentageOutsideUfo);
-			rhs.itemSets				= node["itemSets"].as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
+		rhs.alienRank				= node["alienRank"].as<int>(rhs.alienRank);
+		rhs.lowQty					= node["lowQty"].as<int>(rhs.lowQty);
+		rhs.highQty					= node["highQty"].as<int>(rhs.highQty);
+		rhs.dQty					= node["dQty"].as<int>(rhs.dQty);
+		rhs.percentageOutsideUfo	= node["percentageOutsideUfo"].as<int>(rhs.percentageOutsideUfo);
+		rhs.itemSets				= node["itemSets"].as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
 
-			return true;
-		}
-	};
+		return true;
+	}
+};
+
 }
 
 

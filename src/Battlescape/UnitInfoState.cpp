@@ -734,10 +734,10 @@ void UnitInfoState::btnPrevClick(Action* action)
 
 	_unit = _battleGame->getSelectedUnit();
 
-	if (_unit != 0)
+	if (_unit != NULL)
 		init();
-	else
-		exitClick(action);
+//	else
+//		exitClick(action);
 }
 
 /**
@@ -759,10 +759,10 @@ void UnitInfoState::btnNextClick(Action* action)
 
 	_unit = _battleGame->getSelectedUnit();
 
-	if (_unit != 0)
+	if (_unit != NULL)
 		init();
-	else
-		exitClick(action);
+//	else
+//		exitClick(action);
 }
 
 /**

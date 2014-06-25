@@ -27,6 +27,7 @@
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
@@ -41,6 +42,8 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleTerrain.h" // kL
+#include "../Ruleset/RuleUfo.h" // kL
 
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
@@ -77,19 +80,21 @@ ConfirmLandingState::ConfirmLandingState(
 	// TODO: should do buttons: Patrol or GeoscapeCraftState or Return to base.
 	_screen = false;
 
-//	_window		= new Window(this, 216, 160, 20, 20, POPUP_BOTH);
-	_window		= new Window(this, 230, 160, 13, 20, POPUP_BOTH);
+//	_window			= new Window(this, 216, 160, 20, 20, POPUP_BOTH);
+	_window			= new Window(this, 230, 160, 13, 20, POPUP_BOTH);
 
-	_txtBase	= new Text(80, 9, 23, 29);	// kL
-	_txtShade	= new Text(60, 9, 173, 29);	// kL
-	_txtTexture	= new Text(60, 9, 173, 38);	// kL
+	_txtBase		= new Text(80, 9, 23, 29);	// kL
+	_txtTexture		= new Text(85, 9, 148, 29);	// kL
+	_txtShade		= new Text(60, 9, 173, 39);	// kL
 
-	_txtMessage = new Text(206, 82, 25, 38);
+//	_txtMessage		= new Text(206, 82, 25, 40);
+	_txtMessage		= new Text(206, 40, 25, 47);
+	_txtMessage2	= new Text(206, 43, 25, 87); // kL
 
-	_txtBegin	= new Text(206, 17, 25, 130);
+	_txtBegin		= new Text(206, 17, 25, 130);
 
-	_btnNo		= new TextButton(80, 18, 40, 152);
-	_btnYes		= new TextButton(80, 18, 136, 152);
+	_btnNo			= new TextButton(80, 18, 40, 152);
+	_btnYes			= new TextButton(80, 18, 136, 152);
 
 	setPalette("PAL_GEOSCAPE", 3);
 
@@ -98,6 +103,7 @@ ConfirmLandingState::ConfirmLandingState(
 	add(_txtShade);
 	add(_txtTexture);
 	add(_txtMessage);
+	add(_txtMessage2);
 	add(_txtBegin);
 	add(_btnNo);
 	add(_btnYes);
@@ -106,7 +112,6 @@ ConfirmLandingState::ConfirmLandingState(
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
-
 
 	_txtBase->setColor(Palette::blockOffset(8)+10);
 	_txtBase->setAlign(ALIGN_LEFT);
@@ -120,9 +125,44 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtTexture->setColor(Palette::blockOffset(8)+10);
 	_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtTexture->setAlign(ALIGN_RIGHT);
-	_txtTexture->setText(tr("STR_TEXTURE_").arg(texture));
 
+	RuleTerrain* terrain = NULL;
+	double lat = craft->getLatitude();
+	std::string str = "";
+	if (texture < 0)
+		texture = 0;
 
+	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
+	for (std::vector<std::string>::const_iterator
+			i = terrains.begin();
+			i != terrains.end()
+				&& str == "";
+			++i)
+	{
+		//Log(LOG_INFO) << "terrains VALID";
+		terrain = _game->getRuleset()->getTerrain(*i);
+		for (std::vector<int>::iterator
+				j = terrain->getTextures()->begin();
+				j != terrain->getTextures()->end()
+					&& str == "";
+				++j)
+		{
+			//Log(LOG_INFO) << "terrain VALID";
+			if (*j == texture
+				&& (terrain->getHemisphere() == 0
+					|| (terrain->getHemisphere() < 0
+						&& lat < 0.0)
+					|| (terrain->getHemisphere() > 0
+						&& lat >= 0.0)))
+			{
+				str = terrain->getName();
+				//Log(LOG_INFO) << ". str = " << str;
+			}
+		}
+	}
+	_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(str)));
+
+/*kL
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMessage->setBig();
@@ -130,7 +170,40 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_NEAR_DESTINATION")
 						 .arg(_craft->getName(_game->getLanguage()))
-						 .arg(_craft->getDestination()->getName(_game->getLanguage())));
+						 .arg(_craft->getDestination()->getName(_game->getLanguage()))); */
+	_txtMessage->setColor(Palette::blockOffset(8)+10);
+	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
+	_txtMessage->setBig();
+	_txtMessage->setAlign(ALIGN_CENTER);
+//	_txtMessage->setWordWrap(true);
+	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_AT")
+						 .arg(_craft->getName(_game->getLanguage())));
+
+	_txtMessage2->setColor(Palette::blockOffset(8)+10);
+	_txtMessage2->setSecondaryColor(Palette::blockOffset(5)+4);
+	_txtMessage2->setBig();
+	_txtMessage2->setAlign(ALIGN_CENTER);
+//	_txtMessage2->setWordWrap(true);
+
+	std::wostringstream ss;
+	ss << L""; // blank if UFO not hyperdetected.
+
+	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+	if (ufo != NULL
+		&& ufo->getHyperDetected())
+	{
+		RuleUfo* ufoRule = ufo->getRules();
+		if (ufoRule != NULL)
+		{
+			ss << tr(ufoRule->getType()) << L" : ";
+		}
+		ss << tr(ufo->getAlienRace());
+	}
+	std::wstring wstr = ss.str();
+
+	_txtMessage2->setText(tr("STR_CRAFT_DESTINATION")
+						 .arg(_craft->getDestination()->getName(_game->getLanguage()))
+						 .arg(wstr));
 
 	_txtBegin->setColor(Palette::blockOffset(8)+5);
 	_txtBegin->setBig();

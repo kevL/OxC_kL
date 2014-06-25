@@ -174,9 +174,11 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 	}
 
 	if (compliantMapBlocks.empty())
-		return 0;
+		return NULL;
 
-	int block = RNG::generate(0, static_cast<int>(compliantMapBlocks.size()) - 1);
+	int block = RNG::generate(
+							0,
+							static_cast<int>(compliantMapBlocks.size()) - 1);
 
 	if (type == MT_DEFAULT)
 		compliantMapBlocks[block]->markUsed();
@@ -200,7 +202,7 @@ MapBlock* RuleTerrain::getMapBlock(const std::string& name)
 			return (*i);
 	}
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -213,7 +215,7 @@ MapData* RuleTerrain::getMapData(
 		int* id,
 		int* mapDataSetID) const
 {
-	MapDataSet* mdf = 0;
+	MapDataSet* mdf = NULL;
 
 	for (std::vector<MapDataSet*>::const_iterator
 			i = _mapDataSets.begin();

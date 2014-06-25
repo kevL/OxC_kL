@@ -438,7 +438,7 @@ void State::setPalette(
 		_game->getFpsCounter()->setPalette(_palette);
 		_game->getFpsCounter()->draw();
 
-		if (_game->getResourcePack() != 0)
+		if (_game->getResourcePack() != NULL)
 			_game->getResourcePack()->setPalette(_palette);
 	}
 }

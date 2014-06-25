@@ -255,15 +255,19 @@ void ManufactureState::fillProductionList()
 			if ((*i)->getSellItems())
 			{
 				timeLeft = ((*i)->getAmountProduced() + 1) * (*i)->getRules()->getManufactureTime()
-						- (*i)->getTimeSpent();
+							- (*i)->getTimeSpent();
 			}
 			else
 			{
 				timeLeft = (*i)->getAmountTotal() * (*i)->getRules()->getManufactureTime()
-						- (*i)->getTimeSpent();
+							- (*i)->getTimeSpent();
 			}
 
-			timeLeft /= (*i)->getAssignedEngineers();
+//			timeLeft /= (*i)->getAssignedEngineers();
+//			if (timeLeft == 0) timeLeft = 1; // kL
+
+			timeLeft = static_cast<int>(
+							ceil(static_cast<double>(timeLeft) / static_cast<double>((*i)->getAssignedEngineers())));
 			int daysLeft = timeLeft / 24;
 			int hoursLeft = timeLeft %24;
 			s4 << daysLeft << "/" << hoursLeft;

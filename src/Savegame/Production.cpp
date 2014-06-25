@@ -177,7 +177,7 @@ ProductProgress Production::step(
 		int produced = std::min(
 							getAmountProduced(),
 							_amount)
-					- done;
+						- done;
 		int count = 0;
 
 		do

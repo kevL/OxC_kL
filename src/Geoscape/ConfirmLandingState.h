@@ -50,6 +50,7 @@ private:
 	Text
 		* _txtBegin,
 		* _txtMessage,
+		* _txtMessage2, // kL
 
 		* _txtBase,		// kL
 		* _txtShade,	// kL
