@@ -66,9 +66,9 @@ ManufactureState::ManufactureState(
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
 
 	_txtAllocated	= new Text(140, 9, 16, 25);
-	_txtAvailable	= new Text(140, 9, 160, 25);
+	_txtAvailable	= new Text(140, 9, 16, 34);
 
-	_txtSpace		= new Text(140, 9, 16, 34);
+	_txtSpace		= new Text(140, 9, 160, 25);
 	_txtFunds		= new Text(140, 9, 160, 34);
 
 	_txtItem		= new Text(120, 9, 16, 52);

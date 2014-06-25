@@ -233,9 +233,9 @@ void ExplosionBState::init()
 	else // create a bullet hit, or melee hit, or psi-hit, or acid spit
 	{
 		//Log(LOG_INFO) << ". . new Explosion(point)";
-		_parent->setStateInterval(std::max(
-										1,
-										((BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
+//		_parent->setStateInterval(std::max(
+//										1,
+//										((BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
 //kL									((BattlescapeState::DEFAULT_ANIM_SPEED / 2) - (10 * _item->getRules()->getExplosionSpeed()))));
 //kL	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 //		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
@@ -269,6 +269,10 @@ void ExplosionBState::init()
 //		_parent->getMap()->getExplosions()->insert(explosion); // kL
 		_parent->getMap()->getExplosions()->push_back(explosion); // expl CTD
 
+		_parent->setStateInterval(std::max( // kL, from above^
+										1,
+										((BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
+//kL									((BattlescapeState::DEFAULT_ANIM_SPEED / 2) - (10 * _item->getRules()->getExplosionSpeed()))));
 //kL		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
 //		BattleUnit* target = tileCenter->getUnit();
@@ -348,11 +352,12 @@ void ExplosionBState::explode()
 		|| _parent->getCurrentAction()->type == BA_STUN)
 	{
 		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
+
 		if (_unit
 			&& !_unit->isOut())
 		{
 			_unit->aim(false);
-			_unit->setCache(0);
+			_unit->setCache(NULL);
 		}
 
 		BattleUnit* targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
@@ -362,6 +367,8 @@ void ExplosionBState::explode()
 												_item)
 											* 100.0)))
 		{
+			Log(LOG_INFO) << ". BA_HIT/STUN ... missed !";
+
 			_parent->getMap()->cacheUnits();
 			_parent->popState();
 
@@ -491,7 +498,7 @@ void ExplosionBState::explode()
 		&& _lowerWeapon)
 	{
 		_unit->aim(false);
-		_unit->setCache(0);
+		_unit->setCache(NULL);
 	}
 
 	_parent->getMap()->cacheUnits();
@@ -509,7 +516,7 @@ void ExplosionBState::explode()
 		_parent->statePushFront(new ExplosionBState(
 												_parent,
 												pVoxel,
-												0,
+												NULL,
 												_unit,
 												tile));
 	}

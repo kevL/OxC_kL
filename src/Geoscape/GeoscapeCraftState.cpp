@@ -77,7 +77,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtTitle		= new Text(192, 17, 32, 16);
 
 //	_sprite			= new Surface(32, 38, 220, -11); // kL
-	_sprite			= new Surface(32, 38, 225, -2); // kL
+	_sprite			= new Surface(32, 38, 224, -1); // kL
 
 	_txtStatus		= new Text(192, 17, 32, 31);
 

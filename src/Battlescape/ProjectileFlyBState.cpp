@@ -557,7 +557,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	if (_action.type == BA_THROW)
 	{
-		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy() / 100.0);
+		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy()); // / 100.0
 		//Log(LOG_INFO) << ". BA_THROW, part = " << _projectileImpact;
 		if (_projectileImpact == VOXEL_FLOOR
 			|| _projectileImpact == VOXEL_UNIT
@@ -603,7 +603,6 @@ bool ProjectileFlyBState::createNewProjectile()
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
 																			_action.type,
 																			_action.weapon));
-//kL																		/ 100.0); // Wb.140214
 		//Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
 
 		if (_projectileImpact != VOXEL_EMPTY
@@ -641,7 +640,6 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(NULL);
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_action.TU = 0; // kL
-//kL		_unit->abortTurn();
 			_unit->setStatus(STATUS_STANDING); // kL
 			_parent->popState();
 
@@ -656,7 +654,6 @@ bool ProjectileFlyBState::createNewProjectile()
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon));
-//kL																		/ 100.0);
 		//Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
 
 		// Can soldiers swing a club, graphically??
@@ -682,7 +679,6 @@ bool ProjectileFlyBState::createNewProjectile()
 															_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon),
-//kL																			/ 100.0,
 															_originVoxel);
 		}
 		else // and this is normal weapon shooting
@@ -690,7 +686,6 @@ bool ProjectileFlyBState::createNewProjectile()
 			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																					_action.type,
 																					_action.weapon));
-//kL																				/ 100.0);
 		}
 		//Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
@@ -991,8 +986,6 @@ void ProjectileFlyBState::think()
 																								_action.type,
 																								_action.weapon)
 																							- i * 0.05)); // pellet spread.
-//																							/ 100.0) // Wb.140214
-//																						- i * 5.0)); // Wb.140214
 
 							if (_projectileImpact != VOXEL_EMPTY)
 							{

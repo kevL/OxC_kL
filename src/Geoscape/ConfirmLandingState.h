@@ -49,7 +49,11 @@ private:
 	Craft* _craft;
 	Text
 		* _txtBegin,
-		* _txtMessage;
+		* _txtMessage,
+
+		* _txtBase,		// kL
+		* _txtShade,	// kL
+		* _txtTexture;	// kL
 	TextButton
 		* _btnNo,
 		* _btnYes;

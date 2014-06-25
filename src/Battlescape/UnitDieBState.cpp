@@ -95,7 +95,7 @@ UnitDieBState::UnitDieBState(
 		}
 		else
 		{
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
+//			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7); // moved below_
 			_unit->initDeathSpin(); // inits STATUS_TURNING
 		}
 	}
@@ -193,7 +193,11 @@ void UnitDieBState::think()
 	{
 		//Log(LOG_INFO) << ". . STATUS_TURNING";
 		if (_unit->getSpinPhase() > -1)
+		{
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7); // from init()
+
 			_unit->contDeathSpin(); // -> STATUS_STANDING
+		}
 		else
 			_unit->turn(); // -> STATUS_STANDING
 	}
@@ -215,7 +219,7 @@ void UnitDieBState::think()
 	if (_unit->isOut()) // and this ought be Status_Dead.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
-		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL, just to be sure. See !_unit->isOut() above.
+//		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL, just to be sure. See !_unit->isOut() above.
 
 		_parent->getMap()->setUnitDying(false);
 

@@ -311,7 +311,7 @@ int Projectile::calculateThrow(double accuracy)
 
 	Position originVoxel = _save->getTileEngine()->getOriginVoxel(
 																_action,
-																0);
+																NULL);
 	Position targetVoxel = Position( // determine the target voxel, aim at the center of the floor
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,

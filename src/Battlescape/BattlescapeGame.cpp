@@ -1423,12 +1423,12 @@ void BattlescapeGame::popState()
 			{
 				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
 				if (_AIActionCounter > 2
-					|| _save->getSelectedUnit() == 0
+					|| _save->getSelectedUnit() == NULL
 					|| _save->getSelectedUnit()->isOut())
 				{
 					if (_save->getSelectedUnit())
 					{
-						_save->getSelectedUnit()->setCache(0);
+						_save->getSelectedUnit()->setCache(NULL);
 						getMap()->cacheUnit(_save->getSelectedUnit());
 					}
 
@@ -1440,7 +1440,7 @@ void BattlescapeGame::popState()
 						if (!_save->getDebugMode())
 						{
 							_endTurnRequested = true;
-							statePushBack(0); // end AI turn
+							statePushBack(NULL); // end AI turn
 						}
 						else
 						{
@@ -1462,6 +1462,8 @@ void BattlescapeGame::popState()
 		}
 	}
 
+
+	getMap()->refreshSelectorPosition(); // kL
 	//Log(LOG_INFO) << ". uhm yeah";
 
 
@@ -1501,15 +1503,15 @@ void BattlescapeGame::popState()
 	}
 
 	// the currently selected unit died or became unconscious or disappeared inexplicably
-	if (_save->getSelectedUnit() == 0
+	if (_save->getSelectedUnit() == NULL
 		|| _save->getSelectedUnit()->isOut(true, true))
 	{
 		//Log(LOG_INFO) << ". huh hey wot)";
 		cancelCurrentAction();
-		_save->setSelectedUnit(0);
+		_save->setSelectedUnit(NULL); // kL_note: seems redundant .....
 
-		getMap()->setCursorType(CT_NORMAL, 1);
 		getMap()->refreshSelectorPosition(); // kL
+		getMap()->setCursorType(CT_NORMAL);
 		_parentState->getGame()->getCursor()->setVisible(true);
 	}
 

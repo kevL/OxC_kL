@@ -57,10 +57,10 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Confirm Landing window.
- * @param game Pointer to the core game.
- * @param craft Pointer to the craft to confirm.
- * @param texture Texture of the landing site.
- * @param shade Shade of the landing site.
+ * @param game		- pointer to the core game
+ * @param craft 	- pointer to the craft to confirm
+ * @param texture	- texture of the landing site
+ * @param shade		- shade of the landing site
  */
 ConfirmLandingState::ConfirmLandingState(
 		Game* game,
@@ -73,20 +73,30 @@ ConfirmLandingState::ConfirmLandingState(
 		_texture(texture),
 		_shade(shade)
 {
+	// TODO: show Country & Region, + ufo-type aLien-race and Mission if hyperdetected.
+	// TODO: should do buttons: Patrol or GeoscapeCraftState or Return to base.
 	_screen = false;
 
-	_window		= new Window(this, 216, 160, 20, 20, POPUP_BOTH);
+//	_window		= new Window(this, 216, 160, 20, 20, POPUP_BOTH);
+	_window		= new Window(this, 230, 160, 13, 20, POPUP_BOTH);
+
+	_txtBase	= new Text(80, 9, 23, 29);	// kL
+	_txtShade	= new Text(60, 9, 173, 29);	// kL
+	_txtTexture	= new Text(60, 9, 173, 38);	// kL
 
 	_txtMessage = new Text(206, 82, 25, 38);
 
 	_txtBegin	= new Text(206, 17, 25, 130);
 
-	_btnNo		= new TextButton(80, 18, 40, 151);
-	_btnYes		= new TextButton(80, 18, 136, 151);
+	_btnNo		= new TextButton(80, 18, 40, 152);
+	_btnYes		= new TextButton(80, 18, 136, 152);
 
 	setPalette("PAL_GEOSCAPE", 3);
 
 	add(_window);
+	add(_txtBase);
+	add(_txtShade);
+	add(_txtTexture);
 	add(_txtMessage);
 	add(_txtBegin);
 	add(_btnNo);
@@ -97,19 +107,21 @@ ConfirmLandingState::ConfirmLandingState(
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
-	_btnYes->setColor(Palette::blockOffset(8)+5);
-	_btnYes->setText(tr("STR_YES"));
-	_btnYes->onMouseClick((ActionHandler)& ConfirmLandingState::btnYesClick);
-	_btnYes->onKeyboardPress(
-					(ActionHandler)& ConfirmLandingState::btnYesClick,
-					Options::keyOk);
 
-	_btnNo->setColor(Palette::blockOffset(8)+5);
-	_btnNo->setText(tr("STR_NO"));
-	_btnNo->onMouseClick((ActionHandler)& ConfirmLandingState::btnNoClick);
-	_btnNo->onKeyboardPress(
-					(ActionHandler)& ConfirmLandingState::btnNoClick,
-					Options::keyCancel);
+	_txtBase->setColor(Palette::blockOffset(8)+10);
+	_txtBase->setAlign(ALIGN_LEFT);
+	_txtBase->setText(craft->getBase()->getName(_game->getLanguage()));
+
+	_txtShade->setColor(Palette::blockOffset(8)+10);
+	_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
+	_txtShade->setAlign(ALIGN_RIGHT);
+	_txtShade->setText(tr("STR_SHADE_").arg(shade));
+
+	_txtTexture->setColor(Palette::blockOffset(8)+10);
+	_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
+	_txtTexture->setAlign(ALIGN_RIGHT);
+	_txtTexture->setText(tr("STR_TEXTURE_").arg(texture));
+
 
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
@@ -124,27 +136,40 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtBegin->setBig();
 	_txtBegin->setAlign(ALIGN_CENTER);
 	_txtBegin->setText(tr("STR_BEGIN_MISSION"));
+
+
+	_btnYes->setColor(Palette::blockOffset(8)+5);
+	_btnYes->setText(tr("STR_YES"));
+	_btnYes->onMouseClick((ActionHandler)& ConfirmLandingState::btnYesClick);
+	_btnYes->onKeyboardPress(
+					(ActionHandler)& ConfirmLandingState::btnYesClick,
+					Options::keyOk);
+
+	_btnNo->setColor(Palette::blockOffset(8)+5);
+	_btnNo->setText(tr("STR_NO"));
+	_btnNo->onMouseClick((ActionHandler)& ConfirmLandingState::btnNoClick);
+	_btnNo->onKeyboardPress(
+					(ActionHandler)& ConfirmLandingState::btnNoClick,
+					Options::keyCancel);
 }
 
 /**
- *
+ * dTor
  */
 ConfirmLandingState::~ConfirmLandingState()
 {
 }
 
-/*
+/**
  * Make sure we aren't returning to base.
  */
 void ConfirmLandingState::init()
 {
 	State::init();
 
-	Base* b = dynamic_cast<Base*>(_craft->getDestination());
-	if (b == _craft->getBase())
-	{
+	Base* base = dynamic_cast<Base*>(_craft->getDestination());
+	if (base == _craft->getBase())
 		_game->popState();
-	}
 }
 
 /**
@@ -155,47 +180,47 @@ void ConfirmLandingState::btnYesClick(Action*)
 {
 	_game->popState();
 
-	Ufo* u = dynamic_cast<Ufo*>(_craft->getDestination());
-	TerrorSite* t = dynamic_cast<TerrorSite*>(_craft->getDestination());
-	AlienBase* b = dynamic_cast<AlienBase*>(_craft->getDestination());
+	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+	TerrorSite* ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	AlienBase* ab = dynamic_cast<AlienBase*>(_craft->getDestination());
 
-	SavedBattleGame* bgame = new SavedBattleGame();
-	_game->getSavedGame()->setBattleGame(bgame);
+	SavedBattleGame* battleGame = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(battleGame);
 
-	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	BattlescapeGenerator battleGen = BattlescapeGenerator(_game);
 
-	bgen.setWorldTexture(_texture);
-	bgen.setWorldShade(_shade);
-	bgen.setCraft(_craft);
+	battleGen.setWorldTexture(_texture);
+	battleGen.setWorldShade(_shade);
+	battleGen.setCraft(_craft);
 
-	if (u != 0)
+	if (ufo != NULL)
 	{
-		if (u->getStatus() == Ufo::CRASHED)
-			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
+		if (ufo->getStatus() == Ufo::CRASHED)
+			battleGame->setMissionType("STR_UFO_CRASH_RECOVERY");
 		else
-			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
+			battleGame->setMissionType("STR_UFO_GROUND_ASSAULT");
 
-		bgen.setUfo(u);
-		bgen.setAlienRace(u->getAlienRace());
+		battleGen.setUfo(ufo);
+		battleGen.setAlienRace(ufo->getAlienRace());
 	}
-	else if (t != 0)
+	else if (ts != NULL)
 	{
-		bgame->setMissionType("STR_TERROR_MISSION");
-		bgen.setTerrorSite(t);
-		bgen.setAlienRace(t->getAlienRace());
+		battleGame->setMissionType("STR_TERROR_MISSION");
+		battleGen.setTerrorSite(ts);
+		battleGen.setAlienRace(ts->getAlienRace());
 	}
-	else if (b != 0)
+	else if (ab != NULL)
 	{
-		bgame->setMissionType("STR_ALIEN_BASE_ASSAULT");
-		bgen.setAlienBase(b);
-		bgen.setAlienRace(b->getAlienRace());
+		battleGame->setMissionType("STR_ALIEN_BASE_ASSAULT");
+		battleGen.setAlienBase(ab);
+		battleGen.setAlienRace(ab->getAlienRace());
 	}
 	else
 	{
 		throw Exception("No mission available!");
 	}
 
-	bgen.run();
+	battleGen.run();
 
 	_game->pushState(new BriefingState(
 									_game,
@@ -204,11 +229,13 @@ void ConfirmLandingState::btnYesClick(Action*)
 
 /**
  * Returns the craft to base and closes the window.
+ * kL: CHANGE the craft goes into Patrol mode.
  * @param action Pointer to an action.
  */
 void ConfirmLandingState::btnNoClick(Action*)
 {
-	_craft->returnToBase();
+//kL	_craft->returnToBase();
+	_craft->setDestination(NULL); // kL
 
 	_game->popState();
 }

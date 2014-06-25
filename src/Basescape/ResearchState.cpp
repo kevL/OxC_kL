@@ -66,9 +66,9 @@ ResearchState::ResearchState(
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
 
 	_txtAllocated	= new Text(140, 9, 16, 26);
-	_txtAvailable	= new Text(140, 9, 160, 26);
+	_txtAvailable	= new Text(140, 9, 16, 35);
 
-	_txtSpace		= new Text(100, 9, 16, 35);
+	_txtSpace		= new Text(100, 9, 160, 26);
 
 	_txtProject		= new Text(110, 9, 16, 48);
 	_txtScientists	= new Text(55, 9, 161, 48);

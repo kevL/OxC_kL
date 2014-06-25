@@ -5021,7 +5021,7 @@
 1402457811 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1402457811 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1403596783 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	<limits>
 	<sstream>
@@ -5270,7 +5270,7 @@
 	<algorithm>
 	<stdint.h>
 
-1402923803 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1403596739 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -5790,7 +5790,7 @@
 1402457811 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1403563865 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1403603232 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6012,7 +6012,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1403549147 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1403578306 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6290,7 +6290,7 @@
 1402457811 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1403479257 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1403602269 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6333,7 +6333,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1403577656 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1403578865 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6366,7 +6366,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1403567568 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1403578865 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6387,6 +6387,7 @@
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 	"../Interface/Text.h"
+	"../Interface/NumberText.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/RuleInventory.h"
@@ -6605,7 +6606,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1403307782 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1403600266 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -6629,7 +6630,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1403487307 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1403599775 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6705,7 +6706,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1403527828 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1403647827 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6740,7 +6741,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1402457811 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1403602269 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -7482,7 +7483,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1402457812 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1403606577 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	<sstream>
 	"../Battlescape/BattlescapeGenerator.h"
@@ -7509,7 +7510,7 @@
 	"../Savegame/TerrorSite.h"
 	"../Savegame/Ufo.h"
 
-1402457812 f:\git\openxcom\src\geoscape\confirmlandingstate.h
+1403604640 f:\git\openxcom\src\geoscape\confirmlandingstate.h
 	"../Engine/State.h"
 
 1402457812 source:f:\git\openxcom\src\geoscape\confirmnewbasestate.cpp
