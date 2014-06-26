@@ -61,9 +61,7 @@ private:
 
 	public:
 		/// Creates the ItemsArriving state.
-		ItemsArrivingState(
-				Game* game,
-				GeoscapeState* state);
+		ItemsArrivingState(GeoscapeState* state);
 		/// Cleans up the ItemsArriving state.
 		~ItemsArrivingState();
 

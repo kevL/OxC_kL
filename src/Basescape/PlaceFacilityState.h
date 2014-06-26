@@ -62,7 +62,6 @@ protected:
 	public:
 		/// Creates the Place Facility state.
 		PlaceFacilityState(
-				Game* game,
 				Base* base,
 				RuleBaseFacility* rule);
 		/// Cleans up the Place Facility state.

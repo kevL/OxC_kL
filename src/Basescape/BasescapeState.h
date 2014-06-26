@@ -76,7 +76,6 @@ private:
 
 		/// Creates the Basescape state.
 		BasescapeState(
-				Game* game,
 				Base* base,
 				Globe* globe);
 		/// Cleans up the Basescape state.

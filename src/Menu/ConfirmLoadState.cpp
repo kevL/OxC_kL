@@ -42,11 +42,9 @@ namespace OpenXcom
  * @param fileName Name of the save file without extension.
  */
 ConfirmLoadState::ConfirmLoadState(
-		Game* game,
 		OptionsOrigin origin,
 		std::string fileName)
 	:
-		State(game),
 		_origin(origin),
 		_fileName(fileName)
 {
@@ -112,7 +110,6 @@ void ConfirmLoadState::btnYesClick(Action*)
 	_game->popState();
 
 	_game->pushState(new LoadGameState(
-									_game,
 									_origin,
 									_fileName));
 }

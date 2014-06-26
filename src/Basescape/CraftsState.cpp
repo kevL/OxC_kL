@@ -59,10 +59,8 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  */
 CraftsState::CraftsState(
-		Game* game,
 		Base* base)
 	:
-		State(game),
 		_base(base)
 {
 	_window		= new Window(this, 320, 200, 0, 0);
@@ -226,14 +224,18 @@ std::wstring CraftsState::getAltStatus(Craft* craft) // kL
 	std::wstring status;
 
 /*	Waypoint* wayPt = dynamic_cast<Waypoint*>(craft->getDestination());
-	if (wayPt != 0)
+	if (wayPt != NULL)
 		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
 	else */
 	if (craft->getLowFuel())
 	{
-//		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
-		status = tr("STR_LOW_FUEL");
+		status = tr("STR_LOW_FUEL"); // "STR_LOW_FUEL_RETURNING_TO_BASE"
 		_cellColor = Palette::blockOffset(1)+4;
+	}
+	else if (craft->getMissionComplete())
+	{
+		status = tr("STR_MISSION_COMPLETE"); // "STR_MISSION_COMPLETE_RETURNING_TO_BASE"
+		_cellColor = Palette::blockOffset(1)+6;
 	}
 	else if (craft->getDestination() == NULL)
 	{
@@ -242,8 +244,7 @@ std::wstring CraftsState::getAltStatus(Craft* craft) // kL
 	}
 	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
 	{
-//		status = tr("STR_RETURNING_TO_BASE");
-		status = tr("STR_BASE");
+		status = tr("STR_BASE"); // "STR_RETURNING_TO_BASE"
 		_cellColor = Palette::blockOffset(5)+4;
 	}
 	else
@@ -253,14 +254,12 @@ std::wstring CraftsState::getAltStatus(Craft* craft) // kL
 		{
 			if (craft->isInDogfight()) // chase
 			{
-//				status = tr("STR_TAILING_UFO");
-				status = tr("STR_UFO_").arg(ufo->getId());
+				status = tr("STR_UFO_").arg(ufo->getId()); // "STR_TAILING_UFO"
 				_cellColor = Palette::blockOffset(2)+2;
 			}
 			else if (ufo->getStatus() == Ufo::FLYING) // intercept
 			{
-//				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
-				status = tr("STR_UFO_").arg(ufo->getId());
+				status = tr("STR_UFO_").arg(ufo->getId()); // "STR_INTERCEPTING_UFO"
 				_cellColor = Palette::blockOffset(2)+4;
 			}
 			else // landed
@@ -295,11 +294,8 @@ void CraftsState::btnOkClick(Action*)
 		&& Options::storageLimitsEnforced
 		&& _base->storesOverfull())
 	{
-		_game->pushState(new SellState(
-									_game,
-									_base));
+		_game->pushState(new SellState(_base));
 		_game->pushState(new ErrorMessageState(
-											_game,
 											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 											_palette,
 											Palette::blockOffset(15)+1,
@@ -325,7 +321,6 @@ void CraftsState::lstCraftsClick(Action* action)
 	if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != "STR_OUT")
 	{
 		_game->pushState(new CraftInfoState(
-										_game,
 										_base,
 										_lstCrafts->getSelectedRow()));
 	}

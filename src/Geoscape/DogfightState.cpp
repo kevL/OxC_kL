@@ -248,12 +248,10 @@ const int DogfightState::_projectileBlobs[4][6][3] =
  * @param ufo, Pointer to the UFO being intercepted.
  */
 DogfightState::DogfightState(
-		Game* game,
 		Globe* globe,
 		Craft* craft,
 		Ufo* ufo)
 	:
-		State(game),
 		_globe(globe),
 		_craft(craft),
 		_ufo(ufo),

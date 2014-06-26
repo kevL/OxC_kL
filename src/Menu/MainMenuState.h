@@ -54,7 +54,7 @@ private:
 
 	public:
 		/// Creates the Main Menu state.
-		MainMenuState(Game* game);
+		MainMenuState();
 		/// Cleans up the Main Menu state.
 		~MainMenuState();
 

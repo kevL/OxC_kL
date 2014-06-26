@@ -56,11 +56,9 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  */
 SelectDestinationState::SelectDestinationState(
-		Game* game,
 		Craft* craft,
 		Globe* globe)
 	:
-		State(game),
 		_craft(craft),
 		_globe(globe)
 {
@@ -240,7 +238,6 @@ void SelectDestinationState::globeClick(Action* action)
 		}
 
 		_game->pushState(new MultipleTargetsState(
-												_game,
 												targets,
 												_craft,
 												0));
@@ -369,7 +366,7 @@ void SelectDestinationState::btnCydoniaClick(Action*)
 	if (_craft->getNumSoldiers() > 0
 		|| _craft->getNumVehicles() > 0)
 	{
-		_game->pushState(new ConfirmCydoniaState(_game, _craft));
+		_game->pushState(new ConfirmCydoniaState(_craft));
 	}
 }
 

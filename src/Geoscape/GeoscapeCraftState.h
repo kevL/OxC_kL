@@ -78,7 +78,6 @@ private:
 	public:
 		/// Creates the Geoscape Craft state.
 		GeoscapeCraftState(
-				Game* game,
 				Craft* craft,
 				Globe* globe,
 				Waypoint* waypoint,

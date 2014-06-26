@@ -32,8 +32,7 @@ class Window;
 
 
 /**
- * Screen shown when all aliens died
- * during a crash site.
+ * Screen shown when all aliens died during a crash site.
  */
 class AliensCrashState
 	:
@@ -45,9 +44,10 @@ private:
 	Window* _window;
 	Text* _txtTitle;
 
+
 	public:
 		/// Creates the Aliens Crash state.
-		AliensCrashState(Game* game);
+		AliensCrashState();
 		/// Cleans up the Aliens Crash state.
 		~AliensCrashState();
 

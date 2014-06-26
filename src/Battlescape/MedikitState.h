@@ -79,7 +79,6 @@ private:
 	public:
 		/// Creates the MedikitState.
 		MedikitState(
-				Game* game,
 				BattleUnit* targetUnit,
 				BattleAction* action);
 

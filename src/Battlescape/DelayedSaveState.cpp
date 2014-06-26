@@ -75,7 +75,6 @@ void DelayedSaveState::think()
 		_parent->popState();
 
 		_game->pushState(new SaveGameState(
-										_game,
 										OPT_BATTLESCAPE,
 										_type));
 	}

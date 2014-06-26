@@ -45,13 +45,9 @@
 namespace OpenXcom
 {
 
-ArticleStateArmor::ArticleStateArmor(
-		Game* game,
-		ArticleDefinitionArmor* defs)
+ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	:
-		ArticleState(
-				game,
-				defs->id),
+		ArticleState(defs->id),
 		_row(0)
 {
 	Armor* armor = _game->getRuleset()->getArmor(defs->id);

@@ -105,12 +105,10 @@ struct compareSaveTimestamp
  * @param autoquick, Show auto/quick saved games?
  */
 ListGamesState::ListGamesState(
-		Game* game,
 		OptionsOrigin origin,
 		int firstValidRow,
 		bool autoquick)
 	:
-		State(game),
 		_origin(origin),
 		_showMsg(true),
 		_noUI(false),
@@ -159,7 +157,7 @@ ListGamesState::ListGamesState(
 
 
 	_window->setColor(Palette::blockOffset(8)+5);
-	_window->setBackground(game->getResourcePack()->getSurface("BACK01.SCR"));
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
@@ -378,7 +376,6 @@ void ListGamesState::lstSavesPress(Action* action)
 		&& _lstSaves->getSelectedRow() >= _firstValidRow)
 	{
 		_game->pushState(new DeleteGameState(
-											_game,
 											_origin,
 											_saves[_lstSaves->getSelectedRow() - _firstValidRow].fileName));
 	}

@@ -53,7 +53,7 @@ private:
 
 	public:
 		/// Creates the Promotions state.
-		PromotionsState(Game* game);
+		PromotionsState();
 		/// Cleans up the Promotions state.
 		~PromotionsState();
 

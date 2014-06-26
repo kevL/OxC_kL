@@ -63,9 +63,7 @@ private:
 
 	public:
 		/// Creates the Soldiers state.
-		SoldiersState(
-				Game* game,
-				Base* base);
+		SoldiersState(Base* base);
 		/// Cleans up the Soldiers state.
 		~SoldiersState();
 

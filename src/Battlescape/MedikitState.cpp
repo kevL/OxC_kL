@@ -147,11 +147,9 @@ MedikitButton::MedikitButton(int y)
  * @param action The healing action.
  */
 MedikitState::MedikitState(
-		Game* game,
 		BattleUnit* targetUnit,
 		BattleAction* action)
 	:
-		State(game),
 		_targetUnit(targetUnit),
 		_action(action)
 {

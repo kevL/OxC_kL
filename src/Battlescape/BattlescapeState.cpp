@@ -110,9 +110,8 @@ namespace OpenXcom
  * Initializes all the elements in the Battlescape screen.
  * @param game, Pointer to the core game.
  */
-BattlescapeState::BattlescapeState(Game* game)
+BattlescapeState::BattlescapeState()
 	:
-		State(game),
 //kL	_reserve(0),
 		_popups(),
 		_xBeforeMouseScrolling(0),
@@ -731,7 +730,7 @@ BattlescapeState::BattlescapeState(Game* game)
 
 //	_game->getResourcePack()->playMusic("GMTACTIC");
 
-	std::string terrain = game->getSavedGame()->getSavedBattle()->getTerrain(); // sza_MusicRules
+	std::string terrain = _game->getSavedGame()->getSavedBattle()->getTerrain(); // sza_MusicRules
 //	_game->getResourcePack()->getRandomMusic( // sza_MusicRules
 //										OpenXcom::XCOM_RESOURCE_MUSIC_GMTACTIC,
 //										terrain)->play();
@@ -1276,14 +1275,12 @@ inline void BattlescapeState::handle(Action* action)
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
 				{
 					_game->pushState(new SaveGameState(
-													_game,
 													OPT_BATTLESCAPE,
 													SAVE_QUICK));
 				}
 				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 				{
 					_game->pushState(new LoadGameState(
-													_game,
 													OPT_BATTLESCAPE,
 													SAVE_QUICK));
 				}
@@ -1383,7 +1380,6 @@ void BattlescapeState::btnShowMapClick(Action*)
 {
 	if (allowButtons())
 		_game->pushState(new MiniMapState(
-										_game,
 										_map->getCamera(),
 										_save));
 }
@@ -1469,7 +1465,6 @@ void BattlescapeState::btnInventoryClick(Action*)
 		_battleGame->cancelCurrentAction(true);
 
 		_game->pushState(new InventoryState(
-										_game,
 										!_save->getDebugMode(),
 										this));
 	}
@@ -1602,9 +1597,7 @@ void BattlescapeState::btnShowLayersClick(Action*)
 void BattlescapeState::btnHelpClick(Action*)
 {
 	if (allowButtons(true))
-		_game->pushState(new PauseState(
-									_game,
-									OPT_BATTLESCAPE));
+		_game->pushState(new PauseState(OPT_BATTLESCAPE));
 }
 
 /**
@@ -1633,7 +1626,6 @@ void BattlescapeState::btnAbortClick(Action*)
 	{
 		//Log(LOG_INFO) << "BattlescapeState::btnAbortClick()";
 		_game->pushState(new AbortMissionState(
-											_game,
 											_save,
 											this));
 	}
@@ -1680,7 +1672,6 @@ void BattlescapeState::btnStatsClick(Action* action)
 
 		if (!edge)
 			popup(new UnitInfoState(
-								_game,
 								_save->getSelectedUnit(),
 								this,
 								false,
@@ -2234,7 +2225,6 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 		{
 			_battleGame->getCurrentAction()->weapon = item;
 			popup(new ActionMenuState(
-									_game,
 									_battleGame->getCurrentAction(),
 									_icons->getX(),
 									_icons->getY() + 16));
@@ -2852,7 +2842,6 @@ void BattlescapeState::finishBattle(
 
 		_game->popState();
 		_game->pushState(new BriefingState(
-										_game,
 										0,
 										0));
 	}
@@ -2876,12 +2865,12 @@ void BattlescapeState::finishBattle(
 					|| _save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
 				&& _game->getSavedGame()->getMonthsPassed() > -1)
 			{
-				_game->pushState(new DefeatState(_game));
+				_game->pushState(new DefeatState());
 			}
 			else
 			{
 				//Log(LOG_INFO) << ". . . new DebriefingState";
-				_game->pushState(new DebriefingState(_game));
+				_game->pushState(new DebriefingState());
 				//Log(LOG_INFO) << ". . . new DebriefingState DONE";
 			}
 		}
@@ -2892,10 +2881,10 @@ void BattlescapeState::finishBattle(
 			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT"
 				&& _game->getSavedGame()->getMonthsPassed() > -1)
 			{
-				_game->pushState(new VictoryState(_game));
+				_game->pushState(new VictoryState());
 			}
 			else
-				_game->pushState(new DebriefingState(_game));
+				_game->pushState(new DebriefingState());
 		}
 
 		//Log(LOG_INFO) << ". . set Cursor & FPS colors";

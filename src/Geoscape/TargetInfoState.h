@@ -65,7 +65,6 @@ private:
 
 		/// Creates the Target Info state.
 		TargetInfoState(
-				Game* game,
 				Target* target,
 				Globe* globe,
 				GeoscapeState* state);

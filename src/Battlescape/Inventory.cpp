@@ -1035,7 +1035,6 @@ void Inventory::mouseClick(Action* action, State* state)
 									else
 										// kL_note: This is where activation warning for nonProxy preBattle grenades goes...
 										_game->pushState(new PrimeGrenadeState(
-																			_game,
 																			NULL,
 																			true,
 																			item,

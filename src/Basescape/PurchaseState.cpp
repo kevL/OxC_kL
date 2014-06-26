@@ -66,10 +66,8 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  */
 PurchaseState::PurchaseState(
-		Game* game,
 		Base* base)
 	:
-		State(game),
 		_base(base),
 		_crafts(),
 		_items(),
@@ -797,8 +795,7 @@ void PurchaseState::increaseByValue(int change)
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_NOT_ENOUGH_MONEY",
+											tr("STR_NOT_ENOUGH_MONEY"),
 											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
@@ -809,8 +806,7 @@ void PurchaseState::increaseByValue(int change)
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_NOT_ENOUGH_LIVING_SPACE",
+											tr("STR_NOT_ENOUGH_LIVING_SPACE"),
 											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
@@ -822,8 +818,7 @@ void PurchaseState::increaseByValue(int change)
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_NO_FREE_HANGARS_FOR_PURCHASE",
+											tr("STR_NO_FREE_HANGARS_FOR_PURCHASE"),
 											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
@@ -835,8 +830,7 @@ void PurchaseState::increaseByValue(int change)
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_NOT_ENOUGH_STORE_SPACE",
+											tr("STR_NOT_ENOUGH_STORE_SPACE"),
 											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",

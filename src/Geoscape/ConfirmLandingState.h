@@ -64,7 +64,6 @@ private:
 	public:
 		/// Creates the Confirm Landing state.
 		ConfirmLandingState(
-				Game* game,
 				Craft* craft,
 				int texture,
 				int shade);

@@ -66,7 +66,6 @@ private:
 	public:
 		/// Creates the Prime Grenade state.
 		PrimeGrenadeState(
-				Game* game,
 				BattleAction* action,
 				bool inInventoryView,
 				BattleItem* grenade,

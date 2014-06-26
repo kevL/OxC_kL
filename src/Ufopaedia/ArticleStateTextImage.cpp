@@ -37,13 +37,9 @@
 namespace OpenXcom
 {
 
-ArticleStateTextImage::ArticleStateTextImage(
-		Game* game,
-		ArticleDefinitionTextImage* defs)
+ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 	:
-		ArticleState(
-			game,
-			defs->id)
+		ArticleState(defs->id)
 {
 	_txtTitle = new Text(defs->text_width, 48, 5, 22);
 

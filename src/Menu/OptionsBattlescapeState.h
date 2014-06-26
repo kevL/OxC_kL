@@ -70,9 +70,7 @@ private:
 
 	public:
 		/// Creates the Battlescape Options state.
-		OptionsBattlescapeState(
-				Game* game,
-				OptionsOrigin origin);
+		OptionsBattlescapeState(OptionsOrigin origin);
 		/// Cleans up the Battlescape Options state.
 		~OptionsBattlescapeState();
 

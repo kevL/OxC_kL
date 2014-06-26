@@ -189,8 +189,8 @@ BaseFacility* BaseView::getSelectedFacility() const
  */
 void BaseView::resetSelectedFacility()
 {
-    _facilities[_selFacility->getX()][_selFacility->getY()] = 0;
-    _selFacility = 0;
+	_facilities[_selFacility->getX()][_selFacility->getY()] = 0;
+	_selFacility = 0;
 }
 
 

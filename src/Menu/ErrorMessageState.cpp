@@ -44,14 +44,11 @@ namespace OpenXcom
  * @param bgColor Background color (-1 for Battlescape).
  */
 ErrorMessageState::ErrorMessageState(
-		Game* game,
 		const std::string& id,
 		SDL_Color* palette,
 		Uint8 color,
 		std::string bg,
 		int bgColor)
-	:
-		State(game)
 {
 	create(
 		id,
@@ -72,14 +69,11 @@ ErrorMessageState::ErrorMessageState(
  * @param bgColor Background color (-1 for Battlescape).
  */
 ErrorMessageState::ErrorMessageState(
-		Game* game,
 		const std::wstring& msg,
 		SDL_Color* palette,
 		Uint8 color,
 		std::string bg,
 		int bgColor)
-	:
-		State(game)
 {
 	create(
 		"",

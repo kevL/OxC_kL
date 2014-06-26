@@ -47,11 +47,9 @@ namespace OpenXcom
  * @param filename Name of the save file without extension.
  */
 SaveGameState::SaveGameState(
-		Game* game,
 		OptionsOrigin origin,
 		const std::string& filename)
 	:
-		State(game),
 		_origin(origin),
 		_filename(filename),
 		_type(SAVE_DEFAULT)
@@ -66,11 +64,9 @@ SaveGameState::SaveGameState(
  * @param type Type of auto-load being used.
  */
 SaveGameState::SaveGameState(
-		Game* game,
 		OptionsOrigin origin,
 		SaveType type)
 	:
-		State(game),
 		_origin(origin),
 		_type(type)
 {
@@ -187,7 +183,7 @@ void SaveGameState::init()
 							true); */
 //			_game->getScreen()->resetDisplay(false);
 
-			_game->setState(new MainMenuState(_game));
+			_game->setState(new MainMenuState());
 			_game->setSavedGame(0);
 		}
 	}
@@ -198,7 +194,6 @@ void SaveGameState::init()
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(
-												_game,
 												error.str(),
 												_palette,
 												Palette::blockOffset(8)+10,
@@ -206,7 +201,6 @@ void SaveGameState::init()
 												6));
 		else
 			_game->pushState(new ErrorMessageState(
-												_game,
 												error.str(),
 												_palette,
 												Palette::blockOffset(0),
@@ -220,7 +214,6 @@ void SaveGameState::init()
 		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(
-												_game,
 												error.str(),
 												_palette,
 												Palette::blockOffset(8)+10,
@@ -228,7 +221,6 @@ void SaveGameState::init()
 												6));
 		else
 			_game->pushState(new ErrorMessageState(
-												_game,
 												error.str(),
 												_palette,
 												Palette::blockOffset(0),

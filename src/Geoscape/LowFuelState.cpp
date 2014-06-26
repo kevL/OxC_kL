@@ -47,11 +47,9 @@ namespace OpenXcom
  * @param state Pointer to the Geoscape.
  */
 LowFuelState::LowFuelState(
-		Game* game,
 		Craft* craft,
 		GeoscapeState* state)
 	:
-		State(game),
 		_craft(craft),
 		_state(state)
 {

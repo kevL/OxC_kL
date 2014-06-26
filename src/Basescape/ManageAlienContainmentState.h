@@ -90,7 +90,6 @@ private:
 	public:
 		/// Creates the ManageAlienContainment state.
 		ManageAlienContainmentState(
-				Game* game,
 				Base* base,
 				OptionsOrigin origin,
 				bool allowHelp = true); // kL_add.

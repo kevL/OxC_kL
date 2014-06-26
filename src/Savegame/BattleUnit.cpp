@@ -1168,7 +1168,7 @@ int BattleUnit::getMorale() const
  * Do an amount of damage.
  * @param relative		- reference to a position (voxel) that defines which part of armor and/or bodypart is hit
  * @param power			- the amount of damage to inflict
- * @param type			- the type of damage being inflicted ( DT_* enum )
+ * @param type			- the type of damage being inflicted (RuleItem.h)
  * @param ignoreArmor	- true for stun & smoke damage; no armor reduction, although vulnerability is still factored
  * @return, damage done after adjustment
  */
@@ -1182,17 +1182,17 @@ int BattleUnit::damage(
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
+	power = static_cast<int>(floor(static_cast<double>(power) * static_cast<double>(_armor->getDamageModifier(type))));
+	//Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type << " ModifiedPower " << power;
+
 	if (power < 1)
 		return 0;
 
-	power = static_cast<int>(floor(static_cast<double>(power) * static_cast<double>(_armor->getDamageModifier(type))));
-	//Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type << " ModifiedPower " << power;
 
 	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage
 		type = DT_STUN;
 
-//	if (!ignoreArmor) // kL
-//	{
+
 	if (relative == Position(0, 0, 0))
 		side = SIDE_UNDER;
 	else
@@ -1265,8 +1265,12 @@ int BattleUnit::damage(
 	}
 
 	if (!ignoreArmor)
-		power -= getArmor(side);
-//	}
+	{
+		int armor = getArmor(side);
+		setArmor(armor - (power / 10) - 1, side); // armor damage
+
+		power -= armor; // subtract armor-before-damage from power.
+	}
 
 	if (power > 0)
 	{
@@ -1278,13 +1282,11 @@ int BattleUnit::damage(
 			if (_health < 0)
 				_health = 0;
 
-//			if (type != DT_IN)
-//			{
 			if (_armor->getSize() == 1) // add some stun damage to not-large units
 				_stunlevel += RNG::generate(0, power / 3); // kL_note: was, 4
 
-//			if (type != DT_IN) // kL
-			if (!ignoreArmor) // kL
+			if (!ignoreArmor)	// kinda funky: only wearers of armor-types-that-are
+								// -resistant-to-damage-types can take fatal wounds
 			{
 				if (isWoundable()) // fatal wounds
 				{
@@ -1292,12 +1294,12 @@ int BattleUnit::damage(
 					{
 						int wounds = RNG::generate(1, 3);
 						_fatalWounds[bodypart] += wounds;
+
 						moraleChange(-wounds * 3);
 					}
 				}
 
-//				if (!ignoreArmor) // kL
-				setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
+//				setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
 			}
 		}
 	}

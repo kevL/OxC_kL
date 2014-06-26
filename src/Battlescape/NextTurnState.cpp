@@ -57,11 +57,9 @@ namespace OpenXcom
  * @param state Pointer to the Battlescape state.
  */
 NextTurnState::NextTurnState(
-		Game* game,
 		SavedBattleGame* battleGame,
 		BattlescapeState* state)
 	:
-		State(game),
 		_battleGame(battleGame),
 		_state(state),
 		_timer(NULL)

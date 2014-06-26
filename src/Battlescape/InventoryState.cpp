@@ -75,11 +75,9 @@ static const int _applyTemplateBtnY		= 113;
  * @param parent Pointer to parent Battlescape.
  */
 InventoryState::InventoryState(
-		Game* game,
 		bool tu,
 		BattlescapeState* parent)
 	:
-		State(game),
 		_tu(tu),
 		_parent(parent)
 {
@@ -676,7 +674,6 @@ void InventoryState::btnGroundClick(Action*)
 void InventoryState::btnRankClick(Action*)
 {
 	_game->pushState(new UnitInfoState(
-									_game,
 									_battleGame->getSelectedUnit(),
 									_parent,
 									true,
@@ -737,8 +734,12 @@ void InventoryState::btnCreateTemplateClick(Action* action)
  */
 void InventoryState::btnApplyTemplateClick(Action* action)
 {
-	if (_inv->getSelectedItem() != NULL) // don't accept clicks when moving items
+	if (_inv->getSelectedItem() != NULL)		// don't accept clicks when moving items
+//kL	|| _curInventoryTemplate.empty())	// or when the template is empty
+	// kL_note: Yes accept empty template; I use this as an unload-soldier function.
+	{
 		return;
+	}
 
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 	std::vector<BattleItem*>* unitInv = unit->getInventory();

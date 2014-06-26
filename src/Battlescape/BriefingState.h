@@ -55,7 +55,6 @@ private:
 	public:
 		/// Creates the Briefing state.
 		BriefingState(
-				Game* game,
 				Craft* craft = 0,
 				Base* base = 0);
 		/// Cleans up the Briefing state.

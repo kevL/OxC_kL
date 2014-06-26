@@ -56,7 +56,6 @@ private:
 	public:
 		/// Creates the Restore Defaults state.
 		OptionsDefaultsState(
-				Game* game,
 				OptionsOrigin origin,
 				OptionsBaseState* state);
 		/// Cleans up the Restore Defaults state.

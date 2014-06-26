@@ -51,9 +51,7 @@ namespace OpenXcom
  * Initializes all the elements in the test screen.
  * @param game Pointer to the core game.
  */
-TestState::TestState(Game* game)
-	:
-		State(game)
+TestState::TestState()
 {
 	_window		= new Window(this, 300, 180, 10, 10);
 	_text		= new Text(280, 120, 20, 50);

@@ -66,7 +66,7 @@ private:
 
 	public:
 		/// Creates the Test state.
-		TestState(Game* game);
+		TestState();
 		/// Cleans up the Test state.
 		~TestState();
 

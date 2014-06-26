@@ -56,7 +56,6 @@ private:
 	public:
 		/// Creates the Error state.
 		ErrorMessageState(
-				Game* game,
 				const std::string& id,
 				SDL_Color* palette,
 				Uint8 color,
@@ -64,7 +63,6 @@ private:
 				int bgColor);
 		/// Creates the Error state.
 		ErrorMessageState(
-				Game* game,
 				const std::wstring& msg,
 				SDL_Color* palette,
 				Uint8 color,

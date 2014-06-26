@@ -61,7 +61,6 @@ private:
 	public:
 		/// Creates the Abort Mission state.
 		AbortMissionState(
-                Game* game,
                 SavedBattleGame* battleGame,
                 BattlescapeState* state);
 		/// Cleans up the Abort Mission state.

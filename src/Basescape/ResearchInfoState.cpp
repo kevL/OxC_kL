@@ -55,11 +55,9 @@ namespace OpenXcom
  * @param rule A RuleResearch which will be used to create a new ResearchProject
  */
 ResearchInfoState::ResearchInfoState(
-		Game* game,
 		Base* base,
 		RuleResearch* rule)
 	:
-		State(game),
 		_base(base),
 		_project(new ResearchProject( // time = 70 to 130%
 								rule,
@@ -76,11 +74,9 @@ ResearchInfoState::ResearchInfoState(
  * @param project A ResearchProject to modify
  */
 ResearchInfoState::ResearchInfoState(
-		Game* game,
 		Base* base,
 		ResearchProject* project)
 	:
-		State(game),
 		_base(base),
 		_project(project),
 		_rule(0)

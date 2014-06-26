@@ -184,7 +184,8 @@ private:
 
 	public:
 		/// Creates a new globe at the specified position and size.
-		Globe(Game* game,
+		Globe(
+				Game* game,
 				int cenX,
 				int cenY,
 				int width,

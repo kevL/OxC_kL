@@ -37,11 +37,9 @@
 namespace OpenXcom
 {
 
-ArticleStateText::ArticleStateText(
-		Game* game,
-		ArticleDefinitionText* defs)
+ArticleStateText::ArticleStateText(ArticleDefinitionText* defs)
 	:
-		ArticleState(game, defs->id)
+		ArticleState(defs->id)
 {
 	_txtTitle	= new Text(296, 17, 5, 23);
 	_txtInfo	= new Text(296, 150, 10, 48);

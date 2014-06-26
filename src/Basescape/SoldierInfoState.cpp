@@ -64,11 +64,9 @@ namespace OpenXcom
  * @param soldierId, ID of the selected soldier.
  */
 SoldierInfoState::SoldierInfoState(
-		Game* game,
 		Base* base,
 		size_t soldierId)
 	:
-		State(game),
 		_base(base),
 		_soldierId(soldierId),
 		_soldier(NULL) // kL
@@ -901,12 +899,9 @@ void SoldierInfoState::btnOkClick(Action*)
 		&& _base != 0
 		&& _base->storesOverfull())
 	{
-		_game->pushState(new SellState(
-									_game,
-									_base));
+		_game->pushState(new SellState(_base));
 
 		_game->pushState(new ErrorMessageState(
-											_game,
 											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 											_palette,
 											Palette::blockOffset(15)+1,
@@ -964,7 +959,6 @@ void SoldierInfoState::btnArmorClick(Action*)
 			&& _soldier->getCraft()->getStatus() != "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(
-											_game,
 											_base,
 											_soldierId));
 	}
@@ -977,7 +971,6 @@ void SoldierInfoState::btnArmorClick(Action*)
 void SoldierInfoState::btnSackClick(Action*)
 {
 	_game->pushState(new SackSoldierState(
-										_game,
 										_base,
 										_soldierId));
 }

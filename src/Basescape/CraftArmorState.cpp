@@ -55,11 +55,9 @@ namespace OpenXcom
  * @param craft, ID of the selected craft.
  */
 CraftArmorState::CraftArmorState(
-		Game* game,
 		Base* base,
 		size_t craft)
 	:
-		State(game),
 		_base(base),
 		_craft(craft)
 {
@@ -263,7 +261,6 @@ void CraftArmorState::lstSoldiersClick(Action* action) // kL
 			&& soldier->getCraft()->getStatus() == "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(
-											_game,
 											_base,
 											_lstSoldiers->getSelectedRow()));
 	}

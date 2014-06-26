@@ -55,10 +55,8 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  */
 ResearchState::ResearchState(
-		Game* game,
 		Base* base)
 	:
-		State(game),
 		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -179,9 +177,7 @@ void ResearchState::btnOkClick(Action*)
  */
 void ResearchState::btnNewClick(Action*)
 {
-	_game->pushState(new NewResearchListState(
-											_game,
-											_base));
+	_game->pushState(new NewResearchListState(_base));
 }
 
 /**
@@ -191,7 +187,6 @@ void ResearchState::btnNewClick(Action*)
 void ResearchState::btnAliens(Action*) // kL
 {
 	_game->pushState(new ManageAlienContainmentState(
-													_game,
 													_base,
 													OPT_GEOSCAPE));
 }
@@ -205,7 +200,6 @@ void ResearchState::onSelectProject(Action*)
 	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
 
 	_game->pushState(new ResearchInfoState(
-										_game,
 										_base,
 										baseProjects[_lstResearch->getSelectedRow()]));
 }

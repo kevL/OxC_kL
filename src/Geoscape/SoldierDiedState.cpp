@@ -41,11 +41,9 @@ namespace OpenXcom
  * @param name, Name of the Soldier.
  */
 SoldierDiedState::SoldierDiedState(
-		Game* game,
 		std::wstring name,
 		std::wstring base)
 	:
-		State(game),
 		_name(name),
 		_base(base)
 {

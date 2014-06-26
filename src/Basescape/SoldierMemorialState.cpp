@@ -56,9 +56,7 @@ namespace OpenXcom
  * Initializes all the elements in the Soldier Memorial screen.
  * @param game Pointer to the core game.
  */
-SoldierMemorialState::SoldierMemorialState(Game* game)
-	:
-		State(game)
+SoldierMemorialState::SoldierMemorialState()
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(310, 17, 5, 9);
@@ -203,10 +201,7 @@ void SoldierMemorialState::btnOkClick(Action*)
 void SoldierMemorialState::lstSoldiersClick(Action* action)
 {
 	size_t row = _game->getSavedGame()->getDeadSoldiers()->size() - 1 - _lstSoldiers->getSelectedRow();
-	_game->pushState(new SoldierDeadInfoState(
-											_game,
-											row));
-//											_lstSoldiers->getSelectedRow()));
+	_game->pushState(new SoldierDeadInfoState(row));
 }
 
 }

@@ -44,13 +44,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsAdvancedState::OptionsAdvancedState(
-		Game* game,
-		OptionsOrigin origin)
+OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin)
 	:
-		OptionsBaseState(
-			game,
-			origin)
+		OptionsBaseState(origin)
 {
 	setCategory(_btnAdvanced);
 

@@ -57,16 +57,13 @@ namespace OpenXcom
  * @param craft ID of the selected craft.
  */
 CraftSoldiersState::CraftSoldiersState(
-		Game* game,
 		Base* base,
 		size_t craft)
 	:
-		State(game),
 		_base(base),
 		_craft(craft)
 {
 	//Log(LOG_INFO) << "Create CraftSoldiersState";
-
 	_window			= new Window(this, 320, 200, 0, 0);
 
 	_txtTitle		= new Text(300, 17, 16, 8);
@@ -482,7 +479,6 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		_game->pushState(new SoldierInfoState(
-											_game,
 											_base,
 											row));
 }

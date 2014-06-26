@@ -53,11 +53,9 @@ namespace OpenXcom
  * @param state Pointer to the Battlescape state.
  */
 AbortMissionState::AbortMissionState(
-        Game* game,
         SavedBattleGame* battleGame,
         BattlescapeState* state)
 	:
-		State(game),
 		_battleGame(battleGame),
 		_state(state),
 		_inExitArea(0),
@@ -91,7 +89,7 @@ AbortMissionState::AbortMissionState(
 	if (_battleGame->getMissionType() != "STR_UFO_GROUND_ASSAULT"
 		&& _battleGame->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{
-		nextStage = game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
+		nextStage = _game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
 	}
 
 	for (std::vector<BattleUnit*>::iterator

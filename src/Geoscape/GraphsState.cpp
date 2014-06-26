@@ -75,9 +75,8 @@ struct GraphBtnInfo
  * Initializes all the elements in the Graphs screen.
  * @param game Pointer to the core game.
  */
-GraphsState::GraphsState(Game* game)
+GraphsState::GraphsState()
 	:
-		State(game),
 		_btnRegionsOffset(0),
 		_btnCountriesOffset(0)
 {
@@ -128,7 +127,7 @@ GraphsState::GraphsState(Game* game)
 	add(_txtFactor);
 	add(_numScore);
 
-	for (int
+	for (size_t
 			scaleText = 0;
 			scaleText < 10;
 			++scaleText)
@@ -137,7 +136,7 @@ GraphsState::GraphsState(Game* game)
 									32,
 									10,
 									86,
-									171 - (scaleText * 14)));
+									171 - (static_cast<int>(scaleText) * 14)));
 
 		add(_txtScale.at(scaleText));
 	}
@@ -151,7 +150,7 @@ GraphsState::GraphsState(Game* game)
 		// always save all the regions in toggles
 		_regionToggles.push_back(new GraphBtnInfo(
 												tr((*iter)->getRules()->getType()),
-												(offset * 4) - 42));
+												(static_cast<Uint8>(offset) * 4) - 42));
 
 		// initially add the GRAPH_MAX_BUTTONS having the first region's information
 		if (offset < GRAPH_MAX_BUTTONS)
@@ -160,7 +159,7 @@ GraphsState::GraphsState(Game* game)
 													65,
 													10,
 													0,
-													offset * 10));
+													static_cast<int>(offset) * 10));
 			_btnRegions.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_btnRegions.at(offset)->setInvertColor((offset * 4) - 42);
 			_btnRegions.at(offset)->setText(tr((*iter)->getRules()->getType())); // unique name of Region
@@ -178,16 +177,16 @@ GraphsState::GraphsState(Game* game)
 													24,
 													10,
 													66,
-													(offset * 10) + 1));
+													(static_cast<int>(offset) * 10) + 1));
 //			_numRegionActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7); // grey
 			_numRegionActivityAlien.at(offset)->setColor((offset * 8) + 16);
 			_numRegionActivityXCom.push_back(new Text(
 													24,
 													10,
 													66,
-													(offset * 10) + 1));
+													(static_cast<int>(offset) * 10) + 1));
 //			_numRegionActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
-			_numRegionActivityXCom.at(offset)->setColor((offset * 8) + 16);
+			_numRegionActivityXCom.at(offset)->setColor((static_cast<Uint8>(offset) * 8) + 16);
 
 			add(_numRegionActivityAlien.at(offset));
 			add(_numRegionActivityXCom.at(offset));
@@ -210,13 +209,13 @@ GraphsState::GraphsState(Game* game)
 											65,
 											10,
 											0,
-											_regionToggles.size() * 10);
+											static_cast<int>(_regionToggles.size()) * 10);
 	else
 		_btnRegionTotal = new ToggleTextButton(
 											65,
 											10,
 											0,
-											GRAPH_MAX_BUTTONS * 10);
+											static_cast<int>(GRAPH_MAX_BUTTONS) * 10);
 
 	_regionToggles.push_back(new GraphBtnInfo(
 											tr("STR_TOTAL_UC"),
@@ -246,7 +245,7 @@ GraphsState::GraphsState(Game* game)
 		// always save all the countries in toggles
 		_countryToggles.push_back(new GraphBtnInfo(
 												tr((*iter)->getRules()->getType()),
-												(offset * 4) - 42));
+												(static_cast<Uint8>(offset) * 4) - 42));
 
 		// initially add the GRAPH_MAX_BUTTONS having the first country's information
 		if (offset < GRAPH_MAX_BUTTONS)
@@ -255,9 +254,9 @@ GraphsState::GraphsState(Game* game)
 													65,
 													10,
 													0,
-													offset * 10));
+													static_cast<int>(offset) * 10));
 			_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
-			_btnCountries.at(offset)->setInvertColor((offset * 4) - 42);
+			_btnCountries.at(offset)->setInvertColor((static_cast<Uint8>(offset) * 4) - 42);
 			_btnCountries.at(offset)->setText(tr((*iter)->getRules()->getType()));
 			_btnCountries.at(offset)->onMousePress((ActionHandler)& GraphsState::btnCountryListClick);
 			_btnCountries.at(offset)->onMousePress(
@@ -273,16 +272,16 @@ GraphsState::GraphsState(Game* game)
 													24,
 													10,
 													66,
-													(offset * 10) + 1));
+													(static_cast<int>(offset) * 10) + 1));
 //			_numCountryActivityAlien.at(offset)->setColor(Palette::blockOffset(9)+7);
-			_numCountryActivityAlien.at(offset)->setColor((offset * 8) + 16);
+			_numCountryActivityAlien.at(offset)->setColor((static_cast<Uint8>(offset) * 8) + 16);
 			_numCountryActivityXCom.push_back(new Text(
 													24,
 													10,
 													66,
-													(offset * 10) + 1));
+													(static_cast<int>(offset) * 10) + 1));
 //			_numCountryActivityXCom.at(offset)->setColor(Palette::blockOffset(9)+7);
-			_numCountryActivityXCom.at(offset)->setColor((offset * 8) + 16);
+			_numCountryActivityXCom.at(offset)->setColor((static_cast<Uint8>(offset) * 8) + 16);
 
 			add(_numCountryActivityAlien.at(offset));
 			add(_numCountryActivityXCom.at(offset));
@@ -308,18 +307,18 @@ GraphsState::GraphsState(Game* game)
 											65,
 											10,
 											0,
-											_countryToggles.size() * 10);
+											static_cast<int>(_countryToggles.size()) * 10);
 	else
 		_btnCountryTotal = new ToggleTextButton(
 											65,
 											10,
 											0,
-											GRAPH_MAX_BUTTONS * 10);
+											static_cast<int>(GRAPH_MAX_BUTTONS) * 10);
 
 	_countryToggles.push_back(new GraphBtnInfo(tr("STR_TOTAL_UC"), 22));
 
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
-    _btnCountryTotal->setInvertColor(22);
+	_btnCountryTotal->setInvertColor(22);
 	_btnCountryTotal->setText(tr("STR_TOTAL_UC"));
 	_btnCountryTotal->onMousePress((ActionHandler)& GraphsState::btnCountryListClick);
 
@@ -336,7 +335,7 @@ GraphsState::GraphsState(Game* game)
 	add(_btnCountryTotal);
 
 
-	for (int
+	for (size_t
 			iter = 0;
 			iter < 5;
 			++iter)
@@ -345,11 +344,11 @@ GraphsState::GraphsState(Game* game)
 												82,
 												16,
 												0,
-												iter * 16));
+												static_cast<int>(iter) * 16));
 		_financeToggles.push_back(false);
 
 		_btnFinances.at(iter)->setColor(Palette::blockOffset(9)+7);
-        _btnFinances.at(iter)->setInvertColor((iter * 4) - 42);
+		_btnFinances.at(iter)->setInvertColor((static_cast<Uint8>(iter) * 4) - 42);
 		_btnFinances.at(iter)->onMousePress((ActionHandler)& GraphsState::btnFinanceListClick);
 
 		add(_btnFinances.at(iter));
@@ -477,7 +476,7 @@ GraphsState::GraphsState(Game* game)
 
 
 	int month = _game->getSavedGame()->getTime()->getMonth();
-	for (int
+	for (size_t
 			iter = 0;
 			iter < 12;
 			++iter)
@@ -985,7 +984,7 @@ void GraphsState::btnFinanceClick(Action*)
 void GraphsState::btnRegionListClick(Action* action)
 {
 	size_t number = (action->getSender()->getY() - _game->getScreen()->getDY()) / 10;
-	ToggleTextButton* button = 0;
+	ToggleTextButton* button = NULL;
 
 	if ((_regionToggles.size() <= GRAPH_MAX_BUTTONS + 1
 			&& number == _regionToggles.size() - 1)
@@ -1009,7 +1008,7 @@ void GraphsState::btnRegionListClick(Action* action)
 void GraphsState::btnCountryListClick(Action* action)
 {
 	size_t number = (action->getSender()->getY() - _game->getScreen()->getDY()) / 10;
-	ToggleTextButton* button = 0;
+	ToggleTextButton* button = NULL;
 
 	if ((_countryToggles.size() <= GRAPH_MAX_BUTTONS + 1
 			&& number == _countryToggles.size() - 1)
@@ -1174,9 +1173,9 @@ void GraphsState::updateScale(
 		increment = 10.0;
 
 	double text = lowerLimit;
-	for (int
+	for (size_t
 			i = 0;
-			i < grid + 1;
+			i < static_cast<size_t>(grid + 1);
 			++i)
 	{
 		_txtScale.at(i)->setText(Text::formatNumber(static_cast<int>(text)));
@@ -1343,7 +1342,7 @@ void GraphsState::drawCountryLines()
 				iter != 12;
 				++iter)
 		{
-			int x = 312 - (iter * 17);
+			int x = 312 - (static_cast<int>(iter) * 17);
 			int y = 175 + static_cast<int>((static_cast<double>(lowerLimit) / units));
 
 			if (_alien)
@@ -1385,7 +1384,8 @@ void GraphsState::drawCountryLines()
 			newLineVector.push_back(y);
 
 			int offset = 0;
-			if (itCountry %2) offset = 8;
+			if (itCountry %2)
+				offset = 8;
 
 			if (newLineVector.size() > 1 && _alien)
 				_alienCountryLines.at(itCountry)->drawLine(
@@ -1601,7 +1601,7 @@ void GraphsState::drawRegionLines()
 				iter < 12;
 				++iter)
 		{
-			int x = 312 - (iter * 17);
+			int x = 312 - (static_cast<int>(iter) * 17);
 			int y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
 
 			if (_alien)

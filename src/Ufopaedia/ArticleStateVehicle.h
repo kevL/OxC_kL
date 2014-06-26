@@ -33,7 +33,7 @@ class TextList;
 
 
 /**
- * ArticleStateVehicle hasa caption, text and a stats block.
+ * ArticleStateVehicle has a caption, text, and a stats block.
  */
 class ArticleStateVehicle : public ArticleState
 {
@@ -42,15 +42,14 @@ protected:
 	Text
 		* _txtInfo,
 		* _txtTitle;
-	TextList *_lstStats;
+	TextList* _lstStats;
 
 
 	public:
-		ArticleStateVehicle(
-				Game* game,
-				ArticleDefinitionVehicle* article_defs);
+		///
+		ArticleStateVehicle(ArticleDefinitionVehicle* article_defs);
+		///
 		virtual ~ArticleStateVehicle();
-
 };
 
 }

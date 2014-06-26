@@ -45,9 +45,7 @@ namespace OpenXcom
  * Initializes all the elements in the Promotions screen.
  * @param game Pointer to the core game.
  */
-PromotionsState::PromotionsState(Game* game)
-	:
-		State(game)
+PromotionsState::PromotionsState()
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 

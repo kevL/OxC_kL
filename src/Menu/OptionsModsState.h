@@ -49,9 +49,7 @@ private:
 
 	public:
 		/// Creates the Advanced state.
-		OptionsModsState(
-				Game* game,
-				OptionsOrigin origin);
+		OptionsModsState(OptionsOrigin origin);
 		/// Cleans up the Advanced state.
 		~OptionsModsState();
 

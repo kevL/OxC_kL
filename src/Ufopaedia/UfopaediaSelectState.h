@@ -66,9 +66,7 @@ protected:
 
 
 	public:
-		UfopaediaSelectState(
-				Game* game,
-				std::string section);
+		UfopaediaSelectState(std::string section);
 		virtual ~UfopaediaSelectState();
 
 };

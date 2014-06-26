@@ -82,7 +82,6 @@ private:
 	public:
 		/// Creates the Craft Info state.
 		CraftInfoState(
-				Game* game,
 				Base* base,
 				size_t craftId);
 		/// Cleans up the Craft Info state.

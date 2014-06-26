@@ -29,19 +29,20 @@ namespace OpenXcom
 class Craft;
 class Globe;
 //class InteractiveSurface;
-class Timer;
-class Window;
 //kL class Text;
 class TextButton;
+class Timer;
+class Window;
+
 
 /**
- * Screen that allows the player
- * to pick a target for a craft on the globe.
+ * Screen that allows the player to pick a target for a craft on the globe.
  */
 class SelectDestinationState
 	:
 		public State
 {
+
 private:
 	Craft* _craft;
 	Globe* _globe;
@@ -52,10 +53,10 @@ private:
 		* _btnCancel,
 		* _btnCydonia;
 
+
 	public:
 		/// Creates the Select Destination state.
 		SelectDestinationState(
-				Game* game,
 				Craft* craft,
 				Globe* globe);
 		/// Cleans up the Select Destination state.

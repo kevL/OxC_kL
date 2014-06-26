@@ -79,11 +79,9 @@ Sound* BasescapeState::soundPop = 0;	// kL
  * @param globe Pointer to the Geoscape globe.
  */
 BasescapeState::BasescapeState(
-		Game* game,
 		Base* base,
 		Globe* globe)
 	:
-		State(game),
 		_base(base),
 		_globe(globe)
 {
@@ -368,7 +366,6 @@ void BasescapeState::setBase(Base* base)
 void BasescapeState::btnAliens(Action*) // kL
 {
 	_game->pushState(new ManageAlienContainmentState(
-													_game,
 													_base,
 													OPT_GEOSCAPE));
 }
@@ -383,7 +380,6 @@ void BasescapeState::btnNewBaseClick(Action*)
 
 	_game->popState();
 	_game->pushState(new BuildNewBaseState(
-										_game,
 										base,
 										_globe,
 										false));
@@ -396,7 +392,6 @@ void BasescapeState::btnNewBaseClick(Action*)
 void BasescapeState::btnBaseInfoClick(Action*)
 {
 	_game->pushState(new BaseInfoState(
-									_game,
 									_base,
 									this));
 }
@@ -407,9 +402,7 @@ void BasescapeState::btnBaseInfoClick(Action*)
  */
 void BasescapeState::btnSoldiersClick(Action*)
 {
-	_game->pushState(new SoldiersState(
-									_game,
-									_base));
+	_game->pushState(new SoldiersState(_base));
 }
 
 /**
@@ -418,9 +411,7 @@ void BasescapeState::btnSoldiersClick(Action*)
  */
 void BasescapeState::btnCraftsClick(Action*)
 {
-	_game->pushState(new CraftsState(
-									_game,
-									_base));
+	_game->pushState(new CraftsState(_base));
 }
 
 /**
@@ -430,7 +421,6 @@ void BasescapeState::btnCraftsClick(Action*)
 void BasescapeState::btnFacilitiesClick(Action*)
 {
 	_game->pushState(new BuildFacilitiesState(
-											_game,
 											_base,
 											this));
 }
@@ -441,9 +431,7 @@ void BasescapeState::btnFacilitiesClick(Action*)
  */
 void BasescapeState::btnResearchClick(Action*)
 {
-	_game->pushState(new ResearchState(
-									_game,
-									_base));
+	_game->pushState(new ResearchState(_base));
 }
 
 /**
@@ -452,9 +440,7 @@ void BasescapeState::btnResearchClick(Action*)
  */
 void BasescapeState::btnManufactureClick(Action*)
 {
-	_game->pushState(new ManufactureState(
-										_game,
-										_base));
+	_game->pushState(new ManufactureState(_base));
 }
 
 /**
@@ -463,9 +449,7 @@ void BasescapeState::btnManufactureClick(Action*)
  */
 void BasescapeState::btnPurchaseClick(Action*)
 {
-	_game->pushState(new PurchaseState(
-									_game,
-									_base));
+	_game->pushState(new PurchaseState(_base));
 }
 
 /**
@@ -474,9 +458,7 @@ void BasescapeState::btnPurchaseClick(Action*)
  */
 void BasescapeState::btnSellClick(Action*)
 {
-	_game->pushState(new SellState(
-								_game,
-								_base));
+	_game->pushState(new SellState(_base));
 }
 
 /**
@@ -485,9 +467,7 @@ void BasescapeState::btnSellClick(Action*)
  */
 void BasescapeState::btnTransferClick(Action*)
 {
-	_game->pushState(new TransferBaseState(
-										_game,
-										_base));
+	_game->pushState(new TransferBaseState(_base));
 }
 
 /**
@@ -511,8 +491,7 @@ void BasescapeState::viewLeftClick(Action*)
 		if (fac->inUse())
 		{
 			_game->pushState(new ErrorMessageState(
-												_game,
-												"STR_FACILITY_IN_USE",
+												tr("STR_FACILITY_IN_USE"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
@@ -521,8 +500,7 @@ void BasescapeState::viewLeftClick(Action*)
 		else if (!_base->getDisconnectedFacilities(fac).empty()) // would base become disconnected...
 		{
 			_game->pushState(new ErrorMessageState(
-												_game,
-												"STR_CANNOT_DISMANTLE_FACILITY",
+												tr("STR_CANNOT_DISMANTLE_FACILITY"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
@@ -531,7 +509,6 @@ void BasescapeState::viewLeftClick(Action*)
 		else
 		{
 			_game->pushState(new DismantleFacilityState(
-													_game,
 													_base,
 													_view,
 													fac));
@@ -552,11 +529,9 @@ void BasescapeState::viewRightClick(Action*)
 	{
 		bPop = true;
 //		_game->pushState(new BaseInfoState(
-//										_game,
 //										_base,
 //										this));
 		_game->pushState(new MonthlyCostsState(
-											_game,
 											_base));
 	}
 	else if (fac->getRules()->getCrafts() > 0)
@@ -564,9 +539,7 @@ void BasescapeState::viewRightClick(Action*)
 /*		if (_base->getCrafts()->size() == 0) // no Craft at base
 		{
 			bPop = true;
-			_game->pushState(new CraftsState(
-											_game,
-											_base));
+			_game->pushState(new CraftsState(_base));
 		}
 		else */
 		if (_base->getCrafts()->size() > 0) // Craft at base
@@ -595,9 +568,7 @@ void BasescapeState::viewRightClick(Action*)
 					}
 					else // Empty hangar, no craft for it; however, base has at least one craft (docked or out)
 					{ */
-					_game->pushState(new CraftsState(
-													_game,
-													_base));
+					_game->pushState(new CraftsState(_base));
 
 					break;
 //					}
@@ -606,7 +577,6 @@ void BasescapeState::viewRightClick(Action*)
 				{
 //					bPop = false; // plays window-'swish' instead.
 					_game->pushState(new CraftInfoState(
-													_game,
 													_base,
 													i));
 
@@ -617,58 +587,43 @@ void BasescapeState::viewRightClick(Action*)
 	}
 	else if (fac->getRules()->getStorage() > 0)
 	{
-//kL		_game->pushState(new SellState(
-//kL									_game,
-//kL									_base));
+//kL		_game->pushState(new SellState(_base));
 		bPop = true;
-		_game->pushState(new StoresState(
-									_game,
-									_base));
+		_game->pushState(new StoresState(_base));
 	}
 	else if (fac->getRules()->getPersonnel() > 0)
 	{
 		bPop = true;
-		_game->pushState(new SoldiersState(
-										_game,
-										_base));
+		_game->pushState(new SoldiersState(_base));
 	}
 	else if (fac->getRules()->getPsiLaboratories() > 0
 			&& Options::anytimePsiTraining
 			&& _base->getAvailablePsiLabs() > 0)
 	{
 		bPop = true;
-		_game->pushState(new AllocatePsiTrainingState(
-													_game,
-													_base));
+		_game->pushState(new AllocatePsiTrainingState(_base));
 	}
 	else if (fac->getRules()->getLaboratories() > 0)
 	{
 		bPop = true;
-		_game->pushState(new ResearchState(
-										_game,
-										_base));
+		_game->pushState(new ResearchState(_base));
 	}
 	else if (fac->getRules()->getWorkshops() > 0)
 	{
 		bPop = true;
-		_game->pushState(new ManufactureState(
-											_game,
-											_base));
+		_game->pushState(new ManufactureState(_base));
 	}
 	else if (fac->getRules()->getAliens() > 0)
 	{
 		bPop = true;
 		_game->pushState(new ManageAlienContainmentState(
-														_game,
 														_base,
 														OPT_GEOSCAPE));
 	}
 /*	else if (fac->getRules()->isLift()) // my Lift has a radar range ... (see next)
 	{
 		bPop = true;
-		_game->pushState(new MonthlyCostsState(
-											_game,
-											_base));
+		_game->pushState(new MonthlyCostsState(_base));
 	} */
 	else if (fac->getRules()->getRadarRange() > 0)
 	{

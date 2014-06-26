@@ -60,10 +60,8 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  */
 SoldiersState::SoldiersState(
-		Game* game,
 		Base* base)
 	:
-		State(game),
 		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -219,9 +217,7 @@ void SoldiersState::btnOkClick(Action*)
  */
 void SoldiersState::btnPsiTrainingClick(Action*)
 {
-	_game->pushState(new AllocatePsiTrainingState(
-												_game,
-												_base));
+	_game->pushState(new AllocatePsiTrainingState(_base));
 }
 
 /**
@@ -232,7 +228,6 @@ void SoldiersState::btnPsiTrainingClick(Action*)
 void SoldiersState::btnArmorClick(Action*)
 {
 	_game->pushState(new CraftArmorState(
-										_game,
 										_base,
 										static_cast<size_t>(0)));
 }
@@ -243,7 +238,7 @@ void SoldiersState::btnArmorClick(Action*)
  */
 void SoldiersState::btnMemorialClick(Action*)
 {
-	_game->pushState(new SoldierMemorialState(_game));
+	_game->pushState(new SoldierMemorialState());
 }
 
 /**
@@ -261,7 +256,6 @@ void SoldiersState::lstSoldiersClick(Action* action)
 	}
 
 	_game->pushState(new SoldierInfoState(
-										_game,
 										_base,
 										_lstSoldiers->getSelectedRow()));
 }

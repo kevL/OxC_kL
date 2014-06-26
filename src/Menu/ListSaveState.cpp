@@ -41,12 +41,9 @@ namespace OpenXcom
  * @param game, Pointer to the core game.
  * @param origin, Game section that originated this state.
  */
-ListSaveState::ListSaveState(
-		Game* game,
-		OptionsOrigin origin)
+ListSaveState::ListSaveState(OptionsOrigin origin)
 	:
 		ListGamesState(
-			game,
 			origin,
 			1,
 			false),
@@ -231,7 +228,6 @@ void ListSaveState::saveGame()
 
 	newFilename += ".sav";
 	_game->pushState(new SaveGameState(
-									_game,
 									_origin,
 									newFilename));
 }

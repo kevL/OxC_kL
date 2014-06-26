@@ -54,10 +54,8 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  */
 NewManufactureListState::NewManufactureListState(
-		Game* game,
 		Base* base)
 	:
-		State(game),
 		_base(base)
 {
 	_screen = false;
@@ -144,8 +142,7 @@ void NewManufactureListState::lstProdClick(Action*)
 		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION",
+											tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
 											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK17.SCR",
@@ -154,8 +151,7 @@ void NewManufactureListState::lstProdClick(Action*)
 	else if (rule->getRequiredSpace() > _base->getFreeWorkshops())
 	{
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_NOT_ENOUGH_WORK_SPACE",
+											tr("STR_NOT_ENOUGH_WORK_SPACE"),
 											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK17.SCR",
@@ -164,7 +160,6 @@ void NewManufactureListState::lstProdClick(Action*)
 	else
 	{
 		_game->pushState(new ManufactureStartState(
-												_game,
 												_base,
 												rule));
 	}

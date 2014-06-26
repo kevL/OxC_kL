@@ -80,7 +80,6 @@ private:
 	public:
 		/// Creates the Monthly Report state.
 		MonthlyReportState(
-				Game* game,
 				bool psi,
 				Globe* globe);
 		/// Cleans up the Monthly Report state.

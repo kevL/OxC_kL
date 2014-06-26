@@ -44,7 +44,6 @@ private:
 	public:
 		/// Creates the Build Facilities state.
 		SelectStartFacilityState(
-				Game* game,
 				Base* base,
 				State* state,
 				Globe* globe);

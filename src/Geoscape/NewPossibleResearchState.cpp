@@ -50,12 +50,10 @@ namespace OpenXcom
  * @param possibilities List of newly possible ResearchProject
  */
 NewPossibleResearchState::NewPossibleResearchState(
-		Game* game,
 		Base* base,
 		const std::vector<RuleResearch*>& possibilities,
 		bool showResearchButton) // myk002_add.
 	:
-		State (game),
 		_base(base)
 {
 	_screen = false;
@@ -151,9 +149,7 @@ void NewPossibleResearchState::btnOkClick(Action*)
 void NewPossibleResearchState::btnResearchClick(Action*)
 {
 	_game->popState();
-	_game->pushState(new ResearchState(
-									_game,
-									_base));
+	_game->pushState(new ResearchState(_base));
 }
 
 }

@@ -109,7 +109,6 @@ private:
 	public:
 		/// Creates the Base Info state.
 		BaseInfoState(
-				Game* game,
 				Base* base,
 				BasescapeState* state);
 		/// Cleans up the Base Info state.

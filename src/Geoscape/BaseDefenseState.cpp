@@ -63,12 +63,10 @@ namespace OpenXcom
  * @param state Pointer to the Geoscape.
  */
 BaseDefenseState::BaseDefenseState(
-		Game* game,
 		Base* base,
 		Ufo* ufo,
 		GeoscapeState* state)
 	:
-		State(game),
 		_state(state),
 		_base(base),
 		_action(),

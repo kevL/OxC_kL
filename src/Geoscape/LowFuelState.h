@@ -58,7 +58,6 @@ private:
 	public:
 		/// Creates the Low Fuel state.
 		LowFuelState(
-				Game* game,
 				Craft* craft,
 				GeoscapeState* state);
 		/// Cleans up the Low Fuel state.

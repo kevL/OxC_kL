@@ -57,7 +57,6 @@ private:
 	public:
 		/// Creates the Sack Soldier state.
 		SackSoldierState(
-				Game* game,
 				Base* base,
 				size_t _soldierId);
 		/// Cleans up the Sack Soldier state.

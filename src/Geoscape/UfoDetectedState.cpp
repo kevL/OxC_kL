@@ -56,13 +56,11 @@ namespace OpenXcom
  * @param hyper Was it a hyperwave radar?
  */
 UfoDetectedState::UfoDetectedState(
-		Game* game,
 		Ufo* ufo,
 		GeoscapeState* state,
 		bool detected,
 		bool hyper)
 	:
-		State(game),
 		_ufo(ufo),
 		_state(state),
 		_hyperwave(hyper)
@@ -252,7 +250,6 @@ void UfoDetectedState::btnInterceptClick(Action*)
 
 	_game->popState();
 	_game->pushState(new InterceptState(
-									_game,
 									_state->getGlobe(),
 									0,
 									_ufo));

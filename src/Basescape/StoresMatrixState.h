@@ -63,9 +63,7 @@ private:
 
 	public:
 		/// Creates the Stores Matrix state.
-		StoresMatrixState(
-				Game* game,
-				Base* base);
+		StoresMatrixState(Base* base);
 		/// Cleans up the Stores Matrix state.
 		~StoresMatrixState();
 

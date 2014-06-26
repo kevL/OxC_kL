@@ -53,13 +53,11 @@ namespace OpenXcom
  * @param globe Pointer to the globe to refresh.
  */
 SelectStartFacilityState::SelectStartFacilityState(
-		Game* game,
 		Base* base,
 		State* state,
 		Globe* globe)
 	:
 		BuildFacilitiesState(
-			game,
 			base,
 			state),
 		_globe(globe)
@@ -118,7 +116,6 @@ void SelectStartFacilityState::btnOkClick(Action*)
 	_game->popState();
 
 	_game->pushState(new PlaceLiftState(
-									_game,
 									_base,
 									_globe,
 									true));
@@ -131,7 +128,6 @@ void SelectStartFacilityState::btnOkClick(Action*)
 void SelectStartFacilityState::lstFacilitiesClick(Action*)
 {
 	_game->pushState(new PlaceStartFacilityState(
-											_game,
 											_base,
 											this,
 											_facilities[_lstFacilities->getSelectedRow()]));

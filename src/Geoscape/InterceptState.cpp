@@ -60,12 +60,10 @@ namespace OpenXcom
  * @param target, Pointer to target to intercept (NULL to ask user for target).
  */
 InterceptState::InterceptState(
-		Game* game,
 		Globe* globe,
 		Base* base,
 		Target* target)
 	:
-		State(game),
 		_globe(globe),
 		_base(base),
 		_target(target),
@@ -328,7 +326,6 @@ void InterceptState::btnGotoBaseClick(Action*)
 	_game->popState();
 
 	_game->pushState(new BasescapeState(
-									_game,
 									_base,
 									_globe));
 }
@@ -343,7 +340,6 @@ void InterceptState::lstCraftsLeftClick(Action*)
 
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 	_game->pushState(new GeoscapeCraftState(
-										_game,
 										c,
 										_globe,
 										NULL,

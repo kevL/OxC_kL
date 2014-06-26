@@ -104,9 +104,7 @@ private:
 
 	public:
 		/// Creates the Soldier Dead Info state.
-		SoldierDeadInfoState(
-				Game* game,
-				size_t soldierId);
+		SoldierDeadInfoState(size_t soldierId);
 		/// Cleans up the Soldier Dead Info state.
 		~SoldierDeadInfoState();
 

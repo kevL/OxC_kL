@@ -45,14 +45,17 @@
 namespace OpenXcom
 {
 
+/// Initializes static member
+Game* State::_game = NULL;
+
+
 /**
  * Initializes a brand new state with no child elements.
  * By default states are full-screen.
  * @param game Pointer to the core game.
  */
-State::State(Game* game)
+State::State()
 	:
-		_game(game),
 		_surfaces(),
 		_screen(true),
 		_modal(0)
@@ -507,6 +510,14 @@ void State::recenter(
 		(*i)->setX((*i)->getX() + dX / 2);
 		(*i)->setY((*i)->getY() + dY / 2);
 	}
+}
+
+/**
+ *
+ */
+void State::setGamePtr(Game* game)
+{
+    _game = game;
 }
 
 }

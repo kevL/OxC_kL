@@ -33,6 +33,7 @@ class TextButton;
 class Window;
 class Text;
 
+
 /**
  * Window shown when the player tries to
  * dismantle a facility.
@@ -41,18 +42,27 @@ class DismantleFacilityState
 	:
 		public State
 {
+
 private:
 	Base* _base;
-	BaseView* _view;
 	BaseFacility* _fac;
+	BaseView* _view;
 
-	TextButton* _btnOk, * _btnCancel;
+	Text
+		* _txtTitle,
+		* _txtFacility;
+	TextButton
+		* _btnOk,
+		* _btnCancel;
 	Window* _window;
-	Text* _txtTitle, * _txtFacility;
+
 
 	public:
 		/// Creates the Dismantle Facility state.
-		DismantleFacilityState(Game* game, Base* base, BaseView* view, BaseFacility* fac);
+		DismantleFacilityState(
+				Base* base,
+				BaseView* view,
+				BaseFacility* fac);
 		/// Cleans up the Dismantle Facility state.
 		~DismantleFacilityState();
 

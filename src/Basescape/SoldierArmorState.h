@@ -63,7 +63,6 @@ private:
 	public:
 		/// Creates the Soldier Armor state.
 		SoldierArmorState(
-				Game* game,
 				Base* base,
 				size_t soldier);
 		/// Cleans up the Soldier Armor state.

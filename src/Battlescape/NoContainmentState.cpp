@@ -38,9 +38,7 @@ namespace OpenXcom
  * Initializes all the elements in the No Containment screen.
  * @param game Pointer to the core game.
  */
-NoContainmentState::NoContainmentState(Game* game)
-	:
-		State(game)
+NoContainmentState::NoContainmentState()
 {
 	_window		= new Window(this, 320, 200, 0, 0);
 	_txtTitle	= new Text(300, 160, 10, 8);

@@ -61,7 +61,6 @@ private:
 	public:
 		/// Creates the Multiple Targets state.
 		MultipleTargetsState(
-				Game* game,
 				std::vector<Target*> targets,
 				Craft* craft,
 				GeoscapeState* state);

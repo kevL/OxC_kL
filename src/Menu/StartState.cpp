@@ -64,9 +64,8 @@ bool StartState::kL_ready; // kL
  * Initializes all the elements in the Loading screen.
  * @param game Pointer to the core game.
  */
-StartState::StartState(Game* game)
+StartState::StartState()
 	:
-		State(game),
 		_anim(0),		// load CTD
 //		_ready(false)	// kL
 //		_output(L"")	// kL, load CTD
@@ -280,9 +279,7 @@ void StartState::think()
 				Options::baseYResolution = Screen::ORIGINAL_HEIGHT;
 				_game->getScreen()->resetDisplay(false);
 
-				_game->setState(new IntroState(
-											_game,
-											letterbox));
+				_game->setState(new IntroState(letterbox));
 			}
 			else
 			{
@@ -298,7 +295,7 @@ void StartState::think()
 								true); */
 //				_game->getScreen()->resetDisplay(false);
 
-				State* state = new MainMenuState(_game);
+				State* state = new MainMenuState();
 				_game->setState(state);
 
 				if (!Options::badMods.empty()) // Check for mod loading errors
@@ -316,7 +313,6 @@ void StartState::think()
 					Options::badMods.clear();
 
 					_game->pushState(new ErrorMessageState(
-														_game,
 														error.str(),
 														state->getPalette(),
 														Palette::blockOffset(8)+10,

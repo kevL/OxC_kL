@@ -49,9 +49,7 @@ private:
 
 	public:
 		/// Creates the InfoboxOKState.
-		InfoboxOKState(
-				Game* game,
-				const std::wstring& msg);
+		InfoboxOKState(const std::wstring& msg);
 		/// Cleans up the InfoboxOKState.
 		~InfoboxOKState();
 

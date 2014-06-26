@@ -54,12 +54,10 @@ namespace OpenXcom
  * @param first Is this a custom starting base?
  */
 PlaceLiftState::PlaceLiftState(
-		Game* game,
 		Base* base,
 		Globe* globe,
 		bool first)
 	:
-		State(game),
 		_base(base),
 		_globe(globe),
 		_first(first)
@@ -107,7 +105,6 @@ void PlaceLiftState::viewClick(Action*)
 	_game->popState();
 
 	BasescapeState* bState = new BasescapeState(
-											_game,
 											_base,
 											_globe);
 //kL	_game->getSavedGame()->setSelectedBase(_game->getSavedGame()->getBases()->size() - 1);
@@ -117,7 +114,6 @@ void PlaceLiftState::viewClick(Action*)
 	if (_first)
 	{
 		_game->pushState(new SelectStartFacilityState(
-													_game,
 													_base,
 													bState,
 													_globe));

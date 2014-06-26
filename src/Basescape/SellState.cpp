@@ -65,11 +65,9 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  */
 SellState::SellState(
-		Game* game,
 		Base* base,
 		OptionsOrigin origin)
 	:
-		State(game),
 		_base(base),
 		_qtys(),
 		_soldiers(),
@@ -760,7 +758,7 @@ int SellState::getPrice()
 			return craft->getRules()->getSellCost();
 	}
 
-    return 0;
+	return 0;
 }
 
 /**

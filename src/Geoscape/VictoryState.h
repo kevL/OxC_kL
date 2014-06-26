@@ -42,6 +42,7 @@ class VictoryState
 private:
 	static const int SCREENS = 5;
 
+
 	InteractiveSurface* _bg[SCREENS];
 	Text* _text[SCREENS];
 
@@ -52,7 +53,7 @@ private:
 
 	public:
 		/// Creates the Victory state.
-		VictoryState(Game* game);
+		VictoryState();
 		/// Cleans up the Victory state.
 		~VictoryState();
 

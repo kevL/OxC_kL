@@ -60,7 +60,6 @@ private:
 	public:
 		/// Creates the Base Name state.
 		BaseNameState(
-				Game* game,
 				Base* base,
 				Globe* globe,
 				bool first);

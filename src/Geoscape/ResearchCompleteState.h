@@ -46,7 +46,7 @@ private:
 	Text
 		* _txtResearch,
 		* _txtTitle;
-    TextButton
+	TextButton
 		* _btnOk,
 		* _btnReport;
 	Window* _window;
@@ -59,10 +59,9 @@ private:
 	public:
 		/// Creates the EndResearch state.
 		ResearchCompleteState(
-				Game* game,
 				const RuleResearch* research,
 				const RuleResearch* bonus);
-		// kL_note: WHERE IS THE dTor???
+		// kL_note: no dTor ...
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

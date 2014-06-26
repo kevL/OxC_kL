@@ -55,12 +55,10 @@ private:
 	public:
 		/// Creates the Save Game state.
 		SaveGameState(
-				Game* game,
 				OptionsOrigin origin,
 				const std::string& filename);
 		/// Creates the Save Game state.
 		SaveGameState(
-				Game* game,
 				OptionsOrigin origin,
 				SaveType type);
 		/// Cleans up the Save Game state.

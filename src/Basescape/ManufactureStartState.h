@@ -63,7 +63,6 @@ private:
 	public:
 		/// Creates the State.
 		ManufactureStartState(
-				Game* game,
 				Base* base,
 				RuleManufacture* item);
 		/// Handler for the Cancel button.

@@ -20,18 +20,21 @@
 #ifndef OPENXCOM_CANNOTREEQUIPSTATE_H
 #define OPENXCOM_CANNOTREEQUIPSTATE_H
 
-#include "../Engine/State.h"
-#include "DebriefingState.h"
 #include <vector>
+
+#include "DebriefingState.h"
+
+#include "../Engine/State.h"
 
 
 namespace OpenXcom
 {
 
-class TextButton;
-class Window;
 class Text;
+class TextButton;
 class TextList;
+class Window;
+
 
 /**
  * Screen shown when there's not enough equipment
@@ -41,15 +44,21 @@ class CannotReequipState
 	:
 		public State
 {
+
 private:
+	Text
+		* _txtTitle,
+		* _txtItem,
+		* _txtQuantity,
+		* _txtCraft;
 	TextButton* _btnOk;
-	Window* _window;
-	Text* _txtTitle, * _txtItem, * _txtQuantity, * _txtCraft;
 	TextList* _lstItems;
+	Window* _window;
+
 
 	public:
 		/// Creates the Cannot Reequip state.
-		CannotReequipState(Game* game, std::vector<ReequipStat> missingItems);
+		CannotReequipState(std::vector<ReequipStat> missingItems);
 		/// Cleans up the Cannot Reequip state.
 		~CannotReequipState();
 

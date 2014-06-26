@@ -59,7 +59,6 @@ private:
 
 		/// Creates the Alien Terror state.
 		AlienTerrorState(
-				Game* game,
 				TerrorSite* terror,
 				const std::string& city,
 				GeoscapeState* state);

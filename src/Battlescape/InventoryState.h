@@ -88,7 +88,6 @@ private:
 	public:
 		/// Creates the Inventory state.
 		InventoryState(
-				Game* game,
 				bool tu,
 				BattlescapeState* parent);
 		/// Cleans up the Inventory state.

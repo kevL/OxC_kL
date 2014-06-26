@@ -41,11 +41,9 @@
 namespace OpenXcom
 {
 
-ArticleStateCraft::ArticleStateCraft(
-		Game* game,
-		ArticleDefinitionCraft* defs)
+ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	:
-		ArticleState(game, defs->id)
+		ArticleState(defs->id)
 {
 	RuleCraft* craftRule = _game->getRuleset()->getCraft(defs->id);
 

@@ -46,9 +46,7 @@ private:
 
 	public:
 		/// Creates the Intro state.
-		IntroState(
-				Game* game,
-				bool wasLetterBoxed);
+		IntroState(bool wasLetterBoxed);
 		/// Cleans up the Intro state.
 		~IntroState();
 

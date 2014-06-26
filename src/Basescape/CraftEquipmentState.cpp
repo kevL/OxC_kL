@@ -70,18 +70,16 @@ namespace OpenXcom
  * @param craft ID of the selected craft.
  */
 CraftEquipmentState::CraftEquipmentState(
-		Game* game,
 		Base* base,
 		size_t craft)
 	:
-		State(game),
 		_sel(0),
 		_craft(craft),
 		_base(base)
 {
 	Craft* c = _base->getCrafts()->at(_craft);
 	bool craftHasCrew = c->getNumSoldiers() > 0;
-	bool newBattle = game->getSavedGame()->getMonthsPassed() == -1;
+	bool newBattle = _game->getSavedGame()->getMonthsPassed() == -1;
 
 
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -671,7 +669,6 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 					LocalizedText msg(tr("STR_NOT_ENOUGH_AMMO_TO_ARM_HWP").arg(tr(ammoRule->getType())));
 					_game->pushState(new ErrorMessageState(
-														_game,
 														msg,
 														_palette,
 														Palette::blockOffset(15)+1,
@@ -750,7 +747,6 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 
 
 	_game->pushState(new InventoryState(
-									_game,
 									false,
 									0));
 	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick() EXIT";

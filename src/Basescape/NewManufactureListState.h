@@ -56,9 +56,9 @@ private:
 
 	public:
 		/// Creates the state.
-		NewManufactureListState(
-				Game* game,
-				Base* base);
+		NewManufactureListState(Base* base);
+		///
+		// kL_note: no dTor ...
 
 		/// Initializes state.
 		void init();

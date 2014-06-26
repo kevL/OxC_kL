@@ -58,7 +58,6 @@ private:
 	public:
 		/// Creates the Geoscape CraftPatrol state.
 		CraftPatrolState(
-				Game* game,
 				Craft* craft,
 				Globe* globe);
 		/// Cleans up the Geoscape CraftPatrol state.

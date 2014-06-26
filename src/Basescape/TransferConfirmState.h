@@ -57,7 +57,6 @@ private:
 	public:
 		/// Creates the Transfer Confirm state.
 		TransferConfirmState(
-				Game* game,
 				Base* base,
 				TransferItemsState* state);
 		/// Cleans up the Transfer Confirm state.

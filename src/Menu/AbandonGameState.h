@@ -54,9 +54,7 @@ private:
 
 	public:
 		/// Creates the Abandon Game state.
-		AbandonGameState(
-				Game* game,
-				OptionsOrigin origin);
+		AbandonGameState(OptionsOrigin origin);
 		/// Cleans up the Abandon Game state.
 		~AbandonGameState();
 

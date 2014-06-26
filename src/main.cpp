@@ -84,7 +84,9 @@ int main(
 //					Options::musicVolume,
 //					Options::uiVolume);
 
-		game->setState(new StartState(game));
+		State::setGamePtr(game);
+
+		game->setState(new StartState());
 		game->run();
 #ifndef _DEBUG
 	}

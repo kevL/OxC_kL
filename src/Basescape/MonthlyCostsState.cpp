@@ -49,10 +49,8 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  */
 MonthlyCostsState::MonthlyCostsState(
-		Game* game,
 		Base* base)
 	:
-		State(game),
 		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);

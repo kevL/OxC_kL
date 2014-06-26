@@ -56,12 +56,10 @@ namespace OpenXcom
  * @param state, Pointer to the Geoscape state.
  */
 MultipleTargetsState::MultipleTargetsState(
-		Game* game,
 		std::vector<Target*> targets,
 		Craft* craft,
 		GeoscapeState* state)
 	:
-		State(game),
 		_targets(targets),
 		_craft(craft),
 		_state(state)
@@ -71,7 +69,7 @@ MultipleTargetsState::MultipleTargetsState(
 	if (_targets.size() > 1)
 	{
 		int
-//kL			height	= BUTTON_HEIGHT * _targets.size() + SPACING * (_targets.size() - 1) + MARGIN * 2,
+//kL		height	= BUTTON_HEIGHT * _targets.size() + SPACING * (_targets.size() - 1) + MARGIN * 2,
 			height	= (BUTTON_HEIGHT * (_targets.size() + 1)) + (SPACING * (_targets.size())) + (MARGIN * 2), // kL
 			winY	= (200 - height) / 2,
 			btnY	= winY + MARGIN;
@@ -176,7 +174,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 			//Log(LOG_INFO) << ". . base";
 //			_game->popState(); // kL
 			_game->pushState(new InterceptState(
-											_game,
 											_state->getGlobe(),
 											b));
 		}
@@ -193,7 +190,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 
 //			_game->popState(); // kL
 			_game->pushState(new GeoscapeCraftState(
-												_game,
 												c,
 												_state->getGlobe(),
 												0,
@@ -205,7 +201,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 			//Log(LOG_INFO) << ". . ufo";
 //			_game->popState(); // kL
 			_game->pushState(new UfoDetectedState(
-												_game,
 												u,
 												_state,
 												false,
@@ -217,7 +212,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 //kL			_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
 //			_game->popState(); // kL
 			_game->pushState(new TargetInfoState(
-												_game,
 												target,
 												_state->getGlobe(),
 												_state)); // kL
@@ -228,7 +222,6 @@ void MultipleTargetsState::popupTarget(Target* target)
 		//Log(LOG_INFO) << ". _craft != 0";
 //		_game->popState(); // kL
 		_game->pushState(new ConfirmDestinationState(
-													_game,
 													_craft,
 													target));
 	}

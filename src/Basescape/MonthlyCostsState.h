@@ -64,11 +64,10 @@ private:
 
 	public:
 		/// Creates the Monthly Costs state.
-		MonthlyCostsState(
-				Game* game,
-				Base* base);
+		MonthlyCostsState(Base* base);
 		/// Cleans up the Monthly Costs state.
 		~MonthlyCostsState();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 };

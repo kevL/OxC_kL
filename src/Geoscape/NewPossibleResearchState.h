@@ -43,11 +43,12 @@ class NewPossibleResearchState
 	:
 		public State
 {
+
 private:
 	Base* _base;
 	Text* _txtTitle;
 	TextList* _lstPossibilities;
-    TextButton
+	TextButton
 		* _btnResearch,
 		* _btnOk;
 	Window* _window;
@@ -56,7 +57,6 @@ private:
 	public:
 		/// Creates the NewPossibleResearch state.
 		NewPossibleResearchState(
-				Game* game,
 				Base* base,
 				const std::vector<RuleResearch*>& possibilities,
 				bool showResearchButton); // myk002_add.

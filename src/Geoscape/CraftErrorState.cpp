@@ -43,11 +43,9 @@ namespace OpenXcom
  * @param msg Error message.
  */
 CraftErrorState::CraftErrorState(
-		Game* game,
 		GeoscapeState* state,
 		const std::wstring& msg)
 	:
-		State(game),
 		_state(state)
 {
 	_screen = false;

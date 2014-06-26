@@ -44,13 +44,9 @@
 namespace OpenXcom
 {
 
-ArticleStateVehicle::ArticleStateVehicle(
-		Game* game,
-		ArticleDefinitionVehicle* defs)
+ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 	:
-		ArticleState(
-			game,
-			defs->id)
+		ArticleState(defs->id)
 {
 	Unit* unit = _game->getRuleset()->getUnit(defs->id);
 	Armor* armor = _game->getRuleset()->getArmor(unit->getArmor());

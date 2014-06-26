@@ -58,12 +58,10 @@ namespace OpenXcom
  * @param first Is this the first base in the game?
  */
 BuildNewBaseState::BuildNewBaseState(
-		Game* game,
 		Base* base,
 		Globe* globe,
 		bool first)
 	:
-		State(game),
 		_base(base),
 		_globe(globe),
 		_first(first),
@@ -306,7 +304,6 @@ void BuildNewBaseState::globeClick(Action* action)
 			if (_first)
 			{
 				_game->pushState(new BaseNameState(
-												_game,
 												_base,
 												_globe,
 												true));
@@ -314,7 +311,6 @@ void BuildNewBaseState::globeClick(Action* action)
 			else
 			{
 				_game->pushState(new ConfirmNewBaseState(
-													_game,
 													_base,
 													_globe));
 			}

@@ -78,12 +78,10 @@ private:
 	public:
 		/// Creates a ResearchProject state.
 		ResearchInfoState(
-				Game* game,
 				Base* base,
 				RuleResearch* rule);
 		/// Creates a ResearchProject state.
 		ResearchInfoState(
-				Game* game,
 				Base* base,
 				ResearchProject* project);
 		/// kL. Cleans up the ResearchInfo state.

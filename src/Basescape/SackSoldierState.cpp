@@ -48,11 +48,9 @@ namespace OpenXcom
  * @param soldierId Pointer to the soldier to sack.
  */
 SackSoldierState::SackSoldierState(
-		Game* game,
 		Base* base,
 		size_t soldierId)
 	:
-		State(game),
 		_base(base),
 		_soldierId(soldierId)
 {

@@ -123,7 +123,6 @@ private:
 	public:
 		/// Creates the Unit Info state.
 		UnitInfoState(
-				Game* game,
 				BattleUnit* unit,
 				BattlescapeState* parent,
 				bool fromInventory,

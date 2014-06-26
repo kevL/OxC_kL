@@ -80,7 +80,6 @@ private:
 	public:
 		/// Creates the Base Defense state.
 		BaseDefenseState(
-				Game* game,
 				Base* base,
 				Ufo* ufo,
 				GeoscapeState* state);

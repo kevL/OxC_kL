@@ -88,9 +88,7 @@ private:
 
 	public:
 		/// Creates the Purchase state.
-		PurchaseState(
-				Game* game,
-				Base* base);
+		PurchaseState(Base* base);
 		/// Cleans up the Purchase state.
 		~PurchaseState();
 

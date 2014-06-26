@@ -69,11 +69,9 @@ namespace OpenXcom
  * @param baseTo Pointer to the destination base.
  */
 TransferItemsState::TransferItemsState(
-		Game* game,
 		Base* baseFrom,
 		Base* baseTo)
 	:
-		State(game),
 		_baseQty(),
 		_destQty(),
 		_transferQty(),
@@ -680,7 +678,6 @@ void TransferItemsState::think()
 void TransferItemsState::btnOkClick(Action*)
 {
 	_game->pushState(new TransferConfirmState(
-											_game,
 											_baseTo,
 											this));
 }
@@ -1046,8 +1043,7 @@ void TransferItemsState::increaseByValue(int change)
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_NO_FREE_ACCOMODATION",
+											tr("STR_NO_FREE_ACCOMODATION"),
 											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK13.SCR",
@@ -1062,8 +1058,7 @@ void TransferItemsState::increaseByValue(int change)
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
-												_game,
-												"STR_NO_FREE_HANGARS_FOR_TRANSFER",
+												tr("STR_NO_FREE_HANGARS_FOR_TRANSFER"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
@@ -1075,8 +1070,7 @@ void TransferItemsState::increaseByValue(int change)
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
-												_game,
-												"STR_NO_FREE_ACCOMODATION_CREW",
+												tr("STR_NO_FREE_ACCOMODATION_CREW"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
@@ -1089,8 +1083,7 @@ void TransferItemsState::increaseByValue(int change)
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
-												_game,
-												"STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT",
+												tr("STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
@@ -1112,8 +1105,7 @@ void TransferItemsState::increaseByValue(int change)
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
-												_game,
-												"STR_NOT_ENOUGH_STORE_SPACE",
+												tr("STR_NOT_ENOUGH_STORE_SPACE"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
@@ -1126,8 +1118,7 @@ void TransferItemsState::increaseByValue(int change)
 		{
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
-												_game,
-												"STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER",
+												tr("STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",

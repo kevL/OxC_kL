@@ -45,9 +45,7 @@ class ArticleStateArmor
 
 public:
 	///
-	ArticleStateArmor(
-			Game* game,
-			ArticleDefinitionArmor* article_defs);
+	ArticleStateArmor(ArticleDefinitionArmor* article_defs);
 	///
 	virtual ~ArticleStateArmor();
 

@@ -51,12 +51,10 @@ namespace OpenXcom
  * @param state Pointer to the Geoscape.
  */
 AlienTerrorState::AlienTerrorState(
-		Game* game,
 		TerrorSite* terror,
 		const std::string& city,
 		GeoscapeState* state)
 	:
-		State(game),
 		_terror(terror),
 		_state(state)
 {
@@ -133,7 +131,6 @@ void AlienTerrorState::btnInterceptClick(Action*)
 	_game->popState();
 
 	_game->pushState(new InterceptState(
-									_game,
 									_state->getGlobe(),
 									0,
 									_terror));

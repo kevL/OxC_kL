@@ -53,11 +53,8 @@ namespace OpenXcom
  * @param game - pointer to the core game
  * @param base - pointer to the accessing base
  */
-StoresMatrixState::StoresMatrixState(
-		Game* game,
-		Base* base)
+StoresMatrixState::StoresMatrixState(Base* base)
 	:
-		State(game),
 		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);

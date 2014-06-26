@@ -59,12 +59,10 @@ namespace OpenXcom
  * @param y position on the y-axis.
  */
 ActionMenuState::ActionMenuState(
-		Game* game,
 		BattleAction* action,
 		int x,
 		int y)
 	:
-		State(game),
 		_action(action)
 {
 	setPalette("PAL_BATTLESCAPE");
@@ -323,7 +321,6 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			}
 			else
 				_game->pushState(new PrimeGrenadeState(
-													_game,
 													_action,
 													false,
 													NULL));
@@ -379,7 +376,6 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			{
 				_game->popState();
 				_game->pushState(new MedikitState(
-												_game,
 												targetUnit,
 												_action));
 			}
@@ -395,9 +391,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			if (_action->actor->spendTimeUnits(_action->TU)) // spend TUs first, then show the scanner
 			{
 				_game->popState();
-				_game->pushState(new ScannerState(
-												_game,
-												_action));
+				_game->pushState(new ScannerState(_action));
 			}
 			else
 			{

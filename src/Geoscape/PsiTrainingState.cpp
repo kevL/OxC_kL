@@ -48,9 +48,7 @@ namespace OpenXcom
  * Initializes all the elements in the Psi Training screen.
  * @param game Pointer to the core game.
  */
-PsiTrainingState::PsiTrainingState(Game* game)
-	:
-		State(game)
+PsiTrainingState::PsiTrainingState()
 {
 	_window		= new Window(this, 320, 200, 0, 0);
 	_txtTitle	= new Text(300, 17, 10, 16);
@@ -140,9 +138,7 @@ void PsiTrainingState::btnBaseXClick(Action* action)
 	{
 		if (action->getSender() == _btnBases[i])
 		{
-			_game->pushState(new AllocatePsiTrainingState(
-														_game,
-														_bases.at(i)));
+			_game->pushState(new AllocatePsiTrainingState(_bases.at(i)));
 
 			break;
 		}

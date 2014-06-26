@@ -61,13 +61,11 @@ namespace OpenXcom
  * @param mindProbe		- Is player using a Mind Probe?
  */
 UnitInfoState::UnitInfoState(
-		Game* game,
 		BattleUnit* unit,
 		BattlescapeState* parent,
 		bool fromInventory,
 		bool mindProbe)
 	:
-		State(game),
 		_unit(unit),
 		_parent(parent),
 		_fromInventory(fromInventory),

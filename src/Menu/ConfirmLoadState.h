@@ -57,7 +57,6 @@ private:
 	public:
 		/// Creates a new confirmation state.
 		ConfirmLoadState(
-				Game* game,
 				OptionsOrigin origin,
 				std::string fileName);
 		/// Cleans up the confirmation state.

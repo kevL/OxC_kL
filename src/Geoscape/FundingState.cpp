@@ -46,9 +46,7 @@ namespace OpenXcom
  * Initializes all the elements in the Funding screen.
  * @param game Pointer to the core game.
  */
-FundingState::FundingState(Game* game)
-	:
-		State(game)
+FundingState::FundingState()
 {
 	//Log(LOG_INFO) << "Create FundingState";
 	_screen = false;

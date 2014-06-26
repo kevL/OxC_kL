@@ -47,11 +47,8 @@ namespace OpenXcom
  * @param battleGame The Battlescape save.
  */
 MiniMapState::MiniMapState(
-		Game* game,
 		Camera* camera,
 		SavedBattleGame* battleGame)
-	:
-		State(game)
 {
 /*kL
 	if (Options::maximizeInfoScreens)
@@ -64,7 +61,7 @@ MiniMapState::MiniMapState(
 	_bg			= new InteractiveSurface(320, 200);
 	_miniView	= new MiniMapView(
 								221, 148, 48, 16,
-								game,
+								_game,
 								camera,
 								battleGame);
 

@@ -74,9 +74,9 @@ namespace OpenXcom
  * Initializes all the elements in the New Battle window.
  * @param game Pointer to the core game.
  */
-NewBattleState::NewBattleState(Game* game)
+NewBattleState::NewBattleState()
 	:
-		State(game), _craft(0)
+		_craft(0)
 {
 	_window				= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle			= new Text(320, 17, 0, 9);
@@ -486,29 +486,29 @@ void NewBattleState::initSave()
 //									&rule->getPools(),
 //									save->getId("STR_SOLDIER"));
 
-        for (int
+		for (int
 				n = 0;
 				n < 5;
 				++n)
-        {
-            if (RNG::percent(70))
-                continue;
+		{
+			if (RNG::percent(70))
+				continue;
 
-            soldier->promoteRank();
+			soldier->promoteRank();
 
-            UnitStats* stats = soldier->getCurrentStats();
-            stats->tu			+= RNG::generate(0, 5);
-            stats->stamina		+= RNG::generate(0, 5);
-            stats->health		+= RNG::generate(0, 5);
-            stats->bravery		+= RNG::generate(0, 5);
-            stats->reactions	+= RNG::generate(0, 5);
-            stats->firing		+= RNG::generate(0, 5);
-            stats->throwing		+= RNG::generate(0, 5);
-            stats->strength		+= RNG::generate(0, 5);
-            stats->psiStrength	+= RNG::generate(0, 5);
-            stats->melee		+= RNG::generate(0, 5);
-            stats->psiSkill		+= RNG::generate(0, 20);
-        }
+			UnitStats* stats = soldier->getCurrentStats();
+			stats->tu			+= RNG::generate(0, 5);
+			stats->stamina		+= RNG::generate(0, 5);
+			stats->health		+= RNG::generate(0, 5);
+			stats->bravery		+= RNG::generate(0, 5);
+			stats->reactions	+= RNG::generate(0, 5);
+			stats->firing		+= RNG::generate(0, 5);
+			stats->throwing		+= RNG::generate(0, 5);
+			stats->strength		+= RNG::generate(0, 5);
+			stats->psiStrength	+= RNG::generate(0, 5);
+			stats->melee		+= RNG::generate(0, 5);
+			stats->psiSkill		+= RNG::generate(0, 20);
+		}
 
 		UnitStats* stats = soldier->getCurrentStats();
 //kL		stats->bravery = (int)ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
@@ -633,24 +633,23 @@ void NewBattleState::btnOkClick(Action*)
 	bgen.setAlienItemlevel(_slrAlienTech->getValue());
 
 	bgen.run();
-	//_game->pushState(new BattlescapeState(_game));
-	Base* base = 0;
+//	_game->pushState(new BattlescapeState());
+	Base* base = NULL;
 
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
 	{
 		base = _craft->getBase();
-		_craft = 0;
+		_craft = NULL;
 	}
 
 	_game->popState();
 	_game->popState();
 
 	_game->pushState(new BriefingState(
-									_game,
 									_craft,
 									base));
 
-	_craft = 0;
+	_craft = NULL;
 }
 
 /**
@@ -706,7 +705,6 @@ void NewBattleState::btnRandomClick(Action*)
 void NewBattleState::btnEquipClick(Action*)
 {
 	_game->pushState(new CraftInfoState(
-									_game,
 									_game->getSavedGame()->getBases()->front(),
 									0));
 }

@@ -166,7 +166,7 @@ private:
 		static const int DEFAULT_ANIM_SPEED = 89;
 
 		/// Creates the Battlescape state.
-		BattlescapeState(Game* game);
+		BattlescapeState();
 		/// Cleans up the Battlescape state.
 		~BattlescapeState();
 

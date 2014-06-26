@@ -59,13 +59,11 @@ namespace OpenXcom
  * @param waypoint, Pointer to the last UFO position (if redirecting the craft).
  */
 GeoscapeCraftState::GeoscapeCraftState(
-		Game* game,
 		Craft* craft,
 		Globe* globe,
 		Waypoint* waypoint,
 		bool doublePop) // kL_add.
 	:
-		State(game),
 		_craft(craft),
 		_globe(globe),
 		_waypoint(waypoint),
@@ -429,7 +427,6 @@ void GeoscapeCraftState::btnTargetClick(Action*)
 
 	_game->popState();
 	_game->pushState(new SelectDestinationState(
-											_game,
 											_craft,
 											_globe));
 

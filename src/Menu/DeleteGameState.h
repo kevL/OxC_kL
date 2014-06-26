@@ -56,7 +56,6 @@ private:
 	public:
 		/// Creates the Confirm state.
 		DeleteGameState(
-				Game* game,
 				OptionsOrigin origin,
 				const std::string& save);
 		/// Cleans up the Confirm state.

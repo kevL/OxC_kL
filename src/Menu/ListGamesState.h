@@ -83,7 +83,6 @@ class ListGamesState
 		public:
 			/// Creates the Saved Game state.
 			ListGamesState(
-					Game* game,
 					OptionsOrigin origin,
 					int firstValidRow,
 					bool autoquick);

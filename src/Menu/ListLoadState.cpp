@@ -38,12 +38,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-ListLoadState::ListLoadState(
-		Game* game,
-		OptionsOrigin origin)
+ListLoadState::ListLoadState(OptionsOrigin origin)
 	:
 		ListGamesState(
-			game,
 			origin,
 			0,
 			true)
@@ -91,12 +88,10 @@ void ListLoadState::lstSavesPress(Action* action)
 
 		if (confirm)
 				_game->pushState(new ConfirmLoadState(
-													_game,
 													_origin,
 													_saves[_lstSaves->getSelectedRow()].fileName));
 		else
 			_game->pushState(new LoadGameState(
-											_game,
 											_origin,
 											_saves[_lstSaves->getSelectedRow()].fileName));
 	}

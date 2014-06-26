@@ -126,7 +126,7 @@ private:
 
 
 		/// Creates the Geoscape state.
-		GeoscapeState(Game* game);
+		GeoscapeState();
 		/// Cleans up the Geoscape state.
 		~GeoscapeState();
 

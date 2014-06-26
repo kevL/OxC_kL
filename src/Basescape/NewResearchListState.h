@@ -59,9 +59,9 @@ private:
 
 	public:
 		/// Creates the New research list state.
-		NewResearchListState(
-				Game* game,
-				Base* base);
+		NewResearchListState(Base* base);
+		///
+		// kL_note: no dTor ...
 
 		/// Initializes the state.
 		void init();

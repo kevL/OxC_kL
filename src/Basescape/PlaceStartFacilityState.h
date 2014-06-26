@@ -45,7 +45,6 @@ private:
 	public:
 		/// Creates the Place Facility state.
 		PlaceStartFacilityState(
-				Game* game,
 				Base* base,
 				SelectStartFacilityState* select,
 				RuleBaseFacility* rule);

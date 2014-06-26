@@ -36,9 +36,7 @@ class ListLoadState
 
 public:
 	/// Creates the Load Game state.
-	ListLoadState(
-			Game* game,
-			OptionsOrigin origin);
+	ListLoadState(OptionsOrigin origin);
 	/// Cleans up the Load Game state.
 	~ListLoadState();
 

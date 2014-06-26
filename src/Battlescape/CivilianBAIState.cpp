@@ -53,14 +53,16 @@ CivilianBAIState::CivilianBAIState(
 		BattleUnit* unit,
 		Node* node)
 	:
-		BattleAIState(save, unit),
-		_aggroTarget(0),
+		BattleAIState(
+			save,
+			unit),
+		_aggroTarget(NULL),
 		_escapeTUs(0),
 		_AIMode(0),
 		_visibleEnemies(0),
 		_spottingEnemies(0),
 		_fromNode(node),
-		_toNode(0)
+		_toNode(NULL)
 {
 	//Log(LOG_INFO) << "Create CivilianBAIState";
 
@@ -262,7 +264,7 @@ int CivilianBAIState::selectNearestTarget()
 	int tally = 0;
 	int closest = 100;
 
-	_aggroTarget = 0;
+	_aggroTarget = NULL;
 
 	Position origin = _save->getTileEngine()->getSightOriginVoxel(_unit);
 	origin.z -= 4;
@@ -382,7 +384,7 @@ void CivilianBAIState::setupEscape()
 	int score = -100000;
 
 	Position bestTile(0, 0, 0);
-	Tile* tile = 0;
+	Tile* tile = NULL;
 
 	// weights for various factors when choosing a tile to withdraw to;
 	// they're subjective, should be hand-tuned, may need tweaking.
@@ -603,7 +605,7 @@ void CivilianBAIState::setupPatrol()
 {
 	Node* node;
 
-	if (_toNode != 0
+	if (_toNode != NULL
 		&& _unit->getPosition() == _toNode->getPosition())
 	{
 		if (_traceAI) Log(LOG_INFO) << "Patrol destination reached!";
@@ -611,10 +613,10 @@ void CivilianBAIState::setupPatrol()
 		// destination reached
 		// head off to next patrol node
 		_fromNode = _toNode;
-		_toNode = 0;
+		_toNode = NULL;
 	}
 
-	if (_fromNode == 0)
+	if (_fromNode == NULL)
 	{
 		// assume closest node as "from node"
 		// on same level to avoid strange things, and the node has to match unit size or it will freeze
@@ -643,7 +645,7 @@ void CivilianBAIState::setupPatrol()
 	// look for a new node to walk towards
 	int triesLeft = 5;
 
-	while (_toNode == 0
+	while (_toNode == NULL
 		&& triesLeft)
 	{
 		triesLeft--;
@@ -652,7 +654,7 @@ void CivilianBAIState::setupPatrol()
 									true,
 									_unit,
 									_fromNode);
-		if (_toNode == 0)
+		if (_toNode == NULL)
 		{
 			_toNode = _save->getPatrolNode(
 										false,
@@ -660,7 +662,7 @@ void CivilianBAIState::setupPatrol()
 										_fromNode);
 		}
 
-		if (_toNode != 0)
+		if (_toNode != NULL)
 		{
 			_save->getPathfinding()->calculate(
 											_unit,
@@ -668,14 +670,14 @@ void CivilianBAIState::setupPatrol()
 
 			if (_save->getPathfinding()->getStartDirection() == -1)
 			{
-				_toNode = 0;
+				_toNode = NULL;
 			}
 
 			_save->getPathfinding()->abortPath();
 		}
 	}
 
-	if (_toNode != 0)
+	if (_toNode != NULL)
 	{
 		_patrolAction->actor = _unit;
 		_patrolAction->type = BA_WALK;

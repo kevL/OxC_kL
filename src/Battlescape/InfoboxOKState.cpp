@@ -38,11 +38,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param msg Message string.
  */
-InfoboxOKState::InfoboxOKState(
-		Game* game,
-		const std::wstring& msg)
-	:
-		State(game)
+InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 {
 	_screen = false;
 

@@ -44,11 +44,8 @@ namespace OpenXcom
  * @param game, Pointer to current game.
  * @param article_id, The article id of this state instance.
  */
-ArticleState::ArticleState(
-		Game* game,
-		std::string article_id)
+ArticleState::ArticleState(std::string article_id)
 	:
-		State(game),
 		_id(article_id)
 {
 	_bg			= new Surface(320, 200, 0, 0);

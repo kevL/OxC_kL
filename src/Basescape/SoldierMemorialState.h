@@ -55,7 +55,7 @@ private:
 
 	public:
 		/// Creates the Soldiers state.
-		SoldierMemorialState(Game* game);
+		SoldierMemorialState();
 		/// Cleans up the Soldiers state.
 		~SoldierMemorialState();
 

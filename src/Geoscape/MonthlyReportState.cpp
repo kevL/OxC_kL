@@ -62,11 +62,9 @@ namespace OpenXcom
  * @param globe Pointer to the globe.
  */
 MonthlyReportState::MonthlyReportState(
-		Game* game,
 		bool psi,
 		Globe* globe)
 	:
-		State(game),
 		_psi(psi),
 		_gameOver(false),
 		_ratingTotal(0),
@@ -421,19 +419,17 @@ void MonthlyReportState::btnOkClick(Action*)
 		_game->popState();
 
 		if (_psi)
-			_game->pushState(new PsiTrainingState(_game));
+			_game->pushState(new PsiTrainingState());
 
 		if (_game->getSavedGame()->isIronman()) // Autosave
 		{
 			_game->pushState(new SaveGameState(
-											_game,
 											OPT_GEOSCAPE,
 											SAVE_IRONMAN));
 		}
 		else if (Options::autosave)
 		{
 			_game->pushState(new SaveGameState(
-											_game,
 											OPT_GEOSCAPE,
 											SAVE_AUTO_GEOSCAPE));
 		}
@@ -443,7 +439,7 @@ void MonthlyReportState::btnOkClick(Action*)
 		if (_txtFailure->getVisible())
 		{
 			_game->popState();
-			_game->pushState(new DefeatState(_game));
+			_game->pushState(new DefeatState());
 		}
 		else
 		{

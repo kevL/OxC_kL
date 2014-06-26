@@ -44,11 +44,9 @@
 namespace OpenXcom
 {
 
-ArticleStateItem::ArticleStateItem(
-		Game* game,
-		ArticleDefinitionItem* defs)
+ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 	:
-		ArticleState(game, defs->id)
+		ArticleState(defs->id)
 {
 	RuleItem* item = _game->getRuleset()->getItem(defs->id);
 

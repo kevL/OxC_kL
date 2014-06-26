@@ -50,12 +50,10 @@ namespace OpenXcom
  * @param fac Pointer to the facility to dismantle.
  */
 DismantleFacilityState::DismantleFacilityState(
-		Game* game,
 		Base* base,
 		BaseView* view,
 		BaseFacility* fac)
 	:
-		State(game),
 		_base(base),
 		_view(view),
 		_fac(fac)

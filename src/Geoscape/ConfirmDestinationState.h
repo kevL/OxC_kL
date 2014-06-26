@@ -54,7 +54,6 @@ private:
 	public:
 		/// Creates the Confirm Destination state.
 		ConfirmDestinationState(
-				Game* game,
 				Craft* craft,
 				Target* target);
 		/// Cleans up the Confirm Destination state.

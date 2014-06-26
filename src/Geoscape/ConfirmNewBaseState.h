@@ -60,7 +60,6 @@ private:
 	public:
 		/// Creates the Confirm New Base state.
 		ConfirmNewBaseState(
-				Game* game,
 				Base* base,
 				Globe* globe);
 		/// Cleans up the Confirm New Base state.

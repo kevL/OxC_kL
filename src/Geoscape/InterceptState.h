@@ -76,10 +76,9 @@ private:
 	public:
 		/// Creates the Intercept state.
 		InterceptState(
-				Game* game,
 				Globe* globe,
-				Base* base = 0,
-				Target* target = 0);
+				Base* base = NULL,
+				Target* target = NULL);
 		/// Cleans up the Intercept state.
 		~InterceptState();
 

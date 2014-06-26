@@ -53,7 +53,6 @@ private:
 	public:
 		/// Creates the Place Lift state.
 		PlaceLiftState(
-				Game* game,
 				Base* base,
 				Globe* globe,
 				bool first);

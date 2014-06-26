@@ -71,9 +71,7 @@ private:
 
 	public:
 		/// Creates the Audio Options state.
-		OptionsAudioState(
-				Game* game,
-				OptionsOrigin origin);
+		OptionsAudioState(OptionsOrigin origin);
 		/// Cleans up the Audio Options state.
 		~OptionsAudioState();
 
@@ -83,10 +81,10 @@ private:
 		void slrSoundVolumeChange(Action* action);
 		/// Handler for sound slider button release.
 		void slrSoundVolumeRelease(Action* action);
-    	/// Handler for changing the sound slider.
-	    void slrUiVolumeChange(Action* action);
+		/// Handler for changing the sound slider.
+		void slrUiVolumeChange(Action* action);
 		/// Handler for sound slider button release.
-	    void slrUiVolumeRelease(Action* action);
+		void slrUiVolumeRelease(Action* action);
 		/// Handler for changing the Sample Rate combobox.
 		void cbxSampleRateChange(Action* action);
 		/// Handler for changing the Music Format combobox.

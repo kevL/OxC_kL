@@ -66,7 +66,6 @@ private:
 	public:
 		/// Creates the Craft Weapons state.
 		CraftWeaponsState(
-				Game* game,
 				Base* base,
 				size_t craft,
 				size_t weapon);

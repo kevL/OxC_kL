@@ -117,7 +117,6 @@ private:
 	public:
 		/// Creates the Sell state.
 		SellState(
-				Game* game,
 				Base* base,
 				OptionsOrigin origin = OPT_GEOSCAPE);
 		/// Cleans up the Sell state.

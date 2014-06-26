@@ -57,7 +57,6 @@ private:
 	public:
 		/// Creates the Soldier Died state.
 		SoldierDiedState(
-				Game* game,
 				std::wstring name,
 				std::wstring base);
 		/// Cleans up the Soldier Died state.

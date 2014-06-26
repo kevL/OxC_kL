@@ -54,12 +54,10 @@ namespace OpenXcom
  * @param weapon : ID of the selected weapon.
  */
 CraftWeaponsState::CraftWeaponsState(
-		Game* game,
 		Base* base,
 		size_t craft,
 		size_t weapon)
 	:
-		State(game),
 		_base(base),
 		_craft(craft),
 		_weapon(weapon),

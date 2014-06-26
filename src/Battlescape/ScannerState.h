@@ -56,9 +56,7 @@ private:
 
 	public:
 		/// Creates the ScannerState.
-		ScannerState(
-				Game* game,
-				BattleAction* action);
+		ScannerState(BattleAction* action);
 		///
 		~ScannerState();
 

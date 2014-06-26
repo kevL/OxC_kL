@@ -55,11 +55,9 @@ namespace OpenXcom
  * @param item The RuleManufacture to produce.
  */
 ManufactureInfoState::ManufactureInfoState(
-		Game* game,
 		Base* base,
 		RuleManufacture* item)
 	:
-		State(game),
 		_base(base),
 		_item(item),
 		_production(0)
@@ -74,11 +72,9 @@ ManufactureInfoState::ManufactureInfoState(
  * @param production The Production to modify.
  */
 ManufactureInfoState::ManufactureInfoState(
-		Game* game,
 		Base* base,
 		Production* production)
 	:
-		State(game),
 		_base(base),
 		_item(0),
 		_production(production)
@@ -461,8 +457,7 @@ void ManufactureInfoState::moreUnit(int change)
 	{
 		_timerMoreUnit->stop();
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION",
+											tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
 											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK17.SCR",

@@ -117,7 +117,6 @@ private:
 	public:
 		/// Creates the Soldier Info state.
 		SoldierInfoState(
-				Game* game,
 				Base* base,
 				size_t soldierId);
 		/// Cleans up the Soldier Info state.

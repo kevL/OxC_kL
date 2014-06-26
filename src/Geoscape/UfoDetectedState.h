@@ -66,7 +66,6 @@ private:
 
 		/// Creates the Ufo Detected state.
 		UfoDetectedState(
-				Game* game,
 				Ufo* ufo,
 				GeoscapeState* state,
 				bool detected,

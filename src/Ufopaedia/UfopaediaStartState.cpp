@@ -55,9 +55,7 @@ const std::string UfopaediaStartState::SECTIONS[] =
 };
 
 
-UfopaediaStartState::UfopaediaStartState(Game* game)
-	:
-		State(game)
+UfopaediaStartState::UfopaediaStartState()
 {
 	_screen = false;
 
@@ -149,9 +147,7 @@ void UfopaediaStartState::btnSectionClick(Action* action)
 	{
 		if (action->getSender() == _btnSection[i])
 		{
-			_game->pushState(new UfopaediaSelectState(
-													_game,
-													SECTIONS[i]));
+			_game->pushState(new UfopaediaSelectState(SECTIONS[i]));
 
 			break;
 		}

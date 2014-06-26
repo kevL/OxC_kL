@@ -60,7 +60,6 @@ private:
 	public:
 		/// Creates the MiniMapState.
 		MiniMapState(
-				Game* game,
 				Camera* camera,
 				SavedBattleGame* battleGame);
 		/// Cleans up the MiniMapState.

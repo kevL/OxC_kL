@@ -48,13 +48,11 @@ namespace OpenXcom
  * @param rule Pointer to the facility ruleset to build.
  */
 PlaceStartFacilityState::PlaceStartFacilityState(
-		Game* game,
 		Base* base,
 		SelectStartFacilityState* select,
 		RuleBaseFacility* rule)
 	:
 		PlaceFacilityState(
-			game,
 			base,
 			rule),
 		_select(select)
@@ -82,8 +80,7 @@ void PlaceStartFacilityState::viewClick(Action*)
 	{
 		_game->popState();
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_CANNOT_BUILD_HERE",
+											tr("STR_CANNOT_BUILD_HERE"),
 											_palette,
 											Palette::blockOffset(15)+1,
 											"BACK01.SCR",

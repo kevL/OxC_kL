@@ -102,9 +102,7 @@ private:
 
 	public:
 		/// Creates the Options state.
-		OptionsVideoState(
-				Game* game,
-				OptionsOrigin origin);
+		OptionsVideoState(OptionsOrigin origin);
 		/// Cleans up the Options state.
 		~OptionsVideoState();
 

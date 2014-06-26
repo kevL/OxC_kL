@@ -88,7 +88,7 @@ private:
 
 	public:
 		/// Creates the New Battle state.
-		NewBattleState(Game *game);
+		NewBattleState();
 		/// Cleans up the New Battle state.
 		~NewBattleState();
 

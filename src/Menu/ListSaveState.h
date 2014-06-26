@@ -54,9 +54,7 @@ private:
 
 		public:
 			/// Creates the Save Game state.
-			ListSaveState(
-					Game* game,
-					OptionsOrigin origin);
+			ListSaveState(OptionsOrigin origin);
 			/// Cleans up the Save Game state.
 			~ListSaveState();
 

@@ -395,5 +395,6 @@
 #include "./Savegame/EquipmentLayoutItem.h"
 */
 // kL_note: Also, MatrixState, SoldierDead, SoldierDiedState, &tc. TurnCounter ...
+// + sza_Ruleset/ExtraMusic & sza_Ruleset/RuleMusic
 
 #endif

@@ -45,11 +45,8 @@
 namespace OpenXcom
 {
 
-ConfirmCydoniaState::ConfirmCydoniaState(
-		Game* game,
-		Craft* craft)
+ConfirmCydoniaState::ConfirmCydoniaState(Craft* craft)
 	:
-		State(game),
 		_craft(craft)
 {
 	_screen = false;
@@ -118,9 +115,7 @@ void ConfirmCydoniaState::btnYesClick(Action*)
 	bgen.setWorldShade(15);
 	bgen.run();
 
-	_game->pushState(new BriefingState(
-									_game,
-									_craft));
+	_game->pushState(new BriefingState(_craft));
 }
 
 /**

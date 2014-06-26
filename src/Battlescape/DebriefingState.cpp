@@ -85,9 +85,8 @@ namespace OpenXcom
  * Initializes all the elements in the Debriefing screen.
  * @param game, Pointer to the core game.
  */
-DebriefingState::DebriefingState(Game* game)
+DebriefingState::DebriefingState()
 	:
-		State(game),
 		_region(0),
 		_country(0),
 		_noContainment(false),
@@ -361,28 +360,24 @@ void DebriefingState::btnOkClick(Action*)
 	_game->popState();
 
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
-		_game->setState(new MainMenuState(_game));
+		_game->setState(new MainMenuState());
 	else if (!_destroyBase)
 	{
 		if (_game->getSavedGame()->handlePromotions(participants))
-			_game->pushState(new PromotionsState(_game));
+			_game->pushState(new PromotionsState());
 
 		if (!_missingItems.empty())
-			_game->pushState(new CannotReequipState(
-												_game,
-												_missingItems));
+			_game->pushState(new CannotReequipState(_missingItems));
 
 		if (_noContainment)
-			_game->pushState(new NoContainmentState(_game));
+			_game->pushState(new NoContainmentState());
 		else if (_manageContainment)
 		{
 			_game->pushState(new ManageAlienContainmentState(
-															_game,
 															_base,
 															OPT_BATTLESCAPE,
 															false)); // kL_add. Do not allow researchHelp!
 			_game->pushState(new ErrorMessageState(
-												_game,
 												tr("STR_CONTAINMENT_EXCEEDED")
 													.arg(_base->getName()).c_str(),
 												_palette,
@@ -396,12 +391,11 @@ void DebriefingState::btnOkClick(Action*)
 			&& _base->storesOverfull())
 		{
 			_game->pushState(new SellState(
-										_game,
 										_base,
 										OPT_BATTLESCAPE));
 			_game->pushState(new ErrorMessageState(
-												_game,
-												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
+												tr("STR_STORAGE_EXCEEDED")
+													.arg(_base->getName()).c_str(),
 												_palette,
 												Palette::blockOffset(8)+5,
 												"BACK01.SCR",
@@ -886,6 +880,8 @@ void DebriefingState::prepareDebriefing()
 							SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
 							save->getDeadSoldiers()->push_back(dead);
 
+//							delete death; // kL new.
+
 							int iD = (*j)->getId(); // get ID from battleunit; could also use (*i) instead.
 
 							base->getSoldiers()->erase(i); // erase Soldier from Base_soldiers vector.
@@ -1005,6 +1001,8 @@ void DebriefingState::prepareDebriefing()
 
 								SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
 								save->getDeadSoldiers()->push_back(dead);
+
+//								delete death; // kL new.
 
 								int iD = (*j)->getId(); // get ID from battleunit; could also use (*i) instead.
 

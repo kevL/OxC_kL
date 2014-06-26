@@ -57,9 +57,7 @@ private:
 
 	public:
 		/// Creates the Stores state.
-		StoresState(
-				Game* game,
-				Base* base);
+		StoresState(Base* base);
 		/// Cleans up the Stores state.
 		~StoresState();
 

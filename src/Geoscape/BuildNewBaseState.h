@@ -66,7 +66,6 @@ private:
 	public:
 		/// Creates the Build New Base state.
 		BuildNewBaseState(
-				Game* game,
 				Base* base,
 				Globe* globe,
 				bool first);

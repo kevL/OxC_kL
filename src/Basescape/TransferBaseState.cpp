@@ -52,11 +52,8 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-TransferBaseState::TransferBaseState(
-		Game* game,
-		Base* base)
+TransferBaseState::TransferBaseState(Base* base)
 	:
-		State(game),
 		_base(base),
 		_bases()
 {
@@ -193,9 +190,7 @@ void TransferBaseState::btnCancelClick(Action*)
  */
 void TransferBaseState::btnMatrixClick(Action*)
 {
-	_game->pushState(new StoresMatrixState(
-										_game,
-										_base));
+	_game->pushState(new StoresMatrixState(_base));
 }
 
 /**
@@ -205,7 +200,6 @@ void TransferBaseState::btnMatrixClick(Action*)
 void TransferBaseState::lstBasesClick(Action*)
 {
 	_game->pushState(new TransferItemsState(
-										_game,
 										_base,
 										_bases[_lstBases->getSelectedRow()]));
 }

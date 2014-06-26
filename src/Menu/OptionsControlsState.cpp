@@ -45,11 +45,9 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
-OptionsControlsState::OptionsControlsState(
-		Game* game,
-		OptionsOrigin origin)
+OptionsControlsState::OptionsControlsState(OptionsOrigin origin)
 	:
-		OptionsBaseState(game, origin),
+		OptionsBaseState(origin),
 		_selected(-1),
 		_selKey(0)
 {

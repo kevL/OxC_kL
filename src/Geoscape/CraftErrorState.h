@@ -54,7 +54,6 @@ private:
 	public:
 		/// Creates the Craft Error state.
 		CraftErrorState(
-				Game* game,
 				GeoscapeState* state,
 				const std::wstring& msg);
 		/// Cleans up the Craft Error state.

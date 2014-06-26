@@ -455,15 +455,12 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			{
 				//Log(LOG_INFO) << ". . . inside success MC";
 				// show a little infobox with the name of the unit and "... is under alien control"
-				Game* game = _parentState->getGame();
 				BattleUnit* unit = _save->getTile(action.target)->getUnit();
-
-				game->pushState(new InfoboxState(
-											game,
-											game->getLanguage()->getString(
-																	"STR_IS_UNDER_ALIEN_CONTROL",
-																	unit->getGender())
-																		.arg(unit->getName(game->getLanguage()))));
+				Game* game = _parentState->getGame();
+				game->pushState(new InfoboxState(game->getLanguage()->getString(
+																		"STR_IS_UNDER_ALIEN_CONTROL",
+																		unit->getGender())
+																			.arg(unit->getName(game->getLanguage()))));
 			}
 			//Log(LOG_INFO) << ". . . success MC Done";
 
@@ -777,7 +774,6 @@ void BattlescapeGame::endTurn()
 	{
 		//Log(LOG_INFO) << ". . pushState(nextTurnState)";
 		_parentState->getGame()->pushState(new NextTurnState(
-														_parentState->getGame(),
 														_save,
 														_parentState));
 	}
@@ -1711,22 +1707,18 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 	_parentState->getMap()->setCursorType(CT_NONE);
 
 	// show a little infobox with the name of the unit and "... is panicking"
-	Game* game = _parentState->getGame();
 	if (unit->getVisible()
 		|| !Options::noAlienPanicMessages)
 	{
 		getMap()->getCamera()->centerOnPosition(unit->getPosition());
 
+		Game* game = _parentState->getGame();
 		if (status == STATUS_PANICKING)
-			game->pushState(new InfoboxState(
-											game,
-											game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender())
-																		.arg(unit->getName(game->getLanguage()))));
+			game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender())
+																			.arg(unit->getName(game->getLanguage()))));
 		else
-			game->pushState(new InfoboxState(
-											game,
-											game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender())
-																		.arg(unit->getName(game->getLanguage()))));
+			game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_GONE_BERSERK", unit->getGender())
+																			.arg(unit->getName(game->getLanguage()))));
 	}
 
 //kL	unit->abortTurn(); // makes the unit go to status STANDING :p
@@ -2005,7 +1997,6 @@ void BattlescapeGame::primaryAction(const Position& pos)
 																		_currentAction.weapon->getRules()->getHitSound())
 																	->play();
 						_parentState->getGame()->pushState(new UnitInfoState(
-																		_parentState->getGame(),
 																		_save->selectUnit(pos),
 																		_parentState,
 																		false,
@@ -2075,16 +2066,12 @@ void BattlescapeGame::primaryAction(const Position& pos)
 							if (_currentAction.type == BA_PANIC)
 							{
 								//Log(LOG_INFO) << ". . . . . . . . BA_Panic";
-								game->pushState(new InfoboxState(
-																game,
-																game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
+								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
 							}
 							else //if (_currentAction.type == BA_MINDCONTROL)
 							{
 								//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
-								game->pushState(new InfoboxState(
-																game,
-																game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
+								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
 							}
 
 							//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
@@ -2470,10 +2457,8 @@ BattleUnit* BattlescapeGame::convertUnit(
 		&& unit->getFaction() == FACTION_PLAYER
 		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-		_parentState->getGame()->pushState(new InfoboxState(
-													_parentState->getGame(),
-													_parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender())
-																					.arg(unit->getName(_parentState->getGame()->getLanguage()))));
+		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender())
+																							.arg(unit->getName(_parentState->getGame()->getLanguage()))));
 	}
 
 	for (std::vector<BattleItem*>::iterator

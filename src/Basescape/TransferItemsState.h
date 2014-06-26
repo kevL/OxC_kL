@@ -107,7 +107,6 @@ private:
 	public:
 		/// Creates the Transfer Items state.
 		TransferItemsState(
-				Game* game,
 				Base* baseFrom,
 				Base* baseTo);
 		/// Cleans up the Transfer Items state.

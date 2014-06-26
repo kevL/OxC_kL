@@ -50,11 +50,9 @@ namespace OpenXcom
  * @param target, Pointer to the selected target (NULL if it's just a point on the globe).
  */
 ConfirmDestinationState::ConfirmDestinationState(
-		Game* game,
 		Craft* craft,
 		Target* target)
 	:
-		State(game),
 		_craft(craft),
 		_target(target)
 {

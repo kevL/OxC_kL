@@ -57,7 +57,6 @@ private:
 	public:
 		/// Creates the NewPossibleManufacture state.
 		NewPossibleManufactureState(
-				Game* game,
 				Base* base,
 				const std::vector<RuleManufacture*>& possibilities,
 				bool showManufactureButton); // myk002_add.

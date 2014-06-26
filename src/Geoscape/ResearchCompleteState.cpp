@@ -50,16 +50,13 @@ namespace OpenXcom
  * @param bonus		- pointer to bonus unlocked research
  */
 ResearchCompleteState::ResearchCompleteState(
-		Game* game,
 		const RuleResearch* research,
 		const RuleResearch* bonus)
 	:
-		State(game),
 		_research(research),
 		_bonus(bonus)
 {
 	_screen = false;
-
 
 	_window			= new Window(this, 230, 140, 45, 30, POPUP_BOTH);
 	_txtTitle		= new Text(230, 17, 45, 70);

@@ -52,11 +52,9 @@ namespace OpenXcom
  * @param globe Pointer to the Geoscape globe.
  */
 ConfirmNewBaseState::ConfirmNewBaseState(
-		Game* game,
 		Base* base,
 		Globe* globe)
 	:
-		State(game),
 		_base(base),
 		_globe(globe),
 		_cost(0)
@@ -142,7 +140,6 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 
 		_game->getSavedGame()->getBases()->push_back(_base);
 		_game->pushState(new BaseNameState(
-										_game,
 										_base,
 										_globe,
 										false));
@@ -150,8 +147,7 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 	else
 	{
 		_game->pushState(new ErrorMessageState(
-											_game,
-											"STR_NOT_ENOUGH_MONEY",
+											tr("STR_NOT_ENOUGH_MONEY"),
 											_palette,
 											Palette::blockOffset(8)+10,
 											"BACK01.SCR",

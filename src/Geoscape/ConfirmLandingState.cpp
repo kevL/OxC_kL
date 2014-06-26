@@ -66,12 +66,10 @@ namespace OpenXcom
  * @param shade		- shade of the landing site
  */
 ConfirmLandingState::ConfirmLandingState(
-		Game* game,
 		Craft* craft,
 		int texture,
 		int shade)
 	:
-		State(game),
 		_craft(craft),
 		_texture(texture),
 		_shade(shade)
@@ -260,7 +258,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 	SavedBattleGame* battleGame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(battleGame);
 
-	BattlescapeGenerator battleGen = BattlescapeGenerator(_game);
+	BattlescapeGenerator battleGen (_game); // init.
 
 	battleGen.setWorldTexture(_texture);
 	battleGen.setWorldShade(_shade);
@@ -295,9 +293,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 
 	battleGen.run();
 
-	_game->pushState(new BriefingState(
-									_game,
-									_craft));
+	_game->pushState(new BriefingState(_craft));
 }
 
 /**

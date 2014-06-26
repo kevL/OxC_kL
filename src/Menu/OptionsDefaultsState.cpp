@@ -41,11 +41,9 @@ namespace OpenXcom
  * @param state Pointer to the base Options state.
  */
 OptionsDefaultsState::OptionsDefaultsState(
-		Game* game,
 		OptionsOrigin origin,
 		OptionsBaseState* state)
 	:
-		State(game),
 		_origin(origin),
 		_state(state)
 {

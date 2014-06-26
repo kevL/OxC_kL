@@ -47,12 +47,10 @@ namespace OpenXcom
  * @param possibilities List of newly possible ManufactureProject
  */
 NewPossibleManufactureState::NewPossibleManufactureState(
-		Game* game,
 		Base* base,
 		const std::vector<RuleManufacture*>& possibilities,
 		bool showManufactureButton) // myk002_add.
 	:
-		State (game),
 		_base(base)
 {
 	_screen = false;
@@ -132,9 +130,7 @@ void NewPossibleManufactureState::btnOkClick(Action*)
 void NewPossibleManufactureState::btnManufactureClick(Action*)
 {
 	_game->popState();
-	_game->pushState(new ManufactureState(
-										_game,
-										_base));
+	_game->pushState(new ManufactureState(_base));
 }
 
 }

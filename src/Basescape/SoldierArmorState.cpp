@@ -52,11 +52,9 @@ namespace OpenXcom
  * @param soldier ID of the selected soldier.
  */
 SoldierArmorState::SoldierArmorState(
-		Game* game,
 		Base* base,
 		size_t soldier)
 	:
-		State(game),
 		_base(base),
 		_soldier(soldier)
 {

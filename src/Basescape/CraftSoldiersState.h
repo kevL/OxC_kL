@@ -64,7 +64,6 @@ private:
 	public:
 		/// Creates the Craft Soldiers state.
 		CraftSoldiersState(
-				Game* game,
 				Base* base,
 				size_t craft);
 		/// Cleans up the Craft Soldiers state.

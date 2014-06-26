@@ -40,10 +40,7 @@ namespace OpenXcom
  * Initializes all the elements in the Aliens Crash screen.
  * @param game Pointer to the core game.
  */
-AliensCrashState::AliensCrashState(
-		Game* game)
-	:
-		State(game)
+AliensCrashState::AliensCrashState()
 {
 	_window		= new Window(this, 256, 160, 32, 20);
 	_btnOk		= new TextButton(120, 18, 100, 154);
@@ -95,7 +92,7 @@ AliensCrashState::~AliensCrashState()
 void AliensCrashState::btnOkClick(Action*)
 {
 	_game->popState();
-	_game->pushState(new DebriefingState(_game));
+	_game->pushState(new DebriefingState());
 }
 
 }

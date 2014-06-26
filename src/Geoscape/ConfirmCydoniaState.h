@@ -52,9 +52,7 @@ private:
 
 	public:
 		/// Creates the Select Destination state.
-		ConfirmCydoniaState(
-				Game* game,
-				Craft* craft);
+		ConfirmCydoniaState(Craft* craft);
 		/// Cleans up the Select Destination state.
 		~ConfirmCydoniaState();
 

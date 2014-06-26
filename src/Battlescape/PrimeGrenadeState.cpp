@@ -52,13 +52,11 @@ namespace OpenXcom
  * @param inventory			- pointer to the inventory
  */
 PrimeGrenadeState::PrimeGrenadeState(
-		Game* game,
 		BattleAction* action,
 		bool inInventoryView,
 		BattleItem* grenade,
 		Inventory* inventory) // kL_add.
 	:
-		State(game),
 		_action(action),
 		_inInventoryView(inInventoryView),
 		_grenade(grenade),

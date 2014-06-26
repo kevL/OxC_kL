@@ -55,10 +55,8 @@ namespace OpenXcom
  * @param base Pointer to the base to get info from.
  */
 ManufactureState::ManufactureState(
-		Game* game,
 		Base* base)
 	:
-		State(game),
 		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -209,9 +207,7 @@ void ManufactureState::btnOkClick(Action*)
  */
 void ManufactureState::btnNewProductionClick(Action*)
 {
-	_game->pushState(new NewManufactureListState(
-												_game,
-												_base));
+	_game->pushState(new NewManufactureListState(_base));
 }
 
 /**
@@ -301,7 +297,6 @@ void ManufactureState::lstManufactureClick(Action*)
 {
 	const std::vector<Production*> productions(_base->getProductions());
 	_game->pushState(new ManufactureInfoState(
-											_game,
 											_base,
 											productions[_lstManufacture->getSelectedRow()]));
 }

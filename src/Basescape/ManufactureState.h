@@ -69,7 +69,6 @@ private:
 	public:
 		/// Creates the Manufacture state.
 		ManufactureState(
-				Game* game,
 				Base* base);
 		/// Cleans up the Manufacture state.
 		~ManufactureState();

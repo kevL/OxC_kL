@@ -50,9 +50,10 @@ class State
 
 
 protected:
+	static Game* _game;
+
 	bool _screen;
 
-	Game* _game;
 	InteractiveSurface* _modal;
 	SDL_Color _palette[256];
 
@@ -61,7 +62,7 @@ protected:
 
 	public:
 		/// Creates a new state linked to a game.
-		State(Game* game);
+		State();
 		/// Cleans up the state.
 		virtual ~State();
 
@@ -104,6 +105,9 @@ protected:
 		void lowerAllSurfaces();
 		/// switch the colours to use the battlescape palette.
 		void applyBattlescapeTheme();
+
+		/// Sets game object pointer
+		static void setGamePtr(Game* game);
 
 		/// Sets a modal surface.
 		void setModal(InteractiveSurface* surface);

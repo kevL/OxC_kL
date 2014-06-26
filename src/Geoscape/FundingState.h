@@ -55,7 +55,7 @@ private:
 
 	public:
 		/// Creates the Funding state.
-		FundingState(Game* game);
+		FundingState();
 		/// Cleans up the Funding state.
 		~FundingState();
 

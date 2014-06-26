@@ -61,9 +61,7 @@ private:
 
 	public:
 		/// Creates the Advanced state.
-		OptionsAdvancedState(
-				Game* game,
-				OptionsOrigin origin);
+		OptionsAdvancedState(OptionsOrigin origin);
 		/// Cleans up the Advanced state.
 		~OptionsAdvancedState();
 

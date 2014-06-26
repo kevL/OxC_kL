@@ -42,6 +42,7 @@ class DefeatState
 private:
 	static const int SCREENS = 2;
 
+
 	InteractiveSurface* _bg[SCREENS];
 	Text* _text[SCREENS];
 
@@ -52,7 +53,7 @@ private:
 
 	public:
 		/// Creates the Defeat state.
-		DefeatState(Game *game);
+		DefeatState();
 		/// Cleans up the Defeat state.
 		~DefeatState();
 

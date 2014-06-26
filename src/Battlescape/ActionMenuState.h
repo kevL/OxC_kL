@@ -55,7 +55,6 @@ private:
 	public:
 		/// Creates the Action Menu state.
 		ActionMenuState(
-				Game* game,
 				BattleAction* action,
 				int x,
 				int y);

@@ -131,7 +131,6 @@ private:
 	public:
 		/// Creates the Dogfight state.
 		DogfightState(
-					Game* game,
 					Globe* globe,
 					Craft* craft,
 					Ufo* ufo);

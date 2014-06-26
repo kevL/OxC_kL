@@ -62,12 +62,10 @@ namespace OpenXcom
  * @param origin Game section that originated this state.
  */
 ManageAlienContainmentState::ManageAlienContainmentState(
-		Game* game,
 		Base* base,
 		OptionsOrigin origin,
 		bool allowHelp) // kL_add.
 	:
-		State(game),
 		_base(base),
 		_origin(origin),
 		_allowHelp(allowHelp), // kL
@@ -320,13 +318,11 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 		&& _base->storesOverfull())
 	{
 		_game->pushState(new SellState(
-									_game,
 									_base,
 									_origin));
 
 		if (_origin == OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(
-												_game,
 												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 												_palette,
 												Palette::blockOffset(8)+5,
@@ -334,7 +330,6 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 												0));
 		else
 			_game->pushState(new ErrorMessageState(
-												_game,
 												tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 												_palette,
 												Palette::blockOffset(15)+1,

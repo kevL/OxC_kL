@@ -53,11 +53,8 @@ namespace OpenXcom
  * @param game, Pointer to the core game.
  * @param soldierId, ID of the selected soldier.
  */
-SoldierDeadInfoState::SoldierDeadInfoState(
-		Game* game,
-		size_t soldierId)
+SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
 	:
-		State(game),
 		_soldierId(soldierId),
 		_soldier(0)
 {

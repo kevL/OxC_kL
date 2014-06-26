@@ -59,7 +59,7 @@ protected:
 
 
 	public:
-		UfopaediaStartState(Game* game);
+		UfopaediaStartState();
 		virtual ~UfopaediaStartState();
 };
 

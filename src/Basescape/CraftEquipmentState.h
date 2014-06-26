@@ -80,7 +80,6 @@ private:
 	public:
 		/// Creates the Craft Equipment state.
 		CraftEquipmentState(
-				Game* game,
 				Base* base,
 				size_t craft);
 		/// Cleans up the Craft Equipment state.

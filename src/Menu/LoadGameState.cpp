@@ -52,11 +52,9 @@ namespace OpenXcom
  * @param filename Name of the save file without extension.
  */
 LoadGameState::LoadGameState(
-		Game* game,
 		OptionsOrigin origin,
 		const std::string& filename)
 	:
-		State(game),
 		_origin(origin),
 		_filename(filename)
 {
@@ -70,11 +68,9 @@ LoadGameState::LoadGameState(
  * @param type Type of auto-load being used.
  */
 LoadGameState::LoadGameState(
-		Game* game,
 		OptionsOrigin origin,
 		SaveType type)
 	:
-		State(game),
 		_origin(origin)
 {
 	switch (type)
@@ -160,7 +156,7 @@ void LoadGameState::init()
 		Options::baseYResolution = Options::baseYGeoscape;
 
 		_game->getScreen()->resetDisplay(false);
-		_game->setState(new GeoscapeState(_game));
+		_game->setState(new GeoscapeState());
 
 		if (_game->getSavedGame()->getSavedBattle() != 0)
 		{
@@ -171,7 +167,7 @@ void LoadGameState::init()
 
 			_game->getScreen()->resetDisplay(false);
 
-			BattlescapeState* bs = new BattlescapeState(_game);
+			BattlescapeState* bs = new BattlescapeState();
 			_game->pushState(bs);
 			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
 		}
@@ -183,7 +179,6 @@ void LoadGameState::init()
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(
-												_game,
 												error.str(),
 												_palette,
 												Palette::blockOffset(8)+10,
@@ -191,7 +186,6 @@ void LoadGameState::init()
 												6));
 		else
 			_game->pushState(new ErrorMessageState(
-												_game,
 												error.str(),
 												_palette,
 												Palette::blockOffset(0),
@@ -210,7 +204,6 @@ void LoadGameState::init()
 		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
 		if (_origin != OPT_BATTLESCAPE)
 			_game->pushState(new ErrorMessageState(
-												_game,
 												error.str(),
 												_palette,
 												Palette::blockOffset(8)+10,
@@ -218,7 +211,6 @@ void LoadGameState::init()
 												6));
 		else
 			_game->pushState(new ErrorMessageState(
-												_game,
 												error.str(),
 												_palette,
 												Palette::blockOffset(0),

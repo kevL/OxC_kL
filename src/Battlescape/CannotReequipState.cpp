@@ -18,19 +18,24 @@
  */
 
 #include "CannotReequipState.h"
+
 #include <sstream>
+
 #include "../Engine/Game.h"
-#include "../Resource/ResourcePack.h"
 #include "../Engine/Language.h"
-#include "../Engine/Palette.h"
-#include "../Interface/TextButton.h"
-#include "../Interface/Window.h"
-#include "../Interface/Text.h"
-#include "../Interface/TextList.h"
-#include "../Savegame/SavedGame.h"
-#include "../Savegame/Base.h"
-#include "../Savegame/Soldier.h"
 #include "../Engine/Options.h"
+#include "../Engine/Palette.h"
+
+#include "../Interface/Text.h"
+#include "../Interface/TextButton.h"
+#include "../Interface/TextList.h"
+#include "../Interface/Window.h"
+
+#include "../Resource/ResourcePack.h"
+
+#include "../Savegame/Base.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
@@ -41,9 +46,7 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param missingItems List of items still needed for reequip.
  */
-CannotReequipState::CannotReequipState(Game* game, std::vector<ReequipStat> missingItems)
-	:
-		State(game)
+CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 

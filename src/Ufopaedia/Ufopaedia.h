@@ -79,9 +79,7 @@ protected:
 			SavedGame* save,
 			Ruleset* rule);
 	/// create a new state object from article definition.
-	static ArticleState* createArticleState(
-			Game* game,
-			ArticleDefinition* article);
+	static ArticleState* createArticleState(ArticleDefinition* article);
 
 
 	public:

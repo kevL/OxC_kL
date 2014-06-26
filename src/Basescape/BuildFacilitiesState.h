@@ -59,7 +59,6 @@ protected:
 	public:
 		/// Creates the Build Facilities state.
 		BuildFacilitiesState(
-				Game* game,
 				Base* base,
 				State* state);
 		/// Cleans up the Build Facilities state.

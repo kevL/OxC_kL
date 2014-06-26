@@ -55,7 +55,6 @@ private:
 
 		/// Creates the Alien Base Detected state.
 		AlienBaseState(
-				Game* game,
 				AlienBase* base,
 				GeoscapeState* state);
 		/// Cleans up the Alien Base Detected state.

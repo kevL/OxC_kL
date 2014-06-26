@@ -52,14 +52,12 @@ namespace OpenXcom
  * @param endType What ended the production.
  */
 ProductionCompleteState::ProductionCompleteState(
-		Game* game,
 		Base* base,
 		const std::wstring& item,
 		GeoscapeState* state,
 		bool showGotoBaseButton, // myk002_add.
 		ProductProgress endType)
 	:
-		State(game),
 		_base(base),
 		_state(state),
 		_endType(endType)
@@ -184,12 +182,9 @@ void ProductionCompleteState::btnGotoBaseClick(Action*)
 	_game->popState();
 
 /*	if (_endType != PROGRESS_CONSTRUCTION)
-		_game->pushState(new ManufactureState(
-											_game,
-											_base));
+		_game->pushState(new ManufactureState(_base));
 	else // facility completed */
 	_game->pushState(new BasescapeState(
-									_game,
 									_base,
 									_state->getGlobe()));
 }

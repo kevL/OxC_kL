@@ -62,7 +62,6 @@ private:
 	public:
 		/// Creates the Production Complete state.
 		ProductionCompleteState(
-				Game* game,
 				Base* base,
 				const std::wstring& item,
 				GeoscapeState* state,

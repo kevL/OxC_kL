@@ -49,11 +49,8 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-StoresState::StoresState(
-		Game* game,
-		Base* base)
+StoresState::StoresState(Base* base)
 	:
-		State(game),
 		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);

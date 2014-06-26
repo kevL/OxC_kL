@@ -51,7 +51,7 @@ private:
 
 	public:
 		/// Creates the Psi Training state.
-		PsiTrainingState(Game* game);
+		PsiTrainingState();
 		/// Cleans up the Psi Training state.
 		~PsiTrainingState();
 

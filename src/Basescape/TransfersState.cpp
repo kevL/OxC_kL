@@ -46,11 +46,8 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
-TransfersState::TransfersState(
-		Game* game,
-		Base* base)
+TransfersState::TransfersState(Base* base)
 	:
-		State(game),
 		_base(base)
 {
 	_screen = false;
