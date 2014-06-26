@@ -45,6 +45,7 @@ namespace OpenXcom
 //kL size_t Ufopaedia::_current_index = 0;
 int Ufopaedia::_current_index = 0; // kL
 
+
 /**
  * Checks if an article has already been released.
  * @param save Pointer to saved game.

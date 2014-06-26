@@ -26,7 +26,6 @@
 namespace OpenXcom
 {
 
-class Game;
 class RuleItem;
 class Text;
 class TextButton;

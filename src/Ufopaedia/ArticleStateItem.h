@@ -22,39 +22,48 @@
 
 #include "ArticleState.h"
 
+
 namespace OpenXcom
 {
-	class Game;
-	class Surface;
-	class Text;
-	class TextList;
-	class ArticleDefinitionItem;
 
-	/**
-	 * ArticleStateItem has a caption, text, preview image and a stats block.
-	 * The facility image is found using the RuleBasefacility class.
-	 */
+class ArticleDefinitionItem;
+class Surface;
+class Text;
+class TextList;
 
-	class ArticleStateItem : public ArticleState
-	{
+
+/**
+ * ArticleStateItem has a caption, text, preview image and a stats block.
+ * The facility image is found using the RuleBasefacility class.
+ */
+class ArticleStateItem
+	:
+		public ArticleState
+{
+
+protected:
+	Surface *_image;
+	Surface *_imageAmmo[3];
+	Text
+		* _txtTitle,
+		* _txtInfo,
+		* _txtShotType,
+		* _txtAccuracy,
+		* _txtTuCost,
+		* _txtDamage,
+		* _txtAmmo,
+		* _txtAmmoType[3],
+		* _txtAmmoDamage[3];
+	TextList* _lstInfo;
+
+
 	public:
-		ArticleStateItem(ArticleDefinitionItem *article_defs);
+		///
+		ArticleStateItem(ArticleDefinitionItem* article_defs);
+		///
 		virtual ~ArticleStateItem();
+};
 
-	protected:
-		Surface *_image;
-		Text *_txtTitle;
-		Text *_txtInfo;
-		TextList *_lstInfo;
-		Text *_txtShotType;
-		Text *_txtAccuracy;
-		Text *_txtTuCost;
-		Text *_txtDamage;
-		Text *_txtAmmo;
-		Text *_txtAmmoType[3];
-		Text *_txtAmmoDamage[3];
-		Surface *_imageAmmo[3];
-	};
 }
 
 #endif

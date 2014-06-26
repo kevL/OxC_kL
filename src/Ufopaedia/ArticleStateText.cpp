@@ -37,6 +37,9 @@
 namespace OpenXcom
 {
 
+/**
+ * cTor.
+ */
 ArticleStateText::ArticleStateText(ArticleDefinitionText* defs)
 	:
 		ArticleState(defs->id)
@@ -67,6 +70,9 @@ ArticleStateText::ArticleStateText(ArticleDefinitionText* defs)
 	_txtInfo->setText(tr(defs->text));
 }
 
+/**
+ * dTor.
+ */
 ArticleStateText::~ArticleStateText()
 {
 }

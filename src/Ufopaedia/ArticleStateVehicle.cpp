@@ -44,6 +44,9 @@
 namespace OpenXcom
 {
 
+/**
+ * cTor.
+ */
 ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 	:
 		ArticleState(defs->id)
@@ -177,7 +180,7 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 }
 
 /**
- *
+ * dTor.
  */
  ArticleStateVehicle::~ArticleStateVehicle()
 {

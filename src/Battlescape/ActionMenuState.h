@@ -29,7 +29,6 @@ namespace OpenXcom
 {
 
 class ActionMenuItem;
-class Game;
 
 
 /**

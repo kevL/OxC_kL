@@ -22,28 +22,37 @@
 
 #include "ArticleState.h"
 
+
 namespace OpenXcom
 {
-	class Game;
-	class Text;
-	class TextList;
-	class ArticleDefinitionCraftWeapon;
 
-	/**
-	 * ArticleStateCraftWeapon has a caption, background image and a stats block.
-	 */
+class ArticleDefinitionCraftWeapon;
+class Text;
+class TextList;
 
-	class ArticleStateCraftWeapon : public ArticleState
-	{
+
+/**
+ * ArticleStateCraftWeapon has a caption, background image and a stats block.
+ */
+class ArticleStateCraftWeapon
+	:
+		public ArticleState
+{
+
+protected:
+	Text
+		* _txtInfo,
+		* _txtTitle;
+	TextList* _lstInfo;
+
+
 	public:
-		ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon *article_defs);
+		///
+		ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* article_defs);
+		///
 		virtual ~ArticleStateCraftWeapon();
+};
 
-	protected:
-		Text *_txtTitle;
-		Text *_txtInfo;
-		TextList *_lstInfo;
-	};
 }
 
 #endif

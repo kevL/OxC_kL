@@ -27,7 +27,6 @@ namespace OpenXcom
 {
 
 class ArticleDefinitionVehicle;
-class Game;
 class Text;
 class TextList;
 
@@ -35,7 +34,9 @@ class TextList;
 /**
  * ArticleStateVehicle has a caption, text, and a stats block.
  */
-class ArticleStateVehicle : public ArticleState
+class ArticleStateVehicle
+	:
+		public ArticleState
 {
 
 protected:

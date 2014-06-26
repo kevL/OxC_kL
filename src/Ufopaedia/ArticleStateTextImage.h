@@ -22,27 +22,35 @@
 
 #include "ArticleState.h"
 
+
 namespace OpenXcom
 {
-	class Game;
-	class Text;
-	class ArticleStateTextImage;
-	class ArticleDefinitionTextImage;
 
-	/**
-	 * ArticleStateTextImage has a title, text block and a background image.
-	 */
+class ArticleDefinitionTextImage;
+class ArticleStateTextImage;
+class Text;
 
-	class ArticleStateTextImage : public ArticleState
-	{
+
+/**
+ * ArticleStateTextImage has a title, text block and a background image.
+ */
+class ArticleStateTextImage
+	:
+		public ArticleState
+{
+
+protected:
+	Text* _txtTitle;
+	Text* _txtInfo;
+
+
 	public:
-		ArticleStateTextImage(ArticleDefinitionTextImage *defs);
+		///
+		ArticleStateTextImage(ArticleDefinitionTextImage* defs);
+		///
 		virtual ~ArticleStateTextImage();
+};
 
-	protected:
-		Text *_txtTitle;
-		Text *_txtInfo;
-	};
 }
 
 #endif

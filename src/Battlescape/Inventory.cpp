@@ -93,9 +93,11 @@ Inventory::Inventory(
 								RuleInventory::HAND_H * RuleInventory::SLOT_H,
 								x,
 								y);
-	_stackNumber	= new NumberText(15, 15, 0, 0);
-	_warning		= new WarningMessage(224, 24, 48, 176);
 
+	_stackNumber	= new NumberText(15, 15, 0, 0);
+	_stackNumber->setBordered(true);
+
+	_warning		= new WarningMessage(224, 24, 48, 176);
 	_warning->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
 					_game->getResourcePack()->getFont("FONT_SMALL"),
@@ -349,7 +351,7 @@ void Inventory::drawItems()
 								((*i)->getSlot()->getX()
 									+ (((*i)->getSlotX() + (*i)->getRules()->getInventoryWidth()) - _groundOffset)
 										* RuleInventory::SLOT_W)
-									- 3);
+									- 4);
 
 				if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 9)
 				{
@@ -360,7 +362,7 @@ void Inventory::drawItems()
 								((*i)->getSlot()->getY()
 									+ ((*i)->getSlotY() + (*i)->getRules()->getInventoryHeight())
 										* RuleInventory::SLOT_H)
-									- 5);
+									- 6);
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
 				_stackNumber->setColor(Palette::blockOffset(4)+2);
@@ -368,30 +370,7 @@ void Inventory::drawItems()
 			}
 		}
 
-		for (int // give it a border, this is the "darker" shade that goes in the corners.
-				x = -1;
-				x <= 1;
-				x += 2)
-		{
-			for (int
-					y = -1;
-					y <= 1;
-					y += 2)
-			{
-				stackLayer->blitNShade(_items, x, y, 11);
-			}
-		}
-
-		for (int // this is the "slightly darker" version that goes in four cardinals.
-				z = -1;
-				z <= 1;
-				z += 2)
-		{
-			stackLayer->blitNShade(_items, z, 0, 8);
-			stackLayer->blitNShade(_items, 0, z, 8);
-		}
-
-		stackLayer->blit(_items); // and finally the number itself
+		stackLayer->blit(_items);
 
 		delete stackLayer;
 	}

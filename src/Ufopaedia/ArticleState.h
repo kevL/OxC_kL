@@ -31,7 +31,6 @@ namespace OpenXcom
 {
 
 class Action;
-class Game;
 class Surface;
 class TextButton;
 

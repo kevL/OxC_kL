@@ -28,10 +28,7 @@
 namespace OpenXcom
 {
 
-class Font;
 class Frame;
-class Game;
-class Language;
 class Text;
 
 

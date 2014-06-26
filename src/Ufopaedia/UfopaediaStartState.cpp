@@ -55,6 +55,9 @@ const std::string UfopaediaStartState::SECTIONS[] =
 };
 
 
+/**
+ * cTor.
+ */
 UfopaediaStartState::UfopaediaStartState()
 {
 	_screen = false;
@@ -120,10 +123,11 @@ UfopaediaStartState::UfopaediaStartState()
 }
 
 /**
- *
+ * dTor.
  */
 UfopaediaStartState::~UfopaediaStartState()
-{}
+{
+}
 
 /**
  * Returns to the previous screen.

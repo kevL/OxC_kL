@@ -38,6 +38,7 @@ class SavedGame;
 /// definition of an article list
 typedef std::vector<ArticleDefinition*> ArticleDefinitionList;
 
+
 /// define Ufopaedia sections, which must be consistent
 static const std::string UFOPAEDIA_XCOM_CRAFT_ARMAMENT		= "STR_XCOM_CRAFT_ARMAMENT";
 static const std::string UFOPAEDIA_HEAVY_WEAPONS_PLATFORMS	= "STR_HEAVY_WEAPONS_PLATFORMS";
@@ -53,6 +54,7 @@ static const std::string UFOPAEDIA_NOT_AVAILABLE			= "STR_NOT_AVAILABLE";
 // This last section is meant for articles, that have to be activated,
 // but have no own entry in a list. E.g. Ammunition items.
 // Maybe others as well that should just not be selectable.
+
 
 /**
  * This static class encapsulates all functions related to Ufopaedia

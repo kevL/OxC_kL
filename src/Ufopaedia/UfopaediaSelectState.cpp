@@ -41,6 +41,9 @@
 namespace OpenXcom
 {
 
+/**
+ * cTor.
+ */
 UfopaediaSelectState::UfopaediaSelectState(std::string section)
 	:
 		_section(section)
@@ -88,6 +91,9 @@ UfopaediaSelectState::UfopaediaSelectState(std::string section)
 	loadSelectionList();
 }
 
+/**
+ * dTor.
+ */
 UfopaediaSelectState::~UfopaediaSelectState()
 {
 }

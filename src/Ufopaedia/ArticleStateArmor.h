@@ -27,7 +27,6 @@ namespace OpenXcom
 {
 
 class ArticleDefinitionArmor;
-class Game;
 class Surface;
 class Text;
 class TextList;
@@ -43,30 +42,31 @@ class ArticleStateArmor
 		public ArticleState
 {
 
-public:
+protected:
+	int _row;
+
+	Surface* _image;
+	Text
+		* _txtInfo,
+		* _txtTitle;
+	TextList* _lstInfo;
+
 	///
-	ArticleStateArmor(ArticleDefinitionArmor* article_defs);
+	void addStat(
+			std::string label,
+			int stat,
+			bool plus = false);
 	///
-	virtual ~ArticleStateArmor();
+	void addStat(
+			std::string label,
+			std::wstring stat);
 
 
-	protected:
+	public:
 		///
-		void addStat(
-				std::string label,
-				int stat,
-				bool plus = false);
+		ArticleStateArmor(ArticleDefinitionArmor* article_defs);
 		///
-		void addStat(
-				std::string label,
-				std::wstring stat);
-
-		int _row;
-
-		Surface* _image;
-		Text* _txtTitle;
-		TextList* _lstInfo;
-		Text* _txtInfo;
+		virtual ~ArticleStateArmor();
 };
 
 }

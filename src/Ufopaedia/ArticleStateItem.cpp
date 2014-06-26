@@ -44,6 +44,9 @@
 namespace OpenXcom
 {
 
+/**
+ * cTor.
+ */
 ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 	:
 		ArticleState(defs->id)
@@ -174,9 +177,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		_txtInfo = new Text((ammo_data->size() < 3? 300: 180), 56, 8, 138);
 	}
 	else // text_info is larger and starts on top
-	{
 		_txtInfo = new Text(300, 125, 8, 67);
-	}
 
 	add(_txtInfo);
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
@@ -295,6 +296,9 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 	centerAllSurfaces();
 }
 
+/**
+ * dTor.
+ */
 ArticleStateItem::~ArticleStateItem()
 {
 }

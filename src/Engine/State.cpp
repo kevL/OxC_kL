@@ -58,7 +58,7 @@ State::State()
 	:
 		_surfaces(),
 		_screen(true),
-		_modal(0)
+		_modal(NULL)
 {
 	//Log(LOG_INFO) << "Create State";
 	// initialize palette to all black

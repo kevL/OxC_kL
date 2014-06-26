@@ -41,6 +41,9 @@
 namespace OpenXcom
 {
 
+/**
+ * cTor.
+ */
 ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	:
 		ArticleState(defs->id)
@@ -105,6 +108,9 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	centerAllSurfaces();
 }
 
+/**
+ * dTor.
+ */
 ArticleStateCraft::~ArticleStateCraft()
 {
 }

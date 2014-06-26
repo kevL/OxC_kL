@@ -124,7 +124,7 @@ CraftEquipmentState::CraftEquipmentState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
 
 	_btnClear->setColor(Palette::blockOffset(15)+1);
-	_btnClear->setText(tr("STR_UNLOAD"));
+	_btnClear->setText(tr("STR_UNLOAD_CRAFT"));
 	_btnClear->onMouseClick((ActionHandler)& CraftEquipmentState::btnClearClick);
 //kL	_btnClear->setVisible(newBattle);
 

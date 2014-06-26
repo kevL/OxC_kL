@@ -22,26 +22,35 @@
 
 #include "ArticleState.h"
 
+
 namespace OpenXcom
 {
-	class Game;
-	class Text;
-	class ArticleDefinitionText;
 
-	/**
-	 * ArticleStateText has only a caption and a text.
-	 */
+class ArticleDefinitionText;
+class Text;
 
-	class ArticleStateText : public ArticleState
-	{
+
+/**
+ * ArticleStateText has only a caption and a text.
+ */
+class ArticleStateText
+	:
+		public ArticleState
+{
+
+protected:
+	Text
+		* _txtTitle,
+		* _txtInfo;
+
+
 	public:
-		ArticleStateText(ArticleDefinitionText *article_defs);
+		///
+		ArticleStateText(ArticleDefinitionText* article_defs);
+		///
 		virtual ~ArticleStateText();
+};
 
-	protected:
-		Text *_txtTitle;
-		Text *_txtInfo;
-	};
 }
 
 #endif

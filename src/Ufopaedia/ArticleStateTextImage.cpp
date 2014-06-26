@@ -37,6 +37,9 @@
 namespace OpenXcom
 {
 
+/**
+ * cTor.
+ */
 ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 	:
 		ArticleState(defs->id)
@@ -71,6 +74,9 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 	centerAllSurfaces();
 }
 
+/**
+ * dTor.
+ */
 ArticleStateTextImage::~ArticleStateTextImage()
 {
 }

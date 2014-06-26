@@ -28,7 +28,6 @@
 namespace OpenXcom
 {
 
-class Game;
 class Action;
 class Window;
 class Text;
@@ -59,7 +58,9 @@ protected:
 
 
 	public:
+		/// cTor.
 		UfopaediaStartState();
+		/// dTor.
 		virtual ~UfopaediaStartState();
 };
 

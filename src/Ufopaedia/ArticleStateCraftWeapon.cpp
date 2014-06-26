@@ -42,6 +42,9 @@
 namespace OpenXcom
 {
 
+/**
+ * cTor.
+ */
 ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* defs)
 	:
 		ArticleState(defs->id)
@@ -112,6 +115,9 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 	centerAllSurfaces();
 }
 
+/**
+ * dTor.
+ */
 ArticleStateCraftWeapon::~ArticleStateCraftWeapon()
 {
 }

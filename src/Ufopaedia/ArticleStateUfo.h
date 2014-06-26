@@ -22,31 +22,39 @@
 
 #include "ArticleState.h"
 
+
 namespace OpenXcom
 {
-	class Game;
-	class Surface;
-	class Text;
-	class TextList;
-	class ArticleDefinitionUfo;
 
-	/**
-	 * ArticleStateUfo has a caption, text, preview image and a stats block.
-	 * The UFO image is found using the RuleUfo class.
-	 */
+class ArticleDefinitionUfo;
+class Surface;
+class Text;
+class TextList;
 
-	class ArticleStateUfo : public ArticleState
-	{
+/**
+ * ArticleStateUfo has a caption, text, preview image and a stats block.
+ * The UFO image is found using the RuleUfo class.
+ */
+class ArticleStateUfo
+	:
+		public ArticleState
+{
+
+protected:
+	Surface* _image;
+	Text
+		* _txtTitle,
+		* _txtInfo;
+	TextList* _lstInfo;
+
+
 	public:
-		ArticleStateUfo(ArticleDefinitionUfo *article_defs);
+		///
+		ArticleStateUfo(ArticleDefinitionUfo* article_defs);
+		///
 		virtual ~ArticleStateUfo();
+};
 
-	protected:
-		Surface *_image;
-		Text *_txtTitle;
-		Text *_txtInfo;
-		TextList *_lstInfo;
-	};
 }
 
 #endif

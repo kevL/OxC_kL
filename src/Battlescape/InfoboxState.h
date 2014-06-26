@@ -27,7 +27,6 @@ namespace OpenXcom
 {
 
 class Frame;
-class Game;
 class Text;
 class Timer;
 

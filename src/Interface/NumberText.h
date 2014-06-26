@@ -36,9 +36,13 @@ class NumberText
 {
 
 private:
+	bool _bordered;
 	unsigned _value;
-	Surface* _chars[10];
 	Uint8 _color;
+
+	Surface
+		* _borderedChars[10],
+		* _chars[10];
 
 
 	public:
@@ -69,6 +73,9 @@ private:
 
 		/// Draws the number text.
 		void draw();
+
+		/// sets this numbertext to have a border or not
+		void setBordered(bool bordered);
 };
 
 }

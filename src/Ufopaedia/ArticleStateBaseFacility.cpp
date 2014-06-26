@@ -43,6 +43,9 @@
 namespace OpenXcom
 {
 
+/**
+ * cTor.
+ */
 ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility* defs)
 	:
 		ArticleState(defs->id)
@@ -180,6 +183,9 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 	centerAllSurfaces();
 }
 
+/**
+ * dTor.
+ */
 ArticleStateBaseFacility::~ArticleStateBaseFacility()
 {
 }

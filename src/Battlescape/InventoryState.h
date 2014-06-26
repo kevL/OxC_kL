@@ -52,6 +52,8 @@ class InventoryState
 private:
 	const bool _tu;
 
+//kL	std::string _currentTooltip;
+
 	BattlescapeState* _parent;
 	InteractiveSurface
 		* _btnGround,
@@ -133,6 +135,11 @@ private:
 
 		/// Handles keypresses.
 		void handle(Action* action);
+
+		/// Handler for showing tooltip.
+//kL	void txtTooltipIn(Action* action);
+		/// Handler for hiding tooltip.
+//kL	void txtTooltipOut(Action* action);
 };
 
 }

@@ -45,7 +45,8 @@ NumberText::NumberText(
 			x,
 			y),
 		_value(0),
-		_color(0)
+		_color(0),
+		_bordered(false)
 {
 	_chars[0] = new Surface(3, 5);
 	_chars[0]->lock();
@@ -192,6 +193,59 @@ NumberText::NumberText(
 	_chars[9]->setPixelColor(1, 4, 1);
 	_chars[9]->setPixelColor(2, 4, 1);
 	_chars[9]->unlock();
+
+	for (int
+			i = 0;
+			i < 10;
+			++i)
+	{
+		// give it a border
+		_borderedChars[i] = new Surface(5, 7);
+
+		// this is the "darker" shade that goes in the corners.
+		for (int
+				x = 0;
+				x <= 2;
+				x += 2)
+		{
+			for (int
+					y = 0;
+					y <= 2;
+					y += 2)
+			{
+				_chars[i]->blitNShade(
+								_borderedChars[i],
+								x,
+								y,
+								11);
+			}
+		}
+
+		// this is the "slightly darker" version that goes in four cardinals.
+		for (int
+				z = 0;
+				z <= 2;
+				z += 2)
+		{
+			_chars[i]->blitNShade(
+							_borderedChars[i],
+							z,
+							1,
+							8);
+			_chars[i]->blitNShade(
+							_borderedChars[i],
+							1,
+							z,
+							8);
+		}
+
+		// and finally the number itself
+		_chars[i]->blitNShade(
+						_borderedChars[i],
+						1,
+						1,
+						0);
+	}
 }
 
 /**
@@ -205,6 +259,7 @@ NumberText::~NumberText()
 			++i)
 	{
 		delete _chars[i];
+		delete _borderedChars[i];
 	}
 }
 
@@ -273,6 +328,10 @@ void NumberText::setPalette(
 							colors,
 							firstcolor,
 							ncolors);
+		_borderedChars[i]->setPalette(
+								colors,
+								firstcolor,
+								ncolors);
 	}
 }
 
@@ -289,19 +348,45 @@ void NumberText::draw()
 
 	int x = 0;
 
-	for (std::string::iterator
-			i = s.begin();
-			i != s.end();
-			++i)
+	if (!_bordered)
 	{
-		_chars[*i - '0']->setX(x);
-		_chars[*i - '0']->setY(0);
-		_chars[*i - '0']->blit(this);
+		for (std::string::iterator
+				i = s.begin();
+				i != s.end();
+				++i)
+		{
+			_chars[*i - '0']->setX(x);
+			_chars[*i - '0']->setY(0);
+			_chars[*i - '0']->blit(this);
 
-		x += _chars[*i - '0']->getWidth() + 1;
+			x += _chars[*i - '0']->getWidth() + 1;
+		}
+	}
+	else
+	{
+		for (std::string::iterator
+				i = s.begin();
+				i != s.end();
+				++i)
+		{
+			_borderedChars[*i - '0']->setX(x);
+			_borderedChars[*i - '0']->setY(0);
+			_borderedChars[*i - '0']->blit(this);
+
+			// no this isn't a typo, i want to use the same spacing regardless.
+			x += _chars[*i - '0']->getWidth() + 1;
+		}
 	}
 
 	this->offset(_color);
+}
+
+/**
+ *
+ */
+void NumberText::setBordered(bool bordered)
+{
+	_bordered = bordered;
 }
 
 }

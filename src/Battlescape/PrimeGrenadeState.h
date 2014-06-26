@@ -28,7 +28,6 @@ namespace OpenXcom
 
 class BattleItem;
 class Frame;
-class Game;
 class InteractiveSurface;
 class Inventory; // kL
 class Surface;

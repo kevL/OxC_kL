@@ -42,6 +42,9 @@
 namespace OpenXcom
 {
 
+/**
+ * cTor.
+ */
 ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	:
 		ArticleState(defs->id)
@@ -137,6 +140,9 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 					tr("STR_KNOTS").arg(Text::formatNumber(ufo->getMaxSpeed(), L"", false)).c_str());
 }
 
+/**
+ * dTor.
+ */
 ArticleStateUfo::~ArticleStateUfo()
 {
 }

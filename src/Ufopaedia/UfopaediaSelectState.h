@@ -31,7 +31,6 @@ namespace OpenXcom
 {
 
 class Action;
-class Game;
 class Text;
 class TextButton;
 class TextList;
@@ -56,6 +55,7 @@ protected:
 
 	ArticleDefinitionList _article_list;
 
+
 	/// Handler for clicking the OK button
 	void btnOkClick(Action* action);
 	/// Handler for clicking the selection list.
@@ -66,7 +66,9 @@ protected:
 
 
 	public:
+		///
 		UfopaediaSelectState(std::string section);
+		///
 		virtual ~UfopaediaSelectState();
 
 };
