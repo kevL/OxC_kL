@@ -703,7 +703,7 @@ void UnitInfoState::handle(Action* action)
 
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL_note: why this include LMB
 			exitClick(action);
 		else if (!_mindProbe)
 		{
@@ -736,8 +736,8 @@ void UnitInfoState::btnPrevClick(Action* action)
 
 	if (_unit != NULL)
 		init();
-//	else
-//		exitClick(action);
+	else
+		exitClick(action);
 }
 
 /**
@@ -761,8 +761,8 @@ void UnitInfoState::btnNextClick(Action* action)
 
 	if (_unit != NULL)
 		init();
-//	else
-//		exitClick(action);
+	else
+		exitClick(action);
 }
 
 /**

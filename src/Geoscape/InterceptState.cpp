@@ -210,10 +210,11 @@ InterceptState::InterceptState(
 //			if ((*j)->getStatus() == "STR_READY")
 //				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
 //			colorStatusCell();
-			_lstCrafts->setCellHighContrast(
-										r,
-										1,
-										true);
+
+//			_lstCrafts->setCellHighContrast(
+//										r,
+//										1,
+//										true);
 
 			r++;
 		}
