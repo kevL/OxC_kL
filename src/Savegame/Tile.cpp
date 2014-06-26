@@ -19,6 +19,8 @@
 
 #include "Tile.h"
 
+#include <algorithm>
+
 #include "BattleItem.h"
 #include "BattleUnit.h"
 #include "SerializationHelper.h"
@@ -586,7 +588,9 @@ int Tile::getShade() const
 			light = _light[layer];
 	}
 
-	return 15 - light;
+	return std::max(
+				0,
+				15 - light);
 }
 
 /**

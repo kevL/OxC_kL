@@ -342,7 +342,7 @@ void Game::run()
 							if (action.getDetails()->key.keysym.sym == SDLK_t
 								&& (SDL_GetModState() & KMOD_CTRL) != 0)
 							{
-								setState(new TestState);
+								setState(new TestState());
 							}
 							else if (action.getDetails()->key.keysym.sym == SDLK_u // "ctrl-u" debug UI
 								&& (SDL_GetModState() & KMOD_CTRL) != 0)
