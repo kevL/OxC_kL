@@ -222,15 +222,18 @@ void ResearchState::init()
 		std::wostringstream assigned;
 		assigned << (*proj)->getAssigned();
 
-		const RuleResearch* resRule = (*proj)->getRules();
-		std::wstring research = tr(resRule->getName());
+		std::wstring research = tr((*proj)->getRules()->getName());
+
+		int daysLeft = static_cast<int>(ceil((static_cast<double>((*proj)->getCost() - (*proj)->getSpent())) / static_cast<double>((*proj)->getAssigned())));
+		std::wstring wsDays = Text::formatNumber(daysLeft, L"", false);
 
 		_lstResearch->addRow(
 							4,
 							research.c_str(),
 							assigned.str().c_str(),
 							tr((*proj)->getResearchProgress()).c_str(),
-							(*proj)->getCostCompleted().c_str());
+//							(*proj)->getCostCompleted().c_str());
+							wsDays.c_str());
 	}
 
 	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE")

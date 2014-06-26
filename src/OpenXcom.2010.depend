@@ -5270,7 +5270,7 @@
 	<algorithm>
 	<stdint.h>
 
-1403788378 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1403824454 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -6977,7 +6977,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1403785030 source:f:\git\openxcom\src\engine\game.cpp
+1403815756 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7588,7 +7588,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1403792986 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1403826733 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -9507,7 +9507,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1402457813 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
+1403826733 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
 	"CraftWeaponProjectile.h"
 	<iostream>
 	"../Engine/Palette.h"
@@ -9668,8 +9668,9 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1403513232 source:f:\git\openxcom\src\savegame\tile.cpp
+1403815609 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
+	<algorithm>
 	"BattleItem.h"
 	"BattleUnit.h"
 	"SerializationHelper.h"

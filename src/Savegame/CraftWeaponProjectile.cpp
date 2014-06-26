@@ -31,7 +31,7 @@ namespace OpenXcom
 {
 
 /**
- *
+ * cTor.
  */
 CraftWeaponProjectile::CraftWeaponProjectile()
 	:
@@ -52,7 +52,7 @@ CraftWeaponProjectile::CraftWeaponProjectile()
 }
 
 /**
- *
+ * dTor.
  */
 CraftWeaponProjectile::~CraftWeaponProjectile(void)
 {
@@ -100,9 +100,7 @@ void CraftWeaponProjectile::setDirection(const int& directon)
 	_direction = directon;
 
 	if (_direction == D_UP)
-	{
 		_currentPosition = 0;
-	}
 }
 
 /**
@@ -119,8 +117,29 @@ int CraftWeaponProjectile::getDirection() const
  */
 void CraftWeaponProjectile::move()
 {
+	// IstrebiteI_begin:
 	if (_globalType == CWPGT_MISSILE)
 	{
+		int positionChange = _speed;
+
+		// Check if projectile would reach its maximum range this tick.
+		if ((_distanceCovered / 8) < getRange()
+			&& ((_distanceCovered + _speed)/ 8) >= getRange())
+		{
+			positionChange = getRange() * 8 - _distanceCovered;
+		}
+
+		// Check if projectile passed its maximum range on previous tick.
+		if ((_distanceCovered / 8) >= getRange())
+			setMissed(true);
+
+		if (_direction == D_UP)
+			_currentPosition += positionChange;
+		else if (_direction == D_DOWN)
+			_currentPosition -= positionChange;
+
+		_distanceCovered += positionChange;
+
 		if (_direction == D_UP)
 			_currentPosition += _speed;
 		else if (_direction == D_DOWN)
@@ -133,17 +152,27 @@ void CraftWeaponProjectile::move()
 			&& _distanceCovered / 8 >= getRange())
 		{
 			setMissed(true);
-		}
+		} // IstrebiteI_end.
+/*		if (_direction == D_UP)
+			_currentPosition += _speed;
+		else if (_direction == D_DOWN)
+			_currentPosition -= _speed;
 
+		_distanceCovered += _speed;
+
+		// Check if projectile passed its maximum range.
+		if (getGlobalType() == CWPGT_MISSILE
+			&& _distanceCovered / 8 >= getRange())
+		{
+			setMissed(true);
+		} */
 	}
 	else if (_globalType == CWPGT_BEAM)
 	{
 		_state /= 2;
 
 		if (_state == 1)
-		{
 			_toBeRemoved = true;
-		}
 	}
 }
 
