@@ -53,7 +53,7 @@ int Ufopaedia::_current_index = 0; // kL
  * @returns true, if the article is available.
  */
 bool Ufopaedia::isArticleAvailable(
-		SavedGame *save,
+		SavedGame* save,
 		ArticleDefinition* article)
 {
 	return save->isResearched(article->requires);

@@ -88,7 +88,7 @@ YAML::Node MovingTarget::save() const
 {
 	YAML::Node node = Target::save();
 
-	if (_dest != 0)
+	if (_dest != NULL)
 		node["dest"]	= _dest->saveId();
 
 	node["speedLon"]	= _speedLon;

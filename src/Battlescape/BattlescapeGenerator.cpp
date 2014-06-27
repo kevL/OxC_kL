@@ -484,11 +484,11 @@ void BattlescapeGenerator::run()
 void BattlescapeGenerator::deployXCOM()
 {
 	//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM()";
-//kL	if (_craft != 0) _base = _craft->getBase();
+//kL	if (_craft != NULL) _base = _craft->getBase();
 
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
 
-	if (_craft != 0)
+	if (_craft != NULL)
 	{
 		_base = _craft->getBase();
 
@@ -514,7 +514,7 @@ void BattlescapeGenerator::deployXCOM()
 			}
 		}
 	}
-	else if (_base != 0
+	else if (_base != NULL
 		&& !_baseCraftEquip) // kL
 	{
 		// add vehicles that are in the base inventory
@@ -539,11 +539,11 @@ void BattlescapeGenerator::deployXCOM()
 			i != _base->getSoldiers()->end();
 			++i)
 	{
-		if ((_craft != 0
+		if ((_craft != NULL
 				&& (*i)->getCraft() == _craft)
-			|| (_craft == 0
+			|| (_craft == NULL
 				&& (*i)->getWoundRecovery() == 0
-				&& ((*i)->getCraft() == 0
+				&& ((*i)->getCraft() == NULL
 					|| (*i)->getCraft()->getStatus() != "STR_OUT")))
 		{
 			//Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
@@ -579,7 +579,7 @@ void BattlescapeGenerator::deployXCOM()
 	}
 	//Log(LOG_INFO) << ". setUnit(s) DONE";
 
-	if (_craft != 0) // add items that are in the craft
+	if (_craft != NULL) // add items that are in the craft
 	{
 		//Log(LOG_INFO) << ". . addCraftItems";
 		for (std::map<std::string, int>::iterator

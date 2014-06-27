@@ -1108,7 +1108,6 @@ const std::vector<Base*>* SavedGame::getBases() const
 int SavedGame::getBaseMaintenance() const
 {
 	int total = 0;
-
 	for (std::vector<Base*>::const_iterator
 			i = _bases.begin();
 			i != _bases.end();
@@ -1216,7 +1215,7 @@ void SavedGame::addFinishedResearch(
 			}
 			else if ((*it)->getCost() == 0)
 			{
-				int entry(0);
+				size_t entry (0); // init.
 				for (std::vector<std::string>::const_iterator
 						iter = (*it)->getRequirements().begin();
 						iter != (*it)->getRequirements().end();
@@ -1291,9 +1290,9 @@ void SavedGame::getAvailableResearchProjects(
 																				discovered.end(),
 																				research);
 
-		bool liveAlien = (ruleset->getUnit(research->getName()) != 0);
+		bool liveAlien = (ruleset->getUnit(research->getName()) != NULL);
 
-		if (itDiscovered != discovered.end ())
+		if (itDiscovered != discovered.end())
 		{
 			if (!liveAlien)
 				continue;
@@ -1443,13 +1442,13 @@ bool SavedGame::isResearchAvailable(
 		const std::vector<const RuleResearch*>& unlocked,
 		const Ruleset* ruleset) const
 {
-	if (r == 0)
+	if (r == NULL)
 		return false;
 
 	std::vector<std::string> deps = r->getDependencies();
 	const std::vector<const RuleResearch*>& discovered(getDiscoveredResearch());
 
-	bool liveAlien = (ruleset->getUnit(r->getName()) != 0);
+	bool liveAlien = (ruleset->getUnit(r->getName()) != NULL);
 
 	if (_debug
 		|| std::find(

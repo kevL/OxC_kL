@@ -75,13 +75,15 @@ ArticleDefinition::ArticleDefinition(UfopaediaTypeId type_id)
 	:
 		_type_id(type_id),
 		_listOrder(0)
-{}
+{
+}
 
 /**
  * Destructor.
  */
 ArticleDefinition::~ArticleDefinition()
-{}
+{
+}
 
 /**
  * Gets the article definition type. (Text, TextImage, Craft, ...)
@@ -110,9 +112,7 @@ void ArticleDefinition::load(
 
 	_listOrder	= node["listOrder"].as<int>(_listOrder);
 	if (!_listOrder)
-	{
 		_listOrder = listOrder;
-	}
 }
 
 /**
@@ -133,7 +133,8 @@ ArticleDefinitionRect::ArticleDefinitionRect()
 		y(0),
 		width(0),
 		height(0)
-{}
+{
+}
 
 /**
  * Sets the rectangle parameters in a function.
@@ -160,7 +161,8 @@ void ArticleDefinitionRect::set(
 ArticleDefinitionCraft::ArticleDefinitionCraft()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_CRAFT)
-{}
+{
+}
 
 /**
  * Loads the article definition from a YAML file.
@@ -187,7 +189,8 @@ void ArticleDefinitionCraft::load(
 ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_CRAFT_WEAPON)
-{}
+{
+}
 
 /**
  * Loads the article definition from a YAML file.
@@ -212,7 +215,8 @@ void ArticleDefinitionCraftWeapon::load(
 ArticleDefinitionText::ArticleDefinitionText()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_TEXT)
-{}
+{
+}
 
 /**
  * Loads the article definition from a YAML file.
@@ -237,7 +241,8 @@ ArticleDefinitionTextImage::ArticleDefinitionTextImage()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_TEXTIMAGE),
 		text_width(0)
-{}
+{
+}
 
 /**
  * Loads the article definition from a YAML file.
@@ -263,7 +268,8 @@ void ArticleDefinitionTextImage::load(
 ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY)
-{}
+{
+}
 
 /**
  * Loads the article definition from a YAML file.
@@ -287,7 +293,8 @@ void ArticleDefinitionBaseFacility::load(
 ArticleDefinitionItem::ArticleDefinitionItem()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_ITEM)
-{}
+{
+}
 
 /**
  * Loads the article definition from a YAML file.
@@ -311,7 +318,8 @@ void ArticleDefinitionItem::load(
 ArticleDefinitionUfo::ArticleDefinitionUfo()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_UFO)
-{}
+{
+}
 
 /**
  * Loads the article definition from a YAML file.
@@ -335,7 +343,8 @@ void ArticleDefinitionUfo::load(
 ArticleDefinitionArmor::ArticleDefinitionArmor()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_ARMOR)
-{}
+{
+}
 
 /**
  * Loads the article definition from a YAML file.
@@ -359,7 +368,8 @@ void ArticleDefinitionArmor::load(
 ArticleDefinitionVehicle::ArticleDefinitionVehicle()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_VEHICLE)
-{}
+{
+}
 
 /**
  * Loads the article definition from a YAML file.

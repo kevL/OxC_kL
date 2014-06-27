@@ -1247,7 +1247,7 @@ void GeoscapeState::time5Seconds()
 				continue;
 			}
 
-			if ((*j)->getDestination() != 0)
+			if ((*j)->getDestination() != NULL)
 			{
 				Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (ufo != NULL
@@ -1261,7 +1261,7 @@ void GeoscapeState::time5Seconds()
 					}
 					else
 					{
-						(*j)->setDestination(0);
+						(*j)->setDestination(NULL);
 
 						Waypoint* wp = new Waypoint();
 						wp->setLongitude(ufo->getLongitude());
@@ -1277,7 +1277,10 @@ void GeoscapeState::time5Seconds()
 				}
 
 				if (ufo != NULL
-					&& ufo->getStatus() == Ufo::DESTROYED)
+					&& (ufo->getStatus() == Ufo::DESTROYED
+						|| (ufo->getStatus() == Ufo::CRASHED	// kL, http://openxcom.org/forum/index.php?topic=2406.0
+							&& (*j)->getNumSoldiers() == 0		// kL
+							&& (*j)->getNumVehicles() == 0)))	// kL
 				{
 					(*j)->returnToBase();
 				}
@@ -2501,11 +2504,11 @@ void GeoscapeState::time1Day()
 					&& item->getBattleType() == BT_FIREARM
 					&& !item->getCompatibleAmmo()->empty())
 				{
-					RuleManufacture* manRule = _game->getRuleset()->getManufacture(item->getType());
-					if (manRule
-						&& !manRule->getRequirements().empty())
+					RuleManufacture* manufRule = _game->getRuleset()->getManufacture(item->getType());
+					if (manufRule
+						&& !manufRule->getRequirements().empty())
 					{
-						const std::vector<std::string> &req = manRule->getRequirements();
+						const std::vector<std::string> &req = manufRule->getRequirements();
 						RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 						if (ammo
 							&& std::find(
@@ -2513,7 +2516,7 @@ void GeoscapeState::time1Day()
 										req.end(),
 										ammo->getType())
 									!= req.end()
-							&& !_game->getSavedGame()->isResearched(manRule->getRequirements()))
+							&& !_game->getSavedGame()->isResearched(manufRule->getRequirements()))
 						{
 							researchCompleteEvents.push_back(new ResearchRequiredState(item)); // myk002
 /*myk002

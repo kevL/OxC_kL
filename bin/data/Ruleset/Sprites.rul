@@ -1,0 +1,7 @@
+extraSprites:
+  - type: SMOKE.PCK
+    files:
+      0: Resources/Sprites/ufograph/smoke/
+  - type: INTICON.PCK
+    files:
+      0: Resources/Sprites/geograph/inticon/

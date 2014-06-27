@@ -82,7 +82,7 @@ SellState::SellState(
 		_origin(origin)
 {
 	bool overfull = Options::storageLimitsEnforced
-				&& _base->storesOverfull();
+					&& _base->storesOverfull();
 
 /*	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(overfull? 288:148, 16, overfull? 16:8, 176);
@@ -172,7 +172,7 @@ SellState::SellState(
 	if (overfull)
 	{
 		_btnCancel->setVisible(false);
-//kL		_btnOk->setVisible(false);
+//kL	_btnOk->setVisible(false);
 	}
 
 	_txtTitle->setColor(_color);
@@ -233,7 +233,7 @@ SellState::SellState(
 			i != _base->getSoldiers()->end();
 			++i)
 	{
-		if ((*i)->getCraft() == 0)
+		if ((*i)->getCraft() == NULL)
 		{
 			_qtys.push_back(0);
 			_soldiers.push_back(*i);
@@ -339,9 +339,22 @@ SellState::SellState(
 		{
 			_qtys.push_back(0);
 			_items.push_back(*i);
-			RuleItem* rule = _game->getRuleset()->getItem(*i);
-			std::wostringstream ss;
+
+ 			std::wostringstream ss;
 			ss << qty;
+
+			RuleItem* rule = _game->getRuleset()->getItem(*i);
+
+			Uint8 color = _color;
+			if (!_game->getSavedGame()->isResearched(rule->getType())					// not researched
+				&& (_game->getRuleset()->getItem(*i)->getAlien()						// is an alien
+					|| !_game->getSavedGame()->isResearched(rule->getRequirements())	// has requirements to use but not been researched
+					|| rule->getBattleType() == BT_CORPSE))								// or is a corpse
+//				|| (!rule->getRequirements().empty())
+//					|| !rule->getRequirements().empty()									// has requirements to use
+			{
+				color = _color3;
+			}
 
 			std::wstring item = tr(*i);
 			if (rule->getBattleType() == BT_AMMO
@@ -355,7 +368,9 @@ SellState::SellState(
 								ss.str().c_str(),
 								L"0",
 								Text::formatFunding(rule->getSellCost()).c_str());
-				_lstItems->setRowColor(_qtys.size() - 1, _colorAmmo);
+
+				if (color != _color3)
+					color = _colorAmmo;
 			}
 			else
 			{
@@ -366,6 +381,8 @@ SellState::SellState(
 								L"0",
 								Text::formatFunding(rule->getSellCost()).c_str());
 			}
+
+			_lstItems->setRowColor(_qtys.size() - 1, color);
 		}
 	}
 
@@ -459,7 +476,7 @@ void SellState::btnOkClick(Action*)
 							w != craft->getWeapons()->end();
 							++w)
 					{
-						if (*w != 0)
+						if (*w != NULL)
 						{
 							_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
 							_base->getItems()->addItem(
@@ -485,7 +502,7 @@ void SellState::btnOkClick(Action*)
 					{
 						if ((*s)->getCraft() == craft)
 						{
-							(*s)->setCraft(0);
+							(*s)->setCraft(NULL);
 						}
 					}
 
@@ -497,7 +514,7 @@ void SellState::btnOkClick(Action*)
 					{
 						if ((*f)->getCraft() == craft)
 						{
-							(*f)->setCraft(0);
+							(*f)->setCraft(NULL);
 
 							break;
 						}
@@ -897,8 +914,7 @@ void SellState::changeByValue(
 					++w)
 			{
 				//Log(LOG_INFO) << ". . iter";
-
-				if (*w != 0) // kL, Cheers
+				if (*w != NULL) // kL, Cheers
 				{
 					weapRule = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
 					//Log(LOG_INFO) << ". . weapRule done";

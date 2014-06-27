@@ -138,7 +138,8 @@ void CraftWeaponProjectile::move()
 		else if (_direction == D_DOWN)
 			_currentPosition -= positionChange;
 
-		_distanceCovered += positionChange;
+		_distanceCovered += positionChange; // IstrebiteI_end.
+
 
 		if (_direction == D_UP)
 			_currentPosition += _speed;
@@ -152,20 +153,7 @@ void CraftWeaponProjectile::move()
 			&& _distanceCovered / 8 >= getRange())
 		{
 			setMissed(true);
-		} // IstrebiteI_end.
-/*		if (_direction == D_UP)
-			_currentPosition += _speed;
-		else if (_direction == D_DOWN)
-			_currentPosition -= _speed;
-
-		_distanceCovered += _speed;
-
-		// Check if projectile passed its maximum range.
-		if (getGlobalType() == CWPGT_MISSILE
-			&& _distanceCovered / 8 >= getRange())
-		{
-			setMissed(true);
-		} */
+		}
 	}
 	else if (_globalType == CWPGT_BEAM)
 	{

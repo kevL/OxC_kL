@@ -460,17 +460,17 @@ void Craft::setStatus(const std::string& status)
 
 /**
  * Returns the current altitude of the craft.
- * @return Altitude.
+ * @return, Altitude.
  */
 std::string Craft::getAltitude() const
 {
-	Ufo* u = dynamic_cast<Ufo*>(_dest);
+	Ufo* ufo = dynamic_cast<Ufo*>(_dest);
 
 	// kL_begin:
-	if (u)
+	if (ufo)
 	{
-		if (u->getAltitude() != "STR_GROUND")
-			return u->getAltitude();
+		if (ufo->getAltitude() != "STR_GROUND")
+			return ufo->getAltitude();
 		else
 			return "STR_VERY_LOW";
 	}
@@ -549,13 +549,12 @@ int Craft::getNumWeapons() const
 		return 0;
 
 	int total = 0;
-
 	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
 			i != _weapons.end();
 			++i)
 	{
-		if (*i != 0)
+		if (*i != NULL)
 			total++;
 	}
 
@@ -807,7 +806,7 @@ void Craft::think()
 	{
 		setInterceptionOrder(0);
 		checkup();
-		setDestination(0);
+		setDestination(NULL);
 		setSpeed(0);
 		_lowFuel = false;
 		_mission = false;
@@ -830,7 +829,7 @@ void Craft::checkup()
 			i != _weapons.end();
 			++i)
 	{
-		if (*i == 0)
+		if (*i == NULL)
 			continue;
 
 		available++;

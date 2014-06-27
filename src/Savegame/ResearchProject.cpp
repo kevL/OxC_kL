@@ -58,9 +58,7 @@ bool ResearchProject::step()
 	_spent += _assigned;
 
 	if (_spent >= getCost())
-	{
 		return true;
-	}
 
 	return false;
 }

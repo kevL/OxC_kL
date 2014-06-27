@@ -4514,7 +4514,7 @@
 1403788319 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
-1403788507 f:\git\openxcom\src\basescape\sellstate.h
+1403831012 f:\git\openxcom\src\basescape\sellstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -5330,7 +5330,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1403788565 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1403836460 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	<climits>
 	<cmath>
@@ -5892,7 +5892,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1403790333 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1403829524 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -7680,7 +7680,7 @@
 1403796420 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1403805427 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1403833906 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9198,7 +9198,7 @@
 1403456617 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 
-1402457813 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
+1403835080 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
 1402457813 source:f:\git\openxcom\src\ruleset\city.cpp
@@ -9283,7 +9283,7 @@
 1402504036 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1403098671 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1403830174 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9477,7 +9477,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1403173407 source:f:\git\openxcom\src\savegame\craft.cpp
+1403827861 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9507,7 +9507,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1403826733 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
+1403827176 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
 	"CraftWeaponProjectile.h"
 	<iostream>
 	"../Engine/Palette.h"
@@ -9527,7 +9527,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1403040313 source:f:\git\openxcom\src\savegame\movingtarget.cpp
+1403827934 source:f:\git\openxcom\src\savegame\movingtarget.cpp
 	"MovingTarget.h"
 	<cmath>
 	"../fmath.h"
@@ -9554,7 +9554,7 @@
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
-1402511111 source:f:\git\openxcom\src\savegame\researchproject.cpp
+1403828682 source:f:\git\openxcom\src\savegame\researchproject.cpp
 	"ResearchProject.h"
 	<algorithm>
 	"../Interface/Text.h"
@@ -9591,7 +9591,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1402730798 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1403836005 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9880,7 +9880,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/Unit.h"
 
-1403813888 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1403834891 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"

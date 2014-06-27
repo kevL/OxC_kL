@@ -1049,8 +1049,7 @@ RuleRegion* Ruleset::getRegion(const std::string& id) const
 }
 
 /**
- * Returns the list of all regions
- * provided by the ruleset.
+ * Returns the list of all regions provided by the ruleset.
  * @return List of regions.
  */
 const std::vector<std::string>& Ruleset::getRegionsList() const
@@ -1073,8 +1072,7 @@ RuleBaseFacility* Ruleset::getBaseFacility(const std::string& id) const
 }
 
 /**
- * Returns the list of all base facilities
- * provided by the ruleset.
+ * Returns the list of all base facilities provided by the ruleset.
  * @return List of base faciliies.
  */
 const std::vector<std::string>& Ruleset::getBaseFacilitiesList() const
@@ -1097,8 +1095,7 @@ RuleCraft* Ruleset::getCraft(const std::string& id) const
 }
 
 /**
- * Returns the list of all crafts
- * provided by the ruleset.
+ * Returns the list of all crafts provided by the ruleset.
  * @return List of crafts.
  */
 const std::vector<std::string>& Ruleset::getCraftsList() const
@@ -1121,8 +1118,7 @@ RuleCraftWeapon* Ruleset::getCraftWeapon(const std::string& id) const
 }
 
 /**
- * Returns the list of all craft weapons
- * provided by the ruleset.
+ * Returns the list of all craft weapons provided by the ruleset.
  * @return List of craft weapons.
  */
 const std::vector<std::string>& Ruleset::getCraftWeaponsList() const
@@ -1144,8 +1140,7 @@ RuleItem* Ruleset::getItem(const std::string& id) const
 }
 
 /**
- * Returns the list of all items
- * provided by the ruleset.
+ * Returns the list of all items provided by the ruleset.
  * @return List of items.
  */
 const std::vector<std::string>& Ruleset::getItemsList() const
@@ -1168,8 +1163,7 @@ RuleUfo* Ruleset::getUfo(const std::string& id) const
 }
 
 /**
- * Returns the list of all ufos
- * provided by the ruleset.
+ * Returns the list of all ufos provided by the ruleset.
  * @return List of ufos.
  */
 const std::vector<std::string>& Ruleset::getUfosList() const
@@ -1178,8 +1172,7 @@ const std::vector<std::string>& Ruleset::getUfosList() const
 }
 
 /**
- * Returns the list of all terrains
- * provided by the ruleset.
+ * Returns the list of all terrains provided by the ruleset.
  * @return List of terrains.
  */
 const std::vector<std::string>& Ruleset::getTerrainList() const
@@ -1266,8 +1259,7 @@ AlienRace* Ruleset::getAlienRace(const std::string& name) const
 }
 
 /**
- * Returns the list of all alien races.
- * provided by the ruleset.
+ * Returns the list of all alien races provided by the ruleset.
  * @return List of alien races.
  */
 const std::vector<std::string>& Ruleset::getAlienRacesList() const
@@ -1290,8 +1282,7 @@ AlienDeployment* Ruleset::getDeployment(const std::string& name) const
 }
 
 /**
- * Returns the list of all alien deployments
- * provided by the ruleset.
+ * Returns the list of all alien deployments provided by the ruleset.
  * @return List of alien deployments.
  */
 const std::vector<std::string>& Ruleset::getDeploymentsList() const
@@ -1323,8 +1314,7 @@ const std::vector<std::string>& Ruleset::getArmorsList() const
 }
 
 /**
- * Returns the cost of an individual soldier
- * for purchase/maintenance.
+ * Returns the cost of an individual soldier for purchase/maintenance.
  * @return Cost.
  */
 int Ruleset::getSoldierCost() const
@@ -1333,8 +1323,7 @@ int Ruleset::getSoldierCost() const
 }
 
 /**
- * Returns the cost of an individual engineer
- * for purchase/maintenance.
+ * Returns the cost of an individual engineer for purchase/maintenance.
  * @return Cost.
  */
 int Ruleset::getEngineerCost() const
@@ -1343,8 +1332,7 @@ int Ruleset::getEngineerCost() const
 }
 
 /**
- * Returns the cost of an individual scientist
- * for purchase/maintenance.
+ * Returns the cost of an individual scientist for purchase/maintenance.
  * @return Cost.
  */
 int Ruleset::getScientistCost() const
@@ -1353,8 +1341,7 @@ int Ruleset::getScientistCost() const
 }
 
 /**
- * Returns the time it takes to transfer personnel
- * between bases.
+ * Returns the time it takes to transfer personnel between bases.
  * @return Time in hours.
  */
 int Ruleset::getPersonnelTime() const
@@ -1377,8 +1364,7 @@ ArticleDefinition* Ruleset::getUfopaediaArticle(const std::string& name) const
 }
 
 /**
- * Returns the list of all articles
- * provided by the ruleset.
+ * Returns the list of all articles provided by the ruleset.
  * @return List of articles.
  */
 const std::vector<std::string>& Ruleset::getUfopaediaList() const
