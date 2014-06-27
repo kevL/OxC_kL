@@ -4683,12 +4683,12 @@
 1402457813 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1402457813 f:\git\openxcom\src\ruleset\ruleitem.h
+1403872700 f:\git\openxcom\src\ruleset\ruleitem.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1403810139 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1403868018 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -5204,7 +5204,7 @@
 1403788048 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1403788234 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1403874829 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	<cfloat>
 	<climits>
@@ -5330,7 +5330,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1403840251 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1403877488 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	<climits>
 	<cmath>
@@ -6366,7 +6366,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1403809832 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1403868048 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6400,7 +6400,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1403733816 source:f:\git\openxcom\src\battlescape\map.cpp
+1403868895 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6706,7 +6706,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1403703302 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1403878733 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7588,7 +7588,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1403826733 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1403869053 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -9255,7 +9255,7 @@
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
-1402457813 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
+1403872820 source:f:\git\openxcom\src\ruleset\rulecraftweapon.cpp
 	"RuleCraftWeapon.h"
 
 1403575631 source:f:\git\openxcom\src\ruleset\ruleinventory.cpp
@@ -9507,7 +9507,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1403827176 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
+1403869355 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
 	"CraftWeaponProjectile.h"
 	<iostream>
 	"../Engine/Palette.h"

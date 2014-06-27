@@ -4855,7 +4855,7 @@ bool TileEngine::validateThrow(
 {
 	//Log(LOG_INFO) << "TileEngine::validateThrow(), cf Projectile::calculateThrow()";
 //kL	double arc = 0.5;
-	double arc = 1.2; // kL, for acid spit only .......
+	double arc = 1.12; // kL, for acid spit only ....... throw done next.
 
 	if (action.type == BA_THROW)
 	{

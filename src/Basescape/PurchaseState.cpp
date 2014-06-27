@@ -286,7 +286,7 @@ PurchaseState::PurchaseState(
 		RuleCraftWeapon* rule = _game->getRuleset()->getCraftWeapon(*i);
 		RuleItem* launcher = _game->getRuleset()->getItem(rule->getLauncherItem()); // kL
 
-		if (launcher != 0
+		if (launcher != NULL
 			&& launcher->getBuyCost() > 0
 			&& !isExcluded(launcher->getType()))
 		{
@@ -332,7 +332,7 @@ PurchaseState::PurchaseState(
 		// Handle craft weapon ammo.
 		RuleItem* clip = _game->getRuleset()->getItem(rule->getClipItem()); // kL
 
-		if (clip != 0
+		if (clip != NULL
 			&& clip->getBuyCost() > 0
 			&& !isExcluded(clip->getType()))
 		{

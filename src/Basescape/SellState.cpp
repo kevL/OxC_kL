@@ -345,14 +345,35 @@ SellState::SellState(
 
 			RuleItem* rule = _game->getRuleset()->getItem(*i);
 
-			Uint8 color = _color;
-			if (!_game->getSavedGame()->isResearched(rule->getType())					// not researched
-				&& (_game->getRuleset()->getItem(*i)->getAlien()						// is an alien
-					|| !_game->getSavedGame()->isResearched(rule->getRequirements())	// has requirements to use but not been researched
-					|| rule->getBattleType() == BT_CORPSE))								// or is a corpse
-//				|| (!rule->getRequirements().empty())
-//					|| !rule->getRequirements().empty()									// has requirements to use
+			bool craftOrdnance = false;
+			const std::vector<std::string>& craftWeaps = _game->getRuleset()->getCraftWeaponsList();
+			for (std::vector<std::string>::const_iterator
+					j = craftWeaps.begin();
+					j != craftWeaps.end()
+						&& craftOrdnance == false;
+					++j)
 			{
+				// Special handling for treating craft weapons as items
+				RuleCraftWeapon* cwRule = _game->getRuleset()->getCraftWeapon(*j);
+
+				RuleItem* launcher = _game->getRuleset()->getItem(cwRule->getLauncherItem());
+				if (launcher == rule)
+					craftOrdnance = true;
+
+				RuleItem* clip = _game->getRuleset()->getItem(cwRule->getClipItem());
+				if (clip == rule)
+					craftOrdnance = true;
+			}
+
+			Uint8 color = _color;
+			if (!_game->getSavedGame()->isResearched(rule->getType())				// not researched
+				&& (!_game->getSavedGame()->isResearched(rule->getRequirements())	// and has requirements to use but not been researched
+					|| _game->getRuleset()->getItem(*i)->getAlien()						// or is an alien
+					|| rule->getBattleType() == BT_CORPSE								// or is a corpse
+					|| rule->getBattleType() == BT_NONE)								// or is not a battlefield item
+				&& craftOrdnance == false)											// and is not craft ordnance
+			{
+				// well, that was !NOT! easy.
 				color = _color3;
 			}
 
