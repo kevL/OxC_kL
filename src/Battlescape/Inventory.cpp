@@ -34,6 +34,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Sound.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/NumberText.h"
@@ -83,8 +84,10 @@ Inventory::Inventory(
 		_tu(true),
 		_base(base),
 		_groundOffset(0),
-		_primeGrenade(-1), // kL
-		_tuCost(-1) // kL
+		_animFrame(0),
+		_grenadeFuses(),	// kL
+		_primeGrenade(-1),	// kL
+		_tuCost(-1)			// kL
 {
 	_grid			= new Surface(width, height, x, y);
 	_items			= new Surface(width, height, x, y);
@@ -104,6 +107,10 @@ Inventory::Inventory(
 					_game->getLanguage());
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1)-1);
+
+	_animTimer = new Timer(220);
+	_animTimer->onTimer((SurfaceHandler)& Inventory::drawPrimers);
+	_animTimer->start();
 }
 
 /**
@@ -116,6 +123,7 @@ Inventory::~Inventory()
 	delete _selection;
 	delete _warning;
 	delete _stackNumber;
+	delete _animTimer;
 }
 
 /**
@@ -277,7 +285,7 @@ void Inventory::drawGrid()
 void Inventory::drawItems()
 {
 	_items->clear();
-
+	_grenadeFuses.clear();
 
 	if (_selUnit != NULL)
 	{
@@ -311,6 +319,11 @@ void Inventory::drawItems()
 			}
 
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+
+			if ((*i)->getFuseTimer() > -1) // grenade primer indicators
+				_grenadeFuses.push_back(std::make_pair(
+													frame->getX(),
+													frame->getY()));
 		}
 
 		Surface* stackLayer = new Surface(
@@ -345,7 +358,12 @@ void Inventory::drawItems()
 							+ ((*i)->getSlotY() * RuleInventory::SLOT_H));
 			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 
-			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1)
+			if ((*i)->getFuseTimer() > -1) // grenade primer indicators
+				_grenadeFuses.push_back(std::make_pair(
+													frame->getX(),
+													frame->getY()));
+
+			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1) // item stacking
 			{
 				_stackNumber->setX(
 								((*i)->getSlot()->getX()
@@ -572,6 +590,7 @@ void Inventory::think()
 	} // kL_end.
 
 	_warning->think();
+	_animTimer->think(NULL, this);
 }
 
 /**
@@ -1377,8 +1396,35 @@ void Inventory::showWarning(const std::wstring& msg)
 }
 
 /**
+ * Shows primer warnings on all live grenades.
+ */
+void Inventory::drawPrimers()
+{
+	const int pulse[4] = {9, 10, 11, 10};
+
+	_animFrame++;
+	if (_animFrame == 4)
+		_animFrame = 0;
+
+	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(pulse[_animFrame]);
+	for (std::vector<std::pair<int, int> >::const_iterator
+			i = _grenadeFuses.begin();
+			i != _grenadeFuses.end();
+			++i)
+	{
+		srf->blitNShade(
+					_items,
+					(*i).first,
+					(*i).second,
+					0,
+					false,						// kL
+					Palette::blockOffset(2)+3);	// kL
+	}
+}
+
+/**
  * kL. Set grenade to show a warning in Inventory.
- * @param turn, Turns until grenade is ready to explode
+ * @param turn, Turns until grenade is to explode
  */
 void Inventory::setPrimeGrenade(int turn) // kL
 {

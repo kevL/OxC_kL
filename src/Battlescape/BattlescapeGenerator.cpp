@@ -1256,7 +1256,7 @@ bool BattlescapeGenerator::addItem(
 	} */
 
 
-//	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
+//	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND"); // removed.
 //	RuleInventory* rightHand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 //	BattleItem* rhWeapon = unit->getItem("STR_RIGHT_HAND");
 
@@ -1389,18 +1389,14 @@ bool BattlescapeGenerator::addItem(
 				&& unit->getItem("STR_RIGHT_HAND")->getAmmoItem() == 0)
 			{
 				if (unit->getItem("STR_RIGHT_HAND")->setAmmoItem(item) == 0)
-				{
 					placed = true;
-				}
 			}
 			// kL_begin: BattlescapeGenerator::addItem(), only for plasma pistol + Blaster (see itemSets in Ruleset)
 			else if (unit->getItem("STR_LEFT_HAND")
 				&& unit->getItem("STR_LEFT_HAND")->getAmmoItem() == 0)
 			{
 				if (unit->getItem("STR_LEFT_HAND")->setAmmoItem(item) == 0)
-				{
 					placed = true;
-				}
 			} // kL_end.
 			else
 			{

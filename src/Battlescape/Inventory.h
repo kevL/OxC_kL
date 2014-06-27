@@ -34,6 +34,7 @@ class BattleUnit;
 class Game;
 class NumberText;
 class RuleInventory;
+class Timer;
 class WarningMessage;
 
 
@@ -51,6 +52,7 @@ private:
 		_base,
 		_tu;
 	int
+		_animFrame,
 		_groundOffset,
 		_tuCost, // kL
 		_primeGrenade; // kL
@@ -65,9 +67,12 @@ private:
 		* _grid,
 		* _items,
 		* _selection;
+	Timer* _animTimer;
 	WarningMessage* _warning;
 
 	std::map<int, std::map<int, int> > _stackLevel;
+	std::vector<std::pair<int, int> > _grenadeFuses;
+
 
 	/// Moves an item to a specified slot.
 	void moveItem(
@@ -159,6 +164,8 @@ private:
 
 		/// Shows a warning message.
 		void showWarning(const std::wstring& msg);
+		/// Show priming warnings on grenades.
+		void drawPrimers();
 
 		/// kL. Set grenade to show a warning in Inventory.
 		void setPrimeGrenade(int turn); // kL
