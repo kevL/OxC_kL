@@ -304,7 +304,16 @@ SellState::SellState(
 		++_itemOffset;
 	}
 
-	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
+
+	Ruleset* rules = _game->getRuleset();
+	SavedGame* save = _game->getSavedGame();
+	RuleItem
+		* rule,
+		* launcher,
+		* clip;
+	RuleCraftWeapon* cwRule;
+
+	const std::vector<std::string>& items = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
 			i = items.begin();
 			i != items.end();
@@ -335,7 +344,7 @@ SellState::SellState(
 
 		if (qty > 0
 			&& (Options::canSellLiveAliens
-				|| !_game->getRuleset()->getItem(*i)->getAlien()))
+				|| !rules->getItem(*i)->getAlien()))
 		{
 			_qtys.push_back(0);
 			_items.push_back(*i);
@@ -343,10 +352,10 @@ SellState::SellState(
  			std::wostringstream ss;
 			ss << qty;
 
-			RuleItem* rule = _game->getRuleset()->getItem(*i);
+			rule = rules->getItem(*i);
 
 			bool craftOrdnance = false;
-			const std::vector<std::string>& craftWeaps = _game->getRuleset()->getCraftWeaponsList();
+			const std::vector<std::string>& craftWeaps = rules->getCraftWeaponsList();
 			for (std::vector<std::string>::const_iterator
 					j = craftWeaps.begin();
 					j != craftWeaps.end()
@@ -354,21 +363,21 @@ SellState::SellState(
 					++j)
 			{
 				// Special handling for treating craft weapons as items
-				RuleCraftWeapon* cwRule = _game->getRuleset()->getCraftWeapon(*j);
+				cwRule = rules->getCraftWeapon(*j);
 
-				RuleItem* launcher = _game->getRuleset()->getItem(cwRule->getLauncherItem());
-				if (launcher == rule)
+				launcher = rules->getItem(cwRule->getLauncherItem());
+				clip = rules->getItem(cwRule->getClipItem());
+				if (launcher == rule
+					|| clip == rule)
+				{
 					craftOrdnance = true;
-
-				RuleItem* clip = _game->getRuleset()->getItem(cwRule->getClipItem());
-				if (clip == rule)
-					craftOrdnance = true;
+				}
 			}
 
 			Uint8 color = _color;
-			if (!_game->getSavedGame()->isResearched(rule->getType())				// not researched
-				&& (!_game->getSavedGame()->isResearched(rule->getRequirements())	// and has requirements to use but not been researched
-					|| _game->getRuleset()->getItem(*i)->getAlien()						// or is an alien
+			if (!save->isResearched(rule->getType())				// not researched
+				&& (!save->isResearched(rule->getRequirements())	// and has requirements to use but not been researched
+					|| rules->getItem(*i)->getAlien()						// or is an alien
 					|| rule->getBattleType() == BT_CORPSE								// or is a corpse
 					|| rule->getBattleType() == BT_NONE)								// or is not a battlefield item
 				&& craftOrdnance == false)											// and is not craft ordnance

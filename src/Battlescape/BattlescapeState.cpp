@@ -166,9 +166,10 @@ BattlescapeState::BattlescapeState()
 	_rank		= new Surface(26, 23, _icons->getX() + 107, _icons->getY() + 33);
 	_kneel		= new Surface( 2,  2, _icons->getX() + 115, _icons->getY() + 19); // kL
 
-	_srfWounds	= new Surface(14, 11, _rank->getX() + 14, _rank->getY() - 1); // kL
-	_numWounds	= new NumberText(7, 5, _rank->getX(), _rank->getY() + 2); // kL, X gets adjusted in updateSoldierInfo()
-//	_numWounds	= new NumberText(3, 5, _rank->getX() + 12, _rank->getY() + 10); // kL
+//	_srfWounds	= new Surface(14, 11, _rank->getX() + 14, _rank->getY() - 1); // kL
+//	_numWounds	= new NumberText(7, 5, _rank->getX(), _rank->getY() + 2); // kL, X gets adjusted in updateSoldierInfo()
+	_btnWounds	= new InteractiveSurface(15, 13, _icons->getX() + 4, _icons->getY() - 16);
+	_numWounds	= new NumberText(9, 9, _icons->getX(), _icons->getY() - 12); // X gets adjusted in updateSoldierInfo()
 
 	_btnUnitUp			= new InteractiveSurface(32,  16, _icons->getX() +  48, _icons->getY());
 	_btnUnitDown		= new InteractiveSurface(32,  16, _icons->getX() +  48, _icons->getY() + 16);
@@ -287,7 +288,7 @@ BattlescapeState::BattlescapeState()
 	add(_numLayers);
 	add(_rank);
 	add(_kneel); // kL
-	add(_srfWounds); // kL
+	add(_btnWounds); // kL
 	add(_numWounds); // kL
 	add(_btnUnitUp);
 	add(_btnUnitDown);
@@ -424,9 +425,10 @@ BattlescapeState::BattlescapeState()
 	_rank->setVisible(false);
 	_kneel->setVisible(false);
 
-	_srfWounds->setVisible(false);
+	_btnWounds->setVisible(false);
+	_btnWounds->onMouseClick((ActionHandler)& BattlescapeState::btnWoundedClick);
 
-	_numWounds->setColor(Palette::blockOffset(2)+3); // blood red
+	_numWounds->setColor(Palette::blockOffset(2)+5); // blood red
 //	_numWounds->setColor(2); // white
 	_numWounds->setValue(0);
 	_numWounds->setVisible(false);
@@ -659,13 +661,12 @@ BattlescapeState::BattlescapeState()
 			i < VISIBLE_MAX;
 			++i)
 	{
-//kL		std::ostringstream tooltip;
-
 		_btnVisibleUnit[i]->onMouseClick((ActionHandler)& BattlescapeState::btnVisibleUnitClick);
 		_btnVisibleUnit[i]->onKeyboardPress(
 						(ActionHandler)& BattlescapeState::btnVisibleUnitClick,
 						buttons[i]);
 
+//kL		std::ostringstream tooltip;
 //		tooltip << "STR_CENTER_ON_ENEMY_" << (i + 1);
 //		_btnVisibleUnit[i]->setTooltip(tooltip.str());
 //		_btnVisibleUnit[i]->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
@@ -1764,6 +1765,18 @@ void BattlescapeState::btnVisibleUnitClick(Action* action)
 }
 
 /**
+ * Centers on the currently wounded soldier.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnWoundedClick(Action* action)
+{
+	if (playableUnitSelected())
+		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+
+	action->getDetails()->type = SDL_NOEVENT; // consume the event
+}
+
+/**
  * Launches the blaster bomb.
  * @param action, Pointer to an action.
  */
@@ -1883,7 +1896,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_numTUSnap	->setVisible(false);
 
 	_numWounds	->setVisible(false);
-	_srfWounds	->setVisible(false);
+	_btnWounds	->setVisible(false);
 
 
 	bool isPlayable = playableUnitSelected(); // not aLien or civilian; ie. xCom Soldier
@@ -1982,13 +1995,13 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 	int wounds = selectedUnit->getFatalWounds();
-	_srfWounds->setVisible(wounds > 0);
+	_btnWounds->setVisible(wounds > 0);
 	_numWounds->setVisible(wounds > 0);
 	_numWounds->setValue(wounds);
 	if (wounds > 9)
-		_numWounds->setX(_rank->getX() + 17);
+		_numWounds->setX(_icons->getX() + 8);
 	else
-		_numWounds->setX(_rank->getX() + 19);
+		_numWounds->setX(_icons->getX() + 10);
 
 
 	double stat = static_cast<double>(selectedUnit->getStats()->tu);
@@ -2142,8 +2155,8 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
  */
 /* void BattlescapeState::drawWoundIndicator() // kL
 {
-	_srfWounds->drawRect(0, 0, 15, 12, 15);		// black border
-	_srfWounds->drawRect(1, 1, 13, 10, color);	// inner red square
+	_btnWounds->drawRect(0, 0, 15, 12, 15);		// black border
+	_btnWounds->drawRect(1, 1, 13, 10, color);	// inner red square
 } */
 
 /**
@@ -2183,10 +2196,10 @@ void BattlescapeState::blinkVisibleUnitButtons()
 		}
 	}
 
-	if (_srfWounds->getVisible() == true)
+	if (_btnWounds->getVisible() == true)
 	{
-		_srfWounds->drawRect(0, 0, 13, 11, 15);									// black border
-		_srfWounds->drawRect(1, 1, 11, 9, color + Palette::blockOffset(10));	// inner purple square
+		_btnWounds->drawRect(0, 0, 15, 13, 15);									// black border
+		_btnWounds->drawRect(1, 1, 13, 11, color + Palette::blockOffset(10));	// inner purple square
 	}
 
 

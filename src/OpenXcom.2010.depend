@@ -5330,7 +5330,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1403877488 source:f:\git\openxcom\src\basescape\sellstate.cpp
+1403901838 source:f:\git\openxcom\src\basescape\sellstate.cpp
 	"SellState.h"
 	<climits>
 	<cmath>
@@ -5627,7 +5627,7 @@
 1403789357 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1403790352 f:\git\openxcom\src\battlescape\battlescapestate.h
+1403906984 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -6012,7 +6012,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1403802128 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1403907023 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>

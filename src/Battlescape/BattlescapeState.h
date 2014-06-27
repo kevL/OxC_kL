@@ -109,6 +109,7 @@ private:
 		* _btnRightHandItem,
 
 		* _btnVisibleUnit[VISIBLE_MAX],
+		* _btnWounds, // kL
 
 		* _btnZeroTUs; // kL
 
@@ -138,8 +139,8 @@ private:
 	SavedBattleGame* _save;
 	Surface
 		* _rank,
-		* _kneel, // kL
-		* _srfWounds; // kL
+		* _kneel; // kL
+//		* _srfWounds; // kL
 	Text
 		* _txtBaseLabel, // kL
 		* _txtDebug, //* _txtTooltip;
@@ -244,6 +245,8 @@ private:
 
 		/// Handler for clicking a visible unit button.
 		void btnVisibleUnitClick(Action* action);
+		/// kL. Handler for clicking the wounded unit button.
+		void btnWoundedClick(Action* action); // kL
 
 		/// Handler for clicking the launch rocket button.
 		void btnLaunchClick(Action* action);
