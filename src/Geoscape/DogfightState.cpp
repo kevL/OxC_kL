@@ -958,10 +958,9 @@ void DogfightState::move()
 						|| (p->getGlobalType() == CWPGT_BEAM
 							&& p->toBeRemoved()))
 					&& !_ufo->isCrashed()
-					&& !p->getMissed()) // IstrebiteI
+					&& !p->getMissed())
 				{
-//					if (RNG::percent(p->getAccuracy())) // UFO hit.
-					if (RNG::percent((p->getAccuracy() * (100 + 300 / (5 - _ufoSize)) + 100) / 200)) // IstrebiteI
+					if (RNG::percent((p->getAccuracy() * (100 + 300 / (5 - _ufoSize)) + 100) / 200))
 					{
 						// Formula delivered by Volutar
 						int damage = RNG::generate(

@@ -1842,32 +1842,36 @@ void Map::drawTerrain(Surface* surface)
 							Uint8 wpColor = 1; // white
 							// kL_note: Set pathfinder/ pathPreview number color.
 							if (_save->getTerrain() == "POLAR")
-								wpColor = 15; // black
-							_numWaypid->setColor(wpColor); // kL
-//							_numWaypid->setColor(Palette::blockOffset(12)+8); // kL, lavender
-
-//							int tuMarker = std::max(
-//												0,
-//												tile->getTUMarker());
-//							_numWaypid->setValue(tuMarker);
-							_numWaypid->setValue(tile->getTUMarker());
-							_numWaypid->draw();
+								wpColor = 15; // black, actually yellow.
+							_numWaypid->setColor(wpColor); // kL, (12)+8) lavender
 
 							int off = 2;
 							if (tile->getTUMarker() > 9)
-								int off = 4;
+								off = 4;
 
-							if (_save->getSelectedUnit()
-								&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
+							if (!(_previewSetting & PATH_ARROWS)
+								|| (_save->getSelectedUnit()
+									&& _save->getSelectedUnit()->getArmor()->getSize() > 1))
 							{
-								adjustment += 8;
+								_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
+								off += 1;
+								adjustment += 1;
+
+								if (_save->getSelectedUnit()
+									&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
+								{
+									adjustment += 8;
+								}
 							}
 
+							_numWaypid->setValue(tile->getTUMarker());
+							_numWaypid->draw();
 							_numWaypid->blitNShade(
 									surface,
 									screenPosition.x + 16 - off,
 									screenPosition.y + 30 - adjustment,
 									0);
+							_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
 						}
 					}
 				}
