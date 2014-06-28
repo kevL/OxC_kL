@@ -147,7 +147,7 @@ InventoryState::InventoryState(
 							200,
 							0,
 							0,
-							_parent == 0);
+							_parent == NULL);
 
 	setPalette("PAL_BATTLESCAPE");
 
@@ -289,7 +289,6 @@ InventoryState::InventoryState(
 //	_btnApplyTemplate->setTooltip("STR_APPLY_INVENTORY_TEMPLATE");
 //	_btnApplyTemplate->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnApplyTemplate->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
-
 
 
 	// only use copy/paste layout-template buttons in setup (i.e. non-tu) mode

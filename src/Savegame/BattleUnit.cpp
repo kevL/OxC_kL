@@ -39,7 +39,11 @@
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
+#include "../Engine/Sound.h" // kL
+
 #include "../Engine/Surface.h"
+
+#include "../Resource/ResourcePack.h" // kL
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleInventory.h"
@@ -59,8 +63,10 @@ namespace OpenXcom
 BattleUnit::BattleUnit(
 		Soldier* soldier,
 		UnitFaction faction,
-		int diff) // kL_add.
+		int diff, // kL_add.
+		BattlescapeGame* battleGame) // kL_add: NOTE, this can be removed because it now gets set in the BattlescapeGame cTor.
 	:
+		_battleGame(battleGame), // kL_add
 		_faction(faction),
 		_originalFaction(faction),
 		_killedBy(faction),
@@ -197,8 +203,10 @@ BattleUnit::BattleUnit(
 		int id,
 		Armor* armor,
 		int diff,
-		int month) // kL_add.
+		int month, // kL_add.
+		BattlescapeGame* battleGame) // kL_add. May be NULL: NOTE, this can be removed because it now gets set in the BattlescapeGame cTor.
 	:
+		_battleGame(battleGame), // kL_add
 		_faction(faction),
 		_originalFaction(faction),
 		_killedBy(faction),
@@ -1185,13 +1193,11 @@ int BattleUnit::damage(
 	power = static_cast<int>(floor(static_cast<double>(power) * static_cast<double>(_armor->getDamageModifier(type))));
 	//Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type << " ModifiedPower " << power;
 
-	if (power < 1)
-		return 0;
-
+//	if (power < 1) // kL_note: this early-out messes with got-hit sFx below_
+//		return 0;
 
 	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage
 		type = DT_STUN;
-
 
 	if (relative == Position(0, 0, 0))
 		side = SIDE_UNDER;
@@ -1304,11 +1310,57 @@ int BattleUnit::damage(
 		}
 	}
 
+	// TODO: give a short "ugh" if hit causes no damage or perhaps stuns ( power must be > 0 though );
+	// a longer "uuuhghghgh" if hit causes damage ... and let DieBState handle deathscreams.
+//	if (!isOut(true, true)) // no sound if Stunned; deathscream handled by uh, UnitDieBState.
+//		playHitSound(); // kL
+	if (_health > 0
+		&& type != DT_STUN)
+	{
+		playHitSound(); // kL
+	}
+
 	if (power < 1)
 		power = 0;
 	//Log(LOG_INFO) << "BattleUnit::damage() ret Penetrating Power " << power;
 
 	return power;
+}
+
+/**
+ * kL. Plays a grunt sFx when hit/damaged.
+ */
+void BattleUnit::playHitSound() // kL
+{
+	if (getType() == "MALE_CIVILIAN")
+		_battleGame->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											RNG::generate(41, 43))
+										->play();
+	else if (getType() == "FEMALE_CIVILIAN")
+		_battleGame->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											RNG::generate(44, 46))
+										->play();
+	else if (getType() == "SOLDIER")
+	{
+		if (getGender() == GENDER_MALE)
+			_battleGame->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												RNG::generate(141, 151))
+											->play();
+		else if (getGender() == GENDER_FEMALE)
+			_battleGame->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												RNG::generate(121, 135))
+											->play();
+	}
+//	else	// note: this will crash because _battleGame is currently left NULL for non-xCom & non-Civies.
+			// NOTE: Took care of that by setting BattlescapeGame* on ALL BattleUnits in the BattlescapeGame cTor.
+//		_battleGame->getResourcePack()->getSound(
+//											"BATTLE.CAT",
+//											_unit->getDeathSound())
+//										->play();
 }
 
 /**
@@ -2583,7 +2635,7 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 	if (_expBravery
 		&& stats->bravery < caps.bravery)
 	{
-//kL		if (_expBravery > RNG::generate(0, 10))
+//kL	if (_expBravery > RNG::generate(0, 10))
 		if (_expBravery > RNG::generate(0, 9)) // kL
 			stats->bravery += 10;
 	}
@@ -2637,19 +2689,27 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		// kL_note: The delta-bits seem odd... thought it should be only 1d6 or so.
 		int delta = caps.tu - stats->tu;
 		if (delta > 0)
-			stats->tu += RNG::generate(0, (delta / 10) + 2) - 1;
+			stats->tu += RNG::generate(
+									0,
+									(delta / 10) + 2) - 1;
 
 		delta = caps.health - stats->health;
 		if (delta > 0)
-			stats->health += RNG::generate(0, (delta / 10) + 2) - 1;
+			stats->health += RNG::generate(
+									0,
+									(delta / 10) + 2) - 1;
 
 		delta = caps.strength - stats->strength;
 		if (delta > 0)
-			stats->strength += RNG::generate(0, (delta / 10) + 2) - 1;
+			stats->strength += RNG::generate(
+									0,
+									(delta / 10) + 2) - 1;
 
 		delta = caps.stamina - stats->stamina;
 		if (delta > 0)
-			stats->stamina += RNG::generate(0, (delta / 10) + 2) - 1;
+			stats->stamina += RNG::generate(
+									0,
+									(delta / 10) + 2) - 1;
 
 		return true;
 	}
@@ -3635,6 +3695,14 @@ bool BattleUnit::hasInventory() const
 {
 	return _armor->getSize() == 1
 		&& _rank != "STR_LIVE_TERRORIST";
+}
+
+/**
+ * kL.
+ */
+void BattleUnit::setBattleGame(BattlescapeGame* battleGame) // kL
+{
+	_battleGame = battleGame;
 }
 
 }

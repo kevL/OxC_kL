@@ -147,6 +147,8 @@ private:
 		_walkPhase;
 
 	BattleAIState* _currentAIState;
+	BattlescapeGame* _battleGame; // kL.
+		// Note: don't even declare the class, what's with SavedGame* then; postMissionProcedures()
 	BattleUnit* _charging;
 	Position
 		_lastPos,
@@ -197,9 +199,10 @@ private:
 
 	Armor* _armor;
 	Soldier* _geoscapeSoldier;
+	Unit* _unitRules;
+
 	SoldierGender _gender;
 	SpecialAbility _specab;
-	Unit* _unitRules;
 
 	/// Converts an amount of experience to a stat increase.
 	int improveStat(int exp);
@@ -213,18 +216,21 @@ private:
 		bool _hidingForTurn;
 		Position lastCover;
 
+
 		/// Creates a BattleUnit.
-		BattleUnit(
+		BattleUnit( // xCom operatives
 				Soldier* soldier,
 				UnitFaction faction,
-				int diff); // kL_add: For VictoryPts value per death.
-		BattleUnit(
+				int diff, // kL_add: For VictoryPts value per death.
+				BattlescapeGame* battleGame); // kL_add: for playing sound when hit. NOTE, this can be removed because it now gets set in the BattlescapeGame cTor.
+		BattleUnit( // aLiens, civies, & Tanks
 				Unit* unit,
 				UnitFaction faction,
 				int id,
 				Armor* armor,
 				int diff,
-				int month = 0); // kL_add: For upping aLien stats as time progresses.
+				int month = 0, // kL_add: For upping aLien stats as time progresses.
+				BattlescapeGame* battleGame = NULL); // kL_add: for playing sound when hit (only civies). NOTE, this can be removed because it now gets set in the BattlescapeGame cTor.
 		/// Cleans up the BattleUnit.
 		~BattleUnit();
 
@@ -341,6 +347,9 @@ private:
 				ItemDamageType type,
 				bool ignoreArmor = false);
 
+		/// kL. Plays a grunt sFx when hit/damaged.
+		void playHitSound(); // kL
+
 		/// Heal stun level of the unit.
 		void healStun(int power);
 		/// Gets the unit's stun level.
@@ -357,7 +366,7 @@ private:
 		int getFallingPhase() const;
 
 		/// The unit is out - either dead or unconscious.
-//kL		bool isOut() const;
+//kL	bool isOut() const;
 		bool isOut(
 				bool checkHealth = false,
 				bool checkStun = false) const; // kL
@@ -394,13 +403,13 @@ private:
 		void clearVisibleTiles();
 
 		/// Calculate firing accuracy.
-//		int getFiringAccuracy( // Wb.140214
+//		int getFiringAccuracy(
 		double getFiringAccuracy(
 				BattleActionType actionType,
 				BattleItem* item);
 		/// Calculate accuracy modifier.
-		double getAccuracyModifier(BattleItem* item = 0);
-//		int getAccuracyModifier(BattleItem* item = 0); // Wb.140214
+//		int getAccuracyModifier(BattleItem* item = NULL);
+		double getAccuracyModifier(BattleItem* item = NULL);
 		/// Calculate throwing accuracy.
 		double getThrowingAccuracy();
 
@@ -451,7 +460,7 @@ private:
 		/// Sets the unit's tile it's standing on
 		void setTile(
 				Tile* tile,
-				Tile* tileBelow = 0);
+				Tile* tileBelow = NULL);
 		/// Gets the unit's tile.
 		Tile* getTile() const;
 
@@ -696,6 +705,9 @@ private:
 
 		/// Does this unit have an inventory?
 		bool hasInventory() const;
+
+		/// kL.
+		void setBattleGame(BattlescapeGame* battleGame); // kL
 };
 
 }

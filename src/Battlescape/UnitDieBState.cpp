@@ -421,15 +421,45 @@ void UnitDieBState::convertUnitToCorpse()
 
 /**
  * Plays the death sound.
+ * kL rewrite to include NwN2 hits & screams.
  */
 void UnitDieBState::playDeathSound()
 {
 	//Log(LOG_INFO) << "UnitDieBState::playDeathSound()";
-	if ((_unit->getType() == "SOLDIER"
+	if (_unit->getType() == "MALE_CIVILIAN")
+		_parent->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											RNG::generate(41, 43))
+										->play();
+	else if (_unit->getType() == "FEMALE_CIVILIAN")
+		_parent->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											RNG::generate(44, 46))
+										->play();
+	else if (_unit->getType() == "SOLDIER")
+	{
+		if (_unit->getGender() == GENDER_MALE)
+			_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												RNG::generate(111, 116))
+											->play();
+		else if (_unit->getGender() == GENDER_FEMALE)
+			_parent->getResourcePack()->getSound(
+												"BATTLE.CAT",
+												RNG::generate(101, 103))
+											->play();
+	}
+	else
+		_parent->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											_unit->getDeathSound())
+										->play();
+}
+/*	if ((_unit->getType() == "SOLDIER"
 			&& _unit->getGender() == GENDER_MALE)
 		|| _unit->getType() == "MALE_CIVILIAN")
 	{
-//kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41, 43))->play();
+//kL	_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41, 43))->play();
 		int iSound = RNG::generate(41, 43);
 		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), male iSound = " << iSound;
 		_parent->getResourcePack()->getSound(
@@ -441,7 +471,7 @@ void UnitDieBState::playDeathSound()
 			&& _unit->getGender() == GENDER_FEMALE)
 		|| _unit->getType() == "FEMALE_CIVILIAN")
 	{
-//kL		_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44, 46))->play();
+//kL	_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44, 46))->play();
 		int iSound = RNG::generate(44, 46);
 		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), female iSound = " << iSound;
 		_parent->getResourcePack()->getSound(
@@ -453,7 +483,6 @@ void UnitDieBState::playDeathSound()
 		_parent->getResourcePack()->getSound(
 											"BATTLE.CAT",
 											_unit->getDeathSound())
-										->play();
-}
+										->play(); */
 
 }

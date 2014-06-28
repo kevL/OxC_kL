@@ -108,6 +108,14 @@ BattlescapeGame::BattlescapeGame(
 
 	_currentAction.targeting	= false;
 	_currentAction.type			= BA_NONE;
+
+	for (std::vector<BattleUnit*>::iterator // kL
+			bu = _save->getUnits()->begin();
+			bu != _save->getUnits()->end();
+			++bu)
+	{
+		(*bu)->setBattleGame(this);
+	}
 }
 
 /**
@@ -2494,7 +2502,8 @@ BattleUnit* BattlescapeGame::convertUnit(
 									_save->getUnits()->back()->getId() + 1,
 									getRuleset()->getArmor(newArmor.str()),
 									difficulty,
-									month); // kL_add.
+									month, // kL_add.
+									this); // kL_add
 	// kL_note: what about setting _zombieUnit=true ? It's not generic but it's the only case, afaict
 
 //kL	if (!difficulty) // kL_note: moved to BattleUnit::adjustStats()

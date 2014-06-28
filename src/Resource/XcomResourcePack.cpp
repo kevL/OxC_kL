@@ -1750,7 +1750,7 @@ Music* XcomResourcePack::loadMusic(
 		"mid"
 	};
 
-	Music* music = 0;
+	Music* music = NULL;
 
 	try
 	{
@@ -1801,8 +1801,10 @@ Music* XcomResourcePack::loadMusic(
 	catch (Exception &e)
 	{
 		Log(LOG_INFO) << e.what();
-		if (music) delete music;
-		music = 0;
+		if (music)
+			delete music;
+
+		music = NULL;
 	}
 
 	return music;

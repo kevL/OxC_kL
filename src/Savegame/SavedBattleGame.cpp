@@ -278,11 +278,13 @@ void SavedBattleGame::load(
 			unit = new BattleUnit(				// look up the matching soldier
 								savedGame->getSoldier(id),
 								faction,
-								static_cast<int>(savedGame->getDifficulty())); // kL_add: For VictoryPts value per death.
+								static_cast<int>(savedGame->getDifficulty()), // kL_add: For VictoryPts value per death.
+//								getBattleGame()); // kL_add.
+								NULL); // kL_add. HAVE TO SET THIS AFTER BATTLEGAME HAS LOADED !!!
 		else
 		{
-			std::string type	= (*i)["genUnitType"].as<std::string>();
-			std::string armor	= (*i)["genUnitArmor"].as<std::string>();
+			std::string type = (*i)["genUnitType"].as<std::string>();
+			std::string armor = (*i)["genUnitArmor"].as<std::string>();
 
 			unit = new BattleUnit( // create a new Unit, not-soldier but Vehicle, Civie, or aLien.
 								rule->getUnit(type),
@@ -290,7 +292,9 @@ void SavedBattleGame::load(
 								id,
 								rule->getArmor(armor),
 								static_cast<int>(savedGame->getDifficulty()),
-								savedGame->getMonthsPassed()); // kL_add.
+								savedGame->getMonthsPassed(), // kL_add.
+//								getBattleGame()); // kL_add.
+								NULL); // kL_add. HAVE TO SET THIS AFTER BATTLEGAME HAS LOADED !!!
 		}
 		//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
 

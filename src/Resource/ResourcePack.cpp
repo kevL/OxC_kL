@@ -155,7 +155,7 @@ Font* ResourcePack::getFont(const std::string& name) const
 	if (i != _fonts.end())
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -170,7 +170,7 @@ Surface* ResourcePack::getSurface(const std::string& name) const
 	if (i != _surfaces.end())
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**
@@ -382,7 +382,7 @@ Sound* ResourcePack::getSound(
 		if (_sounds.end() != i)
 			return i->second->getSound(sound);
 		else
-			return 0;
+			return NULL;
 	}
 }
 
@@ -398,7 +398,7 @@ Palette* ResourcePack::getPalette(const std::string& name) const
 	if (_palettes.end() != i)
 		return i->second;
 	else
-		return 0;
+		return NULL;
 }
 
 /**

@@ -4758,7 +4758,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1403310950 f:\git\openxcom\src\savegame\battleunit.h
+1403973089 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -5790,7 +5790,7 @@
 1402457811 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1403790059 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1403973111 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5892,7 +5892,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1403907981 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1403968740 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6333,7 +6333,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1403809974 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1403910967 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6348,6 +6348,7 @@
 	"../Engine/Palette.h"
 	"../Engine/Sound.h"
 	"../Engine/SurfaceSet.h"
+	"../Engine/Timer.h"
 	"../Interface/Text.h"
 	"../Interface/NumberText.h"
 	"../Ruleset/RuleInventory.h"
@@ -6366,7 +6367,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1403868048 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1403961373 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6741,7 +6742,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1403792089 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1403962182 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -9130,7 +9131,7 @@
 1402457813 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1403128283 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1403927919 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	<SDL_mixer.h>
 	"../Engine/Font.h"
@@ -9145,7 +9146,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1403308942 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1403927414 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9448,7 +9449,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1403807437 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1403973089 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9465,7 +9466,9 @@
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Engine/RNG.h"
+	"../Engine/Sound.h"
 	"../Engine/Surface.h"
+	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleSoldier.h"
@@ -9561,7 +9564,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1403471685 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1403968955 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>

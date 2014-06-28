@@ -550,7 +550,8 @@ void BattlescapeGenerator::deployXCOM()
 			BattleUnit* unit = addXCOMUnit(new BattleUnit(
 														*i,
 														FACTION_PLAYER,
-														static_cast<int>(_game->getSavedGame()->getDifficulty()))); // kL_add: For VictoryPts value per death.
+														static_cast<int>(_game->getSavedGame()->getDifficulty()), // kL_add: For VictoryPts value per death.
+														_save->getBattleGame())); // kL_add.
 
 			if (unit
 				&& !_save->getSelectedUnit())
@@ -1751,7 +1752,9 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 									FACTION_NEUTRAL,
 									_unitSequence++,
 									_game->getRuleset()->getArmor(rules->getArmor()),
-									0);
+									0,
+									0,
+									_save->getBattleGame()); // kL_add.
 
 	Node* node = _save->getSpawnNode(0, unit);
 	if (node)
