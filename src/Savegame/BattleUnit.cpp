@@ -64,9 +64,10 @@ BattleUnit::BattleUnit(
 		Soldier* soldier,
 		UnitFaction faction,
 		int diff, // kL_add.
-		BattlescapeGame* battleGame) // kL_add: NOTE, this can be removed because it now gets set in the BattlescapeGame cTor.
+		BattlescapeGame* battleGame) // kL_add
 	:
 		_battleGame(battleGame), // kL_add
+//		_battleGame(NULL), // kL_add
 		_faction(faction),
 		_originalFaction(faction),
 		_killedBy(faction),
@@ -204,9 +205,10 @@ BattleUnit::BattleUnit(
 		Armor* armor,
 		int diff,
 		int month, // kL_add.
-		BattlescapeGame* battleGame) // kL_add. May be NULL: NOTE, this can be removed because it now gets set in the BattlescapeGame cTor.
+		BattlescapeGame* battleGame) // kL_add. May be NULL
 	:
 		_battleGame(battleGame), // kL_add
+//		_battleGame(NULL), // kL_add
 		_faction(faction),
 		_originalFaction(faction),
 		_killedBy(faction),
@@ -1355,8 +1357,7 @@ void BattleUnit::playHitSound() // kL
 												RNG::generate(121, 135))
 											->play();
 	}
-//	else	// note: this will crash because _battleGame is currently left NULL for non-xCom & non-Civies.
-			// NOTE: Took care of that by setting BattlescapeGame* on ALL BattleUnits in the BattlescapeGame cTor.
+//	else // note: this will crash because _battleGame is currently left NULL for non-xCom & non-Civies.
 //		_battleGame->getResourcePack()->getSound(
 //											"BATTLE.CAT",
 //											_unit->getDeathSound())

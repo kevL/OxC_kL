@@ -106,8 +106,8 @@ BattlescapeGame::BattlescapeGame(
 
 	cancelCurrentAction();
 
-	_currentAction.targeting	= false;
 	_currentAction.type			= BA_NONE;
+	_currentAction.targeting	= false;
 
 	for (std::vector<BattleUnit*>::iterator // kL
 			bu = _save->getUnits()->begin();

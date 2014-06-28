@@ -108,7 +108,7 @@ Inventory::Inventory(
 	_warning->setColor(Palette::blockOffset(2));
 	_warning->setTextColor(Palette::blockOffset(1)-1);
 
-	_animTimer = new Timer(220);
+	_animTimer = new Timer(80);
 	_animTimer->onTimer((SurfaceHandler)& Inventory::drawPrimers);
 	_animTimer->start();
 }
@@ -1400,13 +1400,15 @@ void Inventory::showWarning(const std::wstring& msg)
  */
 void Inventory::drawPrimers()
 {
-	const int pulse[4] = {9, 10, 11, 10};
+//	const int pulse[4] = {9, 10, 11, 10}; // ScanG.dat, crosshairs
+	const int pulse[8] = {0, 1, 2, 3, 4, 3, 2, 1}; // pass to shader call
 
-	_animFrame++;
-	if (_animFrame == 4)
+//	if (_animFrame == 4)
+	if (_animFrame == 8)
 		_animFrame = 0;
 
-	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(pulse[_animFrame]);
+//	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(pulse[_animFrame]);
+	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
 	for (std::vector<std::pair<int, int> >::const_iterator
 			i = _grenadeFuses.begin();
 			i != _grenadeFuses.end();
@@ -1416,10 +1418,13 @@ void Inventory::drawPrimers()
 					_items,
 					(*i).first,
 					(*i).second,
-					0,
+//					0,
+					pulse[_animFrame],
 					false,						// kL
 					Palette::blockOffset(2)+3);	// kL
 	}
+
+	_animFrame++;
 }
 
 /**

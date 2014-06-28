@@ -1768,6 +1768,8 @@ void Map::drawTerrain(Surface* surface)
 
 	if (pathfinderTurnedOn)
 	{
+		_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
+
 		for (int
 				itZ = beginZ;
 				itZ <= endZ;
@@ -1845,38 +1847,59 @@ void Map::drawTerrain(Surface* surface)
 								wpColor = 15; // black, actually yellow.
 							_numWaypid->setColor(wpColor); // kL, (12)+8) lavender
 
-							int off = 2;
+							int off = 3;
 							if (tile->getTUMarker() > 9)
-								off = 4;
+								off = 5;
 
-							if (!(_previewSetting & PATH_ARROWS)
-								|| (_save->getSelectedUnit()
-									&& _save->getSelectedUnit()->getArmor()->getSize() > 1))
+							if ( //!(_previewSetting & PATH_ARROWS) || (...)
+								_save->getSelectedUnit()
+									&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
 							{
-								_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
-								off += 1;
+//								_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
+//								off += 1;
 								adjustment += 1;
 
-								if (_save->getSelectedUnit()
-									&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
+								if (!(_previewSetting & PATH_ARROWS))
+									//_save->getSelectedUnit() && _save->getSelectedUnit()->getArmor()->getSize() > 1)
 								{
-									adjustment += 8;
+									adjustment += 7;
 								}
 							}
 
 							_numWaypid->setValue(tile->getTUMarker());
 							_numWaypid->draw();
-							_numWaypid->blitNShade(
-									surface,
-									screenPosition.x + 16 - off,
-									screenPosition.y + 30 - adjustment,
-									0);
-							_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
+//							_numWaypid->blitNShade(
+//									surface,
+//									screenPosition.x + 16 - off,
+//									screenPosition.y + 30 - adjustment,
+//									0);
+							if (!(_previewSetting & PATH_ARROWS))
+							{
+								_numWaypid->blitNShade(
+													surface,
+													screenPosition.x + 16 - off,
+													screenPosition.y + (29 - adjustment),
+													0,
+													false,
+													tile->getMarkerColor());
+							}
+							else
+							{
+								_numWaypid->blitNShade(
+													surface,
+													screenPosition.x + 16 - off,
+													screenPosition.y + (22 - adjustment),
+													0);
+							}
+
+//							_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
 						}
 					}
 				}
 			}
 		}
+
+		_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
 	}
 
 //kL	unit = (BattleUnit*)_save->getSelectedUnit();

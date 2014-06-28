@@ -222,7 +222,7 @@ private:
 				Soldier* soldier,
 				UnitFaction faction,
 				int diff, // kL_add: For VictoryPts value per death.
-				BattlescapeGame* battleGame); // kL_add: for playing sound when hit. NOTE, this can be removed because it now gets set in the BattlescapeGame cTor.
+				BattlescapeGame* battleGame); // kL_add: for playing sound when hit.
 		BattleUnit( // aLiens, civies, & Tanks
 				Unit* unit,
 				UnitFaction faction,
@@ -230,7 +230,7 @@ private:
 				Armor* armor,
 				int diff,
 				int month = 0, // kL_add: For upping aLien stats as time progresses.
-				BattlescapeGame* battleGame = NULL); // kL_add: for playing sound when hit (only civies). NOTE, this can be removed because it now gets set in the BattlescapeGame cTor.
+				BattlescapeGame* battleGame = NULL); // kL_add: for playing sound when hit (only civies).
 		/// Cleans up the BattleUnit.
 		~BattleUnit();
 

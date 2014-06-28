@@ -98,8 +98,8 @@ struct BattleAction
 	BattleAction()
 		:
 			type(BA_NONE),
-			actor(0),
-			weapon(0),
+			actor(NULL),
+			weapon(NULL),
 			TU(0),
 			targeting(false),
 			value(0),
