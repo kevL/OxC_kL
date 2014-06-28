@@ -6333,7 +6333,7 @@
 	"../Interface/Frame.h"
 	"../Interface/Text.h"
 
-1403910967 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1403976866 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6742,7 +6742,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1403962182 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1403981816 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -9449,7 +9449,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1403976530 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1403981929 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

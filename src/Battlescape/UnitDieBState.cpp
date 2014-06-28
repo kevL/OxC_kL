@@ -438,16 +438,25 @@ void UnitDieBState::playDeathSound()
 										->play();
 	else if (_unit->getType() == "SOLDIER")
 	{
+		int sound;
 		if (_unit->getGender() == GENDER_MALE)
+		{
+			sound = RNG::generate(111, 116);
+			Log(LOG_INFO) << "death Male, sound = " << sound;
 			_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
-												RNG::generate(111, 116))
+												sound)
 											->play();
+		}
 		else if (_unit->getGender() == GENDER_FEMALE)
+		{
+			sound = RNG::generate(111, 116);
+			Log(LOG_INFO) << "death Female, sound = " << sound;
 			_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
-												RNG::generate(101, 103))
+												sound)
 											->play();
+		}
 	}
 	else
 		_parent->getResourcePack()->getSound(

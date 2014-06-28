@@ -1346,16 +1346,25 @@ void BattleUnit::playHitSound() // kL
 										->play();
 	else if (getType() == "SOLDIER")
 	{
+		int sound;
 		if (getGender() == GENDER_MALE)
+		{
+			sound = RNG::generate(141, 151);
+			Log(LOG_INFO) << "death Male, sound = " << sound;
 			_battleGame->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												RNG::generate(141, 151))
 											->play();
+		}
 		else if (getGender() == GENDER_FEMALE)
+		{
+			sound = RNG::generate(121, 135);
+			Log(LOG_INFO) << "death Female, sound = " << sound;
 			_battleGame->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												RNG::generate(121, 135))
 											->play();
+		}
 	}
 //	else // note: this will crash because _battleGame is currently left NULL for non-xCom & non-Civies.
 //		_battleGame->getResourcePack()->getSound(
@@ -2692,25 +2701,29 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		if (delta > 0)
 			stats->tu += RNG::generate(
 									0,
-									(delta / 10) + 2) - 1;
+									(delta / 10) + 2)
+								- 1;
 
 		delta = caps.health - stats->health;
 		if (delta > 0)
 			stats->health += RNG::generate(
 									0,
-									(delta / 10) + 2) - 1;
+									(delta / 10) + 2)
+								- 1;
 
 		delta = caps.strength - stats->strength;
 		if (delta > 0)
 			stats->strength += RNG::generate(
 									0,
-									(delta / 10) + 2) - 1;
+									(delta / 10) + 2)
+								- 1;
 
 		delta = caps.stamina - stats->stamina;
 		if (delta > 0)
 			stats->stamina += RNG::generate(
 									0,
-									(delta / 10) + 2) - 1;
+									(delta / 10) + 2)
+								- 1;
 
 		return true;
 	}
@@ -2725,17 +2738,15 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
  */
 int BattleUnit::improveStat(int exp)
 {
-	double tier = 4.0;
+	int teir = 1;
+	if (exp > 10)
+		teir = 4;
+	else if (exp > 5)
+		teir = 3;
+	else if (exp > 2)
+		teir = 2;
 
-	if (exp < 11)
-	{
-		tier = 3.0;
-
-		if (exp < 6)
-			tier = exp > 2? 2.0: 1.0;
-	}
-
-	return static_cast<int>((tier / 2.0) + RNG::generate(0.0, tier));
+	return (teir / 2 + RNG::generate(0, teir));
 }
 
 /**
