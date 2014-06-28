@@ -5266,7 +5266,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/ResearchProject.h"
 
-1402457812 f:\git\openxcom\src\engine\rng.h
+1403986551 f:\git\openxcom\src\engine\rng.h
 	<algorithm>
 	<stdint.h>
 
@@ -9449,7 +9449,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1403981929 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1403984005 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

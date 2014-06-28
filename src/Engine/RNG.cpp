@@ -39,9 +39,12 @@ See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 
 /*	This is a good generator if you're short on memory, but otherwise we
 	rather suggest to use a xorshift128+ (for maximum speed) or
-	xorshift1024* (for speed and very long period) generator.	*/
+	xorshift1024* (for speed and very long period) generator. */
+
+
 
 uint64_t x = time(0); /* The state must be seeded with a nonzero value. */
+
 
 uint64_t next()
 {
@@ -82,6 +85,9 @@ int generate(
 {
 	uint64_t num = next();
 
+	if (max < min)	// CyberAngel
+		max = min;	// http://openxcom.org/bugs/openxcom/issues/736
+
 	return static_cast<int>(num %(max - min + 1) + min);
 }
 
@@ -95,8 +101,24 @@ double generate(
 		double min,
 		double max)
 {
+//kL	double num = static_cast<double>(next());
+
+	// kL_begin:
+	double div = max - min;
+	if (AreSame(div, 0.0))	// kL
+		return min;			// kL
+
+	div = (static_cast<double>(UINT64_MAX) / div);
+	if (AreSame(div, 0.0))	// kL
+		return min;			// kL
+
 	double num = static_cast<double>(next());
-	return static_cast<double>(num / (static_cast<double>(UINT64_MAX) / (max - min)) + min);
+
+	return ((num / div) + min);
+	// kL_end.
+
+//kL	return static_cast<double>(num / (static_cast<double>(UINT64_MAX) / (max - min)) + min);
+//	return (num / (static_cast<double>(UINT64_MAX) / (max - min)) + min); // kL
 }
 
 /**
@@ -109,14 +131,17 @@ double boxMuller(
 		double mean,
 		double standardDeviation)
 {
-	static int use_last = 0;
+//kL	static int use_last = 0;
+	static bool use_last = false; // kL
+
 	static double y2;
 	double y1;
 
 	if (use_last) /* use value from previous call */
 	{
 		y1 = y2;
-		use_last = 0;
+//kL	use_last = 0;
+		use_last = false; // kL
 	}
 	else
 	{
@@ -137,7 +162,8 @@ double boxMuller(
 		y1 = x1 * w;
 		y2 = x2 * w;
 
-		use_last = 1;
+//kL	use_last = 1;
+		use_last = true; // kL
 	}
 
 	return (mean + (y1 * standardDeviation));
@@ -151,8 +177,10 @@ double boxMuller(
  */
 bool percent(int value)
 {
-	if (value < 1) return false; // kL
-	if (value > 99) return true; // kL
+	if (value < 1)
+		return false; // kL
+	else if (value > 99)
+		return true; // kL
 
 	return (generate(0, 99) < value);
 }
@@ -164,6 +192,9 @@ bool percent(int value)
  */
 int generateEx(int max)
 {
+	if (max < 2)	// kL
+		return 0;	// kL
+
 	uint64_t num = next();
 
 	return static_cast<int>(num %max);
