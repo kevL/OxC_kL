@@ -1778,7 +1778,7 @@ void Map::drawTerrain(Surface* surface)
 							233 - grey, medium
 							376 - grey, medium light (bit of slate blue)
 							392 - grey, light */
-							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(376);
+							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(264);
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x + 14,

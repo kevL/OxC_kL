@@ -181,7 +181,7 @@ void MiniMapView::draw()
 
 							if (tileShade == 16)
 							{
-								tileShade = 0;
+								tileShade = 4;
 								srf = _set->getFrame(377);
 							}
 						} // kL_end.
