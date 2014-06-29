@@ -59,6 +59,10 @@ private:
 		SDL_Color* getColors(int offset = 0) const;
 		///
 		void savePal(const std::string& file) const;
+		///
+		void setColors(
+				SDL_Color* pal,
+				int ncolors);
 		/// Converts a given color into a RGBA color value.
 		static Uint32 getRGBA(
 				SDL_Color* pal,

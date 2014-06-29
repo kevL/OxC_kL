@@ -102,7 +102,8 @@ Ruleset::Ruleset(Game* game) // kL
 		_researchListOrder(0),
 		_manufactureListOrder(0),
 		_ufopaediaListOrder(0),
-		_invListOrder(0)
+		_invListOrder(0),
+		_alienFuel("")
 {
 	//Log(LOG_INFO) << "Create Ruleset";
 	std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
@@ -713,6 +714,7 @@ void Ruleset::loadFile(const std::string& filename)
 	_costScientist	= doc["costScientist"].as<int>(_costScientist);
 	_timePersonnel	= doc["timePersonnel"].as<int>(_timePersonnel);
 	_initialFunding	= doc["initialFunding"].as<int>(_initialFunding);
+	_alienFuel		= doc["alienFuel"].as<std::string>(_alienFuel);
 
 	for (YAML::const_iterator
 			i = doc["ufoTrajectories"].begin();
@@ -1937,6 +1939,14 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 							&& save->isResearched(getPsiRequirements())));
 
 	return soldier;
+}
+
+/**
+ * Gets string for the alien fuel type (elerium or zyrbite).
+ */
+const std::string Ruleset::getAlienFuel() const
+{
+	return _alienFuel;
 }
 
 }

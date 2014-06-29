@@ -57,6 +57,7 @@ class SavedBattleGame
 
 private:
 	int
+		_depth,
 		_globalShade,
 		_itemId,
 		_mapsize_x,
@@ -328,6 +329,8 @@ private:
 		void calculateModuleMap();
 		/// a shortcut to the geoscape save.
 		SavedGame* getGeoscapeSave();
+		///
+		int getDepth();
 };
 
 }

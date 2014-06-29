@@ -140,7 +140,7 @@ private:
 	/// Adds a civlian to the game.
 	BattleUnit* addCivilian(Unit* rules);
 
-	/// Fills power sources with an elerium-115 object.
+	/// Fills power sources with an alien fuel object.
 	void fuelPowerSources();
 	/// Possibly explodes ufo powersources.
 	void explodePowerSources();

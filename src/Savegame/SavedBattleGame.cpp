@@ -85,6 +85,7 @@ SavedBattleGame::SavedBattleGame()
 		_unitsFalling(false),
 		_cheating(false),
 		_tuReserved(BA_NONE),
+		_depth(0),
 		_kneelReserved(false),
 		_terrain("") // kL sza_MusicRules
 {
@@ -424,6 +425,7 @@ void SavedBattleGame::load(
 	_objectiveDestroyed	= node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
 	_tuReserved			= (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved		= node["kneelReserved"].as<bool>(_kneelReserved);
+	_depth				= node["depth"].as<int>(_depth);
 }
 
 /**
@@ -584,6 +586,7 @@ YAML::Node SavedBattleGame::save() const
 
 	node["tuReserved"]		= static_cast<int>(_tuReserved);
     node["kneelReserved"]	= _kneelReserved;
+    node["depth"]			= _depth;
 
 	return node;
 }
@@ -2467,6 +2470,14 @@ void SavedBattleGame::calculateModuleMap()
 SavedGame* SavedBattleGame::getGeoscapeSave()
 {
 	return _battleState->getGame()->getSavedGame();
+}
+
+/**
+ *
+ */
+int SavedBattleGame::getDepth()
+{
+	return _depth;
 }
 
 }

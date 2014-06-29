@@ -505,7 +505,7 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_ALIEN_SURGERY", true));
 	_stats.push_back(new DebriefingStat("STR_EXAMINATION_ROOM", true));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
-	_stats.push_back(new DebriefingStat("STR_ELERIUM_115", true));
+	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuel(), true));
 
 	SavedGame* save = _game->getSavedGame();
 	SavedBattleGame* battle = save->getSavedBattle();
@@ -1634,9 +1634,9 @@ void DebriefingState::recoverItems(
 			it != from->end();
 			++it)
 	{
-		if ((*it)->getRules()->getName() == "STR_ELERIUM_115")
+		if ((*it)->getRules()->getName() == _game->getRuleset()->getAlienFuel())
 			addStat( // special case of an item counted as a stat
-					"STR_ELERIUM_115",
+					_game->getRuleset()->getAlienFuel(),
 					50,
 					100); // kL
 		else

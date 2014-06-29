@@ -78,6 +78,8 @@ class Ruleset
 {
 
 protected:
+	std::string _alienFuel;
+
 	int
 		_initialFunding,
 
@@ -298,6 +300,8 @@ protected:
 		const std::vector<std::string>& getInvsList() const;
 		/// Generates a new soldier.
 		Soldier* genSoldier(SavedGame* save) const;
+		///
+		const std::string getAlienFuel() const;
 };
 
 }

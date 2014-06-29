@@ -2827,7 +2827,7 @@ void BattlescapeGenerator::loadRMP(
 }
 
 /**
- * Fill power sources with an elerium-115 object.
+ * Fill power sources with an alien fuel object.
  */
 void BattlescapeGenerator::fuelPowerSources()
 {
@@ -2839,12 +2839,14 @@ void BattlescapeGenerator::fuelPowerSources()
 		if (_save->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _save->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
-			BattleItem* elerium = new BattleItem(
-											_game->getRuleset()->getItem("STR_ELERIUM_115"),
+			BattleItem* alienFuel = new BattleItem(
+											_game->getRuleset()->getItem(_game->getRuleset()->getAlienFuel()),
 											_save->getCurrentItemId());
 
-			_save->getItems()->push_back(elerium);
-			_save->getTiles()[i]->addItem(elerium, _game->getRuleset()->getInventory("STR_GROUND"));
+			_save->getItems()->push_back(alienFuel);
+			_save->getTiles()[i]->addItem(
+										alienFuel,
+										_game->getRuleset()->getInventory("STR_GROUND"));
 		}
 	}
 }
