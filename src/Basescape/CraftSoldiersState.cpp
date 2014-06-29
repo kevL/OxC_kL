@@ -109,7 +109,7 @@ CraftSoldiersState::CraftSoldiersState(
 					Options::keyCancel);
 
 	_btnUnload->setColor(Palette::blockOffset(13)+10);
-	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD"));
+	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD_CRAFT"));
 	_btnUnload->onMouseClick((ActionHandler)& CraftSoldiersState::btnUnloadClick);
 
 	_txtTitle->setColor(Palette::blockOffset(15)+6);

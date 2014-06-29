@@ -200,7 +200,7 @@ private:
 				|| pos.y >= _mapsize_y
 				|| pos.z >= _mapsize_z)
 			{
-				return 0;
+				return NULL;
 			}
 
 			return _tiles[getTileIndex(pos)];

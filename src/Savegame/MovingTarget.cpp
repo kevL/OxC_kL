@@ -35,7 +35,7 @@ namespace OpenXcom
 MovingTarget::MovingTarget()
 	:
 		Target(),
-		_dest(0),
+		_dest(NULL),
 		_speedLon(0.0),
 		_speedLat(0.0),
 		_speedRadian(0.0),
@@ -168,7 +168,7 @@ void MovingTarget::setSpeed(int speed)
  */
 void MovingTarget::calculateSpeed()
 {
-	if (_dest != 0)
+	if (_dest != NULL)
 	{
 		double
 			dLon,
@@ -209,7 +209,7 @@ void MovingTarget::calculateSpeed()
  */
 bool MovingTarget::reachedDestination() const
 {
-	if (_dest == 0)
+	if (_dest == NULL)
 		return false;
 
 	return AreSame(_dest->getLongitude(), _lon)
@@ -223,7 +223,7 @@ void MovingTarget::move()
 {
 	calculateSpeed();
 
-	if (_dest != 0)
+	if (_dest != NULL)
 	{
 		if (getDistance(_dest) > _speedRadian)
 		{

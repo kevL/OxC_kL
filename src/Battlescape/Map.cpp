@@ -108,7 +108,7 @@ Map::Map(
 			x,
 			y),
 		_game(game),
-		_arrow(0),
+		_arrow(NULL),
 		_selectorX(0),
 		_selectorY(0),
 		_mouseX(0),
@@ -117,7 +117,7 @@ Map::Map(
 		_cursorSize(1),
 		_animFrame(0),
 //kL		_cursorFrame(0), // DarkDefender
-		_projectile(0),
+		_projectile(NULL),
 		_projectileInFOV(false),
 		_explosionInFOV(false),
 		_launch(false),
@@ -1768,7 +1768,8 @@ void Map::drawTerrain(Surface* surface)
 
 	if (pathfinderTurnedOn)
 	{
-		_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
+		// make a border for the pathfinding display, so it's more visible on snow, etc.
+//		_numWaypid->setBordered(true);
 
 		for (int
 				itZ = beginZ;
@@ -1801,7 +1802,7 @@ void Map::drawTerrain(Surface* surface)
 						&& screenPosition.y < surface->getHeight() + _spriteHeight)
 					{
 						tile = _save->getTile(mapPosition);
-						Tile* tileBelow = _save->getTile(mapPosition - Position(0, 0, 1));
+
 						if (!tile
 							|| !tile->isDiscovered(0)
 							|| tile->getPreview() == -1)
@@ -1809,9 +1810,11 @@ void Map::drawTerrain(Surface* surface)
 							continue;
 						}
 
-						int adjustment = -tile->getTerrainLevel();
+						int offset_y = -tile->getTerrainLevel();
 						if (_previewSetting & PATH_ARROWS)
 						{
+							Tile* tileBelow = _save->getTile(mapPosition - Position(0, 0, 1));
+
 							if (itZ > 0
 								&& tile->hasNoFloor(tileBelow))
 							{
@@ -1832,7 +1835,7 @@ void Map::drawTerrain(Surface* surface)
 								tmpSurface->blitNShade(
 										surface,
 										screenPosition.x,
-										screenPosition.y - adjustment,
+										screenPosition.y - offset_y,
 										0,
 										false,
 										tile->getMarkerColor());
@@ -1842,43 +1845,34 @@ void Map::drawTerrain(Surface* surface)
 							&& tile->getTUMarker() > -1)
 						{
 							Uint8 wpColor = 1; // white
-							// kL_note: Set pathfinder/ pathPreview number color.
 							if (_save->getTerrain() == "POLAR")
-								wpColor = 15; // black, actually yellow.
-							_numWaypid->setColor(wpColor); // kL, (12)+8) lavender
+								wpColor = 14; // black
 
-							int off = 3;
+							_numWaypid->setColor(wpColor);
+
+							int offset_x = 2;
 							if (tile->getTUMarker() > 9)
-								off = 5;
+								offset_x = 4;
 
-							if ( //!(_previewSetting & PATH_ARROWS) || (...)
-								_save->getSelectedUnit()
-									&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
+							if (_save->getSelectedUnit()
+								&& _save->getSelectedUnit()->getArmor()->getSize() > 1)
 							{
-//								_numWaypid->setBordered(true); // give it a border for the pathfinding display, makes it more visible on snow, etc.
-//								off += 1;
-								adjustment += 1;
+								offset_y += 1;
 
 								if (!(_previewSetting & PATH_ARROWS))
-									//_save->getSelectedUnit() && _save->getSelectedUnit()->getArmor()->getSize() > 1)
-								{
-									adjustment += 7;
-								}
+									offset_y += 7;
 							}
 
 							_numWaypid->setValue(tile->getTUMarker());
 							_numWaypid->draw();
-//							_numWaypid->blitNShade(
-//									surface,
-//									screenPosition.x + 16 - off,
-//									screenPosition.y + 30 - adjustment,
-//									0);
+
 							if (!(_previewSetting & PATH_ARROWS))
 							{
 								_numWaypid->blitNShade(
 													surface,
-													screenPosition.x + 16 - off,
-													screenPosition.y + (29 - adjustment),
+													screenPosition.x + 16 - offset_x,
+//kL												screenPosition.y + 29 - offset_y,
+													screenPosition.y + 37 - offset_y, // kL
 													0,
 													false,
 													tile->getMarkerColor());
@@ -1887,19 +1881,19 @@ void Map::drawTerrain(Surface* surface)
 							{
 								_numWaypid->blitNShade(
 													surface,
-													screenPosition.x + 16 - off,
-													screenPosition.y + (22 - adjustment),
+													screenPosition.x + 16 - offset_x,
+//kL												screenPosition.y + 22 - offset_y,
+													screenPosition.y + 30 - offset_y, // kL
 													0);
 							}
-
-//							_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
 						}
 					}
 				}
 			}
 		}
 
-		_numWaypid->setBordered(false); // make sure we remove the border in case it's being used for missile waypoints.
+		// remove the border in case it's being used for missile waypoints.
+//		_numWaypid->setBordered(false);
 	}
 
 //kL	unit = (BattleUnit*)_save->getSelectedUnit();

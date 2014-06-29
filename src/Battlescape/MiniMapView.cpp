@@ -139,8 +139,8 @@ void MiniMapView::draw()
 				MapData* data = NULL;
 
 				Tile* tile = NULL;
-//				Position p (px, py, lvl); // <- initialization. kL_note
-				Position p = Position(px, py, lvl); // kL (supposedly not as efficient)
+				Position p (px, py, lvl); // <- initialization. kL_note
+//				Position p = Position(px, py, lvl); // kL (supposedly not as efficient)
 				tile = _battleGame->getTile(p);
 
 				if (!tile)
@@ -207,12 +207,7 @@ void MiniMapView::draw()
 /*old
 					if (tile->getUnit() == _battleGame->getSelectedUnit())
 					{
-						srf->blitNShade(
-									this,
-									x,
-									y,
-									0,
-									false,
+						srf->blitNShade(this, x, y, 0, false,
 									4);		// should be same as 36, pale green.
 //									1);		// white -> these numbers are blockOffsets + 1block ( ie. block 0 = block 1)
 //									17);	// white again. % > 1

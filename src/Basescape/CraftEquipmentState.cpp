@@ -727,9 +727,9 @@ void CraftEquipmentState::btnClearClick(Action*)
 void CraftEquipmentState::btnInventoryClick(Action*)
 {
 	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick()";
-	SavedBattleGame* bgame = new SavedBattleGame();
+	SavedBattleGame* sbg = new SavedBattleGame();
 	//Log(LOG_INFO) << ". bgame = " << bgame;
-	_game->getSavedGame()->setBattleGame(bgame);
+	_game->getSavedGame()->setBattleGame(sbg);
 
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 	//Log(LOG_INFO) << ". bgen = " << &bgen;
@@ -748,7 +748,7 @@ void CraftEquipmentState::btnInventoryClick(Action*)
 
 	_game->pushState(new InventoryState(
 									false,
-									0));
+									NULL));
 	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick() EXIT";
 }
 

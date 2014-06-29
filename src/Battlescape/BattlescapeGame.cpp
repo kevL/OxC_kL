@@ -238,13 +238,14 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	{
 		if (_save->selectNextFactionUnit(
 									true,
-									_AISecondMove) == 0)
+									_AISecondMove)
+								== 0)
 		{
 			if (!_save->getDebugMode())
 			{
 				_endTurnRequested = true;
 				//Log(LOG_INFO) << "BattlescapeGame::handleAI() statePushBack(end AI turn)";
-				statePushBack(0); // end AI turn
+				statePushBack(NULL); // end AI turn
 			}
 			else
 			{
@@ -308,12 +309,12 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			unit->setAIState(new AlienBAIState(
 											_save,
 											unit,
-											0));
+											NULL));
 		else
 			unit->setAIState(new CivilianBAIState(
 											_save,
 											unit,
-											0));
+											NULL));
 
 		ai = unit->getCurrentAIState();
 	}
@@ -367,7 +368,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	//Log(LOG_INFO) << ". findItem DONE";
 
 
-	if (unit->getCharging() != 0)
+	if (unit->getCharging() != NULL)
 	{
 		if (unit->getAggroSound() != -1
 			&& !_playedAggroSound)
@@ -486,13 +487,14 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 		if (_save->selectNextFactionUnit(
 									true,
-									_AISecondMove) == 0)
+									_AISecondMove)
+								== 0)
 		{
 			if (!_save->getDebugMode())
 			{
 				_endTurnRequested = true;
 				//Log(LOG_INFO) << "BattlescapeGame::handleAI() statePushBack(end AI turn) 2";
-				statePushBack(0); // end AI turn
+				statePushBack(NULL); // end AI turn
 			}
 			else
 			{
@@ -2477,14 +2479,14 @@ BattleUnit* BattlescapeGame::convertUnit(
 		dropItem(
 				unit->getPosition(),
 				*i);
-		(*i)->setOwner(0);
+		(*i)->setOwner(NULL);
 	}
 
 	unit->getInventory()->clear();
 
 	// remove unit-tile link
 	unit->setTile(NULL);
-	getSave()->getTile(unit->getPosition())->setUnit(0);
+	getSave()->getTile(unit->getPosition())->setUnit(NULL);
 
 
 	std::ostringstream newArmor;

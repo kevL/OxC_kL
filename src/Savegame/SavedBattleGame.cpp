@@ -278,9 +278,7 @@ void SavedBattleGame::load(
 			unit = new BattleUnit(				// look up the matching soldier
 								savedGame->getSoldier(id),
 								faction,
-								static_cast<int>(savedGame->getDifficulty()), // kL_add: For VictoryPts value per death.
-//								getBattleGame()); // kL_add.
-								NULL); // kL_add. HAVE TO SET THIS AFTER BATTLEGAME HAS LOADED !!!
+								static_cast<int>(savedGame->getDifficulty())); // kL_add: For VictoryPts value per death.
 		else
 		{
 			std::string type = (*i)["genUnitType"].as<std::string>();
@@ -292,9 +290,7 @@ void SavedBattleGame::load(
 								id,
 								rule->getArmor(armor),
 								static_cast<int>(savedGame->getDifficulty()),
-								savedGame->getMonthsPassed(), // kL_add.
-//								getBattleGame()); // kL_add.
-								NULL); // kL_add. HAVE TO SET THIS AFTER BATTLEGAME HAS LOADED !!!
+								savedGame->getMonthsPassed()); // kL_add.
 		}
 		//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
 
@@ -1972,8 +1968,14 @@ bool SavedBattleGame::setUnitPosition(
 				dir <= 4;
 				++dir)
 		{
-			if (getPathfinding()->isBlocked(getTile(pos), 0, dir, 0))
+			if (getPathfinding()->isBlocked(
+										getTile(pos),
+										0,
+										dir,
+										NULL))
+			{
 				return false;
+			}
 		}
 	}
 
@@ -1999,7 +2001,7 @@ bool SavedBattleGame::setUnitPosition(
 
 			getTile(pos + Position(x, y, 0))->setUnit(
 													bu,
-													getTile(pos + Position(x, y, -1)));
+													getTile(pos + Position(x, y,-1)));
 		}
 	}
 
@@ -2030,7 +2032,11 @@ bool SavedBattleGame::placeUnitNearPosition(
 
 		Tile* t = getTile(entryPoint + offset);
 		if (t
-			&& !getPathfinding()->isBlocked(getTile(entryPoint), t, dir, 0)
+			&& !getPathfinding()->isBlocked(
+										getTile(entryPoint),
+										t,
+										dir,
+										NULL)
 			&& setUnitPosition(
 							unit,
 							entryPoint + offset))
@@ -2149,7 +2155,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked() xcom = " << xcom;
 
-	BattleUnit* leader = 0;
+	BattleUnit* leader = NULL;
 
 	for (std::vector<BattleUnit*>::iterator
 			bu = _units.begin();
@@ -2165,7 +2171,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 				if ((*bu)->getOriginalFaction() == FACTION_PLAYER
 					&& (*bu)->getFaction() == FACTION_PLAYER)
 				{
-					if (leader == 0
+					if (leader == NULL
 						|| (*bu)->getRankInt() > leader->getRankInt())
 					{
 						leader = *bu;
@@ -2176,7 +2182,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 				&& (*bu)->getFaction() == FACTION_HOSTILE)
 			{
 				//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is aLien";
-				if (leader == 0
+				if (leader == NULL
 					|| (*bu)->getRankInt() < leader->getRankInt())
 				{
 					leader = *bu;
@@ -2206,7 +2212,7 @@ int SavedBattleGame::getMoraleModifier(
 	//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
 	int result = 100;
 
-	if (unit == 0) // leadership Bonus
+	if (unit == NULL) // leadership Bonus
 	{
 		//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), leadership Bonus";
 		if (xcom)

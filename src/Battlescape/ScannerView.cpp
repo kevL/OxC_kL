@@ -67,7 +67,7 @@ ScannerView::ScannerView(
 void ScannerView::draw()
 {
 	SurfaceSet* set = _game->getResourcePack()->getSurfaceSet("DETBLOB.DAT");
-	Surface* surface = 0;
+	Surface* surface = NULL;
 
 	clear();
 

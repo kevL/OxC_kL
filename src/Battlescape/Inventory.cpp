@@ -719,7 +719,8 @@ void Inventory::mouseClick(Action* action, State* state)
 						if (slot->getType() == INV_GROUND)
 						{
 							newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND"); // kL
-/*kL							switch (item->getRules()->getBattleType())
+/*kL
+							switch (item->getRules()->getBattleType())
 							{
 								case BT_FIREARM:
 									newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND");

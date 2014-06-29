@@ -222,7 +222,7 @@ private:
 				Soldier* soldier,
 				UnitFaction faction,
 				int diff, // kL_add: For VictoryPts value per death.
-				BattlescapeGame* battleGame); // kL_add: for playing sound when hit.
+				BattlescapeGame* battleGame = NULL); // kL_add: for playing sound when hit.
 		BattleUnit( // aLiens, civies, & Tanks
 				Unit* unit,
 				UnitFaction faction,

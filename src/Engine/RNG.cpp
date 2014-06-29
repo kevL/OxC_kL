@@ -83,12 +83,12 @@ int generate(
 		int min,
 		int max)
 {
-	uint64_t num = next();
+	uint64_t rand = next();
 
 	if (max < min)	// CyberAngel
 		max = min;	// http://openxcom.org/bugs/openxcom/issues/736
 
-	return static_cast<int>(num %(max - min + 1) + min);
+	return static_cast<int>(rand %(max - min + 1) + min);
 }
 
 /**
@@ -101,7 +101,7 @@ double generate(
 		double min,
 		double max)
 {
-//kL	double num = static_cast<double>(next());
+//kL	double rand = static_cast<double>(next());
 
 	// kL_begin:
 	double div = max - min;
@@ -112,13 +112,13 @@ double generate(
 	if (AreSame(div, 0.0))	// kL
 		return min;			// kL
 
-	double num = static_cast<double>(next());
+	double rand = static_cast<double>(next());
 
-	return ((num / div) + min);
+	return ((rand / div) + min);
 	// kL_end.
 
-//kL	return static_cast<double>(num / (static_cast<double>(UINT64_MAX) / (max - min)) + min);
-//	return (num / (static_cast<double>(UINT64_MAX) / (max - min)) + min); // kL
+//kL	return static_cast<double>(rand / (static_cast<double>(UINT64_MAX) / (max - min)) + min);
+//	return (rand / (static_cast<double>(UINT64_MAX) / (max - min)) + min); // kL
 }
 
 /**
@@ -195,9 +195,9 @@ int generateEx(int max)
 	if (max < 2)	// kL
 		return 0;	// kL
 
-	uint64_t num = next();
+	uint64_t rand = next();
 
-	return static_cast<int>(num %max);
+	return static_cast<int>(rand %max);
 }
 
 }

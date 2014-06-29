@@ -66,6 +66,7 @@ private:
 		_isMouseScrolling,
 		_mouseOverThreshold;
 	int
+		_fuseFrame, // kL
 		_totalMouseMoveX,
 		_totalMouseMoveY,
 		_xBeforeMouseScrolling,
@@ -155,6 +156,7 @@ private:
 
 	/// Popups a context sensitive list of actions the user can choose from.
 	void handleItemClick(BattleItem* item);
+
 	/// Shifts the red colors of the visible unit buttons backgrounds.
 	void blinkVisibleUnitButtons();
 	/// kL. Draws the kneel indicator.
@@ -341,6 +343,8 @@ private:
 		void toggleIcons(bool vis); // kL
 		/// kL. Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
 		void refreshVisUnits(); // kL
+		/// Shows primer warnings on all live grenades. kL. Adapted from Inventory.
+		void drawFuse(); // kL
 };
 
 }

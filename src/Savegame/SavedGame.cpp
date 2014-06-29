@@ -650,7 +650,7 @@ void SavedGame::save(const std::string& filename) const
 	Base* base			= _bases.front();							// kL
 	brief["base"]		= Language::wstrToUtf8(base->getName());	// kL
 
-	if (_battleGame != 0)
+	if (_battleGame != NULL)
 	{
 		brief["mission"]	= _battleGame->getMissionType();
 		brief["turn"]		= _battleGame->getTurn();
@@ -778,7 +778,7 @@ void SavedGame::save(const std::string& filename) const
 		node["deadSoldiers"].push_back((*i)->save());
 	}
 
-	if (_battleGame != 0)
+	if (_battleGame != NULL)
 		node["battleGame"] = _battleGame->save();
 
 	out << node;

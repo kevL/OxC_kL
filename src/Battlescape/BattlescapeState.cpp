@@ -124,8 +124,9 @@ BattlescapeState::BattlescapeState()
 		_mouseOverIcons(false),
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),
-		_mouseScrollingStartTime(0)
+		_mouseScrollingStartTime(0),
 	// kL_end.
+		_fuseFrame(0) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	std::fill_n(
@@ -199,9 +200,9 @@ BattlescapeState::BattlescapeState()
 
 	_btnZeroTUs			= new InteractiveSurface(57, 23, _icons->getX() + 49, _icons->getY() + 33); // kL
 
-	_btnLeftHandItem	= new InteractiveSurface(32, 48, _icons->getX() +   8, _icons->getY() + 5);
+	_btnLeftHandItem	= new InteractiveSurface(32, 48, _icons->getX() + 8, _icons->getY() + 5);
 	_btnRightHandItem	= new InteractiveSurface(32, 48, _icons->getX() + 280, _icons->getY() + 5);
-	_numAmmoLeft		= new NumberText(30, 5, _icons->getX() +   8, _icons->getY() + 4);
+	_numAmmoLeft		= new NumberText(30, 5, _icons->getX() + 8, _icons->getY() + 4);
 	_numAmmoRight		= new NumberText(30, 5, _icons->getX() + 280, _icons->getY() + 4);
 
 	for (int
@@ -851,9 +852,9 @@ void BattlescapeState::think()
 			//Log(LOG_INFO) << "BattlescapeState::think() -> _battlegame.think()";
 			_battleGame->think();
 			//Log(LOG_INFO) << "BattlescapeState::think() -> _animTimer.think()";
-			_animTimer->think(this, 0);
+			_animTimer->think(this, NULL);
 			//Log(LOG_INFO) << "BattlescapeState::think() -> _gametimer.think()";
-			_gameTimer->think(this, 0);
+			_gameTimer->think(this, NULL);
 			//Log(LOG_INFO) << "BattlescapeState::think() -> back from think";
 
 			if (popped)
@@ -2221,6 +2222,7 @@ void BattlescapeState::animate()
 	_map->animate(!_battleGame->isBusy());
 
 	blinkVisibleUnitButtons();
+	drawFuse(); // kL
 }
 
 /**
@@ -3197,6 +3199,62 @@ void BattlescapeState::refreshVisUnits() // kL
 
 		_visibleUnit[j] = *i;
 	}
+}
+
+/**
+ * Shows primer warnings on all live grenades.
+ * kL. Adapted from Inventory.
+ */
+void BattlescapeState::drawFuse()
+{
+	if (_save->getSelectedUnit() == NULL)
+		return;
+
+	BattleUnit* selectedUnit = _save->getSelectedUnit();
+
+	const int pulse[8] = {0, 1, 2, 3, 4, 3, 2, 1};
+
+	if (_fuseFrame == 8)
+		_fuseFrame = 0;
+
+	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
+
+	BattleItem* ltItem = selectedUnit->getItem("STR_LEFT_HAND");
+	if (ltItem
+		&& ((ltItem->getRules()->getBattleType() == BT_GRENADE
+				|| ltItem->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+			&& ltItem->getFuseTimer() > -1))
+	{
+		//Log(LOG_INFO) << "drawFuse() ltItem VALID";
+		_btnLeftHandItem->lock();
+		srf->blitNShade(
+					_btnLeftHandItem,
+					_btnLeftHandItem->getX(),
+					_btnLeftHandItem->getY(),
+					pulse[_fuseFrame],
+					false,
+					Palette::blockOffset(2)+3);
+		_btnLeftHandItem->unlock();
+	}
+
+	BattleItem* rtItem = selectedUnit->getItem("STR_RIGHT_HAND");
+	if (rtItem
+		&& ((rtItem->getRules()->getBattleType() == BT_GRENADE
+				|| rtItem->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+			&& rtItem->getFuseTimer() > -1))
+	{
+		_btnRightHandItem->lock();
+		srf->blitNShade(
+					_btnRightHandItem,
+					_btnRightHandItem->getX(),
+					_btnRightHandItem->getY(),
+					pulse[_fuseFrame],
+					false,
+					Palette::blockOffset(2)+3);
+		_btnRightHandItem->unlock();
+	}
+
+	_fuseFrame++;
 }
 
 }
