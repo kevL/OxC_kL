@@ -71,7 +71,8 @@ Tile::Tile(const Position& pos)
 		_preview(-1),
 		_tuMarker(-1),
 		_overlaps(0),
-		_danger(false)
+		_danger(false),
+		_inventory() // kL
 {
 	for (int
 			i = 0;

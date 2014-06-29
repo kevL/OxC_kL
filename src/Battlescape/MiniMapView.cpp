@@ -150,7 +150,7 @@ void MiniMapView::draw()
 					continue;
 				}
 
-				int tileShade = 16;
+				int tileShade = 16; // paint it ... black !
 				if (tile->isDiscovered(2))
 					tileShade = tile->getShade();
 
@@ -169,11 +169,31 @@ void MiniMapView::draw()
 					}
 
 					if (srf)
+					{
+						// kL_begin:
+						int baseColor = 0;
+						if (px == 0
+							|| px == _battleGame->getMapSizeX() - 1
+							|| py == 0
+							|| py == _battleGame->getMapSizeY() - 1)
+						{
+							baseColor = 1; // greyscale
+
+							if (tileShade == 16)
+							{
+								tileShade = 0;
+								srf = _set->getFrame(377);
+							}
+						} // kL_end.
+
 						srf->blitNShade(
 									this,
 									x,
 									y,
-									tileShade);
+									tileShade,
+									false,
+									baseColor); // kL
+					}
 				}
 
 				BattleUnit* unit = tile->getUnit();
@@ -197,27 +217,14 @@ void MiniMapView::draw()
 					else if (unit->getFaction() == FACTION_PLAYER			// Mc'd aLien
 						&& unit->getOriginalFaction() == FACTION_HOSTILE)
 					{
-						baseColor = 11; // 11 = brown
+						baseColor = 11; // brown
 					}
 					else if (unit->getFaction() == FACTION_HOSTILE			// Mc'd xCom
 						&& unit->getOriginalFaction() == FACTION_PLAYER)
 					{
 						baseColor = 8; // steel blue
-					}
-/*old
-					if (tile->getUnit() == _battleGame->getSelectedUnit())
-					{
-						srf->blitNShade(this, x, y, 0, false,
-									4);		// should be same as 36, pale green.
-//									1);		// white -> these numbers are blockOffsets + 1block ( ie. block 0 = block 1)
-//									17);	// white again. % > 1
-//									35);	// red. % > 3
-//									36);	// pale green % > 4
-//									37);	// paler green % > 5
-//									8);		// blue again. % > 8
-//									25);	// pale blue % > 9
-					}
-					else */ // kL_end.
+					} // kL_end.
+
 					srf->blitNShade(
 								this,
 								x,

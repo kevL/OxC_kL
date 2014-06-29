@@ -116,7 +116,7 @@ Map::Map(
 		_cursorType(CT_NORMAL),
 		_cursorSize(1),
 		_animFrame(0),
-//kL		_cursorFrame(0), // DarkDefender
+//kL	_cursorFrame(0), // DarkDefender
 		_projectile(NULL),
 		_projectileInFOV(false),
 		_explosionInFOV(false),
@@ -1761,10 +1761,40 @@ void Map::drawTerrain(Surface* surface)
 
 						waypid++;
 					}
+
+
+					// kL_begin:
+					if (itZ == 0) // draw border-markers only on ground tiles
+					{
+						if (itX == 0
+							|| itX == _save->getMapSizeX() - 1
+							|| itY == 0
+							|| itY == _save->getMapSizeY() - 1)
+						{
+/*							SCANG.DAT:
+							264 - grey, dark
+							043 - grey, medium dark
+							377 - grey, dark (bit of slate blue)
+							233 - grey, medium
+							376 - grey, medium light (bit of slate blue)
+							392 - grey, light */
+							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(376);
+							tmpSurface->blitNShade(
+									surface,
+									screenPosition.x + 14,
+									screenPosition.y + 31,
+									0);
+						}
+					} // kL_end.
 				}
+				// is inside the Surface
 			}
+			// end Tiles_y looping.
 		}
+		// end Tiles_x looping.
 	}
+	// end Tiles_z looping.
+
 
 	if (pathfinderTurnedOn)
 	{

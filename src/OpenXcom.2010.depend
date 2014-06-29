@@ -6401,7 +6401,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1404010788 source:f:\git\openxcom\src\battlescape\map.cpp
+1404065833 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6501,7 +6501,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1404053027 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1404069683 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<cmath>
 	<sstream>
@@ -7107,7 +7107,7 @@
 
 1402457813 f:\git\openxcom\src\version.h
 
-1402457812 source:f:\git\openxcom\src\engine\palette.cpp
+1404061874 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
 	<fstream>
 	"Exception.h"
@@ -9671,7 +9671,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1403815609 source:f:\git\openxcom\src\savegame\tile.cpp
+1404066394 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
