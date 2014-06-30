@@ -299,7 +299,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		// it should also hide units when they've killed the guy spotting them;
 		// it's also for good luck
 
-    BattleAIState* ai = unit->getCurrentAIState();
+	BattleAIState* ai = unit->getCurrentAIState();
 	if (!ai)
 	{
 		//Log(LOG_INFO) << "BattlescapeGame::handleAI() !ai, assign AI";
@@ -338,7 +338,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	//Log(LOG_INFO) << ". Define action.actor";
 	action.actor = unit;
 	//Log(LOG_INFO) << ". Define action.number";
-    action.number = _AIActionCounter;
+	action.number = _AIActionCounter;
 	//Log(LOG_INFO) << ". unit->think(&action)";
 	unit->think(&action);
 	//Log(LOG_INFO) << ". _unit->think() DONE";
@@ -1572,7 +1572,7 @@ bool BattlescapeGame::checkReservedTU(
 		int tu,
 		bool test)
 {
-    BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
+	BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
 
 	// aLiens reserve TUs as a percentage rather than just enough for a single action.
 	if (_save->getSide() != FACTION_PLAYER)

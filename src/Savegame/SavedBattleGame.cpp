@@ -217,7 +217,7 @@ void SavedBattleGame::load(
 		Tile::SerializationKey serKey;
 		size_t totalTiles = node["totalTiles"].as<size_t>();
 
-        memset(
+		memset(
 				&serKey,
 				0,
 				sizeof(Tile::SerializationKey));
@@ -531,7 +531,7 @@ YAML::Node SavedBattleGame::save() const
 	node["tileOffsetSize"]		= Tile::serializationKey._animOffset; // kL
 	node["tileIDSize"]			= Tile::serializationKey._mapDataID;
 	node["tileSetIDSize"]		= Tile::serializationKey._mapDataSetID;
-    node["tileBoolFieldsSize"]	= Tile::serializationKey.boolFields;
+	node["tileBoolFieldsSize"]	= Tile::serializationKey.boolFields;
 
 	size_t tileDataSize = Tile::serializationKey.totalBytes * _mapsize_z * _mapsize_y * _mapsize_x;
 	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
@@ -585,8 +585,8 @@ YAML::Node SavedBattleGame::save() const
 	}
 
 	node["tuReserved"]		= static_cast<int>(_tuReserved);
-    node["kneelReserved"]	= _kneelReserved;
-    node["depth"]			= _depth;
+	node["kneelReserved"]	= _kneelReserved;
+	node["depth"]			= _depth;
 
 	return node;
 }

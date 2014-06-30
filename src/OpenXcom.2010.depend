@@ -4371,7 +4371,7 @@
 	<string>
 	<iosfwd>
 
-1402457812 f:\git\openxcom\src\engine\localizedtext.h
+1404090598 f:\git\openxcom\src\engine\localizedtext.h
 	<sstream>
 	<string>
 
@@ -4381,7 +4381,7 @@
 	"../Ruleset/StatString.h"
 	"../Ruleset/Unit.h"
 
-1402457813 f:\git\openxcom\src\ruleset\unit.h
+1404089108 f:\git\openxcom\src\ruleset\unit.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -4634,7 +4634,7 @@
 1402457812 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1404060873 f:\git\openxcom\src\ruleset\ruleset.h
+1404091405 f:\git\openxcom\src\ruleset\ruleset.h
 	<map>
 	<string>
 	<vector>
@@ -4737,7 +4737,7 @@
 	"../Savegame/BattleItem.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
-1402457812 f:\git\openxcom\src\engine\logger.h
+1404091359 f:\git\openxcom\src\engine\logger.h
 	<sstream>
 	<string>
 	<stdio.h>
@@ -4775,7 +4775,7 @@
 	<SDL.h>
 	"Position.h"
 
-1402457811 f:\git\openxcom\src\battlescape\position.h
+1404090492 f:\git\openxcom\src\battlescape\position.h
 	<yaml-cpp/yaml.h>
 
 1402457813 f:\git\openxcom\src\savegame\vehicle.h
@@ -5624,7 +5624,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedBattleGame.h"
 
-1403789357 f:\git\openxcom\src\battlescape\abortmissionstate.h
+1404088196 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
 1404011896 f:\git\openxcom\src\battlescape\battlescapestate.h
@@ -5945,7 +5945,7 @@
 	<string>
 	"../Engine/InteractiveSurface.h"
 
-1402457811 f:\git\openxcom\src\engine\crossplatform.h
+1404089870 f:\git\openxcom\src\engine\crossplatform.h
 	<SDL.h>
 	<string>
 	<utility>
@@ -6098,7 +6098,7 @@
 1402457811 f:\git\openxcom\src\battlescape\warningmessage.h
 	"../Engine/Surface.h"
 
-1402457813 f:\git\openxcom\src\lodepng.h
+1404090747 f:\git\openxcom\src\lodepng.h
 	<string.h>
 	<vector>
 	<string>
@@ -6501,7 +6501,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1404069683 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1404077444 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<cmath>
 	<sstream>
@@ -6834,10 +6834,10 @@
 1402457812 f:\git\openxcom\src\engine\shaderdraw.h
 	"ShaderDrawHelper.h"
 
-1402457812 f:\git\openxcom\src\engine\shaderdrawhelper.h
-	"Surface.h"
-	"GraphSubset.h"
+1404090999 f:\git\openxcom\src\engine\shaderdrawhelper.h
 	<vector>
+	"GraphSubset.h"
+	"Surface.h"
 
 1402457812 f:\git\openxcom\src\engine\graphsubset.h
 	<utility>
@@ -6963,7 +6963,7 @@
 	"Options.h"
 	"../fmath.h"
 
-1397875148 f:\git\openxcom\src\engine\flc.h
+1404091764 f:\git\openxcom\src\engine\flc.h
 	<SDL.h>
 
 1402457812 f:\git\openxcom\src\engine\zoom.h
@@ -7122,11 +7122,11 @@
 	"common.h"
 	"hqx.h"
 
-1382767443 f:\git\openxcom\src\engine\scalers\common.h
+1404089853 f:\git\openxcom\src\engine\scalers\common.h
 	<stdlib.h>
 	<stdint.h>
 
-1382767443 f:\git\openxcom\src\engine\scalers\hqx.h
+1404089879 f:\git\openxcom\src\engine\scalers\hqx.h
 	<stdint.h>
 
 1382767443 source:f:\git\openxcom\src\engine\scalers\hq3x.cpp
@@ -7799,7 +7799,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1403815099 f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.h
+1404091774 f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.h
 	"../Engine/State.h"
 
 1403814516 f:\git\openxcom\src\geoscape\newpossibleresearchstate.h
@@ -7890,7 +7890,7 @@
 
 1402457812 f:\git\openxcom\src\geoscape\polyline.h
 
-1402457812 f:\git\openxcom\src\engine\shaderrepeat.h
+1404089904 f:\git\openxcom\src\engine\shaderrepeat.h
 	<vector>
 	"ShaderDraw.h"
 
@@ -8127,7 +8127,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1402457813 f:\git\openxcom\src\ruleset\articledefinition.h
+1404090322 f:\git\openxcom\src\ruleset\articledefinition.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -11508,7 +11508,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1403165117 f:\git\openxcom\src\engine\options.inc.h
+1404089909 f:\git\openxcom\src\engine\options.inc.h
 
 1402457812 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"

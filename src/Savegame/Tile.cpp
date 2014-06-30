@@ -169,8 +169,8 @@ void Tile::loadBinary(
 	_fire		= unserializeInt(&buffer, serKey._fire);
 	_animOffset	= unserializeInt(&buffer, serKey._animOffset); // kL
 
-//kL    Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
-    Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields)); // kL
+//kL	Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
+	Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields)); // kL
 
 	_discovered[0] = (boolFields & 1)? true: false;
 	_discovered[1] = (boolFields & 2)? true: false;

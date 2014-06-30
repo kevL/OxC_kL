@@ -46,7 +46,7 @@ class NewPossibleManufactureState
 private:
 	Base* _base;
 	Text* _txtTitle;
-    TextButton
+	TextButton
 		* _btnManufacture,
 		* _btnOk;
 	TextList* _lstPossibilities;

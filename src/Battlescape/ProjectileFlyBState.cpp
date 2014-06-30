@@ -1197,7 +1197,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
 				dist -= static_cast<int>(curZ / delta_z);
 
 			break;
-        }
+		}
 
 		delta_z -= static_cast<double>(50 * weight / strength) / 100.0;
 		if (delta_z <= -2.0) // become falling

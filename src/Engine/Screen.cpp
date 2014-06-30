@@ -518,7 +518,7 @@ void Screen::resetDisplay(bool resetVideo)
 		if (_topBlackBand < 0)
 			_topBlackBand = 0;
 
-        _bottomBlackBand = getHeight() - targetHeight - _topBlackBand;
+		_bottomBlackBand = getHeight() - targetHeight - _topBlackBand;
 		_leftBlackBand = _rightBlackBand = 0;
 		_cursorLeftBlackBand = 0;
 
@@ -648,7 +648,7 @@ void Screen::screenshot(const std::string& filename) const
 }
 
 
-/** 
+/**
  * Check whether useHQXFilter is set in Options
  * and a compatible resolution has been selected.
  * @return, True if HQXFilter is enabled

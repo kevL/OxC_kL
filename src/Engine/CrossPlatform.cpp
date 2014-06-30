@@ -165,18 +165,18 @@ std::vector<std::string> findDataFolders()
 
 	// Get user-specific data folders
 	if (char const* const xdg_data_home = getenv("XDG_DATA_HOME"))
- 	{
+	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/data/", xdg_data_home);
- 	}
- 	else
- 	{
+	}
+	else
+	{
 #ifdef __APPLE__
 		snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/data/", home);
 #else
 		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/data/", home);
 #endif
- 	}
- 	list.push_back(path);
+	}
+	list.push_back(path);
 
 	// Get global data folders
 	if (char* xdg_data_dirs = getenv("XDG_DATA_DIRS"))
@@ -257,17 +257,17 @@ std::vector<std::string> findUserFolders()
 
 	// Get user folders
 	if (char const* const xdg_data_home = getenv("XDG_DATA_HOME"))
- 	{
+	{
 		snprintf(path, MAXPATHLEN, "%s/openxcom/", xdg_data_home);
- 	}
- 	else
- 	{
+	}
+	else
+	{
 #ifdef __APPLE__
 		snprintf(path, MAXPATHLEN, "%s/Library/Application Support/OpenXcom/", home);
 #else
 		snprintf(path, MAXPATHLEN, "%s/.local/share/openxcom/", home);
 #endif
- 	}
+	}
 	list.push_back(path);
 
 	// Get old-style folder
@@ -830,7 +830,7 @@ bool isQuitShortcut(const SDL_Event& ev)
 	return (ev.type == SDL_KEYDOWN && ev.key.keysym.sym == SDLK_q && ev.key.keysym.mod & KMOD_LMETA);
 #else
 	//TODO add other OSs shortcuts.
-    (void)ev;
+	(void)ev;
 	return false;
 #endif
 }

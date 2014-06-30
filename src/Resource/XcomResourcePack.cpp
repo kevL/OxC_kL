@@ -589,7 +589,7 @@ XcomResourcePack::XcomResourcePack( // kL
 				i = musicRules.begin();
 				i != musicRules.end();
 				++i)
-        {
+		{
 			std::string type = i->first;
 			RuleMusic* musicRule = i->second;
 

@@ -252,7 +252,7 @@ bool Node::isTarget() const
  */
 void Node::setType(int type)
 {
-    _type = type;
+	_type = type;
 }
 
 }

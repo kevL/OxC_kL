@@ -1,4 +1,5 @@
-/*      vi:set nowrap ts=2 sw=2:
+/*
+	vi:set nowrap ts=2 sw=2:
 */
 /** COPYING:
 
@@ -34,49 +35,50 @@ namespace Flc
 
 {
 
-struct Flc_t {
-  FILE *file;
-  Uint8 *pMembuf;
-  Uint32 membufSize;
-  Uint8 *pFrame;
-  Uint8 *pChunk;
-  Uint16 FrameCount;    /* Frame Counter */
-  /*
-  */
-  Uint32 HeaderSize;    /* Fli file size */
-  Uint16 HeaderCheck;   /* Fli header check */
-  Uint16 HeaderFrames;  /* Number of frames in flic */
-  Uint16 HeaderWidth;   /* Fli width */
-  Uint16 HeaderHeight;  /* Fli heigth */
-  Uint16 HeaderDepth;   /* Color depth */
-  double HeaderSpeed;   /* Number of video ticks between frame */
-  Uint32 FrameSize;     /* Frame size in bytes */
-  Uint16 FrameCheck;    /* Frame check */
-  Uint16 FrameChunks;   /* Number of chunks in frame */
-  Uint32 ChunkSize;     /* Size of chunk */
-  Uint16 ChunkType;     /* Type of chunk */
-  /*
-  */
-  // FRAME_TYPE extension, see http://www.compuphase.com/flic.htm
-  Uint16 DelayOverride;
-  //
+struct Flc_t
+{
+	FILE* file;
+	Uint8* pMembuf;
+	Uint32 membufSize;
+	Uint8* pFrame;
+	Uint8* pChunk;
+	Uint16 FrameCount;		/* Frame Counter */
+/*
+*/
+	Uint32 HeaderSize;		/* Fli file size */
+	Uint16 HeaderCheck;		/* Fli header check */
+	Uint16 HeaderFrames;	/* Number of frames in flic */
+	Uint16 HeaderWidth;		/* Fli width */
+	Uint16 HeaderHeight;	/* Fli heigth */
+	Uint16 HeaderDepth;		/* Color depth */
+	double HeaderSpeed;		/* Number of video ticks between frame */
+	Uint32 FrameSize;		/* Frame size in bytes */
+	Uint16 FrameCheck;		/* Frame check */
+	Uint16 FrameChunks;		/* Number of chunks in frame */
+	Uint32 ChunkSize;		/* Size of chunk */
+	Uint16 ChunkType;		/* Type of chunk */
+/*
+*/
+	// FRAME_TYPE extension, see http://www.compuphase.com/flic.htm
+	Uint16 DelayOverride;
+	//
 
-  SDL_Surface *mainscreen;
-  Screen *realscreen;
-  SDL_Color colors[256];
-  int screen_w;
-  int screen_h;
-  int screen_depth;
-  int loop;
-  int dx, dy;
-  int offset;
-  bool quit;
+	SDL_Surface* mainscreen;
+	Screen* realscreen;
+	SDL_Color colors[256];
+	int screen_w;
+	int screen_h;
+	int screen_depth;
+	int loop;
+	int dx, dy;
+	int offset;
+	bool quit;
 };
 
 extern struct Flc_t flc;
 
 /// Open FLC or FLI file, read header, prepare to play it
-int FlcInit(const char *filename);
+int FlcInit(const char* filename);
 /// Play the loaded file; set flc.mainscreen first!
 void FlcMain(void (*frameCallBack)());
 /// Free memory, free love, etc.

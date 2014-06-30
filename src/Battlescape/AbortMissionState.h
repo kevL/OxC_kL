@@ -42,27 +42,27 @@ class AbortMissionState
 {
 
 private:
-    int
-        _inExitArea,
-        _outExitArea;
+	int
+		_inExitArea,
+		_outExitArea;
 
-    BattlescapeState* _state;
-    Text
-        * _txtAbort,
-        * _txtInExit,
-        * _txtOutsideExit;
-    TextButton
-        * _btnCancel,
-        * _btnOk;
-    SavedBattleGame* _battleGame;
-    Window* _window;
+	BattlescapeState* _state;
+	Text
+		* _txtAbort,
+		* _txtInExit,
+		* _txtOutsideExit;
+	TextButton
+		* _btnCancel,
+		* _btnOk;
+	SavedBattleGame* _battleGame;
+	Window* _window;
 
 
 	public:
 		/// Creates the Abort Mission state.
 		AbortMissionState(
-                SavedBattleGame* battleGame,
-                BattlescapeState* state);
+				SavedBattleGame* battleGame,
+				BattlescapeState* state);
 		/// Cleans up the Abort Mission state.
 		~AbortMissionState();
 

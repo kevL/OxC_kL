@@ -481,15 +481,15 @@ bool init(
 void setFolders()
 {
 	_dataList = CrossPlatform::findDataFolders();
-    if (_dataFolder != "")
+	if (_dataFolder != "")
 		_dataList.insert(_dataList.begin(), _dataFolder);
 
-    if (_userFolder == "")
-    {
-        std::vector<std::string> user = CrossPlatform::findUserFolders();
-        _configFolder = CrossPlatform::findConfigFolder();
+	if (_userFolder == "")
+	{
+		std::vector<std::string> user = CrossPlatform::findUserFolders();
+		_configFolder = CrossPlatform::findConfigFolder();
 
-        for (std::vector<std::string>::iterator // Look for an existing user folder
+		for (std::vector<std::string>::iterator // Look for an existing user folder
 				i = user.begin();
 				i != user.end();
 				++i)
@@ -543,9 +543,9 @@ void updateOptions()
 		save();
 	}
 
-    // now apply options set on the command line, overriding defaults and those loaded from config file
-	//if (!_commandLine.empty())
-    for (std::vector<OptionInfo>::iterator
+	// now apply options set on the command line, overriding defaults and those loaded from config file
+//	if (!_commandLine.empty())
+	for (std::vector<OptionInfo>::iterator
 			i = _info.begin();
 			i != _info.end();
 			++i)

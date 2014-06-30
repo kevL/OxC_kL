@@ -140,7 +140,7 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 								0,
 								NULL,
 								NULL);
-    std::string str(size, 0);
+	std::string str(size, 0);
 	WideCharToMultiByte(
 					CP_UTF8,
 					0,
@@ -154,55 +154,55 @@ std::string Language::wstrToUtf8(const std::wstring& src)
 	return str;
 #else
 	std::string out;
-    unsigned int codepoint = 0;
+	unsigned int codepoint = 0;
 
-    for (std::wstring::const_iterator
+	for (std::wstring::const_iterator
 			i = src.begin();
 			i != src.end();
 			++i)
-    {
+	{
 		wchar_t ch = *i;
-        if (ch >= 0xd800
+		if (ch >= 0xd800
 			&& ch <= 0xdbff)
 		{
-            codepoint = ((ch - 0xd800) << 10) + 0x10000;
+			codepoint = ((ch - 0xd800) << 10) + 0x10000;
 		}
-        else
-        {
-            if (ch >= 0xdc00
+		else
+		{
+			if (ch >= 0xdc00
 				&& ch <= 0xdfff)
 			{
-                codepoint |= ch - 0xdc00;
+				codepoint |= ch - 0xdc00;
 			}
-            else
-                codepoint = ch;
+			else
+				codepoint = ch;
 
-            if (codepoint <= 0x7f)
-                out.append(1, static_cast<char>(codepoint));
-            else if (codepoint <= 0x7ff)
-            {
-                out.append(1, static_cast<char>(0xc0 | ((codepoint >> 6) & 0x1f)));
-                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
-            }
-            else if (codepoint <= 0xffff)
-            {
-                out.append(1, static_cast<char>(0xe0 | ((codepoint >> 12) & 0x0f)));
-                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
-                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
-            }
-            else
-            {
-                out.append(1, static_cast<char>(0xf0 | ((codepoint >> 18) & 0x07)));
-                out.append(1, static_cast<char>(0x80 | ((codepoint >> 12) & 0x3f)));
-                out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
-                out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
-            }
+			if (codepoint <= 0x7f)
+				out.append(1, static_cast<char>(codepoint));
+			else if (codepoint <= 0x7ff)
+			{
+				out.append(1, static_cast<char>(0xc0 | ((codepoint >> 6) & 0x1f)));
+				out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+			}
+			else if (codepoint <= 0xffff)
+			{
+				out.append(1, static_cast<char>(0xe0 | ((codepoint >> 12) & 0x0f)));
+				out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+				out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+			}
+			else
+			{
+				out.append(1, static_cast<char>(0xf0 | ((codepoint >> 18) & 0x07)));
+				out.append(1, static_cast<char>(0x80 | ((codepoint >> 12) & 0x3f)));
+				out.append(1, static_cast<char>(0x80 | ((codepoint >> 6) & 0x3f)));
+				out.append(1, static_cast<char>(0x80 | (codepoint & 0x3f)));
+			}
 
-            codepoint = 0;
-        }
-    }
+			codepoint = 0;
+		}
+	}
 
-    return out;
+	return out;
 #endif
 }
 
@@ -295,8 +295,8 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 								(int)src.size(),
 								NULL,
 								0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(
+	std::wstring wstr(size, 0);
+	MultiByteToWideChar(
 					CP_UTF8,
 					0,
 					&src[0],
@@ -307,58 +307,58 @@ std::wstring Language::utf8ToWstr(const std::string& src)
 	return wstr;
 #else
 	std::wstring out;
-    unsigned int codepoint = 0;
-    int following = 0;
+	unsigned int codepoint = 0;
+	int following = 0;
 
-    for (std::string::const_iterator
+	for (std::string::const_iterator
 			i = src.begin();
 			i != src.end();
 			++i)
-    {
-        unsigned char ch = *i;
-        if (ch <= 0x7f)
-        {
-            codepoint = ch;
-            following = 0;
-        }
-        else if (ch <= 0xbf)
-        {
-            if (following > 0)
-            {
-                codepoint = (codepoint << 6) | (ch & 0x3f);
-                --following;
-            }
-        }
-        else if (ch <= 0xdf)
-        {
-            codepoint = ch & 0x1f;
-            following = 1;
-        }
-        else if (ch <= 0xef)
-        {
-            codepoint = ch & 0x0f;
-            following = 2;
-        }
-        else
-        {
-            codepoint = ch & 0x07;
-            following = 3;
-        }
-        if (following == 0)
-        {
-            if (codepoint > 0xffff)
-            {
-                out.append(1, static_cast<wchar_t>(0xd800 + (codepoint >> 10)));
-                out.append(1, static_cast<wchar_t>(0xdc00 + (codepoint & 0x03ff)));
-            }
-            else
-                out.append(1, static_cast<wchar_t>(codepoint));
+	{
+		unsigned char ch = *i;
+		if (ch <= 0x7f)
+		{
+			codepoint = ch;
+			following = 0;
+		}
+		else if (ch <= 0xbf)
+		{
+			if (following > 0)
+			{
+				codepoint = (codepoint << 6) | (ch & 0x3f);
+				--following;
+			}
+		}
+		else if (ch <= 0xdf)
+		{
+			codepoint = ch & 0x1f;
+			following = 1;
+		}
+		else if (ch <= 0xef)
+		{
+			codepoint = ch & 0x0f;
+			following = 2;
+		}
+		else
+		{
+			codepoint = ch & 0x07;
+			following = 3;
+		}
+		if (following == 0)
+		{
+			if (codepoint > 0xffff)
+			{
+				out.append(1, static_cast<wchar_t>(0xd800 + (codepoint >> 10)));
+				out.append(1, static_cast<wchar_t>(0xdc00 + (codepoint & 0x03ff)));
+			}
+			else
+				out.append(1, static_cast<wchar_t>(codepoint));
 
-            codepoint = 0;
-        }
-    }
+			codepoint = 0;
+		}
+	}
 
-    return out;
+	return out;
 #endif
 }
 
@@ -381,8 +381,8 @@ std::wstring Language::cpToWstr(const std::string& src)
 								(int)src.size(),
 								NULL,
 								0);
-    std::wstring wstr(size, 0);
-    MultiByteToWideChar(
+	std::wstring wstr(size, 0);
+	MultiByteToWideChar(
 					CP_ACP,
 					0,
 					&src[0],

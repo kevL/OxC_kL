@@ -31,6 +31,7 @@ namespace OpenXcom
  */
 class Position
 {
+
 public:
 	int
 		x,
@@ -155,7 +156,7 @@ public:
 
 		return *this;
 	}
-    Position operator/ (const int v) const
+	Position operator/ (const int v) const
 	{
 		return Position(
 						x / v,
@@ -172,7 +173,7 @@ public:
 	} // kL_end.
 
 	/// == operator
-    bool operator== (const Position& pos) const
+	bool operator== (const Position& pos) const
 	{
 		return
 			   x == pos.x
@@ -181,7 +182,7 @@ public:
 	}
 
 	/// != operator
-    bool operator!= (const Position& pos) const
+	bool operator!= (const Position& pos) const
 	{
 		return
 			   x != pos.x

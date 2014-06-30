@@ -31,11 +31,11 @@
  */
 
 #ifndef OX_REQUIRED_RESULT
-#  if defined(__GNUC_) && !defined(__INTEL_COMPILER) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))
-#    define OX_REQUIRED_RESULT __attribute__ ((warn_unused_result))
-#  else
-#    define OX_REQUIRED_RESULT
-#  endif
+#	if defined(__GNUC_) && !defined(__INTEL_COMPILER) && (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 1))
+#		define OX_REQUIRED_RESULT __attribute__ ((warn_unused_result))
+#	else
+#		define OX_REQUIRED_RESULT
+#	endif
 #endif
 
 

@@ -20,12 +20,15 @@
 #ifndef OPENXCOM_SHADERDRAWHELPER_H
 #define	OPENXCOM_SHADERDRAWHELPER_H
 
-#include "Surface.h"
-#include "GraphSubset.h"
 #include <vector>
+
+#include "GraphSubset.h"
+#include "Surface.h"
+
 
 namespace OpenXcom
 {
+
 namespace helper
 {
 
@@ -35,8 +38,8 @@ namespace helper
  */
 class Nothing
 {
-
 };
+
 
 /**
  * This is scalar argument to `ShaderDraw`.
@@ -45,12 +48,13 @@ class Nothing
 template<typename T>
 class Scalar
 {
-public:
-	T& ref;
-	inline Scalar(T& t) : ref(t)
-	{
-
-	}
+	public:
+		T& ref;
+		inline Scalar(T& t)
+			:
+				ref(t)
+		{
+		}
 };
 
 
@@ -62,9 +66,9 @@ public:
 template<typename Pixel>
 class ShaderBase
 {
-public:
-	typedef Pixel* PixelPtr;
-	typedef Pixel& PixelRef;
+	public:
+		typedef Pixel* PixelPtr;
+		typedef Pixel& PixelRef;
 
 protected:
 	const PixelPtr _orgin;
@@ -80,7 +84,6 @@ public:
 		_range_domain(s.getDomain()),
 		_pitch(s.pitch())
 	{
-
 	}
 
 	/**
@@ -89,17 +92,16 @@ public:
 	 * size of `f` should be bigger than `max_y*max_x`.
 	 * Attention: after use of this constructor you change size of `f` then `_orgin` will be invalid
 	 * and use of this object will cause memory exception.
-     * @param f vector that are treated as surface
-     * @param max_x x dimension of `f`
-     * @param max_y y dimension of `f`
-     */
+	 * @param f vector that are treated as surface
+	 * @param max_x x dimension of `f`
+	 * @param max_y y dimension of `f`
+	 */
 	inline ShaderBase(std::vector<Pixel>& f, int max_x, int max_y):
 		_orgin(&(f[0])),
 		_range_base(max_x, max_y),
 		_range_domain(max_x, max_y),
 		_pitch(max_x)
 	{
-
 	}
 
 	inline PixelPtr ptr() const
@@ -138,9 +140,9 @@ public:
 template<typename Pixel>
 class ShaderBase<const Pixel>
 {
-public:
-	typedef const Pixel* PixelPtr;
-	typedef const Pixel& PixelRef;
+	public:
+		typedef const Pixel* PixelPtr;
+		typedef const Pixel& PixelRef;
 
 protected:
 	const PixelPtr _orgin;
@@ -156,7 +158,6 @@ public:
 		_range_domain(s.getDomain()),
 		_pitch(s.pitch())
 	{
-
 	}
 
 	///copy constructor
@@ -166,7 +167,6 @@ public:
 		_range_domain(s.getDomain()),
 		_pitch(s.pitch())
 	{
-
 	}
 
 	/**
@@ -175,17 +175,16 @@ public:
 	 * size of `f` should be bigger than `max_y*max_x`.
 	 * Attention: after use of this constructor you change size of `f` then `_orgin` will be invalid
 	 * and use of this object will cause memory exception.
-     * @param f vector that are treated as surface
-     * @param max_x x dimension of `f`
-     * @param max_y y dimension of `f`
-     */
+	 * @param f vector that are treated as surface
+	 * @param max_x x dimension of `f`
+	 * @param max_y y dimension of `f`
+	 */
 	inline ShaderBase(const std::vector<Pixel>& f, int max_x, int max_y):
 		_orgin(&(f[0])),
 		_range_base(max_x, max_y),
 		_range_domain(max_x, max_y),
 		_pitch(max_x)
 	{
-
 	}
 
 	inline PixelPtr ptr() const
@@ -215,6 +214,7 @@ public:
 		return _range_domain;
 	}
 };
+
 
 /**
  * This is surface argument to `ShaderDraw`.
@@ -225,9 +225,9 @@ public:
 template<>
 class ShaderBase<Uint8>
 {
-public:
-	typedef Uint8* PixelPtr;
-	typedef Uint8& PixelRef;
+	public:
+		typedef Uint8* PixelPtr;
+		typedef Uint8& PixelRef;
 
 protected:
 	const PixelPtr _orgin;
@@ -243,7 +243,6 @@ public:
 		_range_domain(s.getDomain()),
 		_pitch(s.pitch())
 	{
-
 	}
 
 	/**
@@ -251,15 +250,14 @@ public:
 	 * surface will have same dimensions as `s`.
 	 * Attention: after use of this constructor you change size of surface `s`
 	 * then `_orgin` will be invalid and use of this object will cause memory exception.
-     * @param s vector that are treated as surface
-     */
+	 * @param s vector that are treated as surface
+	 */
 	inline ShaderBase(Surface* s):
 		_orgin((Uint8*) s->getSurface()->pixels),
 		_range_base(s->getWidth(), s->getHeight()),
 		_range_domain(s->getWidth(), s->getHeight()),
 		_pitch(s->getSurface()->pitch)
 	{
-
 	}
 
 	/**
@@ -268,17 +266,16 @@ public:
 	 * size of `f` should be bigger than `max_y*max_x`.
 	 * Attention: after use of this constructor you change size of `f` then `_orgin` will be invalid
 	 * and use of this object will cause memory exception.
-     * @param f vector that are treated as surface
-     * @param max_x x dimension of `f`
-     * @param max_y y dimension of `f`
-     */
+	 * @param f vector that are treated as surface
+	 * @param max_x x dimension of `f`
+	 * @param max_y y dimension of `f`
+	 */
 	inline ShaderBase(std::vector<Uint8>& f, int max_x, int max_y):
 		_orgin(&(f[0])),
 		_range_base(max_x, max_y),
 		_range_domain(max_x, max_y),
 		_pitch(max_x)
 	{
-
 	}
 
 	inline PixelPtr ptr() const
@@ -309,6 +306,7 @@ public:
 	}
 };
 
+
 /**
  * This is surface argument to `ShaderDraw`.
  * every pixel of this surface will have type `const Uint8`.
@@ -318,9 +316,9 @@ public:
 template<>
 class ShaderBase<const Uint8>
 {
-public:
-	typedef const Uint8* PixelPtr;
-	typedef const Uint8& PixelRef;
+	public:
+		typedef const Uint8* PixelPtr;
+		typedef const Uint8& PixelRef;
 
 protected:
 	const PixelPtr _orgin;
@@ -336,7 +334,6 @@ public:
 		_range_domain(s.getDomain()),
 		_pitch(s.pitch())
 	{
-
 	}
 
 	///copy constructor
@@ -346,7 +343,6 @@ public:
 		_range_domain(s.getDomain()),
 		_pitch(s.pitch())
 	{
-
 	}
 
 	/**
@@ -354,15 +350,14 @@ public:
 	 * surface will have same dimensions as `s`.
 	 * Attention: after use of this constructor you change size of surface `s`
 	 * then `_orgin` will be invalid and use of this object will cause memory exception.
-     * @param s vector that are treated as surface
-     */
+	 * @param s vector that are treated as surface
+	 */
 	inline ShaderBase(const Surface* s):
 		_orgin((Uint8*) s->getSurface()->pixels),
 		_range_base(s->getWidth(), s->getHeight()),
 		_range_domain(s->getWidth(), s->getHeight()),
 		_pitch(s->getSurface()->pitch)
 	{
-
 	}
 
 	/**
@@ -371,17 +366,16 @@ public:
 	 * size of `f` should be bigger than `max_y*max_x`.
 	 * Attention: after use of this constructor you change size of `f` then `_orgin` will be invalid
 	 * and use of this object will case memory exception.
-     * @param f vector that are treated as surface
-     * @param max_x x dimension of `f`
-     * @param max_y y dimension of `f`
-     */
+	 * @param f vector that are treated as surface
+	 * @param max_x x dimension of `f`
+	 * @param max_y y dimension of `f`
+	 */
 	inline ShaderBase(const std::vector<Uint8>& f, int max_x, int max_y):
 		_orgin(&(f[0])),
 		_range_base(max_x, max_y),
 		_range_domain(max_x, max_y),
 		_pitch(max_x)
 	{
-
 	}
 
 	inline PixelPtr ptr() const
@@ -451,6 +445,7 @@ struct controler
 	inline int& get_ref();
 };
 
+
 /// implementation for scalars types aka `int`, `double`, `float`
 template<typename T>
 struct controler<Scalar<T> >
@@ -459,7 +454,6 @@ struct controler<Scalar<T> >
 
 	inline controler(const Scalar<T>& s) : ref(s.ref)
 	{
-
 	}
 
 	//cant use this function
@@ -512,9 +506,10 @@ template<>
 struct controler<Nothing>
 {
 	const int i;
-	inline controler(const Nothing&) : i(0)
+	inline controler(const Nothing&)
+		:
+			i(0)
 	{
-
 	}
 
 	//cant use this function
@@ -561,10 +556,10 @@ struct controler<Nothing>
 	}
 };
 
+
 template<typename PixelPtr, typename PixelRef>
 struct controler_base
 {
-
 	const PixelPtr data;
 	PixelPtr ptr_pos_y;
 	PixelPtr ptr_pos_x;
@@ -574,7 +569,6 @@ struct controler_base
 
 	const std::pair<int, int> step;
 
-
 	controler_base(PixelPtr base, const GraphSubset& d, const GraphSubset& r, const std::pair<int, int>& s) :
 		data(base + d.beg_x*s.first + d.beg_y*s.second),
 		ptr_pos_y(0), ptr_pos_x(0),
@@ -582,7 +576,6 @@ struct controler_base
 		start_x(), start_y(),
 		step(s)
 	{
-
 	}
 
 
@@ -616,7 +609,6 @@ struct controler_base
 		ptr_pos_y += step.second;
 	}
 
-
 	inline void mod_x(int&, int&)
 	{
 		ptr_pos_x = ptr_pos_y;
@@ -637,7 +629,6 @@ struct controler_base
 };
 
 
-
 template<typename Pixel>
 struct controler<ShaderBase<Pixel> > : public controler_base<typename ShaderBase<Pixel>::PixelPtr, typename ShaderBase<Pixel>::PixelRef>
 {
@@ -648,14 +639,13 @@ struct controler<ShaderBase<Pixel> > : public controler_base<typename ShaderBase
 
 	controler(const ShaderBase<Pixel>& f) : base_type(f.ptr(), f.getDomain(), f.getImage(), std::make_pair(1, f.pitch()))
 	{
-
 	}
 
 };
 
-}//namespace helper
+}
 
-}//namespace OpenXcom
+}
 
-#endif	/* SHADERDRAWHELPER_H */
+#endif
 

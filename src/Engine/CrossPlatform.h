@@ -45,7 +45,7 @@ namespace CrossPlatform
 	std::string findConfigFolder();
 	/// Gets the path for a data file.
 	std::string getDataFile(const std::string& filename);
-    /// Gets the path for a data folder
+	/// Gets the path for a data folder
 	std::string getDataFolder(const std::string& foldername);
 	/// Creates a folder.
 	bool createFolder(const std::string& path);

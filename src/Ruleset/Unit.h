@@ -56,15 +56,16 @@ struct UnitStats
 		melee;
 
 //	http://courses.cms.caltech.edu/cs11/material/cpp/donnie/cpp-ops.html
-/*  MyClass& MyClass::operator=(const MyClass &rhs) {
+/*	MyClass& MyClass::operator=(const MyClass &rhs)
+{
+	// Only do assignment if RHS is a different object from this.
+	if (this != &rhs)
+	{
+		... // Deallocate, allocate new space, copy values...
+	}
+	return *this;
+} */
 
-    // Only do assignment if RHS is a different object from this.
-    if (this != &rhs) {
-      ... // Deallocate, allocate new space, copy values...
-    }
-
-    return *this;
-  } */
 	public:
 		UnitStats()
 			:
@@ -305,6 +306,7 @@ namespace YAML
 template<>
 struct convert<OpenXcom::UnitStats>
 {
+	///
 	static Node encode(const OpenXcom::UnitStats& rhs)
 	{
 		Node node;
@@ -324,6 +326,7 @@ struct convert<OpenXcom::UnitStats>
 		return node;
 	}
 
+	///
 	static bool decode(
 			const Node& node,
 			OpenXcom::UnitStats& rhs)
