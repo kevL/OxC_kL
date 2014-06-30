@@ -21,6 +21,8 @@
 
 #include <sstream>
 
+#include "SoldierDiaryOverviewState.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -65,6 +67,7 @@ SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
 	_rank			= new Surface(26, 23, 4, 4);
 
 	_txtSoldier		= new Text(179, 16, 40, 9);
+	_btnDiary		= new TextButton(60, 16, 248, 8);
 
 	_btnPrev		= new TextButton(29, 16, 0, 32);
 	_btnOk			= new TextButton(49, 16, 30, 32);
@@ -142,12 +145,15 @@ SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
 	add(_btnOk);
 	add(_btnPrev);
 	add(_btnNext);
+
 	add(_txtSoldier);
 	add(_txtRank);
 	add(_txtMissions);
 	add(_txtKills);
 	add(_txtDate);
 	add(_txtDeath);
+
+	add(_btnDiary);
 
 	add(_txtTimeUnits);
 	add(_numTimeUnits);
@@ -235,6 +241,10 @@ SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
 	_txtDeath->setText(tr("STR_DATE_UC"));
 
 	_txtDate->setColor(Palette::blockOffset(13));
+
+	_btnDiary->setColor(Palette::blockOffset(15)+6);
+	_btnDiary->setText(tr("STR_DIARY"));
+	_btnDiary->onMouseClick((ActionHandler)& SoldierDeadInfoState::btnDiaryClick);
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
@@ -591,6 +601,27 @@ void SoldierDeadInfoState::btnPrevClick(Action*)
 		_soldierId = 0;
 
 	init();
+}
+
+/**
+ * Set the soldier Id.
+ */
+void SoldierDeadInfoState::setSoldierId(size_t soldier)
+{
+	_soldierId = soldier;
+}
+
+/**
+ * Shows the Diary Soldier window.
+ * @param action Pointer to an action.
+ */
+void SoldierDeadInfoState::btnDiaryClick(Action*)
+{
+	_game->pushState(new SoldierDiaryOverviewState(
+												NULL, //_base
+												_soldierId,
+												NULL,
+												this));
 }
 
 }

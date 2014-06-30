@@ -110,6 +110,8 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false),
+		_statistics(),
+		_murdererId(0),
 		_stopShot(false), // kL
 		_dashing(false), // kL
 		_takenExpl(false), // kL
@@ -188,6 +190,8 @@ BattleUnit::BattleUnit(
 
 	lastCover = Position(-1,-1,-1);
 	//Log(LOG_INFO) << "Create BattleUnit 1, DONE";
+
+	_statistics = new BattleUnitStatistics();
 }
 
 /**
@@ -251,6 +255,8 @@ BattleUnit::BattleUnit(
 		_rankInt(-1),
 		_turretType(-1),
 		_hidingForTurn(false),
+		_statistics(),
+		_murdererId(0),
 		_stopShot(false), // kL
 		_dashing(false), // kL
 		_takenExpl(false), // kL
@@ -310,6 +316,8 @@ BattleUnit::BattleUnit(
 
 	lastCover = Position(-1,-1,-1);
 	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
+
+	_statistics = new BattleUnitStatistics();
 }
 
 /**
@@ -326,6 +334,18 @@ BattleUnit::~BattleUnit()
 		if (_cache[i])
 			delete _cache[i];
 	}
+
+	if (!getGeoscapeSoldier())
+	{
+		for (std::vector<BattleUnitKills*>::const_iterator
+				i = _statistics->kills.begin();
+				i != _statistics->kills.end();
+				++i)
+		{
+			delete *i;
+		}
+	}
+	delete _statistics;
 
 	delete _currentAIState; // delete CTD
 }
@@ -377,6 +397,8 @@ void BattleUnit::load(const YAML::Node& node)
 		_currentArmor[i]	= node["armor"][i].as<int>(_currentArmor[i]);
 	for (int i = 0; i < 6; i++)
 		_fatalWounds[i]		= node["fatalWounds"][i].as<int>(_fatalWounds[i]);
+
+	_statistics->load(node["tempUnitStatistics"]);
 }
 
 /**
@@ -442,6 +464,8 @@ YAML::Node BattleUnit::save() const
 	}
 	if (!_spawnUnit.empty())
 		node["spawnUnit"]		= _spawnUnit;
+
+	node["tempUnitStatistics"]	= _statistics->save();
 
 	return node;
 		// kL_note: This doesn't save/load such things as
@@ -3622,7 +3646,6 @@ void BattleUnit::knockOut()
 
 /**
  * Sets a unit's health level.
- * @return True if an inventory is available, false otherwise.
  */
 void BattleUnit::setHealth(int health)
 {
@@ -3715,6 +3738,33 @@ bool BattleUnit::hasInventory() const
 void BattleUnit::setBattleGame(BattlescapeGame* battleGame) // kL
 {
 	_battleGame = battleGame;
+}
+
+/**
+ * Get the unit's statistics.
+ * @return BattleUnitStatistics statistics.
+ */
+BattleUnitStatistics* BattleUnit::getStatistics()
+{
+	return _statistics;
+}
+
+/**
+ * Sets the unit murderer's id.
+ * @param int murderer id.
+ */
+void BattleUnit::setMurdererId(int id)
+{
+	_murdererId = id;
+}
+
+/**
+ * Gets the unit murderer's id.
+ * @return int murderer id.
+ */
+int BattleUnit::getMurdererId() const
+{
+	return _murdererId;
 }
 
 }

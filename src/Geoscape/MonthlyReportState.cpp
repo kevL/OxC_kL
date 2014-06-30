@@ -28,6 +28,8 @@
 #include "Globe.h"
 #include "PsiTrainingState.h"
 
+#include "../Battlescape/CommendationState.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Music.h" // kL: sza_MusicRules
@@ -46,10 +48,12 @@
 #include "../Ruleset/RuleCountry.h"
 
 #include "../Savegame/AlienBase.h"
+#include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/SoldierDiary.h"
 
 
 namespace OpenXcom
@@ -417,6 +421,27 @@ void MonthlyReportState::btnOkClick(Action*)
 	if (!_gameOver)
 	{
 		_game->popState();
+
+		for (std::vector<Base*>::iterator // Award medals for service time
+				b = _game->getSavedGame()->getBases()->begin();
+				b != _game->getSavedGame()->getBases()->end();
+				++b)
+		{
+			for (std::vector<Soldier*>::iterator
+					s = (*b)->getSoldiers()->begin();
+					s != (*b)->getSoldiers()->end();
+					++s)
+			{
+				Soldier* soldier = _game->getSavedGame()->getSoldier((*s)->getId());
+				soldier->getDiary()->addMonthlyService();
+
+				if (soldier->getDiary()->manageCommendations(_game->getRuleset()))
+					_soldiersMedalled.push_back(soldier);
+			}
+		}
+
+		if (!_soldiersMedalled.empty())
+			_game->pushState(new CommendationState(_soldiersMedalled));
 
 		if (_psi)
 			_game->pushState(new PsiTrainingState());

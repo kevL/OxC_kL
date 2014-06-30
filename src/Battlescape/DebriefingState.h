@@ -26,6 +26,8 @@
 
 #include "../Engine/State.h"
 
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -36,6 +38,7 @@ class Country;
 class Craft;
 class Region;
 class RuleItem;
+class Soldier;
 class Text;
 class TextButton;
 class TextList;
@@ -44,6 +47,13 @@ class Window;
 
 struct DebriefingStat
 {
+	bool recovery;
+	int
+		qty,
+		score;
+	std::string item;
+
+	///
 	DebriefingStat(
 			std::string _item,
 			bool recovery = false)
@@ -54,12 +64,6 @@ struct DebriefingStat
 			recovery(recovery)
 	{
 	};
-
-	bool recovery;
-	int
-		qty,
-		score;
-	std::string item;
 };
 
 
@@ -85,7 +89,8 @@ private:
 		_destroyBase,
 		_manageContainment,
 		_noContainment;
-	int _limitsEnforced;
+	int
+		_limitsEnforced;
 
 	std::wstring _baseLabel; // kL
 
@@ -107,9 +112,12 @@ private:
 		* _lstTotal;
 	Window* _window;
 
+	MissionStatistics* _missionStatistics;
+
 	std::map<RuleItem*, int> _rounds;
 	std::vector<ReequipStat> _missingItems;
 	std::vector<DebriefingStat*> _stats;
+	std::vector<Soldier*> _soldiersCommended;
 
 	/// Adds to the debriefing stats.
 	void addStat(

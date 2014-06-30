@@ -105,7 +105,8 @@ private:
 		* _btnOk,
 		* _btnPrev,
 		* _btnAutoStat, // kL
-		* _btnSack;
+		* _btnSack,
+		* _btnDiary;
 	TextEdit* _edtSoldier;
 
 	/// kL. Automatically renames a soldier according to its statistics.
@@ -126,7 +127,9 @@ private:
 		void init();
 
 		/// Handler for pressing on the Name edit (disables editing).
-//kL		void edtSoldierPress(Action* action);
+//kL	void edtSoldierPress(Action* action);
+		/// Set the soldier Id.
+		void setSoldierId(size_t soldier);
 		/// Handler for changing text on the Name edit.
 		void edtSoldierChange(Action* action);
 
@@ -136,10 +139,13 @@ private:
 		void btnPrevClick(Action* action);
 		/// Handler for clicking the Next button.
 		void btnNextClick(Action* action);
+
 		/// Handler for clicking the Armor button.
 		void btnArmorClick(Action* action);
 		/// Handler for clicking the Sack button.
 		void btnSackClick(Action* action);
+		/// Handler for clicking the Diary button.
+		void btnDiaryClick(Action* action);
 };
 
 }

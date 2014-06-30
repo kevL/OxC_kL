@@ -99,7 +99,8 @@ private:
 	TextButton
 		* _btnNext,
 		* _btnOk,
-		* _btnPrev;
+		* _btnPrev,
+		* _btnDiary;
 
 
 	public:
@@ -111,12 +112,18 @@ private:
 		/// Updates the dead soldier info.
 		void init();
 
+		/// Set the soldier Id.
+		void setSoldierId(size_t soldier);
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Previous button.
 		void btnPrevClick(Action* action);
 		/// Handler for clicking the Next button.
 		void btnNextClick(Action* action);
+
+		/// Handler for clicking the Diary button.
+		void btnDiaryClick(Action* action);
 };
 
 }

@@ -52,6 +52,8 @@ private:
 	std::wstring _name;
 
 	SoldierDeath* _death;
+	SoldierDiary* _diary;
+
 	SoldierGender _gender;
 	SoldierLook _look;
 	SoldierRank _rank;
@@ -72,7 +74,8 @@ private:
 				int kills,
 				SoldierDeath* death,
 				UnitStats initialStats,
-				UnitStats currentStats);
+				UnitStats currentStats,
+				SoldierDiary* diary);
 				// base if I want to...
 		/// Cleans up the dead soldier.
 		~SoldierDead();
@@ -112,6 +115,9 @@ private:
 
 		/// Gets the dead soldier's time of death.
 		SoldierDeath* getDeath() const;
+
+		/// Gets the soldier's diary.
+		SoldierDiary* getDiary();
 };
 
 }

@@ -68,6 +68,7 @@ const std::string
 	SavedGame::AUTOSAVE_BATTLESCAPE	= "_autobattle_.asav",
 	SavedGame::QUICKSAVE			= "_quick_.asav";
 
+///
 struct findRuleResearch
 	:
 		public std::unary_function<ResearchProject*, bool>
@@ -78,18 +79,20 @@ struct findRuleResearch
 	bool operator()(const ResearchProject* r) const;
 };
 
+///
 findRuleResearch::findRuleResearch(RuleResearch* toFind)
 	:
 		_toFind(toFind)
 {
 }
 
+///
 bool findRuleResearch::operator()(const ResearchProject* r) const
 {
 	return _toFind == r->getRules();
 }
 
-
+///
 struct equalProduction
 	:
 		public std::unary_function<Production*, bool>
@@ -100,12 +103,14 @@ struct equalProduction
 	bool operator()(const Production* p) const;
 };
 
+///
 equalProduction::equalProduction(RuleManufacture* item)
 	:
 		_item(item)
 {
 }
 
+///
 bool equalProduction::operator()(const Production* p) const
 {
 	return p->getRules() == _item;
@@ -230,6 +235,14 @@ SavedGame::~SavedGame()
 	{
 		delete *i;
 	} // kL_end.
+
+	for (std::vector<MissionStatistics*>::iterator
+			i = _missionStatistics.begin();
+			i != _missionStatistics.end();
+			++i)
+	{
+		delete *i;
+	}
 
 	delete _battleGame;
 }
@@ -609,9 +622,21 @@ void SavedGame::load(
 										0,
 										NULL,
 										UnitStats(),
-										UnitStats());
+										UnitStats(),
+										NULL);
 		ds->load(*i);							// kL
 		_deadSoldiers.push_back(ds);			// kL
+	}
+
+	for (YAML::const_iterator
+			i = doc["missionStatistics"].begin();
+			i != doc["missionStatistics"].end();
+			++i)
+	{
+		MissionStatistics* ms = new MissionStatistics();
+		ms->load(*i);
+
+		_missionStatistics.push_back(ms);
 	}
 
 	if (const YAML::Node& battle = doc["battleGame"])
@@ -776,6 +801,14 @@ void SavedGame::save(const std::string& filename) const
 			++i)
 	{
 		node["deadSoldiers"].push_back((*i)->save());
+	}
+
+	for (std::vector<MissionStatistics*>::const_iterator
+			i = _missionStatistics.begin();
+			i != _missionStatistics.end();
+			++i)
+	{
+		node["missionStatistics"].push_back((*i)->save());
 	}
 
 	if (_battleGame != NULL)
@@ -2290,5 +2323,14 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
 {
 	_selectedBase = base;
 } */
+
+/**
+ * Gets mission statistics for soldier commendations.
+ * @return, a vector of pointers to mission statistics
+ */
+std::vector<MissionStatistics*>* SavedGame::getMissionStatistics()
+{
+	return &_missionStatistics;
+}
 
 }

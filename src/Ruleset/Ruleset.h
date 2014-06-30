@@ -48,6 +48,7 @@ class MCDPatch;
 class ResourcePack;
 class RuleAlienMission;
 class RuleBaseFacility;
+class RuleCommendations;
 class RuleCountry;
 class RuleCraft;
 class RuleCraftWeapon;
@@ -142,6 +143,7 @@ protected:
 	std::map<std::string, MCDPatch*>			_MCDPatches;
 	std::map<std::string, RuleAlienMission*>	_alienMissions;
 	std::map<std::string, RuleBaseFacility*>	_facilities;
+	std::map<std::string, RuleCommendations*>	_commendations;
 	std::map<std::string, RuleCountry*>			_countries;
 	std::map<std::string, RuleCraft*>			_crafts;
 	std::map<std::string, RuleCraftWeapon*>		_craftWeapons;
@@ -176,6 +178,7 @@ protected:
 			std::map<std::string, T*>* map,
 			std::vector<std::string>* index = 0,
 			const std::string& key = "type");
+
 
 	public:
 		/// Creates a blank ruleset.
@@ -226,6 +229,8 @@ protected:
 		MapDataSet* getMapDataSet(const std::string& name);
 		/// Gets soldier unit rules.
 		RuleSoldier* getSoldier(const std::string& name) const;
+		/// Gets commendation rules.
+		std::map<std::string, RuleCommendations*> getCommendation() const;
 		/// Gets generated unit rules.
 		Unit* getUnit(const std::string& name) const;
 		/// Gets alien race rules.

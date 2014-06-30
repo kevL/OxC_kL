@@ -21,6 +21,7 @@
 
 #include "Soldier.h"
 #include "SoldierDeath.h"
+#include "SoldierDiary.h"
 
 #include "../Engine/Language.h"
 
@@ -41,7 +42,8 @@ SoldierDead::SoldierDead(
 		int kills,
 		SoldierDeath* death,
 		UnitStats initialStats,
-		UnitStats currentStats)
+		UnitStats currentStats,
+		SoldierDiary* diary)
 		// base if I want to...
 	:
 		_name(name),
@@ -54,7 +56,13 @@ SoldierDead::SoldierDead(
 		_death(death),
 		_initialStats(initialStats),
 		_currentStats(currentStats)
+//		_diary(diary)
 {
+	// copy diary instead of resetting a pointer,
+	// because delete Soldier will delete the old diary
+	// (unless you want to do tricky things that i don't)
+	_diary = new SoldierDiary();
+	_diary = diary;
 }
 
 /**
@@ -63,6 +71,7 @@ SoldierDead::SoldierDead(
 SoldierDead::~SoldierDead()
 {
 	delete _death;
+	delete _diary;
 }
 
 /**
@@ -85,6 +94,12 @@ void SoldierDead::load(
 
 	_death = new SoldierDeath();
 	_death->load(node["death"]);
+
+	if (node["diary"])
+	{
+		_diary = new SoldierDiary();
+		_diary->load(node["diary"]);
+	}
 }
 
 /**
@@ -106,6 +121,12 @@ YAML::Node SoldierDead::save() const
 	node["kills"]			= _kills;
 
 	node["death"]			= _death->save();
+
+	if (!_diary->getMissionIdList().empty()
+		|| !_diary->getSoldierCommendations()->empty())
+	{
+		node["diary"] = _diary->save();
+	}
 
 	return node;
 }
@@ -224,11 +245,20 @@ UnitStats* SoldierDead::getCurrentStats()
 
 /**
  * Returns the dead soldier's time of death.
- * @return, Pointer to death time.
+ * @return, pointer to SoldierDeath
  */
 SoldierDeath* SoldierDead::getDeath() const
 {
 	return _death;
+}
+
+/**
+ * Gets the soldier's diary.
+ * @return, pointer to SoldierDiary
+ */
+SoldierDiary* SoldierDead::getDiary()
+{
+	return _diary;
 }
 
 }

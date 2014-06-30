@@ -26,6 +26,8 @@
 
 #include <time.h>
 
+#include "GameTime.h"
+
 
 namespace OpenXcom
 {
@@ -64,7 +66,6 @@ enum GameDifficulty
 	DIFF_SUPERHUMAN		// 4
 };
 
-
 /**
  * Enumerator for the various save types.
  */
@@ -76,6 +77,121 @@ enum SaveType
 	SAVE_AUTO_BATTLESCAPE,	// 3
 	SAVE_IRONMAN,			// 4
 	SAVE_IRONMAN_END		// 5
+};
+
+
+/**
+ * Container for mission statistics.
+ */
+struct MissionStatistics
+{
+	bool
+		success,
+		valiantCrux;
+
+	int
+		daylight,
+		id,
+		score;
+
+	std::string
+		alienRace,
+		country,
+		rating,
+		region,
+		type,
+		ufo;
+
+	std::map<int, int> injuryList;
+
+	GameTime time;
+
+
+	///
+	std::string getMissionTypeLowerCase()
+	{
+		if		(type == "STR_UFO_CRASH_RECOVERY")	return "STR_UFO_CRASH_RECOVERY_LC";
+		else if (type == "STR_UFO_GROUND_ASSAULT")	return "STR_UFO_GROUND_ASSAULT_LC";
+		else if (type == "STR_BASE_DEFENSE")		return "STR_BASE_DEFENSE_LC";
+		else if (type == "STR_ALIEN_BASE_ASSAULT")	return "STR_ALIEN_BASE_ASSAULT_LC";
+		else if (type == "STR_TERROR_MISSION")		return "STR_TERROR_MISSION_LC";
+		else										return "type error";
+	}
+
+	///
+	void load(const YAML::Node& node)
+	{
+		time.load(node["time"]);
+
+		id			= node["id"].as<int>(id);
+		region		= node["region"].as<std::string>(region);
+		country		= node["country"].as<std::string>(country);
+		type		= node["type"].as<std::string>(type);
+		ufo			= node["ufo"].as<std::string>(ufo);
+		success		= node["success"].as<bool>(success);
+		score		= node["score"].as<int>(score);
+		rating		= node["rating"].as<std::string>(rating);
+		alienRace	= node["alienRace"].as<std::string>(alienRace);
+		daylight	= node["daylight"].as<int>(daylight);
+		injuryList	= node["injuryList"].as<std::map<int, int> >(injuryList);
+		valiantCrux	= node["valiantCrux"].as<bool>(valiantCrux);
+	}
+
+	///
+	YAML::Node save() const
+	{
+		YAML::Node node;
+
+		node["id"]			= id;
+		node["time"]		= time.save();
+		node["region"]		= region;
+		node["country"]		= country;
+		node["type"]		= type;
+		node["ufo"]			= ufo;
+		node["success"]		= success;
+		node["score"]		= score;
+		node["rating"]		= rating;
+		node["alienRace"]	= alienRace;
+		node["daylight"]	= daylight;
+		node["injuryList"]	= injuryList;
+
+		if (valiantCrux)
+			 node["valiantCrux"] = valiantCrux;
+
+		return node;
+	}
+
+	/// cTor.
+	MissionStatistics(const YAML::Node& node)
+		:
+			time(0,0,0,0,0,0,0)
+	{
+		load(node);
+	}
+
+	/// cTor.
+	MissionStatistics()
+		:
+			id(0),
+			time(0,0,0,0,0,0,0),
+			region("STR_REGION_UNKNOWN"),
+			country("STR_UNKNOWN"),
+			type(),
+			ufo("NO_UFO"),
+			success(false),
+			score(0),
+			rating(),
+			alienRace("STR_UNKNOWN"),
+			daylight(0),
+			injuryList(),
+			valiantCrux(false)
+	{
+	}
+
+	/// dTor.
+	~MissionStatistics()
+	{
+	}
 };
 
 
@@ -111,10 +227,10 @@ private:
 		_warned;
 	int
 		_monthsPassed;
-//kL		_globeZoom,
+//kL	_globeZoom,
 	size_t
 		_globeZoom; // kL
-//kL		_selectedBase;
+//kL	_selectedBase;
 	double
 		_globeLat,
 		_globeLon;
@@ -134,25 +250,26 @@ private:
 	std::map<std::string, int> _ids;
 
 	std::vector<int>
-		_expenditure,	// kL
+		_expenditure, // kL
 		_funds,
-		_income,		// kL
+		_income, // kL
 		_maintenance,
 		_researchScores;
 
-	std::vector<AlienBase*> _alienBases;
-	std::vector<AlienMission*> _activeMissions;
-	std::vector<Base*> _bases;
-	std::vector<Country*> _countries;
-	std::vector<Region*> _regions;
+	std::vector<AlienBase*>				_alienBases;
+	std::vector<AlienMission*>			_activeMissions;
+	std::vector<Base*>					_bases;
+	std::vector<Country*>				_countries;
+	std::vector<MissionStatistics*>		_missionStatistics;
+	std::vector<Region*>				_regions;
 	std::vector<const RuleResearch*>
-		_discovered,
-		_poppedResearch;
-	std::vector<Soldier*> _soldiers; // kL
-	std::vector<SoldierDead*> _deadSoldiers; // kL
-	std::vector<TerrorSite*> _terrorSites;
-	std::vector<Ufo*> _ufos;
-	std::vector<Waypoint*> _waypoints;
+										_discovered,
+										_poppedResearch;
+	std::vector<Soldier*>				_soldiers; // kL
+	std::vector<SoldierDead*>			_deadSoldiers; // kL
+	std::vector<TerrorSite*>			_terrorSites;
+	std::vector<Ufo*>					_ufos;
+	std::vector<Waypoint*>				_waypoints;
 
 	///
 	void getDependableResearchBasic(
@@ -408,6 +525,9 @@ private:
 
 		/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 		int getSoldierScore(Soldier* soldier);
+
+		/// Gets the list of missions statistics
+		std::vector<MissionStatistics*>* getMissionStatistics();
 };
 
 }

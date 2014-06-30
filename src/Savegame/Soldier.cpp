@@ -20,10 +20,11 @@
 #include "Soldier.h"
 
 #include "Craft.h"
-#include "SoldierDead.h" // kL
-#include "SoldierDeath.h"
 #include "EquipmentLayoutItem.h"
 #include "SavedGame.h"
+#include "SoldierDead.h" // kL
+#include "SoldierDeath.h"
+#include "SoldierDiary.h"
 
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -70,9 +71,12 @@ Soldier::Soldier(
 		_psiTraining(false),
 		_armor(armor),
 		_equipmentLayout()
+//		_diary()
 //kL	_death(0)
 {
-	if (names != 0)
+	_diary = new SoldierDiary();
+
+	if (names != NULL)
 	{
 		UnitStats minStats = rules->getMinStats();
 		UnitStats maxStats = rules->getMaxStats();
@@ -131,6 +135,7 @@ Soldier::~Soldier()
 	}
 
 //kL	delete _death;
+	delete _diary;
 }
 
 /**
@@ -187,6 +192,12 @@ void Soldier::load(
 		_death->load(node["death"]);
 	} */
 
+	if (node["diary"])
+	{
+		_diary = new SoldierDiary();
+		_diary->load(node["diary"]);
+	}
+
 	calcStatString(
 			rule->getStatStrings(),
 			(Options::psiStrengthEval
@@ -235,6 +246,12 @@ YAML::Node Soldier::save() const
 	// ie, SoldierDeath is part of SoldierDead, not class Soldier.
 /*kL	if (_death != 0)
 		node["death"] = _death->save(); */
+
+	if (!_diary->getMissionIdList().empty()
+		|| !_diary->getSoldierCommendations()->empty())
+	{
+		node["diary"] = _diary->save();
+	}
 
 	return node;
 }
@@ -495,7 +512,7 @@ void Soldier::setWoundRecovery(int recovery)
 	_recovery = recovery;
 
 	if (_recovery > 0) // dismiss from craft
-		_craft = 0;
+		_craft = NULL;
 }
 
 /**
@@ -713,9 +730,6 @@ int Soldier::getPsiStrImprovement()
 //kL void Soldier::die(SoldierDeath* death)
 SoldierDead* Soldier::die(SoldierDeath* death)
 {
-//kL	delete _death;
-//kL	_death = death;
-
 	// Clean up associations
 /*	_craft = NULL;
 	_armor = NULL; // kL
@@ -723,7 +737,6 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 	_recentlyPromoted = false;
 	_recovery = 0;
 	_gainPsiSkl = 0; // kL
-*/
 
 	for (std::vector<EquipmentLayoutItem*>::iterator
 			i = _equipmentLayout.begin();
@@ -737,7 +750,7 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 	// wait a second: The soldier is about to get deleted from the Roster anyway!!!
 	// So just pass the required info into SoldierDead below and forget above stuff.
 	// _death/SoldierDeath ought be cleaned out of class_vars also
-
+*/
 	// kL_begin:
 	SoldierDead* dead = new SoldierDead(
 									_name,
@@ -749,12 +762,22 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 									_kills,
 									death,
 									_initialStats,
-									_currentStats);
+									_currentStats,
+									_diary);
 									// base if I want to...
 
 	return dead;
 //	SavedGame::getDeadSoldiers()->push_back(ds);
 	// kL_end.
+}
+
+/**
+ * Gets the soldier's diary.
+ * @return Diary.
+ */
+SoldierDiary* Soldier::getDiary()
+{
+	return _diary;
 }
 
 /**

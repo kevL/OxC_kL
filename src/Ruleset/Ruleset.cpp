@@ -37,6 +37,7 @@
 #include "MCDPatch.h"
 #include "RuleAlienMission.h"
 #include "RuleBaseFacility.h"
+#include "RuleCommendations.h"
 #include "RuleCountry.h"
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
@@ -342,6 +343,14 @@ Ruleset::~Ruleset()
 	{
 		delete i->second;
 	}
+
+	for (std::map<std::string, RuleCommendations*>::const_iterator
+			i = _commendations.begin();
+			i != _commendations.end();
+			++i)
+	{
+		delete i->second;
+	}
 }
 
 /**
@@ -523,7 +532,7 @@ void Ruleset::loadFile(const std::string& filename)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 
-		std::auto_ptr<RuleMusic> ruleMusic(new RuleMusic());
+		std::auto_ptr<RuleMusic> ruleMusic (new RuleMusic());
 		ruleMusic->load(*i);
 
 		_music.push_back(std::make_pair(
@@ -771,7 +780,7 @@ void Ruleset::loadFile(const std::string& filename)
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		std::auto_ptr<ExtraSprites> extraSprites(new ExtraSprites());
+		std::auto_ptr<ExtraSprites> extraSprites (new ExtraSprites());
 		extraSprites->load(
 						*i,
 						_modIndex);
@@ -787,7 +796,7 @@ void Ruleset::loadFile(const std::string& filename)
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		std::auto_ptr<ExtraSounds> extraSounds(new ExtraSounds());
+		std::auto_ptr<ExtraSounds> extraSounds (new ExtraSounds());
 		extraSounds->load(
 						*i,
 						_modIndex);
@@ -803,7 +812,7 @@ void Ruleset::loadFile(const std::string& filename)
 			++i)
 	{
 		std::string media = (*i)["media"].as<std::string>();
-		std::auto_ptr<ExtraMusic> extraMusic(new ExtraMusic());
+		std::auto_ptr<ExtraMusic> extraMusic (new ExtraMusic());
 		extraMusic->load(
 						*i,
 						_modIndex);
@@ -823,13 +832,26 @@ void Ruleset::loadFile(const std::string& filename)
 			_extraStrings[type]->load(*i);
 		else
 		{
-			std::auto_ptr<ExtraStrings> extraStrings(new ExtraStrings());
+			std::auto_ptr<ExtraStrings> extraStrings (new ExtraStrings());
 			extraStrings->load(*i);
 
 			_extraStrings[type] = extraStrings.release();
 
 			_extraStringsIndex.push_back(type);
 		}
+	}
+
+	for (YAML::const_iterator
+			i = doc["commendations"].begin();
+			i != doc["commendations"].end();
+			++i)
+	{
+		std::string type = (*i)["type"].as<std::string>();
+
+		std::auto_ptr<RuleCommendations> commendations (new RuleCommendations()); // init.
+		commendations->load(*i);
+
+		_commendations[type] = commendations.release();
 	}
 
 	for (YAML::const_iterator
@@ -1230,6 +1252,15 @@ RuleSoldier* Ruleset::getSoldier(const std::string& name) const
 		return i->second;
 	else
 		return NULL;
+}
+
+/**
+ * Gets the list of commendations
+ * @return The list of commendations.
+ */
+std::map<std::string, RuleCommendations*> Ruleset::getCommendation() const
+{
+	return _commendations;
 }
 
 /**

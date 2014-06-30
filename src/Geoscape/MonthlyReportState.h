@@ -28,7 +28,9 @@
 namespace OpenXcom
 {
 
+class Base;
 class Globe;
+class Soldier;
 class Text;
 class TextButton;
 class Window;
@@ -52,6 +54,7 @@ private:
 		_ratingLastMonth,
 		_ratingTotal;
 
+	Base* _base;
 	Globe* _globe;
 	Text
 		* _txtChange,
@@ -69,6 +72,8 @@ private:
 		_happyList,
 		_pactList,
 		_sadList;
+
+	std::vector<Soldier*> _soldiersMedalled;
 
 	/// Builds a country list string.
 	std::wstring countryList(

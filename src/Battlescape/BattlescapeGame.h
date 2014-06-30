@@ -42,6 +42,7 @@ class Pathfinding;
 class ResourcePack;
 class Ruleset;
 class SavedBattleGame;
+// class SoldierDiary;
 class TileEngine;
 
 
@@ -147,6 +148,7 @@ private:
 		_states;
 	std::vector<InfoboxOKState*> _infoboxQueue;
 
+
 	/// Ends the turn.
 	void endTurn();
 	/// Picks the first soldier that is panicking.
@@ -195,7 +197,7 @@ private:
 				bool hidden = false,
 				bool terrain = false);
 		/// Checks if a unit panics.
-//kL		void checkForPanic(BattleUnit *unit);
+//kL	void checkForPanic(BattleUnit *unit);
 		/// Checks reserved tu.
 		bool checkReservedTU(
 				BattleUnit* bu,

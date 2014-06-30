@@ -65,6 +65,7 @@ class RuleSoldier;
 class SavedGame;
 class SoldierDead; // kL
 class SoldierDeath;
+class SoldierDiary;
 class SoldierNamePool;
 
 
@@ -96,6 +97,8 @@ private:
 	Craft* _craft;
 	RuleSoldier* _rules;
 //kL	SoldierDeath* _death;
+	SoldierDiary* _diary;
+
 	SoldierGender _gender;
 	SoldierLook _look;
 	SoldierRank _rank;
@@ -204,10 +207,13 @@ private:
 		int getPsiStrImprovement();
 
 		/// Gets the soldier death time.
-//kL		SoldierDeath* getDeath() const;
+//kL	SoldierDeath* getDeath() const;
 		/// Kills the soldier and sends it to the dead soldiers' List.
-//kL		void die(SoldierDeath* death);
+//kL	void die(SoldierDeath* death);
 		SoldierDead* die(SoldierDeath* death);
+
+		/// Gets the soldier's diary.
+		SoldierDiary* getDiary();
 
 		/// Calculates a statString.
 		void calcStatString(

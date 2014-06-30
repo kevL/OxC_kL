@@ -66,6 +66,7 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/SoldierDiary.h"
 #include "../Savegame/Tile.h"
 
 
@@ -806,12 +807,117 @@ void BattlescapeGame::checkForCasualties(
 		bool terrain)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties()";
+	std::string
+		killStatRank,
+		killStatRace,
+		killStatWeapon,
+		killStatWeaponAmmo;
+	int
+		killStatMission,
+		killStatTurn;
+
+	// If the victim was killed by the slayer's death explosion,
+	// fetch who killed the murderer and make THAT the murderer!
+	if (slayer
+		&& !slayer->getGeoscapeSoldier()
+		&& slayer->getUnitRules()->getSpecialAbility() == SPECAB_EXPLODEONDEATH
+		&& slayer->getStatus() == STATUS_DEAD
+		&& slayer->getMurdererId() != 0)
+	{
+		for (std::vector<BattleUnit*>::const_iterator
+				i = _save->getUnits()->begin();
+				i != _save->getUnits()->end();
+				++i)
+		{
+			if ((*i)->getId() == slayer->getMurdererId())
+				slayer = (*i);
+		}
+	}
+
+	killStatWeapon = "STR_WEAPON_UNKNOWN";
+	killStatWeaponAmmo = "STR_WEAPON_UNKNOWN";
+
+	if (slayer != NULL)
+		killStatMission = _save->getGeoscapeSave()->getMissionStatistics()->size();
+
+	if (_save->getSide() == FACTION_PLAYER)
+		killStatTurn = _save->getTurn() * 3;
+	else if (_save->getSide() == FACTION_HOSTILE)
+		killStatTurn = _save->getTurn() * 3 + 1;
+	else if (_save->getSide() == FACTION_NEUTRAL)
+		killStatTurn = _save->getTurn() * 3 + 2;
+
+	// Fetch the murder weapon
+	if (slayer
+		&& slayer->getGeoscapeSoldier())
+	{
+		if (weapon)
+		{
+			killStatWeaponAmmo = weapon->getRules()->getName();
+			killStatWeapon = killStatWeaponAmmo;
+		}
+
+		BattleItem* weapon2 = slayer->getItem("STR_RIGHT_HAND");
+		if (weapon2)
+		{
+			for (std::vector<std::string>::iterator
+					c = weapon->getRules()->getCompatibleAmmo()->begin();
+					c != weapon->getRules()->getCompatibleAmmo()->end();
+					++c)
+			{
+				if (*c == killStatWeaponAmmo)
+					killStatWeapon = weapon->getRules()->getName();
+			}
+		}
+
+		weapon2 = slayer->getItem("STR_LEFT_HAND");
+		if (weapon2)
+		{
+			for (std::vector<std::string>::iterator
+					c = weapon->getRules()->getCompatibleAmmo()->begin();
+					c != weapon->getRules()->getCompatibleAmmo()->end();
+					++c)
+			{
+				if (*c == killStatWeaponAmmo)
+					killStatWeapon = weapon->getRules()->getName();
+			}
+		}
+	}
+
 	for (std::vector<BattleUnit*>::iterator
 			buCasualty = _save->getUnits()->begin();
 			buCasualty != _save->getUnits()->end();
 			++buCasualty)
 	{
 		BattleUnit* victim = *buCasualty; // kL
+
+		/// Decide victim race and rank
+		if (victim->getGeoscapeSoldier()							// Soldiers
+				&& victim->getOriginalFaction() == FACTION_PLAYER)
+		{
+			killStatRank = victim->getGeoscapeSoldier()->getRankString();
+			killStatRace = "STR_HUMAN";
+		}
+		else if (victim->getOriginalFaction() == FACTION_PLAYER)	// HWPs
+		{
+			killStatRank = "STR_HEAVY_WEAPONS_PLATFORM_LC";
+			killStatRace = "STR_TANK";
+		}
+		else if (victim->getOriginalFaction() == FACTION_HOSTILE)	// Aliens
+		{
+			killStatRank = victim->getUnitRules()->getRank();
+			killStatRace = victim->getUnitRules()->getRace();
+		}
+		else if (victim->getOriginalFaction() == FACTION_NEUTRAL)	// Civilians
+		{
+			killStatRank = "STR_CIVILIAN";
+			killStatRace = "STR_HUMAN";
+		}
+		else														// Error
+		{
+			killStatRank = "STR_UNKNOWN";
+			killStatRace = "STR_UNKNOWN";
+		}
 
 		if (victim->getHealth() == 0
 			&& victim->getStatus() != STATUS_DEAD
@@ -826,6 +932,21 @@ void BattlescapeGame::checkForCasualties(
 				&& slayer->getTurretType() == -1) // not a Tank.
 			{
 				//Log(LOG_INFO) << ". slayer = " << slayer->getId();
+				if (slayer->getGeoscapeSoldier()
+					&& slayer->getFaction() == FACTION_PLAYER)
+				{
+					slayer->getStatistics()->kills.push_back(new BattleUnitKills(
+																			killStatRank,
+																			killStatRace,
+																			killStatWeapon,
+																			killStatWeaponAmmo,
+																			victim->getFaction(),
+																			STATUS_DEAD,
+																			killStatMission,
+																			killStatTurn));
+					victim->setMurdererId(slayer->getId());
+				}
+
 				(*buCasualty)->killedBy(slayer->getFaction()); // used in DebriefingState.
 
 				int bonus = 100;
@@ -993,6 +1114,27 @@ void BattlescapeGame::checkForCasualties(
 			&& victim->getStatus() != STATUS_DISABLED)	// kL
 		{
 			//Log(LOG_INFO) << ". STUNNED victim = " << victim->getId();
+			if (slayer
+				&& slayer->getGeoscapeSoldier()
+				&& slayer->getFaction() == FACTION_PLAYER)
+			{
+				slayer->getStatistics()->kills.push_back(new BattleUnitKills(
+																		killStatRank,
+																		killStatRace,
+																		killStatWeapon,
+																		killStatWeaponAmmo,
+																		victim->getFaction(),
+																		STATUS_UNCONSCIOUS,
+																		killStatMission,
+																		killStatTurn));
+			}
+
+			if (victim
+				&& victim->getGeoscapeSoldier())
+			{
+				victim->getStatistics()->wasUnconcious = true;
+			}
+
 			(*buCasualty)->setStatus(STATUS_DISABLED);	// kL
 
 			statePushNext(new UnitDieBState( // kL_note: This is where units get set to STUNNED
