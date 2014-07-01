@@ -56,7 +56,7 @@ ConfirmDestinationState::ConfirmDestinationState(
 		_craft(craft),
 		_target(target)
 {
-	Waypoint* w = dynamic_cast<Waypoint*>(_target);
+	Waypoint* wp = dynamic_cast<Waypoint*>(_target);
 
 	_screen = false;
 
@@ -67,15 +67,13 @@ ConfirmDestinationState::ConfirmDestinationState(
 	_btnCancel	= new TextButton(75, 16, 51, 111);
 	_btnOk		= new TextButton(75, 16, 130, 111);
 
-	if (w != 0
-		&& w->getId() == 0)
+	if (wp != NULL
+		&& wp->getId() == 0)
 	{
 		setPalette("PAL_GEOSCAPE", 6);
 	}
 	else
-	{
 		setPalette("PAL_GEOSCAPE", 4);
-	}
 
 	add(_window);
 	add(_txtTarget);
@@ -92,15 +90,13 @@ ConfirmDestinationState::ConfirmDestinationState(
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
 //	_txtTarget->setWordWrap(true);
-	if (w != 0
-		&& w->getId() == 0)
+	if (wp != NULL
+		&& wp->getId() == 0)
 	{
 		_txtTarget->setText(tr("STR_TARGET_WAY_POINT"));
 	}
 	else
-	{
 		_txtTarget->setText(tr("STR_TARGET").arg(_target->getName(_game->getLanguage())));
-	}
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
@@ -130,12 +126,12 @@ ConfirmDestinationState::~ConfirmDestinationState()
  */
 void ConfirmDestinationState::btnOkClick(Action*)
 {
-	Waypoint* w = dynamic_cast<Waypoint*>(_target);
-	if (w != 0
-		&& w->getId() == 0)
+	Waypoint* wp = dynamic_cast<Waypoint*>(_target);
+	if (wp != NULL
+		&& wp->getId() == 0)
 	{
-		w->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
-		_game->getSavedGame()->getWaypoints()->push_back(w);
+		wp->setId(_game->getSavedGame()->getId("STR_WAYPOINT"));
+		_game->getSavedGame()->getWaypoints()->push_back(wp);
 	}
 
 	_craft->setDestination(_target);
@@ -156,9 +152,7 @@ void ConfirmDestinationState::btnOkClick(Action*)
 					++craftIt)
 			{
 				if ((*craftIt)->getInterceptionOrder() > maxInterceptionOrder)
-				{
 					maxInterceptionOrder = (*craftIt)->getInterceptionOrder();
-				}
 			}
 		}
 
@@ -175,11 +169,11 @@ void ConfirmDestinationState::btnOkClick(Action*)
  */
 void ConfirmDestinationState::btnCancelClick(Action*)
 {
-	Waypoint* w = dynamic_cast<Waypoint*>(_target);
-	if (w != 0
-		&& w->getId() == 0)
+	Waypoint* wp = dynamic_cast<Waypoint*>(_target);
+	if (wp != NULL
+		&& wp->getId() == 0)
 	{
-		delete w;
+		delete wp;
 	}
 
 	_game->popState();

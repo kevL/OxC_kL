@@ -4874,7 +4874,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1404096023 f:\git\openxcom\src\geoscape\globe.h
+1404190080 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"
@@ -9492,7 +9492,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1404096023 source:f:\git\openxcom\src\savegame\craft.cpp
+1404187482 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -11948,7 +11948,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1404159376 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1404185185 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	<string>
 	"SoldierDiaryMissionState.h"

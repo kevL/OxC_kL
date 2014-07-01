@@ -324,7 +324,7 @@ Globe::Globe(
 		_radius(0.0),
 		_radiusStep(0.0)
 //		_zoom(0),
-//		_zoomPre(0)
+//		_dfPreZoom(0)
 {
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -436,8 +436,7 @@ Globe::Globe(
 	_cenLon = _game->getSavedGame()->getGlobeLongitude();
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 
-	_zoom = _game->getSavedGame()->getGlobeZoom();
-	_zoomPre = _zoom;
+	_zoom = _dfPreZoom = _game->getSavedGame()->getGlobeZoom();
 
 	setupRadii(width, height);
 
@@ -873,29 +872,28 @@ void Globe::zoomOut()
 /**
  * Stores the zoom used before a dogfight.
  */
-void Globe::saveDogfightZoom()
+void Globe::setPreDogfightZoom()
 {
-	_zoomPre = _zoom;
+	_dfPreZoom = _zoom;
 }
 
 /**
  * Zooms the globe smoothly into dogfight level.
- * @return Is the globe already zoomed in?
+ * @return, true if the globe has finished zooming in
  */
 bool Globe::zoomDogfightIn()
 {
-	size_t dogfightZoom = _zoomRadii.size() - 1; // kL
+	size_t dfZoomLevel = _zoomRadii.size() - 1; // kL
 
 //kL	if (_zoom < DOGFIGHT_ZOOM)
-	if (_zoom < dogfightZoom) // kL
+	if (_zoom < dfZoomLevel) // kL
 	{
 		double radius = _radius;
-//kL		if (radius + _radiusStep >= _zoomRadii[DOGFIGHT_ZOOM])
-		if (radius + _radiusStep >= _zoomRadii[dogfightZoom]) // kL
-		{
-//kL			setZoom(DOGFIGHT_ZOOM);
-			setZoom(dogfightZoom); // kL
-		}
+
+//kL	if (radius + _radiusStep >= _zoomRadii[DOGFIGHT_ZOOM])
+		if (radius + _radiusStep >= _zoomRadii[dfZoomLevel]) // kL
+//kL		setZoom(DOGFIGHT_ZOOM);
+			setZoom(dfZoomLevel); // kL
 		else
 		{
 			if (radius + _radiusStep >= _zoomRadii[_zoom + 1])
@@ -914,17 +912,16 @@ bool Globe::zoomDogfightIn()
 
 /**
  * Zooms the globe smoothly out of dogfight level.
- * @return Is the globe already zoomed out?
+ * @return, true if the globe has finished zooming out
  */
 bool Globe::zoomDogfightOut()
 {
-	if (_zoom > _zoomPre)
+	if (_zoom > _dfPreZoom)
 	{
 		double radius = _radius;
-		if (radius - _radiusStep <= _zoomRadii[_zoomPre])
-		{
-			setZoom(_zoomPre);
-		}
+
+		if (radius - _radiusStep <= _zoomRadii[_dfPreZoom])
+			setZoom(_dfPreZoom);
 		else
 		{
 			if (radius - _radiusStep <= _zoomRadii[_zoom - 1])

@@ -3266,12 +3266,12 @@ void GeoscapeState::zoomOutEffect()
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
 
+		_globe->center( // kL
+					_interLon,
+					_interLat);
+
 		init();
 	}
-
-	_globe->center( // kL
-				_interLon,
-				_interLat);
 }
 
 /**
@@ -3342,7 +3342,8 @@ void GeoscapeState::startDogfight()
 	{
 		if (!_zoomInEffectTimer->isRunning())
 		{
-			_globe->saveDogfightZoom();
+			_globe->setPreDogfightZoom();
+
 //			_globe->rotateStop();
 			_zoomInEffectTimer->start();
 		}

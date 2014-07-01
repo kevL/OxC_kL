@@ -530,8 +530,8 @@ void Craft::setDestination(Target* dest)
 {
 	if (_status != "STR_OUT")
 		_takeoff = 60;
-	else
-		_takeoff = 0; // kL ...
+//	else
+//		_takeoff = 0; // kL ...
 
 	if (dest == NULL)
 		setSpeed(_rules->getMaxSpeed() / 2);
@@ -798,17 +798,17 @@ void Craft::returnToBase()
  */
 void Craft::think()
 {
-	if (_status == "STR_OUT" // kL
-		|| _takeoff == 0)
+	if ( //_status == "STR_OUT" || // kL
+		_takeoff == 0)
 	{
-		_takeoff = 0; // kL
+//		_takeoff = 0; // kL
 		move();
 	}
 	else
 		_takeoff--;
 
 	if (reachedDestination()
-		&& _dest == (Target*)_base)
+		&& _dest == dynamic_cast<Target*>(_base))
 	{
 		setInterceptionOrder(0);
 		checkup();

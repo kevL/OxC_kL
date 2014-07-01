@@ -481,7 +481,7 @@ DogfightState::DogfightState(
 		ammo->setText(ss.str());
 
 		// Draw range (1 km = 1 pixel)
-		Uint8 color = Palette::blockOffset(7) - 1;
+		Uint8 color = Palette::blockOffset(7)-1;
 
 		range->lock();
 		int
