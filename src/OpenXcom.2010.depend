@@ -4437,7 +4437,7 @@
 	<time.h>
 	"GameTime.h"
 
-1404096022 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1404176518 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -6007,7 +6007,7 @@
 	<yaml-cpp/yaml.h>
 	"Target.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
+1404170577 source:f:\git\openxcom\src\battlescape\battlescapemessage.cpp
 	"BattlescapeMessage.h"
 	"../Engine/Palette.h"
 	"../Interface/Text.h"
@@ -6509,7 +6509,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1404169444 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<cmath>
 	<sstream>
@@ -9461,7 +9461,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1404102255 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1404181353 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9664,7 +9664,7 @@
 	"../Ruleset/SoldierNamePool.h"
 	"../Ruleset/StatString.h"
 
-1404154810 source:f:\git\openxcom\src\savegame\soldierdead.cpp
+1404169765 source:f:\git\openxcom\src\savegame\soldierdead.cpp
 	"SoldierDead.h"
 	"Soldier.h"
 	"SoldierDeath.h"
@@ -12025,7 +12025,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1404152565 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1404168308 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"

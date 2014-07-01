@@ -3562,10 +3562,11 @@ void BattleUnit::contDeathSpin()
 {
 	//Log(LOG_INFO) << "BattleUnit::contDeathSpin()" << " [target]: " << (getId());
 	int dir = _direction;
-	if (dir == 3) // if facing player, 1 rotation left
+	if (dir == 3)	// when facing player, 1 rotation left;
+					// unless started facing player, in which case 2 rotations left
 	{
 		//Log(LOG_INFO) << ". d_init = " << dir;
-		if (_spinPhase == 3
+/*		if (_spinPhase == 3
 			|| _spinPhase == 4)
 		{
 			//Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
@@ -3574,10 +3575,26 @@ void BattleUnit::contDeathSpin()
 
 			 return;
 		}
-		else if (_spinPhase == 1)
-			_spinPhase = 3; // 2nd CW rotation
-		else if (_spinPhase == 2)
-			_spinPhase = 4; // 2nd CCW rotation
+		else if (_spinPhase == 1)	// CW rotation
+			_spinPhase = 3;			// CW rotation 2nd
+		else if (_spinPhase == 2)	// CCW rotation
+			_spinPhase = 4;			// CCW rotation 2nd
+*/
+		if (_spinPhase == 0)		// remove this clause to use only 1 rotation when start faces player.
+			_spinPhase = 2;			// CCW 2 spins.
+		else if (_spinPhase == 1)	// CW rotation
+			_spinPhase = 3;			// CW rotation 2nd
+		else if (_spinPhase == 2)	// CCW rotation
+			_spinPhase = 4;			// CCW rotation 2nd
+		else if (_spinPhase == 3
+			|| _spinPhase == 4)
+		{
+			//Log(LOG_INFO) << ". . _spinPhase = " << _spinPhase << " [ return ]";
+			 _spinPhase = -1; // end.
+			_status = STATUS_STANDING;
+
+			 return;
+		}
 	}
 
 	if (_spinPhase == 0) // start!
@@ -3585,16 +3602,16 @@ void BattleUnit::contDeathSpin()
 		if (-1 < dir && dir < 4)
 		{
 			if (dir == 3)
-				_spinPhase = 3; // only 1 CW rotation
+				_spinPhase = 3; // only 1 CW rotation to go ...
 			else
-				_spinPhase = 1; // 1st CW rotation
+				_spinPhase = 1; // 1st CW rotation of 2
 		}
 		else
 		{
 			if (dir == 3)
-				_spinPhase = 4; // only 1 CCW rotation
+				_spinPhase = 4; // only 1 CCW rotation to go ...
 			else
-				_spinPhase = 2; // 1st CCW rotation
+				_spinPhase = 2; // 1st CCW rotation of 2
 		}
 	}
 

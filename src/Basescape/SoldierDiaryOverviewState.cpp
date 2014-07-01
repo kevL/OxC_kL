@@ -262,16 +262,19 @@ void SoldierDiaryOverviewState::init()
 
 		if (_base == NULL)
 		{
-			for (std::vector<int>::const_iterator
-					k = _soldierDead->getDiary()->getMissionIdList().begin();
-					k != _soldierDead->getDiary()->getMissionIdList().end();
-					++k)
+			if (_soldierDead->getDiary() != NULL) // kL: dead soldiers are initialized w/ NULL diaries ...
 			{
-				if (missionId == *k)
+				for (std::vector<int>::const_iterator
+						k = _soldierDead->getDiary()->getMissionIdList().begin();
+						k != _soldierDead->getDiary()->getMissionIdList().end();
+						++k)
 				{
-					wasOnMission = true;
+					if (missionId == *k)
+					{
+						wasOnMission = true;
 
-					break;
+						break;
+					}
 				}
 			}
 		}

@@ -69,7 +69,7 @@
 namespace OpenXcom
 {
 
-Sound* BasescapeState::soundPop = 0;	// kL
+Sound* BasescapeState::soundPop = NULL; // kL
 
 
 /**
@@ -279,15 +279,23 @@ void BasescapeState::init()
 			i != _base->getFacilities()->end();
 			++i)
 	{
-		if ((*i)->getRules()->getPersonnel() > 0)
+		if ((*i)->getRules()->getPersonnel() > 0
+			&& (*i)->getBuildTime() == 0)
+		{
 			hasQuarters = true;
+		}
 
-		if ((*i)->getRules()->getCrafts() > 0)
+		if ((*i)->getRules()->getCrafts() > 0
+			&& (*i)->getBuildTime() == 0)
+		{
 			hasHangar = true;
+		}
 
-		if ((*i)->getRules()->getAliens() > 0)
+		if ((*i)->getRules()->getAliens() > 0
+			&& (*i)->getBuildTime() == 0)
+		{
 			hasAlienCont = true;
-
+		}
 
 		if ((*i)->getRules()->getLaboratories() > 0
 			&& (*i)->getBuildTime() == 0)

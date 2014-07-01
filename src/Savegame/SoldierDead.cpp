@@ -61,7 +61,9 @@ SoldierDead::SoldierDead(
 	// copy diary instead of resetting a pointer,
 	// because delete Soldier will delete the old diary
 	// (unless you want to do tricky things that i don't)
+//	if (_diary == NULL)
 	_diary = new SoldierDiary();
+
 	_diary = diary;
 }
 
@@ -122,8 +124,9 @@ YAML::Node SoldierDead::save() const
 
 	node["death"]			= _death->save();
 
-	if (!_diary->getMissionIdList().empty()
-		|| !_diary->getSoldierCommendations()->empty())
+	if (_diary != NULL // kL
+		&& (!_diary->getMissionIdList().empty()
+			|| !_diary->getSoldierCommendations()->empty()))
 	{
 		node["diary"] = _diary->save();
 	}

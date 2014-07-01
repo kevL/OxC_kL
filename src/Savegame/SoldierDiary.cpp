@@ -109,7 +109,7 @@ SoldierDiary::~SoldierDiary()
  */
 void SoldierDiary::load(const YAML::Node& node)
 {
-	if (const YAML::Node &commendations = node["commendations"])
+	if (const YAML::Node& commendations = node["commendations"])
 	{
 		for (YAML::const_iterator
 				i = commendations.begin();
@@ -120,7 +120,7 @@ void SoldierDiary::load(const YAML::Node& node)
 		}
 	}
 
-	if (const YAML::Node &killList = node["killList"])
+	if (const YAML::Node& killList = node["killList"])
 	{
 		for (YAML::const_iterator
 				i = killList.begin();
@@ -190,72 +190,40 @@ YAML::Node SoldierDiary::save() const
 		node["killList"].push_back((*i)->save());
 	}
 
-	if (!_missionIdList.empty())
-		node["missionIdList"]				= _missionIdList;
-	if (!_regionTotal.empty())
-		node["regionTotal"]					= _regionTotal;
-	if (!_countryTotal.empty())
-		node["countryTotal"]				= _countryTotal;
-	if (!_typeTotal.empty())
-		node["typeTotal"]					= _typeTotal;
-	if (!_UFOTotal.empty())
-		node["UFOTotal"]					= _UFOTotal;
-	if (_scoreTotal)
-		node["scoreTotal"]					= _scoreTotal;
-	if (_killTotal)
-		node["killTotal"]					= _killTotal;
-	if (_missionTotal)
-		node["missionTotal"]				= _missionTotal;
-	if (_winTotal)
-		node["winTotal"]					= _winTotal;
-	if (_stunTotal)
-		node["stunTotal"]					= _stunTotal;
-	if (_daysWoundedTotal)
-		node["daysWoundedTotal"]			= _daysWoundedTotal;
-	if (_baseDefenseMissionTotal)
-		node["baseDefenseMissionTotal"]		= _baseDefenseMissionTotal;
-	if (_totalShotByFriendlyCounter)
-		node["totalShotByFriendlyCounter"]	= _totalShotByFriendlyCounter;
-	if (_totalShotFriendlyCounter)
-		node["totalShotFriendlyCounter"]	= _totalShotFriendlyCounter;
-	if (_loneSurvivorTotal)
-		node["loneSurvivorTotal"]			= _loneSurvivorTotal;
-	if (_terrorMissionTotal)
-		node["terrorMissionTotal"]			= _terrorMissionTotal;
-	if (_nightMissionTotal)
-		node["nightMissionTotal"]			= _nightMissionTotal;
-	if (_nightTerrorMissionTotal)
-		node["nightTerrorMissionTotal"]		= _nightTerrorMissionTotal;
-	if (_monthsService)
-		node["monthsService"]				= _monthsService;
-	if (_unconciousTotal)
-		node["unconciousTotal"]				= _unconciousTotal;
-	if (_shotAtCounterTotal)
-		node["shotAtCounterTotal"]			= _shotAtCounterTotal;
-	if (_hitCounterTotal)
-		node["hitCounterTotal"]				= _hitCounterTotal;
-	if (_ironManTotal)
-		node["ironManTotal"]				= _ironManTotal;
-	if (_importantMissionTotal)
-		node["importantMissionTotal"]		= _importantMissionTotal;
-	if (_longDistanceHitCounterTotal)
-		node["longDistanceHitCounterTotal"]	= _longDistanceHitCounterTotal;
-	if (_lowAccuracyHitCounterTotal)
-		node["lowAccuracyHitCounterTotal"]	= _lowAccuracyHitCounterTotal;
-	if (_shotsFiredCounterTotal)
-		node["shotsFiredCounterTotal"]		= _shotsFiredCounterTotal;
-	if (_shotsLandedCounterTotal)
-		node["shotsLandedCounterTotal"]		= _shotsLandedCounterTotal;
-	if (_shotAtCounter10in1Mission)
-		node["shotAtCounter10in1Mission"]	= _shotAtCounter10in1Mission;
-	if (_hitCounter5in1Mission)
-		node["hitCounter5in1Mission"]		= _hitCounter5in1Mission;
-	if (_reactionFireTotal)
-		node["reactionFireTotal"]			= _reactionFireTotal;
-	if (_timesWoundedTotal)
-		node["timesWoundedTotal"]			= _timesWoundedTotal;
-	if (_valiantCruxTotal)
-		node["valiantCruxTotal"]			= _valiantCruxTotal;
+	if (!_missionIdList.empty())		node["missionIdList"]				= _missionIdList;
+	if (!_regionTotal.empty())			node["regionTotal"]					= _regionTotal;
+	if (!_countryTotal.empty())			node["countryTotal"]				= _countryTotal;
+	if (!_typeTotal.empty())			node["typeTotal"]					= _typeTotal;
+	if (!_UFOTotal.empty())				node["UFOTotal"]					= _UFOTotal;
+
+	if (_scoreTotal)					node["scoreTotal"]					= _scoreTotal;
+	if (_killTotal)						node["killTotal"]					= _killTotal;
+	if (_missionTotal)					node["missionTotal"]				= _missionTotal;
+	if (_winTotal)						node["winTotal"]					= _winTotal;
+	if (_stunTotal)						node["stunTotal"]					= _stunTotal;
+	if (_daysWoundedTotal)				node["daysWoundedTotal"]			= _daysWoundedTotal;
+	if (_baseDefenseMissionTotal)		node["baseDefenseMissionTotal"]		= _baseDefenseMissionTotal;
+	if (_totalShotByFriendlyCounter)	node["totalShotByFriendlyCounter"]	= _totalShotByFriendlyCounter;
+	if (_totalShotFriendlyCounter)		node["totalShotFriendlyCounter"]	= _totalShotFriendlyCounter;
+	if (_loneSurvivorTotal)				node["loneSurvivorTotal"]			= _loneSurvivorTotal;
+	if (_terrorMissionTotal)			node["terrorMissionTotal"]			= _terrorMissionTotal;
+	if (_nightMissionTotal)				node["nightMissionTotal"]			= _nightMissionTotal;
+	if (_nightTerrorMissionTotal)		node["nightTerrorMissionTotal"]		= _nightTerrorMissionTotal;
+	if (_monthsService)					node["monthsService"]				= _monthsService;
+	if (_unconciousTotal)				node["unconciousTotal"]				= _unconciousTotal;
+	if (_shotAtCounterTotal)			node["shotAtCounterTotal"]			= _shotAtCounterTotal;
+	if (_hitCounterTotal)				node["hitCounterTotal"]				= _hitCounterTotal;
+	if (_ironManTotal)					node["ironManTotal"]				= _ironManTotal;
+	if (_importantMissionTotal)			node["importantMissionTotal"]		= _importantMissionTotal;
+	if (_longDistanceHitCounterTotal)	node["longDistanceHitCounterTotal"]	= _longDistanceHitCounterTotal;
+	if (_lowAccuracyHitCounterTotal)	node["lowAccuracyHitCounterTotal"]	= _lowAccuracyHitCounterTotal;
+	if (_shotsFiredCounterTotal)		node["shotsFiredCounterTotal"]		= _shotsFiredCounterTotal;
+	if (_shotsLandedCounterTotal)		node["shotsLandedCounterTotal"]		= _shotsLandedCounterTotal;
+	if (_shotAtCounter10in1Mission)		node["shotAtCounter10in1Mission"]	= _shotAtCounter10in1Mission;
+	if (_hitCounter5in1Mission)			node["hitCounter5in1Mission"]		= _hitCounter5in1Mission;
+	if (_reactionFireTotal)				node["reactionFireTotal"]			= _reactionFireTotal;
+	if (_timesWoundedTotal)				node["timesWoundedTotal"]			= _timesWoundedTotal;
+	if (_valiantCruxTotal)				node["valiantCruxTotal"]			= _valiantCruxTotal;
 
 	return node;
 }
@@ -913,6 +881,9 @@ void SoldierDiary::addMonthlyService()
 	_monthsService++;
 }
 
+
+/*____________________________________
+/* ** SOLDIER COMMENDATIONS class ** */
 /**
  * Initializes a new commendation entry from YAML.
  * @param node YAML node.
@@ -921,7 +892,6 @@ SoldierCommendations::SoldierCommendations(const YAML::Node& node)
 {
 	load(node);
 }
-
 
 /**
  * cTor. Initializes a soldier commendation.
@@ -998,6 +968,7 @@ std::string SoldierCommendations::getDecorationLevelName(int skipCounter)
 {
 	std::stringstream ss;
 	ss << "STR_AWARD_" << _decorationLevel - skipCounter;
+
 	return ss.str();
 }
 
@@ -1046,6 +1017,7 @@ void SoldierCommendations::makeOld()
 void SoldierCommendations::addDecoration()
 {
 	_decorationLevel++;
+
 	_isNew = true;
 }
 
