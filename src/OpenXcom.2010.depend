@@ -5718,7 +5718,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1404191994 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -7466,7 +7466,7 @@
 1404096023 f:\git\openxcom\src\geoscape\confirmcydoniastate.h
 	"../Engine/State.h"
 
-1404096023 source:f:\git\openxcom\src\geoscape\confirmdestinationstate.cpp
+1404193898 source:f:\git\openxcom\src\geoscape\confirmdestinationstate.cpp
 	"ConfirmDestinationState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -7597,7 +7597,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1404096023 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1404186994 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7689,7 +7689,7 @@
 1404096023 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1404096023 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1404192603 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7849,7 +7849,7 @@
 	<string>
 	<vector>
 
-1404096023 source:f:\git\openxcom\src\geoscape\globe.cpp
+1404190431 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>

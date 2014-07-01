@@ -135,6 +135,8 @@ void Craft::load(
 	_fuel	= node["fuel"].as<int>(_fuel);
 	_damage	= node["damage"].as<int>(_damage);
 
+	_status	= node["status"].as<std::string>(_status); // kL_fromBelow_ heh.
+
 	if (const YAML::Node& dest = node["dest"])
 	{
 		std::string type = dest["type"].as<std::string>();
@@ -264,7 +266,6 @@ void Craft::load(
 		}
 	}
 
-	_status				= node["status"].as<std::string>(_status);
 	_lowFuel			= node["lowFuel"].as<bool>(_lowFuel);
 	_mission			= node["mission"].as<bool>(_mission);
 	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
@@ -491,16 +492,7 @@ std::string Craft::getAltitude() const
 
 	return "STR_VERY_LOW";
 } // kL_end.
-
-/*kL	if (u
-		&& u->getAltitude() != "STR_GROUND")
-	{
-		return u->getAltitude();
-	}
-	else
-		return "STR_VERY_LOW"; */
-
-	// kL_begin: Craft::getAltitude(), add strings for based xCom craft.
+// kL_begin: Craft::getAltitude(), add strings for based xCom craft.
 /*	if (u)
 	{
 		if (u->getAltitude() != "STR_GROUND")
@@ -530,8 +522,6 @@ void Craft::setDestination(Target* dest)
 {
 	if (_status != "STR_OUT")
 		_takeoff = 60;
-//	else
-//		_takeoff = 0; // kL ...
 
 	if (dest == NULL)
 		setSpeed(_rules->getMaxSpeed() / 2);
@@ -798,12 +788,8 @@ void Craft::returnToBase()
  */
 void Craft::think()
 {
-	if ( //_status == "STR_OUT" || // kL
-		_takeoff == 0)
-	{
-//		_takeoff = 0; // kL
+	if (_takeoff == 0)
 		move();
-	}
 	else
 		_takeoff--;
 

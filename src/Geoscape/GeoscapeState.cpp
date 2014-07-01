@@ -1109,7 +1109,7 @@ void GeoscapeState::time5Seconds()
 						if (Base* base = dynamic_cast<Base*>((*i)->getDestination()))
 						{
 							mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
-							(*i)->setDestination(0);
+							(*i)->setDestination(NULL);
 							base->setupDefenses();
 
 							timerReset();
@@ -1376,7 +1376,7 @@ void GeoscapeState::time5Seconds()
 					popup(new CraftPatrolState(
 											*j,
 											_globe));
-					(*j)->setDestination(0);
+					(*j)->setDestination(NULL);
 				}
 				else if (ts != NULL)
 				{
@@ -3405,10 +3405,11 @@ void GeoscapeState::handleBaseDefense(
 	ufo->setStatus(Ufo::DESTROYED); // Whatever happens in the base defense, the UFO has finished its duty
 
 	if (base->getAvailableSoldiers(true) > 0)
+//		|| !base->getVehicles()->empty()) // kL_note: Tanks can't defend the base.
 	{
-		SavedBattleGame* bgame = new SavedBattleGame();
-		_game->getSavedGame()->setBattleGame(bgame);
-		bgame->setMissionType("STR_BASE_DEFENSE");
+		SavedBattleGame* sbg = new SavedBattleGame();
+		_game->getSavedGame()->setBattleGame(sbg);
+		sbg->setMissionType("STR_BASE_DEFENSE");
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.setBase(base);
@@ -3418,7 +3419,7 @@ void GeoscapeState::handleBaseDefense(
 		_pause = true;
 
 		popup(new BriefingState(
-							0,
+							NULL,
 							base));
 	}
 	else

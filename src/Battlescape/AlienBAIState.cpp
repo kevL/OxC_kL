@@ -1693,7 +1693,9 @@ void AlienBAIState::evaluateAIMode()
 	// GENERATE A RANDOM NUMBER TO PRESENT OUR SITUATION:
 	int decision = RNG::generate(
 								1,
-								static_cast<int>(patrolOdds + ambushOdds + escapeOdds + combatOdds));
+								std::max(
+										1,
+										static_cast<int>(patrolOdds + ambushOdds + escapeOdds + combatOdds)));
 
 	// if the aliens are cheating, or the unit is charging, enforce combat as a priority.
 	if (_save->isCheating() // <- hmm, do i want this - kL_note
