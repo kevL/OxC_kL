@@ -30,6 +30,8 @@
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 
+#include "../Interface/Text.h" // kL, format days Wounded for Craft string.
+
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
@@ -352,9 +354,10 @@ void Soldier::setCraft(Craft* craft)
 std::wstring Soldier::getCraftString(Language* lang) const
 {
 	std::wstring sCraft;
+
 	if (_recovery > 0)
-		sCraft = lang->getString("STR_WOUNDED");
-	else if (_craft == 0)
+		sCraft = lang->getString("STR_WOUNDED").arg(Text::formatNumber(_recovery));
+	else if (_craft == NULL)
 		sCraft = lang->getString("STR_NONE_UC");
 	else
 		sCraft = _craft->getName(lang);

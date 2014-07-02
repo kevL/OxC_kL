@@ -84,10 +84,10 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_btnNext			= new TextButton(28, 14, 284, 8);
 
 	_txtLocation		= new Text(114, 9, 16, 36);
-	_txtStatus			= new Text(102, 9, 120, 36);
+	_txtStatus			= new Text(102, 9, 110, 36);
 	_txtDate			= new Text(90, 9, 218, 36);
 
-	_lstDiary			= new TextList(288, 120, 8, 44);
+	_lstDiary			= new TextList(288, 120, 16, 44);
 
 	_btnKills			= new TextButton(70, 16, 8, 176);
 	_btnMissions		= new TextButton(70, 16, 86, 176);
@@ -131,7 +131,6 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 
 	_btnCommendations->setColor(Palette::blockOffset(13)+10);
 	_btnCommendations->setText(tr("STR_AWARDS_UC"));
-
 	if (!_game->getRuleset()->getCommendation().empty())
 	{
 		_btnCommendations->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnCommendationsClick);
@@ -141,8 +140,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 		_btnCommendations->setVisible(false);
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
-	_btnPrev->setText(L"<<");
-
+	_btnPrev->setText(L"<");
 	if (_base == NULL)
 	{
 		_btnPrev->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnNextClick);
@@ -159,8 +157,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	}
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
-	_btnNext->setText(L">>");
-
+	_btnNext->setText(L">");
 	if (_base == NULL)
 	{
 		_btnNext->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnPrevClick);
@@ -189,9 +186,9 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_txtDate->setColor(Palette::blockOffset(15)+1);
 	_txtDate->setText(tr("STR_DATE_UC"));
 
-	_lstDiary->setColor(Palette::blockOffset(13)+10);
+	_lstDiary->setColor(Palette::blockOffset(13));
 	_lstDiary->setArrowColor(Palette::blockOffset(15)+1);
-	_lstDiary->setColumns(5, 104, 98, 30, 25, 35);
+	_lstDiary->setColumns(5, 94, 108, 26, 23, 29);
 	_lstDiary->setSelectable(true);
 	_lstDiary->setBackground(_window);
 	_lstDiary->setMargin(8);

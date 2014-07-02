@@ -44,7 +44,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Soldier Diary Mission window.
+ * Initializes all the elements in the Soldier Diary Mission-description window.
  * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param soldier ID of the selected soldier.
@@ -61,7 +61,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 {
 	if (_base == NULL)
 	{
-		_listDead = _game->getSavedGame()->getDeadSoldiers(); // kL_note: remark this until i get SoldierDead active here.
+		_listDead = _game->getSavedGame()->getDeadSoldiers();
 		_list = NULL;
 	}
 	else
@@ -73,16 +73,21 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	_screen = false;
 
 	_window			= new Window(this, 232, 128, 44, 36, POPUP_BOTH);
+	_txtTitle		= new Text(222, 17, 49, 44);
+
+	_txtMissionType	= new Text(136, 9, 56, 62);
+	_txtUFO			= new Text(136, 9, 56, 71);
+	_txtScore		= new Text(136, 9, 56, 80);
+
+	_txtRace		= new Text(80, 9, 195, 62);
+	_txtDaylight	= new Text(80, 9, 195, 71);
+	_txtKills		= new Text(80, 9, 195, 80);
+
+	_txtDaysWounded	= new Text(100, 9, 135, 89);
+
+	_lstKills		= new TextList(208, 32, 60, 101);
+
 	_btnOk			= new TextButton(180, 16, 70, 140);
-	_txtTitle		= new Text(222, 9, 49, 44);
-	_txtScore		= new Text(222, 9, 49, 62);
-	_txtMissionType	= new Text(222, 9, 49, 71);
-	_txtUFO			= new Text(222, 9, 49, 80);
-	_txtKills		= new Text(130, 9, 187, 62);
-	_txtRace		= new Text(130, 9, 187, 71);
-	_txtDaylight	= new Text(130, 9, 187, 80);
-	_txtDaysWounded	= new Text(130, 9, 187, 89);
-	_lstKills		= new TextList(200, 32, 49, 102);
 
 	setPalette("PAL_BASESCAPE");
 
@@ -107,8 +112,6 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	if (_base == NULL)
 	{
-		_soldier = NULL;
-
 		if (_listDead->empty())
 		{
 			_game->popState();
@@ -120,6 +123,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 			_soldierId = 0;
 
 		_soldierDead = _listDead->at(_soldierId);
+		_soldier = NULL;
 
 		missionId = _soldierDead->getDiary()->getMissionIdList().at(_rowEntry);
 		if (missionId > static_cast<int>(missionStatistics->size()))
@@ -129,8 +133,6 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	}
 	else
 	{
-		_soldierDead = NULL;
-
 		if (_list->empty())
 		{
 			_game->popState();
@@ -142,6 +144,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 			_soldierId = 0;
 
 		_soldier = _list->at(_soldierId);
+		_soldierDead = NULL;
 
 		missionId = _soldier->getDiary()->getMissionIdList().at(_rowEntry);
 		if (missionId > static_cast<int>(missionStatistics->size()))
@@ -162,6 +165,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
+	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_MISSION_DETAILS"));
 
 	_txtScore->setColor(Palette::blockOffset(13)+5);
@@ -197,24 +201,26 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	else
 		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_NIGHT")));
 
-	_txtDaysWounded->setColor(Palette::blockOffset(13)+5);
-	_txtDaysWounded->setSecondaryColor(Palette::blockOffset(13));
-	_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded));
-
 	if (daysWounded == 0)
 		_txtDaysWounded->setVisible(false);
+	else
+	{
+		_txtDaysWounded->setColor(Palette::blockOffset(13)+5);
+		_txtDaysWounded->setSecondaryColor(Palette::blockOffset(13));
+		_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded));
+	}
 
 	_lstKills->setColor(Palette::blockOffset(13));
 	_lstKills->setArrowColor(Palette::blockOffset(13)+5);
-	_lstKills->setColumns(3, 40, 90, 80);
+	_lstKills->setColumns(3, 30, 90, 88); // 208 total
 	_lstKills->setSelectable(false);
 	_lstKills->setBackground(_window);
-	_lstKills->setMargin(8);
+//	_lstKills->setMargin(8);
 
 	int count = 0;
+	size_t row = 0;
 	bool stunOrKill = false;
 	std::wstringstream wssKills;
-
 
 	if (_base == NULL)
 	{
@@ -259,6 +265,10 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 							wssStatus.str().c_str(),
 							wssUnit.str().c_str(),
 							wssWeapon.str().c_str());
+
+			_lstKills->setCellColor(row, 0, Palette::blockOffset(13)+5);
+
+			row++;
 		}
 	}
 	else
@@ -304,13 +314,17 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 							wssStatus.str().c_str(),
 							wssUnit.str().c_str(),
 							wssWeapon.str().c_str());
+
+			_lstKills->setCellColor(row, 0, Palette::blockOffset(13)+5);
+
+			row++;
 		}
 	}
 
 	if (!stunOrKill)
 	{
 		wssKills << tr("STR_NO_KILLS");
-		_lstKills->addRow(1, wssKills.str().c_str());
+		_lstKills->addRow(1, wssKills.str().c_str()); // should change to/add shots-connected ...
 	}
 
 	_txtKills->setColor(Palette::blockOffset(13)+5);

@@ -4437,7 +4437,7 @@
 	<time.h>
 	"GameTime.h"
 
-1404176518 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1404254712 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4850,7 +4850,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1404096022 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1404232247 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -5421,7 +5421,7 @@
 	<string>
 	"../Ruleset/Unit.h"
 
-1404096022 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1404247771 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	<iomanip>
 	<sstream>
@@ -5687,7 +5687,7 @@
 1404096022 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1404096022 f:\git\openxcom\src\battlescape\pathfinding.h
+1404271690 f:\git\openxcom\src\battlescape\pathfinding.h
 	<vector>
 	"PathfindingNode.h"
 	"Position.h"
@@ -6017,7 +6017,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1404270068 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6562,7 +6562,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1404268923 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -7169,7 +7169,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1404096022 source:f:\git\openxcom\src\engine\screen.cpp
+1404270166 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -7689,7 +7689,7 @@
 1404096023 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1404192603 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1404260659 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7849,7 +7849,7 @@
 	<string>
 	<vector>
 
-1404190431 source:f:\git\openxcom\src\geoscape\globe.cpp
+1404232383 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9492,7 +9492,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1404187482 source:f:\git\openxcom\src\savegame\craft.cpp
+1404195174 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9647,7 +9647,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1404149306 source:f:\git\openxcom\src\savegame\soldier.cpp
+1404255112 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -9658,6 +9658,7 @@
 	"../Engine/Language.h"
 	"../Engine/Options.h"
 	"../Engine/RNG.h"
+	"../Interface/Text.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleSoldier.h"
@@ -9685,7 +9686,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1404096023 source:f:\git\openxcom\src\savegame\tile.cpp
+1404251847 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
@@ -11906,7 +11907,7 @@
 
 1401099531 f:\git\openxcom\src\engine\dosfont.h
 
-1404096022 source:f:\git\openxcom\src\battlescape\delayedsavestate.cpp
+1404230314 source:f:\git\openxcom\src\battlescape\delayedsavestate.cpp
 	"DelayedSaveState.h"
 	"BattlescapeState.h"
 	"../Engine/Game.h"
@@ -11926,7 +11927,7 @@
 1404141801 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1404145732 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1404238970 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -11948,7 +11949,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1404185185 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1404247794 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	<string>
 	"SoldierDiaryMissionState.h"
@@ -12001,7 +12002,7 @@
 	<string>
 	"../Engine/State.h"
 
-1404155096 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1404245850 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	<string>
 	"SoldierDiaryOverviewState.h"

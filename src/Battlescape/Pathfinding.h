@@ -52,13 +52,15 @@ private:
 		_size,
 		_totalTUCost;
 
-	BattleUnit* _unit;
+	BattleUnit		* _unit;
+	SavedBattleGame	* _save;
+
 	MovementType _movementType;
-	SavedBattleGame* _save;
 
 	std::vector<int> _path;
 
 	std::vector<PathfindingNode> _nodes;
+
 
 	/// Gets the node at a position.
 	PathfindingNode* getNode(const Position& pos);
@@ -85,10 +87,10 @@ private:
 			int maxTUCost = 1000);
 
 	/// Determines whether a unit can fall down from this tile.
-	bool canFallDown(Tile* destinationTile);
+	bool canFallDown(Tile* tile);
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(
-			Tile* destinationTile,
+			Tile* tile,
 			int size);
 	/// Determines the additional TU cost of going one step from
 	/// start to destination if going through a closed UFO door.

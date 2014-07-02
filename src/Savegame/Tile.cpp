@@ -331,8 +331,8 @@ int Tile::getTUCost(
 		//return ret;
 		return _objects[part]->getTUCost(movementType);
 	}
-	else
-		return 0;
+
+	return 0;
 }
 
 /**
@@ -350,8 +350,8 @@ bool Tile::hasNoFloor(Tile* tileBelow) const
 
 	if (_objects[MapData::O_FLOOR])
 		return _objects[MapData::O_FLOOR]->isNoFloor();
-	else
-		return true;
+
+	return true;
 }
 
 /**
@@ -362,8 +362,8 @@ bool Tile::isBigWall() const
 {
 	if (_objects[MapData::O_OBJECT])
 		return (_objects[MapData::O_OBJECT]->getBigWall() != 0);
-	else
-		return false;
+
+	return false;
 }
 
 /**

@@ -1137,9 +1137,11 @@ void BattlescapeState::mapClick(Action* action)
 	// don't allow to click into void
 	if (_save->getTile(pos) != 0)
 	{
-		if ((action->getDetails()->button.button == SDL_BUTTON_RIGHT
-				|| (action->getDetails()->button.button == SDL_BUTTON_LEFT
-					&& (SDL_GetModState() & KMOD_ALT) != 0))
+		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
+				// kL_ Taking this out so that Alt can be used for forced walking by flying soldiers.
+				// We all have RMBs, it's 2014 a.d. .....
+//kL			|| (action->getDetails()->button.button == SDL_BUTTON_LEFT
+//kL				&& (SDL_GetModState() & KMOD_ALT) != 0))
 			&& playableUnitSelected())
 		{
 			_battleGame->secondaryAction(pos);

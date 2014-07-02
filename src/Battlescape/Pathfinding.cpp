@@ -63,15 +63,7 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 	_size = _save->getMapSizeXYZ();
 	_nodes.reserve(_size); // initialize one node per tile.
 
-	// kL_begin: This is prob. utterly useless (Pathfinding is initialized only once from SavedBattleGame).
-/*	if (_save->getSelectedUnit() != NULL)
-	{
-		_unit = _save->getSelectedUnit();
-		_movementType = _unit->getArmor()->getMovementType();
-	} */ // kL_end.
-
-
-	Position p;
+	Position pos;
 	for (int
 			i = 0;
 			i < _size;
@@ -79,10 +71,10 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 	{
 		_save->getTileCoords(
 							i,
-							&p.x,
-							&p.y,
-							&p.z);
-		_nodes.push_back(PathfindingNode(p));
+							&pos.x,
+							&pos.y,
+							&pos.z);
+		_nodes.push_back(PathfindingNode(pos));
 	}
 }
 
@@ -123,7 +115,6 @@ void Pathfinding::calculate(
 	_path.clear();
 
 	_unit = unit;
-	_movementType = _unit->getArmor()->getMovementType(); // kL
 
 	// i'm DONE with these out of bounds errors.
 	// kL_note: I really don't care what you're "DONE" with.....
@@ -135,15 +126,6 @@ void Pathfinding::calculate(
 		return;
 	}
 
-	// check if destination is not blocked
-	Tile* destTile = _save->getTile(endPos);
-	if (isBlocked(destTile, MapData::O_FLOOR, target)
-		|| isBlocked(destTile, MapData::O_OBJECT, target))
-	{
-		return;
-	}
-
-
 	if (target != NULL
 		&& maxTUCost == -1) // pathfinding for missile
 	{
@@ -151,8 +133,24 @@ void Pathfinding::calculate(
 		_movementType = MT_FLY;
 	}
 	else
+	{
 		_movementType = _unit->getArmor()->getMovementType();
 
+		if (_movementType == MT_FLY
+			&& (SDL_GetModState() & KMOD_ALT) != 0)
+		{
+			_movementType = MT_WALK;
+		}
+	}
+
+	// check if destination is not blocked
+	Tile* destTile = _save->getTile(endPos);
+
+	if (isBlocked(destTile, MapData::O_FLOOR, target)
+		|| isBlocked(destTile, MapData::O_OBJECT, target))
+	{
+		return;
+	}
 
 	// The following check avoids that the unit walks behind the stairs
 	// if we click behind the stairs to make it go up the stairs.
@@ -172,7 +170,9 @@ void Pathfinding::calculate(
 		destTile = _save->getTile(endPos);
 	}
 
-	// check if we have a floor, else lower destination
+	// check if we have a floor, else lower destination;
+	// kL_note: This allows click in the air for non-flyers
+	// and they target the ground tile below the clicked tile.
 	if (_movementType != MT_FLY)
 	{
 		while (canFallDown( // for large & small units.
@@ -243,19 +243,11 @@ void Pathfinding::calculate(
 		}
 	}
 
-	/* kL_begin_TEST:
-		if (_save->getStrafeSetting()) Log(LOG_INFO)					<< "strafe Option true";
-		if ((SDL_GetModState()&KMOD_CTRL) != 0) Log(LOG_INFO)			<< "strafe Ctrl true";
-		if (startPos.z == endPos.z) Log(LOG_INFO)				<< "strafe z-level true";
-		if (abs(startPos.x - endPos.x) <= 1) Log(LOG_INFO)	<< "strafe Pos.x true";
-		if (abs(startPos.y - endPos.y) <= 1) Log(LOG_INFO)	<< "strafe Pos.y true";
-	*/ // kL_end_TEST.
-
 	// Strafing allowed only to adjacent squares on same z
 	// ( z-rule mainly to simplify walking render ).
 	// kL_note: This is 'bugged'/featured because it allows soldiers to strafe
 	// around a corner (ie, dest is only 1 tile distant but move is actually
-	// across 2 tiles at 90deg. path-angle)
+	// across 2 tiles at 90deg. path-angle) -> now accounted for and *allowed*
 	Position startPos = _unit->getPosition();
 
 	_strafeMove = Options::strafe
@@ -263,26 +255,6 @@ void Pathfinding::calculate(
 				&& startPos.z == endPos.z
 				&& abs(startPos.x - endPos.x) < 2
 				&& abs(startPos.y - endPos.y) < 2;
-		// kL_note. Ok let's advance that: allow the 90deg. corner shuggle!
-		// See below ...!!!
-/*	if (Options::strafe
-		&& (SDL_GetModState() & KMOD_CTRL) != 0
-		&& startPos.z == endPos.z
-		&& abs(startPos.x - endPos.x) < 2
-		&& abs(startPos.y - endPos.y) < 2)
-	{
-		if (startPos.x != endPos.x
-			&& startPos.y != endPos.y)
-		{
-			_strafeMove = 2; // 90 degree shuggle.
-		}
-		else
-			_strafeMove = 1; // normal 1-tile strafe
-	}
-	else
-		_strafeMove = 0; */
-
-
 //	if (_strafeMove) Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";
 //	else Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID";
 
@@ -302,16 +274,6 @@ void Pathfinding::calculate(
 				_path.begin(),
 				_path.end());
 
-		// kL_begin:
-/*		if (_path.size() > 1
-			&& !
-				(_path.size() == 2
-					&& startPos.x != endPos.x
-					&& startPos.y != endPos.y))
-		{
-			_strafeMove = false;
-		} */ // kL_end.
-
 		return;
 	}
 	else
@@ -330,16 +292,6 @@ void Pathfinding::calculate(
 	{
 		abortPath();
 	}
-
-	// kL_begin:
-/*	if (_path.size() > 1
-		&& !
-			(_path.size() == 2
-				&& startPos.x != endPos.x
-				&& startPos.y != endPos.y))
-	{
-		_strafeMove = false;
-	} */ // kL_end.
 }
 
 /**
@@ -659,7 +611,6 @@ int Pathfinding::getTUCost(
 {
 	//Log(LOG_INFO) << "Pathfinding::getTUCost()";
 	_unit = unit;
-	_movementType = _unit->getArmor()->getMovementType(); // kL
 
 	directionToVector(
 				dir,
@@ -746,8 +697,9 @@ int Pathfinding::getTUCost(
 				&& !triedStairs)
 			{
 				partsGoingUp++;
-				if (partsGoingUp > size)	// kL_note: seems that partsGoingUp can never
-				{							// be greater than size... if large unit.
+
+				if (partsGoingUp > size)
+				{
 					vertOffset.z++;
 					endPos->z++;
 					destTile = _save->getTile(*endPos + offset);
@@ -756,15 +708,14 @@ int Pathfinding::getTUCost(
 					triedStairs = true;
 				}
 			}
-			else if (!fellDown
+			else if (!fellDown // for safely walking down ramps or stairs ...
 				&& _movementType != MT_FLY
-				&& belowDest
 				&& canFallDown(destTile)
-				&& belowDest->getTerrainLevel() < -11) // less than 1/2 step down.
-														// kL_note: why not fall more than half tile.Z ,,,
-														// Because then you're doing stairs or ramp.
+				&& belowDest
+				&& belowDest->getTerrainLevel() < -11)	// less than 1/2 step down.
 			{
 				partsGoingDown++;
+
 				if (partsGoingDown == (size + 1) * (size + 1))
 				{
 					endPos->z--;
@@ -823,19 +774,21 @@ int Pathfinding::getTUCost(
 					return 255;
 			}
 
-			// check if we have floor, else fall down
-			if (_movementType != MT_FLY
-				&& !fellDown
+			// check if we have floor, else fall down;
+			// for walking off roofs and finding yerself in mid-air ...
+			if (!fellDown
+				&& _movementType != MT_FLY
 				&& canFallDown(startTile))
 			{
 				partsFalling++;
+
 				if (partsFalling == (size + 1) * (size + 1))
 				{
 					*endPos = startPos + Position(0, 0,-1);
 					destTile = _save->getTile(*endPos + offset);
 					belowDest = _save->getTile(*endPos + Position(x, y,-1));
-					fellDown = true;
 					dir = DIR_DOWN;
+					fellDown = true;
 				}
 			}
 
@@ -1646,30 +1599,30 @@ bool Pathfinding::isBlocked(
  * Determines whether a unit can fall down from this tile.
  * We can fall down here,
  * if the current position is higher than 0 (the tileBelow does not exist)
- * or if the tile has no floor, [or if there is no unit standing below us].
- * @param here, The current tile.
- * @return, True if a unit can fall down.
+ * or if the tile has no floor (and there is no unit standing below).
+ * @param tile - the current tile
+ * @return, true if a unit can fall down
  */
 // aha! (kL) This is why that sectoid stood in the air: it walked off
 // the top of a building but there was a cyberdisc below!!! NOT.
-bool Pathfinding::canFallDown(Tile* here)
+bool Pathfinding::canFallDown(Tile* tile)
 {
-	if (here->getPosition().z == 0) // already on lowest maplevel
+	if (tile->getPosition().z == 0) // already on lowest maplevel
 		return false;
 
-	Tile* tileBelow = _save->getTile(here->getPosition() - Position(0, 0, 1));
+	Tile* tileBelow = _save->getTile(tile->getPosition() - Position(0, 0, 1));
 
-	return here->hasNoFloor(tileBelow);
+	return tile->hasNoFloor(tileBelow);
 }
 
 /**
  * Wrapper for canFallDown() above.
- * @param here, The current tile.
- * @param size, The size of the unit.
- * @return, True if a unit can fall down.
+ * @param tile - the current tile
+ * @param size - the size of the unit
+ * @return, true if a unit can fall down
  */
 bool Pathfinding::canFallDown(
-		Tile* here,
+		Tile* tile,
 		int size)
 {
 	for (int
@@ -1682,11 +1635,13 @@ bool Pathfinding::canFallDown(
 				y != size;
 				++y)
 		{
-			Position checkPos = here->getPosition() + Position(x, y, 0);
+			Position checkPos = tile->getPosition() + Position(x, y, 0);
 			Tile* checkTile = _save->getTile(checkPos);
 			if (!canFallDown(checkTile))
+			{
 				//Log(LOG_INFO) << "Pathfinding::canFallDown() ret FALSE";
 				return false;
+			}
 		}
 	}
 
@@ -2255,7 +2210,15 @@ void Pathfinding::setUnit(BattleUnit* unit)
 	_unit = unit;
 
 	if (unit != NULL)
+	{
 		_movementType = unit->getArmor()->getMovementType();
+
+		if (_movementType == MT_FLY
+			&& (SDL_GetModState() & KMOD_ALT) != 0)
+		{
+			_movementType = MT_WALK; // kL. I put this in but not sure where it gets used (if..).
+		}
+	}
 	else
 		_movementType = MT_WALK;
 }

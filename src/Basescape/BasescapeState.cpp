@@ -542,6 +542,8 @@ void BasescapeState::viewRightClick(Action*)
 		_game->pushState(new MonthlyCostsState(
 											_base));
 	}
+	else if (fac->getBuildTime() > 0)
+		return;
 	else if (fac->getRules()->getCrafts() > 0)
 	{
 /*		if (_base->getCrafts()->size() == 0) // no Craft at base

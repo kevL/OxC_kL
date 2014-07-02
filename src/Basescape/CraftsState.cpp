@@ -70,9 +70,9 @@ CraftsState::CraftsState(
 
 	_txtName	= new Text(102, 9, 16, 49);
 	_txtStatus	= new Text(76, 9, 118, 49);
-	_txtWeapon	= new Text(44, 17, 194, 41);
-	_txtCrew	= new Text(27, 9, 238, 49);
-	_txtHwp		= new Text(24, 9, 265, 49);
+	_txtWeapon	= new Text(44, 17, 194, 49);
+	_txtCrew	= new Text(27, 9, 230, 49);
+	_txtHwp		= new Text(24, 9, 257, 49);
 
 	_lstCrafts	= new TextList(288, 112, 16, 59);
 
@@ -132,7 +132,7 @@ CraftsState::CraftsState(
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
 	_lstCrafts->setArrowColumn(265, ARROW_VERTICAL); // kL
-	_lstCrafts->setColumns(5, 94, 76, 44, 27, 39); // -8 for margin
+	_lstCrafts->setColumns(5, 94, 76, 36, 19, 47); // -8 for margin
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(8);
