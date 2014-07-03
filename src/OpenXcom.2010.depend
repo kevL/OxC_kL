@@ -5022,7 +5022,7 @@
 1404096022 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1404096022 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1404410942 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	<limits>
 	<sstream>
@@ -6718,7 +6718,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1404410982 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7096,7 +7096,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1404096022 source:f:\git\openxcom\src\engine\options.cpp
+1404405372 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7172,7 +7172,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1404270166 source:f:\git\openxcom\src\engine\screen.cpp
+1404408737 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -8308,7 +8308,7 @@
 	"../Engine/ShaderDraw.h"
 	"../Engine/ShaderMove.h"
 
-1404364454 source:f:\git\openxcom\src\interface\textbutton.cpp
+1404405372 source:f:\git\openxcom\src\interface\textbutton.cpp
 	"TextButton.h"
 	<SDL.h>
 	<SDL_mixer.h>
@@ -8325,7 +8325,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1404096023 source:f:\git\openxcom\src\interface\textlist.cpp
+1404408808 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>
@@ -9234,8 +9234,9 @@
 1404096023 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
 	"ExtraStrings.h"
 
-1404096023 source:f:\git\openxcom\src\ruleset\mapblock.cpp
+1404409111 source:f:\git\openxcom\src\ruleset\mapblock.cpp
 	"MapBlock.h"
+	"../Battlescape/Position.h"
 
 1404096023 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
@@ -9558,7 +9559,7 @@
 1404096023 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
-1404096023 source:f:\git\openxcom\src\savegame\production.cpp
+1404409252 source:f:\git\openxcom\src\savegame\production.cpp
 	"Production.h"
 	<limits>
 	"Base.h"
@@ -9614,7 +9615,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1404149444 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1404410449 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9694,7 +9695,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1404251847 source:f:\git\openxcom\src\savegame\tile.cpp
+1404410510 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
