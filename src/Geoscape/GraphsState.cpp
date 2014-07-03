@@ -29,6 +29,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
+#include "../Engine/Sound.h" // kL
 #include "../Engine/Surface.h"
 #include "../Engine/Timer.h" // kL
 
@@ -71,6 +72,9 @@ struct GraphBtnInfo
 };
 
 
+Sound* GraphsState::soundPop = 0; // kL
+
+
 /**
  * Initializes all the elements in the Graphs screen.
  * @param game Pointer to the core game.
@@ -78,7 +82,8 @@ struct GraphBtnInfo
 GraphsState::GraphsState()
 	:
 		_btnRegionsOffset(0),
-		_btnCountriesOffset(0)
+		_btnCountriesOffset(0),
+		_current(-1)
 {
 	_bg				= new InteractiveSurface(320, 200, 0, 0);
 	_bg->onMousePress(
@@ -586,7 +591,7 @@ GraphsState::~GraphsState()
  */
 void GraphsState::latestTally()
 {
-	unsigned offset = 0;
+	size_t offset = 0;
 
 	if (_alien == true
 		&& _income == false
@@ -686,7 +691,7 @@ void GraphsState::think()
 void GraphsState::blink()
 {
 	//Log(LOG_INFO) << "GraphsState::blink()";
-	unsigned offset = 0;
+	size_t offset = 0;
 
 	if (_alien == true
 		&& _income == false
@@ -764,6 +769,8 @@ void GraphsState::blink()
 void GraphsState::btnGeoscapeClick(Action*)
 {
 	_game->popState();
+
+	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 }
 
 /**
@@ -772,6 +779,13 @@ void GraphsState::btnGeoscapeClick(Action*)
  */
 void GraphsState::btnUfoRegionClick(Action*)
 {
+	if (_current == 0)
+		return;
+
+	_current = 0;
+
+	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+
 	_alien = true;
 	_income = false;
 	_country = false;
@@ -810,6 +824,13 @@ void GraphsState::btnUfoRegionClick(Action*)
  */
 void GraphsState::btnUfoCountryClick(Action*)
 {
+	if (_current == 2)
+		return;
+
+	_current = 2;
+
+	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+
 	_alien = true;
 	_income = false;
 	_country = true;
@@ -848,6 +869,13 @@ void GraphsState::btnUfoCountryClick(Action*)
  */
 void GraphsState::btnXcomRegionClick(Action*)
 {
+	if (_current == 1)
+		return;
+
+	_current = 1;
+
+	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+
 	_alien = false;
 	_income = false;
 	_country = false;
@@ -886,6 +914,13 @@ void GraphsState::btnXcomRegionClick(Action*)
  */
 void GraphsState::btnXcomCountryClick(Action*)
 {
+	if (_current == 3)
+		return;
+
+	_current = 3;
+
+	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+
 	_alien = false;
 	_income = false;
 	_country = true;
@@ -924,6 +959,13 @@ void GraphsState::btnXcomCountryClick(Action*)
  */
 void GraphsState::btnIncomeClick(Action*)
 {
+	if (_current == 4)
+		return;
+
+	_current = 4;
+
+	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+
 	_alien = false;
 	_income = true;
 	_country = true;
@@ -954,6 +996,13 @@ void GraphsState::btnIncomeClick(Action*)
  */
 void GraphsState::btnFinanceClick(Action*)
 {
+	if (_current == 5)
+		return;
+
+	_current = 5;
+
+	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+
 	_alien = false;
 	_income = false;
 	_country = false;

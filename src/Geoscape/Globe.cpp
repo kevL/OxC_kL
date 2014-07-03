@@ -323,8 +323,6 @@ Globe::Globe(
 		_latBeforeMouseScrolling(0.0),
 		_radius(0.0),
 		_radiusStep(0.0)
-//		_zoom(0),
-//		_dfPreZoom(0)
 {
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
@@ -345,7 +343,7 @@ Globe::Globe(
 	// Globe markers
 	_mkXcomBase = new Surface(3, 3);
 	_mkXcomBase->lock();
-	_mkXcomBase->setPixelColor(0, 0, 9);
+	_mkXcomBase->setPixelColor(0, 0, 9); // cyan border
 	_mkXcomBase->setPixelColor(1, 0, 9);
 	_mkXcomBase->setPixelColor(2, 0, 9);
 	_mkXcomBase->setPixelColor(0, 1, 9);
@@ -357,7 +355,7 @@ Globe::Globe(
 
 	_mkAlienBase = new Surface(3, 3);
 	_mkAlienBase->lock();
-	_mkAlienBase->setPixelColor(0, 0, 1);
+	_mkAlienBase->setPixelColor(0, 0, 1); // pink border
 	_mkAlienBase->setPixelColor(1, 0, 1);
 	_mkAlienBase->setPixelColor(2, 0, 1);
 	_mkAlienBase->setPixelColor(0, 1, 1);
@@ -369,7 +367,7 @@ Globe::Globe(
 
 	_mkCraft = new Surface(3, 3);
 	_mkCraft->lock();
-	_mkCraft->setPixelColor(1, 0, 11);
+	_mkCraft->setPixelColor(1, 0, 11); // yellow +
 	_mkCraft->setPixelColor(0, 1, 11);
 	_mkCraft->setPixelColor(2, 1, 11);
 	_mkCraft->setPixelColor(1, 2, 11);
@@ -377,7 +375,7 @@ Globe::Globe(
 
 	_mkWaypoint = new Surface(3, 3);
 	_mkWaypoint->lock();
-	_mkWaypoint->setPixelColor(0, 0, 3);
+	_mkWaypoint->setPixelColor(0, 0, 3); // orange x
 	_mkWaypoint->setPixelColor(0, 2, 3);
 	_mkWaypoint->setPixelColor(1, 1, 3);
 	_mkWaypoint->setPixelColor(2, 0, 3);
@@ -386,20 +384,20 @@ Globe::Globe(
 
 	_mkCity = new Surface(3, 3);
 	_mkCity->lock();
-	_mkCity->setPixelColor(0, 0, 3); // red border
-	_mkCity->setPixelColor(1, 0, 3);
-	_mkCity->setPixelColor(2, 0, 3);
-	_mkCity->setPixelColor(0, 1, 3);
-	_mkCity->setPixelColor(1, 1, 6); // gray center
-	_mkCity->setPixelColor(2, 1, 3);
-	_mkCity->setPixelColor(0, 2, 3);
-	_mkCity->setPixelColor(1, 2, 3);
-	_mkCity->setPixelColor(2, 2, 3);
+	_mkCity->setPixelColor(0, 0, 8); // green border
+	_mkCity->setPixelColor(1, 0, 8);
+	_mkCity->setPixelColor(2, 0, 8);
+	_mkCity->setPixelColor(0, 1, 8);
+//	_mkCity->setPixelColor(1, 1, 15); // black center
+	_mkCity->setPixelColor(2, 1, 8);
+	_mkCity->setPixelColor(0, 2, 8);
+	_mkCity->setPixelColor(1, 2, 8);
+	_mkCity->setPixelColor(2, 2, 8);
 	_mkCity->unlock();
 
 	_mkFlyingUfo = new Surface(3, 3);
 	_mkFlyingUfo->lock();
-	_mkFlyingUfo->setPixelColor(1, 0, 13);
+	_mkFlyingUfo->setPixelColor(1, 0, 13); // red +
 	_mkFlyingUfo->setPixelColor(0, 1, 13);
 	_mkFlyingUfo->setPixelColor(1, 1, 13);
 	_mkFlyingUfo->setPixelColor(2, 1, 13);
@@ -408,7 +406,7 @@ Globe::Globe(
 
 	_mkLandedUfo = new Surface(3, 3);
 	_mkLandedUfo->lock();
-	_mkLandedUfo->setPixelColor(0, 0, 7);
+	_mkLandedUfo->setPixelColor(0, 0, 7); // geeen x
 	_mkLandedUfo->setPixelColor(0, 2, 7);
 	_mkLandedUfo->setPixelColor(1, 1, 7);
 	_mkLandedUfo->setPixelColor(2, 0, 7);
@@ -417,7 +415,7 @@ Globe::Globe(
 
 	_mkCrashedUfo = new Surface(3, 3);
 	_mkCrashedUfo->lock();
-	_mkCrashedUfo->setPixelColor(0, 0, 5);
+	_mkCrashedUfo->setPixelColor(0, 0, 5); // white x
 	_mkCrashedUfo->setPixelColor(0, 2, 5);
 	_mkCrashedUfo->setPixelColor(1, 1, 5);
 	_mkCrashedUfo->setPixelColor(2, 0, 5);
@@ -426,7 +424,7 @@ Globe::Globe(
 
 	_mkAlienSite = new Surface(3, 3);
 	_mkAlienSite->lock();
-	_mkAlienSite->setPixelColor(1, 0, 1);
+	_mkAlienSite->setPixelColor(1, 0, 1); // pink +
 	_mkAlienSite->setPixelColor(0, 1, 1);
 	_mkAlienSite->setPixelColor(1, 1, 1);
 	_mkAlienSite->setPixelColor(2, 1, 1);
@@ -436,9 +434,12 @@ Globe::Globe(
 	_cenLon = _game->getSavedGame()->getGlobeLongitude();
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
 
-	_zoom = _dfPreZoom = _game->getSavedGame()->getGlobeZoom();
-
-	setupRadii(width, height);
+	// kL_note: The order here is important.
+	_zoom = _game->getSavedGame()->getGlobeZoom();
+	setupRadii(
+			width,
+			height);
+	_dfPreZoom = _zoomRadii.size();
 
 	// filling random noise "texture"
 	_randomNoiseData.resize(static_data.random_surf_size * static_data.random_surf_size);
@@ -870,11 +871,19 @@ void Globe::zoomOut()
 } */
 
 /**
- * Stores the zoom used before a dogfight.
+ * Sets the zoom level before a dogfight.
  */
 void Globe::setPreDogfightZoom()
 {
 	_dfPreZoom = _zoom;
+}
+
+/**
+ * Gets the zoom level from before a dogfight.
+ */
+size_t Globe::getPreDogfightZoom() const
+{
+	return _dfPreZoom;
 }
 
 /**
@@ -934,6 +943,8 @@ bool Globe::zoomDogfightOut()
 
 		return false;
 	}
+
+	_dfPreZoom = _zoomRadii.size();
 
 	return true;
 }
@@ -3081,11 +3092,11 @@ void Globe::setupRadii(
 	_earthData.resize(_zoomRadii.size());
 
 	for (size_t // filling normal field for each radius
-			r = 0;
-			r < _zoomRadii.size();
-			++r)
+			rad = 0;
+			rad < _zoomRadii.size();
+			++rad)
 	{
-		_earthData[r].resize(width * height);
+		_earthData[rad].resize(width * height);
 
 		for(int
 				j = 0;
@@ -3097,10 +3108,10 @@ void Globe::setupRadii(
 					i < width;
 					++i)
 			{
-				_earthData[r][width * j + i] = static_data.circle_norm(
+				_earthData[rad][width * j + i] = static_data.circle_norm(
 																static_cast<double>(width / 2),
 																static_cast<double>(height / 2),
-																_zoomRadii[r],
+																_zoomRadii[rad],
 																static_cast<double>(i) + 0.5,
 																static_cast<double>(j) + 0.5);
 			}

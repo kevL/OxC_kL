@@ -69,7 +69,7 @@
 namespace OpenXcom
 {
 
-Sound* BasescapeState::soundPop = NULL; // kL
+Sound* BasescapeState::soundPop = 0; // kL
 
 
 /**
@@ -649,7 +649,7 @@ void BasescapeState::viewRightClick(Action*)
 
 
 	if (bPop)
-		soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1, see Game.cpp
+		soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 }
 
 /**
@@ -661,7 +661,7 @@ void BasescapeState::viewMouseOver(Action*)
 	std::wostringstream ss;
 
 	BaseFacility* fac = _view->getSelectedFacility();
-	if (fac != 0)
+	if (fac != NULL)
 	{
 		if (fac->getRules()->getCrafts() == 0
 			|| fac->getBuildTime() > 0)
@@ -672,7 +672,7 @@ void BasescapeState::viewMouseOver(Action*)
 		{
 			ss << tr(fac->getRules()->getType());
 
-			if (fac->getCraft() != 0)
+			if (fac->getCraft() != NULL)
 				ss << L" " << tr("STR_CRAFT_")
 								.arg(fac->getCraft()->getName(_game->getLanguage()));
 		}

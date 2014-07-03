@@ -61,14 +61,16 @@ Window::Window(
 			y),
 		_dx(-x),
 		_dy(-y),
-		_bg(0),
+		_bg(NULL),
 		_color(0),
 		_popup(popup),
 		_popupStep(0.0),
 		_state(state),
 		_contrast(false),
 		_screen(false),
-		_thinBorder(false)
+		_thinBorder(false),
+		_bgX(0),	// kL
+		_bgY(0)		// kL
 {
 	_timer = new Timer(10);
 	_timer->onTimer((SurfaceHandler)& Window::popup);
@@ -102,9 +104,16 @@ Window::~Window()
  * Changes the surface used to draw the background of the window.
  * @param bg New background.
  */
-void Window::setBackground(Surface* bg)
+void Window::setBackground(
+		Surface* bg,
+		int dx,	// kL
+		int dy)	// kL
 {
 	_bg = bg;
+
+	_bgX = dx; // kL
+	_bgY = dy; // kL
+
 	_redraw = true;
 }
 
@@ -166,7 +175,7 @@ void Window::popup()
 //		int sound = RNG::generate(1, 2); // kL, Old
 
 //kL	if (soundPopup[sound] != 0)
-		soundPopup[sound]->play(Mix_GroupAvailable(0)); // UI Fx channels #0 & #1
+		soundPopup[sound]->play(Mix_GroupAvailable(1)); // UI Fx channels #0 & #1 & #2
 	}
 
 	if (_popupStep < 1.0)
@@ -295,10 +304,12 @@ void Window::draw()
 		}
 	}
 
-	if (_bg != 0)
+	if (_bg != NULL)
 	{
-		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(square.x) - _dx);
-		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(square.y) - _dy);
+//		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(square.x) - _dx);
+//		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(square.y) - _dy);
+		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(square.x) - _dx - _bgX); // kL
+		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(square.y) - _dy - _bgY); // kL
 		_bg->getCrop()->w = square.w;
 		_bg->getCrop()->h = square.h;
 

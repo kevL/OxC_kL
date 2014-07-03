@@ -135,8 +135,8 @@
 namespace OpenXcom
 {
 
-size_t kL_currentBase = 0;				// kL
-Sound* GeoscapeState::soundPop = NULL;	// kL
+size_t kL_currentBase = 0;			// kL
+Sound* GeoscapeState::soundPop = 0;	// kL
 
 
 // myk002_begin: struct definitions used when enqueuing notification events
@@ -205,8 +205,8 @@ GeoscapeState::GeoscapeState()
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
-		_interLon(0.0),	// kL
-		_interLat(0.0)	// kL
+		_dfLon(0.0),	// kL
+		_dfLat(0.0)	// kL
 {
 	int
 		screenWidth		= Options::baseXGeoscape,
@@ -1326,8 +1326,8 @@ void GeoscapeState::time5Seconds()
 									timerReset();
 
 									// store the current Globe co-ords. Globe will reset to this after dogfight ends.
-									_interLon = _game->getSavedGame()->getGlobeLongitude(),	// kL
-									_interLat = _game->getSavedGame()->getGlobeLatitude();	// kL
+									_dfLon = _game->getSavedGame()->getGlobeLongitude(),	// kL
+									_dfLat = _game->getSavedGame()->getGlobeLatitude();	// kL
 
 									_globe->center(
 												(*j)->getLongitude(),
@@ -3046,7 +3046,7 @@ void GeoscapeState::btnInterceptClick(Action*)
  */
 void GeoscapeState::btnBasesClick(Action*)
 {
-	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1, see Game.cpp
+	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	timerReset();
 
@@ -3086,7 +3086,7 @@ void GeoscapeState::btnBasesClick(Action*)
  */
 void GeoscapeState::btnGraphsClick(Action*)
 {
-	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1, see Game.cpp
+	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	timerReset(); // kL
 
@@ -3269,8 +3269,8 @@ void GeoscapeState::zoomOutEffect()
 		_zoomOutEffectTimer->stop();
 
 		_globe->center( // kL
-					_interLon,
-					_interLat);
+					_dfLon,
+					_dfLat);
 
 		init();
 	}
@@ -3339,13 +3339,13 @@ int GeoscapeState::minimizedDogfightsCount()
  */
 void GeoscapeState::startDogfight()
 {
-//kL	if (_globe->getZoom() < 3)
-	if (_globe->getZoom() < _globe->getZoomLevels() - 1) // kL
+	if (_globe->getPreDogfightZoom() == _globe->getZoomLevels())
+		_globe->setPreDogfightZoom();
+
+	if (_globe->getZoom() < _globe->getZoomLevels() - 1)
 	{
 		if (!_zoomInEffectTimer->isRunning())
 		{
-			_globe->setPreDogfightZoom();
-
 //			_globe->rotateStop();
 			_zoomInEffectTimer->start();
 		}
@@ -3425,7 +3425,9 @@ void GeoscapeState::handleBaseDefense(
 							base));
 	}
 	else
-		popup(new BaseDestroyedState(base)); // Please garrison your bases in future
+		popup(new BaseDestroyedState( // Please garrison your bases in future
+									base,
+									_globe)); // kL
 }
 
 /**

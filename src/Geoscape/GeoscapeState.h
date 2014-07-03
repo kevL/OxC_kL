@@ -62,8 +62,8 @@ private:
 		_zoomOutEffectDone;
 	size_t _minimizedDogfights;
 	double
-		_interLon,
-		_interLat;
+		_dfLon,
+		_dfLat;
 
 	Globe* _globe;
 	ImageButton

@@ -321,11 +321,11 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		}
 	}
 
-	if (!stunOrKill)
-	{
-		wssKills << tr("STR_NO_KILLS");
-		_lstKills->addRow(1, wssKills.str().c_str()); // should change to/add shots-connected ...
-	}
+//	if (!stunOrKill)
+//	{
+//		wssKills << tr("STR_NO_KILLS");
+//		_lstKills->addRow(1, wssKills.str().c_str()); // should change to/add shots-connected ...
+//	}
 
 	_txtKills->setColor(Palette::blockOffset(13)+5);
 	_txtKills->setSecondaryColor(Palette::blockOffset(13));

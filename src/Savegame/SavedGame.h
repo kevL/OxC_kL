@@ -515,13 +515,13 @@ private:
 		void removePoppedResearch(const RuleResearch* research);
 
 		/// Gets the list of dead soldiers.
-//kL		std::vector<Soldier*>* getDeadSoldiers();
+//kL	std::vector<Soldier*>* getDeadSoldiers();
 		std::vector<SoldierDead*>* getDeadSoldiers(); // kL
 
 		/// Gets the last selected player base.
-//kL		Base* getSelectedBase();
+//kL	Base* getSelectedBase();
 		/// Set the last selected player base.
-//kL		void setSelectedBase(size_t base);
+//kL	void setSelectedBase(size_t base);
 
 		/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 		int getSoldierScore(Soldier* soldier);

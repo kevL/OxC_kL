@@ -35,7 +35,7 @@ namespace OpenXcom
  */
 Sound::Sound()
 	:
-		_sound(0)
+		_sound(NULL)
 {
 }
 
@@ -56,9 +56,9 @@ void Sound::load(const std::string& filename)
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
 	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
-
 	_sound = Mix_LoadWAV(utf8.c_str());
-	if (_sound == 0)
+
+	if (_sound == NULL)
 	{
 		std::string err = filename + ":" + Mix_GetError();
 		throw Exception(err);
@@ -76,7 +76,8 @@ void Sound::load(
 {
 	SDL_RWops* rw = SDL_RWFromConstMem(data, size);
 	_sound = Mix_LoadWAV_RW(rw, 1);
-	if (_sound == 0)
+
+	if (_sound == NULL)
 	{
 		throw Exception(Mix_GetError());
 	}
@@ -89,7 +90,7 @@ void Sound::load(
 void Sound::play(int channel) const
 {
 	if (!Options::mute
-		&& _sound != 0
+		&& _sound != NULL
 		&& Mix_PlayChannel(
 						channel,
 						_sound,
@@ -106,9 +107,7 @@ void Sound::play(int channel) const
 void Sound::stop()
 {
 	if (!Options::mute)
-	{
 		Mix_HaltChannel(-1);
-	}
 }
 
 }

@@ -239,7 +239,7 @@ Sound* SoundSet::getSound(unsigned int i)
 	if (_sounds.find(i) != _sounds.end())
 		return _sounds[i];
 
-	return 0;
+	return NULL;
 }
 
 

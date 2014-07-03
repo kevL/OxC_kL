@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Base;
+class Globe; // kL
 class Text;
 class TextButton;
 class Window;
@@ -42,19 +43,29 @@ class BaseDestroyedState
 
 private:
 	Base* _base;
+	Globe* _globe; // kL
 	Text* _txtMessage;
-	TextButton* _btnOk;
+	TextButton
+		* _btnCenter,
+		* _btnOk;
 	Window* _window;
 
 
 	public:
 		/// Creates the Select Destination state.
-		BaseDestroyedState(Base* base);
+		BaseDestroyedState(
+						Base* base,
+						Globe* globe); // kL
 		/// Cleans up the Select Destination state.
 		~BaseDestroyedState();
 
-		/// Handler for clicking the Cydonia mission button.
+		///
+		void finish();
+
+		/// Handler for clicking the Ok button.
 		void btnOkClick(Action* action);
+		/// Handler for clicking the Center button.
+		void btnCenterClick(Action* action);
 };
 
 }

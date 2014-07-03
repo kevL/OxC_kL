@@ -841,7 +841,7 @@ bool UnitWalkBState::doStatusStand_end()
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand_end() : " << _unit->getId();
 
-	_parent->getSave()->getBattleState()->updateSoldierInfo(false); // update the TU display. NEW!!140525
+//kL	_parent->getSave()->getBattleState()->updateSoldierInfo(false); // update the TU display.
 
 	_tileSwitchDone = false; // kL
 

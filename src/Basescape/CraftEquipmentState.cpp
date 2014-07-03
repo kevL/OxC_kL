@@ -81,13 +81,12 @@ CraftEquipmentState::CraftEquipmentState(
 	bool craftHasCrew = c->getNumSoldiers() > 0;
 	bool newBattle = _game->getSavedGame()->getMonthsPassed() == -1;
 
-
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
 	_txtUsed		= new Text(110, 9, 16, 25);
-	_txtAvailable	= new Text(110, 9, 160, 25);
+	_txtAvailable	= new Text(110, 9, 171, 25);
 
 	_txtItem		= new Text(144, 9, 16, 33);
 	_txtStores		= new Text(50, 9, 171, 33);
@@ -175,7 +174,7 @@ CraftEquipmentState::CraftEquipmentState(
 
 	_lstEquipment->setColor(Palette::blockOffset(13)+10);
 	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
-	_lstEquipment->setArrowColumn(188, ARROW_HORIZONTAL);
+	_lstEquipment->setArrowColumn(189, ARROW_HORIZONTAL);
 	_lstEquipment->setColumns(3, 147, 85, 41);
 	_lstEquipment->setSelectable(true);
 	_lstEquipment->setBackground(_window);
@@ -224,13 +223,27 @@ CraftEquipmentState::CraftEquipmentState(
 
 			ss2 << cQty;
 
-			std::wstring s = tr(*i);
-			if (rule->getBattleType() == BT_AMMO)
-				s.insert(0, L"  ");
+			std::wstring item = tr(*i);
+			if (rule->getBattleType() == BT_AMMO) // weapon clips
+			{
+				int clipSize = rule->getClipSize();
+				if (clipSize > 1)
+					item = item + L" (" + Text::formatNumber(clipSize) + L")";
+
+				item.insert(0, L"  ");
+			}
+			else if (rule->isFixed() // tank w/ Ordnance.
+				&& !rule->getCompatibleAmmo()->empty())
+			{
+				RuleItem* ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
+				int clipSize = ammoRule->getClipSize();
+				if (clipSize > 0)
+					item = item + L" (" + Text::formatNumber(clipSize) + L")";
+			}
 
 			_lstEquipment->addRow(
 								3,
-								s.c_str(),
+								item.c_str(),
 								ss.str().c_str(),
 								ss2.str().c_str());
 

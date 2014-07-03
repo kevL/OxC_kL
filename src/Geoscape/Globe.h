@@ -92,8 +92,8 @@ private:
 		_cenY;
 	Uint32 _mouseScrollingStartTime;
 	size_t
-		_zoom,
-		_dfPreZoom;
+		_dfPreZoom,
+		_zoom;
 
 	FastLineClip* _clipper;
 	Game* _game;
@@ -246,8 +246,10 @@ private:
 		/// Zooms the globe maximum.
 //		void zoomMax();
 
-		/// Saves the zoom level for dogfights.
+		/// Sets the zoom level before a dogfight.
 		void setPreDogfightZoom();
+		/// Gets the zoom level from before a dogfight.
+		size_t getPreDogfightZoom() const;
 		/// Zooms the globe in for dogfights.
 		bool zoomDogfightIn();
 		/// Zooms the globe out for dogfights.

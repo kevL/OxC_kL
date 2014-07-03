@@ -1464,7 +1464,7 @@ void DogfightState::ufoFireWeapon()
 	p->setPosition(_currentDist - (_ufo->getRules()->getRadius() / 2));
 	_projectiles.push_back(p);
 
-	_game->getResourcePack()->getSound("GEO.CAT", 8)->play();
+	_game->getResourcePack()->getSound("GEO.CAT", 9)->play();
 }
 
 /**

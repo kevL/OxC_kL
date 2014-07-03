@@ -31,6 +31,7 @@ namespace OpenXcom
 class InteractiveSurface;
 //class NumberText; // kL
 class Region;
+class Sound; // kL
 class Surface;
 class Text;
 class TextButton;
@@ -58,6 +59,8 @@ private:
 		_country,
 		_finance,
 		_income;
+
+	int _current;
 
 	size_t // will be only between 0 and size()
 		_btnCountriesOffset,
@@ -128,6 +131,9 @@ private:
 
 
 	public:
+		static Sound* soundPop; // kL
+
+
 		/// Creates the Graphs state.
 		GraphsState();
 		/// Cleans up the Graphs state.

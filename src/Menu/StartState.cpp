@@ -189,7 +189,7 @@ StartState::StartState()
  */
 StartState::~StartState()
 {
-	if (_thread != 0)
+	if (_thread != NULL)
 		SDL_KillThread(_thread);
 
 	delete _font; // load CTD
@@ -208,7 +208,7 @@ void StartState::init()
 	Sound::stop();
 	Music::stop();
 
-	_game->setResourcePack(0);
+	_game->setResourcePack(NULL);
 	if (!Options::mute
 		&& Options::reload)
 	{
@@ -224,7 +224,7 @@ void StartState::init()
 	_thread = SDL_CreateThread( // Load the game data in a separate thread
 							load,
 							(void*)_game);
-	if (_thread == 0) // If we can't create the thread, just load it as usual
+	if (_thread == NULL) // If we can't create the thread, just load it as usual
 	{
 		load((void*)_game);
 	}
@@ -236,7 +236,7 @@ void StartState::init()
 void StartState::think()
 {
 	State::think();
-	_timer->think(this, 0); // load CTD
+	_timer->think(this, NULL); // load CTD
 
 	switch (loading)
 	{

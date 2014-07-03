@@ -853,7 +853,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 			delete item;		// kL
 			delete tankUnit;	// kL
 
-			return 0;			// kL
+			return NULL;		// kL
 		}
 
 		if (!tank->getRules()->getCompatibleAmmo()->empty())
@@ -871,7 +871,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 				delete item;		// kL
 				delete tankUnit;	// kL
 
-				return 0;			// kL
+				return NULL;		// kL
 			}
 
 			ammoItem->setAmmoQuantity(tank->getAmmo());
@@ -883,7 +883,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 	{
 //		delete tankUnit;	// kL
 
-		return 0;			// kL
+		return NULL;		// kL
 	}
 
 	return tankUnit;

@@ -90,8 +90,8 @@ void RuleCraftWeapon::load(const YAML::Node& node, int modIndex)
 }
 
 /**
- * Gets the language string that names this craft weapon.
- * Each craft weapon type has a unique name.
+ * Gets the language string that names this craft weapon. Each craft weapon type
+ * has a unique name.
  * @return The craft weapon's name.
  */
 std::string RuleCraftWeapon::getType() const
@@ -100,8 +100,8 @@ std::string RuleCraftWeapon::getType() const
 }
 
 /**
- * Gets the ID of the sprite used to draw the craft weapon
- * in the Equip Craft and Interception screens.
+ * Gets the ID of the sprite used to draw the craft weapon in the Equip Craft
+ * and Interception screens.
  * @return The sprite ID.
  */
 int RuleCraftWeapon::getSprite() const
@@ -110,8 +110,7 @@ int RuleCraftWeapon::getSprite() const
 }
 
 /**
- * Gets the ID of the sound used when firing the weapon
- * in the Dogfight screen.
+ * Gets the ID of the sound used when firing the weapon in the Dogfight screen.
  * @return The sound ID.
  */
 int RuleCraftWeapon::getSound() const
@@ -120,8 +119,7 @@ int RuleCraftWeapon::getSound() const
 }
 
 /**
- * Gets the amount of damage this craft weapon
- * inflicts on enemy crafts.
+ * Gets the amount of damage this craft weapon inflicts on enemy crafts.
  * @return The damage amount.
  */
 int RuleCraftWeapon::getDamage() const
@@ -139,8 +137,8 @@ int RuleCraftWeapon::getRange() const
 }
 
 /**
- * Gets the percentage chance of each shot of
- * this craft weapon hitting an enemy craft.
+ * Gets the percentage chance of each shot of this craft weapon hitting an
+ * enemy craft.
  * @return The accuracy as a percentage.
  */
 int RuleCraftWeapon::getAccuracy() const
@@ -149,8 +147,7 @@ int RuleCraftWeapon::getAccuracy() const
 }
 
 /**
- * Gets the amount of time the craft weapon takes to
- * reload in cautious mode.
+ * Gets the amount of time the craft weapon takes to reload in cautious mode.
  * @return The time in game seconds.
  */
 int RuleCraftWeapon::getCautiousReload() const
@@ -159,8 +156,7 @@ int RuleCraftWeapon::getCautiousReload() const
 }
 
 /**
- * Gets the amount of time the craft weapon takes to
- * reload in standard mode.
+ * Gets the amount of time the craft weapon takes to reload in standard mode.
  * @return The time in game seconds.
  */
 int RuleCraftWeapon::getStandardReload() const
@@ -169,8 +165,7 @@ int RuleCraftWeapon::getStandardReload() const
 }
 
 /**
- * Gets the amount of time the craft weapon takes to
- * reload in aggressive mode.
+ * Gets the amount of time the craft weapon takes to reload in aggressive mode.
  * @return The time in game seconds.
  */
 int RuleCraftWeapon::getAggressiveReload() const
@@ -179,8 +174,7 @@ int RuleCraftWeapon::getAggressiveReload() const
 }
 
 /**
- * Gets the maximum amount of ammo the craft weapon
- * can carry.
+ * Gets the maximum amount of ammo the craft weapon can carry.
  * @return The amount of ammo.
  */
 int RuleCraftWeapon::getAmmoMax() const
@@ -189,8 +183,8 @@ int RuleCraftWeapon::getAmmoMax() const
 }
 
 /**
- * Gets how much ammo is added to the craft weapon
- * while rearming (the amount of ammo in each clip item).
+ * Gets how much ammo is added to the craft weapon while rearming (the amount of
+ * ammo in each clip item).
  * @return The amount of ammo.
  */
 int RuleCraftWeapon::getRearmRate() const
@@ -199,7 +193,7 @@ int RuleCraftWeapon::getRearmRate() const
 }
 
 /**
- * Gets the language string of the item used to equip this craft weapon.
+ * Gets the language string of the item that is this craft weapon.
  * @return The item name.
  */
 std::string RuleCraftWeapon::getLauncherItem() const

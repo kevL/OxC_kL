@@ -18,6 +18,7 @@
  */
 
 #include "BaseDestroyedState.h"
+#include "Globe.h" // kL
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -31,10 +32,12 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleRegion.h"
 
 #include "../Savegame/AlienMission.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/Country.h" // kL
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
@@ -43,54 +46,64 @@
 namespace OpenXcom
 {
 
-BaseDestroyedState::BaseDestroyedState(Base* base)
+BaseDestroyedState::BaseDestroyedState(
+		Base* base,
+		Globe* globe) // kL
 	:
-		_base(base)
+		_base(base),
+		_globe(globe) // kL
 {
 	_screen = false;
 
-	_window		= new Window(this, 256, 160, 32, 20);
-	_txtMessage	= new Text(224, 120, 48, 30);
-	_btnOk		= new TextButton(100, 16, 110, 156);
+	_window		= new Window(this, 246, 160, 35, 20); // note, these are offset a few px left.
+	_txtMessage	= new Text(224, 106, 46, 26);
+	_btnCenter	= new TextButton(140, 16, 88, 133);
+	_btnOk		= new TextButton(140, 16, 88, 153);
 
 	setPalette("PAL_GEOSCAPE", 7);
 
 	add(_window);
 	add(_txtMessage);
+	add(_btnCenter);
 	add(_btnOk);
 
 	centerAllSurfaces();
 
 	_window->setColor(Palette::blockOffset(8)+5);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
-
-	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& BaseDestroyedState::btnOkClick);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& BaseDestroyedState::btnOkClick,
-					Options::keyOk);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& BaseDestroyedState::btnOkClick,
-					Options::keyCancel);
+	_window->setBackground(
+						_game->getResourcePack()->getSurface("BACK15.SCR"),
+						37); // kL: x-offset
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
 	_txtMessage->setWordWrap(true);
 	_txtMessage->setColor(Palette::blockOffset(8)+5);
-
 	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE")
 							.arg(_base->getName()));
 
+	_btnCenter->setColor(Palette::blockOffset(8)+5);
+	_btnCenter->setText(tr("STR_CENTER"));
+	_btnCenter->onMouseClick((ActionHandler)& BaseDestroyedState::btnCenterClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseDestroyedState::btnCenterClick,
+					Options::keyOk);
 
-	std::vector<Region*>::iterator r = _game->getSavedGame()->getRegions()->begin();
+	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& BaseDestroyedState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& BaseDestroyedState::btnOkClick,
+					Options::keyCancel);
+
+
+	std::vector<Region*>::iterator region = _game->getSavedGame()->getRegions()->begin();
 	for (
 			;
-			r != _game->getSavedGame()->getRegions()->end();
-			++r)
+			region != _game->getSavedGame()->getRegions()->end();
+			++region)
 	{
-		if ((*r)->getRules()->insideRegion(
+		if ((*region)->getRules()->insideRegion(
 										base->getLongitude(),
 										base->getLatitude()))
 		{
@@ -98,29 +111,31 @@ BaseDestroyedState::BaseDestroyedState(Base* base)
 		}
 	}
 
-	AlienMission* a = _game->getSavedGame()->getAlienMission((*r)->getRules()->getType(), "STR_ALIEN_RETALIATION");
+	AlienMission* am = _game->getSavedGame()->getAlienMission(
+														(*region)->getRules()->getType(),
+														"STR_ALIEN_RETALIATION");
 	for (std::vector<Ufo*>::iterator
-			u = _game->getSavedGame()->getUfos()->begin();
-			u != _game->getSavedGame()->getUfos()->end();)
+			ufo = _game->getSavedGame()->getUfos()->begin();
+			ufo != _game->getSavedGame()->getUfos()->end();)
 	{
-		if ((*u)->getMission() == a)
+		if ((*ufo)->getMission() == am)
 		{
-			delete *u;
-			u = _game->getSavedGame()->getUfos()->erase(u);
+			delete *ufo;
+			ufo = _game->getSavedGame()->getUfos()->erase(ufo);
 		}
 		else
-			++u;
+			++ufo;
 	}
 
 	for (std::vector<AlienMission*>::iterator
-			m = _game->getSavedGame()->getAlienMissions().begin();
-			m != _game->getSavedGame()->getAlienMissions().end();
-			++m)
+			mission = _game->getSavedGame()->getAlienMissions().begin();
+			mission != _game->getSavedGame()->getAlienMissions().end();
+			++mission)
 	{
-		if ((AlienMission*)(*m) == a)
+		if (dynamic_cast<AlienMission*>(*mission) == am)
 		{
-			delete (*m);
-			_game->getSavedGame()->getAlienMissions().erase(m);
+			delete *mission;
+			_game->getSavedGame()->getAlienMissions().erase(mission);
 
 			break;
 		}
@@ -128,33 +143,94 @@ BaseDestroyedState::BaseDestroyedState(Base* base)
 }
 
 /**
- *
+ * dTor.
  */
 BaseDestroyedState::~BaseDestroyedState()
 {
 }
 
 /**
- * Returns to the previous screen.
- * @param action Pointer to an action.
+ *
  */
-void BaseDestroyedState::btnOkClick(Action*)
+void BaseDestroyedState::finish()
 {
 	_game->popState();
 
 	for (std::vector<Base*>::iterator
-			b = _game->getSavedGame()->getBases()->begin();
-			b != _game->getSavedGame()->getBases()->end();
-			++b)
+			base = _game->getSavedGame()->getBases()->begin();
+			base != _game->getSavedGame()->getBases()->end();
+			++base)
 	{
-		if ((*b) == _base)
+		if (*base == _base)
 		{
-			delete (*b);
-			_game->getSavedGame()->getBases()->erase(b);
+			delete *base;
+			_game->getSavedGame()->getBases()->erase(base);
 
 			break;
 		}
 	}
+
+	// kL_begin:
+	double
+		lon = (_base)->getLongitude(),
+		lat = (_base)->getLatitude();
+
+//	pts = (_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 50) + (diff * 200);
+	int aLienPts = 200 + (_game->getSavedGame()->getDifficulty() * 200);
+
+	for (std::vector<Region*>::iterator
+			i = _game->getSavedGame()->getRegions()->begin();
+			i != _game->getSavedGame()->getRegions()->end();
+			++i)
+	{
+		if ((*i)->getRules()->insideRegion(
+										lon,
+										lat))
+		{
+			(*i)->addActivityAlien(aLienPts);
+			(*i)->recentActivity();
+
+			break;
+		}
+	}
+
+	for (std::vector<Country*>::iterator
+			i = _game->getSavedGame()->getCountries()->begin();
+			i != _game->getSavedGame()->getCountries()->end();
+			++i)
+	{
+		if ((*i)->getRules()->insideCountry(
+										lon,
+										lat))
+		{
+			(*i)->addActivityAlien(aLienPts);
+			(*i)->recentActivity();
+
+			break;
+		}
+	} // kL_end.
+}
+
+/**
+ * Deletes the base and scores aLien victory points.
+ * @param action - pointer to an action
+ */
+void BaseDestroyedState::btnOkClick(Action*)
+{
+	finish();
+}
+
+/**
+ * Deletes the base and scores aLien victory points, and centers the Globe.
+ * @param action - pointer to an action
+ */
+void BaseDestroyedState::btnCenterClick(Action*)
+{
+	_globe->center(
+				_base->getLongitude(),
+				_base->getLatitude());
+
+	finish();
 }
 
 }

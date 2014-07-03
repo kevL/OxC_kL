@@ -63,7 +63,9 @@ private:
 		_thinBorder;
 	int
 		_dx,
-		_dy;
+		_dy,
+		_bgX, // kL
+		_bgY; // kL
 	double _popupStep;
 
 	State*		_state;
@@ -87,7 +89,10 @@ private:
 		~Window();
 
 		/// Sets the background surface.
-		void setBackground(Surface* bg);
+		void setBackground(
+				Surface* bg,
+				int dx = 0,  // kL_add
+				int dy = 0); // kL_add
 
 		/// Sets the border color.
 		void setColor(Uint8 color);

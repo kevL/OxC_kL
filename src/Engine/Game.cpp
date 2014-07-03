@@ -453,7 +453,7 @@ void Game::run()
  */
 void Game::quit()
 {
-	if (_save != 0 // Always save ironman
+	if (_save != NULL // Always save ironman
 		&& _save->isIronman()
 		&& !_save->getName().empty())
 	{
@@ -493,8 +493,10 @@ void Game::setVolume(
 		if (ui > -1)
 		{
 			ui = static_cast<int>(volumeExponent(ui) * static_cast<double>(SDL_MIX_MAXVOLUME));
-			Mix_Volume(0, ui); // kL_note: then this sets channel-0 to ui-Volume ... they use channels #1 & #2 btw. and group them accordingly elsewhere
+			// ... they use channels #1 & #2 btw. and group them accordingly in initAudio() below_
+			Mix_Volume(0, ui); // kL_note: then this sets channel-0 to ui-Volume
 			Mix_Volume(1, ui); // and this sets channel-1 to ui-Volume!
+			Mix_Volume(2, ui); // and this sets channel-2 to ui-Volume!
 		}
 	}
 }
@@ -798,12 +800,11 @@ void Game::initAudio()
 	}
 	else
 	{
-//kL	Mix_AllocateChannels(16);
-		Mix_AllocateChannels(12); // kL
+		Mix_AllocateChannels(16);
+
 		// Set up UI channels
-		Mix_ReserveChannels(2);
-//kL	Mix_GroupChannels(1, 2, 0);
-		Mix_GroupChannels(0, 1, 0); // kL
+		Mix_ReserveChannels(3);
+		Mix_GroupChannels(0, 2, 1);
 		Log(LOG_INFO) << "SDL_mixer initialized.";
 
 		setVolume(

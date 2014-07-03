@@ -30,6 +30,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Timer.h"
@@ -238,10 +239,10 @@ PurchaseState::PurchaseState(
 	{
 		ss4.str(L"");
 
-		RuleCraft* rule = _game->getRuleset()->getCraft(*i);
+		RuleCraft* craftRule = _game->getRuleset()->getCraft(*i);
 
-		if (rule->getBuyCost() != 0
-			&& _game->getSavedGame()->isResearched(rule->getRequirements()))
+		if (craftRule->getBuyCost() != 0
+			&& _game->getSavedGame()->isResearched(craftRule->getRequirements()))
 		{
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
@@ -262,7 +263,7 @@ PurchaseState::PurchaseState(
 			_lstItems->addRow(
 							4,
 							tr(*i).c_str(),
-							Text::formatFunding(rule->getBuyCost()).c_str(),
+							Text::formatFunding(craftRule->getBuyCost()).c_str(),
 							ss4.str().c_str(),
 							L"0");
 		}
@@ -272,7 +273,6 @@ PurchaseState::PurchaseState(
 	std::vector<std::string> items = _game->getRuleset()->getItemsList();
 
 	// Add craft Weapon-types to purchase list.
-	// WB-removed: 140124 begin:
 	const std::vector<std::string>& cweapons = _game->getRuleset()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator
 			i = cweapons.begin();
@@ -283,8 +283,8 @@ PurchaseState::PurchaseState(
 		ss6.str(L"");
 
 		// Special handling for treating craft weapons as items
-		RuleCraftWeapon* rule = _game->getRuleset()->getCraftWeapon(*i);
-		RuleItem* launcher = _game->getRuleset()->getItem(rule->getLauncherItem()); // kL
+		RuleCraftWeapon* cwRule = _game->getRuleset()->getCraftWeapon(*i);
+		RuleItem* launcher = _game->getRuleset()->getItem(cwRule->getLauncherItem()); // kL
 
 		if (launcher != NULL
 			&& launcher->getBuyCost() > 0
@@ -306,7 +306,11 @@ PurchaseState::PurchaseState(
 					tQty += (*j)->getQuantity();
 			} // kL_end.
 
-//kL			ss5 << _base->getItems()->getItem(launcher->getType());
+			int clipSize = cwRule->getAmmoMax(); // Launcher
+			if (clipSize > 0)
+				item = item + L" (" + Text::formatNumber(clipSize) + L")";
+
+//kL		ss5 << _base->getItems()->getItem(launcher->getType());
 			ss5 << tQty; // kL
 			_lstItems->addRow(
 							4,
@@ -330,7 +334,7 @@ PurchaseState::PurchaseState(
 		}
 
 		// Handle craft weapon ammo.
-		RuleItem* clip = _game->getRuleset()->getItem(rule->getClipItem()); // kL
+		RuleItem* clip = _game->getRuleset()->getItem(cwRule->getClipItem()); // kL
 
 		if (clip != NULL
 			&& clip->getBuyCost() > 0
@@ -352,7 +356,11 @@ PurchaseState::PurchaseState(
 					tQty += (*j)->getQuantity();
 			} // kL_end.
 
-//kL			ss6 << _base->getItems()->getItem(clip->getType());
+			int clipSize = clip->getClipSize(); // launcher Ammo
+			if (clipSize > 1)
+				item = item + L"s (" + Text::formatNumber(clipSize) + L")";
+
+//kL		ss6 << _base->getItems()->getItem(clip->getType());
 			ss6 << tQty; // kL
 
 			item.insert(0, L"  ");
@@ -377,7 +385,7 @@ PurchaseState::PurchaseState(
 				}
 			}
 		}
-	} // end WB-removed: 140124.
+	}
 
 
 	// Add items to purchase list.
@@ -388,9 +396,9 @@ PurchaseState::PurchaseState(
 	{
 		ss7.str(L"");
 
-		RuleItem* rule = _game->getRuleset()->getItem(*i);
+		RuleItem* itemRule = _game->getRuleset()->getItem(*i);
 
-		if (rule->getBuyCost() != 0
+		if (itemRule->getBuyCost() != 0
 			&& !isExcluded(*i))
 		{
 			_qtys.push_back(0);
@@ -458,27 +466,45 @@ PurchaseState::PurchaseState(
 
 			ss7 << tQty; // kL
 
-			if (rule->getBattleType() == BT_AMMO
-				 || (rule->getBattleType() == BT_NONE
-					&& rule->getClipSize() > 0))
+			if (itemRule->getBattleType() == BT_AMMO)		// #2, weapon clips & HWP rounds
+//kL			 || (itemRule->getBattleType() == BT_NONE	// #0, craft weapon rounds HANDLED ABOVE^
+//kL				&& itemRule->getClipSize() > 0))
 			{
 				item.insert(0, L"  ");
+
+				if (itemRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+				{
+					int clipSize = itemRule->getClipSize();
+					if (clipSize > 1)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+				}
 
 				_lstItems->addRow(
 								4,
 								item.c_str(),
-								Text::formatFunding(rule->getBuyCost()).c_str(),
+								Text::formatFunding(itemRule->getBuyCost()).c_str(),
 								ss7.str().c_str(),
 								L"0");
 				_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15)+6);
 			}
 			else
+			{
+                if (itemRule->isFixed() // tank w/ Ordnance.
+					&& !itemRule->getCompatibleAmmo()->empty())
+                {
+					RuleItem* ammoRule = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
+					int clipSize = ammoRule->getClipSize();
+					if (clipSize > 0)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+                }
+
 				_lstItems->addRow(
 								4,
 								item.c_str(),
-								Text::formatFunding(rule->getBuyCost()).c_str(),
+								Text::formatFunding(itemRule->getBuyCost()).c_str(),
 								ss7.str().c_str(),
 								L"0");
+			}
 		}
 	}
 

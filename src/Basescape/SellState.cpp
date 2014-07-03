@@ -308,7 +308,7 @@ SellState::SellState(
 	Ruleset* rules = _game->getRuleset();
 	SavedGame* save = _game->getSavedGame();
 	RuleItem
-		* rule,
+		* itemRule,
 		* launcher,
 		* clip;
 	RuleCraftWeapon* cwRule;
@@ -349,10 +349,12 @@ SellState::SellState(
 			_qtys.push_back(0);
 			_items.push_back(*i);
 
- 			std::wostringstream ss;
+			std::wstring item = tr(*i);
+
+			std::wostringstream ss;
 			ss << qty;
 
-			rule = rules->getItem(*i);
+			itemRule = rules->getItem(*i);
 
 			bool craftOrdnance = false;
 			const std::vector<std::string>& craftWeaps = rules->getCraftWeaponsList();
@@ -367,49 +369,78 @@ SellState::SellState(
 
 				launcher = rules->getItem(cwRule->getLauncherItem());
 				clip = rules->getItem(cwRule->getClipItem());
-				if (launcher == rule
-					|| clip == rule)
+
+				if (launcher == itemRule)
 				{
 					craftOrdnance = true;
+
+					int clipSize = cwRule->getAmmoMax(); // Launcher
+					if (clipSize > 0)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+				}
+				else if (clip == itemRule)
+				{
+					craftOrdnance = true;
+
+					int clipSize = clip->getClipSize(); // launcher Ammo
+					if (clipSize > 1)
+						item = item + L"s (" + Text::formatNumber(clipSize) + L")";
 				}
 			}
 
 			Uint8 color = _color;
-			if (!save->isResearched(rule->getType())				// not researched
-				&& (!save->isResearched(rule->getRequirements())	// and has requirements to use but not been researched
-					|| rules->getItem(*i)->getAlien()						// or is an alien
-					|| rule->getBattleType() == BT_CORPSE								// or is a corpse
-					|| rule->getBattleType() == BT_NONE)								// or is not a battlefield item
-				&& craftOrdnance == false)											// and is not craft ordnance
+			if (!save->isResearched(itemRule->getType())				// not researched
+				&& (!save->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
+					|| rules->getItem(*i)->getAlien()					// or is an alien
+					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
+					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
+				&& craftOrdnance == false)							// and is not craft ordnance
 			{
 				// well, that was !NOT! easy.
 				color = _color3;
 			}
 
-			std::wstring item = tr(*i);
-			if (rule->getBattleType() == BT_AMMO
-				|| (rule->getBattleType() == BT_NONE
-					&& rule->getClipSize() > 0))
+			if (itemRule->getBattleType() == BT_AMMO		// #2, weapon clips & HWP rounds
+				|| (itemRule->getBattleType() == BT_NONE	// #0, craft weapon rounds
+					&& itemRule->getClipSize() > 0))
 			{
+				if (itemRule->getBattleType() == BT_AMMO
+					&& itemRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+				{
+					int clipSize = itemRule->getClipSize();
+					if (clipSize > 1)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+				}
+
 				item.insert(0, L"  ");
+
 				_lstItems->addRow(
 								4,
 								item.c_str(),
 								ss.str().c_str(),
 								L"0",
-								Text::formatFunding(rule->getSellCost()).c_str());
+								Text::formatFunding(itemRule->getSellCost()).c_str());
 
 				if (color != _color3)
 					color = _colorAmmo;
 			}
 			else
 			{
+                if (itemRule->isFixed() // tank w/ Ordnance.
+					&& !itemRule->getCompatibleAmmo()->empty())
+                {
+					RuleItem* ammoRule = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
+					int clipSize = ammoRule->getClipSize();
+					if (clipSize > 0)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+                }
+
 				_lstItems->addRow(
 								4,
 								item.c_str(),
 								ss.str().c_str(),
 								L"0",
-								Text::formatFunding(rule->getSellCost()).c_str());
+								Text::formatFunding(itemRule->getSellCost()).c_str());
 			}
 
 			_lstItems->setRowColor(_qtys.size() - 1, color);
@@ -484,9 +515,7 @@ void SellState::btnOkClick(Action*)
 						if (*s == _soldiers[i])
 						{
 							if ((*s)->getArmor()->getStoreItem() != "STR_NONE")
-							{
 								_base->getItems()->addItem((*s)->getArmor()->getStoreItem());
-							}
 
 							_base->getSoldiers()->erase(s);
 
@@ -531,9 +560,7 @@ void SellState::btnOkClick(Action*)
 							++s)
 					{
 						if ((*s)->getCraft() == craft)
-						{
 							(*s)->setCraft(NULL);
-						}
 					}
 
 					// Clear Hangar
