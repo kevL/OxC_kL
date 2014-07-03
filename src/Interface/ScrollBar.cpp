@@ -185,7 +185,7 @@ void ScrollBar::setPalette(
  */
 void ScrollBar::handle(Action* action, State* state)
 {
-/*	InteractiveSurface::handle(action, state); // kL_note: screw it. Okay, try it again ... nah Screw it.
+	InteractiveSurface::handle(action, state); // kL_note: screw it. Okay, try it again ... nah Screw it.
 
 	if (_pressed
 		&& (action->getDetails()->type == SDL_MOUSEMOTION
@@ -198,11 +198,11 @@ void ScrollBar::handle(Action* action, State* state)
 							0),
 					getHeight() - static_cast<int>(_thumbRect.h) + 1);
 
-		double scale = static_cast<double>(static_cast<int>(_list->getRows()) / getHeight());
+		double scale = static_cast<double>(_list->getRows()) / static_cast<double>(getHeight());
 		size_t scroll = static_cast<size_t>(Round(static_cast<double>(y) * scale));
 
 		_list->scrollTo(scroll);
-	} */
+	}
 }
 
 /**

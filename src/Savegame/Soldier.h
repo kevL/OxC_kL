@@ -141,7 +141,7 @@ private:
 		/// Gets the soldier's name.
 		std::wstring getName(
 				bool statstring = false,
-				unsigned int maxLength = 20) const;
+				size_t maxLength = 20) const;
 		/// Sets the soldier's name.
 		void setName(const std::wstring& name);
 

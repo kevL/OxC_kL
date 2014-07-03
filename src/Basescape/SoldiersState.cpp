@@ -187,7 +187,7 @@ void SoldiersState::init()
 							tr((*i)->getRankString()).c_str(),
 							(*i)->getCraftString(_game->getLanguage()).c_str());
 
-		if ((*i)->getCraft() == 0)
+		if ((*i)->getCraft() == NULL)
 			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
 
 		row++;

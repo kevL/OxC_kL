@@ -4375,7 +4375,7 @@
 	<sstream>
 	<string>
 
-1404103119 f:\git\openxcom\src\savegame\soldier.h
+1404415056 f:\git\openxcom\src\savegame\soldier.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"../Ruleset/StatString.h"
@@ -4783,7 +4783,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404096022 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1404414817 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -5476,7 +5476,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1404096022 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1404414606 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -5561,7 +5561,7 @@
 1404096022 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1404096022 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1404417222 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	<cfloat>
 	<climits>
@@ -6412,7 +6412,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1404407498 source:f:\git\openxcom\src\battlescape\map.cpp
+1404413914 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6795,7 +6795,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1404413579 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	<sstream>
 	"BattlescapeGame.h"
@@ -9164,7 +9164,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1404362147 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1404411519 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9656,7 +9656,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1404255112 source:f:\git\openxcom\src\savegame\soldier.cpp
+1404416126 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -11896,7 +11896,7 @@
 	"../Engine/Palette.h"
 	"../Interface/TextList.h"
 
-1404096023 f:\git\openxcom\src\interface\scrollbar.h
+1404418736 f:\git\openxcom\src\interface\scrollbar.h
 	"../Engine/InteractiveSurface.h"
 
 1404096023 f:\git\openxcom\src\menu\optionsnoaudiostate.h
@@ -12011,7 +12011,7 @@
 	<string>
 	"../Engine/State.h"
 
-1404245850 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1404417736 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	<string>
 	"SoldierDiaryOverviewState.h"

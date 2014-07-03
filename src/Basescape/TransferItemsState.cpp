@@ -200,9 +200,18 @@ TransferItemsState::TransferItemsState(
 			_destQty.push_back(0);
 			_soldiers.push_back(*i);
 
+			// kL_begin:
+			std::wostringstream woStr;
+			woStr << (*i)->getName();
+
+			if ((*i)->getWoundRecovery() > 0)
+				woStr << L" (" << (*i)->getWoundRecovery() << L" dy)";
+			// kL_end.
+
 			_lstItems->addRow(
 							4,
-							(*i)->getName().c_str(),
+//kL						(*i)->getName().c_str(),
+							woStr.str().c_str(), // kL
 							L"1",
 							L"0",
 							L"0");
@@ -239,18 +248,18 @@ TransferItemsState::TransferItemsState(
 //kL	if (_baseFrom->getAvailableScientists() > 0)
 	if (_baseFrom->getScientists() > 0) // kL
 	{
-//kL		_baseQty.push_back(_baseFrom->getAvailableScientists());
+//kL	_baseQty.push_back(_baseFrom->getAvailableScientists());
 		_baseQty.push_back(_baseFrom->getScientists()); // kL
 		_transferQty.push_back(0);
-//kL		_destQty.push_back(_baseTo->getAvailableScientists());
+//kL	_destQty.push_back(_baseTo->getAvailableScientists());
 		_destQty.push_back(_baseTo->getTotalScientists()); // kL
 		_hasSci = 1;
 
 		std::wostringstream
 			ss1,
 			ss2;
-//kL		ss1 << _baseFrom->getAvailableScientists();
-//kL		ss2 << _baseTo->getAvailableScientists();
+//kL	ss1 << _baseFrom->getAvailableScientists();
+//kL	ss2 << _baseTo->getAvailableScientists();
 //		ss1 << _baseFrom->getScientists(); // kL
 //		ss2 << _baseTo->getScientists(); // kL
 		ss1 << _baseQty.back();
@@ -269,18 +278,18 @@ TransferItemsState::TransferItemsState(
 //kL	if (_baseFrom->getAvailableEngineers() > 0)
 	if (_baseFrom->getEngineers() > 0) // kL
 	{
-//kL		_baseQty.push_back(_baseFrom->getAvailableEngineers());
+//kL	_baseQty.push_back(_baseFrom->getAvailableEngineers());
 		_baseQty.push_back(_baseFrom->getEngineers()); // kL
 		_transferQty.push_back(0);
-//kL		_destQty.push_back(_baseTo->getAvailableEngineers());
+//kL	_destQty.push_back(_baseTo->getAvailableEngineers());
 		_destQty.push_back(_baseTo->getTotalEngineers()); // kL
 		_hasEng = 1;
 
 		std::wostringstream
 			ss1,
 			ss2;
-//kL		ss1 << _baseFrom->getAvailableEngineers();
-//kL		ss2 << _baseTo->getAvailableEngineers();
+//kL	ss1 << _baseFrom->getAvailableEngineers();
+//kL	ss2 << _baseTo->getAvailableEngineers();
 //		ss1 << _baseFrom->getEngineers(); // kL
 //		ss2 << _baseTo->getEngineers(); // kL
 		ss1 << _baseQty.back();
@@ -307,7 +316,7 @@ TransferItemsState::TransferItemsState(
 		{
 			_baseQty.push_back(qty);
 			_transferQty.push_back(0);
-//kL			_destQty.push_back(_baseTo->getItems()->getItem(*i));
+//kL		_destQty.push_back(_baseTo->getItems()->getItem(*i));
 			_items.push_back(*i);
 
 			// kL_begin:
@@ -467,9 +476,18 @@ void TransferItemsState::reinit()
 			_destQty.push_back(0);
 			_soldiers.push_back(*i);
 
+			// kL_begin:
+			std::wostringstream woStr;
+			woStr << (*i)->getName();
+
+			if ((*i)->getWoundRecovery() > 0)
+				woStr << L" (" << (*i)->getWoundRecovery() << L" dy)";
+			// kL_end.
+
 			_lstItems->addRow(
 							4,
-							(*i)->getName().c_str(),
+//kL						(*i)->getName().c_str(),
+							woStr.str().c_str(), // kL
 							L"1",
 							L"0",
 							L"0");

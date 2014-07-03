@@ -272,7 +272,8 @@ UnitInfoState::UnitInfoState(
 
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
 
-	_exit->onMouseClick((ActionHandler)& UnitInfoState::exitClick);
+	_exit->onMouseClick((ActionHandler)& UnitInfoState::exitClick,
+					SDL_BUTTON_RIGHT); // kL
 	_exit->onKeyboardPress(
 					(ActionHandler)& UnitInfoState::exitClick,
 					Options::keyCancel);
@@ -701,9 +702,9 @@ void UnitInfoState::handle(Action* action)
 
 	if (action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL_note: why this include LMB
-			exitClick(action);
-		else if (!_mindProbe)
+//		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+//			exitClick(action); else
+		if (!_mindProbe)
 		{
 			if (action->getDetails()->button.button == SDL_BUTTON_X1)
 				btnNextClick(action);
@@ -723,7 +724,7 @@ void UnitInfoState::btnPrevClick(Action* action)
 		_parent->selectPreviousFactionUnit(
 										false,
 										false);
-//kL										_fromInventory);
+//kL									_fromInventory);
 	else // so we are here from the Craft Equipment screen
 		_battleGame->selectPreviousFactionUnit(
 											false,

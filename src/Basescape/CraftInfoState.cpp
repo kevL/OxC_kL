@@ -299,7 +299,7 @@ void CraftInfoState::init()
 	if (_craft->getRules()->getWeapons() > 0)
 	{
 		CraftWeapon* w1 = _craft->getWeapons()->at(0);
-		if (w1 != 0)
+		if (w1 != NULL)
 		{
 			Surface* frame = texture->getFrame(w1->getRules()->getSprite() + 48);
 			frame->setX(0);
@@ -342,7 +342,7 @@ void CraftInfoState::init()
 	if (_craft->getRules()->getWeapons() > 1)
 	{
 		CraftWeapon* w2 = _craft->getWeapons()->at(1);
-		if (w2 != 0)
+		if (w2 != NULL)
 		{
 			Surface* frame = texture->getFrame(w2->getRules()->getSprite() + 48);
 			frame->setX(0);
@@ -402,7 +402,7 @@ std::wstring CraftInfoState::formatTime(int total)
 	ss << L"\n(";
 
 	if (days > 0)
-//kl		ss << tr("STR_DAY", days) << L"/";
+//kl	ss << tr("STR_DAY", days) << L"/";
 		ss << tr("STR_DAY", days) << L" "; // kL
 
 	if (hours > 0)

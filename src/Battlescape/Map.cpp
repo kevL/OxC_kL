@@ -1440,8 +1440,8 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// Draw smoke/fire
-					if (tile->getSmoke()) // includes tiles on Fire? must...
-//TEST						&& tile->isDiscovered(2))
+					if (tile->getSmoke() // includes tiles on Fire? must...
+						&& tile->isDiscovered(2))
 					{
 						// oXc _animFrames cycle from 0..7
 						frame = 0;	// this will be the SPRITE # on the orig SpriteSheet

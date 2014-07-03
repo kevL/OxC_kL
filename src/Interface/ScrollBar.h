@@ -38,7 +38,9 @@ class ScrollBar
 {
 
 private:
-	bool _pressed, _contrast;
+	bool
+		_contrast,
+		_pressed;
 	int _offset;
 	Uint8 _color;
 

@@ -414,13 +414,32 @@ void SoldierDiaryPerformanceState::init()
 	_txtMedalInfo->setVisible(_displayCommendations);
 	_lstCommendations->setVisible(_displayCommendations);
 
-	_btnKills->setVisible(!_displayKills); // set visibility for buttons
-	_btnMissions->setVisible(!_displayMissions);
+	// kL_begin:
+	if (_displayKills)
+		_btnKills->setColor(Palette::blockOffset(13)+5);
+	else
+		_btnKills->setColor(Palette::blockOffset(13)+10);
+
+	if (_displayMissions)
+		_btnMissions->setColor(Palette::blockOffset(13)+5);
+	else
+		_btnMissions->setColor(Palette::blockOffset(13)+10);
+	// kL_end.
+//	_btnKills->setVisible(!_displayKills); // set visibility for buttons
+//	_btnMissions->setVisible(!_displayMissions);
 
 	if (_game->getRuleset()->getCommendation().empty())
 		_btnCommendations->setVisible(false);
 	else
-		_btnCommendations->setVisible(!_displayCommendations);
+	{
+		// kL_begin:
+		if (_displayCommendations)
+			_btnCommendations->setColor(Palette::blockOffset(13)+5);
+		else
+			_btnCommendations->setColor(Palette::blockOffset(13)+10);
+		// kL_end.
+//		_btnCommendations->setVisible(!_displayCommendations);
+	}
 
 
 	_commendationsListEntry.clear();

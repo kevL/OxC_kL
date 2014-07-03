@@ -304,18 +304,28 @@ int Soldier::getId() const
  */
 std::wstring Soldier::getName(
 		bool statstring,
-		unsigned int maxLength) const
+		size_t maxLength) const
 {
 	if (statstring
 		&& !_statString.empty())
 	{
 		if (_name.length() + _statString.length() > maxLength)
-			return _name.substr(0, maxLength - _statString.length()) + L"/" + _statString;
+		{
+			return _name.substr(
+							0,
+							maxLength - _statString.length()) + L"/" + _statString;
+		}
 		else
 			return _name + L"/" + _statString;
 	}
-	else
-		return _name;
+/*	else if (_recovery > 0)
+	{
+		std::wostringstream wStr;
+		wStr << _name << L" (" << _recovery << L")";
+		return wStr.str();
+	} */ // kL_add.
+
+	return _name;
 }
 
 /**
