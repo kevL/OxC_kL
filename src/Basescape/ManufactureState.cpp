@@ -232,23 +232,31 @@ void ManufactureState::fillProductionList()
 		s1 << (*i)->getAssignedEngineers();
 
 		if ((*i)->getSellItems())
-			s2 << "$";
+			s2 << "$"; // prepend $
 		s2 << (*i)->getAmountProduced() << "/";
 		if ((*i)->getInfiniteAmount())
-//kL			s2 << Language::utf8ToWstr("∞");
-			s2 << "inf"; // kL
+//kL		s2 << Language::utf8ToWstr("∞");
+			s2 << "oo"; // kL
 		else
 			s2 << (*i)->getAmountTotal();
-		if ((*i)->getSellItems())
-			s2 << "$";
+
+//		if ((*i)->getSellItems())
+//			s2 << "$"; // append another dollar $
 
 		s3 << Text::formatFunding((*i)->getRules()->getManufactureCost());
 
+//		if ((*iter)->getInfiniteAmount())
+//kL		s4 << Language::utf8ToWstr("∞");
+//			s4 << "oo"; // kL else
 		if ((*i)->getAssignedEngineers() > 0)
 		{
+//kL		int timeLeft = (*iter)->getAmountTotal() * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
+
+			// kL_begin:
 			int timeLeft;
 
-			if ((*i)->getSellItems())
+			if ((*i)->getSellItems()
+				|| (*i)->getInfiniteAmount()) // kL
 			{
 				timeLeft = ((*i)->getAmountProduced() + 1) * (*i)->getRules()->getManufactureTime()
 							- (*i)->getTimeSpent();
@@ -259,17 +267,15 @@ void ManufactureState::fillProductionList()
 							- (*i)->getTimeSpent();
 			}
 
-//			timeLeft /= (*i)->getAssignedEngineers();
-//			if (timeLeft == 0) timeLeft = 1; // kL
-
 			timeLeft = static_cast<int>(
 							ceil(static_cast<double>(timeLeft) / static_cast<double>((*i)->getAssignedEngineers())));
 			int daysLeft = timeLeft / 24;
 			int hoursLeft = timeLeft %24;
-			s4 << daysLeft << "/" << hoursLeft;
+			s4 << daysLeft << "/" << hoursLeft; // kL_end.
 		}
 		else
-			s4 << L"-";
+//kL		s4 << L"-";
+			s4 << L"oo"; // kL
 
 		_lstManufacture->addRow
 							(5,

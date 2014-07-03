@@ -250,8 +250,8 @@ XcomResourcePack::XcomResourcePack( // kL
 					i->end(),
 					i->begin(),
 					toupper);
-		*i = (*i).substr(0, (*i).length() - 3);
-		*i = *i + "PCK";
+//		*i = (*i).substr(0, (*i).length() - 3);
+//		*i = *i + "PCK";
 		_surfaces[*i] = new Surface(320, 200);
 		_surfaces[*i]->loadBdy(path);
 	}
@@ -1620,6 +1620,14 @@ void XcomResourcePack::loadBattlescapeResources()
 		"D2.LBM"
 	};
 
+	std::string pals[] =
+	{
+		"PAL_BATTLESCAPE",
+		"PAL_BATTLESCAPE_1",
+		"PAL_BATTLESCAPE_2",
+		"PAL_BATTLESCAPE_3"
+	};
+
 	for (size_t
 			i = 0;
 			i < sizeof(lbms) / sizeof(lbms[0]);
@@ -1629,11 +1637,14 @@ void XcomResourcePack::loadBattlescapeResources()
 		s << "UFOGRAPH/" << lbms[i];
 		if (CrossPlatform::getDataFile(s.str()) != s.str())
 		{
+			if (!i)
+				delete _palettes["PAL_BATTLESCAPE"];
+
 			Surface* tempSurface = new Surface(1, 1);
 			tempSurface->loadImage(CrossPlatform::getDataFile(s.str()));
 
-			_palettes[lbms[i]] = new Palette();
-			_palettes[lbms[i]]->setColors(tempSurface->getPalette(), 256);
+			_palettes[pals[i]] = new Palette();
+			_palettes[pals[i]]->setColors(tempSurface->getPalette(), 256);
 
 			delete tempSurface;
 		}

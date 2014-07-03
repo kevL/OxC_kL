@@ -29,6 +29,7 @@ namespace OpenXcom
 {
 
 class Base;
+class ComboBox;
 class RuleManufacture;
 class Text;
 class TextButton;
@@ -46,12 +47,19 @@ class NewManufactureListState
 
 private:
 	Base* _base;
-	Text* _txtTitle, * _txtItem, * _txtCategory;
+	ComboBox* _cbxCategory;
+	Text
+		* _txtTitle,
+		* _txtItem,
+		* _txtCategory;
 	TextButton* _btnCancel;
 	TextList* _lstManufacture;
 	Window* _window;
 
 	std::vector<RuleManufacture*> _possibleProductions;
+	std::vector<std::string>
+		_catStrings,
+		_displayedStrings;
 
 
 	public:
@@ -70,7 +78,8 @@ private:
 		void btnCancelClick(Action* action);
 		/// Handler for clicking on the list.
 		void lstProdClick(Action* action);
-
+		/// Handler for changing the category filter
+		void cbxCategoryChange(Action* action);
 };
 
 }

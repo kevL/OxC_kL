@@ -100,6 +100,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftInventoryTile(NULL),
 		_alienRace(""),
 		_alienItemLevel(0),
+		_generateFuel(true),
 		_craftX(0),
 		_craftY(0),
 		_craftZ(0),
@@ -432,7 +433,8 @@ void BattlescapeGenerator::run()
 			ruleDeploy);
 	deployCivilians(ruleDeploy->getCivilians());
 
-	fuelPowerSources();
+	if (_generateFuel)
+		fuelPowerSources();
 
 	if (_save->getMissionType() ==  "STR_UFO_CRASH_RECOVERY")
 		explodePowerSources();
@@ -2748,6 +2750,33 @@ int BattlescapeGenerator::loadMAP(
 	}
 
 	mapFile.close();
+
+	if (_generateFuel)
+	{
+		// if one of the mapBlocks has an items array defined, don't deploy fuel algorithmically
+		_generateFuel = mapblock->getItems()->empty();
+	}
+
+	for (std::map<std::string, std::vector<Position> >::const_iterator
+			i = mapblock->getItems()->begin();
+			i != mapblock->getItems()->end();
+			++i)
+	{
+		RuleItem* rule = _game->getRuleset()->getItem((*i).first);
+		for (std::vector<Position>::const_iterator
+				j = (*i).second.begin();
+				j != (*i).second.end();
+				++j)
+		{
+			BattleItem* item = new BattleItem(
+											rule,
+											_save->getCurrentItemId());
+			_save->getItems()->push_back(item);
+			_save->getTile((*j) + Position(xoff, yoff, 0))->addItem(
+																item,
+																_game->getRuleset()->getInventory("STR_GROUND"));
+		}
+	}
 
 	return sizez;
 }

@@ -2742,7 +2742,9 @@ void TileEngine::explode(
 								// ignite() checks for Flammability first: if (getFlammability() == 255) don't do it.
 								// So this is, like, napalm from an incendiary round, while ignite() is for parts
 								// of the tile itself self-igniting.
-								if (destTile->getFire() == 0)
+								if (destTile->getFire() == 0
+									&& (destTile->getMapData(MapData::O_FLOOR)
+										|| destTile->getMapData(MapData::O_OBJECT)))
 								{
 									destTile->setFire(destTile->getFuel() + 1);
 									destTile->setSmoke(std::max(
@@ -4077,7 +4079,7 @@ bool TileEngine::detonate(Tile* tile)
  *
  * Chained explosions are explosions which occur after an explosive map object is destroyed.
  * May be due a direct hit, other explosion or fire.
- * @return tile on which a explosion occurred
+ * @return, tile on which an explosion occurred
  */
 Tile* TileEngine::checkForTerrainExplosions()
 {

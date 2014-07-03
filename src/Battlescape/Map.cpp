@@ -1799,7 +1799,8 @@ void Map::drawTerrain(Surface* surface)
 	if (pathfinderTurnedOn)
 	{
 		// make a border for the pathfinding display, so it's more visible on snow, etc.
-//		_numWaypid->setBordered(true);
+//		if (_numWaypid)
+//			_numWaypid->setBordered(true);
 
 		for (int
 				itZ = beginZ;
@@ -1923,7 +1924,8 @@ void Map::drawTerrain(Surface* surface)
 		}
 
 		// remove the border in case it's being used for missile waypoints.
-//		_numWaypid->setBordered(false);
+//		if (_numWaypid)
+//			_numWaypid->setBordered(false);
 	}
 
 //kL	unit = (BattleUnit*)_save->getSelectedUnit();

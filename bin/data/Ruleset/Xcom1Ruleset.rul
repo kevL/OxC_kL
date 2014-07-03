@@ -3563,6 +3563,9 @@ terrains:
       - name: UBASE_03
         width: 20
         length: 20
+        items:
+          STR_ELERIUM_115:
+            - [2, 14, 1]
       - name: UBASE_04
         width: 10
         length: 10
@@ -6898,8 +6901,8 @@ research:
     cost: 600
     points: 60
     dependencies:
-      - STR_CYDONIA_DEP
-  - name: STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
+  - name: STR_COMMANDER_PLUS
     unlocks:
       - STR_CYDONIA_OR_BUST
     requires:
@@ -7271,7 +7274,7 @@ research:
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
   - name: STR_SNAKEMAN_SOLDIER
     cost: 192
@@ -7328,7 +7331,7 @@ research:
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
   - name: STR_MUTON_SOLDIER
     cost: 192
@@ -7455,7 +7458,7 @@ research:
     lookup: STR_SECTOID
     unlocks:
       - STR_LEADER_PLUS
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_ETHEREAL_SOLDIER
@@ -7482,7 +7485,7 @@ research:
     needItem: true
     unlocks:
       - STR_LEADER_PLUS
-      - STR_CYDONIA_DEP
+      - STR_COMMANDER_PLUS
       - STR_ALIEN_ORIGINS
       - STR_PSI_LAB
   - name: STR_PLASMA_CANNON_DEP1

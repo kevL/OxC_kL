@@ -478,6 +478,15 @@ void Screen::resetDisplay(bool resetVideo)
 	_clear.w = static_cast<Uint16>(getWidth());
 	_clear.h = static_cast<Uint16>(getHeight());
 
+	double pixelRatioX = 1.0;
+	double pixelRatioY = 1.0;
+	if (Options::nonSquarePixelRatio
+		&& !Options::allowResize)
+	{
+		pixelRatioX = 0.75;
+		pixelRatioY = 1.2;
+	}
+
 	bool cursorInBlackBands;
 	if (!Options::keepAspectRatio)
 		cursorInBlackBands = false;
@@ -512,13 +521,16 @@ void Screen::resetDisplay(bool resetVideo)
 	else if (_scaleX < _scaleY
 		&& Options::keepAspectRatio)
 	{
-		int targetHeight = static_cast<int>(floor(_scaleX * static_cast<double>(_baseHeight)));
+		int targetHeight = static_cast<int>(floor(_scaleX * static_cast<double>(_baseHeight) * pixelRatioY));
 
 		_topBlackBand = (getHeight() - targetHeight) / 2;
 		if (_topBlackBand < 0)
 			_topBlackBand = 0;
 
 		_bottomBlackBand = getHeight() - targetHeight - _topBlackBand;
+		if (_bottomBlackBand < 0)
+			_bottomBlackBand = 0;
+
 		_leftBlackBand = _rightBlackBand = 0;
 		_cursorLeftBlackBand = 0;
 
@@ -720,28 +732,55 @@ void Screen::updateScale(
 		int& height,
 		bool change)
 {
+	double pixelRatioY = 1.0;
+	double pixelRatioX = 1.0;
+	if (Options::nonSquarePixelRatio
+		&& !Options::allowResize)
+	{
+		pixelRatioX = 0.75;
+		pixelRatioY = 1.2;
+	}
+
 	type = selection;
 	switch (type)
 	{
 		case SCALE_15X:
-			width	= static_cast<int>(static_cast<double>(Screen::ORIGINAL_WIDTH) * 1.5);
-			height	= static_cast<int>(static_cast<double>(Screen::ORIGINAL_HEIGHT) * 1.5);
+			width	= static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_WIDTH) * 1.5));
+			height	= static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_HEIGHT) * 1.5));
 		break;
 		case SCALE_2X:
-			width	= Screen::ORIGINAL_WIDTH * 2;
-			height	= Screen::ORIGINAL_HEIGHT * 2;
+			width	= static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_WIDTH) * 2.0));
+			height	= static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_HEIGHT) * 2.0));
 		break;
 		case SCALE_SCREEN_DIV_3:
-			width	= Options::newDisplayWidth / 3;
-			height	= Options::newDisplayHeight / 3;
+			width	= static_cast<int>(floor(static_cast<double>(Options::newDisplayWidth) / 3.0 * pixelRatioY));
+			height	= static_cast<int>(floor(static_cast<double>(Options::newDisplayHeight) / 3.0));
+			width	= std::max(
+							width,
+							static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_WIDTH) / pixelRatioX  * pixelRatioY)));
+			height	= std::max(
+							height,
+							static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_HEIGHT) * pixelRatioY)));
 		break;
 		case SCALE_SCREEN_DIV_2:
-			width	= Options::newDisplayWidth / 2;
-			height	= Options::newDisplayHeight / 2;
+			width	= static_cast<int>(floor(static_cast<double>(Options::newDisplayWidth) / 2.0 * pixelRatioY));
+			height	= static_cast<int>(floor(static_cast<double>(Options::newDisplayHeight) / 2.0));
+			width	= std::max(
+							width,
+							static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_WIDTH) / pixelRatioX  * pixelRatioY)));
+			height	= std::max(
+							height,
+							static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_HEIGHT) * pixelRatioY)));
 		break;
 		case SCALE_SCREEN:
-			width	= Options::newDisplayWidth;
-			height	= Options::newDisplayHeight;
+			width	= static_cast<int>(floor(static_cast<double>(Options::newDisplayWidth * pixelRatioY)));
+			height	= static_cast<int>(floor(static_cast<double>(Options::newDisplayHeight)));
+			width	= std::max(
+							width,
+							static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_WIDTH) / pixelRatioX  * pixelRatioY)));
+			height	= std::max(
+							height,
+							static_cast<int>(floor(static_cast<double>(Screen::ORIGINAL_HEIGHT) * pixelRatioY)));
 		break;
 
 		case SCALE_ORIGINAL:

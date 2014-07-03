@@ -21,6 +21,7 @@
 #define OPENXCOM_MAPBLOCK_H
 
 #include <string>
+#include <vector>
 
 #include <yaml-cpp/yaml.h>
 
@@ -43,6 +44,7 @@ enum MapBlockType
 };
 
 
+class Position;
 class RuleTerrain;
 
 
@@ -68,6 +70,8 @@ private:
 	MapBlockType
 		_subType,
 		_type;
+
+	std::map<std::string, std::vector<Position> > _items;
 
 
 	public:
@@ -103,6 +107,8 @@ private:
 		void markUsed();
 		/// Resets remaining uses.
 		void reset();
+		///
+		std::map<std::string, std::vector<Position> >* getItems();
 };
 
 }

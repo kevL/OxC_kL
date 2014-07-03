@@ -278,7 +278,14 @@ BattlescapeState::BattlescapeState()
 
 	_turnCounter	= new TurnCounter(20, 5, 0, 0); // kL
 
-	setPalette("PAL_BATTLESCAPE");
+	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
+		setPalette("PAL_BATTLESCAPE");
+	else
+	{
+		std::stringstream ss;
+		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
+		setPalette(ss.str());
+	}
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
@@ -1208,7 +1215,8 @@ void BattlescapeState::stopScrolling(Action* action)
 inline void BattlescapeState::handle(Action* action)
 {
 	if (_game->getCursor()->getVisible()
-		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		|| (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
+			&& action->getDetails()->button.button == SDL_BUTTON_RIGHT))
 	{
 		State::handle(action);
 

@@ -173,13 +173,19 @@ ProductProgress Production::step(
 
 	if (done < getAmountProduced())
 	{
-		// std::min is required because we don't want to overproduce
-		int produced = std::min(
+
+		int produced;
+		if (!getInfiniteAmount()) // std::min is required because we don't want to overproduce
+		{
+			produced = std::min(
 							getAmountProduced(),
 							_amount)
 						- done;
-		int count = 0;
+		}
+		else
+			produced = getAmountProduced() - done;
 
+		int count = 0;
 		do
 		{
 			for (std::map<std::string,int>::const_iterator

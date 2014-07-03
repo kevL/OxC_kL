@@ -764,7 +764,8 @@ void Tile::ignite(int power)
 		if (burn != 255)
 		{
 			power = power - (burn / 10) + 15;
-			if (RNG::percent(power))
+			if (RNG::percent(power)
+				&& getFuel())
 			{
 //kL				_smoke = 15 - std::max(
 //kL									1,

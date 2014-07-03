@@ -4404,7 +4404,7 @@
 	<vector>
 	"../Engine/Surface.h"
 
-1404096023 f:\git\openxcom\src\interface\textbutton.h
+1404408769 f:\git\openxcom\src\interface\textbutton.h
 	"../Engine/InteractiveSurface.h"
 
 1404096023 f:\git\openxcom\src\interface\textedit.h
@@ -4729,7 +4729,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1404096022 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1404407064 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
 1404096022 f:\git\openxcom\src\battlescape\inventorystate.h
@@ -5044,7 +5044,7 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1404096022 f:\git\openxcom\src\basescape\newmanufactureliststate.h
+1404406576 f:\git\openxcom\src\basescape\newmanufactureliststate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -5099,7 +5099,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1404096022 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1404407018 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	<algorithm>
 	"ManufactureStartState.h"
@@ -5107,6 +5107,7 @@
 	"../Engine/Language.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
+	"../Interface/ComboBox.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
@@ -5898,7 +5899,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1404327681 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1404407258 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -5970,8 +5971,9 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1404096023 f:\git\openxcom\src\ruleset\mapblock.h
+1404409047 f:\git\openxcom\src\ruleset\mapblock.h
 	<string>
+	<vector>
 	<yaml-cpp/yaml.h>
 
 1404096023 f:\git\openxcom\src\ruleset\mapdataset.h
@@ -6018,7 +6020,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1404270068 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1404407417 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6410,7 +6412,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\map.cpp
+1404407498 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -11529,7 +11531,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1404096022 f:\git\openxcom\src\engine\options.inc.h
+1404405372 f:\git\openxcom\src\engine\options.inc.h
 
 1404096022 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
@@ -11933,7 +11935,7 @@
 1404141801 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1404238970 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1404374017 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	<sstream>
 	"../Engine/Game.h"

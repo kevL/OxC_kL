@@ -1030,6 +1030,8 @@ void TextList::clearList()
 		i->clear();
 	}
 
+	scrollUp(true, false);
+
 	_texts.clear();
 	_rows.clear();
 
