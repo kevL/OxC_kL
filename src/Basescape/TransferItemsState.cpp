@@ -83,7 +83,7 @@ TransferItemsState::TransferItemsState(
 		_crafts(),
 		_items(),
 		_sel(0),
-		_itemOffset(0),
+		_offset(0),
 		_total(0),
 
 		_pQty(0),
@@ -230,7 +230,7 @@ void TransferItemsState::init()
 	_iQty = 0;
 	_hasSci = 0;
 	_hasEng = 0;
-	_itemOffset = 0;
+	_offset = 0;
 
 
 	_btnOk->setVisible(false);
@@ -264,7 +264,7 @@ void TransferItemsState::init()
 							L"0",
 							L"0");
 
-			++_itemOffset;
+			++_offset;
 		}
 	}
 
@@ -289,7 +289,7 @@ void TransferItemsState::init()
 							L"0",
 							L"0");
 
-			++_itemOffset;
+			++_offset;
 		}
 	}
 
@@ -320,7 +320,7 @@ void TransferItemsState::init()
 						L"0",
 						ss2.str().c_str());
 
-		++_itemOffset;
+		++_offset;
 	}
 
 //kL	if (_baseFrom->getAvailableEngineers() > 0)
@@ -350,11 +350,11 @@ void TransferItemsState::init()
 						L"0",
 						ss2.str().c_str());
 
-		++_itemOffset;
+		++_offset;
 	}
 
-	Ruleset* rules = _game->getRuleset();
 	SavedGame* save = _game->getSavedGame();
+	Ruleset* rules = _game->getRuleset();
 	RuleItem
 		* itemRule,
 		* launcher,
@@ -528,8 +528,8 @@ void TransferItemsState::init()
                 if (itemRule->isFixed() // tank w/ Ordnance.
 					&& !itemRule->getCompatibleAmmo()->empty())
                 {
-					RuleItem* ammoRule = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
-					int clipSize = ammoRule->getClipSize();
+					clip = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
+					int clipSize = clip->getClipSize();
 					if (clipSize > 0)
 						item = item + L" (" + Text::formatNumber(clipSize) + L")";
                 }
@@ -860,7 +860,7 @@ int TransferItemsState::getCost() const
 
 	if (TRANSFER_ITEM == getType(_sel)) // Item cost
 	{
-		RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
+		RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _offset]);
 		if (rule->getType() == "STR_ALIEN_ALLOYS")
 			cost = 0.1;
 		else if (rule->getType() == "STR_ELERIUM_115")
@@ -1184,9 +1184,9 @@ void TransferItemsState::updateItemStrings()
 	{
 		_lstItems->setRowColor(_sel, Palette::blockOffset(13)+10);
 
-		if (_sel > _itemOffset)
+		if (_sel > _offset)
 		{
-			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
+			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _offset]);
 			if (rule->getBattleType() == BT_AMMO
 				|| (rule->getBattleType() == BT_NONE
 					&& rule->getClipSize() > 0))

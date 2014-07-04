@@ -58,7 +58,7 @@ private:
 		_hasEng,
 		_hasSci;
 	size_t
-		_itemOffset,
+		_offset,
 		_sel;
 	double
 		_distance,

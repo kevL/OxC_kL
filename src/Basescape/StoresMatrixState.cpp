@@ -34,6 +34,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 
@@ -63,18 +64,18 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 	_txtItem		= new Text(100, 9, 16, 25);
 
-	_txtBase_0		= new Text(21, 9, 116, 25);
-	_txtBase_1		= new Text(21, 9, 138, 25);
-	_txtBase_2		= new Text(21, 9, 160, 25);
-	_txtBase_3		= new Text(21, 9, 182, 25);
-	_txtBase_4		= new Text(21, 9, 204, 25);
-	_txtBase_5		= new Text(21, 9, 226, 25);
-	_txtBase_6		= new Text(21, 9, 248, 25);
-	_txtBase_7		= new Text(21, 9, 270, 25);
+	_txtBase_0		= new Text(23, 9, 116, 25);
+	_txtBase_1		= new Text(23, 9, 139, 25);
+	_txtBase_2		= new Text(23, 9, 162, 25);
+	_txtBase_3		= new Text(23, 9, 185, 25);
+	_txtBase_4		= new Text(23, 9, 208, 25);
+	_txtBase_5		= new Text(23, 9, 231, 25);
+	_txtBase_6		= new Text(23, 9, 254, 25);
+	_txtBase_7		= new Text(23, 9, 277, 25);
 
 	_lstMatrix		= new TextList(285, 136, 16, 36);
 
-	_btnOk			= new TextButton(288, 16, 16, 177);
+	_btnOk			= new TextButton(268, 16, 26, 177);
 
 	setPalette("PAL_BASESCAPE", 0);
 
@@ -120,74 +121,75 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	_txtItem->setText(tr("STR_ITEM"));
 
 
+	SavedGame* savedGame = _game->getSavedGame();
 	std::wstring wstr;
 
-	if (_game->getSavedGame()->getBases()->at(0)) // always true, but hey.
+	if (savedGame->getBases()->at(0)) // always true, but hey.
 	{
 		_txtBase_0->setColor(Palette::blockOffset(13)+10);
 
-		wstr = _game->getSavedGame()->getBases()->at(0)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(0)->getName().substr(0, 3);
 		_txtBase_0->setText(wstr);
 	}
 
-	if (_game->getSavedGame()->getBases()->at(1)) // always true, but hey.
+	if (savedGame->getBases()->at(1))
 	{
 		_txtBase_1->setColor(Palette::blockOffset(13)+10);
 
-		wstr = _game->getSavedGame()->getBases()->at(1)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(1)->getName().substr(0, 3);
 		_txtBase_1->setText(wstr);
 	}
 
-	if (_game->getSavedGame()->getBases()->at(2))
+	if (savedGame->getBases()->at(2))
 	{
 		_txtBase_2->setColor(Palette::blockOffset(13)+10);
 
-		wstr = _game->getSavedGame()->getBases()->at(2)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(2)->getName().substr(0, 3);
 		_txtBase_2->setText(wstr);
 	}
 
-	if (_game->getSavedGame()->getBases()->at(3))
+	if (savedGame->getBases()->at(3))
 	{
 		_txtBase_3->setColor(Palette::blockOffset(13)+10);
 
-		wstr = _game->getSavedGame()->getBases()->at(3)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(3)->getName().substr(0, 3);
 		_txtBase_3->setText(wstr);
 	}
 
-	if (_game->getSavedGame()->getBases()->at(4))
+	if (savedGame->getBases()->at(4))
 	{
 		_txtBase_4->setColor(Palette::blockOffset(13)+10);
 
-		wstr = _game->getSavedGame()->getBases()->at(4)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(4)->getName().substr(0, 3);
 		_txtBase_4->setText(wstr);
 	}
 
-	if (_game->getSavedGame()->getBases()->at(5))
+	if (savedGame->getBases()->at(5))
 	{
 		_txtBase_5->setColor(Palette::blockOffset(13)+10);
 
-		wstr = _game->getSavedGame()->getBases()->at(5)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(5)->getName().substr(0, 3);
 		_txtBase_5->setText(wstr);
 	}
 
-	if (_game->getSavedGame()->getBases()->at(6))
+	if (savedGame->getBases()->at(6))
 	{
 		_txtBase_6->setColor(Palette::blockOffset(13)+10);
 
-		wstr = _game->getSavedGame()->getBases()->at(6)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(6)->getName().substr(0, 3);
 		_txtBase_6->setText(wstr);
 	}
 
-	if (_game->getSavedGame()->getBases()->at(7))
+	if (savedGame->getBases()->at(7))
 	{
 		_txtBase_7->setColor(Palette::blockOffset(13)+10);
 
-		wstr = _game->getSavedGame()->getBases()->at(7)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(7)->getName().substr(0, 3);
 		_txtBase_7->setText(wstr);
 	}
 
 	_lstMatrix->setColor(Palette::blockOffset(13)+10);
-	_lstMatrix->setColumns(9, 100, 22, 22, 22, 22, 22, 22, 22, 22);
+	_lstMatrix->setColumns(9, 100, 23, 23, 23, 23, 23, 23, 23, 23);
 	_lstMatrix->setSelectable(true);
 	_lstMatrix->setBackground(_window);
 
@@ -196,7 +198,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	int
 		row		= 0,
 		iter	= 0,
-		qty[8]	= { 0, 0, 0, 0, 0, 0, 0, 0 };
+		qty[8]	= {0, 0, 0, 0, 0, 0, 0, 0};
+	Uint8 color = Palette::blockOffset(13)+10; // blue
 
 	std::wostringstream
 		ss0,
@@ -208,23 +211,36 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		ss6,
 		ss7;
 
-	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
+	Ruleset* rules = _game->getRuleset();
+	RuleItem
+		* itemRule,
+		* launcher,
+		* clip;
+	RuleCraftWeapon* cwRule;
+
+	const std::vector<std::string>& items = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
 			i = items.begin();
 			i != items.end();
 			++i)
 	{
-		RuleItem* rule = _game->getRuleset()->getItem(*i);
-		isAmmo = false;
+		itemRule = rules->getItem(*i);
 
 		std::wstring item = tr(*i);
-		if (rule->getBattleType() == BT_AMMO
-			 || (rule->getBattleType() == BT_NONE
-				&& rule->getClipSize() > 0))
+		if (itemRule->getBattleType() == BT_AMMO
+			 || (itemRule->getBattleType() == BT_NONE
+				&& itemRule->getClipSize() > 0))
 		{
-			isAmmo = true;
+/*			if (itemRule->getBattleType() == BT_AMMO
+				&& itemRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+			{
+				int clipSize = itemRule->getClipSize();
+				if (clipSize > 1)
+					item = item + L" (" + Text::formatNumber(clipSize) + L")";
+			} */
 
 			item.insert(0, L"  ");
+			color = Palette::blockOffset(15)+6; // purple
 		}
 
 		ss0.str(L"");
@@ -239,8 +255,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		iter = 0;
 
 		for (std::vector<Base*>::const_iterator
-				b = _game->getSavedGame()->getBases()->begin();
-				b != _game->getSavedGame()->getBases()->end();
+				b = savedGame->getBases()->begin();
+				b != savedGame->getBases()->end();
 				++b)
 		{
 			qty[iter] = (*b)->getItems()->getItem(*i);
@@ -290,8 +306,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 						if ((*v)->getAmmo() != 255)
 						{
-							RuleItem* tankRule = _game->getRuleset()->getItem((*v)->getRules()->getType());
-							RuleItem* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+							RuleItem* tankRule = rules->getItem((*v)->getRules()->getType());
+							RuleItem* ammoRule = rules->getItem(tankRule->getCompatibleAmmo()->front());
 
 							std::wstring crVehic_a = tr(ammoRule->getType());
 
@@ -316,6 +332,57 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			if (qty[6] > 0) ss6 << qty[6];
 			if (qty[7] > 0) ss7 << qty[7];
 
+			bool craftOrdnance = false;
+			const std::vector<std::string>& craftWeaps = rules->getCraftWeaponsList();
+			for (std::vector<std::string>::const_iterator
+					j = craftWeaps.begin();
+					j != craftWeaps.end()
+						&& craftOrdnance == false;
+					++j)
+			{
+				// Special handling for treating craft weapons as items
+				cwRule = rules->getCraftWeapon(*j);
+
+				launcher = rules->getItem(cwRule->getLauncherItem());
+				clip = rules->getItem(cwRule->getClipItem());
+
+				if (launcher == itemRule)
+				{
+					craftOrdnance = true;
+/*					int clipSize = cwRule->getAmmoMax(); // Launcher
+					if (clipSize > 0)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")"; */
+				}
+				else if (clip == itemRule)
+				{
+					craftOrdnance = true;
+/*					int clipSize = clip->getClipSize(); // launcher Ammo
+					if (clipSize > 1)
+						item = item + L"s (" + Text::formatNumber(clipSize) + L")"; */
+				}
+			}
+
+/*			if (itemRule->isFixed() // tank w/ Ordnance.
+				&& !itemRule->getCompatibleAmmo()->empty())
+			{
+				clip = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
+				int clipSize = clip->getClipSize();
+				if (clipSize > 0)
+					item = item + L" (" + Text::formatNumber(clipSize) + L")";
+			} */
+
+			Uint8 color = Palette::blockOffset(13)+10; // blue
+			if (!savedGame->isResearched(itemRule->getType())				// not researched
+				&& (!savedGame->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
+					|| rules->getItem(*i)->getAlien()					// or is an alien
+					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
+					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
+				&& craftOrdnance == false)							// and is not craft ordnance
+			{
+				// well, that was !NOT! easy.
+				color = Palette::blockOffset(13)+5; // yellow
+			}
+
 			_lstMatrix->addRow(
 							9,
 							item.c_str(),
@@ -328,8 +395,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 							ss6.str().c_str(),
 							ss7.str().c_str());
 
-			if (isAmmo)
-				_lstMatrix->setRowColor(row, Palette::blockOffset(15)+6);
+			_lstMatrix->setRowColor(row, color);
 
 			++row;
 		}
