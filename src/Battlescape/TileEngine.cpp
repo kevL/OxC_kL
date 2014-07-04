@@ -3682,6 +3682,7 @@ int TileEngine::blockage(
 				else if (!visLike
 					&& (bigWall == Pathfinding::BIGWALL_NESW
 						|| bigWall == Pathfinding::BIGWALL_NWSE)
+					&& tile->getMapData(MapData::O_OBJECT)->stopLOS()
 					&& _powerE > -1
 					&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2)
 				{

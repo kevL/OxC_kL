@@ -188,6 +188,364 @@ TransferItemsState::TransferItemsState(
 	_lstItems->onRightArrowClick((ActionHandler)& TransferItemsState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)& TransferItemsState::lstItemsMousePress);
 
+/*	for (std::vector<Soldier*>::iterator
+			i = _baseFrom->getSoldiers()->begin();
+			i != _baseFrom->getSoldiers()->end();
+			++i)
+	{
+		if ((*i)->getCraft() == 0)
+		{
+			_baseQty.push_back(1);
+			_transferQty.push_back(0);
+			_destQty.push_back(0);
+			_soldiers.push_back(*i);
+
+			// kL_begin:
+			std::wostringstream woStr;
+			woStr << (*i)->getName();
+
+			if ((*i)->getWoundRecovery() > 0)
+				woStr << L" (" << (*i)->getWoundRecovery() << L" dy)";
+			// kL_end.
+
+			_lstItems->addRow(
+							4,
+//kL						(*i)->getName().c_str(),
+							woStr.str().c_str(), // kL
+							L"1",
+							L"0",
+							L"0");
+
+			++_itemOffset;
+		}
+	}
+
+	for (std::vector<Craft*>::iterator
+			i = _baseFrom->getCrafts()->begin();
+			i != _baseFrom->getCrafts()->end();
+			++i)
+	{
+		if ((*i)->getStatus() != "STR_OUT"
+			|| (Options::canTransferCraftsWhileAirborne
+				&& (*i)->getFuel() >= (*i)->getFuelLimit(_baseTo)))
+		{
+			_baseQty.push_back(1);
+			_transferQty.push_back(0);
+			_destQty.push_back(0);
+			_crafts.push_back(*i);
+
+			_lstItems->addRow(
+							4,
+							(*i)->getName(_game->getLanguage()).c_str(),
+							L"1",
+							L"0",
+							L"0");
+
+			++_itemOffset;
+		}
+	}
+
+//kL	if (_baseFrom->getAvailableScientists() > 0)
+	if (_baseFrom->getScientists() > 0) // kL
+	{
+//kL	_baseQty.push_back(_baseFrom->getAvailableScientists());
+		_baseQty.push_back(_baseFrom->getScientists()); // kL
+		_transferQty.push_back(0);
+//kL	_destQty.push_back(_baseTo->getAvailableScientists());
+		_destQty.push_back(_baseTo->getTotalScientists()); // kL
+		_hasSci = 1;
+
+		std::wostringstream
+			ss1,
+			ss2;
+//kL	ss1 << _baseFrom->getAvailableScientists();
+//kL	ss2 << _baseTo->getAvailableScientists();
+//		ss1 << _baseFrom->getScientists(); // kL
+//		ss2 << _baseTo->getScientists(); // kL
+		ss1 << _baseQty.back();
+		ss2 << _destQty.back();
+
+		_lstItems->addRow(
+						4,
+						tr("STR_SCIENTIST").c_str(),
+						ss1.str().c_str(),
+						L"0",
+						ss2.str().c_str());
+
+		++_itemOffset;
+	}
+
+//kL	if (_baseFrom->getAvailableEngineers() > 0)
+	if (_baseFrom->getEngineers() > 0) // kL
+	{
+//kL	_baseQty.push_back(_baseFrom->getAvailableEngineers());
+		_baseQty.push_back(_baseFrom->getEngineers()); // kL
+		_transferQty.push_back(0);
+//kL	_destQty.push_back(_baseTo->getAvailableEngineers());
+		_destQty.push_back(_baseTo->getTotalEngineers()); // kL
+		_hasEng = 1;
+
+		std::wostringstream
+			ss1,
+			ss2;
+//kL	ss1 << _baseFrom->getAvailableEngineers();
+//kL	ss2 << _baseTo->getAvailableEngineers();
+//		ss1 << _baseFrom->getEngineers(); // kL
+//		ss2 << _baseTo->getEngineers(); // kL
+		ss1 << _baseQty.back();
+		ss2 << _destQty.back();
+
+		_lstItems->addRow(
+						4,
+						tr("STR_ENGINEER").c_str(),
+						ss1.str().c_str(),
+						L"0",
+						ss2.str().c_str());
+
+		++_itemOffset;
+	}
+
+	Ruleset* rules = _game->getRuleset();
+	SavedGame* save = _game->getSavedGame();
+	RuleItem
+		* itemRule,
+		* launcher,
+		* clip;
+	RuleCraftWeapon* cwRule;
+
+	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
+	for (std::vector<std::string>::const_iterator
+			i = items.begin();
+			i != items.end();
+			++i)
+	{
+		int qty = _baseFrom->getItems()->getItem(*i);
+		if (qty > 0)
+		{
+			_baseQty.push_back(qty);
+			_transferQty.push_back(0);
+//kL		_destQty.push_back(_baseTo->getItems()->getItem(*i));
+			_items.push_back(*i);
+
+			// kL_begin:
+			std::wstring item = tr(*i);
+
+			int tQty = _baseTo->getItems()->getItem(*i); // Returns the quantity of an item in the container.
+
+			for (std::vector<Transfer*>::const_iterator
+					j = _baseTo->getTransfers()->begin();
+					j != _baseTo->getTransfers()->end();
+					++j)
+			{
+				std::wstring trItem = (*j)->getName(_game->getLanguage());
+				if (trItem == item)
+					tQty += (*j)->getQuantity();
+			}
+
+			// Add qty of items & vehicles on transport craft to Transfers, _baseTo screen stock.
+			for (std::vector<Craft*>::const_iterator
+					c = _baseTo->getCrafts()->begin();
+					c != _baseTo->getCrafts()->end();
+					++c)
+			{
+				if ((*c)->getRules()->getSoldiers() > 0) // is transport craft
+				{
+					for (std::map<std::string, int>::iterator
+							t = (*c)->getItems()->getContents()->begin();
+							t != (*c)->getItems()->getContents()->end();
+							++t)
+					{
+						std::wstring tranItem = tr(t->first);
+						if (tranItem == item)
+							tQty += t->second;
+					}
+				}
+
+				if ((*c)->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
+				{
+					for (std::vector<Vehicle*>::const_iterator
+							v = (*c)->getVehicles()->begin();
+							v != (*c)->getVehicles()->end();
+							++v)
+					{
+						std::wstring tranTank = tr((*v)->getRules()->getType());
+						if (tranTank == item)
+							tQty++;
+
+						if ((*v)->getAmmo() != 255)
+						{
+							RuleItem* tankRule = _game->getRuleset()->getItem((*v)->getRules()->getType());
+							RuleItem* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+
+							std::wstring tranTank_a = tr(ammoRule->getType());
+							if (tranTank_a == item)
+								tQty += (*v)->getAmmo();
+						}
+					}
+				}
+			}
+
+			_destQty.push_back(tQty);
+			// kL_end.
+
+			// kL_begin:
+			itemRule = rules->getItem(*i);
+
+			bool craftOrdnance = false;
+			const std::vector<std::string>& craftWeaps = rules->getCraftWeaponsList();
+			for (std::vector<std::string>::const_iterator
+					j = craftWeaps.begin();
+					j != craftWeaps.end()
+						&& craftOrdnance == false;
+					++j)
+			{
+				// Special handling for treating craft weapons as items
+				cwRule = rules->getCraftWeapon(*j);
+
+				launcher = rules->getItem(cwRule->getLauncherItem());
+				clip = rules->getItem(cwRule->getClipItem());
+
+				if (launcher == itemRule)
+				{
+					craftOrdnance = true;
+
+					int clipSize = cwRule->getAmmoMax(); // Launcher
+					if (clipSize > 0)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+				}
+				else if (clip == itemRule)
+				{
+					craftOrdnance = true;
+
+					int clipSize = clip->getClipSize(); // launcher Ammo
+					if (clipSize > 1)
+						item = item + L"s (" + Text::formatNumber(clipSize) + L")";
+				}
+			}
+
+			Uint8 color = Palette::blockOffset(13)+10; // blue
+			if (!save->isResearched(itemRule->getType())				// not researched
+				&& (!save->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
+					|| rules->getItem(*i)->getAlien()					// or is an alien
+					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
+					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
+				&& craftOrdnance == false)							// and is not craft ordnance
+			{
+				// well, that was !NOT! easy.
+				color = Palette::blockOffset(13)+5; // yellow
+			}
+			// kL_end.
+
+			std::wostringstream
+				ss1,
+				ss2;
+			ss1 << qty;
+			ss2 << tQty; // kL
+//kL			ss2 << _destQty.back();
+//			_lstItems->addRow( // kL
+//							4,
+//							item.c_str(),
+//							ss1.str().c_str(),
+//							L"0",
+//							ss2.str().c_str());
+//kL			std::wstring item = tr(*i);
+
+//			RuleItem* rule = _game->getRuleset()->getItem(*i);
+			if (itemRule->getBattleType() == BT_AMMO
+				|| (itemRule->getBattleType() == BT_NONE
+					&& itemRule->getClipSize() > 0))
+			{
+				if (itemRule->getBattleType() == BT_AMMO
+					&& itemRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+				{
+					int clipSize = itemRule->getClipSize();
+					if (clipSize > 1)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+				}
+
+				item.insert(0, L"  ");
+
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								ss1.str().c_str(),
+								L"0",
+								ss2.str().c_str());
+
+				if (color != Palette::blockOffset(13)+5) // yellow
+					color = Palette::blockOffset(15)+6; // purple
+			}
+			else
+			{
+                if (itemRule->isFixed() // tank w/ Ordnance.
+					&& !itemRule->getCompatibleAmmo()->empty())
+                {
+					RuleItem* ammoRule = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
+					int clipSize = ammoRule->getClipSize();
+					if (clipSize > 0)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+                }
+
+				_lstItems->addRow(
+								4,
+								item.c_str(),
+								ss1.str().c_str(),
+								L"0",
+								ss2.str().c_str());
+			}
+
+			_lstItems->setRowColor(_baseQty.size() - 1, color);
+		}
+	} */
+
+	_distance = getDistance();
+
+	_timerInc = new Timer(250);
+	_timerInc->onTimer((StateHandler)& TransferItemsState::increase);
+
+	_timerDec = new Timer(250);
+	_timerDec->onTimer((StateHandler)& TransferItemsState::decrease);
+}
+
+/**
+ *
+ */
+TransferItemsState::~TransferItemsState()
+{
+	delete _timerInc;
+	delete _timerDec;
+}
+
+/**
+ * Re-initialize the Transfer menu.
+ * Called when cancelling TransferConfirmState.
+ */
+void TransferItemsState::init()
+{
+	_lstItems->clearList();
+
+	_baseQty.clear();
+	_destQty.clear();
+	_transferQty.clear();
+
+	_soldiers.clear();
+	_crafts.clear();
+	_items.clear();
+
+	_sel = 0;
+	_total = 0;
+	_pQty = 0;
+	_cQty = 0;
+	_aQty = 0;
+	_iQty = 0;
+	_hasSci = 0;
+	_hasEng = 0;
+	_itemOffset = 0;
+
+
+	_btnOk->setVisible(false);
+
+	// from above, cTor.
 	for (std::vector<Soldier*>::iterator
 			i = _baseFrom->getSoldiers()->begin();
 			i != _baseFrom->getSoldiers()->end();
@@ -305,6 +663,14 @@ TransferItemsState::TransferItemsState(
 		++_itemOffset;
 	}
 
+	Ruleset* rules = _game->getRuleset();
+	SavedGame* save = _game->getSavedGame();
+	RuleItem
+		* itemRule,
+		* launcher,
+		* clip;
+	RuleCraftWeapon* cwRule;
+
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator
 			i = items.begin();
@@ -380,6 +746,54 @@ TransferItemsState::TransferItemsState(
 			_destQty.push_back(tQty);
 			// kL_end.
 
+			// kL_begin:
+			itemRule = rules->getItem(*i);
+
+			bool craftOrdnance = false;
+			const std::vector<std::string>& craftWeaps = rules->getCraftWeaponsList();
+			for (std::vector<std::string>::const_iterator
+					j = craftWeaps.begin();
+					j != craftWeaps.end()
+						&& craftOrdnance == false;
+					++j)
+			{
+				// Special handling for treating craft weapons as items
+				cwRule = rules->getCraftWeapon(*j);
+
+				launcher = rules->getItem(cwRule->getLauncherItem());
+				clip = rules->getItem(cwRule->getClipItem());
+
+				if (launcher == itemRule)
+				{
+					craftOrdnance = true;
+
+					int clipSize = cwRule->getAmmoMax(); // Launcher
+					if (clipSize > 0)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+				}
+				else if (clip == itemRule)
+				{
+					craftOrdnance = true;
+
+					int clipSize = clip->getClipSize(); // launcher Ammo
+					if (clipSize > 1)
+						item = item + L"s (" + Text::formatNumber(clipSize) + L")";
+				}
+			}
+
+			Uint8 color = Palette::blockOffset(13)+10; // blue
+			if (!save->isResearched(itemRule->getType())				// not researched
+				&& (!save->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
+					|| rules->getItem(*i)->getAlien()					// or is an alien
+					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
+					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
+				&& craftOrdnance == false)							// and is not craft ordnance
+			{
+				// well, that was !NOT! easy.
+				color = Palette::blockOffset(13)+5; // yellow
+			}
+			// kL_end.
+
 			std::wostringstream
 				ss1,
 				ss2;
@@ -393,78 +807,55 @@ TransferItemsState::TransferItemsState(
 //							L"0",
 //							ss2.str().c_str());
 //kL			std::wstring item = tr(*i);
-			RuleItem* rule = _game->getRuleset()->getItem(*i);
-			if (rule->getBattleType() == BT_AMMO
-				|| (rule->getBattleType() == BT_NONE
-					&& rule->getClipSize() > 0))
+
+//			RuleItem* rule = _game->getRuleset()->getItem(*i);
+			if (itemRule->getBattleType() == BT_AMMO
+				|| (itemRule->getBattleType() == BT_NONE
+					&& itemRule->getClipSize() > 0))
 			{
+				if (itemRule->getBattleType() == BT_AMMO
+					&& itemRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+				{
+					int clipSize = itemRule->getClipSize();
+					if (clipSize > 1)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+				}
+
 				item.insert(0, L"  ");
+
 				_lstItems->addRow(
 								4,
 								item.c_str(),
 								ss1.str().c_str(),
 								L"0",
 								ss2.str().c_str());
-				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15)+6);
+
+				if (color != Palette::blockOffset(13)+5) // yellow
+					color = Palette::blockOffset(15)+6; // purple
 			}
 			else
+			{
+                if (itemRule->isFixed() // tank w/ Ordnance.
+					&& !itemRule->getCompatibleAmmo()->empty())
+                {
+					RuleItem* ammoRule = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
+					int clipSize = ammoRule->getClipSize();
+					if (clipSize > 0)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+                }
+
 				_lstItems->addRow(
 								4,
 								item.c_str(),
 								ss1.str().c_str(),
 								L"0",
 								ss2.str().c_str());
+			}
+
+			_lstItems->setRowColor(_baseQty.size() - 1, color);
 		}
 	}
-
-	_distance = getDistance();
-
-	_timerInc = new Timer(250);
-	_timerInc->onTimer((StateHandler)& TransferItemsState::increase);
-
-	_timerDec = new Timer(250);
-	_timerDec->onTimer((StateHandler)& TransferItemsState::decrease);
-}
-
-/**
- *
- */
-TransferItemsState::~TransferItemsState()
-{
-	delete _timerInc;
-	delete _timerDec;
-}
-
-/**
- * Re-initialize the Transfer menu.
- * Called when cancelling TransferConfirmState.
- */
-void TransferItemsState::reinit()
-{
-	_lstItems->clearList();
-
-	_baseQty.clear();
-	_destQty.clear();
-	_transferQty.clear();
-
-	_soldiers.clear();
-	_crafts.clear();
-	_items.clear();
-
-	_sel = 0;
-	_total = 0;
-	_pQty = 0;
-	_cQty = 0;
-	_aQty = 0;
-	_iQty = 0;
-	_hasSci = 0;
-	_hasEng = 0;
-	_itemOffset = 0;
-
-
-	_btnOk->setVisible(false);
-
-	for (std::vector<Soldier*>::iterator
+/*	for (std::vector<Soldier*>::iterator
 			i = _baseFrom->getSoldiers()->begin();
 			i != _baseFrom->getSoldiers()->end();
 			++i)
@@ -668,14 +1059,16 @@ void TransferItemsState::reinit()
 				_lstItems->setRowColor(_baseQty.size() - 1, Palette::blockOffset(15)+6);
 			}
 			else
+			{
 				_lstItems->addRow(
 								4,
 								item.c_str(),
 								ss1.str().c_str(),
 								L"0",
 								ss2.str().c_str());
+			}
 		}
-	}
+	} */
 }
 
 /**

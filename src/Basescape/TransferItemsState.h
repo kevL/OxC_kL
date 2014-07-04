@@ -113,7 +113,7 @@ private:
 		~TransferItemsState();
 
 		/// kL. Re-initialize the Transfer menu, when cancelling TransferConfirmState.
-		void reinit(); // kL
+		void init(); // kL
 
 		/// Runs the timers.
 		void think();

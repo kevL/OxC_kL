@@ -665,7 +665,9 @@ void SellState::btnOkClick(Action*)
 						}
 					}
 					else
-						_base->getItems()->removeItem(_items[getItemIndex(i)], _qtys[i]);
+						_base->getItems()->removeItem(
+													_items[getItemIndex(i)],
+													_qtys[i]);
 				break;
 			}
 		}

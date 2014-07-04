@@ -64,20 +64,20 @@ NewManufactureListState::NewManufactureListState(
 	_window			= new Window(this, 320, 156, 0, 22, POPUP_BOTH);
 	_txtTitle		= new Text(300, 16, 10, 30);
 
-	_cbxCategory	= new ComboBox(this, 146, 16, 166, 46);
+//	_cbxCategory	= new ComboBox(this, 146, 16, 166, 46);
 
-	_txtItem		= new Text(80, 9, 16, 62);
-	_txtCategory	= new Text(80, 9, 172, 62);
+	_txtItem		= new Text(80, 9, 16, 46);
+	_txtCategory	= new Text(80, 9, 172, 46);
 
-	_lstManufacture	= new TextList(293, 72, 8, 70);
+	_lstManufacture	= new TextList(293, 96, 8, 55);
 
-	_btnCancel		= new TextButton(288, 16, 16, 147);
+	_btnCancel		= new TextButton(288, 16, 16, 154);
 
 	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
 	add(_txtTitle);
-	add(_cbxCategory);
+//	add(_cbxCategory);
 	add(_txtItem);
 	add(_txtCategory);
 	add(_lstManufacture);
@@ -115,7 +115,7 @@ NewManufactureListState::NewManufactureListState(
 					(ActionHandler)& NewManufactureListState::btnCancelClick,
 					Options::keyCancel);
 
-	_possibleProductions.clear();
+/*	_possibleProductions.clear();
 	_game->getSavedGame()->getAvailableProductions(
 												_possibleProductions,
 												_game->getRuleset(),
@@ -147,7 +147,7 @@ NewManufactureListState::NewManufactureListState(
 
 	_cbxCategory->setColor(Palette::blockOffset(15)+1);
 	_cbxCategory->setOptions(_catStrings);
-	_cbxCategory->onChange((ActionHandler)& NewManufactureListState::cbxCategoryChange);
+	_cbxCategory->onChange((ActionHandler)& NewManufactureListState::cbxCategoryChange); */
 }
 
 /**
@@ -175,7 +175,7 @@ void NewManufactureListState::btnCancelClick(Action*)
 */
 void NewManufactureListState::lstProdClick(Action*)
 {
-	RuleManufacture* rule;
+/*	RuleManufacture* rule;
 	for (std::vector<RuleManufacture*>::iterator
 			it = _possibleProductions.begin();
 			it != _possibleProductions.end();
@@ -187,9 +187,9 @@ void NewManufactureListState::lstProdClick(Action*)
 
 			break;
 		}
-	}
+	} */
 
-//	RuleManufacture* rule = _possibleProductions[_lstManufacture->getSelectedRow()];
+	RuleManufacture* rule = _possibleProductions[_lstManufacture->getSelectedRow()];
 	if (rule->getCategory() == "STR_CRAFT"
 		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
 	{
@@ -220,10 +220,10 @@ void NewManufactureListState::lstProdClick(Action*)
 /**
  * Updates the production list to match the category filter
  */
-void NewManufactureListState::cbxCategoryChange(Action*)
+/* void NewManufactureListState::cbxCategoryChange(Action*)
 {
 	fillProductionList();
-}
+} */
 
 /**
  * Fills the list of possible productions.
@@ -232,7 +232,7 @@ void NewManufactureListState::fillProductionList()
 {
 	_lstManufacture->clearList();
 	_possibleProductions.clear();
-	_displayedStrings.clear();
+//	_displayedStrings.clear();
 
 	_game->getSavedGame()->getAvailableProductions(
 												_possibleProductions,
@@ -244,7 +244,11 @@ void NewManufactureListState::fillProductionList()
 			it != _possibleProductions.end();
 			++it)
 	{
-		if ((*it)->getCategory().c_str() == _catStrings[_cbxCategory->getSelected()]
+		_lstManufacture->addRow(
+							2,
+							tr((*it)->getName()).c_str(),
+							tr((*it)->getCategory ()).c_str());
+/*		if ((*it)->getCategory().c_str() == _catStrings[_cbxCategory->getSelected()]
 			|| _catStrings[_cbxCategory->getSelected()] == "STR_ALL_ITEMS")
 		{
 			_lstManufacture->addRow(
@@ -252,7 +256,7 @@ void NewManufactureListState::fillProductionList()
 								tr((*it)->getName()).c_str(),
 								tr((*it)->getCategory ()).c_str());
 			_displayedStrings.push_back((*it)->getName().c_str());
-		}
+		} */
 	}
 }
 
