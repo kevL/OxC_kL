@@ -5561,7 +5561,7 @@
 1404096022 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1404429685 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1404442376 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	<cfloat>
 	<climits>
@@ -5689,7 +5689,7 @@
 1404096022 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1404271690 f:\git\openxcom\src\battlescape\pathfinding.h
+1404444424 f:\git\openxcom\src\battlescape\pathfinding.h
 	<vector>
 	"PathfindingNode.h"
 	"Position.h"
@@ -5796,7 +5796,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1404107515 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1404444495 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5881,7 +5881,7 @@
 	<string>
 	"BattleState.h"
 
-1404096022 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1404450633 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	<climits>
 	"BattlescapeGame.h"
 	"BattleState.h"
@@ -6565,7 +6565,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1404271764 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1404446149 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6718,7 +6718,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1404410982 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1404432725 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6857,7 +6857,7 @@
 1404096022 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1404443441 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6871,7 +6871,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1404348598 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1404445658 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"

@@ -118,6 +118,7 @@ void UnitWalkBState::init()
 		_preStepTurn = true;
 	}
 
+	doFallCheck(); // kL
 	//Log(LOG_INFO) << "UnitWalkBState::init() EXIT";
 }
 
@@ -351,7 +352,7 @@ bool UnitWalkBState::doStatusStand()
 		setNormalWalkSpeed();
 	}
 	else
-//kL		_parent->setStateInterval(0);
+//kL	_parent->setStateInterval(0);
 		_parent->setStateInterval(11); // kL
 	*/
 //	setNormalWalkSpeed(); // kL: Done in init()
@@ -418,16 +419,20 @@ bool UnitWalkBState::doStatusStand()
 //		}
 
 		Tile* tilePos = _parent->getSave()->getTile(_unit->getPosition());
-		bool gravLift = (dir >= _pf->DIR_UP
+		bool gravLift = dir >= _pf->DIR_UP
 						&& tilePos->getMapData(MapData::O_FLOOR)
-						&& tilePos->getMapData(MapData::O_FLOOR)->isGravLift());
+						&& tilePos->getMapData(MapData::O_FLOOR)->isGravLift();
 //						&& tileDest
 //						&& tileDest->getMapData(MapData::O_FLOOR)
 //						&& tileDest->getMapData(MapData::O_FLOOR)->isGravLift())
 		if (!gravLift)
 		{
-			if (_action.run)
+			if (_action.run // allow dash when moving vertically 1 tile (or more).
+				|| (_action.strafe
+					&& dir >= _pf->DIR_UP))
 			{
+				_unit->setDashing(true);	// will be removed either on next movement click
+											// or at end of Player turn.
 				tu = tu * 3 / 4;
 				energy = energy * 3 / 2;
 			}
@@ -768,9 +773,10 @@ bool UnitWalkBState::doStatusWalk()
 
 		_falling = fallCheck
 					&& _unit->getPosition().z != 0
-//kL					&& _unit->getTile()->hasNoFloor(tileBelow) // kL_note: Done above.
-					&& _unit->getArmor()->getMovementType() != MT_FLY; // -> sorta move to doStatusStand_end()
-//kL					&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
+//kL				&& _unit->getTile()->hasNoFloor(tileBelow) // kL_note: Done above.
+					&& (_unit->getArmor()->getMovementType() != MT_FLY // -> sorta move to doStatusStand_end()
+						|| _pf->isModALT());
+//kL				&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
 
 		if (_falling)
 		{
@@ -1164,10 +1170,13 @@ void UnitWalkBState::playMovementSound()
 			if (_unit->getWalkingPhase() == 1) // play default flying sound
 			{
 				if (_falling)
-					_parent->getResourcePack()->getSound( // thunk.
-														"BATTLE.CAT",
-														38)
-													->play();
+				{
+					if (groundCheck(1))
+						_parent->getResourcePack()->getSound( // thunk.
+															"BATTLE.CAT",
+															38)
+														->play();
+				}
 				else if (!_unit->isFloating())
 					_parent->getResourcePack()->getSound( // GravLift
 														"BATTLE.CAT",
@@ -1181,6 +1190,59 @@ void UnitWalkBState::playMovementSound()
 			}
 		}
 	}
+}
+
+/**
+ * kL. For determining if a flying unit turns flight off at start of movement.
+ * NOTE: _falling should always be false when this is called in init().
+ * NOTE: And unit must be capable of flight for this to be relevant.
+ * NOTE: This could get problemmatic if/when falling onto nonFloors like water,
+ *		 and/or if there is another unit on tileBelow.
+ */
+void UnitWalkBState::doFallCheck() // kL
+{
+	if (_unit->getArmor()->getMovementType() != MT_FLY
+		|| _unit->getPosition().z == 0
+		|| _pf->isModALT() == false
+		|| groundCheck() == true)
+	{
+		return;
+	}
+
+	_falling = true;
+}
+
+/**
+ * kL. Checks if there is ground below when unit is falling.
+ * NOTE: Pathfinding already has a function canFallDown() that could be used for
+ * a couple places here in UnitWalkBState; does not have 'descent' though.
+ @param descent - how many levels below current to check for ground (default 0)
+ */
+bool UnitWalkBState::groundCheck(int descent) // kL
+{
+	Tile* tBelow = NULL;
+	int size = _unit->getArmor()->getSize() - 1;
+	for (int
+			x = size;
+			x > -1;
+			x--)
+	{
+		for (int
+				y = size;
+				y > -1;
+				y--)
+		{
+			tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -descent - 1));
+			if (!_parent->getSave()->getTile(
+										_unit->getPosition() + Position(x, y, -descent))
+									->hasNoFloor(tBelow))
+			{
+				return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 }

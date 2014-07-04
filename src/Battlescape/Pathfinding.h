@@ -45,7 +45,8 @@ class Pathfinding
 private:
 	bool
 		_openDoor, // kL, to give accurate preview # when dashing through doors.
-		_modifierUsed,
+		_modALT,
+		_modCTRL,
 		_pathPreviewed,
 		_strafeMove;
 	int
@@ -193,8 +194,10 @@ private:
 		/// Determines whether the unit is going up a stairs.
 //kL	bool isOnStairs(const Position& startPosition, const Position& endPosition);
 
-		/// Gets the modifier setting.
-		bool isModifierUsed() const;
+		/// Gets the CTRL modifier setting.
+		bool isModCTRL() const;
+		/// Gets the ALT modifier setting.
+		bool isModALT() const;
 
 		/// Gets a reference to the path.
 		const std::vector<int>& getPath();

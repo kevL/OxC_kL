@@ -56,7 +56,8 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 		_pathPreviewed(false),
 		_strafeMove(false),
 		_totalTUCost(0),
-		_modifierUsed(false),
+		_modCTRL(false),
+		_modALT(false),
 		_movementType(MT_WALK),
 		_openDoor(false) // kL
 {
@@ -111,10 +112,13 @@ void Pathfinding::calculate(
 		int maxTUCost)
 {
 	//Log(LOG_INFO) << "Pathfinding::calculate()";
+	_unit = unit;
+
 	_totalTUCost = 0;
 	_path.clear();
 
-	_unit = unit;
+	_modALT = false;
+	_modCTRL = false;
 
 	// i'm DONE with these out of bounds errors.
 	// kL_note: I really don't care what you're "DONE" with.....
@@ -1899,39 +1903,31 @@ bool Pathfinding::previewPath(bool bRemove)
 											false);
 	}
 
+
+	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;
+	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
+
 	std::string armorType = _unit->getArmor()->getType();
 
-	_modifierUsed = (SDL_GetModState() & KMOD_CTRL) != 0;
 	bool
 		dash = Options::strafe
-				&& _modifierUsed
+				&& _modCTRL
 				&& size == 0
-				&& _strafeMove == false,	// kL
-//				&& _path.size() > 1,		// <- not exactly true. If moving around a corner +2 tiles, it
-											// will strafe (potential conflict). See WalkBState also or ...
-		// kL_begin:
-/*		if (_path.size() > 1
-			&& !
-				(_path.size() == 2
-					&& startPosition.x != endPosition.x
-					&& startPosition.y != endPosition.y))
-		{
-			_strafeMove = false;
-		} */ // kL_end.
-
-		bLaden		= armorType == "STR_PERSONAL_ARMOR_UC",
-		bPowered	= armorType == "STR_POWER_SUIT_UC",
-		bPowered2	= armorType == "STR_FLYING_SUIT_UC",
+				&& _strafeMove == false, // kL
+		bBody		= armorType == "STR_PERSONAL_ARMOR_UC",
+		bPower		= armorType == "STR_POWER_SUIT_UC",
+		bFlight		= armorType == "STR_FLYING_SUIT_UC",
 		gravLift	= false,
 		reserveOk	= false;
 		// kL_note: Ought to create a factor for those in ruleArmor class & RuleSets ( _burden ).
 		// Or 'enum' those, as in
-/* enum ArmorBurden
+/*
+enum ArmorBurthen
 {
 	AB_LOW,		// -1
-	AB_NORMAL,	// 0
-	AB_MEDIUM,	// 1
-	AB_HIGH		// 2
+	AB_NORMAL,	//  0
+	AB_MEDIUM,	//  1
+	AB_HIGH		//  2
 }; */
 
 	Tile* tile;
@@ -1971,13 +1967,13 @@ bool Pathfinding::previewPath(bool bRemove)
 			else
 				energy -= tu;
 
-			if (bLaden)
+			if (bBody)
 				energy -= 1;
-			else if (bPowered)
+			else if (bPower)
 			{
 				energy += 1;
 			}
-			else if (bPowered2)
+			else if (bFlight)
 			{
 				energy += 2;
 			}
@@ -2225,11 +2221,20 @@ void Pathfinding::setUnit(BattleUnit* unit)
 
 /**
  * Checks whether a modifier key was used to enable strafing or running.
- * @return, True if a modifier was used.
+ * @return, true if modifier was used
  */
-bool Pathfinding::isModifierUsed() const
+bool Pathfinding::isModCTRL() const
 {
-	return _modifierUsed;
+	return _modCTRL;
+}
+
+/**
+ * Checks whether a modifier key was used to enable forced walking.
+ * @return, true if modifier was used
+ */
+bool Pathfinding::isModALT() const
+{
+	return _modALT;
 }
 
 /**

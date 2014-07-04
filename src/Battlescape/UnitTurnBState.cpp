@@ -50,7 +50,7 @@ UnitTurnBState::UnitTurnBState(
 		BattleState(
 			parent,
 			action),
-		_unit(0),
+		_unit(NULL),
 		_turret(false)
 {
 	//Log(LOG_INFO) << "Create UnitTurnBState";
@@ -85,8 +85,8 @@ void UnitTurnBState::init()
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
 	_turret = _unit->getTurretType() != -1
-			&& (_action.strafe
-				|| _action.targeting);
+				&& (_action.strafe
+					|| _action.targeting);
 
 	if (_unit->getPosition().x != _action.target.x		// kL
 		|| _unit->getPosition().y != _action.target.y)	// kL
@@ -171,7 +171,7 @@ void UnitTurnBState::think()
 		_unit->turn(_turret); // -> STATUS_STANDING
 		bool newVis = _parent->getTileEngine()->calculateFOV(_unit);
 
-		_unit->setCache(0);
+		_unit->setCache(NULL);
 		_parent->getMap()->cacheUnit(_unit);
 
 		if ((newVis

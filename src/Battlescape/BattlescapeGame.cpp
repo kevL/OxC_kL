@@ -2337,10 +2337,12 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 		else if (playableUnitSelected())
 		{
-			bool modifierPressed = (SDL_GetModState() & KMOD_CTRL) != 0;
+			bool mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
+			bool mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0; // kL
 			if (bPreviewed
 				&& (_currentAction.target != pos
-					|| _save->getPathfinding()->isModifierUsed() != modifierPressed))
+					|| _save->getPathfinding()->isModCTRL() != mod_CTRL
+					|| _save->getPathfinding()->isModALT() != mod_ALT)) // kL
 			{
 				_save->getPathfinding()->removePreview();
 			}
@@ -2349,17 +2351,17 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			_currentAction.run = false;
 
 			_currentAction.strafe = Options::strafe
-									&& modifierPressed
+									&& mod_CTRL
 									&& _save->getSelectedUnit()->getTurretType() == -1;
 			if (_currentAction.strafe
 //				&& getPathfinding()->getStrafeMove())		// kL <- NO.
 //				&& getPathfinding()->getPath().size() > 1)	// kL <- yes, but think of the shuggle
 				&& _save->getTileEngine()->distance(
-													_currentAction.actor->getPosition(),
-													pos)
-												> 1)
+												_currentAction.actor->getPosition(),
+												pos)
+											> 1)
 			{
-				_currentAction.actor->setDashing(true); // kL
+//				_currentAction.actor->setDashing(true); // kL, do this in UnitWalkBState
 				_currentAction.run = true;
 				_currentAction.strafe = false;
 			}
@@ -2400,24 +2402,22 @@ void BattlescapeGame::primaryAction(const Position& pos)
 void BattlescapeGame::secondaryAction(const Position& pos)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::secondaryAction()";
-
 	_currentAction.actor = _save->getSelectedUnit();
 
 	Position unitPos = _currentAction.actor->getPosition();	// kL
 	if (pos == unitPos)										// kL
 	{
 		// could put just about anything in here Orelly.
-		_currentAction.actor = 0;							// kL
+		_currentAction.actor = NULL;						// kL
 
 		return;												// kL
 	}
 
 	// -= turn to or open door =-
 	_currentAction.target = pos;
-//kL	_currentAction.actor = _save->getSelectedUnit();
 	_currentAction.strafe = Options::strafe
-								&& (SDL_GetModState() & KMOD_CTRL) != 0
-								&& _save->getSelectedUnit()->getTurretType() > -1;
+							&& (SDL_GetModState() & KMOD_CTRL) != 0
+							&& _save->getSelectedUnit()->getTurretType() > -1;
 
 	statePushBack(new UnitTurnBState(
 									this,
