@@ -1737,6 +1737,8 @@ void SavedBattleGame::prepareNewTurn()
 							_objectiveDestroyed = true;
 					}
 				}
+
+				getTileEngine()->applyGravity(*i);
 			}
 		}
 	}
@@ -2473,11 +2475,21 @@ SavedGame* SavedBattleGame::getGeoscapeSave()
 }
 
 /**
- *
+ * Gets the depth of the battlescape.
+ * @return depth.
  */
-int SavedBattleGame::getDepth()
+int const SavedBattleGame::getDepth() const
 {
 	return _depth;
+}
+
+/**
+ * Sets the depth of the battlescape game.
+ * @param depth the intended depth 0-3.
+ */
+void SavedBattleGame::setDepth(int depth)
+{
+	_depth = depth;
 }
 
 }

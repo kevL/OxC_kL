@@ -27,6 +27,7 @@
 #include "ArticleStateItem.h"
 #include "ArticleStateText.h"
 #include "ArticleStateTextImage.h"
+#include "ArticleStateTFTD.h"
 #include "ArticleStateUfo.h"
 #include "ArticleStateVehicle.h"
 #include "UfopaediaStartState.h"
@@ -144,6 +145,9 @@ ArticleState* Ufopaedia::createArticleState(ArticleDefinition* article)
 //		break;
 		case UFOPAEDIA_TYPE_UFO:
 			return new ArticleStateUfo(dynamic_cast<ArticleDefinitionUfo*>(article));
+//		break;
+		case UFOPAEDIA_TYPE_TFTD:
+			return new ArticleStateTFTD(dynamic_cast<ArticleDefinitionTFTD *>(article));
 //		break;
 
 		default:

@@ -531,8 +531,8 @@ void Tile::setDiscovered(
 		}
 
 		// if light/visibility on tile changes, units and objects on it change light too
-		if (_unit != 0)
-			_unit->setCache(0);
+		if (_unit != NULL)
+			_unit->setCache(NULL);
 	}
 }
 

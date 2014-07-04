@@ -58,7 +58,8 @@ UnitSprite::UnitSprite(
 		int width,
 		int height,
 		int x,
-		int y)
+		int y,
+		bool helmet)
 	:
 		Surface(
 			width,
@@ -73,7 +74,8 @@ UnitSprite::UnitSprite(
 		_itemSurfaceB(NULL),
 		_part(0),
 		_animationFrame(0),
-		_drawingRoutine(0)
+		_drawingRoutine(0),
+		_helmet(helmet)
 {
 }
 
@@ -249,7 +251,7 @@ void UnitSprite::drawRoutine0()
 	}
 	else if (_drawingRoutine == 13)
 	{ */
-/*		if (_depth > 0)
+/*		if (_helmet)
 		{
 			die = 259; // aquanaut underwater death frame
 			maleTorso = 32; // aquanaut underwater ion armour torso
@@ -630,7 +632,8 @@ void UnitSprite::drawRoutine0()
 	Surface* newRightArm	= new Surface(*rightArm);
 
 	if (_unit->getGeoscapeSoldier()
-		&& Options::battleHairBleach)
+		&& Options::battleHairBleach
+		&& _drawingRoutine == 0)
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
 		if (look)

@@ -41,6 +41,12 @@ class UnitSprite
 {
 
 private:
+	bool _helmet;
+	int
+		_animationFrame,
+		_drawingRoutine,
+		_part;
+
 	BattleItem
 		* _itemA,
 		* _itemB;
@@ -49,10 +55,7 @@ private:
 		* _itemSurfaceA,
 		* _itemSurfaceB,
 		* _unitSurface;
-	int
-		_animationFrame,
-		_drawingRoutine,
-		_part;
+
 
 	/// Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
 	/// mutons (routine 10),
@@ -100,7 +103,8 @@ private:
 				int width,
 				int height,
 				int x,
-				int y);
+				int y,
+				bool helmet);
 		/// Cleans up the UnitSprite.
 		~UnitSprite();
 

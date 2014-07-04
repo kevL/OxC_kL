@@ -331,7 +331,12 @@ void Map::draw()
 /*kL	if (!_redraw)
 		return; */
 
-	Surface::draw();
+//	Surface::draw();
+	// normally we'd call for a Surface::draw();
+	// but we don't want to clear the background with colour 0, which is transparent (aka black)
+	// we use colour 15 because that actually corresponds to the colour we DO want in all variations of the xcom and tftd palettes.
+	_redraw = false;
+	clear(Palette::blockOffset(0)+15);
 
 	Tile* t = NULL;
 
@@ -2398,7 +2403,8 @@ void Map::cacheUnit(BattleUnit* unit)
 										unit->getStatus() == STATUS_AIMING? _spriteWidth * 2: _spriteWidth,
 										_spriteHeight,
 										0,
-										0);
+										0,
+										_save->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
 
 //kL	int parts = unit->getArmor()->getSize() == 1? 1: (unit->getArmor()->getSize() * 2);

@@ -1785,7 +1785,7 @@ void DebriefingState::recoverItems(
 							1,
 							(*it)->getUnit()->getValue() / 3); // kL
 
-					base->getItems()->addItem((*it)->getRules()->getName());
+					base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape());
 				}
 				else if ((*it)->getRules()->getBattleType() == BT_CORPSE
 					&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)

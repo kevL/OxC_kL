@@ -529,9 +529,9 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 											#2 - northwall
 											#3 - object (content) */
 										Tile* edgeTile = _battleSave->getTile(Position(
-																		posTraj.x + 1,
-																		posTraj.y,
-																		posTraj.z));
+																					posTraj.x + 1,
+																					posTraj.y,
+																					posTraj.z));
 										if (edgeTile) // show Tile EAST
 //kL										edgeTile->setDiscovered(true, 0);
 										// kL_begin:
@@ -571,9 +571,9 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										} // kL_end.
 
 										edgeTile = _battleSave->getTile(Position(
-																posTraj.x,
-																posTraj.y + 1,
-																posTraj.z));
+																			posTraj.x,
+																			posTraj.y + 1,
+																			posTraj.z));
 										if (edgeTile) // show Tile SOUTH
 //kL										edgeTile->setDiscovered(true, 1);
 										// kL_begin:
@@ -613,9 +613,9 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										}
 
 										edgeTile = _battleSave->getTile(Position(
-																posTraj.x - 1,
-																posTraj.y,
-																posTraj.z));
+																			posTraj.x - 1,
+																			posTraj.y,
+																			posTraj.z));
 										if (edgeTile) // show Tile WEST
 										{
 											//Log(LOG_INFO) << "calculateFOV() West edgeTile VALID";
@@ -638,9 +638,9 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										}
 
 										edgeTile = _battleSave->getTile(Position(
-																posTraj.x,
-																posTraj.y - 1,
-																posTraj.z));
+																			posTraj.x,
+																			posTraj.y - 1,
+																			posTraj.z));
 										if (edgeTile) // show Tile NORTH
 										{
 											//Log(LOG_INFO) << "calculateFOV() North edgeTile VALID";

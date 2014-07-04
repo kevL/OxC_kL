@@ -265,6 +265,35 @@ void ArticleDefinitionTextImage::load(
 /**
  * Constructor (only setting type of base class).
  */
+ArticleDefinitionTFTD::ArticleDefinitionTFTD()
+	:
+		ArticleDefinition(
+				UFOPAEDIA_TYPE_TFTD),
+				text_width(0)
+{
+}
+
+/**
+ * Loads the article definition from a YAML file.
+ * @param node YAML node.
+ * @param listOrder The list weight for this article.
+ */
+void ArticleDefinitionTFTD::load(
+		const YAML::Node& node,
+		int listOrder)
+{
+	ArticleDefinition::load(
+			node,
+			listOrder);
+
+	image_id	= node["image_id"].as<std::string>(image_id);
+	text		= node["text"].as<std::string>(text);
+	text_width	= node["text_width"].as<int>(text_width);
+}
+
+/**
+ * Constructor (only setting type of base class).
+ */
 ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility()
 	:
 		ArticleDefinition(UFOPAEDIA_TYPE_BASE_FACILITY)

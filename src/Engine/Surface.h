@@ -99,8 +99,8 @@ protected:
 		/// Runs surface functionality every cycle
 		virtual void think();
 
-		/// Clears the surface's contents.
-		void clear();
+		/// Clears the surface's contents with a specified colour.
+		void clear(Uint32 color = 0);
 		/// Draws the surface's graphic.
 		virtual void draw();
 		/// Blits this surface onto another one.

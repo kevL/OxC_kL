@@ -49,7 +49,9 @@ class RuleTerrain
 private:
 	int
 		_hemisphere,
-		_largeBlockLimit;
+		_largeBlockLimit,
+		_minDepth,
+		_maxDepth;
 
 	std::string _name;
 
@@ -108,6 +110,11 @@ private:
 
 		/// Gets road type odds.
 		std::vector<int> getRoadTypeOdds() const;
+
+		///
+		const int getMinDepth() const;
+		///
+		const int getMaxDepth() const;
 };
 
 }

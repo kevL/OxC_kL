@@ -307,30 +307,33 @@ private:
 		void resetTurnCounter();
 		/// Resets the visibility of all tiles on the map.
 		void resetTiles();
-		/// get an 11x11 grid of positions (-10 to +10) to check.
+		/// Gets an 11x11 grid of positions (-10 to +10) to check.
 		const std::vector<Position> getTileSearch();
-		/// check if the AI has engaged cheat mode.
+		/// Checks if the AI has engaged cheat mode.
 		bool isCheating();
-		/// get the reserved fire mode.
+		/// Gets the reserved fire mode.
 		BattleActionType getTUReserved() const;
-		/// set the reserved fire mode.
+		/// Sets the reserved fire mode.
 		void setTUReserved(BattleActionType reserved);
-		/// get whether we are reserving TUs to kneel.
+		/// Gets whether we are reserving TUs to kneel.
 		bool getKneelReserved() const;
-		/// set whether we are reserving TUs to kneel.
+		/// Sets whether we are reserving TUs to kneel.
 		void setKneelReserved(bool reserved);
-		/// give me access to the storage tiles vector.
+		/// Gives me access to the storage tiles vector.
 		std::vector<Position>& getStorageSpace();
-		/// move all the leftover items to random locations in the storage tiles vector.
+		/// Moves all the leftover items to random locations in the storage tiles vector.
 		void randomizeItemLocations(Tile* t);
-		/// get a reference to the baseModules map.
+		/// Gets a reference to the baseModules map.
 		std::vector<std::vector<std::pair<int, int> > >& getModuleMap();
-		/// calculate the number of map modules remaining
+		/// Calculates the number of map modules remaining
 		void calculateModuleMap();
-		/// a shortcut to the geoscape save.
+		/// Gets a shortcut to the geoscape save.
 		SavedGame* getGeoscapeSave();
-		///
-		int getDepth();
+
+		/// Gets the depth of the battlescape game.
+		int const getDepth() const;
+		/// Sets the depth of the battlescape game.
+		void setDepth(int depth);
 };
 
 }
