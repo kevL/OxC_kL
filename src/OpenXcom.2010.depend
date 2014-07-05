@@ -4724,7 +4724,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Vehicle.h"
 
-1404096022 f:\git\openxcom\src\basescape\craftequipmentstate.h
+1404584300 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -5502,7 +5502,7 @@
 	"../Savegame/Soldier.h"
 	"../Ruleset/RuleCraft.h"
 
-1404096022 source:f:\git\openxcom\src\basescape\storesstate.cpp
+1404579920 source:f:\git\openxcom\src\basescape\storesstate.cpp
 	"StoresState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -5514,6 +5514,7 @@
 	"../Interface/TextList.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 	"../Savegame/Base.h"
@@ -7855,7 +7856,7 @@
 	<string>
 	<vector>
 
-1404507241 source:f:\git\openxcom\src\geoscape\globe.cpp
+1404523875 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9501,7 +9502,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1404195174 source:f:\git\openxcom\src\savegame\craft.cpp
+1404581634 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -11490,7 +11491,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1404506590 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1404578912 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	<sstream>
 	"../Engine/Game.h"

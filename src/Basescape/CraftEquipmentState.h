@@ -47,15 +47,16 @@ class CraftEquipmentState
 {
 
 private:
+	int _tQty;
 	size_t
-		_craft,
+		_craftID,
 		_sel;
 
 	Base* _base;
 	Text
 		* _txtAvailable,
 		* _txtBaseLabel,
-//kL		* _txtCrew,
+//kL	* _txtCrew,
 		* _txtItem,
 		* _txtStores,
 		* _txtCraft,
@@ -81,7 +82,7 @@ private:
 		/// Creates the Craft Equipment state.
 		CraftEquipmentState(
 				Base* base,
-				size_t craft);
+				size_t craftID);
 		/// Cleans up the Craft Equipment state.
 		~CraftEquipmentState();
 

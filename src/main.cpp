@@ -104,7 +104,7 @@ int main(
 	// Comment this for faster exit.
 	delete game;
 
-	Log(LOG_INFO) << "OpenXcom is shutting down...."; // kL
+	Log(LOG_INFO) << "OpenXcom is shutting down."; // kL
 	return EXIT_SUCCESS;
 }
 

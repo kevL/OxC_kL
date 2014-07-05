@@ -194,7 +194,6 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	_lstMatrix->setBackground(_window);
 
 
-	bool isAmmo = false;
 	int
 		row		= 0,
 		iter	= 0,
@@ -274,7 +273,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 					qty[iter] += (*t)->getQuantity();
 			}
 
-			// Add qty of items & vehicles on transport craft to theMatrix.
+			// Add qty of items & vehicles on transport craft to da-Matrix.
 			for (std::vector<Craft*>::const_iterator
 					c = (*b)->getCrafts()->begin();
 					c != (*b)->getCrafts()->end();
@@ -310,7 +309,6 @@ StoresMatrixState::StoresMatrixState(Base* base)
 							RuleItem* ammoRule = rules->getItem(tankRule->getCompatibleAmmo()->front());
 
 							std::wstring crVehic_a = tr(ammoRule->getType());
-
 							if (crVehic_a == item)
 								qty[iter] += (*v)->getAmmo();
 						}
@@ -374,10 +372,10 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			Uint8 color = Palette::blockOffset(13)+10; // blue
 			if (!savedGame->isResearched(itemRule->getType())				// not researched
 				&& (!savedGame->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
-					|| rules->getItem(*i)->getAlien()					// or is an alien
-					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
-					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
-				&& craftOrdnance == false)							// and is not craft ordnance
+					|| rules->getItem(*i)->getAlien()							// or is an alien
+					|| itemRule->getBattleType() == BT_CORPSE					// or is a corpse
+					|| itemRule->getBattleType() == BT_NONE)					// or is not a battlefield item
+				&& craftOrdnance == false)									// and is not craft ordnance
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow

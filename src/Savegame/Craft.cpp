@@ -554,8 +554,7 @@ int Craft::getNumWeapons() const
 }
 
 /**
- * Returns the amount of soldiers from a list
- * that are currently attached to this craft.
+ * Returns the amount of soldiers from a list that are currently attached to this craft.
  * @return Number of soldiers.
  */
 int Craft::getNumSoldiers() const
