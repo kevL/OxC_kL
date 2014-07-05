@@ -1486,7 +1486,10 @@ void BattlescapeState::btnInventoryClick(Action*)
 void BattlescapeState::btnCenterClick(Action*)
 {
 	if (playableUnitSelected())
+	{
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		_map->refreshSelectorPosition();
+	}
 }
 
 /**
@@ -1496,7 +1499,10 @@ void BattlescapeState::btnCenterClick(Action*)
 void BattlescapeState::btnNextSoldierClick(Action*)
 {
 	if (allowButtons())
+	{
 		selectNextFactionUnit(true);
+		_map->refreshSelectorPosition();
+	}
 }
 
 /**
@@ -1526,7 +1532,10 @@ void BattlescapeState::btnPrevSoldierClick(Action*)
 void BattlescapeState::btnPrevStopClick(Action*)
 {
 	if (allowButtons())
+	{
 		selectPreviousFactionUnit(true, true);
+		_map->refreshSelectorPosition();
+	}
 }
 
 /**
