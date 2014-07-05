@@ -125,7 +125,7 @@ TimeTrigger GameTime::advance()
 	}
 
 
-	if (_second >= 60)
+	if (_second > 59)
 	{
 		_second = 0;
 
@@ -137,7 +137,7 @@ TimeTrigger GameTime::advance()
 			trigger = TIME_30MIN;
 	}
 
-	if (_minute >= 60)
+	if (_minute > 59)
 	{
 		_minute = 0;
 
@@ -145,7 +145,7 @@ TimeTrigger GameTime::advance()
 		trigger = TIME_1HOUR;
 	}
 
-	if (_hour >= 24)
+	if (_hour > 23)
 	{
 		_hour = 0;
 

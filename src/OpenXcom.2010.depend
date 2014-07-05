@@ -4534,7 +4534,7 @@
 1404096023 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1404368056 f:\git\openxcom\src\geoscape\geoscapestate.h
+1404509487 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<list>
 	"../Engine/State.h"
 
@@ -7695,7 +7695,7 @@
 1404096023 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1404498232 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1404521369 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7855,7 +7855,7 @@
 	<string>
 	<vector>
 
-1404369476 source:f:\git\openxcom\src\geoscape\globe.cpp
+1404507241 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9542,7 +9542,7 @@
 1404096023 source:f:\git\openxcom\src\savegame\equipmentlayoutitem.cpp
 	"EquipmentLayoutItem.h"
 
-1404096023 source:f:\git\openxcom\src\savegame\gametime.cpp
+1404510461 source:f:\git\openxcom\src\savegame\gametime.cpp
 	"GameTime.h"
 	"../Engine/Language.h"
 
@@ -11490,7 +11490,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1404096022 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1404506590 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -11503,6 +11503,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleCraft.h"
+	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 	"../Savegame/Base.h"

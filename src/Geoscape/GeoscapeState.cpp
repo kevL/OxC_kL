@@ -342,14 +342,18 @@ GeoscapeState::GeoscapeState()
 
 	_srfTime	= new Surface(63, 39, screenWidth - 63, screenHeight / 2 - 28);
 
-	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
+/*	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
 	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
-	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 26);
+	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 26); */
 //kL	_txtHour	= new Text(19, 17, screenWidth - 61, screenHeight / 2 - 26);
 //kL	_txtHourSep	= new Text(5,  17, screenWidth - 42, screenHeight / 2 - 26);
 //kL	_txtMin		= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
-//kL	_txtMinSep	= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
-//kL	_txtSec		= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
+//	_txtMinSep	= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
+//	_txtSec		= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
+	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
+	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
+	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 26);
+	_txtSec		= new Text(6, 9, screenWidth - 6, screenHeight / 2 - 30);
 
 	_txtWeekday	= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
 	_txtDay		= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
@@ -421,8 +425,8 @@ GeoscapeState::GeoscapeState()
 	add(_txtHour);
 	add(_txtHourSep);
 	add(_txtMin);
-//kL	add(_txtMinSep);
-//kL	add(_txtSec);
+//	add(_txtMinSep);
+	add(_txtSec);
 	add(_txtWeekday);
 	add(_txtDay);
 	add(_txtMonth);
@@ -699,12 +703,13 @@ GeoscapeState::GeoscapeState()
 	_txtMin->setColor(Palette::blockOffset(15)+2);
 
 //kL	if (Options::showFundsOnGeoscape) _txtMinSep->setSmall(); else _txtMinSep->setBig();
-//kL	_txtMinSep->setColor(Palette::blockOffset(15)+2);
-//kL	_txtMinSep->setText(L".");
+//	_txtMinSep->setColor(Palette::blockOffset(15)+2);
+//	_txtMinSep->setText(L".");
 
 //	_txtSec->setSmall();
 //kL	_txtSec->setBig();
-//kL	_txtSec->setColor(Palette::blockOffset(15)+2);
+	_txtSec->setText(L".");
+	_txtSec->setColor(Palette::blockOffset(15)+2);
 
 	_txtWeekday->setSmall();
 	_txtWeekday->setColor(Palette::blockOffset(15)+2);
@@ -901,9 +906,9 @@ void GeoscapeState::think()
 {
 	State::think();
 
-	_zoomInEffectTimer->think(this, 0);
-	_zoomOutEffectTimer->think(this, 0);
-	_dogfightStartTimer->think(this, 0);
+	_zoomInEffectTimer->think(this, NULL);
+	_zoomOutEffectTimer->think(this, NULL);
+	_dogfightStartTimer->think(this, NULL);
 
 
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
@@ -925,7 +930,7 @@ void GeoscapeState::think()
 		&& (!_zoomOutEffectTimer->isRunning()
 			|| _zoomOutEffectDone))
 	{
-		_gameTimer->think(this, 0); // Handle timers
+		_gameTimer->think(this, NULL); // Handle timers
 	}
 	else
 	{
@@ -953,20 +958,16 @@ void GeoscapeState::timeDisplay()
 	if (Options::showFundsOnGeoscape)
 		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 
-/*kL	int sec = _game->getSavedGame()->getTime()->getSecond();
-	sec = sec / 30 * 5;
-	if (sec == 2)
-		sec = 0; */
-
 	std::wostringstream
-//kL		ss1, // sec
+		ss1, // sec
 		ss2, // min
 		ss3, // hr
 		ss4, // dy
 		ss5; // yr.
+
 //	ss1 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
-//kL	ss1 << sec;
-//kL	_txtSec->setText(ss1.str());
+//	_txtSec->setText(ss1.str());
+	_txtSec->setVisible(_game->getSavedGame()->getTime()->getSecond() %15 == 0);
 
 	ss2 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
 	_txtMin->setText(ss2.str());

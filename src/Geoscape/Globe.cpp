@@ -384,15 +384,15 @@ Globe::Globe(
 
 	_mkCity = new Surface(3, 3);
 	_mkCity->lock();
-	_mkCity->setPixelColor(0, 0, 8); // green border
-	_mkCity->setPixelColor(1, 0, 8);
-	_mkCity->setPixelColor(2, 0, 8);
-	_mkCity->setPixelColor(0, 1, 8);
-//	_mkCity->setPixelColor(1, 1, 15); // black center
-	_mkCity->setPixelColor(2, 1, 8);
-	_mkCity->setPixelColor(0, 2, 8);
-	_mkCity->setPixelColor(1, 2, 8);
-	_mkCity->setPixelColor(2, 2, 8);
+	_mkCity->setPixelColor(0, 0, 172); // (10)+12 dark slate gray (as per city labels)
+	_mkCity->setPixelColor(1, 0, 172);
+	_mkCity->setPixelColor(2, 0, 172);
+	_mkCity->setPixelColor(0, 1, 172);
+	_mkCity->setPixelColor(1, 1, 14); // red center
+	_mkCity->setPixelColor(2, 1, 172);
+	_mkCity->setPixelColor(0, 2, 172);
+	_mkCity->setPixelColor(1, 2, 172);
+	_mkCity->setPixelColor(2, 2, 172);
 	_mkCity->unlock();
 
 	_mkFlyingUfo = new Surface(3, 3);
@@ -2321,13 +2321,13 @@ void Globe::drawPath(
 		double lat2,
 		bool flight) // kL_add.
 {
-	double length;
-	Sint16
-		count,
+	double
+		length,
 		x1,
 		y1,
 		x2,
 		y2;
+	Sint16 count;
 	CordPolar
 		p1,
 		p2;
