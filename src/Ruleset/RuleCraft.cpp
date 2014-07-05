@@ -52,7 +52,7 @@ RuleCraft::RuleCraft(const std::string& type)
 		_battlescapeTerrainData(NULL),
 		_spacecraft(false),
 		_listOrder(0),
-		_maxItems(80)
+		_maxItems(0)
 {
 }
 

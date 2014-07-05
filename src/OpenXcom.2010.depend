@@ -4690,7 +4690,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1404593252 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1404597653 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -9288,7 +9288,7 @@
 	<math.h>
 	"../Engine/RNG.h"
 
-1404590166 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
+1404597690 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
 	"RuleCraft.h"
 	"RuleTerrain.h"
 

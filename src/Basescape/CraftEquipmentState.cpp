@@ -714,7 +714,8 @@ void CraftEquipmentState::moveRightByValue(int change)
 	}
 	else // load item
 	{
-		if (_tQty + change > craft->getRules()->getMaxItems())
+		if (craft->getRules()->getMaxItems() > 0
+			&& _tQty + change > craft->getRules()->getMaxItems())
 		{
 			_timerRight->stop();
 
