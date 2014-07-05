@@ -36,6 +36,9 @@
 
 #include "../Interface/Text.h"
 
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -110,7 +113,7 @@ void SaveGameState::buildUi()
 	_txtStatus = new Text(320, 17, 0, 92);
 
 	if (_origin == OPT_BATTLESCAPE)
-		setPalette("PAL_BATTLESCAPE");
+		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	else
 		setPalette("PAL_GEOSCAPE", 6);
 

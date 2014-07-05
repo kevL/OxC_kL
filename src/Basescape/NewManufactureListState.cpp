@@ -175,7 +175,7 @@ void NewManufactureListState::btnCancelClick(Action*)
 */
 void NewManufactureListState::lstProdClick(Action*)
 {
-/*	RuleManufacture* rule;
+/*	RuleManufacture* rule = NULL;
 	for (std::vector<RuleManufacture*>::iterator
 			it = _possibleProductions.begin();
 			it != _possibleProductions.end();
@@ -183,7 +183,7 @@ void NewManufactureListState::lstProdClick(Action*)
 	{
 		if ((*it)->getName().c_str() == _displayedStrings[_lstManufacture->getSelectedRow()])
 		{
-			rule = (*it);
+			rule = *it;
 
 			break;
 		}

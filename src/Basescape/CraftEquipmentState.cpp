@@ -79,8 +79,8 @@ CraftEquipmentState::CraftEquipmentState(
 //		_tQty(0)
 {
 	Craft* craft = _base->getCrafts()->at(_craftID);
-	_tQty = craft->getNumEquipment(); // item capacity = 6 items per soldier space
-	Log(LOG_INFO) << "_tQty = " << _tQty;
+	_tQty = craft->getNumEquipment();
+	//Log(LOG_INFO) << "_tQty = " << _tQty;
 
 	bool
 		hasCrew = craft->getNumSoldiers() > 0,
@@ -580,9 +580,10 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	}
 	else
 	{
+		craft->getItems()->removeItem(
+									_items[_sel],
+									change);
 		_tQty -= change;
-
-		craft->getItems()->removeItem(_items[_sel], change);
 
 		if (_game->getSavedGame()->getMonthsPassed() > -1)
 			_base->getItems()->addItem(_items[_sel], change);
@@ -713,16 +714,31 @@ void CraftEquipmentState::moveRightByValue(int change)
 	}
 	else // load item
 	{
-		if ((craft->getRules()->getSoldiers() * 6 - _tQty - change) > -1)
+		if (_tQty + change > craft->getRules()->getMaxItems())
 		{
-			_tQty += change;
+			_timerRight->stop();
 
-			craft->getItems()->addItem(_items[_sel], change);
+			LocalizedText msg(tr(
+							"STR_NO_MORE_EQUIPMENT_ALLOWED",
+							craft->getRules()->getMaxItems()));
 
-			if (_game->getSavedGame()->getMonthsPassed() > -1)
-				_base->getItems()->removeItem(_items[_sel], change);
+			_game->pushState(new ErrorMessageState(
+												msg,
+												_palette,
+												Palette::blockOffset(15)+1,
+												"BACK04.SCR",
+												2));
+
+			change = craft->getRules()->getMaxItems() - _tQty;
 		}
-		// else WARNING, item capacity of X items.
+
+		craft->getItems()->addItem(
+								_items[_sel],
+								change);
+		_tQty += change;
+
+		if (_game->getSavedGame()->getMonthsPassed() > -1)
+			_base->getItems()->removeItem(_items[_sel], change);
 	}
 
 	updateQuantity();

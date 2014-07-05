@@ -65,9 +65,9 @@ ActionMenuState::ActionMenuState(
 	:
 		_action(action)
 {
-	setPalette("PAL_BATTLESCAPE");
-
 	_screen = false;
+
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	for (int
 			i = 0;

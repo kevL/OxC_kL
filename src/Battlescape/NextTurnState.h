@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class BattlescapeState;
+class Surface;
 class SavedBattleGame;
 class Text;
 class Timer;
@@ -47,6 +48,7 @@ private:
 
 	BattlescapeState* _state;
 	SavedBattleGame* _battleGame;
+	Surface* _bg;
 	Text
 		* _txtTitle,
 		* _txtTurn,
@@ -73,6 +75,11 @@ private:
 
 		/// Closes the window.
 		void close();
+
+		///
+		void resize(
+				int& dX,
+				int& dY);
 };
 
 }

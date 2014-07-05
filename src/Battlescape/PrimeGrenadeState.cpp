@@ -93,7 +93,10 @@ PrimeGrenadeState::PrimeGrenadeState(
 							y + ((i / 8) * 24) - 3);
 	}
 
-	setPalette("PAL_BATTLESCAPE");
+	if (inInventoryView)
+		setPalette("PAL_BATTLESCAPE");
+	else
+		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 /*	SDL_Rect square;
 	square.x = 0;

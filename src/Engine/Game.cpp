@@ -366,10 +366,12 @@ void Game::run()
 					Options::useOpenGL && Options::vSyncForOpenGL))
 			{
 				// Update our FPS delay time based on the time of the last draw.
-//kL			_timeUntilNextFrame = (1000.0f / Options::FPS) - (SDL_GetTicks() - _timeOfLastFrame);
-				_timeUntilNextFrame = static_cast<int>( // kL
-										(1000.0f / static_cast<float>(Options::FPS))
-										- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)));
+				int fps = SDL_GetAppState() & SDL_APPINPUTFOCUS? Options::FPS: Options::FPSInactive;
+				if (fps < 1)
+					fps = 1;
+				_timeUntilNextFrame = static_cast<int>(
+										(1000.0f / static_cast<float>(fps))
+											- static_cast<float>(SDL_GetTicks() - static_cast<Uint32>(_timeOfLastFrame)));
 			}
 			else
 				_timeUntilNextFrame = 0;

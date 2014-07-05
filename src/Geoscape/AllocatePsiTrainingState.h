@@ -68,8 +68,8 @@ private:
 		/// Cleans up the Psi Training state.
 		~AllocatePsiTrainingState();
 
-		/// refreshes the soldier-list.
-		void reinit(); // kL
+		/// kL. Refreshes the soldier-list.
+		void init(); // kL
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

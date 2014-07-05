@@ -234,7 +234,7 @@ private:
 		void setBackground(Surface* bg);
 
 		/// Gets the selected row in the list.
-		int getSelectedRow() const;
+		size_t getSelectedRow() const;
 
 		/// Sets the margin of the text list.
 		void setMargin(int margin);

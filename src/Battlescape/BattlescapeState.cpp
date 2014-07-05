@@ -278,14 +278,7 @@ BattlescapeState::BattlescapeState()
 
 	_turnCounter	= new TurnCounter(20, 5, 0, 0); // kL
 
-	if (_game->getSavedGame()->getSavedBattle()->getDepth() == 0)
-		setPalette("PAL_BATTLESCAPE");
-	else
-	{
-		std::stringstream ss;
-		ss << "PAL_BATTLESCAPE_" << _game->getSavedGame()->getSavedBattle()->getDepth();
-		setPalette(ss.str());
-	}
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));

@@ -58,10 +58,10 @@ namespace OpenXcom
  */
 CraftSoldiersState::CraftSoldiersState(
 		Base* base,
-		size_t craft)
+		size_t craftID)
 	:
 		_base(base),
-		_craft(craft)
+		_craftID(craftID)
 {
 	//Log(LOG_INFO) << "Create CraftSoldiersState";
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -119,8 +119,8 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	Craft *c = _base->getCrafts()->at(_craft);
-	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_CRAFT").arg(c->getName(_game->getLanguage())));
+	Craft* craft = _base->getCrafts()->at(_craftID);
+	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_CRAFT").arg(craft->getName(_game->getLanguage())));
 
 	_txtName->setColor(Palette::blockOffset(15)+6);
 	_txtName->setText(tr("STR_NAME_UC"));
@@ -148,6 +148,9 @@ CraftSoldiersState::CraftSoldiersState(
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftSoldiersState::lstRightArrowClick);
 //kL	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick, 0);
 	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick); // kL
+	_lstSoldiers->onMouseClick( // kL
+					(ActionHandler)& CraftSoldiersState::lstSoldiersClick,
+					SDL_BUTTON_RIGHT);
 //kL	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersMousePress);
 }
 
@@ -170,15 +173,14 @@ void CraftSoldiersState::btnOkClick(Action*)
 
 /**
  * kL. Unloads all soldiers from current transport craft.
- * NB: This relies on no two transport craft having the same name!!!!!
- * See, void CraftInfoState::edtCraftKeyPress(Action* action) etc.
+ * NB: This USED TO rely on no two transport craft having the same name!!!!!
  *
  * @param action, Pointer to an action.
  */
 void CraftSoldiersState::btnUnloadClick(Action*) // kL
 {
-	Craft* c = _base->getCrafts()->at(_craft);
-	std::wstring craft1 = c->getName(_game->getLanguage());
+	Craft* craft = _base->getCrafts()->at(_craftID);
+	std::wstring craft1 = craft->getName(_game->getLanguage());
 
 	// iterate over all soldiers at Base
 	for (std::vector<Soldier*>::iterator
@@ -186,15 +188,16 @@ void CraftSoldiersState::btnUnloadClick(Action*) // kL
 			i != _base->getSoldiers()->end();
 			++i)
 	{
-		if ((*i)->getCraft() == c) // if soldier is on this Craft, unload them
-			(*i)->setCraft(0);
+		if ((*i)->getCraft() == craft) // if soldier is on this Craft, unload them
+			(*i)->setCraft(NULL);
 	}
 
+	init(); // <-
 	// iterate over all listRows and change their stringText and lineColor
-	Uint8 color = Palette::blockOffset(13)+10;
+/*	Uint8 color = Palette::blockOffset(13)+10;
 	std::wstring craft2;
 
-	for (unsigned
+	for (size_t
 			row = 0;
 			row < _base->getSoldiers()->size();
 			++row)
@@ -207,8 +210,8 @@ void CraftSoldiersState::btnUnloadClick(Action*) // kL
 		}
 	}
 
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
-	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed())); */
 }
 
 /**
@@ -219,10 +222,10 @@ void CraftSoldiersState::init()
 	//Log(LOG_INFO) << ". CraftSoldiersState::init()";
 	State::init();
 
-	Craft* c = _base->getCrafts()->at(_craft);
+	Craft* craft = _base->getCrafts()->at(_craftID);
 	_lstSoldiers->clearList();
 
-	int row = 0;
+	size_t row = 0;
 	for (std::vector<Soldier*>::iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
@@ -236,7 +239,7 @@ void CraftSoldiersState::init()
 
 		Uint8 color;
 
-		if ((*i)->getCraft() == c)
+		if ((*i)->getCraft() == craft)
 			color = Palette::blockOffset(13);
 		else if ((*i)->getCraft() != 0)
 			color = Palette::blockOffset(15)+6;
@@ -250,8 +253,8 @@ void CraftSoldiersState::init()
 
 	_lstSoldiers->draw();
 
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
-	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
 
 }
 
@@ -261,19 +264,15 @@ void CraftSoldiersState::init()
  */
 void CraftSoldiersState::lstLeftArrowClick(Action* action)
 {
-/*	int row = _lstSoldiers->getSelectedRow();
+/*	size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		{
 			moveSoldierUp(action, row);
-		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		{
 			moveSoldierUp(action, row, true);
-		}
 	} */
-	int row = _lstSoldiers->getSelectedRow();
+	size_t row = _lstSoldiers->getSelectedRow();
 	//Log(LOG_INFO) << ". CraftSoldiersState::lstLeftArrowClick() row = " << row;
 
 /*	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
@@ -290,7 +289,7 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
 			_base->getSoldiers()->at(row - 1) = soldier;
 
-			if (row != static_cast<int>(_lstSoldiers->getScroll()))
+			if (row != _lstSoldiers->getScroll())
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
@@ -317,7 +316,7 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
  * @param row Selected soldier row.
  * @param max Move the soldier to the top?
  */
-/*kL void CraftSoldiersState::moveSoldierUp(Action* action, int row, bool max)
+/*kL void CraftSoldiersState::moveSoldierUp(Action* action, size_t row, bool max)
 {
 	Soldier* soldier = _base->getSoldiers()->at(row);
 	if (max)
@@ -331,12 +330,12 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 		_base->getSoldiers()->at(row - 1) = soldier;
 		if (row != _lstSoldiers->getScroll())
 		{
-			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
+			SDL_WarpMouse(
+						action->getLeftBlackBand() + action->getXMouse(),
+						action->getTopBlackBand() + action->getYMouse() - static_cast<Uint16>(8 * action->getYScale()));
 		}
 		else
-		{
 			_lstSoldiers->scrollUp(false);
-		}
 	}
 	init();
 } */
@@ -347,20 +346,16 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
  */
 void CraftSoldiersState::lstRightArrowClick(Action* action)
 {
-/*	int row = _lstSoldiers->getSelectedRow();
+/*	size_t row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
 	if (0 < numSoldiers && INT_MAX >= numSoldiers && row < (int)numSoldiers - 1)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-		{
 			moveSoldierDown(action, row);
-		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		{
 			moveSoldierDown(action, row, true);
-		}
 	} */
-	int row = _lstSoldiers->getSelectedRow();
+	size_t row = _lstSoldiers->getSelectedRow();
 	//Log(LOG_INFO) << ". CraftSoldiersState::lstRightArrowClick() row = " << row;
 	size_t numSoldiers = _base->getSoldiers()->size();
 /*	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
@@ -370,7 +365,7 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 	else */
 	if (numSoldiers > 0
 		&& numSoldiers <= INT_MAX
-		&& row < static_cast<int>(numSoldiers) - 1)
+		&& row < numSoldiers - 1)
 	{
 		Soldier* soldier = _base->getSoldiers()->at(row);
 
@@ -379,7 +374,7 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
 			_base->getSoldiers()->at(row + 1) = soldier;
 
-			if (row != static_cast<int>(_lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll()))
+			if (row != _lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll())
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
@@ -406,7 +401,7 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
  * @param row Selected soldier row.
  * @param max Move the soldier to the bottom?
  */
-/*kL void CraftSoldiersState::moveSoldierDown(Action* action, int row, bool max)
+/*kL void CraftSoldiersState::moveSoldierDown(Action* action, size_t row, bool max)
 {
 	Soldier* soldier = _base->getSoldiers()->at(row);
 	if (max)
@@ -420,12 +415,12 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 		_base->getSoldiers()->at(row + 1) = soldier;
 		if (row != _lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll())
 		{
-			SDL_WarpMouse(action->getLeftBlackBand() + action->getXMouse(), action->getTopBlackBand() + action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
+			SDL_WarpMouse(
+						action->getLeftBlackBand() + action->getXMouse(),
+						action->getTopBlackBand() + action->getYMouse() + static_cast<Uint16>(8 * action->getYScale()));
 		}
 		else
-		{
 			_lstSoldiers->scrollDown(false);
-		}
 	}
 	init();
 } */
@@ -443,17 +438,17 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 		return;
 	}
 
-	int row = _lstSoldiers->getSelectedRow();
-	Log(LOG_INFO) << ". CraftSoldiersState::lstSoldiersClick() row = " << row;
+	size_t row = _lstSoldiers->getSelectedRow();
+	//Log(LOG_INFO) << ". CraftSoldiersState::lstSoldiersClick() row = " << row;
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		Craft* c = _base->getCrafts()->at(_craft);
+		Craft* craft = _base->getCrafts()->at(_craftID);
 		Soldier* soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 
 		Uint8 color = Palette::blockOffset(13)+10;
 
-		if (soldier->getCraft() == c)
+		if (soldier->getCraft() == craft)
 		{
 			soldier->setCraft(NULL);
 			_lstSoldiers->setCellText(row, 2, tr("STR_NONE_UC"));
@@ -464,18 +459,18 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 		{
 			color = Palette::blockOffset(15)+6;
 		}
-		else if (c->getSpaceAvailable() > 0
+		else if (craft->getSpaceAvailable() > 0
 			&& soldier->getWoundRecovery() == 0)
 		{
-			soldier->setCraft(c);
-			_lstSoldiers->setCellText(row, 2, c->getName(_game->getLanguage()));
+			soldier->setCraft(craft);
+			_lstSoldiers->setCellText(row, 2, craft->getName(_game->getLanguage()));
 			color = Palette::blockOffset(13);
 		}
 
 		_lstSoldiers->setRowColor(row, color);
 
-		_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
-		_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
+		_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
+		_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		_game->pushState(new SoldierInfoState(
@@ -492,7 +487,7 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 	if (Options::changeValueByMouseWheel == 0)
 		return;
 
-	int row = _lstSoldiers->getSelectedRow();
+	size_t row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP
 		&& row > 0)

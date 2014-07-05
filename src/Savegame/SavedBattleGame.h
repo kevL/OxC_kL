@@ -44,6 +44,7 @@ class Pathfinding;
 class Position;
 class Ruleset;
 class SavedGame;
+class State;
 class Tile;
 class TileEngine;
 
@@ -334,6 +335,9 @@ private:
 		int const getDepth() const;
 		/// Sets the depth of the battlescape game.
 		void setDepth(int depth);
+
+		///
+		void setPaletteByDepth(State* state);
 };
 
 }

@@ -37,6 +37,9 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -71,7 +74,7 @@ MiniMapState::MiniMapState(
 
 	_txtLevel	= new Text(20, 25, 281, 73);
 
-	setPalette("PAL_BATTLESCAPE");
+	battleGame->setPaletteByDepth(this);
 
 	add(_bg);
 	add(_miniView);

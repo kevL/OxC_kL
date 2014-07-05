@@ -405,10 +405,10 @@ void TextList::addRow(
 		{
 			std::wstring buf = txt->getText();
 
-			int width = txt->getTextWidth();
-			while (width < static_cast<int>(_columns[i]))
+			size_t width = txt->getTextWidth();
+			while (width < _columns[i])
 			{
-				width += _font->getChar('.')->getCrop()->w + _font->getSpacing();
+				width += static_cast<size_t>(static_cast<int>(_font->getChar('.')->getCrop()->w) + _font->getSpacing());
 				buf += '.';
 			}
 
@@ -842,12 +842,12 @@ void TextList::setCondensed(bool condensed)
  * Returns the currently selected row if the text list is selectable.
  * @return, Selected row, -1 if none.
  */
-int TextList::getSelectedRow() const
+size_t TextList::getSelectedRow() const
 {
 	if (_rows.empty()
 		|| _selRow >= _rows.size())
 	{
-		return -1;
+		return -1; // so what is this, shouldn't it throw() or something instead.
 	}
 	else
 		return _rows[_selRow];
@@ -1368,18 +1368,10 @@ void TextList::mouseOver(Action* action, State* state)
 		int y = _font->getHeight() + _font->getSpacing();
 		_selRow = std::max(
 						0,
-/*						static_cast<int>(static_cast<double>(_scroll)
-						+ floor(action->getRelativeYMouse()
-								/ (static_cast<double>(y) * action->getYScale())))); */
 						static_cast<int>(_scroll)
 						+ static_cast<int>(
 										floor(action->getRelativeYMouse()
-										/ (static_cast<double>(y) * action->getYScale()))));
-/*						static_cast<int>(
-							static_cast<int>(_scroll)
-							+ static_cast<int>(
-											floor(action->getRelativeYMouse()
-											/ (static_cast<double>(y) * action->getYScale()))))); */
+											/ (static_cast<double>(y) * action->getYScale()))));
 
 		if (_selRow < _texts.size())
 		{

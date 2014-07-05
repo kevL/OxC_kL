@@ -84,8 +84,6 @@ ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD* defs)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr(defs->title));
 
-	int text_height = _txtTitle->getTextHeight();
-
 	_txtInfo = new Text(152, 64, 168, 40);
 	add(_txtInfo);
 

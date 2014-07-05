@@ -195,8 +195,6 @@ void Palette::setColors(
 		0,
 		sizeof(SDL_Color) * _count);
 
-//kL	Uint8 value[3];
-
 	for (int // Correct X-Com colors to RGB colors
 			i = 0;
 			i < _count;

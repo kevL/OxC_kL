@@ -2679,6 +2679,10 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 	getTileEngine()->applyGravity(newUnit->getTile());
 	getTileEngine()->calculateFOV(newUnit->getPosition());
+
+	if (unit->getFaction() == FACTION_PLAYER)
+		newUnit->setVisible(true);
+
 //	newUnit->getCurrentAIState()->think();
 
 	return newUnit;

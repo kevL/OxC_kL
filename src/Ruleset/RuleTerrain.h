@@ -90,7 +90,7 @@ private:
 		MapBlock* getMapBlock(const std::string& name);
 		/// Gets the mapdata object.
 		MapData* getMapData(
-				int* id,
+				unsigned int* id,
 				int* mapDataSetID) const;
 
 		/// Gets the maximum amount of large blocks in this terrain.

@@ -56,7 +56,7 @@ class ListGamesState
 			_showMsg,
 			_sortable,
 			_noUI;
-		int _firstValidRow;
+		size_t _firstValidRow;
 
 		OptionsOrigin _origin;
 
@@ -84,7 +84,7 @@ class ListGamesState
 			/// Creates the Saved Game state.
 			ListGamesState(
 					OptionsOrigin origin,
-					int firstValidRow,
+					size_t firstValidRow,
 					bool autoquick);
 			/// Cleans up the Saved Game state.
 			virtual ~ListGamesState();

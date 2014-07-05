@@ -106,7 +106,7 @@ void MedikitView::draw()
 		if (wound)
 			color = 3; // red
 
-		Surface* surface = set->getFrame (i);
+		Surface* surface = set->getFrame(i);
 		surface->blitNShade(
 						this,
 						Surface::getX(),

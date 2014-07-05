@@ -23,6 +23,7 @@
 #include <string>
 
 #include "SoldierArmorState.h"
+#include "SoldierInfoState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -127,6 +128,9 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstRightArrowClick);
 //kL	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick, 0);
 	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick); // kL
+	_lstSoldiers->onMouseClick( // kL
+					(ActionHandler)& CraftArmorState::lstSoldiersClick,
+					SDL_BUTTON_RIGHT);
 
 
 //kL	Craft* c = _base->getCrafts()->at(_craft);
@@ -256,14 +260,21 @@ void CraftArmorState::lstSoldiersClick(Action* action) // kL
 	} // kL_end.
 
 	Soldier* soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
-	if (!
-		(soldier->getCraft()
-			&& soldier->getCraft()->getStatus() == "STR_OUT"))
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_game->pushState(new SoldierArmorState(
+		if (!
+			(soldier->getCraft()
+				&& soldier->getCraft()->getStatus() == "STR_OUT"))
+		{
+			_game->pushState(new SoldierArmorState(
+												_base,
+												_lstSoldiers->getSelectedRow()));
+		}
+	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		_game->pushState(new SoldierInfoState(
 											_base,
 											_lstSoldiers->getSelectedRow()));
-	}
 }
 
 /**

@@ -43,7 +43,7 @@ class CraftSoldiersState
 {
 
 private:
-	size_t _craft;
+	size_t _craftID;
 
 	Base* _base;
 	Text
@@ -65,7 +65,7 @@ private:
 		/// Creates the Craft Soldiers state.
 		CraftSoldiersState(
 				Base* base,
-				size_t craft);
+				size_t craftID);
 		/// Cleans up the Craft Soldiers state.
 		~CraftSoldiersState();
 
@@ -85,14 +85,14 @@ private:
 		/// Moves a soldier up.
 /*		void moveSoldierUp(
 				Action* action,
-				int row,
+				size_t row,
 				bool max = false); */
 		/// Handler for clicking the Soldiers reordering button.
 		void lstRightArrowClick(Action* action);
 		/// Moves a soldier down.
 /*		void moveSoldierDown(
 				Action* action,
-				int row,
+				size_t row,
 				bool max = false); */
 		/// Handler for clicking the Soldiers list.
 		void lstSoldiersClick(Action* action);

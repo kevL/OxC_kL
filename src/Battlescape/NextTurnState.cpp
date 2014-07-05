@@ -32,6 +32,7 @@
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Timer.h"
 
 #include "../Menu/SaveGameState.h"
@@ -70,16 +71,32 @@ NextTurnState::NextTurnState(
 	_txtTurn	= new Text(320, 17, 0, 93);
 	_txtSide	= new Text(320, 17, 0, 109);
 	_txtMessage	= new Text(320, 17, 0, 149);
+	_bg			= new Surface(
+							_game->getScreen()->getWidth(),
+							_game->getScreen()->getHeight(),
+							0,
+							0);
 
-	setPalette("PAL_BATTLESCAPE");
+	battleGame->setPaletteByDepth(this);
 
 	add(_window);
 	add(_txtTitle);
 	add(_txtTurn);
 	add(_txtSide);
 	add(_txtMessage);
+	add(_bg);
 
 	centerAllSurfaces();
+
+	_bg->setX(0);
+	_bg->setY(0);
+	SDL_Rect rect;
+	rect.w = _bg->getWidth();
+	rect.h = _bg->getHeight();
+	rect.x = rect.y = 0;
+	_bg->drawRect(
+				&rect,
+				Palette::blockOffset(0)+15);
 
 	// make this screen line up with the hidden movement screen
 	int y = state->getMap()->getMessageY();
@@ -228,6 +245,19 @@ void NextTurnState::close()
 		else
 			_state->getGame()->getCursor()->setVisible(false); // kL
 	}
+}
+
+/**
+ *
+ */
+void NextTurnState::resize(
+		int& dX,
+		int& dY)
+{
+	State::resize(dX, dY);
+
+	_bg->setX(0);
+	_bg->setY(0);
 }
 
 }

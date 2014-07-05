@@ -2638,7 +2638,7 @@ int BattlescapeGenerator::loadMAP(
 	std::ostringstream filename;
 	filename << "MAPS/" << mapblock->getName() << ".MAP";
 
-	int terrainObjectID;
+	unsigned int terrainObjectID;
 
 	// Load file
 	std::ifstream mapFile(CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in | std::ios::binary);
@@ -2690,13 +2690,14 @@ int BattlescapeGenerator::loadMAP(
 				part < 4;
 				part++)
 		{
-//kL			terrainObjectID = (int)((unsigned char)value[part]);
-			terrainObjectID = static_cast<int>((static_cast<unsigned char>(value[part]))); // kL
+			terrainObjectID = static_cast<unsigned char>(value[part]);
 			if (terrainObjectID > 0)
 			{
 				int mapDataSetID = mapDataSetOffset;
-				int mapDataID = terrainObjectID;
-				MapData* md = terrain->getMapData(&mapDataID, &mapDataSetID);
+				unsigned int mapDataID = terrainObjectID;
+				MapData* md = terrain->getMapData(
+											&mapDataID,
+											&mapDataSetID);
 
 				_save->getTile(Position(x, y, z))->setMapData(
 															md,

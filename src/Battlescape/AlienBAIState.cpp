@@ -1423,7 +1423,7 @@ bool AlienBAIState::selectPointNearTarget(
 
 	int size = _unit->getArmor()->getSize();
 	int targetsize = target->getArmor()->getSize();
-	int distance = 1000;
+	unsigned int distance = 1000;
 
 	for (int
 			z = -1;

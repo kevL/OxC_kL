@@ -607,7 +607,8 @@ void OptionsVideoState::handle(Action* action)
 {
 	State::handle(action);
 
-	if (action->getDetails()->key.keysym.sym == SDLK_g
+	if (action->getDetails()->type == SDL_KEYDOWN
+		&& action->getDetails()->key.keysym.sym == SDLK_g
 		&& (SDL_GetModState() & KMOD_CTRL) != 0)
 	{
 		_btnLockMouse->setPressed(Options::captureMouse == SDL_GRAB_ON);

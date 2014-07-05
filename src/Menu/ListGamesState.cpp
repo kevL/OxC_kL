@@ -47,6 +47,7 @@
 namespace OpenXcom
 {
 
+///
 struct compareSaveName
 	:
 		public std::binary_function<SaveInfo&, SaveInfo&, bool>
@@ -73,6 +74,7 @@ struct compareSaveName
 };
 
 
+///
 struct compareSaveTimestamp
 	:
 		public std::binary_function<SaveInfo&, SaveInfo&, bool>
@@ -106,7 +108,7 @@ struct compareSaveTimestamp
  */
 ListGamesState::ListGamesState(
 		OptionsOrigin origin,
-		int firstValidRow,
+		size_t firstValidRow,
 		bool autoquick)
 	:
 		_origin(origin),
@@ -346,9 +348,9 @@ void ListGamesState::lstSavesMouseOver(Action*)
 	{
 		std::wstring wstr;
 
-		int sel = _lstSaves->getSelectedRow() - _firstValidRow;
+		size_t sel = _lstSaves->getSelectedRow() - _firstValidRow;
 		if (sel > -1
-			&& sel < static_cast<int>(_saves.size()))
+			&& sel < _saves.size())
 		{
 			wstr = _saves[sel].details;
 		}

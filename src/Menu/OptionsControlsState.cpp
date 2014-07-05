@@ -227,7 +227,7 @@ void OptionsControlsState::lstControlsClick(Action* action)
 
 	if (_selected != -1)
 	{
-		int selected = _selected;
+		size_t selected = static_cast<size_t>(_selected);
 
 		_lstControls->setCellColor(_selected, 0, _colorNormal);
 		_lstControls->setCellColor(_selected, 1, _colorNormal);

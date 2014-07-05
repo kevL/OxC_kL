@@ -48,6 +48,7 @@ private:
 		_costRent,
 		_costSell,
 		_listOrder,
+		_maxItems,
 		_radarRange,
 		_refuelRate,
 		_repairRate,
@@ -144,6 +145,9 @@ private:
 
 		/// Gets the deployment priority for the craft.
 		std::vector<std::vector<int> >& getDeployment();
+
+		///
+		int const getMaxItems() const;
 };
 
 }

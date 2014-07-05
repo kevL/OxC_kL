@@ -272,8 +272,8 @@ DogfightState::DogfightState(
 		_craftHeight(0),
 		_craftHeight_pre(0), // kL
 		_currentCraftDamageColor(13),
-		_interceptionsCount(0),
 		_interceptionNumber(0),
+		_interceptionsCount(0),
 		_x(0),
 		_y(0),
 		_minimizedIconX(0),
@@ -435,19 +435,19 @@ DogfightState::DogfightState(
 	_txtInterceptionNumber->setText(ss1.str());
 	_txtInterceptionNumber->setVisible(false);
 
-	for (int
+	for (size_t
 			i = 0;
-			i < _craft->getRules()->getWeapons();
+			i < static_cast<size_t>(_craft->getRules()->getWeapons());
 			++i)
 	{
-		CraftWeapon* w = _craft->getWeapons()->at(static_cast<size_t>(i));
+		CraftWeapon* w = _craft->getWeapons()->at(i);
 		if (w == NULL)
 			continue;
 
 		Surface
-			* weapon = 0,
-			* range = 0;
-		Text* ammo = 0;
+			* weapon = NULL,
+			* range = NULL;
+		Text* ammo = NULL;
 		int
 			x1,
 			x2;
@@ -1072,12 +1072,12 @@ void DogfightState::move()
 				++i;
 		}
 
-		for (int // handle weapons and craft distance.
+		for (size_t // handle weapons and craft distance.
 				i = 0;
-				i < _craft->getRules()->getWeapons();
+				i < static_cast<size_t>(_craft->getRules()->getWeapons());
 				++i)
 		{
-			CraftWeapon* w = _craft->getWeapons()->at(static_cast<size_t>(i));
+			CraftWeapon* w = _craft->getWeapons()->at(i);
 			if (w == NULL)
 				continue;
 

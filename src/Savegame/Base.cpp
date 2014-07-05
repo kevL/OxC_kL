@@ -912,7 +912,7 @@ double Base::getIgnoredStores()
 					w != (*c)->getWeapons()->end();
 					++w)
 			{
-				if (*w != 0
+				if (*w != NULL
 					&& (*w)->isRearming())
 				{
 					std::string clip = (*w)->getRules()->getClipItem();
@@ -926,7 +926,7 @@ double Base::getIgnoredStores()
 							{
 								int toLoad = static_cast<int>(ceil(
 												static_cast<double>((*w)->getRules()->getAmmoMax() - (*w)->getAmmo())
-												/ static_cast<double>(clipSize)));
+													/ static_cast<double>(clipSize)));
 
 								space += static_cast<double>(std::min(
 																	baseQty,

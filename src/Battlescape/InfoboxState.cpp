@@ -29,6 +29,9 @@
 #include "../Interface/Frame.h"
 #include "../Interface/Text.h"
 
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -45,7 +48,7 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 	_frame	= new Frame(260, 90, 30, 27);
 	_text	= new Text(250, 80, 35, 32);
 
-	setPalette("PAL_BATTLESCAPE");
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	add(_frame);
 	add(_text);

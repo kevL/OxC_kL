@@ -25,6 +25,8 @@
 #include "GeoscapeState.h"
 #include "PsiTrainingState.h"
 
+#include "../Basescape/SoldierInfoState.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -138,8 +140,11 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstRightArrowClick);
 //kL	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick, 0);
 	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick); // kL
+	_lstSoldiers->onMouseClick( // kL
+					(ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick,
+					SDL_BUTTON_RIGHT);
 
-	reinit(); // kL -> might not need this at all ... is init() called auto by the engine
+//	init(); // kL -> might not need this at all ... is init() called auto by the engine
 /*kL
 	int row = 0;
 	for (std::vector<Soldier*>::const_iterator
@@ -206,13 +211,13 @@ AllocatePsiTrainingState::~AllocatePsiTrainingState()
 /**
  * Resets the palette. uh, not really.
  */
-void AllocatePsiTrainingState::reinit()
+void AllocatePsiTrainingState::init()
 {
 	State::init(); // kL
 
 	_lstSoldiers->clearList();
 
-	int row = 0;
+	size_t row = 0;
 
 	for (std::vector<Soldier*>::const_iterator
 			soldier = _base->getSoldiers()->begin();
@@ -224,7 +229,6 @@ void AllocatePsiTrainingState::reinit()
 		std::wostringstream
 			ssStr,
 			ssSkl;
-
 
 		int minPsi = (*soldier)->getRules()->getMinStats().psiSkill; // kL
 
@@ -324,6 +328,10 @@ void AllocatePsiTrainingState::lstSoldiersClick(Action* action)
 			_base->getSoldiers()->at(_sel)->setPsiTraining();
 		}
 	}
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+		_game->pushState(new SoldierInfoState(
+											_base,
+											_sel));
 }
 
 /**
@@ -332,7 +340,7 @@ void AllocatePsiTrainingState::lstSoldiersClick(Action* action)
  */
 void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
 {
-	int row = _lstSoldiers->getSelectedRow();
+	size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
 		Soldier* soldier = _base->getSoldiers()->at(row);
@@ -342,7 +350,7 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
 			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
 			_base->getSoldiers()->at(row - 1) = soldier;
 
-			if (row != static_cast<int>(_lstSoldiers->getScroll()))
+			if (row != _lstSoldiers->getScroll())
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
@@ -360,7 +368,7 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
 		}
 	}
 
-	reinit();
+	init();
 }
 
 /**
@@ -369,11 +377,11 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
  */
 void AllocatePsiTrainingState::lstRightArrowClick(Action* action) // kL
 {
-	int row = _lstSoldiers->getSelectedRow();
+	size_t row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
 	if (numSoldiers > 0
 		&& numSoldiers <= INT_MAX
-		&& row < static_cast<int>(numSoldiers) - 1)
+		&& row < numSoldiers - 1)
 	{
 		Soldier* soldier = _base->getSoldiers()->at(row);
 
@@ -400,7 +408,7 @@ void AllocatePsiTrainingState::lstRightArrowClick(Action* action) // kL
 		}
 	}
 
-	reinit();
+	init();
 }
 
 }

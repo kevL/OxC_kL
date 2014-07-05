@@ -88,6 +88,7 @@ Ruleset::Ruleset(Game* game) // kL
 		_costScientist(0),
 		_timePersonnel(0),
 		_initialFunding(0),
+		_alienFuel(""),
 		_startingTime(
 			6,
 			1,
@@ -103,8 +104,7 @@ Ruleset::Ruleset(Game* game) // kL
 		_researchListOrder(0),
 		_manufactureListOrder(0),
 		_ufopaediaListOrder(0),
-		_invListOrder(0),
-		_alienFuel("")
+		_invListOrder(0)
 {
 	//Log(LOG_INFO) << "Create Ruleset";
 	std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored

@@ -152,7 +152,8 @@ NewGameState::~NewGameState()
  */
 void NewGameState::btnOkClick(Action*)
 {
-	GameDifficulty diff;
+	GameDifficulty diff = DIFF_BEGINNER;
+
 	if (_difficulty == _btnBeginner)
 	{
 		diff = DIFF_BEGINNER;
@@ -195,7 +196,7 @@ void NewGameState::btnOkClick(Action*)
  */
 void NewGameState::btnCancelClick(Action*)
 {
-	_game->setSavedGame(0);
+	_game->setSavedGame(NULL);
 	_game->popState();
 }
 

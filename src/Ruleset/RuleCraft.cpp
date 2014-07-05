@@ -51,7 +51,8 @@ RuleCraft::RuleCraft(const std::string& type)
 		_score(0),
 		_battlescapeTerrainData(NULL),
 		_spacecraft(false),
-		_listOrder(0)
+		_listOrder(0),
+		_maxItems(80)
 {
 }
 
@@ -116,10 +117,11 @@ void RuleCraft::load(
 
 	_spacecraft	= node["spacecraft"].as<bool>(_spacecraft);
 	_listOrder	= node["listOrder"].as<int>(_listOrder);
+
 	if (!_listOrder)
-	{
 		_listOrder = listOrder;
-	}
+
+	_maxItems = node["maxItems"].as<int>(_maxItems);
 }
 
 /**
@@ -330,6 +332,15 @@ int RuleCraft::getListOrder() const
 std::vector<std::vector<int> >& RuleCraft::getDeployment()
 {
 	return _deployment;
+}
+
+/**
+ * Gets the item limit for this craft.
+ * @return the item limit.
+ */
+int const RuleCraft::getMaxItems() const
+{
+	return _maxItems;
 }
 
 }

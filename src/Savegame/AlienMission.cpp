@@ -640,7 +640,7 @@ void AlienMission::ufoReachedWaypoint(
 						<< ", no city found.";
 				Log(LOG_FATAL) << error.str();
 				std::vector<MissionArea> cityZones = rules.getRegion(getRegion())->getMissionZones().at(RuleRegion::CITY_MISSION_ZONE).areas;
-				for (int
+				for (size_t
 						i = 0;
 						i != cityZones.size();
 						++i)

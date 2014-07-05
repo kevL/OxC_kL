@@ -37,6 +37,9 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -70,7 +73,7 @@ PauseState::PauseState(OptionsOrigin origin)
 
 
 	if (_origin == OPT_BATTLESCAPE)
-		setPalette("PAL_BATTLESCAPE");
+		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	else
 		setPalette("PAL_GEOSCAPE", 0);
 

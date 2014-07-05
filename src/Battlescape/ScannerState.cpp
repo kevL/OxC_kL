@@ -42,6 +42,8 @@
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -77,7 +79,7 @@ ScannerState::ScannerState(BattleAction* action)
 	if (_game->getScreen()->getDY() > 50)
 		_screen = false;
 
-	setPalette("PAL_BATTLESCAPE");
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	add(_scan);
 	add(_scannerView);

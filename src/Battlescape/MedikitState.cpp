@@ -42,6 +42,9 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 
+#include "../Savegame/SavedBattleGame.h"
+#include "../Savegame/SavedGame.h"
+
 
 namespace OpenXcom
 {
@@ -166,7 +169,7 @@ MedikitState::MedikitState(
 
 	_bg = new Surface(320, 200);
 
-	setPalette("PAL_BATTLESCAPE");
+	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
 	if (_game->getScreen()->getDY() > 50)
 	{

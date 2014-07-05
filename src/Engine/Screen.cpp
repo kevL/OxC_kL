@@ -478,12 +478,10 @@ void Screen::resetDisplay(bool resetVideo)
 	_clear.w = static_cast<Uint16>(getWidth());
 	_clear.h = static_cast<Uint16>(getHeight());
 
-	double pixelRatioX = 1.0;
 	double pixelRatioY = 1.0;
 	if (Options::nonSquarePixelRatio
 		&& !Options::allowResize)
 	{
-		pixelRatioX = 0.75;
 		pixelRatioY = 1.2;
 	}
 
