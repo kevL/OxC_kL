@@ -230,7 +230,7 @@ private:
 		/// Sets current load.
 		void setLoadCurrent(int load);
 		/// Gets current load.
-		int getLoadCurrent() const;
+		int getLoadCurrent();
 };
 
 }

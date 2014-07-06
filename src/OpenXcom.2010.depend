@@ -4562,7 +4562,7 @@
 1404096023 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1404612306 f:\git\openxcom\src\savegame\craft.h
+1404615195 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
 	"MovingTarget.h"
@@ -4690,7 +4690,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1404597653 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1404614896 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -9517,7 +9517,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1404612332 source:f:\git\openxcom\src\savegame\craft.cpp
+1404615195 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>

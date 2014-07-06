@@ -586,7 +586,9 @@ void CraftEquipmentState::moveLeftByValue(int change)
 //		_tQty -= change;
 
 		if (_game->getSavedGame()->getMonthsPassed() > -1)
-			_base->getItems()->addItem(_items[_sel], change);
+			_base->getItems()->addItem(
+									_items[_sel],
+									change);
 	}
 
 	updateQuantity();
@@ -715,7 +717,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 	}
 	else // load item
 	{
-		int extraSpace = (craft->getRules()->getSoldiers() - craft->getNumSoldiers() - craft->getNumVehicles() * 4) * 10;
+//		int extraSpace = (craft->getRules()->getSoldiers() - craft->getNumSoldiers() - craft->getNumVehicles() * 4) * 10;
 
 		if (craft->getRules()->getMaxItems() > 0
 //			&& _tQty + change > craft->getRules()->getMaxItems() + extraSpace)
@@ -738,13 +740,16 @@ void CraftEquipmentState::moveRightByValue(int change)
 			change = craft->getLoadCapacity() - craft->getLoadCurrent();
 		}
 
-		craft->getItems()->addItem(
-								_items[_sel],
-								change);
-//		_tQty += change;
+		if (change > 0)
+		{
+			craft->getItems()->addItem(
+									_items[_sel],
+									change);
+//			_tQty += change;
 
-		if (_game->getSavedGame()->getMonthsPassed() > -1)
-			_base->getItems()->removeItem(_items[_sel], change);
+			if (_game->getSavedGame()->getMonthsPassed() > -1)
+				_base->getItems()->removeItem(_items[_sel], change);
+		}
 	}
 
 	updateQuantity();
