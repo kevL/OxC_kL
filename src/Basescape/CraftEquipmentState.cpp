@@ -90,15 +90,17 @@ CraftEquipmentState::CraftEquipmentState(
 	_txtTitle		= new Text(300, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
-	_txtUsed		= new Text(110, 9, 16, 25);
-	_txtAvailable	= new Text(110, 9, 171, 25);
+//	_txtUsed		= new Text(110, 9, 16, 25);
+//	_txtAvailable	= new Text(110, 9, 171, 25);
+	_txtSpace		= new Text(110, 9, 16, 26);
+	_txtLoad		= new Text(110, 9, 171, 26);
 
-	_txtItem		= new Text(144, 9, 16, 33);
-	_txtStores		= new Text(50, 9, 171, 33);
-	_txtCraft		= new Text(50, 9, 256, 33);
+	_txtItem		= new Text(144, 9, 16, 36);
+	_txtStores		= new Text(50, 9, 171, 36);
+	_txtCraft		= new Text(50, 9, 256, 36);
 //kL	_txtCrew		= new Text(71, 9, 244, 24);
 
-	_lstEquipment	= new TextList(285, 128, 16, 42);
+	_lstEquipment	= new TextList(285, 128, 16, 45);
 
 	_btnClear		= new TextButton(94, 16, 16, 177);
 	_btnInventory	= new TextButton(94, 16, 113, 177);
@@ -110,8 +112,10 @@ CraftEquipmentState::CraftEquipmentState(
 	add(_window);
 	add(_txtTitle);
 	add(_txtBaseLabel);
-	add(_txtAvailable);
-	add(_txtUsed);
+//	add(_txtUsed);
+//	add(_txtAvailable);
+	add(_txtSpace);
+	add(_txtLoad);
 	add(_txtItem);
 	add(_txtStores);
 	add(_txtCraft);
@@ -162,13 +166,25 @@ CraftEquipmentState::CraftEquipmentState(
 	_txtCraft->setColor(Palette::blockOffset(15)+1);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_txtAvailable->setColor(Palette::blockOffset(15)+1);
-	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
-
-	_txtUsed->setColor(Palette::blockOffset(15)+1);
+/*	_txtUsed->setColor(Palette::blockOffset(15)+1);
 	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
+
+	_txtAvailable->setColor(Palette::blockOffset(15)+1);
+	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable())); */
+
+	_txtSpace->setColor(Palette::blockOffset(15)+1);
+	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
+	_txtSpace->setText(tr("STR_SPACE_USED_FREE_")
+					.arg(craft->getSpaceUsed())
+					.arg(craft->getSpaceAvailable()));
+
+	_txtLoad->setColor(Palette::blockOffset(15)+1);
+	_txtLoad->setSecondaryColor(Palette::blockOffset(13));
+	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
+					.arg(craft->getLoadCapacity())
+					.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
 
 //kL	_txtCrew->setColor(Palette::blockOffset(15)+1);
 //kL	_txtCrew->setSecondaryColor(Palette::blockOffset(13));
@@ -485,8 +501,14 @@ void CraftEquipmentState::updateQuantity()
 	_lstEquipment->setCellText(_sel, 1, ss.str());
 	_lstEquipment->setCellText(_sel, 2, ss2.str());
 
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
-	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
+//	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
+//	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
+	_txtSpace->setText(tr("STR_SPACE_USED_FREE_")
+					.arg(craft->getSpaceUsed())
+					.arg(craft->getSpaceAvailable()));
+	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
+					.arg(craft->getLoadCapacity())
+					.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
 }
 
 /**

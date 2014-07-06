@@ -73,48 +73,48 @@ BaseInfoState::BaseInfoState(
 
 	_txtPersonnel		= new Text(300, 9, 8, 30);
 	_txtSoldiers		= new Text(114, 9, 8, 41);
-	_numSoldiers		= new Text(40, 9, 126, 41);
+	_numSoldiers		= new Text(40, 9, 126, 42);
 	_barSoldiers		= new Bar(154, 5, 166, 43);
 	_txtEngineers		= new Text(114, 9, 8, 51);
-	_numEngineers		= new Text(40, 9, 126, 51);
+	_numEngineers		= new Text(40, 9, 126, 52);
 	_barEngineers		= new Bar(154, 5, 166, 53);
 	_txtScientists		= new Text(114, 9, 8, 61);
-	_numScientists		= new Text(40, 9, 126, 61);
+	_numScientists		= new Text(40, 9, 126, 62);
 	_barScientists		= new Bar(154, 5, 166, 63);
 
 	_txtSpace			= new Text(300, 9, 8, 72);
 	_txtQuarters		= new Text(114, 9, 8, 83);
-	_numQuarters		= new Text(40, 9, 126, 83);
+	_numQuarters		= new Text(40, 9, 126, 84);
 	_barQuarters		= new Bar(154, 5, 166, 85);
 	_txtStores			= new Text(114, 9, 8, 93);
-	_numStores			= new Text(40, 9, 126, 93);
+	_numStores			= new Text(40, 9, 126, 94);
 	_barStores			= new Bar(154, 5, 166, 95);
 	_txtLaboratories	= new Text(114, 9, 8, 103);
-	_numLaboratories	= new Text(40, 9, 126, 103);
+	_numLaboratories	= new Text(40, 9, 126, 104);
 	_barLaboratories	= new Bar(154, 5, 166, 105);
 	_txtWorkshops		= new Text(114, 9, 8, 113);
-	_numWorkshops		= new Text(40, 9, 126, 113);
+	_numWorkshops		= new Text(40, 9, 126, 114);
 	_barWorkshops		= new Bar(154, 5, 166, 115);
 
 	if (Options::storageLimitsEnforced)
 	{
 		_txtContainment = new Text(114, 9, 8, 123);
-		_numContainment = new Text(40, 9, 126, 123);
+		_numContainment = new Text(40, 9, 126, 124);
 		_barContainment = new Bar(154, 5, 166, 125);
 	}
 
 	_txtHangars			= new Text(114, 9, 8, Options::storageLimitsEnforced? 133: 123);
-	_numHangars			= new Text(40, 9, 126, Options::storageLimitsEnforced? 133: 123);
+	_numHangars			= new Text(40, 9, 126, Options::storageLimitsEnforced? 133: 124);
 	_barHangars			= new Bar(154, 5, 166, Options::storageLimitsEnforced? 135: 125);
 
 	_txtDefense			= new Text(114, 9, 8, Options::storageLimitsEnforced? 147: 138);
-	_numDefense			= new Text(40, 9, 126, Options::storageLimitsEnforced? 147: 138);
+	_numDefense			= new Text(40, 9, 126, Options::storageLimitsEnforced? 147: 139);
 	_barDefense			= new Bar(154, 5, 166, Options::storageLimitsEnforced? 149: 140);
 	_txtShortRange		= new Text(114, 9, 8, Options::storageLimitsEnforced? 157: 153);
-	_numShortRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 157: 153);
+	_numShortRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 157: 154);
 	_barShortRange		= new Bar(154, 5, 166, Options::storageLimitsEnforced? 159: 155);
 	_txtLongRange		= new Text(114, 9, 8, Options::storageLimitsEnforced? 167: 163);
-	_numLongRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 167: 163);
+	_numLongRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 167: 164);
 	_barLongRange		= new Bar(154, 5, 166, Options::storageLimitsEnforced? 169: 165);
 
 	setPalette("PAL_BASESCAPE");

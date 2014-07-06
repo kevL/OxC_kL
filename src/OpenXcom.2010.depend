@@ -4690,7 +4690,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1404614896 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1404622071 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -4725,7 +4725,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Vehicle.h"
 
-1404612694 f:\git\openxcom\src\basescape\craftequipmentstate.h
+1404619770 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -4809,7 +4809,7 @@
 	"../Savegame/CraftWeapon.h"
 	"../Savegame/SavedGame.h"
 
-1404609718 f:\git\openxcom\src\basescape\craftsoldiersstate.h
+1404620648 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
 1404096022 f:\git\openxcom\src\basescape\craftweaponsstate.h
@@ -4828,7 +4828,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404613035 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1404622071 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -5862,7 +5862,7 @@
 1404096022 f:\git\openxcom\src\battlescape\infoboxstate.h
 	"../Engine/State.h"
 
-1404594159 f:\git\openxcom\src\battlescape\nextturnstate.h
+1404624059 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
 1404096022 f:\git\openxcom\src\battlescape\unitdiebstate.h

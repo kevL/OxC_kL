@@ -49,13 +49,15 @@ private:
 
 	Base* _base;
 	Text
-		* _txtAvailable,
+//		* _txtAvailable,
 		* _txtBaseLabel,
 		* _txtCraft,
 		* _txtName,
 		* _txtRank,
 		* _txtTitle,
-		* _txtUsed;
+//		* _txtUsed,
+		* _txtSpace,
+		* _txtLoad;
 	TextButton
 		* _btnOk,
 		* _btnUnload;

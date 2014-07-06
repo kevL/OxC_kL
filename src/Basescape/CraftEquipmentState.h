@@ -54,14 +54,16 @@ private:
 
 	Base* _base;
 	Text
-		* _txtAvailable,
+//		* _txtAvailable,
 		* _txtBaseLabel,
 //kL	* _txtCrew,
 		* _txtItem,
 		* _txtStores,
 		* _txtCraft,
 		* _txtTitle,
-		* _txtUsed;
+//		* _txtUsed,
+		* _txtSpace,
+		* _txtLoad;
 	TextButton
 		* _btnClear,
 		* _btnInventory,

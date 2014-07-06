@@ -70,8 +70,10 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtTitle		= new Text(300, 17, 16, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
-	_txtUsed		= new Text(110, 9, 16, 24);
-	_txtAvailable	= new Text(110, 9, 160, 24);
+//	_txtUsed		= new Text(110, 9, 16, 24);
+//	_txtAvailable	= new Text(110, 9, 160, 24);
+	_txtSpace		= new Text(110, 9, 16, 24);
+	_txtLoad		= new Text(110, 9, 171, 24);
 
 	_txtName		= new Text(116, 9, 16, 33);
 	_txtRank		= new Text(93, 9, 140, 33);
@@ -87,8 +89,10 @@ CraftSoldiersState::CraftSoldiersState(
 	add(_window);
 	add(_txtTitle);
 	add(_txtBaseLabel);
-	add(_txtAvailable);
-	add(_txtUsed);
+//	add(_txtUsed);
+//	add(_txtAvailable);
+	add(_txtSpace);
+	add(_txtLoad);
 	add(_txtName);
 	add(_txtRank);
 	add(_txtCraft);
@@ -131,11 +135,17 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtCraft->setColor(Palette::blockOffset(15)+6);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
-	_txtAvailable->setColor(Palette::blockOffset(15)+6);
-	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
+//	_txtUsed->setColor(Palette::blockOffset(15)+6);
+//	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtUsed->setColor(Palette::blockOffset(15)+6);
-	_txtUsed->setSecondaryColor(Palette::blockOffset(13));
+//	_txtAvailable->setColor(Palette::blockOffset(15)+6);
+//	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
+
+	_txtSpace->setColor(Palette::blockOffset(15)+6);
+	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
+
+	_txtLoad->setColor(Palette::blockOffset(15)+6);
+	_txtLoad->setSecondaryColor(Palette::blockOffset(13));
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
@@ -261,9 +271,14 @@ void CraftSoldiersState::init()
 
 	_lstSoldiers->draw();
 
-	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
-	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
-
+//	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
+//	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
+	_txtSpace->setText(tr("STR_SPACE_USED_FREE_")
+					.arg(craft->getSpaceUsed())
+					.arg(craft->getSpaceAvailable()));
+	_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
+					.arg(craft->getLoadCapacity())
+					.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
 }
 
 /**
@@ -467,9 +482,9 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 		{
 			color = Palette::blockOffset(15)+6;
 		}
-//		else if (craft->getSpaceAvailable() > 0
-		else if (craft->getLoadCapacity() - craft->getLoadCurrent() > 9
-			&& soldier->getWoundRecovery() == 0)
+		else if (craft->getSpaceAvailable() > 0
+			&& soldier->getWoundRecovery() == 0
+			&& craft->getLoadCapacity() - craft->getLoadCurrent() > 9)
 		{
 			soldier->setCraft(craft);
 			_lstSoldiers->setCellText(row, 2, craft->getName(_game->getLanguage()));
@@ -478,8 +493,14 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 
 		_lstSoldiers->setRowColor(row, color);
 
-		_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
-		_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
+//		_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
+//		_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
+		_txtSpace->setText(tr("STR_SPACE_USED_FREE_")
+						.arg(craft->getSpaceUsed())
+						.arg(craft->getSpaceAvailable()));
+		_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
+						.arg(craft->getLoadCapacity())
+						.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
