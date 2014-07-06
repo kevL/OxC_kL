@@ -58,7 +58,7 @@ private:
 		_condensed,
 		_contrast,
 		_dot,
-		_scrolling,
+		_scrollable,
 		_selectable,
 		_wrap;
 	int
@@ -272,10 +272,10 @@ private:
 		void scrollDown(
 				bool toMax,
 				bool scrollByWheel = false);
-		/// Sets the list scrolling.
-		void setScrolling(
-				bool scrolling,
-//kL				int scrollPos = 4);
+		/// Sets the list scrollable.
+		void setScrollable(
+				bool scrollable,
+//kL			int scrollPos = 4);
 				int scrollPos = 0); // kL
 
 		/// Draws the text onto the text list.

@@ -68,14 +68,14 @@ TextList::TextList(
 		_condensed(false),
 		_contrast(false),
 		_wrap(false),
-		_bg(0),
-		_selector(0),
+		_bg(NULL),
+		_selector(NULL),
 		_margin(0),
-		_scrolling(true),
+		_scrollable(true),
 		_arrowLeft(),
 		_arrowRight(),
 		_arrowPos(-1),
-//kL		_scrollPos(4),
+//kL	_scrollPos(4),
 		_scrollPos(0), // kL
 		_arrowType(ARROW_VERTICAL),
 		_leftClick(0),
@@ -1047,7 +1047,7 @@ void TextList::scrollUp(
 		bool toMax,
 		bool scrollByWheel)
 {
-	if (!_scrolling)
+	if (!_scrollable)
 		return;
 
 	if (_rows.size() > _visibleRows
@@ -1076,7 +1076,7 @@ void TextList::scrollDown(
 		bool toMax,
 		bool scrollByWheel)
 {
-	if (!_scrolling)
+	if (!_scrollable)
 		return;
 
 	if (_rows.size() > _visibleRows
@@ -1130,11 +1130,11 @@ void TextList::updateVisible()
  * @param scrolling, True to allow scrolling, false otherwise.
  * @param scrollPos, Custom +/- x_offset for the scroll buttons.
  */
-void TextList::setScrolling(
-		bool scrolling,
+void TextList::setScrollable(
+		bool scrollable,
 		int scrollPos)
 {
-	_scrolling = scrolling;
+	_scrollable = scrollable;
 
 	if (_scrollPos != scrollPos)
 	{
@@ -1434,7 +1434,7 @@ void TextList::mouseOut(Action* action, State* state)
 }
 
 /**
- * Get the scroll depth.
+ * Gets the scroll depth.
  * @return, scroll depth
  */
 size_t TextList::getScroll()
@@ -1443,12 +1443,12 @@ size_t TextList::getScroll()
 }
 
 /**
- * Set the scroll depth.
+ * Sets the scroll depth.
  * @param scroll Set the scroll depth to this.
  */
 void TextList::scrollTo(size_t scroll)
 {
-	if (!_scrolling)
+	if (!_scrollable)
 		return;
 
 	_scroll = static_cast<size_t>(std::max(

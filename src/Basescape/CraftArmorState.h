@@ -43,7 +43,9 @@ class CraftArmorState
 {
 
 private:
-	size_t _craft;
+	size_t
+		_craftID,
+		_curRow;
 
 	Base* _base;
 	Text
@@ -61,7 +63,7 @@ private:
 		/// Creates the Craft Armor state.
 		CraftArmorState(
 				Base* base,
-				size_t craft);
+				size_t craftID);
 		/// Cleans up the Craft Armor state.
 		~CraftArmorState();
 

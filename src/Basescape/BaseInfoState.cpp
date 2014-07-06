@@ -495,7 +495,9 @@ void BaseInfoState::handleKeyPress(Action* action)
 		{
 			if (key == baseKeys[i])
 			{
+				_mini->setSelectedBase(i);
 				_base = _game->getSavedGame()->getBases()->at(i);
+				_state->setBase(_base);
 				init();
 
 				break;

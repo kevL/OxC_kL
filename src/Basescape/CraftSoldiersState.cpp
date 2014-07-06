@@ -61,7 +61,8 @@ CraftSoldiersState::CraftSoldiersState(
 		size_t craftID)
 	:
 		_base(base),
-		_craftID(craftID)
+		_craftID(craftID),
+		_curRow(0)
 {
 	//Log(LOG_INFO) << "Create CraftSoldiersState";
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -250,6 +251,14 @@ void CraftSoldiersState::init()
 
 		row++;
 	}
+
+	if (row > 0
+		&& _lstSoldiers->getScroll() >= row)
+	{
+		_lstSoldiers->scrollTo(0);
+	}
+	else if (_curRow > 0)
+		_lstSoldiers->scrollTo(_curRow);
 
 	_lstSoldiers->draw();
 
@@ -473,9 +482,13 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 		_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_curRow = _lstSoldiers->getScroll();
+
 		_game->pushState(new SoldierInfoState(
 											_base,
 											row));
+	}
 }
 
 /**

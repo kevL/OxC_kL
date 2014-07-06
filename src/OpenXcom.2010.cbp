@@ -3250,6 +3250,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ufopaedia/ArticleStateTFTD.cpp" />
+		<Unit filename="Ufopaedia/ArticleStateTFTD.h" />
 		<Unit filename="Ufopaedia/ArticleStateText.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

@@ -154,7 +154,7 @@ void ListSaveState::lstSavesPress(Action* action)
 		_edtSave->setVisible(true);
 		_edtSave->setFocus(true, false);
 
-		_lstSaves->setScrolling(false);
+		_lstSaves->setScrollable(false);
 		ListGamesState::disableSort();
 	}
 }

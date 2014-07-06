@@ -100,8 +100,8 @@ BuildFacilitiesState::BuildFacilitiesState(
 //	_lstFacilities->setColumns(1, 109);
 	_lstFacilities->setColumns(1, 109);
 	_lstFacilities->setSelectable(true);
-//kL	_lstFacilities->setScrolling(true, -12);
-//	_lstFacilities->setScrolling(false); // kL, removed when ScrollBar class introduced.
+//kL	_lstFacilities->setScrollable(true, -12);
+//	_lstFacilities->setScrollable(false); // kL, removed when ScrollBar class introduced.
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(3);
 	_lstFacilities->setWordWrap(true);

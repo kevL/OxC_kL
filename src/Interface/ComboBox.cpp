@@ -92,7 +92,7 @@ ComboBox::ComboBox(
 	_list->setSelectable(true);
 	_list->setBackground(_window);
 	_list->setAlign(ALIGN_CENTER);
-	_list->setScrolling(true, 0);
+	_list->setScrollable(true, 0);
 
 	toggle(true);
 }

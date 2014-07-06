@@ -62,7 +62,8 @@ namespace OpenXcom
 SoldiersState::SoldiersState(
 		Base* base)
 	:
-		_base(base)
+		_base(base),
+		_curRow(0)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 10, 11);
@@ -176,6 +177,7 @@ void SoldiersState::init()
 	_lstSoldiers->clearList();
 
 	size_t row = 0;
+
 	for (std::vector<Soldier*>::iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
@@ -198,6 +200,8 @@ void SoldiersState::init()
 	{
 		_lstSoldiers->scrollTo(0);
 	}
+	else if (_curRow > 0)
+		_lstSoldiers->scrollTo(_curRow);
 
 	_lstSoldiers->draw();
 }
@@ -254,6 +258,8 @@ void SoldiersState::lstSoldiersClick(Action* action)
 	{
 		return;
 	}
+
+	_curRow = _lstSoldiers->getScroll();
 
 	_game->pushState(new SoldierInfoState(
 										_base,

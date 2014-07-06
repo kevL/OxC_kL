@@ -58,7 +58,8 @@ namespace OpenXcom
  */
 AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	:
-		_sel(0)
+		_sel(0),
+		_curRow(0)
 {
 	_base = base;
 
@@ -276,6 +277,14 @@ void AllocatePsiTrainingState::init()
 		row++;
 	}
 
+	if (row > 0
+		&& _lstSoldiers->getScroll() >= row)
+	{
+		_lstSoldiers->scrollTo(0);
+	}
+	else if (_curRow > 0)
+		_lstSoldiers->scrollTo(_curRow);
+
 	_lstSoldiers->draw();
 }
 
@@ -329,9 +338,13 @@ void AllocatePsiTrainingState::lstSoldiersClick(Action* action)
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_curRow = _lstSoldiers->getScroll();
+
 		_game->pushState(new SoldierInfoState(
 											_base,
 											_sel));
+	}
 }
 
 /**

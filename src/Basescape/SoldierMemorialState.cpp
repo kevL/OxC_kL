@@ -201,6 +201,7 @@ void SoldierMemorialState::btnOkClick(Action*)
 void SoldierMemorialState::lstSoldiersClick(Action* action)
 {
 	size_t row = _game->getSavedGame()->getDeadSoldiers()->size() - 1 - _lstSoldiers->getSelectedRow();
+
 	_game->pushState(new SoldierDeadInfoState(row));
 }
 
