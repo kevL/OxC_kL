@@ -79,7 +79,7 @@ CraftEquipmentState::CraftEquipmentState(
 //		_tQty(0)
 {
 	Craft* craft = _base->getCrafts()->at(_craftID);
-	_tQty = craft->getNumEquipment();
+//	_tQty = craft->getNumEquipment();
 	//Log(LOG_INFO) << "_tQty = " << _tQty;
 
 	bool
@@ -583,7 +583,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 		craft->getItems()->removeItem(
 									_items[_sel],
 									change);
-		_tQty -= change;
+//		_tQty -= change;
 
 		if (_game->getSavedGame()->getMonthsPassed() > -1)
 			_base->getItems()->addItem(_items[_sel], change);
@@ -645,7 +645,8 @@ void CraftEquipmentState::moveRightByValue(int change)
 		int room = std::min(
 						craft->getRules()->getVehicles() - craft->getNumVehicles(),
 						craft->getSpaceAvailable() / size);
-		if (room > 0)
+		if (room > 0
+			&& craft->getLoadCapacity() - craft->getLoadCurrent() > 39)
 		{
 			change = std::min(room, change);
 
@@ -714,8 +715,11 @@ void CraftEquipmentState::moveRightByValue(int change)
 	}
 	else // load item
 	{
+		int extraSpace = (craft->getRules()->getSoldiers() - craft->getNumSoldiers() - craft->getNumVehicles() * 4) * 10;
+
 		if (craft->getRules()->getMaxItems() > 0
-			&& _tQty + change > craft->getRules()->getMaxItems())
+//			&& _tQty + change > craft->getRules()->getMaxItems() + extraSpace)
+			&& craft->getLoadCurrent() + change > craft->getLoadCapacity())
 		{
 			_timerRight->stop();
 
@@ -730,13 +734,14 @@ void CraftEquipmentState::moveRightByValue(int change)
 												"BACK04.SCR",
 												2));
 
-			change = craft->getRules()->getMaxItems() - _tQty;
+//			change = craft->getRules()->getMaxItems() - _tQty;
+			change = craft->getLoadCapacity() - craft->getLoadCurrent();
 		}
 
 		craft->getItems()->addItem(
 								_items[_sel],
 								change);
-		_tQty += change;
+//		_tQty += change;
 
 		if (_game->getSavedGame()->getMonthsPassed() > -1)
 			_base->getItems()->removeItem(_items[_sel], change);

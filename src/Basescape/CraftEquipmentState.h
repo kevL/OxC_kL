@@ -47,7 +47,7 @@ class CraftEquipmentState
 {
 
 private:
-	int _tQty;
+//	int _tQty;
 	size_t
 		_craftID,
 		_sel;

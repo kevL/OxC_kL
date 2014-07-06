@@ -56,6 +56,8 @@ private:
 		_lowFuel,
 		_mission;
 	int
+		_loadCap,
+		_loadCur,
 		_damage,
 		_fuel,
 		_id,
@@ -220,6 +222,15 @@ private:
 		void setInterceptionOrder(const int order);
 		/// Gets interception number.
 		int getInterceptionOrder() const;
+
+		/// Sets capacity load.
+		void setLoadCapacity(int load);
+		/// Gets capacity load.
+		int getLoadCapacity() const;
+		/// Sets current load.
+		void setLoadCurrent(int load);
+		/// Gets current load.
+		int getLoadCurrent() const;
 };
 
 }

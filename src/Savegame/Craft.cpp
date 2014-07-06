@@ -76,7 +76,8 @@ Craft::Craft(
 		_mission(false),
 		_inBattlescape(false),
 		_inDogfight(false),
-		_name(L"")
+		_name(L""),
+		_loadCur(0)
 {
 	_items = new ItemContainer();
 
@@ -91,7 +92,9 @@ Craft::Craft(
 		_weapons.push_back(0);
 	}
 
-	setBase(base);
+//	setBase(base);
+
+	_loadCap = _rules->getMaxItems() + _rules->getSoldiers() * 10;
 }
 
 /**
@@ -277,6 +280,8 @@ void Craft::load(
 
 	if (_inBattlescape)
 		setSpeed(0);
+
+	_loadCur = getNumEquipment() + getNumSoldiers() * 10 + getNumVehicles() * 40;
 }
 
 /**
@@ -1079,6 +1084,42 @@ void Craft::setInterceptionOrder(const int order)
 int Craft::getInterceptionOrder() const
 {
 	return _interceptionOrder;
+}
+
+/**
+ * Sets capacity load.
+ * @param load - capacity load
+ */
+void Craft::setLoadCapacity(int load)
+{
+	_loadCap = load;
+}
+
+/**
+ * Gets capacity load.
+ * @return, capacity load
+ */
+int Craft::getLoadCapacity() const
+{
+	return _loadCap;
+}
+
+/**
+ * Sets current load.
+ * @param load - current load
+ */
+void Craft::setLoadCurrent(int load)
+{
+	_loadCur = load;
+}
+
+/**
+ * Gets current load.
+ * @return, current load
+ */
+int Craft::getLoadCurrent() const
+{
+	return _loadCur;
 }
 
 }

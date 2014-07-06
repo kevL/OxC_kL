@@ -4562,7 +4562,7 @@
 1404096023 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1404096023 f:\git\openxcom\src\savegame\craft.h
+1404612306 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
 	"MovingTarget.h"
@@ -4725,7 +4725,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Vehicle.h"
 
-1404585479 f:\git\openxcom\src\basescape\craftequipmentstate.h
+1404612694 f:\git\openxcom\src\basescape\craftequipmentstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -4828,7 +4828,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404609718 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1404613035 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -5424,7 +5424,7 @@
 	<string>
 	"../Ruleset/Unit.h"
 
-1404247771 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1404608295 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	<iomanip>
 	<sstream>
@@ -9517,7 +9517,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1404591753 source:f:\git\openxcom\src\savegame\craft.cpp
+1404612332 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>

@@ -98,7 +98,6 @@ CraftSoldiersState::CraftSoldiersState(
 
 	centerAllSurfaces();
 
-
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
@@ -468,7 +467,8 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 		{
 			color = Palette::blockOffset(15)+6;
 		}
-		else if (craft->getSpaceAvailable() > 0
+//		else if (craft->getSpaceAvailable() > 0
+		else if (craft->getLoadCapacity() - craft->getLoadCurrent() > 9
 			&& soldier->getWoundRecovery() == 0)
 		{
 			soldier->setCraft(craft);
