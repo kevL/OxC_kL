@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1404604980 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1404625448 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -4851,7 +4851,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1404232247 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1404623062 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -6541,7 +6541,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1404594142 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1404624059 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6554,7 +6554,6 @@
 	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
-	"../Engine/Screen.h"
 	"../Engine/Timer.h"
 	"../Menu/SaveGameState.h"
 	"../Interface/Cursor.h"
@@ -6629,7 +6628,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1404630829 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"

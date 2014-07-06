@@ -327,19 +327,20 @@ bool UnitWalkBState::doStatusStand()
 //	_unit->setCache(NULL);					// kL
 //	_parent->getMap()->cacheUnit(_unit);	// kL
 
-	bool newVis = visForUnits();
-	if (newVis)
+//	bool newVis = visForUnits();
+//	if (newVis)
+	if (visForUnits())
 	{
 		//if (Options::traceAI) { Log(LOG_INFO) << "Uh-oh! Company!"; }
 		//Log(LOG_INFO) << "Uh-oh! STATUS_STANDING or PANICKING Company!";
 		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, postPathProcedures";
 		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, postPathProcedures";
 
-		_unit->_hidingForTurn = false; // clearly we're not hidden now
+		if (_unit->getFaction() != FACTION_PLAYER)	// kL, Can civies hideForTurn ?
+			_unit->_hidingForTurn = false;			// 'cause, clearly we're not hidden now!!1
 
-		_unit->setCache(NULL);	// kL. Calls to cacheUnit() are bogus without setCache(NULL) first...!
-								// although _cacheInvalid might be set elsewhere but i doubt it.
-		_parent->getMap()->cacheUnit(_unit);
+		_unit->setCache(NULL);					// kL. Calls to cacheUnit() are bogus without setCache(NULL) first...!
+		_parent->getMap()->cacheUnit(_unit);	// although _cacheInvalid might be set elsewhere but i doubt it.
 
 		postPathProcedures();
 
@@ -528,16 +529,20 @@ bool UnitWalkBState::doStatusStand()
 											_unit,
 											false,
 											dir);
-			if (door == 3)
+			if (door == 3) // ufo door still opening ...
+			{
 				//Log(LOG_INFO) << ". . . door #3";
 				return false; // don't start walking yet, wait for the ufo door to open
-			else if (door == 0)
+			}
+			else if (door == 0) // normal door
+			{
 				//Log(LOG_INFO) << ". . . door #0";
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play(); // normal door
-			else if (door == 1)
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play();
+			}
+			else if (door == 1) // ufo door
 			{
 				//Log(LOG_INFO) << ". . . door #1";
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play(); // ufo door
+				_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play();
 
 				return false; // don't start walking yet, wait for the ufo door to open
 			}
@@ -875,7 +880,7 @@ bool UnitWalkBState::doStatusStand_end()
 
 	// This needs to be done *before* the calculateFOV(pos)
 	// or else any newVis will be marked Visible before
-	// visForUnits() catches that new unit as !Visible.
+	// visForUnits() catches the new unit that is !Visible.
 	bool newVis = visForUnits();
 
 	// This calculates or 'refreshes' the Field of View
@@ -960,8 +965,9 @@ void UnitWalkBState::doStatusTurn()
 	// as it can be called from various other places in the code, ie:
 	// doors opening (& explosions/terrain destruction?), and that messes up the result.
 	// kL_note: But let's do it anyway!
-	bool newVis = visForUnits(); // kL
-	if (newVis) // kL
+//	bool newVis = visForUnits(); // kL
+//	if (newVis) // kL
+	if (visForUnits())
 	{
 		if (_preStepTurn)
 			_unit->spendTimeUnits(_preStepCost);
@@ -970,7 +976,8 @@ void UnitWalkBState::doStatusTurn()
 		//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . _newVis = TRUE, Abort path, popState";
 		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path, popState";
 
-		_unit->_hidingForTurn = false;
+		if (_unit->getFaction() != FACTION_PLAYER)
+			_unit->_hidingForTurn = false;
 
 		_pf->abortPath();
 		_unit->setStatus(STATUS_STANDING);
@@ -1065,7 +1072,8 @@ void UnitWalkBState::postPathProcedures()
 
 
 	_terrain->calculateUnitLighting();
-	_terrain->calculateFOV(_unit);
+//kL	_terrain->calculateFOV(_unit);
+	_terrain->calculateFOV(_unit->getPosition()); // kL, in case unit opened a door and stopped without doing Status_WALKING
 
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
@@ -1092,7 +1100,8 @@ bool UnitWalkBState::visForUnits()
 	}
 	else
 	{
-		newVis = _unit->getUnitsSpottedThisTurn().size() > _unitsSpotted
+		newVis = _terrain->calculateFOV(_unit) // <- 14.07.06
+					&& _unit->getUnitsSpottedThisTurn().size() > _unitsSpotted
 					&& !_action.desperate
 					&& !_unit->getCharging()
 					&& _parent->getPanicHandled();

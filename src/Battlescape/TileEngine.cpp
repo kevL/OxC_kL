@@ -4312,16 +4312,20 @@ int TileEngine::unitOpensDoor(
 			{
 				tile->animate(); // cfailde:doorcost : ensures frame advances for ufo doors to update TU cost
 
-				calculateFOV(unit->getPosition());
-
-				// look from the other side (may need check reaction fire)
-				std::vector<BattleUnit*>* visUnits = unit->getVisibleUnits();
-				for (size_t
-						i = 0;
-						i < visUnits->size();
-						++i)
+				if (rClick) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
 				{
-					calculateFOV(visUnits->at(i));
+					calculateFOV(unit->getPosition()); // calculate FoV for everyone within sight-range, incl. unit.
+
+					// look from the other side (may need check reaction fire)
+					// kL_note: This seems redundant, but hey maybe it removes now-unseen units from a unit's visible-units vector ....
+					std::vector<BattleUnit*>* visUnits = unit->getVisibleUnits();
+					for (size_t
+							i = 0;
+							i < visUnits->size();
+							++i)
+					{
+						calculateFOV(visUnits->at(i)); // calculate FoV for all units that are visible to this unit.
+					}
 				}
 			}
 			else

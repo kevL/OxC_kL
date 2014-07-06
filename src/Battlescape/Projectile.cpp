@@ -529,21 +529,21 @@ void Projectile::applyAccuracy(
 				if (targetUnit) // Shade can be from 0 (day) to 15 (night).
 				{
 					if (targetUnit->getFaction() == FACTION_HOSTILE)
-						acuPenalty = 0.016 * static_cast<double>(targetTile->getShade());
+						acuPenalty = 0.01 * static_cast<double>(targetTile->getShade());
 
 					// If targetUnit is kneeled, then accuracy reduced by ~6%.
 					// This is a compromise, because vertical deviation is ~2 times less.
 					if (targetUnit->isKneeled())
-						acuPenalty += 0.066;
+						acuPenalty += 0.07;
 				}
 			}
 			else // targeting tile-stuffs.
-				acuPenalty = 0.016 * static_cast<double>(_save->getGlobalShade());
+				acuPenalty = 0.01 * static_cast<double>(_save->getGlobalShade());
 
 			// kL_begin: modify rangedBasedAccuracy (shot-modes).
 			double baseDeviation = 0.0;
 			if (_action.actor->getFaction() == FACTION_PLAYER)
-				baseDeviation = 0.07; // give the poor aLiens an aiming advantage over xCom & Mc'd units
+				baseDeviation = 0.06; // give the poor aLiens an aiming advantage over xCom & Mc'd units
 
 			// NOTE: This should be done on the weapons themselves!!!!
 /*			switch (_action.type)
@@ -563,9 +563,9 @@ void Projectile::applyAccuracy(
 				break;
 
 			} */
-			baseDeviation += 0.16; // kL:instead of switch() above
+			baseDeviation += 0.15; // kL:instead of switch() above
 
-			baseDeviation /= accuracy - acuPenalty + 0.14;
+			baseDeviation /= accuracy - acuPenalty + 0.13;
 			baseDeviation = std::max(
 									0.01,
 									baseDeviation); // kL_end.
@@ -576,7 +576,7 @@ void Projectile::applyAccuracy(
 			// The angle deviations are spread using a normal distribution:
 			double
 				dH = RNG::boxMuller(0.0, baseDeviation / 6.0),			// horizontal miss in radians
-				dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.79)),	// vertical miss in radians
+				dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.78)),	// vertical miss in radians
 
 				te = atan2(
 						static_cast<double>(target->y - origin.y),
