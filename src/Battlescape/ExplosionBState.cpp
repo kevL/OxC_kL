@@ -72,7 +72,8 @@ ExplosionBState::ExplosionBState(
 		_power(0),
 		_areaOfEffect(false),
 		_lowerWeapon(lowerWeapon),
-		_pistolWhip(false)
+		_pistolWhip(false),
+		_hit(false)
 {
 }
 
@@ -98,6 +99,7 @@ void ExplosionBState::init()
 	{
 		_power = _item->getRules()->getPower();
 
+		// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
 		_pistolWhip = _item->getRules()->getBattleType() != BT_MELEE
 					&& _parent->getCurrentAction()->type == BA_HIT;
 		if (_pistolWhip)
@@ -240,14 +242,14 @@ void ExplosionBState::init()
 //kL	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
 //		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
 
-		bool hit = _pistolWhip
+		_hit = _pistolWhip
 				|| _item->getRules()->getBattleType() == BT_MELEE
 				|| _item->getRules()->getBattleType() == BT_PSIAMP; // includes aLien psi-weapon.
 		int
 			anim = _item->getRules()->getHitAnimation(),
 			sound = _item->getRules()->getHitSound();
 
-		if (hit)
+		if (_hit)
 		{
 			anim = _item->getRules()->getMeleeAnimation();
 //			sound = _item->getRules()->getMeleeHitSound(); // kL, but this mutes Psi-hit sound.
@@ -265,7 +267,7 @@ void ExplosionBState::init()
 										_center,
 										anim,
 										false,
-										hit);
+										_hit);
 //		_parent->getMap()->getExplosions()->insert(explosion); // kL
 		_parent->getMap()->getExplosions()->push_back(explosion); // expl CTD
 
@@ -277,7 +279,7 @@ void ExplosionBState::init()
 
 //		BattleUnit* target = tileCenter->getUnit();
 //		BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
-//		if (hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
+//		if (_hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		// kL_begin:
 		Camera* explodeCam = _parent->getMap()->getCamera();
 		if (!explodeCam->isOnScreen(centerPos))
@@ -348,8 +350,9 @@ void ExplosionBState::explode()
 	TileEngine* tileEngine = save->getTileEngine(); // kL
 
 	// last minute adjustment: determine if we actually
-	if (_parent->getCurrentAction()->type == BA_HIT
-		|| _parent->getCurrentAction()->type == BA_STUN)
+//	if (_parent->getCurrentAction()->type == BA_HIT
+//		|| _parent->getCurrentAction()->type == BA_STUN)
+	if (_hit)
 	{
 		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 

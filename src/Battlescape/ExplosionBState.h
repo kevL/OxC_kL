@@ -47,6 +47,7 @@ class ExplosionBState
 private:
 	bool
 		_areaOfEffect,
+		_hit,
 		_lowerWeapon,
 		_pistolWhip;
 	int _power;

@@ -285,11 +285,13 @@ void BattlescapeGenerator::nextStage()
 				Node* node = _save->getSpawnNode(
 											NR_XCOM,
 											*j);
-				if (node)
+				if (node
+					|| placeUnitNearFriend(*j))
 				{
-					_save->setUnitPosition(
-										*j,
-										node->getPosition());
+					if (node)
+						_save->setUnitPosition(
+											*j,
+											node->getPosition());
 
 					if (!_craftInventoryTile)
 						_craftInventoryTile = (*j)->getTile();
@@ -298,15 +300,9 @@ void BattlescapeGenerator::nextStage()
 					(*j)->setVisible(false);
 
 					if ((*j)->getId() > highestSoldierID)
-						highestSoldierID = (*j)->getId();
-				}
-				else if (placeUnitNearFriend(*j))
-				{
-					if ((*j)->getId() > highestSoldierID)
-						highestSoldierID = (*j)->getId();
+							highestSoldierID = (*j)->getId();
 
-					_craftInventoryTile->setUnit(*j);
-					(*j)->setVisible(false);
+					(*j)->prepareNewTurn();
 				}
 			}
 		}
@@ -321,7 +317,7 @@ void BattlescapeGenerator::nextStage()
 		if (!(*j)->getOwner()
 			|| (*j)->getOwner()->getId() > highestSoldierID)
 		{
-			(*j)->setTile(0);
+			(*j)->setTile(NULL);
 		}
 	}
 
@@ -407,7 +403,8 @@ void BattlescapeGenerator::run()
 
 	_save->setTerrain(_terrain->getName()); // sza_MusicRules
 
-	// kL_begin: blow up PowerSources after aLiens & civies spawn, but before xCom spawn. (i hope)
+	// kL_begin: blow up PowerSources after aLiens & civies spawn, but before xCom spawn.
+	// (i hope) nope-> CTD
 /*	deployAliens(
 			_game->getRuleset()->getAlienRace(_alienRace),
 			ruleDeploy);
@@ -415,13 +412,8 @@ void BattlescapeGenerator::run()
 
 	fuelPowerSources();
 	if (_save->getMissionType() ==  "STR_UFO_CRASH_RECOVERY")
-		explodePowerSources();
+		explodePowerSources(); */ // kL_end.
 
-	if (_craft != NULL
-		|| _base != NULL)
-	{
-		deployXCOM();
-	} */ // kL_end.
 	if (_craft != NULL
 		|| _base != NULL)
 	{
