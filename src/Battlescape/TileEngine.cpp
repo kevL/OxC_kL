@@ -2238,7 +2238,8 @@ BattleUnit* TileEngine::hit(
 				{
 					// kL_begin:
 					if (attacker
-						&& wounds < buTarget->getFatalWounds())
+						&& (wounds < buTarget->getFatalWounds()
+							|| buTarget->getHealth() == 0)) // kL .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 					{
 						buTarget->killedBy(attacker->getFaction());
 					} // kL_end.
@@ -2811,8 +2812,11 @@ void TileEngine::explode(
 						// kL_note: See Above^
 						if (unit)
 						{
-							if (wounds < targetUnit->getFatalWounds())
+							if (wounds < targetUnit->getFatalWounds()
+								|| targetUnit->getHealth() == 0) // kL .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
+							{
 								targetUnit->killedBy(unit->getFaction());
+							}
 
 							if (unit->getOriginalFaction() == FACTION_PLAYER			// kL, shooter is Xcom
 								&& unit->getFaction() == FACTION_PLAYER					// kL, shooter is not Mc'd Xcom

@@ -180,24 +180,13 @@ void UnitWalkBState::think()
 				{
 					_walkCam->centerOnPosition(_unit->getPosition());
 				}
-/*				else if (_walkCam->isOnScreen(
-										_unit->getPosition())
-//										true))
-					&& _walkCam->getViewLevel() > dest_z
-					&& _pf->getPath().at(_pf->getPath().size() - 2) != _pf->DIR_UP)
-				{
-					_walkCam->setViewLevel(dest_z);
-				} */
 				else if (_walkCam->isOnScreen(
 										_unit->getPosition()))
 //										true))
 				{
-					if (_walkCam->getViewLevel() > dest_z)
-/*						&& (_pf->getPath().size() == 2
-							|| (_pf->getPath().size() > 2
-								&& _pf->getPath().at(_pf->getPath().size() - 2) != _pf->DIR_UP)
-							|| (_pf->getPath().size() > 3
-								&& _pf->getPath().at(_pf->getPath().size() - 3) != _pf->DIR_UP))) */
+					if (_walkCam->getViewLevel() > dest_z
+						&& (_pf->getPath().size() == 0
+							|| _pf->getPath().back() != _pf->DIR_UP))
 					{
 						_walkCam->setViewLevel(dest_z);
 					}
