@@ -5901,7 +5901,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1404587289 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1404670769 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -7708,7 +7708,7 @@
 1404096023 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1404521369 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1404677549 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>

@@ -205,8 +205,8 @@ GeoscapeState::GeoscapeState()
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
-		_dfLon(0.0),	// kL
-		_dfLat(0.0)	// kL
+		_dfLon(0.0), // kL
+		_dfLat(0.0) // kL
 {
 	int
 		screenWidth		= Options::baseXGeoscape,
@@ -967,7 +967,10 @@ void GeoscapeState::timeDisplay()
 
 //	ss1 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 //	_txtSec->setText(ss1.str());
-	_txtSec->setVisible(_game->getSavedGame()->getTime()->getSecond() %15 == 0);
+	if (_timeSpeed != _btn5Secs)
+		_txtSec->setVisible(true);
+	else
+		_txtSec->setVisible(_game->getSavedGame()->getTime()->getSecond() %15 == 0);
 
 	ss2 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getMinute();
 	_txtMin->setText(ss2.str());
