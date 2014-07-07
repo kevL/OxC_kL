@@ -50,15 +50,18 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param filename Name of the save file without extension.
+ * @param palette Parent state palette.
  */
 LoadGameState::LoadGameState(
 		OptionsOrigin origin,
-		const std::string& filename)
+		const std::string& filename,
+		SDL_Color* palette)
 	:
+		_firstRun(0),
 		_origin(origin),
 		_filename(filename)
 {
-	buildUi();
+	buildUi(palette);
 }
 
 /**
@@ -66,11 +69,14 @@ LoadGameState::LoadGameState(
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param type Type of auto-load being used.
+ * @param palette Parent state palette.
  */
 LoadGameState::LoadGameState(
 		OptionsOrigin origin,
-		SaveType type)
+		SaveType type,
+		SDL_Color* palette)
 	:
+		_firstRun(0),
 		_origin(origin)
 {
 	switch (type)
@@ -89,7 +95,7 @@ LoadGameState::LoadGameState(
 		break;
 	}
 
-	buildUi();
+	buildUi(palette);
 }
 
 /**
@@ -101,17 +107,15 @@ LoadGameState::~LoadGameState()
 
 /**
  * Builds the interface.
+ * @param palette Parent state palette.
  */
-void LoadGameState::buildUi()
+void LoadGameState::buildUi(SDL_Color* palette)
 {
 	_screen = false;
 
 	_txtStatus = new Text(320, 17, 0, 92);
 
-	if (_origin == OPT_BATTLESCAPE)
-		setPalette("PAL_BATTLESCAPE");
-	else
-		setPalette("PAL_GEOSCAPE", 6);
+	setPalette(palette);
 
 	add(_txtStatus);
 
@@ -123,17 +127,19 @@ void LoadGameState::buildUi()
 	_txtStatus->setText(tr("STR_LOADING_GAME"));
 
 	if (_origin == OPT_BATTLESCAPE)
-		applyBattlescapeTheme();
+	{
+		_txtStatus->setColor(Palette::blockOffset(1)-1);
+		_txtStatus->setHighContrast(true);
+	}
 }
 
 /**
- * Loads the specified save.
+ * Ignore quick loads without a save available.
  */
 void LoadGameState::init()
 {
 	State::init();
 
-	// Ignore quick loads without a save available
 	if (_filename == SavedGame::QUICKSAVE
 		&& !CrossPlatform::fileExists(Options::getUserFolder() + _filename))
 	{
@@ -141,89 +147,102 @@ void LoadGameState::init()
 
 		return;
 	}
+}
 
-	blit(); // Make sure message is shown (if any)
-	_game->getScreen()->flip();
-	_game->popState();
+/**
+ * Loads the specified save.
+ */
+void LoadGameState::think()
+{
+	State::think();
 
-	SavedGame* s = new SavedGame();
-	try
+	// Make sure it gets drawn properly
+	if (_firstRun < 10)
+		_firstRun++;
+	else
 	{
-		s->load(_filename, _game->getRuleset());
-		_game->setSavedGame(s);
+		_game->popState();
 
-		Options::baseXResolution = Options::baseXGeoscape;
-		Options::baseYResolution = Options::baseYGeoscape;
-
-		_game->getScreen()->resetDisplay(false);
-		_game->setState(new GeoscapeState());
-
-		if (_game->getSavedGame()->getSavedBattle() != 0)
+		// Load the game
+		SavedGame* s = new SavedGame();
+		try
 		{
-			_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
+			s->load(_filename, _game->getRuleset());
+			_game->setSavedGame(s);
 
-			Options::baseXResolution = Options::baseXBattlescape;
-			Options::baseYResolution = Options::baseYBattlescape;
+			Options::baseXResolution = Options::baseXGeoscape;
+			Options::baseYResolution = Options::baseYGeoscape;
 
 			_game->getScreen()->resetDisplay(false);
+			_game->setState(new GeoscapeState());
 
-			BattlescapeState* bs = new BattlescapeState();
-			_game->pushState(bs);
-			_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+			if (_game->getSavedGame()->getSavedBattle() != 0)
+			{
+				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
+
+				Options::baseXResolution = Options::baseXBattlescape;
+				Options::baseYResolution = Options::baseYBattlescape;
+
+				_game->getScreen()->resetDisplay(false);
+
+				BattlescapeState* bs = new BattlescapeState();
+				_game->pushState(bs);
+				_game->getSavedGame()->getSavedBattle()->setBattleState(bs);
+			}
 		}
-	}
-	catch (Exception &e)
-	{
-		Log(LOG_ERROR) << e.what();
-		std::wostringstream error;
-		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
-		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(
-												error.str(),
-												_palette,
-												Palette::blockOffset(8)+10,
-												"BACK01.SCR",
-												6));
-		else
-			_game->pushState(new ErrorMessageState(
-												error.str(),
-												_palette,
-												Palette::blockOffset(0),
-												"TAC00.SCR",
-												-1));
+		catch (Exception &e)
+		{
+			Log(LOG_ERROR) << e.what();
+			std::wostringstream error;
+			error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
+			if (_origin != OPT_BATTLESCAPE)
+				_game->pushState(new ErrorMessageState(
+													error.str(),
+													_palette,
+													Palette::blockOffset(8)+10,
+													"BACK01.SCR",
+													6));
+			else
+				_game->pushState(new ErrorMessageState(
+													error.str(),
+													_palette,
+													Palette::blockOffset(0),
+													"TAC00.SCR",
+													-1));
 
-		if (_game->getSavedGame() == s)
-			_game->setSavedGame(0);
-		else
-			delete s;
-	}
-	catch (YAML::Exception &e)
-	{
-		Log(LOG_ERROR) << e.what();
-		std::wostringstream error;
-		error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
-		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(
-												error.str(),
-												_palette,
-												Palette::blockOffset(8)+10,
-												"BACK01.SCR",
-												6));
-		else
-			_game->pushState(new ErrorMessageState(
-												error.str(),
-												_palette,
-												Palette::blockOffset(0),
-												"TAC00.SCR",
-												-1));
+			if (_game->getSavedGame() == s)
+				_game->setSavedGame(0);
+			else
+				delete s;
+		}
+		catch (YAML::Exception &e)
+		{
+			Log(LOG_ERROR) << e.what();
+			std::wostringstream error;
+			error << tr("STR_LOAD_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
+			if (_origin != OPT_BATTLESCAPE)
+				_game->pushState(new ErrorMessageState(
+													error.str(),
+													_palette,
+													Palette::blockOffset(8)+10,
+													"BACK01.SCR",
+													6));
+			else
+				_game->pushState(new ErrorMessageState(
+													error.str(),
+													_palette,
+													Palette::blockOffset(0),
+													"TAC00.SCR",
+													-1));
 
-		if (_game->getSavedGame() == s)
-			_game->setSavedGame(0);
-		else
-			delete s;
-	}
+			if (_game->getSavedGame() == s)
+				_game->setSavedGame(0);
+			else
+				delete s;
+		}
 
-	CrossPlatform::flashWindow();
+		CrossPlatform::flashWindow();
+	}
 }
 
 }

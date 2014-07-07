@@ -23,7 +23,6 @@
 
 #include "BattlescapeState.h"
 #include "DebriefingState.h"
-#include "DelayedSaveState.h"
 #include "Map.h" // kL, global 'kL_preReveal'
 
 #include "../Engine/Action.h"
@@ -213,33 +212,26 @@ void NextTurnState::close()
 	{
 		_state->btnCenterClick(NULL);
 
-		if (_battleGame->getSide() == FACTION_PLAYER)
+		if (_battleGame->getSide() == FACTION_PLAYER)						// kL
 		{
 			_state->getBattleGame()->getMap()->refreshSelectorPosition();	// kL
 			_state->getGame()->getCursor()->setVisible(true);				// kL
 			_state->getBattleGame()->setupCursor();							// kL
 
 			// Autosave every set amount of turns
-			if (_battleGame->getTurn() %Options::autosaveFrequency == 0)
+			if (_battleGame->getTurn() == 1
+				|| _battleGame->getTurn() %Options::autosaveFrequency == 0)
 			{
 				if (_game->getSavedGame()->isIronman())
-					_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(
-																				_battleGame->getBattleGame(),
-																				_game,
-																				SAVE_IRONMAN));
-//					_game->pushState(new SaveGameState(
-//													_game,
-//													OPT_BATTLESCAPE,
-//													SAVE_IRONMAN));
+					_game->pushState(new SaveGameState(
+													OPT_BATTLESCAPE,
+													SAVE_IRONMAN,
+													_palette));
 				else if (Options::autosave)
-					_battleGame->getBattleGame()->statePushBack(new DelayedSaveState(
-																				_battleGame->getBattleGame(),
-																				_game,
-																				SAVE_AUTO_BATTLESCAPE));
-//					_game->pushState(new SaveGameState(
-//													_game,
-//													OPT_BATTLESCAPE,
-//													SAVE_AUTO_BATTLESCAPE));
+					_game->pushState(new SaveGameState(
+													OPT_BATTLESCAPE,
+													SAVE_AUTO_BATTLESCAPE,
+													_palette));
 			}
 		}
 		else

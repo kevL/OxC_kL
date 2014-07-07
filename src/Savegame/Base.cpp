@@ -310,6 +310,8 @@ void Base::load(
 
 			_research.push_back(r);
 		}
+		else
+			_scientists += (*i)["assigned"].as<int>(0);
 	}
 
 	for (YAML::const_iterator
@@ -327,6 +329,8 @@ void Base::load(
 
 			_productions.push_back(p);
 		}
+		else
+			_engineers += (*i)["assigned"].as<int>(0);
 	}
 
 	_retaliationTarget = node["retaliationTarget"].as<bool>(_retaliationTarget);

@@ -229,7 +229,8 @@ void ListSaveState::saveGame()
 	newFilename += ".sav";
 	_game->pushState(new SaveGameState(
 									_origin,
-									newFilename));
+									newFilename,
+									_palette));
 }
 
 }

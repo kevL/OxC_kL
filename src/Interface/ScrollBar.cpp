@@ -344,39 +344,42 @@ void ScrollBar::drawThumb()
 					_thumbRect.y,
 					_color + 4);
 
-	color = _color + 5; // Hollow it out
+	if (static_cast<int>(square.h) - 4 > 0)
+	{
+		color = _color + 5; // Hollow it out
 
-	square.x++;
-	square.y++;
-	square.w -= 3;
-	square.h -= 3;
+		square.x++;
+		square.y++;
+		square.w -= 3;
+		square.h -= 3;
 
-	_thumb->drawRect(&square, color);
+		_thumb->drawRect(&square, color);
 
-	square.x++;
-	square.y++;
-	color = _color + 2;
+		square.x++;
+		square.y++;
+		color = _color + 2;
 
-	_thumb->drawRect(&square, color);
+		_thumb->drawRect(&square, color);
 
-	square.w--;
-	square.h--;
-	color = 0;
+		square.w--;
+		square.h--;
+		color = 0;
 
-	_thumb->drawRect(&square, color);
+		_thumb->drawRect(&square, color);
 
-	_thumb->setPixelColor(
-					_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
-					_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
-					_color + 1);
-	_thumb->setPixelColor(
-					_thumbRect.x + 2,
-					_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
-					_color + 4);
-	_thumb->setPixelColor(
-					_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
-					_thumbRect.y + 2,
-					_color + 4);
+		_thumb->setPixelColor(
+						_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
+						_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
+						_color + 1);
+		_thumb->setPixelColor(
+						_thumbRect.x + 2,
+						_thumbRect.y + 2 + _thumbRect.h - 1 - 4,
+						_color + 4);
+		_thumb->setPixelColor(
+						_thumbRect.x + 2 + _thumbRect.w - 1 - 4,
+						_thumbRect.y + 2,
+						_color + 4);
+	}
 
 	_thumb->unlock();
 }

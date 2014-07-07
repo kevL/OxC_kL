@@ -803,8 +803,7 @@ void ProjectileFlyBState::think()
 	BA_RETHINK		// 14 */
 			if (_action.cameraPosition.z != -1) // kL_note: a bit of overkill here
 			{
-				if (_action.type == BA_THROW // kL, don't jump screen after these.
-					|| _action.type == BA_STUN
+				if (_action.type == BA_STUN // kL, don't jump screen after these.
 					|| _action.type == BA_HIT
 					|| _action.type == BA_USE
 					|| _action.type == BA_LAUNCH
@@ -813,7 +812,8 @@ void ProjectileFlyBState::think()
 				{
 //					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
 				}
-				else if (_action.type == BA_AUTOSHOT // kL, jump screen back to pre-shot position
+				else if (_action.type == BA_THROW // kL, jump screen back to pre-shot position
+					|| _action.type == BA_AUTOSHOT
 					|| _action.type == BA_SNAPSHOT
 					|| _action.type == BA_AIMEDSHOT)
 				{

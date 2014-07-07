@@ -49,12 +49,12 @@ namespace OpenXcom
 
 /**
  * Sets up an ExplosionBState.
- * @param parent, Pointer to the BattleScape.
- * @param center, Center position in voxelspace.
- * @param item, Item involved in the explosion (eg grenade).
- * @param unit, Unit involved in the explosion (eg unit throwing the grenade).
- * @param tile, Tile the explosion is on.
- * @param lowerWeapon, Whether the unit causing this explosion should now lower their weapon.
+ * @param parent		- pointer to the BattlescapeGame
+ * @param center		- center position in voxelspace
+ * @param item			- pointer to item involved in the explosion (eg grenade)
+ * @param unit			- pointer to unit involved in the explosion (eg unit throwing the grenade or cyberdisc )
+ * @param tile			- pointer to tile the explosion is on
+ * @param lowerWeapon	- true to tell the unit causing this explosion to lower their weapon
  */
 ExplosionBState::ExplosionBState(
 		BattlescapeGame* parent,
@@ -461,7 +461,7 @@ void ExplosionBState::explode()
 	} // kL_end.
 
 
-	bool terrainExplosion = false;
+	bool terrain = false;
 
 	if (_tile)
 	{
@@ -470,7 +470,7 @@ void ExplosionBState::explode()
 						_power,
 						DT_HE,
 						_power / 10);
-		terrainExplosion = true;
+		terrain = true;
 	}
 	else if (!_item) // explosion not caused by terrain or an item, must be by a unit (cyberdisc)
 	{
@@ -486,7 +486,7 @@ void ExplosionBState::explode()
 						_power,
 						DT_HE,
 						radius);
-		terrainExplosion = true;
+		terrain = true;
 	}
 
 
@@ -494,7 +494,7 @@ void ExplosionBState::explode()
 							_item,
 							_unit,
 							false,
-							terrainExplosion);
+							terrain);
 
 	if (_unit // if this explosion was caused by a unit shooting, now it's the time to put the gun down
 		&& !_unit->isOut()

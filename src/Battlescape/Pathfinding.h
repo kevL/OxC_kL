@@ -126,7 +126,7 @@ private:
 		void calculate(
 				BattleUnit* unit,
 				Position endPos,
-				BattleUnit* missileTarget = 0,
+				BattleUnit* missileTarget = NULL,
 				int maxTUCost = 1000);
 
 		/// Determines whether or not movement between starttile and endtile is possible in the direction.

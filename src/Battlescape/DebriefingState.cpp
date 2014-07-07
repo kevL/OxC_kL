@@ -47,6 +47,7 @@
 
 #include "../Menu/ErrorMessageState.h"
 #include "../Menu/MainMenuState.h"
+#include "../Menu/SaveGameState.h"
 
 #include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h" // sza_MusicRules
@@ -440,49 +441,64 @@ void DebriefingState::btnOkClick(Action*)
 
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 		_game->setState(new MainMenuState());
-	else if (!_destroyBase)
+	else
 	{
-		if (!_soldiersCommended.empty())
-			_game->pushState(new CommendationState(_soldiersCommended));
-
-		if (_game->getSavedGame()->handlePromotions(participants))
-			_game->pushState(new PromotionsState());
-
-		if (!_missingItems.empty())
-			_game->pushState(new CannotReequipState(_missingItems));
-
-		if (_noContainment)
-			_game->pushState(new NoContainmentState());
-		else if (_manageContainment)
+		if (!_destroyBase)
 		{
-			_game->pushState(new ManageAlienContainmentState(
-															_base,
-															OPT_BATTLESCAPE,
-															false)); // kL_add. Do not allow researchHelp!
-			_game->pushState(new ErrorMessageState(
-												tr("STR_CONTAINMENT_EXCEEDED")
-													.arg(_base->getName()).c_str(),
-												_palette,
-												Palette::blockOffset(8)+5,
-												"BACK01.SCR",
-												0));
+			if (!_soldiersCommended.empty())
+				_game->pushState(new CommendationState(_soldiersCommended));
+
+			if (_game->getSavedGame()->handlePromotions(participants))
+				_game->pushState(new PromotionsState());
+
+			if (!_missingItems.empty())
+				_game->pushState(new CannotReequipState(_missingItems));
+
+			if (_noContainment)
+				_game->pushState(new NoContainmentState());
+			else if (_manageContainment)
+			{
+				_game->pushState(new ManageAlienContainmentState(
+																_base,
+																OPT_BATTLESCAPE,
+																false)); // kL_add. Do not allow researchHelp!
+				_game->pushState(new ErrorMessageState(
+													tr("STR_CONTAINMENT_EXCEEDED")
+														.arg(_base->getName()).c_str(),
+													_palette,
+													Palette::blockOffset(8)+5,
+													"BACK01.SCR",
+													0));
+			}
+
+			if (!_manageContainment
+				&& Options::storageLimitsEnforced
+				&& _base->storesOverfull())
+			{
+				_game->pushState(new SellState(
+											_base,
+											OPT_BATTLESCAPE));
+				_game->pushState(new ErrorMessageState(
+													tr("STR_STORAGE_EXCEEDED")
+														.arg(_base->getName()).c_str(),
+													_palette,
+													Palette::blockOffset(8)+5,
+													"BACK01.SCR",
+													0));
+			}
 		}
 
-		if (!_manageContainment
-			&& Options::storageLimitsEnforced
-			&& _base->storesOverfull())
-		{
-			_game->pushState(new SellState(
-										_base,
-										OPT_BATTLESCAPE));
-			_game->pushState(new ErrorMessageState(
-												tr("STR_STORAGE_EXCEEDED")
-													.arg(_base->getName()).c_str(),
-												_palette,
-												Palette::blockOffset(8)+5,
-												"BACK01.SCR",
-												0));
-		}
+		// Autosave after mission
+		if (_game->getSavedGame()->isIronman())
+			_game->pushState(new SaveGameState(
+											OPT_GEOSCAPE,
+											SAVE_IRONMAN,
+											_palette));
+		else if (Options::autosave)
+			_game->pushState(new SaveGameState(
+											OPT_GEOSCAPE,
+											SAVE_AUTO_GEOSCAPE,
+											_palette));
 	}
 	//Log(LOG_INFO) << "DebriefingState::btnOkClick() EXIT";
 }
@@ -596,10 +612,9 @@ void DebriefingState::prepareDebriefing()
 		aborted = battle->isAborted(),
 		success = !aborted;
 
+	Base* base = NULL;
 	Craft* craft = NULL;
 	std::vector<Craft*>::iterator craftIterator;
-
-	Base* base = NULL;
 
 	_missionStatistics->time = *save->getTime();
 	_missionStatistics->type = battle->getMissionType();
@@ -664,7 +679,7 @@ void DebriefingState::prepareDebriefing()
 				craft->setMissionComplete(true);
 				craft->setInBattlescape(false);
 			}
-			else if ((*j)->getDestination() != 0)
+			else if ((*j)->getDestination() != NULL)
 			{
 				Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (ufo != NULL
@@ -725,8 +740,7 @@ void DebriefingState::prepareDebriefing()
 					k != base->getFacilities()->end();
 					)
 			{
-				// this facility was demolished
-				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0)
+				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0) // this facility was demolished
 				{
 					facilDestroyed = true;
 					base->destroyFacility(k);
@@ -735,8 +749,7 @@ void DebriefingState::prepareDebriefing()
 					++k;
 			}
 
-			// this may cause the base to become disjointed, destroy the disconnected parts.
-			base->destroyDisconnectedFacilities();
+			base->destroyDisconnectedFacilities(); // this may cause the base to become disjointed, destroy the disconnected parts.
 		}
 	}
 
@@ -760,10 +773,10 @@ void DebriefingState::prepareDebriefing()
 			if ((*i)->getStatus() == Ufo::LANDED
 				&& aborted)
 			{
-				 (*i)->setSecondsRemaining(5); // UFO lifts off ...
+				 (*i)->setSecondsRemaining(15); // UFO lifts off ...
 			}
-			else if ( //kL (*i)->getStatus() == Ufo::CRASHED ||	// UFO can't fly
-				!aborted)										// successful mission; kL: failed mission leaves UFO still crashed!
+			else if (!aborted) // successful mission ( kL: failed mission leaves UFO still crashed! )
+//kL			|| (*i)->getStatus() == Ufo::CRASHED) // UFO can't fly
 			{
 				delete *i;
 				save->getUfos()->erase(i); // UFO disappears.
@@ -907,7 +920,7 @@ void DebriefingState::prepareDebriefing()
 					addStat(
 							"STR_ALIEN_BASE_CONTROL_DESTROYED",
 							1,
-							350);
+							300);
 
 					// Take care to remove supply missions for this base.
 					std::for_each(
@@ -960,8 +973,10 @@ void DebriefingState::prepareDebriefing()
 			(*j)->setTile(battle->getTile(pos));
 		}
 
-		UnitFaction origFaction = (*j)->getOriginalFaction();
+
 		int value = (*j)->getValue();
+
+		UnitFaction origFaction = (*j)->getOriginalFaction();
 
 		UnitStatus status = (*j)->getStatus();
 		if (status == STATUS_DEAD) // so this is a dead unit
@@ -1577,7 +1592,7 @@ void DebriefingState::prepareDebriefing()
 				i != save->getAlienMissions().end();
 				++i)
 		{
-//kL			if ((AlienMission*)(*i) == am)
+//kL		if ((AlienMission*)(*i) == am)
 			if (dynamic_cast<AlienMission*>(*i) == am) // kL
 			{
 				delete *i;

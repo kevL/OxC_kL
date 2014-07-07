@@ -24,7 +24,6 @@
 
 #include "BattlescapeGame.h"
 #include "BattleState.h"
-//#include "Position.h"
 
 
 namespace OpenXcom
@@ -48,7 +47,7 @@ private:
 	bool
 		_falling,
 		_onScreen,
-		_tileSwitchDone, // kL
+		_tileSwitchDone,
 		_preStepTurn;
 	int _preStepCost;
 	size_t _unitsSpotted;
@@ -56,7 +55,6 @@ private:
 	BattleUnit* _unit;
 	Camera* _walkCam;
 	Pathfinding* _pf;
-//	Position _target;
 	TileEngine* _terrain;
 
 	/// This function begins unit movement.
@@ -94,8 +92,6 @@ private:
 		/// Cleans up the UnitWalkBState.
 		~UnitWalkBState();
 
-		/// Sets the target to walk to.
-//		void setTarget(Position target);
 		/// Initializes the state.
 		void init();
 		/// Handles a cancel request.

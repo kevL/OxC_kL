@@ -22,6 +22,8 @@
 
 #include <string>
 
+#include <SDL.h>
+
 #include "OptionsBaseState.h"
 
 #include "../Engine/State.h"
@@ -43,29 +45,34 @@ class LoadGameState
 {
 
 private:
+	int _firstRun;
 	std::string _filename;
 
-	OptionsOrigin _origin;
-
 	Text* _txtStatus;
+
+	OptionsOrigin _origin;
 
 
 	public:
 		/// Creates the Load Game state.
 		LoadGameState(
 				OptionsOrigin origin,
-				const std::string& filename);
+				const std::string& filename,
+				SDL_Color* palette);
 		/// Creates the Load Game state.
 		LoadGameState(
 				OptionsOrigin origin,
-				SaveType type);
+				SaveType type,
+				SDL_Color* palette);
 		/// Cleans up the Load Game state.
 		~LoadGameState();
 
 		/// Creates the interface.
-		void buildUi();
-		/// Loads the game.
+		void buildUi(SDL_Color* palette);
+		/// Validates the game.
 		void init();
+		/// Loads the game.
+		void think();
 };
 
 }

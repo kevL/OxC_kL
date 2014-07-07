@@ -98,7 +98,7 @@ DefeatState::DefeatState()
 
 	centerAllSurfaces();
 
-	_timer->onTimer((StateHandler)& DefeatState::screenClick);
+	_timer->onTimer((StateHandler)& DefeatState::screenTimer);
 	_timer->start();
 
 	screenClick(0);
@@ -123,7 +123,15 @@ DefeatState::~DefeatState()
  */
 void DefeatState::think()
 {
-	_timer->think(this, 0);
+	_timer->think(this, NULL);
+}
+
+/**
+ * Shows the next screen on a timed basis.
+ */
+void DefeatState::screenTimer()
+{
+	screenClick(0);
 }
 
 /**
@@ -132,6 +140,8 @@ void DefeatState::think()
  */
 void DefeatState::screenClick(Action*)
 {
+	_timer->start();
+
 	if (_screen > -1)
 	{
 		_bg[_screen]->setVisible(false);

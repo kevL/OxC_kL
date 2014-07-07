@@ -23,6 +23,8 @@
 
 #include <string>
 
+#include <SDL.h>
+
 #include "OptionsBaseState.h"
 
 #include "../Engine/State.h"
@@ -44,6 +46,7 @@ class SaveGameState
 {
 
 private:
+	int _firstRun;
 	std::string _filename;
 
 	OptionsOrigin _origin;
@@ -56,18 +59,20 @@ private:
 		/// Creates the Save Game state.
 		SaveGameState(
 				OptionsOrigin origin,
-				const std::string& filename);
+				const std::string& filename,
+				SDL_Color* palette);
 		/// Creates the Save Game state.
 		SaveGameState(
 				OptionsOrigin origin,
-				SaveType type);
+				SaveType type,
+				SDL_Color* palette);
 		/// Cleans up the Save Game state.
 		~SaveGameState();
 
 		/// Creates the interface.
-		void buildUi();
+		void buildUi(SDL_Color* palette);
 		/// Saves the game.
-		void init();
+		void think();
 };
 
 }

@@ -2239,7 +2239,7 @@ bool Pathfinding::isModALT() const
 
 /**
  * Gets a reference to the current path.
- * @return, the actual path.
+ * @return, the actual path
  */
 const std::vector<int>& Pathfinding::getPath()
 {
@@ -2248,7 +2248,7 @@ const std::vector<int>& Pathfinding::getPath()
 
 /**
  * Makes a copy of the current path.
- * @return a copy of the path.
+ * @return, a copy of the path
  */
 std::vector<int> Pathfinding::copyPath() const
 {

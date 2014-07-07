@@ -874,9 +874,6 @@
     <ClCompile Include="Basescape\SoldierDeadInfoState.cpp">
       <Filter>Basescape</Filter>
     </ClCompile>
-    <ClCompile Include="Battlescape\DelayedSaveState.cpp">
-      <Filter>Battlescape</Filter>
-    </ClCompile>
     <ClCompile Include="Ufopaedia\ArticleStateTFTD.cpp">
       <Filter>Ufopaedia</Filter>
     </ClCompile>
@@ -1773,12 +1770,9 @@
     <ClInclude Include="Engine\DosFont.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Battlescape\DelayedSaveState.h">
-      <Filter>Battlescape</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\SoldierDeadInfoState.h">
       <Filter>Basescape</Filter>
-    </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateTFTD.h">
       <Filter>Ufopaedia</Filter>
     </ClInclude>

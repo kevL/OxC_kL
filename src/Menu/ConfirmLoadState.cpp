@@ -111,7 +111,8 @@ void ConfirmLoadState::btnYesClick(Action*)
 
 	_game->pushState(new LoadGameState(
 									_origin,
-									_fileName));
+									_fileName,
+									_palette));
 }
 
 /**

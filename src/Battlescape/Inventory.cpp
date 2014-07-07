@@ -1043,6 +1043,7 @@ void Inventory::mouseClick(Action* action, State* state)
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
 									item->setFuseTimer(-1); // Unprime the grenade
+									drawItems(); // kL, de-vector the Fuse graphic.
 								}
 							}
 						}

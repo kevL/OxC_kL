@@ -2000,12 +2000,12 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
  *
  * A bullet/weapon hits a voxel.
  * kL_note: called from ExplosionBState
- * @param pTarget_voxel, Center of the hit in voxelspace.
- * @param power, Power of the hit/explosion.
- * @param type, The damage type of the hit.
- * @param attacker, The unit that caused the hit.
- * @param melee, True if no projectile, trajectory, etc. is needed. kL
- * @return, The Unit that got hit.
+ * @param pTarget_voxel	- reference to the center of hit in voxelspace
+ * @param power			- power of the hit/explosion
+ * @param type			- damage type of the hit (RuleItem.h)
+ * @param attacker		- pointer to unit that caused the hit
+ * @param melee			- true if no projectile, trajectory, etc. is needed. kL
+ * @return, the BattleUnit that got hit
  */
 BattleUnit* TileEngine::hit(
 		const Position& pTarget_voxel,
@@ -2019,22 +2019,27 @@ BattleUnit* TileEngine::hit(
 	//			<< " : power = " << power
 	//			<< " : type = " << (int)type;
 
-	if (type != DT_NONE) // TEST for Psi-attack.
+	if (type != DT_NONE) // bypass Psi-attacks.
 	{
 		//Log(LOG_INFO) << "DT_ type = " << static_cast<int>(type);
-		Tile* tile = _battleSave->getTile(Position(
+		Position pTarget_tile = Position(
 										pTarget_voxel.x / 16,
 										pTarget_voxel.y / 16,
-										pTarget_voxel.z / 24));
+										pTarget_voxel.z / 24);
+		Tile* tile = _battleSave->getTile(pTarget_tile);
+/*		Tile* tile = _battleSave->getTile(Position(
+										pTarget_voxel.x / 16,
+										pTarget_voxel.y / 16,
+										pTarget_voxel.z / 24)); */
 		//Log(LOG_INFO) << ". targetTile " << tile->getPosition() << " targetVoxel " << pTarget_voxel;
 
 		if (!tile)
 		{
 			//Log(LOG_INFO) << ". Position& pTarget_voxel : NOT Valid, return NULL";
-			return 0;
+			return NULL;
 		}
 
-		BattleUnit* buTarget = 0;
+		BattleUnit* buTarget = NULL;
 		if (tile->getUnit())
 		{
 			buTarget = tile->getUnit();
@@ -2043,9 +2048,9 @@ BattleUnit* TileEngine::hit(
 
 		// This is returning part < 4 when using a stunRod against a unit outside the north (or east) UFO wall. ERROR!!!
 		// later: Now it's returning VOXEL_EMPTY (-1) when a silicoid attacks a poor civvie!!!!! And on acid-spits!!!
-//kL		int const part = voxelCheck(pTarget_voxel, attacker);
-		// kL_note: for hit==TRUE, just put part=VOXEL_UNIT here. Like,
-		// and take out the 'hit' parameter from voxelCheck() unless
+//kL	int const part = voxelCheck(pTarget_voxel, attacker);
+		// kL_note: for melee==TRUE, just put part=VOXEL_UNIT here. Like,
+		// and take out the 'melee' parameter from voxelCheck() unless
 		// I want to flesh-out melee & psi attacks more than they are.
 		int part = VOXEL_UNIT; // kL, no longer const
 		if (!melee) // kL
@@ -2054,15 +2059,16 @@ BattleUnit* TileEngine::hit(
 							attacker,
 							false,
 							false,
-							0,
+							NULL,
 							melee); // kL
 		//Log(LOG_INFO) << ". voxelCheck() part = " << part;
 
 		if (VOXEL_EMPTY < part && part < VOXEL_UNIT	// 4 terrain parts ( 0..3 )
-			&& type != DT_STUN)						// kL, workaround for Stunrod. ( might include DT_SMOKE & DT_IN )
+			&& type != DT_STUN						// kL, workaround for Stunrod. ( might include DT_SMOKE & DT_IN )
+			&& type != DT_SMOKE)
 		{
 			//Log(LOG_INFO) << ". . terrain hit";
-//kL			const int randPower = RNG::generate(power / 4, power * 3 / 4); // RNG::boxMuller(power, power/6)
+//kL		const int randPower = RNG::generate(power / 4, power * 3 / 4); // RNG::boxMuller(power, power/6)
 			power = RNG::generate( // 25% to 75%
 								power / 4,
 								power * 3 / 4);
@@ -2075,8 +2081,8 @@ BattleUnit* TileEngine::hit(
 					&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
 				{
 					_battleSave->getModuleMap()
-									[(pTarget_voxel.x / 16) / 10]
-									[(pTarget_voxel.y / 16) / 10].second--;
+										[(pTarget_voxel.x / 16) / 10]
+										[(pTarget_voxel.y / 16) / 10].second--;
 				}
 			}
 
@@ -2096,8 +2102,9 @@ BattleUnit* TileEngine::hit(
 			//Log(LOG_INFO) << ". . battleunit hit";
 
 			// power 0 - 200% -> 1 - 200%
-//kL			const int randPower = RNG::generate(1, power * 2); // RNG::boxMuller(power, power / 3)
-			int verticaloffset = 0;
+//kL		const int randPower = RNG::generate(1, power * 2); // RNG::boxMuller(power, power / 3)
+
+			int vertOffset = 0;
 
 			if (!buTarget)
 			{
@@ -2106,15 +2113,16 @@ BattleUnit* TileEngine::hit(
 				// it's possible we have a unit below the actual tile, when he
 				// stands on a stairs and sticks his head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
-				Tile* tileBelow = _battleSave->getTile(Position(
-														pTarget_voxel.x / 16,
-														pTarget_voxel.y / 16,
-														pTarget_voxel.z / 24 - 1));
+				Tile* tileBelow = _battleSave->getTile(pTarget_tile + Position(0, 0,-1));
+/*				Tile* tileBelow = _battleSave->getTile(Position(
+															pTarget_voxel.x / 16,
+															pTarget_voxel.y / 16,
+															pTarget_voxel.z / 24 - 1)); */
 				if (tileBelow
 					&& tileBelow->getUnit())
 				{
 					buTarget = tileBelow->getUnit();
-					verticaloffset = 24;
+					vertOffset = 24;
 				}
 			}
 
@@ -2123,9 +2131,11 @@ BattleUnit* TileEngine::hit(
 				//Log(LOG_INFO) << ". . . buTarget Valid ID = " << buTarget->getId();
 
 				// kL_note: This section needs adjusting ...!
-				const int wounds = buTarget->getFatalWounds();
+//kL			const int wounds = buTarget->getFatalWounds();
+
 				// "adjustedDamage = buTarget->damage(relative, rndPower, type);" -> GOES HERE
-				// if it's going to bleed to death and it's not a player, give credit for the kill.
+
+				// if targetUnit is going to bleed to death and is not a player, give credit for the kill.
 				// kL_note: not just if not a player; Give Credit!!!
 				// NOTE: Move this code-chunk below(s).
 //kL				if (unit
@@ -2143,7 +2153,7 @@ BattleUnit* TileEngine::hit(
 								size,
 								size,
 								buTarget->getFloatHeight() - tile->getTerrainLevel());
-				const Position relPos = pTarget_voxel - targetPos - Position(0, 0, verticaloffset); */
+				const Position relPos = pTarget_voxel - targetPos - Position(0, 0, vertOffset); */
 				int const size = buTarget->getArmor()->getSize() * 8;
 				Position const targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
 										+ Position(
@@ -2151,11 +2161,11 @@ BattleUnit* TileEngine::hit(
 												size,
 												buTarget->getFloatHeight() - tile->getTerrainLevel());
 				Position const relPos = pTarget_voxel
-									- targetPos
-									- Position(
-											0,
-											0,
-											verticaloffset);
+										- targetPos
+										- Position(
+												0,
+												0,
+												vertOffset);
 
 				// kL_begin: TileEngine::hit(), Silacoids can set targets on fire!!
 //kL				if (type == DT_IN)
@@ -2212,16 +2222,18 @@ BattleUnit* TileEngine::hit(
 										power * 2); */
 				//Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
 
-				bool ignoreArmor = (type == DT_STUN);	// kL. stun ignores armor... does now! UHM....
-														// note it still gets Vuln.modifier, but not armorReduction.
-				int adjustedDamage = buTarget->damage(
-													relPos,
-													power,
-													type,
-													ignoreArmor);
-				//Log(LOG_INFO) << ". . . adjustedDamage = " << adjustedDamage;
 
-				if (adjustedDamage > 0)
+				const int wounds = buTarget->getFatalWounds();
+				bool ignoreArmor = type == DT_STUN			// kL. stun ignores armor... does now! UHM....
+									|| type == DT_SMOKE;	// note it still gets Vuln.modifier, but not armorReduction.
+				int adjDamage = buTarget->damage(
+												relPos,
+												power,
+												type,
+												ignoreArmor);
+				//Log(LOG_INFO) << ". . . adjDamage = " << adjDamage;
+
+				if (adjDamage > 0)
 //					&& !buTarget->isOut()
 				{
 					// kL_begin:
@@ -2245,7 +2257,7 @@ BattleUnit* TileEngine::hit(
 							else if (buTarget->getOriginalFaction() == FACTION_HOSTILE)
 								modifier = _battleSave->getMoraleModifier(0, false);
 
-							const int morale_loss = 10 * adjustedDamage * bravery / modifier;
+							const int morale_loss = 10 * adjDamage * bravery / modifier;
 							//Log(LOG_INFO) << ". . . . morale_loss = " << morale_loss;
 
 							buTarget->moraleChange(-morale_loss);
@@ -2264,6 +2276,7 @@ BattleUnit* TileEngine::hit(
 				{
 					//Log(LOG_INFO) << ". . . Cyberdisc down!!";
 					if (type != DT_STUN		// don't explode if stunned. Maybe... see above.
+						&& type != DT_SMOKE
 						&& type != DT_HE)	// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
 					{
 						//Log(LOG_INFO) << ". . . . new ExplosionBState(), !DT_STUN & !DT_HE";
@@ -2271,17 +2284,17 @@ BattleUnit* TileEngine::hit(
 						// but ExplosionBState::explode() creates a hit() ! -> terrain..
 
 						Position unitPos = Position(
-//kL												buTarget->getPosition().x * 16,
-//kL												buTarget->getPosition().y * 16,
+//kL											buTarget->getPosition().x * 16,
+//kL											buTarget->getPosition().y * 16,
 												buTarget->getPosition().x * 16 + 8, // kL
 												buTarget->getPosition().y * 16 + 8, // kL
 												buTarget->getPosition().z * 24);
 
 						_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
-																			_battleSave->getBattleGame(),
-																			unitPos,
-																			0,
-																			buTarget));
+																					_battleSave->getBattleGame(),
+																					unitPos,
+																					NULL,
+																					buTarget));
 					}
 				}
 
@@ -2309,7 +2322,8 @@ BattleUnit* TileEngine::hit(
 		//Log(LOG_INFO) << ". calculateTerrainLighting()";
 		calculateTerrainLighting();							// fires could have been started
 		//Log(LOG_INFO) << ". calculateFOV()";
-		calculateFOV(pTarget_voxel / Position(16, 16, 24));	// walls & objects could have been ruined
+//		calculateFOV(pTarget_voxel / Position(16, 16, 24));	// walls & objects could have been ruined
+		calculateFOV(pTarget_tile);
 
 
 		//if (buTarget) Log(LOG_INFO) << "TileEngine::hit() EXIT, return buTarget";
@@ -2320,7 +2334,7 @@ BattleUnit* TileEngine::hit(
 	//else Log(LOG_INFO) << ". DT_ = " << static_cast<int>(type);
 
 	//Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL";
-	return 0; // end_TEST
+	return NULL;
 }
 
 /**

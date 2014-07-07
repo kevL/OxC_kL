@@ -834,6 +834,7 @@ void BattlescapeGame::checkForCasualties(
 		}
 	}
 
+	// kL_note: what about tile explosions
 	killStatWeapon = "STR_WEAPON_UNKNOWN";
 	killStatWeaponAmmo = "STR_WEAPON_UNKNOWN";
 
@@ -891,7 +892,7 @@ void BattlescapeGame::checkForCasualties(
 	{
 		BattleUnit* victim = *buCasualty; // kL
 
-		/// Decide victim race and rank
+		// Awards: decide victim race and rank
 		if (victim->getGeoscapeSoldier()							// Soldiers
 				&& victim->getOriginalFaction() == FACTION_PLAYER)
 		{
@@ -1236,18 +1237,6 @@ void BattlescapeGame::handleNonTargetAction()
 														_currentAction));
 
 					return;
-/*					BattleUnit* target = _save->getTile(_currentAction.target)->getUnit();
-					int height = target->getFloatHeight() + (target->getHeight() / 2);
-					Position voxel = _currentAction.target * Position(16, 16, 24)
-									+ Position(
-											8,
-											8,
-											height - _save->getTile(_currentAction.target)->getTerrainLevel());
-					statePushNext(new ExplosionBState(
-													this,
-													voxel,
-													_currentAction.weapon,
-													_currentAction.actor)); */ // kL
 				}
 				else
 					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");

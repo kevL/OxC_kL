@@ -48,12 +48,24 @@ void ExtraStrings::load(const YAML::Node& node)
 			i != node["strings"].end();
 			++i)
 	{
-		_strings[i->first.as<std::string>()] = i->second.as<std::string>();
+		if (i->second.IsScalar()) // regular strings
+			_strings[i->first.as<std::string>()] = i->second.as<std::string>();
+		else if (i->second.IsMap()) // strings with plurality
+		{
+			for (YAML::const_iterator
+					j = i->second.begin();
+					j != i->second.end();
+					++j)
+			{
+				std::string s = i->first.as<std::string>() + "_" + j->first.as<std::string>();
+				_strings[s] = j->second.as<std::string>();
+			}
+		}
 	}
 }
 
 /**
- * Gets the list of strings defined my this mod.
+ * Gets the list of strings defined by this mod.
  * @return, The list of strings.
  */
 std::map<std::string, std::string>* ExtraStrings::getStrings()

@@ -1346,7 +1346,7 @@ int BattleUnit::damage(
 		playHitSound(); // kL
 	}
 
-	if (power < 1)
+	if (power < 0)
 		power = 0;
 	//Log(LOG_INFO) << "BattleUnit::damage() ret Penetrating Power " << power;
 
@@ -2007,31 +2007,32 @@ void BattleUnit::prepareNewTurn()
 
 	if (!isOut()) // recover energy
 	{
-//kL		int enRecovery = getStats()->tu / 3;
+//kL	int enron = getStats()->tu / 3;
 		// kL_begin: advanced Energy recovery
-		int enRecovery = getStats()->stamina;
+		int stamina = getStats()->stamina;
+
+		int enron = stamina;
 		if (_turretType < 0) // is NOT xCom Tank (which get 4/5ths energy-recovery).
 		{
 			if (isKneeled())							// kneeled xCom
-				enRecovery /= 2;
+				enron /= 2;
 			else if (getFaction() == FACTION_PLAYER)	// xCom & Mc'd aliens
-				enRecovery /= 3;
+				enron /= 3;
 			else										// non-Mc'd aLiens & civies
-//				enRecovery = enRecovery * 2 / 3;
-				enRecovery = enRecovery * _unitRules->getEnergyRecovery() / 50; // <- values in Ruleset ought be doubled, to do PERCENTs.
+//				enron = enron * 2 / 3;
+				enron = enron * _unitRules->getEnergyRecovery() / 50; // <- values in Ruleset ought be doubled, to do PERCENTs.
 		}
 		else // xCom tank.
-			enRecovery = enRecovery * 4 / 5;
+			enron = enron * 4 / 5;
 		// kL_end.
 
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 		// kL_note: Only xCom gets fatal wounds, atm.
 		if (getFaction() == FACTION_PLAYER)
-			enRecovery -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
+			enron -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
 
-		_energy += enRecovery;
+		_energy += enron;
 
-		int stamina = getStats()->stamina;
 		if (_energy > stamina)
 			_energy = stamina;
 	}

@@ -834,13 +834,15 @@ void GeoscapeState::handle(Action* action)
 			{
 				popup(new SaveGameState(
 									OPT_GEOSCAPE,
-									SAVE_QUICK));
+									SAVE_QUICK,
+									_palette));
 			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
 			{
 				popup(new LoadGameState(
 									OPT_GEOSCAPE,
-									SAVE_QUICK));
+									SAVE_QUICK,
+									_palette));
 			}
 		}
 	}
@@ -2788,11 +2790,13 @@ void GeoscapeState::time1Day()
 	if (_game->getSavedGame()->isIronman())
 		popup(new SaveGameState(
 							OPT_GEOSCAPE,
-							SAVE_IRONMAN));
+							SAVE_IRONMAN,
+							_palette));
 	else if (Options::autosave)
 		popup(new SaveGameState(
 							OPT_GEOSCAPE,
-							SAVE_AUTO_GEOSCAPE));
+							SAVE_AUTO_GEOSCAPE,
+							_palette));
 //	}
 	//Log(LOG_INFO) << "GeoscapeState::time1Day() EXIT";
 }

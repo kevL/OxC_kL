@@ -48,28 +48,34 @@ namespace OpenXcom
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  * @param filename Name of the save file without extension.
+ * @param palette Parent state palette.
  */
 SaveGameState::SaveGameState(
 		OptionsOrigin origin,
-		const std::string& filename)
+		const std::string& filename,
+		SDL_Color* palette)
 	:
+		_firstRun(0),
 		_origin(origin),
 		_filename(filename),
 		_type(SAVE_DEFAULT)
 {
-	buildUi();
+	buildUi(palette);
 }
 
 /**
  * Initializes all the elements in the Save Game screen.
  * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
- * @param type Type of auto-load being used.
+ * @param type Type of auto-save being used.
+ * @param palette Parent state palette.
  */
 SaveGameState::SaveGameState(
 		OptionsOrigin origin,
-		SaveType type)
+		SaveType type,
+		SDL_Color* palette)
 	:
+		_firstRun(0),
 		_origin(origin),
 		_type(type)
 {
@@ -93,7 +99,7 @@ SaveGameState::SaveGameState(
 		break;
 	}
 
-	buildUi();
+	buildUi(palette);
 }
 
 /**
@@ -105,17 +111,15 @@ SaveGameState::~SaveGameState()
 
 /**
  * Builds the interface.
+ * @param palette Parent state palette.
  */
-void SaveGameState::buildUi()
+void SaveGameState::buildUi(SDL_Color* palette)
 {
 	_screen = false;
 
 	_txtStatus = new Text(320, 17, 0, 92);
 
-	if (_origin == OPT_BATTLESCAPE)
-		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
-	else
-		setPalette("PAL_GEOSCAPE", 6);
+	setPalette(palette);
 
 	add(_txtStatus);
 
@@ -127,108 +131,114 @@ void SaveGameState::buildUi()
 	_txtStatus->setText(tr("STR_SAVING_GAME"));
 
 	if (_origin == OPT_BATTLESCAPE)
-		applyBattlescapeTheme();
+	{
+		_txtStatus->setColor(Palette::blockOffset(1)-1);
+		_txtStatus->setHighContrast(true);
+	}
 }
 
 /**
  * Saves the current save.
  */
-void SaveGameState::init()
+void SaveGameState::think()
 {
-	State::init(); // Make sure message is shown (if any)
+	State::think();
 
-	blit();
-	_game->getScreen()->flip();
-
-	_game->popState();
-
-	switch (_type)
+	// Make sure it gets drawn properly
+	if (_firstRun < 10)
+		_firstRun++;
+	else
 	{
-		case SAVE_DEFAULT: // manual save, close the save screen
-			_game->popState();
+		_game->popState();
 
-			if (!_game->getSavedGame()->isIronman()) // and pause screen too
+		switch (_type)
+		{
+			case SAVE_DEFAULT: // manual save, close the save screen
 				_game->popState();
-		break;
 
-		case SAVE_QUICK: // automatic save, give it a default name
-		case SAVE_AUTO_GEOSCAPE:
-		case SAVE_AUTO_BATTLESCAPE:
-			_game->getSavedGame()->setName(Language::fsToWstr(_filename));
+				if (!_game->getSavedGame()->isIronman()) // and pause screen too
+					_game->popState();
+			break;
 
-		default:
-		break;
-	}
+			case SAVE_QUICK: // automatic save, give it a default name
+			case SAVE_AUTO_GEOSCAPE:
+			case SAVE_AUTO_BATTLESCAPE:
+				_game->getSavedGame()->setName(Language::fsToWstr(_filename));
 
-
-	try // Save the game
-	{
-		std::string backup = _filename + ".bak";
-		_game->getSavedGame()->save(backup);
-		std::string fullPath = Options::getUserFolder() + _filename;
-		std::string bakPath = Options::getUserFolder() + backup;
-		if (!CrossPlatform::moveFile(bakPath, fullPath))
-		{
-			throw Exception("Save backed up in " + backup);
+			default:
+			break;
 		}
 
-		if (_type == SAVE_IRONMAN_END)
+
+		try // Save the game
 		{
-			// This uses baseX/Y options for Geoscape & Basescape:
-//			Options::baseXResolution = Options::baseXGeoscape; // kL
-//			Options::baseYResolution = Options::baseYGeoscape; // kL
-			// This sets Geoscape and Basescape to default (320x200) IG and the config.
+			std::string backup = _filename + ".bak";
+			_game->getSavedGame()->save(backup);
+			std::string fullPath = Options::getUserFolder() + _filename;
+			std::string bakPath = Options::getUserFolder() + backup;
+			if (!CrossPlatform::moveFile(bakPath, fullPath))
+			{
+				throw Exception("Save backed up in " + backup);
+			}
+
+			if (_type == SAVE_IRONMAN_END)
+			{
+				// This uses baseX/Y options for Geoscape & Basescape:
+//				Options::baseXResolution = Options::baseXGeoscape; // kL
+//				Options::baseYResolution = Options::baseYGeoscape; // kL
+				// This sets Geoscape and Basescape to default (320x200) IG and the config.
 /*kL			Screen::updateScale(
-							Options::geoscapeScale,
-							Options::geoscapeScale,
-							Options::baseXGeoscape,
-							Options::baseYGeoscape,
-							true); */
-//			_game->getScreen()->resetDisplay(false);
+								Options::geoscapeScale,
+								Options::geoscapeScale,
+								Options::baseXGeoscape,
+								Options::baseYGeoscape,
+								true); */
+//				_game->getScreen()->resetDisplay(false);
 
-			_game->setState(new MainMenuState());
-			_game->setSavedGame(0);
+				_game->setState(new MainMenuState());
+				_game->setSavedGame(0);
+			}
 		}
-	}
-	catch (Exception &e)
-	{
-		Log(LOG_ERROR) << e.what();
-		std::wostringstream error;
-		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
-		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(
-												error.str(),
-												_palette,
-												Palette::blockOffset(8)+10,
-												"BACK01.SCR",
-												6));
-		else
-			_game->pushState(new ErrorMessageState(
-												error.str(),
-												_palette,
-												Palette::blockOffset(0),
-												"TAC00.SCR",
-												-1));
-	}
-	catch (YAML::Exception &e)
-	{
-		Log(LOG_ERROR) << e.what();
-		std::wostringstream error;
-		error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
-		if (_origin != OPT_BATTLESCAPE)
-			_game->pushState(new ErrorMessageState(
-												error.str(),
-												_palette,
-												Palette::blockOffset(8)+10,
-												"BACK01.SCR",
-												6));
-		else
-			_game->pushState(new ErrorMessageState(
-												error.str(),
-												_palette,
-												Palette::blockOffset(0),
-												"TAC00.SCR",
-												-1));
+		catch (Exception &e)
+		{
+			Log(LOG_ERROR) << e.what();
+			std::wostringstream error;
+			error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
+			if (_origin != OPT_BATTLESCAPE)
+				_game->pushState(new ErrorMessageState(
+													error.str(),
+													_palette,
+													Palette::blockOffset(8)+10,
+													"BACK01.SCR",
+													6));
+			else
+				_game->pushState(new ErrorMessageState(
+													error.str(),
+													_palette,
+													Palette::blockOffset(0),
+													"TAC00.SCR",
+													-1));
+		}
+		catch (YAML::Exception &e)
+		{
+			Log(LOG_ERROR) << e.what();
+			std::wostringstream error;
+			error << tr("STR_SAVE_UNSUCCESSFUL") << L'\x02' << Language::fsToWstr(e.what());
+			if (_origin != OPT_BATTLESCAPE)
+				_game->pushState(new ErrorMessageState(
+													error.str(),
+													_palette,
+													Palette::blockOffset(8)+10,
+													"BACK01.SCR",
+													6));
+			else
+				_game->pushState(new ErrorMessageState(
+													error.str(),
+													_palette,
+													Palette::blockOffset(0),
+													"TAC00.SCR",
+													-1));
+		}
 	}
 }
 

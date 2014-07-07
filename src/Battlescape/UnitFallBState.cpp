@@ -51,9 +51,9 @@ namespace OpenXcom
 UnitFallBState::UnitFallBState(BattlescapeGame* parent)
 	:
 		BattleState(parent),
-		_terrain(0),
-		_unitsToMove(0),
-		_tilesToFallInto(0)
+		_terrain(NULL),
+		_unitsToMove(),
+		_tilesToFallInto()
 {
 }
 
@@ -131,7 +131,7 @@ void UnitFallBState::think()
 			{
 				tBelow = _parent->getSave()->getTile(
 												(*unit)->getPosition()
-												+ Position(x, y, -1));
+												+ Position(x, y,-1));
 				if (!_parent->getSave()->getTile(
 											(*unit)->getPosition()
 											+ Position(x, y, 0))
@@ -146,7 +146,7 @@ void UnitFallBState::think()
 
 		tBelow = _parent->getSave()->getTile(
 										(*unit)->getPosition()
-										+ Position(0, 0, -1));
+										+ Position(0, 0,-1));
 
 		falling = fallCheck
 					&& (*unit)->getPosition().z != 0
@@ -154,7 +154,7 @@ void UnitFallBState::think()
 //kL					&& (*unit)->getArmor()->getMovementType() != MT_FLY // done above in fallCheck
 					&& (*unit)->getWalkingPhase() == 0;
 
-		BattleUnit* uBelow = 0;
+		BattleUnit* uBelow = NULL;
 
 		if (falling)
 		{
@@ -172,7 +172,7 @@ void UnitFallBState::think()
 				{
 					tBelow = _parent->getSave()->getTile(
 													(*unit)->getPosition()
-													+ Position(x, y, -1));
+													+ Position(x, y,-1));
 					_tilesToFallInto.push_back(tBelow);
 				}
 			}
@@ -238,7 +238,7 @@ void UnitFallBState::think()
 						//Log(LOG_INFO) << ". Tile is not occupied";
 						_parent->getSave()->getTile(
 												(*unit)->getLastPosition()
-												+ Position(x, y, 0))->setUnit(0);
+												+ Position(x, y, 0))->setUnit(NULL);
 					}
 				}
 			}
@@ -261,7 +261,7 @@ void UnitFallBState::think()
 																		*unit,
 																		_parent->getSave()->getTile(
 																								(*unit)->getPosition()
-																								+ Position(x, y, -1)));
+																								+ Position(x, y,-1)));
 				}
 			}
 
@@ -317,7 +317,7 @@ void UnitFallBState::think()
 							Position originalPosition = *body;
 							Tile* t = _parent->getSave()->getTile(originalPosition + offset);
 							Tile* tCurrent = _parent->getSave()->getTile(originalPosition);
-							Tile* tBelow2 = _parent->getSave()->getTile(originalPosition + offset + Position(0, 0, -1));
+							Tile* tBelow2 = _parent->getSave()->getTile(originalPosition + offset + Position(0, 0,-1));
 
 							bool aboutToBeOccupiedFromAbove = t
 																&& std::find(
@@ -380,7 +380,7 @@ void UnitFallBState::think()
 									}
 
 									//Log(LOG_INFO) << ". . . . startWalking() out of the way?";
-									Tile* tBelow3 = _parent->getSave()->getTile(originalPosition + Position(0, 0, -1));
+									Tile* tBelow3 = _parent->getSave()->getTile(originalPosition + Position(0, 0,-1));
 									uBelow->startWalking(
 													dir,
 													uBelow->getPosition() + offset,
@@ -402,7 +402,7 @@ void UnitFallBState::think()
 				}
 
 				//Log(LOG_INFO) << ". . checkForCasualties()";
-				_parent->checkForCasualties(0, *unit);
+				_parent->checkForCasualties(NULL, *unit);
 			}
 		}
 
@@ -412,7 +412,7 @@ void UnitFallBState::think()
 			if (falling)
 			{
 				//Log(LOG_INFO) << ". . falling (again?) -> startWalking()";
-				Position destination = (*unit)->getPosition() + Position(0, 0, -1);
+				Position destination = (*unit)->getPosition() + Position(0, 0,-1);
 
 				tBelow = _parent->getSave()->getTile(destination);
 				(*unit)->startWalking(
@@ -421,7 +421,7 @@ void UnitFallBState::think()
 									tBelow,
 									onScreen);
 
-				(*unit)->setCache(0);
+				(*unit)->setCache(NULL);
 				_parent->getMap()->cacheUnit(*unit);
 
 				++unit;
@@ -433,14 +433,11 @@ void UnitFallBState::think()
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
 					(*unit)->getTile()->ignite(1);
-					Position here = ((*unit)->getPosition() * Position(
-																	16,
-																	16,
-																	24))
+					Position here = ((*unit)->getPosition() * Position(16, 16, 24))
 									+ Position(
-												8,
-												8,
-												-(*unit)->getTile()->getTerrainLevel());
+											8,
+											8,
+											-(*unit)->getTile()->getTerrainLevel());
 					_parent->getTileEngine()->hit(
 												here,
 												(*unit)->getStats()->strength,
@@ -451,7 +448,7 @@ void UnitFallBState::think()
 				_terrain->calculateUnitLighting(); // move personal lighting
 
 				_parent->getMap()->cacheUnit(*unit);
-				(*unit)->setCache(0);
+				(*unit)->setCache(NULL);
 
 				_terrain->calculateFOV(*unit);
 

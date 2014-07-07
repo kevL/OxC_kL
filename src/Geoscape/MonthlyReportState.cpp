@@ -450,13 +450,15 @@ void MonthlyReportState::btnOkClick(Action*)
 		{
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
-											SAVE_IRONMAN));
+											SAVE_IRONMAN,
+											_palette));
 		}
 		else if (Options::autosave)
 		{
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
-											SAVE_AUTO_GEOSCAPE));
+											SAVE_AUTO_GEOSCAPE,
+											_palette));
 		}
 	}
 	else

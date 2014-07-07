@@ -51,9 +51,9 @@ namespace OpenXcom
 CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
-	_btnOk			= new TextButton(288, 16, 16, 176);
 	_txtTitle		= new Text(300, 16, 10, 8);
-	_lstSoldiers	= new TextList(288, 128, 8, 32);
+	_lstSoldiers	= new TextList(288, 144, 16, 32);
+	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette("PAL_GEOSCAPE", 0);
 
@@ -83,17 +83,20 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	_txtTitle->setBig();
 
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
-	_lstSoldiers->setColumns(2, 204, 84);
+	_lstSoldiers->setColumns(2, 200, 80);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
 
-	int row = 0;
-	int titleRow = 0;
-	std::map<std::string, RuleCommendations*> commendationsList = _game->getRuleset()->getCommendation();
-	bool modularCommendation;
+
 	std::string noun;
-	bool titleChosen = true;
+	bool
+		titleChosen = true,
+		modularCommendation;
+	size_t
+		row = 0,
+		titleRow = 0;
+	std::map<std::string, RuleCommendations*> commendationsList = _game->getRuleset()->getCommendation();
 
 	for (std::map<std::string, RuleCommendations*>::const_iterator
 			commList = commendationsList.begin();
@@ -124,7 +127,8 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 					++soldierComm)
 			{
 				if ((*soldierComm)->getType() == (*commList).first
-					&& (*soldierComm)->isNew() && noun == "noNoun")
+					&& (*soldierComm)->isNew()
+					&& noun == "noNoun")
 				{
 					(*soldierComm)->makeOld();
 
@@ -136,16 +140,15 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 						modularCommendation = true;
 					}
 
-					// Soldier name
-					std::wstringstream wss;
+					std::wstringstream wss; // Soldier name
 					wss << "   ";
 					wss << (*s)->getName().c_str();
 
-					// Decoration level name
-					int skipCounter = 0;
-					int lastInt = -2;
-					int thisInt = -1;
-					int vectorIterator = 0;
+					int // Decoration level name
+						skipCounter = 0,
+						lastInt = -2,
+						thisInt = -1,
+						vectorIterator = 0;
 
 					for (std::vector<int>::const_iterator
 							k = (*commList).second->getCriteria()->begin()->second.begin();
@@ -166,9 +169,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 						}
 
 						if (thisInt == lastInt)
-						{
 							skipCounter++;
-						}
 
 						vectorIterator++;
 					}
@@ -177,7 +178,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 									2,
 									wss.str().c_str(),
 									tr((*soldierComm)->getDecorationLevelName(skipCounter)).c_str());
-					// _lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
+//					_lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
 
 					break;
 				}
@@ -212,7 +213,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 }
 
 /**
- *
+ * dTor.
  */
 CommendationState::~CommendationState()
 {
