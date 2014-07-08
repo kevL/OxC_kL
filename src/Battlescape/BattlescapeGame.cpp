@@ -98,11 +98,11 @@ BattlescapeGame::BattlescapeGame(
 	_playerPanicHandled		= true;
 	_AIActionCounter		= 0;
 	_AISecondMove			= false;
-	_currentAction.actor	= 0;
+	_currentAction.actor	= NULL;
 
 	checkForCasualties(
-					0,
-					0,
+					NULL,
+					NULL,
 					true);
 
 	cancelCurrentAction();
@@ -862,12 +862,12 @@ void BattlescapeGame::checkForCasualties(
 		if (weapon2)
 		{
 			for (std::vector<std::string>::iterator
-					c = weapon->getRules()->getCompatibleAmmo()->begin();
-					c != weapon->getRules()->getCompatibleAmmo()->end();
+					c = weapon2->getRules()->getCompatibleAmmo()->begin();
+					c != weapon2->getRules()->getCompatibleAmmo()->end();
 					++c)
 			{
 				if (*c == killStatWeaponAmmo)
-					killStatWeapon = weapon->getRules()->getName();
+					killStatWeapon = weapon2->getRules()->getName();
 			}
 		}
 
@@ -875,12 +875,12 @@ void BattlescapeGame::checkForCasualties(
 		if (weapon2)
 		{
 			for (std::vector<std::string>::iterator
-					c = weapon->getRules()->getCompatibleAmmo()->begin();
-					c != weapon->getRules()->getCompatibleAmmo()->end();
+					c = weapon2->getRules()->getCompatibleAmmo()->begin();
+					c != weapon2->getRules()->getCompatibleAmmo()->end();
 					++c)
 			{
 				if (*c == killStatWeaponAmmo)
-					killStatWeapon = weapon->getRules()->getName();
+					killStatWeapon = weapon2->getRules()->getName();
 			}
 		}
 	}
@@ -1273,6 +1273,7 @@ void BattlescapeGame::setupCursor()
 	else
 	{
 		_currentAction.actor = _save->getSelectedUnit();
+
 		if (_currentAction.actor)
 			getMap()->setCursorType(
 								CT_NORMAL,
@@ -1403,7 +1404,6 @@ void BattlescapeGame::popState()
 		&& (_save->getSide() == FACTION_PLAYER || _debugPlay))
 	{
 		//Log(LOG_INFO) << ". actionFailed";
-
 		_parentState->warning(action.result);
 
 		actionFailed = true;
@@ -1427,9 +1427,7 @@ void BattlescapeGame::popState()
 				break;
 				case BA_USE:
 					if (action.weapon->getRules()->getBattleType() == BT_MINDPROBE)
-					{
 						cancelCurrentAction(true);
-					}
 				break;
 			}
 		} // kL_end.
@@ -1440,6 +1438,9 @@ void BattlescapeGame::popState()
 	//Log(LOG_INFO) << ". states.Popfront";
 	_states.pop_front();
 	//Log(LOG_INFO) << ". states.Popfront DONE";
+
+
+	getMap()->refreshSelectorPosition(); // kL
 
 	// handle the end of this unit's actions
 	if (action.actor
@@ -1511,21 +1512,30 @@ void BattlescapeGame::popState()
 						break;
 						case BA_SNAPSHOT:
 							//Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
-
-							if (curTU < action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+							if (curTU < action.actor->getActionTUs(
+																BA_SNAPSHOT,
+																action.weapon))
+							{
 								cancelCurrentAction(true);
-						break;
-						case BA_AIMEDSHOT:
-							//Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
-
-							if (curTU < action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
-								cancelCurrentAction(true);
+							}
 						break;
 						case BA_AUTOSHOT:
 							//Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
-
-							if (curTU < action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+							if (curTU < action.actor->getActionTUs(
+																BA_AUTOSHOT,
+																action.weapon))
+							{
 								cancelCurrentAction(true);
+							}
+						break;
+						case BA_AIMEDSHOT:
+							//Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
+							if (curTU < action.actor->getActionTUs(
+																BA_AIMEDSHOT,
+																action.weapon))
+							{
+								cancelCurrentAction(true);
+							}
 						break;
 /*						case BA_PANIC:
 							if (curTU < action.actor->getActionTUs(BA_PANIC, action.weapon))
@@ -1543,10 +1553,9 @@ void BattlescapeGame::popState()
 					}
 				} // kL_end.
 
-				getMap()->refreshSelectorPosition(); // kL
-				_parentState->getGame()->getCursor()->setVisible(true);
+//				getMap()->refreshSelectorPosition(); // kL
 				setupCursor();
-
+				_parentState->getGame()->getCursor()->setVisible(true);
 				//Log(LOG_INFO) << ". end NOT actionFailed";
 			}
 		}
@@ -1572,7 +1581,7 @@ void BattlescapeGame::popState()
 					_AIActionCounter = 0;
 
 					if (_states.empty()
-						&& _save->selectNextFactionUnit(true) == 0)
+						&& _save->selectNextFactionUnit(true) == NULL)
 					{
 						if (!_save->getDebugMode())
 						{
@@ -1592,15 +1601,15 @@ void BattlescapeGame::popState()
 			}
 			else if (_debugPlay)
 			{
-				getMap()->refreshSelectorPosition(); // kL
-				_parentState->getGame()->getCursor()->setVisible(true);
+//				getMap()->refreshSelectorPosition(); // kL
 				setupCursor();
+				_parentState->getGame()->getCursor()->setVisible(true);
 			}
 		}
 	}
 
 
-	getMap()->refreshSelectorPosition(); // kL
+//	getMap()->refreshSelectorPosition(); // kL
 	//Log(LOG_INFO) << ". uhm yeah";
 
 
@@ -1647,7 +1656,7 @@ void BattlescapeGame::popState()
 		cancelCurrentAction();
 		_save->setSelectedUnit(NULL); // kL_note: seems redundant .....
 
-		getMap()->refreshSelectorPosition(); // kL
+//		getMap()->refreshSelectorPosition(); // kL
 		getMap()->setCursorType(CT_NORMAL);
 		_parentState->getGame()->getCursor()->setVisible(true);
 	}
@@ -1696,14 +1705,14 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * @param bu	- pointer to a unit
  * @param tu	- # of time units to check against
  * @param test	- true to suppress error messages
- * @return, true if unit has tu+ time units
+ * @return, true if unit has tu+ time units ( go! )
  */
 bool BattlescapeGame::checkReservedTU(
 		BattleUnit* bu,
 		int tu,
 		bool test)
 {
-	BattleActionType effectiveTuReserved = _tuReserved; // avoid changing _tuReserved in this method
+	BattleActionType actionReserved = _tuReserved; // avoid changing _tuReserved here.
 
 	// aLiens reserve TUs as a percentage rather than just enough for a single action.
 	if (_save->getSide() != FACTION_PLAYER)
@@ -1711,22 +1720,25 @@ bool BattlescapeGame::checkReservedTU(
 		if (_save->getSide() == FACTION_NEUTRAL)
 			return (tu <= bu->getTimeUnits());
 
+
+		int rand = RNG::generate(0, 10); // kL, added in below ->
+
 		// kL_note: This could use some tweaking, for the poor aLiens:
-		switch (effectiveTuReserved)
+		switch (actionReserved)
 		{
 			case BA_SNAPSHOT:
-				return (tu + (bu->getStats()->tu / 3) <= bu->getTimeUnits());		// 33%
+				return (tu + rand + (bu->getStats()->tu / 3) <= bu->getTimeUnits());		// 33%
 			break;
 			case BA_AUTOSHOT:
-//kL				return (tu + ((bu->getStats()->tu / 5) * 2) <= bu->getTimeUnits());
-				return (tu + ((bu->getStats()->tu * 2) / 5) <= bu->getTimeUnits());	// 40%
+//kL			return (tu + ((bu->getStats()->tu / 5) * 2) <= bu->getTimeUnits());
+				return (tu + rand + (bu->getStats()->tu * 2 / 5) <= bu->getTimeUnits());	// 40%
 			break;
 			case BA_AIMEDSHOT:
-				return (tu + (bu->getStats()->tu / 2) <= bu->getTimeUnits());		// 50%
+				return (tu + rand + (bu->getStats()->tu / 2) <= bu->getTimeUnits());		// 50%
 			break;
 
 			default:
-				return (tu <= bu->getTimeUnits());
+				return (tu + rand <= bu->getTimeUnits());
 			break;
 		}
 	}
@@ -1744,31 +1756,38 @@ bool BattlescapeGame::checkReservedTU(
 	// note note: did more work on getMainHandWeapon()
 
 	// if the weapon has no autoshot, reserve TUs for snapshot
-	if (bu->getActionTUs(_tuReserved, slowestWeapon) == 0
+	if (bu->getActionTUs(
+					_tuReserved,
+					slowestWeapon)
+				== 0
 		&& _tuReserved == BA_AUTOSHOT)
 	{
-		effectiveTuReserved = BA_SNAPSHOT;
+		actionReserved = BA_SNAPSHOT;
 	}
 
 	// likewise, if we don't have a snap shot available, try aimed.
-	if (bu->getActionTUs(effectiveTuReserved, slowestWeapon) == 0
+	if (bu->getActionTUs(
+					actionReserved,
+					slowestWeapon)
+				== 0
 		&& _tuReserved == BA_SNAPSHOT)
 	{
-		effectiveTuReserved = BA_AIMEDSHOT;
+		actionReserved = BA_AIMEDSHOT;
 	}
 
 	const int tuKneel = (_kneelReserved && bu->getType() == "SOLDIER")? 4: 0;
-	if ((effectiveTuReserved != BA_NONE
+
+	if ((actionReserved != BA_NONE
 			|| _kneelReserved)
-		&& tu + tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) > bu->getTimeUnits()
-		&& (tuKneel + bu->getActionTUs(effectiveTuReserved, slowestWeapon) <= bu->getTimeUnits()
+		&& tu + tuKneel + bu->getActionTUs(actionReserved, slowestWeapon) > bu->getTimeUnits()
+		&& (tuKneel + bu->getActionTUs(actionReserved, slowestWeapon) <= bu->getTimeUnits()
 			|| test))
 	{
 		if (!test)
 		{
 			if (tuKneel)
 			{
-				switch (effectiveTuReserved)
+				switch (actionReserved)
 				{
 					case BA_NONE:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_KNEELING");
@@ -1781,7 +1800,7 @@ bool BattlescapeGame::checkReservedTU(
 			}
 			else
 			{
-				switch (effectiveTuReserved)
+				switch (actionReserved)
 				{
 					case BA_SNAPSHOT:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT");
@@ -1994,8 +2013,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 /**
   * Cancels the current action the user had selected (firing, throwing,..)
-  * @param bForce, Force the action to be cancelled.
-  * @return, Whether an action was cancelled or not.
+  * @param bForce - force the action to be cancelled
+  * @return, true if action was cancelled
   */
 bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
@@ -2086,7 +2105,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 	//Log(LOG_INFO) << "BattlescapeGame::primaryAction()"; // unitID = " << _currentAction.actor->getId();
 	// kL_debug:
 //	std::string sUnit = "none selected";
-	int iUnit = 0;
+/*	int iUnit = 0;
 	if (_save->getSelectedUnit())
 	{
 		iUnit = _save->getSelectedUnit()->getId();
@@ -2096,7 +2115,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 	{
 		//Log(LOG_INFO) << ". action.Actor " << iUnit;
 		iUnit = _currentAction.actor->getId();
-	} // kL_end.
+	} */ // kL_end.
 	//Log(LOG_INFO) << ". action.TU = " << _currentAction.TU;
 
 
@@ -2271,13 +2290,13 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		{
 			_currentAction.waypoints.clear();
 			_currentAction.waypoints.push_back(pos);
+
 			getMap()->getWaypoints()->clear();
 			getMap()->getWaypoints()->push_back(pos);
 		}
 		else
 		{
 			//Log(LOG_INFO) << ". . . . Firing or Throwing";
-
 			getMap()->setCursorType(CT_NONE);
 
 			if (Options::battleConfirmFireMode)
@@ -2319,8 +2338,10 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			{
 				_save->setSelectedUnit(unit);
 				_parentState->updateSoldierInfo();
+
 				cancelCurrentAction();
 				setupCursor();
+
 				_currentAction.actor = unit;
 			}
 		}

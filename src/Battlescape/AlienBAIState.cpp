@@ -69,23 +69,23 @@ AlienBAIState::AlienBAIState(
 		BattleAIState(
 			save,
 			unit),
-		_aggroTarget(0),
+		_aggroTarget(NULL),
 		_knownEnemies(0),
 		_visibleEnemies(0),
 		_spottingEnemies(0),
 		_escapeTUs(0),
 		_ambushTUs(0),
-		_reserveTUs(0),
+//kL	_reserveTUs(0),
 		_rifle(false),
 		_melee(false),
 		_blaster(false),
 		_grenade(false), // kL
-//kL		_wasHit(false),
+//kL	_wasHit(false),
 		_didPsi(false),
 		_AIMode(AI_PATROL),
 		_closestDist(100),
 		_fromNode(node),
-		_toNode(0)
+		_toNode(NULL)
 {
 	//Log(LOG_INFO) << "Create AlienBAIState";
 	_traceAI		= Options::traceAI;
@@ -208,9 +208,12 @@ void AlienBAIState::think(BattleAction* action)
 	_blaster	= false;
 	_grenade	= false; // kL
 
+//	int rand = RNG::generate(0, 10); // kL
+
 	_reachable	= _save->getPathfinding()->findReachable(
 													_unit,
 													_unit->getTimeUnits());
+//														- rand);
 
 	if (_unit->getCharging()
 		&& _unit->getCharging()->isOut(true, true))
@@ -255,14 +258,22 @@ void AlienBAIState::think(BattleAction* action)
 				_rifle = true;
 				_reachableWithAttack = _save->getPathfinding()->findReachable(
 																		_unit,
-																		_unit->getTimeUnits() - _unit->getActionTUs(BA_SNAPSHOT, action->weapon));
+																		_unit->getTimeUnits()
+																			- _unit->getActionTUs(
+																							BA_SNAPSHOT,
+																							action->weapon));
+//																			- rand); // kL
 			}
 			else
 			{
 				_blaster = true;
 				_reachableWithAttack = _save->getPathfinding()->findReachable(
 																		_unit,
-																		_unit->getTimeUnits() - _unit->getActionTUs(BA_AIMEDSHOT, action->weapon));
+																		_unit->getTimeUnits()
+																			- _unit->getActionTUs(
+																							BA_AIMEDSHOT,
+																							action->weapon));
+//																			- rand); // kL
 			}
 		}
 		else if (rule->getBattleType() == BT_MELEE)
@@ -270,11 +281,15 @@ void AlienBAIState::think(BattleAction* action)
 			_melee = true;
 			_reachableWithAttack = _save->getPathfinding()->findReachable(
 																	_unit,
-																	_unit->getTimeUnits() - _unit->getActionTUs(BA_HIT, action->weapon));
+																	_unit->getTimeUnits()
+																		- _unit->getActionTUs(
+																							BA_HIT,
+																							action->weapon));
+//																		- rand); // kL
 		}
-		else if (rule->getBattleType() == BT_GRENADE)		// kL
-			_grenade = true;								// kL, this is no longer useful since I fixed
-															// getMainHandWeapon() to not return grenades.
+		else if (rule->getBattleType() == BT_GRENADE)	// kL
+			_grenade = true;							// kL, this is no longer useful since I fixed
+														// getMainHandWeapon() to not return grenades.
 	}
 
 	//Log(LOG_INFO) << ". . pos 2";
@@ -534,7 +549,7 @@ void AlienBAIState::setupPatrol()
 	Node* node;
 	_patrolAction->TU = 0;
 
-	if (_toNode != 0
+	if (_toNode != NULL
 		&& _unit->getPosition() == _toNode->getPosition())
 	{
 		if (_traceAI) Log(LOG_INFO) << "Patrol destination reached!";
@@ -542,7 +557,7 @@ void AlienBAIState::setupPatrol()
 		// destination reached; head off to next patrol node
 		_fromNode = _toNode;
 		_toNode->freeNode();
-		_toNode = 0;
+		_toNode = NULL;
 
 		// take a peek through window before walking to the next node
 		int dir = _save->getTileEngine()->faceWindow(_unit->getPosition());
@@ -556,7 +571,7 @@ void AlienBAIState::setupPatrol()
 		}
 	}
 
-	if (_fromNode == 0)
+	if (_fromNode == NULL)
 	{
 		// assume closest node as "from node"
 		// on same level to avoid strange things, and the node has to match unit size or it will freeze
@@ -584,7 +599,7 @@ void AlienBAIState::setupPatrol()
 	}
 
 	int triesLeft = 5;
-	while (_toNode == 0
+	while (_toNode == NULL
 		&& triesLeft)
 	{
 		triesLeft--;
@@ -771,7 +786,7 @@ void AlienBAIState::setupAmbush()
 		{
 			Position pos = (*i)->getPosition();
 			Tile* tile = _save->getTile(pos);
-			if (tile == 0
+			if (tile == NULL
 				|| _save->getTileEngine()->distance(pos, _unit->getPosition()) > 10
 				|| pos.z != _unit->getPosition().z
 				|| tile->getDangerous()
@@ -861,7 +876,7 @@ void AlienBAIState::setupAmbush()
 												path.back(),
 												&nextPos,
 												_aggroTarget,
-												0,
+												NULL,
 												false);
 				path.pop_back();
 				currentPos = nextPos;
@@ -1274,7 +1289,7 @@ int AlienBAIState::selectNearestTarget()
 {
 	int tally = 0;
 
-	_aggroTarget = 0;
+	_aggroTarget = NULL;
 	_closestDist = 100;
 
 	Position
@@ -1444,7 +1459,7 @@ bool AlienBAIState::selectPointNearTarget(
 				{
 					Position checkPath = target->getPosition() + Position (x, y, z);
 
-					if (_save->getTile(checkPath) == 0
+					if (_save->getTile(checkPath) == NULL
 						|| std::find(
 									_reachable.begin(),
 									_reachable.end(),
@@ -1462,7 +1477,7 @@ bool AlienBAIState::selectPointNearTarget(
 																	dir,
 																	_unit,
 																	target,
-																	0);
+																	NULL);
 					bool fitHere = _save->setUnitPosition(
 														_unit,
 														checkPath,
@@ -1474,7 +1489,7 @@ bool AlienBAIState::selectPointNearTarget(
 						_save->getPathfinding()->calculate(
 														_unit,
 														checkPath,
-														0,
+														NULL,
 														maxTUs);
 
 						if (_save->getPathfinding()->getStartDirection() != -1
@@ -2103,7 +2118,7 @@ void AlienBAIState::wayPointAction()
 	}
 
 
-	if (_aggroTarget != 0)
+	if (_aggroTarget != NULL)
 	{
 		_attackAction->type = BA_LAUNCH;
 		_attackAction->TU = _unit->getActionTUs(

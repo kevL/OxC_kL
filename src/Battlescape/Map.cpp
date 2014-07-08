@@ -1573,125 +1573,128 @@ void Map::drawTerrain(Surface* surface)
 							// UFOExtender Accuracy: display adjusted accuracy value on crosshair (and more).
 							if (Options::battleUFOExtenderAccuracy)
 							{
-								if (_cursorType == CT_AIM) // indicator for Firing.
+								BattleAction* action = _save->getBattleGame()->getCurrentAction();
+								if (action->type == BA_SNAPSHOT
+									|| action->type == BA_AUTOSHOT
+									|| action->type == BA_AIMEDSHOT
+									|| action->type == BA_THROW)
 								{
-									// kL_note: Use stuff from ProjectileFlyBState::init()
-									// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
-									// to turn accuracy to 'red 0' if target is out of LoS/LoF.
-
-									BattleAction* action = _save->getBattleGame()->getCurrentAction();
-
-//kL								int accuracy = action->actor->getFiringAccuracy(action->type, action->weapon);
-									int accuracy = static_cast<int>( // _save->getSelectedUnit()->
-															action->actor->getFiringAccuracy(
-																						action->type,
-																						action->weapon)
-																					* 100.0);
-
-									RuleItem* weapon = action->weapon->getRules();
-
-									int
-										upperLimit = 200,
-										lowerLimit = weapon->getMinRange(),
-										distance = _save->getTileEngine()->distance(
-																				Position(
-																						itX,
-																						itY,
-																						itZ),
-																				action->actor->getPosition());
-
-									switch (action->type)
+									if (_cursorType == CT_AIM) // indicator for Firing.
 									{
-										case BA_AIMEDSHOT:
-											upperLimit = weapon->getAimRange();
-										break;
-										case BA_SNAPSHOT:
-											upperLimit = weapon->getSnapRange();
-										break;
-										case BA_AUTOSHOT:
-											upperLimit = weapon->getAutoRange();
-										break;
+										// kL_note: Use stuff from ProjectileFlyBState::init()
+										// as well as TileEngine::canTargetUnit() & TileEngine::canTargetTile()
+										// to turn accuracy to 'red 0' if target is out of LoS/LoF.
 
-										default:
-										break;
+										int accuracy = static_cast<int>( // _save->getSelectedUnit()->
+																action->actor->getFiringAccuracy(
+																							action->type,
+																							action->weapon)
+																						* 100.0);
+
+										RuleItem* weapon = action->weapon->getRules();
+
+										int
+											upperLimit = 200,
+											lowerLimit = weapon->getMinRange(),
+											distance = _save->getTileEngine()->distance(
+																					Position(
+																							itX,
+																							itY,
+																							itZ),
+																					action->actor->getPosition());
+
+										switch (action->type)
+										{
+											case BA_AIMEDSHOT:
+												upperLimit = weapon->getAimRange();
+											break;
+											case BA_SNAPSHOT:
+												upperLimit = weapon->getSnapRange();
+											break;
+											case BA_AUTOSHOT:
+												upperLimit = weapon->getAutoRange();
+											break;
+
+											default:
+											break;
+										}
+
+										Uint8 color = Palette::blockOffset(3)+3; // green
+
+										if (distance > upperLimit)
+										{
+											accuracy -= (distance - upperLimit) * weapon->getDropoff();
+											color = Palette::blockOffset(1)+2; // orange
+										}
+										else if (distance < lowerLimit)
+										{
+											accuracy -= (lowerLimit - distance) * weapon->getDropoff();
+											color = Palette::blockOffset(1)+2; // orange
+										}
+
+										if (accuracy < 1 // zero accuracy or out of range: set it red.
+											|| distance > weapon->getMaxRange())
+										{
+											accuracy = 0;
+											color = Palette::blockOffset(2)+3; // red
+										}
+	//									}
+
+										//Log(LOG_INFO) << "Map::drawTerrain(), accuracy = " << accuracy;
+										_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
+										_txtAccuracy->setColor(color);
+										_txtAccuracy->draw();
+										_txtAccuracy->blitNShade(
+															surface,
+															screenPosition.x,
+															screenPosition.y,
+															0);
 									}
-
-									Uint8 color = Palette::blockOffset(3)+3; // green
-
-									if (distance > upperLimit)
+									else if (_cursorType == CT_THROW) // indicator for Throwing.
 									{
-										accuracy -= (distance - upperLimit) * weapon->getDropoff();
-										color = Palette::blockOffset(1)+2; // orange
+										//Log(LOG_INFO) << "Map::drawTerrain()";
+										Position
+											posOrigin = action->actor->getPosition(),
+											posTarget = Position(
+																itX,
+																itY,
+																itZ);
+										action->target = posTarget;
+
+										Position originVoxel = _save->getTileEngine()->getOriginVoxel(
+																									*action,
+																									0);
+										Position targetVoxel = Position(
+																	itX * 16 + 8,
+																	itY * 16 + 8,
+																	itZ * 24 + 2);
+										targetVoxel.z -= _save->getTile(posTarget)->getTerrainLevel();
+										//Log(LOG_INFO) << ". originVoxel = " << originVoxel;
+										//Log(LOG_INFO) << ". targetVoxel = " << targetVoxel;
+
+										unsigned accuracy = 0;
+										Uint8 color = Palette::blockOffset(2)+3; // red
+
+										bool canThrow = _save->getTileEngine()->validateThrow(
+																							*action,
+																							originVoxel,
+																							targetVoxel);
+										//Log(LOG_INFO) << ". canThrow = " << canThrow;
+										if (canThrow)
+										{
+											accuracy = static_cast<unsigned>(_save->getSelectedUnit()->getThrowingAccuracy() * 100.0);
+											color = Palette::blockOffset(3)+3; // green
+										}
+
+										_txtAccuracy->setValue(accuracy);
+										_txtAccuracy->setColor(color);
+										_txtAccuracy->draw();
+										_txtAccuracy->blitNShade(
+															surface,
+															screenPosition.x,
+															screenPosition.y,
+															0);
 									}
-									else if (distance < lowerLimit)
-									{
-										accuracy -= (lowerLimit - distance) * weapon->getDropoff();
-										color = Palette::blockOffset(1)+2; // orange
-									}
-
-									if (accuracy < 1 // zero accuracy or out of range: set it red.
-										|| distance > weapon->getMaxRange())
-									{
-										accuracy = 0;
-										color = Palette::blockOffset(2)+3; // red
-									}
-//									}
-
-									//Log(LOG_INFO) << "Map::drawTerrain(), accuracy = " << accuracy;
-									_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
-									_txtAccuracy->setColor(color);
-									_txtAccuracy->draw();
-									_txtAccuracy->blitNShade(
-														surface,
-														screenPosition.x,
-														screenPosition.y,
-														0);
-								}
-								else if (_cursorType == CT_THROW) // indicator for Throwing.
-								{
-									//Log(LOG_INFO) << "Map::drawTerrain()";
-									BattleAction* action = _save->getBattleGame()->getCurrentAction();
-									Position
-										posOrigin = action->actor->getPosition(),
-										posTarget = Position(
-															itX,
-															itY,
-															itZ);
-									action->target = posTarget;
-
-									Position originVoxel = _save->getTileEngine()->getOriginVoxel(
-																								*action,
-																								0);
-									Position targetVoxel = Position(
-																itX * 16 + 8,
-																itY * 16 + 8,
-																itZ * 24 + 2);
-									targetVoxel.z -= _save->getTile(posTarget)->getTerrainLevel();
-									//Log(LOG_INFO) << ". originVoxel = " << originVoxel;
-									//Log(LOG_INFO) << ". targetVoxel = " << targetVoxel;
-
-									unsigned accuracy = 0;
-									Uint8 color = Palette::blockOffset(2)+3; // red
-
-									bool canThrow = _save->getTileEngine()->validateThrow(
-																						*action,
-																						originVoxel,
-																						targetVoxel);
-									//Log(LOG_INFO) << ". canThrow = " << canThrow;
-									if (canThrow)
-									{
-										accuracy = static_cast<unsigned>(_save->getSelectedUnit()->getThrowingAccuracy() * 100.0);
-										color = Palette::blockOffset(3)+3; // green
-									}
-
-									_txtAccuracy->setValue(accuracy);
-									_txtAccuracy->setColor(color);
-									_txtAccuracy->draw();
-									_txtAccuracy->blitNShade(
-														surface,
-														screenPosition.x,
-														screenPosition.y,
-														0);
 								}
 							}
 						}

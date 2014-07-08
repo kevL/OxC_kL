@@ -703,7 +703,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		{
 			//Log(LOG_INFO) << ". . _projectileImpact !";
 			_unit->aim(true); // set the soldier in an aiming position
-			_unit->setCache(0);
+			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
 			// and we have a lift-off
@@ -803,7 +803,7 @@ void ProjectileFlyBState::think()
 	BA_RETHINK		// 14 */
 			if (_action.cameraPosition.z != -1) // kL_note: a bit of overkill here
 			{
-				if (_action.type == BA_STUN // kL, don't jump screen after these.
+/*				if (_action.type == BA_STUN // kL, don't jump screen after these.
 					|| _action.type == BA_HIT
 					|| _action.type == BA_USE
 					|| _action.type == BA_LAUNCH
@@ -812,7 +812,8 @@ void ProjectileFlyBState::think()
 				{
 //					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
 				}
-				else if (_action.type == BA_THROW // kL, jump screen back to pre-shot position
+				else */
+				if (_action.type == BA_THROW // kL, jump screen back to pre-shot position
 					|| _action.type == BA_AUTOSHOT
 					|| _action.type == BA_SNAPSHOT
 					|| _action.type == BA_AIMEDSHOT)

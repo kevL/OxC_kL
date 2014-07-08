@@ -1770,9 +1770,9 @@
     <ClInclude Include="Engine\DosFont.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    </ClInclude>
     <ClInclude Include="Basescape\SoldierDeadInfoState.h">
       <Filter>Basescape</Filter>
+    </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateTFTD.h">
       <Filter>Ufopaedia</Filter>
     </ClInclude>

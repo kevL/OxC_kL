@@ -66,7 +66,8 @@ UnitDieBState::UnitDieBState(
 		BattleState(parent),
 		_unit(unit),
 		_damageType(damageType),
-		_noSound(noSound)
+		_noSound(noSound),
+		_doneScream(false)
 {
 	//Log(LOG_INFO) << "Create UnitDieBState ID = " << _unit->getId();
 	_unit->clearVisibleTiles();
@@ -76,8 +77,8 @@ UnitDieBState::UnitDieBState(
 	_unit->setDirection(_originalDir);
 	_unit->setSpinPhase(-1);
 
-	if (!_noSound)
-		playDeathSound();
+//	if (!_noSound)
+//		playDeathSound();
 
 	if (_unit->getVisible())
 	{
@@ -187,8 +188,15 @@ void UnitDieBState::init()
 void UnitDieBState::think()
 {
 	//Log(LOG_INFO) << "UnitDieBState::think() ID " << _unit->getId();
+	if (_noSound == false
+		&& _doneScream == false)
+	{
+		_doneScream = true;
+
+		playDeathSound();
+	}
+
 // #1
-//kL	if (_unit->getDirection() != 3 && _damageType != DT_HE)
 	if (_unit->getStatus() == STATUS_TURNING)
 	{
 		//Log(LOG_INFO) << ". . STATUS_TURNING";
@@ -307,14 +315,14 @@ void UnitDieBState::think()
 }
 
 /**
- * Unit falling cannot be cancelled.
+ * Unit dying cannot be cancelled.
  */
 void UnitDieBState::cancel()
 {
 }
 
 /**
- * Converts unit to a corpse (item).
+ * Converts unit to a corpse-item.
  */
 void UnitDieBState::convertUnitToCorpse()
 {

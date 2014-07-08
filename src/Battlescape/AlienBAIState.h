@@ -51,7 +51,7 @@ protected:
 		_melee,
 		_rifle,
 		_traceAI;
-//kL		_wasHit;
+//kL	_wasHit;
 	int
 		_AIMode,
 		_closestDist,
@@ -60,8 +60,8 @@ protected:
 		_spottingEnemies,
 		_visibleEnemies,
 		_ambushTUs,
-		_escapeTUs,
-		_reserveTUs;
+		_escapeTUs;
+//kL	_reserveTUs;
 
 	std::vector<int>
 		_reachable,

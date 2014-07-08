@@ -102,10 +102,9 @@ void ExplosionBState::init()
 		// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
 		_pistolWhip = _item->getRules()->getBattleType() != BT_MELEE
 					&& _parent->getCurrentAction()->type == BA_HIT;
+
 		if (_pistolWhip)
-		{
 			_power = _item->getRules()->getMeleePower();
-		}
 
 		// since melee aliens don't use a conventional weapon type, we use their strength instead.
 		if ( //_item->getRules()->getBattleType() == BT_MELEE &&
@@ -346,6 +345,18 @@ void ExplosionBState::cancel()
 void ExplosionBState::explode()
 {
 	//Log(LOG_INFO) << "ExplosionBState::explode()";
+	// kL_begin: had this below, where it worked; try it here.
+	// If so, can take out of TileEngine::hit() the check for DT_NONE
+	if (_item
+		&& _item->getRules()->getBattleType() == BT_PSIAMP)
+	{
+//		_parent->getMap()->cacheUnits();
+		_parent->popState();
+
+		return;
+	} // kL_end.
+
+
 	SavedBattleGame* save = _parent->getSave();
 	TileEngine* tileEngine = save->getTileEngine(); // kL
 
@@ -353,6 +364,7 @@ void ExplosionBState::explode()
 //	if (_parent->getCurrentAction()->type == BA_HIT
 //		|| _parent->getCurrentAction()->type == BA_STUN)
 	if (_hit)
+//		&& _item->getRules()->getBattleType() != BT_PSIAMP) // -> or type != BA_PANIC / BA_MINDCONTROL
 	{
 		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 
@@ -370,8 +382,7 @@ void ExplosionBState::explode()
 												_item)
 											* 100.0)))
 		{
-			Log(LOG_INFO) << ". BA_HIT/STUN ... missed !";
-
+			//Log(LOG_INFO) << ". BA_HIT/STUN ... missed !";
 			_parent->getMap()->cacheUnits();
 			_parent->popState();
 
@@ -419,10 +430,11 @@ void ExplosionBState::explode()
 		else
 		{
 			//Log(LOG_INFO) << ". . not AoE, TileEngine::hit()";
-			bool hit = _pistolWhip											// kL
-						|| _item->getRules()->getBattleType() == BT_MELEE	// kL
-						|| _item->getRules()->getBattleType() == BT_PSIAMP;	// kL
+//			bool hit = _pistolWhip											// kL
+//						|| _item->getRules()->getBattleType() == BT_MELEE	// kL
+//						|| _item->getRules()->getBattleType() == BT_PSIAMP;	// kL
 			// kL_note: basically, PsiAmp is needed 'round here only for its animation to play.
+			// Later: no, no it's not.
 
 			ItemDamageType type = _item->getRules()->getDamageType();
 			if (_pistolWhip)
@@ -433,7 +445,8 @@ void ExplosionBState::explode()
 												_power,
 												type,
 												_unit,
-												hit); // kL add.
+//												hit); // kL add.
+												_hit);
 
 			if (!_item->getRules()->getZombieUnit().empty() // check if this unit turns others into zombies
 				&& victim
@@ -451,14 +464,14 @@ void ExplosionBState::explode()
 	}
 
 	// kL_begin:
-	if (_item
+/*	if (_item
 		&& _item->getRules()->getBattleType() == BT_PSIAMP)
 	{
 //		_parent->getMap()->cacheUnits();
 		_parent->popState();
 
 		return;
-	} // kL_end.
+	} */ // kL_end.
 
 
 	bool terrain = false;
