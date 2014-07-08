@@ -6883,7 +6883,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1404753966 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1404769652 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
