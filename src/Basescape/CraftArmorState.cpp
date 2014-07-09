@@ -305,7 +305,9 @@ void CraftArmorState::lstSoldiersClick(Action* action) // kL
  */
 void CraftArmorState::lstLeftArrowClick(Action* action) // kL
 {
-	int row = _lstSoldiers->getSelectedRow();
+	_curRow = _lstSoldiers->getScroll();
+
+	size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
 		Soldier* soldier = _base->getSoldiers()->at(row);
@@ -315,17 +317,22 @@ void CraftArmorState::lstLeftArrowClick(Action* action) // kL
 			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row - 1);
 			_base->getSoldiers()->at(row - 1) = soldier;
 
-			if (row != static_cast<int>(_lstSoldiers->getScroll()))
+			if (row != _lstSoldiers->getScroll())
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
+			{
+				_curRow--;
 				_lstSoldiers->scrollUp(false);
+			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
+			_curRow++;
+
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
 									_base->getSoldiers()->begin(),
@@ -342,11 +349,14 @@ void CraftArmorState::lstLeftArrowClick(Action* action) // kL
  */
 void CraftArmorState::lstRightArrowClick(Action* action) // kL
 {
-	int row = _lstSoldiers->getSelectedRow();
+	_curRow = _lstSoldiers->getScroll();
+
+	size_t row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
+
 	if (numSoldiers > 0
 		&& numSoldiers <= INT_MAX
-		&& row < static_cast<int>(numSoldiers) - 1)
+		&& row < numSoldiers - 1)
 	{
 		Soldier* soldier = _base->getSoldiers()->at(row);
 
@@ -355,14 +365,17 @@ void CraftArmorState::lstRightArrowClick(Action* action) // kL
 			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
 			_base->getSoldiers()->at(row + 1) = soldier;
 
-			if (row != static_cast<int>(_lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll()))
+			if (row != _lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll())
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
+			{
+				_curRow++;
 				_lstSoldiers->scrollDown(false);
+			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{

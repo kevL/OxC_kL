@@ -50,6 +50,7 @@ class TransferItemsState
 {
 
 private:
+	bool _reset; // kL
 	int
 		_aQty,
 		_cQty,

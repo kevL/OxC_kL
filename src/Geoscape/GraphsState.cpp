@@ -71,7 +71,6 @@ struct GraphBtnInfo
 	}
 };
 
-
 Sound* GraphsState::soundPop = 0; // kL
 
 
@@ -784,7 +783,7 @@ void GraphsState::btnUfoRegionClick(Action*)
 
 	_current = 0;
 
-	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+//	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	_alien = true;
 	_income = false;
@@ -829,7 +828,7 @@ void GraphsState::btnUfoCountryClick(Action*)
 
 	_current = 2;
 
-	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+//	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	_alien = true;
 	_income = false;
@@ -874,7 +873,7 @@ void GraphsState::btnXcomRegionClick(Action*)
 
 	_current = 1;
 
-	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+//	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	_alien = false;
 	_income = false;
@@ -919,7 +918,7 @@ void GraphsState::btnXcomCountryClick(Action*)
 
 	_current = 3;
 
-	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+//	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	_alien = false;
 	_income = false;
@@ -964,7 +963,7 @@ void GraphsState::btnIncomeClick(Action*)
 
 	_current = 4;
 
-	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+//	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	_alien = false;
 	_income = true;
@@ -1001,7 +1000,7 @@ void GraphsState::btnFinanceClick(Action*)
 
 	_current = 5;
 
-	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+//	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	_alien = false;
 	_income = false;

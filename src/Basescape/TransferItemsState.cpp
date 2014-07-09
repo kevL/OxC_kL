@@ -94,7 +94,9 @@ TransferItemsState::TransferItemsState(
 		_hasSci(0),
 		_hasEng(0),
 
-		_distance(0.0)
+		_distance(0.0),
+
+		_reset(true)
 {
 	_window					= new Window(this, 320, 200, 0, 0);
 	_txtTitle				= new Text(300, 16, 10, 9);
@@ -212,6 +214,13 @@ TransferItemsState::~TransferItemsState()
  */
 void TransferItemsState::init()
 {
+	if (_reset == false)
+	{
+		_reset = true;
+
+		return;
+	}
+
 	_lstItems->clearList();
 
 	_baseQty.clear();
@@ -554,8 +563,8 @@ void TransferItemsState::think()
 {
 	State::think();
 
-	_timerInc->think(this, 0);
-	_timerDec->think(this, 0);
+	_timerInc->think(this, NULL);
+	_timerDec->think(this, NULL);
 }
 
 /**
@@ -928,6 +937,8 @@ void TransferItemsState::increaseByValue(int change)
 			|| selType == TRANSFER_ENGINEER)
 		&& _pQty + 1 > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 	{
+		_reset = false;
+
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(
 											tr("STR_NO_FREE_ACCOMODATION"),
@@ -943,6 +954,8 @@ void TransferItemsState::increaseByValue(int change)
 
 		if (_cQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
 		{
+			_reset = false;
+
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
 												tr("STR_NO_FREE_HANGARS_FOR_TRANSFER"),
@@ -955,6 +968,8 @@ void TransferItemsState::increaseByValue(int change)
 
 		if (_pQty + craft->getNumSoldiers() > _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters())
 		{
+			_reset = false;
+
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
 												tr("STR_NO_FREE_ACCOMODATION_CREW"),
@@ -968,6 +983,8 @@ void TransferItemsState::increaseByValue(int change)
 		if (Options::storageLimitsEnforced
 			&& _baseTo->storesOverfull(_iQty + craft->getItems()->getTotalSize(_game->getRuleset())))
 		{
+			_reset = false;
+
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
 												tr("STR_NOT_ENOUGH_STORE_SPACE_FOR_CRAFT"),
@@ -990,6 +1007,8 @@ void TransferItemsState::increaseByValue(int change)
 		if (!selItem->getAlien()
 			&& _baseTo->storesOverfull(selItem->getSize() + _iQty))
 		{
+			_reset = false;
+
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
 												tr("STR_NOT_ENOUGH_STORE_SPACE"),
@@ -1003,6 +1022,8 @@ void TransferItemsState::increaseByValue(int change)
 			&& (Options::storageLimitsEnforced * _aQty) + 1
 					> _baseTo->getAvailableContainment() - (Options::storageLimitsEnforced * _baseTo->getUsedContainment()))
 		{
+			_reset = false;
+
 			_timerInc->stop();
 			_game->pushState(new ErrorMessageState(
 												tr("STR_NO_ALIEN_CONTAINMENT_FOR_TRANSFER"),

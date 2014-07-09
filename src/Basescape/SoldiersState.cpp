@@ -272,6 +272,8 @@ void SoldiersState::lstSoldiersClick(Action* action)
  */
 void SoldiersState::lstLeftArrowClick(Action* action) // kL
 {
+	_curRow = _lstSoldiers->getScroll();
+
 	size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
@@ -289,10 +291,15 @@ void SoldiersState::lstLeftArrowClick(Action* action) // kL
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
+			{
+				_curRow--;
 				_lstSoldiers->scrollUp(false);
+			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
+			_curRow++;
+
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
 									_base->getSoldiers()->begin(),
@@ -309,8 +316,11 @@ void SoldiersState::lstLeftArrowClick(Action* action) // kL
  */
 void SoldiersState::lstRightArrowClick(Action* action) // kL
 {
+	_curRow = _lstSoldiers->getScroll();
+
 	size_t row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
+
 	if (numSoldiers > 0
 		&& numSoldiers <= INT_MAX
 		&& row < numSoldiers - 1)
@@ -329,7 +339,10 @@ void SoldiersState::lstRightArrowClick(Action* action) // kL
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
+			{
+				_curRow++;
 				_lstSoldiers->scrollDown(false);
+			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{

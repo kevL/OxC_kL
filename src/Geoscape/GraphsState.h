@@ -133,7 +133,6 @@ private:
 	public:
 		static Sound* soundPop; // kL
 
-
 		/// Creates the Graphs state.
 		GraphsState();
 		/// Cleans up the Graphs state.

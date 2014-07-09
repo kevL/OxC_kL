@@ -353,6 +353,8 @@ void AllocatePsiTrainingState::lstSoldiersClick(Action* action)
  */
 void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
 {
+	_curRow = _lstSoldiers->getScroll();
+
 	size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
@@ -370,10 +372,15 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
+			{
+				_curRow--;
 				_lstSoldiers->scrollUp(false);
+			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
+			_curRow++;
+
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
 									_base->getSoldiers()->begin(),
@@ -390,8 +397,11 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
  */
 void AllocatePsiTrainingState::lstRightArrowClick(Action* action) // kL
 {
+	_curRow = _lstSoldiers->getScroll();
+
 	size_t row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
+
 	if (numSoldiers > 0
 		&& numSoldiers <= INT_MAX
 		&& row < numSoldiers - 1)
@@ -403,14 +413,17 @@ void AllocatePsiTrainingState::lstRightArrowClick(Action* action) // kL
 			_base->getSoldiers()->at(row) = _base->getSoldiers()->at(row + 1);
 			_base->getSoldiers()->at(row + 1) = soldier;
 
-			if (row != static_cast<int>(_lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll()))
+			if (row != _lstSoldiers->getVisibleRows() - 1 + _lstSoldiers->getScroll())
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
 						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
 			}
 			else
+			{
+				_curRow++;
 				_lstSoldiers->scrollDown(false);
+			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
