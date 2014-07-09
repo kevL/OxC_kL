@@ -4646,7 +4646,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404847855 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1404866507 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	<climits>
 	<string>
@@ -5541,7 +5541,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1404850007 f:\git\openxcom\src\basescape\transferitemsstate.h
+1404867782 f:\git\openxcom\src\basescape\transferitemsstate.h
 	<string>
 	<vector>
 	"../Engine/State.h"
@@ -5563,7 +5563,7 @@
 1404096022 f:\git\openxcom\src\basescape\transferconfirmstate.h
 	"../Engine/State.h"
 
-1404504817 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
+1404867782 source:f:\git\openxcom\src\basescape\transferitemsstate.cpp
 	"TransferItemsState.h"
 	<cfloat>
 	<climits>
@@ -5722,7 +5722,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1404791262 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1404874011 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5798,7 +5798,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1404806008 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1404877808 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6883,7 +6883,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1404769652 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1404877808 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -9485,7 +9485,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1404758777 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1404872663 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

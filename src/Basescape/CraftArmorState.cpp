@@ -277,6 +277,8 @@ void CraftArmorState::lstSoldiersClick(Action* action) // kL
 		return;
 	} // kL_end.
 
+	_curRow = _lstSoldiers->getScroll();
+
 	Soldier* soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -291,8 +293,6 @@ void CraftArmorState::lstSoldiersClick(Action* action) // kL
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_curRow = _lstSoldiers->getScroll();
-
 		_game->pushState(new SoldierInfoState(
 											_base,
 											_lstSoldiers->getSelectedRow()));

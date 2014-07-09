@@ -192,6 +192,9 @@ void AlienBAIState::think(BattleAction* action)
 	action->weapon	= _unit->getMainHandWeapon(false);	// this switches BL/Pistol aLiens to use BL (when not reaction firing)
 														// It needs to be refined to account TU usage, also.
 
+
+
+
 	_attackAction->diff		= static_cast<int>(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 	_attackAction->actor	= _unit;
 	_attackAction->weapon	= action->weapon;
@@ -230,18 +233,10 @@ void AlienBAIState::think(BattleAction* action)
 		std::string AIMode;
 		switch (_AIMode)
 		{
-			case 0:
-				AIMode = "Patrol";
-			break;
-			case 1:
-				AIMode = "Ambush";
-			break;
-			case 2:
-				AIMode = "Combat";
-			break;
-			case 3:
-				AIMode = "Escape";
-			break;
+			case 0: AIMode = "Patrol"; break;
+			case 1: AIMode = "Ambush"; break;
+			case 2: AIMode = "Combat"; break;
+			case 3: AIMode = "Escape"; break;
 		}
 
 		Log(LOG_INFO) << "Currently using " << AIMode << " behaviour";
@@ -394,18 +389,10 @@ void AlienBAIState::think(BattleAction* action)
 			std::string AIMode;
 			switch (_AIMode)
 			{
-				case 0:
-					AIMode = "Patrol";
-				break;
-				case 1:
-					AIMode = "Ambush";
-				break;
-				case 2:
-					AIMode = "Combat";
-				break;
-				case 3:
-					AIMode = "Escape";
-				break;
+				case 0: AIMode = "Patrol"; break;
+				case 1: AIMode = "Ambush"; break;
+				case 2: AIMode = "Combat"; break;
+				case 3: AIMode = "Escape"; break;
 			}
 
 			Log(LOG_INFO) << "Re-Evaluated, now using " << AIMode << " behaviour";
@@ -421,10 +408,10 @@ void AlienBAIState::think(BattleAction* action)
 
 			action->type		= _escapeAction->type;
 			action->target		= _escapeAction->target;
-			action->finalAction	= true;			// end this unit's turn.
-			action->desperate	= true;			// ignore new targets.
+			action->finalAction	= true;		// end this unit's turn.
+			action->desperate	= true;		// ignore new targets.
 
-			_unit->_hidingForTurn = true;		// spin 180 at the end of your route.
+			_unit->_hidingForTurn = true;	// spin 180 at the end of your route.
 
 			// forget about reserving TUs, we need to get out of here.
 //			_save->getBattleGame()->setTUReserved(BA_NONE, false); // kL
@@ -439,13 +426,19 @@ void AlienBAIState::think(BattleAction* action)
 				switch (_unit->getAggression())
 				{
 					case 0:
-						_save->getBattleGame()->setTUReserved(BA_AIMEDSHOT, false);
+						_save->getBattleGame()->setTUReserved(
+															BA_AIMEDSHOT,
+															false);
 					break;
 					case 1:
-						_save->getBattleGame()->setTUReserved(BA_AUTOSHOT, false);
+						_save->getBattleGame()->setTUReserved(
+															BA_AUTOSHOT,
+															false);
 					break;
 					case 2:
-						_save->getBattleGame()->setTUReserved(BA_SNAPSHOT, false);
+						_save->getBattleGame()->setTUReserved(
+															BA_SNAPSHOT,
+															false);
 
 					default:
 					break;
@@ -466,22 +459,22 @@ void AlienBAIState::think(BattleAction* action)
 				&& action->weapon->getRules()->getBattleType() == BT_GRENADE)
 			{
 				_unit->spendTimeUnits(_unit->getActionTUs(
-													BA_PRIME,
-													action->weapon));
+														BA_PRIME,
+														action->weapon));
 			}
 
 			action->finalFacing	= _attackAction->finalFacing;				// if this is a firepoint action, set our facing.
 			action->TU			= _unit->getActionTUs(
-												_attackAction->type,
-												_attackAction->weapon);
+													_attackAction->type,
+													_attackAction->weapon);
 
 			_save->getBattleGame()->setTUReserved(BA_NONE, false);			// don't worry about reserving TUs, we've factored that in already.
 
 			if (action->type == BA_WALK										// if this is a "find fire point" action, don't increment the AI counter.
 				&& _rifle
 				&& _unit->getTimeUnits() > _unit->getActionTUs(
-														BA_SNAPSHOT,
-														action->weapon))	// so long as we can take a shot afterwards.
+															BA_SNAPSHOT,
+															action->weapon))	// so long as we can take a shot afterwards.
 			{
 				action->number -= 1;
 			}
@@ -494,8 +487,8 @@ void AlienBAIState::think(BattleAction* action)
 
 			action->type		= _ambushAction->type;
 			action->target		= _ambushAction->target;
-			action->finalFacing	= _ambushAction->finalFacing;		// face where we think our target will appear.
-			action->finalAction	= true;								// end this unit's turn.
+			action->finalFacing	= _ambushAction->finalFacing;	// face where we think our target will appear.
+			action->finalAction	= true;							// end this unit's turn.
 
 			// we've factored in the reserved TUs already, so don't worry.
 //			_save->getBattleGame()->setTUReserved(BA_NONE, false); // kL
@@ -912,7 +905,7 @@ void AlienBAIState::setupAmbush()
 }
 
 /**
- * Try to set up a combat action
+ * Try to set up a combat action.
  * This will either be a psionic, grenade, or weapon attack,
  * or potentially just moving to get a line of sight to a target.
  * Fills out the _attackAction with useful data.
@@ -920,7 +913,6 @@ void AlienBAIState::setupAmbush()
 void AlienBAIState::setupAttack()
 {
 	//Log(LOG_INFO) << "AlienBAIState::setupAttack()";
-
 	_attackAction->type = BA_RETHINK;
 	_psiAction->type = BA_NONE;
 
@@ -1360,9 +1352,8 @@ int AlienBAIState::selectNearestTarget()
 }
 
 /**
- * Selects the nearest known living Xcom unit.
- * used for ambush calculations
- * @return if we found one.
+ * Selects the nearest known living Xcom unit (used for ambush calculations).
+ * @return, true if we found one
  */
 bool AlienBAIState::selectClosestKnownEnemy()
 {
@@ -2078,7 +2069,7 @@ void AlienBAIState::meleeAction()
 
 /**
  * Attempts to fire a waypoint projectile at an enemy that is seen (by any aLien).
- * Waypoint targeting: pick from any units currently spotted by our allies.
+ * Waypoint targeting: pick from any units currently spotted by our aLiens.
  */
 void AlienBAIState::wayPointAction()
 {

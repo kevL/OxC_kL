@@ -96,7 +96,8 @@ TransferItemsState::TransferItemsState(
 
 		_distance(0.0),
 
-		_reset(true)
+		_reset(true),
+		_curRow(0)
 {
 	_window					= new Window(this, 320, 200, 0, 0);
 	_txtTitle				= new Text(300, 16, 10, 9);
@@ -554,6 +555,17 @@ void TransferItemsState::init()
 			_lstItems->setRowColor(_baseQty.size() - 1, color);
 		}
 	}
+
+/*	if (row > 0
+		&& _lstSoldiers->getScroll() >= row)
+	{
+		_lstSoldiers->scrollTo(0);
+	}
+	else */
+	if (_curRow > 0)
+		_lstItems->scrollTo(_curRow);
+
+	// kL_note: hm does not use draw()
 }
 
 /**
@@ -573,6 +585,8 @@ void TransferItemsState::think()
  */
 void TransferItemsState::btnOkClick(Action*)
 {
+	_curRow = _lstItems->getScroll();
+
 	_game->pushState(new TransferConfirmState(
 											_baseTo,
 											this));
@@ -684,7 +698,7 @@ void TransferItemsState::completeTransfer()
 						{
 							if ((*f)->getCraft() == *c)
 							{
-								(*f)->setCraft(0);
+								(*f)->setCraft(NULL);
 
 								break;
 							}
@@ -897,8 +911,8 @@ int TransferItemsState::getQuantity() const
 	{
 		case TRANSFER_SOLDIER:
 		case TRANSFER_CRAFT:		return 1;
-//kL		case TRANSFER_SCIENTIST:	return _baseFrom->getAvailableScientists();
-//kL		case TRANSFER_ENGINEER:		return _baseFrom->getAvailableEngineers();
+//kL	case TRANSFER_SCIENTIST:	return _baseFrom->getAvailableScientists();
+//kL	case TRANSFER_ENGINEER:		return _baseFrom->getAvailableEngineers();
 		case TRANSFER_SCIENTIST:	return _baseFrom->getScientists(); // kL
 		case TRANSFER_ENGINEER:		return _baseFrom->getEngineers(); // kL
 		case TRANSFER_ITEM:			return _baseFrom->getItems()->getItem(_items[getItemIndex(_sel)]);

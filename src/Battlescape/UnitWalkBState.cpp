@@ -421,8 +421,10 @@ bool UnitWalkBState::doStatusStand()
 				|| (_action.strafe
 					&& dir >= _pf->DIR_UP))
 			{
-				_unit->setDashing(true);	// will be removed either on next movement click
-											// or at end of Player turn.
+//				_unit->setDashing(true);	// will be removed either on next movement click
+											// or at end of Player turn. -> No good, move it
+											// back to BattlescapeGame::primaryAction() because
+											// it's needed for setting the animation speed in init()
 				tu = tu * 3 / 4;
 				energy = energy * 3 / 2;
 			}
@@ -1099,10 +1101,10 @@ void UnitWalkBState::setNormalWalkSpeed()
 {
 	if (_unit->getFaction() == FACTION_PLAYER)
 	{
-		_parent->setStateInterval(static_cast<Uint32>(Options::battleXcomSpeed));
-
-		if (_unit->getDashing())
+		if (_action.run) //|| _unit->getDashing())
 			_parent->setStateInterval(static_cast<Uint32>(Options::battleXcomSpeed * 3 / 4));
+		else
+			_parent->setStateInterval(static_cast<Uint32>(Options::battleXcomSpeed));
 	}
 	else
 		_parent->setStateInterval(static_cast<Uint32>(Options::battleAlienSpeed));

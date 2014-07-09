@@ -489,7 +489,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		if (_save->selectNextFactionUnit(
 									true,
 									_AISecondMove)
-								== 0)
+								== NULL)
 		{
 			if (!_save->getDebugMode())
 			{
@@ -514,7 +514,6 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 				_AISecondMove = true;
 		}
 	}
-
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI() EXIT";
 }
 
@@ -583,7 +582,7 @@ void BattlescapeGame::endTurn()
 	//Log(LOG_INFO) << "BattlescapeGame::endTurn()";
 
 // delete CTD_begin:
-// THIS MOVED TO NEXT_TURN_STATE
+// THIS GOT MOVED TO NEXT_TURN_STATE
 /*	for (std::list<BattleState*>::iterator i = _deleted.begin(); i != _deleted.end(); ++i)
 	{
 		delete *i;
@@ -602,8 +601,8 @@ void BattlescapeGame::endTurn()
 
 	getMap()->getWaypoints()->clear();
 
-	if (_save->getTileEngine()->closeUfoDoors())
-		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
+//	if (_save->getTileEngine()->closeUfoDoors())
+//		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
 
 	Position pos;
 	for (int
@@ -630,7 +629,7 @@ void BattlescapeGame::endTurn()
 												(*it)->getPreviousOwner()));
 				_save->removeItem(*it);
 
-				statePushBack(0);
+				statePushBack(NULL);
 
 				//Log(LOG_INFO) << "BattlescapeGame::endTurn(), hot grenades EXIT";
 				return;
@@ -640,6 +639,9 @@ void BattlescapeGame::endTurn()
 		}
 	}
 	//Log(LOG_INFO) << ". done grenades";
+
+	if (_save->getTileEngine()->closeUfoDoors()) // try, close doors between grenade & terrain explosions
+		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
 
 	// check for terrain explosions
 	Tile* t = _save->getTileEngine()->checkForTerrainExplosions();
@@ -657,29 +659,29 @@ void BattlescapeGame::endTurn()
 		statePushNext(new ExplosionBState(
 										this,
 										pos,
-										0,
-										0,
+										NULL,
+										NULL,
 										t));
 
 		t = _save->getTileEngine()->checkForTerrainExplosions();
 
-		statePushBack(0);
+		statePushBack(NULL);
 
 		//Log(LOG_INFO) << "BattlescapeGame::endTurn(), terrain explosions EXIT";
 		return;
 	}
 	//Log(LOG_INFO) << ". done explosions";
 
-	if (_save->getSide() != FACTION_NEUTRAL)
+	if (_save->getSide() != FACTION_NEUTRAL) // tick down grenade timers
 	{
 		for (std::vector<BattleItem*>::iterator
 				grenade = _save->getItems()->begin();
 				grenade != _save->getItems()->end();
 				++grenade)
 		{
-			if ((*grenade)->getOwner() == 0 // kL
+			if ((*grenade)->getOwner() == NULL // kL
 				&& (*grenade)->getRules()->getBattleType() == BT_GRENADE
-//kL					|| (*grenade)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+//kL				|| (*grenade)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 				&& (*grenade)->getFuseTimer() > 0)
 			{
 				(*grenade)->setFuseTimer((*grenade)->getFuseTimer() - 1);
@@ -744,8 +746,8 @@ void BattlescapeGame::endTurn()
 
 
 	checkForCasualties(
-					0,
-					0);
+					NULL,
+					NULL);
 	//Log(LOG_INFO) << ". done checkForCasualties";
 
 	// turn off MCed alien lighting.
@@ -1255,6 +1257,8 @@ void BattlescapeGame::handleNonTargetAction()
  */
 void BattlescapeGame::setupCursor()
 {
+	getMap()->refreshSelectorPosition(); // kL
+
 	if (_currentAction.targeting)
 	{
 		if (_currentAction.type == BA_THROW)
@@ -1440,7 +1444,7 @@ void BattlescapeGame::popState()
 	//Log(LOG_INFO) << ". states.Popfront DONE";
 
 
-	getMap()->refreshSelectorPosition(); // kL
+//	getMap()->refreshSelectorPosition(); // kL, I moved this to setupCursor()
 
 	// handle the end of this unit's actions
 	if (action.actor
@@ -2371,7 +2375,10 @@ void BattlescapeGame::primaryAction(const Position& pos)
 												pos)
 											> 1)
 			{
-//				_currentAction.actor->setDashing(true); // kL, do this in UnitWalkBState
+				_currentAction.actor->setDashing(true); // kL, do this in UnitWalkBState
+				// kL_note: I just realized that action.run could be used instead of set/getDashing() ...
+				// leave it as is for now; for use in TileEngine, reaction fire
+
 				_currentAction.run = true;
 				_currentAction.strafe = false;
 			}

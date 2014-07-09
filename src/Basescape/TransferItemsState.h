@@ -59,6 +59,7 @@ private:
 		_hasEng,
 		_hasSci;
 	size_t
+		_curRow,
 		_offset,
 		_sel;
 	double
@@ -113,7 +114,7 @@ private:
 		/// Cleans up the Transfer Items state.
 		~TransferItemsState();
 
-		/// kL. Re-initialize the Transfer menu, when cancelling TransferConfirmState.
+		/// kL. Initializes the Transfer menu, when cancelling TransferConfirmState.
 		void init(); // kL
 
 		/// Runs the timers.

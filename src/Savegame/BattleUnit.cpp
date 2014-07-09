@@ -2353,85 +2353,86 @@ BattleItem* BattleUnit::getItem(
 }
 
 /**
- * Get the "main hand weapon" from the unit.
- * @param quickest - true to choose the quickest weapon (default = true)
+ * Get the 'main hand weapon' of a BattleUnit.
+ * @param quickest - true to choose the quickest weapon (default true)
  * @return, pointer to BattleItem
  */
 BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
 	// kL_note: This gets called way too much, from somewhere, when just walking around.
+	// probably AI patrol state
 
 	//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon()";
-	BattleItem* weaponRight = getItem("STR_RIGHT_HAND");
-	BattleItem* weaponLeft = getItem("STR_LEFT_HAND");
+	BattleItem* rhtWeapon = getItem("STR_RIGHT_HAND");
+	BattleItem* lftWeapon = getItem("STR_LEFT_HAND");
 
-	bool isRight = weaponRight
-				&& ((weaponRight->getAmmoItem()
-						&& weaponRight->getAmmoItem()->getAmmoQuantity()
-						&& weaponRight->getRules()->getBattleType() == BT_FIREARM)
-					|| weaponRight->getRules()->getBattleType() == BT_MELEE);
-	bool isLeft = weaponLeft
-				&& ((weaponLeft->getAmmoItem()
-						&& weaponLeft->getAmmoItem()->getAmmoQuantity()
-						&& weaponLeft->getRules()->getBattleType() == BT_FIREARM)
-					|| weaponLeft->getRules()->getBattleType() == BT_MELEE);
-	//Log(LOG_INFO) << ". isRight = " << isRight;
-	//Log(LOG_INFO) << ". isLeft = " << isLeft;
+	bool isRht = rhtWeapon
+				&& ((rhtWeapon->getAmmoItem()
+						&& rhtWeapon->getAmmoItem()->getAmmoQuantity()
+						&& rhtWeapon->getRules()->getBattleType() == BT_FIREARM)
+					|| rhtWeapon->getRules()->getBattleType() == BT_MELEE);
+	bool isLft = lftWeapon
+				&& ((lftWeapon->getAmmoItem()
+						&& lftWeapon->getAmmoItem()->getAmmoQuantity()
+						&& lftWeapon->getRules()->getBattleType() == BT_FIREARM)
+					|| lftWeapon->getRules()->getBattleType() == BT_MELEE);
+	//Log(LOG_INFO) << ". isRht = " << isRht;
+	//Log(LOG_INFO) << ". isLft = " << isLft;
 
-	if (!isRight && !isLeft)
+	if (!isRht && !isLft)
 		return NULL;
-	else if (isRight && !isLeft)
-		return weaponRight;
-	else if (!isRight && isLeft)
-		return weaponLeft;
-	else //if (isRight && isLeft).
+	else if (isRht && !isLft)
+		return rhtWeapon;
+	else if (!isRht && isLft)
+		return lftWeapon;
+	else //if (isRht && isLft).
 	{
-		//Log(LOG_INFO) << ". . isRight & isLeft VALID";
+		//Log(LOG_INFO) << ". . isRht & isLft VALID";
 
-		RuleItem* rightRule = weaponRight->getRules();
-		int tuRight = rightRule->getTUSnap();
-		if (!tuRight) //rightRule->getBattleType() == BT_MELEE
-			tuRight = rightRule->getTUMelee();
+		RuleItem* rhtRule = rhtWeapon->getRules();
+		int rhtTU = rhtRule->getTUSnap();
+		if (!rhtTU) //rhtRule->getBattleType() == BT_MELEE
+			rhtTU = rhtRule->getTUMelee();
 
-		RuleItem* leftRule = weaponLeft->getRules();
-		int tuLeft = leftRule->getTUSnap();
-		if (!tuLeft) //leftRule->getBattleType() == BT_MELEE
-			tuLeft = leftRule->getTUMelee();
+		RuleItem* lftRule = lftWeapon->getRules();
+		int lftTU = lftRule->getTUSnap();
+		if (!lftTU) //lftRule->getBattleType() == BT_MELEE
+			lftTU = lftRule->getTUMelee();
 
-		//Log(LOG_INFO) << ". . tuRight = " << tuRight;
-		//Log(LOG_INFO) << ". . tuLeft = " << tuLeft;
+		//Log(LOG_INFO) << ". . rhtTU = " << rhtTU;
+		//Log(LOG_INFO) << ". . lftTU = " << lftTU;
 
-		if (!tuRight && !tuLeft)
+		if (!rhtTU && !lftTU)
 			return NULL;
-		else if (tuRight && !tuLeft)
-			return weaponRight;
-		else if (!tuRight && tuLeft)
-			return weaponLeft;
-		else //if (tuRight && tuLeft)
+		else if (rhtTU && !lftTU)
+			return rhtWeapon;
+		else if (!rhtTU && lftTU)
+			return lftWeapon;
+		else //if (rhtTU && lftTU)
 		{
 			if (quickest)
 			{
-				if (tuRight <= tuLeft)
-					return weaponRight;
+				if (rhtTU <= lftTU)
+					return rhtWeapon;
 				else
-					return weaponLeft;
+					return lftWeapon;
 			}
 			else
 			{
-				if (tuRight >= tuLeft)
-					return weaponRight;
+				if (rhtTU >= lftTU)
+					return rhtWeapon;
 				else
-					return weaponLeft;
+					return lftWeapon;
 			}
 		}
 
-/*		int tuRight = rightRule->getBattleType() == BT_MELEE?
-									getActionTUs(BA_HIT, weaponRight)
-								: getActionTUs(BA_SNAPSHOT, weaponRight);
+/*		int rhtTU = rhtRule->getBattleType() == BT_MELEE?
+									getActionTUs(BA_HIT, rhtWeapon)
+								: getActionTUs(BA_SNAPSHOT, rhtWeapon);
 
-		int tuLeft = leftRule->getBattleType() == BT_MELEE?
-									getActionTUs(BA_HIT, weaponLeft)
-								: getActionTUs(BA_SNAPSHOT, weaponLeft); */
+		int lftTU = lftRule->getBattleType() == BT_MELEE?
+									getActionTUs(BA_HIT, lftWeapon)
+								: getActionTUs(BA_SNAPSHOT, lftWeapon); */
 	}
 
 	// kL_note: should exit this by setting ActiveHand.
