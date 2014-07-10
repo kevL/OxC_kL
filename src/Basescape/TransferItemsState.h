@@ -70,12 +70,14 @@ private:
 		* _baseFrom,
 		* _baseTo;
 	Text
-		* _txtAmountDestination,
-		* _txtAmountTransfer,
+		* _txtAtDestination,
+//		* _txtAmountTransfer,
 		* _txtBaseFrom,
 		* _txtBaseTo,
 		* _txtItem,
 		* _txtQuantity,
+		* _txtSpaceFrom,
+		* _txtSpaceTo,
 		* _txtTitle;
 	TextButton
 		* _btnCancel,
@@ -120,13 +122,14 @@ private:
 		/// Runs the timers.
 		void think();
 
-		/// Completes the transfer between bases.
-		void completeTransfer();
-
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Cancel button.
 		void btnCancelClick(Action* action);
+
+		/// Completes the transfer between bases.
+		void completeTransfer();
+
 		/// Handler for pressing an Increase arrow in the list.
 		void lstItemsLeftArrowPress(Action* action);
 		/// Handler for releasing an Increase arrow in the list.
@@ -156,6 +159,9 @@ private:
 
 		/// Gets the total of the transfer.
 		int getTotal() const;
+
+		/// kL. For handling transfer confirmation Ok / Cancel btns.
+//		void resetTransfer(bool reset); // kL
 };
 
 }

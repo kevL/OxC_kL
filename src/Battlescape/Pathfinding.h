@@ -127,7 +127,8 @@ private:
 				BattleUnit* unit,
 				Position endPos,
 				BattleUnit* missileTarget = NULL,
-				int maxTUCost = 1000);
+				int maxTUCost = 1000,
+				bool strafeRejected = false); // kL_add.
 
 		/// Determines whether or not movement between starttile and endtile is possible in the direction.
 		bool isBlocked(

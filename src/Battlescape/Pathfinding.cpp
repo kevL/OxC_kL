@@ -109,7 +109,8 @@ void Pathfinding::calculate(
 		BattleUnit* unit,
 		Position endPos,
 		BattleUnit* target,
-		int maxTUCost)
+		int maxTUCost,
+		bool strafeRejected) // kL_add.
 {
 	//Log(LOG_INFO) << "Pathfinding::calculate()";
 	_unit = unit;
@@ -119,6 +120,8 @@ void Pathfinding::calculate(
 
 	_modALT = false;
 	_modCTRL = false;
+
+	Position endPos2 = endPos; // kL: for keeping things straight if strafeRejected happens.
 
 	// i'm DONE with these out of bounds errors.
 	// kL_note: I really don't care what you're "DONE" with.....
@@ -254,13 +257,15 @@ void Pathfinding::calculate(
 	// across 2 tiles at 90deg. path-angle) -> now accounted for and *allowed*
 	Position startPos = _unit->getPosition();
 
-	_strafeMove = Options::strafe
+	_strafeMove = strafeRejected == false // kL
+				&& Options::strafe
 				&& (SDL_GetModState() & KMOD_CTRL) != 0
 				&& startPos.z == endPos.z
 				&& abs(startPos.x - endPos.x) < 2
 				&& abs(startPos.y - endPos.y) < 2;
-//	if (_strafeMove) Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";
-//	else Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID";
+
+	//if (_strafeMove) Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";
+	//else Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID";
 
 
 	// look for a possible fast and accurate bresenham path and skip A*
@@ -274,9 +279,29 @@ void Pathfinding::calculate(
 					target,
 					sneak))
 	{
+		//Log(LOG_INFO) << "bresenhamPath";
 		std::reverse( // paths are stored in reverse order
 				_path.begin(),
 				_path.end());
+
+		// kL_begin:
+		if (_strafeMove
+			&& _path.size() > 2) // no strafe then! recalculate!!!
+		{
+			//Log(LOG_INFO) << "strafeRejected, bresenhamPath";
+			calculate(
+					unit,
+					endPos2,
+					target,
+					maxTUCost,
+					true);
+
+			_save->getBattleGame()->getCurrentAction()->strafe = false;
+			_save->getBattleGame()->getCurrentAction()->run = true;
+			_save->getBattleGame()->getCurrentAction()->actor->setDashing(true);
+				// why these things were set up in BattlescapeGame::primaryAction()
+				// rather than here I don't know ....
+		} // kL_end.
 
 		return;
 	}
@@ -294,7 +319,31 @@ void Pathfinding::calculate(
 				sneak,
 				maxTUCost))
 	{
+		//Log(LOG_INFO) << "aStarPath aborted";
 		abortPath();
+	}
+	else
+	{
+		//Log(LOG_INFO) << "aStarPath";
+
+		// kL_begin:
+		if (_strafeMove
+			&& _path.size() > 2) // no strafe then! recalculate!!!
+		{
+			//Log(LOG_INFO) << "strafeRejected, aStarPath";
+			calculate(
+					unit,
+					endPos2,
+					target,
+					maxTUCost,
+					true);
+
+			_save->getBattleGame()->getCurrentAction()->strafe = false;
+			_save->getBattleGame()->getCurrentAction()->run = true;
+			_save->getBattleGame()->getCurrentAction()->actor->setDashing(true);
+				// why these things were set up in BattlescapeGame::primaryAction()
+				// rather than here I don't know ....
+		} // kL_end.
 	}
 }
 

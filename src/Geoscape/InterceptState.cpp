@@ -23,6 +23,7 @@
 
 #include "ConfirmDestinationState.h"
 #include "GeoscapeCraftState.h" // kL
+#include "GeoscapeState.h" // kL
 #include "Globe.h"
 #include "SelectDestinationState.h"
 
@@ -62,11 +63,13 @@ namespace OpenXcom
 InterceptState::InterceptState(
 		Globe* globe,
 		Base* base,
-		Target* target)
+		Target* target,
+		GeoscapeState* geo) // kL_add.
 	:
 		_globe(globe),
 		_base(base),
 		_target(target),
+		_geo(geo), // kL_add.
 		_crafts(),
 		_bases()
 {
@@ -323,6 +326,8 @@ void InterceptState::btnCancelClick(Action*)
  */
 void InterceptState::btnGotoBaseClick(Action*)
 {
+	_geo->timerReset(); // kL ( called from 5 states, but don't need NULL check )
+
 	_game->popState();
 
 	_game->pushState(new BasescapeState(

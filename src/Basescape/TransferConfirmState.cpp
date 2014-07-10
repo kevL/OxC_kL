@@ -127,7 +127,7 @@ void TransferConfirmState::btnCancelClick(Action*)
 void TransferConfirmState::btnOkClick(Action*)
 {
 	_state->completeTransfer();
-	_state->init(); // kL
+//	_state->init(); // kL
 
 	_game->popState(); // pop Confirmation (this)
 //kL	_game->popState(); // pop main Transfer

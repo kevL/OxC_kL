@@ -111,7 +111,7 @@ AlienTerrorState::AlienTerrorState(
 }
 
 /**
- *
+ * dTor.
  */
 AlienTerrorState::~AlienTerrorState()
 {
@@ -125,15 +125,16 @@ void AlienTerrorState::btnInterceptClick(Action*)
 {
 	_state->timerReset();
 
-	_state->getGlobe()->center(
-							_terror->getLongitude(),
-							_terror->getLatitude());
+//	_state->getGlobe()->center(
+//							_terror->getLongitude(),
+//							_terror->getLatitude());
 	_game->popState();
 
 	_game->pushState(new InterceptState(
 									_state->getGlobe(),
-									0,
-									_terror));
+									NULL,
+									_terror,
+									_state)); // kL_add.
 }
 
 /**
@@ -147,6 +148,7 @@ void AlienTerrorState::btnCentreClick(Action*)
 	_state->getGlobe()->center(
 							_terror->getLongitude(),
 							_terror->getLatitude());
+
 	_game->popState();
 }
 

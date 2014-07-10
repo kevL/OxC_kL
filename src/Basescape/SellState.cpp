@@ -197,7 +197,7 @@ SellState::SellState(
 	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtSpaceUsed->setColor(_color);
-	_txtSpaceUsed->setSecondaryColor(_color2);
+//	_txtSpaceUsed->setSecondaryColor(_color2);
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
 //kL	std::wostringstream ss1;

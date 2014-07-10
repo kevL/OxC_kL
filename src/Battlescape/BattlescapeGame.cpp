@@ -2327,7 +2327,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			// I imagine updateSoldierInfo() is done somewhere down the line....... It's done at the end of popState()
 		}
 	}
-	else
+	else // unit MOVE .......
 	{
 		//Log(LOG_INFO) << ". . NOT _currentAction.targeting";
 		_currentAction.actor = _save->getSelectedUnit();
@@ -2370,10 +2370,11 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			if (_currentAction.strafe
 //				&& getPathfinding()->getStrafeMove())		// kL <- NO.
 //				&& getPathfinding()->getPath().size() > 1)	// kL <- yes, but think of the shuggle
-				&& _save->getTileEngine()->distance(
+				&& (_save->getTileEngine()->distance(
 												_currentAction.actor->getPosition(),
 												pos)
-											> 1)
+											> 1
+					|| _currentAction.actor->getPosition().z != pos.z)) // kL
 			{
 				_currentAction.actor->setDashing(true); // kL, do this in UnitWalkBState
 				// kL_note: I just realized that action.run could be used instead of set/getDashing() ...
@@ -2384,7 +2385,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			}
 
 			_currentAction.target = pos;
-			_save->getPathfinding()->calculate(
+			_save->getPathfinding()->calculate( // get the Path.
 											_currentAction.actor,
 											_currentAction.target);
 

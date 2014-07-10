@@ -162,7 +162,7 @@ PurchaseState::PurchaseState(
 	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtSpaceUsed->setColor(Palette::blockOffset(13)+10);
-	_txtSpaceUsed->setSecondaryColor(Palette::blockOffset(13));
+//	_txtSpaceUsed->setSecondaryColor(Palette::blockOffset(13));
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
 //kL	std::wostringstream ss8;
@@ -742,6 +742,9 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
  */
 void PurchaseState::lstItemsMousePress(Action* action)
 {
+	if (Options::changeValueByMouseWheel < 1)	// kL
+		return;									// kL
+
 	_sel = _lstItems->getSelectedRow();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
@@ -852,7 +855,7 @@ void PurchaseState::increaseByValue(int change)
 	}
 	else if (_sel >= 3 + _crafts.size()
 		&& _iQty + _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getSize()
-			> static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores())
+			> static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores() + 0.05)
 	{
 		_timerInc->stop();
 		_game->pushState(new ErrorMessageState(
@@ -885,19 +888,17 @@ void PurchaseState::increaseByValue(int change)
 			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()]);
 
 			double
-				storesNeededPerItem = rule->getSize(),
-				freeStores = static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores() - _iQty,
-				maxByStores = DBL_MAX;
+				storesPerItem = rule->getSize(),
+				availStores = static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores() - _iQty,
+				qtyItemsCanBuy = DBL_MAX;
 
-			if (!AreSame(storesNeededPerItem, 0.0))
-			{
-				maxByStores = (freeStores + 0.05) / storesNeededPerItem;
-			}
+			if (!AreSame(storesPerItem, 0.0))
+				qtyItemsCanBuy = (availStores + 0.05) / storesPerItem;
 
 			change = std::min(
-						static_cast<int>(maxByStores),
+						static_cast<int>(qtyItemsCanBuy),
 						change);
-			_iQty += static_cast<double>(change) * storesNeededPerItem;
+			_iQty += static_cast<double>(change) * storesPerItem;
 		}
 
 		_qtys[_sel] += change;

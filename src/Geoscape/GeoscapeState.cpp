@@ -2944,7 +2944,7 @@ void GeoscapeState::time1Month()
 										*b,
 										this));
 
-//kL				break;
+//kL			break;
 			}
 		}
 	}
@@ -3045,7 +3045,11 @@ void GeoscapeState::globeClick(Action* action)
  */
 void GeoscapeState::btnInterceptClick(Action*)
 {
-	_game->pushState(new InterceptState(_globe));
+	_game->pushState(new InterceptState(
+									_globe,
+									NULL,
+									NULL,
+									this)); // kL_add.
 }
 
 /**

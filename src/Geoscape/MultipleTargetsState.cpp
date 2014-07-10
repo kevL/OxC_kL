@@ -135,7 +135,7 @@ MultipleTargetsState::MultipleTargetsState(
 }
 
 /**
- *
+ * dTor.
  */
 MultipleTargetsState::~MultipleTargetsState()
 {
@@ -161,7 +161,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 	//Log(LOG_INFO) << "MultipleTargetsState::popupTarget()";
 	_game->popState();
 
-	if (_craft == 0)
+	if (_craft == NULL)
 	{
 		//Log(LOG_INFO) << ". _craft == 0";
 		Craft* c	= dynamic_cast<Craft*>(target);
@@ -169,15 +169,17 @@ void MultipleTargetsState::popupTarget(Target* target)
 		Base* b		= dynamic_cast<Base*>(target);
 		//Log(LOG_INFO) << ". dynamic_cast's examined";
 
-		if (b != 0)
+		if (b != NULL)
 		{
 			//Log(LOG_INFO) << ". . base";
 //			_game->popState(); // kL
 			_game->pushState(new InterceptState(
 											_state->getGlobe(),
-											b));
+											b,
+											NULL,
+											_state)); // kL_add.
 		}
-		else if (c != 0)
+		else if (c != NULL)
 		{
 			//Log(LOG_INFO) << ". . craft";
 			// kL_begin:
@@ -192,11 +194,11 @@ void MultipleTargetsState::popupTarget(Target* target)
 			_game->pushState(new GeoscapeCraftState(
 												c,
 												_state->getGlobe(),
-												0,
+												NULL,
 												false)); // kL_add.
 //												doublePop)); // kL_add.
 		}
-		else if (u != 0)
+		else if (u != NULL)
 		{
 			//Log(LOG_INFO) << ". . ufo";
 //			_game->popState(); // kL

@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class Base;
 class Craft;
+class GeoscapeState; // kL_add.
 class Globe;
 class Target;
 class Text;
@@ -51,6 +52,7 @@ private:
 	Uint8 _cellColor;
 
 	Base* _base;
+	GeoscapeState* _geo; // kL
 	Globe* _globe;
 	Target* _target; // kL_note: Doesn't seem to be used... really.
 	Text
@@ -78,7 +80,8 @@ private:
 		InterceptState(
 				Globe* globe,
 				Base* base = NULL,
-				Target* target = NULL);
+				Target* target = NULL,
+				GeoscapeState* geo = NULL); // kL_add.
 		/// Cleans up the Intercept state.
 		~InterceptState();
 

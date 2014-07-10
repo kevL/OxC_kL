@@ -57,7 +57,7 @@ TargetInfoState::TargetInfoState(
 		_target(target),
 		_globe(globe),
 		_state(state),
-		_ab(0)
+		_ab(NULL)
 {
 	//Log(LOG_INFO) << "Create TargetInfoState";
 	_screen = false;
@@ -241,8 +241,9 @@ void TargetInfoState::btnInterceptClick(Action*)
 	_game->popState();
 	_game->pushState(new InterceptState(
 									_globe,
-									0,
-									_target));
+									NULL,
+									_target,
+									_state)); // kL_add.
 }
 
 /**

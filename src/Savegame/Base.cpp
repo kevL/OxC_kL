@@ -869,8 +869,8 @@ double Base::getUsedStores()
  */
 bool Base::storesOverfull(double offset)
 {
-//kL	double capacity = static_cast<double>(getAvailableStores());
-	double capacity = static_cast<double>(getAvailableStores()) + 0.1; // kL (damn!)
+	double capacity = static_cast<double>(getAvailableStores());
+//	double capacity = static_cast<double>(getAvailableStores()) + 0.1; // kL (damn!)
 	double used = getUsedStores();
 
 	return (used + offset > capacity);

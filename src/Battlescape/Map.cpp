@@ -1574,10 +1574,10 @@ void Map::drawTerrain(Surface* surface)
 							if (Options::battleUFOExtenderAccuracy)
 							{
 								BattleAction* action = _save->getBattleGame()->getCurrentAction();
-								if (action->type == BA_SNAPSHOT
+/*								if (action->type == BA_SNAPSHOT
 									|| action->type == BA_AUTOSHOT
 									|| action->type == BA_AIMEDSHOT
-									|| action->type == BA_THROW)
+									|| action->type == BA_THROW) */
 								{
 									if (_cursorType == CT_AIM) // indicator for Firing.
 									{
@@ -1638,7 +1638,6 @@ void Map::drawTerrain(Surface* surface)
 											accuracy = 0;
 											color = Palette::blockOffset(2)+3; // red
 										}
-	//									}
 
 										//Log(LOG_INFO) << "Map::drawTerrain(), accuracy = " << accuracy;
 										_txtAccuracy->setValue(static_cast<unsigned>(accuracy));
@@ -1953,7 +1952,7 @@ void Map::drawTerrain(Surface* surface)
 							unit,
 							&offset);
 
-		offset.y += 20 - unit->getHeight();
+		offset.y += 21 - unit->getHeight();
 
 		if (unit->getArmor()->getSize() > 1)
 			offset.y += 6;
@@ -1973,7 +1972,9 @@ void Map::drawTerrain(Surface* surface)
 									- _arrow->getHeight()
 //kL								+ arrowBob[_cursorFrame],
 									+ static_cast<int>( // kL
-										4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
+//										4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
+//										-4.0 * sin(180.0 / static_cast<double>(_animFrame + 1) / 8.0)),
+										-4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
 								0);
 		}
 		else // DarkDefender
@@ -1990,7 +1991,12 @@ void Map::drawTerrain(Surface* surface)
 //kL							+ arrowBob[_animFrame],
 //kL							+ arrowBob[_cursorFrame], // DarkDefender
 								+ static_cast<int>( // kL
-									4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
+//									4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
+//									4.0 * sin(static_cast<double>(4 - _animFrame) * 45.0 / 8.0)), // fast up, slow down
+//									4.0 * sin(static_cast<double>(_animFrame - 4) * 22.5)),
+//									4.0 * sin(static_cast<double>(_animFrame) * M_PI / 4.0)),
+//									4.0 * sin(180.0 / static_cast<double>(_animFrame + 1) / 8.0)),
+									4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
 							0);
 	}
 

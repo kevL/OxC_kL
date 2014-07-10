@@ -99,20 +99,23 @@ TransferItemsState::TransferItemsState(
 		_reset(true),
 		_curRow(0)
 {
-	_window					= new Window(this, 320, 200, 0, 0);
-	_txtTitle				= new Text(300, 16, 10, 9);
-	_txtBaseFrom			= new Text(80, 9, 16, 9);
-	_txtBaseTo				= new Text(80, 9, 224, 9);
+	_window				= new Window(this, 320, 200, 0, 0);
+	_txtTitle			= new Text(300, 16, 10, 9);
+	_txtBaseFrom		= new Text(80, 9, 16, 9);
+	_txtBaseTo			= new Text(80, 9, 224, 9);
 
-	_txtItem				= new Text(128, 9, 16, 24);
-	_txtQuantity			= new Text(35, 9, 160, 24);
-	_txtAmountTransfer		= new Text(46, 9, 200, 24);
-	_txtAmountDestination	= new Text(62, 9, 247, 24);
+	_txtSpaceFrom		= new Text(85, 9, 16, 18);
+	_txtSpaceTo			= new Text(85, 9, 224, 18);
 
-	_lstItems				= new TextList(285, 136, 16, 35);
+	_txtItem			= new Text(128, 9, 16, 29);
+	_txtQuantity		= new Text(35, 9, 160, 29);
+//	_txtAmountTransfer	= new Text(46, 9, 200, 29);
+	_txtAtDestination	= new Text(62, 9, 247, 29);
 
-	_btnCancel				= new TextButton(134, 16, 16, 177);
-	_btnOk					= new TextButton(134, 16, 170, 177);
+	_lstItems			= new TextList(285, 136, 16, 39);
+
+	_btnCancel			= new TextButton(134, 16, 16, 177);
+	_btnOk				= new TextButton(134, 16, 170, 177);
 
 	setPalette("PAL_BASESCAPE", 0);
 
@@ -120,10 +123,12 @@ TransferItemsState::TransferItemsState(
 	add(_txtTitle);
 	add(_txtBaseFrom);
 	add(_txtBaseTo);
+	add(_txtSpaceFrom);
+	add(_txtSpaceTo);
 	add(_txtItem);
 	add(_txtQuantity);
-	add(_txtAmountTransfer);
-	add(_txtAmountDestination);
+//	add(_txtAmountTransfer);
+	add(_txtAtDestination);
 	add(_lstItems);
 	add(_btnCancel);
 	add(_btnOk);
@@ -160,19 +165,25 @@ TransferItemsState::TransferItemsState(
 	_txtBaseTo->setAlign(ALIGN_RIGHT);
 	_txtBaseTo->setText(_baseTo->getName());
 
+	_txtSpaceFrom->setColor(Palette::blockOffset(13)+10);
+	_txtSpaceFrom->setAlign(ALIGN_RIGHT);
+
+	_txtSpaceTo->setColor(Palette::blockOffset(13)+10);
+	_txtSpaceTo->setAlign(ALIGN_LEFT);
+
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
 
 	_txtQuantity->setColor(Palette::blockOffset(13)+10);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
 
-	_txtAmountTransfer->setColor(Palette::blockOffset(13)+10);
-	_txtAmountTransfer->setText(tr("STR_AMOUNT_TO_TRANSFER"));
-	_txtAmountTransfer->setWordWrap(true);
+//	_txtAmountTransfer->setColor(Palette::blockOffset(13)+10);
+//	_txtAmountTransfer->setText(tr("STR_AMOUNT_TO_TRANSFER"));
+//	_txtAmountTransfer->setWordWrap(true);
 
-	_txtAmountDestination->setColor(Palette::blockOffset(13)+10);
-	_txtAmountDestination->setText(tr("STR_AMOUNT_AT_DESTINATION"));
-	_txtAmountDestination->setWordWrap(true);
+	_txtAtDestination->setColor(Palette::blockOffset(13)+10);
+	_txtAtDestination->setText(tr("STR_AMOUNT_AT_DESTINATION"));
+//	_txtAtDestination->setWordWrap(true);
 
 //	_lstItems->setColor(Palette::blockOffset(15)+1);
 	_lstItems->setColor(Palette::blockOffset(13)+10);
@@ -219,6 +230,28 @@ void TransferItemsState::init()
 	{
 		_reset = true;
 
+		std::wostringstream
+			ss1,
+			ss2;
+
+		ss1 << _baseFrom->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseFrom->getUsedStores();
+		if (std::abs(_iQty) > 0.05)
+		{
+			ss1 << "(";
+			if (-(_iQty) > 0.0) ss1 << "+";
+			ss1 << std::fixed << std::setprecision(1) << -(_iQty) << ")";
+		}
+		_txtSpaceFrom->setText(ss1.str());
+
+		ss2 << _baseTo->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseTo->getUsedStores();
+		if (std::abs(_iQty) > 0.05)
+		{
+			ss2 << "(";
+			if (_iQty > 0.0) ss2 << "+";
+			ss2 << std::fixed << std::setprecision(1) << _iQty << ")";
+		}
+		_txtSpaceTo->setText(ss2.str());
+
 		return;
 	}
 
@@ -237,7 +270,7 @@ void TransferItemsState::init()
 	_pQty = 0;
 	_cQty = 0;
 	_aQty = 0;
-	_iQty = 0;
+	_iQty = 0.0;
 	_hasSci = 0;
 	_hasEng = 0;
 	_offset = 0;
@@ -251,7 +284,7 @@ void TransferItemsState::init()
 			i != _baseFrom->getSoldiers()->end();
 			++i)
 	{
-		if ((*i)->getCraft() == 0)
+		if ((*i)->getCraft() == NULL)
 		{
 			_baseQty.push_back(1);
 			_transferQty.push_back(0);
@@ -566,6 +599,16 @@ void TransferItemsState::init()
 		_lstItems->scrollTo(_curRow);
 
 	// kL_note: hm does not use draw()
+
+	std::wostringstream
+		ss1,
+		ss2;
+
+	ss1 << _baseFrom->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseFrom->getUsedStores();
+	_txtSpaceFrom->setText(ss1.str());
+
+	ss2 << _baseTo->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseTo->getUsedStores();
+	_txtSpaceTo->setText(ss2.str());
 }
 
 /**
@@ -585,6 +628,7 @@ void TransferItemsState::think()
  */
 void TransferItemsState::btnOkClick(Action*)
 {
+	_reset = false;
 	_curRow = _lstItems->getScroll();
 
 	_game->pushState(new TransferConfirmState(
@@ -593,10 +637,22 @@ void TransferItemsState::btnOkClick(Action*)
 }
 
 /**
+ * Returns to the previous screen.
+ * @param action Pointer to an action.
+ */
+void TransferItemsState::btnCancelClick(Action*)
+{
+	_game->popState(); // pop main Transfer (this)
+//kL	_game->popState(); // pop choose Destination
+}
+
+/**
  * Completes the transfer between bases.
  */
 void TransferItemsState::completeTransfer()
 {
+	_reset = true;
+
 	int time = static_cast<int>(floor(6.0 + _distance / 10.0));
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
 	_baseFrom->setCashSpent(_total); // kL
@@ -710,7 +766,7 @@ void TransferItemsState::completeTransfer()
 					}
 				}
 			}
-//kL			else if (_baseFrom->getAvailableScientists() > 0
+//kL		else if (_baseFrom->getAvailableScientists() > 0
 			else if (_baseFrom->getScientists() > 0 // kL
 				&& i == _soldiers.size() + _crafts.size()) // Transfer scientists
 			{
@@ -720,7 +776,7 @@ void TransferItemsState::completeTransfer()
 
 				_baseTo->getTransfers()->push_back(t);
 			}
-//kL			else if (_baseFrom->getAvailableEngineers() > 0
+//kL		else if (_baseFrom->getAvailableEngineers() > 0
 			else if (_baseFrom->getEngineers() > 0 // kL
 				&& i == _soldiers.size() + _crafts.size() + _hasSci) // Transfer engineers
 			{
@@ -740,16 +796,6 @@ void TransferItemsState::completeTransfer()
 			}
 		}
 	}
-}
-
-/**
- * Returns to the previous screen.
- * @param action Pointer to an action.
- */
-void TransferItemsState::btnCancelClick(Action*)
-{
-	_game->popState(); // pop main Transfer (this)
-//kL	_game->popState(); // pop choose Destination
 }
 
 /**
@@ -846,6 +892,9 @@ void TransferItemsState::lstItemsRightArrowClick(Action* action)
  */
 void TransferItemsState::lstItemsMousePress(Action* action)
 {
+	if (Options::changeValueByMouseWheel < 1)	// kL
+		return;									// kL
+
 	_sel = _lstItems->getSelectedRow();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
@@ -995,7 +1044,7 @@ void TransferItemsState::increaseByValue(int change)
 		}
 
 		if (Options::storageLimitsEnforced
-			&& _baseTo->storesOverfull(_iQty + craft->getItems()->getTotalSize(_game->getRuleset())))
+			&& _baseTo->storesOverfull(craft->getItems()->getTotalSize(_game->getRuleset()) + _iQty))
 		{
 			_reset = false;
 
@@ -1019,7 +1068,7 @@ void TransferItemsState::increaseByValue(int change)
 	if (selType == TRANSFER_ITEM)
 	{
 		if (!selItem->getAlien()
-			&& _baseTo->storesOverfull(selItem->getSize() + _iQty))
+			&& _baseTo->storesOverfull(selItem->getSize() + _iQty - 0.05))
 		{
 			_reset = false;
 
@@ -1089,19 +1138,19 @@ void TransferItemsState::increaseByValue(int change)
 		if (!selItem->getAlien()) // Item count
 		{
 			double
-				storesNeededPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize(),
-				freeStores = static_cast<double>(_baseTo->getAvailableStores()) - _baseTo->getUsedStores() - _iQty,
-				freeStoresForItem = DBL_MAX;
+				storesPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize(),
+				availStores = static_cast<double>(_baseTo->getAvailableStores()) - _baseTo->getUsedStores() - _iQty,
+				qtyItemsCanGo = DBL_MAX;
 
-			if (!AreSame(storesNeededPerItem, 0.0))
-				freeStoresForItem = (freeStores + 0.05) / storesNeededPerItem;
+			if (!AreSame(storesPerItem, 0.0))
+				qtyItemsCanGo = (availStores + 0.05) / storesPerItem;
 
 			change = std::min(
 							std::min(
-									static_cast<int>(freeStoresForItem),
+									static_cast<int>(qtyItemsCanGo),
 									getQuantity() - _transferQty[_sel]),
 							change);
-			_iQty += static_cast<double>(change) * storesNeededPerItem;
+			_iQty += static_cast<double>(change) * storesPerItem;
 			_baseQty[_sel] -= change;
 			_destQty[_sel] += change;
 			_transferQty[_sel] += change;
@@ -1202,7 +1251,9 @@ void TransferItemsState::updateItemStrings()
 	std::wostringstream
 		ss1,
 		ss2,
-		ss3;
+		ss3,
+		ss4,
+		ss5;
 
 	ss1 << _baseQty[_sel];
 	_lstItems->setCellText(_sel, 1, ss1.str());
@@ -1232,6 +1283,24 @@ void TransferItemsState::updateItemStrings()
 	}
 
 	_btnOk->setVisible(_total > 0);
+
+	ss4 << _baseFrom->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseFrom->getUsedStores();
+	if (std::abs(_iQty) > 0.05)
+	{
+		ss4 << "(";
+		if (-(_iQty) > 0.0) ss4 << "+";
+		ss4 << std::fixed << std::setprecision(1) << -(_iQty) << ")";
+	}
+	_txtSpaceFrom->setText(ss4.str());
+
+	ss5 << _baseTo->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _baseTo->getUsedStores();
+	if (std::abs(_iQty) > 0.05)
+	{
+		ss5 << "(";
+		if (_iQty > 0.0) ss5 << "+";
+		ss5 << std::fixed << std::setprecision(1) << _iQty << ")";
+	}
+	_txtSpaceTo->setText(ss5.str());
 }
 
 /**
@@ -1242,6 +1311,15 @@ int TransferItemsState::getTotal() const
 {
 	return _total;
 }
+
+/**
+ * kL. For handling transfer confirmation Ok / Cancel btns.
+ * @param reset - true to reset transfers when confirmed Ok
+ */
+/* void TransferItemsState::resetTransfer(bool reset) // kL
+{
+	_reset = reset;
+} */ // done directly in completeTransfer()
 
 /**
  * Gets the shortest distance between the two bases.
