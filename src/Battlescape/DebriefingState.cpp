@@ -1619,9 +1619,10 @@ void DebriefingState::reequipCraft(
 		bool vehicleItemsCanBeDestroyed)
 {
 	//Log(LOG_INFO) << "DebriefingState::reequipCraft()";
-	int qty;
-	int lost;
-//	int qtyLost;
+	int
+		qty,
+		lost;
+//	int used; // kL
 
 	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
 	for (std::map<std::string, int>::iterator
@@ -1636,6 +1637,8 @@ void DebriefingState::reequipCraft(
 			base->getItems()->removeItem(
 										i->first,
 										i->second);
+
+//			used = i->second; // kL
 		}
 		else
 		{
@@ -1647,6 +1650,9 @@ void DebriefingState::reequipCraft(
 			craft->getItems()->removeItem(
 										i->first,
 										lost);
+//										i->second - qty); // kL
+
+//			used = lost; // kL
 
 			ReequipStat stat =
 			{
@@ -1658,16 +1664,28 @@ void DebriefingState::reequipCraft(
 			_missingItems.push_back(stat);
 		}
 
-/*		int qtyLost = ;
+		// kL_begin:
+		// NOTE: quantifying what was Used on the battlefield is difficult,
+		// because *all items recovered* on the 'field, including the craft's
+		// stores, have already been added to base->Stores before this function
+		// runs. An independent vector of either base->Stores or craft->Stores
+		// is NOT maintained.
 
-		ReequipStat stat =
-		{
-			i->first,
-			missing,
-			craft->getName(_game->getLanguage())
-		};
+//		used = i->second - qty;
+//		used = qty - i->second;
+//		if (used > 0)
+/*		{
+			ReequipStat stat =
+			{
+				i->first,
+//				i->second,
+				used,
+				craft->getName(_game->getLanguage())
+			};
 
-		_missingItems.push_back(stat); */
+			_missingItems.push_back(stat);
+		} */
+		// kL_end.
 	}
 
 	// Now let's see the vehicles
@@ -1705,8 +1723,8 @@ void DebriefingState::reequipCraft(
 	{
 		qty = base->getItems()->getItem(i->first);
 		canBeAdded = std::min(
-								qty,
-								i->second);
+							qty,
+							i->second);
 
 		if (qty < i->second)
 		{
@@ -1755,10 +1773,10 @@ void DebriefingState::reequipCraft(
 			int ammoPerVehicle = ammoRule->getClipSize();
 
 			int baseQty = base->getItems()->getItem(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
+
 			if (baseQty < i->second * ammoPerVehicle)
 			{
 				lost = (i->second * ammoPerVehicle) - baseQty; // missing ammo
-
 				ReequipStat stat =
 				{
 					ammoRule->getType(),
@@ -1784,6 +1802,7 @@ void DebriefingState::reequipCraft(
 															tankRule,
 															ammoPerVehicle,
 															size));
+
 					base->getItems()->removeItem(
 												ammoRule->getType(),
 												ammoPerVehicle);
@@ -1794,6 +1813,17 @@ void DebriefingState::reequipCraft(
 											canBeAdded);
 			}
 		}
+
+		// kL_begin:
+/*		ReequipStat stat =
+		{
+			i->first,
+			canBeAdded,
+			craft->getName(_game->getLanguage())
+		};
+
+		_missingItems.push_back(stat); */
+		// kL_end.
 	}
 	//Log(LOG_INFO) << "DebriefingState::reequipCraft() EXIT";
 }

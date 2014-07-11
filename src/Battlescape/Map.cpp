@@ -1884,7 +1884,7 @@ void Map::drawTerrain(Surface* surface)
 						{
 							Uint8 wpColor = 4; // light gray
 							if (_save->getTerrain() == "POLAR")
-								wpColor = 11; // dark gray
+								wpColor = 10; // dark gray
 
 							_numWaypid->setColor(wpColor);
 
