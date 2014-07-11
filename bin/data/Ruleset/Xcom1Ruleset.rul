@@ -9771,6 +9771,8 @@ extraStrings:
       UBASE: "aLien BASE"
       URBAN: "URBAN"
       XBASE: "xCom BASE"
+      STR_SPACE_USED_FREE_: "Space Used:Free> {ALT}{0}:{1}"
+      STR_LOAD_CAPACITY_FREE_: "Load Full:Free> {ALT}{0}:{1}"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

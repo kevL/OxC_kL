@@ -2845,9 +2845,9 @@ int BattleUnit::getFatalWound(int part) const
 
 /**
  * Heal a fatal wound of the soldier.
- * @param part, The body part to heal
- * @param woundAmount, The amount of fatal wound healed
- * @param healthAmount, The amount of health to add to soldier health
+ * @param part			- the body part to heal
+ * @param woundAmount	- the amount of fatal wound healed
+ * @param healthAmount	- the amount of health to add to soldier health
  */
 void BattleUnit::heal(
 		int part,

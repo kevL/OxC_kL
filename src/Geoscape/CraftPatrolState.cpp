@@ -23,6 +23,7 @@
 
 #include "GeoscapeCraftState.h"
 #include "Globe.h"
+#include "SelectDestinationState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -152,10 +153,13 @@ void CraftPatrolState::btnRedirectClick(Action*)
 {
 	_game->popState();
 
-	_game->pushState(new GeoscapeCraftState(
-										_craft,
-										_globe,
-										0));
+	_game->pushState(new SelectDestinationState(
+											_craft,
+											_globe));
+//	_game->pushState(new GeoscapeCraftState(
+//										_craft,
+//										_globe,
+//										NULL));
 }
 
 }

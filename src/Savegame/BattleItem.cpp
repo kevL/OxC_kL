@@ -355,7 +355,7 @@ bool BattleItem::occupiesSlot(
 	if (_inventorySlot->getType() == INV_HAND)
 		return true;
 
-	if (item == 0)
+	if (item == NULL)
 		return (x >= _inventoryX
 				&& x < _inventoryX + _rules->getInventoryWidth()
 				&& y >= _inventoryY
@@ -395,11 +395,12 @@ bool BattleItem::needsAmmo() const
  */
 int BattleItem::setAmmoItem(BattleItem* item)
 {
-	if (!needsAmmo()) return -2;
+	if (!needsAmmo())
+		return -2;
 
-	if (item == 0)
+	if (item == NULL)
 	{
-		_ammoItem = 0;
+		_ammoItem = NULL;
 
 		return 0;
 	}

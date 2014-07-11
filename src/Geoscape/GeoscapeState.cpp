@@ -1525,8 +1525,6 @@ private:
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
 	//Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
-	//Log(LOG_INFO) << "" << _base.getName(); // not workie!
-
 	bool ret = false;
 
 	if (ufo->isCrashed())
@@ -1548,28 +1546,31 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	else
 	{
 		double ufoRange	= 600.0;
-		double targetDistance = _base.getDistance(ufo) * 3440.0;
-		//Log(LOG_INFO) << ". . targetDistance = " << (int)targetDistance;
+		double targetDist = _base.getDistance(ufo) * 3440.0;
+		//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
 
-		if (targetDistance > ufoRange)
+		if (targetDist > ufoRange)
 		{
 			//Log(LOG_INFO) << ". . uFo's have a detection range of 600 nautical miles.";
 			return false;
 		}
 		else
 		{
-			int chance = _base.getDetectionChance(_difficulty);
+			double div = targetDist * 12.0 / ufoRange; // kL: should use log() ...
+			int chance = static_cast<int>(
+							static_cast<double>(_base.getDetectionChance(_difficulty) + ufo->getDetectors())
+								/ div); // kL
+			if (ufo->getMissionType() == "STR_ALIEN_RETALIATION"
+				&& Options::aggressiveRetaliation)
+			{
+				//Log(LOG_INFO) << ". . uFo's on retaliation missions will scan for base 'aggressively'";
+				chance += 3;
+			}
+
 			if (chance > 0)
 			{
-				if (ufo->getMissionType() == "STR_ALIEN_RETALIATION"
-					&& Options::aggressiveRetaliation)
-				{
-					//Log(LOG_INFO) << ". . uFo's on retaliation missions will scan for base 'aggressively'";
-					chance += 1;
-				}
-
+				Log(LOG_INFO) << ". . . chance = " << chance;
 				ret = RNG::percent(chance);
-				//Log(LOG_INFO) << ". . . chance = " << chance;
 			}
 		}
 	}
@@ -1627,7 +1628,7 @@ void GeoscapeState::time10Minutes()
 										this));
 				}
 
-				if ((*c)->getDestination() == 0)
+				if ((*c)->getDestination() == NULL)
 				{
 					for (std::vector<AlienBase*>::iterator // patrol for aLien bases.
 							ab = _game->getSavedGame()->getAlienBases()->begin();
@@ -1673,7 +1674,7 @@ void GeoscapeState::time10Minutes()
 
 			if (u != _game->getSavedGame()->getUfos()->end())
 			{
-				//Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
+				Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
 				(*b)->setIsRetaliationTarget();
 			}
 		}

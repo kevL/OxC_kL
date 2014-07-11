@@ -76,8 +76,7 @@ struct ReequipStat
 
 
 /**
- * Debriefing screen shown after a Battlescape
- * mission that displays the results.
+ * Debriefing screen shown after a Battlescape mission that displays the results.
  */
 class DebriefingState
 	:

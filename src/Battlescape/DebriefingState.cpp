@@ -1609,9 +1609,9 @@ void DebriefingState::prepareDebriefing()
 
 /**
  * Reequips a craft after a mission.
- * @param base, Base to reequip from.
- * @param craft, Craft to reequip.
- * @param vehicleItemsCanBeDestroyed, Whether we can destroy the vehicles on the craft.
+ * @param base							- pointer to a base to reequip from
+ * @param craft							- pointer to a craft to reequip
+ * @param vehicleItemsCanBeDestroyed	- true if the vehicles on the craft can be destroyed
  */
 void DebriefingState::reequipCraft(
 		Base* base,
@@ -1619,6 +1619,9 @@ void DebriefingState::reequipCraft(
 		bool vehicleItemsCanBeDestroyed)
 {
 	//Log(LOG_INFO) << "DebriefingState::reequipCraft()";
+	int qty;
+	int lost;
+//	int qtyLost;
 
 	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
 	for (std::map<std::string, int>::iterator
@@ -1626,25 +1629,45 @@ void DebriefingState::reequipCraft(
 			i != craftItems.end();
 			++i)
 	{
-		int qty = base->getItems()->getItem(i->first);
+		qty = base->getItems()->getItem(i->first);
+
 		if (qty >= i->second)
-			base->getItems()->removeItem(i->first, i->second);
+		{
+			base->getItems()->removeItem(
+										i->first,
+										i->second);
+		}
 		else
 		{
-			int missing = i->second - qty;
+			base->getItems()->removeItem(
+										i->first,
+										qty);
 
-			base->getItems()->removeItem(i->first, qty);
-			craft->getItems()->removeItem(i->first, missing);
+			lost = i->second - qty;
+			craft->getItems()->removeItem(
+										i->first,
+										lost);
 
 			ReequipStat stat =
 			{
 				i->first,
-				missing,
+				lost,
 				craft->getName(_game->getLanguage())
 			};
 
 			_missingItems.push_back(stat);
 		}
+
+/*		int qtyLost = ;
+
+		ReequipStat stat =
+		{
+			i->first,
+			missing,
+			craft->getName(_game->getLanguage())
+		};
+
+		_missingItems.push_back(stat); */
 	}
 
 	// Now let's see the vehicles
@@ -1673,21 +1696,25 @@ void DebriefingState::reequipCraft(
 
 	craft->getVehicles()->clear();
 
+	int canBeAdded;
+
 	for (std::map<std::string, int>::iterator // Ok, now read those vehicles
 			i = craftVehicles.getContents()->begin();
 			i != craftVehicles.getContents()->end();
 			++i)
 	{
-		int qty = base->getItems()->getItem(i->first);
-		int canBeAdded = std::min(qty, i->second);
+		qty = base->getItems()->getItem(i->first);
+		canBeAdded = std::min(
+								qty,
+								i->second);
 
 		if (qty < i->second)
 		{
-			int missing = i->second - qty; // missing tanks
+			lost = i->second - qty; // missing tanks
 			ReequipStat stat =
 			{
 				i->first,
-				missing,
+				lost,
 				craft->getName(_game->getLanguage())
 			};
 
@@ -1718,7 +1745,9 @@ void DebriefingState::reequipCraft(
 														size));
 			}
 
-			base->getItems()->removeItem(i->first, canBeAdded);
+			base->getItems()->removeItem(
+										i->first,
+										canBeAdded);
 		}
 		else // so this tank requires ammo
 		{
@@ -1728,18 +1757,22 @@ void DebriefingState::reequipCraft(
 			int baseQty = base->getItems()->getItem(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
 			if (baseQty < i->second * ammoPerVehicle)
 			{
-				int missing = (i->second * ammoPerVehicle) - baseQty; // missing ammo
+				lost = (i->second * ammoPerVehicle) - baseQty; // missing ammo
+
 				ReequipStat stat =
 				{
 					ammoRule->getType(),
-					missing,
+					lost,
 					craft->getName(_game->getLanguage())
 				};
 
 				_missingItems.push_back(stat);
 			}
 
-			canBeAdded = std::min(canBeAdded, baseQty / ammoPerVehicle);
+			canBeAdded = std::min(
+								canBeAdded,
+								baseQty / ammoPerVehicle);
+
 			if (canBeAdded > 0)
 			{
 				for (int
@@ -1752,8 +1785,8 @@ void DebriefingState::reequipCraft(
 															ammoPerVehicle,
 															size));
 					base->getItems()->removeItem(
-											ammoRule->getType(),
-											ammoPerVehicle);
+												ammoRule->getType(),
+												ammoPerVehicle);
 				}
 
 				base->getItems()->removeItem(

@@ -66,7 +66,7 @@ SelectDestinationState::SelectDestinationState(
 
 	int
 		dx = _game->getScreen()->getDX();
-//kL		dy = _game->getScreen()->getDY();
+//kL	dy = _game->getScreen()->getDY();
 
 /*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
 	_btnRotateRight	= new InteractiveSurface(12, 10, 283 + dx * 2, 176 + dy);

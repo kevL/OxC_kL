@@ -2258,11 +2258,12 @@ void Pathfinding::setUnit(BattleUnit* unit)
 	{
 		_movementType = unit->getArmor()->getMovementType();
 
-		if (_movementType == MT_FLY
+/*		if (_movementType == MT_FLY
 			&& (SDL_GetModState() & KMOD_ALT) != 0)
 		{
-			_movementType = MT_WALK; // kL. I put this in but not sure where it gets used (if..).
-		}
+			_movementType = MT_WALK;	// kL. I put this in but not sure where it gets used (if..).
+										// SavedBattleGame::reviveUnconsciousUnits() ...
+		} */
 	}
 	else
 		_movementType = MT_WALK;

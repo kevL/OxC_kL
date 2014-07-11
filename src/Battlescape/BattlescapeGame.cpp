@@ -2485,8 +2485,8 @@ void BattlescapeGame::psiButtonAction()
 
 /**
  * Moves a unit up or down.
- * @param unit The unit.
- * @param dir Direction DIR_UP or DIR_DOWN.
+ * @param unit	- a unit
+ * @param dir	- direction DIR_UP or DIR_DOWN
  */
 void BattlescapeGame::moveUpDown(
 		BattleUnit* unit,
@@ -2510,6 +2510,19 @@ void BattlescapeGame::moveUpDown(
 
 		kneel(_save->getSelectedUnit());
 	} */
+
+	// kL_begin:
+	_currentAction.strafe = false; // kL, redundancy checks ......
+	_currentAction.run = false;
+	_currentAction.actor->setDashing(false);
+
+	if (Options::strafe
+		&& (SDL_GetModState() & KMOD_CTRL) != 0
+		&& unit->getArmor()->getSize() == 1)
+	{
+		_currentAction.run = true;
+		_currentAction.actor->setDashing(true);
+	} // kL_end.
 
 	_save->getPathfinding()->calculate(
 									_currentAction.actor,

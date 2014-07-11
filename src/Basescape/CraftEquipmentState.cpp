@@ -561,7 +561,9 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			{
 				if ((*i)->getRules() == itRule)
 				{
-					_base->getItems()->addItem(amRule->getType(), (*i)->getAmmo());
+					_base->getItems()->addItem(
+											amRule->getType(),
+											(*i)->getAmmo());
 
 					delete *i;
 					i = craft->getVehicles()->erase(i);
@@ -571,7 +573,9 @@ void CraftEquipmentState::moveLeftByValue(int change)
 			}
 
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
-				_base->getItems()->addItem(_items[_sel], cQty);
+				_base->getItems()->addItem(
+										_items[_sel],
+										cQty);
 
 			// And now reAdd the count we want to keep in the craft (and redistribute the ammo among them)
 			if (cQty > change)
@@ -694,7 +698,9 @@ void CraftEquipmentState::moveRightByValue(int change)
 					{
 						if (_game->getSavedGame()->getMonthsPassed() != -1)
 						{
-							_base->getItems()->removeItem(amRule->getType(), perVehicle);
+							_base->getItems()->removeItem(
+														amRule->getType(),
+														perVehicle);
 							_base->getItems()->removeItem(_items[_sel]);
 						}
 
@@ -770,7 +776,9 @@ void CraftEquipmentState::moveRightByValue(int change)
 //			_tQty += change;
 
 			if (_game->getSavedGame()->getMonthsPassed() > -1)
-				_base->getItems()->removeItem(_items[_sel], change);
+				_base->getItems()->removeItem(
+											_items[_sel],
+											change);
 		}
 	}
 

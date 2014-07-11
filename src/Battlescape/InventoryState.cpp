@@ -120,7 +120,7 @@ InventoryState::InventoryState(
 	_tuCost		= new NumberText(7, 5, 310, 60); // kL
 
 	_txtItem	= new Text(160, 9, 128, 140);
-	_txtAmmo	= new Text(66, 24, 254, 64);
+	_txtAmmo	= new Text(40, 24, 272, 64);
 
 	_btnOk		= new InteractiveSurface(35, 22, 237, 0);
 	_btnPrev	= new InteractiveSurface(23, 22, 273, 0);
@@ -132,8 +132,16 @@ InventoryState::InventoryState(
 
 	_btnRank	= new InteractiveSurface(26, 23, 0, 0);
 
-	_btnCreateTemplate	= new InteractiveSurface(32, 22, _templateBtnX, _createTemplateBtnY);
-	_btnApplyTemplate	= new InteractiveSurface(32, 22, _templateBtnX, _applyTemplateBtnY);
+	_btnCreateTemplate	= new InteractiveSurface(
+											32,
+											22,
+											_templateBtnX,
+											_createTemplateBtnY);
+	_btnApplyTemplate	= new InteractiveSurface(
+											32,
+											22,
+											_templateBtnX,
+											_applyTemplateBtnY);
 
 	_selAmmo	= new Surface(
 						RuleInventory::HAND_W * RuleInventory::SLOT_W,
@@ -228,7 +236,7 @@ InventoryState::InventoryState(
 
 	_txtAmmo->setColor(Palette::blockOffset(4));
 	_txtAmmo->setSecondaryColor(Palette::blockOffset(1));
-	_txtAmmo->setAlign(ALIGN_CENTER);
+	_txtAmmo->setAlign(ALIGN_LEFT);
 	_txtAmmo->setHighContrast(true);
 
 	_btnOk->onMouseClick((ActionHandler)& InventoryState::btnOkClick);
@@ -334,7 +342,7 @@ static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*>& inventory
 }
 
 /**
- *
+ * dTor.
  */
 InventoryState::~InventoryState()
 {
@@ -540,7 +548,7 @@ void InventoryState::saveEquipmentLayout()
 			i != _battleGame->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getGeoscapeSoldier() == 0) // x-Com soldiers only
+		if ((*i)->getGeoscapeSoldier() == NULL) // x-Com soldiers only
 			continue;
 
 		std::vector<EquipmentLayoutItem*>* layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
@@ -567,7 +575,7 @@ void InventoryState::saveEquipmentLayout()
 		{
 			std::string ammo;
 			if ((*j)->needsAmmo()
-				&& (*j)->getAmmoItem() != 0)
+				&& (*j)->getAmmoItem() != NULL)
 			{
 				ammo = (*j)->getAmmoItem()->getRules()->getType();
 			}
@@ -766,7 +774,7 @@ void InventoryState::btnCreateTemplateClick(Action* action)
  */
 void InventoryState::btnApplyTemplateClick(Action* action)
 {
-	if (_inv->getSelectedItem() != NULL)		// don't accept clicks when moving items
+	if (_inv->getSelectedItem() != NULL)	// don't accept clicks when moving items
 //kL	|| _curInventoryTemplate.empty())	// or when the template is empty
 	// kL_note: Yes accept empty template; I use this as an unload-soldier function.
 	{
@@ -966,9 +974,9 @@ void InventoryState::invMouseOver(Action* action)
 {
 	if (_inv->getSelectedItem() != NULL)
 	{
-		_tuCost->setValue(_inv->getTUCost());				// kL
-		_tuCost->setVisible(_tu
-							&& _inv->getTUCost() > 0);	// kL
+		_tuCost->setValue(_inv->getTUCost());			// kL
+		_tuCost->setVisible(_tu							// kL
+							&& _inv->getTUCost() > 0);
 
 		return;
 	}
@@ -1071,7 +1079,7 @@ void InventoryState::invMouseOver(Action* action)
 	}
 	else
 	{
-//kL		if (_currentTooltip == "")
+//kL	if (_currentTooltip == "")
 		_txtItem->setText(L"");
 
 		_txtAmmo->setText(L"");

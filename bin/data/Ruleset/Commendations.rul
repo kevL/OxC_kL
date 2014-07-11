@@ -64,7 +64,7 @@ extraStrings:
      STR_MEDAL_STAR_OF_VALOR_DESCRIPTION: "Given to a soldier who was the lone survivor of a mission."
      STR_MEDAL_IRON_MAN_NAME: "Iron Man"
      STR_MEDAL_IRON_MAN_DESCRIPTION: "Given to a soldier who is truly Iron."
-     STR_MEDAL_ORDER_OF_EARTH_NAME: "Order of Earth"
+     STR_MEDAL_ORDER_OF_EARTH_NAME: "Order of the Earth"
      STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION: "Given to a soldier who has been instrumental in Earth's defense."
      STR_MEDAL_SNIPER_TMPNAME: "Marksman Citation"
      STR_MEDAL_SNIPER_TMPDESCRIPTION: "Given to a soldier who has landed long distance shots on intended targets."

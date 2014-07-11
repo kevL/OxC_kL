@@ -174,6 +174,8 @@ private:
 
 		/// Gets the UFO's visibility.
 		int getVisibility() const;
+		/// kL. Gets a UFO's detect-xCom-base ability.
+		int getDetectors() const; // kL
 
 		/// Gets the UFO's Mission type.
 		const std::string& getMissionType() const;

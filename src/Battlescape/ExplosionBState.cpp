@@ -221,12 +221,15 @@ void ExplosionBState::init()
 			// kL_begin:
 			Camera* explodeCam = _parent->getMap()->getCamera();
 			if (!explodeCam->isOnScreen(centerPos))
+			{
 				explodeCam->centerOnPosition(
 											centerPos,
 											false);
+			}
 			else if (explodeCam->getViewLevel() != centerPos.z)
+			{
 				explodeCam->setViewLevel(centerPos.z);
-			// kL_end.
+			} // kL_end.
 		}
 		else
 			_parent->popState();
@@ -281,13 +284,18 @@ void ExplosionBState::init()
 //		if (_hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		// kL_begin:
 		Camera* explodeCam = _parent->getMap()->getCamera();
-		if (!explodeCam->isOnScreen(centerPos))
+		if (!explodeCam->isOnScreen(centerPos)
+			|| (_parent->getSave()->getSide() != FACTION_PLAYER
+				&& _item->getRules()->getBattleType() == BT_PSIAMP))
+		{
 			explodeCam->centerOnPosition(
 										centerPos,
 										false);
+		}
 		else if (explodeCam->getViewLevel() != centerPos.z)
+		{
 			explodeCam->setViewLevel(centerPos.z);
-		// kL_end.
+		} // kL_end.
 	}
 	//Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }

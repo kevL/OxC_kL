@@ -1879,22 +1879,20 @@ void SavedBattleGame::reviveUnconsciousUnits()
 										originalPosition))
 				{
 					// recover from unconscious
-					(*i)->turn(false); // -> STATUS_STANDING
+//kL				(*i)->turn(); // -> STATUS_STANDING
+					(*i)->setStatus(STATUS_STANDING); // kL
 
-//kL					(*i)->kneel(false);
-					if ((*i)->getOriginalFaction() == FACTION_PLAYER
-						&& (*i)->getArmor()->getSize() == 1)		// kL
-					{
-						(*i)->kneel(true);							// kL
-					}
+//kL				(*i)->kneel(false);
+					if ((*i)->getOriginalFaction() == FACTION_PLAYER)
+						(*i)->kneel(true); // kL
 
 					// Map::cacheUnit(BattleUnit* unit)
 //					UnitSprite::setBattleUnit(unit, part);
 					// UnitSprite::setBattleUnit(BattleUnit* unit, int part);
-					(*i)->setCache(0);
+					(*i)->setCache(NULL);
 
-					(*i)->setDirection(RNG::generate(0, 7));		// kL
-					(*i)->setTimeUnits(0);							// kL
+					(*i)->setDirection(RNG::generate(0, 7));	// kL
+					(*i)->setTimeUnits(0);						// kL
 
 					getTileEngine()->calculateUnitLighting();
 					getTileEngine()->calculateFOV(*i);
@@ -1929,10 +1927,10 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 
 /**
  * Places units on the map. Handles large units that are placed on multiple tiles.
- * @param bu, The unit to be placed.
- * @param pos, The position to place the unit.
- * @param testOnly, If true then just checks if the unit can be placed at the position.
- * @return, True if the unit could be successfully placed.
+ * @param bu		- pointer to a unit to be placed
+ * @param pos		- reference of the position to place the unit
+ * @param testOnly	- true just checks if unit can be placed at the position
+ * @return, true if unit was placed successfully
  */
 bool SavedBattleGame::setUnitPosition(
 		BattleUnit* bu,
@@ -1951,14 +1949,21 @@ bool SavedBattleGame::setUnitPosition(
 				y >= 0;
 				y--)
 		{
-			Tile* t = getTile(pos + Position(x, y, 0));
-			Tile* tb = getTile(pos + Position(x, y, -1));
-			if (t == 0
-				|| (t->getUnit() != 0
-					&& t->getUnit() != bu)
-				|| t->getTUCost(MapData::O_OBJECT, bu->getArmor()->getMovementType()) == 255
-				|| (t->hasNoFloor(tb)
-					&& bu->getArmor()->getMovementType() != MT_FLY))
+			Tile* tile = getTile(pos + Position(x, y, 0));
+			Tile* tileBelow = getTile(pos + Position(x, y,-1));
+			Tile* tileAbove = getTile(pos + Position(x, y, 1)); // kL
+
+			if (tile == NULL
+				|| (tile->getUnit() != NULL
+					&& tile->getUnit() != bu)
+				|| tile->getTUCost(MapData::O_OBJECT, bu->getArmor()->getMovementType()) == 255
+				|| (tile->hasNoFloor(tileBelow)
+					&& bu->getArmor()->getMovementType() != MT_FLY)
+				|| (tileAbove // kL:
+					&& tileAbove->getUnit() != NULL
+					&& tileAbove->getUnit() != bu
+					&& bu->getHeight() - tile->getTerrainLevel() > 26)) // don't stuck yer head up someone's flying arse.
+				// kL_note: no check for ceilings yet ....
 			{
 				return false;
 			}
@@ -1968,6 +1973,7 @@ bool SavedBattleGame::setUnitPosition(
 	if (size > 0)
 	{
 		getPathfinding()->setUnit(bu);
+
 		for (int
 				dir = 2;
 				dir <= 4;
@@ -1975,7 +1981,7 @@ bool SavedBattleGame::setUnitPosition(
 		{
 			if (getPathfinding()->isBlocked(
 										getTile(pos),
-										0,
+										NULL,
 										dir,
 										NULL))
 			{
@@ -2015,9 +2021,9 @@ bool SavedBattleGame::setUnitPosition(
 
 /**
  * Places a unit on or near a position.
- * @param unit, The unit to place.
- * @param entryPoint, The position around which to attempt to place the unit.
- * @return, True if the unit was successfully placed.
+ * @param unit			- pointer to a unit to place
+ * @param entryPoint	- the position around which to attempt to place the unit
+ * @return, true if unit was successfully placed
  */
 bool SavedBattleGame::placeUnitNearPosition(
 		BattleUnit* unit,
@@ -2025,21 +2031,30 @@ bool SavedBattleGame::placeUnitNearPosition(
 {
 	if (setUnitPosition(
 					unit,
-					entryPoint)) return true;
+					entryPoint))
+	{
+		return true;
+	}
 
+	int dirRand = RNG::generate(0, 7); // kL_begin:
 	for (int
-			dir = 0;
-			dir <= 7;
-			++dir)
+			dir = dirRand;
+			dir < dirRand + 8;
+			++dir) // kL_end.
+//	for (int
+//			dir = 0;
+//			dir < 8;
+//			++dir)
 	{
 		Position offset;
-		getPathfinding()->directionToVector(dir, &offset);
+//kL	getPathfinding()->directionToVector(dir, &offset);
+		getPathfinding()->directionToVector(dir %8, &offset); // kL
 
-		Tile* t = getTile(entryPoint + offset);
-		if (t
+		Tile* tile = getTile(entryPoint + offset);
+		if (tile
 			&& !getPathfinding()->isBlocked(
 										getTile(entryPoint),
-										t,
+										tile,
 										dir,
 										NULL)
 			&& setUnitPosition(
@@ -2050,18 +2065,19 @@ bool SavedBattleGame::placeUnitNearPosition(
 		}
 	}
 
+/*kL: uhh no.
 	if (unit->getArmor()->getMovementType() == MT_FLY)
 	{
-		Tile* t = getTile(entryPoint + Position(0, 0, 1));
-		if (t
-			&& t->hasNoFloor(getTile(entryPoint))
+		Tile* tile = getTile(entryPoint + Position(0, 0, 1));
+		if (tile
+			&& tile->hasNoFloor(getTile(entryPoint))
 			&& setUnitPosition(
 							unit,
 							entryPoint + Position(0, 0, 1)))
 		{
 			return true;
 		}
-	}
+	} */
 
 	return false;
 }

@@ -329,14 +329,14 @@ void UnitDieBState::convertUnitToCorpse()
 	//Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() ID = " << _unit->getId() << " pos " << _unit->getPosition();
 	_parent->getSave()->getBattleState()->showPsiButton(false);
 
-	Position lastPos = _unit->getPosition();
+	Position pos = _unit->getPosition();
 
 	// remove the unconscious body item corresponding to this unit, and if it was being carried, keep track of what slot it was in
-	bool carried = lastPos == Position(-1,-1,-1);
+	bool carried = pos == Position(-1,-1,-1);
 	if (!carried)
 		_parent->getSave()->removeUnconsciousBodyItem(_unit);
 
-	BattleItem* itemToKeep = 0;
+	BattleItem* itemToKeep = NULL;
 	int size = _unit->getArmor()->getSize();
 
 	// move inventory from unit to the ground for non-large units
@@ -353,11 +353,11 @@ void UnitDieBState::convertUnitToCorpse()
 				++i)
 		{
 			_parent->dropItem(
-							lastPos,
+							pos,
 							*i);
 
 			if (!(*i)->getRules()->isFixed())
-				(*i)->setOwner(0);
+				(*i)->setOwner(NULL);
 			else
 				itemToKeep = *i;
 		}
@@ -365,13 +365,13 @@ void UnitDieBState::convertUnitToCorpse()
 
 	_unit->getInventory()->clear();
 
-	if (itemToKeep != 0)
+	if (itemToKeep != NULL)
 		_unit->getInventory()->push_back(itemToKeep);
 
-	_unit->setTile(0); // remove unit-tile link
+	_unit->setTile(NULL); // remove unit-tile link
 
 
-	if (carried) // we're being carried
+	if (carried) // unconscious unit is being carried when it dies
 	{
 		// replace the unconscious body item with a corpse in the carrying unit's inventory
 		for (std::vector<BattleItem*>::iterator
@@ -393,7 +393,7 @@ void UnitDieBState::convertUnitToCorpse()
 	else
 	{
 		int i = 0;
-		Tile* tileSelf = NULL;
+		Tile* tile = NULL;
 
 		for (int
 				y = 0;
@@ -411,12 +411,15 @@ void UnitDieBState::convertUnitToCorpse()
 				corpse->setUnit(_unit);
 
 				// check in case unit was displaced by another unit
-				tileSelf = _parent->getSave()->getTile(lastPos + Position(x, y, 0));
-				if (tileSelf->getUnit() == _unit)
-					tileSelf->setUnit(0);
+				tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
+				if (tile // kL, safety. ( had a CTD when ethereal dies on water )
+					&& tile->getUnit() == _unit)
+				{
+					tile->setUnit(NULL);
+				}
 
 				_parent->dropItem(
-								lastPos + Position(x, y, 0),
+								pos + Position(x, y, 0),
 								corpse,
 								true);
 

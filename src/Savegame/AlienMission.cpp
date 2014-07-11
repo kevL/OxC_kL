@@ -328,8 +328,7 @@ Ufo* AlienMission::spawnUfo(
 	//Log(LOG_INFO) << "AlienMission::spawnUfo()";
 	if (_rule.getType() == "STR_ALIEN_RETALIATION")
 	{
-		Log(LOG_INFO) << ". STR_ALIEN_RETALIATION";
-
+		//Log(LOG_INFO) << ". STR_ALIEN_RETALIATION";
 		const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
 		std::vector<Base*>::const_iterator found = std::find_if(

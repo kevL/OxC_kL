@@ -592,13 +592,14 @@ uint8_t Base::detect(Target* target) const
 //			ret = static_cast<uint8_t>(RNG::percent(static_cast<int>(chance)));
 			// kL_note: If this doesn't detect anything but UFOs, could
 			// consolidate it within (u != 0) above. Like this:
-			if (u != 0)
+			if (u != NULL)
 			{
 				chance += static_cast<float>(u->getVisibility());
-				//Log(LOG_INFO) << ". . chance(base + ufo) = " << (int)chance;
 				// need to divide by 3, since Geoscape-detection was moved from 30min to 10min time-slot.
 				chance /= 3.f;
+
 				ret = static_cast<uint8_t>(RNG::percent(static_cast<int>(chance)));
+				Log(LOG_INFO) << ". . Base detect UFO chance (baseDet + ufoVis) = " << (int)chance << " RET = " << (int)ret;
 			}
 //			else return 0;
 		}

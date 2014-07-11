@@ -802,6 +802,11 @@ void Inventory::mouseClick(Action* action, State* state)
 
 						if (!placed)
 							_warning->showMessage(_game->getLanguage()->getString(warning));
+						else // kL_begin:
+						{
+							_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor.
+							mouseOver(action, state);
+						} // kL_end.
 					}
 					else
 					{
