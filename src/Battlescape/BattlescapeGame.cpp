@@ -3251,8 +3251,8 @@ bool BattlescapeGame::getKneelReserved()
  * Checks if a unit has moved next to a proximity grenade.
  * Checks one tile around the unit in every direction.
  * For a large unit we check every tile it occupies.
- * @param unit Pointer to a unit.
- * @return True if a proximity grenade was triggered.
+ * @param unit - pointer to a unit
+ * @return, true if a proximity grenade was triggered
  */
 bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 {
@@ -3278,7 +3278,18 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 						ty++)
 				{
 					Tile* t = _save->getTile(unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
-					if (t)
+
+					int dir; // cred: animal310 - http://openxcom.org/bugs/openxcom/issues/765
+					_save->getPathfinding()->vectorToDirection(
+															Position(tx, ty, 0),
+															dir);
+
+					if (t
+						&& _save->getPathfinding()->isBlocked(
+															_save->getTile(Position(x, y, 0)),
+															NULL,
+															dir)
+														== false)
 					{
 						for (std::vector<BattleItem*>::iterator
 								i = t->getInventory()->begin();
@@ -3301,7 +3312,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 
 								getSave()->removeItem(*i);
 
-								unit->setCache(0);
+								unit->setCache(NULL);
 								getMap()->cacheUnit(unit);
 
 								return true;

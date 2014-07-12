@@ -1982,8 +1982,7 @@ bool SavedBattleGame::setUnitPosition(
 			if (getPathfinding()->isBlocked(
 										getTile(pos),
 										NULL,
-										dir,
-										NULL))
+										dir))
 			{
 				return false;
 			}
@@ -2055,8 +2054,7 @@ bool SavedBattleGame::placeUnitNearPosition(
 			&& !getPathfinding()->isBlocked(
 										getTile(entryPoint),
 										tile,
-										dir,
-										NULL)
+										dir)
 			&& setUnitPosition(
 							unit,
 							entryPoint + offset))

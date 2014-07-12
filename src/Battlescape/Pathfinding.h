@@ -70,7 +70,7 @@ private:
 	bool isBlocked(
 			Tile* tile,
 			const int part,
-			BattleUnit* missileTarget,
+			BattleUnit* missileTarget = NULL,
 			int bigWallExclusion = -1);
 	/// Tries to find a straight line path between two positions.
 	bool bresenhamPath(
@@ -105,15 +105,15 @@ private:
 
 		enum bigWallTypes
 		{
-			BIGWALL_NONE,		// 0
-			BIGWALL_BLOCK,		// 1
-			BIGWALL_NESW,		// 2
-			BIGWALL_NWSE,		// 3
-			BIGWALL_WEST,		// 4
-			BIGWALL_NORTH,		// 5
-			BIGWALL_EAST,		// 6
-			BIGWALL_SOUTH,		// 7
-			BIGWALL_E_S			// 8
+			BIGWALL_NONE,	// 0
+			BIGWALL_BLOCK,	// 1
+			BIGWALL_NESW,	// 2
+			BIGWALL_NWSE,	// 3
+			BIGWALL_WEST,	// 4
+			BIGWALL_NORTH,	// 5
+			BIGWALL_EAST,	// 6
+			BIGWALL_SOUTH,	// 7
+			BIGWALL_E_S		// 8
 		};
 
 
@@ -135,7 +135,7 @@ private:
 				Tile* startTile,
 				Tile* endTile,
 				const int dir,
-				BattleUnit* missileTarget);
+				BattleUnit* missileTarget = NULL);
 
 		/// Aborts the current path.
 		void abortPath();
