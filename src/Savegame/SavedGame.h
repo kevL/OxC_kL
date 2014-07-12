@@ -340,16 +340,16 @@ private:
 		/// Gets the current funds.
 		int getFunds() const;
 		/// Gets the list of funds from previous months.
-		const std::vector<int>& getFundsList() const;
+		std::vector<int>& getFundsList();
 		/// Sets new funds.
 		void setFunds(int funds);
 
 		/// Returns a list of maintenance costs
-		std::vector<int> getMaintenances();
+		std::vector<int>& getMaintenances();
 		/// kL. Returns the list of monthly income values.
-		std::vector<int> getIncomeList(); // kL
+		std::vector<int>& getIncomeList(); // kL
 		/// kL. Returns the list of monthly expenditure values.
-		std::vector<int> getExpenditureList(); // kL
+		std::vector<int>& getExpenditureList(); // kL
 
 		/// Gets the current game time.
 		GameTime* getTime() const;

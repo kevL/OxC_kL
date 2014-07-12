@@ -96,13 +96,17 @@ Soldier::Soldier(
 
 //kL	_initialStats.psiSkill = minStats.psiSkill;
 //		_initialStats.psiSkill = minStats.psiSkill - 2; // kL
-		_initialStats.psiSkill = 0; // kL
+		_initialStats.psiSkill = 0;						// kL
 
 		_currentStats = _initialStats;
 
-		_name	= L"Fritz";								// kL
 		_gender	= (SoldierGender)RNG::generate(0, 1);	// kL
 		_look	= (SoldierLook)RNG::generate(0, 3);		// kL
+
+		if (_gender == GENDER_MALE)
+			_name = L"pfc.Fritz";						// kL
+		else
+			_name = L"pfc.Frita";						// kL
 
 /*kL
 		if (!names->empty())

@@ -4430,14 +4430,14 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1404352262 f:\git\openxcom\src\savegame\savedgame.h
+1405115028 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
 	<string>
 	<vector>
 	<time.h>
 	"GameTime.h"
 
-1404364557 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1405116833 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -5385,7 +5385,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1404143240 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1405116789 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -9632,7 +9632,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1404410449 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1405115234 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9673,7 +9673,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1404416126 source:f:\git\openxcom\src\savegame\soldier.cpp
+1405117576 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -11956,10 +11956,10 @@
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
 
-1404141801 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
+1405123071 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1404374017 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1405122653 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -11977,11 +11977,11 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1404144407 f:\git\openxcom\src\basescape\soldierdiarymissionstate.h
+1405122646 f:\git\openxcom\src\basescape\soldierdiarymissionstate.h
 	<vector>
 	"../Engine/State.h"
 
-1404247794 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1405124062 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	<string>
 	"SoldierDiaryMissionState.h"
@@ -12003,7 +12003,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1404146739 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
+1405123199 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
 	"../Engine/State.h"
 
 1404110161 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp

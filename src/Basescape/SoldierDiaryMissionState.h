@@ -47,8 +47,9 @@ class SoldierDiaryMissionState
 {
 
 private:
-	int _rowEntry;
-	size_t _soldierId;
+	size_t
+		_rowEntry,
+		_soldierId;
 
 	std::vector<Soldier*>* _list;
 	std::vector<SoldierDead*>* _listDead; // kL
@@ -77,7 +78,7 @@ private:
 		SoldierDiaryMissionState(
 				Base* base,
 				size_t soldierId,
-				int rowEntry);
+				size_t rowEntry);
 		/// Cleans up the Soldier Diary Mission state.
 		~SoldierDiaryMissionState();
 

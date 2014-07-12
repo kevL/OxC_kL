@@ -100,8 +100,8 @@ BasescapeState::BasescapeState(
 	_btnAliens		= new TextButton(128, 12, 192, 92);
 	_btnResearch	= new TextButton(128, 12, 192, 104);
 	_btnManufacture	= new TextButton(128, 12, 192, 116);
-	_btnSell		= new TextButton(128, 12, 192, 128);
-	_btnPurchase	= new TextButton(128, 12, 192, 140);
+	_btnPurchase	= new TextButton(128, 12, 192, 128);
+	_btnSell		= new TextButton(128, 12, 192, 140);
 	_btnTransfer	= new TextButton(128, 12, 192, 152);
 	_btnFacilities	= new TextButton(128, 12, 192, 164);
 	_btnNewBase		= new TextButton(128, 12, 192, 176);

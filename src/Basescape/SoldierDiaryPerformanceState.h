@@ -50,11 +50,12 @@ private:
 	bool
 		_displayKills,
 		_displayMissions,
-		_displayCommendations;
+		_displayAwards;
 	int
-		_display,
-		_lastScrollPos; // 0 displays kills, 1 displays missions, 2 displays commendations
-	size_t _soldierId;
+		_display; // 0 displays kills, 1 displays missions, 2 displays commendations
+	size_t
+		_lastScrollPos,
+		_soldierId;
 
 	std::vector<std::wstring> _commendationsListEntry;
 
@@ -74,6 +75,8 @@ private:
 		* _commendationDecoration;
 	Text
 		* _txtTitle,
+		* _txtBaseLabel, // kL
+
 		* _txtRank,
 		* _txtRace,
 		* _txtWeapon,
@@ -91,7 +94,7 @@ private:
 		* _btnNext,
 		* _btnKills,
 		* _btnMissions,
-		* _btnCommendations;
+		* _btnAwards;
 	TextList
 		* _lstRank,
 		* _lstRace,
@@ -103,7 +106,7 @@ private:
 		* _lstUFO,
 		* _lstMissionTotals,
 
-		* _lstCommendations;
+		* _lstAwards;
 	Window
 		* _window;
 

@@ -92,12 +92,13 @@ SoldierInfoState::SoldierInfoState(
 	_edtSoldier		= new TextEdit(this, 179, 16, 40, 9);
 	_btnDiary		= new TextButton(60, 16, 248, 8);
 
-	_txtRank		= new Text(130, 9, 0, 49);
-	_txtMissions	= new Text(100, 9, 130, 49);
-//	_txtKills		= new Text(100, 9, 230, 49);
-	_txtKills		= new Text(100, 9, 200, 49);
+	_txtRank		= new Text(110, 9, 0, 49);
+	_txtMissions	= new Text(80, 9, 112, 49);
+	_txtKills		= new Text(100, 9, 212, 49);
+
 	_txtCraft		= new Text(130, 9, 0, 57);
-	_txtRecovery	= new Text(180, 9, 130, 57);
+	_txtRecovery	= new Text(80, 9, 112, 57);
+
 	_txtPsionic		= new Text(75, 9, 5, 67);
 
 

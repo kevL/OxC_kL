@@ -60,6 +60,7 @@ private:
 
 	Text
 		* _txtTitle,
+		* _txtBaseLabel, // kL
 		* _txtLocation,
 		* _txtStatus,
 		* _txtDate;
@@ -69,7 +70,7 @@ private:
 		* _btnNext,
 		* _btnKills,
 		* _btnMissions,
-		* _btnCommendations;
+		* _btnAwards;
 	TextList* _lstDiary;
 	Window* _window;
 

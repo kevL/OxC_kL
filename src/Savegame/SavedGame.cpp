@@ -1003,7 +1003,7 @@ int SavedGame::getFunds() const
  * Returns the player's funds for the last 12 months.
  * @return funds.
  */
-const std::vector<int>& SavedGame::getFundsList() const
+std::vector<int>& SavedGame::getFundsList()
 {
 	return _funds;
 }
@@ -1021,7 +1021,7 @@ void SavedGame::setFunds(int funds)
  * return the list of monthly maintenance costs
  * @return list of maintenances.
  */
-std::vector<int> SavedGame::getMaintenances()
+std::vector<int>& SavedGame::getMaintenances()
 {
 	return _maintenance;
 }
@@ -1030,7 +1030,7 @@ std::vector<int> SavedGame::getMaintenances()
  * kL. Return the list of monthly income values.
  * @return vector<int>, List of income values
  */
-std::vector<int> SavedGame::getIncomeList() // kL
+std::vector<int>& SavedGame::getIncomeList() // kL
 {
 	return _income;
 }
@@ -1039,7 +1039,7 @@ std::vector<int> SavedGame::getIncomeList() // kL
  * kL. Return the list of monthly expenditure values.
  * @return vector<int>, List of income values
  */
-std::vector<int> SavedGame::getExpenditureList() // kL
+std::vector<int>& SavedGame::getExpenditureList() // kL
 {
 	return _expenditure;
 }

@@ -53,7 +53,7 @@ namespace OpenXcom
 SoldierDiaryMissionState::SoldierDiaryMissionState(
 		Base* base,
 		size_t soldierId,
-		int rowEntry)
+		size_t rowEntry)
 	:
 		_base(base),
 		_soldierId(soldierId),
@@ -72,22 +72,22 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	_screen = false;
 
-	_window			= new Window(this, 232, 128, 44, 36, POPUP_BOTH);
-	_txtTitle		= new Text(222, 17, 49, 44);
+	_window			= new Window(this, 252, 133, 34, 36, POPUP_BOTH);
+	_txtTitle		= new Text(242, 17, 39, 44);
 
-	_txtMissionType	= new Text(136, 9, 56, 62);
-	_txtUFO			= new Text(136, 9, 56, 71);
-	_txtScore		= new Text(136, 9, 56, 80);
+	_txtMissionType	= new Text(144, 9, 46, 62);
+	_txtUFO			= new Text(144, 9, 46, 71);
+	_txtScore		= new Text(144, 9, 46, 80);
 
-	_txtRace		= new Text(80, 9, 195, 62);
-	_txtDaylight	= new Text(80, 9, 195, 71);
-	_txtKills		= new Text(80, 9, 195, 80);
+	_txtRace		= new Text(80, 9, 188, 62);
+	_txtDaylight	= new Text(80, 9, 188, 71);
+	_txtKills		= new Text(80, 9, 188, 80);
 
-	_txtDaysWounded	= new Text(100, 9, 135, 89);
+	_txtDaysWounded	= new Text(100, 9, 100, 89);
 
-	_lstKills		= new TextList(208, 32, 60, 101);
+	_lstKills		= new TextList(217, 40, 50, 101);
 
-	_btnOk			= new TextButton(180, 16, 70, 140);
+	_btnOk			= new TextButton(180, 16, 70, 146);
 
 	setPalette("PAL_BASESCAPE");
 
@@ -106,9 +106,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	centerAllSurfaces();
 
 	std::vector<MissionStatistics*>* missionStatistics = _game->getSavedGame()->getMissionStatistics();
-	int
-		missionId,
-		daysWounded;
+	int daysWounded;
+	size_t missionId;
 
 	if (_base == NULL)
 	{
@@ -207,12 +206,13 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	{
 		_txtDaysWounded->setColor(Palette::blockOffset(13)+5);
 		_txtDaysWounded->setSecondaryColor(Palette::blockOffset(13));
+		_txtDaysWounded->setAlign(ALIGN_CENTER);
 		_txtDaysWounded->setText(tr("STR_DAYS_WOUNDED").arg(daysWounded));
 	}
 
 	_lstKills->setColor(Palette::blockOffset(13));
 	_lstKills->setArrowColor(Palette::blockOffset(13)+5);
-	_lstKills->setColumns(3, 30, 90, 88); // 208 total
+	_lstKills->setColumns(3, 30, 90, 97); // 217 total
 	_lstKills->setSelectable(false);
 	_lstKills->setBackground(_window);
 //	_lstKills->setMargin(8);
