@@ -1278,7 +1278,8 @@ void GeoscapeState::time5Seconds()
 						popup(new GeoscapeCraftState(
 													*j,
 													_globe,
-													wp));
+													wp,
+													this));
 					}
 				}
 
@@ -1383,7 +1384,8 @@ void GeoscapeState::time5Seconds()
 					timerReset(); // kL
 					popup(new CraftPatrolState(
 											*j,
-											_globe));
+											_globe,
+											this));
 					(*j)->setDestination(NULL);
 				}
 				else if (ts != NULL)

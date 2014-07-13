@@ -22,6 +22,7 @@
 #include <string>
 
 #include "GeoscapeCraftState.h"
+#include "GeoscapeState.h"
 #include "Globe.h"
 #include "SelectDestinationState.h"
 
@@ -51,10 +52,12 @@ namespace OpenXcom
  */
 CraftPatrolState::CraftPatrolState(
 		Craft* craft,
-		Globe* globe)
+		Globe* globe,
+		GeoscapeState* geo)
 	:
 		_craft(craft),
-		_globe(globe)
+		_globe(globe),
+		_geo(geo)
 {
 	_screen = false;
 
@@ -155,11 +158,13 @@ void CraftPatrolState::btnRedirectClick(Action*)
 
 	_game->pushState(new SelectDestinationState(
 											_craft,
-											_globe));
+											_globe,
+											_geo));
 //	_game->pushState(new GeoscapeCraftState(
 //										_craft,
 //										_globe,
-//										NULL));
+//										NULL,
+//										_geo));
 }
 
 }

@@ -21,6 +21,7 @@
 
 #include <sstream>
 
+#include "GeoscapeState.h"
 #include "Globe.h"
 #include "SelectDestinationState.h"
 
@@ -62,11 +63,13 @@ GeoscapeCraftState::GeoscapeCraftState(
 		Craft* craft,
 		Globe* globe,
 		Waypoint* waypoint,
+		GeoscapeState* geo,
 		bool doublePop) // kL_add.
 	:
 		_craft(craft),
 		_globe(globe),
 		_waypoint(waypoint),
+		_geo(geo),
 		_doublePop(doublePop) // kL_add.
 {
 	_screen = false;
@@ -428,7 +431,8 @@ void GeoscapeCraftState::btnTargetClick(Action*)
 	_game->popState();
 	_game->pushState(new SelectDestinationState(
 											_craft,
-											_globe));
+											_globe,
+											_geo));
 
 	delete _waypoint;
 }

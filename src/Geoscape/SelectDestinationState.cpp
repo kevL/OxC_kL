@@ -22,18 +22,21 @@
 #include <cmath>
 
 #include "ConfirmCydoniaState.h"
+#include "CraftErrorState.h"
+#include "GeoscapeState.h"
 #include "Globe.h"
 #include "MultipleTargetsState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
-#include "../Engine/Options.h"
-#include "../Engine/Screen.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 #include "../Engine/Surface.h"
 
-//kL #include "../Interface/Text.h"
+#include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
@@ -41,9 +44,10 @@
 
 #include "../Ruleset/RuleCraft.h"
 
-#include "../Savegame/Waypoint.h"
-#include "../Savegame/SavedGame.h"
+#include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/SavedGame.h"
+#include "../Savegame/Waypoint.h"
 
 
 namespace OpenXcom
@@ -57,10 +61,12 @@ namespace OpenXcom
  */
 SelectDestinationState::SelectDestinationState(
 		Craft* craft,
-		Globe* globe)
+		Globe* globe,
+		GeoscapeState* geo) // kL_add
 	:
 		_craft(craft),
-		_globe(globe)
+		_globe(globe),
+		_geo(geo) // kL_add
 {
 	_screen = false;
 
@@ -81,8 +87,10 @@ SelectDestinationState::SelectDestinationState(
 
 //kL	_txtTitle	= new Text(100, 9, 16 + dx, 10);
 
-	_btnCancel	= new TextButton(60, 14, 98 + dx, 8);
+	_btnCancel	= new TextButton(60, 14, 120 + dx, 8);
 	_btnCydonia	= new TextButton(60, 14, 180 + dx, 8);
+
+	_txtError = new Text(100, 9, 12 + dx, 11);
 
 	setPalette("PAL_GEOSCAPE", 0);
 
@@ -97,6 +105,11 @@ SelectDestinationState::SelectDestinationState(
 	add(_btnCancel);
 	add(_btnCydonia);
 //kL	add(_txtTitle);
+	add(_txtError);
+
+	_txtError->setColor(Palette::blockOffset(5));//(8)+5);
+	_txtError->setText(tr("STR_OUTSIDE_CRAFT_RANGE"));
+	_txtError->setVisible(false);
 
 	_globe->onMouseClick((ActionHandler)& SelectDestinationState::globeClick);
 
@@ -167,6 +180,8 @@ SelectDestinationState::SelectDestinationState(
  */
 SelectDestinationState::~SelectDestinationState()
 {
+//	if (_error != NULL)
+//		delete _error;
 }
 
 /**
@@ -175,7 +190,6 @@ SelectDestinationState::~SelectDestinationState()
 void SelectDestinationState::init()
 {
 	State::init();
-
 //	_globe->rotateStop();
 }
 
@@ -184,8 +198,8 @@ void SelectDestinationState::init()
  */
 void SelectDestinationState::think()
 {
-	State::think();
-	_globe->think();
+//kL	State::think();
+//kL	_globe->think();
 }
 
 /**
@@ -219,28 +233,58 @@ void SelectDestinationState::globeClick(Action* action)
 					&lat);
 
 	if (mouseY < 30) // Ignore window clicks
-	{
 		return;
-	}
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // Clicking on a valid target
 	{
-		std::vector<Target*> targets = _globe->getTargets(
-														mouseX,
-														mouseY,
-														true);
-		if (targets.empty())
-		{
-			Waypoint *w = new Waypoint();
-			w->setLongitude(lon);
-			w->setLatitude(lat);
-			targets.push_back(w);
-		}
+		int range = 0;
+//		_error = NULL;
 
-		_game->pushState(new MultipleTargetsState(
-												targets,
-												_craft,
-												0));
+		RuleCraft* craftRule = _craft->getRules();
+		if (craftRule->getRefuelItem() == "")
+			range = _craft->getFuel() * 100 / 6; // <- gasoline-powered (speed factored into consumption)
+		else
+			range = craftRule->getMaxSpeed() * _craft->getFuel() / 6; // six doses per hour on Geoscape.
+		//Log(LOG_INFO) << ". range = " << range;
+
+		Waypoint* w = new Waypoint();
+		w->setLongitude(lon);
+		w->setLatitude(lat);
+
+		//Log(LOG_INFO) << ". dist = " << (int)(_craft->getDistance(w) * 3440.0) << " + " << (int)(_craft->getBase()->getDistance(w) * 3440.0);
+
+		if (static_cast<double>(range) < (_craft->getDistance(w) + _craft->getBase()->getDistance(w)) * 3440.0)
+		{
+			//Log(LOG_INFO) << ". . outside Range";
+			_txtError->setVisible(true);
+
+			delete w;
+
+//			std::wstring msg = tr("STR_OUTSIDE_CRAFT_RANGE");
+//			_geo->popup(new CraftErrorState(
+//			_error = new CraftErrorState(
+//										_geo,
+//										msg);
+		}
+		else
+		{
+			//Log(LOG_INFO) << ". . inside Range";
+			_txtError->setVisible(false);
+
+			std::vector<Target*> targets = _globe->getTargets(
+															mouseX,
+															mouseY,
+															true);
+			if (!targets.empty())
+				delete w;
+			else
+				targets.push_back(w);
+
+			_game->pushState(new MultipleTargetsState(
+													targets,
+													_craft,
+													NULL));
+		}
 	}
 }
 
@@ -358,16 +402,23 @@ void SelectDestinationState::globeClick(Action* action)
  */
 void SelectDestinationState::btnCancelClick(Action*)
 {
+//	if (_error == NULL)
 	_game->popState();
 }
 
+/**
+ *
+ */
 void SelectDestinationState::btnCydoniaClick(Action*)
 {
+//	if (_error == NULL)
+//	{
 	if (_craft->getNumSoldiers() > 0
 		|| _craft->getNumVehicles() > 0)
 	{
 		_game->pushState(new ConfirmCydoniaState(_craft));
 	}
+//	}
 }
 
 /**
@@ -385,9 +436,10 @@ void SelectDestinationState::resize(
 			++i)
 	{
 		(*i)->setX((*i)->getX() + dX / 2);
+
 		if (*i != _window
 			&& *i != _btnCancel
-//kL			&& *i != _txtTitle
+//kL		&& *i != _txtTitle
 			&& *i != _btnCydonia)
 		{
 			(*i)->setY((*i)->getY() + dY / 2);

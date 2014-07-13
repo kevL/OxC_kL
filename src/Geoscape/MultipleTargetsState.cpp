@@ -195,6 +195,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 												c,
 												_state->getGlobe(),
 												NULL,
+												_state,
 												false)); // kL_add.
 //												doublePop)); // kL_add.
 		}
@@ -211,7 +212,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 		else
 		{
 			//Log(LOG_INFO) << ". . else...";
-//kL			_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
+//kL		_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
 //			_game->popState(); // kL
 			_game->pushState(new TargetInfoState(
 												target,

@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Craft;
+class GeoscapeState;
 class Globe;
 class Text;
 class TextButton;
@@ -47,6 +48,7 @@ private:
 	bool _doublePop; // kL
 
 	Craft* _craft;
+	GeoscapeState* _geo;
 	Globe* _globe;
 	Surface* _sprite; // kL
 	Text
@@ -71,7 +73,7 @@ private:
 		* _btnCenter,
 		* _btnPatrol,
 		* _btnTarget;
-	Waypoint* _waypoint; // kL_note: Doesn't seem to be used... really.
+	Waypoint* _waypoint;
 	Window* _window;
 
 
@@ -81,6 +83,7 @@ private:
 				Craft* craft,
 				Globe* globe,
 				Waypoint* waypoint,
+				GeoscapeState* geo,
 				bool doublePop = false); // kL_add.
 		/// Cleans up the Geoscape Craft state.
 		~GeoscapeCraftState();

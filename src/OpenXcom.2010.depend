@@ -6652,7 +6652,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1404806487 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1405222813 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -7275,7 +7275,7 @@
 	"Game.h"
 	"Options.h"
 
-1404595555 source:f:\git\openxcom\src\engine\zoom.cpp
+1405221533 source:f:\git\openxcom\src\engine\zoom.cpp
 	"Zoom.h"
 	"Exception.h"
 	"Logger.h"
@@ -7562,7 +7562,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1404096023 source:f:\git\openxcom\src\geoscape\crafterrorstate.cpp
+1405218254 source:f:\git\openxcom\src\geoscape\crafterrorstate.cpp
 	"CraftErrorState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -7578,10 +7578,11 @@
 	<string>
 	"../Engine/State.h"
 
-1405017545 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1405214146 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
 	<string>
 	"GeoscapeCraftState.h"
+	"GeoscapeState.h"
 	"Globe.h"
 	"SelectDestinationState.h"
 	"../Engine/Game.h"
@@ -7595,10 +7596,10 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Target.h"
 
-1404096023 f:\git\openxcom\src\geoscape\craftpatrolstate.h
+1405213512 f:\git\openxcom\src\geoscape\craftpatrolstate.h
 	"../Engine/State.h"
 
-1404096023 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
+1405213972 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
 1404699665 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
@@ -7617,7 +7618,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1404699907 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1405209266 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7642,6 +7643,7 @@
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
+	"../Ruleset/RuleTerrain.h"
 	"../Ruleset/RuleUfo.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Craft.h"
@@ -7682,9 +7684,10 @@
 1404096023 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1404096023 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1405213947 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
+	"GeoscapeState.h"
 	"Globe.h"
 	"SelectDestinationState.h"
 	"../Engine/Game.h"
@@ -7706,10 +7709,10 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Waypoint.h"
 
-1404096023 f:\git\openxcom\src\geoscape\selectdestinationstate.h
+1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1405206069 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1405214098 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7954,14 +7957,13 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1404976442 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1405214039 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
-	"SelectDestinationState.h"
 	"../Basescape/BasescapeState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -8047,7 +8049,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/SoldierDiary.h"
 
-1404976296 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
+1405214012 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
 	"MultipleTargetsState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -8179,26 +8181,29 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1404990633 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1405215987 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	<cmath>
 	"ConfirmCydoniaState.h"
+	"CraftErrorState.h"
+	"GeoscapeState.h"
 	"Globe.h"
 	"MultipleTargetsState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
-	"../Engine/Options.h"
-	"../Engine/Screen.h"
 	"../Engine/Language.h"
+	"../Engine/Options.h"
 	"../Engine/Palette.h"
+	"../Engine/Screen.h"
 	"../Engine/Surface.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleCraft.h"
-	"../Savegame/Waypoint.h"
-	"../Savegame/SavedGame.h"
+	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
+	"../Savegame/SavedGame.h"
+	"../Savegame/Waypoint.h"
 
 1404976302 source:f:\git\openxcom\src\geoscape\targetinfostate.cpp
 	"TargetInfoState.h"

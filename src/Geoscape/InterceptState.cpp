@@ -25,7 +25,7 @@
 #include "GeoscapeCraftState.h" // kL
 #include "GeoscapeState.h" // kL
 #include "Globe.h"
-#include "SelectDestinationState.h"
+//kL #include "SelectDestinationState.h"
 
 #include "../Basescape/BasescapeState.h"
 
@@ -348,6 +348,7 @@ void InterceptState::lstCraftsLeftClick(Action*)
 										c,
 										_globe,
 										NULL,
+										_geo,
 										true)); // kL_add.
 }
 

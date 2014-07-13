@@ -383,12 +383,12 @@ void ProjectileFlyBState::init()
 		if (_action.type == BA_LAUNCH)
 		{
 			if (_targetFloor) // kL_note: was, if(_action.target == _origin)
-				// launched missiles with two waypoints placed on the same tile: target the floor.
-				_targetVoxel.z -= 10;
+				_targetVoxel.z -= 10; // launched missiles with two waypoints placed on the same tile: target the floor.
 			else
-				// launched missiles go slightly higher than the middle.
-				_targetVoxel.z += 4;
+				_targetVoxel.z += 4; // launched missiles go slightly higher than the middle.
 		}
+		else if ((SDL_GetModState() & KMOD_ALT) != 0)
+			_targetVoxel.z -= 10; // force fire at floor (for HE ammo-types)
 	}
 	else
 	{
