@@ -783,8 +783,7 @@ int Zoom::_zoomSurfaceY(
 	int dgap;
 	static bool proclaimed = false;
 
-//	if (Options::useHQXFilter)
-	if (Screen::isHQXEnabled()) // ajschult - http://openxcom.org/bugs/openxcom/issues/692
+	if (Screen::isHQXEnabled())
 	{
 		static bool initDone = false;
 

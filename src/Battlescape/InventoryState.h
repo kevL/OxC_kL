@@ -63,7 +63,8 @@ private:
 		* _btnRank,
 		* _btnUnload,
 		* _btnCreateTemplate,
-		* _btnApplyTemplate;
+		* _btnApplyTemplate,
+		* _btnClearInventory;
 	Inventory* _inv;
 	NumberText* _tuCost; // kL
 	SavedBattleGame* _battleGame;
@@ -85,6 +86,11 @@ private:
 		* _txtPStr;
 
 	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
+
+	/// Update the visibility and icons for the template buttons
+	void _updateTemplateButtons(bool isVisible);
+	/// Refresh the hover status of the mouse
+	void _refreshMouse();
 
 
 	public:
@@ -124,6 +130,8 @@ private:
 		void btnCreateTemplateClick(Action* action);
 		/// Handler for clicking the Apply Template button.
 		void btnApplyTemplateClick(Action* action);
+		/// Handler for clicking the Clear Inventory button.
+		void btnClearInventoryClick(Action* action);
 
 		/// Handler for clicking on inventory items.
 		void invClick(Action* action);

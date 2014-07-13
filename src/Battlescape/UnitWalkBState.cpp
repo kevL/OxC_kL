@@ -538,6 +538,16 @@ bool UnitWalkBState::doStatusStand()
 			}
 		}
 
+		// kL_begin: proxy blows up in face after door opens - copied doStatusStand_end()
+		if (_parent->checkForProximityGrenades(_unit))
+			// kL_add: Put checkForSilacoid() here!
+		{
+			_parent->popState();
+//			postPathProcedures(); // .. one or the other i suppose.
+
+			return false;
+		} // kL_end
+
 		//Log(LOG_INFO) << ". check size for obstacles";
 		int size = _unit->getArmor()->getSize() - 1;
 		for (int

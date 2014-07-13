@@ -171,6 +171,13 @@ ProductProgress Production::step(
 	int done = getAmountProduced();
 	_timeSpent += _engineers;
 
+	if (!Options::canManufactureMoreItemsPerHour
+		&& done < getAmountProduced())
+	{
+		// enforce pre-TFTD manufacturing rules: extra hours are wasted
+		_timeSpent = (done + 1) * _rules->getManufactureTime();
+	}
+
 	if (done < getAmountProduced())
 	{
 
@@ -258,12 +265,11 @@ ProductProgress Production::step(
 						b->setCashIncome(r->getItem(i->first)->getSellCost() * i->second); // kL
 					}
 					else
-						b->getItems()->addItem(i->first, i->second);
+						b->getItems()->addItem(
+											i->first,
+											i->second);
 				}
 			}
-
-			if (!Options::canManufactureMoreItemsPerHour)
-				break;
 
 			count++;
 			if (count < produced)

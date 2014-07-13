@@ -250,27 +250,37 @@ void ManufactureState::fillProductionList()
 //			s4 << "oo"; // kL else
 		if ((*i)->getAssignedEngineers() > 0)
 		{
-//kL		int timeLeft = (*iter)->getAmountTotal() * (*iter)->getRules()->getManufactureTime() - (*iter)->getTimeSpent();
-
 			// kL_begin:
-			int timeLeft;
+			int hoursLeft;
 
 			if ((*i)->getSellItems()
-				|| (*i)->getInfiniteAmount()) // kL
+				|| (*i)->getInfiniteAmount())
 			{
-				timeLeft = ((*i)->getAmountProduced() + 1) * (*i)->getRules()->getManufactureTime()
+				hoursLeft = ((*i)->getAmountProduced() + 1) * (*i)->getRules()->getManufactureTime()
 							- (*i)->getTimeSpent();
 			}
 			else
 			{
-				timeLeft = (*i)->getAmountTotal() * (*i)->getRules()->getManufactureTime()
+				hoursLeft = (*i)->getAmountTotal() * (*i)->getRules()->getManufactureTime()
 							- (*i)->getTimeSpent();
 			}
 
-			timeLeft = static_cast<int>(
-							ceil(static_cast<double>(timeLeft) / static_cast<double>((*i)->getAssignedEngineers())));
-			int daysLeft = timeLeft / 24;
-			int hoursLeft = timeLeft %24;
+
+			int engs = (*i)->getAssignedEngineers();
+			if (!Options::canManufactureMoreItemsPerHour)
+			{
+				engs = std::min(
+								engs,
+								(*i)->getRules()->getManufactureTime());
+			}
+
+//			hoursLeft = static_cast<int>(
+//							ceil(static_cast<double>(hoursLeft) / static_cast<double>((*i)->getAssignedEngineers())));
+			// ensure we round up since it takes an entire hour to manufacture any part of that hour's capacity
+			hoursLeft = (hoursLeft + engs - 1) / engs;
+
+			int daysLeft = hoursLeft / 24;
+			hoursLeft %= 24;
 			s4 << daysLeft << "/" << hoursLeft; // kL_end.
 		}
 		else

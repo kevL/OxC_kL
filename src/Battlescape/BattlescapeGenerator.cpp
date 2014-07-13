@@ -546,10 +546,12 @@ void BattlescapeGenerator::deployXCOM()
 														FACTION_PLAYER,
 														static_cast<int>(_game->getSavedGame()->getDifficulty()))); // kL_add: For VictoryPts value per death.
 
-			if (unit
-				&& !_save->getSelectedUnit())
+			if (unit)
 			{
-				_save->setSelectedUnit(unit);
+
+
+				if (!_save->getSelectedUnit())
+					_save->setSelectedUnit(unit);
 			}
 		}
 	}
@@ -564,7 +566,7 @@ void BattlescapeGenerator::deployXCOM()
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER)
+		if ((*i)->getFaction() == FACTION_PLAYER) // kL_note: not really necessary because only xCom is on the field atm.
 		{
 			_craftInventoryTile->setUnit(*i);
 
@@ -706,6 +708,24 @@ void BattlescapeGenerator::deployXCOM()
 	}
 	//Log(LOG_INFO) << ". placeItemByLayout all DONE";
 
+	// kL_begin:
+	if (!_baseCraftEquip)
+	{
+		for (std::vector<BattleUnit*>::iterator
+				i = _save->getUnits()->begin();
+				i != _save->getUnits()->end();
+				++i)
+		{
+//			unit->prepareNewTurn();
+
+			int tu = (*i)->getStats()->tu;
+			float encumb = static_cast<float>(static_cast<float>((*i)->getCarriedWeight() / (*i)->getStats()->strength));
+			if (encumb > 1.f)
+				tu = static_cast<int>(encumb * static_cast<float>(tu));
+			(*i)->setTimeUnits(tu);
+		}
+	} // kL_end.
+
 	// auto-equip soldiers (only soldiers *without* layout)
 //	if (!Options::getBool("disableAutoEquip"))
 //	if (_allowAutoLoadout) // kL
@@ -836,10 +856,11 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 												0));
 	if (tankUnit)
 	{
+//		tankUnit->prepareNewTurn(); // kL
 		BattleItem* item = new BattleItem(
 									_game->getRuleset()->getItem(vehicle),
 									_save->getCurrentItemId());
-//kL		addItem(item, unit);
+//kL	addItem(item, unit);
 		if (!addItem(			// kL
 					item,
 					tankUnit))
@@ -856,7 +877,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 			BattleItem* ammoItem = new BattleItem(
 											_game->getRuleset()->getItem(ammo),
 											_save->getCurrentItemId());
-//kL			addItem(ammoItem, unit);
+//kL		addItem(ammoItem, unit);
 			if (!addItem(			// kL
 						ammoItem,
 						tankUnit))
@@ -909,7 +930,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 								node->getPosition());
 			unit->setDirection(RNG::generate(0, 7));
 			unit->deriveRank();
-//kL			_save->getTileEngine()->calculateFOV(unit);
+//kL		_save->getTileEngine()->calculateFOV(unit);
 
 			_craftInventoryTile = _save->getTile(node->getPosition());
 
@@ -923,7 +944,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 
 				unit->setDirection(RNG::generate(0, 7));
 				unit->deriveRank();
-//kL				_save->getTileEngine()->calculateFOV(unit);
+//kL			_save->getTileEngine()->calculateFOV(unit);
 
 				_craftInventoryTile = _save->getTile(unit->getPosition());
 
@@ -934,7 +955,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 	else if (_craft // Transport craft deployments (Lightning & Avenger)
 		&& !_craft->getRules()->getDeployment().empty()
 		&& !_baseCraftEquip) // kL
-//kL		&& _mapsize_y != 1) // _mapsize_y 1 means we're in the faked out base inventory
+//kL	&& _mapsize_y != 1) // _mapsize_y 1 means we're in the faked out base inventory
 	{
 		//Log(LOG_INFO) << "addXCOMUnit() - use Deployment rule";
 		for (std::vector<std::vector<int> >::const_iterator
@@ -947,7 +968,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 								(*i)[0] + (_craftX * 10),
 								(*i)[1] + (_craftY * 10),
 								(*i)[2] + _craftZ);
-//kL			int dir = (*i)[3];
+//kL		int dir = (*i)[3];
 
 			if (canPlaceXCOMUnit(_save->getTile(pos)))
 			{
@@ -1018,7 +1039,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 
 	delete unit; // fallthrough, if above fails.
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -1035,10 +1056,10 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile)
 		&& tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT		// is a 'start point', ie. cargo tile
 		&& !tile->getMapData(MapData::O_OBJECT)										// no object content
 		&& tile->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255				// is walkable.
-		&& tile->getUnit() == 0)													// kL, and no unit on Tile.
+		&& tile->getUnit() == NULL)													// kL, and no unit on Tile.
 	{
 		// kL_note: ground inventory goes where the first xCom unit spawns
-		if (_craftInventoryTile == 0)
+		if (_craftInventoryTile == NULL)
 			_craftInventoryTile = tile;
 
 		return true;
@@ -3119,7 +3140,7 @@ void BattlescapeGenerator::loadWeapons()
 	{
 		if (!(*i)->getRules()->isFixed()
 			&& !(*i)->getRules()->getCompatibleAmmo()->empty()
-			&& (*i)->getAmmoItem() == 0
+			&& (*i)->getAmmoItem() == NULL
 			&& ((*i)->getRules()->getBattleType() == BT_FIREARM
 				|| (*i)->getRules()->getBattleType() == BT_MELEE))
 		{

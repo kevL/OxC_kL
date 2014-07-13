@@ -3914,17 +3914,17 @@ bool TileEngine::detonate(Tile* tile)
 
 		Tile* tiles[7];
 		tiles[0] = _battleSave->getTile(Position( // ceiling
-										pos.x,
-										pos.y,
-										pos.z + 1));
+											pos.x,
+											pos.y,
+											pos.z + 1));
 		tiles[1] = _battleSave->getTile(Position( // east wall
-										pos.x + 1,
-										pos.y,
-										pos.z));
+											pos.x + 1,
+											pos.y,
+											pos.z));
 		tiles[2] = _battleSave->getTile(Position( // south wall
-										pos.x,
-										pos.y + 1,
-										pos.z));
+											pos.x,
+											pos.y + 1,
+											pos.z));
 		tiles[3] = tiles[4]
 				 = tiles[5]
 				 = tiles[6]
@@ -3936,80 +3936,6 @@ bool TileEngine::detonate(Tile* tile)
 			power = explosive;
 
 		static const int parts[7] = {0, 1, 2, 0, 1, 2, 3};
-
-		// kL_begin:
-/*		for (int
-				i = 0;
-				i < 7;
-				++i)
-		{
-			if (tiles[i]
-				&& tiles[i]->getMapData(parts[i]))
-			{
-				power = explosive; // reset 'power'.
-
-				power -= 2 * tiles[i]->getMapData(parts[i])->getArmor();
-				if (power > -1)
-				{
-					int volume = 0;
-					for (int // get the volume of the object by checking its loftemps objects.
-							j = 0;
-							j < 12;
-							j++)
-					{
-						if (tiles[i]->getMapData(parts[i])->getLoftID(j) != 0)
-							++volume;
-					}
-
-					if (i > 3) // ie. [west] [north] [content] <- origin tile
-					{
-						tiles[i]->setFire(0);
-
-						int smoke = RNG::generate(
-												0,
-												(volume / 2) + 2);
-						smoke += (volume / 2) + 1;
-
-						if (smoke > tiles[i]->getSmoke())
-							tiles[i]->setSmoke(std::max(
-													0,
-													std::min(
-															smoke,
-															15)));
-					}
-
-					if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
-						&& i == 6
-						&& tile->getMapData(MapData::O_OBJECT)
-						&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
-					{
-						_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
-					}
-
-					if (tiles[i]->getMapData(parts[i]))
-					{
-						flam = tiles[i]->getFlammability();
-						fuel = tiles[i]->getFuel() + 1;
-					}
-
-					if (tiles[i]->destroy(parts[i]))
-						objective = true;
-				}
-
-				if (i > 3 // ie. [west] [north] [content] <- origin tile
-					&& power > flam * 2
-					&& (tile->getMapData(MapData::O_FLOOR)
-						|| tile->getMapData(MapData::O_OBJECT)))
-				{
-					tile->setFire(fuel);
-					tile->setSmoke(std::max(
-										1,
-										std::min(
-												15 - (flam / 10),
-												12)));
-				}
-			}
-		} */ // kL_end.
 
 		for (int
 				i = 0;
@@ -4089,6 +4015,7 @@ bool TileEngine::detonate(Tile* tile)
 			}
 		}
 	}
+
 	//Log(LOG_INFO) << "TileEngine::detonate() EXIT, objective = " << objective;
 	return objective;
 }
