@@ -5,3 +5,42 @@ extraSprites:
   - type: INTICON.PCK
     files:
       0: Resources/Sprites/geograph/inticon/
+  - type: INTERWIN.DAT
+    files:
+      0: Resources/Sprites/geodata/interwin/
+  - type: WATER
+    width: 9
+    height: 9
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/textures/tex_water.png
+  - type: CULTA
+    width: 9
+    height: 9
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/textures/tex_rural.png
+  - type: DESERT
+    width: 9
+    height: 9
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/textures/tex_desert.png
+  - type: FOREST
+    width: 9
+    height: 9
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/textures/tex_forest.png
+  - type: MOUNT
+    width: 9
+    height: 9
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/textures/tex_mountain.png
+  - type: POLAR
+    width: 9
+    height: 9
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/textures/tex_arctic.png
