@@ -103,11 +103,12 @@ private:
 		* _weapon2;
 	InteractiveSurface* _btnMinimizedIcon;
 	Surface
-		* _window,
 		* _battle,
+		* _damage,
 		* _range1,
 		* _range2,
-		* _damage;
+		* _texture,
+		* _window;
 	Text
 		* _txtAmmo1,
 		* _txtAmmo2,
@@ -220,6 +221,9 @@ private:
 
 		/// Gets pointer to the UFO in this dogfight.
 		Ufo* getUfo() const;
+
+		/// kL. Gets the globe texture icon to display for the interception.
+		const std::string getTextureIcon(); // kL
 };
 
 }

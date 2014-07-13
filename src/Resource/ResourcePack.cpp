@@ -160,8 +160,8 @@ Font* ResourcePack::getFont(const std::string& name) const
 
 /**
  * Returns a specific surface from the resource set.
- * @param name Name of the surface.
- * @return, Pointer to the surface.
+ * @param name - reference to name of the surface
+ * @return, pointer to the surface
  */
 Surface* ResourcePack::getSurface(const std::string& name) const
 {

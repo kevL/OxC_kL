@@ -1358,7 +1358,7 @@ void GeoscapeState::time5Seconds()
 							{
 								if (!(*j)->isInDogfight())
 								{
-									int // look up polygons texture
+									int // look up polygon's texture
 										texture,
 										shade;
 									_globe->getPolygonTextureAndShade(
@@ -1390,7 +1390,7 @@ void GeoscapeState::time5Seconds()
 				{
 					if ((*j)->getNumSoldiers() > 0)
 					{
-						int // look up polygons texture
+						int // look up polygon's texture
 							texture,
 							shade;
 						_globe->getPolygonTextureAndShade(
@@ -1414,7 +1414,7 @@ void GeoscapeState::time5Seconds()
 					{
 						if ((*j)->getNumSoldiers() > 0)
 						{
-							int // look up polygons texture
+							int // look up polygon's texture
 								texture,
 								shade;
 							_globe->getPolygonTextureAndShade(

@@ -156,7 +156,7 @@ Surface::Surface(
 		_visible(true),
 		_hidden(false),
 		_redraw(false),
-		_alignedBuffer(0)
+		_alignedBuffer(NULL)
 {
 	_alignedBuffer = NewAligned(bpp, width, height);
 	_surface = SDL_CreateRGBSurfaceFrom(
@@ -172,7 +172,7 @@ Surface::Surface(
 								0,
 								0);
 
-	if (_surface == 0)
+	if (_surface == NULL)
 	{
 		throw Exception(SDL_GetError());
 	}
@@ -235,10 +235,10 @@ Surface::Surface(const Surface& other)
 									other._surface,
 									other._surface->format,
 									other._surface->flags);
-		_alignedBuffer = 0;
+		_alignedBuffer = NULL;
 	}
 
-	if (_surface == 0)
+	if (_surface == NULL)
 	{
 		throw Exception(SDL_GetError());
 	}
@@ -507,7 +507,8 @@ void Surface::offset(
 		int max,
 		int mult)
 {
-	if (off == 0) return;
+	if (off == 0)
+		return;
 
 	lock(); // Lock the surface
 	for (int
@@ -615,7 +616,7 @@ void Surface::blit(Surface* surface)
 		if (_crop.w == 0
 			&& _crop.h == 0)
 		{
-			cropper = 0;
+			cropper = NULL;
 		}
 		else
 			cropper = &_crop;
@@ -650,7 +651,7 @@ void Surface::copy(Surface* surface)
 				surface->getSurface(),
 				&from,
 				_surface,
-				0);
+				NULL);
 }
 
 /**
@@ -934,6 +935,7 @@ void Surface::unlock()
  */
 struct ColorReplace
 {
+
 /**
 * Function used by ShaderDraw in Surface::blitNShade
 * set shade and replace color in that surface
@@ -1095,7 +1097,7 @@ void Surface::resize(
 												0,
 												0);
 
-	if (surface == 0)
+	if (surface == NULL)
 	{
 		throw Exception(SDL_GetError());
 	}

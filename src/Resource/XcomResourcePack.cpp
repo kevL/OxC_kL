@@ -1163,7 +1163,9 @@ XcomResourcePack::XcomResourcePack( // kL
 				Log(LOG_DEBUG) << "Creating new single image: " << sheetName;
 				//Log(LOG_INFO) << "Creating new single image: " << sheetName;
 
-				_surfaces[sheetName] = new Surface(spritePack->getWidth(), spritePack->getHeight());
+				_surfaces[sheetName] = new Surface(
+												spritePack->getWidth(),
+												spritePack->getHeight());
 			}
 			else
 			{

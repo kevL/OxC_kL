@@ -590,10 +590,10 @@ double Globe::lastVisibleLat(double lon) const
 
 /**
  * Checks if a polar point is inside a certain polygon.
- * @param lon Longitude of the point.
- * @param lat Latitude of the point.
- * @param poly Pointer to the polygon.
- * @return, True if it's inside, False if it's outside.
+ * @param lon	- longitude of the point
+ * @param lat	- latitude of the point
+ * @param poly	- pointer to the polygon
+ * @return, true if it's inside
  */
 bool Globe::insidePolygon(
 		double lon,

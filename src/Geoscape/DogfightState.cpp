@@ -47,6 +47,7 @@
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
 
 #include "../Savegame/SavedGame.h"
@@ -303,6 +304,8 @@ DogfightState::DogfightState(
 	_mode = _btnStandoff;
 
 	_btnUfo					= new ImageButton(36, 17, _x + 120, _y + 52);
+	_texture				= new Surface(9, 9, _x + 147, _y + 72);
+
 	_txtAmmo1				= new Text(16, 9, _x + 4, _y + 70);
 	_txtAmmo2				= new Text(16, 9, _x + 64, _y + 70);
 	_txtDistance			= new Text(40, 9, _x + 116, _y + 72);
@@ -334,6 +337,7 @@ DogfightState::DogfightState(
 	add(_btnAggressive);
 	add(_btnDisengage);
 	add(_btnUfo);
+	add(_texture);
 	add(_txtAmmo1);
 	add(_txtAmmo2);
 	add(_txtDistance);
@@ -407,6 +411,10 @@ DogfightState::DogfightState(
 	_btnUfo->copy(_window);
 	_btnUfo->setColor(Palette::blockOffset(5)+1);
 	_btnUfo->onMouseClick((ActionHandler)& DogfightState::btnUfoClick);
+
+	Surface* srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
+	if (srfTexture != NULL) // safety.
+		srfTexture->blit(_texture);
 
 	_txtAmmo1->setColor(Palette::blockOffset(5)+9);
 	_txtAmmo2->setColor(Palette::blockOffset(5)+9);
@@ -1555,6 +1563,7 @@ void DogfightState::btnMinimizeClick(Action*)
 			_btnAggressive->setVisible(false);
 			_btnDisengage->setVisible(false);
 			_btnUfo->setVisible(false);
+			_texture->setVisible(false);
 			_btnMinimize->setVisible(false);
 			_battle->setVisible(false);
 			_weapon1->setVisible(false);
@@ -1717,6 +1726,7 @@ void DogfightState::btnUfoClick(Action*)
 	_btnAggressive->setVisible(false);
 	_btnDisengage->setVisible(false);
 	_btnUfo->setVisible(false);
+	_texture->setVisible(false);
 	_btnMinimize->setVisible(false);
 	_weapon1->setVisible(false);
 	_weapon2->setVisible(false);
@@ -1737,6 +1747,7 @@ void DogfightState::previewClick(Action*)
 	_btnAggressive->setVisible(true);
 	_btnDisengage->setVisible(true);
 	_btnUfo->setVisible(true);
+	_texture->setVisible(true);
 	_btnMinimize->setVisible(true);
 	_weapon1->setVisible(true);
 	_weapon2->setVisible(true);
@@ -1968,6 +1979,10 @@ void DogfightState::setMinimized(const bool minimized)
  */
 void DogfightState::btnMinimizedIconClick(Action*)
 {
+	Surface* srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
+	if (srfTexture != NULL) // safety.
+		srfTexture->blit(_texture);
+
 	setMinimized(false);
 
 	_window->setVisible(true);
@@ -1977,6 +1992,7 @@ void DogfightState::btnMinimizedIconClick(Action*)
 	_btnAggressive->setVisible(true);
 	_btnDisengage->setVisible(true);
 	_btnUfo->setVisible(true);
+	_texture->setVisible(true);
 	_btnMinimize->setVisible(true);
 	_battle->setVisible(true);
 	_weapon1->setVisible(true);
@@ -2139,6 +2155,9 @@ void DogfightState::moveWindow()
 	_btnUfo->setX(_x + 120);
 	_btnUfo->setY(_y + 52);
 
+	_texture->setX(_x + 147);
+	_texture->setY(_y + 72);
+
 	_txtAmmo1->setX(_x + 4);
 	_txtAmmo1->setY(_y + 70);
 
@@ -2194,6 +2213,73 @@ void DogfightState::endDogfight()
 int DogfightState::getInterceptionNumber() const
 {
 	return _interceptionNumber;
+}
+
+/**
+ * kL. Gets the globe texture icon to display for the interception.
+ */
+const std::string DogfightState::getTextureIcon() // kL
+{
+	//Log(LOG_INFO) << "DogfightState::getTextureIcon()";
+	std::string str = "";
+
+	int // look up polygon's texture
+		texture,
+		shade;
+	_globe->getPolygonTextureAndShade(
+									_ufo->getLongitude(),
+									_ufo->getLatitude(),
+									&texture,
+									&shade);
+
+	RuleTerrain* terrain = NULL;
+
+	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
+	for (std::vector<std::string>::const_iterator
+			i = terrains.begin();
+			i != terrains.end()
+				&& str == "";
+			++i)
+	{
+		//Log(LOG_INFO) << ". cycle terrains";
+		terrain = _game->getRuleset()->getTerrain(*i);
+		for (std::vector<int>::iterator
+				j = terrain->getTextures()->begin();
+				j != terrain->getTextures()->end()
+					&& str == "";
+				++j)
+		{
+			//Log(LOG_INFO) << ". . cycle textures";
+			if (*j == texture
+				&& (terrain->getHemisphere() == 0
+					|| (terrain->getHemisphere() < 0
+						&& _ufo->getLatitude() < 0.0)
+					|| (terrain->getHemisphere() > 0
+						&& _ufo->getLatitude() >= 0.0)))
+			{
+				//Log(LOG_INFO) << ". . . terrain-texture MATCH found!";
+				str = terrain->getName();
+			}
+		}
+	}
+
+	//Log(LOG_INFO) << ". str = " << str;
+
+	if (str == "")
+	{
+		//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT ret = water";
+		return "WATER";
+	}
+
+	if (str == "JUNGLE")
+	{
+		//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT ret = jungle->forest";
+		return "FOREST";
+	}
+
+//	assert(0 && "No matching terrain for globe texture");
+	//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT ret = empty string";
+	return str;
 }
 
 }

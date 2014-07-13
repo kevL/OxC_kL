@@ -5798,7 +5798,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1405054858 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1405198627 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -7244,7 +7244,7 @@
 1404096023 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1404498127 source:f:\git\openxcom\src\engine\surface.cpp
+1405203829 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	<fstream>
 	<vector>
@@ -7654,7 +7654,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1404699732 f:\git\openxcom\src\geoscape\dogfightstate.h
+1405206575 f:\git\openxcom\src\geoscape\dogfightstate.h
 	<vector>
 	<string>
 	"../Engine/State.h"
@@ -7709,7 +7709,7 @@
 1404096023 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1405022580 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1405206069 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7869,7 +7869,7 @@
 	<string>
 	<vector>
 
-1404589429 source:f:\git\openxcom\src\geoscape\globe.cpp
+1405205371 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9166,7 +9166,7 @@
 1404096023 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1404096023 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1405202056 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	<SDL_mixer.h>
 	"../Engine/Font.h"
@@ -9181,7 +9181,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1404411519 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1405202938 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9602,7 +9602,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1405065494 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1405198416 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>
