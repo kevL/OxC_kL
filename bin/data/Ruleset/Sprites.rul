@@ -19,7 +19,7 @@ extraSprites:
     height: 9
     singleImage: true
     files:
-      0: Resources/Sprites/geodata/interwin/textures/tex_rural.png
+      0: Resources/Sprites/geodata/interwin/textures/tex_culta.png
   - type: DESERT
     width: 9
     height: 9
@@ -37,10 +37,10 @@ extraSprites:
     height: 9
     singleImage: true
     files:
-      0: Resources/Sprites/geodata/interwin/textures/tex_mountain.png
+      0: Resources/Sprites/geodata/interwin/textures/tex_mount.png
   - type: POLAR
     width: 9
     height: 9
     singleImage: true
     files:
-      0: Resources/Sprites/geodata/interwin/textures/tex_arctic.png
+      0: Resources/Sprites/geodata/interwin/textures/tex_polar.png
