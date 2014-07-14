@@ -105,7 +105,8 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftY(0),
 		_craftZ(0),
 		_tankPos(0), // kL
-		_baseCraftEquip(false) // kL
+		_baseCraftEquip(false), // kL
+		_battleOrder(0) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeGenerator";
 	_allowAutoLoadout = !Options::disableAutoEquip;
@@ -548,7 +549,7 @@ void BattlescapeGenerator::deployXCOM()
 
 			if (unit)
 			{
-
+				unit->setBattleOrder(++_battleOrder); // kL
 
 				if (!_save->getSelectedUnit())
 					_save->setSelectedUnit(unit);

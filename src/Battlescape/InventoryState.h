@@ -66,7 +66,9 @@ private:
 		* _btnApplyTemplate,
 		* _btnClearInventory;
 	Inventory* _inv;
-	NumberText* _tuCost; // kL
+	NumberText
+		* _numOrder, // kL
+		* _tuCost; // kL
 	SavedBattleGame* _battleGame;
 	Surface
 		* _bg,

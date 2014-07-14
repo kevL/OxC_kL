@@ -1271,8 +1271,8 @@ void Globe::think()
 			_game->getSavedGame()->getGlobeLatitude());
 	}
 
-	_blinkTimer->think(0, this);
-//	_rotTimer->think(0, this);
+	_blinkTimer->think(NULL, this);
+//	_rotTimer->think(NULL, this);
 }
 
 /**
@@ -2164,7 +2164,7 @@ void Globe::drawDetail()
 				_game->getResourcePack()->getFont("FONT_SMALL"),
 				_game->getLanguage());
 //	label->setAlign(ALIGN_LEFT);
-	label->setColor(Palette::blockOffset(11)+2);
+	label->setColor(Palette::blockOffset(11)+1);
 
 	Sint16
 		x,

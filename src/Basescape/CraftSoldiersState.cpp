@@ -190,7 +190,6 @@ void CraftSoldiersState::btnOkClick(Action*)
 void CraftSoldiersState::btnUnloadClick(Action*) // kL
 {
 	Craft* craft = _base->getCrafts()->at(_craftID);
-	std::wstring craft1 = craft->getName(_game->getLanguage());
 
 	// iterate over all soldiers at Base
 	for (std::vector<Soldier*>::iterator
@@ -201,6 +200,8 @@ void CraftSoldiersState::btnUnloadClick(Action*) // kL
 		if ((*i)->getCraft() == craft) // if soldier is on this Craft, unload them
 			(*i)->setCraft(NULL);
 	}
+
+	_curRow = _lstSoldiers->getScroll();
 
 	init(); // iterate over all listRows and change their stringText and lineColor
 }

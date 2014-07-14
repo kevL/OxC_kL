@@ -85,7 +85,6 @@ InventoryState::InventoryState(
 	//Log(LOG_INFO) << "Create InventoryState";
 	_battleGame = _game->getSavedGame()->getSavedBattle();
 	//Log(LOG_INFO) << ". _battleGame = " << _battleGame;
-
 /*kL
 	if (Options::maximizeInfoScreens)
 	{
@@ -118,6 +117,7 @@ InventoryState::InventoryState(
 	_txtPStr	= new Text(40, 9, 245, 64);
 	_txtPSkill	= new Text(40, 9, 245, 72);
 
+	_numOrder	= new NumberText(7, 5, 228, 4); // kL
 	_tuCost		= new NumberText(7, 5, 310, 60); // kL
 
 	_txtItem	= new Text(160, 9, 128, 140);
@@ -178,6 +178,7 @@ InventoryState::InventoryState(
 	add(_txtPStr);
 	add(_txtPSkill);
 
+	add(_numOrder); // kL
 	add(_tuCost); // kL
 	add(_txtItem);
 	add(_txtAmmo);
@@ -233,6 +234,9 @@ InventoryState::InventoryState(
 	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
 	_txtPSkill->setHighContrast(true);
 
+
+	_numOrder->setColor(1);	// kL
+	_numOrder->setValue(0);	// kL
 
 	_tuCost->setColor(1);		// kL
 	_tuCost->setValue(0);		// kL
@@ -334,7 +338,8 @@ InventoryState::InventoryState(
 	_txtWeight->setVisible(Options::showMoreStatsInInventoryView);
 	_txtTus->setVisible(_tu);
 
-	bool vis = (!_tu && Options::showMoreStatsInInventoryView);
+	bool vis = !_tu
+				&& Options::showMoreStatsInInventoryView;
 	_txtFAcc->setVisible(vis);
 	_txtReact->setVisible(vis);
 	_txtThrow->setVisible(vis); // kL
@@ -440,8 +445,8 @@ void InventoryState::init()
 											false,
 											true);
 
-		if (//kL _battleGame->getSelectedUnit() == 0 ||			// no available unit, Checked above.
-			 !_battleGame->getSelectedUnit()->hasInventory())	// so close inventory
+		if (_battleGame->getSelectedUnit() == NULL
+			 || !_battleGame->getSelectedUnit()->hasInventory())
 		{
 			btnOkClick(NULL);
 
@@ -513,6 +518,8 @@ void InventoryState::updateStats()
 {
 	//Log(LOG_INFO) << "InventoryState::updateStats()";
 	BattleUnit* unit = _battleGame->getSelectedUnit();
+
+	_numOrder->setValue(unit->getBattleOrder()); // kL
 
 	if (_tu) // kL
 		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));

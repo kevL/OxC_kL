@@ -69,6 +69,7 @@ private:
 		_unitSequence,
 		_worldTexture,
 		_worldShade;
+	size_t _battleOrder; // kL
 
 	AlienBase		* _alienBase;
 	Base			* _base;

@@ -67,7 +67,7 @@ BattleUnit::BattleUnit(
 		BattlescapeGame* battleGame) // kL_add
 	:
 		_battleGame(battleGame), // kL_add
-//		_battleGame(NULL), // kL_add
+		_battleOrder(0), // kL
 		_faction(faction),
 		_originalFaction(faction),
 		_killedBy(faction),
@@ -212,7 +212,7 @@ BattleUnit::BattleUnit(
 		BattlescapeGame* battleGame) // kL_add. May be NULL
 	:
 		_battleGame(battleGame), // kL_add
-//		_battleGame(NULL), // kL_add
+		_battleOrder(0), // kL
 		_faction(faction),
 		_originalFaction(faction),
 		_killedBy(faction),
@@ -357,6 +357,7 @@ BattleUnit::~BattleUnit()
 void BattleUnit::load(const YAML::Node& node)
 {
 	_id					= node["id"].as<int>(_id);
+	_battleOrder		= node["battleOrder"].as<size_t>(_battleOrder); // kL
 	_faction			= _originalFaction = (UnitFaction)node["faction"].as<int>(_faction);
 	_status				= (UnitStatus)node["status"].as<int>(_status);
 	_pos				= node["position"].as<Position>(_pos);
@@ -410,6 +411,7 @@ YAML::Node BattleUnit::save() const
 	YAML::Node node;
 
 	node["id"]				= _id;
+	node["battleOrder"]		= _battleOrder; // kL
 	node["faction"]			= (int)_faction;
 	node["soldierId"]		= _id;
 	node["genUnitType"]		= _type;
@@ -2765,12 +2767,9 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 int BattleUnit::improveStat(int exp)
 {
 	int teir = 1;
-	if (exp > 10)
-		teir = 4;
-	else if (exp > 5)
-		teir = 3;
-	else if (exp > 2)
-		teir = 2;
+	if		(exp > 10)	teir = 4;
+	else if (exp > 5)	teir = 3;
+	else if (exp > 2)	teir = 2;
 
 	return (teir / 2 + RNG::generate(0, teir));
 }
@@ -3752,14 +3751,6 @@ bool BattleUnit::hasInventory() const
 }
 
 /**
- * kL.
- */
-void BattleUnit::setBattleGame(BattlescapeGame* battleGame) // kL
-{
-	_battleGame = battleGame;
-}
-
-/**
  * Get the unit's statistics.
  * @return BattleUnitStatistics statistics.
  */
@@ -3784,6 +3775,32 @@ void BattleUnit::setMurdererId(int id)
 int BattleUnit::getMurdererId() const
 {
 	return _murdererId;
+}
+
+/**
+ * kL. Sets the unit's order in battle.
+ * @param order - position on the craft or at the base
+ */
+void BattleUnit::setBattleOrder(size_t order) // kL
+{
+	_battleOrder = order;
+}
+
+/**
+ * kL. Gets the unit's order in battle.
+ * @return, position on the craft or at the base
+ */
+size_t BattleUnit::getBattleOrder() const // kL
+{
+	return _battleOrder;
+}
+
+/**
+ * kL.
+ */
+void BattleUnit::setBattleGame(BattlescapeGame* battleGame) // kL
+{
+	_battleGame = battleGame;
 }
 
 }

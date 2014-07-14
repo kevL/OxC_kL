@@ -4646,7 +4646,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1405336432 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1405339574 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	<climits>
 	<string>
@@ -4730,10 +4730,10 @@
 	<vector>
 	"../Engine/State.h"
 
-1404407064 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1405377581 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
-1405274666 f:\git\openxcom\src\battlescape\inventorystate.h
+1405377617 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 	"../Interface/TextButton.h"
 	"../Savegame/BattleItem.h"
@@ -4760,7 +4760,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1404105822 f:\git\openxcom\src\savegame\battleunit.h
+1405377555 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -4828,7 +4828,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1405337369 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1405372657 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -5477,7 +5477,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1405336325 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1405339574 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -5901,7 +5901,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1405283758 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1405377087 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6385,7 +6385,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1405279698 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1405377777 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -7872,7 +7872,7 @@
 	<string>
 	<vector>
 
-1405205371 source:f:\git\openxcom\src\geoscape\globe.cpp
+1405374055 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9494,7 +9494,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1405065494 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1405377601 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9680,7 +9680,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1405335794 source:f:\git\openxcom\src\savegame\soldier.cpp
+1405373799 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"

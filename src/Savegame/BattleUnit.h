@@ -391,6 +391,7 @@ private:
 		_turnsExposed,
 		_verticalDirection,
 		_walkPhase;
+	size_t _battleOrder; // kL
 
 	BattleAIState* _currentAIState;
 	BattlescapeGame* _battleGame; // kL.
@@ -550,7 +551,7 @@ private:
 		/// Turn to the destination direction.
 		void turn(bool turret = false);
 		/// Abort turning.
-//kL		void abortTurn();
+//kL	void abortTurn();
 
 		/// Gets the soldier's gender.
 		SoldierGender getGender() const;
@@ -962,6 +963,12 @@ private:
 		void setMurdererId(int id);
 		/// Get the unit murderer's id.
 		int getMurdererId() const;
+
+		/// kL. Sets the unit's order in battle.
+		void setBattleOrder(size_t order); // kL
+
+		/// kL. Gets the unit's order in battle.
+		size_t getBattleOrder() const; // kL
 
 		/// kL.
 		void setBattleGame(BattlescapeGame* battleGame); // kL
