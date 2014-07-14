@@ -240,6 +240,25 @@ void CraftSoldiersState::init()
 
 		_lstSoldiers->setRowColor(row, color);
 
+		if ((*i)->getWoundRecovery() > 0)
+		{
+			Uint8 color = Palette::blockOffset(3); // green
+			int woundPerct = (*i)->getWoundPercent();
+			if (woundPerct > 10)
+				color = Palette::blockOffset(9); // yellow
+			if (woundPerct > 50)
+				color = Palette::blockOffset(6); // orange
+
+			_lstSoldiers->setCellColor(
+									row,
+									2,
+									color);
+			_lstSoldiers->setCellHighContrast(
+									row,
+									2,
+									true);
+		}
+
 		row++;
 	}
 
@@ -461,9 +480,12 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		Craft* craft = _base->getCrafts()->at(_craftID);
 		Soldier* soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 
+		if (soldier->getWoundRecovery() > 0) // kL
+			return;
+
+		Craft* craft = _base->getCrafts()->at(_craftID);
 		Uint8 color = Palette::blockOffset(13)+10;
 
 		if (soldier->getCraft() == craft)
@@ -478,7 +500,7 @@ void CraftSoldiersState::lstSoldiersClick(Action* action)
 			color = Palette::blockOffset(15)+6;
 		}
 		else if (craft->getSpaceAvailable() > 0
-			&& soldier->getWoundRecovery() == 0
+//kL		&& soldier->getWoundRecovery() == 0
 			&& craft->getLoadCapacity() - craft->getLoadCurrent() > 9)
 		{
 			soldier->setCraft(craft);

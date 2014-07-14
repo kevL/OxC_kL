@@ -190,7 +190,28 @@ void SoldiersState::init()
 							(*i)->getCraftString(_game->getLanguage()).c_str());
 
 		if ((*i)->getCraft() == NULL)
+		{
 			_lstSoldiers->setRowColor(row, Palette::blockOffset(15)+6);
+
+			if ((*i)->getWoundRecovery() > 0)
+			{
+				Uint8 color = Palette::blockOffset(3); // green
+				int woundPerct = (*i)->getWoundPercent();
+				if (woundPerct > 10)
+					color = Palette::blockOffset(9); // yellow
+				if (woundPerct > 50)
+					color = Palette::blockOffset(6); // orange
+
+				_lstSoldiers->setCellColor(
+										row,
+										2,
+										color);
+				_lstSoldiers->setCellHighContrast(
+										row,
+										2,
+										true);
+			}
+		}
 
 		row++;
 	}

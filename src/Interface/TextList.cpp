@@ -716,17 +716,6 @@ void TextList::setHighContrast(bool contrast)
 }
 
 /**
- * Enables/disables text wordwrapping. When enabled, rows can take up multiple
- * lines of the list, otherwise every row is restricted to one line.
- * @param wrap Wordwrapping setting.
- */
-void TextList::setWordWrap(bool wrap)
-{
-	if (wrap != _wrap)
-		_wrap = wrap;
-}
-
-/**
  * kL. Changes the contrast of a specific Text object in the list.
  * @param row, Row number.
  * @param column, Column number.
@@ -740,6 +729,17 @@ void TextList::setCellHighContrast( // kL
 	_texts[row][column]->setHighContrast(contrast);
 
 	_redraw = true;
+}
+
+/**
+ * Enables/disables text wordwrapping. When enabled, rows can take up multiple
+ * lines of the list, otherwise every row is restricted to one line.
+ * @param wrap Wordwrapping setting.
+ */
+void TextList::setWordWrap(bool wrap)
+{
+	if (wrap != _wrap)
+		_wrap = wrap;
 }
 
 /**

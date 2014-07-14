@@ -648,7 +648,7 @@ void SoldierInfoState::init()
 	if (_soldier->getCraft()
 		&& _soldier->getCraft()->getStatus() == "STR_OUT")
 	{
-		_btnArmor->setColor(Palette::blockOffset(4)+8);
+		_btnArmor->setColor(Palette::blockOffset(4)+9); // dark pale purple
 	}
 	else
 		_btnArmor->setColor(Palette::blockOffset(15)+6);
@@ -698,13 +698,13 @@ void SoldierInfoState::init()
 				_barPsiStrength->setValue2(armored.psiStrength);
 		}
 
-		_txtPsiStrength->setVisible(true);
-		_numPsiStrength->setVisible(true);
-		_barPsiStrength->setVisible(true);
+//		_txtPsiStrength->setVisible(true);
+//		_numPsiStrength->setVisible(true);
+//		_barPsiStrength->setVisible(true);
 	}
 	else
 	{
-		_txtPsiStrength->setVisible(false);
+//		_txtPsiStrength->setVisible(false);
 		_numPsiStrength->setVisible(false);
 		_barPsiStrength->setVisible(false);
 	}
@@ -731,13 +731,13 @@ void SoldierInfoState::init()
 				_barPsiSkill->setValue2(armored.psiSkill);
 		}
 
-		_txtPsiSkill->setVisible(true);
-		_numPsiSkill->setVisible(true);
-		_barPsiSkill->setVisible(true);
+//		_txtPsiSkill->setVisible(true);
+//		_numPsiSkill->setVisible(true);
+//		_barPsiSkill->setVisible(true);
 	}
 	else
 	{
-		_txtPsiSkill->setVisible(false);
+//		_txtPsiSkill->setVisible(false);
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
 	}

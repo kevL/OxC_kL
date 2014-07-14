@@ -2599,50 +2599,39 @@ void GeoscapeState::time1Day()
 		{
 			// kL_begin:
 			//Log(LOG_INFO) << ". Soldier = " << (*s)->getId();
-			int wounds = (*s)->getWoundRecovery();
-			if (wounds > 0)
+			//Log(LOG_INFO) << ". woundPercent = " << (*s)->getWoundPercent();
+			if ((*s)->getWoundPercent() > 10					// more than 10% wounded
+				&& RNG::percent((*s)->getWoundPercent() / 5))	// %chance to die today
 			{
-				//Log(LOG_INFO) << ". . wounds = " << wounds;
+				//Log(LOG_INFO) << ". . he's dead, Jim!!";
+				timerReset();
 
-				int hurt = static_cast<int>(static_cast<float>(wounds) / static_cast<float>((*s)->getCurrentStats()->health) * 100.f);
-				//Log(LOG_INFO) << ". . hurt = " << hurt << "%";
-				if (hurt > 10 // more than 10% wounded
-					&& RNG::percent(hurt / 5)) // %chance to die today
-				{
-					//Log(LOG_INFO) << ". . . he's dead, Jim!!";
-					timerReset();
+				popup(new SoldierDiedState(
+										(*s)->getName(),
+										(*b)->getName()));
 
-					popup(new SoldierDiedState(
-											(*s)->getName(),
-											(*b)->getName()));
+				// kill soldier. (lifted from Battlescape/DebriefingState::prepareDebriefing()
+				SoldierDeath* death = new SoldierDeath();
+				death->setTime(*_game->getSavedGame()->getTime());
 
-					// kill soldier. (lifted from Battlescape/DebriefingState::prepareDebriefing()
-					SoldierDeath* death = new SoldierDeath();
-					death->setTime(*_game->getSavedGame()->getTime());
+				SoldierDead* dead = (*s)->die(death); // converts Soldier to SoldierDead class instance.
+				_game->getSavedGame()->getDeadSoldiers()->push_back(dead);
 
-					SoldierDead* dead = (*s)->die(death); // converts Soldier to SoldierDead class instance.
-					_game->getSavedGame()->getDeadSoldiers()->push_back(dead);
+				int iD = (*s)->getId();
 
-//					delete death; // kL new.
+				s = (*b)->getSoldiers()->erase(s); // erase Soldier from Base_soldiers vector.
 
-					int iD = (*s)->getId();
-
-					s = (*b)->getSoldiers()->erase(s); // erase Soldier from Base_soldiers vector.
-
-					delete _game->getSavedGame()->getSoldier(iD); // delete Soldier instance.
-					// note: Could return any armor the soldier was wearing to Stores.
-				}
-				else
-				{
-					//Log(LOG_INFO) << ". . heal up.";
-					(*s)->heal();
-
-					++s;
-				}
+				delete _game->getSavedGame()->getSoldier(iD); // delete Soldier instance.
+				// note: Could return any armor the soldier was wearing to Stores.
 			}
 			else
+			{
+				//Log(LOG_INFO) << ". . heal up.";
+				if ((*s)->getWoundRecovery() > 0)
+					(*s)->heal();
+
 				++s;
-			// kL_end.
+			} // kL_end.
 		}
 		//Log(LOG_INFO) << ". iterate Soldiers DONE";
 

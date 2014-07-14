@@ -538,6 +538,19 @@ void Soldier::setWoundRecovery(int recovery)
 void Soldier::heal()
 {
 	_recovery--;
+
+	if (_recovery < 0) // kL
+		_recovery = 0; // kL
+}
+
+/**
+ * kL. Gets a soldier's wounds as a percent.
+ */
+int Soldier::getWoundPercent() const // kL
+{
+	return static_cast<int>(
+				floor(static_cast<float>(_recovery) / static_cast<float>(_currentStats.health)
+					* 100.f));
 }
 
 /**

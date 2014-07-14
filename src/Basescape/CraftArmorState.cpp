@@ -237,6 +237,25 @@ void CraftArmorState::init()
 		}
 
 		_lstSoldiers->setRowColor(row, color);
+
+		if ((*i)->getWoundRecovery() > 0)
+		{
+			Uint8 color = Palette::blockOffset(3); // green
+			int woundPerct = (*i)->getWoundPercent();
+			if (woundPerct > 10)
+				color = Palette::blockOffset(9); // yellow
+			if (woundPerct > 50)
+				color = Palette::blockOffset(6); // orange
+
+			_lstSoldiers->setCellColor(
+									row,
+									2,
+									color);
+			_lstSoldiers->setCellHighContrast(
+									row,
+									2,
+									true);
+		}
 		// kL_end.
 
 		row++;

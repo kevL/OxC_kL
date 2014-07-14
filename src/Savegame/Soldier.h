@@ -189,6 +189,8 @@ private:
 		void setWoundRecovery(int recovery);
 		/// Heals wound recoveries.
 		void heal();
+		/// kL. Gets a soldier's wounds as a percent.
+		int getWoundPercent() const; // kL
 
 		/// Gets the soldier's equipment-layout.
 		std::vector<EquipmentLayoutItem*>* getEquipmentLayout();
