@@ -790,6 +790,7 @@ void InventoryState::btnCreateTemplateClick(Action* action)
 									"BATTLE.CAT",
 									38)
 								->play();
+	_refreshMouse();
 }
 
 /**

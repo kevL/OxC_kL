@@ -697,7 +697,7 @@ void Soldier::trainPsi1Day()
 	}
 	else // start here.
 	{
-		if (RNG::percent(6)) // 6% per day per soldier (to become psionic-active)
+		if (RNG::percent(5)) // 5% per day per soldier (to become psionic-active)
 		{
 			_gainPsiSkl = RNG::generate(
 									rulesMin,

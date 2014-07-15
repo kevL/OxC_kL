@@ -1080,26 +1080,24 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw smoke/fire
-								// kL: This smoke is redrawing in an awkward way .....
-/*								if (tileWest->getSmoke())
-//TEST									&& tileWest->isDiscovered(2))
-								// kL_begin: copied from its regular place way below.
+								if (tile->getSmoke() // includes tiles on Fire? must...
+									&& tile->isDiscovered(2))
 								{
 									// oXc _animFrames cycle from 0..7
 									frame = 0;	// this will be the SPRITE # on the orig SpriteSheet
 												// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
 												// fire:	0..7	-> 8 frames
 												// smoke:	8..19	-> 12 frames
-//									int fire = tileWest->getFire();	// fire is grouped [0..3] & [4..7] ( latter is for units onFire )
-																	// smoke runs consecutively. [8..19] ( since I adulterated the Smoke.Pck graphics )
-									if (tileWest->getFire() == 0) // then use Smoke frames.
+//									int fire = tile->getFire();	// fire is grouped [0..3] & [4..7] ( latter is for units onFire )
+																// smoke runs consecutively. [8..19] ( since I adulterated the Smoke.Pck graphics )
+									if (tile->getFire() == 0) // then use Smoke frames.
 									{
 										// smoke sprites start at #8 on the spritesheet:
-										frame = 8 + ((tileWest->getSmoke() + 1) / 2); // getSmoke = 1..15 -> frame = 8..16
+										frame = 8 + ((tile->getSmoke() + 1) / 2); // getSmoke = 1..15 -> frame = 8..16
 									}
 
 									// _animFrame = 1..8 -> 0..4, offset = 0..3 -> spriteOffset = 0..7 (0..4, 1..5, 2..6, 3..7)
-									int spriteOffset = ((_animFrame + 1) / 2) + tileWest->getAnimationOffset();
+									int spriteOffset = ((_animFrame + 1) / 2) + tile->getAnimationOffset();
 
 									if (spriteOffset > 3)
 										spriteOffset -= 4;
@@ -1116,9 +1114,8 @@ void Map::drawTerrain(Surface* surface)
 											surface,
 											screenPosition.x,
 											screenPosition.y,
-											0,
-											true);
-								} */ // kL_end.
+											0);
+								}
 
 								// Draw object
 								if (tileWest->getMapData(MapData::O_OBJECT)

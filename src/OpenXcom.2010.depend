@@ -4733,7 +4733,7 @@
 1405377581 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
-1405377617 f:\git\openxcom\src\battlescape\inventorystate.h
+1405458586 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 	"../Interface/TextButton.h"
 	"../Savegame/BattleItem.h"
@@ -5248,7 +5248,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404096022 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
+1405458548 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
 	<limits>
 	<sstream>
@@ -6385,7 +6385,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1405386492 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1405458730 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6419,7 +6419,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1405393117 source:f:\git\openxcom\src\battlescape\map.cpp
+1405458918 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -9679,7 +9679,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1405373799 source:f:\git\openxcom\src\savegame\soldier.cpp
+1405464735 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
