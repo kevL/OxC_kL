@@ -29,7 +29,7 @@
 //kL #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 //kL #include "../Engine/Screen.h"
-#include "../Engine/Timer.h"
+//#include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
 
@@ -65,7 +65,7 @@ VictoryState::VictoryState()
 		"PICT7.LBM"
 	};
 
-	_timer = new Timer(30000);
+//	_timer = new Timer(30000);
 
 	_text[0] = new Text(195, 56, 5, 0);
 	_text[1] = new Text(232, 64, 88, 136);
@@ -104,10 +104,10 @@ VictoryState::VictoryState()
 
 	centerAllSurfaces();
 
-	_timer->onTimer((StateHandler)& VictoryState::screenTimer);
-	_timer->start();
+//	_timer->onTimer((StateHandler)& VictoryState::screenTimer);
+//	_timer->start();
 
-	screenClick(0);
+	screenClick(NULL);
 
 	if (_game->getSavedGame()->isIronman()) // Ironman is over
 	{
@@ -121,24 +121,24 @@ VictoryState::VictoryState()
  */
 VictoryState::~VictoryState()
 {
-	delete _timer;
+//	delete _timer;
 }
 
 /**
  * Shows the next screen on a timed basis.
  */
-void VictoryState::screenTimer()
+/*void VictoryState::screenTimer()
 {
-	screenClick(0);
-}
+	screenClick(NULL);
+} */
 
 /**
  * Handle timers.
  */
-void VictoryState::think()
+/*void VictoryState::think()
 {
 	_timer->think(this, NULL);
-}
+} */
 
 /**
  * Shows the next screen in the slideshow or goes back to the Main Menu.
@@ -146,7 +146,7 @@ void VictoryState::think()
  */
 void VictoryState::screenClick(Action*)
 {
-	_timer->start();
+//	_timer->start();
 
 	if (_screen > -1)
 	{
@@ -177,7 +177,7 @@ void VictoryState::screenClick(Action*)
 		_game->getScreen()->resetDisplay(false); */
 
 		_game->setState(new MainMenuState());
-		_game->setSavedGame(0);
+		_game->setSavedGame(NULL);
 	}
 }
 

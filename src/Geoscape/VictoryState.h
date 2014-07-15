@@ -48,7 +48,7 @@ private:
 
 	int _screen;
 
-	Timer *_timer;
+//	Timer* _timer;
 
 
 	public:
@@ -58,10 +58,10 @@ private:
 		~VictoryState();
 
 		/// Handle timers.
-		void think();
+//		void think();
 
 		/// Handler for waiting the screen.
-		void screenTimer();
+//		void screenTimer();
 		/// Handler for clicking the screen.
 		void screenClick(Action* action);
 };

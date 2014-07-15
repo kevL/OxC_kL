@@ -519,7 +519,8 @@ void InventoryState::updateStats()
 	//Log(LOG_INFO) << "InventoryState::updateStats()";
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 
-	_numOrder->setValue(unit->getBattleOrder()); // kL
+	_numOrder->setValue(unit->getBattleOrder());							// kL
+	_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);	// kL
 
 	if (_tu) // kL
 		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
@@ -969,8 +970,8 @@ void InventoryState::_refreshMouse()
 		y;
 	SDL_GetMouseState(&x, &y);
 
-	SDL_WarpMouse(x + 1, y); // send a mouse motion event to refresh any hover actions
-	SDL_WarpMouse(x, y); // move the mouse back to avoid cursor creep
+	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
+	SDL_WarpMouse(x, y);		// move the mouse back to avoid cursor creep
 }
 
 /**

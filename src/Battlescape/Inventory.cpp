@@ -589,6 +589,14 @@ void Inventory::think()
 		_primeGrenade = -1;
 	} // kL_end.
 
+/*	int
+		x,
+		y;
+	SDL_GetMouseState(&x, &y);
+
+	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
+	SDL_WarpMouse(x, y); */		// move the mouse back to avoid cursor creep
+
 	_warning->think();
 	_animTimer->think(NULL, this);
 }
@@ -885,7 +893,10 @@ void Inventory::mouseClick(Action* action, State* state)
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
+						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+//							mouseOver(action, state); // kL, refresh tuCost visibility.
+						}
 					}
 					else if (canStack)
 					{
@@ -904,7 +915,10 @@ void Inventory::mouseClick(Action* action, State* state)
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
+						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+//							mouseOver(action, state); // kL, refresh tuCost visibility.
+						}
 					}
 				}
 				else if (!item->getRules()->getCompatibleAmmo()->empty()) // Put item in weapon
@@ -924,11 +938,17 @@ void Inventory::mouseClick(Action* action, State* state)
 					}
 
 					if (wrong)
+					{
 						_warning->showMessage(_game->getLanguage()->getString("STR_WRONG_AMMUNITION_FOR_THIS_WEAPON"));
+//						mouseOver(action, state); // kL, refresh tuCost visibility.
+					}
 					else
 					{
 						if (item->getAmmoItem() != NULL)
+						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_IS_ALREADY_LOADED"));
+//							mouseOver(action, state); // kL, refresh tuCost visibility.
+						}
 						else if (!_tu
 							|| _selUnit->spendTimeUnits(15))
 						{
@@ -948,7 +968,10 @@ void Inventory::mouseClick(Action* action, State* state)
 								arrangeGround(false);
 						}
 						else
+						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+//							mouseOver(action, state); // kL, refresh tuCost visibility.
+						}
 					}
 				}
 				// else swap the item positions?
@@ -984,7 +1007,10 @@ void Inventory::mouseClick(Action* action, State* state)
 							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
 						}
 						else
+						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+//							mouseOver(action, state); // kL, refresh tuCost visibility.
+						}
 					}
 				}
 			}
@@ -1090,6 +1116,14 @@ void Inventory::mouseClick(Action* action, State* state)
 	}
 
 	InteractiveSurface::mouseClick(action, state);
+
+/*	int
+		x,
+		y;
+	SDL_GetMouseState(&x, &y);
+
+	SDL_WarpMouse(x + 1, y);	// send a mouse motion event to refresh any hover actions
+	SDL_WarpMouse(x, y); */		// move the mouse back to avoid cursor creep
 }
 
 /**

@@ -181,7 +181,7 @@ UnitInfoState::UnitInfoState(
 	if (!_mindProbe)
 	{
 		_btnPrev	= new TextButton(18, 18, 2, 2);
-		_btnNext	= new TextButton(18, 18, 302, 2);
+		_btnNext	= new TextButton(18, 18, 300, 2);
 	}
 
 	setPalette("PAL_BATTLESCAPE");

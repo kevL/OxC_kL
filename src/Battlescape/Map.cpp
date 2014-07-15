@@ -806,7 +806,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 // START ADVANCED DRAWING CYCLE:
-/*					if (mapPosition.y > 0) // special handling for a moving unit.
+					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
 						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
 						BattleUnit* bu = tileNorth->getUnit();
@@ -1081,7 +1081,7 @@ void Map::drawTerrain(Surface* surface)
 
 								// Draw smoke/fire
 								// kL: This smoke is redrawing in an awkward way .....
-								if (tileWest->getSmoke())
+/*								if (tileWest->getSmoke())
 //TEST									&& tileWest->isDiscovered(2))
 								// kL_begin: copied from its regular place way below.
 								{
@@ -1118,7 +1118,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.y,
 											0,
 											true);
-								} // kL_end.
+								} */ // kL_end.
 
 								// Draw object
 								if (tileWest->getMapData(MapData::O_OBJECT)
@@ -1134,7 +1134,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 						}
-					} */
+					}
 /*kL - their tileWest SMOKE:
 								{
 									frame = 0;
