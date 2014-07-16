@@ -95,26 +95,25 @@ ActionMenuState::ActionMenuState(
 				"STR_THROW",
 				&id);
 
-/*	if ((weapon->getBattleType() == BT_GRENADE
-			|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
-		&& _action->weapon->getFuseTimer() == -1) // priming
+	// kL_begin:
+	SavedGame* save = _game->getSavedGame();
+	if (save->getSavedBattle()->getSelectedUnit()->getOriginalFaction() != FACTION_HOSTILE
+		&& save->isResearched(_action->weapon->getRules()->getRequirements()) == false)
 	{
-		addItem(
-				BA_PRIME,
-				"STR_PRIME_GRENADE",
-				&id);
-	} */
+		return;
+	} // kL_end.
+
 	if (weapon->getBattleType() == BT_GRENADE
 		|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
 	{
-		if (_action->weapon->getFuseTimer() == -1) // priming
+		if (_action->weapon->getFuseTimer() == -1) // canPrime
 		{
 			addItem(
 					BA_PRIME,
 					"STR_PRIME_GRENADE",
 					&id);
 		}
-		else
+		else // kL_add:
 		{
 			addItem(
 					BA_DEFUSE,
@@ -234,10 +233,10 @@ void ActionMenuState::addItem(
 	{
 		int acc = 0;
 		if (baType == BA_THROW)
-//kL		acc = _action->actor->getThrowingAccuracy(); // Wb.140214
+//		acc = _action->actor->getThrowingAccuracy();
 			acc = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100.0)); // kL
 		else
-//			acc = _action->actor->getFiringAccuracy( // Wb.140214
+//			acc = _action->actor->getFiringAccuracy(
 //												baType,
 //												_action->weapon);
 			acc = static_cast<int>(floor(_action->actor->getFiringAccuracy( // kL

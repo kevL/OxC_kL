@@ -2253,17 +2253,18 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 	if (item						// make sure there is an item
 		&& !_battleGame->isBusy())	// and the battlescape is in an idle state
 	{
-		if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements())
-			|| _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
-		{
-			_battleGame->getCurrentAction()->weapon = item;
-			popup(new ActionMenuState(
-									_battleGame->getCurrentAction(),
-									_icons->getX(),
-									_icons->getY() + 16));
-		}
-		else
-			warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
+//kL	if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements())
+//kL		|| _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
+//kL_note: do that in ActionMenu, to allow throwing artefacts.
+//		{
+		_battleGame->getCurrentAction()->weapon = item;
+		popup(new ActionMenuState(
+								_battleGame->getCurrentAction(),
+								_icons->getX(),
+								_icons->getY() + 16));
+//		}
+//kL	else
+//kL		warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
 	}
 }
 
