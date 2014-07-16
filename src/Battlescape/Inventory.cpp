@@ -896,6 +896,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 //							mouseOver(action, state); // kL, refresh tuCost visibility.
+//							arrangeGround(false); // kL, refresh tuCost visibility.
 						}
 					}
 					else if (canStack)
@@ -918,6 +919,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 //							mouseOver(action, state); // kL, refresh tuCost visibility.
+//							arrangeGround(false); // kL, refresh tuCost visibility.
 						}
 					}
 				}
@@ -941,6 +943,7 @@ void Inventory::mouseClick(Action* action, State* state)
 					{
 						_warning->showMessage(_game->getLanguage()->getString("STR_WRONG_AMMUNITION_FOR_THIS_WEAPON"));
 //						mouseOver(action, state); // kL, refresh tuCost visibility.
+//						arrangeGround(false); // kL, refresh tuCost visibility.
 					}
 					else
 					{
@@ -948,6 +951,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_WEAPON_IS_ALREADY_LOADED"));
 //							mouseOver(action, state); // kL, refresh tuCost visibility.
+//							arrangeGround(false); // kL, refresh tuCost visibility.
 						}
 						else if (!_tu
 							|| _selUnit->spendTimeUnits(15))
@@ -971,6 +975,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 //							mouseOver(action, state); // kL, refresh tuCost visibility.
+//							arrangeGround(false); // kL, refresh tuCost visibility.
 						}
 					}
 				}
@@ -1010,6 +1015,7 @@ void Inventory::mouseClick(Action* action, State* state)
 						{
 							_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
 //							mouseOver(action, state); // kL, refresh tuCost visibility.
+//							arrangeGround(false); // kL, refresh tuCost visibility.
 						}
 					}
 				}
@@ -1054,6 +1060,7 @@ void Inventory::mouseClick(Action* action, State* state)
 									if (BT_PROXIMITYGRENADE == itemType)
 									{
 										item->setFuseTimer(0);
+										arrangeGround(false);
 
 //										std::wstring activated = Text::formatNumber(0) + L" ";
 //										activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
@@ -1074,7 +1081,8 @@ void Inventory::mouseClick(Action* action, State* state)
 								{
 									_warning->showMessage(_game->getLanguage()->getString("STR_GRENADE_IS_DEACTIVATED"));
 									item->setFuseTimer(-1); // Unprime the grenade
-									drawItems(); // kL, de-vector the Fuse graphic.
+//									drawItems(); // kL, de-vector the Fuse graphic.
+									arrangeGround(false);
 								}
 							}
 						}

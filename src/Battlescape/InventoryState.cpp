@@ -659,8 +659,23 @@ void InventoryState::btnOkClick(Action*)
 				_battleGame->setSelectedUnit(inventoryTile->getUnit());
 			} */
 		}
-	}
+
+/*kL, done in BattlescapeGenerator.
+		for (std::vector<BattleUnit*>::iterator // initialize xcom units for battle
+				j = _battleGame->getUnits()->begin();
+				j != _battleGame->getUnits()->end();
+				++j)
+		{
+			if ((*j)->getOriginalFaction() != FACTION_PLAYER
+				|| (*j)->isOut())
+			{
+				continue;
+			}
+
+			(*j)->prepareNewTurn();
+		} */
 	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
+	}
 }
 
 /**
@@ -835,6 +850,8 @@ void InventoryState::btnApplyTemplateClick(Action* action)
 	Tile* groundTile = unit->getTile();
 	std::vector<BattleItem*>* groundInv = groundTile->getInventory();
 
+	RuleInventory* groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
+
 	_clearInventory(
 				_game,
 				unitInv,
@@ -906,6 +923,8 @@ void InventoryState::btnApplyTemplateClick(Action* action)
 					(*groundItem)->setSlot(_game->getRuleset()->getInventory((*templateIt)->getSlot()));
 					(*groundItem)->setSlotX((*templateIt)->getSlotX());
 					(*groundItem)->setSlotY((*templateIt)->getSlotY());
+					(*groundItem)->setFuseTimer((*templateIt)->getFuseTimer());
+
 					unitInv->push_back(*groundItem);
 					groundInv->erase(groundItem);
 
@@ -921,8 +940,6 @@ void InventoryState::btnApplyTemplateClick(Action* action)
 				&& (!needsAmmo
 					|| matchedAmmo))
 			{
-				RuleInventory* groundRuleInv = _game->getRuleset()->getInventory("STR_GROUND");
-
 				// unload the existing ammo (if any) from the weapon
 				BattleItem* loadedAmmo = matchedWeapon->getAmmoItem();
 				if (loadedAmmo)
