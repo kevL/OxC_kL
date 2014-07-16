@@ -118,7 +118,9 @@ void Pathfinding::calculate(
 	_totalTUCost = 0;
 	_path.clear();
 
-	_modALT = false;
+//	_modALT = false;
+	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// for BattlescapeState::btnUnitDownClick() -> now redundant.
+													// Can go back to previewPath()
 	_modCTRL = false;
 
 	Position endPos2 = endPos; // kL: for keeping things straight if strafeRejected happens.
@@ -1953,7 +1955,9 @@ bool Pathfinding::previewPath(bool bRemove)
 	}
 
 
-	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;
+//	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// kL: do this in calculate()
+													// for BattlescapeState::btnUnitDownClick()
+													// 'cause it doesn't use pathPreview here.
 	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
 
 	std::string armorType = _unit->getArmor()->getType();

@@ -2494,8 +2494,14 @@ void BattlescapeGame::moveUpDown(
 {
 	//Log(LOG_INFO) << "BattlescapeGame::moveUpDown()";
 	_currentAction.target = unit->getPosition();
+
 	if (dir == Pathfinding::DIR_UP)
+	{
+		if ((SDL_GetModState() & KMOD_ALT) != 0) // kL
+			return;
+
 		_currentAction.target.z++;
+	}
 	else
 		_currentAction.target.z--;
 
