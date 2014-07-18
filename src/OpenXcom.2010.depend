@@ -5798,7 +5798,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1405198627 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1405547151 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6022,7 +6022,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1404698385 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1405548731 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -7812,7 +7812,7 @@
 	"../Savegame/Waypoint.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1404849128 f:\git\openxcom\src\geoscape\graphsstate.h
+1405649739 f:\git\openxcom\src\geoscape\graphsstate.h
 	<string>
 	"../Engine/State.h"
 
@@ -7925,7 +7925,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1404849128 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1405650235 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"

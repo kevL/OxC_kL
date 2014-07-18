@@ -29,14 +29,13 @@ namespace OpenXcom
 {
 
 class InteractiveSurface;
-//class NumberText; // kL
 class Region;
-class Sound; // kL
+class Sound;
 class Surface;
 class Text;
 class TextButton;
 class TextList;
-class Timer; // kL
+class Timer;
 class ToggleTextButton;
 
 struct GraphBtnInfo;
@@ -52,7 +51,7 @@ class GraphsState
 {
 
 private:
-	static const size_t GRAPH_MAX_BUTTONS = 16;
+	static const size_t GRAPH_MAX_BUTTONS = 19; // does not include TOTAL btn.
 
 	bool
 		_alien,
@@ -62,7 +61,7 @@ private:
 
 	int _current;
 
-	size_t // will be only between 0 and size()
+	size_t
 		_btnCountriesOffset,
 		_btnRegionsOffset;
 
@@ -75,9 +74,8 @@ private:
 		* _btnUfoRegion,
 		* _btnXcomCountry,
 		* _btnXcomRegion;
-//	NumberText* _numScore;
 	Text
-		* _numScore,
+		* _txtScore,
 		* _txtFactor,
 		* _txtTitle;
 	TextList
@@ -87,12 +85,12 @@ private:
 		* _btnCountryTotal,
 		* _btnRegionTotal;
 
-	Timer* _blinkTimer; // kL
+	Timer* _blinkTimer;
 
 	std::vector<bool>
-		_blinkCountry, // kL
-		_blinkRegion, // kL
-		_financeToggles;
+		_financeToggles,
+		_blinkCountry,
+		_blinkRegion;
 
 	std::vector<GraphBtnInfo*>
 		_regionToggles,
@@ -104,12 +102,11 @@ private:
 		_incomeLines,
 		_xcomCountryLines,
 		_xcomRegionLines;
-//	std::vector<NumberText*>
 	std::vector<Text*>
-		_numCountryActivityAlien,
-		_numCountryActivityXCom,
-		_numRegionActivityAlien,
-		_numRegionActivityXCom,
+		_txtCountryActivityAlien,
+		_txtCountryActivityXCom,
+		_txtRegionActivityAlien,
+		_txtRegionActivityXCom,
 		_txtScale;
 	std::vector<ToggleTextButton*>
 		_btnRegions,
@@ -120,18 +117,21 @@ private:
 	void scrollButtons(
 			std::vector<GraphBtnInfo*>& toggles,
 			std::vector<ToggleTextButton*>& buttons,
+			std::vector<Text*>& actAlien,
+			std::vector<Text*>& actXCom,
+			std::vector<bool>& blink,
 			size_t& offset,
 			int step);
 	///
 	void updateButton(
-			GraphBtnInfo* from,
-			ToggleTextButton* to);
-	/// Show the latest month's value as NumberText beside the buttons.
-	void latestTally();
+			GraphBtnInfo* info,
+			ToggleTextButton* btn,
+			Text* aliens,
+			Text* xcom);
 
 
 	public:
-		static Sound* soundPop; // kL
+		static Sound* soundPop;
 
 		/// Creates the Graphs state.
 		GraphsState();
@@ -139,18 +139,18 @@ private:
 		~GraphsState();
 
 		/// kL. Handles the blink timer.
-		void think(); // kL
+		void think();
 		/// kL. Blinks recent aLien activity.
-		void blink(); // kL
+		void blink();
 
 		/// Handler for clicking the Geoscape icon.
 		void btnGeoscapeClick(Action* action);
 		/// Handler for clicking the ufo region icon.
 		void btnUfoRegionClick(Action* action);
-		/// Handler for clicking the ufo country icon.
-		void btnUfoCountryClick(Action* action);
 		/// Handler for clicking the xcom region icon.
 		void btnXcomRegionClick(Action* action);
+		/// Handler for clicking the ufo country icon.
+		void btnUfoCountryClick(Action* action);
 		/// Handler for clicking the xcom country icon.
 		void btnXcomCountryClick(Action* action);
 		/// Handler for clicking the income icon.
@@ -163,8 +163,6 @@ private:
 		void btnCountryListClick(Action* action);
 		/// Handler for clicking  on a finances button.
 		void btnFinanceListClick(Action* action);
-		/// Mouse wheel handler for shifting up/down the buttons
-		void shiftButtons(Action* action);
 
 		/// Reset all the elements on screen.
 		void resetScreen();
@@ -182,6 +180,9 @@ private:
 		void drawCountryLines();
 		/// Draw Finances Lines.
 		void drawFinanceLines();
+
+		/// Mouse wheel handler for shifting up/down the buttons
+		void shiftButtons(Action* action);
 };
 
 }
