@@ -1033,17 +1033,23 @@ void GraphsState::btnRegionListClick(Action* action)
 	size_t row = (action->getSender()->getY() - _game->getScreen()->getDY()) / 10;
 	ToggleTextButton* button = NULL;
 
+	size_t btn = 0;
+
 	if ((_regionToggles.size() <= GRAPH_MAX_BUTTONS + 1
 			&& row == _regionToggles.size() - 1)
 		|| (_regionToggles.size() > GRAPH_MAX_BUTTONS + 1
 			&& row == GRAPH_MAX_BUTTONS))
 	{
 		button = _btnRegionTotal;
+		btn = _regionToggles.size() - 1;
 	}
 	else
+	{
 		button = _btnRegions.at(row);
+		btn = row + _btnRegionsOffset;
+	}
 
-	_regionToggles.at(row + _btnRegionsOffset)->_pushed = button->getPressed();
+	_regionToggles.at(btn)->_pushed = button->getPressed();
 
 	drawLines();
 }
