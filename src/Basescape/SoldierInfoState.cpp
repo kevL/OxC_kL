@@ -699,8 +699,8 @@ void SoldierInfoState::init()
 		}
 
 //		_txtPsiStrength->setVisible(true);
-//		_numPsiStrength->setVisible(true);
-//		_barPsiStrength->setVisible(true);
+		_numPsiStrength->setVisible(true);
+		_barPsiStrength->setVisible(true);
 	}
 	else
 	{
@@ -732,8 +732,8 @@ void SoldierInfoState::init()
 		}
 
 //		_txtPsiSkill->setVisible(true);
-//		_numPsiSkill->setVisible(true);
-//		_barPsiSkill->setVisible(true);
+		_numPsiSkill->setVisible(true);
+		_barPsiSkill->setVisible(true);
 	}
 	else
 	{

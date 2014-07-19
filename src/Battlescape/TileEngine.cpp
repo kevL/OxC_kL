@@ -4218,11 +4218,13 @@ int TileEngine::unitOpensDoor(
 						wall = i->second;
 
 						if (door == 1)
+						{
 							openAdjacentDoors(
 											posUnit
 												+ Position(x, y, z)
 												+ i->first,
 											i->second);
+						}
 					}
 				}
 			}

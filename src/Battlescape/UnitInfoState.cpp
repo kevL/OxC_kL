@@ -624,13 +624,13 @@ void UnitInfoState::init()
 		_barPsiStrength->setMax(static_cast<double>(stat));
 		_barPsiStrength->setValue(static_cast<double>(stat));
 
-		_txtPsiStrength->setVisible(true);
+//		_txtPsiStrength->setVisible(true);
 		_numPsiStrength->setVisible(true);
 		_barPsiStrength->setVisible(true);
 	}
 	else
 	{
-		_txtPsiStrength->setVisible(false);
+//		_txtPsiStrength->setVisible(false);
 		_numPsiStrength->setVisible(false);
 		_barPsiStrength->setVisible(false);
 	}
@@ -644,13 +644,13 @@ void UnitInfoState::init()
 		_barPsiSkill->setMax(static_cast<double>(stat));
 		_barPsiSkill->setValue(static_cast<double>(stat));
 
-		_txtPsiSkill->setVisible(true);
+//		_txtPsiSkill->setVisible(true);
 		_numPsiSkill->setVisible(true);
 		_barPsiSkill->setVisible(true);
 	}
 	else
 	{
-		_txtPsiSkill->setVisible(false);
+//		_txtPsiSkill->setVisible(false);
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
 	}

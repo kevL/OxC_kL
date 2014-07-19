@@ -316,8 +316,8 @@ void Map::init()
  */
 void Map::think()
 {
-	_scrollMouseTimer->think(0, this);
-	_scrollKeyTimer->think(0, this);
+	_scrollMouseTimer->think(NULL, this);
+	_scrollKeyTimer->think(NULL, this);
 }
 
 /**

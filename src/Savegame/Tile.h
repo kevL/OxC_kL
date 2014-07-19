@@ -57,7 +57,7 @@ protected:
 		_visible; // kL
 	int
 		_animOffset,
-		_currFrame[4],
+		_curFrame[4],
 		_explosive,
 		_fire,
 		_lastLight[LIGHTLAYERS],
@@ -168,7 +168,7 @@ protected:
 		/// Opens a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
 		int openDoor(
 				int wall,
-				BattleUnit* Unit = 0,
+				BattleUnit* Unit = NULL,
 				BattleActionType reserve = BA_NONE);
 		/**
 		 * Checks if the ufo door is open or opening. Used for visibility/light blocking checks.
@@ -180,7 +180,7 @@ protected:
 		{
 			return _objects[wall]
 					&& _objects[wall]->isUFODoor()
-					&& _currFrame[wall] != 0;
+					&& _curFrame[wall] != 0;
 		}
 		/// Closes ufo door.
 		int closeUfoDoor();

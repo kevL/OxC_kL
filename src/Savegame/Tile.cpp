@@ -54,6 +54,7 @@ Tile::SerializationKey Tile::serializationKey =
 	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1 + 1	// kL
 };
 
+
 /**
 * constructor
 * @param pos Position.
@@ -82,7 +83,7 @@ Tile::Tile(const Position& pos)
 		_objects[i]			=  0;
 		_mapDataID[i]		= -1;
 		_mapDataSetID[i]	= -1;
-		_currFrame[i]		=  0;
+		_curFrame[i]		=  0;
 	}
 
 	for (int
@@ -140,10 +141,10 @@ void Tile::load(const YAML::Node& node)
 	}
 
 	if (node["openDoorWest"])
-		_currFrame[1] = 7;
+		_curFrame[1] = 7;
 
 	if (node["openDoorNorth"])
-		_currFrame[2] = 7;
+		_curFrame[2] = 7;
 }
 
 /**
@@ -176,8 +177,8 @@ void Tile::loadBinary(
 	_discovered[1] = (boolFields & 2)? true: false;
 	_discovered[2] = (boolFields & 4)? true: false;
 
-	_currFrame[1] = (boolFields & 8)? 7: 0;
-	_currFrame[2] = (boolFields & 0x10)? 7: 0;
+	_curFrame[1] = (boolFields & 8)? 7: 0;
+	_curFrame[2] = (boolFields & 0x10)? 7: 0;
 }
 
 /**
@@ -317,8 +318,9 @@ int Tile::getTUCost(
 	if (_objects[part])
 	{
 		if (_objects[part]->isUFODoor()
-//kL			&& _currFrame[part] == 7)
-			&& _currFrame[part] > 1) // cfailde:doorcost
+//kL		&& _curFrame[part] == 7)
+//			&& _curFrame[part] > 1) // cfailde:doorcost
+			&& _curFrame[part] > 0) // kL
 		{
 			return 0;
 		}
@@ -463,7 +465,7 @@ int Tile::openDoor(
 	}
 	else if (_objects[wall]->isUFODoor())
 	{
-		if (_currFrame[wall] == 0) // ufo door wall 0 - door is closed
+		if (_curFrame[wall] == 0) // ufo door wall 0 - door is closed
 		{
 			if (unit
 				&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
@@ -474,11 +476,11 @@ int Tile::openDoor(
 				return 4;
 			}
 
-			_currFrame[wall] = 1; // start opening door
+			_curFrame[wall] = 1; // start opening door
 
 			return 1;
 		}
-		else if (_currFrame[wall] != 7) // ufo door != wall 7 -> door is still opening
+		else if (_curFrame[wall] != 7) // ufo door != wall 7 -> door is still opening
 			return 3;
 	}
 
@@ -499,7 +501,7 @@ int Tile::closeUfoDoor()
 	{
 		if (isUfoDoorOpen(part))
 		{
-			_currFrame[part] = 0;
+			_curFrame[part] = 0;
 			ret = 1;
 		}
 	}
@@ -793,7 +795,7 @@ void Tile::ignite(int power)
  */
 void Tile::animate()
 {
-	int newframe;
+	int nextFrame;
 
 	for (int
 			i = 0;
@@ -803,25 +805,25 @@ void Tile::animate()
 		if (_objects[i])
 		{
 			if (_objects[i]->isUFODoor() // ufo door is static
-				&& (_currFrame[i] == 0
-					|| _currFrame[i] == 7))
+				&& (_curFrame[i] == 0
+					|| _curFrame[i] == 7))
 			{
 				continue;
 			}
 
-			newframe = _currFrame[i] + 1;
+			nextFrame = _curFrame[i] + 1;
 
 			if (_objects[i]->isUFODoor()
 				&& _objects[i]->getSpecialType() == START_POINT
-				&& newframe == 3)
+				&& nextFrame == 3)
 			{
-				newframe = 7;
+				nextFrame = 7;
 			}
 
-			if (newframe == 8)
-				newframe = 0;
+			if (nextFrame == 8)
+				nextFrame = 0;
 
-			_currFrame[i] = newframe;
+			_curFrame[i] = nextFrame;
 		}
 	}
 }
@@ -846,7 +848,7 @@ Surface* Tile::getSprite(int part) const
 	if (_objects[part] == NULL)
 		return NULL;
 
-	return _objects[part]->getDataset()->getSurfaceset()->getFrame(_objects[part]->getSprite(_currFrame[part]));
+	return _objects[part]->getDataset()->getSurfaceset()->getFrame(_objects[part]->getSprite(_curFrame[part]));
 }
 
 /**
