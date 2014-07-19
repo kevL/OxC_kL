@@ -2365,8 +2365,11 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			_currentAction.run = false;
 
 			_currentAction.strafe = Options::strafe
-									&& mod_CTRL
-									&& _save->getSelectedUnit()->getTurretType() == -1;
+									&& ((mod_CTRL
+											&& _save->getSelectedUnit()->getTurretType() == -1)
+										|| (mod_ALT // tank, reverse gear 1 tile only.
+											&& _save->getSelectedUnit()->getTurretType() > -1));
+			//Log(LOG_INFO) << ". primary action: Strafe";
 			if (_currentAction.strafe
 //				&& getPathfinding()->getStrafeMove())		// kL <- NO.
 //				&& getPathfinding()->getPath().size() > 1)	// kL <- yes, but think of the shuggle
@@ -2374,7 +2377,8 @@ void BattlescapeGame::primaryAction(const Position& pos)
 												_currentAction.actor->getPosition(),
 												pos)
 											> 1
-					|| _currentAction.actor->getPosition().z != pos.z)) // kL
+					|| _currentAction.actor->getPosition().z != pos.z) // kL
+				&& _save->getSelectedUnit()->getTurretType() == -1) // kL: tanks don't dash.
 			{
 				_currentAction.actor->setDashing(true); // kL, do this in UnitWalkBState
 				// kL_note: I just realized that action.run could be used instead of set/getDashing() ...
@@ -2383,6 +2387,9 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				_currentAction.run = true;
 				_currentAction.strafe = false;
 			}
+			// need to turn off tank-reverse in Pathfinding, if distance > 1
+			// or
+			// if direction-of-movement is not directly opposite to direction-of-tankbody-facing
 
 			_currentAction.target = pos;
 			_save->getPathfinding()->calculate( // get the Path.

@@ -127,10 +127,10 @@ void Pathfinding::calculate(
 
 	// i'm DONE with these out of bounds errors.
 	// kL_note: I really don't care what you're "DONE" with.....
-	if (endPos.x > _save->getMapSizeX() - _unit->getArmor()->getSize()
-		|| endPos.y > _save->getMapSizeY() - _unit->getArmor()->getSize()
-		|| endPos.x < 0
-		|| endPos.y < 0)
+	if (endPos.x < 0
+		|| endPos.y < 0
+		|| endPos.x > _save->getMapSizeX() - _unit->getArmor()->getSize()
+		|| endPos.y > _save->getMapSizeY() - _unit->getArmor()->getSize())
 	{
 		return;
 	}
@@ -146,7 +146,8 @@ void Pathfinding::calculate(
 		_movementType = _unit->getArmor()->getMovementType();
 
 		if (_movementType == MT_FLY
-			&& (SDL_GetModState() & KMOD_ALT) != 0)
+			&& (SDL_GetModState() & KMOD_ALT) != 0 // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
+			&& _unit->getTurretType() == -1) // hovertanks always hover.
 		{
 			_movementType = MT_WALK;
 		}
@@ -259,9 +260,11 @@ void Pathfinding::calculate(
 	// across 2 tiles at 90deg. path-angle) -> now accounted for and *allowed*
 	Position startPos = _unit->getPosition();
 
-	_strafeMove = strafeRejected == false // kL
+	_strafeMove = strafeRejected == false
 				&& Options::strafe
-				&& (SDL_GetModState() & KMOD_CTRL) != 0
+				&& (((SDL_GetModState() & KMOD_CTRL) != 0)
+					|| ((SDL_GetModState() & KMOD_ALT) != 0
+						&& _unit->getTurretType() > -1))
 				&& startPos.z == endPos.z
 				&& abs(startPos.x - endPos.x) < 2
 				&& abs(startPos.y - endPos.y) < 2;
@@ -1033,10 +1036,10 @@ int Pathfinding::getTUCost(
 			}
 
 			// Propose: if flying then no extra TU cost
-			if (//kL Options::strafe &&
-				_strafeMove)
+			if (_strafeMove)
 			{
-				if (size)
+				if (size
+					&& (_unit->getDirection() + 4) %8 != dir)
 				{
 					// 4-tile units not supported, Turn off strafe move and continue
 					_strafeMove = false;

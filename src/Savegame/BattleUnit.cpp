@@ -530,13 +530,13 @@ const Position& BattleUnit::getDestination() const
  * Sets a BattleUnit's horizontal direction.
  * Only used for initial unit placement.
  * kL_note: and positioning soldier when revived from unconscious status: reviveUnconsciousUnits().
- * @param direction - new horizontal direction
+ * @param dir - new horizontal direction
  */
-void BattleUnit::setDirection(int direction)
+void BattleUnit::setDirection(int dir)
 {
-	_direction			= direction;
-	_toDirection		= direction;
-	_directionTurret	= direction;
+	_direction			= dir;
+	_toDirection		= dir;
+	_directionTurret	= dir;
 }
 
 /**
@@ -551,11 +551,11 @@ int BattleUnit::getDirection() const
 /**
  * Sets a BattleUnit's horizontal direction (facing).
  * Only used for strafing moves.
- * @param direction - new horizontal direction (facing)
+ * @param dir - new horizontal direction (facing)
  */
-void BattleUnit::setFaceDirection(int direction)
+void BattleUnit::setFaceDirection(int dir)
 {
-	_faceDirection = direction;
+	_faceDirection = dir;
 }
 
 /**
@@ -575,6 +575,15 @@ int BattleUnit::getFaceDirection() const
 int BattleUnit::getTurretDirection() const
 {
 	return _directionTurret;
+}
+
+/**
+ * kL. Sets a BattleUnit's turret direction.
+ * @param dir - turret direction
+ */
+void BattleUnit::setTurretDirection(int dir) // kL
+{
+	_directionTurret = dir;
 }
 
 /**

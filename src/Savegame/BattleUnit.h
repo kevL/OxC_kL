@@ -503,15 +503,17 @@ private:
 		const Position& getLastPosition() const;
 
 		/// Sets the unit's direction 0-7.
-		void setDirection(int direction);
+		void setDirection(int dir);
 		/// Gets the unit's direction.
 		int getDirection() const;
 		/// Sets the unit's face direction (only used by strafing moves)
-		void setFaceDirection(int direction);
+		void setFaceDirection(int dir);
 		/// Gets the unit's face direction (only used by strafing moves)
 		int getFaceDirection() const;
 		/// Gets the unit's turret direction.
 		int getTurretDirection() const;
+		/// kL. Sets a BattleUnit's turret direction.
+		void setTurretDirection(int dir); // kL
 		/// Gets the unit's turret To direction.
 		int getTurretToDirection() const;
 		/// Gets the unit's vertical direction.

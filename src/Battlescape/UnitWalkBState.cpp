@@ -102,6 +102,7 @@ void UnitWalkBState::init()
 	//Log(LOG_INFO) << ". walking from " << _unit->getPosition() << " to " << _action.target;
 
 	int dir = _pf->getStartDirection();
+	//Log(LOG_INFO) << ". strafe = " << (int)_action.strafe;
 	//Log(LOG_INFO) << ". StartDirection(init) = " << dir;
 	//Log(LOG_INFO) << ". getDirection(init) = " << _unit->getDirection();
 	if (!_action.strafe						// not strafing
@@ -196,28 +197,33 @@ void UnitWalkBState::think()
 			if (!doStatusStand_end())
 				return;
 			else
-				_parent->getBattlescapeState()->refreshVisUnits(); // kL
+				_parent->getBattlescapeState()->refreshVisUnits();
 		}
 		else if (_onScreen) // still walking....
 		{
 			//Log(LOG_INFO) << ". _onScreen : still walking ...";
-
-			// make sure the unit sprites are up to date
-			if (_pf->getStrafeMove())
+			if (_pf->getStrafeMove()) // make sure the unit sprites are up to date
 			{
 				//Log(LOG_INFO) << ". . strafe";
 				// This is where we fake out the strafe movement direction so the unit "moonwalks"
-				int dirStrafe = _unit->getDirection();
-//				int dirStrafe = _pf->getStartDirection(); // kL
-//				int dirStrafe = dir; // kL
+				int face = _unit->getDirection();
+
+				int turret;
+				if (_unit->getTurretType() > -1)
+					turret = _unit->getTurretDirection();
 
 				_unit->setDirection(_unit->getFaceDirection());
+
+				if (_unit->getTurretType() > -1)
+					_unit->setTurretDirection(turret);
 
 				_unit->setCache(NULL); // kL, might play around with Strafe anim's ......
 				_parent->getMap()->cacheUnit(_unit); // draw unit.
 
-				_unit->setDirection(dirStrafe);
-//				_unit->setDirection(dir); // kL
+				_unit->setDirection(face);
+
+				if (_unit->getTurretType() > -1)
+					_unit->setTurretDirection(turret);
 			}
 			else
 			{
@@ -369,10 +375,10 @@ bool UnitWalkBState::doStatusStand()
 		//Log(LOG_INFO) << "enter (dir!=-1) : " << _unit->getId();
 		if (_pf->getStrafeMove())
 		{
-			int dirFace = _unit->getDirection();
-			_unit->setFaceDirection(dirFace);
+			int face = _unit->getDirection();
+			_unit->setFaceDirection(face);
 
-			//Log(LOG_INFO) << ". . strafeMove, setFaceDirection() <- " << dirFace;
+			//Log(LOG_INFO) << ". . strafeMove, setFaceDirection() <- " << face;
 		}
 
 		//Log(LOG_INFO) << ". getTUCost() & destination";
@@ -637,14 +643,14 @@ bool UnitWalkBState::doStatusStand()
 				//Log(LOG_INFO) << ". . . (_onScreen) -> _pf->getStrafeMove()";
 
 				// This is where we fake out the strafe movement direction so the unit "moonwalks"
-				int dirStrafe = _unit->getDirection();
-//				int dirStrafe = dir; // kL
+				int face = _unit->getDirection();
+//				int face = dir; // kL
 
 				_unit->setDirection(_unit->getFaceDirection());
 //				_unit->setCache(NULL); // kL
 //				_parent->getMap()->cacheUnit(_unit); // kL ( see far above, re. strafe fake-out moonwalking )
 
-				_unit->setDirection(dirStrafe);
+				_unit->setDirection(face);
 //				_unit->setDirection(dir);
 
 				//Log(LOG_INFO) << ". . . end strafeMove()";
