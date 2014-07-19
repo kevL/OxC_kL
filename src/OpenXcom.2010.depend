@@ -5385,7 +5385,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1405337520 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1405725246 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -5888,7 +5888,7 @@
 	"BattlescapeGame.h"
 	"BattleState.h"
 
-1404096022 f:\git\openxcom\src\engine\sound.h
+1405724705 f:\git\openxcom\src\engine\sound.h
 	<string>
 	<SDL_mixer.h>
 
@@ -6385,7 +6385,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1405485394 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1405725456 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6807,7 +6807,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1405392363 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1405725512 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	<sstream>
 	"BattlescapeGame.h"
@@ -7108,7 +7108,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1405273454 source:f:\git\openxcom\src\engine\options.cpp
+1405724623 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7201,7 +7201,7 @@
 	"Timer.h"
 	"Zoom.h"
 
-1404360552 source:f:\git\openxcom\src\engine\sound.cpp
+1405726038 source:f:\git\openxcom\src\engine\sound.cpp
 	"Sound.h"
 	<SDL.h>
 	"Exception.h"
@@ -9788,7 +9788,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleItem.h"
 
-1404096023 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
+1405725121 source:f:\git\openxcom\src\ufopaedia\articlestatearmor.cpp
 	"ArticleStateArmor.h"
 	<sstream>
 	"../fmath.h"
@@ -11557,7 +11557,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1405273454 f:\git\openxcom\src\engine\options.inc.h
+1405724622 f:\git\openxcom\src\engine\options.inc.h
 
 1404096022 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"

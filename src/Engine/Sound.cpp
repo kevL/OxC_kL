@@ -85,19 +85,33 @@ void Sound::load(
 
 /**
  * Plays the contained sound effect.
- * @param channel Use specified channel, -1 to use any channel
+ * @param channel	- use specified channel, -1 to use any channel
+ * @param angle		- stereo
+ * @param distance	- stereo
  */
-void Sound::play(int channel) const
+void Sound::play(
+		int channel,
+		int angle,
+		int distance) const
 {
 	if (!Options::mute
-		&& _sound != NULL
-		&& Mix_PlayChannel(
-						channel,
-						_sound,
-						0)
-					== -1)
+		&& _sound != NULL)
 	{
-		Log(LOG_WARNING) << Mix_GetError();
+		int chan = Mix_PlayChannel(
+								channel,
+								_sound,
+								0);
+		if (chan == -1)
+		{
+			Log(LOG_WARNING) << Mix_GetError();
+		}
+		else if (Options::StereoSound)
+		{
+			if (!Mix_SetPosition(chan, angle, distance))
+			{
+				Log(LOG_WARNING) << Mix_GetError();
+			}
+		}
 	}
 }
 

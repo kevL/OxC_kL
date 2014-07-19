@@ -838,8 +838,9 @@ static void _clearInventory(
  */
 void InventoryState::btnApplyTemplateClick(Action* action)
 {
-	if (_inv->getSelectedItem() != NULL		// don't accept clicks when moving items
-		|| _curInventoryTemplate.empty())	// or when the template is empty
+	if (_inv->getSelectedItem() != NULL)	// don't accept clicks when moving items
+//		|| _curInventoryTemplate.empty())	// or when the template is empty ->
+											// if the template is empty -- it will just result in clearing the unit's inventory
 	{
 		return;
 	}
