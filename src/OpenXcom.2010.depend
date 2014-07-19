@@ -5385,7 +5385,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1405780841 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1405805331 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -6807,7 +6807,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1405780841 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1405805235 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	<sstream>
 	"BattlescapeGame.h"
@@ -11714,7 +11714,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1404143499 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
+1405805796 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
 	"SoldierDeadInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
