@@ -69,7 +69,8 @@ UnitWalkBState::UnitWalkBState(
 		_preStepCost(0),
 		_tileSwitchDone(false),
 		_onScreen(false),
-		_walkCam(NULL)
+		_walkCam(NULL),
+		_start(-1)
 {
 	//Log(LOG_INFO) << "Create UnitWalkBState";
 }
@@ -101,13 +102,13 @@ void UnitWalkBState::init()
 
 	//Log(LOG_INFO) << ". walking from " << _unit->getPosition() << " to " << _action.target;
 
-	int dir = _pf->getStartDirection();
+	_start = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". strafe = " << (int)_action.strafe;
-	//Log(LOG_INFO) << ". StartDirection(init) = " << dir;
+	//Log(LOG_INFO) << ". StartDirection(init) = " << _start;
 	//Log(LOG_INFO) << ". getDirection(init) = " << _unit->getDirection();
 	if (!_action.strafe						// not strafing
-		&& -1 < dir && dir < 8				// moving but not up or down
-		&& dir != _unit->getDirection())	// not facing in direction of movement
+		&& -1 < _start && _start < 8		// moving but not up or down
+		&& _start != _unit->getDirection())	// not facing in direction of movement
 	{
 		// kL_note: if unit is not facing in the direction that it's about to walk toward...
 		// This makes the unit expend tu's if it spots a new alien when turning, but stops before actually walking.
@@ -168,7 +169,6 @@ void UnitWalkBState::think()
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			//Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;
-//			_falling = false; // kL
 			// kL_begin:
 			if (_unit->getVisible())
 			{
@@ -199,31 +199,24 @@ void UnitWalkBState::think()
 			else
 				_parent->getBattlescapeState()->refreshVisUnits();
 		}
-		else if (_onScreen) // still walking....
+		else if (_onScreen) // still walking ... make sure the unit sprites are up to date
 		{
 			//Log(LOG_INFO) << ". _onScreen : still walking ...";
-			if (_pf->getStrafeMove()) // make sure the unit sprites are up to date
+			if (_pf->getStrafeMove())
 			{
-				//Log(LOG_INFO) << ". . strafe";
-				// This is where we fake out the strafe movement direction so the unit "moonwalks"
-				int face = _unit->getDirection();
+				//Log(LOG_INFO) << ". . strafe, face = " << _unit->getDirection();
+				int face = _unit->getDirection(); // direction of travel
 
-				int turret;
-				if (_unit->getTurretType() > -1)
-					turret = _unit->getTurretDirection();
-
-				_unit->setDirection(_unit->getFaceDirection());
-
-				if (_unit->getTurretType() > -1)
-					_unit->setTurretDirection(turret);
+				_unit->setDirection(
+								_unit->getFaceDirection(),
+								false);
 
 				_unit->setCache(NULL); // kL, might play around with Strafe anim's ......
-				_parent->getMap()->cacheUnit(_unit); // draw unit.
+				_parent->getMap()->cacheUnit(_unit);
 
-				_unit->setDirection(face);
-
-				if (_unit->getTurretType() > -1)
-					_unit->setTurretDirection(turret);
+				_unit->setDirection(
+								face,
+								false);
 			}
 			else
 			{
@@ -375,10 +368,18 @@ bool UnitWalkBState::doStatusStand()
 		//Log(LOG_INFO) << "enter (dir!=-1) : " << _unit->getId();
 		if (_pf->getStrafeMove())
 		{
-			int face = _unit->getDirection();
-			_unit->setFaceDirection(face);
+			if (_unit->getTurretType() > -1)
+			{
+				_unit->setFaceDirection((_start + 4) %8);
 
-			//Log(LOG_INFO) << ". . strafeMove, setFaceDirection() <- " << face;
+				int turretOffset = _unit->getTurretDirection() - _unit->getDirection();
+				_unit->setTurretDirection((turretOffset + _start + 4) %8);
+			}
+			else
+			{
+				//Log(LOG_INFO) << ". . strafeMove, setFaceDirection() -> " << _unit->getDirection();
+				_unit->setFaceDirection(_unit->getDirection());
+			}
 		}
 
 		//Log(LOG_INFO) << ". getTUCost() & destination";
@@ -669,6 +670,7 @@ bool UnitWalkBState::doStatusStand()
 	}
 	else // dir == -1
 	{
+		//Log(LOG_INFO) << ". unit direction = " << _unit->getDirection();
 		//Log(LOG_INFO) << ". . postPathProcedures()";
 		postPathProcedures();
 
@@ -932,13 +934,13 @@ bool UnitWalkBState::doStatusStand_end()
 		}
 		//else Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE... no caching";
 	}
-	else	// <<-- Looks like we gotta make it fall here!!! (if unit *ends* its total walk sequence on empty air.
+//	else	// <<-- Looks like we gotta make it fall here!!! (if unit *ends* its total walk sequence on empty air.
 			// And, fall *before* spotting new units, else Abort will likely make it float...
-	{
+//	{
 		//Log(LOG_INFO) << ". . WalkBState: falling";
 //		_unit->setCache(NULL);
 //		_parent->getMap()->cacheUnit(_unit);
-	}
+//	}
 
 	return true;
 }
@@ -1065,8 +1067,7 @@ void UnitWalkBState::postPathProcedures()
 //			_parent->getMap()->cacheUnit(_unit);	// kL
 		}
 	}
-	else if (!_parent->getPanicHandled())
-		// todo: set the unit to aggrostate and try to find cover
+	else if (!_parent->getPanicHandled()) // todo: set the unit to aggrostate and try to find cover
 		_unit->setTimeUnits(0);
 
 

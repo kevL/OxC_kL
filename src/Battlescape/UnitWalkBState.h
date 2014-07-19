@@ -49,7 +49,9 @@ private:
 		_onScreen,
 		_tileSwitchDone,
 		_preStepTurn;
-	int _preStepCost;
+	int
+		_preStepCost,
+		_start;
 	size_t _unitsSpotted;
 
 	BattleUnit* _unit;

@@ -503,7 +503,9 @@ private:
 		const Position& getLastPosition() const;
 
 		/// Sets the unit's direction 0-7.
-		void setDirection(int dir);
+		void setDirection(
+				int dir,
+				bool turret = true); // kL
 		/// Gets the unit's direction.
 		int getDirection() const;
 		/// Sets the unit's face direction (only used by strafing moves)

@@ -262,7 +262,8 @@ void Pathfinding::calculate(
 
 	_strafeMove = strafeRejected == false
 				&& Options::strafe
-				&& (((SDL_GetModState() & KMOD_CTRL) != 0)
+				&& (((SDL_GetModState() & KMOD_CTRL) != 0
+						&& _unit->getTurretType() == -1)
 					|| ((SDL_GetModState() & KMOD_ALT) != 0
 						&& _unit->getTurretType() > -1))
 				&& startPos.z == endPos.z
@@ -1038,15 +1039,14 @@ int Pathfinding::getTUCost(
 			// Propose: if flying then no extra TU cost
 			if (_strafeMove)
 			{
-				if (size
-					&& (_unit->getDirection() + 4) %8 != dir)
-				{
-					// 4-tile units not supported, Turn off strafe move and continue
-					_strafeMove = false;
-				}
 				// kL_begin: extra TU for strafe-moves ->	1 0 1
 				//											2 ^ 2
 				//											3 2 3
+				if (size
+					&& abs(dir - ((_unit->getDirection() + 4) %8)) > 1)
+				{
+					_strafeMove = false;
+				}
 				else if (_unit->getDirection() != dir)
 				{
 					int delta = std::min(
@@ -1056,9 +1056,6 @@ int Pathfinding::getTUCost(
 												abs(8 + _unit->getDirection() - dir)));
 					if (delta == 4)
 						delta = 2;
-
-//					if (_strafeMove == 2) // the 2-tile shuggle.
-//						delta *= 2;
 
 					cost += delta;
 				} // kL_end.
