@@ -783,8 +783,10 @@ bool UnitWalkBState::doStatusWalk()
 		_falling = fallCheck
 					&& _unit->getPosition().z != 0
 //kL				&& _unit->getTile()->hasNoFloor(tileBelow) // kL_note: Done above.
-					&& (_unit->getArmor()->getMovementType() != MT_FLY // -> sorta move to doStatusStand_end()
-						|| _pf->isModALT());
+					&& _pf->getMovementType() != MT_FLY;	//_unit->getArmor()->getMovementType() != MT_FLY
+															// -> sorta move to doStatusStand_end(), perhaps
+//						|| (_pf->isModALT()						// <- note: these two should be the same as
+//							&& _unit->getTurretType() == -1));	// (_pf->getMovementType() != MT_FLY) preceding.
 //kL				&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
 
 		if (_falling)
@@ -1143,10 +1145,12 @@ void UnitWalkBState::playMovementSound()
 	if (_unit->getMoveSound() != -1)
 	{
 		if (_unit->getWalkingPhase() == 0) // if a sound is configured in the ruleset, play it.
+		{
 			_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												_unit->getMoveSound())
 											->play();
+		}
 	}
 	else
 	{
@@ -1159,19 +1163,23 @@ void UnitWalkBState::playMovementSound()
 			{
 				if (t->getFootstepSound(tBelow))
 //					&& _unit->getRaceString() != "STR_ETHEREAL")
+				{
 					_parent->getResourcePack()->getSound(
 														"BATTLE.CAT",
 														23 + (t->getFootstepSound(tBelow) * 2))
 													->play();
+				}
 			}
 			else if (_unit->getWalkingPhase() == 7) // play footstep sound 2
 			{
 				if (t->getFootstepSound(tBelow))
 //					&& _unit->getRaceString() != "STR_ETHEREAL")
+				{
 					_parent->getResourcePack()->getSound(
 														"BATTLE.CAT",
 														22 + (t->getFootstepSound(tBelow) * 2))
 													->play();
+				}
 			}
 		}
 		else if (_unit->getStatus() == STATUS_FLYING)
@@ -1187,15 +1195,19 @@ void UnitWalkBState::playMovementSound()
 														->play();
 				}
 				else if (!_unit->isFloating())
+				{
 					_parent->getResourcePack()->getSound( // GravLift
 														"BATTLE.CAT",
 														40)
 													->play();
+				}
 				else //if (!_falling)
+				{
 					_parent->getResourcePack()->getSound( // hoverSound
 														"BATTLE.CAT",
 														15)
 													->play();
+				}
 			}
 		}
 	}
@@ -1210,9 +1222,9 @@ void UnitWalkBState::playMovementSound()
  */
 void UnitWalkBState::doFallCheck() // kL
 {
-	if (_unit->getArmor()->getMovementType() != MT_FLY
+	if (_pf->getMovementType() == MT_FLY //_unit->getArmor()->getMovementType() != MT_FLY
 		|| _unit->getPosition().z == 0
-		|| _pf->isModALT() == false
+//		|| _pf->isModALT() == false
 		|| groundCheck() == true)
 	{
 		return;

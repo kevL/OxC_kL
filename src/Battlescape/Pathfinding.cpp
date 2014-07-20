@@ -129,8 +129,8 @@ void Pathfinding::calculate(
 	// kL_note: I really don't care what you're "DONE" with.....
 	if (endPos.x < 0
 		|| endPos.y < 0
-		|| endPos.x > _save->getMapSizeX() - _unit->getArmor()->getSize()
-		|| endPos.y > _save->getMapSizeY() - _unit->getArmor()->getSize())
+		|| endPos.x > _save->getMapSizeX() - unit->getArmor()->getSize()
+		|| endPos.y > _save->getMapSizeY() - unit->getArmor()->getSize())
 	{
 		return;
 	}
@@ -143,11 +143,11 @@ void Pathfinding::calculate(
 	}
 	else
 	{
-		_movementType = _unit->getArmor()->getMovementType();
+		_movementType = unit->getArmor()->getMovementType();
 
 		if (_movementType == MT_FLY
-			&& (SDL_GetModState() & KMOD_ALT) != 0 // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
-			&& _unit->getTurretType() == -1) // hovertanks always hover.
+			&& _modALT //(SDL_GetModState() & KMOD_ALT) != 0 // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
+			&& unit->getTurretType() == -1) // hovertanks always hover.
 		{
 			_movementType = MT_WALK;
 		}
@@ -187,7 +187,7 @@ void Pathfinding::calculate(
 	{
 		while (canFallDown( // for large & small units.
 						destTile,
-						_unit->getArmor()->getSize()))
+						unit->getArmor()->getSize()))
 		{
 			endPos.z--;
 			destTile = _save->getTile(endPos);
@@ -195,7 +195,7 @@ void Pathfinding::calculate(
 		}
 	}
 
-	int size = _unit->getArmor()->getSize() - 1;
+	int size = unit->getArmor()->getSize() - 1;
 	if (size > 0) // for large units only.
 	{
 		//Log(LOG_INFO) << ". checking large unit blockage";
@@ -227,7 +227,7 @@ void Pathfinding::calculate(
 									destTile,
 									testTile,
 									dir[i],
-									_unit)
+									unit)
 						&& isBlocked(
 									destTile,
 									testTile,
@@ -239,7 +239,7 @@ void Pathfinding::calculate(
 					else if (testTile->getUnit())
 					{
 						BattleUnit* testUnit = testTile->getUnit();
-						if (testUnit != _unit
+						if (testUnit != unit
 							&& testUnit != target
 							&& testUnit->getVisible())
 						{
@@ -258,14 +258,14 @@ void Pathfinding::calculate(
 	// kL_note: This is 'bugged'/featured because it allows soldiers to strafe
 	// around a corner (ie, dest is only 1 tile distant but move is actually
 	// across 2 tiles at 90deg. path-angle) -> now accounted for and *allowed*
-	Position startPos = _unit->getPosition();
+	Position startPos = unit->getPosition();
 
 	_strafeMove = strafeRejected == false
 				&& Options::strafe
 				&& (((SDL_GetModState() & KMOD_CTRL) != 0
-						&& _unit->getTurretType() == -1)
+						&& unit->getTurretType() == -1)
 					|| ((SDL_GetModState() & KMOD_ALT) != 0
-						&& _unit->getTurretType() > -1))
+						&& unit->getTurretType() > -1))
 				&& startPos.z == endPos.z
 				&& abs(startPos.x - endPos.x) < 2
 				&& abs(startPos.y - endPos.y) < 2;
@@ -275,7 +275,7 @@ void Pathfinding::calculate(
 
 
 	// look for a possible fast and accurate bresenham path and skip A*
-	bool sneak = _unit->getFaction() == FACTION_HOSTILE
+	bool sneak = unit->getFaction() == FACTION_HOSTILE
 				&& Options::sneakyAI;
 
 	if (startPos.z == endPos.z
@@ -2289,6 +2289,15 @@ bool Pathfinding::isModCTRL() const
 bool Pathfinding::isModALT() const
 {
 	return _modALT;
+}
+
+/**
+ * kL. Gets the current movementType.
+ * @return, the currently selected unit's movementType
+ */
+MovementType Pathfinding::getMovementType() const // kL
+{
+	return _movementType;
 }
 
 /**

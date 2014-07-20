@@ -1892,8 +1892,7 @@ void Globe::drawVHLine(
 }
 
 /**
- * Draws the details of the countries on the globe,
- * based on the current zoom level.
+ * Draws the details of the countries on the globe based on the current zoom level.
  */
 void Globe::drawDetail()
 {
@@ -1955,7 +1954,7 @@ void Globe::drawDetail()
 		_countries->unlock(); // Unlock the surface
 	}
 
-	if (_zoom > 1) // Draw the country names
+	if (_zoom > 2) // Draw the country names
 	{
 		Text* label = new Text(100, 9, 0, 0);
 		label->setPalette(getPalette());
@@ -2068,7 +2067,6 @@ void Globe::drawDetail()
 	} */
 
 	// kL_begin: Globe::drawDetail(), separate city markers from labels for zoomLevels
-//	if (_zoom > 2) // Draw the city markers
 	if (_zoom > 1) // Draw the city markers
 	{
 		Sint16

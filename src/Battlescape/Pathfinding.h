@@ -200,6 +200,9 @@ private:
 		/// Gets the ALT modifier setting.
 		bool isModALT() const;
 
+		/// kL. Gets the current movementType.
+		MovementType getMovementType() const; // kL
+
 		/// Gets a reference to the path.
 		const std::vector<int>& getPath();
 		/// Makes a copy to the path.

@@ -806,7 +806,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 // START ADVANCED DRAWING CYCLE:
-					if (mapPosition.y > 0) // special handling for a moving unit.
+/*					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
 						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
 						BattleUnit* bu = tileNorth->getUnit();
@@ -1131,7 +1131,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 						}
-					}
+					} */
 /*kL - their tileWest SMOKE:
 								{
 									frame = 0;
