@@ -1,139 +1,5 @@
 # X-COM 1 (UFO: Enemy Unknown) ruleset
 # For documentation on these values, see http://ufopaedia.org/index.php?title=Rulesets_(OpenXcom)
-countries:
-  - type: STR_USA
-    fundingBase: 675
-    fundingCap: 10000
-    labelLon: 260
-    labelLat: -40
-    areas:
-      - [235, 255, -49, -32]
-      - [255, 277.5, -49, -29]
-      - [260, 265, -29, -26]
-      - [277, 280, -32, -25]
-      - [277.5, 286, -44, -32]
-      - [286, 292.5, -45.5, -40]
-  - type: STR_RUSSIA
-    fundingBase: 535
-    fundingCap: 8000
-    labelLon: 60
-    labelLat: -60
-    areas:
-      - [30, 50, -70, -45]
-      - [24, 30, -60, -42]
-      - [50, 75, -77, -40]
-      - [75, 165, -80, -50]
-      - [165, 170, -70, -59]
-  - type: STR_UK
-    fundingBase: 235
-    fundingCap: 7000
-    labelLon: 358
-    labelLat: -53.625
-    areas:
-      - [352, 2, -60, -50]
-  - type: STR_FRANCE
-    fundingBase: 255
-    fundingCap: 8000
-    labelLon: 2.5
-    labelLat: -46.5
-    areas:
-      - [355, 7, -50, -43]
-  - type: STR_GERMANY
-    fundingBase: 205
-    fundingCap: 9000
-    labelLon: 11.5
-    labelLat: -50
-    areas:
-      - [6, 15, -55, -47.5]
-  - type: STR_ITALY
-    fundingBase: 145
-    fundingCap: 6000
-    labelLon: 12.5
-    labelLat: -43.875
-    areas:
-      - [7, 15, -46.5, -43]
-      - [11, 18, -43, -37]
-  - type: STR_SPAIN
-    fundingBase: 95
-    fundingCap: 5000
-    labelLon: 357.5
-    labelLat: -42.625
-    areas:
-      - [353, 3, -43, -36.5]
-      - [351, 353, -43, -42.25]
-  - type: STR_CHINA
-    fundingBase: 335
-    fundingCap: 7000
-    labelLon: 100
-    labelLat: -35
-    areas:
-      - [75, 98, -50, -30]
-      - [98, 122, -50, -22]
-      - [122, 133, -54, -40]
-  - type: STR_JAPAN
-    fundingBase: 385
-    fundingCap: 10000
-    labelLon: 138
-    labelLat: -38.25
-    areas:
-      - [130, 143, -40, -30]
-      - [138, 147, -46, -40]
-  - type: STR_INDIA
-    fundingBase: 115
-    fundingCap: 5000
-    labelLon: 80
-    labelLat: -24
-    areas:
-      - [70, 85, -30, -8]
-      - [74, 79, -35, -30]
-      - [85, 95, -27, -20]
-  - type: STR_BRAZIL
-    fundingBase: 245
-    fundingCap: 4000
-    labelLon: 305
-    labelLat: 5
-    areas:
-      - [290, 302, -2.5, 17]
-      - [302, 310, -2.5, 22]
-      - [310, 325, 0, 24]
-      - [305, 313, 22, 32]
-  - type: STR_AUSTRALIA
-    fundingBase: 205
-    fundingCap: 5000
-    labelLon: 135
-    labelLat: 25
-    areas:
-      - [110, 156, 10, 40]
-  - type: STR_NIGERIA
-    fundingBase: 165
-    fundingCap: 2000
-    labelLon: 7.5
-    labelLat: -10
-    areas:
-      - [3, 14, -14, -4]
-  - type: STR_SOUTH_AFRICA
-    fundingBase: 305
-    fundingCap: 3000
-    labelLon: 25
-    labelLat: 30
-    areas:
-      - [15, 25, 26, 35]
-      - [25, 32.5, 22, 35]
-  - type: STR_EGYPT
-    fundingBase: 125
-    fundingCap: 2000
-    labelLon: 29
-    labelLat: -26
-    areas:
-      - [25, 35, -32, -22]
-  - type: STR_CANADA
-    fundingBase: 225
-    fundingCap: 4000
-    labelLon: 260
-    labelLat: -55
-    areas:
-      - [219, 230, -70, -55]
-      - [230, 305, -75, -40]
 regions:
   - type: STR_NORTH_AMERICA
     cost: 900000
@@ -990,7 +856,7 @@ facilities:
     buildCost: 500000
     buildTime: 12
     monthlyCost: 25000
-    radarRange: 1500
+    radarRange: 1500 #1695
     radarChance: 10
     mapName: XBASE_04
   - type: STR_LARGE_RADAR_SYSTEM
@@ -999,7 +865,7 @@ facilities:
     buildCost: 800000
     buildTime: 25
     monthlyCost: 40000
-    radarRange: 2250
+    radarRange: 2250 #2577
     radarChance: 20
     mapName: XBASE_05
   - type: STR_MISSILE_DEFENSES
@@ -1109,7 +975,7 @@ facilities:
     buildCost: 1750000
     buildTime: 26
     monthlyCost: 87500
-    radarRange: 2400
+    radarRange: 2400 #2759
     radarChance: 100
     mapName: XBASE_15
   - type: STR_HANGAR
@@ -2543,7 +2409,7 @@ items:
   - type: CIVM_CORPSE
     name: STR_CORPSE
     weight: 32
-    bigSprite: 45
+    bigSprite: 57
     floorSprite: 50
     invWidth: 2
     invHeight: 3
@@ -2552,7 +2418,7 @@ items:
   - type: CIVF_CORPSE
     name: STR_CORPSE
     weight: 28
-    bigSprite: 45
+    bigSprite: 58
     floorSprite: 51
     invWidth: 2
     invHeight: 3
@@ -9733,7 +9599,7 @@ extraStrings:
       STR_DEFUSE_GRENADE: "deFuse"
       STR_SHADE_: "shade> {ALT}{0}"
       STR_TEXTURE_: "terrain> {ALT}{0}"
-      STR_CRAFT_READY_TO_LAND_AT: "{0}{ALT}{SMALLLINE}{NEWLINE}to assault"
+      STR_CRAFT_READY_TO_LAND_AT: "{0}{ALT}{SMALLLINE}{NEWLINE}ready to assault"
       STR_CRAFT_DESTINATION: "{0}{SMALLLINE}{NEWLINE}{ALT}{1}"
       STR_CORPSE_ARMOR: "" # these are just to prevent WARNINGS in the logfile:
       STR_CORPSE_SUIT: ""

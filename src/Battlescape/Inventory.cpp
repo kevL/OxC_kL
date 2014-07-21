@@ -301,29 +301,33 @@ void Inventory::drawItems()
 
 
 			Surface* frame = texture->getFrame((*i)->getRules()->getBigSprite());
-			if ((*i)->getSlot()->getType() == INV_SLOT)
+			if (frame != NULL) // kL, safety.
 			{
-				frame->setX((*i)->getSlot()->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
-				frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
-			}
-			else if ((*i)->getSlot()->getType() == INV_HAND)
-			{
-				frame->setX(
-						(*i)->getSlot()->getX()
-								+ (RuleInventory::HAND_W - (*i)->getRules()->getInventoryWidth())
-							* RuleInventory::SLOT_W / 2);
-				frame->setY(
-						(*i)->getSlot()->getY()
-								+ (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight())
-							* RuleInventory::SLOT_H / 2);
-			}
+				if ((*i)->getSlot()->getType() == INV_SLOT)
+				{
+					frame->setX((*i)->getSlot()->getX() + (*i)->getSlotX() * RuleInventory::SLOT_W);
+					frame->setY((*i)->getSlot()->getY() + (*i)->getSlotY() * RuleInventory::SLOT_H);
+				}
+				else if ((*i)->getSlot()->getType() == INV_HAND)
+				{
+					frame->setX(
+							(*i)->getSlot()->getX()
+									+ (RuleInventory::HAND_W - (*i)->getRules()->getInventoryWidth())
+								* RuleInventory::SLOT_W / 2);
+					frame->setY(
+							(*i)->getSlot()->getY()
+									+ (RuleInventory::HAND_H - (*i)->getRules()->getInventoryHeight())
+								* RuleInventory::SLOT_H / 2);
+				}
 
-			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
+				texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 
-			if ((*i)->getFuseTimer() > -1) // grenade primer indicators
-				_grenadeFuses.push_back(std::make_pair(
-													frame->getX(),
-													frame->getY()));
+				if ((*i)->getFuseTimer() > -1) // grenade primer indicators
+					_grenadeFuses.push_back(std::make_pair(
+														frame->getX(),
+														frame->getY()));
+			}
+			else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite(); // kL
 		}
 
 		Surface* stackLayer = new Surface(
@@ -348,20 +352,24 @@ void Inventory::drawItems()
 				continue;
 			}
 
+			Log(LOG_INFO) << "Inventory::drawItems() bigSprite = " << (*i)->getRules()->getBigSprite();
 			Surface* frame = texture->getFrame((*i)->getRules()->getBigSprite());
+			if (frame != NULL) // kL, safety.
+			{
+				frame->setX(
+							(*i)->getSlot()->getX()
+								+ ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
+				frame->setY(
+							(*i)->getSlot()->getY()
+								+ ((*i)->getSlotY() * RuleInventory::SLOT_H));
+				texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
 
-			frame->setX(
-						(*i)->getSlot()->getX()
-							+ ((*i)->getSlotX() - _groundOffset) * RuleInventory::SLOT_W);
-			frame->setY(
-						(*i)->getSlot()->getY()
-							+ ((*i)->getSlotY() * RuleInventory::SLOT_H));
-			texture->getFrame((*i)->getRules()->getBigSprite())->blit(_items);
-
-			if ((*i)->getFuseTimer() > -1) // grenade primer indicators
-				_grenadeFuses.push_back(std::make_pair(
-													frame->getX(),
-													frame->getY()));
+				if ((*i)->getFuseTimer() > -1) // grenade primer indicators
+					_grenadeFuses.push_back(std::make_pair(
+														frame->getX(),
+														frame->getY()));
+			}
+			else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite(); // kL
 
 			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1) // item stacking
 			{

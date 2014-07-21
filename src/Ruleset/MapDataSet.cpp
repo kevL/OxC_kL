@@ -38,8 +38,8 @@
 namespace OpenXcom
 {
 
-MapData* MapDataSet::_blankTile = 0;
-MapData* MapDataSet::_scorchedTile = 0;
+MapData* MapDataSet::_blankTile = NULL;
+MapData* MapDataSet::_scorchedTile = NULL;
 
 
 /**
@@ -188,7 +188,8 @@ void MapDataSet::loadData()
 	s << "TERRAIN/" << _name << ".MCD";
 
 	// Load file
-	std::ifstream mapFile (CrossPlatform::getDataFile(s.str()).c_str(), std::ios::in | std::ios::binary);
+	std::ifstream mapFile (CrossPlatform::getDataFile(s.str()).c_str(),
+							std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(s.str() + " not found");
@@ -384,8 +385,7 @@ void MapDataSet::loadLOFTEMPS(
 		const std::string& filename,
 		std::vector<Uint16>* voxelData)
 {
-	// Load file
-	std::ifstream mapFile(
+	std::ifstream mapFile( // Load file
 						filename.c_str(),
 						std::ios::in | std::ios::binary);
 	if (!mapFile)

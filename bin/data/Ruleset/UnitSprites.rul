@@ -1,0 +1,4 @@
+extraSprites:
+  - type: BIGOBS.PCK
+    files:
+      0: Resources/Sprites/Units/bigobs/

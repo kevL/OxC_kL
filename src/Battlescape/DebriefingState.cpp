@@ -567,7 +567,7 @@ void ClearAlienBase::operator()(AlienMission* am) const
 {
 	//Log(LOG_INFO) << "DebriefingState, ClearAlienBase()";
 	if (am->getAlienBase() == _base)
-		am->setAlienBase(0);
+		am->setAlienBase(NULL);
 }
 
 

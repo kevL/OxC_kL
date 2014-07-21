@@ -1533,26 +1533,23 @@ void BattlescapeGenerator::deployAliens(
 		month = _alienItemLevel;
 
 
-	std::string alienName;	// kL
-	bool outside;			// kL
+	std::string alienName;
+	bool outside;
 	int
-		itemLevel,			// kL
-		quantity;			// kL
+		itemLevel,
+		quantity;
 
-	BattleItem* item;		// kL
-	BattleUnit* unit;		// kL
-	RuleItem* ruleItem;		// kL
-	Unit* unitRule;			// kL
+	BattleItem* item;
+	BattleUnit* unit;
+	RuleItem* ruleItem;
+	Unit* unitRule;
 
 	for (std::vector<DeploymentData>::iterator
 			d = deployment->getDeploymentData()->begin();
 			d != deployment->getDeploymentData()->end();
 			++d)
 	{
-//kL		std::string alienName = race->getMember((*d).alienRank);
-		alienName = race->getMember((*d).alienRank); // kL
-
-//kL		int quantity;
+		alienName = race->getMember((*d).alienRank);
 
 		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
 			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty);										// beginner/experienced
@@ -1566,23 +1563,18 @@ void BattlescapeGenerator::deployAliens(
 				i < quantity;
 				i++)
 		{
-//kL			bool outside = false;
-			outside = false; // kL
+			outside = false;
 			if (_ufo)
-//kL				outside = RNG::generate(0, 99) < (*d).percentageOutsideUfo;
-				outside = RNG::percent((*d).percentageOutsideUfo); // kL
+				outside = RNG::percent((*d).percentageOutsideUfo);
 
-//kL			Unit* unitRule = _game->getRuleset()->getUnit(alienName);
-//kL			BattleUnit* unit = addAlien(unitRule, (*d).alienRank, outside);
-			unitRule = _game->getRuleset()->getUnit(alienName); // kL
+			unitRule = _game->getRuleset()->getUnit(alienName);
 			unit = addAlien(
 						unitRule,
 						(*d).alienRank,
-						outside); // kL
+						outside);
 
 			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
-//kL			int itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
-			itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9)); // kL
+			itemLevel = _game->getRuleset()->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
 			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() DONE getAlienItemLevels()";
 
 			if (unit)
@@ -1594,12 +1586,10 @@ void BattlescapeGenerator::deployAliens(
 					std::string terroristWeapon = unitRule->getRace().substr(4);
 					terroristWeapon += "_WEAPON";
 
-//kL					RuleItem* ruleItem = _game->getRuleset()->getItem(terroristWeapon);
-					ruleItem = _game->getRuleset()->getItem(terroristWeapon); // kL
+					ruleItem = _game->getRuleset()->getItem(terroristWeapon);
 					if (ruleItem)
 					{
-//kL						BattleItem* item = new BattleItem(
-						item = new BattleItem( // kL, large aLiens add their weapons
+						item = new BattleItem( // large aLiens add their weapons
 											ruleItem,
 											_save->getCurrentItemId());
 						if (!addItem(item, unit))
@@ -1615,12 +1605,10 @@ void BattlescapeGenerator::deployAliens(
 							itemSet != (*d).itemSets.at(itemLevel).items.end();
 							++itemSet)
 					{
-//kL						RuleItem* ruleItem = _game->getRuleset()->getItem(*itemSet);
-						ruleItem = _game->getRuleset()->getItem(*itemSet); // kL
+						ruleItem = _game->getRuleset()->getItem(*itemSet);
 						if (ruleItem)
 						{
-//kL							BattleItem* item = new BattleItem(
-							item = new BattleItem( // kL, aLiens add items
+							item = new BattleItem( // aLiens add items
 												ruleItem,
 												_save->getCurrentItemId());
 							if (!addItem(item, unit))
@@ -1655,10 +1643,10 @@ BattleUnit* BattlescapeGenerator::addAlien(
 									difficulty,
 									month); // kL_add.
 
-	/* following data is the order in which certain alien ranks spawn on certain node ranks */
-	/* note that they all can fall back to rank 0 nodes - which is scout (outside ufo) */
+	// following data is the order in which certain alien ranks spawn on certain node ranks;
+	// note that they all can fall back to rank 0 nodes - which is scout (outside ufo)
 
-	Node* node = 0;
+	Node* node = NULL;
 
 	if (outside)
 		node = _save->getSpawnNode( // Civ-Scout spawnpoints <- 'outside'
@@ -1669,7 +1657,7 @@ BattleUnit* BattlescapeGenerator::addAlien(
 	{
 		for (int
 				i = 0;
-//kL				i < 7
+//kL			i < 7
 				i < 8 // kL
 					&& !node;
 				i++)
@@ -1851,7 +1839,8 @@ void BattlescapeGenerator::generateMap()
 
 	blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
 
-	/* Determine UFO landingzone (do this first because ufo is generally bigger) */
+	// DETERMINE UFO LANDINGZONE
+	// - do this first because ufo is generally bigger
 	if (_ufo != 0)
 	{
 		// pick a random ufo mapblock, can have all kinds of sizes
@@ -1878,8 +1867,8 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	/* Determine Craft landingzone */
-	/* alien base assault has no craft landing zone */
+	// DETERMINE CRAFT LANDINGZONE
+	// - alien base assault has no craft landing zone
 	if (_craft != 0
 		&& (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT")
 		&& ( _save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT"))
@@ -1931,7 +1920,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	/* determine positioning of the urban terrain roads */
+	// DETERMINE POSITION OF URBAN TERRAIN ROADS
 	if (_save->getMissionType() == "STR_TERROR_MISSION")
 	{
 		int roadStyle = RNG::generate(0, 99);
@@ -1940,8 +1929,7 @@ void BattlescapeGenerator::generateMap()
 		bool NSRoad = !EWRoad && roadStyle < roadChances.at(0) + roadChances.at(1);
 		bool twoRoads = !EWRoad && !NSRoad;
 
-		// make sure the road(s) are not crossing the craft landing site
-		int
+		int // make sure the road(s) are not crossing the craft landing site
 			roadX = _craftX,
 			roadY = _craftY;
 		while ((roadX >= _craftX
@@ -1994,7 +1982,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	/* determine positioning of base modules */
+	// DETERMINE POSITION OF BASE MODULES
 	else if (_save->getMissionType() == "STR_BASE_DEFENSE")
 	{
 		for (std::vector<BaseFacility*>::const_iterator
@@ -2036,8 +2024,7 @@ void BattlescapeGenerator::generateMap()
 			}
 		}
 
-		// fill with dirt
-		for (int
+		for (int // fill with dirt
 				i = 0;
 				i < (_mapsize_x / 10);
 				++i)
@@ -2057,21 +2044,19 @@ void BattlescapeGenerator::generateMap()
 		blocksToDo = 0;
 	}
 
-	/* determine positioning of base modules */
+	// DETERMINE POSITION OF BASE MODULES
 	else if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
 		|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		int randX = RNG::generate(0, (_mapsize_x / 10) - 2);
 		int randY = RNG::generate(0, (_mapsize_y / 10) - 2);
 
-		// add the command center
-		blocks[randX][randY] = _terrain->getRandomMapBlock(
+		blocks[randX][randY] = _terrain->getRandomMapBlock( // add the command center
 														20,
 														(_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")? MT_FINALCOMM: MT_UBASECOMM);
 		blocksToDo--;
 
-		// mark mapblocks as used
-		blocks[randX + 1][randY] = dummy;
+		blocks[randX + 1][randY] = dummy; // mark mapblocks as used
 		blocksToDo--;
 
 		blocks[randX + 1][randY + 1] = dummy;
@@ -2080,8 +2065,7 @@ void BattlescapeGenerator::generateMap()
 		blocks[randX][randY + 1] = dummy;
 		blocksToDo--;
 
-		// add two lifts (not on top of the command center)
-		for (int
+		for (int // add two lifts (not on top of the command center)
 				i = 0;
 				i < 2;
 				i++)
@@ -2092,8 +2076,7 @@ void BattlescapeGenerator::generateMap()
 				randY = RNG::generate(0, (_mapsize_y / 10) - 1);
 			}
 
-			// add the lift
-			blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN);
+			blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN); // add the lift
 
 			blocksToDo--;
 		}
@@ -2103,16 +2086,14 @@ void BattlescapeGenerator::generateMap()
 		int randX = RNG::generate(0, (_mapsize_x / 10) - 2);
 		int randY = RNG::generate(0, (_mapsize_y / 10) - 2);
 
-		// add one lift
-		while (blocks[randX][randY] != NULL
+		while (blocks[randX][randY] != NULL // add one lift
 			|| landingzone[randX][randY])
 		{
 			randX = RNG::generate(0, (_mapsize_x / 10) - 1);
 			randY = RNG::generate(0, (_mapsize_y / 10) - 1);
 		}
 
-		// add the lift
-		blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN);
+		blocks[randX][randY] = _terrain->getRandomMapBlock(10, MT_XCOMSPAWN); // add the lift
 
 		blocksToDo--;
 	}
@@ -2144,8 +2125,7 @@ void BattlescapeGenerator::generateMap()
 															true);
 			blocksToDo--;
 
-			// mark mapblocks as used
-			blocks[randX + 1][randY] = dummy;
+			blocks[randX + 1][randY] = dummy; // mark mapblocks as used
 			blocksToDo--;
 
 			blocks[randX + 1][randY + 1] = dummy;
@@ -2160,7 +2140,8 @@ void BattlescapeGenerator::generateMap()
 		tries++;
 	}
 
-	/* Random map generation for crash/landing sites */
+	// RANDOM MAP GENERATION
+	// - for crashed or landed sites
 	while (blocksToDo)
 	{
 		if (blocks[x][y] == 0)
@@ -2187,8 +2168,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	// reset the "times used" fields.
-	_terrain->resetMapBlocks();
+	_terrain->resetMapBlocks(); // reset the "times used" fields.
 
 	for (std::vector<MapDataSet*>::iterator
 			i = _terrain->getMapDataSets()->begin();
@@ -2205,7 +2185,7 @@ void BattlescapeGenerator::generateMap()
 		mapDataSetIDOffset++;
 	}
 
-	/* now load them up */
+	// LOAD it all up.
 	int segment = 0;
 	for (int
 			itY = 0;
@@ -2240,8 +2220,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	/* making passages between blocks in a base map */
-	if (_save->getMissionType() == "STR_BASE_DEFENSE"
+	if (_save->getMissionType() == "STR_BASE_DEFENSE" // make passages between blocks in a base map
 		|| _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
 		|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
@@ -2253,8 +2232,8 @@ void BattlescapeGenerator::generateMap()
 		if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
 			|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 		{
-			ewallfix = 17;		// north wall
-			swallfix = 18;		// west wall
+			ewallfix = 17;	// north wall
+			swallfix = 18;	// west wall
 			ewallfixSet = 2;
 			swallfixSet = 2;
 		}
@@ -2275,8 +2254,7 @@ void BattlescapeGenerator::generateMap()
 				if (blocks[i][j] == dirt)
 					continue;
 
-				// general stores - there is where the items are put
-				if (storageBlocks[i][j])
+				if (storageBlocks[i][j]) // general stores - there is where the items are put
 				{
 					for (int
 							k = i * 10;
@@ -2288,8 +2266,7 @@ void BattlescapeGenerator::generateMap()
 								l != (j + 1) * 10;
 								++l)
 						{
-							// we only want every other tile, giving us a "checkerboard" pattern
-							if ((k + l) %2 == 0)
+							if ((k + l) %2 == 0) // we only want every other tile, giving us a "checkerboard" pattern
 							{
 								Tile* t = _save->getTile(Position(k, l, 1));
 								Tile* tEast = _save->getTile(Position(k + 1, l, 1));
@@ -2308,32 +2285,28 @@ void BattlescapeGenerator::generateMap()
 						}
 					}
 
-					// let's put the inventory tile on the lower floor, just to be safe.
-					_craftInventoryTile = _save->getTile(Position(
+					_craftInventoryTile = _save->getTile(Position( // let's put the inventory tile on the lower floor, just to be safe.
 																(i * 10) + 5,
 																(j * 10) + 5,
 																0));
 				}
 
-				// drill east
-				if (i < _mapsize_x / 10 -1
+				if (i < _mapsize_x / 10 -1 // drill east
 					&& blocks[i + 1][j] != dirt
 					&& _save->getTile(Position((i*10)+9,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
 					&& (!_save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
 						|| (_save->getTile(Position((i*10)+9,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
 							!= _save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT))))
 				{
-					// remove stuff
-					_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(0,-1,-1, MapData::O_WESTWALL);
+					_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(0,-1,-1, MapData::O_WESTWALL); // remove stuff
 					_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(0,-1,-1, MapData::O_OBJECT);
 					_save->getTile(Position((i*10)+9,(j*10)+4,0))->setMapData(0,-1,-1, MapData::O_WESTWALL);
 					_save->getTile(Position((i*10)+9,(j*10)+4,0))->setMapData(0,-1,-1, MapData::O_OBJECT);
 					_save->getTile(Position((i*10)+9,(j*10)+5,0))->setMapData(0,-1,-1, MapData::O_WESTWALL);
 					_save->getTile(Position((i*10)+9,(j*10)+5,0))->setMapData(0,-1,-1, MapData::O_OBJECT);
 
-					if (_save->getTile(Position((i*10)+9,(j*10)+2,0))->getMapData(MapData::O_OBJECT))
+					if (_save->getTile(Position((i*10)+9,(j*10)+2,0))->getMapData(MapData::O_OBJECT)) // wallfix
 					{
-						// wallfix
 						_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(
 																				mds->getObjects()->at(ewallfix),
 																				ewallfix,
@@ -2349,8 +2322,7 @@ void BattlescapeGenerator::generateMap()
 					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
 						|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 					{
-						// wallcornerfix
-						if (!_save->getTile(Position((i*10)+10,(j*10)+3,0))->getMapData(MapData::O_NORTHWALL))
+						if (!_save->getTile(Position((i*10)+10,(j*10)+3,0))->getMapData(MapData::O_NORTHWALL)) // wallcornerfix
 						{
 							_save->getTile(Position(((i+1)*10),(j*10)+3,0))->setMapData(
 																					mds->getObjects()->at(swallfix+1),
@@ -2359,8 +2331,7 @@ void BattlescapeGenerator::generateMap()
 																					MapData::O_OBJECT);
 						}
 
-						// floorfix
-						_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData(
+						_save->getTile(Position((i*10)+9,(j*10)+3,0))->setMapData( // floorfix
 																			_terrain->getMapDataSets()->at(1)->getObjects()->at(63),
 																			63,
 																			1,
@@ -2376,31 +2347,27 @@ void BattlescapeGenerator::generateMap()
 																			MapData::O_FLOOR);
 					}
 
-					// remove more stuff
-					_save->getTile(Position(((i+1)*10),(j*10)+3,0))->setMapData(0,-1,-1, MapData::O_WESTWALL);
+					_save->getTile(Position(((i+1)*10),(j*10)+3,0))->setMapData(0,-1,-1, MapData::O_WESTWALL); // remove more stuff
 					_save->getTile(Position(((i+1)*10),(j*10)+4,0))->setMapData(0,-1,-1, MapData::O_WESTWALL);
 					_save->getTile(Position(((i+1)*10),(j*10)+5,0))->setMapData(0,-1,-1, MapData::O_WESTWALL);
 				}
 
-				// drill south
-				if (j < _mapsize_y / 10 - 1
+				if (j < _mapsize_y / 10 - 1 // drill south
 					&& blocks[i][j + 1] != dirt
 					&& _save->getTile(Position((i*10)+4,(j*10)+9,0))->getMapData(MapData::O_OBJECT)
 					&& (!_save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT)
 					|| (_save->getTile(Position((i*10)+4,(j*10)+9,0))->getMapData(MapData::O_OBJECT)
 						!= _save->getTile(Position((i*10)+4,(j*10)+8,0))->getMapData(MapData::O_OBJECT))))
 				{
-					// remove stuff
-					_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(0,-1,-1, MapData::O_NORTHWALL);
+					_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(0,-1,-1, MapData::O_NORTHWALL); // remove stuff
 					_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(0,-1,-1, MapData::O_OBJECT);
 					_save->getTile(Position((i*10)+4,(j*10)+9,0))->setMapData(0,-1,-1, MapData::O_NORTHWALL);
 					_save->getTile(Position((i*10)+4,(j*10)+9,0))->setMapData(0,-1,-1, MapData::O_OBJECT);
 					_save->getTile(Position((i*10)+5,(j*10)+9,0))->setMapData(0,-1,-1, MapData::O_NORTHWALL);
 					_save->getTile(Position((i*10)+5,(j*10)+9,0))->setMapData(0,-1,-1, MapData::O_OBJECT);
 
-					if (_save->getTile(Position((i*10)+2,(j*10)+9,0))->getMapData(MapData::O_OBJECT))
+					if (_save->getTile(Position((i*10)+2,(j*10)+9,0))->getMapData(MapData::O_OBJECT)) // wallfix
 					{
-						// wallfix
 						_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(
 																				mds->getObjects()->at(swallfix),
 																				swallfix,
@@ -2416,8 +2383,7 @@ void BattlescapeGenerator::generateMap()
 					if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
 						|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 					{
-						// wallcornerfix
-						if (!_save->getTile(Position((i*10)+3,(j*10)+10,0))->getMapData(MapData::O_WESTWALL))
+						if (!_save->getTile(Position((i*10)+3,(j*10)+10,0))->getMapData(MapData::O_WESTWALL)) // wallcornerfix
 						{
 							_save->getTile(Position((i*10)+3,((j+1)*10),0))->setMapData(
 																					mds->getObjects()->at(swallfix+1),
@@ -2426,8 +2392,7 @@ void BattlescapeGenerator::generateMap()
 																					MapData::O_OBJECT);
 						}
 
-						// floorfix
-						_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData(
+						_save->getTile(Position((i*10)+3,(j*10)+9,0))->setMapData( // floorfix
 																			_terrain->getMapDataSets()->at(1)->getObjects()->at(63),
 																			63,
 																			1,
@@ -2444,8 +2409,7 @@ void BattlescapeGenerator::generateMap()
 																			MapData::O_FLOOR);
 					}
 
-					// remove more stuff
-					_save->getTile(Position((i*10)+3,(j+1)*10,0))->setMapData(0,-1,-1, MapData::O_NORTHWALL);
+					_save->getTile(Position((i*10)+3,(j+1)*10,0))->setMapData(0,-1,-1, MapData::O_NORTHWALL); // remove more stuff
 					_save->getTile(Position((i*10)+4,(j+1)*10,0))->setMapData(0,-1,-1, MapData::O_NORTHWALL);
 					_save->getTile(Position((i*10)+5,(j+1)*10,0))->setMapData(0,-1,-1, MapData::O_NORTHWALL);
 				}
@@ -2454,7 +2418,7 @@ void BattlescapeGenerator::generateMap()
 	}
 
 
-	if (_ufo != 0)
+	if (_ufo != NULL)
 	{
 		for (std::vector<MapDataSet*>::iterator
 				i = _ufo->getRules()->getBattlescapeTerrainData()->getMapDataSets()->begin();
@@ -2462,6 +2426,7 @@ void BattlescapeGenerator::generateMap()
 				++i)
 		{
 			(*i)->loadData();
+
 			if (_game->getRuleset()->getMCDPatch((*i)->getName()))
 				_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
 
@@ -2497,7 +2462,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	if (_craft != 0
+	if (_craft != NULL
 		&& _save->getMissionType() != "STR_ALIEN_BASE_ASSAULT"
 		&& _save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT")
 	{
@@ -2522,6 +2487,7 @@ void BattlescapeGenerator::generateMap()
 			mapDataSetIDOffset + craftDataSetIDOffset,
 			true,
 			true);
+
 		loadRMP(
 			craftMap,
 			_craftX * 10,
@@ -2543,8 +2509,7 @@ void BattlescapeGenerator::generateMap()
 		}
 	}
 
-	/* attach nodelinks to each other */
-	for (std::vector<Node*>::iterator
+	for (std::vector<Node*>::iterator // attach nodelinks to each other
 			i = _save->getNodes()->begin();
 			i != _save->getNodes()->end();
 			++i)
@@ -2654,8 +2619,9 @@ int BattlescapeGenerator::loadMAP(
 
 	unsigned int terrainObjectID;
 
-	// Load file
-	std::ifstream mapFile(CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in | std::ios::binary);
+	std::ifstream mapFile( // Load file
+						CrossPlatform::getDataFile(filename.str()).c_str(),
+						std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(filename.str() + " not found");
@@ -2681,7 +2647,7 @@ int BattlescapeGenerator::loadMAP(
 	{
 		// check if there is already a layer - if so, we have to move Z up
 		MapData* floor = _save->getTile(Position(x, y, i))->getMapData(MapData::O_FLOOR);
-		if (floor != 0)
+		if (floor != NULL)
 		{
 			z += i;
 
@@ -2816,8 +2782,9 @@ void BattlescapeGenerator::loadRMP(
 	std::ostringstream filename;
 	filename << "ROUTES/" << mapblock->getName() << ".RMP";
 
-	// Load file
-	std::ifstream mapFile(CrossPlatform::getDataFile(filename.str()).c_str(), std::ios::in | std::ios::binary);
+	std::ifstream mapFile( // Load file
+					CrossPlatform::getDataFile(filename.str()).c_str(),
+					std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
 		throw Exception(filename.str() + " not found");
@@ -3049,8 +3016,7 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory()";
 	_baseCraftEquip = true;
 
-	// we need to fake a map for soldier placement
-	int soldiers = craft->getNumSoldiers();
+	int soldiers = craft->getNumSoldiers(); // we need to fake a map for soldier placement
 
 	_mapsize_x = soldiers;
 	_mapsize_y = 1;
@@ -3093,9 +3059,8 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 													false);
 	}
 
-	// ok now generate the battleitems for inventory
 	//Log(LOG_INFO) << ". setCraft()";
-	setCraft(craft);
+	setCraft(craft); // generate the battleitems for inventory
 	//Log(LOG_INFO) << ". setCraft() DONE, deployXCOM()";
 	deployXCOM();
 	//Log(LOG_INFO) << ". deployXCOM() DONE";

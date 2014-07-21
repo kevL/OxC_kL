@@ -879,7 +879,8 @@ void Ruleset::loadFile(const std::string& filename)
 		}
 	}
 
-	_modIndex += 1000;
+//kL	_modIndex += 1000;	// Question: how is this value subtracted later,
+							// getting a user-specified Index from a ruleset
 }
 
 /**

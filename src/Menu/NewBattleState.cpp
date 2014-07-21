@@ -101,7 +101,7 @@ NewBattleState::NewBattleState()
 
 	_txtDepth			= new Text(120, 9, 22, 143);
 	_slrDepth			= new Slider(120, 16, 22, 153);
-	
+
 	_txtDifficulty		= new Text(120, 9, 178, 83);
 	_cbxDifficulty		= new ComboBox(this, 120, 16, 178, 93);
 
@@ -111,9 +111,9 @@ NewBattleState::NewBattleState()
 	_txtAlienTech		= new Text(120, 9, 178, 143);
 	_slrAlienTech		= new Slider(120, 16, 178, 153);
 
-	_btnOk				= new TextButton(100, 16, 8, 176);
-	_btnCancel			= new TextButton(100, 16, 110, 176);
-	_btnRandom			= new TextButton(100, 16, 212, 176);
+	_btnCancel			= new TextButton(100, 16, 8, 176);
+	_btnRandom			= new TextButton(100, 16, 110, 176);
+	_btnOk				= new TextButton(100, 16, 212, 176);
 
 	setPalette("PAL_GEOSCAPE", 0);
 

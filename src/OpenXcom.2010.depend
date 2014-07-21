@@ -5660,7 +5660,7 @@
 1404096023 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1405548949 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1405927765 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	<cmath>
 	<sstream>
@@ -5901,7 +5901,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1405377087 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1405980395 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6222,7 +6222,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1405907996 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1405979332 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6351,7 +6351,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1405486308 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1405978104 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -9187,7 +9187,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1405202938 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1405982133 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9265,7 +9265,7 @@
 	"MapData.h"
 	"../Engine/Logger.h"
 
-1404096023 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1405981735 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -9307,9 +9307,10 @@
 	<cmath>
 	"RuleItem.h"
 
-1404096023 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1405981072 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
+	"../Engine/Logger.h"
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
 
@@ -9327,7 +9328,7 @@
 1404096023 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1404590273 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1405985136 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>

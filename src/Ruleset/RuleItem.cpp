@@ -21,6 +21,7 @@
 
 #include "RuleInventory.h"
 
+#include "../Engine/Logger.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -577,16 +578,21 @@ int RuleItem::getClipSize() const
  * @param texture Pointer to the surface set to get the sprite from.
  * @param surface Pointer to the surface to draw to.
  */
-void RuleItem::drawHandSprite(SurfaceSet* texture, Surface* surface) const
+void RuleItem::drawHandSprite(
+		SurfaceSet* texture,
+		Surface* surface) const
 {
 	Surface* frame = texture->getFrame(this->getBigSprite());
+	if (frame != NULL) // kL_safety.
+	{
+		frame->setX(
+				(RuleInventory::HAND_W - this->getInventoryWidth()) * RuleInventory::SLOT_W / 2);
+		frame->setY(
+				(RuleInventory::HAND_H - this->getInventoryHeight()) * RuleInventory::SLOT_H / 2);
 
-	frame->setX(
-			(RuleInventory::HAND_W - this->getInventoryWidth()) * RuleInventory::SLOT_W / 2);
-	frame->setY(
-			(RuleInventory::HAND_H - this->getInventoryHeight()) * RuleInventory::SLOT_H / 2);
-
-	texture->getFrame(this->getBigSprite())->blit(surface);
+		texture->getFrame(this->getBigSprite())->blit(surface);
+	}
+	else Log(LOG_INFO) << "ERROR : bigob not found #" << getBigSprite(); // kL
 }
 
 /**

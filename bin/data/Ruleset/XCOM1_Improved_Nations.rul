@@ -118,7 +118,7 @@ countries:
       - [352.917, 353.59, -40, -39] #C near Portugal 2
       - [352.32, 359.1, -37.6, -36.11] #Southern Part of Spain
       - [1.92, 3.7, -40.17, -39] #Majorca
-  - type: STR_PORTUGAL
+  - type: STR_PORTUGAL #New Nation
     fundingBase: 85
     fundingCap: 850
     labelLon: 348.5
@@ -166,7 +166,7 @@ countries:
       - [144, 149, 40, 44.3] #Tasmania
       - [164, 177.2, 40, 47] #New Zealand 1
       - [172, 179, 33.5, 40] #New Zealand 2
-  - type: STR_AFRICANUNION #NEW COUNTRY
+  - type: STR_AFRICANUNION #New Nation
     fundingBase: 280
     fundingCap: 2800
     labelLon: 19
@@ -181,14 +181,14 @@ countries:
       - [8, 37, -19.45, -14] #LeftAfrica2 
       - [13, 25, 22, 26] #Near South Africa 1
       - [33, 36, 22, 26.3] #Near South Africa 2
-  # - type: STR_NIGERIA #DEPRECIATED IN FAVOR OF AU
-    # fundingBase: 165
-    # fundingCap: 1650
-    # labelLon: 7.5
-    # labelLat: -10
-    # areas:
-      # - [3, 14, -14, -4]
-  - type: STR_SOUTH_AFRICA
+  - type: STR_NIGERIA #deprecated in favor of AfricanUnion.
+    fundingBase: 165
+    fundingCap: 1650
+    labelLon: 7.5
+    labelLat: -10
+    areas:
+      - [3, 14, -14, -4]
+  - type: STR_SOUTH_AFRICA #New Nation
     fundingBase: 305
     fundingCap: 3050
     labelLon: 25
@@ -277,7 +277,7 @@ countries:
     areas:   # lonMin lonMax latMin latMax
       - [10.5, 25, -34, -25] #Main Body of Libya 1
       - [17, 25, -25, -20] #Main Body of Libya 1
-  - type: STR_POLAND #new country
+  - type: STR_POLAND #New Nation
     fundingBase: 150
     fundingCap: 1500
     labelLon: 18.09
@@ -285,7 +285,7 @@ countries:
     areas:
       - [15, 24, -55, -50.95] #Main Body of Poland
       - [18.5, 24, -50.95, -49.5] #Bottom Body of Poland
-  - type: STR_UKRAINE #new country
+  - type: STR_UKRAINE #New Nation
     fundingBase: 195
     fundingCap: 1950
     labelLon: 30.25
@@ -294,14 +294,14 @@ countries:
       - [24.3, 33.6, -51.5, -47.5] #UkraineBox1
       - [33.6, 37.9, -51.16, -44.19] #UkraineBox2
       - [28.35, 33.6, -47.5, -44.19] #UkraineBox3
-  - type: STR_DENMARK #new country
+  - type: STR_DENMARK #New Nation
     fundingBase: 185
     fundingCap: 1850
     labelLon: 9
     labelLat: -56.15
     areas:
       - [7.37, 11.13, -57.74, -55] #Main Body of DENMARK
-  - type: STR_INDONESIA #new country
+  - type: STR_INDONESIA #New Nation
     fundingBase: 125
     fundingCap: 1250
     labelLon: 112
@@ -313,7 +313,7 @@ countries:
       - [100, 101, -3.54, -0.57] #Main Body of Indonesia 4
       - [101, 102, -2.17, -0.57] #Main Body of Indonesia 5
       - [102, 103, -1.54, -0.57] #Main Body of Indonesia 6
-  - type: STR_VIETNAM #new country
+  - type: STR_VIETNAM #New Nation
     fundingBase: 125
     fundingCap: 1250
     labelLon: 108
@@ -323,7 +323,7 @@ countries:
       - [105, 107.4, -17.5, -16.5] #Main Body of VIETNAM 2
       - [107.4, 110, -17.5, -9.85] #Main Body of VIETNAM 3
       - [104.8, 107.4, -10.5, -8] #Main Body of VIETNAM 4
-  - type: STR_THAILAND #new country
+  - type: STR_THAILAND #New Nation
     fundingBase: 195
     fundingCap: 1950
     labelLon: 102
@@ -331,7 +331,7 @@ countries:
     areas:
       - [97.68, 102, -19.1, -6.6] #Main Body of Thailand
       - [102, 104.2, -16.8, -13.79] #Right Side of Thailand
-  - type: STR_GREECE #new country
+  - type: STR_GREECE #New Nation
     fundingBase: 205
     fundingCap: 2050
     labelLon: 20.77
@@ -339,14 +339,14 @@ countries:
     areas:
       - [19.19, 25.7, -41.8, -36.3] #Main Body of Greece
       - [23.07, 26.6, -35.84, -34.75] #Crete  
-  - type: STR_TURKEY #new country
+  - type: STR_TURKEY #New Nation
     fundingBase: 155
     fundingCap: 1550
     labelLon: 35.25
     labelLat: -38.7
     areas:
       - [25.7, 46, -42, -36] #Main Body of Turkey
-  - type: STR_NORWAY #new country
+  - type: STR_NORWAY #New Nation
     fundingBase: 225
     fundingCap: 2250
     labelLon: 7.7
@@ -357,7 +357,7 @@ countries:
       - [12, 15.5, -70, -64] #Up Two
       - [15.5, 29.5, -71.62, -69.22] #Up Three
       - [15.5, 19, -69.22, -67.3] #Up FOUR
-  - type: STR_SWEDEN #new country
+  - type: STR_SWEDEN #New Nation
     fundingBase: 205
     fundingCap: 2050
     labelLon: 15.2
@@ -367,7 +367,7 @@ countries:
       - [12.4, 20.7, -64, -62.7]
       - [15.5, 22.5, -67.3, -64]
       - [19, 22.7, -69.22, -67.3]
-  - type: STR_FINLAND #new country
+  - type: STR_FINLAND #New Nation
     fundingBase: 190
     fundingCap: 1900
     labelLon: 25.3
@@ -376,21 +376,21 @@ countries:
       - [22.7, 29.77, -69.22, -59.4] #Main Body of FINLAND
       - [20.61, 22.7, -63.96, -59.4] 
       - [29.77, 31.46, -69.45, -62.39] 
-  - type: STR_BELGIUM #new country
+  - type: STR_BELGIUM #New Nation
     fundingBase: 180
     fundingCap: 1800
     labelLon: 3.282
     labelLat: -50.974
     areas:
       - [2, 6, -51.9, -50] #BELGIUM
-  - type: STR_NETHERLANDS #new country
+  - type: STR_NETHERLANDS #New Nation
     fundingBase: 185
     fundingCap: 1850
     labelLon: 3
     labelLat: -52.949
     areas:
       - [2, 6, -53.8, -51.9] #Main Body
-  - type: STR_IRELAND #new country
+  - type: STR_IRELAND #New Nation
     fundingBase: 180
     fundingCap: 1800
     labelLon: 351.4
@@ -398,49 +398,49 @@ countries:
     areas:
       - [348.348, 353.9, -53.93, -51.13] #Lower Half
       - [348.8, 352, -55.45, -53.93] #Upper Half
-  - type: STR_IRAQ #new country
+  - type: STR_IRAQ #New Nation
     fundingBase: 275
     fundingCap: 2750
     labelLon: 43.17
     labelLat: -34.7
     areas:
       - [40.65, 47, -36, -29]
-  - type: STR_SYRIA #new country
+  - type: STR_SYRIA #New Nation
     fundingBase: 125
     fundingCap: 1250
     labelLon: 37.3
     labelLat: -34.7
     areas:
       - [35.9, 40.65, -36, -31.8]
-  - type: STR_ISRAEL #new country
+  - type: STR_ISRAEL #New Nation
     fundingBase: 175
     fundingCap: 1750
     labelLon: 33.5
     labelLat: -33.91
     areas:
       - [33.5, 35.9, -34.3, -31.14]
-  - type: STR_BALTENTENTE #new country
+  - type: STR_BALTENTENTE #New Nation
     fundingBase: 165
     fundingCap: 1650
     labelLon: 23.43
     labelLat: -56.97
     areas:
       - [19.89, 28.21, -59.4, -55] 
-  - type: STR_BELARUS #new country
+  - type: STR_BELARUS #New Nation
     fundingBase: 130
     fundingCap: 1300
     labelLon: 25
     labelLat: -52.9
     areas:
       - [24, 33.15, -55, -51.5]
-  - type: STR_CZECH #new country
+  - type: STR_CZECH #New Nation
     fundingBase: 125
     fundingCap: 1250
     labelLon: 13.307
     labelLat: -50.1063
     areas:
       - [12, 18.5, -50.95, -48.9]
-  - type: STR_AUSTRIA #new country
+  - type: STR_AUSTRIA #New Nation
     fundingBase: 130
     fundingCap: 1300
     labelLon: 13.2584
@@ -448,28 +448,28 @@ countries:
     areas:
       - [10.7, 17.25, -47.5, -46.5] #Area near Switzerland
       - [12.9, 17.25, -48.9, -47.5] #MAIN AREA
-  - type: STR_HUNGARY #new country
+  - type: STR_HUNGARY #New Nation
     fundingBase: 105
     fundingCap: 1050
     labelLon: 18.821
     labelLat: -48.0142
     areas:
       - [17.25, 24.3, -47.9, -45.9] #Main Body of HUNGARY.
-  - type: STR_ROMANIA #new country
+  - type: STR_ROMANIA #New Nation
     fundingBase: 175
     fundingCap: 1750
     labelLon: 25.24
     labelLat: -45.83
     areas:
       - [24.3, 28.35, -47.5, -43.6] #Main Body of ROMANIA.
-  - type: STR_BULGARIA #new country
+  - type: STR_BULGARIA #New Nation
     fundingBase: 85
     fundingCap: 850
     labelLon: 26.6
     labelLat: -42.95
     areas:
       - [24.3, 28.5, -43.6, -42] #Main Body of BULGARIA.
-  - type: STR_BALKANPACT #new country
+  - type: STR_BALKANPACT #New Nation
     fundingBase: 95
     fundingCap: 950
     labelLon: 17.34
@@ -478,7 +478,7 @@ countries:
       - [15, 17.25, -46.5, -43] #Box 1
       - [17.25, 24.3, -45.9, -43] #Box 2
       - [17.1, 24.3, -43, -41.8] #Box 3
-  - type: STR_CUBA #new country
+  - type: STR_CUBA #New Nation
     fundingBase: 75
     fundingCap: 750
     labelLon: 280
@@ -486,7 +486,7 @@ countries:
     areas:
       - [274.4, 283.4, -23.5, -21] #Box 1
       - [280.6, 285.2, -21, -19.4] #Box 1
-  - type: STR_VENEZULA #new country
+  - type: STR_VENEZULA #New Nation
     fundingBase: 190
     fundingCap: 1900
     labelLon: 292.9
@@ -510,7 +510,7 @@ countries:
       - [316, 325, 1.4, 24] #Eastern Brazil
       - [304, 316, 24, 26.3] #Southern Brazil 1
       - [303.78, 312, 26.3, 33] #Southern Brazil 2
-  - type: STR_COLOMBIA #new country
+  - type: STR_COLOMBIA #New Nation
     fundingBase: 155
     fundingCap: 1550
     labelLon: 284.9
@@ -521,7 +521,7 @@ countries:
       - [285, 289.878, -2.8, 1.5] #Box 3
       - [287, 289.878, 1.5, 3.8] #Box 4
       - [289.878, 291.4, -2.8, -1.7] #Box 4
-  - type: STR_PERU #new country
+  - type: STR_PERU #New Nation
     fundingBase: 70
     fundingCap: 700
     labelLon: 281.3
@@ -531,7 +531,7 @@ countries:
       - [281, 287, 1.5, 3.8] #Box 2
       - [280, 286, 8.4, 11.6] #Box 3
       - [281, 289.5, 11.6, 17.7] #Box 4
-  - type: STR_CHILE #new country
+  - type: STR_CHILE #New Nation
     fundingBase: 75
     fundingCap: 750
     labelLon: 285.6
@@ -541,7 +541,7 @@ countries:
       - [285, 290, 30, 37] #Box 2
       - [283, 288, 37, 55] #Box 3
       - [288, 293, 50, 56.2] #Box 4
-  - type: STR_ARGENTINA #new country
+  - type: STR_ARGENTINA #New Nation
     fundingBase: 100
     fundingCap: 1000
     labelLon: 294
@@ -1016,7 +1016,7 @@ extraStrings:
       STR_SAUDI: saudi arabia
       STR_RIYADH: Riyadh
       # BALTIC ENTENTE CITIES
-      STR_BALTENTENTE: baltic entente
+      STR_BALTENTENTE: baltic state
       # BELARUS CITIES
       STR_BELARUS: belarus
       # LIBYAN CITIES
@@ -1136,7 +1136,7 @@ extraStrings:
       STR_SWEDEN: sweden
       STR_STOCKHOLM: Stockholm
       # CZECH CITIES
-      STR_CZECH: czech republic
+      STR_CZECH: slovakia
       # FINNISH CITIES
       STR_FINLAND: finland
       STR_TURKU: Turku
