@@ -315,19 +315,19 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{
 				_action->value = 0;
-
 				_game->popState();
 			}
 			else
+			{
 				_game->pushState(new PrimeGrenadeState(
 													_action,
 													false,
 													NULL));
+			}
 		}
 		else if (_action->type == BA_DEFUSE) // kL_add.
 		{
 			_action->value = -1;
-
 			_game->popState();
 		}
 		else if (_action->type == BA_USE

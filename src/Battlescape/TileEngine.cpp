@@ -65,7 +65,7 @@
 namespace OpenXcom
 {
 
-const int TileEngine::heightFromCenter[11] = { 0,-2, 2,-4, 4,-6, 6,-8, 8,-12, 12 };
+const int TileEngine::heightFromCenter[11] = {0,-2, 2,-4, 4,-6, 6,-8, 8,-12, 12};
 
 
 /**
@@ -93,8 +93,8 @@ TileEngine::~TileEngine()
 }
 
 /**
-  * Calculates sun shading for the whole terrain.
-  */
+ * Calculates sun shading for the whole terrain.
+ */
 void TileEngine::calculateSunShading()
 {
 	const int layer = 0; // Ambient lighting layer.
@@ -110,9 +110,9 @@ void TileEngine::calculateSunShading()
 }
 
 /**
-  * Calculates sun shading for 1 tile. Sun comes from above and is blocked by floors or objects.
-  * @param tile The tile to calculate sun shading for.
-  */
+ * Calculates sun shading for 1 tile. Sun comes from above and is blocked by floors or objects.
+ * @param tile The tile to calculate sun shading for.
+ */
 void TileEngine::calculateSunShading(Tile* tile)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateSunShading()";
@@ -142,8 +142,8 @@ void TileEngine::calculateSunShading(Tile* tile)
 }
 
 /**
-  * Recalculates lighting for the terrain: objects,items,fire.
-  */
+ * Recalculates lighting for the terrain: objects,items,fire.
+ */
 void TileEngine::calculateTerrainLighting()
 {
 	const int layer				= 1;	// Static lighting layer.
@@ -182,10 +182,12 @@ void TileEngine::calculateTerrainLighting()
 		}
 
 		if (_battleSave->getTiles()[i]->getFire())
+		{
 			addLight(
 					_battleSave->getTiles()[i]->getPosition(),
 					fireLightPower,
 					layer);
+		}
 
 		for (std::vector<BattleItem*>::iterator
 				it = _battleSave->getTiles()[i]->getInventory()->begin();
@@ -202,13 +204,13 @@ void TileEngine::calculateTerrainLighting()
 }
 
 /**
-  * Recalculates lighting for the units.
-  */
+ * Recalculates lighting for the units.
+ */
 void TileEngine::calculateUnitLighting()
 {
 	const int layer = 2;					// Dynamic lighting layer.
 //kL	const int personalLightPower = 15;	// amount of light a unit generates
-	const int personalLightPower = 14;		// kL, Try it...
+	const int personalLightPower = 3;		// kL, Try it...
 	const int fireLightPower = 15;			// amount of light a fire generates
 
 	for (int // reset all light to 0 first
