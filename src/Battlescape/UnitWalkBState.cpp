@@ -293,7 +293,8 @@ bool UnitWalkBState::doStatusStand()
 	//Log(LOG_INFO) << ". StartDirection = " << dir;
 
 	if (_unit->isKneeled()
-		&& -1 < dir && dir < 8)	// ie. *not* up or down
+//		&& -1 < dir && dir < 8)	// ie. *not* up or down
+		&& dir > -1)
 	{
 		//Log(LOG_INFO) << ". kneeled, and path UpDown INVALID";
 		if (_parent->kneel(

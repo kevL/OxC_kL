@@ -59,7 +59,8 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 		_modCTRL(false),
 		_modALT(false),
 		_movementType(MT_WALK),
-		_openDoor(false) // kL
+		_openDoor(false), // kL
+		_kneelCheck(true) // kL
 {
 	_size = _save->getMapSizeXYZ();
 	_nodes.reserve(_size); // initialize one node per tile.
@@ -118,10 +119,12 @@ void Pathfinding::calculate(
 	_totalTUCost = 0;
 	_path.clear();
 
+	_modCTRL = false;
 //	_modALT = false;
 	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// for BattlescapeState::btnUnitDownClick() -> now redundant.
 													// Can go back to previewPath()
-	_modCTRL = false;
+
+	_kneelCheck = true;
 
 	Position endPos2 = endPos; // kL: for keeping things straight if strafeRejected happens.
 
@@ -313,6 +316,7 @@ void Pathfinding::calculate(
 	}
 	else
 	{
+		//Log(LOG_INFO) << "bresenhamPath aborted";
 		// if bresenham failed, we shouldn't keep the path
 		// it was attempting, in case A* fails too.
 		abortPath();
@@ -540,12 +544,12 @@ bool Pathfinding::bresenhamPath(
  * Calculates the shortest path using a simple A-Star algorithm.
  * The unit information and movement type must have already been set.
  * The path information is set only if a valid path is found.
- * @param startPosition, The position to start from.
- * @param endPosition, The position we want to reach.
- * @param target, Target of the path.
- * @param sneak, Is the unit sneaking?
- * @param maxTUCost, Maximum time units the path can cost.
- * @return, True if a path exists, false otherwise.
+ * @param startPosition	- reference the position to start from
+ * @param endPosition	- reference the position to end at
+ * @param target		- pointer to a targetUnit of the path
+ * @param sneak			- true if the unit is 'sneaking'
+ * @param maxTUCost		- maximum time units this path can cost
+ * @return, true if a path exists
  */
 bool Pathfinding::aStarPath(
 		const Position& startPosition,
@@ -572,10 +576,9 @@ bool Pathfinding::aStarPath(
 	openList.push(start);
 
 	bool missile = target
-				&& maxTUCost == -1;
+					&& maxTUCost == -1;
 
-	// if the openList is empty, we've reached the end
-	while (!openList.empty())
+	while (!openList.empty()) // if the openList is empty, we've reached the end
 	{
 		PathfindingNode* currentNode = openList.pop();
 		Position const &currentPos = currentNode->getPosition();
@@ -789,7 +792,7 @@ int Pathfinding::getTUCost(
 				&& belowDest->getUnit()
 				&& belowDest->getUnit() != unit)
 			{
-				// 2 or more voxels poking into this tile = no go
+				// 2 or more voxels poking into this tile -> no go
 				if (belowDest->getUnit()->getHeight()
 						+ belowDest->getUnit()->getFloatHeight()
 						- belowDest->getTerrainLevel() > 26)
@@ -821,16 +824,22 @@ int Pathfinding::getTUCost(
 			else if (dir >= DIR_UP)
 			{
 				// check if we can go up or down through gravlift or fly
-				if (validateUpDown(
-								unit,
-								startPos + offset,
-								dir)
-							> 0)
+				int vert = validateUpDown(
+										unit,
+										startPos + offset,
+										dir);
+				if (vert == 0		// blocked
+					|| vert == -2)	// no flight suit.
 				{
-					cost = 8; // vertical movement by flying suit or grav lift
+					return 255;
 				}
 				else
-					return 255;
+				{
+					cost = 8; // vertical movement by flying suit or grav lift
+
+//					if (vert == -1)	// kneeled
+//						cost += 8;	// stand up
+				}
 			}
 
 			// check if we have floor, else fall down;
@@ -1754,7 +1763,7 @@ bool Pathfinding::canFallDown(
 } */
 
 /**
- * Checks if a movement is valid via the Up/Down buttons.
+ * Checks if vertical movement is valid.
  * Either there is a grav lift or the unit can fly, and there are no obstructions.
  * @param bu		- pointer to a unit
  * @param startPos	- starting position
@@ -1784,14 +1793,19 @@ int Pathfinding::validateUpDown(
 
 	if (startTile->getMapData(MapData::O_FLOOR)
 		&& startTile->getMapData(MapData::O_FLOOR)->isGravLift()
-		&& destTile
+//		&& destTile
 		&& destTile->getMapData(MapData::O_FLOOR)
 		&& destTile->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
 		return 1; // gravLift.
 	}
-	else if (bu->isKneeled())
-		return -1; // kneeled.
+	else if (_kneelCheck == true
+		&& bu->isKneeled())
+	{
+		_kneelCheck = false;
+
+		return -1; // kneeled. Useful only for btnUnitUp/DownClick()s
+	}
 	else if (bu->getArmor()->getMovementType() == MT_FLY)
 	{
 		Tile* belowStart = _save->getTile(startPos + Position(0, 0,-1));

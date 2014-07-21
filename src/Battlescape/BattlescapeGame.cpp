@@ -2363,7 +2363,6 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 			_currentAction.actor->setDashing(false); // kL
 			_currentAction.run = false;
-
 			_currentAction.strafe = Options::strafe
 									&& ((mod_CTRL
 											&& _save->getSelectedUnit()->getTurretType() == -1)
@@ -2371,8 +2370,6 @@ void BattlescapeGame::primaryAction(const Position& pos)
 											&& _save->getSelectedUnit()->getTurretType() > -1));
 			//Log(LOG_INFO) << ". primary action: Strafe";
 			if (_currentAction.strafe
-//				&& getPathfinding()->getStrafeMove())		// kL <- NO.
-//				&& getPathfinding()->getPath().size() > 1)	// kL <- yes, but think of the shuggle
 				&& (_save->getTileEngine()->distance(
 												_currentAction.actor->getPosition(),
 												pos)
@@ -2383,37 +2380,38 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				_currentAction.actor->setDashing(true); // kL, do this in UnitWalkBState
 				// kL_note: I just realized that action.run could be used instead of set/getDashing() ...
 				// leave it as is for now; for use in TileEngine, reaction fire
-
 				_currentAction.run = true;
 				_currentAction.strafe = false;
 			}
-			// need to turn off tank-reverse in Pathfinding, if distance > 1
-			// or
-			// if direction-of-movement is not directly opposite to direction-of-tankbody-facing
 
 			_currentAction.target = pos;
 			_save->getPathfinding()->calculate( // get the Path.
 											_currentAction.actor,
 											_currentAction.target);
 
-			if (bPreviewed
-				&& !_save->getPathfinding()->previewPath()
-				&& _save->getPathfinding()->getStartDirection() != -1)
+			if (_save->getPathfinding()->getStartDirection() != -1) // kL -> assumes removePreview() doesn't change StartDirection
 			{
-				_save->getPathfinding()->removePreview();
-				bPreviewed = false;
-			}
+				if (bPreviewed
+					&& !_save->getPathfinding()->previewPath())
+//kL				&& _save->getPathfinding()->getStartDirection() != -1)
+				{
+					//Log(LOG_INFO) << "primary: bPreviewed";
+					_save->getPathfinding()->removePreview();
+					bPreviewed = false;
+				}
 
-			if (!bPreviewed
-				&& _save->getPathfinding()->getStartDirection() != -1)
-			{
-				//  -= start walking =-
-				getMap()->setCursorType(CT_NONE);
-				_parentState->getGame()->getCursor()->setVisible(false);
+				if (!bPreviewed)
+//kL				&& _save->getPathfinding()->getStartDirection() != -1)
+				{
+					//Log(LOG_INFO) << "primary: !bPreviewed";
+					//  -= start walking =-
+					getMap()->setCursorType(CT_NONE);
+					_parentState->getGame()->getCursor()->setVisible(false);
 
-				statePushBack(new UnitWalkBState(
-												this,
-												_currentAction));
+					statePushBack(new UnitWalkBState(
+													this,
+													_currentAction));
+				}
 			}
 		}
 	}
