@@ -1027,8 +1027,6 @@ void DebriefingState::prepareDebriefing()
 							SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
 							save->getDeadSoldiers()->push_back(dead);
 
-//							delete death; // kL new.
-
 							int iD = (*j)->getId(); // get ID from battleunit; could also use (*i) instead.
 
 							base->getSoldiers()->erase(i); // erase Soldier from Base_soldiers vector.
@@ -1148,8 +1146,6 @@ void DebriefingState::prepareDebriefing()
 
 								SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
 								save->getDeadSoldiers()->push_back(dead);
-
-//								delete death; // kL new.
 
 								int iD = (*j)->getId(); // get ID from battleunit; could also use (*i) instead.
 

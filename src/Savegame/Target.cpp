@@ -60,7 +60,7 @@ Target::~Target()
 
 /**
  * Loads the target from a YAML file.
- * @param node YAML node.
+ * @param node - YAML node
  */
 void Target::load(const YAML::Node& node)
 {
@@ -70,7 +70,7 @@ void Target::load(const YAML::Node& node)
 
 /**
  * Saves the target to a YAML file.
- * @returns YAML node.
+ * @return, YAML node
  */
 YAML::Node Target::save() const
 {
@@ -84,7 +84,7 @@ YAML::Node Target::save() const
 
 /**
  * Saves the target's unique identifiers to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Target::saveId() const
 {
@@ -98,7 +98,7 @@ YAML::Node Target::saveId() const
 
 /**
  * Returns the longitude coordinate of the target.
- * @return Longitude in radian.
+ * @return, longitude in radians
  */
 double Target::getLongitude() const
 {
@@ -107,7 +107,7 @@ double Target::getLongitude() const
 
 /**
  * Changes the longitude coordinate of the target.
- * @param lon Longitude in radian.
+ * @param lon - longitude in radians
  */
 void Target::setLongitude(double lon)
 {
@@ -123,7 +123,7 @@ void Target::setLongitude(double lon)
 
 /**
  * Returns the latitude coordinate of the target.
- * @return Latitude in radian.
+ * @return, latitude in radians
  */
 double Target::getLatitude() const
 {
@@ -132,7 +132,7 @@ double Target::getLatitude() const
 
 /**
  * Changes the latitude coordinate of the target.
- * @param lat Latitude in radian.
+ * @param lat - latitude in radians
  */
 void Target::setLatitude(double lat)
 {
@@ -153,7 +153,7 @@ void Target::setLatitude(double lat)
 
 /**
  * Returns the list of crafts currently following this target.
- * @return Pointer to list of crafts.
+ * @return, pointer to a list of pointers to crafts
  */
 std::vector<Target*>* Target::getFollowers()
 {
@@ -162,8 +162,8 @@ std::vector<Target*>* Target::getFollowers()
 
 /**
  * Returns the great circle distance to another target on the globe.
- * @param target, Pointer to other target.
- * @return, Distance in radians.
+ * @param target - pointer to other target
+ * @return, distance in radians
  */
 double Target::getDistance(const Target* target) const
 {

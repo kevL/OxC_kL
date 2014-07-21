@@ -1233,8 +1233,6 @@ void GeoscapeState::time5Seconds()
 							SoldierDead* dead = (*soldier)->die(death); // converts Soldier to SoldierDead class instance.
 							_game->getSavedGame()->getDeadSoldiers()->push_back(dead);
 
-//							delete death; // kL new.
-
 							int iD = (*soldier)->getId();
 
 							soldier = (*i)->getSoldiers()->erase(soldier); // erase Soldier from Base_soldiers vector.
@@ -1547,9 +1545,11 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	}
 	else
 	{
-//		double ufoRange = ufo->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180.0);
-		double ufoRange	= 600.0;
+//		double ufoRange	= 600.0;
+		double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
+		double ufoRange = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor;
 		double targetDist = _base.getDistance(ufo) * 3440.0;
+		//Log(LOG_INFO) << ". . ufoRange = " << (int)ufoRange;
 		//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
 
 		if (targetDist > ufoRange)
@@ -1572,7 +1572,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 
 			if (chance > 0)
 			{
-				Log(LOG_INFO) << ". . . chance = " << chance;
+				//Log(LOG_INFO) << ". . . chance = " << chance;
 				ret = RNG::percent(chance);
 			}
 		}
@@ -1633,6 +1633,7 @@ void GeoscapeState::time10Minutes()
 
 				if ((*c)->getDestination() == NULL)
 				{
+					//Log(LOG_INFO) << ". Patrol for alienBases";
 					for (std::vector<AlienBase*>::iterator // patrol for aLien bases.
 							ab = _game->getSavedGame()->getAlienBases()->begin();
 							ab != _game->getSavedGame()->getAlienBases()->end();
@@ -1641,20 +1642,22 @@ void GeoscapeState::time10Minutes()
 						if ((*ab)->isDiscovered())
 							continue;
 
-						// TODO: move the craftRadar range to the ruleset.
-//						double range = ((*j)->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180));
-						double craftRadar = 600.0;
+//						double craftRadar = 600.0;
+						double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
+						double craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor;
+						//Log(LOG_INFO) << ". . craftRadar = " << (int)craftRadar;
+
 						double targetDistance = (*c)->getDistance(*ab) * 3440.0;
-						//Log(LOG_INFO) << ". Patrol for alienBases, targetDistance = " << targetDistance;
+						//Log(LOG_INFO) << ". . targetDistance = " << (int)targetDistance;
 
 						if (targetDistance < craftRadar)
 						{
 							int chance = 100 - (diff * 10) - static_cast<int>(targetDistance / craftRadar * 50.0);
-							//Log(LOG_INFO) << ". . craft in Range, chance = " << chance;
+							//Log(LOG_INFO) << ". . . craft in Range, chance = " << chance;
 
 							if (RNG::percent(chance))
 							{
-								//Log(LOG_INFO) << ". . . aLienBase discovered";
+								//Log(LOG_INFO) << ". . . . aLienBase discovered";
 								(*ab)->setDiscovered(true);
 							}
 						}
@@ -1678,7 +1681,7 @@ void GeoscapeState::time10Minutes()
 
 			if (u != _game->getSavedGame()->getUfos()->end())
 			{
-				Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
+				//Log(LOG_INFO) << ". xBase found, set RetaliationStatus";
 				(*b)->setIsRetaliationTarget();
 			}
 		}
@@ -1730,7 +1733,7 @@ void GeoscapeState::time10Minutes()
 							&& !hyperdet;
 						++b)
 				{
-					//Log(LOG_INFO) << ". Base detection";
+					//Log(LOG_INFO) << ". Base detection of UFO";
 					switch (static_cast<int>((*b)->detect(*u)))
 					{
 						case 2:

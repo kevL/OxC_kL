@@ -523,12 +523,14 @@ void Base::setEngineers(int engineers)
 /**
  * Returns if a certain target is covered by the base's
  * radar range, taking in account the range and chance.
- * @param target, Pointer to target to compare.
- * @return, 0 undetected; 1 detected; 2 hyperdetected
+ * @param target - pointer to target to detect
+ * @return,	0 undetected
+ *			1 detected
+ *			2 hyperdetected
  */
 uint8_t Base::detect(Target* target) const
 {
-	//Log(LOG_INFO) << "Base::detect() -> " << getName().c_str();
+	//Log(LOG_INFO) << "Base::detect() <- " << getName().c_str();
 	uint8_t ret = 0;
 
 	double targetDistance = insideRadarRange(target);
@@ -546,6 +548,8 @@ uint8_t Base::detect(Target* target) const
 	{
 		float chance = 0;
 
+		double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
+
 		for (std::vector<BaseFacility*>::const_iterator
 				f = _facilities.begin();
 				f != _facilities.end();
@@ -553,8 +557,9 @@ uint8_t Base::detect(Target* target) const
 		{
 			if ((*f)->getBuildTime() == 0)
 			{
-				double radarRange = static_cast<double>((*f)->getRules()->getRadarRange());
-				//Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
+				double radarRange = static_cast<double>((*f)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+
+				if (radarRange > 0.0) Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 
 				if (targetDistance < radarRange)
 				{
@@ -562,7 +567,7 @@ uint8_t Base::detect(Target* target) const
 					//Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 					//Log(LOG_INFO) << ". . . chance(base) = " << (int)chance;
 				}
-				//else Log(LOG_INFO) << ". . target out of Range";
+				else Log(LOG_INFO) << ". . . target out of Range";
 			}
 		}
 
@@ -599,7 +604,7 @@ uint8_t Base::detect(Target* target) const
 				chance /= 3.f;
 
 				ret = static_cast<uint8_t>(RNG::percent(static_cast<int>(chance)));
-				Log(LOG_INFO) << ". . Base detect UFO chance (baseDet + ufoVis) = " << (int)chance << " RET = " << (int)ret;
+				//Log(LOG_INFO) << ". . Base detect UFO chance (baseDet + ufoVis) = " << (int)chance << " RET = " << (int)ret;
 			}
 //			else return 0;
 		}
@@ -612,16 +617,23 @@ uint8_t Base::detect(Target* target) const
  * Returns if a certain target is inside the base's
  * radar range, taking in account the positions of both.
  * @param target, Pointer to target.
- * @return, Distance to ufo; -2.0 if outside range; -1.0 if within range of hyperwave facility
+ * @return,	great circle distance to ufo
+ *			-2.0 if outside range
+ *			-1.0 if within range of hyperwave facility
  */
 double Base::insideRadarRange(Target* target) const
 {
+	//Log(LOG_INFO) << "Base::insideRadarRange()";
+
 	double ret = -2.0;
 
-	double targetDistance = getDistance(target) * 3440.0;
+	double targetDistance = getDistance(target) * 3440.0; // great circle distance
 	//Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
 
-	if (targetDistance > 2400.0) // early out.
+	double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
+
+	// this assumes maximum radar range is 2400 (default hyperwave decoder)
+	if (targetDistance > 2400.0 * greatCircleConversionFactor) // early out.
 		return ret;
 
 	for (std::vector<BaseFacility*>::const_iterator
@@ -631,7 +643,7 @@ double Base::insideRadarRange(Target* target) const
 	{
 		if ((*f)->getBuildTime() == 0)
 		{
-			double radarRange = static_cast<double>((*f)->getRules()->getRadarRange());
+			double radarRange = static_cast<double>((*f)->getRules()->getRadarRange()) * greatCircleConversionFactor;
 			//Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 
 			if (targetDistance < radarRange)
@@ -1194,8 +1206,9 @@ int Base::getDefenseValue() const
 } */
 
 /**
- * kL. Returns the total %value of short range detection facilities in the base.
- * @return, Short Range Detection %value.
+ * kL. Returns the total value of short range detection facilities at this base.
+ * Used for BaseInfoState graphics.
+ * @return, short range detection value (%)
  */
 int Base::getShortRangeValue() const // kL
 {
@@ -1211,9 +1224,9 @@ int Base::getShortRangeValue() const // kL
 		if ((*i)->getBuildTime() == 0)
 		{
 			range = (*i)->getRules()->getRadarRange();
-				// kL_note: that should be based off a string or Ruleset value.
-			if (range
+			if (range > 0
 				&& range < 1501)
+			// kL_note: that should be based off a string or Ruleset value.
 			{
 				total += (*i)->getRules()->getRadarChance();
 
@@ -1251,8 +1264,9 @@ int Base::getShortRangeValue() const // kL
 } */
 
 /**
- * kL. Returns the total %value of long range detection facilities in the base.
- * @return, Long Range Detection %value.
+ * kL. Returns the total value of long range detection facilities at this base.
+ * Used for BaseInfoState graphics.
+ * @return, long range detection value (%)
  */
 int Base::getLongRangeValue() const // kL
 {
@@ -1265,7 +1279,7 @@ int Base::getLongRangeValue() const // kL
 	{
 		if ((*i)->getBuildTime() == 0
 			&& (*i)->getRules()->getRadarRange() > 1500)
-				// kL_note: that should be based off a string or Ruleset value.
+		// kL_note: that should be based off a string or Ruleset value.
 		{
 			total += (*i)->getRules()->getRadarChance();
 

@@ -46,8 +46,8 @@ RuleCraft::RuleCraft(const std::string& type)
 		_refuelItem(""),
 		_repairRate(1),
 		_refuelRate(1),
-		_radarRange(600), // 672
-		_sightRange(1696), // ?
+		_radarRange(600), // 672 // for detecting UFOs
+		_sightRange(600), // 1696 // for detecting aLien bases
 		_transferTime(0),
 		_score(0),
 		_battlescapeTerrainData(NULL),
