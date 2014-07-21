@@ -1547,6 +1547,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	}
 	else
 	{
+//		double ufoRange = ufo->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180.0);
 		double ufoRange	= 600.0;
 		double targetDist = _base.getDistance(ufo) * 3440.0;
 		//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
@@ -1641,6 +1642,7 @@ void GeoscapeState::time10Minutes()
 							continue;
 
 						// TODO: move the craftRadar range to the ruleset.
+//						double range = ((*j)->getRules()->getSightRange() * (1 / 60.0) * (M_PI / 180));
 						double craftRadar = 600.0;
 						double targetDistance = (*c)->getDistance(*ab) * 3440.0;
 						//Log(LOG_INFO) << ". Patrol for alienBases, targetDistance = " << targetDistance;

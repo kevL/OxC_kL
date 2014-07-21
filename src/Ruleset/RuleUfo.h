@@ -50,6 +50,7 @@ private:
 		_range,
 		_reload,
 		_score,
+		_sightRange,
 		_speedMax,
 		_sprite;
 	std::string
@@ -106,6 +107,8 @@ private:
 
 		/// Gets the name of the surface that represents this UFO.
 		std::string getModSprite() const;
+		/// Gets the UFO's radar range.
+		int getSightRange() const;
 };
 
 }

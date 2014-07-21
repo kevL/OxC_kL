@@ -4602,7 +4602,7 @@
 	<vector>
 	<SDL.h>
 
-1404590044 f:\git\openxcom\src\ruleset\rulecraft.h
+1405906201 f:\git\openxcom\src\ruleset\rulecraft.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5994,7 +5994,7 @@
 	<yaml-cpp/yaml.h>
 	"MapBlock.h"
 
-1404096023 f:\git\openxcom\src\ruleset\ruleufo.h
+1405906439 f:\git\openxcom\src\ruleset\ruleufo.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -6575,7 +6575,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1405814827 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1405905200 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"

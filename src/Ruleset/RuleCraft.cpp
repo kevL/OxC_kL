@@ -46,7 +46,8 @@ RuleCraft::RuleCraft(const std::string& type)
 		_refuelItem(""),
 		_repairRate(1),
 		_refuelRate(1),
-		_radarRange(600),
+		_radarRange(600), // 672
+		_sightRange(1696), // ?
 		_transferTime(0),
 		_score(0),
 		_battlescapeTerrainData(NULL),
@@ -101,6 +102,7 @@ void RuleCraft::load(
 	_repairRate		= node["repairRate"].as<int>(_repairRate);
 	_refuelRate		= node["refuelRate"].as<int>(_refuelRate);
 	_radarRange		= node["radarRange"].as<int>(_radarRange);
+	_sightRange		= node["sightRange"].as<int>(_sightRange);
 	_transferTime	= node["transferTime"].as<int>(_transferTime);
 	_score			= node["score"].as<int>(_score);
 
@@ -264,7 +266,7 @@ int RuleCraft::getRepairRate() const
 
 /**
  * Gets how much fuel is added to the craft while refuelling.
- * @return The amount of fuel.
+ * @return, The amount of fuel.
  */
 int RuleCraft::getRefuelRate() const
 {
@@ -273,7 +275,7 @@ int RuleCraft::getRefuelRate() const
 
 /**
  * Gets the craft's radar range for detecting UFOs.
- * @return The range in nautical miles.
+ * @return, The range in nautical miles.
  */
 int RuleCraft::getRadarRange() const
 {
@@ -281,8 +283,17 @@ int RuleCraft::getRadarRange() const
 }
 
 /**
+ * Gets the craft's sight range for detecting bases.
+ * @return, The range in nautical miles.
+ */
+int RuleCraft::getSightRange() const
+{
+	return _sightRange;
+}
+
+/**
  * Gets the amount of time this item takes to arrive at a base.
- * @return The time in hours.
+ * @return, The time in hours.
  */
 int RuleCraft::getTransferTime() const
 {
@@ -291,7 +302,7 @@ int RuleCraft::getTransferTime() const
 
 /**
  * Gets the number of points you lose when this craft is destroyed.
- * @return The score in points.
+ * @return, The score in points.
  */
 int RuleCraft::getScore() const
 {
@@ -300,7 +311,7 @@ int RuleCraft::getScore() const
 
 /**
  * Gets the terrain data needed to draw the Craft in the battlescape.
- * @return The terrain data.
+ * @return, The terrain data.
  */
 RuleTerrain* RuleCraft::getBattlescapeTerrainData()
 {
@@ -309,7 +320,7 @@ RuleTerrain* RuleCraft::getBattlescapeTerrainData()
 
 /**
  * Checks if this ship is capable of going to mars.
- * @return True if this ship is capable of going to mars.
+ * @return, True if this ship is capable of going to mars.
  */
 bool RuleCraft::getSpacecraft() const
 {
@@ -318,7 +329,7 @@ bool RuleCraft::getSpacecraft() const
 
 /**
  * Gets the list weight for this research item.
- * @return The list weight.
+ * @return, The list weight.
  */
 int RuleCraft::getListOrder() const
 {
@@ -327,7 +338,7 @@ int RuleCraft::getListOrder() const
 
 /**
  * Gets the deployment layout for this craft.
- * @return The deployment layout.
+ * @return, The deployment layout.
  */
 std::vector<std::vector<int> >& RuleCraft::getDeployment()
 {
@@ -336,7 +347,7 @@ std::vector<std::vector<int> >& RuleCraft::getDeployment()
 
 /**
  * Gets the item limit for this craft.
- * @return the item limit.
+ * @return, the item limit.
  */
 int const RuleCraft::getMaxItems() const
 {

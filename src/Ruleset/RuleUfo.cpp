@@ -41,6 +41,7 @@ RuleUfo::RuleUfo(const std::string& type)
 		_score(0),
 		_reload(0),
 		_breakOffTime(0),
+		_sightRange(268), // ?
 		_battlescapeTerrainData(NULL),
 		_modSprite("")
 {
@@ -74,6 +75,7 @@ void RuleUfo::load(
 	_score			= node["score"].as<int>(_score);
 	_reload			= node["reload"].as<int>(_reload);
 	_breakOffTime	= node["breakOffTime"].as<int>(_breakOffTime);
+	_sightRange		= node["sightRange"].as<int>(_sightRange);
 	_modSprite		= node["modSprite"].as<std::string>(_modSprite);
 
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
@@ -229,6 +231,15 @@ int RuleUfo::getBreakOffTime() const
 std::string RuleUfo::getModSprite() const
 {
 	return _modSprite;
+}
+
+/**
+ * Gets the UFO's radar range for detecting bases.
+ * @return The range in nautical miles.
+ */
+int RuleUfo::getSightRange() const
+{
+	return _sightRange;
 }
 
 }

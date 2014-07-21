@@ -53,6 +53,7 @@ private:
 		_refuelRate,
 		_repairRate,
 		_score,
+		_sightRange,
 		_sprite,
 		_transferTime,
 
@@ -128,6 +129,8 @@ private:
 		int getRefuelRate() const;
 		/// Gets the craft's radar range.
 		int getRadarRange() const;
+		/// Gets the craft's sight range.
+		int getSightRange() const;
 		/// Gets the craft's transfer time.
 		int getTransferTime() const;
 
