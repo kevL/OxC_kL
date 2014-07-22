@@ -959,7 +959,7 @@ void BattlescapeGame::checkForCasualties(
 					bonus = _save->getMoraleModifier();
 				}
 				else if (slayer->getOriginalFaction() == FACTION_HOSTILE)
-					bonus = _save->getMoraleModifier(0, false);
+					bonus = _save->getMoraleModifier(NULL, false);
 
 				// slayer's boost
 				if ((victim->getOriginalFaction() == FACTION_PLAYER
@@ -1010,13 +1010,13 @@ void BattlescapeGame::checkForCasualties(
 
 			if (victim->getOriginalFaction() == FACTION_HOSTILE)
 			{
-				losers = _save->getMoraleModifier(0, false);
+				losers = _save->getMoraleModifier(NULL, false);
 				winners = _save->getMoraleModifier();
 			}
 			else
 			{
 				losers = _save->getMoraleModifier();
-				winners = _save->getMoraleModifier(0, false);
+				winners = _save->getMoraleModifier(NULL, false);
 			}
 			// civilians are unaffected by leadership above. They use standard 100.
 
@@ -1138,7 +1138,7 @@ void BattlescapeGame::checkForCasualties(
 				victim->getStatistics()->wasUnconcious = true;
 			}
 
-			(*buCasualty)->setStatus(STATUS_DISABLED);	// kL
+			(*buCasualty)->setStatus(STATUS_DISABLED); // kL
 
 			statePushNext(new UnitDieBState( // kL_note: This is where units get set to STUNNED
 										this,
@@ -1557,13 +1557,18 @@ void BattlescapeGame::popState()
 					}
 				} // kL_end.
 
+				// kL_note: This is done at the end of this function also, but somehow it's
+				// not updating visUnit indicators when watching a unit die and expose a second
+				// enemy unit behind the first. btw, calcFoV ought have been done by now ...
+				_parentState->updateSoldierInfo(false); // kL
+
 //				getMap()->refreshSelectorPosition(); // kL
 				setupCursor();
 				_parentState->getGame()->getCursor()->setVisible(true);
 				//Log(LOG_INFO) << ". end NOT actionFailed";
 			}
 		}
-		else
+		else // not FACTION_PLAYER
 		{
 			//Log(LOG_INFO) << ". action -> NOT Faction_Player";
 			action.actor->spendTimeUnits(action.TU); // spend TUs
@@ -1612,10 +1617,8 @@ void BattlescapeGame::popState()
 		}
 	}
 
-
 //	getMap()->refreshSelectorPosition(); // kL
 	//Log(LOG_INFO) << ". uhm yeah";
-
 
 	if (!_states.empty())
 	{
@@ -1637,8 +1640,8 @@ void BattlescapeGame::popState()
 			{
 				//Log(LOG_INFO) << ". endTurn()";
 				endTurn();
-				//Log(LOG_INFO) << ". endTurn() DONE return";
 
+				//Log(LOG_INFO) << ". endTurn() DONE return";
 				return;
 			}
 			else
@@ -1665,8 +1668,11 @@ void BattlescapeGame::popState()
 		_parentState->getGame()->getCursor()->setVisible(true);
 	}
 
-	//Log(LOG_INFO) << ". updateSoldierInfo()";
-	_parentState->updateSoldierInfo();
+	if (_save->getSide() == FACTION_PLAYER) // kL
+	{
+		//Log(LOG_INFO) << ". updateSoldierInfo()";
+		_parentState->updateSoldierInfo(); // that should be necessary only on xCom turns. See above^
+	}
 
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
 }
@@ -1678,14 +1684,15 @@ void BattlescapeGame::popState()
  */
 bool BattlescapeGame::noActionsPending(BattleUnit* bu)
 {
-	if (_states.empty()) return true;
+	if (_states.empty())
+		return true;
 
 	for (std::list<BattleState*>::iterator
 			i = _states.begin();
 			i != _states.end();
 			++i)
 	{
-		if (*i != 0
+		if (*i != NULL
 			&& (*i)->getAction().actor == bu)
 		{
 			return false;

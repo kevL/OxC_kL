@@ -586,9 +586,11 @@ void RuleItem::drawHandSprite(
 	if (frame != NULL) // kL_safety.
 	{
 		frame->setX(
-				(RuleInventory::HAND_W - this->getInventoryWidth()) * RuleInventory::SLOT_W / 2);
+				(RuleInventory::HAND_W - this->getInventoryWidth())
+				* RuleInventory::SLOT_W / 2);
 		frame->setY(
-				(RuleInventory::HAND_H - this->getInventoryHeight()) * RuleInventory::SLOT_H / 2);
+				(RuleInventory::HAND_H - this->getInventoryHeight())
+				* RuleInventory::SLOT_H / 2);
 
 		texture->getFrame(this->getBigSprite())->blit(surface);
 	}

@@ -248,7 +248,7 @@ void UnitDieBState::think()
 													_unit->getSpawnUnit());
 			newUnit->lookAt(_originalDir); // kL_note: This seems to need a state to initiate turn() ...
 
-			newUnit->setCache(0);					// kL
+			newUnit->setCache(NULL);				// kL
 			_parent->getMap()->cacheUnit(newUnit);	// kL
 
 			//Log(LOG_INFO) << ". . got back from lookAt() in think ...";
@@ -259,6 +259,14 @@ void UnitDieBState::think()
 
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
+
+		// need to freshen visUnits in case another unit was hiding behind the one who just fell ...
+		// that is, it shows up on the Battlescape, but won't trigger the visUnits indicators
+		// until/ unless the viewer calls BattlescapeState::updateSoldierInfo()
+//		_parent->getSave()->getTileEngine()->calculateFOV(_unit->getPosition());
+		// that is actually done already at the end of TileEngine::hit() & explode()
+		// so, might have to updateSoldierInfo() here, there, or perhaps in BattlescapeGame ......
+
 
 		if (_unit->getOriginalFaction() == FACTION_PLAYER
 			&& _unit->getSpawnUnit().empty())

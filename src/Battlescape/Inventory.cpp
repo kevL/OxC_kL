@@ -352,7 +352,7 @@ void Inventory::drawItems()
 				continue;
 			}
 
-			Log(LOG_INFO) << "Inventory::drawItems() bigSprite = " << (*i)->getRules()->getBigSprite();
+//			Log(LOG_INFO) << "Inventory::drawItems() bigSprite = " << (*i)->getRules()->getBigSprite();
 			Surface* frame = texture->getFrame((*i)->getRules()->getBigSprite());
 			if (frame != NULL) // kL, safety.
 			{

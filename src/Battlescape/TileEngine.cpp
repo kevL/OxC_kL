@@ -744,7 +744,7 @@ void TileEngine::recalculateFOV()
 			bu != _battleSave->getUnits()->end();
 			++bu)
 	{
-		if ((*bu)->getTile() != 0)
+		if ((*bu)->getTile() != NULL)
 			calculateFOV(*bu);
 	}
 }
