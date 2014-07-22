@@ -50,7 +50,7 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 {
 	RuleCraft* craftRule = _game->getRuleset()->getCraft(defs->id);
 
-	_txtTitle = new Text(155, 32, 5, 24);
+	_txtTitle = new Text(210, 32, 5, 24);
 
 	setPalette("PAL_UFOPAEDIA");
 

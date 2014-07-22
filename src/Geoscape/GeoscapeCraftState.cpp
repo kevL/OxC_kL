@@ -141,7 +141,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
 	_btnCenter->setColor(Palette::blockOffset(8)+5);
-//	_btnCenter->setText(_game->getLanguage()->getString("STR_CENTER"));
 	_btnCenter->setText(tr("STR_CENTER"));
 	_btnCenter->onMouseClick((ActionHandler)& GeoscapeCraftState::btnCenterClick);
 
@@ -168,24 +167,16 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtTitle->setBig();
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
-
-	std::wostringstream
-		ss1,
-		ss2,
-		ss3;
-
-	ss1 << tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed(), L"", false));
-
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
-//kL	_txtStatus->setWordWrap(true);
+//	_txtStatus->setWordWrap(true);
 
-	// kL: the Following has been re-worked.
 	std::string stat = _craft->getStatus();
 	std::wstring status;
-
-	bool lowFuel = _craft->getLowFuel();
-	bool missionComplete = _craft->getMissionComplete();
+	bool
+		lowFuel = _craft->getLowFuel(),
+		missionComplete = _craft->getMissionComplete();
+	int speed = _craft->getSpeed();
 
 	// note: Could add "DAMAGED - Return to Base" around here.
 	if (stat != "STR_OUT")
@@ -205,9 +196,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 		{
 			if (_craft->isInDogfight())
 			{
+				speed = ufo->getSpeed();	// THIS DOES NOT CHANGE THE SPEED of the xCom CRAFT
+											// for Fuel usage. ( ie. it should )
 				status = tr("STR_TAILING_UFO");
-				ss1 << tr("STR_SPEED_").arg(Text::formatNumber(ufo->getSpeed(), L"", false)); // kL
-					// kL: NOTE THIS DOES NOT CHANGE THE SPEED OF the xCom CRAFT. ( ie. it should )
 			}
 			else if (ufo->getStatus() == Ufo::FLYING)
 				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
@@ -225,38 +216,28 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtBase->setText(tr("STR_BASE_UC").arg(_craft->getBase()->getName()));
 
-	_txtSpeed->setColor(Palette::blockOffset(15)-1);
-	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
-//kL	_txtSpeed->setText(tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed())));
-	// kL_begin: set craftSpeed to UFO when in chase.
-/*	std::wostringstream
+	std::wostringstream
 		ss1,
 		ss2,
 		ss3;
 
-	if (_craft->isInDogfight())
-		ss1 << tr("STR_SPEED_").arg("UFO");
-	// kL_note: If in dogfight or more accurately in chase_mode, insert UFO speed.
-	else
-		ss1 << tr("STR_SPEED_").arg(Text::formatNumber(_craft->getSpeed(), L"", false)); */
+	_txtSpeed->setColor(Palette::blockOffset(15)-1);
+	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
+	ss1 << tr("STR_SPEED_").arg(Text::formatNumber(speed, L"", false));
 	_txtSpeed->setText(ss1.str());
-	// kL_end.
 
 	_txtMaxSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC")
 							.arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
 
-	// kL_begin: GeoscapeCraftState, add #Soldier on transports.
 	_txtSoldier->setColor(Palette::blockOffset(15)-1);
 	_txtSoldier->setSecondaryColor(Palette::blockOffset(8)+5);
 	ss2 << tr("STR_SOLDIERS") << " " << L'\x01' << _craft->getNumSoldiers();
 	_txtSoldier->setText(ss2.str());
-	// kL_end.
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
-	// kL_begin: GeoscapeCraftState, set altitude.
 	std::string alt = _craft->getAltitude();
 	if (alt == "STR_GROUND"
 		|| stat == "STR_READY"
@@ -265,15 +246,13 @@ GeoscapeCraftState::GeoscapeCraftState(
 		|| stat == "STR_REARMING")
 	{
 		alt = "STR_GROUNDED";
-	} // kL_end.
+	}
 	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(alt)));
 
-	// kL_begin: GeoscapeCraftState, add #HWP on transports.
 	_txtHWP->setColor(Palette::blockOffset(15)-1);
 	_txtHWP->setSecondaryColor(Palette::blockOffset(8)+5);
 	ss3 << tr("STR_HWPS") << " " << L'\x01' << _craft->getNumVehicles();
 	_txtHWP->setText(ss3.str());
-	// kL_end.
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
 	_txtFuel->setSecondaryColor(Palette::blockOffset(8)+5);
@@ -281,8 +260,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	_txtDamage->setColor(Palette::blockOffset(15)-1);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
-//kL	_txtDamage->setText(tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage())));
-	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercentage()))); // kL
+	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercentage())));
 
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
