@@ -3653,7 +3653,9 @@ int TileEngine::blockage(
 		{
 			if (visLike)
 			{
-				if (tile->getMapData(part)->stopLOS()
+				if ((tile->getMapData(part)->stopLOS()
+							|| (type == DT_SMOKE
+								&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1)) // some tiles do not stopLOS yet should block smoke (eg. Skyranger cockpit)
 						&& (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // this one is for verticalBlockage() only.
 							|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
 							|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL)
@@ -3695,7 +3697,9 @@ int TileEngine::blockage(
 				if (!visLike
 						&& bigWall == 0 // if (only Content-part == true)
 					|| (dir == 9
-						&& !tile->getMapData(MapData::O_OBJECT)->stopLOS()))
+						&& !tile->getMapData(MapData::O_OBJECT)->stopLOS()
+						&& !(type == DT_SMOKE
+							&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1)))
 				{
 					return 0;
 				}
@@ -3713,7 +3717,9 @@ int TileEngine::blockage(
 			}
 
 			if (visLike // hardblock for visLike
-				&& tile->getMapData(MapData::O_OBJECT)->stopLOS()
+				&& (tile->getMapData(MapData::O_OBJECT)->stopLOS()
+					|| (type == DT_SMOKE
+						&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1))
 				&& bigWall == 0)
 			{
 //				if (type == DT_NONE)
@@ -3821,7 +3827,9 @@ int TileEngine::blockage(
 					if ((bigWall != Pathfinding::BIGWALL_NONE			// lets content-objects Block explosions
 							&& bigWall != Pathfinding::BIGWALL_BLOCK)	// includes stopLoS (floors handled above under non-directional condition)
 						|| (visLike
-							&& !tile->getMapData(MapData::O_OBJECT)->stopLOS()))
+							&& !tile->getMapData(MapData::O_OBJECT)->stopLOS()
+							&& !(type == DT_SMOKE
+								&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1)))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 8,9 up,down )";
 						return 0;

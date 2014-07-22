@@ -1776,7 +1776,7 @@ items:
     weight: 5
     bigSprite: 20
     floorSprite: 20
-    power: 56
+    power: 57
     damageType: 9
     battleType: 4
     blastRadius: 4

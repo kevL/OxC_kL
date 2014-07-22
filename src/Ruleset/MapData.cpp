@@ -225,11 +225,11 @@ int MapData::getBlock(ItemDamageType type) const
 		case DT_IN:		return _block[4];
 		case DT_STUN:	return _block[5]; */
 											// see setBlock() below.
-		case DT_NONE:	return _block[1];	// stop LoS [bool], was [0 or 255]
+		case DT_NONE:	return _block[1];	// stop LoS: [0 or 100], was [0 or 255]
 		case DT_HE:
 		case DT_IN:
 		case DT_STUN:	return _block[2];	// HE block [int]
-		case DT_SMOKE:	return _block[3];	// blocks smoke [0 or 256]
+		case DT_SMOKE:	return _block[3];	// block smoke: try (bool), was [0 or 256]
 
 		default:
 		break;
@@ -275,7 +275,8 @@ void MapData::setBlock(
 		// horizontalBlockage() & blockage() were coded differently [verticalBlockage()
 		// too, perhaps]
 	_block[2] = HEBlock;
-	_block[3] = smokeBlock == 1? 256: 0; // <- why? kL_note. I basically use visionBlock for smoke ....
+//kL	_block[3] = smokeBlock == 1? 256: 0; // <- why? kL_note. I basically use visionBlock for smoke ....
+	_block[3] = smokeBlock;
 	_block[4] = fireBlock;
 	_block[5] = gasBlock;
 }

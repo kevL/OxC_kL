@@ -8503,7 +8503,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1404498433 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1405985942 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	<algorithm>
 	<cmath>
