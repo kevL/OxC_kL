@@ -124,7 +124,8 @@ void Pathfinding::calculate(
 	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// for BattlescapeState::btnUnitDownClick() -> now redundant.
 													// Can go back to previewPath()
 
-	_kneelCheck = true;
+	_kneelCheck = true;	// safety. Also done at end of this function.
+						// Not set FALSE anywhere but validateUpDown()
 
 	Position endPos2 = endPos; // kL: for keeping things straight if strafeRejected happens.
 
@@ -150,7 +151,11 @@ void Pathfinding::calculate(
 
 		if (_movementType == MT_FLY
 			&& _modALT //(SDL_GetModState() & KMOD_ALT) != 0 // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
-			&& unit->getTurretType() == -1) // hovertanks always hover.
+			&& unit->getTurretType() == -1 // hovertanks always hover.
+			&& unit->getRaceString() != "STR_FLOATER" // floaters always float
+			&& unit->getRaceString() != "STR_CELATID" // celatids always .. float.
+			&& unit->getRaceString() != "STR_CYBERDISC") // cyberdiscs always .. float
+			// Ethereals *can* walk, but they don't like to.
 		{
 			_movementType = MT_WALK;
 		}
@@ -312,6 +317,8 @@ void Pathfinding::calculate(
 				// rather than here I don't know ....
 		} // kL_end.
 
+		_kneelCheck = true; // to ensure this doesn't conflict w/ BattlescapeState::btnUnitUp/DownClick()
+
 		return;
 	}
 	else
@@ -355,6 +362,8 @@ void Pathfinding::calculate(
 				// rather than here I don't know ....
 		} // kL_end.
 	}
+
+	_kneelCheck = true; // to ensure this doesn't conflict w/ BattlescapeState::btnUnitUp/DownClick()
 }
 
 /**
@@ -794,8 +803,9 @@ int Pathfinding::getTUCost(
 			{
 				// 2 or more voxels poking into this tile -> no go
 				if (belowDest->getUnit()->getHeight()
-						+ belowDest->getUnit()->getFloatHeight()
-						- belowDest->getTerrainLevel() > 26)
+							+ belowDest->getUnit()->getFloatHeight()
+							- belowDest->getTerrainLevel()
+						> 26)
 				{
 					return 255;
 				}
@@ -828,18 +838,10 @@ int Pathfinding::getTUCost(
 										unit,
 										startPos + offset,
 										dir);
-				if (vert == 0		// blocked
-					|| vert == -2)	// no flight suit.
-				{
+				if (vert < 1)
 					return 255;
-				}
 				else
-				{
 					cost = 8; // vertical movement by flying suit or grav lift
-
-//					if (vert == -1)	// kneeled
-//						cost += 8;	// stand up
-				}
 			}
 
 			// check if we have floor, else fall down;
@@ -1790,33 +1792,29 @@ int Pathfinding::validateUpDown(
 	if (destTile == NULL)
 		return 0;
 
+	bool gravLift = startTile->getMapData(MapData::O_FLOOR)
+					&& startTile->getMapData(MapData::O_FLOOR)->isGravLift()
+					&& destTile->getMapData(MapData::O_FLOOR)
+					&& destTile->getMapData(MapData::O_FLOOR)->isGravLift();
 
-	if (startTile->getMapData(MapData::O_FLOOR)
-		&& startTile->getMapData(MapData::O_FLOOR)->isGravLift()
-//		&& destTile
-		&& destTile->getMapData(MapData::O_FLOOR)
-		&& destTile->getMapData(MapData::O_FLOOR)->isGravLift())
-	{
-		return 1; // gravLift.
-	}
-	else if (_kneelCheck == true
-		&& bu->isKneeled())
+	if (bu->isKneeled()
+		&& _kneelCheck == true)
 	{
 		_kneelCheck = false;
 
-		return -1; // kneeled. Useful only for btnUnitUp/DownClick()s
+		if (gravLift == true)
+			return 1; // kneeled on gravLift -> Go
+		else
+			return -1; // kneeled. Stop ( Useful only for btnUnitUp/DownClick()s ... bleh. )
 	}
+	else if (gravLift) // can't do this before kneel is checked, to allow kneeling up/down gravLifts.
+		return 1; // gravLift. Go
 	else if (bu->getArmor()->getMovementType() == MT_FLY)
 	{
 		Tile* belowStart = _save->getTile(startPos + Position(0, 0,-1));
-//		Tile* belowDest = _save->getTile(destPos + Position(0, 0,-1));
 		if ((dir == DIR_UP
-//				&& destTile
-//				&& !destTile->getMapData(MapData::O_FLOOR))	// flying up only possible when there is no roof
-//				&& destTile->hasNoFloor(belowDest))			// flying up only possible when there is no roof
-				&& destTile->hasNoFloor(NULL))				// flying up only possible when there is no roof
+				&& destTile->hasNoFloor(NULL)) // flying up only possible when there is no roof
 			|| (dir == DIR_DOWN
-//				&& destTile
 				&& startTile->hasNoFloor(belowStart))) // flying down only possible when there is no floor
 		{
 			return 2; // flying.
@@ -1949,14 +1947,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		dir			= -1,
 		color		= 0;
 
-	bool stand = false;
-	if (_unit->isKneeled())
-	{
-		stand = true;
-
-		currentTU -= 8;
-		usedTU += 8;
-	}
+	bool hathStood = false;
 
 	bool switchBack = false;
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
@@ -2021,6 +2012,15 @@ enum ArmorBurthen
 					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)->isGravLift();
 		if (!gravLift)
 		{
+			if (_unit->isKneeled()
+				&& hathStood == false)
+			{
+				hathStood = true;
+
+				currentTU -= 8;
+				usedTU += 8;
+			}
+
 			if (dash)
 			{
 				energy -= tu * 3 / 2;
@@ -2047,15 +2047,6 @@ enum ArmorBurthen
 
 			if (energy > energyStop)
 				energy = energyStop;
-		}
-		else if (_unit->isKneeled()	// is gravLift, give back TU if kneeled,
-			&& dir >= DIR_UP		// AND moving up/down
-			&& stand == true)		// and has Not stood up yet.
-		{
-			stand = false;
-
-			currentTU += 8;
-			usedTU -= 8;
 		}
 
 		currentTU -= tu;

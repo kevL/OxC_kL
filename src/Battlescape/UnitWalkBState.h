@@ -46,6 +46,7 @@ class UnitWalkBState
 private:
 	bool
 		_falling,
+		_kneelCheck,
 		_onScreen,
 		_tileSwitchDone,
 		_preStepTurn;

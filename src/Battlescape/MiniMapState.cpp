@@ -208,7 +208,7 @@ void MiniMapState::animate()
 void MiniMapState::think()
 {
 	State::think();
-	_timerAnimate->think(this, 0);
+	_timerAnimate->think(this, NULL);
 }
 
 }

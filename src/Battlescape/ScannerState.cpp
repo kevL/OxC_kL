@@ -90,7 +90,9 @@ ScannerState::ScannerState(BattleAction* action)
 	_game->getResourcePack()->getSurface("DETBORD.PCK")->blit(_bg);
 	_game->getResourcePack()->getSurface("DETBORD2.PCK")->blit(_scan);
 
-	_bg->onMouseClick((ActionHandler)& ScannerState::exitClick);
+	_bg->onMouseClick(
+					(ActionHandler)& ScannerState::exitClick,
+					SDL_BUTTON_RIGHT);
 	_bg->onKeyboardPress(
 					(ActionHandler)& ScannerState::exitClick,
 					Options::keyCancel);
@@ -147,7 +149,7 @@ void ScannerState::animate()
 void ScannerState::think()
 {
 	State::think();
-	_timerAnimate->think(this, 0);
+	_timerAnimate->think(this, NULL);
 }
 
 /**

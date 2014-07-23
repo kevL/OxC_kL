@@ -5798,7 +5798,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1406001699 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1406087370 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5883,7 +5883,7 @@
 	<string>
 	"BattleState.h"
 
-1405750125 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1406082464 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	<climits>
 	"BattlescapeGame.h"
 	"BattleState.h"
@@ -6419,7 +6419,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1405927150 source:f:\git\openxcom\src\battlescape\map.cpp
+1406079923 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6501,7 +6501,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/BattleUnit.h"
 
-1404587679 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
+1406078880 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
 	"MiniMapState.h"
 	<iostream>
 	<sstream>
@@ -6575,7 +6575,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1405905200 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1406087980 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6693,7 +6693,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1404588529 source:f:\git\openxcom\src\battlescape\scannerstate.cpp
+1406078904 source:f:\git\openxcom\src\battlescape\scannerstate.cpp
 	"ScannerState.h"
 	<iostream>
 	<sstream>
@@ -6730,7 +6730,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1405992622 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1406073881 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6883,7 +6883,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1405902035 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1406091499 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -9824,7 +9824,7 @@
 	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/Ruleset.h"
 
-1404096023 source:f:\git\openxcom\src\ufopaedia\articlestatecraft.cpp
+1406064047 source:f:\git\openxcom\src\ufopaedia\articlestatecraft.cpp
 	"ArticleStateCraft.h"
 	<sstream>
 	"Ufopaedia.h"

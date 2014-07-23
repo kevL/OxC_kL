@@ -1881,9 +1881,9 @@ void Map::drawTerrain(Surface* surface)
 						if ((_previewSetting & PATH_TU_COST)
 							&& tile->getTUMarker() > -1)
 						{
-							Uint8 wpColor = 4; // light gray
+							Uint8 wpColor = 2; // light gray
 							if (_save->getTerrain() == "POLAR")
-								wpColor = 10; // dark gray
+								wpColor = 11; // dark gray
 
 							_numWaypid->setColor(wpColor);
 

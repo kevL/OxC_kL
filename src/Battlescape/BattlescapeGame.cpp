@@ -1483,7 +1483,6 @@ void BattlescapeGame::popState()
 				//	<< ", currentTU = " << action.actor->getTimeUnits();
 			}
 
-
 			if (_save->getSide() == FACTION_PLAYER)
 			{
 				//Log(LOG_INFO) << ". side -> Faction_Player";
@@ -1671,7 +1670,8 @@ void BattlescapeGame::popState()
 	if (_save->getSide() == FACTION_PLAYER) // kL
 	{
 		//Log(LOG_INFO) << ". updateSoldierInfo()";
-		_parentState->updateSoldierInfo(); // that should be necessary only on xCom turns. See above^
+ // kL	_parentState->updateSoldierInfo(); // that should be necessary only on xCom turns. See above^
+		_parentState->updateSoldierInfo(false); // kL: calcFoV ought have been done by now ...
 	}
 
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";

@@ -3699,7 +3699,7 @@ int TileEngine::blockage(
 					|| (dir == 9
 						&& !tile->getMapData(MapData::O_OBJECT)->stopLOS()
 						&& !(type == DT_SMOKE
-							&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1)))
+							&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)))
 				{
 					return 0;
 				}
@@ -3719,7 +3719,7 @@ int TileEngine::blockage(
 			if (visLike // hardblock for visLike
 				&& (tile->getMapData(MapData::O_OBJECT)->stopLOS()
 					|| (type == DT_SMOKE
-						&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1))
+						&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1))
 				&& bigWall == 0)
 			{
 //				if (type == DT_NONE)
@@ -3829,7 +3829,7 @@ int TileEngine::blockage(
 						|| (visLike
 							&& !tile->getMapData(MapData::O_OBJECT)->stopLOS()
 							&& !(type == DT_SMOKE
-								&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1)))
+								&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 8,9 up,down )";
 						return 0;
@@ -3843,7 +3843,9 @@ int TileEngine::blockage(
 			}
 
 			// might be Content-part or remaining-bigWalls block here
-			if (tile->getMapData(MapData::O_OBJECT)->stopLOS()) // use stopLOS to hinder explosions from propagating through bigWalls freely.
+			if (tile->getMapData(MapData::O_OBJECT)->stopLOS() // use stopLOS to hinder explosions from propagating through bigWalls freely.
+				|| (type == DT_SMOKE
+					&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1))
 			{
 /*				if (visLike)
 				{
