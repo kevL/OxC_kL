@@ -720,35 +720,67 @@ int Tile::getExplosive() const
 }
 
 /**
- * Flammability of a tile is the flammability of its content or, if no content, its floor.
- * @return, The lower the value, the higher the chance the tile/object catches fire.
+ * Flammability of a tile is the flammability of its most flammable part.
+ * @return, the lower the value, the higher the chance the tile catches fire
  */
 int Tile::getFlammability() const
 {
 	int burn = 255; // not burnable.
 
-	if (_objects[3]) // content-part
-		burn = _objects[3]->getFlammable();
-	else if (_objects[0]) // floor
-		burn = _objects[0]->getFlammable();
+	for (int
+			i = 0;
+			i < 4;
+			++i)
+	{
+		if (_objects[i]
+			&& (_objects[i]->getFlammable() < burn))
+		{
+			burn = _objects[i]->getFlammable();
+		}
+	}
 
 	return burn;
 }
 
 /**
- * Fuel of a tile is the lowest flammability of its parts/objects.
- * @return how long to burn.
+ * Fuel of a tile is the highest fuel of its parts/objects.
+ * @return, how many turns burn
  */
 int Tile::getFuel() const
 {
 	int fuel = 0;
 
-	if (_objects[3])
-		fuel = _objects[3]->getFuel();
-	else if (_objects[0])
-		fuel = _objects[0]->getFuel();
+	for (int
+			i = 0;
+			i < 4;
+			++i)
+	{
+		if (_objects[i]
+			&& (_objects[i]->getFuel() > fuel))
+		{
+			fuel = _objects[i]->getFuel();
+		}
+	}
 
 	return fuel;
+}
+
+/**
+ * Gets the flammability of a tile-part.
+ * @return, the lower the value, the higher the chance the tile-part catches fire
+ */
+int Tile::getFlammability(int part) const
+{
+	return _objects[part]->getFlammable();
+}
+
+/**
+ * Gets the fuel of a tile-part.
+ * @return, how many turns to burn
+ */
+int Tile::getFuel(int part) const
+{
+	return _objects[part]->getFuel();
 }
 
 /**

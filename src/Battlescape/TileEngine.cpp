@@ -3890,135 +3890,84 @@ int TileEngine::blockage(
  */
 bool TileEngine::detonate(Tile* tile)
 {
-	//Log(LOG_INFO) << "TileEngine::detonate()";
-	bool objective = false;
-
 	int explosive = tile->getExplosive();
-	if (explosive)
+	if (explosive == 0) return false; // no damage applied for this tile
+
+	tile->setExplosive(0,true);
+	bool objective = false;
+	Tile* tiles[7];
+	static const int parts[7]={0,1,2,0,1,2,3};
+	Position pos = tile->getPosition();
+	tiles[0] = _battleSave->getTile(Position(pos.x, pos.y, pos.z+1)); //ceiling
+	tiles[1] = _battleSave->getTile(Position(pos.x+1, pos.y, pos.z)); //east wall
+	tiles[2] = _battleSave->getTile(Position(pos.x, pos.y+1, pos.z)); //south wall
+	tiles[3] = tiles[4] = tiles[5] = tiles[6] = tile;
+
+	// explosions create smoke which only stays 1 or 2 turns
+//	tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0,2), 15)));
+
+	int remainingPower, fireProof, fuel;
+	bool destroyed;
+	for (int i = 0; i < 7; ++i)
 	{
-		tile->setExplosive(0, true);
-
-		// explosions create smoke which only stays 1 or 2 turns; kL_note: or 3
-		// smoke added to an already smoking tile will increase smoke to max.15
-/*		int smoke = std::max(
-							1,
-							std::min(
-									tile->getSmoke() + RNG::generate(0, 3),
-									15)); */
-		tile->setSmoke(std::max(
-							1,
-							std::min(
-									tile->getSmoke() + RNG::generate(0, 3),
-									15)));
-
-		Position pos = tile->getPosition();
-		//Log(LOG_INFO) << "detonate() " << smoke << " " << pos;
-
-		Tile* tiles[7];
-		tiles[0] = _battleSave->getTile(Position( // ceiling
-											pos.x,
-											pos.y,
-											pos.z + 1));
-		tiles[1] = _battleSave->getTile(Position( // east wall
-											pos.x + 1,
-											pos.y,
-											pos.z));
-		tiles[2] = _battleSave->getTile(Position( // south wall
-											pos.x,
-											pos.y + 1,
-											pos.z));
-		tiles[3] = tiles[4]
-				 = tiles[5]
-				 = tiles[6]
-				 = tile;
-
-		int
-			fuel = tile->getFuel() + 1,
-			flam = tile->getFlammability(),
-			power = explosive;
-
-		static const int parts[7] = {0, 1, 2, 0, 1, 2, 3};
-
-		for (int
-				i = 0;
-				i < 7;
-				++i)
+		if (tiles[i] && tiles[i]->getMapData(parts[i]))
 		{
-			if (tiles[i]
-				&& tiles[i]->getMapData(parts[i]))
+			remainingPower = explosive;
+			destroyed = false;
+			int volume = 0;
+			int currentpart = parts[i], currentpart2, diemcd;
+			fireProof = tiles[i]->getFlammability(currentpart);
+			fuel = tiles[i]->getFuel(currentpart) + 1;
+			// get the volume of the object by checking it's loftemps objects.
+			for (int j = 0; j < 12; j++)
 			{
-				power = explosive; // reset 'power'.
-
-				while (power > -1
-					&& tiles[i]->getMapData(parts[i]))
+				if (tiles[i]->getMapData(currentpart)->getLoftID(j) != 0)
+					++volume;
+			}
+			// iterate through tile armor and destroy if can
+			while (tiles[i]->getMapData(currentpart)
+				&& (2 * tiles[i]->getMapData(currentpart)->getArmor()) <= remainingPower
+				&& tiles[i]->getMapData(currentpart)->getArmor() != 255)
+			{
+				remainingPower -= 2 * tiles[i]->getMapData(currentpart)->getArmor();
+				destroyed = true;
+				if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
+					&& tiles[i]->getMapData(currentpart)->isBaseModule())
 				{
-					power -= 2 * tiles[i]->getMapData(parts[i])->getArmor();
-
-					if (power > -1)
-					{
-						int volume = 0;
-						for (int // get the volume of the object by checking its loftemps objects.
-								j = 0;
-								j < 12;
-								j++)
-						{
-							if (tiles[i]->getMapData(parts[i])->getLoftID(j) != 0)
-								++volume;
-						}
-
-						if (i > 3) // ie. [west] [north] [content]
-						{
-							tiles[i]->setFire(0);
-
-							int smoke = RNG::generate(
-													0,
-													(volume / 2) + 2);
-							smoke += (volume / 2) + 1;
-
-							if (smoke > tiles[i]->getSmoke())
-								tiles[i]->setSmoke(std::max(
-														0,
-														std::min(
-																smoke,
-																15)));
-						}
-
-						if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
-							&& i == 6
-							&& tile->getMapData(MapData::O_OBJECT)
-							&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
-						{
-							_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
-						}
-
-						if (tiles[i]->getMapData(parts[i]))
-						{
-							flam = tiles[i]->getFlammability();
-							fuel = tiles[i]->getFuel() + 1;
-						}
-
-						if (tiles[i]->destroy(parts[i]))
-							objective = true;
-					}
+					_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
 				}
-
-				if (i > 3 // ie. [west] [north] [content]
-					&& power > flam * 2
-					&& (tile->getMapData(MapData::O_FLOOR)
-						|| tile->getMapData(MapData::O_OBJECT)))
+				//this trick is to follow transformed object parts (object can become a ground)
+				diemcd = tiles[i]->getMapData(currentpart)->getDieMCD();
+				if (diemcd != 0)
+					currentpart2 = tiles[i]->getMapData(currentpart)->getDataset()->getObjects()->at(diemcd)->getObjectType();
+				else
+					currentpart2 = currentpart;
+				if (tiles[i]->destroy(currentpart))
+					objective = true;
+				currentpart = currentpart2;
+				if (tiles[i]->getMapData(currentpart)) // take new values
 				{
-					tile->setFire(fuel);
-					tile->setSmoke(std::max(
-										1,
-										std::min(
-												15 - (flam / 10),
-												12)));
+					fireProof = tiles[i]->getFlammability(currentpart);
+					fuel = tiles[i]->getFuel(currentpart) + 1;
 				}
+			}
+			// set tile on fire
+			if ((2 * fireProof) < remainingPower)
+			{
+//				if (tiles[i]->getMapData(MapData::O_FLOOR) || tiles[i]->getMapData(MapData::O_OBJECT))
+				tiles[i]->setFire(fuel);
+				tiles[i]->setSmoke(std::max(1, std::min(15 - (fireProof / 10), 12)));
+			}
+			// add some smoke if tile was destroyed and not set on fire
+			if (destroyed && !tiles[i]->getFire())
+			{
+				int smoke = RNG::generate(1, (volume / 2) + 3) + (volume / 2);
+				if (smoke > tiles[i]->getSmoke())
+					tiles[i]->setSmoke(std::max(0, std::min(smoke, 15)));
 			}
 		}
 	}
 
-	//Log(LOG_INFO) << "TileEngine::detonate() EXIT, objective = " << objective;
 	return objective;
 }
 
