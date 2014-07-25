@@ -505,9 +505,9 @@ void DebriefingState::btnOkClick(Action*)
 
 /**
  * Adds to the debriefing stats.
- * @param name, The untranslated name of the stat.
- * @param quantity, The quantity to add.
- * @param score, The score to add.
+ * @param name		- the untranslated name of the stat
+ * @param quantity	- the quantity to add
+ * @param score		- the score to add
  */
 void DebriefingState::addStat(
 		const std::string& name,

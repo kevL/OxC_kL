@@ -886,7 +886,8 @@ bool Base::storesOverfull(double offset)
 //	double capacity = static_cast<double>(getAvailableStores()) + 0.1; // kL (damn!)
 	double used = getUsedStores();
 
-	return (used + offset > capacity);
+//	return (used + offset > capacity);
+	return (used + offset > capacity + 0.05); // kL
 }
 
 /**
@@ -1462,10 +1463,10 @@ void Base::removeResearch(
 }
 
 /**
- * kL: Research Help ala XcomUtil.
+ * kL. Research Help ala XcomUtil.
  * @param aLien - name of the alien that got interrogated
  */
-void Base::researchHelp(std::string aLien)
+void Base::researchHelp(std::string aLien) // kL
 {
 	bool found = false;
 	float
@@ -1496,31 +1497,16 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Soldier.1 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Soldier.2 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_POWER_SUIT")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Soldier.25 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_HEAVY_PLASMA_CLIP"
 				|| help == "STR_PLASMA_RIFLE_CLIP"
@@ -1528,11 +1514,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Soldier.4 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_GRENADE"
 				|| help == "STR_ALIEN_ENTERTAINMENT"
@@ -1540,11 +1521,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Soldier.5 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
 			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
@@ -1560,7 +1536,7 @@ void Base::researchHelp(std::string aLien)
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
 				i != _research.end()
-					&& !found; // only the first project found gets the benefit. Could do a menu allowing player to choose...
+					&& !found;
 				++i)
 		{
 			help	= (*i)->getRules()->getName();
@@ -1572,11 +1548,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.15f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Navigator.15 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_HEAVY_PLASMA"
 				|| help == "STR_HEAVY_PLASMA_CLIP"
@@ -1594,11 +1565,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Navigator.2 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_UFO_POWER_SOURCE"
 				|| help == "STR_UFO_CONSTRUCTION"
@@ -1606,67 +1572,36 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Navigator.25: help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_FLYING_SUIT")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.3f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Navigator.3 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.35f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Navigator.35 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_GRAV_SHIELD"
 				|| help == "STR_ALIEN_ALLOYS")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Navigator.4 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_MOTION_SCANNER"
 				|| help == "STR_ALIEN_ENTERTAINMENT")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Navigator.5 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_HYPER_WAVE_DECODER"
 				|| help == "STR_UFO_NAVIGATION")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Navigator.8 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
-			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
 			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}
@@ -1677,7 +1612,7 @@ void Base::researchHelp(std::string aLien)
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
 				i != _research.end()
-					&& !found; // only the first project found gets the benefit. Could do a menu allowing player to choose...
+					&& !found;
 				++i)
 		{
 			help	= (*i)->getRules()->getName();
@@ -1688,32 +1623,17 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Medic.1 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS"
 				|| help == "STR_ALIEN_ENTERTAINMENT")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Medic.2 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_MEDI_KIT")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Medic.4 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ETHEREAL_CORPSE"
 				|| help == "STR_SECTOPOD_CORPSE"
@@ -1729,11 +1649,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Medic.5 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_PSI_AMP"
 				|| help == "STR_SMALL_LAUNCHER"
@@ -1744,11 +1659,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Medic.6 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_FOOD"
 				|| help == "STR_ALIEN_SURGERY"
@@ -1757,14 +1667,8 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Medic.8 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
-			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
 			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}
@@ -1777,7 +1681,7 @@ void Base::researchHelp(std::string aLien)
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
 				i != _research.end()
-					&& !found; // only the first project found gets the benefit. Could do a menu allowing player to choose...
+					&& !found;
 				++i)
 		{
 			help	= (*i)->getRules()->getName();
@@ -1788,11 +1692,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Engineer.1 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS"
 				|| help == "STR_SMALL_LAUNCHER"
@@ -1800,11 +1699,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Engineer.2 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_NEW_FIGHTER_CRAFT"
 				|| help == "STR_NEW_FIGHTER_TRANSPORTER"
@@ -1812,11 +1706,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.3f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Engineer.3 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_MOTION_SCANNER"
 				|| help == "STR_HEAVY_PLASMA"
@@ -1841,25 +1730,14 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Engineer.5 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_BLASTER_LAUNCHER"
 				|| help == "STR_BLASTER_BOMB")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.7f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Engineer.7 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
-			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
 			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}
@@ -1872,7 +1750,7 @@ void Base::researchHelp(std::string aLien)
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
 				i != _research.end()
-					&& !found; // only the first project found gets the benefit. Could do a menu allowing player to choose...
+					&& !found;
 				++i)
 		{
 			help	= (*i)->getRules()->getName();
@@ -1885,11 +1763,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Leader.1 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_HEAVY_PLASMA"
 				|| help == "STR_HEAVY_PLASMA_CLIP"
@@ -1911,64 +1784,33 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Leader.2 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_PSI_AMP")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Leader.25 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_THE_MARTIAN_SOLUTION")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.3f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Leader.3 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Leader.5 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_BLASTER_LAUNCHER")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Leader.6 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_EXAMINATION_ROOM")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Leader.8 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
-			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
 			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}
@@ -1981,7 +1823,7 @@ void Base::researchHelp(std::string aLien)
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
 				i != _research.end()
-					&& !found; // only the first project found gets the benefit. Could do a menu allowing player to choose...
+					&& !found;
 				++i)
 		{
 			help	= (*i)->getRules()->getName();
@@ -2004,11 +1846,6 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Commander.2 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_BLASTER_BOMB"
 					|| help == "STR_ELERIUM_115"
@@ -2019,56 +1856,30 @@ void Base::researchHelp(std::string aLien)
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Commander.25 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_PSI_AMP"
 				|| help == "STR_CYDONIA_OR_BUST")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Commander.5 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_THE_MARTIAN_SOLUTION")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Commander.6 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_ALIEN_ORIGINS")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.7f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Commander.7 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 			else if (help == "STR_BLASTER_LAUNCHER"
 				|| help == "STR_EXAMINATION_ROOM")
 			{
 				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
 				found = true;
-
-				//Log(LOG_INFO) << ". . Commander.8 : help = " << help
-				//		<< ", spent = " << (int)spent
-				//		<< ", cost = " << (int)cost
-				//		<< ", newSpent = " << (*i)->getSpent();
 			}
 
-			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
 			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
 				(*i)->setSpent(static_cast<int>(cost) - 1);
 		}

@@ -79,6 +79,7 @@ Text::~Text()
  * Takes an integer value and formats it as number with separators (spacing the thousands).
  * @param value		- a value
  * @param currency	- currency symbol
+ * @param space		- true to insert a space every 3 digits, kL
  * @return, formatted string
  */
 std::wstring Text::formatNumber(

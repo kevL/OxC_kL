@@ -149,7 +149,7 @@ ResearchState::ResearchState(
 	_lstResearch->setSelectable(true);
 	_lstResearch->setBackground(_window);
 	_lstResearch->setMargin(8);
-	_lstResearch->setWordWrap(true);
+//	_lstResearch->setWordWrap(true);
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
 
 	init();
@@ -223,9 +223,16 @@ void ResearchState::init()
 		assigned << (*proj)->getAssigned();
 
 		std::wstring research = tr((*proj)->getRules()->getName());
+		std::wstring wsDaysLeft = L"-";
 
-		int daysLeft = static_cast<int>(ceil((static_cast<double>((*proj)->getCost() - (*proj)->getSpent())) / static_cast<double>((*proj)->getAssigned())));
-		std::wstring wsDays = Text::formatNumber(daysLeft, L"", false);
+		if ((*proj)->getAssigned() > 0)
+		{
+			int daysLeft = static_cast<int>(
+							ceil(
+								(static_cast<double>((*proj)->getCost() - (*proj)->getSpent()))
+								/ static_cast<double>((*proj)->getAssigned())));
+			wsDaysLeft = Text::formatNumber(daysLeft, L"", false);
+		}
 
 		_lstResearch->addRow(
 							4,
@@ -233,7 +240,7 @@ void ResearchState::init()
 							assigned.str().c_str(),
 							tr((*proj)->getResearchProgress()).c_str(),
 //							(*proj)->getCostCompleted().c_str());
-							wsDays.c_str());
+							wsDaysLeft.c_str());
 	}
 
 	_txtAvailable->setText(tr("STR_SCIENTISTS_AVAILABLE")

@@ -52,7 +52,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 16, 10, 8);
-	_lstSoldiers	= new TextList(288, 144, 16, 32);
+	_lstSoldiers	= new TextList(285, 144, 16, 32);
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette("PAL_GEOSCAPE", 0);
@@ -83,7 +83,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	_txtTitle->setBig();
 
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
-	_lstSoldiers->setColumns(2, 200, 80);
+	_lstSoldiers->setColumns(2, 200, 77);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);

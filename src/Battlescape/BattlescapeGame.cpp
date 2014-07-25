@@ -1559,7 +1559,7 @@ void BattlescapeGame::popState()
 				// kL_note: This is done at the end of this function also, but somehow it's
 				// not updating visUnit indicators when watching a unit die and expose a second
 				// enemy unit behind the first. btw, calcFoV ought have been done by now ...
-				_parentState->updateSoldierInfo(false); // kL
+				_parentState->updateSoldierInfo(); // kL
 
 //				getMap()->refreshSelectorPosition(); // kL
 				setupCursor();
@@ -1671,7 +1671,7 @@ void BattlescapeGame::popState()
 	{
 		//Log(LOG_INFO) << ". updateSoldierInfo()";
  // kL	_parentState->updateSoldierInfo(); // that should be necessary only on xCom turns. See above^
-		_parentState->updateSoldierInfo(false); // kL: calcFoV ought have been done by now ...
+		_parentState->updateSoldierInfo(); // kL: calcFoV ought have been done by now ...
 	}
 
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";

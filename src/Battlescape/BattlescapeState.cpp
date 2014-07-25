@@ -1266,7 +1266,7 @@ inline void BattlescapeState::handle(Action* action)
 						{
 							(*i)->instaKill();
 							if ((*i)->getTile())
-								(*i)->getTile()->setUnit(0);
+								(*i)->getTile()->setUnit(NULL);
 						}
 					}
 				}

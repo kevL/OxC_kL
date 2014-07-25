@@ -319,8 +319,7 @@ int Tile::getTUCost(
 	{
 		if (_objects[part]->isUFODoor()
 //kL		&& _curFrame[part] == 7)
-//			&& _curFrame[part] > 1) // cfailde:doorcost
-			&& _curFrame[part] > 0) // kL
+			&& _curFrame[part] > 1) // cfailde:doorcost
 		{
 			return 0;
 		}
@@ -416,7 +415,7 @@ int Tile::getFootstepSound(Tile* tileBelow) const
 
 /**
  * Open a door on this tile.
- * @param wall		- a tile part
+ * @param part		- a tile part
  * @param unit		- pointer to a unit
  * @param reserve	- see BA_* enum for TU reserves
  * @return, Value: -1 no door opened
@@ -426,7 +425,7 @@ int Tile::getFootstepSound(Tile* tileBelow) const
  *					4 not enough TUs
  */
 int Tile::openDoor(
-		int wall,
+		int part,
 		BattleUnit* unit,
 		BattleActionType reserve)
 {
@@ -434,9 +433,9 @@ int Tile::openDoor(
 	// May lead to ambiguity, esp. if isDoor() & isUFODoor() are not exclusive;
 	// or if setMapData() is doing something ...... -> to UFO doors.
 
-	if (!_objects[wall])
+	if (!_objects[part])
 		return -1;
-	else if (_objects[wall]->isDoor())
+	else if (_objects[part]->isDoor())
 	{
 		if (_unit
 			&& _unit != unit
@@ -446,7 +445,7 @@ int Tile::openDoor(
 		}
 
 		if (unit
-			&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
+			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
 										+ unit->getActionTUs(
 														reserve,
 														unit->getMainHandWeapon(false)))
@@ -455,20 +454,20 @@ int Tile::openDoor(
 		}
 
 		setMapData(
-				_objects[wall]->getDataset()->getObjects()->at(_objects[wall]->getAltMCD()),
-				_objects[wall]->getAltMCD(),
-				_mapDataSetID[wall],
-				_objects[wall]->getDataset()->getObjects()->at(_objects[wall]->getAltMCD())->getObjectType());
-		setMapData(0,-1,-1, wall);
+				_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
+				_objects[part]->getAltMCD(),
+				_mapDataSetID[part],
+				_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
+		setMapData(0,-1,-1, part);
 
 		return 0;
 	}
-	else if (_objects[wall]->isUFODoor())
+	else if (_objects[part]->isUFODoor())
 	{
-		if (_curFrame[wall] == 0) // ufo door wall 0 - door is closed
+		if (_curFrame[part] == 0) // ufo door part 0 - door is closed
 		{
 			if (unit
-				&& unit->getTimeUnits() < _objects[wall]->getTUCost(unit->getArmor()->getMovementType())
+				&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getArmor()->getMovementType())
 											+ unit->getActionTUs(
 															reserve,
 															unit->getMainHandWeapon(false)))
@@ -476,11 +475,11 @@ int Tile::openDoor(
 				return 4;
 			}
 
-			_curFrame[wall] = 1; // start opening door
+			_curFrame[part] = 1; // start opening door
 
 			return 1;
 		}
-		else if (_curFrame[wall] != 7) // ufo door != wall 7 -> door is still opening
+		else if (_curFrame[part] != 7) // ufo door != part 7 -> door is still opening
 			return 3;
 	}
 

@@ -188,17 +188,17 @@ private:
 		/// Unit opens door?
 		int unitOpensDoor(
 				BattleUnit* unit,
-				bool rClick = false,
+				bool rightClick = false,
 				int dir = -1);
 		/// kL. Checks for a door connected to this wall at this position.
 		bool TileEngine::testAdjacentDoor( // kL
 				Position pos,
-				int wall,
+				int part,
 				int dir);
 		/// Opens any doors this door is connected to.
 		void openAdjacentDoors(
 				Position pos,
-				int wall);
+				int part);
 		/// Closes ufo doors.
 		int closeUfoDoors();
 

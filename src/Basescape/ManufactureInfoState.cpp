@@ -316,8 +316,8 @@ void ManufactureInfoState::setAssignedEngineer()
 	std::wostringstream s2;
 	s2 << L"> \x01";
 	if (_production->getInfiniteAmount())
-//kL		s2 << Language::utf8ToWstr("∞");
-		s2 << "inf"; // kL
+//kL	s2 << Language::utf8ToWstr("∞");
+		s2 << "oo"; // kL
 	else
 		s2 << _production->getAmountTotal();
 

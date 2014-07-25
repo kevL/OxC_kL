@@ -62,8 +62,6 @@ UnitTurnBState::UnitTurnBState(
 UnitTurnBState::~UnitTurnBState()
 {
 	//Log(LOG_INFO) << "Delete UnitTurnBState";
-//	_unit->setShowVisUnits(true); // kL
-//	_parent->getBattlescapeState()->toggleVisUnits(true); // kL
 }
 
 /**

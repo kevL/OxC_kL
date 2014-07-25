@@ -72,7 +72,7 @@ private:
 		void setRearming(bool rearming);
 		/// Rearms the craft weapon.
 		int rearm(
-				const int available,
+				const int baseClips,
 				const int clipSize);
 
 		/// Fires the craft weapon. Used during dogfights.

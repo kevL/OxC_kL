@@ -896,7 +896,7 @@ void Craft::repair()
  */
 std::string Craft::rearm(Ruleset* rules)
 {
-	std::string ammo = "";
+	std::string ret = "";
 
 	for (std::vector<CraftWeapon*>::iterator
 			i = _weapons.begin();
@@ -910,28 +910,35 @@ std::string Craft::rearm(Ruleset* rules)
 			break;
 		}
 
-		if (*i != 0
+		if (*i != NULL
 			&& (*i)->isRearming())
 		{
 			std::string clip = (*i)->getRules()->getClipItem();
-			int available = _base->getItems()->getItem(clip);
+			int baseClips = _base->getItems()->getItem(clip);
+
 			if (clip == "")
 				(*i)->rearm(0, 0);
-			else if (available > 0)
+			else if (baseClips > 0)
 			{
-				int used = (*i)->rearm(available, rules->getItem(clip)->getClipSize());
+				int load = (*i)->rearm(
+									baseClips,
+									rules->getItem(clip)->getClipSize());
 
-				if (used > available)
+//				if (load > baseClips)
+				if ((*i)->isRearming()
+					&& load >= baseClips) // base uses up all stock
 				{
-					ammo = clip;
+					ret = clip;
 					(*i)->setRearming(false);
 				}
 
-				_base->getItems()->removeItem(clip, used);
+				_base->getItems()->removeItem(
+											clip,
+											load);
 			}
 			else
 			{
-				ammo = clip;
+				ret = clip;
 				(*i)->setRearming(false);
 			}
 
@@ -939,7 +946,7 @@ std::string Craft::rearm(Ruleset* rules)
 		}
 	}
 
-	return ammo;
+	return ret;
 }
 
 /**

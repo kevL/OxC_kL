@@ -140,41 +140,74 @@ void CraftWeapon::setRearming(bool rearming)
 
 /**
  * Rearms this craft weapon's ammo.
- * @param available, The number of clips available
- * @param clipSize, The number of rounds in said clips
- * @return, The number of clips used
+ * @param baseClips	- the amount of clips available at the Base
+ * @param clipSize	- the amount of rounds in a clip
+ * @return, the amount of clips used
  */
 int CraftWeapon::rearm(
-		const int available,
+		const int baseClips,
 		const int clipSize)
 {
-	int used = 0;
+	int
+		rate = _rules->getRearmRate(),
+		full = _rules->getAmmoMax(),
+		req = 0;
 
 	if (clipSize > 0)
 	{
-		const int needed = std::max(1, (_rules->getAmmoMax() - _ammo) / clipSize);
-		used = std::min(_rules->getRearmRate() / clipSize, needed);
+		req = std::min( // +(clipSize-1) for rounding up
+					rate,
+					full - _ammo + clipSize - 1) / clipSize;
 	}
 
-	if (available >= used)
+	int load = baseClips * clipSize;
+	if (clipSize < 1 // kL
+		|| baseClips >= req)
 	{
-		setAmmo(_ammo + _rules->getRearmRate());
+		load = rate;
 	}
+
+	setAmmo(_ammo + load);
+
+	_rearming = (_ammo < full);
+
+	if (clipSize < 1)
+		return 0;
+
+	int ret = load / clipSize;
+
+	if (ret < 1) // kL, 1 clip used.
+		return 1;
+
+	return ret;
+}
+//--
+//	int
+/*	load = 0;
+
+	if (clipSize > 0)
+	{
+		load = std::min(
+					rate / clipSize,
+					std::max(
+							1,
+							(full - _ammo) / clipSize));
+	}
+
+	if (baseClips >= load)
+		setAmmo(_ammo + rate);
 	else
-	{
-		setAmmo(_ammo + (clipSize * available));
-	}
+		setAmmo(_ammo + (clipSize * baseClips));
 
-	if (_ammo >= _rules->getAmmoMax())
+	if (_ammo >= full)
 	{
-		_ammo = _rules->getAmmoMax();
+		_ammo = full;
 		_rearming = false;
 	}
 
-	return used;
-}
+	return load; */
 
-/*
+/**
  * Fires a projectile from craft's weapon.
  * @return, Pointer to the new projectile
  */
@@ -191,7 +224,7 @@ CraftWeaponProjectile* CraftWeapon::fire() const
 	return p;
 }
 
-/*
+/**
  * Get how many clips are loaded in this weapon.
  * @param ruleset, A pointer to the core ruleset
  * @return, The number of clips loaded

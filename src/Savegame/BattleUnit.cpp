@@ -1094,7 +1094,6 @@ Surface* BattleUnit::getCache(
 void BattleUnit::kneel(bool kneeled)
 {
 	//Log(LOG_INFO) << "BattleUnit::kneel()";
-
 	_kneeled = kneeled;
 	_cacheInvalid = true;
 }

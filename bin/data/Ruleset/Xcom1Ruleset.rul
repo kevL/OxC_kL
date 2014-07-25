@@ -1108,6 +1108,21 @@ crafts:
           width: 10
           length: 20
 craftWeapons:
+  - type: STR_CANNON_UC
+    sprite: 2
+    sound: 4
+    damage: 9
+    range: 19
+    accuracy: 22
+    reloadCautious: 5
+    reloadStandard: 4
+    reloadAggressive: 3
+    ammoMax: 100
+    rearmRate: 25
+    launcher: STR_CANNON
+    clip: STR_CANNON_ROUNDS_X50
+    projectileType: 2
+    projectileSpeed: 6
   - type: STR_STINGRAY
     sprite: 0
     sound: 5
@@ -1138,21 +1153,6 @@ craftWeapons:
     clip: STR_AVALANCHE_MISSILES
     projectileType: 1
     projectileSpeed: 9
-  - type: STR_CANNON_UC
-    sprite: 2
-    sound: 4
-    damage: 9
-    range: 19
-    accuracy: 22
-    reloadCautious: 5
-    reloadStandard: 4
-    reloadAggressive: 3
-    ammoMax: 100
-    rearmRate: 25
-    launcher: STR_CANNON
-    clip: STR_CANNON_ROUNDS_X50
-    projectileType: 2
-    projectileSpeed: 6
   - type: STR_LASER_CANNON_UC
     sprite: 4
     sound: 8
@@ -1163,21 +1163,21 @@ craftWeapons:
     reloadStandard: 8
     reloadAggressive: 5
     ammoMax: 20
-    rearmRate: 10
+    rearmRate: 5
     launcher: STR_LASER_CANNON
     clip: STR_ELERIUM_115
     projectileType: 4
   - type: STR_PLASMA_BEAM_UC
     sprite: 5
     sound: 9
-    damage: 68
+    damage: 65
     range: 46
-    accuracy: 47
+    accuracy: 46
     reloadCautious: 20
     reloadStandard: 14
     reloadAggressive: 8
-    ammoMax: 50
-    rearmRate: 25
+    ammoMax: 30
+    rearmRate: 15
     launcher: STR_PLASMA_BEAM
     clip: STR_ELERIUM_115
     projectileType: 5
@@ -1186,11 +1186,11 @@ craftWeapons:
     sound: 7
     damage: 222
     range: 69
-    accuracy: 107
+    accuracy: 103
     reloadCautious: 36
     reloadStandard: 27
     reloadAggressive: 18
-    ammoMax: 2
+    ammoMax: 3
     rearmRate: 1
     launcher: STR_FUSION_BALL_LAUNCHER
     clip: STR_FUSION_BALL
@@ -5380,6 +5380,30 @@ alienDeployments:
     height: 4
   - type: STR_LARGE_SCOUT
     data:
+      - alienRank: 6 #terrorist1
+        lowQty: 0
+        highQty: 0
+        dQty: 1
+        percentageOutsideUfo: 100
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7 #terrorist2
+        lowQty: 0
+        highQty: 0
+        dQty: 1
+        percentageOutsideUfo: 100
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
       - alienRank: 2 #engineer
         lowQty: 1
         highQty: 2
@@ -5874,20 +5898,46 @@ alienDeployments:
             - STR_PLASMA_PISTOL
             - STR_PLASMA_PISTOL_CLIP
             - STR_PLASMA_PISTOL_CLIP
+            - STR_ALIEN_GRENADE
           -
             - STR_PLASMA_RIFLE
             - STR_PLASMA_RIFLE_CLIP
             - STR_PLASMA_RIFLE_CLIP
+            - STR_ALIEN_GRENADE
           -
             - STR_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
-            - STR_ALIEN_GRENADE
             - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
     width: 50
     length: 50
     height: 4
   - type: STR_SUPPLY_SHIP
     data:
+      - alienRank: 6 #terrorist1
+        lowQty: 0
+        highQty: 1
+        dQty: 1
+        percentageOutsideUfo: 100
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7 #terrorist2
+        lowQty: 0
+        highQty: 1
+        dQty: 1
+        percentageOutsideUfo: 100
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
       - alienRank: 1 #leader
         lowQty: 1
         highQty: 1
@@ -9329,6 +9379,8 @@ MCDPatches:
       - MCDIndex: 13
         bigWall: 6
       - MCDIndex: 14
+        bigWall: 6
+      - MCDIndex: 59
         bigWall: 6
   - type: U_EXT02
     data:

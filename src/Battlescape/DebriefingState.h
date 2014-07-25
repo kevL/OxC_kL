@@ -53,7 +53,7 @@ struct DebriefingStat
 		score;
 	std::string item;
 
-	///
+	/// cTor.
 	DebriefingStat(
 			std::string _item,
 			bool recovery = false)

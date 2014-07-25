@@ -70,8 +70,7 @@ UnitWalkBState::UnitWalkBState(
 		_tileSwitchDone(false),
 		_onScreen(false),
 		_walkCam(NULL),
-		_start(-1),
-		_kneelCheck(true)
+		_start(-1)
 {
 	//Log(LOG_INFO) << "Create UnitWalkBState";
 }
@@ -293,51 +292,43 @@ bool UnitWalkBState::doStatusStand()
 	int dir = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". StartDirection = " << dir;
 
-	// moved here from below_
 	Tile* tile = _parent->getSave()->getTile(_unit->getPosition());
-	bool gravLift = dir >= _pf->DIR_UP
+	bool gravLift = dir >= _pf->DIR_UP // Assumes tops & bottoms of gravLifts always have floors/ceilings.
 					&& tile->getMapData(MapData::O_FLOOR)
 					&& tile->getMapData(MapData::O_FLOOR)->isGravLift();
 
-//	if (_kneelCheck == true // see also: Pathfinding::_kneelCheck
-//		|| gravLift)
-//	{
-//		_kneelCheck = false; // stop checking unit's kneeled status after first step.
-
-		if (_unit->isKneeled()
-			&& !gravLift
-			&& !_pf->getPath().empty())
-//			&& ((-1 < dir && dir < _pf->DIR_UP) // ie. *not* up or down
-//				|| !gravLift)) // allow kneeling up/down gravLifts.
+	if (dir > -1
+		&& _unit->isKneeled()
+		&& !gravLift
+		&& !_pf->getPath().empty())
+	{
+		//Log(LOG_INFO) << ". kneeled, and path Valid";
+		if (_parent->kneel(
+						_unit,
+						false))
 		{
-			//Log(LOG_INFO) << ". kneeled, and path UpDown INVALID";
-			if (_parent->kneel(
-							_unit,
-							false))
+			//Log(LOG_INFO) << ". . Stand up";
+			_unit->setCache(NULL);
+			_parent->getMap()->cacheUnit(_unit);
+
+			if (_terrain->checkReactionFire(_unit)) // unit got fired upon - stop.
 			{
-				//Log(LOG_INFO) << ". . Stand up";
-				_unit->setCache(NULL);
-				_parent->getMap()->cacheUnit(_unit);
-
-				if (_terrain->checkReactionFire(_unit)) // unit got fired upon - stop.
-				{
-					_pf->abortPath();
-					_parent->popState();
-
-					return false;
-				}
-			}
-			else
-			{
-				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-
 				_pf->abortPath();
 				_parent->popState();
 
 				return false;
 			}
 		}
-//	}
+		else
+		{
+			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+
+			_pf->abortPath();
+			_parent->popState();
+
+			return false;
+		}
+	}
 
 	_tileSwitchDone = false;
 
@@ -431,14 +422,6 @@ bool UnitWalkBState::doStatusStand()
 
 		int energy = tu;
 
-/* moved up before kneel check^
-		Tile* tile = _parent->getSave()->getTile(_unit->getPosition());
-		bool gravLift = dir >= _pf->DIR_UP
-						&& tile->getMapData(MapData::O_FLOOR)
-						&& tile->getMapData(MapData::O_FLOOR)->isGravLift(); */
-//						&& tileDest
-//						&& tileDest->getMapData(MapData::O_FLOOR)
-//						&& tileDest->getMapData(MapData::O_FLOOR)->isGravLift())
 		if (!gravLift)
 		{
 			if (_action.run // allow dash when moving vertically 1 tile (or more).

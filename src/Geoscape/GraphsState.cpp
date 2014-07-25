@@ -156,7 +156,7 @@ GraphsState::GraphsState()
 		_txtScale.push_back(new Text(
 									32,
 									10,
-									86,
+									91,
 									171 - (static_cast<int>(scaleText) * 14)));
 
 		add(_txtScale.at(scaleText));

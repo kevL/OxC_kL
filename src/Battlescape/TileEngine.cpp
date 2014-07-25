@@ -34,6 +34,7 @@
 #include "BattlescapeState.h"
 #include "Camera.h"
 #include "ExplosionBState.h"
+#include "InfoBoxOKState.h"	// kL, for message when unconscious unit explodes.
 #include "Map.h"
 #include "Pathfinding.h"
 #include "ProjectileFlyBState.h"
@@ -41,6 +42,8 @@
 
 #include "../fmath.h"
 
+#include "../Engine/Game.h"		// kL, for message when unconscious unit explodes.
+#include "../Engine/Language.h"	// kL, for message when unconscious unit explodes.
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
@@ -2710,6 +2713,15 @@ void TileEngine::explode(
 											&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 										{
 											(*it)->getUnit()->instaKill();
+											// send Death notice.
+											if (Options::battleNotifyDeath)
+											{
+												Game* game = _battleSave->getBattleState()->getGame();
+												game->pushState(new InfoboxOKState(game->getLanguage()->getString(
+																											"STR_HAS_BEEN_KILLED", // "has exploded ..."
+																											(*it)->getUnit()->getGender())
+																										.arg((*it)->getUnit()->getName(game->getLanguage()))));
+											}
 										}
 
 										_battleSave->removeItem((*it));
@@ -3847,28 +3859,6 @@ int TileEngine::blockage(
 				|| (type == DT_SMOKE
 					&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1))
 			{
-/*				if (visLike)
-				{
-//					if (type == DT_NONE)
-//					{
-
-/*						if (bigWall == Pathfinding::BIGWALL_NESW
-							|| bigWall == Pathfinding::BIGWALL_NWSE)
-						{
-							return -1;
-						}
-						else */
-//						return -1;
-//					}
-//					else
-/*
-					return 500;
-				}
-				else if (_powerE > -1
-					&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
-				{
-					return 500; // this is a hardblock for HE; hence it has to be higher than the highest HE power in the Rulesets.
-				} */
 				if (visLike
 					|| (_powerE > -1
 						&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2)) // terrain absorbs 200% damage from DT_HE!
@@ -4055,9 +4045,9 @@ Tile* TileEngine::checkForTerrainExplosions()
 
 /**
  * Opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
- * @param unit		- pointer to a battleunit
- * @param rClick	- true if the player right-clicked
- * @param dir		- direction to check for a door
+ * @param unit			- pointer to a battleunit
+ * @param rightClick	- true if the player right-clicked
+ * @param dir			- direction to check for a door
  * @return, -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
  *			 0 normal door opened, make a squeaky sound and you can walk through;
  *			 1 ufo door is starting to open, make a whoosh sound, don't walk through;
@@ -4067,7 +4057,7 @@ Tile* TileEngine::checkForTerrainExplosions()
  */
 int TileEngine::unitOpensDoor(
 		BattleUnit* unit,
-		bool rClick,
+		bool rightClick,
 		int dir)
 {
 	//Log(LOG_INFO) << "unitOpensDoor()";
@@ -4077,7 +4067,7 @@ int TileEngine::unitOpensDoor(
 
 	int size = unit->getArmor()->getSize();
 	if (size > 1
-		&& rClick)
+		&& rightClick)
 	{
 		return door;
 	}
@@ -4120,12 +4110,12 @@ int TileEngine::unitOpensDoor(
 				case 1: // north east
 						checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
 						checkPositions.push_back(std::make_pair(Position(1,-1, 0), MapData::O_WESTWALL));	// one tile north-east
-					if (rClick)
+					if (rightClick)
 					{
 						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
 						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_NORTHWALL));	// one tile east
 					}
-/*					if (rClick
+/*					if (rightClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 1)) // kL
 					{
 						checkPositions.push_back(std::make_pair(Position(0, 0, 0), MapData::O_NORTHWALL));	// origin
@@ -4142,12 +4132,12 @@ int TileEngine::unitOpensDoor(
 						checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL));	// one tile south-east
 					if (!x)
 						checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL));	// one tile south-east
-					if (rClick)
+					if (rightClick)
 					{
 						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
 						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
 					}
-/*					if (rClick
+/*					if (rightClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 3)) // kL
 					{
 						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
@@ -4162,12 +4152,12 @@ int TileEngine::unitOpensDoor(
 				case 5: // south-west
 						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
 						checkPositions.push_back(std::make_pair(Position(-1, 1, 0), MapData::O_NORTHWALL));	// one tile south-west
-					if (rClick)
+					if (rightClick)
 					{
 						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_WESTWALL));	// one tile south
 						checkPositions.push_back(std::make_pair(Position(0, 1, 0), MapData::O_NORTHWALL));	// one tile south
 					}
-/*					if (rClick
+/*					if (rightClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 5)) // kL
 					{
 						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
@@ -4188,12 +4178,12 @@ int TileEngine::unitOpensDoor(
 						checkPositions.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_WESTWALL));	// one tile north
 					if (y)
 						checkPositions.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_NORTHWALL));	// one tile north
-					if (rClick)
+					if (rightClick)
 					{
 						checkPositions.push_back(std::make_pair(Position( 0,-1, 0), MapData::O_WESTWALL));	// one tile north
 						checkPositions.push_back(std::make_pair(Position(-1, 0, 0), MapData::O_NORTHWALL));	// one tile west
 					}
-/*					if (rClick
+/*					if (rightClick
 						|| testAdjacentDoor(posUnit, MapData::O_NORTHWALL, 7)) // kL
 					{
 						//Log(LOG_INFO) << ". north-west";
@@ -4208,7 +4198,9 @@ int TileEngine::unitOpensDoor(
 				break;
 			}
 
-			int wall = 0;
+
+			int part = 0;
+
 			for (std::vector<std::pair<Position, int> >::const_iterator
 					i = checkPositions.begin();
 					i != checkPositions.end()
@@ -4227,7 +4219,7 @@ int TileEngine::unitOpensDoor(
 										_battleSave->getBattleGame()->getReservedAction());
 					if (door != -1)
 					{
-						wall = i->second;
+						part = i->second;
 
 						if (door == 1)
 						{
@@ -4242,23 +4234,25 @@ int TileEngine::unitOpensDoor(
 			}
 
 			if (door == 0
-				&& rClick)
+				&& rightClick)
 			{
-				if (wall == MapData::O_WESTWALL)
-					wall = MapData::O_NORTHWALL;
+				if (part == MapData::O_WESTWALL)
+					part = MapData::O_NORTHWALL;
 				else
-					wall = MapData::O_WESTWALL;
+					part = MapData::O_WESTWALL;
 
 				TUCost = tile->getTUCost(
-									wall,
-									unit->getArmor()->getMovementType());
+										part,
+										unit->getArmor()->getMovementType());
+				//Log(LOG_INFO) << ". normal door, RMB, part = " << part << ", TUcost = " << TUCost;
 			}
 			else if (door == 1
 				|| door == 4)
 			{
 				TUCost = tile->getTUCost(
-									wall,
-									unit->getArmor()->getMovementType());
+										part,
+										unit->getArmor()->getMovementType());
+				//Log(LOG_INFO) << ". UFO door, part = " << part << ", TUcost = " << TUCost;
 			}
 		}
 	}
@@ -4271,7 +4265,7 @@ int TileEngine::unitOpensDoor(
 			{
 				tile->animate(); // cfailde:doorcost : ensures frame advances for ufo doors to update TU cost
 
-				if (rClick) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
+				if (rightClick) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
 				{
 					calculateFOV(unit->getPosition()); // calculate FoV for everyone within sight-range, incl. unit.
 
@@ -4287,10 +4281,10 @@ int TileEngine::unitOpensDoor(
 					}
 				}
 			}
-			else
+			else // not enough TU
 				return 4;
 		}
-		else
+		else // reserved TU
 			return 5;
 	}
 
@@ -4305,15 +4299,15 @@ int TileEngine::unitOpensDoor(
 }
 
 /**
- * kL. Checks for a door connected to this wall at this position
+ * kL. Checks for a door connected to a wall at this position,
  * so that units can open double doors diagonally.
- * @param pos The starting position
- * @param wall The wall to test
- * @param dir The direction to check out
+ * @param pos	- the starting position
+ * @param part	- the wall to test
+ * @param dir	- the direction to check out
  */
 bool TileEngine::testAdjacentDoor( // kL
 		Position pos,
-		int wall,
+		int part,
 		int dir)
 {
 	Position offset;
@@ -4339,8 +4333,8 @@ bool TileEngine::testAdjacentDoor( // kL
 
 	Tile* tile = _battleSave->getTile(pos + offset);
 	if (tile
-		&& tile->getMapData(wall)
-		&& tile->getMapData(wall)->isUFODoor())
+		&& tile->getMapData(part)
+		&& tile->getMapData(part)->isUFODoor())
 	{
 		return true;
 	}
@@ -4351,15 +4345,15 @@ bool TileEngine::testAdjacentDoor( // kL
 /**
  * Opens any doors connected to this wall at this position,
  * Keeps processing till it hits a non-ufo-door.
- * @param pos The starting position
- * @param wall The wall to open, defines which direction to check.
+ * @param pos	- the starting position
+ * @param part	- the wall to open ( defines which direction to check )
  */
 void TileEngine::openAdjacentDoors(
 		Position pos,
-		int wall)
+		int part)
 {
 	Position offset;
-	bool westSide = (wall == 1);
+	bool westSide = (part == 1);
 
 	for (int
 			i = 1;
@@ -4369,10 +4363,10 @@ void TileEngine::openAdjacentDoors(
 		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
 		Tile* tile = _battleSave->getTile(pos + offset);
 		if (tile
-			&& tile->getMapData(wall)
-			&& tile->getMapData(wall)->isUFODoor())
+			&& tile->getMapData(part)
+			&& tile->getMapData(part)->isUFODoor())
 		{
-			tile->openDoor(wall);
+			tile->openDoor(part);
 		}
 		else
 			break;
@@ -4386,10 +4380,10 @@ void TileEngine::openAdjacentDoors(
 		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
 		Tile* tile = _battleSave->getTile(pos + offset);
 		if (tile
-			&& tile->getMapData(wall)
-			&& tile->getMapData(wall)->isUFODoor())
+			&& tile->getMapData(part)
+			&& tile->getMapData(part)->isUFODoor())
 		{
-			tile->openDoor(wall);
+			tile->openDoor(part);
 		}
 		else
 			break;
@@ -4398,11 +4392,11 @@ void TileEngine::openAdjacentDoors(
 
 /**
  * Closes ufo doors.
- * @return, Whether doors are closed.
+ * @return, # of doors that get closed
  */
 int TileEngine::closeUfoDoors()
 {
-	int doorsclosed = 0;
+	int closed = 0;
 
 	for (int // prepare a list of tiles on fire/smoke & close any ufo doors
 			i = 0;
@@ -4430,10 +4424,10 @@ int TileEngine::closeUfoDoors()
 			}
 		}
 
-		doorsclosed += _battleSave->getTiles()[i]->closeUfoDoor();
+		closed += _battleSave->getTiles()[i]->closeUfoDoor();
 	}
 
-	return doorsclosed;
+	return closed;
 }
 
 /**

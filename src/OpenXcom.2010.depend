@@ -4824,7 +4824,7 @@
 1404096023 f:\git\openxcom\src\savegame\craftweaponprojectile.h
 	<string>
 
-1404096023 f:\git\openxcom\src\savegame\craftweapon.h
+1406255868 f:\git\openxcom\src\savegame\craftweapon.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -4964,7 +4964,7 @@
 1404096023 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
-1404096022 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1406231493 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	<limits>
 	"../Interface/ArrowButton.h"
@@ -5274,7 +5274,7 @@
 	<algorithm>
 	<stdint.h>
 
-1404096022 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1406168121 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -5703,7 +5703,7 @@
 1404096022 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1404096022 f:\git\openxcom\src\battlescape\tileengine.h
+1406154891 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -5714,7 +5714,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/Position.h"
 
-1405777016 f:\git\openxcom\src\savegame\tile.h
+1406154745 f:\git\openxcom\src\savegame\tile.h
 	<string>
 	<vector>
 	<SDL_types.h>
@@ -5788,7 +5788,7 @@
 1404096022 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1405070995 f:\git\openxcom\src\battlescape\debriefingstate.h
+1406164122 f:\git\openxcom\src\battlescape\debriefingstate.h
 	<map>
 	<string>
 	<vector>
@@ -5798,7 +5798,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1406087370 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1406239740 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5883,7 +5883,7 @@
 	<string>
 	"BattleState.h"
 
-1406082464 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1406159213 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	<climits>
 	"BattlescapeGame.h"
 	"BattleState.h"
@@ -6022,7 +6022,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1405548731 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1406245979 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6222,7 +6222,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1405979332 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1406164032 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6575,7 +6575,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1406087980 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1406112427 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6730,7 +6730,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1406073881 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1406247040 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6743,11 +6743,14 @@
 	"BattlescapeState.h"
 	"Camera.h"
 	"ExplosionBState.h"
+	"InfoBoxOKState.h"
 	"Map.h"
 	"Pathfinding.h"
 	"ProjectileFlyBState.h"
 	"UnitTurnBState.h"
 	"../fmath.h"
+	"../Engine/Game.h"
+	"../Engine/Language.h"
 	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/RNG.h"
@@ -6765,7 +6768,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1405993112 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1406246419 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6869,7 +6872,7 @@
 1404096022 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1404443441 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1406153714 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6883,7 +6886,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1406091499 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1406159498 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -7925,7 +7928,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1405655850 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1406168194 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -8318,7 +8321,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1404096023 source:f:\git\openxcom\src\interface\text.cpp
+1406165863 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -9452,7 +9455,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1405917492 source:f:\git\openxcom\src\savegame\base.cpp
+1406230838 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9494,7 +9497,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1405772576 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1406112784 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9525,7 +9528,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1405917492 source:f:\git\openxcom\src\savegame\craft.cpp
+1406260861 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9548,7 +9551,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1404096023 source:f:\git\openxcom\src\savegame\craftweapon.cpp
+1406260853 source:f:\git\openxcom\src\savegame\craftweapon.cpp
 	"CraftWeapon.h"
 	"CraftWeaponProjectile.h"
 	"../Ruleset/RuleCraftWeapon.h"
@@ -9719,7 +9722,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1405777507 source:f:\git\openxcom\src\savegame\tile.cpp
+1406156773 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
@@ -12019,7 +12022,7 @@
 1404110102 f:\git\openxcom\src\ruleset\rulecommendations.h
 	<yaml-cpp/yaml.h>
 
-1404711272 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
+1406164531 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
 	"CommendationState.h"
 	<sstream>
 	"../Engine/Game.h"
