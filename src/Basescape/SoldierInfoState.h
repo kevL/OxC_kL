@@ -66,6 +66,7 @@ private:
 	Soldier* _soldier;
 	Surface
 		* _bg,
+		* _gender,
 		* _rank;
 	Text
 		* _txtArmor, // kL

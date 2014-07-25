@@ -65,6 +65,7 @@ SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
 	_bg				= new Surface(320, 200, 0, 0);
 
 	_rank			= new Surface(26, 23, 4, 4);
+	_gender			= new Surface(7, 7, 240, 8);
 
 	_txtSoldier		= new Text(179, 16, 40, 9);
 	_btnDiary		= new TextButton(60, 16, 248, 8);
@@ -148,6 +149,7 @@ SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
 
 	add(_txtSoldier);
 	add(_txtRank);
+	add(_gender);
 	add(_txtMissions);
 	add(_txtKills);
 	add(_txtDate);
@@ -403,6 +405,14 @@ void SoldierDeadInfoState::init()
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
 
+	_gender->clear(0);
+	Surface* gender;
+	if (_soldier->getGender() == GENDER_MALE)
+		gender = _game->getResourcePack()->getSurface("GENDER_M");
+	else
+		gender = _game->getResourcePack()->getSurface("GENDER_F");
+	if (gender != NULL)
+		gender->blit(_gender);
 
 	SoldierDeath* death = _soldier->getDeath();
 	std::wostringstream date;

@@ -64,6 +64,7 @@ private:
 		* _barPsiSkill;
 	Surface
 		* _bg,
+		* _gender,
 		* _rank;
 	Text
 		* _txtDate,

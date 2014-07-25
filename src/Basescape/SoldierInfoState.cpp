@@ -78,6 +78,7 @@ SoldierInfoState::SoldierInfoState(
 	_bg				= new Surface(320, 200, 0, 0);
 
 	_rank			= new Surface(26, 23, 4, 4);
+	_gender			= new Surface(7, 7, 240, 8);
 
 	_btnPrev		= new TextButton(29, 16, 0, 32);
 	_btnOk			= new TextButton(49, 16, 30, 32);
@@ -164,6 +165,7 @@ SoldierInfoState::SoldierInfoState(
 
 	add(_bg);
 	add(_rank);
+	add(_gender);
 	add(_btnOk);
 	add(_btnPrev);
 	add(_btnNext);
@@ -454,6 +456,15 @@ void SoldierInfoState::init()
 	texture->getFrame(_soldier->getRankSprite())->setX(0);
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
+
+	_gender->clear(0);
+	Surface* gender;
+	if (_soldier->getGender() == GENDER_MALE)
+		gender = _game->getResourcePack()->getSurface("GENDER_M");
+	else
+		gender = _game->getResourcePack()->getSurface("GENDER_F");
+	if (gender != NULL)
+		gender->blit(_gender);
 
 
 	UnitStats* initial = _soldier->getInitStats();

@@ -44,3 +44,15 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/textures/tex_polar.png
+  - type: GENDER_M
+    width: 7
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/gender/gender_m.png
+  - type: GENDER_F
+    width: 7
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/gender/gender_f.png
