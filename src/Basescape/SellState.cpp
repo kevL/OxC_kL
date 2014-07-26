@@ -391,10 +391,10 @@ SellState::SellState(
 			Uint8 color = _color;
 			if (!save->isResearched(itemRule->getType())				// not researched
 				&& (!save->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
-					|| rules->getItem(*i)->getAlien()					// or is an alien
+					|| rules->getItem(*i)->getAlien()						// or is an alien
 					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
 					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
-				&& craftOrdnance == false)							// and is not craft ordnance
+				&& craftOrdnance == false)								// and is not craft ordnance
 			{
 				// well, that was !NOT! easy.
 				color = _color3;
@@ -1031,18 +1031,59 @@ void SellState::updateItemStrings()
 		_lstItems->setRowColor(_sel, _color2);
 	else
 	{
-		_lstItems->setRowColor(_sel, _color);
-
 		if (_sel > _itemOffset)
 		{
-			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
-			if (rule->getBattleType() == BT_AMMO
-				|| (rule->getBattleType() == BT_NONE
-					&& rule->getClipSize() > 0))
+			Ruleset* rules = _game->getRuleset();
+			SavedGame* save = _game->getSavedGame();
+
+			RuleItem* itemRule = rules->getItem(_items[_sel - _itemOffset]);
+
+			bool craftOrdnance = false;
+			const std::vector<std::string>& craftWeaps = rules->getCraftWeaponsList();
+			for (std::vector<std::string>::const_iterator
+					j = craftWeaps.begin();
+					j != craftWeaps.end()
+						&& craftOrdnance == false;
+					++j)
 			{
-				_lstItems->setRowColor(_sel, _colorAmmo);
+				// Special handling for treating craft weapons as items
+				RuleCraftWeapon* cwRule = rules->getCraftWeapon(*j);
+
+				RuleItem
+					* launcher = rules->getItem(cwRule->getLauncherItem()),
+					* clip = rules->getItem(cwRule->getClipItem());
+
+				if (launcher == itemRule
+					|| clip == itemRule)
+				{
+					craftOrdnance = true;
+				}
+			}
+
+			if (!save->isResearched(itemRule->getType())				// not researched
+				&& (!save->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
+					|| rules->getItem(itemRule->getType())->getAlien()		// or is an alien
+					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
+					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
+				&& craftOrdnance == false)								// and is not craft ordnance
+			{
+				// well, that was !NOT! easy.
+				_lstItems->setRowColor(_sel, _color3);
+			}
+			else
+			{
+				if (itemRule->getBattleType() == BT_AMMO
+					|| (itemRule->getBattleType() == BT_NONE
+						&& itemRule->getClipSize() > 0))
+				{
+					_lstItems->setRowColor(_sel, _colorAmmo);
+				}
+				else
+					_lstItems->setRowColor(_sel, _color);
 			}
 		}
+		else
+			_lstItems->setRowColor(_sel, _color);
 	}
 
 	// kL_begin:
@@ -1124,10 +1165,10 @@ enum SellType SellState::getType(size_t selected) const
 size_t SellState::getItemIndex(size_t selected) const
 {
 	return static_cast<int>(selected)
-		- static_cast<int>(_soldiers.size())
-		- static_cast<int>(_crafts.size())
-		- _hasSci
-		- _hasEng;
+			- static_cast<int>(_soldiers.size())
+			- static_cast<int>(_crafts.size())
+			- _hasSci
+			- _hasEng;
 }
 
 }

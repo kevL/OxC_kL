@@ -128,7 +128,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	{
 		_txtBase_0->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(0)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(0)->getName().substr(0, 4);
 		_txtBase_0->setText(wstr);
 	}
 
@@ -136,7 +136,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	{
 		_txtBase_1->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(1)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(1)->getName().substr(0, 4);
 		_txtBase_1->setText(wstr);
 	}
 
@@ -144,7 +144,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	{
 		_txtBase_2->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(2)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(2)->getName().substr(0, 4);
 		_txtBase_2->setText(wstr);
 	}
 
@@ -152,7 +152,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	{
 		_txtBase_3->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(3)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(3)->getName().substr(0, 4);
 		_txtBase_3->setText(wstr);
 	}
 
@@ -160,7 +160,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	{
 		_txtBase_4->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(4)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(4)->getName().substr(0, 4);
 		_txtBase_4->setText(wstr);
 	}
 
@@ -168,7 +168,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	{
 		_txtBase_5->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(5)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(5)->getName().substr(0, 4);
 		_txtBase_5->setText(wstr);
 	}
 
@@ -176,7 +176,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	{
 		_txtBase_6->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(6)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(6)->getName().substr(0, 4);
 		_txtBase_6->setText(wstr);
 	}
 
@@ -184,7 +184,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	{
 		_txtBase_7->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(7)->getName().substr(0, 3);
+		wstr = savedGame->getBases()->at(7)->getName().substr(0, 4);
 		_txtBase_7->setText(wstr);
 	}
 

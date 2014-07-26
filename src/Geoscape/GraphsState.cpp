@@ -2056,8 +2056,9 @@ void GraphsState::scrollButtons(
 		int step)
 {
 	// -1, 'cause the TOTAL button has already been added to the toggles-vector.
+	// kL_note: but since Argentina was hiding behind TOTAL btn anyway, I took it out. Tks.
 	if (step + static_cast<int>(offset) < 0
-		|| step + static_cast<int>(offset) + static_cast<int>(GRAPH_MAX_BUTTONS) >= static_cast<int>(toggles.size()) - 1)
+		|| step + static_cast<int>(offset) + static_cast<int>(GRAPH_MAX_BUTTONS) >= static_cast<int>(toggles.size()))
 	{
 		return;
 	}
