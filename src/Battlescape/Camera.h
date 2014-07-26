@@ -159,7 +159,7 @@ private:
 		void setMapOffset(Position pos);
 
 		/// Toggles showing all map layers.
-		int toggleShowAllLayers();
+		unsigned toggleShowAllLayers();
 		/// Checks if the camera is showing all map layers.
 		bool getShowAllLayers() const;
 

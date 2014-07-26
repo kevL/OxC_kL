@@ -671,7 +671,7 @@ void Camera::setMapOffset(Position pos)
  * Toggles showing all map layers.
  * @return, new layer setting
  */
-int Camera::toggleShowAllLayers()
+unsigned Camera::toggleShowAllLayers()
 {
 	_showAllLayers = !_showAllLayers;
 
@@ -704,14 +704,10 @@ bool Camera::isOnScreen(
 	screenPos.x += _mapOffset.x;
 	screenPos.y += _mapOffset.y;
 
-//	return screenPos.x > -1 // kL_etc:
-//			&& screenPos.x < _screenWidth
-//			&& screenPos.y > -1
-//			&& screenPos.y < _screenHeight - 72; // <- icons.
 	return screenPos.x > 8 // kL_etc:
 			&& screenPos.x < _screenWidth - 8
-			&& screenPos.y > 8
-			&& screenPos.y < _screenHeight - 72 - 8; // <- icons.
+			&& screenPos.y > -16
+			&& screenPos.y < _screenHeight - 72; // <- icons.
 /*kL
 	if (unitWalking)
 	{

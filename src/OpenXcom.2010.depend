@@ -5842,7 +5842,7 @@
 	"../Savegame/SoldierDiary.h"
 	"../Savegame/Tile.h"
 
-1404096022 f:\git\openxcom\src\battlescape\camera.h
+1406355888 f:\git\openxcom\src\battlescape\camera.h
 	"Position.h"
 
 1404096022 f:\git\openxcom\src\battlescape\civilianbaistate.h
@@ -6177,7 +6177,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1404096022 source:f:\git\openxcom\src\battlescape\camera.cpp
+1406356228 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -7928,7 +7928,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1406168194 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1406353203 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"
