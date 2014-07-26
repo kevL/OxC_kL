@@ -706,7 +706,7 @@ bool Camera::isOnScreen(
 
 	return screenPos.x > 8 // kL_etc:
 			&& screenPos.x < _screenWidth - 8
-			&& screenPos.y > -16
+			&& screenPos.y > -8
 			&& screenPos.y < _screenHeight - 72; // <- icons.
 /*kL
 	if (unitWalking)

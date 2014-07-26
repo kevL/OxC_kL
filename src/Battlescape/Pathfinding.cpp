@@ -838,8 +838,13 @@ int Pathfinding::getTUCost(
 										unit,
 										startPos + offset,
 										dir);
-				if (vert < 1)
+				Log(LOG_INFO) << ". vert = " << vert;
+
+				if (vert == 0 // allow kneeled starts
+					|| vert == -2)
+				{
 					return 255;
+				}
 				else
 					cost = 8; // vertical movement by flying suit or grav lift
 			}
@@ -1935,7 +1940,8 @@ bool Pathfinding::previewPath(bool bRemove)
 		start = _unit->getPosition(),
 		dest;
 
-	int currentTU	= _unit->getTimeUnits(),
+	int
+		currentTU	= _unit->getTimeUnits(),
 		usedTU		= 0, // only for soldiers reserving TUs
 		tu			= 0, // cost per tile
 
@@ -1979,8 +1985,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		reserveOk	= false;
 		// kL_note: Ought to create a factor for those in ruleArmor class & RuleSets ( _burden ).
 		// Or 'enum' those, as in
-/*
-enum ArmorBurthen
+/* enum ArmorBurthen
 {
 	AB_LOW,		// -1
 	AB_NORMAL,	//  0
@@ -1997,14 +2002,14 @@ enum ArmorBurthen
 	{
 		dir = *i;
 
-		// gets tu cost, but also gets the destination position.
-		tu = getTUCost(
+		tu = getTUCost( // gets tu cost, but also gets the destination position.
 					start,
 					dir,
 					&dest,
 					_unit,
 					0,
 					false);
+		Log(LOG_INFO) << ". . tu = " << tu;
 		energyStop = energy;
 
 		gravLift = dir >= DIR_UP
@@ -2026,10 +2031,14 @@ enum ArmorBurthen
 				energy -= tu * 3 / 2;
 				tu = tu * 3 / 4;
 
-				if (_openDoor)
+				if (_openDoor == true)
+				{
+//					_openDoor = false; // safety. Redundant w/ getTUCost() init
+
 					tu++;	// kludge. Assumes: all doors take 4 TU to open ....
 							// Otherwise, have to separate TU for opening doors
 							// (no dash bonus) from TU for stepping on the floors.
+				}
 			}
 			else
 				energy -= tu;
