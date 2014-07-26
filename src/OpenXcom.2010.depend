@@ -6419,7 +6419,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1406079923 source:f:\git\openxcom\src\battlescape\map.cpp
+1406346273 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -11718,7 +11718,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1405805796 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
+1406323250 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
 	"SoldierDeadInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"

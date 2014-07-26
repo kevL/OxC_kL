@@ -1390,6 +1390,26 @@ void Map::drawTerrain(Surface* surface)
 										screenPosition.y + offset.y,
 										0);
 							}
+
+							// kL_begin:
+							if (unit->getFaction() == FACTION_PLAYER
+								//unit != dynamic_cast<BattleUnit*>(_save->getSelectedUnit());
+								&& unit != _save->getSelectedUnit()
+								&& unit->getTurretType() == -1) // no tanks, pls
+							{
+								std::string soldierRank = unit->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
+								soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
+
+								tmpSurface = _res->getSurface(soldierRank);
+								if (tmpSurface != NULL)
+								{
+									tmpSurface->blitNShade(
+											surface,
+											screenPosition.x + offset.x + 2,
+											screenPosition.y + offset.y + 3,
+											0);
+								}
+							} // kL_end.
 						}
 					}
 

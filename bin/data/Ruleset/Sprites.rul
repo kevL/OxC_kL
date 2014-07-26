@@ -56,3 +56,39 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/gender/gender_f.png
+  - type: RANK_ROOKIE
+    width: 9
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/smoke/ranks/rank_rookie.png
+  - type: RANK_SQUADDIE
+    width: 9
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/smoke/ranks/rank_squaddie.png
+  - type: RANK_SERGEANT
+    width: 9
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/smoke/ranks/rank_sergeant.png
+  - type: RANK_CAPTAIN
+    width: 9
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/smoke/ranks/rank_captain.png
+  - type: RANK_COLONEL
+    width: 9
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/smoke/ranks/rank_colonel.png
+  - type: RANK_COMMANDER
+    width: 9
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/smoke/ranks/rank_commander.png
