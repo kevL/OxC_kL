@@ -7621,7 +7621,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1405209266 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1406394275 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -9190,7 +9190,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1405982133 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1406391871 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9281,7 +9281,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/ResourcePack.h"
 
-1404096023 source:f:\git\openxcom\src\ruleset\mcdpatch.cpp
+1406379244 source:f:\git\openxcom\src\ruleset\mcdpatch.cpp
 	"MCDPatch.h"
 	"MapData.h"
 	"MapDataSet.h"
@@ -9558,7 +9558,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1404096023 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
+1406387966 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
 	"CraftWeaponProjectile.h"
 	<iostream>
 	"../Engine/Palette.h"

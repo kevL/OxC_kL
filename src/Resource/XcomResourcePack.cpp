@@ -213,13 +213,18 @@ XcomResourcePack::XcomResourcePack( // kL
 
 
 	/* GRAPHICS */
+/*kL
 	{
 		// Load surfaces
 		std::ostringstream s;
 		s << "GEODATA/" << "INTERWIN.DAT";
 		_surfaces["INTERWIN.DAT"] = new Surface(160, 556);
 		_surfaces["INTERWIN.DAT"]->loadScr(CrossPlatform::getDataFile(s.str()));
-	}
+	} */
+
+	// kL_begin:
+//	_surfaces["INTERWIN"] = new Surface(160, 96);
+	// kL_end.
 
 	std::string geograph = CrossPlatform::getDataFolder("GEOGRAPH/");
 	std::vector<std::string> scrs = CrossPlatform::getFolderContents(geograph, "SCR");

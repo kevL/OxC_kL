@@ -68,9 +68,8 @@ namespace OpenXcom
 // UFO blobs graphics ...
 const int DogfightState::_ufoBlobs[8][13][13] =
 {
-		/* 0 STR_VERY_SMALL */
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 0 - STR_VERY_SMALL
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
@@ -84,9 +83,8 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/* 1 STR_SMALL */
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 1 - STR_SMALL
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
@@ -100,9 +98,8 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/* 2 STR_MEDIUM_UC */
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 2 - STR_MEDIUM_UC
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
 		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
@@ -116,9 +113,8 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/* 3 STR_LARGE */
 	{
-		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}, // 3 - STR_LARGE
 		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
 		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
 		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
@@ -132,9 +128,8 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
 		{0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	},
-		/* 4 STR_VERY_LARGE */
 	{
-		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0},
+		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0}, // 4 - STR_VERY_LARGE
 		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
 		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
 		{0, 1, 2, 3, 3, 4, 4, 4, 3, 3, 2, 1, 0},
@@ -148,9 +143,8 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
 		{0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0}
 	},
-		/* 5 STR_HUGE */
 	{
-		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0},
+		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0}, // 5 - STR_HUGE
 		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
 		{0, 1, 2, 3, 3, 4, 4, 4, 3, 3, 2, 1, 0},
 		{1, 2, 3, 4, 4, 5, 5, 5, 4, 4, 3, 2, 1},
@@ -164,9 +158,8 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 1, 2, 2, 3, 3, 3, 2, 2, 1, 0, 0},
 		{0, 0, 0, 1, 1, 2, 2, 2, 1, 1, 0, 0, 0}
 	},
-		/* 6 STR_VERY_HUGE :p */
 	{
-		{0, 0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0, 0},
+		{0, 0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0, 0}, // 6 - STR_VERY_HUGE :p
 		{0, 0, 2, 3, 3, 4, 4, 4, 3, 3, 2, 0, 0},
 		{0, 2, 3, 4, 4, 5, 5, 5, 4, 4, 3, 2, 0},
 		{2, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 2},
@@ -180,9 +173,8 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 		{0, 0, 2, 3, 3, 4, 4, 4, 3, 3, 2, 0, 0},
 		{0, 0, 0, 2, 2, 3, 3, 3, 2, 2, 0, 0, 0}
 	},
-		/* 7 STR_ENOURMOUS */
 	{
-		{0, 0, 0, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0},
+		{0, 0, 0, 3, 3, 4, 4, 4, 3, 3, 0, 0, 0}, // 7 - STR_ENOURMOUS
 		{0, 0, 3, 4, 4, 5, 5, 5, 4, 4, 3, 0, 0},
 		{0, 3, 4, 5, 5, 5, 5, 5, 5, 5, 4, 3, 0},
 		{3, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 4, 3},
@@ -202,36 +194,32 @@ const int DogfightState::_ufoBlobs[8][13][13] =
 // Projectile blobs
 const int DogfightState::_projectileBlobs[4][6][3] =
 {
-	// 0 STR_STINGRAY_MISSILE
 	{
-		{0, 1, 0},
+		{0, 1, 0}, // 0 - STR_STINGRAY_MISSILE
 		{1, 9, 1},
 		{1, 4, 1},
 		{0, 3, 0},
 		{0, 2, 0},
 		{0, 1, 0}
 	},
-	// 1 STR_AVALANCHE_MISSILE
 	{
-		{1, 2, 1},
+		{1, 2, 1}, // 1 - STR_AVALANCHE_MISSILE
 		{2, 9, 2},
 		{2, 5, 2},
 		{1, 3, 1},
 		{0, 2, 0},
 		{0, 1, 0}
 	},
-	// 2 STR_CANNON_ROUND
 	{
-		{0, 0, 0},
+		{0, 0, 0}, // 2 - STR_CANNON_ROUND
 		{0, 7, 0},
 		{0, 2, 0},
 		{0, 1, 0},
 		{0, 0, 0},
 		{0, 0, 0}
 	},
-	// 3 STR_FUSION_BALL
 	{
-		{2, 4, 2},
+		{2, 4, 2}, // 3 - STR_FUSION_BALL
 		{4, 9, 4},
 		{2, 4, 2},
 		{0, 0, 0},
@@ -296,14 +284,20 @@ DogfightState::DogfightState(
 	_btnMinimize			= new InteractiveSurface(12, 12, _x, _y);
 	_preview				= new InteractiveSurface(160, 96, _x, _y);
 
-	_btnStandoff			= new ImageButton(36, 15, _x + 83, _y + 4);
+//	_btnUfo					= new ImageButton(36, 17, _x + 120, _y + 52);
+	_btnUfo					= new ImageButton(36, 15, _x + 83, _y + 4);
+	_btnDisengage			= new ImageButton(36, 15, _x + 83, _y + 20);
+/*	_btnStandoff			= new ImageButton(36, 15, _x + 83, _y + 4);
 	_btnCautious			= new ImageButton(36, 15, _x + 120, _y + 4);
 	_btnStandard			= new ImageButton(36, 15, _x + 83, _y + 20);
 	_btnAggressive			= new ImageButton(36, 15, _x + 120, _y + 20);
-	_btnDisengage			= new ImageButton(36, 15, _x + 120, _y + 36);
+	_btnDisengage			= new ImageButton(36, 15, _x + 120, _y + 36); */
+	_btnCautious			= new ImageButton(36, 15, _x + 120, _y + 4);
+	_btnStandard			= new ImageButton(36, 15, _x + 120, _y + 20);
+	_btnAggressive			= new ImageButton(36, 15, _x + 120, _y + 36);
+	_btnStandoff			= new ImageButton(36, 17, _x + 120, _y + 52);
 	_mode = _btnStandoff;
 
-	_btnUfo					= new ImageButton(36, 17, _x + 120, _y + 52);
 	_texture				= new Surface(9, 9, _x + 147, _y + 72);
 
 	_txtAmmo1				= new Text(16, 9, _x + 4, _y + 70);
@@ -331,12 +325,12 @@ DogfightState::DogfightState(
 	add(_range2);
 	add(_damage);
 	add(_btnMinimize);
-	add(_btnStandoff);
+	add(_btnUfo);
+	add(_btnDisengage);
 	add(_btnCautious);
 	add(_btnStandard);
 	add(_btnAggressive);
-	add(_btnDisengage);
-	add(_btnUfo);
+	add(_btnStandoff);
 	add(_texture);
 	add(_txtAmmo1);
 	add(_txtAmmo2);
@@ -346,7 +340,7 @@ DogfightState::DogfightState(
 	add(_btnMinimizedIcon);
 	add(_txtInterceptionNumber);
 
-	Surface* graphic;
+/*	Surface* graphic;
 	graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
 	graphic->setY(0);
@@ -361,10 +355,12 @@ DogfightState::DogfightState(
 	graphic->getCrop()->y = 96;
 	graphic->getCrop()->h = 15;
 	graphic->blit(_preview);
+
 	graphic->setY(67);
 	graphic->getCrop()->y = 111;
 	graphic->getCrop()->h = 29;
 	graphic->blit(_preview);
+
 	if (ufo->getRules()->getModSprite() == "")
 	{
 		graphic->setY(15);
@@ -377,16 +373,39 @@ DogfightState::DogfightState(
 		graphic->setX(0);
 		graphic->setY(15);
 	}
-	graphic->blit(_preview);
+	graphic->blit(_preview); */
+
+	// kL_begin:
+	Surface* srfInterwin = _game->getResourcePack()->getSurface("INTERWIN");
+	if (srfInterwin != NULL)
+		srfInterwin->blit(_window);
+
+	Surface* srfPreview = _game->getResourcePack()->getSurface("INTERWIN_");
+	if (srfPreview != NULL)
+		srfPreview->blit(_preview);
+
+	int iSprite = _ufo->getRules()->getSprite();
+	std::ostringstream sprite;
+	sprite << "INTERWIN_" << iSprite;
+	srfPreview = _game->getResourcePack()->getSurface(sprite.str());
+	if (srfPreview != NULL)
+	{
+		srfPreview->setY(15);
+		srfPreview->blit(_preview);
+	} // kL_end.
 	_preview->setVisible(false);
 	_preview->onMouseClick((ActionHandler)& DogfightState::previewClick);
 
 	_btnMinimize->onMouseClick((ActionHandler)& DogfightState::btnMinimizeClick);
 
-	_btnStandoff->copy(_window);
-	_btnStandoff->setColor(Palette::blockOffset(5)+1);
-	_btnStandoff->setGroup(&_mode);
-	_btnStandoff->onMousePress((ActionHandler)& DogfightState::btnStandoffPress);
+	_btnUfo->copy(_window);
+	_btnUfo->setColor(Palette::blockOffset(5)+1);
+	_btnUfo->onMouseClick((ActionHandler)& DogfightState::btnUfoClick);
+
+	_btnDisengage->copy(_window);
+	_btnDisengage->setColor(Palette::blockOffset(5)+1);
+	_btnDisengage->setGroup(&_mode);
+	_btnDisengage->onMousePress((ActionHandler)& DogfightState::btnDisengagePress);
 
 	_btnCautious->copy(_window);
 	_btnCautious->setColor(Palette::blockOffset(5)+1);
@@ -403,14 +422,10 @@ DogfightState::DogfightState(
 	_btnAggressive->setGroup(&_mode);
 	_btnAggressive->onMousePress((ActionHandler)& DogfightState::btnAggressivePress);
 
-	_btnDisengage->copy(_window);
-	_btnDisengage->setColor(Palette::blockOffset(5)+1);
-	_btnDisengage->setGroup(&_mode);
-	_btnDisengage->onMousePress((ActionHandler)& DogfightState::btnDisengagePress);
-
-	_btnUfo->copy(_window);
-	_btnUfo->setColor(Palette::blockOffset(5)+1);
-	_btnUfo->onMouseClick((ActionHandler)& DogfightState::btnUfoClick);
+	_btnStandoff->copy(_window);
+	_btnStandoff->setColor(Palette::blockOffset(5)+1);
+	_btnStandoff->setGroup(&_mode);
+	_btnStandoff->onMousePress((ActionHandler)& DogfightState::btnStandoffPress);
 
 	Surface* srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
 	if (srfTexture != NULL) // safety.
@@ -619,7 +634,7 @@ DogfightState::DogfightState(
 	else // very large
 		_ufoSize = 4;
 
-	// Get craft's height. Used for damage indication.
+	// Get the craft-graphic's height. Used for damage indication.
 //kL	int x = _damage->getWidth() / 2;
 	for (int
 			y = 0;
@@ -968,9 +983,20 @@ void DogfightState::move()
 					&& !_ufo->isCrashed()
 					&& !p->getMissed())
 				{
-					if (RNG::percent((p->getAccuracy() * (100 + 300 / (5 - _ufoSize)) + 100) / 200))
+					// kL_begin:
+					int ufoSize = _ufoSize;
+					if (ufoSize > 4)
+						ufoSize = 4;
+
+					int diff = _game->getSavedGame()->getDifficulty();
+					int hitchance = ((p->getAccuracy() * (100 + (300 / (5 - ufoSize)))) + 100) / (200 + (diff * 50));
+					// kL_end.
+//kL				int hitchance = (p->getAccuracy() * (100 + (300 / (5 - ufoSize))) + 100) / 200;
+					//Log(LOG_INFO) << "hitchance = " << hitchance;
+
+					if (RNG::percent(hitchance))
 					{
-						// Formula delivered by Volutar
+						//Log(LOG_INFO) << "hit";
 						int damage = RNG::generate(
 												p->getDamage() / 2,
 												p->getDamage());
@@ -999,6 +1025,7 @@ void DogfightState::move()
 					}
 					else // Missed.
 					{
+						//Log(LOG_INFO) << "miss";
 						if (p->getGlobalType() == CWPGT_BEAM)
 							p->remove();
 						else
@@ -1023,8 +1050,7 @@ void DogfightState::move()
 				{
 					if (RNG::percent(p->getAccuracy()))
 					{
-						// Formula delivered by Volutar
-//kL						int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
+//kL					int damage = RNG::generate(0, _ufo->getRules()->getWeaponPower());
 						int damage = RNG::generate(
 												10, // kL
 												_ufo->getRules()->getWeaponPower());
@@ -2137,7 +2163,7 @@ void DogfightState::moveWindow()
 	_preview->setX(_x);
 	_preview->setY(_y);
 
-	_btnStandoff->setX(_x + 83);
+/*	_btnStandoff->setX(_x + 83);
 	_btnStandoff->setY(_y + 4);
 
 	_btnCautious->setX(_x + 120);
@@ -2153,7 +2179,27 @@ void DogfightState::moveWindow()
 	_btnDisengage->setY(_y + 36);
 
 	_btnUfo->setX(_x + 120);
-	_btnUfo->setY(_y + 52);
+	_btnUfo->setY(_y + 52); */
+
+	// kL_begin:
+	_btnUfo->setX(_x + 83);
+	_btnUfo->setY(_y + 4);
+
+	_btnDisengage->setX(_x + 83);
+	_btnDisengage->setY(_y + 20);
+
+	_btnCautious->setX(_x + 120);
+	_btnCautious->setY(_y + 4);
+
+	_btnStandard->setX(_x + 120);
+	_btnStandard->setY(_y + 20);
+
+	_btnAggressive->setX(_x + 120);
+	_btnAggressive->setY(_y + 36);
+
+	_btnStandoff->setX(_x + 120);
+	_btnStandoff->setY(_y + 52);
+	// kL_end.
 
 	_texture->setX(_x + 147);
 	_texture->setY(_y + 72);

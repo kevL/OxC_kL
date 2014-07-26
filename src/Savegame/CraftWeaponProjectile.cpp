@@ -59,9 +59,8 @@ CraftWeaponProjectile::~CraftWeaponProjectile(void)
 }
 
 /**
- * Sets the type of projectile according to the type of
- * weapon it was shot from. This is used for drawing the
- * projectiles.
+ * Sets the type of projectile according to the type of weapon it was shot from.
+ * This is used for drawing the projectiles.
  */
 void CraftWeaponProjectile::setType(CraftWeaponProjectileType type)
 {

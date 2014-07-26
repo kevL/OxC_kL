@@ -5,9 +5,66 @@ extraSprites:
   - type: INTICON.PCK
     files:
       0: Resources/Sprites/geograph/inticon/
-  - type: INTERWIN.DAT
+  - type: INTERWIN # interception window
+    width: 160
+    height: 96
+    singleImage: true
     files:
-      0: Resources/Sprites/geodata/interwin/
+      0: Resources/Sprites/geodata/interwin/interwin.png
+  - type: INTERWIN_ # border UFO preview
+    width: 160
+    height: 96
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/interwin_.png
+  - type: INTERWIN_0 # small scout
+    width: 160
+    height: 52
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/interwin_0.png
+  - type: INTERWIN_1 # medium scout
+    width: 160
+    height: 52
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/interwin_1.png
+  - type: INTERWIN_2 # large scout
+    width: 160
+    height: 52
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/interwin_2.png
+  - type: INTERWIN_3 # harvester
+    width: 160
+    height: 52
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/interwin_3.png
+  - type: INTERWIN_4 # abductor
+    width: 160
+    height: 52
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/interwin_4.png
+  - type: INTERWIN_5 # terror ship
+    width: 160
+    height: 52
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/interwin_5.png
+  - type: INTERWIN_6 # battle ship
+    width: 160
+    height: 52
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/interwin_6.png
+  - type: INTERWIN_7 # supply ship
+    width: 160
+    height: 52
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/interwin_7.png
   - type: WATER
     width: 9
     height: 9
