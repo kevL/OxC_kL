@@ -61,12 +61,12 @@ BuildFacilitiesState::BuildFacilitiesState(
 	_window			= new Window(
 								this,
 								128,
-								160,
+								165,
 								192,
-								40,
+								35,
 								POPUP_VERTICAL);
-	_txtTitle		= new Text(118, 17, 197, 48);
-	_lstFacilities	= new TextList(112, 104, 200, 64);
+	_txtTitle		= new Text(118, 17, 197, 43);
+	_lstFacilities	= new TextList(101, 112, 200, 59);
 
 	_btnOk			= new TextButton(112, 16, 200, 176);
 
@@ -97,7 +97,7 @@ BuildFacilitiesState::BuildFacilitiesState(
 
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
-	_lstFacilities->setColumns(1, 110);
+	_lstFacilities->setColumns(1, 99);
 	_lstFacilities->setSelectable(true);
 //kL	_lstFacilities->setScrollable(true, -12);
 	_lstFacilities->setBackground(_window);
@@ -109,7 +109,7 @@ BuildFacilitiesState::BuildFacilitiesState(
 }
 
 /**
- *
+ * dTor.
  */
 BuildFacilitiesState::~BuildFacilitiesState()
 {

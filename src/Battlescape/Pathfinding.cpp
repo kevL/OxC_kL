@@ -838,8 +838,7 @@ int Pathfinding::getTUCost(
 										unit,
 										startPos + offset,
 										dir);
-				Log(LOG_INFO) << ". vert = " << vert;
-
+				//Log(LOG_INFO) << ". vert = " << vert;
 				if (vert == 0 // allow kneeled starts
 					|| vert == -2)
 				{
@@ -2009,7 +2008,7 @@ bool Pathfinding::previewPath(bool bRemove)
 					_unit,
 					0,
 					false);
-		Log(LOG_INFO) << ". . tu = " << tu;
+		//Log(LOG_INFO) << ". . tu = " << tu;
 		energyStop = energy;
 
 		gravLift = dir >= DIR_UP
