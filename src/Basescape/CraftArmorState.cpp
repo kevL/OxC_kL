@@ -40,9 +40,12 @@
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCraft.h"
+//#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+//#include "../Savegame/ItemContainer.h"
+//#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 
 
@@ -64,7 +67,6 @@ CraftArmorState::CraftArmorState(
 		_curRow(0)
 {
 	//Log(LOG_INFO) << "Create CraftArmorState";
-
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 11, 10);
 	_txtBaseLabel	= new Text(80, 9, 224, 10);
@@ -89,7 +91,6 @@ CraftArmorState::CraftArmorState(
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
@@ -125,14 +126,9 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
+	_lstSoldiers->onMousePress((ActionHandler)& CraftArmorState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstRightArrowClick);
-//kL	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick, 0);
-	_lstSoldiers->onMouseClick((ActionHandler)& CraftArmorState::lstSoldiersClick); // kL
-	_lstSoldiers->onMouseClick( // kL
-					(ActionHandler)& CraftArmorState::lstSoldiersClick,
-					SDL_BUTTON_RIGHT);
-
 
 //kL	Craft* craft = _base->getCrafts()->at(_craftID);
 /*	Craft* craft = NULL;							// kL
@@ -255,8 +251,7 @@ void CraftArmorState::init()
 									row,
 									2,
 									true);
-		}
-		// kL_end.
+		} // kL_end.
 
 		row++;
 	}
@@ -274,7 +269,7 @@ void CraftArmorState::init()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action Pointer to an action
  */
 void CraftArmorState::btnOkClick(Action*)
 {
@@ -282,11 +277,11 @@ void CraftArmorState::btnOkClick(Action*)
 }
 
 /**
- * Shows the Select Armor window.
- * @param action Pointer to an action.
+ * LMB shows the Select Armor window.
+ * RMB shows soldier info.
+ * @param action Pointer to an action
  */
-// void CraftArmorState::lstSoldiersClick(Action*)
-void CraftArmorState::lstSoldiersClick(Action* action) // kL
+void CraftArmorState::lstSoldiersPress(Action* action)
 {
 	// kL_begin:
 	double mx = action->getAbsoluteXMouse();
@@ -315,6 +310,24 @@ void CraftArmorState::lstSoldiersClick(Action* action) // kL
 		_game->pushState(new SoldierInfoState(
 											_base,
 											_lstSoldiers->getSelectedRow()));
+
+/*kL: sorry I'll keep SoldierInfoState on RMB; it's easy enough to assign armor.
+		if (_game->getSavedGame()->getMonthsPassed() != -1)
+		{
+			SavedGame* _save;
+			_save = _game->getSavedGame();
+			Armor* a = _game->getRuleset()->getArmor(_save->getLastSelectedArmor());
+			if (_base->getItems()->getItem(a->getStoreItem())>0 || a->getStoreItem() == "STR_NONE")
+			{
+				if (s->getArmor()->getStoreItem() != "STR_NONE")
+					_base->getItems()->addItem(s->getArmor()->getStoreItem());
+				if (a->getStoreItem() != "STR_NONE")
+					_base->getItems()->removeItem(a->getStoreItem());
+
+				s->setArmor(a);
+				_lstSoldiers->setCellText(_lstSoldiers->getSelectedRow(), 2, tr(a->getType()));
+			}
+		} */
 	}
 }
 

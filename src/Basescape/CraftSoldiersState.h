@@ -99,7 +99,7 @@ private:
 				size_t row,
 				bool max = false); */
 		/// Handler for clicking the Soldiers list.
-		void lstSoldiersClick(Action* action);
+		void lstSoldiersPress(Action* action);
 		/// Handler for pressing-down a mouse-button in the list.
 //		void lstSoldiersMousePress(Action* action);
 };

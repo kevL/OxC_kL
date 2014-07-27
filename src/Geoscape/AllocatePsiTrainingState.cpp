@@ -137,13 +137,9 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
+	_lstSoldiers->onMousePress((ActionHandler)& AllocatePsiTrainingState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& AllocatePsiTrainingState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstRightArrowClick);
-//kL	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick, 0);
-	_lstSoldiers->onMouseClick((ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick); // kL
-	_lstSoldiers->onMouseClick( // kL
-					(ActionHandler)& AllocatePsiTrainingState::lstSoldiersClick,
-					SDL_BUTTON_RIGHT);
 
 //	init(); // kL -> might not need this at all ... is init() called auto by the engine
 /*kL
@@ -203,7 +199,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 }
 
 /**
- *
+ * dTor.
  */
 AllocatePsiTrainingState::~AllocatePsiTrainingState()
 {
@@ -298,10 +294,11 @@ void AllocatePsiTrainingState::btnOkClick(Action*)
 }
 
 /**
- * Assigns / removes a soldier from Psi Training.
- * @param action Pointer to an action.
+ * LMB assigns & removes a soldier from Psi Training.
+ * RMB shows soldier info.
+ * @param action - pointer to an action
  */
-void AllocatePsiTrainingState::lstSoldiersClick(Action* action)
+void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 {
 	// kL_begin:
 	double mx = action->getAbsoluteXMouse();

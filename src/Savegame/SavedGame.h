@@ -246,6 +246,7 @@ private:
 		_graphRegionToggles,
 		_graphCountryToggles,
 		_graphFinanceToggles;
+//		_lastselectedArmor;
 
 	std::map<std::string, int> _ids;
 
@@ -525,6 +526,11 @@ private:
 
 		/// Evaluate the score of a soldier based on all of his stats, missions and kills.
 		int getSoldierScore(Soldier* soldier);
+
+		/// Sets the the last selected armour
+//		void setLastSelectedArmor(const std::string& value);
+		/// Gets the the last selected armour
+//		std::string getLastSelectedArmor();
 
 		/// Gets the list of missions statistics
 		std::vector<MissionStatistics*>* getMissionStatistics();

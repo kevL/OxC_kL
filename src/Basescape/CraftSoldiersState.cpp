@@ -154,14 +154,10 @@ CraftSoldiersState::CraftSoldiersState(
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
+	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftSoldiersState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftSoldiersState::lstRightArrowClick);
-//kL	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick, 0);
-	_lstSoldiers->onMouseClick((ActionHandler)& CraftSoldiersState::lstSoldiersClick); // kL
-	_lstSoldiers->onMouseClick( // kL
-					(ActionHandler)& CraftSoldiersState::lstSoldiersClick,
-					SDL_BUTTON_RIGHT);
-//kL	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersMousePress);
+//	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersMousePress);
 }
 
 /**
@@ -464,10 +460,11 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 } */
 
 /**
- * Assigns and de-assigns soldiers from a craft.
- * @param action Pointer to an action.
+ * LMB assigns and de-assigns soldiers from a craft.
+ * RMB shows soldier info.
+ * @param action Pointer to an action
  */
-void CraftSoldiersState::lstSoldiersClick(Action* action)
+void CraftSoldiersState::lstSoldiersPress(Action* action)
 {
 	double mx = action->getAbsoluteXMouse();
 	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())

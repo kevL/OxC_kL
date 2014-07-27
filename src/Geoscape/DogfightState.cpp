@@ -24,6 +24,7 @@
 
 #include "Globe.h"
 
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
@@ -394,7 +395,7 @@ DogfightState::DogfightState(
 		srfPreview->blit(_preview);
 	} // kL_end.
 	_preview->setVisible(false);
-	_preview->onMouseClick((ActionHandler)& DogfightState::previewClick);
+	_preview->onMousePress((ActionHandler)& DogfightState::previewPress);
 
 	_btnMinimize->onMouseClick((ActionHandler)& DogfightState::btnMinimizeClick);
 
@@ -1762,21 +1763,25 @@ void DogfightState::btnUfoClick(Action*)
  * Hides the front view of the UFO.
  * @param action, Pointer to an action.
  */
-void DogfightState::previewClick(Action*)
+void DogfightState::previewPress(Action* action)
 {
-	_preview->setVisible(false);
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_preview->setVisible(false);
 
-	// Reenable all other buttons to prevent misclicks Lol
-	_btnStandoff->setVisible(true);
-	_btnCautious->setVisible(true);
-	_btnStandard->setVisible(true);
-	_btnAggressive->setVisible(true);
-	_btnDisengage->setVisible(true);
-	_btnUfo->setVisible(true);
-	_texture->setVisible(true);
-	_btnMinimize->setVisible(true);
-	_weapon1->setVisible(true);
-	_weapon2->setVisible(true);
+		// Reenable all other buttons to prevent misclicks Lol
+		_btnStandoff->setVisible(true);
+		_btnCautious->setVisible(true);
+		_btnStandard->setVisible(true);
+		_btnAggressive->setVisible(true);
+		_btnDisengage->setVisible(true);
+		_btnUfo->setVisible(true);
+		_texture->setVisible(true);
+		_btnMinimize->setVisible(true);
+		_weapon1->setVisible(true);
+		_weapon2->setVisible(true);
+	}
 }
 
 /**

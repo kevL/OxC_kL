@@ -145,6 +145,7 @@ SavedGame::SavedGame()
 	_researchScores.push_back(0);
 	_income.push_back(0);		// kL
 	_expenditure.push_back(0);	// kL
+//	_lastselectedArmor = "STR_NONE_UC";
 }
 
 /**
@@ -2326,6 +2327,24 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
 /*kL void SavedGame::setSelectedBase(size_t base)
 {
 	_selectedBase = base;
+} */
+
+/**
+ * Sets the last selected armour.
+ * @param value - the new value for last selected armor - Armor type string
+ */
+/* void SavedGame::setLastSelectedArmor(const std::string& value)
+{
+	_lastselectedArmor = value;
+} */
+
+/**
+ * Gets the last selected armour.
+ * @return, last used armor type string
+ */
+/* std::string SavedGame::getLastSelectedArmor()
+{
+	return _lastselectedArmor;
 } */
 
 /**

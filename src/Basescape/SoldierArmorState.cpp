@@ -95,7 +95,8 @@ SoldierArmorState::SoldierArmorState(
 					Options::keyCancel);
 
 	Soldier* s = _base->getSoldiers()->at(_soldier);
-/*kL	_txtTitle->setColor(Palette::blockOffset(13)+5);
+/*kL
+	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(s->getName())); */
 
@@ -152,7 +153,7 @@ SoldierArmorState::SoldierArmorState(
 }
 
 /**
- *
+ * dTor.
  */
 SoldierArmorState::~SoldierArmorState()
 {
@@ -184,6 +185,9 @@ void SoldierArmorState::lstArmorClick(Action*)
 	}
 
 	soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);
+//	SavedGame* save;
+//	save = _game->getSavedGame();
+//	save->setLastSelectedArmor(_armors[_lstArmor->getSelectedRow()]->getType());
 
 	_game->popState();
 }

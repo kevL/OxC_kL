@@ -72,16 +72,17 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	_image = new Surface(160, 52, 160, 6);
 	add(_image);
 
-	Surface* graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
+/*	Surface* graphic = _game->getResourcePack()->getSurface("INTERWIN.DAT");
 	graphic->setX(0);
 	graphic->setY(0);
 	graphic->getCrop()->x = 0;
 	graphic->getCrop()->y = 0;
 	graphic->getCrop()->w = 160;
 	graphic->getCrop()->h = 52;
-	_image->drawRect(graphic->getCrop(), 15);
+	_image->drawRect(graphic->getCrop(), 15); */
 
-/*	graphic->getCrop()->y = 96;
+/*old
+	graphic->getCrop()->y = 96;
 	graphic->getCrop()->h = 15;
 	graphic->blit(_image);
 	graphic->setY(67);
@@ -89,7 +90,7 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	graphic->getCrop()->h = 29;
 	graphic->blit(_image); */
 
-	if (ufo->getModSprite() == "")
+/*	if (ufo->getModSprite() == "")
 	{
 		graphic->getCrop()->y = 140 + 52 * static_cast<Sint16>(ufo->getSprite());
 		graphic->getCrop()->h = 52;
@@ -100,7 +101,16 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 		graphic->setX(0);
 		graphic->setY(0);
 	}
-	graphic->blit(_image);
+	graphic->blit(_image); */
+
+	// kL_begin:
+	int iSprite = ufo->getSprite();
+	std::ostringstream sprite;
+	sprite << "INTERWIN_" << iSprite;
+	Surface* srfPreview = _game->getResourcePack()->getSurface(sprite.str());
+	if (srfPreview != NULL)
+		srfPreview->blit(_image);
+	// kL_end.
 
 	_txtInfo = new Text(300, 50, 10, 140);
 	add(_txtInfo);

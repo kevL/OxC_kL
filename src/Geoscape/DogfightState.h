@@ -173,7 +173,7 @@ private:
 		/// Handler for clicking the Ufo button.
 		void btnUfoClick(Action* action);
 		/// Handler for clicking the Preview graphic.
-		void previewClick(Action* action);
+		void previewPress(Action* action);
 
 		/// Makes the UFO break off the interception... or at least tries to.
 		void ufoBreakOff();

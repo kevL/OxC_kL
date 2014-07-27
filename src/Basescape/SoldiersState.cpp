@@ -154,14 +154,13 @@ SoldiersState::SoldiersState(
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
+	_lstSoldiers->onMousePress((ActionHandler)& SoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstRightArrowClick);
-//kL	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick, 0);
-	_lstSoldiers->onMouseClick((ActionHandler)& SoldiersState::lstSoldiersClick); // kL
 }
 
 /**
- *
+ * dTor.
  */
 SoldiersState::~SoldiersState()
 {
@@ -269,9 +268,9 @@ void SoldiersState::btnMemorialClick(Action*)
 /**
 /**
  * Shows the selected soldier's info.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
-void SoldiersState::lstSoldiersClick(Action* action)
+void SoldiersState::lstSoldiersPress(Action* action)
 {
 	double mx = action->getAbsoluteXMouse();
 	if (mx >= _lstSoldiers->getArrowsLeftEdge()
@@ -280,11 +279,15 @@ void SoldiersState::lstSoldiersClick(Action* action)
 		return;
 	}
 
-	_curRow = _lstSoldiers->getScroll();
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_curRow = _lstSoldiers->getScroll();
 
-	_game->pushState(new SoldierInfoState(
-										_base,
-										_lstSoldiers->getSelectedRow()));
+		_game->pushState(new SoldierInfoState(
+											_base,
+											_lstSoldiers->getSelectedRow()));
+	}
 }
 
 /**

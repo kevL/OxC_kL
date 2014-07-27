@@ -44,8 +44,8 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/SavedGame.h"
-//kL #include "../Savegame/Soldier.h"
-#include "../Savegame/SoldierDead.h" // kL
+//#include "../Savegame/Soldier.h"
+#include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDeath.h"
 
 
@@ -139,8 +139,7 @@ SoldierMemorialState::SoldierMemorialState()
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);
-//	_lstSoldiers->onMouseClick((ActionHandler)& SoldierMemorialState::lstSoldiersClick, 0);
-	_lstSoldiers->onMouseClick((ActionHandler)& SoldierMemorialState::lstSoldiersClick);
+	_lstSoldiers->onMousePress((ActionHandler)& SoldierMemorialState::lstSoldiersPress);
 
 	//Log(LOG_INFO) << "SoldierMemorialState::SoldierMemorialState() -> getDeadSoldiers";
 	for (std::vector<SoldierDead*>::reverse_iterator // kL
@@ -175,7 +174,7 @@ SoldierMemorialState::SoldierMemorialState()
 }
 
 /**
- *
+ * dTor.
  */
 SoldierMemorialState::~SoldierMemorialState()
 {
@@ -198,11 +197,14 @@ void SoldierMemorialState::btnOkClick(Action*)
  * Shows the selected soldier's info.
  * @param action Pointer to an action.
  */
-void SoldierMemorialState::lstSoldiersClick(Action* action)
+void SoldierMemorialState::lstSoldiersPress(Action* action)
 {
-	size_t row = _game->getSavedGame()->getDeadSoldiers()->size() - 1 - _lstSoldiers->getSelectedRow();
-
-	_game->pushState(new SoldierDeadInfoState(row));
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		size_t row = _game->getSavedGame()->getDeadSoldiers()->size() - 1 - _lstSoldiers->getSelectedRow();
+		_game->pushState(new SoldierDeadInfoState(row));
+	}
 }
 
 }

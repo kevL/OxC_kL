@@ -1196,7 +1196,7 @@ int Base::getDefenseValue() const
 			range = (*i)->getRules()->getRadarRange();
 				// kL_note: that should be based off a string or Ruleset value.
 			if (range
-				&& range < 1501)
+				&& range < 1501) // was changed to 1701
 			{
 				total++;
 			}
@@ -1254,7 +1254,7 @@ int Base::getShortRangeValue() const // kL
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getRadarRange() > 1500)
+			&& (*i)->getRules()->getRadarRange() > 1500) // was changed to 1700
 				// kL_note: that should be based off a string or Ruleset value.
 		{
 			total++;
