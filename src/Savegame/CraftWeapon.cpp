@@ -181,31 +181,6 @@ int CraftWeapon::rearm(
 
 	return ret;
 }
-//--
-//	int
-/*	load = 0;
-
-	if (clipSize > 0)
-	{
-		load = std::min(
-					rate / clipSize,
-					std::max(
-							1,
-							(full - _ammo) / clipSize));
-	}
-
-	if (baseClips >= load)
-		setAmmo(_ammo + rate);
-	else
-		setAmmo(_ammo + (clipSize * baseClips));
-
-	if (_ammo >= full)
-	{
-		_ammo = full;
-		_rearming = false;
-	}
-
-	return load; */
 
 /**
  * Fires a projectile from craft's weapon.

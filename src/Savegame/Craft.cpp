@@ -924,7 +924,6 @@ std::string Craft::rearm(Ruleset* rules)
 									baseClips,
 									rules->getItem(clip)->getClipSize());
 
-//				if (load > baseClips)
 				if ((*i)->isRearming()
 					&& load >= baseClips) // base uses up all stock
 				{

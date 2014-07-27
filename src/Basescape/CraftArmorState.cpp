@@ -317,7 +317,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 			SavedGame* _save;
 			_save = _game->getSavedGame();
 			Armor* a = _game->getRuleset()->getArmor(_save->getLastSelectedArmor());
-			if (_base->getItems()->getItem(a->getStoreItem())>0 || a->getStoreItem() == "STR_NONE")
+			if (_base->getItems()->getItem(a->getStoreItem()) > 0 || a->getStoreItem() == "STR_NONE")
 			{
 				if (s->getArmor()->getStoreItem() != "STR_NONE")
 					_base->getItems()->addItem(s->getArmor()->getStoreItem());

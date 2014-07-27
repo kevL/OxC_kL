@@ -4646,7 +4646,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1406424935 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1406429894 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	<climits>
 	<string>

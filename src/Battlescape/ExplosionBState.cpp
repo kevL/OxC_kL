@@ -101,7 +101,7 @@ void ExplosionBState::init()
 
 		// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
 		_pistolWhip = _item->getRules()->getBattleType() != BT_MELEE
-					&& _parent->getCurrentAction()->type == BA_HIT;
+						&& _parent->getCurrentAction()->type == BA_HIT;
 
 		if (_pistolWhip)
 			_power = _item->getRules()->getMeleePower();
@@ -119,9 +119,9 @@ void ExplosionBState::init()
 		// AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = !_pistolWhip
 						&& _item->getRules()->getBattleType() != BT_MELEE
-						&& _item->getRules()->getBattleType() != BT_PSIAMP		// kL
-//kL						&& _item->getRules()->getExplosionRadius() != 0		// <- worrisome, kL_note.
-						&& _item->getRules()->getExplosionRadius() > -1;		// kL
+						&& _item->getRules()->getBattleType() != BT_PSIAMP	// kL
+//kL					&& _item->getRules()->getExplosionRadius() != 0		// <- worrisome, kL_note.
+						&& _item->getRules()->getExplosionRadius() > -1;	// kL
 	}
 	else if (_tile)
 	{
@@ -246,11 +246,15 @@ void ExplosionBState::init()
 
 		_hit = _pistolWhip
 				|| _item->getRules()->getBattleType() == BT_MELEE
-				|| _item->getRules()->getBattleType() == BT_PSIAMP; // includes aLien psi-weapon.
+				|| _item->getRules()->getBattleType() == BT_PSIAMP;	// includes aLien psi-weapon.
+																	// They took this out and use 'bool psi' instead ....
+																	// supposedly to correct some cursor-stuff that was broke for them.
+//		bool psi = _item->getRules()->getBattleType() == BT_PSIAMP;
 		int
 			anim = _item->getRules()->getHitAnimation(),
 			sound = _item->getRules()->getHitSound();
 
+//		if (_hit || psi)
 		if (_hit)
 		{
 			anim = _item->getRules()->getMeleeAnimation();
@@ -265,11 +269,12 @@ void ExplosionBState::init()
 										->play();
 		}
 
-		Explosion* explosion = new Explosion( // animation.
+		Explosion* explosion = new Explosion( // animation. // Don't burn the tile
 										_center,
 										anim,
 										false,
 										_hit);
+//										_hit || psi);
 //		_parent->getMap()->getExplosions()->insert(explosion); // kL
 		_parent->getMap()->getExplosions()->push_back(explosion); // expl CTD
 
@@ -281,7 +286,7 @@ void ExplosionBState::init()
 
 //		BattleUnit* target = tileCenter->getUnit();
 //		BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
-//		if (_hit && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
+//		if ((_hit || psi) && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		// kL_begin:
 		Camera* explodeCam = _parent->getMap()->getCamera();
 		if (!explodeCam->isOnScreen(centerPos)
