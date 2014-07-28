@@ -213,7 +213,7 @@ void TileEngine::calculateUnitLighting()
 {
 	const int layer = 2;					// Dynamic lighting layer.
 //kL	const int personalLightPower = 15;	// amount of light a unit generates
-	const int personalLightPower = 3;		// kL, Try it...
+	const int personalLightPower = 8;		// kL, Try it...
 	const int fireLightPower = 15;			// amount of light a fire generates
 
 	for (int // reset all light to 0 first
@@ -4216,6 +4216,8 @@ int TileEngine::unitOpensDoor(
 
 				if (rightClick) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
 				{
+					_battleSave->getBattleGame()->checkForProximityGrenades(unit); // kL
+
 					calculateFOV(unit->getPosition()); // calculate FoV for everyone within sight-range, incl. unit.
 
 					// look from the other side (may need check reaction fire)

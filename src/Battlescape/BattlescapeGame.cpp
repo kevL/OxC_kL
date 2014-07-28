@@ -3296,18 +3296,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 						ty++)
 				{
 					Tile* t = _save->getTile(unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
-
-					int dir; // cred: animal310 - http://openxcom.org/bugs/openxcom/issues/765
-					_save->getPathfinding()->vectorToDirection(
-															Position(tx, ty, 0),
-															dir);
-
-					if (t
-						&& _save->getPathfinding()->isBlocked(
-															_save->getTile(Position(x, y, 0)),
-															NULL,
-															dir)
-														== false)
+					if (t)
 					{
 						for (std::vector<BattleItem*>::iterator
 								i = t->getInventory()->begin();
@@ -3317,23 +3306,36 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
 								&& (*i)->getFuseTimer() == 0)
 							{
-								Position pos;
-								pos.x = t->getPosition().x * 16 + 8;
-								pos.y = t->getPosition().y * 16 + 8;
-								pos.z = t->getPosition().z * 24 + t->getTerrainLevel();
+								int dir; // cred: animal310 - http://openxcom.org/bugs/openxcom/issues/765
+								_save->getPathfinding()->vectorToDirection(
+																		Position(tx, ty, 0),
+																		dir);
+								//Log(LOG_INFO) << "dir = " << dir;
+								if (_save->getPathfinding()->isBlocked(
+																	_save->getTile(unit->getPosition() + Position(x, y, 0)),
+																	NULL,
+																	dir)
+																== false)
+								{
+									Position pos;
 
-								statePushNext(new ExplosionBState(
-																this,
-																pos,
-																*i,
-																(*i)->getPreviousOwner()));
+									pos.x = t->getPosition().x * 16 + 8;
+									pos.y = t->getPosition().y * 16 + 8;
+									pos.z = t->getPosition().z * 24 + t->getTerrainLevel();
 
-								getSave()->removeItem(*i);
+									statePushNext(new ExplosionBState(
+																	this,
+																	pos,
+																	*i,
+																	(*i)->getPreviousOwner()));
 
-								unit->setCache(NULL);
-								getMap()->cacheUnit(unit);
+									getSave()->removeItem(*i);
 
-								return true;
+									unit->setCache(NULL);
+									getMap()->cacheUnit(unit);
+
+									return true;
+								}
 							}
 						}
 					}

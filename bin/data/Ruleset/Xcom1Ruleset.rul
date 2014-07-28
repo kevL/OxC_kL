@@ -2100,11 +2100,12 @@ items:
     floorSprite: 37
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
     hitAnimation: 0
-    power: 87
+    power: 85
     damageType: 6
     clipSize: 1
     battleType: 2
     recoveryPoints: 1
+    blastRadius: 3
     attraction: 6
   - type: STR_ALIEN_GRENADE
     requires:

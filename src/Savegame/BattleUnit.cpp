@@ -1393,7 +1393,7 @@ void BattleUnit::playHitSound() // kL
 		if (getGender() == GENDER_MALE)
 		{
 			sound = RNG::generate(141, 151);
-			Log(LOG_INFO) << "death Male, sound = " << sound;
+			//Log(LOG_INFO) << "death Male, sound = " << sound;
 			_battleGame->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												RNG::generate(141, 151))
@@ -1402,7 +1402,7 @@ void BattleUnit::playHitSound() // kL
 		else if (getGender() == GENDER_FEMALE)
 		{
 			sound = RNG::generate(121, 135);
-			Log(LOG_INFO) << "death Female, sound = " << sound;
+			//Log(LOG_INFO) << "death Female, sound = " << sound;
 			_battleGame->getResourcePack()->getSound(
 												"BATTLE.CAT",
 												RNG::generate(121, 135))

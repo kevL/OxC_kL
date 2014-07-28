@@ -1423,7 +1423,7 @@ void Map::drawTerrain(Surface* surface)
 												screenPosition.y + offset.y + 4,
 												0,
 												false,
-												3); // red.
+												1); // white, 3=red.
 									}
 								}
 							} // kL_end.

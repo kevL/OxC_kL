@@ -755,7 +755,7 @@ int Pathfinding::getTUCost(
 			}
 
 
-			// this will later be used to re-init the start tile again.
+			// this will later be used to re-init the start tile
 			Position vertOffset(0, 0, 0);
 
 			Tile* belowDest = _save->getTile(*endPos + offset + Position(0, 0,-1));
@@ -940,15 +940,13 @@ int Pathfinding::getTUCost(
 					|| dir == 0
 					|| dir == 1)
 				{
-					wallTU = startTile->getTUCost(
+					wallTU = startTile->getTUCost( // ( 'walkover' bigWalls not incl. -- none exists )
 												MapData::O_NORTHWALL,
-												_movementType); // ( bigWalls not incl. yet )
+												_movementType);
 					if (wallTU > 0)
 					{
 //						if (dir &1) // would use this to increase diagonal wall-crossing by +50%
-//						{
 //							wallTU += wallTU / 2;
-//						}
 
 						wallcost += wallTU;
 						sides++;
@@ -965,13 +963,18 @@ int Pathfinding::getTUCost(
 					|| dir == 2
 					|| dir == 3)
 				{
-					Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition();
-					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below. ( bigWalls not incl. yet )
+					//Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition();
+
+					// Test: i don't know why 'aboveDest' don't work here
+					Tile* aboveDestTile = _save->getTile(destTile->getPosition() + Position(0, 0, 1));
+
+					if (startTile->getPosition().z <= destTile->getPosition().z) // don't count wallcost if it's on the floor below.
 					{
 						wallTU = destTile->getTUCost(
-												MapData::O_WESTWALL,
-												_movementType);
-						Log(LOG_INFO) << ". . eastish, wallTU = " << wallTU;
+													MapData::O_WESTWALL,
+													_movementType);
+						//Log(LOG_INFO) << ". . eastish, wallTU = " << wallTU;
+
 						if (wallTU > 0)
 						{
 							wallcost += wallTU;
@@ -980,7 +983,28 @@ int Pathfinding::getTUCost(
 							if (destTile->getMapData(MapData::O_WESTWALL)->isDoor()
 								|| destTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
 							{
-								Log(LOG_INFO) << ". . . _openDoor = TRUE";
+								//Log(LOG_INFO) << ". . . _openDoor = TRUE";
+								_openDoor = true;
+							}
+						}
+					}
+					else if (aboveDestTile != NULL // should be redundant, really
+						&& aboveDestTile->getMapData(MapData::O_WESTWALL) != NULL) // going downwards...
+					{
+						wallTU = aboveDestTile->getTUCost(
+													MapData::O_WESTWALL,
+													_movementType);
+						//Log(LOG_INFO) << ". . (down) eastish, wallTU = " << wallTU;
+
+						if (wallTU > 0)
+						{
+							wallcost += wallTU;
+							sides++;
+
+							if (aboveDestTile->getMapData(MapData::O_WESTWALL)->isDoor()
+								|| aboveDestTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
+							{
+								//Log(LOG_INFO) << ". . . (down) _openDoor = TRUE";
 								_openDoor = true;
 							}
 						}
@@ -991,11 +1015,14 @@ int Pathfinding::getTUCost(
 					|| dir == 4
 					|| dir == 5)
 				{
-					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below. ( bigWalls not incl. yet )
+					// Test: i don't know why 'aboveDest' don't work here
+					Tile* aboveDestTile = _save->getTile(destTile->getPosition() + Position(0, 0, 1));
+
+					if (startTile->getPosition().z <= destTile->getPosition().z) // don't count wallcost if it's on the floor below.
 					{
 						wallTU = destTile->getTUCost(
-												MapData::O_NORTHWALL,
-												_movementType);
+													MapData::O_NORTHWALL,
+													_movementType);
 						if (wallTU > 0)
 						{
 							wallcost += wallTU;
@@ -1003,6 +1030,25 @@ int Pathfinding::getTUCost(
 
 							if (destTile->getMapData(MapData::O_NORTHWALL)->isDoor()
 								|| destTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
+							{
+								_openDoor = true;
+							}
+						}
+					}
+					else if (aboveDestTile != NULL // should be redundant, really
+						&& aboveDestTile->getMapData(MapData::O_NORTHWALL) != NULL) // going downwards...
+					{
+						wallTU = aboveDestTile->getTUCost(
+													MapData::O_NORTHWALL,
+													_movementType);
+
+						if (wallTU > 0)
+						{
+							wallcost += wallTU;
+							sides++;
+
+							if (aboveDestTile->getMapData(MapData::O_NORTHWALL)->isDoor()
+								|| aboveDestTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
 							{
 								_openDoor = true;
 							}
@@ -1402,12 +1448,12 @@ bool Pathfinding::isBlocked(
 	// stairs terrainlevel goes typically -8 -16 (2 steps) or -4 -12 -20 (3 steps)
 	// this "maximum jump height" is therefore set to 8
 
-	const Position currentPos = startTile->getPosition();
+	const Position pos = startTile->getPosition();
 
-	static const Position oneTileNorth	= Position( 0,-1, 0);
-	static const Position oneTileEast	= Position( 1, 0, 0);
-	static const Position oneTileSouth	= Position( 0, 1, 0);
-	static const Position oneTileWest	= Position(-1, 0, 0);
+	static const Position tileNorth	= Position( 0,-1, 0);
+	static const Position tileEast	= Position( 1, 0, 0);
+	static const Position tileSouth	= Position( 0, 1, 0);
+	static const Position tileWest	= Position(-1, 0, 0);
 
 	// kL_begin:
 	switch (dir)
@@ -1429,24 +1475,24 @@ bool Pathfinding::isBlocked(
 						MapData::O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileEast),
+						_save->getTile(pos + tileEast),
 						MapData::O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileEast),
+						_save->getTile(pos + tileEast),
 						MapData::O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileEast),
+						_save->getTile(pos + tileEast),
 						O_BIGWALL,
 						missileTarget,
 						BIGWALL_NESW)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileEast + oneTileNorth),
+						_save->getTile(pos + tileEast + tileNorth),
 						MapData::O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileNorth),
+						_save->getTile(pos + tileNorth),
 						O_BIGWALL,
 						missileTarget,
 						BIGWALL_NESW))
@@ -1457,7 +1503,7 @@ bool Pathfinding::isBlocked(
 		case 2: // east
 			//Log(LOG_INFO) << ". try East";
 			if (isBlocked(
-						_save->getTile(currentPos + oneTileEast),
+						_save->getTile(pos + tileEast),
 						MapData::O_WESTWALL,
 						missileTarget))
 			{
@@ -1467,28 +1513,28 @@ bool Pathfinding::isBlocked(
 		case 3: // south-east
 			//Log(LOG_INFO) << ". try SouthEast";
 			if (isBlocked(
-						_save->getTile(currentPos + oneTileEast),
+						_save->getTile(pos + tileEast),
 						MapData::O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileEast),
+						_save->getTile(pos + tileEast),
 						O_BIGWALL,
 						missileTarget,
 						BIGWALL_NWSE)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileEast + oneTileSouth),
+						_save->getTile(pos + tileEast + tileSouth),
 						MapData::O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileEast + oneTileSouth),
+						_save->getTile(pos + tileEast + tileSouth),
 						MapData::O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileSouth),
+						_save->getTile(pos + tileSouth),
 						MapData::O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileSouth),
+						_save->getTile(pos + tileSouth),
 						O_BIGWALL,
 						missileTarget,
 						BIGWALL_NWSE))
@@ -1499,7 +1545,7 @@ bool Pathfinding::isBlocked(
 		case 4: // south
 			//Log(LOG_INFO) << ". try South";
 			if (isBlocked(
-						_save->getTile(currentPos + oneTileSouth),
+						_save->getTile(pos + tileSouth),
 						MapData::O_NORTHWALL,
 						missileTarget))
 			{
@@ -1513,24 +1559,24 @@ bool Pathfinding::isBlocked(
 						MapData::O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileSouth),
+						_save->getTile(pos + tileSouth),
 						MapData::O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileSouth),
+						_save->getTile(pos + tileSouth),
 						MapData::O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileSouth),
+						_save->getTile(pos + tileSouth),
 						O_BIGWALL,
 						missileTarget,
 						BIGWALL_NESW)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileSouth + oneTileWest),
+						_save->getTile(pos + tileSouth + tileWest),
 						MapData::O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileWest),
+						_save->getTile(pos + tileWest),
 						O_BIGWALL,
 						missileTarget,
 						BIGWALL_NESW))
@@ -1559,20 +1605,20 @@ bool Pathfinding::isBlocked(
 						MapData::O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileWest),
+						_save->getTile(pos + tileWest),
 						MapData::O_NORTHWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileWest),
+						_save->getTile(pos + tileWest),
 						O_BIGWALL,
 						missileTarget,
 						BIGWALL_NWSE)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileNorth),
+						_save->getTile(pos + tileNorth),
 						MapData::O_WESTWALL,
 						missileTarget)
 				|| isBlocked(
-						_save->getTile(currentPos + oneTileNorth),
+						_save->getTile(pos + tileNorth),
 						O_BIGWALL,
 						missileTarget,
 						BIGWALL_NWSE))
@@ -2004,7 +2050,7 @@ bool Pathfinding::previewPath(bool bRemove)
 			++i)
 	{
 		dir = *i;
-
+		//Log(LOG_INFO) << "dir = " << dir;
 //		_openDoor = false;
 
 		tu = getTUCost( // gets tu cost, but also gets the destination position.
@@ -2064,6 +2110,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		}
 
 		currentTU -= tu;
+		//Log(LOG_INFO) << ". . currentTU = " << currentTU;
 		usedTU += tu;
 		reserveOk = _save->getBattleGame()->checkReservedTU(
 														_unit,
