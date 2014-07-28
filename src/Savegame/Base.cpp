@@ -1191,12 +1191,12 @@ int Base::getDefenseValue() const
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0)
+		if ((*i)->getBuildTime() == 0
+			&& (*i)->getRules()->getRadarRange() > 0)
 		{
 			range = (*i)->getRules()->getRadarRange();
 				// kL_note: that should be based off a string or Ruleset value.
-			if (range
-				&& range < 1501) // was changed to 1701
+			if (range < 1501) // was changed to 1701
 			{
 				total++;
 			}
