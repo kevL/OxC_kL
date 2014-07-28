@@ -184,18 +184,17 @@ ConfirmLandingState::ConfirmLandingState(
 //	_txtMessage2->setWordWrap(true);
 
 	std::wostringstream ss;
-	ss << L""; // blank if UFO not hyperdetected.
+	ss << L""; // blank if no UFO.
 
 	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	if (ufo != NULL
-		&& ufo->getHyperDetected())
+	if (ufo != NULL)
 	{
 		RuleUfo* ufoRule = ufo->getRules();
 		if (ufoRule != NULL)
-		{
-			ss << tr(ufoRule->getType()) << L" : ";
-		}
-		ss << tr(ufo->getAlienRace());
+			ss << tr(ufoRule->getType()); // only ufoType shows if not hyperdetected.
+
+		if (ufo->getHyperDetected())
+			ss << L" : " << tr(ufo->getAlienRace());
 	}
 	std::wstring wstr = ss.str();
 
