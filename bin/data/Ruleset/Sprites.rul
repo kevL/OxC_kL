@@ -149,3 +149,10 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/ufograph/smoke/ranks/rank_commander.png
+  - type: DIGITS
+    width: 30
+    height: 5
+    subX: 3
+    subY: 5
+    files:
+      0: Resources/Sprites/gender/digits.png

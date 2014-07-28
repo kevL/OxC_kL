@@ -1020,7 +1020,7 @@ void Surface::blitNShade(
 	if (half)
 	{
 		GraphSubset g = src.getDomain();
-		g.beg_x = g.end_x/2;
+		g.beg_x = g.end_x / 2;
 		src.setDomain(g);
 	}
 

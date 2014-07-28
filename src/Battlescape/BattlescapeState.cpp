@@ -432,8 +432,8 @@ BattlescapeState::BattlescapeState()
 	_btnWounds->setVisible(false);
 	_btnWounds->onMouseClick((ActionHandler)& BattlescapeState::btnWoundedClick);
 
-	_numWounds->setColor(Palette::blockOffset(2)+5); // blood red
-//	_numWounds->setColor(2); // white
+//	_numWounds->setColor(Palette::blockOffset(2)+5); // blood red
+	_numWounds->setColor(4); // white
 	_numWounds->setValue(0);
 	_numWounds->setVisible(false);
 	// kL_end.
@@ -2217,8 +2217,9 @@ void BattlescapeState::blinkVisibleUnitButtons()
 
 	if (_btnWounds->getVisible() == true)
 	{
-		_btnWounds->drawRect(0, 0, 15, 13, 15);									// black border
-		_btnWounds->drawRect(1, 1, 13, 11, color + Palette::blockOffset(10));	// inner purple square
+		_btnWounds->drawRect(0, 0, 15, 13, 15);		// black border
+		_btnWounds->drawRect(1, 1, 13, 11, color);	// inner red square
+			// color + Palette::blockOffset(10));	// inner purple square
 	}
 
 

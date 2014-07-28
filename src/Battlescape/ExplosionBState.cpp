@@ -177,6 +177,13 @@ void ExplosionBState::init()
 			if (radius < 0)
 				radius = 0;
 
+			int graphPower = _power;
+			if (_item->getRules()->getDamageType() == DT_SMOKE
+				|| _item->getRules()->getDamageType() == DT_STUN)
+			{
+				graphPower /= 2; // smoke & stun bombs do fewer anims.
+			}
+
 			int
 				offset = radius * 5, // voxelspace
 				animQty = static_cast<int>(

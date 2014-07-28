@@ -933,7 +933,8 @@ int Pathfinding::getTUCost(
 				int sides = 0;		// how many walls we cross when moving diagonally
 				int wallTU = 0;		// used to check if there's a wall that costs +TU.
 
-				_openDoor = false;
+//				_openDoor = false;
+				//Log(LOG_INFO) << ". . . _openDoor = FALSE";
 
 				if (dir == 7
 					|| dir == 0
@@ -964,11 +965,13 @@ int Pathfinding::getTUCost(
 					|| dir == 2
 					|| dir == 3)
 				{
+					Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition();
 					if (startTile->getPosition().z == destTile->getPosition().z) // don't count wallcost if it's on the floor below. ( bigWalls not incl. yet )
 					{
 						wallTU = destTile->getTUCost(
 												MapData::O_WESTWALL,
 												_movementType);
+						Log(LOG_INFO) << ". . eastish, wallTU = " << wallTU;
 						if (wallTU > 0)
 						{
 							wallcost += wallTU;
@@ -977,6 +980,7 @@ int Pathfinding::getTUCost(
 							if (destTile->getMapData(MapData::O_WESTWALL)->isDoor()
 								|| destTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
 							{
+								Log(LOG_INFO) << ". . . _openDoor = TRUE";
 								_openDoor = true;
 							}
 						}
@@ -1919,7 +1923,7 @@ int Pathfinding::validateUpDown(
 
 /**
  * Marks tiles for the path preview.
- * @param bRemove - true remove preview
+ * @param bRemove - true removes preview
  * @return, true if a path is previewed
  */
 bool Pathfinding::previewPath(bool bRemove)
@@ -2001,6 +2005,8 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		dir = *i;
 
+//		_openDoor = false;
+
 		tu = getTUCost( // gets tu cost, but also gets the destination position.
 					start,
 					dir,
@@ -2032,7 +2038,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 				if (_openDoor == true)
 				{
-//					_openDoor = false; // safety. Redundant w/ getTUCost() init
+					_openDoor = false; // safety. Redundant w/ getTUCost() init
 
 					tu++;	// kludge. Assumes: all doors take 4 TU to open ....
 							// Otherwise, have to separate TU for opening doors

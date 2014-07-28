@@ -249,7 +249,7 @@ NumberText::NumberText(
 }
 
 /**
- *
+ * dTor.
  */
 NumberText::~NumberText()
 {
@@ -382,7 +382,7 @@ void NumberText::draw()
 }
 
 /**
- *
+ * Sets whether or not to draw a border around the number.
  */
 void NumberText::setBordered(bool bordered)
 {

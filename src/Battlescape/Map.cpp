@@ -1409,6 +1409,23 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.y + offset.y + 3,
 											0);
 								}
+
+								if (unit->getFatalWounds() > 0 // stick to under 10 wounds ... else double digits.
+									&& unit->getFatalWounds() < 10)
+								{
+									SurfaceSet* setDigits = _res->getSurfaceSet("DIGITS");
+									tmpSurface = setDigits->getFrame(unit->getFatalWounds());
+									if (tmpSurface != NULL)
+									{
+										tmpSurface->blitNShade(
+												surface,
+												screenPosition.x + offset.x + 5,
+												screenPosition.y + offset.y + 4,
+												0,
+												false,
+												3); // red.
+									}
+								}
 							} // kL_end.
 						}
 					}
