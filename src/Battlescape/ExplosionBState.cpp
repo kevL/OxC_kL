@@ -187,7 +187,7 @@ void ExplosionBState::init()
 			int
 				offset = radius * 5, // voxelspace
 				animQty = static_cast<int>(
-								sqrt(static_cast<double>(radius) * static_cast<double>(_power)))
+								sqrt(static_cast<double>(radius) * static_cast<double>(graphPower)))
 							/ 5;
 			if (animQty < 1)
 				animQty = 1;

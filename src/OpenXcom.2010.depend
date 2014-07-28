@@ -5798,7 +5798,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1406546764 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1406548701 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6575,7 +6575,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1406546592 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1406548680 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
