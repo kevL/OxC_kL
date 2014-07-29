@@ -5209,9 +5209,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 					int liveSoldiers = 0;
 
 					_battleSave->getBattleGame()->tallyUnits(
-													liveAliens,
-													liveSoldiers,
-													false);
+														liveAliens,
+														liveSoldiers);
 
 					if (liveAliens == 0
 						|| liveSoldiers == 0)

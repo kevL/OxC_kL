@@ -79,7 +79,7 @@ AliensCrashState::AliensCrashState()
 }
 
 /**
- *
+ * dTor.
  */
 AliensCrashState::~AliensCrashState()
 {
@@ -92,6 +92,7 @@ AliensCrashState::~AliensCrashState()
 void AliensCrashState::btnOkClick(Action*)
 {
 	_game->popState();
+
 	_game->pushState(new DebriefingState());
 }
 

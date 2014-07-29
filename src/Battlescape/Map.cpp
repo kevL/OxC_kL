@@ -806,7 +806,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 // START ADVANCED DRAWING CYCLE:
-/*					if (mapPosition.y > 0) // special handling for a moving unit.
+					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
 						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
 						BattleUnit* bu = tileNorth->getUnit();
@@ -1080,7 +1080,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw smoke/fire
-								if (tileWest->getSmoke() // includes tiles on Fire? must...
+/*								if (tileWest->getSmoke() // includes tiles on Fire? must...
 									&& tileWest->isDiscovered(2))
 								{
 									// oXc _animFrames cycle from 0..7
@@ -1115,7 +1115,7 @@ void Map::drawTerrain(Surface* surface)
 											screenPosition.x,
 											screenPosition.y,
 											0);
-								}
+								} */
 
 								// Draw object
 								if (tileWest->getMapData(MapData::O_OBJECT)
@@ -1131,7 +1131,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 						}
-					} */
+					}
 /*kL - their tileWest SMOKE:
 								{
 									frame = 0;

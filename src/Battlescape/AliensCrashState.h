@@ -40,9 +40,9 @@ class AliensCrashState
 {
 
 private:
+	Text* _txtTitle;
 	TextButton* _btnOk;
 	Window* _window;
-	Text* _txtTitle;
 
 
 	public:

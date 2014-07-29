@@ -468,17 +468,16 @@ void ExplosionBState::explode()
 //												hit); // kL add.
 												_hit);
 
-			if (!_item->getRules()->getZombieUnit().empty() // check if this unit turns others into zombies
+			if (_item->getRules()->getZombieUnit().empty() == false // check if this unit turns others into zombies
 				&& victim
 				&& victim->getArmor()->getSize() == 1
-				&& victim->getSpawnUnit().empty()
-//				&& victim->getSpecialAbility() == SPECAB_NONE
-				&& victim->getOriginalFaction() != FACTION_HOSTILE) // only aLiens & civies
+				&& victim->getSpawnUnit().empty() == true
+//				&& victim->getSpecialAbility() == SPECAB_NONE // kL
+				&& victim->getOriginalFaction() != FACTION_HOSTILE) // only xCom & civies (not)
 			{
 				//Log(LOG_INFO) << victim->getId() << ": murderer is *zombieUnit*; !spawnUnit -> specab->RESPAWN, ->zombieUnit!";
-				// converts the victim to a zombie on death
-				victim->setSpecialAbility(SPECAB_RESPAWN);
 				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
+				victim->setSpecialAbility(SPECAB_RESPAWN);
 			}
 		}
 	}

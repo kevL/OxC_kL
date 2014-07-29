@@ -214,7 +214,8 @@ private:
 		/// Converts a unit into a unit of another type.
 		BattleUnit* convertUnit(
 				BattleUnit* unit,
-				std::string newType);
+				std::string convertType,
+				int dirFace = 3); // kL_add.
 		/// Handles kneeling action.
 		bool kneel(
 				BattleUnit* bu,
@@ -288,7 +289,7 @@ private:
 		void tallyUnits(
 				int& liveAliens,
 				int& liveSoldiers,
-				bool convert);
+				bool convert = false);
 		/// Sets the kneel reservation setting.
 		void setKneelReserved(bool reserved);
 		/// Checks the kneel reservation setting.

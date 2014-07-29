@@ -207,8 +207,7 @@ void BriefingState::btnOkClick(Action*)
 
 	bs->getBattleGame()->tallyUnits(
 								liveAliens,
-								liveSoldiers,
-								false);
+								liveSoldiers);
 	if (liveAliens > 0)
 	{
 		_game->pushState(bs);

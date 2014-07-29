@@ -1142,8 +1142,7 @@ void SavedBattleGame::endTurn()
 		liveSoldiers;
 	_battleState->getBattleGame()->tallyUnits(
 											liveAliens,
-											liveSoldiers,
-											false);
+											liveSoldiers);
 	//Log(LOG_INFO) << "done tallyUnits";
 
 	// kL_begin: pseudo the Turn20 reveal and the less than 3 aliens left rule.

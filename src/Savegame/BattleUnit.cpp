@@ -241,6 +241,7 @@ BattleUnit::BattleUnit(
 		_expFiring(0),
 		_expThrowing(0),
 		_expPsiSkill(0),
+		_expPsiStrength(0),
 		_expMelee(0),
 		_motionPoints(0),
 		_kills(0),
@@ -321,7 +322,7 @@ BattleUnit::BattleUnit(
 }
 
 /**
- *
+ * dTor.
  */
 BattleUnit::~BattleUnit()
 {
@@ -357,7 +358,6 @@ BattleUnit::~BattleUnit()
 void BattleUnit::load(const YAML::Node& node)
 {
 	_id					= node["id"].as<int>(_id);
-	_battleOrder		= node["battleOrder"].as<size_t>(_battleOrder); // kL
 	_faction			= _originalFaction = (UnitFaction)node["faction"].as<int>(_faction);
 	_status				= (UnitStatus)node["status"].as<int>(_status);
 	_pos				= node["position"].as<Position>(_pos);
@@ -368,16 +368,8 @@ void BattleUnit::load(const YAML::Node& node)
 	_stunlevel			= node["stunlevel"].as<int>(_stunlevel);
 	_energy				= node["energy"].as<int>(_energy);
 	_morale				= node["morale"].as<int>(_morale);
-	_kneeled			= node["kneeled"].as<bool>(_kneeled);
 	_floating			= node["floating"].as<bool>(_floating);
 	_fire				= node["fire"].as<int>(_fire);
-	_expBravery			= node["expBravery"].as<int>(_expBravery);
-	_expReactions		= node["expReactions"].as<int>(_expReactions);
-	_expFiring			= node["expFiring"].as<int>(_expFiring);
-	_expThrowing		= node["expThrowing"].as<int>(_expThrowing);
-	_expPsiSkill		= node["expPsiSkill"].as<int>(_expPsiSkill);
-	_expPsiStrength		= node["expPsiStrength"].as<int>(_expPsiStrength);
-	_expMelee			= node["expMelee"].as<int>(_expMelee);
 	_turretType			= node["turretType"].as<int>(_turretType);
 	_visible			= node["visible"].as<bool>(_visible);
 	_turnsExposed		= node["turnsExposed"].as<int>(_turnsExposed);
@@ -392,14 +384,28 @@ void BattleUnit::load(const YAML::Node& node)
 	_spawnUnit			= node["spawnUnit"].as<std::string>(_spawnUnit);
 	_motionPoints		= node["motionPoints"].as<int>(0);
 	_activeHand			= node["activeHand"].as<std::string>(_activeHand); // kL
-	_dashing			= node["dashing"].as<bool>(_dashing); // kL
+//	_dashing			= node["dashing"].as<bool>(_dashing); // kL
 
 	for (int i = 0; i < 5; i++)
 		_currentArmor[i]	= node["armor"][i].as<int>(_currentArmor[i]);
 	for (int i = 0; i < 6; i++)
 		_fatalWounds[i]		= node["fatalWounds"][i].as<int>(_fatalWounds[i]);
 
-	_statistics->load(node["tempUnitStatistics"]);
+	if (_originalFaction == FACTION_PLAYER) // kL_add.
+	{
+		_statistics->load(node["tempUnitStatistics"]);
+
+		_battleOrder	= node["battleOrder"].as<size_t>(_battleOrder); // kL
+		_kneeled		= node["kneeled"].as<bool>(_kneeled);
+
+		_expBravery		= node["expBravery"].as<int>(_expBravery);
+		_expReactions	= node["expReactions"].as<int>(_expReactions);
+		_expFiring		= node["expFiring"].as<int>(_expFiring);
+		_expThrowing	= node["expThrowing"].as<int>(_expThrowing);
+		_expPsiSkill	= node["expPsiSkill"].as<int>(_expPsiSkill);
+		_expPsiStrength	= node["expPsiStrength"].as<int>(_expPsiStrength);
+		_expMelee		= node["expMelee"].as<int>(_expMelee);
+	}
 }
 
 /**
@@ -411,7 +417,6 @@ YAML::Node BattleUnit::save() const
 	YAML::Node node;
 
 	node["id"]				= _id;
-	node["battleOrder"]		= _battleOrder; // kL
 	node["faction"]			= (int)_faction;
 	node["soldierId"]		= _id;
 	node["genUnitType"]		= _type;
@@ -426,16 +431,8 @@ YAML::Node BattleUnit::save() const
 	node["stunlevel"]		= _stunlevel;
 	node["energy"]			= _energy;
 	node["morale"]			= _morale;
-	node["kneeled"]			= _kneeled;
 	node["floating"]		= _floating;
 	node["fire"]			= _fire;
-	node["expBravery"]		= _expBravery;
-	node["expReactions"]	= _expReactions;
-	node["expFiring"]		= _expFiring;
-	node["expThrowing"]		= _expThrowing;
-	node["expPsiSkill"]		= _expPsiSkill;
-	node["expPsiStrength"]	= _expPsiStrength;
-	node["expMelee"]		= _expMelee;
 	node["turretType"]		= _turretType;
 	node["visible"]			= _visible;
 	node["turnsExposed"]	= _turnsExposed;
@@ -446,7 +443,7 @@ YAML::Node BattleUnit::save() const
 	node["motionPoints"]	= _motionPoints;
 	// could put (if not tank) here:
 	node["activeHand"]		= _activeHand; // kL
-	node["dashing"]			= _dashing; // kL
+//	node["dashing"]			= _dashing; // kL
 
 	for (int i = 0; i < 5; i++)
 		node["armor"].push_back(_currentArmor[i]);
@@ -467,12 +464,26 @@ YAML::Node BattleUnit::save() const
 	if (!_spawnUnit.empty())
 		node["spawnUnit"]		= _spawnUnit;
 
-	node["tempUnitStatistics"]	= _statistics->save();
+	if (_originalFaction == FACTION_PLAYER) // kL_add.
+	{
+		node["tempUnitStatistics"]	= _statistics->save();
+
+		node["battleOrder"]			= _battleOrder; // kL
+		node["kneeled"]				= _kneeled;
+
+		node["expBravery"]			= _expBravery;
+		node["expReactions"]		= _expReactions;
+		node["expFiring"]			= _expFiring;
+		node["expThrowing"]			= _expThrowing;
+		node["expPsiSkill"]			= _expPsiSkill;
+		node["expPsiStrength"]		= _expPsiStrength;
+		node["expMelee"]			= _expMelee;
+	}
 
 	return node;
 		// kL_note: This doesn't save/load such things as
-		// _visibleUnits, _unitsSpottedThisTurn, _visibleTiles
-		// & AI is saved, but loaded someplace else
+		// _visibleUnits, _unitsSpottedThisTurn, _visibleTiles;
+		// AI is saved, but loaded someplace else
 }
 
 /**
@@ -1448,7 +1459,7 @@ void BattleUnit::knockOut(BattlescapeGame* battle)
 		_health = 0;
 	else if (_spawnUnit != "")
 	{
-		setSpecialAbility(SPECAB_NONE);
+//kL	setSpecialAbility(SPECAB_NONE); // do this in convertUnit()
 		BattleUnit* newUnit = battle->convertUnit(
 												this,
 												_spawnUnit);

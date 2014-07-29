@@ -200,8 +200,7 @@ void NextTurnState::close()
 
 	_state->getBattleGame()->tallyUnits(
 									liveAliens,
-									liveSoldiers,
-									false);
+									liveSoldiers);
 
 	if (liveAliens == 0
 		|| liveSoldiers == 0)

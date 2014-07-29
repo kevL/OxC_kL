@@ -307,6 +307,7 @@ struct BattleUnitStatistics
 		node["lowAccuracyHitCounter"]	= lowAccuracyHitCounter;
 		node["shotsFiredCounter"]		= shotsFiredCounter;
 		node["shotsLandedCounter"]		= shotsLandedCounter;
+
 		return node;
 	}
 
@@ -474,6 +475,7 @@ private:
 				UnitFaction faction,
 				int diff, // kL_add: For VictoryPts value per death.
 				BattlescapeGame* battleGame = NULL); // kL_add: for playing sound when hit.
+		/// Creates a BattleUnit.
 		BattleUnit( // aLiens, civies, & Tanks
 				Unit* unit,
 				UnitFaction faction,

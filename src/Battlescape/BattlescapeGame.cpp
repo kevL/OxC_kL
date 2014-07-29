@@ -935,8 +935,8 @@ void BattlescapeGame::checkForCasualties(
 				&& slayer->getTurretType() == -1) // not a Tank.
 			{
 				//Log(LOG_INFO) << ". slayer = " << slayer->getId();
-				if (slayer->getGeoscapeSoldier()
-					&& slayer->getFaction() == FACTION_PLAYER)
+				if (slayer->getGeoscapeSoldier() != NULL)
+//kL				&& slayer->getOriginalFaction() == FACTION_PLAYER)
 				{
 					slayer->getStatistics()->kills.push_back(new BattleUnitKills(
 																			killStatRank,
@@ -1118,8 +1118,8 @@ void BattlescapeGame::checkForCasualties(
 		{
 			//Log(LOG_INFO) << ". STUNNED victim = " << victim->getId();
 			if (slayer
-				&& slayer->getGeoscapeSoldier()
-				&& slayer->getFaction() == FACTION_PLAYER)
+				&& slayer->getGeoscapeSoldier() != NULL)
+//kL			&& slayer->getOriginalFaction() == FACTION_PLAYER)
 			{
 				slayer->getStatistics()->kills.push_back(new BattleUnitKills(
 																		killStatRank,
@@ -1133,7 +1133,7 @@ void BattlescapeGame::checkForCasualties(
 			}
 
 			if (victim
-				&& victim->getGeoscapeSoldier())
+				&& victim->getGeoscapeSoldier() != NULL)
 			{
 				victim->getStatistics()->wasUnconcious = true;
 			}
@@ -2639,27 +2639,31 @@ void BattlescapeGame::dropItem(
 
 /**
  * Converts a unit into a unit of another type.
- * @param unit		- pointer to a unit to convert
- * @param newType	- the type of unit to convert to
+ * @param unit			- pointer to a unit to convert
+ * @param convertType	- the type of unit to convert to
  * @return, pointer to the new unit
  */
 BattleUnit* BattlescapeGame::convertUnit(
 		BattleUnit* unit,
-		std::string newType)
+		std::string convertType,
+		int dirFace) // kL_add.
 {
+	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << convertType;
 	getSave()->getBattleState()->showPsiButton(false);
-	// in case the unit was unconscious
-	getSave()->removeUnconsciousBodyItem(unit);
+	getSave()->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
 
-//	int origDir = unit->getDirection(); // kL
 	unit->instaKill();
+	unit->setSpecialAbility(SPECAB_NONE); // kL.
 
 	if (Options::battleNotifyDeath
 		&& unit->getFaction() == FACTION_PLAYER
 		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-		_parentState->getGame()->pushState(new InfoboxState(_parentState->getGame()->getLanguage()->getString("STR_HAS_BEEN_KILLED", unit->getGender())
-																							.arg(unit->getName(_parentState->getGame()->getLanguage()))));
+		Language* lang = _parentState->getGame()->getLanguage();
+		_parentState->getGame()->pushState(new InfoboxState(lang->getString(
+																		"STR_HAS_BEEN_KILLED",
+																		unit->getGender())
+																	.arg(unit->getName(lang))));
 	}
 
 	for (std::vector<BattleItem*>::iterator
@@ -2681,16 +2685,12 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 
 	std::ostringstream newArmor;
-	newArmor << getRuleset()->getUnit(newType)->getArmor();
-
-	std::string terroristWeapon = getRuleset()->getUnit(newType)->getRace().substr(4);
-	terroristWeapon += "_WEAPON";
-	RuleItem* newItem = getRuleset()->getItem(terroristWeapon);
+	newArmor << getRuleset()->getUnit(convertType)->getArmor();
 
 	int difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty());
 	int month = _parentState->getGame()->getSavedGame()->getMonthsPassed(); // kL
-	BattleUnit* newUnit = new BattleUnit(
-									getRuleset()->getUnit(newType),
+	BattleUnit* convertUnit = new BattleUnit(
+									getRuleset()->getUnit(convertType),
 									FACTION_HOSTILE,
 									_save->getUnits()->back()->getId() + 1,
 									getRuleset()->getArmor(newArmor.str()),
@@ -2700,41 +2700,48 @@ BattleUnit* BattlescapeGame::convertUnit(
 	// kL_note: what about setting _zombieUnit=true ? It's not generic but it's the only case, afaict
 
 //kL	if (!difficulty) // kL_note: moved to BattleUnit::adjustStats()
-//kL		newUnit->halveArmor();
+//kL		convertUnit->halveArmor();
 
 	getSave()->getTile(unit->getPosition())->setUnit(
-												newUnit,
+												convertUnit,
 												_save->getTile(unit->getPosition() + Position(0, 0,-1)));
-	newUnit->setPosition(unit->getPosition());
-	newUnit->setDirection(3);
-//	newUnit->setDirection(origDir);		// kL
-//	this->getMap()->cacheUnit(newUnit);	// kL, try this. ... damn!
-	newUnit->setCache(0);
-	newUnit->setTimeUnits(0);
+	convertUnit->setPosition(unit->getPosition());
+	convertUnit->setTimeUnits(0);
+//kL	convertUnit->setDirection(3);
+	// kL_begin:
+	if (convertType == "STR_ZOMBIE")
+		dirFace = RNG::generate(0, 7);
+	convertUnit->setDirection(dirFace);
+	// kL_end.
 
-	getSave()->getUnits()->push_back(newUnit);
-	getMap()->cacheUnit(newUnit);
-	newUnit->setAIState(new AlienBAIState(
+	convertUnit->setCache(NULL);
+
+	getSave()->getUnits()->push_back(convertUnit);
+	getMap()->cacheUnit(convertUnit);
+	convertUnit->setAIState(new AlienBAIState(
 										getSave(),
-										newUnit,
-										0));
+										convertUnit,
+										NULL));
 
-	BattleItem* bi = new BattleItem(
-								newItem,
+	std::string terroristWeapon = getRuleset()->getUnit(convertType)->getRace().substr(4);
+	terroristWeapon += "_WEAPON";
+	RuleItem* itemRule = getRuleset()->getItem(terroristWeapon);
+	BattleItem* item = new BattleItem(
+								itemRule,
 								getSave()->getCurrentItemId());
-	bi->moveToOwner(newUnit);
-	bi->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
-	getSave()->getItems()->push_back(bi);
+	item->moveToOwner(convertUnit);
+	item->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
+	getSave()->getItems()->push_back(item);
 
-	getTileEngine()->applyGravity(newUnit->getTile());
-	getTileEngine()->calculateFOV(newUnit->getPosition());
+	getTileEngine()->applyGravity(convertUnit->getTile());
+	getTileEngine()->calculateFOV(convertUnit->getPosition());
 
 	if (unit->getFaction() == FACTION_PLAYER)
-		newUnit->setVisible(true);
+		convertUnit->setVisible(true);
 
-//	newUnit->getCurrentAIState()->think();
+//	convertUnit->getCurrentAIState()->think();
 
-	return newUnit;
+	return convertUnit;
 }
 
 /**
@@ -3197,12 +3204,12 @@ void BattlescapeGame::tallyUnits(
 				j != _save->getUnits()->end();
 				++j)
 		{
-//kL		if ((*j)->getHealth() > 0
-			if ((*j)->getSpecialAbility() == SPECAB_RESPAWN)
-			{
+			if ((*j)->getHealth() > 0							// this appears to be just a safety, in case Soldier(s)
+				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)	// didn't become zombies when they ought have.
+			{													// Chryssalids inflict SPECAB_RESPAWN, in ExplosionBState (melee hits)
 				//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
 
-				(*j)->setSpecialAbility(SPECAB_NONE);
+//kL			(*j)->setSpecialAbility(SPECAB_NONE); // do this in convertUnit()
 				convertUnit(
 						*j,
 						(*j)->getSpawnUnit());

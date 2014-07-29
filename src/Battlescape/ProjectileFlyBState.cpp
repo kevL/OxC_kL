@@ -278,13 +278,13 @@ void ProjectileFlyBState::init()
 			}
 			else if (_action.weapon->getRules()->getMaxRange() > 0 // in case -1 gets used for infinite.
 				&& _parent->getTileEngine()->distance(
-												_action.actor->getPosition(),
+												_unit->getPosition(),
 												_action.target)
 											> _action.weapon->getRules()->getMaxRange())
 /*			else // kL_begin:
 			{
 				int dist = _parent->getTileEngine()->distance(
-														_action.actor->getPosition(),
+														_unit->getPosition(),
 														_action.target);
 				if (dist > _action.weapon->getRules()->getMaxRange()
 					|| dist < _action.weapon->getRules()->getMinRange()) */ // kL_end.
@@ -328,9 +328,9 @@ void ProjectileFlyBState::init()
 		case BA_HIT:
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack()";
 			if (!_parent->getTileEngine()->validMeleeRange(
-													_action.actor->getPosition(),
-													_action.actor->getDirection(),
-													_action.actor,
+													_unit->getPosition(),
+													_unit->getDirection(),
+													_unit,
 													NULL,
 													&_action.target))
 			{
@@ -355,7 +355,7 @@ void ProjectileFlyBState::init()
 															(_action.target.y * 16) + 8,
 															(_action.target.z * 24) + 10),
 													_action.weapon,
-													_action.actor));
+													_unit));
 
 			return;
 		break;
@@ -530,8 +530,9 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	++_action.autoShotCount;
 
-	if (_action.type != BA_THROW
-		|| _action.type != BA_LAUNCH)
+	if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add.
+		&& (_action.type != BA_THROW
+			|| _action.type != BA_LAUNCH))
 	{
 		_unit->getStatistics()->shotsFiredCounter++;
 	}
@@ -760,16 +761,16 @@ void ProjectileFlyBState::think()
 	if (_parent->getMap()->getProjectile() == NULL)
 	{
 		Tile
-			* t = _parent->getSave()->getTile(_action.actor->getPosition()),
-			* tBelow = _parent->getSave()->getTile(_action.actor->getPosition() + Position(0, 0,-1));
+			* t = _parent->getSave()->getTile(_unit->getPosition()),
+			* tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
 
 		bool
 			hasFloor = t && !t->hasNoFloor(tBelow),
-			unitCanFly = _action.actor->getArmor()->getMovementType() == MT_FLY;
+			unitCanFly = _unit->getArmor()->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots()
-			&& !_action.actor->isOut()
+			&& !_unit->isOut()
 			&& _ammo->getAmmoQuantity() != 0
 			&& (hasFloor
 				|| unitCanFly))
@@ -824,13 +825,13 @@ void ProjectileFlyBState::think()
 				_parent->getMap()->invalidate();
 			}
 
-			if (_action.actor->getFaction() == _parent->getSave()->getSide() // kL
+			if (_unit->getFaction() == _parent->getSave()->getSide() // kL
 				&& _action.type != BA_PANIC
 				&& _action.type != BA_MINDCONTROL
 				&& !_parent->getSave()->getUnitsFalling())
 			{
 				//Log(LOG_INFO) << "ProjectileFlyBState::think(), checkReactionFire()"
-				//	<< " ID " << _action.actor->getId()
+				//	<< " ID " << _unit->getId()
 				//	<< " action.type = " << _action.type
 				//	<< " action.TU = " << _action.TU;
 				_parent->getTileEngine()->checkReactionFire(
@@ -892,7 +893,7 @@ void ProjectileFlyBState::think()
 															_parent,
 															_parent->getMap()->getProjectile()->getPosition(-1),
 															item,
-															_action.actor));
+															_unit));
 				}
 				else
 				{
@@ -906,7 +907,7 @@ void ProjectileFlyBState::think()
 						_parent->getTileEngine()->setDangerZone(
 															pos,
 															item->getRules()->getExplosionRadius(),
-															_action.actor);
+															_unit);
 					}
 				}
 			}
@@ -932,8 +933,11 @@ void ProjectileFlyBState::think()
 			}
 			else // shoot.
 			{
-				if (_parent->getSave()->getTile(_action.target)->getUnit()) // Only counts for guns, not throws or launches
+				if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add.
+					&& _parent->getSave()->getTile(_action.target)->getUnit()) // Only counts for guns, not throws or launches
+				{
 					_parent->getSave()->getTile(_action.target)->getUnit()->getStatistics()->shotAtCounter++;
+				}
 
 				if (_ammo
 					&& _action.type == BA_LAUNCH
@@ -963,7 +967,7 @@ void ProjectileFlyBState::think()
 															_parent,
 															_parent->getMap()->getProjectile()->getPosition(offset),
 															_ammo,
-															_action.actor,
+															_unit,
 															NULL,
 															_action.type != BA_AUTOSHOT
 																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
@@ -1028,12 +1032,13 @@ void ProjectileFlyBState::think()
 					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
 						_parent->getSave()->getTile(_action.target)->ignite(15);
 
-					if (_projectileImpact == VOXEL_UNIT)
+					if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL_add. This section is only for SoldierDiary mod.
+						&& _projectileImpact == VOXEL_UNIT)						// but see below also; was also for setting aggroState
 					{
 						BattleUnit* victim = _parent->getSave()->getTile(
 																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
 																->getUnit();
-						BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit(); // target (not necessarily who we hit)
+						BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit(); // target (not necessarily who was hit)
 						if (victim
 							&& !victim->isOut())
 						{
@@ -1045,16 +1050,16 @@ void ProjectileFlyBState::think()
 								_unit->getStatistics()->shotFriendlyCounter++;
 							}
 
-							if (victim == target) // Hit our target
+							if (victim == target) // hit the target
 							{
 								_unit->getStatistics()->shotsLandedCounter++;
-								if (_parent->getTileEngine()->distance(_action.actor->getPosition(), victim->getPosition()) > 30)
+								if (_parent->getTileEngine()->distance(_unit->getPosition(), victim->getPosition()) > 30)
 									_unit->getStatistics()->longDistanceHitCounter++;
 
 								if (_unit->getFiringAccuracy(
 														_action.type,
 														_action.weapon) < _parent->getTileEngine()->distance(
-																										_action.actor->getPosition(),
+																										_unit->getPosition(),
 																										victim->getPosition()))
 								{
 									_unit->getStatistics()->lowAccuracyHitCounter++;
@@ -1151,7 +1156,6 @@ bool ProjectileFlyBState::validThrowRange(
 		Tile* target)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
-
 	if (action->type != BA_THROW) // this is a celatid spit.
 //		&& target->getUnit())
 	{
@@ -1325,7 +1329,7 @@ void ProjectileFlyBState::performMeleeAttack()
 											_parent,
 											voxel,
 											_action.weapon,
-											_action.actor,
+											_unit,
 											NULL,
 											true));
 

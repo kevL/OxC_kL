@@ -73,9 +73,9 @@ UnitDieBState::UnitDieBState(
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
-	_originalDir = _unit->getDirection();
-	_unit->setDirection(_originalDir);
-	_unit->setSpinPhase(-1);
+//	_originalDir = _unit->getDirection();
+//	_unit->setDirection(_originalDir);
+//	_unit->setSpinPhase(-1);
 
 //	if (!_noSound)
 //		playDeathSound();
@@ -89,7 +89,7 @@ UnitDieBState::UnitDieBState(
 		if (_unit->getFaction() == FACTION_PLAYER)
 			_parent->getMap()->setUnitDying(true);
 
-		if (!_unit->getSpawnUnit().empty())
+		if (_unit->getSpawnUnit().empty() == false)
 		{
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);
 			_unit->lookAt(3); // inits STATUS_TURNING if not facing correctly. Else STATUS_STANDING
@@ -224,7 +224,7 @@ void UnitDieBState::think()
 	}
 
 // #4
-	if (_unit->isOut()) // and this ought be Status_Dead.
+	if (_unit->isOut()) // and this ought be Status_Dead OR _Unconscious.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
 //		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL, just to be sure. See !_unit->isOut() above.
@@ -240,13 +240,17 @@ void UnitDieBState::think()
 		if (_unit->getTurnsExposed() < 255)
 			_unit->setTurnsExposed(255);
 
-		if (!_unit->getSpawnUnit().empty()) // converts the dead zombie to a chryssalid
+		if (_unit->getSpawnUnit().empty() == false)
 		{
 			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
 			BattleUnit* newUnit = _parent->convertUnit(
 													_unit,
 													_unit->getSpawnUnit());
-			newUnit->lookAt(_originalDir); // kL_note: This seems to need a state to initiate turn() ...
+
+//			newUnit->lookAt(_originalDir); // kL_note: This seems to need a state to initiate turn() ...
+//TEST		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(_battleSave->getBattleGame(), action));
+//TEST		statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
+
 
 			newUnit->setCache(NULL);				// kL
 			_parent->getMap()->cacheUnit(newUnit);	// kL
@@ -304,8 +308,7 @@ void UnitDieBState::think()
 			int liveSoldiers = 0;
 			_parent->tallyUnits(
 							liveAliens,
-							liveSoldiers,
-							false);
+							liveSoldiers);
 
 			if (liveAliens == 0
 				|| liveSoldiers == 0)
@@ -339,8 +342,9 @@ void UnitDieBState::convertUnitToCorpse()
 
 	Position pos = _unit->getPosition();
 
-	// remove the unconscious body item corresponding to this unit, and if it was being carried, keep track of what slot it was in
-	bool carried = pos == Position(-1,-1,-1);
+	// remove the unconscious body item corresponding to this unit,
+	// and if it was being carried, keep track of what slot it was in
+	bool carried = (pos == Position(-1,-1,-1));
 	if (!carried)
 		_parent->getSave()->removeUnconsciousBodyItem(_unit);
 
