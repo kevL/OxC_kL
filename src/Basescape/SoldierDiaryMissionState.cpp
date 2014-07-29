@@ -212,7 +212,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	_lstKills->setColor(Palette::blockOffset(13));
 	_lstKills->setArrowColor(Palette::blockOffset(13)+5);
-	_lstKills->setColumns(3, 30, 90, 97); // 217 total
+	_lstKills->setColumns(3, 27, 96, 94); // 217 total
 	_lstKills->setSelectable(false);
 	_lstKills->setBackground(_window);
 //	_lstKills->setMargin(8);
