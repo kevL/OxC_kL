@@ -2012,6 +2012,8 @@ void DogfightState::setMinimized(const bool minimized)
  */
 void DogfightState::btnMinimizedIconClick(Action*)
 {
+	_texture->clear();
+
 	Surface* srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
 	if (srfTexture != NULL) // safety.
 		srfTexture->blit(_texture);
@@ -2270,6 +2272,7 @@ int DogfightState::getInterceptionNumber() const
 
 /**
  * kL. Gets the globe texture icon to display for the interception.
+ * @return, string for the icon of the texture of the globe's surface under the dogfight ha!
  */
 const std::string DogfightState::getTextureIcon() // kL
 {

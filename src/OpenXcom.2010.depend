@@ -242,7 +242,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1404096022 f:\git\openxcom\src\basescape\basescapestate.h
+1406820027 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1404096022 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4893,7 +4893,7 @@
 	<yaml-cpp/yaml.h>
 	"MovingTarget.h"
 
-1406800713 source:f:\git\openxcom\src\basescape\craftweaponsstate.cpp
+1406812605 source:f:\git\openxcom\src\basescape\craftweaponsstate.cpp
 	"CraftWeaponsState.h"
 	<cmath>
 	<sstream>
@@ -7626,7 +7626,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1406698452 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1406815133 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7881,7 +7881,7 @@
 	<string>
 	<vector>
 
-1405808208 source:f:\git\openxcom\src\geoscape\globe.cpp
+1406814691 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9728,7 +9728,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1406763680 source:f:\git\openxcom\src\savegame\tile.cpp
+1406812527 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"

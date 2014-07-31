@@ -110,7 +110,8 @@ private:
 		void btnTransferClick(Action* action);
 		/// Handler for clicking the Geoscape button.
 		void btnGeoscapeClick(Action* action);
-		/// Handler for clicking the base view.
+
+		/// Handler for left clicking the base view.
 		void viewLeftClick(Action* action);
 		/// Handler for right clicking the base view.
 		void viewRightClick(Action* action);

@@ -136,7 +136,7 @@ CraftsState::CraftsState(
 	_lstCrafts->setSelectable(true);
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin(8);
-	_lstCrafts->onMouseClick((ActionHandler)& CraftsState::lstCraftsClick);
+	_lstCrafts->onMousePress((ActionHandler)& CraftsState::lstCraftsPress);
 	_lstCrafts->onLeftArrowClick((ActionHandler)& CraftsState::lstLeftArrowClick); // kL
 	_lstCrafts->onRightArrowClick((ActionHandler)& CraftsState::lstRightArrowClick); // kL
 }
@@ -307,9 +307,9 @@ void CraftsState::btnOkClick(Action*)
  * RMB pops out of Basescape and centers craft on Geoscape.
  * @param action, Pointer to an action.
  */
-void CraftsState::lstCraftsClick(Action* action)
+void CraftsState::lstCraftsPress(Action* action)
 {
-	//Log(LOG_INFO) << ". CraftsState::lstCraftsClick()";
+	//Log(LOG_INFO) << ". CraftsState::lstCraftsPress()";
 	double mx = action->getAbsoluteXMouse();
 	if (mx >= _lstCrafts->getArrowsLeftEdge()
 		&& mx < _lstCrafts->getArrowsRightEdge())

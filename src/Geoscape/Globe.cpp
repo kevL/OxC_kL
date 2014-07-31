@@ -1735,7 +1735,7 @@ void Globe::drawRadars()
 }
 
 /**
- *	Draw globe range circle
+ * Draw globe range circle
  */
 void Globe::drawGlobeCircle(
 		double lat,

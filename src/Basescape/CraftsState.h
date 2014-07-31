@@ -74,7 +74,7 @@ private:
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Crafts list.
-		void lstCraftsClick(Action* action);
+		void lstCraftsPress(Action* action);
 		/// kL. Pops out of Basescape and centers craft on Geoscape.
 		void lstCraftsRightClick(Action* action); // kL
 

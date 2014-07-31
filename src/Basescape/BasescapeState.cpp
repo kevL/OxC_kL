@@ -488,47 +488,10 @@ void BasescapeState::btnGeoscapeClick(Action*)
 }
 
 /**
- * Processes clicking on facilities.
+ * Processes left clicking on facilities.
  * @param action - pointer to an action
  */
 void BasescapeState::viewLeftClick(Action*)
-{
-	BaseFacility* fac = _view->getSelectedFacility();
-	if (fac != 0)
-	{
-		if (fac->inUse())
-		{
-			_game->pushState(new ErrorMessageState(
-												tr("STR_FACILITY_IN_USE"),
-												_palette,
-												Palette::blockOffset(15)+1,
-												"BACK13.SCR",
-												6));
-		}
-		else if (!_base->getDisconnectedFacilities(fac).empty()) // would base become disconnected...
-		{
-			_game->pushState(new ErrorMessageState(
-												tr("STR_CANNOT_DISMANTLE_FACILITY"),
-												_palette,
-												Palette::blockOffset(15)+1,
-												"BACK13.SCR",
-												6));
-		}
-		else
-		{
-			_game->pushState(new DismantleFacilityState(
-													_base,
-													_view,
-													fac));
-		}
-	}
-}
-
-/**
- * Processes right clicking on facilities.
- * @param action - pointer to an action
- */
-void BasescapeState::viewRightClick(Action*)
 {
 	bool bPop = false; // play "wha-wha" sound
 
@@ -650,6 +613,43 @@ void BasescapeState::viewRightClick(Action*)
 
 	if (bPop)
 		soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+}
+
+/**
+ * Processes right clicking on facilities.
+ * @param action - pointer to an action
+ */
+void BasescapeState::viewRightClick(Action*)
+{
+	BaseFacility* fac = _view->getSelectedFacility();
+	if (fac != 0)
+	{
+		if (fac->inUse())
+		{
+			_game->pushState(new ErrorMessageState(
+												tr("STR_FACILITY_IN_USE"),
+												_palette,
+												Palette::blockOffset(15)+1,
+												"BACK13.SCR",
+												6));
+		}
+		else if (!_base->getDisconnectedFacilities(fac).empty()) // would base become disconnected...
+		{
+			_game->pushState(new ErrorMessageState(
+												tr("STR_CANNOT_DISMANTLE_FACILITY"),
+												_palette,
+												Palette::blockOffset(15)+1,
+												"BACK13.SCR",
+												6));
+		}
+		else
+		{
+			_game->pushState(new DismantleFacilityState(
+													_base,
+													_view,
+													fac));
+		}
+	}
 }
 
 /**

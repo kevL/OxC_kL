@@ -198,8 +198,8 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 	RuleCraftWeapon* cwRule = _weaponRules[_lstWeapons->getSelectedRow()];
 	CraftWeapon* cwCurrent = _base->getCrafts()->at(_craftID)->getWeapons()->at(_weaponID);
 
-	if (cwRule == NULL			// remove old weapon only when "Standby" is clicked,
-		&& cwCurrent != NULL)	// and a weapon is currently loaded.
+	if (cwRule == NULL
+		&& cwCurrent != NULL)
 	{
 		pop = true;
 
@@ -221,8 +221,6 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 
 		if (cwCurrent != NULL)
 		{
-			pop = true;
-
 			_base->getItems()->addItem(cwCurrent->getRules()->getLauncherItem());
 			_base->getItems()->addItem(
 									cwCurrent->getRules()->getClipItem(),

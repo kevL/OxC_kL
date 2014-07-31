@@ -1026,7 +1026,7 @@ int Tile::getTopItemSprite()
 
 /**
  * kL. Gets if the tile has an unconscious xCom unit in its inventory.
- * @return,	true if there's an unconscious soldier on this tile
+ * @return, true if there's an unconscious soldier on this tile
  */
 bool Tile::getHasUnconsciousSoldier() // kL
 {
