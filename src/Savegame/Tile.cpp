@@ -1002,26 +1002,48 @@ void Tile::removeItem(BattleItem* item)
 
 /**
  * Get the topmost item sprite to draw on the battlescape.
- * @return item sprite ID in floorob, or -1 when no item
+ * @return, sprite ID in floorob, or -1 when no item
  */
 int Tile::getTopItemSprite()
 {
-	int biggestWeight = -1;
-	int biggestItem = -1;
+	int weight = -1;
+	int sprite = -1;
 
 	for (std::vector<BattleItem*>::iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i)->getRules()->getWeight() > biggestWeight)
+		if ((*i)->getRules()->getWeight() > weight)
 		{
-			biggestWeight = (*i)->getRules()->getWeight();
-			biggestItem = (*i)->getRules()->getFloorSprite();
+			weight = (*i)->getRules()->getWeight();
+			sprite = (*i)->getRules()->getFloorSprite();
 		}
 	}
 
-	return biggestItem;
+	return sprite;
+}
+
+/**
+ * kL. Gets if the tile has an unconscious xCom unit in its inventory.
+ * @return,	true if there's an unconscious soldier on this tile
+ */
+bool Tile::getHasUnconsciousSoldier() // kL
+{
+	for (std::vector<BattleItem*>::iterator
+			i = _inventory.begin();
+			i != _inventory.end();
+			++i)
+	{
+		if ((*i)->getUnit()
+			&& (*i)->getUnit()->getOriginalFaction() == FACTION_PLAYER
+			&& (*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+		{
+			return true;
+		}
+	}
+
+	return false;
 }
 
 /**

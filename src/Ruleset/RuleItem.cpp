@@ -131,7 +131,7 @@ void RuleItem::load(
 {
 	_type					= node["type"].as<std::string>(_type);
 	_name					= node["name"].as<std::string>(_name);
-	_requires				= node["requires"].as< std::vector<std::string> >(_requires);
+	_requires				= node["requires"].as<std::vector<std::string> >(_requires);
 	_size					= node["size"].as<double>(_size);
 	_costBuy				= node["costBuy"].as<int>(_costBuy);
 	_costSell				= node["costSell"].as<int>(_costSell);

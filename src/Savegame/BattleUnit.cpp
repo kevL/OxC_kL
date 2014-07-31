@@ -1988,6 +1988,7 @@ int BattleUnit::getArmor(UnitSide side) const
 int BattleUnit::getFatalWounds() const
 {
 	int wounds = 0;
+
 	for (int
 			i = 0;
 			i < 6;

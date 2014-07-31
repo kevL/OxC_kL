@@ -266,6 +266,8 @@ protected:
 
 		/// Gets top-most item-sprite
 		int getTopItemSprite();
+		/// kL. Gets if the tile has an unconscious xCom unit in its inventory.
+		bool getHasUnconsciousSoldier(); // kL
 
 		/// New turn preparations.
 		void prepareNewTurn();

@@ -41,7 +41,9 @@ RuleResearch::RuleResearch(const std::string& name)
  * @param node YAML node.
  * @param listOrder The list weight for this research.
  */
-void RuleResearch::load(const YAML::Node &node, int listOrder)
+void RuleResearch::load(
+		const YAML::Node& node,
+		int listOrder)
 {
 	_name			= node["name"].as<std::string>(_name);
 	_lookup			= node["lookup"].as<std::string>(_lookup);
@@ -55,9 +57,7 @@ void RuleResearch::load(const YAML::Node &node, int listOrder)
 	_listOrder		= node["listOrder"].as<int>(_listOrder);
 
 	if (!_listOrder)
-	{
 		_listOrder = listOrder;
-	}
 }
 
 /**

@@ -26,10 +26,12 @@
 namespace OpenXcom
 {
 
+class Bar;
 class BattleItem;
 class BattleUnit;
 class InteractiveSurface;
 class MedikitView;
+class NumberText;
 class Text;
 
 struct BattleAction;
@@ -44,6 +46,11 @@ class MedikitState
 {
 
 private:
+	Bar
+		* _barTimeUnits,
+		* _barEnergy,
+		* _barHealth,
+		* _barMorale;
 	BattleAction* _action;
 	BattleItem* _item;
 	BattleUnit
@@ -55,6 +62,12 @@ private:
 		* _painButton,
 		* _stimButton;
 	MedikitView* _mediView;
+	NumberText
+		* _numTimeUnits,
+		* _numEnergy,
+		* _numHealth,
+		* _numMorale,
+		* _numStun;
 	Surface* _bg;
 	Text
 		* _healTxt,

@@ -22,6 +22,7 @@
 
 #include <string>
 #include <vector>
+
 #include <yaml-cpp/yaml.h>
 
 
@@ -42,35 +43,60 @@ namespace OpenXcom
  */
 class RuleResearch
 {
+
 private:
-	std::string _name, _lookup;
-	int _cost, _points;
-	std::vector<std::string> _dependencies, _unlocks, _getOneFree, _requires;
+	std::string
+		_lookup,
+		_name;
 	bool _needItem;
-	int _listOrder;
+	int
+		_cost,
+		_listOrder,
+		_points;
+
+	std::vector<std::string>
+		_dependencies,
+		_unlocks,
+		_getOneFree,
+		_requires;
+
 
 	public:
+		/// cTor.
 		RuleResearch(const std::string& name);
+
 		/// Loads the research from YAML.
-		void load(const YAML::Node& node, int listOrder);
+		void load(
+				const YAML::Node& node,
+				int listOrder);
+
 		/// Gets time needed to discover this ResearchProject.
 		int getCost() const;
+
 		/// Gets the research name.
 		const std::string& getName() const;
+
 		/// Gets the research dependencies.
 		const std::vector<std::string>& getDependencies() const;
+
 		/// Checks if this ResearchProject needs a corresponding Item to be researched.
 		bool needItem() const;
+
 		/// Gets the list of ResearchProjects unlocked by this research.
 		const std::vector<std::string>& getUnlocked() const;
+
 		/// Gets the points earned for discovering this ResearchProject.
 		int getPoints() const;
+
 		/// Gets the list of ResearchProjects granted at random for free by this research.
 		const std::vector<std::string>& getGetOneFree() const;
+
 		/// Gets what to look up in the ufopedia.
 		const std::string getLookup() const;
+
 		/// Gets the requirements for this ResearchProject.
 		const std::vector<std::string>& getRequirements() const;
+
 		/// Gets the list weight for this research item.
 		int getListOrder() const;
 };

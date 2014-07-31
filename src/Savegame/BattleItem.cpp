@@ -450,7 +450,7 @@ int BattleItem::getId() const
 }
 
 /**
- * Gets the corpse's unit.
+ * Gets a corpse's unit.
  * @return Pointer to BattleUnit.
  */
 BattleUnit* BattleItem::getUnit() const

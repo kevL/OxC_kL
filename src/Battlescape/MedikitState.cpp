@@ -33,6 +33,8 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
 
+#include "../Interface/Bar.h"
+#include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 
 #include "../Resource/ResourcePack.h"
@@ -139,13 +141,12 @@ class MedikitButton
  */
 MedikitButton::MedikitButton(int y)
 	:
-		InteractiveSurface(30, 20, 190, y)
+		InteractiveSurface(25, 21, 192, y)
 {
 }
 
 /**
  * Initializes the Medikit State.
- * @param game Pointer to the core game.
  * @param targetUnit The wounded unit.
  * @param action The healing action.
  */
@@ -174,20 +175,11 @@ MedikitState::MedikitState(
 	if (_game->getScreen()->getDY() > 50)
 	{
 		_screen = false;
-
-/*		SDL_Rect current;
-		current.w = 190;
-		current.h = 100;
-		current.x = 67;
-		current.y = 44;
-		_bg->drawRect(&current, Palette::blockOffset(15)+15); */
 		_bg->drawRect(67, 44, 190, 100, Palette::blockOffset(15)+15);
 	}
 
-//	_partTxt	= new Text(50, 15, 90, 120);	// kL
-//	_woundTxt	= new Text(10, 15, 145, 120);	// kL
-	_partTxt	= new Text(62, 9, 82, 120);
-	_woundTxt	= new Text(14, 9, 145, 120);
+	_partTxt	= new Text(16, 9, 89, 120);
+	_woundTxt	= new Text(16, 9, 145, 120);
 	_mediView	= new MedikitView(
 								52, 58, 95, 60,
 								_game,
@@ -198,14 +190,66 @@ MedikitState::MedikitState(
 	_stimButton	= new MedikitButton(84);
 	_painButton	= new MedikitButton(48);
 	_healButton	= new MedikitButton(120);
-	_endButton	= new InteractiveSurface(20, 20, 220, 140);
+	_endButton	= new InteractiveSurface(7, 7, 222, 148);
 
-//	_painText	= new MedikitTxt(50);
-//	_stimTxt	= new MedikitTxt(85);
-//	_healTxt	= new MedikitTxt(120);
-	_painText	= new MedikitTxt(52);
-	_stimTxt	= new MedikitTxt(88);
-	_healTxt	= new MedikitTxt(124);
+	_painText	= new MedikitTxt(51);
+	_stimTxt	= new MedikitTxt(87);
+	_healTxt	= new MedikitTxt(123);
+
+	// kL_begin:
+/*	_numTimeUnits	= new NumberText(15, 5, 60, 12); // add x+32 to center these.
+	_barTimeUnits	= new Bar(102, 3, 94, 12);
+
+	_numEnergy		= new NumberText(15, 5, 78, 12);
+	_barEnergy		= new Bar(102, 3, 94, 16);
+
+	_numHealth		= new NumberText(15, 5, 60, 20);
+	_barHealth		= new Bar(102, 3, 94, 20);
+
+	_numMorale		= new NumberText(15, 5, 78, 20);
+	_barMorale		= new Bar(102, 3, 94, 24); */
+
+	_numHealth		= new NumberText(15, 5, 90, 8);
+	_numStun		= new NumberText(15, 5, 105, 8);
+	_barHealth		= new Bar(102, 3, 120, 9);
+
+	_numEnergy		= new NumberText(15, 5, 90, 15);
+	_barEnergy		= new Bar(102, 3, 120, 16);
+
+	_numMorale		= new NumberText(15, 5, 90, 22);
+	_barMorale		= new Bar(102, 3, 120, 23);
+
+	_numTimeUnits	= new NumberText(15, 5, 90, 164); // add x+32 to center these.
+	_barTimeUnits	= new Bar(102, 3, 120, 165);
+
+
+	add(_numHealth);
+	add(_numStun);
+	add(_numEnergy);
+	add(_numMorale);
+	add(_numTimeUnits);
+
+	add(_barHealth);
+	add(_barEnergy);
+	add(_barMorale);
+	add(_barTimeUnits);
+
+	_numHealth->setColor(Palette::blockOffset(2)+2);
+	_numStun->setColor(Palette::blockOffset(0)+1);
+	_numEnergy->setColor(Palette::blockOffset(1));
+	_numMorale->setColor(Palette::blockOffset(12));
+	_numTimeUnits->setColor(Palette::blockOffset(4));
+
+	_barHealth->setColor(Palette::blockOffset(2)+2);
+	_barHealth->setColor2(Palette::blockOffset(5)+2);
+	_barHealth->setScale(1.0);
+	_barEnergy->setColor(Palette::blockOffset(1));
+	_barEnergy->setScale(1.0);
+	_barMorale->setColor(Palette::blockOffset(12));
+	_barMorale->setScale(1.0);
+	_barTimeUnits->setColor(Palette::blockOffset(4));
+	_barTimeUnits->setScale(1.0);
+	// kL_end.
 
 	add(_bg);
 	add(_mediView);
@@ -267,8 +311,7 @@ void MedikitState::handle(Action* action)
  */
 void MedikitState::onEndClick(Action*)
 {
-/*kL
-	if (Options::maximizeInfoScreens)
+/* 	if (Options::maximizeInfoScreens)
 	{
 		Screen::updateScale(
 						Options::battlescapeScale,
@@ -381,6 +424,37 @@ void MedikitState::update()
 	_painText->setText(toString(_item->getPainKillerQuantity()));
 	_stimTxt->setText(toString(_item->getStimulantQuantity()));
 	_healTxt->setText(toString(_item->getHealQuantity()));
+
+	// kL_begin:
+	double stat = static_cast<double>(_targetUnit->getStats()->health);
+	int health = _targetUnit->getHealth();
+	_numHealth->setValue(static_cast<unsigned>(health));
+	_numStun->setValue(static_cast<unsigned>(_targetUnit->getStunlevel()));
+	_barHealth->setMax(100.0);
+	_barHealth->setValue(ceil(
+							static_cast<double>(health) / stat * 100.0));
+	_barHealth->setValue2(ceil(
+							static_cast<double>(_targetUnit->getStunlevel()) / stat * 100.0));
+
+	stat = static_cast<double>(_targetUnit->getStats()->stamina); // stats of the recipient
+	int energy = _targetUnit->getEnergy();
+	_numEnergy->setValue(static_cast<unsigned>(energy));
+	_barEnergy->setMax(100.0);
+	_barEnergy->setValue(ceil(
+							static_cast<double>(energy) / stat * 100.0));
+
+	int morale = _targetUnit->getMorale();
+	_numMorale->setValue(static_cast<unsigned>(morale));
+	_barMorale->setMax(100.0);
+	_barMorale->setValue(morale);
+
+	stat = static_cast<double>(_unit->getStats()->tu); // TU of the MedKit user
+	int tu = _unit->getTimeUnits();
+	_numTimeUnits->setValue(static_cast<unsigned>(tu));
+	_barTimeUnits->setMax(100.0);
+	_barTimeUnits->setValue(ceil(
+							static_cast<double>(tu) / stat * 100.0));
+	// kL_end.
 }
 
 }

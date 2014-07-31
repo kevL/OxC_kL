@@ -806,7 +806,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 // START ADVANCED DRAWING CYCLE:
-					if (mapPosition.y > 0) // special handling for a moving unit.
+/*					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
 						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
 						BattleUnit* bu = tileNorth->getUnit();
@@ -1077,7 +1077,7 @@ void Map::drawTerrain(Surface* surface)
 																true);
 										}
 									}
-								}
+								} */
 
 								// Draw smoke/fire
 /*								if (tileWest->getSmoke() // includes tiles on Fire? must...
@@ -1118,7 +1118,7 @@ void Map::drawTerrain(Surface* surface)
 								} */
 
 								// Draw object
-								if (tileWest->getMapData(MapData::O_OBJECT)
+/*								if (tileWest->getMapData(MapData::O_OBJECT)
 									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
 								{
 									tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
@@ -1131,7 +1131,7 @@ void Map::drawTerrain(Surface* surface)
 								}
 							}
 						}
-					}
+					} */
 /*kL - their tileWest SMOKE:
 								{
 									frame = 0;
@@ -1363,6 +1363,8 @@ void Map::drawTerrain(Surface* surface)
 						&& (unit->getVisible()
 							|| _save->getDebugMode()))
 					{
+						//Log(LOG_INFO) << "draw Soldier ID = " << unit->getId();
+
 						// the part is 0 for small units, large units have parts 1,2 & 3 depending
 						// on the relative x/y position of this tile vs the actual unit position.
 						int part = 0;
@@ -1397,38 +1399,89 @@ void Map::drawTerrain(Surface* surface)
 								&& unit != _save->getSelectedUnit()
 								&& unit->getTurretType() == -1) // no tanks, pls
 							{
-								std::string soldierRank = unit->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
-								soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
-
-								tmpSurface = _res->getSurface(soldierRank);
-								if (tmpSurface != NULL)
+								if (unit->getFatalWounds() > 0)
+//									&& unit->getFatalWounds() < 10)
 								{
+									tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
+									if (tmpSurface != NULL)
+									{
+										tmpSurface->blitNShade(
+												surface,
+												screenPosition.x + offset.x + 2,
+												screenPosition.y + offset.y + 3,
+												0);
+									}
+
+//									tmpSurface->drawRect(1, 1, 7, 5, 0); // clear it.
+//									tmpSurface->drawRect(1, 1, 7, 5, Palette::blockOffset(2)+2); // red block on rankIcon.
+									//Log(LOG_INFO) << ". wounded Soldier ID = " << unit->getId();
+									tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(209); // red cross
 									tmpSurface->blitNShade(
 											surface,
-											screenPosition.x + offset.x + 2,
-											screenPosition.y + offset.y + 3,
+											screenPosition.x + offset.x + 3,
+											screenPosition.y + offset.y + 4,
 											0);
-								}
+//											false,
+//											1); // 1=white, 3=red.
 
-								if (unit->getFatalWounds() > 0 // stick to under 10 wounds ... else double digits.
-									&& unit->getFatalWounds() < 10)
-								{
-									SurfaceSet* setDigits = _res->getSurfaceSet("DIGITS");
+//									if (unit->getFatalWounds() < 10) // stick to under 10 wounds ... else double digits.
+//									{
+/*									SurfaceSet* setDigits = _res->getSurfaceSet("DIGITS");
 									tmpSurface = setDigits->getFrame(unit->getFatalWounds());
 									if (tmpSurface != NULL)
 									{
 										tmpSurface->blitNShade(
 												surface,
-												screenPosition.x + offset.x + 5,
+												screenPosition.x + offset.x + 7,
 												screenPosition.y + offset.y + 4,
 												0,
 												false,
-												1); // white, 3=red.
+												3); // 1=white, 3=red.
+									} */
+//									}
+								}
+								else
+								{
+									std::string soldierRank = unit->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
+									soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
+
+									tmpSurface = _res->getSurface(soldierRank);
+									if (tmpSurface != NULL)
+									{
+										tmpSurface->blitNShade(
+												surface,
+												screenPosition.x + offset.x + 2,
+												screenPosition.y + offset.y + 3,
+												0);
 									}
 								}
 							} // kL_end.
 						}
 					}
+
+					// kL_begin:
+					if (tile->getHasUnconsciousSoldier())
+					{
+						tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
+						if (tmpSurface != NULL)
+						{
+							tmpSurface->blitNShade(
+									surface,
+									screenPosition.x,
+									screenPosition.y,
+									0);
+						}
+
+						tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(209); // red cross
+						tmpSurface->blitNShade(
+								surface,
+								screenPosition.x + 1,
+								screenPosition.y + 1,
+								0);
+//								false,
+//								1); // 1=white, 3=red.
+
+					} // kL_end.
 
 					// if we can see through the floor, draw the soldier below it if it is on stairs
 					Tile* tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
@@ -1815,13 +1868,17 @@ void Map::drawTerrain(Surface* surface)
 							|| itY == _save->getMapSizeY() - 1)
 						{
 /*							SCANG.DAT:
-							264 - grey, dark
-							043 - grey, medium dark
-							377 - grey, dark (bit of slate blue)
-							233 - grey, medium
-							376 - grey, medium light (bit of slate blue)
-							392 - grey, light */
-							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(264);
+							264 - gray, dark
+							043 - gray, medium dark
+							377 - gray, dark (bit of slate blue)
+							233 - gray, medium
+							376 - gray, medium light (bit of slate blue)
+							392 - gray, light
+							330 - gray, square cross
+							331 - brown, small light square
+							373 - gray, fancy cross
+							409 - blue, big square */
+							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(330);
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x + 14,

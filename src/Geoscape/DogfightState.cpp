@@ -395,7 +395,9 @@ DogfightState::DogfightState(
 		srfPreview->blit(_preview);
 	} // kL_end.
 	_preview->setVisible(false);
-	_preview->onMousePress((ActionHandler)& DogfightState::previewPress);
+	_preview->onMouseClick(
+					(ActionHandler)& DogfightState::previewPress,
+					SDL_BUTTON_RIGHT);
 
 	_btnMinimize->onMouseClick((ActionHandler)& DogfightState::btnMinimizeClick);
 
@@ -406,27 +408,27 @@ DogfightState::DogfightState(
 	_btnDisengage->copy(_window);
 	_btnDisengage->setColor(Palette::blockOffset(5)+1);
 	_btnDisengage->setGroup(&_mode);
-	_btnDisengage->onMousePress((ActionHandler)& DogfightState::btnDisengagePress);
+	_btnDisengage->onMouseClick((ActionHandler)& DogfightState::btnDisengagePress);
 
 	_btnCautious->copy(_window);
 	_btnCautious->setColor(Palette::blockOffset(5)+1);
 	_btnCautious->setGroup(&_mode);
-	_btnCautious->onMousePress((ActionHandler)& DogfightState::btnCautiousPress);
+	_btnCautious->onMouseClick((ActionHandler)& DogfightState::btnCautiousPress);
 
 	_btnStandard->copy(_window);
 	_btnStandard->setColor(Palette::blockOffset(5)+1);
 	_btnStandard->setGroup(&_mode);
-	_btnStandard->onMousePress((ActionHandler)& DogfightState::btnStandardPress);
+	_btnStandard->onMouseClick((ActionHandler)& DogfightState::btnStandardPress);
 
 	_btnAggressive->copy(_window);
 	_btnAggressive->setColor(Palette::blockOffset(5)+1);
 	_btnAggressive->setGroup(&_mode);
-	_btnAggressive->onMousePress((ActionHandler)& DogfightState::btnAggressivePress);
+	_btnAggressive->onMouseClick((ActionHandler)& DogfightState::btnAggressivePress);
 
 	_btnStandoff->copy(_window);
 	_btnStandoff->setColor(Palette::blockOffset(5)+1);
 	_btnStandoff->setGroup(&_mode);
-	_btnStandoff->onMousePress((ActionHandler)& DogfightState::btnStandoffPress);
+	_btnStandoff->onMouseClick((ActionHandler)& DogfightState::btnStandoffPress);
 
 	Surface* srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
 	if (srfTexture != NULL) // safety.
@@ -1765,23 +1767,23 @@ void DogfightState::btnUfoClick(Action*)
  */
 void DogfightState::previewPress(Action* action)
 {
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
-		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-	{
-		_preview->setVisible(false);
+//	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+//		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+//	{
+	_preview->setVisible(false);
 
-		// Reenable all other buttons to prevent misclicks Lol
-		_btnStandoff->setVisible(true);
-		_btnCautious->setVisible(true);
-		_btnStandard->setVisible(true);
-		_btnAggressive->setVisible(true);
-		_btnDisengage->setVisible(true);
-		_btnUfo->setVisible(true);
-		_texture->setVisible(true);
-		_btnMinimize->setVisible(true);
-		_weapon1->setVisible(true);
-		_weapon2->setVisible(true);
-	}
+	// Reenable all other buttons to prevent misclicks Lol
+	_btnStandoff->setVisible(true);
+	_btnCautious->setVisible(true);
+	_btnStandard->setVisible(true);
+	_btnAggressive->setVisible(true);
+	_btnDisengage->setVisible(true);
+	_btnUfo->setVisible(true);
+	_texture->setVisible(true);
+	_btnMinimize->setVisible(true);
+	_weapon1->setVisible(true);
+	_weapon2->setVisible(true);
+//	}
 }
 
 /**

@@ -57,7 +57,9 @@ RuleCraftWeapon::~RuleCraftWeapon()
  * @param node YAML node.
  * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
  */
-void RuleCraftWeapon::load(const YAML::Node& node, int modIndex)
+void RuleCraftWeapon::load(
+		const YAML::Node& node,
+		int modIndex)
 {
 	_type				= node["type"].as<std::string>(_type);
 

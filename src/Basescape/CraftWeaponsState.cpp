@@ -24,6 +24,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
@@ -35,12 +36,14 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/RuleCraftWeapon.h"
+#include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
 #include "../Savegame/ItemContainer.h"
+#include "../Savegame/SavedGame.h"
 
 
 namespace OpenXcom
@@ -55,13 +58,13 @@ namespace OpenXcom
  */
 CraftWeaponsState::CraftWeaponsState(
 		Base* base,
-		size_t craft,
-		size_t weapon)
+		size_t craftID,
+		size_t weaponID)
 	:
 		_base(base),
-		_craft(craft),
-		_weapon(weapon),
-		_weapons()
+		_craftID(craftID),
+		_weaponID(weaponID),
+		_weaponRules()
 {
 	_screen = false;
 
@@ -124,7 +127,7 @@ CraftWeaponsState::CraftWeaponsState(
 	_lstWeapons->addRow(
 						1,
 						tr("STR_NONE_UC").c_str());
-	_weapons.push_back(0);
+	_weaponRules.push_back(NULL);
 
 	const std::vector<std::string>& weapons = _game->getRuleset()->getCraftWeaponsList();
 	for (std::vector<std::string>::const_iterator
@@ -133,15 +136,25 @@ CraftWeaponsState::CraftWeaponsState(
 			++i)
 	{
 		RuleCraftWeapon* w = _game->getRuleset()->getCraftWeapon(*i);
-		if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
+		RuleItem* launcherRule = _game->getRuleset()->getItem(w->getLauncherItem());
+		//Log(LOG_INFO) << ". launcherRule = " << launcherRule->getType();
+
+//kL	if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
+		if (_game->getSavedGame()->isResearched(launcherRule->getRequirements()) == true	// requirements have been researched
+			|| launcherRule->getRequirements().empty())										// or, does not need to be researched
 		{
-			_weapons.push_back(w);
+			//Log(LOG_INFO) << ". . add craft weapon";
+			_weaponRules.push_back(w);
 
 			std::wostringstream
 				ss,
 				ss2;
 
-			ss << _base->getItems()->getItem(w->getLauncherItem());
+			if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
+				ss << _base->getItems()->getItem(w->getLauncherItem());
+			else
+				ss << "-";
+
 			if (w->getClipItem() != "")
 				ss2 << _base->getItems()->getItem(w->getClipItem());
 			else
@@ -154,6 +167,7 @@ CraftWeaponsState::CraftWeaponsState(
 								ss2.str().c_str());
 		}
 	}
+
 	_lstWeapons->onMouseClick((ActionHandler)& CraftWeaponsState::lstWeaponsClick);
 }
 
@@ -179,33 +193,59 @@ void CraftWeaponsState::btnCancelClick(Action*)
  */
 void CraftWeaponsState::lstWeaponsClick(Action*)
 {
-	CraftWeapon* current = _base->getCrafts()->at(_craft)->getWeapons()->at(_weapon);
-	if (current != 0) // Remove current weapon
-	{
-		_base->getItems()->addItem(current->getRules()->getLauncherItem());
-		_base->getItems()->addItem(
-								current->getRules()->getClipItem(),
-								current->getClipsLoaded(_game->getRuleset()));
+	bool pop = false;
 
-		delete current;
-		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = 0;
+	RuleCraftWeapon* cwRule = _weaponRules[_lstWeapons->getSelectedRow()];
+	CraftWeapon* cwCurrent = _base->getCrafts()->at(_craftID)->getWeapons()->at(_weaponID);
+
+	if (cwRule == NULL			// remove old weapon only when "Standby" is clicked,
+		&& cwCurrent != NULL)	// and a weapon is currently loaded.
+	{
+		pop = true;
+
+		_base->getItems()->addItem(cwCurrent->getRules()->getLauncherItem());
+		_base->getItems()->addItem(
+								cwCurrent->getRules()->getClipItem(),
+								cwCurrent->getClipsLoaded(_game->getRuleset()));
+
+		delete cwCurrent;
+		_base->getCrafts()->at(_craftID)->getWeapons()->at(_weaponID) = NULL;
 	}
 
-	if (_weapons[_lstWeapons->getSelectedRow()] != 0) // Equip new weapon
+	if (cwRule != NULL
+		&& (cwCurrent == NULL
+			|| cwCurrent->getRules() != cwRule)
+		&& _base->getItems()->getItem(cwRule->getLauncherItem()) > 0)
 	{
+		pop = true;
+
+		if (cwCurrent != NULL)
+		{
+			pop = true;
+
+			_base->getItems()->addItem(cwCurrent->getRules()->getLauncherItem());
+			_base->getItems()->addItem(
+									cwCurrent->getRules()->getClipItem(),
+									cwCurrent->getClipsLoaded(_game->getRuleset()));
+
+			delete cwCurrent;
+			_base->getCrafts()->at(_craftID)->getWeapons()->at(_weaponID) = NULL;
+		}
+
+		_base->getItems()->removeItem(cwRule->getLauncherItem());
+
 		CraftWeapon* sel = new CraftWeapon(
-									_weapons[_lstWeapons->getSelectedRow()],
+									cwRule,
 									0);
 		sel->setRearming(true);
+		_base->getCrafts()->at(_craftID)->getWeapons()->at(_weaponID) = sel;
 
-		_base->getItems()->removeItem(sel->getRules()->getLauncherItem());
-		_base->getCrafts()->at(_craft)->getWeapons()->at(_weapon) = sel;
-
-		if (_base->getCrafts()->at(_craft)->getStatus() == "STR_READY")
-			_base->getCrafts()->at(_craft)->setStatus("STR_REARMING");
+		if (_base->getCrafts()->at(_craftID)->getStatus() == "STR_READY")
+			_base->getCrafts()->at(_craftID)->setStatus("STR_REARMING");
 	}
 
-	_game->popState();
+	if (pop == true)
+		_game->popState();
 }
 
 }

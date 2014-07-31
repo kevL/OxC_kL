@@ -1814,7 +1814,6 @@ bool TileEngine::tryReactionSnap(
 		&& unit->spendTimeUnits(action.TU))
 	{
 		//Log(LOG_INFO) << ". Reaction Fire by ID " << unit->getId();
-
 		action.TU = 0;
 		action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset(); // kL, was above under "BattleAction action;"
 
@@ -3757,8 +3756,8 @@ int TileEngine::blockage(
 				case 1: // north east
 					if (bigWall == Pathfinding::BIGWALL_WEST
 						|| bigWall == Pathfinding::BIGWALL_SOUTH
-						|| (visLike
-							&& bigWall == Pathfinding::BIGWALL_NWSE
+						|| ( //visLike &&
+							bigWall == Pathfinding::BIGWALL_NWSE
 							&& !trueDir))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 1 northeast )";
@@ -3779,8 +3778,8 @@ int TileEngine::blockage(
 				case 3: // south east
 					if (bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_WEST
-						|| (visLike
-							&& bigWall == Pathfinding::BIGWALL_NESW
+						|| ( //visLike &&
+							bigWall == Pathfinding::BIGWALL_NESW
 							&& !trueDir))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 3 southeast )";
@@ -3801,8 +3800,8 @@ int TileEngine::blockage(
 				case 5: // south west
 					if (bigWall == Pathfinding::BIGWALL_NORTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
-						|| (visLike
-							&& bigWall == Pathfinding::BIGWALL_NWSE
+						|| ( //visLike &&
+							bigWall == Pathfinding::BIGWALL_NWSE
 							&& !trueDir))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 5 southwest )";
@@ -3825,8 +3824,8 @@ int TileEngine::blockage(
 					if (bigWall == Pathfinding::BIGWALL_SOUTH
 						|| bigWall == Pathfinding::BIGWALL_EAST
 						|| bigWall == Pathfinding::BIGWALL_E_S
-						|| (visLike
-							&& bigWall == Pathfinding::BIGWALL_NESW
+						|| ( //visLike &&
+							bigWall == Pathfinding::BIGWALL_NESW
 							&& !trueDir))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 7 northwest )";

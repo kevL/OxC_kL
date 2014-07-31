@@ -73,6 +73,7 @@ CraftInfoState::CraftInfoState(
 
 	_edtCraft		= new TextEdit(this, 160, 16, 80, 10);
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
+	_txtStatus		= new Text(80, 9, 224, 10);
 
 	_txtFuel		= new Text(82, 17, 16, 28);
 	_txtDamage		= new Text(82, 17, 228, 28);
@@ -103,6 +104,7 @@ CraftInfoState::CraftInfoState(
 	add(_window);
 	add(_edtCraft);
 	add(_txtBaseLabel);
+	add(_txtStatus);
 	add(_txtFuel);
 	add(_txtDamage);
 	add(_btnW1);
@@ -125,7 +127,6 @@ CraftInfoState::CraftInfoState(
 
 	centerAllSurfaces();
 
-
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
@@ -136,6 +137,12 @@ CraftInfoState::CraftInfoState(
 
 	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+
+	_txtStatus->setColor(Palette::blockOffset(13)+10);
+	_txtStatus->setAlign(ALIGN_RIGHT);
+	std::string stat = base->getCrafts()->at(craftId)->getStatus();
+	_txtStatus->setText(tr(stat));
+	//base->getCrafts()->at(craftId)->getName(_game->getLanguage()));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));

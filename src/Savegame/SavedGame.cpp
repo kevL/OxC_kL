@@ -1287,7 +1287,7 @@ void SavedGame::getAvailableResearchProjects(
 		const Ruleset* ruleset,
 		Base* base) const
 {
-	const std::vector<const RuleResearch*>& discovered(getDiscoveredResearch());
+	const std::vector<const RuleResearch*>& discovered (getDiscoveredResearch()); // init.
 	std::vector<std::string> researchProjects = ruleset->getResearchList();
 	const std::vector<ResearchProject*>& baseResearchProjects = base->getResearch();
 	std::vector<const RuleResearch*> unlocked;
@@ -1445,7 +1445,7 @@ void SavedGame::getAvailableProductions(
 		Base* base) const
 {
 	const std::vector<std::string>& items = ruleset->getManufactureList();
-	const std::vector<Production*> baseProductions (base->getProductions());
+	const std::vector<Production*> baseProductions (base->getProductions()); // init.
 
 	for (std::vector<std::string>::const_iterator
 			iter = items.begin();
@@ -1453,7 +1453,8 @@ void SavedGame::getAvailableProductions(
 			++iter)
 	{
 		RuleManufacture* m = ruleset->getManufacture(*iter);
-		if (!isResearched(m->getRequirements())) continue;
+		if (!isResearched(m->getRequirements()))
+			continue;
 
 		if (std::find_if(
 						baseProductions.begin(),
@@ -1484,7 +1485,7 @@ bool SavedGame::isResearchAvailable(
 		return false;
 
 	std::vector<std::string> deps = r->getDependencies();
-	const std::vector<const RuleResearch*>& discovered(getDiscoveredResearch());
+	const std::vector<const RuleResearch*>& discovered (getDiscoveredResearch()); // init.
 
 	bool liveAlien = (ruleset->getUnit(r->getName()) != NULL);
 

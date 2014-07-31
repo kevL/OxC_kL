@@ -1230,7 +1230,21 @@ items:
     costSell: 17000
     transferTime: 48
     clipSize: 1
+  - type: STR_LASER_CANNON
+    requires:
+      - STR_LASER_CANNON # kL. This is only for populating CraftWeaponsState
+    size: 1.8
+    costSell: 250740 # 835800
+    transferTime: 48
+  - type: STR_PLASMA_BEAM
+    requires:
+      - STR_PLASMA_CANNON # kL. This is only for populating CraftWeaponsState
+    size: 1.2
+    costSell: 442680 # 1475600
+    transferTime: 48
   - type: STR_FUSION_BALL_LAUNCHER
+    requires:
+      - STR_FUSION_MISSILE # kL. This is only for populating CraftWeaponsState
     size: 1.5
     costSell: 148290 # 494300 x 0.1 (triple this for equip NOT on Battlescape)
     transferTime: 48
@@ -1239,14 +1253,6 @@ items:
     costSell: 260490 # 868300
     transferTime: 48
     clipSize: 1
-  - type: STR_LASER_CANNON
-    size: 1.8
-    costSell: 250740 # 835800
-    transferTime: 48
-  - type: STR_PLASMA_BEAM
-    size: 1.2
-    costSell: 442680 # 1475600
-    transferTime: 48
   - type: STR_TANK_CANNON
     size: 5
     costBuy: 235000
@@ -7931,9 +7937,9 @@ manufacture:
     category: STR_CRAFT
     requires:
       - STR_NEW_FIGHTER_CRAFT
-    space: 30
+    space: 32
     time: 28000
-    cost: 2800000
+    cost: 2800000 # 1.5x manufacture cost OR 100x manufacture hours
     requiredItems:
       STR_ALIEN_ALLOYS: 115
       STR_UFO_POWER_SOURCE: 1
@@ -7942,7 +7948,7 @@ manufacture:
     category: STR_CRAFT
     requires:
       - STR_NEW_FIGHTER_TRANSPORTER
-    space: 34
+    space: 48
     time: 36000
     cost: 3600000
     requiredItems:
@@ -7953,7 +7959,7 @@ manufacture:
     category: STR_CRAFT
     requires:
       - STR_ULTIMATE_CRAFT
-    space: 36
+    space: 64
     time: 68000
     cost: 6800000
     requiredItems:

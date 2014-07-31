@@ -506,9 +506,10 @@ void CivilianBAIState::setupEscape()
 
 			// just ignore unreachable tiles
 			if (std::find(
-					reachable.begin(),
-					reachable.end(),
-					_save->getTileIndex(tile->getPosition())) == reachable.end())
+						reachable.begin(),
+						reachable.end(),
+						_save->getTileIndex(tile->getPosition()))
+					== reachable.end())
 			{
 				continue;
 			}

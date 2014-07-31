@@ -57,18 +57,18 @@ private:
 	Window* _window;
 
 	size_t
-		_craft,
-		_weapon;
+		_craftID,
+		_weaponID;
 
-	std::vector<RuleCraftWeapon*> _weapons;
+	std::vector<RuleCraftWeapon*> _weaponRules;
 
 
 	public:
 		/// Creates the Craft Weapons state.
 		CraftWeaponsState(
 				Base* base,
-				size_t craft,
-				size_t weapon);
+				size_t craftID,
+				size_t weaponID);
 		/// Cleans up the Craft Weapons state.
 		~CraftWeaponsState();
 
