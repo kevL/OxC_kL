@@ -132,7 +132,8 @@ Game::Game(const std::string& title)
 	_cursor->setColor(Palette::blockOffset(15)+12);
 
 	// Create invisible hardware cursor to workaround bug with absolute positioning pointing devices
-	SDL_ShowCursor(SDL_ENABLE);
+//kL	SDL_ShowCursor(SDL_ENABLE);
+	SDL_ShowCursor(SDL_DISABLE); // kL
 	Uint8 cursor = 0;
 	SDL_SetCursor(SDL_CreateCursor(&cursor, &cursor, 1, 1, 0, 0));
 

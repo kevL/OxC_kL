@@ -30,6 +30,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
@@ -133,10 +134,13 @@ MainMenuState::MainMenuState()
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+
+
+	SDL_ShowCursor(SDL_ENABLE); // kL: stabilize my cursor. I disabled it in Game and show it here instead.
 }
 
 /**
- *
+ * dTor.
  */
 MainMenuState::~MainMenuState()
 {

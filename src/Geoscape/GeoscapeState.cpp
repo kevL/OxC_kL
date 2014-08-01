@@ -1196,7 +1196,8 @@ void GeoscapeState::time5Seconds()
 															lon,
 															lat))
 					{
-						(*country)->addActivityXcom(-(*j)->getRules()->getScore());
+//						(*country)->addActivityXcom(-(*j)->getRules()->getScore());
+						(*country)->addActivityAlien((*j)->getRules()->getScore());
 
 						break;
 					}
@@ -1211,7 +1212,8 @@ void GeoscapeState::time5Seconds()
 														lon,
 														lat))
 					{
-						(*region)->addActivityXcom(-(*j)->getRules()->getScore());
+//						(*region)->addActivityXcom(-(*j)->getRules()->getScore());
+						(*region)->addActivityAlien((*j)->getRules()->getScore());
 
 						break;
 					}
@@ -1332,7 +1334,7 @@ void GeoscapeState::time5Seconds()
 
 									// store the current Globe co-ords. Globe will reset to this after dogfight ends.
 									_dfLon = _game->getSavedGame()->getGlobeLongitude(),	// kL
-									_dfLat = _game->getSavedGame()->getGlobeLatitude();	// kL
+									_dfLat = _game->getSavedGame()->getGlobeLatitude();		// kL
 
 									_globe->center(
 												(*j)->getLongitude(),
@@ -1439,8 +1441,7 @@ void GeoscapeState::time5Seconds()
 		}
 	}
 
-	// Clean up dead UFOs and end dogfights which were minimized.
-	for (std::vector<Ufo*>::iterator
+	for (std::vector<Ufo*>::iterator // Clean up dead UFOs and end dogfights which were minimized.
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();
 			)
@@ -1449,8 +1450,7 @@ void GeoscapeState::time5Seconds()
 		{
 			if (!(*i)->getFollowers()->empty())
 			{
-				// Remove all dogfights with this UFO.
-				for (std::list<DogfightState*>::iterator
+				for (std::list<DogfightState*>::iterator // Remove all dogfights with this UFO.
 						d = _dogfights.begin();
 						d != _dogfights.end();
 						)
@@ -1472,8 +1472,7 @@ void GeoscapeState::time5Seconds()
 			++i;
 	}
 
-	// Clean up unused waypoints
-	for (std::vector<Waypoint*>::iterator
+	for (std::vector<Waypoint*>::iterator // Clean up unused waypoints
 			i = _game->getSavedGame()->getWaypoints()->begin();
 			i != _game->getSavedGame()->getWaypoints()->end();
 			)

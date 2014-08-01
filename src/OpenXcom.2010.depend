@@ -4437,7 +4437,7 @@
 	<time.h>
 	"GameTime.h"
 
-1405116833 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1406820091 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4488,7 +4488,7 @@
 1406777119 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
-1404096022 f:\git\openxcom\src\basescape\craftsstate.h
+1406819773 f:\git\openxcom\src\basescape\craftsstate.h
 	"../Engine/State.h"
 
 1404096022 f:\git\openxcom\src\basescape\dismantlefacilitystate.h
@@ -4851,7 +4851,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1406425070 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1406819856 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -6287,7 +6287,7 @@
 1404096022 f:\git\openxcom\src\battlescape\promotionsstate.h
 	"../Engine/State.h"
 
-1404096023 f:\git\openxcom\src\menu\mainmenustate.h
+1406899307 f:\git\openxcom\src\menu\mainmenustate.h
 	"../Engine/State.h"
 
 1404096023 f:\git\openxcom\src\ruleset\rulecountry.h
@@ -6735,7 +6735,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1406763988 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1406821271 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7009,7 +7009,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1404594332 source:f:\git\openxcom\src\engine\game.cpp
+1406898126 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7192,7 +7192,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1404585319 source:f:\git\openxcom\src\engine\screen.cpp
+1406894332 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -7626,7 +7626,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1406815133 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1406815292 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7721,7 +7721,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1405917492 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1406863102 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8291,7 +8291,7 @@
 	<cmath>
 	<SDL.h>
 
-1404096023 source:f:\git\openxcom\src\interface\cursor.cpp
+1406894490 source:f:\git\openxcom\src\interface\cursor.cpp
 	"Cursor.h"
 	<cmath>
 	<SDL.h>
@@ -8476,7 +8476,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1404096023 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1406896539 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	<sstream>
 	"ListLoadState.h"
@@ -8486,6 +8486,7 @@
 	"../version.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/Music.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
@@ -9534,7 +9535,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1406430531 source:f:\git\openxcom\src\savegame\craft.cpp
+1406863271 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>

@@ -525,7 +525,7 @@ std::string Craft::getAltitude() const
 void Craft::setDestination(Target* dest)
 {
 	if (_status != "STR_OUT")
-		_takeoff = 60;
+		_takeoff = 75;
 
 	if (dest == NULL)
 		setSpeed(_rules->getMaxSpeed() / 2);
