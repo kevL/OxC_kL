@@ -4809,7 +4809,7 @@
 	"../Savegame/CraftWeapon.h"
 	"../Savegame/SavedGame.h"
 
-1406424781 f:\git\openxcom\src\basescape\craftsoldiersstate.h
+1406939209 f:\git\openxcom\src\basescape\craftsoldiersstate.h
 	"../Engine/State.h"
 
 1406779087 f:\git\openxcom\src\basescape\craftweaponsstate.h

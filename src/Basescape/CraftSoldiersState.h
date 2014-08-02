@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Base;
+//class Craft;
 class Text;
 class TextButton;
 class TextList;
@@ -64,6 +65,9 @@ private:
 	TextList* _lstSoldiers;
 	Window* _window;
 
+	/// initializes the display list based on the craft soldier's list and the position to display
+//	void initList(size_t scrl);
+
 
 	public:
 		/// Creates the Craft Soldiers state.
@@ -76,9 +80,7 @@ private:
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
 		/// kL. Handler for clicking the Unload button.
-		/// * NB: This relies on no two transport craft having the same name!!!!!
-		/// * See, void CraftInfoState::edtCraftKeyPress(Action* action) etc.
-		void btnUnloadClick(Action* action);
+		void btnUnloadClick(Action* action); // kL
 
 		/// Updates the soldiers list.
 		void init();

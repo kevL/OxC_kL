@@ -161,7 +161,7 @@ CraftSoldiersState::CraftSoldiersState(
 }
 
 /**
- *
+ * dTor.
  */
 CraftSoldiersState::~CraftSoldiersState()
 {
@@ -179,16 +179,13 @@ void CraftSoldiersState::btnOkClick(Action*)
 
 /**
  * kL. Unloads all soldiers from current transport craft.
- * NB: This USED TO rely on no two transport craft having the same name!!!!!
- *
  * @param action, Pointer to an action.
  */
 void CraftSoldiersState::btnUnloadClick(Action*) // kL
 {
 	Craft* craft = _base->getCrafts()->at(_craftID);
 
-	// iterate over all soldiers at Base
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::iterator // iterate over all soldiers at Base
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i)
@@ -201,6 +198,51 @@ void CraftSoldiersState::btnUnloadClick(Action*) // kL
 
 	init(); // iterate over all listRows and change their stringText and lineColor
 }
+
+/**
+ * Shows the soldiers in a list at specified offset/scroll.
+ */
+/* void CraftSoldiersState::initList(size_t scrl)
+{
+	int row = 0;
+	_lstSoldiers->clearList();
+	Craft *c = _base->getCrafts()->at(_craft);
+	for (std::vector<Soldier*>::iterator i = _base->getSoldiers()->begin(); i != _base->getSoldiers()->end(); ++i)
+	{
+		_lstSoldiers->addRow(3, (*i)->getName(true, 19).c_str(), tr((*i)->getRankString()).c_str(), (*i)->getCraftString(_game->getLanguage()).c_str());
+
+		Uint8 color;
+		if ((*i)->getCraft() == c)
+		{
+			color = Palette::blockOffset(13);
+		}
+		else if ((*i)->getCraft() != 0)
+		{
+			color = Palette::blockOffset(15)+6;
+		}
+		else
+		{
+			color = Palette::blockOffset(13)+10;
+		}
+		_lstSoldiers->setRowColor(row, color);
+		row++;
+	}
+	if(scrl)
+		_lstSoldiers->scrollTo(scrl);
+	_lstSoldiers->draw();
+
+	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(c->getSpaceAvailable()));
+	_txtUsed->setText(tr("STR_SPACE_USED").arg(c->getSpaceUsed()));
+} */
+
+/**
+ * Shows the soldiers in a list.
+ */
+/* void CraftSoldiersState::init()
+{
+	State::init();
+	initList(0);
+} */
 
 /**
  * Shows the soldiers in a list.
@@ -351,6 +393,8 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->begin(), soldier);
+
+		initList(0);
 	}
 	else
 	{
@@ -364,8 +408,9 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 		}
 		else
 			_lstSoldiers->scrollUp(false);
+
+		initList(_lstSoldiers->getScroll());
 	}
-	init();
 } */
 
 /**
@@ -442,6 +487,8 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 	{
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->end(), soldier);
+
+		initList(_lstSoldiers->getRows());
 	}
 	else
 	{
@@ -455,8 +502,9 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 		}
 		else
 			_lstSoldiers->scrollDown(false);
+
+		initList(_lstSoldiers->getScroll());
 	}
-	init();
 } */
 
 /**
