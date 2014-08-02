@@ -6877,7 +6877,7 @@
 1404096022 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1406153714 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1406901526 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6888,6 +6888,7 @@
 	"../Engine/RNG.h"
 	"../Engine/Sound.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/Armor.h"
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
@@ -8476,7 +8477,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1406896539 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1406899314 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	<sstream>
 	"ListLoadState.h"

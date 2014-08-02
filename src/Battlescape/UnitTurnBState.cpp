@@ -31,6 +31,8 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/Armor.h"
+
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 
@@ -133,7 +135,7 @@ void UnitTurnBState::think()
 	bool
 		factPlayer	= _unit->getFaction() == FACTION_PLAYER,
 		factSide	= _unit->getFaction() == _parent->getSave()->getSide();
-	int
+/*	int
 		tu = 1,					// one tu per facing change
 		turretType = _unit->getTurretType();
 
@@ -147,6 +149,20 @@ void UnitTurnBState::think()
 			tu = 3;
 		else					// hover vehicles cost 2 per facing change
 			tu = 2;
+	} */
+	int tu = 1;					// one tu per facing change
+	bool tank = _unit->getTurretType() > -1;
+
+	if (!factSide)				// reaction fire permits free turning
+		tu = 0;
+	else if (tank				// if xCom tank
+		&& !_action.strafe		// but not swivelling turret
+		&& !_action.targeting)	// or not taking a shot at something...
+	{
+		if (_unit->getArmor()->getMovementType() == MT_FLY)
+			tu = 2; // hover vehicles cost 2 per facing change
+		else
+			tu = 3; // tracked vehicles cost 3 per facing change
 	}
 
 
