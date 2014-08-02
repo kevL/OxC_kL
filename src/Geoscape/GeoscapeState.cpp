@@ -2803,6 +2803,7 @@ void GeoscapeState::time1Day()
 void GeoscapeState::time1Month()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time1Month()";
+	timerReset();
 	_game->getSavedGame()->addMonth();
 
 	determineAlienMissions(); // determine alien mission for this month.
@@ -2909,10 +2910,7 @@ void GeoscapeState::time1Month()
 		}
 	}
 
-	timerReset();
-
-	// Handle funding
-	_game->getSavedGame()->monthlyFunding();
+	_game->getSavedGame()->monthlyFunding(); // handle Funding
 	popup(new MonthlyReportState(
 								psi,
 								_globe));

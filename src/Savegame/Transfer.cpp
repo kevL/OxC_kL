@@ -39,8 +39,8 @@ namespace OpenXcom
 Transfer::Transfer(int hours)
 	:
 		_hours(hours),
-		_soldier(0),
-		_craft(0),
+		_soldier(NULL),
+		_craft(NULL),
 		_itemId(""),
 		_itemQty(0),
 		_scientists(0),
@@ -91,7 +91,7 @@ bool Transfer::load(
 	if (const YAML::Node& craft = node["craft"])
 	{
 		std::string type = craft["type"].as<std::string>();
-		if (rule->getCraft(type) != 0)
+		if (rule->getCraft(type) != NULL)
 		{
 			_craft = new Craft(
 							rule->getCraft(craft["type"].as<std::string>()),
@@ -99,7 +99,7 @@ bool Transfer::load(
 			_craft->load(
 						craft,
 						rule,
-						0);
+						NULL);
 		}
 		else
 		{
@@ -112,7 +112,7 @@ bool Transfer::load(
 	if (const YAML::Node& item = node["itemId"])
 	{
 		_itemId = item.as<std::string>(_itemId);
-		if (rule->getItem(_itemId) == 0)
+		if (rule->getItem(_itemId) == NULL)
 		{
 			delete this;
 
@@ -138,9 +138,9 @@ YAML::Node Transfer::save() const
 	YAML::Node node;
 
 	node["hours"] = _hours;
-	if (_soldier != 0)
+	if (_soldier != NULL)
 		node["soldier"] = _soldier->save();
-	else if (_craft != 0)
+	else if (_craft != NULL)
 		node["craft"] = _craft->save();
 	else if (_itemQty != 0)
 	{
@@ -232,9 +232,9 @@ void Transfer::setItems(
  */
 std::wstring Transfer::getName(Language* lang) const
 {
-	if (_soldier != 0)
+	if (_soldier != NULL)
 		return _soldier->getName();
-	else if (_craft != 0)
+	else if (_craft != NULL)
 		return _craft->getName(lang);
 	else if (_scientists != 0)
 		return lang->getString("STR_SCIENTISTS");
@@ -245,8 +245,7 @@ std::wstring Transfer::getName(Language* lang) const
 }
 
 /**
- * Returns the time remaining until the
- * transfer arrives at its destination.
+ * Returns the time remaining until the transfer arrives at its destination.
  * @return Amount of hours.
  */
 int Transfer::getHours() const
@@ -276,9 +275,9 @@ int Transfer::getQuantity() const
  */
 TransferType Transfer::getType() const
 {
-	if (_soldier != 0)
+	if (_soldier != NULL)
 		return TRANSFER_SOLDIER;
-	else if (_craft != 0)
+	else if (_craft != NULL)
 		return TRANSFER_CRAFT;
 	else if (_scientists != 0)
 		return TRANSFER_SCIENTIST;
@@ -289,8 +288,7 @@ TransferType Transfer::getType() const
 }
 
 /**
- * Advances the transfer and takes care of
- * the delivery once it's arrived.
+ * Advances the transfer and takes care of the delivery once it's arrived.
  * @param base Pointer to destination base.
  */
 void Transfer::advance(Base* base)
@@ -299,9 +297,9 @@ void Transfer::advance(Base* base)
 
 	if (_hours == 0)
 	{
-		if (_soldier != 0)
+		if (_soldier != NULL)
 			base->getSoldiers()->push_back(_soldier);
-		else if (_craft != 0)
+		else if (_craft != NULL)
 		{
 			base->getCrafts()->push_back(_craft);
 			_craft->setBase(base);

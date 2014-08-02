@@ -62,7 +62,7 @@ namespace OpenXcom
 ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	:
 		_state(state),
-		_base(0)
+		_base(NULL)
 {
 	_screen = false;
 
@@ -152,8 +152,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 			{
 				_base = *i;
 
-				// Check if we have an automated use for an item
-				if ((*j)->getType() == TRANSFER_ITEM)
+				if ((*j)->getType() == TRANSFER_ITEM) // check if there's an automated use for item
 //					&& _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
 				{
 					RuleItem* item = _game->getRuleset()->getItem((*j)->getItems());
@@ -163,8 +162,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 							c != (*i)->getCrafts()->end();
 							++c)
 					{
-						// check if it's ammo to reload a craft
-						if ((*c)->getStatus() == "STR_READY")
+						if ((*c)->getStatus() == "STR_READY") // check if it's ammo to reload a craft
 						{
 							for (std::vector<CraftWeapon*>::iterator
 									w = (*c)->getWeapons()->begin();
@@ -181,8 +179,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 							}
 						}
 
-						// check if it's ammo to reload a vehicle
-						for (std::vector<Vehicle*>::iterator
+						for (std::vector<Vehicle*>::iterator // check if it's ammo to reload a vehicle
 								v = (*c)->getVehicles()->begin();
 								v != (*c)->getVehicles()->end();
 								++v)
@@ -199,7 +196,8 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 												item->getClipSize() - (*v)->getAmmo());
 								(*v)->setAmmo((*v)->getAmmo() + used);
 
-								// Note that the items have already been delivered, so we remove them from the base, not the transfer.
+								// Note that the items have already been delivered --
+								// so they are removed from the base, not the transfer.
 								_base->getItems()->removeItem(
 															item->getType(),
 															used);
@@ -226,7 +224,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 }
 
 /**
- *
+ * dTor.
  */
 ItemsArrivingState::~ItemsArrivingState()
 {

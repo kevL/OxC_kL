@@ -1293,13 +1293,27 @@ int Base::getLongRangeValue() const // kL
 }
 
 /**
- * Returns the total amount of craft of a certain type stored in the base.
- * @param craft Craft type.
- * @return, Number of craft.
+ * Returns the total amount of craft of a certain type stored at or being
+ * tranferred to this base. Used for MonthlyCostsState.
+ * @param craft - craft type
+ * @return, quantity of craft type
  */
 int Base::getCraftCount(const std::string& craft) const
 {
 	int total = 0;
+
+	// kL_begin:
+	for (std::vector<Transfer*>::const_iterator
+			i = _transfers.begin();
+			i != _transfers.end();
+			++i)
+	{
+		if ((*i)->getType() == TRANSFER_CRAFT
+			&& (*i)->getCraft()->getRules()->getType() == craft)
+		{
+			total += (*i)->getQuantity();
+		}
+	} // kL_end.
 
 	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
@@ -1315,11 +1329,24 @@ int Base::getCraftCount(const std::string& craft) const
 
 /**
  * Returns the total amount of monthly costs for maintaining the craft in the base.
+ * Used for month-end maintenance expenditure.
  * @return, Maintenance costs.
  */
 int Base::getCraftMaintenance() const
 {
 	int total = 0;
+
+	// kL_begin: craft-transfer bugfix.
+	for (std::vector<Transfer*>::const_iterator
+			i = _transfers.begin();
+			i != _transfers.end();
+			++i)
+	{
+		if ((*i)->getType() == TRANSFER_CRAFT)
+		{
+			total += (*i)->getQuantity() * (*i)->getCraft()->getRules()->getRentCost();
+		}
+	} // kL_end.
 
 	for (std::vector<Craft*>::const_iterator
 			i = _crafts.begin();
@@ -1334,13 +1361,15 @@ int Base::getCraftMaintenance() const
 
 /**
  * Returns the total amount of monthly costs for maintaining the personnel in the base.
+ * Used for month-end maintenance expenditure.
  * @return, Maintenance costs.
  */
 int Base::getPersonnelMaintenance() const
 {
 	int total = 0;
 
-	total += static_cast<int>(_soldiers.size()) * _rule->getSoldierCost();
+//kL	total += static_cast<int>(_soldiers.size()) * _rule->getSoldierCost();
+	total += getTotalSoldiers() * _rule->getSoldierCost(); // kL, personel-transfer bugfix.
 	total += getTotalEngineers() * _rule->getEngineerCost();
 	total += getTotalScientists() * _rule->getScientistCost();
 
@@ -1349,6 +1378,7 @@ int Base::getPersonnelMaintenance() const
 
 /**
  * Returns the total amount of monthly costs for maintaining the facilities in the base.
+ * Used for month-end maintenance expenditure.
  * @return, Maintenance costs.
  */
 int Base::getFacilityMaintenance() const
@@ -1369,6 +1399,7 @@ int Base::getFacilityMaintenance() const
 
 /**
  * Returns the total amount of all the maintenance monthly costs in the base.
+ * Used for month-end maintenance expenditure.
  * @return, Maintenance costs.
  */
 int Base::getMonthlyMaintenace() const

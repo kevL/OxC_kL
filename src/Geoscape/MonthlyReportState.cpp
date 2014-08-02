@@ -349,7 +349,7 @@ void MonthlyReportState::calculateChanges()
 
 		if ((*k)->getActivityXcom().size() > 2)
 			_ratingLastMonth += (*k)->getActivityXcom().at(lastMonthOffset)
-							- (*k)->getActivityAlien().at(lastMonthOffset);
+								- (*k)->getActivityAlien().at(lastMonthOffset);
 
 		xComSubTotal += (*k)->getActivityXcom().at(monthOffset);
 		aLienTotal += (*k)->getActivityAlien().at(monthOffset);
@@ -381,10 +381,10 @@ void MonthlyReportState::calculateChanges()
 		if ((*k)->getNewPact())
 			_pactList.push_back((*k)->getRules()->getType());
 
-		// determine satisfaction level, sign pacts, adjust funding and update activity meters,
+		// determine satisfaction level, sign pacts, adjust funding, and update activity meters
 		int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()); // kL
 		(*k)->newMonth(
-//kL					xComTotal,
+//kL				xComTotal,
 					xComSubTotal, // kL, There. done
 					aLienTotal,
 					diff); // kL
@@ -392,7 +392,7 @@ void MonthlyReportState::calculateChanges()
 		// and after they've made their decisions, calculate the difference,
 		// and add them to the appropriate lists.
 		_fundingDiff += (*k)->getFunding().back()
-					- (*k)->getFunding().at((*k)->getFunding().size() - 2);
+						- (*k)->getFunding().at((*k)->getFunding().size() - 2);
 
 		switch ((*k)->getSatisfaction())
 		{
@@ -408,8 +408,7 @@ void MonthlyReportState::calculateChanges()
 		}
 	}
 
-	// calculate total.
-	_ratingTotal = xComTotal - aLienTotal;
+	_ratingTotal = xComTotal - aLienTotal; // calculate total.
 }
 
 /**

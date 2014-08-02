@@ -140,19 +140,22 @@ MonthlyCostsState::MonthlyCostsState(
 			i != crafts.end();
 			++i)
 	{
+		int
+			qty,
+			cost;
+
 		RuleCraft* craft = _game->getRuleset()->getCraft(*i);
-		if (craft->getRentCost() != 0
-			&& _game->getSavedGame()->isResearched(craft->getRequirements()))
+		if (_game->getSavedGame()->isResearched(craft->getRequirements())
+			&& (cost = craft->getRentCost()) > 0)
 		{
 			std::wostringstream ss2;
-			ss2 << _base->getCraftCount((*i));
+			ss2 << (qty = _base->getCraftCount(*i));
 			_lstCrafts->addRow(
 							4,
 							tr(*i).c_str(),
-							Text::formatFunding(craft->getRentCost()).c_str(),
+							Text::formatFunding(cost).c_str(),
 							ss2.str().c_str(),
-							Text::formatFunding(_base->getCraftCount(*i)
-												* craft->getRentCost()).c_str());
+							Text::formatFunding(qty * cost).c_str());
 		}
 	}
 
@@ -211,7 +214,7 @@ MonthlyCostsState::MonthlyCostsState(
 }
 
 /**
- *
+ * dTor.
  */
 MonthlyCostsState::~MonthlyCostsState()
 {
