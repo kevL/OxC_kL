@@ -839,11 +839,8 @@ int Pathfinding::getTUCost(
 										startPos + offset,
 										dir);
 				//Log(LOG_INFO) << ". vert = " << vert;
-				if (vert == 0 // allow kneeled starts
-					|| vert == -2)
-				{
+				if (vert < 1)
 					return 255;
-				}
 				else
 					cost = 8; // vertical movement by flying suit or grav lift
 			}
@@ -1834,6 +1831,7 @@ int Pathfinding::validateUpDown(
 		Position startPos,
 		int const dir)
 {
+	//Log(LOG_INFO) << "validateUpDown()";
 	Position destPos;
 	directionToVector(
 					dir,
@@ -1851,18 +1849,16 @@ int Pathfinding::validateUpDown(
 					&& destTile->getMapData(MapData::O_FLOOR)
 					&& destTile->getMapData(MapData::O_FLOOR)->isGravLift();
 
-	if (bu->isKneeled()
+	if (gravLift)
+		return 1;
+	else if (bu->isKneeled()
 		&& _kneelCheck == true)
 	{
+		//Log(LOG_INFO) << ". kneelCheck set FALSE";
 		_kneelCheck = false;
 
-		if (gravLift == true)
-			return 1; // kneeled on gravLift -> Go
-		else
-			return -1; // kneeled. Stop ( Useful only for btnUnitUp/DownClick()s ... bleh. )
+		return -1; // kneeled.
 	}
-	else if (gravLift) // can't do this before kneel is checked, to allow kneeling up/down gravLifts.
-		return 1; // gravLift. Go
 	else if (bu->getArmor()->getMovementType() == MT_FLY)
 	{
 		Tile* belowStart = _save->getTile(startPos + Position(0, 0,-1));

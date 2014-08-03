@@ -1302,8 +1302,7 @@ int Base::getCraftCount(const std::string& craft) const
 {
 	int total = 0;
 
-	// kL_begin:
-	for (std::vector<Transfer*>::const_iterator
+	for (std::vector<Transfer*>::const_iterator // kL_begin:
 			i = _transfers.begin();
 			i != _transfers.end();
 			++i)
@@ -1336,16 +1335,13 @@ int Base::getCraftMaintenance() const
 {
 	int total = 0;
 
-	// kL_begin: craft-transfer bugfix.
-	for (std::vector<Transfer*>::const_iterator
+	for (std::vector<Transfer*>::const_iterator // kL_begin: craft-transfer bugfix.
 			i = _transfers.begin();
 			i != _transfers.end();
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_CRAFT)
-		{
 			total += (*i)->getQuantity() * (*i)->getCraft()->getRules()->getRentCost();
-		}
 	} // kL_end.
 
 	for (std::vector<Craft*>::const_iterator

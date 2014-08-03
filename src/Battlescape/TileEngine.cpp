@@ -5155,7 +5155,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 		//Log(LOG_INFO) << ". . . dist = " << dist;
 
 //kL	attack -= dist;
-		attack -= dist * 2; // kL
+		attack -= dist * 2.0; // kL
 
 		attack -= defense;
 		if (action->type == BA_MINDCONTROL)
@@ -5185,9 +5185,9 @@ bool TileEngine::psiAttack(BattleAction* action)
 			info = "STR_CONTROL";
 
 		_battleSave->getBattleState()->warning(
-										info,
-										true,
-										success);
+											info,
+											true,
+											success);
 
 		//Log(LOG_INFO) << ". . . attack Success @ " << success;
 		if (RNG::percent(success))
@@ -5200,7 +5200,9 @@ bool TileEngine::psiAttack(BattleAction* action)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
 
-				int moraleLoss = (110 - victim->getStats()->bravery);
+				int moraleLoss = 110
+								- victim->getStats()->bravery * 2
+								+ action->actor->getStats()->psiStrength / 2;
 				if (moraleLoss > 0)
 					victim->moraleChange(-moraleLoss);
 			}

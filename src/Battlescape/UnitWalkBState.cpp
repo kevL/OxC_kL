@@ -70,7 +70,8 @@ UnitWalkBState::UnitWalkBState(
 		_tileSwitchDone(false),
 		_onScreen(false),
 		_walkCam(NULL),
-		_start(-1)
+		_start(-1),
+		_kneelCheck(true)
 {
 	//Log(LOG_INFO) << "Create UnitWalkBState";
 }
@@ -298,11 +299,14 @@ bool UnitWalkBState::doStatusStand()
 					&& tile->getMapData(MapData::O_FLOOR)->isGravLift();
 
 	if (dir > -1
-		&& _unit->isKneeled()
-		&& !gravLift
-		&& !_pf->getPath().empty())
+		&& _kneelCheck				== true		// check if unit is kneeled
+		&& _unit->isKneeled()		== true		// unit is kneeled
+		&& gravLift					== false	// not on a gravLift
+		&& _pf->getPath().empty()	== false)	// not the final tile of path; that is, the unit is actually going to move.
 	{
 		//Log(LOG_INFO) << ". kneeled, and path Valid";
+		_kneelCheck = false;
+
 		if (_parent->kneel(
 						_unit,
 						false))
@@ -321,6 +325,7 @@ bool UnitWalkBState::doStatusStand()
 		}
 		else
 		{
+			//Log(LOG_INFO) << ". . don't stand: not enough TU";
 			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 
 			_pf->abortPath();
@@ -420,6 +425,7 @@ bool UnitWalkBState::doStatusStand()
 			tu = 0;
 		}
 
+		int tuTemp = tu;
 		int energy = tu;
 
 		if (!gravLift)
@@ -460,13 +466,16 @@ bool UnitWalkBState::doStatusStand()
 		}
 
 
-		//Log(LOG_INFO) << ". check tu + stamina, etc.";
+		//Log(LOG_INFO) << ". check tu + stamina, etc. TU = " << tu;
+		//Log(LOG_INFO) << ". unit->TU = " << _unit->getTimeUnits();
 		if (tu > _unit->getTimeUnits())
 		{
-			//Log(LOG_INFO) << ". . tu > _unit->getTimeUnits()";
+			//Log(LOG_INFO) << ". . tu > _unit->TU()";
 			if (_parent->getPanicHandled()
-				&& tu < 255)
+//kL			&& tu < 255)
+				&& tuTemp < 255)
 			{
+				//Log(LOG_INFO) << ". send warning: not enough TU";
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
 
