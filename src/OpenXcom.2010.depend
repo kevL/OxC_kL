@@ -4437,7 +4437,7 @@
 	<time.h>
 	"GameTime.h"
 
-1406820091 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1407131695 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4784,7 +4784,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1406777484 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1407133270 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -5388,7 +5388,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1406322550 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1407123888 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -7722,7 +7722,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1406941263 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1407124008 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7882,7 +7882,7 @@
 	<string>
 	<vector>
 
-1406814691 source:f:\git\openxcom\src\geoscape\globe.cpp
+1407124297 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>

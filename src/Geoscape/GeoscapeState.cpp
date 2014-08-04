@@ -360,6 +360,7 @@ GeoscapeState::GeoscapeState()
 	_txtMonth	= new Text(29, 8, screenWidth - 32, screenHeight / 2 - 6);
 	_txtYear	= new Text(59, 8, screenWidth - 61, screenHeight / 2 + 1);
 
+	_txtFunds	= new Text(63, 8, screenWidth - 63, 10); // kL
 	if (Options::showFundsOnGeoscape)
 	{
 		_txtFunds = new Text(59, 8, screenWidth - 61, screenHeight / 2 - 27);
@@ -419,8 +420,8 @@ GeoscapeState::GeoscapeState()
 
 	add(_srfTime); // kL
 
-	if (Options::showFundsOnGeoscape)
-		add(_txtFunds);
+//	if (Options::showFundsOnGeoscape)
+	add(_txtFunds);
 
 	add(_txtHour);
 	add(_txtHourSep);
@@ -671,6 +672,8 @@ GeoscapeState::GeoscapeState()
 //kL	_sideTop->setColor(Palette::blockOffset(15)+6);
 //kL	_sideBottom->setColor(Palette::blockOffset(15)+6);
 
+	_txtFunds->setColor(Palette::blockOffset(15)+4);	// kL
+	_txtFunds->setAlign(ALIGN_CENTER);					// kL
 	if (Options::showFundsOnGeoscape)
 	{
 		_txtFunds->setSmall();
@@ -957,8 +960,8 @@ void GeoscapeState::think()
  */
 void GeoscapeState::timeDisplay()
 {
-	if (Options::showFundsOnGeoscape)
-		_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
+//	if (Options::showFundsOnGeoscape)
+	_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 
 	std::wostringstream
 		ss1, // sec

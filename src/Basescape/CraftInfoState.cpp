@@ -140,9 +140,6 @@ CraftInfoState::CraftInfoState(
 
 	_txtStatus->setColor(Palette::blockOffset(13)+10);
 	_txtStatus->setAlign(ALIGN_RIGHT);
-	std::string stat = base->getCrafts()->at(craftId)->getStatus();
-	_txtStatus->setText(tr(stat));
-	//base->getCrafts()->at(craftId)->getName(_game->getLanguage()));
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
@@ -213,6 +210,10 @@ void CraftInfoState::init()
 
 	_craft = _base->getCrafts()->at(_craftId);
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
+
+	std::string stat = _craft->getStatus();
+	_txtStatus->setText(tr(stat));
+//	base->getCrafts()->at(craftId)->getName(_game->getLanguage()));
 
 	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);

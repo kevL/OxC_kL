@@ -209,7 +209,7 @@ BasescapeState::BasescapeState(
 }
 
 /**
- *
+ * dTor.
  */
 BasescapeState::~BasescapeState()
 {
@@ -316,7 +316,8 @@ void BasescapeState::init()
 		}
 	}
 
-	_btnSoldiers->setVisible(hasQuarters);
+	_btnSoldiers->setVisible(hasQuarters
+								&& _base->getSoldiers()->empty() == false);
 	_btnCrafts->setVisible(hasHangar);
 	_btnAliens->setVisible(hasAlienCont);
 	_btnResearch->setVisible(hasLabs);
