@@ -4875,7 +4875,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1404369407 f:\git\openxcom\src\geoscape\globe.h
+1407124297 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"

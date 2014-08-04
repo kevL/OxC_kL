@@ -308,7 +308,7 @@ Globe::Globe(
 		_cenY(cenY),
 		_game(game),
 		_blink(true),
-		_blinkVal(0),
+//		_blinkVal(0),
 		_hover(false),
 		_cacheLand(),
 		_isMouseScrolled(false),
@@ -1280,11 +1280,11 @@ void Globe::think()
  */
 void Globe::blink()
 {
-	// kL_begin:
-	int off = 0;
+/*	int colorOffset = 0; // kL_begin:
+
 	if (_blink)
 	{
-		off = 1;
+		colorOffset = 1;
 
 		_blinkVal++;
 
@@ -1293,30 +1293,31 @@ void Globe::blink()
 	}
 	else
 	{
-		off = -1;
+		colorOffset = -1;
 
 		_blinkVal--;
 
 		if (_blinkVal == 0)
 			_blink = true;
-	} // kL_end.
+	} */ // kL_end.
 
-/*	_blink = !_blink;
 
-	int off = 0;
+	_blink = !_blink;
+
+	int colorOffset = 0;
 	if (_blink)
-		off = -1;
+		colorOffset = -1;
 	else
-		off = 1; */
+		colorOffset = 1;
 
-	_mkXcomBase->offset(off);
-	_mkAlienBase->offset(off);
-	_mkCraft->offset(off);
-	_mkWaypoint->offset(off);
-	_mkFlyingUfo->offset(off);
-	_mkLandedUfo->offset(off);
-	_mkCrashedUfo->offset(off);
-	_mkAlienSite->offset(off);
+	_mkXcomBase->offset(colorOffset);
+	_mkAlienBase->offset(colorOffset);
+	_mkCraft->offset(colorOffset);
+	_mkWaypoint->offset(colorOffset);
+	_mkFlyingUfo->offset(colorOffset);
+	_mkLandedUfo->offset(colorOffset);
+	_mkCrashedUfo->offset(colorOffset);
+	_mkAlienSite->offset(colorOffset);
 
 	drawMarkers();
 }

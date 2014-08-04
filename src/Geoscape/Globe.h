@@ -72,7 +72,7 @@ private:
 		_isMouseScrolling,
 		_mouseOverThreshold;
 	int
-		_blinkVal,
+//		_blinkVal,
 		_totalMouseMoveX,
 		_totalMouseMoveY,
 		_xBeforeMouseScrolling,

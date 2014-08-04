@@ -85,22 +85,22 @@ SoldierInfoState::SoldierInfoState(
 	_btnNext		= new TextButton(29, 16, 80, 32);
 	_btnAutoStat	= new TextButton(49, 16, 112, 32);
 
-	_txtArmor		= new Text(32, 9, 216, 35);
+	_txtArmor		= new Text(32, 9, 217, 36);
 	_btnArmor		= new TextButton(72, 16, 248, 32);
 
-	_btnSack		= new TextButton(36, 16, 284, 48);
+	_btnSack		= new TextButton(36, 16, 284, 49);
 
 	_edtSoldier		= new TextEdit(this, 179, 16, 40, 9);
 	_btnDiary		= new TextButton(60, 16, 248, 8);
 
 	_txtRank		= new Text(110, 9, 0, 49);
-	_txtMissions	= new Text(80, 9, 112, 49);
-	_txtKills		= new Text(100, 9, 212, 49);
-
 	_txtCraft		= new Text(130, 9, 0, 57);
-	_txtRecovery	= new Text(80, 9, 112, 57);
-
 	_txtPsionic		= new Text(75, 9, 5, 67);
+
+	_txtMissions	= new Text(80, 9, 112, 49);
+	_txtKills		= new Text(100, 9, 112, 57);
+
+	_txtRecovery	= new Text(80, 9, 207, 57);
 
 
 	int
