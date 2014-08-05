@@ -5706,7 +5706,7 @@
 1404096022 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1406154891 f:\git\openxcom\src\battlescape\tileengine.h
+1407241295 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -6025,7 +6025,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1407171681 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1407173341 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6580,7 +6580,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1407169927 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1407173341 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"

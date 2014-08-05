@@ -126,13 +126,37 @@ void TileEngine::calculateSunShading(Tile* tile)
 	// At night/dusk sun isn't dropping shades blocked by roofs
 	if (_battleSave->getGlobalShade() < 5)
 	{
+		// kL: old code
 		if (verticalBlockage(
 						_battleSave->getTile(Position(
-											tile->getPosition().x,
-											tile->getPosition().y,
-											_battleSave->getMapSizeZ() - 1)),
+													tile->getPosition().x,
+													tile->getPosition().y,
+													_battleSave->getMapSizeZ() - 1)),
 						tile,
 						DT_NONE)) // !=0
+		// kL_note: new code
+/*		int
+			block = 0,
+			x = tile->getPosition().x,
+			y = tile->getPosition().y;
+
+		for (int
+				z = _save->getMapSizeZ() - 1;
+				z > tile->getPosition().z;
+				--z)
+		{
+			block += blockage(
+							_save->getTile(Position(x, y, z)),
+							MapData::O_FLOOR,
+							DT_NONE);
+			block += blockage(
+							_save->getTile(Position(x, y, z)),
+							MapData::O_OBJECT,
+							DT_NONE,
+							Pathfinding::DIR_DOWN);
+		}
+
+		if (block > 0) */
 		{
 			power -= 2;
 		}
@@ -213,7 +237,7 @@ void TileEngine::calculateUnitLighting()
 {
 	const int layer = 2;					// Dynamic lighting layer.
 //kL	const int personalLightPower = 15;	// amount of light a unit generates
-	const int personalLightPower = 8;		// kL, Try it...
+	const int personalLightPower = 9;		// kL, Try it...
 	const int fireLightPower = 15;			// amount of light a fire generates
 
 	for (int // reset all light to 0 first
@@ -231,8 +255,8 @@ void TileEngine::calculateUnitLighting()
 	{
 		if (_personalLighting // add lighting of soldiers
 			&& (*i)->getFaction() == FACTION_PLAYER
-//kL			&& !(*i)->isOut())
-			&& (*i)->getHealth() != 0) // kL, Let unconscious soldiers glow.
+//kL		&& !(*i)->isOut())
+			&& (*i)->getHealth() > 0) // kL, Let unconscious soldiers glow.
 		{
 			addLight(
 					(*i)->getPosition(),
@@ -240,8 +264,7 @@ void TileEngine::calculateUnitLighting()
 					layer);
 		}
 
-		// add lighting of units on fire
-		if ((*i)->getFire())
+		if ((*i)->getFire()) // add lighting of units on fire
 			addLight(
 					(*i)->getPosition(),
 					fireLightPower,
@@ -2342,6 +2365,8 @@ BattleUnit* TileEngine::hit(
 	return NULL;
 }
 
+//kL static unsigned char expmap[14400];
+
 /**
  * Handles explosions.
  * kL_note: called from ExplosionBState
@@ -3526,7 +3551,7 @@ int TileEngine::verticalBlockage(
 								_battleSave->getTile(Position(x, y, z)),
 								MapData::O_OBJECT,
 								type,
-								8); // Pathfinding::DIR_UP
+								Pathfinding::DIR_UP);
 			}
 
 			return block;
@@ -3560,7 +3585,7 @@ int TileEngine::verticalBlockage(
 			}
 		}
 	}
-	else if (dirZ < 0) // down
+	else // if (dirZ < 0) // down
 	{
 		if (x == endTile->getPosition().x
 			&& y == endTile->getPosition().y)
@@ -3578,7 +3603,7 @@ int TileEngine::verticalBlockage(
 								_battleSave->getTile(Position(x, y, z)),
 								MapData::O_OBJECT,
 								type,
-								9, // Pathfinding::DIR_DOWN
+								Pathfinding::DIR_DOWN,
 								true); // kL_add. ( should be false for LoS, btw )
 			}
 
@@ -3617,6 +3642,63 @@ int TileEngine::verticalBlockage(
 	//Log(LOG_INFO) << "TileEngine::verticalBlockage() EXIT ret = " << block;
 	return block;
 }
+
+/**
+ * Calculates the amount of power that is blocked going from one tile to another on a different level.
+ * @param startTile The tile where the power starts.
+ * @param endTile The adjacent tile where the power ends.
+ * @param type The type of power/damage.
+ * @return Amount of blockage of this power.
+ */
+/* int TileEngine::verticalBlockage(Tile *startTile, Tile *endTile, ItemDamageType type, bool skipObject)
+{
+	int block = 0;
+
+	// safety check
+	if (startTile == 0 || endTile == 0) return 0;
+	int direction = endTile->getPosition().z - startTile->getPosition().z;
+
+	if (direction == 0 ) return 0;
+
+	int x = startTile->getPosition().x;
+	int y = startTile->getPosition().y;
+	int z = startTile->getPosition().z;
+
+	if (direction < 0) // down
+	{
+		block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+		if (!skipObject)
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type, Pathfinding::DIR_DOWN);
+		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
+		{
+			x = endTile->getPosition().x;
+			y = endTile->getPosition().y;
+			int z = startTile->getPosition().z;
+			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type, skipObject);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			if (!skipObject)
+				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
+		}
+	}
+	else if (direction > 0) // up
+	{
+		block += blockage(_save->getTile(Position(x, y, z+1)), MapData::O_FLOOR, type);
+		if (!skipObject)
+			block += blockage(_save->getTile(Position(x, y, z+1)), MapData::O_OBJECT, type, Pathfinding::DIR_UP);
+		if (x != endTile->getPosition().x || y != endTile->getPosition().y)
+		{
+			x = endTile->getPosition().x;
+			y = endTile->getPosition().y;
+			int z = startTile->getPosition().z+1;
+			block += horizontalBlockage(startTile, _save->getTile(Position(x, y, z)), type, skipObject);
+			block += blockage(_save->getTile(Position(x, y, z)), MapData::O_FLOOR, type);
+			if (!skipObject)
+				block += blockage(_save->getTile(Position(x, y, z)), MapData::O_OBJECT, type);
+		}
+	}
+
+	return block;
+} */
 
 /**
  * Calculates the amount of power or LoS/FoV/LoF that various types of
