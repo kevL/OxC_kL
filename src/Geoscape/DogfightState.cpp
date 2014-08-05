@@ -987,12 +987,13 @@ void DogfightState::move()
 					&& !p->getMissed())
 				{
 					// kL_begin:
-					int ufoSize = _ufoSize;
-					if (ufoSize > 4)
-						ufoSize = 4;
+//					int ufoSize = _ufoSize;
+//					if (ufoSize > 4)
+//						ufoSize = 4;
 
 					int diff = _game->getSavedGame()->getDifficulty();
-					int hitchance = ((p->getAccuracy() * (100 + (300 / (5 - ufoSize)))) + 100) / (200 + (diff * 50));
+//					int hitchance = ((p->getAccuracy() * (100 + (300 / (5 - ufoSize)))) + 100) / (200 + (diff * 50)); // fuck that.
+					int hitchance = p->getAccuracy() + (_ufoSize * 5) - (diff * 5); // could include UFO speed here.
 					// kL_end.
 //kL				int hitchance = (p->getAccuracy() * (100 + (300 / (5 - ufoSize))) + 100) / 200;
 					//Log(LOG_INFO) << "hitchance = " << hitchance;

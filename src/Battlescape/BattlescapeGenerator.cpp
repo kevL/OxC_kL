@@ -104,7 +104,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftX(0),
 		_craftY(0),
 		_craftZ(0),
-		_tankPos(0), // kL
+//		_tankPos(0), // kL
 		_baseCraftEquip(false), // kL
 		_battleOrder(0) // kL
 {
@@ -562,12 +562,12 @@ void BattlescapeGenerator::deployXCOM()
 	// maybe we should assign all units to the first tile of the skyranger before the
 	// inventory pre-equip and then reassign them to their correct tile afterwards?
 	// Fix: make them invisible, they are made visible afterwards.
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::iterator // pre-battle equip; give all xCom Soldiers access to the inventory tile.
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getFaction() == FACTION_PLAYER) // kL_note: not really necessary because only xCom is on the field atm.
+		if ((*i)->getFaction() == FACTION_PLAYER) // kL_note: not really necessary because only xCom is on the field atm. Could exclude tanks ....
 		{
 			_craftInventoryTile->setUnit(*i);
 
@@ -604,7 +604,7 @@ void BattlescapeGenerator::deployXCOM()
 	else // add items that are in the base
 	{
 		//Log(LOG_INFO) << ". . addBaseItems";
-		for (std::map<std::string, int>::iterator
+		for (std::map<std::string, int>::iterator // add items from stores in base
 				i = _base->getItems()->getContents()->begin();
 				i != _base->getItems()->getContents()->end();
 				)
@@ -642,8 +642,7 @@ void BattlescapeGenerator::deployXCOM()
 		}
 		//Log(LOG_INFO) << ". . addBaseBaseItems DONE, add BaseCraftItems";
 
-		// add items from crafts in base
-		for (std::vector<Craft*>::iterator
+		for (std::vector<Craft*>::iterator // add items from crafts in base
 				c = _base->getCrafts()->begin();
 				c != _base->getCrafts()->end();
 				++c)
@@ -718,11 +717,12 @@ void BattlescapeGenerator::deployXCOM()
 				++i)
 		{
 //			unit->prepareNewTurn();
-
 			int tu = (*i)->getStats()->tu;
+
 			float encumb = static_cast<float>(static_cast<float>((*i)->getCarriedWeight() / (*i)->getStats()->strength));
 			if (encumb > 1.f)
 				tu = static_cast<int>(encumb * static_cast<float>(tu));
+
 			(*i)->setTimeUnits(tu);
 		}
 	} // kL_end.
@@ -898,7 +898,6 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 	else					// kL
 	{
 //		delete tankUnit;	// kL
-
 		return NULL;		// kL
 	}
 
@@ -915,7 +914,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 {
 //	unit->setId(_unitCount++);
-	if (_craft == 0
+	if (_craft == NULL
 		|| _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
 		|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
 	{
@@ -992,45 +991,40 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 	else // kL_note: mission w/ transport craft that does not have ruleset Deployments.
 	{
 		//Log(LOG_INFO) << "addXCOMUnit() - NO Deployment rule";
-		_tankPos = 0;
+		int tankPos = 0;
 
 		for (int // kL_note: iterate through *all* tiles
 				i = 0;
 				i < _mapsize_x * _mapsize_y * _mapsize_z;
-				i++)
+				++i)
 		{
 			if (canPlaceXCOMUnit(_save->getTiles()[i]))
 			{
 				// kL_begin: BattlescapeGenerator, set tankPosition
-				if (unit->getArmor()->getSize() > 1														// is a tank
-					&& _save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x)	// and the ground-inventory-tile is on this[i] tile's x-axis|
+				if (unit->getArmor()->getSize() > 1) // is a tank
 				{
-					_tankPos++;
-					if (_tankPos == 3)
+					if (_save->getTiles()[i]->getPosition().x == _craftInventoryTile->getPosition().x) // and the ground-inventory-tile is on this[i] tile's x-axis|
 					{
-						if (_save->setUnitPosition(										// set unit position SUCCESS
-												unit,
-												_save->getTiles()[i]->getPosition()))
+						if (++tankPos == 3)
 						{
-							_save->getUnits()->push_back(unit);							// add unit to vector of Units.
+							if (_save->setUnitPosition( // set unit position SUCCESS
+													unit,
+													_save->getTiles()[i]->getPosition()))
+							{
+								_save->getUnits()->push_back(unit); // add unit to vector of Units.
 
-							unit->deriveRank();
-//							if (_save->getTileEngine())
-//								_save->getTileEngine()->calculateFOV(unit);				// it's all good: do Field of View for unit!
-
-							return unit;
+								return unit;
+							}
 						}
 					}
 				}
-				else if (_save->setUnitPosition(										// set unit position SUCCESS
+				else if (_save->setUnitPosition( // set unit position SUCCESS
 											unit,
 											_save->getTiles()[i]->getPosition()))
 				{
-					_save->getUnits()->push_back(unit);									// add unit to vector of Units.
+					_save->getUnits()->push_back(unit); // add unit to vector of Units.
 
 					unit->deriveRank();
-//					if (_save->getTileEngine())
-//						_save->getTileEngine()->calculateFOV(unit);						// it's all good: do Field of View for unit!
 
 					return unit;
 				} // kL_end.

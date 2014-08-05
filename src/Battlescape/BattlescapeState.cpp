@@ -1312,6 +1312,7 @@ void BattlescapeState::btnUnitUpClick(Action*)
 	if (!playableUnitSelected())
 		return;
 
+//	_save->getPathfinding()->setKneelCheck();
 	int valid = _save->getPathfinding()->validateUpDown(
 												_save->getSelectedUnit(),
 												_save->getSelectedUnit()->getPosition(),
@@ -1326,8 +1327,8 @@ void BattlescapeState::btnUnitUpClick(Action*)
 	}
 	else if (valid == -2)	// no flight suit
 		warning("STR_ACTION_NOT_ALLOWED_FLIGHT");
-	else if (valid == -1)	// kneeling
-		warning("STR_ACTION_NOT_ALLOWED_KNEEL");
+//	else if (valid == -1)	// kneeling
+//		warning("STR_ACTION_NOT_ALLOWED_KNEEL");
 	else					// valid == 0 : blocked by roof
 		warning("STR_ACTION_NOT_ALLOWED_ROOF");
 }

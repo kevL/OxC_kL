@@ -3385,7 +3385,6 @@ std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()
 }
 
 /**
-/**
  * Sets the numeric version of a unit's rank.
  * @param rank - unit rank ( 0 = lowest ) kL_note: uh doesn't aLien & xCom go opposite ways
  */
@@ -3395,7 +3394,6 @@ void BattleUnit::setRankInt(int rank)
 }
 
 /**
- *
  * Gets the numeric version of a unit's rank.
  * @return, unit rank ( 0 = lowest ) kL_note: uh doesn't aLien & xCom go opposite ways
  */
@@ -3405,7 +3403,6 @@ int BattleUnit::getRankInt() const
 }
 
 /**
- *
  * Derives a numeric unit rank from a string rank (for xCom/soldier units only).
  */
 void BattleUnit::deriveRank()

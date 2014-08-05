@@ -1927,7 +1927,7 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 /**
  * Places units on the map. Handles large units that are placed on multiple tiles.
  * @param bu		- pointer to a unit to be placed
- * @param pos		- reference of the position to place the unit
+ * @param pos		- reference the position to place the unit
  * @param testOnly	- true just checks if unit can be placed at the position
  * @return, true if unit was placed successfully
  */
@@ -1940,13 +1940,13 @@ bool SavedBattleGame::setUnitPosition(
 
 	for (int // first check if the tiles are occupied
 			x = size;
-			x >= 0;
-			x--)
+			x > -1;
+			--x)
 	{
 		for (int
 				y = size;
-				y >= 0;
-				y--)
+				y > -1;
+				--y)
 		{
 			Tile* tile = getTile(pos + Position(x, y, 0));
 			Tile* tileBelow = getTile(pos + Position(x, y,-1));
@@ -1994,13 +1994,13 @@ bool SavedBattleGame::setUnitPosition(
 
 	for (int // set the unit in position
 			x = size;
-			x >= 0;
-			x--)
+			x > -1;
+			--x)
 	{
 		for (int
 				y = size;
-				y >= 0;
-				y--)
+				y > -1;
+				--y)
 		{
 			if (x == 0 && y == 0)
 			{

@@ -65,7 +65,7 @@ private:
 		_mapsize_x,
 		_mapsize_y,
 		_mapsize_z,
-		_tankPos, // kL
+//		_tankPos, // kL
 		_unitSequence,
 		_worldTexture,
 		_worldShade;

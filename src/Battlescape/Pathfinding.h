@@ -44,7 +44,7 @@ class Pathfinding
 
 private:
 	bool
-		_kneelCheck, // kL
+//		_kneelCheck, // kL
 		_modALT,
 		_modCTRL,
 		_openDoor, // kL, to give accurate preview # when dashing through doors.
@@ -174,6 +174,8 @@ private:
 				BattleUnit* bu,
 				Position startPos,
 				int const dir);
+		/// kL. Sets pathfinding to check whether a unit is kneeled.
+//		void setKneelCheck(bool checkKneel = true); // kL
 
 		/// Gets all reachable tiles, based on cost.
 		std::vector<int> findReachable(

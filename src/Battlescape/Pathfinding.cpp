@@ -59,8 +59,8 @@ Pathfinding::Pathfinding(SavedBattleGame* save)
 		_modCTRL(false),
 		_modALT(false),
 		_movementType(MT_WALK),
-		_openDoor(false), // kL
-		_kneelCheck(true) // kL
+		_openDoor(false) // kL
+//		_kneelCheck(true) // kL
 {
 	_size = _save->getMapSizeXYZ();
 	_nodes.reserve(_size); // initialize one node per tile.
@@ -124,7 +124,7 @@ void Pathfinding::calculate(
 	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// for BattlescapeState::btnUnitDownClick() -> now redundant.
 													// Can go back to previewPath()
 
-	_kneelCheck = true;	// safety. Also done at end of this function.
+//	_kneelCheck = true;	// safety. Also done at end of this function.
 						// Not set FALSE anywhere but validateUpDown()
 
 	Position endPos2 = endPos; // kL: for keeping things straight if strafeRejected happens.
@@ -317,7 +317,7 @@ void Pathfinding::calculate(
 				// rather than here I don't know ....
 		} // kL_end.
 
-		_kneelCheck = true; // to ensure this doesn't conflict w/ BattlescapeState::btnUnitUp/DownClick()
+//		_kneelCheck = true; // to ensure this doesn't conflict w/ BattlescapeState::btnUnitUp/DownClick()
 
 		return;
 	}
@@ -363,7 +363,7 @@ void Pathfinding::calculate(
 		} // kL_end.
 	}
 
-	_kneelCheck = true; // to ensure this doesn't conflict w/ BattlescapeState::btnUnitUp/DownClick()
+//	_kneelCheck = true; // to ensure this doesn't conflict w/ BattlescapeState::btnUnitUp/DownClick()
 }
 
 /**
@@ -1851,16 +1851,24 @@ int Pathfinding::validateUpDown(
 
 	if (gravLift)
 		return 1;
-	else if (bu->isKneeled()
+/*	else if (bu->isKneeled() // holy diana, that just fixed Everything!
 		&& _kneelCheck == true)
 	{
 		//Log(LOG_INFO) << ". kneelCheck set FALSE";
 		_kneelCheck = false;
 
 		return -1; // kneeled.
-	}
+	} */
 	else if (bu->getArmor()->getMovementType() == MT_FLY)
+//	else if (_movementType == MT_FLY)
 	{
+		if (dir == DIR_UP
+//			&& _modALT == true)
+			&& (SDL_GetModState() & KMOD_ALT) != 0) // for, BattlescapeState::btnUnitUpClick()
+		{
+			return -2;
+		}
+
 		Tile* belowStart = _save->getTile(startPos + Position(0, 0,-1));
 		if ((dir == DIR_UP
 				&& destTile->hasNoFloor(NULL)) // flying up only possible when there is no roof
@@ -1875,6 +1883,19 @@ int Pathfinding::validateUpDown(
 
 	return -2; // no flying suit.
 }
+
+/**
+ * kL. Sets pathfinding to check whether a unit is kneeled.
+ * Used when vertical movement is initiated by BattlescapeState::btnUnitUpClick()
+ * because otherwise the kneelCheck boolean has not been reset to false before
+ * validateUpDown() is called, and it has to be false at that time. It of course
+ * is set false in calculate(), but that's not called by Battlescape btns
+ * till a tad later.
+ */
+/* void Pathfinding::setKneelCheck(bool checkKneel) // kL
+{
+	_kneelCheck = checkKneel;
+} */
 
 /**
  * Checks if going one step from start to destination in the
