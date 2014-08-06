@@ -218,10 +218,7 @@ void ExplosionBState::init()
 			}
 
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-//			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7); // kL
-			_parent->setStateInterval(std::max( // kL, from below_
-											1,
-											((BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7); // kL
 
 			if (_power < 76)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();

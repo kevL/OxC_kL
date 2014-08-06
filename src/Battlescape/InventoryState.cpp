@@ -470,13 +470,18 @@ void InventoryState::init()
 
 	_inv->setSelectedUnit(unit);
 
-	Soldier* soldier = _game->getSavedGame()->getSoldier(unit->getId());
+//	Soldier* soldier = _game->getSavedGame()->getSoldier(unit->getId());
+	Soldier* soldier = unit->getGeoscapeSoldier();
 	if (soldier)
 	{
-		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+/*		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(soldier->getRankSprite())->setX(0);
 		texture->getFrame(soldier->getRankSprite())->setY(0);
-		texture->getFrame(soldier->getRankSprite())->blit(_btnRank);
+		texture->getFrame(soldier->getRankSprite())->blit(_btnRank); */
+		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		texture->getFrame(20 + soldier->getRank())->setX(0);
+		texture->getFrame(20 + soldier->getRank())->setY(0);
+		texture->getFrame(20 + soldier->getRank())->blit(_btnRank);
 
 		std::string look = soldier->getArmor()->getSpriteInventory();
 		if (soldier->getGender() == GENDER_MALE)

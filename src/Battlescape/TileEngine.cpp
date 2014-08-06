@@ -2367,8 +2367,6 @@ BattleUnit* TileEngine::hit(
 	return NULL;
 }
 
-//kL static unsigned char expmap[14400];
-
 /**
  * Handles explosions.
  * kL_note: called from ExplosionBState

@@ -1973,11 +1973,15 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	BattleUnit* selectedUnit = NULL;
 	if (_save->getSelectedUnit())
-		selectedUnit = _save->getSelectedUnit();
+	{
 		//Log(LOG_INFO) << ". . selectedUnit ID " << selectedUnit->getId();
+		selectedUnit = _save->getSelectedUnit();
+	}
 	else // safety.
+	{
 		//Log(LOG_INFO) << ". . selectedUnit = NULL return";
 		return;
+	}
 
 
 	if (calcFoV)
@@ -2000,11 +2004,14 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	_txtName->setText(selectedUnit->getName(_game->getLanguage(), false));
 
-	Soldier* soldier = _game->getSavedGame()->getSoldier(selectedUnit->getId());
+//	Soldier* soldier = _game->getSavedGame()->getSoldier(selectedUnit->getId());
+	Soldier* soldier = selectedUnit->getGeoscapeSoldier();
 	if (soldier != NULL)
 	{
-		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-		texture->getFrame(soldier->getRankSprite())->blit(_rank);
+/*		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+		texture->getFrame(soldier->getRankSprite())->blit(_rank); */
+		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		texture->getFrame(20 + soldier->getRank())->blit(_rank);
 
 		if (selectedUnit->isKneeled())
 		{
