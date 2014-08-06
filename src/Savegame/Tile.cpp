@@ -105,7 +105,7 @@ Tile::Tile(const Position& pos)
 }
 
 /**
- * destructor
+ * dTor.
  */
 Tile::~Tile()
 {
@@ -616,7 +616,7 @@ bool Tile::destroy(int part)
 			return false;
 		}
 
-
+		//Log(LOG_INFO) << ". . . tile part DESTROYED";
 		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
 		MapData* originalPart = _objects[part];
 

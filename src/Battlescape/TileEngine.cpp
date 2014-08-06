@@ -2595,10 +2595,17 @@ void TileEngine::explode(
 				}
 
 				// set this to the power-value *before* BLOCK reduces it, and *after* distance is accounted for!
+				// ..... not necessarily.
 				if (type == DT_HE) // explosions do 50% damage to terrain and 50% to 150% damage to units
-					destTile->setExplosive(_powerE);
+				{
+					//Log(LOG_INFO) << ". setExplosive() _powerE = " << _powerE;
+					//Log(LOG_INFO) << ". setExplosive() _powerT = " << _powerT;
 
-				_powerE = _powerT;
+					destTile->setExplosive(_powerE);
+//					destTile->setExplosive(_powerT);
+				}
+
+				_powerE = _powerT; // note: These two are becoming increasingly redundant !!!
 
 
 				// ** DAMAGE begins w/ _powerE ***
@@ -2610,6 +2617,7 @@ void TileEngine::explode(
 				{
 					//Log(LOG_INFO) << ". . > tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition(); //<< ". _powerE = " << _powerE << ". r = " << r;
 					//Log(LOG_INFO) << ". . > _powerE = " << _powerE;
+
 					targetUnit = destTile->getUnit();
 					if (targetUnit
 						&& targetUnit->getTakenExpl()) // hit large units only once ... stop experience exploitation near the end of this loop, also. Lulz
@@ -2893,7 +2901,7 @@ void TileEngine::explode(
 
 	if (type == DT_HE) // detonate tiles affected with HE
 	{
-		//Log(LOG_INFO) << ". explode Tiles";
+		//Log(LOG_INFO) << ". explode Tiles, size = " << tilesAffected.size();
 		for (std::set<Tile*>::iterator
 				explTile = tilesAffected.begin();
 				explTile != tilesAffected.end();
@@ -3970,106 +3978,418 @@ int TileEngine::blockage(
  */
 bool TileEngine::detonate(Tile* tile)
 {
-	int explosive = tile->getExplosive();
-	if (explosive == 0) return false; // no damage applied for this tile
+	int expl = tile->getExplosive();
+	if (expl == 0) // no damage applied for this tile
+		return false;
 
-	tile->setExplosive(0,true);
-	bool objective = false;
+	//Log(LOG_INFO) << "TileEngine::detonate() " << tile->getPosition();
+	tile->setExplosive(0, true);
+
+
 	Tile* tiles[9];
-	static const int parts[9]={0,1,2,0,1,2,3,3,3}; //6th is the object of current
+	static const int parts[9] =
+	{
+		0,	// 0 - floor
+		1,	// 1 - westwall
+		2,	// 2 - northwall
+		0,	// 3 - floor
+		1,	// 4 - westwall
+		2,	// 5 - northwall
+		3,	// 6 - content, currentTile
+		3,	// 7 - content
+		3	// 8 - content
+	};
+
 	Position pos = tile->getPosition();
 
-	tiles[0] = _battleSave->getTile(Position(pos.x, pos.y, pos.z+1)); //ceiling
-	tiles[1] = _battleSave->getTile(Position(pos.x+1, pos.y, pos.z)); //east wall
-	tiles[2] = _battleSave->getTile(Position(pos.x, pos.y+1, pos.z)); //south wall
-	tiles[3] = tiles[4] = tiles[5] = tiles[6] = tile;
-	tiles[7] = _battleSave->getTile(Position(pos.x, pos.y-1, pos.z)); //north bigwall
-	tiles[8] = _battleSave->getTile(Position(pos.x-1, pos.y, pos.z)); //west bigwall
+	tiles[0] = _battleSave->getTile(Position(				// tileUp, floor
+											pos.x,
+											pos.y,
+											pos.z + 1));
+	tiles[1] = _battleSave->getTile(Position(				// tileEast, westwall
+											pos.x + 1,
+											pos.y,
+											pos.z));
+	tiles[2] = _battleSave->getTile(Position(				// tileSouth, northwall
+											pos.x,
+											pos.y + 1,
+											pos.z));
+	tiles[3]												// floor
+				= tiles[4]									// westwall
+				= tiles[5]									// northwall
+				= tiles[6]									// content
+				= tile;
+	tiles[7] = _battleSave->getTile(Position(				// tileNorth, bigwall south
+											pos.x,
+											pos.y - 1,
+											pos.z));
+	tiles[8] = _battleSave->getTile(Position(				// tileWest, bigwall east
+											pos.x - 1,
+											pos.y,
+											pos.z));
 
 	// explosions create smoke which only stays 1 or 2 turns
 //	tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0,2), 15)));
 
-	int remainingPower, fireProof, fuel;
-	bool destroyed, bigwalldestroyed = true;
-	for (int i = 8; i >=0; --i)
+	int
+		explTest,
+		fireProof,
+		fuel;
+	bool
+		destroyed,
+		bigWallDestroyed = true,
+		objective = false;
+
+	for (int
+			i = 8;
+			i > -1;
+			--i)
 	{
-		if (!tiles[i] || !tiles[i]->getMapData(parts[i]))
-			continue; //skip out of map and emptiness
-		int bigwall = tiles[i]->getMapData(parts[i])->getBigWall();
-		if (i > 6 && !( (bigwall==1) || (bigwall==8) || (i==8 && bigwall==6) || (i==7 && bigwall==7)))
+		Log(LOG_INFO) << ". i = " << i;
+
+		if (!tiles[i]
+			|| !tiles[i]->getMapData(parts[i]))
+		{
+			continue; // skip out of map and emptiness
+		}
+
+/*
+BIGWALL_NONE,	// 0
+BIGWALL_BLOCK,	// 1
+BIGWALL_NESW,	// 2
+BIGWALL_NWSE,	// 3
+BIGWALL_WEST,	// 4
+BIGWALL_NORTH,	// 5
+BIGWALL_EAST,	// 6
+BIGWALL_SOUTH,	// 7
+BIGWALL_E_S		// 8
+*/
+		int bigWall = tiles[i]->getMapData(parts[i])->getBigWall();
+		if (i > 6
+				&& !(
+						bigWall == Pathfinding::BIGWALL_BLOCK
+							|| bigWall == Pathfinding::BIGWALL_E_S
+							|| (i == 8
+								&& bigWall == Pathfinding::BIGWALL_EAST)
+							|| (i == 7
+								&& bigWall == Pathfinding::BIGWALL_SOUTH)))
+		{
 			continue;
-		if (!bigwalldestroyed && parts[i]==0) //when ground shouldn't be destroyed
+		}
+
+		if (!bigWallDestroyed
+				&& parts[i] == 0)
+		{
+			continue; // when ground shouldn't be destroyed
+		}
+
+		// kL_begin:
+		if (tile->getMapData(3) != NULL														// if tile has content,
+			&& ((i == 1																		// don't hit tileEast westwall
+					&& tile->getMapData(3)->getBigWall() == Pathfinding::BIGWALL_EAST)			// if east bigwall not destroyed;
+				|| (i == 2																	// don't hit tileSouth northwall
+					&& tile->getMapData(3)->getBigWall() == Pathfinding::BIGWALL_SOUTH)))		// if south bigwall not destroyed
+		{
+			//Log(LOG_INFO) << ". . bypass east/south bigwall";
 			continue;
-		remainingPower = explosive;
+		} // kL_end.
+
+		explTest = expl;
+
 		destroyed = false;
-		int volume = 0;
-		int currentpart = parts[i], currentpart2, diemcd;
+		int
+			volume = 0,
+			curPart = parts[i],
+			curPart2,
+			diemcd;
+
+		fireProof = tiles[i]->getFlammability(curPart);
+		fuel = tiles[i]->getFuel(curPart) + 1;
+
+		// get the volume of the object by checking its loftemps objects.
+		for (int
+				j = 0;
+				j < 12;
+				j++)
+		{
+			if (tiles[i]->getMapData(curPart)->getLoftID(j) != 0)
+				++volume;
+		}
+
+		if (i == 6
+			&& (bigWall == Pathfinding::BIGWALL_NESW
+				|| bigWall == Pathfinding::BIGWALL_NWSE)  // diagonals
+			&& 2 * tiles[i]->getMapData(curPart)->getArmor() > explTest) // not enough to destroy
+		{
+			bigWallDestroyed = false;
+		}
+
+		// iterate through tile armor and destroy if can
+		while (tiles[i]->getMapData(curPart)
+			&& 2 * tiles[i]->getMapData(curPart)->getArmor() <= explTest
+			&& tiles[i]->getMapData(curPart)->getArmor() != 255)
+		{
+			//Log(LOG_INFO) << ". explTest = " << explTest;
+			if (i == 6
+				&& (bigWall == Pathfinding::BIGWALL_NESW // diagonals for the current tile
+					|| bigWall == Pathfinding::BIGWALL_NWSE))
+			{
+				bigWallDestroyed = true;
+			}
+
+			explTest -= 2 * tiles[i]->getMapData(curPart)->getArmor();
+
+			destroyed = true;
+
+			if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
+				&& tiles[i]->getMapData(curPart)->isBaseModule())
+			{
+				_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
+			}
+
+			// this trick is to follow transformed object parts (object can become a ground)
+			diemcd = tiles[i]->getMapData(curPart)->getDieMCD();
+			if (diemcd != 0)
+				curPart2 = tiles[i]->getMapData(curPart)->getDataset()->getObjects()->at(diemcd)->getObjectType();
+			else
+				curPart2 = curPart;
+
+
+			if (tiles[i]->destroy(curPart))
+			{
+				//Log(LOG_INFO) << ". . objective TRUE";
+				objective = true;
+			}
+
+
+			curPart = curPart2;
+			if (tiles[i]->getMapData(curPart)) // take new values
+			{
+				fireProof = tiles[i]->getFlammability(curPart);
+				fuel = tiles[i]->getFuel(curPart) + 1;
+			}
+		}
+
+		// set tile on fire
+		if (2 * fireProof < explTest)
+		{
+			if (tiles[i]->getMapData(MapData::O_FLOOR)
+				|| tiles[i]->getMapData(MapData::O_OBJECT))
+			{
+				tiles[i]->setFire(fuel);
+				tiles[i]->setSmoke(std::max(
+										1,
+										std::min(
+												15 - (fireProof / 10),
+												12)));
+			}
+		}
+
+		// add some smoke if tile was destroyed and not set on fire
+		if (destroyed
+			&& !tiles[i]->getFire())
+		{
+			int smoke = RNG::generate(
+									1,
+									(volume / 2) + 3) + (volume / 2);
+
+			if (smoke > tiles[i]->getSmoke())
+				tiles[i]->setSmoke(std::max(
+										0,
+										std::min(
+												smoke,
+												15)));
+		}
+	}
+
+	return objective;
+}
+/* bool TileEngine::detonate(Tile* tile)
+{
+	int explosive = tile->getExplosive();
+	if (explosive == 0) // no damage applied for this tile
+		return false;
+
+	Log(LOG_INFO) << "TileEngine::detonate() " << tile->getPosition();
+	tile->setExplosive(0, true);
+
+	bool objective = false;
+
+	Tile* tiles[9];
+	static const int parts[9] = {0, 1, 2, 0, 1, 2, 3, 3, 3}; // 6th is the object of current
+
+	Position pos = tile->getPosition();
+
+	tiles[0] = _battleSave->getTile(Position( // ceiling
+											pos.x,
+											pos.y,
+											pos.z + 1));
+	tiles[1] = _battleSave->getTile(Position( // east wall
+											pos.x + 1,
+											pos.y,
+											pos.z));
+	tiles[2] = _battleSave->getTile(Position( // south wall
+											pos.x,
+											pos.y + 1,
+											pos.z));
+	tiles[3]	= tiles[4]
+				= tiles[5]
+				= tiles[6]
+				= tile;
+	tiles[7] = _battleSave->getTile(Position( // north bigwall
+											pos.x,
+											pos.y - 1,
+											pos.z));
+	tiles[8] = _battleSave->getTile(Position( // west bigwall
+											pos.x - 1,
+											pos.y,
+											pos.z));
+
+	// explosions create smoke which only stays 1 or 2 turns
+//	tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0,2), 15)));
+
+	int
+		remainingPower,
+		fireProof,
+		fuel;
+	bool
+		destroyed,
+		bigWallDestroyed = true;
+
+	for (int
+			i = 8;
+			i > -1;
+			--i)
+	{
+		if (!tiles[i]
+			|| !tiles[i]->getMapData(parts[i]))
+		{
+			continue; // skip out of map and emptiness
+		}
+
+		int bigwall = tiles[i]->getMapData(parts[i])->getBigWall();
+		if (i > 6
+				&& !(
+					bigwall == 1
+						|| bigwall == 8
+						|| (i == 8
+							&& bigwall == 6)
+						|| (i == 7
+							&& bigwall == 7)))
+		{
+			continue;
+		}
+
+		if (!bigWallDestroyed
+				&& parts[i] == 0)
+		{
+			continue; // when ground shouldn't be destroyed
+		}
+
+		remainingPower = explosive;
+
+		destroyed = false;
+		int
+			volume = 0,
+			currentpart = parts[i],
+			currentpart2,
+			diemcd;
+
 		fireProof = tiles[i]->getFlammability(currentpart);
 		fuel = tiles[i]->getFuel(currentpart) + 1;
-		// get the volume of the object by checking it's loftemps objects.
-		for (int j = 0; j < 12; j++)
+
+		// get the volume of the object by checking its loftemps objects.
+		for (int
+				j = 0;
+				j < 12;
+				j++)
 		{
 			if (tiles[i]->getMapData(currentpart)->getLoftID(j) != 0)
 				++volume;
 		}
-		if ( i == 6 &&
-			(bigwall == 2 || bigwall == 3) && //diagonals
-			(2 * tiles[i]->getMapData(currentpart)->getArmor()) > remainingPower) //not enough to destroy
+
+		if (i == 6
+			&& (bigwall == 2
+				|| bigwall == 3)  // diagonals
+			&& 2 * tiles[i]->getMapData(currentpart)->getArmor() > remainingPower) // not enough to destroy
 		{
-			bigwalldestroyed = false;
+			bigWallDestroyed = false;
 		}
+
 		// iterate through tile armor and destroy if can
-		while (	tiles[i]->getMapData(currentpart) &&
-				(2 * tiles[i]->getMapData(currentpart)->getArmor()) <= remainingPower &&
-				tiles[i]->getMapData(currentpart)->getArmor() != 255)
+		while (tiles[i]->getMapData(currentpart)
+			&& 2 * tiles[i]->getMapData(currentpart)->getArmor() <= remainingPower
+			&& tiles[i]->getMapData(currentpart)->getArmor() != 255)
 		{
-			if ( i == 6 && (bigwall == 2 || bigwall == 3)) //diagonals for the current tile
+			if (i == 6
+				&& (bigwall == 2
+					|| bigwall == 3)) // diagonals for the current tile
 			{
-				bigwalldestroyed = true;
+				bigWallDestroyed = true;
 			}
+
 			remainingPower -= 2 * tiles[i]->getMapData(currentpart)->getArmor();
+
 			destroyed = true;
-			if (_battleSave->getMissionType() == "STR_BASE_DEFENSE" &&
-				tiles[i]->getMapData(currentpart)->isBaseModule())
+
+			if (_battleSave->getMissionType() == "STR_BASE_DEFENSE"
+				&& tiles[i]->getMapData(currentpart)->isBaseModule())
 			{
-				_battleSave->getModuleMap()[tile->getPosition().x/10][tile->getPosition().y/10].second--;
+				_battleSave->getModuleMap()[tile->getPosition().x / 10][tile->getPosition().y / 10].second--;
 			}
-			//this trick is to follow transformed object parts (object can become a ground)
+
+			// this trick is to follow transformed object parts (object can become a ground)
 			diemcd = tiles[i]->getMapData(currentpart)->getDieMCD();
-			if (diemcd!=0)
+			if (diemcd != 0)
 				currentpart2 = tiles[i]->getMapData(currentpart)->getDataset()->getObjects()->at(diemcd)->getObjectType();
 			else
 				currentpart2 = currentpart;
+
 			if (tiles[i]->destroy(currentpart))
 				objective = true;
-			currentpart =  currentpart2;
+
+			currentpart = currentpart2;
 			if (tiles[i]->getMapData(currentpart)) // take new values
 			{
 				fireProof = tiles[i]->getFlammability(currentpart);
 				fuel = tiles[i]->getFuel(currentpart) + 1;
 			}
 		}
+
 		// set tile on fire
-		if ((2 * fireProof) < remainingPower)
+		if (2 * fireProof < remainingPower)
 		{
-			if (tiles[i]->getMapData(MapData::O_FLOOR) || tiles[i]->getMapData(MapData::O_OBJECT))
+			if (tiles[i]->getMapData(MapData::O_FLOOR)
+				|| tiles[i]->getMapData(MapData::O_OBJECT))
 			{
 				tiles[i]->setFire(fuel);
-				tiles[i]->setSmoke(std::max(1, std::min(15 - (fireProof / 10), 12)));
+				tiles[i]->setSmoke(std::max(
+										1,
+										std::min(
+												15 - (fireProof / 10),
+												12)));
 			}
 		}
+
 		// add some smoke if tile was destroyed and not set on fire
-		if (destroyed && !tiles[i]->getFire())
+		if (destroyed
+			&& !tiles[i]->getFire())
 		{
-			int smoke = RNG::generate(1, (volume / 2) + 3) + (volume / 2);
+			int smoke = RNG::generate(
+									1,
+									(volume / 2) + 3) + (volume / 2);
+
 			if (smoke > tiles[i]->getSmoke())
-			{
-				tiles[i]->setSmoke(std::max(0, std::min(smoke, 15)));
-			}
+				tiles[i]->setSmoke(std::max(
+										0,
+										std::min(
+												smoke,
+												15)));
 		}
 	}
+
 	return objective;
-}
+} */
 
 /**
  * Checks for chained explosions.
