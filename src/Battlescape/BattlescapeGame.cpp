@@ -2689,39 +2689,39 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 	int difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty());
 	int month = _parentState->getGame()->getSavedGame()->getMonthsPassed(); // kL
-	BattleUnit* convertUnit = new BattleUnit(
-									getRuleset()->getUnit(convertType),
-									FACTION_HOSTILE,
-									_save->getUnits()->back()->getId() + 1,
-									getRuleset()->getArmor(newArmor.str()),
-									difficulty,
-									month, // kL_add.
-									this); // kL_add
+	BattleUnit* convertedUnit = new BattleUnit(
+											getRuleset()->getUnit(convertType),
+											FACTION_HOSTILE,
+											_save->getUnits()->back()->getId() + 1,
+											getRuleset()->getArmor(newArmor.str()),
+											difficulty,
+											month, // kL_add.
+											this); // kL_add
 	// kL_note: what about setting _zombieUnit=true ? It's not generic but it's the only case, afaict
 
 //kL	if (!difficulty) // kL_note: moved to BattleUnit::adjustStats()
-//kL		convertUnit->halveArmor();
+//kL		convertedUnit->halveArmor();
 
 	getSave()->getTile(unit->getPosition())->setUnit(
-												convertUnit,
+												convertedUnit,
 												_save->getTile(unit->getPosition() + Position(0, 0,-1)));
-	convertUnit->setPosition(unit->getPosition());
-	convertUnit->setTimeUnits(0);
-//kL	convertUnit->setDirection(3);
+	convertedUnit->setPosition(unit->getPosition());
+	convertedUnit->setTimeUnits(0);
+//kL	convertedUnit->setDirection(3);
 	// kL_begin:
 	if (convertType == "STR_ZOMBIE")
 		dirFace = RNG::generate(0, 7);
-	convertUnit->setDirection(dirFace);
+	convertedUnit->setDirection(dirFace);
 	// kL_end.
 
-	convertUnit->setCache(NULL);
+	convertedUnit->setCache(NULL);
 
-	getSave()->getUnits()->push_back(convertUnit);
-	getMap()->cacheUnit(convertUnit);
-	convertUnit->setAIState(new AlienBAIState(
-										getSave(),
-										convertUnit,
-										NULL));
+	getSave()->getUnits()->push_back(convertedUnit);
+	getMap()->cacheUnit(convertedUnit);
+	convertedUnit->setAIState(new AlienBAIState(
+											getSave(),
+											convertedUnit,
+											NULL));
 
 	std::string terroristWeapon = getRuleset()->getUnit(convertType)->getRace().substr(4);
 	terroristWeapon += "_WEAPON";
@@ -2729,19 +2729,19 @@ BattleUnit* BattlescapeGame::convertUnit(
 	BattleItem* item = new BattleItem(
 								itemRule,
 								getSave()->getCurrentItemId());
-	item->moveToOwner(convertUnit);
+	item->moveToOwner(convertedUnit);
 	item->setSlot(getRuleset()->getInventory("STR_RIGHT_HAND"));
 	getSave()->getItems()->push_back(item);
 
-	getTileEngine()->applyGravity(convertUnit->getTile());
-	getTileEngine()->calculateFOV(convertUnit->getPosition());
+	getTileEngine()->applyGravity(convertedUnit->getTile());
+	getTileEngine()->calculateFOV(convertedUnit->getPosition());
 
 	if (unit->getFaction() == FACTION_PLAYER)
-		convertUnit->setVisible(true);
+		convertedUnit->setVisible(true);
 
-//	convertUnit->getCurrentAIState()->think();
+//	convertedUnit->getCurrentAIState()->think();
 
-	return convertUnit;
+	return convertedUnit;
 }
 
 /**

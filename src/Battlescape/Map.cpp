@@ -1975,12 +1975,15 @@ void Map::drawTerrain(Surface* surface)
 						if ((_previewSetting & PATH_TU_COST)
 							&& tile->getTUMarker() > -1)
 						{
-/*							Uint8 wpColor = 2; // light gray
-							if (_save->getTerrain() == "POLAR")
-								wpColor = 11; // dark gray
+//							Uint8 wpColor = 2; // light gray
+							Uint8 wpColor = Palette::blockOffset(1); // yellow
+//							if (_save->getTerrain() == "POLAR")
+//								wpColor = 11; // dark gray
+							if (_save->getTerrain() == "DESERT")
+								wpColor = 2; // light gray
 
-							_numWaypid->setColor(wpColor); */
-							_numWaypid->setColor(Palette::blockOffset(1)); // yellow.
+							_numWaypid->setColor(wpColor);
+//							_numWaypid->setColor(Palette::blockOffset(1)); // yellow.
 
 							int offset_x = 2;
 							if (tile->getTUMarker() > 9)

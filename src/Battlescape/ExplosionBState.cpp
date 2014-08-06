@@ -142,7 +142,7 @@ void ExplosionBState::init()
 	}
 	else // unhandled cyberdiscs!!! ( see Xcom1Ruleset.rul )
 	{
-		_power = RNG::generate(66, 138);
+		_power = RNG::generate(67, 135);
 		//Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
 
 		_areaOfEffect = true;
@@ -218,7 +218,10 @@ void ExplosionBState::init()
 			}
 
 //kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7); // kL
+//			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7); // kL
+			_parent->setStateInterval(std::max( // kL, from below_
+											1,
+											((BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
 
 			if (_power < 76)
 				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
@@ -287,7 +290,7 @@ void ExplosionBState::init()
 
 		_parent->setStateInterval(std::max( // kL, from above^
 										1,
-										((BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
+										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
 //kL									((BattlescapeState::DEFAULT_ANIM_SPEED / 2) - (10 * _item->getRules()->getExplosionSpeed()))));
 //kL		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
 
@@ -295,19 +298,18 @@ void ExplosionBState::init()
 //		BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
 //		if ((_hit || psi) && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
 		// kL_begin:
-		Camera* explodeCam = _parent->getMap()->getCamera();
-		if (!explodeCam->isOnScreen(centerPos)
+		Camera* explCam = _parent->getMap()->getCamera();
+		if (!explCam->isOnScreen(centerPos)
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{
-			explodeCam->centerOnPosition(
-										centerPos,
-										false);
+			explCam->centerOnPosition(
+									centerPos,
+									false);
 		}
-		else if (explodeCam->getViewLevel() != centerPos.z)
-		{
-			explodeCam->setViewLevel(centerPos.z);
-		} // kL_end.
+		else if (explCam->getViewLevel() != centerPos.z)
+			explCam->setViewLevel(centerPos.z);
+		// kL_end.
 	}
 	//Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }
@@ -465,7 +467,6 @@ void ExplosionBState::explode()
 												_power,
 												type,
 												_unit,
-//												hit); // kL add.
 												_hit);
 
 			if (_item->getRules()->getZombieUnit().empty() == false // check if this unit turns others into zombies

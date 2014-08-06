@@ -2023,9 +2023,7 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 }
 
 /**
- * Handles bullet/weapon hits.
- *
- * A bullet/weapon hits a voxel.
+ * Handles bullet/weapon hits. A bullet/weapon hits a voxel.
  * kL_note: called from ExplosionBState
  * @param pTarget_voxel	- reference to the center of hit in voxelspace
  * @param power			- power of the hit/explosion
@@ -2181,21 +2179,22 @@ BattleUnit* TileEngine::hit(
 								size,
 								buTarget->getFloatHeight() - tile->getTerrainLevel());
 				const Position relPos = pTarget_voxel - targetPos - Position(0, 0, vertOffset); */
-				int const size = buTarget->getArmor()->getSize() * 8;
-				Position const targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
-										+ Position(
-												size,
-												size,
-												buTarget->getFloatHeight() - tile->getTerrainLevel());
-				Position const relPos = pTarget_voxel
-										- targetPos
-										- Position(
-												0,
-												0,
-												vertOffset);
+				const int size = buTarget->getArmor()->getSize() * 8;
+				const Position
+					targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
+								+ Position(
+										size,
+										size,
+										buTarget->getFloatHeight() - tile->getTerrainLevel()),
+					relPos = pTarget_voxel
+							- targetPos
+							- Position(
+									0,
+									0,
+									vertOffset);
 
 				// kL_begin: TileEngine::hit(), Silacoids can set targets on fire!!
-//kL				if (type == DT_IN)
+//kL			if (type == DT_IN)
 				if (attacker->getSpecialAbility() == SPECAB_BURNFLOOR)
 				{
 					float modifier = buTarget->getArmor()->getDamageModifier(DT_IN);
@@ -2291,38 +2290,41 @@ BattleUnit* TileEngine::hit(
 							buTarget->moraleChange(-morale_loss);
 						}
 					}
-				}
 
-				//Log(LOG_INFO) << ". . check for Cyberdisc expl.";
-				//Log(LOG_INFO) << ". . health = " << buTarget->getHealth();
-				//Log(LOG_INFO) << ". . stunLevel = " << buTarget->getStunlevel();
-				if (buTarget->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
-					&& (buTarget->getHealth() == 0
-						|| buTarget->getHealth() <= buTarget->getStunlevel()))
-//					&& !buTarget->isOut(false, true))	// kL. don't explode if stunned. Maybe... wrong!!!
-														// Cannot be STATUS_DEAD OR STATUS_UNCONSCIOUS!
-				{
-					//Log(LOG_INFO) << ". . . Cyberdisc down!!";
-					if (type != DT_STUN		// don't explode if stunned. Maybe... see above.
-						&& type != DT_SMOKE
-						&& type != DT_HE)	// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
+					//Log(LOG_INFO) << ". . check for Cyberdisc expl.";
+					//Log(LOG_INFO) << ". . health = " << buTarget->getHealth();
+					//Log(LOG_INFO) << ". . stunLevel = " << buTarget->getStunlevel();
+					if (buTarget->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
+						&& (buTarget->getHealth() == 0
+							|| buTarget->getStunlevel() >= buTarget->getHealth()))
+	//					&& !buTarget->isOut(false, true))	// kL. don't explode if stunned. Maybe... wrong!!!
+															// Cannot be STATUS_DEAD OR STATUS_UNCONSCIOUS!
 					{
-						//Log(LOG_INFO) << ". . . . new ExplosionBState(), !DT_STUN & !DT_HE";
-						// kL_note: wait a second. hit() creates an ExplosionBState,
-						// but ExplosionBState::explode() creates a hit() ! -> terrain..
+						//Log(LOG_INFO) << ". . . Cyberdisc down!!";
+						if (type != DT_STUN		// don't explode if stunned. Maybe... see above.
+							&& type != DT_SMOKE
+							&& type != DT_HE)	// don't explode if taken down w/ explosives -> wait a sec, this is hit() not explode() ...
+						{
+							//Log(LOG_INFO) << ". . . . new ExplosionBState(), !DT_STUN & !DT_HE";
+							// kL_note: wait a second. hit() creates an ExplosionBState,
+							// but ExplosionBState::explode() creates a hit() ! -> terrain..
 
-						Position unitPos = Position(
-//kL											buTarget->getPosition().x * 16,
-//kL											buTarget->getPosition().y * 16,
-												buTarget->getPosition().x * 16 + 8, // kL
-												buTarget->getPosition().y * 16 + 8, // kL
-												buTarget->getPosition().z * 24);
+							Position unitPos = Position(
+	//kL											buTarget->getPosition().x * 16,
+	//kL											buTarget->getPosition().y * 16,
+	//kL											buTarget->getPosition().z * 24);
+	//												buTarget->getPosition().x * 16 + 8, // kL
+	//												buTarget->getPosition().y * 16 + 8, // kL
+													buTarget->getPosition().x * 16 + 16,	// kL, cyberdisc a big unit.
+													buTarget->getPosition().y * 16 + 16,	// kL
+													buTarget->getPosition().z * 24 + 12);	// kL
 
-						_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
-																					_battleSave->getBattleGame(),
-																					unitPos,
-																					NULL,
-																					buTarget));
+							_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
+																						_battleSave->getBattleGame(),
+																						unitPos,
+																						NULL,
+																						buTarget));
+						}
 					}
 				}
 
@@ -5340,154 +5342,162 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 /**
  * Applies gravity to a tile. Causes items and units to drop.
- * @param t, Tile.
- * @return, Tile where the items end up eventually.
+ * @param tile - pointer to a tile from which stuff is going to drop
+ * @return, pointer to the tile where stuff eventually ends up
  */
-Tile* TileEngine::applyGravity(Tile* t)
+Tile* TileEngine::applyGravity(Tile* tile)
 {
-	if (!t)							// skip this if there is no tile.
-		return 0;
+	if (tile == NULL)
+		return NULL;
 
-	if (t->getInventory()->empty()	// skip this if there are no items;
-		&& !t->getUnit())			// skip this if there is no unit in the tile. huh
+	Position pos = tile->getPosition();
+	if (pos.z == 0)
+		return tile;
+
+	BattleUnit* unit = tile->getUnit();
+	bool hasNoItems = tile->getInventory()->empty();
+
+	if (unit == NULL
+		&& hasNoItems == true)
 	{
-		return t;
+		return tile;
 	}
 
-	Position p = t->getPosition();
-	Tile* rt = t;
-	Tile* rtb;
+	Tile
+		* dt = tile,
+		* dtb = NULL;
+	Position posBelow = pos;
 
-	BattleUnit* occupant = t->getUnit();
-	if (occupant)
-//		&& (occupant->getArmor()->getMovementType() != MT_FLY
-//			|| occupant->isOut()))
+	if (unit)
 	{
-		Position unitPos = occupant->getPosition();
-		while (unitPos.z >= 0)
+		while (posBelow.z > 0)
 		{
 			bool canFall = true;
 
 			for (int
 					y = 0;
-					y < occupant->getArmor()->getSize()
+					y < unit->getArmor()->getSize()
 						&& canFall;
 					++y)
 			{
 				for (int
 						x = 0;
-						x < occupant->getArmor()->getSize()
+						x < unit->getArmor()->getSize()
 							&& canFall;
 						++x)
 				{
-					rt = _battleSave->getTile(Position(
-											unitPos.x + x,
-											unitPos.y + y,
-											unitPos.z));
-					rtb = _battleSave->getTile(Position( // below
-											unitPos.x + x,
-											unitPos.y + y,
-											unitPos.z - 1));
-					if (!rt->hasNoFloor(rtb))
-						canFall = false;
+					dt = _battleSave->getTile(Position(
+													posBelow.x + x,
+													posBelow.y + y,
+													posBelow.z));
+					dtb = _battleSave->getTile(Position(
+													posBelow.x + x,
+													posBelow.y + y,
+													posBelow.z - 1));
+					if (!dt->hasNoFloor(dtb))	// note: polar water has no floor, so units that die on them ... uh, sink.
+						canFall = false;		// ... before I changed the loop condition to > 0, that is
 				}
 			}
 
-			if (!canFall)
+			if (canFall == false)
 				break;
 
-			unitPos.z--;
+			posBelow.z--;
 		}
 
-		if (unitPos != occupant->getPosition())
+		if (posBelow != pos)
 		{
-//kL			if (occupant->getHealth() != 0
-//kL				&& occupant->getStunlevel() < occupant->getHealth())
-			if (!occupant->isOut(true, true)) // kL
+			if (unit->isOut())
 			{
-				if (occupant->getArmor()->getMovementType() == MT_FLY)
-				{
-					// move to the position you're already in. this will unset the kneeling flag, set the floating flag, etc.
-					occupant->startWalking(
-									occupant->getDirection(),
-									occupant->getPosition(),
-									_battleSave->getTile(occupant->getPosition() + Position(0, 0,-1)),
-									true);
-					// and set our status to standing (rather than walking or flying) to avoid weirdness.
-					occupant->setStatus(STATUS_STANDING);
-				}
-				else
-				{
-					occupant->startWalking(
-									Pathfinding::DIR_DOWN,
-									occupant->getPosition() + Position(0, 0,-1),
-									_battleSave->getTile(occupant->getPosition() + Position(0, 0,-1)),
-									true);
-					//Log(LOG_INFO) << "TileEngine::applyGravity(), addFallingUnit() ID " << occupant->getId();
-					_battleSave->addFallingUnit(occupant);
-				}
-			}
-			else if (occupant->isOut(true, true))
-			{
-				Position origin = occupant->getPosition();
-
 				for (int
-						y = occupant->getArmor()->getSize() - 1;
-						y >= 0;
+						y = unit->getArmor()->getSize() - 1;
+						y > -1;
 						--y)
 				{
 					for (int
-							x = occupant->getArmor()->getSize() - 1;
-							x >= 0;
+							x = unit->getArmor()->getSize() - 1;
+							x > -1;
 							--x)
 					{
-						_battleSave->getTile(origin + Position(x, y, 0))->setUnit(0);
+						_battleSave->getTile(pos + Position(x, y, 0))->setUnit(NULL);
 					}
 				}
 
-				occupant->setPosition(unitPos);
+				unit->setPosition(posBelow);
+			}
+			else // if (!unit->isOut(true, true))
+			{
+				if (unit->getArmor()->getMovementType() == MT_FLY)
+				{
+					// move to the position you're already in. this will unset the kneeling flag, set the floating flag, etc.
+					unit->startWalking(
+									unit->getDirection(),
+									unit->getPosition(),
+									_battleSave->getTile(unit->getPosition() + Position(0, 0,-1)),
+									true);
+					// and set our status to standing (rather than walking or flying) to avoid weirdness.
+					unit->setStatus(STATUS_STANDING);
+				}
+				else
+				{
+					unit->startWalking(
+									Pathfinding::DIR_DOWN,
+									unit->getPosition() + Position(0, 0,-1),
+									_battleSave->getTile(unit->getPosition() + Position(0, 0,-1)),
+									true);
+					//Log(LOG_INFO) << "TileEngine::applyGravity(), addFallingUnit() ID " << unit->getId();
+					_battleSave->addFallingUnit(unit);
+				}
 			}
 		}
 	}
 
-	rt = t;
+	dt = tile;
+	posBelow = pos;
 
-	bool canFall = true;
-	while (p.z >= 0
-		&& canFall)
+	while (posBelow.z > 0)
 	{
-		rt = _battleSave->getTile(p);
-		rtb = _battleSave->getTile(Position( // below
-									p.x,
-									p.y,
-									p.z - 1));
-		if (!rt->hasNoFloor(rtb))
-			canFall = false;
+		dt = _battleSave->getTile(posBelow);
+		dtb = _battleSave->getTile(Position(
+										posBelow.x,
+										posBelow.y,
+										posBelow.z - 1));
 
-		p.z--;
+		if (dt->hasNoFloor(dtb) == false)
+			break;
+
+		posBelow.z--;
 	}
 
-	for (std::vector<BattleItem*>::iterator
-			it = t->getInventory()->begin();
-			it != t->getInventory()->end();
-			++it)
+	if (posBelow != pos)
 	{
-		if ((*it)->getUnit()
-			&& t->getPosition() == (*it)->getUnit()->getPosition())
+		dt = _battleSave->getTile(posBelow);
+
+		if (hasNoItems == false)
 		{
-			(*it)->getUnit()->setPosition(rt->getPosition());
-		}
+			for (std::vector<BattleItem*>::iterator
+					i = tile->getInventory()->begin();
+					i != tile->getInventory()->end();
+					++i)
+			{
+				if ((*i)->getUnit()) // corpse
+//					&& tile->getPosition() == (*i)->getUnit()->getPosition())
+//				{
+					(*i)->getUnit()->setPosition(dt->getPosition());
+//				}
 
-		if (t != rt)
-			rt->addItem(
-					*it,
-					(*it)->getSlot());
+//				if (dt != tile)
+				dt->addItem(
+							*i,
+							(*i)->getSlot());
+			}
+
+//			if (tile != dt) // clear tile
+			tile->getInventory()->clear();
+		}
 	}
 
-	if (t != rt) // clear tile
-		t->getInventory()->clear();
-
-	return rt;
+	return dt;
 }
 
 /**

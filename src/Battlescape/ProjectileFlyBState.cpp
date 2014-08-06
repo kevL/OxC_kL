@@ -387,7 +387,7 @@ void ProjectileFlyBState::init()
 			else
 				_targetVoxel.z += 4; // launched missiles go slightly higher than the middle.
 		}
-		else if ((SDL_GetModState() & KMOD_ALT) != 0)
+		else if ((SDL_GetModState() & KMOD_ALT) != 0) // note: CTRL+ALT
 			_targetVoxel.z -= 10; // force fire at floor (for HE ammo-types)
 	}
 	else
@@ -528,7 +528,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
 	//Log(LOG_INFO) << ". _action_type = " << _action.type;
 
-	++_action.autoShotCount;
+	_action.autoShotCount++;
 
 	if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add.
 		&& (_action.type != BA_THROW
@@ -557,8 +557,9 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	// set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
 //kL	_parent->setStateInterval(1000/60);
-	Uint32 interval = static_cast<Uint32>(16);	// kL
-	_parent->setStateInterval(interval);		// kL
+//	Uint32 interval = static_cast<Uint32>(16);	// kL
+//	_parent->setStateInterval(interval);		// kL
+	_parent->setStateInterval(16);				// kL
 
 	_projectileImpact = VOXEL_EMPTY; // let it calculate a trajectory
 
@@ -597,9 +598,11 @@ bool ProjectileFlyBState::createNewProjectile()
 			delete projectile;
 
 			_parent->getMap()->setProjectile(NULL);
+
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_action.TU = 0;
 			_unit->setStatus(STATUS_STANDING); // kL
+
 			_parent->popState();
 
 			return false;
@@ -616,7 +619,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
 		{
 //kL			_unit->aim(true); // set the celatid in an aiming position <- yeah right. not.
-//kL			_unit->setCache(0);
+//kL			_unit->setCache(NULL);
 //kL			_parent->getMap()->cacheUnit(_unit);
 
 			// and we have a lift-off
@@ -645,9 +648,11 @@ bool ProjectileFlyBState::createNewProjectile()
 			delete projectile;
 
 			_parent->getMap()->setProjectile(NULL);
+
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_action.TU = 0; // kL
 			_unit->setStatus(STATUS_STANDING); // kL
+
 			_parent->popState();
 
 			return false;
@@ -665,7 +670,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 		// Can soldiers swing a club, graphically??
 //		_unit->aim(true); // set the soldier in an aiming position
-//		_unit->setCache(0);
+//		_unit->setCache(NULL);
 //		_parent->getMap()->cacheUnit(_unit);
 
 		// and we have a hit!
@@ -724,7 +729,7 @@ bool ProjectileFlyBState::createNewProjectile()
 				&& _ammo->spendBullet() == false)
 			{
 				_parent->getSave()->removeItem(_ammo);
-				_action.weapon->setAmmoItem(0);
+				_action.weapon->setAmmoItem(NULL);
 			}
 		}
 		else // VOXEL_EMPTY, no line of fire
@@ -732,11 +737,13 @@ bool ProjectileFlyBState::createNewProjectile()
 			//Log(LOG_INFO) << ". no shot, no LoF, Voxel_Empty";
 			delete projectile;
 
-			_parent->getMap()->setProjectile(0);
+			_parent->getMap()->setProjectile(NULL);
+
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_action.TU = 0; // kL
 //kL		_unit->abortTurn();
 			_unit->setStatus(STATUS_STANDING); // kL
+
 			_parent->popState();
 
 			return false;
@@ -761,11 +768,11 @@ void ProjectileFlyBState::think()
 	if (_parent->getMap()->getProjectile() == NULL)
 	{
 		Tile
-			* t = _parent->getSave()->getTile(_unit->getPosition()),
-			* tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
+			* tile = _parent->getSave()->getTile(_unit->getPosition()),
+			* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
 
 		bool
-			hasFloor = t && !t->hasNoFloor(tBelow),
+			hasFloor = tile && tile->hasNoFloor(tileBelow) == false,
 			unitCanFly = _unit->getArmor()->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
@@ -944,7 +951,7 @@ void ProjectileFlyBState::think()
 					&& _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
-					_action.weapon->setAmmoItem(0);
+					_action.weapon->setAmmoItem(NULL);
 				}
 
 				if (_projectileImpact != VOXEL_OUTOFBOUNDS) // NOT out of map
@@ -952,6 +959,7 @@ void ProjectileFlyBState::think()
 					// explosions impact not inside the voxel but two steps back;
 					// projectiles generally move 2 voxels at a time
 					int offset = 0;
+
 					if (_ammo
 //kL						&& _ammo->getRules()->getExplosionRadius() != 0
 						&& _ammo->getRules()->getExplosionRadius() > 0			// kL

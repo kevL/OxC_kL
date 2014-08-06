@@ -240,20 +240,22 @@ void UnitDieBState::think()
 		if (_unit->getTurnsExposed() < 255)
 			_unit->setTurnsExposed(255);
 
+//		Tile* tile = _unit->getTile(); // kL
+
 		if (_unit->getSpawnUnit().empty() == false)
 		{
 			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
-			BattleUnit* newUnit = _parent->convertUnit(
-													_unit,
-													_unit->getSpawnUnit());
+			BattleUnit* convertedUnit = _parent->convertUnit(
+															_unit,
+															_unit->getSpawnUnit());
 
-//			newUnit->lookAt(_originalDir); // kL_note: This seems to need a state to initiate turn() ...
+//			convertedUnit->lookAt(_originalDir); // kL_note: This seems to need a state to initiate turn() ...
 //TEST		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(_battleSave->getBattleGame(), action));
 //TEST		statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
 
 
-			newUnit->setCache(NULL);				// kL
-			_parent->getMap()->cacheUnit(newUnit);	// kL
+			convertedUnit->setCache(NULL);					// kL
+			_parent->getMap()->cacheUnit(convertedUnit);	// kL
 
 			//Log(LOG_INFO) << ". . got back from lookAt() in think ...";
 		}
@@ -261,6 +263,7 @@ void UnitDieBState::think()
 			convertUnitToCorpse();
 
 
+//		_parent->getTileEngine()->applyGravity(tile); // kL
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
 

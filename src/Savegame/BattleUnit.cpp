@@ -3494,18 +3494,18 @@ void BattleUnit::adjustStats(
 	// kL_begin:
 	if (month > 0)
 	{
-//		_stats.tu			+= month;
-//		_stats.stamina		+= month;
-		_stats.reactions	+= month;
-		_stats.firing		+= month;
-		_stats.throwing		+= month;
-		_stats.melee		+= month;
-//		_stats.strength		+= month;
-		_stats.psiStrength	+= (month * 2);
+//		_stats.tu += month;
+//		_stats.stamina += month;
+		if (_stats.reactions > 0)	_stats.reactions	+= month;
+		if (_stats.firing > 0)		_stats.firing		+= month;
+		if (_stats.throwing > 0)	_stats.throwing		+= month;
+		if (_stats.melee > 0)		_stats.melee		+= month;
+//		_stats.strength += month;
+		if (_stats.psiStrength > 0)	_stats.psiStrength	+= (month * 2);
 //		if (_stats.psiSkill > 0)
-//			_stats.psiSkill	+= month;
+//			_stats.psiSkill += month;
 
-		_stats.health		+= (month / 2);
+		_stats.health += (month / 2);
 	}
 
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), unitID = " << getId();
@@ -3518,7 +3518,7 @@ void BattleUnit::adjustStats(
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiSkill = " << _stats.psiSkill;
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiStrength = " << _stats.psiStrength;
 
-	if (!diff)			// kL, moved here from BattlescapeGenerator::addAlien() & BattlescapeGame::convertUnit()
+	if (diff == 0)		// kL, moved here from BattlescapeGenerator::addAlien() & BattlescapeGame::convertUnit()
 		halveArmor();	// kL
 	// kL_end.
 }

@@ -127,7 +127,7 @@ PromotionsState::PromotionsState()
 }
 
 /**
- *
+ * dTor.
  */
 PromotionsState::~PromotionsState()
 {

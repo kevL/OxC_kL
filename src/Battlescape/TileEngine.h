@@ -242,8 +242,8 @@ private:
 		/// Attempts a panic or mind control action.
 		bool psiAttack(BattleAction* action);
 
-		/// Applies gravity to anything that occupy this tile.
-		Tile* applyGravity(Tile* t);
+		/// Applies gravity to anything that occupies this tile.
+		Tile* applyGravity(Tile* tile);
 
 		/// Returns melee validity between two units.
 		bool validMeleeRange(
@@ -272,7 +272,7 @@ private:
 				BattleUnit* excludeUnit,
 				bool excludeAllUnits = false,
 				bool onlyVisible = false,
-				BattleUnit* excludeAllBut = 0,
+				BattleUnit* excludeAllBut = NULL,
 				bool hit = false); // kL add.
 
 		/// Get direction to a target-point
