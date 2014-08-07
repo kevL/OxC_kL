@@ -623,7 +623,7 @@ void Map::drawTerrain(Surface* surface)
 			else // NOT smoothCamera
 			// kL_note: Camera remains stationary when xCom actively fires at target.
 			// That is, Target is already onScreen due to targetting cursor click!
-			// ( And, player should know what unit is shooting... )
+			// ( And, player should already know what unit is shooting... )
 //			if (_projectile->getActor()->getFaction() != FACTION_PLAYER) // kL
 			{
 				bool enough;
@@ -690,7 +690,9 @@ void Map::drawTerrain(Surface* surface)
 	if (beginY < 0)
 		beginY = 0;
 
-	bool pathfinderTurnedOn = _save->getPathfinding()->isPathPreviewed();
+	bool
+		pathfinderTurnedOn = _save->getPathfinding()->isPathPreviewed(),
+		drawRankIcon;
 
 	if (!_waypoints.empty()
 		|| (pathfinderTurnedOn
@@ -734,7 +736,7 @@ void Map::drawTerrain(Surface* surface)
 				{
 					tile = _save->getTile(mapPosition);
 
-					if (!tile)
+					if (tile == NULL)
 						continue;
 
 					if (tile->isDiscovered(2))
@@ -746,15 +748,76 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					tileColor = tile->getMarkerColor();
+					drawRankIcon = true;
 
 					// Draw floor
 					tmpSurface = tile->getSprite(MapData::O_FLOOR);
 					if (tmpSurface)
+					{
 						tmpSurface->blitNShade(
 								surface,
 								screenPosition.x,
 								screenPosition.y - tile->getMapData(MapData::O_FLOOR)->getYOffset(),
 								tileShade);
+
+						// kL_begin:
+						Tile* tileEastDown = _save->getTile(mapPosition + Position(1, 0, -1));
+						if (tileEastDown != NULL)
+						{
+							BattleUnit* bu = tileEastDown->getUnit();
+							Tile* tileEast = _save->getTile(mapPosition + Position(1, 0, 0));
+							if (bu != NULL
+								&& tileEast->getSprite(MapData::O_FLOOR) == NULL)
+							{
+								// from below_ Draw soldier. This ensures the rankIcon isn't half-hidden by a floor above & west of soldier.
+								// ... should probably be a subfunction
+								if (bu->getFaction() == FACTION_PLAYER
+									&& bu != _save->getSelectedUnit()
+									&& bu->getTurretType() == -1) // no tanks, pls
+								{
+									drawRankIcon = false;
+
+									Position offset;
+									calculateWalkingOffset(bu, &offset);
+
+									if (bu->getFatalWounds() > 0)
+									{
+										tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
+										if (tmpSurface != NULL)
+										{
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 2 + 16,
+													screenPosition.y + offset.y + 3 + 32,
+													0);
+										}
+
+										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(209); // red cross
+										tmpSurface->blitNShade(
+												surface,
+												screenPosition.x + offset.x + 3 + 16,
+												screenPosition.y + offset.y + 4 + 32,
+												0);
+									}
+									else
+									{
+										std::string soldierRank = bu->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
+										soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
+
+										tmpSurface = _res->getSurface(soldierRank);
+										if (tmpSurface != NULL)
+										{
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 2 + 16,
+													screenPosition.y + offset.y + 3 + 32,
+													0);
+										}
+									}
+								}
+							}
+						} // kL_end.
+					}
 
 					unit = tile->getUnit();
 
@@ -1401,7 +1464,8 @@ void Map::drawTerrain(Surface* surface)
 							}
 
 							// kL_begin:
-							if (unit->getFaction() == FACTION_PLAYER
+							if (drawRankIcon == true
+								&& unit->getFaction() == FACTION_PLAYER
 								//unit != dynamic_cast<BattleUnit*>(_save->getSelectedUnit());
 								&& unit != _save->getSelectedUnit()
 								&& unit->getTurretType() == -1) // no tanks, pls

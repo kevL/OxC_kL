@@ -104,17 +104,17 @@ BaseInfoState::BaseInfoState(
 	}
 
 	_txtHangars			= new Text(114, 9, 8, Options::storageLimitsEnforced? 133: 123);
-	_numHangars			= new Text(40, 9, 126, Options::storageLimitsEnforced? 133: 124);
+	_numHangars			= new Text(40, 9, 126, Options::storageLimitsEnforced? 134: 124);
 	_barHangars			= new Bar(218, 5, 166, Options::storageLimitsEnforced? 135: 125);
 
 	_txtDefense			= new Text(114, 9, 8, Options::storageLimitsEnforced? 147: 138);
-	_numDefense			= new Text(40, 9, 126, Options::storageLimitsEnforced? 147: 139);
+	_numDefense			= new Text(40, 9, 126, Options::storageLimitsEnforced? 148: 139);
 	_barDefense			= new Bar(218, 5, 166, Options::storageLimitsEnforced? 149: 140);
 	_txtShortRange		= new Text(114, 9, 8, Options::storageLimitsEnforced? 157: 153);
-	_numShortRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 157: 154);
+	_numShortRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 158: 154);
 	_barShortRange		= new Bar(218, 5, 166, Options::storageLimitsEnforced? 159: 155);
 	_txtLongRange		= new Text(114, 9, 8, Options::storageLimitsEnforced? 167: 163);
-	_numLongRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 167: 164);
+	_numLongRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 168: 164);
 	_barLongRange		= new Bar(218, 5, 166, Options::storageLimitsEnforced? 169: 165);
 
 	setPalette("PAL_BASESCAPE");

@@ -40,7 +40,7 @@
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Screen.h" // newScroll
+#include "../Engine/Screen.h"
 #include "../Engine/ShaderMove.h"
 #include "../Engine/ShaderRepeat.h"
 #include "../Engine/SurfaceSet.h"
@@ -51,10 +51,11 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/City.h"
+#include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCountry.h"
 #include "../Ruleset/RuleCraft.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
 
@@ -81,6 +82,11 @@ bool kL_reCenter = false;
 const double
 	Globe::ROTATE_LONGITUDE	= 0.176,
 	Globe::ROTATE_LATITUDE	= 0.176;
+
+Uint8
+	Globe::oceanColor1 = Palette::blockOffset(12),
+	Globe::oceanColor2 = Palette::blockOffset(13);
+
 
 namespace
 {
@@ -186,7 +192,8 @@ struct Ocean
 			const int&,
 			const int&)
 	{
-		dest = Palette::blockOffset(12);
+		dest = Globe::oceanColor1;
+//		dest = Palette::blockOffset(12);
 	}
 };
 
@@ -222,11 +229,14 @@ struct CreateShadow
 		if (temp.x > 0.0)
 		{
 			const Sint16 val = (temp.x > 31.0)? 31: static_cast<Sint16>(temp.x);
-			const int d = dest & helper::ColorGroup;
-			if (   d == Palette::blockOffset(12)
-				|| d == Palette::blockOffset(13))
+			const int d = static_cast<int>(dest & helper::ColorGroup);
+			if (d == Globe::oceanColor1
+				|| d == Globe::oceanColor2)
+//			if (d == Palette::blockOffset(12)
+//				|| d == Palette::blockOffset(13))
 			{
-				return Palette::blockOffset(12)+val; // this pixel is ocean
+				return Globe::oceanColor1 + val; // this pixel is ocean
+//				return Palette::blockOffset(12)+val;
 			}
 			else
 			{
@@ -245,10 +255,13 @@ struct CreateShadow
 		else
 		{
 			const int d = static_cast<int>(dest & helper::ColorGroup);
-			if (   static_cast<Uint8>(d) == Palette::blockOffset(12)
-				|| static_cast<Uint8>(d) == Palette::blockOffset(13))
+			if (d == Globe::oceanColor1
+				|| d == Globe::oceanColor2)
+//			if (static_cast<Uint8>(d) == Palette::blockOffset(12)
+//				|| static_cast<Uint8>(d) == Palette::blockOffset(13))
 			{
-				return Palette::blockOffset(12); // this pixel is ocean
+				return Globe::oceanColor1; // this pixel is ocean
+//				return Palette::blockOffset(12);
 			}
 			else
 				return dest; // this pixel is land
@@ -324,6 +337,13 @@ Globe::Globe(
 		_radius(0.0),
 		_radiusStep(0.0)
 {
+	if (game->getRuleset()->getInterface("geoscape")
+		&& game->getRuleset()->getInterface("geoscape")->getElement("globe"))
+	{
+		Globe::oceanColor1 = game->getRuleset()->getInterface("geoscape")->getElement("globe")->color;
+		Globe::oceanColor2 = game->getRuleset()->getInterface("geoscape")->getElement("globe")->color2;
+	}
+
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
 
 	_countries	= new Surface(width, height, x, y);
@@ -1365,7 +1385,8 @@ void Globe::drawOcean()
 			_cenX + 1,
 			_cenY,
 			static_cast<Sint16>(_radius) + 20,
-			Palette::blockOffset(12));
+			oceanColor1);
+//			Palette::blockOffset(12));
 //	ShaderDraw<Ocean>(ShaderSurface(this));
 	unlock();
 }
@@ -1592,10 +1613,13 @@ void Globe::XuLine(
 			else
 			{
 				const int d = tcol & helper::ColorGroup;
-				if (d == Palette::blockOffset(12)
-					|| d == Palette::blockOffset(13))
+				if (d == oceanColor1
+					|| d == oceanColor2)
+//				if (d == Palette::blockOffset(12)
+//					|| d == Palette::blockOffset(13))
 				{
-					tcol = Palette::blockOffset(12) + shade + 8; // this pixel is ocean
+					tcol = oceanColor1 + shade + 8; // this pixel is ocean
+//					tcol = Palette::blockOffset(12) + shade + 8;
 				}
 				else
 				{

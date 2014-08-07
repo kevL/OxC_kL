@@ -4875,7 +4875,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1407124297 f:\git\openxcom\src\geoscape\globe.h
+1407419963 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"
@@ -6181,7 +6181,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1407386628 source:f:\git\openxcom\src\battlescape\camera.cpp
+1407428074 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6425,7 +6425,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1407385705 source:f:\git\openxcom\src\battlescape\map.cpp
+1407431191 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -7898,7 +7898,7 @@
 	<string>
 	<vector>
 
-1407124297 source:f:\git\openxcom\src\geoscape\globe.cpp
+1407422574 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -7923,10 +7923,11 @@
 	"../Interface/Cursor.h"
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
-	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/City.h"
+	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/RuleCountry.h"
 	"../Ruleset/RuleCraft.h"
+	"../Ruleset/RuleInterface.h"
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 	"../Savegame/Base.h"
@@ -11939,7 +11940,7 @@
 
 1398655003 f:\git\openxcom\src\engine\adlib\adlplayer.h
 
-1404585319 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
+1407419900 source:f:\git\openxcom\src\engine\adlib\fmopl.cpp
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
