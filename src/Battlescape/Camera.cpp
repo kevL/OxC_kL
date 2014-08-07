@@ -733,7 +733,7 @@ void Camera::resize()
 	_screenWidth = _map->getWidth();
 	_screenHeight = _map->getHeight();
 
-	_visibleMapHeight = _map->getHeight() - Map::ICON_HEIGHT;
+	_visibleMapHeight = _map->getHeight() - _map->getIconHeight();
 }
 
 /**

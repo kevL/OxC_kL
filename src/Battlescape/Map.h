@@ -84,6 +84,8 @@ private:
 		_animFrame,
 //kL	_cursorFrame, // DarkDefender
 		_cursorSize,
+		_iconHeight,
+		_iconWidth,
 		_mouseX,
 		_mouseY,
 		_reveal, // kL
@@ -123,8 +125,8 @@ private:
 
 
 	public:
-		static const int ICON_WIDTH		= 320;
-		static const int ICON_HEIGHT	= 56;
+//		static const int ICON_WIDTH		= 320;
+//		static const int ICON_HEIGHT	= 56;
 
 		/// Creates a new map at the specified position and size.
 		Map(
@@ -223,7 +225,12 @@ private:
 		void setWidth(int width);
 
 		/// Get the vertical position of the hidden movement screen.
-		int getMessageY();
+		const int getMessageY();
+
+		/// Get the icon height.
+		const int getIconHeight();
+		/// Get the icon width.
+		const int getIconWidth();
 };
 
 }

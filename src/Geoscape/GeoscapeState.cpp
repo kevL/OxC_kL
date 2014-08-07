@@ -3055,7 +3055,7 @@ void GeoscapeState::btnInterceptClick(Action*)
  */
 void GeoscapeState::btnBasesClick(Action*)
 {
-	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	timerReset();
 
@@ -3095,7 +3095,7 @@ void GeoscapeState::btnBasesClick(Action*)
  */
 void GeoscapeState::btnGraphsClick(Action*)
 {
-	soundPop->play(Mix_GroupAvailable(1)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
+	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	timerReset(); // kL
 

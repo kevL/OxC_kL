@@ -52,6 +52,7 @@ class RuleCommendations;
 class RuleCountry;
 class RuleCraft;
 class RuleCraftWeapon;
+class RuleInterface;
 class RuleInventory;
 class RuleItem;
 class RuleManufacture;
@@ -147,6 +148,7 @@ protected:
 	std::map<std::string, RuleCountry*>			_countries;
 	std::map<std::string, RuleCraft*>			_crafts;
 	std::map<std::string, RuleCraftWeapon*>		_craftWeapons;
+	std::map<std::string, RuleInterface*>		_interfaces;
 	std::map<std::string, RuleInventory*>		_invs;
 	std::map<std::string, RuleItem*>			_items;
 	std::map<std::string, RuleManufacture*>		_manufacture;
@@ -305,8 +307,10 @@ protected:
 		const std::vector<std::string>& getInvsList() const;
 		/// Generates a new soldier.
 		Soldier* genSoldier(SavedGame* save) const;
-		///
+		/// Gets the item to be used as fuel for ships.
 		const std::string getAlienFuel() const;
+		/// Gets information on an interface element.
+		RuleInterface* getInterface(const std::string id) const;
 };
 
 }

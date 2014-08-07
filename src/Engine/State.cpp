@@ -19,6 +19,8 @@
 
 #include "State.h"
 
+#include <climits>
+
 #include "Font.h"
 #include "Game.h"
 #include "InteractiveSurface.h"
@@ -29,9 +31,11 @@
 #include "Surface.h"
 
 #include "../Interface/ArrowButton.h"
+#include "../Interface/Bar.h"
 #include "../Interface/ComboBox.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
+#include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
@@ -40,6 +44,9 @@
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 
 namespace OpenXcom
@@ -102,6 +109,79 @@ void State::add(Surface* surface)
 					_game->getResourcePack()->getFont("FONT_BIG"),
 					_game->getResourcePack()->getFont("FONT_SMALL"),
 					_game->getLanguage());
+	}
+
+	_surfaces.push_back(surface);
+}
+
+/**
+ * As above, except this adds a surface based on an interface element defined in the ruleset.
+ * @note that this function REQUIRES the ruleset to have been loaded prior to use.
+ * @note if no parent is defined the element will not be moved.
+ * @param surface	- child surface
+ * @param id		- the ID of the element defined in the ruleset, if any
+ * @param category	- the category of elements this interface is associated with
+ * @param parent	- the surface to base the coordinates of this element off
+ */
+void State::add(
+		Surface* surface,
+		const std::string id,
+		const std::string category,
+		Surface* parent)
+{
+	surface->setPalette(_palette);
+
+	if (_game->getRuleset()->getInterface(category)
+		&& _game->getRuleset()->getInterface(category)->getElement(id))
+	{
+		Element* element = _game->getRuleset()->getInterface(category)->getElement(id);
+		if (parent
+			&& element->w != INT_MAX
+			&& element->h != INT_MAX)
+		{
+			surface->setWidth(element->w);
+			surface->setHeight(element->h);
+		}
+
+		if (parent
+			&& element->x != INT_MAX
+			&& element->y != INT_MAX)
+		{
+			surface->setX(parent->getX() + element->x);
+			surface->setY(parent->getY() + element->y);
+		}
+
+		if (element->color)
+		{
+			NumberText* numText = dynamic_cast<NumberText*>(surface);
+			Text* text = dynamic_cast<Text*>(surface);
+			Bar* bar = dynamic_cast<Bar*>(surface);
+
+			if (numText)
+				numText->setColor(element->color);
+			else if (text)
+			{
+				text->setColor(element->color);
+				text->setSecondaryColor(element->color2);
+			}
+			else if (bar)
+			{
+				bar->setColor(element->color);
+				bar->setColor2(element->color2);
+				bar->setBorderColor(element->border);
+			}
+		}
+
+		surface->invalidate(false);
+	}
+
+	if (_game->getLanguage() // set default text resources
+		&& _game->getResourcePack())
+	{
+		surface->initText(
+						_game->getResourcePack()->getFont("FONT_BIG"),
+						_game->getResourcePack()->getFont("FONT_SMALL"),
+						_game->getLanguage());
 	}
 
 	_surfaces.push_back(surface);

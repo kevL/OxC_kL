@@ -31,6 +31,9 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
+
 #include "../Savegame/BattleUnit.h"
 
 
@@ -93,7 +96,16 @@ void MedikitView::draw()
 
 	int
 		wound = 0,
-		color = 0;
+		green = 0,
+		red = 3,
+		color;
+
+	if (_game->getRuleset()->getInterface("medikit")
+		&& _game->getRuleset()->getInterface("medikit")->getElement("body"))
+	{
+		green = _game->getRuleset()->getInterface("medikit")->getElement("body")->color;
+		red = _game->getRuleset()->getInterface("medikit")->getElement("body")->color2;
+	}
 
 	this->lock();
 	for (size_t
@@ -101,10 +113,9 @@ void MedikitView::draw()
 			i < set->getTotalFrames();
 			i++)
 	{
-		color = 0;
-		wound = _unit->getFatalWound(i);
-		if (wound)
-			color = 3; // red
+		color = green;
+		if (_unit->getFatalWound(i))
+			color = red;
 
 		Surface* surface = set->getFrame(i);
 		surface->blitNShade(

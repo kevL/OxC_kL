@@ -175,7 +175,7 @@ void Window::popup()
 //		int sound = RNG::generate(1, 2); // kL, Old
 
 //kL	if (soundPopup[sound] != 0)
-		soundPopup[sound]->play(Mix_GroupAvailable(1)); // UI Fx channels #0 & #1 & #2
+		soundPopup[sound]->play(Mix_GroupAvailable(0)); // UI Fx channels #0 & #1 & #2
 	}
 
 	if (_popupStep < 1.0)

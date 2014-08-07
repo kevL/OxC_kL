@@ -1042,11 +1042,12 @@ void Surface::blitNShade(
 }
 
 /**
- * Set the surface to be redrawn
+ * Set the surface to be redrawn.
+ * @param valid true means redraw.
  */
-void Surface::invalidate()
+void Surface::invalidate(bool valid)
 {
-	_redraw = true;
+	_redraw = valid;
 }
 
 /**

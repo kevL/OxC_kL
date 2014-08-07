@@ -48,6 +48,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
@@ -109,7 +110,7 @@ InventoryState::InventoryState(
 	_txtName	= new Text(200, 17, 36, 6);
 
 	_txtWeight	= new Text(70, 9, 245, 24);
-	_txtTus		= new Text(40, 9, 245, Options::showMoreStatsInInventoryView? 32: 24);
+	_txtTus		= new Text(40, 9, 245, 24);
 	_txtFAcc	= new Text(40, 9, 245, 32);
 	_txtReact	= new Text(40, 9, 245, 40);
 	_txtThrow	= new Text(40, 9, 245, 48); // kL
@@ -167,55 +168,59 @@ InventoryState::InventoryState(
 
 	add(_bg);
 	add(_soldier);
-	add(_txtName);
+	add(_txtName, "textName", "inventory", _bg);
 
-	add(_txtWeight);
-	add(_txtTus);
-	add(_txtFAcc);
-	add(_txtReact);
+	add(_txtWeight, "textWeight", "inventory", _bg);
+	add(_txtTus, "textTUs", "inventory", _bg);
+	add(_txtFAcc, "textFiring", "inventory", _bg);
+	add(_txtReact, "textReaction", "inventory", _bg);
 	add(_txtThrow); // kL
 	add(_txtMelee); // kL
-	add(_txtPStr);
-	add(_txtPSkill);
+	add(_txtPStr, "textPsiStrength", "inventory", _bg);
+	add(_txtPSkill, "textPsiSkill", "inventory", _bg);
 
 	add(_numOrder); // kL
 	add(_tuCost); // kL
-	add(_txtItem);
-	add(_txtAmmo);
-	add(_btnOk);
-	add(_btnPrev);
-	add(_btnNext);
-	add(_btnUnload);
-	add(_btnGround);
-	add(_btnRank);
-	add(_btnCreateTemplate);
-	add(_btnApplyTemplate);
+	add(_txtItem, "textItem", "inventory", _bg);
+	add(_txtAmmo, "textAmmo", "inventory", _bg);
+	add(_btnOk, "buttonOK", "inventory", _bg);
+	add(_btnPrev, "buttonPrev", "inventory", _bg);
+	add(_btnNext, "buttonNext", "inventory", _bg);
+	add(_btnUnload, "buttonUnload", "inventory", _bg);
+	add(_btnGround, "buttonGround", "inventory", _bg);
+	add(_btnRank, "rank", "inventory", _bg);
+	add(_btnCreateTemplate, "buttonCreate", "inventory", _bg);
+	add(_btnApplyTemplate, "buttonApply", "inventory", _bg);
 	add(_btnClearInventory);
 	add(_selAmmo);
 	add(_inv);
+
+	// move the TU display down to make room for the weight display
+	if (Options::showMoreStatsInInventoryView)
+		_txtTus->setY(_txtTus->getY() + 8);
 
 	centerAllSurfaces();
 
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
 
-	_txtName->setColor(Palette::blockOffset(4));
+//	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setBig();
 	_txtName->setHighContrast(true);
 
-	_txtWeight->setColor(Palette::blockOffset(4));
-	_txtWeight->setSecondaryColor(Palette::blockOffset(1));
+//	_txtWeight->setColor(Palette::blockOffset(4));
+//	_txtWeight->setSecondaryColor(Palette::blockOffset(1));
 	_txtWeight->setHighContrast(true);
 
-	_txtTus->setColor(Palette::blockOffset(4));
-	_txtTus->setSecondaryColor(Palette::blockOffset(1));
+//	_txtTus->setColor(Palette::blockOffset(4));
+//	_txtTus->setSecondaryColor(Palette::blockOffset(1));
 	_txtTus->setHighContrast(true);
 
-	_txtFAcc->setColor(Palette::blockOffset(4));
-	_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
+//	_txtFAcc->setColor(Palette::blockOffset(4));
+//	_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
 	_txtFAcc->setHighContrast(true);
 
-	_txtReact->setColor(Palette::blockOffset(4));
-	_txtReact->setSecondaryColor(Palette::blockOffset(1));
+//	_txtReact->setColor(Palette::blockOffset(4));
+//	_txtReact->setSecondaryColor(Palette::blockOffset(1));
 	_txtReact->setHighContrast(true);
 
 	_txtThrow->setColor(Palette::blockOffset(4));			// kL
@@ -226,8 +231,8 @@ InventoryState::InventoryState(
 	_txtMelee->setSecondaryColor(Palette::blockOffset(1));	// kL
 	_txtMelee->setHighContrast(true);						// kL
 
-	_txtPStr->setColor(Palette::blockOffset(4));
-	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
+//	_txtPStr->setColor(Palette::blockOffset(4));
+//	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
 	_txtPStr->setHighContrast(true);
 
 	_txtPSkill->setColor(Palette::blockOffset(4));
@@ -242,11 +247,11 @@ InventoryState::InventoryState(
 	_tuCost->setValue(0);		// kL
 	_tuCost->setVisible(false);	// kL
 
-	_txtItem->setColor(Palette::blockOffset(3));
+//	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast(true);
 
-	_txtAmmo->setColor(Palette::blockOffset(4));
-	_txtAmmo->setSecondaryColor(Palette::blockOffset(1));
+//	_txtAmmo->setColor(Palette::blockOffset(4));
+//	_txtAmmo->setSecondaryColor(Palette::blockOffset(1));
 	_txtAmmo->setAlign(ALIGN_LEFT);
 	_txtAmmo->setHighContrast(true);
 
@@ -1214,7 +1219,8 @@ void InventoryState::invMouseOver(Action* action)
 			r.y = 0;
 			r.w = RuleInventory::HAND_W * RuleInventory::SLOT_W;
 			r.h = RuleInventory::HAND_H * RuleInventory::SLOT_H;
-			_selAmmo->drawRect(&r, Palette::blockOffset(0)+8);
+//			_selAmmo->drawRect(&r, Palette::blockOffset(0)+8);
+			_selAmmo->drawRect(&r, _game->getRuleset()->getInterface("inventory")->getElement("grid")->color);
 
 			r.x++;
 			r.y++;

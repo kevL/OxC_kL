@@ -252,21 +252,21 @@ MedikitState::MedikitState(
 	// kL_end.
 
 	add(_bg);
-	add(_mediView);
+	add(_mediView, "body", "medikit", _bg);
 	add(_endButton);
 
-	add(new MedikitTitle(37, tr("STR_PAIN_KILLER")));
-	add(new MedikitTitle(73, tr("STR_STIMULANT")));
-	add(new MedikitTitle(109, tr("STR_HEAL")));
+	add(new MedikitTitle(37, tr("STR_PAIN_KILLER")), "textPK", "medikit", _bg);
+	add(new MedikitTitle(73, tr("STR_STIMULANT")), "textStim", "medikit", _bg);
+	add(new MedikitTitle(109, tr("STR_HEAL")), "textHeal", "medikit", _bg);
 
-	add(_healButton);
-	add(_stimButton);
-	add(_painButton);
-	add(_painText);
-	add(_stimTxt);
-	add(_healTxt);
-	add(_partTxt);
-	add(_woundTxt);
+	add(_healButton, "buttonHeal", "medikit", _bg);
+	add(_stimButton, "buttonStim", "medikit", _bg);
+	add(_painButton, "buttonPK", "medikit", _bg);
+	add(_painText, "numPK", "medikit", _bg);
+	add(_stimTxt, "numStim", "medikit", _bg);
+	add(_healTxt, "numHeal", "medikit", _bg);
+	add(_partTxt, "textPart", "medikit", _bg);
+	add(_woundTxt, "numWounds", "medikit", _bg);
 
 	centerAllSurfaces();
 
@@ -274,9 +274,9 @@ MedikitState::MedikitState(
 	_painText->setBig();
 	_stimTxt->setBig();
 	_healTxt->setBig();
-	_partTxt->setColor(Palette::blockOffset(2));
+//	_partTxt->setColor(Palette::blockOffset(2));
 	_partTxt->setHighContrast(true);
-	_woundTxt->setColor(Palette::blockOffset(2));
+//	_woundTxt->setColor(Palette::blockOffset(2));
 	_woundTxt->setHighContrast(true);
 
 	_endButton->onMouseClick((ActionHandler)& MedikitState::onEndClick);

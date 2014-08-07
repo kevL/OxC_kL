@@ -16,61 +16,90 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_BAR_H
 #define OPENXCOM_BAR_H
 
 #include "../Engine/Surface.h"
+
 
 namespace OpenXcom
 {
 
 /**
  * Bar graphic that represents a certain value.
- * Drawn with a coloured border and partially
- * filled content to contrast two values, typically
- * used for showing base and soldier stats.
+ * Drawn with a coloured border and partially filled content to contrast
+ * two values, typically used for showing base and soldier stats.
  */
-class Bar : public Surface
+class Bar
+	:
+		public Surface
 {
+
 private:
-	Uint8 _color, _color2;
-	double _scale, _max, _value, _value2;
-	bool _invert, _secondOnTop;
-public:
-	/// Creates a new bar with the specified size and position.
-	Bar(int width, int height, int x = 0, int y = 0);
-	/// Cleans up the bar.
-	~Bar();
-	/// Sets the bar's color.
-	void setColor(Uint8 color);
-	/// Gets the bar's color.
-	Uint8 getColor() const;
-	/// Sets the bar's second color.
-	void setColor2(Uint8 color);
-	/// Gets the bar's second color.
-	Uint8 getColor2() const;
-	/// Sets the bar's scale.
-	void setScale(double scale);
-	/// Gets the bar's scale.
-	double getScale() const;
-	/// Sets the bar's maximum value.
-	void setMax(double max);
-	/// Gets the bar's maximum value.
-	double getMax() const;
-	/// Sets the bar's current value.
-	void setValue(double value);
-	/// Gets the bar's current value.
-	double getValue() const;
-	/// Sets the bar's second current value.
-	void setValue2(double value);
-	/// Gets the bar's second current value.
-	double getValue2() const;
-	/// Defines whether the second value should be drawn on top.
-	void setSecondValueOnTop(bool onTop);
-	/// Sets the bar's color invert setting.
-	void setInvert(bool invert);
-	/// Draws the bar.
-	void draw();
+	bool
+		_invert,
+		_secondOnTop;
+	Uint8
+		_color,
+		_color2,
+		_borderColor;
+	double
+		_scale,
+		_max,
+		_value,
+		_value2;
+
+
+	public:
+		/// Creates a new bar with the specified size and position.
+		Bar(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
+		/// Cleans up the bar.
+		~Bar();
+
+		/// Sets the bar's color.
+		void setColor(Uint8 color);
+		/// Gets the bar's color.
+		Uint8 getColor() const;
+		/// Sets the bar's second color.
+		void setColor2(Uint8 color);
+		/// Gets the bar's second color.
+		Uint8 getColor2() const;
+
+		/// Sets the bar's scale.
+		void setScale(double scale);
+		/// Gets the bar's scale.
+		double getScale() const;
+
+		/// Sets the bar's maximum value.
+		void setMax(double max);
+		/// Gets the bar's maximum value.
+		double getMax() const;
+
+		/// Sets the bar's current value.
+		void setValue(double value);
+		/// Gets the bar's current value.
+		double getValue() const;
+		/// Sets the bar's second current value.
+		void setValue2(double value);
+		/// Gets the bar's second current value.
+		double getValue2() const;
+
+		/// Defines whether the second value should be drawn on top.
+		void setSecondValueOnTop(bool onTop);
+
+		/// Sets the bar's color invert setting.
+		void setInvert(bool invert);
+
+		/// Draws the bar.
+		void draw();
+
+		/// set the outline color for the bar.
+		void setBorderColor(Uint8 bc);
 };
 
 }

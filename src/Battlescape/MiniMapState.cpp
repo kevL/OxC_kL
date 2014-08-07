@@ -28,6 +28,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
+#include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -36,6 +37,9 @@
 #include "../Interface/Text.h"
 
 #include "../Resource/ResourcePack.h"
+
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
 
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
@@ -72,16 +76,16 @@ MiniMapState::MiniMapState(
 	_btnLvlDwn	= new InteractiveSurface(18, 20, 24, 88);
 	_btnOk		= new InteractiveSurface(32, 32, 275, 145);
 
-	_txtLevel	= new Text(20, 25, 281, 73);
+	_txtLevel	= new Text(28, 16, 281, 73);
 
 	battleGame->setPaletteByDepth(this);
 
 	add(_bg);
 	add(_miniView);
-	add(_btnLvlUp);
-	add(_btnLvlDwn);
-	add(_btnOk);
-	add(_txtLevel);
+	add(_btnLvlUp, "buttonUp", "minimap", _bg);
+	add(_btnLvlDwn, "buttonDown", "minimap", _bg);
+	add(_btnOk, "buttonOK", "minimap", _bg);
+	add(_txtLevel, "textLevel", "minimap", _bg);
 
 	centerAllSurfaces();
 
@@ -113,9 +117,11 @@ MiniMapState::MiniMapState(
 					Options::keyBattleMap);
 
 	_txtLevel->setBig();
-	_txtLevel->setColor(Palette::blockOffset(4));
+//	_txtLevel->setColor(Palette::blockOffset(4));
 	_txtLevel->setHighContrast(true);
 	std::wostringstream s;
+	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
+		s << tr("STR_LEVEL_SHORT");
 	s << camera->getViewLevel();
 	_txtLevel->setText(s.str());
 
@@ -179,6 +185,8 @@ void MiniMapState::btnOkClick(Action*)
 void MiniMapState::btnLevelUpClick(Action*)
 {
 	std::wostringstream s;
+	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
+		s << tr("STR_LEVEL_SHORT");
 	s << _miniView->up();
 	_txtLevel->setText(s.str());
 }
@@ -190,6 +198,8 @@ void MiniMapState::btnLevelUpClick(Action*)
 void MiniMapState::btnLevelDownClick(Action*)
 {
 	std::wostringstream s;
+	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
+		s << tr("STR_LEVEL_SHORT");
 	s << _miniView->down();
 	_txtLevel->setText(s.str());
 }

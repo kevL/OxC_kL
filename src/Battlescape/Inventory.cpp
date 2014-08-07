@@ -39,6 +39,7 @@
 #include "../Interface/Text.h"
 #include "../Interface/NumberText.h"
 
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleInventory.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
@@ -192,9 +193,12 @@ void Inventory::drawGrid()
 				_game->getResourcePack()->getFont("FONT_BIG"),
 				_game->getResourcePack()->getFont("FONT_SMALL"),
 				_game->getLanguage());
-	text.setColor(Palette::blockOffset(4)-1);
+	RuleInterface* rule = _game->getRuleset()->getInterface("inventory");
+	text.setColor(rule->getElement("textSlots")->color);
+//	text.setColor(Palette::blockOffset(4)-1);
 	text.setHighContrast(true);
-	Uint8 color = Palette::blockOffset(0)+8;
+	Uint8 color = rule->getElement("grid")->color;
+//	Uint8 color = Palette::blockOffset(0)+8;
 
 
 	for (std::map<std::string, RuleInventory*>::iterator
@@ -286,6 +290,8 @@ void Inventory::drawItems()
 {
 	_items->clear();
 	_grenadeFuses.clear();
+
+	Uint8 color = _game->getRuleset()->getInterface("inventory")->getElement("numStack")->color;
 
 	if (_selUnit != NULL)
 	{
@@ -391,7 +397,8 @@ void Inventory::drawItems()
 									- 6);
 				_stackNumber->setValue(_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()]);
 				_stackNumber->draw();
-				_stackNumber->setColor(Palette::blockOffset(4)+2);
+				_stackNumber->setColor(color);
+//				_stackNumber->setColor(Palette::blockOffset(4)+2);
 				_stackNumber->blit(stackLayer);
 			}
 		}

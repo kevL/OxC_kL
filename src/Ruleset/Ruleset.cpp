@@ -41,6 +41,7 @@
 #include "RuleCountry.h"
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
+#include "RuleInterface.h"
 #include "RuleInventory.h"
 #include "RuleItem.h"
 #include "RuleManufacture.h"
@@ -347,6 +348,14 @@ Ruleset::~Ruleset()
 	for (std::map<std::string, RuleCommendations*>::const_iterator
 			i = _commendations.begin();
 			i != _commendations.end();
+			++i)
+	{
+		delete i->second;
+	}
+
+	for (std::map<std::string, RuleInterface *>::const_iterator
+			i = _interfaces.begin();
+			i != _interfaces.end();
 			++i)
 	{
 		delete i->second;
@@ -863,6 +872,18 @@ void Ruleset::loadFile(const std::string& filename)
 		StatString* statString = new StatString();
 		statString->load(*i);
 		_statStrings.push_back(statString);
+	}
+
+	for (YAML::const_iterator
+			i = doc["interfaces"].begin();
+			i != doc["interfaces"].end();
+			++i)
+	{
+		RuleInterface* rule = loadRule(
+									*i,
+									&_interfaces);
+		if (rule != NULL)
+			rule->load(*i);
 	}
 
 	for (std::vector<std::string>::const_iterator // refresh _psiRequirements for psiStrengthEval
@@ -1975,11 +1996,26 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 }
 
 /**
- * Gets string for the alien fuel type (elerium or zyrbite).
+ * Gets the name of the item to be used as alien fuel (elerium or zyrbite).
+ * @return, the name of the fuel
  */
 const std::string Ruleset::getAlienFuel() const
 {
 	return _alienFuel;
+}
+
+/**
+ * Gets information on an interface.
+ * @param id - the interface we want info on
+ * @return, the interface
+ */
+RuleInterface* Ruleset::getInterface(const std::string id) const
+{
+	std::map<std::string, RuleInterface*>::const_iterator i = _interfaces.find(id);
+	if (_interfaces.end() != i)
+		return i->second;
+	else
+		return NULL;
 }
 
 }

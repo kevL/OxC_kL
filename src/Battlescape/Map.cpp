@@ -61,7 +61,9 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
+#include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/Ruleset.h"
 
 //#include "../Ruleset/RuleTerrain.h" // kL
 
@@ -127,6 +129,9 @@ Map::Map(
 		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
+	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
+	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
+
 //kL	_smoothCamera = Options::battleSmoothCamera;
 
 	_previewSetting	= Options::battleNewPreviewPath;
@@ -2706,8 +2711,8 @@ void Map::setHeight(int height)
 {
 	Surface::setHeight(height);
 
-	_visibleMapHeight = height - ICON_HEIGHT;
-//	_message->setY(height / 2 - _message->getHeight() / 2);
+	_visibleMapHeight = height - _iconHeight;
+
 	_message->setHeight((_visibleMapHeight < 200)? _visibleMapHeight: 200);
 	_message->setY((_visibleMapHeight - _message->getHeight()) / 2);
 }
@@ -2726,12 +2731,28 @@ void Map::setWidth(int width)
 }
 
 /*
- * Get the hidden movement screen's vertical position.
+ * Gets the hidden movement screen's vertical position.
  * @return, the vertical position of the hidden movement window
  */
-int Map::getMessageY()
+const int Map::getMessageY()
 {
 	return _message->getY();
+}
+
+/**
+ * Gets the icon height.
+ */
+const int Map::getIconHeight()
+{
+	return _iconWidth;
+}
+
+/**
+ * Gets the icon width.
+ */
+const int Map::getIconWidth()
+{
+	return _iconHeight;
 }
 
 }

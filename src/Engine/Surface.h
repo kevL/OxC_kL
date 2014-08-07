@@ -326,7 +326,7 @@ protected:
 				int newBaseColor = 0);
 
 		/// Invalidate the surface: force it to be redrawn
-		void invalidate();
+		void invalidate(bool valid = true);
 
 		/// Gets the tooltip of the surface.
 		std::string getTooltip() const;
