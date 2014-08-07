@@ -2628,6 +2628,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/RuleInterface.cpp" />
+		<Unit filename="Ruleset/RuleInterface.h" />
 		<Unit filename="Ruleset/RuleInventory.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
