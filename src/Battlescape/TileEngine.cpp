@@ -4028,8 +4028,12 @@ bool TileEngine::detonate(Tile* tile)
 											pos.y,
 											pos.z));
 
-	// explosions create smoke which only stays 1 or 2 turns
-//	tile->setSmoke(std::max(1, std::min(tile->getSmoke() + RNG::generate(0,2), 15)));
+	// explosions create smoke which only stays 1 or 2 turns, or 3
+	tile->setSmoke(std::max(
+							1,
+							std::min(
+									tile->getSmoke() + RNG::generate(0, 3),
+									15)));
 
 	int
 		explTest,
@@ -4052,17 +4056,15 @@ bool TileEngine::detonate(Tile* tile)
 			continue; // skip out of map and emptiness
 		}
 
-/*
-BIGWALL_NONE,	// 0
-BIGWALL_BLOCK,	// 1
-BIGWALL_NESW,	// 2
-BIGWALL_NWSE,	// 3
-BIGWALL_WEST,	// 4
-BIGWALL_NORTH,	// 5
-BIGWALL_EAST,	// 6
-BIGWALL_SOUTH,	// 7
-BIGWALL_E_S		// 8
-*/
+// BIGWALL_NONE,	// 0
+// BIGWALL_BLOCK,	// 1
+// BIGWALL_NESW,	// 2
+// BIGWALL_NWSE,	// 3
+// BIGWALL_WEST,	// 4
+// BIGWALL_NORTH,	// 5
+// BIGWALL_EAST,	// 6
+// BIGWALL_SOUTH,	// 7
+// BIGWALL_E_S		// 8
 		int bigWall = tiles[i]->getMapData(parts[i])->getBigWall();
 		if (i > 6
 				&& !(
@@ -5416,7 +5418,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
 
 				int moraleLoss = 110
-								- victim->getStats()->bravery * 2
+								- victim->getStats()->bravery * 3 / 2
 								+ action->actor->getStats()->psiStrength / 2;
 				if (moraleLoss > 0)
 					victim->moraleChange(-moraleLoss);

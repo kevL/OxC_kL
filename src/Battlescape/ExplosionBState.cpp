@@ -92,9 +92,7 @@ ExplosionBState::~ExplosionBState()
  */
 void ExplosionBState::init()
 {
-	//Log(LOG_INFO) << "ExplosionBState::init()";
-//			<< " type = " << (int)_item->getRules()->getDamageType();
-
+	//Log(LOG_INFO) << "ExplosionBState::init()"; //<< " type = " << (int)_item->getRules()->getDamageType();
 	if (_item)
 	{
 		_power = _item->getRules()->getPower();
@@ -114,9 +112,8 @@ void ExplosionBState::init()
 		}
 		//Log(LOG_INFO) << ". _power(_item) = " << _power;
 
-		// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
-		// all the rest hits one point:
-		// AP, melee (stun or AP), laser, plasma, acid
+		// HE, incendiary, smoke or stun bombs create AOE explosions;
+		// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = !_pistolWhip
 						&& _item->getRules()->getBattleType() != BT_MELEE
 						&& _item->getRules()->getBattleType() != BT_PSIAMP	// kL
@@ -162,55 +159,60 @@ void ExplosionBState::init()
 		{
 			Position posCenter_voxel = _center; // voxelspace
 			int
-				startFrame = 0, // less than 0 will delay anim-start (total 8 Frames)
-				radius = 0,
-				graphPower = _power;
+				frameInit = 0, // less than 0 will delay anim-start-frame (total 8 Frames)
+				graphRadius = 0,
+				graphQty = _power,
+				graphOffset;
 
 			if (_item)
 			{
-				radius = _item->getRules()->getExplosionRadius();
-				//Log(LOG_INFO) << ". . . getExplosionRadius() -> " << radius;
+				graphRadius = _item->getRules()->getExplosionRadius();
+				//Log(LOG_INFO) << ". . . getExplosionRadius() -> " << graphRadius;
 
 				if (_item->getRules()->getDamageType() == DT_SMOKE
 					|| _item->getRules()->getDamageType() == DT_STUN)
 				{
-					graphPower /= 2; // smoke & stun bombs do fewer anims.
+					graphQty /= 2; // smoke & stun bombs do fewer anims.
 				}
+				else
+					graphQty *= 2; // bump this up.
 			}
 			else
-				radius = _power / 9; // <- for cyberdiscs & terrain expl.
-			//Log(LOG_INFO) << ". . . radius = " << radius;
+				graphRadius = _power / 9; // <- for cyberdiscs & terrain expl.
+			//Log(LOG_INFO) << ". . . graphRadius = " << graphRadius;
 
-			if (radius < 0)
-				radius = 0;
+			if (graphRadius < 0)
+				graphRadius = 0;
 
-			int
-				offset = radius * 5, // voxelspace
-				animQty = static_cast<int>(
-								sqrt(static_cast<double>(radius) * static_cast<double>(graphPower)))
+			graphOffset = graphRadius * 5; // voxelspace
+			graphQty = static_cast<int>(
+								sqrt(static_cast<double>(graphRadius) * static_cast<double>(graphQty)))
 							/ 5;
-			if (animQty < 1)
-				animQty = 1;
+			if (graphQty < 1
+				|| graphOffset == 0)
+			{
+				graphQty = 1;
+			}
 
-			//Log(LOG_INFO) << ". . . offset(total) = " << offset;
-			//Log(LOG_INFO) << ". . . animQty = " << animQty;
+			//Log(LOG_INFO) << ". . . graphOffset(total) = " << graphOffset;
+			//Log(LOG_INFO) << ". . . graphQty = " << graphQty;
 			for (int
 					i = 0;
-					i < animQty;
+					i < graphQty;
 					i++)
 			{
 				if (i > 0) // 1st exp. is always centered.
 				{
-					startFrame = RNG::generate(-i, 0) - i / 2;
+					frameInit = RNG::generate(-i, 0) - i / 2;
 
-					posCenter_voxel.x += RNG::generate(-offset, offset);
-					posCenter_voxel.y += RNG::generate(-offset, offset);
+					posCenter_voxel.x += RNG::generate(-graphOffset, graphOffset);
+					posCenter_voxel.y += RNG::generate(-graphOffset, graphOffset);
 				}
 
-//				Explosion* explosion = new Explosion(p, startFrame, true);
+//				Explosion* explosion = new Explosion(p, frameInit, true);
 				Explosion* explosion = new Explosion( // animation
 												posCenter_voxel + Position(10, 10, 0), // jogg the anim down a few pixels. Tks.
-												startFrame,
+												frameInit,
 												true);
 
 //				_parent->getMap()->getExplosions()->insert(explosion); // kL
