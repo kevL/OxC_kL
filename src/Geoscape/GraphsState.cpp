@@ -100,7 +100,8 @@ GraphsState::GraphsState()
 	:
 		_btnRegionsOffset(0),
 		_btnCountriesOffset(0),
-		_current(-1)
+		_current(-1),
+		_vis(true)
 {
 	_bg				= new InteractiveSurface(320, 200, 0, 0);
 	_bg->onMousePress(
@@ -705,6 +706,8 @@ void GraphsState::think()
 void GraphsState::blink()
 {
 	//Log(LOG_INFO) << "GraphsState::blink()";
+	_vis = !_vis;
+
 	size_t offset = 0;
 
 	if (_alien == true
@@ -719,7 +722,8 @@ void GraphsState::blink()
 				++i)
 		{
 			if (*i == true)
-				_txtRegionActivityAlien.at(offset)->setVisible(!_txtRegionActivityAlien.at(offset)->getVisible());
+//				_txtRegionActivityAlien.at(offset)->setVisible(!_txtRegionActivityAlien.at(offset)->getVisible());
+				_txtRegionActivityAlien.at(offset)->setVisible(_vis);
 			else
 				_txtRegionActivityAlien.at(offset)->setVisible(true);
 
@@ -738,7 +742,8 @@ void GraphsState::blink()
 				++i)
 		{
 			if (*i == true)
-				_txtCountryActivityAlien.at(offset)->setVisible(!_txtCountryActivityAlien.at(offset)->getVisible());
+//				_txtCountryActivityAlien.at(offset)->setVisible(!_txtCountryActivityAlien.at(offset)->getVisible());
+				_txtCountryActivityAlien.at(offset)->setVisible(_vis);
 			else
 				_txtCountryActivityAlien.at(offset)->setVisible(true);
 

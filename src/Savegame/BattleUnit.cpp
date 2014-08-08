@@ -2717,6 +2717,13 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		&& stats->firing < caps.firing)
 	{
 		stats->firing += improveStat(_expFiring);
+
+		// kL_begin: add a touch of reactions if good firing .....
+		if (_expFiring / 3 > 0
+			&& stats->reactions < caps.reactions)
+		{
+			stats->reactions += improveStat(_expFiring / 3);
+		} // kL_end.
 	}
 
 	if (_expMelee

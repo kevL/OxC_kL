@@ -2187,7 +2187,7 @@ void Globe::drawDetail()
 				_game->getResourcePack()->getFont("FONT_SMALL"),
 				_game->getLanguage());
 //	label->setAlign(ALIGN_LEFT);
-	label->setColor(Palette::blockOffset(11)+1);
+	label->setColor(Palette::blockOffset(6)+2); //(11)+1);
 
 	Sint16
 		x,

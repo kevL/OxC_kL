@@ -97,10 +97,11 @@ private:
 		* _txtMin,
 //		* _txtMinSep,
 		* _txtSec,
-		* _txtWeekday,
-		* _txtDay,
-		* _txtMonth,
-		* _txtYear;
+		* _txtDate;
+//		* _txtWeekday,
+//		* _txtDay,
+//		* _txtMonth,
+//		* _txtYear;
 //	TextButton
 //		* _sideTop,
 //		* _sideBottom;

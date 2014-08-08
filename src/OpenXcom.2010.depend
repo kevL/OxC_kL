@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1405806104 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1407435789 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -4534,7 +4534,7 @@
 1404096023 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1404509487 f:\git\openxcom\src\geoscape\geoscapestate.h
+1407502826 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<list>
 	"../Engine/State.h"
 
@@ -6025,7 +6025,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1407388243 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1407467855 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6226,7 +6226,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1406164032 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1407472311 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6667,7 +6667,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1407246537 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1407467986 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6942,7 +6942,7 @@
 1404096022 f:\git\openxcom\src\engine\catfile.h
 	<fstream>
 
-1404096022 source:f:\git\openxcom\src\engine\crossplatform.cpp
+1407467591 source:f:\git\openxcom\src\engine\crossplatform.cpp
 	"CrossPlatform.h"
 	<algorithm>
 	<iostream>
@@ -7738,7 +7738,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1407389601 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1407505804 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7838,7 +7838,7 @@
 	"../Savegame/Waypoint.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1405649739 f:\git\openxcom\src\geoscape\graphsstate.h
+1407525432 f:\git\openxcom\src\geoscape\graphsstate.h
 	<string>
 	"../Engine/State.h"
 
@@ -7898,7 +7898,7 @@
 	<string>
 	<vector>
 
-1407422574 source:f:\git\openxcom\src\geoscape\globe.cpp
+1407473688 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -7952,7 +7952,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1407389601 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1407525558 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -9523,7 +9523,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1407259994 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1407514249 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9709,7 +9709,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1405464735 source:f:\git\openxcom\src\savegame\soldier.cpp
+1407512631 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"

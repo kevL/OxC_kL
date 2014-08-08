@@ -57,7 +57,8 @@ private:
 		_alien,
 		_country,
 		_finance,
-		_income;
+		_income,
+		_vis;
 
 	int _current;
 

@@ -70,7 +70,8 @@ MapData::~MapData()
 {
 }
 
-/* Explicit storage for MapData constants. */
+// Explicit storage for MapData constants.
+// Pathfinding::O_BIGWALL		= -1
 const int MapData::O_FLOOR		= 0;
 const int MapData::O_WESTWALL	= 1;
 const int MapData::O_NORTHWALL	= 2;

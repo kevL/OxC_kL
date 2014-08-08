@@ -1267,13 +1267,34 @@ bool Pathfinding::isBlocked(
 	//Log(LOG_INFO) << "Pathfinding::isBlocked() #2";
 	if (tile == NULL) // probably outside the map here
 		return true;
+/*
+BIGWALL_NONE,	// 0
+BIGWALL_BLOCK,	// 1
+BIGWALL_NESW,	// 2
+BIGWALL_NWSE,	// 3
+BIGWALL_WEST,	// 4
+BIGWALL_NORTH,	// 5
+BIGWALL_EAST,	// 6
+BIGWALL_SOUTH,	// 7
+BIGWALL_E_S		// 8
+*/
+	// kL_begin:
+	if ((tile->getMapData(MapData::O_WESTWALL)
+			&& tile->getMapData(MapData::O_WESTWALL)->getBigWall() == BIGWALL_BLOCK)
+		|| (tile->getMapData(MapData::O_NORTHWALL)
+			&& tile->getMapData(MapData::O_NORTHWALL)->getBigWall() == BIGWALL_BLOCK))
+//		|| (tile->getMapData(MapData::O_OBJECT)
+//			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK))
+	{
+		return true;
+	} // kL_end.
 
 	if (part == O_BIGWALL)
 	{
 		//Log(LOG_INFO) << ". part is Bigwall";
 		if (tile->getMapData(MapData::O_OBJECT)
 			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != 0
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() <= BIGWALL_NWSE
+			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < BIGWALL_WEST
 			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != bigWallExclusion)
 		{
 			return true; // blocking part
@@ -1286,7 +1307,8 @@ bool Pathfinding::isBlocked(
 	{
 		//Log(LOG_INFO) << ". part is Westwall";
 		if (tile->getMapData(MapData::O_OBJECT)
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_WEST)
+			&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_WEST
+				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
@@ -1297,7 +1319,8 @@ bool Pathfinding::isBlocked(
 
 		if (tileWest->getMapData(MapData::O_OBJECT)
 			&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_EAST
-				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
+				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S
+				|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
@@ -1307,7 +1330,8 @@ bool Pathfinding::isBlocked(
 	{
 		//Log(LOG_INFO) << ". part is Northwall";
 		if (tile->getMapData(MapData::O_OBJECT)
-			&& tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_NORTH)
+			&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_NORTH
+				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
@@ -1318,7 +1342,8 @@ bool Pathfinding::isBlocked(
 
 		if (tileNorth->getMapData(MapData::O_OBJECT)
 			&& (tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_SOUTH
-				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S))
+				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_E_S
+				|| tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
@@ -1342,13 +1367,13 @@ bool Pathfinding::isBlocked(
 				&& _unit->getFaction() == FACTION_PLAYER
 				&& tileUnit->getVisible())
 			{
-				return true; // player know only visible units
+				return true; // player knows about visible units only
 			}
 
 			if (_unit
 				&& _unit->getFaction() == tileUnit->getFaction())
 			{
-				return true; // AI know all allied units
+				return true; // AI knows all allied units
 			}
 
 			if (_unit
@@ -1359,7 +1384,7 @@ bool Pathfinding::isBlocked(
 						tileUnit)
 					!= _unit->getUnitsSpottedThisTurn().end())
 			{
-				return true; // AI know only spotted xCom units.
+				return true; // AI knows only spotted xCom units.
 			}
 		}
 		else if (tile->hasNoFloor(NULL) // this whole section is devoted to making large units

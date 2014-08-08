@@ -128,7 +128,7 @@ Soldier::Soldier(
 }
 
 /**
- *
+ * dTor.
  */
 Soldier::~Soldier()
 {

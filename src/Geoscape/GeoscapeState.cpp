@@ -350,15 +350,20 @@ GeoscapeState::GeoscapeState()
 //kL	_txtMin		= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
 //	_txtMinSep	= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
 //	_txtSec		= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
-	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 26);
-	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 26);
-	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 26);
-	_txtSec		= new Text(6, 9, screenWidth - 6, screenHeight / 2 - 30);
+	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 24);
+	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 24);
+	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 24);
+	_txtSec		= new Text(6, 9, screenWidth - 6, screenHeight / 2 - 28);
 
-	_txtWeekday	= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
+/*	_txtWeekday	= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
 	_txtDay		= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
 	_txtMonth	= new Text(29, 8, screenWidth - 32, screenHeight / 2 - 6);
-	_txtYear	= new Text(59, 8, screenWidth - 61, screenHeight / 2 + 1);
+	_txtYear	= new Text(59, 8, screenWidth - 61, screenHeight / 2 + 1); */
+//	_txtWeekday	= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
+//	_txtDay		= new Text(12, 16, screenWidth - 61, screenHeight / 2 - 5);
+//	_txtMonth	= new Text(21, 16, screenWidth - 49, screenHeight / 2 - 5);
+//	_txtYear	= new Text(27, 16, screenWidth - 28, screenHeight / 2 - 5);
+	_txtDate	= new Text(60, 8, screenWidth - 62, screenHeight / 2 - 5);
 
 	_txtFunds	= new Text(63, 8, screenWidth - 63, 10); // kL
 	if (Options::showFundsOnGeoscape)
@@ -428,10 +433,11 @@ GeoscapeState::GeoscapeState()
 	add(_txtMin);
 //	add(_txtMinSep);
 	add(_txtSec);
-	add(_txtWeekday);
-	add(_txtDay);
-	add(_txtMonth);
-	add(_txtYear);
+	add(_txtDate);
+//	add(_txtWeekday);
+//	add(_txtDay);
+//	add(_txtMonth);
+//	add(_txtYear);
 
 	add(_txtDebug);
 
@@ -714,21 +720,24 @@ GeoscapeState::GeoscapeState()
 	_txtSec->setText(L".");
 	_txtSec->setColor(Palette::blockOffset(15)+2);
 
-	_txtWeekday->setSmall();
-	_txtWeekday->setColor(Palette::blockOffset(15)+2);
-	_txtWeekday->setAlign(ALIGN_CENTER);
+	_txtDate->setColor(Palette::blockOffset(15)+2);
+	_txtDate->setAlign(ALIGN_CENTER);
 
-	_txtDay->setSmall();
-	_txtDay->setColor(Palette::blockOffset(15)+2);
-	_txtDay->setAlign(ALIGN_CENTER);
+//	_txtWeekday->setSmall();
+//	_txtWeekday->setColor(Palette::blockOffset(15)+2);
+//	_txtWeekday->setAlign(ALIGN_CENTER);
 
-	_txtMonth->setSmall();
-	_txtMonth->setColor(Palette::blockOffset(15)+2);
-	_txtMonth->setAlign(ALIGN_CENTER);
+//	_txtDay->setBig();
+//	_txtDay->setColor(Palette::blockOffset(15)+2);
+//	_txtDay->setAlign(ALIGN_CENTER);
 
-	_txtYear->setSmall();
-	_txtYear->setColor(Palette::blockOffset(15)+2);
-	_txtYear->setAlign(ALIGN_CENTER);
+//	_txtMonth->setBig();
+//	_txtMonth->setColor(Palette::blockOffset(15)+2);
+//	_txtMonth->setAlign(ALIGN_CENTER);
+
+//	_txtYear->setBig();
+//	_txtYear->setColor(Palette::blockOffset(15)+2);
+//	_txtYear->setAlign(ALIGN_CENTER);
 
 	_txtDebug->setColor(Palette::blockOffset(15)+4);
 
@@ -964,11 +973,13 @@ void GeoscapeState::timeDisplay()
 	_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 
 	std::wostringstream
-		ss1, // sec
+//		ss1, // sec
 		ss2, // min
 		ss3, // hr
-		ss4, // dy
+//		ss4, // dy
 		ss5; // yr.
+
+
 
 //	ss1 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 //	_txtSec->setText(ss1.str());
@@ -983,15 +994,28 @@ void GeoscapeState::timeDisplay()
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
-	_txtDay->setText(ss4.str());
 
-	_txtWeekday->setText(tr(_game->getSavedGame()->getTime()->getWeekdayString()));
+//	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD_CRAFT"));
+	std::wstring month = _game->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString());
+
+	ss5 << _game->getSavedGame()->getTime()->getDay();
+	ss5 << L" ";
+	ss5 << month; //_game->getSavedGame()->getTime()->getMonthString().c_str();
+	ss5 << L" ";
+	ss5 << _game->getSavedGame()->getTime()->getYear();
+	_txtDate->setText(ss5.str());
+
+//	_txtWeekday->setText(tr(_game->getSavedGame()->getTime()->getWeekdayString()));
+
+//	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
+//	_txtDay->setText(ss4.str());
+/*	ss4 << _game->getSavedGame()->getTime()->getDay();
+	_txtDay->setText(ss4.str());
 
 	_txtMonth->setText(tr(_game->getSavedGame()->getTime()->getMonthString()));
 
 	ss5 << _game->getSavedGame()->getTime()->getYear();
-	_txtYear->setText(ss5.str());
+	_txtYear->setText(ss5.str()); */
 }
 
 /**
