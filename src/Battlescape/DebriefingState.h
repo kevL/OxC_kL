@@ -121,8 +121,8 @@ private:
 	/// Adds to the debriefing stats.
 	void addStat(
 			const std::string& name,
-			int quantity,
-			int score);
+			int score,
+			int quantity = 1);
 	/// Prepares debriefing.
 	void prepareDebriefing();
 	/// Recovers items from the battlescape.

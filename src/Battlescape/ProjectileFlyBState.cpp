@@ -1304,7 +1304,8 @@ void ProjectileFlyBState::performMeleeAttack()
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 
-	if (_ammo->getRules()->getMeleeAttackSound() != -1) // and we have a lift-off!
+	if (_ammo
+		&& _ammo->getRules()->getMeleeAttackSound() != -1) // and we have a lift-off!
 //	if (_ammo->getRules()->getFireSound() != -1) // kL
 	{
 		_parent->getResourcePack()->getSound(
@@ -1324,7 +1325,8 @@ void ProjectileFlyBState::performMeleeAttack()
 	}
 
 	if (!_parent->getSave()->getDebugMode()
-		&& _action.type != BA_LAUNCH
+		&& _action.weapon->getRules()->getBattleType() == BT_MELEE
+		&& _ammo
 		&& _ammo->spendBullet() == false)
 	{
 		_parent->getSave()->removeItem(_ammo);

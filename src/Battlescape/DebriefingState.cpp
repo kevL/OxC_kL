@@ -91,8 +91,8 @@ namespace OpenXcom
  */
 DebriefingState::DebriefingState()
 	:
-		_region(0),
-		_country(0),
+		_region(NULL),
+		_country(NULL),
 		_noContainment(false),
 		_manageContainment(false),
 		_destroyBase(false),
@@ -400,7 +400,7 @@ DebriefingState::DebriefingState()
 }
 
 /**
- *
+ * dTor.
  */
 DebriefingState::~DebriefingState()
 {
@@ -506,13 +506,13 @@ void DebriefingState::btnOkClick(Action*)
 /**
  * Adds to the debriefing stats.
  * @param name		- the untranslated name of the stat
- * @param quantity	- the quantity to add
  * @param score		- the score to add
+ * @param quantity	- the quantity to add
  */
 void DebriefingState::addStat(
 		const std::string& name,
-		int quantity,
-		int score)
+		int score,
+		int quantity)
 {
 	//Log(LOG_INFO) << "DebriefingState::addStat()";
 	for (std::vector<DebriefingStat*>::iterator
@@ -522,8 +522,8 @@ void DebriefingState::addStat(
 	{
 		if ((*i)->item == name)
 		{
-			(*i)->qty = (*i)->qty + quantity;
 			(*i)->score = (*i)->score + score;
+			(*i)->qty = (*i)->qty + quantity;
 
 			break;
 		}
@@ -919,7 +919,6 @@ void DebriefingState::prepareDebriefing()
 				{
 					addStat(
 							"STR_ALIEN_BASE_CONTROL_DESTROYED",
-							1,
 							300);
 
 					// Take care to remove supply missions for this base.
@@ -986,7 +985,6 @@ void DebriefingState::prepareDebriefing()
 			{
 				addStat(
 						"STR_ALIENS_KILLED",
-						1,
 						value);
 			}
 			else if (origFaction == FACTION_PLAYER)
@@ -996,7 +994,6 @@ void DebriefingState::prepareDebriefing()
 				{
 					addStat(
 							"STR_XCOM_OPERATIVES_KILLED",
-							1,
 							-value);
 
 					for (std::vector<Soldier*>::iterator
@@ -1041,7 +1038,6 @@ void DebriefingState::prepareDebriefing()
 				else // not soldier -> tank
 					addStat(
 							"STR_TANKS_DESTROYED",
-							1,
 							-value);
 			}
 			else if (origFaction == FACTION_NEUTRAL)
@@ -1049,17 +1045,15 @@ void DebriefingState::prepareDebriefing()
 				if ((*j)->killedBy() == FACTION_PLAYER)
 					addStat(
 							"STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES",
-							1,
 							-(value * 2)); // kL
 				else
 					// if civilians happen to kill themselves XCOM shouldn't get penalty for it
 					addStat(
 							"STR_CIVILIANS_KILLED_BY_ALIENS",
-							1,
 							-value); // kL
 			}
 		}
-		else // so this unit is not dead...
+		else // so this unit is NOT dead...
 		{
 			UnitFaction faction = (*j)->getFaction();
 
@@ -1076,7 +1070,7 @@ void DebriefingState::prepareDebriefing()
 							|| success))
 					|| !aborted)
 				{
-					// so game is not aborted or aborted and unit is on exit area
+					// so game is not aborted, or aborted and unit is on exit area
 					(*j)->postMissionProcedures(save);
 
 					soldierExit++;
@@ -1089,8 +1083,8 @@ void DebriefingState::prepareDebriefing()
 
 						soldier->calcStatString( // calculate new statString
 											_game->getRuleset()->getStatStrings(),
-											(Options::psiStrengthEval
-												&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
+											Options::psiStrengthEval
+												&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()));
 					}
 					else // not soldier -> tank
 					{
@@ -1113,7 +1107,6 @@ void DebriefingState::prepareDebriefing()
 				{
 					addStat(
 							"STR_XCOM_OPERATIVES_MISSING_IN_ACTION",
-							1,
 							-value);
 
 					if (soldier != NULL)
@@ -1160,11 +1153,15 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (origFaction == FACTION_HOSTILE
+			else if (origFaction == FACTION_HOSTILE	// Mc'd unit,
+				&& faction == FACTION_PLAYER		// counts as unconscious
 				&& (!aborted
 					|| (*j)->isInExitArea())
-				&& faction == FACTION_PLAYER // mind controlled units may as well count as unconscious
-				&& !(*j)->isOut())
+				&& !(*j)->isOut()) // not Unconscious ... dead handled above.
+				// kL_note: so, this never actually runs unless early psi-exit
+				// when all aliens are dead or mind-controlled is turned on ....
+				// Except the two-stage Cydonia mission, in which case all this
+				// does not matter.
 			{
 				for (std::vector<BattleItem*>::iterator
 						k = (*j)->getInventory()->begin();
@@ -1186,10 +1183,14 @@ void DebriefingState::prepareDebriefing()
 									->getCorpseGeoscape();
 				}
 
-				addStat(
-						"STR_LIVE_ALIENS_RECOVERED",
-						1,
-						value); // kL, duplicated in function below.
+				if (base->getAvailableContainment() > 0)
+					addStat(
+							"STR_LIVE_ALIENS_RECOVERED",
+							value); // kL, duplicated in function below.
+				else // kL->
+					addStat(
+							"STR_ALIENS_KILLED",
+							value); // kL, duplicated in function below.
 
 				RuleResearch* research = _game->getRuleset()->getResearch(type);
 				if (research != NULL
@@ -1198,11 +1199,6 @@ void DebriefingState::prepareDebriefing()
 											save->getDiscoveredResearch(),
 											_game->getRuleset()))
 				{
-					addStat( // more points if it's not researched
-							"STR_LIVE_ALIENS_RECOVERED",
-							0,
-							value * 2); // kL, duplicated in function below.
-
 					if (base->getAvailableContainment() == 0)
 					{
 						_noContainment = true;
@@ -1210,6 +1206,11 @@ void DebriefingState::prepareDebriefing()
 					}
 					else
 					{
+						addStat( // more points if it's not researched
+								"STR_LIVE_ALIENS_RECOVERED",
+								value, // kL, duplicated in function below.
+								0);
+
 						base->getItems()->addItem(type);
 						_manageContainment = base->getAvailableContainment()
 												- (base->getUsedContainment() * _limitsEnforced) < 0;
@@ -1232,13 +1233,11 @@ void DebriefingState::prepareDebriefing()
 				{
 					addStat(
 							"STR_CIVILIANS_KILLED_BY_ALIENS",
-							1,
 							-value); // kL
 				}
 				else
 					addStat(
 							"STR_CIVILIANS_SAVED",
-							1,
 							value); // kL_note: duplicated below.
 			}
 		}
@@ -1251,7 +1250,6 @@ void DebriefingState::prepareDebriefing()
 	{
 		addStat(
 				"STR_XCOM_CRAFT_LOST",
-				1,
 				-craft->getRules()->getScore());
 
 		for (std::vector<Soldier*>::iterator
@@ -1293,7 +1291,6 @@ void DebriefingState::prepareDebriefing()
 		{
 			addStat(
 					"STR_XCOM_CRAFT_LOST",
-					1,
 					-(*i)->getRules()->getScore());
 		}
 	}
@@ -1337,61 +1334,51 @@ void DebriefingState::prepareDebriefing()
 							case UFO_POWER_SOURCE:
 								addStat(
 										"STR_UFO_POWER_SOURCE",
-										1,
 										20); // kL
 							break;
 							case UFO_NAVIGATION:
 								addStat(
 										"STR_UFO_NAVIGATION",
-										1,
 										5);
 							break;
 							case UFO_CONSTRUCTION:
 								addStat(
 										"STR_UFO_CONSTRUCTION",
-										1,
 										2);
 							break;
 							case ALIEN_FOOD:
 								addStat(
 										"STR_ALIEN_FOOD",
-										1,
 										1); // kL
 							break;
 							case ALIEN_REPRODUCTION:
 								addStat(
 										"STR_ALIEN_REPRODUCTION",
-										1,
 										3); // kL
 							break;
 							case ALIEN_ENTERTAINMENT:
 								addStat(
 										"STR_ALIEN_ENTERTAINMENT",
-										1,
 										1); // kL
 							break;
 							case ALIEN_SURGERY:
 								addStat(
 										"STR_ALIEN_SURGERY",
-										1,
 										2);
 							break;
 							case EXAM_ROOM:
 								addStat(
 										"STR_EXAMINATION_ROOM",
-										1,
 										2);
 							break;
 							case ALIEN_ALLOYS:
 								addStat(
 										"STR_ALIEN_ALLOYS",
-										1,
 										1);
 							break;
 							case ALIEN_HABITAT:
 								addStat(
 										"STR_ALIEN_HABITAT",
-										1,
 										1);
 							break;
 							case MUST_DESTROY: // this is the brain!
@@ -1477,8 +1464,7 @@ void DebriefingState::prepareDebriefing()
 									total_clips);
 	}
 
-	// recover all our goodies
-	if (soldierLive > 0)
+	if (soldierLive > 0) // recover all our goodies
 	{
 		for (std::vector<DebriefingStat*>::iterator
 				i = _stats.begin();
@@ -1489,10 +1475,10 @@ void DebriefingState::prepareDebriefing()
 			// kL_note: change to divided by 6 or divided by 120 in case of an alien base.
 			if ((*i)->item == "STR_ALIEN_ALLOYS")
 			{
-//kL				int alloy = 10;
+//kL			int alloy = 10;
 				int alloy = 6; // kL
 				if (mission == "STR_ALIEN_BASE_ASSAULT")
-//kL					alloy = 100;
+//kL				alloy = 100;
 					alloy = 120; // kL
 
 				(*i)->qty = (*i)->qty / alloy;
@@ -1512,7 +1498,7 @@ void DebriefingState::prepareDebriefing()
 
 	// reequip craft after a non-base-defense mission;
 	// of course only if it's not lost already, that case craft=0
-	if (craft)
+	if (craft != NULL)
 		reequipCraft(
 					base,
 					craft,
@@ -1856,7 +1842,6 @@ void DebriefingState::recoverItems(
 				{
 					addStat(
 							"STR_ALIEN_CORPSES_RECOVERED",
-							1,
 							(*it)->getUnit()->getValue() / 3); // kL
 
 					base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape());
@@ -1866,21 +1851,20 @@ void DebriefingState::recoverItems(
 				{
 					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 					{
-						addStat(
-								"STR_LIVE_ALIENS_RECOVERED",
-								1,
-								(*it)->getUnit()->getValue()); // kL, duplicated above.
+						if (base->getAvailableContainment() > 0)
+							addStat(
+									"STR_LIVE_ALIENS_RECOVERED",
+									(*it)->getUnit()->getValue()); // kL, duplicated above.
+						else // kL->
+							addStat(
+									"STR_ALIENS_KILLED",
+									(*it)->getUnit()->getValue()); // kL, duplicated above.
 
 						if (_game->getSavedGame()->isResearchAvailable(
 								_game->getRuleset()->getResearch((*it)->getUnit()->getType()),
 								_game->getSavedGame()->getDiscoveredResearch(),
 								_game->getRuleset()))
 						{
-							addStat( // more points if it's not researched
-									"STR_LIVE_ALIENS_RECOVERED",
-									0,
-									(*it)->getUnit()->getValue() * 2); // kL, duplicated above.
-
 							if (base->getAvailableContainment() == 0)
 							{
 								_noContainment = true;
@@ -1888,6 +1872,11 @@ void DebriefingState::recoverItems(
 							}
 							else
 							{
+								addStat( // more points if it's not researched
+										"STR_LIVE_ALIENS_RECOVERED",
+										(*it)->getUnit()->getValue(), // kL, duplicated above.
+										0);
+
 								base->getItems()->addItem((*it)->getUnit()->getType());
 								_manageContainment = base->getAvailableContainment()
 														- (base->getUsedContainment() * _limitsEnforced) < 0;
@@ -1899,13 +1888,11 @@ void DebriefingState::recoverItems(
 					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
 						addStat(
 								"STR_CIVILIANS_SAVED",
-								1,
 								(*it)->getUnit()->getValue()); // kL_note: duplicated above.
 				}
 				else if (!_game->getSavedGame()->isResearched((*it)->getRules()->getType()))
 					addStat( // add pts. for unresearched items only
 							"STR_ALIEN_ARTIFACTS_RECOVERED",
-							1,
 							(*it)->getRules()->getRecoveryPoints());
 			}
 

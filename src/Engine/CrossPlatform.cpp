@@ -573,6 +573,9 @@ std::vector<std::string> getFolderContents(
 	}
 
 	closedir(dp);
+	std::sort(
+			files.begin(),
+			files.end());
 
 	return files;
 }
