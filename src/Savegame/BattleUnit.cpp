@@ -2707,23 +2707,23 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 			stats->bravery += 10;
 	}
 
-	if (_expReactions
-		&& stats->reactions < caps.reactions)
-	{
-		stats->reactions += improveStat(_expReactions);
-	}
-
 	if (_expFiring
 		&& stats->firing < caps.firing)
 	{
 		stats->firing += improveStat(_expFiring);
 
 		// kL_begin: add a touch of reactions if good firing .....
-		if (_expFiring / 3 > 0
+		if (_expFiring - 2 > 0
 			&& stats->reactions < caps.reactions)
 		{
-			stats->reactions += improveStat(_expFiring / 3);
+			stats->reactions += improveStat(_expFiring - 2);
 		} // kL_end.
+	}
+
+	if (_expReactions
+		&& stats->reactions < caps.reactions)
+	{
+		stats->reactions += improveStat(_expReactions);
 	}
 
 	if (_expMelee
@@ -2750,49 +2750,55 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		stats->throwing += improveStat(_expThrowing);
 	}
 
-	if (_expBravery
-		|| _expReactions
-		|| _expFiring
-		|| _expMelee)
-//kL	|| _expPsiSkill
-//kL	|| _expPsiStrength)
+
+	bool expPri = _expBravery
+				|| _expReactions
+				|| _expFiring
+				|| _expMelee;
+
+	if (expPri
+		|| _expPsiSkill
+		|| _expPsiStrength)
 	{
 		if (soldier->getRank() == RANK_ROOKIE)
 			soldier->promoteRank();
 
-		// kL_note: The delta-bits seem odd... thought it should be only 1d6 or so.
-		int delta = caps.tu - stats->tu;
-		if (delta > 0)
-			stats->tu += RNG::generate(
-									0,
-									(delta / 10) + 2)
-								- 1;
+		if (expPri)
+		{
+			// kL_note: The delta-bits seem odd... thought it should be only 1d6 or so.
+			int delta = caps.tu - stats->tu;
+			if (delta > 0)
+				stats->tu += RNG::generate(
+										0,
+										(delta / 10) + 2)
+									- 1;
 
-		delta = caps.health - stats->health;
-		if (delta > 0)
-			stats->health += RNG::generate(
-									0,
-									(delta / 10) + 2)
-								- 1;
+			delta = caps.health - stats->health;
+			if (delta > 0)
+				stats->health += RNG::generate(
+										0,
+										(delta / 10) + 2)
+									- 1;
 
-		delta = caps.strength - stats->strength;
-		if (delta > 0)
-			stats->strength += RNG::generate(
-									0,
-									(delta / 10) + 2)
-								- 1;
+			delta = caps.strength - stats->strength;
+			if (delta > 0)
+				stats->strength += RNG::generate(
+										0,
+										(delta / 10) + 2)
+									- 1;
 
-		delta = caps.stamina - stats->stamina;
-		if (delta > 0)
-			stats->stamina += RNG::generate(
-									0,
-									(delta / 10) + 2)
-								- 1;
+			delta = caps.stamina - stats->stamina;
+			if (delta > 0)
+				stats->stamina += RNG::generate(
+										0,
+										(delta / 10) + 2)
+									- 1;
+		}
 
 		return true;
 	}
-	else
-		return false;
+
+	return false;
 }
 
 /**
@@ -2803,6 +2809,7 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 int BattleUnit::improveStat(int exp)
 {
 	int teir = 1;
+
 	if		(exp > 10)	teir = 4;
 	else if (exp > 5)	teir = 3;
 	else if (exp > 2)	teir = 2;

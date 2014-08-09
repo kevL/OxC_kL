@@ -6590,7 +6590,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1407173341 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1407531633 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -9289,7 +9289,7 @@
 	"MapBlock.h"
 	"../Battlescape/Position.h"
 
-1405988102 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1407532637 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 	"../Engine/Logger.h"
 
