@@ -141,7 +141,7 @@ void Timer::think(
 	Sint64 now = slowTick();
 	// this is used to make sure we stop calling *_state on *state
 	// in the loop once *state has been popped and deallocated:
-	Game* game = state? state->_game: 0;
+	Game* game = state? state->_game: NULL;
 //	assert(!game || game->isState(state));
 
 	if (_running)
@@ -155,7 +155,7 @@ void Timer::think(
 						&& now - _frameSkipStart >= _interval;
 					++i)
 			{
-				if (state != 0
+				if (state != NULL
 					&& _state != 0)
 				{
 					(state->*_state)();
@@ -173,7 +173,7 @@ void Timer::think(
 			}
 
 			if (_running
-				&& surface != 0
+				&& surface != NULL
 				&& _surface != 0)
 			{
 				(surface->*_surface)();

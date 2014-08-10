@@ -76,6 +76,7 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Sound.h" // kL
 #include "../Engine/Surface.h"
+#include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
 
 #include "../Interface/Cursor.h"
@@ -206,7 +207,10 @@ GeoscapeState::GeoscapeState()
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
 		_dfLon(0.0), // kL
-		_dfLat(0.0) // kL
+		_dfLat(0.0), // kL
+		_day(-1),
+		_month(-1),
+		_year(-1)
 {
 	int
 		screenWidth		= Options::baseXGeoscape,
@@ -350,10 +354,10 @@ GeoscapeState::GeoscapeState()
 //kL	_txtMin		= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
 //	_txtMinSep	= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
 //	_txtSec		= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
-	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 24);
-	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 24);
-	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 24);
-	_txtSec		= new Text(6, 9, screenWidth - 6, screenHeight / 2 - 28);
+	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 23);
+	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 23);
+	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 23);
+	_txtSec		= new Text(6, 9, screenWidth - 7, screenHeight / 2 - 27);
 
 /*	_txtWeekday	= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
 	_txtDay		= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
@@ -363,18 +367,25 @@ GeoscapeState::GeoscapeState()
 //	_txtDay		= new Text(12, 16, screenWidth - 61, screenHeight / 2 - 5);
 //	_txtMonth	= new Text(21, 16, screenWidth - 49, screenHeight / 2 - 5);
 //	_txtYear	= new Text(27, 16, screenWidth - 28, screenHeight / 2 - 5);
-	_txtDate	= new Text(60, 8, screenWidth - 62, screenHeight / 2 - 5);
+//	_txtDate	= new Text(60, 8, screenWidth - 62, screenHeight / 2 - 5);
 
-	_txtFunds	= new Text(63, 8, screenWidth - 63, 10); // kL
+	_srfDay1		= new Surface(3, 8, screenWidth - 46, screenHeight / 2 - 3);
+	_srfDay2		= new Surface(3, 8, screenWidth - 42, screenHeight / 2 - 3);
+	_srfMonth1		= new Surface(3, 8, screenWidth - 35, screenHeight / 2 - 3);
+	_srfMonth2		= new Surface(3, 8, screenWidth - 31, screenHeight / 2 - 3);
+	_srfYear1		= new Surface(3, 8, screenWidth - 24, screenHeight / 2 - 3);
+	_srfYear2		= new Surface(3, 8, screenWidth - 20, screenHeight / 2 - 3);
+
+	_txtFunds = new Text(63, 8, screenWidth - 63, 10); // kL
 	if (Options::showFundsOnGeoscape)
 	{
 		_txtFunds = new Text(59, 8, screenWidth - 61, screenHeight / 2 - 27);
 		_txtHour->		setY(_txtHour->		getY() + 6);
 		_txtHourSep->	setY(_txtHourSep->	getY() + 6);
 		_txtMin->		setY(_txtMin->		getY() + 6);
-//kL		_txtMinSep->	setY(_txtMinSep->	getY() + 6);
-//kL		_txtMinSep->	setX(_txtMinSep->	getX() - 10);
-//kL		_txtSec->		setX(_txtSec->		getX() - 10);
+//kL	_txtMinSep->	setY(_txtMinSep->	getY() + 6);
+//kL	_txtMinSep->	setX(_txtMinSep->	getX() - 10);
+//kL	_txtSec->		setX(_txtSec->		getX() - 10);
 	}
 
 	_timeSpeed = _btn5Secs;
@@ -433,7 +444,13 @@ GeoscapeState::GeoscapeState()
 	add(_txtMin);
 //	add(_txtMinSep);
 	add(_txtSec);
-	add(_txtDate);
+//	add(_txtDate);
+	add(_srfDay1);
+	add(_srfDay2);
+	add(_srfMonth1);
+	add(_srfMonth2);
+	add(_srfYear1);
+	add(_srfYear2);
 //	add(_txtWeekday);
 //	add(_txtDay);
 //	add(_txtMonth);
@@ -720,8 +737,8 @@ GeoscapeState::GeoscapeState()
 	_txtSec->setText(L".");
 	_txtSec->setColor(Palette::blockOffset(15)+2);
 
-	_txtDate->setColor(Palette::blockOffset(15)+2);
-	_txtDate->setAlign(ALIGN_CENTER);
+//	_txtDate->setColor(Palette::blockOffset(15)+2);
+//	_txtDate->setAlign(ALIGN_CENTER);
 
 //	_txtWeekday->setSmall();
 //	_txtWeekday->setColor(Palette::blockOffset(15)+2);
@@ -874,8 +891,7 @@ void GeoscapeState::handle(Action* action)
 }
 
 /**
- * Updates the timer display and resets the palette
- * since it's bound to change on other screens.
+ * Updates the timer display and resets the palette since it's bound to change on other screens.
  */
 void GeoscapeState::init()
 {
@@ -969,6 +985,8 @@ void GeoscapeState::think()
  */
 void GeoscapeState::timeDisplay()
 {
+	Log(LOG_INFO) << "GeoscapeState::timeDisplay()";
+
 //	if (Options::showFundsOnGeoscape)
 	_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 
@@ -978,8 +996,6 @@ void GeoscapeState::timeDisplay()
 		ss3, // hr
 //		ss4, // dy
 		ss5; // yr.
-
-
 
 //	ss1 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 //	_txtSec->setText(ss1.str());
@@ -994,17 +1010,80 @@ void GeoscapeState::timeDisplay()
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-
-//	_btnUnload->setText(_game->getLanguage()->getString("STR_UNLOAD_CRAFT"));
-	std::wstring month = _game->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString());
+/*	std::wstring month = _game->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString());
 
 	ss5 << _game->getSavedGame()->getTime()->getDay();
 	ss5 << L" ";
 	ss5 << month; //_game->getSavedGame()->getTime()->getMonthString().c_str();
 	ss5 << L" ";
 	ss5 << _game->getSavedGame()->getTime()->getYear();
-	_txtDate->setText(ss5.str());
+	_txtDate->setText(ss5.str()); */
 
+	int date = _game->getSavedGame()->getTime()->getDay();
+	if (_day != date)
+	{
+		//Log(LOG_INFO) << ". day NOT Date";
+		_day = date;
+
+		SurfaceSet* digitSet = _game->getResourcePack()->getSurfaceSet("DIGITS");
+
+		//Log(LOG_INFO) << ". blit day1";
+		Surface* srfDate = digitSet->getFrame(date / 10);
+		srfDate->blit(_srfDay1);
+
+		//Log(LOG_INFO) << ". blit day2";
+		srfDate = digitSet->getFrame(date %10);
+		srfDate->blit(_srfDay2);
+
+		_srfDay1->offset(Palette::blockOffset(15)+3);
+		_srfDay2->offset(Palette::blockOffset(15)+3);
+
+		//Log(LOG_INFO) << ". done day";
+
+		date = _game->getSavedGame()->getTime()->getMonth();
+		if (_month != date)
+		{
+			//Log(LOG_INFO) << ". month NOT Date";
+			_month = date;
+
+			srfDate = digitSet->getFrame(date / 10);
+			srfDate->blit(_srfMonth1);
+
+			srfDate = digitSet->getFrame(date %10);
+			srfDate->blit(_srfMonth2);
+
+			_srfMonth1->offset(Palette::blockOffset(15)+3);
+			_srfMonth2->offset(Palette::blockOffset(15)+3);
+
+
+			date = _game->getSavedGame()->getTime()->getYear() %100;
+			if (_year != date)
+			{
+				//Log(LOG_INFO) << ". year NOT Date";
+				_year = date;
+
+				srfDate = digitSet->getFrame(date / 10);
+				srfDate->blit(_srfYear1);
+
+				srfDate = digitSet->getFrame(date %10);
+				srfDate->blit(_srfYear2);
+
+				_srfYear1->offset(Palette::blockOffset(15)+3);
+				_srfYear2->offset(Palette::blockOffset(15)+3);
+			}
+		}
+	}
+
+/*	if (tmpSurface != NULL)
+	{
+		tmpSurface->blitNShade(
+				surface,
+				screenPosition.x + offset.x + 7,
+				screenPosition.y + offset.y + 4,
+				0,
+				false,
+				3); // 1=white, 3=red.
+	} */
 //	_txtWeekday->setText(tr(_game->getSavedGame()->getTime()->getWeekdayString()));
 
 //	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());

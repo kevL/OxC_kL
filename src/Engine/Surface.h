@@ -227,9 +227,10 @@ protected:
 				return;
 			}
 
-			static_cast<Uint8*>(_surface->pixels)[(y * static_cast<int>(_surface->pitch))
-												+ (x * static_cast<int>(_surface->format->BytesPerPixel))]
-											= pixel;
+			static_cast<Uint8*>(_surface->pixels)
+						[(y * static_cast<int>(_surface->pitch))
+						+ (x * static_cast<int>(_surface->format->BytesPerPixel))]
+					= pixel;
 		}
 
 		/**
@@ -273,8 +274,8 @@ protected:
 			}
 
 			return static_cast<Uint8*>(_surface->pixels)
-					[ (y * static_cast<int>(_surface->pitch))
-					+ (x * static_cast<int>(_surface->format->BytesPerPixel))];
+						[(y * static_cast<int>(_surface->pitch))
+						+ (x * static_cast<int>(_surface->format->BytesPerPixel))];
 		}
 
 		/**

@@ -71,7 +71,8 @@ Base::Base(const Ruleset* rule)
 		_inBattlescape(false),
 		_retaliationTarget(false),
 		_cashIncome(0),	// kL
-		_cashSpent(0)	// kL
+		_cashSpent(0),	// kL
+		_defenseEffect(0)
 {
 	_items = new ItemContainer();
 }
@@ -2767,6 +2768,22 @@ void Base::setCashSpent(int cash)
 int Base::getCashSpent() const
 {
 	return _cashSpent;
+}
+
+/**
+ * Sets the effect of a base's defense against aLien attacks.
+ */
+void Base::setDefenseEffect(int effect)
+{
+	_defenseEffect = effect;
+}
+
+/**
+ * Gets the effect of a base's defense against aLien attacks.
+ */
+int Base::getDefenseEffect() const
+{
+	return _defenseEffect;
 } // kL_end.
 
 }

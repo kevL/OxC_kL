@@ -166,7 +166,8 @@ private:
 
 
 	public:
-		static const int DEFAULT_ANIM_SPEED = 89;
+//		static const int DEFAULT_ANIM_SPEED = 89; // for shaders Raw, Quillez, etc.
+		static const int DEFAULT_ANIM_SPEED = 79; // for shaders 4xHQX & above.
 
 		/// Creates the Battlescape state.
 		BattlescapeState();

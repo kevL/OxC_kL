@@ -300,14 +300,14 @@ int Projectile::calculateTrajectory(
 int Projectile::calculateThrow(double accuracy)
 {
 	//Log(LOG_INFO) << "Projectile::calculateThrow(), cf TileEngine::validateThrow()";
-	BattleUnit* bu = _save->getTile(_origin)->getUnit();
-	if (!bu)
+/*	BattleUnit* bu = _save->getTile(_origin)->getUnit();
+	if (bu == NULL)
 	{
 		bu = _save->getTile(Position(
 								_origin.x,
 								_origin.y,
 								_origin.z - 1))->getUnit();
-	}
+	} */
 
 	Position originVoxel = _save->getTileEngine()->getOriginVoxel(
 																_action,
@@ -359,7 +359,7 @@ int Projectile::calculateThrow(double accuracy)
 		while (test == VOXEL_OUTOFBOUNDS)
 		{
 			Position delta = targetVoxel;	// will apply some accuracy modifiers
-			applyAccuracy(					// calling for best flavor
+			applyAccuracy(					// ... calling for best flavor ...
 						originVoxel,
 						&delta,
 						accuracy,
@@ -644,18 +644,20 @@ void Projectile::applyAccuracy(
 	target->z += RNG::generate(0, deviation / 4) - deviation / 8; */
 
 	// kL_begin:
-	int maxThrowRule = 100;
-	Soldier* soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
+	int throwRule = 100;
+//	Soldier* soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
+	Soldier* soldier = _action.actor->getGeoscapeSoldier();
 	if (soldier)
 	{
-		int maxThrowRule = soldier->getRules()->getStatCaps().throwing;
+		int throwRule = soldier->getRules()->getStatCaps().throwing;
 
 //		int minThrowRule = _save->getGeoscapeSave()->getSoldier(_action.actor->getId())->getRules()->getMinStats().throwing;
 		//Log(LOG_INFO) << ". . minThrowRule = " << minThrowRule;
 	}
-	//Log(LOG_INFO) << ". . maxThrowRule = " << maxThrowRule;
+	//Log(LOG_INFO) << ". . throwRule = " << throwRule;
 
-	double deviation = static_cast<double>(maxThrowRule) - (accuracy * 100.0);
+	accuracy = accuracy / 2.0 + 30.0; // arbitrary adjustment.
+	double deviation = static_cast<double>(throwRule) - (accuracy * 100.0);
 	deviation = std::max(
 						0.0,
 						deviation * targetDist / 100);
@@ -826,10 +828,19 @@ Position Projectile::getOrigin()
  * of the projectile here, but rather the targeted tile.
  * @return, target as a tile position
  */
-//kL Position Projectile::getTarget()
-Position Projectile::getTarget() const // kL
+Position Projectile::getTarget() const
 {
 	return _action.target;
+}
+
+/**
+ * kL. Gets the ACTUAL target for this projectile.
+ * It is important to note that we use the final position of the projectile here.
+ * @return, trajectory finish as a tile position
+ */
+Position Projectile::getFinalTarget() const // kL
+{
+	return _trajectory.back() / Position(16, 16, 24);
 }
 
 /**

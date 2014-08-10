@@ -237,8 +237,8 @@ void UnitDieBState::think()
 			_unit->instaKill();
 		}
 
-		if (_unit->getTurnsExposed() < 255)
-			_unit->setTurnsExposed(255);
+//kL	if (_unit->getTurnsExposed() < 255)
+		_unit->setTurnsExposed(255);
 
 //		Tile* tile = _unit->getTile(); // kL
 

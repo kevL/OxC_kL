@@ -124,7 +124,7 @@ BaseDefenseState::BaseDefenseState(
 }
 
 /**
- *
+ * dTor.
  */
 BaseDefenseState::~BaseDefenseState()
 {
@@ -136,7 +136,7 @@ BaseDefenseState::~BaseDefenseState()
  */
 void BaseDefenseState::think()
 {
-	_timer->think(this, 0);
+	_timer->think(this, NULL);
 }
 
 /**
@@ -253,7 +253,9 @@ void BaseDefenseState::btnOkClick(Action*)
 	if (_ufo->getStatus() != Ufo::DESTROYED)
 	{
 		// the UFO has finished its duty, whatever happens in the base defense
-		_ufo->setStatus(Ufo::DESTROYED);
+//kL	_ufo->setStatus(Ufo::DESTROYED); // done in GeoscapeState::handleBaseDefense()
+
+		_base->setDefenseEffect(_ufo->getDamagePercentage()); // kL
 
 		_state->handleBaseDefense(
 								_base,

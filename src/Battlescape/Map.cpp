@@ -594,8 +594,8 @@ void Map::drawTerrain(Surface* surface)
 
 				if (!_smoothingEngaged)
 				{
-					Position target = _projectile->getTarget();	// kL
-					if (!_camera->isOnScreen(target)			// kL
+					Position target = _projectile->getFinalTarget();	// kL
+					if (!_camera->isOnScreen(target)					// kL
 						|| bulletScreen.x < 1
 						|| bulletScreen.x > surface->getWidth() - 1
 						|| bulletScreen.y < 1
@@ -792,12 +792,14 @@ void Map::drawTerrain(Surface* surface)
 													0);
 										}
 
-										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(209); // red cross
+										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
 										tmpSurface->blitNShade(
 												surface,
-												screenPosition.x + offset.x + 3 + 16,
+												screenPosition.x + offset.x + 4 + 16,
 												screenPosition.y + offset.y + 4 + 32,
-												0);
+												0,
+												false,
+												3); // 1=white, 3=red
 									}
 									else
 									{
@@ -1486,14 +1488,14 @@ void Map::drawTerrain(Surface* surface)
 //									tmpSurface->drawRect(1, 1, 7, 5, 0); // clear it.
 //									tmpSurface->drawRect(1, 1, 7, 5, Palette::blockOffset(2)+2); // red block on rankIcon.
 									//Log(LOG_INFO) << ". wounded Soldier ID = " << unit->getId();
-									tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(209); // red cross
+									tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
 									tmpSurface->blitNShade(
 											surface,
-											screenPosition.x + offset.x + 3,
+											screenPosition.x + offset.x + 4,
 											screenPosition.y + offset.y + 4,
-											0);
-//											false,
-//											1); // 1=white, 3=red.
+											0,
+											false,
+											3); // 1=white, 3=red.
 
 //									if (unit->getFatalWounds() < 10) // stick to under 10 wounds ... else double digits.
 //									{
@@ -1543,14 +1545,14 @@ void Map::drawTerrain(Surface* surface)
 									0);
 						}
 
-						tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(209); // red cross
+						tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
 						tmpSurface->blitNShade(
 								surface,
-								screenPosition.x + 1,
-								screenPosition.y + 1,
-								0);
-//								false,
-//								1); // 1=white, 3=red.
+								screenPosition.x + 4,
+								screenPosition.y + 4,
+								0,
+								false,
+								3); // 1=white, 3=red.
 
 					} // kL_end.
 

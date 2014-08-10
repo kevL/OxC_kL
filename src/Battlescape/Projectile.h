@@ -66,7 +66,7 @@ private:
 			Position* target,
 			double accuracy,
 			bool keepRange = false,
-			Tile* targetTile = 0,
+			Tile* targetTile = NULL,
 			bool extendLine = true);
 
 
@@ -108,8 +108,9 @@ private:
 		/// Gets the Position of origin for the projectile.
 		Position getOrigin();
 		/// Gets the targetted tile for the projectile.
-//kL	Position getTarget();
-		Position getTarget() const; // kL
+		Position getTarget() const;
+		/// kL. Gets the ACTUAL target for this projectile.
+		Position getFinalTarget() const; // kL
 
 		///
 		bool isReversed() const;

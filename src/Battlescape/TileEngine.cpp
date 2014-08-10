@@ -1617,7 +1617,7 @@ bool TileEngine::canMakeSnap(
 		weapon = unit->getItem(unit->getActiveHand());
 	}
 	else
-		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
+		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good. Also, this does a check for ammo.
 
 	if (weapon == NULL)
 	{
@@ -1662,7 +1662,7 @@ bool TileEngine::canMakeSnap(
 				&& unit->getTimeUnits() >= unit->getActionTUs(			// has enough TU
 															BA_HIT,
 															weapon))
-			|| (weapon->getRules()->getBattleType() == BT_FIREARM	// has a gun
+			|| (weapon->getRules()->getBattleType() == BT_FIREARM		// has a gun
 
 					// ARE THESE REALLY CHECKED SOMEWHERE:
 
@@ -1671,7 +1671,7 @@ bool TileEngine::canMakeSnap(
 //kL				&& unit->getTimeUnits() >= unit->getActionTUs(				// has enough TU
 //kL															BA_SNAPSHOT,
 //kL															weapon)
-				&& testFireMethod(									// kL, has enough TU for a firing method.
+				&& testFireMethod( // kL, has enough TU for a firing method.
 								unit,
 								target,
 								weapon))))
@@ -1798,61 +1798,63 @@ bool TileEngine::tryReactionSnap(
 								action.type,
 								action.weapon);
 
-	// kL_note: Does this handle melee hits, as reaction shots? really.
-//	if (action.weapon->getAmmoItem()						// lasers & melee are their own ammo-items.
-															// Unless their battleGame #ID happens to be 0
-//		&& action.weapon->getAmmoItem()->getAmmoQuantity()	// returns 255 for laser; 0 for melee
-//		&& unit->getTimeUnits() >= action.TU)
-	// That's all been done!!!
-//	{
-	action.targeting = true;
-
-	if (unit->getFaction() == FACTION_HOSTILE) // aLien units will go into an "aggro" state when they react.
+	// Re-instate this. That is, continue checking these during a skirmish and
+	// punt any spotters that may have initially passed these tests (somewhere
+	// in the reaction-fire algorithm) out of the spotters-vector if they can't
+	// pass tryReactionSnap() as called from checkReactionFire().
+	if (action.weapon->getAmmoItem() != NULL					// lasers & melee are their own ammo-items
+		&& action.weapon->getAmmoItem()->getAmmoQuantity() > 0	// returns 255 for laser; 0 for melee; else, rounds still in a loaded clip
+		&& action.TU <= unit->getTimeUnits())
+	// That's all been done!!! BUT REACTOR MIGHT RUN OUT OF AMMO ... or TU! in which case, put an ammo/TU checks into getReactor()
 	{
-		AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
-		if (aggro == NULL) // should not happen, but just in case...
+		action.targeting = true;
+
+		if (unit->getFaction() == FACTION_HOSTILE) // aLien units will go into an "aggro" state when they react.
 		{
-			aggro = new AlienBAIState(
-									_battleSave,
-									unit,
-									NULL);
-			unit->setAIState(aggro);
+			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
+			if (aggro == NULL) // should not happen, but just in case...
+			{
+				aggro = new AlienBAIState(
+										_battleSave,
+										unit,
+										NULL);
+				unit->setAIState(aggro);
+			}
+
+//kL		if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
+			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() > -1 // kL
+				&& aggro->explosiveEfficacy(
+										action.target,
+										unit,
+										action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
+										-1)
+									== false)
+			{
+				action.targeting = false;
+			}
 		}
 
-//kL	if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
-		if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() > -1 // kL
-			&& aggro->explosiveEfficacy(
-									action.target,
-									unit,
-									action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
-									-1)
-								== false)
+		if (action.targeting
+			&& action.type != BA_NONE // kL
+			&& unit->spendTimeUnits(action.TU))
 		{
-			action.targeting = false;
-		}
-	}
+			//Log(LOG_INFO) << ". Reaction Fire by ID " << unit->getId();
+			action.TU = 0;
+			action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset(); // kL, was above under "BattleAction action;"
 
-	if (action.targeting
-		&& action.type != BA_NONE // kL
-		&& unit->spendTimeUnits(action.TU))
-	{
-		//Log(LOG_INFO) << ". Reaction Fire by ID " << unit->getId();
-		action.TU = 0;
-		action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset(); // kL, was above under "BattleAction action;"
-
-		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
-															_battleSave->getBattleGame(),
-															action));
-		_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
+			_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
 																_battleSave->getBattleGame(),
 																action));
+			_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
+																	_battleSave->getBattleGame(),
+																	action));
 
-//		if (unit->getFaction() == FACTION_PLAYER)
-//			unit->setTurnsExposed(0); // kL: That's for giving our position away!!
+//			if (unit->getFaction() == FACTION_PLAYER)
+//				unit->setTurnsExposed(0); // kL: That's for giving our position away!!
 
-		return true;
+			return true;
+		}
 	}
-//	}
 
 	return false;
 }

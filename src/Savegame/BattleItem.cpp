@@ -187,7 +187,9 @@ void BattleItem::setFuseTimer(int turn)
 
 /**
  * Gets the quantity of ammo in this ammo-item.
- * @return, Ammo quantity: 0 if item is not ammo; -1 if item is a weapon.
+ * @return, ammo quantity
+ *			0	- item is not ammo
+ *			255	- item is its own ammo
  */
 int BattleItem::getAmmoQuantity() const
 {
@@ -370,7 +372,9 @@ bool BattleItem::occupiesSlot(
 
 /**
  * Gets an item's currently loaded ammo item.
- * @return, A required ammo item. -1 if item is ammo, or the weaponID if item is its own ammo.
+ * @return, required ammo item
+ *			-1 if item is ammo
+ *			the weaponID if item is its own ammo
  */
 BattleItem* BattleItem::getAmmoItem()
 {

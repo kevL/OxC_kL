@@ -255,9 +255,9 @@ MedikitState::MedikitState(
 	add(_mediView, "body", "medikit", _bg);
 	add(_endButton);
 
-	add(new MedikitTitle(37, tr("STR_PAIN_KILLER")), "textPK", "medikit", _bg);
-	add(new MedikitTitle(73, tr("STR_STIMULANT")), "textStim", "medikit", _bg);
-	add(new MedikitTitle(109, tr("STR_HEAL")), "textHeal", "medikit", _bg);
+	add(new MedikitTitle(36, tr("STR_PAIN_KILLER")), "textPK", "medikit", _bg);
+	add(new MedikitTitle(72, tr("STR_STIMULANT")), "textStim", "medikit", _bg);
+	add(new MedikitTitle(108, tr("STR_HEAL")), "textHeal", "medikit", _bg);
 
 	add(_healButton, "buttonHeal", "medikit", _bg);
 	add(_stimButton, "buttonStim", "medikit", _bg);

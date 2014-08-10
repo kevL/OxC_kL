@@ -2716,7 +2716,8 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 		if (_expFiring - 2 > 0
 			&& stats->reactions < caps.reactions)
 		{
-			stats->reactions += improveStat(_expFiring - 2);
+			_expReactions += _expFiring / 3;
+//			stats->reactions += improveStat(_expFiring - 2);
 		} // kL_end.
 	}
 

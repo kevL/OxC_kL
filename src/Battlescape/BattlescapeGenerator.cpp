@@ -1509,8 +1509,8 @@ bool BattlescapeGenerator::addItem(
 
 /**
  * Deploys the aliens, according to the alien deployment rules.
- * @param race Pointer to the alien race.
- * @param deployment Pointer to the deployment rules.
+ * @param race 			- pointer to the alien race
+ * @param deployment 	- pointer to the deployment rules
  */
 void BattlescapeGenerator::deployAliens(
 		AlienRace* race,
@@ -1531,7 +1531,7 @@ void BattlescapeGenerator::deployAliens(
 	bool outside;
 	int
 		itemLevel,
-		quantity;
+		qty;
 
 	BattleItem* item;
 	BattleUnit* unit;
@@ -1539,32 +1539,52 @@ void BattlescapeGenerator::deployAliens(
 	Unit* unitRule;
 
 	for (std::vector<DeploymentData>::iterator
-			d = deployment->getDeploymentData()->begin();
-			d != deployment->getDeploymentData()->end();
-			++d)
+			data = deployment->getDeploymentData()->begin();
+			data != deployment->getDeploymentData()->end();
+			++data)
 	{
-		alienName = race->getMember((*d).alienRank);
+		alienName = race->getMember((*data).alienRank);
 
 		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
-			quantity = (*d).lowQty + RNG::generate(0, (*d).dQty);										// beginner/experienced
+			qty = (*data).lowQty + RNG::generate( // beginner/experienced
+											0,
+											(*data).dQty);
 		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
-			quantity = (*d).lowQty + (((*d).highQty - (*d).lowQty) / 2) + RNG::generate(0, (*d).dQty);	// veteran/genius
+			qty = (*data).lowQty + (((*data).highQty - (*data).lowQty) / 2) + RNG::generate( // veteran/genius
+																						0,
+																						(*data).dQty);
 		else
-			quantity = (*d).highQty + RNG::generate(0, (*d).dQty);										// super (and beyond?)
+			qty = (*data).highQty + RNG::generate( // super (and beyond)
+												0,
+												(*data).dQty);
+
+		if (_base != NULL
+			&& _base->getDefenseEffect() > 0)
+		{
+			Log(LOG_INFO) << "BattlescapeGenerator::deployAliens()";
+			Log(LOG_INFO) << ". defenseEffect = " << _base->getDefenseEffect();
+			Log(LOG_INFO) << ". qty_init = " << qty;
+			qty = std::max(
+						qty / 2,
+						qty - (qty * _base->getDefenseEffect() / 100));
+			Log(LOG_INFO) << ". qty_postDefense = " << qty;
+
+			_base->setDefenseEffect(0);
+		}
 
 		for (int
 				i = 0;
-				i < quantity;
+				i < qty;
 				i++)
 		{
 			outside = false;
 			if (_ufo)
-				outside = RNG::percent((*d).percentageOutsideUfo);
+				outside = RNG::percent((*data).percentageOutsideUfo);
 
 			unitRule = _game->getRuleset()->getUnit(alienName);
 			unit = addAlien(
 						unitRule,
-						(*d).alienRank,
+						(*data).alienRank,
 						outside);
 
 			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
@@ -1595,8 +1615,8 @@ void BattlescapeGenerator::deployAliens(
 				else
 				{
 					for (std::vector<std::string>::iterator
-							itemSet = (*d).itemSets.at(itemLevel).items.begin();
-							itemSet != (*d).itemSets.at(itemLevel).items.end();
+							itemSet = (*data).itemSets.at(itemLevel).items.begin();
+							itemSet != (*data).itemSets.at(itemLevel).items.end();
 							++itemSet)
 					{
 						ruleItem = _game->getRuleset()->getItem(*itemSet);

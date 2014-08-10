@@ -74,7 +74,7 @@ NoContainmentState::NoContainmentState()
 }
 
 /**
- *
+ * dTor.
  */
 NoContainmentState::~NoContainmentState()
 {

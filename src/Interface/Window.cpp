@@ -32,7 +32,8 @@
 namespace OpenXcom
 {
 
-const double Window::POPUP_SPEED = 0.076; // higher is faster
+// const double Window::POPUP_SPEED = 0.076; // higher is faster
+const double Window::POPUP_SPEED = 0.135; // for high-quality filters & shaders, like 4xHQX
 
 Sound* Window::soundPopup[3] = {0, 0, 0};
 

@@ -60,6 +60,10 @@ private:
 		_pause,
 		_zoomInEffectDone,
 		_zoomOutEffectDone;
+	int
+		_day,
+		_month,
+		_year;
 	size_t _minimizedDogfights;
 	double
 		_dfLon,
@@ -88,7 +92,13 @@ private:
 		* _sideLine,
 //		* _bg,
 		* _srfSpace,	// kL
-		* _srfTime;		// kL
+		* _srfTime,		// kL
+		* _srfDay1,
+		* _srfDay2,
+		* _srfMonth1,
+		* _srfMonth2,
+		* _srfYear1,
+		* _srfYear2;
 	Text
 		* _txtDebug,
 		* _txtFunds,
@@ -96,8 +106,8 @@ private:
 		* _txtHourSep,
 		* _txtMin,
 //		* _txtMinSep,
-		* _txtSec,
-		* _txtDate;
+		* _txtSec;
+//		* _txtDate;
 //		* _txtWeekday,
 //		* _txtDay,
 //		* _txtMonth,

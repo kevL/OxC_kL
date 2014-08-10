@@ -60,16 +60,16 @@ BaseView::BaseView(
 			height,
 			x,
 			y),
-		_base(0),
-		_texture(0),
-		_selFacility(0),
-		_big(0),
-		_small(0),
-		_lang(0),
+		_base(NULL),
+		_texture(NULL),
+		_selFacility(NULL),
+		_big(NULL),
+		_small(NULL),
+		_lang(NULL),
 		_gridX(0),
 		_gridY(0),
 		_selSize(0),
-		_selector(0),
+		_selector(NULL),
 		_blink(true)
 {
 	for (int
@@ -82,7 +82,7 @@ BaseView::BaseView(
 				y < BASE_SIZE;
 				++y)
 		{
-			_facilities[x][y] = 0;
+			_facilities[x][y] = NULL;
 		}
 	}
 
@@ -125,7 +125,7 @@ void BaseView::initText(
 void BaseView::setBase(Base* base)
 {
 	_base = base;
-	_selFacility = 0;
+	_selFacility = NULL;
 
 	for (int // clear grid
 			x = 0;
@@ -137,7 +137,7 @@ void BaseView::setBase(Base* base)
 				y < BASE_SIZE;
 				++y)
 		{
-			_facilities[x][y] = 0;
+			_facilities[x][y] = NULL;
 		}
 	}
 
@@ -189,8 +189,8 @@ BaseFacility* BaseView::getSelectedFacility() const
  */
 void BaseView::resetSelectedFacility()
 {
-	_facilities[_selFacility->getX()][_selFacility->getY()] = 0;
-	_selFacility = 0;
+	_facilities[_selFacility->getX()][_selFacility->getY()] = NULL;
+	_selFacility = NULL;
 }
 
 
@@ -274,7 +274,7 @@ bool BaseView::isPlaceable(RuleBaseFacility* rule) const
 				return false;
 			}
 
-			if (_facilities[x][y] != 0)
+			if (_facilities[x][y] != NULL)
 				return false;
 		}
 	}
@@ -423,8 +423,8 @@ void BaseView::updateNeighborFacilityBuildTime(
 		BaseFacility* facility,
 		BaseFacility* neighbor)
 {
-	if (facility != 0
-		&& neighbor != 0
+	if (facility != NULL
+		&& neighbor != NULL
 		&& neighbor->getBuildTime() > neighbor->getRules()->getBuildTime()
 		&& facility->getBuildTime() + neighbor->getRules()->getBuildTime() < neighbor->getBuildTime())
 	{
@@ -437,7 +437,7 @@ void BaseView::updateNeighborFacilityBuildTime(
  */
 void BaseView::think()
 {
-	_timer->think(0, this);
+	_timer->think(NULL, this);
 }
 
 /**
@@ -554,7 +554,7 @@ void BaseView::draw()
 						y < (*fac)->getY() + (*fac)->getRules()->getSize();
 						++y)
 				{
-					if (_facilities[x][y] != 0
+					if (_facilities[x][y] != NULL
 						&& _facilities[x][y]->getBuildTime() == 0)
 					{
 						Surface* frame = _texture->getFrame(7);
@@ -575,10 +575,10 @@ void BaseView::draw()
 						x < (*fac)->getX() + (*fac)->getRules()->getSize();
 						++x)
 				{
-					if (_facilities[x][y] != 0
+					if (_facilities[x][y] != NULL
 						&& _facilities[x][y]->getBuildTime() == 0)
 					{
-						Surface *frame = _texture->getFrame(8);
+						Surface* frame = _texture->getFrame(8);
 						frame->setX(x * GRID_SIZE);
 						frame->setY(y * GRID_SIZE - GRID_SIZE / 2);
 
@@ -685,7 +685,7 @@ void BaseView::blit(Surface* surface)
 {
 	Surface::blit(surface);
 
-	if (_selector != 0)
+	if (_selector != NULL)
 		_selector->blit(surface);
 }
 
@@ -723,7 +723,7 @@ void BaseView::mouseOver(Action* action, State* state)
 	}
 	else
 	{
-		_selFacility = 0;
+		_selFacility = NULL;
 
 		if (_selSize > 0)
 			_selector->setVisible(false);
@@ -739,7 +739,7 @@ void BaseView::mouseOver(Action* action, State* state)
  */
 void BaseView::mouseOut(Action* action, State* state)
 {
-	_selFacility = 0;
+	_selFacility = NULL;
 
 	if (_selSize > 0)
 		_selector->setVisible(false);

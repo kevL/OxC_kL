@@ -1395,6 +1395,8 @@ void BattlescapeGame::popState()
 	if (_states.empty())
 	{
 		//Log(LOG_INFO) << ". states.Empty -> return";
+		setupCursor(); // kL_TEST
+
 		return;
 	}
 
@@ -1517,7 +1519,10 @@ void BattlescapeGame::popState()
 							//Log(LOG_INFO) << ". SnapShot, TU percent = " << (float)action.weapon->getRules()->getTUSnap();
 							if (curTU < action.actor->getActionTUs(
 																BA_SNAPSHOT,
-																action.weapon))
+																action.weapon)
+								|| ( //action.weapon->needsAmmo() == true &&
+									action.weapon->getAmmoItem() != NULL
+									&& action.weapon->getAmmoItem()->getAmmoQuantity() == 0))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1526,7 +1531,10 @@ void BattlescapeGame::popState()
 							//Log(LOG_INFO) << ". AutoShot, TU percent = " << (float)action.weapon->getRules()->getTUAuto();
 							if (curTU < action.actor->getActionTUs(
 																BA_AUTOSHOT,
-																action.weapon))
+																action.weapon)
+								|| ( //action.weapon->needsAmmo() == true &&
+									action.weapon->getAmmoItem() != NULL
+									&& action.weapon->getAmmoItem()->getAmmoQuantity() == 0))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1535,7 +1543,10 @@ void BattlescapeGame::popState()
 							//Log(LOG_INFO) << ". AimedShot, TU percent = " << (float)action.weapon->getRules()->getTUAimed();
 							if (curTU < action.actor->getActionTUs(
 																BA_AIMEDSHOT,
-																action.weapon))
+																action.weapon)
+								|| ( //action.weapon->needsAmmo() == true &&
+									action.weapon->getAmmoItem() != NULL
+									&& action.weapon->getAmmoItem()->getAmmoQuantity() == 0))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1562,7 +1573,7 @@ void BattlescapeGame::popState()
 				_parentState->updateSoldierInfo(); // kL
 
 //				getMap()->refreshSelectorPosition(); // kL
-				setupCursor();
+//kL_TEST		setupCursor();
 				_parentState->getGame()->getCursor()->setVisible(true);
 				//Log(LOG_INFO) << ". end NOT actionFailed";
 			}
@@ -1610,7 +1621,7 @@ void BattlescapeGame::popState()
 			else if (_debugPlay)
 			{
 //				getMap()->refreshSelectorPosition(); // kL
-				setupCursor();
+//kL_TEST		setupCursor();
 				_parentState->getGame()->getCursor()->setVisible(true);
 			}
 		}
@@ -1638,6 +1649,8 @@ void BattlescapeGame::popState()
 			if (_states.empty())
 			{
 				//Log(LOG_INFO) << ". endTurn()";
+				setupCursor(); // kL_TEST
+
 				endTurn();
 
 				//Log(LOG_INFO) << ". endTurn() DONE return";
@@ -1674,6 +1687,7 @@ void BattlescapeGame::popState()
 		_parentState->updateSoldierInfo(); // kL: calcFoV ought have been done by now ...
 	}
 
+	setupCursor(); // kL_TEST
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
 }
 

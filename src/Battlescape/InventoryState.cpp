@@ -117,6 +117,7 @@ InventoryState::InventoryState(
 	_txtMelee	= new Text(40, 9, 245, 56); // kL
 	_txtPStr	= new Text(40, 9, 245, 64);
 	_txtPSkill	= new Text(40, 9, 245, 72);
+	_txtPrimeTU	= new Text(40, 9, 245, 141);
 
 	_numOrder	= new NumberText(7, 5, 228, 4); // kL
 	_tuCost		= new NumberText(7, 5, 310, 60); // kL
@@ -128,11 +129,9 @@ InventoryState::InventoryState(
 	_btnPrev	= new InteractiveSurface(23, 22, 273, 0);
 	_btnNext	= new InteractiveSurface(23, 22, 297, 0);
 
-	_btnUnload	= new InteractiveSurface(32, 25, 288, 32);
-
-	_btnGround	= new InteractiveSurface(32, 15, 289, 137);
-
 	_btnRank	= new InteractiveSurface(26, 23, 0, 0);
+	_btnUnload	= new InteractiveSurface(32, 25, 288, 32);
+	_btnGround	= new InteractiveSurface(30, 15, 290, 137);
 
 	_btnCreateTemplate	= new InteractiveSurface(
 											32,
@@ -194,6 +193,7 @@ InventoryState::InventoryState(
 	add(_btnClearInventory);
 	add(_selAmmo);
 	add(_inv);
+	add(_txtPrimeTU);
 
 	// move the TU display down to make room for the weight display
 	if (Options::showMoreStatsInInventoryView)
@@ -239,6 +239,9 @@ InventoryState::InventoryState(
 	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
 	_txtPSkill->setHighContrast(true);
 
+	_txtPrimeTU->setColor(Palette::blockOffset(4));
+	_txtPrimeTU->setSecondaryColor(Palette::blockOffset(1));
+	_txtPrimeTU->setHighContrast(true);
 
 	_numOrder->setColor(1);	// kL
 	_numOrder->setValue(0);	// kL
@@ -517,6 +520,7 @@ void InventoryState::init()
 	}
 
 	updateStats();
+
 	_refreshMouse();
 	//Log(LOG_INFO) << "InventoryState::init() EXIT";
 }
@@ -544,6 +548,13 @@ void InventoryState::updateStats()
 			_txtWeight->setSecondaryColor(Palette::blockOffset(2)+5);
 		else
 			_txtWeight->setSecondaryColor(Palette::blockOffset(3));
+
+		if (_tu)
+		{
+			int primeTU = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 45) / 100.f));
+//			_txtPrimeTU->setText(Text::formatNumber(primeTU));
+			_txtPrimeTU->setText(tr("STR_PRIME_GRENADE_").arg(primeTU));
+		}
 
 		if (!_tu) // kL
 		{
