@@ -985,8 +985,7 @@ void GeoscapeState::think()
  */
 void GeoscapeState::timeDisplay()
 {
-	Log(LOG_INFO) << "GeoscapeState::timeDisplay()";
-
+	//Log(LOG_INFO) << "GeoscapeState::timeDisplay()";
 //	if (Options::showFundsOnGeoscape)
 	_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 

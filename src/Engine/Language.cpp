@@ -709,8 +709,7 @@ const LocalizedText& Language::getString(
 }
 
 /**
- * Outputs all the language IDs and strings
- * to an HTML table.
+ * Outputs all the language IDs and strings to an HTML table.
  * @param filename HTML file.
  */
 void Language::toHtml(const std::string& filename) const

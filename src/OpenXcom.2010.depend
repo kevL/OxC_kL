@@ -4682,7 +4682,7 @@
 	"MapData.h"
 	"Unit.h"
 
-1404096023 f:\git\openxcom\src\ruleset\mapdata.h
+1407776611 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
 1404096023 f:\git\openxcom\src\ruleset\ruleitem.h
@@ -6643,7 +6643,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1407630244 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1407784642 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -6745,7 +6745,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1407730103 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1407777583 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7077,7 +7077,7 @@
 	"Action.h"
 	"Options.h"
 
-1404096022 source:f:\git\openxcom\src\engine\language.cpp
+1407772034 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	<locale>
 	<fstream>
@@ -7738,7 +7738,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1407690380 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1407780640 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8776,7 +8776,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1407735253 source:f:\git\openxcom\src\menu\startstate.cpp
+1407776799 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"../version.h"
 	"ErrorMessageState.h"
@@ -9289,11 +9289,11 @@
 	"MapBlock.h"
 	"../Battlescape/Position.h"
 
-1407532637 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1407776630 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 	"../Engine/Logger.h"
 
-1405981735 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1407776778 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -9748,7 +9748,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1407345078 source:f:\git\openxcom\src\savegame\tile.cpp
+1407775121 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"

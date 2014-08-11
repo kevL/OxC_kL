@@ -2422,9 +2422,11 @@ void TileEngine::explode(
 
 	switch (Options::battleExplosionHeight)
 	{
-		case 3: z_Dec = 10; break;
+		case 1: z_Dec = 10; break;
 		case 2: z_Dec = 20; break;
-		case 1: z_Dec = 30; break;
+		case 3: z_Dec = 30; break;
+		case 4: z_Dec = 40; break;
+		case 5: z_Dec = 50; break;
 
 		case 0: // default flat explosion
 		default:
@@ -2743,22 +2745,24 @@ void TileEngine::explode(
 
 									if (_powerE > (*it)->getRules()->getArmor())
 									{
-										if ((*it)->getUnit()
-											&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+										BattleUnit* buOut = (*it)->getUnit();
+										if (buOut != NULL
+											&& buOut->getStatus() == STATUS_UNCONSCIOUS)
 										{
-											(*it)->getUnit()->instaKill();
-											// send Death notice.
-											if (Options::battleNotifyDeath)
+											buOut->instaKill();
+
+											if (Options::battleNotifyDeath // send Death notice.
+												&& buOut->getOriginalFaction() == FACTION_PLAYER)
 											{
 												Game* game = _battleSave->getBattleState()->getGame();
 												game->pushState(new InfoboxOKState(game->getLanguage()->getString(
 																											"STR_HAS_BEEN_KILLED", // "has exploded ..."
-																											(*it)->getUnit()->getGender())
-																										.arg((*it)->getUnit()->getName(game->getLanguage()))));
+																											buOut->getGender())
+																										.arg(buOut->getName(game->getLanguage()))));
 											}
 										}
 
-										_battleSave->removeItem((*it));
+										_battleSave->removeItem(*it);
 
 										break;
 									}
@@ -3495,7 +3499,7 @@ int TileEngine::horizontalBlockage(
 			if (type == DT_NONE)
 				return -1;
 			else
-				return 500; // this is a hardblock and should be greater than the most powerful explosions.
+				return 1000; // this is a hardblock and should be greater than the most powerful explosions.
 		}
 	}
 
@@ -3770,7 +3774,7 @@ int TileEngine::blockage(
 //						return 1;// hardblock.
 //					else
 					//Log(LOG_INFO) << ". . . . RET 501 part = " << part << " " << tile->getPosition();
-					return 500;
+					return 1000;
 				}
 			}
 			else if (tile->getMapData(part)->stopLOS()
@@ -3778,7 +3782,7 @@ int TileEngine::blockage(
 				&& _powerE < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
 			{
 				//Log(LOG_INFO) << ". . . . RET 502 part = " << part << " " << tile->getPosition();
-				return 500; // this is a hardblock for HE; hence it has to be higher than the highest HE power in the Rulesets.
+				return 1000; // this is a hardblock for HE; hence it has to be higher than the highest HE power in the Rulesets.
 			}
 		}
 		else // dir > -1 -> OBJECT part. ( BigWalls & content ) *always* an OBJECT-part gets passed in through here, and *with* a direction.
@@ -3814,7 +3818,7 @@ int TileEngine::blockage(
 					&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2)
 				{
 					//Log(LOG_INFO) << ". . . . RET 503 part = " << part << " " << tile->getPosition();
-					return 500;	// unfortunately this currently blocks expl-propagation originating
+					return 1000;	// unfortunately this currently blocks expl-propagation originating
 								// vs diagonal walls traveling out from those walls (see note above)
 				}
 			}
@@ -3829,7 +3833,7 @@ int TileEngine::blockage(
 //					return -1;
 //				else
 				//Log(LOG_INFO) << ". . . . RET 504 part = " << part << " " << tile->getPosition();
-				return 500;
+				return 1000;
 			}
 
 			switch (dir) // -> OBJECT part. ( BigWalls & content )
@@ -3955,7 +3959,7 @@ int TileEngine::blockage(
 						&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2)) // terrain absorbs 200% damage from DT_HE!
 				{
 					//Log(LOG_INFO) << ". . . . RET 505 part = " << part << " " << tile->getPosition();
-					return 500; // this is a hardblock for HE; hence it has to be higher than the highest HE power in the Rulesets.
+					return 1000; // this is a hardblock for HE; hence it has to be higher than the highest HE power in the Rulesets.
 				}
 			}
 		}

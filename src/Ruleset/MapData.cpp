@@ -178,6 +178,15 @@ bool MapData::isGravLift() const
 }
 
 /**
+ * kL. Sets whether this stops LoS.
+ * @return, true if this stops LoS
+ */
+void MapData::setStopLOS(bool stopLOS) // kL
+{
+	_stopLOS = stopLOS;
+}
+
+/**
  * Sets all kinds of flags.
  * @param isUfoDoor		- true if this is a ufo door
  * @param stopLOS		- true if this stops line of sight

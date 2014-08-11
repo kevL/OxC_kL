@@ -291,8 +291,10 @@ void Tile::getMapData(
 }
 
 /**
- * Gets whether this tile has no objects. Note that we can have a unit or smoke on this tile.
- * @return, bool True if there is nothing but air on this tile.
+ * Gets whether this tile has no objects.
+ * Note that we can have a unit or smoke on this tile.
+ * kL_note: doesn't seem to check for unit, though!
+ * @return, true if there is nothing but air on this tile
  */
 bool Tile::isVoid() const
 {

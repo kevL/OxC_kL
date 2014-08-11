@@ -188,7 +188,8 @@ void MapDataSet::loadData()
 	s << "TERRAIN/" << _name << ".MCD";
 
 	// Load file
-	std::ifstream mapFile (CrossPlatform::getDataFile(s.str()).c_str(),
+	std::ifstream mapFile ( // init.
+							CrossPlatform::getDataFile(s.str()).c_str(),
 							std::ios::in | std::ios::binary);
 	if (!mapFile)
 	{
@@ -294,7 +295,8 @@ void MapDataSet::loadData()
 						armor,	// HE
 						1,		// smoke
 						1,		// fire
-						armor);	// gas
+						1);		// gas, kL
+//kL					armor);	// gas
 
 			if ((*i)->getDieMCD())
 				_objects.at((*i)->getDieMCD())->setBlock(
@@ -303,14 +305,17 @@ void MapDataSet::loadData()
 														armor,
 														1,
 														1,
-														armor);
+														1); // kL
+//kL													armor);
+
+			if ((*i)->isGravLift() == false)	// kL
+				(*i)->setStopLOS();				// kL
 		}
 	}
 
 	// Load terrain sprites/surfaces/PCK files into a surfaceset
 	// kL_begin: Let extraSprites override terrain sprites.
 	//Log(LOG_INFO) << ". terrain_PCK = " << _name;
-
 	std::ostringstream test;
 	test << _name << ".PCK";
 	SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(test.str());

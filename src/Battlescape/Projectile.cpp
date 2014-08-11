@@ -645,22 +645,24 @@ void Projectile::applyAccuracy(
 
 	// kL_begin:
 	int throwRule = 100;
-//	Soldier* soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
-	Soldier* soldier = _action.actor->getGeoscapeSoldier();
+	Soldier* soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
+//	Soldier* soldier = _action.actor->getGeoscapeSoldier();
 	if (soldier)
 	{
 		int throwRule = soldier->getRules()->getStatCaps().throwing;
-
 //		int minThrowRule = _save->getGeoscapeSave()->getSoldier(_action.actor->getId())->getRules()->getMinStats().throwing;
 		//Log(LOG_INFO) << ". . minThrowRule = " << minThrowRule;
 	}
 	//Log(LOG_INFO) << ". . throwRule = " << throwRule;
 
-	accuracy = accuracy / 2.0 + 30.0; // arbitrary adjustment.
-	double deviation = static_cast<double>(throwRule) - (accuracy * 100.0);
+	accuracy = accuracy * 50.0 + 35.0; // arbitrary adjustment.
+	//Log(LOG_INFO) << ". . accuracy = " << accuracy;
+	//Log(LOG_INFO) << ". . targetDist = " << targetDist;
+//	double deviation = static_cast<double>(throwRule) - (accuracy * 100.0);
+	double deviation = static_cast<double>(throwRule) - accuracy;
 	deviation = std::max(
 						0.0,
-						deviation * targetDist / 100);
+						deviation * targetDist / 100.0);
 
 	//Log(LOG_INFO) << ". . deviation = " << deviation;
 
@@ -678,6 +680,7 @@ void Projectile::applyAccuracy(
 	if (extendLine) // kL_note: This is for aimed projectiles; always false outside my RangedBased above.
 					// That is, this ought never run in my Build.
 	{
+		//Log(LOG_INFO) << ". Projectile::applyAccuracy() ERROR : extendLine";
 /*		double maxDeviation = 2.5; // maxDeviation is the max angle deviation for accuracy 0% in degrees
 		double minDeviation = 0.4; // minDeviation is the min angle deviation for accuracy 100% in degrees
 		double dRot, dTilt;
