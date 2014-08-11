@@ -1559,17 +1559,17 @@ void BattlescapeGenerator::deployAliens(
 												(*data).dQty);
 
 		if (_base != NULL
-			&& _base->getDefenseEffect() > 0)
+			&& _base->getDefenseResult() > 0)
 		{
 			Log(LOG_INFO) << "BattlescapeGenerator::deployAliens()";
-			Log(LOG_INFO) << ". defenseEffect = " << _base->getDefenseEffect();
+			Log(LOG_INFO) << ". defenseEffect = " << _base->getDefenseResult();
 			Log(LOG_INFO) << ". qty_init = " << qty;
 			qty = std::max(
 						qty / 2,
-						qty - (qty * _base->getDefenseEffect() / 100));
+						qty - (qty * _base->getDefenseResult() / 100));
 			Log(LOG_INFO) << ". qty_postDefense = " << qty;
 
-			_base->setDefenseEffect(0);
+			_base->setDefenseResult(0);
 		}
 
 		for (int

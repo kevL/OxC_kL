@@ -65,7 +65,7 @@ private:
 		_cashIncome,	// kL
 		_engineers,
 		_scientists,
-		_defenseEffect;
+		_defenseResult;
 
 	ItemContainer* _items;
 	const Ruleset* _rule;
@@ -282,10 +282,10 @@ private:
 		/// Gets the base's total spent amount.
 		int getCashSpent() const;
 
-		/// Sets the effect of a base's defense against aLien attacks.
-		void setDefenseEffect(int effect);
-		/// Gets the effect of a base's defense against aLien attacks.
-		int getDefenseEffect() const;
+		/// Sets the result of a base's defense against aLien attacks.
+		void setDefenseResult(int result);
+		/// Gets the result of a base's defense against aLien attacks.
+		int getDefenseResult() const;
 		// kL_end.
 };
 

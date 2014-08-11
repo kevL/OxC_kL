@@ -135,7 +135,8 @@ StartState::StartState()
 					0,
 					0);
 
-	_timer	= new Timer(9);
+//	_timer	= new Timer(9);
+	_timer	= new Timer(6); // for HQ graphic filters
 
 	setPalette(_font->getSurface()->getPalette(), 0, 2);
 

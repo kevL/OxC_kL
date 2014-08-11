@@ -19,13 +19,14 @@
 
 #include "ItemsArrivingState.h"
 
-#include <algorithm>
-#include <sstream>
+//#include <algorithm>
+//#include <sstream>
 
 #include "GeoscapeState.h"
 
 #include "../Basescape/BasescapeState.h"
 
+#include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -61,8 +62,8 @@ namespace OpenXcom
  */
 ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	:
-		_state(state),
-		_base(NULL)
+		_state(state)
+//		_base(NULL)
 {
 	_screen = false;
 
@@ -75,9 +76,11 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 
 	_lstTransfers	= new TextList(285, 120, 16, 45);
 
-	_btnGotoBase	= new TextButton(90, 16, 16, 169);
-	_btnOk5Secs		= new TextButton(90, 16, 118, 169);
-	_btnOk			= new TextButton(90, 16, 220, 169);
+//	_btnGotoBase	= new TextButton(90, 16, 16, 169);
+//	_btnOk5Secs		= new TextButton(90, 16, 118, 169);
+//	_btnOk			= new TextButton(90, 16, 220, 169);
+	_btnOk5Secs		= new TextButton(139, 16, 16, 169);
+	_btnOk			= new TextButton(139, 16, 165, 169);
 
 	setPalette("PAL_GEOSCAPE", 6);
 
@@ -87,7 +90,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	add(_txtQuantity);
 	add(_txtDestination);
 	add(_lstTransfers);
-	add(_btnGotoBase);
+//	add(_btnGotoBase);
 	add(_btnOk5Secs);
 	add(_btnOk);
 
@@ -96,12 +99,12 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
-	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
+/*	_btnGotoBase->setColor(Palette::blockOffset(8)+5);
 	_btnGotoBase->setText(tr("STR_GO_TO_BASE"));
 	_btnGotoBase->onMouseClick((ActionHandler)& ItemsArrivingState::btnGotoBaseClick);
 	_btnGotoBase->onKeyboardPress(
 					(ActionHandler)& ItemsArrivingState::btnGotoBaseClick,
-					Options::keyOk);
+					Options::keyOk); */
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
 	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
@@ -137,7 +140,9 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	_lstTransfers->setSelectable(true);
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin(8);
+	_lstTransfers->onMousePress((ActionHandler)& ItemsArrivingState::lstGoToBasePress); // kL
 
+	Base* base = NULL;
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
@@ -150,7 +155,9 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 		{
 			if ((*j)->getHours() == 0)
 			{
-				_base = *i;
+				_bases.push_back(*i);	// kL, sequential vector of bases w/ transfers-completed to;
+										// will be matched w/ selectedRow on list-clicks for gotoBase.
+				base = *i;
 
 				if ((*j)->getType() == TRANSFER_ITEM) // check if there's an automated use for item
 //					&& _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
@@ -198,7 +205,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 
 								// Note that the items have already been delivered --
 								// so they are removed from the base, not the transfer.
-								_base->getItems()->removeItem(
+								base->getItems()->removeItem(
 															item->getType(),
 															used);
 							}
@@ -206,7 +213,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 					}
 				}
 
-				std::wostringstream ss; // remove transfer
+				std::wostringstream ss;
 				ss << (*j)->getQuantity();
 				_lstTransfers->addRow(
 									3,
@@ -214,7 +221,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 									ss.str().c_str(),
 									(*i)->getName().c_str());
 
-				delete *j;
+				delete *j; // remove transfer
 				j = (*i)->getTransfers()->erase(j);
 			}
 			else
@@ -254,7 +261,7 @@ void ItemsArrivingState::btnOk5SecsClick(Action*)
  * Goes to the base for the respective transfer.
  * @param action Pointer to an action.
  */
-void ItemsArrivingState::btnGotoBaseClick(Action*)
+/* void ItemsArrivingState::btnGotoBaseClick(Action*)
 {
 	_state->timerReset();
 
@@ -262,6 +269,28 @@ void ItemsArrivingState::btnGotoBaseClick(Action*)
 	_game->pushState(new BasescapeState(
 									_base,
 									_state->getGlobe()));
+} */
+
+/**
+ * kL. LMB or RMB opens the Basescape for the pressed row.
+ * Do not pop the state here.
+ * @param action - pointer to an action
+ */
+void ItemsArrivingState::lstGoToBasePress(Action* action) // kL
+{
+	//Log(LOG_INFO) << ". ItemsArrivingState::lstGoToBasePress()";
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		//Log(LOG_INFO) << ". . row = " << _lstTransfers->getSelectedRow();
+		Base* base = _bases.at(_lstTransfers->getSelectedRow());
+		if (base) // make sure player hasn't deconstructed a base, when jumping back & forth between bases and the list.
+		{
+			_game->pushState(new BasescapeState(
+											base,
+											_state->getGlobe()));
+		}
+	}
 }
 
 }

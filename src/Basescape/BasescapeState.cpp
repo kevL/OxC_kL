@@ -565,7 +565,8 @@ void BasescapeState::viewLeftClick(Action*)
 		bPop = true;
 		_game->pushState(new StoresState(_base));
 	}
-	else if (fac->getRules()->getPersonnel() > 0)
+	else if (fac->getRules()->getPersonnel() > 0
+		&& _base->getSoldiers()->empty() == false)
 	{
 		bPop = true;
 		_game->pushState(new SoldiersState(_base));

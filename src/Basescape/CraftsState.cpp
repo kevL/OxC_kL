@@ -142,7 +142,7 @@ CraftsState::CraftsState(
 }
 
 /**
- *
+ * dTor.
  */
 CraftsState::~CraftsState()
 {

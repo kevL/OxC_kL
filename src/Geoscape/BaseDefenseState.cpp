@@ -255,7 +255,7 @@ void BaseDefenseState::btnOkClick(Action*)
 		// the UFO has finished its duty, whatever happens in the base defense
 //kL	_ufo->setStatus(Ufo::DESTROYED); // done in GeoscapeState::handleBaseDefense()
 
-		_base->setDefenseEffect(_ufo->getDamagePercentage()); // kL
+		_base->setDefenseResult(_ufo->getDamagePercentage()); // kL
 
 		_state->handleBaseDefense(
 								_base,

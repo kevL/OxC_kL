@@ -72,7 +72,7 @@ Base::Base(const Ruleset* rule)
 		_retaliationTarget(false),
 		_cashIncome(0),	// kL
 		_cashSpent(0),	// kL
-		_defenseEffect(0)
+		_defenseResult(0)
 {
 	_items = new ItemContainer();
 }
@@ -2773,17 +2773,17 @@ int Base::getCashSpent() const
 /**
  * Sets the effect of a base's defense against aLien attacks.
  */
-void Base::setDefenseEffect(int effect)
+void Base::setDefenseResult(int result)
 {
-	_defenseEffect = effect;
+	_defenseResult = result;
 }
 
 /**
  * Gets the effect of a base's defense against aLien attacks.
  */
-int Base::getDefenseEffect() const
+int Base::getDefenseResult() const
 {
-	return _defenseEffect;
+	return _defenseResult;
 } // kL_end.
 
 }

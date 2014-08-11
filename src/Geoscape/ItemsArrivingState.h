@@ -20,6 +20,8 @@
 #ifndef OPENXCOM_ITEMSARRIVINGSTATE_H
 #define OPENXCOM_ITEMSARRIVINGSTATE_H
 
+//#include <vector> // kL
+
 #include "../Engine/State.h"
 
 
@@ -44,7 +46,7 @@ class ItemsArrivingState
 {
 
 private:
-	Base* _base;
+//	Base* _base;
 	GeoscapeState* _state;
 	Text
 		* _txtDestination,
@@ -52,11 +54,13 @@ private:
 		* _txtQuantity,
 		* _txtTitle;
 	TextButton
-		* _btnGotoBase,
+//		* _btnGotoBase,
 		* _btnOk,
 		* _btnOk5Secs;
 	TextList* _lstTransfers;
 	Window* _window;
+
+	std::vector<Base*> _bases; // kL
 
 
 	public:
@@ -70,7 +74,9 @@ private:
 		/// Handler for clicking the Ok 5sec button.
 		void btnOk5SecsClick(Action* action);
 		/// Handler for clicking the Go To Base button.
-		void btnGotoBaseClick(Action* action);
+//		void btnGotoBaseClick(Action* action);
+		/// kL. Handler for pressing the ItemsArriving list.
+		void lstGoToBasePress(Action* action); // kL
 };
 
 }

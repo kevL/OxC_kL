@@ -65,7 +65,7 @@ IntroState::IntroState(bool wasLetterBoxed)
 }
 
 /**
- *
+ * dTor.
  */
 IntroState::~IntroState()
 {

@@ -4418,7 +4418,7 @@
 	<vector>
 	<SDL.h>
 
-1407616853 f:\git\openxcom\src\savegame\base.h
+1407735564 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
 	<string>
 	<vector>
@@ -4437,7 +4437,7 @@
 	<time.h>
 	"GameTime.h"
 
-1407389601 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1407736261 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4488,7 +4488,7 @@
 1406777119 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
-1406819773 f:\git\openxcom\src\basescape\craftsstate.h
+1407730405 f:\git\openxcom\src\basescape\craftsstate.h
 	"../Engine/State.h"
 
 1404096022 f:\git\openxcom\src\basescape\dismantlefacilitystate.h
@@ -4851,7 +4851,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1406819856 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1407730233 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -5904,7 +5904,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1407613699 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1407735564 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6745,7 +6745,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1407687635 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1407730103 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7390,7 +7390,7 @@
 1404096023 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1407612188 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1407735564 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
 	<sstream>
 	"BaseDestroyedState.h"
@@ -7843,7 +7843,7 @@
 	<string>
 	"../Engine/State.h"
 
-1404096023 f:\git\openxcom\src\geoscape\itemsarrivingstate.h
+1407734284 f:\git\openxcom\src\geoscape\itemsarrivingstate.h
 	"../Engine/State.h"
 
 1404096023 f:\git\openxcom\src\geoscape\lowfuelstate.h
@@ -8009,12 +8009,11 @@
 	"../Savegame/Target.h"
 	"../Savegame/Ufo.h"
 
-1406943129 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
+1407735068 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
 	"ItemsArrivingState.h"
-	<algorithm>
-	<sstream>
 	"GeoscapeState.h"
 	"../Basescape/BasescapeState.h"
+	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -8777,7 +8776,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1404360860 source:f:\git\openxcom\src\menu\startstate.cpp
+1407735253 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"../version.h"
 	"ErrorMessageState.h"
@@ -9482,7 +9481,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1407612077 source:f:\git\openxcom\src\savegame\base.cpp
+1407735564 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -11610,7 +11609,7 @@
 	"../Engine/Options.h"
 	"../Engine/State.h"
 
-1404096023 source:f:\git\openxcom\src\menu\introstate.cpp
+1407735144 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	<SDL_mixer.h>
 	"MainMenuState.h"
