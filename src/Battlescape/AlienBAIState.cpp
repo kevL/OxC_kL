@@ -40,6 +40,7 @@
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleItem.h"
+#include "../Ruleset/RuleInventory.h" // kL, grenade from Belt to Hand
 #include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"
@@ -458,9 +459,14 @@ void AlienBAIState::think(BattleAction* action)
 				&& action->type == BA_THROW
 				&& action->weapon->getRules()->getBattleType() == BT_GRENADE)
 			{
-				_unit->spendTimeUnits(_unit->getActionTUs(
-														BA_PRIME,
-														action->weapon));
+				RuleInventory* beltRule = _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_BELT");
+				RuleInventory* rhRule = _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_RIGHT_HAND");
+				int cost = beltRule->getCost(rhRule);
+				Log(LOG_INFO) << "AlienBAIState::think() move grenade from Belt to Hand, TU = " << cost;
+
+				_unit->spendTimeUnits(cost + _unit->getActionTUs(
+																BA_PRIME,
+																action->weapon));
 			}
 
 			action->finalFacing	= _attackAction->finalFacing;				// if this is a firepoint action, set our facing.
@@ -483,7 +489,7 @@ void AlienBAIState::think(BattleAction* action)
 		break;
 		case AI_AMBUSH:
 			//Log(LOG_INFO) << ". . . . AI_AMBUSH";
-			_unit->setCharging(0);
+			_unit->setCharging(NULL);
 
 			action->type		= _ambushAction->type;
 			action->target		= _ambushAction->target;

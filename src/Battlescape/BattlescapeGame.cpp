@@ -1800,7 +1800,7 @@ bool BattlescapeGame::checkReservedTU(
 		actionReserved = BA_AIMEDSHOT;
 	}
 
-	const int tuKneel = (_kneelReserved && bu->getType() == "SOLDIER")? 4: 0;
+	const int tuKneel = (_kneelReserved && !bu->isKneeled() && bu->getType() == "SOLDIER")? 4: 0;
 
 	if ((actionReserved != BA_NONE
 			|| _kneelReserved)

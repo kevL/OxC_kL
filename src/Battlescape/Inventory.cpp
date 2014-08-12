@@ -1386,9 +1386,9 @@ bool Inventory::fitItem(
 					warning = "STR_NOT_ENOUGH_TIME_UNITS";
 			} */
 			if (newSlot->fitItemInSlot(
-										item->getRules(),
-										x2,
-										y2))
+									item->getRules(),
+									x2,
+									y2))
 			{
 				if (_tu
 					&& test == true)
