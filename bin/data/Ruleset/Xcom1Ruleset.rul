@@ -7598,7 +7598,7 @@ manufacture:
       - STR_FUSION_MISSILE
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 6
+    space: 8
     time: 420
     cost: 42000 # 100 x time (was, 250 x time)
     requiredItems:
@@ -7609,7 +7609,7 @@ manufacture:
       - STR_LASER_CANNON
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 6
+    space: 9
     time: 560
     cost: 56000
     requiredItems:
@@ -7621,7 +7621,7 @@ manufacture:
       - STR_PLASMA_CANNON
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 8
+    space: 10
     time: 670
     cost: 67000
     requiredItems:
@@ -7633,7 +7633,7 @@ manufacture:
       - STR_FUSION_MISSILE
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 6
+    space: 8
     time: 760
     cost: 76000
     requiredItems:
@@ -7645,7 +7645,7 @@ manufacture:
       - STR_LASER_CANNON
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 25
+    space: 23
     time: 2030
     cost: 203000
     requiredItems:
@@ -7658,7 +7658,7 @@ manufacture:
       - STR_NEW_FIGHTER_CRAFT
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 30
+    space: 22
     time: 1950
     cost: 195000
     requiredItems:
@@ -7671,7 +7671,7 @@ manufacture:
       - STR_NEW_FIGHTER_CRAFT
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 30
+    space: 19
     time: 2300
     cost: 230000
     requiredItems:
@@ -7684,7 +7684,7 @@ manufacture:
       - STR_NEW_FIGHTER_CRAFT
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 25
+    space: 13
     time: 780
     cost: 78000
     requiredItems:
@@ -7694,14 +7694,14 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_LASER_PISTOL
-    space: 2
+    space: 4
     time: 300
     cost: 30000
   - name: STR_LASER_RIFLE
     category: STR_WEAPON
     requires:
       - STR_LASER_RIFLE
-    space: 3
+    space: 6
     time: 400
     cost: 40000
   - name: STR_HEAVY_LASER
@@ -7709,7 +7709,7 @@ manufacture:
     requires:
       - STR_HEAVY_LASER
       - STR_ELERIUM_115
-    space: 4
+    space: 7
     time: 700
     cost: 70000
     requiredItems:
@@ -7718,14 +7718,14 @@ manufacture:
     category: STR_EQUIPMENT
     requires:
       - STR_MOTION_SCANNER
-    space: 4
+    space: 5
     time: 320
     cost: 32000
   - name: STR_MEDI_KIT
     category: STR_EQUIPMENT
     requires:
       - STR_MEDI_KIT
-    space: 4
+    space: 5
     time: 250
     cost: 25000
   - name: STR_PSI_AMP
@@ -7744,7 +7744,7 @@ manufacture:
       - STR_HEAVY_PLASMA
       - STR_HEAVY_PLASMA_CLIP
       - STR_ALIEN_ALLOYS
-    space: 4
+    space: 8
     time: 1000
     cost: 100000
     requiredItems:
@@ -7755,7 +7755,7 @@ manufacture:
       - STR_HEAVY_PLASMA
       - STR_HEAVY_PLASMA_CLIP
       - STR_ELERIUM_115
-    space: 4
+    space: 5
     time: 100
     cost: 10000
     requiredItems:
@@ -7766,7 +7766,7 @@ manufacture:
       - STR_PLASMA_RIFLE
       - STR_PLASMA_RIFLE_CLIP
       - STR_ALIEN_ALLOYS
-    space: 4
+    space: 7
     time: 800
     cost: 80000
     requiredItems:
@@ -7788,7 +7788,7 @@ manufacture:
       - STR_PLASMA_PISTOL
       - STR_PLASMA_PISTOL_CLIP
       - STR_ALIEN_ALLOYS
-    space: 3
+    space: 5
     time: 600
     cost: 60000
     requiredItems:
@@ -7799,7 +7799,7 @@ manufacture:
       - STR_PLASMA_PISTOL
       - STR_PLASMA_PISTOL_CLIP
       - STR_ELERIUM_115
-    space: 4
+    space: 3
     time: 60
     cost: 6000
     requiredItems:
@@ -7810,7 +7810,7 @@ manufacture:
       - STR_BLASTER_LAUNCHER
       - STR_BLASTER_BOMB
       - STR_ALIEN_ALLOYS
-    space: 5
+    space: 6
     time: 330
     cost: 33000
     requiredItems:
@@ -7821,7 +7821,7 @@ manufacture:
       - STR_BLASTER_LAUNCHER
       - STR_BLASTER_BOMB
       - STR_ELERIUM_115
-    space: 3
+    space: 5
     time: 460
     cost: 46000
     requiredItems:
@@ -7832,7 +7832,7 @@ manufacture:
       - STR_SMALL_LAUNCHER
       - STR_STUN_BOMB
       - STR_ALIEN_ALLOYS
-    space: 3
+    space: 4
     time: 250
     cost: 25000
     requiredItems:
@@ -7865,7 +7865,7 @@ manufacture:
     requires:
       - STR_MIND_PROBE
       - STR_ELERIUM_115
-    space: 4
+    space: 3
     time: 1000
     cost: 100000
     requiredItems:
@@ -7875,7 +7875,7 @@ manufacture:
     requires:
       - STR_PERSONAL_ARMOR
       - STR_ALIEN_ALLOYS
-    space: 12
+    space: 10
     time: 800
     cost: 80000
     requiredItems:
@@ -7886,7 +7886,7 @@ manufacture:
       - STR_POWER_SUIT
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 16
+    space: 14
     time: 1200
     cost: 120000
     requiredItems:
@@ -7898,7 +7898,7 @@ manufacture:
       - STR_FLYING_SUIT
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 16
+    space: 17
     time: 1600
     cost: 160000
     requiredItems:
@@ -7917,7 +7917,7 @@ manufacture:
       - STR_UFO_POWER_SOURCE
       - STR_ALIEN_ALLOYS
       - STR_ELERIUM_115
-    space: 22
+    space: 20
     time: 5100
     cost: 510000
     requiredItems:
@@ -7928,7 +7928,7 @@ manufacture:
     requires:
       - STR_UFO_NAVIGATION
       - STR_ALIEN_ALLOYS
-    space: 18
+    space: 16
     time: 2200
     cost: 220000
     requiredItems:
