@@ -199,7 +199,7 @@ void BaseDefenseState::nextStep()
 
 		switch (_action)
 		{
-			case  BDA_NONE:
+			case BDA_NONE:
 				_lstDefenses->addRow(3, tr((def)->getRules()->getType()).c_str(), L" ", L" ");
 				++_row;
 				_action = BDA_FIRE;
@@ -222,7 +222,7 @@ void BaseDefenseState::nextStep()
 				{
 					_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());
 					_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getHitSound())->play();
-					_ufo->setDamage(_ufo->getDamage() + (def)->getRules()->getDefenseValue());
+					_ufo->setDamage(_ufo->getDamage() + (def)->getRules()->getDefenseValue()); // kL_note: should vary this.
 				}
 
 				if (_ufo->getStatus() == Ufo::DESTROYED)

@@ -469,14 +469,14 @@ void AlienBAIState::think(BattleAction* action)
 																action->weapon));
 			}
 
-			action->finalFacing	= _attackAction->finalFacing;				// if this is a firepoint action, set our facing.
+			action->finalFacing	= _attackAction->finalFacing;					// if this is a firepoint action, set our facing.
 			action->TU			= _unit->getActionTUs(
 													_attackAction->type,
 													_attackAction->weapon);
 
-			_save->getBattleGame()->setTUReserved(BA_NONE, false);			// don't worry about reserving TUs, we've factored that in already.
+			_save->getBattleGame()->setTUReserved(BA_NONE, false);				// don't worry about reserving TUs, we've factored that in already.
 
-			if (action->type == BA_WALK										// if this is a "find fire point" action, don't increment the AI counter.
+			if (action->type == BA_WALK											// if this is a "find fire point" action, don't increment the AI counter.
 				&& _rifle
 				&& _unit->getTimeUnits() > _unit->getActionTUs(
 															BA_SNAPSHOT,

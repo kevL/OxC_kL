@@ -119,7 +119,8 @@ void Pathfinding::calculate(
 	_totalTUCost = 0;
 	_path.clear();
 
-	_modCTRL = false;
+//	_modCTRL = false;
+	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
 //	_modALT = false;
 	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// for BattlescapeState::btnUnitDownClick() -> now redundant.
 													// Can go back to previewPath()
@@ -1245,6 +1246,9 @@ int Pathfinding::dequeuePath()
  */
 void Pathfinding::abortPath()
 {
+	_modCTRL = false;	// kL
+	_modALT = false;	// kL
+
 	_totalTUCost = 0;
 	_path.clear();
 }
@@ -2060,7 +2064,7 @@ bool Pathfinding::previewPath(bool bRemove)
 //	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// kL: do this in calculate()
 													// for BattlescapeState::btnUnitDownClick()
 													// 'cause it doesn't use pathPreview here.
-	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
+//	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
 
 	std::string armorType = _unit->getArmor()->getType();
 

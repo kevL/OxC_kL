@@ -5725,7 +5725,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1404874011 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1407862321 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5741,6 +5741,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/RuleItem.h"
+	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 	"../Savegame/BattleItem.h"
 	"../Savegame/BattleUnit.h"
@@ -5801,7 +5802,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1407689137 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1407859070 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6355,7 +6356,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1407386587 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1407859775 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6590,7 +6591,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1407531633 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1407917339 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -7390,7 +7391,7 @@
 1404096023 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1407735564 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1407878115 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
 	<sstream>
 	"BaseDestroyedState.h"
@@ -7899,7 +7900,7 @@
 	<string>
 	<vector>
 
-1407473688 source:f:\git\openxcom\src\geoscape\globe.cpp
+1407914677 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9748,7 +9749,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1407775121 source:f:\git\openxcom\src\savegame\tile.cpp
+1407858933 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
