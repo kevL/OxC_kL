@@ -139,8 +139,8 @@ private:
 
 	BattlescapeState* _parentState;
 	BattleActionType
-		_tuReserved,
-		_playerTUReserved;
+		_batReserved,
+		_playerBATReserved;
 	SavedBattleGame* _save;
 
 	std::list<BattleState*>
@@ -242,7 +242,7 @@ private:
 		void requestEndTurn();
 		/// Sets the TU reserved type.
 		void setTUReserved(
-				BattleActionType tur,
+				BattleActionType bat,
 				bool player);
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();

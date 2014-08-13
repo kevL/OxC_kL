@@ -165,9 +165,17 @@ void Pathfinding::calculate(
 	// check if destination is not blocked
 	Tile* destTile = _save->getTile(endPos);
 
-	if (isBlocked(destTile, MapData::O_FLOOR, target)
-		|| isBlocked(destTile, MapData::O_OBJECT, target))
+	if (isBlocked(
+				destTile,
+				MapData::O_FLOOR,
+				target)
+		|| isBlocked(
+					destTile,
+					MapData::O_OBJECT,
+					target))
 	{
+//		abortPath(); // kL
+
 		return;
 	}
 
@@ -230,6 +238,8 @@ void Pathfinding::calculate(
 							||  (testTile->getMapData(MapData::O_WESTWALL)
 								&& testTile->getMapData(MapData::O_WESTWALL)->isDoor())))
 					{
+//						abortPath(); // kL
+
 						return;
 					}
 					else if (isBlocked(
@@ -243,6 +253,8 @@ void Pathfinding::calculate(
 									dir[i],
 									target))
 					{
+//						abortPath(); // kL
+
 						return;
 					}
 					else if (testTile->getUnit())
@@ -252,6 +264,8 @@ void Pathfinding::calculate(
 							&& testUnit != target
 							&& testUnit->getVisible())
 						{
+//							abortPath(); // kL
+
 							return;
 						}
 					}
@@ -486,6 +500,7 @@ bool Pathfinding::bresenhamPath(
 								_unit,
 								targetUnit,
 								(targetUnit && maxTUCost == 10000));
+			//Log(LOG_INFO) << ". TU Cost = " << tuCost;
 
 			if (sneak
 				&& _save->getTile(nextPoint)->getVisible())
@@ -952,6 +967,7 @@ int Pathfinding::getTUCost(
 						if (startTile->getMapData(MapData::O_NORTHWALL)->isDoor()
 							|| startTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
 						{
+							//Log(LOG_INFO) << ". . . _openDoor[N] = TRUE";
 							_openDoor = true;
 						}
 					}
@@ -981,7 +997,7 @@ int Pathfinding::getTUCost(
 							if (destTile->getMapData(MapData::O_WESTWALL)->isDoor()
 								|| destTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
 							{
-								//Log(LOG_INFO) << ". . . _openDoor = TRUE";
+								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE";
 								_openDoor = true;
 							}
 						}
@@ -1002,7 +1018,7 @@ int Pathfinding::getTUCost(
 							if (aboveDestTile->getMapData(MapData::O_WESTWALL)->isDoor()
 								|| aboveDestTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
 							{
-								//Log(LOG_INFO) << ". . . (down) _openDoor = TRUE";
+								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE (down)";
 								_openDoor = true;
 							}
 						}
@@ -1029,6 +1045,7 @@ int Pathfinding::getTUCost(
 							if (destTile->getMapData(MapData::O_NORTHWALL)->isDoor()
 								|| destTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
 							{
+								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE";
 								_openDoor = true;
 							}
 						}
@@ -1048,6 +1065,7 @@ int Pathfinding::getTUCost(
 							if (aboveDestTile->getMapData(MapData::O_NORTHWALL)->isDoor()
 								|| aboveDestTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
 							{
+								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE (down)";
 								_openDoor = true;
 							}
 						}
@@ -1069,6 +1087,7 @@ int Pathfinding::getTUCost(
 						if (startTile->getMapData(MapData::O_WESTWALL)->isDoor()
 							|| startTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
 						{
+							//Log(LOG_INFO) << ". . . _openDoor[W] = TRUE";
 							_openDoor = true;
 						}
 					}
@@ -1246,8 +1265,12 @@ int Pathfinding::dequeuePath()
  */
 void Pathfinding::abortPath()
 {
-	_modCTRL = false;	// kL
-	_modALT = false;	// kL
+//	_modCTRL = false;	// kL
+//	_modALT = false;	// kL
+	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;	// kL
+	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;		// kL
+
+	_openDoor = false; // kL
 
 	_totalTUCost = 0;
 	_path.clear();
@@ -1656,90 +1679,6 @@ bool Pathfinding::isBlocked(
 
 	return false;
 }
-/*kL	switch (dir)
-	{
-		case 0:	// north
-			//Log(LOG_INFO) << ". try North";
-			if (isBlocked(startTile, MapData::O_NORTHWALL, missileTarget))
-				return true;
-		break;
-		case 1: // north-east
-			//Log(LOG_INFO) << ". try NorthEast";
-			if (isBlocked(startTile, MapData::O_NORTHWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileNorth + oneTileEast), MapData::O_WESTWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileEast), MapData::O_WESTWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileEast), MapData::O_NORTHWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileEast), O_BIGWALL, missileTarget, BIGWALL_NESW))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileNorth), O_BIGWALL, missileTarget, BIGWALL_NESW))
-				return true;
-		break;
-		case 2: // east
-			//Log(LOG_INFO) << ". try East";
-			if (isBlocked(_save->getTile(currentPos + oneTileEast), MapData::O_WESTWALL, missileTarget))
-				//Log(LOG_INFO) << "Pathfinding::isBlocked -> east is Blocked";
-				return true;
-		break;
-		case 3: // south-east
-			//Log(LOG_INFO) << ". try SouthEast";
-			if (isBlocked(_save->getTile(currentPos + oneTileEast), MapData::O_WESTWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileSouth), MapData::O_NORTHWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileSouth + oneTileEast), MapData::O_NORTHWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileSouth + oneTileEast), MapData::O_WESTWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileEast), O_BIGWALL, missileTarget, BIGWALL_NWSE))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileSouth), O_BIGWALL, missileTarget, BIGWALL_NWSE))
-				return true;
-		break;
-		case 4: // south
-			//Log(LOG_INFO) << ". try South";
-			if (isBlocked(_save->getTile(currentPos + oneTileSouth), MapData::O_NORTHWALL, missileTarget))
-				return true;
-		break;
-		case 5: // south-west
-			//Log(LOG_INFO) << ". try SouthWest";
-			if (isBlocked(startTile, MapData::O_WESTWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileSouth), MapData::O_WESTWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileSouth), MapData::O_NORTHWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileSouth), O_BIGWALL, missileTarget, BIGWALL_NESW))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileWest), O_BIGWALL, missileTarget, BIGWALL_NESW))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileSouth + oneTileWest), MapData::O_NORTHWALL, missileTarget))
-				return true;
-		break;
-		case 6: // west
-			//Log(LOG_INFO) << ". try West";
-			if (isBlocked(startTile, MapData::O_WESTWALL, missileTarget))
-				return true;
-		break;
-		case 7: // north-west
-			//Log(LOG_INFO) << ". try NorthWest";
-			if (isBlocked(startTile, MapData::O_WESTWALL, missileTarget))
-				return true;
-			if (isBlocked(startTile, MapData::O_NORTHWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileWest), MapData::O_NORTHWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileNorth), MapData::O_WESTWALL, missileTarget))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileNorth), O_BIGWALL, missileTarget, BIGWALL_NWSE))
-				return true;
-			if (isBlocked(_save->getTile(currentPos + oneTileWest), O_BIGWALL, missileTarget, BIGWALL_NWSE))
-				return true;
-		break;
-	} */
 
 /**
  * Determines whether a unit can fall down from this tile.
@@ -2063,7 +2002,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 //	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// kL: do this in calculate()
 													// for BattlescapeState::btnUnitDownClick()
-													// 'cause it doesn't use pathPreview here.
+													// 'cause it doesn't use pathPreview there.
 //	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
 
 	std::string armorType = _unit->getArmor()->getType();
@@ -2107,6 +2046,14 @@ bool Pathfinding::previewPath(bool bRemove)
 					0,
 					false);
 		//Log(LOG_INFO) << ". . tu = " << tu;
+/*		if (tu == 255)		// kL: Conflicts w/ the switchback for marker colors @ BA_SNAP.
+		{
+			abortPath();	// kL
+
+			return false;	// kL
+		} */
+
+
 		energyStop = energy;
 
 		gravLift = dir >= DIR_UP
@@ -2114,8 +2061,8 @@ bool Pathfinding::previewPath(bool bRemove)
 					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)->isGravLift();
 		if (!gravLift)
 		{
-			if (_unit->isKneeled()
-				&& hathStood == false)
+			if (hathStood == false
+				&& _unit->isKneeled())
 			{
 				hathStood = true;
 
@@ -2130,6 +2077,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 				if (_openDoor == true)
 				{
+					//Log(LOG_INFO) << ". . . openDoor TRUE, set to false";
 					_openDoor = false; // safety. Redundant w/ getTUCost() init
 
 					tu++;	// kludge. Assumes: all doors take 4 TU to open ....
@@ -2143,17 +2091,15 @@ bool Pathfinding::previewPath(bool bRemove)
 			if (bBody)
 				energy -= 1;
 			else if (bPower)
-			{
 				energy += 1;
-			}
 			else if (bFlight)
-			{
 				energy += 2;
-			}
 
 			if (energy > energyStop)
 				energy = energyStop;
 		}
+
+		//Log(LOG_INFO) << ". . tu2 = " << tu;
 
 		currentTU -= tu;
 		//Log(LOG_INFO) << ". . currentTU = " << currentTU;
@@ -2232,17 +2178,21 @@ bool Pathfinding::previewPath(bool bRemove)
 											BA_NONE,
 											false);
 
+	//Log(LOG_INFO) << ". . tu @ return = " << tu;
 	return true;
 }
 
 /**
  * Unmarks the tiles used for the path preview.
- * @return True, if the previewed path was removed.
+ * @return, true if the previewed path was removed
  */
 bool Pathfinding::removePreview()
 {
 	if (!_pathPreviewed)
 		return false;
+
+//	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;		// kL
+//	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;	// kL
 
 	previewPath(true);
 
@@ -2251,7 +2201,7 @@ bool Pathfinding::removePreview()
 
 /**
  * Gets the path preview setting.
- * @return True, if paths are previewed.
+ * @return, true if paths are previewed
  */
 bool Pathfinding::isPathPreviewed() const
 {
@@ -2261,9 +2211,9 @@ bool Pathfinding::isPathPreviewed() const
 /**
  * Locates all tiles reachable to @a *unit with a TU cost no more than @a tuMax.
  * Uses Dijkstra's algorithm.
- * @param unit Pointer to the unit.
- * @param tuMax The maximum cost of the path to each tile.
- * @return An array of reachable tiles, sorted in ascending order of cost. The first tile is the start location.
+ * @param unit	- pointer to a unit
+ * @param tuMax	- the maximum cost of the path to each tile
+ * @return, an array of reachable tiles, sorted in ascending order of cost; the first tile is the start location
  */
 std::vector<int> Pathfinding::findReachable(
 		BattleUnit* unit,
@@ -2310,7 +2260,7 @@ std::vector<int> Pathfinding::findReachable(
 				continue;
 
 			if (currentNode->getTUCost(false) + tuCost > tuMax
-//kL				|| (currentNode->getTUCost(false) + tuCost) / 2 > energyMax) // Run out of TUs/Energy
+//kL			|| (currentNode->getTUCost(false) + tuCost) / 2 > energyMax) // Run out of TUs/Energy
 				|| (currentNode->getTUCost(false) + tuCost) > energyMax) // kL
 			{
 				continue;
@@ -2355,7 +2305,7 @@ std::vector<int> Pathfinding::findReachable(
 
 /**
  * Gets the strafe move setting.
- * @return Strafe move.
+ * @return, true if strafe move
  */
 bool Pathfinding::getStrafeMove() const
 {

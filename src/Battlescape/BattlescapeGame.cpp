@@ -92,8 +92,8 @@ BattlescapeGame::BattlescapeGame(
 		_kneelReserved(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
-	_tuReserved				= BA_NONE;
-	_playerTUReserved		= BA_NONE;
+	_batReserved			= BA_NONE;
+	_playerBATReserved		= BA_NONE;
 	_debugPlay				= false;
 	_playerPanicHandled		= true;
 	_AIActionCounter		= 0;
@@ -227,7 +227,7 @@ void BattlescapeGame::init()
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI() " << unit->getId();
-	_tuReserved = BA_NONE;
+	_batReserved = BA_NONE;
 
 
 	if (unit->getTimeUnits() < 4) // kL
@@ -277,13 +277,13 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		switch (unit->getAggression())
 		{
 			case 0:
-				_tuReserved = BA_AIMEDSHOT;
+				_batReserved = BA_AIMEDSHOT;
 			break;
 			case 1:
-				_tuReserved = BA_AUTOSHOT;
+				_batReserved = BA_AUTOSHOT;
 			break;
 			case 2:
-				_tuReserved = BA_SNAPSHOT;
+				_batReserved = BA_SNAPSHOT;
 
 			default:
 			break;
@@ -590,7 +590,7 @@ void BattlescapeGame::endTurn()
 	_deleted.clear(); */
 // delete CTD_end.
 
-	_tuReserved		= _playerTUReserved;
+	_batReserved	= _playerBATReserved;
 	_debugPlay		= false;
 	_AISecondMove	= false;
 	_parentState->showLaunchButton(false);
@@ -1446,7 +1446,7 @@ void BattlescapeGame::popState()
 	//Log(LOG_INFO) << ". states.Popfront DONE";
 
 
-//	getMap()->refreshSelectorPosition(); // kL, I moved this to setupCursor()
+//	getMap()->refreshSelectorPosition(); // kL, I moved this to setupCursor() (also)
 
 	// handle the end of this unit's actions
 	if (action.actor
@@ -1573,7 +1573,7 @@ void BattlescapeGame::popState()
 				_parentState->updateSoldierInfo(); // kL
 
 //				getMap()->refreshSelectorPosition(); // kL
-//kL_TEST		setupCursor();
+				setupCursor();
 				_parentState->getGame()->getCursor()->setVisible(true);
 				//Log(LOG_INFO) << ". end NOT actionFailed";
 			}
@@ -1621,7 +1621,7 @@ void BattlescapeGame::popState()
 			else if (_debugPlay)
 			{
 //				getMap()->refreshSelectorPosition(); // kL
-//kL_TEST		setupCursor();
+				setupCursor();
 				_parentState->getGame()->getCursor()->setVisible(true);
 			}
 		}
@@ -1649,7 +1649,7 @@ void BattlescapeGame::popState()
 			if (_states.empty())
 			{
 				//Log(LOG_INFO) << ". endTurn()";
-				setupCursor(); // kL_TEST
+//				setupCursor(); // kL_TEST
 
 				endTurn();
 
@@ -1673,10 +1673,12 @@ void BattlescapeGame::popState()
 	{
 		//Log(LOG_INFO) << ". huh hey wot)";
 		cancelCurrentAction();
-		_save->setSelectedUnit(NULL); // kL_note: seems redundant .....
 
+//kL	_save->setSelectedUnit(NULL); // kL_note: seems redundant .....
+
+		setupCursor(); // kL
 //		getMap()->refreshSelectorPosition(); // kL
-		getMap()->setCursorType(CT_NORMAL);
+//kL	getMap()->setCursorType(CT_NORMAL);
 		_parentState->getGame()->getCursor()->setVisible(true);
 	}
 
@@ -1687,7 +1689,8 @@ void BattlescapeGame::popState()
 		_parentState->updateSoldierInfo(); // kL: calcFoV ought have been done by now ...
 	}
 
-	setupCursor(); // kL_TEST
+//	getMap()->refreshSelectorPosition(); // kL_TEST
+//	setupCursor(); // kL_TEST
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
 }
 
@@ -1737,7 +1740,7 @@ bool BattlescapeGame::checkReservedTU(
 		int tu,
 		bool test)
 {
-	BattleActionType actionReserved = _tuReserved; // avoid changing _tuReserved here.
+	BattleActionType actionReserved = _batReserved; // avoid changing _batReserved here.
 
 	// aLiens reserve TUs as a percentage rather than just enough for a single action.
 	if (_save->getSide() != FACTION_PLAYER)
@@ -1782,10 +1785,10 @@ bool BattlescapeGame::checkReservedTU(
 
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(
-					_tuReserved,
+					_batReserved,
 					slowestWeapon)
 				== 0
-		&& _tuReserved == BA_AUTOSHOT)
+		&& _batReserved == BA_AUTOSHOT)
 	{
 		actionReserved = BA_SNAPSHOT;
 	}
@@ -1795,17 +1798,30 @@ bool BattlescapeGame::checkReservedTU(
 					actionReserved,
 					slowestWeapon)
 				== 0
-		&& _tuReserved == BA_SNAPSHOT)
+		&& _batReserved == BA_SNAPSHOT)
 	{
 		actionReserved = BA_AIMEDSHOT;
 	}
 
-	const int tuKneel = (_kneelReserved && !bu->isKneeled() && bu->getType() == "SOLDIER")? 4: 0;
+	const int tuKneel = (_kneelReserved
+							&& !bu->isKneeled()
+							&& bu->getType()
+						== "SOLDIER")? 4
+						: 0;
 
 	if ((actionReserved != BA_NONE
 			|| _kneelReserved)
-		&& tu + tuKneel + bu->getActionTUs(actionReserved, slowestWeapon) > bu->getTimeUnits()
-		&& (tuKneel + bu->getActionTUs(actionReserved, slowestWeapon) <= bu->getTimeUnits()
+		&& tu
+			+ tuKneel
+			+ bu->getActionTUs(
+							actionReserved,
+							slowestWeapon)
+						> bu->getTimeUnits()
+		&& (tuKneel
+				+ bu->getActionTUs(
+								actionReserved,
+								slowestWeapon)
+							<= bu->getTimeUnits()
 			|| test))
 	{
 		if (!test)
@@ -2410,7 +2426,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 											_currentAction.actor,
 											_currentAction.target);
 
-			if (_save->getPathfinding()->getStartDirection() != -1) // kL -> assumes removePreview() doesn't change StartDirection
+			if (_save->getPathfinding()->getStartDirection() != -1) // kL -> assumes both previewPath() & removePreview() don't change StartDirection
 			{
 				if (bPreviewed
 					&& !_save->getPathfinding()->previewPath())
@@ -2584,20 +2600,20 @@ void BattlescapeGame::requestEndTurn()
 }
 
 /**
- * Sets the TU reserved type.
- * @param tur A battleactiontype.
- * @param player is this requested by the player?
+ * Sets the TU reserved type as a BattleAction.
+ * @param bat		- a battleactiontype (BattlescapeGame.h)
+ * @param player	- true if this requested by the player
  */
 void BattlescapeGame::setTUReserved(
-		BattleActionType tur,
+		BattleActionType bat,
 		bool player)
 {
-	_tuReserved = tur;
+	_batReserved = bat;
 
 	if (player)
 	{
-		_playerTUReserved = tur;
-		_save->setTUReserved(tur);
+		_playerBATReserved = bat;
+		_save->setTUReserved(bat);
 	}
 }
 
@@ -3193,7 +3209,7 @@ bool BattlescapeGame::takeItem(
  */
 BattleActionType BattlescapeGame::getReservedAction()
 {
-	return _tuReserved;
+	return _batReserved;
 }
 
 /**

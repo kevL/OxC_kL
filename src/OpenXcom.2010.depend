@@ -4770,7 +4770,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1406606227 f:\git\openxcom\src\battlescape\battlescapegame.h
+1407965381 f:\git\openxcom\src\battlescape\battlescapegame.h
 	<list>
 	<string>
 	<vector>
@@ -5802,7 +5802,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1407859070 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1407965699 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6591,7 +6591,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1407917339 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1407966223 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
