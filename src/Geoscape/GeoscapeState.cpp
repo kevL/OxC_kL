@@ -354,10 +354,10 @@ GeoscapeState::GeoscapeState()
 //kL	_txtMin		= new Text(19, 17, screenWidth - 37, screenHeight / 2 - 26);
 //	_txtMinSep	= new Text(5,  17, screenWidth - 18, screenHeight / 2 - 26);
 //	_txtSec		= new Text(10, 17, screenWidth - 13, screenHeight / 2 - 26);
-	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 23);
-	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 23);
-	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 23);
-	_txtSec		= new Text(6, 9, screenWidth - 7, screenHeight / 2 - 27);
+	_txtHour	= new Text(19, 17, screenWidth - 54, screenHeight / 2 - 22);
+	_txtHourSep	= new Text(5,  17, screenWidth - 35, screenHeight / 2 - 22);
+	_txtMin		= new Text(19, 17, screenWidth - 30, screenHeight / 2 - 22);
+	_txtSec		= new Text(6, 9, screenWidth - 8, screenHeight / 2 - 26);
 
 /*	_txtWeekday	= new Text(59, 8, screenWidth - 61, screenHeight / 2 - 13);
 	_txtDay		= new Text(29, 8, screenWidth - 61, screenHeight / 2 - 6);
@@ -369,12 +369,12 @@ GeoscapeState::GeoscapeState()
 //	_txtYear	= new Text(27, 16, screenWidth - 28, screenHeight / 2 - 5);
 //	_txtDate	= new Text(60, 8, screenWidth - 62, screenHeight / 2 - 5);
 
-	_srfDay1		= new Surface(3, 8, screenWidth - 46, screenHeight / 2 - 3);
-	_srfDay2		= new Surface(3, 8, screenWidth - 42, screenHeight / 2 - 3);
-	_srfMonth1		= new Surface(3, 8, screenWidth - 35, screenHeight / 2 - 3);
-	_srfMonth2		= new Surface(3, 8, screenWidth - 31, screenHeight / 2 - 3);
-	_srfYear1		= new Surface(3, 8, screenWidth - 24, screenHeight / 2 - 3);
-	_srfYear2		= new Surface(3, 8, screenWidth - 20, screenHeight / 2 - 3);
+	_srfDay1		= new Surface(3, 8, screenWidth - 45, screenHeight / 2 - 3);
+	_srfDay2		= new Surface(3, 8, screenWidth - 41, screenHeight / 2 - 3);
+	_srfMonth1		= new Surface(3, 8, screenWidth - 34, screenHeight / 2 - 3);
+	_srfMonth2		= new Surface(3, 8, screenWidth - 30, screenHeight / 2 - 3);
+	_srfYear1		= new Surface(3, 8, screenWidth - 23, screenHeight / 2 - 3);
+	_srfYear2		= new Surface(3, 8, screenWidth - 19, screenHeight / 2 - 3);
 
 	_txtFunds = new Text(63, 8, screenWidth - 63, 10); // kL
 	if (Options::showFundsOnGeoscape)
@@ -1022,6 +1022,9 @@ void GeoscapeState::timeDisplay()
 	if (_day != date)
 	{
 		//Log(LOG_INFO) << ". day NOT Date";
+		_srfDay1->clear();
+		_srfDay2->clear();
+
 		_day = date;
 
 		SurfaceSet* digitSet = _game->getResourcePack()->getSurfaceSet("DIGITS");
@@ -1043,6 +1046,9 @@ void GeoscapeState::timeDisplay()
 		if (_month != date)
 		{
 			//Log(LOG_INFO) << ". month NOT Date";
+			_srfMonth1->clear();
+			_srfMonth2->clear();
+
 			_month = date;
 
 			srfDate = digitSet->getFrame(date / 10);
@@ -1059,6 +1065,9 @@ void GeoscapeState::timeDisplay()
 			if (_year != date)
 			{
 				//Log(LOG_INFO) << ". year NOT Date";
+				_srfYear1->clear();
+				_srfYear2->clear();
+
 				_year = date;
 
 				srfDate = digitSet->getFrame(date / 10);
@@ -1628,7 +1637,7 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-	//Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
+	Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
 	bool ret = false;
 
 	if (ufo->isCrashed())
@@ -1638,13 +1647,13 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	}
 	else if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
-		//Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
+		Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
 		return false;
 	}
 	else if (ufo->getMissionType() != "STR_ALIEN_RETALIATION"
 		&& !Options::aggressiveRetaliation)
 	{
-		//Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is true";
+		Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is true";
 		return false;
 	}
 	else
@@ -1653,12 +1662,12 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 		double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
 		double ufoRange = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor;
 		double targetDist = _base.getDistance(ufo) * 3440.0;
-		//Log(LOG_INFO) << ". . ufoRange = " << (int)ufoRange;
-		//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
+		Log(LOG_INFO) << ". . ufoRange = " << (int)ufoRange;
+		Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
 
 		if (targetDist > ufoRange)
 		{
-			//Log(LOG_INFO) << ". . uFo's have a detection range of 600 nautical miles.";
+			Log(LOG_INFO) << ". . uFo's have a detection range of 600 nautical miles.";
 			return false;
 		}
 		else
@@ -1670,19 +1679,19 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 			if (ufo->getMissionType() == "STR_ALIEN_RETALIATION"
 				&& Options::aggressiveRetaliation)
 			{
-				//Log(LOG_INFO) << ". . uFo's on retaliation missions will scan for base 'aggressively'";
-				chance += 3;
+				Log(LOG_INFO) << ". . uFo's on retaliation missions will scan for base 'aggressively'";
+				chance += 5;
 			}
 
 			if (chance > 0)
 			{
-				//Log(LOG_INFO) << ". . . chance = " << chance;
+				Log(LOG_INFO) << ". . . chance = " << chance;
 				ret = RNG::percent(chance);
 			}
 		}
 	}
 
-	//Log(LOG_INFO) << ". ret " << ret;
+	Log(LOG_INFO) << ". ret " << ret;
 	return ret;
 }
 
