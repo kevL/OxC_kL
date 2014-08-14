@@ -708,8 +708,16 @@ void BattlescapeGame::endTurn()
 			int fire = (*j)->getFire(); // kL
 			if (fire > 0) // kL
 			{
-//kL				(*j)->setFire(-1);
-				(*j)->setFire(fire - 1); // kL
+				int dam = RNG::generate(3, 9);
+
+				(*j)->damage(
+							Position(0, 0, 0),
+							dam,
+							DT_IN,
+							true);
+
+//kL			(*j)->setFire(-1);
+/*				(*j)->setFire(fire - 1); // kL
 
 				int fireDamage = static_cast<int>(
 									(*j)->getArmor()->getDamageModifier(DT_IN)
@@ -718,7 +726,7 @@ void BattlescapeGame::endTurn()
 				(*j)->setHealth((*j)->getHealth() - fireDamage);
 
 				if ((*j)->getHealth() < 0)
-					(*j)->setHealth(0);
+					(*j)->setHealth(0); */
 			}
 		}
 	}

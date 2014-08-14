@@ -242,7 +242,8 @@ void UnitDieBState::think()
 
 //		Tile* tile = _unit->getTile(); // kL
 
-		if (_unit->getSpawnUnit().empty() == false)
+		if (_unit->getSpawnUnit().empty() == false
+			&& _unit->getDiedByFire() == false) // kL <- could screw with death animations, etc.
 		{
 			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
 			BattleUnit* convertedUnit = _parent->convertUnit(

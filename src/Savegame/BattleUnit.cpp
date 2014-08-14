@@ -1341,27 +1341,34 @@ int BattleUnit::damage(
 		else
 		{
 			_health -= power; // health damage
-			if (_health < 0)
+			if (_health < 1)
+			{
 				_health = 0;
 
-			if (_armor->getSize() == 1) // add some stun damage to not-large units
-				_stunlevel += RNG::generate(0, power / 3); // kL_note: was, 4
-
-			if (!ignoreArmor)	// kinda funky: only wearers of armor-types-that-are
-								// -resistant-to-damage-types can take fatal wounds
+				if (type == DT_IN)
+					_diedByFire = true;
+			}
+			else
 			{
-				if (isWoundable()) // fatal wounds
+				if (_armor->getSize() == 1) // add some stun damage to not-large units
+					_stunlevel += RNG::generate(0, power / 3); // kL_note: was, 4
+
+				if (!ignoreArmor)	// kinda funky: only wearers of armor-types-that-are
+									// -resistant-to-damage-types can take fatal wounds
 				{
-					if (RNG::generate(0, 10) < power) // kL: refactor this.
+					if (isWoundable()) // fatal wounds
 					{
-						int wounds = RNG::generate(1, 3);
-						_fatalWounds[bodypart] += wounds;
+						if (RNG::generate(0, 10) < power) // kL: refactor this.
+						{
+							int wounds = RNG::generate(1, 3);
+							_fatalWounds[bodypart] += wounds;
 
-						moraleChange(-wounds * 3);
+							moraleChange(-wounds * 3);
+						}
 					}
-				}
 
-//				setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
+//					setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
+				}
 			}
 		}
 	}
@@ -2133,7 +2140,6 @@ void BattleUnit::moraleChange(int change)
 	}
 
 	//Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;
-
 	_morale += change;
 
 	if (_morale > 100)
@@ -3760,6 +3766,22 @@ void BattleUnit::setTakenExpl(bool beenhit)
 bool BattleUnit::getTakenExpl() const
 {
 	return _takenExpl;
+}
+
+/**
+ * Sets the unit has having died by fire damage.
+ */
+/* void BattleUnit::setDiedByFire()
+{
+	_diedByFire = true;
+} */
+
+/**
+ * Gets if the unit died by fire damage.
+ */
+bool BattleUnit::getDiedByFire() const
+{
+	return _diedByFire;
 } // kL_end.
 
 /**

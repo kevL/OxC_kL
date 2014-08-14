@@ -353,6 +353,7 @@ class BattleUnit
 private:
 	bool
 		_cacheInvalid,
+		_diedByFire,
 		_dontReselect,
 		_floating,
 //kL	_hitByFire,
@@ -943,40 +944,44 @@ private:
 		/// to stop a unit from firing/throwing if it spots a new opponent during turning
 		bool getStopShot() const;
 
-		/// Set a unit as dashing.
+		/// Sets a unit as dashing.
 		void setDashing(bool dash);
-		/// Get if a unit is dashing.
+		/// Gets if a unit is dashing.
 		bool getDashing() const;
 
-		/// Set a unit as having been damaged in a single explosion.
+		/// Sets a unit as having been damaged in a single explosion.
 		void setTakenExpl(bool beenhit = true);
-		/// Get if a unit was aleady damaged in a single explosion.
+		/// Gets if a unit was aleady damaged in a single explosion.
 		bool getTakenExpl() const;
+
+		/// Sets the unit has having died by fire damage.
+//		void setDiedByFire();
+		/// Gets if the unit died by fire damage.
+		bool getDiedByFire() const;
 		// kL_end.
 
-		/// Is this unit selectable?
+		/// Returns true if this unit selectable.
 		bool isSelectable(
 				UnitFaction faction,
 				bool checkReselect = false,
 				bool checkInventory = false) const;
 
-		/// Does this unit have an inventory?
+		/// Returns true if this unit has an inventory.
 		bool hasInventory() const;
 
-		/// Get the unit's mission statistics.
+		/// Gets the unit's mission statistics.
 		BattleUnitStatistics* getStatistics();
-		/// Set the unit murderer's id.
+		/// Sets the unit murderer's id.
 		void setMurdererId(int id);
-		/// Get the unit murderer's id.
+		/// Gets the unit murderer's id.
 		int getMurdererId() const;
 
 		/// kL. Sets the unit's order in battle.
 		void setBattleOrder(size_t order); // kL
-
 		/// kL. Gets the unit's order in battle.
 		size_t getBattleOrder() const; // kL
 
-		/// kL.
+		/// kL. Sets the BattleGame for this unit.
 		void setBattleGame(BattlescapeGame* battleGame); // kL
 };
 
