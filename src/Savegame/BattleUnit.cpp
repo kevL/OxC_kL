@@ -1371,6 +1371,7 @@ int BattleUnit::damage(
 //	if (!isOut(true, true)) // no sound if Stunned; deathscream handled by uh, UnitDieBState.
 //		playHitSound(); // kL
 	if (_health > 0
+		&& _status != STATUS_UNCONSCIOUS
 		&& type != DT_STUN)
 	{
 		playHitSound(); // kL

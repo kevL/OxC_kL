@@ -1440,7 +1440,6 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
-    armor: 20
   - type: STR_PISTOL_CLIP
     size: 0.1
     costBuy: 75

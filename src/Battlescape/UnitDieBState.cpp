@@ -357,7 +357,7 @@ void UnitDieBState::convertUnitToCorpse()
 	// move inventory from unit to the ground for non-large units
 	bool drop = size == 1
 				&& !carried // kL, i don't think this ever happens (ie, items have already been dropped). So let's bypass this section anyway!
-				&& (!Options::weaponSelfDestruction
+				&& (Options::weaponSelfDestruction == false
 					|| _unit->getOriginalFaction() != FACTION_HOSTILE
 					|| _unit->getStatus() == STATUS_UNCONSCIOUS);
 	if (drop)
@@ -371,7 +371,7 @@ void UnitDieBState::convertUnitToCorpse()
 							pos,
 							*i);
 
-			if (!(*i)->getRules()->isFixed())
+			if ((*i)->getRules()->isFixed() == false)
 				(*i)->setOwner(NULL);
 			else
 				itemToKeep = *i;
@@ -396,8 +396,8 @@ void UnitDieBState::convertUnitToCorpse()
 		{
 			if ((*i)->getUnit() == _unit) // unit is in an inventory, so unit must be a 1x1 unit
 			{
-				RuleItem* corpseRules = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]);
-				(*i)->convertToCorpse(corpseRules);
+				RuleItem* corpseRule = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]);
+				(*i)->convertToCorpse(corpseRule);
 
 				break;
 			}

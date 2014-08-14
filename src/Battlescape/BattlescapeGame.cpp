@@ -703,8 +703,8 @@ void BattlescapeGame::endTurn()
 		{
 			// Catch fire first! do it here
 
-//kL			if (!(*j)->getTookFire()
-//kL				&& (*j)->getFire() > 0)
+//kL		if (!(*j)->getTookFire()
+//kL			&& (*j)->getFire() > 0)
 			int fire = (*j)->getFire(); // kL
 			if (fire > 0) // kL
 			{

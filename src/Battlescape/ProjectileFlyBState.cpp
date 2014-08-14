@@ -387,7 +387,7 @@ void ProjectileFlyBState::init()
 			else
 				_targetVoxel.z += 4; // launched missiles go slightly higher than the middle.
 		}
-		else if ((SDL_GetModState() & KMOD_ALT) != 0) // note: CTRL+ALT
+		else if ((SDL_GetModState() & KMOD_ALT) != 0) // note: CTRL+ALT !
 			_targetVoxel.z -= 10; // force fire at floor (for HE ammo-types)
 	}
 	else
@@ -961,10 +961,10 @@ void ProjectileFlyBState::think()
 					int offset = 0;
 
 					if (_ammo
-//kL						&& _ammo->getRules()->getExplosionRadius() != 0
-						&& _ammo->getRules()->getExplosionRadius() > 0			// kL
-//						&& (_ammo->getRules()->getDamageType() == DT_HE			// kL
-//							|| _ammo->getRules()->getDamageType() == DT_IN)		// kL
+//kL					&& _ammo->getRules()->getExplosionRadius() != 0
+						&& _ammo->getRules()->getExplosionRadius() > 0		// kL
+//						&& (_ammo->getRules()->getDamageType() == DT_HE		// kL
+//							|| _ammo->getRules()->getDamageType() == DT_IN)	// kL
 						&& _projectileImpact != VOXEL_UNIT)
 					{
 						offset = -2;

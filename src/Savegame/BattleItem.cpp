@@ -40,14 +40,14 @@ BattleItem::BattleItem(
 	:
 		_id(*id),
 		_rules(rules),
-		_owner(0),
-		_previousOwner(0),
-		_unit(0),
-		_tile(0),
-		_inventorySlot(0),
+		_owner(NULL),
+		_previousOwner(NULL),
+		_unit(NULL),
+		_tile(NULL),
+		_inventorySlot(NULL),
 		_inventoryX(0),
 		_inventoryY(0),
-		_ammoItem(0),
+		_ammoItem(NULL),
 		_fuseTimer(-1),
 		_ammoQuantity(0),
 		_painKiller(0),
@@ -84,7 +84,7 @@ BattleItem::BattleItem(
 }
 
 /**
- *
+ * dTor.
  */
 BattleItem::~BattleItem()
 {
@@ -571,7 +571,7 @@ void BattleItem::setTurnFlag(bool flag)
 
 /**
  * Converts an unconscious body into a dead one.
- * @param rules the rules of the corpse item to convert this item into.
+ * @param rules - the rules of the corpse item to convert this item into
  */
 void BattleItem::convertToCorpse(RuleItem* rules)
 {

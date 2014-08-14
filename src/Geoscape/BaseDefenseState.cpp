@@ -200,7 +200,7 @@ void BaseDefenseState::nextStep()
 		switch (_action)
 		{
 			case BDA_NONE:
-				_lstDefenses->addRow(3, tr((def)->getRules()->getType()).c_str(), L" ", L" ");
+				_lstDefenses->addRow(3, tr(def->getRules()->getType()).c_str(), L" ", L" ");
 				++_row;
 				_action = BDA_FIRE;
 
@@ -208,21 +208,21 @@ void BaseDefenseState::nextStep()
 
 			case BDA_FIRE:
 				_lstDefenses->setCellText(_row, 1, tr("STR_FIRING").c_str());
-				_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getFireSound())->play();
+				_game->getResourcePack()->getSound("GEO.CAT", def->getRules()->getFireSound())->play();
 				_action = BDA_RESOLVE;
 
 				return;
 
 			case BDA_RESOLVE:
-				if (!RNG::percent((def)->getRules()->getHitRatio()))
+				if (!RNG::percent(def->getRules()->getHitRatio()))
 				{
 					_lstDefenses->setCellText(_row, 2, tr("STR_MISSED").c_str());
 				}
 				else
 				{
 					_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());
-					_game->getResourcePack()->getSound("GEO.CAT", (def)->getRules()->getHitSound())->play();
-					_ufo->setDamage(_ufo->getDamage() + (def)->getRules()->getDefenseValue()); // kL_note: should vary this.
+					_game->getResourcePack()->getSound("GEO.CAT", def->getRules()->getHitSound())->play();
+					_ufo->setDamage(_ufo->getDamage() + def->getRules()->getDefenseValue()); // kL_note: should vary this.
 				}
 
 				if (_ufo->getStatus() == Ufo::DESTROYED)

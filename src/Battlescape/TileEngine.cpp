@@ -2714,7 +2714,7 @@ void TileEngine::explode(
 									//Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, not GZ";
 									if (targetUnit->isKneeled())
 									{
-										powerVsUnit = powerVsUnit * 13 / 20; // 65% damage
+										powerVsUnit = powerVsUnit * 7 / 10; // 70% damage
 										//Log(LOG_INFO) << ". . . powerVsUnit(kneeled) = " << powerVsUnit << " DT_HE, not GZ";
 									}
 
@@ -2739,32 +2739,54 @@ void TileEngine::explode(
 										it != destTile->getInventory()->end();
 										)
 								{
-									powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
-														static_cast<double>(_powerE) * 0.5,
-														static_cast<double>(_powerE) * 1.5));
-
-									if (_powerE > (*it)->getRules()->getArmor())
+									BattleUnit* buOut = (*it)->getUnit();
+									if (buOut != NULL
+										&& buOut->getTakenExpl() == true)
 									{
-										BattleUnit* buOut = (*it)->getUnit();
+										++it;
+										done = (it == destTile->getInventory()->end());
+									}
+									else if (_powerE > (*it)->getRules()->getArmor())
+									{
 										if (buOut != NULL
 											&& buOut->getStatus() == STATUS_UNCONSCIOUS)
 										{
-											buOut->instaKill();
+											buOut->setTakenExpl();
 
-											if (Options::battleNotifyDeath // send Death notice.
-												&& buOut->getOriginalFaction() == FACTION_PLAYER)
+											powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
+																static_cast<double>(_powerE) * 0.5,
+																static_cast<double>(_powerE) * 1.5));
+
+											buOut->damage(
+														Position(0, 0, 0),
+														powerVsUnit,
+														DT_HE);
+
+											if (buOut->getHealth() < 1)
 											{
-												Game* game = _battleSave->getBattleState()->getGame();
-												game->pushState(new InfoboxOKState(game->getLanguage()->getString(
-																											"STR_HAS_BEEN_KILLED", // "has exploded ..."
-																											buOut->getGender())
-																										.arg(buOut->getName(game->getLanguage()))));
+												buOut->instaKill();
+
+												if (Options::battleNotifyDeath // send Death notice.
+													&& buOut->getOriginalFaction() == FACTION_PLAYER)
+												{
+													Game* game = _battleSave->getBattleState()->getGame();
+													game->pushState(new InfoboxOKState(game->getLanguage()->getString(
+																													"STR_HAS_BEEN_KILLED", // "has exploded ..."
+																													buOut->getGender())
+																												.arg(buOut->getName(game->getLanguage()))));
+												}
+
+												_battleSave->removeItem(*it);
 											}
+
+											break;
 										}
+										else
+										{
+											_battleSave->removeItem(*it);
 
-										_battleSave->removeItem(*it);
-
-										break;
+											break;
+										}
 									}
 									else
 									{
@@ -2800,8 +2822,31 @@ void TileEngine::explode(
 									//Log(LOG_INFO) << ". . DT_IN : " << targetUnit->getId() << " takes " << firePower << " firePower";
 								}
 							}
+
+							// kL: Adapted from DT_HE above^
+							for (std::vector<BattleItem*>::iterator
+									it = destTile->getInventory()->begin();
+									it != destTile->getInventory()->end();
+									++it)
+							{
+								BattleUnit* buOut = (*it)->getUnit();
+								if (buOut != NULL
+									&& buOut->getStatus() == STATUS_UNCONSCIOUS)
+								{
+									powerVsUnit = RNG::generate( // 10% to 20%
+															_powerE / 10,
+															_powerE / 5);
+
+									buOut->damage(
+												Position(0, 0, 0),
+												powerVsUnit,
+												DT_SMOKE,
+												true);
+								}
+							}
 						break;
 						case DT_IN:
+						{
 							if (!destTile->isVoid())
 							{
 								// kL_note: So, this just sets a tile on fire/smoking regardless of its content.
@@ -2811,7 +2856,7 @@ void TileEngine::explode(
 								// of the tile itself self-igniting.
 								if (destTile->getFire() == 0
 									&& (destTile->getMapData(MapData::O_FLOOR)
-										|| destTile->getMapData(MapData::O_OBJECT)))
+										|| destTile->getMapData(MapData::O_OBJECT))) // only floors & content can catch fire.
 								{
 									destTile->setFire(destTile->getFuel() + 1);
 									destTile->setSmoke(std::max(
@@ -2841,13 +2886,71 @@ void TileEngine::explode(
 										//Log(LOG_INFO) << ". . DT_IN : " << targetUnit->getId() << " takes " << firePower << " firePower";
 
 										int burnTime = RNG::generate(
-																0,
-																static_cast<int>(5.f * modifier));
-										if (targetUnit->getFire() < burnTime) // catch fire and burn
-											targetUnit->setFire(burnTime);
+																	0,
+																	static_cast<int>(5.f * modifier));
+										if (targetUnit->getFire() < burnTime)
+											targetUnit->setFire(burnTime); // catch fire and burn!!
 									}
 								}
 							}
+
+							// kL: Adapted from DT_HE above^
+							bool done = false;
+							while (!done)
+							{
+								done = destTile->getInventory()->empty();
+
+								for (std::vector<BattleItem*>::iterator
+										it = destTile->getInventory()->begin();
+										it != destTile->getInventory()->end();
+										)
+								{
+//									int fire = RNG::generate(4, 11);
+									powerVsUnit = RNG::generate( // kL: 25% - 75%
+															_powerE / 4,
+															_powerE * 3 / 4);
+
+									BattleUnit* buOut = (*it)->getUnit();
+									if (buOut != NULL
+										&& buOut->getStatus() == STATUS_UNCONSCIOUS)
+									{
+										buOut->damage(
+													Position(0, 0, 0),
+													powerVsUnit,
+													DT_IN,
+													true);
+
+										if (buOut->getHealth() < 1)
+										{
+											buOut->instaKill();
+
+											if (Options::battleNotifyDeath // send Death notice.
+												&& buOut->getOriginalFaction() == FACTION_PLAYER)
+											{
+												Game* game = _battleSave->getBattleState()->getGame();
+												game->pushState(new InfoboxOKState(game->getLanguage()->getString(
+																											"STR_HAS_BEEN_KILLED", // "has exploded ..."
+																											buOut->getGender())
+																										.arg(buOut->getName(game->getLanguage()))));
+											}
+										}
+
+										break;
+									}
+									else if (powerVsUnit > (*it)->getRules()->getArmor())
+									{
+										_battleSave->removeItem(*it);
+
+										break;
+									}
+									else
+									{
+										++it;
+										done = (it == destTile->getInventory()->end());
+									}
+								}
+							}
+						}
 						break;
 
 						default:
@@ -2858,7 +2961,7 @@ void TileEngine::explode(
 					if (targetUnit)
 					{
 						//Log(LOG_INFO) << ". . targetUnit ID " << targetUnit->getId() << ", setTaken TRUE";
-						targetUnit->setTakenExpl(true);
+						targetUnit->setTakenExpl();
 
 						// if it's going to bleed to death and it's not a player, give credit for the kill.
 						// kL_note: See Above^
@@ -2882,7 +2985,6 @@ void TileEngine::explode(
 					}
 				}
 
-//				_powerE = _powerT;
 				origin = destTile;
 				r += 1.0;
 			}
