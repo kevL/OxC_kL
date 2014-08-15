@@ -101,10 +101,10 @@ Ufo::~Ufo()
 	if (_dest)
 	{
 		Waypoint* wp = dynamic_cast<Waypoint*>(_dest);
-		if (wp != 0)
+		if (wp != NULL)
 		{
 			delete _dest;
-			_dest = 0;
+			_dest = NULL;
 		}
 	}
 }
@@ -440,8 +440,7 @@ void Ufo::setAltitude(const std::string& altitude)
 }
 
 /**
- * Returns if this UFO took enough damage
- * to cause it to crash.
+ * Returns if this UFO took enough damage to cause it to crash.
  * @return Crashed status.
  */
 bool Ufo::isCrashed() const
@@ -450,8 +449,7 @@ bool Ufo::isCrashed() const
 }
 
 /**
- * Returns if this UFO took enough damage
- * to cause it to crash.
+ * Returns if this UFO took enough damage to destroy it.
  * @return Crashed status.
  */
 bool Ufo::isDestroyed() const
@@ -460,8 +458,7 @@ bool Ufo::isDestroyed() const
 }
 
 /**
- * Calculates the direction for the UFO based
- * on the current raw speed and destination.
+ * Calculates the direction for the UFO based on the current raw speed and destination.
  */
 void Ufo::calculateSpeed()
 {

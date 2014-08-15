@@ -58,7 +58,7 @@ namespace OpenXcom
 {
 
 /**
- *
+ * cTor.
  */
 AlienMission::AlienMission(const RuleAlienMission& rule)
 	:
@@ -68,12 +68,12 @@ AlienMission::AlienMission(const RuleAlienMission& rule)
 		_spawnCountdown(0),
 		_liveUfos(0),
 		_uniqueID(0),
-		_base(0)
+		_base(NULL)
 {
 }
 
 /**
- *
+ * dTor.
  */
 AlienMission::~AlienMission()
 {
@@ -359,8 +359,9 @@ Ufo* AlienMission::spawnUfo(
 
 			ufo->setAltitude(trajAssault.getAltitude(0));
 			ufo->setSpeed(static_cast<int>(ceil(
-							static_cast<double>(trajAssault.getSpeedPercentage(0)) * static_cast<double>(battleshipRule.getMaxSpeed()))));
-//			ufo->setAltitude("STR_VERY_LOW");		// kL. heh -> changed in Xcom1Ruleset.rul
+							static_cast<double>(trajAssault.getSpeedPercentage(0))
+							* static_cast<double>(battleshipRule.getMaxSpeed()))));
+//			ufo->setAltitude("STR_VERY_LOW");				// kL. heh -> changed in Xcom1Ruleset.rul
 //			ufo->setSpeed(battleshipRule.getMaxSpeed());	// kL. heh -> fixed above.
 			ufo->setLongitude(pos.first);
 			ufo->setLatitude(pos.second);
@@ -401,7 +402,8 @@ Ufo* AlienMission::spawnUfo(
 
 		ufo->setAltitude(trajectory.getAltitude(0));
 		ufo->setSpeed(static_cast<int>(ceil(
-						static_cast<double>(trajectory.getSpeedPercentage(0)) * static_cast<double>(ufoRule.getMaxSpeed()))));
+						static_cast<double>(trajectory.getSpeedPercentage(0))
+						* static_cast<double>(ufoRule.getMaxSpeed()))));
 		ufo->setLongitude(pos.first);
 		ufo->setLatitude(pos.second);
 
@@ -449,7 +451,8 @@ Ufo* AlienMission::spawnUfo(
 		ufo->setSecondsRemaining(trajectory.groundTimer());
 
 	ufo->setSpeed(static_cast<int>(ceil(
-					static_cast<double>(trajectory.getSpeedPercentage(0)) * static_cast<double>(ufoRule.getMaxSpeed()))));
+					static_cast<double>(trajectory.getSpeedPercentage(0))
+					* static_cast<double>(ufoRule.getMaxSpeed()))));
 	ufo->setLongitude(pos.first);
 	ufo->setLatitude(pos.second);
 
@@ -592,16 +595,9 @@ void AlienMission::ufoReachedWaypoint(
 		if (ufo.getLandId() != 0)
 			ufo.setLandId(0);
 
-		// kL_begin:
-//		if (_rule.getType() == "STR_ALIEN_RETALIATION" &&
-/*		if (trajectory.getID() == "__RETALIATION_ASSAULT_RUN")
-		{
-			ufo.setSpeed(ufo.getRules()->getMaxSpeed());
-		}
-		else */ // kL_end. Nope not it !
-		ufo.setSpeed(static_cast<int>(
-						(static_cast<float>(ufo.getRules()->getMaxSpeed())
-							* trajectory.getSpeedPercentage(nextWaypoint))));
+		ufo.setSpeed(static_cast<int>(ceil(
+						static_cast<double>(trajectory.getSpeedPercentage(nextWaypoint))
+						* static_cast<double>(ufo.getRules()->getMaxSpeed()))));
 	}
 	else // UFO landed.
 	{
@@ -638,7 +634,8 @@ void AlienMission::ufoReachedWaypoint(
 						<< " at point: " << ufo.getTrajectoryPoint()
 						<< ", no city found.";
 				Log(LOG_FATAL) << error.str();
-				std::vector<MissionArea> cityZones = rules.getRegion(getRegion())->getMissionZones().at(RuleRegion::CITY_MISSION_ZONE).areas;
+				std::vector<MissionArea> cityZones = rules.getRegion(getRegion())->getMissionZones()
+													.at(RuleRegion::CITY_MISSION_ZONE).areas;
 				for (size_t
 						i = 0;
 						i != cityZones.size();
@@ -786,7 +783,9 @@ void AlienMission::ufoLifting(
 				}
 
 				ufo.setAltitude("STR_VERY_LOW");
-				ufo.setSpeed(static_cast<int>(ufo.getRules()->getMaxSpeed() * ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint())));
+				ufo.setSpeed(static_cast<int>(ceil(
+								static_cast<double>(ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint()))
+								* static_cast<double>(ufo.getRules()->getMaxSpeed()))));
 			}
 		break;
 		case Ufo::CRASHED: // Mission expired
@@ -941,12 +940,11 @@ void AlienMission::spawnAlienBase(
 			engine);
 }
 
-/*
- * Sets the mission's region. if the region is incompatible with
- * actually carrying out an attack, use the "fallback" region as
- * defined in the ruleset.
- * (this is a slight difference from the original, which just
- * defaulted them to zone[0], North America)
+/**
+ * Sets the mission's region. if the region is incompatible with actually
+ * carrying out an attack, use the "fallback" region as defined in the ruleset.
+ * This is a slight difference from the original,
+ * which just defaulted them to zone[0], North America.
  * @param region the region we want to try to set the mission to.
  * @param rules the ruleset, in case we need to swap out the region.
  */

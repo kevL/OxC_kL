@@ -139,7 +139,7 @@ void MovingTarget::setDestination(Target* dest)
 
 /**
  * Returns the speed of the moving target.
- * @return Speed in knots.
+ * @return, speed in knots
  */
 int MovingTarget::getSpeed() const
 {
@@ -149,7 +149,7 @@ int MovingTarget::getSpeed() const
 /**
  * Changes the speed of the moving target and converts it from standard
  * knots (nautical miles per hour) into radians per 5 in-game seconds.
- * @param speed, Speed in knots.
+ * @param speed - speed in knots
  */
 void MovingTarget::setSpeed(int speed)
 {

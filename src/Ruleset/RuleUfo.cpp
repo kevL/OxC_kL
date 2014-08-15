@@ -48,7 +48,7 @@ RuleUfo::RuleUfo(const std::string& type)
 }
 
 /**
- *
+ * dTor.
  */
 RuleUfo::~RuleUfo()
 {
@@ -88,8 +88,8 @@ void RuleUfo::load(
 }
 
 /**
- * Gets the language string that names
- * this UFO. Each UFO type has a unique name.
+ * Gets the language string that names this UFO.
+ * Each UFO type has a unique name.
  * @return The Ufo's name.
  */
 std::string RuleUfo::getType() const
@@ -128,8 +128,7 @@ int RuleUfo::getRadius() const
 }
 
 /**
- * Gets the ID of the sprite used to draw the UFO
- * in the Dogfight window.
+ * Gets the ID of the sprite used to draw the UFO in the Dogfight window.
  * @return The sprite ID.
  */
 int RuleUfo::getSprite() const
@@ -138,8 +137,7 @@ int RuleUfo::getSprite() const
 }
 
 /**
- * Gets the maximum damage (damage the UFO can take)
- * of the UFO.
+ * Gets the maximum damage (damage the UFO can take) of the UFO.
  * @return The maximum damage.
  */
 int RuleUfo::getMaxDamage() const
@@ -148,8 +146,7 @@ int RuleUfo::getMaxDamage() const
 }
 
 /**
- * Gets the maximum speed of the UFO flying
- * around the Geoscape.
+ * Gets the maximum speed of the UFO flying around the Geoscape.
  * @return The maximum speed.
  */
 int RuleUfo::getMaxSpeed() const
@@ -158,8 +155,7 @@ int RuleUfo::getMaxSpeed() const
 }
 
 /**
- * Gets the acceleration of the UFO for
- * taking off / stopping.
+ * Gets the acceleration of the UFO for taking off / stopping.
  * @return The acceleration.
  */
 int RuleUfo::getAcceleration() const
@@ -168,8 +164,7 @@ int RuleUfo::getAcceleration() const
 }
 
 /**
- * Gets the maximum damage done by the
- * UFO's weapons per shot.
+ * Gets the maximum damage done by the UFO's weapons per shot.
  * @return The weapon power.
  */
 int RuleUfo::getWeaponPower() const
@@ -178,8 +173,7 @@ int RuleUfo::getWeaponPower() const
 }
 
 /**
- * Gets the maximum range for the
- * UFO's weapons.
+ * Gets the maximum range for the UFO's weapons.
  * @return The weapon range.
  */
 int RuleUfo::getWeaponRange() const
@@ -188,8 +182,7 @@ int RuleUfo::getWeaponRange() const
 }
 
 /**
- * Gets the amount of points the player
- * gets for shooting down the UFO.
+ * Gets the amount of points the player gets for shooting down the UFO.
  * @return The score.
  */
 int RuleUfo::getScore() const
