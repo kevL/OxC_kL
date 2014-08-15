@@ -6784,7 +6784,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1407629103 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1408054756 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -7739,7 +7739,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1407996196 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1408126600 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9524,7 +9524,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1408046143 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1408054122 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

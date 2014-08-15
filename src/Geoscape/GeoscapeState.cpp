@@ -1610,17 +1610,17 @@ class DetectXCOMBase
 {
 
 private:
-	const int _difficulty;
+	const int _diffLevel;
 	const Base& _base; // !< The target base.
 
 	public:
 		/// Create a detector for the given base.
 		DetectXCOMBase(
 				const Base& base,
-				int difficulty)
+				int diffLevel)
 			:
 				_base(base),
-				_difficulty(difficulty)
+				_diffLevel(diffLevel)
 		{
 			//Log(LOG_INFO) << "DetectXCOMBase";
 			/* Empty by design. */
@@ -1638,6 +1638,12 @@ private:
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
 	Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
+/*	if (_base.getIsRetaliationTarget())
+	{
+		Log(LOG_INFO) << ". base is already marked as RetaliationTarget";
+		return false;
+	} */ // Do this before the call to here.
+
 	bool ret = false;
 
 	if (ufo->isCrashed())
@@ -1674,7 +1680,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 		{
 			double div = targetDist * 12.0 / ufoRange; // kL: should use log() ...
 			int chance = static_cast<int>(
-							static_cast<double>(_base.getDetectionChance(_difficulty) + ufo->getDetectors())
+							static_cast<double>(_base.getDetectionChance(_diffLevel) + ufo->getDetectors())
 								/ div); // kL
 			if (ufo->getMissionType() == "STR_ALIEN_RETALIATION"
 				&& Options::aggressiveRetaliation)
@@ -1787,6 +1793,12 @@ void GeoscapeState::time10Minutes()
 				b != _game->getSavedGame()->getBases()->end();
 				++b)
 		{
+			if ((*b)->getIsRetaliationTarget()) // kL_begin:
+			{
+				Log(LOG_INFO) << "base is already marked as RetaliationTarget";
+				continue;
+			} // kL_end.
+
 			std::vector<Ufo*>::const_iterator u = std::find_if( // find a UFO that detected this base, if any.
 					_game->getSavedGame()->getUfos()->begin(),
 					_game->getSavedGame()->getUfos()->end(),
