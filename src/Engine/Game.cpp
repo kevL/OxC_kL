@@ -378,7 +378,7 @@ void Game::run()
 				_timeUntilNextFrame = 0;
 
 			if (_init
-				&& _timeUntilNextFrame <= 0)
+				&& _timeUntilNextFrame < 1)
 			{
 				// make a note of when this frame update occured.
 				_timeOfLastFrame = SDL_GetTicks();

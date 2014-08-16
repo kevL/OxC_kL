@@ -148,7 +148,8 @@ void UnitWalkBState::think()
 	{
 		//Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();
 		// kL_begin:
-		if (_unit->getVisible())
+//		if (_unit->getVisible())
+		if (_onScreen)
 		{
 			int dest_z = _unit->getDestination().z;
 
@@ -171,10 +172,9 @@ void UnitWalkBState::think()
 		{
 			//Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;
 			// kL_begin:
-			if (_unit->getVisible())
+//			if (_unit->getVisible())
+			if (_onScreen)
 			{
-				int dest_z = _unit->getDestination().z;
-
 				if (_unit->getFaction() != FACTION_PLAYER
 					&& !_walkCam->isOnScreen(
 										_unit->getPosition()))
@@ -186,6 +186,8 @@ void UnitWalkBState::think()
 										_unit->getPosition()))
 //										true))
 				{
+					int dest_z = _unit->getDestination().z;
+
 					if (_walkCam->getViewLevel() > dest_z
 						&& (_pf->getPath().size() == 0
 							|| _pf->getPath().back() != _pf->DIR_UP))
@@ -235,7 +237,8 @@ void UnitWalkBState::think()
 	{
 		//Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();
 		// kL_begin:
-		if (_unit->getVisible())
+//		if (_unit->getVisible())
+		if (_onScreen)
 		{
 			int pos_z = _unit->getPosition().z;
 
@@ -247,12 +250,17 @@ void UnitWalkBState::think()
 				_walkCam->centerOnPosition(_unit->getPosition());
 			}
 			else if (_walkCam->isOnScreen(
-										_unit->getPosition())
+										_unit->getPosition()))
 //										true))
-				&& _walkCam->getViewLevel() < pos_z
-				&& _unit->getDestination().z > pos_z)
 			{
-				_walkCam->setViewLevel(pos_z);
+				int dest_z = _unit->getDestination().z;
+
+				if (dest_z == pos_z
+					|| (dest_z > pos_z
+						&& _walkCam->getViewLevel() < pos_z))
+				{
+					_walkCam->setViewLevel(pos_z);
+				}
 			}
 		} // kL_end.
 

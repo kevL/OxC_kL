@@ -488,8 +488,7 @@ void DebriefingState::btnOkClick(Action*)
 			}
 		}
 
-		// Autosave after mission
-		if (_game->getSavedGame()->isIronman())
+		if (_game->getSavedGame()->isIronman()) // Autosave after mission
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
 											SAVE_IRONMAN,
@@ -1316,8 +1315,7 @@ void DebriefingState::prepareDebriefing()
 
 		if (!aborted)
 		{
-			// get recoverable map data objects from the battlescape map
-			for (int
+			for (int // get recoverable map data objects from the battlescape map
 					i = 0;
 					i < battle->getMapSizeXYZ();
 					++i)
@@ -1814,8 +1812,8 @@ void DebriefingState::reequipCraft(
  * Recovers items from the battlescape.
  *
  * Converts the battlescape inventory into a geoscape itemcontainer.
- * @param from, Items recovered from the battlescape.
- * @param base, Base to add items to.
+ * @param from - items recovered from the battlescape
+ * @param base - base to add the items to
  */
 void DebriefingState::recoverItems(
 		std::vector<BattleItem*>* from,
@@ -1830,8 +1828,8 @@ void DebriefingState::recoverItems(
 		if ((*it)->getRules()->getName() == _game->getRuleset()->getAlienFuel())
 			addStat( // special case of an item counted as a stat
 					_game->getRuleset()->getAlienFuel(),
-					50,
-					100); // kL
+					100,
+					50); // kL
 		else
 		{
 			if ((*it)->getRules()->getRecoveryPoints()

@@ -6227,7 +6227,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1407472311 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1408208062 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6391,7 +6391,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1407623732 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1408201977 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6904,7 +6904,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1407031040 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1408205665 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -7022,7 +7022,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1407389601 source:f:\git\openxcom\src\engine\game.cpp
+1408208456 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>

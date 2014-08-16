@@ -42,7 +42,8 @@ invs:
       STR_RIGHT_SHOULDER: 10
       STR_QD: 7
   - id: STR_BELT
-    x: 208
+#    x: 208
+    x: 192
     y: 104
     slots:
       - [0, 0]
@@ -124,7 +125,8 @@ invs:
       STR_RIGHT_SHOULDER: 8
       STR_QD: 9
   - id: STR_BACK_PACK
-    x: 192
+#    x: 192
+    x: 176
     y: 37
     slots:
       - [0, 0]
@@ -147,7 +149,8 @@ invs:
       STR_RIGHT_SHOULDER: 14
       STR_QD: 11
   - id: STR_QD
-    x: 192
+#    x: 192
+    x: 176
     y: 104
     slots:
       - [0, 0]
