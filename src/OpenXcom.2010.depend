@@ -4733,7 +4733,7 @@
 1407162133 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
-1407620493 f:\git\openxcom\src\battlescape\inventorystate.h
+1408200578 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 	"../Interface/TextButton.h"
 	"../Savegame/BattleItem.h"
@@ -5802,7 +5802,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1408053534 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1408197562 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -7391,7 +7391,7 @@
 1404096023 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1407997372 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1408189421 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
 	<sstream>
 	"BaseDestroyedState.h"
@@ -9336,7 +9336,7 @@
 	<cmath>
 	"RuleItem.h"
 
-1407684196 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1408200835 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"
@@ -9524,7 +9524,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1408193252 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1408200969 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

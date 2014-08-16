@@ -72,7 +72,6 @@ static const int _clearInventoryBtnY	= 113;
 
 /**
  * Initializes all the elements in the Inventory screen.
- * @param game Pointer to the core game.
  * @param tu Does Inventory use up Time Units?
  * @param parent Pointer to parent Battlescape.
  */
@@ -109,21 +108,22 @@ InventoryState::InventoryState(
 
 	_txtName	= new Text(200, 17, 36, 6);
 
-	_txtWeight	= new Text(70, 9, 245, 24);
-	_txtTus		= new Text(40, 9, 245, 24);
-	_txtFAcc	= new Text(40, 9, 245, 32);
-	_txtReact	= new Text(40, 9, 245, 40);
-	_txtThrow	= new Text(40, 9, 245, 48); // kL
-	_txtMelee	= new Text(40, 9, 245, 56); // kL
-	_txtPStr	= new Text(40, 9, 245, 64);
-	_txtPSkill	= new Text(40, 9, 245, 72);
-	_txtPrimeTU	= new Text(40, 9, 245, 141);
+	_txtWeight	= new Text(70, 9, 237, 24); // 237 -> was, 245
+	_txtTus		= new Text(40, 9, 237, 24);
+	_txtFAcc	= new Text(40, 9, 237, 32);
+	_txtReact	= new Text(40, 9, 237, 40);
+	_txtThrow	= new Text(40, 9, 237, 48); // kL
+	_txtMelee	= new Text(40, 9, 237, 56); // kL
+	_txtPStr	= new Text(40, 9, 237, 64);
+	_txtPSkill	= new Text(40, 9, 237, 72);
+
+	_txtPrimeTU	= new Text(40, 9, 245, 132);
+	_txtThrowTU	= new Text(40, 9, 245, 141);
 
 	_numOrder	= new NumberText(7, 5, 228, 4); // kL
 	_tuCost		= new NumberText(7, 5, 310, 60); // kL
 
 	_txtItem	= new Text(160, 9, 128, 140);
-	_txtAmmo	= new Text(40, 24, 272, 64);
 
 	_btnOk		= new InteractiveSurface(35, 22, 237, 0);
 	_btnPrev	= new InteractiveSurface(23, 22, 273, 0);
@@ -149,10 +149,13 @@ InventoryState::InventoryState(
 											_templateBtnX,
 											_clearInventoryBtnY);
 
+//	_txtAmmo	= new Text(40, 24, 272, 64);
+	_txtAmmo	= new Text(40, 24, 288, 64);
 	_selAmmo	= new Surface(
 						RuleInventory::HAND_W * RuleInventory::SLOT_W,
 						RuleInventory::HAND_H * RuleInventory::SLOT_H,
-						272,
+//						272,
+						288,
 						88);
 
 	_inv		= new Inventory(
@@ -194,6 +197,7 @@ InventoryState::InventoryState(
 	add(_selAmmo);
 	add(_inv);
 	add(_txtPrimeTU);
+	add(_txtThrowTU);
 
 	// move the TU display down to make room for the weight display
 	if (Options::showMoreStatsInInventoryView)
@@ -242,6 +246,10 @@ InventoryState::InventoryState(
 	_txtPrimeTU->setColor(Palette::blockOffset(4));
 	_txtPrimeTU->setSecondaryColor(Palette::blockOffset(1));
 	_txtPrimeTU->setHighContrast(true);
+
+	_txtThrowTU->setColor(Palette::blockOffset(4));
+	_txtThrowTU->setSecondaryColor(Palette::blockOffset(1));
+	_txtThrowTU->setHighContrast(true);
 
 	_numOrder->setColor(1);	// kL
 	_numOrder->setValue(0);	// kL
@@ -549,11 +557,15 @@ void InventoryState::updateStats()
 		else
 			_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 
-		if (_tu)
+		if (_tu) // See: BattleUnit::getActionTUs(), but don't do that yet 'cause there is no ITEM to pass in.
 		{
-			int primeTU = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 45) / 100.f));
-//			_txtPrimeTU->setText(Text::formatNumber(primeTU));
-			_txtPrimeTU->setText(tr("STR_PRIME_GRENADE_").arg(primeTU));
+			int stat = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 45) / 100.f));
+
+//			_txtPrimeTU->setText(Text::formatNumber(stat));
+			_txtPrimeTU->setText(tr("STR_PRIME_").arg(stat));
+
+			stat = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 23) / 100.f));
+			_txtThrowTU->setText(tr("STR_THROW_").arg(stat));
 		}
 
 		if (!_tu) // kL
@@ -754,6 +766,7 @@ void InventoryState::btnUnloadClick(Action*)
 	if (_inv->unload())
 	{
 		_inv->unload();
+
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
 		_selAmmo->clear();
@@ -821,8 +834,7 @@ void InventoryState::btnCreateTemplateClick(Action* action)
 															(*j)->getFuseTimer()));
 	}
 
-	// give audio feedback
-	_game->getResourcePack()->getSound(
+	_game->getResourcePack()->getSound( // give audio feedback
 									"BATTLE.CAT",
 									38)
 								->play();
@@ -1271,7 +1283,6 @@ void InventoryState::invMouseOver(Action* action)
 	{
 //kL	if (_currentTooltip == "")
 		_txtItem->setText(L"");
-
 		_txtAmmo->setText(L"");
 
 		_selAmmo->clear();

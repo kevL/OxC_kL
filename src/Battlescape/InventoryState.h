@@ -86,7 +86,8 @@ private:
 		* _txtMelee, // kL
 		* _txtPSkill,
 		* _txtPStr,
-		* _txtPrimeTU;
+		* _txtPrimeTU,
+		* _txtThrowTU;
 
 	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
 

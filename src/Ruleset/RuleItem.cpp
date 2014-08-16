@@ -112,7 +112,7 @@ RuleItem::RuleItem(const std::string& type)
 }
 
 /**
- *
+ * dTor.
  */
 RuleItem::~RuleItem()
 {

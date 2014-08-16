@@ -1630,7 +1630,7 @@ int BattleUnit::getActionTUs(
 	}
 
 	// if it's a percentage, apply it to unit TUs
-	if ((!item->getRules()->getFlatRate()
+	if ((item->getRules()->getFlatRate() == false
 			|| actionType == BA_PRIME
 			|| actionType == BA_THROW)
 		&& actionType != BA_DEFUSE) // kL

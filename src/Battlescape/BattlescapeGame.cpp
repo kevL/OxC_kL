@@ -1403,7 +1403,7 @@ void BattlescapeGame::popState()
 	if (_states.empty())
 	{
 		//Log(LOG_INFO) << ". states.Empty -> return";
-		setupCursor(); // kL_TEST
+//		setupCursor(); // kL_TEST
 
 		return;
 	}
@@ -1658,7 +1658,6 @@ void BattlescapeGame::popState()
 			{
 				//Log(LOG_INFO) << ". endTurn()";
 //				setupCursor(); // kL_TEST
-
 				endTurn();
 
 				//Log(LOG_INFO) << ". endTurn() DONE return";
@@ -1682,11 +1681,11 @@ void BattlescapeGame::popState()
 		//Log(LOG_INFO) << ". huh hey wot)";
 		cancelCurrentAction();
 
-//kL	_save->setSelectedUnit(NULL); // kL_note: seems redundant .....
+		_save->setSelectedUnit(NULL); // kL_note: seems redundant .....
 
-		setupCursor(); // kL
+//		setupCursor(); // kL
 //		getMap()->refreshSelectorPosition(); // kL
-//kL	getMap()->setCursorType(CT_NORMAL);
+		getMap()->setCursorType(CT_NORMAL);
 		_parentState->getGame()->getCursor()->setVisible(true);
 	}
 
