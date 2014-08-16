@@ -2896,19 +2896,19 @@ void BattlescapeGenerator::explodePowerSources()
 			pos.y = _save->getTiles()[i]->getPosition().y * 16;
 			pos.z = _save->getTiles()[i]->getPosition().z * 24 + 12;
 
-			int hullDamage = _ufo->getCrashPS(); // ( range: 50+ to 100- )
-			//Log(LOG_INFO) << ". crashPS = " << hullDamage;
-			if (RNG::percent(hullDamage / 2)) // chance for full range Explosion (even if crash took low damage)
+			int crashPower = _ufo->getCrashPower(); // ( range: 50+ to 100- )
+			//Log(LOG_INFO) << ". crashPower = " << crashPower;
+			if (RNG::percent(crashPower / 2)) // chance for full range Explosion (even if crash took low damage)
 			{
-				hullDamage = RNG::generate(1, 100);
-				//Log(LOG_INFO) << ". . Alt hullDamage = " << hullDamage;
+				crashPower = RNG::generate(1, 100);
+				//Log(LOG_INFO) << ". . Alt crashPower = " << crashPower;
 			}
 
-			double explForce = RNG::generate(0.1, 2.0) * static_cast<double>(hullDamage);
+			double explForce = RNG::generate(0.1, 2.0) * static_cast<double>(crashPower);
 			//Log(LOG_INFO) << ". explForce = " << (int)explForce;
 
-//			int power = static_cast<int>(((pow(explForce, 3)) / 32000.0) + (static_cast<double>(hullDamage) - 50.0));
-			int power = static_cast<int>(((pow(explForce, 2)) / 160.0) + (static_cast<double>(hullDamage)));
+//			int power = static_cast<int>(((pow(explForce, 3)) / 32000.0) + (static_cast<double>(crashPower) - 50.0));
+			int power = static_cast<int>(((pow(explForce, 2)) / 160.0) + (static_cast<double>(crashPower)));
 			//Log(LOG_INFO) << ". power = " << power;
 
 			_save->getTileEngine()->explode(

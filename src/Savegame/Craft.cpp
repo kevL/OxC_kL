@@ -685,7 +685,7 @@ void Craft::setDamage(int damage)
  * has taken and the total it can take before it's destroyed.
  * @return, Percentage of damage.
  */
-int Craft::getDamagePercentage() const
+int Craft::getDamagePercent() const
 {
 	return static_cast<int>(
 			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()))

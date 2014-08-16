@@ -1637,13 +1637,7 @@ private:
  */
 bool DetectXCOMBase::operator()(const Ufo* ufo) const
 {
-	Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
-/*	if (_base.getIsRetaliationTarget())
-	{
-		Log(LOG_INFO) << ". base is already marked as RetaliationTarget";
-		return false;
-	} */ // Do this before the call to here.
-
+	//Log(LOG_INFO) << "DetectXCOMBase(), ufoID " << ufo->getId();
 	bool ret = false;
 
 	if (ufo->isCrashed())
@@ -1653,13 +1647,13 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	}
 	else if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN")
 	{
-		Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
+		//Log(LOG_INFO) << ". uFo's attacking a base don't bother with this!";
 		return false;
 	}
 	else if (ufo->getMissionType() != "STR_ALIEN_RETALIATION"
 		&& !Options::aggressiveRetaliation)
 	{
-		Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is true";
+		//Log(LOG_INFO) << ". . Only uFo's on retaliation missions scan for bases unless 'aggressiveRetaliation' option is true";
 		return false;
 	}
 	else
@@ -1668,12 +1662,12 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 		double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
 		double ufoRange = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor;
 		double targetDist = _base.getDistance(ufo) * 3440.0;
-		Log(LOG_INFO) << ". . ufoRange = " << (int)ufoRange;
-		Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
+		//Log(LOG_INFO) << ". . ufoRange = " << (int)ufoRange;
+		//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
 
 		if (targetDist > ufoRange)
 		{
-			Log(LOG_INFO) << ". . uFo's have a detection range of 600 nautical miles.";
+			//Log(LOG_INFO) << ". . uFo's have a detection range of 600 nautical miles.";
 			return false;
 		}
 		else
@@ -1685,19 +1679,19 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 			if (ufo->getMissionType() == "STR_ALIEN_RETALIATION"
 				&& Options::aggressiveRetaliation)
 			{
-				Log(LOG_INFO) << ". . uFo's on retaliation missions will scan for base 'aggressively'";
+				//Log(LOG_INFO) << ". . uFo's on retaliation missions will scan for base 'aggressively'";
 				chance += 5;
 			}
 
 			if (chance > 0)
 			{
-				Log(LOG_INFO) << ". . . chance = " << chance;
+				//Log(LOG_INFO) << ". . . chance = " << chance;
 				ret = RNG::percent(chance);
 			}
 		}
 	}
 
-	Log(LOG_INFO) << ". ret " << ret;
+	//Log(LOG_INFO) << ". ret " << ret;
 	return ret;
 }
 
@@ -1795,7 +1789,7 @@ void GeoscapeState::time10Minutes()
 		{
 			if ((*b)->getIsRetaliationTarget()) // kL_begin:
 			{
-				Log(LOG_INFO) << "base is already marked as RetaliationTarget";
+				//Log(LOG_INFO) << "base is already marked as RetaliationTarget";
 				continue;
 			} // kL_end.
 

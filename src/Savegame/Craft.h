@@ -153,7 +153,7 @@ private:
 		/// Sets the craft's amount of damage.
 		void setDamage(int damage);
 		/// Gets the craft's percentage of damage.
-		int getDamagePercentage() const;
+		int getDamagePercent() const;
 
 		/// Gets whether the craft is running out of fuel.
 		bool getLowFuel() const;

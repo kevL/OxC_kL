@@ -56,7 +56,7 @@ Ufo::Ufo(RuleUfo* rules)
 		_rules(rules),
 		_id(0),
 		_crashId(0),
-		_crashPS(0),
+		_crashPower(0),
 		_landId(0),
 		_damage(0),
 		_direction("STR_NORTH"),
@@ -154,7 +154,7 @@ void Ufo::load(
 
 	_id					= node["id"].as<int>(_id);
 	_crashId			= node["crashId"].as<int>(_crashId);
-	_crashPS			= node["crashPS"].as<int>(_crashPS);
+	_crashPower			= node["crashPower"].as<int>(_crashPower);
 	_landId				= node["landId"].as<int>(_landId);
 	_damage				= node["damage"].as<int>(_damage);
 	_altitude			= node["altitude"].as<std::string>(_altitude);
@@ -228,8 +228,8 @@ YAML::Node Ufo::save(bool newBattle) const
 	node["id"]			= _id;
 	if (_crashId)
 	{
-		node["crashId"]	= _crashId;
-		node["crashPS"]	= _crashPS;
+		node["crashId"]		= _crashId;
+		node["crashPower"]	= _crashPower;
 	}
 	else if (_landId)
 		node["landId"]	= _landId;
@@ -356,10 +356,11 @@ void Ufo::setDamage(int damage)
  * has taken and the total it can take before it's destroyed.
  * @return, Percentage of damage.
  */
-int Ufo::getDamagePercentage() const
+int Ufo::getDamagePercent() const
 {
 	return static_cast<int>(
-			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())) * 100.0));
+			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()))
+			* 100.0));
 }
 
 /**
@@ -441,7 +442,7 @@ void Ufo::setAltitude(const std::string& altitude)
 
 /**
  * Returns if this UFO took enough damage to cause it to crash.
- * @return Crashed status.
+ * @return, crashed status
  */
 bool Ufo::isCrashed() const
 {
@@ -450,7 +451,7 @@ bool Ufo::isCrashed() const
 
 /**
  * Returns if this UFO took enough damage to destroy it.
- * @return Crashed status.
+ * @return, destroyed status
  */
 bool Ufo::isDestroyed() const
 {
@@ -473,30 +474,20 @@ void Ufo::calculateSpeed()
 	if (AreSame(x, 0.0) || AreSame(y, 0.0))
 	{
 		if (AreSame(x, 0.0) && AreSame(y, 0.0))
-		{
 			_direction = "STR_NONE_UC";
-		}
 		else if (AreSame(x, 0.0))
 		{
 			if (y > 0.0)
-			{
 				_direction = "STR_NORTH";
-			}
 			else if (y < 0.0)
-			{
 				_direction = "STR_SOUTH";
-			}
 		}
 		else if (AreSame(y, 0.0))
 		{
 			if (x > 0.0)
-			{
 				_direction = "STR_EAST";
-			}
 			else if (x < 0.0)
-			{
 				_direction = "STR_WEST";
-			}
 		}
 
 		//Log(LOG_INFO) << ". . _dir = " << _direction;
@@ -513,70 +504,21 @@ void Ufo::calculateSpeed()
 	//Log(LOG_INFO) << ". . theta(deg) = " << theta;
 
 	if (157.5 < theta || theta < -157.5)
-	{
 		_direction = "STR_WEST";
-	}
 	else if (theta > 112.5)
-	{
 		_direction = "STR_NORTH_WEST";
-	}
 	else if (theta > 67.5)
-	{
 		_direction = "STR_NORTH";
-	}
 	else if (theta > 22.5)
-	{
 		_direction = "STR_NORTH_EAST";
-	}
 	else if (theta < -112.5)
-	{
 		_direction = "STR_SOUTH_WEST";
-	}
 	else if (theta < -67.5)
-	{
 		_direction = "STR_SOUTH";
-	}
 	else if (theta < -22.5)
-	{
 		_direction = "STR_SOUTH_EAST";
-	}
 	else
-	{
 		_direction = "STR_EAST";
-	}
-
-/*	if (22.5 > theta && theta > -22.5)
-	{
-		_direction = "STR_EAST";
-	}
-	else if (-22.5 > theta && theta > -67.5)
-	{
-		_direction = "STR_SOUTH_EAST";
-	}
-	else if (-67.5 > theta && theta > -112.5)
-	{
-		_direction = "STR_SOUTH";
-	}
-	else if (-112.5 > theta && theta > -157.5)
-	{
-		_direction = "STR_SOUTH_WEST";
-	}
-	else if (-157.5 > theta || theta > 157.5)
-	{
-		_direction = "STR_WEST";
-	}
-	else if (157.5 > theta && theta > 112.5)
-	{
-		_direction = "STR_NORTH_WEST";
-	}
-	else if (112.5 > theta && theta > 67.5)
-	{
-		_direction = "STR_NORTH";
-	}
-	else
-	{
-		_direction = "STR_NORTH_EAST";
-	} */
 
 	//Log(LOG_INFO) << ". . _dir = " << _direction;
 }
@@ -590,25 +532,24 @@ void Ufo::think()
 	{
 		case FLYING:
 			move();
-			if (reachedDestination())
-			{
-				// Prevent further movement.
+
+			if (reachedDestination()) // Prevent further movement.
 				setSpeed(0);
-			}
 		break;
+
 		case LANDED:
 			assert(_secondsRemaining >= 5 && "Wrong time management.");
 			_secondsRemaining -= 5;
 		break;
+
 		case CRASHED:
 			// This gets handled in GeoscapeState::time30Minutes()
 			// Because the original game processes it every 30 minutes!
 			if (!_detected)
-			{
 				_detected = true;
-			}
+
 		case DESTROYED:
-			// Do nothing
+		default: // Do nothing
 		break;
 	}
 }
@@ -624,7 +565,7 @@ bool Ufo::isInBattlescape() const
 
 /**
  * Sets the UFO's battlescape status.
- * @param inbattle .
+ * @param inbattle
  */
 void Ufo::setInBattlescape(bool inbattle)
 {
@@ -846,17 +787,17 @@ void Ufo::setHitFrame(int frame)
 /**
  * kL. Gets the UFO's powerSource explosive power factor.
  */
-int Ufo::getCrashPS() const // kL
+int Ufo::getCrashPower() const // kL
 {
-	return _crashPS;
+	return _crashPower;
 }
 
 /**
  * kL. Sets the UFO's powerSource explosive power factor.
  */
-void Ufo::setCrashPS(int percDamage) // kL
+void Ufo::setCrashPower(int percent) // kL
 {
-	_crashPS = percDamage;
+	_crashPower = percent;
 }
 
 }

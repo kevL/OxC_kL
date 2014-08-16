@@ -4562,7 +4562,7 @@
 1404096023 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1404615195 f:\git\openxcom\src\savegame\craft.h
+1408187487 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
 	"MovingTarget.h"
@@ -4784,7 +4784,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1407133270 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1408187478 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -4888,7 +4888,7 @@
 
 1404096022 f:\git\openxcom\src\engine\fastlineclip.h
 
-1405022580 f:\git\openxcom\src\savegame\ufo.h
+1408187494 f:\git\openxcom\src\savegame\ufo.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"MovingTarget.h"
@@ -5905,7 +5905,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1407735564 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1408187504 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -7644,7 +7644,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1407158847 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1408188013 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7711,7 +7711,7 @@
 1404096023 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1406065130 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1408187483 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -7739,7 +7739,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1408126600 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1408145320 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9418,7 +9418,7 @@
 	"RuleTerrain.h"
 	"../Engine/RNG.h"
 
-1405909248 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
+1408143179 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleTerrain.h"
 	"RuleUfo.h"
 
@@ -9524,7 +9524,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1408054122 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1408193252 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9555,7 +9555,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1406863271 source:f:\git\openxcom\src\savegame\craft.cpp
+1408187492 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9605,7 +9605,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1404096023 source:f:\git\openxcom\src\savegame\movingtarget.cpp
+1408143052 source:f:\git\openxcom\src\savegame\movingtarget.cpp
 	"MovingTarget.h"
 	<cmath>
 	"../fmath.h"
@@ -9774,7 +9774,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1405022580 source:f:\git\openxcom\src\savegame\ufo.cpp
+1408187509 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	<sstream>
 	<algorithm>

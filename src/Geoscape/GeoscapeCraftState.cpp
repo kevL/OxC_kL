@@ -260,7 +260,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	_txtDamage->setColor(Palette::blockOffset(15)-1);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(8)+5);
-	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercentage())));
+	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent())));
 
 
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);

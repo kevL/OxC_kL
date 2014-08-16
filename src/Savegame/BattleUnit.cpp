@@ -1350,8 +1350,11 @@ int BattleUnit::damage(
 			}
 			else
 			{
-				if (_armor->getSize() == 1) // add some stun damage to not-large units
+				if (_armor->getSize() == 1		// add some stun damage to not-large units
+					&& _race != "STR_ZOMBIE")	// unless it's a freakin Zombie.
+				{
 					_stunlevel += RNG::generate(0, power / 3); // kL_note: was, 4
+				}
 
 				if (!ignoreArmor)	// kinda funky: only wearers of armor-types-that-are
 									// -resistant-to-damage-types can take fatal wounds
@@ -2046,23 +2049,22 @@ void BattleUnit::prepareNewTurn()
 
 	if (!isOut()) // recover energy
 	{
-//kL	int enron = getStats()->tu / 3;
 		// kL_begin: advanced Energy recovery
-		int stamina = getStats()->stamina;
+		int
+			stamina = getStats()->stamina,
+			enron = stamina;
 
-		int enron = stamina;
-		if (_turretType < 0) // is NOT xCom Tank (which get 4/5ths energy-recovery).
+		if (_turretType == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
 		{
 			if (isKneeled())							// kneeled xCom
 				enron /= 2;
 			else if (getFaction() == FACTION_PLAYER)	// xCom & Mc'd aliens
 				enron /= 3;
 			else										// non-Mc'd aLiens & civies
-//				enron = enron * 2 / 3;
-				enron = enron * _unitRules->getEnergyRecovery() / 50; // <- values in Ruleset ought be doubled, to do PERCENTs.
+				enron = enron * _unitRules->getEnergyRecovery() / 100;
 		}
 		else // xCom tank.
-			enron = enron * 4 / 5;
+			enron = enron * 4 / 5; // value in Ruleset is 100%
 		// kL_end.
 
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
@@ -2109,14 +2111,14 @@ void BattleUnit::prepareNewTurn()
 
 	if (!isOut())
 	{
-		int panicChance = 100 - (2 * getMorale());
-		if (RNG::percent(panicChance))
+		int panic = 100 - (2 * getMorale());
+		if (RNG::percent(panic))
 		{
 			_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
 			if (RNG::percent(30))
 				_status = STATUS_BERSERK;	// or shoot stuff.
 		}
-		else if (panicChance > 0)			// successfully avoided Panic
+		else if (panic > 0)			// successfully avoided Panic
 			_expBravery++;
 	}
 

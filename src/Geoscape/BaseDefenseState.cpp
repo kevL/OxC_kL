@@ -57,10 +57,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Base Defense screen.
- * @param game Pointer to the core game.
- * @param base Pointer to the base being attacked.
- * @param ufo Pointer to the attacking ufo.
- * @param state Pointer to the Geoscape.
+ * @param base	- pointer to a base being attacked
+ * @param ufo	- pointer to the attacking ufo
+ * @param state	- pointer to GeoscapeState
  */
 BaseDefenseState::BaseDefenseState(
 		Base* base,
@@ -116,8 +115,10 @@ BaseDefenseState::BaseDefenseState(
 
 	_lstDefenses->setColor(Palette::blockOffset(13)+10);
 	_lstDefenses->setColumns(3, 134, 70, 50);
+
 	_gravShields = _base->getGravShields();
 	_defenses = _base->getDefenses()->size();
+
 	_timer = new Timer(750);
 	_timer->onTimer((StateHandler)& BaseDefenseState::nextStep);
 	_timer->start();
@@ -132,7 +133,7 @@ BaseDefenseState::~BaseDefenseState()
 }
 
 /**
- *
+ * Advance the state of the State.
  */
 void BaseDefenseState::think()
 {
@@ -140,7 +141,7 @@ void BaseDefenseState::think()
 }
 
 /**
- *
+ * Advance the state of the State by doing this.
  */
 void BaseDefenseState::nextStep()
 {
@@ -161,38 +162,41 @@ void BaseDefenseState::nextStep()
 		switch (_action)
 		{
 			case BDA_DESTROY:
-				_lstDefenses->addRow(2, tr("STR_UFO_DESTROYED").c_str(), L" ", L" ");
-				_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
 				_action = BDA_END;
 
-				return;
+				_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
+
+				_lstDefenses->addRow(2, tr("STR_UFO_DESTROYED").c_str(), L" ", L" ");
+			return;
 
 			case BDA_END:
-				_btnOk->setVisible(true);
 				_thinkcycles = -1;
 
-				return;
+				_btnOk->setVisible(true);
+			return;
 
 			default:
 			break;
 		}
 
-		if (_attacks == _defenses
-			&& _passes == _gravShields)
+		if (_attacks == _defenses)
 		{
-			_action = BDA_END;
+			if (_passes < _gravShields)
+			{
+				_attacks = 0;
+				_passes++;
 
-			return;
-		}
-		else if (_attacks == _defenses
-			&& _passes < _gravShields)
-		{
-			_lstDefenses->addRow(3, tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(), L" ", L" ");
-			++_row;
-			++_passes;
-			_attacks = 0;
+				_lstDefenses->addRow(3, tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(), L" ", L" ");
+				_row++;
 
-			return;
+				return;
+			}
+			else if (_passes == _gravShields)
+			{
+				_action = BDA_END;
+
+				return;
+			}
 		}
 
 		BaseFacility* def = _base->getDefenses()->at(_attacks);
@@ -200,30 +204,37 @@ void BaseDefenseState::nextStep()
 		switch (_action)
 		{
 			case BDA_NONE:
+				_action = BDA_FIRE;
+
 				_lstDefenses->addRow(3, tr(def->getRules()->getType()).c_str(), L" ", L" ");
 				++_row;
-				_action = BDA_FIRE;
 
 				return;
 
 			case BDA_FIRE:
-				_lstDefenses->setCellText(_row, 1, tr("STR_FIRING").c_str());
-				_game->getResourcePack()->getSound("GEO.CAT", def->getRules()->getFireSound())->play();
 				_action = BDA_RESOLVE;
+
+				_game->getResourcePack()->getSound("GEO.CAT", def->getRules()->getFireSound())->play();
+
+				_lstDefenses->setCellText(_row, 1, tr("STR_FIRING").c_str());
 
 				return;
 
 			case BDA_RESOLVE:
-				if (!RNG::percent(def->getRules()->getHitRatio()))
+				if (RNG::percent(def->getRules()->getHitRatio()))
 				{
-					_lstDefenses->setCellText(_row, 2, tr("STR_MISSED").c_str());
+					_game->getResourcePack()->getSound("GEO.CAT", def->getRules()->getHitSound())->play();
+
+					int damage = def->getRules()->getDefenseValue();
+					damage = RNG::generate( // kL: vary damage between 75% and 133%
+										damage * 3 / 4,
+										damage * 4 / 3);
+					_ufo->setDamage(_ufo->getDamage() + damage);
+
+					_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());
 				}
 				else
-				{
-					_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());
-					_game->getResourcePack()->getSound("GEO.CAT", def->getRules()->getHitSound())->play();
-					_ufo->setDamage(_ufo->getDamage() + def->getRules()->getDefenseValue()); // kL_note: should vary this.
-				}
+					_lstDefenses->setCellText(_row, 2, tr("STR_MISSED").c_str());
 
 				if (_ufo->getStatus() == Ufo::DESTROYED)
 					_action = BDA_DESTROY;
@@ -255,7 +266,7 @@ void BaseDefenseState::btnOkClick(Action*)
 		// the UFO has finished its duty, whatever happens in the base defense
 //kL	_ufo->setStatus(Ufo::DESTROYED); // done in GeoscapeState::handleBaseDefense()
 
-		_base->setDefenseResult(_ufo->getDamagePercentage()); // kL
+		_base->setDefenseResult(_ufo->getDamagePercent()); // kL
 
 		_state->handleBaseDefense(
 								_base,

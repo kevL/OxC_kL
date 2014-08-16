@@ -4266,16 +4266,16 @@ armors:
     underArmor: 41
     drawingRoutine: 7
     damageModifier:
-      - 1.0
-      - 1.07
-      - 0.85
-      - 1.17
-      - 0.96
-      - 1.05
-      - 0.8
-      - 0.9
-      - 0.86
-      - 0.0
+      - 1.0 #none
+      - 1.2 #ap
+      - 0.7 #in
+      - 0.9 #he
+      - 1.0 #laser
+      - 0.9 #plasma
+      - 0.8 #stun
+      - 0.9 #melee
+      - 0.8 #acid
+      - 0.0 #smoke
     loftempsSet: [ 3 ]
   - type: ZOMBIE_ARMOR
     spriteSheet: ZOMBIE.PCK
@@ -4287,16 +4287,16 @@ armors:
     underArmor: 5
     drawingRoutine: 4
     damageModifier:
-      - 1.0
-      - 1.07
-      - 0.85
-      - 1.17
-      - 0.96
-      - 1.05
-      - 0.8
-      - 0.9
-      - 0.86
-      - 0.0
+      - 1.0 #none
+      - 0.6 #ap
+      - 1.3 #in
+      - 1.2 #he
+      - 0.7 #laser
+      - 1.0 #plasma
+      - 0.0 #stun
+      - 0.8 #melee
+      - 0.9 #acid
+      - 0.0 #smoke
     loftempsSet: [ 3 ]
     deathFrames: 18
   - type: SILACOID_ARMOR
@@ -4407,7 +4407,7 @@ units:
     value: 25
     deathSound: 23
     moveSound: 14
-    energyRecovery: 50
+    energyRecovery: 100
   - type: STR_TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
@@ -4428,7 +4428,7 @@ units:
     value: 30
     deathSound: 23
     moveSound: 14
-    energyRecovery: 50
+    energyRecovery: 100
   - type: STR_TANK_LASER_CANNON
     race: STR_TANK_LASER_CANNON
     stats:
@@ -4449,7 +4449,7 @@ units:
     value: 35
     deathSound: 23
     moveSound: 14
-    energyRecovery: 50
+    energyRecovery: 100
   - type: STR_HOVERTANK_PLASMA
     race: STR_HOVERTANK_PLASMA
     stats:
@@ -4471,7 +4471,7 @@ units:
     value: 40
     deathSound: 23
     moveSound: 40
-    energyRecovery: 50
+    energyRecovery: 100
   - type: STR_HOVERTANK_LAUNCHER
     race: STR_HOVERTANK_LAUNCHER
     stats:
@@ -4493,7 +4493,7 @@ units:
     value: 50
     deathSound: 23
     moveSound: 40
-    energyRecovery: 50
+    energyRecovery: 100
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -4513,7 +4513,7 @@ units:
     kneelHeight: 14
     value: 33
     intelligence: 4
-    energyRecovery: 25
+    energyRecovery: 50
   - type: FEMALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -4533,7 +4533,7 @@ units:
     kneelHeight: 14
     value: 33
     intelligence: 4
-    energyRecovery: 25
+    energyRecovery: 50
   - type: STR_SECTOID_SOLDIER
     race: STR_SECTOID
     rank: STR_LIVE_SOLDIER
@@ -4556,7 +4556,7 @@ units:
     deathSound: 10
     intelligence: 3
     aggression: 1
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_SECTOID_ENGINEER
     race: STR_SECTOID
     rank: STR_LIVE_ENGINEER
@@ -4579,7 +4579,7 @@ units:
     deathSound: 10
     intelligence: 6
     aggression: 2
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_SECTOID_MEDIC
     race: STR_SECTOID
     rank: STR_LIVE_MEDIC
@@ -4602,7 +4602,7 @@ units:
     deathSound: 10
     intelligence: 5
     aggression: 0
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_SECTOID_NAVIGATOR
     race: STR_SECTOID
     rank: STR_LIVE_NAVIGATOR
@@ -4625,7 +4625,7 @@ units:
     deathSound: 10
     intelligence: 4
     aggression: 1
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_SECTOID_LEADER
     race: STR_SECTOID
     rank: STR_LIVE_LEADER
@@ -4648,7 +4648,7 @@ units:
     deathSound: 10
     intelligence: 7
     aggression: 1
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_SECTOID_COMMANDER
     race: STR_SECTOID
     rank: STR_LIVE_COMMANDER
@@ -4671,7 +4671,7 @@ units:
     deathSound: 10
     intelligence: 8
     aggression: 0
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_CYBERDISC_TERRORIST
     race: STR_CYBERDISC
     rank: STR_LIVE_TERRORIST
@@ -4696,7 +4696,7 @@ units:
     moveSound: 40
     intelligence: 5
     aggression: 1
-    energyRecovery: 50
+    energyRecovery: 100
     specab: 1
     livingWeapon: true
   - type: STR_FLOATER_SOLDIER
@@ -4723,7 +4723,7 @@ units:
     moveSound: 15
     intelligence: 4
     aggression: 2
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_FLOATER_ENGINEER
     race: STR_FLOATER
     rank: STR_LIVE_ENGINEER
@@ -4748,7 +4748,7 @@ units:
     moveSound: 15
     intelligence: 7
     aggression: 2
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_FLOATER_NAVIGATOR
     race: STR_FLOATER
     rank: STR_LIVE_NAVIGATOR
@@ -4773,7 +4773,7 @@ units:
     moveSound: 15
     intelligence: 5
     aggression: 2
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_FLOATER_MEDIC
     race: STR_FLOATER
     rank: STR_LIVE_MEDIC
@@ -4798,7 +4798,7 @@ units:
     moveSound: 15
     intelligence: 6
     aggression: 1
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_FLOATER_LEADER
     race: STR_FLOATER
     rank: STR_LIVE_LEADER
@@ -4823,7 +4823,7 @@ units:
     moveSound: 15
     intelligence: 8
     aggression: 0
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_FLOATER_COMMANDER
     race: STR_FLOATER
     rank: STR_LIVE_COMMANDER
@@ -4848,7 +4848,7 @@ units:
     moveSound: 15
     intelligence: 8
     aggression: 0
-    energyRecovery: 30
+    energyRecovery: 60
   - type: STR_REAPER_TERRORIST
     race: STR_REAPER
     rank: STR_LIVE_TERRORIST
@@ -4871,7 +4871,7 @@ units:
     deathSound: 48
     intelligence: 2
     aggression: 2
-    energyRecovery: 40
+    energyRecovery: 80
     livingWeapon: true
   - type: STR_SNAKEMAN_SOLDIER
     race: STR_SNAKEMAN
@@ -4896,7 +4896,7 @@ units:
     moveSound: 0
     intelligence: 2
     aggression: 1
-    energyRecovery: 40
+    energyRecovery: 80
   - type: STR_SNAKEMAN_NAVIGATOR
     race: STR_SNAKEMAN
     rank: STR_LIVE_NAVIGATOR
@@ -4920,7 +4920,7 @@ units:
     moveSound: 0
     intelligence: 3
     aggression: 1
-    energyRecovery: 40
+    energyRecovery: 80
   - type: STR_SNAKEMAN_ENGINEER
     race: STR_SNAKEMAN
     rank: STR_LIVE_ENGINEER
@@ -4944,7 +4944,7 @@ units:
     moveSound: 0
     intelligence: 4
     aggression: 2
-    energyRecovery: 40
+    energyRecovery: 80
   - type: STR_SNAKEMAN_LEADER
     race: STR_SNAKEMAN
     rank: STR_LIVE_LEADER
@@ -4968,7 +4968,7 @@ units:
     moveSound: 0
     intelligence: 5
     aggression: 2
-    energyRecovery: 40
+    energyRecovery: 80
   - type: STR_SNAKEMAN_COMMANDER
     race: STR_SNAKEMAN
     rank: STR_LIVE_COMMANDER
@@ -4992,7 +4992,7 @@ units:
     moveSound: 0
     intelligence: 6
     aggression: 2
-    energyRecovery: 40
+    energyRecovery: 80
   - type: STR_CHRYSSALID_TERRORIST
     race: STR_CHRYSSALID
     rank: STR_LIVE_TERRORIST
@@ -5016,7 +5016,7 @@ units:
     aggroSound: 49
     intelligence: 2
     aggression: 2
-    energyRecovery: 40
+    energyRecovery: 80
     livingWeapon: true
   - type: STR_MUTON_SOLDIER
     race: STR_MUTON
@@ -5040,7 +5040,7 @@ units:
     deathSound: 6
     intelligence: 2
     aggression: 2
-    energyRecovery: 45
+    energyRecovery: 90
   - type: STR_MUTON_NAVIGATOR
     race: STR_MUTON
     rank: STR_LIVE_NAVIGATOR
@@ -5063,7 +5063,7 @@ units:
     deathSound: 6
     intelligence: 3
     aggression: 2
-    energyRecovery: 45
+    energyRecovery: 90
   - type: STR_MUTON_ENGINEER
     race: STR_MUTON
     rank: STR_LIVE_ENGINEER
@@ -5086,7 +5086,7 @@ units:
     deathSound: 6
     intelligence: 4
     aggression: 2
-    energyRecovery: 45
+    energyRecovery: 90
   - type: STR_SILACOID_TERRORIST
     race: STR_SILACOID
     rank: STR_LIVE_TERRORIST
@@ -5110,7 +5110,7 @@ units:
     moveSound: 47
     intelligence: 1
     aggression: 2
-    energyRecovery: 40
+    energyRecovery: 80
     specab: 2
     livingWeapon: true
   - type: STR_CELATID_TERRORIST
@@ -5137,7 +5137,7 @@ units:
     moveSound: 16
     intelligence: 3
     aggression: 2
-    energyRecovery: 35
+    energyRecovery: 70
     livingWeapon: true
   - type: STR_ETHEREAL_SOLDIER
     race: STR_ETHEREAL
@@ -5162,7 +5162,7 @@ units:
     moveSound: 15
     intelligence: 6
     aggression: 1
-    energyRecovery: 50
+    energyRecovery: 100
   - type: STR_ETHEREAL_LEADER
     race: STR_ETHEREAL
     rank: STR_LIVE_LEADER
@@ -5186,7 +5186,7 @@ units:
     moveSound: 15
     intelligence: 7
     aggression: 1
-    energyRecovery: 50
+    energyRecovery: 100
   - type: STR_ETHEREAL_COMMANDER
     race: STR_ETHEREAL
     rank: STR_LIVE_COMMANDER
@@ -5210,7 +5210,7 @@ units:
     moveSound: 15
     intelligence: 8
     aggression: 0
-    energyRecovery: 50
+    energyRecovery: 100
   - type: STR_SECTOPOD_TERRORIST
     race: STR_SECTOPOD
     rank: STR_LIVE_TERRORIST
@@ -5233,7 +5233,7 @@ units:
     deathSound: 23
     intelligence: 4
     aggression: 2
-    energyRecovery: 50
+    energyRecovery: 100
     livingWeapon: true
   - type: STR_ZOMBIE
     race: STR_ZOMBIE
@@ -5257,7 +5257,7 @@ units:
     deathSound: 48
     intelligence: 1
     aggression: 2
-    energyRecovery: 20
+    energyRecovery: 40
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
 alienRaces:

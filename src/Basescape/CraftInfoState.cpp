@@ -194,7 +194,7 @@ CraftInfoState::CraftInfoState(
 }
 
 /**
- *
+ * dTor.
  */
 CraftInfoState::~CraftInfoState()
 {
@@ -225,8 +225,8 @@ void CraftInfoState::init()
 		ss1,
 		ss2;
 
-//kL	ss1 << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercentage()));
-	ss1 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercentage())); // kL
+//kL	ss1 << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercent()));
+	ss1 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent())); // kL
 	if (_craft->getStatus() == "STR_REPAIRS"
 		&& _craft->getDamage() > 0)
 	{

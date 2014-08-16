@@ -752,7 +752,7 @@ void DogfightState::drawCraftDamage()
 	if (_minimized)
 		return;
 
-	int damagePercent = _craft->getDamagePercentage();
+	int damagePercent = _craft->getDamagePercent();
 	if (damagePercent > 0)
 	{
 		if (!_craftDamageAnimTimer->isRunning())
@@ -1069,9 +1069,9 @@ void DogfightState::move()
 														->play();
 
 							if ((_mode == _btnCautious
-									&& _craft->getDamagePercentage() > 60)
+									&& _craft->getDamagePercent() > 60)
 								|| (_mode == _btnStandard
-									&& _craft->getDamagePercentage() > 35))
+									&& _craft->getDamagePercent() > 35))
 							{
 								// kL_begin: taken from btnStandoffClick() below.
 								if (!_ufo->isCrashed()
@@ -1386,9 +1386,9 @@ void DogfightState::move()
 				if (_ufo->getCrashId() == 0)
 					_ufo->setCrashId(_game->getSavedGame()->getId("STR_CRASH_SITE"));
 
-				int percDamage = _ufo->getDamagePercentage(); // kL
-				//Log(LOG_INFO) << "DogfightState::move(), crashPS = " << percDamage;
-				_ufo->setCrashPS(percDamage); // kL
+				int hull = _ufo->getDamagePercent(); // kL
+				//Log(LOG_INFO) << "DogfightState::move(), crashPower = " << hull;
+				_ufo->setCrashPower(hull); // kL
 			}
 		}
 
