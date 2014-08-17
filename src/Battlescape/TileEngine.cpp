@@ -53,15 +53,15 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
-#include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/Unit.h"
+//#include "../Ruleset/Ruleset.h"
+//#include "../Ruleset/RuleSoldier.h"
+//#include "../Ruleset/Unit.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Soldier.h"
+//#include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
 
 
@@ -5121,8 +5121,8 @@ bool TileEngine::validateThrow(
 					0.48,
 					1.73 / sqrt(
 								sqrt(
-									static_cast<double>(action.actor->getStats()->strength)
-										/ static_cast<double>(action.weapon->getRules()->getWeight())))
+									static_cast<double>(action.actor->getStats()->strength) * action.actor->getAccuracyModifier()
+									/ static_cast<double>(action.weapon->getRules()->getWeight())))
 							+ kneel);
 	}
 	//Log(LOG_INFO) << ". starting arc = " << arc;
@@ -5535,8 +5535,47 @@ bool TileEngine::psiAttack(BattleAction* action)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
 				victim->convertToFaction(action->actor->getFaction());
-				victim->setTimeUnits(victim->getStats()->tu);
-				victim->setEnergy(victim->getStats()->stamina); // kL
+//				victim->setTimeUnits(victim->getStats()->tu);
+//				victim->setEnergy(victim->getStats()->stamina); // kL
+
+				// kL_begin: taken from BattleUnit::prepareNewTurn()
+				int prepTU = victim->getStats()->tu;
+				double underLoad = static_cast<double>(victim->getStats()->strength) / static_cast<double>(victim->getCarriedWeight());
+				underLoad *= victim->getAccuracyModifier();
+				if (underLoad < 1.0)
+					prepTU = static_cast<int>(underLoad * static_cast<double>(prepTU));
+
+				// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
+				prepTU -= (prepTU * (victim->getFatalWound(BODYPART_LEFTLEG) + victim->getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
+				victim->setTimeUnits(prepTU);
+
+				int // advanced Energy recovery
+					stamina = victim->getStats()->stamina,
+					enron = stamina;
+
+//				if (victim->getTurretType() == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
+//				{
+				if (victim->isKneeled())							// kneeled xCom
+					enron /= 2;
+				else if (victim->getFaction() == FACTION_PLAYER)	// xCom & Mc'd aliens
+					enron /= 3;
+				else												// non-Mc'd aLiens & civies
+					enron = enron * victim->getUnitRules()->getEnergyRecovery() / 100;
+//				}
+//				else // xCom tank. ( can't get Mc'd )
+//					enron = enron * 4 / 5; // value in Ruleset is 100%
+
+				enron = static_cast<int>(static_cast<double>(enron) * victim->getAccuracyModifier());
+
+				// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
+				// kL_note: Only xCom gets fatal wounds, atm.
+				if (victim->getFaction() == FACTION_PLAYER)
+					enron -= (victim->getEnergy() * (victim->getFatalWound(BODYPART_TORSO) * 10)) / 100;
+
+				victim->setEnergy(victim->getEnergy() + enron);
+				// kL_end.
+
+
 				victim->allowReselect();
 				victim->setStatus(STATUS_STANDING);
 

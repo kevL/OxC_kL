@@ -1190,7 +1190,7 @@ bool ProjectileFlyBState::validThrowRange(
 	double maxDist = static_cast<double>(
 							getMaxThrowDistance( // tilespace
 											weight,
-											action->actor->getStats()->strength,
+											static_cast<int>(static_cast<double>(action->actor->getStats()->strength) * action->actor->getAccuracyModifier()),
 											delta_z)
 										+ 8)
 									/ 16.0;

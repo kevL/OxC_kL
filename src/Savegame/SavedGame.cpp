@@ -1962,20 +1962,29 @@ void SavedGame::inspectSoldiers(
 
 /**
  * Evaluate the score of a soldier based on all of his stats, missions and kills.
- * @param soldier, Pointer to the soldier to get a score for.
- * @return, This soldier's score.
+ * @param soldier - pointer to the soldier to get a score for
+ * @return, the soldier's score
  */
 int SavedGame::getSoldierScore(Soldier* soldier)
 {
-	UnitStats* s = soldier->getCurrentStats();
+	UnitStats* stats = soldier->getCurrentStats();
 
-	int v1 = 2 * s->health + 2 * s->stamina + 4 * s->reactions + 4 * s->bravery;
-	int v2 = v1 + 3 * (s->tu + 2 * (s->firing));
-	int v3 = v2 + s->melee + s->throwing + s->strength;
-	if (s->psiSkill > 0)
-		v3 += s->psiStrength + 2 * s->psiSkill;
+	int score = 2 * stats->health
+				+ 2 * stats->stamina
+				+ 4 * stats->reactions
+				+ 4 * stats->bravery
+				+ 3 * (stats->tu + 2 * (stats->firing))
+				+ stats->melee
+				+ stats->throwing
+				+ stats->strength;
 
-	return v3 + 10 * (soldier->getMissions() + soldier->getKills());
+	if (stats->psiSkill > 0)
+		score += stats->psiStrength
+				+ 2 * stats->psiSkill;
+
+	score += 10 * (soldier->getMissions() + soldier->getKills());
+
+	return score;
 }
 
 /**

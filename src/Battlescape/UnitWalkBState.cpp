@@ -887,14 +887,14 @@ bool UnitWalkBState::doStatusStand_end()
 		// kL_add: Put burnedBySilacoid() here! etc
 		_unit->getTile()->ignite(1);
 
-		Position here = _unit->getPosition() * Position(16, 16, 24)
+		Position pos = _unit->getPosition() * Position(16, 16, 24)
 						+ Position(
 								8,
 								8,
 								-(_unit->getTile()->getTerrainLevel()));
 		_parent->getTileEngine()->hit(
-									here,
-									_unit->getStats()->strength,
+									pos,
+									_unit->getStats()->strength, // * _unit->getAccuracyModifier(),
 									DT_IN,
 									_unit);
 	}

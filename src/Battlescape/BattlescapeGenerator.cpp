@@ -717,13 +717,11 @@ void BattlescapeGenerator::deployXCOM()
 				++i)
 		{
 //			unit->prepareNewTurn();
-			int tu = (*i)->getStats()->tu;
-
-			float encumb = static_cast<float>(static_cast<float>((*i)->getCarriedWeight() / (*i)->getStats()->strength));
-			if (encumb > 1.f)
-				tu = static_cast<int>(encumb * static_cast<float>(tu));
-
-			(*i)->setTimeUnits(tu);
+			int prepTU = (*i)->getStats()->tu;
+			double underLoad = static_cast<double>((*i)->getStats()->strength / static_cast<double>((*i)->getCarriedWeight()));
+			if (underLoad < 1.0)
+				prepTU = static_cast<int>(underLoad * static_cast<double>(prepTU));
+			(*i)->setTimeUnits(prepTU);
 		}
 	} // kL_end.
 

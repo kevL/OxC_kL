@@ -48,7 +48,7 @@ private:
 		_droppedOnAlienTurn,
 		_XCOMProperty;
 	int
-		_ammoQuantity,
+		_ammoQty,
 		_fuseTimer,
 		_id,
 		_inventoryX,

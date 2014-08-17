@@ -549,7 +549,7 @@ void InventoryState::updateStats()
 
 	if (Options::showMoreStatsInInventoryView) // kL
 	{
-		int str = unit->getStats()->strength;
+		int str = static_cast<int>(static_cast<double>(unit->getStats()->strength) * unit->getAccuracyModifier());
 		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
 		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(str));
 		if (weight > str)

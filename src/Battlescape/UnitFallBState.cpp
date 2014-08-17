@@ -433,14 +433,14 @@ void UnitFallBState::think()
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
 					(*unit)->getTile()->ignite(1);
-					Position here = ((*unit)->getPosition() * Position(16, 16, 24))
+					Position pos = ((*unit)->getPosition() * Position(16, 16, 24))
 									+ Position(
 											8,
 											8,
 											-(*unit)->getTile()->getTerrainLevel());
 					_parent->getTileEngine()->hit(
-												here,
-												(*unit)->getStats()->strength,
+												pos,
+												(*unit)->getStats()->strength, // * (*unit)->getAccuracyModifier(),
 												DT_IN,
 												*unit);
 				}

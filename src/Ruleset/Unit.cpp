@@ -264,7 +264,7 @@ bool Unit::isLivingWeapon() const
 }
 
 /**
- *
+ * Gets stamina recovery per turn as a percentage.
  */
 int Unit::getEnergyRecovery() const
 {

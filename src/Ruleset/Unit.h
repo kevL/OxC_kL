@@ -293,7 +293,7 @@ private:
 		int getAggroSound() const;
 		/// Checks if this unit has a built in weapon.
 		bool isLivingWeapon() const;
-		///
+		/// Gets stamina recovery per turn as a percentage.
 		int getEnergyRecovery() const;
 };
 

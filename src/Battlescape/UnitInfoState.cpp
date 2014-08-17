@@ -544,7 +544,7 @@ UnitInfoState::UnitInfoState(
 }
 
 /**
- *
+ * dTor.
  */
 UnitInfoState::~UnitInfoState()
 {
@@ -614,14 +614,21 @@ void UnitInfoState::init()
 	_barMorale->setMax(100);
 	_barMorale->setValue(static_cast<double>(stat));
 
-	stat = _unit->getStats()->reactions;
+/*	stat = _unit->getStats()->reactions;
 	ss.str(L"");
 	ss << stat;
 	_numReactions->setText(ss.str());
 	_barReactions->setMax(static_cast<double>(stat));
+	_barReactions->setValue(static_cast<double>(stat)); */
+	double arbitraryVariable = static_cast<double>(_unit->getStats()->reactions);
+	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
+	ss.str(L"");
+	ss << stat;
+	_numReactions->setText(ss.str());
+	_barReactions->setMax(arbitraryVariable);
 	_barReactions->setValue(static_cast<double>(stat));
 
-	double arbitraryVariable = static_cast<double>(_unit->getStats()->firing);
+	arbitraryVariable = static_cast<double>(_unit->getStats()->firing);
 	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
 	ss.str(L"");
 	ss << stat;
@@ -645,11 +652,18 @@ void UnitInfoState::init()
 	_barMelee->setMax(arbitraryVariable);
 	_barMelee->setValue(static_cast<double>(stat));
 
-	stat = _unit->getStats()->strength;
+/*	stat = _unit->getStats()->strength;
 	ss.str(L"");
 	ss << stat;
 	_numStrength->setText(ss.str());
 	_barStrength->setMax(static_cast<double>(stat));
+	_barStrength->setValue(static_cast<double>(stat)); */
+	arbitraryVariable = static_cast<double>(_unit->getStats()->strength);
+	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
+	ss.str(L"");
+	ss << stat;
+	_numStrength->setText(ss.str());
+	_barStrength->setMax(arbitraryVariable);
 	_barStrength->setValue(static_cast<double>(stat));
 
 
@@ -694,6 +708,7 @@ void UnitInfoState::init()
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
 	}
+
 
 	stat = _unit->getArmor(SIDE_FRONT);
 	ss.str(L"");

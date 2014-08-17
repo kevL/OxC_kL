@@ -1681,7 +1681,13 @@ bool BattleUnit::spendEnergy(int energy)
  */
 void BattleUnit::setTimeUnits(int tu)
 {
-	_tu = tu;
+	if (tu < 0)
+		_tu = 0;
+	else
+		_tu = tu;
+
+	if (_tu > _unitRules->getStats()->tu) // this might screw up ArmorBonus +tu
+		_tu = _unitRules->getStats()->tu;
 }
 
 /**
@@ -1690,7 +1696,13 @@ void BattleUnit::setTimeUnits(int tu)
  */
 void BattleUnit::setEnergy(int energy)
 {
-	_energy = energy;
+	if (energy < 0)
+		_energy = 0;
+	else
+		_energy = energy;
+
+	if (_energy > _unitRules->getStats()->stamina) // this might screw up ArmorBonus +stamina
+		_energy = _unitRules->getStats()->stamina;
 }
 
 /**
@@ -1865,7 +1877,6 @@ double BattleUnit::getFiringAccuracy(
 
 	return ret;
 }
-// Wb.140214_begin:
 /* int BattleUnit::getFiringAccuracy(
 		BattleActionType actionType,
 		BattleItem* item)
@@ -1902,7 +1913,7 @@ double BattleUnit::getFiringAccuracy(
 	}
 
 	return result * getAccuracyModifier(item) / 100;
-} */ // Wb_end.
+} */
 
 /**
  * Calculates accuracy modifier. Takes health and fatal wounds into account.
@@ -1931,11 +1942,12 @@ double BattleUnit::getAccuracyModifier(BattleItem* item)
 	}
 
 	ret *= 1.0 - (0.1 * static_cast<double>(wounds));
-
 	//Log(LOG_INFO) << ". ret = " << ret;
+	if (ret < 0.1)
+		ret = 0.1; // limit low @ 10%
+
 	return ret;
 }
-// Wb.140214_begin:
 /* int BattleUnit::getAccuracyModifier(BattleItem* item)
 {
 	int wounds = _fatalWounds[BODYPART_HEAD];
@@ -1956,7 +1968,7 @@ double BattleUnit::getAccuracyModifier(BattleItem* item)
 	return std::max(
 				10,
 				25 * _health / getStats()->health + 75 + -10 * wounds);
-} */ // Wb_end.
+} */
 
 /**
  * Calculates throwing accuracy.
@@ -2019,9 +2031,12 @@ int BattleUnit::getFatalWounds() const
 double BattleUnit::getInitiative(int tuSpent) // kL
 {
 	// (Reactions Stat) x (Current Time Units / Max TUs)
-	return static_cast<double>(
-				getStats()->reactions * (getTimeUnits() - tuSpent))
-				/ static_cast<double>(getStats()->tu);
+	double ret = static_cast<double>(
+						getStats()->reactions * (getTimeUnits() - tuSpent))
+						/ static_cast<double>(getStats()->tu);
+	ret *= getAccuracyModifier();
+
+	return ret;
 }
 
 /**
@@ -2037,15 +2052,15 @@ void BattleUnit::prepareNewTurn()
 
 	_unitsSpottedThisTurn.clear();
 
-	int tuRecovery = getStats()->tu;
-
-	float encumbrance = static_cast<float>(getStats()->strength) / static_cast<float>(getCarriedWeight());
-	if (encumbrance < 1.f)
-		tuRecovery = static_cast<int>(encumbrance * static_cast<float>(tuRecovery));
+	int prepTU = getStats()->tu;
+	double underLoad = static_cast<double>(getStats()->strength) / static_cast<double>(getCarriedWeight());
+	underLoad *= getAccuracyModifier();
+	if (underLoad < 1.0)
+		prepTU = static_cast<int>(underLoad * static_cast<double>(prepTU));
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-	tuRecovery -= (tuRecovery * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
-	setTimeUnits(tuRecovery);
+	prepTU -= (prepTU * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
+	setTimeUnits(prepTU);
 
 	if (!isOut()) // recover energy
 	{
@@ -2065,6 +2080,8 @@ void BattleUnit::prepareNewTurn()
 		}
 		else // xCom tank.
 			enron = enron * 4 / 5; // value in Ruleset is 100%
+
+		enron = static_cast<int>(static_cast<double>(enron) * getAccuracyModifier());
 		// kL_end.
 
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
@@ -2897,14 +2914,14 @@ int BattleUnit::getFatalWound(int part) const
 
 /**
  * Heal a fatal wound of the soldier.
- * @param part			- the body part to heal
- * @param woundAmount	- the amount of fatal wound healed
- * @param healthAmount	- the amount of health to add to soldier health
+ * @param part		- the body part to heal
+ * @param wounds	- the amount of fatal wound healed
+ * @param health	- the amount of health to add to soldier health
  */
 void BattleUnit::heal(
 		int part,
-		int woundAmount,
-		int healthAmount)
+		int wounds,
+		int health)
 {
 	if (part < 0 || part > 5)
 		return;
@@ -2912,13 +2929,13 @@ void BattleUnit::heal(
 	if (!_fatalWounds[part])
 		return;
 
-	_fatalWounds[part] -= woundAmount;
+	_fatalWounds[part] -= wounds;
 
-	_health += healthAmount;
+	_health += health;
 	if (_health > getStats()->health)
 		_health = getStats()->health;
 
-	moraleChange(healthAmount);
+	moraleChange(health);
 }
 
 /**

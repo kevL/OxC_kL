@@ -49,7 +49,7 @@ BattleItem::BattleItem(
 		_inventoryY(0),
 		_ammoItem(NULL),
 		_fuseTimer(-1),
-		_ammoQuantity(0),
+		_ammoQty(0),
 		_painKiller(0),
 		_heal(0),
 		_stimulant(0),
@@ -98,7 +98,7 @@ void BattleItem::load(const YAML::Node& node)
 {
 	_inventoryX			= node["inventoryX"].as<int>(_inventoryX);
 	_inventoryY			= node["inventoryY"].as<int>(_inventoryY);
-	_ammoQuantity		= node["ammoqty"].as<int>(_ammoQuantity);
+	_ammoQty			= node["ammoQty"].as<int>(_ammoQty);
 	_painKiller			= node["painKiller"].as<int>(_painKiller);
 	_heal				= node["heal"].as<int>(_heal);
 	_stimulant			= node["stimulant"].as<int>(_stimulant);
@@ -138,9 +138,9 @@ YAML::Node BattleItem::save() const
 	if (_tile)
 		node["position"]			= _tile->getPosition();
 	else
-		node["position"]			= Position(-1, -1, -1);
+		node["position"]			= Position(-1,-1,-1);
 
-	node["ammoqty"]					= _ammoQuantity;
+	node["ammoQty"]					= _ammoQty;
 
 	if (_ammoItem)
 		node["ammoItem"]			= _ammoItem->getId();
@@ -196,7 +196,7 @@ int BattleItem::getAmmoQuantity() const
 	if (_rules->getClipSize() == -1) // is Laser, etc.
 		return 255;
 
-	return _ammoQuantity;
+	return _ammoQty;
 }
 
 /**
@@ -205,7 +205,7 @@ int BattleItem::getAmmoQuantity() const
  */
 void BattleItem::setAmmoQuantity(int qty)
 {
-	_ammoQuantity = qty;
+	_ammoQty = qty;
 }
 
 /**
@@ -214,9 +214,9 @@ void BattleItem::setAmmoQuantity(int qty)
  */
 bool BattleItem::spendBullet()
 {
-	_ammoQuantity--;
+	_ammoQty--;
 
-	if (_ammoQuantity == 0)
+	if (_ammoQty == 0)
 		return false;
 	else
 		return true;

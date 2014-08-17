@@ -780,8 +780,8 @@ private:
 		/// Heal one fatal wound
 		void heal(
 				int part,
-				int woundAmount,
-				int healthAmount);
+				int wounds,
+				int health);
 		/// Give pain killers to this unit
 		void painKillers();
 		/// Give stimulant to this unit
