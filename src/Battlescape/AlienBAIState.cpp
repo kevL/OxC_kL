@@ -91,6 +91,7 @@ AlienBAIState::AlienBAIState(
 	//Log(LOG_INFO) << "Create AlienBAIState";
 	_traceAI		= Options::traceAI;
 
+	_reserve		= BA_NONE;
 	_intelligence	= _unit->getIntelligence();
 
 	_escapeAction	= new BattleAction();
@@ -401,6 +402,8 @@ void AlienBAIState::think(BattleAction* action)
 	}
 
 	//Log(LOG_INFO) << ". . pos 8";
+	_reserve = BA_NONE;
+
 	switch (_AIMode)
 	{
 		case AI_ESCAPE:
@@ -427,19 +430,22 @@ void AlienBAIState::think(BattleAction* action)
 				switch (_unit->getAggression())
 				{
 					case 0:
-						_save->getBattleGame()->setTUReserved(
-															BA_AIMEDSHOT,
-															false);
+						_reserve = BA_AIMEDSHOT;
+//						_save->getBattleGame()->setTUReserved(
+//															BA_AIMEDSHOT,
+//															false);
 					break;
 					case 1:
-						_save->getBattleGame()->setTUReserved(
-															BA_AUTOSHOT,
-															false);
+						_reserve = BA_AUTOSHOT;
+//						_save->getBattleGame()->setTUReserved(
+//															BA_AUTOSHOT,
+//															false);
 					break;
 					case 2:
-						_save->getBattleGame()->setTUReserved(
-															BA_SNAPSHOT,
-															false);
+						_reserve = BA_SNAPSHOT;
+//						_save->getBattleGame()->setTUReserved(
+//															BA_SNAPSHOT,
+//															false);
 
 					default:
 					break;
@@ -474,7 +480,7 @@ void AlienBAIState::think(BattleAction* action)
 													_attackAction->type,
 													_attackAction->weapon);
 
-			_save->getBattleGame()->setTUReserved(BA_NONE, false);				// don't worry about reserving TUs, we've factored that in already.
+//			_save->getBattleGame()->setTUReserved(BA_NONE, false);				// don't worry about reserving TUs, we've factored that in already.
 
 			if (action->type == BA_WALK											// if this is a "find fire point" action, don't increment the AI counter.
 				&& _rifle
@@ -2610,6 +2616,14 @@ bool AlienBAIState::validTarget(
 		return true;
 
 	return unit->getFaction() == FACTION_PLAYER;
+}
+
+/**
+ *
+ */
+BattleActionType AlienBAIState::getReserveMode()
+{
+	return _reserve;
 }
 
 }

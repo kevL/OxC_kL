@@ -1686,8 +1686,8 @@ void BattleUnit::setTimeUnits(int tu)
 	else
 		_tu = tu;
 
-	if (_tu > _unitRules->getStats()->tu) // this might screw up ArmorBonus +tu
-		_tu = _unitRules->getStats()->tu;
+	if (_tu > getStats()->tu) // this might screw up ArmorBonus +tu
+		_tu = getStats()->tu;
 }
 
 /**
@@ -1701,8 +1701,8 @@ void BattleUnit::setEnergy(int energy)
 	else
 		_energy = energy;
 
-	if (_energy > _unitRules->getStats()->stamina) // this might screw up ArmorBonus +stamina
-		_energy = _unitRules->getStats()->stamina;
+	if (_energy > getStats()->stamina) // this might screw up ArmorBonus +stamina
+		_energy = getStats()->stamina;
 }
 
 /**

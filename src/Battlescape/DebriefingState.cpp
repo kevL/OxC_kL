@@ -974,19 +974,19 @@ void DebriefingState::prepareDebriefing()
 
 		int value = (*j)->getValue();
 
-		UnitFaction origFaction = (*j)->getOriginalFaction();
+		UnitFaction origFact = (*j)->getOriginalFaction();
 
 		UnitStatus status = (*j)->getStatus();
 		if (status == STATUS_DEAD) // so this is a dead unit
 		{
-			if (origFaction == FACTION_HOSTILE
+			if (origFact == FACTION_HOSTILE
 				&& (*j)->killedBy() == FACTION_PLAYER)
 			{
 				addStat(
 						"STR_ALIENS_KILLED",
 						value);
 			}
-			else if (origFaction == FACTION_PLAYER)
+			else if (origFact == FACTION_PLAYER)
 			{
 				Soldier* soldier = save->getSoldier((*j)->getId());
 				if (soldier != NULL) // xCom soldier.
@@ -1039,7 +1039,7 @@ void DebriefingState::prepareDebriefing()
 							"STR_TANKS_DESTROYED",
 							-value);
 			}
-			else if (origFaction == FACTION_NEUTRAL)
+			else if (origFact == FACTION_NEUTRAL)
 			{
 				if ((*j)->killedBy() == FACTION_PLAYER)
 					addStat(
@@ -1060,7 +1060,7 @@ void DebriefingState::prepareDebriefing()
 			if ((*j)->getSpawnUnit() != "")
 				type = (*j)->getSpawnUnit();
 
-			if (origFaction == FACTION_PLAYER)
+			if (origFact == FACTION_PLAYER)
 			{
 				Soldier* soldier = save->getSoldier((*j)->getId());
 
@@ -1152,7 +1152,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (origFaction == FACTION_HOSTILE	// Mc'd unit,
+			else if (origFact == FACTION_HOSTILE	// Mc'd unit,
 				&& faction == FACTION_PLAYER		// counts as unconscious
 				&& (!aborted
 					|| (*j)->isInExitArea())
@@ -1225,7 +1225,7 @@ void DebriefingState::prepareDebriefing()
 						base->getItems()->addItem(corpseItem);
 				}
 			}
-			else if (origFaction == FACTION_NEUTRAL)
+			else if (origFact == FACTION_NEUTRAL)
 			{
 				if (aborted
 					|| soldierLive == 0) // if mission fails, all civilians die

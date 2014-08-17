@@ -130,7 +130,7 @@ private:
 	bool
 		_AISecondMove,
 		_endTurnRequested,
-		_kneelReserved,
+//		_kneelReserved,
 		_playedAggroSound,
 		_playerPanicHandled;
 	int _AIActionCounter;
@@ -138,9 +138,9 @@ private:
 	BattleAction _currentAction;
 
 	BattlescapeState* _parentState;
-	BattleActionType
-		_batReserved,
-		_playerBATReserved;
+//	BattleActionType
+//		_batReserved,
+//		_playerBATReserved;
 	SavedBattleGame* _save;
 
 	std::list<BattleState*>
@@ -242,8 +242,8 @@ private:
 		void requestEndTurn();
 		/// Sets the TU reserved type.
 		void setTUReserved(
-				BattleActionType bat,
-				bool player);
+				BattleActionType bat);
+//				bool player);
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
 

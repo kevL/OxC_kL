@@ -48,7 +48,7 @@ BattlescapeMessage::BattlescapeMessage(
 			y)
 {
 	_window = new Window(
-						0,
+						NULL,
 						width,
 						height,
 						x,
@@ -171,6 +171,15 @@ void BattlescapeMessage::setHeight(int height)
 	Surface::setHeight(height);
 	_window->setHeight(height);
 	_text->setHeight(height);
+}
+
+/**
+ * Sets the text color of the battlescape message.
+ * @param color the new color.
+ */
+void BattlescapeMessage::setTextColor(Uint8 color)
+{
+	_text->setColor(color);
 }
 
 }

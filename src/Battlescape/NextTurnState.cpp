@@ -52,9 +52,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Next Turn screen.
- * @param game Pointer to the core game.
- * @param battleGame Pointer to the saved game.
- * @param state Pointer to the Battlescape state.
+ * @param battleGame	- pointer to the SavedBattleGame
+ * @param state			- pointer to the BattlescapeState
  */
 NextTurnState::NextTurnState(
 		SavedBattleGame* battleGame,
@@ -79,10 +78,10 @@ NextTurnState::NextTurnState(
 	battleGame->setPaletteByDepth(this);
 
 	add(_window);
-	add(_txtTitle);
-	add(_txtTurn);
-	add(_txtSide);
-	add(_txtMessage);
+	add(_txtTitle, "messageWindows", "battlescape");
+	add(_txtTurn, "messageWindows", "battlescape");
+	add(_txtSide, "messageWindows", "battlescape");
+	add(_txtMessage, "messageWindows", "battlescape");
 //	add(_bg);
 
 	centerAllSurfaces();
@@ -110,26 +109,26 @@ NextTurnState::NextTurnState(
 	_window->setHighContrast(true);
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
-	_txtTitle->setColor(Palette::blockOffset(0)-1);
+//	_txtTitle->setColor(Palette::blockOffset(0)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setHighContrast(true);
 	_txtTitle->setText(tr("STR_OPENXCOM"));
 
-	_txtTurn->setColor(Palette::blockOffset(0)-1);
+//	_txtTurn->setColor(Palette::blockOffset(0)-1);
 	_txtTurn->setBig();
 	_txtTurn->setAlign(ALIGN_CENTER);
 	_txtTurn->setHighContrast(true);
 	_txtTurn->setText(tr("STR_TURN").arg(_battleGame->getTurn()));
 
-	_txtSide->setColor(Palette::blockOffset(0)-1);
+//	_txtSide->setColor(Palette::blockOffset(0)-1);
 	_txtSide->setBig();
 	_txtSide->setAlign(ALIGN_CENTER);
 	_txtSide->setHighContrast(true);
 	_txtSide->setText(tr("STR_SIDE")
 						.arg(tr(_battleGame->getSide() == FACTION_PLAYER? "STR_XCOM": "STR_ALIENS")));
 
-	_txtMessage->setColor(Palette::blockOffset(0)-1);
+//	_txtMessage->setColor(Palette::blockOffset(0)-1);
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setHighContrast(true);

@@ -217,11 +217,9 @@ void CivilianBAIState::think(BattleAction* action)
 			std::string AIMode;
 			switch (_AIMode)
 			{
-				case 0:
-					AIMode = "Patrol";
+				case 0: AIMode = "Patrol";
 				break;
-				case 3:
-					AIMode = "Escape";
+				case 3: AIMode = "Escape";
 				break;
 			}
 
@@ -232,16 +230,17 @@ void CivilianBAIState::think(BattleAction* action)
 	switch (_AIMode)
 	{
 		case AI_ESCAPE:
-			action->type = _escapeAction->type;
-			action->target = _escapeAction->target;
-			action->number = 3;
+			action->type		= _escapeAction->type;
+			action->target		= _escapeAction->target;
+			action->number		= 3;
+			action->desperate	= true;
+
 			_unit->dontReselect();
-			action->desperate = true;
-			_save->getBattleGame()->setTUReserved(BA_NONE, false);
+//			_save->getBattleGame()->setTUReserved(BA_NONE, false);
 		break;
 		case AI_PATROL:
-			action->type = _patrolAction->type;
-			action->target = _patrolAction->target;
+			action->type	= _patrolAction->type;
+			action->target	= _patrolAction->target;
 		break;
 
 		default:

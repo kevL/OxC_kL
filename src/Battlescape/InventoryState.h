@@ -22,18 +22,16 @@
 
 #include "../Engine/State.h"
 
-#include "../Interface/TextButton.h"
-
-#include "../Savegame/BattleItem.h"
 #include "../Savegame/EquipmentLayoutItem.h"
 
 
 namespace OpenXcom
 {
 
+class BattlescapeButton;
 class BattlescapeState;
 class BattleUnit;
-class InteractiveSurface;
+//class InteractiveSurface;
 class Inventory;
 class NumberText; // kL
 class SavedBattleGame;
@@ -54,8 +52,7 @@ private:
 
 //kL	std::string _currentTooltip;
 
-	BattlescapeState* _parent;
-	InteractiveSurface
+	BattlescapeButton
 		* _btnGround,
 		* _btnNext,
 		* _btnOk,
@@ -65,6 +62,7 @@ private:
 		* _btnCreateTemplate,
 		* _btnApplyTemplate,
 		* _btnClearInventory;
+	BattlescapeState* _parent;
 	Inventory* _inv;
 	NumberText
 		* _numOrder, // kL

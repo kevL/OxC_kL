@@ -1994,9 +1994,8 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		switchBack = true;
 		_save->getBattleGame()->setTUReserved(
-//kL										BA_AUTOSHOT,
-											BA_SNAPSHOT, // kL
-											false);
+//kL										BA_AUTOSHOT);
+											BA_SNAPSHOT); // kL
 	}
 
 
@@ -2175,8 +2174,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	if (switchBack)
 		_save->getBattleGame()->setTUReserved(
-											BA_NONE,
-											false);
+											BA_NONE);
 
 	//Log(LOG_INFO) << ". . tu @ return = " << tu;
 	return true;

@@ -32,6 +32,7 @@
 
 #include "../Interface/ArrowButton.h"
 #include "../Interface/Bar.h"
+#include "../Interface/BattlescapeButton.h"
 #include "../Interface/ComboBox.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
@@ -131,10 +132,14 @@ void State::add(
 {
 	surface->setPalette(_palette);
 
+	// this only works if we're dealing with a battlescape button
+	BattlescapeButton* bsbtn = dynamic_cast<BattlescapeButton*>(surface);
+
 	if (_game->getRuleset()->getInterface(category)
 		&& _game->getRuleset()->getInterface(category)->getElement(id))
 	{
 		Element* element = _game->getRuleset()->getInterface(category)->getElement(id);
+
 		if (parent
 			&& element->w != INT_MAX
 			&& element->h != INT_MAX)
@@ -151,11 +156,18 @@ void State::add(
 			surface->setY(parent->getY() + element->y);
 		}
 
+		if (bsbtn)
+			bsbtn->setTftdMode(element->TFTDMode);
+
 		if (element->color)
 		{
 			NumberText* numText = dynamic_cast<NumberText*>(surface);
 			Text* text = dynamic_cast<Text*>(surface);
 			Bar* bar = dynamic_cast<Bar*>(surface);
+			TextButton* tb = dynamic_cast<TextButton*>(surface);
+
+			if (bsbtn)
+				bsbtn->setColor(element->color);
 
 			if (numText)
 				numText->setColor(element->color);
@@ -170,9 +182,18 @@ void State::add(
 				bar->setColor2(element->color2);
 				bar->setBorderColor(element->border);
 			}
+			else if (tb)
+				tb->setColor(element->color);
 		}
 
 		surface->invalidate(false);
+	}
+
+	if (bsbtn)
+	{
+		// this will initialize the graphics and settings of the battlescape button.
+		bsbtn->copy(parent);
+		bsbtn->initSurfaces();
 	}
 
 	if (_game->getLanguage() // set default text resources

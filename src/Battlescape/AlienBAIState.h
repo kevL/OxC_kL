@@ -25,6 +25,8 @@
 #include "BattleAIState.h"
 #include "Position.h"
 
+#include "../Battlescape/BattlescapeGame.h"
+
 
 namespace OpenXcom
 {
@@ -77,6 +79,8 @@ protected:
 	Node
 		* _fromNode,
 		* _toNode;
+
+	BattleActionType _reserve;
 
 
 	public:
@@ -169,6 +173,9 @@ protected:
 				BattleUnit* unit,
 				bool assessDanger,
 				bool includeCivs) const;
+
+		///
+		BattleActionType getReserveMode();
 };
 
 }

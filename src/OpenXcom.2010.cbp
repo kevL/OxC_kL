@@ -2045,6 +2045,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Interface/BattlescapeButton.cpp" />
+		<Unit filename="Interface/BattlescapeButton.h" />
 		<Unit filename="Interface/ComboBox.cpp" />
 		<Unit filename="Interface/ComboBox.h" />
 		<Unit filename="Interface/Cursor.cpp">

@@ -114,7 +114,7 @@ private:
 		Soldier(
 				RuleSoldier* rules,
 				Armor* armor,
-				const std::vector<SoldierNamePool*>* names = 0,
+				const std::vector<SoldierNamePool*>* names = NULL,
 				int id = 0);
 		/// Cleans up the soldier.
 		~Soldier();

@@ -26,8 +26,9 @@
 namespace OpenXcom
 {
 
+class BattlescapeButton;
 class Camera;
-class InteractiveSurface;
+//class InteractiveSurface;
 class MiniMapView;
 class SavedBattleGame;
 class Text;
@@ -44,7 +45,7 @@ class MiniMapState
 {
 
 private:
-	InteractiveSurface
+	BattlescapeButton
 		* _btnLvlDwn,
 		* _btnLvlUp,
 		* _btnOk;

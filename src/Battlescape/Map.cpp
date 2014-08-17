@@ -160,6 +160,8 @@ Map::Map(
 									0);
 	_message->setX(_game->getScreen()->getDX());
 	_message->setY(_game->getScreen()->getDY());
+//	_message->setY((visibleMapHeight - _message->getHeight()) / 2);
+	_message->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color);
 
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)& Map::scrollMouse);

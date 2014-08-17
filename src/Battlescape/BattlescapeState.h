@@ -32,6 +32,7 @@ namespace OpenXcom
 {
 
 class Bar;
+class BattlescapeButton;
 class BattlescapeGame;
 class BattleItem;
 class BattleUnit;
@@ -81,11 +82,7 @@ private:
 		* _barEnergy,
 		* _barHealth,
 		* _barMorale;
-	BattlescapeGame* _battleGame;
-	BattleUnit* _visibleUnit[VISIBLE_MAX];
-	InteractiveSurface
-		* _icons,
-
+	BattlescapeButton
 		* _btnUnitUp,
 		* _btnUnitDown,
 		* _btnMapUp,
@@ -101,10 +98,17 @@ private:
 		* _btnEndTurn,
 		* _btnAbort,
 
-		* _btnStats,
-
 		* _btnLaunch,
-		* _btnPsi,
+		* _btnPsi;
+
+//		* _reserve;
+//		* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
+	BattlescapeGame* _battleGame;
+	BattleUnit* _visibleUnit[VISIBLE_MAX];
+	InteractiveSurface
+		* _icons,
+
+		* _btnStats,
 
 		* _btnLeftHandItem,
 		* _btnRightHandItem,
@@ -113,10 +117,8 @@ private:
 		* _btnWounds, // kL
 
 		* _btnZeroTUs; // kL
-
 //	ImageButton* _reserve;
 //	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
-
 	Map* _map;
 	NumberText
 		* _numVisibleUnit[VISIBLE_MAX],

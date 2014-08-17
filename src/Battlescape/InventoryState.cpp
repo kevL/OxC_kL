@@ -42,6 +42,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
+#include "../Interface/BattlescapeButton.h"
 #include "../Interface/Text.h"
 #include "../Interface/NumberText.h" // kL
 
@@ -54,6 +55,7 @@
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 
+#include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
@@ -125,25 +127,25 @@ InventoryState::InventoryState(
 
 	_txtItem	= new Text(160, 9, 128, 140);
 
-	_btnOk		= new InteractiveSurface(35, 22, 237, 0);
-	_btnPrev	= new InteractiveSurface(23, 22, 273, 0);
-	_btnNext	= new InteractiveSurface(23, 22, 297, 0);
+	_btnOk		= new BattlescapeButton(35, 22, 237, 0);
+	_btnPrev	= new BattlescapeButton(23, 22, 273, 0);
+	_btnNext	= new BattlescapeButton(23, 22, 297, 0);
 
-	_btnRank	= new InteractiveSurface(26, 23, 0, 0);
-	_btnUnload	= new InteractiveSurface(32, 25, 288, 32);
-	_btnGround	= new InteractiveSurface(30, 15, 290, 137);
+	_btnRank	= new BattlescapeButton(26, 23, 0, 0);
+	_btnUnload	= new BattlescapeButton(32, 25, 288, 32);
+	_btnGround	= new BattlescapeButton(30, 15, 290, 137);
 
-	_btnCreateTemplate	= new InteractiveSurface(
+	_btnCreateTemplate	= new BattlescapeButton(
 											32,
 											22,
 											_templateBtnX,
 											_createTemplateBtnY);
-	_btnApplyTemplate	= new InteractiveSurface(
+	_btnApplyTemplate	= new BattlescapeButton(
 											32,
 											22,
 											_templateBtnX,
 											_applyTemplateBtnY);
-	_btnClearInventory	= new InteractiveSurface(
+	_btnClearInventory	= new BattlescapeButton(
 											32,
 											22,
 											_templateBtnX,
@@ -169,6 +171,8 @@ InventoryState::InventoryState(
 	setPalette("PAL_BATTLESCAPE");
 
 	add(_bg);
+	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
+
 	add(_soldier);
 	add(_txtName, "textName", "inventory", _bg);
 
@@ -204,8 +208,6 @@ InventoryState::InventoryState(
 		_txtTus->setY(_txtTus->getY() + 8);
 
 	centerAllSurfaces();
-
-	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
 
 //	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setBig();
@@ -1375,6 +1377,10 @@ void InventoryState::_updateTemplateButtons(bool isVisible)
 			_game->getResourcePack()->getSurface("InvCopyActive")->blit(_btnCreateTemplate);
 			_game->getResourcePack()->getSurface("InvPaste")->blit(_btnApplyTemplate);
 		}
+
+		_btnCreateTemplate->initSurfaces();
+		_btnApplyTemplate->initSurfaces();
+		_btnClearInventory->initSurfaces();
 	}
 	else
 	{

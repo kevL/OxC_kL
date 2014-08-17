@@ -2382,14 +2382,14 @@ BattleUnit* TileEngine::hit(
  * @param power			- power of explosion
  * @param type			- damage type of explosion (enum ItemDamageType)
  * @param maxRadius		- maximum radius of explosion
- * @param unit			- pointer to a unit that caused explosion
+ * @param attacker			- pointer to a unit that caused explosion
  */
 void TileEngine::explode(
 			const Position& voxelTarget,
 			int power,
 			ItemDamageType type,
 			int maxRadius,
-			BattleUnit* unit)
+			BattleUnit* attacker)
 {
 /*	int iFalse = 0;
 	for (int
@@ -2631,7 +2631,7 @@ void TileEngine::explode(
 					}
 
 					int wounds = 0;
-					if (unit
+					if (attacker
 						&& targetUnit)
 					{
 						wounds = targetUnit->getFatalWounds();
@@ -2765,6 +2765,9 @@ void TileEngine::explode(
 											if (buOut->getHealth() < 1)
 											{
 												buOut->instaKill();
+
+												if (attacker)
+													buOut->killedBy(attacker->getFaction());
 
 												if (Options::battleNotifyDeath // send Death notice.
 													&& buOut->getOriginalFaction() == FACTION_PLAYER)
@@ -2924,6 +2927,9 @@ void TileEngine::explode(
 										{
 											buOut->instaKill();
 
+											if (attacker)
+												buOut->killedBy(attacker->getFaction());
+
 											if (Options::battleNotifyDeath // send Death notice.
 												&& buOut->getOriginalFaction() == FACTION_PLAYER)
 											{
@@ -2965,21 +2971,21 @@ void TileEngine::explode(
 
 						// if it's going to bleed to death and it's not a player, give credit for the kill.
 						// kL_note: See Above^
-						if (unit)
+						if (attacker)
 						{
 							if (wounds < targetUnit->getFatalWounds()
 								|| targetUnit->getHealth() == 0) // kL .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 							{
-								targetUnit->killedBy(unit->getFaction());
+								targetUnit->killedBy(attacker->getFaction());
 							}
 
-							if (unit->getOriginalFaction() == FACTION_PLAYER			// kL, shooter is Xcom
-								&& unit->getFaction() == FACTION_PLAYER					// kL, shooter is not Mc'd Xcom
+							if (attacker->getOriginalFaction() == FACTION_PLAYER			// kL, shooter is Xcom
+								&& attacker->getFaction() == FACTION_PLAYER					// kL, shooter is not Mc'd Xcom
 								&& targetUnit->getOriginalFaction() == FACTION_HOSTILE	// kL, target is aLien Mc'd or not; no Xp for shooting civies...
 								&& type != DT_SMOKE)									// sorry, no Xp for smoke!
-//								&& targetUnit->getFaction() != unit->getFaction())
+//								&& targetUnit->getFaction() != attacker->getFaction())
 							{
-								unit->addFiringExp();
+								attacker->addFiringExp();
 							}
 						}
 					}

@@ -81,6 +81,9 @@ private:
 
 		/// Special handling for setting the height of the battlescape message.
 		void setHeight(int height);
+
+		/// Sets the text color of the battlescape message.
+		void setTextColor(Uint8 color);
 };
 
 }

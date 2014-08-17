@@ -88,12 +88,12 @@ BattlescapeGame::BattlescapeGame(
 		_save(save),
 		_parentState(parentState),
 		_playedAggroSound(false),
-		_endTurnRequested(false),
-		_kneelReserved(false)
+		_endTurnRequested(false)
+//		_kneelReserved(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
-	_batReserved			= BA_NONE;
-	_playerBATReserved		= BA_NONE;
+//	_batReserved			= BA_NONE;
+//	_playerBATReserved		= BA_NONE;
 	_debugPlay				= false;
 	_playerPanicHandled		= true;
 	_AIActionCounter		= 0;
@@ -227,7 +227,7 @@ void BattlescapeGame::init()
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI() " << unit->getId();
-	_batReserved = BA_NONE;
+//	_batReserved = BA_NONE;
 
 
 	if (unit->getTimeUnits() < 4) // kL
@@ -537,7 +537,7 @@ bool BattlescapeGame::kneel(
 
 			if (checkReservedTU(bu, tu)
 				|| (tu == 4 //kL !bu->isKneeled()
-					&& _kneelReserved))
+					&& _save->getKneelReserved()))
 			{
 				if (bu->spendTimeUnits(tu))
 				{
@@ -590,7 +590,7 @@ void BattlescapeGame::endTurn()
 	_deleted.clear(); */
 // delete CTD_end.
 
-	_batReserved	= _playerBATReserved;
+//	_batReserved	= _playerBATReserved;
 	_debugPlay		= false;
 	_AISecondMove	= false;
 	_parentState->showLaunchButton(false);
@@ -648,8 +648,8 @@ void BattlescapeGame::endTurn()
 	if (t)
 	{
 		Position pos = Position(
-//kL							t->getPosition().x * 16,
-//kL							t->getPosition().y * 16,
+//kL						t->getPosition().x * 16,
+//kL						t->getPosition().y * 16,
 							t->getPosition().x * 16 + 8, // kL
 							t->getPosition().y * 16 + 8, // kL
 							t->getPosition().z * 24);
@@ -1747,14 +1747,24 @@ bool BattlescapeGame::checkReservedTU(
 		int tu,
 		bool test)
 {
-	BattleActionType actionReserved = _batReserved; // avoid changing _batReserved here.
+	BattleActionType actionReserved = _save->getTUReserved(); // avoid changing _batReserved here.
+
+	if (_save->getSide() != bu->getFaction()
+		|| _save->getSide() == FACTION_NEUTRAL)
+	{
+		return tu <= bu->getTimeUnits();
+	}
 
 	// aLiens reserve TUs as a percentage rather than just enough for a single action.
-	if (_save->getSide() != FACTION_PLAYER)
+	if (_save->getSide() == FACTION_HOSTILE)
+//	if (_save->getSide() != FACTION_PLAYER)
 	{
-		if (_save->getSide() == FACTION_NEUTRAL)
-			return (tu <= bu->getTimeUnits());
+//		if (_save->getSide() == FACTION_NEUTRAL)
+//			return (tu <= bu->getTimeUnits());
 
+		AlienBAIState* ai = dynamic_cast<AlienBAIState*>(bu->getCurrentAIState());
+		if (ai)
+			actionReserved = ai->getReserveMode();
 
 		int rand = RNG::generate(0, 10); // kL, added in below ->
 
@@ -1792,10 +1802,10 @@ bool BattlescapeGame::checkReservedTU(
 
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(
-					_batReserved,
+					actionReserved,
 					slowestWeapon)
 				== 0
-		&& _batReserved == BA_AUTOSHOT)
+		&& actionReserved == BA_AUTOSHOT)
 	{
 		actionReserved = BA_SNAPSHOT;
 	}
@@ -1805,19 +1815,18 @@ bool BattlescapeGame::checkReservedTU(
 					actionReserved,
 					slowestWeapon)
 				== 0
-		&& _batReserved == BA_SNAPSHOT)
+		&& actionReserved == BA_SNAPSHOT)
 	{
 		actionReserved = BA_AIMEDSHOT;
 	}
 
-	const int tuKneel = (_kneelReserved
+	const int tuKneel = (_save->getKneelReserved()
 							&& !bu->isKneeled()
-							&& bu->getType()
-						== "SOLDIER")? 4
+							&& bu->getType() == "SOLDIER")? 4
 						: 0;
 
 	if ((actionReserved != BA_NONE
-			|| _kneelReserved)
+			|| _save->getKneelReserved())
 		&& tu
 			+ tuKneel
 			+ bu->getActionTUs(
@@ -2611,17 +2620,16 @@ void BattlescapeGame::requestEndTurn()
  * @param bat		- a battleactiontype (BattlescapeGame.h)
  * @param player	- true if this requested by the player
  */
-void BattlescapeGame::setTUReserved(
-		BattleActionType bat,
-		bool player)
+void BattlescapeGame::setTUReserved(BattleActionType bat)
+//		bool player)
 {
-	_batReserved = bat;
+//	_batReserved = bat;
 
-	if (player)
-	{
-		_playerBATReserved = bat;
-		_save->setTUReserved(bat);
-	}
+//	if (player)
+//	{
+//		_playerBATReserved = bat;
+	_save->setTUReserved(bat);
+//	}
 }
 
 /**
@@ -3216,7 +3224,7 @@ bool BattlescapeGame::takeItem(
  */
 BattleActionType BattlescapeGame::getReservedAction()
 {
-	return _batReserved;
+	return _save->getTUReserved();
 }
 
 /**
@@ -3290,7 +3298,7 @@ void BattlescapeGame::tallyUnits(
  */
 void BattlescapeGame::setKneelReserved(bool reserved)
 {
-	_kneelReserved = reserved;
+//	_kneelReserved = reserved;
 	_save->setKneelReserved(reserved);
 }
 
@@ -3300,13 +3308,15 @@ void BattlescapeGame::setKneelReserved(bool reserved)
  */
 bool BattlescapeGame::getKneelReserved()
 {
-	if (_save->getSelectedUnit()
-		&& _save->getSelectedUnit()->getGeoscapeSoldier())
-	{
-		return _kneelReserved;
-	}
+	return _save->getKneelReserved();
 
-	return false;
+//	if (_save->getSelectedUnit()
+//		&& _save->getSelectedUnit()->getGeoscapeSoldier())
+//	{
+//		return _kneelReserved;
+//	}
+
+//	return false;
 }
 
 /**
