@@ -2749,7 +2749,8 @@ void TileEngine::explode(
 									else if (_powerE > (*it)->getRules()->getArmor())
 									{
 										if (buOut != NULL
-											&& buOut->getStatus() == STATUS_UNCONSCIOUS)
+											&& buOut->getStatus() == STATUS_UNCONSCIOUS
+											&& buOut->getTakenExpl() == false)
 										{
 											buOut->setTakenExpl();
 
@@ -2766,7 +2767,7 @@ void TileEngine::explode(
 											{
 												buOut->instaKill();
 
-												if (attacker)
+												if (attacker != NULL)
 													buOut->killedBy(attacker->getFaction());
 
 												if (Options::battleNotifyDeath // send Death notice.
@@ -2804,7 +2805,7 @@ void TileEngine::explode(
 							if (destTile->getSmoke() < 10
 								&& destTile->getTerrainLevel() > -24)
 							{
-								destTile->setFire(0);
+								destTile->setFire(0); // smoke puts out fire, hm.
 								destTile->setSmoke(RNG::generate(7, 15));
 							}
 
@@ -2834,8 +2835,11 @@ void TileEngine::explode(
 							{
 								BattleUnit* buOut = (*it)->getUnit();
 								if (buOut != NULL
-									&& buOut->getStatus() == STATUS_UNCONSCIOUS)
+									&& buOut->getStatus() == STATUS_UNCONSCIOUS
+									&& buOut->getTakenExpl() == false)
 								{
+									buOut->setTakenExpl();
+
 									powerVsUnit = RNG::generate( // 10% to 20%
 															_powerE / 10,
 															_powerE / 5);
@@ -2850,50 +2854,72 @@ void TileEngine::explode(
 						break;
 						case DT_IN:
 						{
-							if (!destTile->isVoid())
+							Tile* fireTile = destTile;
+							Tile* tileBelow = _battleSave->getTile(fireTile->getPosition() - Position(0, 0, 1));
+							if (fireTile->getPosition().z > 0
+								&& fireTile->getMapData(MapData::O_OBJECT) == NULL
+								&& fireTile->getMapData(MapData::O_FLOOR) == NULL
+								&& fireTile->hasNoFloor(tileBelow) == true)
 							{
+								while (fireTile->hasNoFloor(tileBelow)
+									&& fireTile->getPosition().z > 0)
+								{
+									fireTile = tileBelow;
+									tileBelow = _battleSave->getTile(fireTile->getPosition() - Position(0, 0, 1));
+								}
+							}
+
+//							if (fireTile->isVoid() == false)
+//							{
 								// kL_note: So, this just sets a tile on fire/smoking regardless of its content.
 								// cf. Tile::ignite() -> well, not regardless, but automatically. That is,
 								// ignite() checks for Flammability first: if (getFlammability() == 255) don't do it.
 								// So this is, like, napalm from an incendiary round, while ignite() is for parts
 								// of the tile itself self-igniting.
-								if (destTile->getFire() == 0
-									&& (destTile->getMapData(MapData::O_FLOOR)
-										|| destTile->getMapData(MapData::O_OBJECT))) // only floors & content can catch fire.
+
+//							tileBelow = _battleSave->getTile(fireTile->getPosition() - Position(0, 0, 1));
+							if (fireTile->getFire() == 0
+								&& (fireTile->getMapData(MapData::O_OBJECT) // only floors & content can catch fire.
+									|| fireTile->getMapData(MapData::O_FLOOR)
+									|| fireTile->hasNoFloor(tileBelow) == false)) // these might be somewhat redundant ... cf above^
+							{
+								fireTile->setFire(fireTile->getFuel() + 1);
+								fireTile->setSmoke(std::max(
+														1,
+														std::min(
+																15 - (fireTile->getFlammability() / 10),
+																12)));
+							}
+//							}
+
+							// kL_note: fire damage is also caused by BattlescapeGame::endTurn()
+							// -- but previously by BattleUnit::prepareNewTurn()!!!!
+							targetUnit = fireTile->getUnit();
+							if (targetUnit
+								&& targetUnit->getTakenExpl() == false)
+							{
+								targetUnit->setTakenExpl();
+
+								float modifier = targetUnit->getArmor()->getDamageModifier(DT_IN);
+								if (modifier > 0.f)
 								{
-									destTile->setFire(destTile->getFuel() + 1);
-									destTile->setSmoke(std::max(
-															1,
-															std::min(
-																	15 - (destTile->getFlammability() / 10),
-																	12)));
-								}
+//kL								int fire = RNG::generate(4, 11);
+									powerVsUnit = RNG::generate( // kL: 25% - 75%
+															_powerE / 4,
+															_powerE * 3 / 4);
 
-								// kL_note: fire damage is also caused by BattlescapeGame::endTurn()
-								// -- but previously by BattleUnit::prepareNewTurn()!!!!
-								if (targetUnit)
-								{
-									float modifier = targetUnit->getArmor()->getDamageModifier(DT_IN);
-									if (modifier > 0.f)
-									{
-//kL									int fire = RNG::generate(4, 11);
-										powerVsUnit = RNG::generate( // kL: 25% - 75%
-																_powerE / 4,
-																_powerE * 3 / 4);
+									targetUnit->damage(
+													Position(0, 0, 0), // 12 - destTile->getTerrainLevel()
+													powerVsUnit,
+													DT_IN,
+													true);
+									//Log(LOG_INFO) << ". . DT_IN : " << targetUnit->getId() << " takes " << firePower << " firePower";
 
-										targetUnit->damage(
-														Position(0, 0, 0), // 12 - destTile->getTerrainLevel()
-														powerVsUnit,
-														DT_IN,
-														true);
-										//Log(LOG_INFO) << ". . DT_IN : " << targetUnit->getId() << " takes " << firePower << " firePower";
-
-										int burnTime = RNG::generate(
-																	0,
-																	static_cast<int>(5.f * modifier));
-										if (targetUnit->getFire() < burnTime)
-											targetUnit->setFire(burnTime); // catch fire and burn!!
-									}
+									int burnTime = RNG::generate(
+																0,
+																static_cast<int>(5.f * modifier));
+									if (targetUnit->getFire() < burnTime)
+										targetUnit->setFire(burnTime); // catch fire and burn!!
 								}
 							}
 
@@ -2901,11 +2927,11 @@ void TileEngine::explode(
 							bool done = false;
 							while (!done)
 							{
-								done = destTile->getInventory()->empty();
+								done = fireTile->getInventory()->empty();
 
 								for (std::vector<BattleItem*>::iterator
-										it = destTile->getInventory()->begin();
-										it != destTile->getInventory()->end();
+										it = fireTile->getInventory()->begin();
+										it != fireTile->getInventory()->end();
 										)
 								{
 //									int fire = RNG::generate(4, 11);
@@ -2915,8 +2941,11 @@ void TileEngine::explode(
 
 									BattleUnit* buOut = (*it)->getUnit();
 									if (buOut != NULL
-										&& buOut->getStatus() == STATUS_UNCONSCIOUS)
+										&& buOut->getStatus() == STATUS_UNCONSCIOUS
+										&& buOut->getTakenExpl() == false)
 									{
+										buOut->setTakenExpl();
+
 										buOut->damage(
 													Position(0, 0, 0),
 													powerVsUnit,
@@ -2927,7 +2956,7 @@ void TileEngine::explode(
 										{
 											buOut->instaKill();
 
-											if (attacker)
+											if (attacker != NULL)
 												buOut->killedBy(attacker->getFaction());
 
 											if (Options::battleNotifyDeath // send Death notice.
@@ -2952,7 +2981,7 @@ void TileEngine::explode(
 									else
 									{
 										++it;
-										done = (it == destTile->getInventory()->end());
+										done = (it == fireTile->getInventory()->end());
 									}
 								}
 							}

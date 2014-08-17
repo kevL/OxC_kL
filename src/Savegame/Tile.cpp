@@ -797,9 +797,9 @@ void Tile::ignite(int power)
 		int burn = getFlammability(); // <- lower is better :)
 		if (burn != 255)
 		{
-			power = power - (burn / 10) + 15;
-			if (RNG::percent(power)
-				&& getFuel())
+			power -= (burn / 10) + 15;
+			if (getFuel()
+				&& RNG::percent(power))
 			{
 //kL				_smoke = 15 - std::max(
 //kL									1,
@@ -1068,7 +1068,6 @@ void Tile::prepareNewTurn()
 								(_smoke / _overlaps) - 1,
 								15));
 	}
-
 
 	if (_unit
 		&& !_unit->isOut(true)
