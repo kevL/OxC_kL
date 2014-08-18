@@ -86,6 +86,7 @@ private:
 		_cursorSize,
 		_iconHeight,
 		_iconWidth,
+		_messageColor,
 		_mouseX,
 		_mouseY,
 		_reveal, // kL

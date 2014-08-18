@@ -131,6 +131,7 @@ Map::Map(
 	//Log(LOG_INFO) << "Create Map";
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
+	_messageColor = _game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color;
 
 //kL	_smoothCamera = Options::battleSmoothCamera;
 
@@ -161,7 +162,8 @@ Map::Map(
 	_message->setX(_game->getScreen()->getDX());
 	_message->setY(_game->getScreen()->getDY());
 //	_message->setY((visibleMapHeight - _message->getHeight()) / 2);
-	_message->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color);
+//	_message->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color);
+	_message->setTextColor(_messageColor);
 
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)& Map::scrollMouse);
@@ -702,8 +704,9 @@ void Map::drawTerrain(Surface* surface)
 	{
 		_numWaypid = new NumberText(15, 15, 20, 30);
 		_numWaypid->setPalette(getPalette());
-//kL		_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn? 0: 1));
-		_numWaypid->setColor(16); // kL, lt.orange
+//kL	_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn? 0: 1));
+		_numWaypid->setColor(pathfinderTurnedOn? _messageColor + 1: Palette::blockOffset(1));
+//		_numWaypid->setColor(16); // kL, lt.orange
 	}
 
 	surface->lock();

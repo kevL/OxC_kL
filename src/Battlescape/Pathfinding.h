@@ -100,9 +100,15 @@ private:
 
 
 	public:
-		static const int DIR_UP		= 8;
-		static const int DIR_DOWN	= 9;
-		static const int O_BIGWALL	= -1;
+		static const int
+			DIR_UP		=  8,
+			DIR_DOWN	=  9,
+			O_BIGWALL	= -1;
+
+		static int
+			red,
+			green,
+			yellow;
 
 		enum bigWallTypes
 		{
