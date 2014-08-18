@@ -1561,9 +1561,9 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 		if ((*spotter)->getFaction() != _battleSave->getSide()
 			&& !(*spotter)->isOut(true, true))
 		{
-/*kL			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*spotter)->getCurrentAIState());
+/*kL		AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*spotter)->getCurrentAIState());
 			if (((aggro != 0
-						&& aggro->getWasHit()) // set in ProjectileFlyBState...
+						&& aggro->getWasHitBy(unit->getId())) // set in ProjectileFlyBState...
 					|| (*spotter)->getFaction() == FACTION_HOSTILE // note: doesn't this cover the aggro-thing, like totally
 					|| (*spotter)->checkViewSector(unit->getPosition())) // aLiens see all directions, btw. */
 			if (((*spotter)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units

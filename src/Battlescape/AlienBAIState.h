@@ -53,7 +53,6 @@ protected:
 		_melee,
 		_rifle,
 		_traceAI;
-//kL	_wasHit;
 	int
 		_AIMode,
 		_closestDist,
@@ -68,6 +67,7 @@ protected:
 	std::vector<int>
 		_reachable,
 		_reachableWithAttack;
+//		_wasHitBy;
 
 	BattleUnit* _aggroTarget;
 	BattleAction
@@ -105,9 +105,9 @@ protected:
 		void think(BattleAction* action);
 
 		/// Sets the "unit was hit" flag true.
-//kL		void setWasHit();
+//kL	void setWasHitBy(BattleUnit *attacker);
 		/// Gets whether the unit was hit.
-//kL		bool getWasHit() const;
+//kL	getWasHitBy(int attacker) const;
 
 		/// setup a patrol objective.
 		void setupPatrol();

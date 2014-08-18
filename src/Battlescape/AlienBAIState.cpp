@@ -81,7 +81,6 @@ AlienBAIState::AlienBAIState(
 		_melee(false),
 		_blaster(false),
 		_grenade(false), // kL
-//kL	_wasHit(false),
 		_didPsi(false),
 		_AIMode(AI_PATROL),
 		_closestDist(100),
@@ -128,7 +127,7 @@ void AlienBAIState::load(const YAML::Node& node)
 	fromNodeID	= node["fromNode"].as<int>(-1);
 	toNodeID	= node["toNode"].as<int>(-1);
 	_AIMode		= node["AIMode"].as<int>(0);
-//kL	_wasHit		= node["wasHit"].as<bool>(false);
+//	_wasHitBy	= node["wasHitBy"].as<std::vector<int> >(_wasHitBy);
 
 	if (fromNodeID != -1)
 		_fromNode = _save->getNodes()->at(fromNodeID);
@@ -157,7 +156,7 @@ YAML::Node AlienBAIState::save() const
 	node["fromNode"]	= fromNodeID;
 	node["toNode"]		= toNodeID;
 	node["AIMode"]		= _AIMode;
-//kL	node["wasHit"]		= _wasHit;
+//kL	node["wasHitBy"]		= _wasHitBy;
 
 	return node;
 }
@@ -219,6 +218,8 @@ void AlienBAIState::think(BattleAction* action)
 													_unit,
 													_unit->getTimeUnits());
 //														- rand);
+
+//	_wasHitBy.clear();
 
 	if (_unit->getCharging()
 		&& _unit->getCharging()->isOut(true, true))
@@ -528,18 +529,19 @@ void AlienBAIState::think(BattleAction* action)
 /**
  * sets the "was hit" flag to true.
  */
-/*kL void AlienBAIState::setWasHit()
+/*kL void AlienBAIState::setWasHitBy(BattleUnit* attacker)
 {
-	_wasHit = true;
+	if (attacker->getFaction() != _unit->getFaction() && !getWasHitBy(attacker->getId()))
+		_wasHitBy.push_back(attacker->getId());
 } */
 
 /*
  * Gets whether the unit was hit.
  * @return if it was hit.
  */
-/*kL bool AlienBAIState::getWasHit() const
+/*kL bool AlienBAIState::getWasHitBy(int attacker) const
 {
-	return _wasHit;
+	return std::find(_wasHitBy.begin(), _wasHitBy.end(), attacker) != _wasHitBy.end();
 } */
 
 /**
