@@ -97,17 +97,17 @@ Inventory::Inventory(
 								RuleInventory::HAND_H * RuleInventory::SLOT_H,
 								x,
 								y);
+	_warning		= new WarningMessage(224, 24, 48, 176);
 
 	_stackNumber	= new NumberText(15, 15, 0, 0);
 	_stackNumber->setBordered(true);
 
-	_warning		= new WarningMessage(224, 24, 48, 176);
 	_warning->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
 					_game->getResourcePack()->getFont("FONT_SMALL"),
 					_game->getLanguage());
-	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1)-1);
+	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2); //Palette::blockOffset(2));
+	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color); //Palette::blockOffset(1)-1);
 
 	_animTimer = new Timer(80);
 	_animTimer->onTimer((SurfaceHandler)& Inventory::drawPrimers);

@@ -45,6 +45,7 @@ class ActionMenuItem
 private:
 	bool _highlighted;
 	int
+		_highlightModifier,
 		_id,
 		_tu;
 

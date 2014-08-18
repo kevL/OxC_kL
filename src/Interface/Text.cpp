@@ -83,7 +83,7 @@ Text::~Text()
  * @return, formatted string
  */
 std::wstring Text::formatNumber(
-		int value,
+		int64_t value,
 		std::wstring currency,
 		bool space)
 {
@@ -137,7 +137,7 @@ std::wstring Text::formatNumber(
  * @param funds The funding value.
  * @return The formatted string.
  */
-std::wstring Text::formatFunding(int funds)
+std::wstring Text::formatFunding(int64_t funds)
 {
 	return formatNumber(funds, L"$");
 }

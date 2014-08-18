@@ -44,10 +44,7 @@
 #include "../Engine/SurfaceSet.h"
 
 #include "../Geoscape/GeoscapeState.h" // kL: soundPop
-#include "../Geoscape/Globe.h"
 #include "../Geoscape/GraphsState.h" // kL: sound Pop
-#include "../Geoscape/Polygon.h"
-#include "../Geoscape/Polyline.h"
 
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
@@ -473,6 +470,9 @@ XcomResourcePack::XcomResourcePack( // kL
 	scang << "GEODATA/" << "SCANG.DAT";
 	_sets["SCANG.DAT"]->loadDat(CrossPlatform::getDataFile(scang.str()));
 
+/*
+MOVED TO Ruleset !
+
 	std::ostringstream s; // Load polygons
 	s << "GEODATA/" << "WORLD.DAT";
 	Globe::loadDat(
@@ -480,7 +480,7 @@ XcomResourcePack::XcomResourcePack( // kL
 				&_polygons);
 
 
-	/* LINES */
+	// LINES /
 	// Load polylines (extracted from game)
 	// -10 = Start of line
 	// -20 = End of data
@@ -582,7 +582,7 @@ XcomResourcePack::XcomResourcePack( // kL
 		}
 	}
 
-	_polylines.push_back(line);
+	_polylines.push_back(line); */
 
 
 	/* MUSICS */
@@ -1149,6 +1149,8 @@ XcomResourcePack::XcomResourcePack( // kL
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
 
 	/* EXTRA SPRITES */
+	std::ostringstream s;
+
 	for (std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator
 			i = extraSprites.begin();
 			i != extraSprites.end();
@@ -1473,7 +1475,7 @@ XcomResourcePack::XcomResourcePack( // kL
 }
 
 /**
- *
+ * dTor.
  */
 XcomResourcePack::~XcomResourcePack()
 {

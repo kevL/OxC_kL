@@ -23,6 +23,8 @@
 #include <string>
 #include <vector>
 
+#include <stdint.h>
+
 #include "../Engine/Surface.h"
 
 
@@ -103,11 +105,11 @@ private:
 
 		/// Formats an integer value as number with separators.
 		static std::wstring formatNumber(
-				int value,
+				int64_t value,
 				std::wstring currency = L"",
 				bool space = true);
 		/// Formats an integer value as currency.
-		static std::wstring formatFunding(int funds);
+		static std::wstring formatFunding(int64_t funds);
 		/// Formats an integer value as percentage.
 		static std::wstring formatPercentage(int value);
 

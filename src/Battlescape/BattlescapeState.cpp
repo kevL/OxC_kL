@@ -190,12 +190,12 @@ BattlescapeState::BattlescapeState()
 	_btnEndTurn			= new BattlescapeButton(32,  16, x + 240, y);
 	_btnAbort			= new BattlescapeButton(32,  16, x + 240, y + 16);
 	_btnStats			= new InteractiveSurface(164, 23, x + 107, y + 33);
-/*	_btnReserveNone = new BattlescapeButton(17, 11, x + 60, y + 33);
-	_btnReserveSnap = new BattlescapeButton(17, 11, x + 78, y + 33);
-	_btnReserveAimed = new BattlescapeButton(17, 11, x + 60, y + 45);
-	_btnReserveAuto = new BattlescapeButton(17, 11, x + 78, y + 45);
-	_btnReserveKneel = new BattlescapeButton(10, 23, x + 96, y + 33);
-	_btnZeroTUs = new BattlescapeButton(10, 23, x + 49, y + 33); */
+/*	_btnReserveNone		= new BattlescapeButton(17, 11, x + 60, y + 33);
+	_btnReserveSnap		= new BattlescapeButton(17, 11, x + 78, y + 33);
+	_btnReserveAimed	= new BattlescapeButton(17, 11, x + 60, y + 45);
+	_btnReserveAuto		= new BattlescapeButton(17, 11, x + 78, y + 45);
+	_btnReserveKneel	= new BattlescapeButton(10, 23, x + 96, y + 33);
+	_btnZeroTUs			= new BattlescapeButton(10, 23, x + 49, y + 33); */
 
 	_btnZeroTUs			= new InteractiveSurface(57, 23,x + 49, y + 33); // kL
 
@@ -696,8 +696,8 @@ BattlescapeState::BattlescapeState()
 		_numVisibleUnit[i]->setValue(i + 1);
 	}
 
-	_warning->setColor(Palette::blockOffset(2));
-	_warning->setTextColor(Palette::blockOffset(1));
+	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2); //Palette::blockOffset(2));
+	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color); //Palette::blockOffset(1));
 
 	_btnLaunch->onMouseClick((ActionHandler)& BattlescapeState::btnLaunchClick);
 	_btnPsi->onMouseClick((ActionHandler)& BattlescapeState::btnPsiClick);

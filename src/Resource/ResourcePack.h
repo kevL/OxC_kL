@@ -21,7 +21,6 @@
 #define OPENXCOM_RESOURCEPACK_H
 
 #include <map>
-#include <list>
 #include <string>
 #include <vector>
 
@@ -34,8 +33,6 @@ namespace OpenXcom
 class Font;
 class Music;
 class Palette;
-class Polygon;
-class Polyline;
 class Sound;
 class SoundSet;
 class Surface;
@@ -61,9 +58,6 @@ private:
 
 
 	protected:
-		std::list<Polygon*>		_polygons;
-		std::list<Polyline*>	_polylines;
-
 		std::map<std::string, Font*>		_fonts;
 		std::map<std::string, Music*>		_musics;
 		std::map<std::string, Palette*>		_palettes;
@@ -90,11 +84,6 @@ private:
 			Surface* getSurface(const std::string& name) const;
 			/// Gets a particular surface set.
 			SurfaceSet* getSurfaceSet(const std::string& name) const;
-
-			/// Gets the list of world polygons.
-			std::list<Polygon*>* getPolygons();
-			/// Gets the list of world polylines.
-			std::list<Polyline*>* getPolylines();
 
 			/// Gets a particular music.
 			Music* getMusic(const std::string& name) const;

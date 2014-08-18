@@ -1818,12 +1818,12 @@ void GraphsState::drawFinanceLines() // Council Analytics
 		}
 		else
 		{
-			income[itMonth]			= _game->getSavedGame()->getIncomeList().at(itRev) / 1000;		// kL, perhaps add Country funding
-			expenditure[itMonth]	= _game->getSavedGame()->getExpenditureList().at(itRev) / 1000;	// kL
-			maintenance[itMonth]	= _game->getSavedGame()->getMaintenances().at(itRev) / 1000;
+			income[itMonth]			= static_cast<int>(_game->getSavedGame()->getIncomeList().at(itRev)) / 1000;		// kL, perhaps add Country funding
+			expenditure[itMonth]	= static_cast<int>(_game->getSavedGame()->getExpenditureList().at(itRev)) / 1000;	// kL
+			maintenance[itMonth]	= static_cast<int>(_game->getSavedGame()->getMaintenances().at(itRev)) / 1000;
 		}
 
-		balance[itMonth]	= _game->getSavedGame()->getFundsList().at(itRev) / 1000;
+		balance[itMonth]	= static_cast<int>(_game->getSavedGame()->getFundsList().at(itRev)) / 1000; // note: these (int)casts renders int64_t useless.
 		score[itMonth]		= _game->getSavedGame()->getResearchScores().at(itRev);
 
 

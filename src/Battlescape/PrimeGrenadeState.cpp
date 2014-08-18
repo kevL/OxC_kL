@@ -35,6 +35,9 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleInterface.h"
+
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
@@ -98,6 +101,8 @@ PrimeGrenadeState::PrimeGrenadeState(
 	else
 		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
+	Element* grenadeBackground = _game->getRuleset()->getInterface("battlescape")->getElement("grenadeBackground");
+
 /*	SDL_Rect square;
 	square.x = 0;
 	square.y = 0;
@@ -105,20 +110,20 @@ PrimeGrenadeState::PrimeGrenadeState(
 	square.h = _srfBG->getHeight();
 	_srfBG->drawRect(&square, Palette::blockOffset(6)+9); */
 	add(_srfBG);
-	_srfBG->drawRect(0, 0, _srfBG->getWidth(), _srfBG->getHeight(), Palette::blockOffset(6)+9);
+	_srfBG->drawRect(0, 0, _srfBG->getWidth(), _srfBG->getHeight(), grenadeBackground->color); //Palette::blockOffset(6)+9);
 
-	add(_fraTop);
-	_fraTop->setColor(Palette::blockOffset(6)+3);
+	add(_fraTop, "grenadeMenu", "battlescape");
+//	_fraTop->setColor(Palette::blockOffset(6)+3);
 //kL	_fraTop->setBackground(Palette::blockOffset(6)+12);
 	_fraTop->setBackground(Palette::blockOffset(8)+4); // kL
 	_fraTop->setThickness(3);
 	_fraTop->setHighContrast(true);
 
-	add(_txtTitle);
+	add(_txtTitle, "grenadeMenu", "battlescape");
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SET_TIMER"));
-	_txtTitle->setColor(Palette::blockOffset(1)-1);
+//	_txtTitle->setColor(Palette::blockOffset(1)-1);
 	_txtTitle->setHighContrast(true);
 
 	// kL_begin:
@@ -164,20 +169,20 @@ PrimeGrenadeState::PrimeGrenadeState(
 		square.y = 0;
 		square.w = _isfBtn[i]->getWidth();
 		square.h = _isfBtn[i]->getHeight();
-		_isfBtn[i]->drawRect(&square, Palette::blockOffset(0)+15);
+		_isfBtn[i]->drawRect(&square, grenadeBackground->border); //Palette::blockOffset(0)+15);
 
 		square.x++; // inside fill
 		square.y++;
 		square.w -= 2;
 		square.h -= 2;
-		_isfBtn[i]->drawRect(&square, Palette::blockOffset(6)+12);
+		_isfBtn[i]->drawRect(&square, grenadeBackground->color2); //Palette::blockOffset(6)+12);
 
-		add(_txtTurn[i]);
+		add(_txtTurn[i], "grenadeMenu", "battlescape");
 		std::wostringstream ss;
 		ss << i + 1;
 		_txtTurn[i]->setText(ss.str());
 //		_txtTurn[i]->setBig();
-		_txtTurn[i]->setColor(Palette::blockOffset(1)-1);
+//		_txtTurn[i]->setColor(Palette::blockOffset(1)-1);
 		_txtTurn[i]->setHighContrast(true);
 		_txtTurn[i]->setAlign(ALIGN_CENTER);
 		_txtTurn[i]->setVerticalAlign(ALIGN_MIDDLE);

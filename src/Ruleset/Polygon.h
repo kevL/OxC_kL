@@ -17,33 +17,47 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_POLYLINE_H
-#define OPENXCOM_POLYLINE_H
+#ifndef OPENXCOM_POLYGON_H
+#define OPENXCOM_POLYGON_H
+
+#include <SDL.h>
+
+#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
 {
 
 /**
- * Represents a polyline in the world map.
- * Polylines constitute the textured land portions
+ * Represents a polygon in the world map.
+ * Polygons constitute the textured land portions
  * of the X-Com globe and typically have 3-4 points.
  */
-class Polyline
+class Polygon
 {
 
 private:
-	const int _points;
+	int
+		_points,
+		_texture;
+	Sint16
+		* _x,
+		* _y;
 	double
 		* _lat,
 		* _lon;
 
 
 	public:
-		/// Creates a polyline with a number of points.
-		Polyline(int points);
-		/// Cleans up the polyline.
-		~Polyline();
+		/// Creates a polygon with a number of points.
+		Polygon(int points);
+		/// Creates a new polygon from an existing one.
+		Polygon(const Polygon& other);
+		/// Cleans up the polygon.
+		~Polygon();
+
+		/// Loads the polygon from YAML.
+		void load(const YAML::Node& node);
 
 		/// Gets the latitude of a point.
 		double getLatitude(int i) const;
@@ -58,7 +72,25 @@ private:
 				int i,
 				double lon);
 
-		/// Gets the number of points of the polyline.
+		/// Gets the X coordinate of a point.
+		Sint16 getX(int i) const;
+		/// Sets the X coordinate of a point.
+		void setX(
+				int i,
+				Sint16 x);
+		/// Gets the Y coordinate of a point.
+		Sint16 getY(int i) const;
+		/// Sets the Y coordinate of a point.
+		void setY(
+				int i,
+				Sint16 y);
+
+		/// Gets the texture of the polygon.
+		int getTexture() const;
+		/// Sets the texture of the polygon.
+		void setTexture(int tex);
+
+		/// Gets the number of points of the polygon.
 		int getPoints() const;
 };
 

@@ -17,7 +17,11 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#define _USE_MATH_DEFINES
+
 #include "Polygon.h"
+
+#include <cmath>
 
 
 namespace OpenXcom
@@ -84,6 +88,42 @@ Polygon::~Polygon()
 	delete[] _lon;
 	delete[] _x;
 	delete[] _y;
+}
+
+/**
+ * Loads the polygon from a YAML file.
+ * @param node YAML node.
+ */
+void Polygon::load(const YAML::Node& node)
+{
+	delete[] _lat;
+	delete[] _lon;
+	delete[] _x;
+	delete[] _y;
+
+	std::vector<double> coords = node.as<std::vector<double> >();
+	_points = (coords.size() - 1) / 2;
+
+	_lat = new double[_points];
+	_lon = new double[_points];
+
+	_x = new Sint16[_points];
+	_y = new Sint16[_points];
+
+	_texture = static_cast<int>(coords[0]);
+	for (size_t
+			i = 1;
+			i < coords.size();
+			i += 2)
+	{
+		size_t j = (i - 1) / 2;
+
+		_lon[j] = coords[i] * M_PI / 180.0;
+		_lat[j] = coords[i + 1] * M_PI / 180.0;
+
+		_x[j] = 0;
+		_y[j] = 0;
+	}
 }
 
 /**

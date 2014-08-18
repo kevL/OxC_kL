@@ -28,11 +28,7 @@
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
-#include "../Geoscape/Polygon.h"
-#include "../Geoscape/Polyline.h"
-
 #include "../Engine/Options.h"
-//#include "../Engine/RNG.h" // Old, for random music
 #include "../Engine/Sound.h"
 #include "../Engine/SoundSet.h"
 
@@ -51,8 +47,6 @@ ResourcePack::ResourcePack()
 		_surfaces(),
 		_sets(),
 		_sounds(),
-		_polygons(),
-		_polylines(),
 		_musics(),
 		_musicFile(), // sza_MusicRules
 		_musicAssignment() // sza_MusicRules
@@ -92,22 +86,6 @@ ResourcePack::~ResourcePack()
 			++i)
 	{
 		delete i->second;
-	}
-
-	for (std::list<Polygon*>::iterator
-			i = _polygons.begin();
-			i != _polygons.end();
-			++i)
-	{
-		delete *i;
-	}
-
-	for (std::list<Polyline*>::iterator
-			i = _polylines.begin();
-			i != _polylines.end();
-			++i)
-	{
-		delete *i;
 	}
 
 	for (std::map<std::string, Palette*>::iterator
@@ -190,24 +168,6 @@ SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 	}
 	else
 		return NULL;
-}
-
-/**
- * Returns the list of polygons in the resource set.
- * @return, Pointer to the list of polygons.
- */
-std::list<Polygon*>* ResourcePack::getPolygons()
-{
-	return &_polygons;
-}
-
-/**
- * Returns the list of polylines in the resource set.
- * @return, Pointer to the list of polylines.
- */
-std::list<Polyline*>* ResourcePack::getPolylines()
-{
-	return &_polylines;
 }
 
 /**

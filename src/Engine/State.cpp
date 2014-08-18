@@ -36,6 +36,7 @@
 #include "../Interface/ComboBox.h"
 #include "../Interface/Cursor.h"
 #include "../Interface/FpsCounter.h"
+#include "../Interface/Frame.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -165,6 +166,7 @@ void State::add(
 			Text* text = dynamic_cast<Text*>(surface);
 			Bar* bar = dynamic_cast<Bar*>(surface);
 			TextButton* tb = dynamic_cast<TextButton*>(surface);
+			Frame* frame = dynamic_cast<Frame*>(surface);
 
 			if (bsbtn)
 				bsbtn->setColor(element->color);
@@ -184,6 +186,11 @@ void State::add(
 			}
 			else if (tb)
 				tb->setColor(element->color);
+			else if (frame)
+			{
+				frame->setColor(element->border);
+				frame->setBackground(element->color2);
+			}
 		}
 
 		surface->invalidate(false);

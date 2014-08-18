@@ -457,11 +457,11 @@ void SavedGame::load(
 	_graphRegionToggles		= doc["graphRegionToggles"].as<std::string>(_graphRegionToggles);
 	_graphCountryToggles	= doc["graphCountryToggles"].as<std::string>(_graphCountryToggles);
 	_graphFinanceToggles	= doc["graphFinanceToggles"].as<std::string>(_graphFinanceToggles);
-	_funds					= doc["funds"].as<std::vector<int> >(_funds);
-	_maintenance			= doc["maintenance"].as<std::vector<int> >(_maintenance);
+	_funds					= doc["funds"].as<std::vector<int64_t> >(_funds);
+	_maintenance			= doc["maintenance"].as<std::vector<int64_t> >(_maintenance);
 	_researchScores			= doc["researchScores"].as<std::vector<int> >(_researchScores);
-	_income					= doc["income"].as<std::vector<int> >(_income);				// kL
-	_expenditure			= doc["expenditure"].as<std::vector<int> >(_expenditure);	// kL
+	_income					= doc["income"].as<std::vector<int64_t> >(_income);				// kL
+	_expenditure			= doc["expenditure"].as<std::vector<int64_t> >(_expenditure);	// kL
 	_warned					= doc["warned"].as<bool>(_warned);
 	_globeLon				= doc["globeLon"].as<double>(_globeLon);
 	_globeLat				= doc["globeLat"].as<double>(_globeLat);
@@ -995,7 +995,7 @@ void SavedGame::monthlyFunding()
  * Returns the player's current funds.
  * @return Current funds.
  */
-int SavedGame::getFunds() const
+int64_t SavedGame::getFunds() const
 {
 	return _funds.back();
 }
@@ -1004,7 +1004,7 @@ int SavedGame::getFunds() const
  * Returns the player's funds for the last 12 months.
  * @return funds.
  */
-std::vector<int>& SavedGame::getFundsList()
+std::vector<int64_t>& SavedGame::getFundsList()
 {
 	return _funds;
 }
@@ -1013,7 +1013,7 @@ std::vector<int>& SavedGame::getFundsList()
  * Changes the player's funds to a new value.
  * @param funds New funds.
  */
-void SavedGame::setFunds(int funds)
+void SavedGame::setFunds(int64_t funds)
 {
 	_funds.back() = funds;
 }
@@ -1022,7 +1022,7 @@ void SavedGame::setFunds(int funds)
  * return the list of monthly maintenance costs
  * @return list of maintenances.
  */
-std::vector<int>& SavedGame::getMaintenances()
+std::vector<int64_t>& SavedGame::getMaintenances()
 {
 	return _maintenance;
 }
@@ -1031,7 +1031,7 @@ std::vector<int>& SavedGame::getMaintenances()
  * kL. Return the list of monthly income values.
  * @return vector<int>, List of income values
  */
-std::vector<int>& SavedGame::getIncomeList() // kL
+std::vector<int64_t>& SavedGame::getIncomeList() // kL
 {
 	return _income;
 }
@@ -1040,7 +1040,7 @@ std::vector<int>& SavedGame::getIncomeList() // kL
  * kL. Return the list of monthly expenditure values.
  * @return vector<int>, List of income values
  */
-std::vector<int>& SavedGame::getExpenditureList() // kL
+std::vector<int64_t>& SavedGame::getExpenditureList() // kL
 {
 	return _expenditure;
 }

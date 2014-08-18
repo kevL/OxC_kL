@@ -25,6 +25,7 @@
 #include <vector>
 
 #include <time.h>
+#include <stdint.h>
 
 #include "GameTime.h"
 
@@ -250,12 +251,12 @@ private:
 
 	std::map<std::string, int> _ids;
 
-	std::vector<int>
-		_expenditure, // kL
+	std::vector<int> _researchScores;
+	std::vector<int64_t>
+		_expenditure,
 		_funds,
-		_income, // kL
-		_maintenance,
-		_researchScores;
+		_income,
+		_maintenance;
 
 	std::vector<AlienBase*>				_alienBases;
 	std::vector<AlienMission*>			_activeMissions;
@@ -339,18 +340,18 @@ private:
 		void monthlyFunding();
 
 		/// Gets the current funds.
-		int getFunds() const;
+		int64_t getFunds() const;
 		/// Gets the list of funds from previous months.
-		std::vector<int>& getFundsList();
+		std::vector<int64_t>& getFundsList();
 		/// Sets new funds.
-		void setFunds(int funds);
+		void setFunds(int64_t funds);
 
 		/// Returns a list of maintenance costs
-		std::vector<int>& getMaintenances();
+		std::vector<int64_t>& getMaintenances();
 		/// kL. Returns the list of monthly income values.
-		std::vector<int>& getIncomeList(); // kL
+		std::vector<int64_t>& getIncomeList(); // kL
 		/// kL. Returns the list of monthly expenditure values.
-		std::vector<int>& getExpenditureList(); // kL
+		std::vector<int64_t>& getExpenditureList(); // kL
 
 		/// Gets the current game time.
 		GameTime* getTime() const;

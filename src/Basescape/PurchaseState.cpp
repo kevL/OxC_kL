@@ -867,7 +867,7 @@ void PurchaseState::increaseByValue(int change)
 	}
 	else
 	{
-		int maxByMoney = (_game->getSavedGame()->getFunds() - _total) / getPrice();
+		int maxByMoney = (static_cast<int>(_game->getSavedGame()->getFunds()) - _total) / getPrice(); // note: (int)cast renders int64_t useless.
 		change = std::min(maxByMoney, change);
 
 		if (_sel <= 2) // Personnel count

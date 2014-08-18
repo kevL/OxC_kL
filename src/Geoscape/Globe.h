@@ -38,6 +38,7 @@ extern bool kL_reCenter;
 class Game;
 class LocalizedText;
 class Polygon;
+class RuleGlobe;
 class SurfaceSet;
 class Target;
 class Timer;
@@ -55,7 +56,7 @@ class Globe
 {
 
 private:
-	static const int NUM_TEXTURES	= 13;
+//	static const int NUM_TEXTURES	= 13;
 	static const int NUM_LANDSHADES	= 48;
 	static const int NUM_SEASHADES	= 72;
 	static const int NEAR_RADIUS	= 25;
@@ -93,10 +94,12 @@ private:
 	Uint32 _mouseScrollingStartTime;
 	size_t
 		_dfPreZoom,
-		_zoom;
+		_zoom,
+		_zoomTexture;
 
 	FastLineClip* _clipper;
 	Game* _game;
+	RuleGlobe* _rules;
 	Surface
 		* _countries,
 		* _markers,
@@ -197,11 +200,6 @@ private:
 				int y = 0);
 		/// Cleans up the globe.
 		~Globe();
-
-		/// Loads a set of polygons from a DAT file.
-		static void loadDat(
-				const std::string& filename,
-				std::list<Polygon*>* polygons);
 
 		/// Converts polar coordinates to cartesian coordinates.
 		void polarToCart(

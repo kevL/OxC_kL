@@ -29,7 +29,8 @@ globe:
     - [107.875, -21.5, 105.625, -23.375, 101.75, -21.25, 99.125, -22.125, 98.875, -24.25, 97.5, -24, 98.875, -27.375, 97.125, -27.25]
     - [91.625, -28, 88.875, -28.125]
     - [88.25, -28, 80.875, -30.375]
-    - [77.875, -35.375, 73.375, -39.375, 80.5, -42.25, 80, -45, 82.5, -45.125, 82.875, -47.25, 85.75, -47.125, 86.375, -49.125, 88, -49.125, 90.625, -45.25, 96.25, -42.75, 105, -41.5, 112, -43.625, 112.125, -45, 119.875, -46.75, 115.75, -47.75, 116.75, -49.875]regions:
+    - [77.875, -35.375, 73.375, -39.375, 80.5, -42.25, 80, -45, 82.5, -45.125, 82.875, -47.25, 85.75, -47.125, 86.375, -49.125, 88, -49.125, 90.625, -45.25, 96.25, -42.75, 105, -41.5, 112, -43.625, 112.125, -45, 119.875, -46.75, 115.75, -47.75, 116.75, -49.875]
+regions:
   - type: STR_NORTH_AMERICA
     cost: 900000
     areas:
@@ -9860,6 +9861,14 @@ interfaces:
         color: 35
       - id: buttonZeroTUs
         color: 35
+      - id: infoBoxOK
+        color: 15
+        color2: 27
+        border: 20
+      - id: grenadeMenu
+        color: 15
+        color2: 27
+        border: 20
       # The usage of the following is hard-coded, these ones MUST be defined
       - id: visibleUnits
         pos: [300, -16]
@@ -9868,12 +9877,21 @@ interfaces:
         size: [320, 56]
       - id: numLayers
         color: 15
+      - id: warning
+        color: 16
+        color2: 32
       - id: messageWindows
         color: -1
+        color2: 14
+        border: 7
       - id: actionMenu
         color: -1
         color2: 14
         border: 3
+      - id: grenadeBackground
+        color: 24
+        color2: 28
+        border: 15
   - type: inventory
     elements:
       - id: textName

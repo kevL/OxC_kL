@@ -41,6 +41,7 @@
 #include "RuleCountry.h"
 #include "RuleCraft.h"
 #include "RuleCraftWeapon.h"
+#include "RuleGlobe.h"
 #include "RuleInterface.h"
 #include "RuleInventory.h"
 #include "RuleItem.h"
@@ -108,6 +109,8 @@ Ruleset::Ruleset(Game* game) // kL
 		_invListOrder(0)
 {
 	//Log(LOG_INFO) << "Create Ruleset";
+	_globe = new RuleGlobe();
+
 	std::string path = CrossPlatform::getDataFolder("SoldierName/"); // Check in which data dir the folder is stored
 
 	std::vector<std::string> names = CrossPlatform::getFolderContents(path, "nam"); // Add soldier names
@@ -129,6 +132,8 @@ Ruleset::Ruleset(Game* game) // kL
  */
 Ruleset::~Ruleset()
 {
+	delete _globe;
+
 	for (std::vector<SoldierNamePool*>::iterator
 			i = _names.begin();
 			i != _names.end();
@@ -726,7 +731,8 @@ void Ruleset::loadFile(const std::string& filename)
 		}
 	}
 
-	_startingTime.load(doc["startingTime"]);
+	if (doc["startingTime"])
+		_startingTime.load(doc["startingTime"]);
 
 	_costSoldier	= doc["costSoldier"].as<int>(_costSoldier);
 	_costEngineer	= doc["costEngineer"].as<int>(_costEngineer);
@@ -885,6 +891,9 @@ void Ruleset::loadFile(const std::string& filename)
 		if (rule != NULL)
 			rule->load(*i);
 	}
+
+	if (doc["globe"])
+		_globe->load(doc["globe"]);
 
 	for (std::vector<std::string>::const_iterator // refresh _psiRequirements for psiStrengthEval
 			i = _facilitiesIndex.begin();
@@ -2016,6 +2025,15 @@ RuleInterface* Ruleset::getInterface(const std::string id) const
 		return i->second;
 	else
 		return NULL;
+}
+
+/**
+ * Gets the rules for the Geoscape globe.
+ * @return Pointer to globe rules.
+ */
+RuleGlobe* Ruleset::getGlobe() const
+{
+	return _globe;
 }
 
 }

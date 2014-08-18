@@ -52,6 +52,7 @@ class RuleCommendations;
 class RuleCountry;
 class RuleCraft;
 class RuleCraftWeapon;
+class RuleGlobe;
 class RuleInterface;
 class RuleInventory;
 class RuleItem;
@@ -104,6 +105,7 @@ protected:
 	YAML::Node _startingBase;
 
 	Game* _game; // kL
+	RuleGlobe* _globe;
 
 	std::vector<std::string>
 		_alienMissionsIndex,
@@ -311,6 +313,9 @@ protected:
 		const std::string getAlienFuel() const;
 		/// Gets information on an interface element.
 		RuleInterface* getInterface(const std::string id) const;
+
+		/// Gets the ruleset for the globe
+		RuleGlobe* getGlobe() const;
 };
 
 }
