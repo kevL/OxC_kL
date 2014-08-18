@@ -2113,8 +2113,8 @@ void BattleUnit::prepareNewTurn()
 	if (_health < 0)
 		_health = 0;
 
-	if (_health == 0
-		&& _currentAIState) // if unit is dead, AI state should be gone
+	if (_health == 0 // if unit is dead, AI state should be gone
+		&& _currentAIState != NULL)
 	{
 		_currentAIState->exit();
 
