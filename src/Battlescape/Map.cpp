@@ -488,7 +488,7 @@ void Map::drawTerrain(Surface* surface)
 {
 	//Log(LOG_INFO) << "Map::drawTerrain()";
 	BattleUnit* unit		= NULL;
-	NumberText* _numWaypid	= NULL;
+	NumberText* _numWpID	= NULL;
 	Surface* tmpSurface		= NULL;
 	Tile* tile				= NULL;
 	Position
@@ -695,18 +695,26 @@ void Map::drawTerrain(Surface* surface)
 		beginY = 0;
 
 	bool
-		pathfinderTurnedOn = _save->getPathfinding()->isPathPreviewed(),
+		pathPreview = _save->getPathfinding()->isPathPreviewed(),
 		drawRankIcon;
 
 	if (!_waypoints.empty()
-		|| (pathfinderTurnedOn
+		|| (pathPreview
 			&& (_previewSetting & PATH_TU_COST)))
 	{
-		_numWaypid = new NumberText(15, 15, 20, 30);
-		_numWaypid->setPalette(getPalette());
-//kL	_numWaypid->setColor(Palette::blockOffset(pathfinderTurnedOn? 0: 1));
-		_numWaypid->setColor(pathfinderTurnedOn? _messageColor + 1: Palette::blockOffset(1));
-//		_numWaypid->setColor(16); // kL, lt.orange
+		// note: WpID is used for both pathPreview and BL waypoints.
+		// kL_note: Leave them the same color.
+		_numWpID = new NumberText(15, 15, 20, 30);
+		_numWpID->setPalette(getPalette());
+//		_numWpID->setColor(pathPreview? _messageColor + 1: Palette::blockOffset(1));
+
+		Uint8 wpColor = Palette::blockOffset(1); // yellow
+//		if (_save->getTerrain() == "POLAR")
+//			wpColor = 11; // dark gray
+		if (_save->getTerrain() == "DESERT")
+			wpColor = 2; // light gray
+
+		_numWpID->setColor(wpColor);
 	}
 
 	surface->lock();
@@ -1918,9 +1926,9 @@ void Map::drawTerrain(Surface* surface)
 
 							if (_save->getBattleGame()->getCurrentAction()->type == BA_LAUNCH)
 							{
-								_numWaypid->setValue(waypid);
-								_numWaypid->draw();
-								_numWaypid->blitNShade(
+								_numWpID->setValue(waypid);
+								_numWpID->draw();
+								_numWpID->blitNShade(
 										surface,
 										screenPosition.x + waypXOff,
 										screenPosition.y + waypYOff,
@@ -1976,11 +1984,11 @@ void Map::drawTerrain(Surface* surface)
 	// end Tiles_z looping.
 
 
-	if (pathfinderTurnedOn)
+	if (pathPreview)
 	{
 		// make a border for the pathfinding display, so it's more visible on snow, etc.
-//		if (_numWaypid)
-//			_numWaypid->setBordered(true);
+//		if (_numWpID)
+//			_numWpID->setBordered(true);
 
 		for (int
 				itZ = beginZ;
@@ -2055,16 +2063,6 @@ void Map::drawTerrain(Surface* surface)
 						if ((_previewSetting & PATH_TU_COST)
 							&& tile->getTUMarker() > -1)
 						{
-//							Uint8 wpColor = 2; // light gray
-							Uint8 wpColor = Palette::blockOffset(1); // yellow
-//							if (_save->getTerrain() == "POLAR")
-//								wpColor = 11; // dark gray
-							if (_save->getTerrain() == "DESERT")
-								wpColor = 2; // light gray
-
-							_numWaypid->setColor(wpColor);
-//							_numWaypid->setColor(Palette::blockOffset(1)); // yellow.
-
 							int offset_x = 2;
 							if (tile->getTUMarker() > 9)
 								offset_x = 4;
@@ -2078,28 +2076,28 @@ void Map::drawTerrain(Surface* surface)
 									offset_y += 7;
 							}
 
-							_numWaypid->setValue(tile->getTUMarker());
-							_numWaypid->draw();
+							_numWpID->setValue(tile->getTUMarker());
+							_numWpID->draw();
 
 							if (!(_previewSetting & PATH_ARROWS))
 							{
-								_numWaypid->blitNShade(
-													surface,
-													screenPosition.x + 16 - offset_x,
-//kL												screenPosition.y + 29 - offset_y,
-													screenPosition.y + 37 - offset_y, // kL
-													0,
-													false,
-													tile->getMarkerColor());
+								_numWpID->blitNShade(
+												surface,
+												screenPosition.x + 16 - offset_x,
+//kL											screenPosition.y + 29 - offset_y,
+												screenPosition.y + 37 - offset_y, // kL
+												0,
+												false,
+												tile->getMarkerColor());
 							}
 							else
 							{
-								_numWaypid->blitNShade(
-													surface,
-													screenPosition.x + 16 - offset_x,
-//kL												screenPosition.y + 22 - offset_y,
-													screenPosition.y + 30 - offset_y, // kL
-													0);
+								_numWpID->blitNShade(
+												surface,
+												screenPosition.x + 16 - offset_x,
+//kL											screenPosition.y + 22 - offset_y,
+												screenPosition.y + 30 - offset_y, // kL
+												0);
 							}
 						}
 					}
@@ -2108,8 +2106,8 @@ void Map::drawTerrain(Surface* surface)
 		}
 
 		// remove the border in case it's being used for missile waypoints.
-//		if (_numWaypid)
-//			_numWaypid->setBordered(false);
+//		if (_numWpID)
+//			_numWpID->setBordered(false);
 	}
 
 //kL	unit = (BattleUnit*)_save->getSelectedUnit();
@@ -2177,7 +2175,7 @@ void Map::drawTerrain(Surface* surface)
 							0);
 	}
 
-	delete _numWaypid;
+	delete _numWpID;
 
 	if (_explosionInFOV) // check if we got hit or explosion animations
 	{
