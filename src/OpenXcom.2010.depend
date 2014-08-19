@@ -5726,7 +5726,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1408298560 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1408378288 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -6677,7 +6677,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1408234353 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1408378519 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6755,7 +6755,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1408317206 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1408378481 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -12133,7 +12133,7 @@
 1408304868 f:\git\openxcom\src\interface\battlescapebutton.h
 	"../Engine/InteractiveSurface.h"
 
-1408305321 source:f:\git\openxcom\src\interface\battlescapebutton.cpp
+1408434357 source:f:\git\openxcom\src\interface\battlescapebutton.cpp
 	"BattlescapeButton.h"
 	"../Engine/Action.h"
 
@@ -12144,7 +12144,7 @@
 1408362140 f:\git\openxcom\src\ruleset\polyline.h
 	<yaml-cpp/yaml.h>
 
-1408356754 f:\git\openxcom\src\ruleset\ruleglobe.h
+1408408156 f:\git\openxcom\src\ruleset\ruleglobe.h
 	<list>
 	<string>
 	<yaml-cpp/yaml.h>
@@ -12153,15 +12153,15 @@
 	"Polyline.h"
 	<cmath>
 
-1408356754 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
+1408408388 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
 	"RuleGlobe.h"
-	<SDL_endian.h>
 	<cmath>
 	<fstream>
-	"../Engine/Exception.h"
+	<SDL_endian.h>
 	"Polygon.h"
 	"Polyline.h"
 	"../Engine/CrossPlatform.h"
+	"../Engine/Exception.h"
 
 1408365134 source:f:\git\openxcom\src\ruleset\polygon.cpp
 	"Polygon.h"

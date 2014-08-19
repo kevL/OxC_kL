@@ -46,8 +46,8 @@ BattlescapeButton::BattlescapeButton(
 		_color(0),
 		_group(NULL),
 		_inverted(false),
-		_toggleMode(INVERT_NONE),
 		_tftdMode(false),
+		_toggleMode(INVERT_NONE),
 		_altSurface(NULL)
 {
 }
@@ -238,7 +238,8 @@ void BattlescapeButton::initSurfaces()
 				_altSurface->setPixelIterative(
 											&x,
 											&y,
-											pixel + 2 * ((int)_color + 3 - (int)pixel));
+//kL										pixel + 2 * ((int)_color + 3 - (int)pixel));
+											pixel + 2 * (_color + 3 - pixel)); // kL
 			else
 				_altSurface->setPixelIterative(&x, &y, 0);
 		}

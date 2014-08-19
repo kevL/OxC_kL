@@ -10,21 +10,28 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #define _USE_MATH_DEFINES
+
 #include "RuleGlobe.h"
-#include <SDL_endian.h>
+
 #include <cmath>
 #include <fstream>
-#include "../Engine/Exception.h"
+
+#include <SDL_endian.h>
+
 #include "Polygon.h"
 #include "Polyline.h"
+
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
+
 
 namespace OpenXcom
 {
@@ -32,20 +39,30 @@ namespace OpenXcom
 /**
  * Creates a blank ruleset for globe contents.
  */
-RuleGlobe::RuleGlobe() : _polygons(), _polylines()
+RuleGlobe::RuleGlobe()
+	:
+		_polygons(),
+		_polylines()
 {
 }
 
 /**
- *
+ * dTor.
  */
 RuleGlobe::~RuleGlobe()
 {
-	for (std::list<Polygon*>::iterator i = _polygons.begin(); i != _polygons.end(); ++i)
+	for (std::list<Polygon*>::iterator
+			i = _polygons.begin();
+			i != _polygons.end();
+			++i)
 	{
 		delete *i;
 	}
-	for (std::list<Polyline*>::iterator i = _polylines.begin(); i != _polylines.end(); ++i)
+
+	for (std::list<Polyline*>::iterator
+			i = _polylines.begin();
+			i != _polylines.end();
+			++i)
 	{
 		delete *i;
 	}
@@ -55,21 +72,27 @@ RuleGlobe::~RuleGlobe()
  * Loads the globe from a YAML file.
  * @param node YAML node.
  */
-void RuleGlobe::load(const YAML::Node &node)
+void RuleGlobe::load(const YAML::Node& node)
 {
 	if (node["data"])
-	{
 		loadDat(CrossPlatform::getDataFile(node["data"].as<std::string>()));
-	}
-	for (YAML::const_iterator i = node["polygons"].begin(); i != node["polygons"].end(); ++i)
+
+	for (YAML::const_iterator
+			i = node["polygons"].begin();
+			i != node["polygons"].end();
+			++i)
 	{
-		Polygon *polygon = new Polygon(3);
+		Polygon* polygon = new Polygon(3);
 		polygon->load(*i);
 		_polygons.push_back(polygon);
 	}
-	for (YAML::const_iterator i = node["polylines"].begin(); i != node["polylines"].end(); ++i)
+
+	for (YAML::const_iterator
+			i = node["polylines"].begin();
+			i != node["polylines"].end();
+			++i)
 	{
-		Polyline *polyline = new Polyline(3);
+		Polyline* polyline = new Polyline(3);
 		polyline->load(*i);
 		_polylines.push_back(polyline);
 	}
@@ -79,7 +102,7 @@ void RuleGlobe::load(const YAML::Node &node)
  * Returns the list of polygons in the globe.
  * @return Pointer to the list of polygons.
  */
-std::list<Polygon*> *RuleGlobe::getPolygons()
+std::list<Polygon*>* RuleGlobe::getPolygons()
 {
 	return &_polygons;
 }
@@ -88,7 +111,7 @@ std::list<Polygon*> *RuleGlobe::getPolygons()
  * Returns the list of polylines in the globe.
  * @return Pointer to the list of polylines.
  */
-std::list<Polyline*> *RuleGlobe::getPolylines()
+std::list<Polyline*>* RuleGlobe::getPolylines()
 {
 	return &_polylines;
 }
@@ -99,7 +122,7 @@ std::list<Polyline*> *RuleGlobe::getPolylines()
  * @param filename Filename of the DAT file.
  * @sa http://www.ufopaedia.org/index.php?title=WORLD.DAT
  */
-void RuleGlobe::loadDat(const std::string &filename)
+void RuleGlobe::loadDat(const std::string& filename)
 {
 	// Load file
 	std::ifstream mapFile (filename.c_str(), std::ios::in | std::ios::binary);
@@ -114,31 +137,36 @@ void RuleGlobe::loadDat(const std::string &filename)
 	{
 		Polygon* poly;
 		int points;
-		
-		for (int i = 0; i < 10; ++i)
+
+		for (int
+				i = 0;
+				i < 10;
+				++i)
 		{
 			value[i] = SDL_SwapLE16(value[i]);
 		}
 
 		if (value[6] != -1)
-		{
 			points = 4;
-		}
 		else
-		{
 			points = 3;
-		}
+
 		poly = new Polygon(points);
 
-		for (int i = 0, j = 0; i < points; ++i)
+		for (int
+				i = 0,
+					j = 0;
+				i < points;
+				++i)
 		{
 			// Correct X-Com degrees and convert to radians
-			double lonRad = value[j++] * 0.125f * M_PI / 180;
-			double latRad = value[j++] * 0.125f * M_PI / 180;
+			double lonRad = value[j++] * 0.125f * M_PI / 180.0;
+			double latRad = value[j++] * 0.125f * M_PI / 180.0;
 
 			poly->setLongitude(i, lonRad);
 			poly->setLatitude(i, latRad);
 		}
+
 		poly->setTexture(value[8]);
 
 		_polygons.push_back(poly);
