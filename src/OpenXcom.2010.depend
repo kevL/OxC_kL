@@ -4987,7 +4987,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/Production.h"
 
-1404096022 f:\git\openxcom\src\basescape\manufactureinfostate.h
+1408447990 f:\git\openxcom\src\basescape\manufactureinfostate.h
 	"../Engine/State.h"
 
 1404096023 f:\git\openxcom\src\interface\arrowbutton.h
@@ -5025,7 +5025,7 @@
 1404096022 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1405278054 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1408443538 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	<limits>
 	<sstream>
@@ -7078,7 +7078,7 @@
 1404096022 f:\git\openxcom\src\engine\gmcat.h
 	"CatFile.h"
 
-1404096022 source:f:\git\openxcom\src\engine\interactivesurface.cpp
+1408447327 source:f:\git\openxcom\src\engine\interactivesurface.cpp
 	"InteractiveSurface.h"
 	"Action.h"
 	"Options.h"
@@ -7245,7 +7245,7 @@
 	<map>
 	<string>
 
-1408357614 source:f:\git\openxcom\src\engine\state.cpp
+1408447071 source:f:\git\openxcom\src\engine\state.cpp
 	"State.h"
 	<climits>
 	"Font.h"

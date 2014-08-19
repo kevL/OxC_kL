@@ -1887,19 +1887,7 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Geoscape/Polygon.cpp">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
 		<Unit filename="Geoscape/Polygon.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Geoscape/Polyline.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
 			<Option target="Release Win32" />
@@ -2568,6 +2556,10 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/Polygon.cpp" />
+		<Unit filename="Ruleset/Polygon.h" />
+		<Unit filename="Ruleset/Polyline.cpp" />
+		<Unit filename="Ruleset/Polyline.h" />
 		<Unit filename="Ruleset/RuleAlienMission.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2630,6 +2622,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/RuleGlobe.cpp" />
+		<Unit filename="Ruleset/RuleGlobe.h" />
 		<Unit filename="Ruleset/RuleInterface.cpp" />
 		<Unit filename="Ruleset/RuleInterface.h" />
 		<Unit filename="Ruleset/RuleInventory.cpp">

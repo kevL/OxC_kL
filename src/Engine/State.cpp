@@ -255,7 +255,7 @@ void State::init()
 	_game->getFpsCounter()->setPalette(_palette);
 	_game->getFpsCounter()->draw();
 
-	if (_game->getResourcePack() != 0)
+	if (_game->getResourcePack() != NULL)
 		_game->getResourcePack()->setPalette(_palette);
 }
 
@@ -289,7 +289,7 @@ void State::handle(Action* action)
 				++i)
 		{
 			InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
-			if (j != 0)
+			if (j != NULL)
 				j->handle(action, this);
 		}
 	}
@@ -352,7 +352,7 @@ void State::resetAll()
 			++i)
 	{
 		InteractiveSurface* s = dynamic_cast<InteractiveSurface*>(*i);
-		if (s != 0)
+		if (s != NULL)
 		{
 			s->unpress(this);
 //			s->setFocus(false);
@@ -621,7 +621,8 @@ void State::recenter(
 }
 
 /**
- *
+ * Sets a pointer to the Game object.
+ * This pointer can be used universally by all subStates.
  */
 void State::setGamePtr(Game* game)
 {

@@ -28,7 +28,7 @@ namespace OpenXcom
 
 class ArrowButton;
 class Base;
-class InteractiveSurface;
+//class InteractiveSurface;
 class Production;
 class RuleManufacture;
 class Text;
@@ -53,9 +53,9 @@ private:
 		* _btnUnitDown,
 		* _btnUnitUp;
 	Base* _base;
-	InteractiveSurface
-		* _surfaceEngineers,
-		* _surfaceUnits;
+//	InteractiveSurface
+//		* _surfaceEngineers,
+//		* _surfaceUnits;
 	Production* _production;
 	RuleManufacture* _item;
 	Text
@@ -65,6 +65,8 @@ private:
 		* _txtAvailableSpace,
 		* _txtEngineerDown,
 		* _txtEngineerUp,
+		* _txtTimeDescr,
+		* _txtTimeTotal,
 		* _txtTitle,
 		* _txtTodo,
 		* _txtUnitDown,
@@ -126,20 +128,23 @@ private:
 	void onMoreEngineer();
 	/// Removes one engineer from the production (if possible).
 	void onLessEngineer();
-
 	/// Handler for using the mouse wheel on the Engineer-part of the screen.
-	void handleWheelEngineer(Action* action);
+//	void handleWheelEngineer(Action* action);
 
 	/// Increases count of number of units to make.
 	void onMoreUnit();
 	/// Decreases count of number of units to make (if possible).
 	void onLessUnit();
-
 	/// Handler for using the mouse wheel on the Unit-part of the screen.
-	void handleWheelUnit(Action* action);
+//	void handleWheelUnit(Action* action);
 
 	/// Updates display of assigned/available engineers and workshop space.
 	void setAssignedEngineer();
+	/// kL. Updates the total time to complete the project.
+	void updateTimeTotal(); // kL
+
+	/// kL. Handler for releasing the Sell button.
+	void btnSellRelease(Action* action); // kL
 
 	/// Runs state functionality every cycle.
 	void think();

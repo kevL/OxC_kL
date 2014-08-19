@@ -50,7 +50,6 @@ namespace OpenXcom
 
 /**
  * Initializes all elements in the Production settings screen (new Production).
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param item The RuleManufacture to produce.
  */
@@ -60,14 +59,13 @@ ManufactureInfoState::ManufactureInfoState(
 	:
 		_base(base),
 		_item(item),
-		_production(0)
+		_production(NULL)
 {
 	buildUi();
 }
 
 /**
  * Initializes all elements in the Production settings screen (modifying Production).
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param production The Production to modify.
  */
@@ -76,7 +74,7 @@ ManufactureInfoState::ManufactureInfoState(
 		Production* production)
 	:
 		_base(base),
-		_item(0),
+		_item(NULL),
 		_production(production)
 {
 	buildUi();
@@ -104,6 +102,8 @@ void ManufactureInfoState::buildUi()
 
 	_txtTitle				= new Text(280, 17, 20, 25);
 
+	_txtTimeDescr			= new Text(30, 17, 244, 36);
+	_txtTimeTotal			= new Text(30, 17, 274, 36);
 	_btnSell				= new ToggleTextButton(60, 16, 244, 56);
 
 	_txtAvailableEngineer	= new Text(100, 9, 16, 47);
@@ -125,21 +125,22 @@ void ManufactureInfoState::buildUi()
 	_txtUnitDown			= new Text(100, 17, 205, 135);
 	_btnUnitDown			= new ArrowButton(ARROW_BIG_DOWN, 14, 14, 280, 135);
 
-	_btnOk					= new TextButton(135, 16, 175, 159);
 	_btnStop				= new TextButton(135, 16, 10, 159);
+	_btnOk					= new TextButton(135, 16, 175, 159);
 
-	_surfaceEngineers = new InteractiveSurface(160, 150, 0, 25);
-	_surfaceEngineers->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelEngineer, 0);
+//	_surfaceEngineers = new InteractiveSurface(160, 150, 0, 25);
+//	_surfaceEngineers->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelEngineer, 0);
 
-	_surfaceUnits = new InteractiveSurface(160, 150, 160, 25);
-	_surfaceUnits->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
+//	_surfaceUnits = new InteractiveSurface(160, 150, 160, 25);
+//	_surfaceUnits->onMouseClick((ActionHandler)& ManufactureInfoState::handleWheelUnit, 0);
 
 	setPalette("PAL_BASESCAPE", 6);
 
-	add(_surfaceEngineers);
-	add(_surfaceUnits);
 	add(_window);
 	add(_txtTitle);
+	add(_txtTimeDescr);
+	add(_txtTimeTotal);
+	add(_btnSell);
 	add(_txtAvailableEngineer);
 	add(_txtAvailableSpace);
 	add(_txtAllocatedEngineer);
@@ -147,36 +148,49 @@ void ManufactureInfoState::buildUi()
 	add(_txtUnitToProduce);
 	add(_txtTodo);
 	add(_txtEngineerUp);
-	add(_txtEngineerDown);
 	add(_btnEngineerUp);
+	add(_txtEngineerDown);
 	add(_btnEngineerDown);
 	add(_txtUnitUp);
-	add(_txtUnitDown);
 	add(_btnUnitUp);
+	add(_txtUnitDown);
 	add(_btnUnitDown);
-	add(_btnOk);
 	add(_btnStop);
-	add(_btnSell);
+	add(_btnOk);
+
+//	add(_surfaceEngineers);
+//	add(_surfaceUnits);
 
 	centerAllSurfaces();
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
+
 	_txtTitle->setColor(Palette::blockOffset(15)+1);
 	_txtTitle->setText(tr(_item? _item->getName(): _production->getRules()->getName()));
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 
+	_txtTimeDescr->setColor(Palette::blockOffset(15)+1);
+	_txtTimeDescr->setText(tr("STR_DAYS_HOURS_LEFT"));
+
+	_txtTimeTotal->setColor(Palette::blockOffset(13));
+
+	_btnSell->setColor(Palette::blockOffset(15)+1);
+	_btnSell->setText(tr("STR_SELL_PRODUCTION"));
+	_btnSell->onMouseRelease((ActionHandler)& ManufactureInfoState::btnSellRelease);
+
 	_txtAvailableEngineer->setColor(Palette::blockOffset(15)+1);
 	_txtAvailableEngineer->setSecondaryColor(Palette::blockOffset(13));
+
 	_txtAvailableSpace->setColor(Palette::blockOffset(15)+1);
 	_txtAvailableSpace->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtAllocatedEngineer->setColor(Palette::blockOffset(15)+1);
 	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
-	_txtAllocatedEngineer->setWordWrap(true);
-//kL	_txtAllocatedEngineer->setVerticalAlign(ALIGN_MIDDLE);
+//	_txtAllocatedEngineer->setWordWrap(true);
+//	_txtAllocatedEngineer->setVerticalAlign(ALIGN_MIDDLE);
 
 	_txtAllocated->setColor(Palette::blockOffset(15)+1);
 	_txtAllocated->setSecondaryColor(Palette::blockOffset(13));
@@ -189,11 +203,12 @@ void ManufactureInfoState::buildUi()
 	_txtUnitToProduce->setColor(Palette::blockOffset(15)+1);
 	_txtUnitToProduce->setText(tr("STR_UNITS_TO_PRODUCE"));
 	_txtUnitToProduce->setBig();
-	_txtUnitToProduce->setWordWrap(true);
-//kL	_txtUnitToProduce->setVerticalAlign(ALIGN_MIDDLE);
+//	_txtUnitToProduce->setWordWrap(true);
+//	_txtUnitToProduce->setVerticalAlign(ALIGN_MIDDLE);
 
 	_txtEngineerUp->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerUp->setText(tr("STR_INCREASE_UC"));
+
 	_txtEngineerDown->setColor(Palette::blockOffset(15)+1);
 	_txtEngineerDown->setText(tr("STR_DECREASE_UC"));
 
@@ -209,6 +224,7 @@ void ManufactureInfoState::buildUi()
 
 	_txtUnitUp->setColor(Palette::blockOffset(15)+1);
 	_txtUnitUp->setText(tr("STR_INCREASE_UC"));
+
 	_txtUnitDown->setColor(Palette::blockOffset(15)+1);
 	_txtUnitDown->setText(tr("STR_DECREASE_UC"));
 
@@ -222,8 +238,9 @@ void ManufactureInfoState::buildUi()
 	_btnUnitDown->onMouseRelease((ActionHandler)& ManufactureInfoState::lessUnitRelease);
 	_btnUnitDown->onMouseClick((ActionHandler)& ManufactureInfoState::lessUnitClick, 0);
 
-	_btnSell->setColor(Palette::blockOffset(15)+1);
-	_btnSell->setText(tr("STR_SELL_PRODUCTION"));
+	_btnStop->setColor(Palette::blockOffset(15)+6);
+	_btnStop->setText(tr("STR_STOP_PRODUCTION"));
+	_btnStop->onMouseClick((ActionHandler)& ManufactureInfoState::btnStopClick);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
@@ -235,11 +252,7 @@ void ManufactureInfoState::buildUi()
 					(ActionHandler)& ManufactureInfoState::btnOkClick,
 					Options::keyCancel);
 
-	_btnStop->setColor(Palette::blockOffset(15)+6);
-	_btnStop->setText(tr("STR_STOP_PRODUCTION"));
-	_btnStop->onMouseClick((ActionHandler)& ManufactureInfoState::btnStopClick);
-
-	if (!_production)
+	if (_production == NULL)
 	{
 		_btnOk->setVisible(false);
 
@@ -284,7 +297,7 @@ void ManufactureInfoState::btnOkClick(Action*)
 							_base,
 							_game->getSavedGame());
 
-	_production->setSellItems(_btnSell->getPressed());
+//	_production->setSellItems(_btnSell->getPressed());
 
 	exitState();
 }
@@ -324,6 +337,69 @@ void ManufactureInfoState::setAssignedEngineer()
 	_txtTodo->setText(s2.str());
 
 	_btnOk->setVisible(_production->getAmountTotal() > 0);
+
+	updateTimeTotal(); // kL
+}
+
+/**
+ * kL. Updates the total time to complete the project.
+ */
+void ManufactureInfoState::updateTimeTotal() // kL
+{
+	std::wostringstream woStr;
+
+	if (_production->getAssignedEngineers() > 0)
+	{
+		int hoursLeft;
+
+		if (_production->getSellItems()
+			|| _production->getInfiniteAmount())
+		{
+			hoursLeft = (_production->getAmountProduced() + 1) * _production->getRules()->getManufactureTime()
+						- _production->getTimeSpent();
+		}
+		else
+		{
+			hoursLeft = _production->getAmountTotal() * _production->getRules()->getManufactureTime()
+						- _production->getTimeSpent();
+		}
+
+
+		int engs = _production->getAssignedEngineers();
+		if (!Options::canManufactureMoreItemsPerHour)
+		{
+			engs = std::min(
+							engs,
+							_production->getRules()->getManufactureTime());
+		}
+
+//		hoursLeft = static_cast<int>(
+//						ceil(static_cast<double>(hoursLeft) / static_cast<double>(_production->getAssignedEngineers())));
+		// ensure we round up since it takes an entire hour to manufacture any part of that hour's capacity
+		hoursLeft = (hoursLeft + engs - 1) / engs;
+
+		int daysLeft = hoursLeft / 24;
+		hoursLeft %= 24;
+		woStr << daysLeft << "\n" << hoursLeft;
+	}
+	else
+		woStr << L"oo";
+
+	_txtTimeTotal->setText(woStr.str());
+}
+
+/**
+ * kL. Handler for releasing the Sell button.
+ */
+void ManufactureInfoState::btnSellRelease(Action* action) // kL
+{
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
+		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	{
+		_production->setSellItems(_btnSell->getPressed());
+
+		updateTimeTotal();
+	}
 }
 
 /**
@@ -395,7 +471,8 @@ void ManufactureInfoState::moreEngineerClick(Action* action)
  */
 void ManufactureInfoState::lessEngineer(int change)
 {
-	if (change < 1) return;
+	if (change < 1)
+		return;
 
 	int assigned = _production->getAssignedEngineers();
 	if (assigned > 0)
@@ -615,13 +692,13 @@ void ManufactureInfoState::onLessEngineer()
  * Increases or decreases the Engineers according the mouse-wheel used.
  * @param action A pointer to an Action.
  */
-void ManufactureInfoState::handleWheelEngineer(Action* action)
+/* void ManufactureInfoState::handleWheelEngineer(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		moreEngineer(Options::changeValueByMouseWheel);
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 		lessEngineer(Options::changeValueByMouseWheel);
-}
+} */
 
 /**
  * Builds one more unit.
@@ -645,13 +722,13 @@ void ManufactureInfoState::onLessUnit()
  * Increases or decreases the Units to produce according the mouse-wheel used.
  * @param action A pointer to an Action.
  */
-void ManufactureInfoState::handleWheelUnit(Action* action)
+/* void ManufactureInfoState::handleWheelUnit(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		moreUnit(Options::changeValueByMouseWheel);
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 		lessUnit(Options::changeValueByMouseWheel);
-}
+} */
 
 /**
  * Runs state functionality every cycle (used to update the timer).
@@ -660,10 +737,10 @@ void ManufactureInfoState::think()
 {
 	State::think();
 
-	_timerMoreEngineer->think(this, 0);
-	_timerLessEngineer->think(this, 0);
-	_timerMoreUnit->think(this, 0);
-	_timerLessUnit->think(this, 0);
+	_timerMoreEngineer->think(this, NULL);
+	_timerLessEngineer->think(this, NULL);
+	_timerMoreUnit->think(this, NULL);
+	_timerLessUnit->think(this, NULL);
 }
 
 }

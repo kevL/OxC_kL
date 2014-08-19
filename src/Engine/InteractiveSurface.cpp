@@ -26,7 +26,7 @@
 namespace OpenXcom
 {
 
-const SDLKey InteractiveSurface::SDLK_ANY = (SDLKey)-1; // using an unused keycode to represent an "any key"
+const SDLKey InteractiveSurface::SDLK_ANY = (SDLKey) - 1; // using an unused keycode to represent an "any key"
 
 
 /**
@@ -58,7 +58,7 @@ InteractiveSurface::InteractiveSurface(
 }
 
 /**
- *
+ * dTor.
  */
 InteractiveSurface::~InteractiveSurface()
 {
@@ -132,7 +132,8 @@ void InteractiveSurface::handle(
 		Action* action,
 		State* state)
 {
-	if (!_visible || _hidden) return;
+	if (!_visible || _hidden)
+		return;
 
 	action->setSender(this);
 
@@ -168,7 +169,7 @@ void InteractiveSurface::handle(
 			if (_listButton
 				&& action->getDetails()->type == SDL_MOUSEMOTION)
 			{
-				_buttonsPressed = SDL_GetMouseState(0, 0);
+				_buttonsPressed = SDL_GetMouseState(NULL, NULL);
 				for (Uint8
 						i = 1;
 						i <= NUM_BUTTONS;
