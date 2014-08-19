@@ -100,7 +100,8 @@ SoldierInfoState::SoldierInfoState(
 	_txtMissions	= new Text(80, 9, 112, 49);
 	_txtKills		= new Text(100, 9, 112, 57);
 
-	_txtRecovery	= new Text(80, 9, 207, 57);
+	_txtRecovery	= new Text(45, 9, 192, 57);
+	_txtRecovDay	= new Text(30, 9, 237, 57);
 
 
 	int
@@ -177,6 +178,7 @@ SoldierInfoState::SoldierInfoState(
 	add(_txtKills);
 	add(_txtCraft);
 	add(_txtRecovery);
+	add(_txtRecovDay);
 	add(_txtPsionic);
 
 	add(_txtArmor); // kL
@@ -297,7 +299,10 @@ SoldierInfoState::SoldierInfoState(
 	_txtCraft->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtRecovery->setColor(Palette::blockOffset(13)+10);
-	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
+//	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
+	_txtRecovery->setText(tr("STR_WOUND_RECOVERY"));
+
+	_txtRecovDay->setHighContrast(true);
 
 	_txtPsionic->setColor(Palette::blockOffset(15)+1);
 	_txtPsionic->setText(tr("STR_IN_PSIONIC_TRAINING"));
@@ -425,7 +430,7 @@ SoldierInfoState::SoldierInfoState(
 }
 
 /**
- *
+ * dTor.
  */
 SoldierInfoState::~SoldierInfoState()
 {
@@ -647,8 +652,6 @@ void SoldierInfoState::init()
 	}
 
 
-//	if (_base != NULL) // kL
-//	{
 	std::wstring
 		armor,
 		craft;
@@ -669,12 +672,23 @@ void SoldierInfoState::init()
 	else
 		craft = _soldier->getCraft()->getName(_game->getLanguage());
 	_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
-//	}
 
 
-	if (_soldier->getWoundRecovery() > 0)
-		_txtRecovery->setText(tr("STR_WOUND_RECOVERY")
-								.arg(tr("STR_DAY", _soldier->getWoundRecovery())));
+	int woundRec = _soldier->getWoundRecovery();
+	if (woundRec > 0)
+	{
+		Uint8 color = Palette::blockOffset(3); // green
+		int woundPct = _soldier->getWoundPercent();
+		if (woundPct > 50)
+			color = Palette::blockOffset(6); // orange
+		else if (woundPct > 10)
+			color = Palette::blockOffset(9); // yellow
+
+//		_txtRecovery->setSecondaryColor(color);
+//		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", woundRec)));
+		_txtRecovDay->setColor(color);
+		_txtRecovDay->setText(tr("STR_DAY", woundRec));
+	}
 	else
 		_txtRecovery->setText(L"");
 

@@ -4827,7 +4827,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1406939305 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1408450868 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -4966,7 +4966,7 @@
 1404096023 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
-1406231493 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1408448889 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	<limits>
 	"../Interface/ArrowButton.h"
@@ -5387,7 +5387,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1407123888 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1408453076 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -5418,7 +5418,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDiary.h"
 
-1406321383 f:\git\openxcom\src\basescape\soldierinfostate.h
+1408453107 f:\git\openxcom\src\basescape\soldierinfostate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -5479,7 +5479,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1406425253 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1408451414 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>

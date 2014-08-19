@@ -195,11 +195,11 @@ void SoldiersState::init()
 			if ((*i)->getWoundRecovery() > 0)
 			{
 				Uint8 color = Palette::blockOffset(3); // green
-				int woundPerct = (*i)->getWoundPercent();
-				if (woundPerct > 10)
-					color = Palette::blockOffset(9); // yellow
-				if (woundPerct > 50)
+				int woundPct = (*i)->getWoundPercent();
+				if (woundPct > 50)
 					color = Palette::blockOffset(6); // orange
+				else if (woundPct > 10)
+					color = Palette::blockOffset(9); // yellow
 
 				_lstSoldiers->setCellColor(
 										row,

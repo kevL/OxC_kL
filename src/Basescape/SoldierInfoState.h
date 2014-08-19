@@ -76,6 +76,7 @@ private:
 		* _txtPsionic,
 		* _txtRank,
 		* _txtRecovery,
+		* _txtRecovDay,
 
 		* _txtTimeUnits,
 		* _txtStamina,
