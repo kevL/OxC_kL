@@ -9865,10 +9865,10 @@ interfaces:
         color: 15
         color2: 27
         border: 20
-      - id: grenadeMenu
-        color: 15
-        color2: 27
-        border: 20
+      - id: messageWindows
+        color: -1
+        color2: 14
+        border: 4
       # The usage of the following is hard-coded, these ones MUST be defined
       - id: visibleUnits
         pos: [300, -16]
@@ -9880,14 +9880,14 @@ interfaces:
       - id: warning
         color: 16
         color2: 32
-      - id: messageWindows
-        color: -1
-        color2: 14
-        border: 7
       - id: actionMenu
         color: -1
         color2: 14
-        border: 3
+        border: 4
+      - id: grenadeMenu
+        color: 15
+        color2: 27
+        border: 20
       - id: grenadeBackground
         color: 24
         color2: 28
