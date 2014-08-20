@@ -31,6 +31,7 @@ namespace OpenXcom
 {
 
 class AlienMission;
+class Craft;
 class Ruleset;
 class RuleUfo;
 class SavedGame;
@@ -70,13 +71,13 @@ private:
 		_landId,
 		_shootingAt,
 		_hitFrame,
-		_shotDownByCraftId,
 		_crashPower; // kL
 	size_t
 		_secondsRemaining,
 		_trajectoryPoint;
 
 	AlienMission* _mission;
+	Craft* _shotDownByCraft;
 	RuleUfo* _rules;
 	const UfoTrajectory* _trajectory;
 
@@ -167,10 +168,10 @@ private:
 		/// Gets the UFO's alien race.
 		const std::string& getAlienRace() const;
 
-		/// Sets the ID of craft which shot down the UFO.
-		void setShotDownByCraftId(const int id);
-		/// Gets the ID of craft which shot down the UFO.
-		int getShotDownByCraftId() const;
+		/// Sets a pointer to a craft which shot down the UFO.
+		void setShotDownByCraft(Craft* craft);
+		/// Gets a pointer to the craft which shot down the UFO.
+		Craft* getShotDownByCraft() const;
 
 		/// Gets the UFO's visibility.
 		int getVisibility() const;
