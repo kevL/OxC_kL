@@ -708,8 +708,8 @@ int Pathfinding::getTUCost(
 	_unit = unit;
 
 	directionToVector(
-				dir,
-				endPos);
+					dir,
+					endPos);
 	*endPos += startPos;
 
 	bool
@@ -955,12 +955,13 @@ int Pathfinding::getTUCost(
 				int wallTU = 0;		// used to check if there's a wall that costs +TU.
 
 //				_openDoor = false;
-				//Log(LOG_INFO) << ". . . _openDoor = FALSE";
+				Log(LOG_INFO) << ". . . _openDoor = FALSE";
 
 				if (dir == 7
 					|| dir == 0
 					|| dir == 1)
 				{
+					Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition() << " dir = " << dir;
 					wallTU = startTile->getTUCost( // ( 'walkover' bigWalls not incl. -- none exists )
 												MapData::O_NORTHWALL,
 												_movementType);
@@ -975,7 +976,7 @@ int Pathfinding::getTUCost(
 						if (startTile->getMapData(MapData::O_NORTHWALL)->isDoor()
 							|| startTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
 						{
-							//Log(LOG_INFO) << ". . . _openDoor[N] = TRUE";
+							Log(LOG_INFO) << ". . . _openDoor[N] = TRUE";
 							_openDoor = true;
 						}
 					}
@@ -985,7 +986,7 @@ int Pathfinding::getTUCost(
 					|| dir == 2
 					|| dir == 3)
 				{
-					//Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition();
+					Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition() << " dir = " << dir;
 
 					// Test: i don't know why 'aboveDest' don't work here
 					Tile* aboveDestTile = _save->getTile(destTile->getPosition() + Position(0, 0, 1));
@@ -1005,7 +1006,7 @@ int Pathfinding::getTUCost(
 							if (destTile->getMapData(MapData::O_WESTWALL)->isDoor()
 								|| destTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
 							{
-								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE";
+								Log(LOG_INFO) << ". . . _openDoor[E] = TRUE";
 								_openDoor = true;
 							}
 						}
@@ -1016,7 +1017,7 @@ int Pathfinding::getTUCost(
 						wallTU = aboveDestTile->getTUCost(
 													MapData::O_WESTWALL,
 													_movementType);
-						//Log(LOG_INFO) << ". . (down) eastish, wallTU = " << wallTU;
+						Log(LOG_INFO) << ". . (down) eastish, wallTU = " << wallTU;
 
 						if (wallTU > 0)
 						{
@@ -1026,7 +1027,7 @@ int Pathfinding::getTUCost(
 							if (aboveDestTile->getMapData(MapData::O_WESTWALL)->isDoor()
 								|| aboveDestTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
 							{
-								//Log(LOG_INFO) << ". . . _openDoor[E] = TRUE (down)";
+								Log(LOG_INFO) << ". . . _openDoor[E] = TRUE (down)";
 								_openDoor = true;
 							}
 						}
@@ -1037,6 +1038,8 @@ int Pathfinding::getTUCost(
 					|| dir == 4
 					|| dir == 5)
 				{
+					Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition() << " dir = " << dir;
+
 					// Test: i don't know why 'aboveDest' don't work here
 					Tile* aboveDestTile = _save->getTile(destTile->getPosition() + Position(0, 0, 1));
 
@@ -1053,7 +1056,7 @@ int Pathfinding::getTUCost(
 							if (destTile->getMapData(MapData::O_NORTHWALL)->isDoor()
 								|| destTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
 							{
-								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE";
+								Log(LOG_INFO) << ". . . _openDoor[S] = TRUE";
 								_openDoor = true;
 							}
 						}
@@ -1073,7 +1076,7 @@ int Pathfinding::getTUCost(
 							if (aboveDestTile->getMapData(MapData::O_NORTHWALL)->isDoor()
 								|| aboveDestTile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
 							{
-								//Log(LOG_INFO) << ". . . _openDoor[S] = TRUE (down)";
+								Log(LOG_INFO) << ". . . _openDoor[S] = TRUE (down)";
 								_openDoor = true;
 							}
 						}
@@ -1084,6 +1087,7 @@ int Pathfinding::getTUCost(
 					|| dir == 6
 					|| dir == 7)
 				{
+					Log(LOG_INFO) << ". from " << startTile->getPosition() << " to " << destTile->getPosition() << " dir = " << dir;
 					wallTU = startTile->getTUCost(
 												MapData::O_WESTWALL,
 												_movementType); // ( bigWalls not incl. yet )
@@ -1095,7 +1099,7 @@ int Pathfinding::getTUCost(
 						if (startTile->getMapData(MapData::O_WESTWALL)->isDoor()
 							|| startTile->getMapData(MapData::O_WESTWALL)->isUFODoor())
 						{
-							//Log(LOG_INFO) << ". . . _openDoor[W] = TRUE";
+							Log(LOG_INFO) << ". . . _openDoor[W] = TRUE";
 							_openDoor = true;
 						}
 					}
@@ -2008,10 +2012,10 @@ bool Pathfinding::previewPath(bool bRemove)
 	}
 
 
+//	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
 //	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// kL: do this in calculate()
 													// for BattlescapeState::btnUnitDownClick()
 													// 'cause it doesn't use pathPreview there.
-//	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
 
 	std::string armorType = _unit->getArmor()->getType();
 
@@ -2044,7 +2048,8 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		dir = *i;
 		//Log(LOG_INFO) << "dir = " << dir;
-//		_openDoor = false;
+
+		_openDoor = false;
 
 		tu = getTUCost( // gets tu cost, but also gets the destination position.
 					start,
@@ -2053,7 +2058,7 @@ bool Pathfinding::previewPath(bool bRemove)
 					_unit,
 					0,
 					false);
-		//Log(LOG_INFO) << ". . tu = " << tu;
+		Log(LOG_INFO) << ". . tu = " << tu;
 /*		if (tu == 255)		// kL: Conflicts w/ the switchback for marker colors @ BA_SNAP.
 		{
 			abortPath();	// kL
@@ -2085,7 +2090,7 @@ bool Pathfinding::previewPath(bool bRemove)
 
 				if (_openDoor == true)
 				{
-					//Log(LOG_INFO) << ". . . openDoor TRUE, set to false";
+					Log(LOG_INFO) << ". . . openDoor TRUE, set to false";
 					_openDoor = false; // safety. Redundant w/ getTUCost() init
 
 					tu++;	// kludge. Assumes: all doors take 4 TU to open ....
@@ -2200,9 +2205,6 @@ bool Pathfinding::removePreview()
 {
 	if (!_pathPreviewed)
 		return false;
-
-//	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;		// kL
-//	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;	// kL
 
 	previewPath(true);
 

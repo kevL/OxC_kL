@@ -1940,9 +1940,9 @@ bool AlienBAIState::explosiveEfficacy(
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if (!(*i)->isOut(true)	// don't grenade dead guys
-			&& *i != attacker	// don't count ourself twice
-//			&& *i != target		// don't count the target twice (kL_note: not been coconutted yet)
+		if ((*i)->isOut(true) == false	// don't grenade dead guys
+			&& *i != attacker			// don't count ourself twice
+//			&& *i != target				// don't count the target twice (kL_note: not been coconutted yet)
 			// don't count units that probably won't be affected cause they're out of range
 			&& abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight
 			&& _save->getTileEngine()->distance(
@@ -1950,7 +1950,8 @@ bool AlienBAIState::explosiveEfficacy(
 											targetPos)
 										< radius)
 		{
-			if ((*i)->getTile()->getDangerous()				// don't count people who were already grenaded this turn
+			if (((*i)->getTile()
+					&& (*i)->getTile()->getDangerous())		// don't count people who were already grenaded this turn
 				|| ((*i)->getFaction() == FACTION_PLAYER	// don't count units we don't know about
 					&& (*i)->getTurnsExposed() > _intelligence))
 			{
@@ -1980,10 +1981,11 @@ bool AlienBAIState::explosiveEfficacy(
 			if (collision == VOXEL_UNIT
 				&& traj.front() / Position(16, 16, 24) == (*i)->getPosition())
 			{
-				if ((*i)->getFaction() == FACTION_PLAYER)
+//				if ((*i)->getFaction() == FACTION_PLAYER)
+				if ((*i)->getFaction() != attacker->getFaction()) // do xCom & civies.
 					effect += 10;
 				else if ((*i)->getOriginalFaction() == attacker->getFaction())
-					effect -= 5; // true friendlies count half
+					effect -= 5; // true friendlies count negative-half
 			}
 		}
 	}

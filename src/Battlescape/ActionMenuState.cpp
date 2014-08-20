@@ -106,19 +106,15 @@ ActionMenuState::ActionMenuState(
 		|| weapon->getBattleType() == BT_PROXIMITYGRENADE)
 	{
 		if (_action->weapon->getFuseTimer() == -1) // canPrime
-		{
 			addItem(
 					BA_PRIME,
 					"STR_PRIME_GRENADE",
 					&id);
-		}
 		else // kL_add:
-		{
 			addItem(
 					BA_DEFUSE,
 					"STR_DEFUSE_GRENADE",
 					&id);
-		}
 	}
 
 	if (weapon->getTUMelee())
@@ -137,8 +133,7 @@ ActionMenuState::ActionMenuState(
 					"STR_HIT_MELEE",
 					&id);
 	}
-	/** special items */
-	else if (weapon->getBattleType() == BT_MEDIKIT)
+	else if (weapon->getBattleType() == BT_MEDIKIT) // special items
 		addItem(
 				BA_USE,
 				"STR_USE_MEDI_KIT",
@@ -180,16 +175,16 @@ ActionMenuState::ActionMenuState(
 
 		if (_action->weapon->getAmmoItem()) // kL
 		{
-			if (weapon->getAccuracyAuto() != 0)
-				addItem(
-						BA_AUTOSHOT,
-						"STR_AUTO_SHOT",
-						&id);
-
 			if (weapon->getAccuracySnap() != 0)
 				addItem(
 						BA_SNAPSHOT,
 						"STR_SNAP_SHOT",
+						&id);
+
+			if (weapon->getAccuracyAuto() != 0)
+				addItem(
+						BA_AUTOSHOT,
+						"STR_AUTO_SHOT",
 						&id);
 
 			if (weapon->getAccuracyAimed() != 0)

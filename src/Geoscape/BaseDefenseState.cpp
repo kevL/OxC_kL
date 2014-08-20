@@ -227,8 +227,8 @@ void BaseDefenseState::nextStep()
 
 					int damage = def->getRules()->getDefenseValue();
 					damage = RNG::generate( // kL: vary damage between 75% and 133%
-										damage * 3 / 4,
-										damage * 4 / 3);
+										damage * 3 / 4,		// stock is 0..200%
+										damage * 4 / 3);	// TFTD is 50..150%
 					_ufo->setDamage(_ufo->getDamage() + damage);
 
 					_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());

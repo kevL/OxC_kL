@@ -134,40 +134,23 @@ void Frame::draw()
 	if (_contrast)
 		mult = 2;
 
-	// _color denotes our middle line color, so we start at
-	// half(thickness-times-multiplier) steps darker and build up
-//	Uint8 color = _color + ((1 + _thickness) * mult) / 2;
-	// we [not 'we' - YOU] want the darkest version of this color to outline any thick borders
-	Uint8 darkest = Palette::blockOffset(_color / 16) + 15;
-
-	Uint8 color;
+	Uint8
+		darkest = Palette::blockOffset(_color / 16) + 15,
+		color;
 
 	for (int
 			i = 0;
 			i < _thickness;
 			++i)
 	{
-/*		if (_thickness > 5
-			&& (i == 0
-				|| i == _thickness - 1))
+		if ((_thickness > 1
+				&& i == _thickness - 1)
+			|| color / 16 != _color / 16)
 		{
-			drawRect(
-					&square,
-					darkest);
+			color = darkest;
 		}
 		else
-			drawRect(
-					&square,
-					color);
-
-		if (i < _thickness / 2)
-			color -= 1 * mult;
-		else
-			color += 1 * mult; */
-
-		color = _color + abs(i - _thickness / 2) * mult;
-		if (color / 16 != _color / 16)
-			color = darkest;
+			color = _color + abs(i - _thickness / 2) * mult;
 
 		drawRect(
 				&square,

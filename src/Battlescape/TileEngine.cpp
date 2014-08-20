@@ -2422,7 +2422,7 @@ void TileEngine::explode(
 
 	switch (Options::battleExplosionHeight)
 	{
-		case 1: z_Dec = 10; break;
+/*		case 1: z_Dec = 10; break;
 		case 2: z_Dec = 20; break;
 		case 3: z_Dec = 30; break;
 		case 4: z_Dec = 40; break;
@@ -2431,7 +2431,10 @@ void TileEngine::explode(
 		case 0: // default flat explosion
 		default:
 			z_Dec = 1000;
-		break;
+		break; */
+		case 3: z_Dec = 10; break; // makes things easy for AlienBAIState::explosiveEfficacy()
+		case 2: z_Dec = 20; break;
+		case 1: z_Dec = 30;
 	}
 
 	Tile
