@@ -157,7 +157,6 @@ ListGamesState::ListGamesState(
 
 //	centerAllSurfaces();
 
-
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -210,7 +209,7 @@ ListGamesState::ListGamesState(
 }
 
 /**
- *
+ * dTor.
  */
 ListGamesState::~ListGamesState()
 {
@@ -344,13 +343,15 @@ void ListGamesState::btnCancelClick(Action*)
  */
 void ListGamesState::lstSavesMouseOver(Action*)
 {
+	Log(LOG_INFO) << "ListGamesState::lstSavesMouseOver()";
 	if (!_inEditMode) // kL
 	{
-		std::wstring wstr;
+		Log(LOG_INFO) << ". NOT inEditMode";
+		std::wstring wstr = L"";
 
-		size_t sel = _lstSaves->getSelectedRow() - _firstValidRow;
+		int sel = _lstSaves->getSelectedRow() - _firstValidRow;
 		if (sel > -1
-			&& sel < _saves.size())
+			&& sel < static_cast<int>(_saves.size()))
 		{
 			wstr = _saves[sel].details;
 		}
@@ -360,12 +361,16 @@ void ListGamesState::lstSavesMouseOver(Action*)
 }
 
 /**
- *
+ * Hides details of saves.
  */
 void ListGamesState::lstSavesMouseOut(Action*)
 {
+	Log(LOG_INFO) << "ListGamesState::lstSavesMouseOut()";
 	if (!_inEditMode) // kL
+	{
+		Log(LOG_INFO) << ". NOT inEditMode";
 		_txtDetails->setText(tr("STR_DETAILS").arg(L""));
+	}
 }
 
 /**
@@ -378,8 +383,8 @@ void ListGamesState::lstSavesPress(Action* action)
 		&& _lstSaves->getSelectedRow() >= _firstValidRow)
 	{
 		_game->pushState(new DeleteGameState(
-											_origin,
-											_saves[_lstSaves->getSelectedRow() - _firstValidRow].fileName));
+										_origin,
+										_saves[_lstSaves->getSelectedRow() - _firstValidRow].fileName));
 	}
 }
 

@@ -48,7 +48,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Place Lift screen.
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param globe Pointer to the Geoscape globe.
  * @param first Is this a custom starting base?
@@ -82,7 +81,7 @@ PlaceLiftState::PlaceLiftState(
 }
 
 /**
- *
+ * dTor.
  */
 PlaceLiftState::~PlaceLiftState()
 {

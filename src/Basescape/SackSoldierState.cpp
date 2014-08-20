@@ -43,7 +43,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in a Sack Soldier window.
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param soldierId Pointer to the soldier to sack.
  */
@@ -99,7 +98,7 @@ SackSoldierState::SackSoldierState(
 }
 
 /**
- *
+ * dTor.
  */
 SackSoldierState::~SackSoldierState()
 {

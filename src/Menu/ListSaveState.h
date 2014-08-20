@@ -52,24 +52,24 @@ private:
 	TextEdit* _edtSave;
 
 
-		public:
-			/// Creates the Save Game state.
-			ListSaveState(OptionsOrigin origin);
-			/// Cleans up the Save Game state.
-			~ListSaveState();
+	public:
+		/// Creates the Save Game state.
+		ListSaveState(OptionsOrigin origin);
+		/// Cleans up the Save Game state.
+		~ListSaveState();
 
-			/// Updates the savegame list.
-			void updateList();
+		/// Updates the savegame list.
+		void updateList();
 
-			/// Handler for pressing a key on the Save edit.
-			void edtSaveKeyPress(Action* action);
-			/// Handler for clicking on the Save Game button.
-			void btnSaveGameClick(Action *action);
-			/// Handler for clicking the Saves list.
-			void lstSavesPress(Action* action);
+		/// Handler for pressing a key on the Save edit.
+		void edtSaveKeyPress(Action* action);
+		/// Handler for clicking on the Save Game button.
+		void btnSaveGameClick(Action *action);
+		/// Handler for clicking the Saves list.
+		void lstSavesPress(Action* action);
 
-			/// Save game.
-			void saveGame();
+		/// Save game.
+		void saveGame();
 };
 
 }

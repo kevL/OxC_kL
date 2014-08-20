@@ -36,7 +36,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in an error window.
- * @param game Pointer to the core game.
  * @param id Language ID for the message to display.
  * @param palette Parent state palette.
  * @param color Color of the UI controls.
@@ -61,7 +60,6 @@ ErrorMessageState::ErrorMessageState(
 
 /**
  * Initializes all the elements in an error window.
- * @param game Pointer to the core game.
  * @param msg Text string for the message to display.
  * @param palette Parent state palette.
  * @param color Color of the UI controls.

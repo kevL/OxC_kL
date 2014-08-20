@@ -49,71 +49,71 @@ class ListGamesState
 		public State
 {
 
-	protected:
-		bool
-			_autoquick,
-			_inEditMode, // kL
-			_showMsg,
-			_sortable,
-			_noUI;
-		size_t _firstValidRow;
+protected:
+	bool
+		_autoquick,
+		_inEditMode, // kL
+		_showMsg,
+		_sortable,
+		_noUI;
+	size_t _firstValidRow;
 
-		OptionsOrigin _origin;
+	OptionsOrigin _origin;
 
-		ArrowButton
-			* _sortName,
-			* _sortDate;
-		Text
-			* _txtTitle,
-			* _txtName,
-			* _txtDate,
-			* _txtDelete,
-			* _txtDetails;
-		TextButton
-			* _btnCancel;
-		TextList* _lstSaves;
-		Window* _window;
+	ArrowButton
+		* _sortName,
+		* _sortDate;
+	Text
+		* _txtTitle,
+		* _txtName,
+		* _txtDate,
+		* _txtDelete,
+		* _txtDetails;
+	TextButton
+		* _btnCancel;
+	TextList* _lstSaves;
+	Window* _window;
 
-		std::vector<SaveInfo> _saves;
+	std::vector<SaveInfo> _saves;
 
-		///
-		void updateArrows();
+	///
+	void updateArrows();
 
 
-		public:
-			/// Creates the Saved Game state.
-			ListGamesState(
-					OptionsOrigin origin,
-					size_t firstValidRow,
-					bool autoquick);
-			/// Cleans up the Saved Game state.
-			virtual ~ListGamesState();
+	public:
+		/// Creates the Saved Game state.
+		ListGamesState(
+				OptionsOrigin origin,
+				size_t firstValidRow,
+				bool autoquick);
+		/// Cleans up the Saved Game state.
+		virtual ~ListGamesState();
 
-			/// Sets up the saves list.
-			void init();
+		/// Sets up the saves list.
+		void init();
 
-			/// Sorts the savegame list.
-			void sortList(SaveSort sort);
+		/// Sorts the savegame list.
+		void sortList(SaveSort sort);
 
-			/// Updates the savegame list.
-			virtual void updateList();
+		/// Updates the savegame list.
+		virtual void updateList();
 
-			/// Handler for clicking the Cancel button.
-			void btnCancelClick(Action* action);
-			/// Handler for moving the mouse over a list item.
-			void lstSavesMouseOver(Action* action);
-			/// Handler for moving the mouse outside the list borders.
-			void lstSavesMouseOut(Action* action);
-			/// Handler for clicking the Saves list.
-			virtual void lstSavesPress(Action* action);
+		/// Handler for clicking the Cancel button.
+		void btnCancelClick(Action* action);
+		/// Handler for moving the mouse over a list item.
+		void lstSavesMouseOver(Action* action);
+		/// Handler for moving the mouse outside the list borders.
+		void lstSavesMouseOut(Action* action);
+		/// Handler for clicking the Saves list.
+		virtual void lstSavesPress(Action* action);
 
-			/// Handler for clicking the Name arrow.
-			void sortNameClick(Action* action);
-			/// Handler for clicking the Date arrow.
-			void sortDateClick(Action* action);
+		/// Handler for clicking the Name arrow.
+		void sortNameClick(Action* action);
+		/// Handler for clicking the Date arrow.
+		void sortDateClick(Action* action);
 
-			/// disables the sort buttons.
-			void disableSort();
+		/// disables the sort buttons.
+		void disableSort();
 };
 
 }

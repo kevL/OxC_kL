@@ -49,7 +49,6 @@ const std::string OptionsVideoState::GL_STRING	= "*";
 
 /**
  * Initializes all the elements in the Video Options screen.
- * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
 OptionsVideoState::OptionsVideoState(OptionsOrigin origin)

@@ -61,7 +61,6 @@ Game* State::_game = NULL;
 /**
  * Initializes a brand new state with no child elements.
  * By default states are full-screen.
- * @param game Pointer to the core game.
  */
 State::State()
 	:

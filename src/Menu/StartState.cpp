@@ -62,7 +62,6 @@ bool StartState::kL_ready; // kL
 
 /**
  * Initializes all the elements in the Loading screen.
- * @param game Pointer to the core game.
  */
 StartState::StartState()
 	:

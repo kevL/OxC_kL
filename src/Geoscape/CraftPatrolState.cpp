@@ -46,9 +46,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Craft Patrol window.
- * @param game Pointer to the core game.
- * @param craft Pointer to the craft to display.
- * @param globe Pointer to the Geoscape globe.
+ * @param craft	- pointer to Craft
+ * @param globe	- pointer to Globe
+ * @param geo	- pointer to GeoscapeState
  */
 CraftPatrolState::CraftPatrolState(
 		Craft* craft,
@@ -120,7 +120,7 @@ CraftPatrolState::CraftPatrolState(
 }
 
 /**
- *
+ * dTor.
  */
 CraftPatrolState::~CraftPatrolState()
 {

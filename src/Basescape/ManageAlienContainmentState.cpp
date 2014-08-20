@@ -57,9 +57,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Manage Alien Containment screen.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
- * @param origin Game section that originated this state.
+ * @param base		- pointer to the base to get info from
+ * @param origin	- game section that originated this state
+ * @param allowHelp	- true to get researchHelp from executed aLiens
  */
 ManageAlienContainmentState::ManageAlienContainmentState(
 		Base* base,

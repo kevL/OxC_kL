@@ -63,7 +63,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Purchase/Hire screen.
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  */
 PurchaseState::PurchaseState(
@@ -519,7 +518,7 @@ PurchaseState::PurchaseState(
 }
 
 /**
- *
+ * dTor.
  */
 PurchaseState::~PurchaseState()
 {

@@ -45,9 +45,9 @@ namespace OpenXcom
 {
 /**
  * Initializes all the elements in the EndResearch screen.
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param possibilities List of newly possible ResearchProject
+ * @param showResearchButton
  */
 NewPossibleResearchState::NewPossibleResearchState(
 		Base* base,
@@ -105,12 +105,13 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 
 	size_t tally(0);
+
 	for (std::vector<RuleResearch *>::const_iterator
 			iter = possibilities.begin();
 			iter != possibilities.end();
 			++iter)
 	{
-		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != 0;
+		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != NULL;
 
 		if (!_game->getSavedGame()->wasResearchPopped(*iter)
 			&& (*iter)->getRequirements().empty()

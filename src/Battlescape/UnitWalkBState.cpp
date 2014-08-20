@@ -142,7 +142,7 @@ void UnitWalkBState::think()
 	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 
-// _oO **** STATUS WALKING **** Oo_
+// _oO **** STATUS WALKING **** Oo_ // #2
 	if (_unit->getStatus() == STATUS_WALKING
 		|| _unit->getStatus() == STATUS_FLYING)
 	{
@@ -151,6 +151,7 @@ void UnitWalkBState::think()
 //		if (_unit->getVisible())
 		if (_onScreen)
 		{
+			//Log(LOG_INFO) << ". onScreen";
 			int dest_z = _unit->getDestination().z;
 
 			if (_walkCam->isOnScreen(
@@ -158,6 +159,7 @@ void UnitWalkBState::think()
 //								true))
 				&& _walkCam->getViewLevel() < dest_z)
 			{
+				//Log(LOG_INFO) << ". . setViewLevel(dest_z)";
 				_walkCam->setViewLevel(dest_z);
 			}
 		} // kL_end.
@@ -166,7 +168,7 @@ void UnitWalkBState::think()
 			return;
 
 
-	// _oO **** STATUS STANDING end **** Oo_
+	// _oO **** STATUS STANDING end **** Oo_ // #3
 		// kL_note: walkPhase reset as the unit completes its transition to the next tile
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
@@ -186,12 +188,14 @@ void UnitWalkBState::think()
 										_unit->getPosition()))
 //										true))
 				{
+					//Log(LOG_INFO) << ". onScreen";
 					int dest_z = _unit->getDestination().z;
 
 					if (_walkCam->getViewLevel() > dest_z
 						&& (_pf->getPath().size() == 0
 							|| _pf->getPath().back() != _pf->DIR_UP))
 					{
+						//Log(LOG_INFO) << ". . setViewLevel(dest_z)";
 						_walkCam->setViewLevel(dest_z);
 					}
 				}
@@ -231,41 +235,53 @@ void UnitWalkBState::think()
 	}
 
 
-// _oO **** STATUS STANDING **** Oo_
+// _oO **** STATUS STANDING **** Oo_ // #1 & #4
 	if (_unit->getStatus() == STATUS_STANDING
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
 		//Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();
-		// kL_begin:
-//		if (_unit->getVisible())
-		if (_onScreen)
-		{
-			int pos_z = _unit->getPosition().z;
-
-			if (_unit->getFaction() != FACTION_PLAYER
-				&& !_walkCam->isOnScreen(
-									_unit->getPosition()))
-//kL								true))
-			{
-				_walkCam->centerOnPosition(_unit->getPosition());
-			}
-			else if (_walkCam->isOnScreen(
-										_unit->getPosition()))
-//										true))
-			{
-				int dest_z = _unit->getDestination().z;
-
-				if (dest_z == pos_z
-					|| (dest_z > pos_z
-						&& _walkCam->getViewLevel() < pos_z))
-				{
-					_walkCam->setViewLevel(pos_z);
-				}
-			}
-		} // kL_end.
 
 		if (!doStatusStand())
 			return;
+		else // kL_begin: Destination is not valid until *after* doStatusStand() runs.
+		{
+//			if (_unit->getVisible())
+			if (_onScreen)
+			{
+				//Log(LOG_INFO) << ". onScreen";
+				int pos_z = _unit->getPosition().z;
+
+				if (_unit->getFaction() != FACTION_PLAYER
+					&& !_walkCam->isOnScreen(
+										_unit->getPosition()))
+//kL									true))
+				{
+					_walkCam->centerOnPosition(_unit->getPosition());
+				}
+				else if (_walkCam->isOnScreen(
+											_unit->getPosition()))
+//											true))
+				{
+					//Log(LOG_INFO) << ". cam->onScreen";
+					int dest_z = _unit->getDestination().z;
+
+					//Log(LOG_INFO) << ". dest_z == pos_z : " << (dest_z == pos_z);
+					//Log(LOG_INFO) << ". dest_z > pos_z : " << (dest_z > pos_z);
+					//Log(LOG_INFO) << ". _walkCam->getViewLevel() < pos_z : " << (_walkCam->getViewLevel() < pos_z);
+					if (dest_z == pos_z
+						|| (dest_z > pos_z
+//							&& _walkCam->getViewLevel() < pos_z))
+							&& _walkCam->getViewLevel() < dest_z))
+//							&& _pf->getPath().size() > 0))
+//							&& _unit->getPosition().x != _unit->getDestination().x
+//							&& _unit->getPosition().y != _unit->getDestination().y))
+					{
+						//Log(LOG_INFO) << ". . setViewLevel(pos_z)";
+						_walkCam->setViewLevel(pos_z);
+					}
+				}
+			}
+		} // kL_end.
 	}
 
 
@@ -841,26 +857,6 @@ bool UnitWalkBState::doStatusWalk()
 				}
 			}
 		}
-
-		// kL_note: try moving this up into think().
-		// kL_note: Let's try this, maintain camera focus centered on Visible aliens during (un)hidden movement
-/*		if (_unit->getVisible()										// kL
-			&& _unit->getFaction() != FACTION_PLAYER				// kL
-			&& !_walkCam->isOnScreen(_unit->getPosition(), true))	// kL_TEST!
-		{
-			_walkCam->centerOnPosition(_unit->getPosition());
-		}
-
-		// kL_begin: if the unit changed level, camera changes level with it.
-		if (_walkCam->getViewLevel() != _unit->getPosition().z)
-		{
-			int delta_z = _unit->getPosition().z - _walkCam->getViewLevel();
-			if (delta_z > 0)
-				_walkCam->up();
-			else
-				_walkCam->down();
-		} // kL_end. */
-//kL	_walkCam->setViewLevel(_unit->getPosition().z);
 	}
 
 	return true;
@@ -909,12 +905,6 @@ bool UnitWalkBState::doStatusStand_end()
 	// This calculates or 'refreshes' the Field of View
 	// of all units within maximum distance (20 tiles) of this unit.
 	_terrain->calculateFOV(_unit->getPosition());
-
-/*	_newUnitSpotted = !_falling
-						&& !_action.desperate
-						&& _parent->getPanicHandled()
-						&& _unitsSpotted < _unit->getUnitsSpottedThisTurn().size()
-						&& _unit->getFaction() != FACTION_PLAYER; */
 
 	if (_parent->checkForProximityGrenades(_unit))
 		// kL_add: Put checkForSilacoid() here!

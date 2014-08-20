@@ -322,7 +322,6 @@ BattlescapeState::BattlescapeState()
 		_icons->setPixelColor(46, 44, 8);
 
 	add(_rank, "rank", "battlescape", _icons);
-	add(_kneel); // kL
 	add(_btnWounds); // kL
 	add(_numWounds); // kL
 	add(_btnUnitUp, "buttonUnitUp", "battlescape", _icons);
@@ -341,6 +340,7 @@ BattlescapeState::BattlescapeState()
 	add(_btnEndTurn, "buttonEndTurn", "battlescape", _icons);
 	add(_btnAbort, "buttonAbort", "battlescape", _icons);
 	add(_btnStats, "buttonStats", "battlescape", _icons);
+	add(_kneel); // kL, this has to go overtop _btns.
 	add(_txtName, "textName", "battlescape", _icons);
 	add(_numTUAim);
 	add(_numTUAuto);

@@ -55,9 +55,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Select Destination window.
- * @param game Pointer to the core game.
- * @param craft Pointer to the craft to target.
- * @param globe Pointer to the Geoscape globe.
+ * @param craft	- pointer to the craft
+ * @param globe	- pointer to the Globe
+ * @param geo	- pointer to the GeoscapeState
  */
 SelectDestinationState::SelectDestinationState(
 		Craft* craft,
@@ -176,7 +176,7 @@ SelectDestinationState::SelectDestinationState(
 }
 
 /**
- *
+ * dTor.
  */
 SelectDestinationState::~SelectDestinationState()
 {

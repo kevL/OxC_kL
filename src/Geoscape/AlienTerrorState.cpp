@@ -45,7 +45,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Aliens Terrorise window.
- * @param game Pointer to the core game.
  * @param terror Pointer to the respective Terror Site.
  * @param city Terrorized city name.
  * @param state Pointer to the Geoscape.

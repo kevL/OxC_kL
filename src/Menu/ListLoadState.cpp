@@ -35,7 +35,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Load Game screen.
- * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
 ListLoadState::ListLoadState(OptionsOrigin origin)
@@ -51,7 +50,7 @@ ListLoadState::ListLoadState(OptionsOrigin origin)
 }
 
 /**
- *
+ * dTor.
  */
 ListLoadState::~ListLoadState()
 {

@@ -78,7 +78,7 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 }
 
 /**
- *
+ * dTor.
  */
 ListSaveState::~ListSaveState()
 {

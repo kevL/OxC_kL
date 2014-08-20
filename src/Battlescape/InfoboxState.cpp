@@ -38,7 +38,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements.
- * @param game Pointer to the core game.
  * @param msg Message string.
  */
 InfoboxState::InfoboxState(const std::wstring& msg)
@@ -55,10 +54,10 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 
 	centerAllSurfaces();
 
-	_frame->setHighContrast(true);
 //	_frame->setColor(Palette::blockOffset(0)+7);
 //	_frame->setBackground(Palette::blockOffset(0)+14);
-	_frame->setThickness(9);
+	_frame->setHighContrast(true);
+	_frame->setThickness(8);
 
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
@@ -75,7 +74,7 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 }
 
 /**
- *
+ * dTor.
  */
 InfoboxState::~InfoboxState()
 {
@@ -102,7 +101,7 @@ void InfoboxState::handle(Action* action)
  */
 void InfoboxState::think()
 {
-	_timer->think(this, 0);
+	_timer->think(this, NULL);
 }
 
 /**

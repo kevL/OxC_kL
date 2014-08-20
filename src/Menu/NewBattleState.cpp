@@ -72,11 +72,10 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the New Battle window.
- * @param game Pointer to the core game.
  */
 NewBattleState::NewBattleState()
 	:
-		_craft(0)
+		_craft(NULL)
 {
 	_window				= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle			= new Text(320, 17, 0, 9);
@@ -284,7 +283,7 @@ NewBattleState::NewBattleState()
 }
 
 /**
- *
+ * dTor.
  */
 NewBattleState::~NewBattleState()
 {
@@ -298,7 +297,7 @@ void NewBattleState::init()
 {
 	State::init();
 
-	if (_craft == 0)
+	if (_craft == NULL)
 		load();
 }
 
@@ -673,7 +672,7 @@ void NewBattleState::btnCancelClick(Action*)
 {
 	save();
 
-	_game->setSavedGame(0);
+	_game->setSavedGame(NULL);
 	_game->popState();
 }
 
@@ -705,9 +704,9 @@ void NewBattleState::btnRandomClick(Action*)
 										0,
 										_game->getRuleset()->getAlienItemLevels().size() - 1));
 
-	cbxMissionChange(0);
-	cbxCraftChange(0);
-	cbxTerrainChange(0);
+	cbxMissionChange(NULL);
+	cbxCraftChange(NULL);
+	cbxTerrainChange(NULL);
 
 	initSave();
 }
@@ -735,7 +734,7 @@ void NewBattleState::cbxMissionChange(Action*)
 	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
 	_txtTerrain->setVisible(ruleDeploy->getTerrains().empty());
 	_cbxTerrain->setVisible(ruleDeploy->getTerrains().empty());
-	cbxTerrainChange(0);
+	cbxTerrainChange(NULL);
 }
 
 /**
@@ -758,7 +757,7 @@ void NewBattleState::cbxCraftChange(Action*)
 		{
 			if ((*i)->getCraft() == _craft)
 			{
-				(*i)->setCraft(0);
+				(*i)->setCraft(NULL);
 
 				current--;
 			}

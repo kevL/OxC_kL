@@ -1546,7 +1546,8 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// kL_begin:
-					if (tile->getHasUnconsciousSoldier())
+					if (unit == NULL
+						&& tile->getHasUnconsciousSoldier())
 					{
 						tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
 						if (tmpSurface != NULL)
@@ -1561,8 +1562,8 @@ void Map::drawTerrain(Surface* surface)
 						tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
 						tmpSurface->blitNShade(
 								surface,
-								screenPosition.x + 4,
-								screenPosition.y + 4,
+								screenPosition.x + 2,
+								screenPosition.y + 1,
 								0,
 								false,
 								3); // 1=white, 3=red.

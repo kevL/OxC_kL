@@ -51,7 +51,7 @@ Frame::Frame(
 }
 
 /**
- *
+ * dTor.
  */
 Frame::~Frame()
 {
@@ -126,27 +126,29 @@ void Frame::draw()
 
 	SDL_Rect square;
 	square.x = 0;
-	square.w = getWidth();
 	square.y = 0;
+	square.w = getWidth();
 	square.h = getHeight();
 
 	int mult = 1;
 	if (_contrast)
 		mult = 2;
 
-
-	// _color denotes our middle line color, so we start (half the thickness times the multiplier) steps darker and build up
-	Uint8 color = _color + ((1 + _thickness) * mult) / 2;
-	// we want the darkest version of this colour to outline any thick borders
+	// _color denotes our middle line color, so we start at
+	// half(thickness-times-multiplier) steps darker and build up
+//	Uint8 color = _color + ((1 + _thickness) * mult) / 2;
+	// we [not 'we' - YOU] want the darkest version of this color to outline any thick borders
 	Uint8 darkest = Palette::blockOffset(_color / 16) + 15;
+
+	Uint8 color;
 
 	for (int
 			i = 0;
 			i < _thickness;
 			++i)
 	{
-		if (_thickness > 5
-			&& (!i
+/*		if (_thickness > 5
+			&& (i == 0
 				|| i == _thickness - 1))
 		{
 			drawRect(
@@ -161,17 +163,25 @@ void Frame::draw()
 		if (i < _thickness / 2)
 			color -= 1 * mult;
 		else
-			color += 1 * mult;
+			color += 1 * mult; */
+
+		color = _color + abs(i - _thickness / 2) * mult;
+		if (color / 16 != _color / 16)
+			color = darkest;
+
+		drawRect(
+				&square,
+				color);
 
 		square.x++;
 		square.y++;
 
-		if (square.w >= 2)
+		if (square.w > 1)
 			square.w -= 2;
 		else
 			square.w = 1;
 
-		if (square.h >= 2)
+		if (square.h > 1)
 			square.h -= 2;
 		else
 			square.h = 1;

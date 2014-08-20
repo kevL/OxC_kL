@@ -46,7 +46,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Pause window.
- * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
 PauseState::PauseState(OptionsOrigin origin)
@@ -142,7 +141,7 @@ PauseState::PauseState(OptionsOrigin origin)
 }
 
 /**
- *
+ * dTor.
  */
 PauseState::~PauseState()
 {

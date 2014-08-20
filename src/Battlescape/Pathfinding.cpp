@@ -126,8 +126,8 @@ void Pathfinding::calculate(
 	_path.clear();
 
 //	_modCTRL = false;
-	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
 //	_modALT = false;
+	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
 	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// for BattlescapeState::btnUnitDownClick() -> now redundant.
 													// Can go back to previewPath()
 
@@ -291,9 +291,11 @@ void Pathfinding::calculate(
 
 	_strafeMove = strafeRejected == false
 				&& Options::strafe
-				&& (((SDL_GetModState() & KMOD_CTRL) != 0
+//				&& (((SDL_GetModState() & KMOD_CTRL) != 0
+				&& ((_modCTRL == true
 						&& unit->getTurretType() == -1)
-					|| ((SDL_GetModState() & KMOD_ALT) != 0
+//					|| ((SDL_GetModState() & KMOD_ALT) != 0
+					|| (_modALT == true
 						&& unit->getTurretType() > -1))
 				&& startPos.z == endPos.z
 				&& abs(startPos.x - endPos.x) < 2
@@ -1276,7 +1278,8 @@ void Pathfinding::abortPath()
 	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;	// kL
 	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;		// kL
 
-	_openDoor = false; // kL
+//	_strafeMove = false;	// kL
+	_openDoor = false;		// kL
 
 	_totalTUCost = 0;
 	_path.clear();

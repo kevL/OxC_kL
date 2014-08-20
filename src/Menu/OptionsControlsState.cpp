@@ -42,7 +42,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Controls screen.
- * @param game Pointer to the core game.
  * @param origin Game section that originated this state.
  */
 OptionsControlsState::OptionsControlsState(OptionsOrigin origin)
@@ -105,7 +104,7 @@ OptionsControlsState::OptionsControlsState(OptionsOrigin origin)
 }
 
 /**
- *
+ * dTor.
  */
 OptionsControlsState::~OptionsControlsState()
 {

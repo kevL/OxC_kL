@@ -74,26 +74,26 @@ ActionMenuItem::ActionMenuItem(
 	_txtAcc		= new Text(63, 20, 151, 13);
 	_txtTU		= new Text(50, 20, 214, 13);
 
-	_frame->setHighContrast(true);
 	_frame->setColor(actionMenu->border); //Palette::blockOffset(0)+7);
 	_frame->setBackground(actionMenu->color2); //Palette::blockOffset(0)+14);
+	_frame->setHighContrast(true);
 	_frame->setThickness(8);
 
 	_txtDesc->initText(big, small, lang);
-	_txtDesc->setBig();
-	_txtDesc->setHighContrast(true);
 	_txtDesc->setColor(actionMenu->color); //Palette::blockOffset(0)-1);
-	_txtDesc->setVisible(true);
+	_txtDesc->setHighContrast(true);
+	_txtDesc->setBig();
+//	_txtDesc->setVisible(true);
 
 	_txtAcc->initText(big, small, lang);
-	_txtAcc->setBig();
-	_txtAcc->setHighContrast(true);
 	_txtAcc->setColor(actionMenu->color); //Palette::blockOffset(0)-1);
+	_txtAcc->setHighContrast(true);
+	_txtAcc->setBig();
 
 	_txtTU->initText(big, small, lang);
-	_txtTU->setBig();
-	_txtTU->setHighContrast(true);
 	_txtTU->setColor(actionMenu->color); //Palette::blockOffset(0)-1);
+	_txtTU->setHighContrast(true);
+	_txtTU->setBig();
 }
 
 /**

@@ -47,7 +47,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Build Facilities window.
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param state Pointer to the base state to refresh.
  * @param globe Pointer to the globe to refresh.
@@ -74,7 +73,7 @@ SelectStartFacilityState::SelectStartFacilityState(
 }
 
 /**
- *
+ * dTor.
  */
 SelectStartFacilityState::~SelectStartFacilityState()
 {

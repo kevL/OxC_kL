@@ -38,7 +38,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements.
- * @param game Pointer to the core game.
  * @param msg Message string.
  */
 InfoboxOKState::InfoboxOKState(const std::wstring& msg)
@@ -46,7 +45,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 	_screen = false;
 
 	_frame		= new Frame(260, 90, 30, 27);
-	_txtTitle	= new Text(250, 60, 35, 32);
+	_txtTitle	= new Text(250, 58, 35, 34);
 	_btnOk		= new TextButton(120, 16, 100, 94);
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
@@ -59,7 +58,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 
 //	_frame->setColor(Palette::blockOffset(6)+3);
 //	_frame->setBackground(Palette::blockOffset(6)+12);
-	_frame->setThickness(3);
+	_frame->setThickness(5);
 	_frame->setHighContrast(true);
 
 //	_txtTitle->setColor(Palette::blockOffset(1)-1);
@@ -85,7 +84,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 }
 
 /**
- *
+ * dTor.
  */
 InfoboxOKState::~InfoboxOKState()
 {

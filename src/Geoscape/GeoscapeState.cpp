@@ -195,7 +195,6 @@ struct NewPossibleManufactureInfo
 
 /**
  * Initializes all the elements in the Geoscape screen.
- * @param game Pointer to the core game.
  */
 GeoscapeState::GeoscapeState()
 	:

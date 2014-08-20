@@ -36,7 +36,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the No Containment screen.
- * @param game Pointer to the core game.
  */
 NoContainmentState::NoContainmentState()
 {

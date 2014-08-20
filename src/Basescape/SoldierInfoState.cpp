@@ -688,9 +688,17 @@ void SoldierInfoState::init()
 //		_txtRecovery->setText(tr("STR_WOUND_RECOVERY").arg(tr("STR_DAY", woundRec)));
 		_txtRecovDay->setColor(color);
 		_txtRecovDay->setText(tr("STR_DAY", woundRec));
+
+		_txtRecovery->setVisible(true);
+		_txtRecovDay->setVisible(true);
 	}
 	else
-		_txtRecovery->setText(L"");
+	{
+//		_txtRecovery->setText(L"");
+//		_txtRecovDay->setText(L"");
+		_txtRecovery->setVisible(false);
+		_txtRecovDay->setVisible(false);
+	}
 
 	_txtRank->setText(tr("STR_RANK_").arg(tr(_soldier->getRankString())));
 	_txtMissions->setText(tr("STR_MISSIONS").arg(_soldier->getMissions()));
