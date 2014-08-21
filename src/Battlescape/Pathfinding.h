@@ -47,10 +47,10 @@ private:
 //		_kneelCheck, // kL
 		_modALT,
 		_modCTRL,
-		_openDoor, // kL, to give accurate preview # when dashing through doors.
 		_pathPreviewed,
 		_strafeMove;
 	int
+		_openDoor, // kL, to give accurate preview # when dashing through doors.
 		_size,
 		_totalTUCost;
 
@@ -211,6 +211,9 @@ private:
 
 		/// kL. Gets the current movementType.
 		MovementType getMovementType() const; // kL
+
+		/// kL. Gets TU cost for opening a door.
+		int getOpenDoor() const; // kL
 
 		/// Gets a reference to the path.
 		const std::vector<int>& getPath();

@@ -449,7 +449,7 @@ bool UnitWalkBState::doStatusStand()
 			tu = 0;
 		}
 
-		int tuTemp = tu;
+		int tuTest = tu;
 		int energy = tu;
 
 		if (!gravLift)
@@ -462,7 +462,13 @@ bool UnitWalkBState::doStatusStand()
 											// or at end of Player turn. -> No good, move it
 											// back to BattlescapeGame::primaryAction() because
 											// it's needed for setting the animation speed in init()
-				tu = tu * 3 / 4;
+//				tu = tu * 3 / 4;
+//				energy = energy * 3 / 2;
+
+				tu -= _pf->getOpenDoor();
+				tu = (tu * 3 / 4) + _pf->getOpenDoor();
+
+				energy -= _pf->getOpenDoor();
 				energy = energy * 3 / 2;
 			}
 
@@ -497,7 +503,7 @@ bool UnitWalkBState::doStatusStand()
 			//Log(LOG_INFO) << ". . tu > _unit->TU()";
 			if (_parent->getPanicHandled()
 //kL			&& tu < 255)
-				&& tuTemp < 255)
+				&& tuTest < 255)
 			{
 				//Log(LOG_INFO) << ". send warning: not enough TU";
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
