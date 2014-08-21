@@ -4231,16 +4231,16 @@ armors:
     movementType: 1
     drawingRoutine: 4
     damageModifier:
-      - 1.0
-      - 0.8
-      - 0.8
-      - 0.9
-      - 0.9
-      - 1.0
-      - 0.7
-      - 0.9
-      - 1.0
-      - 0.0
+      - 1.0 #none
+      - 0.7 #ap
+      - 1.2 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 0.7 #stun
+      - 0.9 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
     loftempsSet: [ 3 ]
   - type: ETHEREAL_ARMOR1 #leader
     spriteSheet: ETHEREAL.PCK
@@ -4253,16 +4253,16 @@ armors:
     movementType: 1
     drawingRoutine: 4
     damageModifier:
-      - 1.0
-      - 0.8
-      - 0.8
-      - 0.9
-      - 0.9
-      - 1.0
-      - 0.7
-      - 0.9
-      - 1.0
-      - 0.0
+      - 1.0 #none
+      - 0.7 #ap
+      - 1.2 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 0.7 #stun
+      - 0.9 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
     loftempsSet: [ 3 ]
   - type: ETHEREAL_ARMOR2 #commander
     spriteSheet: ETHEREAL.PCK
@@ -4275,16 +4275,16 @@ armors:
     movementType: 1
     drawingRoutine: 4
     damageModifier:
-      - 1.0
-      - 0.8
-      - 0.8
-      - 0.9
-      - 0.9
-      - 1.0
-      - 0.7
-      - 0.9
-      - 1.0
-      - 0.0
+      - 1.0 #none
+      - 0.7 #ap
+      - 1.2 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 0.7 #stun
+      - 0.9 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
     loftempsSet: [ 3 ]
   - type: CHRYSSALID_ARMOR
     spriteSheet: CHRYS.PCK

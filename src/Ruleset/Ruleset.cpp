@@ -797,9 +797,13 @@ void Ruleset::loadFile(const std::string& filename)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 		std::auto_ptr<ExtraSprites> extraSprites (new ExtraSprites());
-		extraSprites->load(
-						*i,
-						_modIndex);
+
+		if (type != "TEXTURE.DAT") // doesn't support modIndex
+			extraSprites->load(
+							*i,
+							_modIndex);
+		else
+			extraSprites->load(*i, 0);
 
 		_extraSprites.push_back(std::make_pair(type, extraSprites.release()));
 

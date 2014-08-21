@@ -424,9 +424,13 @@ private:
 	// static data
 	UnitStats _stats;
 
+	bool
+		_breathFrameUpdated,
+		_breathing;
 	int
 		_aggression,
 		_aggroSound,
+		_breathFrame,
 		_deathSound,
 		_floatHeight,
 		_kneelHeight,
@@ -968,6 +972,11 @@ private:
 
 		/// Returns true if this unit has an inventory.
 		bool hasInventory() const;
+
+		///
+		int getBreathFrame() const;
+		///
+		bool breathe();
 
 		/// Gets the unit's mission statistics.
 		BattleUnitStatistics* getStatistics();

@@ -130,26 +130,30 @@ BattleUnit::BattleUnit(
 		_activeHand("STR_RIGHT_HAND")
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
-	_name			= soldier->getName(true);
-	_id				= soldier->getId();
-//	_type			= "SOLDIER";
-	_rank			= soldier->getRankString();
-	_stats			= *soldier->getCurrentStats();
+	_name				= soldier->getName(true);
+	_id					= soldier->getId();
+//	_type				= "SOLDIER";
+	_rank				= soldier->getRankString();
+	_stats				= *soldier->getCurrentStats();
 
-	_standHeight	= soldier->getRules()->getStandHeight();
-	_kneelHeight	= soldier->getRules()->getKneelHeight();
-	_floatHeight	= soldier->getRules()->getFloatHeight();
-//	_deathSound		= 0; // this one is hardcoded
-//	_aggroSound		= -1;
-//	_moveSound		= -1; // this one is hardcoded
-//	_intelligence	= 2;
-//	_aggression		= 1;
-//	_specab			= SPECAB_NONE;
-	_armor			= soldier->getArmor();
-	_stats			+= *_armor->getStats();	// armors may modify effective stats
-	_loftempsSet	= _armor->getLoftempsSet();
-	_gender			= soldier->getGender();
-//	_faceDirection	= -1;
+	_standHeight		= soldier->getRules()->getStandHeight();
+	_kneelHeight		= soldier->getRules()->getKneelHeight();
+	_floatHeight		= soldier->getRules()->getFloatHeight();
+//	_deathSound			= 0; // this one is hardcoded
+//	_aggroSound			= -1;
+//	_moveSound			= -1; // this one is hardcoded
+//	_intelligence		= 2;
+//	_aggression			= 1;
+//	_specab				= SPECAB_NONE;
+	_armor				= soldier->getArmor();
+	_stats				+= *_armor->getStats();	// armors may modify effective stats
+	_loftempsSet		= _armor->getLoftempsSet();
+	_gender				= soldier->getGender();
+//	_faceDirection		= -1;
+	_breathFrame		= 0;
+	_breathFrameUpdated	= false;
+	_breathing			= false;
+
 
 	int rankbonus = 0;
 	switch (soldier->getRank())
@@ -301,6 +305,14 @@ BattleUnit::BattleUnit(
 	_value			= unit->getValue();
 	_gender			= GENDER_MALE;
 	_faceDirection	= -1;
+
+	_breathFrame = -1; // most aliens don't breathe per-se, that's exclusive to humanoids
+	if (armor->getDrawingRoutine() == 14)
+	{
+		_breathFrame = 0;
+	}
+	_breathFrameUpdated = false;
+	_breathing = false;
 
 	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
 	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
@@ -3831,6 +3843,51 @@ bool BattleUnit::hasInventory() const
 {
 	return _armor->getSize() == 1
 		&& _rank != "STR_LIVE_TERRORIST";
+}
+
+/**
+ *
+ */
+int BattleUnit::getBreathFrame() const
+{
+	return _breathFrame;
+}
+
+/**
+ *
+ */
+bool BattleUnit::breathe()
+{
+	// _breathFrame of -1 means this unit doesn't produce bubbles
+	if (_breathFrame < 0)
+		return false;
+
+	if (!_breathing)
+	{
+		// 10% chance per animation frame to start breathing
+		_breathing = (_status != STATUS_WALKING && RNG::percent(10));
+		_breathFrameUpdated = false;
+	}
+
+	if (_breathing)
+	{
+		// only update the sprite every second animation cycle
+		_breathFrameUpdated = !_breathFrameUpdated;
+		if (_breathFrameUpdated)
+		{
+			// advance the bubble frame
+			_breathFrame++;
+
+			// we've reached the end of the cycle, but we still need to update the sprite to get rid of the bubbles
+			if (_breathFrame > 16)
+			{
+				_breathFrame = 0;
+				_breathing = false;
+			}
+		}
+	}
+
+	return _breathFrameUpdated;
 }
 
 /**
