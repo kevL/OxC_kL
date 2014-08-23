@@ -1478,6 +1478,19 @@ void Map::drawTerrain(Surface* surface)
 										0);
 							}
 
+							if (unit->getBreathFrame() > 0)
+							{
+								tmpSurface = _res->getSurfaceSet("BREATH-1.PCK")->getFrame(unit->getBreathFrame() - 1);
+								if (tmpSurface)
+								{
+									tmpSurface->blitNShade(
+											surface,
+											screenPosition.x + offset.x,
+											screenPosition.y + offset.y - 30,
+											tileShade);
+								}
+							}
+
 							// kL_begin:
 							if (drawRankIcon == true
 								&& unit->getFaction() == FACTION_PLAYER
@@ -2332,9 +2345,10 @@ void Map::animate(bool redraw)
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if ((*i)->getArmor()->getConstantAnimation()
-			|| (_save->getDepth() > 0
-				&& (*i)->breathe()))
+		if (_save->getDepth() > 0)
+			(*i)->breathe();
+
+		if ((*i)->getArmor()->getConstantAnimation())
 		{
 			(*i)->setCache(NULL);
 			cacheUnit(*i);

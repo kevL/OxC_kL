@@ -119,7 +119,7 @@ BaseDefenseState::BaseDefenseState(
 	_gravShields = _base->getGravShields();
 	_defenses = _base->getDefenses()->size();
 
-	_timer = new Timer(750);
+	_timer = new Timer(250);
 	_timer->onTimer((StateHandler)& BaseDefenseState::nextStep);
 	_timer->start();
 }
@@ -162,11 +162,37 @@ void BaseDefenseState::nextStep()
 		switch (_action)
 		{
 			case BDA_DESTROY:
+				_action = BDA_EXPLODING1;
+				_timer->setInterval(100);
+
+				_game->getResourcePack()->getSound(
+												"GEO.CAT",
+												11)
+											->play();
+
+				_lstDefenses->addRow(
+								3,
+								tr("STR_UFO_DESTROYED").c_str(),
+								L" ",
+								L" ");
+			return;
+
+			case BDA_EXPLODING1:
+				_action = BDA_EXPLODING2;
+
+				_game->getResourcePack()->getSound(
+												"GEO.CAT",
+												11)
+											->play();
+			return;
+			case BDA_EXPLODING2:
 				_action = BDA_END;
+				_timer->setInterval(250);
 
-				_game->getResourcePack()->getSound("GEO.CAT", 11)->play();
-
-				_lstDefenses->addRow(2, tr("STR_UFO_DESTROYED").c_str(), L" ", L" ");
+				_game->getResourcePack()->getSound(
+												"GEO.CAT",
+												11)
+											->play();
 			return;
 
 			case BDA_END:
@@ -186,7 +212,11 @@ void BaseDefenseState::nextStep()
 				_attacks = 0;
 				_passes++;
 
-				_lstDefenses->addRow(3, tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(), L" ", L" ");
+				_lstDefenses->addRow(
+								3,
+								tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),
+								L" ",
+								L" ");
 				_row++;
 
 				return;
@@ -206,7 +236,11 @@ void BaseDefenseState::nextStep()
 			case BDA_NONE:
 				_action = BDA_FIRE;
 
-				_lstDefenses->addRow(3, tr(def->getRules()->getType()).c_str(), L" ", L" ");
+				_lstDefenses->addRow(
+								3,
+								tr(def->getRules()->getType()).c_str(),
+								L" ",
+								L" ");
 				++_row;
 
 				return;
@@ -214,9 +248,15 @@ void BaseDefenseState::nextStep()
 			case BDA_FIRE:
 				_action = BDA_RESOLVE;
 
-				_game->getResourcePack()->getSound("GEO.CAT", def->getRules()->getFireSound())->play();
+				_game->getResourcePack()->getSound(
+												"GEO.CAT",
+												def->getRules()->getFireSound())
+											->play();
 
-				_lstDefenses->setCellText(_row, 1, tr("STR_FIRING").c_str());
+				_lstDefenses->setCellText(
+									_row,
+									1,
+									tr("STR_FIRING").c_str());
 
 				return;
 
@@ -226,15 +266,22 @@ void BaseDefenseState::nextStep()
 					_game->getResourcePack()->getSound("GEO.CAT", def->getRules()->getHitSound())->play();
 
 					int damage = def->getRules()->getDefenseValue();
-					damage = RNG::generate( // kL: vary damage between 75% and 133%
-										damage * 3 / 4,		// stock is 0..200%
-										damage * 4 / 3);	// TFTD is 50..150%
+//					_ufo->setDamage(_ufo->getDamage() + (dmg / 2 + RNG::generate(0, dmg)));
+					damage = RNG::generate( // kL: vary damage between 75% and 133% ( stock is 50..150% )
+										damage * 3 / 4,
+										damage * 4 / 3);
 					_ufo->setDamage(_ufo->getDamage() + damage);
 
-					_lstDefenses->setCellText(_row, 2, tr("STR_HIT").c_str());
+					_lstDefenses->setCellText(
+										_row,
+										2,
+										tr("STR_HIT").c_str());
 				}
 				else
-					_lstDefenses->setCellText(_row, 2, tr("STR_MISSED").c_str());
+					_lstDefenses->setCellText(
+										_row,
+										2,
+										tr("STR_MISSED").c_str());
 
 				if (_ufo->getStatus() == Ufo::DESTROYED)
 					_action = BDA_DESTROY;

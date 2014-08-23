@@ -976,7 +976,7 @@ private:
 		///
 		int getBreathFrame() const;
 		///
-		bool breathe();
+		void breathe();
 
 		/// Gets the unit's mission statistics.
 		BattleUnitStatistics* getStatistics();

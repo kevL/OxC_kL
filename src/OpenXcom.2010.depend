@@ -4762,7 +4762,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1408626221 f:\git\openxcom\src\savegame\battleunit.h
+1408824402 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -7428,7 +7428,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1404096022 f:\git\openxcom\src\geoscape\basedefensestate.h
+1408824705 f:\git\openxcom\src\geoscape\basedefensestate.h
 	"../Engine/State.h"
 
 1404353861 f:\git\openxcom\src\geoscape\basedestroyedstate.h
