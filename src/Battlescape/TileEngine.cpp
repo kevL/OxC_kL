@@ -209,12 +209,10 @@ void TileEngine::calculateTerrainLighting()
 		}
 
 		if (_battleSave->getTiles()[i]->getFire())
-		{
 			addLight(
 					_battleSave->getTiles()[i]->getPosition(),
 					fireLightPower,
 					layer);
-		}
 
 		for (std::vector<BattleItem*>::iterator
 				it = _battleSave->getTiles()[i]->getInventory()->begin();
@@ -237,7 +235,7 @@ void TileEngine::calculateUnitLighting()
 {
 	const int layer = 2;					// Dynamic lighting layer.
 //kL	const int personalLightPower = 15;	// amount of light a unit generates
-	const int personalLightPower = 9;		// kL, Try it...
+	const int personalLightPower = 10;		// kL, Try it...
 	const int fireLightPower = 15;			// amount of light a fire generates
 
 	for (int // reset all light to 0 first

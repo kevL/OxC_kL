@@ -88,7 +88,7 @@ BasescapeState::BasescapeState(
 	_view			= new BaseView(192, 192, 0, 8);
 
 	_edtBase		= new TextEdit(this, 127, 17, 193, 0);
-	_txtLocation	= new Text(126, 9, 194, 16);
+	_txtRegion		= new Text(126, 9, 194, 16);
 	_txtFunds		= new Text(126, 9, 194, 24);
 
 	_mini			= new MiniBaseView(128, 20, 192, 35);
@@ -112,7 +112,7 @@ BasescapeState::BasescapeState(
 	add(_mini);
 	add(_txtFacility);
 	add(_edtBase);
-	add(_txtLocation);
+	add(_txtRegion);
 	add(_txtFunds);
 	add(_btnAliens);
 	add(_btnNewBase);
@@ -151,7 +151,7 @@ BasescapeState::BasescapeState(
 	_edtBase->setBig();
 	_edtBase->onChange((ActionHandler)& BasescapeState::edtBaseChange);
 
-	_txtLocation->setColor(Palette::blockOffset(15)+6);
+	_txtRegion->setColor(Palette::blockOffset(15)+6);
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 
@@ -253,7 +253,7 @@ void BasescapeState::init()
 										_base->getLongitude(),
 										_base->getLatitude()))
 		{
-			_txtLocation->setText(tr((*i)->getRules()->getType()));
+			_txtRegion->setText(tr((*i)->getRules()->getType()));
 
 			break;
 		}

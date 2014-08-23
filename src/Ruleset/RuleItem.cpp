@@ -978,4 +978,50 @@ bool RuleItem::isLOSRequired() const
 	return _LOSRequired;
 }
 
+/**
+ * kL. Gets the item's default BattleAction.
+ * Used to show a tu cost in InventoryState. Lifted from ActionMenuState cTor.
+ */
+BattleActionType RuleItem::getDefaultAction() const // kL
+{
+	if (isFixed())
+		return BA_NONE;
+
+	if (getBattleType() == BT_FIREARM)
+	{
+		if (isWaypoint())
+			return BA_LAUNCH;
+
+		if (getAccuracySnap() != 0)
+			return BA_SNAPSHOT;
+
+		if (getAccuracyAuto() != 0)
+			return BA_AUTOSHOT;
+
+		if (getAccuracyAimed() != 0)
+			return BA_AIMEDSHOT;
+	}
+
+	if (getBattleType() == BT_GRENADE
+		|| getBattleType() == BT_PROXIMITYGRENADE)
+	{
+		return BA_PRIME;
+	}
+
+	if (getBattleType() == BT_MEDIKIT
+		|| getBattleType() == BT_SCANNER
+		|| getBattleType() == BT_MINDPROBE)
+	{
+		return BA_USE;
+	}
+
+	if (getBattleType() == BT_PSIAMP)
+		return BA_PANIC;
+
+	if (getTUMelee())
+		return BA_HIT;
+
+	return BA_NONE;
+}
+
 }

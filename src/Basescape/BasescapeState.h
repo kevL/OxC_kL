@@ -50,8 +50,8 @@ private:
 	MiniBaseView* _mini;
 	Text
 		* _txtFacility,
-		* _txtLocation,
-		* _txtFunds;
+		* _txtFunds,
+		* _txtRegion;
 	TextEdit* _edtBase;
 	TextButton
 		* _btnAliens, // kL

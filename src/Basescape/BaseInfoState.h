@@ -52,6 +52,7 @@ private:
 	Surface* _bg;
 	Text
 		* _txtPersonnel,
+		* _txtRegion,
 		* _txtSpace;
 	TextButton
 		* _btnMonthlyCosts,

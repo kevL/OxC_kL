@@ -1685,7 +1685,8 @@ void Map::drawTerrain(Surface* surface)
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x,
-									screenPosition.y + tile->getTerrainLevel(),
+//kL								screenPosition.y + tile->getTerrainLevel(),
+									screenPosition.y, // kL
 									0,
 									false,
 									tileColor);
@@ -1949,7 +1950,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 					// kL_begin:
-					if (itZ == 0) // draw border-markers only on ground tiles
+					if (itZ == 0) // draw border-marks only on ground tiles
 					{
 						if (itX == 0
 							|| itX == _save->getMapSizeX() - 1
@@ -1987,7 +1988,7 @@ void Map::drawTerrain(Surface* surface)
 
 	if (pathPreview)
 	{
-		// make a border for the pathfinding display, so it's more visible on snow, etc.
+		// make a border for the pathfinding display
 //		if (_numWpID)
 //			_numWpID->setBordered(true);
 
@@ -2030,7 +2031,8 @@ void Map::drawTerrain(Surface* surface)
 							continue;
 						}
 
-						int offset_y = -tile->getTerrainLevel();
+//kL					int offset_y = -tile->getTerrainLevel();
+						int offset_y = 0; // kL
 						if (_previewSetting & PATH_ARROWS)
 						{
 							Tile* tileBelow = _save->getTile(mapPosition - Position(0, 0, 1));

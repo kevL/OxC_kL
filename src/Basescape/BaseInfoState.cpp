@@ -41,7 +41,10 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleRegion.h"
+
 #include "../Savegame/Base.h"
+#include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
 
 
@@ -70,7 +73,9 @@ BaseInfoState::BaseInfoState(
 
 	_edtBase			= new TextEdit(this, 127, 16, 8, 9);
 
-	_txtPersonnel		= new Text(300, 9, 8, 30);
+	_txtPersonnel		= new Text(212, 9, 8, 31);
+	_txtRegion			= new Text(100, 9, 212, 31);
+
 	_txtSoldiers		= new Text(114, 9, 8, 41);
 	_numSoldiers		= new Text(40, 9, 126, 42);
 	_barSoldiers		= new Bar(218, 5, 166, 43);
@@ -82,6 +87,7 @@ BaseInfoState::BaseInfoState(
 	_barScientists		= new Bar(218, 5, 166, 63);
 
 	_txtSpace			= new Text(300, 9, 8, 72);
+
 	_txtQuarters		= new Text(114, 9, 8, 83);
 	_numQuarters		= new Text(40, 9, 126, 84);
 	_barQuarters		= new Bar(218, 5, 166, 85);
@@ -127,6 +133,7 @@ BaseInfoState::BaseInfoState(
 	add(_edtBase);
 
 	add(_txtPersonnel);
+	add(_txtRegion);
 	add(_txtSoldiers);
 	add(_numSoldiers);
 	add(_barSoldiers);
@@ -222,6 +229,9 @@ BaseInfoState::BaseInfoState(
 
 	_txtPersonnel->setColor(Palette::blockOffset(15)+1);
 	_txtPersonnel->setText(tr("STR_PERSONNEL_AVAILABLE_PERSONNEL_TOTAL"));
+
+	_txtRegion->setColor(Palette::blockOffset(15)+1);
+	_txtRegion->setAlign(ALIGN_RIGHT);
 
 	_txtSoldiers->setColor(Palette::blockOffset(13)+5);
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));
@@ -320,6 +330,21 @@ void BaseInfoState::init()
 	State::init();
 
 	_edtBase->setText(_base->getName());
+
+	for (std::vector<Region*>::iterator // Get region
+			i = _game->getSavedGame()->getRegions()->begin();
+			i != _game->getSavedGame()->getRegions()->end();
+			++i)
+	{
+		if ((*i)->getRules()->insideRegion(
+										_base->getLongitude(),
+										_base->getLatitude()))
+		{
+			_txtRegion->setText(tr((*i)->getRules()->getType()));
+
+			break;
+		}
+	}
 
 	std::wostringstream
 		ss1,

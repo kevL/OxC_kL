@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1408479061 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1408672337 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -18,10 +18,12 @@
 	"../Interface/TextButton.h"
 	"../Interface/TextEdit.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleRegion.h"
 	"../Savegame/Base.h"
+	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1404096022 f:\git\openxcom\src\basescape\baseinfostate.h
+1408670905 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
 1407383407 f:\git\openxcom\src\engine\state.h
@@ -242,7 +244,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1406820027 f:\git\openxcom\src\basescape\basescapestate.h
+1408671503 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1404096022 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4438,7 +4440,7 @@
 	<stdint.h>
 	"GameTime.h"
 
-1408479026 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1408671500 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseInfoState.h"
 	"BaseView.h"
@@ -4686,10 +4688,11 @@
 1407776611 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1404096023 f:\git\openxcom\src\ruleset\ruleitem.h
+1408752385 f:\git\openxcom\src\ruleset\ruleitem.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
+	"../Battlescape/BattlescapeGame.h"
 
 1405073064 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
@@ -4734,7 +4737,7 @@
 1407162133 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
-1408303533 f:\git\openxcom\src\battlescape\inventorystate.h
+1408749699 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
@@ -6395,7 +6398,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1408303488 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1408755610 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6432,7 +6435,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1408625949 source:f:\git\openxcom\src\battlescape\map.cpp
+1408748976 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6755,7 +6758,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1408554792 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1408746096 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9338,7 +9341,7 @@
 	<cmath>
 	"RuleItem.h"
 
-1408200835 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1408752795 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"

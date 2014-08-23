@@ -25,6 +25,8 @@
 
 #include <yaml-cpp/yaml.h>
 
+#include "../Battlescape/BattlescapeGame.h" // kL, BattleActionType
+
 
 namespace OpenXcom
 {
@@ -359,6 +361,9 @@ private:
 
 		/// Check if LOS is required to use this item (only applies to psionic type items)
 		bool isLOSRequired() const;
+
+		/// kL. Gets the item's default BattleAction.
+		BattleActionType getDefaultAction() const; // kL
 };
 
 }

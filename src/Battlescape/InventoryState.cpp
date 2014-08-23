@@ -119,7 +119,7 @@ InventoryState::InventoryState(
 	_txtPStr	= new Text(40, 9, 237, 64);
 	_txtPSkill	= new Text(40, 9, 237, 72);
 
-	_txtPrimeTU	= new Text(40, 9, 245, 132);
+	_txtUseTU	= new Text(40, 9, 245, 132);
 	_txtThrowTU	= new Text(40, 9, 245, 141);
 
 	_numOrder	= new NumberText(7, 5, 228, 4); // kL
@@ -200,7 +200,7 @@ InventoryState::InventoryState(
 	add(_btnClearInventory);
 	add(_selAmmo);
 	add(_inv);
-	add(_txtPrimeTU);
+	add(_txtUseTU);
 	add(_txtThrowTU);
 
 	// move the TU display down to make room for the weight display
@@ -245,9 +245,9 @@ InventoryState::InventoryState(
 	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
 	_txtPSkill->setHighContrast(true);
 
-	_txtPrimeTU->setColor(Palette::blockOffset(4));
-	_txtPrimeTU->setSecondaryColor(Palette::blockOffset(1));
-	_txtPrimeTU->setHighContrast(true);
+	_txtUseTU->setColor(Palette::blockOffset(4));
+	_txtUseTU->setSecondaryColor(Palette::blockOffset(1));
+	_txtUseTU->setHighContrast(true);
 
 	_txtThrowTU->setColor(Palette::blockOffset(4));
 	_txtThrowTU->setSecondaryColor(Palette::blockOffset(1));
@@ -451,17 +451,21 @@ void InventoryState::init()
 	{
 		//Log(LOG_INFO) << ". . unit doesn't have Inventory";
 		if (_parent)
+		{
 			//Log(LOG_INFO) << ". . . _parent: select next unit";
 			_parent->selectNextFactionUnit(
 										false,
 										false,
 										true);
+		}
 		else
+		{
 			//Log(LOG_INFO) << ". . . NO _parent: select next unit";
 			_battleGame->selectNextFactionUnit(
 											false,
 											false,
 											true);
+		}
 
 		if (_battleGame->getSelectedUnit() == NULL
 			 || !_battleGame->getSelectedUnit()->hasInventory())
@@ -472,8 +476,10 @@ void InventoryState::init()
 			return; // starting a mission with just vehicles
 		}
 		else
+		{
 			//Log(LOG_INFO) << ". . . unit = selectedUnit";
 			unit = _battleGame->getSelectedUnit();
+		}
 	}
 
 //kL	if (_parent)
@@ -559,14 +565,9 @@ void InventoryState::updateStats()
 		else
 			_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 
-		if (_tu) // See: BattleUnit::getActionTUs(), but don't do that yet 'cause there is no ITEM to pass in.
+		if (_tu)
 		{
-			int stat = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 45) / 100.f));
-
-//			_txtPrimeTU->setText(Text::formatNumber(stat));
-			_txtPrimeTU->setText(tr("STR_PRIME_").arg(stat));
-
-			stat = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 23) / 100.f));
+			int stat = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 23) / 100.f));
 			_txtThrowTU->setText(tr("STR_THROW_").arg(stat));
 		}
 
@@ -709,8 +710,8 @@ void InventoryState::btnOkClick(Action*)
 
 			(*j)->prepareNewTurn();
 		} */
-	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 	}
+	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }
 
 /**
@@ -771,6 +772,8 @@ void InventoryState::btnUnloadClick(Action*)
 
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
+		_txtUseTU->setText(L"");
+
 		_selAmmo->clear();
 
 		updateStats();
@@ -1075,6 +1078,7 @@ void InventoryState::invClick(Action*)
 
 		// kL_begin:
 		std::wostringstream label;
+		bool isArt = false;
 
 		if (item->getUnit()
 			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
@@ -1086,7 +1090,10 @@ void InventoryState::invClick(Action*)
 			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()))
 				label << tr(itemRule->getName());
 			else
+			{
 				label << tr("STR_ALIEN_ARTIFACT");
+				isArt = true;
+			}
 		}
 
 		int wt = itemRule->getWeight();
@@ -1100,20 +1107,28 @@ void InventoryState::invClick(Action*)
 
 		label << " (" << wt << ")";
 		_txtItem->setText(label.str());
-		// kL_end.
-/*kL
-		if (item->getUnit()
-			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+
+
+		BattleUnit* unit = _battleGame->getSelectedUnit();
+		BattleActionType bat = itemRule->getDefaultAction();
+		if (unit != NULL
+			&& isArt == false
+			&& (bat != BA_NONE
+				|| itemRule->getBattleType() == BT_AMMO))
 		{
-			_txtItem->setText(item->getUnit()->getName(_game->getLanguage()));
+			int tuUse;
+
+			if (itemRule->getBattleType() == BT_AMMO)
+				tuUse = 15; // reload
+			else
+				tuUse = unit->getActionTUs(
+										bat,
+										item);
+			_txtUseTU->setText(tr("STR_USE_").arg(tuUse));
 		}
 		else
-		{
-			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()))
-				_txtItem->setText(tr(itemRule->getName()));
-			else
-				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
-		} */
+			_txtUseTU->setText(L"");
+		// kL_end.
 
 		std::wstring wstr;
 
@@ -1192,7 +1207,10 @@ void InventoryState::invMouseOver(Action* action)
 		RuleItem* itemRule = item->getRules();
 
 		// kL_begin:
-		std::wostringstream label;
+		std::wostringstream
+			label,
+			tuUse;
+		bool isArt = false;
 
 		if (item->getUnit()
 			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
@@ -1204,7 +1222,10 @@ void InventoryState::invMouseOver(Action* action)
 			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()))
 				label << tr(itemRule->getName());
 			else
+			{
 				label << tr("STR_ALIEN_ARTIFACT");
+				isArt = true;
+			}
 		}
 
 		int wt = itemRule->getWeight();
@@ -1218,20 +1239,28 @@ void InventoryState::invMouseOver(Action* action)
 
 		label << " (" << wt << ")";
 		_txtItem->setText(label.str());
-		// kL_end.
-/*kL
-		if (item->getUnit()
-			&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+
+
+		BattleUnit* unit = _battleGame->getSelectedUnit();
+		BattleActionType bat = itemRule->getDefaultAction();
+		if (unit != NULL
+			&& isArt == false
+			&& (bat != BA_NONE
+				|| itemRule->getBattleType() == BT_AMMO))
 		{
-			_txtItem->setText(item->getUnit()->getName(_game->getLanguage()));
+			int tuUse;
+
+			if (itemRule->getBattleType() == BT_AMMO)
+				tuUse = 15; // reload
+			else
+				tuUse = unit->getActionTUs(
+										bat,
+										item);
+			_txtUseTU->setText(tr("STR_USE_").arg(tuUse));
 		}
 		else
-		{
-			if (_game->getSavedGame()->isResearched(itemRule->getRequirements()))
-				_txtItem->setText(tr(itemRule->getName()));
-			else
-				_txtItem->setText(tr("STR_ALIEN_ARTIFACT"));
-		} */
+			_txtUseTU->setText(L"");
+		// kL_end.
 
 		std::wstring wstr;
 		if (item->getAmmoItem() != NULL
@@ -1286,6 +1315,7 @@ void InventoryState::invMouseOver(Action* action)
 //kL	if (_currentTooltip == "")
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
+		_txtUseTU->setText(L"");
 
 		_selAmmo->clear();
 
@@ -1301,6 +1331,7 @@ void InventoryState::invMouseOut(Action*)
 {
 	_txtItem->setText(L"");
 	_txtAmmo->setText(L"");
+	_txtUseTU->setText(L"");
 
 	_selAmmo->clear();
 
