@@ -1279,31 +1279,37 @@ void SavedBattleGame::resetUnitTiles()
 			if ((*i)->getTile()
 				&& (*i)->getTile()->getUnit() == *i)
 			{
-				for (int
+				for (int // remove Unit from its current tile
 						x = size;
-						x >= 0;
+						x > -1;
 						x--)
+				{
 					for (int
 							y = size;
-							y >= 0;
+							y > -1;
 							y--)
-						getTile((*i)->getTile()->getPosition() + Position(x, y, 0))->setUnit(0);
+					{
+						getTile((*i)->getTile()->getPosition() + Position(x, y, 0))->setUnit(NULL);
+					}
+				}
 			}
 
-			for (int
+			for (int // set Unit onto its proper tile
 					x = size;
-					x >= 0;
+					x > -1;
 					x--)
+			{
 				for (int
 						y = size;
-						y >= 0;
+						y > -1;
 						y--)
 				{
-					Tile* t = getTile((*i)->getPosition() + Position(x, y, 0));
-					t->setUnit(
+					Tile* tile = getTile((*i)->getPosition() + Position(x, y, 0));
+					tile->setUnit(
 							*i,
-							getTile(t->getPosition() + Position(0, 0, -1)));
+							getTile(tile->getPosition() + Position(0, 0, -1)));
 				}
+			}
 		}
 
 		if ((*i)->getFaction() == FACTION_PLAYER)

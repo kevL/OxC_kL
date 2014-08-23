@@ -2070,7 +2070,7 @@ void BattleUnit::prepareNewTurn()
 	double underLoad = static_cast<double>(getStats()->strength) / static_cast<double>(getCarriedWeight());
 	underLoad *= getAccuracyModifier();
 	if (underLoad < 1.0)
-		prepTU = static_cast<int>(underLoad * static_cast<double>(prepTU));
+		prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
 	prepTU -= (prepTU * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
@@ -3361,21 +3361,24 @@ BattleUnit* BattleUnit::getCharging()
 
 /**
  * Gets the unit's carried weight in strength units.
- * @param draggingItem - item to ignore
+ * @param dragItem - item to ignore
  * @return, weight
  */
-int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
+int BattleUnit::getCarriedWeight(BattleItem* dragItem) const
 {
 	int weight = _armor->getWeight();
+	//Log(LOG_INFO) << "wt armor = " << weight;
+
 	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i) == draggingItem)
+		if ((*i) == dragItem)
 			continue;
 
 		weight += (*i)->getRules()->getWeight();
+		//Log(LOG_INFO) << "weight = " << weight;
 
 		if ((*i)->getAmmoItem()
 			&& (*i)->getAmmoItem() != *i)
@@ -3384,6 +3387,7 @@ int BattleUnit::getCarriedWeight(BattleItem* draggingItem) const
 		}
 	}
 
+	//Log(LOG_INFO) << "weight[ret] = " << weight;
 	return std::max(0, weight);
 }
 

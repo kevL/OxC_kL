@@ -210,7 +210,7 @@ void BattlescapeGenerator::setTerrorSite(TerrorSite* terror)
 }
 
 /**
- * Switches an existing battlescapesavegame to a new stage.
+ * Switches an existing SavedBattleGame to a new stage.
  */
 void BattlescapeGenerator::nextStage()
 {
@@ -228,9 +228,9 @@ void BattlescapeGenerator::nextStage()
 		}
 
 		if ((*j)->getTile())
-			(*j)->getTile()->setUnit(0);
+			(*j)->getTile()->setUnit(NULL);
 
-		(*j)->setTile(0);
+		(*j)->setTile(NULL);
 		(*j)->setPosition(Position(-1,-1,-1), false);
 	}
 
@@ -707,28 +707,6 @@ void BattlescapeGenerator::deployXCOM()
 		placeItemByLayout(*i);
 	}
 	//Log(LOG_INFO) << ". placeItemByLayout all DONE";
-
-	// kL_begin:
-	if (!_baseCraftEquip)
-	{
-		for (std::vector<BattleUnit*>::iterator
-				i = _save->getUnits()->begin();
-				i != _save->getUnits()->end();
-				++i)
-		{
-//			unit->prepareNewTurn();
-			int prepTU = (*i)->getStats()->tu;
-
-			double underLoad = static_cast<double>((*i)->getStats()->strength / static_cast<double>((*i)->getCarriedWeight()));
-			if (underLoad < 1.0)
-				prepTU = static_cast<int>(underLoad * static_cast<double>(prepTU));
-
-			if (prepTU < 12)
-				prepTU = 12;
-
-			(*i)->setTimeUnits(prepTU);
-		}
-	} // kL_end.
 
 	// auto-equip soldiers (only soldiers *without* layout)
 //	if (!Options::getBool("disableAutoEquip"))

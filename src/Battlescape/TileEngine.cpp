@@ -5579,10 +5579,14 @@ bool TileEngine::psiAttack(BattleAction* action)
 				double underLoad = static_cast<double>(victim->getStats()->strength) / static_cast<double>(victim->getCarriedWeight());
 				underLoad *= victim->getAccuracyModifier();
 				if (underLoad < 1.0)
-					prepTU = static_cast<int>(underLoad * static_cast<double>(prepTU));
+					prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
 
 				// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
 				prepTU -= (prepTU * (victim->getFatalWound(BODYPART_LEFTLEG) + victim->getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
+
+				if (prepTU < 12)
+					prepTU = 12;
+
 				victim->setTimeUnits(prepTU);
 
 				int // advanced Energy recovery
@@ -5608,7 +5612,12 @@ bool TileEngine::psiAttack(BattleAction* action)
 				if (victim->getFaction() == FACTION_PLAYER)
 					enron -= (victim->getEnergy() * (victim->getFatalWound(BODYPART_TORSO) * 10)) / 100;
 
-				victim->setEnergy(victim->getEnergy() + enron);
+				enron += victim->getEnergy();
+
+				if (enron < 12)
+					enron = 12;
+
+				victim->setEnergy(enron);
 				// kL_end.
 
 

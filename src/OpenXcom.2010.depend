@@ -4762,7 +4762,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1408824402 f:\git\openxcom\src\savegame\battleunit.h
+1408828936 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -5910,7 +5910,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1408823619 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1408829018 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6435,7 +6435,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1408748976 source:f:\git\openxcom\src\battlescape\map.cpp
+1408824351 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -7401,7 +7401,7 @@
 1404096023 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1408566533 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1408825534 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
 	<sstream>
 	"BaseDestroyedState.h"
@@ -9530,7 +9530,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1408626627 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1408829130 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9645,7 +9645,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1407164417 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1408830402 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>

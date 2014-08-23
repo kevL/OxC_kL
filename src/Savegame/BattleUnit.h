@@ -880,7 +880,7 @@ private:
 		BattleUnit* getCharging();
 
 		/// Get the carried weight in strength units.
-		int getCarriedWeight(BattleItem* draggingItem = NULL) const;
+		int getCarriedWeight(BattleItem* dragItem = NULL) const;
 
 		/// Set how many turns this unit will be exposed for.
 		void setTurnsExposed(int turns);

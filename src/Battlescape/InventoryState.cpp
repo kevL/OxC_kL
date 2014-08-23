@@ -670,46 +670,64 @@ void InventoryState::btnOkClick(Action*)
 
 	_game->popState();
 
-	Tile* inventoryTile = _battleGame->getSelectedUnit()->getTile();
-
 	if (!_tu) // pre-Battle inventory equip.
 	{
 		saveEquipmentLayout();
 
 		// kL_begin: This for early exit because access is via CraftEquip screen.
-		if (_parent == NULL)
+		if (_parent == NULL) // no BattlescapeState!
 		{
 			//Log(LOG_INFO) << ". early out <- CraftEquip ( no BattlescapeState )";
 			return;
 		} // kL_end.
 
+
 		_battleGame->resetUnitTiles();
 
-		if (_battleGame->getTurn() == 1)
-		{
-			_battleGame->randomizeItemLocations(inventoryTile);
+		Tile* invTile = _battleGame->getSelectedUnit()->getTile();
+		_battleGame->randomizeItemLocations(invTile);	// This doesn't seem to happen on second stage of Multi-State MISSIONS.
+														// In fact, none of this !_tu InventoryState appears to run for 2nd staged missions.
+														// and BattlescapeGenerator::nextStage() has its own bu->prepareNewTurn() call ....
 /*kL
-			if (inventoryTile->getUnit())
+		if (_battleGame->getTurn() == 1) // Leaving this out could be troublesome for Multi-Stage MISSIONS.
+		{
+			_battleGame->randomizeItemLocations(invTile);
+
+			if (invTile->getUnit())
 			{
 				// make sure we select the unit closest to the ramp.
-				_battleGame->setSelectedUnit(inventoryTile->getUnit());
-			} */
-		}
-
-/*kL, done in BattlescapeGenerator.
-		for (std::vector<BattleUnit*>::iterator // initialize xcom units for battle
-				j = _battleGame->getUnits()->begin();
-				j != _battleGame->getUnits()->end();
-				++j)
-		{
-			if ((*j)->getOriginalFaction() != FACTION_PLAYER
-				|| (*j)->isOut())
-			{
-				continue;
+				_battleGame->setSelectedUnit(invTile->getUnit());
 			}
-
-			(*j)->prepareNewTurn();
 		} */
+
+		// kL_begin:
+		for (std::vector<BattleUnit*>::iterator
+				i = _battleGame->getUnits()->begin();
+				i != _battleGame->getUnits()->end();
+				++i)
+		{
+			if ((*i)->getFaction() == FACTION_PLAYER)
+			{
+				//Log(LOG_INFO) << "\n. bu ID = " << (*i)->getId();
+				int prepTU = (*i)->getStats()->tu;
+				//Log(LOG_INFO) << ". tu = " << prepTU;
+
+				double underLoad = static_cast<double>((*i)->getStats()->strength) / static_cast<double>((*i)->getCarriedWeight());
+				//Log(LOG_INFO) << ". strength = " << (*i)->getStats()->strength;
+				//Log(LOG_INFO) << ". underLoad = " << underLoad;
+				if (underLoad < 1.0)
+				{
+					prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
+					//Log(LOG_INFO) << ". prepTU[0] = " << prepTU;
+				}
+
+				if (prepTU < 12)
+					prepTU = 12;
+
+				//Log(LOG_INFO) << ". prepTU[1] = " << prepTU;
+				(*i)->setTimeUnits(prepTU);
+			}
+		} // kL_end.
 	}
 	//Log(LOG_INFO) << "InventoryState::btnOkClick() EXIT";
 }
