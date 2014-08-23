@@ -46,7 +46,7 @@ class SoldierInfoState
 {
 
 private:
-	size_t _soldierId;
+	size_t _soldierID;
 
 	std::vector<Soldier*>* _list;
 
@@ -121,7 +121,7 @@ private:
 		/// Creates the Soldier Info state.
 		SoldierInfoState(
 				Base* base,
-				size_t soldierId);
+				size_t soldierID);
 		/// Cleans up the Soldier Info state.
 		~SoldierInfoState();
 
@@ -131,7 +131,7 @@ private:
 		/// Handler for pressing on the Name edit (disables editing).
 //kL	void edtSoldierPress(Action* action);
 		/// Set the soldier Id.
-		void setSoldierId(size_t soldier);
+		void setSoldierID(size_t soldierID);
 		/// Handler for changing text on the Name edit.
 		void edtSoldierChange(Action* action);
 

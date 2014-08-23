@@ -30,7 +30,7 @@ class Base;
 class Soldier;
 class SoldierDead; // kL
 class SoldierInfoState;
-class SoldierDeadInfoState; // kL
+class SoldierInfoDeadState; // kL
 class Text;
 class TextButton;
 class TextList;
@@ -47,14 +47,16 @@ class SoldierDiaryOverviewState
 {
 
 private:
-	size_t _soldierId;
+	size_t
+		_soldierID,
+		_curRow;
 
 	std::vector<Soldier*>* _list;
 	std::vector<SoldierDead*>* _listDead; // kL
 
 	Base* _base;
 	SoldierInfoState* _soldierInfoState;
-	SoldierDeadInfoState* _soldierDeadInfoState; // kL
+	SoldierInfoDeadState* _soldierInfoDeadState; // kL
 	Soldier* _soldier;
 	SoldierDead* _soldierDead; // kL
 
@@ -79,17 +81,17 @@ private:
 		/// Creates the Soldiers state.
 		SoldierDiaryOverviewState(
 				Base* base,
-				size_t soldierId,
+				size_t soldierID,
 				SoldierInfoState* soldierInfoState,
-				SoldierDeadInfoState* soldierDeadInfoState); // kL
+				SoldierInfoDeadState* soldierInfoDeadState); // kL
 		/// Cleans up the Soldiers state.
 		~SoldierDiaryOverviewState();
 
 		/// Updates the soldier info.
 		void init();
 
-		/// Set the soldier's Id.
-		void setSoldierId(size_t soldierId);
+		/// Set the soldier's ID.
+		void setSoldierID(size_t soldierID);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

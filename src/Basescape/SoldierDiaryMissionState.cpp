@@ -61,8 +61,8 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 {
 	if (_base == NULL)
 	{
-		_listDead = _game->getSavedGame()->getDeadSoldiers();
 		_list = NULL;
+		_listDead = _game->getSavedGame()->getDeadSoldiers();
 	}
 	else
 	{
@@ -334,7 +334,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 }
 
 /**
- *
+ * dTor.
  */
 SoldierDiaryMissionState::~SoldierDiaryMissionState()
 {

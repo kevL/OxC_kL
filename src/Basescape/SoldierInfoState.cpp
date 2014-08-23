@@ -63,14 +63,14 @@ namespace OpenXcom
  * Initializes all the elements in the Soldier Info screen.
  * @param game, Pointer to the core game.
  * @param base, Pointer to the base to get info from. NULL to use the dead soldiers list.
- * @param soldierId, ID of the selected soldier.
+ * @param soldierID, ID of the selected soldier.
  */
 SoldierInfoState::SoldierInfoState(
 		Base* base,
-		size_t soldierId)
+		size_t soldierID)
 	:
 		_base(base),
-		_soldierId(soldierId),
+		_soldierID(soldierID),
 		_soldier(NULL) // kL
 {
 	_list = _base->getSoldiers();
@@ -450,10 +450,10 @@ void SoldierInfoState::init()
 		return;
 	}
 
-	if (_soldierId >= _list->size())
-		_soldierId = 0;
+	if (_soldierID >= _list->size())
+		_soldierID = 0;
 
-	_soldier = _list->at(_soldierId);
+	_soldier = _list->at(_soldierID);
 //kL	_edtSoldier->setBig();
 	_edtSoldier->setText(_soldier->getName());
 
@@ -798,7 +798,7 @@ void SoldierInfoState::init()
 void SoldierInfoState::btnAutoStat(Action*)
 {
 	//Log(LOG_INFO) << "SoldierInfoState::btnAutoStat()";
-//	Soldier* _soldier = _base->getSoldiers()->at(_soldierId);
+//	Soldier* _soldier = _base->getSoldiers()->at(_soldierID);
 
 //	_edtSoldier->deFocus();
 //	_edtSoldier->setFocus(false);
@@ -880,7 +880,7 @@ void SoldierInfoState::btnAutoStat(Action*)
 	}
 
 	//Log(LOG_INFO) << ". set Soldier name : " << stat;
-//	_base->getSoldiers()->at(_soldierId)->setName(stat.str());
+//	_base->getSoldiers()->at(_soldierID)->setName(stat.str());
 	_soldier->setName(stat.str());
 
 	//Log(LOG_INFO) << ". re-init";
@@ -914,16 +914,16 @@ void SoldierInfoState::btnAutoStatAll(Action*)
  */
 /* void SoldierInfoState::edtSoldierPress(Action* action)
 {
-	if (_base == NULL) // kL_note: This should never happen, because (base=NULL) is handled by SoldierDeadInfoState.
+	if (_base == NULL) // kL_note: This should never happen, because (base=NULL) is handled by SoldierInfoDeadState.
 		_edtSoldier->setFocus(false);
 } */
 
 /**
  * Set the soldier Id.
  */
-void SoldierInfoState::setSoldierId(size_t soldier)
+void SoldierInfoState::setSoldierID(size_t soldierID)
 {
-	_soldierId = soldier;
+	_soldierID = soldierID;
 }
 
 /**
@@ -942,7 +942,7 @@ void SoldierInfoState::edtSoldierChange(Action* action)
 void SoldierInfoState::btnOkClick(Action*)
 {
 //	_edtSoldier->deFocus(); // kL
-//	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
+//	_base->getSoldiers()->at(_soldierID)->setName(_edtSoldier->getText());
 
 //	_edtSoldier->setFocus(false); // kL
 
@@ -971,14 +971,14 @@ void SoldierInfoState::btnOkClick(Action*)
 void SoldierInfoState::btnPrevClick(Action*)
 {
 //	_edtSoldier->deFocus();
-//	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
+//	_base->getSoldiers()->at(_soldierID)->setName(_edtSoldier->getText());
 
 //	_edtSoldier->setFocus(false); // kL
 
-	if (_soldierId == 0)
-		_soldierId = _list->size() - 1;
+	if (_soldierID == 0)
+		_soldierID = _list->size() - 1;
 	else
-		_soldierId--;
+		_soldierID--;
 
 	init();
 }
@@ -990,14 +990,14 @@ void SoldierInfoState::btnPrevClick(Action*)
 void SoldierInfoState::btnNextClick(Action*)
 {
 //	_edtSoldier->deFocus();
-//	_base->getSoldiers()->at(_soldierId)->setName(_edtSoldier->getText());
+//	_base->getSoldiers()->at(_soldierID)->setName(_edtSoldier->getText());
 
 //	_edtSoldier->setFocus(false); // kL
 
-	_soldierId++;
+	_soldierID++;
 
-	if (_soldierId >= _list->size())
-		_soldierId = 0;
+	if (_soldierID >= _list->size())
+		_soldierID = 0;
 
 	init();
 }
@@ -1014,7 +1014,7 @@ void SoldierInfoState::btnArmorClick(Action*)
 	{
 		_game->pushState(new SoldierArmorState(
 											_base,
-											_soldierId));
+											_soldierID));
 	}
 }
 
@@ -1026,7 +1026,7 @@ void SoldierInfoState::btnSackClick(Action*)
 {
 	_game->pushState(new SackSoldierState(
 										_base,
-										_soldierId));
+										_soldierID));
 }
 
 /**
@@ -1037,7 +1037,7 @@ void SoldierInfoState::btnDiaryClick(Action*)
 {
 	_game->pushState(new SoldierDiaryOverviewState(
 												_base,
-												_soldierId,
+												_soldierID,
 												this,
 												NULL));
 }

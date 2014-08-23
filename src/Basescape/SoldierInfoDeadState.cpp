@@ -17,7 +17,7 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "SoldierDeadInfoState.h"
+#include "SoldierInfoDeadState.h"
 
 #include <sstream>
 
@@ -53,11 +53,11 @@ namespace OpenXcom
  * Initializes all the elements in the Soldier Dead Info screen.
  * kL: based on SoldierInfoState (see, if/when having issues)
  * @param game, Pointer to the core game.
- * @param soldierId, ID of the selected soldier.
+ * @param soldierID, ID of the selected soldier.
  */
-SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
+SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	:
-		_soldierId(soldierId),
+		_soldierID(soldierID),
 		_soldier(0)
 {
 	_list = _game->getSavedGame()->getDeadSoldiers();
@@ -207,23 +207,23 @@ SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& SoldierDeadInfoState::btnOkClick);
+	_btnOk->onMouseClick((ActionHandler)& SoldierInfoDeadState::btnOkClick);
 	_btnOk->onKeyboardPress(
-					(ActionHandler)& SoldierDeadInfoState::btnOkClick,
+					(ActionHandler)& SoldierInfoDeadState::btnOkClick,
 					Options::keyCancel);
 
 	_btnPrev->setColor(Palette::blockOffset(15)+6);
 	_btnPrev->setText(L"<");
-	_btnPrev->onMouseClick((ActionHandler)& SoldierDeadInfoState::btnPrevClick);
+	_btnPrev->onMouseClick((ActionHandler)& SoldierInfoDeadState::btnPrevClick);
 	_btnPrev->onKeyboardPress(
-					(ActionHandler)& SoldierDeadInfoState::btnPrevClick,
+					(ActionHandler)& SoldierInfoDeadState::btnPrevClick,
 					Options::keyBattlePrevUnit);
 
 	_btnNext->setColor(Palette::blockOffset(15)+6);
 	_btnNext->setText(L">");
-	_btnNext->onMouseClick((ActionHandler)& SoldierDeadInfoState::btnNextClick);
+	_btnNext->onMouseClick((ActionHandler)& SoldierInfoDeadState::btnNextClick);
 	_btnNext->onKeyboardPress(
-					(ActionHandler)& SoldierDeadInfoState::btnNextClick,
+					(ActionHandler)& SoldierInfoDeadState::btnNextClick,
 					Options::keyBattleNextUnit);
 
 
@@ -246,7 +246,7 @@ SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
 
 	_btnDiary->setColor(Palette::blockOffset(15)+6);
 	_btnDiary->setText(tr("STR_DIARY"));
-	_btnDiary->onMouseClick((ActionHandler)& SoldierDeadInfoState::btnDiaryClick);
+	_btnDiary->onMouseClick((ActionHandler)& SoldierInfoDeadState::btnDiaryClick);
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);
@@ -373,14 +373,14 @@ SoldierDeadInfoState::SoldierDeadInfoState(size_t soldierId)
 /**
  *
  */
-SoldierDeadInfoState::~SoldierDeadInfoState()
+SoldierInfoDeadState::~SoldierInfoDeadState()
 {
 }
 
 /**
  * Updates soldier stats when the dead soldier changes.
  */
-void SoldierDeadInfoState::init()
+void SoldierInfoDeadState::init()
 {
 	State::init();
 
@@ -391,10 +391,10 @@ void SoldierDeadInfoState::init()
 		return;
 	}
 
-	if (_soldierId >= _list->size())
-		_soldierId = 0;
+	if (_soldierID >= _list->size())
+		_soldierID = 0;
 
-	_soldier = _list->at(_soldierId);
+	_soldier = _list->at(_soldierID);
 	_txtSoldier->setText(_soldier->getName());
 
 	UnitStats* initial = _soldier->getInitStats();
@@ -576,7 +576,7 @@ void SoldierDeadInfoState::init()
  * Returns to the previous screen.
  * @param action Pointer to an action.
  */
-void SoldierDeadInfoState::btnOkClick(Action*)
+void SoldierInfoDeadState::btnOkClick(Action*)
 {
 	_game->popState();
 }
@@ -586,13 +586,13 @@ void SoldierDeadInfoState::btnOkClick(Action*)
  * kL: reversed these because SoldierMemorialState uses a reversed vector.
  * @param action Pointer to an action.
  */
-void SoldierDeadInfoState::btnNextClick(Action*)
-// void SoldierDeadInfoState::btnPrevClick(Action*)
+void SoldierInfoDeadState::btnNextClick(Action*)
+// void SoldierInfoDeadState::btnPrevClick(Action*)
 {
-	if (_soldierId == 0)
-		_soldierId = _list->size() - 1;
+	if (_soldierID == 0)
+		_soldierID = _list->size() - 1;
 	else
-		_soldierId--;
+		_soldierID--;
 
 	init();
 }
@@ -602,13 +602,13 @@ void SoldierDeadInfoState::btnNextClick(Action*)
  * kL: reversed these because SoldierMemorialState uses a reversed vector.
  * @param action Pointer to an action.
  */
-void SoldierDeadInfoState::btnPrevClick(Action*)
-//void SoldierDeadInfoState::btnNextClick(Action*)
+void SoldierInfoDeadState::btnPrevClick(Action*)
+//void SoldierInfoDeadState::btnNextClick(Action*)
 {
-	_soldierId++;
+	_soldierID++;
 
-	if (_soldierId >= _list->size())
-		_soldierId = 0;
+	if (_soldierID >= _list->size())
+		_soldierID = 0;
 
 	init();
 }
@@ -616,20 +616,20 @@ void SoldierDeadInfoState::btnPrevClick(Action*)
 /**
  * Set the soldier Id.
  */
-void SoldierDeadInfoState::setSoldierId(size_t soldier)
+void SoldierInfoDeadState::setSoldierID(size_t soldierID)
 {
-	_soldierId = soldier;
+	_soldierID = soldierID;
 }
 
 /**
  * Shows the Diary Soldier window.
  * @param action Pointer to an action.
  */
-void SoldierDeadInfoState::btnDiaryClick(Action*)
+void SoldierInfoDeadState::btnDiaryClick(Action*)
 {
 	_game->pushState(new SoldierDiaryOverviewState(
 												NULL, //_base
-												_soldierId,
+												_soldierID,
 												NULL,
 												this));
 }

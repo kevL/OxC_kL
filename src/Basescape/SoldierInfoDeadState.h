@@ -38,13 +38,13 @@ class TextButton;
 /**
  * Soldier Dead Info screen that shows all the info of a specific dead soldier.
  */
-class SoldierDeadInfoState
+class SoldierInfoDeadState
 	:
 		public State
 {
 
 private:
-	size_t _soldierId;
+	size_t _soldierID;
 
 	std::vector<SoldierDead*>* _list;
 
@@ -106,15 +106,15 @@ private:
 
 	public:
 		/// Creates the Soldier Dead Info state.
-		SoldierDeadInfoState(size_t soldierId);
+		SoldierInfoDeadState(size_t soldierID);
 		/// Cleans up the Soldier Dead Info state.
-		~SoldierDeadInfoState();
+		~SoldierInfoDeadState();
 
 		/// Updates the dead soldier info.
 		void init();
 
 		/// Set the soldier Id.
-		void setSoldierId(size_t soldier);
+		void setSoldierID(size_t soldierID);
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

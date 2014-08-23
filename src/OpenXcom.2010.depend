@@ -4830,7 +4830,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1408450868 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1408804152 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -5390,7 +5390,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1408509221 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1408805069 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -5421,7 +5421,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDiary.h"
 
-1408453107 f:\git\openxcom\src\basescape\soldierinfostate.h
+1408803652 f:\git\openxcom\src\basescape\soldierinfostate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -5429,11 +5429,11 @@
 	<string>
 	"../Ruleset/Unit.h"
 
-1408479176 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1408805069 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	<iomanip>
 	<sstream>
-	"SoldierDeadInfoState.h"
+	"SoldierInfoDeadState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -6031,7 +6031,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1408471712 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1408758082 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -11752,7 +11752,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1406323250 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
+1408803734 source:f:\git\openxcom\src\basescape\soldierdeadinfostate.cpp
 	"SoldierDeadInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -11773,7 +11773,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDeath.h"
 
-1406323171 f:\git\openxcom\src\basescape\soldierdeadinfostate.h
+1408803540 f:\git\openxcom\src\basescape\soldierdeadinfostate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -12000,10 +12000,10 @@
 	"SavedGame.h"
 	"../Ruleset/Ruleset.h"
 
-1405123071 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
+1408805069 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1406650322 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1408802332 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -12025,13 +12025,13 @@
 	<vector>
 	"../Engine/State.h"
 
-1408478691 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1408805069 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	<string>
 	"SoldierDiaryMissionState.h"
 	"SoldierDiaryPerformanceState.h"
 	"SoldierInfoState.h"
-	"SoldierDeadInfoState.h"
+	"SoldierInfoDeadState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -12047,7 +12047,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1405127004 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
+1408804460 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
 	"../Engine/State.h"
 
 1404110161 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
@@ -12078,12 +12078,12 @@
 	<string>
 	"../Engine/State.h"
 
-1405127004 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1408805069 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	<string>
 	"SoldierDiaryOverviewState.h"
 	"SoldierInfoState.h"
-	"SoldierDeadInfoState.h"
+	"SoldierInfoDeadState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -12169,4 +12169,29 @@
 1408365134 source:f:\git\openxcom\src\ruleset\polygon.cpp
 	"Polygon.h"
 	<cmath>
+
+1408805069 f:\git\openxcom\src\basescape\soldierinfodeadstate.h
+	<vector>
+	"../Engine/State.h"
+
+1408805069 source:f:\git\openxcom\src\basescape\soldierinfodeadstate.cpp
+	"SoldierInfoDeadState.h"
+	<sstream>
+	"SoldierDiaryOverviewState.h"
+	"../Engine/Action.h"
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Engine/Options.h"
+	"../Engine/Palette.h"
+	"../Engine/Surface.h"
+	"../Engine/SurfaceSet.h"
+	"../Interface/Bar.h"
+	"../Interface/Text.h"
+	"../Interface/TextButton.h"
+	"../Resource/ResourcePack.h"
+	"../Ruleset/Ruleset.h"
+	"../Ruleset/RuleSoldier.h"
+	"../Savegame/SavedGame.h"
+	"../Savegame/SoldierDead.h"
+	"../Savegame/SoldierDeath.h"
 

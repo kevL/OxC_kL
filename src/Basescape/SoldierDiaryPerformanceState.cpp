@@ -23,7 +23,7 @@
 
 #include "SoldierDiaryOverviewState.h"
 #include "SoldierInfoState.h"
-#include "SoldierDeadInfoState.h" // kL
+#include "SoldierInfoDeadState.h" // kL
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -58,12 +58,12 @@ namespace OpenXcom
  */
 SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 		Base* base,
-		size_t soldierId,
+		size_t soldierID,
 		SoldierDiaryOverviewState* soldierDiaryOverviewState,
 		int display)
 	:
 		_base(base),
-		_soldierId(soldierId),
+		_soldierID(soldierID),
 		_soldierDiaryOverviewState(soldierDiaryOverviewState),
 		_display(display),
 		_lastScrollPos(0)
@@ -473,10 +473,10 @@ void SoldierDiaryPerformanceState::init()
 			return;
 		}
 
-		if (_soldierId >= _listDead->size())
-			_soldierId = 0;
+		if (_soldierID >= _listDead->size())
+			_soldierID = 0;
 
-		_soldierDead = _listDead->at(_soldierId);
+		_soldierDead = _listDead->at(_soldierID);
 
 		if (_soldierDead->getDiary() != NULL) // kL
 		{
@@ -503,10 +503,10 @@ void SoldierDiaryPerformanceState::init()
 			return;
 		}
 
-		if (_soldierId >= _list->size())
-			_soldierId = 0;
+		if (_soldierID >= _list->size())
+			_soldierID = 0;
 
-		_soldier = _list->at(_soldierId);
+		_soldier = _list->at(_soldierID);
 
 		_lstKillTotals->addRow(
 							2,
@@ -715,8 +715,7 @@ void SoldierDiaryPerformanceState::init()
 }
 
 /**
- * Draws sprites
- *
+ * Draws sprites.
  */
 void SoldierDiaryPerformanceState::drawSprites()
 {
@@ -737,11 +736,11 @@ void SoldierDiaryPerformanceState::drawSprites()
 
 	if (_base == NULL) // kL
 	{
-		if (_listDead->at(_soldierId)->getDiary() != NULL) // kL
+		if (_listDead->at(_soldierID)->getDiary() != NULL) // kL
 		{
 			for (std::vector<SoldierCommendations*>::const_iterator
-					i = _listDead->at(_soldierId)->getDiary()->getSoldierCommendations()->begin();
-					i != _listDead->at(_soldierId)->getDiary()->getSoldierCommendations()->end();
+					i = _listDead->at(_soldierID)->getDiary()->getSoldierCommendations()->begin();
+					i != _listDead->at(_soldierID)->getDiary()->getSoldierCommendations()->end();
 					++i)
 			{
 				RuleCommendations* commendation = _game->getRuleset()->getCommendation()[(*i)->getType()];
@@ -775,8 +774,8 @@ void SoldierDiaryPerformanceState::drawSprites()
 	else
 	{
 		for (std::vector<SoldierCommendations*>::const_iterator
-				i = _list->at(_soldierId)->getDiary()->getSoldierCommendations()->begin();
-				i != _list->at(_soldierId)->getDiary()->getSoldierCommendations()->end();
+				i = _list->at(_soldierID)->getDiary()->getSoldierCommendations()->begin();
+				i != _list->at(_soldierID)->getDiary()->getSoldierCommendations()->end();
 				++i)
 		{
 			RuleCommendations* commendation = _game->getRuleset()->getCommendation()[(*i)->getType()];
@@ -814,7 +813,7 @@ void SoldierDiaryPerformanceState::drawSprites()
  */
 void SoldierDiaryPerformanceState::btnOkClick(Action*)
 {
-	_soldierDiaryOverviewState->setSoldierId(_soldierId);
+	_soldierDiaryOverviewState->setSoldierID(_soldierID);
 
 	_game->popState();
 }
@@ -831,10 +830,10 @@ void SoldierDiaryPerformanceState::btnPrevClick(Action*)
 	else
 		rows = _list->size();
 
-	if (_soldierId == 0)
-		_soldierId = rows - 1;
+	if (_soldierID == 0)
+		_soldierID = rows - 1;
 	else
-		_soldierId--;
+		_soldierID--;
 
 	init();
 }
@@ -851,9 +850,9 @@ void SoldierDiaryPerformanceState::btnNextClick(Action*)
 	else
 		rows = _list->size();
 
-	_soldierId++;
-	if (_soldierId >= rows)
-		_soldierId = 0;
+	_soldierID++;
+	if (_soldierID >= rows)
+		_soldierID = 0;
 
 	init();
 }
@@ -911,7 +910,7 @@ void SoldierDiaryPerformanceState::lstInfoMouseOver(Action*)
 }
 
 /**
- *  Clears the Medal information.
+ * Clears the Medal information.
  */
 void SoldierDiaryPerformanceState::lstInfoMouseOut(Action*)
 {

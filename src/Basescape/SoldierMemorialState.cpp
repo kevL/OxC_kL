@@ -23,7 +23,7 @@
 #include <sstream>
 
 //kL #include "SoldierInfoState.h"
-#include "SoldierDeadInfoState.h" // kL
+#include "SoldierInfoDeadState.h" // kL
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -201,8 +201,8 @@ void SoldierMemorialState::lstSoldiersPress(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		size_t row = _game->getSavedGame()->getDeadSoldiers()->size() - 1 - _lstSoldiers->getSelectedRow();
-		_game->pushState(new SoldierDeadInfoState(row));
+		size_t row = _game->getSavedGame()->getDeadSoldiers()->size() - _lstSoldiers->getSelectedRow() - 1;
+		_game->pushState(new SoldierInfoDeadState(row));
 	}
 }
 

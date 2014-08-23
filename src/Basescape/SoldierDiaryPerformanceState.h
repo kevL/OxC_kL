@@ -55,7 +55,7 @@ private:
 		_display; // 0 displays kills, 1 displays missions, 2 displays commendations
 	size_t
 		_lastScrollPos,
-		_soldierId;
+		_soldierID;
 
 	std::vector<std::wstring> _commendationsListEntry;
 
@@ -115,7 +115,7 @@ private:
 		/// Creates the Soldiers state.
 		SoldierDiaryPerformanceState(
 				Base* base,
-				size_t soldierId,
+				size_t soldierID,
 				SoldierDiaryOverviewState* soldierDiaryState,
 				int display);
 		/// Cleans up the Soldiers state.
