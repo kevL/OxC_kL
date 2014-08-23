@@ -718,9 +718,14 @@ void BattlescapeGenerator::deployXCOM()
 		{
 //			unit->prepareNewTurn();
 			int prepTU = (*i)->getStats()->tu;
+
 			double underLoad = static_cast<double>((*i)->getStats()->strength / static_cast<double>((*i)->getCarriedWeight()));
 			if (underLoad < 1.0)
 				prepTU = static_cast<int>(underLoad * static_cast<double>(prepTU));
+
+			if (prepTU < 12)
+				prepTU = 12;
+
 			(*i)->setTimeUnits(prepTU);
 		}
 	} // kL_end.

@@ -2064,7 +2064,9 @@ void BattleUnit::prepareNewTurn()
 
 	_unitsSpottedThisTurn.clear();
 
+
 	int prepTU = getStats()->tu;
+
 	double underLoad = static_cast<double>(getStats()->strength) / static_cast<double>(getCarriedWeight());
 	underLoad *= getAccuracyModifier();
 	if (underLoad < 1.0)
@@ -2072,6 +2074,10 @@ void BattleUnit::prepareNewTurn()
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
 	prepTU -= (prepTU * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
+
+	if (prepTU < 12)
+		prepTU = 12;
+
 	setTimeUnits(prepTU);
 
 	if (!isOut()) // recover energy
@@ -2106,6 +2112,9 @@ void BattleUnit::prepareNewTurn()
 		if (_energy > stamina)
 			_energy = stamina;
 	}
+
+	if (_energy < 12)
+		_energy = 12;
 
 	_health -= getFatalWounds(); // suffer from fatal wounds
 
@@ -2144,6 +2153,7 @@ void BattleUnit::prepareNewTurn()
 		if (RNG::percent(panic))
 		{
 			_status = STATUS_PANICKING;		// panic is either flee or freeze (determined later)
+
 			if (RNG::percent(30))
 				_status = STATUS_BERSERK;	// or shoot stuff.
 		}
