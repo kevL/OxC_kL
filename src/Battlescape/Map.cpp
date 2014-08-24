@@ -2354,7 +2354,31 @@ void Map::animate(bool redraw)
 			++i)
 	{
 		if (_save->getDepth() > 0)
-			(*i)->breathe();
+		{
+			(*i)->setFloorAbove(false);
+
+			// make sure this unit isn't obscured by the floor above him, otherwise it looks weird.
+			Position pos = (*i)->getPosition();
+			if ((*i)->getTile()
+				&& _camera->getViewLevel() > pos.z)
+			{
+				for (int
+						z = _camera->getViewLevel();
+						z != pos.z;
+						--z)
+				{
+					if (_save->getTile(Position(pos.x, pos.y, z))->hasNoFloor(NULL) == false)
+					{
+						(*i)->setFloorAbove(true);
+
+						break;
+					}
+				}
+			}
+
+			if (!(*i)->getFloorAbove())
+				(*i)->breathe();
+		}
 
 		if ((*i)->getArmor()->getConstantAnimation())
 		{

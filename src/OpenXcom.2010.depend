@@ -4762,7 +4762,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1408828936 f:\git\openxcom\src\savegame\battleunit.h
+1408882874 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -6435,7 +6435,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1408834356 source:f:\git\openxcom\src\battlescape\map.cpp
+1408882717 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>

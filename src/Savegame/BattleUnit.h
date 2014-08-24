@@ -425,8 +425,8 @@ private:
 	UnitStats _stats;
 
 	bool
-		_breathFrameUpdated,
-		_breathing;
+		_breathing,
+		_floorAbove;
 	int
 		_aggression,
 		_aggroSound,
@@ -973,10 +973,15 @@ private:
 		/// Returns true if this unit has an inventory.
 		bool hasInventory() const;
 
-		///
+		/// Is this unit breathing and if so what frame?
 		int getBreathFrame() const;
-		///
+		/// Start breathing and/or update the breathing frame.
 		void breathe();
+
+		/// Sets the flag for "floor above me" meaning stop rendering bubbles.
+		void setFloorAbove(bool floor);
+		/// Gets the flag for "floor above me".
+		bool getFloorAbove();
 
 		/// Gets the unit's mission statistics.
 		BattleUnitStatistics* getStatistics();

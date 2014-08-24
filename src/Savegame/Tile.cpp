@@ -65,7 +65,7 @@ Tile::Tile(const Position& pos)
 		_fire(0),
 		_explosive(0),
 		_pos(pos),
-		_unit(0),
+		_unit(NULL),
 		_animOffset(0),
 		_markerColor(0),
 		_visible(false),

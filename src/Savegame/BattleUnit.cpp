@@ -127,33 +127,32 @@ BattleUnit::BattleUnit(
 		_morale(100),
 		_stunlevel(0),
 		_type("SOLDIER"),
-		_activeHand("STR_RIGHT_HAND")
+		_activeHand("STR_RIGHT_HAND"),
+		_breathFrame(0),
+		_floorAbove(false),
+		_breathing(false)
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
-	_name				= soldier->getName(true);
-	_id					= soldier->getId();
-//	_type				= "SOLDIER";
-	_rank				= soldier->getRankString();
-	_stats				= *soldier->getCurrentStats();
+	_name			= soldier->getName(true);
+	_id				= soldier->getId();
+//	_type			= "SOLDIER";
+	_rank			= soldier->getRankString();
+	_stats			= *soldier->getCurrentStats();
 
-	_standHeight		= soldier->getRules()->getStandHeight();
-	_kneelHeight		= soldier->getRules()->getKneelHeight();
-	_floatHeight		= soldier->getRules()->getFloatHeight();
-//	_deathSound			= 0; // this one is hardcoded
-//	_aggroSound			= -1;
-//	_moveSound			= -1; // this one is hardcoded
-//	_intelligence		= 2;
-//	_aggression			= 1;
-//	_specab				= SPECAB_NONE;
-	_armor				= soldier->getArmor();
-	_stats				+= *_armor->getStats();	// armors may modify effective stats
-	_loftempsSet		= _armor->getLoftempsSet();
-	_gender				= soldier->getGender();
-//	_faceDirection		= -1;
-	_breathFrame		= 0;
-	_breathFrameUpdated	= false;
-	_breathing			= false;
-
+	_standHeight	= soldier->getRules()->getStandHeight();
+	_kneelHeight	= soldier->getRules()->getKneelHeight();
+	_floatHeight	= soldier->getRules()->getFloatHeight();
+//	_deathSound		= 0; // this one is hardcoded
+//	_aggroSound		= -1;
+//	_moveSound		= -1; // this one is hardcoded
+//	_intelligence	= 2;
+//	_aggression		= 1;
+//	_specab			= SPECAB_NONE;
+	_armor			= soldier->getArmor();
+	_stats			+= *_armor->getStats();	// armors may modify effective stats
+	_loftempsSet	= _armor->getLoftempsSet();
+	_gender			= soldier->getGender();
+//	_faceDirection	= -1;
 
 	int rankbonus = 0;
 	switch (soldier->getRank())
@@ -268,8 +267,11 @@ BattleUnit::BattleUnit(
 
 		_morale(100), // kL, moved these here from def'ns below.
 		_stunlevel(0),
-		_activeHand("STR_RIGHT_HAND")
- {
+		_activeHand("STR_RIGHT_HAND"),
+		_breathFrame(-1),
+		_floorAbove(false),
+		_breathing(false)
+{
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 	_type	= unit->getType();
 	_rank	= unit->getRank();
@@ -278,11 +280,11 @@ BattleUnit::BattleUnit(
 	_stats	= *unit->getStats();
 	_stats	+= *_armor->getStats();	// armors may modify effective stats
 
-	if (faction == FACTION_HOSTILE)
 //	if (_originalFaction == FACTION_HOSTILE) // kL (note: overriding initialization above.)
+	if (faction == FACTION_HOSTILE)
 		adjustStats(
-					diff,
-					month); // kL_add
+				diff,
+				month); // kL_add
 
 
 	_tu			= _stats.tu;
@@ -306,13 +308,8 @@ BattleUnit::BattleUnit(
 	_gender			= GENDER_MALE;
 	_faceDirection	= -1;
 
-	_breathFrame = -1; // most aliens don't breathe per-se, that's exclusive to humanoids
-	if (armor->getDrawingRoutine() == 14)
-	{
+	if (armor->getDrawingRoutine() == 14) // most aliens don't breathe per-se, that's exclusive to humanoids
 		_breathFrame = 0;
-	}
-	_breathFrameUpdated = false;
-	_breathing = false;
 
 	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
 	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
@@ -3860,15 +3857,19 @@ bool BattleUnit::hasInventory() const
 }
 
 /**
- *
+ * If this unit is breathing, what frame should be displayed?
+ * @return, frame number
  */
 int BattleUnit::getBreathFrame() const
 {
+	if (_floorAbove)
+		return 0;
+
 	return _breathFrame;
 }
 
 /**
- *
+ * Decides if we should start producing bubbles, and/or updates which bubble frame we are on.
  */
 void BattleUnit::breathe()
 {
@@ -3887,26 +3888,38 @@ void BattleUnit::breathe()
 		// 10% chance per animation frame to start breathing
 		_breathing = RNG::percent(10);
 		_breathFrame = 0;
-		_breathFrameUpdated = false;
 	}
 
 	if (_breathing)
 	{
-		// only update the sprite every second animation cycle
-		_breathFrameUpdated = !_breathFrameUpdated;
-		if (_breathFrameUpdated)
-		{
-			// advance the bubble frame
-			_breathFrame++;
+		// advance the bubble frame
+		_breathFrame++;
 
-			// we've reached the end of the cycle, but we still need to update the sprite to get rid of the bubbles
-			if (_breathFrame > 16)
-			{
-				_breathFrame = 0;
-				_breathing = false;
-			}
+		// we've reached the end of the cycle, get rid of the bubbles
+		if (_breathFrame > 16)
+		{
+			_breathFrame = 0;
+			_breathing = false;
 		}
 	}
+}
+
+/**
+ * Sets the flag for "this unit is under cover" meaning don't draw bubbles.
+ * @param floor - true if there is a floor
+ */
+void BattleUnit::setFloorAbove(bool floor)
+{
+	_floorAbove = floor;
+}
+
+/**
+ * Checks if the floorAbove flag has been set.
+ * @return, true if this unit is under cover
+ */
+bool BattleUnit::getFloorAbove()
+{
+	return _floorAbove;
 }
 
 /**
