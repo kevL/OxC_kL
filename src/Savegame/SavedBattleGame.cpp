@@ -1713,6 +1713,7 @@ void SavedBattleGame::prepareNewTurn()
 															DT_IN)
 														== 0) // if there's no wall blocking the path of the flames...
 					{
+						//Log(LOG_INFO) << ". fire " << (*i)->getPosition() << " to " << tile->getPosition();
 						tile->ignite((*i)->getSmoke()); // attempt to set this tile on fire
 					}
 				}

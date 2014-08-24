@@ -2012,7 +2012,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 												ba));
 			}
 
-			if (_save->getTile(ba.target) != 0)
+			if (_save->getTile(ba.target) != NULL)
 			{
 				ba.weapon = unit->getMainHandWeapon();
 				if (ba.weapon)
@@ -2609,7 +2609,7 @@ void BattlescapeGame::requestEndTurn()
 	{
 		_endTurnRequested = true;
 
-		statePushBack(0);
+		statePushBack(NULL);
 	}
 
 	//Log(LOG_INFO) << "BattlescapeGame::requestEndTurn() EXIT";

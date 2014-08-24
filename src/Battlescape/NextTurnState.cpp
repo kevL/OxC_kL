@@ -148,7 +148,7 @@ NextTurnState::NextTurnState(
 }
 
 /**
- *
+ * dTor.
  */
 NextTurnState::~NextTurnState()
 {

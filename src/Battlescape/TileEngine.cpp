@@ -2884,6 +2884,7 @@ void TileEngine::explode(
 									|| fireTile->getMapData(MapData::O_FLOOR)
 									|| fireTile->hasNoFloor(tileBelow) == false)) // these might be somewhat redundant ... cf above^
 							{
+								//Log(LOG_INFO) << ". . . set Fire to TILE";
 								fireTile->setFire(fireTile->getFuel() + 1);
 								fireTile->setSmoke(std::max(
 														1,
@@ -3626,7 +3627,7 @@ int TileEngine::horizontalBlockage(
 						dir, // checks Content/bigWalls
 						true,
 						true);
-		if (block == 0		// if, no vision block yet ...
+		if (block == 0		// if, no visBlock yet ...
 			&& blockage(	// so check for content @endTile & reveal it by not cutting trajectory.
 					endTile,
 					MapData::O_OBJECT,
@@ -3637,7 +3638,10 @@ int TileEngine::horizontalBlockage(
 			if (type == DT_NONE)
 				return -1;
 			else
+			{
+				//Log(LOG_INFO) << "explode End: hardblock 1000";
 				return 1000; // this is a hardblock and should be greater than the most powerful explosions.
+			}
 		}
 	}
 
@@ -3855,16 +3859,16 @@ int TileEngine::verticalBlockage(
 /**
  * Calculates the amount of power or LoS/FoV/LoF that various types of
  * walls/bigwalls or floors or object parts of a tile blocks.
- * @param startTile			- pointer to tile where the power starts
- * @param part				- the part of the tile that the power tries to go through
- * @param type				- the type of power (RuleItem.h) DT_NONE if line-of-vision
- * @param dir				- direction the power travels	-1	walls & floors (default)
- *															 0+	big-walls & content
- * @param checkingOrigin	- true if the origin tile is being examined for bigWalls;
- *								used only when dir is specified (default: false)
- * @param trueDir			- for checking if dir is *really* from the direction of sight (true)
- *								or, in the case of some bigWall determinations, perpendicular to it (false);
- *								used only when dir is specified (default: false)
+ * @param startTile		- pointer to tile where the power starts
+ * @param part			- the part of the tile that the power tries to go through
+ * @param type			- the type of power (RuleItem.h) DT_NONE if line-of-vision
+ * @param dir			- direction the power travels	-1	walls & floors (default)
+ *														 0+	big-walls & content
+ * @param originTest	- true if the origin tile is being examined for bigWalls;
+ *							used only when dir is specified (default: false)
+ * @param trueDir		- for checking if dir is *really* from the direction of sight (true)
+ *							or, in the case of some bigWall determinations, perpendicular to it (false);
+ *							used only when dir is specified (default: false)
  * @return, (int)block	-99 special case for invalid tiles
  *						-1 hardblock power / vision
  *						 0 no block
@@ -3875,7 +3879,7 @@ int TileEngine::blockage(
 		const int part,
 		ItemDamageType type,
 		int dir,
-		bool checkingOrigin,
+		bool originTest,
 		bool trueDir) // kL_add
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
@@ -3900,7 +3904,9 @@ int TileEngine::blockage(
 			{
 				if ((tile->getMapData(part)->stopLOS()
 							|| (type == DT_SMOKE
-								&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1)) // some tiles do not stopLOS yet should block smoke (eg. Skyranger cockpit)
+								&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1) // some tiles do not stopLOS yet should block smoke (eg. Skyranger cockpit)
+							|| (type == DT_IN
+								&& tile->getMapData(part)->blockFire() == true))
 						&& (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // this one is for verticalBlockage() only.
 							|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
 							|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL)
@@ -3911,7 +3917,7 @@ int TileEngine::blockage(
 //					if (type == DT_NONE)
 //						return 1;// hardblock.
 //					else
-					//Log(LOG_INFO) << ". . . . RET 501 part = " << part << " " << tile->getPosition();
+					//Log(LOG_INFO) << ". . . . Ret 1000[0] part = " << part << " " << tile->getPosition();
 					return 1000;
 				}
 			}
@@ -3919,7 +3925,7 @@ int TileEngine::blockage(
 				&& _powerE > -1
 				&& _powerE < tile->getMapData(part)->getArmor() * 2) // terrain absorbs 200% damage from DT_HE!
 			{
-				//Log(LOG_INFO) << ". . . . RET 502 part = " << part << " " << tile->getPosition();
+				//Log(LOG_INFO) << ". . . . Ret 1000[1] part = " << part << " " << tile->getPosition();
 				return 1000; // this is a hardblock for HE; hence it has to be higher than the highest HE power in the Rulesets.
 			}
 		}
@@ -3928,8 +3934,8 @@ int TileEngine::blockage(
 			int bigWall = tile->getMapData(MapData::O_OBJECT)->getBigWall(); // 0..8 or, per MCD.
 			//Log(LOG_INFO) << ". bigWall = " << bigWall;
 
-			if (checkingOrigin)	// kL (the ContentOBJECT already got hit as the previous endTile...
-								// but can still block LoS when looking down ...)
+			if (originTest)	// kL (the ContentOBJECT already got hit as the previous endTile...
+							// but can still block LoS when looking down ...)
 			{
 /*				if (bigWall == 0 // if (only Content-part == true)
 //					|| (dir =	// this would need to check which side the *missile* is coming from first
@@ -3939,12 +3945,14 @@ int TileEngine::blockage(
 //					|| bigWall == Pathfinding::BIGWALL_NWSE)
 					|| (dir == 9
 						&& !tile->getMapData(MapData::O_OBJECT)->stopLOS())) */
-				if (!visLike
-						&& bigWall == 0 // if (only Content-part == true)
+				if ( // !visLike &&
+						bigWall == 0 // if (only Content-part == true) -> all DamageTypes ok here (because, origin).
 					|| (dir == 9
 						&& !tile->getMapData(MapData::O_OBJECT)->stopLOS()
 						&& !(type == DT_SMOKE
-							&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)))
+							&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)
+						&& !(type == DT_IN
+							&& tile->getMapData(MapData::O_OBJECT)->blockFire() == true)))
 				{
 					return 0;
 				}
@@ -3955,22 +3963,24 @@ int TileEngine::blockage(
 					&& _powerE > -1
 					&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2)
 				{
-					//Log(LOG_INFO) << ". . . . RET 503 part = " << part << " " << tile->getPosition();
+					//Log(LOG_INFO) << ". . . . Ret 1000[2] part = " << part << " " << tile->getPosition();
 					return 1000;	// unfortunately this currently blocks expl-propagation originating
-								// vs diagonal walls traveling out from those walls (see note above)
+									// vs diagonal walls traveling out from those walls (see note above)
 				}
 			}
 
 			if (visLike // hardblock for visLike
 				&& (tile->getMapData(MapData::O_OBJECT)->stopLOS()
 					|| (type == DT_SMOKE
-						&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1))
+						&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)
+					|| (type == DT_IN
+						&& tile->getMapData(MapData::O_OBJECT)->blockFire() == true))
 				&& bigWall == 0)
 			{
 //				if (type == DT_NONE)
 //					return -1;
 //				else
-				//Log(LOG_INFO) << ". . . . RET 504 part = " << part << " " << tile->getPosition();
+				//Log(LOG_INFO) << ". . . . Ret 1000[3] part = " << part << " " << tile->getPosition();
 				return 1000;
 			}
 
@@ -4074,7 +4084,9 @@ int TileEngine::blockage(
 						|| (visLike
 							&& !tile->getMapData(MapData::O_OBJECT)->stopLOS()
 							&& !(type == DT_SMOKE
-								&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)))
+								&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)
+							&& !(type == DT_IN
+								&& tile->getMapData(MapData::O_OBJECT)->blockFire() == true)))
 					{
 						//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret 0 ( dir 8,9 up,down )";
 						return 0;
@@ -4090,13 +4102,15 @@ int TileEngine::blockage(
 			// might be Content-part or remaining-bigWalls block here
 			if (tile->getMapData(MapData::O_OBJECT)->stopLOS() // use stopLOS to hinder explosions from propagating through bigWalls freely.
 				|| (type == DT_SMOKE
-					&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1))
+					&& tile->getMapData(MapData::O_OBJECT)->getBlock(DT_SMOKE) == 1)
+				|| (type == DT_IN
+					&& tile->getMapData(MapData::O_OBJECT)->blockFire() == true))
 			{
 				if (visLike
 					|| (_powerE > -1
 						&& _powerE < tile->getMapData(MapData::O_OBJECT)->getArmor() * 2)) // terrain absorbs 200% damage from DT_HE!
 				{
-					//Log(LOG_INFO) << ". . . . RET 505 part = " << part << " " << tile->getPosition();
+					//Log(LOG_INFO) << ". . . . Ret 1000[4] part = " << part << " " << tile->getPosition();
 					return 1000; // this is a hardblock for HE; hence it has to be higher than the highest HE power in the Rulesets.
 				}
 			}

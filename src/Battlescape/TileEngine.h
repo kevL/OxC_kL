@@ -77,7 +77,7 @@ private:
 			const int part,
 			ItemDamageType type,
 			int dir = -1,
-			bool checkingOrigin = false,
+			bool originTest = false,
 			bool trueDir = false); // kL_add
 
 

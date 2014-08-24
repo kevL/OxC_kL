@@ -178,6 +178,15 @@ bool MapData::isGravLift() const
 }
 
 /**
+ * kL. Gets whether this blocks fire.
+ * @return, true if this blocks fire
+ */
+bool MapData::blockFire() const // kL
+{
+	return _blockFire;
+}
+
+/**
  * kL. Sets whether this stops LoS.
  * @return, true if this stops LoS
  */
@@ -287,7 +296,7 @@ void MapData::setBlock(
 	_block[2] = HEBlock;
 //kL	_block[3] = smokeBlock == 1? 256: 0; // <- why? kL_note. I basically use visionBlock for smoke ....
 	_block[3] = smokeBlock;
-	_block[4] = fireBlock;
+	_block[4] = fireBlock; // this is Flammable, NOT Block_Fire.
 	_block[5] = gasBlock;
 }
 

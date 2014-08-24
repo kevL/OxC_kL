@@ -1492,66 +1492,74 @@ void Map::drawTerrain(Surface* surface)
 							}
 
 							// kL_begin:
-							if (drawRankIcon == true
-								&& unit->getFaction() == FACTION_PLAYER
-								//unit != dynamic_cast<BattleUnit*>(_save->getSelectedUnit());
-								&& unit != _save->getSelectedUnit()
-								&& unit->getTurretType() == -1) // no tanks, pls
+							if (drawRankIcon == true)
 							{
-								if (unit->getFatalWounds() > 0)
-//									&& unit->getFatalWounds() < 10)
+								Tile* tileUp = _save->getTile(mapPosition + Position(0, 0, 1));
+								if (tileUp
+									&& (tileUp->getSprite(MapData::O_FLOOR) == NULL
+										|| _camera->getViewLevel() == itZ))
 								{
-									tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
-									if (tmpSurface != NULL)
+									if (unit->getFaction() == FACTION_PLAYER
+										//unit != dynamic_cast<BattleUnit*>(_save->getSelectedUnit());
+										&& unit != _save->getSelectedUnit()
+										&& unit->getTurretType() == -1) // no tanks, pls
 									{
-										tmpSurface->blitNShade(
-												surface,
-												screenPosition.x + offset.x + 2,
-												screenPosition.y + offset.y + 3,
-												0);
-									}
+										if (unit->getFatalWounds() > 0)
+//											&& unit->getFatalWounds() < 10)
+										{
+											tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
+											if (tmpSurface != NULL)
+											{
+												tmpSurface->blitNShade(
+														surface,
+														screenPosition.x + offset.x + 2,
+														screenPosition.y + offset.y + 3,
+														0);
+											}
 
-//									tmpSurface->drawRect(1, 1, 7, 5, 0); // clear it.
-//									tmpSurface->drawRect(1, 1, 7, 5, Palette::blockOffset(2)+2); // red block on rankIcon.
-									//Log(LOG_INFO) << ". wounded Soldier ID = " << unit->getId();
-									tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
-									tmpSurface->blitNShade(
-											surface,
-											screenPosition.x + offset.x + 4,
-											screenPosition.y + offset.y + 4,
-											0,
-											false,
-											3); // 1=white, 3=red.
+//											tmpSurface->drawRect(1, 1, 7, 5, 0); // clear it.
+//											tmpSurface->drawRect(1, 1, 7, 5, Palette::blockOffset(2)+2); // red block on rankIcon.
+											//Log(LOG_INFO) << ". wounded Soldier ID = " << unit->getId();
+											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 4,
+													screenPosition.y + offset.y + 4,
+													0,
+													false,
+													3); // 1=white, 3=red.
 
-//									if (unit->getFatalWounds() < 10) // stick to under 10 wounds ... else double digits.
-//									{
-/*									SurfaceSet* setDigits = _res->getSurfaceSet("DIGITS");
-									tmpSurface = setDigits->getFrame(unit->getFatalWounds());
-									if (tmpSurface != NULL)
-									{
-										tmpSurface->blitNShade(
-												surface,
-												screenPosition.x + offset.x + 7,
-												screenPosition.y + offset.y + 4,
-												0,
-												false,
-												3); // 1=white, 3=red.
-									} */
-//									}
-								}
-								else
-								{
-									std::string soldierRank = unit->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
-									soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
+//											if (unit->getFatalWounds() < 10) // stick to under 10 wounds ... else double digits.
+//											{
+/*											SurfaceSet* setDigits = _res->getSurfaceSet("DIGITS");
+											tmpSurface = setDigits->getFrame(unit->getFatalWounds());
+											if (tmpSurface != NULL)
+											{
+												tmpSurface->blitNShade(
+														surface,
+														screenPosition.x + offset.x + 7,
+														screenPosition.y + offset.y + 4,
+														0,
+														false,
+														3); // 1=white, 3=red.
+											} */
+//											}
+										}
+										else
+										{
+											std::string soldierRank = unit->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
+											soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
 
-									tmpSurface = _res->getSurface(soldierRank);
-									if (tmpSurface != NULL)
-									{
-										tmpSurface->blitNShade(
-												surface,
-												screenPosition.x + offset.x + 2,
-												screenPosition.y + offset.y + 3,
-												0);
+											tmpSurface = _res->getSurface(soldierRank);
+											if (tmpSurface != NULL)
+											{
+												tmpSurface->blitNShade(
+														surface,
+														screenPosition.x + offset.x + 2,
+														screenPosition.y + offset.y + 3,
+														0);
+											}
+										}
 									}
 								}
 							} // kL_end.
