@@ -284,8 +284,8 @@ void BattlescapeGenerator::nextStage()
 				}
 
 				Node* node = _save->getSpawnNode(
-											NR_XCOM,
-											*j);
+												NR_XCOM,
+												*j);
 				if (node
 					|| placeUnitNearFriend(*j))
 				{
@@ -295,7 +295,11 @@ void BattlescapeGenerator::nextStage()
 											node->getPosition());
 
 					if (!_craftInventoryTile)
+					{
 						_craftInventoryTile = (*j)->getTile();
+
+						_save->setBattleInventory((*j)->getTile()); // kL
+					}
 
 					_craftInventoryTile->setUnit(*j);
 					(*j)->setVisible(false);
@@ -914,6 +918,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 //kL		_save->getTileEngine()->calculateFOV(unit);
 
 			_craftInventoryTile = _save->getTile(node->getPosition());
+			_save->setBattleInventory(_craftInventoryTile); // kL
 
 			return unit;
 		}
@@ -928,6 +933,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 //kL			_save->getTileEngine()->calculateFOV(unit);
 
 				_craftInventoryTile = _save->getTile(unit->getPosition());
+				_save->setBattleInventory(_craftInventoryTile); // kL
 
 				return unit;
 			}
@@ -1036,7 +1042,10 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile)
 	{
 		// kL_note: ground inventory goes where the first xCom unit spawns
 		if (_craftInventoryTile == NULL)
+		{
 			_craftInventoryTile = tile;
+			_save->setBattleInventory(_craftInventoryTile); // kL
+		}
 
 		return true;
 	}
@@ -2135,8 +2144,7 @@ void BattlescapeGenerator::generateMap()
 		tries++;
 	}
 
-	// RANDOM MAP GENERATION
-	// - for crashed or landed sites
+	// RANDOM MAP GENERATION - for crashed or landed sites
 	while (blocksToDo)
 	{
 		if (blocks[x][y] == 0)
@@ -2263,16 +2271,16 @@ void BattlescapeGenerator::generateMap()
 						{
 							if ((k + l) %2 == 0) // we only want every other tile, giving us a "checkerboard" pattern
 							{
-								Tile* t = _save->getTile(Position(k, l, 1));
-								Tile* tEast = _save->getTile(Position(k + 1, l, 1));
-								Tile* tSouth = _save->getTile(Position(k, l + 1, 1));
-								if (t
-									&& t->getMapData(MapData::O_FLOOR)
-									&& !t->getMapData(MapData::O_OBJECT)
-									&& tEast
-									&& !tEast->getMapData(MapData::O_WESTWALL)
-									&& tSouth
-									&& !tSouth->getMapData(MapData::O_NORTHWALL))
+								Tile* tile = _save->getTile(Position(k, l, 1));
+								Tile* tileEast = _save->getTile(Position(k + 1, l, 1));
+								Tile* tileSouth = _save->getTile(Position(k, l + 1, 1));
+								if (tile
+									&& tile->getMapData(MapData::O_FLOOR)
+									&& !tile->getMapData(MapData::O_OBJECT)
+									&& tileEast
+									&& !tileEast->getMapData(MapData::O_WESTWALL)
+									&& tileSouth
+									&& !tileSouth->getMapData(MapData::O_NORTHWALL))
 								{
 									_save->getStorageSpace().push_back(Position(k, l, 1));
 								}
@@ -2284,9 +2292,10 @@ void BattlescapeGenerator::generateMap()
 																(i * 10) + 5,
 																(j * 10) + 5,
 																0));
+					_save->setBattleInventory(_craftInventoryTile); // kL
 				}
 
-				if (i < _mapsize_x / 10 -1 // drill east
+				if (i < _mapsize_x / 10 - 1 // drill east
 					&& blocks[i + 1][j] != dirt
 					&& _save->getTile(Position((i*10)+9,(j*10)+4,0))->getMapData(MapData::O_OBJECT)
 					&& (!_save->getTile(Position((i*10)+8,(j*10)+4,0))->getMapData(MapData::O_OBJECT)

@@ -53,7 +53,6 @@
 #include "../Savegame/Tile.h"
 
 
-
 namespace OpenXcom
 {
 
@@ -1492,7 +1491,7 @@ void Inventory::drawPrimers()
 }
 
 /**
- * kL. Set grenade to show a warning in Inventory.
+ * kL. Sets grenade to show a warning in Inventory.
  * @param turn, Turns until grenade is to explode
  */
 void Inventory::setPrimeGrenade(int turn) // kL
@@ -1501,7 +1500,7 @@ void Inventory::setPrimeGrenade(int turn) // kL
 }
 
 /**
- * kL. Get the TU cost for moving items around.
+ * kL. Gets the TU cost for moving items around.
  */
 int Inventory::getTUCost() const // kL
 {

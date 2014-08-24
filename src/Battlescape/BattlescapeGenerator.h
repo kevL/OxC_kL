@@ -22,6 +22,7 @@
 
 #include <string> // kL
 
+
 namespace OpenXcom
 {
 

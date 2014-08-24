@@ -355,6 +355,7 @@ InventoryState::InventoryState(
 
 	_txtWeight->setVisible(Options::showMoreStatsInInventoryView);
 	_txtTus->setVisible(_tu);
+	_txtUseTU->setVisible(_tu);
 
 	bool vis = !_tu
 				&& Options::showMoreStatsInInventoryView;
@@ -489,7 +490,7 @@ void InventoryState::init()
 	_soldier->clear();
 	_btnRank->clear();
 
-	_txtName->setBig();
+//	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
 
 	_inv->setSelectedUnit(unit);
@@ -672,6 +673,7 @@ void InventoryState::btnOkClick(Action*)
 
 	if (!_tu) // pre-Battle inventory equip.
 	{
+		//Log(LOG_INFO) << ". tu = FALSE";
 		saveEquipmentLayout();
 
 		// kL_begin: This for early exit because access is via CraftEquip screen.
@@ -684,15 +686,16 @@ void InventoryState::btnOkClick(Action*)
 
 		_battleGame->resetUnitTiles();
 
-		Tile* invTile = _battleGame->getSelectedUnit()->getTile();
+//		Tile* invTile = _battleGame->getSelectedUnit()->getTile();
+		Tile* invTile = _battleGame->getBattleInventory(); // kL
 		_battleGame->randomizeItemLocations(invTile);	// This doesn't seem to happen on second stage of Multi-State MISSIONS.
 														// In fact, none of this !_tu InventoryState appears to run for 2nd staged missions.
 														// and BattlescapeGenerator::nextStage() has its own bu->prepareNewTurn() call ....
 /*kL
 		if (_battleGame->getTurn() == 1) // Leaving this out could be troublesome for Multi-Stage MISSIONS.
 		{
+			//Log(LOG_INFO) << ". turn = 1";
 			_battleGame->randomizeItemLocations(invTile);
-
 			if (invTile->getUnit())
 			{
 				// make sure we select the unit closest to the ramp.

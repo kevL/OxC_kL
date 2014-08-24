@@ -4734,7 +4734,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1407162133 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1408903881 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
 1408749699 f:\git\openxcom\src\battlescape\inventorystate.h
@@ -4753,7 +4753,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404591818 f:\git\openxcom\src\savegame\savedbattlegame.h
+1408909543 f:\git\openxcom\src\savegame\savedbattlegame.h
 	<algorithm>
 	<iostream>
 	<string>
@@ -5910,7 +5910,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1408831960 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1408909326 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -5958,7 +5958,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
 
-1404096022 f:\git\openxcom\src\battlescape\inventory.h
+1408905268 f:\git\openxcom\src\battlescape\inventory.h
 	<map>
 	<string>
 	"../Engine/InteractiveSurface.h"
@@ -6363,7 +6363,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1408360071 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1408905121 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6398,7 +6398,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1408832650 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1408909543 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -9530,7 +9530,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1408831740 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1408884001 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9645,7 +9645,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1408853358 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1408909543 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	<vector>
 	<deque>
 	<queue>
@@ -9755,7 +9755,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1408853324 source:f:\git\openxcom\src\savegame\tile.cpp
+1408883915 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"

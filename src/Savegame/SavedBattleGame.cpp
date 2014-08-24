@@ -87,7 +87,8 @@ SavedBattleGame::SavedBattleGame()
 		_tuReserved(BA_NONE),
 		_depth(0),
 		_kneelReserved(false),
-		_terrain("") // kL sza_MusicRules
+		_terrain(""), // kL sza_MusicRules
+		_invBattle(NULL)
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
 	_tileSearch.resize(11 * 11);
@@ -1318,8 +1319,8 @@ void SavedBattleGame::resetUnitTiles()
 }
 
 /**
- * Gives access to the "storage space" vector, for distribution of items in base defense missions.
- * @return, reference to a vector of storage positions
+ * Gives access to the storageSpace vector, for distribution of items in base defense missions.
+ * @return, reference a vector of storage positions
  */
 std::vector<Position>& SavedBattleGame::getStorageSpace()
 {
@@ -1328,69 +1329,78 @@ std::vector<Position>& SavedBattleGame::getStorageSpace()
 
 /**
  * Move all the leftover items in base defense missions to random locations in the storage facilities.
- * @param t, The tile where all the goodies are initially stored.
+ * @param tile - pointer to a tile where all the goodies are initially stored
  */
-void SavedBattleGame::randomizeItemLocations(Tile* t)
+void SavedBattleGame::randomizeItemLocations(Tile* tile)
 {
+	//Log(LOG_INFO) << "SavedBattleGame::randomizeItemLocations()";
 	if (!_storageSpace.empty())
 	{
+		//Log(LOG_INFO) << ". storageSpace NOT empty";
 		for (std::vector<BattleItem*>::iterator
-				it = t->getInventory()->begin();
-				it != t->getInventory()->end();
+				i = tile->getInventory()->begin();
+				i != tile->getInventory()->end();
 				)
 		{
-			if ((*it)->getSlot()->getId() == "STR_GROUND")
+			//Log(LOG_INFO) << ". . iterate battleItems";
+			if ((*i)->getSlot()->getId() == "STR_GROUND")
 			{
-				getTile(_storageSpace.at(RNG::generate(0, _storageSpace.size() - 1)))
-						->addItem(
-								*it,
-								(*it)->getSlot());
+				//Log(LOG_INFO) << ". . . slot = GROUND";
+				getTile(_storageSpace.at(RNG::generate(
+													0,
+													_storageSpace.size() - 1)))
+												->addItem(
+														*i,
+														(*i)->getSlot());
 
-				it = t->getInventory()->erase(it);
+				i = tile->getInventory()->erase(i);
 			}
 			else
-				++it;
+			{
+				//Log(LOG_INFO) << ". . . slot Not GROUND";
+				++i;
+			}
 		}
 	}
 }
 
 /**
- * Removes an item from the game. Eg. when ammo item is depleted.
- * @param item, The Item to remove.
+ * Removes an item from the game; when ammo item is depleted for example.
+ * @param item - an item to remove
  */
 void SavedBattleGame::removeItem(BattleItem* item)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::removeItem()";
 
 	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
-	BattleUnit* b = item->getOwner();
-	Tile* t = item->getTile();
-	if (t)
+	BattleUnit* bu = item->getOwner();
+	Tile* tile = item->getTile();
+	if (tile)
 	{
 		for (std::vector<BattleItem*>::iterator
-				it = t->getInventory()->begin();
-				it != t->getInventory()->end();
-				++it)
+				i = tile->getInventory()->begin();
+				i != tile->getInventory()->end();
+				++i)
 		{
-			if (*it == item)
+			if (*i == item)
 			{
-				t->getInventory()->erase(it);
+				tile->getInventory()->erase(i);
 
 				break;
 			}
 		}
 	}
 
-	if (b)
+	if (bu)
 	{
 		for (std::vector<BattleItem*>::iterator
-				it = b->getInventory()->begin();
-				it != b->getInventory()->end();
-				++it)
+				i = bu->getInventory()->begin();
+				i != bu->getInventory()->end();
+				++i)
 		{
-			if (*it == item)
+			if (*i == item)
 			{
-				b->getInventory()->erase(it);
+				bu->getInventory()->erase(i);
 
 				break;
 			}
@@ -1406,7 +1416,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 		{
 			_items.erase(i);
 
-			//Log(LOG_INFO) << "SavedBattleGame::removeItem() [1]EXIT";
+			//Log(LOG_INFO) << "SavedBattleGame::removeItem() EXIT[0]";
 			return;
 		}
 	}
@@ -1425,7 +1435,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 			++it;
 		}
 	} */
-	//Log(LOG_INFO) << "SavedBattleGame::removeItem() [2]EXIT";
+	//Log(LOG_INFO) << "SavedBattleGame::removeItem() EXIT[1]";
 }
 
 /**
@@ -2525,6 +2535,24 @@ void SavedBattleGame::setPaletteByDepth(State* state)
 		ss << "PAL_BATTLESCAPE_" << _depth;
 		state->setPalette(ss.str());
 	}
+}
+
+/**
+ * kL. Sets the battlescape inventory tile when BattlescapeGenerator runs.
+ * For use in base missions to randomize item locations.
+ * @param invBattle - pointer to the tile where battle inventory is created
+ */
+void SavedBattleGame::setBattleInventory(Tile* invBattle) // kL
+{
+	_invBattle = invBattle;
+}
+
+/**
+ * kL. Gets the inventory tile for preBattle InventoryState OK click.
+ */
+Tile* SavedBattleGame::getBattleInventory() const // kL
+{
+	return _invBattle;
 }
 
 }

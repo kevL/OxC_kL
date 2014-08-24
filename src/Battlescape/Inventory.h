@@ -167,10 +167,10 @@ private:
 		/// Show priming warnings on grenades.
 		void drawPrimers();
 
-		/// kL. Set grenade to show a warning in Inventory.
+		/// kL. Sets grenade to show a warning in Inventory.
 		void setPrimeGrenade(int turn); // kL
 
-		/// kL. Get the TU cost for moving items around.
+		/// kL. Gets the TU cost for moving items around.
 		int getTUCost() const; // kL
 };
 

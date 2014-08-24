@@ -81,6 +81,7 @@ private:
 		* _selectedUnit,
 		* _lastSelectedUnit;
 	Pathfinding* _pathfinding;
+	Tile* _invBattle;
 	Tile** _tiles;
 	TileEngine* _tileEngine;
 
@@ -288,30 +289,35 @@ private:
 		void setUnitsFalling(bool fall);
 		/// Checks the status of the switch that says "there are units falling".
 		bool getUnitsFalling() const;
+
 		/// Gets a pointer to the BattlescapeState.
 		BattlescapeState* getBattleState();
 		/// Gets a pointer to the BattlescapeGame.
 		BattlescapeGame* getBattleGame();
 		/// Sets the pointer to the BattlescapeState.
 		void setBattleState(BattlescapeState* bs);
-		/// Gets the highest ranked, living XCom unit.
-//kL	BattleUnit* getHighestRankedXCom();
+
 		/// Gets the highest ranked, living unit of faction.
-		BattleUnit* getHighestRanked(bool xcom = true);		// kL
-		/// Gets the morale modifier for XCom based on the highest ranked, living XCom unit, or the modifier for the unit passed to this function.
-//kL	int getMoraleModifier(BattleUnit* unit = 0);
+		BattleUnit* getHighestRanked(bool xcom = true); // kL
 		/// Gets the morale modifier based on the highest ranked, living xcom/alien unit, or for a unit passed into this function.
-		int getMoraleModifier(BattleUnit* unit = 0, bool xcom = true);	// kL
+		int getMoraleModifier(
+				BattleUnit* unit = NULL,
+				bool xcom = true); // kL
+
 		/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 //kL	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);
+
 		/// Resets the turn counter.
 		void resetTurnCounter();
 		/// Resets the visibility of all tiles on the map.
 		void resetTiles();
+
 		/// Gets an 11x11 grid of positions (-10 to +10) to check.
 		const std::vector<Position> getTileSearch();
+
 		/// Checks if the AI has engaged cheat mode.
 		bool isCheating();
+
 		/// Gets the reserved fire mode.
 		BattleActionType getTUReserved() const;
 		/// Sets the reserved fire mode.
@@ -320,15 +326,18 @@ private:
 		bool getKneelReserved() const;
 		/// Sets whether we are reserving TUs to kneel.
 		void setKneelReserved(bool reserved);
+
 		/// Gives me access to the storage tiles vector.
 		std::vector<Position>& getStorageSpace();
 		/// Moves all the leftover items to random locations in the storage tiles vector.
-		void randomizeItemLocations(Tile* t);
+		void randomizeItemLocations(Tile* tile);
+
 		/// Gets a reference to the baseModules map.
 		std::vector<std::vector<std::pair<int, int> > >& getModuleMap();
 		/// Calculates the number of map modules remaining
 		void calculateModuleMap();
-		/// Gets a shortcut to the geoscape save.
+
+		/// Gets a pointer to the Geoscape save.
 		SavedGame* getGeoscapeSave();
 
 		/// Gets the depth of the battlescape game.
@@ -338,6 +347,11 @@ private:
 
 		///
 		void setPaletteByDepth(State* state);
+
+		/// kL. Sets the inventory tile when BattlescapeGenerator runs.
+		void setBattleInventory(Tile* invBattle); // kL
+		/// kL. Gets the inventory tile for preBattle InventoryState OK click.
+		Tile* getBattleInventory() const; // kL
 };
 
 }
