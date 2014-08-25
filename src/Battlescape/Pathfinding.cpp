@@ -291,10 +291,8 @@ void Pathfinding::calculate(
 
 	_strafeMove = strafeRejected == false
 				&& Options::strafe
-//				&& (((SDL_GetModState() & KMOD_CTRL) != 0
 				&& ((_modCTRL == true
 						&& unit->getTurretType() == -1)
-//					|| ((SDL_GetModState() & KMOD_ALT) != 0
 					|| (_modALT == true
 						&& unit->getTurretType() > -1))
 				&& startPos.z == endPos.z
@@ -1146,7 +1144,7 @@ int Pathfinding::getTUCost(
 				// kL_begin: extra TU for strafe-moves ->	1 0 1
 				//											2 ^ 2
 				//											3 2 3
-				if (size
+				if (size > 0
 					&& abs(dir - ((_unit->getDirection() + 4) %8)) > 1)
 				{
 					_strafeMove = false;
@@ -1162,6 +1160,16 @@ int Pathfinding::getTUCost(
 						delta = 2;
 
 					cost += delta;
+				}
+				else if ( //size == 0 &&
+					_unit->getDirection() == dir) // forced dash 1 tile straight forward.
+				{
+					_strafeMove = false;
+					cost = cost * 3 / 4;
+
+					_save->getBattleGame()->getCurrentAction()->strafe = false;
+					_save->getBattleGame()->getCurrentAction()->run = true;
+					_save->getBattleGame()->getCurrentAction()->actor->setDashing(true);
 				} // kL_end.
 			}
 
@@ -1997,10 +2005,17 @@ bool Pathfinding::previewPath(bool bRemove)
 						&& size == 0
 						&& _strafeMove == false, // kL
 		bodySuit	= armorType == "STR_PERSONAL_ARMOR_UC",
-		powerSuit	= armorType == "STR_POWER_SUIT_UC"
-						|| (armorType == "STR_FLYING_SUIT_UC"
+		powerSuit	= (armorType == "STR_POWER_SUIT_UC"
+							|| armorType == "STR_BLUE_ARMOR_UC"
+							|| armorType == "STR_ORANGE_ARMOR_UC"
+							|| armorType == "STR_RED_ARMOR_UC")
+						|| ((armorType == "STR_FLYING_SUIT_UC"
+								|| armorType == "STR_BLUESUIT_ARMOR_UC"
+								|| armorType == "STR_GREENSUIT_ARMOR_UC")
 							&& _movementType == MT_WALK),
-		flightSuit	= armorType == "STR_FLYING_SUIT_UC"
+		flightSuit	= (armorType == "STR_FLYING_SUIT_UC"
+							|| armorType == "STR_BLUESUIT_ARMOR_UC"
+							|| armorType == "STR_GREENSUIT_ARMOR_UC")
 						&& _movementType == MT_FLY,
 		gravLift	= false,
 		reserveOk	= false;

@@ -4786,7 +4786,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1408478960 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1408940267 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -6601,7 +6601,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1408930561 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1408982964 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6680,7 +6680,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1408934005 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1408940941 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6863,7 +6863,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1404588616 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1408983137 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -6912,7 +6912,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1408928422 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1408990766 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"

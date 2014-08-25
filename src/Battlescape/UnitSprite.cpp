@@ -392,7 +392,7 @@ void UnitSprite::drawRoutine0()
 	{
 		torso = _unitSurface->getFrame(maleTorso + unitDir);
 	}
-	else if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC")
+	else if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC") // the mod Colored Armors might muck w/ this.
 	{
 		torso = _unitSurface->getFrame(femaleTorso + unitDir);
 	}

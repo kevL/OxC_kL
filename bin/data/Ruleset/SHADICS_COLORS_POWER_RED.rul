@@ -1,0 +1,120 @@
+items:
+  - type: STR_RED_ARMOR
+    size: 0.8
+    costSell: 256950 # 856500
+  - type: STR_CORPSE_RED_ARMOR
+    name: STR_CORPSE
+    weight: 33
+    bigSprite: 65
+    floorSprite: 78
+    invWidth: 2
+    invHeight: 3
+    armor: 40
+    recover: false
+armors:
+  - type: STR_RED_ARMOR_UC
+    spriteSheet: RED.PCK
+    spriteInv: MAN_6
+    corpseBattle:
+      - STR_CORPSE_RED_ARMOR
+    storeItem: STR_RED_ARMOR
+    frontArmor: 96
+    sideArmor: 82
+    rearArmor: 74
+    underArmor: 62
+    movementType: 0
+    damageModifier:
+      - 1.0 #none
+      - 0.93 #ap
+      - 0.07 #in
+      - 0.96 #he
+      - 0.96 #laser
+      - 0.97 #plasma
+      - 0.76 #stun
+      - 0.9 #melee
+      - 0.95 #acid
+      - 0.0 #smoke
+    loftempsSet: [ 3 ]
+manufacture:
+  - name: STR_RED_ARMOR
+    category: STR_PERSONAL_ARMOR_BA
+    requires:
+      - STR_POWER_SUIT
+      - STR_ALIEN_ALLOYS
+      - STR_ELERIUM_115
+    space: 14
+    time: 1200
+    cost: 120000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 13
+      STR_ELERIUM_115: 3
+ufopaedia:
+  - id: STR_RED_ARMOR_UC
+    type_id: 5
+    section: STR_WEAPONS_AND_EQUIPMENT
+    listOrder: 1700
+    requires:
+      - STR_POWER_SUIT
+    text: STR_RED_ARMOR_UFOPEDIA
+extraSprites:
+  - type: MAN_6F0.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/RED/Screens/red_f0.gif
+  - type: MAN_6F1.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/RED/Screens/red_f1.gif
+  - type: MAN_6F2.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/RED/Screens/red_f2.gif
+  - type: MAN_6F3.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/RED/Screens/red_f3.gif
+  - type: MAN_6M0.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/RED/Screens/red_m0.gif
+  - type: MAN_6M1.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/RED/Screens/red_m1.gif
+  - type: MAN_6M2.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/RED/Screens/red_m2.gif
+  - type: MAN_6M3.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/RED/Screens/red_m3.gif
+  - type: RED.PCK
+    subX: 32
+    subY: 40
+    width: 512
+    height: 720
+    files:
+      0: Resources/Colored_ARMOR/RED.png
+  - type: BIGOBS.PCK
+    files:
+      65: Resources/Colored_ARMOR/RED/Screens/RED_Corpse_Inv.gif
+  - type: FLOOROB.PCK
+    files:
+      78: Resources/Colored_ARMOR/RED/Screens/RED_Corpse.png
+extraStrings:
+  - type: en-US
+    strings:
+      STR_RED_ARMOR_UC: "POWER SUIT> red"
+      STR_RED_ARMOR: "Power Suit> red"
+      STR_RED_ARMOR_UFOPEDIA: "A powerful new protection for soldiers, this armor is powered by an Elerium energy source and greatly amplifies the speed and strength of the wearer, it offers the best protection yet for combat troops."
+  - type: en-GB
+    strings:
+      STR_RED_ARMOR_UC: "POWER SUIT> red"
+      STR_RED_ARMOR: "Power Suit> red"
+      STR_RED_ARMOR_UFOPEDIA: "A powerful new protection for soldiers, this armor is powered by an Elerium energy source and greatly amplifies the speed and strength of the wearer, it offers the best protection yet for combat troops."
+  - type: es
+    strings:
+      STR_RED_ARMOR_UC: "TRAJE MECANICO> rojo"
+      STR_RED_ARMOR: "Traje mecanico> rojo"
+      STR_RED_ARMOR_UFOPEDIA: "Una nueva y poderosa proteccion para nuestros soldados. Esta armadura esta alimentada por una fuente de energia de Elerium y aumenta en gran medida la velocidad y fuerza del que la lleva, ofreciendo la mejor protección para tropas de combate."

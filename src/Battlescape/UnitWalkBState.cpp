@@ -474,13 +474,20 @@ bool UnitWalkBState::doStatusStand()
 			}
 
 			std::string armorType = _unit->getArmor()->getType();
-			if (armorType == "STR_FLYING_SUIT_UC"
+			if ((armorType == "STR_FLYING_SUIT_UC"
+					|| armorType == "STR_BLUESUIT_ARMOR_UC"
+					|| armorType == "STR_GREENSUIT_ARMOR_UC")
 				&& _pf->getMovementType() == MT_FLY)
 			{
 				energy -= 2; // zippy.
 			}
-			else if (armorType == "STR_POWER_SUIT_UC"
-				|| (armorType == "STR_FLYING_SUIT_UC"
+			else if ((armorType == "STR_POWER_SUIT_UC"
+					|| armorType == "STR_BLUE_ARMOR_UC"
+					|| armorType == "STR_ORANGE_ARMOR_UC"
+					|| armorType == "STR_RED_ARMOR_UC")
+				|| ((armorType == "STR_FLYING_SUIT_UC"
+						|| armorType == "STR_BLUESUIT_ARMOR_UC"
+						|| armorType == "STR_GREENSUIT_ARMOR_UC")
 					&& _pf->getMovementType() == MT_WALK))
 			{
 				energy -= 1; // good stuff
