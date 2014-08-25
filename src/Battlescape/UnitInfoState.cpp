@@ -659,7 +659,7 @@ void UnitInfoState::init()
 	_barStrength->setMax(static_cast<double>(stat));
 	_barStrength->setValue(static_cast<double>(stat)); */
 	arbitraryVariable = static_cast<double>(_unit->getStats()->strength);
-	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
+	stat = static_cast<int>(arbitraryVariable * (_unit->getAccuracyModifier() / 2.0 + 0.5));
 	ss.str(L"");
 	ss << stat;
 	_numStrength->setText(ss.str());

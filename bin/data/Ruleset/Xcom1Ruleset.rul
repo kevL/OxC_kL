@@ -3895,16 +3895,16 @@ armors:
     movementType: 1
     size: 2
     damageModifier:
-      - 1.0
-      - 1.0
-      - 0.8
-      - 0.7
-      - 1.2
-      - 0.9
-      - 0.0
-      - 0.7
-      - 1.0
-      - 0.0
+      - 1.0 #none
+      - 1.0 #ap
+      - 0.8 #in
+      - 0.7 #he
+      - 1.2 #laser
+      - 0.9 #plasma
+      - 0.0 #stun
+      - 0.7 #melee
+      - 1.0 #acid
+      - 0.0 #smoke
     loftempsSet: [ 92, 89, 90, 91 ]
   - type: REAPER_ARMOR
     spriteSheet: X_REAP.PCK
@@ -4534,7 +4534,7 @@ units:
       reactions: 30
       firing: 30
       throwing: 50
-      strength: 20
+      strength: 30
       psiStrength: 5
       psiSkill: 0
       melee: 50
@@ -4554,7 +4554,7 @@ units:
       reactions: 30
       firing: 30
       throwing: 50
-      strength: 20
+      strength: 30
       psiStrength: 5
       psiSkill: 0
       melee: 50
@@ -4575,7 +4575,7 @@ units:
       reactions: 63
       firing: 52
       throwing: 58
-      strength: 30
+      strength: 40
       psiStrength: 57
       psiSkill: 0
       melee: 76
@@ -4598,7 +4598,7 @@ units:
       reactions: 63
       firing: 52
       throwing: 58
-      strength: 30
+      strength: 40
       psiStrength: 87
       psiSkill: 0
       melee: 76
@@ -4621,7 +4621,7 @@ units:
       reactions: 63
       firing: 52
       throwing: 58
-      strength: 30
+      strength: 40
       psiStrength: 77
       psiSkill: 0
       melee: 76
@@ -4644,7 +4644,7 @@ units:
       reactions: 63
       firing: 52
       throwing: 58
-      strength: 30
+      strength: 40
       psiStrength: 67
       psiSkill: 0
       melee: 76
@@ -4667,7 +4667,7 @@ units:
       reactions: 63
       firing: 52
       throwing: 58
-      strength: 30
+      strength: 45
       psiStrength: 89
       psiSkill: 41
       melee: 76
@@ -4690,7 +4690,7 @@ units:
       reactions: 63
       firing: 52
       throwing: 58
-      strength: 30
+      strength: 50
       psiStrength: 109
       psiSkill: 42
       melee: 76
@@ -4840,7 +4840,7 @@ units:
       reactions: 60
       firing: 60
       throwing: 58
-      strength: 47
+      strength: 45
       psiStrength: 76
       psiSkill: 0
       melee: 70
@@ -4865,7 +4865,7 @@ units:
       reactions: 66
       firing: 63
       throwing: 65
-      strength: 48
+      strength: 50
       psiStrength: 86
       psiSkill: 0
       melee: 76
@@ -4986,7 +4986,7 @@ units:
       reactions: 55
       firing: 65
       throwing: 65
-      strength: 47
+      strength: 52
       psiStrength: 95
       psiSkill: 0
       melee: 76
@@ -5010,7 +5010,7 @@ units:
       reactions: 65
       firing: 58
       throwing: 65
-      strength: 47
+      strength: 57
       psiStrength: 105
       psiSkill: 0
       melee: 76
@@ -5082,7 +5082,7 @@ units:
       reactions: 47
       firing: 54
       throwing: 62
-      strength: 70
+      strength: 75
       psiStrength: 47
       psiSkill: 0
       melee: 76
@@ -5105,7 +5105,7 @@ units:
       reactions: 51
       firing: 54
       throwing: 62
-      strength: 70
+      strength: 80
       psiStrength: 57
       psiSkill: 0
       melee: 76

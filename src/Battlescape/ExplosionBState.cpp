@@ -108,7 +108,7 @@ void ExplosionBState::init()
 		if ( //_item->getRules()->getBattleType() == BT_MELEE &&
 			_item->getRules()->isStrengthApplied())
 		{
-			_power += static_cast<int>(static_cast<double>(_unit->getStats()->strength) * _unit->getAccuracyModifier());
+			_power += static_cast<int>(static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5));
 		}
 		//Log(LOG_INFO) << ". _power(_item) = " << _power;
 

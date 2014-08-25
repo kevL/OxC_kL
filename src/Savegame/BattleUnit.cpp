@@ -2065,7 +2065,7 @@ void BattleUnit::prepareNewTurn()
 	int prepTU = getStats()->tu;
 
 	double underLoad = static_cast<double>(getStats()->strength) / static_cast<double>(getCarriedWeight());
-	underLoad *= getAccuracyModifier();
+	underLoad *= getAccuracyModifier() / 2.0 + 0.5;
 	if (underLoad < 1.0)
 		prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
 

@@ -449,8 +449,9 @@ bool UnitWalkBState::doStatusStand()
 			tu = 0;
 		}
 
-		int tuTest = tu;
-		int energy = tu;
+		int
+			energy = tu,
+			tuTest = tu;
 
 		if (!gravLift)
 		{
@@ -473,19 +474,18 @@ bool UnitWalkBState::doStatusStand()
 			}
 
 			std::string armorType = _unit->getArmor()->getType();
-			if (armorType == "STR_FLYING_SUIT_UC")
+			if (armorType == "STR_FLYING_SUIT_UC"
+				&& _pf->getMovementType() == MT_FLY)
 			{
 				energy -= 2; // zippy.
-				if (energy < 0)
-					energy = 0;
 			}
-			else if (armorType == "STR_POWER_SUIT_UC")
+			else if (armorType == "STR_POWER_SUIT_UC"
+				|| (armorType == "STR_FLYING_SUIT_UC"
+					&& _pf->getMovementType() == MT_WALK))
 			{
 				energy -= 1; // good stuff
-				if (energy < 0)
-					energy = 0;
 			}
-			// else if (coveralls) Normal energy expenditure
+			// else if (coveralls){} // normal energy expenditure
 			else if (armorType == "STR_PERSONAL_ARMOR_UC")
 				energy += 1; // *clunk*clunk*
 		}
@@ -495,6 +495,8 @@ bool UnitWalkBState::doStatusStand()
 			energy = 0;
 		}
 
+		if (energy < 0)
+			energy = 0;
 
 		//Log(LOG_INFO) << ". check tu + stamina, etc. TU = " << tu;
 		//Log(LOG_INFO) << ". unit->TU = " << _unit->getTimeUnits();

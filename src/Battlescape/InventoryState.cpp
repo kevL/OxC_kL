@@ -558,7 +558,7 @@ void InventoryState::updateStats()
 
 	if (Options::showMoreStatsInInventoryView) // kL
 	{
-		int str = static_cast<int>(static_cast<double>(unit->getStats()->strength) * unit->getAccuracyModifier());
+		int str = static_cast<int>(static_cast<double>(unit->getStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5));
 		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
 		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(str));
 		if (weight > str)
@@ -716,6 +716,7 @@ void InventoryState::btnOkClick(Action*)
 				//Log(LOG_INFO) << ". tu = " << prepTU;
 
 				double underLoad = static_cast<double>((*i)->getStats()->strength) / static_cast<double>((*i)->getCarriedWeight());
+				underLoad *= (*i)->getAccuracyModifier() / 2.0 + 0.5; // This *could* affect 2nd part of a Multi-Stage mission.
 				//Log(LOG_INFO) << ". strength = " << (*i)->getStats()->strength;
 				//Log(LOG_INFO) << ". underLoad = " << underLoad;
 				if (underLoad < 1.0)

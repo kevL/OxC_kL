@@ -81,8 +81,8 @@ CraftInfoState::CraftInfoState(
 	_btnW2			= new TextButton(24, 32, 282, 48);
 	_txtW1Name		= new Text(78, 9, 46, 48);
 	_txtW2Name		= new Text(78, 9, 204, 48);
-	_txtW1Ammo		= new Text(60, 17, 46, 64);
-	_txtW2Ammo		= new Text(60, 17, 204, 64);
+	_txtW1Ammo		= new Text(60, 25, 46, 64);
+	_txtW2Ammo		= new Text(60, 25, 204, 64);
 //	_txtW1Max		= new Text(60, 9, 46, 72);
 //	_txtW2Max		= new Text(60, 9, 204, 72);
 
@@ -409,8 +409,7 @@ std::wstring CraftInfoState::formatTime(int total)
 	ss << L"\n(";
 
 	if (days > 0)
-//kl	ss << tr("STR_DAY", days) << L"/";
-		ss << tr("STR_DAY", days) << L" "; // kL
+		ss << tr("STR_DAY", days) << L" ";
 
 	if (hours > 0)
 		ss << tr("STR_HOUR", hours);

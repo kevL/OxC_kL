@@ -54,7 +54,7 @@ namespace OpenXcom
 {
 
 /**
- * Sets up an ProjectileFlyBState.
+ * Sets up an ProjectileFlyBState [0].
  */
 ProjectileFlyBState::ProjectileFlyBState(
 		BattlescapeGame* parent,
@@ -77,7 +77,7 @@ ProjectileFlyBState::ProjectileFlyBState(
 }
 
 /**
- *
+ * Sets up an ProjectileFlyBState [1].
  */
 ProjectileFlyBState::ProjectileFlyBState(
 		BattlescapeGame* parent,
@@ -1190,7 +1190,7 @@ bool ProjectileFlyBState::validThrowRange(
 	double maxDist = static_cast<double>(
 							getMaxThrowDistance( // tilespace
 											weight,
-											static_cast<int>(static_cast<double>(action->actor->getStats()->strength) * action->actor->getAccuracyModifier()),
+											static_cast<int>(static_cast<double>(action->actor->getStats()->strength) * (action->actor->getAccuracyModifier() / 2.0 + 0.5)),
 											delta_z)
 										+ 8)
 									/ 16.0;

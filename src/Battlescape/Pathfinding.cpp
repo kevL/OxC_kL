@@ -1978,24 +1978,51 @@ bool Pathfinding::previewPath(bool bRemove)
 
 	_pathPreviewed = !bRemove;
 
+	int
+		curTU		= _unit->getTimeUnits(),
+		usedTU		= 0, // only for soldiers reserving TUs
+		tu			= 0, // cost per tile
+		energy		= _unit->getEnergy(),
+		energyLim	= energy,
+		size		= _unit->getArmor()->getSize() - 1,
+		dir			= -1,
+		color		= 0;
+
+	std::string armorType = _unit->getArmor()->getType();
+
+	bool
+		hathStood	= false,
+		dash		= Options::strafe
+						&& _modCTRL
+						&& size == 0
+						&& _strafeMove == false, // kL
+		bodySuit	= armorType == "STR_PERSONAL_ARMOR_UC",
+		powerSuit	= armorType == "STR_POWER_SUIT_UC"
+						|| (armorType == "STR_FLYING_SUIT_UC"
+							&& _movementType == MT_WALK),
+		flightSuit	= armorType == "STR_FLYING_SUIT_UC"
+						&& _movementType == MT_FLY,
+		gravLift	= false,
+		reserveOk	= false;
+
+	//Log(LOG_INFO) << ". bodySuit = " << bodySuit;
+	//Log(LOG_INFO) << ". powerSuit = " << powerSuit;
+	//Log(LOG_INFO) << ". flightSuit = " << flightSuit;
+// kL_note: Ought to create a factor for those in ruleArmor class & RuleSets ( _burden ).
+// Or 'enum' those, as in
+/* enum ArmorBurthen
+{
+	AB_LOW,		// -1
+	AB_NORMAL,	//  0
+	AB_MEDIUM,	//  1
+	AB_HIGH		//  2
+}; */
+
 	Position
 		start = _unit->getPosition(),
 		dest;
 
-	int
-		currentTU	= _unit->getTimeUnits(),
-		usedTU		= 0, // only for soldiers reserving TUs
-		tu			= 0, // cost per tile
-
-		energy		= _unit->getEnergy(),
-		energyStop	= energy,
-
-		size		= _unit->getArmor()->getSize() - 1,
-
-		dir			= -1,
-		color		= 0;
-
-	bool hathStood = false;
+	Tile* tile;
 
 	bool switchBack = false;
 	if (_save->getBattleGame()->getReservedAction() == BA_NONE)
@@ -2005,30 +2032,6 @@ bool Pathfinding::previewPath(bool bRemove)
 //kL										BA_AUTOSHOT);
 											BA_SNAPSHOT); // kL
 	}
-
-	std::string armorType = _unit->getArmor()->getType();
-
-	bool
-		dash = Options::strafe
-				&& _modCTRL
-				&& size == 0
-				&& _strafeMove == false, // kL
-		bBody		= armorType == "STR_PERSONAL_ARMOR_UC",
-		bPower		= armorType == "STR_POWER_SUIT_UC",
-		bFlight		= armorType == "STR_FLYING_SUIT_UC",
-		gravLift	= false,
-		reserveOk	= false;
-		// kL_note: Ought to create a factor for those in ruleArmor class & RuleSets ( _burden ).
-		// Or 'enum' those, as in
-/* enum ArmorBurthen
-{
-	AB_LOW,		// -1
-	AB_NORMAL,	//  0
-	AB_MEDIUM,	//  1
-	AB_HIGH		//  2
-}; */
-
-	Tile* tile;
 
 	for (std::vector<int>::reverse_iterator
 			i = _path.rbegin();
@@ -2052,7 +2055,7 @@ bool Pathfinding::previewPath(bool bRemove)
 			return false;	// kL
 		} */
 
-		energyStop = energy;
+		energyLim = energy;
 
 		gravLift = dir >= DIR_UP
 					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)
@@ -2064,7 +2067,7 @@ bool Pathfinding::previewPath(bool bRemove)
 			{
 				hathStood = true;
 
-				currentTU -= 8;
+				curTU -= 8;
 				usedTU += 8;
 			}
 
@@ -2074,24 +2077,30 @@ bool Pathfinding::previewPath(bool bRemove)
 				energy -= tu * 3 / 2;
 
 				tu = (tu * 3 / 4) + _openDoor;
+				//Log(LOG_INFO) << ". . tu [dash] = " << tu;
+				//Log(LOG_INFO) << ". . energy [dash] = " << energy;
 			}
 			else
 				energy -= tu;
 
-			if (bBody)
+			if (bodySuit)
 				energy -= 1;
-			else if (bPower)
+			else if (powerSuit)
 				energy += 1;
-			else if (bFlight)
+			else if (flightSuit)
 				energy += 2;
+			//Log(LOG_INFO) << ". . energy left = " << energy;
 
-			if (energy > energyStop)
-				energy = energyStop;
+			if (energy > energyLim)
+			{
+				//Log(LOG_INFO) << ". hit energyLim of " << energyLim;
+				energy = energyLim;
+			}
 		}
 		//Log(LOG_INFO) << ". . tu[1] = " << tu;
 
-		currentTU -= tu;
-		//Log(LOG_INFO) << ". . currentTU = " << currentTU;
+		curTU -= tu;
+		//Log(LOG_INFO) << ". . curTU = " << curTU;
 
 		usedTU += tu;
 		reserveOk = _save->getBattleGame()->checkReservedTU(
@@ -2126,7 +2135,7 @@ bool Pathfinding::previewPath(bool bRemove)
 					if ((x && y)
 						|| size == 0)
 					{
-						tile->setTUMarker(currentTU);
+						tile->setTUMarker(curTU);
 					}
 
 					if (tileAbove // unit fell down, retroactively make the tileAbove's direction marker to DOWN
@@ -2146,7 +2155,7 @@ bool Pathfinding::previewPath(bool bRemove)
 				color = 0;
 				if (!bRemove)
 				{
-					if (currentTU > -1
+					if (curTU > -1
 						&& energy > -1)
 					{
 						if (reserveOk)

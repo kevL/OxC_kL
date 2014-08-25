@@ -5171,7 +5171,7 @@ bool TileEngine::validateThrow(
 					0.48,
 					1.73 / sqrt(
 								sqrt(
-									static_cast<double>(action.actor->getStats()->strength) * action.actor->getAccuracyModifier()
+									static_cast<double>(action.actor->getStats()->strength) * (action.actor->getAccuracyModifier() / 2.0 + 0.5)
 									/ static_cast<double>(action.weapon->getRules()->getWeight())))
 							+ kneel);
 	}
@@ -5591,7 +5591,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 				// kL_begin: taken from BattleUnit::prepareNewTurn()
 				int prepTU = victim->getStats()->tu;
 				double underLoad = static_cast<double>(victim->getStats()->strength) / static_cast<double>(victim->getCarriedWeight());
-				underLoad *= victim->getAccuracyModifier();
+				underLoad *= victim->getAccuracyModifier() / 2.0 + 0.5;
 				if (underLoad < 1.0)
 					prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
 
