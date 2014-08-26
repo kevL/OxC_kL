@@ -577,7 +577,7 @@ void Ufo::setInBattlescape(bool inbattle)
 
 /**
  * Returns the alien race currently residing in the UFO.
- * @return Alien race.
+ * @return, Alien race.
  */
 const std::string& Ufo::getAlienRace() const
 {

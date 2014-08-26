@@ -180,7 +180,7 @@ BriefingState::BriefingState(
 }
 
 /**
- *
+ * dTor.
  */
 BriefingState::~BriefingState()
 {

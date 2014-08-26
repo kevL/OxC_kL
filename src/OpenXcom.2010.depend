@@ -4432,7 +4432,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1408358345 f:\git\openxcom\src\savegame\savedgame.h
+1409019950 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
 	<string>
 	<vector>
@@ -4694,7 +4694,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/BattlescapeGame.h"
 
-1405073064 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1409022546 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -4753,7 +4753,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1408909543 f:\git\openxcom\src\savegame\savedbattlegame.h
+1409023348 f:\git\openxcom\src\savegame\savedbattlegame.h
 	<algorithm>
 	<iostream>
 	<string>
@@ -5910,7 +5910,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1408909326 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1409023709 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6031,7 +6031,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1408758082 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1409021248 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6165,7 +6165,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1408478199 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1409021337 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	<sstream>
 	"AliensCrashState.h"
@@ -6234,7 +6234,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1408311820 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1409024949 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -7749,7 +7749,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1408478426 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1409021125 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9645,14 +9645,14 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1408909543 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1409023887 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+	"SavedBattleGame.h"
 	<vector>
 	<deque>
 	<queue>
 	<assert.h>
 	"BattleItem.h"
 	"Node.h"
-	"SavedBattleGame.h"
 	"SavedGame.h"
 	"SerializationHelper.h"
 	"Tile.h"
@@ -9675,7 +9675,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1408552301 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1409022424 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9780,7 +9780,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1408552197 source:f:\git\openxcom\src\savegame\ufo.cpp
+1409022707 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	<sstream>
 	<algorithm>
@@ -12003,7 +12003,7 @@
 1408805069 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1408802332 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1409019789 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	<sstream>
 	"../Engine/Game.h"

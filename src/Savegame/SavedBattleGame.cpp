@@ -17,6 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
+#include "SavedBattleGame.h"
+
 #include <vector>
 #include <deque>
 #include <queue>
@@ -25,7 +27,6 @@
 
 #include "BattleItem.h"
 #include "Node.h"
-#include "SavedBattleGame.h"
 #include "SavedGame.h"
 #include "SerializationHelper.h"
 #include "Tile.h"
@@ -88,7 +89,8 @@ SavedBattleGame::SavedBattleGame()
 		_depth(0),
 		_kneelReserved(false),
 		_terrain(""), // kL sza_MusicRules
-		_invBattle(NULL)
+		_invBattle(NULL),
+		_alienRace("") // kL
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
 	_tileSearch.resize(11 * 11);
@@ -2553,6 +2555,25 @@ void SavedBattleGame::setBattleInventory(Tile* invBattle) // kL
 Tile* SavedBattleGame::getBattleInventory() const // kL
 {
 	return _invBattle;
+}
+
+/**
+ * kL. Sets the alien race for this battle.
+ * Currently used only for Base Defense missions, but should fill for other missions also.
+ */
+void SavedBattleGame::setAlienRace(std::string alienRace) // kL
+{
+	_alienRace = alienRace;
+}
+
+/**
+ * kL. Gets the alien race participating in this battle.
+ * Currently used only to get the alien race for SoldierDiary statistics
+ * after a Base Defense mission.
+ */
+std::string SavedBattleGame::getAlienRace() const // kL
+{
+	return _alienRace;
 }
 
 }

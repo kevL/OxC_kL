@@ -81,11 +81,12 @@ private:
 		* _selectedUnit,
 		* _lastSelectedUnit;
 	Pathfinding* _pathfinding;
-	Tile* _invBattle;
+	Tile* _invBattle; // kL
 	Tile** _tiles;
 	TileEngine* _tileEngine;
 
 	std::string
+		_alienRace, // kL
 		_missionType,
 		_terrain; // sza_MusicRules
 
@@ -352,6 +353,11 @@ private:
 		void setBattleInventory(Tile* invBattle); // kL
 		/// kL. Gets the inventory tile for preBattle InventoryState OK click.
 		Tile* getBattleInventory() const; // kL
+
+		/// kL. Sets the alien race for this battle game.
+		void setAlienRace(std::string alienRace); // kL
+		/// kL. Gets the alien race participating in this battle game.
+		std::string getAlienRace() const; // kL
 };
 
 }

@@ -436,7 +436,8 @@ void DebriefingState::btnOkClick(Action*)
 			participants.push_back((*i)->getGeoscapeSoldier());
 	}
 
-	_game->getSavedGame()->setBattleGame(NULL);
+	_game->getSavedGame()->setBattleGame(NULL);	// kL_note: Would it be better to **delete** that ........
+												// It is deleted when SavedGame::setBattleGame() runs the *next Battle*.
 	_game->popState();
 
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
@@ -764,15 +765,15 @@ void DebriefingState::prepareDebriefing()
 		if ((*i)->isInBattlescape())
 		{
 			_missionStatistics->ufo = (*i)->getRules()->getType();
-			if (save->getMonthsPassed() != -1)
-				_missionStatistics->alienRace = (*i)->getAlienRace();
+//kL		if (save->getMonthsPassed() != -1)
+//kL			_missionStatistics->alienRace = (*i)->getAlienRace();
 
 			(*i)->setInBattlescape(false);
 
 			if ((*i)->getStatus() == Ufo::LANDED
 				&& aborted)
 			{
-				 (*i)->setSecondsRemaining(15); // UFO lifts off ...
+				(*i)->setSecondsRemaining(15); // UFO lifts off ...
 			}
 			else if (!aborted) // successful mission ( kL: failed mission leaves UFO still crashed! )
 //kL			|| (*i)->getStatus() == Ufo::CRASHED) // UFO can't fly
@@ -793,7 +794,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		if ((*i)->isInBattlescape())
 		{
-			_missionStatistics->alienRace = (*i)->getAlienRace();
+//kL		_missionStatistics->alienRace = (*i)->getAlienRace();
 
 			delete *i;
 			save->getTerrorSites()->erase(i);
@@ -878,6 +879,14 @@ void DebriefingState::prepareDebriefing()
 
 	std::string mission = battle->getMissionType();
 
+	// kL_begin: Could very likely do all missionTypes here, for SoldierDiary race stat.
+//	if (mission == "STR_BASE_DEFENSE")
+	if (battle->getAlienRace() != "") // safety.
+		_missionStatistics->alienRace = battle->getAlienRace();
+	else
+		_missionStatistics->alienRace = "STR_UNKNOWN";
+	// kL_end.
+
 	// alien base disappears (if you didn't abort)
 	if (mission == "STR_ALIEN_BASE_ASSAULT")
 	{
@@ -912,7 +921,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			if ((*i)->isInBattlescape())
 			{
-				_missionStatistics->alienRace = (*i)->getAlienRace();
+//kL			_missionStatistics->alienRace = (*i)->getAlienRace();
 
 				if (destroyAlienBase)
 				{
@@ -1415,7 +1424,6 @@ void DebriefingState::prepareDebriefing()
 		if (mission == "STR_BASE_DEFENSE")
 		{
 			//Log(LOG_INFO) << ". failed BASE_DEFENSE";
-
 			_txtTitle->setText(tr("STR_BASE_IS_LOST"));
 			_destroyBase = true;
 		}

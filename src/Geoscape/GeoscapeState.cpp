@@ -3521,9 +3521,9 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 }
 
 /**
- * Handle base defense
- * @param base Base to defend.
- * @param ufo Ufo attacking base.
+ * Handle base defense.
+ * @param base	- base to defend
+ * @param ufo	- ufo attacking base
  */
 void GeoscapeState::handleBaseDefense(
 		Base* base,

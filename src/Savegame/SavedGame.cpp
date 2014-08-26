@@ -1191,8 +1191,8 @@ SavedBattleGame* SavedGame::getSavedBattle()
 }
 
 /**
- * Set battleGame object.
- * @param battleGame, Pointer to the battleGame object.
+ * Set SavedBattleGame object.
+ * @param battleGame - pointer to a new SavedBattleGame object
  */
 void SavedGame::setBattleGame(SavedBattleGame* battleGame)
 {

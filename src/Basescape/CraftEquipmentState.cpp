@@ -294,7 +294,7 @@ CraftEquipmentState::CraftEquipmentState(
 }
 
 /**
- *
+ * dTor.
  */
 CraftEquipmentState::~CraftEquipmentState()
 {

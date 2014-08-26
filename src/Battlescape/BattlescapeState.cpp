@@ -767,7 +767,6 @@ BattlescapeState::BattlescapeState()
 //	_currentTooltip = "";
 }
 
-
 /**
  * Deletes the battlescapestate.
  */
