@@ -1,0 +1,2068 @@
+﻿# Terrain/Missions Pack by Hobbes # version 1.9.9
+regions:
+  - type: STR_NORTH_AMERICA
+    missionWeights:
+      STR_ALIEN_RESEARCH: 14
+      STR_ALIEN_HARVEST: 17
+      STR_ALIEN_ABDUCTION: 20
+      STR_ALIEN_INFILTRATION: 20
+      STR_ALIEN_BASE: 20
+      STR_ALIEN_RAID: 20
+      STR_ALIEN_FLYBY: 14
+  - type: STR_SOUTH_AMERICA
+    missionWeights:
+      STR_ALIEN_RESEARCH: 10
+      STR_ALIEN_HARVEST: 24
+      STR_ALIEN_ABDUCTION: 12
+      STR_ALIEN_INFILTRATION: 18
+      STR_ALIEN_BASE: 22
+      STR_ALIEN_RAID: 12
+      STR_ALIEN_FLYBY: 18
+  - type: STR_EUROPE
+    missionWeights:
+      STR_ALIEN_RESEARCH: 10
+      STR_ALIEN_HARVEST: 10
+      STR_ALIEN_ABDUCTION: 15
+      STR_ALIEN_INFILTRATION: 20
+      STR_ALIEN_BASE: 6
+      STR_ALIEN_RAID: 20
+      STR_ALIEN_FLYBY: 10
+  - type: STR_NORTH_AFRICA
+    missionWeights:
+      STR_ALIEN_RESEARCH: 8
+      STR_ALIEN_HARVEST: 8
+      STR_ALIEN_ABDUCTION: 8
+      STR_ALIEN_INFILTRATION: 8
+      STR_ALIEN_BASE: 19
+      STR_ALIEN_RAID: 8
+      STR_ALIEN_FLYBY: 8
+  - type: STR_SOUTHERN_AFRICA
+    missionWeights:
+      STR_ALIEN_RESEARCH: 7
+      STR_ALIEN_HARVEST: 8
+      STR_ALIEN_ABDUCTION: 8
+      STR_ALIEN_INFILTRATION: 8
+      STR_ALIEN_BASE: 9
+      STR_ALIEN_RAID: 8
+      STR_ALIEN_FLYBY: 9
+  - type: STR_CENTRAL_ASIA
+    missionWeights:
+      STR_ALIEN_RESEARCH: 5
+      STR_ALIEN_HARVEST: 5
+      STR_ALIEN_ABDUCTION: 6
+      STR_ALIEN_INFILTRATION: 10
+      STR_ALIEN_BASE: 8
+      STR_ALIEN_RAID: 9
+      STR_ALIEN_FLYBY: 8
+  - type: STR_SOUTH_EAST_ASIA
+    missionWeights:
+      STR_ALIEN_RESEARCH: 8
+      STR_ALIEN_HARVEST: 13
+      STR_ALIEN_ABDUCTION: 21
+      STR_ALIEN_INFILTRATION: 13
+      STR_ALIEN_BASE: 8
+      STR_ALIEN_RAID: 16
+      STR_ALIEN_FLYBY: 20
+  - type: STR_SIBERIA
+    missionWeights:
+      STR_ALIEN_RESEARCH: 6
+      STR_ALIEN_ABDUCTION: 4
+      STR_ALIEN_BASE: 9
+      STR_ALIEN_RAID: 9
+  - type: STR_AUSTRALASIA
+    missionWeights:
+      STR_ALIEN_RESEARCH: 15
+      STR_ALIEN_HARVEST: 11
+      STR_ALIEN_ABDUCTION: 4
+      STR_ALIEN_INFILTRATION: 8
+      STR_ALIEN_BASE: 16
+      STR_ALIEN_RAID: 14
+      STR_ALIEN_FLYBY: 15
+ufos:
+  - type: STR_RAIDER_SHIP
+    size: STR_LARGE
+    sprite: 5
+    damageMax: 1200
+    speedMax: 4800
+    accel: 6
+    power: 120
+    range: 82
+    score: 500
+    reload: 12
+    breakOffTime: 1000
+    battlescapeTerrainData:
+      name: AREA51
+      mapDataSets:
+        - BLANKS
+        - AREA51P
+        - AREA51X
+        - AREA51Y
+        - AREA51Z
+      mapBlocks:
+        - name: AREARAID00
+          width: 50
+          length: 50
+terrains:
+  - name: CULTA
+    textures: [4]
+    hemisphere: -1
+  - name: CULTAFARMA
+    mapDataSets:
+      - BLANKS
+      - CULTIVAT
+      - BARN
+    textures: [2]
+    largeBlockLimit: 2
+    hemisphere: -1
+    mapBlocks:
+      - name: CULTA00
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        maxCount: 2
+      - name: CULTA01
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA02
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA03
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA04
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA05
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA06
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA07
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        maxCount: 2
+      - name: CULTA08
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA09
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA10
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA11
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        maxCount: 2
+      - name: CULTA12
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA13
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA14
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA15
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA16
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA17
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTA18
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM00
+        width: 20
+        length: 20
+      - name: CULTAFARM01
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM02
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM03
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM04
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM05
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM06
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM07
+        width: 20
+        length: 20
+      - name: CULTAFARM08
+        width: 20
+        length: 20
+      - name: CULTAFARM09
+        width: 20
+        length: 20
+      - name: CULTAFARM10
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM11
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM12
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM13
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM14
+        width: 20
+        length: 20
+      - name: CULTAFARM15
+        width: 20
+        length: 20
+      - name: CULTAFARM16
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM17
+        width: 20
+        length: 20
+      - name: CULTAFARM18
+        width: 20
+        length: 20
+      - name: CULTAFARM19
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM20
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM21
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM22
+        width: 20
+        length: 20
+  - name: CULTAFARMB
+    mapDataSets:
+      - BLANKS
+      - CULTIVAT
+      - BARN
+    textures: [3]
+    largeBlockLimit: 2
+    mapBlocks:
+      - name: CULTA00
+        width: 10
+        length: 10
+        type: 1
+      - name: CULTA07
+        width: 10
+        length: 10
+        type: 1
+      - name: CULTA11
+        width: 10
+        length: 10
+        type: 1
+      - name: CULTAFARM00
+        width: 20
+        length: 20
+      - name: CULTAFARM01
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM02
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM03
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM04
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM05
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM06
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM07
+        width: 20
+        length: 20
+      - name: CULTAFARM08
+        width: 20
+        length: 20
+      - name: CULTAFARM09
+        width: 20
+        length: 20
+      - name: CULTAFARM10
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM11
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM12
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM13
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM14
+        width: 20
+        length: 20
+      - name: CULTAFARM15
+        width: 20
+        length: 20
+      - name: CULTAFARM16
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM17
+        width: 20
+        length: 20
+      - name: CULTAFARM18
+        width: 20
+        length: 20
+      - name: CULTAFARM19
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM20
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM21
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: CULTAFARM22
+        width: 20
+        length: 20
+  - name: MADURBAN
+    mapDataSets:
+      - BLANKS
+      - ROADS
+      - URBITS
+      - URBAN
+      - FRNITURE
+      - MADDECOR
+    textures: [2]
+    hemisphere: 1
+    largeBlockLimit: 5
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    roadTypeOdds: [50, 25]
+    mapBlocks:
+      - name: URBAN00
+        width: 10
+        length: 10
+        type: 2
+      - name: URBAN01
+        width: 10
+        length: 10
+        type: 3
+      - name: URBAN02
+        width: 10
+        length: 10
+        type: 4
+      - name: URBAN03
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        frequency: 2
+      - name: URBAN04
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        frequency: 2
+      - name: URBAN05
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN06
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN07
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN08
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN09
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN10
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN11
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN12
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN13
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN14
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: URBAN15
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: URBAN16
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: URBAN17
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: URBAN18
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN19
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN20
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN21
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN22
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN23
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN24
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN26
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN27
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN28
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN29
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN30
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN31
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN32
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN33
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN34
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN35
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN36
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN37
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN38
+        width: 10
+        length: 10
+        maxCount: 1
+  - name: DAWNURBANA
+    mapDataSets:
+      - BLANKS
+      - DAWNROADS
+      - DAWNURBITS
+      - DAWNURBAN
+      - DAWNFRNITURE
+      - DAWNDECOR
+    largeBlockLimit: 5
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    roadTypeOdds: [25, 25]
+    mapBlocks:
+      - name: DAWNURBAN00
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN01
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN02
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN03
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN04
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN05
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN06
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN07
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN08
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN09
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN10
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN11
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN12
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN13
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN14
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN15
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN16
+        width: 10
+        length: 10
+        type: 4
+      - name: DAWNURBAN17
+        width: 10
+        length: 10
+        type: 4
+      - name: DAWNURBAN18
+        width: 10
+        length: 10
+        type: 4
+      - name: DAWNURBAN19
+        width: 10
+        length: 10
+        type: 4
+      - name: DAWNURBAN20
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN21
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN22
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN23
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN24
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN25
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN26
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN27
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN28
+        width: 10
+        length: 10
+        type: 1
+      - name: DAWNURBAN29
+        width: 10
+        length: 10
+        type: 1
+      - name: DAWNURBAN30
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN31
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN32
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN33
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN34
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN35
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN36
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN37
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN38
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN39
+        width: 10
+        length: 10
+        maxCount: 2
+  - name: DAWNURBANB
+    mapDataSets:
+      - BLANKS
+      - DAWNROADS
+      - DAWNURBITS
+      - DAWNURBAN
+      - DAWNFRNITURE
+      - DAWNDECOR
+    largeBlockLimit: 5
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    roadTypeOdds: [25, 25]
+    mapBlocks:
+      - name: DAWNURBAN40
+        width: 10
+        length: 10
+        type: 4
+      - name: DAWNURBAN41
+        width: 10
+        length: 10
+        type: 4
+      - name: DAWNURBAN42
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN43
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN44
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN45
+        width: 10
+        length: 10
+        type: 2
+      - name: DAWNURBAN46
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN47
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN48
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN49
+        width: 10
+        length: 10
+        type: 3
+      - name: DAWNURBAN50
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        maxCount: 1
+      - name: DAWNURBAN51
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        maxCount: 1
+      - name: DAWNURBAN52
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        maxCount: 1
+      - name: DAWNURBAN53
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN54
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN55
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN56
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN57
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN58
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN59
+        width: 10
+        length: 10
+        maxCount: 2
+      - name: DAWNURBAN60
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN61
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN62
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN63
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN64
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN65
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN66
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: DAWNURBAN67
+        width: 20
+        length: 20
+        maxCount: 1
+  - name: PORTURBAN
+    mapDataSets:
+      - BLANKS
+      - PORTROADS
+      - PORTURBITS
+    largeBlockLimit: 5
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    roadTypeOdds: [50, 25]
+    mapBlocks:
+      - name: PORTURBAN00
+        width: 10
+        length: 10
+        type: 2
+      - name: PORTURBAN01
+        width: 10
+        length: 10
+        type: 2
+      - name: PORTURBAN02
+        width: 10
+        length: 10
+        type: 2
+      - name: PORTURBAN03
+        width: 10
+        length: 10
+        type: 2
+      - name: PORTURBAN04
+        width: 10
+        length: 10
+        type: 4
+      - name: PORTURBAN05
+        width: 20
+        length: 20
+      - name: PORTURBAN06
+        width: 20
+        length: 20
+      - name: PORTURBAN07
+        width: 20
+        length: 20
+      - name: PORTURBAN08
+        width: 20
+        length: 20
+      - name: PORTURBAN09
+        width: 20
+        length: 20
+      - name: PORTURBAN10
+        width: 10
+        length: 10
+      - name: PORTURBAN11
+        width: 10
+        length: 10
+      - name: PORTURBAN12
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        frequency: 3
+      - name: PORTURBAN13
+        width: 10
+        length: 20
+        type: 1
+        subType: 0
+        frequency: 3
+      - name: PORTURBAN14
+        width: 10
+        length: 10
+        frequency: 2
+      - name: PORTURBAN15
+        width: 10
+        length: 10
+        frequency: 2
+      - name: PORTURBAN16
+        width: 10
+        length: 10
+        frequency: 2
+      - name: PORTURBAN17
+        width: 10
+        length: 10
+        frequency: 2
+      - name: PORTURBAN18
+        width: 10
+        length: 10
+        frequency: 2
+      - name: PORTURBAN19
+        width: 10
+        length: 10
+        type: 3
+      - name: PORTURBAN20
+        width: 10
+        length: 10
+        type: 3
+      - name: PORTURBAN21
+        width: 10
+        length: 10
+        type: 3
+      - name: PORTURBAN22
+        width: 10
+        length: 10
+        type: 3
+  - name: NATIVEURBAN
+    mapDataSets:
+      - BLANKS
+      - JUNGLE
+      - BARN
+      - FRNITURE
+      - URBITS
+      - CULTIVAT
+    textures: [4]
+    hemisphere: 1
+    largeBlockLimit: 2
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    roadTypeOdds: [50, 25]
+    mapBlocks:
+      - name: NATIVEURBAN00
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: NATIVEURBAN01
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN02
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: NATIVEURBAN03
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: NATIVEURBAN04
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN05
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: NATIVEURBAN06
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN07
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN08
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: NATIVEURBAN09
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: NATIVEURBAN10
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN11
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: NATIVEURBAN12
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: NATIVEURBAN13
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN14
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: NATIVEURBAN15
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: NATIVEURBAN16
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN17
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: NATIVEURBAN18
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: NATIVEURBAN19
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN20
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: NATIVEURBAN21
+        width: 20
+        length: 20
+      - name: NATIVEURBAN22
+        width: 20
+        length: 20
+      - name: NATIVEURBAN23
+        width: 20
+        length: 20
+      - name: NATIVEURBAN24
+        width: 20
+        length: 20
+      - name: NATIVEURBAN25
+        width: 20
+        length: 20
+      - name: NATIVEURBAN26
+        width: 20
+        length: 20
+      - name: NATIVEURBAN27
+        width: 20
+        length: 20
+      - name: NATIVEURBAN28
+        width: 20
+        length: 20
+      - name: NATIVEURBAN29
+        width: 20
+        length: 20
+      - name: NATIVEURBAN30
+        width: 20
+        length: 20
+      - name: NATIVEURBAN31
+        width: 20
+        length: 20
+      - name: NATIVEURBAN32
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: NATIVEURBAN33
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN34
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: NATIVEURBAN35
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: NATIVEURBAN36
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: NATIVEURBAN37
+        width: 20
+        length: 20
+      - name: NATIVEURBAN38
+        width: 20
+        length: 20
+      - name: NATIVEURBAN39
+        width: 20
+        length: 20
+      - name: NATIVEURBAN40
+        width: 20
+        length: 20
+      - name: NATIVEURBAN41
+        width: 20
+        length: 20
+      - name: NATIVEURBAN42
+        width: 20
+        length: 20
+      - name: NATIVEURBAN43
+        width: 20
+        length: 20
+      - name: NATIVEURBAN44
+        width: 20
+        length: 20
+      - name: NATIVEURBAN45
+        width: 10
+        length: 10
+      - name: NATIVEURBAN46
+        width: 10
+        length: 10
+        type: 1
+  - name: INDUSTRIALURBAN
+    mapDataSets:
+      - BLANKS
+      - PORTROADS
+      - PORTURBITS
+      - ROADS
+      - URBITS
+    textures: [1]
+    largeBlockLimit: 5
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    roadTypeOdds: [50, 25]
+    mapBlocks:
+      - name: INDUSTRIALURBAN00
+        width: 20
+        length: 20
+      - name: INDUSTRIALURBAN01
+        width: 20
+        length: 20
+      - name: INDUSTRIALURBAN02
+        width: 20
+        length: 20
+      - name: INDUSTRIALURBAN03
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: INDUSTRIALURBAN04
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN05
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: INDUSTRIALURBAN06
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN07
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN08
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: INDUSTRIALURBAN09
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: INDUSTRIALURBAN10
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN11
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: INDUSTRIALURBAN12
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: INDUSTRIALURBAN13
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN14
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: INDUSTRIALURBAN15
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: INDUSTRIALURBAN16
+        width: 10
+        length: 10
+        type: 1
+        frequency: 3
+      - name: INDUSTRIALURBAN17
+        width: 10
+        length: 10
+        type: 1
+        frequency: 3
+  - name: RAILYARDURBAN
+    mapDataSets:
+      - BLANKS
+      - PORTROADS
+      - PORTURBITS
+      - ROADS
+      - URBITS
+      - FRNITURE
+    largeBlockLimit: 5
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    roadTypeOdds: [50, 25]
+    mapBlocks:
+      - name: RAILYARDURBAN00
+        width: 10
+        length: 10
+        type: 1
+      - name: RAILYARDURBAN01
+        width: 10
+        length: 10
+        type: 2
+      - name: RAILYARDURBAN02
+        width: 10
+        length: 10
+        type: 3
+      - name: RAILYARDURBAN03
+        width: 10
+        length: 10
+        type: 3
+      - name: RAILYARDURBAN04
+        width: 10
+        length: 10
+        type: 3
+      - name: RAILYARDURBAN05
+        width: 10
+        length: 10
+        type: 4
+      - name: RAILYARDURBAN06
+        width: 10
+        length: 10
+        type: 4
+      - name: RAILYARDURBAN07
+        width: 10
+        length: 10
+        type: 4
+      - name: RAILYARDURBAN08
+        width: 10
+        length: 10
+        type: 2
+      - name: RAILYARDURBAN09
+        width: 10
+        length: 10
+        type: 2
+      - name: RAILYARDURBAN11
+        width: 20
+        length: 20
+      - name: RAILYARDURBAN12
+        width: 20
+        length: 20
+      - name: RAILYARDURBAN13
+        width: 20
+        length: 20
+      - name: RAILYARDURBAN14
+        width: 20
+        length: 20
+      - name: RAILYARDURBAN15
+        width: 20
+        length: 20
+      - name: RAILYARDURBAN16
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN17
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN18
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN19
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN20
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN21
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN22
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN23
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN24
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN25
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN26
+        width: 10
+        length: 10
+      - name: RAILYARDURBAN27
+        width: 10
+        length: 10
+  - name: POLAR
+    textures: [12]
+  - name: POLARMOUNT
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - POLAR
+      - POLARMOUNT
+    textures: [9]
+    largeBlockLimit: 2
+    mapBlocks:
+      - name: MOUNTPOLAR00
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+      - name: MOUNTPOLAR01
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+      - name: MOUNTPOLAR02
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+      - name: MOUNTPOLAR03
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR04
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR05
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR06
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR07
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR08
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR09
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR10
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR11
+        width: 20
+        length: 20
+      - name: MOUNTPOLAR12
+        width: 20
+        length: 20
+  - name: FOREST
+    textures: [6]
+    hemisphere: -1
+  - name: JUNGLE
+    textures: [0, 6, 10, 11]
+    hemisphere: 1
+  - name: FORESTMOUNT
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - FOREST
+      - FORESTMOUNT
+    textures: [0, 10, 11]
+    hemisphere: -1
+    largeBlockLimit: 3
+    mapBlocks:
+      - name: FORESTMOUNT00
+        width: 10
+        length: 10
+        type: 1
+      - name: FORESTMOUNT01
+        width: 10
+        length: 10
+        type: 1
+      - name: FORESTMOUNT02
+        width: 10
+        length: 10
+      - name: FORESTMOUNT03
+        width: 10
+        length: 10
+      - name: FORESTMOUNT04
+        width: 10
+        length: 10
+      - name: FORESTMOUNT05
+        width: 10
+        length: 10
+      - name: FORESTMOUNT06
+        width: 10
+        length: 10
+      - name: FORESTMOUNT07
+        width: 10
+        length: 10
+      - name: FORESTMOUNT08
+        width: 10
+        length: 10
+      - name: FORESTMOUNT09
+        width: 10
+        length: 10
+      - name: FORESTMOUNT10
+        width: 10
+        length: 10
+      - name: FORESTMOUNT11
+        width: 20
+        length: 20
+      - name: FORESTMOUNT12
+        width: 20
+        length: 20
+      - name: FORESTMOUNT13
+        width: 20
+        length: 20
+      - name: FORESTMOUNT14
+        width: 20
+        length: 20
+      - name: FORESTMOUNT15
+        width: 10
+        length: 10
+      - name: FORESTMOUNT16
+        width: 10
+        length: 10
+      - name: FORESTMOUNT17
+        width: 10
+        length: 10
+      - name: FORESTMOUNT18
+        width: 10
+        length: 10
+      - name: FORESTMOUNT19
+        width: 10
+        length: 10
+      - name: FORESTMOUNT20
+        width: 10
+        length: 10
+      - name: FORESTMOUNT21
+        width: 10
+        length: 10
+      - name: FORESTMOUNT22
+        width: 10
+        length: 10
+      - name: FORESTMOUNT23
+        width: 10
+        length: 10
+      - name: FORESTMOUNT24
+        width: 10
+        length: 10
+      - name: FORESTMOUNT25
+        width: 20
+        length: 20
+      - name: FORESTMOUNT26
+        width: 20
+        length: 20
+  - name: DESERT
+    largeBlockLimit: 3
+    textures: [7]
+  - name: DESERTMOUNT
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - DESERT
+    textures: [8]
+    largeBlockLimit: 3
+    mapBlocks:
+      - name: DESERTMOUNT00
+        width: 10
+        length: 10
+        type: 1
+      - name: DESERTMOUNT01
+        width: 10
+        length: 10
+        type: 1
+      - name: DESERTMOUNT02
+        width: 10
+        length: 10
+        type: 1
+      - name: DESERTMOUNT03
+        width: 10
+        length: 10
+      - name: DESERTMOUNT04
+        width: 10
+        length: 10
+      - name: DESERTMOUNT05
+        width: 10
+        length: 10
+      - name: DESERTMOUNT06
+        width: 10
+        length: 10
+      - name: DESERTMOUNT07
+        width: 10
+        length: 10
+      - name: DESERTMOUNT08
+        width: 10
+        length: 10
+      - name: DESERTMOUNT09
+        width: 10
+        length: 10
+      - name: DESERTMOUNT10
+        width: 10
+        length: 10
+      - name: DESERTMOUNT11
+        width: 20
+        length: 20
+      - name: DESERTMOUNT12
+        width: 20
+        length: 20
+      - name: DESERTMOUNT13
+        width: 20
+        length: 20
+      - name: DESERTMOUNT14
+        width: 20
+        length: 20
+      - name: DESERTMOUNT15
+        width: 10
+        length: 10
+      - name: DESERTMOUNT16
+        width: 10
+        length: 10
+      - name: DESERTMOUNT17
+        width: 10
+        length: 10
+alienRaces:
+  - id: STR_RAIDERS_EARLY
+    members:
+      - STR_FLOATER_LEADER
+      - STR_SECTOID_LEADER
+      - STR_FLOATER_ENGINEER
+      - STR_SECTOID_MEDIC
+      - STR_FLOATER_NAVIGATOR
+      - STR_SECTOID_SOLDIER
+      - STR_SILACOID_TERRORIST
+      - STR_REAPER_TERRORIST
+  - id: STR_RAIDERS_MIDEARLY
+    members:
+      - STR_FLOATER_LEADER
+      - STR_SECTOID_LEADER
+      - STR_FLOATER_ENGINEER
+      - STR_SECTOID_MEDIC
+      - STR_FLOATER_NAVIGATOR
+      - STR_SECTOID_SOLDIER
+      - STR_CELATID_TERRORIST
+      - STR_CYBERDISC_TERRORIST
+  - id: STR_RAIDERS_MID
+    members:
+      - STR_SECTOID_LEADER
+      - STR_SNAKEMAN_LEADER
+      - STR_SNAKEMAN_ENGINEER
+      - STR_FLOATER_MEDIC
+      - STR_SNAKEMAN_NAVIGATOR
+      - STR_FLOATER_SOLDIER
+      - STR_CYBERDISC_TERRORIST
+      - STR_CHRYSSALID_TERRORIST
+  - id: STR_RAIDERS_LATE
+    members:
+      - STR_SECTOID_COMMANDER
+      - STR_SNAKEMAN_LEADER
+      - STR_MUTON_ENGINEER
+      - STR_FLOATER_MEDIC
+      - STR_MUTON_NAVIGATOR
+      - STR_MUTON_SOLDIER
+      - STR_CELATID_TERRORIST
+      - STR_CHRYSSALID_TERRORIST
+  - id: STR_RAIDERS_VERYLATE
+    members:
+      - STR_ETHEREAL_LEADER
+      - STR_ETHEREAL_LEADER
+      - STR_MUTON_ENGINEER
+      - STR_ETHEREAL_SOLDIER
+      - STR_MUTON_NAVIGATOR
+      - STR_MUTON_SOLDIER
+      - STR_SECTOPOD_TERRORIST
+      - STR_CHRYSSALID_TERRORIST
+alienDeployments:
+  - type: STR_TERROR_MISSION
+    width: 50
+    length: 50
+    height: 6
+    civilians: 12
+    terrains:
+      - MADURBAN
+      - DAWNURBANA
+      - DAWNURBANB
+      - PORTURBAN
+      - INDUSTRIALURBAN
+      - URBAN
+      - RAILYARDURBAN
+      - NATIVEURBAN
+  - type: STR_RAIDER_SHIP
+    data:
+      - alienRank: 5
+        lowQty: 4
+        highQty: 8
+        dQty: 4
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+      - alienRank: 4
+        lowQty: 1
+        highQty: 2
+        dQty: 1
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+      - alienRank: 3
+        lowQty: 1
+        highQty: 2
+        dQty: 1
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_SMALL_LAUNCHER
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
+            - STR_STUN_BOMB
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+      - alienRank: 2
+        lowQty: 1
+        highQty: 2
+        dQty: 1
+        percentageOutsideUfo: 20
+        itemSets:
+          -
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+      - alienRank: 1
+        lowQty: 1
+        highQty: 3
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_PLASMA_RIFLE
+            - STR_PLASMA_RIFLE_CLIP
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+          -
+            - STR_BLASTER_LAUNCHER
+            - STR_BLASTER_BOMB
+            - STR_BLASTER_BOMB
+            - STR_PLASMA_PISTOL
+            - STR_PLASMA_PISTOL_CLIP
+      - alienRank: 0
+        lowQty: 1
+        highQty: 1
+        dQty: 1
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+          -
+            - STR_HEAVY_PLASMA
+            - STR_HEAVY_PLASMA_CLIP
+            - STR_ALIEN_GRENADE
+      - alienRank: 6
+        lowQty: 1
+        highQty: 3
+        dQty: 1
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []            
+      - alienRank: 7
+        lowQty: 1
+        highQty: 3
+        dQty: 1
+        percentageOutsideUfo: 50
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 50
+    length: 80
+    height: 4
+research:
+  - name: STR_FLOATER_NAVIGATOR
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
+      - STR_ALIEN_RAID
+      - STR_ALIEN_FLYBY
+  - name: STR_SECTOID_NAVIGATOR
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
+      - STR_ALIEN_RAID
+      - STR_ALIEN_FLYBY
+  - name: STR_SNAKEMAN_NAVIGATOR
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
+      - STR_ALIEN_RAID
+      - STR_ALIEN_FLYBY
+  - name: STR_MUTON_NAVIGATOR
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
+      - STR_ALIEN_RAID
+      - STR_ALIEN_FLYBY
+  - name: STR_FLOATER_ENGINEER
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
+      - STR_RAIDER_SHIP
+  - name: STR_SECTOID_ENGINEER
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
+      - STR_RAIDER_SHIP
+  - name: STR_SNAKEMAN_ENGINEER
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
+      - STR_RAIDER_SHIP
+  - name: STR_MUTON_ENGINEER
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
+      - STR_RAIDER_SHIP
+  - name: STR_ALIEN_RAID
+    points: 50
+    needItem: true
+  - name: STR_ALIEN_FLYBY
+    points: 50
+    needItem: true
+  - name: STR_RAIDER_SHIP
+    points: 50
+    needItem: true
+ufopaedia:
+  - id: STR_ALIEN_RAID
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_RAID
+    text: STR_ALIEN_RAID_UFOPEDIA
+  - id: STR_ALIEN_FLYBY
+    type_id: 8
+    section: STR_ALIEN_RESEARCH_UC
+    requires:
+      - STR_ALIEN_FLYBY
+    text: STR_ALIEN_FLYBY_UFOPEDIA
+  - id: STR_RAIDER_SHIP
+    type_id: 9
+    section: STR_UFOS
+    requires:
+      - STR_RAIDER_SHIP
+    text: STR_RAIDER_SHIP_UFOPEDIA
+ufoTrajectories:
+  - id: R0
+    groundTimer: 2000
+    waypoints:
+      - [5, 4, 80]
+      - [5, 0, 100]
+alienMissions:
+  - type: STR_ALIEN_RAID
+    points: 500
+    raceWeights:
+      0:
+          STR_RAIDERS_EARLY: 50
+          STR_RAIDERS_MIDEARLY: 30
+          STR_RAIDERS_MID: 20
+      1:
+          STR_RAIDERS_EARLY: 40
+          STR_RAIDERS_MIDEARLY: 40
+          STR_RAIDERS_MID: 20
+      3:
+          STR_RAIDERS_EARLY: 20
+          STR_RAIDERS_MIDEARLY: 30
+          STR_RAIDERS_MID: 40
+          STR_RAIDERS_LATE: 10
+      5:
+          STR_RAIDERS_MIDEARLY: 10
+          STR_RAIDERS_MID: 20
+          STR_RAIDERS_LATE: 50
+          STR_RAIDERS_VERYLATE: 20
+      7:
+          STR_RAIDERS_MID: 20
+          STR_RAIDERS_LATE: 30
+          STR_RAIDERS_VERYLATE: 50
+    waves:
+      - ufo: STR_RAIDER_SHIP
+        count: 1
+        trajectory: R0
+        timer: 0
+  - type: STR_ALIEN_FLYBY
+    points: 50
+    raceWeights:
+      0:
+          STR_SECTOID: 30
+          STR_FLOATER: 70
+      1:
+          STR_SECTOID: 60
+          STR_FLOATER: 40
+      3:
+          STR_SECTOID: 20
+          STR_SNAKEMAN: 60
+          STR_FLOATER: 20
+      5:
+          STR_SECTOID: 10
+          STR_SNAKEMAN: 20
+          STR_ETHEREAL: 20
+          STR_MUTON: 40
+          STR_FLOATER: 10
+      7:
+          STR_SECTOID: 10
+          STR_SNAKEMAN: 20
+          STR_ETHEREAL: 40
+          STR_MUTON: 20
+          STR_FLOATER: 10
+    waves:
+      - ufo: STR_SMALL_SCOUT
+        count: 1
+        trajectory: P0
+        timer: 9000
+      - ufo: STR_SMALL_SCOUT
+        count: 1
+        trajectory: P8
+        timer: 120
+      - ufo: STR_LARGE_SCOUT
+        count: 1
+        trajectory: P0
+        timer: 120
+      - ufo: STR_LARGE_SCOUT
+        count: 1
+        trajectory: P8
+        timer: 120
+      - ufo: STR_LARGE_SCOUT
+        count: 1
+        trajectory: P8
+        timer: 120
+      - ufo: STR_TERROR_SHIP
+        count: 1
+        trajectory: P0
+        timer: 120
+      - ufo: STR_TERROR_SHIP
+        count: 1
+        trajectory: P0
+        timer: 120
+      - ufo: STR_TERROR_SHIP
+        count: 1
+        trajectory: P8
+        timer: 120
+      - ufo: STR_BATTLESHIP
+        count: 1
+        trajectory: P0
+        timer: 120
+extraStrings:
+  - type: en-GB
+    strings:
+      STR_ALIEN_RAID: Alien Raid
+      STR_ALIEN_RAID_UFOPEDIA: The aliens will send raid missions to strike directly at critical facilities located on earth. If successful this alien activity will cause significant alarm on the targeted area. The UFO will not be present during the recovery of the vital installation. 
+      STR_ALIEN_FLYBY: Alien Flyby
+      STR_ALIEN_FLYBY_UFOPEDIA: This mission consists of alien craft sent to intimidate earth governments. This will result in waves of UFO activity over major populated areas as a display of alien power.  
+      STR_RAIDER_SHIP: Raider Ship
+      STR_RAIDER_SHIP_UFOPEDIA: The Raider Ship is a fast and dangerous alien vessel used for attacks on earth's infrastructure. It carries a large strike crew under orders to destroy their own ship upon a crash before attacking any nearby human installation.  
+      STR_RAIDERS_EARLY: Light Raider
+      STR_RAIDERS_MIDEARLY: Medium Raider
+      STR_RAIDERS_MID: Heavy Raider
+      STR_RAIDERS_LATE: Very Heavy Raider
+      STR_RAIDERS_VERYLATE: Elite Raider
+      STR_NATIVEURBAN: Native (Farm + Jungle)
+      STR_CULTAFARMA: Expanded Farm A
+      STR_CULTAFARMB: Expanded Farm B
+      STR_MADURBAN: Expanded Urban
+      STR_PORTURBAN: Port
+      STR_INDUSTRIALURBAN: Industrial
+      STR_RAILYARDURBAN: Railyard
+      STR_DAWNURBANA: Dawn City A
+      STR_DAWNURBANB: Dawn City B
+      STR_POLARMOUNT: Polar Mountain
+      STR_FORESTMOUNT: Forest Mountain
+      STR_DESERTMOUNT: Desert Mountain
+  - type: en-US
+    strings:
+      STR_ALIEN_RAID: Alien Raid
+      STR_ALIEN_RAID_UFOPEDIA: The aliens will send raid missions to strike directly at critical facilities located on earth. If successful this alien activity will cause significant alarm on the targeted area. The UFO will not be present during the recovery of the vital installation. 
+      STR_ALIEN_FLYBY: Alien Flyby
+      STR_ALIEN_FLYBY_UFOPEDIA: This mission consists of alien craft sent to intimidate earth governments. This will result in waves of UFO activity over major populated areas as a display of alien power.  
+      STR_RAIDER_SHIP: Raider Ship
+      STR_RAIDER_SHIP_UFOPEDIA: The Raider Ship is an fast and dangerous alien vessel used for attacks on earth's infrastructure. It carries a large strike crew under orders to destroy their own ship upon a crash before attacking any nearby human installation.  
+      STR_RAIDERS_EARLY: Light Raider
+      STR_RAIDERS_MIDEARLY: Medium Raider
+      STR_RAIDERS_MID: Heavy Raider
+      STR_RAIDERS_LATE: Very Heavy Raider
+      STR_RAIDERS_VERYLATE: Elite Raider
+      STR_NATIVEURBAN: Native (Farm + Jungle)
+      STR_CULTAFARMA: Expanded Farm A
+      STR_CULTAFARMB: Expanded Farm B
+      STR_MADURBAN: Expanded Urban
+      STR_PORTURBAN: Port
+      STR_INDUSTRIALURBAN: Industrial
+      STR_RAILYARDURBAN: Railyard
+      STR_DAWNURBANA: Dawn City A
+      STR_DAWNURBANB: Dawn City B
+      STR_POLARMOUNT: Polar Mountain
+      STR_FORESTMOUNT: Forest Mountain
+      STR_DESERTMOUNT: Desert Mountain
