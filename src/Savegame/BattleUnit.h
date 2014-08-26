@@ -683,6 +683,10 @@ private:
 		Armor* getArmor() const;
 		/// Get armor value.
 		int getArmor(UnitSide side) const;
+		/// kL. Checks if unit is wearing a PowerSuit.
+		bool hasPowerSuit() const; // kL
+		/// kL. Checks if unit is wearing a FlightSuit.
+		bool hasFlightSuit() const; // kL
 
 		/// Get total number of fatal wounds.
 		int getFatalWounds() const;

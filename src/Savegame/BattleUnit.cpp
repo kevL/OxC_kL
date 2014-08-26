@@ -3013,6 +3013,52 @@ Armor* BattleUnit::getArmor() const
 }
 
 /**
+ * kL. Checks if unit is wearing a PowerSuit.
+ * @return, true if this unit is wearing a PowerSuit of some sort
+ */
+bool BattleUnit::hasPowerSuit() const // kL
+{
+	std::string armorType = _armor->getType();
+
+	if (armorType == "STR_POWER_SUIT_UC"
+		|| armorType == "STR_BLACK_ARMOR_UC"
+		|| armorType == "STR_BLUE_ARMOR_UC"
+		|| armorType == "STR_GREEN_ARMOR_UC"
+		|| armorType == "STR_ORANGE_ARMOR_UC"
+		|| armorType == "STR_PINK_ARMOR_UC"
+		|| armorType == "STR_PURPLE_ARMOR_UC"
+		|| armorType == "STR_RED_ARMOR_UC")
+	{
+		return true;
+	}
+
+	return false;
+}
+
+/**
+ * kL. Checks if unit is wearing a FlightSuit.
+ * @return, true if this unit is wearing a FlightSuit of some sort
+ */
+bool BattleUnit::hasFlightSuit() const // kL
+{
+	std::string armorType = _armor->getType();
+
+	if (armorType == "STR_FLYING_SUIT_UC"
+		|| armorType == "STR_BLACKSUIT_ARMOR_UC"
+		|| armorType == "STR_BLUESUIT_ARMOR_UC"
+		|| armorType == "STR_GREENSUIT_ARMOR_UC"
+		|| armorType == "STR_ORANGESUIT_ARMOR_UC"
+		|| armorType == "STR_PINKSUIT_ARMOR_UC"
+		|| armorType == "STR_PURPLESUIT_ARMOR_UC"
+		|| armorType == "STR_REDSUIT_ARMOR_UC")
+	{
+		return true;
+	}
+
+	return false;
+}
+
+/**
  * Gets a unit's name.
  * An aLien's name is the translation of its race and rank; hence the language pointer needed.
  * @param lang			- pointer to language

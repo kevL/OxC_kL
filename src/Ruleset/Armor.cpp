@@ -24,8 +24,7 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain
- * type of armor.
+ * Creates a blank ruleset for a certain type of armor.
  * @param type String defining the type.
  */
 Armor::Armor(const std::string& type)
@@ -70,7 +69,7 @@ Armor::Armor(const std::string& type)
 }
 
 /**
- *
+ * dTor.
  */
 Armor::~Armor()
 {
@@ -147,9 +146,9 @@ void Armor::load(const YAML::Node& node)
 }
 
 /**
- * Returns the language string that names
- * this armor. Each armor has a unique name. Coveralls, Power Suit,...
- * @return The armor name.
+ * Returns the language string that names this armor.
+ * Each armor has a unique name.
+ * @return, The armor name.
  */
 std::string Armor::getType() const
 {
@@ -158,7 +157,7 @@ std::string Armor::getType() const
 
 /**
  * Gets the unit's sprite sheet.
- * @return The sprite sheet name.
+ * @return, The sprite sheet name.
  */
 std::string Armor::getSpriteSheet() const
 {
@@ -167,7 +166,7 @@ std::string Armor::getSpriteSheet() const
 
 /**
  * Gets the unit's inventory sprite.
- * @return The inventory sprite name.
+ * @return, The inventory sprite name.
  */
 std::string Armor::getSpriteInventory() const
 {
@@ -176,7 +175,7 @@ std::string Armor::getSpriteInventory() const
 
 /**
  * Gets the front armor level.
- * @return The front armor level.
+ * @return, The front armor level.
  */
 int Armor::getFrontArmor() const
 {
@@ -185,7 +184,7 @@ int Armor::getFrontArmor() const
 
 /**
  * Gets the side armor level.
- * @return The side armor level.
+ * @return, The side armor level.
  */
 int Armor::getSideArmor() const
 {
@@ -194,7 +193,7 @@ int Armor::getSideArmor() const
 
 /**
  * Gets the rear armor level.
- * @return The rear armor level.
+ * @return, The rear armor level.
  */
 int Armor::getRearArmor() const
 {
@@ -203,7 +202,7 @@ int Armor::getRearArmor() const
 
 /**
  * Gets the under armor level.
- * @return The under armor level.
+ * @return, The under armor level.
  */
 int Armor::getUnderArmor() const
 {
@@ -212,7 +211,7 @@ int Armor::getUnderArmor() const
 
 /**
  * Gets the corpse item used in the Geoscape.
- * @return The name of the corpse item.
+ * @return, The name of the corpse item.
  */
 std::string Armor::getCorpseGeoscape() const
 {
@@ -222,7 +221,7 @@ std::string Armor::getCorpseGeoscape() const
 /**
  * Gets the list of corpse items dropped by the unit
  * in the Battlescape (one per unit tile).
- * @return The list of corpse items.
+ * @return, The list of corpse items.
  */
 const std::vector<std::string>& Armor::getCorpseBattlescape() const
 {
@@ -231,7 +230,7 @@ const std::vector<std::string>& Armor::getCorpseBattlescape() const
 
 /**
  * Gets the storage item needed to equip this.
- * @return The name of the store item.
+ * @return, The name of the store item.
  */
 std::string Armor::getStoreItem() const
 {
@@ -240,7 +239,7 @@ std::string Armor::getStoreItem() const
 
 /**
  * Gets the drawing routine ID.
- * @return The drawing routine ID.
+ * @return, The drawing routine ID.
  */
 int Armor::getDrawingRoutine() const
 {
@@ -250,7 +249,7 @@ int Armor::getDrawingRoutine() const
 /**
  * Gets the movement type of this armor.
  * Useful for determining whether the armor can fly.
- * @return The movement type.
+ * @return, The movement type.
  */
 MovementType Armor::getMovementType() const
 {
@@ -259,7 +258,7 @@ MovementType Armor::getMovementType() const
 
 /**
  * Gets the size of the unit. Normally this is 1 (small) or 2 (big).
- * @return The unit's size.
+ * @return, The unit's size.
  */
 int Armor::getSize() const
 {
@@ -269,7 +268,7 @@ int Armor::getSize() const
 /**
  * Gets the damage modifier for a certain damage type.
  * @param dt The damageType.
- * @return The damage modifier 0->1.
+ * @return, The damage modifier 0->1.
  */
 float Armor::getDamageModifier(ItemDamageType dType)
 {
@@ -277,7 +276,7 @@ float Armor::getDamageModifier(ItemDamageType dType)
 }
 
 /** Gets the loftempSet.
- * @return The loftempsSet.
+ * @return, The loftempsSet.
  */
 std::vector<int> Armor::getLoftempsSet() const
 {
@@ -286,7 +285,7 @@ std::vector<int> Armor::getLoftempsSet() const
 
 /**
   * Gets pointer to the armor's stats.
-  * @return stats, Pointer to the armor's stats.
+  * @return, stats, Pointer to the armor's stats.
   */
 UnitStats* Armor::getStats()
 {
@@ -295,7 +294,7 @@ UnitStats* Armor::getStats()
 
 /**
  * Gets the armor's weight.
- * @return the weight of the armor.
+ * @return, the weight of the armor.
  */
 int Armor::getWeight()
 {
@@ -304,7 +303,7 @@ int Armor::getWeight()
 
 /**
  * Gets number of death frames.
- * @return number of death frames.
+ * @return, number of death frames.
  */
 int Armor::getDeathFrames()
 {
@@ -313,7 +312,7 @@ int Armor::getDeathFrames()
 
 /**
  * Gets if armor uses constant animation.
- * @return if it uses constant animation
+ * @return, if it uses constant animation
  */
 bool Armor::getConstantAnimation()
 {
@@ -322,7 +321,7 @@ bool Armor::getConstantAnimation()
 
 /**
  * Gets if armor can hold weapon.
- * @return if it can hold weapon
+ * @return, if it can hold weapon
  */
 bool Armor::getCanHoldWeapon()
 {

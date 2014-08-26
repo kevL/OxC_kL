@@ -4762,7 +4762,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1408882874 f:\git\openxcom\src\savegame\battleunit.h
+1409075189 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -6601,7 +6601,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1408994352 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1409075773 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6912,7 +6912,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1408990766 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1409075720 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -9272,7 +9272,7 @@
 1404096023 source:f:\git\openxcom\src\ruleset\alienrace.cpp
 	"AlienRace.h"
 
-1404096023 source:f:\git\openxcom\src\ruleset\armor.cpp
+1409074803 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 
 1404498902 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
@@ -9530,7 +9530,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1409009590 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1409075480 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

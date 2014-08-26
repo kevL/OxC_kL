@@ -2003,19 +2003,12 @@ bool Pathfinding::previewPath(bool bRemove)
 		dash		= Options::strafe
 						&& _modCTRL
 						&& size == 0
-						&& _strafeMove == false, // kL
+						&& _strafeMove == false,
 		bodySuit	= armorType == "STR_PERSONAL_ARMOR_UC",
-		powerSuit	= (armorType == "STR_POWER_SUIT_UC"
-							|| armorType == "STR_BLUE_ARMOR_UC"
-							|| armorType == "STR_ORANGE_ARMOR_UC"
-							|| armorType == "STR_RED_ARMOR_UC")
-						|| ((armorType == "STR_FLYING_SUIT_UC"
-								|| armorType == "STR_BLUESUIT_ARMOR_UC"
-								|| armorType == "STR_GREENSUIT_ARMOR_UC")
+		powerSuit	= _unit->hasPowerSuit()
+						|| (_unit->hasFlightSuit()
 							&& _movementType == MT_WALK),
-		flightSuit	= (armorType == "STR_FLYING_SUIT_UC"
-							|| armorType == "STR_BLUESUIT_ARMOR_UC"
-							|| armorType == "STR_GREENSUIT_ARMOR_UC")
+		flightSuit	= _unit->hasFlightSuit()
 						&& _movementType == MT_FLY,
 		gravLift	= false,
 		reserveOk	= false;
@@ -2044,8 +2037,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	{
 		switchBack = true;
 		_save->getBattleGame()->setTUReserved(
-//kL										BA_AUTOSHOT);
-											BA_SNAPSHOT); // kL
+											BA_SNAPSHOT);
 	}
 
 	for (std::vector<int>::reverse_iterator
