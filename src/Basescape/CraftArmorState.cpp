@@ -71,9 +71,9 @@ CraftArmorState::CraftArmorState(
 	_txtTitle		= new Text(300, 17, 11, 10);
 	_txtBaseLabel	= new Text(80, 9, 224, 10);
 
-	_txtName		= new Text(114, 9, 16, 31);
-	_txtArmor		= new Text(76, 9, 133, 31);
-	_txtCraft		= new Text(70, 9, 226, 31);
+	_txtName		= new Text(90, 9, 16, 31);
+	_txtArmor		= new Text(50, 9, 106, 31);
+	_txtCraft		= new Text(50, 9, 226, 31);
 
 	_lstSoldiers	= new TextList(293, 128, 8, 42);
 
@@ -122,7 +122,7 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
-	_lstSoldiers->setColumns(3, 117, 93, 73);
+	_lstSoldiers->setColumns(3, 90, 120, 73);
 	_lstSoldiers->setSelectable(true);
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin(8);

@@ -85,8 +85,8 @@ SoldierInfoState::SoldierInfoState(
 	_btnNext		= new TextButton(29, 16, 80, 32);
 	_btnAutoStat	= new TextButton(49, 16, 112, 32);
 
-	_txtArmor		= new Text(32, 9, 217, 36);
-	_btnArmor		= new TextButton(72, 16, 248, 32);
+	_txtArmor		= new Text(30, 9, 190, 36);
+	_btnArmor		= new TextButton(100, 16, 220, 32);
 
 	_btnSack		= new TextButton(36, 16, 284, 49);
 
@@ -652,13 +652,7 @@ void SoldierInfoState::init()
 	}
 
 
-	std::wstring
-		armor,
-		craft;
-
-	std::string armorType = _soldier->getArmor()->getType();
-	armor = tr(armorType);
-	_btnArmor->setText(armor);
+	_btnArmor->setText(tr(_soldier->getArmor()->getType()));
 	if (_soldier->getCraft()
 		&& _soldier->getCraft()->getStatus() == "STR_OUT")
 	{
@@ -667,6 +661,7 @@ void SoldierInfoState::init()
 	else
 		_btnArmor->setColor(Palette::blockOffset(15)+6);
 
+	std::wstring craft;
 	if (_soldier->getCraft() == NULL)
 		craft = tr("STR_NONE_UC");
 	else

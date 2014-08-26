@@ -861,7 +861,7 @@ en-US:
   STR_INCENDIARY_ROCKET: "Rocket-IN"
   STR_GRENADE: "Grenade"
   STR_SMOKE_GRENADE: "Smoke Grenade"
-  STR_PROXIMITY_GRENADE: "Proximity Grenade"
+  STR_PROXIMITY_GRENADE: "Proxi-Grenade"
   STR_HIGH_EXPLOSIVE: "Satchel-HE"
   STR_STUN_ROD: "Stun Rod"
   STR_HEAVY_PLASMA: "Plasma Heavy"

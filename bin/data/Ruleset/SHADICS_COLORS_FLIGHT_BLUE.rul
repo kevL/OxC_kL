@@ -105,12 +105,12 @@ extraSprites:
 extraStrings:
   - type: en-US
     strings:
-      STR_BLUESUIT_ARMOR_UC: "FLIGHT SUIT> blue"
+      STR_BLUESUIT_ARMOR_UC: "Flight Suit> blue"
       STR_BLUESUIT_ARMOR: "Flight Suit> blue"
       STR_BLUESUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
   - type: en-GB
     strings:
-      STR_BLUESUIT_ARMOR_UC: "FLIGHT SUIT> blue"
+      STR_BLUESUIT_ARMOR_UC: "Flight Suit> blue"
       STR_BLUESUIT_ARMOR: "Flight Suit> blue"
       STR_BLUESUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
   - type: es

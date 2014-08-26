@@ -105,12 +105,12 @@ extraSprites:
 extraStrings:
   - type: en-US
     strings:
-      STR_RED_ARMOR_UC: "POWER SUIT> red"
+      STR_RED_ARMOR_UC: "Power Suit> red"
       STR_RED_ARMOR: "Power Suit> red"
       STR_RED_ARMOR_UFOPEDIA: "A powerful new protection for soldiers, this armor is powered by an Elerium energy source and greatly amplifies the speed and strength of the wearer, it offers the best protection yet for combat troops."
   - type: en-GB
     strings:
-      STR_RED_ARMOR_UC: "POWER SUIT> red"
+      STR_RED_ARMOR_UC: "Power Suit> red"
       STR_RED_ARMOR: "Power Suit> red"
       STR_RED_ARMOR_UFOPEDIA: "A powerful new protection for soldiers, this armor is powered by an Elerium energy source and greatly amplifies the speed and strength of the wearer, it offers the best protection yet for combat troops."
   - type: es

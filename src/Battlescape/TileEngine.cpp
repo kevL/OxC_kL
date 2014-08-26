@@ -235,7 +235,7 @@ void TileEngine::calculateUnitLighting()
 {
 	const int layer = 2;					// Dynamic lighting layer.
 //kL	const int personalLightPower = 15;	// amount of light a unit generates
-	const int personalLightPower = 10;		// kL, Try it...
+	const int personalLightPower = 11;		// kL, Try it...
 	const int fireLightPower = 15;			// amount of light a fire generates
 
 	for (int // reset all light to 0 first
@@ -5584,7 +5584,18 @@ bool TileEngine::psiAttack(BattleAction* action)
 			else //if (action->type == BA_MINDCONTROL)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
-				victim->convertToFaction(action->actor->getFaction());
+				// kL_begin:
+				if (victim->getFaction() != FACTION_HOSTILE)
+					victim->moraleChange(-100);
+				else if (action->actor->getFaction() == FACTION_PLAYER)
+				{
+					if (victim->getOriginalFaction() == FACTION_HOSTILE)
+						victim->moraleChange(-50);
+					else
+						victim->moraleChange(+25);
+				} // kL_end.
+
+				victim->convertToFaction(action->actor->getFaction()); // moved below, must be done *after* energyRecovery.
 //				victim->setTimeUnits(victim->getStats()->tu);
 //				victim->setEnergy(victim->getStats()->stamina); // kL
 
@@ -5596,7 +5607,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 					prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
 
 				// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-				prepTU -= (prepTU * (victim->getFatalWound(BODYPART_LEFTLEG) + victim->getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
+				if (victim->getOriginalFaction() == FACTION_PLAYER)
+					prepTU -= (prepTU * (victim->getFatalWound(BODYPART_LEFTLEG) + victim->getFatalWound(BODYPART_RIGHTLEG) * 10)) / 100;
 
 				if (prepTU < 12)
 					prepTU = 12;
@@ -5609,11 +5621,14 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 //				if (victim->getTurretType() == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
 //				{
-				if (victim->isKneeled())							// kneeled xCom
-					enron /= 2;
-				else if (victim->getFaction() == FACTION_PLAYER)	// xCom & Mc'd aliens
-					enron /= 3;
-				else												// non-Mc'd aLiens & civies
+				if (victim->getOriginalFaction() == FACTION_PLAYER)
+				{
+					if (victim->isKneeled())
+						enron /= 2;
+					else
+						enron /= 3;
+				}
+				else // aLiens.
 					enron = enron * victim->getUnitRules()->getEnergyRecovery() / 100;
 //				}
 //				else // xCom tank. ( can't get Mc'd )
@@ -5623,7 +5638,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 				// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 				// kL_note: Only xCom gets fatal wounds, atm.
-				if (victim->getFaction() == FACTION_PLAYER)
+				if (victim->getOriginalFaction() == FACTION_PLAYER)
 					enron -= (victim->getEnergy() * (victim->getFatalWound(BODYPART_TORSO) * 10)) / 100;
 
 				enron += victim->getEnergy();
@@ -5633,7 +5648,6 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 				victim->setEnergy(enron);
 				// kL_end.
-
 
 				victim->allowReselect();
 				victim->setStatus(STATUS_STANDING);

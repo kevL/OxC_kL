@@ -469,7 +469,7 @@ void AlienBAIState::think(BattleAction* action)
 				RuleInventory* beltRule = _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_BELT");
 				RuleInventory* rhRule = _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_RIGHT_HAND");
 				int cost = beltRule->getCost(rhRule);
-				Log(LOG_INFO) << "AlienBAIState::think() move grenade from Belt to Hand, TU = " << cost;
+				//Log(LOG_INFO) << "AlienBAIState::think() move grenade from Belt to Hand, TU = " << cost;
 
 				_unit->spendTimeUnits(cost + _unit->getActionTUs(
 																BA_PRIME,

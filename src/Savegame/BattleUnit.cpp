@@ -130,7 +130,8 @@ BattleUnit::BattleUnit(
 		_activeHand("STR_RIGHT_HAND"),
 		_breathFrame(0),
 		_floorAbove(false),
-		_breathing(false)
+		_breathing(false),
+		_diedByFire(false)
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 	_name			= soldier->getName(true);
@@ -270,7 +271,8 @@ BattleUnit::BattleUnit(
 		_activeHand("STR_RIGHT_HAND"),
 		_breathFrame(-1),
 		_floorAbove(false),
-		_breathing(false)
+		_breathing(false),
+		_diedByFire(false)
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 	_type	= unit->getType();
@@ -2054,7 +2056,6 @@ double BattleUnit::getInitiative(int tuSpent) // kL
 void BattleUnit::prepareNewTurn()
 {
 	//Log(LOG_INFO) << "BattleUnit::prepareNewTurn() ID " << getId();
-
 	_faction = _originalFaction;
 	//Log(LOG_INFO) << ". _stopShot is " << _stopShot << " setFALSE";
 	//_stopShot = false;
@@ -2070,7 +2071,8 @@ void BattleUnit::prepareNewTurn()
 		prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
-	prepTU -= (prepTU * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
+	if (_faction == FACTION_PLAYER)
+		prepTU -= (prepTU * (_fatalWounds[BODYPART_LEFTLEG] + _fatalWounds[BODYPART_RIGHTLEG] * 10)) / 100;
 
 	if (prepTU < 12)
 		prepTU = 12;
@@ -2086,11 +2088,14 @@ void BattleUnit::prepareNewTurn()
 
 		if (_turretType == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
 		{
-			if (isKneeled())							// kneeled xCom
-				enron /= 2;
-			else if (getFaction() == FACTION_PLAYER)	// xCom & Mc'd aliens
-				enron /= 3;
-			else										// non-Mc'd aLiens & civies
+			if (_faction == FACTION_PLAYER)
+			{
+				if (isKneeled())
+					enron /= 2;
+				else
+					enron /= 3;
+			}
+			else // aLiens.
 				enron = enron * _unitRules->getEnergyRecovery() / 100;
 		}
 		else // xCom tank.
@@ -2101,7 +2106,7 @@ void BattleUnit::prepareNewTurn()
 
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 		// kL_note: Only xCom gets fatal wounds, atm.
-		if (getFaction() == FACTION_PLAYER)
+		if (_faction == FACTION_PLAYER)
 			enron -= (_energy * (_fatalWounds[BODYPART_TORSO] * 10)) / 100;
 
 		_energy += enron;

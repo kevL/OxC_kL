@@ -4649,7 +4649,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1408551617 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1409018649 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	<climits>
 	<string>
@@ -5390,7 +5390,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1408805069 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1409017306 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -5729,7 +5729,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1408554947 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1409008647 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -6601,7 +6601,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1408982964 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1408994352 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6758,7 +6758,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1408934005 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1409013383 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9530,7 +9530,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1408933624 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1409009590 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

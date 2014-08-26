@@ -865,9 +865,6 @@
     <ClCompile Include="Menu\OptionsNoAudioState.cpp">
       <Filter>Menu</Filter>
     </ClCompile>
-    <ClCompile Include="Basescape\SoldierDeadInfoState.cpp">
-      <Filter>Basescape</Filter>
-    </ClCompile>
     <ClCompile Include="Ufopaedia\ArticleStateTFTD.cpp">
       <Filter>Ufopaedia</Filter>
     </ClCompile>
@@ -886,6 +883,13 @@
     <ClCompile Include="Ruleset\Polyline.cpp">
       <Filter>Ruleset</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\SoldierDiaryMissionState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryOverviewState.cpp" />
+    <ClCompile Include="Basescape\SoldierDiaryPerformanceState.cpp" />
+    <ClCompile Include="Battlescape\CommendationState.cpp" />
+    <ClCompile Include="Ruleset\RuleCommendations.cpp" />
+    <ClCompile Include="Savegame\SoldierDiary.cpp" />
+    <ClCompile Include="Basescape\SoldierInfoDeadState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1773,9 +1777,6 @@
     <ClInclude Include="Engine\DosFont.h">
       <Filter>Engine</Filter>
     </ClInclude>
-    <ClInclude Include="Basescape\SoldierDeadInfoState.h">
-      <Filter>Basescape</Filter>
-    </ClInclude>
     <ClInclude Include="Ufopaedia\ArticleStateTFTD.h">
       <Filter>Ufopaedia</Filter>
     </ClInclude>
@@ -1794,6 +1795,13 @@
     <ClInclude Include="Ruleset\Polyline.h">
       <Filter>Ruleset</Filter>
     </ClInclude>
+    <ClInclude Include="Basescape\SoldierDiaryMissionState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryOverviewState.h" />
+    <ClInclude Include="Basescape\SoldierDiaryPerformanceState.h" />
+    <ClInclude Include="Battlescape\CommendationState.h" />
+    <ClInclude Include="Ruleset\RuleCommendations.h" />
+    <ClInclude Include="Savegame\SoldierDiary.h" />
+    <ClInclude Include="Basescape\SoldierInfoDeadState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">
