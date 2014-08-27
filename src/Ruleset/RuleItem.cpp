@@ -107,7 +107,8 @@ RuleItem::RuleItem(const std::string& type)
 		_meleeSound(39),
 		_meleePower(0),
 		_meleeAnimation(0),
-		_meleeHitSound(-1)
+		_meleeHitSound(-1),
+		_noResearch(false) // kL
 {
 }
 
@@ -267,6 +268,7 @@ void RuleItem::load(
 	_skillApplied			= node["skillApplied"].as<bool>(_skillApplied);
 	_LOSRequired			= node["LOSRequired"].as<bool>(_LOSRequired);
 	_noReaction				= node["noReaction"].as<bool>(_noReaction); // kL
+	_noResearch				= node["noResearch"].as<bool>(_noResearch); // kL
 	_meleePower				= node["meleePower"].as<int>(_meleePower);
 
 	if (!_listOrder)
@@ -1030,11 +1032,14 @@ BattleActionType RuleItem::getDefaultAction() const // kL
  * as unresearched in various lists, such as Stores & Transfers ...
  * This boolean should be set in the Rulesets under these ITEMS respectively.
  * and then the checks both here and in those lists ought be simplified.
+ * Note: put in Ruleset done.
  */
 bool RuleItem::isResearchExempt() const // kL
 {
+	return _noResearch;
+
 	//Log(LOG_INFO) << ". type = " << getType();
-	if (getType() == "STR_BLACKSUIT_ARMOR"
+/*	if (getType() == "STR_BLACKSUIT_ARMOR"
 		|| getType() == "STR_BLUESUIT_ARMOR"
 		|| getType() == "STR_GREENSUIT_ARMOR"
 		|| getType() == "STR_ORANGESUIT_ARMOR"
@@ -1052,7 +1057,7 @@ bool RuleItem::isResearchExempt() const // kL
 		return true;
 	}
 
-	return false;
+	return false; */
 }
 
 }

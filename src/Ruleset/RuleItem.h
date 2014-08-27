@@ -83,6 +83,7 @@ private:
 		_liveAlien,
 		_noReaction,
 		_recover,
+		_noResearch, // kL
 		_twoHanded,
 		_waypoint;
 	int
