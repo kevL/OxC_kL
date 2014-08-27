@@ -4,8 +4,6 @@ items:
     size: 0.8
     costSell: 400650 # 1335500
     listOrder: 7501
-    requires:
-      - STR_FLYING_SUIT
   - type: STR_CORPSE_BLACKSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -19,8 +17,6 @@ items:
     size: 0.8
     costSell: 400650 # 1335500
     listOrder: 7502
-    requires:
-      - STR_FLYING_SUIT
   - type: STR_CORPSE_BLUESUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -34,8 +30,6 @@ items:
     size: 0.8
     costSell: 400650 # 1335500
     listOrder: 7503
-    requires:
-      - STR_FLYING_SUIT
   - type: STR_CORPSE_GREENSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -49,8 +43,6 @@ items:
     size: 0.8
     costSell: 400650 # 1335500
     listOrder: 7504
-    requires:
-      - STR_FLYING_SUIT
   - type: STR_CORPSE_ORANGESUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -64,8 +56,6 @@ items:
     size: 0.8
     costSell: 400650 # 1335500
     listOrder: 7505
-    requires:
-      - STR_FLYING_SUIT
   - type: STR_CORPSE_PINKSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -79,8 +69,6 @@ items:
     size: 0.8
     costSell: 400650 # 1335500
     listOrder: 7506
-    requires:
-      - STR_FLYING_SUIT
   - type: STR_CORPSE_PURPLESUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -94,8 +82,6 @@ items:
     size: 0.8
     costSell: 400650 # 1335500
     listOrder: 7507
-    requires:
-      - STR_FLYING_SUIT
   - type: STR_CORPSE_REDSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
