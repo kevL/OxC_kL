@@ -104,7 +104,7 @@ private:
 		YAML::Node saveId() const;
 
 		/// Gets the base's name.
-		std::wstring getName(Language* lang = 0) const;
+		std::wstring getName(Language* lang = NULL) const;
 		/// Sets the base's name.
 		void setName(const std::wstring& name);
 
@@ -253,10 +253,9 @@ private:
 		bool getIsRetaliationTarget() const;
 
 		/// Gets the detection chance for this base.
-//kL	size_t getDetectionChance() const;
-		int getDetectionChance(int difficulty) const;
+		int getDetectionChance(int diff) const;
 
-		/// Gets how many Grav Shields the base has
+		/// Gets how many Grav Shields the base has.
 		int getGravShields() const;
 		/// Sets up base defenses.
 		void setupDefenses();

@@ -2083,89 +2083,105 @@ bool Base::getIsRetaliationTarget() const
 /**
  * Functor to check for mind shield capability.
  */
-struct isMindShield
+/* struct isMindShield
 	:
 		public std::unary_function<BaseFacility*, bool>
 {
 	/// Check isMindShield() for @a facility.
 	bool operator()(const BaseFacility* facility) const;
-};
+}; */
 
 /**
  * Only fully operational facilities are checked.
  * @param facility Pointer to the facility to check.
  * @return, If @a facility can act as a mind shield.
  */
-bool isMindShield::operator()(const BaseFacility* facility) const
+/* bool isMindShield::operator()(const BaseFacility* facility) const
 {
 	if (facility->getBuildTime() != 0)
 		return false; // Still building this
 
 	return facility->getRules()->isMindShield();
-}
+} */
 
 
 /**
  * Functor to check for completed facilities.
  */
-struct isCompleted
+/* struct isCompleted
 	:
 		public std::unary_function<BaseFacility*, bool>
 {
 	/// Check isCompleted() for @a facility.
 	bool operator()(const BaseFacility* facility) const;
-};
+}; */
 
 /**
  * Facilities are checked for construction completion.
  * @param, facility Pointer to the facility to check.
  * @return, If @a facility has completed construction.
  */
-bool isCompleted::operator()(const BaseFacility* facility) const
+/* bool isCompleted::operator()(const BaseFacility* facility) const
 {
 	return facility->getBuildTime() == 0;
-}
-
+} */
 
 /**
  * Calculates the chance for aLiens to detect this base.
  * Big bases without mindshields are easier to detect.
- * @param difficulty - the current difficulty setting
+ * @param diff - the current difficulty setting
  * @return, detection chance
  */
-/*kL size_t Base::getDetectionChance(int difficulty) const
+/*kL size_t Base::getDetectionChance(int diff) const
 {
 	size_t mindShields = std::count_if(_facilities.begin(), _facilities.end(), isMindShield());
 	size_t completedFacilities = std::count_if(_facilities.begin(), _facilities.end(), isCompleted());
-	return ((completedFacilities / 6 + 15) / (mindShields + 1)) * (int)(1 + difficulty / 2);
+	return ((completedFacilities / 6 + 15) / (mindShields + 1)) * (int)(1 + diff / 2);
 } */
 // kL_begin: rewrite getDetectionChance()
-int Base::getDetectionChance(int difficulty) const
+int Base::getDetectionChance(int diff) const
 {
 	//Log(LOG_INFO) << "Base::getDetectionChance()";
-	int facilities = static_cast<int>(std::count_if(
-												_facilities.begin(),
-												_facilities.end(),
-												isCompleted()));
+	int
+		facQty = 0,
+		shields = 0;
+
+	for (std::vector<BaseFacility*>::const_iterator
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
+	{
+		if ((*i)->getBuildTime() == 0)
+		{
+			facQty++;
+
+			if ((*i)->getRules()->isMindShield())
+				shields++;
+		}
+	}
+/*	int facQty = static_cast<int>(std::count_if( // Lol.
+											_facilities.begin(),
+											_facilities.end(),
+											isCompleted()));
 	int shields = static_cast<int>(std::count_if(
 											_facilities.begin(),
 											_facilities.end(),
-											isMindShield()));
+											isMindShield())); */
 
-	facilities = (facilities / 6) + 9;
-	shields = (shields * 2) + 1;
-	//Log(LOG_INFO) << ". facilities = " << facilities;
+	facQty = facQty / 6 + 9;
+	shields = shields * 2 + 1;
+	//Log(LOG_INFO) << ". facQty = " << facQty;
 	//Log(LOG_INFO) << ". shields = " << shields;
-	//Log(LOG_INFO) << ". difficulty = " << difficulty;
+	//Log(LOG_INFO) << ". diff = " << diff;
 
-	int detchance = (facilities / shields) + difficulty;
+	int detchance = facQty / shields + diff;
 	//Log(LOG_INFO) << ". detchance = " << detchance;
 
 	return detchance;
 }
 
 /**
- *
+ * Gets the number of gravShields at this base.
  */
 int Base::getGravShields() const
 {
@@ -2297,6 +2313,9 @@ void Base::setupDefenses()
 	}
 }
 
+/**
+ *
+ */
 std::vector<BaseFacility*>* Base::getDefenses()
 {
 	return &_defenses;
@@ -2397,9 +2416,8 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 	}
 
 	// we're in real trouble if this happens...
-	if (lift == 0)
-		//TODO: something clever.
-		return result;
+	if (lift == NULL)
+		return result; // TODO: something clever.
 
 
 	// Now make the recursion manually using a stack

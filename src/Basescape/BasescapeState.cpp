@@ -19,6 +19,7 @@
 
 #include "BasescapeState.h"
 
+#include "BaseDetectionState.h"
 #include "BaseInfoState.h"
 #include "BaseView.h"
 #include "BuildFacilitiesState.h"
@@ -560,7 +561,7 @@ void BasescapeState::viewLeftClick(Action*)
 	}
 	else if (fac->getRules()->getStorage() > 0)
 	{
-//kL		_game->pushState(new SellState(_base));
+//kL	_game->pushState(new SellState(_base));
 		bPop = true;
 		_game->pushState(new StoresState(_base));
 	}
@@ -571,8 +572,8 @@ void BasescapeState::viewLeftClick(Action*)
 		_game->pushState(new SoldiersState(_base));
 	}
 	else if (fac->getRules()->getPsiLaboratories() > 0
-			&& Options::anytimePsiTraining
-			&& _base->getAvailablePsiLabs() > 0)
+			&& Options::anytimePsiTraining)
+//			&& _base->getAvailablePsiLabs() > 0)
 	{
 		bPop = true;
 		_game->pushState(new AllocatePsiTrainingState(_base));
@@ -594,12 +595,15 @@ void BasescapeState::viewLeftClick(Action*)
 														_base,
 														OPT_GEOSCAPE));
 	}
-/*	else if (fac->getRules()->isLift()) // my Lift has a radar range ... (see next)
+	else if (fac->getRules()->isLift()) // my Lift has a radar range ... (see next)
 	{
 		bPop = true;
-		_game->pushState(new MonthlyCostsState(_base));
-	} */
-	else if (fac->getRules()->getRadarRange() > 0)
+		_game->pushState(new BaseDetectionState(_base));
+//		_game->pushState(new MonthlyCostsState(_base));
+	}
+	else if (fac->getRules()->getRadarRange() > 0
+		|| fac->getRules()->isMindShield() == true
+		|| fac->getRules()->isHyperwave() == true)
 	{
 		bPop = true;
 
@@ -623,7 +627,7 @@ void BasescapeState::viewLeftClick(Action*)
 void BasescapeState::viewRightClick(Action*)
 {
 	BaseFacility* fac = _view->getSelectedFacility();
-	if (fac != 0)
+	if (fac != NULL)
 	{
 		if (fac->inUse())
 		{

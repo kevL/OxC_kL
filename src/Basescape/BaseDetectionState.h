@@ -17,8 +17,8 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_TRANSFERSSTATE_H
-#define OPENXCOM_TRANSFERSSTATE_H
+#ifndef OPENXCOM_BASEDETECTIONSTATE_H
+#define OPENXCOM_BASEDETECTIONSTATE_H
 
 #include "../Engine/State.h"
 
@@ -34,31 +34,36 @@ class Window;
 
 
 /**
- * Transfers window that displays all the items currently in-transit to a base.
+ * BaseDetection window that displays current basic chance of being detected.
  */
-class TransfersState
+class BaseDetectionState
 	:
 		public State
 {
 
 private:
 	Base* _base;
-	Text
-		* _txtArrivalTime,
-		* _txtBaseLabel,
-		* _txtItem,
-		* _txtQuantity,
+	Text // TODO: add base defenses
+		* _txtDifficulty,
+		* _txtDifficultyVal,
+		* _txtExposure,
+		* _txtExposureVal,
+		* _txtFacilities,
+		* _txtFacilitiesVal,
+		* _txtShields,
+		* _txtShieldsVal,
+		* _txtTimePeriod,
 		* _txtTitle;
 	TextButton* _btnOk;
-	TextList* _lstTransfers;
+	TextList* _lstDetection;
 	Window* _window;
 
 
 	public:
-		/// Creates the Transfers state.
-		TransfersState(Base* base);
-		/// Cleans up the Transfers state.
-		~TransfersState();
+		/// Creates the BaseDetection state.
+		BaseDetectionState(Base* base);
+		/// Cleans up the BaseDetection state.
+		~BaseDetectionState();
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);

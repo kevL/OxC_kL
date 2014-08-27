@@ -46,7 +46,7 @@ BaseFacility::BaseFacility(
 }
 
 /**
- *
+ * dTor.
  */
 BaseFacility::~BaseFacility()
 {

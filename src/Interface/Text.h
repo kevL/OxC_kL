@@ -138,9 +138,9 @@ private:
 				bool indent = false);
 
 		/// Sets the text's color invert setting.
-		void setInvert(bool invert);
+		void setInvert(bool invert = true);
 		/// Sets the text's high contrast color setting.
-		void setHighContrast(bool contrast);
+		void setHighContrast(bool contrast = true);
 
 		/// Sets the text's horizontal alignment.
 		void setAlign(TextHAlign align);

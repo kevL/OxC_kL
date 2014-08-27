@@ -60,7 +60,7 @@ RuleBaseFacility::RuleBaseFacility(const std::string& type)
 }
 
 /**
- *
+ * dTor.
  */
 RuleBaseFacility::~RuleBaseFacility()
 {

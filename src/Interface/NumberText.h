@@ -75,7 +75,7 @@ private:
 		void draw();
 
 		/// sets this numbertext to have a border or not
-		void setBordered(bool bordered);
+		void setBordered(bool bordered = true);
 };
 
 }
