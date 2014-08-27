@@ -9736,6 +9736,12 @@ extraStrings:
       STR_USE_: "use {ALT}{0}"
       STR_THROW_: "throw {ALT}{0}"
       STR_ARMOR_NONE_UC: "xCom Pyjamas"
+      STR_BASEDETECTION: "Base Detection"
+      STR_FACILITIES: "Facilities"
+      STR_MINDSHIELDS: "Shielding"
+      STR_DIFFICULTY: "Difficulty"
+      STR_EXPOSURE: "exposure"
+      STR_PER10MIN: "per 10 min"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
