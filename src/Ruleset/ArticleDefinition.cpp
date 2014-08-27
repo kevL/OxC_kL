@@ -26,39 +26,37 @@ namespace YAML
 template<>
 struct convert<OpenXcom::ArticleDefinitionRect>
 {
+	/**
+	 *
+	 */
+	static Node encode(const OpenXcom::ArticleDefinitionRect& rhs)
+	{
+		Node node;
+		node["x"]		= rhs.x;
+		node["y"]		= rhs.y;
+		node["width"]	= rhs.width;
+		node["height"]	= rhs.height;
 
-/**
- *
- */
-static Node encode(const OpenXcom::ArticleDefinitionRect& rhs)
-{
-	Node node;
-	node["x"]		= rhs.x;
-	node["y"]		= rhs.y;
-	node["width"]	= rhs.width;
-	node["height"]	= rhs.height;
+		return node;
+	}
 
-	return node;
-}
+	/**
+	 *
+	 */
+	static bool decode(
+			const Node& node,
+			OpenXcom::ArticleDefinitionRect& rhs)
+	{
+		if (!node.IsMap())
+			return false;
 
-/**
- *
- */
-static bool decode(
-		const Node& node,
-		OpenXcom::ArticleDefinitionRect& rhs)
-{
-	if (!node.IsMap())
-		return false;
+		rhs.x		= node["x"].as<int>(rhs.x);
+		rhs.y		= node["y"].as<int>(rhs.y);
+		rhs.width	= node["width"].as<int>(rhs.width);
+		rhs.height	= node["height"].as<int>(rhs.height);
 
-	rhs.x		= node["x"].as<int>(rhs.x);
-	rhs.y		= node["y"].as<int>(rhs.y);
-	rhs.width	= node["width"].as<int>(rhs.width);
-	rhs.height	= node["height"].as<int>(rhs.height);
-
-	return true;
-}
-
+		return true;
+	}
 };
 
 }

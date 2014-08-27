@@ -1963,7 +1963,7 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 
 		soldier = new Soldier(
 							getSoldier("XCOM"),
-							getArmor("STR_NONE_UC"),
+							getArmor("STR_ARMOR_NONE_UC"),
 							&_names,
 							newId);
 

@@ -387,34 +387,34 @@ private:
 		/// Sets the current battle game.
 		void setBattleGame(SavedBattleGame* battleGame);
 
-		/// Add a finished ResearchProject
+		/// Adds a finished ResearchProject.
 		void addFinishedResearch(
-				const RuleResearch* r,
-				const Ruleset* ruleset = NULL);
-		/// Get the list of already discovered research projects
+				const RuleResearch* resRule,
+				const Ruleset* rules = NULL);
+		/// Gets the list of already discovered research projects.
 		const std::vector<const RuleResearch*>& getDiscoveredResearch() const;
-		/// Get the list of ResearchProject which can be researched in a Base
+		/// Gets the list of ResearchProject which can be researched in a Base.
 		void getAvailableResearchProjects(
 				std::vector<RuleResearch*>& projects,
 				const Ruleset* ruleset,
 				Base* base) const;
-		/// Get the list of Productions which can be manufactured in a Base
+		/// Gets the list of Productions which can be manufactured in a Base.
 		void getAvailableProductions(
 				std::vector<RuleManufacture*>& productions,
 				const Ruleset* ruleset,
 				Base* base) const;
-		/// Get the list of newly available research projects once a research has been completed.
+		/// Gets the list of newly available research projects once a research has been completed.
 		void getDependableResearch(std::vector<RuleResearch*>& dependables,
 				const RuleResearch* research,
 				const Ruleset* ruleset,
 				Base* base) const;
-		/// Get the list of newly available manufacture projects once a research has been completed.
+		/// Gets the list of newly available manufacture projects once a research has been completed.
 		void getDependableManufacture(
 				std::vector<RuleManufacture*>& dependables,
 				const RuleResearch* research,
 				const Ruleset* ruleset,
 				Base* base) const;
-		/// Check whether a ResearchProject can be researched
+		/// Checks whether a ResearchProject can be researched
 		bool isResearchAvailable(
 				RuleResearch* r,
 				const std::vector<const RuleResearch*>& unlocked,

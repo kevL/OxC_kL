@@ -393,7 +393,8 @@ SellState::SellState(
 					|| rules->getItem(*i)->getAlien()						// or is an alien
 					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
 					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
-				&& craftOrdnance == false)								// and is not craft ordnance
+				&& craftOrdnance == false								// and is not craft ordnance
+				&& !itemRule->isResearchExempt())
 			{
 				// well, that was !NOT! easy.
 				color = _color3;
@@ -1064,7 +1065,8 @@ void SellState::updateItemStrings()
 					|| rules->getItem(itemRule->getType())->getAlien()		// or is an alien
 					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
 					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
-				&& craftOrdnance == false)								// and is not craft ordnance
+				&& craftOrdnance == false								// and is not craft ordnance
+				&& !itemRule->isResearchExempt())
 			{
 				// well, that was !NOT! easy.
 				_lstItems->setRowColor(_sel, _color3);

@@ -226,7 +226,7 @@ void Base::load(
 	{
 		Soldier* s = new Soldier(
 							_rule->getSoldier("XCOM"),
-							_rule->getArmor("STR_NONE_UC"));
+							_rule->getArmor("STR_ARMOR_NONE_UC"));
 		s->load(
 				*i,
 				_rule,

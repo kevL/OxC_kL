@@ -145,7 +145,7 @@ SavedGame::SavedGame()
 	_researchScores.push_back(0);
 	_income.push_back(0);		// kL
 	_expenditure.push_back(0);	// kL
-//	_lastselectedArmor = "STR_NONE_UC";
+//	_lastselectedArmor = "STR_ARMOR_NONE_UC";
 }
 
 /**
@@ -608,7 +608,7 @@ void SavedGame::load(
 	{
 /*kL		Soldier* s = new Soldier(
 							rule->getSoldier("XCOM"),
-							rule->getArmor("STR_NONE_UC"));
+							rule->getArmor("STR_ARMOR_NONE_UC"));
 		s->load(
 				*i,
 				rule,
@@ -1203,63 +1203,71 @@ void SavedGame::setBattleGame(SavedBattleGame* battleGame)
 
 /**
  * Adds a ResearchProject to the list of already discovered ResearchProjects.
- * @param r			- the newly found ResearchProject
- * @param ruleset	- the game Ruleset
+ * @param resRule	- the newly found ResearchProject
+ * @param rules		- the game Ruleset (NULL if single battle skirmish)
  */
 void SavedGame::addFinishedResearch(
-		const RuleResearch* r,
-		const Ruleset* ruleset)
+		const RuleResearch* resRule,
+		const Ruleset* rules)
 {
-	std::vector<const RuleResearch*>::const_iterator itDiscovered = std::find(
-																		_discovered.begin(),
-																		_discovered.end(),
-																		r);
-	if (itDiscovered == _discovered.end())
+	std::vector<const RuleResearch*>::const_iterator iDisc = std::find(
+																	_discovered.begin(),
+																	_discovered.end(),
+																	resRule);
+	if (iDisc == _discovered.end())
 	{
-		_discovered.push_back(r);
-		removePoppedResearch(r);
-		addResearchScore(r->getPoints());
+		_discovered.push_back(resRule);
+
+/*		if (rules
+			&& resRule->getName() == "STR_POWER_SUIT")
+		{
+			_discovered.push_back(rules->getResearch("STR_BLACKSUIT_ARMOR"));
+		} */ // i don't want to do this. I'd have to create RuleResearch's for each new armor!!!
+
+		removePoppedResearch(resRule);
+		addResearchScore(resRule->getPoints());
 	}
 
-	if (ruleset)
+	if (rules)
 	{
 		std::vector<RuleResearch*> availableResearch;
 		for (std::vector<Base*>::const_iterator
-				it = _bases.begin();
-				it != _bases.end();
-				++it)
+				i = _bases.begin();
+				i != _bases.end();
+				++i)
 		{
 			getDependableResearchBasic(
 									availableResearch,
-									r,
-									ruleset,
-									*it);
+									resRule,
+									rules,
+									*i);
 		}
 
 		for (std::vector<RuleResearch*>::iterator
-				it = availableResearch.begin();
-				it != availableResearch.end();
-				++it)
+				i = availableResearch.begin();
+				i != availableResearch.end();
+				++i)
 		{
-			if ((*it)->getCost() == 0
-				&& (*it)->getRequirements().empty())
+			if ((*i)->getCost() == 0
+				&& (*i)->getRequirements().empty())
 			{
 				addFinishedResearch(
-								*it,
-								ruleset);
+								*i,
+								rules);
 			}
-			else if ((*it)->getCost() == 0)
+			else if ((*i)->getCost() == 0)
 			{
 				size_t entry (0); // init.
+
 				for (std::vector<std::string>::const_iterator
-						iter = (*it)->getRequirements().begin();
-						iter != (*it)->getRequirements().end();
-						++iter)
+						iReq = (*i)->getRequirements().begin();
+						iReq != (*i)->getRequirements().end();
+						++iReq)
 				{
-					if ((*it)->getRequirements().at(entry) == *iter)
+					if ((*i)->getRequirements().at(entry) == *iReq)
 						addFinishedResearch(
-										*it,
-										ruleset);
+										*i,
+										rules);
 
 					entry++;
 				}
@@ -1775,7 +1783,7 @@ Soldier* SavedGame::getSoldier(int id) const
 		}
 	}
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -1797,7 +1805,7 @@ bool SavedGame::handlePromotions(std::vector<Soldier*>& participants)
 		soldiersTotal += (*i)->getSoldiers()->size();
 	}
 
-	Soldier* highestRanked = 0;
+	Soldier* highestRanked = NULL;
 
 	// now determine the number of positions we have of each rank,
 	// and the soldier with the heighest promotion score of the rank below it

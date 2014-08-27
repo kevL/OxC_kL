@@ -307,7 +307,7 @@ private:
 		/// How much do aliens want this thing?
 		int getAttraction() const;
 
-		/// Get the list weight for this item.
+		/// Gets the list weight for this item.
 		int getListOrder() const;
 
 		/// How fast does a projectile fired from this weapon travel?
@@ -323,20 +323,20 @@ private:
 		/// is this item a single handed weapon?
 		bool isPistol() const;
 
-		/// Get the max range of this weapon.
+		/// Gets the max range of this weapon.
 		int getMaxRange() const;
-		/// Get the max range of aimed shots with this weapon.
+		/// Gets the max range of aimed shots with this weapon.
 		int getAimRange() const;
-		/// Get the max range of snap shots with this weapon.
+		/// Gets the max range of snap shots with this weapon.
 		int getSnapRange() const;
-		/// Get the max range of auto shots with this weapon.
+		/// Gets the max range of auto shots with this weapon.
 		int getAutoRange() const;
-		/// Get the minimum effective range of this weapon.
+		/// Gets the minimum effective range of this weapon.
 		int getMinRange() const;
-		/// Get the accuracy dropoff of this weapon.
+		/// Gets the accuracy dropoff of this weapon.
 		int getDropoff() const;
 
-		/// Get the number of projectiles to trace.
+		/// Gets the number of projectiles to trace.
 		int getShotgunPellets() const;
 
 		/// Gets a weapon's zombie unit, if any.
@@ -354,9 +354,9 @@ private:
 		int getMeleeAttackSound() const;
 		/// Gets the sound this weapon makes when you punch someone in the face with it.
 		int getMeleeHitSound() const;
-		/// Ok, so this isn't a melee type weapon but we're using it for melee anyway... Get its melee damage.
+		/// Ok, so this isn't a melee type weapon but we're using it for melee anyway... Gets its melee damage.
 		int getMeleePower() const;
-		/// Get the melee animation starting frame (comes from hit.pck).
+		/// Gets the melee animation starting frame (comes from hit.pck).
 		int getMeleeAnimation() const;
 
 		/// Check if LOS is required to use this item (only applies to psionic type items)
@@ -364,6 +364,9 @@ private:
 
 		/// kL. Gets the item's default BattleAction.
 		BattleActionType getDefaultAction() const; // kL
+
+		/// kL. Checks if an item is exempt from research.
+		bool isResearchExempt() const; // kL
 };
 
 }

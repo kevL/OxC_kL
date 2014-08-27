@@ -2215,15 +2215,12 @@ items:
   - type: STR_PERSONAL_ARMOR
     size: 0.8
     costSell: 152400 # 508000
-    weight: 0
   - type: STR_POWER_SUIT
     size: 0.8
     costSell: 256950 # 856500
-    weight: 0
   - type: STR_FLYING_SUIT
     size: 0.8
     costSell: 400650 # 1335500
-    weight: 0
   - type: STR_SECTOID_CORPSE
     size: 0.5
     costSell: 5000
@@ -3663,7 +3660,7 @@ terrains:
         length: 10
         type: 5
 armors:
-  - type: STR_NONE_UC
+  - type: STR_ARMOR_NONE_UC
     spriteSheet: XCOM_0.PCK
     spriteInv: MAN_0
     storeItem: STR_NONE
@@ -3696,16 +3693,16 @@ armors:
     rearArmor: 36
     underArmor: 30
     damageModifier:
-      - 1.0
-      - 1.05
-      - 0.86
-      - 1.0
-      - 1.0
-      - 1.06
-      - 0.89
-      - 1.05
-      - 1.15
-      - 1.12
+      - 1.0 #none
+      - 1.05 #ap
+      - 0.86 #in
+      - 1.0 #he
+      - 1.0 #laser
+      - 1.06 #plasma
+      - 0.89 #stun
+      - 1.05 #melee
+      - 1.15 #acid
+      - 1.12 #smoke
     loftempsSet: [ 3 ]
   - type: STR_POWER_SUIT_UC
     spriteSheet: XCOM_2.PCK
@@ -3718,16 +3715,16 @@ armors:
     rearArmor: 74
     underArmor: 62
     damageModifier:
-      - 1.0
-      - 0.93
-      - 0.07
-      - 0.96
-      - 0.96
-      - 0.97
-      - 0.76
-      - 0.9
-      - 0.95
-      - 0.0
+      - 1.0 #none
+      - 0.93 #ap
+      - 0.07 #in
+      - 0.96 #he
+      - 0.96 #laser
+      - 0.97 #plasma
+      - 0.76 #stun
+      - 0.9 #melee
+      - 0.95 #acid
+      - 0.0 #smoke
     loftempsSet: [ 3 ]
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
@@ -3741,16 +3738,16 @@ armors:
     underArmor: 74
     movementType: 1
     damageModifier:
-      - 1.0
-      - 0.93
-      - 0.07
-      - 0.96
-      - 0.96
-      - 0.97
-      - 0.76
-      - 0.9
-      - 0.95
-      - 0.0
+      - 1.0 #none
+      - 0.93 #ap
+      - 0.07 #in
+      - 0.96 #he
+      - 0.96 #laser
+      - 0.97 #plasma
+      - 0.76 #stun
+      - 0.9 #melee
+      - 0.95 #acid
+      - 0.0 #smoke
     loftempsSet: [ 3 ]
   - type: SECTOID_ARMOR0 #soldier, navigator, medic, engineer
     spriteSheet: SECTOID.PCK
@@ -4412,7 +4409,7 @@ soldiers:
       psiStrength: 100
       psiSkill: 160
       melee: 130
-    armor: STR_NONE_UC
+    armor: STR_ARMOR_NONE_UC
     standHeight: 22
     kneelHeight: 14
     genderRatio: [3, 1]
@@ -8146,7 +8143,7 @@ ufopaedia:
       - STR_FUSION_MISSILE
       - STR_NEW_FIGHTER_CRAFT
     text: STR_HOVERTANK_LAUNCHER_UFOPEDIA
-  - id: STR_NONE_UC
+  - id: STR_ARMOR_NONE_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     text: STR_STREET_ARMOR_UFOPEDIA
@@ -8162,12 +8159,14 @@ ufopaedia:
     requires:
       - STR_POWER_SUIT
     text: STR_POWER_SUIT_UFOPEDIA
+    listOrder: 1800
   - id: STR_FLYING_SUIT_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
     requires:
       - STR_FLYING_SUIT
     text: STR_FLYING_SUIT_UFOPEDIA
+    listOrder: 1900
   - id: STR_PISTOL
     type_id: 4
     section: STR_WEAPONS_AND_EQUIPMENT
@@ -9736,6 +9735,7 @@ extraStrings:
       STR_OUTSIDE_CRAFT_RANGE: "Outside craft's Range"
       STR_USE_: "use {ALT}{0}"
       STR_THROW_: "throw {ALT}{0}"
+      STR_ARMOR_NONE_UC: "xCom Pyjamas"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

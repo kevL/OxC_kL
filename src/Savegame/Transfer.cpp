@@ -81,7 +81,7 @@ bool Transfer::load(
 	{
 		_soldier = new Soldier(
 							rule->getSoldier("XCOM"),
-							rule->getArmor("STR_NONE_UC"));
+							rule->getArmor("STR_ARMOR_NONE_UC"));
 		_soldier->load(
 					soldier,
 					rule,

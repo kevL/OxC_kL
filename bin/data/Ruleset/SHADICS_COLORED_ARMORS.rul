@@ -3,6 +3,9 @@ items:
   - type: STR_BLACKSUIT_ARMOR
     size: 0.8
     costSell: 400650 # 1335500
+    listOrder: 7501
+    requires:
+      - STR_FLYING_SUIT
   - type: STR_CORPSE_BLACKSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -15,6 +18,9 @@ items:
   - type: STR_BLUESUIT_ARMOR
     size: 0.8
     costSell: 400650 # 1335500
+    listOrder: 7502
+    requires:
+      - STR_FLYING_SUIT
   - type: STR_CORPSE_BLUESUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -24,10 +30,13 @@ items:
     invHeight: 3
     armor: 40
     recover: false
-  - type: STR_VERDESUIT_ARMOR
+  - type: STR_GREENSUIT_ARMOR
     size: 0.8
     costSell: 400650 # 1335500
-  - type: STR_CORPSE_VERDESUIT_ARMOR
+    listOrder: 7503
+    requires:
+      - STR_FLYING_SUIT
+  - type: STR_CORPSE_GREENSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
     bigSprite: 65
@@ -39,6 +48,9 @@ items:
   - type: STR_ORANGESUIT_ARMOR
     size: 0.8
     costSell: 400650 # 1335500
+    listOrder: 7504
+    requires:
+      - STR_FLYING_SUIT
   - type: STR_CORPSE_ORANGESUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -51,6 +63,9 @@ items:
   - type: STR_PINKSUIT_ARMOR
     size: 0.8
     costSell: 400650 # 1335500
+    listOrder: 7505
+    requires:
+      - STR_FLYING_SUIT
   - type: STR_CORPSE_PINKSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -63,6 +78,9 @@ items:
   - type: STR_PURPLESUIT_ARMOR
     size: 0.8
     costSell: 400650 # 1335500
+    listOrder: 7506
+    requires:
+      - STR_FLYING_SUIT
   - type: STR_CORPSE_PURPLESUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -75,6 +93,9 @@ items:
   - type: STR_REDSUIT_ARMOR
     size: 0.8
     costSell: 400650 # 1335500
+    listOrder: 7507
+    requires:
+      - STR_FLYING_SUIT
   - type: STR_CORPSE_REDSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -87,6 +108,7 @@ items:
   - type: STR_BLACK_ARMOR
     size: 0.8
     costSell: 256950 # 856500
+    listOrder: 7401
   - type: STR_CORPSE_BLACK_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -99,6 +121,7 @@ items:
   - type: STR_BLUE_ARMOR
     size: 0.8
     costSell: 256950 # 856500
+    listOrder: 7402
   - type: STR_CORPSE_BLUE_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -111,6 +134,7 @@ items:
   - type: STR_GREEN_ARMOR
     size: 0.8
     costSell: 256950 # 856500
+    listOrder: 7403
   - type: STR_CORPSE_GREEN_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -123,6 +147,7 @@ items:
   - type: STR_ORANGE_ARMOR
     size: 0.8
     costSell: 256950 # 856500
+    listOrder: 7404
   - type: STR_CORPSE_ORANGE_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -135,6 +160,7 @@ items:
   - type: STR_PINK_ARMOR
     size: 0.8
     costSell: 256950 # 856500
+    listOrder: 7405
   - type: STR_CORPSE_PINK_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -147,6 +173,7 @@ items:
   - type: STR_PURPLE_ARMOR
     size: 0.8
     costSell: 256950 # 856500
+    listOrder: 7406
   - type: STR_CORPSE_PURPLE_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -159,6 +186,7 @@ items:
   - type: STR_RED_ARMOR
     size: 0.8
     costSell: 256950 # 856500
+    listOrder: 7407
   - type: STR_CORPSE_RED_ARMOR
     name: STR_CORPSE
     weight: 33
@@ -215,12 +243,12 @@ armors:
       - 0.95 #acid
       - 0.0 #smoke
     loftempsSet: [ 3 ]
-  - type: STR_VERDESUIT_ARMOR_UC
-    spriteSheet: VERDESUIT.PCK
+  - type: STR_GREENSUIT_ARMOR_UC
+    spriteSheet: GREENSUIT.PCK
     spriteInv: MAN_16
     corpseBattle:
-      - STR_CORPSE_VERDESUIT_ARMOR
-    storeItem: STR_VERDESUIT_ARMOR
+      - STR_CORPSE_GREENSUIT_ARMOR
+    storeItem: STR_GREENSUIT_ARMOR
     frontArmor: 116
     sideArmor: 96
     rearArmor: 84
@@ -494,6 +522,7 @@ armors:
 manufacture:
   - name: STR_BLACKSUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2901
     requires:
       - STR_FLYING_SUIT
       - STR_ALIEN_ALLOYS
@@ -506,6 +535,7 @@ manufacture:
       STR_ELERIUM_115: 9
   - name: STR_BLUESUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2902
     requires:
       - STR_FLYING_SUIT
       - STR_ALIEN_ALLOYS
@@ -516,8 +546,9 @@ manufacture:
     requiredItems:
       STR_ALIEN_ALLOYS: 16
       STR_ELERIUM_115: 9
-  - name: STR_VERDESUIT_ARMOR
+  - name: STR_GREENSUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2903
     requires:
       - STR_FLYING_SUIT
       - STR_ALIEN_ALLOYS
@@ -530,6 +561,7 @@ manufacture:
       STR_ELERIUM_115: 9
   - name: STR_ORANGESUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2904
     requires:
       - STR_FLYING_SUIT
       - STR_ALIEN_ALLOYS
@@ -542,6 +574,7 @@ manufacture:
       STR_ELERIUM_115: 9
   - name: STR_PINKSUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2905
     requires:
       - STR_FLYING_SUIT
       - STR_ALIEN_ALLOYS
@@ -554,6 +587,7 @@ manufacture:
       STR_ELERIUM_115: 9
   - name: STR_PURPLESUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2906
     requires:
       - STR_FLYING_SUIT
       - STR_ALIEN_ALLOYS
@@ -566,6 +600,7 @@ manufacture:
       STR_ELERIUM_115: 9
   - name: STR_REDSUIT_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2907
     requires:
       - STR_FLYING_SUIT
       - STR_ALIEN_ALLOYS
@@ -578,6 +613,7 @@ manufacture:
       STR_ELERIUM_115: 9
   - name: STR_BLACK_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2801
     requires:
       - STR_POWER_SUIT
       - STR_ALIEN_ALLOYS
@@ -590,6 +626,7 @@ manufacture:
       STR_ELERIUM_115: 3
   - name: STR_BLUE_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2802
     requires:
       - STR_POWER_SUIT
       - STR_ALIEN_ALLOYS
@@ -602,6 +639,7 @@ manufacture:
       STR_ELERIUM_115: 3
   - name: STR_GREEN_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2803
     requires:
       - STR_POWER_SUIT
       - STR_ALIEN_ALLOYS
@@ -614,6 +652,7 @@ manufacture:
       STR_ELERIUM_115: 3
   - name: STR_ORANGE_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2804
     requires:
       - STR_POWER_SUIT
       - STR_ALIEN_ALLOYS
@@ -626,6 +665,7 @@ manufacture:
       STR_ELERIUM_115: 3
   - name: STR_PINK_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2805
     requires:
       - STR_POWER_SUIT
       - STR_ALIEN_ALLOYS
@@ -638,6 +678,7 @@ manufacture:
       STR_ELERIUM_115: 3
   - name: STR_PURPLE_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2806
     requires:
       - STR_POWER_SUIT
       - STR_ALIEN_ALLOYS
@@ -650,6 +691,7 @@ manufacture:
       STR_ELERIUM_115: 3
   - name: STR_RED_ARMOR
     category: STR_PERSONAL_ARMOR_BA
+    listOrder: 2807
     requires:
       - STR_POWER_SUIT
       - STR_ALIEN_ALLOYS
@@ -664,98 +706,98 @@ ufopaedia:
   - id: STR_BLACKSUIT_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1901
     requires:
       - STR_FLYING_SUIT
     text: STR_BLACKSUIT_ARMOR_UFOPEDIA
   - id: STR_BLUESUIT_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1902
     requires:
       - STR_FLYING_SUIT
     text: STR_BLUESUIT_ARMOR_UFOPEDIA
-  - id: STR_VERDESUIT_ARMOR_UC
+  - id: STR_GREENSUIT_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1903
     requires:
       - STR_FLYING_SUIT
-    text: STR_VERDESUIT_ARMOR_UFOPEDIA
+    text: STR_GREENSUIT_ARMOR_UFOPEDIA
   - id: STR_ORANGESUIT_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1904
     requires:
       - STR_FLYING_SUIT
     text: STR_ORANGESUIT_ARMOR_UFOPEDIA
   - id: STR_PINKSUIT_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1905
     requires:
       - STR_FLYING_SUIT
     text: STR_PINKSUIT_ARMOR_UFOPEDIA
   - id: STR_PURPLESUIT_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1906
     requires:
       - STR_FLYING_SUIT
     text: STR_PURPLESUIT_ARMOR_UFOPEDIA
   - id: STR_REDSUIT_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1907
     requires:
       - STR_FLYING_SUIT
     text: STR_REDSUIT_ARMOR_UFOPEDIA
   - id: STR_BLACK_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1801
     requires:
       - STR_POWER_SUIT
     text: STR_BLACK_ARMOR_UFOPEDIA
   - id: STR_BLUE_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1802
     requires:
       - STR_POWER_SUIT
     text: STR_BLUE_ARMOR_UFOPEDIA
   - id: STR_GREEN_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1803
     requires:
       - STR_POWER_SUIT
     text: STR_GREEN_ARMOR_UFOPEDIA
   - id: STR_ORANGE_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1804
     requires:
       - STR_POWER_SUIT
     text: STR_ORANGE_ARMOR_UFOPEDIA
   - id: STR_PINK_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1805
     requires:
       - STR_POWER_SUIT
     text: STR_PINK_ARMOR_UFOPEDIA
   - id: STR_PURPLE_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1806
     requires:
       - STR_POWER_SUIT
     text: STR_PURPLE_ARMOR_UFOPEDIA
   - id: STR_RED_ARMOR_UC
     type_id: 5
     section: STR_WEAPONS_AND_EQUIPMENT
-    listOrder: 1700
+    listOrder: 1807
     requires:
       - STR_POWER_SUIT
     text: STR_RED_ARMOR_UFOPEDIA
@@ -902,7 +944,7 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_m4.gif
-  - type: VERDESUIT.PCK
+  - type: GREENSUIT.PCK
     subX: 32
     subY: 40
     width: 512
@@ -1347,9 +1389,9 @@ extraStrings:
       STR_BLUESUIT_ARMOR_UC: "Flight Suit> blue"
       STR_BLUESUIT_ARMOR: "Flight Suit> blue"
       STR_BLUESUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
-      STR_VERDESUIT_ARMOR_UC: "Flight Suit> green"
-      STR_VERDESUIT_ARMOR: "Flight Suit> green"
-      STR_VERDESUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
+      STR_GREENSUIT_ARMOR_UC: "Flight Suit> green"
+      STR_GREENSUIT_ARMOR: "Flight Suit> green"
+      STR_GREENSUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
       STR_ORANGESUIT_ARMOR_UC: "Flight Suit> orange"
       STR_ORANGESUIT_ARMOR: "Flight Suit> orange"
       STR_ORANGESUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
@@ -1391,9 +1433,9 @@ extraStrings:
       STR_BLUESUIT_ARMOR_UC: "Flight Suit> blue"
       STR_BLUESUIT_ARMOR: "Flight Suit> blue"
       STR_BLUESUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
-      STR_VERDESUIT_ARMOR_UC: "Flight Suit> green"
-      STR_VERDESUIT_ARMOR: "Flight Suit> green"
-      STR_VERDESUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
+      STR_GREENSUIT_ARMOR_UC: "Flight Suit> green"
+      STR_GREENSUIT_ARMOR: "Flight Suit> green"
+      STR_GREENSUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
       STR_ORANGESUIT_ARMOR_UC: "Flight Suit> orange"
       STR_ORANGESUIT_ARMOR: "Flight Suit> orange"
       STR_ORANGESUIT_ARMOR_UFOPEDIA: "An enhanced version of the Power Suit, incorporating alien anti-gravity navigation technology to allow full freedom of movement across the battlefield."
@@ -1435,9 +1477,9 @@ extraStrings:
       STR_BLUESUIT_ARMOR_UC: "TRAJE VOLADOR> azul"
       STR_BLUESUIT_ARMOR: "Traje Solador> azul"
       STR_BLUESUIT_ARMOR_UFOPEDIA: "Una versión mejorada del Traje de Poder que incorpora tecnología alienígena de navegación anti-gravedad para permitir libertad total de movimientos en el campo de batalla."
-      STR_VERDESUIT_ARMOR_UC: "TRAJE VOLADOR> VERDE"
-      STR_VERDESUIT_ARMOR: "Traje Solador> verde"
-      STR_VERDESUIT_ARMOR_UFOPEDIA: "Una versión mejorada del Traje de Poder que incorpora tecnología alienígena de navegación anti-gravedad para permitir libertad total de movimientos en el campo de batalla."
+      STR_GREENSUIT_ARMOR_UC: "TRAJE VOLADOR> verde"
+      STR_GREENSUIT_ARMOR: "Traje Solador> verde"
+      STR_GREENSUIT_ARMOR_UFOPEDIA: "Una versión mejorada del Traje de Poder que incorpora tecnología alienígena de navegación anti-gravedad para permitir libertad total de movimientos en el campo de batalla."
       STR_ORANGESUIT_ARMOR_UC: "TRAJE VOLADOR> naranja"
       STR_ORANGESUIT_ARMOR: "Traje Solador> naranja"
       STR_ORANGESUIT_ARMOR_UFOPEDIA: "Una versión mejorada del Traje de Poder que incorpora tecnología alienígena de navegación anti-gravedad para permitir libertad total de movimientos en el campo de batalla."

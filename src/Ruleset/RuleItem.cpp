@@ -1024,4 +1024,35 @@ BattleActionType RuleItem::getDefaultAction() const // kL
 	return BA_NONE;
 }
 
+/**
+ * kL. Checks if an item is exempt from research.
+ * Currently this is used to exclude SHADICS ARMORS from getting marked
+ * as unresearched in various lists, such as Stores & Transfers ...
+ * This boolean should be set in the Rulesets under these ITEMS respectively.
+ * and then the checks both here and in those lists ought be simplified.
+ */
+bool RuleItem::isResearchExempt() const // kL
+{
+	//Log(LOG_INFO) << ". type = " << getType();
+	if (getType() == "STR_BLACKSUIT_ARMOR"
+		|| getType() == "STR_BLUESUIT_ARMOR"
+		|| getType() == "STR_GREENSUIT_ARMOR"
+		|| getType() == "STR_ORANGESUIT_ARMOR"
+		|| getType() == "STR_PINKSUIT_ARMOR"
+		|| getType() == "STR_PURPLESUIT_ARMOR"
+		|| getType() == "STR_REDSUIT_ARMOR"
+		|| getType() == "STR_BLACK_ARMOR"
+		|| getType() == "STR_BLUE_ARMOR"
+		|| getType() == "STR_GREEN_ARMOR"
+		|| getType() == "STR_ORANGE_ARMOR"
+		|| getType() == "STR_PINK_ARMOR"
+		|| getType() == "STR_PURPLE_ARMOR"
+		|| getType() == "STR_RED_ARMOR")
+	{
+		return true;
+	}
+
+	return false;
+}
+
 }

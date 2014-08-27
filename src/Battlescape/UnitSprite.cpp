@@ -255,7 +255,7 @@ void UnitSprite::drawRoutine0()
 		{
 			die = 259; // aquanaut underwater death frame
 			maleTorso = 32; // aquanaut underwater ion armour torso
-			if ( (_unit->getArmor()->getType() == "STR_NONE_UC") ||
+			if ( (_unit->getArmor()->getType() == "STR_ARMOR_NONE_UC") ||
 				 (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC") )
 			{
 				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso

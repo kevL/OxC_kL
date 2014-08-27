@@ -2600,7 +2600,7 @@ void GeoscapeState::time1Day()
 				newResearch = NULL;
 			}
 
-			_game->getSavedGame()->addFinishedResearch(
+			_game->getSavedGame()->addFinishedResearch( // this adds the actual research project to _discovered vector.
 													research,
 													_game->getRuleset());
 

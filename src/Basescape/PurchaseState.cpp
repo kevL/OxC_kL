@@ -583,7 +583,7 @@ void PurchaseState::btnOkClick(Action*)
 					t->setSoldier(_game->getRuleset()->genSoldier(_game->getSavedGame()));
 //					t->setSoldier(new Soldier(
 //											_game->getRuleset()->getSoldier("XCOM"),
-//											_game->getRuleset()->getArmor("STR_NONE_UC"),
+//											_game->getRuleset()->getArmor("STR_ARMOR_NONE_UC"),
 //											&_game->getRuleset()->getPools(),
 //											_game->getSavedGame()->getId("STR_SOLDIER")));
 

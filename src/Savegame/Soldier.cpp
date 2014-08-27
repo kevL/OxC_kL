@@ -170,8 +170,8 @@ void Soldier::load(
 	_gainPsiStr		= node["gainPsiStr"].as<int>(_gainPsiStr);
 
 	Armor* armor = rule->getArmor(node["armor"].as<std::string>());
-	if (armor == 0)
-		armor = rule->getArmor("STR_NONE_UC");
+	if (armor == NULL)
+		armor = rule->getArmor("STR_ARMOR_NONE_UC");
 
 	_armor = armor;
 
