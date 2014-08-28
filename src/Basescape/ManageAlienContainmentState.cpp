@@ -137,7 +137,6 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 	centerAllSurfaces();
 
-
 	_window->setColor(_color);
 	if (origin == OPT_BATTLESCAPE)
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
@@ -181,12 +180,12 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 	_txtLiveAliens->setColor(_color);
 	_txtLiveAliens->setText(tr("STR_LIVE_ALIENS"));
-//kL	_txtLiveAliens->setWordWrap(true);
+//kL	_txtLiveAliens->setWordWrap();
 //kL	_txtLiveAliens->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtDeadAliens->setColor(_color);
 	_txtDeadAliens->setText(tr("STR_DEAD_ALIENS"));
-//kL	_txtDeadAliens->setWordWrap(true);
+//kL	_txtDeadAliens->setWordWrap();
 //kL	_txtDeadAliens->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtAvailable->setColor(_color);
@@ -203,9 +202,9 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_lstAliens->setArrowColor(_color);
 	_lstAliens->setArrowColumn(178, ARROW_HORIZONTAL);
 	_lstAliens->setColumns(3, 140, 66, 56);
-	_lstAliens->setSelectable(true);
+	_lstAliens->setSelectable();
 	_lstAliens->setBackground(_window);
-	_lstAliens->setMargin(8);
+	_lstAliens->setMargin();
 //	_lstAliens->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstAliens->onLeftArrowPress((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowPress);
 	_lstAliens->onLeftArrowRelease((ActionHandler)& ManageAlienContainmentState::lstItemsLeftArrowRelease);
@@ -246,7 +245,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 }
 
 /**
- *
+ * dTor.
  */
 ManageAlienContainmentState::~ManageAlienContainmentState()
 {
@@ -261,8 +260,8 @@ void ManageAlienContainmentState::think()
 {
 	State::think();
 
-	_timerInc->think(this, 0);
-	_timerDec->think(this, 0);
+	_timerInc->think(this, NULL);
+	_timerDec->think(this, NULL);
 }
 
 /**

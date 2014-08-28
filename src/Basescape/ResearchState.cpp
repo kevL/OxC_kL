@@ -131,11 +131,11 @@ ResearchState::ResearchState(
 	_txtSpace->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtProject->setColor(Palette::blockOffset(13)+10);
-	_txtProject->setWordWrap(true);
+	_txtProject->setWordWrap();
 	_txtProject->setText(tr("STR_RESEARCH_PROJECT"));
 
 	_txtScientists->setColor(Palette::blockOffset(13)+10);
-	_txtScientists->setWordWrap(true);
+	_txtScientists->setWordWrap();
 	_txtScientists->setText(tr("STR_SCIENTISTS_ALLOCATED_UC"));
 
 	_txtProgress->setColor(Palette::blockOffset(13)+10);
@@ -145,13 +145,13 @@ ResearchState::ResearchState(
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 //	_lstResearch->setColumns(4, 149, 59, 48, 17);
 	_lstResearch->setColumns(4, 137, 58, 48, 34);
-	_lstResearch->setSelectable(true);
+	_lstResearch->setSelectable();
 	_lstResearch->setBackground(_window);
-	_lstResearch->setMargin(8);
-//	_lstResearch->setWordWrap(true);
+	_lstResearch->setMargin();
+//	_lstResearch->setWordWrap();
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
 
-	init();
+	init(); // do ya need this
 }
 
 /**

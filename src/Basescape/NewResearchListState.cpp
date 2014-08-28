@@ -88,9 +88,9 @@ NewResearchListState::NewResearchListState(
 
 	_lstResearch->setColor(Palette::blockOffset(13));
 	_lstResearch->setColumns(1, 180);
-	_lstResearch->setSelectable(true);
+	_lstResearch->setSelectable();
 	_lstResearch->setBackground(_window);
-	_lstResearch->setMargin(8);
+	_lstResearch->setMargin();
 	_lstResearch->setAlign(ALIGN_CENTER);
 	_lstResearch->setArrowColor(Palette::blockOffset(13)+10);
 	_lstResearch->onMouseClick((ActionHandler)& NewResearchListState::onSelectProject);

@@ -84,9 +84,9 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
 	_lstSoldiers->setColumns(2, 200, 77);
-	_lstSoldiers->setSelectable(true);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->setMargin(8);
+	_lstSoldiers->setMargin();
 
 
 	std::string noun;

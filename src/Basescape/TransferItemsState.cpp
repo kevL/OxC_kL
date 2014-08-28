@@ -179,20 +179,20 @@ TransferItemsState::TransferItemsState(
 
 //	_txtAmountTransfer->setColor(Palette::blockOffset(13)+10);
 //	_txtAmountTransfer->setText(tr("STR_AMOUNT_TO_TRANSFER"));
-//	_txtAmountTransfer->setWordWrap(true);
+//	_txtAmountTransfer->setWordWrap();
 
 	_txtAtDestination->setColor(Palette::blockOffset(13)+10);
 	_txtAtDestination->setText(tr("STR_AMOUNT_AT_DESTINATION"));
-//	_txtAtDestination->setWordWrap(true);
+//	_txtAtDestination->setWordWrap();
 
 //	_lstItems->setColor(Palette::blockOffset(15)+1);
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(172, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 136, 56, 31, 20);
-	_lstItems->setSelectable(true);
+	_lstItems->setSelectable();
 	_lstItems->setBackground(_window);
-	_lstItems->setMargin(8);
+	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)& TransferItemsState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& TransferItemsState::lstItemsLeftArrowRelease);

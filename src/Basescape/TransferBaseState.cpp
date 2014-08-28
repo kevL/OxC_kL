@@ -122,9 +122,9 @@ TransferBaseState::TransferBaseState(Base* base)
 	_lstBases->setColor(Palette::blockOffset(15)+1);
 	_lstBases->setArrowColor(Palette::blockOffset(13)+5);
 	_lstBases->setColumns(2, 128, 80);
-	_lstBases->setSelectable(true);
+	_lstBases->setSelectable();
 	_lstBases->setBackground(_window);
-	_lstBases->setMargin(8);
+	_lstBases->setMargin();
 	_lstBases->onMouseClick((ActionHandler)& TransferBaseState::lstBasesClick);
 
 	int row = 0;

@@ -88,7 +88,7 @@ DefeatState::DefeatState()
 		ss << "STR_GAME_OVER_" << i + 1;
 		_text[i]->setText(tr(ss.str()));
 		_text[i]->setColor(Palette::blockOffset(15)+9);
-		_text[i]->setWordWrap(true);
+		_text[i]->setWordWrap();
 		_text[i]->setVisible(false);
 	}
 
@@ -100,7 +100,7 @@ DefeatState::DefeatState()
 	_timer->onTimer((StateHandler)& DefeatState::screenTimer);
 	_timer->start();
 
-	screenClick(0);
+	screenClick(NULL);
 
 	if (_game->getSavedGame()->isIronman()) // Ironman is over
 	{
@@ -110,7 +110,7 @@ DefeatState::DefeatState()
 }
 
 /**
- *
+ * dTor.
  */
 DefeatState::~DefeatState()
 {
@@ -130,7 +130,7 @@ void DefeatState::think()
  */
 void DefeatState::screenTimer()
 {
-	screenClick(0);
+	screenClick(NULL);
 }
 
 /**
@@ -170,7 +170,7 @@ void DefeatState::screenClick(Action*)
 		_game->getScreen()->resetDisplay(false); */
 
 		_game->setState(new MainMenuState());
-		_game->setSavedGame(0);
+		_game->setSavedGame(NULL);
 	}
 }
 

@@ -67,14 +67,14 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setWordWrap();
 	_txtTitle->setText(tr(defs->title));
 
 	_txtInfo = new Text(310, 32, 5, 160);
 	add(_txtInfo);
 
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
-	_txtInfo->setWordWrap(true);
+	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
 	_lstInfo = new TextList(250, 111, 5, 80);
@@ -82,7 +82,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 
 	_lstInfo->setColor(Palette::blockOffset(14)+15);
 	_lstInfo->setColumns(2, 180, 70);
-	_lstInfo->setDot(true);
+	_lstInfo->setDot();
 	_lstInfo->setBig();
 
 	_lstInfo->addRow(

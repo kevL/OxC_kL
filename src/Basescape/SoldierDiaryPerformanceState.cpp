@@ -269,97 +269,97 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	// Kill stats
 	_txtRace->setColor(Palette::blockOffset(15)+1);
 	_txtRace->setText(tr("STR_KILLS_BY_RACE"));
-	_txtRace->setWordWrap(true);
+	_txtRace->setWordWrap();
 
 	_txtRank->setColor(Palette::blockOffset(15)+1);
 	_txtRank->setText(tr("STR_KILLS_BY_RANK"));
-	_txtRank->setWordWrap(true);
+	_txtRank->setWordWrap();
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(tr("STR_KILLS_BY_WEAPON"));
-	_txtWeapon->setWordWrap(true);
+	_txtWeapon->setWordWrap();
 
 	_lstRace->setColor(Palette::blockOffset(13));
 	_lstRace->setArrowColor(Palette::blockOffset(15)+1);
 	_lstRace->setColumns(2, 80, 18);
 	_lstRace->setBackground(_window);
-//	_lstRace->setDot(true);
+//	_lstRace->setDot();
 
 	_lstRank->setColor(Palette::blockOffset(13));
 	_lstRank->setArrowColor(Palette::blockOffset(15)+1);
 	_lstRank->setColumns(2, 80, 18);
 	_lstRank->setBackground(_window);
-//	_lstRank->setDot(true);
+//	_lstRank->setDot();
 
 	_lstWeapon->setColor(Palette::blockOffset(13));
 	_lstWeapon->setArrowColor(Palette::blockOffset(15)+1);
 	_lstWeapon->setColumns(2, 80, 18);
 	_lstWeapon->setBackground(_window);
-//	_lstWeapon->setDot(true);
+//	_lstWeapon->setDot();
 
 	_lstKillTotals->setColor(Palette::blockOffset(13)+5);
 	_lstKillTotals->setSecondaryColor(Palette::blockOffset(13));
 	_lstKillTotals->setColumns(2, 50, 50);
-//	_lstKillTotals->setMargin(8); // TODO: need to fix this.
+//	_lstKillTotals->setMargin(); // TODO: need to fix this.
 	_lstKillTotals->setBackground(_window);
 
 	// Mission stats
 	_txtLocation->setColor(Palette::blockOffset(15)+1);
 	_txtLocation->setText(tr("STR_MISSIONS_BY_LOCATION"));
-	_txtLocation->setWordWrap(true);
+	_txtLocation->setWordWrap();
 
 	_txtType->setColor(Palette::blockOffset(15)+1);
 	_txtType->setText(tr("STR_MISSIONS_BY_TYPE"));
-	_txtType->setWordWrap(true);
+	_txtType->setWordWrap();
 
 	_txtUFO->setColor(Palette::blockOffset(15)+1);
 	_txtUFO->setText(tr("STR_MISSIONS_BY_UFO"));
-	_txtUFO->setWordWrap(true);
+	_txtUFO->setWordWrap();
 
 	_lstLocation->setColor(Palette::blockOffset(13));
 	_lstLocation->setArrowColor(Palette::blockOffset(15)+1);
 	_lstLocation->setColumns(2, 80, 12);
 	_lstLocation->setBackground(_window);
-//	_lstLocation->setDot(true);
+//	_lstLocation->setDot();
 
 	_lstType->setColor(Palette::blockOffset(13));
 	_lstType->setArrowColor(Palette::blockOffset(15)+1);
 	_lstType->setColumns(2, 100, 14);
 	_lstType->setBackground(_window);
-//	_lstType->setDot(true);
+//	_lstType->setDot();
 
 	_lstUFO->setColor(Palette::blockOffset(13));
 	_lstUFO->setArrowColor(Palette::blockOffset(15)+1);
 	_lstUFO->setColumns(2, 80, 12);
 	_lstUFO->setBackground(_window);
-//	_lstUFO->setDot(true);
+//	_lstUFO->setDot();
 
 	_lstMissionTotals->setColor(Palette::blockOffset(13)+5);
 	_lstMissionTotals->setSecondaryColor(Palette::blockOffset(13));
 	_lstMissionTotals->setColumns(4, 68, 68, 68, 84);
-//	_lstMissionTotals->setMargin(8); // TODO: need to fix this.
+//	_lstMissionTotals->setMargin(); // TODO: need to fix this.
 	_lstMissionTotals->setBackground(_window);
 
 	// Award stats
 	_txtMedalName->setColor(Palette::blockOffset(15)+1);
 	_txtMedalName->setText(tr("STR_MEDAL_NAME"));
-	_txtMedalName->setWordWrap(true);
+	_txtMedalName->setWordWrap();
 
 	_txtMedalLevel->setColor(Palette::blockOffset(15)+1);
 	_txtMedalLevel->setText(tr("STR_MEDAL_DECOR_LEVEL"));
-	_txtMedalLevel->setWordWrap(true);
+	_txtMedalLevel->setWordWrap();
 
 	_lstAwards->setColor(Palette::blockOffset(13));
 	_lstAwards->setArrowColor(Palette::blockOffset(15)+1);
 	_lstAwards->setColumns(2, 158, 80);
-	_lstAwards->setSelectable(true);
+	_lstAwards->setSelectable();
 	_lstAwards->setBackground(_window);
 	_lstAwards->onMouseOver((ActionHandler)& SoldierDiaryPerformanceState::lstInfoMouseOver);
 	_lstAwards->onMouseOut((ActionHandler)& SoldierDiaryPerformanceState::lstInfoMouseOut);
 	_lstAwards->onMousePress((ActionHandler)& SoldierDiaryPerformanceState::handle);
 
 	_txtMedalInfo->setColor(Palette::blockOffset(13)+10);
-	_txtMedalInfo->setWordWrap(true);
+	_txtMedalInfo->setWordWrap();
 
 	init(); // Populate the list
 	//Log(LOG_INFO) << "Create SoldierDiaryPerformanceState EXIT";

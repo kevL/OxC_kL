@@ -212,7 +212,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	_lstKills->setColumns(3, 27, 96, 94); // 217 total
 	_lstKills->setSelectable(false);
 	_lstKills->setBackground(_window);
-//	_lstKills->setMargin(8);
+//	_lstKills->setMargin();
 
 	int count = 0;
 	size_t row = 0;

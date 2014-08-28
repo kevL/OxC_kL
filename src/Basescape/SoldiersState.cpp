@@ -150,9 +150,9 @@ SoldiersState::SoldiersState(
 	_lstSoldiers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 117, 93, 71);
-	_lstSoldiers->setSelectable(true);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->setMargin(8);
+	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& SoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstRightArrowClick);
@@ -206,8 +206,7 @@ void SoldiersState::init()
 										color);
 				_lstSoldiers->setCellHighContrast(
 										row,
-										2,
-										true);
+										2);
 			}
 		}
 

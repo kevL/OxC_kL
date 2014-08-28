@@ -138,22 +138,22 @@ ManufactureStartState::ManufactureStartState(
 
 	_txtItemNameColumn->setColor(Palette::blockOffset(13)+10);
 	_txtItemNameColumn->setText(tr("STR_ITEM_REQUIRED"));
-	_txtItemNameColumn->setWordWrap(true);
+	_txtItemNameColumn->setWordWrap();
 
 	_txtUnitRequiredColumn->setColor(Palette::blockOffset(13)+10);
 	_txtUnitRequiredColumn->setText(tr("STR_UNITS_REQUIRED"));
-	_txtUnitRequiredColumn->setWordWrap(true);
+	_txtUnitRequiredColumn->setWordWrap();
 
 	_txtUnitAvailableColumn->setColor(Palette::blockOffset(13)+10);
 	_txtUnitAvailableColumn->setText(tr("STR_UNITS_AVAILABLE"));
-	_txtUnitAvailableColumn->setWordWrap(true);
+	_txtUnitAvailableColumn->setWordWrap();
 
 	_lstRequiredItems->setColumns(3, 140, 60, 40);
 	_lstRequiredItems->setBackground(_window);
 	_lstRequiredItems->setColor(Palette::blockOffset(13));
 	_lstRequiredItems->setArrowColor(Palette::blockOffset(15)+1);
 
-	ItemContainer* itemContainer (base->getItems());
+	ItemContainer* itemContainer (base->getItems()); // init.
 	int row = 0;
 	for (std::map<std::string, int>::const_iterator
 			iter = requiredItems.begin();

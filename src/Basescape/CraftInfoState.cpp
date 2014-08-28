@@ -174,7 +174,7 @@ CraftInfoState::CraftInfoState(
 	_txtFuel->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtW1Name->setColor(Palette::blockOffset(13)+5);
-//kL	_txtW1Name->setWordWrap(true);
+//kL	_txtW1Name->setWordWrap();
 
 	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
 	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
@@ -183,7 +183,7 @@ CraftInfoState::CraftInfoState(
 //	_txtW1Max->setSecondaryColor(Palette::blockOffset(13)+5);
 
 	_txtW2Name->setColor(Palette::blockOffset(13)+5);
-//kL	_txtW2Name->setWordWrap(true);
+//kL	_txtW2Name->setWordWrap();
 
 	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
 	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);

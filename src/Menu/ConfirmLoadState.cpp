@@ -86,7 +86,7 @@ ConfirmLoadState::ConfirmLoadState(
 	_txtText->setColor(Palette::blockOffset(15)-1);
 	_txtText->setAlign(ALIGN_CENTER);
 	_txtText->setBig();
-	_txtText->setWordWrap(true);
+	_txtText->setWordWrap();
 	_txtText->setText(tr("STR_MISSING_CONTENT_PROMPT"));
 
 	if (_origin == OPT_BATTLESCAPE)

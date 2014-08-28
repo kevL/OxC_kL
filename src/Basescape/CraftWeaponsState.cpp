@@ -116,14 +116,14 @@ CraftWeaponsState::CraftWeaponsState(
 
 	_txtAmmunition->setColor(Palette::blockOffset(15)+6);
 	_txtAmmunition->setText(tr("STR_AMMUNITION_AVAILABLE"));
-	_txtAmmunition->setWordWrap(true);
+	_txtAmmunition->setWordWrap();
 
 	_lstWeapons->setColor(Palette::blockOffset(13)+10);
 	_lstWeapons->setArrowColor(Palette::blockOffset(15)+6);
 	_lstWeapons->setColumns(3, 98, 30, 50);
-	_lstWeapons->setSelectable(true);
+	_lstWeapons->setSelectable();
 	_lstWeapons->setBackground(_window);
-	_lstWeapons->setMargin(8);
+	_lstWeapons->setMargin();
 	_lstWeapons->addRow(
 						1,
 						tr("STR_NONE_UC").c_str());
@@ -172,7 +172,7 @@ CraftWeaponsState::CraftWeaponsState(
 }
 
 /**
- *
+ * dTor.
  */
 CraftWeaponsState::~CraftWeaponsState()
 {

@@ -185,16 +185,16 @@ ListGamesState::ListGamesState(
 	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
 //	_lstSaves->setColumns(5, 168, 30, 26, 24, 28);
 	_lstSaves->setColumns(3, 188, 60, 40);
-	_lstSaves->setSelectable(true);
+	_lstSaves->setSelectable();
 	_lstSaves->setBackground(_window);
-	_lstSaves->setMargin(8);
+	_lstSaves->setMargin();
 	_lstSaves->onMouseOver((ActionHandler)& ListGamesState::lstSavesMouseOver);
 	_lstSaves->onMouseOut((ActionHandler)& ListGamesState::lstSavesMouseOut);
 	_lstSaves->onMousePress((ActionHandler)& ListGamesState::lstSavesPress);
 
 	_txtDetails->setColor(Palette::blockOffset(15)-1);
 	_txtDetails->setSecondaryColor(Palette::blockOffset(8)+10);
-	_txtDetails->setWordWrap(true);
+	_txtDetails->setWordWrap();
 	_txtDetails->setText(tr("STR_DETAILS").arg(L""));
 
 	_sortName->setX(_sortName->getX() + _txtName->getTextWidth() + 5);

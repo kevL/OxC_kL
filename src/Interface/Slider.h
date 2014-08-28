@@ -85,7 +85,7 @@ private:
 				Font* small,
 				Language* lang);
 		/// Sets the slider's high contrast color setting.
-		void setHighContrast(bool contrast);
+		void setHighContrast(bool contrast = true);
 		/// Sets the slider's color.
 		void setColor(Uint8 color);
 		/// Gets the slider's color.

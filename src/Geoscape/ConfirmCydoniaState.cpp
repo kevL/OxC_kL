@@ -84,13 +84,13 @@ ConfirmCydoniaState::ConfirmCydoniaState(Craft* craft)
 
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
-	_txtMessage->setWordWrap(true);
+	_txtMessage->setWordWrap();
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setText(tr("STR_ARE_YOU_SURE_CYDONIA"));
 }
 
 /**
- *
+ * dTor.
  */
 ConfirmCydoniaState::~ConfirmCydoniaState()
 {

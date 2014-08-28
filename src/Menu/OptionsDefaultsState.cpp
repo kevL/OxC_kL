@@ -85,7 +85,7 @@ OptionsDefaultsState::OptionsDefaultsState(
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setWordWrap();
 	_txtTitle->setText(tr("STR_RESTORE_DEFAULTS_QUESTION"));
 
 	if (_origin == OPT_BATTLESCAPE)
@@ -93,7 +93,7 @@ OptionsDefaultsState::OptionsDefaultsState(
 }
 
 /**
- *
+ * dTor.
  */
 OptionsDefaultsState::~OptionsDefaultsState()
 {

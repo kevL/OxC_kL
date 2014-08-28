@@ -129,7 +129,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 	add(_txtInfo);
 
 	_txtInfo->setColor(Palette::blockOffset(13)+10);
-	_txtInfo->setWordWrap(true);
+	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
 	_lstInfo = new TextList(200, 42, 10, 42);
@@ -137,7 +137,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 
 	_lstInfo->setColor(Palette::blockOffset(13)+10);
 	_lstInfo->setColumns(2, 140, 60);
-	_lstInfo->setDot(true);
+	_lstInfo->setDot();
 
 	_lstInfo->addRow(
 					2,

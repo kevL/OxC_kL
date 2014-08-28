@@ -87,7 +87,7 @@ protected:
 				Font* small,
 				Language* lang);
 		/// Sets the text button's high contrast color setting.
-		void setHighContrast(bool contrast);
+		void setHighContrast(bool contrast = true);
 		/// Sets the text button's text.
 		void setText(const std::wstring& text);
 		/// Gets the text button's text.

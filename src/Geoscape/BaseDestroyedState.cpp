@@ -77,7 +77,7 @@ BaseDestroyedState::BaseDestroyedState(
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
-	_txtMessage->setWordWrap(true);
+	_txtMessage->setWordWrap();
 	_txtMessage->setColor(Palette::blockOffset(8)+5);
 	_txtMessage->setText(tr("STR_THE_ALIENS_HAVE_DESTROYED_THE_UNDEFENDED_BASE")
 							.arg(_base->getName()));

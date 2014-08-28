@@ -65,7 +65,7 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setWordWrap();
 	_txtTitle->setText(tr(defs->title));
 
 	_txtInfo = new Text(
@@ -76,7 +76,7 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	add(_txtInfo);
 
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
-	_txtInfo->setWordWrap(true);
+	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
 	_txtStats = new Text(

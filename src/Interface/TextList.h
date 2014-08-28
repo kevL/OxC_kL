@@ -201,15 +201,15 @@ private:
 		Uint8 getSecondaryColor() const;
 
 		/// Sets the text list's high contrast color setting.
-		void setHighContrast(bool contrast);
+		void setHighContrast(bool contrast = true);
 		/// kL. Sets the contrast of a certain cell.
 		void setCellHighContrast( // kL
 				int row,
 				int column,
-				bool contrast);
+				bool contrast = true);
 
 		/// Sets the text list's wordwrap setting.
-		void setWordWrap(bool wrap);
+		void setWordWrap(bool wrap = true);
 
 		/// Sets the text horizontal alignment of the text list.
 		void setAlign(
@@ -217,10 +217,10 @@ private:
 				int col = -1);
 
 		/// Sets whether to separate columns with dots.
-		void setDot(bool dot);
+		void setDot(bool dot = true);
 
 		/// Sets whether the list is selectable.
-		void setSelectable(bool selectable);
+		void setSelectable(bool selectable = true);
 
 		/// Sets the text size to big.
 		void setBig();
@@ -237,7 +237,7 @@ private:
 		size_t getSelectedRow() const;
 
 		/// Sets the margin of the text list.
-		void setMargin(int margin);
+		void setMargin(int margin = 8);
 		/// Gets the margin of the text list.
 		int getMargin() const;
 

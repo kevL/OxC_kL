@@ -48,10 +48,10 @@ Bar::Bar(
 		_color(0),
 		_color2(0),
 		_borderColor(0),
-		_scale(0),
-		_max(0),
-		_value(0),
-		_value2(0),
+		_scale(0.0),
+		_max(0.0),
+		_value(0.0),
+		_value2(0.0),
 		_invert(false),
 		_secondOnTop(true)
 {
@@ -228,11 +228,11 @@ void Bar::draw()
 	drawRect(&square, 0);
 
 	double width = _scale * _value;		// kL
-	if (0 < width && width < 1)			// kL
-		width = 1;						// kL
+	if (0.0 < width && width < 1.0)		// kL
+		width = 1.0;					// kL
 	double width2 = _scale * _value2;	// kL
-	if (0 < width2 && width2 < 1)		// kL
-		width2 = 1;						// kL
+	if (0.0 < width2 && width2 < 1.0)	// kL
+		width2 = 1.0;					// kL
 
 	if (_invert)
 	{

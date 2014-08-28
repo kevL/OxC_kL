@@ -712,7 +712,7 @@ BattlescapeState::BattlescapeState()
 	_btnPsi->onMouseClick((ActionHandler)& BattlescapeState::btnPsiClick);
 
 //	_txtName->setColor(Palette::blockOffset(8));
-	_txtName->setHighContrast(true);
+	_txtName->setHighContrast();
 	_numTUAim->setColor(Palette::blockOffset(0)+7);
 	_numTUAuto->setColor(Palette::blockOffset(0)+7);
 	_numTUSnap->setColor(Palette::blockOffset(0)+7);
@@ -721,20 +721,20 @@ BattlescapeState::BattlescapeState()
 //	_numHealth->setColor(Palette::blockOffset(2)+12);
 //	_numMorale->setColor(Palette::blockOffset(12));
 //	_barTimeUnits->setColor(Palette::blockOffset(4));
-	_barTimeUnits->setScale(1.0);
+	_barTimeUnits->setScale();
 //	_barEnergy->setColor(Palette::blockOffset(1));
-	_barEnergy->setScale(1.0);
+	_barEnergy->setScale();
 //	_barHealth->setColor(Palette::blockOffset(2));
 //	_barHealth->setColor2(Palette::blockOffset(5)+2);
-	_barHealth->setScale(1.0);
+	_barHealth->setScale();
 //	_barMorale->setColor(Palette::blockOffset(12));
-	_barMorale->setScale(1.0);
+	_barMorale->setScale();
 
 	_txtDebug->setColor(Palette::blockOffset(8));
-	_txtDebug->setHighContrast(true);
+	_txtDebug->setHighContrast();
 
 //	_txtTooltip->setColor(Palette::blockOffset(0)-1);
-//	_txtTooltip->setHighContrast(true);
+//	_txtTooltip->setHighContrast();
 
 /*	_btnReserveNone->setGroup(&_reserve);
 	_btnReserveSnap->setGroup(&_reserve);

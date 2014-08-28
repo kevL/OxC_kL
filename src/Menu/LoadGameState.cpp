@@ -127,7 +127,7 @@ void LoadGameState::buildUi(SDL_Color* palette)
 	if (_origin == OPT_BATTLESCAPE)
 	{
 		_txtStatus->setColor(Palette::blockOffset(1)-1);
-		_txtStatus->setHighContrast(true);
+		_txtStatus->setHighContrast();
 	}
 }
 

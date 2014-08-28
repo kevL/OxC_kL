@@ -117,14 +117,14 @@ PrimeGrenadeState::PrimeGrenadeState(
 //kL	_fraTop->setBackground(Palette::blockOffset(6)+12);
 	_fraTop->setBackground(Palette::blockOffset(8)+4); // kL
 	_fraTop->setThickness(3);
-	_fraTop->setHighContrast(true);
+	_fraTop->setHighContrast();
 
 	add(_txtTitle, "grenadeMenu", "battlescape");
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SET_TIMER"));
 //	_txtTitle->setColor(Palette::blockOffset(1)-1);
-	_txtTitle->setHighContrast(true);
+	_txtTitle->setHighContrast();
 
 	// kL_begin:
 	add(_isfBtn0);
@@ -150,7 +150,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 	_txtTurn0->setText(ss0.str());
 	_txtTurn0->setBig();
 	_txtTurn0->setColor(Palette::blockOffset(1)-1);
-	_txtTurn0->setHighContrast(true);
+	_txtTurn0->setHighContrast();
 	_txtTurn0->setAlign(ALIGN_CENTER);
 	_txtTurn0->setVerticalAlign(ALIGN_MIDDLE);
 	// kL_end.
@@ -183,7 +183,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 		_txtTurn[i]->setText(ss.str());
 //		_txtTurn[i]->setBig();
 //		_txtTurn[i]->setColor(Palette::blockOffset(1)-1);
-		_txtTurn[i]->setHighContrast(true);
+		_txtTurn[i]->setHighContrast();
 		_txtTurn[i]->setAlign(ALIGN_CENTER);
 		_txtTurn[i]->setVerticalAlign(ALIGN_MIDDLE);
 	}

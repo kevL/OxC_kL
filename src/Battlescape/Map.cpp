@@ -178,7 +178,7 @@ Map::Map(
 /*kL	_txtAccuracy = new Text(24, 9, 0, 0);
 	_txtAccuracy->setSmall();
 	_txtAccuracy->setPalette(_game->getScreen()->getPalette());
-	_txtAccuracy->setHighContrast(true);
+	_txtAccuracy->setHighContrast();
 	_txtAccuracy->initText(
 						_res->getFont("FONT_BIG"),
 						_res->getFont("FONT_SMALL"),
@@ -423,7 +423,7 @@ void Map::draw()
 		}
 		else
 		{
-			_reveal = 4;
+			_reveal = 2;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 

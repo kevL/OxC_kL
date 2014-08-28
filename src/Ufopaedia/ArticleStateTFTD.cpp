@@ -70,7 +70,7 @@ ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD* defs)
 	ArticleState::initLayout();
 
 	_btnTitle->setColor(Palette::blockOffset(9)+4);
-	_btnTitle->setHighContrast(true);
+	_btnTitle->setHighContrast();
 
 	add(_btnTitle);
 	add(_txtTitle);
@@ -80,7 +80,7 @@ ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD* defs)
 
 	_txtTitle->setColor(Palette::blockOffset(0)+2);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setWordWrap();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr(defs->title));
 
@@ -88,7 +88,7 @@ ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD* defs)
 	add(_txtInfo);
 
 	_txtInfo->setColor(Palette::blockOffset(0)+2);
-	_txtInfo->setWordWrap(true);
+	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
 	centerAllSurfaces();

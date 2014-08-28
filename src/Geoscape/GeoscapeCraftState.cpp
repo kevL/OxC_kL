@@ -169,7 +169,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	_txtStatus->setColor(Palette::blockOffset(15)-1);
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
-//	_txtStatus->setWordWrap(true);
+//	_txtStatus->setWordWrap();
 
 	std::string stat = _craft->getStatus();
 	std::wstring status;
@@ -361,7 +361,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 }
 
 /**
- *
+ * dTor.
  */
 GeoscapeCraftState::~GeoscapeCraftState()
 {

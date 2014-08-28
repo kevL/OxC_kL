@@ -55,15 +55,15 @@ TextButton::TextButton(
 			x,
 			y),
 		_color(0),
-		_group(0),
+		_group(NULL),
 		_contrast(false),
-		_comboBox(0)
+		_comboBox(NULL)
 {
 	_text = new Text(width, height, 0, 0);
 	_text->setSmall();
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
-	_text->setWordWrap(true);
+	_text->setWordWrap();
 }
 
 /**
@@ -76,7 +76,7 @@ TextButton::~TextButton()
 
 bool TextButton::isButtonHandled(Uint8 button)
 {
-	if (_comboBox != 0)
+	if (_comboBox != NULL)
 		return (button == SDL_BUTTON_LEFT);
 	else
 		return InteractiveSurface::isButtonHandled(button);
@@ -163,8 +163,7 @@ void TextButton::initText(
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for
- * Battlescape UI.
+ * Enables/disables high contrast color. Mostly used for Battlescape UI.
  * @param contrast High contrast setting.
  */
 void TextButton::setHighContrast(bool contrast)
@@ -278,7 +277,7 @@ void TextButton::draw()
 	}
 
 	bool press;
-	if (_group == 0)
+	if (_group == NULL)
 		press = isButtonPressed();
 	else
 		press = (*_group == this);
@@ -298,12 +297,12 @@ void TextButton::draw()
 void TextButton::mousePress(Action* action, State* state)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
-		&& _group != 0)
+		&& _group != NULL)
 	{
 		TextButton* old = *_group;
 		*_group = this;
 
-		if (old != 0)
+		if (old != NULL)
 			old->draw();
 
 		draw();
@@ -311,8 +310,8 @@ void TextButton::mousePress(Action* action, State* state)
 
 	if (isButtonHandled(action->getDetails()->button.button))
 	{
-		if (soundPress != 0
-			&& _group == 0
+		if (soundPress != NULL
+			&& _group == NULL
 			&& action->getDetails()->button.button != SDL_BUTTON_WHEELUP
 			&& action->getDetails()->button.button != SDL_BUTTON_WHEELDOWN)
 		{

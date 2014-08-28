@@ -165,7 +165,7 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
-	_txtMessage->setWordWrap(true);
+	_txtMessage->setWordWrap();
 	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_NEAR_DESTINATION")
 						 .arg(_craft->getName(_game->getLanguage()))
 						 .arg(_craft->getDestination()->getName(_game->getLanguage()))); */
@@ -173,7 +173,7 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtMessage->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMessage->setBig();
 	_txtMessage->setAlign(ALIGN_CENTER);
-//	_txtMessage->setWordWrap(true);
+//	_txtMessage->setWordWrap();
 	_txtMessage->setText(tr("STR_CRAFT_READY_TO_LAND_AT")
 						 .arg(_craft->getName(_game->getLanguage())));
 
@@ -181,7 +181,7 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtMessage2->setSecondaryColor(Palette::blockOffset(5)+4);
 	_txtMessage2->setBig();
 	_txtMessage2->setAlign(ALIGN_CENTER);
-//	_txtMessage2->setWordWrap(true);
+//	_txtMessage2->setWordWrap();
 
 	std::wostringstream ss;
 	ss << L""; // blank if no UFO.

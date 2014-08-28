@@ -189,7 +189,7 @@ void ManufactureInfoState::buildUi()
 	_txtAllocatedEngineer->setColor(Palette::blockOffset(15)+1);
 	_txtAllocatedEngineer->setText(tr("STR_ENGINEERS__ALLOCATED"));
 	_txtAllocatedEngineer->setBig();
-//	_txtAllocatedEngineer->setWordWrap(true);
+//	_txtAllocatedEngineer->setWordWrap();
 //	_txtAllocatedEngineer->setVerticalAlign(ALIGN_MIDDLE);
 
 	_txtAllocated->setColor(Palette::blockOffset(15)+1);
@@ -203,7 +203,7 @@ void ManufactureInfoState::buildUi()
 	_txtUnitToProduce->setColor(Palette::blockOffset(15)+1);
 	_txtUnitToProduce->setText(tr("STR_UNITS_TO_PRODUCE"));
 	_txtUnitToProduce->setBig();
-//	_txtUnitToProduce->setWordWrap(true);
+//	_txtUnitToProduce->setWordWrap();
 //	_txtUnitToProduce->setVerticalAlign(ALIGN_MIDDLE);
 
 	_txtEngineerUp->setColor(Palette::blockOffset(15)+1);

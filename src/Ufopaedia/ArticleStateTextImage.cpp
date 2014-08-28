@@ -59,7 +59,7 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 
 	_txtTitle->setColor(Palette::blockOffset(15)+4);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setWordWrap();
 	_txtTitle->setText(tr(defs->title));
 
 	int text_height = _txtTitle->getTextHeight();
@@ -68,7 +68,7 @@ ArticleStateTextImage::ArticleStateTextImage(ArticleDefinitionTextImage* defs)
 	add(_txtInfo);
 
 	_txtInfo->setColor(Palette::blockOffset(15)-1);
-	_txtInfo->setWordWrap(true);
+	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
 	centerAllSurfaces();

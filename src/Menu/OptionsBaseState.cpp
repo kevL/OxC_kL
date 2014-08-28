@@ -168,11 +168,11 @@ OptionsBaseState::OptionsBaseState(OptionsOrigin origin)
 	_btnDefault->onMouseClick((ActionHandler)& OptionsBaseState::btnDefaultClick);
 
 	_txtTooltip->setColor(Palette::blockOffset(8)+5);
-	_txtTooltip->setWordWrap(true);
+	_txtTooltip->setWordWrap();
 }
 
 /**
- *
+ * dTor.
  */
 OptionsBaseState::~OptionsBaseState()
 {

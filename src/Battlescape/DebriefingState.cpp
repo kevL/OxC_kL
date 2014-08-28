@@ -192,18 +192,18 @@ DebriefingState::DebriefingState()
 	_lstStats->setColor(Palette::blockOffset(15)-1);
 	_lstStats->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstStats->setColumns(3, 176, 60, 36);
-	_lstStats->setDot(true);
-	_lstStats->setMargin(8);
+	_lstStats->setDot();
+	_lstStats->setMargin();
 
 	_lstRecovery->setColor(Palette::blockOffset(15)-1);
 	_lstRecovery->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstRecovery->setColumns(3, 176, 60, 36);
-	_lstRecovery->setDot(true);
-	_lstRecovery->setMargin(8);
+	_lstRecovery->setDot();
+	_lstRecovery->setMargin();
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
 	_lstTotal->setColumns(2, 244, 36);
-	_lstTotal->setDot(true);
+	_lstTotal->setDot();
 
 
 	prepareDebriefing();

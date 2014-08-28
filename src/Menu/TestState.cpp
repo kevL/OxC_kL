@@ -83,7 +83,7 @@ TestState::TestState()
 
 	_text->setColor(Palette::blockOffset(15)+1);
 //	_text->setBig();
-	_text->setWordWrap(true);
+	_text->setWordWrap();
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
 //	_text->setText(tr("STR_COUNCIL_TERMINATED"));
@@ -127,7 +127,7 @@ TestState::TestState()
 }
 
 /**
- *
+ * dTor.
  */
 TestState::~TestState()
 {
@@ -174,7 +174,7 @@ SDL_Surface* TestState::testSurface()
 								0,
 								0);
 
-	if (surface == 0)
+	if (surface == NULL)
 	{
 		throw Exception(SDL_GetError());
 	}

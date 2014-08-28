@@ -89,12 +89,12 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	add(_lstInfo);
 	_lstInfo->setColor(Palette::blockOffset(14)+15);
 	_lstInfo->setColumns(2, 125, 25);
-	_lstInfo->setDot(true);
+	_lstInfo->setDot();
 
 	_txtInfo = new Text(300, 56, 8, 150);
 	add(_txtInfo);
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
-	_txtInfo->setWordWrap(true);
+	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
 

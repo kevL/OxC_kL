@@ -237,19 +237,19 @@ BaseInfoState::BaseInfoState(
 	_txtSoldiers->setText(tr("STR_SOLDIERS"));
 	_numSoldiers->setColor(Palette::blockOffset(13));
 	_barSoldiers->setColor(Palette::blockOffset(1));
-	_barSoldiers->setScale(1.0);
+	_barSoldiers->setScale();
 
 	_txtEngineers->setColor(Palette::blockOffset(13)+5);
 	_txtEngineers->setText(tr("STR_ENGINEERS"));
 	_numEngineers->setColor(Palette::blockOffset(13));
 	_barEngineers->setColor(Palette::blockOffset(1));
-	_barEngineers->setScale(1.0);
+	_barEngineers->setScale();
 
 	_txtScientists->setColor(Palette::blockOffset(13)+5);
 	_txtScientists->setText(tr("STR_SCIENTISTS"));
 	_numScientists->setColor(Palette::blockOffset(13));
 	_barScientists->setColor(Palette::blockOffset(1));
-	_barScientists->setScale(1.0);
+	_barScientists->setScale();
 
 
 	_txtSpace->setColor(Palette::blockOffset(15)+1);

@@ -65,8 +65,8 @@ BuildNewBaseState::BuildNewBaseState(
 		_base(base),
 		_globe(globe),
 		_first(first),
-		_oldlat(0),
-		_oldlon(0),
+		_oldlat(0.0),
+		_oldlon(0.0),
 		_mousex(0),
 		_mousey(0)
 {
@@ -162,7 +162,7 @@ BuildNewBaseState::BuildNewBaseState(
 	_txtTitle->setText(tr("STR_SELECT_SITE_FOR_NEW_BASE"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 //	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-//	_txtTitle->setWordWrap(true);
+//	_txtTitle->setWordWrap();
 
 	if (_first)
 		_btnCancel->setVisible(false);
@@ -198,7 +198,7 @@ void BuildNewBaseState::think()
 {
 	State::think();
 	_globe->think();
-	_hoverTimer->think(this, 0);
+	_hoverTimer->think(this, NULL);
 }
 
 /**

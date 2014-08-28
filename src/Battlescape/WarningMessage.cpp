@@ -48,11 +48,15 @@ WarningMessage::WarningMessage(
 		_color(0),
 		_fade(0)
 {
-	_text = new Text(width, height, 0, 0);
-	_text->setHighContrast(true);
+	_text = new Text(
+					width,
+					height,
+					0,
+					0);
+	_text->setHighContrast();
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
-	_text->setWordWrap(true);
+	_text->setWordWrap();
 
 	_timer = new Timer(80);
 	_timer->onTimer((SurfaceHandler)& WarningMessage::fade);

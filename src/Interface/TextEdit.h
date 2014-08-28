@@ -98,12 +98,12 @@ private:
 		std::wstring getText() const;
 
 		/// Sets the text edit's wordwrap setting.
-		void setWordWrap(bool wrap);
+		void setWordWrap(bool wrap = true);
 
 		/// Sets the text edit's color invert setting.
-		void setInvert(bool invert);
+		void setInvert(bool invert = true);
 		/// Sets the text edit's high contrast color setting.
-		void setHighContrast(bool contrast);
+		void setHighContrast(bool contrast = true);
 
 		/// Sets the text edit's horizontal alignment.
 		void setAlign(TextHAlign align);
@@ -111,7 +111,7 @@ private:
 		void setVerticalAlign(TextVAlign valign);
 
 		/// Sets the text edit to numerical input.
-		void setNumerical(bool numerical);
+		void setNumerical(bool numerical = true);
 
 		/// Sets the text edit's color.
 		void setColor(Uint8 color);

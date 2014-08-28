@@ -107,7 +107,7 @@ private:
 		Uint8 getColor() const;
 
 		/// Sets the high contrast color setting.
-		void setHighContrast(bool contrast);
+		void setHighContrast(bool contrast = true);
 
 		/// Sets the arrow color of the text list.
 		void setArrowColor(Uint8 color);

@@ -147,8 +147,8 @@ InterceptState::InterceptState(
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstCrafts->setColumns(3, 93, 126, 50);
-	_lstCrafts->setSelectable(true);
-	_lstCrafts->setMargin(8);
+	_lstCrafts->setSelectable();
+	_lstCrafts->setMargin();
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->onMouseClick((ActionHandler)& InterceptState::lstCraftsLeftClick);
 	_lstCrafts->onMouseClick(

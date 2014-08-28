@@ -121,7 +121,7 @@ CraftsState::CraftsState(
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
-	_txtWeapon->setWordWrap(true);
+	_txtWeapon->setWordWrap();
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
 	_txtCrew->setText(tr("STR_CREW"));
@@ -133,9 +133,9 @@ CraftsState::CraftsState(
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
 	_lstCrafts->setArrowColumn(265, ARROW_VERTICAL); // kL
 	_lstCrafts->setColumns(5, 94, 76, 36, 27, 47);
-	_lstCrafts->setSelectable(true);
+	_lstCrafts->setSelectable();
 	_lstCrafts->setBackground(_window);
-	_lstCrafts->setMargin(8);
+	_lstCrafts->setMargin();
 	_lstCrafts->onMousePress((ActionHandler)& CraftsState::lstCraftsPress);
 	_lstCrafts->onLeftArrowClick((ActionHandler)& CraftsState::lstLeftArrowClick); // kL
 	_lstCrafts->onRightArrowClick((ActionHandler)& CraftsState::lstRightArrowClick); // kL

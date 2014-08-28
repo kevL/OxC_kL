@@ -62,10 +62,10 @@ private:
 		Uint8 getBackground() const;
 
 		/// Sets the high contrast color setting.
-		void setHighContrast(bool contrast);
+		void setHighContrast(bool contrast = true);
 
 		/// Sets the border thickness.
-		void setThickness(int thickness);
+		void setThickness(int thickness = 5);
 
 		/// Draws the frame.
 		void draw();

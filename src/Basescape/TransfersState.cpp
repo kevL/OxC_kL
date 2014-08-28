@@ -109,9 +109,9 @@ TransfersState::TransfersState(Base* base)
 	_lstTransfers->setColor(Palette::blockOffset(13)+10);
 	_lstTransfers->setArrowColor(Palette::blockOffset(15)+6);
 	_lstTransfers->setColumns(3, 155, 75, 28);
-	_lstTransfers->setSelectable(true);
+	_lstTransfers->setSelectable();
 	_lstTransfers->setBackground(_window);
-	_lstTransfers->setMargin(8);
+	_lstTransfers->setMargin();
 
 	for (std::vector<Transfer*>::iterator
 			i = _base->getTransfers()->begin();

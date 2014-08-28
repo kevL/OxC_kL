@@ -77,12 +77,12 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 	_txtTitle->setText(tr(defs->title));
 
 	_txtInfo->setColor(Palette::blockOffset(15)-1);
-	_txtInfo->setWordWrap(true);
+	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
 	_lstStats->setColor(Palette::blockOffset(15)+4);
 	_lstStats->setColumns(2, 175, 145);
-	_lstStats->setDot(true);
+	_lstStats->setDot();
 
 	std::wostringstream
 		ss,

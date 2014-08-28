@@ -158,7 +158,7 @@ BriefingState::BriefingState(
 	_txtCraft->setText(s);
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
-	_txtBriefing->setWordWrap(true);
+	_txtBriefing->setWordWrap();
 
 	// Show respective mission briefing
 	if (mission == "STR_ALIEN_BASE_ASSAULT"

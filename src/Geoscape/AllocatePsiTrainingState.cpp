@@ -133,9 +133,9 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL); // kL
 //kL	_lstSoldiers->setAlign(ALIGN_RIGHT, 3);
 	_lstSoldiers->setColumns(4, 118, 48, 78, 34);
-	_lstSoldiers->setSelectable(true);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->setMargin(8);
+	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& AllocatePsiTrainingState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& AllocatePsiTrainingState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstRightArrowClick);

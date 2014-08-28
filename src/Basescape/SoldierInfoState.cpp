@@ -302,7 +302,7 @@ SoldierInfoState::SoldierInfoState(
 //	_txtRecovery->setSecondaryColor(Palette::blockOffset(13));
 	_txtRecovery->setText(tr("STR_WOUND_RECOVERY"));
 
-	_txtRecovDay->setHighContrast(true);
+	_txtRecovDay->setHighContrast();
 
 	_txtPsionic->setColor(Palette::blockOffset(15)+1);
 	_txtPsionic->setText(tr("STR_IN_PSIONIC_TRAINING"));
@@ -315,8 +315,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barTimeUnits->setColor(Palette::blockOffset(3));
 	_barTimeUnits->setColor2(Palette::blockOffset(3)+4);
-	_barTimeUnits->setScale(1.0);
-	_barTimeUnits->setInvert(true);
+	_barTimeUnits->setScale();
+	_barTimeUnits->setInvert();
 
 
 	_txtStamina->setColor(Palette::blockOffset(15)+1);
@@ -326,8 +326,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barStamina->setColor(Palette::blockOffset(9));
 	_barStamina->setColor2(Palette::blockOffset(9)+4);
-	_barStamina->setScale(1.0);
-	_barStamina->setInvert(true);
+	_barStamina->setScale();
+	_barStamina->setInvert();
 
 
 	_txtHealth->setColor(Palette::blockOffset(15)+1);
@@ -337,8 +337,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barHealth->setColor(Palette::blockOffset(2));
 	_barHealth->setColor2(Palette::blockOffset(2)+4);
-	_barHealth->setScale(1.0);
-	_barHealth->setInvert(true);
+	_barHealth->setScale();
+	_barHealth->setInvert();
 
 
 	_txtBravery->setColor(Palette::blockOffset(15)+1);
@@ -348,8 +348,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barBravery->setColor(Palette::blockOffset(4));
 	_barBravery->setColor2(Palette::blockOffset(4)+4);
-	_barBravery->setScale(1.0);
-	_barBravery->setInvert(true);
+	_barBravery->setScale();
+	_barBravery->setInvert();
 
 
 	_txtReactions->setColor(Palette::blockOffset(15)+1);
@@ -359,8 +359,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barReactions->setColor(Palette::blockOffset(1));
 	_barReactions->setColor2(Palette::blockOffset(1)+4);
-	_barReactions->setScale(1.0);
-	_barReactions->setInvert(true);
+	_barReactions->setScale();
+	_barReactions->setInvert();
 
 
 	_txtFiring->setColor(Palette::blockOffset(15)+1);
@@ -370,8 +370,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barFiring->setColor(Palette::blockOffset(8));
 	_barFiring->setColor2(Palette::blockOffset(8)+4);
-	_barFiring->setScale(1.0);
-	_barFiring->setInvert(true);
+	_barFiring->setScale();
+	_barFiring->setInvert();
 
 
 	_txtThrowing->setColor(Palette::blockOffset(15)+1);
@@ -381,8 +381,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barThrowing->setColor(Palette::blockOffset(10));
 	_barThrowing->setColor2(Palette::blockOffset(10)+4);
-	_barThrowing->setScale(1.0);
-	_barThrowing->setInvert(true);
+	_barThrowing->setScale();
+	_barThrowing->setInvert();
 
 
 	_txtMelee->setColor(Palette::blockOffset(15)+1);
@@ -392,8 +392,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barMelee->setColor(Palette::blockOffset(4));
 	_barMelee->setColor2(Palette::blockOffset(4)+4);
-	_barMelee->setScale(1.0);
-	_barMelee->setInvert(true);
+	_barMelee->setScale();
+	_barMelee->setInvert();
 
 
 	_txtStrength->setColor(Palette::blockOffset(15)+1);
@@ -403,8 +403,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barStrength->setColor(Palette::blockOffset(5));
 	_barStrength->setColor2(Palette::blockOffset(5)+4);
-	_barStrength->setScale(1.0);
-	_barStrength->setInvert(true);
+	_barStrength->setScale();
+	_barStrength->setInvert();
 
 
 	_txtPsiStrength->setColor(Palette::blockOffset(15)+1);
@@ -414,8 +414,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barPsiStrength->setColor(Palette::blockOffset(11));
 	_barPsiStrength->setColor2(Palette::blockOffset(11)+4);
-	_barPsiStrength->setScale(1.0);
-	_barPsiStrength->setInvert(true);
+	_barPsiStrength->setScale();
+	_barPsiStrength->setInvert();
 
 
 	_txtPsiSkill->setColor(Palette::blockOffset(15)+1);
@@ -425,8 +425,8 @@ SoldierInfoState::SoldierInfoState(
 
 	_barPsiSkill->setColor(Palette::blockOffset(11));
 	_barPsiSkill->setColor2(Palette::blockOffset(11)+4);
-	_barPsiSkill->setScale(1.0);
-	_barPsiSkill->setInvert(true);
+	_barPsiSkill->setScale();
+	_barPsiSkill->setInvert();
 }
 
 /**

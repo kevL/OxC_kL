@@ -137,9 +137,9 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	_lstTransfers->setColor(Palette::blockOffset(8)+10);
 	_lstTransfers->setArrowColor(Palette::blockOffset(8)+5);
 	_lstTransfers->setColumns(3, 144, 53, 80);
-	_lstTransfers->setSelectable(true);
+	_lstTransfers->setSelectable();
 	_lstTransfers->setBackground(_window);
-	_lstTransfers->setMargin(8);
+	_lstTransfers->setMargin();
 	_lstTransfers->onMousePress((ActionHandler)& ItemsArrivingState::lstGoToBasePress); // kL
 
 	Base* base = NULL;

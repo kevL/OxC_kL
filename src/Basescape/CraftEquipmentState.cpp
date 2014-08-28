@@ -197,9 +197,9 @@ CraftEquipmentState::CraftEquipmentState(
 	_lstEquipment->setArrowColor(Palette::blockOffset(15)+1);
 	_lstEquipment->setArrowColumn(189, ARROW_HORIZONTAL);
 	_lstEquipment->setColumns(3, 147, 85, 41);
-	_lstEquipment->setSelectable(true);
+	_lstEquipment->setSelectable();
 	_lstEquipment->setBackground(_window);
-	_lstEquipment->setMargin(8);
+	_lstEquipment->setMargin();
 //	_lstEquipment->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 
 	_lstEquipment->onLeftArrowPress((ActionHandler)& CraftEquipmentState::lstEquipmentLeftArrowPress);

@@ -112,9 +112,9 @@ SoldierArmorState::SoldierArmorState(
 	_lstArmor->setColor(Palette::blockOffset(13));
 	_lstArmor->setArrowColor(Palette::blockOffset(13)+5);
 	_lstArmor->setColumns(2, 110, 42);
-	_lstArmor->setSelectable(true);
+	_lstArmor->setSelectable();
 	_lstArmor->setBackground(_window);
-	_lstArmor->setMargin(8);
+	_lstArmor->setMargin();
 
 	const std::vector<std::string>& armors = _game->getRuleset()->getArmorsList();
 	for (std::vector<std::string>::const_iterator

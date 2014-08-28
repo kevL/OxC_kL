@@ -134,7 +134,7 @@ private:
 
 		/// Sets the text's wordwrap setting.
 		void setWordWrap(
-				bool wrap,
+				bool wrap = true,
 				bool indent = false);
 
 		/// Sets the text's color invert setting.

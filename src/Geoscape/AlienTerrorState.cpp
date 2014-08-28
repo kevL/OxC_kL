@@ -100,7 +100,7 @@ AlienTerrorState::AlienTerrorState(
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setWordWrap();
 	_txtTitle->setText(tr("STR_ALIENS_TERRORISE"));
 
 	_txtCity->setColor(Palette::blockOffset(8)+5);

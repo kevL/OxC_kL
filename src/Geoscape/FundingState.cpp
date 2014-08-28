@@ -108,7 +108,7 @@ FundingState::FundingState()
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
 	_lstCountries->setColumns(3, 114, 100, 63);
-	_lstCountries->setDot(true);
+	_lstCountries->setDot();
 	for (std::vector<Country*>::iterator
 			i = _game->getSavedGame()->getCountries()->begin();
 			i != _game->getSavedGame()->getCountries()->end();
@@ -143,7 +143,7 @@ FundingState::FundingState()
 	// kL_begin: FundingState, list Total.
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
 	_lstTotal->setColumns(3, 122, 100, 55);
-	_lstTotal->setDot(true);
+	_lstTotal->setDot();
 	_lstTotal->addRow(
 					3,
 					"",

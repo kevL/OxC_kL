@@ -428,7 +428,7 @@ void State::applyBattlescapeTheme()
 		if (window)
 		{
 			window->setColor(Palette::blockOffset(0)-1);
-			window->setHighContrast(true);
+			window->setHighContrast();
 			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 		}
 
@@ -436,21 +436,21 @@ void State::applyBattlescapeTheme()
 		if (text)
 		{
 			text->setColor(Palette::blockOffset(0)-1);
-			text->setHighContrast(true);
+			text->setHighContrast();
 		}
 
 		TextButton* button = dynamic_cast<TextButton*>(*i);
 		if (button)
 		{
 			button->setColor(Palette::blockOffset(0)-1);
-			button->setHighContrast(true);
+			button->setHighContrast();
 		}
 
 		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
 		if (edit)
 		{
 			edit->setColor(Palette::blockOffset(0)-1);
-			edit->setHighContrast(true);
+			edit->setHighContrast();
 		}
 
 		TextList* list = dynamic_cast<TextList*>(*i);
@@ -458,7 +458,7 @@ void State::applyBattlescapeTheme()
 		{
 			list->setColor(Palette::blockOffset(0)-1);
 			list->setArrowColor(Palette::blockOffset(0));
-			list->setHighContrast(true);
+			list->setHighContrast();
 		}
 
 		ArrowButton* arrow = dynamic_cast<ArrowButton*>(*i);
@@ -471,7 +471,7 @@ void State::applyBattlescapeTheme()
 		if (slider)
 		{
 			slider->setColor(Palette::blockOffset(0)-1);
-			slider->setHighContrast(true);
+			slider->setHighContrast();
 		}
 
 		ComboBox* combo = dynamic_cast<ComboBox*>(*i);
@@ -479,7 +479,7 @@ void State::applyBattlescapeTheme()
 		{
 			combo->setColor(Palette::blockOffset(0)-1);
 			combo->setArrowColor(Palette::blockOffset(0));
-			combo->setHighContrast(true);
+			combo->setHighContrast();
 		}
 	}
 }

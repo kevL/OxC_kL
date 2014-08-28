@@ -147,7 +147,7 @@ UfoDetectedState::UfoDetectedState(
 
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 80, 112);
-	_lstInfo->setDot(true);
+	_lstInfo->setDot();
 	_lstInfo->addRow(
 					2,
 					tr("STR_SIZE_UC").c_str(),
@@ -202,12 +202,12 @@ UfoDetectedState::UfoDetectedState(
 	{
 		_txtHyperwave->setColor(Palette::blockOffset(8)+5);
 		_txtHyperwave->setAlign(ALIGN_CENTER);
-		_txtHyperwave->setWordWrap(true);
+		_txtHyperwave->setWordWrap();
 		_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
 
 		_lstInfo2->setColor(Palette::blockOffset(8)+5);
 		_lstInfo2->setColumns(2, 80, 112);
-		_lstInfo2->setDot(true);
+		_lstInfo2->setDot();
 		_lstInfo2->addRow(
 						2,
 						tr("STR_CRAFT_TYPE").c_str(),

@@ -178,9 +178,9 @@ PurchaseState::PurchaseState(
 	_lstItems->setColor(Palette::blockOffset(13)+10);
 	_lstItems->setArrowColumn(227, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 142, 55, 46, 32);
-	_lstItems->setSelectable(true);
+	_lstItems->setSelectable();
 	_lstItems->setBackground(_window);
-	_lstItems->setMargin(8);
+	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)& PurchaseState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& PurchaseState::lstItemsLeftArrowRelease);

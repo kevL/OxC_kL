@@ -104,7 +104,7 @@ TargetInfoState::TargetInfoState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 //kL	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-//kL	_txtTitle->setWordWrap(true);
+//kL	_txtTitle->setWordWrap();
 	_txtTitle->setText(_target->getName(_game->getLanguage()));
 
 	_edtTarget->setVisible(false);
@@ -159,7 +159,7 @@ TargetInfoState::TargetInfoState(
 }
 
 /**
- *
+ * dTor.
  */
 TargetInfoState::~TargetInfoState()
 {

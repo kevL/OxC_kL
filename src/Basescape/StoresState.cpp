@@ -111,9 +111,9 @@ StoresState::StoresState(Base* base)
 
 	_lstStores->setColor(Palette::blockOffset(13)+10);
 	_lstStores->setColumns(3, 154, 84, 26);
-	_lstStores->setSelectable(true);
+	_lstStores->setSelectable();
 	_lstStores->setBackground(_window);
-	_lstStores->setMargin(8);
+	_lstStores->setMargin();
 
 
 	SavedGame* sg = _game->getSavedGame();

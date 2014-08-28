@@ -58,15 +58,15 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 
 //	_frame->setColor(Palette::blockOffset(6)+3);
 //	_frame->setBackground(Palette::blockOffset(6)+12);
-	_frame->setThickness(5);
-	_frame->setHighContrast(true);
+	_frame->setThickness();
+	_frame->setHighContrast();
 
 //	_txtTitle->setColor(Palette::blockOffset(1)-1);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-	_txtTitle->setHighContrast(true);
-//kL	_txtTitle->setWordWrap(true);
+	_txtTitle->setHighContrast();
+//kL	_txtTitle->setWordWrap();
 	_txtTitle->setText(msg);
 
 //	_btnOk->setColor(Palette::blockOffset(1)-1);
@@ -78,7 +78,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& InfoboxOKState::btnOkClick,
 					Options::keyCancel);
-	_btnOk->setHighContrast(true);
+	_btnOk->setHighContrast();
 
 	_game->getCursor()->setVisible(true);
 }

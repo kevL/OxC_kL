@@ -92,7 +92,7 @@ MedikitTitle::MedikitTitle(
 		Text(73, 9, 186, y) //(60, 16, 192, y)
 {
 	this->setText(title);
-	this->setHighContrast(true);
+	this->setHighContrast();
 	this->setAlign(ALIGN_CENTER);
 }
 
@@ -118,7 +118,7 @@ MedikitTxt::MedikitTxt(int y)
 {
 	// Note: we can't set setBig here. The needed font is only set when added to State
 	this->setColor(Palette::blockOffset(1));
-	this->setHighContrast(true);
+	this->setHighContrast();
 	this->setAlign(ALIGN_CENTER);
 //	this->setVerticalAlign(ALIGN_MIDDLE); // kL
 }
@@ -242,13 +242,13 @@ MedikitState::MedikitState(
 
 	_barHealth->setColor(Palette::blockOffset(2)+2);
 	_barHealth->setColor2(Palette::blockOffset(5)+2);
-	_barHealth->setScale(1.0);
+	_barHealth->setScale();
 	_barEnergy->setColor(Palette::blockOffset(1));
-	_barEnergy->setScale(1.0);
+	_barEnergy->setScale();
 	_barMorale->setColor(Palette::blockOffset(12));
-	_barMorale->setScale(1.0);
+	_barMorale->setScale();
 	_barTimeUnits->setColor(Palette::blockOffset(4));
-	_barTimeUnits->setScale(1.0);
+	_barTimeUnits->setScale();
 	// kL_end.
 
 	add(_bg);
@@ -271,13 +271,16 @@ MedikitState::MedikitState(
 	centerAllSurfaces();
 
 	_game->getResourcePack()->getSurface("MEDIBORD.PCK")->blit(_bg);
+
 	_painText->setBig();
 	_stimTxt->setBig();
 	_healTxt->setBig();
+
 //	_partTxt->setColor(Palette::blockOffset(2));
-	_partTxt->setHighContrast(true);
+	_partTxt->setHighContrast();
+
 //	_woundTxt->setColor(Palette::blockOffset(2));
-	_woundTxt->setHighContrast(true);
+	_woundTxt->setHighContrast();
 
 	_endButton->onMouseClick((ActionHandler)& MedikitState::onEndClick);
 	_endButton->onKeyboardPress(

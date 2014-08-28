@@ -84,12 +84,12 @@ OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin)
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setWordWrap();
 	_txtTitle->setText(tr("STR_DISPLAY_OPTIONS_CONFIRM"));
 
 	_txtTimer->setColor(Palette::blockOffset(15)-1);
 	_txtTimer->setAlign(ALIGN_CENTER);
-	_txtTimer->setWordWrap(true);
+	_txtTimer->setWordWrap();
 	_txtTimer->setText(tr("STR_DISPLAY_OPTIONS_REVERT").arg(_countdown));
 
 	if (_origin == OPT_BATTLESCAPE)
@@ -100,7 +100,7 @@ OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin)
 }
 
 /**
- *
+ * dTor.
  */
 OptionsConfirmState::~OptionsConfirmState()
 {
@@ -114,7 +114,7 @@ void OptionsConfirmState::think()
 {
 	State::think();
 
-	_timer->think(this, 0);
+	_timer->think(this, NULL);
 }
 
 /**
@@ -129,7 +129,7 @@ void OptionsConfirmState::countdown()
 	_txtTimer->setText(tr("STR_DISPLAY_OPTIONS_REVERT").arg(ss.str()));
 
 	if (_countdown == 0)
-		btnNoClick(0);
+		btnNoClick(NULL);
 }
 
 /**

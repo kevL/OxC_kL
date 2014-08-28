@@ -83,7 +83,7 @@ ErrorMessageState::ErrorMessageState(
 }
 
 /**
- *
+ * dTor.
  */
 ErrorMessageState::~ErrorMessageState()
 {
@@ -144,7 +144,7 @@ void ErrorMessageState::create(
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
-	_txtMessage->setWordWrap(true);
+	_txtMessage->setWordWrap();
 
 	if (str.empty())
 		_txtMessage->setText(wstr);
@@ -153,9 +153,9 @@ void ErrorMessageState::create(
 
 	if (bgColor == -1)
 	{
-		_window->setHighContrast(true);
-		_btnOk->setHighContrast(true);
-		_txtMessage->setHighContrast(true);
+		_window->setHighContrast();
+		_btnOk->setHighContrast();
+		_txtMessage->setHighContrast();
 	}
 }
 

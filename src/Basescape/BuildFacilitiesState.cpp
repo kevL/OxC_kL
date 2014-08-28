@@ -97,11 +97,11 @@ BuildFacilitiesState::BuildFacilitiesState(
 	_lstFacilities->setColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setArrowColor(Palette::blockOffset(13)+5);
 	_lstFacilities->setColumns(1, 99);
-	_lstFacilities->setSelectable(true);
+	_lstFacilities->setSelectable();
 //kL	_lstFacilities->setScrollable(true, -12);
 	_lstFacilities->setBackground(_window);
 	_lstFacilities->setMargin(2);
-	_lstFacilities->setWordWrap(true);
+	_lstFacilities->setWordWrap();
 	_lstFacilities->onMouseClick((ActionHandler)& BuildFacilitiesState::lstFacilitiesClick);
 
 	PopulateBuildList();

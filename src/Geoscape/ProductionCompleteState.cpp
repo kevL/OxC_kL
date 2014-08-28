@@ -114,7 +114,7 @@ ProductionCompleteState::ProductionCompleteState(
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
-	_txtMessage->setWordWrap(true);
+	_txtMessage->setWordWrap();
 
 	std::wstring str;
 	switch (_endType)

@@ -100,7 +100,7 @@ NewManufactureListState::NewManufactureListState(
 	_txtCategory->setText(tr("STR_CATEGORY"));
 
 	_lstManufacture->setColumns(2, 148, 129);
-	_lstManufacture->setSelectable(true);
+	_lstManufacture->setSelectable();
 	_lstManufacture->setBackground(_window);
 	_lstManufacture->setMargin(16);
 	_lstManufacture->setColor(Palette::blockOffset(13));

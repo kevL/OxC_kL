@@ -99,9 +99,9 @@ PromotionsState::PromotionsState()
 
 	_lstSoldiers->setColor(Palette::blockOffset(8)+10);
 	_lstSoldiers->setColumns(3, 126, 70, 81);
-	_lstSoldiers->setSelectable(true);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->setMargin(8);
+	_lstSoldiers->setMargin();
 
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();

@@ -118,7 +118,7 @@ MiniMapState::MiniMapState(
 
 	_txtLevel->setBig();
 //	_txtLevel->setColor(Palette::blockOffset(4));
-	_txtLevel->setHighContrast(true);
+	_txtLevel->setHighContrast();
 	std::wostringstream s;
 	if (_game->getRuleset()->getInterface("minimap")->getElement("textLevel")->TFTDMode)
 		s << tr("STR_LEVEL_SHORT");
@@ -133,7 +133,7 @@ MiniMapState::MiniMapState(
 }
 
 /**
- *
+ * dTor.
  */
 MiniMapState::~MiniMapState()
 {

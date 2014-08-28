@@ -131,7 +131,7 @@ MonthlyCostsState::MonthlyCostsState(
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setColumns(4, 125, 70, 44, 54);
-	_lstCrafts->setDot(true);
+	_lstCrafts->setDot();
 
 	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
 	for (std::vector<std::string>::const_iterator
@@ -160,7 +160,7 @@ MonthlyCostsState::MonthlyCostsState(
 
 	_lstSalaries->setColor(Palette::blockOffset(13)+10);
 	_lstSalaries->setColumns(4, 125, 70, 44, 54);
-	_lstSalaries->setDot(true);
+	_lstSalaries->setDot();
 
 	std::wostringstream
 		ss4,
@@ -196,7 +196,7 @@ MonthlyCostsState::MonthlyCostsState(
 
 	_lstMaintenance->setColor(Palette::blockOffset(13)+10);
 	_lstMaintenance->setColumns(2, 239, 54);
-	_lstMaintenance->setDot(true);
+	_lstMaintenance->setDot();
 	_lstMaintenance->addRow(
 						2,
 						tr("STR_BASE_MAINTENANCE").c_str(),
@@ -205,7 +205,7 @@ MonthlyCostsState::MonthlyCostsState(
 
 	_lstTotal->setColor(Palette::blockOffset(13));
 	_lstTotal->setColumns(2, 45, 55);
-	_lstTotal->setDot(true);
+	_lstTotal->setDot();
 	_lstTotal->addRow(
 					2,
 					tr("STR_TOTAL").c_str(),

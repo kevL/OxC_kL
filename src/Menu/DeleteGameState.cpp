@@ -93,7 +93,7 @@ DeleteGameState::DeleteGameState(
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setBig();
-	_txtMessage->setWordWrap(true);
+	_txtMessage->setWordWrap();
 	_txtMessage->setText(tr("STR_IS_IT_OK_TO_DELETE_THE_SAVED_GAME"));
 
 	if (_origin == OPT_BATTLESCAPE)
@@ -107,11 +107,17 @@ DeleteGameState::~DeleteGameState()
 {
 }
 
+/**
+ *
+ */
 void DeleteGameState::btnNoClick(Action*)
 {
 	_game->popState();
 }
 
+/**
+ *
+ */
 void DeleteGameState::btnYesClick(Action*)
 {
 	_game->popState();

@@ -80,7 +80,7 @@ private:
 		/// Gets the scrollbar's color.
 		Uint8 getColor() const;
 		/// Sets the scrollbar's high contrast color setting.
-		void setHighContrast(bool contrast);
+		void setHighContrast(bool contrast = true);
 
 		/// Sets the scrollbar's list.
 		void setTextList(TextList* list);

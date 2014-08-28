@@ -89,7 +89,7 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 	_txtTitle->setText(tr("STR_NOT_ENOUGH_EQUIPMENT_TO_FULLY_RE_EQUIP_SQUAD"));
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-//	_txtTitle->setWordWrap(true);
+//	_txtTitle->setWordWrap();
 
 	_txtItem->setColor(Palette::blockOffset(15)-1);
 	_txtItem->setText(tr("STR_ITEM"));
@@ -102,9 +102,9 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 
 	_lstItems->setColor(Palette::blockOffset(8)+10);
 	_lstItems->setColumns(3, 154, 46, 80);
-	_lstItems->setSelectable(true);
+	_lstItems->setSelectable();
 	_lstItems->setBackground(_window);
-	_lstItems->setMargin(8);
+	_lstItems->setMargin();
 
 	for (std::vector<ReequipStat>::iterator
 			i = missingItems.begin();
@@ -122,7 +122,7 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 }
 
 /**
- *
+ * dTor.
  */
 CannotReequipState::~CannotReequipState()
 {

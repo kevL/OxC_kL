@@ -114,19 +114,19 @@ AbortMissionState::AbortMissionState(
 
 
 	_window->setColor(Palette::blockOffset(0)-1);
-	_window->setHighContrast(true);
+	_window->setHighContrast();
 	_window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 
 //	_txtInExit->setColor(Palette::blockOffset(0)-1);
 	_txtInExit->setBig();
 	_txtInExit->setAlign(ALIGN_CENTER);
-	_txtInExit->setHighContrast(true);
+	_txtInExit->setHighContrast();
 	_txtInExit->setText(tr("STR_UNITS_IN_EXIT_AREA", _inExitArea));
 
 //	_txtOutsideExit->setColor(Palette::blockOffset(0)-1);
 	_txtOutsideExit->setBig();
 	_txtOutsideExit->setAlign(ALIGN_CENTER);
-	_txtOutsideExit->setHighContrast(true);
+	_txtOutsideExit->setHighContrast();
 	_txtOutsideExit->setText(tr("STR_UNITS_OUTSIDE_EXIT_AREA", _outExitArea));
 
 	if (_battleGame->getMissionType() == "STR_BASE_DEFENSE")
@@ -138,12 +138,12 @@ AbortMissionState::AbortMissionState(
 //	_txtAbort->setColor(Palette::blockOffset(0)-1);
 	_txtAbort->setBig();
 	_txtAbort->setAlign(ALIGN_CENTER);
-	_txtAbort->setHighContrast(true);
+	_txtAbort->setHighContrast();
 	_txtAbort->setText(tr("STR_ABORT_MISSION_QUESTION"));
 
 //	_btnOk->setColor(Palette::blockOffset(0)-1);
 	_btnOk->setText(tr("STR_OK"));
-	_btnOk->setHighContrast(true);
+	_btnOk->setHighContrast();
 	_btnOk->onMouseClick((ActionHandler)& AbortMissionState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& AbortMissionState::btnOkClick,
@@ -151,7 +151,7 @@ AbortMissionState::AbortMissionState(
 
 //	_btnCancel->setColor(Palette::blockOffset(0)-1);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
-	_btnCancel->setHighContrast(true);
+	_btnCancel->setHighContrast();
 	_btnCancel->onMouseClick((ActionHandler)& AbortMissionState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& AbortMissionState::btnCancelClick,
@@ -162,7 +162,7 @@ AbortMissionState::AbortMissionState(
 }
 
 /**
- *
+ * dTor.
  */
 AbortMissionState::~AbortMissionState()
 {

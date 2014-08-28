@@ -190,7 +190,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 	_lstMatrix->setColor(Palette::blockOffset(13)+10);
 	_lstMatrix->setColumns(9, 100, 23, 23, 23, 23, 23, 23, 23, 23);
-	_lstMatrix->setSelectable(true);
+	_lstMatrix->setSelectable();
 	_lstMatrix->setBackground(_window);
 
 

@@ -123,9 +123,9 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 	_lstSoldiers->setColumns(3, 90, 120, 73);
-	_lstSoldiers->setSelectable(true);
+	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
-	_lstSoldiers->setMargin(8);
+	_lstSoldiers->setMargin();
 	_lstSoldiers->onMousePress((ActionHandler)& CraftArmorState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstRightArrowClick);
@@ -173,7 +173,7 @@ CraftArmorState::CraftArmorState(
 }
 
 /**
- *
+ * dTor.
  */
 CraftArmorState::~CraftArmorState()
 {
@@ -249,8 +249,7 @@ void CraftArmorState::init()
 									color);
 			_lstSoldiers->setCellHighContrast(
 									row,
-									2,
-									true);
+									2);
 		} // kL_end.
 
 		row++;

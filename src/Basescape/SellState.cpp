@@ -215,9 +215,9 @@ SellState::SellState(
 	_lstItems->setColor(_color);
 	_lstItems->setArrowColumn(182, ARROW_VERTICAL);
 	_lstItems->setColumns(4, 142, 60, 22, 53);
-	_lstItems->setSelectable(true);
+	_lstItems->setSelectable();
 	_lstItems->setBackground(_window);
-	_lstItems->setMargin(8);
+	_lstItems->setMargin();
 //	_lstItems->setAllowScrollOnArrowButtons(!_allowChangeListValuesByMouseWheel);
 	_lstItems->onLeftArrowPress((ActionHandler)& SellState::lstItemsLeftArrowPress);
 	_lstItems->onLeftArrowRelease((ActionHandler)& SellState::lstItemsLeftArrowRelease);

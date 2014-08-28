@@ -211,47 +211,47 @@ InventoryState::InventoryState(
 
 //	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setBig();
-	_txtName->setHighContrast(true);
+	_txtName->setHighContrast();
 
 //	_txtWeight->setColor(Palette::blockOffset(4));
 //	_txtWeight->setSecondaryColor(Palette::blockOffset(1));
-	_txtWeight->setHighContrast(true);
+	_txtWeight->setHighContrast();
 
 //	_txtTus->setColor(Palette::blockOffset(4));
 //	_txtTus->setSecondaryColor(Palette::blockOffset(1));
-	_txtTus->setHighContrast(true);
+	_txtTus->setHighContrast();
 
 //	_txtFAcc->setColor(Palette::blockOffset(4));
 //	_txtFAcc->setSecondaryColor(Palette::blockOffset(1));
-	_txtFAcc->setHighContrast(true);
+	_txtFAcc->setHighContrast();
 
 //	_txtReact->setColor(Palette::blockOffset(4));
 //	_txtReact->setSecondaryColor(Palette::blockOffset(1));
-	_txtReact->setHighContrast(true);
+	_txtReact->setHighContrast();
 
 	_txtThrow->setColor(Palette::blockOffset(4));			// kL
 	_txtThrow->setSecondaryColor(Palette::blockOffset(1));	// kL
-	_txtThrow->setHighContrast(true);						// kL
+	_txtThrow->setHighContrast();						// kL
 
 	_txtMelee->setColor(Palette::blockOffset(4));			// kL
 	_txtMelee->setSecondaryColor(Palette::blockOffset(1));	// kL
-	_txtMelee->setHighContrast(true);						// kL
+	_txtMelee->setHighContrast();						// kL
 
 //	_txtPStr->setColor(Palette::blockOffset(4));
 //	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
-	_txtPStr->setHighContrast(true);
+	_txtPStr->setHighContrast();
 
 	_txtPSkill->setColor(Palette::blockOffset(4));
 	_txtPSkill->setSecondaryColor(Palette::blockOffset(1));
-	_txtPSkill->setHighContrast(true);
+	_txtPSkill->setHighContrast();
 
 	_txtUseTU->setColor(Palette::blockOffset(4));
 	_txtUseTU->setSecondaryColor(Palette::blockOffset(1));
-	_txtUseTU->setHighContrast(true);
+	_txtUseTU->setHighContrast();
 
 	_txtThrowTU->setColor(Palette::blockOffset(4));
 	_txtThrowTU->setSecondaryColor(Palette::blockOffset(1));
-	_txtThrowTU->setHighContrast(true);
+	_txtThrowTU->setHighContrast();
 
 	_numOrder->setColor(1);	// kL
 	_numOrder->setValue(0);	// kL
@@ -261,12 +261,12 @@ InventoryState::InventoryState(
 	_tuCost->setVisible(false);	// kL
 
 //	_txtItem->setColor(Palette::blockOffset(3));
-	_txtItem->setHighContrast(true);
+	_txtItem->setHighContrast();
 
 //	_txtAmmo->setColor(Palette::blockOffset(4));
 //	_txtAmmo->setSecondaryColor(Palette::blockOffset(1));
 	_txtAmmo->setAlign(ALIGN_LEFT);
-	_txtAmmo->setHighContrast(true);
+	_txtAmmo->setHighContrast();
 
 	_btnOk->onMouseClick((ActionHandler)& InventoryState::btnOkClick);
 	_btnOk->onKeyboardPress(

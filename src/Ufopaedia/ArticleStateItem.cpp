@@ -68,7 +68,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 
 	_txtTitle->setColor(Palette::blockOffset(14)+15);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setWordWrap();
 	_txtTitle->setText(tr(defs->title));
 
 
@@ -85,19 +85,19 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		_txtShotType = new Text(100, 17, 8, 66);
 		add(_txtShotType);
 		_txtShotType->setColor(Palette::blockOffset(14)+15);
-		_txtShotType->setWordWrap(true);
+		_txtShotType->setWordWrap();
 		_txtShotType->setText(tr("STR_SHOT_TYPE"));
 
 		_txtAccuracy = new Text(50, 17, 108, 66);
 		add(_txtAccuracy);
 		_txtAccuracy->setColor(Palette::blockOffset(14)+15);
-		_txtAccuracy->setWordWrap(true);
+		_txtAccuracy->setWordWrap();
 		_txtAccuracy->setText(tr("STR_ACCURACY_UC"));
 
 		_txtTuCost = new Text(60, 17, 160, 66);
 		add(_txtTuCost);
 		_txtTuCost->setColor(Palette::blockOffset(14)+15);
-		_txtTuCost->setWordWrap(true);
+		_txtTuCost->setWordWrap();
 		_txtTuCost->setText(tr("STR_TIME_UNIT_COST"));
 
 		_lstInfo = new TextList(204, 55, 8, 82);
@@ -181,7 +181,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 
 	add(_txtInfo);
 	_txtInfo->setColor(Palette::blockOffset(14)+15);
-	_txtInfo->setWordWrap(true);
+	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
 
@@ -199,7 +199,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		_txtAmmoType[i]->setColor(Palette::blockOffset(14)+15);
 		_txtAmmoType[i]->setAlign(ALIGN_CENTER);
 		_txtAmmoType[i]->setVerticalAlign(ALIGN_MIDDLE);
-		_txtAmmoType[i]->setWordWrap(true);
+		_txtAmmoType[i]->setWordWrap();
 
 //kL		_txtAmmoDamage[i] = new Text(82, 17, 194, 40 + (i * 49));
 		_txtAmmoDamage[i] = new Text(90, 16, 190, 40 + (i * 49));

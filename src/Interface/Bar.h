@@ -71,7 +71,7 @@ private:
 		Uint8 getColor2() const;
 
 		/// Sets the bar's scale.
-		void setScale(double scale);
+		void setScale(double scale = 1.0);
 		/// Gets the bar's scale.
 		double getScale() const;
 
@@ -93,7 +93,7 @@ private:
 		void setSecondValueOnTop(bool onTop);
 
 		/// Sets the bar's color invert setting.
-		void setInvert(bool invert);
+		void setInvert(bool invert = true);
 
 		/// Draws the bar.
 		void draw();

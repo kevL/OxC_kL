@@ -100,7 +100,7 @@ private:
 		Uint8 getColor() const;
 
 		/// Sets the high contrast color setting.
-		void setHighContrast(bool contrast);
+		void setHighContrast(bool contrast = true);
 
 		/// Handles the timers.
 		void think();

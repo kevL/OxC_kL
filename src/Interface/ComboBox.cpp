@@ -89,7 +89,7 @@ ComboBox::ComboBox(
 						y + height + VERTICAL_MARGIN);
 	_list->setComboBox(this);
 	_list->setColumns(1, _list->getWidth());
-	_list->setSelectable(true);
+	_list->setSelectable();
 	_list->setBackground(_window);
 	_list->setAlign(ALIGN_CENTER);
 	_list->setScrollable(true, 0);

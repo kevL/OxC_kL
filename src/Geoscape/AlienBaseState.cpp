@@ -87,7 +87,7 @@ AlienBaseState::AlienBaseState(
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
-	_txtTitle->setWordWrap(true);
+	_txtTitle->setWordWrap();
 
 	double // Check location of base
 		lon = _base->getLongitude(),
@@ -138,7 +138,7 @@ AlienBaseState::AlienBaseState(
 }
 
 /**
- *
+ * dTor.
  */
 AlienBaseState::~AlienBaseState()
 {

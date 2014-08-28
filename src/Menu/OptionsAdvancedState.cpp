@@ -72,8 +72,8 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin)
 	_lstOptions->setColumns(2, leftcol, rightcol);
 	_lstOptions->setColor(Palette::blockOffset(8)+10);
 	_lstOptions->setArrowColor(Palette::blockOffset(8)+5);
-	_lstOptions->setWordWrap(true);
-	_lstOptions->setSelectable(true);
+	_lstOptions->setWordWrap();
+	_lstOptions->setSelectable();
 	_lstOptions->setBackground(_window);
 	_lstOptions->onMouseClick((ActionHandler)& OptionsAdvancedState::lstOptionsClick, 0);
 	_lstOptions->onMouseOver((ActionHandler)& OptionsAdvancedState::lstOptionsMouseOver);

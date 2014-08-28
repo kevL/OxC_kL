@@ -141,22 +141,22 @@ ManufactureState::ManufactureState(
 
 	_txtEngineers->setColor(Palette::blockOffset(15)+1);
 	_txtEngineers->setText(tr("STR_ENGINEERS__ALLOCATED"));
-//	_txtEngineers->setWordWrap(true);
+//	_txtEngineers->setWordWrap();
 	_txtEngineers->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtProduced->setColor(Palette::blockOffset(15)+1);
 	_txtProduced->setText(tr("STR_UNITS_PRODUCED"));
-//	_txtProduced->setWordWrap(true);
+//	_txtProduced->setWordWrap();
 	_txtProduced->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtCost->setColor(Palette::blockOffset(15)+1);
 	_txtCost->setText(tr("STR_COST__PER__UNIT"));
-//	_txtCost->setWordWrap(true);
+//	_txtCost->setWordWrap();
 	_txtCost->setVerticalAlign(ALIGN_BOTTOM);
 
 	_txtTimeLeft->setColor(Palette::blockOffset(15)+1);
 	_txtTimeLeft->setText(tr("STR_DAYS_HOURS_LEFT"));
-//	_txtTimeLeft->setWordWrap(true);
+//	_txtTimeLeft->setWordWrap();
 	_txtTimeLeft->setVerticalAlign(ALIGN_BOTTOM);
 
 	_lstManufacture->setColor(Palette::blockOffset(13)+10);
@@ -164,10 +164,10 @@ ManufactureState::ManufactureState(
 	_lstManufacture->setColumns(5, 121, 29, 41, 56, 30);
 //	_lstManufacture->setAlign(ALIGN_RIGHT);
 //	_lstManufacture->setAlign(ALIGN_LEFT, 0);
-	_lstManufacture->setSelectable(true);
+	_lstManufacture->setSelectable();
 	_lstManufacture->setBackground(_window);
-	_lstManufacture->setMargin(8);
-//	_lstManufacture->setWordWrap(true);
+	_lstManufacture->setMargin();
+//	_lstManufacture->setWordWrap();
 	_lstManufacture->onMouseClick((ActionHandler)& ManufactureState::lstManufactureClick);
 
 	fillProductionList();

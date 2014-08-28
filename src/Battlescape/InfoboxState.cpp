@@ -56,16 +56,16 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 
 //	_frame->setColor(Palette::blockOffset(0)+7);
 //	_frame->setBackground(Palette::blockOffset(0)+14);
-	_frame->setHighContrast(true);
+	_frame->setHighContrast();
 	_frame->setThickness(8);
 
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
 	_text->setBig();
-	_text->setWordWrap(true);
+	_text->setWordWrap();
 	_text->setText(msg);
 //	_text->setColor(Palette::blockOffset(0)-1);
-	_text->setHighContrast(true);
+	_text->setHighContrast();
 	_text->setPalette(_frame->getPalette());
 
 	_timer = new Timer(INFOBOX_DELAY);

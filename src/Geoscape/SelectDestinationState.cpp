@@ -160,7 +160,7 @@ SelectDestinationState::SelectDestinationState(
 //kL	_txtTitle->setColor(Palette::blockOffset(15)-1);
 //kL	_txtTitle->setText(tr("STR_SELECT_DESTINATION"));
 //kL	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-//kL	_txtTitle->setWordWrap(true);
+//kL	_txtTitle->setWordWrap();
 
 	if (!_craft->getRules()->getSpacecraft()
 		|| !_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST"))

@@ -55,7 +55,7 @@ BattlescapeMessage::BattlescapeMessage(
 						y,
 						POPUP_NONE);
 	_window->setColor(Palette::blockOffset(0)-1);
-	_window->setHighContrast(true);
+	_window->setHighContrast();
 
 	// HIDDEN MOVEMENT... text
 	_text = new Text(
@@ -66,7 +66,7 @@ BattlescapeMessage::BattlescapeMessage(
 	_text->setColor(Palette::blockOffset(0)-1);
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
-	_text->setHighContrast(true);
+	_text->setHighContrast();
 }
 
 /**

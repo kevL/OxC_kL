@@ -83,7 +83,7 @@ Window::Window(
 		setHidden(true);
 		_timer->start();
 
-		if (_state != 0)
+		if (_state != NULL)
 		{
 			_screen = state->isScreen();
 
@@ -160,7 +160,7 @@ void Window::think()
 		setHidden(false);
 	}
 
-	_timer->think(0, this);
+	_timer->think(NULL, this);
 }
 
 /**

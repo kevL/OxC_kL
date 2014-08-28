@@ -134,13 +134,13 @@ NewGameState::NewGameState()
 	_txtTitle->setText(tr("STR_SELECT_DIFFICULTY_LEVEL"));
 
 	_txtIronman->setColor(Palette::blockOffset(8)+10);
-	_txtIronman->setWordWrap(true);
+	_txtIronman->setWordWrap();
 	_txtIronman->setVerticalAlign(ALIGN_MIDDLE);
 	_txtIronman->setText(tr("STR_IRONMAN_DESC"));
 }
 
 /**
- *
+ * dTor.
  */
 NewGameState::~NewGameState()
 {

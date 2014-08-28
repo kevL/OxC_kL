@@ -82,7 +82,7 @@ UfopaediaSelectState::UfopaediaSelectState(std::string section)
 	_lstSelection->setColor(Palette::blockOffset(8)+5);
 	_lstSelection->setArrowColor(Palette::blockOffset(15)-1);
 	_lstSelection->setColumns(1, 206);
-	_lstSelection->setSelectable(true);
+	_lstSelection->setSelectable();
 	_lstSelection->setBackground(_window);
 	_lstSelection->setMargin(18);
 	_lstSelection->setAlign(ALIGN_CENTER);

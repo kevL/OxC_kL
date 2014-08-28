@@ -101,7 +101,7 @@ ResearchCompleteState::ResearchCompleteState(
 	_txtResearch->setColor(Palette::blockOffset(8)+10);
 	_txtResearch->setAlign(ALIGN_CENTER);
 	_txtResearch->setBig();
-//kL	_txtResearch->setWordWrap(true);
+//kL	_txtResearch->setWordWrap();
 	if (research)
 		_txtResearch->setText(tr(research->getName()));
 }

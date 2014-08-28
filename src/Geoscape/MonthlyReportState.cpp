@@ -141,7 +141,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtFailure->setBig();
 	_txtFailure->setAlign(ALIGN_CENTER);
 	_txtFailure->setVerticalAlign(ALIGN_MIDDLE);
-	_txtFailure->setWordWrap(true);
+	_txtFailure->setWordWrap();
 	_txtFailure->setText(tr("STR_YOU_HAVE_FAILED"));
 	_txtFailure->setVisible(false);
 
@@ -222,7 +222,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtChange->setText(tr("STR_FUNDING_CHANGE").arg(ss3.str()));
 
 	_txtDesc->setColor(Palette::blockOffset(8)+10);
-	_txtDesc->setWordWrap(true);
+	_txtDesc->setWordWrap();
 
 	// calculate satisfaction
 	std::wostringstream ss4;
@@ -311,7 +311,7 @@ MonthlyReportState::MonthlyReportState(
 }
 
 /**
- *
+ * dTor.
  */
 MonthlyReportState::~MonthlyReportState()
 {

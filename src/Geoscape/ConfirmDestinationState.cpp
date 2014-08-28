@@ -89,7 +89,7 @@ ConfirmDestinationState::ConfirmDestinationState(
 	_txtTarget->setBig();
 	_txtTarget->setAlign(ALIGN_CENTER);
 	_txtTarget->setVerticalAlign(ALIGN_MIDDLE);
-//	_txtTarget->setWordWrap(true);
+//	_txtTarget->setWordWrap();
 	if (wp != NULL
 		&& wp->getId() == 0)
 	{
@@ -114,7 +114,7 @@ ConfirmDestinationState::ConfirmDestinationState(
 }
 
 /**
- *
+ * dTor.
  */
 ConfirmDestinationState::~ConfirmDestinationState()
 {

@@ -195,7 +195,7 @@ void Inventory::drawGrid()
 	RuleInterface* rule = _game->getRuleset()->getInterface("inventory");
 	text.setColor(rule->getElement("textSlots")->color);
 //	text.setColor(Palette::blockOffset(4)-1);
-	text.setHighContrast(true);
+	text.setHighContrast();
 	Uint8 color = rule->getElement("grid")->color;
 //	Uint8 color = Palette::blockOffset(0)+8;
 

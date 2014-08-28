@@ -179,9 +179,9 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_lstDiary->setColor(Palette::blockOffset(13));
 	_lstDiary->setArrowColor(Palette::blockOffset(15)+1);
 	_lstDiary->setColumns(5, 94, 108, 26, 23, 29);
-	_lstDiary->setSelectable(true);
+	_lstDiary->setSelectable();
 	_lstDiary->setBackground(_window);
-	_lstDiary->setMargin(8);
+	_lstDiary->setMargin();
 	_lstDiary->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::lstDiaryInfoClick);
 
 	_btnKills->setColor(Palette::blockOffset(13)+10);
