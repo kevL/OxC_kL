@@ -181,11 +181,16 @@ void MiniBaseView::draw()
 			}
 			unlock();
 
-			// kL_begin: Red Marker for unused Scientists or Engineers.
-			if (_bases->at(i)->getTotalScientists() - _bases->at(i)->getAllocatedScientists() > 0
-				|| _bases->at(i)->getTotalEngineers() - _bases->at(i)->getAllocatedEngineers() > 0)
+			// kL_begin: Dot Marks for various base-status indicators.
+			if (_bases->at(i)->getTransfers()->empty() == false) // white for incoming Transfers
 			{
-				setPixelColor(i * (MINI_SIZE + 2) + 8, 18, Palette::blockOffset(2)+1);
+				setPixelColor(i * (MINI_SIZE + 2) + 3, 18, Palette::blockOffset(0)+1); // white
+			}
+
+			if (_bases->at(i)->getScientists() > 0 // red for unused Scientists & Engineers
+				|| _bases->at(i)->getEngineers() > 0)
+			{
+				setPixelColor(i * (MINI_SIZE + 2) + 6, 18, Palette::blockOffset(2)+1); // red
 			} // kL_end.
 		}
 	}

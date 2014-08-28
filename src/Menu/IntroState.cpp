@@ -249,8 +249,8 @@ static introSoundEffect introSoundTrack[] =
 	{501, 0x16},
 //kL	{512, 0xd},  // feet -- not in original
 //kL	{514, 0xd},  // feet -- not in original
-	{521, 0x0B}, // kL
 //kL	{522, 0x0B}, // rifle grab
+	{523, 0x0B}, // kL
 //kL	{523, 0xd},  // feet -- not in original
 //kL	{525, 0xd},  // feet -- not in original
 	{534, 0x18},
