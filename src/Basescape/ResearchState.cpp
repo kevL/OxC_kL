@@ -27,6 +27,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -151,7 +152,7 @@ ResearchState::ResearchState(
 //	_lstResearch->setWordWrap();
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
 
-	init(); // do ya need this
+//	init(); // do ya need this -> nope. It runs auto ....
 }
 
 /**
@@ -208,6 +209,7 @@ void ResearchState::onSelectProject(Action*)
  */
 void ResearchState::init()
 {
+	//Log(LOG_INFO) << "ResearchState::init()";
 	State::init();
 
 	_lstResearch->clearList();

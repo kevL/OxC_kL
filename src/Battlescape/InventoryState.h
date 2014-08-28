@@ -58,10 +58,10 @@ private:
 		* _btnOk,
 		* _btnPrev,
 		* _btnRank,
-		* _btnUnload,
-		* _btnCreateTemplate,
-		* _btnApplyTemplate,
-		* _btnClearInventory;
+		* _btnUnload;
+//		* _btnCreateTemplate,
+//		* _btnApplyTemplate,
+//		* _btnClearInventory;
 	BattlescapeState* _parent;
 	Inventory* _inv;
 	NumberText
@@ -87,11 +87,11 @@ private:
 		* _txtUseTU,
 		* _txtThrowTU;
 
-	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
+//	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
 
-	/// Update the visibility and icons for the template buttons
-	void _updateTemplateButtons(bool isVisible);
-	/// Refresh the hover status of the mouse
+	/// Update the visibility and icons for the template buttons.
+//	void _updateTemplateButtons(bool isVisible);
+	/// Refresh the hover status of the mouse.
 	void _refreshMouse();
 
 
@@ -129,9 +129,9 @@ private:
 		void btnRankClick(Action* action);
 
 		/// Handler for clicking on the Create Template button.
-		void btnCreateTemplateClick(Action* action);
+//		void btnCreateTemplateClick(Action* action);
 		/// Handler for clicking the Apply Template button.
-		void btnApplyTemplateClick(Action* action);
+//		void btnApplyTemplateClick(Action* action);
 		/// Handler for clicking the Clear Inventory button.
 		void btnClearInventoryClick(Action* action);
 

@@ -1903,7 +1903,7 @@ items:
     size: 0.1
     costBuy: 60
     costSell: 12
-    weight: 2
+    weight: 1
     bigSprite: 55
     floorSprite: 72
     power: 15

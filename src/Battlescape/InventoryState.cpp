@@ -66,10 +66,10 @@
 namespace OpenXcom
 {
 
-static const int _templateBtnX			= 288;
-static const int _createTemplateBtnY	= 67;	//90
-static const int _applyTemplateBtnY		= 90;	//113
-static const int _clearInventoryBtnY	= 113;
+//static const int _templateBtnX			= 288;
+//static const int _createTemplateBtnY	= 67;	//90
+//static const int _applyTemplateBtnY		= 90;	//113
+//static const int _clearInventoryBtnY	= 113;
 
 
 /**
@@ -135,7 +135,7 @@ InventoryState::InventoryState(
 	_btnUnload	= new BattlescapeButton(32, 25, 288, 32);
 	_btnGround	= new BattlescapeButton(30, 15, 290, 137);
 
-	_btnCreateTemplate	= new BattlescapeButton(
+/*	_btnCreateTemplate	= new BattlescapeButton(
 											32,
 											22,
 											_templateBtnX,
@@ -149,7 +149,7 @@ InventoryState::InventoryState(
 											32,
 											22,
 											_templateBtnX,
-											_clearInventoryBtnY);
+											_clearInventoryBtnY); */
 
 //	_txtAmmo	= new Text(40, 24, 272, 64);
 	_txtAmmo	= new Text(40, 24, 288, 64);
@@ -195,9 +195,9 @@ InventoryState::InventoryState(
 	add(_btnUnload, "buttonUnload", "inventory", _bg);
 	add(_btnGround, "buttonGround", "inventory", _bg);
 	add(_btnRank, "rank", "inventory", _bg);
-	add(_btnCreateTemplate, "buttonCreate", "inventory", _bg);
-	add(_btnApplyTemplate, "buttonApply", "inventory", _bg);
-	add(_btnClearInventory);
+//	add(_btnCreateTemplate, "buttonCreate", "inventory", _bg);
+//	add(_btnApplyTemplate, "buttonApply", "inventory", _bg);
+//	add(_btnClearInventory);
 	add(_selAmmo);
 	add(_inv);
 	add(_txtUseTU);
@@ -295,7 +295,13 @@ InventoryState::InventoryState(
 //	_btnNext->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnNext->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
 
-	_btnUnload->onMouseClick((ActionHandler)& InventoryState::btnUnloadClick);
+	_btnUnload->onMouseClick(
+					(ActionHandler)& InventoryState::btnUnloadClick,
+					SDL_BUTTON_LEFT);
+	_btnUnload->onMouseClick(
+					(ActionHandler)& InventoryState::btnClearInventoryClick,
+					SDL_BUTTON_RIGHT);
+//	_btnUnload->onMouseClick((ActionHandler)& InventoryState::btnUnloadClick);
 //	_btnUnload->setTooltip("STR_UNLOAD_WEAPON");
 //	_btnUnload->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnUnload->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
@@ -311,40 +317,40 @@ InventoryState::InventoryState(
 //	_btnRank->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
 
 
-	_btnCreateTemplate->onMouseClick((ActionHandler)& InventoryState::btnCreateTemplateClick);
+/*	_btnCreateTemplate->onMouseClick((ActionHandler)& InventoryState::btnCreateTemplateClick);
 	_btnCreateTemplate->onKeyboardPress(
 						(ActionHandler)& InventoryState::btnCreateTemplateClick,
-						Options::keyInvCreateTemplate);
+						Options::keyInvCreateTemplate); */
 //	_btnCreateTemplate->setTooltip("STR_CREATE_INVENTORY_TEMPLATE");
 //	_btnCreateTemplate->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnCreateTemplate->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
 
-	_btnApplyTemplate->onMouseClick((ActionHandler)& InventoryState::btnApplyTemplateClick);
+/*	_btnApplyTemplate->onMouseClick((ActionHandler)& InventoryState::btnApplyTemplateClick);
 	_btnApplyTemplate->onKeyboardPress(
 						(ActionHandler)& InventoryState::btnApplyTemplateClick,
-						Options::keyInvApplyTemplate);
+						Options::keyInvApplyTemplate); */
 //	_btnApplyTemplate->setTooltip("STR_APPLY_INVENTORY_TEMPLATE");
 //	_btnApplyTemplate->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnApplyTemplate->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
 
-	_btnClearInventory->onMouseClick((ActionHandler)& InventoryState::btnClearInventoryClick);
+/*	_btnClearInventory->onMouseClick((ActionHandler)& InventoryState::btnClearInventoryClick);
 	_btnClearInventory->onKeyboardPress(
 					(ActionHandler)& InventoryState::btnClearInventoryClick,
-					Options::keyInvClear);
+					Options::keyInvClear); */
 //	_btnClearInventory->setTooltip("STR_CLEAR_INVENTORY");
 //	_btnClearInventory->onMouseIn((ActionHandler)& InventoryState::txtTooltipIn);
 //	_btnClearInventory->onMouseOut((ActionHandler)& InventoryState::txtTooltipOut);
 
 
 	// only use copy/paste layout-template buttons in setup (i.e. non-tu) mode
-	if (_tu)
+/*	if (_tu)
 	{
 		_btnCreateTemplate->setVisible(false);
 		_btnApplyTemplate->setVisible(false);
 		_btnClearInventory->setVisible(false);
 	}
 	else
-		_updateTemplateButtons(true);
+		_updateTemplateButtons(true); */
 
 	_inv->draw();
 	_inv->setTuMode(_tu);
@@ -371,9 +377,9 @@ InventoryState::InventoryState(
 }
 
 /**
- *
+ * Helper for the dTor.
  */
-static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*>& inventoryTemplate)
+/* static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*>& inventoryTemplate)
 {
 	for (std::vector<EquipmentLayoutItem*>::iterator
 			i = inventoryTemplate.begin();
@@ -382,14 +388,14 @@ static void _clearInventoryTemplate(std::vector<EquipmentLayoutItem*>& inventory
 	{
 		delete *i;
 	}
-}
+} */
 
 /**
  * dTor.
  */
 InventoryState::~InventoryState()
 {
-	_clearInventoryTemplate(_curInventoryTemplate);
+//	_clearInventoryTemplate(_curInventoryTemplate);
 
 	// kL_begin:
 	if (_parent)
@@ -827,7 +833,7 @@ void InventoryState::btnRankClick(Action*)
 /**
  *
  */
-void InventoryState::btnCreateTemplateClick(Action* action)
+/* void InventoryState::btnCreateTemplateClick(Action* action)
 {
 	if (_inv->getSelectedItem() != NULL) // don't accept clicks when moving items
 		return;
@@ -866,7 +872,7 @@ void InventoryState::btnCreateTemplateClick(Action* action)
 									38)
 								->play();
 	_refreshMouse();
-}
+} */
 
 /**
  *
@@ -896,7 +902,7 @@ static void _clearInventory(
 /**
  *
  */
-void InventoryState::btnApplyTemplateClick(Action* action)
+/* void InventoryState::btnApplyTemplateClick(Action* action)
 {
 	if (_inv->getSelectedItem() != NULL)	// don't accept clicks when moving items
 //		|| _curInventoryTemplate.empty())	// or when the template is empty ->
@@ -1037,10 +1043,10 @@ void InventoryState::btnApplyTemplateClick(Action* action)
 									"BATTLE.CAT",
 									38)
 								->play();
-}
+} */
 
 /**
- *
+ * Jogs the mouse cursor to refresh appearances.
  */
 void InventoryState::_refreshMouse()
 {
@@ -1054,7 +1060,7 @@ void InventoryState::_refreshMouse()
 }
 
 /**
- *
+ * Clears the current unit's inventory and moves all items to the ground.
  */
 void InventoryState::btnClearInventoryClick(Action* action)
 {
@@ -1215,7 +1221,7 @@ void InventoryState::invMouseOver(Action* action)
 		_tuCost->setVisible(_tu					// kL
 							&& _inv->getTUCost() > 0);
 
-		_updateTemplateButtons(false); // kL
+//		_updateTemplateButtons(false); // kL
 
 		return;
 	}
@@ -1223,7 +1229,7 @@ void InventoryState::invMouseOver(Action* action)
 	BattleItem* item = _inv->getMouseOverItem();
 	if (item != NULL)
 	{
-		_updateTemplateButtons(false); // kL
+//		_updateTemplateButtons(false); // kL
 //		_tuCost->setVisible(false); // kL
 
 		RuleItem* itemRule = item->getRules();
@@ -1341,7 +1347,7 @@ void InventoryState::invMouseOver(Action* action)
 
 		_selAmmo->clear();
 
-		_updateTemplateButtons(!_tu);
+//		_updateTemplateButtons(!_tu);
 	}
 }
 
@@ -1357,7 +1363,7 @@ void InventoryState::invMouseOut(Action*)
 
 	_selAmmo->clear();
 
-	_updateTemplateButtons(!_tu);
+//	_updateTemplateButtons(!_tu);
 	_tuCost->setVisible(false); // kL
 }
 
@@ -1414,7 +1420,7 @@ void InventoryState::txtTooltipOut(Action* action)
 /**
  *
  */
-void InventoryState::_updateTemplateButtons(bool isVisible)
+/* void InventoryState::_updateTemplateButtons(bool isVisible)
 {
 	if (isVisible)
 	{
@@ -1441,6 +1447,6 @@ void InventoryState::_updateTemplateButtons(bool isVisible)
 		_btnApplyTemplate->clear();
 		_btnClearInventory->clear();
 	}
-}
+} */
 
 }
