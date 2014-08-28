@@ -51,7 +51,7 @@ private:
 
 	SurfaceSet* _texture;
 
-	std::vector<Base*> *_bases;
+	std::vector<Base*>* _bases;
 
 
 	public:

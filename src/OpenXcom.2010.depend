@@ -247,7 +247,7 @@
 1408671503 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
-1404096022 f:\git\openxcom\src\basescape\minibaseview.h
+1409198951 f:\git\openxcom\src\basescape\minibaseview.h
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
@@ -4440,7 +4440,7 @@
 	<stdint.h>
 	"GameTime.h"
 
-1409176856 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1409200207 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -5280,7 +5280,7 @@
 	<algorithm>
 	<stdint.h>
 
-1409185480 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1409186555 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -5288,6 +5288,7 @@
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Engine/Screen.h"
@@ -7548,7 +7549,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1409183215 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1409192964 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	<sstream>
 	"../Battlescape/BattlescapeGenerator.h"

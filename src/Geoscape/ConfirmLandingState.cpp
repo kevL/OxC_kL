@@ -194,7 +194,7 @@ ConfirmLandingState::ConfirmLandingState(
 			ss << tr(ufoRule->getType()); // only ufoType shows if not hyperdetected.
 
 		if (ufo->getHyperDetected())
-			ss << L" : " << tr(ufo->getAlienRace());
+			ss << L" <> " << tr(ufo->getAlienRace());
 	}
 	std::wstring wstr = ss.str();
 

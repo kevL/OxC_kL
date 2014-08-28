@@ -47,7 +47,7 @@
 #include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Geoscape/BuildNewBaseState.h"
 #include "../Geoscape/GeoscapeState.h"
-#include "../Geoscape/Globe.h" // kL, kL_reCenter
+#include "../Geoscape/Globe.h" // kL_reCenter
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -597,7 +597,7 @@ void BasescapeState::viewLeftClick(Action*)
 	}
 	else if (fac->getRules()->isLift()) // my Lift has a radar range ... (see next)
 	{
-		bPop = true;
+//		bPop = true; // plays window-'swish' instead.
 		_game->pushState(new BaseDetectionState(_base));
 //		_game->pushState(new MonthlyCostsState(_base));
 	}
@@ -702,6 +702,7 @@ void BasescapeState::viewMouseOut(Action*)
 void BasescapeState::miniClick(Action*)
 {
 	size_t base = _mini->getHoveredBase();
+
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
 		_base = _game->getSavedGame()->getBases()->at(base);

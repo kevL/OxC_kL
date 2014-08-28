@@ -56,14 +56,14 @@ MiniBaseView::MiniBaseView(
 			x,
 			y),
 		_bases(),
-		_texture(0),
+		_texture(NULL),
 		_base(0),
 		_hoverBase(0)
 {
 }
 
 /**
- *
+ * dTor.
  */
 MiniBaseView::~MiniBaseView()
 {
@@ -105,7 +105,6 @@ void MiniBaseView::setSelectedBase(size_t base)
 {
 	_base = base;
 
-//	_gs->setCurrentBase((Uint8)_base); // kL
 	kL_currentBase = base;
 
 	_redraw = true;
@@ -123,8 +122,7 @@ void MiniBaseView::draw()
 			i < MAX_BASES;
 			++i)
 	{
-		// Draw base squares
-		if (i == _base)
+		if (i == _base) // Draw base squares
 		{
 			SDL_Rect r;
 			r.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2));
@@ -138,27 +136,27 @@ void MiniBaseView::draw()
 		_texture->getFrame(41)->setY(0);
 		_texture->getFrame(41)->blit(this);
 
-		// Draw facilities
-		if (i < _bases->size())
+
+		if (i < _bases->size()) // Draw facilities
 		{
 			lock();
-
 			SDL_Rect r;
+
 			for (std::vector<BaseFacility*>::iterator
-					f = _bases->at(i)->getFacilities()->begin();
-					f != _bases->at(i)->getFacilities()->end();
-					++f)
+					fac = _bases->at(i)->getFacilities()->begin();
+					fac != _bases->at(i)->getFacilities()->end();
+					++fac)
 			{
 				int pal;
-				if ((*f)->getBuildTime() == 0)
+				if ((*fac)->getBuildTime() == 0)
 					pal = 3;
 				else
 					pal = 2;
 
-				r.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*f)->getX() * 2);
-				r.y = static_cast<Sint16>(2 + (*f)->getY() * 2);
-				r.w = static_cast<Uint16>((*f)->getRules()->getSize() * 2);
-				r.h = static_cast<Uint16>((*f)->getRules()->getSize() * 2);
+				r.x = static_cast<Sint16>(static_cast<int>(i) * (MINI_SIZE + 2) + 2 + (*fac)->getX() * 2);
+				r.y = static_cast<Sint16>(2 + (*fac)->getY() * 2);
+				r.w = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
+				r.h = static_cast<Uint16>((*fac)->getRules()->getSize() * 2);
 				drawRect(&r, Palette::blockOffset(pal)+3);
 
 				r.x++;
@@ -181,8 +179,14 @@ void MiniBaseView::draw()
 				r.y--;
 				setPixelColor(r.x, r.y, Palette::blockOffset(pal)+1);
 			}
-
 			unlock();
+
+			// kL_begin: Red Marker for unused Scientists or Engineers.
+			if (_bases->at(i)->getTotalScientists() - _bases->at(i)->getAllocatedScientists() > 0
+				|| _bases->at(i)->getTotalEngineers() - _bases->at(i)->getAllocatedEngineers() > 0)
+			{
+				setPixelColor(i * (MINI_SIZE + 2) + 8, 18, Palette::blockOffset(2)+1);
+			} // kL_end.
 		}
 	}
 }
