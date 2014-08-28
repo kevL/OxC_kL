@@ -576,12 +576,12 @@ bool UnitWalkBState::doStatusStand()
 			else if (door == 0) // normal door
 			{
 				//Log(LOG_INFO) << ". . . door #0";
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 3)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::DOOR_OPEN)->play();
 			}
 			else if (door == 1) // ufo door
 			{
 				//Log(LOG_INFO) << ". . . door #1";
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 20)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SLIDING_DOOR_OPEN)->play();
 
 				return false; // don't start walking yet, wait for the ufo door to open
 			}
@@ -1182,7 +1182,7 @@ void UnitWalkBState::playMovementSound()
 				{
 					_parent->getResourcePack()->getSound(
 														"BATTLE.CAT",
-														23 + (t->getFootstepSound(tBelow) * 2))
+														ResourcePack::WALK_OFFSET + 1 + (t->getFootstepSound(tBelow) * 2))
 													->play();
 				}
 			}
@@ -1193,7 +1193,7 @@ void UnitWalkBState::playMovementSound()
 				{
 					_parent->getResourcePack()->getSound(
 														"BATTLE.CAT",
-														22 + (t->getFootstepSound(tBelow) * 2))
+														ResourcePack::WALK_OFFSET + (t->getFootstepSound(tBelow) * 2))
 													->play();
 				}
 			}
@@ -1207,21 +1207,21 @@ void UnitWalkBState::playMovementSound()
 					if (groundCheck(1))
 						_parent->getResourcePack()->getSound( // thunk.
 															"BATTLE.CAT",
-															38)
+															ResourcePack::ITEM_DROP)
 														->play();
 				}
 				else if (!_unit->isFloating())
 				{
 					_parent->getResourcePack()->getSound( // GravLift
 														"BATTLE.CAT",
-														40)
+														40) // play gravLift sound ...
 													->play();
 				}
 				else //if (!_falling)
 				{
 					_parent->getResourcePack()->getSound( // hoverSound
 														"BATTLE.CAT",
-														15)
+														ResourcePack::FLYING_SOUND)
 													->play();
 				}
 			}

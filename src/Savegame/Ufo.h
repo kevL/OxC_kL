@@ -120,6 +120,9 @@ private:
 		/// Gets the UFO's name.
 		std::wstring getName(Language* lang) const;
 
+		/// Gets the UFO's marker.
+//kL	int getMarker() const;
+
 		/// Gets the UFO's amount of damage.
 		int getDamage() const;
 		/// Sets the UFO's amount of damage.

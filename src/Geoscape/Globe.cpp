@@ -318,7 +318,7 @@ Globe::Globe(
 		_cenX(cenX),
 		_cenY(cenY),
 		_game(game),
-		_blink(true),
+		_blink(true), //(-1)
 //		_blinkVal(0),
 		_hover(false),
 		_cacheLand(),
@@ -345,6 +345,7 @@ Globe::Globe(
 	}
 
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
+//kL	_markerSet = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
 
 	_countries	= new Surface(width, height, x, y);
 	_markers	= new Surface(width, height, x, y);
@@ -360,6 +361,7 @@ Globe::Globe(
 //kL	_rotTimer = new Timer(Options::geoScrollSpeed); // old.
 //kL	_rotTimer->onTimer((SurfaceHandler)& Globe::rotate);
 
+// kL_begin:
 	// Globe markers
 	_mkXcomBase = new Surface(3, 3);
 	_mkXcomBase->lock();
@@ -450,6 +452,7 @@ Globe::Globe(
 	_mkAlienSite->setPixelColor(2, 1, 1);
 	_mkAlienSite->setPixelColor(1, 2, 1);
 	_mkAlienSite->unlock();
+//kL_end.
 
 	_cenLon = _game->getSavedGame()->getGlobeLongitude();
 	_cenLat = _game->getSavedGame()->getGlobeLatitude();
@@ -481,6 +484,7 @@ Globe::Globe(
 Globe::~Globe()
 {
 	delete _texture;
+//	delete _markerSet; (they don't actually delete this.. it's been commented in stock code too.)
 
 	delete _blinkTimer;
 //	delete _rotTimer;
@@ -1197,9 +1201,11 @@ void Globe::setPalette(
 	Surface::setPalette(colors, firstcolor, ncolors);
 
 	_texture->setPalette(colors, firstcolor, ncolors);
+//kL	_markerSet->setPalette(colors, firstcolor, ncolors);
 
 	_countries->setPalette(colors, firstcolor, ncolors);
 	_markers->setPalette(colors, firstcolor, ncolors);
+//kL_begin:
 	_mkXcomBase->setPalette(colors, firstcolor, ncolors);
 	_mkAlienBase->setPalette(colors, firstcolor, ncolors);
 	_mkCraft->setPalette(colors, firstcolor, ncolors);
@@ -1209,6 +1215,7 @@ void Globe::setPalette(
 	_mkLandedUfo->setPalette(colors, firstcolor, ncolors);
 	_mkCrashedUfo->setPalette(colors, firstcolor, ncolors);
 	_mkAlienSite->setPalette(colors, firstcolor, ncolors);
+//kL_end.
 	_radars->setPalette(colors, firstcolor, ncolors);
 }
 
@@ -1254,7 +1261,7 @@ void Globe::blink()
 
 		if (_blinkVal == 0)
 			_blink = true;
-	} */ // kL_end.
+	} */
 
 
 	_blink = !_blink;
@@ -1272,7 +1279,15 @@ void Globe::blink()
 	_mkFlyingUfo->offset(colorOffset);
 	_mkLandedUfo->offset(colorOffset);
 	_mkCrashedUfo->offset(colorOffset);
-	_mkAlienSite->offset(colorOffset);
+	_mkAlienSite->offset(colorOffset); // kL_end.
+
+/* code for using a SurfaceSet for markers:
+	_blink = -_blink;
+	for (size_t i = 0; i < _markerSet->getTotalFrames(); ++i)
+	{
+		if (i != CITY_MARKER)
+			_markerSet->getFrame(i)->offset(_blink);
+	} */
 
 	drawMarkers();
 }
@@ -1985,11 +2000,19 @@ void Globe::drawDetail()
 				// Convert coordinates
 				polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
 
+// kL_begin:
 				_mkCity->setX(x - 1);
 				_mkCity->setY(y - 1);
 				_mkCity->setPalette(getPalette());
 
 				_mkCity->blit(_countries);
+// kL_end.
+
+// code for using SurfaceSet for markers:
+				Surface *marker = _markerSet->getFrame(CITY_MARKER);
+				marker->setX(x - 1);
+				marker->setY(y - 1);
+				marker->blit(_countries); //
 
 				label->setX(x - 40);
 				label->setY(y + 2);
@@ -2388,6 +2411,23 @@ void Globe::drawFlights()
 }
 
 /**
+ * Draws the marker for a specified target on the globe.
+ * @param target Pointer to globe target.
+ */
+/* void Globe::drawTarget(Target* target)
+{
+	if (target->getMarker() != -1 && !pointBack(target->getLongitude(), target->getLatitude()))
+	{
+		Sint16 x, y;
+		polarToCart(target->getLongitude(), target->getLatitude(), &x, &y);
+		Surface *marker = _markerSet->getFrame(target->getMarker());
+		marker->setX(x - 1);
+		marker->setY(y - 1);
+		marker->blit(_markers);
+	}
+} */
+
+/**
  * Draws the markers of all the various things going on around the world.
  */
 void Globe::drawMarkers()
@@ -2576,6 +2616,47 @@ void Globe::drawMarkers()
 		}
 	}
 }
+/*	Sint16 x, y; // code for using SurfaceSet for markers:
+	_markers->clear();
+
+	// Draw the base markers
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	{
+		drawTarget(*i);
+	}
+
+	// Draw the waypoint markers
+	for (std::vector<Waypoint*>::iterator i = _game->getSavedGame()->getWaypoints()->begin(); i != _game->getSavedGame()->getWaypoints()->end(); ++i)
+	{
+		drawTarget(*i);
+	}
+
+	// Draw the terror site markers
+	for (std::vector<TerrorSite*>::iterator i = _game->getSavedGame()->getTerrorSites()->begin(); i != _game->getSavedGame()->getTerrorSites()->end(); ++i)
+	{
+		drawTarget(*i);
+	}
+
+	// Draw the Alien Base markers
+	for (std::vector<AlienBase*>::iterator i = _game->getSavedGame()->getAlienBases()->begin(); i != _game->getSavedGame()->getAlienBases()->end(); ++i)
+	{
+		drawTarget(*i);
+	}
+
+	// Draw the UFO markers
+	for (std::vector<Ufo*>::iterator i = _game->getSavedGame()->getUfos()->begin(); i != _game->getSavedGame()->getUfos()->end(); ++i)
+	{
+		drawTarget(*i);
+	}
+
+	// Draw the craft markers
+	for (std::vector<Base*>::iterator i = _game->getSavedGame()->getBases()->begin(); i != _game->getSavedGame()->getBases()->end(); ++i)
+	{
+		for (std::vector<Craft*>::iterator j = (*i)->getCrafts()->begin(); j != (*i)->getCrafts()->end(); ++j)
+		{
+			drawTarget(*j);
+		}
+	} */
 
 /**
  * Blits the globe onto another surface.

@@ -1022,7 +1022,7 @@ void DogfightState::move()
 						setStatus("STR_UFO_HIT");
 						_game->getResourcePack()->getSound(
 														"GEO.CAT",
-														12)
+														ResourcePack::UFO_HIT)
 													->play();
 
 						p->remove();
@@ -1065,7 +1065,7 @@ void DogfightState::move()
 							setStatus("STR_INTERCEPTOR_DAMAGED");
 							_game->getResourcePack()->getSound(
 															"GEO.CAT",
-															10)
+															ResourcePack::INTERCEPTOR_HIT)
 														->play();
 
 							if ((_mode == _btnCautious
@@ -1224,7 +1224,7 @@ void DogfightState::move()
 		_timeout += 30;
 		_game->getResourcePack()->getSound(
 										"GEO.CAT",
-										13)
+										ResourcePack::INTERCEPTOR_EXPLODE)
 									->play();
 
 		finalRun = true;
@@ -1323,7 +1323,7 @@ void DogfightState::move()
 				setStatus("STR_UFO_DESTROYED");
 				_game->getResourcePack()->getSound(
 												"GEO.CAT",
-												11)
+												ResourcePack::UFO_EXPLODE)
 											->play();
 			}
 
@@ -1336,7 +1336,7 @@ void DogfightState::move()
 				setStatus("STR_UFO_CRASH_LANDS");
 				_game->getResourcePack()->getSound(
 												"GEO.CAT",
-												11)
+												ResourcePack::UFO_CRASH)
 											->play();
 
 				for(std::vector<Country*>::iterator
@@ -1485,7 +1485,9 @@ void DogfightState::ufoFireWeapon()
 {
 	Uint32 reload = static_cast<Uint32>(
 						static_cast<int>(_ufoFireInterval)
-						+ RNG::generate(5, _ufo->getRules()->getWeaponReload())
+						+ RNG::generate(
+									5,
+									_ufo->getRules()->getWeaponReload())
 					* _timeScale);
 	if (reload < 1)
 		reload = 1;
@@ -1502,7 +1504,7 @@ void DogfightState::ufoFireWeapon()
 	p->setPosition(_currentDist - (_ufo->getRules()->getRadius() / 2));
 	_projectiles.push_back(p);
 
-	_game->getResourcePack()->getSound("GEO.CAT", 9)->play();
+	_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_FIRE)->play();
 }
 
 /**

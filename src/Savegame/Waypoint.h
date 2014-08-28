@@ -16,12 +16,16 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_WAYPOINT_H
 #define OPENXCOM_WAYPOINT_H
 
 #include "Target.h"
+
 #include <string>
+
 #include <yaml-cpp/yaml.h>
+
 
 namespace OpenXcom
 {
@@ -29,27 +33,38 @@ namespace OpenXcom
 /**
  * Represents a fixed waypoint on the world.
  */
-class Waypoint : public Target
+class Waypoint
+	:
+		public Target
 {
+
 private:
 	int _id;
-public:
-	/// Creates a waypoint.
-	Waypoint();
-	/// Cleans up the waypoint.
-	~Waypoint();
-	/// Loads the waypoint from YAML.
-	void load(const YAML::Node& node);
-	/// Saves the waypoint to YAML.
-	YAML::Node save() const;
-	/// Saves the waypoint's ID to YAML.
-	YAML::Node saveId() const;
-	/// Gets the waypoint's ID.
-	int getId() const;
-	/// Sets the waypoint's ID.
-	void setId(int id);
-	/// Gets the waypoint's name.
-	std::wstring getName(Language *lang) const;
+
+
+	public:
+		/// Creates a waypoint.
+		Waypoint();
+		/// Cleans up the waypoint.
+		~Waypoint();
+
+		/// Loads the waypoint from YAML.
+		void load(const YAML::Node& node);
+		/// Saves the waypoint to YAML.
+		YAML::Node save() const;
+
+		/// Saves the waypoint's ID to YAML.
+		YAML::Node saveId() const;
+		/// Gets the waypoint's ID.
+		int getId() const;
+		/// Sets the waypoint's ID.
+		void setId(int id);
+
+		/// Gets the waypoint's name.
+		std::wstring getName(Language* lang) const;
+
+		/// Gets the waypoint's marker.
+//kL	int getMarker() const;
 };
 
 }

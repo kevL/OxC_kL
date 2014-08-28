@@ -167,7 +167,7 @@ void BaseDefenseState::nextStep()
 
 				_game->getResourcePack()->getSound(
 												"GEO.CAT",
-												11)
+												ResourcePack::UFO_EXPLODE)
 											->play();
 
 				_lstDefenses->addRow(
@@ -182,7 +182,7 @@ void BaseDefenseState::nextStep()
 
 				_game->getResourcePack()->getSound(
 												"GEO.CAT",
-												11)
+												ResourcePack::UFO_EXPLODE)
 											->play();
 			return;
 			case BDA_EXPLODING2:
@@ -191,7 +191,7 @@ void BaseDefenseState::nextStep()
 
 				_game->getResourcePack()->getSound(
 												"GEO.CAT",
-												11)
+												ResourcePack::UFO_EXPLODE)
 											->play();
 			return;
 

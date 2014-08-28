@@ -16,9 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #include "Waypoint.h"
+
 #include <sstream>
+
 #include "../Engine/Language.h"
+
 
 namespace OpenXcom
 {
@@ -26,12 +30,15 @@ namespace OpenXcom
 /**
  * Initializes a waypoint.
  */
-Waypoint::Waypoint() : Target(), _id(0)
+Waypoint::Waypoint()
+	:
+		Target(),
+		_id(0)
 {
 }
 
 /**
- *
+ * dTor.
  */
 Waypoint::~Waypoint()
 {
@@ -41,7 +48,7 @@ Waypoint::~Waypoint()
  * Loads the waypoint from a YAML file.
  * @param node YAML node.
  */
-void Waypoint::load(const YAML::Node &node)
+void Waypoint::load(const YAML::Node& node)
 {
 	Target::load(node);
 	_id = node["id"].as<int>(_id);
@@ -55,6 +62,7 @@ YAML::Node Waypoint::save() const
 {
 	YAML::Node node = Target::save();
 	node["id"] = _id;
+
 	return node;
 }
 
@@ -67,6 +75,7 @@ YAML::Node Waypoint::saveId() const
 	YAML::Node node = Target::saveId();
 	node["type"] = "STR_WAYPOINT";
 	node["id"] = _id;
+
 	return node;
 }
 
@@ -93,9 +102,18 @@ void Waypoint::setId(int id)
  * @param lang Language to get strings from.
  * @return Full name.
  */
-std::wstring Waypoint::getName(Language *lang) const
+std::wstring Waypoint::getName(Language* lang) const
 {
 	return lang->getString("STR_WAY_POINT_").arg(_id);
 }
+
+/**
+ * Returns the globe marker for the waypoint.
+ * @return Marker sprite, -1 if none.
+ */
+/* int Waypoint::getMarker() const
+{
+	return 6;
+} */
 
 }

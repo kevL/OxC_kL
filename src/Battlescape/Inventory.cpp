@@ -815,7 +815,10 @@ void Inventory::mouseClick(Action* action, State* state)
 										newSlot,
 										0,
 										0);
-								_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+								_game->getResourcePack()->getSound(
+																"BATTLE.CAT",
+																ResourcePack::ITEM_DROP)
+															->play();
 								arrangeGround(false);
 							}
 							else
@@ -904,7 +907,10 @@ void Inventory::mouseClick(Action* action, State* state)
 								_stackLevel[x][y] += 1;
 
 							setSelectedItem(NULL);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSound(
+															"BATTLE.CAT",
+															ResourcePack::ITEM_DROP)
+														->play();
 						}
 						else
 						{
@@ -927,7 +933,10 @@ void Inventory::mouseClick(Action* action, State* state)
 									item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(NULL);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSound(
+															"BATTLE.CAT",
+															ResourcePack::ITEM_DROP)
+														->play();
 						}
 						else
 						{
@@ -977,10 +986,15 @@ void Inventory::mouseClick(Action* action, State* state)
 									NULL,
 									0,
 									0);
+
 							item->setAmmoItem(_selItem);
 							_selItem->moveToOwner(NULL);
 							setSelectedItem(NULL);
-							_game->getResourcePack()->getSound("BATTLE.CAT", 17)->play();
+
+							_game->getResourcePack()->getSound(
+															"BATTLE.CAT",
+															ResourcePack::ITEM_RELOAD)
+														->play();
 
 							if (item->getSlot()->getType() == INV_GROUND)
 								arrangeGround(false);
@@ -1023,7 +1037,10 @@ void Inventory::mouseClick(Action* action, State* state)
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(NULL);
 
-							_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+							_game->getResourcePack()->getSound(
+															"BATTLE.CAT",
+															ResourcePack::ITEM_DROP)
+														->play();
 						}
 						else
 						{
@@ -1350,40 +1367,6 @@ bool Inventory::fitItem(
 					&& !placed;
 				++x2)
 		{
-/*			if (!overlapItems(
-							_selUnit,
-							item,
-							newSlot,
-							x2,
-							y2)
-				&& newSlot->fitItemInSlot(
-										item->getRules(),
-										x2,
-										y2))
-			{
-				if (_tu // kL_begin:
-					&& test == true)
-				{
-					placed = true; // kL end.
-				}
-				else if (!_tu
-					|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
-				{
-					placed = true;
-
-					moveItem(
-							item,
-							newSlot,
-							x2,
-							y2);
-
-					_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
-
-					drawItems();
-				}
-				else if (test == false) // kL_alter.
-					warning = "STR_NOT_ENOUGH_TIME_UNITS";
-			} */
 			if (newSlot->fitItemInSlot(
 									item->getRules(),
 									x2,
@@ -1412,7 +1395,10 @@ bool Inventory::fitItem(
 								x2,
 								y2);
 
-						_game->getResourcePack()->getSound("BATTLE.CAT", 38)->play();
+						_game->getResourcePack()->getSound(
+														"BATTLE.CAT",
+														ResourcePack::ITEM_DROP)
+													->play();
 
 						drawItems();
 					}

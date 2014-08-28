@@ -35,6 +35,7 @@ class ExtraSprites;
 class GMCatFile;
 class Music;
 class RuleMusic; // sza_MusicRules
+class Ruleset;
 
 
 static const std::string XCOM_RESOURCE_MUSIC_GMDEFEND	= "GMDEFEND";
@@ -64,19 +65,7 @@ class XcomResourcePack
 
 public:
 	/// Creates the X-Com ruleset.
-	XcomResourcePack( // kL
-			std::vector<std::pair<std::string, RuleMusic*> > musicRules,
-			std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
-			std::vector<std::pair<std::string, ExtraSounds*> > extraSounds,
-			std::vector<std::pair<std::string, ExtraMusic*> > extraMusic);
-//	XcomResourcePack( // sza_MusicRules
-//			std::vector<std::pair<std::string, RuleMusic*> > musicRules,
-//			std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
-//			std::vector<std::pair<std::string, ExtraSounds*> > extraSounds);
-//	XcomResourcePack( // sza_ExtraMusic
-//			std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
-//			std::vector<std::pair<std::string, ExtraSounds*> > extraSounds,
-//			std::vector<std::pair<std::string, ExtraMusic*> > extraMusic);
+	XcomResourcePack(Ruleset* rules);
 	/// Cleans up the X-Com ruleset.
 	~XcomResourcePack();
 

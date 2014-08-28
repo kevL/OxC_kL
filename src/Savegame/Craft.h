@@ -106,6 +106,9 @@ private:
 		/// Sets the craft's name.
 		void setName(const std::wstring& newName);
 
+		/// Gets the craft's marker.
+//kL	int getMarker() const;
+
 		/// Gets the craft's base.
 		Base* getBase() const;
 		/// Sets the craft's base.

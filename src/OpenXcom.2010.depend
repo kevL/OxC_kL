@@ -4414,20 +4414,20 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1408361728 f:\git\openxcom\src\resource\resourcepack.h
+1409255068 f:\git\openxcom\src\resource\resourcepack.h
 	<map>
 	<string>
 	<vector>
 	<SDL.h>
 
-1409168893 f:\git\openxcom\src\savegame\base.h
+1409253147 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
 	"Target.h"
 
-1404096023 f:\git\openxcom\src\savegame\target.h
+1409259807 f:\git\openxcom\src\savegame\target.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -4566,7 +4566,7 @@
 1404096023 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1408187487 f:\git\openxcom\src\savegame\craft.h
+1409253459 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
 	"MovingTarget.h"
@@ -4878,7 +4878,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1408360652 f:\git\openxcom\src\geoscape\globe.h
+1409251150 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"
@@ -4891,7 +4891,7 @@
 
 1404096022 f:\git\openxcom\src\engine\fastlineclip.h
 
-1408552017 f:\git\openxcom\src\savegame\ufo.h
+1409253560 f:\git\openxcom\src\savegame\ufo.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"MovingTarget.h"
@@ -5809,7 +5809,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1408843012 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1409257320 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5975,7 +5975,7 @@
 	<exception>
 	<string>
 
-1404096023 f:\git\openxcom\src\resource\xcomresourcepack.h
+1409258071 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
 	"../Engine/Options.h"
 
@@ -6009,7 +6009,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404096023 f:\git\openxcom\src\savegame\alienbase.h
+1409253115 f:\git\openxcom\src\savegame\alienbase.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"Target.h"
@@ -6018,7 +6018,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404096023 f:\git\openxcom\src\savegame\terrorsite.h
+1409253532 f:\git\openxcom\src\savegame\terrorsite.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"Target.h"
@@ -6033,7 +6033,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1409185294 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1409257487 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6318,7 +6318,7 @@
 1404096022 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1408934005 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1409257766 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6365,7 +6365,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1409182299 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1409258071 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6400,7 +6400,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1409187804 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1409258249 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6437,7 +6437,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1409182372 source:f:\git\openxcom\src\battlescape\map.cpp
+1409248897 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6682,7 +6682,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1408940941 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1409258310 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -7240,13 +7240,13 @@
 	"Logger.h"
 	"Options.h"
 
-1404360571 source:f:\git\openxcom\src\engine\soundset.cpp
+1409253896 source:f:\git\openxcom\src\engine\soundset.cpp
 	"SoundSet.h"
 	"CatFile.h"
 	"Exception.h"
 	"Sound.h"
 
-1404096022 f:\git\openxcom\src\engine\soundset.h
+1409253892 f:\git\openxcom\src\engine\soundset.h
 	<map>
 	<string>
 
@@ -7544,7 +7544,7 @@
 1404096023 f:\git\openxcom\src\geoscape\confirmdestinationstate.h
 	"../Engine/State.h"
 
-1404096023 f:\git\openxcom\src\savegame\waypoint.h
+1409256540 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 	<string>
 	<yaml-cpp/yaml.h>
@@ -7656,7 +7656,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1408551829 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1409256064 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -11618,7 +11618,7 @@
 	"../Engine/Options.h"
 	"../Engine/State.h"
 
-1408479010 source:f:\git\openxcom\src\menu\introstate.cpp
+1409246339 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	<SDL_mixer.h>
 	"MainMenuState.h"
@@ -11737,7 +11737,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1407389601 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
+1409256217 source:f:\git\openxcom\src\menu\optionsaudiostate.cpp
 	"OptionsAudioState.h"
 	<sstream>
 	<SDL_mixer.h>

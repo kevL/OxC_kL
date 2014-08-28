@@ -869,7 +869,7 @@ void InventoryState::btnRankClick(Action*)
 
 	_game->getResourcePack()->getSound( // give audio feedback
 									"BATTLE.CAT",
-									38)
+									ResourcePack::ITEM_DROP)
 								->play();
 	_refreshMouse();
 } */
@@ -1041,7 +1041,7 @@ static void _clearInventory(
 
 	_game->getResourcePack()->getSound( // give audio feedback
 									"BATTLE.CAT",
-									38)
+									ResourcePack::ITEM_DROP)
 								->play();
 } */
 
@@ -1082,7 +1082,7 @@ void InventoryState::btnClearInventoryClick(Action* action)
 
 	_game->getResourcePack()->getSound( // give audio feedback
 									"BATTLE.CAT",
-									38)
+									ResourcePack::ITEM_DROP)
 								->play();
 }
 

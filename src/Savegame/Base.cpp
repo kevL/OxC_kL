@@ -441,6 +441,18 @@ void Base::setName(const std::wstring& name)
 }
 
 /**
+ * Returns the globe marker for the base.
+ * @return Marker sprite, -1 if none.
+ */
+/* int Base::getMarker() const
+{
+	// Cheap hack to hide bases when they haven't been placed yet
+	if (AreSame(_lon, 0.0) && AreSame(_lat, 0.0))
+		return -1;
+	return 0;
+} */
+
+/**
  * Returns the list of facilities in the base.
  * @return, Pointer to the facility list.
  */
@@ -547,67 +559,45 @@ uint8_t Base::detect(Target* target) const
 	}
 	else
 	{
-		float chance = 0;
-
+		double chance = 0.0;
 		double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
 
 		for (std::vector<BaseFacility*>::const_iterator
-				f = _facilities.begin();
-				f != _facilities.end();
-				++f)
+				fac = _facilities.begin();
+				fac != _facilities.end();
+				++fac)
 		{
-			if ((*f)->getBuildTime() == 0)
+			if ((*fac)->getBuildTime() == 0)
 			{
-				double radarRange = static_cast<double>((*f)->getRules()->getRadarRange()) * greatCircleConversionFactor;
-
-				if (radarRange > 0.0) Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
+				double radarRange = static_cast<double>((*fac)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+				//if (radarRange > 0.0) Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 
 				if (targetDistance < radarRange)
 				{
-					chance += static_cast<float>((*f)->getRules()->getRadarChance());
+					chance += static_cast<double>((*fac)->getRules()->getRadarChance());
 					//Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
 					//Log(LOG_INFO) << ". . . chance(base) = " << (int)chance;
 				}
-				else Log(LOG_INFO) << ". . . target out of Range";
+				//else Log(LOG_INFO) << ". . . target out of Range";
 			}
 		}
 
-		if (AreSame(chance, 0.f))
+		if (AreSame(chance, 0.0))
 			return 0;
 		else
 		{
 			Ufo* u = dynamic_cast<Ufo*>(target);
-/*			if (u != 0)
-			{
-				chance += static_cast<float>(u->getVisibility());
-				//Log(LOG_INFO) << ". . chance(base + ufo) = " << (int)chance;
-			}
-
-			// need to divide by 3, since Geoscape-detection was moved from 30m to 10m time-slot.
-			chance /= 3.f; */
-			// and convert to int:
-/*			int iChance = static_cast<int>(chance);
-
-			if (iChance < 1)
-				return 0;
-			else
-			{
-				ret = static_cast<uint8_t>(RNG::percent(iChance));
-				//Log(LOG_INFO) << ". detected = " << (int)ret;
-			} */
-//			ret = static_cast<uint8_t>(RNG::percent(static_cast<int>(chance)));
 			// kL_note: If this doesn't detect anything but UFOs, could
 			// consolidate it within (u != 0) above. Like this:
 			if (u != NULL)
 			{
-				chance += static_cast<float>(u->getVisibility());
+				chance += static_cast<double>(u->getVisibility());
 				// need to divide by 3, since Geoscape-detection was moved from 30min to 10min time-slot.
-				chance /= 3.f;
+				chance /= 3.0;
 
 				ret = static_cast<uint8_t>(RNG::percent(static_cast<int>(chance)));
 				//Log(LOG_INFO) << ". . Base detect UFO chance (baseDet + ufoVis) = " << (int)chance << " RET = " << (int)ret;
 			}
-//			else return 0;
 		}
 	}
 

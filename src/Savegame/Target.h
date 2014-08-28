@@ -72,6 +72,9 @@ protected:
 		/// Gets the target's name.
 		virtual std::wstring getName(Language* lang) const = 0;
 
+		/// Gets the target's marker.
+//kL	virtual int getMarker() const = 0;
+
 		/// Gets the target's followers.
 		std::vector<Target*>* getFollowers();
 

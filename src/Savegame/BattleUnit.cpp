@@ -3926,18 +3926,21 @@ void BattleUnit::breathe()
 {
 	// _breathFrame of -1 means this unit doesn't produce bubbles
 	if (_breathFrame < 0
-		|| isOut()
-		|| _status == STATUS_WALKING)
+		|| isOut())
 	{
 		_breathing = false;
 
 		return;
 	}
 
-	if (!_breathing)
+	if (!_breathing
+		|| _status == STATUS_WALKING)
 	{
-		// 10% chance per animation frame to start breathing
-		_breathing = RNG::percent(10);
+		// deviation from original: TFTD used a static 10% chance for every animation frame,
+		// instead let's use 5%, but allow morale to affect it.
+		_breathing = (_status != STATUS_WALKING
+					&& RNG::percent(105 - _morale));
+
 		_breathFrame = 0;
 	}
 

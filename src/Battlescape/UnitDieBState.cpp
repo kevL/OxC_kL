@@ -456,12 +456,12 @@ void UnitDieBState::playDeathSound()
 	if (_unit->getType() == "MALE_CIVILIAN")
 		_parent->getResourcePack()->getSound(
 											"BATTLE.CAT",
-											RNG::generate(41, 43))
+											ResourcePack::MALE_SCREAM[RNG::generate(0, 2)])
 										->play();
 	else if (_unit->getType() == "FEMALE_CIVILIAN")
 		_parent->getResourcePack()->getSound(
 											"BATTLE.CAT",
-											RNG::generate(44, 46))
+											ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)])
 										->play();
 	else if (_unit->getType() == "SOLDIER")
 	{
@@ -477,7 +477,7 @@ void UnitDieBState::playDeathSound()
 		}
 		else if (_unit->getGender() == GENDER_FEMALE)
 		{
-			sound = RNG::generate(111, 116);
+			sound = RNG::generate(101, 103);
 			//Log(LOG_INFO) << "death Female, sound = " << sound;
 			_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
@@ -491,34 +491,5 @@ void UnitDieBState::playDeathSound()
 											_unit->getDeathSound())
 										->play();
 }
-/*	if ((_unit->getType() == "SOLDIER"
-			&& _unit->getGender() == GENDER_MALE)
-		|| _unit->getType() == "MALE_CIVILIAN")
-	{
-//kL	_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(41, 43))->play();
-		int iSound = RNG::generate(41, 43);
-		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), male iSound = " << iSound;
-		_parent->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											iSound)
-										->play();
-	}
-	else if ((_unit->getType() == "SOLDIER"
-			&& _unit->getGender() == GENDER_FEMALE)
-		|| _unit->getType() == "FEMALE_CIVILIAN")
-	{
-//kL	_parent->getResourcePack()->getSound("BATTLE.CAT", RNG::generate(44, 46))->play();
-		int iSound = RNG::generate(44, 46);
-		//Log(LOG_INFO) << "UnitDieBState::playDeathSound(), female iSound = " << iSound;
-		_parent->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											iSound)
-										->play();
-	}
-	else
-		_parent->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											_unit->getDeathSound())
-										->play(); */
 
 }

@@ -16,11 +16,13 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SOUNDSET_H
 #define OPENXCOM_SOUNDSET_H
 
 #include <map>
 #include <string>
+
 
 namespace OpenXcom
 {
@@ -29,26 +31,38 @@ class Sound;
 
 /**
  * Container of a set of sounds.
- * Used to manage file sets that contain a pack
- * of sounds inside.
+ * Used to manage file sets that contain a pack of sounds inside.
  */
 class SoundSet
 {
+
 private:
 	std::map<int, Sound*> _sounds;
-public:
-	/// Crates a sound set.
-	SoundSet();
-	/// Cleans up the sound set.
-	~SoundSet();
-	/// Loads an X-Com CAT set of sound files.
-	void loadCat(const std::string &filename, bool wav = true);
-	/// Gets a particular sound from the set.
-	Sound *getSound(unsigned int i);
-	/// Creates a new sound and returns a pointer to it.
-	Sound *addSound(unsigned int i);
-	/// Gets the total sounds in the set.
-	size_t getTotalSounds() const;
+
+
+	public:
+		/// Creates a sound set.
+		SoundSet();
+		/// Cleans up the sound set.
+		~SoundSet();
+
+		/// Loads an X-Com CAT set of sound files.
+		void loadCat(
+				const std::string& filename,
+				bool wav = true);
+
+		/// Gets a particular sound from the set.
+		Sound* getSound(unsigned int i);
+		/// Creates a new sound and returns a pointer to it.
+		Sound* addSound(unsigned int i);
+
+		/// Gets the total sounds in the set.
+		size_t getTotalSounds() const;
+
+		/// Loads a specific entry from a CAT file into the soundset.
+		void loadCatbyIndex(
+				const std::string& filename,
+				int index);
 };
 
 }

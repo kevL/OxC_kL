@@ -62,12 +62,13 @@ private:
 	static const int NEAR_RADIUS	= 25;
 
 //kL	static const size_t DOGFIGHT_ZOOM = 5; // kL, was 3
+//kL	static const int CITY_MARKER = 8;
 
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
 	bool
-		_blink,
+		_blink, // they typed it to (int)
 		_hover,
 		_isMouseScrolled,
 		_isMouseScrolling,
@@ -104,7 +105,7 @@ private:
 		* _countries,
 		* _markers,
 		* _radars,
-		* _mkAlienBase,
+		* _mkAlienBase,		// kL_begin:
 		* _mkAlienSite,
 		* _mkCity,
 		* _mkCraft,
@@ -112,8 +113,9 @@ private:
 		* _mkFlyingUfo,
 		* _mkLandedUfo,
 		* _mkWaypoint,
-		* _mkXcomBase;
+		* _mkXcomBase;		// kL_end.
 	SurfaceSet* _texture;
+//kL	* _markerSet;
 	Timer* _blinkTimer; //, * _rotTimer;
 
 	std::list<Polygon*> _cacheLand;
@@ -183,6 +185,8 @@ private:
 			double lon2,
 			double lat2,
 			bool flight = false); // kL_add.
+	/// Draw target marker.
+//kL	void drawTarget(Target* target);
 
 
 	public:

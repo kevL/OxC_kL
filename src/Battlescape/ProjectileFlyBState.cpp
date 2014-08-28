@@ -583,7 +583,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			_parent->getResourcePack()->getSound(
 												"BATTLE.CAT",
-												39)
+												ResourcePack::ITEM_THROW)
 											->play();
 
 			if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL
@@ -877,7 +877,7 @@ void ProjectileFlyBState::think()
 			{
 				_parent->getResourcePack()->getSound(
 													"BATTLE.CAT",
-													38)
+													ResourcePack::ITEM_DROP)
 												->play();
 
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);

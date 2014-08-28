@@ -114,7 +114,7 @@ void Target::setLongitude(double lon)
 	_lon = lon;
 
 	// Keep between 0 and 2xPI
-	while (_lon < 0)
+	while (_lon < 0.0)
 		_lon += 2.0 * M_PI;
 
 	while (_lon >= 2.0 * M_PI)
@@ -138,8 +138,7 @@ void Target::setLatitude(double lat)
 {
 	_lat = lat;
 
-	// keep it between -pi/2 and pi/2
-	if (_lat < -(M_PI / 2.0))
+	if (_lat < -(M_PI / 2.0)) // keep it between -pi/2 and pi/2
 	{
 		_lat = -M_PI - _lat; // kL
 		setLongitude(_lon + M_PI);

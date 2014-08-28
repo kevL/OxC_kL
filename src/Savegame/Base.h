@@ -107,6 +107,8 @@ private:
 		std::wstring getName(Language* lang = NULL) const;
 		/// Sets the base's name.
 		void setName(const std::wstring& name);
+		/// Gets the base's marker.
+//kL	int getMarker() const;
 
 		/// Gets the base's facilities.
 		std::vector<BaseFacility*>* getFacilities();

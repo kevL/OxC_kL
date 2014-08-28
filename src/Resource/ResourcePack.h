@@ -72,6 +72,30 @@ private:
 
 
 		public:
+			static int BUTTON_PRESS;
+			static int WINDOW_POPUP[3];
+
+			static int SMALL_EXPLOSION;
+			static int DOOR_OPEN;
+			static int LARGE_EXPLOSION;
+			static int FLYING_SOUND;
+			static int ITEM_RELOAD;
+			static int SLIDING_DOOR_OPEN;
+			static int SLIDING_DOOR_CLOSE;
+			static int WALK_OFFSET;
+			static int ITEM_DROP;
+			static int ITEM_THROW;
+			static int MALE_SCREAM[3];
+			static int FEMALE_SCREAM[3];
+
+			static int UFO_FIRE;
+			static int UFO_HIT;
+			static int UFO_CRASH;
+			static int UFO_EXPLODE;
+			static int INTERCEPTOR_HIT;
+			static int INTERCEPTOR_EXPLODE;
+
+
 			/// Create a new resource pack with a folder's contents.
 			ResourcePack();
 			/// Cleans up the resource pack.

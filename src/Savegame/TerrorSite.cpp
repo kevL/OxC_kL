@@ -40,7 +40,7 @@ TerrorSite::TerrorSite()
 }
 
 /**
- *
+ * dTor.
  */
 TerrorSite::~TerrorSite()
 {
@@ -119,6 +119,15 @@ std::wstring TerrorSite::getName(Language* lang) const
 {
 	return lang->getString("STR_TERROR_SITE").arg(_id);
 }
+
+/**
+ * Returns the globe marker for the terror site.
+ * @return Marker sprite, -1 if none.
+ */
+/* int TerrorSite::getMarker() const
+{
+	return 5;
+} */
 
 /**
  * Returns the number of seconds remaining before the terror site expires.

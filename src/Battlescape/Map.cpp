@@ -2353,31 +2353,10 @@ void Map::animate(bool redraw)
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if (_save->getDepth() > 0)
+		if (_save->getDepth() > 0
+			&& !(*i)->getFloorAbove())
 		{
-			(*i)->setFloorAbove(false);
-
-			// make sure this unit isn't obscured by the floor above him, otherwise it looks weird.
-			Position pos = (*i)->getPosition();
-			if ((*i)->getTile()
-				&& _camera->getViewLevel() > pos.z)
-			{
-				for (int
-						z = _camera->getViewLevel();
-						z != pos.z;
-						--z)
-				{
-					if (_save->getTile(Position(pos.x, pos.y, z))->hasNoFloor(NULL) == false)
-					{
-						(*i)->setFloorAbove(true);
-
-						break;
-					}
-				}
-			}
-
-			if (!(*i)->getFloorAbove())
-				(*i)->breathe();
+			(*i)->breathe();
 		}
 
 		if ((*i)->getArmor()->getConstantAnimation())
@@ -2542,6 +2521,32 @@ void Map::calculateWalkingOffset(
 		{
 			if (unit->getStatus() == STATUS_AIMING)
 				offset->x = -16;
+		}
+
+		if (_save->getDepth() > 0)
+		{
+			unit->setFloorAbove(false);
+
+			// make sure this unit isn't obscured by the floor above him, otherwise it looks weird.
+			if (_camera->getViewLevel() > unit->getPosition().z)
+			{
+				for (int
+						z = _camera->getViewLevel();
+						z != unit->getPosition().z;
+						--z)
+				{
+					if (!_save->getTile(Position(
+											unit->getPosition().x,
+											unit->getPosition().y,
+											z))
+										->hasNoFloor(0))
+					{
+						unit->setFloorAbove(true);
+
+						break;
+					}
+				}
+			}
 		}
 	}
 }

@@ -223,9 +223,9 @@ void ExplosionBState::init()
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7); // kL
 
 			if (_power < 76)
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 12)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SMALL_EXPLOSION)->play();
 			else
-				_parent->getResourcePack()->getSound("BATTLE.CAT", 5)->play();
+				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::LARGE_EXPLOSION)->play();
 
 			// kL_begin:
 			Camera* explodeCam = _parent->getMap()->getCamera();

@@ -41,7 +41,7 @@ RuleItem::RuleItem(const std::string& type)
 		_costBuy(0),
 		_costSell(0),
 		_transferTime(24),
-		_weight(999),
+		_weight(3),
 		_bigSprite(0),
 		_floorSprite(-1),
 		_handSprite(120),

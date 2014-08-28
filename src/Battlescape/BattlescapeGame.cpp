@@ -601,8 +601,8 @@ void BattlescapeGame::endTurn()
 
 	getMap()->getWaypoints()->clear();
 
-//	if (_save->getTileEngine()->closeUfoDoors())
-//		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
+//	if (_save->getTileEngine()->closeUfoDoors() && ResourcePack::SLIDING_DOOR_CLOSE != -1)
+//		getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SLIDING_DOOR_CLOSE)->play(); // ufo door closed->getSound("BATTLE.CAT", 21)->play()
 
 	Position pos;
 	for (int
@@ -640,8 +640,11 @@ void BattlescapeGame::endTurn()
 	}
 	//Log(LOG_INFO) << ". done grenades";
 
-	if (_save->getTileEngine()->closeUfoDoors()) // try, close doors between grenade & terrain explosions
-		getResourcePack()->getSound("BATTLE.CAT", 21)->play(); // ufo door closed
+	if (_save->getTileEngine()->closeUfoDoors()
+		&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
+	{
+		getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SLIDING_DOOR_CLOSE)->play(); // ufo door closed
+	}
 
 	// check for terrain explosions
 	Tile* t = _save->getTileEngine()->checkForTerrainExplosions();

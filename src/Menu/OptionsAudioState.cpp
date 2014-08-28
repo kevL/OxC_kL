@@ -252,7 +252,7 @@ OptionsAudioState::OptionsAudioState(OptionsOrigin origin)
 }
 
 /**
- *
+ * dTor.
  */
 OptionsAudioState::~OptionsAudioState()
 {
@@ -290,7 +290,7 @@ void OptionsAudioState::slrSoundVolumeChange(Action*)
  */
 void OptionsAudioState::slrSoundVolumeRelease(Action*)
 {
-	_game->getResourcePack()->getSound("GEO.CAT", 5)->play();
+	_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_FIRE)->play();
 }
 
 /**

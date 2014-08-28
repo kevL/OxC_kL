@@ -54,6 +54,7 @@
 #include "../Ruleset/ExtraSprites.h"
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/RuleMusic.h" // sza_MusicRules
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Node.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -99,22 +100,7 @@ struct HairBleach
  * @param extraSounds	- list of mod extra sounds
  * @param extraMusic	- list of ...
  */
-XcomResourcePack::XcomResourcePack( // kL
-		std::vector<std::pair<std::string, RuleMusic*> > musicRules,
-		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
-		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds,
-		std::vector<std::pair<std::string, ExtraMusic*> > extraMusic)
-//XcomResourcePack::XcomResourcePack( // sza_MusicRules
-//		std::vector<std::pair<std::string, RuleMusic*> > musicRules,
-//		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
-//		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds)
-//XcomResourcePack::XcomResourcePack( // sza_ExtraMusic
-//		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
-//		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds,
-//		std::vector<std::pair<std::string, ExtraMusic*> > extraMusic)
-//XcomResourcePack::XcomResourcePack(
-//		std::vector<std::pair<std::string, ExtraSprites*> > extraSprites,
-//		std::vector<std::pair<std::string, ExtraSounds*> > extraSounds)
+XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	:
 		ResourcePack()
 {
@@ -591,6 +577,7 @@ MOVED TO Ruleset !
 #ifndef __NO_MUSIC // sza_MusicRules
 		// Load musics
 		// gather the assignments first.
+		std::vector<std::pair<std::string, RuleMusic*> > musicRules = rules->getMusic();
 		for (std::vector<std::pair<std::string, RuleMusic*> >::const_iterator
 				i = musicRules.begin();
 				i != musicRules.end();
@@ -725,6 +712,7 @@ MOVED TO Ruleset !
 						{
 							bool loaded = false;
 
+							std::vector<std::pair<std::string, ExtraMusic*> > extraMusic = rules->getExtraMusic();
 							for (std::vector<std::pair<std::string, ExtraMusic*> >::const_iterator
 									m = extraMusic.begin();
 									m != extraMusic.end();
@@ -1081,13 +1069,13 @@ MOVED TO Ruleset !
 	}
 
 	// define GUI sound Fx
-	TextButton::soundPress		= getSound("GEO.CAT", 0); // bleep
-//kL	Window::soundPopup[0]	= getSound("GEO.CAT", 1); // wahahahah
-	Window::soundPopup[1]		= getSound("GEO.CAT", 2); // swish1
-	Window::soundPopup[2]		= getSound("GEO.CAT", 3); // swish2
-	GeoscapeState::soundPop		= getSound("GEO.CAT", 1); // wahahahah // kL, used for Geo->Base & Geo->Graphs
-	BasescapeState::soundPop	= getSound("GEO.CAT", 1); // wahahahah // kL, used for Basescape RMB.
-	GraphsState::soundPop		= getSound("GEO.CAT", 1); // wahahahah // kL, used for switching Graphs screens.
+	TextButton::soundPress		= getSound("GEO.CAT", ResourcePack::BUTTON_PRESS);		// #0 bleep
+//kL	Window::soundPopup[0]	= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// #1 wahahahah
+	Window::soundPopup[1]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[1]);	// #2 swish1
+	Window::soundPopup[2]		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[2]);	// #3 swish2
+	GeoscapeState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Geo->Base & Geo->Graphs
+	BasescapeState::soundPop	= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Basescape RMB.
+	GraphsState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for switching Graphs screens. Or just returning to Geoscape.
 
 	/* BATTLESCAPE RESOURCES */
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
@@ -1151,6 +1139,7 @@ MOVED TO Ruleset !
 	/* EXTRA SPRITES */
 	std::ostringstream s;
 
+	std::vector<std::pair<std::string, ExtraSprites*> > extraSprites = rules->getExtraSprites();
 	for (std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator
 			i = extraSprites.begin();
 			i != extraSprites.end();
@@ -1397,6 +1386,7 @@ MOVED TO Ruleset !
 
 
 	/* EXTRA SOUNDS */
+	std::vector<std::pair<std::string, ExtraSounds*> > extraSounds = rules->getExtraSounds();
 	for (std::vector<std::pair<std::string, ExtraSounds*> >::const_iterator
 			i = extraSounds.begin();
 			i != extraSounds.end();
