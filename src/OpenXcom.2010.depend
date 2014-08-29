@@ -6762,7 +6762,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1409013383 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1409344139 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7242,8 +7242,9 @@
 	"Logger.h"
 	"Options.h"
 
-1409253896 source:f:\git\openxcom\src\engine\soundset.cpp
+1409331137 source:f:\git\openxcom\src\engine\soundset.cpp
 	"SoundSet.h"
+	<sstream>
 	"CatFile.h"
 	"Exception.h"
 	"Sound.h"
@@ -9228,7 +9229,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1409258071 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1409331087 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9260,6 +9261,7 @@
 	"../Ruleset/MapDataSet.h"
 	"../Ruleset/RuleMusic.h"
 	"../Ruleset/Ruleset.h"
+	"../Ruleset/SoundDefinition.h"
 	"../Savegame/Node.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
@@ -9367,7 +9369,7 @@
 1406769750 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1409253038 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1409330666 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9401,6 +9403,7 @@
 	"RuleTerrain.h"
 	"RuleUfo.h"
 	"SoldierNamePool.h"
+	"SoundDefinition.h"
 	"StatString.h"
 	"UfoTrajectory.h"
 	"Unit.h"
@@ -11795,7 +11798,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1404096023 f:\git\openxcom\src\menu\confirmloadstate.h
+1409344869 f:\git\openxcom\src\menu\confirmloadstate.h
 	<string>
 	"OptionsBaseState.h"
 	"../Engine/State.h"

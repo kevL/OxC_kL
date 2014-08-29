@@ -50,9 +50,10 @@ ConfirmLoadState::ConfirmLoadState(
 	_screen = false;
 
 	_window		= new Window(this, 216, 100, 52, 50, POPUP_BOTH);
-	_btnYes		= new TextButton(50, 20, 70, 120);
-	_btnNo		= new TextButton(50, 20, 200, 120);
-	_txtText	= new Text(204, 58, 58, 60);
+	_txtText	= new Text(180, 60, 70, 60);
+
+	_btnNo		= new TextButton(60, 20, 65, 122);
+	_btnYes		= new TextButton(60, 20, 195, 122);
 
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");

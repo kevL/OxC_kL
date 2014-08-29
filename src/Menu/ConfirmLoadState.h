@@ -54,6 +54,7 @@ private:
 		* _btnNo;
 	Window* _window;
 
+
 	public:
 		/// Creates a new confirmation state.
 		ConfirmLoadState(
