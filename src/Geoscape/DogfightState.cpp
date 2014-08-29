@@ -1768,7 +1768,7 @@ void DogfightState::btnUfoClick(Action*)
  * Hides the front view of the UFO.
  * @param action, Pointer to an action.
  */
-void DogfightState::previewPress(Action* action)
+void DogfightState::previewPress(Action*) // action)
 {
 //	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 //		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)

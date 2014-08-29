@@ -128,6 +128,9 @@ private:
 	/// Ends the dogfight.
 	void endDogfight();
 
+	/// kL. Gets the globe texture icon to display for the interception.
+	const std::string getTextureIcon(); // kL
+
 
 	public:
 		/// Creates the Dogfight state.
@@ -221,9 +224,6 @@ private:
 
 		/// Gets pointer to the UFO in this dogfight.
 		Ufo* getUfo() const;
-
-		/// kL. Gets the globe texture icon to display for the interception.
-		const std::string getTextureIcon(); // kL
 };
 
 }

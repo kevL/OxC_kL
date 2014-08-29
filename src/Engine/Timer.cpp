@@ -82,7 +82,7 @@ Timer::Timer(
 }
 
 /**
- *
+ * dTor.
  */
 Timer::~Timer()
 {

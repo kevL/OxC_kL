@@ -1930,21 +1930,21 @@ alienMissions:
           STR_RAIDERS_EARLY: 50
           STR_RAIDERS_MIDEARLY: 30
           STR_RAIDERS_MID: 20
-      1:
+      2:
           STR_RAIDERS_EARLY: 40
           STR_RAIDERS_MIDEARLY: 40
           STR_RAIDERS_MID: 20
-      3:
+      6:
           STR_RAIDERS_EARLY: 20
           STR_RAIDERS_MIDEARLY: 30
           STR_RAIDERS_MID: 40
           STR_RAIDERS_LATE: 10
-      5:
+      10:
           STR_RAIDERS_MIDEARLY: 10
           STR_RAIDERS_MID: 20
           STR_RAIDERS_LATE: 50
           STR_RAIDERS_VERYLATE: 20
-      7:
+      14:
           STR_RAIDERS_MID: 20
           STR_RAIDERS_LATE: 30
           STR_RAIDERS_VERYLATE: 50
@@ -1959,20 +1959,20 @@ alienMissions:
       0:
           STR_SECTOID: 30
           STR_FLOATER: 70
-      1:
+      2:
           STR_SECTOID: 60
           STR_FLOATER: 40
-      3:
+      6:
           STR_SECTOID: 20
           STR_SNAKEMAN: 60
           STR_FLOATER: 20
-      5:
+      10:
           STR_SECTOID: 10
           STR_SNAKEMAN: 20
           STR_ETHEREAL: 20
           STR_MUTON: 40
           STR_FLOATER: 10
-      7:
+      14:
           STR_SECTOID: 10
           STR_SNAKEMAN: 20
           STR_ETHEREAL: 40
@@ -2016,14 +2016,14 @@ alienMissions:
         trajectory: P0
         timer: 120
 extraStrings:
-  - type: en-GB
+  - type: en-US
     strings:
       STR_ALIEN_RAID: Alien Raid
       STR_ALIEN_RAID_UFOPEDIA: The aliens will send raid missions to strike directly at critical facilities located on earth. If successful this alien activity will cause significant alarm on the targeted area. The UFO will not be present during the recovery of the vital installation. 
       STR_ALIEN_FLYBY: Alien Flyby
       STR_ALIEN_FLYBY_UFOPEDIA: This mission consists of alien craft sent to intimidate earth governments. This will result in waves of UFO activity over major populated areas as a display of alien power.  
       STR_RAIDER_SHIP: Raider Ship
-      STR_RAIDER_SHIP_UFOPEDIA: The Raider Ship is a fast and dangerous alien vessel used for attacks on earth's infrastructure. It carries a large strike crew under orders to destroy their own ship upon a crash before attacking any nearby human installation.  
+      STR_RAIDER_SHIP_UFOPEDIA: The Raider Ship is an fast and dangerous alien vessel used for attacks on earth's infrastructure. It carries a large strike crew under orders to destroy their own ship upon a crash before attacking any nearby human installation.  
       STR_RAIDERS_EARLY: Light Raider
       STR_RAIDERS_MIDEARLY: Medium Raider
       STR_RAIDERS_MID: Heavy Raider
@@ -2041,14 +2041,14 @@ extraStrings:
       STR_POLARMOUNT: Polar Mountain
       STR_FORESTMOUNT: Forest Mountain
       STR_DESERTMOUNT: Desert Mountain
-  - type: en-US
+  - type: en-GB
     strings:
       STR_ALIEN_RAID: Alien Raid
       STR_ALIEN_RAID_UFOPEDIA: The aliens will send raid missions to strike directly at critical facilities located on earth. If successful this alien activity will cause significant alarm on the targeted area. The UFO will not be present during the recovery of the vital installation. 
       STR_ALIEN_FLYBY: Alien Flyby
       STR_ALIEN_FLYBY_UFOPEDIA: This mission consists of alien craft sent to intimidate earth governments. This will result in waves of UFO activity over major populated areas as a display of alien power.  
       STR_RAIDER_SHIP: Raider Ship
-      STR_RAIDER_SHIP_UFOPEDIA: The Raider Ship is an fast and dangerous alien vessel used for attacks on earth's infrastructure. It carries a large strike crew under orders to destroy their own ship upon a crash before attacking any nearby human installation.  
+      STR_RAIDER_SHIP_UFOPEDIA: The Raider Ship is a fast and dangerous alien vessel used for attacks on earth's infrastructure. It carries a large strike crew under orders to destroy their own ship upon a crash before attacking any nearby human installation.  
       STR_RAIDERS_EARLY: Light Raider
       STR_RAIDERS_MIDEARLY: Medium Raider
       STR_RAIDERS_MID: Heavy Raider

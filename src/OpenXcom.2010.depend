@@ -247,7 +247,7 @@
 1408671503 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
-1409198951 f:\git\openxcom\src\basescape\minibaseview.h
+1409299459 f:\git\openxcom\src\basescape\minibaseview.h
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
@@ -4440,7 +4440,7 @@
 	<stdint.h>
 	"GameTime.h"
 
-1409200207 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1409328248 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4482,7 +4482,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1404096022 f:\git\openxcom\src\basescape\baseview.h
+1409326801 f:\git\openxcom\src\basescape\baseview.h
 	"../Engine/InteractiveSurface.h"
 
 1404096022 f:\git\openxcom\src\basescape\buildfacilitiesstate.h
@@ -4606,7 +4606,7 @@
 	<vector>
 	<SDL.h>
 
-1405906201 f:\git\openxcom\src\ruleset\rulecraft.h
+1409292286 f:\git\openxcom\src\ruleset\rulecraft.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5077,14 +5077,17 @@
 	<windows.h>
 	<stddef.h>
 
-1409245683 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1409299598 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	<cmath>
 	"../Engine/Action.h"
+	"../Engine/Logger.h"
 	"../Engine/Palette.h"
 	"../Engine/SurfaceSet.h"
+	"../Engine/Timer.h"
 	"../Geoscape/GeoscapeState.h"
 	"../Ruleset/RuleBaseFacility.h"
+	"../Ruleset/RuleCraft.h"
 	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
@@ -6353,7 +6356,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1409183314 source:f:\git\openxcom\src\battlescape\infoboxstate.cpp
+1409261519 source:f:\git\openxcom\src\battlescape\infoboxstate.cpp
 	"InfoboxState.h"
 	<string>
 	"../Engine/Action.h"
@@ -7307,7 +7310,7 @@
 	"Exception.h"
 	"Logger.h"
 
-1407621847 source:f:\git\openxcom\src\engine\timer.cpp
+1409299272 source:f:\git\openxcom\src\engine\timer.cpp
 	"Timer.h"
 	<assert.h>
 	"Game.h"
@@ -7656,7 +7659,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1409256064 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1409289558 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7695,7 +7698,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1406426075 f:\git\openxcom\src\geoscape\dogfightstate.h
+1409289722 f:\git\openxcom\src\geoscape\dogfightstate.h
 	<vector>
 	<string>
 	"../Engine/State.h"
@@ -7997,7 +8000,7 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1409185480 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1409289274 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -9332,7 +9335,7 @@
 	<math.h>
 	"../Engine/RNG.h"
 
-1405909237 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
+1409292217 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
 	"RuleCraft.h"
 	"RuleTerrain.h"
 

@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class Base;
 class SurfaceSet;
+class Timer;
 
 
 /**
@@ -45,11 +46,14 @@ class MiniBaseView
 private:
 	static const int MINI_SIZE = 14;
 
+	bool _blink;
+
 	size_t
 		_base,
 		_hoverBase;
 
 	SurfaceSet* _texture;
+	Timer* _timer;
 
 	std::vector<Base*>* _bases;
 
@@ -68,16 +72,26 @@ private:
 
 		/// Sets the base list to display.
 		void setBases(std::vector<Base*>* bases);
+
 		/// Sets the texture for the mini base view.
 		void setTexture(SurfaceSet* texture);
+
 		/// Gets the base the mouse is over.
 		size_t getHoveredBase() const;
+
 		/// Sets the selected base for the mini base view.
 		void setSelectedBase(size_t base);
+
 		/// Draws the mini base view.
 		void draw();
+
 		/// Special handling for mouse hovers.
 		void mouseOver(Action* action, State* state);
+
+		/// Handles timer.
+		void think();
+		/// kL. Blinks the craft status indicators.
+		void MiniBaseView::blink();
 };
 
 }

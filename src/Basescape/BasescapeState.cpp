@@ -92,7 +92,7 @@ BasescapeState::BasescapeState(
 	_txtRegion		= new Text(126, 9, 194, 16);
 	_txtFunds		= new Text(126, 9, 194, 24);
 
-	_mini			= new MiniBaseView(128, 20, 192, 35);
+	_mini			= new MiniBaseView(128, 22, 192, 33);
 
 	_btnBaseInfo	= new TextButton(128, 12, 192, 56);
 	_btnSoldiers	= new TextButton(128, 12, 192, 68);
@@ -145,6 +145,8 @@ BasescapeState::BasescapeState(
 	_mini->setBases(_game->getSavedGame()->getBases());
 	_mini->onMouseClick((ActionHandler)& BasescapeState::miniClick);
 	_mini->onKeyboardPress((ActionHandler)& BasescapeState::handleKeyPress);
+	_mini->onMouseOver((ActionHandler)& BasescapeState::viewMouseOver);
+	_mini->onMouseOut((ActionHandler)& BasescapeState::viewMouseOut);
 
 	_txtFacility->setColor(Palette::blockOffset(13)+10);
 
@@ -666,6 +668,8 @@ void BasescapeState::viewMouseOver(Action*)
 	std::wostringstream ss;
 
 	BaseFacility* fac = _view->getSelectedFacility();
+	size_t base = _mini->getHoveredBase();
+
 	if (fac != NULL)
 	{
 		if (fac->getRules()->getCrafts() == 0
@@ -682,6 +686,8 @@ void BasescapeState::viewMouseOver(Action*)
 								.arg(fac->getCraft()->getName(_game->getLanguage()));
 		}
 	}
+	else if (base < _game->getSavedGame()->getBases()->size())
+		ss << _game->getSavedGame()->getBases()->at(base)->getName(_game->getLanguage()).c_str();
 
 	_txtFacility->setText(ss.str());
 }

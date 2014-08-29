@@ -149,7 +149,7 @@ private:
 		/// Gets the deployment priority for the craft.
 		std::vector<std::vector<int> >& getDeployment();
 
-		///
+		/// Gets the maximum space for items on this craft.
 		int const getMaxItems() const;
 };
 

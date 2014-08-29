@@ -22,12 +22,15 @@
 #include <cmath>
 
 #include "../Engine/Action.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
+#include "../Engine/Timer.h"
 
 #include "../Geoscape/GeoscapeState.h"
 
 #include "../Ruleset/RuleBaseFacility.h"
+#include "../Ruleset/RuleCraft.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
@@ -58,8 +61,12 @@ MiniBaseView::MiniBaseView(
 		_bases(),
 		_texture(NULL),
 		_base(0),
-		_hoverBase(0)
+		_hoverBase(0),
+		_blink(false)
 {
+	_timer = new Timer(250);
+	_timer->onTimer((SurfaceHandler)& MiniBaseView::blink);
+	_timer->start();
 }
 
 /**
@@ -67,6 +74,7 @@ MiniBaseView::MiniBaseView(
  */
 MiniBaseView::~MiniBaseView()
 {
+	delete _timer;
 }
 
 /**
@@ -117,6 +125,8 @@ void MiniBaseView::draw()
 {
 	Surface::draw();
 
+	Base* base = NULL;
+
 	for (size_t
 			i = 0;
 			i < MAX_BASES;
@@ -139,12 +149,14 @@ void MiniBaseView::draw()
 
 		if (i < _bases->size()) // Draw facilities
 		{
+			base = _bases->at(i);
+
 			lock();
 			SDL_Rect r;
 
 			for (std::vector<BaseFacility*>::iterator
-					fac = _bases->at(i)->getFacilities()->begin();
-					fac != _bases->at(i)->getFacilities()->end();
+					fac = base->getFacilities()->begin();
+					fac != base->getFacilities()->end();
 					++fac)
 			{
 				int pal;
@@ -182,15 +194,52 @@ void MiniBaseView::draw()
 			unlock();
 
 			// kL_begin: Dot Marks for various base-status indicators.
-			if (_bases->at(i)->getTransfers()->empty() == false) // white for incoming Transfers
+			int offset_x = i * (MINI_SIZE + 2);
+
+			if (base->getScientists() > 0 // red for unused Scientists & Engineers
+				|| base->getEngineers() > 0)
 			{
-				setPixelColor(i * (MINI_SIZE + 2) + 3, 18, Palette::blockOffset(0)+1); // white
+				setPixelColor(offset_x + 3, 18, Palette::blockOffset(2)+1); // red
 			}
 
-			if (_bases->at(i)->getScientists() > 0 // red for unused Scientists & Engineers
-				|| _bases->at(i)->getEngineers() > 0)
+			if (base->getTransfers()->empty() == false) // white for incoming Transfers
+				setPixelColor(offset_x + 3, 20, Palette::blockOffset(4)+5); // lavender
+
+			if (base->getCrafts()->empty() == false)
 			{
-				setPixelColor(i * (MINI_SIZE + 2) + 6, 18, Palette::blockOffset(2)+1); // red
+				int pixel_y = 17;
+				RuleCraft* craftRule = NULL;
+
+				for (std::vector<Craft*>::iterator
+						craft = base->getCrafts()->begin();
+						craft != base->getCrafts()->end();
+						++craft)
+				{
+					craftRule = (*craft)->getRules();
+
+					std::string stat = (*craft)->getStatus();
+					if (stat == "STR_READY")
+						setPixelColor(offset_x + 14, pixel_y, Palette::blockOffset(3)+2);
+
+					if (craftRule->getRefuelItem() == "STR_ELERIUM_115")
+						setPixelColor(offset_x + 12, pixel_y, Palette::blockOffset(9)+1); // yellow
+					else
+						setPixelColor(offset_x + 12, pixel_y, Palette::blockOffset(9)+9);
+
+					if (craftRule->getWeapons() > 0)
+						setPixelColor(offset_x + 10, pixel_y, Palette::blockOffset(8)+2); // blue
+//					else setPixelColor(offset_x + 12, pixel_y, Palette::blockOffset(8)+10);
+
+					if (craftRule->getSoldiers() > 0)
+						setPixelColor(offset_x + 8, pixel_y, Palette::blockOffset(10)+1); // brown
+//					else setPixelColor(offset_x + 10, pixel_y, Palette::blockOffset(10)+10);
+
+					if (craftRule->getVehicles() > 0)
+						setPixelColor(offset_x + 6, pixel_y, Palette::blockOffset(4)+8); // lavender
+//					else setPixelColor(offset_x + 8, pixel_y, Palette::blockOffset(4)+10);
+
+					pixel_y += 2;
+				}
 			} // kL_end.
 		}
 	}
@@ -203,10 +252,74 @@ void MiniBaseView::draw()
  */
 void MiniBaseView::mouseOver(Action* action, State* state)
 {
-	_hoverBase = static_cast<unsigned int>(
+	_hoverBase = static_cast<size_t>(
 					floor(action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
 
 	InteractiveSurface::mouseOver(action, state);
+}
+
+/**
+ * kL. Handles the blink() timer.
+ */
+void MiniBaseView::think()
+{
+	_timer->think(NULL, this);
+}
+
+/**
+ * kL. Blinks the craft status indicators.
+ */
+void MiniBaseView::blink()
+{
+	//Log(LOG_INFO) << "MiniBaseView::blink() = " << (int)_blink;
+	_blink = !_blink;
+
+	Base* base = NULL;
+
+	for (size_t
+			i = 0;
+			i < MAX_BASES;
+			++i)
+	{
+		if (i < _bases->size())
+		{
+			base = _bases->at(i);
+
+			int offset_x = i * (MINI_SIZE + 2);
+
+			if (base->getCrafts()->empty() == false)
+			{
+				int pixel_y = 17;
+
+				for (std::vector<Craft*>::iterator
+						craft = base->getCrafts()->begin();
+						craft != base->getCrafts()->end();
+						++craft)
+				{
+					std::string stat = (*craft)->getStatus();
+
+					if (stat != "STR_READY") // done in draw() above^
+					{
+						if (_blink)
+						{
+							if (stat == "STR_OUT")
+								setPixelColor(offset_x + 14, pixel_y, Palette::blockOffset(3)+2); // green
+							else if (stat == "STR_REFUELLING")
+								setPixelColor(offset_x + 14, pixel_y, Palette::blockOffset(6)); // orange
+							else if (stat == "STR_REARMING")
+								setPixelColor(offset_x + 14, pixel_y, Palette::blockOffset(6)+3);
+							else if (stat == "STR_REPAIRS")
+								setPixelColor(offset_x + 14, pixel_y, Palette::blockOffset(2)+5); // red
+						}
+						else
+							setPixelColor(offset_x + 14, pixel_y, 0); // transparent
+					}
+
+					pixel_y += 2;
+				}
+			}
+		}
+	}
 }
 
 }

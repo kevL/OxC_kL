@@ -226,7 +226,7 @@ InterceptState::InterceptState(
 }
 
 /**
- *
+ * dTor.
  */
 InterceptState::~InterceptState()
 {

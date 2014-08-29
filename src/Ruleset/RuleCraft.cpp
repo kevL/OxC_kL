@@ -58,7 +58,7 @@ RuleCraft::RuleCraft(const std::string& type)
 }
 
 /**
- *
+ * dTor.
  */
 RuleCraft::~RuleCraft()
 {
