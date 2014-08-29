@@ -4639,7 +4639,7 @@
 1409181874 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1408358704 f:\git\openxcom\src\ruleset\ruleset.h
+1409330565 f:\git\openxcom\src\ruleset\ruleset.h
 	<map>
 	<string>
 	<vector>
@@ -5077,11 +5077,10 @@
 	<windows.h>
 	<stddef.h>
 
-1409299598 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1409329123 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	<cmath>
 	"../Engine/Action.h"
-	"../Engine/Logger.h"
 	"../Engine/Palette.h"
 	"../Engine/SurfaceSet.h"
 	"../Engine/Timer.h"
@@ -12221,4 +12220,12 @@
 
 1409175236 f:\git\openxcom\src\basescape\basedetectionstate.h
 	"../Engine/State.h"
+
+1409331358 source:f:\git\openxcom\src\ruleset\sounddefinition.cpp
+	"SoundDefinition.h"
+
+1409331449 f:\git\openxcom\src\ruleset\sounddefinition.h
+	<string>
+	<vector>
+	<yaml-cpp/yaml.h>
 

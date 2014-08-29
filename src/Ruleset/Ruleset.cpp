@@ -53,6 +53,7 @@
 #include "RuleTerrain.h"
 #include "RuleUfo.h"
 #include "SoldierNamePool.h"
+#include "SoundDefinition.h"
 #include "StatString.h"
 #include "UfoTrajectory.h"
 #include "Unit.h"
@@ -894,6 +895,18 @@ void Ruleset::loadFile(const std::string& filename)
 		RuleInterface* rule = loadRule(
 									*i,
 									&_interfaces);
+		if (rule != NULL)
+			rule->load(*i);
+	}
+
+	for (YAML::const_iterator
+			i = doc["soundDefs"].begin();
+			i != doc["soundDefs"].end();
+			++i)
+	{
+		SoundDefinition* rule = loadRule(
+									*i,
+									&_soundDefs);
 		if (rule != NULL)
 			rule->load(*i);
 	}
@@ -2107,6 +2120,14 @@ RuleInterface* Ruleset::getInterface(const std::string id) const
 RuleGlobe* Ruleset::getGlobe() const
 {
 	return _globe;
+}
+
+/**
+ *
+ */
+const std::map<std::string, SoundDefinition*>* Ruleset::getSoundDefinitions() const
+{
+	return &_soundDefs;
 }
 
 }

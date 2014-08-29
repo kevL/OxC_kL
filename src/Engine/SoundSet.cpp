@@ -19,6 +19,8 @@
 
 #include "SoundSet.h"
 
+#include <sstream>
+
 #include "CatFile.h"
 #include "Exception.h"
 #include "Sound.h"
@@ -282,6 +284,13 @@ void SoundSet::loadCatbyIndex(
 	if (!sndFile)
 	{
 		throw Exception(filename + " not found");
+	}
+
+	if (index >= sndFile.getAmount())
+	{
+		std::stringstream err;
+		err << filename << " does not contain " << index << " sound files.";
+		throw Exception(err.str());
 	}
 
 	// Read WAV chunk

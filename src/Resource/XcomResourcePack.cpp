@@ -55,6 +55,7 @@
 #include "../Ruleset/MapDataSet.h"
 #include "../Ruleset/RuleMusic.h" // sza_MusicRules
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/SoundDefinition.h"
 
 #include "../Savegame/Node.h"
 #include "../Savegame/SavedBattleGame.h"
@@ -982,76 +983,110 @@ MOVED TO Ruleset !
 
 
 		/* SOUNDS fx */
-		std::string catsId[] = // Load sounds
+		if (rules->getSoundDefinitions()->empty())
 		{
-			"GEO.CAT",
-			"BATTLE.CAT"
-		};
-		std::string catsDos[] =
-		{
-			"SOUND2.CAT",
-			"SOUND1.CAT"
-		};
-		std::string catsWin[] =
-		{
-			"SAMPLE.CAT",
-			"SAMPLE2.CAT"
-		};
+			std::string catsId[] = // Load sounds
+			{
+				"GEO.CAT",
+				"BATTLE.CAT"
+			};
+			std::string catsDos[] =
+			{
+				"SOUND2.CAT",
+				"SOUND1.CAT"
+			};
+			std::string catsWin[] =
+			{
+				"SAMPLE.CAT",
+				"SAMPLE2.CAT"
+			};
 
-		// Try the preferred format first, otherwise use the default priority
-		std::string* cats[] =
-		{
-			0,
-			catsWin,
-			catsDos
-		};
+			// Try the preferred format first, otherwise use the default priority
+			std::string* cats[] =
+			{
+				0,
+				catsWin,
+				catsDos
+			};
 
-		if (Options::preferredSound == SOUND_14)
-			cats[0] = catsWin;
-		else if (Options::preferredSound == SOUND_10)
-			cats[1] = catsDos;
+			if (Options::preferredSound == SOUND_14)
+				cats[0] = catsWin;
+			else if (Options::preferredSound == SOUND_10)
+				cats[1] = catsDos;
 
-		Options::currentSound = SOUND_AUTO;
-
-		for (size_t
-				i = 0;
-				i < sizeof(catsId) / sizeof(catsId[0]);
-				++i)
-		{
-			SoundSet* sound = 0;
+			Options::currentSound = SOUND_AUTO;
 
 			for (size_t
-					j = 0;
-					j < sizeof(cats) / sizeof(cats[0])
-						&& sound == 0;
-					++j)
+					i = 0;
+					i < sizeof(catsId) / sizeof(catsId[0]);
+					++i)
 			{
-				bool wav = true;
+				SoundSet* sound = 0;
 
-				if (cats[j] == 0)
-					continue;
-				else if (cats[j] == catsDos)
-					wav = false;
-
-				std::ostringstream s;
-				s << "SOUND/" << cats[j][i];
-				std::string file = CrossPlatform::getDataFile(s.str());
-				if (CrossPlatform::fileExists(file))
+				for (size_t
+						j = 0;
+						j < sizeof(cats) / sizeof(cats[0])
+							&& sound == 0;
+						++j)
 				{
-					sound = new SoundSet();
-					sound->loadCat(file, wav);
+					bool wav = true;
 
-					Options::currentSound = (wav)? SOUND_14: SOUND_10;
+					if (cats[j] == 0)
+						continue;
+					else if (cats[j] == catsDos)
+						wav = false;
+
+					std::ostringstream s;
+					s << "SOUND/" << cats[j][i];
+					std::string file = CrossPlatform::getDataFile(s.str());
+					if (CrossPlatform::fileExists(file))
+					{
+						sound = new SoundSet();
+						sound->loadCat(file, wav);
+
+						Options::currentSound = (wav)? SOUND_14: SOUND_10;
+					}
+				}
+
+				if (sound == 0)
+				{
+					throw Exception(catsWin[i] + " not found");
+				}
+				else
+				{
+					_sounds[catsId[i]] = sound;
 				}
 			}
+		}
+		else
+		{
+			for (std::map<std::string, SoundDefinition*>::const_iterator
+					i = rules->getSoundDefinitions()->begin();
+					i != rules->getSoundDefinitions()->end();
+					++i)
+			{
+				std::ostringstream s;
+				s << "SOUND/" << (*i).second->getCATFile();
+				std::string file = CrossPlatform::getDataFile(s.str());
 
-			if (sound == 0)
-			{
-				throw Exception(catsWin[i] + " not found");
-			}
-			else
-			{
-				_sounds[catsId[i]] = sound;
+				if (CrossPlatform::fileExists(file))
+				{
+					if (_sounds.find((*i).first) == _sounds.end())
+						_sounds[(*i).first] = new SoundSet();
+
+					for (std::vector<int>::const_iterator
+							j = (*i).second->getSoundList().begin();
+							j != (*i).second->getSoundList().end();
+							++j)
+					{
+						_sounds[(*i).first]->loadCatbyIndex(file, *j);
+					}
+				}
+				else
+				{
+					s << " not found";
+					throw Exception(s.str());
+				}
 			}
 		}
 

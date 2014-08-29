@@ -66,6 +66,7 @@ class RuleUfo;
 class SavedGame;
 class Soldier;
 class SoldierNamePool;
+class SoundDefinition;
 class StatString;
 class UfoTrajectory;
 class Unit;
@@ -159,6 +160,7 @@ protected:
 	std::map<std::string, RuleSoldier*>			_soldiers;
 	std::map<std::string, RuleTerrain*>			_terrains;
 	std::map<std::string, RuleUfo*>				_ufos;
+	std::map<std::string, SoundDefinition*>		_soundDefs;
 	std::map<std::string, UfoTrajectory*>		_ufoTrajectories;
 
 	std::vector<StatString*> _statStrings;
@@ -316,6 +318,9 @@ protected:
 
 		/// Gets the ruleset for the globe
 		RuleGlobe* getGlobe() const;
+
+		/// Gets the list of selective files for insertion into internal Cat files.
+		const std::map<std::string, SoundDefinition*>* getSoundDefinitions() const;
 };
 
 }

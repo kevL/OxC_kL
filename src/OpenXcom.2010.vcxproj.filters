@@ -890,6 +890,9 @@
     <ClCompile Include="Ruleset\RuleCommendations.cpp" />
     <ClCompile Include="Savegame\SoldierDiary.cpp" />
     <ClCompile Include="Basescape\SoldierInfoDeadState.cpp" />
+    <ClCompile Include="Ruleset\SoundDefinition.cpp">
+      <Filter>Ruleset</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1802,6 +1805,9 @@
     <ClInclude Include="Ruleset\RuleCommendations.h" />
     <ClInclude Include="Savegame\SoldierDiary.h" />
     <ClInclude Include="Basescape\SoldierInfoDeadState.h" />
+    <ClInclude Include="Ruleset\SoundDefinition.h">
+      <Filter>Ruleset</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

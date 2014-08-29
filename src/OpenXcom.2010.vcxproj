@@ -463,6 +463,7 @@
     <ClCompile Include="Ruleset\RuleGlobe.cpp" />
     <ClCompile Include="Ruleset\RuleCommendations.cpp" />
     <ClCompile Include="Ruleset\RuleMusic.cpp" />
+    <ClCompile Include="Ruleset\SoundDefinition.cpp" />
     <ClCompile Include="Ruleset\StatString.cpp" />
     <ClCompile Include="Ruleset\StatStringCondition.cpp" />
     <ClCompile Include="Ruleset\RuleInterface.cpp" />
@@ -773,6 +774,7 @@
     <ClInclude Include="Ruleset\RuleGlobe.h" />
     <ClInclude Include="Ruleset\RuleCommendations.h" />
     <ClInclude Include="Ruleset\RuleMusic.h" />
+    <ClInclude Include="Ruleset\SoundDefinition.h" />
     <ClInclude Include="Ruleset\StatString.h" />
     <ClInclude Include="Ruleset\StatStringCondition.h" />
     <ClInclude Include="Ruleset\RuleInterface.h" />
