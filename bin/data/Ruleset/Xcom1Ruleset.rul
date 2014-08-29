@@ -2824,7 +2824,7 @@ ufos:
         - BLANKS
         - U_EXT02
         - U_WALL02
-        - U_DISEC2
+#        - U_DISEC2 # Luke83's supercedes
         - U_BITS
       mapBlocks:
         - name: UFO_130
@@ -2873,7 +2873,7 @@ ufos:
         - U_PODS
         - U_BITS
       mapBlocks:
-        - name: UFO_150
+        - name: UFO_150 # Luke83's removes, but I'm leaving it in.
           width: 30
           length: 20
   - type: STR_BATTLESHIP
@@ -2919,7 +2919,7 @@ ufos:
         - U_DISEC2
         - U_BITS
       mapBlocks:
-        - name: UFO_170
+        - name: UFO_170 # Luke83's removes, but I'm leaving it in.
           width: 30
           length: 20
 invs:
