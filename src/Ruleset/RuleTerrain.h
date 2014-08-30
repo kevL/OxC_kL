@@ -48,6 +48,7 @@ class RuleTerrain
 
 private:
 	int
+		_ambience,
 		_hemisphere,
 		_largeBlockLimit,
 		_minDepth,
@@ -111,10 +112,13 @@ private:
 		/// Gets road type odds.
 		std::vector<int> getRoadTypeOdds() const;
 
-		///
+		/// Gets the minimum depth.
 		const int getMinDepth() const;
-		///
+		/// Gets the maximum depth.
 		const int getMaxDepth() const;
+
+		/// get the ambient sound effect.
+		const int getAmbience() const;
 };
 
 }

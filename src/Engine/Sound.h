@@ -59,6 +59,11 @@ private:
 				int distance = 0) const;
 		/// Stops all sounds.
 		static void stop();
+
+		/// Plays the sound repeatedly.
+		void loop();
+		/// Stops the looping sound effect.
+		void stopLoop();
 };
 
 }

@@ -106,16 +106,16 @@ void UnitTurnBState::init()
 															true);
 			if (door == 0)
 				//Log(LOG_INFO) << ". open door PlaySound";
-				_parent->getResourcePack()->getSound( // normal door
-													"BATTLE.CAT",
-													ResourcePack::DOOR_OPEN)
-												->play();
+				_parent->getResourcePack()->getSoundByDepth( // normal door
+														_parent->getDepth(),
+														ResourcePack::DOOR_OPEN)
+													->play();
 			else if (door == 1)
 				//Log(LOG_INFO) << ". open uFo door PlaySound";
-				_parent->getResourcePack()->getSound( // ufo door
-													"BATTLE.CAT",
-													ResourcePack::SLIDING_DOOR_OPEN)
-												->play();
+				_parent->getResourcePack()->getSoundByDepth( // ufo door
+														_parent->getDepth(),
+														ResourcePack::SLIDING_DOOR_OPEN)
+													->play();
 			else if (door == 4)
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			else if (door == 5)

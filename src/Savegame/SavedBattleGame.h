@@ -58,6 +58,7 @@ class SavedBattleGame
 
 private:
 	int
+		_ambience,
 		_depth,
 		_globalShade,
 		_itemId,
@@ -346,8 +347,13 @@ private:
 		/// Sets the depth of the battlescape game.
 		void setDepth(int depth);
 
-		///
+		/// Uses the depth variable to set a palette.
 		void setPaletteByDepth(State* state);
+
+		/// Sets the ambient sound effect;
+		void setAmbientSound(int sound);
+		/// Gets the ambient sound effect;
+		const int getAmbientSound() const;
 
 		/// kL. Sets the inventory tile when BattlescapeGenerator runs.
 		void setBattleInventory(Tile* invBattle); // kL

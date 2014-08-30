@@ -454,15 +454,15 @@ void UnitDieBState::playDeathSound()
 {
 	//Log(LOG_INFO) << "UnitDieBState::playDeathSound()";
 	if (_unit->getType() == "MALE_CIVILIAN")
-		_parent->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											ResourcePack::MALE_SCREAM[RNG::generate(0, 2)])
-										->play();
+		_parent->getResourcePack()->getSoundByDepth(
+												_parent->getDepth(),
+												ResourcePack::MALE_SCREAM[RNG::generate(0, 2)])
+											->play();
 	else if (_unit->getType() == "FEMALE_CIVILIAN")
-		_parent->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)])
-										->play();
+		_parent->getResourcePack()->getSoundByDepth(
+												_parent->getDepth(),
+												ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)])
+											->play();
 	else if (_unit->getType() == "SOLDIER")
 	{
 		int sound;
@@ -470,26 +470,26 @@ void UnitDieBState::playDeathSound()
 		{
 			sound = RNG::generate(111, 116);
 			//Log(LOG_INFO) << "death Male, sound = " << sound;
-			_parent->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												sound)
-											->play();
+			_parent->getResourcePack()->getSoundByDepth(
+													_parent->getDepth(),
+													sound)
+												->play();
 		}
 		else if (_unit->getGender() == GENDER_FEMALE)
 		{
 			sound = RNG::generate(101, 103);
 			//Log(LOG_INFO) << "death Female, sound = " << sound;
-			_parent->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												sound)
-											->play();
+			_parent->getResourcePack()->getSoundByDepth(
+													_parent->getDepth(),
+													sound)
+												->play();
 		}
 	}
 	else
-		_parent->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											_unit->getDeathSound())
-										->play();
+		_parent->getResourcePack()->getSoundByDepth(
+												_parent->getDepth(),
+												_unit->getDeathSound())
+											->play();
 }
 
 }

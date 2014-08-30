@@ -867,10 +867,10 @@ void InventoryState::btnRankClick(Action*)
 															(*j)->getFuseTimer()));
 	}
 
-	_game->getResourcePack()->getSound( // give audio feedback
-									"BATTLE.CAT",
-									ResourcePack::ITEM_DROP)
-								->play();
+	_game->getResourcePack()->getSoundByDepth(
+											_battleGame->getDepth(),
+											ResourcePack::ITEM_DROP)
+										->play();
 	_refreshMouse();
 } */
 
@@ -1039,10 +1039,10 @@ static void _clearInventory(
 	updateStats();
 	_refreshMouse();
 
-	_game->getResourcePack()->getSound( // give audio feedback
-									"BATTLE.CAT",
-									ResourcePack::ITEM_DROP)
-								->play();
+	_game->getResourcePack()->getSoundByDepth(
+											_battleGame->getDepth(),
+											ResourcePack::ITEM_DROP)
+										->play();
 } */
 
 /**
@@ -1080,10 +1080,10 @@ void InventoryState::btnClearInventoryClick(Action* action)
 	updateStats();
 	_refreshMouse();
 
-	_game->getResourcePack()->getSound( // give audio feedback
-									"BATTLE.CAT",
-									ResourcePack::ITEM_DROP)
-								->play();
+	_game->getResourcePack()->getSoundByDepth(
+											_battleGame->getDepth(),
+											ResourcePack::ITEM_DROP)
+										->play();
 }
 
 /**

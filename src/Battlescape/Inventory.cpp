@@ -89,6 +89,8 @@ Inventory::Inventory(
 		_primeGrenade(-1),	// kL
 		_tuCost(-1)			// kL
 {
+	_depth = _game->getSavedGame()->getSavedBattle()->getDepth();
+
 	_grid			= new Surface(width, height, x, y);
 	_items			= new Surface(width, height, x, y);
 	_selection		= new Surface(
@@ -815,10 +817,10 @@ void Inventory::mouseClick(Action* action, State* state)
 										newSlot,
 										0,
 										0);
-								_game->getResourcePack()->getSound(
-																"BATTLE.CAT",
-																ResourcePack::ITEM_DROP)
-															->play();
+								_game->getResourcePack()->getSoundByDepth(
+																		_depth,
+																		ResourcePack::ITEM_DROP)
+																	->play();
 								arrangeGround(false);
 							}
 							else
@@ -907,10 +909,10 @@ void Inventory::mouseClick(Action* action, State* state)
 								_stackLevel[x][y] += 1;
 
 							setSelectedItem(NULL);
-							_game->getResourcePack()->getSound(
-															"BATTLE.CAT",
-															ResourcePack::ITEM_DROP)
-														->play();
+							_game->getResourcePack()->getSoundByDepth(
+																	_depth,
+																	ResourcePack::ITEM_DROP)
+																->play();
 						}
 						else
 						{
@@ -933,10 +935,10 @@ void Inventory::mouseClick(Action* action, State* state)
 									item->getSlotY());
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(NULL);
-							_game->getResourcePack()->getSound(
-															"BATTLE.CAT",
-															ResourcePack::ITEM_DROP)
-														->play();
+							_game->getResourcePack()->getSoundByDepth(
+																	_depth,
+																	ResourcePack::ITEM_DROP)
+																->play();
 						}
 						else
 						{
@@ -991,10 +993,10 @@ void Inventory::mouseClick(Action* action, State* state)
 							_selItem->moveToOwner(NULL);
 							setSelectedItem(NULL);
 
-							_game->getResourcePack()->getSound(
-															"BATTLE.CAT",
-															ResourcePack::ITEM_RELOAD)
-														->play();
+							_game->getResourcePack()->getSoundByDepth(
+																	_depth,
+																	ResourcePack::ITEM_RELOAD)
+																->play();
 
 							if (item->getSlot()->getType() == INV_GROUND)
 								arrangeGround(false);
@@ -1037,10 +1039,10 @@ void Inventory::mouseClick(Action* action, State* state)
 							_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 							setSelectedItem(NULL);
 
-							_game->getResourcePack()->getSound(
-															"BATTLE.CAT",
-															ResourcePack::ITEM_DROP)
-														->play();
+							_game->getResourcePack()->getSoundByDepth(
+																	_depth,
+																	ResourcePack::ITEM_DROP)
+																->play();
 						}
 						else
 						{
@@ -1395,10 +1397,10 @@ bool Inventory::fitItem(
 								x2,
 								y2);
 
-						_game->getResourcePack()->getSound(
-														"BATTLE.CAT",
-														ResourcePack::ITEM_DROP)
-													->play();
+						_game->getResourcePack()->getSoundByDepth(
+																_depth,
+																ResourcePack::ITEM_DROP)
+															->play();
 
 						drawItems();
 					}

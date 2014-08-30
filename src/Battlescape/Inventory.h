@@ -53,6 +53,7 @@ private:
 		_tu;
 	int
 		_animFrame,
+		_depth,
 		_groundOffset,
 		_tuCost, // kL
 		_primeGrenade; // kL

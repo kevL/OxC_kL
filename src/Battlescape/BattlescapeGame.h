@@ -297,8 +297,11 @@ private:
 		/// Checks for and triggers proximity grenades.
 		bool checkForProximityGrenades(BattleUnit* unit);
 
-		/// Delete all battlestates that are queued for deletion.
+		/// Cleans up all the deleted states. [Delete all battlestates that are queued for deletion.]
 		void cleanupDeleted();
+
+		/// Get the depth of the saved game.
+		const int getDepth() const;
 
 		/// kL. Gets the BattlescapeState.
 		BattlescapeState* getBattlescapeState() const;

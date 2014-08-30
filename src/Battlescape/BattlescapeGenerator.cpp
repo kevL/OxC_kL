@@ -1828,6 +1828,7 @@ void BattlescapeGenerator::generateMap()
 		* craftMap = 0,
 		* ufoMap = 0;
 
+	_save->setAmbientSound(_terrain->getAmbience());
 
 	blocks.resize(
 			_mapsize_x / 10,

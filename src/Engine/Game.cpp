@@ -491,6 +491,9 @@ void Game::setVolume(
 		{
 			sound = static_cast<int>(volumeExponent(sound) * static_cast<double>(SDL_MIX_MAXVOLUME));
 			Mix_Volume(-1, sound); // kL_note: this, supposedly, sets volume on *all channels*
+
+			// channel 3: reserved for ambient sound effect.
+			Mix_Volume(3, sound / 2);
 		}
 
 		if (ui > -1)
@@ -806,7 +809,7 @@ void Game::initAudio()
 		Mix_AllocateChannels(16);
 
 		// Set up UI channels
-		Mix_ReserveChannels(3);
+		Mix_ReserveChannels(4); // 4th channel (#3) is for ambient sFx
 		Mix_GroupChannels(0, 2, 0);
 		Log(LOG_INFO) << "SDL_mixer initialized.";
 

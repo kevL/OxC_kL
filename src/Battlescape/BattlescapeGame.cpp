@@ -376,10 +376,10 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		{
 			_playedAggroSound = true;
 
-			getResourcePack()->getSound(
-									"BATTLE.CAT",
-									unit->getAggroSound())
-								->play();
+			getResourcePack()->getSoundByDepth(
+											_save->getDepth(),
+											unit->getAggroSound())
+										->play();
 		}
 	}
 	//Log(LOG_INFO) << ". getCharging DONE";
@@ -602,7 +602,7 @@ void BattlescapeGame::endTurn()
 	getMap()->getWaypoints()->clear();
 
 //	if (_save->getTileEngine()->closeUfoDoors() && ResourcePack::SLIDING_DOOR_CLOSE != -1)
-//		getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SLIDING_DOOR_CLOSE)->play(); // ufo door closed->getSound("BATTLE.CAT", 21)->play()
+//		getResourcePack()->getSoundByDepth(_save->getDepth(), ResourcePack::SLIDING_DOOR_CLOSE)->play();
 
 	Position pos;
 	for (int
@@ -643,7 +643,10 @@ void BattlescapeGame::endTurn()
 	if (_save->getTileEngine()->closeUfoDoors()
 		&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
 	{
-		getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SLIDING_DOOR_CLOSE)->play(); // ufo door closed
+		getResourcePack()->getSoundByDepth( // ufo door closed
+										_save->getDepth(),
+										ResourcePack::SLIDING_DOOR_CLOSE)
+									->play();
 	}
 
 	// check for terrain explosions
@@ -2212,10 +2215,10 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				{
 					if (_currentAction.actor->spendTimeUnits(_currentAction.TU)) // kL_note: Should this be getActionTUs() to account for flatRates?
 					{
-						_parentState->getGame()->getResourcePack()->getSound(
-																		"BATTLE.CAT",
-																		_currentAction.weapon->getRules()->getHitSound())
-																	->play();
+						_parentState->getGame()->getResourcePack()->getSoundByDepth(
+																				_save->getDepth(),
+																				_currentAction.weapon->getRules()->getHitSound())
+																			->play();
 						_parentState->getGame()->pushState(new UnitInfoState(
 																		_save->selectUnit(pos),
 																		_parentState,
@@ -3405,7 +3408,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 }
 
 /**
- *
+ * Cleans up all the deleted states.
  */
 void BattlescapeGame::cleanupDeleted()
 {
@@ -3418,6 +3421,15 @@ void BattlescapeGame::cleanupDeleted()
 	}
 
 	_deleted.clear();
+}
+
+/**
+ * Gets the depth of the battlescape.
+ * @return the depth of the battlescape.
+ */
+const int BattlescapeGame::getDepth() const
+{
+	return _save->getDepth();
 }
 
 /**

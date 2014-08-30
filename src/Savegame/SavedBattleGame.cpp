@@ -90,7 +90,8 @@ SavedBattleGame::SavedBattleGame()
 		_kneelReserved(false),
 		_terrain(""), // kL sza_MusicRules
 		_invBattle(NULL),
-		_alienRace("") // kL
+		_alienRace(""), // kL
+		_ambience(-1)
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";
 	_tileSearch.resize(11 * 11);
@@ -2525,7 +2526,8 @@ void SavedBattleGame::setDepth(int depth)
 }
 
 /**
- *
+ * Uses the depth variable to choose a palette.
+ * @param state the state to set the palette for.
  */
 void SavedBattleGame::setPaletteByDepth(State* state)
 {
@@ -2537,6 +2539,24 @@ void SavedBattleGame::setPaletteByDepth(State* state)
 		ss << "PAL_BATTLESCAPE_" << _depth;
 		state->setPalette(ss.str());
 	}
+}
+
+/**
+ * Sets the ambient battlescape sound effect.
+ * @param sound the intended sound.
+ */
+void SavedBattleGame::setAmbientSound(int sound)
+{
+	_ambience = sound;
+}
+
+/**
+ * Gets the ambient battlescape sound effect.
+ * @return the intended sound.
+ */
+const int SavedBattleGame::getAmbientSound() const
+{
+	return _ambience;
 }
 
 /**

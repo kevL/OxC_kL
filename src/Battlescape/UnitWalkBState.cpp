@@ -576,12 +576,18 @@ bool UnitWalkBState::doStatusStand()
 			else if (door == 0) // normal door
 			{
 				//Log(LOG_INFO) << ". . . door #0";
-				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::DOOR_OPEN)->play();
+				_parent->getResourcePack()->getSoundByDepth(
+														_parent->getDepth(),
+														ResourcePack::DOOR_OPEN)
+													->play();
 			}
 			else if (door == 1) // ufo door
 			{
 				//Log(LOG_INFO) << ". . . door #1";
-				_parent->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::SLIDING_DOOR_OPEN)->play();
+				_parent->getResourcePack()->getSoundByDepth(
+														_parent->getDepth(),
+														ResourcePack::SLIDING_DOOR_OPEN)
+													->play();
 
 				return false; // don't start walking yet, wait for the ufo door to open
 			}
@@ -1162,10 +1168,10 @@ void UnitWalkBState::playMovementSound()
 	{
 		if (_unit->getWalkingPhase() == 0) // if a sound is configured in the ruleset, play it.
 		{
-			_parent->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												_unit->getMoveSound())
-											->play();
+			_parent->getResourcePack()->getSoundByDepth(
+													_parent->getDepth(),
+													_unit->getMoveSound())
+												->play();
 		}
 	}
 	else
@@ -1180,10 +1186,10 @@ void UnitWalkBState::playMovementSound()
 				if (t->getFootstepSound(tBelow))
 //					&& _unit->getRaceString() != "STR_ETHEREAL")
 				{
-					_parent->getResourcePack()->getSound(
-														"BATTLE.CAT",
-														ResourcePack::WALK_OFFSET + 1 + (t->getFootstepSound(tBelow) * 2))
-													->play();
+					_parent->getResourcePack()->getSoundByDepth(
+															_parent->getDepth(),
+															ResourcePack::WALK_OFFSET + 1 + (t->getFootstepSound(tBelow) * 2))
+														->play();
 				}
 			}
 			else if (_unit->getWalkingPhase() == 7) // play footstep sound 2
@@ -1191,10 +1197,10 @@ void UnitWalkBState::playMovementSound()
 				if (t->getFootstepSound(tBelow))
 //					&& _unit->getRaceString() != "STR_ETHEREAL")
 				{
-					_parent->getResourcePack()->getSound(
-														"BATTLE.CAT",
-														ResourcePack::WALK_OFFSET + (t->getFootstepSound(tBelow) * 2))
-													->play();
+					_parent->getResourcePack()->getSoundByDepth(
+															_parent->getDepth(),
+															ResourcePack::WALK_OFFSET + (t->getFootstepSound(tBelow) * 2))
+														->play();
 				}
 			}
 		}
@@ -1205,24 +1211,24 @@ void UnitWalkBState::playMovementSound()
 				if (_falling)
 				{
 					if (groundCheck(1))
-						_parent->getResourcePack()->getSound( // thunk.
-															"BATTLE.CAT",
-															ResourcePack::ITEM_DROP)
-														->play();
+						_parent->getResourcePack()->getSoundByDepth( // thunk.
+																_parent->getDepth(),
+																ResourcePack::ITEM_DROP)
+															->play();
 				}
 				else if (!_unit->isFloating())
 				{
-					_parent->getResourcePack()->getSound( // GravLift
-														"BATTLE.CAT",
-														40) // play gravLift sound ...
-													->play();
+					_parent->getResourcePack()->getSoundByDepth( // GravLift
+															_parent->getDepth(),
+															40) // play gravLift sound ...
+														->play();
 				}
 				else //if (!_falling)
 				{
-					_parent->getResourcePack()->getSound( // hoverSound
-														"BATTLE.CAT",
-														ResourcePack::FLYING_SOUND)
-													->play();
+					_parent->getResourcePack()->getSoundByDepth( // hoverSound
+															_parent->getDepth(),
+															ResourcePack::FLYING_SOUND)
+														->play();
 				}
 			}
 		}

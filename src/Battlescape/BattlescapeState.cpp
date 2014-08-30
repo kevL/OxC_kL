@@ -784,6 +784,12 @@ BattlescapeState::~BattlescapeState()
 void BattlescapeState::init()
 {
 	//Log(LOG_INFO) << "BattlescapeState::init()";
+	if (_save->getAmbientSound() != -1)
+		_game->getResourcePack()->getSoundByDepth(
+												0,
+												_save->getAmbientSound())
+											->loop();
+
 	State::init();
 
 	_animTimer->start();
@@ -1858,7 +1864,10 @@ void BattlescapeState::btnPsiClick(Action* action)
 	if (playableUnitSelected()
 		&& _save->getSelectedUnit()->checkAmmo())
 	{
-		_game->getResourcePack()->getSound("BATTLE.CAT", ResourcePack::ITEM_RELOAD)->play();
+		_game->getResourcePack()->getSoundByDepth(
+												_save->getDepth(),
+												ResourcePack::ITEM_RELOAD)
+											->play();
 		updateSoldierInfo();
 	}
 } */
@@ -2868,6 +2877,12 @@ void BattlescapeState::finishBattle(
 		_game->popState();
 
 	_game->getCursor()->setVisible(true);
+	if (_save->getAmbientSound() != -1)
+		_game->getResourcePack()->getSoundByDepth(
+												0,
+												_save->getAmbientSound())
+											->stopLoop();
+
 	std::string nextStage = "";
 
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT"

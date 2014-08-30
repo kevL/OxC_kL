@@ -502,14 +502,14 @@ void BaseView::draw()
 	}
 
 
-	for (std::vector<BaseFacility*>::iterator
+	for (std::vector<BaseFacility*>::iterator // draw facility shape
 			i = _base->getFacilities()->begin();
 			i != _base->getFacilities()->end();
 			++i)
 	{
 		int num = 0;
 
-		for (int // draw facility shape
+		for (int
 				y = (*i)->getY();
 				y < (*i)->getY() + (*i)->getRules()->getSize();
 				++y)
@@ -538,15 +538,14 @@ void BaseView::draw()
 		}
 	}
 
-	for (std::vector<BaseFacility*>::iterator
+	for (std::vector<BaseFacility*>::iterator // draw connectors
 			fac = _base->getFacilities()->begin();
 			fac != _base->getFacilities()->end();
 			++fac)
 	{
-		if ((*fac)->getBuildTime() == 0) // draw connectors
+		if ((*fac)->getBuildTime() == 0)
 		{
-			// facilities to the right
-			int x = (*fac)->getX() + (*fac)->getRules()->getSize();
+			int x = (*fac)->getX() + (*fac)->getRules()->getSize(); // facilities to the right
 			if (x < BASE_SIZE)
 			{
 				for (int
@@ -566,8 +565,7 @@ void BaseView::draw()
 				}
 			}
 
-			// facilities to the bottom
-			int y = (*fac)->getY() + (*fac)->getRules()->getSize();
+			int y = (*fac)->getY() + (*fac)->getRules()->getSize(); // facilities to the bottom
 			if (y < BASE_SIZE)
 			{
 				for (int
@@ -589,15 +587,12 @@ void BaseView::draw()
 		}
 	}
 
-
-	std::vector<Craft*>::iterator craft = _base->getCrafts()->begin();
-
-	for (std::vector<BaseFacility*>::iterator
+	for (std::vector<BaseFacility*>::iterator // draw facility graphic
 			fac = _base->getFacilities()->begin();
 			fac != _base->getFacilities()->end();
 			++fac)
 	{
-		int num = 0; // draw facility graphic
+		int num = 0;
 
 		for (int
 				y = (*fac)->getY();
@@ -611,39 +606,15 @@ void BaseView::draw()
 			{
 				if ((*fac)->getRules()->getSize() == 1)
 				{
-					Surface* frame = _texture->getFrame((*fac)->getRules()->getSpriteFacility() + num);
-					frame->setX(x * GRID_SIZE);
-					frame->setY(y * GRID_SIZE);
+					Surface* srfFac = _texture->getFrame((*fac)->getRules()->getSpriteFacility() + num);
+					srfFac->setX(x * GRID_SIZE);
+					srfFac->setY(y * GRID_SIZE);
 
-					frame->blit(this);
+					srfFac->blit(this);
 				}
 
 				num++;
 			}
-		}
-
-		if ((*fac)->getBuildTime() == 0 // draw crafts
-			&& (*fac)->getRules()->getCrafts() > 0)
-		{
-			if (craft != _base->getCrafts()->end())
-			{
-				if ((*craft)->getStatus() != "STR_OUT")
-				{
-					Surface* frame = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
-					frame->setX((*fac)->getX() * GRID_SIZE + ((*fac)->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
-					frame->setY((*fac)->getY() * GRID_SIZE + ((*fac)->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
-
-					frame->blit(this);
-
-					(*fac)->setCraft(*craft);
-				}
-				else
-					(*fac)->setCraft(NULL);
-
-				++craft;
-			}
-			else
-				(*fac)->setCraft(NULL);
 		}
 
 		if ((*fac)->getBuildTime() > 0) // draw time remaining
@@ -659,8 +630,7 @@ void BaseView::draw()
 						_big,
 						_small,
 						_lang);
-//kL		text->setX((*fac)->getX() * GRID_SIZE);
-			text->setX(((*fac)->getX() * GRID_SIZE) - 1); // kL
+			text->setX(((*fac)->getX() * GRID_SIZE) - 1);
 			text->setY((*fac)->getY() * GRID_SIZE + (GRID_SIZE * (*fac)->getRules()->getSize() - 16) / 2);
 			text->setBig();
 
@@ -673,6 +643,56 @@ void BaseView::draw()
 			text->blit(this);
 
 			delete text;
+		}
+	}
+
+	for (std::vector<BaseFacility*>::iterator // remove crafts from Facilities
+			fac = _base->getFacilities()->begin();
+			fac != _base->getFacilities()->end();
+			++fac)
+	{
+		(*fac)->setCraft(NULL);
+	}
+
+	std::vector<Craft*>::iterator craft = _base->getCrafts()->begin();
+	for (int // draw crafts left to right, top row to bottom.
+			y = 0;
+			y < BASE_SIZE;
+			++y)
+	{
+		for (int
+				x = 0;
+				x < BASE_SIZE;
+				++x)
+		{
+			if (_facilities[x][y] != NULL)
+			{
+				BaseFacility* fac = _facilities[x][y];
+				if (fac->getBuildTime() == 0
+					&& fac->getRules()->getCrafts() > 0
+					&& fac->getCraft() == NULL)
+				{
+					if (craft != _base->getCrafts()->end())
+					{
+						if ((*craft)->getStatus() != "STR_OUT")
+						{
+							Surface* srfCraft = _texture->getFrame((*craft)->getRules()->getSprite() + 33);
+							srfCraft->setX(fac->getX() * GRID_SIZE + (fac->getRules()->getSize() - 1) * GRID_SIZE / 2 + 2);
+							srfCraft->setY(fac->getY() * GRID_SIZE + (fac->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
+
+							srfCraft->blit(this);
+
+							fac->setCraft(*craft);
+						}
+						else
+							fac->setCraft(NULL);
+
+						++craft;
+					}
+					else
+						fac->setCraft(NULL);
+				}
+			}
 		}
 	}
 }
