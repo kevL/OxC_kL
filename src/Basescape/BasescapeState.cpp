@@ -89,7 +89,7 @@ BasescapeState::BasescapeState(
 	_view			= new BaseView(192, 192, 0, 8);
 
 	_edtBase		= new TextEdit(this, 127, 17, 193, 0);
-	_txtRegion		= new Text(126, 9, 194, 16);
+	_txtRegion		= new Text(126, 9, 194, 15);
 	_txtFunds		= new Text(126, 9, 194, 24);
 
 	_mini			= new MiniBaseView(128, 22, 192, 33);
@@ -672,6 +672,8 @@ void BasescapeState::viewMouseOver(Action*)
 
 	if (fac != NULL)
 	{
+		_txtFacility->setAlign(ALIGN_LEFT);
+
 		if (fac->getRules()->getCrafts() == 0
 			|| fac->getBuildTime() > 0)
 		{
@@ -687,7 +689,11 @@ void BasescapeState::viewMouseOver(Action*)
 		}
 	}
 	else if (base < _game->getSavedGame()->getBases()->size())
+	{
+		_txtFacility->setAlign(ALIGN_RIGHT);
+
 		ss << _game->getSavedGame()->getBases()->at(base)->getName(_game->getLanguage()).c_str();
+	}
 
 	_txtFacility->setText(ss.str());
 }

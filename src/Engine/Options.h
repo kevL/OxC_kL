@@ -120,41 +120,41 @@ namespace Options
 {
 
 #define OPT extern
-#include "Options.inc.h"
+	#include "Options.inc.h"
 #undef OPT
 
-/// Creates the options info.
-void create();
-/// Restores default options.
-void resetDefault();
-/// Initializes the options settings.
-bool init(
-		int argc,
-		char* argv[]);
-/// Loads options from YAML.
-void load(const std::string& filename = "options");
-/// Saves options to YAML.
-void save(const std::string& filename = "options");
-/// Gets the game's data folder.
-std::string getDataFolder();
-/// Sets the game's data folder.
-void setDataFolder(const std::string& folder);
-/// Gets the game's data list.
-const std::vector<std::string>& getDataList();
-/// Gets the game's user folder.
-std::string getUserFolder();
-/// Gets the game's config folder.
-std::string getConfigFolder();
-/// Gets the game's options.
-const std::vector<OptionInfo>& getOptionInfo();
-/// Sets the game's data, user and config folders.
-void setFolders();
-/// Update game options from config file and command line.
-void updateOptions();
-/// Backup display options.
-void backupDisplay();
-/// Switches display options.
-void switchDisplay();
+	/// Creates the options info.
+	void create();
+	/// Restores default options.
+	void resetDefault();
+	/// Initializes the options settings.
+	bool init(
+			int argc,
+			char* argv[]);
+	/// Loads options from YAML.
+	void load(const std::string& filename = "options");
+	/// Saves options to YAML.
+	void save(const std::string& filename = "options");
+	/// Gets the game's data folder.
+	std::string getDataFolder();
+	/// Sets the game's data folder.
+	void setDataFolder(const std::string& folder);
+	/// Gets the game's data list.
+	const std::vector<std::string>& getDataList();
+	/// Gets the game's user folder.
+	std::string getUserFolder();
+	/// Gets the game's config folder.
+	std::string getConfigFolder();
+	/// Gets the game's options.
+	const std::vector<OptionInfo>& getOptionInfo();
+	/// Sets the game's data, user and config folders.
+	void setFolders();
+	/// Update game options from config file and command line.
+	void updateOptions();
+	/// Backup display options.
+	void backupDisplay();
+	/// Switches display options.
+	void switchDisplay();
 
 }
 

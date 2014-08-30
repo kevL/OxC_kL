@@ -74,7 +74,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Screen.h"
-#include "../Engine/Sound.h" // kL
+#include "../Engine/Sound.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
@@ -123,7 +123,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/SoldierDead.h" // kL
+#include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDeath.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/Transfer.h"
@@ -136,8 +136,8 @@
 namespace OpenXcom
 {
 
-size_t kL_currentBase = 0;			// kL
-Sound* GeoscapeState::soundPop = 0;	// kL
+size_t kL_currentBase = 0;
+Sound* GeoscapeState::soundPop = 0;
 
 
 // myk002_begin: struct definitions used when enqueuing notification events
@@ -146,14 +146,12 @@ struct ProductionCompleteInfo
 	std::wstring item;
 	bool showGotoBaseButton;
 
-//kL	productionProgress_e endType;
-	ProductProgress endType; // kL
+	ProductProgress endType;
 
 	ProductionCompleteInfo(
 			const std::wstring& a_item,
 			bool a_showGotoBaseButton,
-//kL			productionProgress_e a_endType)
-			ProductProgress a_endType) // kL
+			ProductProgress a_endType)
 		:
 			item(a_item),
 			showGotoBaseButton(a_showGotoBaseButton),
@@ -205,8 +203,8 @@ GeoscapeState::GeoscapeState()
 		_dogfights(),
 		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
-		_dfLon(0.0), // kL
-		_dfLat(0.0), // kL
+		_dfLon(0.0),
+		_dfLat(0.0),
 		_day(-1),
 		_month(-1),
 		_year(-1)
@@ -253,7 +251,7 @@ GeoscapeState::GeoscapeState()
 						screenHeight,			// y_height	= 120
 						0,						// start_x
 						0);						// start_y
-																// BACKGROUND
+																	// BACKGROUND
 //kL	_bg->setX((_globe->getWidth() - _bg->getWidth()) / 2);		// (160 - 768) / 2	= -304	= x
 //kL	_bg->setY((_globe->getHeight() - _bg->getHeight()) / 2);	// (120 - 600) / 2	= -240	= y
 
@@ -301,6 +299,7 @@ GeoscapeState::GeoscapeState()
 
 	// The old rotate buttons have now become the Detail toggle.
 	_btnDetail		= new ImageButton(63, 46, screenWidth - 63, screenHeight / 2 + 54);
+//	_btnFake		= new InteractiveSurface(1,1,0,0);
 
 	// kL_end.
 
@@ -408,6 +407,7 @@ GeoscapeState::GeoscapeState()
 	add(_globe);
 
 	add(_btnDetail);
+//	add(_btnFake);
 
 	add(_btnIntercept);
 	add(_btnBases);
@@ -423,7 +423,8 @@ GeoscapeState::GeoscapeState()
 	add(_btn1Hour);
 	add(_btn1Day);
 
-/*kL	add(_btnRotateLeft);
+/*kL
+	add(_btnRotateLeft);
 	add(_btnRotateRight);
 	add(_btnRotateUp);
 	add(_btnRotateDown);
@@ -469,7 +470,8 @@ GeoscapeState::GeoscapeState()
 
 	_sideLine->drawRect(0, 0, _sideLine->getWidth(), _sideLine->getHeight(), 15);
 
-/*kL	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
+/*kL
+	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnIntercept->setColor(Palette::blockOffset(15)+6);
 	_btnIntercept->setTextColor(Palette::blockOffset(15)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
@@ -654,16 +656,27 @@ GeoscapeState::GeoscapeState()
 
 	_btnDetail->copy(geobord);
 	_btnDetail->setColor(Palette::blockOffset(15)+9);
-	_btnDetail->onMouseClick(
-					(ActionHandler)& GeoscapeState::btnDetailClick,
-					SDL_BUTTON_LEFT);
-	_btnDetail->onMouseClick(
-					(ActionHandler)& GeoscapeState::btnDetailClick,
-					SDL_BUTTON_RIGHT);
-//	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnDetailClick, keyGeoToggleDetail);
-	// kL_end.
+	_btnDetail->onMousePress((ActionHandler)& GeoscapeState::btnDetailPress);
+//	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnDetailPress, keyGeoToggleDetail);
 
-/*kL	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
+	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnRotateLeftPress, Options::keyGeoLeft);
+	_btnDetail->onKeyboardRelease((ActionHandler)& GeoscapeState::btnRotateLeftRelease, Options::keyGeoLeft);
+
+	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnRotateRightPress, Options::keyGeoRight);
+	_btnDetail->onKeyboardRelease((ActionHandler)& GeoscapeState::btnRotateRightRelease, Options::keyGeoRight);
+
+	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnRotateUpPress, Options::keyGeoUp);
+	_btnDetail->onKeyboardRelease((ActionHandler)& GeoscapeState::btnRotateUpRelease, Options::keyGeoUp);
+
+	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnRotateDownPress, Options::keyGeoDown);
+	_btnDetail->onKeyboardRelease((ActionHandler)& GeoscapeState::btnRotateDownRelease, Options::keyGeoDown);
+
+	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnZoomInLeftClick, Options::keyGeoZoomIn);
+	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut);
+
+	// kL_end.
+/*kL
+	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
 	_btnRotateLeft->onMouseRelease((ActionHandler)& GeoscapeState::btnRotateLeftRelease);
 	_btnRotateLeft->onKeyboardPress((ActionHandler)&GeoscapeState::btnRotateLeftPress, Options::keyGeoLeft);
 	_btnRotateLeft->onKeyboardRelease((ActionHandler)&GeoscapeState::btnRotateLeftRelease, Options::keyGeoLeft);
@@ -3019,12 +3032,13 @@ void GeoscapeState::time1Month()
 					++s)
 			{
 				if ((*s)->isInPsiTraining())
+				{
 					(*s)->trainPsi();
-
 					(*s)->calcStatString(
 									_game->getRuleset()->getStatStrings(),
 									(Options::psiStrengthEval
-										&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
+									&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
+				}
 			}
 		}
 	}
@@ -3036,8 +3050,8 @@ void GeoscapeState::time1Month()
 
 
 	// kL_note: Might want to change this to time1day() ...
-	int revDiff = 20 - (diff * 5); // kL, Superhuman == 0%
-	if (RNG::percent(revDiff + 50) // kL
+	int rDiff = 20 - (diff * 5); // kL, Superhuman == 0%
+	if (RNG::percent(rDiff + 50) // kL
 //kL	if (RNG::percent(20)
 		&& !_game->getSavedGame()->getAlienBases()->empty())
 	{
@@ -3048,7 +3062,7 @@ void GeoscapeState::time1Month()
 		{
 			if (!(*b)->isDiscovered()
 //				&& RNG::percent(5)) // kL
-				&& RNG::percent(revDiff + 5)) // kL
+				&& RNG::percent(rDiff + 5)) // kL
 			{
 				(*b)->setDiscovered(true);
 
@@ -3124,7 +3138,7 @@ void GeoscapeState::globeClick(Action* action)
 		{
 			_game->pushState(new MultipleTargetsState(
 													targets,
-													0,
+													NULL,
 													this));
 		}
 	}
@@ -3199,7 +3213,7 @@ void GeoscapeState::btnBasesClick(Action*)
 	else
 	{
 		_game->pushState(new BasescapeState(
-										0,
+										NULL,
 										_globe));
 	}
 	//Log(LOG_INFO) << ". . exit btnBasesClick()";
@@ -3255,7 +3269,7 @@ void GeoscapeState::btnFundingClick(Action*)
  * Handler for clicking the Detail area.
  * @param action, Pointer to an action.
  */
-void GeoscapeState::btnDetailClick(Action* action)
+void GeoscapeState::btnDetailPress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		_globe->toggleDetail();
@@ -3267,82 +3281,82 @@ void GeoscapeState::btnDetailClick(Action* action)
  * Starts rotating the globe to the left.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnRotateLeftPress(Action*)
+void GeoscapeState::btnRotateLeftPress(Action*)
 {
 	_globe->rotateLeft();
-} */
+}
 
 /**
  * Stops rotating the globe to the left.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnRotateLeftRelease(Action*)
+void GeoscapeState::btnRotateLeftRelease(Action*)
 {
 	_globe->rotateStopLon();
-} */
+}
 
 /**
  * Starts rotating the globe to the right.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnRotateRightPress(Action*)
+void GeoscapeState::btnRotateRightPress(Action*)
 {
 	_globe->rotateRight();
-} */
+}
 
 /**
  * Stops rotating the globe to the right.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnRotateRightRelease(Action*)
+void GeoscapeState::btnRotateRightRelease(Action*)
 {
 	_globe->rotateStopLon();
-} */
+}
 
 /**
  * Starts rotating the globe upwards.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnRotateUpPress(Action*)
+void GeoscapeState::btnRotateUpPress(Action*)
 {
 	_globe->rotateUp();
-} */
+}
 
 /**
  * Stops rotating the globe upwards.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnRotateUpRelease(Action*)
+void GeoscapeState::btnRotateUpRelease(Action*)
 {
 	_globe->rotateStopLat();
-} */
+}
 
 /**
  * Starts rotating the globe downwards.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnRotateDownPress(Action*)
+void GeoscapeState::btnRotateDownPress(Action*)
 {
 	_globe->rotateDown();
-} */
+}
 
 /**
  * Stops rotating the globe downwards.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnRotateDownRelease(Action*)
+void GeoscapeState::btnRotateDownRelease(Action*)
 {
 	_globe->rotateStopLat();
-} */
+}
 
 /**
  * Zooms into the globe.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnZoomInLeftClick(Action*)
+void GeoscapeState::btnZoomInLeftClick(Action*)
 {
 	_globe->zoomIn();
-} */
+}
 
 /**
  * Zooms the globe maximum.
@@ -3357,10 +3371,10 @@ void GeoscapeState::btnDetailClick(Action* action)
  * Zooms out of the globe.
  * @param action Pointer to an action.
  */
-/* void GeoscapeState::btnZoomOutLeftClick(Action*)
+void GeoscapeState::btnZoomOutLeftClick(Action*)
 {
 	_globe->zoomOut();
-} */
+}
 
 /**
  * Zooms the globe minimum.
@@ -3393,7 +3407,7 @@ void GeoscapeState::zoomOutEffect()
 		_zoomOutEffectDone = true;
 		_zoomOutEffectTimer->stop();
 
-		_globe->center( // kL
+		_globe->center(
 					_dfLon,
 					_dfLat);
 
@@ -3410,7 +3424,7 @@ void GeoscapeState::handleDogfights()
 	if (_dogfights.size() == _minimizedDogfights)
 	{
 		_pause = false;
-		_gameTimer->think(this, 0);
+		_gameTimer->think(this, NULL);
 	}
 
 	_minimizedDogfights = 0; // handle dogfights logic.
@@ -3618,7 +3632,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 void GeoscapeState::setupTerrorMission()
 {
 	// Determine a random region with at least one city and no currently running terror mission.
-	RuleRegion* region = 0;
+	RuleRegion* region = NULL;
 	int counter = 0;
 	std::vector<std::string> regions = _game->getRuleset()->getRegionsList();
 
@@ -3637,7 +3651,7 @@ void GeoscapeState::setupTerrorMission()
 		|| _game->getSavedGame()->getAlienMission(
 												region->getType(),
 												"STR_ALIEN_TERROR")
-											!= 0);
+											!= NULL);
 
 	// Choose race for terror mission.
 	const RuleAlienMission& terrorRules = *_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR");

@@ -80,13 +80,14 @@ private:
 		_xBeforeMouseScrolling,
 		_yBeforeMouseScrolling;
 	double
-		_cenLon,
 		_cenLat,
-		_hoverLon,
+		_cenLon,
 		_hoverLat,
+		_hoverLon,
 		_lonBeforeMouseScrolling,
 		_latBeforeMouseScrolling,
-//		_rotLon, _rotLat;
+		_rotLat,
+		_rotLon,
 		_radius,
 		_radiusStep;
 	Sint16
@@ -116,7 +117,9 @@ private:
 		* _mkXcomBase;		// kL_end.
 	SurfaceSet* _texture;
 //kL	* _markerSet;
-	Timer* _blinkTimer; //, * _rotTimer;
+	Timer
+		* _blinkTimer,
+		* _rotTimer;
 
 	std::list<Polygon*> _cacheLand;
 	/// normal of each pixel in earth globe per zoom level
@@ -228,19 +231,19 @@ private:
 		void setTexture(SurfaceSet* texture);
 
 		/// Starts rotating the globe left.
-//		void rotateLeft();
+		void rotateLeft();
 		/// Starts rotating the globe right.
-//		void rotateRight();
+		void rotateRight();
 		/// Starts rotating the globe up.
-//		void rotateUp();
+		void rotateUp();
 		/// Starts rotating the globe down.
-//		void rotateDown();
+		void rotateDown();
 		/// Stops rotating the globe.
-//		void rotateStop();
+		void rotateStop();
 		/// Stops longitude rotation of the globe.
-//		void rotateStopLon();
+		void rotateStopLon();
 		/// Stops latitude rotation of the globe.
-//		void rotateStopLat();
+		void rotateStopLat();
 
 		/// Zooms the globe in.
 		void zoomIn();
@@ -296,7 +299,7 @@ private:
 		/// Blinks the markers.
 		void blink();
 		/// Rotates the globe.
-//		void rotate();
+		void rotate();
 
 		/// Draws the whole globe.
 		void draw();

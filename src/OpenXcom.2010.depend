@@ -4387,7 +4387,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404096022 f:\git\openxcom\src\engine\options.h
+1409416658 f:\git\openxcom\src\engine\options.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -4440,7 +4440,7 @@
 	<stdint.h>
 	"GameTime.h"
 
-1409328248 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1409428463 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4538,7 +4538,7 @@
 1404096023 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1407610190 f:\git\openxcom\src\geoscape\geoscapestate.h
+1409426710 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<list>
 	"../Engine/State.h"
 
@@ -4578,7 +4578,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1407622468 source:f:\git\openxcom\src\basescape\baseview.cpp
+1409366963 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	<cmath>
 	<limits>
@@ -4878,7 +4878,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1409251150 f:\git\openxcom\src\geoscape\globe.h
+1409417436 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"
@@ -7310,7 +7310,7 @@
 	"Exception.h"
 	"Logger.h"
 
-1409299272 source:f:\git\openxcom\src\engine\timer.cpp
+1409419145 source:f:\git\openxcom\src\engine\timer.cpp
 	"Timer.h"
 	<assert.h>
 	"Game.h"
@@ -7754,7 +7754,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1409097671 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1409426880 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7915,7 +7915,7 @@
 	<string>
 	<vector>
 
-1409251844 source:f:\git\openxcom\src\geoscape\globe.cpp
+1409426880 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -7925,6 +7925,7 @@
 	"../Engine/Font.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/LocalizedText.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"

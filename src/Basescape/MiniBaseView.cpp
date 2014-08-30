@@ -226,8 +226,11 @@ void MiniBaseView::draw()
 					else
 						setPixelColor(offset_x + 12, pixel_y, Palette::blockOffset(9)+9);
 
-					if (craftRule->getWeapons() > 0)
+					if (craftRule->getWeapons() > 0
+						&& craftRule->getWeapons() == (*craft)->getNumWeapons())
+					{
 						setPixelColor(offset_x + 10, pixel_y, Palette::blockOffset(8)+2); // blue
+					}
 //					else setPixelColor(offset_x + 12, pixel_y, Palette::blockOffset(8)+10);
 
 					if (craftRule->getSoldiers() > 0)
@@ -298,7 +301,7 @@ void MiniBaseView::blink()
 				{
 					std::string stat = (*craft)->getStatus();
 
-					if (stat != "STR_READY") // done in draw() above^
+					if (stat != "STR_READY") // done in draw() above^; Craft is not status_Ready.
 					{
 						if (_blink)
 						{
@@ -314,6 +317,16 @@ void MiniBaseView::blink()
 						else
 							setPixelColor(offset_x + 14, pixel_y, 0); // transparent
 					}
+
+					if ((*craft)->getRules()->getWeapons() > 0								// done in draw() above^
+						&& (*craft)->getRules()->getWeapons() != (*craft)->getNumWeapons())	// craft needs Weapons mounted.
+					{
+						if (_blink)
+							setPixelColor(offset_x + 10, pixel_y, Palette::blockOffset(8)+2); // blue
+						else
+							setPixelColor(offset_x + 10, pixel_y, 0); // transparent
+					}
+
 
 					pixel_y += 2;
 				}

@@ -1192,7 +1192,7 @@ craftWeapons:
     reloadCautious: 11
     reloadStandard: 8
     reloadAggressive: 5
-    ammoMax: 20
+    ammoMax: 22
     rearmRate: 5
     launcher: STR_LASER_CANNON
     clip: STR_ELERIUM_115
@@ -1206,7 +1206,7 @@ craftWeapons:
     reloadCautious: 20
     reloadStandard: 14
     reloadAggressive: 8
-    ammoMax: 30
+    ammoMax: 33
     rearmRate: 15
     launcher: STR_PLASMA_BEAM
     clip: STR_ELERIUM_115
@@ -2749,7 +2749,7 @@ ufos:
     damageMax: 96
     speedMax: 2175
     accel: 12
-    power: 7
+    power: 0
     range: 0
     score: 25
     reload: 30
@@ -2824,7 +2824,7 @@ ufos:
         - BLANKS
         - U_EXT02
         - U_WALL02
-#        - U_DISEC2 # Luke83's supercedes
+        - U_DISEC2
         - U_BITS
       mapBlocks:
         - name: UFO_130
@@ -2873,7 +2873,7 @@ ufos:
         - U_PODS
         - U_BITS
       mapBlocks:
-        - name: UFO_150 # Luke83's removes, but I'm leaving it in.
+        - name: UFO_150
           width: 30
           length: 20
   - type: STR_BATTLESHIP
@@ -2919,7 +2919,7 @@ ufos:
         - U_DISEC2
         - U_BITS
       mapBlocks:
-        - name: UFO_170 # Luke83's removes, but I'm leaving it in.
+        - name: UFO_170
           width: 30
           length: 20
 invs:

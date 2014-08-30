@@ -34,9 +34,9 @@ extern size_t kL_currentBase;
 class Base;
 class DogfightState;
 class Globe;
-class ImageButton; // kL
-//kL class InteractiveSurface;
-class Sound; // kL
+class ImageButton;
+//class InteractiveSurface;
+class Sound;
 class Surface;
 class TerrorSite;
 class Text;
@@ -84,6 +84,7 @@ private:
 		* _btn30Mins,
 		* _btn1Hour,
 		* _btn1Day,
+
 		* _btnDetail,
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
@@ -191,10 +192,10 @@ private:
 		void btnFundingClick(Action* action);
 
 		/// Handler for clicking the Detail area.
-		void btnDetailClick(Action* action);
+		void btnDetailPress(Action* action);
 
 		/// Handler for pressing the Rotate Left arrow.
-/*		void btnRotateLeftPress(Action* action);
+		void btnRotateLeftPress(Action* action);
 		/// Handler for releasing the Rotate Left arrow.
 		void btnRotateLeftRelease(Action* action);
 		/// Handler for pressing the Rotate Right arrow.
@@ -212,11 +213,11 @@ private:
 		/// Handler for left-clicking the Zoom In icon.
 		void btnZoomInLeftClick(Action* action);
 		/// Handler for right-clicking the Zoom In icon.
-		void btnZoomInRightClick(Action* action);
+//		void btnZoomInRightClick(Action* action);
 		/// Handler for left-clicking the Zoom Out icon.
 		void btnZoomOutLeftClick(Action* action);
 		/// Handler for right-clicking the Zoom Out icon.
-		void btnZoomOutRightClick(Action* action); */
+//		void btnZoomOutRightClick(Action* action);
 
 		/// Blit method - renders the state and dogfights.
 		void blit();
@@ -242,7 +243,9 @@ private:
 		bool processTerrorSite(TerrorSite* ts) const;
 
 		/// Handles base defense
-		void handleBaseDefense(Base* base, Ufo* ufo);
+		void handleBaseDefense(
+				Base* base,
+				Ufo* ufo);
 
 		/// Update the resolution settings, we just resized the window.
 		void resize(

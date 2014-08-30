@@ -31,7 +31,7 @@
 #include "../Engine/Font.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
+#include "../Engine/Logger.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
@@ -140,7 +140,7 @@ struct GlobeStaticData
 		}
 	}
 
-	// initialization
+	/// initialization
 	GlobeStaticData()
 		:
 			random_surf_size(60)
@@ -183,6 +183,7 @@ GlobeStaticData static_data;
 
 struct Ocean
 {
+	///
 	static inline void func(
 			Uint8& dest,
 			const int&,
@@ -198,6 +199,7 @@ struct Ocean
 
 struct CreateShadow
 {
+	///
 	static inline Uint8 getShadowValue(
 			const Uint8& dest,
 			const Cord& earth,
@@ -311,8 +313,8 @@ Globe::Globe(
 			height,
 			x,
 			y),
-//		_rotLon(0.0),
-//		_rotLat(0.0),
+		_rotLon(0.0),
+		_rotLat(0.0),
 		_hoverLon(0.0),
 		_hoverLat(0.0),
 		_cenX(cenX),
@@ -357,9 +359,9 @@ Globe::Globe(
 	_blinkTimer->onTimer((SurfaceHandler)& Globe::blink);
 	_blinkTimer->start();
 
-//kL	_rotTimer = new Timer(10);
-//kL	_rotTimer = new Timer(Options::geoScrollSpeed); // old.
-//kL	_rotTimer->onTimer((SurfaceHandler)& Globe::rotate);
+//	_rotTimer = new Timer(10);
+	_rotTimer = new Timer(Options::geoScrollSpeed); // old.
+	_rotTimer->onTimer((SurfaceHandler)& Globe::rotate);
 
 // kL_begin:
 	// Globe markers
@@ -487,7 +489,7 @@ Globe::~Globe()
 //	delete _markerSet; (they don't actually delete this.. it's been commented in stock code too.)
 
 	delete _blinkTimer;
-//	delete _rotTimer;
+	delete _rotTimer;
 	delete _countries;
 	delete _markers;
 	delete _mkXcomBase;
@@ -519,13 +521,12 @@ Globe::~Globe()
  * @param x, Pointer to the output X position.
  * @param y, Pointer to the output Y position.
  */
-void Globe::polarToCart(
+void Globe::polarToCart( // Orthographic projection
 		double lon,
 		double lat,
 		Sint16* x,
 		Sint16* y) const
 {
-	// Orthographic projection
 	*x = _cenX + static_cast<Sint16>(floor(_radius * cos(lat) * sin(lon - _cenLon)));
 	*y = _cenY + static_cast<Sint16>(floor(_radius * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon))));
 }
@@ -533,13 +534,12 @@ void Globe::polarToCart(
 /**
  *
  */
-void Globe::polarToCart(
+void Globe::polarToCart( // Orthographic projection
 		double lon,
 		double lat,
 		double* x,
 		double* y) const
 {
-	// Orthographic projection
 	*x = _cenX + static_cast<Sint16>(_radius * cos(lat) * sin(lon - _cenLon));
 	*y = _cenY + static_cast<Sint16>(_radius * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
 }
@@ -693,73 +693,79 @@ bool Globe::insidePolygon(
 /**
  * Sets a leftwards rotation speed and starts the timer.
  */
-/* void Globe::rotateLeft()
+void Globe::rotateLeft()
 {
 	_rotLon = -ROTATE_LONGITUDE;
 
-	if (!_rotTimer->isRunning()) _rotTimer->start();
-} */
+	if (!_rotTimer->isRunning())
+		_rotTimer->start();
+}
 
 /**
  * Sets a rightwards rotation speed and starts the timer.
  */
-/* void Globe::rotateRight()
+void Globe::rotateRight()
 {
 	_rotLon = ROTATE_LONGITUDE;
 
-	if (!_rotTimer->isRunning()) _rotTimer->start();
-} */
+	if (!_rotTimer->isRunning())
+		_rotTimer->start();
+}
 
 /**
  * Sets a upwards rotation speed and starts the timer.
  */
-/* void Globe::rotateUp()
+void Globe::rotateUp()
 {
 	_rotLat = -ROTATE_LATITUDE;
 
-	if (!_rotTimer->isRunning()) _rotTimer->start();
-} */
+	if (!_rotTimer->isRunning())
+		_rotTimer->start();
+}
 
 /**
  * Sets a downwards rotation speed and starts the timer.
  */
-/* void Globe::rotateDown()
+void Globe::rotateDown()
 {
 	_rotLat = ROTATE_LATITUDE;
 
-	if (!_rotTimer->isRunning()) _rotTimer->start();
-} */
+	if (!_rotTimer->isRunning())
+		_rotTimer->start();
+}
 
 /**
  * Resets the rotation speed and timer.
  */
-/* void Globe::rotateStop()
+void Globe::rotateStop()
 {
 	_rotLon = 0.0;
 	_rotLat = 0.0;
 
 	_rotTimer->stop();
-} */
+}
 
 /**
  * Resets longitude rotation speed and timer.
  */
-/* void Globe::rotateStopLon()
+void Globe::rotateStopLon()
 {
 	_rotLon = 0.0;
 
-	if (AreSame(_rotLat, 0.0)) _rotTimer->stop();
-} */
+	if (AreSame(_rotLat, 0.0))
+		_rotTimer->stop();
+}
 
 /**
  * Resets latitude rotation speed and timer.
  */
-/* void Globe::rotateStopLat()
+void Globe::rotateStopLat()
 {
 	_rotLat = 0.0;
 
-	if (AreSame(_rotLon, 0.0)) _rotTimer->stop();
-} */
+	if (AreSame(_rotLon, 0.0))
+		_rotTimer->stop();
+}
 
 /**
  * Changes the current globe zoom factor.
@@ -1220,7 +1226,7 @@ void Globe::setPalette(
 }
 
 /**
- * Keeps the animation timers running.
+ * Keeps the animation & rotation timers running.
  */
 void Globe::think()
 {
@@ -1228,13 +1234,13 @@ void Globe::think()
 	{
 		kL_reCenter = false;
 
-		center( // -> from Basescape\CraftsState (crafts screen) & ...
+		center(
 			_game->getSavedGame()->getGlobeLongitude(),
 			_game->getSavedGame()->getGlobeLatitude());
 	}
 
 	_blinkTimer->think(NULL, this);
-//	_rotTimer->think(NULL, this);
+	_rotTimer->think(NULL, this);
 }
 
 /**
@@ -1296,15 +1302,16 @@ void Globe::blink()
  * Rotates the globe by a set amount. Necessary since the
  * globe keeps rotating while a button is pressed down.
  */
-/* void Globe::rotate()
+void Globe::rotate()
 {
-	_cenLon += _rotLon * ((110 - Options::geoScrollSpeed) / 100.0) / (_zoom + 1);
-	_cenLat += _rotLat * ((110 - Options::geoScrollSpeed) / 100.0) / (_zoom + 1);
+	_cenLon += _rotLon * (static_cast<double>(110 - Options::geoScrollSpeed) / 100.0) / static_cast<double>(_zoom + 1);
+	_cenLat += _rotLat * (static_cast<double>(110 - Options::geoScrollSpeed) / 100.0) / static_cast<double>(_zoom + 1);
+
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
 
 	invalidate();
-} */
+}
 
 /**
  * Draws the whole globe, part by part.
@@ -2550,7 +2557,7 @@ void Globe::drawMarkers()
 			continue;
 		}
 
-		Surface* marker = 0;
+		Surface* marker = NULL;
 
 		switch ((*i)->getStatus())
 		{
@@ -2616,7 +2623,7 @@ void Globe::drawMarkers()
 		}
 	}
 }
-/*	Sint16 x, y; // code for using SurfaceSet for markers:
+/*	// code for using SurfaceSet for markers:
 	_markers->clear();
 
 	// Draw the base markers
