@@ -527,39 +527,33 @@ void BasescapeState::viewLeftClick(Action*)
 			{
 				Craft* craft = _base->getCrafts()->at(i);
 
-				if (fac->getCraft() == NULL) // Empty hangar, craft currently out
+				if (fac->getCraft() == NULL							// empty hangar
+					|| fac->getCraft()->getStatus() == "STR_OUT")	// or Craft currently out
 				{
 					bPop = true;
 
+					_game->pushState(new CraftsState(_base));
+
+					break;
 /*					if (craft->getStatus() == "STR_OUT")
 					{
 						_game->getSavedGame()->setGlobeLongitude(craft->getLongitude());
 						_game->getSavedGame()->setGlobeLatitude(craft->getLatitude());
-
 						kL_reCenter = true;
-
 						_game->popState(); // pop to Geoscape.
-
 						break; // might not be needed here
-					}
-					else // Empty hangar, no craft for it; however, base has at least one craft (docked or out)
-					{ */
-					_game->pushState(new CraftsState(_base));
-
-					break;
-//					}
+					} */
 				}
 				else if (fac->getCraft() == craft) // craft is docked here
 				{
-//					bPop = false; // plays window-'swish' instead.
 					_game->pushState(new CraftInfoState(
 													_base,
 													i));
 
 					break;
 				}
-			}
-		} // kL_end.
+			} // kL_end.
+		}
 	}
 	else if (fac->getRules()->getStorage() > 0)
 	{

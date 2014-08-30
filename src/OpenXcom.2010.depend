@@ -4578,7 +4578,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1409366963 source:f:\git\openxcom\src\basescape\baseview.cpp
+1409431123 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	<cmath>
 	<limits>
@@ -5077,7 +5077,7 @@
 	<windows.h>
 	<stddef.h>
 
-1409329123 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1409429773 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	<cmath>
 	"../Engine/Action.h"

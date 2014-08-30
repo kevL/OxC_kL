@@ -655,6 +655,7 @@ void BaseView::draw()
 	}
 
 	std::vector<Craft*>::iterator craft = _base->getCrafts()->begin();
+
 	for (int // draw crafts left to right, top row to bottom.
 			y = 0;
 			y < BASE_SIZE;
@@ -681,16 +682,12 @@ void BaseView::draw()
 							srfCraft->setY(fac->getY() * GRID_SIZE + (fac->getRules()->getSize() - 1) * GRID_SIZE / 2 - 4);
 
 							srfCraft->blit(this);
-
-							fac->setCraft(*craft);
 						}
-						else
-							fac->setCraft(NULL);
+
+						fac->setCraft(*craft);
 
 						++craft;
 					}
-					else
-						fac->setCraft(NULL);
 				}
 			}
 		}
