@@ -5077,7 +5077,7 @@
 	<windows.h>
 	<stddef.h>
 
-1409429773 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1409504767 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	<cmath>
 	"../Engine/Action.h"
@@ -6035,7 +6035,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1409359198 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1409502165 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6439,7 +6439,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1409444625 source:f:\git\openxcom\src\battlescape\map.cpp
+1409501038 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>

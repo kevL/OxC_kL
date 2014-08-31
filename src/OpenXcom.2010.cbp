@@ -106,6 +106,8 @@
 			<Add directory="C:/Program Files/Microsoft Visual Studio 10.0/VC/lib" />
 		</Linker>
 		<Unit filename="../res/windows/openxcom.ico" />
+		<Unit filename="Basescape/BaseDetectionState.cpp" />
+		<Unit filename="Basescape/BaseDetectionState.h" />
 		<Unit filename="Basescape/BaseInfoState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -454,14 +456,14 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Basescape/SoldierDeadInfoState.cpp" />
-		<Unit filename="Basescape/SoldierDeadInfoState.h" />
 		<Unit filename="Basescape/SoldierDiaryMissionState.cpp" />
 		<Unit filename="Basescape/SoldierDiaryMissionState.h" />
 		<Unit filename="Basescape/SoldierDiaryOverviewState.cpp" />
 		<Unit filename="Basescape/SoldierDiaryOverviewState.h" />
 		<Unit filename="Basescape/SoldierDiaryPerformanceState.cpp" />
 		<Unit filename="Basescape/SoldierDiaryPerformanceState.h" />
+		<Unit filename="Basescape/SoldierInfoDeadState.cpp" />
+		<Unit filename="Basescape/SoldierInfoDeadState.h" />
 		<Unit filename="Basescape/SoldierInfoState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -1887,18 +1889,6 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
-		<Unit filename="Geoscape/Polygon.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
-		<Unit filename="Geoscape/Polyline.h">
-			<Option target="Debug Win32" />
-			<Option target="Debug x64" />
-			<Option target="Release Win32" />
-			<Option target="Release x64" />
-		</Unit>
 		<Unit filename="Geoscape/ProductionCompleteState.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -2748,6 +2738,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Ruleset/SoundDefinition.cpp" />
+		<Unit filename="Ruleset/SoundDefinition.h" />
 		<Unit filename="Ruleset/StatString.cpp" />
 		<Unit filename="Ruleset/StatString.h" />
 		<Unit filename="Ruleset/StatStringCondition.cpp" />
