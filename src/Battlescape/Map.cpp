@@ -286,6 +286,11 @@ void Map::init()
 
 	_projectile = 0;
 
+	if (_save->getDepth() == 0)
+		_projectileSet = _res->getSurfaceSet("Projectiles");
+	else
+		_projectileSet = _res->getSurfaceSet("UnderwaterProjectiles");
+
 /*	int // kL_begin: reveal map's border tiles.
 		size_x = _save->getMapSizeX(),
 		size_y = _save->getMapSizeY(),
@@ -1393,7 +1398,7 @@ void Map::drawTerrain(Surface* surface)
 										i != end;
 										i += direction)
 								{
-									tmpSurface = _res->getSurfaceSet("Projectiles")->getFrame(_projectile->getParticle(i));
+									tmpSurface = _projectileSet->getFrame(_projectile->getParticle(i));
 									if (tmpSurface)
 									{
 										Position voxelPos = _projectile->getPosition(1 - i);
@@ -1480,6 +1485,9 @@ void Map::drawTerrain(Surface* surface)
 
 							if (unit->getBreathFrame() > 0)
 							{
+//kL							if (unit->getStatus() == STATUS_AIMING) // enlarge the unit sprite when aiming to accomodate the weapon. adjust as necessary.
+//kL								offset.x = 0;
+
 								tmpSurface = _res->getSurfaceSet("BREATH-1.PCK")->getFrame(unit->getBreathFrame() - 1);
 								if (tmpSurface)
 								{

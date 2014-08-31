@@ -320,9 +320,9 @@ Globe::Globe(
 		_cenX(cenX),
 		_cenY(cenY),
 		_game(game),
-		_blink(true), //(-1)
-//		_blinkVal(0),
 		_hover(false),
+		_blink(false), //(-1)
+//		_blinkVal(0),
 		_cacheLand(),
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),

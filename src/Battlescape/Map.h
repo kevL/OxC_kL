@@ -44,6 +44,7 @@ class Projectile;
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
+class SurfaceSet;
 //kL class Text;
 class Timer;
 
@@ -108,6 +109,7 @@ private:
 	Surface
 						* _arrow,
 						* _arrow_kneel; // DarkDefender
+	SurfaceSet			* _projectileSet;
 //kL	Text				* _txtAccuracy;
 	Timer
 						* _scrollMouseTimer,
