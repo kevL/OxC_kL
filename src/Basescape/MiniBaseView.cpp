@@ -310,7 +310,7 @@ void MiniBaseView::blink()
 							else if (stat == "STR_REFUELLING")
 								setPixelColor(offset_x + 14, pixel_y, Palette::blockOffset(6)); // orange
 							else if (stat == "STR_REARMING")
-								setPixelColor(offset_x + 14, pixel_y, Palette::blockOffset(6)+3);
+								setPixelColor(offset_x + 14, pixel_y, Palette::blockOffset(6)+2);
 							else if (stat == "STR_REPAIRS")
 								setPixelColor(offset_x + 14, pixel_y, Palette::blockOffset(2)+5); // red
 						}

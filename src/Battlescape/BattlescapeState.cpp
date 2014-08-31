@@ -2285,8 +2285,7 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 								_icons->getX(),
 								_icons->getY() + 16));
 //		}
-//kL	else
-//kL		warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
+//kL	else warning("STR_UNABLE_TO_USE_ALIEN_ARTIFACT_UNTIL_RESEARCHED");
 	}
 }
 
