@@ -2021,7 +2021,9 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 			if (_save->getTile(ba.target) != NULL)
 			{
 				ba.weapon = unit->getMainHandWeapon();
-				if (ba.weapon)
+				if (ba.weapon
+					&& (_save->getDepth() != 0
+						|| ba.weapon->getRules()->isWaterOnly() == false))
 				{
 					if (ba.weapon->getRules()->getBattleType() == BT_FIREARM)
 					{

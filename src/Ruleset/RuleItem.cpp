@@ -103,6 +103,7 @@ RuleItem::RuleItem(const std::string& type)
 		_strengthApplied(false),
 		_skillApplied(true),
 		_LOSRequired(false),
+		_underwaterOnly(false),
 		_noReaction(false), // kL
 		_meleeSound(39),
 		_meleePower(0),
@@ -270,6 +271,7 @@ void RuleItem::load(
 	_noReaction				= node["noReaction"].as<bool>(_noReaction); // kL
 	_noResearch				= node["noResearch"].as<bool>(_noResearch); // kL
 	_meleePower				= node["meleePower"].as<int>(_meleePower);
+	_underwaterOnly			= node["underwaterOnly"].as<bool>(_underwaterOnly);
 
 	if (!_listOrder)
 		_listOrder = listOrder;
@@ -972,12 +974,21 @@ int RuleItem::getMeleeAnimation() const
 }
 
 /**
- * Is line of sight required for this psionic weapon to function?
- * @return, If line of sight is required.
+ * Checks if line of sight is required for this psionic weapon to function.
+ * @return, true if line of sight is required
  */
 bool RuleItem::isLOSRequired() const
 {
 	return _LOSRequired;
+}
+
+/**
+ * Checks if this item can be used on land or if it's it underwater only.
+ * @return, true if this is an underwater weapon only
+ */
+const bool RuleItem::isWaterOnly() const
+{
+	return _underwaterOnly;
 }
 
 /**

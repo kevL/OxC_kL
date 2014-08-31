@@ -301,10 +301,17 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 
 	if (btnID != -1)
 	{
-		_action->TU = _actionMenu[btnID]->getTUs();
+		_action->TU		= _actionMenu[btnID]->getTUs();
+		_action->type	= _actionMenu[btnID]->getAction();
 
-		_action->type = _actionMenu[btnID]->getAction();
-		if (_action->type == BA_PRIME)
+		if (_action->type != BA_THROW
+			&& _game->getSavedGame()->getSavedBattle()->getDepth() == 0
+			&& weapon->isWaterOnly())
+		{
+			_action->result = "STR_THIS_EQUIPMENT_WILL_NOT_FUNCTION_ABOVE_WATER";
+			_game->popState();
+		}
+		else if (_action->type == BA_PRIME)
 		{
 			if (weapon->getBattleType() == BT_PROXIMITYGRENADE)
 			{

@@ -249,45 +249,51 @@ void AlienBAIState::think(BattleAction* action)
 	if (action->weapon)
 	{
 		RuleItem* rule = action->weapon->getRules();
-		if (rule->getBattleType() == BT_FIREARM)
+		if (rule->isWaterOnly() == false
+			|| _save->getDepth() != 0)
 		{
-			if (!rule->isWaypoint())
+			if (rule->getBattleType() == BT_FIREARM)
 			{
-				_rifle = true;
+				if (!rule->isWaypoint())
+				{
+					_rifle = true;
+					_reachableWithAttack = _save->getPathfinding()->findReachable(
+																			_unit,
+																			_unit->getTimeUnits()
+																				- _unit->getActionTUs(
+																								BA_SNAPSHOT,
+																								action->weapon));
+//																				- rand); // kL
+				}
+				else
+				{
+					_blaster = true;
+					_reachableWithAttack = _save->getPathfinding()->findReachable(
+																			_unit,
+																			_unit->getTimeUnits()
+																				- _unit->getActionTUs(
+																								BA_AIMEDSHOT,
+																								action->weapon));
+//																				- rand); // kL
+				}
+			}
+			else if (rule->getBattleType() == BT_MELEE)
+			{
+				_melee = true;
 				_reachableWithAttack = _save->getPathfinding()->findReachable(
 																		_unit,
 																		_unit->getTimeUnits()
 																			- _unit->getActionTUs(
-																							BA_SNAPSHOT,
-																							action->weapon));
+																								BA_HIT,
+																								action->weapon));
 //																			- rand); // kL
 			}
-			else
-			{
-				_blaster = true;
-				_reachableWithAttack = _save->getPathfinding()->findReachable(
-																		_unit,
-																		_unit->getTimeUnits()
-																			- _unit->getActionTUs(
-																							BA_AIMEDSHOT,
-																							action->weapon));
-//																			- rand); // kL
-			}
+			else if (rule->getBattleType() == BT_GRENADE)	// kL
+				_grenade = true;							// kL, this is no longer useful since I fixed
+															// getMainHandWeapon() to not return grenades.
 		}
-		else if (rule->getBattleType() == BT_MELEE)
-		{
-			_melee = true;
-			_reachableWithAttack = _save->getPathfinding()->findReachable(
-																	_unit,
-																	_unit->getTimeUnits()
-																		- _unit->getActionTUs(
-																							BA_HIT,
-																							action->weapon));
-//																		- rand); // kL
-		}
-		else if (rule->getBattleType() == BT_GRENADE)	// kL
-			_grenade = true;							// kL, this is no longer useful since I fixed
-														// getMainHandWeapon() to not return grenades.
+		else
+			action->weapon = NULL;
 	}
 
 	//Log(LOG_INFO) << ". . pos 2";

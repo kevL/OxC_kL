@@ -85,6 +85,7 @@ private:
 		_recover,
 		_noResearch, // kL
 		_twoHanded,
+		_underwaterOnly,
 		_waypoint;
 	int
 		_armor,
@@ -360,8 +361,10 @@ private:
 		/// Gets the melee animation starting frame (comes from hit.pck).
 		int getMeleeAnimation() const;
 
-		/// Check if LOS is required to use this item (only applies to psionic type items)
+		/// Checks if LOS is required to use this item (only applies to psionic type items)
 		bool isLOSRequired() const;
+		/// Checks if this item is restricted to underwater usage.
+		const bool isWaterOnly() const;
 
 		/// kL. Gets the item's default BattleAction.
 		BattleActionType getDefaultAction() const; // kL

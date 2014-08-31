@@ -1650,6 +1650,8 @@ bool TileEngine::canMakeSnap(
 	if (weapon->getRules()->canReactionFire() // kL add.
 		&& (unit->getOriginalFaction() == FACTION_HOSTILE				// is aLien, or has researched weapon.
 			|| _battleSave->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements()))
+		&& (_save->getDepth() != 0
+			|| weapon->getRules()->isWaterOnly() == false)
 //		&& ((weapon->getRules()->getBattleType() == BT_MELEE			// has a melee weapon
 		&& ((isMelee
 				&& canMelee
