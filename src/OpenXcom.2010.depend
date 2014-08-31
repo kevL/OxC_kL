@@ -4578,7 +4578,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1409431123 source:f:\git\openxcom\src\basescape\baseview.cpp
+1409457016 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	<cmath>
 	<limits>
@@ -7754,7 +7754,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1409426880 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1409451464 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>

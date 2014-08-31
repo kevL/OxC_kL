@@ -592,6 +592,8 @@ void BaseView::draw()
 			fac != _base->getFacilities()->end();
 			++fac)
 	{
+		(*fac)->setCraft(NULL); // NULL these to prepare hangers for population by Crafts.
+
 		int num = 0;
 
 		for (int
@@ -646,16 +648,15 @@ void BaseView::draw()
 		}
 	}
 
-	for (std::vector<BaseFacility*>::iterator // remove crafts from Facilities
+/*	for (std::vector<BaseFacility*>::iterator // remove crafts from Facilities
 			fac = _base->getFacilities()->begin();
 			fac != _base->getFacilities()->end();
 			++fac)
 	{
-		(*fac)->setCraft(NULL);
-	}
+		(*fac)->setCraft(NULL); // done above^
+	} */
 
 	std::vector<Craft*>::iterator craft = _base->getCrafts()->begin();
-
 	for (int // draw crafts left to right, top row to bottom.
 			y = 0;
 			y < BASE_SIZE;
