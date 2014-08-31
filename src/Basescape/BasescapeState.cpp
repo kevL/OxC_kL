@@ -270,8 +270,13 @@ void BasescapeState::init()
 	// kL_begin:
 	bool hasFunds		= (_game->getSavedGame()->getFunds() > 0);
 	bool hasQuarters	= false;
+	bool hasSoldiers	= false;
+	bool hasScientists	= false;
+	bool hasEngineers	= false;
 	bool hasHangar		= false;
+	bool hasCraft		= false;
 	bool hasAlienCont	= false;
+	bool hasAliens		= false;
 	bool hasLabs		= false;
 	bool hasProd		= false;
 	bool hasStores		= false;
@@ -285,12 +290,30 @@ void BasescapeState::init()
 			&& (*i)->getBuildTime() == 0)
 		{
 			hasQuarters = true;
+
+			if (_base->getSoldiers()->size() > 0)
+				hasSoldiers = true;
+
+			if (_base->getScientists() > 0
+				|| _base->getAllocatedScientists() > 0)
+			{
+				hasScientists = true;
+			}
+
+			if (_base->getEngineers() > 0
+				|| _base->getAllocatedEngineers() > 0)
+			{
+				hasEngineers = true;
+			}
 		}
 
 		if ((*i)->getRules()->getCrafts() > 0
 			&& (*i)->getBuildTime() == 0)
 		{
 			hasHangar = true;
+
+			if (_base->getCrafts()->size() > 0)
+				hasCraft = true;
 		}
 
 		if ((*i)->getRules()->getAliens() > 0
@@ -318,15 +341,14 @@ void BasescapeState::init()
 		}
 	}
 
-	_btnSoldiers->setVisible(hasQuarters
-								&& _base->getSoldiers()->empty() == false);
-	_btnCrafts->setVisible(hasHangar);
-	_btnAliens->setVisible(hasAlienCont);
-	_btnResearch->setVisible(hasLabs);
-	_btnManufacture->setVisible(hasProd);
-	_btnSell->setVisible(hasStores || hasQuarters || hasHangar || hasAlienCont);
-	_btnPurchase->setVisible(hasFunds && (hasStores || hasQuarters || hasHangar));
-	_btnTransfer->setVisible(hasFunds && (hasStores || hasQuarters || hasHangar));
+	_btnSoldiers->setVisible(hasSoldiers);
+	_btnCrafts->setVisible(hasCraft);
+	_btnAliens->setVisible(hasAlienCont); // ie. hasLiveAliens
+	_btnResearch->setVisible(hasLabs && hasScientists);
+	_btnManufacture->setVisible(hasProd && hasEngineers);
+	_btnPurchase->setVisible(hasFunds && (hasStores || hasQuarters || hasHangar)); // ie, hasFree... space
+	_btnSell->setVisible(hasStores || hasQuarters || hasCraft || hasAlienCont); // ie. hasFreeSoldiers || hasFreeScientists || hasFreeEngineers || hasLiveAliens || hasItemsInStorage
+	_btnTransfer->setVisible(hasFunds && (hasStores || hasQuarters || hasCraft || hasAlienCont)); // ditto.
 	_btnFacilities->setVisible(hasFunds); // kL_end.
 }
 
@@ -517,43 +539,42 @@ void BasescapeState::viewLeftClick(Action*)
 			bPop = true;
 			_game->pushState(new CraftsState(_base));
 		}
-		else */
-		if (_base->getCrafts()->size() > 0) // Craft at base
+		else if (_base->getCrafts()->size() > 0) // Craft at base
+		{ */
+		for (size_t // kL_begin:
+				i = 0;
+				i < _base->getCrafts()->size();
+				++i)
 		{
-			for (size_t // kL_begin:
-					i = 0;
-					i < _base->getCrafts()->size();
-					++i)
+			Craft* craft = _base->getCrafts()->at(i);
+
+			if (fac->getCraft() == NULL							// empty hangar
+				|| fac->getCraft()->getStatus() == "STR_OUT")	// or Craft currently out
 			{
-				Craft* craft = _base->getCrafts()->at(i);
+				bPop = true;
 
-				if (fac->getCraft() == NULL							// empty hangar
-					|| fac->getCraft()->getStatus() == "STR_OUT")	// or Craft currently out
+				_game->pushState(new CraftsState(_base));
+
+				break;
+/*				if (craft->getStatus() == "STR_OUT")
 				{
-					bPop = true;
-
-					_game->pushState(new CraftsState(_base));
-
+					_game->getSavedGame()->setGlobeLongitude(craft->getLongitude());
+					_game->getSavedGame()->setGlobeLatitude(craft->getLatitude());
+					kL_reCenter = true;
+					_game->popState(); // pop to Geoscape.
 					break;
-/*					if (craft->getStatus() == "STR_OUT")
-					{
-						_game->getSavedGame()->setGlobeLongitude(craft->getLongitude());
-						_game->getSavedGame()->setGlobeLatitude(craft->getLatitude());
-						kL_reCenter = true;
-						_game->popState(); // pop to Geoscape.
-						break; // might not be needed here
-					} */
-				}
-				else if (fac->getCraft() == craft) // craft is docked here
-				{
-					_game->pushState(new CraftInfoState(
-													_base,
-													i));
+				} */
+			}
+			else if (fac->getCraft() == craft) // craft is docked here
+			{
+				_game->pushState(new CraftInfoState(
+												_base,
+												i));
 
-					break;
-				}
-			} // kL_end.
-		}
+				break;
+			}
+		} // kL_end.
+//		}
 	}
 	else if (fac->getRules()->getStorage() > 0)
 	{

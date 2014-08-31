@@ -36,7 +36,7 @@ ItemContainer::ItemContainer()
 }
 
 /**
- *
+ * dTor.
  */
 ItemContainer::~ItemContainer()
 {
