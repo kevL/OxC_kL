@@ -71,13 +71,13 @@ BattleItem::BattleItem(
 
 	(*id)++;
 
-	// weapon does not need ammo, ammo item points to weapon
-	if (_rules
+	if (_rules // weapon does not need ammo, ammoItem points to weapon itself.
 		&& (_rules->getBattleType() == BT_FIREARM
 			|| _rules->getBattleType() == BT_MELEE)
 		&& _rules->getCompatibleAmmo()->empty())
 	{
-		setAmmoQuantity(_rules->getClipSize());
+//kL	setAmmoQuantity(_rules->getClipSize()); // melee items have clipsize(0), lasers etc have clipsize(-1).
+		setAmmoQuantity(-1); // needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
 
 		_ammoItem = this;
 	}
@@ -193,8 +193,12 @@ void BattleItem::setFuseTimer(int turn)
  */
 int BattleItem::getAmmoQuantity() const
 {
-	if (_rules->getClipSize() == -1) // is Laser, etc.
+	if ( //_rules->getClipSize() == -1 || // is Laser, melee, etc.
+		_ammoQty == -1)	// kL, NOTE: specifying clipSize(-1) in Ruleset should no longer be necessary.
+						// This should iron out some ( rare ) reaction & AI problems ....
+	{
 		return 255;
+	}
 
 	return _ammoQty;
 }
@@ -210,7 +214,7 @@ void BattleItem::setAmmoQuantity(int qty)
 
 /**
  * Spends a bullet from the ammo in this item.
- * @return, True if there are bullets left.
+ * @return, true if there are bullets left
  */
 bool BattleItem::spendBullet()
 {
@@ -218,8 +222,8 @@ bool BattleItem::spendBullet()
 
 	if (_ammoQty == 0)
 		return false;
-	else
-		return true;
+
+	return true;
 }
 
 /**

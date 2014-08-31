@@ -1650,7 +1650,7 @@ bool TileEngine::canMakeSnap(
 	if (weapon->getRules()->canReactionFire() // kL add.
 		&& (unit->getOriginalFaction() == FACTION_HOSTILE				// is aLien, or has researched weapon.
 			|| _battleSave->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements()))
-		&& (_save->getDepth() != 0
+		&& (_battleSave->getDepth() != 0
 			|| weapon->getRules()->isWaterOnly() == false)
 //		&& ((weapon->getRules()->getBattleType() == BT_MELEE			// has a melee weapon
 		&& ((isMelee
@@ -1801,11 +1801,11 @@ bool TileEngine::tryReactionSnap(
 	// Re-instate this. That is, continue checking these during a skirmish and
 	// punt any spotters that may have initially passed these tests (somewhere
 	// in the reaction-fire algorithm) out of the spotters-vector if they can't
-	// pass tryReactionSnap() as called from checkReactionFire().
+	// pass tryReactionSnap() - as called from checkReactionFire().
 	if (action.weapon->getAmmoItem() != NULL					// note: lasers & melee are their own ammo-items
-		&& action.weapon->getAmmoItem()->getAmmoQuantity() > 0	// returns 255 for lasers; 0 for melee; else, rounds still in a loaded clip
+		&& action.weapon->getAmmoItem()->getAmmoQuantity() > 0	// returns 255 for lasers; 0 for melee (now returns 255 also); else, rounds still in a loaded clip
 		&& action.TU <= unit->getTimeUnits())
-	// That's all been done!!! BUT REACTOR MIGHT RUN OUT OF AMMO ... or TU! in which case, put an ammo/TU checks into getReactor()
+	// That's all been done!!! BUT REACTOR MIGHT RUN OUT OF AMMO ... or TU! in which case, put ammo/TU checks into getReactor()
 	{
 		action.targeting = true;
 
