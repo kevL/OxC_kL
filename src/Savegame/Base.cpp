@@ -444,13 +444,13 @@ void Base::setName(const std::wstring& name)
  * Returns the globe marker for the base.
  * @return Marker sprite, -1 if none.
  */
-/* int Base::getMarker() const
+int Base::getMarker() const
 {
-	// Cheap hack to hide bases when they haven't been placed yet
-	if (AreSame(_lon, 0.0) && AreSame(_lat, 0.0))
+	if (AreSame(_lon, 0.0) && AreSame(_lat, 0.0)) // Cheap hack to hide bases when they haven't been placed yet
 		return -1;
+
 	return 0;
-} */
+}
 
 /**
  * Returns the list of facilities in the base.

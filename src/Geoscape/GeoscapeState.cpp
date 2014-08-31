@@ -2254,7 +2254,7 @@ void GeoscapeState::time30Minutes()
 												lon,
 												lat))
 				{
-					(*k)->addActivityAlien(victPts * 2); // two points per UFO in-Country per half hour
+					(*k)->addActivityAlien(victPts); // two points per UFO in-Country per half hour <- no, KEEP IT CONSISTENT, pending investigation.
 					(*k)->recentActivity(); // kL
 
 					break;

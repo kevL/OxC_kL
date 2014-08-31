@@ -67,7 +67,7 @@ private:
 		std::wstring getName(Language* lang) const;
 
 		/// Gets the terror site's marker.
-//kL	int getMarker() const;
+		int getMarker() const;
 
 		/// Gets the seconds until this terror site expires.
 		size_t getSecondsRemaining() const;

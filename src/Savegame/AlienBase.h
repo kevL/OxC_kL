@@ -70,7 +70,7 @@ private:
 		/// Gets the alien base's name.
 		std::wstring getName(Language* lang) const;
 		/// Gets the alien base's marker.
-//kL	int getMarker() const;
+		int getMarker() const;
 
 		/// Gets the alien base's alien race.
 		std::string getAlienRace() const;

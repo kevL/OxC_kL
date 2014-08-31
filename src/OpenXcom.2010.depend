@@ -4420,14 +4420,14 @@
 	<vector>
 	<SDL.h>
 
-1409253147 f:\git\openxcom\src\savegame\base.h
+1409449628 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
 	"Target.h"
 
-1409259807 f:\git\openxcom\src\savegame\target.h
+1409449273 f:\git\openxcom\src\savegame\target.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -4566,7 +4566,7 @@
 1404096023 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1409253459 f:\git\openxcom\src\savegame\craft.h
+1409449628 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
 	"MovingTarget.h"
@@ -4878,7 +4878,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1409417436 f:\git\openxcom\src\geoscape\globe.h
+1409448233 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"
@@ -4891,7 +4891,7 @@
 
 1404096022 f:\git\openxcom\src\engine\fastlineclip.h
 
-1409253560 f:\git\openxcom\src\savegame\ufo.h
+1409449628 f:\git\openxcom\src\savegame\ufo.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"MovingTarget.h"
@@ -6011,7 +6011,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1409253115 f:\git\openxcom\src\savegame\alienbase.h
+1409449628 f:\git\openxcom\src\savegame\alienbase.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"Target.h"
@@ -6020,7 +6020,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1409253532 f:\git\openxcom\src\savegame\terrorsite.h
+1409449628 f:\git\openxcom\src\savegame\terrorsite.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"Target.h"
@@ -6439,7 +6439,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1409248897 source:f:\git\openxcom\src\battlescape\map.cpp
+1409444625 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -7547,7 +7547,7 @@
 1404096023 f:\git\openxcom\src\geoscape\confirmdestinationstate.h
 	"../Engine/State.h"
 
-1409256540 f:\git\openxcom\src\savegame\waypoint.h
+1409449628 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
 	<string>
 	<yaml-cpp/yaml.h>
@@ -7915,7 +7915,7 @@
 	<string>
 	<vector>
 
-1409426880 source:f:\git\openxcom\src\geoscape\globe.cpp
+1409449871 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9455,7 +9455,7 @@
 1408227220 source:f:\git\openxcom\src\ruleset\unit.cpp
 	"Unit.h"
 
-1409256311 source:f:\git\openxcom\src\savegame\alienbase.cpp
+1409449628 source:f:\git\openxcom\src\savegame\alienbase.cpp
 	"AlienBase.h"
 	<sstream>
 	"../Engine/Language.h"
@@ -9498,7 +9498,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1409259807 source:f:\git\openxcom\src\savegame\base.cpp
+1409449628 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9571,7 +9571,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1409256354 source:f:\git\openxcom\src\savegame\craft.cpp
+1409449628 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9760,7 +9760,7 @@
 	"Craft.h"
 	"../Engine/Language.h"
 
-1409256387 source:f:\git\openxcom\src\savegame\terrorsite.cpp
+1409449628 source:f:\git\openxcom\src\savegame\terrorsite.cpp
 	"TerrorSite.h"
 	<sstream>
 	"../Engine/Language.h"
@@ -9790,7 +9790,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1409256436 source:f:\git\openxcom\src\savegame\ufo.cpp
+1409449628 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	<sstream>
 	<algorithm>
@@ -9812,7 +9812,7 @@
 	"Vehicle.h"
 	"../Ruleset/RuleItem.h"
 
-1409256593 source:f:\git\openxcom\src\savegame\waypoint.cpp
+1409449628 source:f:\git\openxcom\src\savegame\waypoint.cpp
 	"Waypoint.h"
 	<sstream>
 	"../Engine/Language.h"

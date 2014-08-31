@@ -9880,7 +9880,7 @@ interfaces:
         border: 20
       - id: infoBox
         color: -1
-        color2: 10
+        color2: 14
         border: 2
       - id: messageWindows
         color: -1

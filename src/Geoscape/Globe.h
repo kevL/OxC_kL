@@ -56,24 +56,25 @@ class Globe
 {
 
 private:
-//	static const int NUM_TEXTURES	= 13;
-	static const int NUM_LANDSHADES	= 48;
-	static const int NUM_SEASHADES	= 72;
-	static const int NEAR_RADIUS	= 25;
-
+	static const int
+		NUM_LANDSHADES	= 48,
+		NUM_SEASHADES	= 72,
+		NEAR_RADIUS		= 25,
+		CITY_MARKER		= 8;
+//		NUM_TEXTURES	= 13;
 //kL	static const size_t DOGFIGHT_ZOOM = 5; // kL, was 3
-//kL	static const int CITY_MARKER = 8;
 
 	static const double ROTATE_LONGITUDE;
 	static const double ROTATE_LATITUDE;
 
 	bool
-		_blink, // they typed it to (int)
+//		_blink, // they typed it to (int)
 		_hover,
 		_isMouseScrolled,
 		_isMouseScrolling,
 		_mouseOverThreshold;
 	int
+		_blink,
 //		_blinkVal,
 		_totalMouseMoveX,
 		_totalMouseMoveY,
@@ -105,8 +106,8 @@ private:
 	Surface
 		* _countries,
 		* _markers,
-		* _radars,
-		* _mkAlienBase,		// kL_begin:
+		* _radars;
+/*		* _mkAlienBase,		// kL_begin:
 		* _mkAlienSite,
 		* _mkCity,
 		* _mkCraft,
@@ -114,9 +115,10 @@ private:
 		* _mkFlyingUfo,
 		* _mkLandedUfo,
 		* _mkWaypoint,
-		* _mkXcomBase;		// kL_end.
-	SurfaceSet* _texture;
-//kL	* _markerSet;
+		* _mkXcomBase; */	// kL_end.
+	SurfaceSet
+		* _markerSet,
+		* _texture;
 	Timer
 		* _blinkTimer,
 		* _rotTimer;
@@ -189,7 +191,7 @@ private:
 			double lat2,
 			bool flight = false); // kL_add.
 	/// Draw target marker.
-//kL	void drawTarget(Target* target);
+	void drawTarget(Target* target);
 
 
 	public:

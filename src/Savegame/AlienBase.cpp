@@ -130,13 +130,13 @@ std::wstring AlienBase::getName(Language* lang) const
  * Returns the globe marker for the alien base.
  * @return Marker sprite, -1 if none.
  */
-/* int AlienBase::getMarker() const
+int AlienBase::getMarker() const
 {
-	// Cheap hack to hide bases when they haven't been placed yet
-	if (!_discovered)
+	if (!_discovered) // Cheap hack to hide bases when they haven't been placed yet
 		return -1;
+
 	return 7;
-} */
+}
 
 /**
  * Returns the alien race currently residing in the alien base.

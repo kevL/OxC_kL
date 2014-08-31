@@ -108,7 +108,7 @@ private:
 		/// Sets the base's name.
 		void setName(const std::wstring& name);
 		/// Gets the base's marker.
-//kL	int getMarker() const;
+		int getMarker() const;
 
 		/// Gets the base's facilities.
 		std::vector<BaseFacility*>* getFacilities();

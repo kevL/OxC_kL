@@ -64,7 +64,7 @@ private:
 		std::wstring getName(Language* lang) const;
 
 		/// Gets the waypoint's marker.
-//kL	int getMarker() const;
+		int getMarker() const;
 };
 
 }
