@@ -135,8 +135,8 @@ private:
 		/// Takes a screenshot.
 		void screenshot(const std::string& filename) const;
 
-		/// Checks whether HQX is requested and works for the selected resolution
-		static bool isHQXEnabled();
+		/// Checks whether a 32bit scaler is requested and works for the selected resolution
+		static bool is32bitEnabled();
 		/// Checks whether OpenGL output is requested
 		static bool isOpenGLEnabled();
 

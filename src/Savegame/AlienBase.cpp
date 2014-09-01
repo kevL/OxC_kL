@@ -132,7 +132,7 @@ std::wstring AlienBase::getName(Language* lang) const
  */
 int AlienBase::getMarker() const
 {
-	if (!_discovered) // Cheap hack to hide bases when they haven't been placed yet
+	if (!_discovered)
 		return -1;
 
 	return 7;

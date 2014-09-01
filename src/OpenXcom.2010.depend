@@ -5055,7 +5055,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1404096022 f:\git\openxcom\src\engine\screen.h
+1409605444 f:\git\openxcom\src\engine\screen.h
 	<SDL.h>
 	<string>
 	"OpenGL.h"
@@ -7142,7 +7142,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1405724623 source:f:\git\openxcom\src\engine\options.cpp
+1409605835 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -7218,7 +7218,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1406894332 source:f:\git\openxcom\src\engine\screen.cpp
+1409605685 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -7317,7 +7317,7 @@
 	"Game.h"
 	"Options.h"
 
-1405276172 source:f:\git\openxcom\src\engine\zoom.cpp
+1409606706 source:f:\git\openxcom\src\engine\zoom.cpp
 	"Zoom.h"
 	"Exception.h"
 	"Logger.h"
@@ -7328,6 +7328,7 @@
 	"Scalers/scalebit.h"
 	"Scalers/common.h"
 	"Scalers/hqx.h"
+	"Scalers/xbrz.h"
 	<intrin.h>
 	<cpuid.h>
 	<emmintrin.h>
@@ -9456,7 +9457,7 @@
 1408227220 source:f:\git\openxcom\src\ruleset\unit.cpp
 	"Unit.h"
 
-1409449628 source:f:\git\openxcom\src\savegame\alienbase.cpp
+1409606081 source:f:\git\openxcom\src\savegame\alienbase.cpp
 	"AlienBase.h"
 	<sstream>
 	"../Engine/Language.h"
@@ -9541,7 +9542,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1409542476 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1409576463 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -11605,7 +11606,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1405724622 f:\git\openxcom\src\engine\options.inc.h
+1409605127 f:\git\openxcom\src\engine\options.inc.h
 
 1404096022 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
@@ -11727,7 +11728,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1408478388 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
+1409606052 source:f:\git\openxcom\src\menu\optionsvideostate.cpp
 	"OptionsVideoState.h"
 	"../Engine/Action.h"
 	"../Engine/CrossPlatform.h"
@@ -12233,4 +12234,18 @@
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
+
+1409605115 f:\git\openxcom\src\engine\scalers\xbrz.h
+	<cstddef>
+	<stdint.h>
+	<limits>
+	"config.h"
+
+1409605115 f:\git\openxcom\src\engine\scalers\config.h
+
+1409605115 source:f:\git\openxcom\src\engine\scalers\xbrz.cpp
+	"xbrz.h"
+	<cassert>
+	<cmath>
+	<algorithm>
 

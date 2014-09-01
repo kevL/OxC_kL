@@ -134,6 +134,7 @@
 #include "./Engine/Scalers/common.h"
 #include "./Engine/Scalers/scale2x.h"
 #include "./Engine/Scalers/scale3x.h"
+#include "./Engine/Scalers/xbrz.h"
 #include "./Engine/ShaderRepeat.h"
 #include "./Engine/SoundSet.h"
 #include "./Engine/Action.h"
@@ -252,6 +253,7 @@
 #include "./Basescape/CraftSoldiersState.h"
 #include "./Basescape/MonthlyCostsState.h"
 #include "./Basescape/PlaceStartFacilityState.h"
+#include "./Basescape/BaseDetectionState.h"
 
 #include "./Geoscape/NewPossibleManufactureState.h"
 #include "./Geoscape/LowFuelState.h"
@@ -319,6 +321,7 @@
 #include "./Ruleset/Polyline.h"
 #include "./Ruleset/RuleInterface.h"
 #include "./Ruleset/RuleGlobe.h"
+#include "./Ruleset/SoundDefinition.h"
 
 #include "./Interface/ToggleTextButton.h"
 #include "./Interface/TextButton.h"
@@ -398,5 +401,6 @@
 */
 // kL_note: Also, MatrixState, SoldierDead, SoldierDiedState, &tc. TurnCounter ...
 // + sza_Ruleset/ExtraMusic & sza_Ruleset/RuleMusic
+// ... many more. eg, Engine/Shaders *
 
 #endif
