@@ -1313,7 +1313,7 @@ void ProjectileFlyBState::performMeleeAttack()
 	if (RNG::percent(static_cast<int>(_unit->getFiringAccuracy( // MISSED.
 															BA_HIT,
 															_ammo) // Ammo is the weapon.
-														* 100.0 + 0.5))) // round up.
+														* 100.0 + 0.5))) // round up. bleh-> not consistent w/ rest of the code ......
 	{
 		success = true;
 	}

@@ -218,8 +218,9 @@ void BattleItem::setAmmoQuantity(int qty)
  */
 bool BattleItem::spendBullet()
 {
-	if (_ammoQty < 1)	// the ammo should have gotten deleted if/when it reaches 0;
-		return true;	// less than 0 denotes self-powered weapons.
+	if (_ammoQty < 0)	// the ammo should have gotten deleted if/when it reaches 0;
+		return true;	// less than 0 denotes self-powered weapons. But ...
+						// let ==0 be a fudge-factor.
 
 	_ammoQty--;
 
