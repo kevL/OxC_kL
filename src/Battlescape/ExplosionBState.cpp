@@ -52,7 +52,7 @@ namespace OpenXcom
  * @param parent		- pointer to the BattlescapeGame
  * @param center		- center position in voxelspace
  * @param item			- pointer to item involved in the explosion (eg grenade)
- * @param unit			- pointer to unit involved in the explosion (eg unit throwing the grenade or cyberdisc )
+ * @param unit			- pointer to unit involved in the explosion (eg unit throwing the grenade, cyberdisc, etc)
  * @param tile			- pointer to tile the explosion is on
  * @param lowerWeapon	- true to tell the unit causing this explosion to lower their weapon
  */
@@ -62,7 +62,8 @@ ExplosionBState::ExplosionBState(
 		BattleItem* item,
 		BattleUnit* unit,
 		Tile* tile,
-		bool lowerWeapon)
+		bool lowerWeapon,
+		bool success) // kL_add.
 	:
 		BattleState(parent),
 		_unit(unit),
@@ -73,7 +74,8 @@ ExplosionBState::ExplosionBState(
 		_areaOfEffect(false),
 		_lowerWeapon(lowerWeapon),
 		_pistolWhip(false),
-		_hit(false)
+		_hit(false),
+		_hitSuccess(success) // kL_add.
 {
 }
 
@@ -86,15 +88,15 @@ ExplosionBState::~ExplosionBState()
 }
 
 /**
- * Initializes the explosion.
- * The animation and sound starts here.
+ * Initializes the explosion. The animation and sound starts here.
  * If the animation is finished, the actual effect takes place.
  */
 void ExplosionBState::init()
 {
-	//Log(LOG_INFO) << "ExplosionBState::init()"; //<< " type = " << (int)_item->getRules()->getDamageType();
+	//Log(LOG_INFO) << "ExplosionBState::init()";
 	if (_item)
 	{
+		//Log(LOG_INFO) << ". type = " << (int)_item->getRules()->getDamageType();
 		_power = _item->getRules()->getPower();
 
 		// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
@@ -277,12 +279,10 @@ void ExplosionBState::init()
 		}
 
 		if (sound != -1) // bullet hit sound
-		{
 			_parent->getResourcePack()->getSoundByDepth(
 													_parent->getDepth(),
 													sound)
 												->play();
-		}
 
 		Explosion* explosion = new Explosion( // animation. // Don't burn the tile
 										_center,
@@ -403,34 +403,67 @@ void ExplosionBState::explode()
 		}
 
 		BattleUnit* targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
-		if (!RNG::percent(static_cast<int>(_unit->getFiringAccuracy(
-												BA_HIT,
-//												_parent->getCurrentAction()->type, // kL
-												_item)
-											* 100.0)))
+
+		if (_hitSuccess == false)
 		{
-			//Log(LOG_INFO) << ". BA_HIT/STUN ... missed !";
 			_parent->getMap()->cacheUnits();
 			_parent->popState();
 
 			return;
 		}
-		else if (targetUnit
+		else if (targetUnit // HIT.
 			&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
 			&& _unit->getOriginalFaction() == FACTION_PLAYER)
 		{
 			_unit->addMeleeExp();
 		}
-
-		// kL_note: This should play only on a successful hit; there's another sound for the attack-swing.
-		if (_item->getRules()->getMeleeHitSound() != -1)
-		{
-			_parent->getResourcePack()->getSoundByDepth(
-													_parent->getDepth(),
-													_item->getRules()->getMeleeHitSound())
-												->play();
-		}
 	}
+/*		int sound = -1;
+		if (!RNG::percent(static_cast<int>(_unit->getFiringAccuracy( // MISSED.
+																BA_HIT,
+																_item)
+															* 100.0 + 0.5))) // round up.
+		{
+			//Log(LOG_INFO) << ". BA_HIT/STUN ... missed !";
+			sound = ResourcePack::ITEM_THROW;
+
+			if (_unit->getOriginalFaction() == FACTION_HOSTILE
+				&& _item->getRules()->getMeleeHitSound() != -1)
+			{
+				sound = _item->getRules()->getMeleeAttackSound();
+			}
+
+			if (sound != -1) // safety (ala TFTD).
+				_parent->getResourcePack()->getSoundByDepth(
+														_parent->getDepth(),
+														sound)
+													->play();
+
+			_parent->getMap()->cacheUnits();
+			_parent->popState();
+
+			return;
+		}
+		else if (targetUnit // HIT.
+			&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
+			&& _unit->getOriginalFaction() == FACTION_PLAYER)
+		{
+			//Log(LOG_INFO) << ". BA_HIT/STUN ... hit !";
+			_unit->addMeleeExp();
+
+			sound = ResourcePack::ITEM_DROP;
+
+			if (_item->getRules()->getMeleeHitSound() != -1)
+				sound = _item->getRules()->getMeleeHitSound();
+			else if (_item->getRules()->getMeleeAttackSound() != -1)
+				sound = _item->getRules()->getMeleeAttackSound();
+
+			if (sound != -1) // safety (ala TFTD).
+				_parent->getResourcePack()->getSoundByDepth(
+														_parent->getDepth(),
+														sound)
+													->play();
+		} */
 
 	if (_item)
 	{
@@ -456,7 +489,7 @@ void ExplosionBState::explode()
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". . not AoE, TileEngine::hit()";
+			//Log(LOG_INFO) << ". . not AoE, -> TileEngine::hit()";
 //			bool hit = _pistolWhip											// kL
 //						|| _item->getRules()->getBattleType() == BT_MELEE	// kL
 //						|| _item->getRules()->getBattleType() == BT_PSIAMP;	// kL
@@ -547,7 +580,7 @@ void ExplosionBState::explode()
 
 
 	Tile* tile = tileEngine->checkForTerrainExplosions();
-	if (tile) // check for terrain explosions
+	if (tile != NULL) // check for terrain explosions
 	{
 		Position pVoxel = Position(
 								tile->getPosition().x * 16,

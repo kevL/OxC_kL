@@ -93,9 +93,11 @@ private:
 
 		/// Set the origin voxel, used for the blaster launcher.
 		void setOriginVoxel(Position pos);
+
 		/// Set the boolean flag to angle a blaster bomb towards the floor.
 		void targetFloor();
-		///
+
+		/// Peforms a melee attack.
 		void performMeleeAttack();
 };
 

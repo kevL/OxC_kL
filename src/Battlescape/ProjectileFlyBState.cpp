@@ -36,6 +36,7 @@
 #include "../Engine/Game.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
+#include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
 #include "../Resource/ResourcePack.h"
@@ -153,7 +154,7 @@ void ProjectileFlyBState::init()
 
 		return;
 	}
-	else if (!_action.weapon) // can't shoot without weapon
+	else if (!_action.weapon) // can't shoot without weapon. NOTE: def'n of _ammo above^ would CTD if this were ever true. Lol
 	{
 		//Log(LOG_INFO) << ". no weapon, EXIT";
 		_unit->setStopShot(false); // kL
@@ -232,8 +233,8 @@ void ProjectileFlyBState::init()
 	// autoshot will default back to snapshot if it's not possible
 	// kL_note: should this be done *before* tu expenditure?!! Ok it is,
 	// popState() does tu costs
-	if (_action.weapon->getRules()->getAccuracyAuto() == 0
-		&& _action.type == BA_AUTOSHOT)
+	if (_action.type == BA_AUTOSHOT
+		&& _action.weapon->getRules()->getAccuracyAuto() == 0)
 	{
 		_action.type = BA_SNAPSHOT;
 	}
@@ -341,9 +342,10 @@ void ProjectileFlyBState::init()
 				return;
 			}
 
-//kL		performMeleeAttack();
+			performMeleeAttack();
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
-//kL			return;
+
+			return;
 		break;
 		case BA_PANIC:
 		case BA_MINDCONTROL:
@@ -388,7 +390,7 @@ void ProjectileFlyBState::init()
 				_targetVoxel.z += 4; // launched missiles go slightly higher than the middle.
 		}
 		else if ((SDL_GetModState() & KMOD_ALT) != 0) // note: CTRL+ALT !
-			_targetVoxel.z -= 10; // force fire at floor (for HE ammo-types)
+			_targetVoxel.z -= 10; // force fire at floor (useful for HE ammo-types)
 	}
 	else
 	{
@@ -434,7 +436,7 @@ void ProjectileFlyBState::init()
 			_targetVoxel = Position( // target nothing, targets the middle of the tile
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,
-								_action.target.z * 24 + 12);
+								_action.target.z * 24 + 10); // a bit below center
 		} // kL_end.
 		else if (targetTile->getMapData(MapData::O_OBJECT) != NULL)
 		{
@@ -565,8 +567,9 @@ bool ProjectileFlyBState::createNewProjectile()
 
 	if (_action.type == BA_THROW)
 	{
-		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy()); // / 100.0
+		_projectileImpact = projectile->calculateThrow(_unit->getThrowingAccuracy());
 		//Log(LOG_INFO) << ". BA_THROW, part = " << _projectileImpact;
+
 		if (_projectileImpact == VOXEL_FLOOR
 			|| _projectileImpact == VOXEL_UNIT
 			|| _projectileImpact == VOXEL_OBJECT)
@@ -660,13 +663,13 @@ bool ProjectileFlyBState::createNewProjectile()
 	}
 	else if (_action.type == BA_HIT) // kL. Let's not calculate anything we don't have to for meleeHits!
 	{
-		//Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
+		//Log(LOG_INFO) << ". melee attack!";
 		// validMeleeRange/target has been validated.
 //		_projectileImpact = 4;
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon));
-		//Log(LOG_INFO) << ". melee attack!";// part = " << _projectileImpact;
+		//Log(LOG_INFO) << ". part = " << _projectileImpact;
 
 		// Can soldiers swing a club, graphically??
 //		_unit->aim(true); // set the soldier in an aiming position
@@ -772,7 +775,8 @@ void ProjectileFlyBState::think()
 			* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
 
 		bool
-			hasFloor = tile && tile->hasNoFloor(tileBelow) == false,
+			hasFloor = tile
+						&& tile->hasNoFloor(tileBelow) == false,
 			unitCanFly = _unit->getArmor()->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
@@ -1282,13 +1286,13 @@ void ProjectileFlyBState::targetFloor()
 }
 
 /**
- *
+ * Peforms a melee attack.
  */
 void ProjectileFlyBState::performMeleeAttack()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack()";
-	BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
-	int height = target->getFloatHeight() + (target->getHeight() / 2);
+	BattleUnit* buTarget = _parent->getSave()->getTile(_action.target)->getUnit();
+	int height = buTarget->getFloatHeight() + (buTarget->getHeight() / 2);
 
 	Position voxel;
 	_parent->getSave()->getPathfinding()->directionToVector(
@@ -1300,12 +1304,55 @@ void ProjectileFlyBState::performMeleeAttack()
 														height - _parent->getSave()->getTile(_action.target)->getTerrainLevel())
 													- voxel;
 
-	_unit->aim(true); // set the soldier in an aiming position <- hm, this also sets cacheInvalid ...
+	_unit->aim(true);
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 
-	if (_ammo
-		&& _ammo->getRules()->getMeleeAttackSound() != -1) // and we have a lift-off!
+	// kL: from ExplosionBState, moved here to play accurate hit/miss sFx
+	bool success = false;
+	if (RNG::percent(static_cast<int>(_unit->getFiringAccuracy( // MISSED.
+															BA_HIT,
+															_ammo) // Ammo is the weapon.
+														* 100.0 + 0.5))) // round up.
+	{
+		success = true;
+	}
+
+	int sound = -1;
+	if (success == false)
+	{
+		sound = ResourcePack::ITEM_THROW;
+
+		if (_unit->getOriginalFaction() == FACTION_HOSTILE
+			&& _ammo->getRules()->getMeleeHitSound() != -1)
+		{
+			sound = _ammo->getRules()->getMeleeAttackSound();
+		}
+
+		if (sound != -1) // safety (ala TFTD).
+			_parent->getResourcePack()->getSoundByDepth(
+													_parent->getDepth(),
+													sound)
+												->play();
+	}
+	else
+	{
+		sound = ResourcePack::ITEM_DROP;
+
+		if (_ammo->getRules()->getMeleeHitSound() != -1)
+			sound = _ammo->getRules()->getMeleeHitSound();
+		else if (_ammo->getRules()->getMeleeAttackSound() != -1)
+			sound = _ammo->getRules()->getMeleeAttackSound();
+
+		if (sound != -1) // safety (ala TFTD).
+			_parent->getResourcePack()->getSoundByDepth(
+													_parent->getDepth(),
+													sound)
+												->play();
+	}
+
+/*	if (_ammo != NULL // kL_note: Move this to ExplosionBState, where hit/miss is determined.
+		&& _ammo->getRules()->getMeleeAttackSound() != -1)
 //	if (_ammo->getRules()->getFireSound() != -1) // kL
 	{
 		_parent->getResourcePack()->getSoundByDepth(
@@ -1322,11 +1369,11 @@ void ProjectileFlyBState::performMeleeAttack()
 												_action.weapon->getRules()->getMeleeAttackSound())
 //												_action.weapon->getRules()->getFireSound()) // kL
 											->play();
-	}
+	} */
 
 	if (!_parent->getSave()->getDebugMode()
 		&& _action.weapon->getRules()->getBattleType() == BT_MELEE
-		&& _ammo
+		&& _ammo != NULL
 		&& _ammo->spendBullet() == false)
 	{
 		_parent->getSave()->removeItem(_ammo);
@@ -1341,11 +1388,9 @@ void ProjectileFlyBState::performMeleeAttack()
 											_action.weapon,
 											_unit,
 											NULL,
-											true));
+											true,
+											success)); // kL_add.
 
-//	_unit->aim(false);						// ajschult: take soldier out of aiming position <- hm, this also sets cacheInvalid ...
-//	_unit->setCache(NULL);					// kL
-//	_parent->getMap()->cacheUnit(_unit);	// kL
 	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack() EXIT";
 }
 

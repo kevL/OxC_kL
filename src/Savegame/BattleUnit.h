@@ -665,15 +665,13 @@ private:
 		void clearVisibleTiles();
 
 		/// Calculate firing accuracy.
-//		int getFiringAccuracy(
 		double getFiringAccuracy(
 				BattleActionType actionType,
 				BattleItem* item);
-		/// Calculate accuracy modifier.
-//		int getAccuracyModifier(BattleItem* item = NULL);
-		double getAccuracyModifier(BattleItem* item = NULL);
 		/// Calculate throwing accuracy.
 		double getThrowingAccuracy();
+		/// Calculate accuracy modifier.
+		double getAccuracyModifier(BattleItem* item = NULL);
 
 		/// Set armor value.
 		void setArmor(
@@ -692,8 +690,7 @@ private:
 		int getFatalWounds() const;
 
 		/// Get the current reaction score.
-//kL	double getInitiative();
-		double getInitiative(int tuSpent = 0); // kL
+		double getInitiative(int tuSpent = 0);
 
 		/// Prepare for a new turn.
 		void prepareNewTurn();

@@ -49,7 +49,8 @@ private:
 		_areaOfEffect,
 		_hit,
 		_lowerWeapon,
-		_pistolWhip;
+		_pistolWhip,
+		_hitSuccess;
 	int _power;
 
 	BattleItem* _item;
@@ -68,8 +69,9 @@ private:
 				Position center,
 				BattleItem* item,
 				BattleUnit* unit,
-				Tile* tile = 0,
-				bool lowerWeapon = false);
+				Tile* tile = NULL,
+				bool lowerWeapon = false,
+				bool success = false); // kL_add.
 		/// Cleans up the ExplosionBState.
 		~ExplosionBState();
 

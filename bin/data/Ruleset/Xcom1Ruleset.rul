@@ -1381,7 +1381,7 @@ items:
     tuAimed: 92
     battleType: 1
     fixedWeapon: true
-    clipSize: -1
+#    clipSize: -1
     invWidth: 2
     invHeight: 3
     turretType: 2
@@ -1406,7 +1406,7 @@ items:
     tuAimed: 68
     battleType: 1
     fixedWeapon: true
-    clipSize: -1
+#    clipSize: -1
     invWidth: 2
     invHeight: 3
     turretType: 3
@@ -1743,7 +1743,7 @@ items:
     tuAuto: 29
     tuSnap: 16
     tuAimed: 53
-    clipSize: -1
+#    clipSize: -1
     battleType: 1
     invWidth: 1
     invHeight: 2
@@ -1766,7 +1766,7 @@ items:
     tuAuto: 36
     tuSnap: 22
     tuAimed: 49
-    clipSize: -1
+#    clipSize: -1
     battleType: 1
     twoHanded: true
     invWidth: 1
@@ -1788,7 +1788,7 @@ items:
     accuracyAimed: 107
     tuSnap: 40
     tuAimed: 66
-    clipSize: -1
+#    clipSize: -1
     battleType: 1
     twoHanded: true
     invWidth: 2
@@ -1898,7 +1898,7 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    skillApplied: false
+#    skillApplied: false
   - type: STR_ELECTRO_FLARE
     size: 0.1
     costBuy: 60
@@ -2074,8 +2074,9 @@ items:
       - STR_BLASTER_BOMB
     accuracyAimed: 120
     tuAimed: 82
+#    tuLaunch: 50 #kL reverse these/those.
     battleType: 1
-    noReaction: true # kL
+    noReaction: true #kL
     twoHanded: true
     waypoint: true
     invWidth: 2
@@ -2472,7 +2473,7 @@ items:
     accuracyAimed: 108
     tuSnap: 33
     tuAimed: 62
-    clipSize: -1
+#    clipSize: -1
     battleType: 1
     fixedWeapon: true
     invWidth: 2
@@ -2484,7 +2485,7 @@ items:
     floorSprite: 31
     handSprite: 104
     meleeSound: 48
-    clipSize: -1
+#    clipSize: -1
     strengthApplied: true
     damageType: 7
     accuracyMelee: 100
@@ -2500,7 +2501,7 @@ items:
     floorSprite: 31
     handSprite: 104
     meleeSound: 49
-    clipSize: -1
+#    clipSize: -1
     strengthApplied: true
     damageType: 7
     accuracyMelee: 100
@@ -2530,7 +2531,7 @@ items:
     fixedWeapon: true
     invWidth: 2
     invHeight: 3
-    clipSize: -1
+#    clipSize: -1
     recover: false
     arcingShot: true
   - type: SILACOID_WEAPON
@@ -2543,7 +2544,7 @@ items:
     damageType: 7
     accuracyMelee: 100
     tuMelee: 14
-    clipSize: -1
+#    clipSize: -1
     battleType: 3
     fixedWeapon: true
     invWidth: 2
@@ -2569,7 +2570,7 @@ items:
     fixedWeapon: true
     invWidth: 2
     invHeight: 3
-    clipSize: -1
+#    clipSize: -1
     bulletSprite: 8
     recover: false
   - type: ZOMBIE_WEAPON
@@ -2586,7 +2587,7 @@ items:
     fixedWeapon: true
     invWidth: 1
     invHeight: 3
-    clipSize: -1
+#    clipSize: -1
     recover: false
   - type: STR_SECTOID_SOLDIER
     size: 0.0

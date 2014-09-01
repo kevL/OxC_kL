@@ -1844,87 +1844,58 @@ double BattleUnit::getFiringAccuracy(
 		BattleItem* item)
 {
 	//Log(LOG_INFO) << "BattleUnit::getFiringAccuracy() ID " << getId();
-				//<< " /  getStats()->firing" << getStats()->firing;
-	// kL_note: This is also used for MeleeAccuracy.
-
 	if (actionType == BA_LAUNCH)
 		return 1.0;
 
-	if (actionType == BA_HIT)
-		return 1.0; // kL. for now......
-//		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0;
-//		return static_cast<double>(item->getRules()->getAccuracyMelee()) / 100.0 * getAccuracyModifier(); // kL
+	double ret;
 
-
-	double weaponAcc = 0.0;
-	if (actionType == BA_AIMEDSHOT)
-//		|| actionType == BA_LAUNCH) // is this needed right now.
+	if (actionType == BA_HIT
+		|| actionType == BA_STUN)
 	{
-		weaponAcc = static_cast<double>(item->getRules()->getAccuracyAimed());
+		ret = static_cast<double>(item->getRules()->getAccuracyMelee()) * getAccuracyModifier(item) / 100.0;
+
+		if (item->getRules()->isSkillApplied())
+			ret = ret * static_cast<double>(getStats()->melee) / 100.0;
 	}
-	else if (actionType == BA_AUTOSHOT)
-		weaponAcc = static_cast<double>(item->getRules()->getAccuracyAuto());
-	else // snapShot.
-		weaponAcc = static_cast<double>(item->getRules()->getAccuracySnap());
-
-	double ret = static_cast<double>(getStats()->firing) / 100.0;
-	ret *= weaponAcc / 100.0;
-
-	if (_kneeled)
-		ret *= 1.16;
-
-	if (item->getRules()->isTwoHanded())
+	else
 	{
-		// two handed weapon, means one hand should be empty
-		if (getItem("STR_RIGHT_HAND") != 0
-			&& getItem("STR_LEFT_HAND") != 0)
+		double weaponAcc = 0.0;
+
+		if (actionType == BA_AIMEDSHOT)
+			weaponAcc = static_cast<double>(item->getRules()->getAccuracyAimed());
+		else if (actionType == BA_AUTOSHOT)
+			weaponAcc = static_cast<double>(item->getRules()->getAccuracyAuto());
+		else // BA_SNAPSHOT
+			weaponAcc = static_cast<double>(item->getRules()->getAccuracySnap());
+
+		ret = static_cast<double>(getStats()->firing) / 100.0;
+		ret = ret * weaponAcc / 100.0;
+
+		if (_kneeled)
+			ret *= 1.16;
+
+		if (item->getRules()->isTwoHanded()
+			&& getItem("STR_RIGHT_HAND") != NULL
+			&& getItem("STR_LEFT_HAND") != NULL)
 		{
 			ret *= 0.79;
 		}
+
+		ret *= getAccuracyModifier();
 	}
 
-	ret *= getAccuracyModifier();
-	//Log(LOG_INFO) << ". Accuracy = " << ret;
-
+	//Log(LOG_INFO) << ". acu = " << ret;
 	return ret;
 }
-/* int BattleUnit::getFiringAccuracy(
-		BattleActionType actionType,
-		BattleItem* item)
+
+/**
+ * Calculates throwing accuracy.
+ * @return throwing Accuracy
+ */
+double BattleUnit::getThrowingAccuracy()
 {
-	int weaponAcc = item->getRules()->getAccuracySnap();
-	if (actionType == BA_AIMEDSHOT
-		|| actionType == BA_LAUNCH) // kL_note: make this 100%
-	{
-		weaponAcc = item->getRules()->getAccuracyAimed();
-	}
-	else if (actionType == BA_AUTOSHOT)
-		weaponAcc = item->getRules()->getAccuracyAuto();
-	else if (actionType == BA_HIT || actionType == BA_STUN)
-	{
-		if (item->getRules()->isSkillApplied())
-			return (getStats()->melee * item->getRules()->getAccuracyMelee() / 100) * getAccuracyModifier(item) / 100;
-
-		return item->getRules()->getAccuracyMelee() * getAccuracyModifier(item) / 100;
-	}
-
-	int result = getStats()->firing * weaponAcc / 100;
-
-	if (_kneeled)
-		result = result * 116 / 100;
-
-	if (item->getRules()->isTwoHanded())
-	{
-		// two handed weapon, means one hand should be empty
-		if (getItem("STR_RIGHT_HAND") != 0
-			&& getItem("STR_LEFT_HAND") != 0)
-		{
-			result = result * 79 / 100;
-		}
-	}
-
-	return result * getAccuracyModifier(item) / 100;
-} */
+	return static_cast<double>(getStats()->throwing) * getAccuracyModifier() / 100.0;
+}
 
 /**
  * Calculates accuracy modifier. Takes health and fatal wounds into account.
@@ -1952,42 +1923,13 @@ double BattleUnit::getAccuracyModifier(BattleItem* item)
 		}
 	}
 
-	ret *= 1.0 - (0.1 * static_cast<double>(wounds));
+	ret *= 1.0 - 0.1 * static_cast<double>(wounds);
 	//Log(LOG_INFO) << ". ret = " << ret;
-	if (ret < 0.1)
-		ret = 0.1; // limit low @ 10%
+
+	if (ret < 0.1) // limit low @ 10%
+		ret = 0.1;
 
 	return ret;
-}
-/* int BattleUnit::getAccuracyModifier(BattleItem* item)
-{
-	int wounds = _fatalWounds[BODYPART_HEAD];
-
-	if (item)
-	{
-		if (item->getRules()->isTwoHanded())
-			wounds += _fatalWounds[BODYPART_RIGHTARM] + _fatalWounds[BODYPART_LEFTARM];
-		else
-		{
-			if (getItem("STR_RIGHT_HAND") == item)
-				wounds += _fatalWounds[BODYPART_RIGHTARM];
-			else
-				wounds += _fatalWounds[BODYPART_LEFTARM];
-		}
-	}
-
-	return std::max(
-				10,
-				25 * _health / getStats()->health + 75 + -10 * wounds);
-} */
-
-/**
- * Calculates throwing accuracy.
- * @return throwing Accuracy
- */
-double BattleUnit::getThrowingAccuracy()
-{
-	return (static_cast<double>(getStats()->throwing) / 100.0) * getAccuracyModifier();
 }
 
 /**

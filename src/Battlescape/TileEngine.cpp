@@ -2032,7 +2032,7 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
  * @param type			- damage type of the hit (RuleItem.h)
  * @param attacker		- pointer to unit that caused the hit
  * @param melee			- true if no projectile, trajectory, etc. is needed. kL
- * @return, the BattleUnit that got hit
+ * @return, pointer to the BattleUnit that got hit
  */
 BattleUnit* TileEngine::hit(
 		const Position& pTarget_voxel,
@@ -2081,6 +2081,7 @@ BattleUnit* TileEngine::hit(
 		// I want to flesh-out melee & psi attacks more than they are.
 		int part = VOXEL_UNIT; // kL, no longer const
 		if (!melee) // kL
+		{
 			part = voxelCheck(
 							pTarget_voxel,
 							attacker,
@@ -2088,7 +2089,8 @@ BattleUnit* TileEngine::hit(
 							false,
 							NULL,
 							melee); // kL
-		//Log(LOG_INFO) << ". voxelCheck() part = " << part;
+			//Log(LOG_INFO) << ". voxelCheck() part = " << part;
+		}
 
 		if (VOXEL_EMPTY < part && part < VOXEL_UNIT	// 4 terrain parts ( 0..3 )
 			&& type != DT_STUN						// kL, workaround for Stunrod. ( might include DT_SMOKE & DT_IN )
@@ -2133,7 +2135,7 @@ BattleUnit* TileEngine::hit(
 
 			int vertOffset = 0;
 
-			if (!buTarget)
+			if (buTarget == NULL)
 			{
 				//Log(LOG_INFO) << ". . . buTarget NOT Valid, check tileBelow";
 
@@ -2166,24 +2168,24 @@ BattleUnit* TileEngine::hit(
 				// kL_note: not just if not a player; Give Credit!!!
 				// NOTE: Move this code-chunk below(s).
 //kL				if (unit
-//kL					&& buTarget->getFaction() != FACTION_PLAYER
+//kL				&& buTarget->getFaction() != FACTION_PLAYER
 //					&& buTarget->getOriginalFaction() != FACTION_PLAYER // kL
-//kL					&& wounds < buTarget->getFatalWounds())
+//kL				&& wounds < buTarget->getFatalWounds())
 //				{
-//kL					buTarget->killedBy(unit->getFaction());
+//kL				buTarget->killedBy(unit->getFaction());
 //				} // kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
 
-/*kL
-				const int size = buTarget->getArmor()->getSize() * 8;
+/*kL			const int size = buTarget->getArmor()->getSize() * 8;
 				const Position targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
 						+ Position(
 								size,
 								size,
 								buTarget->getFloatHeight() - tile->getTerrainLevel());
 				const Position relPos = pTarget_voxel - targetPos - Position(0, 0, vertOffset); */
+
 				const int size = buTarget->getArmor()->getSize() * 8;
 				const Position
-					targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
+					targetPos = buTarget->getPosition() * Position(16, 16, 24) // convert tilespace to voxelspace
 								+ Position(
 										size,
 										size,
@@ -2204,21 +2206,21 @@ BattleUnit* TileEngine::hit(
 					{
 						// generate(4, 11)
 						int firePower = RNG::generate( // kL: 25% - 75% / 2
-												power / 8,
-												power * 3 / 8);
+													power / 8,
+													power * 3 / 8);
 						//Log(LOG_INFO) << ". . . . DT_IN : firePower = " << firePower;
 
 						// generate(5, 10)
 						int check = buTarget->damage(
-												Position(0, 0, 0),
-												firePower,
-												DT_IN,
-												true);
+													Position(0, 0, 0),
+													firePower,
+													DT_IN,
+													true);
 						//Log(LOG_INFO) << ". . . . DT_IN : " << buTarget->getId() << " takes " << check;
 
 						int burnTime = RNG::generate(
-												0,
-												static_cast<int>(5.f * modifier));
+													0,
+													static_cast<int>(5.f * modifier));
 						if (buTarget->getFire() < burnTime)
 							buTarget->setFire(burnTime); // catch fire and burn
 					}
@@ -2361,13 +2363,13 @@ BattleUnit* TileEngine::hit(
 
 
 		//if (buTarget) Log(LOG_INFO) << "TileEngine::hit() EXIT, return buTarget";
-		//else Log(LOG_INFO) << "TileEngine::hit() EXIT, return 0";
+		//else Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[0]";
 
 		return buTarget;
 	}
 	//else Log(LOG_INFO) << ". DT_ = " << static_cast<int>(type);
 
-	//Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL";
+	//Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[1]";
 	return NULL;
 }
 
@@ -4947,8 +4949,8 @@ int TileEngine::calculateLine(
 									endTile,
 									DT_NONE);
 			// kL_TEST:
-//			BattleUnit* selUnit = _battleSave->getSelectedUnit();
-/*			if (selUnit
+/*			BattleUnit* selUnit = _battleSave->getSelectedUnit();
+			if (selUnit
 				&& selUnit->getId() == 375
 				&& startTile != endTile)
 //				&& selUnit->getFaction() == FACTION_PLAYER
