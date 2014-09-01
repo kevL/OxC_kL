@@ -4381,12 +4381,12 @@ soldiers:
       health: 25
       bravery: 10
       reactions: 35
-      firing: 44
+      firing: 45
       throwing: 50
       strength: 20
       psiStrength: 1
       psiSkill: 15
-      melee: 25
+      melee: 45
     maxStats:
       tu: 60
       stamina: 60
@@ -4398,11 +4398,11 @@ soldiers:
       strength: 35
       psiStrength: 100
       psiSkill: 25
-      melee: 45
+      melee: 60
     statCaps:
       tu: 88
       stamina: 112
-      health: 80
+      health: 83
       bravery: 100
       reactions: 103
       firing: 132
@@ -4410,7 +4410,7 @@ soldiers:
       strength: 72
       psiStrength: 100
       psiSkill: 160
-      melee: 130
+      melee: 128
     armor: STR_ARMOR_NONE_UC
     standHeight: 22
     kneelHeight: 14

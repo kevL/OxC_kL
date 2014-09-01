@@ -1868,7 +1868,7 @@ double BattleUnit::getFiringAccuracy(
 		else if (actionType == BA_AUTOSHOT)
 			acu = item->getRules()->getAccuracyAuto();
 
-		ret = static_cast<double>(getStats()->firing * acu) / 10000.0;
+		ret = static_cast<double>(acu * getStats()->firing) / 10000.0;
 
 		if (_kneeled)
 			ret *= 1.16;

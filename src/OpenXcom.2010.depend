@@ -5077,7 +5077,7 @@
 	<windows.h>
 	<stddef.h>
 
-1409504767 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1409554846 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	<cmath>
 	"../Engine/Action.h"
