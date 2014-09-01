@@ -143,8 +143,8 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 			_lstInfo->addRow(
 							3,
 							tr("STR_SHOT_TYPE_SNAP").c_str(),
-//kL							Text::formatPercentage(item->getAccuracySnap()).c_str(),
-							shotsnap.c_str(),		// kL
+//kL						Text::formatPercentage(item->getAccuracySnap()).c_str(),
+							shotsnap.c_str(), // kL
 							tu.c_str());
 			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 
@@ -159,14 +159,36 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 				tu.erase(tu.end() - 1);
 			}
 
-			std::wstring shotaimed = Text::formatPercentage(item->getAccuracyAimed());		// kL
-			shotaimed.erase(shotaimed.end() - 1);											// kL
+			std::wstring shotaimed = Text::formatPercentage(item->getAccuracyAimed());	// kL
+			shotaimed.erase(shotaimed.end() - 1);										// kL
 
 			_lstInfo->addRow(
 							3,
 							tr("STR_SHOT_TYPE_AIMED").c_str(),
-//kL							Text::formatPercentage(item->getAccuracyAimed()).c_str(),
-							shotaimed.c_str(),		// kL
+//kL						Text::formatPercentage(item->getAccuracyAimed()).c_str(),
+							shotaimed.c_str(), // kL
+							tu.c_str());
+			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
+
+			current_row++;
+		}
+
+		if (item->getTULaunch() > 0) // kL ->
+		{
+			std::wstring tu = Text::formatPercentage(item->getTULaunch());
+			if (item->getFlatRate())
+			{
+				tu.erase(tu.end() - 1);
+			}
+
+//			std::wstring shotlaunch = Text::formatPercentage(item->getAccuracyAimed());	// kL
+//			shotlaunch.erase(shotlaunch.end() - 1);										// kL
+
+			_lstInfo->addRow(
+							3,
+							tr("STR_SHOT_TYPE_LAUNCH").c_str(),
+//kL						Text::formatPercentage(item->getAccuracyAimed()).c_str(),
+							L"", // kL
 							tu.c_str());
 			_lstInfo->setCellColor(current_row, 0, Palette::blockOffset(14)+15);
 
@@ -193,7 +215,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 			i < 3;
 			++i)
 	{
-//kL		_txtAmmoType[i] = new Text(82, 16, 194, 20 + (i * 49));
+//kL	_txtAmmoType[i] = new Text(82, 16, 194, 20 + (i * 49));
 		_txtAmmoType[i] = new Text(90, 9, 189, 24 + (i * 49));
 		add(_txtAmmoType[i]);
 		_txtAmmoType[i]->setColor(Palette::blockOffset(14)+15);
@@ -201,10 +223,10 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		_txtAmmoType[i]->setVerticalAlign(ALIGN_MIDDLE);
 		_txtAmmoType[i]->setWordWrap();
 
-//kL		_txtAmmoDamage[i] = new Text(82, 17, 194, 40 + (i * 49));
+//kL	_txtAmmoDamage[i] = new Text(82, 17, 194, 40 + (i * 49));
 		_txtAmmoDamage[i] = new Text(90, 16, 190, 40 + (i * 49));
 		add(_txtAmmoDamage[i]);
-//kL		_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
+//kL	_txtAmmoDamage[i]->setColor(Palette::blockOffset(2));
 		_txtAmmoDamage[i]->setColor(Palette::blockOffset(2)+5); // kL
 		_txtAmmoDamage[i]->setAlign(ALIGN_CENTER);
 		_txtAmmoDamage[i]->setBig();

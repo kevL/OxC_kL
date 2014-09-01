@@ -2257,7 +2257,6 @@ void AlienBAIState::selectFireMethod()
 	int distance = _save->getTileEngine()->distance(
 												_unit->getPosition(),
 												_attackAction->target);
-//	if (distance < 7)
 	if (distance <= _attackAction->weapon->getRules()->getAutoRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUAuto()
@@ -2282,7 +2281,6 @@ void AlienBAIState::selectFireMethod()
 			_attackAction->type = BA_AIMEDSHOT;
 		}
 	}
-//	else if (distance < 13)
 	else if (distance <= _attackAction->weapon->getRules()->getSnapRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUSnap()
@@ -2307,7 +2305,6 @@ void AlienBAIState::selectFireMethod()
 			_attackAction->type = BA_AUTOSHOT;
 		}
 	}
-//	else // distance > 12
 	else if (distance <= _attackAction->weapon->getRules()->getAimRange())
 	{
 		if (_attackAction->weapon->getRules()->getTUAimed()

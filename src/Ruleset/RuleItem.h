@@ -126,6 +126,7 @@ private:
 		_accuracySnap,
 		_tuAimed,
 		_tuAuto,
+		_tuLaunch, // kL
 		_tuMelee,
 		_tuSnap,
 
@@ -240,6 +241,8 @@ private:
 		int getTUAuto() const;
 		/// Gets the item's aimed shot TU cost.
 		int getTUAimed() const;
+		/// kL. Gets the item's launch shot TU cost.
+		int getTULaunch() const; // kL
 		/// Gets the item's melee TU cost.
 		int getTUMelee() const;
 

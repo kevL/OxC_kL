@@ -225,21 +225,18 @@ void ActionMenuState::addItem(
 //kL	|| baType == BA_LAUNCH
 		|| baType == BA_HIT)
 	{
-		int acc = 0;
+		int acu = 0;
+
 		if (baType == BA_THROW)
-//		acc = _action->actor->getThrowingAccuracy();
-			acc = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100.0)); // kL
+			acu = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100.0));
 		else
-//			acc = _action->actor->getFiringAccuracy(
-//												baType,
-//												_action->weapon);
-			acc = static_cast<int>(floor(_action->actor->getFiringAccuracy( // kL
+			acu = static_cast<int>(floor(_action->actor->getFiringAccuracy(
 																		baType,
 																		_action->weapon)
 																	* 100.0));
 
-//kL	s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acc));
-		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acc); // kL
+//kL	s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acu));
+		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acu); // kL
 	}
 
 	int tu = _action->actor->getActionTUs(

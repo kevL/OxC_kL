@@ -58,6 +58,7 @@ RuleItem::RuleItem(const std::string& type)
 		_tuAuto(0),
 		_tuSnap(0),
 		_tuAimed(0),
+		_tuLaunch(0), // kL
 		_clipSize(0),
 		_accuracyMelee(0),
 		_tuMelee(0),
@@ -221,6 +222,7 @@ void RuleItem::load(
 	_tuAuto					= node["tuAuto"].as<int>(_tuAuto);
 	_tuSnap					= node["tuSnap"].as<int>(_tuSnap);
 	_tuAimed				= node["tuAimed"].as<int>(_tuAimed);
+	_tuLaunch				= node["tuLaunch"].as<int>(_tuLaunch);
 	_clipSize				= node["clipSize"].as<int>(_clipSize);
 	_accuracyMelee			= node["accuracyMelee"].as<int>(_accuracyMelee);
 	_tuMelee				= node["tuMelee"].as<int>(_tuMelee);
@@ -511,6 +513,15 @@ int RuleItem::getTUAuto() const
 int RuleItem::getTUAimed() const
 {
 	return _tuAimed;
+}
+
+/**
+ * kL. Gets the item's time unit percentage for launch shots.
+ * @return, The launch shot TU percentage.
+ */
+int RuleItem::getTULaunch() const // kL
+{
+	return _tuLaunch;
 }
 
 /**

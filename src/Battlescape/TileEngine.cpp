@@ -1873,7 +1873,6 @@ bool TileEngine::testFireMethod(
 		BattleItem* weapon) const
 {
 	//Log(LOG_INFO) << "TileEngine::testFireMethod()";
-
 	int tuUnit = unit->getTimeUnits();
 	//Log(LOG_INFO) << ". tuUnit = " << tuUnit;
 	//Log(LOG_INFO) << ". tuAuto = " << unit->getActionTUs(BA_AUTOSHOT, weapon);
@@ -1884,7 +1883,6 @@ bool TileEngine::testFireMethod(
 												unit->getPosition(),
 												target->getPosition());
 	//Log(LOG_INFO) << ". distance = " << distance;
-//	if (distance < 7)
 	if (distance <= weapon->getRules()->getAutoRange())
 	{
 		if (weapon->getRules()->getTUAuto()							// weapon can do this action-type
@@ -1903,7 +1901,6 @@ bool TileEngine::testFireMethod(
 			return true;
 		}
 	}
-//	else if (distance < 13)
 	else if (distance <= weapon->getRules()->getSnapRange())
 	{
 		if (weapon->getRules()->getTUSnap()
@@ -1922,7 +1919,6 @@ bool TileEngine::testFireMethod(
 			return true;
 		}
 	}
-//	else // distance > 12
 	else if (distance <= weapon->getRules()->getAimRange())
 	{
 		if (weapon->getRules()->getTUAimed()
@@ -1955,7 +1951,6 @@ bool TileEngine::testFireMethod(
 BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/should use a pointer for this(?)
 {
 	//Log(LOG_INFO) << "TileEngine::selectFireMethod()";
-
 	action.type = BA_NONE; // should never happen.
 
 	int
@@ -1963,7 +1958,6 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 		distance = _battleSave->getTileEngine()->distance(
 												action.actor->getPosition(),
 												action.target);
-//	if (distance < 7)
 	if (distance <= action.weapon->getRules()->getAutoRange())
 	{
 		if (action.weapon->getRules()->getTUAuto()									// weapon can do this action-type
@@ -1982,7 +1976,6 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 			action.type = BA_AIMEDSHOT;
 		}
 	}
-//	else if (distance < 13)
 	else if (distance <= action.weapon->getRules()->getSnapRange())
 	{
 		if (action.weapon->getRules()->getTUSnap()
@@ -2001,7 +1994,6 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 			action.type = BA_AUTOSHOT;
 		}
 	}
-//	else // distance > 12
 	else if (distance <= action.weapon->getRules()->getAimRange())
 	{
 		if (action.weapon->getRules()->getTUAimed()

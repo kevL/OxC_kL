@@ -1615,6 +1615,12 @@ int BattleUnit::getActionTUs(
 //kL		cost = 25; // maybe this should go in the ruleset
 			cost = 23; // kL
 		break;
+		case BA_LAUNCH: // kL
+			cost = item->getRules()->getTULaunch();
+		break;
+		case BA_AIMEDSHOT:
+			cost = item->getRules()->getTUAimed();
+		break;
 		case BA_AUTOSHOT:
 			cost = item->getRules()->getTUAuto();
 		break;
@@ -1624,10 +1630,6 @@ int BattleUnit::getActionTUs(
 		case BA_STUN:
 		case BA_HIT:
 			cost = item->getRules()->getTUMelee();
-		break;
-		case BA_LAUNCH:
-		case BA_AIMEDSHOT:
-			cost = item->getRules()->getTUAimed();
 		break;
 		case BA_USE:
 		case BA_MINDCONTROL:
@@ -1646,7 +1648,7 @@ int BattleUnit::getActionTUs(
 			|| actionType == BA_THROW)
 		&& actionType != BA_DEFUSE) // kL
 	{
-		cost = static_cast<int>(floor(static_cast<float>(getStats()->tu * cost) / 100.f));
+		cost = static_cast<int>(floor(static_cast<double>(getStats()->tu * cost) / 100.0));
 	}
 
 	return cost;
