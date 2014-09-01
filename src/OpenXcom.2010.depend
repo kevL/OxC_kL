@@ -4440,7 +4440,7 @@
 	<stdint.h>
 	"GameTime.h"
 
-1409443398 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1409548183 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -6684,7 +6684,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1409531955 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1409541999 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -9534,14 +9534,14 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1409533645 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1409536633 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1409535332 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1409542476 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

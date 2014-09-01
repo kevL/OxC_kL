@@ -1310,9 +1310,9 @@ void ProjectileFlyBState::performMeleeAttack()
 
 	// kL: from ExplosionBState, moved here to play accurate hit/miss sFx
 	bool success = false;
-	if (RNG::percent(static_cast<int>(_unit->getFiringAccuracy( // MISSED.
+	if (RNG::percent(static_cast<int>(_unit->getFiringAccuracy(
 															BA_HIT,
-															_ammo) // Ammo is the weapon.
+															_ammo) // Ammo is the weapon since (melee==true).
 														* 100.0 + 0.5))) // round up. bleh-> not consistent w/ rest of the code ......
 	{
 		success = true;

@@ -1861,17 +1861,14 @@ double BattleUnit::getFiringAccuracy(
 	}
 	else
 	{
-		double weaponAcc = 0.0;
+		int acu = item->getRules()->getAccuracySnap();
 
 		if (actionType == BA_AIMEDSHOT)
-			weaponAcc = static_cast<double>(item->getRules()->getAccuracyAimed());
+			acu = item->getRules()->getAccuracyAimed();
 		else if (actionType == BA_AUTOSHOT)
-			weaponAcc = static_cast<double>(item->getRules()->getAccuracyAuto());
-		else // BA_SNAPSHOT
-			weaponAcc = static_cast<double>(item->getRules()->getAccuracySnap());
+			acu = item->getRules()->getAccuracyAuto();
 
-		ret = static_cast<double>(getStats()->firing) / 100.0;
-		ret = ret * weaponAcc / 100.0;
+		ret = static_cast<double>(getStats()->firing * acu) / 10000.0;
 
 		if (_kneeled)
 			ret *= 1.16;
@@ -1886,7 +1883,7 @@ double BattleUnit::getFiringAccuracy(
 		ret *= getAccuracyModifier();
 	}
 
-	//Log(LOG_INFO) << ". acu = " << ret;
+	//Log(LOG_INFO) << ". ret = " << ret;
 	return ret;
 }
 

@@ -216,6 +216,7 @@ BasescapeState::BasescapeState(
 BasescapeState::~BasescapeState()
 {
 	bool exists = false; // Clean up any temporary bases
+
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end()
@@ -361,6 +362,7 @@ void BasescapeState::setBase(Base* base)
 	if (!_game->getSavedGame()->getBases()->empty())
 	{
 		bool exists = false; // Check if base still exists
+
 		for (size_t
 				i = 0;
 				i < _game->getSavedGame()->getBases()->size();
@@ -647,30 +649,24 @@ void BasescapeState::viewRightClick(Action*)
 	if (fac != NULL)
 	{
 		if (fac->inUse())
-		{
 			_game->pushState(new ErrorMessageState(
 												tr("STR_FACILITY_IN_USE"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
 												6));
-		}
 		else if (!_base->getDisconnectedFacilities(fac).empty()) // would base become disconnected...
-		{
 			_game->pushState(new ErrorMessageState(
 												tr("STR_CANNOT_DISMANTLE_FACILITY"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
 												6));
-		}
 		else
-		{
 			_game->pushState(new DismantleFacilityState(
 													_base,
 													_view,
 													fac));
-		}
 	}
 }
 
@@ -703,7 +699,8 @@ void BasescapeState::viewMouseOver(Action*)
 								.arg(fac->getCraft()->getName(_game->getLanguage()));
 		}
 	}
-	else if (base < _game->getSavedGame()->getBases()->size())
+	else if (base < _game->getSavedGame()->getBases()->size()
+		&& _base != _game->getSavedGame()->getBases()->at(base))
 	{
 		_txtFacility->setAlign(ALIGN_RIGHT);
 
@@ -730,10 +727,12 @@ void BasescapeState::miniClick(Action*)
 {
 	size_t base = _mini->getHoveredBase();
 
-	if (base < _game->getSavedGame()->getBases()->size())
+	if (base < _game->getSavedGame()->getBases()->size()
+		&& _base != _game->getSavedGame()->getBases()->at(base))
 	{
-		_base = _game->getSavedGame()->getBases()->at(base);
+		_txtFacility->setText(L"");
 
+		_base = _game->getSavedGame()->getBases()->at(base);
 		init();
 	}
 }

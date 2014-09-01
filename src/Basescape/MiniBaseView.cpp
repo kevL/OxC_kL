@@ -199,11 +199,11 @@ void MiniBaseView::draw()
 			if (base->getScientists() > 0 // red for unused Scientists & Engineers
 				|| base->getEngineers() > 0)
 			{
-				setPixelColor(offset_x + 3, 18, Palette::blockOffset(2)+1); // red
+				setPixelColor(offset_x + 2, 17, Palette::blockOffset(2)+1); // red
 			}
 
 			if (base->getTransfers()->empty() == false) // white for incoming Transfers
-				setPixelColor(offset_x + 3, 20, Palette::blockOffset(4)+5); // lavender
+				setPixelColor(offset_x + 2, 21, Palette::blockOffset(4)+5); // lavender
 
 			if (base->getCrafts()->empty() == false)
 			{
