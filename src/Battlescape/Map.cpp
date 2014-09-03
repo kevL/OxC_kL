@@ -701,7 +701,9 @@ void Map::drawTerrain(Surface* surface)
 
 	bool
 		pathPreview = _save->getPathfinding()->isPathPreviewed(),
-		drawRankIcon;
+//		drawRankIcon;
+		floor,
+		object;
 
 	if (!_waypoints.empty()
 		|| (pathPreview
@@ -766,7 +768,9 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					tileColor = tile->getMarkerColor();
-					drawRankIcon = true;
+//					drawRankIcon = true;
+					floor = false;
+					object = false;
 
 					// Draw floor
 					tmpSurface = tile->getSprite(MapData::O_FLOOR);
@@ -779,6 +783,8 @@ void Map::drawTerrain(Surface* surface)
 								tileShade);
 
 						// kL_begin:
+						floor = true;
+
 						Tile* tileEastDown = _save->getTile(mapPosition + Position(1, 0, -1));
 						if (tileEastDown != NULL)
 						{
@@ -787,13 +793,14 @@ void Map::drawTerrain(Surface* surface)
 							if (bu != NULL
 								&& tileEast->getSprite(MapData::O_FLOOR) == NULL)
 							{
-								// from below_ Draw soldier. This ensures the rankIcon isn't half-hidden by a floor above & west of soldier.
+								// from below_ 'Draw soldier'. This ensures the rankIcon isn't half-hidden by a floor above & west of soldier.
+								// also, make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 								// ... should probably be a subfunction
 								if (bu->getFaction() == FACTION_PLAYER
 									&& bu != _save->getSelectedUnit()
 									&& bu->getTurretType() == -1) // no tanks, pls
 								{
-									drawRankIcon = false;
+//									drawRankIcon = false;
 
 									Position offset;
 									calculateWalkingOffset(bu, &offset);
@@ -897,7 +904,7 @@ void Map::drawTerrain(Surface* surface)
 					if (mapPosition.y > 0) // special handling for a moving unit.
 					{
 						Tile* tileNorth = _save->getTile(mapPosition - Position(0, 1, 0));
-						BattleUnit* bu = tileNorth->getUnit();
+						BattleUnit* buNorth = NULL;
 
 						int
 							tileNorthShade,
@@ -907,39 +914,38 @@ void Map::drawTerrain(Surface* surface)
 							tileSouthWestShade;
 
 						if (tileNorth->isDiscovered(2))
-							tileNorthShade = tileNorth->getShade();
-						else
 						{
-							tileNorthShade = 16;
-							bu = NULL;
+							buNorth = tileNorth->getUnit();
+							tileNorthShade = tileNorth->getShade();
 						}
-						// kL_note: What about tileWestShade ...? (used in subscope below)
+						else
+							tileNorthShade = 16;
 
 						// Phase I: rerender the unit to make sure they don't get drawn over any walls or under any tiles
-						if (bu
-							&& bu->getVisible()
-							&& bu->getStatus() == STATUS_WALKING
+						if (buNorth
+							&& buNorth->getVisible()
+							&& buNorth->getStatus() == STATUS_WALKING
 							&& tile->getTerrainLevel() >= tileNorth->getTerrainLevel())
 						{
 							Position tileOffset = Position(16,-8, 0);
 							// the part is 0 for small units, large units have parts 1,2 & 3 depending
 							// on the relative x/y position of this tile vs the actual unit position.
 							int part = 0;
-							part += tileNorth->getPosition().x - bu->getPosition().x;
-							part += (tileNorth->getPosition().y - bu->getPosition().y) * 2;
+							part += tileNorth->getPosition().x - buNorth->getPosition().x;
+							part += (tileNorth->getPosition().y - buNorth->getPosition().y) * 2;
 
-							tmpSurface = bu->getCache(&invalid, part);
+							tmpSurface = buNorth->getCache(&invalid, part);
 							if (tmpSurface)
 							{
 								Position offset; // draw unit
-								calculateWalkingOffset(bu, &offset);
+								calculateWalkingOffset(buNorth, &offset);
 								tmpSurface->blitNShade(
 													surface,
 													screenPosition.x + offset.x + tileOffset.x,
 													screenPosition.y + offset.y  + tileOffset.y,
 													tileNorthShade);
 
-								if (bu->getFire() > 0) // draw fire
+								if (buNorth->getFire() > 0) // draw fire
 								{
 									frame = 4 + (_animFrame / 2);
 									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -953,8 +959,8 @@ void Map::drawTerrain(Surface* surface)
 
 							// Phase II: rerender any east wall type objects in the tile to the north of the unit
 							// only applies to movement in the north/south direction.
-							if ((bu->getDirection() == 0
-									|| bu->getDirection() == 4)
+							if ((buNorth->getDirection() == 0
+									|| buNorth->getDirection() == 4)
 								&& mapPosition.y >= 2)
 							{
 								Tile* tileTwoNorth = _save->getTile(mapPosition - Position(0, 2, 0));
@@ -1014,8 +1020,8 @@ void Map::drawTerrain(Surface* surface)
 								// Phase V: re-render objects in the tile to the south west
 								// only render half so it won't overlap other areas that are already drawn
 								// and only apply this to movement in a north easterly or south westerly direction.
-								if ((bu->getDirection() == 1
-										|| bu->getDirection() == 5)
+								if ((buNorth->getDirection() == 1
+										|| buNorth->getDirection() == 5)
 									&& mapPosition.y < endY - 1)
 								{
 									Tile* tileSouthWest = _save->getTile(mapPosition + Position(-1, 1, 0));
@@ -1036,20 +1042,20 @@ void Map::drawTerrain(Surface* surface)
 
 								// Phase VI: we need to re-render everything in the tile to the west.
 								Tile* tileWest = _save->getTile(mapPosition - Position(1, 0, 0));
-								BattleUnit* westUnit = tileWest->getUnit();
+								BattleUnit* buWest = NULL;
 
 								int tileWestShade;
 								if (tileWest->isDiscovered(2))
-									tileWestShade = tileWest->getShade();
-								else
 								{
-									tileWestShade = 16;
-									westUnit = 0;
+									buWest = tileWest->getUnit();
+									tileWestShade = tileWest->getShade();
 								}
+								else
+									tileWestShade = 16;
 
 								tmpSurface = tileWest->getSprite(MapData::O_WESTWALL);
 								if (tmpSurface
-									&& bu != unit)
+									&& buNorth != unit)
 								{
 									if ((tileWest->getMapData(MapData::O_WESTWALL)->isDoor()
 											|| tileWest->getMapData(MapData::O_WESTWALL)->isUFODoor())
@@ -1127,31 +1133,31 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw soldier
-								if (westUnit
-									&& westUnit->getStatus() != STATUS_WALKING
+								if (buWest
+									&& buWest->getStatus() != STATUS_WALKING
 									&& (!tileWest->getMapData(MapData::O_OBJECT)
 										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6)
-									&& (westUnit->getVisible()
+									&& (buWest->getVisible()
 										|| _save->getDebugMode()))
 								{
 									// the part is 0 for small units, large units have parts 1,2 & 3 depending on the relative x/y position of this tile vs the actual unit position.
 									int part = 0;
-									part += tileWest->getPosition().x - westUnit->getPosition().x;
-									part += (tileWest->getPosition().y - westUnit->getPosition().y) * 2;
+									part += tileWest->getPosition().x - buWest->getPosition().x;
+									part += (tileWest->getPosition().y - buWest->getPosition().y) * 2;
 
-									tmpSurface = westUnit->getCache(&invalid, part);
+									tmpSurface = buWest->getCache(&invalid, part);
 									if (tmpSurface)
 									{
 										tmpSurface->blitNShade(
 															surface,
 															screenPosition.x - tileOffset.x,
 															screenPosition.y + tileOffset.y + getTerrainLevel(
-																										westUnit->getPosition(),
-																										westUnit->getArmor()->getSize()),
+																										buWest->getPosition(),
+																										buWest->getArmor()->getSize()),
 															tileWestShade,
 															true);
 
-										if (westUnit->getFire() > 0)
+										if (buWest->getFire() > 0)
 										{
 											frame = 4 + (_animFrame / 2);
 											tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
@@ -1159,8 +1165,8 @@ void Map::drawTerrain(Surface* surface)
 																surface,
 																screenPosition.x - tileOffset.x,
 																screenPosition.y + tileOffset.y + getTerrainLevel(
-																											westUnit->getPosition(),
-																											westUnit->getArmor()->getSize()),
+																											buWest->getPosition(),
+																											buWest->getArmor()->getSize()),
 																0,
 																true);
 										}
@@ -1168,48 +1174,34 @@ void Map::drawTerrain(Surface* surface)
 								}
 
 								// Draw smoke/fire
-								if (tileWest->getSmoke() // includes tiles on Fire? must...
+								if (tileWest->getSmoke()
 									&& tileWest->isDiscovered(2))
 								{
-									// oXc _animFrames cycle from 0..7
-									frame = 0;	// this will be the SPRITE # on the orig SpriteSheet
-												// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-												// fire:	0..7	-> 8 frames
-												// smoke:	8..19	-> 12 frames
-//									int fire = tileWest->getFire();	// fire is grouped [0..3] & [4..7] ( latter is for units onFire )
-																// smoke runs consecutively. [8..19] ( since I adulterated the Smoke.Pck graphics )
+									frame = 0;
 									int shade = 0;
-									if (tileWest->getFire() == 0) // then use Smoke frames.
+									if (tileWest->getFire() == 0)
 									{
-										// smoke sprites start at #8 on the spritesheet:
-										frame = 8 + ((tileWest->getSmoke() + 1) / 2); // getSmoke = 1..15 -> frame = 8..16
+										frame = 7 + ((tileWest->getSmoke() + 1) / 2);
 										shade = tileWestShade;
 									}
 
-									// _animFrame = 1..8 -> 0..4, offset = 0..3 -> spriteOffset = 0..7 (0..4, 1..5, 2..6, 3..7)
-									int spriteOffset = ((_animFrame + 1) / 2) + tileWest->getAnimationOffset();
+									int offset = _animFrame / 2 + tileWest->getAnimationOffset();
+									if (offset > 3)
+										offset -= 4;
+									frame += offset;
 
-									if (spriteOffset > 3)
-										spriteOffset -= 4;
-
-									frame += spriteOffset;
-
-									//Log(LOG_INFO) << "Map::drawTerrain() smokeFrames";
-									//Log(LOG_INFO) << ". frame = " << frame;
-
-									// smokeFrames in smoke.pck: 8..19 (12 frames)
-									// fireFrames in smoke.pck: 0..7 (8 frames, separated into 2 x 4-frame sets)
 									tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 									tmpSurface->blitNShade(
 											surface,
-											screenPosition.x,
-											screenPosition.y,
-											shade);
+											screenPosition.x - tileOffset.x,
+											screenPosition.y + tileOffset.y,
+											shade,
+											true);
 								}
 
 								// Draw object
 								if (tileWest->getMapData(MapData::O_OBJECT)
-									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() > 5)
 								{
 									tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
 									tmpSurface->blitNShade(
@@ -1300,6 +1292,8 @@ void Map::drawTerrain(Surface* surface)
 						if (tile->getMapData(MapData::O_OBJECT)
 							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < 6)
 						{
+							object = true; // kL
+
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
 								tmpSurface->blitNShade(
@@ -1313,12 +1307,71 @@ void Map::drawTerrain(Surface* surface)
 						int sprite = tile->getTopItemSprite();
 						if (sprite != -1)
 						{
+//							object = true; // kL
+
 							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
 							tmpSurface->blitNShade(
 									surface,
 									screenPosition.x,
 									screenPosition.y + tile->getTerrainLevel(),
 									tileShade);
+						}
+
+						// kL_begin:
+						if (floor == false
+							&& object == false)
+						{
+							Tile* tileBelow = _save->getTile(mapPosition + Position(0, 0,-1));
+							if (tileBelow != NULL)
+							{
+								// make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
+								BattleUnit* buBelow = tileBelow->getUnit();
+								if (buBelow != NULL
+									&& buBelow->getFaction() == FACTION_PLAYER
+									&& buBelow != _save->getSelectedUnit()
+									&& buBelow->getTurretType() == -1) // no tanks, pls
+								{
+									Position offset;
+									calculateWalkingOffset(buBelow, &offset);
+
+									if (buBelow->getFatalWounds() > 0)
+									{
+										tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
+										if (tmpSurface != NULL)
+										{
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 2,
+													screenPosition.y + offset.y + 3 + 24,
+													0);
+										}
+
+										tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
+										tmpSurface->blitNShade(
+												surface,
+												screenPosition.x + offset.x + 4,
+												screenPosition.y + offset.y + 4 + 24,
+												0,
+												false,
+												3); // 1=white, 3=red
+									}
+									else
+									{
+										std::string soldierRank = buBelow->getRankString(); // eg. STR_COMMANDER -> RANK_COMMANDER
+										soldierRank = "RANK" + soldierRank.substr(3, soldierRank.length() - 3);
+
+										tmpSurface = _res->getSurface(soldierRank);
+										if (tmpSurface != NULL)
+										{
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 2,
+													screenPosition.y + offset.y + 3 + 24,
+													0);
+										}
+									}
+								}
+							}
 						}
 					}
 
@@ -1500,7 +1553,7 @@ void Map::drawTerrain(Surface* surface)
 							}
 
 							// kL_begin:
-							if (drawRankIcon == true)
+//							if (drawRankIcon == true)
 							{
 								Tile* tileUp = _save->getTile(mapPosition + Position(0, 0, 1));
 								if (tileUp
@@ -1605,8 +1658,8 @@ void Map::drawTerrain(Surface* surface)
 					if (itZ > 0
 						&& tile->hasNoFloor(tileBelow))
 					{
-						BattleUnit* tunit = _save->selectUnit(Position(itX, itY, itZ - 1));
 						Tile* ttile = _save->getTile(Position(itX, itY, itZ - 1));
+						BattleUnit* tunit = _save->selectUnit(Position(itX, itY, itZ - 1));
 						if (tunit
 							&& tunit->getVisible()
 							&& ttile->getTerrainLevel() < 0
@@ -1648,37 +1701,22 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// Draw smoke/fire
-					if (tile->getSmoke() // includes tiles on Fire? must...
+					if (tile->getSmoke() > 0
 						&& tile->isDiscovered(2))
 					{
-						// oXc _animFrames cycle from 0..7
-						frame = 0;	// this will be the SPRITE # on the orig SpriteSheet
-									// see http://www.ufopaedia.org/images/c/cb/Smoke.gif
-									// fire:	0..7	-> 8 frames
-									// smoke:	8..19	-> 12 frames
-//						int fire = tile->getFire();	// fire is grouped [0..3] & [4..7] ( latter is for units onFire )
-													// smoke runs consecutively. [8..19] ( since I adulterated the Smoke.Pck graphics )
+						frame = 0;
 						int shade = 0;
-						if (tile->getFire() == 0) // then use Smoke frames.
+						if (tile->getFire() == 0)
 						{
-							// smoke sprites start at #8 on the spritesheet:
-							frame = 8 + ((tile->getSmoke() + 1) / 2); // getSmoke = 1..15 -> frame = 8..16
+							frame = 7 + ((tile->getSmoke() + 1) / 2);
 							shade = tileShade;
 						}
 
-						// _animFrame = 1..8 -> 0..4, offset = 0..3 -> spriteOffset = 0..7 (0..4, 1..5, 2..6, 3..7)
-						int spriteOffset = ((_animFrame + 1) / 2) + tile->getAnimationOffset();
+						int offset = _animFrame / 2 + tile->getAnimationOffset();
+						if (offset > 3)
+							offset -= 4;
+						frame += offset;
 
-						if (spriteOffset > 3)
-							spriteOffset -= 4;
-
-						frame += spriteOffset;
-
-						//Log(LOG_INFO) << "Map::drawTerrain() smokeFrames";
-						//Log(LOG_INFO) << ". frame = " << frame;
-
-						// smokeFrames in smoke.pck: 8..19 (12 frames)
-						// fireFrames in smoke.pck: 0..7 (8 frames, separated into 2 x 4-frame sets)
 						tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame(frame);
 						tmpSurface->blitNShade(
 								surface,

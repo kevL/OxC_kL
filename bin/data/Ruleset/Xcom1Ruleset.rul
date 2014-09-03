@@ -7641,8 +7641,8 @@ manufacture:
     time: 560
     cost: 56000
     requiredItems:
-     STR_ALIEN_ALLOYS: 12
-     STR_ELERIUM_115: 8
+     STR_ALIEN_ALLOYS: 10
+     STR_ELERIUM_115: 6
   - name: STR_PLASMA_BEAM
     category: STR_CRAFT_WEAPON
     requires:
@@ -7654,7 +7654,7 @@ manufacture:
     cost: 67000
     requiredItems:
       STR_ALIEN_ALLOYS: 18
-      STR_ELERIUM_115: 18
+      STR_ELERIUM_115: 16
   - name: STR_FUSION_BALL
     category: STR_CRAFT_AMMUNITION
     requires:
@@ -7677,7 +7677,7 @@ manufacture:
     time: 2030
     cost: 203000
     requiredItems:
-      STR_ALIEN_ALLOYS: 8
+      STR_ALIEN_ALLOYS: 18
       STR_ELERIUM_115: 10
   - name: STR_HOVERTANK_PLASMA
     category: STR_HEAVY_WEAPONS_PLATFORM
@@ -7690,8 +7690,8 @@ manufacture:
     time: 1950
     cost: 195000
     requiredItems:
-      STR_ALIEN_ALLOYS: 30
-      STR_ELERIUM_115: 32
+      STR_ALIEN_ALLOYS: 28
+      STR_ELERIUM_115: 20
   - name: STR_HOVERTANK_LAUNCHER
     category: STR_HEAVY_WEAPONS_PLATFORM
     requires:
@@ -7704,7 +7704,7 @@ manufacture:
     cost: 230000
     requiredItems:
       STR_ALIEN_ALLOYS: 32
-      STR_ELERIUM_115: 18
+      STR_ELERIUM_115: 16
   - name: STR_HWP_FUSION_BOMB
     category: STR_HWP_AMMUNITION
     requires:
@@ -7716,22 +7716,28 @@ manufacture:
     time: 780
     cost: 78000
     requiredItems:
-      STR_ALIEN_ALLOYS: 6
+      STR_ALIEN_ALLOYS: 8
       STR_ELERIUM_115: 6
   - name: STR_LASER_PISTOL
     category: STR_WEAPON
     requires:
       - STR_LASER_PISTOL
+      - STR_ELERIUM_115
     space: 4
     time: 300
     cost: 30000
+    requiredItems:
+      STR_ELERIUM_115: 1
   - name: STR_LASER_RIFLE
     category: STR_WEAPON
     requires:
       - STR_LASER_RIFLE
+      - STR_ELERIUM_115
     space: 6
     time: 400
     cost: 40000
+    requiredItems:
+      STR_ELERIUM_115: 2
   - name: STR_HEAVY_LASER
     category: STR_WEAPON
     requires:
@@ -7741,7 +7747,7 @@ manufacture:
     time: 700
     cost: 70000
     requiredItems:
-      STR_ELERIUM_115: 2
+      STR_ELERIUM_115: 3
   - name: STR_MOTION_SCANNER
     category: STR_EQUIPMENT
     requires:
@@ -9646,7 +9652,7 @@ music: # sza_MusicRules: http://openxcom.org/forum/index.php?topic=1853.0
   - type: GMSTORY
     midipack: 12
   - type: GMTACTIC
-    terrain: [CULTA, DESERT, FOREST, JUNGLE, MARS, MOUNT, POLAR, UBASE, URBAN, XBASE]
+    terrain: [CULTA, DESERT, FOREST, JUNGLE, MARS, MOUNT, POLAR, UBASE, URBAN, XBASE, MADURBAN, DAWNURBANA, DAWNURBANB, PORTURBAN, INDUSTRIALURBAN, RAILYARDURBAN, NATIVEURBAN]
     files: [ GMTACTIC ]
     indexes: [ 17 ]
   - type: GMWIN
@@ -9739,6 +9745,18 @@ extraStrings:
       UBASE: "aLien BASE"
       URBAN: "URBAN"
       XBASE: "xCom BASE"
+      MADURBAN: "Mad"
+      DAWNURBANA: "Dawn"
+      DAWNURBANB: "Dawn"
+      PORTURBAN: "Port"
+      INDUSTRIALURBAN: "Industrial"
+      RAILYARDURBAN: "Railyard"
+      NATIVEURBAN: "Native"
+      CULTAFARMA: "Rural"
+      CULTAFARMB: "Rural"
+      POLARMOUNT: "Polar"
+      FORESTMOUNT: "Forest"
+      DESERTMOUNT: "Desert"
       STR_SPACE_USED_FREE_: "Space Used:Free> {ALT}{0}:{1}"
       STR_LOAD_CAPACITY_FREE_: "Load Full:Free> {ALT}{0}:{1}"
       STR_OUTSIDE_CRAFT_RANGE: "Outside craft's Range"

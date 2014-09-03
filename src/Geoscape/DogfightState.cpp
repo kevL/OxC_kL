@@ -2322,22 +2322,36 @@ const std::string DogfightState::getTextureIcon() // kL
 		}
 	}
 
-	//Log(LOG_INFO) << ". str = " << str;
+	Log(LOG_INFO) << ". str = " << str;
 
 	if (str == "")
+		str = "WATER";
+	else if (str == "JUNGLE"
+		|| str == "FORESTMOUNT")
 	{
-		//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT ret = water";
-		return "WATER";
+		str = "FOREST";
+	}
+	else if (str == "CULTAFARMA"
+		|| str == "CULTAFARMB")
+	{
+		str = "CULTA";
+	}
+	else if (str == "DESERTMOUNT")
+		str = "DESERT";
+	else if (str == "POLARMOUNT")
+		str = "POLAR";
+	else if (str == "INDUSTRIALURBAN"
+		|| str == "MADURBAN"
+		|| str == "NATIVEURBAN"
+		|| str == "RAILYARDURBAN")
+//		|| str == "DAWNURBANA" // these are Terror sites only:
+//		|| str == "DAWNURBANB" // ie. not referenced by any of the Globe's polygon textures.
+//		|| str == "PORTURBAN"
+	{
+		str = "URBAN";
 	}
 
-	if (str == "JUNGLE")
-	{
-		//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT ret = jungle->forest";
-		return "FOREST";
-	}
-
-//	assert(0 && "No matching terrain for globe texture");
-	//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT ret = empty string";
+	Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT : " << str;
 	return str;
 }
 

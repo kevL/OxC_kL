@@ -939,7 +939,7 @@ void Tile::addSmoke(int smoke)
 							1,
 							std::min(
 									_smoke + smoke,
-									15));
+									17));
 		else
 			_smoke += smoke;
 

@@ -101,6 +101,12 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/textures/tex_polar.png
+  - type: URBAN
+    width: 9
+    height: 9
+    singleImage: true
+    files:
+      0: Resources/Sprites/geodata/interwin/textures/tex_urban.png
   - type: GENDER_M
     width: 7
     height: 7

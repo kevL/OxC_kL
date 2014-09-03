@@ -2825,7 +2825,8 @@ void TileEngine::explode(
 								&& destTile->getTerrainLevel() > -24)
 							{
 								destTile->setFire(0); // smoke puts out fire, hm.
-								destTile->setSmoke(RNG::generate(7, 15));
+//								destTile->setSmoke(RNG::generate(7, 15));
+								destTile->setSmoke(RNG::generate(8, 17)); // kL
 							}
 
 							if (targetUnit) // kL: add this in for smoke inhalation
@@ -2907,8 +2908,8 @@ void TileEngine::explode(
 								fireTile->setSmoke(std::max(
 														1,
 														std::min(
-																15 - (fireTile->getFlammability() / 10),
-																12)));
+																17 - (fireTile->getFlammability() / 10),
+																13)));
 							}
 //							}
 
@@ -4209,7 +4210,7 @@ bool TileEngine::detonate(Tile* tile)
 							1,
 							std::min(
 									tile->getSmoke() + RNG::generate(0, 3),
-									15)));
+									17)));
 
 	int
 		explTest,
@@ -4357,8 +4358,8 @@ bool TileEngine::detonate(Tile* tile)
 				tiles[i]->setSmoke(std::max(
 										1,
 										std::min(
-												15 - (fireProof / 10),
-												12)));
+												17 - (fireProof / 10),
+												13)));
 			}
 		}
 
@@ -4375,7 +4376,7 @@ bool TileEngine::detonate(Tile* tile)
 										0,
 										std::min(
 												smoke,
-												15)));
+												17)));
 		}
 	}
 

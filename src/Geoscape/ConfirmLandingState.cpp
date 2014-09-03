@@ -74,20 +74,18 @@ ConfirmLandingState::ConfirmLandingState(
 		_texture(texture),
 		_shade(shade)
 {
-	// TODO: show Country & Region, + ufo-type aLien-race and Mission if hyperdetected.
+	// TODO: show Country & Region
 	// TODO: should do buttons: Patrol or GeoscapeCraftState or Return to base.
 	_screen = false;
 
-//	_window			= new Window(this, 216, 160, 20, 20, POPUP_BOTH);
 	_window			= new Window(this, 230, 160, 13, 20, POPUP_BOTH);
 
-	_txtBase		= new Text(80, 9, 23, 29);	// kL
-	_txtTexture		= new Text(85, 9, 148, 29);	// kL
-	_txtShade		= new Text(60, 9, 173, 39);	// kL
+	_txtBase		= new Text(100, 9, 23, 29);
+	_txtTexture		= new Text(130, 9, 103, 29);
+	_txtShade		= new Text(60, 9, 173, 39);
 
-//	_txtMessage		= new Text(206, 82, 25, 40);
 	_txtMessage		= new Text(206, 40, 25, 47);
-	_txtMessage2	= new Text(206, 43, 25, 87); // kL
+	_txtMessage2	= new Text(206, 43, 25, 87);
 
 	_txtBegin		= new Text(206, 17, 25, 130);
 
@@ -185,7 +183,6 @@ ConfirmLandingState::ConfirmLandingState(
 
 	std::wostringstream ss;
 	ss << L""; // blank if no UFO.
-
 	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
 	if (ufo != NULL)
 	{
@@ -194,13 +191,11 @@ ConfirmLandingState::ConfirmLandingState(
 			ss << tr(ufoRule->getType()); // only ufoType shows if not hyperdetected.
 
 		if (ufo->getHyperDetected())
-			ss << L" <> " << tr(ufo->getAlienRace());
+			ss << L" > " << tr(ufo->getAlienRace());
 	}
-	std::wstring wstr = ss.str();
-
 	_txtMessage2->setText(tr("STR_CRAFT_DESTINATION")
 						 .arg(_craft->getDestination()->getName(_game->getLanguage()))
-						 .arg(wstr));
+						 .arg(ss.str()));
 
 	_txtBegin->setColor(Palette::blockOffset(8)+5);
 	_txtBegin->setBig();

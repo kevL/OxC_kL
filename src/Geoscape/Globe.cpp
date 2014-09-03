@@ -3019,11 +3019,11 @@ void Globe::stopScrolling(Action* action)
 }
 
 /**
- * Get the polygons texture at a given point
- * @param lon Longitude of the point.
- * @param lat Latitude of the point.
- * @param texture pointer to texture ID returns -1 when polygon not found
- * @param shade pointer to shade
+ * Get the polygon's texture at a given point.
+ * @param lon		- longitude of the point
+ * @param lat 		- latitude of the point
+ * @param texture	- pointer to texture ID (returns -1 if polygon not found)
+ * @param shade		- pointer to shade level
  */
 void Globe::getPolygonTextureAndShade(
 		double lon,
@@ -3032,12 +3032,19 @@ void Globe::getPolygonTextureAndShade(
 		int* shade) const
 {
 	// this is shade conversion from 0..31 levels of geoscape to battlescape levels 0..15
-	int worldshades[32] =
+/*	int worldshades[32] =
 	{
 		 0,  0,  0,  0,  1,  1,  2,  2,
 		 3,  3,  4,  4,  5,  5,  6,  6,
 		 7,  7,  8,  8,  9,  9, 10, 11,
 		11, 12, 12, 13, 13, 14, 15, 15
+	}; */
+	int worldshades[32] =
+	{
+		 0, 1, 2, 2, 3, 3, 4, 4,
+		 5, 5, 6, 6, 7, 7, 7, 8,
+		 8, 8, 8, 9, 9, 9,10,10,
+		11,11,12,12,13,13,14,15
 	};
 
 	*texture = -1;

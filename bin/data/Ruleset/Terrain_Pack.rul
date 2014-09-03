@@ -1280,6 +1280,7 @@ terrains:
       - POLAR
       - POLARMOUNT
     textures: [9]
+    hemisphere: 1
     largeBlockLimit: 2
     mapBlocks:
       - name: MOUNTPOLAR00
@@ -1510,7 +1511,7 @@ alienDeployments:
       - RAILYARDURBAN
       - NATIVEURBAN
 extraStrings:
-  - type: en-GB
+  - type: en-US
     strings:
       STR_NATIVEURBAN: Native (Farm + Jungle)
       STR_CULTAFARMA: Expanded Farm A
@@ -1524,7 +1525,7 @@ extraStrings:
       STR_POLARMOUNT: Polar Mountain
       STR_FORESTMOUNT: Forest Mountain
       STR_DESERTMOUNT: Desert Mountain
-  - type: en-US
+  - type: en-GB
     strings:
       STR_NATIVEURBAN: Native (Farm + Jungle)
       STR_CULTAFARMA: Expanded Farm A

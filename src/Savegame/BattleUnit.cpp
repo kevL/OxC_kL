@@ -1410,38 +1410,32 @@ int BattleUnit::damage(
  */
 void BattleUnit::playHitSound() // kL
 {
+	size_t sound = 0;
+
 	if (getType() == "MALE_CIVILIAN")
-		_battleGame->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											RNG::generate(41, 43))
-										->play();
+		sound = RNG::generate(41, 43);
 	else if (getType() == "FEMALE_CIVILIAN")
-		_battleGame->getResourcePack()->getSound(
-											"BATTLE.CAT",
-											RNG::generate(44, 46))
-										->play();
-	else if (getType() == "SOLDIER")
+		sound = RNG::generate(44, 46);
+	else if (getOriginalFaction() == FACTION_PLAYER) // getType() == "SOLDIER")
 	{
-		int sound;
 		if (getGender() == GENDER_MALE)
 		{
 			sound = RNG::generate(141, 151);
 			//Log(LOG_INFO) << "death Male, sound = " << sound;
-			_battleGame->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												RNG::generate(141, 151))
-											->play();
 		}
-		else if (getGender() == GENDER_FEMALE)
+		else // if (getGender() == GENDER_FEMALE)
 		{
 			sound = RNG::generate(121, 135);
 			//Log(LOG_INFO) << "death Female, sound = " << sound;
-			_battleGame->getResourcePack()->getSound(
-												"BATTLE.CAT",
-												RNG::generate(121, 135))
-											->play();
 		}
 	}
+
+	if (sound != 0)
+		_battleGame->getResourcePack()->getSound(
+											"BATTLE.CAT",
+											sound)
+										->play();
+
 //	else // note: this will crash because _battleGame is currently left NULL for non-xCom & non-Civies.
 //		_battleGame->getResourcePack()->getSound(
 //											"BATTLE.CAT",

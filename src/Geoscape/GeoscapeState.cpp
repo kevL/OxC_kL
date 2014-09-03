@@ -374,7 +374,7 @@ GeoscapeState::GeoscapeState()
 	_srfYear1		= new Surface(3, 8, screenWidth - 23, screenHeight / 2 - 3);
 	_srfYear2		= new Surface(3, 8, screenWidth - 19, screenHeight / 2 - 3);
 
-	_txtFunds = new Text(63, 8, screenWidth - 63, 10); // kL
+	_txtFunds = new Text(63, 8, screenWidth - 64, screenHeight / 2 - 110); // kL
 	if (Options::showFundsOnGeoscape)
 	{
 		_txtFunds = new Text(59, 8, screenWidth - 61, screenHeight / 2 - 27);
