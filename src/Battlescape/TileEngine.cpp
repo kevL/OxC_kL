@@ -114,14 +114,14 @@ void TileEngine::calculateSunShading()
 
 /**
  * Calculates sun shading for 1 tile. Sun comes from above and is blocked by floors or objects.
- * @param tile The tile to calculate sun shading for.
+ * @param tile - a tile to calculate sun shading for
  */
 void TileEngine::calculateSunShading(Tile* tile)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateSunShading()";
 	const int layer = 0; // Ambient lighting layer.
 
-	int power = 15 - _battleSave->getGlobalShade();
+	int light = 15 - _battleSave->getGlobalShade();
 
 	// At night/dusk sun isn't dropping shades blocked by roofs
 	if (_battleSave->getGlobalShade() < 5)
@@ -158,23 +158,23 @@ void TileEngine::calculateSunShading(Tile* tile)
 
 		if (block > 0) */
 		{
-			power -= 2;
+			light -= 2;
 		}
 	}
 
 	tile->addLight(
-				power,
+				light,
 				layer);
 	//Log(LOG_INFO) << "TileEngine::calculateSunShading() EXIT";
 }
 
 /**
- * Recalculates lighting for the terrain: objects,items,fire.
+ * Recalculates lighting for the terrain: objects, items, fire.
  */
 void TileEngine::calculateTerrainLighting()
 {
-	const int layer				= 1;	// Static lighting layer.
-	const int fireLightPower	= 15;	// amount of light a fire generates
+	const int layer		= 1;	// Static lighting layer.
+	const int fireLight	= 15;	// amount of light a fire generates
 
 	for (int // reset all light to 0 first
 			i = 0;
@@ -211,7 +211,7 @@ void TileEngine::calculateTerrainLighting()
 		if (_battleSave->getTiles()[i]->getFire())
 			addLight(
 					_battleSave->getTiles()[i]->getPosition(),
-					fireLightPower,
+					fireLight,
 					layer);
 
 		for (std::vector<BattleItem*>::iterator
@@ -233,10 +233,10 @@ void TileEngine::calculateTerrainLighting()
  */
 void TileEngine::calculateUnitLighting()
 {
-	const int layer = 2;					// Dynamic lighting layer.
-//kL	const int personalLightPower = 15;	// amount of light a unit generates
-	const int personalLightPower = 11;		// kL, Try it...
-	const int fireLightPower = 15;			// amount of light a fire generates
+	const int layer			= 2;		// Dynamic lighting layer.
+//kL	const int personalLight = 15;	// amount of light a unit generates
+	const int personalLight	= 12;		// kL, Try it...
+	const int fireLight		= 15;		// amount of light a fire generates
 
 	for (int // reset all light to 0 first
 			i = 0;
@@ -253,19 +253,19 @@ void TileEngine::calculateUnitLighting()
 	{
 		if (_personalLighting // add lighting of soldiers
 			&& (*i)->getFaction() == FACTION_PLAYER
-//kL		&& !(*i)->isOut())
-			&& (*i)->getHealth() > 0) // kL, Let unconscious soldiers glow.
+			&& !(*i)->isOut())
+//			&& (*i)->getHealth() > 0) // kL, Let unconscious soldiers glow. But stunned soldiers are off the map ...
 		{
 			addLight(
 					(*i)->getPosition(),
-					personalLightPower,
+					personalLight,
 					layer);
 		}
 
 		if ((*i)->getFire()) // add lighting of units on fire
 			addLight(
 					(*i)->getPosition(),
-					fireLightPower,
+					fireLight,
 					layer);
 	}
 }
@@ -280,13 +280,13 @@ void TileEngine::togglePersonalLighting()
 }
 
 /**
- * Adds circular light pattern starting from voxelTarget and losing power with distance travelled.
- * @param voxelTarget, Center.
- * @param power, Power.
- * @param layer, Light is separated in 3 layers: Ambient, Static and Dynamic.
+ * Adds circular light pattern starting from pos and losing power with distance travelled.
+ * @param pos	- reference center position
+ * @param power	- power of light
+ * @param layer	- light is separated in 3 layers: Ambient, Static and Dynamic
  */
 void TileEngine::addLight(
-		const Position& voxelTarget,
+		const Position& pos,
 		int power,
 		int layer)
 {
@@ -307,17 +307,17 @@ void TileEngine::addLight(
 			{
 				int distance = static_cast<int>(Round(sqrt(static_cast<double>(x * x + y * y))));
 
-				if (_battleSave->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z)))
-					_battleSave->getTile(Position(voxelTarget.x + x, voxelTarget.y + y, z))->addLight(power - distance, layer);
+				if (_battleSave->getTile(Position(pos.x + x, pos.y + y, z)))
+					_battleSave->getTile(Position(pos.x + x, pos.y + y, z))->addLight(power - distance, layer);
 
-				if (_battleSave->getTile(Position(voxelTarget.x - x, voxelTarget.y - y, z)))
-					_battleSave->getTile(Position(voxelTarget.x - x, voxelTarget.y - y, z))->addLight(power - distance, layer);
+				if (_battleSave->getTile(Position(pos.x - x, pos.y - y, z)))
+					_battleSave->getTile(Position(pos.x - x, pos.y - y, z))->addLight(power - distance, layer);
 
-				if (_battleSave->getTile(Position(voxelTarget.x + x, voxelTarget.y - y, z)))
-					_battleSave->getTile(Position(voxelTarget.x + x, voxelTarget.y - y, z))->addLight(power - distance, layer);
+				if (_battleSave->getTile(Position(pos.x + x, pos.y - y, z)))
+					_battleSave->getTile(Position(pos.x + x, pos.y - y, z))->addLight(power - distance, layer);
 
-				if (_battleSave->getTile(Position(voxelTarget.x - x, voxelTarget.y + y, z)))
-					_battleSave->getTile(Position(voxelTarget.x - x, voxelTarget.y + y, z))->addLight(power - distance, layer);
+				if (_battleSave->getTile(Position(pos.x - x, pos.y + y, z)))
+					_battleSave->getTile(Position(pos.x - x, pos.y + y, z))->addLight(power - distance, layer);
 			}
 		}
 	}
@@ -796,28 +796,33 @@ bool TileEngine::visible(
 	//Log(LOG_INFO) << ". target ID = " << targetUnit->getId();
 
 	if (targetUnit->isOut(true, true))
+	{
 		//Log(LOG_INFO) << ". . target is Dead, ret FALSE";
 		return false;
+	}
 
 	if (unit->getFaction() == targetUnit->getFaction())
+	{
 		//Log(LOG_INFO) << ". . target is Friend, ret TRUE";
 		return true;
+	}
 
 	float dist = static_cast<float>(distance(
 											unit->getPosition(),
 											targetUnit->getPosition()));
 	if (static_cast<int>(dist) > MAX_VIEW_DISTANCE)
+	{
 		//Log(LOG_INFO) << ". . too far to see Tile, ret FALSE";
 		return false;
+	}
 
 	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
 	//Log(LOG_INFO) << ". tileShade = " << tile->getShade();
 	if (unit->getFaction() == FACTION_PLAYER
-//		&& distance(
-//					unit->getPosition(),
-//					tile->getPosition())
-		&& dist > 9.f
-		&& tile->getShade() > MAX_SHADE_TO_SEE_UNITS)
+//		&& dist > 9.f
+//		&& tile->getShade() > MAX_SHADE_TO_SEE_UNITS)
+		&& dist > 8.f
+		&& tile->getShade() >= _battleSave->getGlobalShade())
 	{
 		//Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
 		return false;

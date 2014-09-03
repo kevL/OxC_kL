@@ -552,7 +552,7 @@ bool Tile::isDiscovered(int part) const
 
 /**
  * Reset the light amount on the tile. This is done before a light level recalculation.
- * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
+ * @param layer - light is separated in 3 layers: Ambient, Static and Dynamic
  */
 void Tile::resetLight(int layer)
 {
@@ -562,8 +562,8 @@ void Tile::resetLight(int layer)
 
 /**
  * Add the light amount on the tile. Only add light if the current light is lower.
- * @param light Amount of light to add.
- * @param layer Light is separated in 3 layers: Ambient, Static and Dynamic.
+ * @param light - amount of light to add
+ * @param layer - light is separated in 3 layers: Ambient, Static and Dynamic
  */
 void Tile::addLight(
 		int light,
@@ -576,7 +576,7 @@ void Tile::addLight(
 /**
  * Gets the tile's shade amount 0-15. It returns the brightest of all light layers.
  * Shade level is the inverse of light level. So a maximum amount of light (15) returns shade level 0.
- * @return shade
+ * @return, shade
  */
 int Tile::getShade() const
 {

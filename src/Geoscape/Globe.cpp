@@ -1387,10 +1387,10 @@ void Globe::drawLand()
 }
 
 /**
- * Get position of sun from point on globe
- * @param lon lontidue of position
- * @param lat latitude of position
- * @return position of sun
+ * Gets position of sun from point on globe.
+ * @param lon - longitude of position
+ * @param lat - latitude of position
+ * @return, position of sun
  */
 Cord Globe::getSunDirection(
 		double lon,
@@ -3019,7 +3019,7 @@ void Globe::stopScrolling(Action* action)
 }
 
 /**
- * Get the polygon's texture at a given point.
+ * Get the polygon's texture & shadeLevel at a given point.
  * @param lon		- longitude of the point
  * @param lat 		- latitude of the point
  * @param texture	- pointer to texture ID (returns -1 if polygon not found)
@@ -3041,11 +3041,18 @@ void Globe::getPolygonTextureAndShade(
 	}; */
 	int worldshades[32] =
 	{
-		 0, 1, 2, 2, 3, 3, 4, 4,
-		 5, 5, 6, 6, 7, 7, 7, 8,
-		 8, 8, 8, 9, 9, 9,10,10,
-		11,11,12,12,13,13,14,15
+		0, 1, 1, 1, 2, 2, 2, 3,
+		3, 3, 4, 4, 4, 5, 5, 5,
+		6, 6, 6, 7, 7, 7, 8, 8,
+		9, 9,10,11,12,13,14,15
 	};
+/*	int worldshades[32] =
+	{
+		 0, 1, 2, 3, 4, 5, 6, 7,
+		 8, 9,10,11,12,13,14,15,
+		16,17,18,19,20,21,22,23,
+		24,25,26,27,28,29,30,31
+	}; */ // terminator @ 25.
 
 	*texture = -1;
 	*shade = worldshades[CreateShadow::getShadowValue(
