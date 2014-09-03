@@ -807,10 +807,12 @@ bool TileEngine::visible(
 		return true;
 	}
 
-	float dist = static_cast<float>(distance(
-											unit->getPosition(),
-											targetUnit->getPosition()));
-	if (static_cast<int>(dist) > MAX_VIEW_DISTANCE)
+
+	int dist = distance(
+					unit->getPosition(),
+					targetUnit->getPosition());
+
+	if (dist > MAX_VIEW_DISTANCE)
 	{
 		//Log(LOG_INFO) << ". . too far to see Tile, ret FALSE";
 		return false;
@@ -819,10 +821,8 @@ bool TileEngine::visible(
 	// aliens can see in the dark, xcom can see at a distance of 9 or less, further if there's enough light.
 	//Log(LOG_INFO) << ". tileShade = " << tile->getShade();
 	if (unit->getFaction() == FACTION_PLAYER
-//		&& dist > 9.f
-//		&& tile->getShade() > MAX_SHADE_TO_SEE_UNITS)
-		&& dist > 8.f
-		&& tile->getShade() >= _battleSave->getGlobalShade())
+		&& tile->getShade() > MAX_SHADE_TO_SEE_UNITS
+		&& dist > 23 - _battleSave->getGlobalShade()) // was >9
 	{
 		//Log(LOG_INFO) << ". . too dark to see Tile, ret FALSE";
 		return false;
@@ -866,7 +866,7 @@ bool TileEngine::visible(
 
 		// floatify this Smoke ( & Fire ) thing.
 		float effDist = static_cast<float>(_trajectory.size());
-		float factor = dist * 16.f / effDist; // how many 'real distance' units there are in each 'effective distance' unit.
+		float factor = static_cast<float>(dist) * 16.f / effDist; // how many 'real distance' units there are in each 'effective distance' unit.
 
 		//Log(LOG_INFO) << ". . . effDist = " << effDist / 16.f;
 		//Log(LOG_INFO) << ". . . dist = " << dist;

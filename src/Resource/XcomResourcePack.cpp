@@ -70,11 +70,11 @@ namespace
 
 struct HairBleach
 {
-	static const Uint8 ColorGroup = 15 << 4;
-	static const Uint8 ColorShade = 15;
+	static const Uint8
+		ColorShade	= 15,
+		Hair		= 9 << 4,
+		Face		= 6 << 4;
 
-	static const Uint8 Hair = 9 << 4;
-	static const Uint8 Face = 6 << 4;
 	static inline void func(
 			Uint8& src,
 			const Uint8& cutoff,
