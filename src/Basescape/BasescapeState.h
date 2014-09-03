@@ -111,18 +111,23 @@ private:
 		/// Handler for clicking the Geoscape button.
 		void btnGeoscapeClick(Action* action);
 
-		/// Handler for left clicking the base view.
+		/// Handler for left-clicking the base view.
 		void viewLeftClick(Action* action);
-		/// Handler for right clicking the base view.
+		/// Handler for right-clicking the base view.
 		void viewRightClick(Action* action);
 		/// Handler for hovering the base view.
 		void viewMouseOver(Action* action);
 		/// Handler for hovering out of the base view.
 		void viewMouseOut(Action* action);
-		/// Handler for clicking the mini base view.
-		void miniClick(Action* action);
+
+		/// Handler for left-clicking the mini base view.
+		void miniLeftClick(Action* action); // kL
+		/// Handler for right-clicking the mini base view.
+		void miniRightClick(Action* action); // kL
+
 		/// Handler for changing the text on the Name edit.
 		void edtBaseChange(Action* action);
+
 		/// Handler for pressing a base selection hotkey.
 		void handleKeyPress(Action* action);
 };

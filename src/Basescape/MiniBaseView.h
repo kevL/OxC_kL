@@ -91,7 +91,7 @@ private:
 		/// Handles timer.
 		void think();
 		/// kL. Blinks the craft status indicators.
-		void MiniBaseView::blink();
+		void MiniBaseView::blink(); // kL
 };
 
 }

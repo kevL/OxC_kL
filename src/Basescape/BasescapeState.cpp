@@ -88,7 +88,7 @@ BasescapeState::BasescapeState(
 	_txtFacility	= new Text(192, 9, 0, 0);
 	_view			= new BaseView(192, 192, 0, 8);
 
-	_edtBase		= new TextEdit(this, 127, 17, 193, 0);
+	_edtBase		= new TextEdit(this, 127, 17, 194, 0);
 	_txtRegion		= new Text(126, 9, 194, 15);
 	_txtFunds		= new Text(126, 9, 194, 24);
 
@@ -143,7 +143,13 @@ BasescapeState::BasescapeState(
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-	_mini->onMouseClick((ActionHandler)& BasescapeState::miniClick);
+//	_mini->onMouseClick((ActionHandler)& BasescapeState::miniClick);
+	_mini->onMouseClick( // kL
+					(ActionHandler)& BasescapeState::miniLeftClick,
+					SDL_BUTTON_LEFT);
+	_mini->onMouseClick( // kL
+					(ActionHandler)& BasescapeState::miniRightClick,
+					SDL_BUTTON_RIGHT);
 	_mini->onKeyboardPress((ActionHandler)& BasescapeState::handleKeyPress);
 	_mini->onMouseOver((ActionHandler)& BasescapeState::viewMouseOver);
 	_mini->onMouseOut((ActionHandler)& BasescapeState::viewMouseOut);
@@ -620,7 +626,7 @@ void BasescapeState::viewLeftClick(Action*)
 		_game->pushState(new BaseDetectionState(_base));
 //		_game->pushState(new MonthlyCostsState(_base));
 	}
-	else if (fac->getRules()->getRadarRange() > 0
+/*	else if (fac->getRules()->getRadarRange() > 0
 		|| fac->getRules()->isMindShield() == true
 		|| fac->getRules()->isHyperwave() == true)
 	{
@@ -632,7 +638,7 @@ void BasescapeState::viewLeftClick(Action*)
 		kL_reCenter = true;
 
 		_game->popState();
-	}
+	} */
 
 
 	if (bPop)
@@ -723,7 +729,7 @@ void BasescapeState::viewMouseOut(Action*)
  * Selects a new base to display.
  * @param action - pointer to an action
  */
-void BasescapeState::miniClick(Action*)
+void BasescapeState::miniLeftClick(Action*)
 {
 	size_t base = _mini->getHoveredBase();
 
@@ -733,7 +739,30 @@ void BasescapeState::miniClick(Action*)
 		_txtFacility->setText(L"");
 
 		_base = _game->getSavedGame()->getBases()->at(base);
+
 		init();
+	}
+}
+
+/**
+ * Pops to globe with selected base centered.
+ * @param action - pointer to an action
+ */
+void BasescapeState::miniRightClick(Action*)
+{
+	size_t base = _mini->getHoveredBase();
+
+	if (base < _game->getSavedGame()->getBases()->size())
+	{
+		Base* centBase = _game->getSavedGame()->getBases()->at(base);
+		_game->getSavedGame()->setGlobeLongitude(centBase->getLongitude());
+		_game->getSavedGame()->setGlobeLatitude(centBase->getLatitude());
+
+		kL_reCenter = true;
+
+		_game->popState();
+
+		soundPop->play(Mix_GroupAvailable(0));
 	}
 }
 

@@ -272,7 +272,7 @@ void MiniBaseView::think()
 /**
  * kL. Blinks the craft status indicators.
  */
-void MiniBaseView::blink()
+void MiniBaseView::blink() // kL
 {
 	//Log(LOG_INFO) << "MiniBaseView::blink() = " << (int)_blink;
 	_blink = !_blink;

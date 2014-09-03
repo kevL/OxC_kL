@@ -244,10 +244,10 @@
 	"begin_code.h"
 	"close_code.h"
 
-1408671503 f:\git\openxcom\src\basescape\basescapestate.h
+1409768615 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
-1409299459 f:\git\openxcom\src\basescape\minibaseview.h
+1409768244 f:\git\openxcom\src\basescape\minibaseview.h
 	<vector>
 	"../Engine/InteractiveSurface.h"
 
@@ -4440,7 +4440,7 @@
 	<stdint.h>
 	"GameTime.h"
 
-1409548183 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1409773437 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -5077,7 +5077,7 @@
 	<windows.h>
 	<stddef.h>
 
-1409554846 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1409768234 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	<cmath>
 	"../Engine/Action.h"
@@ -6763,7 +6763,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1409736254 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1409765681 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
