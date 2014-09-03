@@ -2322,7 +2322,7 @@ const std::string DogfightState::getTextureIcon() // kL
 		}
 	}
 
-	Log(LOG_INFO) << ". str = " << str;
+	//Log(LOG_INFO) << ". str = " << str;
 
 	if (str == "")
 		str = "WATER";
@@ -2351,7 +2351,7 @@ const std::string DogfightState::getTextureIcon() // kL
 		str = "URBAN";
 	}
 
-	Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT : " << str;
+	//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT : " << str;
 	return str;
 }
 
