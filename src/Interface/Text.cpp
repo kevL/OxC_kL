@@ -69,7 +69,7 @@ Text::Text(
 }
 
 /**
- *
+ * dTor.
  */
 Text::~Text()
 {

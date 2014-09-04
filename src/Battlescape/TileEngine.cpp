@@ -2234,9 +2234,9 @@ BattleUnit* TileEngine::hit(
 					min = static_cast<int>(static_cast<double>(power) * (100.0 - range) / 100.0) + 1,
 					max = static_cast<int>(static_cast<double>(power) * (100.0 + range) / 100.0);
 
-//				power = RNG::generate(min, max);
-				power = RNG::generate(min, max) / 2; // bell curve
-				power += RNG::generate(min, max) / 2;
+				power = (RNG::generate(min, max) // bell curve
+					   + RNG::generate(min, max))
+					/ 2;
 
 /*				if (type == DT_HE
 					|| Options::TFTDDamage)
@@ -2649,14 +2649,9 @@ void TileEngine::explode(
 						{
 							if (targetUnit)
 							{
-								powerVsUnit = RNG::generate(
-														1,
-														_powerE * 2)
-													/ 2;
-								powerVsUnit += RNG::generate( // bell curve
-														1,
-														_powerE * 2)
-													/ 2;
+								powerVsUnit = (RNG::generate(1, _powerE * 2) // bell curve
+											 + RNG::generate(1, _powerE * 2))
+											/ 2;
 								//Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_STUN";
 								targetUnit->damage(
 												Position(0, 0, 0),
@@ -2672,14 +2667,9 @@ void TileEngine::explode(
 							{
 								if ((*item)->getUnit())
 								{
-									powerVsUnit = RNG::generate(
-															1,
-															_powerE * 2)
-														/ 2;
-									powerVsUnit += RNG::generate( // bell curve
-															1,
-															_powerE * 2)
-														/ 2;
+									powerVsUnit = (RNG::generate(1, _powerE * 2) // bell curve
+												 + RNG::generate(1, _powerE * 2))
+												/ 2;
 									//Log(LOG_INFO) << ". . . . powerVsUnit (corpse) = " << powerVsUnit << " DT_STUN";
 									(*item)->getUnit()->damage(
 															Position(0, 0, 0),
@@ -2695,14 +2685,9 @@ void TileEngine::explode(
 							//Log(LOG_INFO) << ". . type == DT_HE";
 							if (targetUnit)
 							{
-								powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
-													static_cast<double>(_powerE) * 0.5,
-													static_cast<double>(_powerE) * 1.5))
-												/ 2;
-								powerVsUnit += static_cast<int>(RNG::generate( // bell curve
-													static_cast<double>(_powerE) * 0.5,
-													static_cast<double>(_powerE) * 1.5))
-												/ 2;
+								powerVsUnit = (static_cast<int>(RNG::generate(static_cast<double>(_powerE) * 0.5, static_cast<double>(_powerE) * 1.5)) // bell curve
+											 + static_cast<int>(RNG::generate(static_cast<double>(_powerE) * 0.5, static_cast<double>(_powerE) * 1.5)))
+											/ 2;
 								//Log(LOG_INFO) << ". . DT_HE power = " << powerVsUnit << ", vs ID " << targetUnit->getId();
 
 								if (distance(
@@ -2773,14 +2758,9 @@ void TileEngine::explode(
 										{
 											buOut->setTakenExpl();
 
-											powerVsUnit = static_cast<int>(RNG::generate( // 50% to 150%
-																static_cast<double>(_powerE) * 0.5,
-																static_cast<double>(_powerE) * 1.5))
-															/ 2;
-											powerVsUnit += static_cast<int>(RNG::generate( // bell curve
-																static_cast<double>(_powerE) * 0.5,
-																static_cast<double>(_powerE) * 1.5))
-															/ 2;
+											powerVsUnit = (static_cast<int>(RNG::generate(static_cast<double>(_powerE) * 0.5, static_cast<double>(_powerE) * 1.5)) // bell curve
+														 + static_cast<int>(RNG::generate(static_cast<double>(_powerE) * 0.5, static_cast<double>(_powerE) * 1.5)))
+														/ 2;
 
 											buOut->damage(
 														Position(0, 0, 0),

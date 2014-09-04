@@ -81,7 +81,7 @@
 #include "../Interface/ImageButton.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
-#include "../Interface/TurnCounter.h" // kL
+//#include "../Interface/TurnCounter.h" // kL
 
 #include "../Menu/LoadGameState.h"
 #include "../Menu/PauseState.h"
@@ -122,14 +122,12 @@ BattlescapeState::BattlescapeState()
 		_totalMouseMoveX(0),
 		_totalMouseMoveY(0),
 		_mouseOverThreshold(false),
-	// kL_begin:
-		_firstInit(true),
+		_firstInit(true),				// kL_begin <-
 		_mouseOverIcons(false),
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),
-		_mouseScrollingStartTime(0),
-	// kL_end.
-		_fuseFrame(0) // kL
+		_mouseScrollingStartTime(0),	// kL_end.
+		_fuseFrame(0)					// kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	std::fill_n(
@@ -139,8 +137,8 @@ BattlescapeState::BattlescapeState()
 
 	const int screenWidth		= Options::baseXResolution;
 	const int screenHeight		= Options::baseYResolution;
-	const int iconsWidth		= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
-	const int iconsHeight		= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
+	const int iconsWidth		= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w; // 320
+	const int iconsHeight		= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h; // 56
 	const int visibleMapHeight	= screenHeight - iconsHeight;
 	const int x					= screenWidth / 2 - iconsWidth / 2;
 	const int y					= screenHeight - iconsHeight;
@@ -158,7 +156,6 @@ BattlescapeState::BattlescapeState()
 
 	// Create the battlemap view
 	// The actual map height is the total height minus the height of the buttonbar
-
 	_map = new Map(
 				_game,
 				screenWidth,
@@ -259,6 +256,7 @@ BattlescapeState::BattlescapeState()
 
 	_txtName		= new Text(136, 9, _icons->getX() + 135, _icons->getY() + 32);
 
+	_numTULaunch	= new NumberText(8, 10, x + 230, y + 34);
 	_numTUAim		= new NumberText(8, 10, x + 241, y + 34);
 	_numTUAuto		= new NumberText(8, 10, x + 252, y + 34);
 	_numTUSnap		= new NumberText(8, 10, x + 263, y + 34);
@@ -278,7 +276,9 @@ BattlescapeState::BattlescapeState()
 	_txtDebug		= new Text(300, 10, 10, 0);
 //	_txtTooltip		= new Text(300, 10, x + 2, y - 10);
 
-	_turnCounter	= new TurnCounter(20, 5, 0, 0); // kL
+	_txtShade		= new Text(45, 9, 1, 0); // kL
+	_txtTurn		= new Text(45, 9, 1, 10); // kL
+//	_turnCounter	= new TurnCounter(20, 5, 0, 0);
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
@@ -342,6 +342,7 @@ BattlescapeState::BattlescapeState()
 	add(_btnStats, "buttonStats", "battlescape", _icons);
 	add(_kneel); // kL, this has to go overtop _btns.
 	add(_txtName, "textName", "battlescape", _icons);
+	add(_numTULaunch);
 	add(_numTUAim);
 	add(_numTUAuto);
 	add(_numTUSnap);
@@ -382,12 +383,18 @@ BattlescapeState::BattlescapeState()
 	add(_btnPsi);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 
-	add(_turnCounter);									// kL
-	_turnCounter->setColor(Palette::blockOffset(9)+1);	// kL
-
 	_save = _game->getSavedGame()->getSavedBattle();
 
 	// kL_begin:
+//	add(_turnCounter);									// kL
+//	_turnCounter->setColor(Palette::blockOffset(9)+1);	// kL
+
+	add(_txtShade);
+	add(_txtTurn);
+
+	_txtShade->setColor(Palette::blockOffset(9)+1);
+	_txtTurn->setColor(Palette::blockOffset(9)+1);
+
 	//Log(LOG_INFO) << "_txtBaseLabel BEGIN";
 	add(_txtBaseLabel);
 	_txtBaseLabel->setColor(Palette::blockOffset(9)+1);
@@ -430,6 +437,18 @@ BattlescapeState::BattlescapeState()
 	}
 	_txtBaseLabel->setText(baseLabel); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
 	//Log(LOG_INFO) << "_txtBaseLabel DONE";
+
+	std::wostringstream
+		woShade,
+		woTurn;
+
+	woShade << L"shade ";
+	woShade << _save->getGlobalShade();
+	_txtShade->setText(woShade.str());
+
+	woTurn << L"turn ";
+	woTurn << _save->getTurn();
+	_txtTurn->setText(woTurn.str());
 	// kL_end.
 
 	_map->init();
@@ -713,9 +732,12 @@ BattlescapeState::BattlescapeState()
 
 //	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast();
+
+	_numTULaunch->setColor(Palette::blockOffset(0)+7);
 	_numTUAim->setColor(Palette::blockOffset(0)+7);
 	_numTUAuto->setColor(Palette::blockOffset(0)+7);
 	_numTUSnap->setColor(Palette::blockOffset(0)+7);
+
 //	_numTimeUnits->setColor(Palette::blockOffset(4));
 //	_numEnergy->setColor(Palette::blockOffset(1));
 //	_numHealth->setColor(Palette::blockOffset(2)+12);
@@ -800,9 +822,9 @@ void BattlescapeState::init()
 	_map->draw();
 	_battleGame->init();
 
-	kL_TurnCount = _save->getTurn();	// kL
-	_turnCounter->update();				// kL
-	_turnCounter->draw();				// kL
+//	kL_TurnCount = _save->getTurn();	// kL
+//	_turnCounter->update();				// kL
+//	_turnCounter->draw();				// kL
 
 	updateSoldierInfo();
 
@@ -1924,6 +1946,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	_kneel		->setVisible(false);
 
+	_numTULaunch->setVisible(false);
 	_numTUAim	->setVisible(false);
 	_numTUAuto	->setVisible(false);
 	_numTUSnap	->setVisible(false);
@@ -2078,6 +2101,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	if (selectedUnit->getActiveHand() != "")
 	{
+		int tuLaunch = 0;
 		int tuAim = 0;
 		int tuAuto = 0;
 		int tuSnap = 0;
@@ -2086,10 +2110,12 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			&& (rtItem->getRules()->getBattleType() == BT_FIREARM
 				|| rtItem->getRules()->getBattleType() == BT_MELEE))
 		{
+			tuLaunch = selectedUnit->getActionTUs(BA_LAUNCH, rtItem);
 			tuAim = selectedUnit->getActionTUs(BA_AIMEDSHOT, rtItem);
 			tuAuto = selectedUnit->getActionTUs(BA_AUTOSHOT, rtItem);
 			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, rtItem);
-			if (tuAim == 0
+			if (tuLaunch == 0
+				&& tuAim == 0
 				&& tuAuto == 0
 				&& tuSnap == 0)
 			{
@@ -2100,15 +2126,23 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			&& (ltItem->getRules()->getBattleType() == BT_FIREARM
 				|| ltItem->getRules()->getBattleType() == BT_MELEE))
 		{
+			tuLaunch = selectedUnit->getActionTUs(BA_LAUNCH, ltItem);
 			tuAim = selectedUnit->getActionTUs(BA_AIMEDSHOT, ltItem);
 			tuAuto = selectedUnit->getActionTUs(BA_AUTOSHOT, ltItem);
 			tuSnap = selectedUnit->getActionTUs(BA_SNAPSHOT, ltItem);
-			if (tuAim == 0
+			if (tuLaunch == 0
+				&& tuAim == 0
 				&& tuAuto == 0
 				&& tuSnap == 0)
 			{
 				tuSnap = selectedUnit->getActionTUs(BA_HIT, ltItem);
 			}
+		}
+
+		if (tuLaunch)
+		{
+			_numTULaunch->setValue(tuLaunch);
+			_numTULaunch->setVisible(true);
 		}
 
 		if (tuAim)
@@ -3195,9 +3229,20 @@ void BattlescapeState::resize(
  * kL. Returns the TurnCounter used by the Battlescape.
  * @return, Pointer to the TurnCounter.
  */
-TurnCounter* BattlescapeState::getTurnCounter() const
+/* TurnCounter* BattlescapeState::getTurnCounter() const
 {
 	return _turnCounter;
+} */
+
+/**
+ * kL. Updates the turn text.
+ */
+void BattlescapeState::updateTurn() // kL
+{
+	std::wostringstream woStr;
+	woStr << L"turn ";
+	woStr << _save->getTurn();
+	_txtTurn->setText(woStr.str());
 }
 
 /**
@@ -3270,7 +3315,7 @@ void BattlescapeState::refreshVisUnits() // kL
  * Shows primer warnings on all live grenades.
  * kL. Adapted from Inventory.
  */
-void BattlescapeState::drawFuse()
+void BattlescapeState::drawFuse() // kL
 {
 	if (_save->getSelectedUnit() == NULL)
 		return;

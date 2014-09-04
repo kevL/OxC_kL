@@ -31,7 +31,7 @@ class BattlescapeState;
 class SavedBattleGame;
 class Text;
 class Timer;
-class TurnCounter; // kL
+//class TurnCounter; // kL
 class Window;
 
 
@@ -55,7 +55,7 @@ private:
 		* _txtSide,
 		* _txtMessage;
 	Timer* _timer;
-	TurnCounter* _turnCounter; // kL
+//	TurnCounter* _turnCounter; // kL
 	Window* _window;
 
 

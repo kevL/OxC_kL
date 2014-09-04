@@ -219,6 +219,15 @@ void Map::init()
 					   0, 0, b, f, f, f, b, 0, 0,
 					   0, 0, 0, b, f, b, 0, 0, 0,
 					   0, 0, 0, 0, b, 0, 0, 0, 0 };
+/*	int pixels[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, // kL
+					   0, 0, b, b, b, b, b, 0, 0,
+					   0, 0, b, f, f, f, b, 0, 0,
+					   b, b, b, f, f, f, b, b, b,
+					   b, f, f, f, f, f, f, f, b,
+					   0, b, f, f, f, f, f, b, 0,
+					   0, 0, b, f, f, f, b, 0, 0,
+					   0, 0, 0, b, f, b, 0, 0, 0,
+					   0, 0, 0, 0, b, 0, 0, 0, 0 }; */
 
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
@@ -261,6 +270,15 @@ void Map::init()
 							 b, b, b, f, f, f, b, b, b,
 							 0, 0, b, f, f, f, b, 0, 0,
 							 0, 0, b, b, b, b, b, 0, 0 };
+/*	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, // kL
+							 0, 0, 0, 0, 0, 0, 0, 0, 0,
+							 0, 0, 0, 0, b, 0, 0, 0, 0,
+							 0, 0, 0, b, f, b, 0, 0, 0,
+							 0, 0, b, f, f, f, b, 0, 0,
+							 0, b, f, f, f, f, f, b, 0,
+							 b, f, f, f, f, f, f, f, b,
+							 b, b, b, f, f, f, b, b, b,
+							 0, 0, b, b, b, b, b, 0, 0 }; */
 
 	_arrow_kneel = new Surface(9, 9);
 	_arrow_kneel->setPalette(this->getPalette());
@@ -492,10 +510,10 @@ void Map::setPalette(
 void Map::drawTerrain(Surface* surface)
 {
 	//Log(LOG_INFO) << "Map::drawTerrain()";
-	BattleUnit* unit		= NULL;
-	NumberText* _numWpID	= NULL;
-	Surface* tmpSurface		= NULL;
-	Tile* tile				= NULL;
+	BattleUnit* unit	= NULL;
+	NumberText* wpID	= NULL;
+	Surface* tmpSurface	= NULL;
+	Tile* tile			= NULL;
 	Position
 		mapPosition,
 		screenPosition,
@@ -711,17 +729,17 @@ void Map::drawTerrain(Surface* surface)
 	{
 		// note: WpID is used for both pathPreview and BL waypoints.
 		// kL_note: Leave them the same color.
-		_numWpID = new NumberText(15, 15, 20, 30);
-		_numWpID->setPalette(getPalette());
-//		_numWpID->setColor(pathPreview? _messageColor + 1: Palette::blockOffset(1));
+		wpID = new NumberText(15, 15, 20, 30);
+		wpID->setPalette(getPalette());
+//		wpID->setColor(pathPreview? _messageColor + 1: Palette::blockOffset(1));
 
-		Uint8 wpColor = Palette::blockOffset(1); // yellow
-//		if (_save->getTerrain() == "POLAR")
-//			wpColor = 11; // dark gray
+		Uint8 wpColor;
 		if (_save->getTerrain() == "DESERT")
-			wpColor = 2; // light gray
+			wpColor = Palette::blockOffset(0)+2; // light gray
+		else
+			wpColor = Palette::blockOffset(1)+2; // yellow
 
-		_numWpID->setColor(wpColor);
+		wpID->setColor(wpColor);
 	}
 
 	surface->lock();
@@ -1995,9 +2013,9 @@ void Map::drawTerrain(Surface* surface)
 
 							if (_save->getBattleGame()->getCurrentAction()->type == BA_LAUNCH)
 							{
-								_numWpID->setValue(waypid);
-								_numWpID->draw();
-								_numWpID->blitNShade(
+								wpID->setValue(waypid);
+								wpID->draw();
+								wpID->blitNShade(
 										surface,
 										screenPosition.x + waypXOff,
 										screenPosition.y + waypYOff,
@@ -2053,11 +2071,76 @@ void Map::drawTerrain(Surface* surface)
 	// end Tiles_z looping.
 
 
+//kL	unit = (BattleUnit*)_save->getSelectedUnit();
+	unit = dynamic_cast<BattleUnit*>(_save->getSelectedUnit()); // kL
+	if (unit
+		&& (_save->getSide() == FACTION_PLAYER
+			|| _save->getDebugMode())
+		&& unit->getPosition().z <= _camera->getViewLevel())
+	{
+		_camera->convertMapToScreen(
+								unit->getPosition(),
+								&screenPosition);
+		screenPosition += _camera->getMapOffset();
+
+		Position offset;
+		calculateWalkingOffset(
+							unit,
+							&offset);
+
+		offset.y += 21 - unit->getHeight();
+
+		if (unit->getArmor()->getSize() > 1)
+			offset.y += 6;
+
+		if (unit->isKneeled()
+			&& getCursorType() != CT_NONE) // DarkDefender
+		{
+			offset.y -= 5;
+			_arrow_kneel->blitNShade( // DarkDefender
+								surface,
+								screenPosition.x
+									+ offset.x
+									+ (_spriteWidth / 2)
+									- (_arrow->getWidth() / 2),
+								screenPosition.y
+									+ offset.y
+									- _arrow->getHeight()
+//kL								+ arrowBob[_cursorFrame],
+									+ static_cast<int>( // kL
+//										4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
+//										-4.0 * sin(180.0 / static_cast<double>(_animFrame + 1) / 8.0)),
+										-4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
+								0);
+		}
+		else // DarkDefender
+		if (getCursorType() != CT_NONE)
+			_arrow->blitNShade(
+							surface,
+							screenPosition.x
+								+ offset.x
+								+ (_spriteWidth / 2)
+								- (_arrow->getWidth() / 2),
+							screenPosition.y
+								+ offset.y
+								- _arrow->getHeight()
+//kL							+ arrowBob[_animFrame],
+//kL							+ arrowBob[_cursorFrame], // DarkDefender
+								+ static_cast<int>( // kL
+//									4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
+//									4.0 * sin(static_cast<double>(4 - _animFrame) * 45.0 / 8.0)), // fast up, slow down
+//									4.0 * sin(static_cast<double>(_animFrame - 4) * 22.5)),
+//									4.0 * sin(static_cast<double>(_animFrame) * M_PI / 4.0)),
+//									4.0 * sin(180.0 / static_cast<double>(_animFrame + 1) / 8.0)),
+									4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
+							0);
+	}
+
 	if (pathPreview)
 	{
 		// make a border for the pathfinding display
-//		if (_numWpID)
-//			_numWpID->setBordered(true);
+//		if (wpID)
+//			wpID->setBordered(true);
 
 		for (int
 				itZ = beginZ;
@@ -2146,12 +2229,12 @@ void Map::drawTerrain(Surface* surface)
 									offset_y += 7;
 							}
 
-							_numWpID->setValue(tile->getTUMarker());
-							_numWpID->draw();
+							wpID->setValue(tile->getTUMarker());
+							wpID->draw();
 
 							if (!(_previewSetting & PATH_ARROWS))
 							{
-								_numWpID->blitNShade(
+								wpID->blitNShade(
 												surface,
 												screenPosition.x + 16 - offset_x,
 //kL											screenPosition.y + 29 - offset_y,
@@ -2162,7 +2245,7 @@ void Map::drawTerrain(Surface* surface)
 							}
 							else
 							{
-								_numWpID->blitNShade(
+								wpID->blitNShade(
 												surface,
 												screenPosition.x + 16 - offset_x,
 //kL											screenPosition.y + 22 - offset_y,
@@ -2176,76 +2259,11 @@ void Map::drawTerrain(Surface* surface)
 		}
 
 		// remove the border in case it's being used for missile waypoints.
-//		if (_numWpID)
-//			_numWpID->setBordered(false);
+//		if (wpID)
+//			wpID->setBordered(false);
 	}
 
-//kL	unit = (BattleUnit*)_save->getSelectedUnit();
-	unit = dynamic_cast<BattleUnit*>(_save->getSelectedUnit()); // kL
-	if (unit
-		&& (_save->getSide() == FACTION_PLAYER
-			|| _save->getDebugMode())
-		&& unit->getPosition().z <= _camera->getViewLevel())
-	{
-		_camera->convertMapToScreen(
-								unit->getPosition(),
-								&screenPosition);
-		screenPosition += _camera->getMapOffset();
-
-		Position offset;
-		calculateWalkingOffset(
-							unit,
-							&offset);
-
-		offset.y += 21 - unit->getHeight();
-
-		if (unit->getArmor()->getSize() > 1)
-			offset.y += 6;
-
-		if (unit->isKneeled()
-			&& getCursorType() != CT_NONE) // DarkDefender
-		{
-			offset.y -= 5;
-			_arrow_kneel->blitNShade( // DarkDefender
-								surface,
-								screenPosition.x
-									+ offset.x
-									+ (_spriteWidth / 2)
-									- (_arrow->getWidth() / 2),
-								screenPosition.y
-									+ offset.y
-									- _arrow->getHeight()
-//kL								+ arrowBob[_cursorFrame],
-									+ static_cast<int>( // kL
-//										4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
-//										-4.0 * sin(180.0 / static_cast<double>(_animFrame + 1) / 8.0)),
-										-4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
-								0);
-		}
-		else // DarkDefender
-		if (getCursorType() != CT_NONE)
-			_arrow->blitNShade(
-							surface,
-							screenPosition.x
-								+ offset.x
-								+ (_spriteWidth / 2)
-								- (_arrow->getWidth() / 2),
-							screenPosition.y
-								+ offset.y
-								- _arrow->getHeight()
-//kL							+ arrowBob[_animFrame],
-//kL							+ arrowBob[_cursorFrame], // DarkDefender
-								+ static_cast<int>( // kL
-//									4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
-//									4.0 * sin(static_cast<double>(4 - _animFrame) * 45.0 / 8.0)), // fast up, slow down
-//									4.0 * sin(static_cast<double>(_animFrame - 4) * 22.5)),
-//									4.0 * sin(static_cast<double>(_animFrame) * M_PI / 4.0)),
-//									4.0 * sin(180.0 / static_cast<double>(_animFrame + 1) / 8.0)),
-									4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
-							0);
-	}
-
-	delete _numWpID;
+	delete wpID;
 
 	if (_explosionInFOV) // check if we got hit or explosion animations
 	{

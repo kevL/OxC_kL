@@ -1,4 +1,10 @@
 extraSprites:
+  - type: ICONS.PCK
+    width: 320
+    height: 200
+    singleImage: true
+    files:
+      0: Resources/UI/icons.png
   - type: SMOKE.PCK
     files:
       0: Resources/Sprites/ufograph/smoke/

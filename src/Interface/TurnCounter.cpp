@@ -18,15 +18,16 @@
  */
 
 #include "TurnCounter.h"
+
 #include "NumberText.h"
+
 #include "../Engine/Palette.h"
-//#include "../Savegame/SavedBattleGame.h"
 
 
 namespace OpenXcom
 {
 
-unsigned int kL_TurnCount = 1;
+int kL_TurnCount = 1;
 
 /**
  * Creates a Turn counter of the specified size.
@@ -35,21 +36,27 @@ unsigned int kL_TurnCount = 1;
  * @param x, X position in pixels.
  * @param y, Y position in pixels.
  */
-TurnCounter::TurnCounter(int width, int height, int x, int y)
+TurnCounter::TurnCounter(
+		int width,
+		int height,
+		int x,
+		int y)
 	:
-		Surface(width, height, x + 1, y + 1),
-		_tCount(1)
+		Surface(
+			width,
+			height,
+			x + 1,
+			y + 10) // relative to screen
 {
 	//Log(LOG_INFO) << "Create TurnCounter";
+	_text = new NumberText(width, height); // relative to Surface
 
-	_visible = true;
-
-	_text = new NumberText(width, height, x, y);
 	setColor(Palette::blockOffset(15)+12);
 
-//	_text->setValue(_sbgame->getTurn());
 	_text->setValue(kL_TurnCount);
-//	_text->setValue(_tCount);
+//	std::wostringstream str; // for Text.
+//	str << L"turn " << kL_TurnCount;
+//	_text->setText(str.str());
 }
 
 /**
@@ -58,18 +65,18 @@ TurnCounter::TurnCounter(int width, int height, int x, int y)
 TurnCounter::~TurnCounter()
 {
 	//Log(LOG_INFO) << "Delete TurnCounter";
-
 	delete _text;
 }
 
 /**
  * Updates the Turn display.
  */
-// void TurnCounter::update(int t)
 void TurnCounter::update()
 {
 	_text->setValue(kL_TurnCount);
-//	_text->setValue(_tCount);
+//	std::wostringstream str; // for Text.
+//	str << L"turn " << kL_TurnCount;
+//	_text->setText(str.str());
 
 	_redraw = true;
 }
@@ -80,7 +87,10 @@ void TurnCounter::update()
  * @param firstcolor Offset of the first color to replace.
  * @param ncolors Amount of colors to replace.
  */
-void TurnCounter::setPalette(SDL_Color* colors, int firstcolor, int ncolors)
+void TurnCounter::setPalette(
+		SDL_Color* colors,
+		int firstcolor,
+		int ncolors)
 {
 	Surface::setPalette(colors, firstcolor, ncolors);
 	_text->setPalette(colors, firstcolor, ncolors);
@@ -101,6 +111,7 @@ void TurnCounter::setColor(Uint8 color)
 void TurnCounter::draw()
 {
 	Surface::draw();
+
 	_text->blit(this);
 }
 

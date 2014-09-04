@@ -53,9 +53,8 @@ enum TextVAlign
 
 /**
  * Text string displayed on screen.
- * Takes the characters from a Font and puts them together on screen
- * to display a string of text, taking care of any required aligning
- * or wrapping.
+ * Takes the characters from a Font and puts them together on screen to display
+ * a string of text, taking care of any required aligning or wrapping.
  */
 class Text
 	:

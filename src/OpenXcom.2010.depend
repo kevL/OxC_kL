@@ -4401,7 +4401,7 @@
 1409185599 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
 
-1409182040 f:\git\openxcom\src\interface\text.h
+1409822754 f:\git\openxcom\src\interface\text.h
 	<string>
 	<vector>
 	<stdint.h>
@@ -5643,7 +5643,7 @@
 1404096022 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1408300245 f:\git\openxcom\src\battlescape\battlescapestate.h
+1409852718 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5875,7 +5875,7 @@
 1404096022 f:\git\openxcom\src\battlescape\infoboxstate.h
 	"../Engine/State.h"
 
-1404624059 f:\git\openxcom\src\battlescape\nextturnstate.h
+1409851746 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
 1404803394 f:\git\openxcom\src\battlescape\unitdiebstate.h
@@ -6035,7 +6035,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1409502165 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1409853418 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6091,7 +6091,6 @@
 	"../Interface/ImageButton.h"
 	"../Interface/NumberText.h"
 	"../Interface/Text.h"
-	"../Interface/TurnCounter.h"
 	"../Menu/LoadGameState.h"
 	"../Menu/PauseState.h"
 	"../Menu/SaveGameState.h"
@@ -6144,7 +6143,7 @@
 1409174226 f:\git\openxcom\src\interface\numbertext.h
 	"../Engine/Surface.h"
 
-1404096023 f:\git\openxcom\src\interface\turncounter.h
+1409850939 f:\git\openxcom\src\interface\turncounter.h
 	"../Engine/Surface.h"
 
 1394398507 f:\git\openxcom\src\menu\loadstate.h
@@ -6439,7 +6438,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1409647887 source:f:\git\openxcom\src\battlescape\map.cpp
+1409809288 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6572,7 +6571,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1409182337 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1409852662 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6588,7 +6587,6 @@
 	"../Menu/SaveGameState.h"
 	"../Interface/Cursor.h"
 	"../Interface/Text.h"
-	"../Interface/TurnCounter.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedBattleGame.h"
@@ -6763,7 +6761,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1409765681 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1409861790 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -8333,7 +8331,7 @@
 	<SDL.h>
 	"../Engine/Action.h"
 
-1404096023 source:f:\git\openxcom\src\interface\fpscounter.cpp
+1409785085 source:f:\git\openxcom\src\interface\fpscounter.cpp
 	"FpsCounter.h"
 	<cmath>
 	"NumberText.h"
@@ -8364,7 +8362,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1408361657 source:f:\git\openxcom\src\interface\text.cpp
+1409822790 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -8410,7 +8408,7 @@
 	"TextButton.h"
 	"../Engine/Sound.h"
 
-1404096023 source:f:\git\openxcom\src\interface\turncounter.cpp
+1409851030 source:f:\git\openxcom\src\interface\turncounter.cpp
 	"TurnCounter.h"
 	"NumberText.h"
 	"../Engine/Palette.h"
@@ -9657,7 +9655,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1409361019 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1409852563 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -12148,7 +12146,7 @@
 1408304868 f:\git\openxcom\src\interface\battlescapebutton.h
 	"../Engine/InteractiveSurface.h"
 
-1408552329 source:f:\git\openxcom\src\interface\battlescapebutton.cpp
+1409813040 source:f:\git\openxcom\src\interface\battlescapebutton.cpp
 	"BattlescapeButton.h"
 	"../Engine/Action.h"
 

@@ -49,7 +49,8 @@ FpsCounter::FpsCounter(
 			width,
 			height,
 			x + 1,
-			y + 12),
+//			y + 12),
+			y + 18),
 		_frames(0) // kL
 {
 	_visible = Options::fpsCounter;

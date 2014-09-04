@@ -179,9 +179,9 @@ void BattlescapeButton::setTftdMode(bool mode)
 
 /**
  * Initializes the alternate surface for swapping out as needed.
- * performs a colour swap for TFTD style buttons, and a palette inversion for coloured buttons
- * we use two seperate surfaces because it's far easier to keep track of
- * whether or not this surface is inverted.
+ * Performs a color swap for TFTD style buttons, and a palette inversion for
+ * colored buttons. Use two separate surfaces because it's easier to keep track
+ * of whether or not this surface is inverted.
  */
 void BattlescapeButton::initSurfaces()
 {

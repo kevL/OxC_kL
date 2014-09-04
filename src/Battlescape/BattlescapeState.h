@@ -44,7 +44,7 @@ class SavedBattleGame;
 class Surface;
 class Text;
 class Timer;
-class TurnCounter; // kL
+//class TurnCounter; // kL
 class WarningMessage;
 
 
@@ -57,8 +57,7 @@ class BattlescapeState
 {
 
 private:
-//kL	static const int VISIBLE_MAX = 10;
-	static const int VISIBLE_MAX = 20; // kL
+	static const int VISIBLE_MAX = 20; // was 10
 
 	bool
 		_mouseOverIcons,
@@ -126,6 +125,7 @@ private:
 		* _numTUAim,
 		* _numTUAuto,
 		* _numTUSnap,
+		* _numTULaunch,
 
 		* _numTimeUnits,
 		* _numEnergy,
@@ -146,12 +146,15 @@ private:
 //		* _srfWounds; // kL
 	Text
 		* _txtBaseLabel, // kL
-		* _txtDebug, //* _txtTooltip;
-		* _txtName;
+		* _txtDebug,
+//		* _txtTooltip;
+		* _txtName,
+		* _txtShade, // kL
+		* _txtTurn; // kL
 	Timer
 		* _animTimer,
 		* _gameTimer;
-	TurnCounter* _turnCounter; // kL
+//	TurnCounter* _turnCounter; // kL
 	WarningMessage* _warning;
 
 	std::vector<State*> _popups;
@@ -341,11 +344,16 @@ private:
 				int& dY);
 
 		/// kL. Gets the TurnCounter.
-		TurnCounter* getTurnCounter() const; // kL
+//		TurnCounter* getTurnCounter() const; // kL
+		/// kL. Updates the turn text.
+		void updateTurn(); // kL
+
 		/// kL. Toggles the icons' surfaces' visibility for Hidden Movement.
 		void toggleIcons(bool vis); // kL
+
 		/// kL. Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
 		void refreshVisUnits(); // kL
+
 		/// Shows primer warnings on all live grenades. kL. Adapted from Inventory.
 		void drawFuse(); // kL
 };

@@ -1378,6 +1378,7 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Engine/Scalers/config.h" />
 		<Unit filename="Engine/Scalers/hq2x.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />
@@ -1444,6 +1445,8 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Engine/Scalers/xbrz.cpp" />
+		<Unit filename="Engine/Scalers/xbrz.h" />
 		<Unit filename="Engine/Screen.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

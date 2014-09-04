@@ -38,7 +38,7 @@
 
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
-#include "../Interface/TurnCounter.h" // kL, global 'kL_TurnCount'
+//#include "../Interface/TurnCounter.h" // kL, global 'kL_TurnCount'
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
@@ -62,6 +62,7 @@ NextTurnState::NextTurnState(
 		_battleGame(battleGame),
 		_state(state),
 		_timer(NULL)
+//		_turnCounter(NULL)
 {
 	//Log(LOG_INFO) << "Create NextTurnState";
 	_window		= new Window(this, 320, 200, 0, 0);
@@ -166,10 +167,12 @@ void NextTurnState::handle(Action* action)
 	if (action->getDetails()->type == SDL_KEYDOWN
 		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
-		kL_TurnCount = _battleGame->getTurn();
+//		kL_TurnCount = _battleGame->getTurn();
 
-		_turnCounter = _state->getTurnCounter();
-		_turnCounter->update();
+//		_turnCounter = _state->getTurnCounter();
+//		_turnCounter->update();
+
+		_state->updateTurn(); // kL
 
 		close();
 	}
@@ -212,9 +215,9 @@ void NextTurnState::close()
 
 		if (_battleGame->getSide() == FACTION_PLAYER)						// kL
 		{
-			_state->getBattleGame()->getMap()->refreshSelectorPosition();	// kL
-			_state->getGame()->getCursor()->setVisible(true);				// kL
+//			_state->getBattleGame()->getMap()->refreshSelectorPosition();	// kL
 			_state->getBattleGame()->setupCursor();							// kL
+			_state->getGame()->getCursor()->setVisible(true);				// kL
 
 			// Autosave every set amount of turns
 			if (_battleGame->getTurn() == 1

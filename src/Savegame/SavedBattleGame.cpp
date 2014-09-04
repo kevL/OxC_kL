@@ -1032,7 +1032,7 @@ UnitFaction SavedBattleGame::getSide() const
  */
 int SavedBattleGame::getTurn() const
 {
-	//Log(LOG_INFO) << ". getTurn()"; // kL
+	//Log(LOG_INFO) << ". getTurn()";
 	return _turn;
 }
 

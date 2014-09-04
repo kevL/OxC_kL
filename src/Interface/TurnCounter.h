@@ -26,10 +26,9 @@
 namespace OpenXcom
 {
 
-extern unsigned int kL_TurnCount;
+extern int kL_TurnCount;
 
 class NumberText;
-//class SavedBattleGame;
 
 /**
  * Gets Battlescape turn and displays it in a NumberText surface.
@@ -38,14 +37,18 @@ class TurnCounter
 	:
 		public Surface
 {
+
 private:
 	NumberText* _text;
-	unsigned int _tCount;
-//	SavedBattleGame* _sbgame;
+
 
 	public:
 		/// Creates a new Turn counter linked to a game.
-		TurnCounter(int width, int height, int x, int y);
+		TurnCounter(
+				int width,
+				int height,
+				int x = 0,
+				int y = 0);
 		/// Cleans up all the Turn counter resources.
 		~TurnCounter();
 
@@ -53,7 +56,10 @@ private:
 		void update();
 
 		/// Sets the Turn counter's palette.
-		void setPalette(SDL_Color* colors, int firstcolor = 0, int ncolors = 256);
+		void setPalette(
+				SDL_Color* colors,
+				int firstcolor = 0,
+				int ncolors = 256);
 		/// Sets the TurnCounter's color.
 		void setColor(Uint8 color);
 		/// Draws the Turn counter.
