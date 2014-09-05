@@ -96,10 +96,6 @@ struct HairBleach
 /**
  * Initializes the resource pack by loading all the
  * resources contained in the original game folder.
- * @param musicRules	- list of ...
- * @param extraSprites	- list of mod extra sprites
- * @param extraSounds	- list of mod extra sounds
- * @param extraMusic	- list of ...
  */
 XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	:

@@ -260,7 +260,7 @@ void ResearchState::init()
 	{
 		if ((*fac)->getRules()->getAliens() > 0)
 		{
-			_btnAliens->setVisible(true);
+			_btnAliens->setVisible();
 
 			break;
 		}

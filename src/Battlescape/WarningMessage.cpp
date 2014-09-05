@@ -134,7 +134,7 @@ void WarningMessage::showMessage(const std::wstring& msg)
 	_fade = 0;
 	_redraw = true;
 
-	setVisible(true);
+	setVisible();
 
 	_timer->start();
 }

@@ -133,7 +133,7 @@ private:
 	void reequipCraft(
 			Base* base,
 			Craft* craft,
-			bool vehicleItemsCanBeDestroyed);
+			bool vehicleDestruction);
 
 
 	public:

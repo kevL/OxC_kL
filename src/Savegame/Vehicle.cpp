@@ -27,11 +27,15 @@ namespace OpenXcom
 
 /**
  * Initializes a vehicle of the specified type.
+ * kL_note: This describes a vehicle that has been loaded onto a Craft only.
  * @param rules, Pointer to ruleset.
  * @param ammo, Initial ammo.
  * @param size, Size in tiles.
  */
-Vehicle::Vehicle(RuleItem* rules, int ammo, int size)
+Vehicle::Vehicle(
+		RuleItem* rules,
+		int ammo,
+		int size)
 	:
 		_rules(rules),
 		_ammo(ammo),
@@ -40,7 +44,7 @@ Vehicle::Vehicle(RuleItem* rules, int ammo, int size)
 }
 
 /**
- *
+ * dTor.
  */
 Vehicle::~Vehicle()
 {
@@ -87,9 +91,7 @@ RuleItem* Vehicle::getRules() const
 int Vehicle::getAmmo() const
 {
 	if (_ammo == -1)
-	{
 		return 255;
-	}
 
 	return _ammo;
 }
@@ -101,9 +103,7 @@ int Vehicle::getAmmo() const
 void Vehicle::setAmmo(int ammo)
 {
 	if (_ammo != -1)
-	{
 		_ammo = ammo;
-	}
 }
 
 /**

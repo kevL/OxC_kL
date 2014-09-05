@@ -197,7 +197,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	if (!_game->getRuleset()->getCommendation().empty())
 	{
 		_btnAwards->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnCommendationsClick);
-		_btnAwards->setVisible(true);
+		_btnAwards->setVisible();
 	}
 	else
 		_btnAwards->setVisible(false);

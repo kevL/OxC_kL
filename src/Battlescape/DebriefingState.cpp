@@ -104,7 +104,7 @@ DebriefingState::DebriefingState()
 	_game->getScreen()->resetDisplay(false);
 
 	// Restore the cursor in case something weird happened
-	_game->getCursor()->setVisible(true);
+	_game->getCursor()->setVisible();
 
 	// kL_begin: Clean up the leftover states from BattlescapeGame
 	// ( was done in ~BattlescapeGame, but that causes CTD under reLoad situation )
@@ -879,7 +879,7 @@ void DebriefingState::prepareDebriefing()
 
 	std::string mission = battle->getMissionType();
 
-	// kL_begin: Could very likely do all missionTypes here, for SoldierDiary race stat.
+	// kL_begin: Do all missionTypes here, for SoldierDiary race stat.
 //	if (mission == "STR_BASE_DEFENSE")
 	if (battle->getAlienRace() != "") // safety.
 		_missionStatistics->alienRace = battle->getAlienRace();
@@ -956,7 +956,7 @@ void DebriefingState::prepareDebriefing()
 			j != battle->getUnits()->end();
 			++j)
 	{
-		if (!(*j)->getTile()) // handle unconscious units; This unit is not on a tile...
+		if ((*j)->getTile() == NULL) // handle unconscious units; This unit is not on a tile...
 		{
 			Position pos = (*j)->getPosition();
 			if (pos == Position(-1,-1,-1)) // in fact, this Unit is in limbo...
@@ -1064,8 +1064,8 @@ void DebriefingState::prepareDebriefing()
 		else // so this unit is NOT dead...
 		{
 			UnitFaction faction = (*j)->getFaction();
-
 			std::string type = (*j)->getType();
+
 			if ((*j)->getSpawnUnit() != "")
 				type = (*j)->getSpawnUnit();
 
@@ -1101,7 +1101,7 @@ void DebriefingState::prepareDebriefing()
 						RuleItem* tankRule = _game->getRuleset()->getItem(type);
 						BattleItem* ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
 
-						if (!tankRule->getCompatibleAmmo()->empty()
+						if (tankRule->getCompatibleAmmo()->empty() == false
 							&& ammoItem != NULL
 							&& ammoItem->getAmmoQuantity() > 0)
 						{
@@ -1176,7 +1176,7 @@ void DebriefingState::prepareDebriefing()
 						k != (*j)->getInventory()->end();
 						++k)
 				{
-					if (!(*k)->getRules()->isFixed())
+					if ((*k)->getRules()->isFixed() == false)
 						(*j)->getTile()->addItem(
 												*k,
 												_game->getRuleset()->getInventory("STR_GROUND"));
@@ -1463,11 +1463,14 @@ void DebriefingState::prepareDebriefing()
 			i != _rounds.end();
 			++i)
 	{
-		int total_clips = i->second / i->first->getClipSize();
-		if (total_clips > 0)
-			base->getItems()->addItem(
-									i->first->getType(),
-									total_clips);
+		if (i->first->getClipSize() > 0) // kL
+		{
+			int total_clips = i->second / i->first->getClipSize();
+			if (total_clips > 0)
+				base->getItems()->addItem(
+										i->first->getType(),
+										total_clips);
+		}
 	}
 
 	if (soldierLive > 0) // recover all our goodies
@@ -1528,7 +1531,7 @@ void DebriefingState::prepareDebriefing()
 							false);
 		}
 
-		// Clearing base->getVehicles() objects, they don't needed anymore.
+		// Clearing base->getVehicles() objects, they're not needed anymore.
 		for (std::vector<Vehicle*>::iterator
 				i = base->getVehicles()->begin();
 				i != base->getVehicles()->end();
@@ -1568,7 +1571,6 @@ void DebriefingState::prepareDebriefing()
 			if ((*i)->getMission() == am)
 			{
 				delete *i;
-
 				i = save->getUfos()->erase(i);
 			}
 			else
@@ -1597,14 +1599,14 @@ void DebriefingState::prepareDebriefing()
 
 /**
  * Reequips a craft after a mission.
- * @param base							- pointer to a base to reequip from
- * @param craft							- pointer to a craft to reequip
- * @param vehicleItemsCanBeDestroyed	- true if the vehicles on the craft can be destroyed
+ * @param base					- pointer to a base to reequip from
+ * @param craft					- pointer to a craft to reequip
+ * @param vehicleDestruction	- true if vehicles on the craft can be destroyed
  */
 void DebriefingState::reequipCraft(
 		Base* base,
 		Craft* craft,
-		bool vehicleItemsCanBeDestroyed)
+		bool vehicleDestruction)
 {
 	//Log(LOG_INFO) << "DebriefingState::reequipCraft()";
 	int
@@ -1689,7 +1691,8 @@ void DebriefingState::reequipCraft(
 	// Now we know how many vehicles (separated by types) we have to read.
 	// Erase the current vehicles, because we have to
 	// reAdd them ('cause we want to redistribute their ammo)
-	if (vehicleItemsCanBeDestroyed)
+	// kL_note: and generally weave our way through this spaghetti ....
+	if (vehicleDestruction)
 	{
 		for (std::vector<Vehicle*>::iterator
 				i = craft->getVehicles()->begin();
@@ -1820,113 +1823,113 @@ void DebriefingState::reequipCraft(
  * Recovers items from the battlescape.
  *
  * Converts the battlescape inventory into a geoscape itemcontainer.
- * @param from - items recovered from the battlescape
- * @param base - base to add the items to
+ * @param battleItems	- items recovered from the battlescape
+ * @param base			- base to add the items to
  */
 void DebriefingState::recoverItems(
-		std::vector<BattleItem*>* from,
+		std::vector<BattleItem*>* battleItems,
 		Base* base)
 {
 	//Log(LOG_INFO) << "DebriefingState::recoverItems()";
 	for (std::vector<BattleItem*>::iterator
-			it = from->begin();
-			it != from->end();
-			++it)
+			item = battleItems->begin();
+			item != battleItems->end();
+			++item)
 	{
-		if ((*it)->getRules()->getName() == _game->getRuleset()->getAlienFuel())
+		if ((*item)->getRules()->getName() == _game->getRuleset()->getAlienFuel())
 			addStat( // special case of an item counted as a stat
 					_game->getRuleset()->getAlienFuel(),
 					100,
 					50); // kL
 		else
 		{
-			if ((*it)->getRules()->getRecoveryPoints()
-				&& !(*it)->getXCOMProperty())
+			if ((*item)->getRules()->getRecoveryPoints()
+				&& !(*item)->getXCOMProperty())
 			{
-				if ((*it)->getRules()->getBattleType() == BT_CORPSE
-					&& (*it)->getUnit()->getStatus() == STATUS_DEAD)
+				if ((*item)->getRules()->getBattleType() == BT_CORPSE
+					&& (*item)->getUnit()->getStatus() == STATUS_DEAD)
 				{
 					addStat(
 							"STR_ALIEN_CORPSES_RECOVERED",
-							(*it)->getUnit()->getValue() / 3); // kL
+							(*item)->getUnit()->getValue() / 3); // kL
 
-					base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape());
+					base->getItems()->addItem((*item)->getUnit()->getArmor()->getCorpseGeoscape());
 				}
-				else if ((*it)->getRules()->getBattleType() == BT_CORPSE
-					&& (*it)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+				else if ((*item)->getRules()->getBattleType() == BT_CORPSE
+					&& (*item)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 				{
-					if ((*it)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
+					if ((*item)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 					{
 						if (base->getAvailableContainment() > 0)
 							addStat(
 									"STR_LIVE_ALIENS_RECOVERED",
-									(*it)->getUnit()->getValue()); // kL, duplicated above.
+									(*item)->getUnit()->getValue()); // kL, duplicated above.
 						else // kL->
 							addStat(
 									"STR_ALIENS_KILLED",
-									(*it)->getUnit()->getValue()); // kL, duplicated above.
+									(*item)->getUnit()->getValue()); // kL, duplicated above.
 
 						if (_game->getSavedGame()->isResearchAvailable(
-								_game->getRuleset()->getResearch((*it)->getUnit()->getType()),
+								_game->getRuleset()->getResearch((*item)->getUnit()->getType()),
 								_game->getSavedGame()->getDiscoveredResearch(),
 								_game->getRuleset()))
 						{
 							if (base->getAvailableContainment() == 0)
 							{
 								_noContainment = true;
-								base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape());
+								base->getItems()->addItem((*item)->getUnit()->getArmor()->getCorpseGeoscape());
 							}
 							else
 							{
-								addStat( // more points if it's not researched
+								addStat( // more points if item's not researched
 										"STR_LIVE_ALIENS_RECOVERED",
-										(*it)->getUnit()->getValue(), // kL, duplicated above.
+										(*item)->getUnit()->getValue(), // kL, duplicated above.
 										0);
 
-								base->getItems()->addItem((*it)->getUnit()->getType());
+								base->getItems()->addItem((*item)->getUnit()->getType());
 								_manageContainment = base->getAvailableContainment()
 														- (base->getUsedContainment() * _limitsEnforced) < 0;
 							}
 						}
 						else
-							base->getItems()->addItem((*it)->getUnit()->getArmor()->getCorpseGeoscape());
+							base->getItems()->addItem((*item)->getUnit()->getArmor()->getCorpseGeoscape());
 					}
-					else if ((*it)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
+					else if ((*item)->getUnit()->getOriginalFaction() == FACTION_NEUTRAL)
 						addStat(
 								"STR_CIVILIANS_SAVED",
-								(*it)->getUnit()->getValue()); // kL_note: duplicated above.
+								(*item)->getUnit()->getValue()); // kL_note: duplicated above.
 				}
-				else if (!_game->getSavedGame()->isResearched((*it)->getRules()->getType()))
+				else if (!_game->getSavedGame()->isResearched((*item)->getRules()->getType()))
 					addStat( // add pts. for unresearched items only
 							"STR_ALIEN_ARTIFACTS_RECOVERED",
-							(*it)->getRules()->getRecoveryPoints());
+							(*item)->getRules()->getRecoveryPoints());
 			}
 
-			if ((*it)->getRules()->isRecoverable()
-				&& !(*it)->getRules()->isFixed())
+			if ((*item)->getRules()->isRecoverable()
+				&& (*item)->getRules()->isFixed() == false)
 			{
 				// put items back in the base
-				switch ((*it)->getRules()->getBattleType())
+				switch ((*item)->getRules()->getBattleType())
 				{
 					case BT_CORPSE:
 					break;
-					case BT_AMMO: // it's a clip, count rounds left
-						_rounds[(*it)->getRules()] += (*it)->getAmmoQuantity();
+					case BT_AMMO: // item's a clip, count rounds left
+						_rounds[(*item)->getRules()] += (*item)->getAmmoQuantity();
 					break;
 					case BT_FIREARM:
-					case BT_MELEE: // it's a weapon, count rounds in clip
+					case BT_MELEE: // item's a weapon, count rounds in clip
 					{
-						BattleItem* clip = (*it)->getAmmoItem();
+						BattleItem* clip = (*item)->getAmmoItem();
 						if (clip
 							&& clip->getRules()->getClipSize() > 0
-							&& clip != *it)
+							&& clip != *item)
 						{
 							_rounds[clip->getRules()] += clip->getAmmoQuantity();
 						}
 					}
 
 					default: // fall-through, recover the weapon itself
-						base->getItems()->addItem((*it)->getRules()->getType());
+						base->getItems()->addItem((*item)->getRules()->getType());
 					break;
 				}
 			}

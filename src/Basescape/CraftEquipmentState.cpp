@@ -549,7 +549,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 
 	if (itRule->isFixed()) // Convert vehicle to item
 	{
-		if (!itRule->getCompatibleAmmo()->empty())
+		if (itRule->getCompatibleAmmo()->empty() == false)
 		{
 			// First we remove all vehicles because we want to redistribute the ammo
 			RuleItem* amRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
@@ -584,7 +584,9 @@ void CraftEquipmentState::moveLeftByValue(int change)
 		else
 		{
 			if (_game->getSavedGame()->getMonthsPassed() != -1)
-				_base->getItems()->addItem(_items[_sel], change);
+				_base->getItems()->addItem(
+										_items[_sel],
+										change);
 
 			for (std::vector<Vehicle*>::iterator
 					i = craft->getVehicles()->begin();
@@ -678,7 +680,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 		{
 			change = std::min(room, change);
 
-			if (!itRule->getCompatibleAmmo()->empty()) // if there is compatible ammo
+			if (itRule->getCompatibleAmmo()->empty() == false)
 			{
 				// And now let's see if we can add the total number of vehicles.
 				RuleItem* amRule = _game->getRuleset()->getItem(itRule->getCompatibleAmmo()->front());
@@ -732,10 +734,10 @@ void CraftEquipmentState::moveRightByValue(int change)
 						++i)
 				{
 					craft->getVehicles()->push_back(new Vehicle(
-														itRule,
-														itRule->getClipSize(),
-//														static_cast<int>(sqrt(static_cast<double>(size))))); // kL
-														size));
+															itRule,
+															itRule->getClipSize(),
+//															static_cast<int>(sqrt(static_cast<double>(size))))); // kL
+															size));
 
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
 						_base->getItems()->removeItem(_items[_sel]);

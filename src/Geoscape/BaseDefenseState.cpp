@@ -152,7 +152,7 @@ void BaseDefenseState::nextStep()
 
 	if (_thinkcycles == 1)
 	{
-		_txtInit->setVisible(true);
+		_txtInit->setVisible();
 
 		return;
 	}
@@ -198,7 +198,7 @@ void BaseDefenseState::nextStep()
 			case BDA_END:
 				_thinkcycles = -1;
 
-				_btnOk->setVisible(true);
+				_btnOk->setVisible();
 			return;
 
 			default:

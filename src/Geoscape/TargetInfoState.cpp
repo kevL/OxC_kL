@@ -123,7 +123,7 @@ TargetInfoState::TargetInfoState(
 			_edtTarget->setColor(Palette::blockOffset(15)+1);
 			_edtTarget->onChange((ActionHandler)& TargetInfoState::edtTargetChange);
 
-			_edtTarget->setVisible(true);
+			_edtTarget->setVisible();
 
 			break;
 		}

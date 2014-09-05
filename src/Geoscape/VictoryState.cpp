@@ -158,8 +158,8 @@ void VictoryState::screenClick(Action*)
 	if (_screen < SCREENS) // next screen
 	{
 		setPalette(_bg[_screen]->getPalette());
-		_bg[_screen]->setVisible(true);
-		_text[_screen]->setVisible(true);
+		_bg[_screen]->setVisible();
+		_text[_screen]->setVisible();
 
 		init();
 	}

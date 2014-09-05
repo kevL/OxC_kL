@@ -450,7 +450,7 @@ void Inventory::moveItem(
 			{
 				item->moveToOwner(_selUnit);
 				_selUnit->getTile()->removeItem(item);
-				item->setTurnFlag(false);
+//				item->setTurnFlag(false);
 
 				if (item->getUnit()
 					&& item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)

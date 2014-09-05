@@ -109,7 +109,7 @@ void ListSaveState::lstSavesPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_btnSaveGame->setVisible(true); // kL
+		_btnSaveGame->setVisible(); // kL
 		_inEditMode = true; // kL
 
 		_previousSelectedRow = _selectedRow;
@@ -151,7 +151,7 @@ void ListSaveState::lstSavesPress(Action* action)
 
 		_edtSave->setX(_lstSaves->getColumnX(0));
 		_edtSave->setY(_lstSaves->getRowY(_selectedRow));
-		_edtSave->setVisible(true);
+		_edtSave->setVisible();
 		_edtSave->setFocus(true, false);
 
 		_lstSaves->setScrollable(false);

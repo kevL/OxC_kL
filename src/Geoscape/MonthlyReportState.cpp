@@ -478,8 +478,8 @@ void MonthlyReportState::btnOkClick(Action*)
 			_txtDesc->setVisible(false);
 			_btnOk->setVisible(false);
 
-			_txtFailure->setVisible(true);
-			_btnBigOk->setVisible(true);
+			_txtFailure->setVisible();
+			_btnBigOk->setVisible();
 
 //			_game->getResourcePack()->playMusic("GMLOSE");
 //			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE)->play(); // kL: sza_MusicRules

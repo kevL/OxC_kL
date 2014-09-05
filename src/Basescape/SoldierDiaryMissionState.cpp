@@ -179,14 +179,14 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 	_txtUFO->setColor(Palette::blockOffset(13)+5);
 	_txtUFO->setSecondaryColor(Palette::blockOffset(13));
 	_txtUFO->setText(tr("STR_UFO_TYPE").arg(tr(missionStatistics->at(missionId)->ufo)));
-//	_txtUFO->setVisible(true);
+//	_txtUFO->setVisible();
 	if (missionStatistics->at(missionId)->ufo == "NO_UFO")
 		_txtUFO->setVisible(false);
 
 	_txtRace->setColor(Palette::blockOffset(13)+5);
 	_txtRace->setSecondaryColor(Palette::blockOffset(13));
 	_txtRace->setText(tr("STR_RACE_TYPE").arg(tr(missionStatistics->at(missionId)->alienRace)));
-//	_txtRace->setVisible(true);
+//	_txtRace->setVisible();
 	if (missionStatistics->at(missionId)->alienRace == "STR_UNKNOWN")
 		_txtRace->setVisible(false);
 

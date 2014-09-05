@@ -1588,7 +1588,7 @@ void BattlescapeGame::popState()
 
 //				getMap()->refreshSelectorPosition(); // kL
 				setupCursor();
-				_parentState->getGame()->getCursor()->setVisible(true);
+				_parentState->getGame()->getCursor()->setVisible();
 				//Log(LOG_INFO) << ". end NOT actionFailed";
 			}
 		}
@@ -1636,7 +1636,7 @@ void BattlescapeGame::popState()
 			{
 //				getMap()->refreshSelectorPosition(); // kL
 				setupCursor();
-				_parentState->getGame()->getCursor()->setVisible(true);
+				_parentState->getGame()->getCursor()->setVisible();
 			}
 		}
 	}
@@ -1692,7 +1692,7 @@ void BattlescapeGame::popState()
 //		setupCursor(); // kL
 //		getMap()->refreshSelectorPosition(); // kL
 		getMap()->setCursorType(CT_NORMAL);
-		_parentState->getGame()->getCursor()->setVisible(true);
+		_parentState->getGame()->getCursor()->setVisible();
 	}
 
 	if (_save->getSide() == FACTION_PLAYER) // kL
@@ -1925,7 +1925,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 
 	//Log(LOG_INFO) << "unit Panic/Berserk : " << unit->getId() << " / " << unit->getMorale();
 	_save->setSelectedUnit(unit);
-//	unit->setVisible(true); // kL
+//	unit->setVisible(); // kL
 
 	_parentState->getMap()->setCursorType(CT_NONE);
 
@@ -2126,7 +2126,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 
 				setupCursor();
 				getMap()->refreshSelectorPosition(); // kL
-				_parentState->getGame()->getCursor()->setVisible(true);
+				_parentState->getGame()->getCursor()->setVisible();
 
 				return true;
 			}
@@ -2642,10 +2642,10 @@ void BattlescapeGame::setTUReserved(BattleActionType bat)
 
 /**
  * Drops an item to the floor and affects it with gravity.
- * @param position Position to spawn the item.
- * @param item Pointer to the item.
- * @param newItem Bool whether this is a new item.
- * @param removeItem Bool whether to remove the item from the owner.
+ * @param position		- reference position to spawn the item
+ * @param item			- pointer to the item
+ * @param newItem		- true if this is a new item
+ * @param removeItem	- true to remove the item from the owner
  */
 void BattlescapeGame::dropItem(
 		const Position& position,
@@ -2656,7 +2656,7 @@ void BattlescapeGame::dropItem(
 	Position pos = position;
 
 	// don't spawn anything outside of bounds
-	if (_save->getTile(pos) == 0)
+	if (_save->getTile(pos) == NULL)
 		return;
 
 	// don't ever drop fixed items
@@ -2670,15 +2670,15 @@ void BattlescapeGame::dropItem(
 
 	if (newItem)
 		_save->getItems()->push_back(item);
-	else if (_save->getSide() != FACTION_PLAYER)
-		item->setTurnFlag(true);
+//	else if (_save->getSide() != FACTION_PLAYER)
+//		item->setTurnFlag(true);
 
 	if (removeItem)
-		item->moveToOwner(0);
+		item->moveToOwner(NULL);
 	else if (item->getRules()->getBattleType() != BT_GRENADE
 		&& item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)
 	{
-		item->setOwner(0);
+		item->setOwner(NULL);
 	}
 
 	getTileEngine()->applyGravity(_save->getTile(pos));
@@ -2790,7 +2790,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 	getTileEngine()->calculateFOV(convertedUnit->getPosition());
 
 	if (unit->getFaction() == FACTION_PLAYER)
-		convertedUnit->setVisible(true);
+		convertedUnit->setVisible();
 
 //	convertedUnit->getCurrentAIState()->think();
 

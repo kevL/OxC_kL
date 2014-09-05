@@ -733,7 +733,7 @@ void BaseView::mouseOver(Action* action, State* state)
 				_selector->setX(_x + _gridX * GRID_SIZE);
 				_selector->setY(_y + _gridY * GRID_SIZE);
 
-				_selector->setVisible(true);
+				_selector->setVisible();
 			}
 			else
 				_selector->setVisible(false);

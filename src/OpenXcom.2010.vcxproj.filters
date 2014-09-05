@@ -896,6 +896,7 @@
     <ClCompile Include="Engine\Scalers\xbrz.cpp">
       <Filter>Engine\Scalers</Filter>
     </ClCompile>
+    <ClCompile Include="Basescape\BaseDetectionState.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1817,6 +1818,7 @@
     <ClInclude Include="Engine\Scalers\config.h">
       <Filter>Engine\Scalers</Filter>
     </ClInclude>
+    <ClInclude Include="Basescape\BaseDetectionState.h" />
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

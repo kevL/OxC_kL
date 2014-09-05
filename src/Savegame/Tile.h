@@ -281,10 +281,8 @@ protected:
 		int getMarkerColor();
 
 		/// Sets the tile visible flag.
-//kL		void setVisible(int visibility);
-		void setVisible(bool vis); // kL
+		void setVisible(bool vis = true); // kL
 		/// Gets the tile visible flag.
-//kL		int getVisible();
 		bool getVisible(); // kL
 
 		/// Sets the direction (used for path previewing)

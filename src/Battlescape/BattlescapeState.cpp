@@ -111,7 +111,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Battlescape screen.
- * @param game, Pointer to the core game.
  */
 BattlescapeState::BattlescapeState()
 	:
@@ -276,9 +275,11 @@ BattlescapeState::BattlescapeState()
 	_txtDebug		= new Text(300, 10, 10, 0);
 //	_txtTooltip		= new Text(300, 10, x + 2, y - 10);
 
-	_txtShade		= new Text(45, 9, 1, 0); // kL
-	_txtTurn		= new Text(45, 9, 1, 10); // kL
 //	_turnCounter	= new TurnCounter(20, 5, 0, 0);
+	_txtTurn		= new Text(45, 9, 1, 0);	// kL
+	_txtShade		= new Text(45, 9, 1, 10);	// kL
+
+	_txtConsole		= new Text(100, 100, 1, 0); // kL
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
@@ -377,17 +378,20 @@ BattlescapeState::BattlescapeState()
 	add(_warning, "warning", "battlescape", _icons);
 	add(_txtDebug);
 //	add(_txtTooltip, "textTooltip", "battlescape", _icons);
-
 	add(_btnLaunch);
-	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
 	add(_btnPsi);
+
+	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 
 	_save = _game->getSavedGame()->getSavedBattle();
 
 	// kL_begin:
-//	add(_turnCounter);									// kL
-//	_turnCounter->setColor(Palette::blockOffset(9)+1);	// kL
+//	add(_turnCounter);
+//	_turnCounter->setColor(Palette::blockOffset(9)+1);
+	add(_txtConsole);
+	_txtConsole->setColor(Palette::blockOffset(9)+1);
+	_txtConsole->setVisible(false);
 
 	add(_txtShade);
 	add(_txtTurn);
@@ -395,60 +399,52 @@ BattlescapeState::BattlescapeState()
 	_txtShade->setColor(Palette::blockOffset(9)+1);
 	_txtTurn->setColor(Palette::blockOffset(9)+1);
 
-	//Log(LOG_INFO) << "_txtBaseLabel BEGIN";
 	add(_txtBaseLabel);
 	_txtBaseLabel->setColor(Palette::blockOffset(9)+1);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
-	Base* base = NULL;
 	std::wstring baseLabel = L"";
 
-	//Log(LOG_INFO) << ". iterate start";
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		//Log(LOG_INFO) << ". iterate bases";
+		if ((*i)->isInBattlescape())
+		{
+			baseLabel = (*i)->getName(_game->getLanguage());
+			break;
+		}
+
 		for (std::vector<Craft*>::iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
-			//Log(LOG_INFO) << ". iterate craft at base";
 			if ((*j)->isInBattlescape())
 			{
-				//Log(LOG_INFO) << ". found craft in Battlescape";
 				baseLabel = (*i)->getName(_game->getLanguage());
-
 				break;
 			}
 		}
 
 		if (baseLabel != L"")
 			break;
-		else if ((*i)->isInBattlescape())
-		{
-			//Log(LOG_INFO) << ". found base in Battlescape";
-			baseLabel = (*i)->getName(_game->getLanguage());
-
-			break;
-		}
 	}
 	_txtBaseLabel->setText(baseLabel); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
-	//Log(LOG_INFO) << "_txtBaseLabel DONE";
+
 
 	std::wostringstream
 		woShade,
 		woTurn;
 
-	woShade << L"shade ";
-	woShade << _save->getGlobalShade();
-	_txtShade->setText(woShade.str());
-
 	woTurn << L"turn ";
 	woTurn << _save->getTurn();
 	_txtTurn->setText(woTurn.str());
+
+	woShade << L"shade ";
+	woShade << _save->getGlobalShade();
+	_txtShade->setText(woShade.str());
 	// kL_end.
 
 	_map->init();
@@ -961,7 +957,7 @@ void BattlescapeState::mapOver(Action* action)
 
 		if (!_mouseOverThreshold) // check threshold
 			_mouseOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
-									|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
+							   || std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 
 		if (Options::battleDragScrollInvert) // scroll
@@ -1047,6 +1043,43 @@ void BattlescapeState::mapOver(Action* action)
 
 		_game->getCursor()->handle(action);
 	}
+	else if (allowButtons()) // kL_begin:
+	{
+		Position pos;
+		_map->getSelectorPosition(&pos);
+		Tile* tile = _save->getTile(pos);
+
+		if (tile != NULL
+			&& tile->getInventory()->empty() == false)
+		{
+			_txtConsole->setVisible();
+			_txtTurn->setVisible(false);
+			_txtShade->setVisible(false);
+
+			std::wostringstream ss;
+			ss << L"";
+
+			for (std::vector<BattleItem*>::iterator // ground items
+					i = tile->getInventory()->begin();
+					i != tile->getInventory()->end();
+					++i)
+			{
+				ss << L"- " << tr((*i)->getRules()->getType()) << L"\n";
+
+				// get ammo in clip or ammo loaded in gun (#)
+				// get grendade prime fuse/turns
+				// get health & stun of soldier/alien
+			}
+
+			_txtConsole->setText(ss.str());
+		}
+		else
+		{
+			_txtConsole->setVisible(false);
+			_txtTurn->setVisible();
+			_txtShade->setVisible();
+		}
+	} // kL_end.
 }
 
 /**
@@ -1913,7 +1946,7 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
 bool BattlescapeState::playableUnitSelected()
 {
 	return _save->getSelectedUnit() != NULL
-		&& allowButtons();
+			&& allowButtons();
 }
 
 /**
@@ -1987,23 +2020,23 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 	else // not aLien or civilian; ie. xCom Soldier
 	{
-		_rank			->setVisible(true);
+		_rank			->setVisible();
 
-		_numTimeUnits	->setVisible(true);
-		_barTimeUnits	->setVisible(true);
-		_barTimeUnits	->setVisible(true);
+		_numTimeUnits	->setVisible();
+		_barTimeUnits	->setVisible();
+		_barTimeUnits	->setVisible();
 
-		_numEnergy		->setVisible(true);
-		_barEnergy		->setVisible(true);
-		_barEnergy		->setVisible(true);
+		_numEnergy		->setVisible();
+		_barEnergy		->setVisible();
+		_barEnergy		->setVisible();
 
-		_numHealth		->setVisible(true);
-		_barHealth		->setVisible(true);
-		_barHealth		->setVisible(true);
+		_numHealth		->setVisible();
+		_barHealth		->setVisible();
+		_barHealth		->setVisible();
 
-		_numMorale		->setVisible(true);
-		_barMorale		->setVisible(true);
-		_barMorale		->setVisible(true);
+		_numMorale		->setVisible();
+		_barMorale		->setVisible();
+		_barMorale		->setVisible();
 	}
 
 
@@ -2031,8 +2064,8 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			++i,
 				++j)
 	{
-		_btnVisibleUnit[j]->setVisible(true);
-		_numVisibleUnit[j]->setVisible(true);
+		_btnVisibleUnit[j]->setVisible();
+		_numVisibleUnit[j]->setVisible();
 
 		_visibleUnit[j] = *i;
 	}
@@ -2053,7 +2086,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		{
 //			drawKneelIndicator();
 			_kneel->drawRect(0, 0, 2, 2, Palette::blockOffset(5)+12);
-			_kneel->setVisible(true);
+			_kneel->setVisible();
 		}
 	}
 
@@ -2142,25 +2175,25 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		if (tuLaunch)
 		{
 			_numTULaunch->setValue(tuLaunch);
-			_numTULaunch->setVisible(true);
+			_numTULaunch->setVisible();
 		}
 
 		if (tuAim)
 		{
 			_numTUAim->setValue(tuAim);
-			_numTUAim->setVisible(true);
+			_numTUAim->setVisible();
 		}
 
 		if (tuAuto)
 		{
 			_numTUAuto->setValue(tuAuto);
-			_numTUAuto->setVisible(true);
+			_numTUAuto->setVisible();
 		}
 
 		if (tuSnap)
 		{
 			_numTUSnap->setValue(tuSnap);
-			_numTUSnap->setVisible(true);
+			_numTUSnap->setVisible();
 		}
 	}
 
@@ -2169,13 +2202,13 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		rtItem->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
 										_btnRightHandItem);
-		_btnRightHandItem->setVisible(true);
+		_btnRightHandItem->setVisible();
 
 		if (rtItem->getRules()->getBattleType() == BT_FIREARM
 			&& (rtItem->needsAmmo()
 				|| rtItem->getRules()->getClipSize() > 0))
 		{
-			_numAmmoRight->setVisible(true);
+			_numAmmoRight->setVisible();
 			if (rtItem->getAmmoItem())
 				_numAmmoRight->setValue(rtItem->getAmmoItem()->getAmmoQuantity());
 			else
@@ -2188,13 +2221,13 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		ltItem->getRules()->drawHandSprite(
 										_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"),
 										_btnLeftHandItem);
-		_btnLeftHandItem->setVisible(true);
+		_btnLeftHandItem->setVisible();
 
 		if (ltItem->getRules()->getBattleType() == BT_FIREARM
 			&& (ltItem->needsAmmo()
 				|| ltItem->getRules()->getClipSize() > 0))
 		{
-			_numAmmoLeft->setVisible(true);
+			_numAmmoLeft->setVisible();
 			if (ltItem->getAmmoItem())
 				_numAmmoLeft->setValue(ltItem->getAmmoItem()->getAmmoQuantity());
 			else
@@ -2909,7 +2942,7 @@ void BattlescapeState::finishBattle(
 	while (!_game->isState(this))
 		_game->popState();
 
-	_game->getCursor()->setVisible(true);
+	_game->getCursor()->setVisible();
 	if (_save->getAmbientSound() != -1)
 		_game->getResourcePack()->getSoundByDepth(
 												0,
@@ -3070,7 +3103,7 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 					|| _save->getDebugMode())
 				&& (_battleGame->getPanicHandled()
 					|| _firstInit)
-				&& _map->getProjectile() == 0);
+				&& _map->getProjectile() == NULL);
 }
 
 /**
@@ -3304,8 +3337,8 @@ void BattlescapeState::refreshVisUnits() // kL
 			++i,
 				++j)
 	{
-		_btnVisibleUnit[j]->setVisible(true);
-		_numVisibleUnit[j]->setVisible(true);
+		_btnVisibleUnit[j]->setVisible();
+		_numVisibleUnit[j]->setVisible();
 
 		_visibleUnit[j] = *i;
 	}

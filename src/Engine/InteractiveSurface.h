@@ -93,7 +93,7 @@ private:
 			virtual ~InteractiveSurface();
 
 			/// Sets the surface's visibility.
-			void setVisible(bool visible);
+			void setVisible(bool visible = true);
 
 			/// Processes any pending events.
 			virtual void handle(

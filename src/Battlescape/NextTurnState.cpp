@@ -217,7 +217,7 @@ void NextTurnState::close()
 		{
 //			_state->getBattleGame()->getMap()->refreshSelectorPosition();	// kL
 			_state->getBattleGame()->setupCursor();							// kL
-			_state->getGame()->getCursor()->setVisible(true);				// kL
+			_state->getGame()->getCursor()->setVisible();				// kL
 
 			// Autosave every set amount of turns
 			if (_battleGame->getTurn() == 1

@@ -80,7 +80,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 					Options::keyCancel);
 	_btnOk->setHighContrast();
 
-	_game->getCursor()->setVisible(true);
+	_game->getCursor()->setVisible();
 }
 
 /**

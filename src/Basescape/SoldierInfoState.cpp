@@ -684,8 +684,8 @@ void SoldierInfoState::init()
 		_txtRecovDay->setColor(color);
 		_txtRecovDay->setText(tr("STR_DAY", woundRec));
 
-		_txtRecovery->setVisible(true);
-		_txtRecovDay->setVisible(true);
+		_txtRecovery->setVisible();
+		_txtRecovDay->setVisible();
 	}
 	else
 	{
@@ -726,9 +726,9 @@ void SoldierInfoState::init()
 				_barPsiStrength->setValue2(armored.psiStrength);
 		}
 
-//		_txtPsiStrength->setVisible(true);
-		_numPsiStrength->setVisible(true);
-		_barPsiStrength->setVisible(true);
+//		_txtPsiStrength->setVisible();
+		_numPsiStrength->setVisible();
+		_barPsiStrength->setVisible();
 	}
 	else
 	{
@@ -759,9 +759,9 @@ void SoldierInfoState::init()
 				_barPsiSkill->setValue2(armored.psiSkill);
 		}
 
-//		_txtPsiSkill->setVisible(true);
-		_numPsiSkill->setVisible(true);
-		_barPsiSkill->setVisible(true);
+//		_txtPsiSkill->setVisible();
+		_numPsiSkill->setVisible();
+		_barPsiSkill->setVisible();
 	}
 	else
 	{

@@ -837,44 +837,43 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 	Unit* unitRule = _game->getRuleset()->getUnit(vehicle);
 
 	BattleUnit* tankUnit = addXCOMUnit(new BattleUnit(
-												unitRule,
-												FACTION_PLAYER,
-												_unitSequence++,
-												_game->getRuleset()->getArmor(unitRule->getArmor()),
-												0));
+													unitRule,
+													FACTION_PLAYER,
+													_unitSequence++,
+													_game->getRuleset()->getArmor(unitRule->getArmor()),
+													0));
 	if (tankUnit)
 	{
-//		tankUnit->prepareNewTurn(); // kL
 		BattleItem* item = new BattleItem(
 									_game->getRuleset()->getItem(vehicle),
 									_save->getCurrentItemId());
 //kL	addItem(item, unit);
-		if (!addItem(			// kL
+		if (!addItem( // kL_begin:
 					item,
 					tankUnit))
 		{
-			delete item;		// kL
-			delete tankUnit;	// kL
+			delete item;
+			delete tankUnit;
 
-			return NULL;		// kL
+			return NULL; // kL_end.
 		}
 
-		if (!tank->getRules()->getCompatibleAmmo()->empty())
+		if (tank->getRules()->getCompatibleAmmo()->empty() == false)
 		{
 			std::string ammo = tank->getRules()->getCompatibleAmmo()->front();
 			BattleItem* ammoItem = new BattleItem(
 											_game->getRuleset()->getItem(ammo),
 											_save->getCurrentItemId());
 //kL		addItem(ammoItem, unit);
-			if (!addItem(			// kL
+			if (!addItem( // kL_begin:
 						ammoItem,
 						tankUnit))
 			{
-				delete ammoItem;	// kL
-				delete item;		// kL
-				delete tankUnit;	// kL
+				delete ammoItem;
+				delete item;
+				delete tankUnit;
 
-				return NULL;		// kL
+				return NULL; // kL_end.
 			}
 
 			ammoItem->setAmmoQuantity(tank->getAmmo());
@@ -882,10 +881,10 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 
 		tankUnit->setTurretType(tank->getRules()->getTurretType());
 	}
-	else					// kL
+	else // kL_begin:
 	{
-//		delete tankUnit;	// kL
-		return NULL;		// kL
+//		delete tankUnit;
+		return NULL; // kL_end.
 	}
 
 	return tankUnit;

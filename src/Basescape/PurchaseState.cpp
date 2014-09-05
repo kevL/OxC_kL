@@ -415,7 +415,6 @@ PurchaseState::PurchaseState(
 					++j)
 			{
 				std::wstring trItem = (*j)->getName(_game->getLanguage());
-//				std::wstring trItem = tr(*j);
 				if (item == trItem)
 					tQty += (*j)->getQuantity();
 			}
@@ -454,10 +453,12 @@ PurchaseState::PurchaseState(
 						{
 							RuleItem* tankRule = _game->getRuleset()->getItem((*v)->getRules()->getType());
 							RuleItem* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
-							std::wstring tv_a = tr(ammoRule->getType());
 
+							std::wstring tv_a = tr(ammoRule->getType());
 							if (item == tv_a)
+							{
 								tQty += (*v)->getAmmo();
+							}
 						}
 					}
 				}

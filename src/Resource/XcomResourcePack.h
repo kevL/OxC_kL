@@ -29,12 +29,10 @@ namespace OpenXcom
 {
 
 class CatFile;
-class ExtraMusic; // sza_ExtraMusic
 class ExtraSounds;
 class ExtraSprites;
 class GMCatFile;
 class Music;
-class RuleMusic; // sza_MusicRules
 class Ruleset;
 
 
@@ -64,9 +62,9 @@ class XcomResourcePack
 {
 
 public:
-	/// Creates the X-Com ruleset.
+	/// Creates the X-Com Resource Pack.
 	XcomResourcePack(Ruleset* rules);
-	/// Cleans up the X-Com ruleset.
+	/// Cleans up the X-Com Resource Pack.
 	~XcomResourcePack();
 
 	/// Loads battlescape specific resources

@@ -146,6 +146,7 @@ private:
 //		* _srfWounds; // kL
 	Text
 		* _txtBaseLabel, // kL
+		* _txtConsole, // kL
 		* _txtDebug,
 //		* _txtTooltip;
 		* _txtName,

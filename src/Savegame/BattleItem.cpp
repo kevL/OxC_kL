@@ -53,8 +53,8 @@ BattleItem::BattleItem(
 		_painKiller(0),
 		_heal(0),
 		_stimulant(0),
-		_XCOMProperty(false),
-		_droppedOnAlienTurn(false)
+		_XCOMProperty(false)
+//		_droppedOnAlienTurn(false)
 {
 	if (_rules
 		&& _rules->getBattleType() == BT_AMMO)
@@ -76,8 +76,8 @@ BattleItem::BattleItem(
 			|| _rules->getBattleType() == BT_MELEE)
 		&& _rules->getCompatibleAmmo()->empty())
 	{
-//kL	setAmmoQuantity(_rules->getClipSize()); // melee items have clipsize(0), lasers etc have clipsize(-1).
-		setAmmoQuantity(-1); // needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
+		setAmmoQuantity(_rules->getClipSize()); // melee items have clipsize(0), lasers etc have clipsize(-1).
+//		setAmmoQuantity(-1); // needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
 
 		_ammoItem = this;
 	}
@@ -96,14 +96,15 @@ BattleItem::~BattleItem()
  */
 void BattleItem::load(const YAML::Node& node)
 {
-	_inventoryX			= node["inventoryX"].as<int>(_inventoryX);
-	_inventoryY			= node["inventoryY"].as<int>(_inventoryY);
-	_ammoQty			= node["ammoQty"].as<int>(_ammoQty);
-	_painKiller			= node["painKiller"].as<int>(_painKiller);
-	_heal				= node["heal"].as<int>(_heal);
-	_stimulant			= node["stimulant"].as<int>(_stimulant);
-	_fuseTimer			= node["fuseTimer"].as<int>(_fuseTimer);
-	_droppedOnAlienTurn	= node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
+	_inventoryX	= node["inventoryX"].as<int>(_inventoryX);
+	_inventoryY	= node["inventoryY"].as<int>(_inventoryY);
+	_ammoQty	= node["ammoQty"].as<int>(_ammoQty);
+	_painKiller	= node["painKiller"].as<int>(_painKiller);
+	_heal		= node["heal"].as<int>(_heal);
+	_stimulant	= node["stimulant"].as<int>(_stimulant);
+	_fuseTimer	= node["fuseTimer"].as<int>(_fuseTimer);
+
+//	_droppedOnAlienTurn	= node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
 }
 
 /**
@@ -114,46 +115,46 @@ YAML::Node BattleItem::save() const
 {
 	YAML::Node node;
 
-	node["id"]						= _id;
-	node["type"]					= _rules->getType();
+	node["id"]					= _id;
+	node["type"]				= _rules->getType();
 
 	if (_owner)
-		node["owner"]				= _owner->getId();
+		node["owner"]			= _owner->getId();
 	else
-		node["owner"]				= -1;
+		node["owner"]			= -1;
 
 	if (_unit)
-		node["unit"]				= _unit->getId();
+		node["unit"]			= _unit->getId();
 	else
-		node["unit"]				= -1;
+		node["unit"]			= -1;
 
 	if (_inventorySlot)
-		node["inventoryslot"]		= _inventorySlot->getId();
+		node["inventoryslot"]	= _inventorySlot->getId();
 	else
-		node["inventoryslot"]		= "NULL";
+		node["inventoryslot"]	= "NULL";
 
-	node["inventoryX"]				= _inventoryX;
-	node["inventoryY"]				= _inventoryY;
+	node["inventoryX"]			= _inventoryX;
+	node["inventoryY"]			= _inventoryY;
 
 	if (_tile)
-		node["position"]			= _tile->getPosition();
+		node["position"]		= _tile->getPosition();
 	else
-		node["position"]			= Position(-1,-1,-1);
+		node["position"]		= Position(-1,-1,-1);
 
-	node["ammoQty"]					= _ammoQty;
+	node["ammoQty"]				= _ammoQty;
 
 	if (_ammoItem)
-		node["ammoItem"]			= _ammoItem->getId();
+		node["ammoItem"]		= _ammoItem->getId();
 	else
-		node["ammoItem"]			= -1;
+		node["ammoItem"]		= -1;
 
-	node["painKiller"]				= _painKiller;
-	node["heal"]					= _heal;
-	node["stimulant"]				= _stimulant;
-	node["fuseTimer"]				= _fuseTimer;
+	node["painKiller"]			= _painKiller;
+	node["heal"]				= _heal;
+	node["stimulant"]			= _stimulant;
+	node["fuseTimer"]			= _fuseTimer;
 
-	if (_droppedOnAlienTurn)
-		node["droppedOnAlienTurn"]	= _droppedOnAlienTurn;
+//	if (_droppedOnAlienTurn)
+//		node["droppedOnAlienTurn"]	= _droppedOnAlienTurn;
 
 	return node;
 }
@@ -193,9 +194,10 @@ void BattleItem::setFuseTimer(int turn)
  */
 int BattleItem::getAmmoQuantity() const
 {
-	if ( //_rules->getClipSize() == -1 || // is Laser, melee, etc.
-		_ammoQty == -1)	// kL, NOTE: specifying clipSize(-1) in Ruleset should no longer be necessary.
-						// This should iron out some ( rare ) reaction & AI problems ....
+	if (_rules->getClipSize() == -1) // is Laser, melee, etc. This could be taken out
+//		|| _ammoQty == -1)	// kL, NOTE: specifying clipSize(-1) in Ruleset should no longer be necessary. BLEH !
+							// This should iron out some ( rare ) reaction & AI problems ....
+							// But it creates problems w/ TANKS returning to Base.
 	{
 		return 255;
 	}
@@ -271,7 +273,7 @@ void BattleItem::moveToOwner(BattleUnit* owner)
 
 	_owner = owner;
 
-	if (_previousOwner != 0)
+	if (_previousOwner != NULL)
 	{
 		for (std::vector<BattleItem*>::iterator
 				i = _previousOwner->getInventory()->begin();
@@ -287,10 +289,8 @@ void BattleItem::moveToOwner(BattleUnit* owner)
 		}
 	}
 
-	if (_owner != 0)
-	{
+	if (_owner != NULL)
 		_owner->getInventory()->push_back(this);
-	}
 }
 
 /**
@@ -562,20 +562,20 @@ bool BattleItem::getXCOMProperty() const
  * so, in a word or 25, TAKE THIS OUT.
  * @return True if the aliens dropped the item.
  */
-bool BattleItem::getTurnFlag() const
+/* bool BattleItem::getTurnFlag() const
 {
 	return _droppedOnAlienTurn;
-}
+} */
 
 /**
  * Sets the "dropped on non-player turn" flag. This is set when the item
  * is dropped in the battlescape or picked up in the inventory screen.
  * @param flag True if the aliens dropped the item.
  */
-void BattleItem::setTurnFlag(bool flag)
+/* void BattleItem::setTurnFlag(bool flag)
 {
 	_droppedOnAlienTurn = flag;
-}
+} */
 
 /**
  * Converts an unconscious body into a dead one.

@@ -1411,7 +1411,7 @@ void TextList::mouseOver(Action* action, State* state)
 			else
 				_selector->offset(-10, Palette::backPos);
 
-			_selector->setVisible(true);
+			_selector->setVisible();
 		}
 		else
 			_selector->setVisible(false);

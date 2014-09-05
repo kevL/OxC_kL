@@ -1011,7 +1011,7 @@ void GeoscapeState::timeDisplay()
 //	ss1 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
 //	_txtSec->setText(ss1.str());
 	if (_timeSpeed != _btn5Secs)
-		_txtSec->setVisible(true);
+		_txtSec->setVisible();
 	else
 		_txtSec->setVisible(_game->getSavedGame()->getTime()->getSecond() %15 == 0);
 

@@ -29,7 +29,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h" // kL
-#include "../Engine/Logger.h" // kL
+//#include "../Engine/Logger.h" // kL
 #include "../Engine/SurfaceSet.h"
 
 #include "../Resource/ResourcePack.h" // kL
@@ -38,8 +38,8 @@
 namespace OpenXcom
 {
 
-MapData* MapDataSet::_blankTile = NULL;
-MapData* MapDataSet::_scorchedTile = NULL;
+MapData* MapDataSet::_blankTile		= NULL;
+MapData* MapDataSet::_scorchedTile	= NULL;
 
 
 /**
@@ -320,7 +320,7 @@ void MapDataSet::loadData()
 	test << _name << ".PCK";
 	SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(test.str());
 
-	if (srfSet)
+	if (srfSet != NULL)
 	{
 		//Log(LOG_INFO) << ". . Overriding terrain SurfaceSet";
 		_surfaceSet = srfSet;

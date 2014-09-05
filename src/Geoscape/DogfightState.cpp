@@ -1609,8 +1609,8 @@ void DogfightState::btnMinimizeClick(Action*)
 			_preview->setVisible(false);
 			_txtStatus->setVisible(false);
 
-			_btnMinimizedIcon->setVisible(true);
-			_txtInterceptionNumber->setVisible(true);
+			_btnMinimizedIcon->setVisible();
+			_txtInterceptionNumber->setVisible();
 
 			_ufoEscapeTimer->stop();
 		}
@@ -1749,7 +1749,7 @@ void DogfightState::btnDisengagePress(Action*)
  */
 void DogfightState::btnUfoClick(Action*)
 {
-	_preview->setVisible(true);
+	_preview->setVisible();
 
 	// Disable all other buttons to prevent misclicks
 	_btnStandoff->setVisible(false);
@@ -1776,16 +1776,16 @@ void DogfightState::previewPress(Action*) // action)
 	_preview->setVisible(false);
 
 	// Reenable all other buttons to prevent misclicks Lol
-	_btnStandoff->setVisible(true);
-	_btnCautious->setVisible(true);
-	_btnStandard->setVisible(true);
-	_btnAggressive->setVisible(true);
-	_btnDisengage->setVisible(true);
-	_btnUfo->setVisible(true);
-	_texture->setVisible(true);
-	_btnMinimize->setVisible(true);
-	_weapon1->setVisible(true);
-	_weapon2->setVisible(true);
+	_btnStandoff->setVisible();
+	_btnCautious->setVisible();
+	_btnStandard->setVisible();
+	_btnAggressive->setVisible();
+	_btnDisengage->setVisible();
+	_btnUfo->setVisible();
+	_texture->setVisible();
+	_btnMinimize->setVisible();
+	_weapon1->setVisible();
+	_weapon2->setVisible();
 //	}
 }
 
@@ -2023,25 +2023,25 @@ void DogfightState::btnMinimizedIconClick(Action*)
 
 	setMinimized(false);
 
-	_window->setVisible(true);
-	_btnStandoff->setVisible(true);
-	_btnCautious->setVisible(true);
-	_btnStandard->setVisible(true);
-	_btnAggressive->setVisible(true);
-	_btnDisengage->setVisible(true);
-	_btnUfo->setVisible(true);
-	_texture->setVisible(true);
-	_btnMinimize->setVisible(true);
-	_battle->setVisible(true);
-	_weapon1->setVisible(true);
-	_range1->setVisible(true);
-	_weapon2->setVisible(true);
-	_range2->setVisible(true);
-	_damage->setVisible(true);
-	_txtAmmo1->setVisible(true);
-	_txtAmmo2->setVisible(true);
-	_txtDistance->setVisible(true);
-	_txtStatus->setVisible(true);
+	_window->setVisible();
+	_btnStandoff->setVisible();
+	_btnCautious->setVisible();
+	_btnStandard->setVisible();
+	_btnAggressive->setVisible();
+	_btnDisengage->setVisible();
+	_btnUfo->setVisible();
+	_texture->setVisible();
+	_btnMinimize->setVisible();
+	_battle->setVisible();
+	_weapon1->setVisible();
+	_range1->setVisible();
+	_weapon2->setVisible();
+	_range2->setVisible();
+	_damage->setVisible();
+	_txtAmmo1->setVisible();
+	_txtAmmo2->setVisible();
+	_txtDistance->setVisible();
+	_txtStatus->setVisible();
 
 	_btnMinimizedIcon->setVisible(false);
 	_txtInterceptionNumber->setVisible(false);

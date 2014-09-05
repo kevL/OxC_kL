@@ -614,12 +614,6 @@ void UnitInfoState::init()
 	_barMorale->setMax(100);
 	_barMorale->setValue(static_cast<double>(stat));
 
-/*	stat = _unit->getStats()->reactions;
-	ss.str(L"");
-	ss << stat;
-	_numReactions->setText(ss.str());
-	_barReactions->setMax(static_cast<double>(stat));
-	_barReactions->setValue(static_cast<double>(stat)); */
 	double arbitraryVariable = static_cast<double>(_unit->getStats()->reactions);
 	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
 	ss.str(L"");
@@ -652,12 +646,6 @@ void UnitInfoState::init()
 	_barMelee->setMax(arbitraryVariable);
 	_barMelee->setValue(static_cast<double>(stat));
 
-/*	stat = _unit->getStats()->strength;
-	ss.str(L"");
-	ss << stat;
-	_numStrength->setText(ss.str());
-	_barStrength->setMax(static_cast<double>(stat));
-	_barStrength->setValue(static_cast<double>(stat)); */
 	arbitraryVariable = static_cast<double>(_unit->getStats()->strength);
 	stat = static_cast<int>(arbitraryVariable * (_unit->getAccuracyModifier() / 2.0 + 0.5));
 	ss.str(L"");
@@ -667,7 +655,8 @@ void UnitInfoState::init()
 	_barStrength->setValue(static_cast<double>(stat));
 
 
-	if (_unit->getStats()->psiSkill > minPsi
+	if (_unit->getType() != "SOLDIER"
+		|| _unit->getStats()->psiSkill > minPsi
 		|| (Options::psiStrengthEval
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
@@ -678,9 +667,9 @@ void UnitInfoState::init()
 		_barPsiStrength->setMax(static_cast<double>(stat));
 		_barPsiStrength->setValue(static_cast<double>(stat));
 
-//		_txtPsiStrength->setVisible(true);
-		_numPsiStrength->setVisible(true);
-		_barPsiStrength->setVisible(true);
+//		_txtPsiStrength->setVisible();
+		_numPsiStrength->setVisible();
+		_barPsiStrength->setVisible();
 	}
 	else
 	{
@@ -698,9 +687,9 @@ void UnitInfoState::init()
 		_barPsiSkill->setMax(static_cast<double>(stat));
 		_barPsiSkill->setValue(static_cast<double>(stat));
 
-//		_txtPsiSkill->setVisible(true);
-		_numPsiSkill->setVisible(true);
-		_barPsiSkill->setVisible(true);
+//		_txtPsiSkill->setVisible();
+		_numPsiSkill->setVisible();
+		_barPsiSkill->setVisible();
 	}
 	else
 	{

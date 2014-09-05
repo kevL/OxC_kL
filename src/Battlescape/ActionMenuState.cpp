@@ -252,7 +252,7 @@ void ActionMenuState::addItem(
 							s1,
 							s2,
 							tu);
-	_actionMenu[*id]->setVisible(true);
+	_actionMenu[*id]->setVisible();
 
 	(*id)++; // kL_note: huh. oh yeah: &reference
 }

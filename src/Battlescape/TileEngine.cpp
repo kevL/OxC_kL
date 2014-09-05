@@ -455,11 +455,11 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							if (unit->getFaction() == FACTION_PLAYER)
 							{
 								//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, set spottedTile & spottedUnit visible";
-								revealUnit->getTile()->setVisible(true);
+								revealUnit->getTile()->setVisible();
 //								revealUnit->getTile()->setDiscovered(true, 2); // kL_below. sprite caching for floor+content: DO I WANT THIS.
 
 								if (!revealUnit->getVisible())
-									revealUnit->setVisible(true);
+									revealUnit->setVisible();
 							}
 							//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, Done";
 
@@ -544,7 +544,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										// mark every tile of line as visible (this is needed because of bresenham narrow stroke).
 										Tile* visTile = _battleSave->getTile(posTraj);
 //kL									visTile->setVisible(+1);
-										visTile->setVisible(true); // kL
+										visTile->setVisible(); // kL
 										visTile->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
 
 										// walls to the east or south of a visible tile, we see that too
@@ -1580,7 +1580,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 
 				// these two calls should already be done in calculateFOV()
 //				if ((*spotter)->getFaction() == FACTION_PLAYER)
-//					unit->setVisible(true);
+//					unit->setVisible();
 //				(*spotter)->addToVisibleUnits(unit);
 					// as long as calculateFOV is always done right between
 					// walking, kneeling, shooting, throwing .. and checkReactionFire()

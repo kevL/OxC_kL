@@ -265,20 +265,20 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 	else // sza_MusicRules
 	{
 		if (terrain == "")
-			Log(LOG_DEBUG) << "MUSIC - Request to play ( " << name << " )";
+			Log(LOG_DEBUG) << "MUSIC : Request " << name;
 		else
-			Log(LOG_DEBUG) << "MUSIC - Request to play ( " << name << " ) for terrainType: " << terrain;
+			Log(LOG_DEBUG) << "MUSIC : Request " << name << " for terrainType " << terrain;
 
 		if (_musicAssignment.find(name) == _musicAssignment.end())
 		{
-			Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music assignment: return MUTE";
+			Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music assignment: return MUTE [0]";
 			return _muteMusic;
 		}
 
 		std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
 		if (assignment.find(terrain) == assignment.end())
 		{
-			Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music for terrain: return MUTE";
+			Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music for terrain: return MUTE [1]";
 			return _muteMusic;
 		}
 
@@ -286,8 +286,8 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 		int musicRand = SDL_GetTicks() %musicCodes.size();				// kL
 		std::pair<std::string, int> randMusic = musicCodes[musicRand];	// kL
 //		std::pair<std::string, int> randMusic = musicCodes[RNG::generate(0, musicCodes.size() - 1)];
-		Log(LOG_DEBUG) << "MUSIC - Chose " << randMusic.first;
-		Log(LOG_INFO) << "MUSIC - Chose " << randMusic.first;
+		Log(LOG_DEBUG) << "MUSIC : " << randMusic.first;
+		Log(LOG_INFO) << "MUSIC : " << randMusic.first;
 
 		Music* music = _musicFile.at(randMusic.first);
 

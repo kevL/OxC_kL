@@ -647,7 +647,7 @@ private:
 		void setEnergy(int energy);
 
 		/// Set whether this unit is visible
-		void setVisible(bool flag);
+		void setVisible(bool flag = true);
 		/// Get whether this unit is visible
 		bool getVisible() const;
 		/// Add unit to visible units.

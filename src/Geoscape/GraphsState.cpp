@@ -724,7 +724,7 @@ void GraphsState::blink()
 //				_txtRegionActivityAlien.at(offset)->setVisible(!_txtRegionActivityAlien.at(offset)->getVisible());
 				_txtRegionActivityAlien.at(offset)->setVisible(_vis);
 			else
-				_txtRegionActivityAlien.at(offset)->setVisible(true);
+				_txtRegionActivityAlien.at(offset)->setVisible();
 
 			offset++;
 		}
@@ -744,7 +744,7 @@ void GraphsState::blink()
 //				_txtCountryActivityAlien.at(offset)->setVisible(!_txtCountryActivityAlien.at(offset)->getVisible());
 				_txtCountryActivityAlien.at(offset)->setVisible(_vis);
 			else
-				_txtCountryActivityAlien.at(offset)->setVisible(true);
+				_txtCountryActivityAlien.at(offset)->setVisible();
 
 			offset++;
 		}
@@ -819,10 +819,10 @@ void GraphsState::btnUfoRegionClick(Action*)
 			i != _btnRegions.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 
-	_btnRegionTotal->setVisible(true);
+	_btnRegionTotal->setVisible();
 	_txtTitle->setText(tr("STR_UFO_ACTIVITY_IN_AREAS"));
 
 	for (std::vector<Text*>::iterator
@@ -830,7 +830,7 @@ void GraphsState::btnUfoRegionClick(Action*)
 			i != _txtRegionActivityAlien.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 }
 
@@ -860,10 +860,10 @@ void GraphsState::btnXcomRegionClick(Action*)
 			i != _btnRegions.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 
-	_btnRegionTotal->setVisible(true);
+	_btnRegionTotal->setVisible();
 	_txtTitle->setText(tr("STR_XCOM_ACTIVITY_IN_AREAS"));
 
 	for (std::vector<Text*>::iterator
@@ -871,7 +871,7 @@ void GraphsState::btnXcomRegionClick(Action*)
 			i != _txtRegionActivityXCom.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 }
 
@@ -901,10 +901,10 @@ void GraphsState::btnUfoCountryClick(Action*)
 			i != _btnCountries.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 
-	_btnCountryTotal->setVisible(true);
+	_btnCountryTotal->setVisible();
 	_txtTitle->setText(tr("STR_UFO_ACTIVITY_IN_COUNTRIES"));
 
 	for (std::vector<Text*>::iterator
@@ -912,7 +912,7 @@ void GraphsState::btnUfoCountryClick(Action*)
 			i != _txtCountryActivityAlien.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 }
 
@@ -942,10 +942,10 @@ void GraphsState::btnXcomCountryClick(Action*)
 			i != _btnCountries.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 
-	_btnCountryTotal->setVisible(true);
+	_btnCountryTotal->setVisible();
 	_txtTitle->setText(tr("STR_XCOM_ACTIVITY_IN_COUNTRIES"));
 
 	for (std::vector<Text*>::iterator
@@ -953,7 +953,7 @@ void GraphsState::btnXcomCountryClick(Action*)
 			i != _txtCountryActivityXCom.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 }
 
@@ -978,17 +978,17 @@ void GraphsState::btnIncomeClick(Action*)
 	resetScreen();
 	drawLines();
 
-	_txtFactor->setVisible(true);
+	_txtFactor->setVisible();
 
 	for (std::vector<ToggleTextButton*>::iterator
 			i = _btnCountries.begin();
 			i != _btnCountries.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 
-	_btnCountryTotal->setVisible(true);
+	_btnCountryTotal->setVisible();
 
 	_txtTitle->setText(tr("STR_INCOME"));
 }
@@ -1019,10 +1019,10 @@ void GraphsState::btnFinanceClick(Action*)
 			i != _btnFinances.end();
 			++i)
 	{
-		(*i)->setVisible(true);
+		(*i)->setVisible();
 	}
 
-	_txtScore->setVisible(true);
+	_txtScore->setVisible();
 
 	_txtTitle->setText(tr("STR_FINANCE"));
 
@@ -1980,7 +1980,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 			static_cast<double>(lowerLimit),
 			static_cast<double>(upperLimit));
 
-	_txtFactor->setVisible(true);
+	_txtFactor->setVisible();
 }
 
 /**

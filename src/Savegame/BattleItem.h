@@ -44,9 +44,8 @@ class BattleItem
 {
 
 private:
-	bool
-		_droppedOnAlienTurn,
-		_XCOMProperty;
+	bool _XCOMProperty;
+//		_droppedOnAlienTurn,
 	int
 		_ammoQty,
 		_fuseTimer,
@@ -152,9 +151,9 @@ private:
 		/// Gets xcom property flag
 		bool getXCOMProperty() const;
 		/// Gets the flag representing "not dropped on player turn"
-		bool getTurnFlag() const;
+//		bool getTurnFlag() const;
 		/// Sets the flag representing "not dropped on player turn"
-		void setTurnFlag(bool flag);
+//		void setTurnFlag(bool flag);
 		/// Sets the item's ruleset.
 		void convertToCorpse(RuleItem* rules);
 };

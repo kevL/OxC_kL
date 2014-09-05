@@ -198,7 +198,7 @@ protected:
 		}
 
 		/// Sets the surface's visibility.
-		void setVisible(bool visible);
+		void setVisible(bool visible = true);
 		/// Gets the surface's visibility.
 		bool getVisible() const;
 
