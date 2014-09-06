@@ -79,11 +79,13 @@ private:
 	AlienMission* _mission;
 	Craft* _shotDownByCraft;
 	RuleUfo* _rules;
+
 	const UfoTrajectory* _trajectory;
 
 	std::string
 		_altitude,
-		_direction;
+		_direction,
+		_terrain; // kL
 
 	enum UfoStatus _status;
 
@@ -241,6 +243,11 @@ private:
 		int getCrashPower() const; // kL
 		/// kL. Sets the UFO's powerSource explosive-power-factor.
 		void setCrashPower(int percent); // kL
+
+		/// kL. Gets a crashed or landed UFO's terrainType.
+		std::string getTerrain() const; // kL
+		/// kL. Sets a crashed or landed UFO's terrainType.
+		void setTerrain(std::string terrain); // kL
 };
 
 }

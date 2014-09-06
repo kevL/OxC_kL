@@ -1,7 +1,7 @@
 ﻿# Terrain Pack by Hobbes # version 2.0
 terrains:
   - name: CULTA
-    textures: [4]
+    textures: [1, 2, 3, 4]
     hemisphere: -1
   - name: CULTAFARMA
     mapDataSets:
@@ -1272,7 +1272,7 @@ terrains:
         width: 10
         length: 10
   - name: POLAR
-    textures: [12]
+    textures: [9, 12]
   - name: POLARMOUNT
     mapDataSets:
       - BLANKS
@@ -1329,7 +1329,7 @@ terrains:
         width: 20
         length: 20
   - name: FOREST
-    textures: [6]
+    textures: [0, 6, 10, 11]
     hemisphere: -1
   - name: JUNGLE
     textures: [0, 6, 10, 11]
@@ -1340,7 +1340,7 @@ terrains:
       - MOUNT
       - FOREST
       - FORESTMOUNT
-    textures: [0, 10, 11]
+    textures: [0, 5, 10, 11]
     hemisphere: -1
     largeBlockLimit: 3
     mapBlocks:
@@ -1429,7 +1429,7 @@ terrains:
         length: 20
   - name: DESERT
     largeBlockLimit: 3
-    textures: [7]
+    textures: [7, 8]
   - name: DESERTMOUNT
     mapDataSets:
       - BLANKS

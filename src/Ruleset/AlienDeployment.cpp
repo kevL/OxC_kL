@@ -87,7 +87,7 @@ AlienDeployment::AlienDeployment(const std::string& type)
 }
 
 /**
- *
+ * dTor.
  */
 AlienDeployment::~AlienDeployment()
 {
@@ -156,7 +156,7 @@ int AlienDeployment::getCivilians() const
 
 /**
  * Gets the terrain for battlescape generation.
- * kL_note: See header note.
+ * kL_note: See note in header file.
  * @return, The terrain.
  */
 /* std::string AlienDeployment::getTerrain() const

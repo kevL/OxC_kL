@@ -746,7 +746,7 @@ int SavedBattleGame::getMapSizeXYZ() const
 }
 
 /**
- *
+ * Sets the terrainType string.
  */
 void SavedBattleGame::setTerrain(std::string terrain) // sza_MusicRules
 {
@@ -754,7 +754,7 @@ void SavedBattleGame::setTerrain(std::string terrain) // sza_MusicRules
 }
 
 /**
- *
+ * Gets the terrainType string.
  */
 std::string SavedBattleGame::getTerrain() const // sza_MusicRules
 {

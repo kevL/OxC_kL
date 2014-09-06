@@ -72,8 +72,10 @@ ConfirmLandingState::ConfirmLandingState(
 	:
 		_craft(craft),
 		_texture(texture),
-		_shade(shade)
+		_shade(shade),
+		_terrain(NULL)
 {
+	Log(LOG_INFO) << "Create ConfirmLandingState()";
 	// TODO: show Country & Region
 	// TODO: should do buttons: Patrol or GeoscapeCraftState or Return to base.
 	_screen = false;
@@ -122,41 +124,73 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtTexture->setAlign(ALIGN_RIGHT);
 
-	RuleTerrain* terrain = NULL;
-	double lat = craft->getLatitude();
-	std::string str = "";
-	if (texture < 0)
-		texture = 0;
-
-	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
-	for (std::vector<std::string>::const_iterator
-			i = terrains.begin();
-			i != terrains.end()
-				&& str == "";
-			++i)
+	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+	if (ufo != NULL) // NOTE: all this terrain stuff can and may fall through to BattlescapeGenerator.
 	{
-		//Log(LOG_INFO) << "terrains VALID";
-		terrain = _game->getRuleset()->getTerrain(*i);
-		for (std::vector<int>::iterator
-				j = terrain->getTextures()->begin();
-				j != terrain->getTextures()->end()
-					&& str == "";
-				++j)
+		std::string terrain = ufo->getTerrain();
+		Log(LOG_INFO) << ". ufo VALID, terrain = " << terrain;
+
+		if (terrain == "")
 		{
-			//Log(LOG_INFO) << "terrain VALID";
-			if (*j == texture
-				&& (terrain->getHemisphere() == 0
-					|| (terrain->getHemisphere() < 0
-						&& lat < 0.0)
-					|| (terrain->getHemisphere() > 0
-						&& lat >= 0.0)))
+			Log(LOG_INFO) << ". . terrain NOT valid";
+
+			std::vector<RuleTerrain*> choice;
+			double lat = craft->getLatitude();
+			if (texture < 0)
+				texture = 0;
+
+			const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
+			for (std::vector<std::string>::const_iterator
+					i = terrains.begin();
+					i != terrains.end();
+					++i)
 			{
-				str = terrain->getName();
-				//Log(LOG_INFO) << ". str = " << str;
+				Log(LOG_INFO) << ". . . terrain = " << *i;
+
+				_terrain = _game->getRuleset()->getTerrain(*i);
+				for (std::vector<int>::iterator
+						j = _terrain->getTextures()->begin();
+						j != _terrain->getTextures()->end();
+						++j)
+				{
+					Log(LOG_INFO) << ". . . . texture = " << *j;
+
+					if (*j == texture
+						&& (_terrain->getHemisphere() == 0
+							|| (_terrain->getHemisphere() < 0
+								&& lat < 0.0)
+							|| (_terrain->getHemisphere() > 0
+								&& lat >= 0.0)))
+					{
+						Log(LOG_INFO) << ". . . . . _terrain = " << *i;
+						choice.push_back(_terrain);
+					}
+				}
 			}
+
+			size_t pick = static_cast<size_t>(RNG::generate(
+														0,
+														static_cast<int>(choice.size() - 1)));
+			_terrain = choice.at(pick);
+			Log(LOG_INFO) << ". . pick = " << pick << ", choice = " << _terrain->getName();
+
+			ufo->setTerrain(_terrain->getName());
+			_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(_terrain->getName())));
+		}
+		else
+		{
+			Log(LOG_INFO) << ". . terrain VALID";
+
+			_terrain = _game->getRuleset()->getTerrain(terrain);
+			_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(terrain)));
 		}
 	}
-	_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(str)));
+	else // TODO: TerrorSites will have to go in here ... they choose terrain/textures differently.
+	{
+		Log(LOG_INFO) << ". ufo NOT valid";
+
+		_txtTexture->setVisible(false);
+	}
 
 /*kL
 	_txtMessage->setColor(Palette::blockOffset(8)+10);
@@ -183,7 +217,6 @@ ConfirmLandingState::ConfirmLandingState(
 
 	std::wostringstream ss;
 	ss << L""; // blank if no UFO.
-	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
 	if (ufo != NULL)
 	{
 		RuleUfo* ufoRule = ufo->getRules();
@@ -191,7 +224,7 @@ ConfirmLandingState::ConfirmLandingState(
 			ss << tr(ufoRule->getType()); // only ufoType shows if not hyperdetected.
 
 		if (ufo->getHyperDetected())
-			ss << L" > " << tr(ufo->getAlienRace());
+			ss << L" : " << tr(ufo->getAlienRace());
 	}
 	_txtMessage2->setText(tr("STR_CRAFT_DESTINATION")
 						 .arg(_craft->getDestination()->getName(_game->getLanguage()))
@@ -254,6 +287,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 
 	BattlescapeGenerator battleGen (_game); // init.
 
+	battleGen.setWorldTerrain(_terrain); // kL
 	battleGen.setWorldTexture(_texture);
 	battleGen.setWorldShade(_shade);
 	battleGen.setCraft(_craft);

@@ -37,6 +37,7 @@ class Game;
 class MapBlock;
 class ResourcePack;
 class RuleItem;
+class Ruleset;
 class RuleTerrain;
 class SavedBattleGame;
 class TerrorSite;
@@ -77,10 +78,13 @@ private:
 	Craft			* _craft;
 	Game			* _game;
 	ResourcePack	* _res;
-	RuleTerrain		* _terrain;
+	Ruleset			* _rules;
+	RuleTerrain
+		* _terrain,
+		* _worldTerrain; // kL
 	SavedBattleGame	* _save;
 	TerrorSite		* _terror;
-	Tile			* _craftInventoryTile;
+	Tile			* _craftInventTile;
 	Ufo				* _ufo;
 
 	std::string _alienRace;
@@ -155,6 +159,8 @@ private:
 		/// Cleans up the BattlescapeGenerator.
 		~BattlescapeGenerator();
 
+		/// kL. Sets the world terrainRule of where a ufo crashed or landed.
+		void BattlescapeGenerator::setWorldTerrain(RuleTerrain* terrain); // kL
 		/// Sets the polygon texture.
 		void setWorldTexture(int texture);
 		/// Sets the polygon shade.

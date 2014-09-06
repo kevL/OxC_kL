@@ -1331,7 +1331,7 @@ RuleTerrain* Ruleset::getTerrain(const std::string& name) const
 {
 	std::map<std::string, RuleTerrain*>::const_iterator i = _terrains.find(name);
 
-	if (_terrains.end() != i)
+	if (i != _terrains.end())
 		return i->second;
 	else
 		return NULL;

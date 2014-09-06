@@ -53,9 +53,9 @@ struct DeploymentData
 
 /**
  * Represents a specific type of Alien Deployment.
- * Contains constant info about an Alien Deployment, like the
- * number of aliens for each alien type and what items they carry
- * (itemset depends on alien technology advancement level 0, 1 or 2).
+ * Contains constant info about an Alien Deployment, like the number of aliens
+ * for each alien type and what items they carry (itemset depends on alien
+ * technology advancement level 0, 1 or 2).
  * - deployment type can be a craft's name, but also alien base or cydonia.
  * - alienRank is used to check which nodeRanks can be used to deploy this unit
  *   + to match to a specific unit (=race/rank combination) that should be deployed.
@@ -104,7 +104,9 @@ private:
 		/// Gets civilians.
 		int getCivilians() const;
 		/// Gets the terrain for battlescape generation.
-//		std::string getTerrain() const; // kL_note: This may still be needed for things like sza_musicRules & my pathPreview for polar expeditions. (but unlikely, since this is AlienDeployment)
+//		std::string getTerrain() const;	// kL_note: This may still be needed for things like
+										// sza_musicRules & alternate pathPreview colors.
+										// (but unlikely, since this is AlienDeployment)
 		/// Gets the terrains for battlescape generation.
 		std::vector<std::string> getTerrains() const;
 		/// Gets the shade level for battlescape generation.

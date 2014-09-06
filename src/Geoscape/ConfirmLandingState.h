@@ -27,6 +27,7 @@ namespace OpenXcom
 {
 
 class Craft;
+class RuleTerrain; // kL
 class Text;
 class TextButton;
 class Window;
@@ -47,6 +48,7 @@ private:
 		_texture;
 
 	Craft* _craft;
+	RuleTerrain* _terrain; // kL
 	Text
 		* _txtBegin,
 		* _txtMessage,

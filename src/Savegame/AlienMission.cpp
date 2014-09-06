@@ -751,9 +751,9 @@ void AlienMission::ufoShotDown(
  * This function is called when one of the mission's UFOs has finished its time on the ground.
  * It takes care of sending the UFO to the next waypoint and marking them for removal as required.
  * It must set the game data in a way that the rest of the code understands what to do.
- * @param ufo, The UFO that reached its waypoint.
- * @param engine, The game engine, required to get access to game data and game rules.
- * @param globe, The earth globe, required to get access to land checks.
+ * @param ufo		- UFO that reached its waypoint
+ * @param engine	- game engine, required to get access to game data and game rules
+ * @param globe		- earth globe, required to get access to land checks
  */
 void AlienMission::ufoLifting(
 		Ufo& ufo,
@@ -764,6 +764,8 @@ void AlienMission::ufoLifting(
 	switch (ufo.getStatus())
 	{
 		case Ufo::FLYING:
+			ufo.setTerrain(""); // kL, safety i guess.
+
 			assert(0 && "Ufo is already on the air!");
 		break;
 		case Ufo::LANDED:
@@ -782,6 +784,7 @@ void AlienMission::ufoLifting(
 							engine);
 				}
 
+				ufo.setTerrain(""); // kL
 				ufo.setAltitude("STR_VERY_LOW");
 				ufo.setSpeed(static_cast<int>(ceil(
 								static_cast<double>(ufo.getTrajectory().getSpeedPercentage(ufo.getTrajectoryPoint()))

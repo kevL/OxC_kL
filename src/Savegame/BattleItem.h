@@ -147,7 +147,7 @@ private:
 		/// Gets medikit stimulant quantity
 		int getStimulantQuantity() const;
 		/// Sets xcom property flag
-		void setXCOMProperty(bool flag);
+		void setXCOMProperty(bool flag = true);
 		/// Gets xcom property flag
 		bool getXCOMProperty() const;
 		/// Gets the flag representing "not dropped on player turn"

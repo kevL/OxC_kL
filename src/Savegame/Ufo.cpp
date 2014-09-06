@@ -71,7 +71,8 @@ Ufo::Ufo(RuleUfo* rules)
 		_detected(false),
 		_hyperDetected(false),
 		_shootingAt(0),
-		_hitFrame(0)
+		_hitFrame(0),
+		_terrain("")
 {
 }
 
@@ -163,6 +164,7 @@ void Ufo::load(
 	_hyperDetected		= node["hyperDetected"].as<bool>(_hyperDetected);
 	_secondsRemaining	= node["secondsRemaining"].as<size_t>(_secondsRemaining);
 	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
+	_terrain			= node["terrain"].as<std::string>(_terrain); // kL
 
 	double
 		lon = _lon,
@@ -226,6 +228,10 @@ YAML::Node Ufo::save(bool newBattle) const
 
 	node["type"]		= _rules->getType();
 	node["id"]			= _id;
+
+	if (_terrain != "")
+		node["terrain"]	= _terrain; // kL
+
 	if (_crashId)
 	{
 		node["crashId"]		= _crashId;
@@ -238,6 +244,7 @@ YAML::Node Ufo::save(bool newBattle) const
 	node["altitude"]	= _altitude;
 	node["direction"]	= _direction;
 	node["status"]		= (int)_status;
+
 	if (_detected)
 		node["detected"]			= _detected;
 	if (_hyperDetected)
@@ -818,6 +825,22 @@ int Ufo::getCrashPower() const // kL
 void Ufo::setCrashPower(int percent) // kL
 {
 	_crashPower = percent;
+}
+
+/**
+ * kL. Gets a crashed or landed UFO's terrainType.
+ */
+std::string Ufo::getTerrain() const // kL
+{
+	return _terrain;
+}
+
+/**
+ * kL. Sets a crashed or landed UFO's terrainType.
+ */
+void Ufo::setTerrain(std::string terrain) // kL
+{
+	_terrain = terrain;
 }
 
 }
