@@ -2296,10 +2296,10 @@ BattleUnit* TileEngine::hit(
 
 					//Log(LOG_INFO) << ". . check for Cyberdisc expl.";
 					//Log(LOG_INFO) << ". . health = " << buTarget->getHealth();
-					//Log(LOG_INFO) << ". . stunLevel = " << buTarget->getStunlevel();
+					//Log(LOG_INFO) << ". . stunLevel = " << buTarget->getStun();
 					if (buTarget->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
 						&& (buTarget->getHealth() == 0
-							|| buTarget->getStunlevel() >= buTarget->getHealth()))
+							|| buTarget->getStun() >= buTarget->getHealth()))
 //						&& !buTarget->isOut(false, true))	// kL. don't explode if stunned. Maybe... wrong!!!
 															// Cannot be STATUS_DEAD OR STATUS_UNCONSCIOUS!
 					{

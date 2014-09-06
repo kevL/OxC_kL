@@ -92,7 +92,7 @@ void UnitFallBState::think()
 		//Log(LOG_INFO) << ". falling ID = " << (*unit)->getId();
 		if ((*unit)->isOut(true, true)) // kL
 //kL		if ((*unit)->getHealth() == 0
-//kL			|| (*unit)->getStunlevel() >= (*unit)->getHealth())
+//kL			|| (*unit)->getStun() >= (*unit)->getHealth())
 		{
 			//Log(LOG_INFO) << ". dead OR stunned, Erase & cont";
 			unit = _parent->getSave()->getFallingUnits()->erase(unit);

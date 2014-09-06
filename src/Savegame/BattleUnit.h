@@ -386,7 +386,7 @@ private:
 		_moraleRestored,
 		_motionPoints,
 		_spinPhase,
-		_stunlevel,
+		_stunLevel,
 		_toDirection,
 		_toDirectionTurret,
 		_tu,
@@ -615,7 +615,7 @@ private:
 		/// Heal stun level of the unit.
 		void healStun(int power);
 		/// Gets the unit's stun level.
-		int getStunlevel() const;
+		int getStun() const;
 
 		/// Knocks the unit out instantly.
 		void knockOut(BattlescapeGame* battle);

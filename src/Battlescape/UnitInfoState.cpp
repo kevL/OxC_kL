@@ -591,7 +591,7 @@ void UnitInfoState::init()
 	_numHealth->setText(ss.str());
 	_barHealth->setMax(static_cast<double>(_unit->getStats()->health));
 	_barHealth->setValue(static_cast<double>(stat));
-	_barHealth->setValue2(static_cast<double>(_unit->getStunlevel()));
+	_barHealth->setValue2(static_cast<double>(_unit->getStun()));
 
 	stat = _unit->getFatalWounds();
 	ss.str(L"");

@@ -1123,7 +1123,7 @@ void BattlescapeGame::checkForCasualties(
 				}
 			}
 		}
-		else if (victim->getStunlevel() > victim->getHealth() - 1
+		else if (victim->getStun() > victim->getHealth() - 1
 			&& victim->getStatus() != STATUS_DEAD
 			&& victim->getStatus() != STATUS_UNCONSCIOUS
 			&& victim->getStatus() != STATUS_COLLAPSING	// kL_note: is this really needed ....

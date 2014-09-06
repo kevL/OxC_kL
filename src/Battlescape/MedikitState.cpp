@@ -382,7 +382,7 @@ void MedikitState::onStimulantClick(Action*)
 
 		// if the unit has revived we quit this screen automatically
 		if (_targetUnit->getStatus() == STATUS_UNCONSCIOUS
-			&& _targetUnit->getStunlevel() < _targetUnit->getHealth())
+			&& _targetUnit->getStun() < _targetUnit->getHealth())
 		{
 			onEndClick(NULL);
 		}
@@ -432,12 +432,12 @@ void MedikitState::update()
 	double stat = static_cast<double>(_targetUnit->getStats()->health);
 	int health = _targetUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
-	_numStun->setValue(static_cast<unsigned>(_targetUnit->getStunlevel()));
+	_numStun->setValue(static_cast<unsigned>(_targetUnit->getStun()));
 	_barHealth->setMax(100.0);
 	_barHealth->setValue(ceil(
 							static_cast<double>(health) / stat * 100.0));
 	_barHealth->setValue2(ceil(
-							static_cast<double>(_targetUnit->getStunlevel()) / stat * 100.0));
+							static_cast<double>(_targetUnit->getStun()) / stat * 100.0));
 
 	stat = static_cast<double>(_targetUnit->getStats()->stamina); // stats of the recipient
 	int energy = _targetUnit->getEnergy();

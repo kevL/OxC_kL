@@ -125,7 +125,7 @@ BattleUnit::BattleUnit(
 		_specab(SPECAB_NONE),
 		_faceDirection(-1),
 		_morale(100),
-		_stunlevel(0),
+		_stunLevel(0),
 		_type("SOLDIER"),
 		_activeHand("STR_RIGHT_HAND"),
 		_breathFrame(0),
@@ -177,7 +177,7 @@ BattleUnit::BattleUnit(
 	_energy		= _stats.stamina;
 	_health		= _stats.health;
 //	_morale		= 100;
-//	_stunlevel	= 0;
+//	_stunLevel	= 0;
 
 	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
 	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
@@ -267,7 +267,7 @@ BattleUnit::BattleUnit(
 		_takenExpl(false), // kL
 
 		_morale(100), // kL, moved these here from def'ns below.
-		_stunlevel(0),
+		_stunLevel(0),
 		_activeHand("STR_RIGHT_HAND"),
 		_breathFrame(-1),
 		_floorAbove(false),
@@ -293,7 +293,7 @@ BattleUnit::BattleUnit(
 	_energy		= _stats.stamina;
 	_health		= _stats.health;
 //	_morale		= 100;
-//	_stunlevel	= 0;
+//	_stunLevel	= 0;
 
 	_standHeight	= unit->getStandHeight();
 	_kneelHeight	= unit->getKneelHeight();
@@ -376,7 +376,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_directionTurret	= _toDirectionTurret = node["directionTurret"].as<int>(_directionTurret);
 	_tu					= node["tu"].as<int>(_tu);
 	_health				= node["health"].as<int>(_health);
-	_stunlevel			= node["stunlevel"].as<int>(_stunlevel);
+	_stunLevel			= node["stunLevel"].as<int>(_stunLevel);
 	_energy				= node["energy"].as<int>(_energy);
 	_morale				= node["morale"].as<int>(_morale);
 	_floating			= node["floating"].as<bool>(_floating);
@@ -439,7 +439,7 @@ YAML::Node BattleUnit::save() const
 	node["directionTurret"]	= _directionTurret;
 	node["tu"]				= _tu;
 	node["health"]			= _health;
-	node["stunlevel"]		= _stunlevel;
+	node["stunLevel"]		= _stunLevel;
 	node["energy"]			= _energy;
 	node["morale"]			= _morale;
 	node["floating"]		= _floating;
@@ -1348,7 +1348,7 @@ int BattleUnit::damage(
 	if (power > 0)
 	{
 		if (type == DT_STUN)
-			_stunlevel += power;
+			_stunLevel += power;
 		else
 		{
 			_health -= power; // health damage
@@ -1364,7 +1364,7 @@ int BattleUnit::damage(
 				if (_armor->getSize() == 1		// add some stun damage to not-large units
 					&& _race != "STR_ZOMBIE")	// unless it's a freakin Zombie.
 				{
-					_stunlevel += RNG::generate(0, power / 3); // kL_note: was, 4
+					_stunLevel += RNG::generate(0, power / 3); // kL_note: was, 4
 				}
 
 				if (!ignoreArmor)	// kinda funky: only wearers of armor-types-that-are
@@ -1449,18 +1449,18 @@ void BattleUnit::playHitSound() // kL
  */
 void BattleUnit::healStun(int power)
 {
-	_stunlevel -= power;
+	_stunLevel -= power;
 
-	if (_stunlevel < 0)
-		_stunlevel = 0;
+	if (_stunLevel < 0)
+		_stunLevel = 0;
 }
 
 /**
- *
+ * Gets the amount of stun damage this unit has.
  */
-int BattleUnit::getStunlevel() const
+int BattleUnit::getStun() const
 {
-	return _stunlevel;
+	return _stunLevel;
 }
 
 /**
@@ -1482,7 +1482,7 @@ void BattleUnit::knockOut(BattlescapeGame* battle)
 		newUnit->knockOut(battle); // -> STATUS_UNCONSCIOUS
 	}
 	else
-		_stunlevel = _health;
+		_stunLevel = _health;
 }
 
 /**
@@ -1547,7 +1547,7 @@ bool BattleUnit::isOut(
 			return true;
 	}
 	else if (checkStun
-		&& getStunlevel() >= getHealth())
+		&& getStun() >= getHealth())
 	{
 			return true;
 	}
@@ -1568,7 +1568,7 @@ bool BattleUnit::isOut(
 
 	if (checkStun)
 	{
-		if (getStunlevel() >= getHealth())
+		if (getStun() >= getHealth())
 			ret = true;
 	}
 
@@ -2081,7 +2081,7 @@ void BattleUnit::prepareNewTurn()
 		_currentAIState = NULL;
 	}
 
-	if (_stunlevel > 0)
+	if (_stunLevel > 0)
 		healStun(1); // recover stun 1pt/turn
 
 	if (!isOut())

@@ -380,7 +380,7 @@ bool BattleItem::occupiesSlot(
 
 /**
  * Gets an item's currently loaded ammo item.
- * @return, required ammo item
+ * @return, ammo item
  *			-1 if item is ammo
  *			the weaponID if item is its own ammo
  */

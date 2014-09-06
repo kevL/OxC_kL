@@ -1890,7 +1890,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			}
 
 			if ((*i)->getStatus() == STATUS_UNCONSCIOUS
-				&& (*i)->getStunlevel() < (*i)->getHealth()
+				&& (*i)->getStun() < (*i)->getHealth()
 				&& (*i)->getHealth() > 0)
 			{
 				if (placeUnitNearPosition(

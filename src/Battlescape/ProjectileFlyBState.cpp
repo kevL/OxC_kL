@@ -145,7 +145,7 @@ void ProjectileFlyBState::init()
 	// They should be coded with a tuRefund() function regardless.
 	if (_unit->isOut(true, true))
 //		|| _unit->getHealth() == 0
-//		|| _unit->getHealth() < _unit->getStunlevel())
+//		|| _unit->getHealth() < _unit->getStun())
 	{
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
 		//Log(LOG_INFO) << ". actor is Out, EXIT";

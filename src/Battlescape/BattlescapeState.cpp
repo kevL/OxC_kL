@@ -279,7 +279,7 @@ BattlescapeState::BattlescapeState()
 	_txtTurn		= new Text(45, 9, 1, 0);	// kL
 	_txtShade		= new Text(45, 9, 1, 10);	// kL
 
-	_txtConsole		= new Text(100, 100, 1, 0); // kL
+	_txtConsole		= new Text(200, 100, 1, 0); // kL
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
@@ -1064,11 +1064,42 @@ void BattlescapeState::mapOver(Action* action)
 					i != tile->getInventory()->end();
 					++i)
 			{
-				ss << L"- " << tr((*i)->getRules()->getType()) << L"\n";
+				if (ss != L"")
+					ss << L"\n";
 
-				// get ammo in clip or ammo loaded in gun (#)
-				// get grendade prime fuse/turns
-				// get health & stun of soldier/alien
+				ss << L"> ";
+
+				if ((*i)->getUnit() != NULL)
+//					&& (*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+				{
+					ss << (*i)->getUnit()->getName(_game->getLanguage())
+					<< L" (" << (*i)->getUnit()->getStun() - (*i)->getUnit()->getHealth() << L")";
+				}
+				else
+				{
+					ss << tr((*i)->getRules()->getType());
+
+					if ((*i)->getRules()->getBattleType() == BT_AMMO)
+//						&& (*i)->getAmmoQuantity() != 255
+//						&& (*i)->getAmmoQuantity() != 0)
+					{
+						ss << L" (" << (*i)->getAmmoQuantity() << L")";
+					}
+					else if ((*i)->getRules()->getBattleType() == BT_FIREARM
+//							|| (*i)->getRules()->getBattleType() == BT_MELEE)
+						&& (*i)->getAmmoItem()
+						&& (*i)->getAmmoItem() != (*i))
+					{
+						ss << L"-" << tr((*i)->getAmmoItem()->getRules()->getType())
+						<< L" (" << (*i)->getAmmoItem()->getAmmoQuantity() << L")";
+					}
+					else if (((*i)->getRules()->getBattleType() == BT_GRENADE
+							|| (*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+						&& (*i)->getFuseTimer() > -1)
+					{
+						ss << L" (" << (*i)->getFuseTimer() << L")";
+					}
+				}
 			}
 
 			_txtConsole->setText(ss.str());
@@ -2121,7 +2152,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_barHealth->setValue(ceil(
 							static_cast<double>(health) / stat * 100.0));
 	_barHealth->setValue2(ceil(
-							static_cast<double>(selectedUnit->getStunlevel()) / stat * 100.0));
+							static_cast<double>(selectedUnit->getStun()) / stat * 100.0));
 
 	int morale = selectedUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
