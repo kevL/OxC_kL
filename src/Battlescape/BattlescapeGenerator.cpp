@@ -1197,11 +1197,11 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
  * Adds an item to an XCom soldier (auto-equip ONLY). kL_note: I don't use this part.
  * kL_notes: Or an XCom tank, also adds items & terrorWeapons to aLiens, deployAliens()!
  *
- * @param item, Pointer to the Item.
- * @param unit, Pointer to the Unit.
- * @param allowSecondClip, allow the unit to take a second clip or not
- *		(only applies to xcom soldiers, aliens are allowed regardless).
- * @return, True if the item was placed.
+ * @param item				- pointer to the Item
+ * @param unit				- pointer to the Unit
+ * @param allowSecondClip	- true to allow the unit to take a second clip
+ *							(only applies to xcom soldiers, aliens are allowed regardless)
+ * @return, true if the item was placed
  */
 bool BattlescapeGenerator::addItem(
 		BattleItem* item,
@@ -1214,7 +1214,8 @@ bool BattlescapeGenerator::addItem(
 	// loadouts are defined in the rulesets and more or less set in stone.
 
 
-/*kL	if (unit->getFaction() == FACTION_PLAYER // XCOM Soldiers!!! auto-equip
+/*kL
+	if (unit->getFaction() == FACTION_PLAYER // XCOM Soldiers!!! auto-equip
 		&& unit->hasInventory())
 	{
 		weight = unit->getCarriedWeight() + item->getRules()->getWeight();
@@ -1258,13 +1259,16 @@ bool BattlescapeGenerator::addItem(
 
 
 //	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND"); // removed.
-//	RuleInventory* rightHand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
-//	BattleItem* rhWeapon = unit->getItem("STR_RIGHT_HAND");
+	RuleInventory* rightHand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+	RuleInventory* leftHand = _game->getRuleset()->getInventory("STR_LEFT_HAND");
+	BattleItem* rhWeapon = unit->getItem("STR_RIGHT_HAND");
+	BattleItem* lhWeapon = unit->getItem("STR_LEFT_HAND");
 
 	bool placed = false;
 //	bool loaded = false;
 
-/*kL	switch (item->getRules()->getBattleType())
+/*kL
+	switch (item->getRules()->getBattleType())
 	{
 		case BT_FIREARM:
 		case BT_MELEE:
@@ -1275,9 +1279,11 @@ bool BattlescapeGenerator::addItem(
 				loaded = true;
 			}
 
-			if (loaded && (unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
+			if (loaded
+				&& (unit->getGeoscapeSoldier() == 0
+					|| _allowAutoLoadout))
 			{
-				if (!unit->getItem("STR_RIGHT_HAND")
+				if (!rhWeapon
 					&& unit->getStats()->strength * 0.66 >= weight)
 				{
 					item->moveToOwner(unit);
@@ -1285,35 +1291,51 @@ bool BattlescapeGenerator::addItem(
 
 					placed = true;
 				}
+				if (!placed
+					&& !lhWeapon
+					&& (unit->getFaction() != FACTION_PLAYER
+						|| item->getRules()->isFixed()))
+				{
+					item->moveToOwner(unit);
+					item->setSlot(leftHand);
+
+					placed = true;
+				}
 			}
 		break;
 		case BT_AMMO:
-			// no weapon, or our weapon takes no ammo, or this ammo isn't compatible.
-			// we won't be needing this. move on.
+			// no weapon, or our weapon takes no ammo.
+			// won't be needing this. move on.
 			if (!rhWeapon
-				|| rhWeapon->getRules()->getCompatibleAmmo()->empty()
-				|| std::find(rhWeapon->getRules()->getCompatibleAmmo()->begin(),
-								rhWeapon->getRules()->getCompatibleAmmo()->end(),
-								item->getRules()->getType()) == rhWeapon->getRules()->getCompatibleAmmo()->end())
+				|| rhWeapon->getRules()->getCompatibleAmmo()->empty())
 			{
 				break;
 			}
 
-			// xcom weapons will already be loaded, aliens and tanks, however,
-			// [ kL_note: NOT. just aLiens & terrorist aLiens need loading ]
-			// get their ammo added after those. So let's try to load them here.
+			// xCom weapons will already be loaded; aliens and tanks, however,
+			// get their ammo added after those. So try to load them here.
 			if ((rhWeapon->getRules()->isFixed()
 					|| unit->getFaction() != FACTION_PLAYER)
 				&& !rhWeapon->getAmmoItem()
 				&& rhWeapon->setAmmoItem(item) == 0)
 			{
 				item->setSlot(rightHand);
-
 				placed = true;
 
 				break;
 			}
 
+			if (lhWeapon
+				&& (lhWeapon->getRules()->isFixed()
+					|| unit->getFaction() != FACTION_PLAYER)
+				&& !lhWeapon->getAmmoItem()
+				&& lhWeapon->setAmmoItem(item))
+			{
+				item->setSlot(leftHand);
+				placed = true;
+
+				break;
+			}
 		default:
 		if ((unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
 		{
@@ -1368,52 +1390,88 @@ bool BattlescapeGenerator::addItem(
 	{
 		case BT_FIREARM:	// kL_note: These are also terrorist weapons:
 		case BT_MELEE:		// chryssalids, cyberdiscs, zombies, sectopods, reapers, celatids, silacoids
-			if (!unit->getItem("STR_RIGHT_HAND"))
+			if (!rhWeapon)
 			{
 				item->moveToOwner(unit);
-				item->setSlot(_game->getRuleset()->getInventory("STR_RIGHT_HAND"));
+				item->setSlot(rightHand);
 
 				placed = true;
 			}
-			// kL_begin: BattlescapeGenerator::addItem(), only for plasma pistol + Blaster (see itemSets in Ruleset)
-			else if (!unit->getItem("STR_LEFT_HAND"))
+
+			// kL_note: only for plasma pistol + Blaster (see itemSets in Ruleset)
+			// Also now for advanced fixed/innate weapon rules.
+			if (!placed
+				&& !lhWeapon
+				&& (unit->getFaction() != FACTION_PLAYER
+					|| item->getRules()->isFixed()))
 			{
 				item->moveToOwner(unit);
-				item->setSlot(_game->getRuleset()->getInventory("STR_LEFT_HAND"));
+				item->setSlot(leftHand);
 
 				placed = true;
-			} // kL_end.
+			}
 		break;
 		case BT_AMMO:
+		{
 			// find equipped weapons that can be loaded with this ammo
-			if (unit->getItem("STR_RIGHT_HAND")
-				&& unit->getItem("STR_RIGHT_HAND")->getAmmoItem() == 0)
+			if ((rhWeapon->getRules()->isFixed()
+					|| unit->getFaction() != FACTION_PLAYER)
+				&& !rhWeapon->getAmmoItem()
+				&& rhWeapon->setAmmoItem(item) == 0)
 			{
-				if (unit->getItem("STR_RIGHT_HAND")->setAmmoItem(item) == 0)
-					placed = true;
-			}
-			// kL_begin: BattlescapeGenerator::addItem(), only for plasma pistol + Blaster (see itemSets in Ruleset)
-			else if (unit->getItem("STR_LEFT_HAND")
-				&& unit->getItem("STR_LEFT_HAND")->getAmmoItem() == 0)
-			{
-				if (unit->getItem("STR_LEFT_HAND")->setAmmoItem(item) == 0)
-					placed = true;
-			} // kL_end.
-			else
-			{
-//				RuleItem* itemRule = _game->getRuleset()->getItem(item->getRules());
-				RuleItem* itemRule = item->getRules();
+				item->setSlot(rightHand);
+				placed = true;
 
+				break;
+			}
+
+			// kL_note: only for plasma pistol + Blaster (see itemSets in Ruleset)
+			// Also now for advanced fixed/innate weapon rules.
+			if (lhWeapon
+				&& (lhWeapon->getRules()->isFixed()
+					|| unit->getFaction() != FACTION_PLAYER)
+				&& !lhWeapon->getAmmoItem()
+				&& lhWeapon->setAmmoItem(item) == 0)
+			{
+				item->setSlot(leftHand);
+				placed = true;
+
+				break;
+			}
+
+			// put the clip in Belt or Backpack
+			RuleItem* itemRule = item->getRules();
+
+			for (int
+					i = 0;
+					i != 4;
+					++i)
+			{
+				if (!unit->getItem("STR_BELT", i)
+					&& _game->getRuleset()->getInventory("STR_BELT")->fitItemInSlot(itemRule, i, 0))
+				{
+					item->moveToOwner(unit);
+					item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+					item->setSlotX(i);
+
+					placed = true;
+
+					break;
+				}
+			}
+
+			if (!placed)
+			{
 				for (int
 						i = 0;
-						i != 4;
+						i != 3;
 						++i)
 				{
-					if (!unit->getItem("STR_BELT", i)
-						&& _game->getRuleset()->getInventory("STR_BELT")->fitItemInSlot(itemRule, i, 0))
+					if (!unit->getItem("STR_BACK_PACK", i)
+						&& _game->getRuleset()->getInventory("STR_BACK_PACK")->fitItemInSlot(itemRule, i, 0))
 					{
 						item->moveToOwner(unit);
-						item->setSlot(_game->getRuleset()->getInventory("STR_BELT"));
+						item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
 						item->setSlotX(i);
 
 						placed = true;
@@ -1421,30 +1479,10 @@ bool BattlescapeGenerator::addItem(
 						break;
 					}
 				}
-
-				if (!placed)
-				{
-					for (int
-							i = 0;
-							i != 3;
-							++i)
-					{
-						if (!unit->getItem("STR_BACK_PACK", i)
-							&& _game->getRuleset()->getInventory("STR_BACK_PACK")->fitItemInSlot(itemRule, i, 0))
-						{
-							item->moveToOwner(unit);
-							item->setSlot(_game->getRuleset()->getInventory("STR_BACK_PACK"));
-							item->setSlotX(i);
-
-							placed = true;
-
-							break;
-						}
-					}
-				}
 			}
+		}
 		break;
-		case BT_GRENADE:			// includes AlienGrenades, SmokeGrenades
+		case BT_GRENADE: // includes AlienGrenades & SmokeGrenades & HE-Packs.
 		case BT_PROXIMITYGRENADE:
 			for (int
 					i = 0;
@@ -1584,6 +1622,33 @@ void BattlescapeGenerator::deployAliens(
 
 			if (unit)
 			{
+				// Built in weapons: the unit has this weapon regardless of loadout or what have you.
+				if (unitRule->getInnateWeapons().empty() == false)
+				{
+					for (std::vector<std::string>::const_iterator
+							j = unitRule->getInnateWeapons().begin();
+							j != unitRule->getInnateWeapons().end();
+							++j)
+					{
+						RuleItem* ruleItem = _game->getRuleset()->getItem(*j);
+						if (ruleItem)
+						{
+							BattleItem* item = new BattleItem(
+															ruleItem,
+															_save->getCurrentItemId());
+
+							if (!addItem(
+										item,
+										unit))
+							{
+								delete item;
+							}
+							else
+								unit->setTurretType(item->getRules()->getTurretType());
+						}
+					}
+				}
+
 				// terrorist aliens' equipment is a special case - they are fitted
 				// with a weapon which is the alien's name with suffix _WEAPON
 				if (unitRule->isLivingWeapon())

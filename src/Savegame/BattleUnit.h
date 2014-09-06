@@ -637,6 +637,10 @@ private:
 		int getActionTUs(
 				BattleActionType actionType,
 				BattleItem* item);
+		/// Get the number of time units a certain action takes.
+		int getActionTUs(
+				BattleActionType actionType,
+				RuleItem* item);
 		/// Spend time units if it can.
 		bool spendTimeUnits(int tu);
 		/// Spend energy if it can.
@@ -983,6 +987,9 @@ private:
 		void setFloorAbove(bool floor);
 		/// Gets the flag for "floor above me".
 		bool getFloorAbove();
+
+		/// Get the name of any melee weapon we may be carrying, or a built in one.
+		std::string getMeleeWeapon();
 
 		/// Gets the unit's mission statistics.
 		BattleUnitStatistics* getStatistics();

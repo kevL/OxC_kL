@@ -168,14 +168,16 @@ protected:
 		/// Performs a melee attack action.
 		void meleeAttack();
 
-		///
+		/// Checks to make sure a target is valid, given the parameters.
 		bool validTarget(
 				BattleUnit* unit,
 				bool assessDanger,
 				bool includeCivs) const;
 
-		///
+		/// Checks the alien's TU reservation setting.
 		BattleActionType getReserveMode();
+		/// Assuming the aLien has both a ranged and a melee weapon, select one.
+		void selectMeleeOrRanged();
 };
 
 }

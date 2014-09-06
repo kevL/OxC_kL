@@ -53,7 +53,7 @@ Unit::Unit(const std::string& type)
 }
 
 /**
- *
+ * dTor.
  */
 Unit::~Unit()
 {
@@ -86,6 +86,8 @@ void Unit::load(
 	_specab			= (SpecialAbility)node["specab"].as<int>(_specab);
 	_spawnUnit		= node["spawnUnit"].as<std::string>(_spawnUnit);
 	_livingWeapon	= node["livingWeapon"].as<bool>(_livingWeapon);
+	_meleeWeapon	= node["meleeWeapon"].as<std::string>(_meleeWeapon);
+	_innateWeapons	= node["innateWeapons"].as<std::vector<std::string> >(_innateWeapons);
 
 	if (node["deathSound"])
 	{
@@ -255,20 +257,45 @@ int Unit::getAggroSound() const
 }
 
 /**
- * Checks if this unit is a living weapon. (ie: chryssalid).
- * @return True if this unit is a living weapon.
+ * Gets stamina recovery per turn as a percentage.
+ * @return, rate of stamina recovery
  */
-bool Unit::isLivingWeapon() const
+const int Unit::getEnergyRecovery() const
+{
+	return _energyRecovery;
+}
+
+/**
+ * Checks if this unit is a living weapon. (ie: chryssalid).
+ * A living weapon ignores any loadout that may be available to
+ * its rank and uses the one associated with its race.
+ * @return, true if this unit is a living weapon
+ */
+const bool Unit::isLivingWeapon() const
 {
 	return _livingWeapon;
 }
 
 /**
- * Gets stamina recovery per turn as a percentage.
+ * Gets this unit's built in melee weapon (if any).
+ * @return, the name of the weapon
  */
-int Unit::getEnergyRecovery() const
+const std::string Unit::getMeleeWeapon() const
 {
-	return _energyRecovery;
+	return _meleeWeapon;
+}
+
+/**
+ * Gets what weapons this unit has built in.
+ * This is a vector of strings representing any
+ * weapons that may be inherent to this creature.
+ * Note: unlike "livingWeapon" this is used in ADDITION to
+ * any loadout or living weapon item that may be defined.
+ * @return, list of weapons that are integral to this unit.
+ */
+const std::vector<std::string>& Unit::getInnateWeapons() const
+{
+	return _innateWeapons;
 }
 
 }

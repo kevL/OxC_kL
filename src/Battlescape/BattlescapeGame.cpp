@@ -423,16 +423,40 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			action.weapon = new BattleItem(
 									_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
 									_save->getCurrentItemId());
-			action.TU = action.weapon->getRules()->getTUUse();
-
-			if (!action.weapon->getRules()->getFlatRate()) // kL
-				action.TU = static_cast<int>(
-								floor(static_cast<float>(action.actor->getStats()->tu * action.TU) / 100.f)); // kL
+			action.TU = unit->getActionTUs(
+										action.type,
+										action.weapon);
 		}
 		else
+		{
 			statePushBack(new UnitTurnBState(
 											this,
 											action));
+
+			// special behaviour here: add and remove the item all at once.
+			if (action.type == BA_HIT
+				&& action.weapon->getRules()->getType() != unit->getMeleeWeapon())
+			{
+				ss.clear();
+				ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
+				_parentState->debug(ss.str());
+
+				action.weapon = new BattleItem(
+											_parentState->getGame()->getRuleset()->getItem(unit->getMeleeWeapon()),
+											_save->getCurrentItemId());
+
+				action.TU = unit->getActionTUs(
+											action.type,
+											action.weapon);
+
+				statePushBack(new ProjectileFlyBState(
+													this,
+													action));
+				_save->removeItem(action.weapon);
+
+				return;
+			}
+		}
 		//Log(LOG_INFO) << ". . create Psi weapon DONE";
 
 

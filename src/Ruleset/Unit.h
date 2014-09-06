@@ -240,10 +240,13 @@ private:
 
 	std::string
 		_armor,
+		_meleeWeapon,
 		_race,
 		_rank,
 		_type,
 		_spawnUnit;
+
+	std::vector<std::string> _innateWeapons;
 
 	SpecialAbility _specab;
 	UnitStats _stats;
@@ -291,10 +294,14 @@ private:
 		std::string getSpawnUnit() const;
 		/// Gets the unit's war cry.
 		int getAggroSound() const;
-		/// Checks if this unit has a built in weapon.
-		bool isLivingWeapon() const;
 		/// Gets stamina recovery per turn as a percentage.
-		int getEnergyRecovery() const;
+		const int getEnergyRecovery() const;
+		/// Checks if this unit has a built in weapon.
+		const bool isLivingWeapon() const;
+		/// Gets the name of any melee weapon that may be built in to this unit.
+		const std::string getMeleeWeapon() const;
+		/// Gets a vector of integrated items this unit has available.
+		const std::vector<std::string>& getInnateWeapons() const;
 };
 
 }

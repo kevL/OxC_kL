@@ -403,7 +403,9 @@ bool BattleItem::needsAmmo() const
 /**
  * Sets an ammo item.
  * @param item, The ammo item.
- * @return, -2 if ammo doesn't fit, or -1 if weapon already contains ammo.
+ * @return,	-2 = ammo doesn't fit
+ *			-1 = weapon already contains ammo
+ *			 0 = success or invalid item
  */
 int BattleItem::setAmmoItem(BattleItem* item)
 {
@@ -424,12 +426,14 @@ int BattleItem::setAmmoItem(BattleItem* item)
 			i = _rules->getCompatibleAmmo()->begin();
 			i != _rules->getCompatibleAmmo()->end();
 			++i)
+	{
 		if (*i == item->getRules()->getType())
 		{
 			_ammoItem = item;
 
 			return 0;
 		}
+	}
 
 	return -2;
 }

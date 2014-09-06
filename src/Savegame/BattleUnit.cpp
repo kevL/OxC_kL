@@ -1594,6 +1594,24 @@ int BattleUnit::getActionTUs(
 	if (item == NULL)
 		return 0;
 
+	return getActionTUs(
+					actionType,
+					item->getRules());
+}
+
+/**
+ * Gets the number of time units a certain action takes.
+ * @param actionType	- type of battle action (BattlescapeGame.h)
+ * @param item			- pointer to an item for TU-cost
+ * @return, TUs to perform action
+ */
+int BattleUnit::getActionTUs(
+		BattleActionType actionType,
+		RuleItem* rule)
+{
+	if (rule == NULL)
+		return 0;
+
 	int cost = 0;
 
 	switch (actionType)
@@ -1610,25 +1628,25 @@ int BattleUnit::getActionTUs(
 			cost = 23; // kL
 		break;
 		case BA_LAUNCH: // kL
-			cost = item->getRules()->getTULaunch();
+			cost = rule->getTULaunch();
 		break;
 		case BA_AIMEDSHOT:
-			cost = item->getRules()->getTUAimed();
+			cost = rule->getTUAimed();
 		break;
 		case BA_AUTOSHOT:
-			cost = item->getRules()->getTUAuto();
+			cost = rule->getTUAuto();
 		break;
 		case BA_SNAPSHOT:
-			cost = item->getRules()->getTUSnap();
+			cost = rule->getTUSnap();
 		break;
 		case BA_STUN:
 		case BA_HIT:
-			cost = item->getRules()->getTUMelee();
+			cost = rule->getTUMelee();
 		break;
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
-			cost = item->getRules()->getTUUse();
+			cost = rule->getTUUse();
 		break;
 
 		default:
@@ -1637,7 +1655,7 @@ int BattleUnit::getActionTUs(
 	}
 
 	// if it's a percentage, apply it to unit TUs
-	if ((item->getRules()->getFlatRate() == false
+	if ((rule->getFlatRate() == false
 			|| actionType == BA_PRIME
 			|| actionType == BA_THROW)
 		&& actionType != BA_DEFUSE) // kL
@@ -3909,6 +3927,27 @@ void BattleUnit::setFloorAbove(bool floor)
 bool BattleUnit::getFloorAbove()
 {
 	return _floorAbove;
+}
+
+/**
+ * Gets the name of any melee weapon we may be carrying, or a built in one.
+ * @return, the name of a melee weapon
+ */
+std::string BattleUnit::getMeleeWeapon()
+{
+	if (getItem("STR_RIGHT_HAND")
+		&& getItem("STR_RIGHT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	{
+		return getItem("STR_RIGHT_HAND")->getRules()->getType();
+	}
+
+	if (getItem("STR_LEFT_HAND")
+		&& getItem("STR_LEFT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	{
+		return getItem("STR_LEFT_HAND")->getRules()->getType();
+	}
+
+	return _unitRules->getMeleeWeapon();
 }
 
 /**
