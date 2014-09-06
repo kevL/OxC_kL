@@ -262,28 +262,37 @@ private:
 		void load(
 				const YAML::Node& node,
 				int modIndex);
+
 		/// Gets the unit's type.
 		std::string getType() const;
+
 		/// Gets the unit's stats.
 		UnitStats* getStats();
+
 		/// Gets the unit's height when standing.
 		int getStandHeight() const;
 		/// Gets the unit's height when kneeling.
 		int getKneelHeight() const;
 		/// Gets the unit's float elevation.
 		int getFloatHeight() const;
+
 		/// Gets the armor type.
 		std::string getArmor() const;
 		/// Gets the alien race type.
 		std::string getRace() const;
 		/// Gets the alien rank.
 		std::string getRank() const;
+
 		/// Gets the value - for score calculation.
 		int getValue() const;
+
 		/// Gets the death sound id.
 		int getDeathSound() const;
 		/// Gets the move sound id.
 		int getMoveSound() const;
+		/// Gets the unit's war cry.
+		int getAggroSound() const;
+
 		/// Gets the intelligence. This is the number of turns AI remembers your troop positions.
 		int getIntelligence() const;
 		/// Gets the aggression. Determines the chance of revenge and taking cover.
@@ -292,10 +301,10 @@ private:
 		int getSpecialAbility() const;
 		/// Gets the unit's spawn unit.
 		std::string getSpawnUnit() const;
-		/// Gets the unit's war cry.
-		int getAggroSound() const;
+
 		/// Gets stamina recovery per turn as a percentage.
 		const int getEnergyRecovery() const;
+
 		/// Checks if this unit has a built in weapon.
 		const bool isLivingWeapon() const;
 		/// Gets the name of any melee weapon that may be built in to this unit.

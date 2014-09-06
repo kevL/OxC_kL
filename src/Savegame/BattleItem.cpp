@@ -403,7 +403,7 @@ bool BattleItem::needsAmmo() const
 /**
  * Sets an ammo item.
  * @param item, The ammo item.
- * @return,	-2 = ammo doesn't fit
+ * @return,	-2 = ammo doesn't fit or nothing happened
  *			-1 = weapon already contains ammo
  *			 0 = success or invalid item
  */

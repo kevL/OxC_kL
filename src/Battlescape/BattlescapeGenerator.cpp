@@ -1061,7 +1061,6 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile)
 void BattlescapeGenerator::loadGroundWeapon(BattleItem* item)
 {
 	//Log(LOG_INFO) << "BattlescapeGenerator::loadGroundWeapon()";
-
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
 	RuleInventory* righthand = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
 	//Log(LOG_INFO) << ". ground & righthand RuleInventory are set";
@@ -1077,7 +1076,6 @@ void BattlescapeGenerator::loadGroundWeapon(BattleItem* item)
 			&& item->setAmmoItem(*i) == 0) // success
 		{
 			//Log(LOG_INFO) << ". . . attempt to set righthand as Inv.";
-
 			(*i)->setXCOMProperty(true);
 			(*i)->setSlot(righthand);	// I don't think this is actually setting the ammo
 										// into anyone's right hand; I think it's just here
@@ -1413,7 +1411,7 @@ bool BattlescapeGenerator::addItem(
 		break;
 		case BT_AMMO:
 		{
-			// find equipped weapons that can be loaded with this ammo
+			// find handheld weapons that can be loaded with this ammo
 			if ((rhWeapon->getRules()->isFixed()
 					|| unit->getFaction() != FACTION_PLAYER)
 				&& !rhWeapon->getAmmoItem()
@@ -1439,7 +1437,7 @@ bool BattlescapeGenerator::addItem(
 				break;
 			}
 
-			// put the clip in Belt or Backpack
+			// else put the clip in Belt or Backpack
 			RuleItem* itemRule = item->getRules();
 
 			for (int
@@ -3175,8 +3173,8 @@ void BattlescapeGenerator::loadWeapons()
 			i != _craftInventoryTile->getInventory()->end();
 			++i)
 	{
-		if (!(*i)->getRules()->isFixed()
-			&& !(*i)->getRules()->getCompatibleAmmo()->empty()
+		if ((*i)->getRules()->isFixed() == false
+			&& (*i)->getRules()->getCompatibleAmmo()->empty() == false
 			&& (*i)->getAmmoItem() == NULL
 			&& ((*i)->getRules()->getBattleType() == BT_FIREARM
 				|| (*i)->getRules()->getBattleType() == BT_MELEE))

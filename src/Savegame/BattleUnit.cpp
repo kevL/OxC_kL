@@ -3765,7 +3765,7 @@ void BattleUnit::setHealth(int health)
 }
 
 /**
- * to stop a unit from firing/throwing if it spots a new opponent during turning
+ * Stops a unit from firing/throwing if it spots a new opponent during turning.
  */
 void BattleUnit::setStopShot(bool stop)
 {
@@ -3773,7 +3773,7 @@ void BattleUnit::setStopShot(bool stop)
 }
 
 /**
- * to stop a unit from firing/throwing if it spots a new opponent during turning
+ * Stops a unit from firing/throwing if it spots a new opponent during turning.
  */
 bool BattleUnit::getStopShot() const
 {

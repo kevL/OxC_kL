@@ -151,6 +151,7 @@ private:
 //		* _txtTooltip;
 		* _txtName,
 		* _txtShade, // kL
+		* _txtTerrain, // kL
 		* _txtTurn; // kL
 	Timer
 		* _animTimer,

@@ -275,9 +275,10 @@ BattlescapeState::BattlescapeState()
 	_txtDebug		= new Text(300, 10, 10, 0);
 //	_txtTooltip		= new Text(300, 10, x + 2, y - 10);
 
+	_txtTerrain		= new Text(150, 9, 1, 0);	// kL
+	_txtShade		= new Text(50, 9, 1, 10);	// kL
+	_txtTurn		= new Text(50, 9, 1, 20);	// kL
 //	_turnCounter	= new TurnCounter(20, 5, 0, 0);
-	_txtTurn		= new Text(45, 9, 1, 0);	// kL
-	_txtShade		= new Text(45, 9, 1, 10);	// kL
 
 	_txtConsole		= new Text(200, 100, 1, 0); // kL
 
@@ -393,9 +394,11 @@ BattlescapeState::BattlescapeState()
 	_txtConsole->setColor(Palette::blockOffset(9)+1);
 	_txtConsole->setVisible(false);
 
+	add(_txtTerrain);
 	add(_txtShade);
 	add(_txtTurn);
 
+	_txtTerrain->setColor(Palette::blockOffset(9)+1);
 	_txtShade->setColor(Palette::blockOffset(9)+1);
 	_txtTurn->setColor(Palette::blockOffset(9)+1);
 
@@ -435,14 +438,19 @@ BattlescapeState::BattlescapeState()
 
 
 	std::wostringstream
+		woTurn,
 		woShade,
-		woTurn;
+		woTerrain;
 
-	woTurn << L"turn ";
+	woTerrain << L"terrain> ";
+	woTerrain << tr(_save->getTerrain()); //.c_str();
+	_txtTerrain->setText(woTerrain.str());
+
+	woTurn << L"turn> ";
 	woTurn << _save->getTurn();
 	_txtTurn->setText(woTurn.str());
 
-	woShade << L"shade ";
+	woShade << L"shade> ";
 	woShade << _save->getGlobalShade();
 	_txtShade->setText(woShade.str());
 	// kL_end.
@@ -1053,19 +1061,20 @@ void BattlescapeState::mapOver(Action* action)
 			&& tile->getInventory()->empty() == false)
 		{
 			_txtConsole->setVisible();
-			_txtTurn->setVisible(false);
+			_txtTerrain->setVisible(false);
 			_txtShade->setVisible(false);
+			_txtTurn->setVisible(false);
 
 			std::wostringstream ss;
-			ss << L"";
+//			ss << L"";
 
 			for (std::vector<BattleItem*>::iterator // ground items
 					i = tile->getInventory()->begin();
 					i != tile->getInventory()->end();
 					++i)
 			{
-				if (ss != L"")
-					ss << L"\n";
+//				if (ss != L"")
+//					ss << L"\n";
 
 				ss << L"> ";
 
@@ -1073,7 +1082,7 @@ void BattlescapeState::mapOver(Action* action)
 //					&& (*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 				{
 					ss << (*i)->getUnit()->getName(_game->getLanguage())
-					<< L" (" << (*i)->getUnit()->getStun() - (*i)->getUnit()->getHealth() << L")";
+					<< L" (" << (*i)->getUnit()->getStun() - (*i)->getUnit()->getHealth() << L")"; // something funny here ...!
 				}
 				else
 				{
@@ -1100,6 +1109,8 @@ void BattlescapeState::mapOver(Action* action)
 						ss << L" (" << (*i)->getFuseTimer() << L")";
 					}
 				}
+
+				ss << L"\n";
 			}
 
 			_txtConsole->setText(ss.str());
@@ -1107,8 +1118,9 @@ void BattlescapeState::mapOver(Action* action)
 		else
 		{
 			_txtConsole->setVisible(false);
-			_txtTurn->setVisible();
+			_txtTerrain->setVisible();
 			_txtShade->setVisible();
+			_txtTurn->setVisible();
 		}
 	} // kL_end.
 }

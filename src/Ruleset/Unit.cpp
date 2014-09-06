@@ -212,6 +212,15 @@ int Unit::getMoveSound() const
 }
 
 /**
+ * Gets the unit's war cry.
+ * @return The id of the unit's aggro sound.
+ */
+int Unit::getAggroSound() const
+{
+	return _aggroSound;
+}
+
+/**
  * Gets the intelligence. This is the number of turns the AI remembers your troop positions.
  * @return The unit's intelligence.
  */
@@ -245,15 +254,6 @@ int Unit::getSpecialAbility() const
 std::string Unit::getSpawnUnit() const
 {
 	return _spawnUnit;
-}
-
-/**
- * Gets the unit's war cry.
- * @return The id of the unit's aggro sound.
- */
-int Unit::getAggroSound() const
-{
-	return _aggroSound;
 }
 
 /**
