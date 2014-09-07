@@ -737,10 +737,12 @@ void Inventory::mouseClick(Action* action, State* state)
 					{
 						RuleInventory* newSlot = _game->getRuleset()->getInventory("STR_GROUND");
 
-						std::string warning = "STR_NOT_ENOUGH_SPACE";
+//kL					std::string warning = "STR_NOT_ENOUGH_SPACE";
+						std::string warning = ""; // kL
 						bool placed = false;
 
-						if (slot->getType() == INV_GROUND)
+						if (slot->getType() == INV_GROUND
+							|| slot->getType() == INV_SLOT) // kL
 						{
 							newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND"); // kL
 /*kL
@@ -774,8 +776,7 @@ void Inventory::mouseClick(Action* action, State* state)
 											item,
 											warning);
 
-							// kL_begin:
-							if (!placed)
+							if (!placed) // kL_begin:
 							{
 								newSlot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
 								placed = fitItem(
@@ -783,7 +784,7 @@ void Inventory::mouseClick(Action* action, State* state)
 												item,
 												warning);
 							} // kL_end
-
+/*kL
 							if (!placed)
 							{
 								for (std::map<std::string, RuleInventory*>::const_iterator
@@ -801,12 +802,12 @@ void Inventory::mouseClick(Action* action, State* state)
 													item,
 													warning);
 								}
-							}
+							} */
 
 							if (!placed)
 								_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 						}
-						else
+						else // newSlot = ground. Move to ground
 						{
 							if (!_tu
 								|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
@@ -827,8 +828,11 @@ void Inventory::mouseClick(Action* action, State* state)
 								warning = "STR_NOT_ENOUGH_TIME_UNITS";
 						}
 
-						if (!placed)
+						if (!placed
+							&& warning != "") // kL
+						{
 							_warning->showMessage(_game->getLanguage()->getString(warning));
+						}
 						else // kL_begin:
 						{
 							_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor.

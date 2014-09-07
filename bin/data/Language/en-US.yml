@@ -1010,7 +1010,7 @@ en-US:
   STR_UNABLE_TO_THROW_HERE: "< Throw >"
   STR_SET_TIMER: "Set Timer"
   STR_HIDDEN_MOVEMENT: "hidden Movement ..."
-  STR_TURN: "turn {0}"
+  STR_TURN: "turn> {ALT}{0}"
   STR_SIDE: "{0}"
   STR_OPENXCOM: "0xC: uFo deFense"
   STR_PRESS_BUTTON_TO_CONTINUE: "All your TU are belong to us."

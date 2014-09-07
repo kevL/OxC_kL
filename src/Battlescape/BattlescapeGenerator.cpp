@@ -391,9 +391,8 @@ void BattlescapeGenerator::run()
 
 	if (ruleDeploy->getTerrains().empty())
 	{
-		Log(LOG_INFO) << "Generator run() terrains NOT available: worldTexture = " << _worldTexture;
-		Log(LOG_INFO) << "Generator run() terrains NOT available: worldTerrain = " << _worldTerrain->getName();
-
+		//Log(LOG_INFO) << "Generator run() terrains NOT available: worldTexture = " << _worldTexture;
+		//Log(LOG_INFO) << "Generator run() terrains NOT available: worldTerrain = " << _worldTerrain->getName();
 		if (_worldTerrain == NULL) // kL
 		{
 			double lat = 0.0;
@@ -409,7 +408,7 @@ void BattlescapeGenerator::run()
 	}
 	else
 	{
-		Log(LOG_INFO) << "Generator run() terrains available = " << ruleDeploy->getTerrains().size();
+		//Log(LOG_INFO) << "Generator run() terrains available = " << ruleDeploy->getTerrains().size();
 		size_t pick = RNG::generate(
 								0,
 								ruleDeploy->getTerrains().size() - 1);

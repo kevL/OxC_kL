@@ -40,9 +40,9 @@ struct RuleSlot
 
 enum InventoryType
 {
-	INV_SLOT,
-	INV_HAND,
-	INV_GROUND
+	INV_SLOT,	// 0
+	INV_HAND,	// 1
+	INV_GROUND	// 2
 };
 
 

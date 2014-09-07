@@ -388,20 +388,6 @@ BattlescapeState::BattlescapeState()
 	_save = _game->getSavedGame()->getSavedBattle();
 
 	// kL_begin:
-//	add(_turnCounter);
-//	_turnCounter->setColor(Palette::blockOffset(9)+1);
-	add(_txtConsole);
-	_txtConsole->setColor(Palette::blockOffset(9)+1);
-	_txtConsole->setVisible(false);
-
-	add(_txtTerrain);
-	add(_txtShade);
-	add(_txtTurn);
-
-	_txtTerrain->setColor(Palette::blockOffset(9)+1);
-	_txtShade->setColor(Palette::blockOffset(9)+1);
-	_txtTurn->setColor(Palette::blockOffset(9)+1);
-
 	add(_txtBaseLabel);
 	_txtBaseLabel->setColor(Palette::blockOffset(9)+1);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
@@ -436,7 +422,23 @@ BattlescapeState::BattlescapeState()
 	}
 	_txtBaseLabel->setText(baseLabel); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
 
+//	add(_turnCounter);
+//	_turnCounter->setColor(Palette::blockOffset(9)+1);
+	add(_txtConsole);
+	_txtConsole->setColor(Palette::blockOffset(8)+1); // blue
+	_txtConsole->setVisible(false);
 
+	add(_txtTerrain);
+	add(_txtShade);
+	add(_txtTurn);
+
+	_txtTerrain->setColor(Palette::blockOffset(9)+1); // yellow
+	_txtTerrain->setSecondaryColor(Palette::blockOffset(8)+1);
+	_txtShade->setColor(Palette::blockOffset(9)+1);
+	_txtShade->setSecondaryColor(Palette::blockOffset(8)+1);
+	_txtTurn->setColor(Palette::blockOffset(9)+1);
+	_txtTurn->setSecondaryColor(Palette::blockOffset(8)+1);
+/*
 	std::wostringstream
 		woTurn,
 		woShade,
@@ -446,13 +448,17 @@ BattlescapeState::BattlescapeState()
 	woTerrain << tr(_save->getTerrain()); //.c_str();
 	_txtTerrain->setText(woTerrain.str());
 
-	woTurn << L"turn> ";
-	woTurn << _save->getTurn();
-	_txtTurn->setText(woTurn.str());
-
 	woShade << L"shade> ";
 	woShade << _save->getGlobalShade();
 	_txtShade->setText(woShade.str());
+
+	woTurn << L"turn> ";
+	woTurn << _save->getTurn();
+	_txtTurn->setText(woTurn.str()); */
+
+	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_save->getTerrain())));
+	_txtShade->setText(tr("STR_SHADE_").arg(_save->getGlobalShade()));
+	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
 	// kL_end.
 
 	_map->init();
@@ -1078,8 +1084,8 @@ void BattlescapeState::mapOver(Action* action)
 
 				ss << L"> ";
 
-				if ((*i)->getUnit() != NULL)
-//					&& (*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+				if ((*i)->getUnit() != NULL
+					&& (*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS) // ie. not dead (although I think the unit<->tile association is supposed to go away onDeath)
 				{
 					ss << (*i)->getUnit()->getName(_game->getLanguage())
 					<< L" (" << (*i)->getUnit()->getStun() - (*i)->getUnit()->getHealth() << L")"; // something funny here ...!
