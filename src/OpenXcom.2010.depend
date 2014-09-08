@@ -4440,7 +4440,7 @@
 	<stdint.h>
 	"GameTime.h"
 
-1409773437 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1410120234 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -5643,7 +5643,7 @@
 1404096022 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1410026585 f:\git\openxcom\src\battlescape\battlescapestate.h
+1410138032 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5733,7 +5733,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1409989770 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1410119711 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5914,7 +5914,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1410047218 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1410126930 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6035,7 +6035,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1410056189 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1410138423 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6915,7 +6915,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1409360125 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1410138919 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -6930,6 +6930,8 @@
 	"../Engine/Options.h"
 	"../Engine/Sound.h"
 	"../Engine/Surface.h"
+	"../Interface/Bar.h"
+	"../Interface/NumberText.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
 	"../Savegame/BattleItem.h"
@@ -7140,7 +7142,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1409605835 source:f:\git\openxcom\src\engine\options.cpp
+1410135384 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
 	<algorithm>
 	<fstream>
@@ -11597,15 +11599,15 @@
 1404096023 f:\git\openxcom\src\ruleset\rulemusic.h
 	<yaml-cpp/yaml.h>
 
-1404096022 f:\git\openxcom\src\engine\optioninfo.h
+1410135182 f:\git\openxcom\src\engine\optioninfo.h
 	<map>
 	<string>
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1409605127 f:\git\openxcom\src\engine\options.inc.h
+1410135211 f:\git\openxcom\src\engine\options.inc.h
 
-1404096022 source:f:\git\openxcom\src\engine\optioninfo.cpp
+1410135211 source:f:\git\openxcom\src\engine\optioninfo.cpp
 	"OptionInfo.h"
 	"Exception.h"
 

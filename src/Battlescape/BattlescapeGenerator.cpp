@@ -1911,8 +1911,8 @@ void BattlescapeGenerator::generateMap()
 							0,
 							0,
 							MT_DEFAULT),
-		* craftMap = 0,
-		* ufoMap = 0;
+		* craftMap = NULL,
+		* ufoMap = NULL;
 
 	_save->setAmbientSound(_terrain->getAmbience());
 
@@ -1934,7 +1934,7 @@ void BattlescapeGenerator::generateMap()
 
 	// DETERMINE UFO LANDINGZONE
 	// - do this first because ufo is generally bigger
-	if (_ufo != 0)
+	if (_ufo != NULL)
 	{
 		// pick a random ufo mapblock, can have all kinds of sizes
 		ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);

@@ -43,6 +43,7 @@ class NumberText;
 class SavedBattleGame;
 class Surface;
 class Text;
+//class TextList; // kL
 class Timer;
 //class TurnCounter; // kL
 class WarningMessage;
@@ -60,11 +61,12 @@ private:
 	static const int VISIBLE_MAX = 20; // was 10
 
 	bool
-		_mouseOverIcons,
 		_firstInit,
 		_isMouseScrolled,
 		_isMouseScrolling,
-		_mouseOverThreshold;
+		_mouseOverIcons,
+		_mouseOverThreshold,
+		_showConsole; // kL
 	int
 		_fuseFrame, // kL
 		_totalMouseMoveX,
@@ -153,6 +155,7 @@ private:
 		* _txtShade, // kL
 		* _txtTerrain, // kL
 		* _txtTurn; // kL
+//	TextList* _lstConsole; // kL
 	Timer
 		* _animTimer,
 		* _gameTimer;
@@ -265,11 +268,20 @@ private:
 
 		/// Handler for clicking a reserved button.
 //		void btnReserveClick(Action* action);
+		/// Handler for clicking the reserve TUs to kneel button.
+//		void btnReserveKneelClick(Action* action);
 		/// Handler for clicking the reload button.
-//		void btnReloadClick(Action* action);
-
+		void btnReloadClick(Action* action);
+		/// Handler for clicking the expend all TUs button.
+		void btnZeroTUsClick(Action* action);
 		/// Handler for clicking the lighting button.
 		void btnPersonalLightingClick(Action* action);
+		/// kL. Handler for toggling the console.
+		void btnConsoleToggle(Action* action); // kL
+		/// Handler for showing tooltip.
+//		void txtTooltipIn(Action* action);
+		/// Handler for hiding tooltip.
+//		void txtTooltipOut(Action* action);
 
 		/// Determines whether a playable unit is selected.
 		bool playableUnitSelected();
@@ -331,15 +343,6 @@ private:
 		/// Is the player allowed to press buttons?
 		bool allowButtons(bool allowSaving = false) const;
 
-		/// Handler for clicking the reserve TUs to kneel button.
-//		void btnReserveKneelClick(Action* action);
-		/// Handler for clicking the expend all TUs button.
-		void btnZeroTUsClick(Action* action);
-		/// Handler for showing tooltip.
-//		void txtTooltipIn(Action* action);
-		/// Handler for hiding tooltip.
-//		void txtTooltipOut(Action* action);
-
 		/// Update the resolution settings, we just resized the window.
 		void resize(
 				int& dX,
@@ -356,8 +359,17 @@ private:
 		/// kL. Refreshes the visUnits' surfaces' visibility for UnitWalk/TurnBStates.
 		void refreshVisUnits(); // kL
 
-		/// Shows primer warnings on all live grenades. kL. Adapted from Inventory.
+		/// kL. Shows primer warnings on all live grenades. Adapted from Inventory.
 		void drawFuse(); // kL
+
+		/// kL. Gets the TimeUnits field from icons.
+		NumberText* getTimeUnitsField() const; // kL
+		/// kL. Gets the TimeUnits bar from icons.
+		Bar* getTimeUnitsBar() const; // kL
+		/// kL. Gets the Energy field from icons.
+		NumberText* getEnergyField() const; // kL
+		/// kL. Gets the Energy bar from icons.
+		Bar* getEnergyBar() const; // kL
 };
 
 }

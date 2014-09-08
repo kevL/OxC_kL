@@ -88,7 +88,7 @@ BasescapeState::BasescapeState(
 	_txtFacility	= new Text(192, 9, 0, 0);
 	_view			= new BaseView(192, 192, 0, 8);
 
-	_edtBase		= new TextEdit(this, 127, 17, 194, 0);
+	_edtBase		= new TextEdit(this, 126, 17, 194, 0);
 	_txtRegion		= new Text(126, 9, 194, 15);
 	_txtFunds		= new Text(126, 9, 194, 24);
 
@@ -161,6 +161,7 @@ BasescapeState::BasescapeState(
 	_edtBase->onChange((ActionHandler)& BasescapeState::edtBaseChange);
 
 	_txtRegion->setColor(Palette::blockOffset(15)+6);
+	_txtRegion->setAlign(ALIGN_RIGHT);
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 

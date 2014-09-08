@@ -9699,8 +9699,8 @@ extraStrings:
       STR_ACCURACY_SHORT_KL: "acu {ALT}{0}"
       STR_HULL_: "HULL {ALT}{0}"
       STR_DEFUSE_GRENADE: "deFuse"
-      STR_SHADE_: "shade> {ALT}{0}"
-      STR_TEXTURE_: "terrain> {ALT}{0}"
+      STR_SHADE_: "shade> {0}"
+      STR_TEXTURE_: "terrain> {0}"
       STR_CRAFT_READY_TO_LAND_AT: "{0}{ALT}{SMALLLINE}{NEWLINE}ready to assault"
       STR_CRAFT_DESTINATION: "{0}{SMALLLINE}{NEWLINE}{ALT}{1}"
       STR_CORPSE_ARMOR: "" # these are just to prevent WARNINGS in the logfile:
@@ -9770,6 +9770,7 @@ extraStrings:
       STR_EXPOSURE: "exposure"
       STR_PER10MIN: "per 10 min"
       STR_SHOT_TYPE_LAUNCH: "launch"
+      STR_CONSOLE: "toggle battlescape console"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

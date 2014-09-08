@@ -81,6 +81,7 @@
 #include "../Interface/ImageButton.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
+//#include "../Interface/TextList.h" // kL
 //#include "../Interface/TurnCounter.h" // kL
 
 #include "../Menu/LoadGameState.h"
@@ -126,7 +127,8 @@ BattlescapeState::BattlescapeState()
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),
 		_mouseScrollingStartTime(0),	// kL_end.
-		_fuseFrame(0)					// kL
+		_fuseFrame(0), // kL
+		_showConsole(false) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	std::fill_n(
@@ -280,7 +282,8 @@ BattlescapeState::BattlescapeState()
 	_txtTurn		= new Text(50, 9, 1, 20);	// kL
 //	_turnCounter	= new TurnCounter(20, 5, 0, 0);
 
-	_txtConsole		= new Text(200, 100, 1, 0); // kL
+	_txtConsole		= new Text(200, y, 1, 0); // kL
+//	_lstConsole		= new TextList(200, y, 1, 0); // kL
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
@@ -428,16 +431,25 @@ BattlescapeState::BattlescapeState()
 	_txtConsole->setColor(Palette::blockOffset(8)+1); // blue
 	_txtConsole->setVisible(false);
 
+/*	add(_lstConsole);
+	_lstConsole->setColor(Palette::blockOffset(8)+1); // blue
+//	_lstConsole->setArrowColor(Palette::blockOffset(15)+6);
+//	_lstConsole->setArrowColumn(180, ARROW_VERTICAL);
+	_lstConsole->setColumns(1, 200);
+//	_lstSoldiers->setBackground(_window);
+//	_lstSoldiers->setMargin();
+	_lstConsole->setVisible(false); */
+
 	add(_txtTerrain);
 	add(_txtShade);
 	add(_txtTurn);
 
 	_txtTerrain->setColor(Palette::blockOffset(9)+1); // yellow
-	_txtTerrain->setSecondaryColor(Palette::blockOffset(8)+1);
+//	_txtTerrain->setSecondaryColor(Palette::blockOffset(8)+1);
 	_txtShade->setColor(Palette::blockOffset(9)+1);
-	_txtShade->setSecondaryColor(Palette::blockOffset(8)+1);
+//	_txtShade->setSecondaryColor(Palette::blockOffset(8)+1);
 	_txtTurn->setColor(Palette::blockOffset(9)+1);
-	_txtTurn->setSecondaryColor(Palette::blockOffset(8)+1);
+//	_txtTurn->setSecondaryColor(Palette::blockOffset(8)+1);
 /*
 	std::wostringstream
 		woTurn,
@@ -686,16 +698,16 @@ BattlescapeState::BattlescapeState()
 //	_btnZeroTUs->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 //	_btnZeroTUs->allowClickInversion();
 
-	// shortcuts without a specific button
-//	_btnStats->onKeyboardPress(
-//				(ActionHandler)& BattlescapeState::btnReloadClick,
-//				Options::keyBattleReload);
+	// shortcuts without a specific surface button graphic.
+	_btnStats->onKeyboardPress(
+					(ActionHandler)& BattlescapeState::btnReloadClick,
+					Options::keyBattleReload);
 	_btnStats->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnPersonalLightingClick,
 					Options::keyBattlePersonalLighting);
-/*	_btnStats->onKeyboardPress( // kL, replaces _btnZeroUTs functionality.
-					(ActionHandler)& BattlescapeState::btnZeroTUsClick,
-					Options::keyBattleZeroTUs); */
+	_btnStats->onKeyboardPress( // kL
+					(ActionHandler)& BattlescapeState::btnConsoleToggle,
+					Options::keyBattleConsole);
 
 	SDLKey buttons[] =
 	{
@@ -754,13 +766,17 @@ BattlescapeState::BattlescapeState()
 //	_numMorale->setColor(Palette::blockOffset(12));
 //	_barTimeUnits->setColor(Palette::blockOffset(4));
 	_barTimeUnits->setScale();
+	_barTimeUnits->setMax(100.0);
 //	_barEnergy->setColor(Palette::blockOffset(1));
 	_barEnergy->setScale();
+	_barEnergy->setMax(100.0);
 //	_barHealth->setColor(Palette::blockOffset(2));
 //	_barHealth->setColor2(Palette::blockOffset(5)+2);
 	_barHealth->setScale();
+	_barHealth->setMax(100.0);
 //	_barMorale->setColor(Palette::blockOffset(12));
 	_barMorale->setScale();
+	_barMorale->setMax(100.0);
 
 	_txtDebug->setColor(Palette::blockOffset(8));
 	_txtDebug->setHighContrast();
@@ -1057,7 +1073,8 @@ void BattlescapeState::mapOver(Action* action)
 
 		_game->getCursor()->handle(action);
 	}
-	else if (allowButtons()) // kL_begin:
+	else if (_showConsole // kL_begin:
+		&& allowButtons())
 	{
 		Position pos;
 		_map->getSelectorPosition(&pos);
@@ -1067,10 +1084,13 @@ void BattlescapeState::mapOver(Action* action)
 			&& tile->getInventory()->empty() == false)
 		{
 			_txtConsole->setVisible();
+//			_lstConsole->setVisible();
+
 			_txtTerrain->setVisible(false);
 			_txtShade->setVisible(false);
 			_txtTurn->setVisible(false);
 
+			size_t rows = 0;
 			std::wostringstream ss;
 //			ss << L"";
 
@@ -1082,6 +1102,7 @@ void BattlescapeState::mapOver(Action* action)
 //				if (ss != L"")
 //					ss << L"\n";
 
+				rows++;
 				ss << L"> ";
 
 				if ((*i)->getUnit() != NULL
@@ -1117,6 +1138,11 @@ void BattlescapeState::mapOver(Action* action)
 				}
 
 				ss << L"\n";
+				if (rows > 24)
+				{
+					ss << L"> . . . more";
+					break;
+				}
 			}
 
 			_txtConsole->setText(ss.str());
@@ -1124,6 +1150,8 @@ void BattlescapeState::mapOver(Action* action)
 		else
 		{
 			_txtConsole->setVisible(false);
+//			_lstConsole->setVisible(false);
+
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
@@ -1960,10 +1988,37 @@ void BattlescapeState::btnPsiClick(Action* action)
 } */
 
 /**
+ * Reserves time units for kneeling.
+ * @param action Pointer to an action.
+ */
+/* void BattlescapeState::btnReserveKneelClick(Action* action)
+{
+	if (allowButtons())
+	{
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
+		action->getSender()->mousePress(&a, this);
+		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
+//		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
+		_btnReserveKneel->toggle(_battleGame->getKneelReserved());
+
+		// update any path preview
+		if (_battleGame->getPathfinding()->isPathPreviewed())
+		{
+			_battleGame->getPathfinding()->removePreview();
+			_battleGame->getPathfinding()->previewPath();
+		}
+	}
+} */
+
+/**
  * Reloads the weapon in hand.
  * @param action Pointer to an action.
  */
-/* void BattlescapeState::btnReloadClick(Action*)
+void BattlescapeState::btnReloadClick(Action*)
 {
 	if (playableUnitSelected()
 		&& _save->getSelectedUnit()->checkAmmo())
@@ -1972,9 +2027,34 @@ void BattlescapeState::btnPsiClick(Action* action)
 												_save->getDepth(),
 												ResourcePack::ITEM_RELOAD)
 											->play();
+
 		updateSoldierInfo();
 	}
-} */
+}
+
+/**
+ * Removes all time units.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnZeroTUsClick(Action* action)
+{
+	if (allowButtons())
+	{
+		SDL_Event ev;
+		ev.type = SDL_MOUSEBUTTONDOWN;
+		ev.button.button = SDL_BUTTON_LEFT;
+
+		Action a = Action(&ev, 0.0, 0.0, 0, 0);
+		action->getSender()->mousePress(&a, this);
+
+		if (_battleGame->getSave()->getSelectedUnit())
+		{
+			_battleGame->getSave()->getSelectedUnit()->setTimeUnits(0);
+
+			updateSoldierInfo();
+		}
+	}
+}
 
 /**
  * Toggles soldier's personal lighting (purely cosmetic).
@@ -1985,6 +2065,45 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
 	if (allowButtons())
 		_save->getTileEngine()->togglePersonalLighting();
 }
+
+/**
+ * kL. Handler for toggling the console.
+ * @param action Pointer to an action.
+ */
+void BattlescapeState::btnConsoleToggle(Action*) // kL
+{
+	if (allowButtons())
+		_showConsole = !_showConsole;
+//		_txtConsole->setVisible(!_txtConsole->getVisible());
+}
+
+/**
+* Shows a tooltip for the appropriate button.
+* @param action Pointer to an action.
+*/
+/* void BattlescapeState::txtTooltipIn(Action* action)
+{
+	if (allowButtons() && Options::battleTooltips)
+	{
+		_currentTooltip = action->getSender()->getTooltip();
+		_txtTooltip->setText(tr(_currentTooltip));
+	}
+} */
+
+/**
+* Clears the tooltip text.
+* @param action Pointer to an action.
+*/
+/* void BattlescapeState::txtTooltipOut(Action* action)
+{
+	if (allowButtons() && Options::battleTooltips)
+	{
+		if (_currentTooltip == action->getSender()->getTooltip())
+		{
+			_txtTooltip->setText(L"");
+		}
+	}
+} */
 
 /**
  * Determines whether a playable unit is selected. Normally only player side
@@ -2152,21 +2271,21 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	double stat = static_cast<double>(selectedUnit->getStats()->tu);
 	int tu = selectedUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
-	_barTimeUnits->setMax(100.0);
+//	_barTimeUnits->setMax(100.0);
 	_barTimeUnits->setValue(ceil(
 							static_cast<double>(tu) / stat * 100.0));
 
 	stat = static_cast<double>(selectedUnit->getStats()->stamina);
 	int energy = selectedUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
-	_barEnergy->setMax(100.0);
+//	_barEnergy->setMax(100.0);
 	_barEnergy->setValue(ceil(
 							static_cast<double>(energy) / stat * 100.0));
 
 	stat = static_cast<double>(selectedUnit->getStats()->health);
 	int health = selectedUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
-	_barHealth->setMax(100.0);
+//	_barHealth->setMax(100.0);
 	_barHealth->setValue(ceil(
 							static_cast<double>(health) / stat * 100.0));
 	_barHealth->setValue2(ceil(
@@ -2174,7 +2293,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	int morale = selectedUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
-	_barMorale->setMax(100.0);
+//	_barMorale->setMax(100.0);
 	_barMorale->setValue(morale);
 
 
@@ -3156,85 +3275,6 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 }
 
 /**
- * Reserves time units for kneeling.
- * @param action Pointer to an action.
- */
-/* void BattlescapeState::btnReserveKneelClick(Action* action)
-{
-	if (allowButtons())
-	{
-		SDL_Event ev;
-		ev.type = SDL_MOUSEBUTTONDOWN;
-		ev.button.button = SDL_BUTTON_LEFT;
-
-		Action a = Action(&ev, 0.0, 0.0, 0, 0);
-		action->getSender()->mousePress(&a, this);
-		_battleGame->setKneelReserved(!_battleGame->getKneelReserved());
-//		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
-		_btnReserveKneel->toggle(_battleGame->getKneelReserved());
-
-		// update any path preview
-		if (_battleGame->getPathfinding()->isPathPreviewed())
-		{
-			_battleGame->getPathfinding()->removePreview();
-			_battleGame->getPathfinding()->previewPath();
-		}
-	}
-} */
-
-/**
- * Removes all time units.
- * @param action Pointer to an action.
- */
-void BattlescapeState::btnZeroTUsClick(Action* action)
-{
-	if (allowButtons())
-	{
-		SDL_Event ev;
-		ev.type = SDL_MOUSEBUTTONDOWN;
-		ev.button.button = SDL_BUTTON_LEFT;
-
-		Action a = Action(&ev, 0.0, 0.0, 0, 0);
-		action->getSender()->mousePress(&a, this);
-
-		if (_battleGame->getSave()->getSelectedUnit())
-		{
-			_battleGame->getSave()->getSelectedUnit()->setTimeUnits(0);
-
-			updateSoldierInfo();
-		}
-	}
-}
-
-/**
-* Shows a tooltip for the appropriate button.
-* @param action Pointer to an action.
-*/
-/* void BattlescapeState::txtTooltipIn(Action* action)
-{
-	if (allowButtons() && Options::battleTooltips)
-	{
-		_currentTooltip = action->getSender()->getTooltip();
-		_txtTooltip->setText(tr(_currentTooltip));
-	}
-} */
-
-/**
-* Clears the tooltip text.
-* @param action Pointer to an action.
-*/
-/* void BattlescapeState::txtTooltipOut(Action* action)
-{
-	if (allowButtons() && Options::battleTooltips)
-	{
-		if (_currentTooltip == action->getSender()->getTooltip())
-		{
-			_txtTooltip->setText(L"");
-		}
-	}
-} */
-
-/**
  * Updates the scale.
  * @param dX delta of X;
  * @param dY delta of Y;
@@ -3321,10 +3361,12 @@ void BattlescapeState::resize(
  */
 void BattlescapeState::updateTurn() // kL
 {
-	std::wostringstream woStr;
+	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
+
+/*	std::wostringstream woStr;
 	woStr << L"turn ";
 	woStr << _save->getTurn();
-	_txtTurn->setText(woStr.str());
+	_txtTurn->setText(woStr.str()); */
 }
 
 /**
@@ -3447,6 +3489,39 @@ void BattlescapeState::drawFuse() // kL
 	}
 
 	_fuseFrame++;
+}
+
+/**
+ * kL. Gets the TimeUnits field from icons.
+ * Note: these are for use in UnitWalkBState to update info when soldier walks.
+ */
+NumberText* BattlescapeState::getTimeUnitsField() const // kL
+{
+	return _numTimeUnits;
+}
+
+/**
+/// kL. Gets the TimeUnits bar from icons.
+ */
+Bar* BattlescapeState::getTimeUnitsBar() const // kL
+{
+	return _barTimeUnits;
+}
+
+/**
+/// kL. Gets the Energy field from icons.
+ */
+NumberText* BattlescapeState::getEnergyField() const // kL
+{
+	return _numEnergy;
+}
+
+/**
+/// kL. Gets the Energy bar from icons.
+ */
+Bar* BattlescapeState::getEnergyBar() const // kL
+{
+	return _barEnergy;
 }
 
 }

@@ -35,6 +35,9 @@
 #include "../Engine/Sound.h"
 #include "../Engine/Surface.h" // kL, for turning on/off visUnit indicators.
 
+#include "../Interface/Bar.h"
+#include "../Interface/NumberText.h"
+
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
@@ -892,6 +895,22 @@ bool UnitWalkBState::doStatusStand_end()
 
 	if (_unit->getFaction() != FACTION_PLAYER)
 		_unit->setVisible(false);
+	else
+	{
+		BattlescapeState* battleState = _parent->getSave()->getBattleState();
+
+		double stat = static_cast<double>(_unit->getStats()->tu);
+		int tu = _unit->getTimeUnits();
+		battleState->getTimeUnitsField()->setValue(static_cast<unsigned>(tu));
+		battleState->getTimeUnitsBar()->setValue(ceil(
+											static_cast<double>(tu) / stat * 100.0));
+
+		stat = static_cast<double>(_unit->getStats()->stamina);
+		int energy = _unit->getEnergy();
+		battleState->getEnergyField()->setValue(static_cast<unsigned>(energy));
+		battleState->getEnergyBar()->setValue(ceil(
+											static_cast<double>(energy) / stat * 100.0));
+	}
 
 	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR) // if the unit burns floortiles, burn floortiles
 	{

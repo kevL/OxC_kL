@@ -2672,13 +2672,13 @@ void AlienBAIState::selectMeleeOrRanged()
 
 	int meleeOdds = 10;
 
-	int dmg = static_cast<int>(
-				static_cast<float>(meleeWeapon->getPower()) * _aggroTarget->getArmor()->getDamageModifier(meleeWeapon->getDamageType()));
+	int power = static_cast<int>(
+					static_cast<float>(meleeWeapon->getPower()) * _aggroTarget->getArmor()->getDamageModifier(meleeWeapon->getDamageType()));
 
-	if (dmg > 50)
-		meleeOdds += (dmg - 50) / 2;
+	if (power > 50)
+		meleeOdds += (power - 50) / 2;
 
-	if ( _visibleEnemies > 1 )
+	if (_visibleEnemies > 1)
 		meleeOdds -= 5 * (_visibleEnemies - 1);
 
 	if (meleeOdds > 0
@@ -2692,7 +2692,11 @@ void AlienBAIState::selectMeleeOrRanged()
 		if (RNG::percent(meleeOdds))
 		{
 			_rifle = false;
-			_reachableWithAttack = _save->getPathfinding()->findReachable(_unit, _unit->getTimeUnits() - _unit->getActionTUs(BA_HIT, meleeWeapon));
+			_reachableWithAttack = _save->getPathfinding()->findReachable(
+																		_unit,
+																		_unit->getTimeUnits() - _unit->getActionTUs(
+																												BA_HIT,
+																												meleeWeapon));
 
 			return;
 		}
