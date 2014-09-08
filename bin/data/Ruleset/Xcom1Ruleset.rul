@@ -9883,7 +9883,7 @@ interfaces:
       - id: numAmmoRight
         color: 3
       - id: textTooltip
-        color: 128
+        color: -1
       - id: buttonReserveNone
         color: 67
       - id: buttonReserveSnap

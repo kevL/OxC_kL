@@ -1855,7 +1855,9 @@ bool BattlescapeGame::checkReservedTU(
 							&& bu->getType() == "SOLDIER")? 4
 						: 0;
 
-	if (slowestWeapon == NULL)
+	// if no aimed shot is available, revert to none.
+	if (bu->getActionTUs(actionReserved, slowestWeapon) == 0
+		&& actionReserved == BA_AIMEDSHOT)
 	{
 		if (tuKneel > 0)
 			actionReserved = BA_NONE;
@@ -1895,7 +1897,7 @@ bool BattlescapeGame::checkReservedTU(
 			}
 			else
 			{
-				switch (actionReserved)
+				switch (_save->getTUReserved())
 				{
 					case BA_SNAPSHOT:
 						_parentState->warning("STR_TIME_UNITS_RESERVED_FOR_SNAP_SHOT");
