@@ -1058,7 +1058,6 @@ bool Tile::getHasUnconsciousSoldier() // kL
  * New turn preparations.
  * Average out any smoke added by the number of overlaps.
  * Apply fire/smoke damage to units as applicable.
- * kL_note: This should happen only at end Turn.
  */
 void Tile::prepareNewTurn()
 {
@@ -1076,60 +1075,41 @@ void Tile::prepareNewTurn()
 								15));
 	}
 
-	if (_unit
+	if (_smoke > 0
+		&& _unit != NULL
 		&& !_unit->isOut(true)
-		&& _unit->getArmor()->getSize() == 1) // large units don't catch fire, i Guess - nor do Smoke
+		&& _unit->getArmor()->getSize() == 1)
 	{
 		if (_fire)
 		{
-//kL		if (_unit->getArmor()->getSize() == 1
-//kL			|| !_unit->getTookFire()) // this is how to avoid hitting the same unit multiple times.
-					// kL_note: Set the guy on fire here, set the toggle so he doesn't take
-					// damage in BattleUnit::prepareNewTurn() but don't deliver any damage here.
-//kL		{
-//kL			_unit->toggleFireDamage();
-
-				// battleUnit is standing on fire tile about to start burning.
-				//Log(LOG_INFO) << ". ID " << _unit->getId() << " fireDamage = " << _smoke;
-//kL			_unit->damage(Position(0, 0, 0), _smoke, DT_IN, true); // _smoke becomes our damage value
-
-			float modifier = _unit->getArmor()->getDamageModifier(DT_IN);
-			int burnChance = static_cast<int>(40.f * modifier);
-			//Log(LOG_INFO) << "Tile::prepareNewTurn(), ID " << _unit->getId() << " burnChance = " << burnChance;
-			if (RNG::percent(burnChance)) // try to set the unit on fire.
+			float vuln = _unit->getArmor()->getDamageModifier(DT_IN);
+			int burn = static_cast<int>(40.f * vuln);
+			//Log(LOG_INFO) << "Tile::prepareNewTurn(), ID " << _unit->getId() << " burn = " << burn;
+			if (RNG::percent(burn)) // try to set the unit on fire.
 			{
-				int burnTime = RNG::generate(
-											0,
-											static_cast<int>(5.f * modifier));
-				if (burnTime > _unit->getFire())
+				int dur = RNG::generate(
+										0,
+										static_cast<int>(5.f * vuln));
+				if (dur > _unit->getFire())
 				{
-					//Log(LOG_INFO) << ". burnTime = " << burnTime;
-					_unit->setFire(burnTime);
+					//Log(LOG_INFO) << ". dur = " << dur;
+					_unit->setFire(dur);
 				}
 			}
-//kL		}
 		}
-//		else	// no fire: must be smoke -> keep this in, because I don't want something quirky happening
-				// like a unit catching fire and going unconscious, although I doubt it matters!! So,
-				// leave it out 'cause I'm sure there are other ways to pass out while on fire.
-		// kL_note: Take smoke also.
-		// kL_note: I could make unconscious units suffer more smoke inhalation... not yet.
-
-		if (_smoke) // if we still have smoke/fire
+//		else // no fire: must be smoke. kL: Do both
+//		{
+		if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock this unit out.
 		{
-			if (_unit->getOriginalFaction() != FACTION_HOSTILE // aliens don't breathe
-//kL			&& _unit->getArmor()->getSize() == 1 // does not affect tanks. (could use turretType)
-				&& _unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock this soldier out.
-			{
-				int smokePower = (_smoke / 4) + 1;
-				//Log(LOG_INFO) << ". damage -> ID " << _unit->getId() << " smokePower = " << smokePower;
-				_unit->damage(
-							Position(0, 0, 0),
-							smokePower,
-							DT_SMOKE, // -> DT_STUN
-							true);
-			}
+			int power = (_smoke / 4) + 1;
+			//Log(LOG_INFO) << ". damage -> ID " << _unit->getId() << " power = " << power;
+			_unit->damage(
+						Position(0, 0, 0),
+						power,
+						DT_SMOKE, // -> DT_STUN
+						true);
 		}
+//		}
 	}
 
 	_overlaps = 0;

@@ -104,17 +104,17 @@ double generate(
 //kL	double rand = static_cast<double>(next());
 
 	// kL_begin:
-	double div = max - min;
-	if (AreSame(div, 0.0))	// kL
+	double diff = max - min;
+	if (AreSame(diff, 0.0))	// kL
 		return min;			// kL
 
-	div = (static_cast<double>(UINT64_MAX) / div);
-	if (AreSame(div, 0.0))	// kL
+	diff = (static_cast<double>(UINT64_MAX) / diff);
+	if (AreSame(diff, 0.0))	// kL
 		return min;			// kL
 
 	double rand = static_cast<double>(next());
 
-	return ((rand / div) + min);
+	return ((rand / diff) + min);
 	// kL_end.
 
 //kL	return static_cast<double>(rand / (static_cast<double>(UINT64_MAX) / (max - min)) + min);

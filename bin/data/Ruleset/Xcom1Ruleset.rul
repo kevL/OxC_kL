@@ -3769,7 +3769,7 @@ armors:
       - 1.19
       - 1.2
       - 1.5
-      - 1.12
+      - 0.0
     loftempsSet: [ 2 ]
   - type: SECTOID_ARMOR1 #leader
     spriteSheet: SECTOID.PCK
@@ -3789,7 +3789,7 @@ armors:
       - 1.19
       - 1.2
       - 1.5
-      - 1.12
+      - 0.0
     loftempsSet: [ 2 ]
   - type: SECTOID_ARMOR2 #commander
     spriteSheet: SECTOID.PCK
@@ -3809,7 +3809,7 @@ armors:
       - 1.19
       - 1.2
       - 1.5
-      - 1.12
+      - 0.0
     loftempsSet: [ 2 ]
   - type: FLOATER_ARMOR0 #soldier, navigator, medic, engineer
     spriteSheet: FLOATER.PCK
@@ -3831,7 +3831,7 @@ armors:
       - 1.0
       - 1.2
       - 1.3
-      - 0.8
+      - 0.0
     loftempsSet: [ 3 ]
   - type: FLOATER_ARMOR1 #leader
     spriteSheet: FLOATER.PCK
@@ -3853,7 +3853,7 @@ armors:
       - 1.0
       - 1.2
       - 1.3
-      - 0.8
+      - 0.0
     loftempsSet: [ 3 ]
   - type: FLOATER_ARMOR2 #commander
     spriteSheet: FLOATER.PCK
@@ -3875,7 +3875,7 @@ armors:
       - 1.0
       - 1.2
       - 1.3
-      - 0.8
+      - 0.0
     loftempsSet: [ 3 ]
   - type: CYBERDISC_ARMOR
     spriteSheet: CYBER.PCK
@@ -4371,7 +4371,7 @@ armors:
       - 1.2 #stun
       - 1.0 #melee
       - 0.7 #acid
-      - 1.0 #smoke
+      - 0.0 #smoke
     loftempsSet: [ 3 ]
 soldiers:
   - type: XCOM

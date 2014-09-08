@@ -1855,6 +1855,14 @@ bool BattlescapeGame::checkReservedTU(
 							&& bu->getType() == "SOLDIER")? 4
 						: 0;
 
+	if (slowestWeapon == NULL)
+	{
+		if (tuKneel > 0)
+			actionReserved = BA_NONE;
+		else
+			return true;
+	}
+
 	if ((actionReserved != BA_NONE
 			|| _save->getKneelReserved())
 		&& tu
@@ -3364,29 +3372,29 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 	for (int
 			x = size;
 			x > -1;
-			x--)
+			--x)
 	{
 		for (int
 				y = size;
 				y > -1;
-				y--)
+				--y)
 		{
 			for (int
 					tx = -1;
 					tx < 2;
-					tx++)
+					++tx)
 			{
 				for (int
 						ty = -1;
 						ty < 2;
-						ty++)
+						++ty)
 				{
-					Tile* t = _save->getTile(unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
-					if (t)
+					Tile* tile = _save->getTile(unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
+					if (tile != NULL)
 					{
 						for (std::vector<BattleItem*>::iterator
-								i = t->getInventory()->begin();
-								i != t->getInventory()->end();
+								i = tile->getInventory()->begin();
+								i != tile->getInventory()->end();
 								++i)
 						{
 							if ((*i)->getRules()->getBattleType() == BT_PROXIMITYGRENADE
@@ -3400,14 +3408,15 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 								if (_save->getPathfinding()->isBlocked(
 																	_save->getTile(unit->getPosition() + Position(x, y, 0)),
 																	NULL,
-																	dir)
-																== false)
+																	dir,
+																	unit) // kL try passing in OBJECT_SELF as a missile target to kludge for closed doors.
+																== false) // there *might* be a problem if the Proxy is on a non-walkable tile ....
 								{
 									Position pos;
 
-									pos.x = t->getPosition().x * 16 + 8;
-									pos.y = t->getPosition().y * 16 + 8;
-									pos.z = t->getPosition().z * 24 + t->getTerrainLevel();
+									pos.x = tile->getPosition().x * 16 + 8;
+									pos.y = tile->getPosition().y * 16 + 8;
+									pos.z = tile->getPosition().z * 24 + tile->getTerrainLevel();
 
 									statePushNext(new ExplosionBState(
 																	this,

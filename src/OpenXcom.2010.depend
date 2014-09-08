@@ -5811,7 +5811,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1409989029 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1410160179 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6035,7 +6035,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1410138423 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1410165441 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6603,7 +6603,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1409075773 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1410166743 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -7169,7 +7169,7 @@
 	<fstream>
 	"Exception.h"
 
-1404096022 source:f:\git\openxcom\src\engine\rng.cpp
+1410165931 source:f:\git\openxcom\src\engine\rng.cpp
 	"RNG.h"
 	<math.h>
 	<time.h>
@@ -8342,7 +8342,7 @@
 	"../Engine/Palette.h"
 	"../Engine/Timer.h"
 
-1408569970 source:f:\git\openxcom\src\interface\frame.cpp
+1410159179 source:f:\git\openxcom\src\interface\frame.cpp
 	"Frame.h"
 	"../Engine/Palette.h"
 
@@ -9656,7 +9656,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1410031201 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1410162295 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -9766,7 +9766,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1409724728 source:f:\git\openxcom\src\savegame\tile.cpp
+1410161466 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"

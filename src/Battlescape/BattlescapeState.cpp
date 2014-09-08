@@ -128,7 +128,7 @@ BattlescapeState::BattlescapeState()
 		_isMouseScrolling(false),
 		_mouseScrollingStartTime(0),	// kL_end.
 		_fuseFrame(0), // kL
-		_showConsole(false) // kL
+		_showConsole(true) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	std::fill_n(
@@ -380,7 +380,6 @@ BattlescapeState::BattlescapeState()
 	}
 
 	add(_warning, "warning", "battlescape", _icons);
-	add(_txtDebug);
 //	add(_txtTooltip, "textTooltip", "battlescape", _icons);
 	add(_btnLaunch);
 	add(_btnPsi);
@@ -472,6 +471,8 @@ BattlescapeState::BattlescapeState()
 	_txtShade->setText(tr("STR_SHADE_").arg(_save->getGlobalShade()));
 	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
 	// kL_end.
+
+	add(_txtDebug);
 
 	_map->init();
 	_map->onMouseOver((ActionHandler)& BattlescapeState::mapOver);
@@ -1074,6 +1075,7 @@ void BattlescapeState::mapOver(Action* action)
 		_game->getCursor()->handle(action);
 	}
 	else if (_showConsole // kL_begin:
+		&& _mouseOverIcons == false
 		&& allowButtons())
 	{
 		Position pos;
@@ -2073,8 +2075,10 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
 void BattlescapeState::btnConsoleToggle(Action*) // kL
 {
 	if (allowButtons())
+	{
 		_showConsole = !_showConsole;
 //		_txtConsole->setVisible(!_txtConsole->getVisible());
+	}
 }
 
 /**
@@ -2573,7 +2577,6 @@ void BattlescapeState::debug(const std::wstring& message)
  * Shows a warning message.
  * @param message Warning message.
  */
-//kL void BattlescapeState::warning(const std::string& message)
 void BattlescapeState::warning( // kL
 		const std::string& message,
 		const bool useArg,

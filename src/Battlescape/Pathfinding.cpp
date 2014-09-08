@@ -1307,11 +1307,10 @@ void Pathfinding::abortPath()
  * @param tile			- pointer to a specified tile, can be a null pointer
  * @param part			- part of the tile
  * @param missileTarget	- pointer to target for a missile
- * @param bigWallExclusion
+ * @param bigWallExclusion - for diagonal bigwalls
  * @return, true if movement is blocked
  */
-// private
-bool Pathfinding::isBlocked(
+bool Pathfinding::isBlocked( // private
 		Tile* tile,
 		const int part,
 		BattleUnit* missileTarget,
@@ -1478,12 +1477,12 @@ BIGWALL_E_S		// 8
 		}
 	}
 
-	// missiles can't pathfind through closed doors.
+	// missiles can't pathfind through closed doors. kL: neither can proxy mines.
 	if (missileTarget != NULL
 		&& tile->getMapData(part)
 		&& (tile->getMapData(part)->isDoor()
 			|| (tile->getMapData(part)->isUFODoor()
-				&& !tile->isUfoDoorOpen(part))))
+				&& tile->isUfoDoorOpen(part) == false)))
 	{
 		return true;
 	}
@@ -1509,8 +1508,7 @@ BIGWALL_E_S		// 8
  * @param missileTarget	- pointer to target for a missile
  * @return, true if movement is blocked
  */
-// public:
-bool Pathfinding::isBlocked(
+bool Pathfinding::isBlocked( // public
 		Tile* startTile,
 		Tile* /* endTile */,
 		const int dir,

@@ -1537,13 +1537,13 @@ Node* SavedBattleGame::getSpawnNode(
 	}
 
 	if (legitNodes.empty())
-		return 0;
+		return NULL;
 
-	int node = RNG::generate(
-						0,
-						static_cast<int>(legitNodes.size()) - 1);
+	size_t legit = static_cast<size_t>(RNG::generate(
+												0,
+												static_cast<int>(legitNodes.size()) - 1));
 
-	return legitNodes[node];
+	return legitNodes[legit];
 }
 
 /**
@@ -1563,9 +1563,9 @@ Node* SavedBattleGame::getPatrolNode(
 	{
 		if (Options::traceAI) Log(LOG_INFO) << "This alien got lost. :(";
 
-		fromNode = getNodes()->at(RNG::generate(
-											0,
-											static_cast<int>(getNodes()->size()) - 1));
+		fromNode = getNodes()->at(static_cast<size_t>(RNG::generate(
+																0,
+																static_cast<int>(getNodes()->size()) - 1)));
 	}
 
 
@@ -1575,11 +1575,13 @@ Node* SavedBattleGame::getPatrolNode(
 
 	// scouts roam all over while all others shuffle around to adjacent nodes at most:
 //kL	int const linksEnd = scout? getNodes()->size(): fromNode->getNodeLinks()->size();
-	int linksEnd = fromNode->getNodeLinks()->size();
+	size_t linksEnd = 0;
 	if (scout)
 		linksEnd = getNodes()->size();
+	else
+		linksEnd = fromNode->getNodeLinks()->size();
 
-	for (int
+	for (size_t
 			i = 0;
 			i < linksEnd;
 			++i)
@@ -1590,7 +1592,7 @@ Node* SavedBattleGame::getPatrolNode(
 			continue; // nothing to patrol to
 		}
 
-//kL		node = getNodes()->at(scout? i: fromNode->getNodeLinks()->at(i));
+//kL	node = getNodes()->at(scout? i: fromNode->getNodeLinks()->at(i));
 		if (scout)
 			node = getNodes()->at(i);
 		else
@@ -1634,7 +1636,6 @@ Node* SavedBattleGame::getPatrolNode(
 	if (legitNodes.empty())
 	{
 		//Log(LOG_INFO) << " . legitNodes is EMPTY.";
-
 		if (Options::traceAI) Log(LOG_INFO) << (scout? "Scout ": "Guard ") << "found no patrol node! XXX XXX XXX";
 
 		if (unit->getArmor()->getSize() > 1
