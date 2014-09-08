@@ -79,8 +79,8 @@ private:
 	void moveItem(
 			BattleItem* item,
 			RuleInventory* slot,
-			int x,
-			int y);
+			int x = 0,
+			int y = 0);
 	/// Gets the slot in the specified position.
 	RuleInventory* getSlotInPosition(
 			int* x,

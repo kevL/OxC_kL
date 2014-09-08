@@ -294,7 +294,7 @@ en-US:
   STR_TAILING_UFO: "chase uFo"
   STR_INTERCEPTING_UFO: "INTERCEPT uFo-{0}"
   STR_RETURNING_TO_BASE: "Return to Base"
-  STR_DESTINATION_UC_: "Destination: {0}"
+  STR_DESTINATION_UC_: "ENROUTE : {0}"
   STR_BASE_UC: "BASE {ALT}{0}"
   STR_SPEED_: "speed {ALT}{0}"
   STR_MAXIMUM_SPEED_UC: "top speed {ALT}{0}{ALT}"

@@ -411,11 +411,11 @@ void Inventory::drawItems()
 }
 
 /**
- * Moves an item to a specified slot in the selected player's inventory.
- * @param item Pointer to battle item.
- * @param slot Inventory slot, or NULL if none.
- * @param x X position in slot.
- * @param y Y position in slot.
+ * Moves an item to a specified slot in the selected unit's inventory.
+ * @param item	- pointer to a battle item
+ * @param slot	- pointer to an inventory slot, or NULL if none
+ * @param x		- X position in slot (default 0)
+ * @param y		- Y position in slot (default 0)
  */
 void Inventory::moveItem(
 		BattleItem* item,
@@ -665,8 +665,7 @@ void Inventory::mouseOver(Action* action, State* state)
 	RuleInventory* slot = getSlotInPosition(&x, &y);
 	if (slot != NULL)
 	{
-		// kL_begin:
-		std::string warning = "";
+		std::string warning = ""; // kL_begin:
 		if (_tu
 			&& _selItem != NULL
 			&& fitItem(
@@ -735,79 +734,34 @@ void Inventory::mouseClick(Action* action, State* state)
 				{
 					if (SDL_GetModState() & KMOD_CTRL)
 					{
-						RuleInventory* newSlot = _game->getRuleset()->getInventory("STR_GROUND");
-
-//kL					std::string warning = "STR_NOT_ENOUGH_SPACE";
-						std::string warning = ""; // kL
 						bool placed = false;
+						bool toGround = true;
+						std::string warning = "";
 
-						if (slot->getType() == INV_GROUND
-							|| slot->getType() == INV_SLOT) // kL
+						RuleInventory* newSlot = NULL;
+
+						if (slot->getType() == INV_HAND)
+							newSlot = _game->getRuleset()->getInventory("STR_GROUND");
+						else
 						{
-							newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND"); // kL
-/*kL
-							switch (item->getRules()->getBattleType())
+							if (_selUnit->getItem("STR_RIGHT_HAND") == NULL)
 							{
-								case BT_FIREARM:
-									newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
-								break;
-								case BT_MINDPROBE:
-								case BT_PSIAMP:
-								case BT_MELEE:
-								case BT_CORPSE:
-									newSlot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
-								break;
-
-								default:
-									if (item->getRules()->getInventoryHeight() > 2)
-										newSlot = _game->getRuleset()->getInventory("STR_BACK_PACK");
-									else
-										newSlot = _game->getRuleset()->getInventory("STR_BELT");
-								break;
-							} */
-						}
-
-						if (newSlot->getType() != INV_GROUND)
-						{
-							_stackLevel[item->getSlotX()][item->getSlotY()] -= 1;
-
-							placed = fitItem(
-											newSlot,
-											item,
-											warning);
-
-							if (!placed) // kL_begin:
+								toGround = false;
+								newSlot = _game->getRuleset()->getInventory("STR_RIGHT_HAND");
+							}
+							else if (_selUnit->getItem("STR_LEFT_HAND") == NULL)
 							{
+								toGround = false;
 								newSlot = _game->getRuleset()->getInventory("STR_LEFT_HAND");
-								placed = fitItem(
-												newSlot,
-												item,
-												warning);
-							} // kL_end
-/*kL
-							if (!placed)
-							{
-								for (std::map<std::string, RuleInventory*>::const_iterator
-										wildCard = _game->getRuleset()->getInventories()->begin();
-										wildCard != _game->getRuleset()->getInventories()->end()
-											&& !placed;
-										++wildCard)
-								{
-									newSlot = wildCard->second;
-									if (newSlot->getType() == INV_GROUND)
-										continue;
-
-									placed = fitItem(
-													newSlot,
-													item,
-													warning);
-								}
-							} */
-
-							if (!placed)
-								_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
+							}
+							else if (slot->getType() != INV_GROUND)
+								newSlot = _game->getRuleset()->getInventory("STR_GROUND");
 						}
-						else // newSlot = ground. Move to ground
+
+						if (newSlot == NULL)
+							return;
+
+						if (toGround)
 						{
 							if (!_tu
 								|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
@@ -815,29 +769,38 @@ void Inventory::mouseClick(Action* action, State* state)
 								placed = true;
 								moveItem(
 										item,
-										newSlot,
-										0,
-										0);
+										newSlot);
+
+								arrangeGround(false);
+
 								_game->getResourcePack()->getSoundByDepth(
 																		_depth,
 																		ResourcePack::ITEM_DROP)
 																	->play();
-								arrangeGround(false);
 							}
 							else
-								warning = "STR_NOT_ENOUGH_TIME_UNITS";
+								_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+						}
+						else
+						{
+							_stackLevel[item->getSlotX()][item->getSlotY()] -= 1;
+
+							if (fitItem(
+										newSlot,
+										item,
+										warning))
+							{
+								placed = true;
+							}
+							else
+								_stackLevel[item->getSlotX()][item->getSlotY()] += 1;
 						}
 
-						if (!placed
-							&& warning != "") // kL
-						{
-							_warning->showMessage(_game->getLanguage()->getString(warning));
-						}
-						else // kL_begin:
+						if (placed)
 						{
 							_mouseOverItem = NULL; // remove cursor info 'cause item is no longer under the cursor.
 							mouseOver(action, state);
-						} // kL_end.
+						}
 					}
 					else
 					{

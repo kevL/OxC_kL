@@ -5163,21 +5163,29 @@ bool TileEngine::validateThrow(
 {
 	//Log(LOG_INFO) << "TileEngine::validateThrow(), cf Projectile::calculateThrow()";
 //kL	double arc = 0.5;
-	double arc = 1.12; // kL, for acid spit only ....... throw done next.
+//	double arc = 1.12;
+	double arc = 0.0;
+
+	double kneel = 0.0;
+	if (action.actor->isKneeled())
+		kneel = 0.16; // stock: 0.1 (higher value lets kneeled throws go farther w/out hitting ceiling...)
 
 	if (action.type == BA_THROW)
 	{
-		double kneel = 0.0;
-		if (action.actor->isKneeled())
-			kneel = 0.15;
-
-		arc = std::max( // kL_note: this is for throwing (instead of spitting...)
+		arc = std::max(
 					0.48,
 					1.73 / sqrt(
 								sqrt(
 									static_cast<double>(action.actor->getStats()->strength) * (action.actor->getAccuracyModifier() / 2.0 + 0.5)
 									/ static_cast<double>(action.weapon->getRules()->getWeight())))
 							+ kneel);
+	}
+	else // spit
+	{
+		// arcing projectile weapons assume a fixed strength and weight.(70 and 10 respectively)
+		// curvature should be approximately 1.06358350461 at this point.
+//		arc = 1.73 / sqrt(sqrt(70.0 / 10.0)) + kneel; // OR ...
+		arc = 1.0635835046056873518242669985672 + kneel;
 	}
 	//Log(LOG_INFO) << ". starting arc = " << arc;
 
@@ -5196,9 +5204,10 @@ bool TileEngine::validateThrow(
 		return false; // object blocking - can't throw here
 	}
 
-	// try several different curvatures to reach our goal.
+
 	bool found = false;
-	while (!found
+
+	while (!found // try several different curvatures
 		&& arc < 5.0)
 	{
 		int test = VOXEL_OUTOFBOUNDS;
@@ -5874,7 +5883,7 @@ bool TileEngine::validMeleeRange(
 						dir,
 						attacker,
 						target,
-						0);
+						NULL);
 }
 
 /**
