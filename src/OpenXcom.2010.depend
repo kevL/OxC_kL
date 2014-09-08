@@ -6366,7 +6366,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1410153115 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1410155744 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"

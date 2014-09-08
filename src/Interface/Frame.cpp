@@ -136,7 +136,7 @@ void Frame::draw()
 
 	Uint8
 		darkest = Palette::blockOffset(_color / 16) + 15,
-		color;
+		color = _color;
 
 	for (int
 			i = 0;
