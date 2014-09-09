@@ -48,7 +48,8 @@ Unit::Unit(const std::string& type)
 		_energyRecovery(30),
 		_specab(SPECAB_NONE),
 		_spawnUnit(""),
-		_livingWeapon(false)
+		_livingWeapon(false),
+		_meleeWeapon("")
 {
 }
 
