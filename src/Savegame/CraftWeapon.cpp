@@ -157,14 +157,15 @@ int CraftWeapon::rearm(
 	{
 		req = std::min( // +(clipSize-1) for rounding up
 					rate,
-					full - _ammo + clipSize - 1) / clipSize;
+					full - _ammo + clipSize - 1)
+				/ clipSize;
 	}
 
 	int load = baseClips * clipSize;
 	if (clipSize < 1 // kL
 		|| baseClips >= req)
 	{
-		load = rate;
+		load = rate; // req * clipSize (Falko-note)
 	}
 
 	setAmmo(_ammo + load);
