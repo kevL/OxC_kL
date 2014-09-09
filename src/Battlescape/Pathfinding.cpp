@@ -125,14 +125,8 @@ void Pathfinding::calculate(
 	_totalTUCost = 0;
 	_path.clear();
 
-//	_modCTRL = false;
-//	_modALT = false;
 	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
-	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;	// for BattlescapeState::btnUnitDownClick() -> now redundant.
-													// Can go back to previewPath()
-
-//	_kneelCheck = true;	// safety. Also done at end of this function.
-						// Not set FALSE anywhere but validateUpDown()
+	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;
 
 	Position endPos2 = endPos; // kL: for keeping things straight if strafeRejected happens.
 
@@ -158,30 +152,27 @@ void Pathfinding::calculate(
 
 		if (_movementType == MT_FLY
 			&& _modALT //(SDL_GetModState() & KMOD_ALT) != 0 // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
-			&& unit->getTurretType() == -1 // hovertanks always hover.
-			&& unit->getRaceString() != "STR_FLOATER" // floaters always float
-			&& unit->getRaceString() != "STR_CELATID" // celatids always .. float.
-			&& unit->getRaceString() != "STR_CYBERDISC") // cyberdiscs always .. float
-			// Ethereals *can* walk, but they don't like to.
+			&& unit->getTurretType() == -1					// hovertanks always hover.
+			&& unit->getRaceString() != "STR_FLOATER"		// floaters always float
+			&& unit->getRaceString() != "STR_CELATID"		// celatids always .. float.
+			&& unit->getRaceString() != "STR_CYBERDISC")	// cyberdiscs always .. float
+			// Ethereals *can* walk, but they don't like to. Should turn this into Ruleset param: 'alwaysFloat'
 		{
 			_movementType = MT_WALK;
 		}
 	}
 
-	// check if destination is not blocked
 	Tile* destTile = _save->getTile(endPos);
 
-	if (isBlocked(
+	if (isBlocked( // check if destination is blocked
 				destTile,
 				MapData::O_FLOOR,
 				target)
 		|| isBlocked(
-					destTile,
-					MapData::O_OBJECT,
-					target))
+				destTile,
+				MapData::O_OBJECT,
+				target))
 	{
-//		abortPath(); // kL
-
 		return;
 	}
 
@@ -190,7 +181,8 @@ void Pathfinding::calculate(
 	// It only works if the unit is on one of the 2 tiles on the
 	// stairs, or on the tile right in front of the stairs.
 	// kL_note: I don't want this: ( the function, below, can be removed ).
-/*kL	if (isOnStairs(startPos, endPos))
+/*kL
+	if (isOnStairs(startPos, endPos))
 	{
 		endPos.z++;
 		destTile = _save->getTile(endPos);
@@ -203,7 +195,7 @@ void Pathfinding::calculate(
 		destTile = _save->getTile(endPos);
 	}
 
-	// check if we have a floor, else lower destination;
+	// check if we have a floor, else lower destination.
 	// kL_note: This allows click in the air for non-flyers
 	// and they target the ground tile below the clicked tile.
 	if (_movementType != MT_FLY)
@@ -244,8 +236,6 @@ void Pathfinding::calculate(
 							||  (testTile->getMapData(MapData::O_WESTWALL)
 								&& testTile->getMapData(MapData::O_WESTWALL)->isDoor())))
 					{
-//						abortPath(); // kL
-
 						return;
 					}
 					else if (isBlocked(
@@ -259,8 +249,6 @@ void Pathfinding::calculate(
 									dir[i],
 									target))
 					{
-//						abortPath(); // kL
-
 						return;
 					}
 					else if (testTile->getUnit())
@@ -270,8 +258,6 @@ void Pathfinding::calculate(
 							&& testUnit != target
 							&& testUnit->getVisible())
 						{
-//							abortPath(); // kL
-
 							return;
 						}
 					}
@@ -286,7 +272,7 @@ void Pathfinding::calculate(
 	// ( z-rule mainly to simplify walking render ).
 	// kL_note: This is 'bugged'/featured because it allows soldiers to strafe
 	// around a corner (ie, dest is only 1 tile distant but move is actually
-	// across 2 tiles at 90deg. path-angle) -> now accounted for and *allowed*
+	// across 2+ tiles at 90deg. path-angle) -> now accounted for and *allowed*
 	Position startPos = unit->getPosition();
 
 	_strafeMove = strafeRejected == false
@@ -294,7 +280,7 @@ void Pathfinding::calculate(
 				&& ((_modCTRL == true
 						&& unit->getTurretType() == -1)
 					|| (_modALT == true
-						&& unit->getTurretType() > -1))
+						&& unit->getTurretType() > -1)) // should create Ruleset param 'trackedVehicle'
 				&& startPos.z == endPos.z
 				&& abs(startPos.x - endPos.x) < 2
 				&& abs(startPos.y - endPos.y) < 2;
@@ -331,9 +317,10 @@ void Pathfinding::calculate(
 					maxTUCost,
 					true);
 
-			_save->getBattleGame()->getCurrentAction()->strafe = false;
-			_save->getBattleGame()->getCurrentAction()->run = true;
-			_save->getBattleGame()->getCurrentAction()->actor->setDashing(true);
+			BattleAction* action = _save->getBattleGame()->getCurrentAction();
+			action->strafe = false;
+			action->run = true;
+			action->actor->setDashing(true);
 				// why these things were set up in BattlescapeGame::primaryAction()
 				// rather than here I don't know ....
 		} // kL_end.
@@ -376,9 +363,10 @@ void Pathfinding::calculate(
 					maxTUCost,
 					true);
 
-			_save->getBattleGame()->getCurrentAction()->strafe = false;
-			_save->getBattleGame()->getCurrentAction()->run = true;
-			_save->getBattleGame()->getCurrentAction()->actor->setDashing(true);
+			BattleAction* action = _save->getBattleGame()->getCurrentAction();
+			action->strafe = false;
+			action->run = true;
+			action->actor->setDashing(true);
 				// why these things were set up in BattlescapeGame::primaryAction()
 				// rather than here I don't know ....
 		} // kL_end.
@@ -1139,6 +1127,7 @@ int Pathfinding::getTUCost(
 			}
 
 			// Propose: if flying then no extra TU cost
+			//Log(LOG_INFO) << ". pathSize = " << (int)_path.size();
 			if (_strafeMove)
 			{
 				// kL_begin: extra TU for strafe-moves ->	1 0 1
@@ -1161,16 +1150,21 @@ int Pathfinding::getTUCost(
 
 					cost += delta;
 				}
-				else if ( //size == 0 &&
-					_unit->getDirection() == dir) // forced dash 1 tile straight forward.
+/*				else if (_unit->getDirection() == dir // forced dash 1 tile straight forward.
+					&& ((SDL_GetModState() & KMOD_RSHIFT) != 0)) // try this one ... uh exploitable.
+				// note: Unfortunately, this overrides a 2-tile strafe around corners, and
+				// I can't get _path.size() to return a usable value .... to differentiate.
+				// eg. if (_path.size() < 1) <- TUCost is ascertained *before*
+				// the step is added to _path<vector>
 				{
 					_strafeMove = false;
 					cost = cost * 3 / 4;
 
-					_save->getBattleGame()->getCurrentAction()->strafe = false;
-					_save->getBattleGame()->getCurrentAction()->run = true;
-					_save->getBattleGame()->getCurrentAction()->actor->setDashing(true);
-				} // kL_end.
+					BattleAction* action = _save->getBattleGame()->getCurrentAction();
+					action->strafe = false;
+					action->run = true;
+					action->actor->setDashing(true);
+				} */ // kL_end.
 			}
 
 			totalCost += cost;

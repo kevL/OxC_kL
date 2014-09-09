@@ -380,9 +380,9 @@ bool BattleItem::occupiesSlot(
 
 /**
  * Gets an item's currently loaded ammo item.
- * @return, ammo item
- *			-1 if item is ammo
- *			the weaponID if item is its own ammo
+ * @return, pointer to BattleItem
+ *			- NULL if item is ammo or has no ammo loaded
+ *			- the weapon itself if weapon is its own ammo
  */
 BattleItem* BattleItem::getAmmoItem()
 {

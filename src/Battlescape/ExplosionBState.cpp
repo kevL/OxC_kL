@@ -100,17 +100,27 @@ void ExplosionBState::init()
 		_power = _item->getRules()->getPower();
 
 		// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
-		_pistolWhip = _item->getRules()->getBattleType() != BT_MELEE
-						&& _parent->getCurrentAction()->type == BA_HIT;
+		_pistolWhip = _unit != NULL								// kL
+					&& _unit->getFaction() == FACTION_PLAYER	// kL
+					&& _item->getRules()->getBattleType() != BT_MELEE
+					&& _parent->getCurrentAction()->type == BA_HIT;
 
 		if (_pistolWhip)
 			_power = _item->getRules()->getMeleePower();
 
-		// since melee aliens don't use a conventional weapon type, we use their strength instead.
-		if ( //_item->getRules()->getBattleType() == BT_MELEE &&
-			_item->getRules()->isStrengthApplied())
+		// since melee aliens don't use a conventional weapon type, use their strength instead.
+		if (_unit != NULL											// kL
+			&& (_pistolWhip											// kL
+				|| _item->getRules()->getBattleType() == BT_MELEE)	// kL
+			&& _item->getRules()->isStrengthApplied())
 		{
-			_power += static_cast<int>(static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5));
+			int str = static_cast<int>( // kL_begin:
+						static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5));
+
+			if (_pistolWhip)
+				str /= 2; // kL_end.
+
+			_power += str;
 		}
 		//Log(LOG_INFO) << ". _power(_item) = " << _power;
 
@@ -262,10 +272,10 @@ void ExplosionBState::init()
 //		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
 
 		_hit = _pistolWhip
-				|| _item->getRules()->getBattleType() == BT_MELEE
-				|| _item->getRules()->getBattleType() == BT_PSIAMP;	// includes aLien psi-weapon.
-																	// They took this out and use 'bool psi' instead ....
-																	// supposedly to correct some cursor-stuff that was broke for them.
+			|| _item->getRules()->getBattleType() == BT_MELEE
+			|| _item->getRules()->getBattleType() == BT_PSIAMP;	// includes aLien psi-weapon.
+																// They took this out and use 'bool psi' instead ....
+																// supposedly to correct some cursor-stuff that was broke for them.
 //		bool psi = _item->getRules()->getBattleType() == BT_PSIAMP;
 		int
 			anim = _item->getRules()->getHitAnimation(),
@@ -275,10 +285,13 @@ void ExplosionBState::init()
 		if (_hit)
 		{
 			anim = _item->getRules()->getMeleeAnimation();
-//			sound = _item->getRules()->getMeleeHitSound(); // kL, but this mutes Psi-hit sound.
+
+			if (_item->getRules()->getBattleType() != BT_PSIAMP)
+				sound = -1; // kL, done in ProjectileFlyBState for melee hits.
+//			sound = _item->getRules()->getMeleeHitSound(); // kL, this mutes Psi-hit sound.
 		}
 
-		if (sound != -1) // bullet hit sound
+		if (sound != -1)
 			_parent->getResourcePack()->getSoundByDepth(
 													_parent->getDepth(),
 													sound)
@@ -430,7 +443,7 @@ void ExplosionBState::explode()
 			if (_unit->getOriginalFaction() == FACTION_HOSTILE
 				&& _item->getRules()->getMeleeHitSound() != -1)
 			{
-				sound = _item->getRules()->getMeleeAttackSound();
+				sound = _item->getRules()->getMeleeSound();
 			}
 
 			if (sound != -1) // safety (ala TFTD).
@@ -455,8 +468,8 @@ void ExplosionBState::explode()
 
 			if (_item->getRules()->getMeleeHitSound() != -1)
 				sound = _item->getRules()->getMeleeHitSound();
-			else if (_item->getRules()->getMeleeAttackSound() != -1)
-				sound = _item->getRules()->getMeleeAttackSound();
+			else if (_item->getRules()->getMeleeSound() != -1)
+				sound = _item->getRules()->getMeleeSound();
 
 			if (sound != -1) // safety (ala TFTD).
 				_parent->getResourcePack()->getSoundByDepth(

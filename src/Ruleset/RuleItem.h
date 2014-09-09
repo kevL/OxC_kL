@@ -356,7 +356,7 @@ private:
 		bool canReactionFire() const; // kL
 
 		/// Gets the sound this weapon makes when you swing it at someone.
-		int getMeleeAttackSound() const;
+		int getMeleeSound() const;
 		/// Gets the sound this weapon makes when you punch someone in the face with it.
 		int getMeleeHitSound() const;
 		/// Ok, so this isn't a melee type weapon but we're using it for melee anyway... Gets its melee damage.

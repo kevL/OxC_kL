@@ -106,7 +106,9 @@ RuleItem::RuleItem(const std::string& type)
 		_LOSRequired(false),
 		_underwaterOnly(false),
 		_noReaction(false), // kL
-		_meleeSound(39),
+//kL	_meleeSound(39),	// screws with hit/miss sound-determination in ProjectileFlyBState;
+							// defaults are set there, else specify it in a Ruleset. Thanks!!
+		_meleeSound(-1),	// kL
 		_meleePower(0),
 		_meleeAnimation(0),
 		_meleeHitSound(-1),
@@ -952,7 +954,7 @@ bool RuleItem::canReactionFire() const // kL
  * The sound this weapon makes when you swing it at someone.
  * @return, The weapon's melee attack sound.
  */
-int RuleItem::getMeleeAttackSound() const
+int RuleItem::getMeleeSound() const
 {
 	return _meleeSound;
 }

@@ -138,7 +138,8 @@ void ProjectileFlyBState::init()
 //kL	_projectileItem = 0; // already initialized.
 
 	_unit = _action.actor;
-	_ammo = _action.weapon->getAmmoItem();
+	if (_action.weapon != NULL) // kL
+		_ammo = _action.weapon->getAmmoItem();
 
 	// **** The first 4 of these SHOULD NEVER happen ****
 	// the 4th is wtf: tu ought be spent for this already.
@@ -154,7 +155,9 @@ void ProjectileFlyBState::init()
 
 		return;
 	}
-	else if (!_action.weapon) // can't shoot without weapon. NOTE: def'n of _ammo above^ would CTD if this were ever true. Lol
+	else if (_action.weapon == NULL)	// can't shoot without weapon.
+										// NOTE: def'n of _ammo above^ would CTD if this were ever true. Lol
+										// relax i fixed it.
 	{
 		//Log(LOG_INFO) << ". no weapon, EXIT";
 		_unit->setStopShot(false); // kL
@@ -162,7 +165,7 @@ void ProjectileFlyBState::init()
 
 		return;
 	}
-	else if (!_parent->getSave()->getTile(_action.target)) // invalid target position
+	else if (_parent->getSave()->getTile(_action.target) == NULL) // invalid target position
 	{
 		//Log(LOG_INFO) << ". no targetPos, EXIT";
 		_unit->setStopShot(false); // kL
@@ -563,6 +566,8 @@ bool ProjectileFlyBState::createNewProjectile()
 //	_parent->setStateInterval(interval);		// kL
 	_parent->setStateInterval(16);				// kL
 
+	int sound = -1;
+
 	_projectileImpact = VOXEL_EMPTY; // let it calculate a trajectory
 
 	if (_action.type == BA_THROW)
@@ -584,10 +589,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
-			_parent->getResourcePack()->getSoundByDepth(
-													_parent->getDepth(),
-													ResourcePack::ITEM_THROW)
-												->play();
+			sound = ResourcePack::ITEM_THROW;
 
 			if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL
 				&& _unit->getFaction() == FACTION_PLAYER)		// kL
@@ -621,21 +623,15 @@ bool ProjectileFlyBState::createNewProjectile()
 		if (_projectileImpact != VOXEL_EMPTY
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
 		{
-//kL			_unit->aim(true); // set the celatid in an aiming position <- yeah right. not.
-//kL			_unit->setCache(NULL);
-//kL			_parent->getMap()->cacheUnit(_unit);
+//kL		_unit->aim(true); // set the celatid in an aiming position <- yeah right. not yet.
+//kL		_unit->setCache(NULL);
+//kL		_parent->getMap()->cacheUnit(_unit);
 
-			// and we have a lift-off
+			// lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														_ammo->getRules()->getFireSound())
-													->play();
+				sound = _ammo->getRules()->getFireSound();
 			else if (_action.weapon->getRules()->getFireSound() != -1)
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														_action.weapon->getRules()->getFireSound())
-													->play();
+				sound = _action.weapon->getRules()->getFireSound();
 
 			if (!_parent->getSave()->getDebugMode()
 				&& _action.type != BA_LAUNCH
@@ -661,34 +657,25 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
+/* superceded by performMeleeAttack() below_
 	else if (_action.type == BA_HIT) // kL. Let's not calculate anything we don't have to for meleeHits!
 	{
 		//Log(LOG_INFO) << ". melee attack!";
-		// validMeleeRange/target has been validated.
-//		_projectileImpact = 4;
 		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon));
 		//Log(LOG_INFO) << ". part = " << _projectileImpact;
 
-		// Can soldiers swing a club, graphically??
-//		_unit->aim(true); // set the soldier in an aiming position
-//		_unit->setCache(NULL);
-//		_parent->getMap()->cacheUnit(_unit);
+		_unit->aim(true);
+		_unit->setCache(NULL);
+		_parent->getMap()->cacheUnit(_unit);
 
-		// and we have a hit!
-		//Log(LOG_INFO) << ". melee attack! Play fireSound";// part = " << _projectileImpact;
-//		if (_action.weapon->getRules()->getFireSound() != -1)
-		if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
-			_parent->getResourcePack()->getSound(
-											"BATTLE.CAT",
-//											_action.weapon->getRules()->getFireSound())
-											_action.weapon->getRules()->getMeleeAttackSound())
-										->play();
-	}
-	else // shoot weapon / was do melee attack too
+		if (_action.weapon->getRules()->getMeleeSound() != -1)
+			sound = _action.weapon->getRules()->getMeleeSound();
+	} */
+	else // shoot weapon
 	{
-		if (_originVoxel != Position(-1,-1,-1)) // this i believe is BL waypoints.
+		if (_originVoxel != Position(-1,-1,-1)) // ... BL waypoints
 		{
 			_projectileImpact = projectile->calculateTrajectory(
 															_unit->getFiringAccuracy(
@@ -696,12 +683,10 @@ bool ProjectileFlyBState::createNewProjectile()
 																				_action.weapon),
 															_originVoxel);
 		}
-		else // and this is normal weapon shooting
-		{
+		else // this is normal weapon shooting
 			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																					_action.type,
 																					_action.weapon));
-		}
 		//Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
 		if (_projectileImpact == VOXEL_UNIT)	// kL
@@ -711,21 +696,15 @@ bool ProjectileFlyBState::createNewProjectile()
 			|| _action.type == BA_LAUNCH)
 		{
 			//Log(LOG_INFO) << ". . _projectileImpact !";
-			_unit->aim(true); // set the soldier in an aiming position
+			_unit->aim(true);
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
-			// and we have a lift-off
+			// lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														_ammo->getRules()->getFireSound())
-													->play();
+				sound = _ammo->getRules()->getFireSound();
 			else if (_action.weapon->getRules()->getFireSound() != -1)
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														_action.weapon->getRules()->getFireSound())
-													->play();
+				sound = _action.weapon->getRules()->getFireSound();
 
 			if (!_parent->getSave()->getDebugMode()
 				&& _action.type != BA_LAUNCH
@@ -744,7 +723,6 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			_action.result = "STR_NO_LINE_OF_FIRE";
 			_action.TU = 0; // kL
-//kL		_unit->abortTurn();
 			_unit->setStatus(STATUS_STANDING); // kL
 
 			_parent->popState();
@@ -752,6 +730,12 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
+
+	if (sound != -1)
+		_parent->getResourcePack()->getSoundByDepth(
+												_parent->getDepth(),
+												sound)
+											->play();
 
 	//Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
 	return true;
@@ -875,7 +859,7 @@ void ProjectileFlyBState::think()
 			_parent->getMap()->getProjectile()->skipTrajectory();
 		}
 
-		if (!_parent->getMap()->getProjectile()->move())
+		if (_parent->getMap()->getProjectile()->move() == false)
 		{
 			if (_action.type == BA_THROW)
 			{
@@ -950,8 +934,8 @@ void ProjectileFlyBState::think()
 					_parent->getSave()->getTile(_action.target)->getUnit()->getStatistics()->shotAtCounter++;
 				}
 
-				if (_ammo
-					&& _action.type == BA_LAUNCH
+				if (_action.type == BA_LAUNCH
+					&& _ammo
 					&& _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
@@ -983,7 +967,7 @@ void ProjectileFlyBState::think()
 															NULL,
 															_action.type != BA_AUTOSHOT
 																|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
-																|| !_action.weapon->getAmmoItem()));
+																|| _action.weapon->getAmmoItem() == NULL));
 
 					// special shotgun behaviour: trace extra projectile paths,
 					// and add bullet hits at their termination points.
@@ -1114,7 +1098,7 @@ void ProjectileFlyBState::think()
 				}
 				else if (_action.type != BA_AUTOSHOT
 					|| _action.autoShotCount == _action.weapon->getRules()->getAutoShots()
-					|| !_action.weapon->getAmmoItem())
+					|| _action.weapon->getAmmoItem() == NULL)
 				{
 					_unit->aim(false);
 					_unit->setCache(NULL);
@@ -1194,7 +1178,8 @@ bool ProjectileFlyBState::validThrowRange(
 	double maxDist = static_cast<double>(
 							getMaxThrowDistance( // tilespace
 											weight,
-											static_cast<int>(static_cast<double>(action->actor->getStats()->strength) * (action->actor->getAccuracyModifier() / 2.0 + 0.5)),
+											static_cast<int>(
+												static_cast<double>(action->actor->getStats()->strength) * (action->actor->getAccuracyModifier() / 2.0 + 0.5)),
 											delta_z)
 										+ 8)
 									/ 16.0;
@@ -1308,32 +1293,29 @@ void ProjectileFlyBState::performMeleeAttack()
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 
-	// kL: from ExplosionBState, moved here to play accurate hit/miss sFx
+	// kL: from ExplosionBState, moved here to play a proper hit/miss sFx
 	bool success = false;
 	if (RNG::percent(static_cast<int>(_unit->getFiringAccuracy(
 															BA_HIT,
 															_ammo) // Ammo is the weapon since (melee==true).
-														* 100.0 + 0.5))) // round up. bleh-> not consistent w/ rest of the code ......
+														* 100.0))) // + 0.5))) // round up. bleh-> not consistent w/ rest of the code ......
 	{
 		success = true;
 	}
 
 	int sound = -1;
+
 	if (success == false)
 	{
 		sound = ResourcePack::ITEM_THROW;
 
-		if (_unit->getOriginalFaction() == FACTION_HOSTILE
-			&& _ammo->getRules()->getMeleeHitSound() != -1)
+		if (_ammo->getRules()->getBattleType() == BT_MELEE
+			&& _ammo->getRules()->getMeleeSound() != -1
+			&& _ammo->getRules()->getMeleeHitSound() != -1)	// if there is a hitSound play attackSound, else ITEM_THROW;
+															// the hitSound will be used for success.
 		{
-			sound = _ammo->getRules()->getMeleeAttackSound();
+			sound = _ammo->getRules()->getMeleeSound();
 		}
-
-		if (sound != -1) // safety (ala TFTD).
-			_parent->getResourcePack()->getSoundByDepth(
-													_parent->getDepth(),
-													sound)
-												->play();
 	}
 	else
 	{
@@ -1341,32 +1323,32 @@ void ProjectileFlyBState::performMeleeAttack()
 
 		if (_ammo->getRules()->getMeleeHitSound() != -1)
 			sound = _ammo->getRules()->getMeleeHitSound();
-		else if (_ammo->getRules()->getMeleeAttackSound() != -1)
-			sound = _ammo->getRules()->getMeleeAttackSound();
-
-		if (sound != -1) // safety (ala TFTD).
-			_parent->getResourcePack()->getSoundByDepth(
-													_parent->getDepth(),
-													sound)
-												->play();
+		else if (_ammo->getRules()->getMeleeSound() != -1)
+			sound = _ammo->getRules()->getMeleeSound();
 	}
 
+	if (sound != -1)
+		_parent->getResourcePack()->getSoundByDepth(
+												_parent->getDepth(),
+												sound)
+											->play();
+
 /*	if (_ammo != NULL // kL_note: Move this to ExplosionBState, where hit/miss is determined.
-		&& _ammo->getRules()->getMeleeAttackSound() != -1)
+		&& _ammo->getRules()->getMeleeSound() != -1)
 //	if (_ammo->getRules()->getFireSound() != -1) // kL
 	{
 		_parent->getResourcePack()->getSoundByDepth(
 												_parent->getDepth(),
-												_ammo->getRules()->getMeleeAttackSound())
+												_ammo->getRules()->getMeleeSound())
 //												_ammo->getRules()->getFireSound()) // kL
 											->play();
 	}
-	else if (_action.weapon->getRules()->getMeleeAttackSound() != -1)
+	else if (_action.weapon->getRules()->getMeleeSound() != -1)
 //	else if (_action.weapon->getRules()->getFireSound() != -1) // kL
 	{
 		_parent->getResourcePack()->getSoundByDepth(
 												_parent->getDepth(),
-												_action.weapon->getRules()->getMeleeAttackSound())
+												_action.weapon->getRules()->getMeleeSound())
 //												_action.weapon->getRules()->getFireSound()) // kL
 											->play();
 	} */

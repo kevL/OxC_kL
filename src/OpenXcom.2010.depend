@@ -4689,7 +4689,7 @@
 1408854832 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1409534273 f:\git\openxcom\src\ruleset\ruleitem.h
+1410216727 f:\git\openxcom\src\ruleset\ruleitem.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5811,7 +5811,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1410160179 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1410195999 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6035,7 +6035,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1410165441 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1410169387 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6319,7 +6319,7 @@
 1404096022 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1409531955 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1410216727 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6603,7 +6603,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1410166743 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1410204755 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6682,7 +6682,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1409979779 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1410216726 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -9350,7 +9350,7 @@
 	<cmath>
 	"RuleItem.h"
 
-1409534356 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1410216726 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"
@@ -9534,7 +9534,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1410028065 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1410211857 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
