@@ -5914,7 +5914,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1410126930 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1410256223 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6035,7 +6035,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1410243308 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1410258789 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -9595,7 +9595,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1406430723 source:f:\git\openxcom\src\savegame\craftweapon.cpp
+1410254653 source:f:\git\openxcom\src\savegame\craftweapon.cpp
 	"CraftWeapon.h"
 	"CraftWeaponProjectile.h"
 	"../Ruleset/RuleCraftWeapon.h"

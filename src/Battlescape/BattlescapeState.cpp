@@ -1107,13 +1107,19 @@ void BattlescapeState::mapOver(Action* action)
 				rows++;
 				ss << L"> ";
 
-				if ((*i)->getUnit() != NULL
-					&& (*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS) // ie. not dead (although I think the unit<->tile association is supposed to go away onDeath)
+				if ((*i)->getUnit() != NULL)
 				{
-					ss << (*i)->getUnit()->getName(_game->getLanguage())
-					<< L" (" << (*i)->getUnit()->getHealth() - (*i)->getUnit()->getStun() << L")"; // something funny here ...!
-					//Log(LOG_INFO) << ". health = " << (*i)->getUnit()->getHealth();
-					//Log(LOG_INFO) << ". stun = " << (*i)->getUnit()->getStun();
+					if ((*i)->getUnit()->getType().compare(0, 11, "STR_FLOATER") == 0)
+						ss << tr("STR_FLOATER_CORPSE");
+					else if ((*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+					{
+						ss << (*i)->getUnit()->getName(_game->getLanguage());
+
+						if ((*i)->getUnit()->getOriginalFaction() == FACTION_PLAYER)
+							ss << L" (" << (*i)->getUnit()->getHealth() - (*i)->getUnit()->getStun() << L")";
+					}
+					else
+						ss << tr((*i)->getRules()->getType());
 				}
 				else
 				{
@@ -1128,7 +1134,7 @@ void BattlescapeState::mapOver(Action* action)
 					else if ((*i)->getRules()->getBattleType() == BT_FIREARM
 //							|| (*i)->getRules()->getBattleType() == BT_MELEE)
 						&& (*i)->getAmmoItem()
-						&& (*i)->getAmmoItem() != (*i))
+						&& (*i)->getAmmoItem() != *i)
 					{
 						ss << L"-" << tr((*i)->getAmmoItem()->getRules()->getType())
 						<< L" (" << (*i)->getAmmoItem()->getAmmoQuantity() << L")";
