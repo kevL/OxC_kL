@@ -338,21 +338,14 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
-//	for (std::set<Explosion*>::const_iterator // kL
-//			i = _parent->getMap()->getExplosions()->begin(),
-//				next = i;
-//			i != _parent->getMap()->getExplosions()->end();
-//			i = next)
 	for (std::list<Explosion*>::const_iterator // expl CTD
 			i = _parent->getMap()->getExplosions()->begin();
 			i != _parent->getMap()->getExplosions()->end();
 			)
 	{
-//		++next; // kL
 		if (!(*i)->animate())
 		{
 			delete *i; // delete CTD
-//			_parent->getMap()->getExplosions()->erase(i); // kL
 			i = _parent->getMap()->getExplosions()->erase(i); // expl CTD, delete CTD
 
 			if (_parent->getMap()->getExplosions()->empty())
@@ -431,52 +424,8 @@ void ExplosionBState::explode()
 			_unit->addMeleeExp();
 		}
 	}
-/*		int sound = -1;
-		if (!RNG::percent(static_cast<int>(_unit->getFiringAccuracy( // MISSED.
-																BA_HIT,
-																_item)
-															* 100.0 + 0.5))) // round up.
-		{
-			//Log(LOG_INFO) << ". BA_HIT/STUN ... missed !";
-			sound = ResourcePack::ITEM_THROW;
 
-			if (_unit->getOriginalFaction() == FACTION_HOSTILE
-				&& _item->getRules()->getMeleeHitSound() != -1)
-			{
-				sound = _item->getRules()->getMeleeSound();
-			}
-
-			if (sound != -1) // safety (ala TFTD).
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														sound)
-													->play();
-
-			_parent->getMap()->cacheUnits();
-			_parent->popState();
-
-			return;
-		}
-		else if (targetUnit // HIT.
-			&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
-			&& _unit->getOriginalFaction() == FACTION_PLAYER)
-		{
-			//Log(LOG_INFO) << ". BA_HIT/STUN ... hit !";
-			_unit->addMeleeExp();
-
-			sound = ResourcePack::ITEM_DROP;
-
-			if (_item->getRules()->getMeleeHitSound() != -1)
-				sound = _item->getRules()->getMeleeHitSound();
-			else if (_item->getRules()->getMeleeSound() != -1)
-				sound = _item->getRules()->getMeleeSound();
-
-			if (sound != -1) // safety (ala TFTD).
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														sound)
-													->play();
-		} */
+	// kL_note: melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
 
 	if (_item)
 	{
@@ -503,12 +452,6 @@ void ExplosionBState::explode()
 		else
 		{
 			//Log(LOG_INFO) << ". . not AoE, -> TileEngine::hit()";
-//			bool hit = _pistolWhip											// kL
-//						|| _item->getRules()->getBattleType() == BT_MELEE	// kL
-//						|| _item->getRules()->getBattleType() == BT_PSIAMP;	// kL
-			// kL_note: basically, PsiAmp is needed 'round here only for its animation to play.
-			// Later: no, no it's not.
-
 			ItemDamageType type = _item->getRules()->getDamageType();
 			if (_pistolWhip)
 				type = DT_STUN;
@@ -533,16 +476,6 @@ void ExplosionBState::explode()
 			}
 		}
 	}
-
-	// kL_begin:
-/*	if (_item
-		&& _item->getRules()->getBattleType() == BT_PSIAMP)
-	{
-//		_parent->getMap()->cacheUnits();
-		_parent->popState();
-
-		return;
-	} */ // kL_end.
 
 
 	bool terrain = false;

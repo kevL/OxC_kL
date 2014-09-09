@@ -87,14 +87,14 @@ RuleItem::RuleItem(const std::string& type)
 		_arcingShot(false),
 		_listOrder(0),
 		_maxRange(200),
-//kL		_aimRange(200),
-//kL		_snapRange(15),
-//kL		_autoRange(7),
+//kL	_aimRange(200),
+//kL	_snapRange(15),
+//kL	_autoRange(7),
 		_aimRange(20),	// kL
 		_snapRange(10),	// kL
 		_autoRange(5),	// kL
 		_minRange(0),
-//kL		_dropoff(2),
+//kL	_dropoff(2),
 		_dropoff(1),	// kL
 		_bulletSpeed(0),
 		_explosionSpeed(0),

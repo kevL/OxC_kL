@@ -139,7 +139,7 @@ void ProjectileFlyBState::init()
 
 	_unit = _action.actor;
 	if (_action.weapon != NULL) // kL
-		_ammo = _action.weapon->getAmmoItem();
+		_ammo = _action.weapon->getAmmoItem(); // _ammo is the weapon itself, if self-powered or BT_MELEE.
 
 	// **** The first 4 of these SHOULD NEVER happen ****
 	// the 4th is wtf: tu ought be spent for this already.
@@ -1295,11 +1295,15 @@ void ProjectileFlyBState::performMeleeAttack()
 
 	// kL: from ExplosionBState, moved here to play a proper hit/miss sFx
 	bool success = false;
-	if (RNG::percent(static_cast<int>(_unit->getFiringAccuracy(
-															BA_HIT,
-															_ammo) // Ammo is the weapon since (melee==true).
-														* 100.0))) // + 0.5))) // round up. bleh-> not consistent w/ rest of the code ......
+	int percent = static_cast<int>(_unit->getFiringAccuracy(
+														BA_HIT,
+//														_ammo)			// Ammo is the weapon since (melee==true).
+														_action.weapon)	// Not necessarily ...
+													* 100.0);
+	//Log(LOG_INFO) << ". hit percent = " << percent;
+	if (RNG::percent(percent))
 	{
+		//Log(LOG_INFO) << ". success";
 		success = true;
 	}
 
@@ -1321,10 +1325,13 @@ void ProjectileFlyBState::performMeleeAttack()
 	{
 		sound = ResourcePack::ITEM_DROP;
 
-		if (_ammo->getRules()->getMeleeHitSound() != -1)
-			sound = _ammo->getRules()->getMeleeHitSound();
-		else if (_ammo->getRules()->getMeleeSound() != -1)
-			sound = _ammo->getRules()->getMeleeSound();
+		if (_ammo->getRules()->getBattleType() == BT_MELEE)
+		{
+			if (_ammo->getRules()->getMeleeHitSound() != -1)
+				sound = _ammo->getRules()->getMeleeHitSound();
+			else if (_ammo->getRules()->getMeleeSound() != -1)
+				sound = _ammo->getRules()->getMeleeSound();
+		}
 	}
 
 	if (sound != -1)
@@ -1333,33 +1340,15 @@ void ProjectileFlyBState::performMeleeAttack()
 												sound)
 											->play();
 
-/*	if (_ammo != NULL // kL_note: Move this to ExplosionBState, where hit/miss is determined.
-		&& _ammo->getRules()->getMeleeSound() != -1)
-//	if (_ammo->getRules()->getFireSound() != -1) // kL
-	{
-		_parent->getResourcePack()->getSoundByDepth(
-												_parent->getDepth(),
-												_ammo->getRules()->getMeleeSound())
-//												_ammo->getRules()->getFireSound()) // kL
-											->play();
-	}
-	else if (_action.weapon->getRules()->getMeleeSound() != -1)
-//	else if (_action.weapon->getRules()->getFireSound() != -1) // kL
-	{
-		_parent->getResourcePack()->getSoundByDepth(
-												_parent->getDepth(),
-												_action.weapon->getRules()->getMeleeSound())
-//												_action.weapon->getRules()->getFireSound()) // kL
-											->play();
-	} */
-
 	if (!_parent->getSave()->getDebugMode()
 		&& _action.weapon->getRules()->getBattleType() == BT_MELEE
 		&& _ammo != NULL
 		&& _ammo->spendBullet() == false)
 	{
 		_parent->getSave()->removeItem(_ammo);
-		_action.weapon->setAmmoItem(NULL);
+
+		if (_action.weapon != NULL) // kL, in case the weapon just spent itself as a bullet -- jic.
+			_action.weapon->setAmmoItem(NULL);
 	}
 
 	_parent->getMap()->setCursorType(CT_NONE);

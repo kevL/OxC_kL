@@ -1111,7 +1111,9 @@ void BattlescapeState::mapOver(Action* action)
 					&& (*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS) // ie. not dead (although I think the unit<->tile association is supposed to go away onDeath)
 				{
 					ss << (*i)->getUnit()->getName(_game->getLanguage())
-					<< L" (" << (*i)->getUnit()->getStun() - (*i)->getUnit()->getHealth() << L")"; // something funny here ...!
+					<< L" (" << (*i)->getUnit()->getHealth() - (*i)->getUnit()->getStun() << L")"; // something funny here ...!
+					//Log(LOG_INFO) << ". health = " << (*i)->getUnit()->getHealth();
+					//Log(LOG_INFO) << ". stun = " << (*i)->getUnit()->getStun();
 				}
 				else
 				{

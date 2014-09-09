@@ -1867,9 +1867,13 @@ double BattleUnit::getFiringAccuracy(
 		|| actionType == BA_STUN)
 	{
 		ret = static_cast<double>(item->getRules()->getAccuracyMelee()) * getAccuracyModifier(item) / 100.0;
+		//Log(LOG_INFO) << ". ret[1] = " << ret;
 
 		if (item->getRules()->isSkillApplied())
+		{
 			ret = ret * static_cast<double>(getStats()->melee) / 100.0;
+			//Log(LOG_INFO) << ". ret[2] = " << ret;
+		}
 	}
 	else
 	{
@@ -1895,7 +1899,7 @@ double BattleUnit::getFiringAccuracy(
 		ret *= getAccuracyModifier();
 	}
 
-	//Log(LOG_INFO) << ". ret = " << ret;
+	//Log(LOG_INFO) << ". ret[0] = " << ret;
 	return ret;
 }
 
@@ -1917,7 +1921,7 @@ double BattleUnit::getThrowingAccuracy()
 double BattleUnit::getAccuracyModifier(BattleItem* item)
 {
 	//Log(LOG_INFO) << "BattleUnit::getAccuracyModifier()";
-	double ret = static_cast<double>(_health) / static_cast<double>(getStats()->health);
+	double ret = Round(static_cast<double>(_health) / static_cast<double>(getStats()->health));
 
 	int wounds = _fatalWounds[BODYPART_HEAD];
 

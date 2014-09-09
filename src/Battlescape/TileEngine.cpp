@@ -1339,9 +1339,9 @@ bool TileEngine::canTargetTile(
 									targetVoxel.x + tX,
 									targetVoxel.y + tY,
 									targetVoxel.z + j * 2),
-									0,
-									true)
-								== part) // bingo
+							NULL,
+							true)
+						== part) // bingo
 				{
 					if (!minZfound)
 					{
@@ -1382,9 +1382,9 @@ bool TileEngine::canTargetTile(
 									targetVoxel.x + tX,
 									targetVoxel.y + tY,
 									targetVoxel.z + j * 2),
-									0,
-									true)
-								== part) // bingo
+							NULL,
+							true)
+						== part) // bingo
 				{
 					if (!maxZfound)
 					{
@@ -2084,8 +2084,7 @@ BattleUnit* TileEngine::hit(
 							attacker,
 							false,
 							false,
-							NULL,
-							melee); // kL
+							NULL);
 			//Log(LOG_INFO) << ". voxelCheck() part = " << part;
 		}
 
@@ -2123,7 +2122,6 @@ BattleUnit* TileEngine::hit(
 			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 		}
 		else if (part == VOXEL_UNIT)	// battleunit part
-//			|| type == DT_STUN)			// kL, workaround for Stunrod. (not needed, huh?)
 		{
 			//Log(LOG_INFO) << ". . battleunit hit";
 
@@ -5276,7 +5274,7 @@ int TileEngine::castedShade(const Position& voxel)
 	{
 		tmpVoxel.z = z;
 
-		if (voxelCheck(tmpVoxel, 0) != VOXEL_EMPTY)
+		if (voxelCheck(tmpVoxel, NULL) != VOXEL_EMPTY)
 			break;
 	}
 
@@ -5303,15 +5301,15 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 			z++)
 	{
 		tmpVoxel.z = z;
-		if (voxelCheck(tmpVoxel, 0) == VOXEL_OBJECT)
+		if (voxelCheck(tmpVoxel, NULL) == VOXEL_OBJECT)
 			return false;
 
 		++tmpVoxel.x;
-		if (voxelCheck(tmpVoxel, 0) == VOXEL_OBJECT)
+		if (voxelCheck(tmpVoxel, NULL) == VOXEL_OBJECT)
 			return false;
 
 		++tmpVoxel.y;
-		if (voxelCheck(tmpVoxel, 0) == VOXEL_OBJECT)
+		if (voxelCheck(tmpVoxel, NULL) == VOXEL_OBJECT)
 			return false;
 	}
 
@@ -5325,7 +5323,6 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  * @param excludeAllUnits	- true to NOT do checks on any unit
  * @param onlyVisible		- true to consider only visible units
  * @param excludeAllBut		- pointer to an only unit to be considered
- * @param hit				- true if no projectile, trajectory, or any of this is needed - kL
  * @return,  -1 hit nothing
  *			0-3 tile-part (floor / westwall / northwall / content)
  *			  4 unit
@@ -5343,14 +5340,9 @@ int TileEngine::voxelCheck(
 		BattleUnit* excludeUnit,
 		bool excludeAllUnits,
 		bool onlyVisible,
-		BattleUnit* excludeAllBut,
-		bool hit) // kL add.
+		BattleUnit* excludeAllBut)
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
-	if (hit)
-		return VOXEL_UNIT; // kL; i think Wb may have this covered now.
-
-
 	Tile* targetTile = _battleSave->getTile(targetPos / Position(16, 16, 24)); // converts to tilespace -> Tile
 	//Log(LOG_INFO) << ". targetTile " << targetTile->getPosition();
 	// check if we are out of the map

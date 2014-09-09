@@ -272,8 +272,7 @@ private:
 				BattleUnit* excludeUnit,
 				bool excludeAllUnits = false,
 				bool onlyVisible = false,
-				BattleUnit* excludeAllBut = NULL,
-				bool hit = false); // kL add.
+				BattleUnit* excludeAllBut = NULL);
 
 		/// Get direction to a target-point
 		int getDirectionTo(

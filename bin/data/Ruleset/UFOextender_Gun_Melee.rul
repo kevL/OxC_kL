@@ -2,67 +2,67 @@
 # kL_modified: apply Strength; change code to +1/2 Str. for pistolWhips.
 items:
   - type: STR_PISTOL
-    meleePower: 20
+    meleePower: 15
     tuMelee: 15
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_RIFLE
-    meleePower: 50
-    tuMelee: 40
+    meleePower: 30
+    tuMelee: 35
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_HEAVY_CANNON
-    meleePower: 65
-    tuMelee: 50
+    meleePower: 40
+    tuMelee: 45
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_AUTO_CANNON
-    meleePower: 65
-    tuMelee: 50
+    meleePower: 40
+    tuMelee: 45
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_ROCKET_LAUNCHER
-    meleePower: 80
-    tuMelee: 80
+    meleePower: 50
+    tuMelee: 75
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_LASER_PISTOL
-    meleePower: 20
+    meleePower: 15
     tuMelee: 15
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_LASER_RIFLE
-    meleePower: 50
-    tuMelee: 40
+    meleePower: 30
+    tuMelee: 35
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_HEAVY_LASER
-    meleePower: 65
-    tuMelee: 50
+    meleePower: 40
+    tuMelee: 45
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_PLASMA_PISTOL
-    meleePower: 20
+    meleePower: 15
     tuMelee: 15
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_PLASMA_RIFLE
-    meleePower: 50
-    tuMelee: 40
+    meleePower: 30
+    tuMelee: 35
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_HEAVY_PLASMA
-    meleePower: 65
-    tuMelee: 50
+    meleePower: 40
+    tuMelee: 45
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_BLASTER_LAUNCHER
-    meleePower: 80
-    tuMelee: 80
+    meleePower: 50
+    tuMelee: 75
     accuracyMelee: 100
     strengthApplied: true
   - type: STR_SMALL_LAUNCHER
-    meleePower: 50
-    tuMelee: 40
+    meleePower: 25
+    tuMelee: 35
     accuracyMelee: 100
     strengthApplied: true
