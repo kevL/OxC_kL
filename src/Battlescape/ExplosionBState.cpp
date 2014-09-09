@@ -417,9 +417,10 @@ void ExplosionBState::explode()
 
 			return;
 		}
-		else if (targetUnit // HIT.
-			&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
-			&& _unit->getOriginalFaction() == FACTION_PLAYER)
+		else if (_unit // HIT.
+			&& _unit->getOriginalFaction() == FACTION_PLAYER
+			&& targetUnit
+			&& targetUnit->getOriginalFaction() == FACTION_HOSTILE)
 		{
 			_unit->addMeleeExp();
 		}

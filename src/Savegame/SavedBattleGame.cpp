@@ -2582,7 +2582,7 @@ Tile* SavedBattleGame::getBattleInventory() const // kL
  * kL. Sets the alien race for this battle.
  * Currently used only for Base Defense missions, but should fill for other missions also.
  */
-void SavedBattleGame::setAlienRace(std::string alienRace) // kL
+void SavedBattleGame::setAlienRace(const std::string& alienRace) // kL
 {
 	_alienRace = alienRace;
 }
@@ -2592,7 +2592,7 @@ void SavedBattleGame::setAlienRace(std::string alienRace) // kL
  * Currently used only to get the alien race for SoldierDiary statistics
  * after a Base Defense mission.
  */
-std::string SavedBattleGame::getAlienRace() const // kL
+const std::string& SavedBattleGame::getAlienRace() const // kL
 {
 	return _alienRace;
 }

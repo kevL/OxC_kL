@@ -756,6 +756,15 @@ void DebriefingState::prepareDebriefing()
 	_base = base;
 	_baseLabel = _base->getName(_game->getLanguage()); // kL
 
+	// kL_begin: Do all missionTypes here, for SoldierDiary race stat.
+	if (save->getMonthsPassed() != -1)
+	{
+		if (battle->getAlienRace() != "") // safety.
+			_missionStatistics->alienRace = battle->getAlienRace();
+		else
+			_missionStatistics->alienRace = "STR_UNKNOWN";
+	} // kL_end.
+
 	// UFO crash/landing site disappears
 	for (std::vector<Ufo*>::iterator
 			i = save->getUfos()->begin();
@@ -881,11 +890,11 @@ void DebriefingState::prepareDebriefing()
 
 	// kL_begin: Do all missionTypes here, for SoldierDiary race stat.
 //	if (mission == "STR_BASE_DEFENSE")
-	if (battle->getAlienRace() != "") // safety.
+/*	if (battle->getAlienRace() != "") // safety.
 		_missionStatistics->alienRace = battle->getAlienRace();
 	else
 		_missionStatistics->alienRace = "STR_UNKNOWN";
-	// kL_end.
+	// */ // kL_end.
 
 	// alien base disappears (if you didn't abort)
 	if (mission == "STR_ALIEN_BASE_ASSAULT")

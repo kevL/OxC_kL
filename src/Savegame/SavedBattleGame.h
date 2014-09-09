@@ -361,9 +361,9 @@ private:
 		Tile* getBattleInventory() const; // kL
 
 		/// kL. Sets the alien race for this battle game.
-		void setAlienRace(std::string alienRace); // kL
+		void setAlienRace(const std::string& alienRace); // kL
 		/// kL. Gets the alien race participating in this battle game.
-		std::string getAlienRace() const; // kL
+		const std::string& getAlienRace() const; // kL
 };
 
 }

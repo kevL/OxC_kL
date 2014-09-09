@@ -53,8 +53,10 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldiers screen.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
+ * @param base						- pointer to the base to get info from
+ * @param soldierId					- ID of the selected soldier
+ * @param soldierDiaryOverviewState	-
+ * @param display					- subscreen to display
  */
 SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 		Base* base,
