@@ -2909,9 +2909,11 @@ void BattlescapeGenerator::loadRMP(
 					j < 5;
 					++j)
 			{
-				int connectID = static_cast<int>(static_cast<signed char>(value[(j * 3) + 4]));
-				if (connectID > -1)
+				int connectID = static_cast<int>(static_cast<unsigned char>(value[(j * 3) + 4]));
+				if (connectID != 255)
 					connectID += nodeOffset;
+				else
+					connectID = -1;
 
 				node->getNodeLinks()->push_back(connectID);
 			}
