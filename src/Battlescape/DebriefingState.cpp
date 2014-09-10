@@ -761,9 +761,15 @@ void DebriefingState::prepareDebriefing()
 	if (save->getMonthsPassed() != -1)
 	{
 		if (battle->getAlienRace() != "") // safety.
+		{
+			//Log(LOG_INFO) << ". race = " << battle->getAlienRace();
 			_missionStatistics->alienRace = battle->getAlienRace();
+		}
 		else
+		{
+			//Log(LOG_INFO) << ". race UNKNOWN";
 			_missionStatistics->alienRace = "STR_UNKNOWN";
+		}
 	} // kL_end.
 
 	// UFO crash/landing site disappears

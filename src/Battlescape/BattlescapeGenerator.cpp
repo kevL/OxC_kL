@@ -186,6 +186,7 @@ void BattlescapeGenerator::setWorldShade(int shade)
  */
 void BattlescapeGenerator::setAlienRace(const std::string& alienRace)
 {
+	//Log(LOG_INFO) << "gen, race = " << alienRace;
 	_alienRace = alienRace;
 
 	_game->getSavedGame()->getSavedBattle()->setAlienRace(alienRace); // kL
