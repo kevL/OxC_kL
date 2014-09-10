@@ -50,7 +50,7 @@ private:
 		* _btnMore,
 		* _btnLess;
 	Base* _base;
-	InteractiveSurface* _surfaceScientists;
+//	InteractiveSurface* _srfScientists;
 	ResearchProject* _project;
 	RuleResearch* _rule;
 	Text
@@ -61,9 +61,8 @@ private:
 		* _txtMore,
 		* _txtTitle;
 	TextButton
+		* _btnCancel,
 		* _btnOk;
-	TextButton
-		* _btnCancel;
 	Timer
 		* _timerLess,
 		* _timerMore;
@@ -102,7 +101,7 @@ private:
 		void lessByValue(int change);
 
 		/// Handler for using the mouse wheel.
-		void handleWheel(Action* action);
+//		void handleWheel(Action* action);
 		/// Handler for pressing the More button.
 		void morePress(Action* action);
 		/// Handler for releasing the More button.

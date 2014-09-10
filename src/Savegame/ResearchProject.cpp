@@ -43,7 +43,8 @@ ResearchProject::ResearchProject(
 		_project(project),
 		_assigned(0),
 		_spent(0),
-		_cost(cost)
+		_cost(cost),
+		_offline(false) // kL
 {
 }
 
@@ -126,6 +127,25 @@ int ResearchProject::getCost() const
 }
 
 /**
+ * kL. Sets the project offline.
+ * Used to remove the project from lists, while preserving its cost & spent values.
+ * @param cost, New project cost(in man/day)
+ */
+void ResearchProject::setOffline(bool offline) // kL
+{
+	_offline = offline;
+}
+
+/**
+ * kL. Gets whether the project is offline or not.
+ * @return, The cost of the ResearchProject(in man/day)
+ */
+bool ResearchProject::getOffline() const // kL
+{
+	return _offline;
+}
+
+/**
  * Loads the research project from a YAML file.
  * @param node, YAML node.
  */
@@ -134,6 +154,8 @@ void ResearchProject::load(const YAML::Node& node)
 	setAssigned(node["assigned"].as<int>(getAssigned()));
 	setSpent(node["spent"].as<int>(getSpent()));
 	setCost(node["cost"].as<int>(getCost()));
+
+	setOffline(node["offline"].as<bool>(getOffline())); // kL
 }
 
 /**
@@ -148,6 +170,8 @@ YAML::Node ResearchProject::save() const
 	node["assigned"]	= getAssigned();
 	node["spent"]		= getSpent();
 	node["cost"]		= getCost();
+
+	node["offline"]		= getOffline(); // kL
 
 	return node;
 }

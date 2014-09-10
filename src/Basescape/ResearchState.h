@@ -54,11 +54,13 @@ private:
 		* _txtSpace,
 		* _txtTitle;
 	TextButton
-		* _btnAliens, // kL
+		* _btnAliens,
 		* _btnNew,
 		* _btnOk;
 	TextList* _lstResearch;
 	Window* _window;
+
+	std::vector<bool> _online; // kL
 
 
 	public:
@@ -72,7 +74,7 @@ private:
 		/// Handler for clicking the New Research button.
 		void btnNewClick(Action* action);
 		/// Handler for clicking the Alien Containment button.
-		void btnAliens(Action* action); // kL
+		void btnAliens(Action* action);
 		/// Handler for clicking the ResearchProject list.
 		void onSelectProject(Action* action);
 

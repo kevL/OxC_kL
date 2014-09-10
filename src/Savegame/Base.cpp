@@ -1448,12 +1448,14 @@ void Base::addResearch(ResearchProject* project)
 
 /**
  * Remove a ResearchProject from base.
- * @param project, The project to remove
- * @param help, True to apply researchHelp()
+ * @param project	- a project to remove
+ * @param grantHelp	- true to apply researchHelp()
+ * @param goOffline	- true to hide project but not remove it from base's active ResearchProjects
  */
 void Base::removeResearch(
 		ResearchProject* project,
-		bool help)
+		bool grantHelp, // kL
+		bool goOffline) // kL
 {
 	//Log(LOG_INFO) << "Base::removeResearch()";
 	_scientists += project->getAssigned();
@@ -1465,18 +1467,26 @@ void Base::removeResearch(
 						project);
 	if (i != _research.end())
 	{
-		// kL_begin: Add Research Help here. aLien must be interrogated
-		// at the same Base that project-help applies to, for now.
-		if (help)
+		if (goOffline)
 		{
-			std::string aLien = project->getRules()->getName();
-			//Log(LOG_INFO) << ". . aLien = " << aLien;
-			// eg. Base::removeResearch() aLien = STR_REAPER_CORPSE
+			project->setAssigned(0);
+			project->setOffline();
+		}
+		else
+		{
+			// kL_begin: Add Research Help here. aLien must be interrogated
+			// at the same Base that project-help applies to, for now.
+			if (grantHelp)
+			{
+				std::string aLien = project->getRules()->getName();
+				//Log(LOG_INFO) << ". . aLien = " << aLien;
+				// eg. Base::removeResearch() aLien = STR_REAPER_CORPSE
 
-			researchHelp(aLien);
-		} // kL_end.
+				researchHelp(aLien);
+			} // kL_end.
 
-		_research.erase(i);
+			_research.erase(i);
+		}
 	}
 }
 

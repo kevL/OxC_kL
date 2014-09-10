@@ -2534,7 +2534,9 @@ void GeoscapeState::time1Day()
 				rp != finished.end();
 				++rp)
 		{
-			(*b)->removeResearch(*rp);
+			(*b)->removeResearch(
+							*rp,
+							_game->getRuleset()->getUnit((*rp)->getRules()->getName()) != NULL); // kL, interrogation of aLien Unit complete.
 
 			RuleResearch* bonus = NULL;
 			const RuleResearch* research = (*rp)->getRules();

@@ -78,7 +78,8 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	_overCrowded = Options::storageLimitsEnforced
 				&& _base->getAvailableContainment() < _base->getUsedContainment();
 
-/*kL	for (std::vector<ResearchProject*>::const_iterator
+/*kL
+	for (std::vector<ResearchProject*>::const_iterator
 			i = _base->getResearch().begin();
 			i != _base->getResearch().end();
 			++i)

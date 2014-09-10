@@ -1287,7 +1287,7 @@ const std::vector<const RuleResearch*>& SavedGame::getDiscoveredResearch() const
 
 /**
  * Gets the list of RuleResearch which can be researched in a Base.
- * @param projects	- reference to a vector of pointers to the ResearchProjects that are available
+ * @param projects	- reference a vector of pointers to the ResearchProjects that are available
  * @param ruleset	- pointer to the game Ruleset
  * @param base		- pointer to a Base
  */

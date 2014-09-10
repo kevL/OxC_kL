@@ -215,10 +215,10 @@ private:
 		/// Adds a new ResearchProject to the Base.
 		void addResearch(ResearchProject* project);
 		/// Removes a ResearchProject from the Base.
-//kL		void removeResearch(ResearchProject*);
 		void removeResearch(
 				ResearchProject* project,
-				bool help = true); // kL
+				bool grantHelp = true,		// kL
+				bool goOffline = false);	// kL
 		/// kL. Research Help ala XcomUtil.
 		void researchHelp(std::string aLien); // kL
 

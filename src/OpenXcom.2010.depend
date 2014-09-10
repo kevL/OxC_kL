@@ -4420,7 +4420,7 @@
 	<vector>
 	<SDL.h>
 
-1409449628 f:\git\openxcom\src\savegame\base.h
+1410388486 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
 	<string>
 	<vector>
@@ -4516,7 +4516,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1404096022 f:\git\openxcom\src\basescape\researchstate.h
+1410387462 f:\git\openxcom\src\basescape\researchstate.h
 	"../Engine/State.h"
 
 1404096022 f:\git\openxcom\src\basescape\sellstate.h
@@ -4935,7 +4935,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/SavedGame.h"
 
-1409185480 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
+1410333946 source:f:\git\openxcom\src\basescape\managealiencontainmentstate.cpp
 	"ManageAlienContainmentState.h"
 	<sstream>
 	<climits>
@@ -4967,7 +4967,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1404096023 f:\git\openxcom\src\savegame\researchproject.h
+1410341572 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
 1409183744 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
@@ -5129,12 +5129,13 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1409185480 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1410389471 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	<algorithm>
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Interface/Text.h"
@@ -5146,13 +5147,14 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/Base.h"
 	"../Savegame/ItemContainer.h"
+	"../Savegame/ResearchProject.h"
 	"../Savegame/SavedGame.h"
 
-1404096022 f:\git\openxcom\src\basescape\newresearchliststate.h
+1410338985 f:\git\openxcom\src\basescape\newresearchliststate.h
 	<vector>
 	"../Engine/State.h"
 
-1404096022 f:\git\openxcom\src\basescape\researchinfostate.h
+1410341462 f:\git\openxcom\src\basescape\researchinfostate.h
 	"../Engine/State.h"
 
 1404096022 source:f:\git\openxcom\src\basescape\placefacilitystate.cpp
@@ -5256,7 +5258,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1405458548 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
+1410384368 source:f:\git\openxcom\src\basescape\researchinfostate.cpp
 	"ResearchInfoState.h"
 	<limits>
 	<sstream>
@@ -5282,7 +5284,7 @@
 	<algorithm>
 	<stdint.h>
 
-1409954762 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1410384983 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -5914,7 +5916,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1410328405 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1410328842 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6237,7 +6239,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1410289322 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1410328835 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -7756,7 +7758,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1409954763 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1410336052 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9499,7 +9501,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1409449628 source:f:\git\openxcom\src\savegame\base.cpp
+1410388486 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9649,7 +9651,7 @@
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
-1404096023 source:f:\git\openxcom\src\savegame\researchproject.cpp
+1410333459 source:f:\git\openxcom\src\savegame\researchproject.cpp
 	"ResearchProject.h"
 	<algorithm>
 	"../Interface/Text.h"
@@ -9686,7 +9688,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1409098194 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1410336650 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>

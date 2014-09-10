@@ -27,7 +27,7 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -57,8 +57,10 @@ namespace OpenXcom
 ResearchState::ResearchState(
 		Base* base)
 	:
-		_base(base)
+		_base(base),
+		_online() // kL
 {
+	//Log(LOG_INFO) << "Create ResearchState";
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 16, 10);
 	_txtBaseLabel	= new Text(80, 9, 16, 10);
@@ -74,7 +76,7 @@ ResearchState::ResearchState(
 
 	_lstResearch	= new TextList(288, 112, 16, 63);
 
-	_btnAliens		= new TextButton(92, 16, 16, 177); // kL
+	_btnAliens		= new TextButton(92, 16, 16, 177);
 	_btnNew			= new TextButton(92, 16, 114, 177);
 	_btnOk			= new TextButton(92, 16, 212, 177);
 
@@ -90,7 +92,7 @@ ResearchState::ResearchState(
 	add(_txtScientists);
 	add(_txtProgress);
 	add(_lstResearch);
-	add(_btnAliens); // kL
+	add(_btnAliens);
 	add(_btnNew);
 	add(_btnOk);
 
@@ -102,6 +104,7 @@ ResearchState::ResearchState(
 	_btnAliens->setColor(Palette::blockOffset(15)+6);
 	_btnAliens->setText(tr("STR_ALIENS"));
 	_btnAliens->onMouseClick((ActionHandler)& ResearchState::btnAliens);
+	_btnAliens->setVisible(false);
 
 	_btnNew->setColor(Palette::blockOffset(15)+6);
 	_btnNew->setText(tr("STR_NEW_PROJECT"));
@@ -153,6 +156,7 @@ ResearchState::ResearchState(
 	_lstResearch->onMouseClick((ActionHandler)& ResearchState::onSelectProject);
 
 //	init(); // do ya need this -> nope. It runs auto ....
+	//Log(LOG_INFO) << "Create ResearchState EXIT";
 }
 
 /**
@@ -160,6 +164,7 @@ ResearchState::ResearchState(
  */
 ResearchState::~ResearchState()
 {
+	//Log(LOG_INFO) << "delete ResearchState";
 }
 
 /**
@@ -192,16 +197,45 @@ void ResearchState::btnAliens(Action*) // kL
 }
 
 /**
- * Displays the list of possible ResearchProjects.
+ * Selects a ResearchProject to begin research.
  * @param action Pointer to an action.
  */
 void ResearchState::onSelectProject(Action*)
 {
-	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
+	//Log(LOG_INFO) << "ResearchState::onSelectProject()";
+	size_t
+		sel = _lstResearch->getSelectedRow(),	// original listclick
+		sel2 = sel,								// entry of RP vector
+		entry = 0;								// to break when vector.at[entry] meets sel
+	//Log(LOG_INFO) << ". sel = " << sel;
+
+	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
+
+	for (std::vector<bool>::const_iterator
+			i = _online.begin();
+			i != _online.end();
+			++i)
+	{
+		if (*i == false)
+		{
+			//Log(LOG_INFO) << ". . offline[" << entry << "] " << (*rps[entry]).getRules()->getName();
+			sel2++;
+		}
+		//else Log(LOG_INFO) << ". . online[" << entry << "] " << (*rps[entry]).getRules()->getName();
+
+		if (entry == sel2)
+		{
+			//Log(LOG_INFO) << ". . break";
+			break;
+		}
+
+		entry++;
+	}
 
 	_game->pushState(new ResearchInfoState(
 										_base,
-										baseProjects[_lstResearch->getSelectedRow()]));
+										rps[sel2]));
+//										rps[_lstResearch->getSelectedRow()]));
 }
 
 /**
@@ -212,35 +246,50 @@ void ResearchState::init()
 	//Log(LOG_INFO) << "ResearchState::init()";
 	State::init();
 
+	_online.clear();
 	_lstResearch->clearList();
 
-	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
-	for (std::vector<ResearchProject*>::const_iterator
-			proj = baseProjects.begin();
-			proj != baseProjects.end();
-			++proj)
-	{
-		std::wostringstream assigned;
-		assigned << (*proj)->getAssigned();
+	size_t row = -1; // kL, intentional buffer underrun.
 
-		std::wstring research = tr((*proj)->getRules()->getName());
+	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
+	for (std::vector<ResearchProject*>::const_iterator
+			rp = rps.begin();
+			rp != rps.end();
+			++rp)
+	{
+		row++; // =0 on first iteration
+
+		if ((*rp)->getOffline() == true) // kL
+		{
+			//Log(LOG_INFO) << ". offline[" << row << "] " << (*rp)->getRules()->getName();
+			_online.push_back(false);
+			continue;
+		}
+
+		//Log(LOG_INFO) << ". online[" << row << "] " << (*rp)->getRules()->getName();
+		_online.push_back(true);
+
+
+		std::wostringstream assigned;
+		assigned << (*rp)->getAssigned();
+
+		std::wstring project = tr((*rp)->getRules()->getName());
 		std::wstring wsDaysLeft = L"-";
 
-		if ((*proj)->getAssigned() > 0)
+		if ((*rp)->getAssigned() > 0)
 		{
-			int daysLeft = static_cast<int>(
-							ceil(
-								(static_cast<double>((*proj)->getCost() - (*proj)->getSpent()))
-								/ static_cast<double>((*proj)->getAssigned())));
+			int daysLeft = static_cast<int>(ceil(
+								(static_cast<double>((*rp)->getCost() - (*rp)->getSpent()))
+								/ static_cast<double>((*rp)->getAssigned())));
 			wsDaysLeft = Text::formatNumber(daysLeft, L"", false);
 		}
 
 		_lstResearch->addRow(
 							4,
-							research.c_str(),
+							project.c_str(),
 							assigned.str().c_str(),
-							tr((*proj)->getResearchProgress()).c_str(),
-//							(*proj)->getCostCompleted().c_str());
+							tr((*rp)->getResearchProgress()).c_str(),
+//							(*rp)->getCostCompleted().c_str());
 							wsDaysLeft.c_str());
 	}
 
@@ -251,20 +300,9 @@ void ResearchState::init()
 	_txtSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE")
 							.arg(_base->getFreeLaboratories()));
 
-	// kL_begin:
-	_btnAliens->setVisible(false);
-	for (std::vector<BaseFacility*>::iterator
-			fac = _base->getFacilities()->begin();
-			fac != _base->getFacilities()->end();
-			++fac)
-	{
-		if ((*fac)->getRules()->getAliens() > 0)
-		{
-			_btnAliens->setVisible();
 
-			break;
-		}
-	} // kL_end.
+	if (_base->getAvailableContainment() > 0)
+		_btnAliens->setVisible();
 }
 
 }

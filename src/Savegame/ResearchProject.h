@@ -29,16 +29,23 @@ namespace OpenXcom
 class RuleResearch;
 class Ruleset;
 
+
 /**
-   Represent a ResearchProject
-   Contain information about assigned scientist, time already spent and cost of the project.
+ * Represents a ResearchProject.
+ * Contains information about assigned scientists, time already spent and cost of the project.
 */
 class ResearchProject
 {
+
+private:
+	bool _offline; // kL
+	int
+		_assigned,
+		_cost,
+		_spent;
+
 	RuleResearch* _project;
-	int _assigned;
-	int _spent;
-	int _cost;
+
 
 	public:
 		ResearchProject(
@@ -64,6 +71,10 @@ class ResearchProject
 		void setCost(int cost);
 		/// get time cost of this ResearchProject
 		int getCost() const;
+		/// kL. Sets the project offline.
+		void setOffline(bool offline = true); // kL
+		/// kL. Gets whether the project is offline or not.
+		bool getOffline() const; // kL
 
 		/// load the ResearchProject from YAML
 		void load(const YAML::Node& node);

@@ -50,7 +50,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the ResearchProject screen.
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param rule A RuleResearch which will be used to create a new ResearchProject
  */
@@ -59,9 +58,9 @@ ResearchInfoState::ResearchInfoState(
 		RuleResearch* rule)
 	:
 		_base(base),
-		_project(new ResearchProject( // time = 70 to 130%
+		_project(new ResearchProject( // time = 65 to 130%
 								rule,
-								(rule->getCost() * RNG::generate(70, 130)) / 100)),
+								(rule->getCost() * RNG::generate(65, 130)) / 100)),
 		_rule(rule)
 {
 	buildUi();
@@ -69,7 +68,6 @@ ResearchInfoState::ResearchInfoState(
 
 /**
  * Initializes all the elements in the ResearchProject screen.
- * @param game Pointer to the core game.
  * @param base Pointer to the base to get info from.
  * @param project A ResearchProject to modify
  */
@@ -79,7 +77,7 @@ ResearchInfoState::ResearchInfoState(
 	:
 		_base(base),
 		_project(project),
-		_rule(0)
+		_rule(NULL)
 {
 	buildUi();
 }
@@ -101,28 +99,25 @@ void ResearchInfoState::buildUi()
 	_screen = false;
 
 	_window					= new Window(this, 230, 140, 45, 30);
-
 	_txtTitle				= new Text(198, 16, 61, 40);
+
 	_txtAvailableScientist	= new Text(198, 16, 61, 60);
 	_txtAvailableSpace		= new Text(198, 16, 61, 70);
 	_txtAllocatedScientist	= new Text(198, 16, 61, 80);
+
 	_txtMore				= new Text(134, 16, 93, 100);
 	_txtLess				= new Text(134, 16, 93, 120);
-	_btnCancel				= new TextButton(95, 16, 61, 144);
-	_btnOk					= new TextButton(95, 16, 164, 144);
-
 	_btnMore				= new ArrowButton(ARROW_BIG_UP, 13, 14, 205, 100);
 	_btnLess				= new ArrowButton(ARROW_BIG_DOWN, 13, 14, 205, 120);
 
-	_surfaceScientists = new InteractiveSurface(230, 140, 45, 30);
-	_surfaceScientists->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
+	_btnCancel				= new TextButton(95, 16, 61, 144);
+	_btnOk					= new TextButton(95, 16, 164, 144);
+
+//	_srfScientists			= new InteractiveSurface(230, 140, 45, 30);
 
 	setPalette("PAL_BASESCAPE", 1);
 
-	add(_surfaceScientists);
 	add(_window);
-	add(_btnOk);
-	add(_btnCancel);
 	add(_txtTitle);
 	add(_txtAvailableScientist);
 	add(_txtAvailableSpace);
@@ -131,16 +126,21 @@ void ResearchInfoState::buildUi()
 	add(_txtLess);
 	add(_btnMore);
 	add(_btnLess);
+	add(_btnCancel);
+	add(_btnOk);
+//	add(_srfScientists);
 
 	centerAllSurfaces();
 
-
 	_window->setColor(Palette::blockOffset(13)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
+
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setBig();
-
-	_txtTitle->setText(_rule? tr(_rule->getName()): tr(_project->getRules()->getName()));
+	if (_rule != NULL)
+		_txtTitle->setText(tr(_rule->getName()));
+	else
+		_txtTitle->setText(tr(_project->getRules()->getName()));
 
 	_txtAvailableScientist->setColor(Palette::blockOffset(13)+5);
 	_txtAvailableScientist->setSecondaryColor(Palette::blockOffset(13));
@@ -152,16 +152,15 @@ void ResearchInfoState::buildUi()
 	_txtAllocatedScientist->setSecondaryColor(Palette::blockOffset(13));
 	_txtAllocatedScientist->setBig();
 
-	_txtMore->setText(tr("STR_INCREASE"));
-	_txtLess->setText(tr("STR_DECREASE"));
-
 	_txtMore->setColor(Palette::blockOffset(13)+5);
+	_txtMore->setText(tr("STR_INCREASE"));
 	_txtLess->setColor(Palette::blockOffset(13)+5);
+	_txtLess->setText(tr("STR_DECREASE"));
 
 	_txtMore->setBig();
 	_txtLess->setBig();
 
-	if (_rule)
+	if (_rule != NULL)
 	{
 		_base->addResearch(_project);
 
@@ -185,24 +184,17 @@ void ResearchInfoState::buildUi()
 	_btnLess->onMouseRelease((ActionHandler)& ResearchInfoState::lessRelease);
 	_btnLess->onMouseClick((ActionHandler)& ResearchInfoState::lessClick, 0);
 
-	_timerMore = new Timer(250); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerMore = new Timer(250);
 	_timerMore->onTimer((StateHandler)& ResearchInfoState::more);
 
-	_timerLess = new Timer(250); // kL_note: SHOULD THESE TIMERS BE delete'd
+	_timerLess = new Timer(250);
 	_timerLess->onTimer((StateHandler)& ResearchInfoState::less);
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->onMouseClick((ActionHandler)& ResearchInfoState::btnOkClick);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& ResearchInfoState::btnOkClick,
-					Options::keyOk);
-
 	_btnCancel->setColor(Palette::blockOffset(13)+10);
-
-
-	if (_rule)
+	if (_rule != NULL)
 	{
 		_btnOk->setText(tr("STR_START_PROJECT"));
+
 		_btnCancel->setText(tr("STR_CANCEL_UC"));
 		_btnCancel->onKeyboardPress(
 						(ActionHandler)& ResearchInfoState::btnCancelClick,
@@ -210,14 +202,22 @@ void ResearchInfoState::buildUi()
 	}
 	else
 	{
-		_btnOk->setText(tr("STR_OK"));
 		_btnCancel->setText(tr("STR_CANCEL_PROJECT"));
+
+		_btnOk->setText(tr("STR_OK"));
 		_btnOk->onKeyboardPress(
 						(ActionHandler)& ResearchInfoState::btnOkClick,
 						Options::keyCancel);
 	}
-
 	_btnCancel->onMouseClick((ActionHandler)& ResearchInfoState::btnCancelClick);
+
+	_btnOk->setColor(Palette::blockOffset(13)+10);
+	_btnOk->onMouseClick((ActionHandler)& ResearchInfoState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& ResearchInfoState::btnOkClick,
+					Options::keyOk);
+
+//	_srfScientists->onMouseClick((ActionHandler)& ResearchInfoState::handleWheel, 0);
 }
 
 /**
@@ -226,6 +226,8 @@ void ResearchInfoState::buildUi()
  */
 void ResearchInfoState::btnOkClick(Action*)
 {
+	_project->setOffline(false); // kL
+
 	_game->popState();
 }
 
@@ -236,18 +238,24 @@ void ResearchInfoState::btnOkClick(Action*)
  */
 void ResearchInfoState::btnCancelClick(Action*)
 {
-	const RuleResearch* ruleResearch = _rule? _rule: _project->getRules();
+	const RuleResearch* rule;
+	if (_rule != NULL)
+		rule = _rule;
+	else
+		rule = _project->getRules();
 
-	if (ruleResearch->needItem()
-		&& (_game->getRuleset()->getUnit(ruleResearch->getName())
-			|| Options::spendResearchedItems))
+	if (rule->needItem()
+		&& (Options::spendResearchedItems
+			|| _game->getRuleset()->getUnit(rule->getName())))
 	{
-		_base->getItems()->addItem(ruleResearch->getName());
+		_base->getItems()->addItem(rule->getName());
 	}
 
 	_base->removeResearch(
 						_project,
-						false);
+						false,			// kL
+						_rule == NULL);	// kL
+
 	_game->popState();
 }
 
@@ -256,9 +264,8 @@ void ResearchInfoState::btnCancelClick(Action*)
  */
 void ResearchInfoState::setAssignedScientist()
 {
-//kL	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC").arg(_base->getAvailableScientists()));
 	_txtAvailableScientist->setText(tr("STR_SCIENTISTS_AVAILABLE_UC")
-									.arg(_base->getScientists())); // kL
+									.arg(_base->getScientists()));
 	_txtAvailableSpace->setText(tr("STR_LABORATORY_SPACE_AVAILABLE_UC")
 									.arg(_base->getFreeLaboratories()));
 	_txtAllocatedScientist->setText(tr("STR_SCIENTISTS_ALLOCATED")
@@ -269,13 +276,13 @@ void ResearchInfoState::setAssignedScientist()
  * Increases or decreases the scientists according the mouse-wheel used.
  * @param action Pointer to an Action.
  */
-void ResearchInfoState::handleWheel(Action* action)
+/* void ResearchInfoState::handleWheel(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		moreByValue(Options::changeValueByMouseWheel);
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 		lessByValue(Options::changeValueByMouseWheel);
-}
+} */
 
 /**
  * Starts the timeMore timer.
@@ -417,8 +424,8 @@ void ResearchInfoState::think()
 {
 	State::think();
 
-	_timerLess->think(this, 0);
-	_timerMore->think(this, 0);
+	_timerLess->think(this, NULL);
+	_timerMore->think(this, NULL);
 }
 
 }
