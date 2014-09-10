@@ -2857,10 +2857,10 @@ int BattlescapeGenerator::loadMAP(
 
 /**
  * Loads an XCom format RMP file into the spawnpoints of the battlegame.
- * @param mapblock Pointer to MapBlock.
- * @param xoff Mapblock offset in X direction.
- * @param yoff Mapblock offset in Y direction.
- * @param segment Mapblock segment.
+ * @param mapblock	- pointer to MapBlock
+ * @param xoff		- Mapblock offset in X direction
+ * @param yoff		- Mapblock offset in Y direction
+ * @param segment	- Mapblock segment
  * @sa http://www.ufopaedia.org/index.php?title=ROUTES
  */
 void BattlescapeGenerator::loadRMP(
@@ -2869,7 +2869,6 @@ void BattlescapeGenerator::loadRMP(
 		int yoff,
 		int segment)
 {
-	int id = 0;
 	char value[24];
 
 	std::ostringstream filename;
@@ -2884,25 +2883,46 @@ void BattlescapeGenerator::loadRMP(
 	}
 
 	size_t nodeOffset = _save->getNodes()->size();
+	int
+		pos_x,
+		pos_y,
+		pos_z,
+		type,
+		rank,
+		flags,
+		reserved,
+		priority;
 
 	while (mapFile.read((char*)& value, sizeof(value)))
 	{
-		if (static_cast<int>(value[0]) < mapblock->getSizeY()
-			&& static_cast<int>(value[1]) < mapblock->getSizeX()
-			&& static_cast<int>(value[2]) < _mapsize_z)
+		pos_x = static_cast<int>(value[1]);
+		pos_y = static_cast<int>(value[0]);
+		pos_z = static_cast<int>(value[2]);
+
+		if (pos_x < mapblock->getSizeX()
+			&& pos_y < mapblock->getSizeY()
+			&& pos_z < _mapsize_z )
 		{
+			Position pos = Position(
+								xoff + pos_x,
+								yoff + pos_y,
+								mapblock->getSizeZ() - pos_z - 1);
+
+			type		= value[19];
+			rank		= value[20];
+			flags		= value[21];
+			reserved	= value[22];
+			priority	= value[23];
+
 			Node* node = new Node(
-								nodeOffset + id,
-								Position(
-										xoff + static_cast<int>(value[1]),
-										yoff + static_cast<int>(value[0]),
-										mapblock->getSizeZ() - 1 - static_cast<int>(value[2])),
+								_save->getNodes()->size(),
+								pos,
 								segment,
-								static_cast<int>(value[19]),
-								static_cast<int>(value[20]),
-								static_cast<int>(value[21]),
-								static_cast<int>(value[22]),
-								static_cast<int>(value[23]));
+								type,
+								rank,
+								flags,
+								reserved,
+								priority);
 
 			for (int
 					j = 0;
@@ -2910,18 +2930,16 @@ void BattlescapeGenerator::loadRMP(
 					++j)
 			{
 				int connectID = static_cast<int>(static_cast<unsigned char>(value[(j * 3) + 4]));
-				if (connectID != 255)
+				if (connectID < 251) // don't touch special values
 					connectID += nodeOffset;
-				else
-					connectID = -1;
+				else // 255/-1 = unused, 254/-2 = north, 253/-3 = east, 252/-4 = south, 251/-5 = west
+					connectID -= 256;
 
 				node->getNodeLinks()->push_back(connectID);
 			}
 
 			_save->getNodes()->push_back(node);
 		}
-
-		id++;
 	}
 
 	if (!mapFile.eof())
