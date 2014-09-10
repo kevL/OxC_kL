@@ -1094,17 +1094,12 @@ void BattlescapeState::mapOver(Action* action)
 
 			size_t rows = 0;
 			std::wostringstream ss;
-//			ss << L"";
 
 			for (std::vector<BattleItem*>::iterator // ground items
 					i = tile->getInventory()->begin();
 					i != tile->getInventory()->end();
 					++i)
 			{
-//				if (ss != L"")
-//					ss << L"\n";
-
-				rows++;
 				ss << L"> ";
 
 				if ((*i)->getUnit() != NULL)
@@ -1148,11 +1143,13 @@ void BattlescapeState::mapOver(Action* action)
 				}
 
 				ss << L"\n";
-				if (rows > 24)
+				if (rows > 25)
 				{
 					ss << L"> . . . more";
 					break;
 				}
+
+				rows++;
 			}
 
 			_txtConsole->setText(ss.str());
