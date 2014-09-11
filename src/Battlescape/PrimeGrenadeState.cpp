@@ -70,7 +70,7 @@ PrimeGrenadeState::PrimeGrenadeState(
 	_fraTop		= new Frame(192, 27, 65, 37);
 	_txtTitle	= new Text(192, 18, 65, 43);
 
-	_srfBG		= new Surface(192, 92, 65, 45);
+	_srfBG		= new Surface(192, 93, 65, 45);
 
 	_txtTurn0	= new Text(190, 18, 66, 67); // kL
 	_isfBtn0	= new InteractiveSurface(190, 22, 66, 65); // kL

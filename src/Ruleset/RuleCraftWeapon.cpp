@@ -46,7 +46,7 @@ RuleCraftWeapon::RuleCraftWeapon(const std::string& type)
 }
 
 /**
- *
+ * dTor.
  */
 RuleCraftWeapon::~RuleCraftWeapon()
 {

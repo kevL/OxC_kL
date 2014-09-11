@@ -690,7 +690,6 @@ void Inventory::mouseOver(Action* action, State* state)
 	else
 	{
 		_tuCost = -1; // kL
-
 		setMouseOverItem(NULL);
 	}
 
@@ -740,8 +739,13 @@ void Inventory::mouseClick(Action* action, State* state)
 
 						RuleInventory* newSlot = NULL;
 
-						if (slot->getType() == INV_HAND)
+						if (slot->getType() == INV_HAND
+							|| (slot->getType() != INV_GROUND
+								&& (_tu == false
+									|| _selUnit->getOriginalFaction() != FACTION_PLAYER)))
+						{
 							newSlot = _game->getRuleset()->getInventory("STR_GROUND");
+						}
 						else
 						{
 							if (_selUnit->getItem("STR_RIGHT_HAND") == NULL)
@@ -1372,7 +1376,8 @@ bool Inventory::fitItem(
 						drawItems();
 					}
 					else if (test == false)
-						warning = "STR_NOT_ENOUGH_TIME_UNITS";
+						_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
+//						warning = "STR_NOT_ENOUGH_TIME_UNITS";
 				}
 			}
 		}

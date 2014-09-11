@@ -45,7 +45,7 @@ CraftWeapon::CraftWeapon(
 }
 
 /**
- *
+ * dTor.
  */
 CraftWeapon::~CraftWeapon()
 {
@@ -149,35 +149,37 @@ int CraftWeapon::rearm(
 		const int clipSize)
 {
 	int
-		rate = _rules->getRearmRate(),
-		full = _rules->getAmmoMax(),
-		req = 0;
+		loadQty = baseClips * clipSize,
+		fullQty = _rules->getAmmoMax(),
+		rateQty = _rules->getRearmRate(),
+		clipsRequested = 0;
 
 	if (clipSize > 0)
 	{
-		req = std::min( // +(clipSize-1) for rounding up
-					rate,
-					full - _ammo + clipSize - 1)
-				/ clipSize;
+		clipsRequested = std::min(
+								rateQty,
+								fullQty - _ammo + clipSize - 1) // round up.
+							/ clipSize;
 	}
 
-	int load = baseClips * clipSize;
-	if (clipSize < 1 // kL
-		|| baseClips >= req)
+	if (baseClips >= clipsRequested)
 	{
-		load = rate; // req * clipSize (Falko-note)
+		if (clipSize == 0) // kL
+			loadQty = rateQty;
+		else
+			loadQty = clipsRequested * clipSize; // Falko-note
 	}
 
-	setAmmo(_ammo + load);
+	setAmmo(_ammo + loadQty);
 
-	_rearming = (_ammo < full);
+	_rearming = (_ammo < fullQty);
 
 	if (clipSize < 1)
 		return 0;
 
-	int ret = load / clipSize;
+	int ret = (loadQty + clipSize - 1) / clipSize; // kL_mod, round up.
 
-	if (ret < 1) // kL, 1 clip used.
+	if (ret < 1) // kL, safety.
 		return 1;
 
 	return ret;

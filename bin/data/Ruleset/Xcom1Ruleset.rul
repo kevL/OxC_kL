@@ -1193,7 +1193,7 @@ craftWeapons:
     reloadStandard: 8
     reloadAggressive: 5
     ammoMax: 22
-    rearmRate: 5
+    rearmRate: 11
     launcher: STR_LASER_CANNON
     clip: STR_ELERIUM_115
     projectileType: 4
@@ -1207,7 +1207,7 @@ craftWeapons:
     reloadStandard: 14
     reloadAggressive: 8
     ammoMax: 33
-    rearmRate: 15
+    rearmRate: 11
     launcher: STR_PLASMA_BEAM
     clip: STR_ELERIUM_115
     projectileType: 5

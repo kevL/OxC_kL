@@ -65,10 +65,10 @@ private:
 		_isMouseScrolled,
 		_isMouseScrolling,
 		_mouseOverIcons,
-		_mouseOverThreshold,
-		_showConsole; // kL
+		_mouseOverThreshold;
 	int
 		_fuseFrame, // kL
+		_showConsole, // kL
 		_totalMouseMoveX,
 		_totalMouseMoveY,
 		_xBeforeMouseScrolling,
@@ -148,7 +148,9 @@ private:
 //		* _srfWounds; // kL
 	Text
 		* _txtBaseLabel, // kL
-		* _txtConsole, // kL
+		* _txtConsole1, // kL
+		* _txtConsole2, // kL
+		* _txtConsole3, // kL
 		* _txtDebug,
 //		* _txtTooltip;
 		* _txtName,

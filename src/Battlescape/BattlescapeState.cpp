@@ -128,7 +128,7 @@ BattlescapeState::BattlescapeState()
 		_isMouseScrolling(false),
 		_mouseScrollingStartTime(0),	// kL_end.
 		_fuseFrame(0), // kL
-		_showConsole(true) // kL
+		_showConsole(1) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	std::fill_n(
@@ -282,7 +282,9 @@ BattlescapeState::BattlescapeState()
 	_txtTurn		= new Text(50, 9, 1, 20);	// kL
 //	_turnCounter	= new TurnCounter(20, 5, 0, 0);
 
-	_txtConsole		= new Text(200, y, 1, 0); // kL
+	_txtConsole1	= new Text(164, y, 1, 0); // kL
+	_txtConsole2	= new Text(164, y, 165, 0); // kL
+	_txtConsole3	= new Text(164, y, 331, 0); // kL, this gets cut off on right ...
 //	_lstConsole		= new TextList(200, y, 1, 0); // kL
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
@@ -426,9 +428,15 @@ BattlescapeState::BattlescapeState()
 
 //	add(_turnCounter);
 //	_turnCounter->setColor(Palette::blockOffset(9)+1);
-	add(_txtConsole);
-	_txtConsole->setColor(Palette::blockOffset(8)+1); // blue
-	_txtConsole->setVisible(false);
+	add(_txtConsole1);
+	add(_txtConsole2);
+	add(_txtConsole3);
+	_txtConsole1->setColor(Palette::blockOffset(8)+2); // blue
+	_txtConsole2->setVisible(false);
+	_txtConsole2->setColor(Palette::blockOffset(8)+2);
+	_txtConsole2->setVisible(false);
+	_txtConsole3->setColor(Palette::blockOffset(8)+2);
+	_txtConsole3->setVisible(false);
 
 /*	add(_lstConsole);
 	_lstConsole->setColor(Palette::blockOffset(8)+1); // blue
@@ -444,11 +452,13 @@ BattlescapeState::BattlescapeState()
 	add(_txtTurn);
 
 	_txtTerrain->setColor(Palette::blockOffset(9)+1); // yellow
-//	_txtTerrain->setSecondaryColor(Palette::blockOffset(8)+1);
+	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_save->getTerrain())));
+
 	_txtShade->setColor(Palette::blockOffset(9)+1);
-//	_txtShade->setSecondaryColor(Palette::blockOffset(8)+1);
+	_txtShade->setText(tr("STR_SHADE_").arg(_save->getGlobalShade()));
+
 	_txtTurn->setColor(Palette::blockOffset(9)+1);
-//	_txtTurn->setSecondaryColor(Palette::blockOffset(8)+1);
+	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
 /*
 	std::wostringstream
 		woTurn,
@@ -466,10 +476,6 @@ BattlescapeState::BattlescapeState()
 	woTurn << L"turn> ";
 	woTurn << _save->getTurn();
 	_txtTurn->setText(woTurn.str()); */
-
-	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_save->getTerrain())));
-	_txtShade->setText(tr("STR_SHADE_").arg(_save->getGlobalShade()));
-	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
 	// kL_end.
 
 	add(_txtDebug);
@@ -1074,10 +1080,14 @@ void BattlescapeState::mapOver(Action* action)
 
 		_game->getCursor()->handle(action);
 	}
-	else if (_showConsole // kL_begin:
+	else if (_showConsole > 0 // kL_begin:
 		&& _mouseOverIcons == false
 		&& allowButtons())
 	{
+		_txtConsole1->setText(L"");
+		_txtConsole2->setText(L"");
+		_txtConsole3->setText(L"");
+
 		Position pos;
 		_map->getSelectorPosition(&pos);
 		Tile* tile = _save->getTile(pos);
@@ -1085,22 +1095,23 @@ void BattlescapeState::mapOver(Action* action)
 		if (tile != NULL
 			&& tile->getInventory()->empty() == false)
 		{
-			_txtConsole->setVisible();
-//			_lstConsole->setVisible();
-
 			_txtTerrain->setVisible(false);
 			_txtShade->setVisible(false);
 			_txtTurn->setVisible(false);
 
-			size_t rows = 0;
-			std::wostringstream ss;
+			size_t row = 0;
+			std::wostringstream
+				ss,
+				ss1,
+				ss2,
+				ss3;
 
 			for (std::vector<BattleItem*>::iterator // ground items
 					i = tile->getInventory()->begin();
 					i != tile->getInventory()->end();
 					++i)
 			{
-				ss << L"> ";
+				ss << L">";
 
 				if ((*i)->getUnit() != NULL)
 				{
@@ -1131,7 +1142,7 @@ void BattlescapeState::mapOver(Action* action)
 						&& (*i)->getAmmoItem()
 						&& (*i)->getAmmoItem() != *i)
 					{
-						ss << L"-" << tr((*i)->getAmmoItem()->getRules()->getType())
+						ss << L" >" << tr((*i)->getAmmoItem()->getRules()->getType())
 						<< L" (" << (*i)->getAmmoItem()->getAmmoQuantity() << L")";
 					}
 					else if (((*i)->getRules()->getBattleType() == BT_GRENADE
@@ -1143,22 +1154,56 @@ void BattlescapeState::mapOver(Action* action)
 				}
 
 				ss << L"\n";
-				if (rows > 25)
-				{
-					ss << L"> . . . more";
-					break;
-				}
 
-				rows++;
+				if (row == 24) // Console #1
+				{
+					ss << L". . . more";
+					row++;
+				}
+				if (row < 26)
+				{
+					ss1.str(L"");
+					ss1 << ss.str(); // not efficient
+				}
+				if (row == 25)
+					ss.str(L"");
+
+				if (row == 49) // Console #2
+				{
+					ss << L". . . more";
+					row++;
+				}
+				if (25 < row && row < 51)
+				{
+					ss2.str(L"");
+					ss2 << ss.str(); // not efficient
+				}
+				if (row == 50)
+					ss.str(L"");
+
+				if (row == 74) // Console #3
+				{
+					ss << L". . . more";
+					row++;
+				}
+				if (50 < row && row < 76)
+				{
+					ss3.str(L"");
+					ss3 << ss.str(); // not efficient
+				}
+				if (row == 75)
+					break;
+
+
+				row++;
 			}
 
-			_txtConsole->setText(ss.str());
+			_txtConsole1->setText(ss1.str());
+			_txtConsole2->setText(ss2.str());
+			_txtConsole3->setText(ss3.str());
 		}
 		else
 		{
-			_txtConsole->setVisible(false);
-//			_lstConsole->setVisible(false);
-
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
@@ -2081,8 +2126,39 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 {
 	if (allowButtons())
 	{
-		_showConsole = !_showConsole;
-//		_txtConsole->setVisible(!_txtConsole->getVisible());
+		if (_showConsole == 0)
+		{
+			_showConsole = 1;
+
+			_txtConsole2->setText(L"");
+			_txtConsole3->setText(L"");
+		}
+		else if (_showConsole == 1)
+		{
+			_showConsole = 2;
+
+			_txtConsole3->setText(L"");
+		}
+		else if (_showConsole == 2)
+		{
+			_showConsole = 3;
+		}
+		else if (_showConsole == 3)
+		{
+			_showConsole = 0;
+
+			_txtConsole1->setText(L"");
+			_txtConsole2->setText(L"");
+			_txtConsole3->setText(L"");
+
+			_txtTerrain->setVisible();
+			_txtShade->setVisible();
+			_txtTurn->setVisible();
+		}
+
+		_txtConsole1->setVisible(_showConsole > 0);
+		_txtConsole2->setVisible(_showConsole > 1);
+		_txtConsole3->setVisible(_showConsole > 2);
 	}
 }
 
