@@ -171,7 +171,7 @@ void NewResearchListState::fillProjectList()
 								1,
 								tr((*i)->getRules()->getName()).c_str());
 
-			_lstResearch->setRowColor(row, Palette::blockOffset(10));
+			_lstResearch->setRowColor(row, Palette::blockOffset(11)+2);
 
 			_offlines.push_back(*i);
 

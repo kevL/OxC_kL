@@ -112,6 +112,7 @@ RuleItem::RuleItem(const std::string& type)
 		_meleePower(0),
 		_meleeAnimation(0),
 		_meleeHitSound(-1),
+		_specialType(-1),
 		_noResearch(false) // kL
 {
 }
@@ -276,6 +277,7 @@ void RuleItem::load(
 	_noResearch				= node["noResearch"].as<bool>(_noResearch); // kL
 	_meleePower				= node["meleePower"].as<int>(_meleePower);
 	_underwaterOnly			= node["underwaterOnly"].as<bool>(_underwaterOnly);
+	_specialType			= node["specialType"].as<int>(_specialType);
 
 	if (!_listOrder)
 		_listOrder = listOrder;
@@ -1002,6 +1004,17 @@ bool RuleItem::isLOSRequired() const
 const bool RuleItem::isWaterOnly() const
 {
 	return _underwaterOnly;
+}
+
+/**
+ * Gets the associated special type of this item.
+ * Note that type 14 is the alien brain, and types 0 and 1 are "regular tile"
+ * and "starting point" so try not to use those ones.
+ * @return, special type
+ */
+const int RuleItem::getSpecialType() const
+{
+	return _specialType;
 }
 
 /**

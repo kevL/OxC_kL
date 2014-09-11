@@ -119,6 +119,7 @@ private:
 		_meleeHitSound,
 		_power,
 		_shotgunPellets,
+		_specialType,
 
 		_accuracyAimed,
 		_accuracyAuto,
@@ -368,6 +369,8 @@ private:
 		bool isLOSRequired() const;
 		/// Checks if this item is restricted to underwater usage.
 		const bool isWaterOnly() const;
+		/// Gets the associated special type of this item.
+		const int getSpecialType() const;
 
 		/// kL. Gets the item's default BattleAction.
 		BattleActionType getDefaultAction() const; // kL

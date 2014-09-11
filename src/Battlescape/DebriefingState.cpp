@@ -416,6 +416,15 @@ DebriefingState::~DebriefingState()
 		delete *i;
 	}
 
+	for (std::map<int, RecoveryItem*>::iterator
+			i = _recoveryStats.begin();
+			i != _recoveryStats.end();
+			++i)
+	{
+		delete i->second;
+	}
+	_recoveryStats.clear();
+
 	_rounds.clear();
 }
 
@@ -579,6 +588,20 @@ void ClearAlienBase::operator()(AlienMission* am) const
  */
 void DebriefingState::prepareDebriefing()
 {
+	for (std::vector<std::string>::const_iterator
+			i = _game->getRuleset()->getItemsList().begin();
+			i != _game->getRuleset()->getItemsList().end();
+			++i)
+	{
+		if (_game->getRuleset()->getItem(*i)->getSpecialType() > 1)
+		{
+			RecoveryItem* item = new RecoveryItem();
+			item->name = *i;
+			item->value = _game->getRuleset()->getItem(*i)->getRecoveryPoints();
+			_recoveryStats[_game->getRuleset()->getItem(*i)->getSpecialType()] = item;
+		}
+	}
+
 	//Log(LOG_INFO) << "DebriefingState::prepareDebriefing()";
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED"));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED"));
@@ -594,7 +617,16 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_TANKS_DESTROYED"));
 	_stats.push_back(new DebriefingStat("STR_XCOM_CRAFT_LOST"));
 
-	_stats.push_back(new DebriefingStat("STR_UFO_POWER_SOURCE", true));
+	for (std::map<int, RecoveryItem*>::const_iterator
+			i = _recoveryStats.begin();
+			i != _recoveryStats.end();
+			++i)
+	{
+		_stats.push_back(new DebriefingStat(
+										(*i).second->name,
+										true));
+	}
+/*	_stats.push_back(new DebriefingStat("STR_UFO_POWER_SOURCE", true));
 	_stats.push_back(new DebriefingStat("STR_UFO_NAVIGATION", true));
 	_stats.push_back(new DebriefingStat("STR_UFO_CONSTRUCTION", true));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_FOOD", true));
@@ -603,7 +635,8 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_ALIEN_SURGERY", true));
 	_stats.push_back(new DebriefingStat("STR_EXAMINATION_ROOM", true));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
-	_stats.push_back(new DebriefingStat("STR_ALIEN_HABITAT", true));
+	_stats.push_back(new DebriefingStat("STR_ALIEN_HABITAT", true)); */
+
 	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuel(), true));
 
 	SavedGame* save = _game->getSavedGame();
@@ -1352,7 +1385,12 @@ void DebriefingState::prepareDebriefing()
 				{
 					if (battle->getTiles()[i]->getMapData(part))
 					{
-						switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
+						size_t specialType = battle->getTiles()[i]->getMapData(part)->getSpecialType();
+						if (_recoveryStats.find(specialType) != _recoveryStats.end())
+							addStat(
+								_recoveryStats[specialType]->name,
+								_recoveryStats[specialType]->value);
+/*						switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
 						{
 							case UFO_POWER_SOURCE:
 								addStat(
@@ -1409,7 +1447,7 @@ void DebriefingState::prepareDebriefing()
 
 							default:
 							break;
-						}
+						} */
 					}
 				}
 
@@ -1498,7 +1536,8 @@ void DebriefingState::prepareDebriefing()
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
 			// kL_note: change to divided by 6 or divided by 120 in case of an alien base.
-			if ((*i)->item == "STR_ALIEN_ALLOYS")
+			if ((*i)->item == _recoveryStats[ALIEN_ALLOYS]->name)
+//			if ((*i)->item == "STR_ALIEN_ALLOYS")
 			{
 //kL			int alloy = 10;
 				int alloy = 6; // kL

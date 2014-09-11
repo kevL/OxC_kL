@@ -4689,7 +4689,7 @@
 1408854832 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1410216727 f:\git\openxcom\src\ruleset\ruleitem.h
+1410394304 f:\git\openxcom\src\ruleset\ruleitem.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5129,13 +5129,12 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1410389471 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1410396970 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	<algorithm>
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Interface/Text.h"
@@ -5284,7 +5283,7 @@
 	<algorithm>
 	<stdint.h>
 
-1410384983 source:f:\git\openxcom\src\basescape\researchstate.cpp
+1410391513 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
 	<sstream>
 	"ManageAlienContainmentState.h"
@@ -5292,7 +5291,6 @@
 	"ResearchInfoState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Engine/Screen.h"
@@ -5735,7 +5733,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1410232912 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1410396246 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5803,7 +5801,7 @@
 1406595105 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1409950538 f:\git\openxcom\src\battlescape\debriefingstate.h
+1410394584 f:\git\openxcom\src\battlescape\debriefingstate.h
 	<map>
 	<string>
 	<vector>
@@ -6239,7 +6237,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1410328835 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1410395079 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -7176,24 +7174,24 @@
 	<math.h>
 	<time.h>
 
-1382767443 source:f:\git\openxcom\src\engine\scalers\hq2x.cpp
+1410393711 source:f:\git\openxcom\src\engine\scalers\hq2x.cpp
 	<stdint.h>
 	"common.h"
 	"hqx.h"
 
-1404096022 f:\git\openxcom\src\engine\scalers\common.h
+1410395156 f:\git\openxcom\src\engine\scalers\common.h
 	<stdlib.h>
 	<stdint.h>
 
-1404096022 f:\git\openxcom\src\engine\scalers\hqx.h
+1410395305 f:\git\openxcom\src\engine\scalers\hqx.h
 	<stdint.h>
 
-1382767443 source:f:\git\openxcom\src\engine\scalers\hq3x.cpp
+1410393711 source:f:\git\openxcom\src\engine\scalers\hq3x.cpp
 	<stdint.h>
 	"common.h"
 	"hqx.h"
 
-1382767443 source:f:\git\openxcom\src\engine\scalers\hq4x.cpp
+1410393711 source:f:\git\openxcom\src\engine\scalers\hq4x.cpp
 	<stdint.h>
 	"common.h"
 	"hqx.h"
@@ -7202,25 +7200,30 @@
 	<stdint.h>
 	"hqx.h"
 
-1404096022 source:f:\git\openxcom\src\engine\scalers\scale2x.cpp
+1410393717 source:f:\git\openxcom\src\engine\scalers\scale2x.cpp
+	<config.h>
 	"scale2x.h"
 	<assert.h>
 
-1404096022 f:\git\openxcom\src\engine\scalers\scale2x.h
+1410393717 f:\git\openxcom\src\engine\scalers\scale2x.h
 
-1404096022 source:f:\git\openxcom\src\engine\scalers\scale3x.cpp
+1410393717 source:f:\git\openxcom\src\engine\scalers\scale3x.cpp
+	<config.h>
 	"scale3x.h"
 	<assert.h>
 
-1404096022 f:\git\openxcom\src\engine\scalers\scale3x.h
+1410393717 f:\git\openxcom\src\engine\scalers\scale3x.h
 
-1404096022 source:f:\git\openxcom\src\engine\scalers\scalebit.cpp
+1410393717 source:f:\git\openxcom\src\engine\scalers\scalebit.cpp
+	<config.h>
 	"scale2x.h"
 	"scale3x.h"
+	<alloca.h>
 	<assert.h>
 	<stdlib.h>
+	<malloc.h>
 
-1409605685 source:f:\git\openxcom\src\engine\screen.cpp
+1410395389 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -7319,7 +7322,7 @@
 	"Game.h"
 	"Options.h"
 
-1410233430 source:f:\git\openxcom\src\engine\zoom.cpp
+1410395534 source:f:\git\openxcom\src\engine\zoom.cpp
 	"Zoom.h"
 	"Exception.h"
 	"Logger.h"
@@ -7335,7 +7338,7 @@
 	<cpuid.h>
 	<emmintrin.h>
 
-1404096022 f:\git\openxcom\src\engine\scalers\scalebit.h
+1410393717 f:\git\openxcom\src\engine\scalers\scalebit.h
 
 1409183541 source:f:\git\openxcom\src\geoscape\alienbasestate.cpp
 	"AlienBaseState.h"
@@ -9352,7 +9355,7 @@
 	<cmath>
 	"RuleItem.h"
 
-1410237754 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1410394454 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"

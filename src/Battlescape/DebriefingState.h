@@ -75,6 +75,13 @@ struct ReequipStat
 };
 
 
+struct RecoveryItem
+{
+	std::string name;
+	int value;
+};
+
+
 /**
  * Debriefing screen shown after a Battlescape mission that displays the results.
  */
@@ -113,7 +120,9 @@ private:
 
 	MissionStatistics* _missionStatistics;
 
+	std::map<int, RecoveryItem*> _recoveryStats;
 	std::map<RuleItem*, int> _rounds;
+
 	std::vector<ReequipStat> _missingItems;
 	std::vector<DebriefingStat*> _stats;
 	std::vector<Soldier*> _soldiersCommended;
