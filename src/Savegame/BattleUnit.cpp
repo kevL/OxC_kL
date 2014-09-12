@@ -1650,17 +1650,24 @@ int BattleUnit::getActionTUs(
 		break;
 
 		default:
-			cost = 0;
+			cost = 1;	// kL, was cost=0
+						// problem: cost=0 can lead to infinite loop in reaction fire
+						// Presently, cost=0 means 'cannot do' but conceivably an action
+						// could be free, or cost=0; so really cost=-1 ought be
+						// implemented, to mean 'cannot do' ......
+						// (ofc this default is rather meaningless, but there is a point)
 		break;
 	}
 
-	// if it's a percentage, apply it to unit TUs
-	if ((rule->getFlatRate() == false
+
+	if ((rule->getFlatRate() == false // if it's a percentage, apply it to unit TUs
 			|| actionType == BA_PRIME
 			|| actionType == BA_THROW)
 		&& actionType != BA_DEFUSE) // kL
 	{
-		cost = static_cast<int>(floor(static_cast<double>(getStats()->tu * cost) / 100.0));
+		cost = std::max( // Smjert mod.
+					1,
+					static_cast<int>(floor(static_cast<double>(getStats()->tu * cost) / 100.0)));
 	}
 
 	return cost;

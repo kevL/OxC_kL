@@ -5279,9 +5279,9 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/ResearchProject.h"
 
-1404096022 f:\git\openxcom\src\engine\rng.h
+1410478450 f:\git\openxcom\src\engine\rng.h
 	<algorithm>
-	<stdint.h>
+	<cstdint>
 
 1410391513 source:f:\git\openxcom\src\basescape\researchstate.cpp
 	"ResearchState.h"
@@ -7169,10 +7169,10 @@
 	<fstream>
 	"Exception.h"
 
-1410165931 source:f:\git\openxcom\src\engine\rng.cpp
+1410478794 source:f:\git\openxcom\src\engine\rng.cpp
 	"RNG.h"
-	<math.h>
-	<time.h>
+	<cmath>
+	<ctime>
 
 1410393711 source:f:\git\openxcom\src\engine\scalers\hq2x.cpp
 	<stdint.h>
@@ -7214,14 +7214,13 @@
 
 1410393717 f:\git\openxcom\src\engine\scalers\scale3x.h
 
-1410393717 source:f:\git\openxcom\src\engine\scalers\scalebit.cpp
+1410478871 source:f:\git\openxcom\src\engine\scalers\scalebit.cpp
 	<config.h>
 	"scale2x.h"
 	"scale3x.h"
 	<alloca.h>
 	<assert.h>
 	<stdlib.h>
-	<malloc.h>
 
 1410395389 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
@@ -9546,7 +9545,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1410242399 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1410479455 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9600,7 +9599,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1410254653 source:f:\git\openxcom\src\savegame\craftweapon.cpp
+1410477479 source:f:\git\openxcom\src\savegame\craftweapon.cpp
 	"CraftWeapon.h"
 	"CraftWeaponProjectile.h"
 	"../Ruleset/RuleCraftWeapon.h"

@@ -19,8 +19,10 @@
 
 #include "RNG.h"
 
-#include <math.h>
-#include <time.h>
+//#include <math.h>
+//#include <time.h>
+#include <cmath>
+#include <ctime>
 
 
 namespace OpenXcom
@@ -108,7 +110,8 @@ double generate(
 	if (AreSame(diff, 0.0))	// kL
 		return min;			// kL
 
-	diff = (static_cast<double>(UINT64_MAX) / diff);
+//	diff = (static_cast<double>(UINT64_MAX) / diff);
+	diff = (static_cast<double>(std::numeric_limits<uint64_t>::max()) / diff);
 	if (AreSame(diff, 0.0))	// kL
 		return min;			// kL
 
@@ -117,7 +120,10 @@ double generate(
 	return ((rand / diff) + min);
 	// kL_end.
 
+
 //kL	return static_cast<double>(rand / (static_cast<double>(UINT64_MAX) / (max - min)) + min);
+//		return (double)(rand / ((double)std::numeric_limits<uint64_t>::max() / (max - min)) + min); // AMDmi3 note.
+
 //	return (rand / (static_cast<double>(UINT64_MAX) / (max - min)) + min); // kL
 }
 
