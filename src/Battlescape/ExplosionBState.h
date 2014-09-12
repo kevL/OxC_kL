@@ -51,7 +51,9 @@ private:
 		_lowerWeapon,
 		_pistolWhip,
 		_hitSuccess;
-	int _power;
+	int
+		_extend, // kL
+		_power;
 
 	BattleItem* _item;
 	BattleUnit* _unit;

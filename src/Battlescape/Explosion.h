@@ -39,18 +39,24 @@ private:
 		_big,
 		_hit;
 	int
-		_startFrame,
-		_currentFrame;
+		_frameCurrent,
+		_frameDelay,
+		_frameStart;
 
 	Position _position;
 
 
 	public:
+		static const int FRAMES_BULLET;
+		static const int FRAMES_EXPLODE;
+		static const int FRAMES_HIT;
+
 		/// Creates a new Explosion.
 		Explosion(
 				Position _position,
-				int startFrame,
-				bool big,
+				int frameStart,
+				int frameDelay = 0,
+				bool big = false,
 				bool hit = false);
 		/// Cleans up the Explosion.
 		~Explosion();

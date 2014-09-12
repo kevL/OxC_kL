@@ -57,6 +57,13 @@ class SavedBattleGame
 {
 
 private:
+	bool
+		_aborted,
+		_debugMode,
+		_cheating,
+		_kneelReserved,
+		_objectiveDestroyed,
+		_unitsFalling;
 	int
 		_ambience,
 		_depth,
@@ -66,13 +73,6 @@ private:
 		_mapsize_y,
 		_mapsize_z,
 		_turn;
-	bool
-		_aborted,
-		_debugMode,
-		_cheating,
-		_kneelReserved,
-		_objectiveDestroyed,
-		_unitsFalling;
 
 	BattleActionType _tuReserved;
 	UnitFaction _side;

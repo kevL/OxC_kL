@@ -113,7 +113,7 @@ DebriefingState::DebriefingState()
 //	if (_game->getSavedGame()->getSavedBattle()->getBattleGame())
 //	{
 		//Log(LOG_INFO) << "DebriefingState : Saved Battle Game EXISTS";
-	_game->getSavedGame()->getSavedBattle()->getBattleGame()->cleanupDeleted(); // kL, delete CTD
+	_game->getSavedGame()->getSavedBattle()->getBattleGame()->cleanupDeleted();
 //	}
 
 

@@ -72,7 +72,6 @@ private:
 
 		/// Handles the timer.
 		void think();
-
 		/// Closes the window.
 		void close();
 

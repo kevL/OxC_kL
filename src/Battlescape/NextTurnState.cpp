@@ -137,7 +137,8 @@ NextTurnState::NextTurnState(
 
 	_state->clearMouseScrollingState();
 
-	kL_preReveal = true; // kL
+	kL_preReveal = true;
+	//Log(LOG_INFO) << ". preReveal TRUE";
 
 	if (Options::skipNextTurnScreen)
 	{
@@ -153,7 +154,8 @@ NextTurnState::NextTurnState(
  */
 NextTurnState::~NextTurnState()
 {
-	delete _timer;
+	if (Options::skipNextTurnScreen) // kL
+		delete _timer;
 }
 
 /**
@@ -168,7 +170,6 @@ void NextTurnState::handle(Action* action)
 		|| action->getDetails()->type == SDL_MOUSEBUTTONDOWN)
 	{
 //		kL_TurnCount = _battleGame->getTurn();
-
 //		_turnCounter = _state->getTurnCounter();
 //		_turnCounter->update();
 
@@ -193,7 +194,7 @@ void NextTurnState::think()
 void NextTurnState::close()
 {
 	// Done here and in DebriefingState, but removed from ~BattlescapeGame (see)
-	_battleGame->getBattleGame()->cleanupDeleted(); // delete CTD
+	_battleGame->getBattleGame()->cleanupDeleted();
 
 	_game->popState();
 
@@ -213,11 +214,10 @@ void NextTurnState::close()
 	{
 		_state->btnCenterClick(NULL);
 
-		if (_battleGame->getSide() == FACTION_PLAYER)						// kL
+		if (_battleGame->getSide() == FACTION_PLAYER)		// kL
 		{
-//			_state->getBattleGame()->getMap()->refreshSelectorPosition();	// kL
-			_state->getBattleGame()->setupCursor();							// kL
-			_state->getGame()->getCursor()->setVisible();				// kL
+			_state->getBattleGame()->setupCursor();			// kL
+			_state->getGame()->getCursor()->setVisible();	// kL
 
 			// Autosave every set amount of turns
 			if (_battleGame->getTurn() == 1

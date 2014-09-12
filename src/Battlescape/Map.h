@@ -39,13 +39,12 @@ class BattlescapeMessage;
 class BattleUnit;
 class Camera;
 class Explosion;
-class NumberText; // kL
+class NumberText;
 class Projectile;
 class ResourcePack;
 class SavedBattleGame;
 class Surface;
 class SurfaceSet;
-//kL class Text;
 class Timer;
 
 
@@ -78,12 +77,10 @@ private:
 		_launch,
 		_explosionInFOV,
 		_projectileInFOV,
-//kL	_smoothCamera,
 		_smoothingEngaged,
 		_unitDying;
 	int
 		_animFrame,
-//kL	_cursorFrame, // DarkDefender
 		_cursorSize,
 		_iconHeight,
 		_iconWidth,
@@ -102,7 +99,7 @@ private:
 	BattlescapeMessage	* _message;
 	Camera				* _camera;
 	Game				* _game;
-	NumberText			* _txtAccuracy; // kL
+	NumberText			* _txtAccuracy;
 	Projectile			* _projectile;
 	ResourcePack		* _res;
 	SavedBattleGame		* _save;
@@ -110,14 +107,12 @@ private:
 						* _arrow,
 						* _arrow_kneel; // DarkDefender
 	SurfaceSet			* _projectileSet;
-//kL	Text				* _txtAccuracy;
 	Timer
 						* _scrollMouseTimer,
 						* _scrollKeyTimer;
 
-//	std::set<Explosion*>	_explosions; // kL
-	std::list<Explosion*>	_explosions; // expl CTD
-	std::vector<Position>	_waypoints;
+	std::list<Explosion*> _explosions;
+	std::vector<Position> _waypoints;
 
 	///
 	void drawTerrain(Surface* surface);
@@ -128,9 +123,6 @@ private:
 
 
 	public:
-//		static const int ICON_WIDTH		= 320;
-//		static const int ICON_HEIGHT	= 56;
-
 		/// Creates a new map at the specified position and size.
 		Map(
 				Game* game,
@@ -199,8 +191,7 @@ private:
 		Projectile* getProjectile() const;
 
 		/// Gets explosion set.
-//		std::set<Explosion*>* getExplosions(); // kL
-		std::list<Explosion*>* getExplosions(); // expl CTD
+		std::list<Explosion*>* getExplosions();
 
 		/// Gets the pointer to the camera.
 		Camera* getCamera();

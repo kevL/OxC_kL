@@ -39,6 +39,8 @@ namespace OpenXcom
 int ResourcePack::BUTTON_PRESS			= 0;
 int ResourcePack::WINDOW_POPUP[3]		= {1, 2, 3};
 
+int ResourcePack::EXPLOSION_OFFSET		= 0;
+
 int ResourcePack::SMALL_EXPLOSION		= 2;
 int ResourcePack::DOOR_OPEN				= 3;
 int ResourcePack::LARGE_EXPLOSION		= 5;

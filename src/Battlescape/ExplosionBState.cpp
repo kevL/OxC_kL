@@ -75,7 +75,8 @@ ExplosionBState::ExplosionBState(
 		_lowerWeapon(lowerWeapon),
 		_pistolWhip(false),
 		_hit(false),
-		_hitSuccess(success) // kL_add.
+		_hitSuccess(success), // kL
+		_extend(4) // kL, extra think-cycles before this state Pops.
 {
 }
 
@@ -100,8 +101,8 @@ void ExplosionBState::init()
 		_power = _item->getRules()->getPower();
 
 		// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
-		_pistolWhip = _unit != NULL								// kL
-					&& _unit->getFaction() == FACTION_PLAYER	// kL
+		_pistolWhip = _unit != NULL
+					&& _unit->getFaction() == FACTION_PLAYER
 					&& _item->getRules()->getBattleType() != BT_MELEE
 					&& _parent->getCurrentAction()->type == BA_HIT;
 
@@ -109,16 +110,16 @@ void ExplosionBState::init()
 			_power = _item->getRules()->getMeleePower();
 
 		// since melee aliens don't use a conventional weapon type, use their strength instead.
-		if (_unit != NULL											// kL
-			&& (_pistolWhip											// kL
-				|| _item->getRules()->getBattleType() == BT_MELEE)	// kL
+		if (_unit != NULL
+			&& (_pistolWhip
+				|| _item->getRules()->getBattleType() == BT_MELEE)
 			&& _item->getRules()->isStrengthApplied())
 		{
-			int str = static_cast<int>( // kL_begin:
+			int str = static_cast<int>(
 						static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5));
 
 			if (_pistolWhip)
-				str /= 2; // kL_end.
+				str /= 2;
 
 			_power += str;
 		}
@@ -128,9 +129,8 @@ void ExplosionBState::init()
 		// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid
 		_areaOfEffect = !_pistolWhip
 						&& _item->getRules()->getBattleType() != BT_MELEE
-						&& _item->getRules()->getBattleType() != BT_PSIAMP	// kL
-//kL					&& _item->getRules()->getExplosionRadius() != 0		// <- worrisome, kL_note.
-						&& _item->getRules()->getExplosionRadius() > -1;	// kL
+						&& _item->getRules()->getBattleType() != BT_PSIAMP
+						&& _item->getRules()->getExplosionRadius() > -1;
 	}
 	else if (_tile)
 	{
@@ -143,15 +143,21 @@ void ExplosionBState::init()
 		&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 	{
 		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
-		_power = RNG::generate(
+		_power = (RNG::generate(
 							_power * 2 / 3,
-							_power * 3 / 2); // kL
+							_power * 3 / 2)
+				+ RNG::generate(
+							_power * 2 / 3,
+							_power * 3 / 2))
+			/ 2;
 
 		_areaOfEffect = true;
 	}
-	else // unhandled cyberdiscs!!! ( see Xcom1Ruleset.rul )
+	else // unhandled cyberdisc!!!
 	{
-		_power = RNG::generate(67, 135);
+		_power = (RNG::generate(67, 137)
+				+ RNG::generate(67, 137))
+			/ 2;
 		//Log(LOG_INFO) << ". _power(Cyberdisc) = " << _power;
 
 		_areaOfEffect = true;
@@ -162,77 +168,81 @@ void ExplosionBState::init()
 								_center.x / 16,
 								_center.y / 16,
 								_center.z / 24);
-//	Tile* tileCenter = _parent->getSave()->getTile(centerPos);
 
 	if (_areaOfEffect)
 	{
 		//Log(LOG_INFO) << ". . new Explosion(AoE)";
 		if (_power > 0)
 		{
-			Position posCenter_voxel = _center; // voxelspace
+			Position pos = _center; // voxelspace
 			int
-				frameInit = 0, // less than 0 will delay anim-start-frame (total 8 Frames)
-				graphRadius = 0,
-				graphQty = _power,
-				graphOffset;
+				frameStart = ResourcePack::EXPLOSION_OFFSET,
+				frameDelay = 0,
+				radius = 0,
+				qty = _power,
+				offset;
 
 			if (_item)
 			{
-				graphRadius = _item->getRules()->getExplosionRadius();
-				//Log(LOG_INFO) << ". . . getExplosionRadius() -> " << graphRadius;
+				frameStart = _item->getRules()->getHitAnimation();
+				radius = _item->getRules()->getExplosionRadius();
+				//Log(LOG_INFO) << ". . . getExplosionRadius() -> " << radius;
 
 				if (_item->getRules()->getDamageType() == DT_SMOKE
 					|| _item->getRules()->getDamageType() == DT_STUN)
 				{
-					graphQty /= 2; // smoke & stun bombs do fewer anims.
+					qty /= 2; // smoke & stun bombs do fewer anims.
 				}
 				else
-					graphQty *= 2; // bump this up.
+					qty *= 2; // bump this up.
 			}
 			else
-				graphRadius = _power / 9; // <- for cyberdiscs & terrain expl.
-			//Log(LOG_INFO) << ". . . graphRadius = " << graphRadius;
+				radius = _power / 9; // <- for cyberdiscs & terrain expl.
+			//Log(LOG_INFO) << ". . . radius = " << radius;
 
-			if (graphRadius < 0)
-				graphRadius = 0;
+			if (radius < 0)
+				radius = 0;
 
-			graphOffset = graphRadius * 5; // voxelspace
-			graphQty = static_cast<int>(
-								sqrt(static_cast<double>(graphRadius) * static_cast<double>(graphQty)))
-							/ 5;
-			if (graphQty < 1
-				|| graphOffset == 0)
+			offset = radius * 6; // voxelspace
+//			qty = static_cast<int>(sqrt(static_cast<double>(radius) * static_cast<double>(qty))) / 3;
+			qty = radius * qty / 100;
+			if (qty < 1
+				|| offset == 0)
 			{
-				graphQty = 1;
+				qty = 1;
 			}
 
-			//Log(LOG_INFO) << ". . . graphOffset(total) = " << graphOffset;
-			//Log(LOG_INFO) << ". . . graphQty = " << graphQty;
+			if (_parent->getDepth() > 0)
+				frameStart -= Explosion::FRAMES_EXPLODE;
+
+			//Log(LOG_INFO) << ". . . offset(total) = " << offset;
+			//Log(LOG_INFO) << ". . . qty = " << qty;
 			for (int
 					i = 0;
-					i < graphQty;
-					i++)
+					i < qty;
+					++i)
 			{
-				if (i > 0) // 1st exp. is always centered.
+				if (i > 0) // bypass 1st explosion: it's always centered w/out any delay.
 				{
-					frameInit = RNG::generate(-i, 0) - i / 2;
+//					pos.x += RNG::generate(-offset, offset); // these cause anims to sweep across the battlefield.
+//					pos.y += RNG::generate(-offset, offset);
+					pos.x = _center.x + RNG::generate(-offset, offset);
+					pos.y = _center.y + RNG::generate(-offset, offset);
 
-					posCenter_voxel.x += RNG::generate(-graphOffset, graphOffset);
-					posCenter_voxel.y += RNG::generate(-graphOffset, graphOffset);
+					if (RNG::generate(0, 1))
+						frameDelay++;
 				}
 
-//				Explosion* explosion = new Explosion(p, frameInit, true);
 				Explosion* explosion = new Explosion( // animation
-												posCenter_voxel + Position(10, 10, 0), // jogg the anim down a few pixels. Tks.
-												frameInit,
+												pos + Position(10, 10, 0), // jogg the anim down a few pixels. Tks.
+												frameStart,
+												frameDelay,
 												true);
 
-//				_parent->getMap()->getExplosions()->insert(explosion); // kL
-				_parent->getMap()->getExplosions()->push_back(explosion); // add the explosion on the map // expl CTD
+				_parent->getMap()->getExplosions()->push_back(explosion);
 			}
 
-//kL		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7); // kL
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7);
 
 			if (_power < 76)
 				_parent->getResourcePack()->getSoundByDepth(
@@ -245,18 +255,15 @@ void ExplosionBState::init()
 														ResourcePack::LARGE_EXPLOSION)
 													->play();
 
-			// kL_begin:
-			Camera* explodeCam = _parent->getMap()->getCamera();
-			if (!explodeCam->isOnScreen(centerPos))
+			Camera* exploCam = _parent->getMap()->getCamera();
+			if (!exploCam->isOnScreen(centerPos))
 			{
-				explodeCam->centerOnPosition(
+				exploCam->centerOnPosition(
 											centerPos,
 											false);
 			}
-			else if (explodeCam->getViewLevel() != centerPos.z)
-			{
-				explodeCam->setViewLevel(centerPos.z);
-			} // kL_end.
+			else if (exploCam->getViewLevel() != centerPos.z)
+				exploCam->setViewLevel(centerPos.z);
 		}
 		else
 			_parent->popState();
@@ -264,24 +271,15 @@ void ExplosionBState::init()
 	else // create a bullet hit, or melee hit, or psi-hit, or acid spit
 	{
 		//Log(LOG_INFO) << ". . new Explosion(point)";
-//		_parent->setStateInterval(std::max(
-//										1,
-//										((BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
-//kL									((BattlescapeState::DEFAULT_ANIM_SPEED / 2) - (10 * _item->getRules()->getExplosionSpeed()))));
-//kL	_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED / 2);
-//		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 6 / 7); // kL
-
 		_hit = _pistolWhip
 			|| _item->getRules()->getBattleType() == BT_MELEE
 			|| _item->getRules()->getBattleType() == BT_PSIAMP;	// includes aLien psi-weapon.
 																// They took this out and use 'bool psi' instead ....
 																// supposedly to correct some cursor-stuff that was broke for them.
-//		bool psi = _item->getRules()->getBattleType() == BT_PSIAMP;
 		int
 			anim = _item->getRules()->getHitAnimation(),
 			sound = _item->getRules()->getHitSound();
 
-//		if (_hit || psi)
 		if (_hit)
 		{
 			anim = _item->getRules()->getMeleeAnimation();
@@ -297,37 +295,29 @@ void ExplosionBState::init()
 													sound)
 												->play();
 
-		Explosion* explosion = new Explosion( // animation. // Don't burn the tile
+		Explosion* explosion = new Explosion( // animation. Don't burn the tile
 										_center,
 										anim,
+										0,
 										false,
 										_hit);
-//										_hit || psi);
-//		_parent->getMap()->getExplosions()->insert(explosion); // kL
-		_parent->getMap()->getExplosions()->push_back(explosion); // expl CTD
+		_parent->getMap()->getExplosions()->push_back(explosion);
 
-		_parent->setStateInterval(std::max( // kL, from above^
+		_parent->setStateInterval(std::max(
 										1,
-										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (10 * _item->getRules()->getExplosionSpeed())))); // kL
-//kL									((BattlescapeState::DEFAULT_ANIM_SPEED / 2) - (10 * _item->getRules()->getExplosionSpeed()))));
-//kL		_parent->getMap()->getCamera()->setViewLevel(_center.z / 24);
+										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (10 * _item->getRules()->getExplosionSpeed()))));
 
-//		BattleUnit* target = tileCenter->getUnit();
-//		BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit();
-//		if ((_hit || psi) && _parent->getSave()->getSide() == FACTION_HOSTILE && target && target->getFaction() == FACTION_PLAYER)
-		// kL_begin:
-		Camera* explCam = _parent->getMap()->getCamera();
-		if (!explCam->isOnScreen(centerPos)
+		Camera* exploCam = _parent->getMap()->getCamera();
+		if (!exploCam->isOnScreen(centerPos)
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{
-			explCam->centerOnPosition(
+			exploCam->centerOnPosition(
 									centerPos,
 									false);
 		}
-		else if (explCam->getViewLevel() != centerPos.z)
-			explCam->setViewLevel(centerPos.z);
-		// kL_end.
+		else if (exploCam->getViewLevel() != centerPos.z)
+			exploCam->setViewLevel(centerPos.z);
 	}
 	//Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }
@@ -335,18 +325,19 @@ void ExplosionBState::init()
 /**
  * Animates explosion sprites. If their animation is finished remove them from the list.
  * If the list is empty, this state is finished and the actual calculations take place.
+ * kL rewrite: Allow a few extra cycles for explosion animations to dissipate.
  */
 void ExplosionBState::think()
 {
-	for (std::list<Explosion*>::const_iterator // expl CTD
+/*	for (std::list<Explosion*>::const_iterator
 			i = _parent->getMap()->getExplosions()->begin();
 			i != _parent->getMap()->getExplosions()->end();
 			)
 	{
 		if (!(*i)->animate())
 		{
-			delete *i; // delete CTD
-			i = _parent->getMap()->getExplosions()->erase(i); // expl CTD, delete CTD
+			delete *i;
+			i = _parent->getMap()->getExplosions()->erase(i);
 
 			if (_parent->getMap()->getExplosions()->empty())
 			{
@@ -355,8 +346,41 @@ void ExplosionBState::think()
 				return;
 			}
 		}
-		else // expl CTD
+		else
 			++i;
+	} */
+
+	for (std::list<Explosion*>::const_iterator
+			i = _parent->getMap()->getExplosions()->begin();
+			i != _parent->getMap()->getExplosions()->end();
+			)
+	{
+		//Log(LOG_INFO) << "iterate";
+		if ((*i)->animate() == false)
+		{
+			//Log(LOG_INFO) << "done anim.";
+			delete *i;
+			i = _parent->getMap()->getExplosions()->erase(i);
+		}
+		else
+		{
+			//Log(LOG_INFO) << "next anim";
+			i++;
+		}
+	}
+
+	if (_parent->getMap()->getExplosions()->empty())
+	{
+		_extend--;
+		//Log(LOG_INFO) << "explosions Empty, extend = " << _extend;
+	}
+
+	if (_extend < 1)
+	{
+		//Log(LOG_INFO) << "extend is 0";
+		explode();
+
+		return;
 	}
 }
 
@@ -378,8 +402,6 @@ void ExplosionBState::cancel()
 void ExplosionBState::explode()
 {
 	//Log(LOG_INFO) << "ExplosionBState::explode()";
-	// kL_begin: had this below, where it worked; try it here.
-	// If so, can take out of TileEngine::hit() the check for DT_NONE
 	if (_item
 		&& _item->getRules()->getBattleType() == BT_PSIAMP)
 	{
@@ -387,17 +409,13 @@ void ExplosionBState::explode()
 		_parent->popState();
 
 		return;
-	} // kL_end.
+	}
 
 
 	SavedBattleGame* save = _parent->getSave();
-	TileEngine* tileEngine = save->getTileEngine(); // kL
+	TileEngine* tileEngine = save->getTileEngine();
 
-	// last minute adjustment: determine if we actually
-//	if (_parent->getCurrentAction()->type == BA_HIT
-//		|| _parent->getCurrentAction()->type == BA_STUN)
 	if (_hit)
-//		&& _item->getRules()->getBattleType() != BT_PSIAMP) // -> or type != BA_PANIC / BA_MINDCONTROL
 	{
 		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 
@@ -412,6 +430,14 @@ void ExplosionBState::explode()
 
 		if (_hitSuccess == false)
 		{
+			if (_unit // HIT.
+				&& _unit->getOriginalFaction() == FACTION_PLAYER
+				&& targetUnit
+				&& targetUnit->getOriginalFaction() == FACTION_HOSTILE)
+			{
+				_unit->addMeleeExp();
+			}
+
 			_parent->getMap()->cacheUnits();
 			_parent->popState();
 
@@ -422,7 +448,7 @@ void ExplosionBState::explode()
 			&& targetUnit
 			&& targetUnit->getOriginalFaction() == FACTION_HOSTILE)
 		{
-			_unit->addMeleeExp();
+			_unit->addMeleeExp(2);
 		}
 	}
 

@@ -1005,12 +1005,9 @@ void ProjectileFlyBState::think()
 								{
 									Explosion* explosion = new Explosion(
 																		proj->getPosition(1),
-																		_ammo->getRules()->getHitAnimation(),
-																		false,
-																		false);
+																		_ammo->getRules()->getHitAnimation());
 
-//									_parent->getMap()->getExplosions()->insert(explosion); // kL
-									_parent->getMap()->getExplosions()->push_back(explosion); // expl CTD
+									_parent->getMap()->getExplosions()->push_back(explosion);
 									_parent->getSave()->getTileEngine()->hit(
 																			proj->getPosition(1),
 																			_ammo->getRules()->getPower(),

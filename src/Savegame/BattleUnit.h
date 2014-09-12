@@ -767,8 +767,8 @@ private:
 		void addPsiSkillExp(int qty = 1); // kL
 		/// Adds qty to the psiStrength exp counter.
 		void addPsiStrengthExp(int qty = 1); // kL
-		/// Adds one to the melee exp counter.
-		void addMeleeExp();
+		/// Adds qty to the melee exp counter.
+		void addMeleeExp(int qty = 1);
 
 		/// Updates the stats of a Geoscape soldier.
 		void updateGeoscapeStats(Soldier* soldier);

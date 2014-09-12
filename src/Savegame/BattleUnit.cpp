@@ -359,7 +359,7 @@ BattleUnit::~BattleUnit()
 	}
 	delete _statistics;
 
-	delete _currentAIState; // delete CTD
+	delete _currentAIState;
 }
 
 /**
@@ -2657,32 +2657,31 @@ void BattleUnit::addThrowingExp()
  * Adds qty to the psiSkill exp counter.
  * @param qty - amount to add
  */
-void BattleUnit::addPsiSkillExp(int qty) // kL
+void BattleUnit::addPsiSkillExp(int qty)
 {
-//kL	_expPsiSkill++;
-	_expPsiSkill += qty; // kL
+	_expPsiSkill += qty;
 }
 
 /**
  * Adds qty to the psiStrength exp counter.
  * @param qty - amount to add
  */
-void BattleUnit::addPsiStrengthExp(int qty) // kL
+void BattleUnit::addPsiStrengthExp(int qty)
 {
-//kL	_expPsiStrength++;
-	_expPsiStrength += qty; // kL
+	_expPsiStrength += qty;
 }
 
 /**
- * Adds one to the melee exp counter.
+ * Adds qty to the melee exp counter.
+ * @param qty - amount to add
  */
-void BattleUnit::addMeleeExp()
+void BattleUnit::addMeleeExp(int qty)
 {
-	_expMelee++;
+	_expMelee += qty;
 }
 
 /**
- *
+ * Adds a mission and kill counts to Soldier's stats.
  */
 void BattleUnit::updateGeoscapeStats(Soldier* soldier)
 {

@@ -38,7 +38,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h" // kL
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
@@ -65,8 +65,6 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 
-//#include "../Ruleset/RuleTerrain.h" // kL
-
 
 /*
   1) Map origin is top corner.
@@ -84,7 +82,7 @@
 namespace OpenXcom
 {
 
-bool kL_preReveal = true; // kL
+bool kL_preReveal = true;
 
 
 /**
@@ -118,22 +116,19 @@ Map::Map(
 		_cursorType(CT_NORMAL),
 		_cursorSize(1),
 		_animFrame(0),
-//kL	_cursorFrame(0), // DarkDefender
 		_projectile(NULL),
 		_projectileInFOV(false),
 		_explosionInFOV(false),
 		_launch(false),
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
-		_reveal(0), // kL
+		_reveal(0),
 		_smoothingEngaged(false)
 {
 	//Log(LOG_INFO) << "Create Map";
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
 	_iconHeight = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h;
 	_messageColor = _game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color;
-
-//kL	_smoothCamera = Options::battleSmoothCamera;
 
 	_previewSetting	= Options::battleNewPreviewPath;
 	if (Options::traceAI) // turn everything on because we want to see the markers.
@@ -154,7 +149,7 @@ Map::Map(
 					this,
 					visibleMapHeight);
 
-	_message = new BattlescapeMessage( // Hidden Movement... screen
+	_message = new BattlescapeMessage( // "Hidden Movement..." screen
 									320,
 									visibleMapHeight < 200? visibleMapHeight: 200,
 									0,
@@ -174,8 +169,8 @@ Map::Map(
 	_camera->setScrollTimer(
 						_scrollMouseTimer,
 						_scrollKeyTimer);
-
-/*kL	_txtAccuracy = new Text(24, 9, 0, 0);
+/*kL
+	_txtAccuracy = new Text(24, 9, 0, 0);
 	_txtAccuracy->setSmall();
 	_txtAccuracy->setPalette(_game->getScreen()->getPalette());
 	_txtAccuracy->setHighContrast();
@@ -193,7 +188,6 @@ Map::Map(
 Map::~Map()
 {
 	//Log(LOG_INFO) << "Delete Map";
-
 	delete _scrollMouseTimer;
 	delete _scrollKeyTimer;
 	delete _arrow;
@@ -219,15 +213,6 @@ void Map::init()
 					   0, 0, b, f, f, f, b, 0, 0,
 					   0, 0, 0, b, f, b, 0, 0, 0,
 					   0, 0, 0, 0, b, 0, 0, 0, 0 };
-/*	int pixels[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, // kL
-					   0, 0, b, b, b, b, b, 0, 0,
-					   0, 0, b, f, f, f, b, 0, 0,
-					   b, b, b, f, f, f, b, b, b,
-					   b, f, f, f, f, f, f, f, b,
-					   0, b, f, f, f, f, f, b, 0,
-					   0, 0, b, f, f, f, b, 0, 0,
-					   0, 0, 0, b, f, b, 0, 0, 0,
-					   0, 0, 0, 0, b, 0, 0, 0, 0 }; */
 
 	_arrow = new Surface(9, 9);
 	_arrow->setPalette(this->getPalette());
@@ -252,16 +237,7 @@ void Map::init()
 	_arrow->unlock();
 
 	// DarkDefender_begin:
-/*	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
-							 0, 0, b, b, b, b, b, 0, 0,
-							 0, 0, b, f, f, f, b, 0, 0,
-							 b, b, b, f, f, f, b, b, b,
-							 b, f, f, f, f, f, f, f, b,
-							 0, b, f, f, f, f, f, b, 0,
-							 0, 0, b, f, f, f, b, 0, 0,
-							 0, 0, 0, b, f, b, 0, 0, 0,
-							 0, 0, 0, 0, b, 0, 0, 0, 0 }; */
-	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, // kL
+	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0,
 							 0, 0, 0, 0, b, 0, 0, 0, 0,
 							 0, 0, 0, b, f, b, 0, 0, 0,
 							 0, 0, b, f, f, f, b, 0, 0,
@@ -270,15 +246,6 @@ void Map::init()
 							 b, b, b, f, f, f, b, b, b,
 							 0, 0, b, f, f, f, b, 0, 0,
 							 0, 0, b, b, b, b, b, 0, 0 };
-/*	int pixels_kneel[81] = { 0, 0, 0, 0, 0, 0, 0, 0, 0, // kL
-							 0, 0, 0, 0, 0, 0, 0, 0, 0,
-							 0, 0, 0, 0, b, 0, 0, 0, 0,
-							 0, 0, 0, b, f, b, 0, 0, 0,
-							 0, 0, b, f, f, f, b, 0, 0,
-							 0, b, f, f, f, f, f, b, 0,
-							 b, f, f, f, f, f, f, f, b,
-							 b, b, b, f, f, f, b, b, b,
-							 0, 0, b, b, b, b, b, 0, 0 }; */
 
 	_arrow_kneel = new Surface(9, 9);
 	_arrow_kneel->setPalette(this->getPalette());
@@ -302,7 +269,7 @@ void Map::init()
 	}
 	_arrow_kneel->unlock(); // DarkDefender_end.
 
-	_projectile = 0;
+	_projectile = NULL;
 
 	if (_save->getDepth() == 0)
 		_projectileSet = _res->getSurfaceSet("Projectiles");
@@ -370,19 +337,19 @@ void Map::draw()
 	_redraw = false;
 	clear(Palette::blockOffset(0)+15);
 
-	Tile* t = NULL;
+	Tile* tile = NULL;
 
 	_projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 //kL		&& _save->getSide() == FACTION_PLAYER)
 	{
 		//Log(LOG_INFO) << "Map::draw() _projectile = true";
-		t = _save->getTile(Position(
+		tile = _save->getTile(Position(
 								_projectile->getPosition(0).x / 16,
 								_projectile->getPosition(0).y / 16,
 								_projectile->getPosition(0).z / 24));
-		if (t
-			&& (t->getVisible()
+		if (tile
+			&& (tile->getVisible()
 				|| _save->getSide() != FACTION_PLAYER))	// kL: shows projectile during aLien berserk
 		{
 			//Log(LOG_INFO) << "Map::draw() _projectileInFOV = true";
@@ -391,21 +358,20 @@ void Map::draw()
 	}
 
 	_explosionInFOV = _save->getDebugMode();
-	if (!_explosions.empty())
+	if (_explosions.empty() == false)
 	{
-//		for (std::set<Explosion*>::iterator // kL
-		for (std::list<Explosion*>::iterator // expl CTD
+		for (std::list<Explosion*>::iterator
 				i = _explosions.begin();
 				i != _explosions.end();
 				++i)
 		{
-			t = _save->getTile(Position(
+			tile = _save->getTile(Position(
 									(*i)->getPosition().x / 16,
 									(*i)->getPosition().y / 16,
 									(*i)->getPosition().z / 24));
-			if (t
-				&& ((*i)->isBig()
-					|| t->getVisible()
+			if (tile
+				&& (tile->getVisible()
+					|| (*i)->isBig()
 					|| _save->getSide() != FACTION_PLAYER))	// kL: shows hit-explosion during aLien berserk
 			{
 				_explosionInFOV = true;
@@ -415,22 +381,18 @@ void Map::draw()
 		}
 	}
 
-	//Log(LOG_INFO) << ". . kL_preReveal = " << kL_preReveal;
-/*kL
-	if ((_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible())
-		|| _unitDying
-		|| _save->getSelectedUnit() == 0
-		|| _save->getDebugMode()
-		|| _projectileInFOV
-		|| _explosionInFOV)
-	{
-		drawTerrain(this);
-	} */
 
-
-	if ((_save->getSelectedUnit()
+	//Log(LOG_INFO) << ". selUnit & selUnit->VISIBLE = " << (_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible());
+	//Log(LOG_INFO) << ". selUnit NULL = " << (_save->getSelectedUnit() == NULL);
+	//Log(LOG_INFO) << ". unitDying = " << _unitDying;
+	//Log(LOG_INFO) << ". deBug = " << _save->getDebugMode();
+	//Log(LOG_INFO) << ". projectile = " << _projectileInFOV;
+	//Log(LOG_INFO) << ". explosion = " << _explosionInFOV;
+	//Log(LOG_INFO) << ". reveal & !preReveal = " << (_reveal > 0 && !kL_preReveal);
+	//Log(LOG_INFO) << ". kL_preReveal = " << kL_preReveal;
+	if (_save->getSelectedUnit() == NULL
+		|| (_save->getSelectedUnit()
 			&& _save->getSelectedUnit()->getVisible())
-		|| _save->getSelectedUnit() == 0
 		|| _unitDying
 		|| _save->getDebugMode()
 		|| _projectileInFOV
@@ -438,6 +400,7 @@ void Map::draw()
 		|| (_reveal > 0
 			&& !kL_preReveal))
 	{
+		//Log(LOG_INFO) << ". . drawTerrain()";
 		if (_reveal > 0
 			&& !kL_preReveal)
 		{
@@ -453,11 +416,14 @@ void Map::draw()
 		if (_save->getSide() == FACTION_PLAYER)
 			_save->getBattleState()->toggleIcons(true);
 
+		//Log(LOG_INFO) << ". . drawTerrain()";
 		drawTerrain(this);
 	}
-	else // "hidden movement"
+	else // "Hidden Movement ..."
 	{
-		if (kL_preReveal)
+		//Log(LOG_INFO) << ". . blit( Hidden Movement ... )";
+		if (kL_preReveal
+			&& _save->getSelectedUnit()->getVisible())
 		{
 			kL_preReveal = false;
 			_reveal = 0;
@@ -467,7 +433,6 @@ void Map::draw()
 
 		_save->getBattleState()->toggleIcons(false);
 
-		//Log(LOG_INFO) << ". . . . blit( hidden movement )";
 		_message->blit(this);
 	}
 }
@@ -1559,6 +1524,10 @@ void Map::drawTerrain(Surface* surface)
 //kL							if (unit->getStatus() == STATUS_AIMING) // enlarge the unit sprite when aiming to accomodate the weapon. adjust as necessary.
 //kL								offset.x = 0;
 
+								// lower the bubbles for shorter or kneeling units.
+//kL							offset.y += (22 - unit->getHeight());
+//kL_note: Don't throw my offsets off ...
+
 								tmpSurface = _res->getSurfaceSet("BREATH-1.PCK")->getFrame(unit->getBreathFrame() - 1);
 								if (tmpSurface)
 								{
@@ -2139,8 +2108,7 @@ void Map::drawTerrain(Surface* surface)
 	if (pathPreview)
 	{
 		// make a border for the pathfinding display
-//		if (wpID)
-//			wpID->setBordered(true);
+//		if (wpID) wpID->setBordered(true);
 
 		for (int
 				itZ = beginZ;
@@ -2259,16 +2227,15 @@ void Map::drawTerrain(Surface* surface)
 		}
 
 		// remove the border in case it's being used for missile waypoints.
-//		if (wpID)
-//			wpID->setBordered(false);
+//		if (wpID) wpID->setBordered(false);
 	}
 
 	delete wpID;
 
+
 	if (_explosionInFOV) // check if we got hit or explosion animations
 	{
-//		for (std::set<Explosion*>::const_iterator // kL
-		for (std::list<Explosion*>::const_iterator // expl CTD
+		for (std::list<Explosion*>::const_iterator
 				i = _explosions.begin();
 				i != _explosions.end();
 				++i)
@@ -2276,9 +2243,10 @@ void Map::drawTerrain(Surface* surface)
 			_camera->convertVoxelToScreen(
 									(*i)->getPosition(),
 									&bulletScreen);
-			if ((*i)->isBig())
+
+			if ((*i)->getCurrentFrame() > -1)
 			{
-				if ((*i)->getCurrentFrame() > -1)
+				if ((*i)->isBig()) // explosion, http://ufopaedia.org/index.php?title=X1.PCK
 				{
 					tmpSurface = _res->getSurfaceSet("X1.PCK")->getFrame((*i)->getCurrentFrame());
 					tmpSurface->blitNShade(
@@ -2287,24 +2255,24 @@ void Map::drawTerrain(Surface* surface)
 							bulletScreen.y - 64,
 							0);
 				}
-			}
-			else if ((*i)->isHit())
-			{
-				tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
-				tmpSurface->blitNShade(
-						surface,
-						bulletScreen.x - 15,
-						bulletScreen.y - 25,
-						0);
-			}
-			else
-			{
-				tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
-				tmpSurface->blitNShade(
-						surface,
-						bulletScreen.x - 15,
-						bulletScreen.y - 15,
-						0);
+				else if ((*i)->isHit()) // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
+				{
+					tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
+					tmpSurface->blitNShade(
+							surface,
+							bulletScreen.x - 15,
+							bulletScreen.y - 25,
+							0);
+				}
+				else // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
+				{
+					tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
+					tmpSurface->blitNShade(
+							surface,
+							bulletScreen.x - 15,
+							bulletScreen.y - 15,
+							0);
+				}
 			}
 		}
 	}
@@ -2813,8 +2781,7 @@ Projectile* Map::getProjectile() const
  * Gets a list of explosion sprites on the map.
  * @return A list of explosion sprites.
  */
-//std::set<Explosion*>* Map::getExplosions() // kL
-std::list<Explosion*>* Map::getExplosions() // expl CTD
+std::list<Explosion*>* Map::getExplosions()
 {
 	return &_explosions;
 }

@@ -75,6 +75,8 @@ private:
 			static int BUTTON_PRESS;
 			static int WINDOW_POPUP[3];
 
+			static int EXPLOSION_OFFSET;
+
 			static int SMALL_EXPLOSION;
 			static int DOOR_OPEN;
 			static int LARGE_EXPLOSION;

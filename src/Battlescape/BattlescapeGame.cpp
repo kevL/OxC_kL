@@ -66,7 +66,6 @@
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/SoldierDiary.h"
 #include "../Savegame/Tile.h"
 
 
@@ -92,8 +91,6 @@ BattlescapeGame::BattlescapeGame(
 //		_kneelReserved(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
-//	_batReserved			= BA_NONE;
-//	_playerBATReserved		= BA_NONE;
 	_debugPlay				= false;
 	_playerPanicHandled		= true;
 	_AIActionCounter		= 0;
@@ -126,7 +123,6 @@ BattlescapeGame::~BattlescapeGame()
 {
 	//Log(LOG_INFO) << "Delete BattlescapeGame";
 
-// delete CTD_begin:
 // THIS CAUSES ctd BECAUSE, WHEN RELOADING FROM Main-Menu,
 // A new BATTLESCAPE_GAME IS CREATED *BEFORE* THE OLD ONE IS dTor'D
 // ( i think ) So this loop 'deletes' the fresh BattlescapeGame's states .....
@@ -139,10 +135,6 @@ BattlescapeGame::~BattlescapeGame()
 		delete *i;
 	}
 // *cough* so much for that hypothesis
-
-//kL	cleanupDeleted();	// <- there it is ! Yet it works in NextTurnState ???
-							// Added it to DebriefingState instead of here. (see)
-// delete CTD_end.
 }
 
 /**
@@ -162,7 +154,6 @@ void BattlescapeGame::think()
 				if (_save->getSelectedUnit())
 				{
 					if (!handlePanickingUnit(_save->getSelectedUnit()))
-//						&& _save->getSelectedUnit()->getFaction() != FACTION_PLAYER) // kL, safety.
 					{
 						//Log(LOG_INFO) << "BattlescapeGame::think() call handleAI() ID " << _save->getSelectedUnit()->getId();
 						handleAI(_save->getSelectedUnit());
@@ -172,12 +163,12 @@ void BattlescapeGame::think()
 				{
 					if (_save->selectNextFactionUnit(
 												true,
-												_AISecondMove) == 0)
+												_AISecondMove) == NULL)
 					{
 						if (!_save->getDebugMode())
 						{
 							_endTurnRequested = true;
-							statePushBack(0); // end AI turn
+							statePushBack(NULL); // end AI turn
 						}
 						else
 						{
@@ -227,20 +218,17 @@ void BattlescapeGame::init()
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::handleAI() " << unit->getId();
-//	_batReserved = BA_NONE;
-
-
 	if (unit->getTimeUnits() < 4) // kL
 		unit->dontReselect();
 
-	if (//kL unit->getTimeUnits() < 6 ||
+	if ( //kL unit->getTimeUnits() < 6 ||
 		_AIActionCounter > 1
 		|| !unit->reselectAllowed())
 	{
 		if (_save->selectNextFactionUnit(
 									true,
 									_AISecondMove)
-								== 0)
+								== NULL)
 		{
 			if (!_save->getDebugMode())
 			{
@@ -271,25 +259,6 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		return;
 	}
 
-/*	if (unit->getMainHandWeapon()
-		&& unit->getMainHandWeapon()->getRules()->getBattleType() == BT_FIREARM)
-	{
-		switch (unit->getAggression())
-		{
-			case 0:
-				_batReserved = BA_AIMEDSHOT;
-			break;
-			case 1:
-				_batReserved = BA_AUTOSHOT;
-			break;
-			case 2:
-				_batReserved = BA_SNAPSHOT;
-
-			default:
-			break;
-		}
-	} */ // kL, was moved to the aLienAI class.
-	//Log(LOG_INFO) << ". aggressionReserved DONE";
 
 	unit->setVisible(false);
 
@@ -360,7 +329,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	{
 		//Log(LOG_INFO) << ". . no mainhand weapon or no ammo";
 		if (unit->getOriginalFaction() == FACTION_HOSTILE)
-//kL			&& unit->getVisibleUnits()->size() == 0)
+//kL		&& unit->getVisibleUnits()->size() == 0)
 		{
 			//Log(LOG_INFO) << ". . . call findItem()";
 			findItem(&action);
@@ -416,7 +385,6 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		|| action.type == BA_LAUNCH)
 	{
 		//Log(LOG_INFO) << ". . in action.type";
-
 		if (action.type == BA_MINDCONTROL
 			|| action.type == BA_PANIC)
 		{
@@ -604,17 +572,6 @@ bool BattlescapeGame::kneel(
 void BattlescapeGame::endTurn()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::endTurn()";
-
-// delete CTD_begin:
-// THIS GOT MOVED TO NEXT_TURN_STATE
-/*	for (std::list<BattleState*>::iterator i = _deleted.begin(); i != _deleted.end(); ++i)
-	{
-		delete *i;
-	}
-	_deleted.clear(); */
-// delete CTD_end.
-
-//	_batReserved	= _playerBATReserved;
 	_debugPlay		= false;
 	_AISecondMove	= false;
 	_parentState->showLaunchButton(false);
@@ -624,9 +581,6 @@ void BattlescapeGame::endTurn()
 	_currentAction.waypoints.clear();
 
 	getMap()->getWaypoints()->clear();
-
-//	if (_save->getTileEngine()->closeUfoDoors() && ResourcePack::SLIDING_DOOR_CLOSE != -1)
-//		getResourcePack()->getSoundByDepth(_save->getDepth(), ResourcePack::SLIDING_DOOR_CLOSE)->play();
 
 	Position pos;
 	for (int
@@ -733,9 +687,7 @@ void BattlescapeGame::endTurn()
 		{
 			// Catch fire first! do it here
 
-//kL		if (!(*j)->getTookFire()
-//kL			&& (*j)->getFire() > 0)
-			int fire = (*j)->getFire(); // kL
+			int fire = (*j)->getFire();
 			if (fire > 0) // kL
 			{
 				int dam = RNG::generate(3, 9);
@@ -745,23 +697,10 @@ void BattlescapeGame::endTurn()
 							dam,
 							DT_IN,
 							true);
-
-//kL			(*j)->setFire(-1);
-/*				(*j)->setFire(fire - 1); // kL
-
-				int fireDamage = static_cast<int>(
-									(*j)->getArmor()->getDamageModifier(DT_IN)
-										* static_cast<float>(RNG::generate(3, 9)));
-				//Log(LOG_INFO) << ". . endTurn() ID " << (*j)->getId() << " fireDamage = " << fireDamage;
-				(*j)->setHealth((*j)->getHealth() - fireDamage);
-
-				if ((*j)->getHealth() < 0)
-					(*j)->setHealth(0); */
 			}
 		}
-	}
+	} // kL_end.
 	// that just might work...
-	// kL_end.
 	//Log(LOG_INFO) << ". done fire damage";
 
 	// if all units from either faction are killed - the mission is over.
@@ -1334,9 +1273,9 @@ void BattlescapeGame::setupCursor()
  */
 bool BattlescapeGame::playableUnitSelected()
 {
-	return _save->getSelectedUnit() != 0
-		&& (_save->getSide() == FACTION_PLAYER
-			|| _save->getDebugMode());
+	return _save->getSelectedUnit() != NULL
+			&& (_save->getSide() == FACTION_PLAYER
+				|| _save->getDebugMode());
 }
 
 /**
@@ -1344,10 +1283,9 @@ bool BattlescapeGame::playableUnitSelected()
  */
 void BattlescapeGame::handleState()
 {
-	if (!_states.empty())
+	if (_states.empty() == false)
 	{
-		// end turn request?
-		if (_states.front() == 0)
+		if (_states.front() == 0) // end turn request?
 		{
 			_states.pop_front();
 
@@ -1359,7 +1297,7 @@ void BattlescapeGame::handleState()
 			_states.front()->think();
 
 
-//kL		getMap()->invalidate(); // redraw map
+//kL	getMap()->invalidate(); // redraw map
 		getMap()->draw(); // kL, old code!! -> Map::draw()
 	}
 }
@@ -1433,8 +1371,6 @@ void BattlescapeGame::popState()
 	if (_states.empty())
 	{
 		//Log(LOG_INFO) << ". states.Empty -> return";
-//		setupCursor(); // kL_TEST
-
 		return;
 	}
 
@@ -1477,21 +1413,18 @@ void BattlescapeGame::popState()
 		} // kL_end.
 	}
 
-	_deleted.push_back(_states.front()); // delete CTD
+	_deleted.push_back(_states.front());
 
 	//Log(LOG_INFO) << ". states.Popfront";
 	_states.pop_front();
 	//Log(LOG_INFO) << ". states.Popfront DONE";
 
 
-//	getMap()->refreshSelectorPosition(); // kL, I moved this to setupCursor() (also)
-
 	// handle the end of this unit's actions
 	if (action.actor
 		&& noActionsPending(action.actor))
 	{
 		//Log(LOG_INFO) << ". noActionsPending";
-
 		if (action.actor->getFaction() == FACTION_PLAYER)
 		{
 			//Log(LOG_INFO) << ". actor -> Faction_Player";
@@ -1530,19 +1463,8 @@ void BattlescapeGame::popState()
 				// after throwing, the cursor returns to default cursor, after shooting it stays in
 				// targeting mode and the player can shoot again in the same mode (autoshot/snap/aimed)
 				// kL_note: unless he/she is out of tu's
-/*kL
-				if ((action.type == BA_THROW || action.type == BA_LAUNCH) && !actionFailed)
-				{
-					// clean up the waypoints
-					if (action.type == BA_LAUNCH)
-					{
-						_currentAction.waypoints.clear();
-					}
-					cancelCurrentAction(true);
-				} */
 
-				// kL_begin:
-				if (!actionFailed)
+				if (!actionFailed) // kL_begin:
 				{
 					int curTU = action.actor->getTimeUnits();
 
@@ -1610,7 +1532,6 @@ void BattlescapeGame::popState()
 				// enemy unit behind the first. btw, calcFoV ought have been done by now ...
 				_parentState->updateSoldierInfo(); // kL
 
-//				getMap()->refreshSelectorPosition(); // kL
 				setupCursor();
 				_parentState->getGame()->getCursor()->setVisible();
 				//Log(LOG_INFO) << ". end NOT actionFailed";
@@ -1658,20 +1579,17 @@ void BattlescapeGame::popState()
 			}
 			else if (_debugPlay)
 			{
-//				getMap()->refreshSelectorPosition(); // kL
 				setupCursor();
 				_parentState->getGame()->getCursor()->setVisible();
 			}
 		}
 	}
 
-//	getMap()->refreshSelectorPosition(); // kL
 	//Log(LOG_INFO) << ". uhm yeah";
 
 	if (!_states.empty())
 	{
 		//Log(LOG_INFO) << ". NOT states.Empty";
-
 		if (_states.front() == 0) // end turn request?
 		{
 			//Log(LOG_INFO) << ". states.front() == 0";
@@ -1687,7 +1605,6 @@ void BattlescapeGame::popState()
 			if (_states.empty())
 			{
 				//Log(LOG_INFO) << ". endTurn()";
-//				setupCursor(); // kL_TEST
 				endTurn();
 
 				//Log(LOG_INFO) << ". endTurn() DONE return";
@@ -1713,8 +1630,6 @@ void BattlescapeGame::popState()
 
 		_save->setSelectedUnit(NULL); // kL_note: seems redundant .....
 
-//		setupCursor(); // kL
-//		getMap()->refreshSelectorPosition(); // kL
 		getMap()->setCursorType(CT_NORMAL);
 		_parentState->getGame()->getCursor()->setVisible();
 	}
@@ -1722,12 +1637,8 @@ void BattlescapeGame::popState()
 	if (_save->getSide() == FACTION_PLAYER) // kL
 	{
 		//Log(LOG_INFO) << ". updateSoldierInfo()";
- // kL	_parentState->updateSoldierInfo(); // that should be necessary only on xCom turns. See above^
-		_parentState->updateSoldierInfo(); // kL: calcFoV ought have been done by now ...
+		_parentState->updateSoldierInfo(); // calcFoV ought have been done by now ...
 	}
-
-//	getMap()->refreshSelectorPosition(); // kL_TEST
-//	setupCursor(); // kL_TEST
 	//Log(LOG_INFO) << "BattlescapeGame::popState() EXIT";
 }
 
@@ -2159,7 +2070,6 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 				_currentAction.type = BA_NONE;
 
 				setupCursor();
-				getMap()->refreshSelectorPosition(); // kL
 				_parentState->getGame()->getCursor()->setVisible();
 
 				return true;

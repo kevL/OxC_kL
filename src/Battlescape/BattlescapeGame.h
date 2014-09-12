@@ -42,7 +42,6 @@ class Pathfinding;
 class ResourcePack;
 class Ruleset;
 class SavedBattleGame;
-// class SoldierDiary;
 class TileEngine;
 
 
@@ -130,7 +129,6 @@ private:
 	bool
 		_AISecondMove,
 		_endTurnRequested,
-//		_kneelReserved,
 		_playedAggroSound,
 		_playerPanicHandled;
 	int _AIActionCounter;
@@ -138,13 +136,10 @@ private:
 	BattleAction _currentAction;
 
 	BattlescapeState* _parentState;
-//	BattleActionType
-//		_batReserved,
-//		_playerBATReserved;
 	SavedBattleGame* _save;
 
 	std::list<BattleState*>
-		_deleted, // delete CTD
+		_deleted,
 		_states;
 	std::vector<InfoboxOKState*> _infoboxQueue;
 
@@ -243,7 +238,6 @@ private:
 		/// Sets the TU reserved type.
 		void setTUReserved(
 				BattleActionType bat);
-//				bool player);
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
 
@@ -304,7 +298,7 @@ private:
 		const int getDepth() const;
 
 		/// kL. Gets the BattlescapeState.
-		BattlescapeState* getBattlescapeState() const;
+		BattlescapeState* getBattlescapeState() const; // kL
 };
 
 }
