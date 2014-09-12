@@ -83,10 +83,17 @@ extraSprites:
   - type: XBASE2.PCK
     files:
       0: Resources/Sprites/Terrain/xbase2/
-#HobbesTerrainPack start
+#Hobbes' Terrain Pack
   - type: PORTROADS.PCK
     files:
       0: Resources/Sprites/Terrain/portroads/
   - type: PORTURBITS.PCK
     files:
       0: Resources/Sprites/Terrain/porturbits/
+#Luke83's Extra UFOs
+  - type: U_DISEC3.PCK
+    files:
+      0: Resources/Sprites/Terrain/u_disec3/
+  - type: UFOL83.PCK
+    files:
+      0: Resources/Sprites/Terrain/ufol83/
