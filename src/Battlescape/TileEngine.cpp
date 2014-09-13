@@ -1826,8 +1826,7 @@ bool TileEngine::tryReactionSnap(
 				unit->setAIState(aggro);
 			}
 
-//kL		if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius()
-			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() > -1 // kL
+			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() > -1
 				&& aggro->explosiveEfficacy(
 										action.target,
 										unit,
@@ -1840,7 +1839,7 @@ bool TileEngine::tryReactionSnap(
 		}
 
 		if (action.targeting
-			&& action.type != BA_NONE // kL
+			&& action.type != BA_NONE
 			&& unit->spendTimeUnits(action.TU))
 		{
 			//Log(LOG_INFO) << ". Reaction Fire by ID " << unit->getId();
@@ -2495,7 +2494,7 @@ void TileEngine::explode(
 			r = 0.0;					// initialize radial length, also.
 
 			while (_powerE > 0
-				&& r - 1.0 < r_Max) // kL_note: Allows explosions of 0 radius(!), single tile only hypothetically.
+				&& r - 0.5 < r_Max) // kL_note: Allows explosions of 0 radius(!), single tile only hypothetically.
 									// the idea is to show an explosion animation but affect only that one tile.
 			{
 				//Log(LOG_INFO) << ". . . . .";
@@ -2541,7 +2540,16 @@ void TileEngine::explode(
 						}
 					}
 
-					_powerE -= 10;
+//					_powerE -= 10;
+					if (maxRadius > 0)
+					{
+//						if (power / maxRadius < 1) // do min -1 per tile. Nah ...
+//							_powerE -= 1;
+//						else
+						_powerE -= power / maxRadius; // per RSSwizard, http://openxcom.org/forum/index.php?topic=2927.msg32061#msg32061
+					}
+
+
 					if (_powerE < 1)
 					{
 						//Log(LOG_INFO) << ". _powerE < 1 BREAK[hori] " << Position(tileX, tileY, tileZ);
@@ -6197,10 +6205,10 @@ Position TileEngine::getOriginVoxel(
 }
 
 /**
- * mark a region of the map as "dangerous" for a turn.
- * @param pos is the epicenter of the explosion.
- * @param radius how far to spread out.
- * @param unit the unit that is triggering this action.
+ * Marks a region of the map as "dangerous" for a turn.
+ * @param pos		- is the epicenter of the explosion
+ * @param radius	- how far to spread out
+ * @param unit		- the unit that is triggering this action
  */
 void TileEngine::setDangerZone(
 		Position pos,
@@ -6240,7 +6248,7 @@ void TileEngine::setDangerZone(
 					if (tile)
 					{
 						targetVoxel = ((pos + Position(x, y, 0)) * Position(16, 16, 24))
-										+ Position(8, 8, 12 - tile->getTerrainLevel());
+									+ Position(8, 8, 12 - tile->getTerrainLevel());
 
 						std::vector<Position> trajectory;
 						// we'll trace a line here, ignoring all units, to check if the explosion will reach this point;

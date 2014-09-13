@@ -5736,7 +5736,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1410396246 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1410642354 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -7667,7 +7667,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1409954762 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1410581146 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -9578,7 +9578,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1409449628 source:f:\git\openxcom\src\savegame\craft.cpp
+1410580846 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9692,7 +9692,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1410336650 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1410581313 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9797,7 +9797,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1410578147 source:f:\git\openxcom\src\savegame\ufo.cpp
+1410581184 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	<sstream>
 	<algorithm>

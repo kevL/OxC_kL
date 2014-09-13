@@ -1888,7 +1888,7 @@ bool AlienBAIState::findFirePoint()
 }
 
 /**
- * Decides if it's worth our while to create an explosion.
+ * Decides if it's worthwhile to create an explosion.
  * @param targetPos	- target's position
  * @param attacker	- pointer to the attacking unit
  * @param radius	- radius of explosion in tile space
@@ -1915,16 +1915,17 @@ bool AlienBAIState::explosiveEfficacy(
 	// if attacker is hurt, assume things are dire and increase desperation
 	int desperation = (100 - attacker->getMorale()) / 10;
 	int hurt = 10 - static_cast<int>(
-						static_cast<float>(attacker->getHealth()) / static_cast<float>(attacker->getStats()->health) * 10.f);
+						static_cast<double>(attacker->getHealth()) / static_cast<double>(attacker->getStats()->health) * 10.0);
 	int effect = (desperation + hurt) * 3;
 
 	// but don't go kamikaze unless we're already doomed
 	int distance = _save->getTileEngine()->distance(
 												attacker->getPosition(),
 												targetPos);
-	if (distance < radius) // attacker inside blast zone
+	if (distance <= radius) // attacker inside blast zone
 	{
-		effect -= 35;
+//		effect -= 35;
+		effect -= (radius - distance + 1) * 5;
 
 		if (abs(attacker->getPosition().z - targetPos.z) <= Options::battleExplosionHeight)
 			effect -= 15;
@@ -1958,7 +1959,7 @@ bool AlienBAIState::explosiveEfficacy(
 			&& _save->getTileEngine()->distance(
 											(*i)->getPosition(),
 											targetPos)
-										< radius)
+										<= radius)
 		{
 			if (((*i)->getTile()
 					&& (*i)->getTile()->getDangerous())		// don't count people who were already grenaded this turn
@@ -1992,10 +1993,11 @@ bool AlienBAIState::explosiveEfficacy(
 				&& traj.front() / Position(16, 16, 24) == (*i)->getPosition())
 			{
 //				if ((*i)->getFaction() == FACTION_PLAYER)
-				if ((*i)->getFaction() != attacker->getFaction()) // do xCom & civies.
+				if ((*i)->getFaction() != attacker->getFaction()) // do xCom, Mc'd aLiens, & civies.
 					effect += 10;
-				else if ((*i)->getOriginalFaction() == attacker->getFaction())
-					effect -= 5; // true friendlies count negative-half
+
+				if ((*i)->getOriginalFaction() == attacker->getFaction()) // but true friendlies count negative-half
+					effect -= 5;
 			}
 		}
 	}
@@ -2233,8 +2235,7 @@ void AlienBAIState::projectileAction()
 {
 	_attackAction->target = _aggroTarget->getPosition();
 
-//kL	if (!_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius()
-	if (_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius() < 0 // kL
+	if (_attackAction->weapon->getAmmoItem()->getRules()->getExplosionRadius() < 0
 		|| explosiveEfficacy(
 						_aggroTarget->getPosition(),
 						_unit,

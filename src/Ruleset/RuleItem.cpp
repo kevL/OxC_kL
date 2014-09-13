@@ -700,24 +700,17 @@ int RuleItem::getExplosionRadius() const
 	if (_blastRadius > -1)
 		return _blastRadius;
 
-	// heavy explosions, incendiary, smoke or stun bombs create AOE explosions
-	// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid.
-	if (_damageType == DT_IN)
-		return _power / 30 + 1;	// kL_note: Should just reduce the power of IN in Xcom1Ruleset
-								// and be done with it.
-
-// kL_note: Removing these checks assumes only these remaining types
-// are getting checked for ExplosionRadii elsewhere ...
-// ... which they aren't! Or may not be ..
 	if (_damageType == DT_HE
 		|| _damageType == DT_STUN
 		|| _damageType == DT_SMOKE)
 	{
-		return _power / 20 + 1;
+		return _power / 20;
 	}
 
-	return -1;	// Or perhaps return 0, then use another function getBlastRadius() to determine other(-1).
-				// -> Use 0 for the AI, TileEngine::setDangerZone()
+	if (_damageType == DT_IN)
+		return _power / 30;
+
+	return -1;
 }
 
 /**

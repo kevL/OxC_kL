@@ -903,7 +903,7 @@ void ProjectileFlyBState::think()
 									pos,
 									item);
 
-					if (_unit->getFaction() != FACTION_PLAYER
+					if (_unit->getFaction() == FACTION_HOSTILE
 						&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
 					{
 						_parent->getTileEngine()->setDangerZone(
@@ -957,7 +957,7 @@ void ProjectileFlyBState::think()
 
 					if (_ammo
 //kL					&& _ammo->getRules()->getExplosionRadius() != 0
-						&& _ammo->getRules()->getExplosionRadius() > 0		// kL
+						&& _ammo->getRules()->getExplosionRadius() > -1		// kL
 //						&& (_ammo->getRules()->getDamageType() == DT_HE		// kL
 //							|| _ammo->getRules()->getDamageType() == DT_IN)	// kL
 						&& _projectileImpact != VOXEL_UNIT)
