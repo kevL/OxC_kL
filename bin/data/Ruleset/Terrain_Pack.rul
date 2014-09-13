@@ -1,5 +1,171 @@
-﻿# Terrain Pack by Hobbes # version 2.0
+﻿# Terrain Pack by Hobbes # version 2.2
 terrains:
+  - name: ATLANTDESERT
+    mapDataSets:
+      - BLANKS
+      - SANDS
+      - ATLANTDESERT
+      - DESERT
+    textures: [7]
+    hemisphere: 1
+    largeBlockLimit: 3
+    mapBlocks:
+      - name: ATLANTDESERT00
+        width: 10
+        length: 10
+        type: 1
+      - name: ATLANTDESERT01
+        width: 10
+        length: 10
+        type: 1
+      - name: ATLANTDESERT02
+        width: 10
+        length: 10
+      - name: ATLANTDESERT03
+        width: 10
+        length: 10
+      - name: ATLANTDESERT04
+        width: 10
+        length: 10
+      - name: ATLANTDESERT05
+        width: 10
+        length: 10
+      - name: ATLANTDESERT06
+        width: 10
+        length: 10
+      - name: ATLANTDESERT07
+        width: 10
+        length: 10
+      - name: ATLANTDESERT08
+        width: 10
+        length: 10
+      - name: ATLANTDESERT09
+        width: 10
+        length: 10
+      - name: ATLANTDESERT10
+        width: 20
+        length: 20
+      - name: ATLANTDESERT11
+        width: 20
+        length: 20
+      - name: ATLANTDESERT12
+        width: 20
+        length: 20
+  - name: COMRCURBAN
+    mapDataSets:
+      - BLANKS
+      - COMROADS
+      - COMBITS
+      - COMMERCE
+      - COMFRN
+      - COMDECOR
+    largeBlockLimit: 4
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    roadTypeOdds: [50, 25]
+    mapBlocks:
+      - name: COMRCURBAN00
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN01
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN02
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN03
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN04
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN05
+        width: 20
+        length: 20
+      - name: COMRCURBAN06
+        width: 20
+        length: 20
+      - name: COMRCURBAN07
+        width: 20
+        length: 20
+      - name: COMRCURBAN08
+        width: 20
+        length: 20
+      - name: COMRCURBAN09
+        width: 20
+        length: 20
+      - name: COMRCURBAN10
+        width: 20
+        length: 20
+      - name: COMRCURBAN11
+        width: 20
+        length: 20
+      - name: COMRCURBAN12
+        width: 20
+        length: 20
+      - name: COMRCURBAN13
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN14
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN15
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN16
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN17
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN18
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN19
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+        frequency: 2
+      - name: COMRCURBAN20
+        width: 10
+        length: 10
+        type: 4
+        frequency: 2
   - name: CULTA
     textures: [1, 2, 3, 4]
     hemisphere: -1
@@ -280,178 +446,6 @@ terrains:
       - name: CULTAFARM22
         width: 20
         length: 20
-  - name: MADURBAN
-    mapDataSets:
-      - BLANKS
-      - ROADS
-      - URBITS
-      - URBAN
-      - FRNITURE
-      - MADDECOR
-    textures: [2]
-    hemisphere: 1
-    largeBlockLimit: 5
-    civilianTypes:
-      - MALE_CIVILIAN
-      - FEMALE_CIVILIAN
-    roadTypeOdds: [50, 25]
-    mapBlocks:
-      - name: URBAN00
-        width: 10
-        length: 10
-        type: 2
-      - name: URBAN01
-        width: 10
-        length: 10
-        type: 3
-      - name: URBAN02
-        width: 10
-        length: 10
-        type: 4
-      - name: URBAN03
-        width: 10
-        length: 10
-        type: 1
-        subType: 0
-        frequency: 2
-      - name: URBAN04
-        width: 10
-        length: 10
-        type: 1
-        subType: 0
-        frequency: 2
-      - name: URBAN05
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: URBAN06
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: URBAN07
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: URBAN08
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: URBAN09
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN10
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN11
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN12
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN13
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: URBAN14
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: URBAN15
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: URBAN16
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: URBAN17
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: URBAN18
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN19
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN20
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN21
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN22
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN23
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN24
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN26
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN27
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN28
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN29
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN30
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN31
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN32
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN33
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN34
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN35
-        width: 20
-        length: 20
-        maxCount: 1
-      - name: MADURBAN36
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN37
-        width: 10
-        length: 10
-        maxCount: 1
-      - name: MADURBAN38
-        width: 10
-        length: 10
-        maxCount: 1
   - name: DAWNURBANA
     mapDataSets:
       - BLANKS
@@ -758,106 +752,501 @@ terrains:
         width: 20
         length: 20
         maxCount: 1
-  - name: PORTURBAN
+  - name: DESERT
+    largeBlockLimit: 3
+    textures: [7, 8]
+#    hemisphere: -1
+  - name: DESERTMOUNT
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - DESERT
+    textures: [8]
+    largeBlockLimit: 3
+    mapBlocks:
+      - name: DESERTMOUNT00
+        width: 10
+        length: 10
+        type: 1
+      - name: DESERTMOUNT01
+        width: 10
+        length: 10
+        type: 1
+      - name: DESERTMOUNT02
+        width: 10
+        length: 10
+        type: 1
+      - name: DESERTMOUNT03
+        width: 10
+        length: 10
+      - name: DESERTMOUNT04
+        width: 10
+        length: 10
+      - name: DESERTMOUNT05
+        width: 10
+        length: 10
+      - name: DESERTMOUNT06
+        width: 10
+        length: 10
+      - name: DESERTMOUNT07
+        width: 10
+        length: 10
+      - name: DESERTMOUNT08
+        width: 10
+        length: 10
+      - name: DESERTMOUNT09
+        width: 10
+        length: 10
+      - name: DESERTMOUNT10
+        width: 10
+        length: 10
+      - name: DESERTMOUNT11
+        width: 20
+        length: 20
+      - name: DESERTMOUNT12
+        width: 20
+        length: 20
+      - name: DESERTMOUNT13
+        width: 20
+        length: 20
+      - name: DESERTMOUNT14
+        width: 20
+        length: 20
+      - name: DESERTMOUNT15
+        width: 10
+        length: 10
+      - name: DESERTMOUNT16
+        width: 10
+        length: 10
+      - name: DESERTMOUNT17
+        width: 10
+        length: 10
+  - name: FOREST
+    textures: [0, 6, 10, 11]
+    hemisphere: -1
+  - name: FORESTMOUNT
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - FOREST
+      - FORESTMOUNT
+    textures: [0, 5, 10, 11]
+    hemisphere: -1
+    largeBlockLimit: 3
+    mapBlocks:
+      - name: FORESTMOUNT00
+        width: 10
+        length: 10
+        type: 1
+      - name: FORESTMOUNT01
+        width: 10
+        length: 10
+        type: 1
+      - name: FORESTMOUNT02
+        width: 10
+        length: 10
+      - name: FORESTMOUNT03
+        width: 10
+        length: 10
+      - name: FORESTMOUNT04
+        width: 10
+        length: 10
+      - name: FORESTMOUNT05
+        width: 10
+        length: 10
+      - name: FORESTMOUNT06
+        width: 10
+        length: 10
+      - name: FORESTMOUNT07
+        width: 10
+        length: 10
+      - name: FORESTMOUNT08
+        width: 10
+        length: 10
+      - name: FORESTMOUNT09
+        width: 10
+        length: 10
+      - name: FORESTMOUNT10
+        width: 10
+        length: 10
+      - name: FORESTMOUNT11
+        width: 20
+        length: 20
+      - name: FORESTMOUNT12
+        width: 20
+        length: 20
+      - name: FORESTMOUNT13
+        width: 20
+        length: 20
+      - name: FORESTMOUNT14
+        width: 20
+        length: 20
+      - name: FORESTMOUNT15
+        width: 10
+        length: 10
+      - name: FORESTMOUNT16
+        width: 10
+        length: 10
+      - name: FORESTMOUNT17
+        width: 10
+        length: 10
+      - name: FORESTMOUNT18
+        width: 10
+        length: 10
+      - name: FORESTMOUNT19
+        width: 10
+        length: 10
+      - name: FORESTMOUNT20
+        width: 10
+        length: 10
+      - name: FORESTMOUNT21
+        width: 10
+        length: 10
+      - name: FORESTMOUNT22
+        width: 10
+        length: 10
+      - name: FORESTMOUNT23
+        width: 10
+        length: 10
+      - name: FORESTMOUNT24
+        width: 10
+        length: 10
+      - name: FORESTMOUNT25
+        width: 20
+        length: 20
+      - name: FORESTMOUNT26
+        width: 20
+        length: 20
+  - name: INDUSTRIALURBAN
     mapDataSets:
       - BLANKS
       - PORTROADS
       - PORTURBITS
+      - ROADS
+      - URBITS
+    textures: [1]
     largeBlockLimit: 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
     roadTypeOdds: [50, 25]
     mapBlocks:
-      - name: PORTURBAN00
+      - name: INDUSTRIALURBAN00
+        width: 20
+        length: 20
+      - name: INDUSTRIALURBAN01
+        width: 20
+        length: 20
+      - name: INDUSTRIALURBAN02
+        width: 20
+        length: 20
+      - name: INDUSTRIALURBAN03
         width: 10
         length: 10
         type: 2
-      - name: PORTURBAN01
+        subType: 0
+      - name: INDUSTRIALURBAN04
         width: 10
         length: 10
-        type: 2
-      - name: PORTURBAN02
-        width: 10
-        length: 10
-        type: 2
-      - name: PORTURBAN03
-        width: 10
-        length: 10
-        type: 2
-      - name: PORTURBAN04
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN05
         width: 10
         length: 10
         type: 4
-      - name: PORTURBAN05
-        width: 20
-        length: 20
-      - name: PORTURBAN06
-        width: 20
-        length: 20
-      - name: PORTURBAN07
-        width: 20
-        length: 20
-      - name: PORTURBAN08
-        width: 20
-        length: 20
-      - name: PORTURBAN09
-        width: 20
-        length: 20
-      - name: PORTURBAN10
+        subType: 0
+      - name: INDUSTRIALURBAN06
         width: 10
         length: 10
-      - name: PORTURBAN11
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN07
         width: 10
         length: 10
-      - name: PORTURBAN12
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN08
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: INDUSTRIALURBAN09
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: INDUSTRIALURBAN10
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN11
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: INDUSTRIALURBAN12
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: INDUSTRIALURBAN13
+        width: 10
+        length: 10
+        type: 3
+        subType: 0
+      - name: INDUSTRIALURBAN14
+        width: 10
+        length: 10
+        type: 4
+        subType: 0
+      - name: INDUSTRIALURBAN15
+        width: 10
+        length: 10
+        type: 2
+        subType: 0
+      - name: INDUSTRIALURBAN16
+        width: 10
+        length: 10
+        type: 1
+        frequency: 3
+      - name: INDUSTRIALURBAN17
+        width: 10
+        length: 10
+        type: 1
+        frequency: 3
+  - name: JUNGLE
+    textures: [0, 6, 10, 11]
+    hemisphere: 1
+  - name: MADURBAN
+    mapDataSets:
+      - BLANKS
+      - ROADS
+      - URBITS
+      - URBAN
+      - FRNITURE
+      - MADDECOR
+    textures: [2]
+    hemisphere: 1
+    largeBlockLimit: 5
+    civilianTypes:
+      - MALE_CIVILIAN
+      - FEMALE_CIVILIAN
+    roadTypeOdds: [50, 25]
+    mapBlocks:
+      - name: URBAN00
+        width: 10
+        length: 10
+        type: 2
+      - name: URBAN01
+        width: 10
+        length: 10
+        type: 3
+      - name: URBAN02
+        width: 10
+        length: 10
+        type: 4
+      - name: URBAN03
         width: 10
         length: 10
         type: 1
         subType: 0
-        frequency: 3
-      - name: PORTURBAN13
+        frequency: 2
+      - name: URBAN04
         width: 10
-        length: 20
+        length: 10
         type: 1
         subType: 0
-        frequency: 3
-      - name: PORTURBAN14
-        width: 10
-        length: 10
         frequency: 2
-      - name: PORTURBAN15
+      - name: URBAN05
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN06
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN07
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN08
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN09
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN10
         width: 10
         length: 10
-        frequency: 2
-      - name: PORTURBAN16
+        maxCount: 1
+      - name: MADURBAN11
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN12
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN13
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: URBAN14
         width: 10
         length: 10
-        frequency: 2
-      - name: PORTURBAN17
+        maxCount: 1
+      - name: URBAN15
         width: 10
         length: 10
-        frequency: 2
-      - name: PORTURBAN18
+        maxCount: 1
+      - name: URBAN16
         width: 10
         length: 10
-        frequency: 2
-      - name: PORTURBAN19
+        maxCount: 1
+      - name: URBAN17
         width: 10
         length: 10
-        type: 3
-      - name: PORTURBAN20
+        maxCount: 1
+      - name: URBAN18
         width: 10
         length: 10
-        type: 3
-      - name: PORTURBAN21
+        maxCount: 1
+      - name: MADURBAN19
         width: 10
         length: 10
-        type: 3
-      - name: PORTURBAN22
+        maxCount: 1
+      - name: MADURBAN20
         width: 10
         length: 10
-        type: 3
+        maxCount: 1
+      - name: MADURBAN21
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN22
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN23
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN24
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN26
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN27
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN28
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN29
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN30
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN31
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN32
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN33
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN34
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN35
+        width: 20
+        length: 20
+        maxCount: 1
+      - name: MADURBAN36
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN37
+        width: 10
+        length: 10
+        maxCount: 1
+      - name: MADURBAN38
+        width: 10
+        length: 10
+        maxCount: 1
+  - name: MUJUNGLE
+    mapDataSets:
+      - BLANKS
+      - SANDS
+      - MUJUNGLE
+      - JUNGLE
+    textures: [0, 6]
+    hemisphere: 1
+    largeBlockLimit: 3
+    mapBlocks:
+      - name: MUJUNGLE00
+        width: 10
+        length: 10
+        type: 1
+      - name: MUJUNGLE01
+        width: 10
+        length: 10
+        type: 1
+      - name: MUJUNGLE02
+        width: 10
+        length: 10
+      - name: MUJUNGLE03
+        width: 10
+        length: 10
+      - name: MUJUNGLE04
+        width: 10
+        length: 10
+      - name: MUJUNGLE05
+        width: 10
+        length: 10
+      - name: MUJUNGLE06
+        width: 10
+        length: 10
+      - name: MUJUNGLE07
+        width: 10
+        length: 10
+      - name: MUJUNGLE08
+        width: 10
+        length: 10
+      - name: MUJUNGLE09
+        width: 20
+        length: 20
+      - name: MUJUNGLE10
+        width: 20
+        length: 20
+      - name: MUJUNGLE11
+        width: 20
+        length: 20
+      - name: MUJUNGLE12
+        width: 20
+        length: 20
+      - name: MUJUNGLE13
+        width: 20
+        length: 20
+      - name: MUJUNGLE14
+        width: 20
+        length: 20
   - name: NATIVEURBAN
     mapDataSets:
       - BLANKS
@@ -1068,104 +1457,163 @@ terrains:
         width: 10
         length: 10
         type: 1
-  - name: INDUSTRIALURBAN
+  - name: POLAR
+    textures: [9, 12]
+  - name: POLARMOUNT
+    mapDataSets:
+      - BLANKS
+      - MOUNT
+      - POLAR
+      - POLARMOUNT
+    textures: [9]
+    hemisphere: 1
+    largeBlockLimit: 2
+    mapBlocks:
+      - name: MOUNTPOLAR00
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+      - name: MOUNTPOLAR01
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+      - name: MOUNTPOLAR02
+        width: 10
+        length: 10
+        type: 1
+        subType: 0
+      - name: MOUNTPOLAR03
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR04
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR05
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR06
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR07
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR08
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR09
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR10
+        width: 10
+        length: 10
+      - name: MOUNTPOLAR11
+        width: 20
+        length: 20
+      - name: MOUNTPOLAR12
+        width: 20
+        length: 20
+  - name: PORTURBAN
     mapDataSets:
       - BLANKS
       - PORTROADS
       - PORTURBITS
-      - ROADS
-      - URBITS
-    textures: [1]
     largeBlockLimit: 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
     roadTypeOdds: [50, 25]
     mapBlocks:
-      - name: INDUSTRIALURBAN00
+      - name: PORTURBAN00
+        width: 10
+        length: 10
+        type: 2
+      - name: PORTURBAN01
+        width: 10
+        length: 10
+        type: 2
+      - name: PORTURBAN02
+        width: 10
+        length: 10
+        type: 2
+      - name: PORTURBAN03
+        width: 10
+        length: 10
+        type: 2
+      - name: PORTURBAN04
+        width: 10
+        length: 10
+        type: 4
+      - name: PORTURBAN05
         width: 20
         length: 20
-      - name: INDUSTRIALURBAN01
+      - name: PORTURBAN06
         width: 20
         length: 20
-      - name: INDUSTRIALURBAN02
+      - name: PORTURBAN07
         width: 20
         length: 20
-      - name: INDUSTRIALURBAN03
+      - name: PORTURBAN08
+        width: 20
+        length: 20
+      - name: PORTURBAN09
+        width: 20
+        length: 20
+      - name: PORTURBAN10
         width: 10
         length: 10
-        type: 2
-        subType: 0
-      - name: INDUSTRIALURBAN04
+      - name: PORTURBAN11
         width: 10
         length: 10
-        type: 3
-        subType: 0
-      - name: INDUSTRIALURBAN05
-        width: 10
-        length: 10
-        type: 4
-        subType: 0
-      - name: INDUSTRIALURBAN06
-        width: 10
-        length: 10
-        type: 3
-        subType: 0
-      - name: INDUSTRIALURBAN07
-        width: 10
-        length: 10
-        type: 3
-        subType: 0
-      - name: INDUSTRIALURBAN08
-        width: 10
-        length: 10
-        type: 4
-        subType: 0
-      - name: INDUSTRIALURBAN09
-        width: 10
-        length: 10
-        type: 2
-        subType: 0
-      - name: INDUSTRIALURBAN10
-        width: 10
-        length: 10
-        type: 3
-        subType: 0
-      - name: INDUSTRIALURBAN11
-        width: 10
-        length: 10
-        type: 4
-        subType: 0
-      - name: INDUSTRIALURBAN12
-        width: 10
-        length: 10
-        type: 2
-        subType: 0
-      - name: INDUSTRIALURBAN13
-        width: 10
-        length: 10
-        type: 3
-        subType: 0
-      - name: INDUSTRIALURBAN14
-        width: 10
-        length: 10
-        type: 4
-        subType: 0
-      - name: INDUSTRIALURBAN15
-        width: 10
-        length: 10
-        type: 2
-        subType: 0
-      - name: INDUSTRIALURBAN16
+      - name: PORTURBAN12
         width: 10
         length: 10
         type: 1
+        subType: 0
         frequency: 3
-      - name: INDUSTRIALURBAN17
+      - name: PORTURBAN13
+        width: 10
+        length: 20
+        type: 1
+        subType: 0
+        frequency: 3
+      - name: PORTURBAN14
         width: 10
         length: 10
-        type: 1
-        frequency: 3
+        frequency: 2
+      - name: PORTURBAN15
+        width: 10
+        length: 10
+        frequency: 2
+      - name: PORTURBAN16
+        width: 10
+        length: 10
+        frequency: 2
+      - name: PORTURBAN17
+        width: 10
+        length: 10
+        frequency: 2
+      - name: PORTURBAN18
+        width: 10
+        length: 10
+        frequency: 2
+      - name: PORTURBAN19
+        width: 10
+        length: 10
+        type: 3
+      - name: PORTURBAN20
+        width: 10
+        length: 10
+        type: 3
+      - name: PORTURBAN21
+        width: 10
+        length: 10
+        type: 3
+      - name: PORTURBAN22
+        width: 10
+        length: 10
+        type: 3
   - name: RAILYARDURBAN
     mapDataSets:
       - BLANKS
@@ -1271,230 +1719,6 @@ terrains:
       - name: RAILYARDURBAN27
         width: 10
         length: 10
-  - name: POLAR
-    textures: [9, 12]
-  - name: POLARMOUNT
-    mapDataSets:
-      - BLANKS
-      - MOUNT
-      - POLAR
-      - POLARMOUNT
-    textures: [9]
-    hemisphere: 1
-    largeBlockLimit: 2
-    mapBlocks:
-      - name: MOUNTPOLAR00
-        width: 10
-        length: 10
-        type: 1
-        subType: 0
-      - name: MOUNTPOLAR01
-        width: 10
-        length: 10
-        type: 1
-        subType: 0
-      - name: MOUNTPOLAR02
-        width: 10
-        length: 10
-        type: 1
-        subType: 0
-      - name: MOUNTPOLAR03
-        width: 10
-        length: 10
-      - name: MOUNTPOLAR04
-        width: 10
-        length: 10
-      - name: MOUNTPOLAR05
-        width: 10
-        length: 10
-      - name: MOUNTPOLAR06
-        width: 10
-        length: 10
-      - name: MOUNTPOLAR07
-        width: 10
-        length: 10
-      - name: MOUNTPOLAR08
-        width: 10
-        length: 10
-      - name: MOUNTPOLAR09
-        width: 10
-        length: 10
-      - name: MOUNTPOLAR10
-        width: 10
-        length: 10
-      - name: MOUNTPOLAR11
-        width: 20
-        length: 20
-      - name: MOUNTPOLAR12
-        width: 20
-        length: 20
-  - name: FOREST
-    textures: [0, 6, 10, 11]
-    hemisphere: -1
-  - name: JUNGLE
-    textures: [0, 6, 10, 11]
-    hemisphere: 1
-  - name: FORESTMOUNT
-    mapDataSets:
-      - BLANKS
-      - MOUNT
-      - FOREST
-      - FORESTMOUNT
-    textures: [0, 5, 10, 11]
-    hemisphere: -1
-    largeBlockLimit: 3
-    mapBlocks:
-      - name: FORESTMOUNT00
-        width: 10
-        length: 10
-        type: 1
-      - name: FORESTMOUNT01
-        width: 10
-        length: 10
-        type: 1
-      - name: FORESTMOUNT02
-        width: 10
-        length: 10
-      - name: FORESTMOUNT03
-        width: 10
-        length: 10
-      - name: FORESTMOUNT04
-        width: 10
-        length: 10
-      - name: FORESTMOUNT05
-        width: 10
-        length: 10
-      - name: FORESTMOUNT06
-        width: 10
-        length: 10
-      - name: FORESTMOUNT07
-        width: 10
-        length: 10
-      - name: FORESTMOUNT08
-        width: 10
-        length: 10
-      - name: FORESTMOUNT09
-        width: 10
-        length: 10
-      - name: FORESTMOUNT10
-        width: 10
-        length: 10
-      - name: FORESTMOUNT11
-        width: 20
-        length: 20
-      - name: FORESTMOUNT12
-        width: 20
-        length: 20
-      - name: FORESTMOUNT13
-        width: 20
-        length: 20
-      - name: FORESTMOUNT14
-        width: 20
-        length: 20
-      - name: FORESTMOUNT15
-        width: 10
-        length: 10
-      - name: FORESTMOUNT16
-        width: 10
-        length: 10
-      - name: FORESTMOUNT17
-        width: 10
-        length: 10
-      - name: FORESTMOUNT18
-        width: 10
-        length: 10
-      - name: FORESTMOUNT19
-        width: 10
-        length: 10
-      - name: FORESTMOUNT20
-        width: 10
-        length: 10
-      - name: FORESTMOUNT21
-        width: 10
-        length: 10
-      - name: FORESTMOUNT22
-        width: 10
-        length: 10
-      - name: FORESTMOUNT23
-        width: 10
-        length: 10
-      - name: FORESTMOUNT24
-        width: 10
-        length: 10
-      - name: FORESTMOUNT25
-        width: 20
-        length: 20
-      - name: FORESTMOUNT26
-        width: 20
-        length: 20
-  - name: DESERT
-    largeBlockLimit: 3
-    textures: [7, 8]
-  - name: DESERTMOUNT
-    mapDataSets:
-      - BLANKS
-      - MOUNT
-      - DESERT
-    textures: [8]
-    largeBlockLimit: 3
-    mapBlocks:
-      - name: DESERTMOUNT00
-        width: 10
-        length: 10
-        type: 1
-      - name: DESERTMOUNT01
-        width: 10
-        length: 10
-        type: 1
-      - name: DESERTMOUNT02
-        width: 10
-        length: 10
-        type: 1
-      - name: DESERTMOUNT03
-        width: 10
-        length: 10
-      - name: DESERTMOUNT04
-        width: 10
-        length: 10
-      - name: DESERTMOUNT05
-        width: 10
-        length: 10
-      - name: DESERTMOUNT06
-        width: 10
-        length: 10
-      - name: DESERTMOUNT07
-        width: 10
-        length: 10
-      - name: DESERTMOUNT08
-        width: 10
-        length: 10
-      - name: DESERTMOUNT09
-        width: 10
-        length: 10
-      - name: DESERTMOUNT10
-        width: 10
-        length: 10
-      - name: DESERTMOUNT11
-        width: 20
-        length: 20
-      - name: DESERTMOUNT12
-        width: 20
-        length: 20
-      - name: DESERTMOUNT13
-        width: 20
-        length: 20
-      - name: DESERTMOUNT14
-        width: 20
-        length: 20
-      - name: DESERTMOUNT15
-        width: 10
-        length: 10
-      - name: DESERTMOUNT16
-        width: 10
-        length: 10
-      - name: DESERTMOUNT17
-        width: 10
-        length: 10
 alienDeployments:
   - type: STR_TERROR_MISSION
     width: 50
@@ -1510,6 +1734,7 @@ alienDeployments:
       - URBAN
       - RAILYARDURBAN
       - NATIVEURBAN
+      - COMRCURBAN
 extraStrings:
   - type: en-US
     strings:
@@ -1525,6 +1750,9 @@ extraStrings:
       STR_POLARMOUNT: Polar Mountain
       STR_FORESTMOUNT: Forest Mountain
       STR_DESERTMOUNT: Desert Mountain
+      STR_ATLANTDESERT: Atlantis + Desert
+      STR_MUJUNGLE: Mu + Jungle
+      STR_COMRCURBAN: Commercial
   - type: en-GB
     strings:
       STR_NATIVEURBAN: Native (Farm + Jungle)
@@ -1539,6 +1767,9 @@ extraStrings:
       STR_POLARMOUNT: Polar Mountain
       STR_FORESTMOUNT: Forest Mountain
       STR_DESERTMOUNT: Desert Mountain
+      STR_ATLANTDESERT: Atlantis + Desert
+      STR_MUJUNGLE: Mu + Jungle
+      STR_COMRCURBAN: Commercial
   - type: fr
     strings:
       STR_NATIVEURBAN: Indigène
@@ -1553,17 +1784,23 @@ extraStrings:
       STR_POLARMOUNT: Montagne Polaire
       STR_FORESTMOUNT: Forêt de Montagne
       STR_DESERTMOUNT: Montagne Désertique
+      STR_ATLANTDESERT: Atlantis + Desert
+      STR_MUJUNGLE: Mu + Jungle
+      STR_COMRCURBAN: Commercial
   - type: ru
     strings:
-      STR_NATIVEURBAN: Ферма + джунгли
-      STR_CULTAFARMA: Расшир. ферма А
-      STR_CULTAFARMB: Расшир. ферма Б
-      STR_MADURBAN: Расшир. город
-      STR_PORTURBAN: Порт
-      STR_INDUSTRIALURBAN: Промзона
-      STR_RAILYARDURBAN: Ж/Д станция
-      STR_DAWNURBANA: Город А
-      STR_DAWNURBANB: Город Б
-      STR_POLARMOUNT: Горы в полярных снегах
-      STR_FORESTMOUNT: Горы в лесу
-      STR_DESERTMOUNT: Горы в пустыне
+      STR_NATIVEURBAN: "Ферма + джунгли"
+      STR_CULTAFARMA: "Расшир. ферма А"
+      STR_CULTAFARMB: "Расшир. ферма Б"
+      STR_MADURBAN: "Расшир. город"
+      STR_PORTURBAN: "Порт"
+      STR_INDUSTRIALURBAN: "Промзона"
+      STR_RAILYARDURBAN: "Ж/Д депо"
+      STR_DAWNURBANA: "Город А"
+      STR_DAWNURBANB: "Город Б"
+      STR_POLARMOUNT: "Горы на полюсе"
+      STR_FORESTMOUNT: "Горы в лесу"
+      STR_DESERTMOUNT: "Горы в пустыне"
+      STR_ATLANTDESERT: "Руины в пустыне"
+      STR_MUJUNGLE: "Руины в джунглях"
+      STR_COMRCURBAN: "Деловой район"
