@@ -49,10 +49,10 @@ namespace OpenXcom
 
 /**
  * Sets up a UnitSprite with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 UnitSprite::UnitSprite(
 		int width,
@@ -168,7 +168,7 @@ struct ColorFace
 
 /**
  * Sets the animation frame for animated units.
- * @param frame Frame number.
+ * @param frame - frame number
  */
 void UnitSprite::setAnimationFrame(int frame)
 {
@@ -200,16 +200,16 @@ void UnitSprite::draw()
 		&UnitSprite::drawRoutine9,
 		&UnitSprite::drawRoutine0
 	};
-/*										&UnitSprite::drawRoutine11,
-										&UnitSprite::drawRoutine12,
-										&UnitSprite::drawRoutine0,
-										&UnitSprite::drawRoutine0,
-										&UnitSprite::drawRoutine12,
-										&UnitSprite::drawRoutine4,
-										&UnitSprite::drawRoutine4,
-										&UnitSprite::drawRoutine18,
-										&UnitSprite::drawRoutine19,
-										&UnitSprite::drawRoutine20}; */
+/*		&UnitSprite::drawRoutine11,
+		&UnitSprite::drawRoutine12,
+		&UnitSprite::drawRoutine0,
+		&UnitSprite::drawRoutine0,
+		&UnitSprite::drawRoutine12,
+		&UnitSprite::drawRoutine4,
+		&UnitSprite::drawRoutine4,
+		&UnitSprite::drawRoutine18,
+		&UnitSprite::drawRoutine19,
+		&UnitSprite::drawRoutine20}; */
 
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
@@ -1731,18 +1731,21 @@ void UnitSprite::drawRoutine9()
 	if (_unit->isOut())
 		return; // unit is drawn as an item
 
-	Surface* torso = NULL;
+	_redraw = true;
 
 	// magic numbers
 	const int
 		body = 0,
-		die = 25;
+		die = 25,
+		shoot = 8;  // frames 8..23 or ..24 (24 is merely a green ball sprite)
 
-	torso = _unitSurface->getFrame(body + _animationFrame);
-	_redraw = true;
-
+	Surface* torso = NULL;
 	if (_unit->getStatus() == STATUS_COLLAPSING)
 		torso = _unitSurface->getFrame(die + _unit->getFallingPhase());
+	else if (_unit->getStatus() == STATUS_AIMING)							// kL
+		torso = _unitSurface->getFrame(shoot + _unit->getAimingPhase());	// kL
+	else
+		torso = _unitSurface->getFrame(body + _animationFrame);
 
 	torso->blit(this);
 }

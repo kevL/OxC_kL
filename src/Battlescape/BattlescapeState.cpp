@@ -170,7 +170,9 @@ BattlescapeState::BattlescapeState()
 	_rank		= new Surface(26, 23, x + 107, y + 33);
 	_kneel		= new Surface( 2,  2, x + 115, y + 19); // kL
 
-	_btnWounds	= new InteractiveSurface(15, 13, x + 4,y - 16);
+//	_btnWounds	= new InteractiveSurface(15, 13, x + 4, y - 16);
+//	_numWounds	= new NumberText(9, 9, x, y - 12); // X gets adjusted in updateSoldierInfo()
+	_btnWounds	= new InteractiveSurface(14, 14, x + 5, y - 17);
 	_numWounds	= new NumberText(9, 9, x, y - 12); // X gets adjusted in updateSoldierInfo()
 
 	_btnUnitUp			= new BattlescapeButton(32,  16, x +  48, y);
@@ -202,8 +204,9 @@ BattlescapeState::BattlescapeState()
 	_numAmmoLeft		= new NumberText(30, 5, x + 8, y + 4);
 	_numAmmoRight		= new NumberText(30, 5, x + 280, y + 4);
 
-	const int visibleUnitX = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->x;
-	const int visibleUnitY = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->y;
+	const int
+		visibleUnitX = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->x,
+		visibleUnitY = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->y;
 
 	for (int
 			i = 0,
@@ -217,12 +220,12 @@ BattlescapeState::BattlescapeState()
 		_btnVisibleUnit[i] = new InteractiveSurface(
 												15,
 												13,
-												x + iconsWidth - 20 - offset_x,
+												x + iconsWidth - 21 - offset_x,
 												y - 16 - (i * 13));
 		_numVisibleUnit[i] = new NumberText(
 										9,
 										9,
-										x + iconsWidth - 14 - offset_x,
+										x + iconsWidth - 15 - offset_x,
 										y - 12 - (i * 13));
 	}
 
@@ -497,16 +500,16 @@ BattlescapeState::BattlescapeState()
 	_btnWounds->onMouseClick((ActionHandler)& BattlescapeState::btnWoundedClick);
 
 //	_numWounds->setColor(Palette::blockOffset(2)+5); // blood red
-	_numWounds->setColor(4); // white
+	_numWounds->setColor(Palette::blockOffset(0)+3); // light gray
 	_numWounds->setValue(0);
 	_numWounds->setVisible(false);
 	// kL_end.
 
 //	_numAmmoLeft->setColor(3);
-	_numAmmoLeft->setValue(999);
+	_numAmmoLeft->setValue(0);
 
 //	_numAmmoRight->setColor(3);
-	_numAmmoRight->setValue(999);
+	_numAmmoRight->setValue(0);
 
 	_icons->onMouseIn((ActionHandler)& BattlescapeState::mouseInIcons);
 	_icons->onMouseOut((ActionHandler)& BattlescapeState::mouseOutIcons);
@@ -2343,14 +2346,35 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		}
 	}
 
-	int wounds = selectedUnit->getFatalWounds();
+/*	int wounds = selectedUnit->getFatalWounds();
 	_btnWounds->setVisible(wounds > 0);
 	_numWounds->setVisible(wounds > 0);
-	_numWounds->setValue(wounds);
+	_numWounds->setValue(static_cast<unsigned>(wounds));
 	if (wounds > 9)
 		_numWounds->setX(_icons->getX() + 8);
 	else
-		_numWounds->setX(_icons->getX() + 10);
+		_numWounds->setX(_icons->getX() + 10); */
+
+	int wounds = selectedUnit->getFatalWounds();
+	if (wounds > 0)
+	{
+		SurfaceSet* srtStatus = _game->getResourcePack()->getSurfaceSet("StatusIcons");
+		if (srtStatus != NULL)
+		{
+			//Log(LOG_INFO) << ". srtStatus is VALID";
+			srtStatus->getFrame(4)->blit(_btnWounds); // red heart icon
+
+			_btnWounds->setVisible();
+		}
+
+		if (wounds > 9)
+			_numWounds->setX(_btnWounds->getX() + 4);
+		else
+			_numWounds->setX(_btnWounds->getX() + 6);
+
+		_numWounds->setValue(static_cast<unsigned>(wounds));
+		_numWounds->setVisible();
+	}
 
 
 	double stat = static_cast<double>(selectedUnit->getStats()->tu);
@@ -2527,7 +2551,6 @@ void BattlescapeState::blinkVisibleUnitButtons()
 {
 	static int
 		delta = 1,
-//		color = 34;
 		color = Palette::blockOffset(2)+2;
 
 /*	SDL_Rect square1; // black border
@@ -2547,7 +2570,7 @@ void BattlescapeState::blinkVisibleUnitButtons()
 			i < VISIBLE_MAX;
 			++i)
 	{
-		if (_btnVisibleUnit[i]->getVisible() == true)
+		if (_btnVisibleUnit[i]->getVisible())
 		{
 //			_btnVisibleUnit[i]->drawRect(&square1, 15);		// black border
 //			_btnVisibleUnit[i]->drawRect(&square2, color);	// inner red square
@@ -2556,18 +2579,16 @@ void BattlescapeState::blinkVisibleUnitButtons()
 		}
 	}
 
-	if (_btnWounds->getVisible() == true)
+/*	if (_btnWounds->getVisible())
 	{
 		_btnWounds->drawRect(0, 0, 15, 13, 15);		// black border
 		_btnWounds->drawRect(1, 1, 13, 11, color);	// inner red square
 			// color + Palette::blockOffset(10));	// inner purple square
-	}
+	} */
 
 
-//	if (color == 45) // reached darkish red
 	if (color == Palette::blockOffset(2)+13) // reached darkish red
 		delta = -1;
-//	if (color == 34) // reached lightish red
 	else if (color == Palette::blockOffset(2)+2) // reached lightish red
 		delta = 1;
 

@@ -412,6 +412,8 @@ void ExplosionBState::explode()
 	}
 
 
+	// kL_note: melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
+
 	SavedBattleGame* save = _parent->getSave();
 	TileEngine* tileEngine = save->getTileEngine();
 
@@ -426,33 +428,31 @@ void ExplosionBState::explode()
 			_unit->setCache(NULL);
 		}
 
-		BattleUnit* targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
-
-		if (_hitSuccess == false)
+		if (_unit
+			&& _unit->getOriginalFaction() == FACTION_PLAYER
+			&& _unit->getFaction() == FACTION_PLAYER)
 		{
-			if (_unit // HIT.
-				&& _unit->getOriginalFaction() == FACTION_PLAYER
-				&& targetUnit
-				&& targetUnit->getOriginalFaction() == FACTION_HOSTILE)
-			{
-				_unit->addMeleeExp();
-			}
+			_unit->addMeleeExp(); // +1xp for swinging
 
+			if (_hitSuccess)
+			{
+				BattleUnit* targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
+				if (targetUnit
+					&& targetUnit->getFaction() == FACTION_HOSTILE)
+				{
+					_unit->addMeleeExp(); // +1xp for hitting an aLien OR Mc'd xCom agent
+				}
+			}
+		}
+
+		if (_hitSuccess == false) // MISS.
+		{
 			_parent->getMap()->cacheUnits();
 			_parent->popState();
 
 			return;
 		}
-		else if (_unit // HIT.
-			&& _unit->getOriginalFaction() == FACTION_PLAYER
-			&& targetUnit
-			&& targetUnit->getOriginalFaction() == FACTION_HOSTILE)
-		{
-			_unit->addMeleeExp(2);
-		}
 	}
-
-	// kL_note: melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
 
 	if (_item)
 	{

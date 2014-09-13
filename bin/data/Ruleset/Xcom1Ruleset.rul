@@ -4333,6 +4333,7 @@ armors:
     rearArmor: 5
     underArmor: 5
     drawingRoutine: 4
+    deathFrames: 18
     damageModifier:
       - 1.0 #none
       - 0.6 #ap
@@ -4345,7 +4346,6 @@ armors:
       - 0.9 #acid
       - 0.0 #smoke
     loftempsSet: [ 3 ]
-    deathFrames: 18
   - type: SILACOID_ARMOR
     spriteSheet: SILACOID.PCK
     corpseBattle:
@@ -4377,8 +4377,9 @@ armors:
     rearArmor: 24
     underArmor: 26
     drawingRoutine: 9
+    shootFrames: 17 #prob 16
     constantAnimation: true
-    movementType: 1 # celatid's CAN fly
+    movementType: 1 #celatid's CAN fly
     damageModifier:
       - 1.0 #none
       - 1.1 #ap
@@ -9530,6 +9531,13 @@ extraSprites:
     subY: 3
     files:
       0: Resources/UI/globe_ufo.png
+  - type: StatusIcons
+    width: 294
+    height: 14
+    subX: 14
+    subY: 14
+    files:
+      0: Resources/Sprites/ufograph/statusbar/statusbar.png
 #kL, my Sound customizations:
 #kL, the numbering is representative of their order in SAMPLE*.CAT;
 #kL, the "hitSound" etc. under items etc. above correspond to these below.

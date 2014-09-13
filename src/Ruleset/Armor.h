@@ -57,6 +57,7 @@ private:
 		_constantAnimation;
 	int
 		_deathFrames,
+		_shootFrames, // kL
 		_frontArmor,
 		_sideArmor,
 		_rearArmor,
@@ -86,10 +87,12 @@ private:
 
 		/// Gets the armor's type.
 		std::string getType() const;
+
 		/// Gets the unit's sprite sheet.
 		std::string getSpriteSheet() const;
 		/// Gets the unit's inventory sprite.
 		std::string getSpriteInventory() const;
+
 		/// Gets the front armor level.
 		int getFrontArmor() const;
 		/// Gets the side armor level.
@@ -98,32 +101,46 @@ private:
 		int getRearArmor() const;
 		/// Gets the under armor level.
 		int getUnderArmor() const;
+
 		/// Gets the Geoscape corpse item.
 		std::string getCorpseGeoscape() const;
 		/// Gets the Battlescape corpse item.
 		const std::vector<std::string>& getCorpseBattlescape() const;
+
 		/// Gets the stores item.
 		std::string getStoreItem() const;
+
 		/// Gets the battlescape drawing routine ID.
 		int getDrawingRoutine() const;
+
 		/// Gets whether the armor can fly.
 		MovementType getMovementType() const;
+
 		/// Gets whether this is a normal or big unit.
 		int getSize() const;
+
 		/// Gets damage modifier.
 		float getDamageModifier(ItemDamageType dType);
+
 		/// Gets loftempSet
 		std::vector<int> getLoftempsSet() const;
+
 		/// Gets the armor's stats.
 		UnitStats* getStats();
+
 		/// Gets the armor's weight.
-		int getWeight();
+		int getWeight() const;
+
 		/// Gets number of death frames.
-		int getDeathFrames();
+		int getDeathFrames() const;
+		/// kL. Gets number of shoot frames.
+		int getShootFrames() const; // kL
+
 		/// Gets if armor uses constant animation.
-		bool getConstantAnimation();
+		bool getConstantAnimation() const;
+
 		/// Gets if armor can hold weapon.
-		bool getCanHoldWeapon();
+		bool getCanHoldWeapon() const;
 };
 
 }

@@ -377,6 +377,7 @@ private:
 		_expThrowing,
 		_faceDirection, // used only during strafeing moves
 		_fallPhase,
+		_aimPhase, // kL
 		_fatalWounds[6],
 		_fire,
 		_health,
@@ -588,7 +589,7 @@ private:
 		bool isFloating() const;
 
 		/// Aim.
-		void aim(bool aiming);
+		void aim(bool aim = true);
 
 		/// Get direction to a certain point
 		int directionTo(const Position& point) const;
@@ -626,6 +627,13 @@ private:
 		void keepFalling();
 		/// Get falling sequence.
 		int getFallingPhase() const;
+
+		/// kL. Start aiming sequence. This is only for celatids.
+		void startAiming(); // kL
+		/// kL. Increment the aiming sequence.
+		void keepAiming(); // kL
+		/// Get aiming sequence.
+		int getAimingPhase() const; // kL
 
 		/// The unit is out - either dead or unconscious.
 //kL	bool isOut() const;

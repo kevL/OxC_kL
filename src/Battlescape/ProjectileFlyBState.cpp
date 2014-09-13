@@ -591,8 +591,8 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			sound = ResourcePack::ITEM_THROW;
 
-			if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL
-				&& _unit->getFaction() == FACTION_PLAYER)		// kL
+			if (_unit->getOriginalFaction() == FACTION_PLAYER
+				&& _unit->getFaction() == FACTION_PLAYER)
 			{
 				_unit->addThrowingExp();
 			}
@@ -606,7 +606,7 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			_action.result = "STR_UNABLE_TO_THROW_HERE";
 			_action.TU = 0;
-			_unit->setStatus(STATUS_STANDING); // kL
+			_unit->setStatus(STATUS_STANDING);
 
 			_parent->popState();
 
@@ -623,9 +623,10 @@ bool ProjectileFlyBState::createNewProjectile()
 		if (_projectileImpact != VOXEL_EMPTY
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
 		{
-//kL		_unit->aim(true); // set the celatid in an aiming position <- yeah right. not yet.
-//kL		_unit->setCache(NULL);
-//kL		_parent->getMap()->cacheUnit(_unit);
+//			_unit->aim(); // set the celatid in an aiming position <- yeah right. not yet.
+			_unit->startAiming();
+			_unit->setCache(NULL);
+			_parent->getMap()->cacheUnit(_unit);
 
 			// lift-off
 			if (_ammo->getRules()->getFireSound() != -1)
@@ -666,7 +667,7 @@ bool ProjectileFlyBState::createNewProjectile()
 																				_action.weapon));
 		//Log(LOG_INFO) << ". part = " << _projectileImpact;
 
-		_unit->aim(true);
+		_unit->aim();
 		_unit->setCache(NULL);
 		_parent->getMap()->cacheUnit(_unit);
 
@@ -696,7 +697,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			|| _action.type == BA_LAUNCH)
 		{
 			//Log(LOG_INFO) << ". . _projectileImpact !";
-			_unit->aim(true);
+			_unit->aim();
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
@@ -749,6 +750,12 @@ bool ProjectileFlyBState::createNewProjectile()
 void ProjectileFlyBState::think()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::think()";
+	if (_unit->getStatus() == STATUS_AIMING
+		&& _unit->getArmor()->getShootFrames() > 0)
+	{
+		_unit->keepAiming();
+	}
+
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
 
 	// TODO refactoring : store the projectile in this state, instead of getting it from the map each time.
@@ -1286,7 +1293,7 @@ void ProjectileFlyBState::performMeleeAttack()
 														height - _parent->getSave()->getTile(_action.target)->getTerrainLevel())
 													- voxel;
 
-	_unit->aim(true);
+	_unit->aim();
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
 

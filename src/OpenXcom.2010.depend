@@ -4679,7 +4679,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1404096023 f:\git\openxcom\src\ruleset\armor.h
+1410572697 f:\git\openxcom\src\ruleset\armor.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -4763,7 +4763,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1410523980 f:\git\openxcom\src\savegame\battleunit.h
+1410573477 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -5643,7 +5643,7 @@
 1404096022 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1410461576 f:\git\openxcom\src\battlescape\battlescapestate.h
+1410563024 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -6034,7 +6034,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1410468939 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1410569977 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6318,7 +6318,7 @@
 1410509529 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1410530992 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1410561175 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6437,7 +6437,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1410528167 source:f:\git\openxcom\src\battlescape\map.cpp
+1410571086 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6570,7 +6570,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1410553808 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1410557021 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6681,7 +6681,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1410517766 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1410573770 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6865,7 +6865,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1409092009 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1410572357 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -9285,7 +9285,7 @@
 1404096023 source:f:\git\openxcom\src\ruleset\alienrace.cpp
 	"AlienRace.h"
 
-1409074803 source:f:\git\openxcom\src\ruleset\armor.cpp
+1410572697 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 
 1409090929 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
@@ -9544,7 +9544,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1410525458 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1410573444 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

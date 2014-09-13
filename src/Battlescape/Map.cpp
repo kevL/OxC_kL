@@ -2716,7 +2716,7 @@ void Map::cacheUnit(BattleUnit* unit)
 			if (!lhandItem
 				&& !rhandItem)
 			{
-				unitSprite->setBattleItem(0);
+				unitSprite->setBattleItem(NULL);
 			}
 			else
 			{
@@ -2730,9 +2730,9 @@ void Map::cacheUnit(BattleUnit* unit)
 
 			//Log(LOG_INFO) << ". . setSurfaces()";
 			unitSprite->setSurfaces(
-					_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
-					_res->getSurfaceSet("HANDOB.PCK"),
-					_res->getSurfaceSet("HANDOB2.PCK"));
+								_res->getSurfaceSet(unit->getArmor()->getSpriteSheet()),
+								_res->getSurfaceSet("HANDOB.PCK"),
+								_res->getSurfaceSet("HANDOB2.PCK"));
 			//Log(LOG_INFO) << ". . setAnimationFrame() " << _animFrame;
 			unitSprite->setAnimationFrame(_animFrame);
 			//Log(LOG_INFO) << ". . clear()";

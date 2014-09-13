@@ -44,6 +44,7 @@ Armor::Armor(const std::string& type)
 		_size(1),
 		_weight(0),
 		_deathFrames(3),
+		_shootFrames(0), // kL
 		_constantAnimation(false),
 		_canHoldWeapon(false)
 {
@@ -127,6 +128,7 @@ void Armor::load(const YAML::Node& node)
 		_loftempsSet.push_back(node["loftemps"].as<int>());
 
 	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
+	_shootFrames = node["shootFrames"].as<int>(_shootFrames);
 	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
 
 	if (_drawingRoutine == 0
@@ -294,36 +296,45 @@ UnitStats* Armor::getStats()
 
 /**
  * Gets the armor's weight.
- * @return, the weight of the armor.
+ * @return, the weight of the armor
  */
-int Armor::getWeight()
+int Armor::getWeight() const
 {
 	return _weight;
 }
 
 /**
  * Gets number of death frames.
- * @return, number of death frames.
+ * @return, number of death frames
  */
-int Armor::getDeathFrames()
+int Armor::getDeathFrames() const
 {
 	return _deathFrames;
 }
 
 /**
- * Gets if armor uses constant animation.
- * @return, if it uses constant animation
+ * kL. Gets number of shoot frames.
+ * @return, number of shoot frames
  */
-bool Armor::getConstantAnimation()
+int Armor::getShootFrames() const // kL
+{
+	return _shootFrames;
+}
+
+/**
+ * Gets if armor uses constant animation.
+ * @return, true if it uses constant animation
+ */
+bool Armor::getConstantAnimation() const
 {
 	return _constantAnimation;
 }
 
 /**
  * Gets if armor can hold weapon.
- * @return, if it can hold weapon
+ * @return, true if it can hold weapon
  */
-bool Armor::getCanHoldWeapon()
+bool Armor::getCanHoldWeapon() const
 {
 	return _canHoldWeapon;
 }

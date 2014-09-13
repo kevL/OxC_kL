@@ -83,6 +83,7 @@ BattleUnit::BattleUnit(
 		_status(STATUS_STANDING),
 		_walkPhase(0),
 		_fallPhase(0),
+		_aimPhase(0), // kL
 		_spinPhase(-1),
 		_kneeled(false),
 		_floating(false),
@@ -1140,11 +1141,11 @@ bool BattleUnit::isFloating() const
 
 /**
  * Shows the righthand sprite with weapon aiming.
- * @param aiming - true to aim, false to stand there like an idiot
+ * @param aim - true to aim, false to stand there like an idiot
  */
-void BattleUnit::aim(bool aiming)
+void BattleUnit::aim(bool aim)
 {
-	if (aiming)
+	if (aim)
 		_status = STATUS_AIMING;
 	else
 		_status = STATUS_STANDING;
@@ -1519,11 +1520,52 @@ void BattleUnit::keepFalling()
 
 /**
  * Returns the phase of the falling sequence.
- * @return phase
+ * @return, phase
  */
 int BattleUnit::getFallingPhase() const
 {
 	return _fallPhase;
+}
+
+/**
+ * kL. Intialises the aiming sequence.
+ */
+void BattleUnit::startAiming() // kL
+{
+	_status = STATUS_AIMING;
+	_aimPhase = 0;
+
+	if (_visible)
+//		|| _faction == FACTION_PLAYER) // all Faction_Player is visible ...
+	{
+		_cacheInvalid = true;
+	}
+}
+
+/**
+ * kL. Advances the phase of aiming sequence.
+ */
+void BattleUnit::keepAiming() // kL
+{
+	_aimPhase++;
+
+	if (_aimPhase == _armor->getShootFrames())
+	{
+		_aimPhase--;
+
+		_status = STATUS_STANDING;
+	}
+
+	_cacheInvalid = true;
+}
+
+/**
+ * kL. Returns the phase of the Aiming sequence.
+ * @return, phase
+ */
+int BattleUnit::getAimingPhase() const // kL
+{
+	return _aimPhase;
 }
 
 /**
