@@ -235,16 +235,14 @@ void Base::load(
 
 		if (const YAML::Node& craft = (*i)["craft"])
 		{
-			std::string type = craft["type"].as<std::string>();
-			int id = craft["id"].as<int>();
+			CraftId craftId = Craft::loadId(craft);
 
 			for (std::vector<Craft*>::iterator
 					j = _crafts.begin();
 					j != _crafts.end();
 					++j)
 			{
-				if ((*j)->getRules()->getType() == type
-					&& (*j)->getId() == id)
+				if ((*j)->getUniqueId() == craftId)
 				{
 					s->setCraft(*j);
 
@@ -1177,6 +1175,10 @@ int Base::getDefenseValue() const
 		total = 0,
 		range = 0;
 
+	int minRadarRange = _rule->getMinRadarRange();
+	if (minRadarRange == 0)
+		return 0;
+
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
 			i != _facilities.end();
@@ -1186,8 +1188,10 @@ int Base::getDefenseValue() const
 			&& (*i)->getRules()->getRadarRange() > 0)
 		{
 			range = (*i)->getRules()->getRadarRange();
-				// kL_note: that should be based off a string or Ruleset value.
-			if (range < 1501) // was changed to 1701
+			// kL_note: that should be based off a string or Ruleset value.
+
+			if ((*i)->getRules()->getRadarRange() <= minRadarRange)
+//			if (range < 1501) // was changed to 1701
 			{
 				total++;
 			}
@@ -1217,8 +1221,7 @@ int Base::getShortRangeValue() const // kL
 		{
 			range = (*i)->getRules()->getRadarRange();
 			if (range > 0
-				&& range < 1501)
-			// kL_note: that should be based off a string or Ruleset value.
+				&& range < _rule->getRadarCutoffRange() + 1)
 			{
 				total += (*i)->getRules()->getRadarChance();
 
@@ -1238,15 +1241,16 @@ int Base::getShortRangeValue() const // kL
 /*kL int Base::getLongRangeDetection() const
 {
 	int total = 0;
+	int minRadarRange = _rule->getMinRadarRange();
 
 	for (std::vector<BaseFacility*>::const_iterator
 			i = _facilities.begin();
 			i != _facilities.end();
 			++i)
 	{
-		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getRadarRange() > 1500) // was changed to 1700
-				// kL_note: that should be based off a string or Ruleset value.
+		if ((*i)->getRules()->getRadarRange() > minRadarRange
+			&& (*i)->getBuildTime() == 0)
+//			&& (*i)->getRules()->getRadarRange() > 1500) // was changed to 1700
 		{
 			total++;
 		}
@@ -1270,8 +1274,7 @@ int Base::getLongRangeValue() const // kL
 			++i)
 	{
 		if ((*i)->getBuildTime() == 0
-			&& (*i)->getRules()->getRadarRange() > 1500)
-		// kL_note: that should be based off a string or Ruleset value.
+			&& (*i)->getRules()->getRadarRange() > _rule->getRadarCutoffRange())
 		{
 			total += (*i)->getRules()->getRadarChance();
 

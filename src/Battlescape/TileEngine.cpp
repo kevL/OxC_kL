@@ -4419,7 +4419,7 @@ int TileEngine::unitOpensDoor(
 	if (dir == -1)
 		dir = unit->getDirection();
 
-	Tile* tile; // cfailde:doorcost
+	Tile* tile;
 
 	int z = unit->getTile()->getTerrainLevel() < -12? 1: 0; // if we're standing on stairs, check the tile above instead.
 	for (int
@@ -4607,7 +4607,7 @@ int TileEngine::unitOpensDoor(
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
-				tile->animate(); // cfailde:doorcost : ensures frame advances for ufo doors to update TU cost
+				tile->animate(); // ensures frame advances for ufo doors to update TU cost
 
 				if (rightClick) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
 				{

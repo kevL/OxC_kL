@@ -64,7 +64,6 @@ Ufo::Ufo(RuleUfo* rules)
 		_status(FLYING),
 		_secondsRemaining(0),
 		_inBattlescape(false),
-		_shotDownByCraft(NULL),
 		_mission(NULL),
 		_trajectory(NULL),
 		_trajectoryPoint(0),
@@ -72,7 +71,8 @@ Ufo::Ufo(RuleUfo* rules)
 		_hyperDetected(false),
 		_shootingAt(0),
 		_hitFrame(0),
-		_terrain("")
+		_terrain(""),
+		_shotDownByCraftId() // kL
 {
 }
 
@@ -614,17 +614,17 @@ const std::string& Ufo::getAlienRace() const
  * Sets a pointer to a craft that shot down this UFO.
  * @param craft - pointer to Craft
  */
-void Ufo::setShotDownByCraft(Craft* craft)
+void Ufo::setShotDownByCraftId(const CraftId& craft)
 {
-	_shotDownByCraft = craft;
+	_shotDownByCraftId = craft;
 }
 
 /**
  * Gets the pointer to the craft that shot down this UFO.
  */
-Craft* Ufo::getShotDownByCraft() const
+CraftId Ufo::getShotDownByCraftId() const
 {
-	return _shotDownByCraft;
+	return _shotDownByCraftId;
 }
 
 /**

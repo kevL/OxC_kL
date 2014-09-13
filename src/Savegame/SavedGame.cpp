@@ -2375,4 +2375,30 @@ std::vector<MissionStatistics*>* SavedGame::getMissionStatistics()
 	return &_missionStatistics;
 }
 
+/**
+ * Returns the craft corresponding to the specified unique id.
+ * @param craftId - the unique craft id to look up
+ * @return, the craft with the specified id, or NULL
+ */
+/*kL
+Craft* SavedGame::findCraftByUniqueId(const CraftId& craftId) const
+{
+	for (std::vector<Base*>::const_iterator
+			base = _bases.begin();
+			base != _bases.end();
+			++base)
+	{
+		for (std::vector<Craft*>::const_iterator
+				craft = (*base)->getCrafts()->begin();
+				craft != (*base)->getCrafts()->end();
+				++craft)
+		{
+			if ((*craft)->getUniqueId() == craftId)
+				return *craft;
+		}
+	}
+
+	return NULL;
+} */
+
 }

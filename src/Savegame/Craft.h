@@ -23,6 +23,7 @@
 #include <string>
 #include <vector>
 
+#include "CraftId.h"
 #include "MovingTarget.h"
 
 
@@ -93,6 +94,8 @@ private:
 		YAML::Node save() const;
 		/// Saves the craft's ID to YAML.
 		YAML::Node saveId() const;
+		/// Loads a craft ID from YAML.
+		static CraftId loadId(const YAML::Node& node);
 
 		/// Gets the craft's ruleset.
 		RuleCraft* getRules() const;
@@ -225,6 +228,9 @@ private:
 		void setInterceptionOrder(const int order);
 		/// Gets interception number.
 		int getInterceptionOrder() const;
+
+		/// Gets the craft's unique id.
+		CraftId getUniqueId() const;
 
 		/// Sets capacity load.
 		void setLoadCapacity(int load);

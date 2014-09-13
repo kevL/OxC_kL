@@ -84,7 +84,6 @@ namespace OpenXcom
 /**
  * Creates a ruleset with blank sets of rules.
  */
-//kL Ruleset::Ruleset()
 Ruleset::Ruleset(Game* game) // kL
 	:
 		_game(game), // kL
@@ -109,7 +108,8 @@ Ruleset::Ruleset(Game* game) // kL
 		_researchListOrder(0),
 		_manufactureListOrder(0),
 		_ufopaediaListOrder(0),
-		_invListOrder(0)
+		_invListOrder(0),
+		_radarCutoff(1500) // kL
 {
 	//Log(LOG_INFO) << "Create Ruleset";
 	_globe = new RuleGlobe();
@@ -743,6 +743,7 @@ void Ruleset::loadFile(const std::string& filename)
 	_timePersonnel	= doc["timePersonnel"].as<int>(_timePersonnel);
 	_initialFunding	= doc["initialFunding"].as<int>(_initialFunding);
 	_alienFuel		= doc["alienFuel"].as<std::string>(_alienFuel);
+	_radarCutoff	= doc["radarCutoff"].as<int>(_radarCutoff);
 
 	for (YAML::const_iterator
 			i = doc["ufoTrajectories"].begin();
@@ -2098,6 +2099,48 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 const std::string Ruleset::getAlienFuel() const
 {
 	return _alienFuel;
+}
+
+/**
+ * Gets minimum radar range out of all facilities.
+ * @return, the minimum range
+ */
+/* int Ruleset::getMinRadarRange() const
+{
+	static int minRadarRange = -1;
+
+	if (minRadarRange < 0)
+	{
+		minRadarRange = 0;
+		for (std::vector<std::string>::const_iterator
+				i = _facilitiesIndex.begin();
+				i != _facilitiesIndex.end();
+				++i)
+		{
+			RuleBaseFacility* facRule = getBaseFacility(*i);
+			if (facRule == NULL)
+				continue;
+
+			int radarRange = facRule->getRadarRange();
+			if (radarRange > 0
+				&& (minRadarRange == 0
+					|| minRadarRange > radarRange))
+			{
+				minRadarRange = radarRange;
+			}
+		}
+	}
+
+	return minRadarRange;
+} */
+
+/**
+ * kL. Gets the cutoff between small & large radars
+ * for determining base info values.
+ */
+int Ruleset::getRadarCutoffRange() const // kL
+{
+	return _radarCutoff;
 }
 
 /**

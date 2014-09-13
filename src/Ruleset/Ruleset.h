@@ -91,6 +91,7 @@ protected:
 		_costScientist,
 		_costSoldier,
 		_timePersonnel,
+		_radarCutoff, // kL
 
 		_modIndex,
 
@@ -313,6 +314,10 @@ protected:
 		Soldier* genSoldier(SavedGame* save) const;
 		/// Gets the item to be used as fuel for ships.
 		const std::string getAlienFuel() const;
+		/// Gets the minimum radar's range.
+//		int getMinRadarRange() const;
+		/// kL. Gets the cutoff between small & large radars.
+		int getRadarCutoffRange() const; // kL
 		/// Gets information on an interface element.
 		RuleInterface* getInterface(const std::string id) const;
 

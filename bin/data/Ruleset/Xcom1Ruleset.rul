@@ -8914,6 +8914,7 @@ costScientist: 50000
 timePersonnel: 72
 initialFunding: 6000 #kL, not used.
 alienFuel: STR_ELERIUM_115
+radarCutoffRange: 1500 #kL
 ufoTrajectories:
   - id: P0
     groundTimer: 3000

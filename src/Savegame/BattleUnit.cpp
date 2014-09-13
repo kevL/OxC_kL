@@ -1707,7 +1707,7 @@ int BattleUnit::getActionTUs(
 			|| actionType == BA_THROW)
 		&& actionType != BA_DEFUSE) // kL
 	{
-		cost = std::max( // Smjert mod.
+		cost = std::max(
 					1,
 					static_cast<int>(floor(static_cast<double>(getStats()->tu * cost) / 100.0)));
 	}

@@ -4432,12 +4432,13 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1409096563 f:\git\openxcom\src\savegame\savedgame.h
+1410581313 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
 	<string>
 	<vector>
 	<time.h>
 	<stdint.h>
+	"CraftId.h"
 	"GameTime.h"
 
 1410120234 source:f:\git\openxcom\src\basescape\basescapestate.cpp
@@ -4566,9 +4567,10 @@
 1404096023 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1409449628 f:\git\openxcom\src\savegame\craft.h
+1410576895 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
+	"CraftId.h"
 	"MovingTarget.h"
 
 1404096023 f:\git\openxcom\src\savegame\movingtarget.h
@@ -4639,7 +4641,7 @@
 1409181874 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1409330565 f:\git\openxcom\src\ruleset\ruleset.h
+1410579717 f:\git\openxcom\src\ruleset\ruleset.h
 	<map>
 	<string>
 	<vector>
@@ -4891,9 +4893,10 @@
 
 1404096022 f:\git\openxcom\src\engine\fastlineclip.h
 
-1410042349 f:\git\openxcom\src\savegame\ufo.h
+1410577624 f:\git\openxcom\src\savegame\ufo.h
 	<string>
 	<yaml-cpp/yaml.h>
+	"CraftId.h"
 	"MovingTarget.h"
 
 1409185480 source:f:\git\openxcom\src\basescape\craftweaponsstate.cpp
@@ -6551,7 +6554,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1409764741 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1410575360 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<cmath>
 	<sstream>
@@ -6760,7 +6763,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1410244218 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1410575518 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6865,7 +6868,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1410572357 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1410573855 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -7213,7 +7216,7 @@
 
 1410393717 f:\git\openxcom\src\engine\scalers\scale3x.h
 
-1410478871 source:f:\git\openxcom\src\engine\scalers\scalebit.cpp
+1410575550 source:f:\git\openxcom\src\engine\scalers\scalebit.cpp
 	<config.h>
 	"scale2x.h"
 	"scale3x.h"
@@ -9235,7 +9238,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1410482919 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1410575683 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<sstream>
 	"../Basescape/BasescapeState.h"
@@ -9374,7 +9377,7 @@
 1406769750 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1410483349 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1410579667 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9502,7 +9505,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1410388486 source:f:\git\openxcom\src\savegame\base.cpp
+1410579902 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9544,7 +9547,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1410573444 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1410576807 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9769,7 +9772,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1410161466 source:f:\git\openxcom\src\savegame\tile.cpp
+1410577311 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
@@ -9794,7 +9797,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1410042952 source:f:\git\openxcom\src\savegame\ufo.cpp
+1410578147 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	<sstream>
 	<algorithm>
@@ -12250,4 +12253,8 @@
 	<cassert>
 	<cmath>
 	<algorithm>
+
+1410577858 f:\git\openxcom\src\savegame\craftid.h
+	<string>
+	<utility>
 

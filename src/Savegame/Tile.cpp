@@ -306,10 +306,10 @@ bool Tile::isVoid() const
 }
 
 /**
- * Get the TU cost to move over a certain part of the tile.
- * @param part
- * @param movementType
- * @return TU cost
+ * Gets the TU cost to move over a certain part of the tile.
+ * @param part			- the part number
+ * @param movementType	- the movement type
+ * @return, TU cost
  */
 int Tile::getTUCost(
 		int part,
@@ -319,8 +319,7 @@ int Tile::getTUCost(
 	if (_objects[part])
 	{
 		if (_objects[part]->isUFODoor()
-//kL		&& _curFrame[part] == 7)
-			&& _curFrame[part] > 1) // cfailde:doorcost
+			&& _curFrame[part] > 1)
 		{
 			return 0;
 		}
@@ -328,7 +327,7 @@ int Tile::getTUCost(
 		if (_objects[part]->getBigWall() >= 4)
 			return 0;
 
-		//int ret = _objects[part]->getTUCost(movementType); // kL
+		//int ret = _objects[part]->getTUCost(movementType);
 		//Log(LOG_INFO) << ". ret = " << ret;
 		//return ret;
 		return _objects[part]->getTUCost(movementType);

@@ -27,6 +27,7 @@
 #include <time.h>
 #include <stdint.h>
 
+#include "CraftId.h"
 #include "GameTime.h"
 
 
@@ -38,6 +39,7 @@ class AlienMission;
 class AlienStrategy;
 class Base;
 class Country;
+class Craft;
 class GameTime;
 class Language;
 class Region;
@@ -532,6 +534,9 @@ private:
 //		void setLastSelectedArmor(const std::string& value);
 		/// Gets the the last selected armour
 //		std::string getLastSelectedArmor();
+
+		/// Returns the craft corresponding to the specified unique id.
+//kL	Craft* findCraftByUniqueId(const CraftId& craftId) const;
 
 		/// Gets the list of missions statistics
 		std::vector<MissionStatistics*>* getMissionStatistics();
