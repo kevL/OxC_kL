@@ -1474,9 +1474,8 @@ bool TileEngine::checkReactionFire(
 	// currently playing side, and is still on the map, alive
 	if (unit->getFaction() != _battleSave->getSide()
 		|| unit->getTile() == NULL
-		|| unit->isOut(true, true))	// kL (note getTile() may return false for corpses anyway)
+		|| unit->isOut(true, true))
 	{
-		//Log(LOG_INFO) << ". ret FALSE pre";
 		return false;
 	}
 
@@ -1497,7 +1496,7 @@ bool TileEngine::checkReactionFire(
 		// the current unit is the one with the highest score.
 		while (reactor != unit)
 		{
-			// !!!!!SHOOT!!!!!!!
+			// !!!!!SHOOT!!!!!!!!
 			if (reactionShot(reactor, unit) == false)
 			{
 				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
@@ -1663,8 +1662,11 @@ bool TileEngine::reactionShot(
 	else
 	{
 		action.type = selectFireMethod(action, &tu);
-		if (tu < 1)
+		if (tu < 1
+			|| tu > action.actor->getTimeUnits())
+		{
 			return false;
+		}
 	}
 
 	if (action.type == BA_NONE)
@@ -1768,6 +1770,7 @@ BattleActionType TileEngine::selectFireMethod( // kL
 {
 	//Log(LOG_INFO) << "TileEngine::selectFireMethod()";
 	action.type = BA_NONE;
+	tu = 0;
 
 	int
 		tuUnit = action.actor->getTimeUnits(),
@@ -1837,8 +1840,6 @@ BattleActionType TileEngine::selectFireMethod( // kL
 			*tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 	}
-
-	tu = 0;
 
 	return action.type;
 }
