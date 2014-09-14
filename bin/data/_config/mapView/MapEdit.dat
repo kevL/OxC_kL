@@ -1,0 +1,772 @@
+${ufoPath}:${ufo}
+
+${rootPathUFO}:${ufoPath}\MAPS\
+${rmpPathUFO}:${ufoPath}\ROUTES\
+${blankUFO}:F:\openXcom\oXc_MapView\BLANKS\UFO\
+
+Tileset:UFO - Terrain
+	type:1
+	rootpath:${rootPathUFO}
+	rmpPath:${rmpPathUFO}
+	blankPath:${blankUFO}
+	palette:UFO
+
+	files:arearaid
+		${dep}:
+	end
+
+	files:atlantdesert
+		${dep}:SANDS ATLANTDESERT DESERT
+		ATLANTDESERT00:${dep}
+		ATLANTDESERT01:${dep}
+		ATLANTDESERT02:${dep}
+		ATLANTDESERT03:${dep}
+		ATLANTDESERT04:${dep}
+		ATLANTDESERT05:${dep}
+		ATLANTDESERT06:${dep}
+		ATLANTDESERT07:${dep}
+		ATLANTDESERT08:${dep}
+		ATLANTDESERT09:${dep}
+		ATLANTDESERT10:${dep}
+		ATLANTDESERT11:${dep}
+		ATLANTDESERT12:${dep}
+	end
+
+	files: comrcurban
+		${dep}:COMROADS COMBITS COMMERCE COMFRN COMDECOR
+		COMRCURBAN00:${dep}
+		COMRCURBAN01:${dep}
+		COMRCURBAN02:${dep}
+		COMRCURBAN03:${dep}
+		COMRCURBAN04:${dep}
+		COMRCURBAN05:${dep}
+		COMRCURBAN06:${dep}
+		COMRCURBAN07:${dep}
+		COMRCURBAN08:${dep}
+		COMRCURBAN09:${dep}
+		COMRCURBAN10:${dep}
+		COMRCURBAN11:${dep}
+		COMRCURBAN12:${dep}
+		COMRCURBAN13:${dep}
+		COMRCURBAN14:${dep}
+		COMRCURBAN15:${dep}
+		COMRCURBAN16:${dep}
+		COMRCURBAN17:${dep}
+		COMRCURBAN18:${dep}
+		COMRCURBAN19:${dep}
+		COMRCURBAN20:${dep}
+	end
+
+	files:culta
+		${dep}:CULTIVAT BARN
+		CULTA00:${dep}
+		CULTA01:${dep}
+		CULTA02:${dep}
+		CULTA03:${dep}
+		CULTA04:${dep}
+		CULTA05:${dep}
+		CULTA06:${dep}
+		CULTA07:${dep}
+		CULTA08:${dep}
+		CULTA09:${dep}
+		CULTA10:${dep}
+		CULTA11:${dep}
+		CULTA12:${dep}
+		CULTA13:${dep}
+		CULTA14:${dep}
+		CULTA15:${dep}
+		CULTA16:${dep}
+		CULTA17:${dep}
+		CULTA18:${dep}
+	end
+
+	files:cultafarma
+		${dep}:CULTIVAT BARN
+		CULTA00:${dep}
+		CULTA01:${dep}
+		CULTA02:${dep}
+		CULTA03:${dep}
+		CULTA04:${dep}
+		CULTA05:${dep}
+		CULTA06:${dep}
+		CULTA07:${dep}
+		CULTA08:${dep}
+		CULTA09:${dep}
+		CULTA10:${dep}
+		CULTA11:${dep}
+		CULTA12:${dep}
+		CULTA13:${dep}
+		CULTA14:${dep}
+		CULTA15:${dep}
+		CULTA16:${dep}
+		CULTA17:${dep}
+		CULTA18:${dep}
+		CULTAFARM00:${dep}
+		CULTAFARM01:${dep}
+		CULTAFARM02:${dep}
+		CULTAFARM03:${dep}
+		CULTAFARM04:${dep}
+		CULTAFARM05:${dep}
+		CULTAFARM06:${dep}
+		CULTAFARM07:${dep}
+		CULTAFARM08:${dep}
+		CULTAFARM09:${dep}
+		CULTAFARM10:${dep}
+		CULTAFARM11:${dep}
+		CULTAFARM12:${dep}
+		CULTAFARM13:${dep}
+		CULTAFARM14:${dep}
+		CULTAFARM15:${dep}
+		CULTAFARM16:${dep}
+		CULTAFARM17:${dep}
+		CULTAFARM18:${dep}
+		CULTAFARM19:${dep}
+		CULTAFARM20:${dep}
+		CULTAFARM21:${dep}
+		CULTAFARM22:${dep}
+	end
+
+	files:cultafarmb
+		${dep}:CULTIVAT BARN
+		CULTA00:${dep}
+		CULTA07:${dep}
+		CULTA11:${dep}
+		CULTAFARM00:${dep}
+		CULTAFARM01:${dep}
+		CULTAFARM02:${dep}
+		CULTAFARM03:${dep}
+		CULTAFARM04:${dep}
+		CULTAFARM05:${dep}
+		CULTAFARM06:${dep}
+		CULTAFARM07:${dep}
+		CULTAFARM08:${dep}
+		CULTAFARM09:${dep}
+		CULTAFARM10:${dep}
+		CULTAFARM11:${dep}
+		CULTAFARM12:${dep}
+		CULTAFARM13:${dep}
+		CULTAFARM14:${dep}
+		CULTAFARM15:${dep}
+		CULTAFARM16:${dep}
+		CULTAFARM17:${dep}
+		CULTAFARM18:${dep}
+		CULTAFARM19:${dep}
+		CULTAFARM20:${dep}
+		CULTAFARM21:${dep}
+		CULTAFARM22:${dep}
+	end
+
+	files:dawnurbana
+		${dep}:DAWNROADS DAWNURBITS DAWNURBAN DAWNFRNITURE DAWNDECOR
+		DAWNURBAN00:${dep}
+		DAWNURBAN01:${dep}
+		DAWNURBAN02:${dep}
+		DAWNURBAN03:${dep}
+		DAWNURBAN04:${dep}
+		DAWNURBAN05:${dep}
+		DAWNURBAN06:${dep}
+		DAWNURBAN07:${dep}
+		DAWNURBAN08:${dep}
+		DAWNURBAN09:${dep}
+		DAWNURBAN10:${dep}
+		DAWNURBAN11:${dep}
+		DAWNURBAN12:${dep}
+		DAWNURBAN13:${dep}
+		DAWNURBAN14:${dep}
+		DAWNURBAN15:${dep}
+		DAWNURBAN16:${dep}
+		DAWNURBAN17:${dep}
+		DAWNURBAN18:${dep}
+		DAWNURBAN19:${dep}
+		DAWNURBAN20:${dep}
+		DAWNURBAN21:${dep}
+		DAWNURBAN22:${dep}
+		DAWNURBAN23:${dep}
+		DAWNURBAN24:${dep}
+		DAWNURBAN25:${dep}
+		DAWNURBAN26:${dep}
+		DAWNURBAN27:${dep}
+		DAWNURBAN28:${dep}
+		DAWNURBAN29:${dep}
+		DAWNURBAN30:${dep}
+		DAWNURBAN31:${dep}
+		DAWNURBAN32:${dep}
+		DAWNURBAN33:${dep}
+		DAWNURBAN34:${dep}
+		DAWNURBAN35:${dep}
+		DAWNURBAN36:${dep}
+		DAWNURBAN37:${dep}
+		DAWNURBAN38:${dep}
+		DAWNURBAN39:${dep}
+	end
+
+	files:dawnurbanb
+		${dep}:DAWNROADS DAWNURBITS DAWNURBAN DAWNFRNITURE DAWNDECOR
+		DAWNURBAN40:${dep}
+		DAWNURBAN41:${dep}
+		DAWNURBAN42:${dep}
+		DAWNURBAN43:${dep}
+		DAWNURBAN44:${dep}
+		DAWNURBAN45:${dep}
+		DAWNURBAN46:${dep}
+		DAWNURBAN47:${dep}
+		DAWNURBAN48:${dep}
+		DAWNURBAN49:${dep}
+		DAWNURBAN50:${dep}
+		DAWNURBAN51:${dep}
+		DAWNURBAN52:${dep}
+		DAWNURBAN53:${dep}
+		DAWNURBAN54:${dep}
+		DAWNURBAN55:${dep}
+		DAWNURBAN56:${dep}
+		DAWNURBAN57:${dep}
+		DAWNURBAN58:${dep}
+		DAWNURBAN59:${dep}
+		DAWNURBAN60:${dep}
+		DAWNURBAN61:${dep}
+		DAWNURBAN62:${dep}
+		DAWNURBAN63:${dep}
+		DAWNURBAN64:${dep}
+		DAWNURBAN65:${dep}
+		DAWNURBAN66:${dep}
+		DAWNURBAN67:${dep}
+	end
+
+	files:desert
+		${dep}:DESERT
+		DESERT00:${dep}
+		DESERT01:${dep}
+		DESERT02:${dep}
+		DESERT03:${dep}
+		DESERT04:${dep}
+		DESERT05:${dep}
+		DESERT06:${dep}
+		DESERT07:${dep}
+		DESERT08:${dep}
+		DESERT09:${dep}
+		DESERT10:${dep}
+		DESERT11:${dep}
+	end
+
+	files:desertmount
+		${dep}:MOUNT DESERT
+		DESERTMOUNT00:${dep}
+		DESERTMOUNT01:${dep}
+		DESERTMOUNT02:${dep}
+		DESERTMOUNT03:${dep}
+		DESERTMOUNT04:${dep}
+		DESERTMOUNT05:${dep}
+		DESERTMOUNT06:${dep}
+		DESERTMOUNT07:${dep}
+		DESERTMOUNT08:${dep}
+		DESERTMOUNT09:${dep}
+		DESERTMOUNT10:${dep}
+		DESERTMOUNT11:${dep}
+		DESERTMOUNT12:${dep}
+		DESERTMOUNT13:${dep}
+		DESERTMOUNT14:${dep}
+		DESERTMOUNT15:${dep}
+		DESERTMOUNT16:${dep}
+		DESERTMOUNT17:${dep}
+	end
+
+	files:forest
+		${dep}:FOREST
+		FOREST00:${dep}
+		FOREST01:${dep}
+		FOREST02:${dep}
+		FOREST03:${dep}
+		FOREST04:${dep}
+		FOREST05:${dep}
+		FOREST06:${dep}
+		FOREST07:${dep}
+		FOREST08:${dep}
+		FOREST09:${dep}
+		FOREST10:${dep}
+		FOREST11:${dep}
+	end
+
+	files:forestmount
+		${dep}:MOUNT FOREST FORESTMOUNT
+		FORESTMOUNT00:${dep}
+		FORESTMOUNT01:${dep}
+		FORESTMOUNT02:${dep}
+		FORESTMOUNT03:${dep}
+		FORESTMOUNT04:${dep}
+		FORESTMOUNT05:${dep}
+		FORESTMOUNT06:${dep}
+		FORESTMOUNT07:${dep}
+		FORESTMOUNT08:${dep}
+		FORESTMOUNT09:${dep}
+		FORESTMOUNT10:${dep}
+		FORESTMOUNT11:${dep}
+		FORESTMOUNT12:${dep}
+		FORESTMOUNT13:${dep}
+		FORESTMOUNT14:${dep}
+		FORESTMOUNT15:${dep}
+		FORESTMOUNT16:${dep}
+		FORESTMOUNT17:${dep}
+		FORESTMOUNT18:${dep}
+		FORESTMOUNT19:${dep}
+		FORESTMOUNT20:${dep}
+		FORESTMOUNT21:${dep}
+		FORESTMOUNT22:${dep}
+		FORESTMOUNT23:${dep}
+		FORESTMOUNT24:${dep}
+		FORESTMOUNT25:${dep}
+		FORESTMOUNT26:${dep}
+	end
+
+	files:industrialurban
+		${dep}:PORTROADS PORTURBITS ROADS URBITS
+		INDUSTRIALURBAN00:${dep}
+		INDUSTRIALURBAN01:${dep}
+		INDUSTRIALURBAN02:${dep}
+		INDUSTRIALURBAN03:${dep}
+		INDUSTRIALURBAN04:${dep}
+		INDUSTRIALURBAN05:${dep}
+		INDUSTRIALURBAN06:${dep}
+		INDUSTRIALURBAN07:${dep}
+		INDUSTRIALURBAN08:${dep}
+		INDUSTRIALURBAN09:${dep}
+		INDUSTRIALURBAN10:${dep}
+		INDUSTRIALURBAN11:${dep}
+		INDUSTRIALURBAN12:${dep}
+		INDUSTRIALURBAN13:${dep}
+		INDUSTRIALURBAN14:${dep}
+		INDUSTRIALURBAN15:${dep}
+		INDUSTRIALURBAN16:${dep}
+		INDUSTRIALURBAN17:${dep}
+	end
+
+	files:jungle
+		${dep}:JUNGLE
+		JUNGLE00:${dep}
+		JUNGLE01:${dep}
+		JUNGLE02:${dep}
+		JUNGLE03:${dep}
+		JUNGLE04:${dep}
+		JUNGLE05:${dep}
+		JUNGLE06:${dep}
+		JUNGLE07:${dep}
+		JUNGLE08:${dep}
+		JUNGLE09:${dep}
+		JUNGLE10:${dep}
+		JUNGLE11:${dep}
+	end
+
+	files:madurban
+		${dep}:ROADS URBITS URBAN FRNITURE MADDECOR
+		URBAN00:${dep}
+		URBAN01:${dep}
+		URBAN02:${dep}
+		URBAN03:${dep}
+		URBAN04:${dep}
+		URBAN05:${dep}
+		URBAN06:${dep}
+		URBAN07:${dep}
+		URBAN08:${dep}
+		URBAN09:${dep}
+		MADURBAN10:${dep}
+		MADURBAN11:${dep}
+		MADURBAN12:${dep}
+		MADURBAN13:${dep}
+		URBAN14:${dep}
+		URBAN15:${dep}
+		URBAN16:${dep}
+		URBAN17:${dep}
+		URBAN18:${dep}
+		MADURBAN19:${dep}
+		MADURBAN20:${dep}
+		MADURBAN21:${dep}
+		MADURBAN22:${dep}
+		MADURBAN23:${dep}
+		MADURBAN24:${dep}
+		MADURBAN26:${dep}
+		MADURBAN27:${dep}
+		MADURBAN28:${dep}
+		MADURBAN29:${dep}
+		MADURBAN30:${dep}
+		MADURBAN31:${dep}
+		MADURBAN32:${dep}
+		MADURBAN33:${dep}
+		MADURBAN34:${dep}
+		MADURBAN35:${dep}
+		MADURBAN36:${dep}
+		MADURBAN37:${dep}
+		MADURBAN38:${dep}
+	end
+
+	files:mars
+		${dep}:MARS U_WALL02
+		MARS00:${dep}
+		MARS01:${dep}
+		MARS02:${dep}
+		MARS03:${dep}
+		MARS04:${dep}
+		MARS05:${dep}
+		MARS06:${dep}
+		MARS07:${dep}
+		MARS08:${dep}
+		MARS09:${dep}
+		MARS10:${dep}
+	end
+
+	files:mount
+		${dep}:MOUNT
+		MOUNT00:${dep}
+		MOUNT01:${dep}
+		MOUNT02:${dep}
+		MOUNT03:${dep}
+		MOUNT04:${dep}
+		MOUNT05:${dep}
+		MOUNT06:${dep}
+		MOUNT07:${dep}
+		MOUNT08:${dep}
+		MOUNT09:${dep}
+		MOUNT10:${dep}
+		MOUNT11:${dep}
+		MOUNT12:${dep}
+	end
+
+	files:mujungle
+		${dep}:SANDS MUJUNGLE JUNGLE
+		MUJUNGLE00:${dep}
+		MUJUNGLE01:${dep}
+		MUJUNGLE02:${dep}
+		MUJUNGLE03:${dep}
+		MUJUNGLE04:${dep}
+		MUJUNGLE05:${dep}
+		MUJUNGLE06:${dep}
+		MUJUNGLE07:${dep}
+		MUJUNGLE08:${dep}
+		MUJUNGLE09:${dep}
+		MUJUNGLE10:${dep}
+		MUJUNGLE11:${dep}
+		MUJUNGLE12:${dep}
+		MUJUNGLE13:${dep}
+		MUJUNGLE14:${dep}
+	end
+
+	files:nativeurban
+		${dep}:JUNGLE BARN FRNITURE URBITS CULTIVAT
+		NATIVEURBAN00:${dep}
+		NATIVEURBAN01:${dep}
+		NATIVEURBAN02:${dep}
+		NATIVEURBAN03:${dep}
+		NATIVEURBAN04:${dep}
+		NATIVEURBAN05:${dep}
+		NATIVEURBAN06:${dep}
+		NATIVEURBAN07:${dep}
+		NATIVEURBAN08:${dep}
+		NATIVEURBAN09:${dep}
+		NATIVEURBAN10:${dep}
+		NATIVEURBAN11:${dep}
+		NATIVEURBAN12:${dep}
+		NATIVEURBAN13:${dep}
+		NATIVEURBAN14:${dep}
+		NATIVEURBAN15:${dep}
+		NATIVEURBAN16:${dep}
+		NATIVEURBAN17:${dep}
+		NATIVEURBAN18:${dep}
+		NATIVEURBAN19:${dep}
+		NATIVEURBAN20:${dep}
+		NATIVEURBAN21:${dep}
+		NATIVEURBAN22:${dep}
+		NATIVEURBAN23:${dep}
+		NATIVEURBAN24:${dep}
+		NATIVEURBAN25:${dep}
+		NATIVEURBAN26:${dep}
+		NATIVEURBAN27:${dep}
+		NATIVEURBAN28:${dep}
+		NATIVEURBAN29:${dep}
+		NATIVEURBAN30:${dep}
+		NATIVEURBAN31:${dep}
+		NATIVEURBAN32:${dep}
+		NATIVEURBAN33:${dep}
+		NATIVEURBAN34:${dep}
+		NATIVEURBAN35:${dep}
+		NATIVEURBAN36:${dep}
+		NATIVEURBAN37:${dep}
+		NATIVEURBAN38:${dep}
+		NATIVEURBAN39:${dep}
+		NATIVEURBAN40:${dep}
+		NATIVEURBAN41:${dep}
+		NATIVEURBAN42:${dep}
+		NATIVEURBAN43:${dep}
+		NATIVEURBAN44:${dep}
+		NATIVEURBAN45:${dep}
+		NATIVEURBAN46:${dep}
+	end
+
+	files:polar
+		${dep}:POLAR
+		POLAR00:${dep}
+		POLAR01:${dep}
+		POLAR02:${dep}
+		POLAR03:${dep}
+		POLAR04:${dep}
+		POLAR05:${dep}
+		POLAR06:${dep}
+		POLAR07:${dep}
+		POLAR08:${dep}
+		POLAR09:${dep}
+		POLAR10:${dep}
+		POLAR11:${dep}
+		POLAR12:${dep}
+		POLAR13:${dep}
+	end
+
+	files:polarmount
+		${dep}:MOUNT POLAR POLARMOUNT
+		MOUNTPOLAR00:${dep}
+		MOUNTPOLAR01:${dep}
+		MOUNTPOLAR02:${dep}
+		MOUNTPOLAR03:${dep}
+		MOUNTPOLAR04:${dep}
+		MOUNTPOLAR05:${dep}
+		MOUNTPOLAR06:${dep}
+		MOUNTPOLAR07:${dep}
+		MOUNTPOLAR08:${dep}
+		MOUNTPOLAR09:${dep}
+		MOUNTPOLAR10:${dep}
+		MOUNTPOLAR11:${dep}
+		MOUNTPOLAR12:${dep}
+	end
+
+	files:porturban
+		${dep}:PORTROADS PORTURBITS
+		PORTURBAN00:${dep}
+		PORTURBAN01:${dep}
+		PORTURBAN02:${dep}
+		PORTURBAN03:${dep}
+		PORTURBAN04:${dep}
+		PORTURBAN05:${dep}
+		PORTURBAN06:${dep}
+		PORTURBAN07:${dep}
+		PORTURBAN08:${dep}
+		PORTURBAN09:${dep}
+		PORTURBAN10:${dep}
+		PORTURBAN11:${dep}
+		PORTURBAN12:${dep}
+		PORTURBAN13:${dep}
+		PORTURBAN14:${dep}
+		PORTURBAN15:${dep}
+		PORTURBAN16:${dep}
+		PORTURBAN17:${dep}
+		PORTURBAN18:${dep}
+		PORTURBAN19:${dep}
+		PORTURBAN20:${dep}
+		PORTURBAN21:${dep}
+		PORTURBAN22:${dep}
+	end
+
+	files:railyardurban
+		${dep}:PORTROADS PORTURBITS ROADS URBITS FRNITURE
+		RAILYARDURBAN00:${dep}
+		RAILYARDURBAN01:${dep}
+		RAILYARDURBAN02:${dep}
+		RAILYARDURBAN03:${dep}
+		RAILYARDURBAN04:${dep}
+		RAILYARDURBAN05:${dep}
+		RAILYARDURBAN06:${dep}
+		RAILYARDURBAN07:${dep}
+		RAILYARDURBAN08:${dep}
+		RAILYARDURBAN09:${dep}
+		RAILYARDURBAN11:${dep}
+		RAILYARDURBAN12:${dep}
+		RAILYARDURBAN13:${dep}
+		RAILYARDURBAN14:${dep}
+		RAILYARDURBAN15:${dep}
+		RAILYARDURBAN16:${dep}
+		RAILYARDURBAN17:${dep}
+		RAILYARDURBAN18:${dep}
+		RAILYARDURBAN19:${dep}
+		RAILYARDURBAN20:${dep}
+		RAILYARDURBAN21:${dep}
+		RAILYARDURBAN22:${dep}
+		RAILYARDURBAN23:${dep}
+		RAILYARDURBAN24:${dep}
+		RAILYARDURBAN25:${dep}
+		RAILYARDURBAN26:${dep}
+		RAILYARDURBAN27:${dep}
+	end
+
+	files:ubase
+		${dep}:U_BASE U_WALL02 U_PODS BRAIN U_BASE2
+		UBASE_00:${dep}
+		UBASE_01:${dep}
+		UBASE_02:${dep}
+		UBASE_03:${dep}
+		UBASE_04:${dep}
+		UBASE_05:${dep}
+		UBASE_06:${dep}
+		UBASE_07:${dep}
+		UBASE_08:${dep}
+		UBASE_09:${dep}
+		UBASE_10:${dep}
+		UBASE_11:${dep}
+		UBASE_12:${dep}
+		UBASE_13:${dep}
+		UBASE_14:${dep}
+		UBASE_15:${dep}
+		UBASE_19:${dep}
+		UBASE_20:${dep}
+		UBASE_21:${dep}
+		UBASE_22:${dep}
+		UBASE_23:${dep}
+		UBASE_24:${dep}
+		UBASE_25:${dep}
+		UBASE_26:${dep}
+		UBASE_27:${dep}
+		UBASE_28:${dep}
+		UBASE_29:${dep}
+		UBASE_30:${dep}
+		UBASE_31:${dep}
+		UBASE_32:${dep}
+		UBASE_33:${dep}
+		UBASE_34:${dep}
+		UBASE_35:${dep}
+		UBASE_36:${dep}
+		UBASE_37:${dep}
+		UBASE_38:${dep}
+		UBASE_39:${dep}
+		UBASE_40:${dep}
+		UBASE_41:${dep}
+	end
+
+	files:urban
+		${dep}:ROADS URBITS URBAN FRNITURE
+		URBAN00:${dep}
+		URBAN01:${dep}
+		URBAN02:${dep}
+		URBAN03:${dep}
+		URBAN04:${dep}
+		URBAN05:${dep}
+		URBAN06:${dep}
+		URBAN07:${dep}
+		URBAN08:${dep}
+		URBAN09:${dep}
+		URBAN14:${dep}
+		URBAN15:${dep}
+		URBAN16:${dep}
+		URBAN17:${dep}
+		URBAN18:${dep}
+	end
+
+	files:xbase
+		${dep}:XBASE1 XBASE2
+		XBASE_00:${dep}
+		XBASE_01:${dep}
+		XBASE_02:${dep}
+		XBASE_03:${dep}
+		XBASE_04:${dep}
+		XBASE_05:${dep}
+		XBASE_06:${dep}
+		XBASE_07:${dep}
+		XBASE_08:${dep}
+		XBASE_09:${dep}
+		XBASE_10:${dep}
+		XBASE_11:${dep}
+		XBASE_12:${dep}
+		XBASE_13:${dep}
+		XBASE_14:${dep}
+		XBASE_15:${dep}
+		XBASE_16:${dep}
+		XBASE_17:${dep}
+		XBASE_18:${dep}
+		XBASE_19:${dep}
+		XBASE_20:${dep}
+	end
+end
+
+Tileset:UFO - Craft
+	type:1
+	rootpath:${rootPathUFO}
+	rmpPath:${rmpPathUFO}
+	blankPath:${blankUFO}
+	palette:ufo
+
+	files:xCom
+		AVENGER:AVENGER
+		FIRESTORM:FIRES
+		INTERCEPTOR:INTERC
+		LIGHTNING:LIGHTNIN
+		PLANE:PLANE
+	end
+
+	files:aLien
+		ox_ufo1:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo1b:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo1c:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo1d:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo1e:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo1f:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo1g:U_EXT02 U_WALL02 U_BITS UFOL83
+
+		ox_ufo2a:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2b:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2c:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2d:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2e:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2f:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2g:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2h:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2i:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2j:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2k:U_EXT02 U_WALL02 U_BITS UFOL83
+		ox_ufo2l:U_EXT02 U_WALL02 U_BITS UFOL83
+
+		ox_ufo3a:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3b:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3c:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3d:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3e:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3f:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3g:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3h:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3i:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3j:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+		ox_ufo3k:U_EXT02 U_WALL02 U_DISEC3 U_BITS UFOL83
+
+		ox_ufo4a:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4b:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4c:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4d:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4e:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4f:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4g:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4h:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4i:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+		ox_ufo4j:U_EXT02 U_WALL02 U_OPER2 U_BITS UFOL83
+
+		ox_ufo5a:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+		ox_ufo5b:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+		ox_ufo5c:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+		ox_ufo5d:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+		ox_ufo5e:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+		ox_ufo5f:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+		ox_ufo5g:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+		ox_ufo5h:U_EXT02 U_WALL02 U_PODS U_BITS UFOL83
+
+		ox_ufo7a:U_EXT02 U_WALL02 U_DISEC2 U_BITS UFOL83
+		ox_ufo7b:U_EXT02 U_WALL02 U_DISEC2 U_BITS UFOL83
+		ox_ufo7c:U_EXT02 U_WALL02 U_DISEC2 U_BITS UFOL83
+		ox_ufo7d:U_EXT02 U_WALL02 U_DISEC2 U_BITS UFOL83
+
+		UFO_110:U_EXT02 U_WALL02 U_BITS
+		UFO_120:U_EXT02 U_WALL02 U_BITS
+		UFO_130:U_EXT02 U_WALL02 U_DISEC3 U_BITS
+		UFO_140:U_EXT02 U_WALL02 U_OPER2 U_BITS
+		UFO_150:U_EXT02 U_WALL02 U_PODS U_BITS
+		UFO_160:U_EXT02 U_WALL02 U_PODS U_BITS
+		UFO_170:U_EXT02 U_WALL02 U_DISEC2 U_BITS
+		UFO1a:UFO1
+	end
+
+	files:extra
+		AREARAID00:AREA51P AREA51X AREA51Y AREA51Z
+		POLISURBAN02:ROADS URBITS URBAN FRNITURE
+		POLISURBAN04:ROADS URBITS URBAN FRNITURE
+	end
+end

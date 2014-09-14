@@ -1,0 +1,22 @@
+## comments are denoted by double number signs
+## Everything must ALWAYS be left aligned (no leading spaces!)
+
+1  ##there are two LOF paths
+F:\openXcom\data\GEODATA\loftemps.dat
+##tftd\geodata\loftemps.dat
+
+1  ##there are three terrain paths
+##f:\ufo\terrain\barn
+F:\openXcom\data\TERRAIN\
+##tftd\terrain\atlantis
+
+1  ##there are five palette paths
+F:\openXcom\data\UFOGRAPH\moc1.lbm
+##tftd\ufograph\d0.lbm
+##tftd\ufograph\d1.lbm
+##tftd\ufograph\d2.lbm
+##tftd\ufograph\d3.lbm
+
+1
+F:\openXcom\data\GEODATA\scang.dat
+##tftd\geodata\scang.dat

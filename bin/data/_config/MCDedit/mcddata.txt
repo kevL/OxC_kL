@@ -1,0 +1,45 @@
+1-Map CoDe editor|By Koralt
+2-koralt@yahoo.com|For UFO2000 =)
+3- www.edf-project.org | www.xcom2000.org
+21-LB ScanG|(Scanner Graphic) The small image number used on the zoomed out map view.  A reference to GEODATA\SCANG.DAT .  The image number = LB ScanG + HB ScanG * 256 .  Click the image (above) to change it.
+22-HB ScanG|(Scanner Graphic) The small image number used on the zoomed out map view.  A reference to GEODATA\SCANG.DAT .  The image number = LB ScanG + HB ScanG * 256 .  Click the image (above) to change it.
+23-?|
+24-?|
+25-?|
+26-?|
+27-?|
+28-?|
+29-?|
+30-?|
+31-Sliding Door|If 1, the tile slides open like UFO doors and doors in XCOM bases.  It stays at frame 1 until someone walks through, at which point it animates once, making the UFO door sound, and turns into the terrain type indicated by "Alt Mapcode".  If the alt mapcode lists this tile as *its* alt mapcode, it will change back for the next turn.
+32-Stop LOS|If 0, the tile is see through.  If 1, it is not possible to see through this tile
+33-No Floor|If 1, a non-flying unit moving onto this tile will fall through.  If 0, units can stand on it.
+34-Big Wall|It's a terrain feature (type 3) which is 'pretending' to be a wall
+35-Gravlift|If 1, any unit can move up or down while on this tile, whether they can fly or not.
+36-Door|If 1, this is a terrestrial door which flips open.  It becomes "Alternate Mapcode".  It makes the normal door opening sound.
+37-Block Fire|If 1, this tile does not allow fire to pass
+38-Block Smoke|If 1, this tile does not allow smoke to pass.
+39-?|Print All (?)
+40-Walk TU|The number of TUs required to pass through the block when walking.  If 255, it's impassable for walking units.
+41-Fly TU|The number of TUs required for flying things to pass through.  If 255, it's impassable for flying units.
+42-Slide TU|The number of TUs required for things which slide to pass through.  If 255, it's impassable for sliding units.
+43-Constitution|The amount of damage which the block can resist before becoming Destroy Mapcode
+44-Explode Blockage|How well the tile blocks explosions
+45-Destroy mapcode|When enough damage is done to overwhelm the Constitution, the block becomes the destroyed mapcode.  If Explode Strength is anything but 0, "Destroy Mapcode" is ignored and the tile is simply removed (after the explosion, of course).
+46-Flammability|How easily it catches afire.  The higher, the harder it is to light.
+47-Alternate Mapcode|If "Earth Door" or "UFO Door" is set--when a unit walks through the tile (as a wall), the tile will change to the alt mapcode.
+48-Keycode|Not used
+49-Terrain Level|Units and objects standing on this are shifted this many pixels down.  It's a signed byte (255=-1, 254=-2, ...).  (This is added to y)
+50-Print Level Adjust|The terrain is shifted by this many pixels up when the PCK is plotted (this is subtracted from y)
+51-?|
+52-Light Blockage|The amount of light which is blocked by the tile.  0-10
+53-Sound Effect|The sound effect type which is used on this tile.  1=Metal  2=Normal (Wood, Grass, Dirt)  3=  4=  5=Sand (Desert)  6=Martian
+54-Tile Type|The type of tile which this block is--0=Floor, 1=West Wall, 2=North Wall, 3=Terrain feature
+55-Explode Type|If 0, Explode Strength is HE.  If 1, Explode Strength is Smoke (no damage)
+56-Explode Strength|When the tile is destroyed, it produces an explosion of strength "Explode Strength" of a type determined by "Explode Type".
+57-Smoke Blockage|How well it blocks smoke
+58-Fuel|The number of turns that a fire started on it will burn
+59-Light Source|0-10 (?), the higher it is the more light it produces
+60-Target Type|0=Normal (no special properties), 1=X-COM Craft, 2=UFO Propulsion, 3=UFO NavComp, 4=UFO Wave Guide, 5=Alien Food, 6=Alien Reproduction, 7-Alien Entertainment, 8=Surgery, 9=Abduction Room, 10=Alien Alloys, 11=Alien Habitat, 12=Damaged UFO, 13=Mars Exit, 14=Alien Brain
+61-Victory Points|The number of victory points it has.  Seems to be rare...
+62-?|

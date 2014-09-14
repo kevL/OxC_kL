@@ -2327,7 +2327,8 @@ const std::string DogfightState::getTextureIcon() // kL
 	if (str == "")
 		str = "WATER";
 	else if (str == "JUNGLE"
-		|| str == "FORESTMOUNT")
+		|| str == "FORESTMOUNT"
+		|| str == "MUJUNGLE")
 	{
 		str = "FOREST";
 	}
@@ -2336,16 +2337,20 @@ const std::string DogfightState::getTextureIcon() // kL
 	{
 		str = "CULTA";
 	}
-	else if (str == "DESERTMOUNT")
+	else if (str == "DESERTMOUNT"
+		|| str == "ATLANTDESERT")
+	{
 		str = "DESERT";
+	}
 	else if (str == "POLARMOUNT")
 		str = "POLAR";
 	else if (str == "INDUSTRIALURBAN"
 		|| str == "MADURBAN"
 		|| str == "NATIVEURBAN"
 		|| str == "RAILYARDURBAN")
-//		|| str == "DAWNURBANA" // these are Terror sites only:
-//		|| str == "DAWNURBANB" // ie. not referenced by any of the Globe's polygon textures.
+//		|| str == "COMRCURBAN" // these are Terror sites only:
+//		|| str == "DAWNURBANA" // ie. not referenced by any of the Globe's polygon textures.
+//		|| str == "DAWNURBANB"
 //		|| str == "PORTURBAN"
 	{
 		str = "URBAN";

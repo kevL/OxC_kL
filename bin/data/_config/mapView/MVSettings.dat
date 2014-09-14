@@ -1,0 +1,61 @@
+RmpView
+{
+	WallWidth:4
+	SelectedLinkWidth:2
+	UnselectedLinkColor:255,255,0,0
+	UnselectedNodeColor:Green
+	SelectedNodeColor:Blue
+	UnselectedLinkWidth:2
+	ContentTiles:DarkGray
+	GridLineWidth:1
+	SelectedLinkColor:255,0,0,255
+	GridLineColor:255,0,0,0
+	SpawnNodeColor:GreenYellow
+	WallColor:255,0,0,0
+}
+MainWindow
+{
+	Doors:False
+	SelectGrayscale:True
+	GridColor:35,69,100,129
+	Animation:False
+	GridLineWidth:1
+	UseGrid:True
+	GridLineColor:255,0,0,0
+	SaveWindowPositions:True
+}
+TileView
+{
+	IonBeamAccel:DarkRed
+	StartPoint:Lavender
+	MagneticNav:Aqua
+	DestroyObjective:Fuchsia
+	AlienClon:DeepPink
+	AlienImplant:Lime
+	EndPoint:Yellow
+	AlienCryo:DarkOrange
+	ExamRoom:LightCoral
+	MustDestroy:Blue
+	AlienLearn:LightBlue
+	Unknown9:LightGreen
+	AlienPlastics:MediumPurple
+	Tile:Cornsilk
+	DeadTile:LightCyan
+}
+TopView
+{
+	ContentColor:Green
+	SelectTileColor:Lavender
+	NorthWidth:4
+	DiamondMinHeight:5
+	NorthColor:Red
+	MouseWidth:2
+	GridWidth:1
+	MouseColor:Blue
+	GridColor:Black
+	WestColor:Red
+	SelectColor:Black
+	WestWidth:4
+	GroundColor:Orange
+	SelectWidth:2
+}
