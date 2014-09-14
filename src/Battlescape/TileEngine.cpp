@@ -1452,21 +1452,20 @@ bool TileEngine::canTargetTile(
 }
 
 /**
- * Checks if a sniper from the opposing faction sees this unit. The unit with the
- * highest reaction score will be compared with the current unit's reaction score.
+ * Checks if a 'sniper' from the opposing faction sees this unit. The unit with the
+ * highest reaction score will be compared with the triggering unit's reaction score.
  * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
- * NOTE: the tuSpent parameter is needed because popState() doesn't
+ * kL NOTE: the tuSpent parameter is needed because popState() doesn't
  * subtract TU until after the Initiative has been calculated.
  * @param unit		- pointer to a unit to check reaction fire against
- * @param tuSpent	- the unit's triggering expenditure of TU if firing or throwing. kL
+ * @param tuSpent	- the unit's triggering expenditure of TU if firing or throwing.
  * @return, true if reaction fire took place
  */
 bool TileEngine::checkReactionFire(
 		BattleUnit* unit,
-		int tuSpent) // kL
+		int tuSpent)
 {
 	//Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID " << unit->getId();
-
 	if (_battleSave->getSide() == FACTION_NEUTRAL) // no reaction on civilian turn.
 		return false;
 
@@ -1474,7 +1473,7 @@ bool TileEngine::checkReactionFire(
 	// trigger reaction fire only when the spotted unit is of the
 	// currently playing side, and is still on the map, alive
 	if (unit->getFaction() != _battleSave->getSide()
-		|| unit->getTile() == 0
+		|| unit->getTile() == NULL
 		|| unit->isOut(true, true))	// kL (note getTile() may return false for corpses anyway)
 	{
 		//Log(LOG_INFO) << ". ret FALSE pre";
@@ -1483,31 +1482,23 @@ bool TileEngine::checkReactionFire(
 
 	bool ret = false;
 
-	// not mind controlled, or is player's side:
-	// kL. If spotted unit is not mind controlled,
-	// or is mind controlled but not an alien;
-	// ie, never reaction fire on a mind-controlled xCom soldier;
-	// but *do* reaction fire on a mind-controlled aLien (or civilian.. ruled out above).
 	if (unit->getFaction() == unit->getOriginalFaction()
-//kL		|| unit->getFaction() != FACTION_HOSTILE)
-		|| unit->getFaction() == FACTION_PLAYER) // kL
+		|| unit->getFaction() == FACTION_PLAYER)
 	{
 		//Log(LOG_INFO) << ". Target = VALID";
 		std::vector<BattleUnit*> spotters = getSpottingUnits(unit);
 		//Log(LOG_INFO) << ". # spotters = " << spotters.size();
 
 		BattleUnit* reactor = getReactor( // get the first man up to bat.
-										spotters,
-										unit,
-										tuSpent); // kL
+									spotters,
+									unit,
+									tuSpent);
 		// start iterating through the possible reactors until
 		// the current unit is the one with the highest score.
 		while (reactor != unit)
 		{
 			// !!!!!SHOOT!!!!!!!
-			if (!tryReactionSnap( // <- statePushBack(new ProjectileFlyBState()
-								reactor,
-								unit))
+			if (reactionShot(reactor, unit) == false)
 			{
 				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
 				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
@@ -1519,7 +1510,6 @@ bool TileEngine::checkReactionFire(
 					if (*i == reactor)
 					{
 						spotters.erase(i);
-
 						break;
 					}
 				}
@@ -1533,11 +1523,11 @@ bool TileEngine::checkReactionFire(
 			reactor = getReactor( // nice shot, kid. don't get too cocky.
 								spotters,
 								unit,
-								tuSpent); // kL
+								tuSpent);
 			//Log(LOG_INFO) << ". . NEXT AT BAT : " << reactor->getId();
 		}
 
-		spotters.clear(); // kL
+		spotters.clear();
 	}
 
 	return ret;
@@ -1545,14 +1535,12 @@ bool TileEngine::checkReactionFire(
 
 /**
  * Creates a vector of units that can spot this unit.
- * @param unit, The unit to check for spotters of.
- * @return, A vector of units that can see this unit.
+ * @param unit - pointer to a unit to check for spotters of
+ * @return, vector of pointers to units that can see the trigger unit
  */
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << unit->getId();
-//no longer accurate			<< " : initi = " << (int)(unit)->getInitiative();
-
 	Tile* tile = unit->getTile();
 
 	std::vector<BattleUnit*> spotters;
@@ -1561,40 +1549,25 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 			spotter != _battleSave->getUnits()->end();
 			++spotter)
 	{
-		if ((*spotter)->getFaction() != _battleSave->getSide()
-			&& !(*spotter)->isOut(true, true))
+		if ((*spotter)->getTimeUnits() < 1
+			|| (*spotter)->getFaction() == _battleSave->getSide()
+			|| (*spotter)->getFaction() == FACTION_NEUTRAL
+			|| (*spotter)->isOut(true, true))
 		{
-/*kL		AlienBAIState* aggro = dynamic_cast<AlienBAIState*>((*spotter)->getCurrentAIState());
-			if (((aggro != 0
-						&& aggro->getWasHitBy(unit->getId())) // set in ProjectileFlyBState...
-					|| (*spotter)->getFaction() == FACTION_HOSTILE // note: doesn't this cover the aggro-thing, like totally
-					|| (*spotter)->checkViewSector(unit->getPosition())) // aLiens see all directions, btw. */
-			if (((*spotter)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units
-					|| ((*spotter)->getOriginalFaction() == FACTION_PLAYER		// but Mc'd aLiens won't RF on other aLiens ...
-						&& (*spotter)->checkViewSector(unit->getPosition())))
-				&& visible(*spotter, tile))
-			{
-				//Log(LOG_INFO) << ". check ID " << (*spotter)->getId();
-				if ((*spotter)->getFaction() == FACTION_HOSTILE)
-					unit->setTurnsExposed(0);
+			continue;
+		}
 
-				// these two calls should already be done in calculateFOV()
-//				if ((*spotter)->getFaction() == FACTION_PLAYER)
-//					unit->setVisible();
-//				(*spotter)->addToVisibleUnits(unit);
-					// as long as calculateFOV is always done right between
-					// walking, kneeling, shooting, throwing .. and checkReactionFire()
-					// If so, then technically, visible() above can be replaced
-					// by checking (*spotter)'s _visibleUnits vector. But this is working good per.
+		if (((*spotter)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units
+				|| ((*spotter)->getOriginalFaction() == FACTION_PLAYER		// but Mc'd aLiens won't RF on other aLiens ...
+					&& (*spotter)->checkViewSector(unit->getPosition())))
+			&& visible(*spotter, tile))
+		{
+			//Log(LOG_INFO) << ". check ID " << (*spotter)->getId();
+			if ((*spotter)->getFaction() == FACTION_HOSTILE)
+				unit->setTurnsExposed(0);
 
-				if (canMakeSnap(*spotter, unit))
-				{
-					//Log(LOG_INFO) << ". . . reactor ID " << (*spotter)->getId()
-					//		<< " : initi = " << (int)(*spotter)->getInitiative();
-
-					spotters.push_back(*spotter);
-				}
-			}
+			//Log(LOG_INFO) << ". reactor ID " << (*spotter)->getId() << ": initi = " << (int)(*spotter)->getInitiative();
+			spotters.push_back(*spotter);
 		}
 	}
 
@@ -1602,110 +1575,22 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 }
 
 /**
- * Checks the validity of a reaction method.
- * kL: Changed to use selectFireMethod (aimed/auto/snap).
- * @param unit		- pointer to the spotting unit
- * @param target	- pointer to the spotted unit
- * @return, True if a shot can happen
- */
-bool TileEngine::canMakeSnap(
-		BattleUnit* unit,
-		BattleUnit* target)
-{
-	//Log(LOG_INFO) << "TileEngine::canMakeSnap() reactID " << unit->getId() << " vs targetID " << target->getId();
-	BattleItem* weapon; // = unit->getMainHandWeapon(true);
-	if (unit->getFaction() == FACTION_PLAYER
-		&& unit->getOriginalFaction() == FACTION_PLAYER)
-	{
-		weapon = unit->getItem(unit->getActiveHand());
-	}
-	else
-		weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good. Also, this does a check for ammo.
-
-	if (weapon == NULL)
-	{
-		//Log(LOG_INFO) << ". no weapon, return FALSE";
-		return false;
-	}
-
-
-	bool canMelee = false;
-	bool isMelee = weapon->getRules()->getBattleType() == BT_MELEE;
-
-	if (isMelee)
-	{
-		//Log(LOG_INFO) << ". . validMeleeRange = " << validMeleeRange(unit, target, unit->getDirection());
-		//Log(LOG_INFO) << ". . unit's TU = " << unit->getTimeUnits();
-		//Log(LOG_INFO) << ". . action's TU = " << unit->getActionTUs(BA_HIT, weapon);
-		for (int // check all 8 directions for Melee reaction
-				i = 0;
-				i < 8;
-				++i)
-		{
-			canMelee = validMeleeRange(
-									unit,
-									target,
-									i);
-
-			if (canMelee)
-				break;
-		}
-	}
-
-	if (weapon->getRules()->canReactionFire() // kL add.
-		&& (unit->getOriginalFaction() == FACTION_HOSTILE				// is aLien, or has researched weapon.
-			|| _battleSave->getGeoscapeSave()->isResearched(weapon->getRules()->getRequirements()))
-		&& (_battleSave->getDepth() != 0
-			|| weapon->getRules()->isWaterOnly() == false)
-//		&& ((weapon->getRules()->getBattleType() == BT_MELEE			// has a melee weapon
-		&& ((isMelee
-				&& canMelee
-//				&& validMeleeRange(
-//								unit,
-//								target,
-//								unit->getDirection())					// is in melee range
-				&& unit->getTimeUnits() >= unit->getActionTUs(			// has enough TU
-															BA_HIT,
-															weapon))
-			|| (weapon->getRules()->getBattleType() == BT_FIREARM		// has a gun
-
-					// ARE THESE REALLY CHECKED SOMEWHERE:
-
-//kL				&& weapon->getRules()->getTUSnap()							// can make snapshot
-//kL				&& weapon->getAmmoItem()									// gun is loaded, checked in "getMainHandWeapon()" -> what about getActiveHand() ?
-//kL				&& unit->getTimeUnits() >= unit->getActionTUs(				// has enough TU
-//kL															BA_SNAPSHOT,
-//kL															weapon)
-				&& testFireMethod( // kL, has enough TU for a firing method.
-								unit,
-								target,
-								weapon))))
-	{
-		//Log(LOG_INFO) << ". ret TRUE";
-		return true;
-	}
-
-	//Log(LOG_INFO) << ". ret FALSE";
-	return false;
-}
-
-/**
  * Gets the unit with the highest reaction score from the spotters vector.
  * NOTE: the tuSpent parameter is needed because popState() doesn't
  * subtract TU until after the Initiative has been calculated.
- * @param spotters	- vector of the pointers to spotting battleunits
- * @param defender	- pointer to the defending battleunit to check reaction scores against
- * @param tuSpent	- defending battleunit's expenditure of TU that had caused reaction checks - kL
- * @return, pointer to battleunit with the initiative (next up!)
+ * @param spotters	- vector of the pointers to spotting BattleUnits
+ * @param defender	- pointer to the defending BattleUnit to check reaction scores against
+ * @param tuSpent	- defending BattleUnit's expenditure of TU that had caused reaction checks
+ * @return, pointer to BattleUnit with the initiative (next up!)
  */
 BattleUnit* TileEngine::getReactor(
 		std::vector<BattleUnit*> spotters,
 		BattleUnit* defender,
-		int tuSpent) // kL
+		int tuSpent)
 {
 	//Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << defender->getId();
 	BattleUnit* nextReactor = NULL;
-	int highestInit = -1;
+	int highestIniti = -1;
 
 	for (std::vector<BattleUnit*>::iterator
 			spotter = spotters.begin();
@@ -1716,29 +1601,12 @@ BattleUnit* TileEngine::getReactor(
 		if ((*spotter)->isOut(true, true))
 			continue;
 
-		if ((*spotter)->getInitiative() > highestInit)
+		if ((*spotter)->getInitiative() > highestIniti)
 		{
-			highestInit = static_cast<int>((*spotter)->getInitiative());
+			highestIniti = static_cast<int>((*spotter)->getInitiative());
 			nextReactor = *spotter;
 		}
 	}
-
-
-//	BattleAction action = _battleSave->getAction();
-/*	BattleItem* weapon;// = BattleState::getAction();
-	if (defender->getFaction() == FACTION_PLAYER
-		&& defender->getOriginalFaction() == FACTION_PLAYER)
-	{
-		weapon = defender->getItem(defender->getActiveHand());
-	}
-	else
-		weapon = defender->getMainHandWeapon(); // kL_note: no longer returns grenades. good
-//	if (!weapon) return false;  // it *has* to be there by now!
-		// note these calc's should be refactored; this calc happens what 3 times now!!!
-		// Ought get the BattleAction* and just toss it around among these RF determinations.
-
-	int tuShoot = defender->getActionTUs(BA_AUTOSHOT, weapon) */
-
 
 	//Log(LOG_INFO) << ". ID " << defender->getId() << " initi = " << static_cast<int>(defender->getInitiative(tuSpent));
 
@@ -1746,7 +1614,7 @@ BattleUnit* TileEngine::getReactor(
 	// Analysis: It appears that defender's tu for firing/throwing
 	// are not subtracted before getInitiative() is called.
 	if (nextReactor
-		&& highestInit > static_cast<int>(defender->getInitiative(tuSpent)))
+		&& highestIniti > static_cast<int>(defender->getInitiative(tuSpent)))
 	{
 		if (nextReactor->getOriginalFaction() == FACTION_PLAYER)
 			nextReactor->addReactionExp();
@@ -1757,227 +1625,174 @@ BattleUnit* TileEngine::getReactor(
 		nextReactor = defender;
 	}
 
-	//Log(LOG_INFO) << ". highestInit (nextReactor) = " << highestInit;
+	//Log(LOG_INFO) << ". highestIniti (nextReactor) = " << highestIniti;
 	return nextReactor;
 }
 
 /**
- * Attempts to perform a reaction snap shot.
- * @param unit, The unit to check sight from.
- * @param target, The unit to check sight TO.
- * @return, True if the action should (theoretically) succeed.
+ * Fires off a reaction shot.
+ * @param unit		- pointer to the spotting unit
+ * @param target	- pointer to the spotted unit
+ * @return, true if a shot happens
  */
-bool TileEngine::tryReactionSnap(
+bool TileEngine::reactionShot(
 		BattleUnit* unit,
 		BattleUnit* target)
 {
-	//Log(LOG_INFO) << "TileEngine::tryReactionSnap() reactID " << unit->getId() << " vs targetID " << target->getId();
+	//Log(LOG_INFO) << "TileEngine::reactionShot() reactID " << unit->getId() << " vs targetID " << target->getId();
 	BattleAction action;
+	action.actor = unit;
+	action.target = target->getPosition();
+	action.type = BA_NONE;
 
-	// note that other checks for/of weapon were done in "canMakeSnap()"
-	// redone here to fill the BattleAction object...
-	if (unit->getFaction() == FACTION_PLAYER)
-		action.weapon = unit->getItem(unit->getActiveHand());
-	else
-		action.weapon = unit->getMainHandWeapon(); // kL_note: no longer returns grenades. good
-
-	if (!action.weapon)
+	if (unit->getFaction() == FACTION_PLAYER
+		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-		//Log(LOG_INFO) << ". no Weapon, ret FALSE";
+		action.weapon = unit->getItem(unit->getActiveHand());
+	}
+	else
+		action.weapon = unit->getMainHandWeapon();
+
+	if (action.weapon == NULL)
 		return false;
+
+
+	int tu;
+	if (action.weapon->getRules()->getBattleType() == BT_MELEE)
+		action.type = BA_HIT;
+	else
+	{
+		action.type = selectFireMethod(action, &tu);
+		if (tu < 1)
+			return false;
 	}
 
-//kL	action.type = BA_SNAPSHOT;	// reaction fire is ALWAYS snap shot.
-									// kL_note: not true in Orig. aliens did auto at times
-									// kL_note: changed to ALL shot-modes!
+	if (action.type == BA_NONE)
+		return false;
 
-	action.actor = unit; // kL, was above under "BattleAction action;"
-	action.target = target->getPosition();
+	if (action.type == BA_HIT)
+	{
+		tu = action.actor->getActionTUs(BA_HIT, action.weapon);
 
-	if (action.weapon->getRules()->getBattleType() == BT_MELEE)	// unless we're a melee unit.
-		action.type = BA_HIT;									// kL_note: in which case you might not react at all. ( yet )
-	else
-		action.type = selectFireMethod(action); // kL, Let's try this. Might want to exclude soldiers, apply only to aLiens...
+		if (tu < 1
+			|| tu > action.actor->getTimeUnits())
+		{
+			return false;
+		}
+		else
+		{
+			bool canMelee = false;
 
-	action.TU = unit->getActionTUs(
-								action.type,
-								action.weapon);
+			for (int
+					i = 0;
+					i < 8
+						&& canMelee == false;
+					++i)
+			{
+				canMelee = validMeleeRange(
+										unit,
+										target,
+										i);
+			}
 
-	// Re-instate this. That is, continue checking these during a skirmish and
-	// punt any spotters that may have initially passed these tests (somewhere
-	// in the reaction-fire algorithm) out of the spotters-vector if they can't
-	// pass tryReactionSnap() - as called from checkReactionFire().
-	if (action.weapon->getAmmoItem() != NULL					// note: lasers & melee are their own ammo-items
-		&& action.weapon->getAmmoItem()->getAmmoQuantity() > 0	// returns 255 for lasers; 0 for melee (now returns 255 also); else, rounds still in a loaded clip
-		&& action.TU <= unit->getTimeUnits())
-	// That's all been done!!! BUT REACTOR MIGHT RUN OUT OF AMMO ... or TU! in which case, put ammo/TU checks into getReactor()
+			if (canMelee == false)
+				return false;
+		}
+	}
+
+	action.TU = tu;
+
+	if (action.weapon->getRules()->canReactionFire()
+		&& (action.actor->getOriginalFaction() == FACTION_HOSTILE	// is aLien, or has researched weapon.
+			|| _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()))
+		&& (_battleSave->getDepth() != 0
+			|| action.weapon->getRules()->isWaterOnly() == false)
+		&& action.weapon->getAmmoItem() != NULL						// lasers & melee are their own ammo-items
+		&& action.weapon->getAmmoItem()->getAmmoQuantity() > 0		// lasers & melee return 255
+		&& action.actor->spendTimeUnits(action.TU))					// spend the TU
 	{
 		action.targeting = true;
 
-		if (unit->getFaction() == FACTION_HOSTILE) // aLien units will go into an "aggro" state when they react.
+		if (unit->getFaction() == FACTION_HOSTILE)
 		{
-			AlienBAIState* aggro = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
-			if (aggro == NULL) // should not happen, but just in case...
+			AlienBAIState* aggro_AI = dynamic_cast<AlienBAIState*>(unit->getCurrentAIState());
+			if (aggro_AI == NULL)
 			{
-				aggro = new AlienBAIState(
+				aggro_AI = new AlienBAIState(
 										_battleSave,
 										unit,
 										NULL);
-				unit->setAIState(aggro);
+				unit->setAIState(aggro_AI);
 			}
 
 			if (action.weapon->getAmmoItem()->getRules()->getExplosionRadius() > -1
-				&& aggro->explosiveEfficacy(
+				&& aggro_AI->explosiveEfficacy(
 										action.target,
 										unit,
 										action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
-										-1)
-									== false)
+										-1) == false)
 			{
 				action.targeting = false;
 			}
 		}
 
-		if (action.targeting
-			&& action.type != BA_NONE
-			&& unit->spendTimeUnits(action.TU))
+		if (action.targeting)
 		{
-			//Log(LOG_INFO) << ". Reaction Fire by ID " << unit->getId();
 			action.TU = 0;
-			action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset(); // kL, was above under "BattleAction action;"
+			action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 
 			_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
-																_battleSave->getBattleGame(),
-																action));
+																	_battleSave->getBattleGame(),
+																	action));
 			_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
 																	_battleSave->getBattleGame(),
 																	action));
 
-//			if (unit->getFaction() == FACTION_PLAYER)
-//				unit->setTurnsExposed(0); // kL: That's for giving our position away!!
-
 			return true;
 		}
 	}
 
-	return false;
-}
-
-/**
- * kL. Tests for a fire method based on range & time units.
- * lifted from: AlienBAIState::selectFireMethod()
- * @param unit, Pointer to a BattleUnit
- * @param target, Pointer to a targetUnit
- * @param weapon, Pointer to the unit's weapon
- * @return, True if a firing method is successfully chosen
- */
-bool TileEngine::testFireMethod(
-		BattleUnit* unit,
-		BattleUnit* target,
-		BattleItem* weapon) const
-{
-	//Log(LOG_INFO) << "TileEngine::testFireMethod()";
-	int tuUnit = unit->getTimeUnits();
-	//Log(LOG_INFO) << ". tuUnit = " << tuUnit;
-	//Log(LOG_INFO) << ". tuAuto = " << unit->getActionTUs(BA_AUTOSHOT, weapon);
-	//Log(LOG_INFO) << ". tuSnap = " << unit->getActionTUs(BA_SNAPSHOT, weapon);
-	//Log(LOG_INFO) << ". tuAimed = " << unit->getActionTUs(BA_AIMEDSHOT, weapon);
-
-	int distance = _battleSave->getTileEngine()->distance(
-												unit->getPosition(),
-												target->getPosition());
-	//Log(LOG_INFO) << ". distance = " << distance;
-	if (distance <= weapon->getRules()->getAutoRange())
-	{
-		if (weapon->getRules()->getTUAuto()							// weapon can do this action-type
-			&& tuUnit >= unit->getActionTUs(BA_AUTOSHOT, weapon))	// accounts for flatRate or not.
-		{
-			return true;
-		}
-		else if (weapon->getRules()->getTUSnap()
-			&& tuUnit >= unit->getActionTUs(BA_SNAPSHOT, weapon))
-		{
-			return true;
-		}
-		else if (weapon->getRules()->getTUAimed()
-			&& tuUnit >= unit->getActionTUs(BA_AIMEDSHOT, weapon))
-		{
-			return true;
-		}
-	}
-	else if (distance <= weapon->getRules()->getSnapRange())
-	{
-		if (weapon->getRules()->getTUSnap()
-			&& tuUnit >= unit->getActionTUs(BA_SNAPSHOT, weapon))
-		{
-			return true;
-		}
-		else if (weapon->getRules()->getTUAimed()
-			&& tuUnit >= unit->getActionTUs(BA_AIMEDSHOT, weapon))
-		{
-			return true;
-		}
-		else if (weapon->getRules()->getTUAuto()
-			&& tuUnit >= unit->getActionTUs(BA_AUTOSHOT, weapon))
-		{
-			return true;
-		}
-	}
-	else if (distance <= weapon->getRules()->getAimRange())
-	{
-		if (weapon->getRules()->getTUAimed()
-			&& tuUnit >= unit->getActionTUs(BA_AIMEDSHOT, weapon))
-		{
-			return true;
-		}
-		else if (weapon->getRules()->getTUSnap()
-			&& tuUnit >= unit->getActionTUs(BA_SNAPSHOT, weapon))
-		{
-			return true;
-		}
-		else if (weapon->getRules()->getTUAuto()
-			&& tuUnit >= unit->getActionTUs(BA_AUTOSHOT, weapon))
-		{
-			return true;
-		}
-	}
-
-	//Log(LOG_INFO) << "TileEngine::testFireMethod() EXIT false";
 	return false;
 }
 
 /**
  * kL. Selects a fire method based on range & time units.
- * lifted from: AlienBAIState::selectFireMethod()
- * @param action, A BattleAction
+ * Lifted from AlienBAIState::selectFireMethod().
+ * @param action	- a BattleAction struct
+ * @param tu		- reference TUs to be required
  * @return, The calculated BattleAction type
  */
-BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/should use a pointer for this(?)
+BattleActionType TileEngine::selectFireMethod( // kL
+		BattleAction action,
+		int* tu)
 {
 	//Log(LOG_INFO) << "TileEngine::selectFireMethod()";
-	action.type = BA_NONE; // should never happen.
+	action.type = BA_NONE;
 
 	int
 		tuUnit = action.actor->getTimeUnits(),
 		distance = _battleSave->getTileEngine()->distance(
-												action.actor->getPosition(),
-												action.target);
+														action.actor->getPosition(),
+														action.target);
 	if (distance <= action.weapon->getRules()->getAutoRange())
 	{
-		if (action.weapon->getRules()->getTUAuto()									// weapon can do this action-type
-			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))	// accounts for flatRate or not.
+		if (action.weapon->getRules()->getTUAuto()
+			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
+			*tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUSnap()
 			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
+			*tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUAimed()
 			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
+			*tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 	}
 	else if (distance <= action.weapon->getRules()->getSnapRange())
@@ -1986,16 +1801,19 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
+			*tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUAimed()
 			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
+			*tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUAuto()
 			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
+			*tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 	}
 	else if (distance <= action.weapon->getRules()->getAimRange())
@@ -2004,18 +1822,23 @@ BattleActionType TileEngine::selectFireMethod(BattleAction action) // could/shou
 			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
+			*tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUSnap()
 			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
+			*tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUAuto()
 			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
+			*tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 	}
+
+	tu = 0;
 
 	return action.type;
 }
@@ -5410,7 +5233,8 @@ int TileEngine::voxelCheck(
 			int y = targetPos.y %16;		// y-direction is standard
 
 			int LoftIdx = ((dataTarget->getLoftID((targetPos.z %24) / 2) * 16) + y); // wtf
-			if (_voxelData->at(LoftIdx) & (1 << x))
+			if (LoftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146
+				&& _voxelData->at(LoftIdx) & (1 << x))
 			{
 				//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret i = " << i;
 				return i;
@@ -5596,16 +5420,17 @@ bool TileEngine::psiAttack(BattleAction* action)
 				if (moraleLoss > 0)
 					victim->moraleChange(-moraleLoss);
 			}
-			else //if (action->type == BA_MINDCONTROL)
+			else // BA_MINDCONTROL
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
-				// kL_begin:
-				if (victim->getFaction() != FACTION_HOSTILE)
-					victim->moraleChange(-100);
+				if (victim->getFaction() != FACTION_HOSTILE) // kL_begin:
+				{
+					victim->moraleChange(_battleSave->getMoraleModifier(NULL, true) / 10 - 100);
+				}
 				else if (action->actor->getFaction() == FACTION_PLAYER)
 				{
 					if (victim->getOriginalFaction() == FACTION_HOSTILE)
-						victim->moraleChange(-50);
+						victim->moraleChange(_battleSave->getMoraleModifier(NULL, false) / 10 - 50);
 					else
 						victim->moraleChange(+25);
 				} // kL_end.

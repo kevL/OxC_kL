@@ -81,7 +81,8 @@ MiniMapState::MiniMapState(
 	battleGame->setPaletteByDepth(this);
 
 	add(_bg);
-	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
+//	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
+	_game->getResourcePack()->getSurface("SCANBORD")->blit(_bg);
 
 	add(_miniView);
 	add(_btnLvlUp, "buttonUp", "minimap", _bg);
@@ -91,18 +92,22 @@ MiniMapState::MiniMapState(
 
 	centerAllSurfaces();
 
-	if (_game->getScreen()->getDY() > 50)
+	_screen = false;												// kL
+	_bg->drawRect(48, 16, 221, 148, Palette::blockOffset(15)+15);	// kL
+
+/*	if (_game->getScreen()->getDY() > 50)
 	{
 		_screen = false;
 
-/*		SDL_Rect current;
-		current.w = 223;
-		current.h = 151;
-		current.x = 46;
-		current.y = 14;
-		_bg->drawRect(&current, Palette::blockOffset(15)+15); */
+//		SDL_Rect current;
+//		current.w = 223;
+//		current.h = 151;
+//		current.x = 46;
+//		current.y = 14;
+//		_bg->drawRect(&current, Palette::blockOffset(15)+15);
+
 		_bg->drawRect(46, 14, 223, 151, Palette::blockOffset(15)+15);
-	}
+	} */
 
 
 	_btnLvlUp->onMouseClick((ActionHandler)& MiniMapState::btnLevelUpClick);

@@ -9539,6 +9539,12 @@ extraSprites:
     subY: 14
     files:
       0: Resources/Sprites/ufograph/statusbar/statusbar.png
+  - type: Cygnus_BG
+    width: 480
+    height: 270
+    singleImage: true
+    files:
+      0: Resources/Sprites/ig271_cygnus_02.png
 #kL, my Sound customizations:
 #kL, the numbering is representative of their order in SAMPLE*.CAT;
 #kL, the "hitSound" etc. under items etc. above correspond to these below.

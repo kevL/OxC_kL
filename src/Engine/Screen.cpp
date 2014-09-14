@@ -714,11 +714,11 @@ int Screen::getDY()
 
 /**
 * Changes a given scale, and if necessary, switch the current base resolution.
-* @param type		- reference to which scale option we are using, battlescape or geoscape
+* @param type		- reference which scale option we are using, battlescape or geoscape
 * @param selection	- the new scale level
-* @param width		- reference to which x scale to adjust.
-* @param height		- reference to which y scale to adjust.
-* @param change		- true to change the current scale.
+* @param width		- reference which x scale to adjust
+* @param height		- reference which y scale to adjust
+* @param change		- true to change the current scale
 */
 void Screen::updateScale(
 		int& type,
@@ -751,7 +751,7 @@ void Screen::updateScale(
 			height	= static_cast<int>(static_cast<double>(Options::displayHeight) / pixelRatioY / 2.0);
 		break;
 		case SCALE_SCREEN:
-			width	= static_cast<int>(static_cast<double>(Options::displayWidth));
+			width	= Options::displayWidth;
 			height	= static_cast<int>(static_cast<double>(Options::displayHeight / pixelRatioY));
 		break;
 

@@ -232,7 +232,7 @@ void CraftInfoState::init()
 		int damageHrs = static_cast<int>(
 							ceil(static_cast<double>(_craft->getDamage())
 								/ static_cast<double>(_craft->getRules()->getRepairRate())
-								/ 2.0));
+								/ 2.0)); // repair every half-hour.
 //		ss1 << L"\n" << tr("STR_HOUR", damageHrs);
 		ss1 << formatTime(damageHrs);
 	}
@@ -245,7 +245,7 @@ void CraftInfoState::init()
 		int fuelHrs = static_cast<int>(
 							ceil(static_cast<double>(_craft->getRules()->getMaxFuel() - _craft->getFuel())
 								/ static_cast<double>(_craft->getRules()->getRefuelRate())
-								/ 2.0));
+								/ 2.0)); // refuel every half-hour.
 //		ss2 << L"\n" << tr("STR_HOUR", fuelHrs);
 		ss2 << formatTime(fuelHrs);
 	}
@@ -322,10 +322,11 @@ void CraftInfoState::init()
 			if (_craft->getStatus() == "STR_REARMING"
 				&& w1->getAmmo() < w1->getRules()->getAmmoMax())
 			{
-				int rearmHours = static_cast<int>(
+				int rearmHrs = static_cast<int>(
 									ceil(static_cast<double>(w1->getRules()->getAmmoMax() - w1->getAmmo())
-										/ static_cast<double>(w1->getRules()->getRearmRate())));
-				ss << formatTime(rearmHours);
+										/ static_cast<double>(w1->getRules()->getRearmRate())
+										/ 2.0)); // rearm every half-hour.
+				ss << formatTime(rearmHrs);
 			}
 			_txtW1Ammo->setText(ss.str());
 		}
@@ -365,10 +366,11 @@ void CraftInfoState::init()
 			if (_craft->getStatus() == "STR_REARMING"
 				&& w2->getAmmo() < w2->getRules()->getAmmoMax())
 			{
-				int rearmHours = static_cast<int>(
+				int rearmHrs = static_cast<int>(
 									ceil(static_cast<double>(w2->getRules()->getAmmoMax() - w2->getAmmo())
-										/ static_cast<double>(w2->getRules()->getRearmRate())));
-				ss << formatTime(rearmHours);
+										/ static_cast<double>(w2->getRules()->getRearmRate())
+										/ 2.0)); // rearm every half-hour.
+				ss << formatTime(rearmHrs);
 			}
 			_txtW2Ammo->setText(ss.str());
 		}

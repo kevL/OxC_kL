@@ -3339,6 +3339,14 @@ BattlescapeGame* BattlescapeState::getBattleGame()
 void BattlescapeState::mouseInIcons(Action*)
 {
 	_mouseOverIcons = true;
+
+	_txtConsole1->setText(L"");
+	_txtConsole2->setText(L"");
+	_txtConsole3->setText(L"");
+
+	_txtTerrain->setVisible();
+	_txtShade->setVisible();
+	_txtTurn->setVisible();
 }
 
 /**

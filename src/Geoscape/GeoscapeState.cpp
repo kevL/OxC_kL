@@ -235,13 +235,14 @@ GeoscapeState::GeoscapeState()
 						screenWidth - 64,
 						screenHeight / 2 - 100); */
 
-	_srfSpace	= new Surface( // kL
+/*	_srfSpace	= new Surface( // kL
 //							screenWidth - 64,
 //							screenHeight,
 							256,
 							200,
 							32,
-							12);
+							12); */
+	_srfSpace	= new Surface(480, 270, 0, 0); // kL
 
 	_globe		= new Globe(
 						_game,					// GLOBE:
@@ -458,7 +459,8 @@ GeoscapeState::GeoscapeState()
 
 	add(_txtDebug);
 
-	_game->getResourcePack()->getSurface("LGEOBORD.SCR")->blit(_srfSpace);		// kL
+	_game->getResourcePack()->getSurface("Cygnus_BG")->blit(_srfSpace);			// kL
+//	_game->getResourcePack()->getSurface("LGEOBORD.SCR")->blit(_srfSpace);		// kL
 //	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_srfSpace);	// kL
 //	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);				// kL
 

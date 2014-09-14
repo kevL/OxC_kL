@@ -4789,7 +4789,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1409183157 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1410673888 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -5717,7 +5717,7 @@
 1404096022 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1410243779 f:\git\openxcom\src\battlescape\tileengine.h
+1410686320 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -5916,7 +5916,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1410328842 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1410661899 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6037,7 +6037,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1410569977 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1410698363 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6321,7 +6321,7 @@
 1410509529 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1410561175 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1410696327 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6528,7 +6528,7 @@
 	"../Ruleset/RuleInterface.h"
 	"../Savegame/BattleUnit.h"
 
-1409182243 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
+1410695687 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
 	"MiniMapState.h"
 	<iostream>
 	<sstream>
@@ -6554,7 +6554,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1410575360 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1410694548 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<cmath>
 	<sstream>
@@ -6763,7 +6763,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1410643706 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1410692078 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7224,7 +7224,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1410395389 source:f:\git\openxcom\src\engine\screen.cpp
+1410694351 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	<cmath>
 	<iomanip>
@@ -7762,7 +7762,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1410336052 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1410671791 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9547,7 +9547,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1410576807 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1410688996 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9578,7 +9578,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1410580846 source:f:\git\openxcom\src\savegame\craft.cpp
+1410675683 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9601,7 +9601,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1410477479 source:f:\git\openxcom\src\savegame\craftweapon.cpp
+1410675932 source:f:\git\openxcom\src\savegame\craftweapon.cpp
 	"CraftWeapon.h"
 	"CraftWeaponProjectile.h"
 	"../Ruleset/RuleCraftWeapon.h"
@@ -9662,7 +9662,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1410525381 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1410690528 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

@@ -132,29 +132,36 @@ private:
 		/// Checks reaction fire.
 		bool checkReactionFire(
 							BattleUnit* unit,
-							int tuSpent = 0); // kL
+							int tuSpent = 0);
 		/// Creates a vector of units that can spot this unit.
 		std::vector<BattleUnit*> getSpottingUnits(BattleUnit* unit);
-		/// Checks validity of a snap shot to this position.
-		bool canMakeSnap(
-				BattleUnit* unit,
-				BattleUnit* target);
 		/// Given a vector of spotters, and a unit, picks the spotter with the highest reaction score.
 		BattleUnit* getReactor(
 				std::vector<BattleUnit*> spotters,
 				BattleUnit* defender,
-				int tuSpent = 0); // kL
+				int tuSpent = 0);
+		/// Fires off a reaction shot.
+		bool reactionShot(
+				BattleUnit* unit,
+				BattleUnit* target);
+
+		/// Checks validity of a snap shot to this position.
+/*		bool canMakeSnap(
+				BattleUnit* unit,
+				BattleUnit* target);
 		/// Tries to perform a reaction snap shot to this location.
 		bool tryReactionSnap(
 				BattleUnit* unit,
 				BattleUnit* target);
 		/// kL. Tests for a fire method based on range & time units.
-		bool testFireMethod(
+		int testFireMethod(
 				BattleUnit* unit,
 				BattleUnit* target,
-				BattleItem* weapon) const; // kL
+				BattleItem* weapon) const; */ // kL
 		/// kL. Selects a fire method based on range & time units.
-		BattleActionType selectFireMethod(BattleAction action); // kL
+		BattleActionType selectFireMethod(
+				BattleAction action,
+				int* tu); // kL
 
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(

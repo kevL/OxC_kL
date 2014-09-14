@@ -112,9 +112,8 @@ bool CraftWeapon::setAmmo(int ammo)
 		return false;
 	}
 
-	int maxAmmo = _rules->getAmmoMax();
-	if (_ammo > maxAmmo)
-		_ammo = maxAmmo;
+	if (_ammo > _rules->getAmmoMax())
+		_ammo = _rules->getAmmoMax();
 
 	return true;
 }
@@ -156,9 +155,9 @@ int CraftWeapon::rearm(
 
 	if (clipSize > 0)
 	{
-		clipsRequested = std::min(
-								rateQty,
-								fullQty - _ammo + clipSize - 1) // round up.
+		clipsRequested = std::min( // round up. ie, + clipSize - 1
+								rateQty + clipSize - 1,
+								fullQty - _ammo + clipSize - 1)
 							/ clipSize;
 	}
 

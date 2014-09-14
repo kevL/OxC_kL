@@ -168,3 +168,9 @@ extraSprites:
     subY: 5
     files:
       0: Resources/Sprites/gender/digits.png
+  - type: SCANBORD
+    width: 320
+    height: 200
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/scanbord.png

@@ -76,7 +76,7 @@ ExplosionBState::ExplosionBState(
 		_pistolWhip(false),
 		_hit(false),
 		_hitSuccess(success), // kL
-		_extend(4) // kL, extra think-cycles before this state Pops.
+		_extend(3) // kL, extra think-cycles before this state Pops.
 {
 }
 

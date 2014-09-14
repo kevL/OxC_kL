@@ -1658,18 +1658,17 @@ int BattleUnit::getActionTUs(
 
 	switch (actionType)
 	{
-		case BA_PRIME: // kL_note: Should put "tuPrime" yaml-entry in Xcom1Ruleset, under various grenade-types.
-//kL		cost = 50; // maybe this should go in the ruleset
-			cost = 45; // kL
+		// note: Should put "tuPrime", "tuDefuse", & "tuThrow" yaml-entry in Xcom1Ruleset, under various grenade-types etc.
+		case BA_PRIME:
+			cost = 45;
 		break;
-		case BA_DEFUSE: // kL_add.
-			cost = 15; // do this flatrate!
+		case BA_DEFUSE:
+			cost = 15;
 		break;
 		case BA_THROW:
-//kL		cost = 25; // maybe this should go in the ruleset
-			cost = 23; // kL
+			cost = 23;
 		break;
-		case BA_LAUNCH: // kL
+		case BA_LAUNCH:
 			cost = rule->getTULaunch();
 		break;
 		case BA_AIMEDSHOT:
@@ -1692,7 +1691,7 @@ int BattleUnit::getActionTUs(
 		break;
 
 		default:
-			cost = 1;	// kL, was cost=0
+			cost = 0;
 						// problem: cost=0 can lead to infinite loop in reaction fire
 						// Presently, cost=0 means 'cannot do' but conceivably an action
 						// could be free, or cost=0; so really cost=-1 ought be
@@ -1702,10 +1701,11 @@ int BattleUnit::getActionTUs(
 	}
 
 
-	if ((rule->getFlatRate() == false // if it's a percentage, apply it to unit TUs
+	if (cost > 0
+		&& (rule->getFlatRate() == false // if it's a percentage, apply it to unit TUs
 			|| actionType == BA_PRIME
 			|| actionType == BA_THROW)
-		&& actionType != BA_DEFUSE) // kL
+		&& actionType != BA_DEFUSE)
 	{
 		cost = std::max(
 					1,
@@ -2042,12 +2042,12 @@ int BattleUnit::getFatalWounds() const
 
 /**
  * Little formula that calculates initiative/reaction score.
+ * Reactions Stat * Current Time Units / Max TUs
+ * @param tuSpent -
  * @return, Reaction score; aka INITIATIVE
  */
-//kL double BattleUnit::getInitiative()
-double BattleUnit::getInitiative(int tuSpent) // kL
+double BattleUnit::getInitiative(int tuSpent)
 {
-	// (Reactions Stat) x (Current Time Units / Max TUs)
 	double ret = static_cast<double>(
 						getStats()->reactions * (getTimeUnits() - tuSpent))
 						/ static_cast<double>(getStats()->tu);

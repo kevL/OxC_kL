@@ -191,7 +191,7 @@ void MiniMapView::draw()
 									y,
 									tileShade,
 									false,
-									baseColor); // kL
+									baseColor); // kL_add.
 					}
 				}
 

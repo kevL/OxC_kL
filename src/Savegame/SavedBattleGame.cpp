@@ -2187,13 +2187,12 @@ bool SavedBattleGame::getUnitsFalling() const
 
 /**
  * Gets the highest ranked, living, non Mc'd unit of faction.
- * @param bool, xCom=true if faction_Player else false if faction_Hostile.
- * @return BattleUnit*, The highest ranked, living unit of the given faction.
+ * @param bool - true if examining Faction_Player, false for Faction_Hostile
+ * @return, pointer to a BattleUnit
  */
 BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked() xcom = " << xcom;
-
 	BattleUnit* leader = NULL;
 
 	for (std::vector<BattleUnit*>::iterator
@@ -2202,7 +2201,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 			++bu)
 	{
 		if (*bu
-			&& !(*bu)->isOut(true, true))
+			&& (*bu)->isOut(true, true) == false)
 		{
 			if (xcom)
 			{
@@ -2238,18 +2237,18 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
 
 /**
  * Gets the morale modifier, either
- * - a bonus based on the highest ranked, living unit of the xcom/alien factions
- * - or penalty for a unit (deceased..) passed into this function.
- * @param unit, Unit deceased; higher rank gets higher penalty to faction
- * @param xcom, If no unit is passed in this determines whether bonus applies to xcom/aliens
- * @return, The morale modifier
+ * a bonus based on the highest ranked living unit of the xcom/alien factions
+ * or penalty for a deceased unit passed into this function.
+ * @param unit - pointer to a unit deceased; higher rank gives higher penalty to faction
+ * @param xcom - if no unit is passed in this determines whether bonus applies to xcom/aliens
+ * @return, the resulting morale modifier
  */
 int SavedBattleGame::getMoraleModifier(
 		BattleUnit* unit,
 		bool xcom)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
-	int result = 100;
+	int ret = 100;
 
 	if (unit == NULL) // leadership Bonus
 	{
@@ -2261,25 +2260,25 @@ int SavedBattleGame::getMoraleModifier(
 			{
 				switch (leader->getRankInt())
 				{
-					case 5:				// commander
-						result += 15;	// 135, was 150
-					case 4:				// colonel
-						result += 5;	// 120, was 125
-					case 3:				// captain
-						result += 5;	// 115
-					case 2:				// sergeant
-						result += 10;	// 110
-					case 1:				// squaddie
-						result += 15;	// 100
-					case 0:				// rookies...
-						result -= 15;	// 85
+					case 5:			// commander
+						ret += 15;	// 135, was 150
+					case 4:			// colonel
+						ret += 5;	// 120, was 125
+					case 3:			// captain
+						ret += 5;	// 115
+					case 2:			// sergeant
+						ret += 10;	// 110
+					case 1:			// squaddie
+						ret += 15;	// 100
+					case 0:			// rookies...
+						ret -= 15;	// 85
 
 					default:
 					break;
 				}
 			}
 
-			//Log(LOG_INFO) << ". . xCom leaderModifi = " << result;
+			//Log(LOG_INFO) << ". . xCom leaderModifi = " << ret;
 		}
 		else // alien
 		{
@@ -2288,18 +2287,18 @@ int SavedBattleGame::getMoraleModifier(
 			{
 				switch (leader->getRankInt())
 				{
-					case 0:				// commander
-						result += 25;	// 150
-					case 1:				// leader
-						result += 10;	// 125
-					case 2:				// engineer
-						result += 5;	// 115
-					case 3:				// medic
-						result += 10;	// 110
-					case 4:				// navigator
-						result += 10;	// 100
-					case 5:				// soldiers...
-						result -= 10;	// 90
+					case 0:			// commander
+						ret += 25;	// 150
+					case 1:			// leader
+						ret += 10;	// 125
+					case 2:			// engineer
+						ret += 5;	// 115
+					case 3:			// medic
+						ret += 10;	// 110
+					case 4:			// navigator
+						ret += 10;	// 100
+					case 5:			// soldiers...
+						ret -= 10;	// 90
 
 					// kL_note: terrorists are ranks #6 and #7
 
@@ -2308,7 +2307,7 @@ int SavedBattleGame::getMoraleModifier(
 				}
 			}
 
-			//Log(LOG_INFO) << ". . aLien leaderModifi = " << result;
+			//Log(LOG_INFO) << ". . aLien leaderModifi = " << ret;
 		}
 	}
 	else // morale Loss when 'unit' slain
@@ -2318,22 +2317,22 @@ int SavedBattleGame::getMoraleModifier(
 		{
 			switch (unit->getRankInt())
 			{
-				case 5:					// commander
-					result += 30;		// 200
-				case 4:					// colonel
-					result += 25;		// 170
-				case 3:					// captain
-					result += 20;		// 145
-				case 2:					// sergeant
-					result += 10;		// 125
-				case 1:					// squaddie
-					result += 15;		// 115
+				case 5:			// commander
+					ret += 30;	// 200
+				case 4:			// colonel
+					ret += 25;	// 170
+				case 3:			// captain
+					ret += 20;	// 145
+				case 2:			// sergeant
+					ret += 10;	// 125
+				case 1:			// squaddie
+					ret += 15;	// 115
 
 				default:
 				break;
 			}
 
-			//Log(LOG_INFO) << ". . xCom lossModifi = " << result;
+			//Log(LOG_INFO) << ". . xCom lossModifi = " << ret;
 		}
 		else if (unit->getFaction() == FACTION_HOSTILE) // aliens or Mind Controlled XCOM dies.
 														// note this does funny things. A low-ranked, mind-controlled xCom unit's
@@ -2344,16 +2343,16 @@ int SavedBattleGame::getMoraleModifier(
 		{
 			switch (unit->getRankInt())
 			{
-				case 0:					// commander
-					result += 30;		// 200
-				case 1:					// leader
-					result += 25;		// 170
-				case 2:					// engineer
-					result += 20;		// 145
-				case 3:					// medic
-					result += 10;		// 125
-				case 4:					// navigator
-					result += 15;		// 115
+				case 0:			// commander
+					ret += 30;	// 200
+				case 1:			// leader
+					ret += 25;	// 170
+				case 2:			// engineer
+					ret += 20;	// 145
+				case 3:			// medic
+					ret += 10;	// 125
+				case 4:			// navigator
+					ret += 15;	// 115
 
 				// kL_note: terrorists are ranks #6 and #7 (soldiers are #5)
 
@@ -2362,13 +2361,12 @@ int SavedBattleGame::getMoraleModifier(
 			}
 			// else if a mind-controlled alien dies nobody cares.
 
-			//Log(LOG_INFO) << ". . aLien lossModifi = " << result;
+			//Log(LOG_INFO) << ". . aLien lossModifi = " << ret;
 		}
 	}
 
-	//Log(LOG_INFO) << ". totalModifier = " << result;
-
-	return result;
+	//Log(LOG_INFO) << ". totalModifier = " << ret;
+	return ret;
 }
 
 /**
