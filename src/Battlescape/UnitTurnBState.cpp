@@ -71,12 +71,11 @@ UnitTurnBState::~UnitTurnBState()
  */
 void UnitTurnBState::init()
 {
-	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = "
-	//		<< _action.actor->getId() << " strafe = " << _action.strafe;
+	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _action.actor->getId() << " strafe = " << _action.strafe;
 	_unit = _action.actor;
 	_action.TU = 0;
 
-	_unit->setStopShot(false); // kL
+	_unit->setStopShot(false);
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 		_parent->setStateInterval(Options::battleXcomSpeed);
@@ -88,8 +87,8 @@ void UnitTurnBState::init()
 				&& (_action.strafe
 					|| _action.targeting);
 
-	if (_unit->getPosition().x != _action.target.x		// kL
-		|| _unit->getPosition().y != _action.target.y)	// kL
+	if (_unit->getPosition().x != _action.target.x
+		|| _unit->getPosition().y != _action.target.y)
 	{
 		_unit->lookAt( // -> STATUS_TURNING
 					_action.target,
@@ -101,25 +100,33 @@ void UnitTurnBState::init()
 	{
 		if (_action.type == BA_NONE)
 		{
-			int door = _parent->getTileEngine()->unitOpensDoor(
+			int
+				sound = -1,
+				door = _parent->getTileEngine()->unitOpensDoor(
 															_unit,
 															true);
 			if (door == 0)
+			{
 				//Log(LOG_INFO) << ". open door PlaySound";
-				_parent->getResourcePack()->getSoundByDepth( // normal door
-														_parent->getDepth(),
-														ResourcePack::DOOR_OPEN)
-													->play();
+				sound = ResourcePack::DOOR_OPEN;
+			}
 			else if (door == 1)
+			{
 				//Log(LOG_INFO) << ". open uFo door PlaySound";
-				_parent->getResourcePack()->getSoundByDepth( // ufo door
-														_parent->getDepth(),
-														ResourcePack::SLIDING_DOOR_OPEN)
-													->play();
+				sound = ResourcePack::SLIDING_DOOR_OPEN;
+			}
 			else if (door == 4)
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			else if (door == 5)
 				_action.result = "STR_TUS_RESERVED";
+
+			if (sound != -1)
+				_parent->getResourcePack()->getSoundByDepth(
+														_parent->getDepth(),
+														sound)
+													->play(
+														-1,
+														_parent->getMap()->getSoundAngle(_unit->getPosition()));
 		}
 
 		_parent->popState();
@@ -135,21 +142,7 @@ void UnitTurnBState::think()
 	bool
 		factPlayer	= _unit->getFaction() == FACTION_PLAYER,
 		factSide	= _unit->getFaction() == _parent->getSave()->getSide();
-/*	int
-		tu = 1,					// one tu per facing change
-		turretType = _unit->getTurretType();
 
-	if (!factSide)				// reaction fire permits free turning
-		tu = 0;
-	else if (turretType != -1	// if xCom tank
-		&& !_action.strafe		// but not swivelling turret
-		&& !_action.targeting)	// or not taking a shot at something...
-	{
-		if (turretType < 3)		// tracked vehicles cost 3 per facing change
-			tu = 3;
-		else					// hover vehicles cost 2 per facing change
-			tu = 2;
-	} */
 	int tu = 1;					// one tu per facing change
 	bool tank = _unit->getTurretType() > -1;
 
@@ -203,12 +196,12 @@ void UnitTurnBState::think()
 			_unit->setStatus(STATUS_STANDING);
 
 			// keep this for Faction_Player only, till I figure out the AI better:
-			if (factPlayer				// kL
-				&& factSide				// kL
-				&& _action.targeting)	// kL
+			if (factPlayer
+				&& factSide
+				&& _action.targeting)
 			{
 				//Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();
-				_unit->setStopShot(true); // kL
+				_unit->setStopShot(true);
 			}
 			// kL_note: Can i pop the state (ProjectileFlyBState) here if we came from
 			// BattlescapeGame::primaryAction() and as such STOP a unit from shooting

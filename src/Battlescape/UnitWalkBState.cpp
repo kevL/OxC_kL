@@ -22,7 +22,6 @@
 #include "BattleAIState.h"
 #include "BattlescapeState.h"
 #include "Camera.h"
-//kL #include "ExplosionBState.h"
 #include "Map.h"
 #include "Pathfinding.h"
 #include "ProjectileFlyBState.h"
@@ -141,7 +140,7 @@ void UnitWalkBState::think()
 
 	_onScreen = _unit->getVisible();
 //				&& (_walkCam->isOnScreen(_unit->getPosition(), true)
-//					|| _walkCam->isOnScreen(_unit->getDestination(), true)); // kL
+//					|| _walkCam->isOnScreen(_unit->getDestination(), true));
 	//Log(LOG_INFO) << ". _onScreen = " << _onScreen;
 
 
@@ -150,7 +149,6 @@ void UnitWalkBState::think()
 		|| _unit->getStatus() == STATUS_FLYING)
 	{
 		//Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();
-		// kL_begin:
 //		if (_unit->getVisible())
 		if (_onScreen)
 		{
@@ -165,7 +163,7 @@ void UnitWalkBState::think()
 				//Log(LOG_INFO) << ". . setViewLevel(dest_z)";
 				_walkCam->setViewLevel(dest_z);
 			}
-		} // kL_end.
+		}
 
 		if (!doStatusWalk())
 			return;
@@ -176,14 +174,13 @@ void UnitWalkBState::think()
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
 			//Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;
-			// kL_begin:
 //			if (_unit->getVisible())
 			if (_onScreen)
 			{
 				if (_unit->getFaction() != FACTION_PLAYER
 					&& !_walkCam->isOnScreen(
 										_unit->getPosition()))
-//kL									true))
+//										true))
 				{
 					_walkCam->centerOnPosition(_unit->getPosition());
 				}
@@ -202,7 +199,7 @@ void UnitWalkBState::think()
 						_walkCam->setViewLevel(dest_z);
 					}
 				}
-			} // kL_end.
+			}
 
 			if (!doStatusStand_end())
 				return;
@@ -231,7 +228,7 @@ void UnitWalkBState::think()
 			else
 			{
 				//Log(LOG_INFO) << ". . no strafe, cacheUnit()";
-				_unit->setCache(NULL); // kL, might play around with non-Strafe anim's ......
+				_unit->setCache(NULL); // might play around with non-Strafe anim's ......
 				_parent->getMap()->cacheUnit(_unit);
 			}
 		}
@@ -246,7 +243,7 @@ void UnitWalkBState::think()
 
 		if (!doStatusStand())
 			return;
-		else // kL_begin: Destination is not valid until *after* doStatusStand() runs.
+		else // Destination is not valid until *after* doStatusStand() runs.
 		{
 //			if (_unit->getVisible())
 			if (_onScreen)
@@ -257,7 +254,7 @@ void UnitWalkBState::think()
 				if (_unit->getFaction() != FACTION_PLAYER
 					&& !_walkCam->isOnScreen(
 										_unit->getPosition()))
-//kL									true))
+//										true))
 				{
 					_walkCam->centerOnPosition(_unit->getPosition());
 				}
@@ -273,18 +270,14 @@ void UnitWalkBState::think()
 					//Log(LOG_INFO) << ". _walkCam->getViewLevel() < pos_z : " << (_walkCam->getViewLevel() < pos_z);
 					if (dest_z == pos_z
 						|| (dest_z > pos_z
-//							&& _walkCam->getViewLevel() < pos_z))
 							&& _walkCam->getViewLevel() < dest_z))
-//							&& _pf->getPath().size() > 0))
-//							&& _unit->getPosition().x != _unit->getDestination().x
-//							&& _unit->getPosition().y != _unit->getDestination().y))
 					{
 						//Log(LOG_INFO) << ". . setViewLevel(pos_z)";
 						_walkCam->setViewLevel(pos_z);
 					}
 				}
 			}
-		} // kL_end.
+		}
 	}
 
 
@@ -382,18 +375,6 @@ bool UnitWalkBState::doStatusStand()
 		return false;
 	}
 
-/*kL	if (_onScreen
-		|| _parent->getSave()->getDebugMode())
-	{
-		setNormalWalkSpeed();
-	}
-	else
-//kL	_parent->setStateInterval(0);
-		_parent->setStateInterval(11); // kL
-	*/
-//	setNormalWalkSpeed(); // kL: Done in init()
-
-//	int dir = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". getStartDirection() dir = " << dir;
 
 	if (_falling)
@@ -422,8 +403,7 @@ bool UnitWalkBState::doStatusStand()
 		}
 
 		//Log(LOG_INFO) << ". getTUCost() & destination";
-		// gets tu cost, but also gets the destination position.
-		Position destination;
+		Position destination; // gets tu cost, but also gets the destination position.
 		int tu = _pf->getTUCost(
 							_unit->getPosition(),
 							dir,
@@ -462,13 +442,6 @@ bool UnitWalkBState::doStatusStand()
 				|| (_action.strafe
 					&& dir >= _pf->DIR_UP))
 			{
-//				_unit->setDashing(true);	// will be removed either on next movement click
-											// or at end of Player turn. -> No good, move it
-											// back to BattlescapeGame::primaryAction() because
-											// it's needed for setting the animation speed in init()
-//				tu = tu * 3 / 4;
-//				energy = energy * 3 / 2;
-
 				tu -= _pf->getOpenDoor();
 				tu = (tu * 3 / 4) + _pf->getOpenDoor();
 
@@ -508,7 +481,6 @@ bool UnitWalkBState::doStatusStand()
 		{
 			//Log(LOG_INFO) << ". . tu > _unit->TU()";
 			if (_parent->getPanicHandled()
-//kL			&& tu < 255)
 				&& tuTest < 255)
 			{
 				//Log(LOG_INFO) << ". send warning: not enough TU";
@@ -567,10 +539,13 @@ bool UnitWalkBState::doStatusStand()
 		else if (dir < _pf->DIR_UP) // now open doors (if any)
 		{
 			//Log(LOG_INFO) << ". . check for doors";
-			int door = _terrain->unitOpensDoor(
+			int
+				sound = -1,
+				door = _terrain->unitOpensDoor(
 											_unit,
 											false,
 											dir);
+
 			if (door == 3) // ufo door still opening ...
 			{
 				//Log(LOG_INFO) << ". . . door #3";
@@ -579,32 +554,36 @@ bool UnitWalkBState::doStatusStand()
 			else if (door == 0) // normal door
 			{
 				//Log(LOG_INFO) << ". . . door #0";
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														ResourcePack::DOOR_OPEN)
-													->play();
+				sound = ResourcePack::DOOR_OPEN;
 			}
 			else if (door == 1) // ufo door
 			{
 				//Log(LOG_INFO) << ". . . door #1";
+				sound = ResourcePack::SLIDING_DOOR_OPEN;
+			}
+
+			if (sound != -1)
+			{
 				_parent->getResourcePack()->getSoundByDepth(
 														_parent->getDepth(),
-														ResourcePack::SLIDING_DOOR_OPEN)
-													->play();
+														sound)
+													->play(
+														-1,
+														_parent->getMap()->getSoundAngle(_unit->getPosition()));
 
-				return false; // don't start walking yet, wait for the ufo door to open
+				if (sound == ResourcePack::SLIDING_DOOR_OPEN)
+					return false; // don't start walking yet, wait for the ufo door to open
 			}
 		}
 
-		// kL_begin: proxy blows up in face after door opens - copied doStatusStand_end()
-		if (_parent->checkForProximityGrenades(_unit))
-			// kL_add: Put checkForSilacoid() here!
+		// proxy blows up in face after door opens - copied doStatusStand_end()
+		if (_parent->checkForProximityGrenades(_unit)) // kL_add: Put checkForSilacoid() here!
 		{
 			_parent->popState();
 //			postPathProcedures(); // .. one or the other i suppose.
 
 			return false;
-		} // kL_end
+		}
 
 		//Log(LOG_INFO) << ". check size for obstacles";
 		int size = _unit->getArmor()->getSize() - 1;
@@ -664,9 +643,6 @@ bool UnitWalkBState::doStatusStand()
 		}
 		//Log(LOG_INFO) << ". dequeuePath() dir = " << dir;
 
-//		if (dir == _pf->DIR_UP)	// kL
-//			_walkCam->up();		// kL
-
 		if (_unit->spendTimeUnits(tu)		// These were checked above and don't really need to
 			&& _unit->spendEnergy(energy))	// be checked again here. Only subtract required.
 		{
@@ -687,36 +663,6 @@ bool UnitWalkBState::doStatusStand()
 		// kL_note: This could probably go up under spend tu+energy. but.....
 		// And since Status_Stand algorithm doesn't actually draw anything
 		// REMARK It.
-/*kL	if (_onScreen)
-		{
-			//Log(LOG_INFO) << ". . _onScreen";
-			if (_pf->getStrafeMove())
-			{
-				//Log(LOG_INFO) << ". . . (_onScreen) -> _pf->getStrafeMove()";
-
-				// This is where we fake out the strafe movement direction so the unit "moonwalks"
-				int face = _unit->getDirection();
-//				int face = dir; // kL
-
-				_unit->setDirection(_unit->getFaceDirection());
-//				_unit->setCache(NULL); // kL
-//				_parent->getMap()->cacheUnit(_unit); // kL ( see far above, re. strafe fake-out moonwalking )
-
-				_unit->setDirection(face);
-//				_unit->setDirection(dir);
-
-				//Log(LOG_INFO) << ". . . end strafeMove()";
-			}
-//			else // kL
-//			{
-			//Log(LOG_INFO) << ". . (_onScreen) -> cacheUnit()";
-
-//			_unit->setCache(NULL); // kL
-			_parent->getMap()->cacheUnit(_unit);
-//			}
-
-			//Log(LOG_INFO) << ". . end (_onScreen)";
-		} */
 		//Log(LOG_INFO) << ". EXIT (dir!=-1) : " << _unit->getId();
 	}
 	else // dir == -1
@@ -833,12 +779,7 @@ bool UnitWalkBState::doStatusWalk()
 
 		_falling = fallCheck
 					&& _unit->getPosition().z != 0
-//kL				&& _unit->getTile()->hasNoFloor(tileBelow) // kL_note: Done above.
-					&& _pf->getMovementType() != MT_FLY;	//_unit->getArmor()->getMovementType() != MT_FLY
-															// -> sorta move to doStatusStand_end(), perhaps
-//						|| (_pf->isModALT()						// <- note: these two should be the same as
-//							&& _unit->getTurretType() == -1));	// (_pf->getMovementType() != MT_FLY) preceding.
-//kL				&& _unit->getWalkingPhase() == 0; // <- set @ startWalking() and @ end of keepWalking()
+					&& _pf->getMovementType() != MT_FLY;
 
 		if (_falling)
 		{
@@ -860,7 +801,6 @@ bool UnitWalkBState::doStatusWalk()
 						&& tBelow->getUnit())
 					{
 						//Log(LOG_INFO) << ". . . another unit already occupies lower tile";
-
 						_falling = false;
 
 						_pf->dequeuePath();
@@ -888,9 +828,6 @@ bool UnitWalkBState::doStatusWalk()
 bool UnitWalkBState::doStatusStand_end()
 {
 	//Log(LOG_INFO) << "***** UnitWalkBState::doStatusStand_end() : " << _unit->getId();
-
-//kL	_parent->getSave()->getBattleState()->updateSoldierInfo(false); // update the TU display.
-
 	_tileSwitchDone = false;
 
 	if (_unit->getFaction() != FACTION_PLAYER)
@@ -940,8 +877,7 @@ bool UnitWalkBState::doStatusStand_end()
 	// of all units within maximum distance (20 tiles) of this unit.
 	_terrain->calculateFOV(_unit->getPosition());
 
-	if (_parent->checkForProximityGrenades(_unit))
-		// kL_add: Put checkForSilacoid() here!
+	if (_parent->checkForProximityGrenades(_unit)) // kL_add: Put checkForSilacoid() here!
 	{
 		_parent->popState();
 
@@ -977,13 +913,6 @@ bool UnitWalkBState::doStatusStand_end()
 		}
 		//else Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE... no caching";
 	}
-//	else	// <<-- Looks like we gotta make it fall here!!! (if unit *ends* its total walk sequence on empty air.
-			// And, fall *before* spotting new units, else Abort will likely make it float...
-//	{
-		//Log(LOG_INFO) << ". . WalkBState: falling";
-//		_unit->setCache(NULL);
-//		_parent->getMap()->cacheUnit(_unit);
-//	}
 
 	return true;
 }
@@ -1000,13 +929,8 @@ void UnitWalkBState::doStatusTurn()
 
 	_unit->turn();
 
-//	if (_onScreen) // kL, old code. // make sure the unit sprites are up to date
-//	{
-		//Log(LOG_INFO) << ". cacheUnit()";
-
 	_unit->setCache(NULL);
 	_parent->getMap()->cacheUnit(_unit);
-//	}
 
 	// calculateFOV() is unreliable for setting the _newUnitSpotted bool,
 	// as it can be called from various other places in the code, ie:
@@ -1104,10 +1028,6 @@ void UnitWalkBState::postPathProcedures()
 				_parent->getTileEngine()->calculateFOV(_unit);
 				// kL_note: might need newVis/newUnitSpotted -> abort
 			}
-
-			// kL_note: These should prob be done before this pt.
-//			_unit->setCache(NULL);					// kL
-//			_parent->getMap()->cacheUnit(_unit);	// kL
 		}
 	}
 	else if (!_parent->getPanicHandled()) // todo: set the unit to aggrostate and try to find cover
@@ -1159,15 +1079,19 @@ bool UnitWalkBState::visForUnits()
  */
 void UnitWalkBState::setNormalWalkSpeed()
 {
+	int interval = 1;
+
 	if (_unit->getFaction() == FACTION_PLAYER)
 	{
-		if (_action.run) //|| _unit->getDashing())
-			_parent->setStateInterval(static_cast<Uint32>(Options::battleXcomSpeed * 3 / 4));
+		if (_action.run)
+			interval = Options::battleXcomSpeed * 2 / 3;
 		else
-			_parent->setStateInterval(static_cast<Uint32>(Options::battleXcomSpeed));
+			interval = Options::battleXcomSpeed;
 	}
 	else
-		_parent->setStateInterval(static_cast<Uint32>(Options::battleAlienSpeed));
+		interval = Options::battleAlienSpeed;
+
+	_parent->setStateInterval(static_cast<Uint32>(interval));
 }
 
 /**
@@ -1175,23 +1099,20 @@ void UnitWalkBState::setNormalWalkSpeed()
  */
 void UnitWalkBState::playMovementSound()
 {
-	if (!_unit->getVisible()
-		&& !_parent->getSave()->getDebugMode())
-//kL		|| (!_walkCam->isOnScreen(_unit->getPosition(), true)
-//kL			&& !_walkCam->isOnScreen(_unit->getDestination(), true)))
+	if (_unit->getVisible() == false
+		&& _parent->getSave()->getDebugMode() == false)
+//kL	|| (!_walkCam->isOnScreen(_unit->getPosition(), true)
+//kL		&& !_walkCam->isOnScreen(_unit->getDestination(), true)))
 	{
 		return;
 	}
 
+	int sound = -1;
+
 	if (_unit->getMoveSound() != -1)
 	{
-		if (_unit->getWalkingPhase() == 0) // if a sound is configured in the ruleset, play it.
-		{
-			_parent->getResourcePack()->getSoundByDepth(
-													_parent->getDepth(),
-													_unit->getMoveSound())
-												->play();
-		}
+		if (_unit->getWalkingPhase() == 0)
+			sound = _unit->getMoveSound();
 	}
 	else
 	{
@@ -1203,55 +1124,38 @@ void UnitWalkBState::playMovementSound()
 			if (_unit->getWalkingPhase() == 3) // play footstep sound 1
 			{
 				if (t->getFootstepSound(tBelow))
-//					&& _unit->getRaceString() != "STR_ETHEREAL")
-				{
-					_parent->getResourcePack()->getSoundByDepth(
-															_parent->getDepth(),
-															ResourcePack::WALK_OFFSET + 1 + (t->getFootstepSound(tBelow) * 2))
-														->play();
-				}
+					sound = ResourcePack::WALK_OFFSET + 1 + (t->getFootstepSound(tBelow) * 2);
 			}
 			else if (_unit->getWalkingPhase() == 7) // play footstep sound 2
 			{
 				if (t->getFootstepSound(tBelow))
-//					&& _unit->getRaceString() != "STR_ETHEREAL")
-				{
-					_parent->getResourcePack()->getSoundByDepth(
-															_parent->getDepth(),
-															ResourcePack::WALK_OFFSET + (t->getFootstepSound(tBelow) * 2))
-														->play();
-				}
+					sound = ResourcePack::WALK_OFFSET + (t->getFootstepSound(tBelow) * 2);
 			}
 		}
 		else if (_unit->getStatus() == STATUS_FLYING)
 		{
-			if (_unit->getWalkingPhase() == 1) // play default flying sound
+			if (_unit->getWalkingPhase() == 1)
 			{
 				if (_falling)
 				{
 					if (groundCheck(1))
-						_parent->getResourcePack()->getSoundByDepth( // thunk.
-																_parent->getDepth(),
-																ResourcePack::ITEM_DROP)
-															->play();
+						sound = ResourcePack::ITEM_DROP;	// thunk.
 				}
 				else if (!_unit->isFloating())
-				{
-					_parent->getResourcePack()->getSoundByDepth( // GravLift
-															_parent->getDepth(),
-															40) // play gravLift sound ...
-														->play();
-				}
-				else //if (!_falling)
-				{
-					_parent->getResourcePack()->getSoundByDepth( // hoverSound
-															_parent->getDepth(),
-															ResourcePack::FLYING_SOUND)
-														->play();
-				}
+					sound = 40;								// GravLift
+				else // !_falling
+					sound = ResourcePack::FLYING_SOUND;		// hoverSound
 			}
 		}
 	}
+
+	if (sound != -1)
+		_parent->getResourcePack()->getSoundByDepth(
+												_parent->getDepth(),
+												sound)
+											->play(
+												-1,
+												_parent->getMap()->getSoundAngle(_unit->getPosition()));
 }
 
 /**
@@ -1263,9 +1167,8 @@ void UnitWalkBState::playMovementSound()
  */
 void UnitWalkBState::doFallCheck() // kL
 {
-	if (_pf->getMovementType() == MT_FLY //_unit->getArmor()->getMovementType() != MT_FLY
+	if (_pf->getMovementType() == MT_FLY
 		|| _unit->getPosition().z == 0
-//		|| _pf->isModALT() == false
 		|| groundCheck() == true)
 	{
 		return;

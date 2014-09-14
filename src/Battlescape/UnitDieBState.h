@@ -32,7 +32,6 @@ class BattlescapeGame;
 class BattleUnit;
 
 
-/* Refactoring tip : UnitDieBState */
 /**
  * State for dying units.
  */
@@ -73,8 +72,6 @@ private:
 
 		/// Plays the death sound.
 		void playDeathSound();
-		/// Gets the result of the state.
-//		std::string getResult() const;
 };
 
 }

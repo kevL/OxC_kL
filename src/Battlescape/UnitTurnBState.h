@@ -61,9 +61,6 @@ private:
 
 		/// Runs state functionality every cycle.
 		void think();
-
-		/// Gets the result of the state.
-//		std::string getResult() const;
 };
 
 }

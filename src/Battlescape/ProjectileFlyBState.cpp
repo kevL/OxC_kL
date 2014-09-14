@@ -736,7 +736,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		_parent->getResourcePack()->getSoundByDepth(
 												_parent->getDepth(),
 												sound)
-											->play();
+											->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
 
 	//Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
 	return true;
@@ -870,11 +870,6 @@ void ProjectileFlyBState::think()
 		{
 			if (_action.type == BA_THROW)
 			{
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														ResourcePack::ITEM_DROP)
-													->play();
-
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 				pos.x /= 16;
 				pos.y /= 16;
@@ -912,6 +907,13 @@ void ProjectileFlyBState::think()
 															_unit);
 					}
 				}
+
+				_parent->getResourcePack()->getSoundByDepth(
+														_parent->getDepth(),
+														ResourcePack::ITEM_DROP)
+													->play(
+														-1,
+														_parent->getMap()->getSoundAngle(pos));
 			}
 			else if (_action.type == BA_LAUNCH
 				&& _action.waypoints.size() > 1
@@ -1033,7 +1035,7 @@ void ProjectileFlyBState::think()
 						_parent->getSave()->getTile(_action.target)->ignite(15);
 
 					if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL_add. This section is only for SoldierDiary mod.
-						&& _projectileImpact == VOXEL_UNIT)						// but see below also; was also for setting aggroState
+						&& _projectileImpact == VOXEL_UNIT)				// but see below also; was also for setting aggroState
 					{
 						BattleUnit* victim = _parent->getSave()->getTile(
 																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
@@ -1342,7 +1344,7 @@ void ProjectileFlyBState::performMeleeAttack()
 		_parent->getResourcePack()->getSoundByDepth(
 												_parent->getDepth(),
 												sound)
-											->play();
+											->play(-1, _parent->getMap()->getSoundAngle(_action.target));
 
 	if (!_parent->getSave()->getDebugMode()
 		&& _action.weapon->getRules()->getBattleType() == BT_MELEE

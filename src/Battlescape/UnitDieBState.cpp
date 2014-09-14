@@ -21,7 +21,6 @@
 
 #include "BattlescapeState.h"
 #include "Camera.h"
-//kL #include "ExplosionBState.h"
 #include "InfoboxOKState.h"
 #include "InfoboxState.h"
 #include "Map.h"
@@ -73,13 +72,6 @@ UnitDieBState::UnitDieBState(
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
-//	_originalDir = _unit->getDirection();
-//	_unit->setDirection(_originalDir);
-//	_unit->setSpinPhase(-1);
-
-//	if (!_noSound)
-//		playDeathSound();
-
 	if (_unit->getVisible())
 	{
 		Camera* deathCam = _parent->getMap()->getCamera();
@@ -96,7 +88,6 @@ UnitDieBState::UnitDieBState(
 		}
 		else
 		{
-//			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7); // moved below_
 			_unit->initDeathSpin(); // inits STATUS_TURNING
 		}
 	}
@@ -146,38 +137,6 @@ UnitDieBState::~UnitDieBState()
 void UnitDieBState::init()
 {
 	//Log(LOG_INFO) << "UnitDieBState::init()";
-	// This moved into cTor:
-	// ( else units don't know when they're dead, re. Explosions )
-/*	if (!_noSound)
-		playDeathSound();
-
-	if (_unit->getVisible())
-	{
-		Camera* deathCam = _parent->getMap()->getCamera();
-		if (!deathCam->isOnScreen(_unit->getPosition()))
-			deathCam->centerOnPosition(_unit->getPosition());
-
-		if (_unit->getFaction() == FACTION_PLAYER)
-			_parent->getMap()->setUnitDying(true);
-
-		if (!_unit->getSpawnUnit().empty())
-		{
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 8 / 7);
-			_unit->lookAt(3);
-		}
-		else
-		{
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
-			_unit->initDeathSpin();
-		}
-	}
-	else
-	{
-		if (_unit->getHealth() == 0)
-			_unit->instaKill();
-		else
-			_unit->knockOut();
-	} */
 	//Log(LOG_INFO) << "UnitDieBState::init() EXIT";
 }
 
@@ -202,7 +161,7 @@ void UnitDieBState::think()
 		//Log(LOG_INFO) << ". . STATUS_TURNING";
 		if (_unit->getSpinPhase() > -1)
 		{
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7); // from init()
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
 
 			_unit->contDeathSpin(); // -> STATUS_STANDING
 		}
@@ -227,8 +186,6 @@ void UnitDieBState::think()
 	if (_unit->isOut()) // and this ought be Status_Dead OR _Unconscious.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
-//		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // kL, just to be sure. See !_unit->isOut() above.
-
 		_parent->getMap()->setUnitDying(false);
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
@@ -237,10 +194,7 @@ void UnitDieBState::think()
 			_unit->instaKill();
 		}
 
-//kL	if (_unit->getTurnsExposed() < 255)
 		_unit->setTurnsExposed(255);
-
-//		Tile* tile = _unit->getTile(); // kL
 
 		if (_unit->getSpawnUnit().empty() == false
 			&& _unit->getDiedByFire() == false) // kL <- could screw with death animations, etc.
@@ -254,9 +208,8 @@ void UnitDieBState::think()
 //TEST		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(_battleSave->getBattleGame(), action));
 //TEST		statePushFront(new UnitTurnBState(this, _currentAction)); // first of all turn towards the target
 
-
-			convertedUnit->setCache(NULL);					// kL
-			_parent->getMap()->cacheUnit(convertedUnit);	// kL
+			convertedUnit->setCache(NULL);
+			_parent->getMap()->cacheUnit(convertedUnit);
 
 			//Log(LOG_INFO) << ". . got back from lookAt() in think ...";
 		}
@@ -264,7 +217,6 @@ void UnitDieBState::think()
 			convertUnitToCorpse();
 
 
-//		_parent->getTileEngine()->applyGravity(tile); // kL
 		_parent->getTileEngine()->calculateUnitLighting();
 		_parent->popState();
 
@@ -274,7 +226,6 @@ void UnitDieBState::think()
 //		_parent->getSave()->getTileEngine()->calculateFOV(_unit->getPosition());
 		// that is actually done already at the end of TileEngine::hit() & explode()
 		// so, might have to updateSoldierInfo() here, there, or perhaps in BattlescapeGame ......
-
 
 		if (_unit->getOriginalFaction() == FACTION_PLAYER
 			&& _unit->getSpawnUnit().empty())
@@ -453,43 +404,36 @@ void UnitDieBState::convertUnitToCorpse()
 void UnitDieBState::playDeathSound()
 {
 	//Log(LOG_INFO) << "UnitDieBState::playDeathSound()";
+	int sound = -1;
+
 	if (_unit->getType() == "MALE_CIVILIAN")
-		_parent->getResourcePack()->getSoundByDepth(
-												_parent->getDepth(),
-												ResourcePack::MALE_SCREAM[RNG::generate(0, 2)])
-											->play();
+		sound = ResourcePack::MALE_SCREAM[RNG::generate(0, 2)];
 	else if (_unit->getType() == "FEMALE_CIVILIAN")
-		_parent->getResourcePack()->getSoundByDepth(
-												_parent->getDepth(),
-												ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)])
-											->play();
+		sound = ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)];
 	else if (_unit->getType() == "SOLDIER")
 	{
-		int sound;
 		if (_unit->getGender() == GENDER_MALE)
 		{
 			sound = RNG::generate(111, 116);
 			//Log(LOG_INFO) << "death Male, sound = " << sound;
-			_parent->getResourcePack()->getSoundByDepth(
-													_parent->getDepth(),
-													sound)
-												->play();
 		}
 		else if (_unit->getGender() == GENDER_FEMALE)
 		{
 			sound = RNG::generate(101, 103);
 			//Log(LOG_INFO) << "death Female, sound = " << sound;
-			_parent->getResourcePack()->getSoundByDepth(
-													_parent->getDepth(),
-													sound)
-												->play();
 		}
 	}
 	else
+		sound = _unit->getDeathSound();
+
+
+	if (sound != -1)
 		_parent->getResourcePack()->getSoundByDepth(
 												_parent->getDepth(),
-												_unit->getDeathSound())
-											->play();
+												sound)
+											->play(
+												-1,
+												_parent->getMap()->getSoundAngle(_unit->getPosition()));
 }
 
 }

@@ -293,7 +293,7 @@ void ExplosionBState::init()
 			_parent->getResourcePack()->getSoundByDepth(
 													_parent->getDepth(),
 													sound)
-												->play();
+												->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
 
 		Explosion* explosion = new Explosion( // animation. Don't burn the tile
 										_center,

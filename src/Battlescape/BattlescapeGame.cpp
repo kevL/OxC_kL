@@ -348,7 +348,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			getResourcePack()->getSoundByDepth(
 											_save->getDepth(),
 											unit->getAggroSound())
-										->play();
+										->play(-1, getMap()->getSoundAngle(unit->getPosition()));
 		}
 	}
 	//Log(LOG_INFO) << ". getCharging DONE";
@@ -2164,7 +2164,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 						_parentState->getGame()->getResourcePack()->getSoundByDepth(
 																				_save->getDepth(),
 																				_currentAction.weapon->getRules()->getHitSound())
-																			->play();
+																			->play(-1, getMap()->getSoundAngle(pos));
 						_parentState->getGame()->pushState(new UnitInfoState(
 																		_save->selectUnit(pos),
 																		_parentState,

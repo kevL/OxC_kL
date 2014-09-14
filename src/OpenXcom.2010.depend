@@ -5778,7 +5778,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1410525293 f:\git\openxcom\src\battlescape\map.h
+1410729512 f:\git\openxcom\src\battlescape\map.h
 	<set>
 	<vector>
 	"Position.h"
@@ -5814,7 +5814,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1410522711 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1410729620 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5880,7 +5880,7 @@
 1410520270 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
-1404803394 f:\git\openxcom\src\battlescape\unitdiebstate.h
+1410732151 f:\git\openxcom\src\battlescape\unitdiebstate.h
 	"BattleState.h"
 	"../Ruleset/RuleItem.h"
 
@@ -5894,7 +5894,7 @@
 	<string>
 	"BattleState.h"
 
-1404096022 f:\git\openxcom\src\battlescape\unitturnbstate.h
+1410732159 f:\git\openxcom\src\battlescape\unitturnbstate.h
 	<string>
 	"BattleState.h"
 
@@ -5916,7 +5916,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1410661899 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1410734814 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6037,7 +6037,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1410698363 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1410730283 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6321,7 +6321,7 @@
 1410509529 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1410696327 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1410730497 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6763,7 +6763,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1410692078 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1410703920 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>

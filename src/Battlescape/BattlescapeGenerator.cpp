@@ -871,18 +871,41 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 													0));
 	if (tankUnit)
 	{
+		if (unitRule->getInnateWeapons().empty() == false)
+		{
+			for (std::vector<std::string>::const_iterator
+					i = unitRule->getInnateWeapons().begin();
+					i != unitRule->getInnateWeapons().end();
+					++i)
+			{
+				RuleItem* itemRule = _game->getRuleset()->getItem(*i);
+				if (itemRule)
+				{
+					BattleItem* item = new BattleItem(
+													itemRule,
+													_save->getCurrentItemId());
+
+					if (!addItem(
+								item,
+								tankUnit))
+					{
+						delete item;
+					}
+				}
+			}
+		}
+
 		BattleItem* item = new BattleItem(
 									_rules->getItem(vehicle),
 									_save->getCurrentItemId());
-//kL	addItem(item, unit);
-		if (!addItem( // kL_begin:
+		if (!addItem(
 					item,
 					tankUnit))
 		{
 			delete item;
 			delete tankUnit;
 
-			return NULL; // kL_end.
+			return NULL;
 		}
 
 		if (tank->getRules()->getCompatibleAmmo()->empty() == false)
@@ -891,8 +914,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 			BattleItem* ammoItem = new BattleItem(
 											_rules->getItem(ammo),
 											_save->getCurrentItemId());
-//kL		addItem(ammoItem, unit);
-			if (!addItem( // kL_begin:
+			if (!addItem(
 						ammoItem,
 						tankUnit))
 			{
@@ -900,7 +922,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 				delete item;
 				delete tankUnit;
 
-				return NULL; // kL_end.
+				return NULL;
 			}
 
 			ammoItem->setAmmoQuantity(tank->getAmmo());
@@ -908,11 +930,8 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 
 		tankUnit->setTurretType(tank->getRules()->getTurretType());
 	}
-	else // kL_begin:
-	{
-//		delete tankUnit;
-		return NULL; // kL_end.
-	}
+	else
+		return NULL;
 
 	return tankUnit;
 }
@@ -1587,7 +1606,6 @@ void BattlescapeGenerator::deployAliens(
 
 	BattleItem* item;
 	BattleUnit* unit;
-	RuleItem* ruleItem;
 	Unit* unitRule;
 
 	for (std::vector<DeploymentData>::iterator
@@ -1643,8 +1661,10 @@ void BattlescapeGenerator::deployAliens(
 			itemLevel = _rules->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
 			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() DONE getAlienItemLevels()";
 
-			if (unit)
+			if (unit != NULL)
 			{
+				RuleItem* itemRule;
+
 				// Built in weapons: the unit has this weapon regardless of loadout or what have you.
 				if (unitRule->getInnateWeapons().empty() == false)
 				{
@@ -1653,21 +1673,18 @@ void BattlescapeGenerator::deployAliens(
 							j != unitRule->getInnateWeapons().end();
 							++j)
 					{
-						RuleItem* ruleItem = _rules->getItem(*j);
-						if (ruleItem)
+						itemRule = _rules->getItem(*j);
+						if (itemRule != NULL)
 						{
 							BattleItem* item = new BattleItem(
-															ruleItem,
+															itemRule,
 															_save->getCurrentItemId());
-
 							if (!addItem(
 										item,
 										unit))
 							{
 								delete item;
 							}
-							else
-								unit->setTurretType(item->getRules()->getTurretType());
 						}
 					}
 				}
@@ -1679,14 +1696,18 @@ void BattlescapeGenerator::deployAliens(
 					std::string terroristWeapon = unitRule->getRace().substr(4);
 					terroristWeapon += "_WEAPON";
 
-					ruleItem = _rules->getItem(terroristWeapon);
-					if (ruleItem)
+					itemRule = _rules->getItem(terroristWeapon);
+					if (itemRule != NULL)
 					{
 						item = new BattleItem( // large aLiens add their weapons
-											ruleItem,
+											itemRule,
 											_save->getCurrentItemId());
-						if (!addItem(item, unit))
+						if (!addItem(
+									item,
+									unit))
+						{
 							delete item;
+						}
 						else
 							unit->setTurretType(item->getRules()->getTurretType());
 					}
@@ -1698,14 +1719,18 @@ void BattlescapeGenerator::deployAliens(
 							itemSet != (*data).itemSets.at(itemLevel).items.end();
 							++itemSet)
 					{
-						ruleItem = _rules->getItem(*itemSet);
-						if (ruleItem)
+						itemRule = _rules->getItem(*itemSet);
+						if (itemRule != NULL)
 						{
 							item = new BattleItem( // aLiens add items
-												ruleItem,
+												itemRule,
 												_save->getCurrentItemId());
-							if (!addItem(item, unit))
+							if (!addItem(
+										item,
+										unit))
+							{
 								delete item;
+							}
 						}
 					}
 				}

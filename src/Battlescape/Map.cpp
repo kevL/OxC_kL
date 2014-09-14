@@ -2868,18 +2868,16 @@ void Map::setHeight(int height)
 
 /**
  * Special handling for setting the width of the map viewport.
- * @param width the new base screen width.
+ * @param width - the new base screen width
  */
 void Map::setWidth(int width)
 {
 	Surface::setWidth(width);
 
-//	_message->setX(width / 2 - _message->getWidth() / 2);
-	int dX = width - getWidth();
-	_message->setX(_message->getX() + dX / 2);
+	_message->setX(_message->getX() + (width - getWidth()) / 2);
 }
 
-/*
+/**
  * Gets the hidden movement screen's vertical position.
  * @return, the vertical position of the hidden movement window
  */
@@ -2902,6 +2900,35 @@ const int Map::getIconHeight()
 const int Map::getIconWidth()
 {
 	return _iconHeight;
+}
+
+/**
+ * Returns the angle (left/right balance) of a sound effect based off a map position.
+ * @param pos - the map position to calculate the sound angle from
+ * @return, the angle of the sound (280 to 440) aka. -80 left to +80 degrees right
+ */
+const int Map::getSoundAngle(Position pos)
+{
+	int midPoint = getWidth() / 2;
+
+	Position relativePosition;
+	_camera->convertMapToScreen(
+							pos,
+							&relativePosition);
+
+	// cap the position to the screen edges relative to the center,
+	// negative values indicating a left-shift, and positive values shifting to the right.
+	relativePosition.x = std::max(
+								-midPoint,
+								std::min(
+										midPoint,
+										relativePosition.x + _camera->getMapOffset().x - midPoint));
+
+	// convert the relative distance to a relative increment of an 80 degree angle
+	// we use +- 80 instead of +- 90, so as not to go ALL the way left or right
+	// which would effectively mute the sound out of one speaker.
+	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
+	return static_cast<int>(static_cast<double>(relativePosition.x) / static_cast<double>(midPoint) / 80.0) + 360;
 }
 
 }
