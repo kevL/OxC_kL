@@ -1723,18 +1723,19 @@ alienDeployments:
   - type: STR_TERROR_MISSION
     width: 50
     length: 50
-    height: 6
+    height: 10 #was 6. 10 is Luke's ...
     civilians: 12
     terrains:
-      - MADURBAN
+      - COMRCURBAN
       - DAWNURBANA
       - DAWNURBANB
-      - PORTURBAN
       - INDUSTRIALURBAN
-      - URBAN
-      - RAILYARDURBAN
+      - MADURBAN
       - NATIVEURBAN
-      - COMRCURBAN
+      - PORTURBAN
+      - RAILYARDURBAN
+      - URBAN
+      - URBAN2 #Luke's Expanded Terror Sites
 extraStrings:
   - type: en-US
     strings:

@@ -1963,9 +1963,9 @@ void BattlescapeGenerator::generateMap()
 
 	// DETERMINE CRAFT LANDINGZONE
 	// - alien base assault has no craft landing zone
-	if (_craft != 0
+	if (_craft != NULL
 		&& (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT")
-		&& ( _save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT"))
+		&& (_save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT"))
 	{
 		// pick a random craft mapblock, can have all kinds of sizes
 		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
@@ -2579,7 +2579,7 @@ void BattlescapeGenerator::generateMap()
 			_craftY * 10,
 			_craft->getRules()->getBattlescapeTerrainData(),
 			mapDataSetIDOffset + craftDataSetIDOffset,
-			true,
+			false, // was true, let calcFOV() do the job.
 			true);
 
 		loadRMP(
@@ -2678,13 +2678,13 @@ void BattlescapeGenerator::generateMap()
 
 /**
  * Loads an XCom format MAP file into the tiles of the battlegame.
- * @param mapblock, Pointer to MapBlock.
- * @param xoff, Mapblock offset in X direction.
- * @param yoff, Mapblock offset in Y direction.
- * @param terrain, Pointer to the Terrain rule.
- * @param discovered, Whether or not this mapblock is discovered (eg. landingsite of the XCom plane).
- * @param craft,
- * @return, Height of the loaded mapblock (this is needed for spawpoint calculation...)
+ * @param mapblock		- pointer to MapBlock
+ * @param xoff			- Mapblock offset in X direction
+ * @param yoff			- Mapblock offset in Y direction
+ * @param terrain		- pointer to the Terrain rule
+ * @param discovered	- whether or not this mapblock is discovered (eg. landingsite of the XCom plane)
+ * @param craft			- true if Craft
+ * @return, height of the loaded mapblock (this is needed for spawnpoint calculation...
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * @note Y-axis is in reverse order.
  */

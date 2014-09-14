@@ -11,10 +11,6 @@ Tileset:UFO - Terrain
 	blankPath:${blankUFO}
 	palette:UFO
 
-	files:arearaid
-		${dep}:
-	end
-
 	files:atlantdesert
 		${dep}:SANDS ATLANTDESERT DESERT
 		ATLANTDESERT00:${dep}
@@ -652,6 +648,47 @@ Tileset:UFO - Terrain
 		URBAN16:${dep}
 		URBAN17:${dep}
 		URBAN18:${dep}
+	end
+
+	files:urban2
+		${dep}:ROADS URBITS URBAN FRNL83
+		CF00:${dep}
+		CF01:${dep}
+		CF02:${dep}
+		CF03:${dep}
+		CF04:${dep}
+		CF05:${dep}
+		CF06:${dep}
+		CF07:${dep}
+		CF08:${dep}
+		CF09:${dep}
+		CF14:${dep}
+		CF15:${dep}
+		CF16:${dep}
+		CF17:${dep}
+		CF18:${dep}
+		CF20:${dep}
+		CF21:${dep}
+		CF23:${dep}
+		CF24:${dep}
+		CF25:${dep}
+		CF26:${dep}
+		CF27:${dep}
+		CF100:${dep}
+		CF101:${dep}
+		CF102:${dep}
+		CF103:${dep}
+		CF104:${dep}
+		CF105:${dep}
+		CF106:${dep}
+		CF107:${dep}
+		CF108:${dep}
+		CF109:${dep}
+		CF114:${dep}
+		CF115:${dep}
+		CF116:${dep}
+		CF117:${dep}
+		CF118:${dep}
 	end
 
 	files:xbase
