@@ -2911,24 +2911,25 @@ const int Map::getSoundAngle(Position pos)
 {
 	int midPoint = getWidth() / 2;
 
-	Position relativePosition;
+	Position screenPos;
 	_camera->convertMapToScreen(
 							pos,
-							&relativePosition);
+							&screenPos);
 
 	// cap the position to the screen edges relative to the center,
 	// negative values indicating a left-shift, and positive values shifting to the right.
-	relativePosition.x = std::max(
-								-midPoint,
-								std::min(
-										midPoint,
-										relativePosition.x + _camera->getMapOffset().x - midPoint));
+	screenPos.x = std::max(
+						-midPoint,
+						std::min(
+								midPoint,
+								screenPos.x + _camera->getMapOffset().x - midPoint));
 
 	// convert the relative distance to a relative increment of an 80 degree angle
 	// we use +- 80 instead of +- 90, so as not to go ALL the way left or right
+	// we use +- 75 instead of +- 90, so as not to go ALL the way left or right
 	// which would effectively mute the sound out of one speaker.
 	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
-	return static_cast<int>(static_cast<double>(relativePosition.x) / static_cast<double>(midPoint) / 80.0) + 360;
+	return static_cast<int>(static_cast<double>(screenPos.x) / static_cast<double>(midPoint) / 75.0) + 360;
 }
 
 }

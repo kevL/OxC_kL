@@ -1472,8 +1472,6 @@ void GeoscapeState::time5Seconds()
 									_dogfightStartTimer->start();
 								}
 
-//								_game->getResourcePack()->playMusic("GMINTER");
-//								_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTER)->play(); // sza_MusicRules
 								_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTER); // kL, sza_MusicRules
 							}
 						break;

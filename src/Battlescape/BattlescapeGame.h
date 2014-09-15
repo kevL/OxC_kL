@@ -116,6 +116,29 @@ struct BattleAction
 			number(0)
 	{
 	}
+
+	public:
+		/// kL. heh This could cause problems.
+		void clearAction() // kL
+		{
+			type = BA_NONE;
+			actor = NULL;
+			weapon = NULL;
+			TU = 0;
+			targeting = false;
+			value = 0;
+			result = "";
+			strafe = false;
+			run = false;
+			diff = 0;
+			autoShotCount = 0;
+			autoShotKill = false;
+			cameraPosition = Position(0, 0,-1);
+			desperate = false;
+			finalFacing = -1;
+			finalAction = false;
+			number = 0;
+		}
 };
 
 

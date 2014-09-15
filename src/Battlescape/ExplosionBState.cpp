@@ -244,16 +244,21 @@ void ExplosionBState::init()
 
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7);
 
-			if (_power < 76)
-				_parent->getResourcePack()->getSoundByDepth(
-														_parent->getDepth(),
-														ResourcePack::SMALL_EXPLOSION)
-													->play();
+
+			int sound = -1;
+
+			if (_power < 73)
+				sound = ResourcePack::SMALL_EXPLOSION;
 			else
+				sound = ResourcePack::LARGE_EXPLOSION;
+
+			if (sound != -1)
 				_parent->getResourcePack()->getSoundByDepth(
 														_parent->getDepth(),
 														ResourcePack::LARGE_EXPLOSION)
-													->play();
+													->play(
+														-1,
+														_parent->getMap()->getSoundAngle(centerPos));
 
 			Camera* exploCam = _parent->getMap()->getCamera();
 			if (!exploCam->isOnScreen(centerPos))
@@ -286,14 +291,16 @@ void ExplosionBState::init()
 
 			if (_item->getRules()->getBattleType() != BT_PSIAMP)
 				sound = -1; // kL, done in ProjectileFlyBState for melee hits.
-//			sound = _item->getRules()->getMeleeHitSound(); // kL, this mutes Psi-hit sound.
+//			sound = _item->getRules()->getMeleeHitSound(); // this would mute Psi-hit sound.
 		}
 
 		if (sound != -1)
 			_parent->getResourcePack()->getSoundByDepth(
 													_parent->getDepth(),
 													sound)
-												->play(-1, _parent->getMap()->getSoundAngle(_center / Position(16,16,24)));
+												->play(
+													-1,
+													_parent->getMap()->getSoundAngle(centerPos));
 
 		Explosion* explosion = new Explosion( // animation. Don't burn the tile
 										_center,
@@ -402,10 +409,9 @@ void ExplosionBState::cancel()
 void ExplosionBState::explode()
 {
 	//Log(LOG_INFO) << "ExplosionBState::explode()";
-	if (_item
+	if (_item != NULL
 		&& _item->getRules()->getBattleType() == BT_PSIAMP)
 	{
-//		_parent->getMap()->cacheUnits();
 		_parent->popState();
 
 		return;
@@ -421,14 +427,14 @@ void ExplosionBState::explode()
 	{
 		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 
-		if (_unit
-			&& !_unit->isOut())
+		if (_unit != NULL
+			&& _unit->isOut() == false)
 		{
 			_unit->aim(false);
 			_unit->setCache(NULL);
 		}
 
-		if (_unit
+		if (_unit != NULL
 			&& _unit->getOriginalFaction() == FACTION_PLAYER
 			&& _unit->getFaction() == FACTION_PLAYER)
 		{
@@ -457,7 +463,7 @@ void ExplosionBState::explode()
 	if (_item)
 	{
 		//Log(LOG_INFO) << ". _item is VALID";
-		if (!_unit
+		if (_unit == NULL
 			&& _item->getPreviousOwner())
 		{
 			_unit = _item->getPreviousOwner();
@@ -470,10 +476,7 @@ void ExplosionBState::explode()
 							_center,
 							_power,
 							_item->getRules()->getDamageType(),
-							_item->getRules()->getExplosionRadius(),	// what about cyberdiscs/terrain explosions?
-																		// I need to introduce a _blastRadius class_var for ExplosionBState;
-																		// could use _areaOfEffect w/ -1 meaning !NOT!
-																		// Because I'd want to keep 0 for single tile explosions.
+							_item->getRules()->getExplosionRadius(),
 							_unit);
 		}
 		else
@@ -507,7 +510,7 @@ void ExplosionBState::explode()
 
 	bool terrain = false;
 
-	if (_tile)
+	if (_tile != NULL)
 	{
 		tileEngine->explode(
 						_center,
@@ -516,7 +519,7 @@ void ExplosionBState::explode()
 						_power / 10);
 		terrain = true;
 	}
-	else if (!_item) // explosion not caused by terrain or an item, must be by a unit (cyberdisc)
+	else if (_item == NULL) // explosion not caused by terrain or an item, must be a cyberdisc
 	{
 		int radius = 6;
 		if (_unit
@@ -534,14 +537,14 @@ void ExplosionBState::explode()
 	}
 
 
-	_parent->checkForCasualties( // now check for new casualties
+	_parent->checkForCasualties(
 							_item,
 							_unit,
 							false,
 							terrain);
 
-	if (_unit // if this explosion was caused by a unit shooting, now it's the time to put the gun down
-		&& !_unit->isOut()
+	if (_unit != NULL // if this explosion was caused by a unit shooting, now put the gun down
+		&& _unit->isOut() == false
 		&& _lowerWeapon)
 	{
 		_unit->aim(false);
@@ -568,7 +571,7 @@ void ExplosionBState::explode()
 												tile));
 	}
 
-	if (_item
+	if (_item != NULL
 		&& (_item->getRules()->getBattleType() == BT_GRENADE
 			|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 	{

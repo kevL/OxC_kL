@@ -1411,7 +1411,7 @@ int BattleUnit::damage(
  */
 void BattleUnit::playHitSound() // kL
 {
-	size_t sound = 0;
+	int sound = -1;
 
 	if (getType() == "MALE_CIVILIAN")
 		sound = RNG::generate(41, 43);
@@ -1431,12 +1431,11 @@ void BattleUnit::playHitSound() // kL
 		}
 	}
 
-	if (sound != 0)
+	if (sound != -1)
 		_battleGame->getResourcePack()->getSound(
 											"BATTLE.CAT",
 											sound)
 										->play();
-
 //	else // note: this will crash because _battleGame is currently left NULL for non-xCom & non-Civies.
 //		_battleGame->getResourcePack()->getSound(
 //											"BATTLE.CAT",

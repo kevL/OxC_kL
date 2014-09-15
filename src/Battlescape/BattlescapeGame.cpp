@@ -348,7 +348,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			getResourcePack()->getSoundByDepth(
 											_save->getDepth(),
 											unit->getAggroSound())
-										->play(-1, getMap()->getSoundAngle(unit->getPosition()));
+										->play(
+											-1,
+											getMap()->getSoundAngle(unit->getPosition()));
 		}
 	}
 	//Log(LOG_INFO) << ". getCharging DONE";
@@ -632,11 +634,9 @@ void BattlescapeGame::endTurn()
 	if (t)
 	{
 		Position pos = Position(
-//kL						t->getPosition().x * 16,
-//kL						t->getPosition().y * 16,
-							t->getPosition().x * 16 + 8, // kL
-							t->getPosition().y * 16 + 8, // kL
-							t->getPosition().z * 24);
+							t->getPosition().x * 16 + 8,
+							t->getPosition().y * 16 + 8,
+							t->getPosition().z * 24 + 10);
 
 		// kL_note: This seems to be screwing up for preBattle powersource explosions; they
 		// wait until the first turn, either endTurn or perhaps checkForCasualties or like that.
@@ -663,9 +663,8 @@ void BattlescapeGame::endTurn()
 				grenade != _save->getItems()->end();
 				++grenade)
 		{
-			if ((*grenade)->getOwner() == NULL // kL
+			if ((*grenade)->getOwner() == NULL
 				&& (*grenade)->getRules()->getBattleType() == BT_GRENADE
-//kL				|| (*grenade)->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 				&& (*grenade)->getFuseTimer() > 0)
 			{
 				(*grenade)->setFuseTimer((*grenade)->getFuseTimer() - 1);
@@ -685,10 +684,8 @@ void BattlescapeGame::endTurn()
 	{
 		if ((*j)->getFaction() == _save->getSide())
 		{
-			// Catch fire first! do it here
-
-			int fire = (*j)->getFire();
-			if (fire > 0) // kL
+			int fire = (*j)->getFire(); // Catch fire first! do it here
+			if (fire > 0)
 			{
 				int dam = RNG::generate(3, 9);
 
@@ -2066,8 +2063,10 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 					return true;
 				}
 
+//				_currentAction.clearAction(); // kL
 				_currentAction.targeting = false;
 				_currentAction.type = BA_NONE;
+//				_currentAction.TU = 0; // kL
 
 				setupCursor();
 				_parentState->getGame()->getCursor()->setVisible();
@@ -2111,30 +2110,15 @@ bool BattlescapeGame::isBusy()
  */
 void BattlescapeGame::primaryAction(const Position& pos)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::primaryAction()"; // unitID = " << _currentAction.actor->getId();
-	// kL_debug:
-//	std::string sUnit = "none selected";
-/*	int iUnit = 0;
-	if (_save->getSelectedUnit())
-	{
-		iUnit = _save->getSelectedUnit()->getId();
-		//Log(LOG_INFO) << ". selectedUnit " << iUnit;
-	}
-	else if (_currentAction.actor)
-	{
-		//Log(LOG_INFO) << ". action.Actor " << iUnit;
-		iUnit = _currentAction.actor->getId();
-	} */ // kL_end.
-	//Log(LOG_INFO) << ". action.TU = " << _currentAction.TU;
-
-
+	//Log(LOG_INFO) << "BattlescapeGame::primaryAction()";
+	//if (_save->getSelectedUnit()) Log(LOG_INFO) << ". ID " << _save->getSelectedUnit()->getId();
 	bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
 
-	if (_currentAction.targeting
-		&& _save->getSelectedUnit())
+	if (_save->getSelectedUnit()
+		&& _currentAction.targeting)
 	{
 		//Log(LOG_INFO) << ". . _currentAction.targeting";
-		_currentAction.strafe = false; // kL
+		_currentAction.strafe = false;
 
 		if (_currentAction.type == BA_LAUNCH) // click to set BL waypoints.
 		{
@@ -2152,39 +2136,36 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction()
 				&& _save->selectUnit(pos)->getVisible())
 			{
-				if (!_currentAction.weapon->getRules()->isLOSRequired()
+				if (_currentAction.weapon->getRules()->isLOSRequired() == false
 					|| std::find(
 							_currentAction.actor->getVisibleUnits()->begin(),
 							_currentAction.actor->getVisibleUnits()->end(),
 							_save->selectUnit(pos))
 						!= _currentAction.actor->getVisibleUnits()->end())
 				{
-					if (_currentAction.actor->spendTimeUnits(_currentAction.TU)) // kL_note: Should this be getActionTUs() to account for flatRates?
+					if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 					{
 						_parentState->getGame()->getResourcePack()->getSoundByDepth(
 																				_save->getDepth(),
 																				_currentAction.weapon->getRules()->getHitSound())
-																			->play(-1, getMap()->getSoundAngle(pos));
+																			->play(
+																				-1,
+																				getMap()->getSoundAngle(pos));
+
 						_parentState->getGame()->pushState(new UnitInfoState(
 																		_save->selectUnit(pos),
 																		_parentState,
 																		false,
 																		true));
-
-						cancelCurrentAction();
-						// kL_note: where is updateSoldierInfo() - is that done when unitInfoState is dismissed?
 					}
 					else
-					{
-						cancelCurrentAction(); // kL
 						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
-					}
 				}
 				else
-				{
-//					cancelCurrentAction(); // kL
 					_parentState->warning("STR_NO_LINE_OF_FIRE");
-				}
+
+
+				cancelCurrentAction(); // kL
 			}
 		}
 		else if (_currentAction.type == BA_PANIC
@@ -2195,19 +2176,20 @@ void BattlescapeGame::primaryAction(const Position& pos)
 				&& _save->selectUnit(pos)->getFaction() != _save->getSelectedUnit()->getFaction()
 				&& _save->selectUnit(pos)->getVisible())
 			{
-				bool builtinpsi = !_currentAction.weapon;
-				if (builtinpsi)
+				bool aLienPsi = (_currentAction.weapon == NULL);
+				if (aLienPsi)
 				{
 					_currentAction.weapon = new BattleItem(
-													_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
-													_save->getCurrentItemId());
+														_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
+														_save->getCurrentItemId());
 				}
 
+				_currentAction.target = pos;
 				_currentAction.TU = _currentAction.actor->getActionTUs(
 																	_currentAction.type,
 																	_currentAction.weapon);
-				_currentAction.target = pos;
-				if (!_currentAction.weapon->getRules()->isLOSRequired()
+
+				if (_currentAction.weapon->getRules()->isLOSRequired() == false
 					|| std::find(
 							_currentAction.actor->getVisibleUnits()->begin(),
 							_currentAction.actor->getVisibleUnits()->end(),
@@ -2226,7 +2208,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 														this,
 														_currentAction));
 
-					if (_currentAction.TU <= _currentAction.actor->getTimeUnits()) // kL_note: WAIT, check this *before* all the stuff above!!!
+					if (_currentAction.actor->getTimeUnits() >= _currentAction.TU) // kL_note: WAIT, check this *before* all the stuff above!!!
 					{
 						if (getTileEngine()->psiAttack(&_currentAction))
 						{
@@ -2237,7 +2219,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 								//Log(LOG_INFO) << ". . . . . . . . BA_Panic";
 								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
 							}
-							else //if (_currentAction.type == BA_MINDCONTROL)
+							else // BA_MINDCONTROL
 							{
 								//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
 								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
@@ -2251,20 +2233,20 @@ void BattlescapeGame::primaryAction(const Position& pos)
 
 							// kL_begin: BattlescapeGame::primaryAction(), not sure where this bit came from.....
 							// it doesn't seem to be in the official oXc but it might
-							// stop some (psi-related) crashes i'm getting; (no, it was something else..)
+							// stop some (psi-related) crashes i'm getting; (no, it was something else..),
 							// but then it probably never runs because I doubt that selectedUnit can be other than xCom.
 							// (yes, selectedUnit is currently operating unit of *any* faction)
+							// BUT -> primaryAction() here is never called by the AI; only by Faction_Player ...
+							// BUT <- it has to be, because this is how aLiens do their 'builtInPsi'
+							//
+							// I could do a test Lol
+
 //							if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
 //							{
 //							_currentAction.targeting = false;
 //							_currentAction.type = BA_NONE;
 //							}
 //							setupCursor();
-
-
-							// kL_note: might need to put a refresh (redraw/blit) cursor here;
-							// else it 'sticks' for a moment at its previous position.
-//							_parentState->getMap()->refreshSelectorPosition();			// kL
 
 //							getMap()->setCursorType(CT_NONE);							// kL
 //							_parentState->getGame()->getCursor()->setVisible(false);	// kL
@@ -2274,22 +2256,20 @@ void BattlescapeGame::primaryAction(const Position& pos)
 							//Log(LOG_INFO) << ". . . . . . inVisible cursor, DONE";
 						}
 					}
-					else													// kL
+					else
 					{
-						cancelCurrentAction();								// kL
-						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");	// kL
+						cancelCurrentAction();
+						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 					}
 				}
 				else
-				{
-//					cancelCurrentAction();									// kL
 					_parentState->warning("STR_NO_LINE_OF_FIRE");
-				}
 
-				if (builtinpsi)
+
+				if (aLienPsi)
 				{
 					_save->removeItem(_currentAction.weapon);
-					_currentAction.weapon = 0;
+					_currentAction.weapon = NULL;
 				}
 			}
 		}
@@ -2342,8 +2322,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 			&& unit != _save->getSelectedUnit()
 			&& (unit->getVisible() || _debugPlay))
 		{
-			//  -= select unit =-
-			if (unit->getFaction() == _save->getSide())
+			if (unit->getFaction() == _save->getSide()) // -= select unit =- //
 			{
 				_save->setSelectedUnit(unit);
 				_parentState->updateSoldierInfo();
@@ -2357,34 +2336,34 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		else if (playableUnitSelected())
 		{
 			bool mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
-			bool mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0; // kL
+			bool mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0;
 			if (bPreviewed
 				&& (_currentAction.target != pos
 					|| _save->getPathfinding()->isModCTRL() != mod_CTRL
-					|| _save->getPathfinding()->isModALT() != mod_ALT)) // kL
+					|| _save->getPathfinding()->isModALT() != mod_ALT))
 			{
 				_save->getPathfinding()->removePreview();
 			}
 
-			_currentAction.actor->setDashing(false); // kL
+			_currentAction.actor->setDashing(false);
 			_currentAction.run = false;
 			_currentAction.strafe = Options::strafe
 									&& ((mod_CTRL
 											&& _save->getSelectedUnit()->getTurretType() == -1)
 										|| (mod_ALT // tank, reverse gear 1 tile only.
 											&& _save->getSelectedUnit()->getTurretType() > -1));
+
 			//Log(LOG_INFO) << ". primary action: Strafe";
+
 			if (_currentAction.strafe
 				&& (_save->getTileEngine()->distance(
 												_currentAction.actor->getPosition(),
 												pos)
 											> 1
-					|| _currentAction.actor->getPosition().z != pos.z) // kL
-				&& _save->getSelectedUnit()->getTurretType() == -1) // kL: tanks don't dash.
+					|| _currentAction.actor->getPosition().z != pos.z)
+				&& _save->getSelectedUnit()->getTurretType() == -1) // tanks don't dash.
 			{
-				_currentAction.actor->setDashing(true); // kL, do this in UnitWalkBState
-				// kL_note: I just realized that action.run could be used instead of set/getDashing() ...
-				// leave it as is for now; for use in TileEngine, reaction fire
+				_currentAction.actor->setDashing(true);
 				_currentAction.run = true;
 				_currentAction.strafe = false;
 			}
@@ -2394,7 +2373,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 											_currentAction.actor,
 											_currentAction.target);
 
-			if (_save->getPathfinding()->getStartDirection() != -1) // kL -> assumes both previewPath() & removePreview() don't change StartDirection
+			if (_save->getPathfinding()->getStartDirection() != -1) // assumes both previewPath() & removePreview() don't change StartDirection
 			{
 				if (bPreviewed
 					&& !_save->getPathfinding()->previewPath())
@@ -2405,11 +2384,10 @@ void BattlescapeGame::primaryAction(const Position& pos)
 					bPreviewed = false;
 				}
 
-				if (!bPreviewed)
+				if (!bPreviewed) // -= start walking =- //
 //kL				&& _save->getPathfinding()->getStartDirection() != -1)
 				{
 					//Log(LOG_INFO) << "primary: !bPreviewed";
-					//  -= start walking =-
 					getMap()->setCursorType(CT_NONE);
 					_parentState->getGame()->getCursor()->setVisible(false);
 
