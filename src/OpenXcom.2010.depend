@@ -5814,7 +5814,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1410729620 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1410739600 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6170,7 +6170,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1409183645 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1410739423 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	<sstream>
 	"AliensCrashState.h"
@@ -6440,7 +6440,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1410571086 source:f:\git\openxcom\src\battlescape\map.cpp
+1410740081 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -7762,7 +7762,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1410671791 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1410738642 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>

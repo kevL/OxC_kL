@@ -1072,6 +1072,7 @@ void SavedGame::setTime(GameTime time)
 int SavedGame::getId(const std::string& name)
 {
 	std::map<std::string, int>::iterator i = _ids.find(name);
+
 	if (i != _ids.end())
 		return i->second++;
 	else
@@ -1098,6 +1099,7 @@ std::vector<Country*>* SavedGame::getCountries()
 int SavedGame::getCountryFunding() const
 {
 	int total = 0;
+
 	for (std::vector<Country*>::const_iterator
 			i = _countries.begin();
 			i != _countries.end();

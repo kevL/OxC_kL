@@ -1761,13 +1761,13 @@ void Globe::drawGlobeCircle(
 
 		if (!pointBack(lon1, lat1))
 			XuLine(
-					_radars,
-					this,
-					x,
-					y,
-					x2,
-					y2,
-					4);
+				_radars,
+				this,
+				x,
+				y,
+				x2,
+				y2,
+				4);
 
 		x2 = x;
 		y2 = y;
@@ -1883,13 +1883,10 @@ void Globe::drawDetail()
 	//Log(LOG_INFO) << "Globe::drawDetail()";
 	_countries->clear();
 
-	if (!Options::globeDetail)
-	{
-		//Log(LOG_INFO) << ". OFF, return";
-		return;
-	}
+//	if (!Options::globeDetail) return;
 
-	if (_zoom > 0) // Draw the country borders
+	if (_zoom > 0 // Draw the country borders
+		&& Options::globeDetail)
 	{
 		_countries->lock(); // Lock the surface
 		for (std::list<Polyline*>::iterator
@@ -1910,8 +1907,8 @@ void Globe::drawDetail()
 							(*i)->getLongitude(j),
 							(*i)->getLatitude(j))
 					|| pointBack(
-								(*i)->getLongitude(j + 1),
-								(*i)->getLatitude(j + 1)))
+							(*i)->getLongitude(j + 1),
+							(*i)->getLatitude(j + 1)))
 				{
 					continue;
 				}
@@ -1938,127 +1935,6 @@ void Globe::drawDetail()
 		_countries->unlock(); // Unlock the surface
 	}
 
-	if (_zoom > 2) // Draw the country names
-	{
-		Text* label = new Text(100, 9, 0, 0);
-		label->setPalette(getPalette());
-		label->initText(
-					_game->getResourcePack()->getFont("FONT_BIG"),
-					_game->getResourcePack()->getFont("FONT_SMALL"),
-					_game->getLanguage());
-		label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(14)+3);
-
-		Sint16
-			x,
-			y;
-
-		for (std::vector<Country*>::iterator
-				i = _game->getSavedGame()->getCountries()->begin();
-				i != _game->getSavedGame()->getCountries()->end();
-				++i)
-		{
-			if (pointBack( // don't draw if label is facing back
-						(*i)->getRules()->getLabelLongitude(),
-						(*i)->getRules()->getLabelLatitude()))
-			{
-				continue;
-			}
-
-			polarToCart( // Convert coordinates
-					(*i)->getRules()->getLabelLongitude(),
-					(*i)->getRules()->getLabelLatitude(),
-					&x,
-					&y);
-
-			label->setX(x - 50);
-			label->setY(y);
-			label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
-
-			label->blit(_countries);
-		}
-
-		delete label;
-	}
-
-/*kL	if (_zoom > 2) // Draw the city and base markers
-	{
-		Text* label = new Text(80, 9, 0, 0);
-		label->setPalette(getPalette());
-		label->initText(
-					_game->getResourcePack()->getFont("FONT_BIG"),
-					_game->getResourcePack()->getFont("FONT_SMALL"),
-					_game->getLanguage());
-//kL	label->setAlign(ALIGN_CENTER);
-		label->setColor(Palette::blockOffset(10)+7);
-
-		Sint16 x, y;
-
-		for (std::vector<Region*>::iterator
-				i = _game->getSavedGame()->getRegions()->begin();
-				i != _game->getSavedGame()->getRegions()->end();
-				++i)
-		{
-			for (std::vector<City*>::iterator
-					j = (*i)->getRules()->getCities()->begin();
-					j != (*i)->getRules()->getCities()->end();
-					++j)
-			{
-				// Don't draw if city is facing back
-				if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
-					continue;
-
-				// Convert coordinates
-				polarToCart((*j)->getLongitude(), (*j)->getLatitude(), &x, &y);
-
-// kL_begin:
-				_mkCity->setX(x - 1);
-				_mkCity->setY(y - 1);
-				_mkCity->setPalette(getPalette());
-
-				_mkCity->blit(_countries);
-// kL_end.
-
-// code for using SurfaceSet for markers:
-				Surface* marker = _markerSet->getFrame(CITY_MARKER);
-				marker->setX(x - 1);
-				marker->setY(y - 1);
-				marker->blit(_countries); // end.
-
-				label->setX(x - 40);
-				label->setY(y + 2);
-				label->setText(_game->getLanguage()->getString((*j)->getName()));
-
-				label->blit(_countries);
-			}
-		}
-
-		// Draw bases names
-		for (std::vector<Base*>::iterator
-				j = _game->getSavedGame()->getBases()->begin();
-				j != _game->getSavedGame()->getBases()->end();
-				++j)
-		{
-			if (pointBack((*j)->getLongitude(), (*j)->getLatitude()))
-				continue;
-
-			polarToCart(
-					(*j)->getLongitude(),
-					(*j)->getLatitude(),
-					&x,
-					&y);
-
-			label->setX(x - 40);
-			label->setY(y + 2);
-			label->setColor(Palette::blockOffset(8)+5);
-			label->setText((*j)->getName());
-			label->blit(_countries);
-		}
-
-		delete label;
-	} */
-
-	// kL_begin: Globe::drawDetail(), separate city markers from labels for zoomLevels
 	if (_zoom > 1) // Draw the city markers
 	{
 		Sint16
@@ -2097,15 +1973,57 @@ void Globe::drawDetail()
 /*				_mkCity->setX(x - 1);
 				_mkCity->setY(y - 1);
 				_mkCity->setPalette(getPalette());
-
 				_mkCity->blit(_countries); */
 			}
 		}
 	}
 
-	if (_zoom > 3) // Draw the city labels
+	Text* label = new Text(100, 9, 0, 0);
+
+	if (_zoom > 2 // Draw the country names
+		&& Options::globeDetail)
 	{
-		Text* label = new Text(80, 9, 0, 0);
+		label->setPalette(getPalette());
+		label->initText(
+					_game->getResourcePack()->getFont("FONT_BIG"),
+					_game->getResourcePack()->getFont("FONT_SMALL"),
+					_game->getLanguage());
+		label->setAlign(ALIGN_CENTER);
+		label->setColor(Palette::blockOffset(14)+3);
+
+		Sint16
+			x,
+			y;
+
+		for (std::vector<Country*>::iterator
+				i = _game->getSavedGame()->getCountries()->begin();
+				i != _game->getSavedGame()->getCountries()->end();
+				++i)
+		{
+			if (pointBack( // don't draw if label is facing back
+						(*i)->getRules()->getLabelLongitude(),
+						(*i)->getRules()->getLabelLatitude()))
+			{
+				continue;
+			}
+
+			polarToCart( // Convert coordinates
+					(*i)->getRules()->getLabelLongitude(),
+					(*i)->getRules()->getLabelLatitude(),
+					&x,
+					&y);
+
+			label->setX(x - 50);
+			label->setY(y);
+			label->setText(_game->getLanguage()->getString((*i)->getRules()->getType()));
+
+			label->blit(_countries);
+		}
+	}
+
+	if (_zoom > 3 // Draw the city labels
+		&& Options::globeDetail)
+	{
 		label->setPalette(getPalette());
 		label->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
@@ -2141,59 +2059,57 @@ void Globe::drawDetail()
 						&x,
 						&y);
 
-				label->setX(x - 40);
+				label->setX(x - 50);
 				label->setY(y + 2);
 				label->setText(_game->getLanguage()->getString((*j)->getName()));
 
 				label->blit(_countries);
 			}
 		}
+	}
 
-		delete label;
-	} // kL_end.
-
-	// kL_begin: Draw xCom base labels.
-	Text* label = new Text(80, 9, 0, 0);
-	label->setPalette(getPalette());
-	label->initText(
-				_game->getResourcePack()->getFont("FONT_BIG"),
-				_game->getResourcePack()->getFont("FONT_SMALL"),
-				_game->getLanguage());
-//	label->setAlign(ALIGN_LEFT);
-	label->setColor(Palette::blockOffset(6)+3); //(11)+1);
-
-	Sint16
-		x,
-		y;
-
-	for (std::vector<Base*>::iterator // Draw the base labels
-			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end();
-			++i)
+	if (Options::globeDetail) // Draw xCom base labels.
 	{
-		// Cheap hack to hide a base when it hasn't been placed yet
-		if (((*i)->getLongitude() != 0.0
-				|| (*i)->getLatitude() != 0.0)
-			&& !pointBack( // Don't draw if city is facing back
-						(*i)->getLongitude(),
-						(*i)->getLatitude()))
+		label->setPalette(getPalette());
+		label->initText(
+					_game->getResourcePack()->getFont("FONT_BIG"),
+					_game->getResourcePack()->getFont("FONT_SMALL"),
+					_game->getLanguage());
+		label->setAlign(ALIGN_LEFT);
+		label->setColor(Palette::blockOffset(6)+3);
+
+		Sint16
+			x,
+			y;
+
+		for (std::vector<Base*>::iterator // Draw the base labels
+				i = _game->getSavedGame()->getBases()->begin();
+				i != _game->getSavedGame()->getBases()->end();
+				++i)
 		{
-			polarToCart( // Convert coordinates
-					(*i)->getLongitude(),
-					(*i)->getLatitude(),
-					&x,
-					&y);
+			// Cheap hack to hide a base when it hasn't been placed yet
+			if (((*i)->getLongitude() != 0.0
+					|| (*i)->getLatitude() != 0.0)
+				&& !pointBack( // Don't draw if city is facing back
+							(*i)->getLongitude(),
+							(*i)->getLatitude()))
+			{
+				polarToCart( // Convert coordinates
+						(*i)->getLongitude(),
+						(*i)->getLatitude(),
+						&x,
+						&y);
 
-			label->setX(x - 3);
-			label->setY(y - 10);
-			label->setText((*i)->getName());
+				label->setX(x - 3);
+				label->setY(y - 10);
+				label->setText((*i)->getName());
 
-			label->blit(_countries);
+				label->blit(_countries);
+			}
 		}
 	}
 
 	delete label;
-	// kL_end.
 
 
 	// debug stuff follows...

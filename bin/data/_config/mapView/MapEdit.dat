@@ -28,7 +28,7 @@ Tileset:UFO - Terrain
 		ATLANTDESERT12:${dep}
 	end
 
-	files: comrcurban
+	files:comrcurban
 		${dep}:COMROADS COMBITS COMMERCE COMFRN COMDECOR
 		COMRCURBAN00:${dep}
 		COMRCURBAN01:${dep}
