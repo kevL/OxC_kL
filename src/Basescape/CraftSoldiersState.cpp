@@ -61,8 +61,7 @@ CraftSoldiersState::CraftSoldiersState(
 		size_t craftID)
 	:
 		_base(base),
-		_craftID(craftID),
-		_curRow(0)
+		_craftID(craftID)
 {
 	//Log(LOG_INFO) << "Create CraftSoldiersState";
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -154,10 +153,12 @@ CraftSoldiersState::CraftSoldiersState(
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin();
+//	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersMousePress);
 	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftSoldiersState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftSoldiersState::lstRightArrowClick);
-//	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersMousePress);
+
+	_curRow = base->getCurrentRowSoldiers();
 }
 
 /**
@@ -174,6 +175,8 @@ CraftSoldiersState::~CraftSoldiersState()
  */
 void CraftSoldiersState::btnOkClick(Action*)
 {
+	_base->setCurrentRowSoldiers(_curRow);
+
 	_game->popState();
 }
 
@@ -300,13 +303,25 @@ void CraftSoldiersState::init()
 		row++;
 	}
 
-	if (row > 0
+/*	if (row > 0
 		&& _lstSoldiers->getScroll() >= row)
 	{
 		_lstSoldiers->scrollTo(0);
 	}
 	else if (_curRow > 0)
-		_lstSoldiers->scrollTo(_curRow);
+		_lstSoldiers->scrollTo(_curRow); */
+
+	if (row > 0)
+	{
+		if (_lstSoldiers->getScroll() > row - 1
+			|| _curRow > row - 1)
+		{
+			_curRow = 0;
+			_lstSoldiers->scrollTo(0);
+		}
+		else if (_curRow > 0)
+			_lstSoldiers->scrollTo(_curRow);
+	}
 
 	_lstSoldiers->draw();
 

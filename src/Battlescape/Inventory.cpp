@@ -1204,7 +1204,7 @@ bool Inventory::unload()
 
 /**
  * Arranges items on the ground for the inventory display.
- * Since items on the ground aren't assigned to anyone,
+ * Since items on the ground aren't assigned to anyone
  * they don't actually have permanent slot positions.
  * @param alterOffset Whether to alter the ground offset.
  */
@@ -1303,8 +1303,10 @@ void Inventory::arrangeGround(bool alterOffset)
 
 	if (alterOffset)
 	{
-		if (xMax >= _groundOffset + slotsX - 1)
-			_groundOffset += slotsX - 1;
+//		if (xMax >= _groundOffset + slotsX - 1)
+//			_groundOffset += slotsX - 1;
+		if (xMax > _groundOffset + slotsX)
+			_groundOffset += slotsX;
 		else
 			_groundOffset = 0;
 	}

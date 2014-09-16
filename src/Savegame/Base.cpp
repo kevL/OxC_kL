@@ -72,7 +72,8 @@ Base::Base(const Ruleset* rule)
 		_retaliationTarget(false),
 		_cashIncome(0),	// kL
 		_cashSpent(0),	// kL
-		_defenseResult(0)
+		_defenseResult(0), // kL
+		_curRowSoldiers(0) // kL
 {
 	_items = new ItemContainer();
 }
@@ -2805,6 +2806,22 @@ void Base::setDefenseResult(int result)
 int Base::getDefenseResult() const
 {
 	return _defenseResult;
+}
+
+/**
+ * Sets the current row of Soldiers list.
+ */
+void Base::setCurrentRowSoldiers(size_t row)
+{
+	_curRowSoldiers = row;
+}
+
+/**
+ * Gets the current row of Soldiers list.
+ */
+size_t Base::getCurrentRowSoldiers() const
+{
+	return _curRowSoldiers;
 } // kL_end.
 
 }

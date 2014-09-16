@@ -66,6 +66,7 @@ private:
 		_engineers,
 		_scientists,
 		_defenseResult;
+	size_t _curRowSoldiers; // kL
 
 	ItemContainer* _items;
 	const Ruleset* _rule;
@@ -273,7 +274,7 @@ private:
 		/// Destroys a facility and deals with the side effects.
 		void destroyFacility(std::vector<BaseFacility*>::iterator facility);
 
-		// kL_begin: Base, for GraphsState monthly expenditures etc.
+// kL_begin: Base, for GraphsState monthly expenditures etc.
 		/// Increases (or decreases) the base's total income amount.
 		void setCashIncome(int cash);
 		/// Gets the base's total income amount.
@@ -287,7 +288,12 @@ private:
 		void setDefenseResult(int result);
 		/// Gets the result of a base's defense against aLien attacks.
 		int getDefenseResult() const;
-		// kL_end.
+
+		/// Sets the current row of Soldiers list.
+		void setCurrentRowSoldiers(size_t row);
+		/// Gets the current row of Soldiers list.
+		size_t getCurrentRowSoldiers() const;
+// kL_end.
 };
 
 }

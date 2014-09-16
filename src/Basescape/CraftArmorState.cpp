@@ -63,8 +63,7 @@ CraftArmorState::CraftArmorState(
 		size_t craftID)
 	:
 		_base(base),
-		_craftID(craftID),
-		_curRow(0)
+		_craftID(craftID)
 {
 	//Log(LOG_INFO) << "Create CraftArmorState";
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -129,6 +128,8 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->onMousePress((ActionHandler)& CraftArmorState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstRightArrowClick);
+
+	_curRow = base->getCurrentRowSoldiers();
 
 //kL	Craft* craft = _base->getCrafts()->at(_craftID);
 /*	Craft* craft = NULL;							// kL
@@ -255,13 +256,25 @@ void CraftArmorState::init()
 		row++;
 	}
 
-	if (row > 0
+/*	if (row > 0
 		&& _lstSoldiers->getScroll() >= row)
 	{
 		_lstSoldiers->scrollTo(0);
 	}
 	else if (_curRow > 0)
-		_lstSoldiers->scrollTo(_curRow);
+		_lstSoldiers->scrollTo(_curRow); */
+
+	if (row > 0)
+	{
+		if (_lstSoldiers->getScroll() > row - 1
+			|| _curRow > row - 1)
+		{
+			_curRow = 0;
+			_lstSoldiers->scrollTo(0);
+		}
+		else if (_curRow > 0)
+			_lstSoldiers->scrollTo(_curRow);
+	}
 
 	_lstSoldiers->draw();
 }
@@ -272,6 +285,8 @@ void CraftArmorState::init()
  */
 void CraftArmorState::btnOkClick(Action*)
 {
+	_base->setCurrentRowSoldiers(_curRow);
+
 	_game->popState();
 }
 

@@ -61,8 +61,7 @@ namespace OpenXcom
 SoldiersState::SoldiersState(
 		Base* base)
 	:
-		_base(base),
-		_curRow(0)
+		_base(base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 10, 11);
@@ -156,6 +155,8 @@ SoldiersState::SoldiersState(
 	_lstSoldiers->onMousePress((ActionHandler)& SoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstRightArrowClick);
+
+	_curRow = base->getCurrentRowSoldiers();
 }
 
 /**
@@ -213,13 +214,25 @@ void SoldiersState::init()
 		row++;
 	}
 
-	if (row > 0
+/*	if (row > 0
 		&& _lstSoldiers->getScroll() >= row)
 	{
 		_lstSoldiers->scrollTo(0);
 	}
 	else if (_curRow > 0)
-		_lstSoldiers->scrollTo(_curRow);
+		_lstSoldiers->scrollTo(_curRow); */
+
+	if (row > 0)
+	{
+		if (_lstSoldiers->getScroll() > row - 1
+			|| _curRow > row - 1)
+		{
+			_curRow = 0;
+			_lstSoldiers->scrollTo(0);
+		}
+		else if (_curRow > 0)
+			_lstSoldiers->scrollTo(_curRow);
+	}
 
 	_lstSoldiers->draw();
 }
@@ -230,6 +243,8 @@ void SoldiersState::init()
  */
 void SoldiersState::btnOkClick(Action*)
 {
+	_base->setCurrentRowSoldiers(_curRow);
+
 	_game->popState();
 }
 
@@ -239,6 +254,8 @@ void SoldiersState::btnOkClick(Action*)
  */
 void SoldiersState::btnPsiTrainingClick(Action*)
 {
+	_base->setCurrentRowSoldiers(_curRow);
+
 	_game->pushState(new AllocatePsiTrainingState(_base));
 }
 
@@ -249,6 +266,8 @@ void SoldiersState::btnPsiTrainingClick(Action*)
  */
 void SoldiersState::btnArmorClick(Action*)
 {
+	_base->setCurrentRowSoldiers(_curRow);
+
 	_game->pushState(new CraftArmorState(
 										_base,
 										0));
@@ -260,6 +279,8 @@ void SoldiersState::btnArmorClick(Action*)
  */
 void SoldiersState::btnMemorialClick(Action*)
 {
+//	_base->setCurrentRowSoldiers(_curRow);
+
 	_game->pushState(new SoldierMemorialState());
 }
 

@@ -57,8 +57,7 @@ namespace OpenXcom
  */
 AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	:
-		_sel(0),
-		_curRow(0)
+		_sel(0)
 {
 	_base = base;
 
@@ -139,6 +138,8 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_lstSoldiers->onMousePress((ActionHandler)& AllocatePsiTrainingState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& AllocatePsiTrainingState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstRightArrowClick);
+
+	_curRow = base->getCurrentRowSoldiers();
 
 //	init(); // kL -> might not need this at all ... is init() called auto by the engine
 /*kL
@@ -272,13 +273,25 @@ void AllocatePsiTrainingState::init()
 		row++;
 	}
 
-	if (row > 0
+/*	if (row > 0
 		&& _lstSoldiers->getScroll() >= row)
 	{
 		_lstSoldiers->scrollTo(0);
 	}
 	else if (_curRow > 0)
-		_lstSoldiers->scrollTo(_curRow);
+		_lstSoldiers->scrollTo(_curRow); */
+
+	if (row > 0)
+	{
+		if (_lstSoldiers->getScroll() > row - 1
+			|| _curRow > row - 1)
+		{
+			_curRow = 0;
+			_lstSoldiers->scrollTo(0);
+		}
+		else if (_curRow > 0)
+			_lstSoldiers->scrollTo(_curRow);
+	}
 
 	_lstSoldiers->draw();
 }
@@ -289,6 +302,8 @@ void AllocatePsiTrainingState::init()
  */
 void AllocatePsiTrainingState::btnOkClick(Action*)
 {
+	_base->setCurrentRowSoldiers(_curRow);
+
 	_game->popState();
 }
 
