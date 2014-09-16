@@ -4778,10 +4778,14 @@ int TileEngine::calculateLine(
 
 			if (horiBlock < 0) // hit content-object
 			{
-				if (vertBlock > 0)
+				if (vertBlock < 1)
+					return horiBlock;
+				else
+					horiBlock = 0;
+/*				if (vertBlock > 0)
 					horiBlock = 0;
 				else
-					return horiBlock;
+					return horiBlock; */
 			}
 
 			horiBlock += vertBlock;

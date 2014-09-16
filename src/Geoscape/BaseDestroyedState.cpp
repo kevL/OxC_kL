@@ -166,6 +166,11 @@ void BaseDestroyedState::finish()
 			delete *base;
 			_game->getSavedGame()->getBases()->erase(base);
 
+			// SHOULD PUT IN A SECTION FOR TRANSFERRING AIRBORNE CRAFT TO ANOTHER BASE/S
+			// if Option:: transfer airborne craft == true
+			// & stores available (else sell)
+			// & living quarters available (if soldiers true) else Sack.
+
 			break;
 		}
 	}

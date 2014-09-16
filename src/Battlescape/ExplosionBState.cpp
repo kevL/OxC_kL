@@ -255,7 +255,7 @@ void ExplosionBState::init()
 			if (sound != -1)
 				_parent->getResourcePack()->getSoundByDepth(
 														_parent->getDepth(),
-														ResourcePack::LARGE_EXPLOSION)
+														sound)
 													->play(
 														-1,
 														_parent->getMap()->getSoundAngle(centerPos));
