@@ -787,7 +787,7 @@ void ProjectileFlyBState::think()
 		}
 		else // end think()
 		{
-			if (_action.cameraPosition.z != -1)
+			if (_action.cameraPosition.z != -1 && _action.waypoints.size() <= 1)
 			{
 /*				if (_action.type == BA_STUN // kL, don't jump screen after these.
 					|| _action.type == BA_HIT
