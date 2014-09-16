@@ -650,8 +650,8 @@ void Map::drawTerrain(Surface* surface)
 			}
 		}
 	}
-	else // if (no projectile OR explosions waiting)
-		_smoothingEngaged = false;
+//	else // if (no projectile OR explosions waiting)
+//		_smoothingEngaged = false;
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(
@@ -2929,7 +2929,17 @@ const int Map::getSoundAngle(Position pos)
 	// we use +- 75 instead of +- 90, so as not to go ALL the way left or right
 	// which would effectively mute the sound out of one speaker.
 	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
-	return static_cast<int>(static_cast<double>(screenPos.x) / static_cast<double>(midPoint) / 75.0) + 360;
+
+//	return static_cast<int>(static_cast<double>(screenPos.x) / (static_cast<double>(midPoint) / 80.0)) + 360;
+	return screenPos.x * 75 / midPoint + 360;
+}
+
+/**
+ * Resets the camera smoothing bool.
+ */
+void Map::resetCameraSmoothing()
+{
+	_smoothingEngaged = false;
 }
 
 }

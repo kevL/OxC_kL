@@ -202,10 +202,10 @@ private:
 		/// Refreshes the battlescape selector after scrolling.
 		void refreshSelectorPosition();
 
-		/// Get waypoints vector.
+		/// Gets waypoints vector.
 		std::vector<Position>* getWaypoints();
 
-		/// Set mouse-buttons' pressed state.
+		/// Sets mouse-buttons' pressed state.
 		void setButtonsPressed(
 				Uint8 button,
 				bool pressed);
@@ -218,16 +218,19 @@ private:
 		/// Special handling for updating map width.
 		void setWidth(int width);
 
-		/// Get the vertical position of the hidden movement screen.
+		/// Gets the vertical position of the hidden movement screen.
 		const int getMessageY();
 
-		/// Get the icon height.
+		/// Gets the icon height.
 		const int getIconHeight();
-		/// Get the icon width.
+		/// Gets the icon width.
 		const int getIconWidth();
 
-		/// Convert a map position to a sound angle.
+		/// Converts a map position to a sound angle.
 		const int getSoundAngle(Position pos);
+
+		/// Resets the camera smoothing bool.
+		void resetCameraSmoothing();
 };
 
 }

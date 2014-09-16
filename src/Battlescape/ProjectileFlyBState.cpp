@@ -853,6 +853,8 @@ void ProjectileFlyBState::think()
 		{
 			if (_action.type == BA_THROW)
 			{
+				_parent->getMap()->resetCameraSmoothing();
+
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 				pos.x /= 16;
 				pos.y /= 16;
@@ -920,6 +922,8 @@ void ProjectileFlyBState::think()
 			}
 			else // shoot.
 			{
+				_parent->getMap()->resetCameraSmoothing();
+
 				if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add.
 					&& _parent->getSave()->getTile(_action.target)->getUnit()) // Only counts for guns, not throws or launches
 				{
