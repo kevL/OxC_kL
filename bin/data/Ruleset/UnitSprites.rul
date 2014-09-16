@@ -2,3 +2,6 @@ extraSprites:
   - type: BIGOBS.PCK
     files:
       0: Resources/Sprites/Units/bigobs/
+  - type: FLOOROB.PCK
+    files:
+      0: Resources/Sprites/Units/floorob/

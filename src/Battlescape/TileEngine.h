@@ -144,6 +144,10 @@ private:
 		bool reactionShot(
 				BattleUnit* unit,
 				BattleUnit* target);
+		/// kL. Selects a fire method based on range & time units.
+		BattleActionType selectFireMethod(
+				BattleAction action,
+				int& tu); // kL
 
 		/// Checks validity of a snap shot to this position.
 /*		bool canMakeSnap(
@@ -158,10 +162,6 @@ private:
 				BattleUnit* unit,
 				BattleUnit* target,
 				BattleItem* weapon) const; */ // kL
-		/// kL. Selects a fire method based on range & time units.
-		BattleActionType selectFireMethod(
-				BattleAction action,
-				int* tu); // kL
 
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(

@@ -5717,7 +5717,7 @@
 1404096022 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1410686320 f:\git\openxcom\src\battlescape\tileengine.h
+1410904432 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -6440,7 +6440,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1410859503 source:f:\git\openxcom\src\battlescape\map.cpp
+1410871195 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6684,7 +6684,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1410865670 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1410871077 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6763,7 +6763,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1410864569 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1410902653 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6868,7 +6868,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1410573855 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1410898978 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"

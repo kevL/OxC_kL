@@ -1316,13 +1316,9 @@ void UnitSprite::drawRoutine5()
 	Surface* srf = NULL;
 
 	if (_unit->getStatus() == STATUS_WALKING)
-	{
 		srf = _unitSurface->getFrame(32 + (_unit->getDirection() * 16) + (_part * 4) + ((_unit->getWalkingPhase() / 2) %4));
-	}
 	else
-	{
 		srf = _unitSurface->getFrame((_part * 8) + _unit->getDirection());
-	}
 
 	srf->blit(this);
 }

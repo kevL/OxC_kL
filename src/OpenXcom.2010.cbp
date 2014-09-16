@@ -2879,6 +2879,7 @@
 			<Option target="Release Win32" />
 			<Option target="Release x64" />
 		</Unit>
+		<Unit filename="Savegame/CraftId.h" />
 		<Unit filename="Savegame/CraftWeapon.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

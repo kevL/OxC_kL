@@ -1656,12 +1656,12 @@ bool TileEngine::reactionShot(
 		return false;
 
 
-	int tu;
+	int tu = 0;
 	if (action.weapon->getRules()->getBattleType() == BT_MELEE)
 		action.type = BA_HIT;
 	else
 	{
-		action.type = selectFireMethod(action, &tu);
+		action.type = selectFireMethod(action, tu);
 		if (tu < 1
 			|| tu > action.actor->getTimeUnits())
 		{
@@ -1766,11 +1766,10 @@ bool TileEngine::reactionShot(
  */
 BattleActionType TileEngine::selectFireMethod( // kL
 		BattleAction action,
-		int* tu)
+		int& tu)
 {
 	//Log(LOG_INFO) << "TileEngine::selectFireMethod()";
 	action.type = BA_NONE;
-	tu = 0;
 
 	int
 		tuUnit = action.actor->getTimeUnits(),
@@ -1783,19 +1782,19 @@ BattleActionType TileEngine::selectFireMethod( // kL
 			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
-			*tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
+			tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUSnap()
 			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
-			*tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUAimed()
 			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
-			*tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
+			tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 	}
 	else if (distance <= action.weapon->getRules()->getSnapRange())
@@ -1803,20 +1802,23 @@ BattleActionType TileEngine::selectFireMethod( // kL
 		if (action.weapon->getRules()->getTUSnap()
 			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
+			Log(LOG_INFO) << ". actor = " << action.actor->getId();
+			Log(LOG_INFO) << ". tu = " << action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+
 			action.type = BA_SNAPSHOT;
-			*tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUAimed()
 			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
-			*tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
+			tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUAuto()
 			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
-			*tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
+			tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 	}
 	else if (distance <= action.weapon->getRules()->getAimRange())
@@ -1825,19 +1827,19 @@ BattleActionType TileEngine::selectFireMethod( // kL
 			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
-			*tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
+			tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUSnap()
 			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
-			*tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
+			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
 		else if (action.weapon->getRules()->getTUAuto()
 			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
-			*tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
+			tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 	}
 
