@@ -1258,7 +1258,7 @@ int BattleUnit::damage(
 	UnitSide side = SIDE_FRONT;
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
-	power = static_cast<int>(floor(static_cast<double>(power) * static_cast<double>(_armor->getDamageModifier(type))));
+	power = static_cast<int>(Round(static_cast<double>(power) * static_cast<double>(_armor->getDamageModifier(type))));
 	//Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type << " ModifiedPower " << power;
 
 //	if (power < 1) // kL_note: this early-out messes with got-hit sFx below_
@@ -1969,7 +1969,7 @@ double BattleUnit::getThrowingAccuracy()
 double BattleUnit::getAccuracyModifier(BattleItem* item)
 {
 	//Log(LOG_INFO) << "BattleUnit::getAccuracyModifier()";
-	double ret = Round(static_cast<double>(_health) / static_cast<double>(getStats()->health));
+	double ret = static_cast<double>(_health) / static_cast<double>(getStats()->health);
 
 	int wounds = _fatalWounds[BODYPART_HEAD];
 
@@ -1987,7 +1987,6 @@ double BattleUnit::getAccuracyModifier(BattleItem* item)
 	}
 
 	ret *= 1.0 - 0.1 * static_cast<double>(wounds);
-	//Log(LOG_INFO) << ". ret = " << ret;
 
 	if (ret < 0.1) // limit low @ 10%
 		ret = 0.1;

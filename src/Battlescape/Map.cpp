@@ -650,8 +650,8 @@ void Map::drawTerrain(Surface* surface)
 			}
 		}
 	}
-//	else // if (no projectile OR explosions waiting)
-//		_smoothingEngaged = false;
+	else // if (no projectile OR explosions waiting)
+		_smoothingEngaged = false;
 
 	// get corner map coordinates to give rough boundaries in which tiles to redraw are
 	_camera->convertScreenToMap(
@@ -1817,11 +1817,11 @@ void Map::drawTerrain(Surface* surface)
 									// to turn accuracy to 'red 0' if target is out of LoS/LoF.
 									BattleAction* action = _save->getBattleGame()->getCurrentAction();
 
-									int accuracy = static_cast<int>( // _save->getSelectedUnit()->
+									int accuracy = static_cast<int>(Round( // _save->getSelectedUnit()->
 															action->actor->getFiringAccuracy(
 																						action->type,
 																						action->weapon)
-																					* 100.0);
+																					* 100.0));
 
 									RuleItem* weapon = action->weapon->getRules();
 
@@ -1914,7 +1914,7 @@ void Map::drawTerrain(Surface* surface)
 									//Log(LOG_INFO) << ". canThrow = " << canThrow;
 									if (canThrow)
 									{
-										accuracy = static_cast<unsigned>(_save->getSelectedUnit()->getThrowingAccuracy() * 100.0);
+										accuracy = static_cast<unsigned>(Round(_save->getSelectedUnit()->getThrowingAccuracy() * 100.0));
 										color = Palette::blockOffset(3)+3; // green
 									}
 
@@ -2931,7 +2931,7 @@ const int Map::getSoundAngle(Position pos)
 	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
 
 //	return static_cast<int>(static_cast<double>(screenPos.x) / (static_cast<double>(midPoint) / 80.0)) + 360;
-	return screenPos.x * 75 / midPoint + 360;
+	return screenPos.x * 67 / midPoint + 360;
 }
 
 /**

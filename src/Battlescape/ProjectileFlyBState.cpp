@@ -853,7 +853,7 @@ void ProjectileFlyBState::think()
 		{
 			if (_action.type == BA_THROW)
 			{
-				_parent->getMap()->resetCameraSmoothing();
+//				_parent->getMap()->resetCameraSmoothing();
 
 				Position pos = _parent->getMap()->getProjectile()->getPosition(-1);
 				pos.x /= 16;
@@ -922,7 +922,7 @@ void ProjectileFlyBState::think()
 			}
 			else // shoot.
 			{
-				_parent->getMap()->resetCameraSmoothing();
+//				_parent->getMap()->resetCameraSmoothing();
 
 				if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add.
 					&& _parent->getSave()->getTile(_action.target)->getUnit()) // Only counts for guns, not throws or launches
@@ -1047,7 +1047,7 @@ void ProjectileFlyBState::think()
 
 								if (_unit->getFiringAccuracy(
 														_action.type,
-														_action.weapon) < _parent->getTileEngine()->distance(
+														_action.weapon) < _parent->getTileEngine()->distance( // kL_note: This is prob. wrong, for SoldierDiary.
 																										_unit->getPosition(),
 																										victim->getPosition()))
 								{
@@ -1288,11 +1288,11 @@ void ProjectileFlyBState::performMeleeAttack()
 
 	// kL: from ExplosionBState, moved here to play a proper hit/miss sFx
 	bool success = false;
-	int percent = static_cast<int>(_unit->getFiringAccuracy(
+	int percent = static_cast<int>(Round(_unit->getFiringAccuracy(
 														BA_HIT,
 //														_ammo)			// Ammo is the weapon since (melee==true).
 														_action.weapon)	// Not necessarily ...
-													* 100.0);
+													* 100.0));
 	//Log(LOG_INFO) << ". hit percent = " << percent;
 	if (RNG::percent(percent))
 	{

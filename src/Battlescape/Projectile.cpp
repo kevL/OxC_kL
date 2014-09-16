@@ -593,9 +593,9 @@ void Projectile::applyAccuracy(
 			if (extendLine) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
 			{
 				// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
-				target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos(te) * cos_fi);
-				target->y = static_cast<int>(static_cast<double>(origin.y) + maxRange * sin(te) * cos_fi);
-				target->z = static_cast<int>(static_cast<double>(origin.z) + maxRange * sin(fi));
+				target->x = static_cast<int>(Round(static_cast<double>(origin.x) + maxRange * cos(te) * cos_fi));
+				target->y = static_cast<int>(Round(static_cast<double>(origin.y) + maxRange * sin(te) * cos_fi));
+				target->z = static_cast<int>(Round(static_cast<double>(origin.z) + maxRange * sin(fi)));
 			}
 
 			//Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
@@ -671,9 +671,9 @@ void Projectile::applyAccuracy(
 		dy = RNG::boxMuller(0.0, deviation),
 		dz = RNG::boxMuller(0.0, deviation);
 
-	target->x += static_cast<int>(RNG::generate(0.0, dx) - dx / 2.0);
-	target->y += static_cast<int>(RNG::generate(0.0, dy) - dy / 2.0);
-	target->z += static_cast<int>(RNG::generate(0.0, dz / 4.0) - dz / 8.0);
+	target->x += static_cast<int>(Round(RNG::generate(0.0, dx) - dx / 2.0));
+	target->y += static_cast<int>(Round(RNG::generate(0.0, dy) - dy / 2.0));
+	target->z += static_cast<int>(Round(RNG::generate(0.0, dz / 4.0) - dz / 8.0));
 	// kL_end.
 
 

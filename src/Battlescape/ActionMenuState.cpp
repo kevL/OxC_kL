@@ -228,9 +228,9 @@ void ActionMenuState::addItem(
 		int acu = 0;
 
 		if (baType == BA_THROW)
-			acu = static_cast<int>(floor(_action->actor->getThrowingAccuracy() * 100.0));
+			acu = static_cast<int>(Round(_action->actor->getThrowingAccuracy() * 100.0));
 		else
-			acu = static_cast<int>(floor(_action->actor->getFiringAccuracy(
+			acu = static_cast<int>(Round(_action->actor->getFiringAccuracy(
 																		baType,
 																		_action->weapon)
 																	* 100.0));

@@ -1082,13 +1082,13 @@ void Tile::prepareNewTurn()
 		if (_fire)
 		{
 			float vuln = _unit->getArmor()->getDamageModifier(DT_IN);
-			int burn = static_cast<int>(40.f * vuln);
+			int burn = static_cast<int>(Round(40.f * vuln));
 			//Log(LOG_INFO) << "Tile::prepareNewTurn(), ID " << _unit->getId() << " burn = " << burn;
 			if (RNG::percent(burn)) // try to set the unit on fire.
 			{
 				int dur = RNG::generate(
 										0,
-										static_cast<int>(5.f * vuln));
+										static_cast<int>(Round(5.f * vuln)));
 				if (dur > _unit->getFire())
 				{
 					//Log(LOG_INFO) << ". dur = " << dur;

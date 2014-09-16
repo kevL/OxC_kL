@@ -2038,7 +2038,7 @@ BattleUnit* TileEngine::hit(
 
 						int burnTime = RNG::generate(
 													0,
-													static_cast<int>(5.f * modifier));
+													static_cast<int>(Round(5.f * modifier)));
 						if (buTarget->getFire() < burnTime)
 							buTarget->setFire(burnTime); // catch fire and burn
 					}
@@ -2753,7 +2753,7 @@ void TileEngine::explode(
 
 									int burnTime = RNG::generate(
 																0,
-																static_cast<int>(5.f * modifier));
+																static_cast<int>(Round(5.f * modifier)));
 									if (targetUnit->getFire() < burnTime)
 										targetUnit->setFire(burnTime); // catch fire and burn!!
 								}

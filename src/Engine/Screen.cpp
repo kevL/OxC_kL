@@ -169,7 +169,7 @@ void Screen::handle(Action* action)
 		if (action->getDetails()->type == SDL_KEYDOWN
 			&& action->getDetails()->key.keysym.sym == SDLK_F8)
 		{
-			switch(Timer::gameSlowSpeed)
+			switch (Timer::gameSlowSpeed)
 			{
 				case 1:
 					Timer::gameSlowSpeed = 5;
