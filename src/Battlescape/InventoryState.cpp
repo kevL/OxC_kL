@@ -66,9 +66,9 @@
 namespace OpenXcom
 {
 
-//static const int _templateBtnX			= 288;
+//static const int _templateBtnX		= 288;
 //static const int _createTemplateBtnY	= 67;	//90
-//static const int _applyTemplateBtnY		= 90;	//113
+//static const int _applyTemplateBtnY	= 90;	//113
 //static const int _clearInventoryBtnY	= 113;
 
 

@@ -334,7 +334,7 @@ void Inventory::drawItems()
 														frame->getX(),
 														frame->getY()));
 			}
-			else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite(); // kL
+			//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite(); // kL
 		}
 
 		Surface* stackLayer = new Surface(
@@ -376,7 +376,7 @@ void Inventory::drawItems()
 														frame->getX(),
 														frame->getY()));
 			}
-			else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite(); // kL
+			//else Log(LOG_INFO) << "ERROR : bigob not found #" << (*i)->getRules()->getBigSprite(); // kL
 
 			if (_stackLevel[(*i)->getSlotX()][(*i)->getSlotY()] > 1) // item stacking
 			{
@@ -1212,7 +1212,7 @@ void Inventory::arrangeGround(bool alterOffset)
 {
 	RuleInventory* ground = _game->getRuleset()->getInventory("STR_GROUND");
 
-	bool ok = false;
+	bool fit = false;
 	int
 		slotsX = (320 - ground->getX()) / RuleInventory::SLOT_W,
 		slotsY = (200 - ground->getY()) / RuleInventory::SLOT_H,
@@ -1222,7 +1222,7 @@ void Inventory::arrangeGround(bool alterOffset)
 
 	_stackLevel.clear();
 
-	if (_selUnit != NULL)
+	if (_selUnit != NULL) // kL_note: That should never happen.
 	{
 		// first move all items out of the way - a big number in X direction
 		for (std::vector<BattleItem*>::iterator
@@ -1244,39 +1244,39 @@ void Inventory::arrangeGround(bool alterOffset)
 			x = 0;
 			y = 0;
 
-			ok = false;
-			while (!ok)
+			fit = false;
+			while (!fit)
 			{
-				ok = true; // assume we can put the item here, if one of the following checks fails, we can't.
+				fit = true; // assume we can put the item here, if one of the following checks fails, we can't.
 				for (int
 						xd = 0;
 						xd < (*i)->getRules()->getInventoryWidth()
-							&& ok;
+							&& fit;
 						xd++)
 				{
 					if ((x + xd) %slotsX < x %slotsX)
-						ok = false;
+						fit = false;
 					else
 					{
 						for (int
 								yd = 0;
 								yd < (*i)->getRules()->getInventoryHeight()
-									&& ok;
+									&& fit;
 								yd++)
 						{
 							BattleItem* item = _selUnit->getItem(
 																ground,
 																x + xd,
 																y + yd);
-							ok = (item == NULL);
+							fit = (item == NULL);
 
 							if (canBeStacked(item, *i))
-								ok = true;
+								fit = true;
 						}
 					}
 				}
 
-				if (ok)
+				if (fit)
 				{
 					(*i)->setSlotX(x);
 					(*i)->setSlotY(y);
@@ -1303,9 +1303,11 @@ void Inventory::arrangeGround(bool alterOffset)
 
 	if (alterOffset)
 	{
-//		if (xMax >= _groundOffset + slotsX - 1)
-//			_groundOffset += slotsX - 1;
-		if (xMax > _groundOffset + slotsX)
+		int itemWidth = 0;
+		if (_selItem != NULL)
+			itemWidth = _selItem->getRules()->getInventoryWidth();
+
+		if (xMax > _groundOffset + slotsX - itemWidth)
 			_groundOffset += slotsX;
 		else
 			_groundOffset = 0;
