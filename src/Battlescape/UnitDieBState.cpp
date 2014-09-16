@@ -51,7 +51,7 @@ namespace OpenXcom
 
 /**
  * Creates a UnitDieBState.
- * @param parent		- pointer to the battlescape
+ * @param parent		- pointer to BattlescapeGame
  * @param unit			- pointer to a dying unit
  * @param damageType	- type of damage that caused the death (RuleItem.h)
  * @param noSound		- true to disable the death sound (for pre-battle powersource explosions)
@@ -103,7 +103,7 @@ UnitDieBState::UnitDieBState(
 	{
 		//Log(LOG_INFO) << ". . unit is Faction_Hostile";
 		std::vector<Node*>* nodes = _parent->getSave()->getNodes();
-		if (!nodes)
+		if (nodes == NULL)
 			return; // this better not happen.
 
 		for (std::vector<Node*>::iterator
@@ -226,13 +226,14 @@ void UnitDieBState::think()
 //		_parent->getSave()->getTileEngine()->calculateFOV(_unit->getPosition());
 		// that is actually done already at the end of TileEngine::hit() & explode()
 		// so, might have to updateSoldierInfo() here, there, or perhaps in BattlescapeGame ......
+		_parent->getSave()->getBattleState()->updateSoldierInfo(false); // kL
+
 
 		if (_unit->getOriginalFaction() == FACTION_PLAYER
 			&& _unit->getSpawnUnit().empty())
 		{
 			Game* game = _parent->getSave()->getBattleState()->getGame();
-
-			if (_unit->getStatus() == STATUS_DEAD)
+/*			if (_unit->getStatus() == STATUS_DEAD)
 			{
 				if (_unit->getArmor()->getSize() == 1)
 				{
@@ -252,7 +253,27 @@ void UnitDieBState::think()
 				game->pushState(new InfoboxOKState(game->getLanguage()->getString(
 																			"STR_HAS_BECOME_UNCONSCIOUS",
 																			_unit->getGender())
-																		.arg(_unit->getName(game->getLanguage()))));
+																		.arg(_unit->getName(game->getLanguage())))); */
+			std::string message;
+
+			if (_unit->getStatus() == STATUS_DEAD)
+			{
+				if (_unit->getArmor()->getSize() == 1)
+				{
+					if (_damageType == DT_NONE)
+						message = "STR_HAS_DIED_FROM_A_FATAL_WOUND";
+					else if (Options::battleNotifyDeath)
+						message = "STR_HAS_BEEN_KILLED";
+				}
+			}
+			else
+				message = "STR_HAS_BECOME_UNCONSCIOUS";
+
+			if (message != "")
+				game->pushState(new InfoboxOKState(game->getLanguage()->getString(
+																				message,
+																				_unit->getGender())
+																			.arg(_unit->getName(game->getLanguage()))));
 		}
 
 		// if all units from either faction are killed - auto-end the mission.

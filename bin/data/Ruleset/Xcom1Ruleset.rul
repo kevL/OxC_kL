@@ -1910,8 +1910,7 @@ items:
     recover: true
     liveAlien: true
     costSell: 250000
-# Special Psi Weapon for Aliens.
-# Usage of this is hard-coded.
+# Special Psi Weapon for Aliens. Usage of this is hard-coded.
 # DO NOT DELETE!
   - type: ALIEN_PSI_WEAPON
     hitSound: 36
@@ -5940,6 +5939,8 @@ research:
   - name: STR_LASER_WEAPONS
     cost: 50
     points: 10
+    dependencies:
+      - STR_ELERIUM_115
   - name: STR_LASER_PISTOL
     cost: 100
     points: 10
@@ -5954,6 +5955,7 @@ research:
     cost: 460
     points: 10
     dependencies:
+      - STR_ALIEN_ALLOYS
       - STR_LASER_RIFLE
   - name: STR_LASER_CANNON
     cost: 420
@@ -6898,7 +6900,6 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_LASER_PISTOL
-      - STR_ELERIUM_115
     space: 4
     time: 300
     cost: 30000
@@ -6908,7 +6909,6 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_LASER_RIFLE
-      - STR_ELERIUM_115
     space: 6
     time: 400
     cost: 40000
@@ -6918,11 +6918,11 @@ manufacture:
     category: STR_WEAPON
     requires:
       - STR_HEAVY_LASER
-      - STR_ELERIUM_115
     space: 7
     time: 700
     cost: 70000
     requiredItems:
+      STR_ALIEN_ALLOYS: 6
       STR_ELERIUM_115: 3
   - name: STR_MOTION_SCANNER
     category: STR_EQUIPMENT

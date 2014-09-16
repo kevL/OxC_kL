@@ -1333,7 +1333,7 @@ void BattlescapeState::mapClick(Action* action)
 	}
 
 	// don't allow to click into void
-	if (_save->getTile(pos) != 0)
+	if (_save->getTile(pos) != NULL)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
 				// kL_ Taking this out so that Alt can be used for forced walking by flying soldiers.
@@ -2380,21 +2380,18 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	double stat = static_cast<double>(selectedUnit->getStats()->tu);
 	int tu = selectedUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
-//	_barTimeUnits->setMax(100.0);
 	_barTimeUnits->setValue(ceil(
 							static_cast<double>(tu) / stat * 100.0));
 
 	stat = static_cast<double>(selectedUnit->getStats()->stamina);
 	int energy = selectedUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
-//	_barEnergy->setMax(100.0);
 	_barEnergy->setValue(ceil(
 							static_cast<double>(energy) / stat * 100.0));
 
 	stat = static_cast<double>(selectedUnit->getStats()->health);
 	int health = selectedUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
-//	_barHealth->setMax(100.0);
 	_barHealth->setValue(ceil(
 							static_cast<double>(health) / stat * 100.0));
 	_barHealth->setValue2(ceil(
@@ -2402,7 +2399,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	int morale = selectedUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
-//	_barMorale->setMax(100.0);
 	_barMorale->setValue(morale);
 
 

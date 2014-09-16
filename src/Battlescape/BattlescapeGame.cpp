@@ -1441,7 +1441,7 @@ void BattlescapeGame::popState()
 			// (throwing already did work to trigger reactions, somehow).
 			if (action.targeting
 				&& _save->getSelectedUnit()
-				&& !actionFailed)
+				&& actionFailed == false)
 			{
 				action.actor->spendTimeUnits(action.TU);
 					// kL_query: Does this happen **before** ReactionFire/getReactor()?
@@ -1461,7 +1461,7 @@ void BattlescapeGame::popState()
 				// targeting mode and the player can shoot again in the same mode (autoshot/snap/aimed)
 				// kL_note: unless he/she is out of tu's
 
-				if (!actionFailed) // kL_begin:
+				if (actionFailed == false) // kL_begin:
 				{
 					int curTU = action.actor->getTimeUnits();
 
@@ -1527,7 +1527,8 @@ void BattlescapeGame::popState()
 				// kL_note: This is done at the end of this function also, but somehow it's
 				// not updating visUnit indicators when watching a unit die and expose a second
 				// enemy unit behind the first. btw, calcFoV ought have been done by now ...
-				_parentState->updateSoldierInfo(); // kL
+//				_parentState->updateSoldierInfo(); // kL
+				// I put in a call in UnitDieBState ...
 
 				setupCursor();
 				_parentState->getGame()->getCursor()->setVisible();
@@ -1545,7 +1546,7 @@ void BattlescapeGame::popState()
 				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
 				if (_AIActionCounter > 2
 					|| _save->getSelectedUnit() == NULL
-					|| _save->getSelectedUnit()->isOut())
+					|| _save->getSelectedUnit()->isOut(true, true))
 				{
 					if (_save->getSelectedUnit())
 					{
@@ -1622,10 +1623,10 @@ void BattlescapeGame::popState()
 	if (_save->getSelectedUnit() == NULL
 		|| _save->getSelectedUnit()->isOut(true, true))
 	{
-		//Log(LOG_INFO) << ". huh hey wot)";
+		//Log(LOG_INFO) << ". unit incapacitated: cancelAction & deSelect)";
 		cancelCurrentAction();
 
-		_save->setSelectedUnit(NULL); // kL_note: seems redundant .....
+		_save->setSelectedUnit(NULL);
 
 		getMap()->setCursorType(CT_NORMAL);
 		_parentState->getGame()->getCursor()->setVisible();
@@ -1678,7 +1679,7 @@ void BattlescapeGame::setStateInterval(Uint32 interval)
  * @param bu	- pointer to a unit
  * @param tu	- # of time units to check against
  * @param test	- true to suppress error messages
- * @return, true if unit has tu+ time units ( go! )
+ * @return, true if unit has enough time units ( go! )
  */
 bool BattlescapeGame::checkReservedTU(
 		BattleUnit* bu,
@@ -1695,11 +1696,7 @@ bool BattlescapeGame::checkReservedTU(
 
 	// aLiens reserve TUs as a percentage rather than just enough for a single action.
 	if (_save->getSide() == FACTION_HOSTILE)
-//	if (_save->getSide() != FACTION_PLAYER)
 	{
-//		if (_save->getSide() == FACTION_NEUTRAL)
-//			return (tu <= bu->getTimeUnits());
-
 		AlienBAIState* ai = dynamic_cast<AlienBAIState*>(bu->getCurrentAIState());
 		if (ai)
 			actionReserved = ai->getReserveMode();
@@ -1713,7 +1710,6 @@ bool BattlescapeGame::checkReservedTU(
 				return (tu + rand + (bu->getStats()->tu / 3) <= bu->getTimeUnits());		// 33%
 			break;
 			case BA_AUTOSHOT:
-//kL			return (tu + ((bu->getStats()->tu / 5) * 2) <= bu->getTimeUnits());
 				return (tu + rand + (bu->getStats()->tu * 2 / 5) <= bu->getTimeUnits());	// 40%
 			break;
 			case BA_AIMEDSHOT:
@@ -1730,7 +1726,7 @@ bool BattlescapeGame::checkReservedTU(
 	// ( which i don't care about )
 
 	// check TUs against slowest weapon if we have two weapons
-	BattleItem* slowestWeapon = bu->getMainHandWeapon(false);
+	BattleItem* slowWeapon = bu->getMainHandWeapon(false);
 	// kL_note: Use getActiveHand() instead, if xCom wants to reserve TU.
 	// kL_note: make sure this doesn't work on aLiens, because getMainHandWeapon()
 	// returns grenades and that can easily cause problems. Probably could cause
@@ -1741,7 +1737,7 @@ bool BattlescapeGame::checkReservedTU(
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(
 					actionReserved,
-					slowestWeapon)
+					slowWeapon)
 				== 0
 		&& actionReserved == BA_AUTOSHOT)
 	{
@@ -1751,7 +1747,7 @@ bool BattlescapeGame::checkReservedTU(
 	// likewise, if we don't have a snap shot available, try aimed.
 	if (bu->getActionTUs(
 					actionReserved,
-					slowestWeapon)
+					slowWeapon)
 				== 0
 		&& actionReserved == BA_SNAPSHOT)
 	{
@@ -1764,7 +1760,7 @@ bool BattlescapeGame::checkReservedTU(
 						: 0;
 
 	// if no aimed shot is available, revert to none.
-	if (bu->getActionTUs(actionReserved, slowestWeapon) == 0
+	if (bu->getActionTUs(actionReserved, slowWeapon) == 0
 		&& actionReserved == BA_AIMEDSHOT)
 	{
 		if (tuKneel > 0)
@@ -1779,12 +1775,12 @@ bool BattlescapeGame::checkReservedTU(
 			+ tuKneel
 			+ bu->getActionTUs(
 							actionReserved,
-							slowestWeapon)
+							slowWeapon)
 						> bu->getTimeUnits()
 		&& (tuKneel
 				+ bu->getActionTUs(
 								actionReserved,
-								slowestWeapon)
+								slowWeapon)
 							<= bu->getTimeUnits()
 			|| test))
 	{

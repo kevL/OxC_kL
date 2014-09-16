@@ -3629,7 +3629,7 @@ void GeoscapeState::determineAlienMissions(bool atGameStart)
 }
 
 /**
- *
+ * Sets up a Terror mission.
  */
 void GeoscapeState::setupTerrorMission()
 {

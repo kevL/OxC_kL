@@ -11,7 +11,7 @@ items:
     fireSound: 52
     battleType: 1
     accuracyAimed: 200
-    tuAimed: 85
+    tuAimed: 87
     maxRange: 1
     invWidth: 2
     invHeight: 3
@@ -36,6 +36,50 @@ items:
     hitAnimation: 88
     blastRadius: 0
     armor: 5
+research:
+  - name: STR_FUSION_TORCH
+    cost: 5000
+    points: 25
+    dependencies:
+      - STR_HEAVY_LASER
+  - name: STR_FUSION_TORCH_POWER_CELL
+    cost: 1000
+    points: 5
+    dependencies:
+      - STR_FUSION_TORCH
+manufacture:
+  - name: STR_FUSION_TORCH
+    category: STR_WEAPON
+    requires:
+      - STR_FUSION_TORCH
+    space: 6
+    time: 750
+    cost: 200000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 8
+  - name: STR_FUSION_TORCH_POWER_CELL
+    category: STR_AMMUNITION
+    requires:
+      - STR_FUSION_TORCH_POWER_CELL
+    space: 2
+    time: 150
+    cost: 45000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 1
+      STR_ELERIUM_115: 3
+ufopaedia:
+  - id: STR_FUSION_TORCH
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_FUSION_TORCH_UFOPEDIA
+    requires:
+      - STR_FUSION_TORCH
+  - id: STR_FUSION_TORCH_POWER_CELL
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_FUSION_TORCH_POWER_CELL_UFOPEDIA
+    requires:
+      - STR_FUSION_TORCH_POWER_CELL
 extraSprites:
   - type: BIGOBS.PCK
     files:
@@ -55,26 +99,13 @@ extraSprites:
     subY: 40
     files:
       88: Resources/FusionTorch/SMOKE/HitAnimation.gif
-ufopaedia:
-  - id: STR_FUSION_TORCH
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_FUSION_TORCH_UFOPEDIA
-    requires:
-      - STR_FUSION_TORCH
-  - id: STR_FUSION_TORCH_POWER_CELL
-    type_id: 4
-    section: STR_WEAPONS_AND_EQUIPMENT
-    text: STR_FUSION_TORCH_POWER_CELL_UFOPEDIA
-    requires:
-      - STR_FUSION_TORCH_POWER_CELL
 extraStrings:
   - type: en-US
     strings:
       STR_FUSION_TORCH: Fusion Torch
-      STR_FUSION_TORCH_POWER_CELL: Fusion Torch Power Cell
-      STR_FUSION_TORCH_UFOPEDIA: The Fusion Torch uses a Matter-Antimatter reaction to create enormously powerful plasma jets. If close enough, the deeply penetrating plasma jet cuts through the target, melting it within seconds. Even the strongest armor plates and UFO hulls are no match for this device. However, it is only effective at close range and needs a separate power cell.
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: This high energy power cell is needed to operate the Fusion Torch. It provides enough energy for 5 plasma jets.
+      STR_FUSION_TORCH_POWER_CELL: Fusion Torch Powercell
+      STR_FUSION_TORCH_UFOPEDIA: The Fusion Torch uses a highly concentrated laser to induce miniature nuclear reactions. The resulting effect disrupts matter and cuts through a target at close range. The strongest armors and even UFO hulls succumb to this device very quickly. It needs to be powered by a separately produced Fusion Torch Powercell.
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: This high energy powercell is required to operate a Fusion Torch. It provides only enough energy for 3 operations.
   - type: en-GB
     strings:
       STR_FUSION_TORCH: Fusion Torch
@@ -117,37 +148,3 @@ extraStrings:
       STR_FUSION_TORCH_POWER_CELL: Célula Energética Soplete de Fusión
       STR_FUSION_TORCH_UFOPEDIA: El Soplete de Fusión utiliza una reacción de Materia-Antimateria para crear un enorme haz potente de plasma.{NEWLINE}Estando suficientemente cerca, su chorro de plasma puede penetrar profundamente en el objetivo, derritiéndolo en segundos. Incluso las armaduras o el casco de un OVNI no serían capaz de resistirlo.{NEWLINE}No obstante, sólo es efectivo a muy corta distancia y necesita una célula de energía independiente.
       STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: Esta potente célula de energía es necesaria para que funcione el Solplete de Fusión. Proveé suficiente energía para 5 chorros de plasma.     
-research:
-  - name: STR_FUSION_TORCH
-    cost: 5000
-    points: 25
-    dependencies:
-      - STR_ALIEN_ALLOYS
-      - STR_ELERIUM_115
-      - STR_BLASTER_LAUNCHER
-      - STR_BLASTER_BOMB
-  - name: STR_FUSION_TORCH_POWER_CELL
-    cost: 1000
-    points: 5
-    dependencies:
-      - STR_FUSION_TORCH
-manufacture:
-  - name: STR_FUSION_TORCH
-    category: STR_WEAPON
-    requires:
-      - STR_FUSION_TORCH
-    space: 6
-    time: 750
-    cost: 200000
-    requiredItems:
-      STR_ALIEN_ALLOYS: 5
-  - name: STR_FUSION_TORCH_POWER_CELL
-    category: STR_AMMUNITION
-    requires:
-      - STR_FUSION_TORCH_POWER_CELL
-    space: 2
-    time: 150
-    cost: 45000
-    requiredItems:
-      STR_ALIEN_ALLOYS: 1
-      STR_ELERIUM_115: 3

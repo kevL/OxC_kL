@@ -1456,7 +1456,7 @@ bool TileEngine::canTargetTile(
  * highest reaction score will be compared with the triggering unit's reaction score.
  * If it's higher, a shot is fired when enough time units, a weapon and ammo are available.
  * kL NOTE: the tuSpent parameter is needed because popState() doesn't
- * subtract TU until after the Initiative has been calculated.
+ * subtract TU until after the Initiative has been calculated or called from ProjectileFlyBState.
  * @param unit		- pointer to a unit to check reaction fire against
  * @param tuSpent	- the unit's triggering expenditure of TU if firing or throwing.
  * @return, true if reaction fire took place
@@ -1576,7 +1576,7 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 /**
  * Gets the unit with the highest reaction score from the spotters vector.
  * NOTE: the tuSpent parameter is needed because popState() doesn't
- * subtract TU until after the Initiative has been calculated.
+ * subtract TU until after the Initiative has been calculated or called from ProjectileFlyBState.
  * @param spotters	- vector of the pointers to spotting BattleUnits
  * @param defender	- pointer to the defending BattleUnit to check reaction scores against
  * @param tuSpent	- defending BattleUnit's expenditure of TU that had caused reaction checks

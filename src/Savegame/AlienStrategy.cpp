@@ -35,6 +35,7 @@ namespace OpenXcom
 
 typedef std::map<std::string, WeightedOptions*> MissionsByRegion;
 
+
 /**
  * Create an AlienStrategy with no values.
  * Running a game like this will most likely crash.

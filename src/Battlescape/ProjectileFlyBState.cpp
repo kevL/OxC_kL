@@ -767,12 +767,12 @@ void ProjectileFlyBState::think()
 
 		bool
 			hasFloor = tile
-						&& tile->hasNoFloor(tileBelow) == false,
+					&& tile->hasNoFloor(tileBelow) == false,
 			unitCanFly = _unit->getArmor()->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots()
-			&& !_unit->isOut()
+			&& _unit->isOut() == false
 			&& _ammo->getAmmoQuantity() != 0
 			&& (hasFloor
 				|| unitCanFly))
@@ -787,24 +787,7 @@ void ProjectileFlyBState::think()
 		}
 		else // end think()
 		{
-			// kL_note: Don't return camera to its pre-firing position.
-			// that is, leave it wherever the projectile hits... (or try to.)
-/*	BA_NONE,		// 0
-	BA_TURN,		// 1
-	BA_WALK,		// 2
-	BA_PRIME,		// 3
-	BA_THROW,		// 4
-	BA_AUTOSHOT,	// 5
-	BA_SNAPSHOT,	// 6
-	BA_AIMEDSHOT,	// 7
-	BA_STUN,		// 8
-	BA_HIT,			// 9
-	BA_USE,			// 10
-	BA_LAUNCH,		// 11
-	BA_MINDCONTROL,	// 12
-	BA_PANIC,		// 13
-	BA_RETHINK		// 14 */
-			if (_action.cameraPosition.z != -1) // kL_note: a bit of overkill here
+			if (_action.cameraPosition.z != -1)
 			{
 /*				if (_action.type == BA_STUN // kL, don't jump screen after these.
 					|| _action.type == BA_HIT
@@ -813,7 +796,7 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_MINDCONTROL
 					|| _action.type == BA_PANIC)
 				{
-//					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset()); // kL
+//					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset());
 				}
 				else */
 				if (_action.type == BA_THROW // kL, jump screen back to pre-shot position
@@ -830,7 +813,7 @@ void ProjectileFlyBState::think()
 			if (_unit->getFaction() == _parent->getSave()->getSide() // kL
 				&& _action.type != BA_PANIC
 				&& _action.type != BA_MINDCONTROL
-				&& !_parent->getSave()->getUnitsFalling())
+				&& _parent->getSave()->getUnitsFalling() == false)
 			{
 				//Log(LOG_INFO) << "ProjectileFlyBState::think(), checkReactionFire()"
 				//	<< " ID " << _unit->getId()
@@ -841,7 +824,7 @@ void ProjectileFlyBState::think()
 														_action.TU); // kL
 			}
 
-			if (!_unit->isOut()
+			if (_unit->isOut() == false
 				&& _action.type != BA_HIT) // kL_note: huh?
 			{
 				_unit->setStatus(STATUS_STANDING);

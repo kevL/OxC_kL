@@ -83,8 +83,6 @@ CraftInfoState::CraftInfoState(
 	_txtW2Name		= new Text(78, 9, 204, 48);
 	_txtW1Ammo		= new Text(60, 25, 46, 64);
 	_txtW2Ammo		= new Text(60, 25, 204, 64);
-//	_txtW1Max		= new Text(60, 9, 46, 72);
-//	_txtW2Max		= new Text(60, 9, 204, 72);
 
 	_btnCrew		= new TextButton(64, 16, 16, 96);
 	_btnEquip		= new TextButton(64, 16, 16, 120);
@@ -112,8 +110,6 @@ CraftInfoState::CraftInfoState(
 	add(_txtW2Name);
 	add(_txtW1Ammo);
 	add(_txtW2Ammo);
-//	add(_txtW1Max);
-//	add(_txtW2Max);
 	add(_btnCrew);
 	add(_btnEquip);
 	add(_btnArmor);
@@ -174,22 +170,14 @@ CraftInfoState::CraftInfoState(
 	_txtFuel->setSecondaryColor(Palette::blockOffset(13));
 
 	_txtW1Name->setColor(Palette::blockOffset(13)+5);
-//kL	_txtW1Name->setWordWrap();
 
 	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
 	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
 
-//	_txtW1Max->setColor(Palette::blockOffset(13)+10);
-//	_txtW1Max->setSecondaryColor(Palette::blockOffset(13)+5);
-
 	_txtW2Name->setColor(Palette::blockOffset(13)+5);
-//kL	_txtW2Name->setWordWrap();
 
 	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
 	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
-
-//	_txtW2Max->setColor(Palette::blockOffset(13)+10);
-//	_txtW2Max->setSecondaryColor(Palette::blockOffset(13)+5);
 }
 
 /**
@@ -220,21 +208,21 @@ void CraftInfoState::init()
 	texture->getFrame(_craft->getRules()->getSprite() + 33)->blit(_sprite);
 
 
+	int hours = 0;
 	std::wostringstream
-		ss1,
-		ss2;
+		ss1, // hull
+		ss2; // fuel
 
-//kL	ss1 << tr("STR_DAMAGE_UC_").arg(Text::formatPercentage(_craft->getDamagePercent()));
-	ss1 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent())); // kL
+	ss1 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent()));
 	if (_craft->getStatus() == "STR_REPAIRS"
 		&& _craft->getDamage() > 0)
 	{
-		int damageHrs = static_cast<int>(
-							ceil(static_cast<double>(_craft->getDamage())
-								/ static_cast<double>(_craft->getRules()->getRepairRate())
-								/ 2.0)); // repair every half-hour.
-//		ss1 << L"\n" << tr("STR_HOUR", damageHrs);
-		ss1 << formatTime(damageHrs);
+		hours = static_cast<int>(
+					ceil(static_cast<double>(_craft->getDamage())
+						/ static_cast<double>(_craft->getRules()->getRepairRate())
+						/ 2.0)); // repair every half-hour.
+//		ss1 << L"\n" << tr("STR_HOUR", hours);
+		ss1 << formatTime(hours);
 	}
 	_txtDamage->setText(ss1.str());
 
@@ -242,12 +230,12 @@ void CraftInfoState::init()
 	if (_craft->getStatus() == "STR_REFUELLING"
 		&& _craft->getRules()->getMaxFuel() - _craft->getFuel() > 0)
 	{
-		int fuelHrs = static_cast<int>(
-							ceil(static_cast<double>(_craft->getRules()->getMaxFuel() - _craft->getFuel())
-								/ static_cast<double>(_craft->getRules()->getRefuelRate())
-								/ 2.0)); // refuel every half-hour.
-//		ss2 << L"\n" << tr("STR_HOUR", fuelHrs);
-		ss2 << formatTime(fuelHrs);
+		hours = static_cast<int>(
+					ceil(static_cast<double>(_craft->getRules()->getMaxFuel() - _craft->getFuel())
+						/ static_cast<double>(_craft->getRules()->getRefuelRate())
+						/ 2.0)); // refuel every half-hour.
+//		ss2 << L"\n" << tr("STR_HOUR", hours);
+		ss2 << formatTime(hours);
 	}
 	_txtFuel->setText(ss2.str());
 
@@ -314,19 +302,18 @@ void CraftInfoState::init()
 			frame->blit(_weapon1);
 
 			_txtW1Name->setText(tr(w1->getRules()->getType()));
-//			_txtW1Ammo->setText(tr("STR_AMMO_").arg(w1->getAmmo()));
-//			_txtW1Max->setText(tr("STR_MAX").arg(w1->getRules()->getAmmoMax()));
+
 			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(w1->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(w1->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING"
 				&& w1->getAmmo() < w1->getRules()->getAmmoMax())
 			{
-				int rearmHrs = static_cast<int>(
-									ceil(static_cast<double>(w1->getRules()->getAmmoMax() - w1->getAmmo())
-										/ static_cast<double>(w1->getRules()->getRearmRate())
-										/ 2.0)); // rearm every half-hour.
-				ss << formatTime(rearmHrs);
+				hours = static_cast<int>(
+							ceil(static_cast<double>(w1->getRules()->getAmmoMax() - w1->getAmmo())
+								/ static_cast<double>(w1->getRules()->getRearmRate())
+								/ 2.0)); // rearm every half-hour.
+				ss << formatTime(hours);
 			}
 			_txtW1Ammo->setText(ss.str());
 		}
@@ -335,7 +322,6 @@ void CraftInfoState::init()
 			_weapon1->clear();
 			_txtW1Name->setText(L"");
 			_txtW1Ammo->setText(L"");
-//			_txtW1Max->setText(L"");
 		}
 	}
 	else
@@ -344,7 +330,6 @@ void CraftInfoState::init()
 		_btnW1->setVisible(false);
 		_txtW1Name->setVisible(false);
 		_txtW1Ammo->setVisible(false);
-//		_txtW1Max->setVisible(false);
 	}
 
 	if (_craft->getRules()->getWeapons() > 1)
@@ -358,19 +343,18 @@ void CraftInfoState::init()
 			frame->blit(_weapon2);
 
 			_txtW2Name->setText(tr(w2->getRules()->getType()));
-//			_txtW2Ammo->setText(tr("STR_AMMO_").arg(w2->getAmmo()));
-//			_txtW2Max->setText(tr("STR_MAX").arg(w2->getRules()->getAmmoMax()));
+
 			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(w2->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(w2->getRules()->getAmmoMax());
 			if (_craft->getStatus() == "STR_REARMING"
 				&& w2->getAmmo() < w2->getRules()->getAmmoMax())
 			{
-				int rearmHrs = static_cast<int>(
-									ceil(static_cast<double>(w2->getRules()->getAmmoMax() - w2->getAmmo())
-										/ static_cast<double>(w2->getRules()->getRearmRate())
-										/ 2.0)); // rearm every half-hour.
-				ss << formatTime(rearmHrs);
+				hours = static_cast<int>(
+							ceil(static_cast<double>(w2->getRules()->getAmmoMax() - w2->getAmmo())
+								/ static_cast<double>(w2->getRules()->getRearmRate())
+								/ 2.0)); // rearm every half-hour.
+				ss << formatTime(hours);
 			}
 			_txtW2Ammo->setText(ss.str());
 		}
@@ -379,7 +363,6 @@ void CraftInfoState::init()
 			_weapon2->clear();
 			_txtW2Name->setText(L"");
 			_txtW2Ammo->setText(L"");
-//			_txtW2Max->setText(L"");
 		}
 	}
 	else
@@ -388,15 +371,11 @@ void CraftInfoState::init()
 		_btnW2->setVisible(false);
 		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);
-//		_txtW2Max->setVisible(false);
 	}
 
-	_defaultName = tr("STR_CRAFTNAME")
-								.arg(tr(_craft->getRules()->getType()))
-								.arg(_craft->getId());
-//	std::wostringstream name;
-//	name << tr(_craft->getRules()->getType()) << "-" << _craft->getId();
-//	_defaultName = name.str();
+//	_defaultName = tr("STR_CRAFTNAME")
+//								.arg(tr(_craft->getRules()->getType()))
+//								.arg(_craft->getId());
 }
 
 /**
@@ -495,8 +474,8 @@ void CraftInfoState::edtCraftChange(Action* action)
 {
 	_craft->setName(_edtCraft->getText());
 
-//kL	if (_craft->getName(_game->getLanguage()) == _defaultName)
-//kL		_craft->setName(L"");
+//	if (_craft->getName(_game->getLanguage()) == _defaultName)
+//		_craft->setName(L"");
 
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
 		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)
