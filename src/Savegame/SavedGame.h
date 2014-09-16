@@ -232,7 +232,8 @@ private:
 		_monthsPassed;
 //kL	_globeZoom,
 	size_t
-		_globeZoom; // kL
+		_globeZoom, // kL
+		_curRowMatrix; // kL
 //kL	_selectedBase;
 	double
 		_globeLat,
@@ -535,11 +536,16 @@ private:
 		/// Gets the the last selected armour
 //		std::string getLastSelectedArmor();
 
-		/// Returns the craft corresponding to the specified unique id.
-//kL	Craft* findCraftByUniqueId(const CraftId& craftId) const;
+		/// kL. Sets the current Matrix row.
+		void setCurrentRowMatrix(size_t row); // kL
+		/// kL. Gets the current Matrix row.
+		size_t getCurrentRowMatrix() const; // kL
 
 		/// Gets the list of missions statistics
 		std::vector<MissionStatistics*>* getMissionStatistics();
+
+		/// Returns the craft corresponding to the specified unique id.
+//kL	Craft* findCraftByUniqueId(const CraftId& craftId) const;
 };
 
 }

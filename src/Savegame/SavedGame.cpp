@@ -135,17 +135,20 @@ SavedGame::SavedGame()
 		_monthsPassed(-1),
 		_graphRegionToggles(""),
 		_graphCountryToggles(""),
-		_graphFinanceToggles("")
-//kL	_selectedBase(0)
+		_graphFinanceToggles(""),
+		_curRowMatrix(0) // kL
+//kL	_selectedBase(0),
+//kL	_lastselectedArmor("STR_ARMOR_NONE_UC")
 {
 	_time = new GameTime(6, 1, 1, 1999, 12, 0, 0);
+
 	_alienStrategy = new AlienStrategy();
+
 	_funds.push_back(0);
 	_maintenance.push_back(0);
 	_researchScores.push_back(0);
 	_income.push_back(0);		// kL
 	_expenditure.push_back(0);	// kL
-//	_lastselectedArmor = "STR_ARMOR_NONE_UC";
 }
 
 /**
@@ -2165,7 +2168,7 @@ Region* SavedGame::locateRegion(
 		return *found;
 	}
 
-	return 0;
+	return NULL;
 }
 
 /**
@@ -2367,6 +2370,24 @@ std::vector<SoldierDead*>* SavedGame::getDeadSoldiers() // kL
 {
 	return _lastselectedArmor;
 } */
+
+/**
+ * kL. Sets the current Matrix row.
+ * @param row - current Matrix row
+ */
+void SavedGame::setCurrentRowMatrix(size_t row) // kL
+{
+	_curRowMatrix = row;
+}
+
+/**
+ * kL. Gets the current Matrix row.
+ * @return, current Matrix row
+ */
+size_t SavedGame::getCurrentRowMatrix() const // kL
+{
+	return _curRowMatrix;
+}
 
 /**
  * Gets mission statistics for soldier commendations.

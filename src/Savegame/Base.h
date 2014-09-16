@@ -61,8 +61,8 @@ private:
 		_inBattlescape,
 		_retaliationTarget;
 	int
-		_cashSpent,		// kL
-		_cashIncome,	// kL
+		_cashSpent, // kL
+		_cashIncome, // kL
 		_engineers,
 		_scientists,
 		_defenseResult;

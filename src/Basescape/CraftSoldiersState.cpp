@@ -308,7 +308,7 @@ void CraftSoldiersState::init()
 	else if (_curRow > 0)
 		_lstSoldiers->scrollTo(_curRow);
 
-//kL_TEST	_lstSoldiers->draw();
+	_lstSoldiers->draw();
 
 //	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
 //	_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));

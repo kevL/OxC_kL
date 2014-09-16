@@ -195,9 +195,9 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 
 	int
-		row		= 0,
 		iter	= 0,
 		qty[8]	= {0, 0, 0, 0, 0, 0, 0, 0};
+	size_t row = 0;
 	Uint8 color = Palette::blockOffset(13)+10; // blue
 
 	std::wostringstream
@@ -399,10 +399,20 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			++row;
 		}
 	}
+
+	if (row > 0
+		&& savedGame->getCurrentRowMatrix() >= row)
+	{
+		_lstMatrix->scrollTo(0);
+	}
+	else if (savedGame->getCurrentRowMatrix() > 0)
+		_lstMatrix->scrollTo(savedGame->getCurrentRowMatrix());
+
+//	_lstMatrix->draw(); // only needed when list changes while state is active. Eg, on re-inits
 }
 
 /**
- *
+ * dTor.
  */
 StoresMatrixState::~StoresMatrixState()
 {
@@ -414,6 +424,8 @@ StoresMatrixState::~StoresMatrixState()
  */
 void StoresMatrixState::btnOkClick(Action*)
 {
+	_game->getSavedGame()->setCurrentRowMatrix(_lstMatrix->getScroll());
+
 	_game->popState();
 }
 

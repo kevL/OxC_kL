@@ -264,7 +264,6 @@ void SoldiersState::btnMemorialClick(Action*)
 }
 
 /**
-/**
  * Shows the selected soldier's info.
  * @param action - pointer to an action
  */

@@ -565,7 +565,7 @@ void TextList::setPalette(
 					ncolors);
 	}
 
-	if (_selector != 0)
+	if (_selector != NULL)
 	{
 		_selector->setPalette(
 							colors,
@@ -763,9 +763,7 @@ void TextList::setAlign(
 		}
 	}
 	else
-	{
 		_align[col] = align;
-	}
 }
 
 /**
