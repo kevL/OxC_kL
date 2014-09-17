@@ -614,11 +614,11 @@ void UnitInfoState::init()
 	_barMorale->setMax(100);
 	_barMorale->setValue(static_cast<double>(stat));
 
-	double acu = _unit->getAccuracyModifier();
+	double acuModi = _unit->getAccuracyModifier();
 
 	double arbitraryVariable = static_cast<double>(_unit->getStats()->reactions);
 	_barReactions->setMax(arbitraryVariable);
-	arbitraryVariable *= acu;
+	arbitraryVariable *= acuModi;
 	_barReactions->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
@@ -627,7 +627,7 @@ void UnitInfoState::init()
 
 	arbitraryVariable = static_cast<double>(_unit->getStats()->firing);
 	_barFiring->setMax(arbitraryVariable);
-	arbitraryVariable *= acu;
+	arbitraryVariable *= acuModi;
 	_barFiring->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
@@ -636,7 +636,7 @@ void UnitInfoState::init()
 
 	arbitraryVariable = static_cast<double>(_unit->getStats()->throwing);
 	_barThrowing->setMax(arbitraryVariable);
-	arbitraryVariable *= acu;
+	arbitraryVariable *= acuModi;
 	_barThrowing->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
@@ -645,18 +645,16 @@ void UnitInfoState::init()
 
 	arbitraryVariable = static_cast<double>(_unit->getStats()->melee);
 	_barMelee->setMax(arbitraryVariable);
-	arbitraryVariable *= acu;
+	arbitraryVariable *= acuModi;
 	_barMelee->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
 	ss << stat;
 	_numMelee->setText(ss.str());
 
-	 acu = (acu / 2.0 + 0.5);
-
 	arbitraryVariable = static_cast<double>(_unit->getStats()->strength);
 	_barStrength->setMax(arbitraryVariable);
-	arbitraryVariable *= acu;
+	arbitraryVariable *= acuModi / 2.0 + 0.5;
 	_barStrength->setValue(arbitraryVariable);
 	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");

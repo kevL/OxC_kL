@@ -1115,7 +1115,7 @@ void BattlescapeState::mapOver(Action* action)
 					i != tile->getInventory()->end();
 					++i)
 			{
-				ss << L">";
+				ss << L"- ";
 
 				if ((*i)->getUnit() != NULL)
 				{
@@ -1146,7 +1146,7 @@ void BattlescapeState::mapOver(Action* action)
 						&& (*i)->getAmmoItem()
 						&& (*i)->getAmmoItem() != *i)
 					{
-						ss << L" >" << tr((*i)->getAmmoItem()->getRules()->getType())
+						ss << L" > " << tr((*i)->getAmmoItem()->getRules()->getType())
 						<< L" (" << (*i)->getAmmoItem()->getAmmoQuantity() << L")";
 					}
 					else if (((*i)->getRules()->getBattleType() == BT_GRENADE

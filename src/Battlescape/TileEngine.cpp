@@ -5448,7 +5448,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 				double underLoad = static_cast<double>(victim->getStats()->strength) / static_cast<double>(victim->getCarriedWeight());
 				underLoad *= victim->getAccuracyModifier() / 2.0 + 0.5;
 				if (underLoad < 1.0)
-					prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
+					prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
 
 				// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
 				if (victim->getOriginalFaction() == FACTION_PLAYER)

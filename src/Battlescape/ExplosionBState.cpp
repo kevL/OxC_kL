@@ -119,7 +119,7 @@ void ExplosionBState::init()
 						static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5)));
 
 			if (_pistolWhip)
-				str /= 2;
+				str /= 2; // pistolwhipping adds only 1/2 str.
 
 			_power += str;
 		}

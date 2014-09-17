@@ -1020,6 +1020,9 @@ int Tile::getTopItemSprite()
 			i != _inventory.end();
 			++i)
 	{
+		if ((*i)->getRules()->getBattleType() == BT_CORPSE)	// kL
+			return (*i)->getRules()->getFloorSprite();		// kL
+
 		if ((*i)->getRules()->getWeight() > weight)
 		{
 			weight = (*i)->getRules()->getWeight();

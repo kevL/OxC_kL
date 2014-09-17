@@ -258,6 +258,9 @@ void MiniBaseView::mouseOver(Action* action, State* state)
 	_hoverBase = static_cast<size_t>(
 					floor(action->getRelativeXMouse()) / (static_cast<double>(MINI_SIZE + 2) * action->getXScale()));
 
+	if (_hoverBase < 0) _hoverBase = 0; // kL
+	if (_hoverBase > 8) _hoverBase = 8; // kL
+
 	InteractiveSurface::mouseOver(action, state);
 }
 

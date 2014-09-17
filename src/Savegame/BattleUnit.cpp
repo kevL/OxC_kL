@@ -1650,42 +1650,54 @@ int BattleUnit::getActionTUs(
 		BattleActionType actionType,
 		RuleItem* rule)
 {
-	if (rule == NULL)
-		return 0;
+//	if (rule == NULL)
+//		return 0;
 
 	int cost = 0;
 
 	switch (actionType)
 	{
 		// note: Should put "tuPrime", "tuDefuse", & "tuThrow" yaml-entry in Xcom1Ruleset, under various grenade-types etc.
-		case BA_PRIME:
-			cost = 45;
-		break;
 		case BA_DEFUSE:
 			cost = 15;
+		break;
+		case BA_PRIME:
+			cost = 45;
 		break;
 		case BA_THROW:
 			cost = 23;
 		break;
 		case BA_LAUNCH:
+			if (rule == NULL)
+				return 0;
 			cost = rule->getTULaunch();
 		break;
 		case BA_AIMEDSHOT:
+			if (rule == NULL)
+				return 0;
 			cost = rule->getTUAimed();
 		break;
 		case BA_AUTOSHOT:
+			if (rule == NULL)
+				return 0;
 			cost = rule->getTUAuto();
 		break;
 		case BA_SNAPSHOT:
+			if (rule == NULL)
+				return 0;
 			cost = rule->getTUSnap();
 		break;
 		case BA_STUN:
 		case BA_HIT:
+			if (rule == NULL)
+				return 0;
 			cost = rule->getTUMelee();
 		break;
 		case BA_USE:
 		case BA_MINDCONTROL:
 		case BA_PANIC:
+			if (rule == NULL)
+				return 0;
 			cost = rule->getTUUse();
 		break;
 
@@ -1701,7 +1713,8 @@ int BattleUnit::getActionTUs(
 
 
 	if (cost > 0
-		&& (rule->getFlatRate() == false // if it's a percentage, apply it to unit TUs
+		&& ((rule != NULL
+				&& rule->getFlatRate() == false) // it's a percentage, apply to TUs
 			|| actionType == BA_PRIME
 			|| actionType == BA_THROW)
 		&& actionType != BA_DEFUSE)
@@ -2072,7 +2085,7 @@ void BattleUnit::prepareNewTurn()
 	double underLoad = static_cast<double>(getStats()->strength) / static_cast<double>(getCarriedWeight());
 	underLoad *= getAccuracyModifier() / 2.0 + 0.5;
 	if (underLoad < 1.0)
-		prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
+		prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
 
 	// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.
 	if (_faction == FACTION_PLAYER)

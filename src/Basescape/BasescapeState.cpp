@@ -743,6 +743,17 @@ void BasescapeState::miniLeftClick(Action*)
 
 		init();
 	}
+	else // courtesy kkmic, http://openxcom.org/forum/index.php?topic=1558.msg32461#msg32461
+	{
+		// aka: btnNewBaseClick();
+		Base* base = new Base(_game->getRuleset());
+
+		_game->popState();
+		_game->pushState(new BuildNewBaseState(
+											base,
+											_globe,
+											false));
+	}
 }
 
 /**

@@ -647,7 +647,7 @@ private:
 		/// Get the number of time units a certain action takes.
 		int getActionTUs(
 				BattleActionType actionType,
-				RuleItem* item);
+				RuleItem* item = NULL);
 		/// Spend time units if it can.
 		bool spendTimeUnits(int tu);
 		/// Spend energy if it can.

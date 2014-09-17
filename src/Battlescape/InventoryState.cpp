@@ -231,11 +231,11 @@ InventoryState::InventoryState(
 
 	_txtThrow->setColor(Palette::blockOffset(4));			// kL
 	_txtThrow->setSecondaryColor(Palette::blockOffset(1));	// kL
-	_txtThrow->setHighContrast();						// kL
+	_txtThrow->setHighContrast();							// kL
 
 	_txtMelee->setColor(Palette::blockOffset(4));			// kL
 	_txtMelee->setSecondaryColor(Palette::blockOffset(1));	// kL
-	_txtMelee->setHighContrast();						// kL
+	_txtMelee->setHighContrast();							// kL
 
 //	_txtPStr->setColor(Palette::blockOffset(4));
 //	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
@@ -561,13 +561,13 @@ void InventoryState::updateStats()
 	//Log(LOG_INFO) << "InventoryState::updateStats()";
 	BattleUnit* unit = _battleGame->getSelectedUnit();
 
-	_numOrder->setValue(unit->getBattleOrder());							// kL
-	_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);	// kL
+	_numOrder->setValue(unit->getBattleOrder());
+	_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
 
-	if (_tu) // kL
+	if (_tu)
 		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
 
-	if (Options::showMoreStatsInInventoryView) // kL
+	if (Options::showMoreStatsInInventoryView)
 	{
 		int str = static_cast<int>(Round(
 					static_cast<double>(unit->getStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
@@ -580,16 +580,16 @@ void InventoryState::updateStats()
 
 		if (_tu)
 		{
-			int stat = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 23) / 100.f));
+//			int stat = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 23) / 100.f));
+			int stat = unit->getActionTUs(BA_THROW);
 			_txtThrowTU->setText(tr("STR_THROW_").arg(stat));
 		}
-
-		if (!_tu) // kL
+		else
 		{
 			_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg(unit->getStats()->firing));
 			_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
-			_txtThrow->setText(tr("STR_THROWACC_SHORT").arg(unit->getStats()->throwing)); // kL
-			_txtMelee->setText(tr("STR_MELEEACC_SHORT").arg(unit->getStats()->melee)); // kL
+			_txtThrow->setText(tr("STR_THROWACC_SHORT").arg(unit->getStats()->throwing));
+			_txtMelee->setText(tr("STR_MELEEACC_SHORT").arg(unit->getStats()->melee));
 
 			int minPsi = 0;
 			if (unit->getType() == "SOLDIER")
@@ -733,7 +733,7 @@ void InventoryState::btnOkClick(Action*)
 				//Log(LOG_INFO) << ". underLoad = " << underLoad;
 				if (underLoad < 1.0)
 				{
-					prepTU = static_cast<int>(static_cast<double>(prepTU) * underLoad);
+					prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
 					//Log(LOG_INFO) << ". prepTU[0] = " << prepTU;
 				}
 

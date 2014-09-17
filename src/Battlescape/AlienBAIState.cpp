@@ -2678,7 +2678,8 @@ void AlienBAIState::selectMeleeOrRanged()
 
 	int power = meleeWeapon->getPower();
 	if (meleeWeapon->isStrengthApplied())
-		power += _unit->getStats()->strength;
+		power += static_cast<int>(Round(
+					static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5)));
 
 	power = static_cast<int>(Round(
 				static_cast<float>(power) * _aggroTarget->getArmor()->getDamageModifier(meleeWeapon->getDamageType())));
