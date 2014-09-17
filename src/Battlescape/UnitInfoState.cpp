@@ -614,45 +614,54 @@ void UnitInfoState::init()
 	_barMorale->setMax(100);
 	_barMorale->setValue(static_cast<double>(stat));
 
+	double acu = _unit->getAccuracyModifier();
+
 	double arbitraryVariable = static_cast<double>(_unit->getStats()->reactions);
-	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
+	_barReactions->setMax(arbitraryVariable);
+	arbitraryVariable *= acu;
+	_barReactions->setValue(arbitraryVariable);
+	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
 	ss << stat;
 	_numReactions->setText(ss.str());
-	_barReactions->setMax(arbitraryVariable);
-	_barReactions->setValue(static_cast<double>(stat));
 
 	arbitraryVariable = static_cast<double>(_unit->getStats()->firing);
-	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
+	_barFiring->setMax(arbitraryVariable);
+	arbitraryVariable *= acu;
+	_barFiring->setValue(arbitraryVariable);
+	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
 	ss << stat;
 	_numFiring->setText(ss.str());
-	_barFiring->setMax(arbitraryVariable);
-	_barFiring->setValue(static_cast<double>(stat));
 
 	arbitraryVariable = static_cast<double>(_unit->getStats()->throwing);
-	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
+	_barThrowing->setMax(arbitraryVariable);
+	arbitraryVariable *= acu;
+	_barThrowing->setValue(arbitraryVariable);
+	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
 	ss << stat;
 	_numThrowing->setText(ss.str());
-	_barThrowing->setMax(arbitraryVariable);
-	_barThrowing->setValue(static_cast<double>(stat));
 
 	arbitraryVariable = static_cast<double>(_unit->getStats()->melee);
-	stat = static_cast<int>(arbitraryVariable * _unit->getAccuracyModifier());
+	_barMelee->setMax(arbitraryVariable);
+	arbitraryVariable *= acu;
+	_barMelee->setValue(arbitraryVariable);
+	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
 	ss << stat;
 	_numMelee->setText(ss.str());
-	_barMelee->setMax(arbitraryVariable);
-	_barMelee->setValue(static_cast<double>(stat));
+
+	 acu = (acu / 2.0 + 0.5);
 
 	arbitraryVariable = static_cast<double>(_unit->getStats()->strength);
-	stat = static_cast<int>(arbitraryVariable * (_unit->getAccuracyModifier() / 2.0 + 0.5));
+	_barStrength->setMax(arbitraryVariable);
+	arbitraryVariable *= acu;
+	_barStrength->setValue(arbitraryVariable);
+	stat = static_cast<int>(Round(arbitraryVariable));
 	ss.str(L"");
 	ss << stat;
 	_numStrength->setText(ss.str());
-	_barStrength->setMax(arbitraryVariable);
-	_barStrength->setValue(static_cast<double>(stat));
 
 
 	if (_unit->getType() != "SOLDIER"

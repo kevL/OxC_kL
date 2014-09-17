@@ -999,12 +999,11 @@ void Tile::removeItem(BattleItem* item)
 		if ((*i) == item)
 		{
 			_inventory.erase(i);
-
 			break;
 		}
 	}
 
-	item->setTile(0);
+	item->setTile(NULL);
 }
 
 /**

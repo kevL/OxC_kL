@@ -2105,7 +2105,7 @@ void BattleUnit::prepareNewTurn()
 		else // xCom tank.
 			enron = enron * 4 / 5; // value in Ruleset is 100%
 
-		enron = static_cast<int>(static_cast<double>(enron) * getAccuracyModifier());
+		enron = static_cast<int>(Round(static_cast<double>(enron) * getAccuracyModifier()));
 		// kL_end.
 
 		// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
@@ -2443,8 +2443,9 @@ BattleItem* BattleUnit::getItem(
 
 /**
  * Get the 'main hand weapon' of a BattleUnit.
+ * Ought alter AI so this Returns firearms only.
  * @param quickest - true to choose the quickest weapon (default true)
- * @return, pointer to BattleItem
+ * @return, pointer to a BattleItem
  */
 BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
@@ -2456,72 +2457,70 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	BattleItem* lftWeapon = getItem("STR_LEFT_HAND");
 
 	bool isRht = rhtWeapon
-				&& ((rhtWeapon->getAmmoItem()
-						&& rhtWeapon->getAmmoItem()->getAmmoQuantity()
-						&& rhtWeapon->getRules()->getBattleType() == BT_FIREARM)
-					|| rhtWeapon->getRules()->getBattleType() == BT_MELEE);
+				&& (rhtWeapon->getRules()->getBattleType() == BT_MELEE
+					|| (rhtWeapon->getRules()->getBattleType() == BT_FIREARM
+						&& rhtWeapon->getAmmoItem()
+						&& rhtWeapon->getAmmoItem()->getAmmoQuantity()));
 	bool isLft = lftWeapon
-				&& ((lftWeapon->getAmmoItem()
-						&& lftWeapon->getAmmoItem()->getAmmoQuantity()
-						&& lftWeapon->getRules()->getBattleType() == BT_FIREARM)
-					|| lftWeapon->getRules()->getBattleType() == BT_MELEE);
+				&& (lftWeapon->getRules()->getBattleType() == BT_MELEE
+					|| (lftWeapon->getRules()->getBattleType() == BT_FIREARM
+						&& lftWeapon->getAmmoItem()
+						&& lftWeapon->getAmmoItem()->getAmmoQuantity()));
 	//Log(LOG_INFO) << ". isRht = " << isRht;
 	//Log(LOG_INFO) << ". isLft = " << isLft;
 
 	if (!isRht && !isLft)
 		return NULL;
-	else if (isRht && !isLft)
+
+	if (isRht && !isLft)
 		return rhtWeapon;
-	else if (!isRht && isLft)
+
+	if (!isRht && isLft)
 		return lftWeapon;
-	else //if (isRht && isLft).
+
+	//Log(LOG_INFO) << ". . isRht & isLft VALID";
+
+	RuleItem* rule = rhtWeapon->getRules();
+	int rhtTU = rule->getTUSnap();
+	if (rhtTU == 0)
+		if (rhtTU = rule->getTUAuto() == 0)
+			if (rhtTU = rule->getTUAimed() == 0)
+				if (rhtTU = rule->getTULaunch() == 0)
+					rhtTU = rule->getTUMelee();
+
+	rule = lftWeapon->getRules();
+	int lftTU = rule->getTUSnap();
+	if (lftTU == 0)
+		if (lftTU = rule->getTUAuto() == 0)
+			if (lftTU = rule->getTUAimed() == 0)
+				if (lftTU = rule->getTULaunch() == 0)
+					lftTU = rule->getTUMelee();
+
+	//Log(LOG_INFO) << ". . rhtTU = " << rhtTU;
+	//Log(LOG_INFO) << ". . lftTU = " << lftTU;
+
+	if (!rhtTU && !lftTU)
+		return NULL;
+
+	if (rhtTU && !lftTU)
+		return rhtWeapon;
+
+	if (!rhtTU && lftTU)
+		return lftWeapon;
+
+	if (quickest) // rhtTU && lftTU
 	{
-		//Log(LOG_INFO) << ". . isRht & isLft VALID";
-
-		RuleItem* rhtRule = rhtWeapon->getRules();
-		int rhtTU = rhtRule->getTUSnap();
-		if (!rhtTU) //rhtRule->getBattleType() == BT_MELEE
-			rhtTU = rhtRule->getTUMelee();
-
-		RuleItem* lftRule = lftWeapon->getRules();
-		int lftTU = lftRule->getTUSnap();
-		if (!lftTU) //lftRule->getBattleType() == BT_MELEE
-			lftTU = lftRule->getTUMelee();
-
-		//Log(LOG_INFO) << ". . rhtTU = " << rhtTU;
-		//Log(LOG_INFO) << ". . lftTU = " << lftTU;
-
-		if (!rhtTU && !lftTU)
-			return NULL;
-		else if (rhtTU && !lftTU)
+		if (rhtTU <= lftTU)
 			return rhtWeapon;
-		else if (!rhtTU && lftTU)
+		else
 			return lftWeapon;
-		else //if (rhtTU && lftTU)
-		{
-			if (quickest)
-			{
-				if (rhtTU <= lftTU)
-					return rhtWeapon;
-				else
-					return lftWeapon;
-			}
-			else
-			{
-				if (rhtTU >= lftTU)
-					return rhtWeapon;
-				else
-					return lftWeapon;
-			}
-		}
-
-/*		int rhtTU = rhtRule->getBattleType() == BT_MELEE?
-									getActionTUs(BA_HIT, rhtWeapon)
-								: getActionTUs(BA_SNAPSHOT, rhtWeapon);
-
-		int lftTU = lftRule->getBattleType() == BT_MELEE?
-									getActionTUs(BA_HIT, lftWeapon)
-								: getActionTUs(BA_SNAPSHOT, lftWeapon); */
+	}
+	else
+	{
+		if (rhtTU >= lftTU)
+			return rhtWeapon;
+		else
+			return lftWeapon;
 	}
 
 	// kL_note: should exit this by setting ActiveHand.
@@ -2583,6 +2582,30 @@ BattleItem* BattleUnit::getGrenadeFromBelt() const
 	}
 
 	return NULL;
+}
+
+/**
+ * Gets the name of any melee weapon we may be carrying, or a built in one.
+ * @return, the name of a melee weapon
+ */
+std::string BattleUnit::getMeleeWeapon()
+{
+	if (getItem("STR_RIGHT_HAND")
+		&& getItem("STR_RIGHT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	{
+		return getItem("STR_RIGHT_HAND")->getRules()->getType();
+	}
+
+	if (getItem("STR_LEFT_HAND")
+		&& getItem("STR_LEFT_HAND")->getRules()->getBattleType() == BT_MELEE)
+	{
+		return getItem("STR_LEFT_HAND")->getRules()->getType();
+	}
+
+	if (_unitRules != NULL) // -> do not CTD for Mc'd xCom agents. Thanks again.
+		return _unitRules->getMeleeWeapon();
+
+	return "";
 }
 
 /**
@@ -3296,14 +3319,14 @@ std::string BattleUnit::getType() const
 
 /**
  * Sets unit's active hand.
- * @param hand - pointer to a hand
+ * @param slot - pointer to a handslot
  */
-void BattleUnit::setActiveHand(const std::string& hand)
+void BattleUnit::setActiveHand(const std::string& slot)
 {
-	if (_activeHand != hand)
+	if (_activeHand != slot)
 		_cacheInvalid = true;
 
-	_activeHand = hand;
+	_activeHand = slot;
 }
 
 /**
@@ -3313,39 +3336,25 @@ void BattleUnit::setActiveHand(const std::string& hand)
  */
 std::string BattleUnit::getActiveHand() const
 {
-	// NOTE: what about Tanks? Does this work in canMakeSnap() for reaction fire???
-
 	if (getItem(_activeHand)) // has an item in the already active Hand.
-	{
 		return _activeHand;
-	}
-	// kL_begin: BattleUnit::getActiveHand(), tinker tinker.
-	else if (getItem("STR_RIGHT_HAND"))
-	{
+
+	if (getItem("STR_RIGHT_HAND"))
 		return "STR_RIGHT_HAND";
-	}
-	else if (getItem("STR_LEFT_HAND"))
-	{
-		return "STR_LEFT_HAND";
-	}
 
-//	return "STR_RIGHT_HAND";
+	if (getItem("STR_LEFT_HAND"))
+		return "STR_LEFT_HAND";
+
 	return "";
-	// kL_end.
-
-/*kL	if (getItem("STR_LEFT_HAND"))
-		return "STR_LEFT_HAND";
-
-	return "STR_RIGHT_HAND"; */
 }
 
 /**
  * Converts unit to another faction (original faction is still stored).
  * @param f - faction
  */
-void BattleUnit::convertToFaction(UnitFaction f)
+void BattleUnit::convertToFaction(UnitFaction faction)
 {
-	_faction = f;
+	_faction = faction;
 }
 
 /**
@@ -3391,9 +3400,9 @@ UnitFaction BattleUnit::killedBy() const
  * Sets the faction the unit was killed by.
  * @param f faction
  */
-void BattleUnit::killedBy(UnitFaction f)
+void BattleUnit::killedBy(UnitFaction faction)
 {
-	_killedBy = f;
+	_killedBy = faction;
 }
 
 /**
@@ -3981,30 +3990,6 @@ void BattleUnit::setFloorAbove(bool floor)
 bool BattleUnit::getFloorAbove()
 {
 	return _floorAbove;
-}
-
-/**
- * Gets the name of any melee weapon we may be carrying, or a built in one.
- * @return, the name of a melee weapon
- */
-std::string BattleUnit::getMeleeWeapon()
-{
-	if (getItem("STR_RIGHT_HAND")
-		&& getItem("STR_RIGHT_HAND")->getRules()->getBattleType() == BT_MELEE)
-	{
-		return getItem("STR_RIGHT_HAND")->getRules()->getType();
-	}
-
-	if (getItem("STR_LEFT_HAND")
-		&& getItem("STR_LEFT_HAND")->getRules()->getBattleType() == BT_MELEE)
-	{
-		return getItem("STR_LEFT_HAND")->getRules()->getType();
-	}
-
-	if (_unitRules != NULL) // -> do not CTD for Mc'd xCom agents. Thanks again.
-		return _unitRules->getMeleeWeapon();
-
-	return "";
 }
 
 /**

@@ -204,12 +204,12 @@ void Bar::setInvert(bool invert)
 void Bar::draw()
 {
 	Surface::draw();
-	SDL_Rect square;
 
+	SDL_Rect square;
 	square.x = 0;
 	square.y = 0;
-	square.w = static_cast<Uint16>(_scale * _max) + 1;
-	square.h = getHeight();
+	square.w = static_cast<Uint16>(Round(_scale * _max)) + 1;
+	square.h = static_cast<Uint16>(getHeight());
 
 	if (_invert)
 		drawRect(&square, _color);
@@ -238,16 +238,16 @@ void Bar::draw()
 	{
 		if (_secondOnTop)
 		{
-			square.w = (Uint16)(width);
+			square.w = static_cast<Uint16>(Round(width));
 			drawRect(&square, _color + 4);
-			square.w = (Uint16)(width2);
+			square.w = static_cast<Uint16>(Round(width2));
 			drawRect(&square, _color2 + 4);
 		}
 		else
 		{
-			square.w = (Uint16)(width2);
+			square.w = static_cast<Uint16>(Round(width2));
 			drawRect(&square, _color2 + 4);
-			square.w = (Uint16)(width);
+			square.w = static_cast<Uint16>(Round(width));
 			drawRect(&square, _color + 4);
 		}
 	}
@@ -255,16 +255,16 @@ void Bar::draw()
 	{
 		if (_secondOnTop)
 		{
-			square.w = (Uint16)(width);
+			square.w = static_cast<Uint16>(Round(width));
 			drawRect(&square, _color);
-			square.w = (Uint16)(width2);
+			square.w = static_cast<Uint16>(Round(width2));
 			drawRect(&square, _color2);
 		}
 		else
 		{
-			square.w = (Uint16)(width2);
+			square.w = static_cast<Uint16>(Round(width2));
 			drawRect(&square, _color2);
-			square.w = (Uint16)(width);
+			square.w = static_cast<Uint16>(Round(width));
 			drawRect(&square, _color);
 		}
 	}

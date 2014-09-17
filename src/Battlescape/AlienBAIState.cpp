@@ -203,15 +203,13 @@ void AlienBAIState::think(BattleAction* action)
 	_knownEnemies		= countKnownTargets();
 	_visibleEnemies		= selectNearestTarget();
 	_spottingEnemies	= getSpottingUnits(_unit->getPosition());
-	_melee				= (_unit->getMeleeWeapon() != "");
 
-	_melee		= false;
+	_melee		= (_unit->getMeleeWeapon() != "");
 	_rifle		= false;
 	_blaster	= false;
 	_grenade	= false; // kL
 
 //	int rand = RNG::generate(0, 10); // kL
-
 	_reachable	= _save->getPathfinding()->findReachable(
 													_unit,
 													_unit->getTimeUnits());
@@ -239,7 +237,6 @@ void AlienBAIState::think(BattleAction* action)
 			case 2: AIMode = "Combat"; break;
 			case 3: AIMode = "Escape"; break;
 		}
-
 		Log(LOG_INFO) << "Currently using " << AIMode << " behaviour";
 	}
 
@@ -252,7 +249,7 @@ void AlienBAIState::think(BattleAction* action)
 		{
 			if (rule->getBattleType() == BT_FIREARM)
 			{
-				if (!rule->isWaypoint())
+				if (rule->isWaypoint() == false)
 				{
 					_rifle = true;
 					_reachableWithAttack = _save->getPathfinding()->findReachable(
@@ -2034,7 +2031,9 @@ void AlienBAIState::meleeAction()
 		}
 	}
 
-	int attackCost		= _unit->getActionTUs(BA_HIT, _unit->getMainHandWeapon());
+	int attackCost		= _unit->getActionTUs(
+											BA_HIT,
+											_unit->getMainHandWeapon());
 	int chargeReserve	= _unit->getTimeUnits() - attackCost;
 	int distance		= (chargeReserve / 4) + 1;
 
@@ -2595,8 +2594,7 @@ void AlienBAIState::meleeAttack()
 			_aggroTarget->getPosition() + Position(
 											_unit->getArmor()->getSize() - 1,
 											_unit->getArmor()->getSize() - 1,
-											0),
-			false);
+											0));
 
 	while (_unit->getStatus() == STATUS_TURNING)
 		_unit->turn();
@@ -2649,21 +2647,29 @@ BattleActionType AlienBAIState::getReserveMode()
  */
 void AlienBAIState::selectMeleeOrRanged()
 {
-	RuleItem* rangedWeapon = _unit->getMainHandWeapon()->getRules();
-	RuleItem* meleeWeapon = _save->getBattleGame()->getRuleset()->getItem(_unit->getMeleeWeapon());
-
-	if (!meleeWeapon)
+	BattleItem* mainWeapon = _unit->getMainHandWeapon();
+	if (mainWeapon == NULL) // kL safety.
 	{
-		// no idea how we got here, but melee is definitely out of the question.
-		_melee = false;
+		_rifle = false;
 
 		return;
 	}
 
-	if (!rangedWeapon
-		|| _unit->getMainHandWeapon()->getAmmoItem() == NULL)
+	RuleItem* rifleWeapon = mainWeapon->getRules();
+	if (rifleWeapon->getBattleType() != BT_FIREARM) // kL_add.
+//		|| rifleWeapon == NULL)
+//		|| _unit->getMainHandWeapon()->getAmmoItem() == NULL) // done in getMainHandWeapon()
 	{
 		_rifle = false;
+
+		return;
+	}
+
+	RuleItem* meleeWeapon = _save->getBattleGame()->getRuleset()->getItem(_unit->getMeleeWeapon());
+	if (meleeWeapon == NULL)
+	{
+		// no idea how we got here, but melee is definitely out of the question.
+		_melee = false;
 
 		return;
 	}
@@ -2672,7 +2678,7 @@ void AlienBAIState::selectMeleeOrRanged()
 
 	int power = meleeWeapon->getPower();
 	if (meleeWeapon->isStrengthApplied())
-		power += _unit->getStats()->strength / 2;
+		power += _unit->getStats()->strength;
 
 	power = static_cast<int>(Round(
 				static_cast<float>(power) * _aggroTarget->getArmor()->getDamageModifier(meleeWeapon->getDamageType())));
@@ -2684,21 +2690,23 @@ void AlienBAIState::selectMeleeOrRanged()
 		meleeOdds -= 5 * (_visibleEnemies - 1);
 
 	if (meleeOdds > 0
-		&& _unit->getHealth() >= 2 * _unit->getStats()->health / 3)
+		&& _unit->getHealth() > _unit->getStats()->health * 2 / 3)
 	{
-		if (_unit->getAggression() == 0)
+/*		if (_unit->getAggression() == 0)
 			meleeOdds -= 20;
 		else if (_unit->getAggression() > 1)
-			meleeOdds += 10 * _unit->getAggression();
+			meleeOdds += 10 * _unit->getAggression(); */
+		meleeOdds += 10 * _unit->getAggression(); // kL
 
 		if (RNG::percent(meleeOdds))
 		{
 			_rifle = false;
 			_reachableWithAttack = _save->getPathfinding()->findReachable(
 																		_unit,
-																		_unit->getTimeUnits() - _unit->getActionTUs(
-																												BA_HIT,
-																												meleeWeapon));
+																		_unit->getTimeUnits()
+																			- _unit->getActionTUs(
+																								BA_HIT,
+																								meleeWeapon));
 
 			return;
 		}

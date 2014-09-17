@@ -1096,6 +1096,7 @@ void BattlescapeState::mapOver(Action* action)
 		Tile* tile = _save->getTile(pos);
 
 		if (tile != NULL
+			&& tile->isDiscovered(2)
 			&& tile->getInventory()->empty() == false)
 		{
 			_txtTerrain->setVisible(false);
@@ -1161,6 +1162,9 @@ void BattlescapeState::mapOver(Action* action)
 				if (row == 24) // Console #1
 				{
 					ss << L". . . more";
+					if (_showConsole == 1)
+						break;
+
 					row++;
 				}
 				if (row < 26)
@@ -1174,6 +1178,9 @@ void BattlescapeState::mapOver(Action* action)
 				if (row == 49) // Console #2
 				{
 					ss << L". . . more";
+					if (_showConsole == 2)
+						break;
+
 					row++;
 				}
 				if (25 < row && row < 51)
@@ -1187,15 +1194,18 @@ void BattlescapeState::mapOver(Action* action)
 				if (row == 74) // Console #3
 				{
 					ss << L". . . more";
-					row++;
+//					if (_showConsole == 3)
+					break;
+
+//					row++;
 				}
 				if (50 < row && row < 76)
 				{
 					ss3.str(L"");
 					ss3 << ss.str(); // not efficient
 				}
-				if (row == 75)
-					break;
+//				if (row == 75)
+//					break;
 
 
 				row++;
@@ -2405,14 +2415,15 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	BattleItem* rtItem = selectedUnit->getItem("STR_RIGHT_HAND");
 	BattleItem* ltItem = selectedUnit->getItem("STR_LEFT_HAND");
 
-	if (selectedUnit->getActiveHand() != "")
+	std::string activeHand = selectedUnit->getActiveHand();
+	if (activeHand != "")
 	{
 		int tuLaunch = 0;
 		int tuAim = 0;
 		int tuAuto = 0;
 		int tuSnap = 0;
 
-		if (selectedUnit->getActiveHand() == "STR_RIGHT_HAND"
+		if (activeHand == "STR_RIGHT_HAND"
 			&& (rtItem->getRules()->getBattleType() == BT_FIREARM
 				|| rtItem->getRules()->getBattleType() == BT_MELEE))
 		{
@@ -2428,7 +2439,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 				tuSnap = selectedUnit->getActionTUs(BA_HIT, rtItem);
 			}
 		}
-		else if (selectedUnit->getActiveHand() == "STR_LEFT_HAND"
+		else if (activeHand == "STR_LEFT_HAND"
 			&& (ltItem->getRules()->getBattleType() == BT_FIREARM
 				|| ltItem->getRules()->getBattleType() == BT_MELEE))
 		{

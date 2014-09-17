@@ -537,6 +537,11 @@ void InventoryState::init()
 	}
 	else
 	{
+		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		texture->getFrame(26)->setX(0);
+		texture->getFrame(26)->setY(0);
+		texture->getFrame(26)->blit(_btnRank); // kL
+
 		Surface* armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
 		if (armorSurface)
 			armorSurface->blit(_soldier);
@@ -564,7 +569,8 @@ void InventoryState::updateStats()
 
 	if (Options::showMoreStatsInInventoryView) // kL
 	{
-		int str = static_cast<int>(static_cast<double>(unit->getStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5));
+		int str = static_cast<int>(Round(
+					static_cast<double>(unit->getStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
 		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
 		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(str));
 		if (weight > str)

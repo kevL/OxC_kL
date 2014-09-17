@@ -324,8 +324,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	_AIActionCounter = action.number;
 
 	//Log(LOG_INFO) << ". pre hunt for weapon";
-	if (!unit->getMainHandWeapon()
-		|| !unit->getMainHandWeapon()->getAmmoItem())
+	if (unit->getMainHandWeapon() == NULL)
+//		|| !unit->getMainHandWeapon()->getAmmoItem() == NULL) // done in getMainHandWeapon()
 	{
 		//Log(LOG_INFO) << ". . no mainhand weapon or no ammo";
 		if (unit->getOriginalFaction() == FACTION_HOSTILE)

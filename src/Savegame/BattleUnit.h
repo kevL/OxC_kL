@@ -636,10 +636,9 @@ private:
 		int getAimingPhase() const; // kL
 
 		/// The unit is out - either dead or unconscious.
-//kL	bool isOut() const;
 		bool isOut(
 				bool checkHealth = false,
-				bool checkStun = false) const; // kL
+				bool checkStun = false) const;
 
 		/// Get the number of time units a certain action takes.
 		int getActionTUs(
@@ -749,10 +748,13 @@ private:
 				const std::string& slot,
 				int x = 0,
 				int y = 0) const;
+
 		/// Gets the item in the main hand.
 		BattleItem* getMainHandWeapon(bool quickest = true) const;
 		/// Gets a grenade from the belt, if any.
 		BattleItem* getGrenadeFromBelt() const;
+		/// Gets the name of a melee weapon we may be carrying or that's innate.
+		std::string getMeleeWeapon();
 
 		/// Reloads righthand weapon if needed.
 		bool checkAmmo();
@@ -872,7 +874,7 @@ private:
 		/// Get this unit's original faction
 		UnitFaction getOriginalFaction() const;
 		/// Convert's unit to a faction
-		void convertToFaction(UnitFaction f);
+		void convertToFaction(UnitFaction faction);
 
 		/// Set health to 0 and set status dead
 		void instaKill();
@@ -885,7 +887,7 @@ private:
 		/// Get the faction that killed this unit.
 		UnitFaction killedBy() const;
 		/// Set the faction that killed this unit.
-		void killedBy(UnitFaction f);
+		void killedBy(UnitFaction faction);
 
 		/// Set the units we are charging towards.
 		void setCharging(BattleUnit* chargeTarget);
@@ -995,9 +997,6 @@ private:
 		void setFloorAbove(bool floor);
 		/// Gets the flag for "floor above me".
 		bool getFloorAbove();
-
-		/// Get the name of any melee weapon we may be carrying, or a built in one.
-		std::string getMeleeWeapon();
 
 		/// Gets the unit's mission statistics.
 		BattleUnitStatistics* getStatistics();

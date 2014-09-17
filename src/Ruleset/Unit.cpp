@@ -288,10 +288,10 @@ const std::string Unit::getMeleeWeapon() const
 
 /**
  * Gets what weapons this unit has built in.
- * This is a vector of strings representing any
- * weapons that may be inherent to this creature.
- * Note: unlike "livingWeapon" this is used in ADDITION to
- * any loadout or living weapon item that may be defined.
+ * This is a vector of strings representing any weapons that may be inherent
+ * to this creature.
+ * Note: unlike "livingWeapon" this is used in ADDITION to any loadout or
+ * living weapon item that may be defined.
  * @return, list of weapons that are integral to this unit.
  */
 const std::vector<std::string>& Unit::getInnateWeapons() const

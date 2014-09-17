@@ -161,10 +161,8 @@ protected:
 
 		/// Attempts to throw a grenade at an enemy (or group of enemies) we can see.
 		void grenadeAction();
-
 		/// Performs a psionic attack.
 		bool psiAction();
-
 		/// Performs a melee attack action.
 		void meleeAttack();
 

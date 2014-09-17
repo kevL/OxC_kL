@@ -115,8 +115,8 @@ void ExplosionBState::init()
 				|| _item->getRules()->getBattleType() == BT_MELEE)
 			&& _item->getRules()->isStrengthApplied())
 		{
-			int str = static_cast<int>(
-						static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5));
+			int str = static_cast<int>(Round(
+						static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5)));
 
 			if (_pistolWhip)
 				str /= 2;

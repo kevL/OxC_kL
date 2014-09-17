@@ -1802,9 +1802,6 @@ BattleActionType TileEngine::selectFireMethod( // kL
 		if (action.weapon->getRules()->getTUSnap()
 			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
-			Log(LOG_INFO) << ". actor = " << action.actor->getId();
-			Log(LOG_INFO) << ". tu = " << action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
-
 			action.type = BA_SNAPSHOT;
 			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
@@ -5481,7 +5478,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 //				else // xCom tank. ( can't get Mc'd )
 //					enron = enron * 4 / 5; // value in Ruleset is 100%
 
-				enron = static_cast<int>(static_cast<double>(enron) * victim->getAccuracyModifier());
+				enron = static_cast<int>(Round(static_cast<double>(enron) * victim->getAccuracyModifier()));
 
 				// Each fatal wound to the body reduces the soldier's energy recovery by 10%.
 				// kL_note: Only xCom gets fatal wounds, atm.

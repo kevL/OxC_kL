@@ -779,15 +779,16 @@ void ProjectileFlyBState::think()
 		{
 			createNewProjectile();
 
-			if (_action.cameraPosition.z != -1) // new behavior here (14 jun 2):
+			if (_action.cameraPosition.z != -1)
 			{
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 				_parent->getMap()->invalidate();
 			}
 		}
-		else // end think()
+		else // think() FINISH.
 		{
-			if (_action.cameraPosition.z != -1 && _action.waypoints.size() <= 1)
+			if (_action.cameraPosition.z != -1)
+//				&& _action.waypoints.size() < 2)
 			{
 /*				if (_action.type == BA_STUN // kL, don't jump screen after these.
 					|| _action.type == BA_HIT
@@ -804,10 +805,11 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_SNAPSHOT
 					|| _action.type == BA_AIMEDSHOT)
 				{
-					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
+					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition); // jumps camera back to stored position when shot was taken.
+					_parent->getMap()->invalidate();
 				}
 
-				_parent->getMap()->invalidate();
+//				_parent->getMap()->invalidate(); // above^
 			}
 
 			if (_unit->getFaction() == _parent->getSave()->getSide() // kL
@@ -1171,8 +1173,8 @@ bool ProjectileFlyBState::validThrowRange(
 	double maxDist = static_cast<double>(
 							getMaxThrowDistance( // tilespace
 											weight,
-											static_cast<int>(
-												static_cast<double>(action->actor->getStats()->strength) * (action->actor->getAccuracyModifier() / 2.0 + 0.5)),
+											static_cast<int>(Round(
+												static_cast<double>(action->actor->getStats()->strength) * (action->actor->getAccuracyModifier() / 2.0 + 0.5))),
 											delta_z)
 										+ 8)
 									/ 16.0;
