@@ -4973,7 +4973,7 @@
 1410341572 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
-1409183744 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1411080201 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	<limits>
 	"../Interface/ArrowButton.h"
@@ -6037,7 +6037,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1411051724 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1411053329 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>

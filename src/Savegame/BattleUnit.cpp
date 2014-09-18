@@ -2428,7 +2428,7 @@ BattleItem* BattleUnit::getItem(
 				i != _inventory.end();
 				++i)
 		{
-			if ((*i)->getSlot() != 0
+			if ((*i)->getSlot() != NULL
 				&& (*i)->getSlot()->getId() == slot
 				&& (*i)->occupiesSlot(x, y))
 			{
@@ -2443,7 +2443,7 @@ BattleItem* BattleUnit::getItem(
 				i != _tile->getInventory()->end();
 				++i)
 		{
-			if ((*i)->getSlot() != 0
+			if ((*i)->getSlot() != NULL
 				&& (*i)->occupiesSlot(x, y))
 			{
 				return *i;
@@ -2560,10 +2560,19 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	// otherwise pick the one with the least snapshot TUs
 	int tuRightHand = weaponRightHand->getRules()->getTUSnap();
 	int tuLeftHand = weaponLeftHand->getRules()->getTUSnap();
-	if (tuLeftHand >= tuRightHand)
-		return quickest?weaponRightHand:weaponLeftHand;
+	// if only one weapon has snapshot, pick that one
+	if (tuLeftHand <= 0 && tuRightHand > 0)
+		return weaponRightHand;
+	else if (tuRightHand <= 0 && tuLeftHand > 0)
+		return weaponLeftHand;
+	// else pick the better one
 	else
-		return quickest?weaponLeftHand:weaponRightHand; */
+	{
+		if (tuLeftHand >= tuRightHand)
+			return quickest?weaponRightHand:weaponLeftHand;
+		else
+			return quickest?weaponLeftHand:weaponRightHand;
+	} */
 
 /**
  * Get a grenade from the belt (used for AI)
