@@ -2197,8 +2197,8 @@ void BattleUnit::prepareNewTurn()
  */
 void BattleUnit::moraleChange(int change)
 {
-	if (!isFearable()
-		&& change < 0) // kL
+	if (isFearable() == false
+		&& change < 1) // kL
 	{
 		return;
 	}

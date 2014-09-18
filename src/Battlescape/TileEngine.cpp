@@ -5427,16 +5427,18 @@ bool TileEngine::psiAttack(BattleAction* action)
 			else // BA_MINDCONTROL
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
-				if (victim->getFaction() != FACTION_HOSTILE) // kL_begin:
+				if (victim->getFaction() != FACTION_HOSTILE) // kL_begin: Morale loss for getting Mc'd.
 				{
-					victim->moraleChange(_battleSave->getMoraleModifier(NULL, true) / 10 - 100);
+					victim->moraleChange(
+									_battleSave->getMoraleModifier(NULL, true) / 10 + victim->getStats()->bravery / 2 - 110);
 				}
 				else if (action->actor->getFaction() == FACTION_PLAYER)
 				{
 					if (victim->getOriginalFaction() == FACTION_HOSTILE)
-						victim->moraleChange(_battleSave->getMoraleModifier(NULL, false) / 10 - 50);
+						victim->moraleChange(
+										_battleSave->getMoraleModifier(NULL, false) / 10 + victim->getStats()->bravery - 110);
 					else
-						victim->moraleChange(+25);
+						victim->moraleChange(victim->getStats()->bravery / 2);
 				} // kL_end.
 
 				victim->convertToFaction(action->actor->getFaction()); // moved below, must be done *after* energyRecovery.
