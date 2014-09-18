@@ -5814,7 +5814,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1410916582 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1411012403 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5916,7 +5916,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1410734814 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1411023628 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6440,7 +6440,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1410871195 source:f:\git\openxcom\src\battlescape\map.cpp
+1411022840 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6902,7 +6902,7 @@
 1404096022 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1410732471 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1411023296 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"

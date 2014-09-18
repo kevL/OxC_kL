@@ -2672,10 +2672,7 @@ void Map::cacheUnit(BattleUnit* unit)
 										_save->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
 
-//kL	int parts = unit->getArmor()->getSize() == 1? 1: (unit->getArmor()->getSize() * 2);
-	int parts = 1;									// kL
-	if (unit->getArmor()->getSize() > 1)			// kL
-		parts = unit->getArmor()->getSize() * 2;	// kL
+	int parts = unit->getArmor()->getSize() * unit->getArmor()->getSize();
 
 	bool
 		d = false,

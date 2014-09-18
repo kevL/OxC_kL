@@ -2955,7 +2955,7 @@ void BattlescapeGenerator::loadRMP(
 					j < 5;
 					++j)
 			{
-				int connectID = static_cast<int>(static_cast<unsigned char>(value[(j * 3) + 4]));
+				int connectID = static_cast<int>(value[j * 3 + 4]);
 				if (connectID < 251) // don't touch special values
 					connectID += nodeOffset;
 				else // 255/-1 = unused, 254/-2 = north, 253/-3 = east, 252/-4 = south, 251/-5 = west

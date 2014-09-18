@@ -73,8 +73,14 @@ void UnitTurnBState::init()
 {
 	//Log(LOG_INFO) << "UnitTurnBState::init() unitID = " << _action.actor->getId() << " strafe = " << _action.strafe;
 	_unit = _action.actor;
-	_action.TU = 0;
+	if (_unit->isOut(true, true))
+	{
+		_parent->popState();
 
+		return;
+	}
+
+	_action.TU = 0;
 	_unit->setStopShot(false);
 
 	if (_unit->getFaction() == FACTION_PLAYER)
