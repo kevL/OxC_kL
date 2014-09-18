@@ -186,6 +186,8 @@ void BattlescapeGame::think()
 				_playerPanicHandled = handlePanickingPlayer();
 				_save->getBattleState()->updateSoldierInfo();
 			}
+
+			_parentState->updateExpData(); // kL
 		}
 
 		if (_save->getUnitsFalling())

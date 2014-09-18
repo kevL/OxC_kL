@@ -136,13 +136,14 @@ BattlescapeState::BattlescapeState()
 			10,
 			(BattleUnit*)(0));
 
-	const int screenWidth		= Options::baseXResolution;
-	const int screenHeight		= Options::baseYResolution;
-	const int iconsWidth		= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w; // 320
-	const int iconsHeight		= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h; // 56
-	const int visibleMapHeight	= screenHeight - iconsHeight;
-	const int x					= screenWidth / 2 - iconsWidth / 2;
-	const int y					= screenHeight - iconsHeight;
+	const int
+		screenWidth			= Options::baseXResolution,
+		screenHeight		= Options::baseYResolution,
+		iconsWidth			= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w, // 320
+		iconsHeight			= _game->getRuleset()->getInterface("battlescape")->getElement("icons")->h, // 56
+		visibleMapHeight	= screenHeight - iconsHeight,
+		x					= screenWidth / 2 - iconsWidth / 2,
+		y					= screenHeight - iconsHeight;
 
 //kL	_mouseOverIcons = false; // cTor.
 
@@ -280,20 +281,21 @@ BattlescapeState::BattlescapeState()
 	_txtDebug		= new Text(300, 10, 10, 0);
 //	_txtTooltip		= new Text(300, 10, x + 2, y - 10);
 
-	_txtTerrain		= new Text(150, 9, 1, 0);	// kL
-	_txtShade		= new Text(50, 9, 1, 10);	// kL
-	_txtTurn		= new Text(50, 9, 1, 20);	// kL
+	_txtTerrain		= new Text(150, 9, 1, 0); // kL
+	_txtShade		= new Text(50, 9, 1, 10); // kL
+	_txtTurn		= new Text(50, 9, 1, 20); // kL
 //	_turnCounter	= new TurnCounter(20, 5, 0, 0);
+	_txtExp			= new Text(30, 63, 1, 38); // kL
 
 //	_lstConsole		= new TextList(200, y, 1, 0); // kL
 /*	_txtConsole1	= new Text(164, y, 1, 0); // kL
 	_txtConsole2	= new Text(164, y, 165, 0); // kL
 	_txtConsole3	= new Text(164, y, 331, 0); // kL, this gets cut off on right ...
 */
-	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0); // kL
-	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0); // kL
-	_txtConsole3	= new Text(screenWidth / 2, y, 0, 0); // kL
-	_txtConsole4	= new Text(screenWidth / 2, y, screenWidth / 2, 0); // kL
+	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);				// kL
+	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0);	// kL
+	_txtConsole3	= new Text(screenWidth / 2, y, 0, 0);				// kL
+	_txtConsole4	= new Text(screenWidth / 2, y, screenWidth / 2, 0);	// kL
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
@@ -401,7 +403,7 @@ BattlescapeState::BattlescapeState()
 
 	// kL_begin:
 	add(_txtBaseLabel);
-	_txtBaseLabel->setColor(Palette::blockOffset(9)+1);
+	_txtBaseLabel->setColor(Palette::blockOffset(8)+2);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
 	std::wstring baseLabel = L"";
@@ -435,7 +437,7 @@ BattlescapeState::BattlescapeState()
 	_txtBaseLabel->setText(baseLabel); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
 
 //	add(_turnCounter);
-//	_turnCounter->setColor(Palette::blockOffset(9)+1);
+//	_turnCounter->setColor(Palette::blockOffset(8)+2);
 	add(_txtConsole1);
 	add(_txtConsole2);
 	add(_txtConsole3);
@@ -461,15 +463,19 @@ BattlescapeState::BattlescapeState()
 	add(_txtTerrain);
 	add(_txtShade);
 	add(_txtTurn);
+	add(_txtExp);
 
-	_txtTerrain->setColor(Palette::blockOffset(9)+1); // yellow
+	_txtTerrain->setColor(Palette::blockOffset(8)+2); // blue, was yellow (9)+1
 	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_save->getTerrain())));
 
-	_txtShade->setColor(Palette::blockOffset(9)+1);
+	_txtShade->setColor(Palette::blockOffset(8)+2);
 	_txtShade->setText(tr("STR_SHADE_").arg(_save->getGlobalShade()));
 
-	_txtTurn->setColor(Palette::blockOffset(9)+1);
+	_txtTurn->setColor(Palette::blockOffset(8)+2);
 	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
+
+	_txtExp->setColor(Palette::blockOffset(8)+2);
+
 /*
 	std::wostringstream
 		woTurn,
@@ -1111,6 +1117,7 @@ void BattlescapeState::mapOver(Action* action)
 			_txtTerrain->setVisible(false);
 			_txtShade->setVisible(false);
 			_txtTurn->setVisible(false);
+			_txtExp->setVisible(false);
 
 			size_t row = 0;
 			std::wostringstream
@@ -1277,6 +1284,7 @@ void BattlescapeState::mapOver(Action* action)
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
+			_txtExp->setVisible();
 		}
 	} // kL_end.
 }
@@ -2238,6 +2246,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
+			_txtExp->setVisible();
 		}
 
 		_txtConsole1->setVisible(0 < _showConsole && _showConsole < 3);
@@ -3019,7 +3028,7 @@ void BattlescapeState::saveVoxelView()
 	};
 
 	BattleUnit* bu = _save->getSelectedUnit();
-	if (bu == 0) // no unit selected
+	if (bu == NULL) // no unit selected
 		return;
 
 	bool
@@ -3041,7 +3050,7 @@ void BattlescapeState::saveVoxelView()
 		originVoxel = getBattleGame()->getTileEngine()->getSightOriginVoxel(bu),
 		targetVoxel,
 		hitPos;
-	Tile* tile = 0;
+	Tile* tile = NULL;
 
 	image.clear();
 
@@ -3427,6 +3436,7 @@ void BattlescapeState::mouseInIcons(Action*)
 	_txtTerrain->setVisible();
 	_txtShade->setVisible();
 	_txtTurn->setVisible();
+	_txtExp->setVisible();
 }
 
 /**
@@ -3694,7 +3704,7 @@ NumberText* BattlescapeState::getTimeUnitsField() const // kL
 }
 
 /**
-/// kL. Gets the TimeUnits bar from icons.
+ * kL. Gets the TimeUnits bar from icons.
  */
 Bar* BattlescapeState::getTimeUnitsBar() const // kL
 {
@@ -3702,7 +3712,7 @@ Bar* BattlescapeState::getTimeUnitsBar() const // kL
 }
 
 /**
-/// kL. Gets the Energy field from icons.
+ * kL. Gets the Energy field from icons.
  */
 NumberText* BattlescapeState::getEnergyField() const // kL
 {
@@ -3710,11 +3720,40 @@ NumberText* BattlescapeState::getEnergyField() const // kL
 }
 
 /**
-/// kL. Gets the Energy bar from icons.
+ * kL. Gets the Energy bar from icons.
  */
 Bar* BattlescapeState::getEnergyBar() const // kL
 {
 	return _barEnergy;
+}
+
+/**
+ * kL. Updates experience data for the currently selected soldier.
+ */
+void BattlescapeState::updateExpData() // kL
+{
+	BattleUnit* unit = _save->getSelectedUnit();
+
+	if (unit == NULL
+		|| unit->getOriginalFaction() != FACTION_PLAYER)
+	{
+		_txtExp->setText(L"");
+
+		return;
+	}
+
+	std::wostringstream str;
+
+	str
+	<< L"f > " << unit->getExpFiring() << L"\n"
+	<< L"t > " << unit->getExpThrowing() << L"\n"
+	<< L"m > " << unit->getExpMelee() << L"\n"
+	<< L"r > " << unit->getExpReactions() << L"\n"
+	<< L"b > " << unit->getExpBravery() << L"\n"
+	<< L"p > " << unit->getExpPsiSkill() << L"\n"
+	<< L"p > " << unit->getExpPsiStrength();
+
+	_txtExp->setText(str.str());
 }
 
 }

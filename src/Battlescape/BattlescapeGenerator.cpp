@@ -1958,9 +1958,71 @@ void BattlescapeGenerator::generateMap()
 
 	blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
 
+	/* Determine UFO landingzone (do this first because ufo is generally bigger) */
+	if (_ufo != NULL)
+	{
+		// pick a random ufo mapblock, can have all kinds of sizes
+		ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
+
+		int
+			minX = 0,
+			minY = 0,
+			maxX = (_mapsize_x / 10) - (ufoMap->getSizeX() / 10),
+			maxY = (_mapsize_y / 10) - (ufoMap->getSizeY() / 10);
+
+		if (_terrain->getUfoPositions()->empty() == false)
+		{
+			std::vector<LandingSite*> possibleSites;
+			for (std::vector<LandingSite*>::const_iterator
+					i = _terrain->getUfoPositions()->begin();
+					i != _terrain->getUfoPositions()->end();
+					++i)
+			{
+				if ((*i)->sizeX >= ufoMap->getSizeX() / 10
+					&& (*i)->sizeY >= ufoMap->getSizeY() / 10)
+				{
+					possibleSites.push_back(*i);
+				}
+			}
+
+			if (possibleSites.empty())
+			{
+				throw Exception("no suitable landing site found for a UFO of that size");
+			}
+
+			size_t pick = RNG::generate(0, possibleSites.size() - 1);
+			LandingSite* landingSite = possibleSites.at(pick);
+
+			minX = landingSite->x;
+			minY = landingSite->y;
+			maxX = minX + landingSite->sizeX - (ufoMap->getSizeX() / 10);
+			maxY = minY + landingSite->sizeY - (ufoMap->getSizeY() / 10);
+		}
+
+		ufoX = RNG::generate(minX, maxX);
+		ufoY = RNG::generate(minY, maxY);
+
+		for (int
+				i = 0;
+				i < ufoMap->getSizeX() / 10;
+				++i)
+		{
+			for (int
+					j = 0;
+					j < ufoMap->getSizeY() / 10;
+					++j)
+			{
+				landingzone[ufoX + i][ufoY + j] = true;
+				blocks[ufoX + i][ufoY + j] = _terrain->getRandomMapBlock(10, MT_LANDINGZONE);
+
+				blocksToDo--;
+			}
+		}
+	}
+
 	// DETERMINE UFO LANDINGZONE
 	// - do this first because ufo is generally bigger
-	if (_ufo != NULL)
+/*	if (_ufo != NULL)
 	{
 		// pick a random ufo mapblock, can have all kinds of sizes
 		ufoMap = _ufo->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
@@ -1984,11 +2046,11 @@ void BattlescapeGenerator::generateMap()
 				blocksToDo--;
 			}
 		}
-	}
+	} */
 
 	// DETERMINE CRAFT LANDINGZONE
 	// - alien base assault has no craft landing zone
-	if (_craft != NULL
+/*	if (_craft != NULL
 		&& (_save->getMissionType() != "STR_ALIEN_BASE_ASSAULT")
 		&& (_save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT"))
 	{
@@ -1998,7 +2060,57 @@ void BattlescapeGenerator::generateMap()
 		while (!placed)
 		{
 			_craftX = RNG::generate(0, (_mapsize_x / 10) - (craftMap->getSizeX() / 10));
-			_craftY = RNG::generate(0, (_mapsize_y / 10) - (craftMap->getSizeY() / 10));
+			_craftY = RNG::generate(0, (_mapsize_y / 10) - (craftMap->getSizeY() / 10)); */
+
+	/* Determine Craft landingzone */
+	/* alien base assault has no craft landing zone */
+	if (_craft != NULL
+		&& _save->getMissionType() != "STR_ALIEN_BASE_ASSAULT"
+		&& _save->getMissionType() != "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		// pick a random craft mapblock, can have all kinds of sizes
+		craftMap = _craft->getRules()->getBattlescapeTerrainData()->getRandomMapBlock(999, MT_DEFAULT);
+
+		while (!placed)
+		{
+			int
+				minX = 0,
+				minY = 0,
+				maxX = (_mapsize_x / 10) - (craftMap->getSizeX() / 10),
+				maxY = (_mapsize_y / 10) - (craftMap->getSizeY() / 10);
+
+			if (_terrain->getCraftPositions()->empty() == false)
+			{
+				std::vector<LandingSite*> possibleSites;
+				for (std::vector<LandingSite*>::const_iterator
+					i = _terrain->getCraftPositions()->begin();
+					i != _terrain->getCraftPositions()->end();
+					++i)
+				{
+					if ((*i)->sizeX >= craftMap->getSizeX() / 10
+						&& (*i)->sizeY >= craftMap->getSizeY() / 10)
+					{
+						possibleSites.push_back(*i);
+					}
+				}
+
+				if (possibleSites.empty())
+				{
+					throw Exception("no suitable landing site found for a craft of that size");
+				}
+
+				size_t pick = RNG::generate(0, possibleSites.size() - 1);
+				LandingSite* landingSite = possibleSites.at(pick);
+
+				minX = landingSite->x;
+				minY = landingSite->y;
+				maxX = minX + landingSite->sizeX - (craftMap->getSizeX() / 10);
+				maxY = minY + landingSite->sizeY - (craftMap->getSizeY() / 10);
+			}
+
+			_craftX = RNG::generate(minX, maxX);
+			_craftY = RNG::generate(minY, maxY); // end_New.
+
 
 			placed = true;
 

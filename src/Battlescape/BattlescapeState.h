@@ -153,6 +153,7 @@ private:
 		* _txtConsole3, // kL
 		* _txtConsole4, // kL
 		* _txtDebug,
+		* _txtExp, // kL
 //		* _txtTooltip;
 		* _txtName,
 		* _txtShade, // kL
@@ -316,7 +317,9 @@ private:
 		void popup(State* state);
 
 		/// Finishes a battle.
-		void finishBattle(bool abort, int inExitArea);
+		void finishBattle(
+				bool abort,
+				int inExitArea);
 
 		/// Show the launch button.
 		void showLaunchButton(bool show);
@@ -373,6 +376,9 @@ private:
 		NumberText* getEnergyField() const; // kL
 		/// kL. Gets the Energy bar from icons.
 		Bar* getEnergyBar() const; // kL
+
+		/// kL. Updates experience data for the currently selected soldier.
+		void updateExpData(); // kL
 };
 
 }

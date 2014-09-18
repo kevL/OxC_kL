@@ -2709,6 +2709,71 @@ int BattleUnit::getHeight() const
 	return getStandHeight();
 }
 
+// kL_begin:
+/**
+ * Gets a soldier's Firing experience.
+ * @return, firing xp
+ */
+int BattleUnit::getExpFiring() const
+{
+	return _expFiring;
+}
+
+/**
+ * Gets a soldier's Throwing experience.
+ * @return, throwing xp
+ */
+int BattleUnit::getExpThrowing() const
+{
+	return _expThrowing;
+}
+
+/**
+ * Gets a soldier's Melee experience.
+ * @return, melee xp
+ */
+int BattleUnit::getExpMelee() const
+{
+	return _expMelee;
+}
+
+/**
+ * Gets a soldier's Reactions experience.
+ * @return, reactions xp
+ */
+int BattleUnit::getExpReactions() const
+{
+	return _expReactions;
+}
+
+/**
+ * Gets a soldier's Bravery experience.
+ * @return, bravery xp
+ */
+int BattleUnit::getExpBravery() const
+{
+	return _expBravery;
+}
+
+/**
+ * Gets a soldier's PsiSkill experience.
+ * @return, psiskill xp
+ */
+int BattleUnit::getExpPsiSkill() const
+{
+	return _expPsiSkill;
+}
+
+/**
+ * Gets a soldier's PsiStrength experience.
+ * @return, psistrength xp
+ */
+int BattleUnit::getExpPsiStrength() const
+{
+	return _expPsiStrength;
+}
+// kL_end.
+
 /**
  * Adds one to the reaction exp counter.
  */

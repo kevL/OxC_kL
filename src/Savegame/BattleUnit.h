@@ -567,7 +567,6 @@ private:
 
 		/// Gets the soldier's gender.
 		SoldierGender getGender() const;
-
 		/// Gets the unit's faction.
 		UnitFaction getFaction() const;
 
@@ -767,6 +766,23 @@ private:
 		/// Gets the unit floating elevation.
 		int getFloatHeight() const;
 
+		// kL_begin:
+		/// Gets a soldier's Firing experience.
+		int getExpFiring() const;
+		/// Gets a soldier's Throwing experience.
+		int getExpThrowing() const;
+		/// Gets a soldier's Melee experience.
+		int getExpMelee() const;
+		/// Gets a soldier's Reactions experience.
+		int getExpReactions() const;
+		/// Gets a soldier's Bravery experience.
+		int getExpBravery() const;
+		/// Gets a soldier's PsiSkill experience.
+		int getExpPsiSkill() const;
+		/// Gets a soldier's PsiStrength experience.
+		int getExpPsiStrength() const;
+		// kL_end.
+
 		/// Adds one to the reaction exp counter.
 		void addReactionExp();
 		/// Adds one to the firing exp counter.
@@ -774,9 +790,9 @@ private:
 		/// Adds one to the throwing exp counter.
 		void addThrowingExp();
 		/// Adds qty to the psiSkill exp counter.
-		void addPsiSkillExp(int qty = 1); // kL
+		void addPsiSkillExp(int qty = 1);
 		/// Adds qty to the psiStrength exp counter.
-		void addPsiStrengthExp(int qty = 1); // kL
+		void addPsiStrengthExp(int qty = 1);
 		/// Adds qty to the melee exp counter.
 		void addMeleeExp(int qty = 1);
 
