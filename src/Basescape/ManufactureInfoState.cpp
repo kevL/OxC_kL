@@ -256,7 +256,9 @@ void ManufactureInfoState::buildUi()
 	{
 		_btnOk->setVisible(false);
 
-		_production = new Production(_item, 0);
+		_production = new Production(
+									_item,
+									0);
 		_base->addProduction(_production);
 	}
 
@@ -596,9 +598,21 @@ void ManufactureInfoState::moreUnitClick(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_production->setInfiniteAmount(true);
+		if (_production->getRules()->getCategory() == "STR_CRAFT") // kL_add ->
+		{
+			_game->pushState(new ErrorMessageState(
+												tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
+												_palette,
+												Palette::blockOffset(15)+1,
+												"BACK17.SCR",
+												6));
+		}
+		else
+		{
+			_production->setInfiniteAmount(true);
 
-		setAssignedEngineer();
+			setAssignedEngineer();
+		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		moreUnit(1);
@@ -659,7 +673,6 @@ void ManufactureInfoState::lessUnitClick(Action* action)
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
 			|| _production->getAmountTotal() <= _production->getAmountProduced())
 		{
-			// so the number-to-produce is now below the produced items OR it was a right-click
 			_production->setAmountTotal(_production->getAmountProduced() + 1);
 
 			setAssignedEngineer();
