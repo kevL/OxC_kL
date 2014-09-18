@@ -326,14 +326,14 @@ void Map::draw()
 {
 	//Log(LOG_INFO) << "Map::draw()";
 
-	// kL_note: removed setting this in BattlescapeGame::handleState().
-/*kL	if (!_redraw)
-		return; */
+	// kL_note: removed setting this here and in BattlescapeGame::handleState().
+//	if (!_redraw) return;
 
 //	Surface::draw();
-	// normally we'd call for a Surface::draw();
-	// but we don't want to clear the background with colour 0, which is transparent (aka black)
-	// we use colour 15 because that actually corresponds to the colour we DO want in all variations of the xcom and tftd palettes.
+	// normally call for a Surface::draw();
+	// But we don't want to clear the background with color 0, which is transparent
+	// (aka black) -- we use color 15 because that actually corresponds to the
+	// colour we DO want in all variations of the xcom and tftd palettes.
 	_redraw = false;
 	clear(Palette::blockOffset(0)+15);
 

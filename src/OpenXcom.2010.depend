@@ -5646,7 +5646,7 @@
 1404096022 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1410563024 f:\git\openxcom\src\battlescape\battlescapestate.h
+1410995440 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -6037,7 +6037,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1410956539 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1411011501 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>

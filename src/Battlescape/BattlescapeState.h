@@ -151,6 +151,7 @@ private:
 		* _txtConsole1, // kL
 		* _txtConsole2, // kL
 		* _txtConsole3, // kL
+		* _txtConsole4, // kL
 		* _txtDebug,
 //		* _txtTooltip;
 		* _txtName,

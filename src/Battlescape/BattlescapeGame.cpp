@@ -1293,9 +1293,8 @@ void BattlescapeGame::handleState()
 		else
 			_states.front()->think();
 
-
-//kL	getMap()->invalidate(); // redraw map
-		getMap()->draw(); // kL, old code!! -> Map::draw()
+//		getMap()->invalidate(); // redraw map
+		getMap()->draw(); // kL, old code!! Less clunky when scrolling the battlemap.
 	}
 }
 
