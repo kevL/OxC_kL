@@ -190,7 +190,7 @@ void NewManufactureListState::lstProdClick(Action*)
 
 	RuleManufacture* rule = _possibleProductions[_lstManufacture->getSelectedRow()];
 	if (rule->getCategory() == "STR_CRAFT"
-		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
+		&& _base->getAvailableHangars() - _base->getUsedHangars() < 1)
 	{
 		_game->pushState(new ErrorMessageState(
 											tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),

@@ -532,7 +532,7 @@ void ManufactureInfoState::moreUnit(int change)
 		return;
 
 	if (_production->getRules()->getCategory() == "STR_CRAFT"
-		&& _base->getAvailableHangars() - _base->getUsedHangars() == 0)
+		&& _base->getAvailableHangars() - _base->getUsedHangars() < 1)
 	{
 		_timerMoreUnit->stop();
 		_game->pushState(new ErrorMessageState(
@@ -598,8 +598,9 @@ void ManufactureInfoState::moreUnitClick(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (_production->getRules()->getCategory() == "STR_CRAFT") // kL_add ->
+		if (_production->getRules()->getCategory() == "STR_CRAFT")
 		{
+//			moreUnit(std::numeric_limits<int>::max()); // kL_note: RMB won't start the timer ....
 			_game->pushState(new ErrorMessageState(
 												tr("STR_NO_FREE_HANGARS_FOR_CRAFT_PRODUCTION"),
 												_palette,
