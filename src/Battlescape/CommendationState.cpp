@@ -52,7 +52,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 16, 10, 8);
-	_lstSoldiers	= new TextList(285, 144, 16, 32);
+	_lstSoldiers	= new TextList(285, 144, 16, 28);
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette("PAL_GEOSCAPE", 0);
@@ -92,18 +92,18 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	std::string noun;
 	bool
 		titleChosen = true,
-		modularCommendation;
+		modularCom;
 	size_t
 		row = 0,
 		titleRow = 0;
-	std::map<std::string, RuleCommendations*> commendationsList = _game->getRuleset()->getCommendation();
 
+	std::map<std::string, RuleCommendations*> comList = _game->getRuleset()->getCommendation();
 	for (std::map<std::string, RuleCommendations*>::const_iterator
-			commList = commendationsList.begin();
-			commList != commendationsList.end();
+			com = comList.begin();
+			com != comList.end();
 			)
 	{
-		modularCommendation = false;
+		modularCom = false;
 		noun = "noNoun";
 
 		if (titleChosen)
@@ -117,67 +117,65 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 		titleRow = row - 1;
 
 		for (std::vector<Soldier*>::iterator
-				s = soldiersMedalled.begin();
-				s != soldiersMedalled.end();
-				++s)
+				soldier = soldiersMedalled.begin();
+				soldier != soldiersMedalled.end();
+				++soldier)
 		{
 			for (std::vector<SoldierCommendations*>::const_iterator
-					soldierComm = (*s)->getDiary()->getSoldierCommendations()->begin();
-					soldierComm != (*s)->getDiary()->getSoldierCommendations()->end();
-					++soldierComm)
+					soldierCom = (*soldier)->getDiary()->getSoldierCommendations()->begin();
+					soldierCom != (*soldier)->getDiary()->getSoldierCommendations()->end();
+					++soldierCom)
 			{
-				if ((*soldierComm)->getType() == (*commList).first
-					&& (*soldierComm)->isNew()
+				if ((*soldierCom)->getType() == (*com).first
+					&& (*soldierCom)->isNew()
 					&& noun == "noNoun")
 				{
-					(*soldierComm)->makeOld();
+					(*soldierCom)->makeOld();
 
 					row++;
 
-					if ((*soldierComm)->getNoun() != "noNoun")
+					if ((*soldierCom)->getNoun() != "noNoun")
 					{
-						noun = (*soldierComm)->getNoun();
-						modularCommendation = true;
+						noun = (*soldierCom)->getNoun();
+						modularCom = true;
 					}
 
 					std::wstringstream wss; // Soldier name
-					wss << "   ";
-					wss << (*s)->getName().c_str();
+					wss << "  ";
+					wss << (*soldier)->getName().c_str();
 
 					int // Decoration level name
 						skipCounter = 0,
 						lastInt = -2,
 						thisInt = -1,
-						vectorIterator = 0;
+						j = 0;
 
 					for (std::vector<int>::const_iterator
-							k = (*commList).second->getCriteria()->begin()->second.begin();
-							k != (*commList).second->getCriteria()->begin()->second.end();
-							++k)
+							i = (*com).second->getCriteria()->begin()->second.begin();
+							i != (*com).second->getCriteria()->begin()->second.end();
+							++i)
 					{
-						if (vectorIterator == (*soldierComm)->getDecorationLevelInt() + 1)
-						{
+						if (j == (*soldierCom)->getDecorationLevelInt() + 1)
 							break;
-						}
 
-						thisInt = *k;
-						if (k != (*commList).second->getCriteria()->begin()->second.begin())
+						thisInt = *i;
+						if (i != (*com).second->getCriteria()->begin()->second.begin())
 						{
-							--k;
-							lastInt = *k;
-							++k;
+							--i;
+							lastInt = *i;
+							++i;
 						}
 
 						if (thisInt == lastInt)
 							skipCounter++;
 
-						vectorIterator++;
+						j++;
 					}
 
 					_lstSoldiers->addRow(
 									2,
 									wss.str().c_str(),
-									tr((*soldierComm)->getDecorationLevelName(skipCounter)).c_str());
+									tr((*soldierCom)->getDecorationLevelName(skipCounter)).c_str());
 //					_lstSoldiers->setRowColor(row, Palette::blockOffset(8)+10);
 
 					break;
@@ -187,19 +185,19 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 		if (titleRow != row - 1)
 		{
-			if (modularCommendation) // Medal name
+			if (modularCom) // Medal name
 			{
 				_lstSoldiers->setCellText(
 										titleRow,
 										0,
-										tr((*commList).first).arg(tr(noun).c_str()).c_str());
+										tr((*com).first).arg(tr(noun).c_str()).c_str());
 			}
 			else
 			{
 				_lstSoldiers->setCellText(
 										titleRow,
 										0,
-										tr((*commList).first).c_str());
+										tr((*com).first).c_str());
 			}
 
 			_lstSoldiers->setRowColor(titleRow, Palette::blockOffset(15)-1);
@@ -208,7 +206,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 		}
 
 		if (noun == "noNoun")
-			++commList;
+			++com;
 	}
 }
 
