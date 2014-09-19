@@ -22,6 +22,7 @@
 
 #include "ShaderDrawHelper.h"
 
+
 namespace OpenXcom
 {
 
@@ -106,7 +107,6 @@ static inline void ShaderDraw(const DestType& dest_frame, const Src0Type& src0_f
 			ColorFunc::func(dest.get_ref(), src0.get_ref(), src1.get_ref(), src2.get_ref(), src3.get_ref());
 		}
 	}
-
 }
 
 template<typename ColorFunc, typename DestType, typename Src0Type, typename Src1Type, typename Src2Type>

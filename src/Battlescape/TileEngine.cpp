@@ -4019,11 +4019,11 @@ bool TileEngine::detonate(Tile* tile)
 											pos.y,
 											pos.z));
 
-	// explosions create smoke which only stays 1 or 2 turns, or 3
-	tile->setSmoke(std::max(
+
+	tile->setSmoke(std::max( // explosions create smoke which only stays 1 or 2 turns, or 5 ...
 							1,
 							std::min(
-									tile->getSmoke() + RNG::generate(0, 3),
+									tile->getSmoke() + RNG::generate(0, 5),
 									17)));
 
 	int

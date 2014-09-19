@@ -43,7 +43,7 @@ class NumberText;
 class SavedBattleGame;
 class Surface;
 class Text;
-//class TextList; // kL
+class TextList;
 class Timer;
 //class TurnCounter; // kL
 class WarningMessage;
@@ -153,13 +153,13 @@ private:
 		* _txtConsole3, // kL
 		* _txtConsole4, // kL
 		* _txtDebug,
-		* _txtExp, // kL
 //		* _txtTooltip;
 		* _txtName,
 		* _txtShade, // kL
 		* _txtTerrain, // kL
 		* _txtTurn; // kL
 //	TextList* _lstConsole; // kL
+	TextList* _lstExp; // kL
 	Timer
 		* _animTimer,
 		* _gameTimer;

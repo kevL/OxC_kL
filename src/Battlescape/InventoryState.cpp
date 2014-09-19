@@ -574,7 +574,7 @@ void InventoryState::updateStats()
 		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
 		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(str));
 		if (weight > str)
-			_txtWeight->setSecondaryColor(Palette::blockOffset(2)+5);
+			_txtWeight->setSecondaryColor(Palette::blockOffset(2)); // +5 gives green border (high contrast)
 		else
 			_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 

@@ -16,12 +16,15 @@
  * You should have received a copy of the GNU General Public License
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
+
 #ifndef OPENXCOM_SOLDIERNAMEPOOL_H
 #define OPENXCOM_SOLDIERNAMEPOOL_H
 
 #include <string>
 #include <vector>
+
 #include "../Savegame/Soldier.h"
+
 
 namespace OpenXcom
 {
@@ -34,21 +37,30 @@ namespace OpenXcom
  */
 class SoldierNamePool
 {
+
 private:
-	std::vector<std::wstring> _maleFirst, _femaleFirst, _maleLast, _femaleLast;
-	std::vector<int> _lookWeights;
 	int _totalWeight;
-public:
-	/// Creates a blank pool.
-	SoldierNamePool();
-	/// Cleans up the pool.
-	~SoldierNamePool();
-	/// Loads the pool from YAML.
-	void load(const std::string &filename);
-	/// Generates a new name from the pool.
-	std::wstring genName(SoldierGender *gender) const;
-	/// Generates an int representing the index of the soldier's look, when passed the maximum index value.
-	size_t genLook(size_t numLooks);
+	std::vector<int> _lookWeights;
+	std::vector<std::wstring>
+		_maleFirst,
+		_femaleFirst,
+		_maleLast,
+		_femaleLast;
+
+
+	public:
+		/// Creates a blank pool.
+		SoldierNamePool();
+		/// Cleans up the pool.
+		~SoldierNamePool();
+
+		/// Loads the pool from YAML.
+		void load(const std::string& filename);
+
+		/// Generates a new name from the pool.
+		std::wstring genName(SoldierGender* gender) const;
+		/// Generates an int representing the index of the soldier's look, when passed the maximum index value.
+		size_t genLook(size_t numLooks);
 };
 
 }

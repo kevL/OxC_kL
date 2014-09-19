@@ -655,7 +655,6 @@ void Text::draw()
 	int mult = 1;
 	if (_contrast)
 		mult = 3;
-//		mult = 4; // kL
 
 	// Set up text direction
 	int dir = 1;

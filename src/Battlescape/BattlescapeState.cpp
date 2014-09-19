@@ -81,8 +81,8 @@
 #include "../Interface/ImageButton.h"
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
-//#include "../Interface/TextList.h" // kL
-//#include "../Interface/TurnCounter.h" // kL
+#include "../Interface/TextList.h"
+//#include "../Interface/TurnCounter.h"
 
 #include "../Menu/LoadGameState.h"
 #include "../Menu/PauseState.h"
@@ -97,10 +97,10 @@
 #include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/Ruleset.h"
 
-#include "../Savegame/Base.h" // kL
+#include "../Savegame/Base.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
-#include "../Savegame/Craft.h" // kL
+#include "../Savegame/Craft.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Soldier.h"
@@ -115,26 +115,29 @@ namespace OpenXcom
  */
 BattlescapeState::BattlescapeState()
 	:
-//kL	_reserve(0),
+//		_reserve(0),
+//		_currentTooltip(""),
 		_popups(),
 		_xBeforeMouseScrolling(0),
 		_yBeforeMouseScrolling(0),
 		_totalMouseMoveX(0),
 		_totalMouseMoveY(0),
 		_mouseOverThreshold(false),
-		_firstInit(true),				// kL_begin <-
+		_firstInit(true),
 		_mouseOverIcons(false),
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),
-		_mouseScrollingStartTime(0),	// kL_end.
-		_fuseFrame(0), // kL
-		_showConsole(1) // kL
+		_mouseScrollingStartTime(0),
+		_fuseFrame(0),
+		_showConsole(1)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
+	_save = _game->getSavedGame()->getSavedBattle();
+
 	std::fill_n(
 			_visibleUnit,
 			10,
-			(BattleUnit*)(0));
+			(BattleUnit*)(NULL));
 
 	const int
 		screenWidth			= Options::baseXResolution,
@@ -145,9 +148,7 @@ BattlescapeState::BattlescapeState()
 		x					= screenWidth / 2 - iconsWidth / 2,
 		y					= screenHeight - iconsHeight;
 
-//kL	_mouseOverIcons = false; // cTor.
-
-	_txtBaseLabel = new Text(80, 9, screenWidth - 81, 0); // kL
+	_txtBaseLabel = new Text(80, 9, screenWidth - 81, 0);
 
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons = new InteractiveSurface(
@@ -169,10 +170,8 @@ BattlescapeState::BattlescapeState()
 	_numLayers	= new NumberText(3, 5, x + 232, y + 6);
 
 	_rank		= new Surface(26, 23, x + 107, y + 33);
-	_kneel		= new Surface( 2,  2, x + 115, y + 19); // kL
+	_kneel		= new Surface( 2,  2, x + 115, y + 19);
 
-//	_btnWounds	= new InteractiveSurface(15, 13, x + 4, y - 16);
-//	_numWounds	= new NumberText(9, 9, x, y - 12); // X gets adjusted in updateSoldierInfo()
 	_btnWounds	= new InteractiveSurface(14, 14, x + 5, y - 17);
 	_numWounds	= new NumberText(9, 9, x, y - 12); // X gets adjusted in updateSoldierInfo()
 
@@ -197,8 +196,7 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAuto		= new BattlescapeButton(17, 11, x + 78, y + 45);
 	_btnReserveKneel	= new BattlescapeButton(10, 23, x + 96, y + 33);
 	_btnZeroTUs			= new BattlescapeButton(10, 23, x + 49, y + 33); */
-
-	_btnZeroTUs			= new InteractiveSurface(57, 23,x + 49, y + 33); // kL
+	_btnZeroTUs			= new InteractiveSurface(57, 23,x + 49, y + 33);
 
 	_btnLeftHandItem	= new InteractiveSurface(32, 48, x + 8, y + 5);
 	_btnRightHandItem	= new InteractiveSurface(32, 48, x + 280, y + 5);
@@ -211,12 +209,12 @@ BattlescapeState::BattlescapeState()
 
 	for (int
 			i = 0,
-				offset_x = 0; // kL
+				offset_x = 0;
 			i < VISIBLE_MAX;
 			++i)
 	{
 		if (i > 9)
-			offset_x = 15; // kL
+			offset_x = 15;
 
 		_btnVisibleUnit[i] = new InteractiveSurface(
 												15,
@@ -230,12 +228,12 @@ BattlescapeState::BattlescapeState()
 										y - 12 - (i * 13));
 	}
 
-	for (int
+	for (int // center 10+ on buttons
 			i = 9;
 			i < VISIBLE_MAX;
 			++i)
 	{
-		_numVisibleUnit[i]->setX(_numVisibleUnit[i]->getX() - 2); // center 10+ on buttons
+		_numVisibleUnit[i]->setX(_numVisibleUnit[i]->getX() - 2);
 	}
 
 	_warning	= new WarningMessage(
@@ -249,15 +247,11 @@ BattlescapeState::BattlescapeState()
 					24,
 					screenWidth - 32,
 					0);
-	_btnLaunch->setVisible(false);
-
 	_btnPsi		= new BattlescapeButton(
 					32,
 					24,
 					screenWidth - 32,
 					25);
-	_btnPsi->setVisible(false);
-
 
 	_txtName		= new Text(136, 9, _icons->getX() + 135, _icons->getY() + 32);
 
@@ -281,21 +275,16 @@ BattlescapeState::BattlescapeState()
 	_txtDebug		= new Text(300, 10, 10, 0);
 //	_txtTooltip		= new Text(300, 10, x + 2, y - 10);
 
-	_txtTerrain		= new Text(150, 9, 1, 0); // kL
-	_txtShade		= new Text(50, 9, 1, 10); // kL
-	_txtTurn		= new Text(50, 9, 1, 20); // kL
 //	_turnCounter	= new TurnCounter(20, 5, 0, 0);
-	_txtExp			= new Text(30, 63, 1, 38); // kL
+	_txtTerrain		= new Text(150, 9, 1, 0);
+	_txtShade		= new Text(50, 9, 1, 10);
+	_txtTurn		= new Text(50, 9, 1, 20);
+	_lstExp			= new TextList(25, 63, 1, 37);
 
-//	_lstConsole		= new TextList(200, y, 1, 0); // kL
-/*	_txtConsole1	= new Text(164, y, 1, 0); // kL
-	_txtConsole2	= new Text(164, y, 165, 0); // kL
-	_txtConsole3	= new Text(164, y, 331, 0); // kL, this gets cut off on right ...
-*/
-	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);				// kL
-	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0);	// kL
-	_txtConsole3	= new Text(screenWidth / 2, y, 0, 0);				// kL
-	_txtConsole4	= new Text(screenWidth / 2, y, screenWidth / 2, 0);	// kL
+	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);
+	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
+	_txtConsole3	= new Text(screenWidth / 2, y, 0, 0);
+	_txtConsole4	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
@@ -313,10 +302,16 @@ BattlescapeState::BattlescapeState()
 	}
 
 	add(_map);
+	_map->init();
+	_map->onMouseOver((ActionHandler)& BattlescapeState::mapOver);
+	_map->onMousePress((ActionHandler)& BattlescapeState::mapPress);
+	_map->onMouseClick((ActionHandler)& BattlescapeState::mapClick, 0);
+	_map->onMouseIn((ActionHandler)& BattlescapeState::mapIn);
+
 	add(_icons);
+	Surface* icons = _game->getResourcePack()->getSurface("ICONS.PCK");
 
 	// Add in custom reserve buttons
-	Surface* icons = _game->getResourcePack()->getSurface("ICONS.PCK");
 	if (_game->getResourcePack()->getSurface("TFTDReserve"))
 	{
 		Surface* tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve"); // 'Resources/UI/reserve.png'
@@ -339,8 +334,8 @@ BattlescapeState::BattlescapeState()
 		_icons->setPixelColor(46, 44, 8);
 
 	add(_rank, "rank", "battlescape", _icons);
-	add(_btnWounds); // kL
-	add(_numWounds); // kL
+	add(_btnWounds);
+	add(_numWounds);
 	add(_btnUnitUp, "buttonUnitUp", "battlescape", _icons);
 	add(_btnUnitDown, "buttonUnitDown", "battlescape", _icons);
 	add(_btnMapUp, "buttonMapUp", "battlescape", _icons);
@@ -357,7 +352,7 @@ BattlescapeState::BattlescapeState()
 	add(_btnEndTurn, "buttonEndTurn", "battlescape", _icons);
 	add(_btnAbort, "buttonAbort", "battlescape", _icons);
 	add(_btnStats, "buttonStats", "battlescape", _icons);
-	add(_kneel); // kL, this has to go overtop _btns.
+	add(_kneel); // this has to go overtop _btns.
 	add(_txtName, "textName", "battlescape", _icons);
 	add(_numTULaunch);
 	add(_numTUAim);
@@ -391,26 +386,34 @@ BattlescapeState::BattlescapeState()
 		add(_numVisibleUnit[i]);
 	}
 
-	add(_warning, "warning", "battlescape", _icons);
 //	add(_txtTooltip, "textTooltip", "battlescape", _icons);
+	add(_txtDebug);
+
+	add(_warning, "warning", "battlescape", _icons);
+	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2); //Palette::blockOffset(2));
+	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color); //Palette::blockOffset(1));
+
 	add(_btnLaunch);
 	add(_btnPsi);
-
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
+	_btnLaunch->onMouseClick((ActionHandler)& BattlescapeState::btnLaunchClick);
+	_btnPsi->onMouseClick((ActionHandler)& BattlescapeState::btnPsiClick);
+	_btnLaunch->setVisible(false);
+	_btnPsi->setVisible(false);
 
-	_save = _game->getSavedGame()->getSavedBattle();
 
-	// kL_begin:
 	add(_txtBaseLabel);
-	_txtBaseLabel->setColor(Palette::blockOffset(8)+2);
+	_txtBaseLabel->setColor(Palette::blockOffset(8));
+	_txtBaseLabel->setHighContrast();
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
 	std::wstring baseLabel = L"";
 
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end();
+			i != _game->getSavedGame()->getBases()->end()
+				&& baseLabel == L"";
 			++i)
 	{
 		if ((*i)->isInBattlescape())
@@ -421,108 +424,72 @@ BattlescapeState::BattlescapeState()
 
 		for (std::vector<Craft*>::iterator
 				j = (*i)->getCrafts()->begin();
-				j != (*i)->getCrafts()->end();
+				j != (*i)->getCrafts()->end()
+					&& baseLabel == L"";
 				++j)
 		{
 			if ((*j)->isInBattlescape())
-			{
 				baseLabel = (*i)->getName(_game->getLanguage());
-				break;
-			}
 		}
-
-		if (baseLabel != L"")
-			break;
 	}
 	_txtBaseLabel->setText(baseLabel); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
 
 //	add(_turnCounter);
-//	_turnCounter->setColor(Palette::blockOffset(8)+2);
+//	_turnCounter->setColor(Palette::blockOffset(8));
 	add(_txtConsole1);
 	add(_txtConsole2);
 	add(_txtConsole3);
 	add(_txtConsole4);
-	_txtConsole1->setColor(Palette::blockOffset(8)+2); // blue
-	_txtConsole2->setVisible(false);
-	_txtConsole2->setColor(Palette::blockOffset(8)+2);
-	_txtConsole2->setVisible(false);
-	_txtConsole3->setColor(Palette::blockOffset(8)+2);
-	_txtConsole3->setVisible(false);
-	_txtConsole4->setColor(Palette::blockOffset(8)+2);
-	_txtConsole4->setVisible(false);
 
-/*	add(_lstConsole);
-	_lstConsole->setColor(Palette::blockOffset(8)+1); // blue
-//	_lstConsole->setArrowColor(Palette::blockOffset(15)+6);
-//	_lstConsole->setArrowColumn(180, ARROW_VERTICAL);
-	_lstConsole->setColumns(1, 200);
-//	_lstSoldiers->setBackground(_window);
-//	_lstSoldiers->setMargin();
-	_lstConsole->setVisible(false); */
+	_txtConsole1->setColor(Palette::blockOffset(8)); // blue
+	_txtConsole1->setHighContrast();
+	_txtConsole2->setColor(Palette::blockOffset(8));
+	_txtConsole2->setHighContrast();
+	_txtConsole3->setColor(Palette::blockOffset(8));
+	_txtConsole3->setHighContrast();
+	_txtConsole4->setColor(Palette::blockOffset(8));
+	_txtConsole4->setHighContrast();
+
+	_txtConsole1->setVisible(_showConsole > 0);
+	_txtConsole2->setVisible(_showConsole > 1);
+	_txtConsole3->setVisible(_showConsole > 2);
+	_txtConsole4->setVisible(_showConsole > 3);
 
 	add(_txtTerrain);
 	add(_txtShade);
 	add(_txtTurn);
-	add(_txtExp);
+	add(_lstExp);
 
-	_txtTerrain->setColor(Palette::blockOffset(8)+2); // blue, was yellow (9)+1
+	_txtTerrain->setColor(Palette::blockOffset(8)); // was yellow(9)
+	_txtTerrain->setHighContrast();
 	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_save->getTerrain())));
 
-	_txtShade->setColor(Palette::blockOffset(8)+2);
+	_txtShade->setColor(Palette::blockOffset(8));
+	_txtShade->setHighContrast();
 	_txtShade->setText(tr("STR_SHADE_").arg(_save->getGlobalShade()));
 
-	_txtTurn->setColor(Palette::blockOffset(8)+2);
+	_txtTurn->setColor(Palette::blockOffset(8));
+	_txtTurn->setHighContrast();
 	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
 
-	_txtExp->setColor(Palette::blockOffset(8)+2);
-
-/*
-	std::wostringstream
-		woTurn,
-		woShade,
-		woTerrain;
-
-	woTerrain << L"terrain> ";
-	woTerrain << tr(_save->getTerrain()); //.c_str();
-	_txtTerrain->setText(woTerrain.str());
-
-	woShade << L"shade> ";
-	woShade << _save->getGlobalShade();
-	_txtShade->setText(woShade.str());
-
-	woTurn << L"turn> ";
-	woTurn << _save->getTurn();
-	_txtTurn->setText(woTurn.str()); */
-	// kL_end.
-
-	add(_txtDebug);
-
-	_map->init();
-	_map->onMouseOver((ActionHandler)& BattlescapeState::mapOver);
-	_map->onMousePress((ActionHandler)& BattlescapeState::mapPress);
-	_map->onMouseClick((ActionHandler)& BattlescapeState::mapClick, 0);
-	_map->onMouseIn((ActionHandler)& BattlescapeState::mapIn);
+	_lstExp->setColor(Palette::blockOffset(8));
+	_lstExp->setHighContrast();
+	_lstExp->setColumns(2, 10, 15);
 
 	_numLayers->setColor(Palette::blockOffset(5)+12);
 	_numLayers->setValue(1);
 
-	// kL_begin:
 	_rank->setVisible(false);
 	_kneel->setVisible(false);
 
 	_btnWounds->setVisible(false);
 	_btnWounds->onMouseClick((ActionHandler)& BattlescapeState::btnWoundedClick);
 
-//	_numWounds->setColor(Palette::blockOffset(2)+5); // blood red
 	_numWounds->setColor(Palette::blockOffset(0)+3); // light gray
 	_numWounds->setValue(0);
 	_numWounds->setVisible(false);
-	// kL_end.
 
-//	_numAmmoLeft->setColor(3);
 	_numAmmoLeft->setValue(0);
-
-//	_numAmmoRight->setColor(3);
 	_numAmmoRight->setValue(0);
 
 	_icons->onMouseIn((ActionHandler)& BattlescapeState::mouseInIcons);
@@ -586,13 +553,12 @@ BattlescapeState::BattlescapeState()
 //	_btnCenter->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnCenter->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-//kL	_btnNextSoldier->onMouseClick((ActionHandler)& BattlescapeState::btnNextSoldierClick);
 	_btnNextSoldier->onMouseClick(
 					(ActionHandler)& BattlescapeState::btnNextSoldierClick,
-					SDL_BUTTON_LEFT);	// kL
+					SDL_BUTTON_LEFT);
 	_btnNextSoldier->onMouseClick(
 					(ActionHandler)& BattlescapeState::btnPrevSoldierClick,
-					SDL_BUTTON_RIGHT);	// kL
+					SDL_BUTTON_RIGHT);
 	_btnNextSoldier->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnNextSoldierClick,
 					Options::keyBattleNextUnit);
@@ -603,13 +569,12 @@ BattlescapeState::BattlescapeState()
 //	_btnNextSoldier->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnNextSoldier->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-//kL	_btnNextStop->onMouseClick((ActionHandler)& BattlescapeState::btnNextStopClick);
 	_btnNextStop->onMouseClick(
 					(ActionHandler)& BattlescapeState::btnNextStopClick,
-					SDL_BUTTON_LEFT);	// kL
+					SDL_BUTTON_LEFT);
 	_btnNextStop->onMouseClick(
 					(ActionHandler)& BattlescapeState::btnPrevStopClick,
-					SDL_BUTTON_RIGHT);	// kL
+					SDL_BUTTON_RIGHT);
 	_btnNextStop->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnNextStopClick,
 					Options::keyBattleDeselectUnit);
@@ -729,9 +694,10 @@ BattlescapeState::BattlescapeState()
 	_btnStats->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnPersonalLightingClick,
 					Options::keyBattlePersonalLighting);
-	_btnStats->onKeyboardPress( // kL
+	_btnStats->onKeyboardPress(
 					(ActionHandler)& BattlescapeState::btnConsoleToggle,
 					Options::keyBattleConsole);
+
 
 	SDLKey buttons[] =
 	{
@@ -759,22 +725,15 @@ BattlescapeState::BattlescapeState()
 						(ActionHandler)& BattlescapeState::btnVisibleUnitClick,
 						buttons[i]);
 
-//kL		std::ostringstream tooltip;
+//		std::ostringstream tooltip;
 //		tooltip << "STR_CENTER_ON_ENEMY_" << (i + 1);
 //		_btnVisibleUnit[i]->setTooltip(tooltip.str());
 //		_btnVisibleUnit[i]->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //		_btnVisibleUnit[i]->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-		_numVisibleUnit[i]->setColor(color);
-//		_numVisibleUnit[i]->setColor(16);
+		_numVisibleUnit[i]->setColor(color); // 16
 		_numVisibleUnit[i]->setValue(i + 1);
 	}
-
-	_warning->setColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color2); //Palette::blockOffset(2));
-	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color); //Palette::blockOffset(1));
-
-	_btnLaunch->onMouseClick((ActionHandler)& BattlescapeState::btnLaunchClick);
-	_btnPsi->onMouseClick((ActionHandler)& BattlescapeState::btnPsiClick);
 
 //	_txtName->setColor(Palette::blockOffset(8));
 	_txtName->setHighContrast();
@@ -814,29 +773,21 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAuto->setGroup(&_reserve); */
 
 //	_game->getResourcePack()->playMusic("GMTACTIC");
-
 	std::string terrain = _game->getSavedGame()->getSavedBattle()->getTerrain(); // sza_MusicRules
 //	_game->getResourcePack()->getRandomMusic( // sza_MusicRules
 //										OpenXcom::XCOM_RESOURCE_MUSIC_GMTACTIC,
 //										terrain)->play();
 	_game->getResourcePack()->playMusic("GMTACTIC", true, terrain); // kL, sza_MusicRules
 
-//kL	_animTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
 
-//kL	_gameTimer = new Timer(DEFAULT_ANIM_SPEED, true);
 	_gameTimer = new Timer(DEFAULT_ANIM_SPEED + 32);
 	_gameTimer->onTimer((StateHandler)& BattlescapeState::handleState);
 
 	_battleGame = new BattlescapeGame(
 									_save,
 									this);
-
-//kL	_firstInit = true;			// cTor.
-//kL	_isMouseScrolling = false;	// cTor.
-//kL	_isMouseScrolled = false;	// cTor.
-//	_currentTooltip = "";
 }
 
 /**
@@ -1117,7 +1068,7 @@ void BattlescapeState::mapOver(Action* action)
 			_txtTerrain->setVisible(false);
 			_txtShade->setVisible(false);
 			_txtTurn->setVisible(false);
-			_txtExp->setVisible(false);
+			_lstExp->setVisible(false);
 
 			size_t row = 0;
 			std::wostringstream
@@ -1284,7 +1235,7 @@ void BattlescapeState::mapOver(Action* action)
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
-			_txtExp->setVisible();
+			_lstExp->setVisible();
 		}
 	} // kL_end.
 }
@@ -2246,7 +2197,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_txtTerrain->setVisible();
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
-			_txtExp->setVisible();
+			_lstExp->setVisible();
 		}
 
 		_txtConsole1->setVisible(0 < _showConsole && _showConsole < 3);
@@ -3436,7 +3387,7 @@ void BattlescapeState::mouseInIcons(Action*)
 	_txtTerrain->setVisible();
 	_txtShade->setVisible();
 	_txtTurn->setVisible();
-	_txtExp->setVisible();
+	_lstExp->setVisible();
 }
 
 /**
@@ -3732,17 +3683,51 @@ Bar* BattlescapeState::getEnergyBar() const // kL
  */
 void BattlescapeState::updateExpData() // kL
 {
+	_lstExp->clearList();
+
 	BattleUnit* unit = _save->getSelectedUnit();
 
 	if (unit == NULL
 		|| unit->getOriginalFaction() != FACTION_PLAYER)
 	{
-		_txtExp->setText(L"");
-
 		return;
 	}
 
-	std::wostringstream str;
+	std::vector<std::wstring> xpType;
+	xpType.push_back(L"f ");
+	xpType.push_back(L"t ");
+	xpType.push_back(L"m ");
+	xpType.push_back(L"r ");
+	xpType.push_back(L"b ");
+	xpType.push_back(L"p ");
+	xpType.push_back(L"p ");
+
+	int xp[] =
+	{
+		unit->getExpFiring(),
+		unit->getExpThrowing(),
+		unit->getExpMelee(),
+		unit->getExpReactions(),
+		unit->getExpBravery(),
+		unit->getExpPsiSkill(),
+		unit->getExpPsiStrength()
+	};
+
+	for (int
+			i = 0;
+			i < 7;
+			++i)
+	{
+		_lstExp->addRow(
+					2,
+					xpType.at(i).c_str(),
+					Text::formatNumber(xp[i]).c_str());
+
+		_lstExp->setCellHighContrast(i, 1);
+	}
+
+	_lstExp->draw();
+/*	std::wostringstream str;
 
 	str
 	<< L"f > " << unit->getExpFiring() << L"\n"
@@ -3753,7 +3738,7 @@ void BattlescapeState::updateExpData() // kL
 	<< L"p > " << unit->getExpPsiSkill() << L"\n"
 	<< L"p > " << unit->getExpPsiStrength();
 
-	_txtExp->setText(str.str());
+	_txtExp->setText(str.str()); */
 }
 
 }

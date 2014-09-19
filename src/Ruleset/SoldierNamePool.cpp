@@ -18,14 +18,17 @@
  */
 
 #include "SoldierNamePool.h"
+
+#include <fstream>
 #include <iostream>
 #include <sstream>
-#include <fstream>
-#include "../Savegame/Soldier.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Language.h"
-#include "../Engine/Exception.h"
+
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
+#include "../Engine/Language.h"
+#include "../Engine/RNG.h"
+
+#include "../Savegame/Soldier.h"
 
 
 namespace OpenXcom
@@ -45,7 +48,7 @@ SoldierNamePool::SoldierNamePool()
 }
 
 /**
- *
+ * dTor.
  */
 SoldierNamePool::~SoldierNamePool()
 {
@@ -60,39 +63,52 @@ void SoldierNamePool::load(const std::string& filename)
 	std::string s = CrossPlatform::getDataFile("SoldierName/" + filename + ".nam");
 	YAML::Node doc = YAML::LoadFile(s);
 
-	for (YAML::const_iterator i = doc["maleFirst"].begin(); i != doc["maleFirst"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["maleFirst"].begin();
+			i != doc["maleFirst"].end();
+			++i)
 	{
 		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_maleFirst.push_back(name);
 	}
 
-	for (YAML::const_iterator i = doc["femaleFirst"].begin(); i != doc["femaleFirst"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["femaleFirst"].begin();
+			i != doc["femaleFirst"].end();
+			++i)
 	{
 		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_femaleFirst.push_back(name);
 	}
 
-	for (YAML::const_iterator i = doc["maleLast"].begin(); i != doc["maleLast"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["maleLast"].begin();
+			i != doc["maleLast"].end();
+			++i)
 	{
 		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_maleLast.push_back(name);
 	}
 
-	for (YAML::const_iterator i = doc["femaleLast"].begin(); i != doc["femaleLast"].end(); ++i)
+	for (YAML::const_iterator
+			i = doc["femaleLast"].begin();
+			i != doc["femaleLast"].end();
+			++i)
 	{
 		std::wstring name = Language::utf8ToWstr(i->as<std::string>());
 		_femaleLast.push_back(name);
 	}
 
 	if (_femaleLast.empty())
-	{
 		_femaleLast = _maleLast;
-	}
 
 	_lookWeights = doc["lookWeights"].as<std::vector<int> >(_lookWeights);
 	_totalWeight = 0;
 
-	for (std::vector<int>::iterator i = _lookWeights.begin(); i != _lookWeights.end(); ++i)
+	for (std::vector<int>::iterator
+			i = _lookWeights.begin();
+			i != _lookWeights.end();
+			++i)
 	{
 		_totalWeight += *i;
 	}
@@ -107,8 +123,6 @@ std::wstring SoldierNamePool::genName(SoldierGender* gender) const
 {
 	std::wostringstream name;
 
-//kL	int gen = RNG::generate(1, 10);
-//kL	if (gen <= 5)
 	if (RNG::percent(50))
 	{
 		*gender = GENDER_MALE;
@@ -160,7 +174,10 @@ size_t SoldierNamePool::genLook(size_t numLooks)
 	}
 
 	int random = RNG::generate(0, _totalWeight);
-	for (std::vector<int>::iterator i = _lookWeights.begin(); i != _lookWeights.end(); ++i)
+	for (std::vector<int>::iterator
+			i = _lookWeights.begin();
+			i != _lookWeights.end();
+			++i)
 	{
 		if (random <= *i)
 		{

@@ -5646,7 +5646,7 @@
 1404096022 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1411050927 f:\git\openxcom\src\battlescape\battlescapestate.h
+1411081431 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -6037,7 +6037,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1411053329 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1411087988 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6093,6 +6093,7 @@
 	"../Interface/ImageButton.h"
 	"../Interface/NumberText.h"
 	"../Interface/Text.h"
+	"../Interface/TextList.h"
 	"../Menu/LoadGameState.h"
 	"../Menu/PauseState.h"
 	"../Menu/SaveGameState.h"
@@ -6403,7 +6404,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1410953610 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1411090359 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6763,7 +6764,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1411027397 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1411088850 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6887,7 +6888,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/Soldier.h"
 
-1404096022 f:\git\openxcom\src\engine\shaderdraw.h
+1411090573 f:\git\openxcom\src\engine\shaderdraw.h
 	"ShaderDrawHelper.h"
 
 1404096022 f:\git\openxcom\src\engine\shaderdrawhelper.h
@@ -8370,7 +8371,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1409822790 source:f:\git\openxcom\src\interface\text.cpp
+1411090598 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -9217,7 +9218,7 @@
 	<string>
 	"../Engine/State.h"
 
-1404096023 f:\git\openxcom\src\ruleset\soldiernamepool.h
+1411082895 f:\git\openxcom\src\ruleset\soldiernamepool.h
 	<string>
 	<vector>
 	"../Savegame/Soldier.h"
@@ -9445,16 +9446,16 @@
 	"RuleTerrain.h"
 	"RuleUfo.h"
 
-1404096023 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
+1411083045 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
 	"SoldierNamePool.h"
+	<fstream>
 	<iostream>
 	<sstream>
-	<fstream>
-	"../Savegame/Soldier.h"
-	"../Engine/RNG.h"
-	"../Engine/Language.h"
-	"../Engine/Exception.h"
 	"../Engine/CrossPlatform.h"
+	"../Engine/Exception.h"
+	"../Engine/Language.h"
+	"../Engine/RNG.h"
+	"../Savegame/Soldier.h"
 
 1404096023 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
@@ -9547,7 +9548,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1411050819 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1411081195 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
