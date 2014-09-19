@@ -3722,11 +3722,9 @@ void BattlescapeState::updateExpData() // kL
 					2,
 					xpType.at(i).c_str(),
 					Text::formatNumber(xp[i]).c_str());
-
-		_lstExp->setCellHighContrast(i, 1);
 	}
 
-	_lstExp->draw();
+//	_lstExp->draw();
 /*	std::wostringstream str;
 
 	str
