@@ -3688,7 +3688,8 @@ void BattlescapeState::updateExpData() // kL
 	BattleUnit* unit = _save->getSelectedUnit();
 
 	if (unit == NULL
-		|| unit->getOriginalFaction() != FACTION_PLAYER)
+		|| unit->getOriginalFaction() != FACTION_PLAYER
+		|| unit->getTurretType() > -1)
 	{
 		return;
 	}

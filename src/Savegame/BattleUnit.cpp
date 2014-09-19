@@ -2170,7 +2170,7 @@ void BattleUnit::prepareNewTurn()
 		healStun(1); // recover stun 1pt/turn
 	}
 
-	if (!isOut())
+	if (isOut() == false)
 	{
 		int panic = 100 - (2 * getMorale());
 		if (RNG::percent(panic))
