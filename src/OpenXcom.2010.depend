@@ -4973,7 +4973,7 @@
 1410341572 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
-1411080201 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
+1411125360 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
 	"ManufactureInfoState.h"
 	<limits>
 	"../Interface/ArrowButton.h"
@@ -5111,7 +5111,7 @@
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 
-1409185479 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
+1411124370 source:f:\git\openxcom\src\basescape\newmanufactureliststate.cpp
 	"NewManufactureListState.h"
 	<algorithm>
 	"ManufactureStartState.h"
