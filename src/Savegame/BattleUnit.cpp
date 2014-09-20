@@ -2624,7 +2624,7 @@ std::string BattleUnit::getMeleeWeapon()
 		return getItem("STR_LEFT_HAND")->getRules()->getType();
 	}
 
-	if (_unitRules != NULL) // -> do not CTD for Mc'd xCom agents. Thanks again.
+	if (_unitRules != NULL) // -> do not CTD for Mc'd xCom agents.
 		return _unitRules->getMeleeWeapon();
 
 	return "";

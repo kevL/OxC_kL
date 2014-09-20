@@ -77,8 +77,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_window			= new Window(this, 224, 174, 16, 8, POPUP_BOTH);
 	_txtTitle		= new Text(192, 17, 32, 16);
 
-//	_sprite			= new Surface(32, 38, 220, -11); // kL
-	_sprite			= new Surface(32, 38, 224, -1); // kL
+	_sprite			= new Surface(32, 38, 224, -1);
 
 	_txtStatus		= new Text(192, 17, 32, 31);
 
@@ -113,7 +112,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	add(_window);
 	add(_txtTitle);
-	add(_sprite); // kL
+	add(_sprite);
 	add(_txtStatus);
 	add(_txtBase);
 	add(_txtRedirect);
@@ -278,8 +277,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 	else
 	{
-//kL	_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr("STR_NONE_UC")));
-		_txtW1Name->setVisible(false); // kL
+		_txtW1Name->setVisible(false);
 		_txtW1Ammo->setVisible(false);
 	}
 
@@ -298,11 +296,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 	else
 	{
-//kL	_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr("STR_NONE_UC")));
-		_txtW2Name->setVisible(false); // kL
+		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);
 	}
-
 
 	_txtRedirect->setColor(Palette::blockOffset(15)-1);
 	_txtRedirect->setBig();

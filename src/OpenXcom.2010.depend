@@ -4652,7 +4652,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1411190884 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1411215133 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	<climits>
 	<string>
@@ -4667,6 +4667,7 @@
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
 	"../Interface/Window.h"
+	"../Menu/ErrorMessageState.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/RuleCraft.h"
@@ -7763,7 +7764,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1410825517 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1411228006 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9580,7 +9581,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1410675683 source:f:\git\openxcom\src\savegame\craft.cpp
+1411226025 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9597,6 +9598,7 @@
 	"../Engine/Language.h"
 	"../Engine/Logger.h"
 	"../Engine/RNG.h"
+	"../Geoscape/GeoscapeState.h"
 	"../Ruleset/RuleCraft.h"
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"

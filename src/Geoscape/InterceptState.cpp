@@ -341,7 +341,7 @@ void InterceptState::btnGotoBaseClick(Action*)
  */
 void InterceptState::lstCraftsLeftClick(Action*)
 {
-//kL	_game->popState();
+//	_game->popState();
 
 	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
 	_game->pushState(new GeoscapeCraftState(
