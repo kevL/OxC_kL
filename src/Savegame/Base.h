@@ -133,7 +133,7 @@ private:
 		void setEngineers(int engineers);
 
 		/// Checks if a target is detected by the base's radar.
-		uint8_t detect(Target* target) const;
+		int detect(Target* target) const;
 		/// Checks if a target is inside the base's radar range.
 		double insideRadarRange(Target* target) const;
 

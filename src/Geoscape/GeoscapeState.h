@@ -30,6 +30,8 @@ namespace OpenXcom
 
 extern size_t kL_currentBase;
 
+extern const double greatCircleConversionFactor;
+
 
 class Base;
 class DogfightState;

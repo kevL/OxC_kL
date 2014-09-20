@@ -136,7 +136,7 @@ private:
 		/// Gets the UFO's detection status.
 		bool getDetected() const;
 		/// Sets the UFO's detection status.
-		void setDetected(bool detected);
+		void setDetected(bool detected = true);
 
 		/// Gets the UFO's seconds left on the ground.
 		size_t getSecondsRemaining() const;
@@ -194,7 +194,7 @@ private:
 		/// Gets the UFO's hyper detection status.
 		bool getHyperDetected() const;
 		/// Sets the UFO's hyper detection status.
-		void setHyperDetected(bool hyperdetected);
+		void setHyperDetected(bool hyperdetected = true);
 
 		/// Gets the UFO's progress on the trajectory track.
 		size_t getTrajectoryPoint() const

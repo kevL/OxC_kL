@@ -44,6 +44,8 @@
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 
+#include "../Geoscape/GeoscapeState.h"
+
 #include "../Ruleset/RuleBaseFacility.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
@@ -535,69 +537,50 @@ void Base::setEngineers(int engineers)
 /**
  * Returns if a certain target is covered by the base's
  * radar range, taking in account the range and chance.
- * @param target - pointer to target to detect
+ * @param target - pointer to a UFO to attempt detection against
  * @return,	0 undetected
- *			1 detected
- *			2 hyperdetected
+ *			1 hyperdetected only
+ *			2 detected
+ *			3 detected & hyperdetected
  */
-uint8_t Base::detect(Target* target) const
+int Base::detect(Target* target) const
 {
-	//Log(LOG_INFO) << "Base::detect() <- " << getName().c_str();
-	uint8_t ret = 0;
+	double dist = insideRadarRange(target);
 
-	double targetDistance = insideRadarRange(target);
-	if (AreSame(targetDistance, -2.0))
-	{
-		//Log(LOG_INFO) << ". not in range";
+	if (AreSame(dist, 0.0))
 		return 0;
-	}
-	else if (AreSame(targetDistance, -1.0))
+
+	int ret = 0;
+
+	if (dist < 0.0)
 	{
-		//Log(LOG_INFO) << ". hyperdetected";
-		return 2;
+		ret++;
+		dist = -dist;
 	}
-	else
+
+	int chance = 0;
+
+	for (std::vector<BaseFacility*>::const_iterator
+			fac = _facilities.begin();
+			fac != _facilities.end();
+			++fac)
 	{
-		double chance = 0.0;
-		double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
-
-		for (std::vector<BaseFacility*>::const_iterator
-				fac = _facilities.begin();
-				fac != _facilities.end();
-				++fac)
+		if ((*fac)->getBuildTime() == 0)
 		{
-			if ((*fac)->getBuildTime() == 0)
-			{
-				double radarRange = static_cast<double>((*fac)->getRules()->getRadarRange()) * greatCircleConversionFactor;
-				//if (radarRange > 0.0) Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
-
-				if (targetDistance < radarRange)
-				{
-					chance += static_cast<double>((*fac)->getRules()->getRadarChance());
-					//Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
-					//Log(LOG_INFO) << ". . . chance(base) = " << (int)chance;
-				}
-				//else Log(LOG_INFO) << ". . . target out of Range";
-			}
+			double range = static_cast<double>((*fac)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+			if (range > dist)
+				chance += (*fac)->getRules()->getRadarChance();
 		}
+	}
 
-		if (AreSame(chance, 0.0))
-			return 0;
-		else
-		{
-			Ufo* u = dynamic_cast<Ufo*>(target);
-			// kL_note: If this doesn't detect anything but UFOs, could
-			// consolidate it within (u != 0) above. Like this:
-			if (u != NULL)
-			{
-				chance += static_cast<double>(u->getVisibility());
-				// need to divide by 3, since Geoscape-detection was moved from 30min to 10min time-slot.
-				chance /= 3.0;
+	Ufo* ufo = dynamic_cast<Ufo*>(target);
+	if (ufo != NULL)
+	{
+		chance += ufo->getVisibility();
+		chance = static_cast<int>(Round(static_cast<double>(chance) / 3.0)); // per 10 min.
 
-				ret = static_cast<uint8_t>(RNG::percent(static_cast<int>(chance)));
-				//Log(LOG_INFO) << ". . Base detect UFO chance (baseDet + ufoVis) = " << (int)chance << " RET = " << (int)ret;
-			}
-		}
+		if (RNG::percent(chance))
+			ret += 2;
 	}
 
 	return ret;
@@ -606,24 +589,17 @@ uint8_t Base::detect(Target* target) const
 /**
  * Returns if a certain target is inside the base's
  * radar range, taking in account the positions of both.
- * @param target, Pointer to target.
- * @return,	great circle distance to ufo
- *			-2.0 if outside range
- *			-1.0 if within range of hyperwave facility
+ * @param target - pointer to UFO
+ * @return,	great circle distance to UFO, negative if hyperdetected
  */
 double Base::insideRadarRange(Target* target) const
 {
 	//Log(LOG_INFO) << "Base::insideRadarRange()";
+	double ret = 0.0; // lets hope UFO is not *right on top of Base* Lol
 
-	double ret = -2.0;
-
-	double targetDistance = getDistance(target) * 3440.0; // great circle distance
+	const double targetDistance = getDistance(target) * 3440.0; // great circle distance
 	//Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
-
-	double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
-
-	// this assumes maximum radar range is 2400 (default hyperwave decoder)
-	if (targetDistance > 2400.0 * greatCircleConversionFactor) // early out.
+	if (targetDistance > static_cast<double>(_rule->getMaxRadarRange()) * greatCircleConversionFactor)
 		return ret;
 
 	for (std::vector<BaseFacility*>::const_iterator
@@ -634,20 +610,12 @@ double Base::insideRadarRange(Target* target) const
 		if ((*f)->getBuildTime() == 0)
 		{
 			double radarRange = static_cast<double>((*f)->getRules()->getRadarRange()) * greatCircleConversionFactor;
-			//Log(LOG_INFO) << ". . radarRange = " << (int)radarRange;
-
 			if (targetDistance < radarRange)
 			{
+				ret = targetDistance;
+
 				if ((*f)->getRules()->isHyperwave())
-				{
-					//Log(LOG_INFO) << ". . . . ret = hyperWave";
-					return -1.0;
-				}
-				else
-				{
-					//Log(LOG_INFO) << ". . . ret = radar";
-					ret = targetDistance;
-				}
+					ret = -ret;
 			}
 		}
 	}

@@ -163,7 +163,7 @@ facilities:
     buildTime: 26
     monthlyCost: 87500
     radarRange: 2400 #2759
-    radarChance: 100
+    radarChance: 50
     mapName: XBASE_15
   - type: STR_HANGAR
     spriteShape: 9
@@ -8975,6 +8975,7 @@ extraStrings:
       STR_PER10MIN: "per 10 min"
       STR_SHOT_TYPE_LAUNCH: "launch"
       STR_CONSOLE: "toggle battlescape console"
+      STR_SOLDIER_NOT_AT_BASE: "Soldier Out on Mission"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

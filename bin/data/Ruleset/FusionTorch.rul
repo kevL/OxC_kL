@@ -16,6 +16,7 @@ items:
     invWidth: 2
     invHeight: 3
     twoHanded: true
+    listOrder: 3710
     compatibleAmmo:
       - STR_FUSION_TORCH_POWER_CELL
   - type: STR_FUSION_TORCH_POWER_CELL
@@ -36,6 +37,7 @@ items:
     hitAnimation: 88
     blastRadius: 0
     armor: 5
+    listOrder: 3711
 research:
   - name: STR_FUSION_TORCH
     cost: 5000

@@ -2135,6 +2135,32 @@ const std::string Ruleset::getAlienFuel() const
 } */
 
 /**
+ * Gets maximum radar range out of all facilities.
+ * @return, maximum range
+ */
+int Ruleset::getMaxRadarRange() const
+{
+	int ret = 0;
+
+	for (std::vector<std::string>::const_iterator
+			i = _facilitiesIndex.begin();
+			i != _facilitiesIndex.end();
+			++i)
+	{
+		RuleBaseFacility* rule = getBaseFacility(*i);
+
+		if (rule == NULL)
+			continue;
+
+		int range = rule->getRadarRange();
+		if (range > ret)
+			ret = range;
+	}
+
+	return ret;
+}
+
+/**
  * kL. Gets the cutoff between small & large radars
  * for determining base info values.
  */

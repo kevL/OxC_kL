@@ -36,16 +36,15 @@
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
+#include "../Menu/ErrorMessageState.h"
+
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCraft.h"
-//#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
-//#include "../Savegame/ItemContainer.h"
-//#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 
 
@@ -317,6 +316,15 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 			_game->pushState(new SoldierArmorState(
 												_base,
 												_lstSoldiers->getSelectedRow()));
+		}
+		else
+		{
+			_game->pushState(new ErrorMessageState(
+												tr("STR_SOLDIER_NOT_AT_BASE"),
+												_palette,
+												Palette::blockOffset(4)+10,
+												"BACK12.SCR",
+												6));
 		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)

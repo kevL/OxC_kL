@@ -44,7 +44,7 @@ class UfoDetectedState
 
 private:
 
-	bool _hyperwave;
+//	bool _hyperwave;
 
 	GeoscapeState* _state;
 	Text
@@ -69,7 +69,8 @@ private:
 				Ufo* ufo,
 				GeoscapeState* state,
 				bool detected,
-				bool hyper);
+				bool hyper,
+				bool contact = true);
 		/// Cleans up the Ufo Detected state.
 		~UfoDetectedState();
 

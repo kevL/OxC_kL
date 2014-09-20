@@ -40,6 +40,8 @@
 #include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
 
+#include "../Geoscape/GeoscapeState.h"
+
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
@@ -872,24 +874,19 @@ void Craft::checkup()
 }
 
 /**
- * Returns if a target is detected by the craft's radar.
+ * Returns if a UFO is detected by the craft's radar.
  * @param target, Pointer to target
  * @return, True if detected, false otherwise
  */
 bool Craft::detect(Target* target) const
 {
-	//Log(LOG_INFO) << "Craft::detect()";
-	double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
+	const double range = static_cast<double>(_rules->getRadarRange()) * greatCircleConversionFactor;
 
-	double radarRange = static_cast<double>(_rules->getRadarRange()) * greatCircleConversionFactor;
-	//Log(LOG_INFO) << ". radarRange = " << (int)radarRange;
-	if (AreSame(radarRange, 0.0))
+	if (AreSame(range, 0.0))
 		return false;
 
-	double targetDistance = getDistance(target) * 3440.0;
-	//Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
-
-	if (radarRange > targetDistance)
+	const double dist = getDistance(target) * 3440.0;
+	if (dist < range)
 		return true;
 
 	return false;
@@ -911,8 +908,7 @@ void Craft::repair()
 {
 	setDamage(_damage - _rules->getRepairRate());
 
-//kL	if (_damage <= 0)
-	if (_damage == 0) // kL
+	if (_damage == 0)
 		_status = "STR_REARMING";
 }
 

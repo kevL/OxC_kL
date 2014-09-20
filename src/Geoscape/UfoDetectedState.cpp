@@ -49,20 +49,22 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Ufo Detected window.
- * @param ufo Pointer to the UFO to get info from.
- * @param state Pointer to the Geoscape.
- * @param detected Was the UFO detected?
- * @param hyper Was it a hyperwave radar?
+ * @param ufo		- pointer to a UFO to get info from
+ * @param state		- pointer to GeoscapeState
+ * @param detected	- true if the UFO has just been detected
+ * @param hyper		- true if the UFO has been hyperdetected
+ * @param contact	- true if radar contact is established
  */
 UfoDetectedState::UfoDetectedState(
 		Ufo* ufo,
 		GeoscapeState* state,
 		bool detected,
-		bool hyper)
+		bool hyper,
+		bool contact)
 	:
 		_ufo(ufo),
-		_state(state),
-		_hyperwave(hyper)
+		_state(state)
+//		_hyperwave(hyper)
 {
 	// Generate UFO ID
 	if (_ufo->getId() == 0)
@@ -88,13 +90,9 @@ UfoDetectedState::UfoDetectedState(
 
 
 	_txtUfo			= new Text(208, 17, 32, 56);
-
 	_txtDetected	= new Text(80, 9, 32, 73);
-
 	_lstInfo		= new TextList(192, 33, 32, 85);
-
 	_btnCentre		= new TextButton(192, 16, 32, 124);
-
 	_btnIntercept	= new TextButton(88, 16, 32, 144);
 	_btnCancel		= new TextButton(88, 16, 136, 144);
 
@@ -110,9 +108,7 @@ UfoDetectedState::UfoDetectedState(
 		setPalette("PAL_GEOSCAPE", 2);
 	}
 	else
-	{
 		setPalette("PAL_GEOSCAPE", 7);
-	}
 
 
 	add(_window);
@@ -130,7 +126,6 @@ UfoDetectedState::UfoDetectedState(
 	}
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
@@ -183,6 +178,7 @@ UfoDetectedState::UfoDetectedState(
 	_btnIntercept->setColor(Palette::blockOffset(8)+5);
 	_btnIntercept->setText(tr("STR_INTERCEPT"));
 	_btnIntercept->onMouseClick((ActionHandler)& UfoDetectedState::btnInterceptClick);
+	_btnIntercept->setVisible(contact);
 
 	_btnCentre->setColor(Palette::blockOffset(8)+5);
 	_btnCentre->setText(tr("STR_CENTER_ON_UFO_TIME_5_SECONDS"));
@@ -190,6 +186,7 @@ UfoDetectedState::UfoDetectedState(
 	_btnCentre->onKeyboardPress(
 					(ActionHandler)& UfoDetectedState::btnCentreClick,
 					Options::keyOk);
+	_btnCentre->setVisible(contact);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));

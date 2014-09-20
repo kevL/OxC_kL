@@ -196,10 +196,13 @@ protected:
 
 		/// Loads a ruleset from the given source.
 		void load(const std::string& source);
+
 		/// Generates the starting saved game.
 		SavedGame* newSave() const;
+
 		/// Gets the pool list for soldier names.
 		const std::vector<SoldierNamePool*>& getPools() const;
+
 		/// Gets the ruleset for a country type.
 		RuleCountry* getCountry(const std::string& id) const;
 		/// Gets the available countries.
@@ -208,10 +211,12 @@ protected:
 		RuleRegion* getRegion(const std::string& id) const;
 		/// Gets the available regions.
 		const std::vector<std::string>& getRegionsList() const;
+
 		/// Gets the ruleset for a facility type.
 		RuleBaseFacility* getBaseFacility(const std::string& id) const;
 		/// Gets the available facilities.
 		const std::vector<std::string>& getBaseFacilitiesList() const;
+
 		/// Gets the ruleset for a craft type.
 		RuleCraft* getCraft(const std::string& id) const;
 		/// Gets the available crafts.
@@ -220,26 +225,34 @@ protected:
 		RuleCraftWeapon* getCraftWeapon(const std::string& id) const;
 		/// Gets the available craft weapons.
 		const std::vector<std::string>& getCraftWeaponsList() const;
+
 		/// Gets the ruleset for an item type.
 		RuleItem* getItem(const std::string& id) const;
 		/// Gets the available items.
 		const std::vector<std::string>& getItemsList() const;
+
 		/// Gets the ruleset for a UFO type.
 		RuleUfo* getUfo(const std::string& id) const;
 		/// Gets the available UFOs.
 		const std::vector<std::string>& getUfosList() const;
+
 		/// Gets the available terrains.
 		const std::vector<std::string>& getTerrainList() const;
 		/// Gets terrains for battlescape games.
 		RuleTerrain* getTerrain(const std::string& name) const;
+
 		/// Gets mapdatafile for battlescape games.
 		MapDataSet* getMapDataSet(const std::string& name);
+
 		/// Gets soldier unit rules.
 		RuleSoldier* getSoldier(const std::string& name) const;
+
 		/// Gets commendation rules.
 		std::map<std::string, RuleCommendations*> getCommendation() const;
+
 		/// Gets generated unit rules.
 		Unit* getUnit(const std::string& name) const;
+
 		/// Gets alien race rules.
 		AlienRace* getAlienRace(const std::string& name) const;
 		/// Gets the available alien races.
@@ -248,18 +261,22 @@ protected:
 		AlienDeployment* getDeployment(const std::string& name) const;
 		/// Gets the available alien deployments.
 		const std::vector<std::string>& getDeploymentsList() const;
+
 		/// Gets armor rules.
 		Armor* getArmor(const std::string& name) const;
 		/// Gets the available armors.
 		const std::vector<std::string>& getArmorsList() const;
+
 		/// Gets Ufopaedia article definition.
 		ArticleDefinition* getUfopaediaArticle(const std::string& name) const;
 		/// Gets the available articles.
 		const std::vector<std::string>& getUfopaediaList() const;
+
 		/// Gets the inventory list.
 		std::map<std::string, RuleInventory*>* getInventories();
 		/// Gets the ruleset for a specific inventory.
 		RuleInventory* getInventory(const std::string& id) const;
+
 		/// Gets the cost of a soldier.
 		int getSoldierCost() const;
 		/// Gets the cost of an engineer.
@@ -268,6 +285,7 @@ protected:
 		int getScientistCost() const;
 		/// Gets the transfer time of personnel.
 		int getPersonnelTime() const;
+
 		/// Gets the ruleset for a specific research project.
 		RuleResearch* getResearch(const std::string& id) const;
 		/// Gets the list of all research projects.
@@ -276,22 +294,29 @@ protected:
 		RuleManufacture* getManufacture(const std::string& id) const;
 		/// Gets the list of all manufacture projects.
 		const std::vector<std::string>& getManufactureList() const;
+
 		/// Gets facilities for custom bases.
 		std::vector<OpenXcom::RuleBaseFacility*> getCustomBaseFacilities() const;
+
 		/// Gets a specific UfoTrajectory.
 		const UfoTrajectory* getUfoTrajectory(const std::string& id) const;
 		/// Gets the ruleset for a specific alien mission.
 		const RuleAlienMission* getAlienMission(const std::string& id) const;
 		/// Gets the list of all alien missions.
 		const std::vector<std::string>& getAlienMissionList() const;
+
 		/// Gets the city at the specified coordinates.
 		const City* locateCity(double lon, double lat) const;
+
 		/// Gets the alien item level table.
 		const std::vector<std::vector<int> >& getAlienItemLevels() const;
+
 		/// Gets the Defined starting base.
 		const YAML::Node& getStartingBase();
+
 		/// Gets an MCDPatch.
 		MCDPatch* getMCDPatch(const std::string name) const;
+
 		/// Gets the music rules
 		std::vector<std::pair<std::string, RuleMusic*> > getMusic() const; // sza_MusicRules
 		/// Gets the list of external Sprites.
@@ -302,8 +327,10 @@ protected:
 		std::vector<std::pair<std::string, ExtraMusic*> > getExtraMusic() const; // sza_ExtraMusic
 		/// Gets the list of external Strings.
 		std::map<std::string, ExtraStrings*> getExtraStrings() const;
+
 		/// Gets the list of StatStrings.
 		std::vector<StatString*> getStatStrings() const;
+
 		/// Sorts all our lists according to their weight.
 		void sortLists();
 		/// Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
@@ -314,10 +341,14 @@ protected:
 		Soldier* genSoldier(SavedGame* save) const;
 		/// Gets the item to be used as fuel for ships.
 		const std::string getAlienFuel() const;
+
 		/// Gets the minimum radar's range.
 //		int getMinRadarRange() const;
+		/// kL. Gets maximum radar range out of all facilities.
+		int getMaxRadarRange() const; // kL
 		/// kL. Gets the cutoff between small & large radars.
 		int getRadarCutoffRange() const; // kL
+
 		/// Gets information on an interface element.
 		RuleInterface* getInterface(const std::string id) const;
 

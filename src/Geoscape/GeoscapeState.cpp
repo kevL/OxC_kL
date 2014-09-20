@@ -137,6 +137,9 @@ namespace OpenXcom
 {
 
 size_t kL_currentBase = 0;
+
+const double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
+
 Sound* GeoscapeState::soundPop = 0;
 
 
@@ -1199,14 +1202,14 @@ void GeoscapeState::time5Seconds()
 												*_game,
 												*_globe);
 
-						if (detected != (*i)->getDetected() // kL_note <- how is this possible?
+						if (detected != (*i)->getDetected()
 							&& !(*i)->getFollowers()->empty())
 						{
 							if (!
 								((*i)->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
 									&& (*i)->getStatus() ==  Ufo::LANDED))
 							{
-								timerReset(); // kL
+								timerReset();
 								popup(new UfoLostState((*i)->getName(_game->getLanguage())));
 							}
 						}
@@ -1275,10 +1278,10 @@ void GeoscapeState::time5Seconds()
 									*_game,
 									*_globe);
 
-					if (detected != (*i)->getDetected() // kL_note <- how is this possible?
+					if (detected != (*i)->getDetected()
 						&& !(*i)->getFollowers()->empty())
 					{
-						timerReset(); // kL
+						timerReset();
 						popup(new UfoLostState((*i)->getName(_game->getLanguage())));
 					}
 				}
@@ -1671,7 +1674,7 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	else
 	{
 //		double ufoRange	= 600.0;
-		double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
+//		double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
 		double ufoRange = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor;
 		double targetDist = _base.getDistance(ufo) * 3440.0;
 		//Log(LOG_INFO) << ". . ufoRange = " << (int)ufoRange;
@@ -1768,7 +1771,7 @@ void GeoscapeState::time10Minutes()
 							continue;
 
 //						double craftRadar = 600.0;
-						double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
+//						double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
 						double craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor;
 						//Log(LOG_INFO) << ". . craftRadar = " << (int)craftRadar;
 
@@ -1847,123 +1850,114 @@ void GeoscapeState::time10Minutes()
 			u != _game->getSavedGame()->getUfos()->end();
 			++u)
 	{
-		//Log(LOG_INFO) << ". . . . for " << *u;
 		if ((*u)->getStatus() == Ufo::FLYING)
 		{
-			//Log(LOG_INFO) << ". . . . . . ufo is Flying";
-			if (!(*u)->getDetected())
+			if ((*u)->getDetected() == false)
 			{
-				//Log(LOG_INFO) << ". handle undetected uFo";
 				bool
-					detected = false,
+					contact = false,
 					hyperdet = false;
 
 				for (std::vector<Base*>::iterator
 						b = _game->getSavedGame()->getBases()->begin();
-						b != _game->getSavedGame()->getBases()->end()
-							&& !hyperdet;
+						b != _game->getSavedGame()->getBases()->end();
 						++b)
 				{
-					//Log(LOG_INFO) << ". Base detection of UFO";
-					switch (static_cast<int>((*b)->detect(*u)))
+					switch ((*b)->detect(*u))
 					{
-						case 2:
-							//Log(LOG_INFO) << ". detect() = 2, hyperDet";
-							(*u)->setHyperDetected(true);
-							hyperdet = true;
+						case 3:
+							contact = true;
 						case 1:
-							//Log(LOG_INFO) << ". detect() = 1, radar";
-							detected = true;
+							(*u)->setHyperDetected();
+							hyperdet = true;
+						break;
+						case 2:
+							contact = true;
 						break;
 					}
+
+					if (contact && hyperdet)
+						break;
 
 					for (std::vector<Craft*>::iterator
 							c = (*b)->getCrafts()->begin();
 							c != (*b)->getCrafts()->end()
-								&& !detected;
+								&& contact == false;
 							++c)
 					{
 						if ((*c)->getStatus() == "STR_OUT"
 							&& (*c)->detect(*u))
 						{
-							//Log(LOG_INFO) << ". detected by Craft";
-							detected = true;
-
+							contact = true;
 							break;
 						}
 					}
 				}
 
-				if (detected)
+				if (contact || hyperdet)
 				{
-					(*u)->setDetected(true);
+					(*u)->setDetected();
 
 					popup(new UfoDetectedState(
 											*u,
 											this,
 											true,
-											hyperdet));
+											hyperdet,
+											contact));
 				}
-				//Log(LOG_INFO) << ". . . . . . . not Detected done";
 			}
 			else // ufo is already detected
 			{
-				//Log(LOG_INFO) << ". handle previously detected uFo";
-				bool hyperdet = false; // (*u)->getHyperDetected();
-				bool detected = false;
+				bool hyperdet = false;
+				bool contact = false;
 
 				for (std::vector<Base*>::iterator
 						b = _game->getSavedGame()->getBases()->begin();
-						b != _game->getSavedGame()->getBases()->end()
-							&& !hyperdet;
+						b != _game->getSavedGame()->getBases()->end();
 						++b)
 				{
-					//Log(LOG_INFO) << ". Base re-detection";
-					// -2.0 =outside range ; -1.0 =hyperdetected ; 0.0+ =targetDistance
-					double targetRange = (*b)->insideRadarRange(*u);
-					if (targetRange > -1.99)
+					switch ((*b)->detect(*u))
 					{
-						//Log(LOG_INFO) << ". . still detected";
-						detected = true;
-
-						if (AreSame(targetRange, -1.0))
-						{
-							//Log(LOG_INFO) << ". . and hyper-detected";
-							(*u)->setHyperDetected(true);
+						case 3:
+							contact = true;
+						case 1:
+							(*u)->setHyperDetected();
 							hyperdet = true;
-						}
+						break;
+						case 2:
+							contact = true;
+						break;
 					}
+
+					if (contact && hyperdet)
+						break;
 
 					for (std::vector<Craft*>::iterator
 							c = (*b)->getCrafts()->begin();
 							c != (*b)->getCrafts()->end()
-								&& !detected;
+								&& !contact;
 							++c)
 					{
 						if ((*c)->getStatus() == "STR_OUT"
 							&& (*c)->detect(*u))
 						{
-							//Log(LOG_INFO) << ". detected by Craft";
-							detected = true;
-
+							contact = true;
 							break;
 						}
 					}
-					//Log(LOG_INFO) << ". . . . . . . Detected done";
 				}
 
-				if (!detected)
+				if (contact == false)
 				{
 					(*u)->setDetected(false);
 					(*u)->setHyperDetected(false);
 
-					if (!(*u)->getFollowers()->empty())
+					if ((*u)->getFollowers()->empty() == false)
 					{
-						timerReset(); // kL
+						timerReset();
 
 						popup(new UfoLostState((*u)->getName(_game->getLanguage())));
 					}
-					//Log(LOG_INFO) << ". . . . . . . not Detected done 2x";
 				}
 			}
 		}
