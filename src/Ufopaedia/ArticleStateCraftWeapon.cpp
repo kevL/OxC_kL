@@ -77,7 +77,7 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
-	_lstInfo = new TextList(250, 111, 5, 80);
+	_lstInfo = new TextList(250, 113, 5, 80);
 	add(_lstInfo);
 
 	_lstInfo->setColor(Palette::blockOffset(14)+15);

@@ -72,7 +72,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_txtPsiSkill	= new Text(48, 16, 182, 23);
 	_txtTraining	= new Text(34, 16, 260, 23);
 
-	_lstSoldiers	= new TextList(293, 128, 8, 42);
+	_lstSoldiers	= new TextList(293, 129, 8, 42);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 

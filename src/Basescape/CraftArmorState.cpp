@@ -74,7 +74,7 @@ CraftArmorState::CraftArmorState(
 	_txtArmor		= new Text(50, 9, 106, 31);
 	_txtCraft		= new Text(50, 9, 226, 31);
 
-	_lstSoldiers	= new TextList(293, 128, 8, 42);
+	_lstSoldiers	= new TextList(293, 129, 8, 42);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 

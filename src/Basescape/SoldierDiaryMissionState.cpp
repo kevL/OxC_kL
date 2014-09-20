@@ -84,7 +84,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	_txtDaysWounded	= new Text(100, 9, 100, 89);
 
-	_lstKills		= new TextList(217, 40, 50, 101);
+	_lstKills		= new TextList(217, 41, 50, 101);
 
 	_btnOk			= new TextButton(180, 16, 70, 146);
 

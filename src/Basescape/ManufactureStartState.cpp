@@ -73,7 +73,7 @@ ManufactureStartState::ManufactureStartState(
 	_txtUnitRequiredColumn	= new Text(60, 9, 180, 85);
 	_txtUnitAvailableColumn	= new Text(60, 9, 240, 85);
 
-	_lstRequiredItems		= new TextList(240, 56, 40, 100);
+	_lstRequiredItems		= new TextList(240, 57, 40, 100);
 
 	_btnCancel				= new TextButton(130, 16, 20, 160);
 	_btnStart				= new TextButton(130, 16, 170, 160);

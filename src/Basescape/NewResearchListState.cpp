@@ -63,7 +63,7 @@ NewResearchListState::NewResearchListState(
 
 	_window			= new Window(this, 230, 136, 45, 32, POPUP_BOTH);
 	_txtTitle		= new Text(214, 16, 53, 40);
-	_lstResearch	= new TextList(190, 88, 61, 52);
+	_lstResearch	= new TextList(190, 89, 61, 52);
 	_btnCancel		= new TextButton(214, 16, 53, 144);
 
 	setPalette("PAL_BASESCAPE", 1);

@@ -74,7 +74,7 @@ CraftsState::CraftsState(
 	_txtCrew	= new Text(27, 9, 230, 49);
 	_txtHwp		= new Text(24, 9, 257, 49);
 
-	_lstCrafts	= new TextList(288, 112, 16, 59);
+	_lstCrafts	= new TextList(288, 113, 16, 59);
 
 	_btnOk		= new TextButton(288, 16, 16, 177);
 

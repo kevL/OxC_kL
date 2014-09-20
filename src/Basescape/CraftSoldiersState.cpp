@@ -78,7 +78,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtRank		= new Text(93, 9, 140, 33);
 	_txtCraft		= new Text(71, 9, 225, 33);
 
-	_lstSoldiers	= new TextList(285, 128, 16, 42);
+	_lstSoldiers	= new TextList(285, 129, 16, 42);
 
 	_btnUnload		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);

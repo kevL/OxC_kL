@@ -279,7 +279,7 @@ BattlescapeState::BattlescapeState()
 	_txtTerrain		= new Text(150, 9, 1, 0);
 	_txtShade		= new Text(50, 9, 1, 10);
 	_txtTurn		= new Text(50, 9, 1, 20);
-	_lstExp			= new TextList(25, 63, 1, 37);
+	_lstExp			= new TextList(25, 57, 1, 37);
 
 	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);
 	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0);

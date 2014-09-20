@@ -84,8 +84,7 @@ ArticleStateArmor::ArticleStateArmor(ArticleDefinitionArmor* defs)
 	_game->getResourcePack()->getSurface(look)->blit(_image);
 
 
-//kL	_lstInfo = new TextList(150, 96, 150, 46);
-	_lstInfo = new TextList(150, 128, 150, 12); // kL
+	_lstInfo = new TextList(150, 129, 150, 12);
 	add(_lstInfo);
 	_lstInfo->setColor(Palette::blockOffset(14)+15);
 	_lstInfo->setColumns(2, 125, 25);

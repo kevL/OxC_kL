@@ -74,7 +74,7 @@ ManufactureState::ManufactureState(
 	_txtCost		= new Text(50, 17, 215, 44);
 	_txtTimeLeft	= new Text(25, 17, 271, 44);
 
-	_lstManufacture	= new TextList(285, 96, 16, 70);
+	_lstManufacture	= new TextList(285, 97, 16, 70);
 
 	_btnNew			= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);

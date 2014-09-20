@@ -111,7 +111,7 @@ SellState::SellState(
 	_txtSell		= new Text(20, 9, 226, 33);
 	_txtValue		= new Text(40, 9, 248, 33);
 
-	_lstItems		= new TextList(285, 128, 16, 44);
+	_lstItems		= new TextList(285, 129, 16, 44);
 
 	_btnCancel		= new TextButton(134, 16, 16, 177);
 	_btnOk			= new TextButton(134, 16, 170, 177);

@@ -56,7 +56,7 @@ CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 	_txtQuantity	= new Text(46, 9, 178, 77);
 	_txtCraft		= new Text(80, 9, 224, 77);
 
-	_lstItems		= new TextList(285, 88, 16, 87);
+	_lstItems		= new TextList(285, 89, 16, 87);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 

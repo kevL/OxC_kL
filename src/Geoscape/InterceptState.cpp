@@ -89,7 +89,7 @@ InterceptState::InterceptState(
 	_txtStatus		= new Text(53, 9, 117, 64);
 	_txtWeapons		= new Text(67, 17, 243, 56);
 
-	_lstCrafts		= new TextList(285, 72, 16, 74);
+	_lstCrafts		= new TextList(285, 73, 16, 74);
 
 	_btnGotoBase	= new TextButton(142, 16, 16, 151);
 	_btnCancel		= new TextButton(142, 16, 162, 151);

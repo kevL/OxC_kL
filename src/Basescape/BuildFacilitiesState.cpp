@@ -65,7 +65,7 @@ BuildFacilitiesState::BuildFacilitiesState(
 								35,
 								POPUP_VERTICAL);
 	_txtTitle		= new Text(118, 17, 197, 43);
-	_lstFacilities	= new TextList(101, 112, 200, 59);
+	_lstFacilities	= new TextList(101, 113, 200, 59);
 
 	_btnOk			= new TextButton(112, 16, 200, 176);
 

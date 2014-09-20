@@ -119,7 +119,7 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
-	_lstInfo = new TextList(300, 64, 10, 68);
+	_lstInfo = new TextList(300, 65, 10, 68);
 
 	add(_lstInfo);
 

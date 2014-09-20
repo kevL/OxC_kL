@@ -84,7 +84,8 @@ ComboBox::ComboBox(
 
 	_list	= new TextList(
 						width - HORIZONTAL_MARGIN * 2 - BUTTON_WIDTH + 1,
-						MAX_ITEMS * TEXT_HEIGHT - 2,
+//kL					MAX_ITEMS * TEXT_HEIGHT - 2,
+						MAX_ITEMS * TEXT_HEIGHT + 1, // kL
 						x + HORIZONTAL_MARGIN,
 						y + height + VERTICAL_MARGIN);
 	_list->setComboBox(this);

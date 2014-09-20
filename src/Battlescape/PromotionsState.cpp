@@ -54,7 +54,7 @@ PromotionsState::PromotionsState()
 	_txtRank		= new Text(70, 9, 150, 32);
 	_txtBase		= new Text(80, 9, 220, 32);
 
-	_lstSoldiers	= new TextList(285, 128, 16, 42);
+	_lstSoldiers	= new TextList(285, 129, 16, 42);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 

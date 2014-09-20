@@ -91,7 +91,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_txtStatus		= new Text(108, 9, 110, 36);
 	_txtDate		= new Text(90, 9, 218, 36);
 
-	_lstDiary		= new TextList(288, 120, 16, 44);
+	_lstDiary		= new TextList(288, 121, 16, 44);
 
 	_btnKills		= new TextButton(70, 16, 8, 177);
 	_btnMissions	= new TextButton(70, 16, 86, 177);

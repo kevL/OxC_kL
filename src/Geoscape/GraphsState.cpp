@@ -121,8 +121,8 @@ GraphsState::GraphsState()
 	_txtTitle		= new Text(220, 17, 100, 28);
 	_txtFactor		= new Text(35, 9, 96, 28);
 
-	_txtMonths		= new TextList(205, 8, 115, 183);
-	_txtYears		= new TextList(200, 8, 121, 191);
+	_txtMonths		= new TextList(205, 9, 115, 183);
+	_txtYears		= new TextList(200, 9, 121, 191);
 
 	_txtScore		= new Text(36, 9, 46, 82);
 

@@ -73,7 +73,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	_txtBase_6		= new Text(23, 9, 254, 25);
 	_txtBase_7		= new Text(23, 9, 277, 25);
 
-	_lstMatrix		= new TextList(285, 136, 16, 36);
+	_lstMatrix		= new TextList(285, 137, 16, 36);
 
 	_btnOk			= new TextButton(268, 16, 26, 177);
 

@@ -59,7 +59,7 @@ TransfersState::TransfersState(Base* base)
 	_txtQuantity	= new Text(54, 9, 179, 34);
 	_txtArrivalTime	= new Text(28, 9, 254, 34);
 
-	_lstTransfers	= new TextList(285, 120, 16, 45);
+	_lstTransfers	= new TextList(285, 121, 16, 45);
 
 	_btnOk			= new TextButton(288, 16, 16, 169);
 

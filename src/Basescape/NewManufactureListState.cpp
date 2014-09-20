@@ -69,7 +69,7 @@ NewManufactureListState::NewManufactureListState(
 	_txtItem		= new Text(80, 9, 16, 46);
 	_txtCategory	= new Text(80, 9, 172, 46);
 
-	_lstManufacture	= new TextList(293, 96, 8, 55);
+	_lstManufacture	= new TextList(293, 97, 8, 55);
 
 	_btnCancel		= new TextButton(288, 16, 16, 154);
 

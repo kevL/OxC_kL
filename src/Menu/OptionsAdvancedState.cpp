@@ -49,7 +49,7 @@ OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin)
 {
 	setCategory(_btnAdvanced);
 
-	_lstOptions = new TextList(200, 136, 94, 8);
+	_lstOptions = new TextList(200, 137, 94, 8);
 
 	add(_lstOptions);
 

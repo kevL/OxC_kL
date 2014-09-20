@@ -67,7 +67,7 @@ SoldierArmorState::SoldierArmorState(
 	_txtType		= new Text(102, 9, 84, 72);
 	_txtQuantity	= new Text(42, 9, 194, 72);
 
-	_lstArmor		= new TextList(168, 40, 76, 88);
+	_lstArmor		= new TextList(168, 41, 76, 88);
 
 	_btnCancel		= new TextButton(152, 16, 84, 136);
 

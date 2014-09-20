@@ -112,7 +112,7 @@ TransferItemsState::TransferItemsState(
 //	_txtAmountTransfer	= new Text(46, 9, 200, 29);
 	_txtAtDestination	= new Text(62, 9, 247, 29);
 
-	_lstItems			= new TextList(285, 136, 16, 39);
+	_lstItems			= new TextList(285, 137, 16, 39);
 
 	_btnCancel			= new TextButton(134, 16, 16, 177);
 	_btnOk				= new TextButton(134, 16, 170, 177);

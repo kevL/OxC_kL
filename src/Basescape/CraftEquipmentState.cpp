@@ -100,7 +100,7 @@ CraftEquipmentState::CraftEquipmentState(
 	_txtCraft		= new Text(50, 9, 256, 36);
 //kL	_txtCrew		= new Text(71, 9, 244, 24);
 
-	_lstEquipment	= new TextList(285, 128, 16, 45);
+	_lstEquipment	= new TextList(285, 129, 16, 45);
 
 	_btnClear		= new TextButton(94, 16, 16, 177);
 	_btnInventory	= new TextButton(94, 16, 113, 177);

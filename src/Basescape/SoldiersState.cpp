@@ -72,7 +72,7 @@ SoldiersState::SoldiersState(
 	_txtRank		= new Text(102, 9, 133, 31);
 	_txtCraft		= new Text(82, 9, 226, 31);
 
-	_lstSoldiers	= new TextList(293, 128, 8, 42);
+	_lstSoldiers	= new TextList(293, 129, 8, 42);
 
 	_btnMemorial	= new TextButton(72, 16, 11, 177);
 	_btnPsiTrain	= new TextButton(71, 16, 87, 177);

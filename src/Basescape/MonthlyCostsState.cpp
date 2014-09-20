@@ -61,10 +61,10 @@ MonthlyCostsState::MonthlyCostsState(
 	_txtTotal		= new Text(54, 9, 255, 31);
 
 	_txtRental		= new Text(150, 9, 16, 46);
-	_lstCrafts		= new TextList(293, 40, 16, 57);
+	_lstCrafts		= new TextList(293, 41, 16, 57);
 
 	_txtSalaries	= new Text(150, 9, 16, 100);
-	_lstSalaries	= new TextList(293, 27, 16, 111);
+	_lstSalaries	= new TextList(293, 25, 16, 111);
 
 	_lstMaintenance	= new TextList(293, 9, 16, 142);
 

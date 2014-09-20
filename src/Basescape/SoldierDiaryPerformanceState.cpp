@@ -117,24 +117,24 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_txtRace			= new Text(98, 16, 16, 36);
 	_txtRank			= new Text(98, 16, 114, 36);
 	_txtWeapon			= new Text(98, 16, 212, 36);
-	_lstRace			= new TextList(98, 140, 16, 52);
-	_lstRank			= new TextList(98, 140, 114, 52);
-	_lstWeapon			= new TextList(98, 140, 212, 52);
+	_lstRace			= new TextList(98, 113, 16, 52);
+	_lstRank			= new TextList(98, 113, 114, 52);
+	_lstWeapon			= new TextList(98, 113, 212, 52);
 	_lstKillTotals		= new TextList(100, 9, 18, 166);
 
 	// Mission stats
 	_txtLocation		= new Text(92, 16, 16, 36);
 	_txtType			= new Text(114, 16, 108, 36);
 	_txtUFO				= new Text(92, 16, 222, 36);
-	_lstLocation		= new TextList(92, 140, 16, 52);
-	_lstType			= new TextList(114, 140, 108, 52);
-	_lstUFO				= new TextList(92, 140, 222, 52);
+	_lstLocation		= new TextList(92, 113, 16, 52);
+	_lstType			= new TextList(114, 113, 108, 52);
+	_lstUFO				= new TextList(92, 113, 222, 52);
 	_lstMissionTotals	= new TextList(288, 9, 18, 166);
 
 	// Award stats
 	_txtMedalName		= new Text(90, 9, 16, 36);
 	_txtMedalLevel		= new Text(90, 9, 206, 36);
-	_lstAwards			= new TextList(240, 96, 48, 49);
+	_lstAwards			= new TextList(240, 97, 48, 49);
 	_txtMedalInfo		= new Text(280, 25, 20, 150);
 
 	// Award sprites

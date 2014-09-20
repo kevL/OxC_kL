@@ -78,7 +78,7 @@ BaseDefenseState::BaseDefenseState(
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 16, 6);
 	_txtInit		= new Text(300, 10, 16, 24);
-	_lstDefenses	= new TextList(300, 130, 16, 40);
+	_lstDefenses	= new TextList(300, 129, 16, 40);
 	_btnOk			= new TextButton(120, 16, 100, 170);
 
 	setPalette("PAL_BASESCAPE", 2);

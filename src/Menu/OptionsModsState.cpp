@@ -49,7 +49,7 @@ OptionsModsState::OptionsModsState(OptionsOrigin origin)
 {
 	setCategory(_btnMods);
 
-	_lstMods = new TextList(200, 136, 94, 8);
+	_lstMods = new TextList(200, 137, 94, 8);
 	add(_lstMods);
 
 	centerAllSurfaces();

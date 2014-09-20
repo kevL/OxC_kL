@@ -76,7 +76,7 @@ CraftWeaponsState::CraftWeaponsState(
 	_txtQuantity	= new Text(30, 9, 164, 53);
 	_txtAmmunition	= new Text(50, 9, 194, 53);
 
-	_lstWeapons		= new TextList(204, 88, 58, 68);
+	_lstWeapons		= new TextList(204, 89, 58, 68);
 
 	_btnCancel		= new TextButton(140, 16, 90, 156);
 

@@ -132,8 +132,7 @@ ListGamesState::ListGamesState(
 	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 32);
 	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 222, 32);
 
-	_lstSaves	= new TextList(285, 120, 16, 41); // when editing, the up/down arrow jogs a few px right.
-//	_lstSaves	= new TextList(285, 120, 16, 42);
+	_lstSaves	= new TextList(285, 121, 16, 41);
 
 	_txtDetails = new Text(288, 9, 16, 165);
 

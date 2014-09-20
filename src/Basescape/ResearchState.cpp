@@ -74,7 +74,7 @@ ResearchState::ResearchState(
 	_txtScientists	= new Text(55, 9, 161, 48);
 	_txtProgress	= new Text(55, 9, 219, 48);
 
-	_lstResearch	= new TextList(288, 112, 16, 63);
+	_lstResearch	= new TextList(288, 113, 16, 63);
 
 	_btnAliens		= new TextButton(92, 16, 16, 177);
 	_btnNew			= new TextButton(92, 16, 114, 177);

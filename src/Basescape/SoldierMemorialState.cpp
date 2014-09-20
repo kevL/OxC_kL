@@ -67,7 +67,7 @@ SoldierMemorialState::SoldierMemorialState()
 	_txtRank		= new Text(70, 9, 148, 36);
 	_txtDate		= new Text(86, 9, 218, 36);
 
-	_lstSoldiers	= new TextList(285, 128, 16, 44);
+	_lstSoldiers	= new TextList(285, 129, 16, 44);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 

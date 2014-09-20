@@ -53,7 +53,7 @@ UfopaediaSelectState::UfopaediaSelectState(std::string section)
 	_window			= new Window(this, 256, 180, 32, 10, POPUP_NONE);
 	_txtTitle		= new Text(224, 17, 48, 26);
 	_btnOk			= new TextButton(224, 16, 48, 166);
-	_lstSelection	= new TextList(224, 104, 40, 50);
+	_lstSelection	= new TextList(224, 105, 40, 50);
 
 	setPalette("PAL_GEOSCAPE", 0);
 

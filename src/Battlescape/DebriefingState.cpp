@@ -131,9 +131,9 @@ DebriefingState::DebriefingState()
 	_txtQuantity	= new Text(60, 9, 200, 24);
 	_txtScore		= new Text(36, 9, 260, 24);
 
-	_lstStats		= new TextList(288, 80, 16, 32);
+	_lstStats		= new TextList(288, 81, 16, 32);
 
-	_lstRecovery	= new TextList(288, 80, 16, 32);
+	_lstRecovery	= new TextList(288, 81, 16, 32);
 	_txtRecovery	= new Text(180, 9, 16, 60);
 
 	_lstTotal		= new TextList(288, 9, 16, 12);

@@ -57,7 +57,7 @@ FundingState::FundingState()
 	_txtFunding		= new Text(100, 9, 138, 25);
 	_txtChange		= new Text(72, 9, 238, 25);
 
-	_lstCountries	= new TextList(277, 128, 24, 34);
+	_lstCountries	= new TextList(277, 129, 24, 34);
 	_lstTotal		= new TextList(277, 9, 16, 165);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);

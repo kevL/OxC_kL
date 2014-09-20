@@ -8399,7 +8399,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1411182744 source:f:\git\openxcom\src\interface\textlist.cpp
+1411189428 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>
@@ -8409,7 +8409,6 @@
 	"ScrollBar.h"
 	"../Engine/Action.h"
 	"../Engine/Font.h"
-	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 

@@ -52,7 +52,7 @@ OptionsControlsState::OptionsControlsState(OptionsOrigin origin)
 {
 	setCategory(_btnControls);
 
-	_lstControls = new TextList(200, 136, 94, 8);
+	_lstControls = new TextList(200, 137, 94, 8);
 
 	add(_lstControls);
 

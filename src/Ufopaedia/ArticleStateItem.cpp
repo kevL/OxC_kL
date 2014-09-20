@@ -100,7 +100,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		_txtTuCost->setWordWrap();
 		_txtTuCost->setText(tr("STR_TIME_UNIT_COST"));
 
-		_lstInfo = new TextList(204, 55, 8, 82);
+		_lstInfo = new TextList(204, 57, 8, 82);
 		add(_lstInfo);
 		_lstInfo->setColor(Palette::blockOffset(15)+4); // color for %-data!
 		_lstInfo->setColumns(3, 100, 52, 52);

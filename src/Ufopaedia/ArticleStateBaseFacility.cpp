@@ -132,7 +132,7 @@ ArticleStateBaseFacility::ArticleStateBaseFacility(ArticleDefinitionBaseFacility
 	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
-	_lstInfo = new TextList(200, 42, 10, 42);
+	_lstInfo = new TextList(200, 41, 10, 42);
 	add(_lstInfo);
 
 	_lstInfo->setColor(Palette::blockOffset(13)+10);
