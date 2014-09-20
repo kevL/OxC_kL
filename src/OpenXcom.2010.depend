@@ -4401,7 +4401,7 @@
 1409185599 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
 
-1409822754 f:\git\openxcom\src\interface\text.h
+1411181010 f:\git\openxcom\src\interface\text.h
 	<string>
 	<vector>
 	<stdint.h>
@@ -5397,7 +5397,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1411172940 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1411176953 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -8371,7 +8371,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1411090598 source:f:\git\openxcom\src\interface\text.cpp
+1411181694 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -8399,7 +8399,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1410831701 source:f:\git\openxcom\src\interface\textlist.cpp
+1411182744 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>
@@ -8409,6 +8409,7 @@
 	"ScrollBar.h"
 	"../Engine/Action.h"
 	"../Engine/Font.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 
@@ -12096,7 +12097,7 @@
 	<string>
 	"../Engine/State.h"
 
-1411175789 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1411178398 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	<string>
 	"SoldierDiaryOverviewState.h"

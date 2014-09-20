@@ -56,9 +56,9 @@ TextList::TextList(
 			y),
 		_texts(),
 		_columns(),
-		_big(0),
-		_small(0),
-		_font(0),
+		_big(NULL),
+		_small(NULL),
+		_font(NULL),
 		_scroll(0),
 		_visibleRows(0),
 		_selRow(0),
@@ -75,8 +75,7 @@ TextList::TextList(
 		_arrowLeft(),
 		_arrowRight(),
 		_arrowPos(-1),
-//kL	_scrollPos(4),
-		_scrollPos(0), // kL
+		_scrollPos(0), // kL, was 4
 		_arrowType(ARROW_VERTICAL),
 		_leftClick(0),
 		_leftPress(0),
@@ -171,7 +170,7 @@ void TextList::setX(int x)
 	_down->setX(getX() + getWidth() + _scrollPos);
 	_scrollbar->setX(getX() + getWidth() + _scrollPos);
 
-	if (_selector != 0)
+	if (_selector != NULL)
 		_selector->setX(getX());
 }
 
@@ -187,7 +186,7 @@ void TextList::setY(int y)
 	_down->setY(getY() + getHeight() - 12); // - 14
 	_scrollbar->setY(_up->getY() + _up->getHeight());
 
-	if (_selector != 0)
+	if (_selector != NULL)
 		_selector->setY(getY());
 }
 
@@ -1152,8 +1151,9 @@ void TextList::draw()
 	Surface::draw();
 
 	int y = 0;
+	bool addPx = false;
 
-	if (!_rows.empty())
+	if (_rows.empty() == false)
 	{
 		if (_scroll > 0
 			&& _rows[_scroll] == _rows[_scroll - 1])
@@ -1167,16 +1167,25 @@ void TextList::draw()
 					&& i < _rows[_scroll] + _visibleRows;
 				++i)
 		{
+			if (i == _texts.size() - 1
+				|| i == _rows[_scroll] + _visibleRows - 1)
+			{
+				addPx = true; // add px_Y under last textrow
+			}
+
 			for (std::vector<Text*>::iterator
 					j = _texts[i].begin();
 					j < _texts[i].end();
 					++j)
 			{
+				if (addPx)
+					(*j)->addTextHeight();
+
 				(*j)->setY(y);
 				(*j)->blit(this);
 			}
 
-			if (!_texts[i].empty())
+			if (_texts[i].empty() == false)
 				y += _texts[i].front()->getHeight() + _font->getSpacing();
 			else
 				y += _font->getHeight() + _font->getSpacing();
@@ -1291,7 +1300,7 @@ void TextList::mousePress(Action* action, State* state)
 {
 	bool allowScroll = true;
 
-	if (Options::changeValueByMouseWheel != 0)
+	if (Options::changeValueByMouseWheel)
 	{
 		allowScroll = (action->getAbsoluteXMouse() < _arrowsLeftEdge
 					|| action->getAbsoluteXMouse() > _arrowsRightEdge);

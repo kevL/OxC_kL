@@ -352,6 +352,31 @@ Uint8 Text::getSecondaryColor() const
 }
 
 /**
+ * Returns the rendered text's width.
+ * @param line - line to get the width of, or -1 to get whole text width
+ * @return, width in pixels
+ */
+int Text::getTextWidth(int line) const
+{
+	if (line == -1)
+	{
+		int width = 0;
+		for (std::vector<int>::const_iterator
+				i = _lineWidth.begin();
+				i != _lineWidth.end();
+				++i)
+		{
+			if (*i > width)
+				width = *i;
+		}
+
+		return width;
+	}
+	else
+		return _lineWidth[line];
+}
+
+/**
  * Returns the rendered text's height. Useful to check if wordwrap applies.
  * @param line - line to get the height of, or -1 to get whole text height
  * @return, height in pixels
@@ -376,28 +401,17 @@ int Text::getTextHeight(int line) const
 }
 
 /**
- * Returns the rendered text's width.
- * @param line - line to get the width of, or -1 to get whole text width
- * @return, width in pixels
+ * kL. Adds to the text's height.
+ * @param pixels - pixels to add to height of a textline
  */
-int Text::getTextWidth(int line) const
+void Text::addTextHeight(int pixels) // kL
 {
-	if (line == -1)
+	if (_lineHeight.empty() == false)
 	{
-		int width = 0;
-		for (std::vector<int>::const_iterator
-				i = _lineWidth.begin();
-				i != _lineWidth.end();
-				++i)
-		{
-			if (*i > width)
-				width = *i;
-		}
+		size_t line = _lineHeight.size() - 1;
 
-		return width;
+		_lineHeight[line] += pixels;
 	}
-	else
-		return _lineWidth[line];
 }
 
 /**
@@ -638,8 +652,8 @@ void Text::draw()
 			y = 0;
 		break;
 		case ALIGN_MIDDLE:
-			y = static_cast<int>(
-					ceil(static_cast<double>(getHeight() - height) / 2.0));
+			y = static_cast<int>(ceil(
+					static_cast<double>(getHeight() - height) / 2.0));
 		break;
 		case ALIGN_BOTTOM:
 			y = getHeight() - height;

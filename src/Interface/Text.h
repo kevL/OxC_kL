@@ -161,6 +161,8 @@ private:
 		int getTextWidth(int line = -1) const;
 		/// Gets the rendered text's height.
 		int getTextHeight(int line = -1) const;
+		/// kL. Adds to the text's height.
+		void addTextHeight(int pixels = 1); // kL
 
 		/// Draws the text.
 		void draw();
