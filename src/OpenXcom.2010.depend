@@ -5397,7 +5397,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1409954763 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1411172940 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -12065,7 +12065,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1408804460 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
+1411175789 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
 	"../Engine/State.h"
 
 1404110161 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
@@ -12096,7 +12096,7 @@
 	<string>
 	"../Engine/State.h"
 
-1410247484 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
+1411167601 source:f:\git\openxcom\src\basescape\soldierdiaryperformancestate.cpp
 	"SoldierDiaryPerformanceState.h"
 	<string>
 	"SoldierDiaryOverviewState.h"
@@ -12174,7 +12174,7 @@
 	"Polyline.h"
 	<cmath>
 
-1408408388 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
+1411165152 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
 	"RuleGlobe.h"
 	<cmath>
 	<fstream>

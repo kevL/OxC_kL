@@ -47,6 +47,9 @@ class SoldierDiaryPerformanceState
 {
 
 private:
+	static const int LIST_ROWS		= 12;
+	static const int LIST_SPRITES_y	= 49;
+
 	bool
 		_displayKills,
 		_displayMissions,
@@ -62,8 +65,8 @@ private:
 	std::vector<Soldier*>* _list;
 	std::vector<SoldierDead*>* _listDead; // kL
 	std::vector<Surface*>
-		_commendations,
-		_commendationDecorations;
+		_srfSprite,
+		_srfDecor;
 
 	Base* _base;
 	Soldier* _soldier;
@@ -71,8 +74,8 @@ private:
 	SoldierDiaryOverviewState* _soldierDiaryOverviewState;
 
 	SurfaceSet
-		*_commendationSprite,
-		* _commendationDecoration;
+		* _sstSprite,
+		* _sstDecor;
 	Text
 		* _txtTitle,
 		* _txtBaseLabel, // kL
