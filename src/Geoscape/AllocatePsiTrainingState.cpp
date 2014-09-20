@@ -65,12 +65,12 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_txtTitle		= new Text(300, 17, 10, 8);
 	_txtBaseLabel	= new Text(80, 9, 230, 8);
 
-	_txtRemaining	= new Text(100, 8, 12, 20);
+	_txtRemaining	= new Text(100, 9, 12, 20);
 
-	_txtName		= new Text(114, 8, 16, 31);
-	_txtPsiStrength	= new Text(48, 16, 134, 23);
-	_txtPsiSkill	= new Text(48, 16, 182, 23);
-	_txtTraining	= new Text(34, 16, 260, 23);
+	_txtName		= new Text(114, 9, 16, 31);
+	_txtPsiStrength	= new Text(48, 9, 134, 31);
+	_txtPsiSkill	= new Text(48, 9, 182, 31);
+	_txtTraining	= new Text(34, 9, 260, 31);
 
 	_lstSoldiers	= new TextList(293, 129, 8, 42);
 

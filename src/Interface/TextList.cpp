@@ -55,6 +55,7 @@ TextList::TextList(
 			x,
 			y),
 		_texts(),
+		_rows(),
 		_columns(),
 		_big(NULL),
 		_small(NULL),
@@ -1111,13 +1112,17 @@ void TextList::updateVisible()
 {
 	_visibleRows = 0;
 
+	const int delta_Y = _font->getHeight() + _font->getSpacing();
 	for (int
 			y = 0;
 			y < getHeight();
-			y += _font->getHeight() + _font->getSpacing())
+			y += delta_Y)
 	{
 		_visibleRows++;
 	}
+
+	if (getHeight() > static_cast<int>(_visibleRows - 1) * delta_Y)
+		_visibleRows--;
 
 	updateArrows();
 }
@@ -1170,7 +1175,7 @@ void TextList::draw()
 			if (i == _texts.size() - 1
 				|| i == _rows[_scroll] + _visibleRows - 1)
 			{
-				addPx = true; // add px_Y under last textrow
+				addPx = true; // add px_Y under last row
 			}
 
 			for (std::vector<Text*>::iterator
@@ -1248,7 +1253,7 @@ void TextList::handle(Action* action, State* state)
 
 	if (_arrowPos != -1)
 	{
-		if (!_rows.empty())
+		if (_rows.empty() == false)
 		{
 			for (size_t
 					i = _rows[_scroll];
@@ -1372,15 +1377,16 @@ void TextList::mouseOver(Action* action, State* state)
 {
 	if (_selectable)
 	{
-		int y = _font->getHeight() + _font->getSpacing();
+		int h = _font->getHeight() + _font->getSpacing();
 		_selRow = std::max(
 						0,
 						static_cast<int>(_scroll)
 						+ static_cast<int>(
 										floor(action->getRelativeYMouse()
-											/ (static_cast<double>(y) * action->getYScale()))));
+										/ (static_cast<double>(h) * action->getYScale()))));
 
-		if (_selRow < _texts.size())
+		if (_selRow < _texts.size()
+			&& _selRow < _scroll + _visibleRows)
 		{
 			Text* selText = _texts[_rows[_selRow]].front();
 			int
@@ -1398,8 +1404,7 @@ void TextList::mouseOver(Action* action, State* state)
 
 			if (_selector->getHeight() != h)
 			{
-				// resizing doesn't work, but recreating does, so let's do that!
-				delete _selector;
+				delete _selector; // resizing doesn't work, but recreating does, so do that!
 				_selector = new Surface(
 									getWidth(),
 									h,

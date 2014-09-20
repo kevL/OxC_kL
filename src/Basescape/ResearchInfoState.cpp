@@ -101,8 +101,8 @@ void ResearchInfoState::buildUi()
 	_window					= new Window(this, 230, 140, 45, 30);
 	_txtTitle				= new Text(198, 16, 61, 40);
 
-	_txtAvailableScientist	= new Text(198, 16, 61, 60);
-	_txtAvailableSpace		= new Text(198, 16, 61, 70);
+	_txtAvailableScientist	= new Text(198, 9, 61, 60);
+	_txtAvailableSpace		= new Text(198, 9, 61, 70);
 	_txtAllocatedScientist	= new Text(198, 16, 61, 80);
 
 	_txtMore				= new Text(134, 16, 93, 100);

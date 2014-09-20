@@ -68,8 +68,8 @@ SoldiersState::SoldiersState(
 	_txtBaseLabel	= new Text(80, 9, 16, 11);
 	_txtSoldiers	= new Text(20, 9, 284, 11);
 
-	_txtName		= new Text(114, 9, 16, 31);
-	_txtRank		= new Text(102, 9, 133, 31);
+	_txtName		= new Text(117, 9, 16, 31);
+	_txtRank		= new Text(92, 9, 133, 31);
 	_txtCraft		= new Text(82, 9, 226, 31);
 
 	_lstSoldiers	= new TextList(293, 129, 8, 42);
