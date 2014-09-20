@@ -86,7 +86,7 @@ TextList::TextList(
 		_rightRelease(0),
 		_arrowsLeftEdge(0),
 		_arrowsRightEdge(0),
-		_comboBox(0)
+		_comboBox(NULL)
 {
 	_up = new ArrowButton(
 						ARROW_BIG_UP,

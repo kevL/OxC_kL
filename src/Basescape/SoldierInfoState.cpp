@@ -113,7 +113,7 @@ SoldierInfoState::SoldierInfoState(
 	_barTimeUnits	= new Bar(234, 7, 150, yPos + 1);
 
 	yPos += step;
-	_txtStamina		= new Text(120, 9, 5, yPos);
+	_txtStamina		= new Text(120, 9, 6, yPos);
 	_numStamina		= new Text(18, 9, 131, yPos);
 	_barStamina		= new Bar(234, 7, 150, yPos + 1);
 
