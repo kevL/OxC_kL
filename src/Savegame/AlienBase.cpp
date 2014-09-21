@@ -132,7 +132,7 @@ std::wstring AlienBase::getName(Language* lang) const
  */
 int AlienBase::getMarker() const
 {
-	if (!_discovered)
+	if (_discovered == false)
 		return -1;
 
 	return 7;

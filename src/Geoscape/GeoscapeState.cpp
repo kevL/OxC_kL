@@ -1856,7 +1856,10 @@ void GeoscapeState::time10Minutes()
 			{
 				bool
 					contact = false,
-					hyperdet = false;
+					hyperDet = false,
+					hyperDet_pre = (*u)->getHyperDetected();
+
+				std::vector<Base*> hyperBases = std::vector<Base*>();
 
 				for (std::vector<Base*>::iterator
 						b = _game->getSavedGame()->getBases()->begin();
@@ -1867,16 +1870,73 @@ void GeoscapeState::time10Minutes()
 					{
 						case 3:
 							contact = true;
+							(*u)->setDetected();
 						case 1:
+							hyperDet = true;
 							(*u)->setHyperDetected();
-							hyperdet = true;
+
+							hyperBases.push_back(*b);
 						break;
 						case 2:
 							contact = true;
+							(*u)->setDetected();
 						break;
 					}
 
-					if (contact && hyperdet)
+					for (std::vector<Craft*>::iterator
+							c = (*b)->getCrafts()->begin();
+							c != (*b)->getCrafts()->end()
+								&& contact == false;
+							++c)
+					{
+						if ((*c)->getStatus() == "STR_OUT"
+							&& (*c)->detect(*u))
+						{
+							contact = true;
+							break;
+						}
+					}
+				}
+
+				if (contact
+					|| (hyperDet
+						&& hyperDet_pre == false))
+				{
+					popup(new UfoDetectedState(
+											*u,
+											this,
+											true,
+											hyperDet,
+											contact,
+											hyperBases));
+				}
+			}
+			else // ufo is already detected
+			{
+				bool hyperDet = false;
+				bool contact = false;
+
+				for (std::vector<Base*>::iterator
+						b = _game->getSavedGame()->getBases()->begin();
+						b != _game->getSavedGame()->getBases()->end();
+						++b)
+				{
+					switch ((*b)->detect(*u)) // note: this lets a UFO blip on/off radar scope
+					{
+						case 3:
+							contact = true;
+//							(*u)->setDetected();
+						case 1:
+							hyperDet = true;
+//							(*u)->setHyperDetected();
+						break;
+						case 2:
+							contact = true;
+//							(*u)->setDetected();
+						break;
+					}
+
+					if (contact && hyperDet)
 						break;
 
 					for (std::vector<Craft*>::iterator
@@ -1894,63 +1954,14 @@ void GeoscapeState::time10Minutes()
 					}
 				}
 
-				if (contact || hyperdet)
-				{
-					(*u)->setDetected();
-
-					popup(new UfoDetectedState(
-											*u,
-											this,
-											true,
-											hyperdet,
-											contact));
-				}
-			}
-			else // ufo is already detected
-			{
-				bool hyperdet = false;
-				bool contact = false;
-
-				for (std::vector<Base*>::iterator
-						b = _game->getSavedGame()->getBases()->begin();
-						b != _game->getSavedGame()->getBases()->end();
-						++b)
-				{
-					switch ((*b)->detect(*u))
-					{
-						case 3:
-							contact = true;
-						case 1:
-							(*u)->setHyperDetected();
-							hyperdet = true;
-						break;
-						case 2:
-							contact = true;
-						break;
-					}
-
-					if (contact && hyperdet)
-						break;
-
-					for (std::vector<Craft*>::iterator
-							c = (*b)->getCrafts()->begin();
-							c != (*b)->getCrafts()->end()
-								&& !contact;
-							++c)
-					{
-						if ((*c)->getStatus() == "STR_OUT"
-							&& (*c)->detect(*u))
-						{
-							contact = true;
-							break;
-						}
-					}
-				}
+				if (hyperDet == false)
+					(*u)->setHyperDetected(false);
+				else
+					(*u)->setHyperDetected();
 
 				if (contact == false)
 				{
 					(*u)->setDetected(false);
-					(*u)->setHyperDetected(false);
 
 					if ((*u)->getFollowers()->empty() == false)
 					{

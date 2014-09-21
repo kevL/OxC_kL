@@ -8882,7 +8882,7 @@ extraStrings:
       STR_AUTOSTAT: "stat"
       STR_MONTHLY_COSTS_: "Costs> {0}"
       STR_LOW_FUEL: "Low Fuel"
-      STR_MISSION_COMPLETE: "MISSION"
+      STR_MISSION_COMPLETE: "MISSION > return"
       STR_ACTION_NOT_ALLOWED_FLOAT: "> float <"
       STR_ACTION_NOT_ALLOWED_KNEEL: "> kneel <"
       STR_ACTION_NOT_ALLOWED_FLOOR: "> floor <"

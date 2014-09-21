@@ -334,11 +334,11 @@ std::wstring Ufo::getName(Language* lang) const
 
 /**
  * Returns the globe marker for the UFO.
- * @return Marker sprite, -1 if none.
+ * @return Marker sprite, -1 if none or not detected
  */
 int Ufo::getMarker() const
 {
-	if (!_detected)
+	if (_detected == false)
 		return -1;
 
 	switch (_status)

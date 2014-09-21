@@ -26,6 +26,7 @@
 namespace OpenXcom
 {
 
+class Base;
 class GeoscapeState;
 class Text;
 class TextButton;
@@ -44,10 +45,11 @@ class UfoDetectedState
 
 private:
 
-//	bool _hyperwave;
+	bool _contact;
 
 	GeoscapeState* _state;
 	Text
+		* _txtBases,
 		* _txtDetected,
 		* _txtHyperwave,
 		* _txtUfo;
@@ -70,7 +72,8 @@ private:
 				GeoscapeState* state,
 				bool detected,
 				bool hyper,
-				bool contact = true);
+				bool contact = true,
+				std::vector<Base*> hyperBases = std::vector<Base*>());
 		/// Cleans up the Ufo Detected state.
 		~UfoDetectedState();
 

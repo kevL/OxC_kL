@@ -347,7 +347,7 @@ Globe::Globe(
 	}
 
 	_texture	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("TEXTURE.DAT"));
-	_markerSet = new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
+	_markerSet	= new SurfaceSet(*_game->getResourcePack()->getSurfaceSet("GlobeMarkers"));
 
 	_countries	= new Surface(width, height, x, y);
 	_markers	= new Surface(width, height, x, y);
@@ -584,11 +584,10 @@ void Globe::cartToPolar( // Orthographic Projection
 }
 
 /**
- * Checks if a polar point is on the back-half of the globe,
- * invisible to the player.
- * @param lon, Longitude of the point.
- * @param lat, Latitude of the point.
- * @return, True if it's on the back, False if it's on the front.
+ * Checks if a polar point is on the back-half of the globe, invisible to the player.
+ * @param lon - longitude of the point
+ * @param lat - latitude of the point
+ * @return, true if it's on the back, false if it's on the front
  */
 bool Globe::pointBack(
 		double lon,
@@ -601,9 +600,10 @@ bool Globe::pointBack(
 }
 
 
-/** Return latitude of last visible to player point on given longitude.
- * @param lon Longitude of the point.
- * @return, Longitude of last visible point.
+/**
+ * Returns latitude of last visible to player point on given longitude.
+ * @param lon - longitude of the point
+ * @return, longitude of last visible point
  */
 double Globe::lastVisibleLat(double lon) const
 {
@@ -1029,7 +1029,7 @@ std::vector<Target*> Globe::getTargets(
 {
 	std::vector<Target*> targets;
 
-	if (!craftOnly)
+	if (craftOnly == false)
 	{
 		for (std::vector<Base*>::iterator
 				i = _game->getSavedGame()->getBases()->begin();
@@ -1068,7 +1068,7 @@ std::vector<Target*> Globe::getTargets(
 			i != _game->getSavedGame()->getUfos()->end();
 			++i)
 	{
-		if (!(*i)->getDetected()
+		if ((*i)->getDetected() == false
 			// kL: this is a kludge; the UFO should have been deleted before
 			// creating SelectDestinationState, or MultipleTargetsState.
 			// see: GeoscapeState::time5Seconds(), case Ufo::FLYING

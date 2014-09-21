@@ -50,10 +50,10 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Multiple Targets window.
- * @param game, Pointer to the core game.
- * @param targets, List of targets to display.
- * @param craft, Pointer to craft to retarget (NULL if none).
- * @param state, Pointer to the Geoscape state.
+ * @param game		- pointer to the core game
+ * @param targets	- vector of pointers to targets to display
+ * @param craft		- pointer to craft to retarget (NULL if none)
+ * @param state		- pointer to the Geoscape state
  */
 MultipleTargetsState::MultipleTargetsState(
 		std::vector<Target*> targets,
@@ -164,15 +164,14 @@ void MultipleTargetsState::popupTarget(Target* target)
 	if (_craft == NULL)
 	{
 		//Log(LOG_INFO) << ". _craft == 0";
-		Craft* c	= dynamic_cast<Craft*>(target);
-		Ufo* u		= dynamic_cast<Ufo*>(target);
-		Base* b		= dynamic_cast<Base*>(target);
+		Craft* c = dynamic_cast<Craft*>(target);
+		Ufo* u = dynamic_cast<Ufo*>(target);
+		Base* b = dynamic_cast<Base*>(target);
 		//Log(LOG_INFO) << ". dynamic_cast's examined";
 
 		if (b != NULL)
 		{
 			//Log(LOG_INFO) << ". . base";
-//			_game->popState(); // kL
 			_game->pushState(new InterceptState(
 											_state->getGlobe(),
 											b,
@@ -182,27 +181,16 @@ void MultipleTargetsState::popupTarget(Target* target)
 		else if (c != NULL)
 		{
 			//Log(LOG_INFO) << ". . craft";
-			// kL_begin:
-//			bool doublePop = true;
-//			if (_targets.size() == 1) // uh This never happens.
-//			{
-//				doublePop = false;
-//				_game->popState();
-//			} // kL_end.
-
-//			_game->popState(); // kL
 			_game->pushState(new GeoscapeCraftState(
 												c,
 												_state->getGlobe(),
 												NULL,
 												_state,
 												false)); // kL_add.
-//												doublePop)); // kL_add.
 		}
 		else if (u != NULL)
 		{
 			//Log(LOG_INFO) << ". . ufo";
-//			_game->popState(); // kL
 			_game->pushState(new UfoDetectedState(
 												u,
 												_state,
@@ -212,18 +200,15 @@ void MultipleTargetsState::popupTarget(Target* target)
 		else
 		{
 			//Log(LOG_INFO) << ". . else...";
-//kL		_game->pushState(new TargetInfoState(_game, target, _state->getGlobe()));
-//			_game->popState(); // kL
 			_game->pushState(new TargetInfoState(
 												target,
 												_state->getGlobe(),
-												_state)); // kL
+												_state)); // kL_add.
 		}
 	}
 	else
 	{
 		//Log(LOG_INFO) << ". _craft != 0";
-//		_game->popState(); // kL
 		_game->pushState(new ConfirmDestinationState(
 													_craft,
 													target));

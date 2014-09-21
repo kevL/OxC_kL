@@ -122,17 +122,17 @@ ListGamesState::ListGamesState(
 	_screen = false;
 
 	_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
-	_txtTitle	= new Text(310, 17, 5, 8);
+	_txtTitle	= new Text(310, 16, 5, 8);
 
-	_txtDelete	= new Text(310, 9, 5, 23);
+	_txtDelete	= new Text(310, 9, 5, 24);
 
-	_txtName	= new Text(176, 9, 16, 32);
-	_txtDate	= new Text(84, 9, 222, 32);
+	_txtName	= new Text(176, 9, 16, 33);
+	_txtDate	= new Text(84, 9, 204, 33);
 
-	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 32);
-	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 222, 32);
+	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 33);
+	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 33);
 
-	_lstSaves	= new TextList(285, 121, 16, 41);
+	_lstSaves	= new TextList(285, 121, 16, 42);
 
 	_txtDetails = new Text(288, 9, 16, 165);
 
@@ -182,8 +182,7 @@ ListGamesState::ListGamesState(
 
 	_lstSaves->setColor(Palette::blockOffset(8)+10);
 	_lstSaves->setArrowColor(Palette::blockOffset(8)+5);
-//	_lstSaves->setColumns(5, 168, 30, 26, 24, 28);
-	_lstSaves->setColumns(3, 188, 60, 40);
+	_lstSaves->setColumns(3, 188, 60, 29);
 	_lstSaves->setSelectable();
 	_lstSaves->setBackground(_window);
 	_lstSaves->setMargin();

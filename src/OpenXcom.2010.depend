@@ -4580,7 +4580,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1409954762 source:f:\git\openxcom\src\basescape\baseview.cpp
+1411255672 source:f:\git\openxcom\src\basescape\baseview.cpp
 	"BaseView.h"
 	<cmath>
 	<limits>
@@ -4698,7 +4698,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/BattlescapeGame.h"
 
-1411190875 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1411255729 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -6405,7 +6405,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1411090359 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1411255759 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -7736,7 +7736,7 @@
 1404096023 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1409183349 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1411256683 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -7764,7 +7764,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1411228006 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1411278716 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7900,7 +7900,7 @@
 1404096023 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1411221808 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1411277667 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1404096023 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -7925,7 +7925,7 @@
 	<string>
 	<vector>
 
-1410767053 source:f:\git\openxcom\src\geoscape\globe.cpp
+1411261525 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -8011,7 +8011,7 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1411190184 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1411256693 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -8102,7 +8102,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/SoldierDiary.h"
 
-1405214012 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
+1411265120 source:f:\git\openxcom\src\geoscape\multipletargetsstate.cpp
 	"MultipleTargetsState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -8234,7 +8234,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1409954762 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1411259053 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	<cmath>
 	"ConfirmCydoniaState.h"
@@ -8278,7 +8278,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1411221824 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1411277992 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -8295,6 +8295,7 @@
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleUfo.h"
 	"../Savegame/AlienMission.h"
+	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
@@ -9464,7 +9465,7 @@
 1410913002 source:f:\git\openxcom\src\ruleset\unit.cpp
 	"Unit.h"
 
-1409606081 source:f:\git\openxcom\src\savegame\alienbase.cpp
+1411261807 source:f:\git\openxcom\src\savegame\alienbase.cpp
 	"AlienBase.h"
 	<sstream>
 	"../Engine/Language.h"
@@ -9550,7 +9551,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1411098346 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1411256075 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9801,7 +9802,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1410581184 source:f:\git\openxcom\src\savegame\ufo.cpp
+1411261767 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	<sstream>
 	<algorithm>
@@ -11830,7 +11831,7 @@
 	<string>
 	"ListGamesState.h"
 
-1411190028 source:f:\git\openxcom\src\menu\listgamesstate.cpp
+1411279495 source:f:\git\openxcom\src\menu\listgamesstate.cpp
 	"ListGamesState.h"
 	<utility>
 	"DeleteGameState.h"

@@ -61,7 +61,7 @@ namespace OpenXcom
  */
 SelectDestinationState::SelectDestinationState(
 		Craft* craft,
-		Globe* globe,
+		Globe* globe, // kL_note: Globe is redudant here, use geo->getGlobe()
 		GeoscapeState* geo) // kL_add
 	:
 		_craft(craft),
@@ -213,8 +213,7 @@ void SelectDestinationState::handle(Action* action)
 }
 
 /**
- * Processes any left-clicks for picking a target,
- * or right-clicks to scroll the globe.
+ * Processes any left-clicks for picking a target, or right-clicks to scroll the globe.
  * @param action Pointer to an action.
  */
 void SelectDestinationState::globeClick(Action* action)

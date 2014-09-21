@@ -40,6 +40,7 @@
 #include "../Ruleset/RuleUfo.h"
 
 #include "../Savegame/AlienMission.h"
+#include "../Savegame/Base.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
 
@@ -49,25 +50,29 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Ufo Detected window.
- * @param ufo		- pointer to a UFO to get info from
- * @param state		- pointer to GeoscapeState
- * @param detected	- true if the UFO has just been detected
- * @param hyper		- true if the UFO has been hyperdetected
- * @param contact	- true if radar contact is established
+ * For hyperdetected UFOs without radar contact.
+ * @param ufo			- pointer to a UFO to get info from
+ * @param state			- pointer to GeoscapeState
+ * @param detected		- true if the UFO has just been detected
+ * @param hyper			- true if the UFO has been hyperdetected
+ * @param contact		- true if radar contact is established (default true)
+ * @param hyperBases	- vector of pointers to Bases that hyperdetected UFO (default NULL)
  */
 UfoDetectedState::UfoDetectedState(
 		Ufo* ufo,
 		GeoscapeState* state,
 		bool detected,
 		bool hyper,
-		bool contact)
+		bool contact,
+		std::vector<Base*> hyperBases)	// yeh this should be pass-by-pointer ..... const ptr.
 	:
 		_ufo(ufo),
-		_state(state)
-//		_hyperwave(hyper)
+		_state(state),
+		_contact(contact)
 {
-	// Generate UFO ID
-	if (_ufo->getId() == 0)
+	state->getGlobe()->rotateStop();
+
+	if (_ufo->getId() == 0) // generate UFO-ID
 		_ufo->setId(_game->getSavedGame()->getId("STR_UFO"));
 
 	if (_ufo->getAltitude() == "STR_GROUND"
@@ -82,14 +87,15 @@ UfoDetectedState::UfoDetectedState(
 	{
 		_window			= new Window(this, 224, 170, 16, 10, POPUP_BOTH);
 
-		_txtHyperwave	= new Text(216, 17, 20, 45);
+		_txtHyperwave	= new Text(216, 16, 20, 45);
 		_lstInfo2		= new TextList(192, 33, 32, 98);
+		_txtBases		= new Text(100, 41, 32, 135);
 	}
 	else
 		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 
 
-	_txtUfo			= new Text(208, 17, 32, 56);
+	_txtUfo			= new Text(192, 16, 32, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);
 	_lstInfo		= new TextList(192, 33, 32, 85);
 	_btnCentre		= new TextButton(192, 16, 32, 124);
@@ -115,14 +121,15 @@ UfoDetectedState::UfoDetectedState(
 	add(_txtUfo);
 	add(_txtDetected);
 	add(_lstInfo);
-	add(_btnIntercept);
 	add(_btnCentre);
+	add(_btnIntercept);
 	add(_btnCancel);
 
 	if (hyper)
 	{
 		add(_txtHyperwave);
 		add(_lstInfo2);
+		add(_txtBases);
 	}
 
 	centerAllSurfaces();
@@ -160,9 +167,8 @@ UfoDetectedState::UfoDetectedState(
 
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
-	{
 		heading = "STR_NONE_UC";
-	}
+
 	_lstInfo->addRow(
 					2,
 					tr("STR_HEADING").c_str(),
@@ -186,7 +192,6 @@ UfoDetectedState::UfoDetectedState(
 	_btnCentre->onKeyboardPress(
 					(ActionHandler)& UfoDetectedState::btnCentreClick,
 					Options::keyOk);
-	_btnCentre->setVisible(contact);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
 	_btnCancel->setText(tr("STR_CANCEL_UC"));
@@ -225,6 +230,24 @@ UfoDetectedState::UfoDetectedState(
 						tr("STR_ZONE").c_str(),
 						tr(_ufo->getMission()->getRegion()).c_str());
 		_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
+
+		if (contact == false)
+		{
+			_btnCentre->setX(216);
+			_btnCentre->setWidth(88);
+
+			_txtBases->setColor(Palette::blockOffset(8)+5);
+
+			std::wostringstream bases;
+			for (std::vector<Base*>::const_iterator
+					i = hyperBases.begin();
+					i != hyperBases.end();
+					++i)
+			{
+				bases << (*i)->getName(_game->getLanguage()) << L"\n";
+			}
+			_txtBases->setText(bases.str());
+		}
 	}
 }
 
@@ -259,6 +282,7 @@ void UfoDetectedState::btnInterceptClick(Action*)
 void UfoDetectedState::btnCentreClick(Action*)
 {
 	_state->timerReset();
+
 	_state->getGlobe()->center(
 							_ufo->getLongitude(),
 							_ufo->getLatitude());
