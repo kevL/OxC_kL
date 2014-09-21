@@ -1883,9 +1883,11 @@ BattleUnit* TileEngine::hit(
 										pTarget_voxel.z / 24)); */
 		//Log(LOG_INFO) << ". targetTile " << tile->getPosition() << " targetVoxel " << pTarget_voxel;
 
-		if (!tile)
+		if (tile == NULL)
 		{
 			//Log(LOG_INFO) << ". Position& pTarget_voxel : NOT Valid, return NULL";
+			_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
+
 			return NULL;
 		}
 
@@ -1903,7 +1905,7 @@ BattleUnit* TileEngine::hit(
 		// and take out the 'melee' parameter from voxelCheck() unless
 		// I want to flesh-out melee & psi attacks more than they are.
 		int part = VOXEL_UNIT; // kL, no longer const
-		if (!melee) // kL
+		if (melee == false) // kL
 		{
 			part = voxelCheck(
 							pTarget_voxel,
@@ -2186,10 +2188,14 @@ BattleUnit* TileEngine::hit(
 
 		//if (buTarget) Log(LOG_INFO) << "TileEngine::hit() EXIT, return buTarget";
 		//else Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[0]";
+		_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
+
 
 		return buTarget;
 	}
 	//else Log(LOG_INFO) << ". DT_ = " << static_cast<int>(type);
+
+	_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
 
 	//Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[1]";
 	return NULL;

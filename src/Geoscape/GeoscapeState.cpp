@@ -1893,6 +1893,7 @@ void GeoscapeState::time10Minutes()
 							&& (*c)->detect(*u))
 						{
 							contact = true;
+							(*u)->setDetected();
 							break;
 						}
 					}
@@ -1921,7 +1922,7 @@ void GeoscapeState::time10Minutes()
 						b != _game->getSavedGame()->getBases()->end();
 						++b)
 				{
-					switch ((*b)->detect(*u)) // note: this lets a UFO blip on/off radar scope
+					switch ((*b)->detect(*u)) // note: this lets a UFO blip off radar scope
 					{
 						case 3:
 							contact = true;

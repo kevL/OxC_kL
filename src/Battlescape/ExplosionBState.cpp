@@ -425,7 +425,9 @@ void ExplosionBState::explode()
 
 	if (_hit)
 	{
-		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
+		// kL_note: Try moving this to TileEngine::hit()
+		// so I can tell whether Firing XP is to be awarded or not, there.
+//		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 
 		if (_unit != NULL
 			&& _unit->isOut() == false)
@@ -438,7 +440,7 @@ void ExplosionBState::explode()
 			&& _unit->getOriginalFaction() == FACTION_PLAYER
 			&& _unit->getFaction() == FACTION_PLAYER)
 		{
-			_unit->addMeleeExp(); // +1xp for swinging
+			_unit->addMeleeExp(); // 1xp for swinging
 
 			if (_hitSuccess)
 			{
