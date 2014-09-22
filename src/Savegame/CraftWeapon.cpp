@@ -185,8 +185,8 @@ int CraftWeapon::rearm(
 }
 
 /**
- * Fires a projectile from craft's weapon.
- * @return, Pointer to the new projectile
+ * Fires a projectile from this CraftWeapon.
+ * @return, pointer to the new projectile
  */
 CraftWeaponProjectile* CraftWeapon::fire() const
 {
@@ -202,9 +202,9 @@ CraftWeaponProjectile* CraftWeapon::fire() const
 }
 
 /**
- * Get how many clips are loaded in this weapon.
- * @param ruleset, A pointer to the core ruleset
- * @return, The number of clips loaded
+ * Get how many clips are loaded in this CraftWeapon.
+ * @param ruleset - pointer to the core ruleset
+ * @return, the number of clips loaded
  */
 int CraftWeapon::getClipsLoaded(Ruleset* ruleset)
 {
