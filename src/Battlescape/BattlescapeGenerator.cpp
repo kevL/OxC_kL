@@ -3253,7 +3253,7 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 						&& lat >= 0.0)))
 			{
 				Log(LOG_INFO) << "Gen:getTerrain() return = " << (*i);
-//test				return terrain;
+//test			return terrain;
 				ret = terrain; // test
 			}
 		}

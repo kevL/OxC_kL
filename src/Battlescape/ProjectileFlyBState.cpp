@@ -736,7 +736,9 @@ bool ProjectileFlyBState::createNewProjectile()
 		_parent->getResourcePack()->getSoundByDepth(
 												_parent->getDepth(),
 												sound)
-											->play(-1, _parent->getMap()->getSoundAngle(_unit->getPosition()));
+											->play(
+												-1,
+												_parent->getMap()->getSoundAngle(_unit->getPosition()));
 
 	//Log(LOG_INFO) << ". createNewProjectile() ret TRUE";
 	return true;
@@ -1333,7 +1335,9 @@ void ProjectileFlyBState::performMeleeAttack()
 		_parent->getResourcePack()->getSoundByDepth(
 												_parent->getDepth(),
 												sound)
-											->play(-1, _parent->getMap()->getSoundAngle(_action.target));
+											->play(
+												-1,
+												_parent->getMap()->getSoundAngle(_action.target));
 
 	if (!_parent->getSave()->getDebugMode()
 		&& _action.weapon->getRules()->getBattleType() == BT_MELEE

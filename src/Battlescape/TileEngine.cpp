@@ -2142,8 +2142,6 @@ BattleUnit* TileEngine::hit(
 //kL												buTarget->getPosition().x * 16,
 //kL												buTarget->getPosition().y * 16,
 //kL												buTarget->getPosition().z * 24);
-//													buTarget->getPosition().x * 16 + 8, // kL
-//													buTarget->getPosition().y * 16 + 8, // kL
 													buTarget->getPosition().x * 16 + 16,	// kL, cyberdisc a big unit.
 													buTarget->getPosition().y * 16 + 16,	// kL
 													buTarget->getPosition().z * 24 + 12);	// kL

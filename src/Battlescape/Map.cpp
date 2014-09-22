@@ -2929,7 +2929,7 @@ const int Map::getSoundAngle(Position pos)
 	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
 
 //	return static_cast<int>(static_cast<double>(screenPos.x) / (static_cast<double>(midPoint) / 80.0)) + 360;
-	return screenPos.x * 44 / midPoint + 360;
+	return screenPos.x * 45 / midPoint + 360;
 }
 
 /**

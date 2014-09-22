@@ -50,13 +50,12 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Ufo Detected window.
- * For hyperdetected UFOs without radar contact.
  * @param ufo			- pointer to a UFO to get info from
  * @param state			- pointer to GeoscapeState
  * @param detected		- true if the UFO has just been detected
  * @param hyper			- true if the UFO has been hyperdetected
  * @param contact		- true if radar contact is established (default true)
- * @param hyperBases	- vector of pointers to Bases that hyperdetected UFO (default NULL)
+ * @param hyperBases	- vector of pointers to Bases that hyperdetected UFO (default empty)
  */
 UfoDetectedState::UfoDetectedState(
 		Ufo* ufo,
@@ -94,7 +93,6 @@ UfoDetectedState::UfoDetectedState(
 	else
 		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 
-
 	_txtUfo			= new Text(192, 16, 32, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);
 	_lstInfo		= new TextList(192, 33, 32, 85);
@@ -115,7 +113,6 @@ UfoDetectedState::UfoDetectedState(
 	}
 	else
 		setPalette("PAL_GEOSCAPE", 7);
-
 
 	add(_window);
 	add(_txtUfo);
@@ -168,7 +165,6 @@ UfoDetectedState::UfoDetectedState(
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
 		heading = "STR_NONE_UC";
-
 	_lstInfo->addRow(
 					2,
 					tr("STR_HEADING").c_str(),
@@ -265,14 +261,14 @@ UfoDetectedState::~UfoDetectedState()
 void UfoDetectedState::btnInterceptClick(Action*)
 {
 	_state->timerReset();
-//kL	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
+//	_state->getGlobe()->center(_ufo->getLongitude(), _ufo->getLatitude());
 
 	_game->popState();
 	_game->pushState(new InterceptState(
 									_state->getGlobe(),
 									NULL,
 									_ufo,
-									_state)); // kL_add.
+									_state));
 }
 
 /**

@@ -1020,10 +1020,11 @@ void DogfightState::move()
 						}
 
 						setStatus("STR_UFO_HIT");
-						_game->getResourcePack()->getSound(
+						playSoundFX(ResourcePack::UFO_HIT, true);
+/*						_game->getResourcePack()->getSound(
 														"GEO.CAT",
 														ResourcePack::UFO_HIT)
-													->play();
+													->play(); */
 
 						p->remove();
 					}
@@ -1063,10 +1064,11 @@ void DogfightState::move()
 							_craft->setDamage(_craft->getDamage() + damage);
 							drawCraftDamage();
 							setStatus("STR_INTERCEPTOR_DAMAGED");
-							_game->getResourcePack()->getSound(
+							playSoundFX(ResourcePack::INTERCEPTOR_HIT, true);
+/*							_game->getResourcePack()->getSound(
 															"GEO.CAT",
 															ResourcePack::INTERCEPTOR_HIT)
-														->play();
+														->play(); */
 
 							if ((_mode == _btnCautious
 									&& _craft->getDamagePercent() > 60)
@@ -1222,10 +1224,11 @@ void DogfightState::move()
 		setStatus("STR_INTERCEPTOR_DESTROYED");
 
 		_timeout += 30;
-		_game->getResourcePack()->getSound(
+		playSoundFX(ResourcePack::INTERCEPTOR_EXPLODE);
+/*		_game->getResourcePack()->getSound(
 										"GEO.CAT",
 										ResourcePack::INTERCEPTOR_EXPLODE)
-									->play();
+									->play(); */
 
 		finalRun = true;
 		_destroyCraft = true;
@@ -1291,10 +1294,11 @@ void DogfightState::move()
 			if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
 			{
 				setStatus("STR_UFO_DESTROYED");
-				_game->getResourcePack()->getSound(
+				playSoundFX(ResourcePack::UFO_EXPLODE);
+/*				_game->getResourcePack()->getSound(
 												"GEO.CAT",
 												ResourcePack::UFO_EXPLODE)
-											->play();
+											->play(); */
 
 				for (std::vector<Country*>::iterator
 						country = _game->getSavedGame()->getCountries()->begin();
@@ -1334,10 +1338,11 @@ void DogfightState::move()
 			if (_ufo->getShotDownByCraftId() == _craft->getUniqueId())
 			{
 				setStatus("STR_UFO_CRASH_LANDS");
-				_game->getResourcePack()->getSound(
+				playSoundFX(ResourcePack::UFO_CRASH);
+/*				_game->getResourcePack()->getSound(
 												"GEO.CAT",
 												ResourcePack::UFO_CRASH)
-											->play();
+											->play(); */
 
 				for(std::vector<Country*>::iterator
 						country = _game->getSavedGame()->getCountries()->begin();
@@ -1442,10 +1447,11 @@ void DogfightState::fireWeapon1()
 			p->setHorizontalPosition(HP_LEFT);
 			_projectiles.push_back(p);
 
-			_game->getResourcePack()->getSound(
+			playSoundFX(w1->getRules()->getSound(), true);
+/*			_game->getResourcePack()->getSound(
 											"GEO.CAT",
 											w1->getRules()->getSound())
-										->play();
+										->play(); */
 		}
 	}
 }
@@ -1469,10 +1475,11 @@ void DogfightState::fireWeapon2()
 			p->setHorizontalPosition(HP_RIGHT);
 			_projectiles.push_back(p);
 
-			_game->getResourcePack()->getSound(
+			playSoundFX(w2->getRules()->getSound(), true);
+/*			_game->getResourcePack()->getSound(
 											"GEO.CAT",
 											w2->getRules()->getSound())
-										->play();
+										->play(); */
 		}
 	}
 }
@@ -1504,7 +1511,11 @@ void DogfightState::ufoFireWeapon()
 	p->setPosition(_currentDist - (_ufo->getRules()->getRadius() / 2));
 	_projectiles.push_back(p);
 
-	_game->getResourcePack()->getSound("GEO.CAT", ResourcePack::UFO_FIRE)->play();
+	playSoundFX(ResourcePack::UFO_FIRE, true);
+/*	_game->getResourcePack()->getSound(
+									"GEO.CAT",
+									ResourcePack::UFO_FIRE)
+								->play(); */
 }
 
 /**
@@ -2358,6 +2369,26 @@ const std::string DogfightState::getTextureIcon() // kL
 
 	//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT : " << str;
 	return str;
+}
+
+/**
+ * kL. Plays a sound effect in stereo.
+ * @param sound		- sound to play
+ * @param randAngle	- true to randomize the sound angle, default false to center it
+ */
+void DogfightState::playSoundFX(
+		int sound,
+		bool randAngle) // kL
+{
+	int dir = 360; // stereo center
+
+	if (randAngle)
+		dir += RNG::generate(-45, 45);
+
+	_game->getResourcePack()->getSound(
+									"GEO.CAT",
+									sound)
+								->play(-1, dir);
 }
 
 }

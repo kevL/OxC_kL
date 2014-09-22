@@ -131,6 +131,11 @@ private:
 	/// kL. Gets the globe texture icon to display for the interception.
 	const std::string getTextureIcon(); // kL
 
+	/// kL. Plays a sound effect in stereo.
+	void playSoundFX(
+			int sound,
+			bool randAngle = false); // kL
+
 
 	public:
 		/// Creates the Dogfight state.

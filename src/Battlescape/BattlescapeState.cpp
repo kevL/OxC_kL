@@ -2107,7 +2107,9 @@ void BattlescapeState::btnReloadClick(Action*)
 		_game->getResourcePack()->getSoundByDepth(
 												_save->getDepth(),
 												ResourcePack::ITEM_RELOAD)
-											->play(-1, getMap()->getSoundAngle(_save->getSelectedUnit()->getPosition()));
+											->play(
+												-1,
+												getMap()->getSoundAngle(_save->getSelectedUnit()->getPosition()));
 
 		updateSoldierInfo();
 	}
