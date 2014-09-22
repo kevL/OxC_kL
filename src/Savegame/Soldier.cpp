@@ -104,9 +104,11 @@ Soldier::Soldier(
 		_look	= (SoldierLook)RNG::generate(0, 3);		// kL
 
 		if (_gender == GENDER_MALE)
-			_name = L"pfc.Fritz";						// kL
+			_name = L"uncle Adolf";
+//			_name = L"pfc.Fritz";						// kL
 		else
-			_name = L"pfc.Frita";						// kL
+			_name = L"Eva Braun";
+//			_name = L"pfc.Frita";						// kL
 
 /*kL
 		if (!names->empty())

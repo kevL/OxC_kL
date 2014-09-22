@@ -23,7 +23,7 @@
 
 #include "BattlescapeState.h"
 #include "DebriefingState.h"
-#include "Map.h" // kL, global 'kL_preReveal'
+#include "Map.h" // kL, extern 'kL_preReveal'
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -38,7 +38,7 @@
 
 #include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
-//#include "../Interface/TurnCounter.h" // kL, global 'kL_TurnCount'
+//#include "../Interface/TurnCounter.h" // kL, extern 'kL_TurnCount'
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"

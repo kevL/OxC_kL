@@ -610,8 +610,8 @@ globe:
       - 6.1269355677358
       - 12.289455668395021
       - 6.1708808802358
-    - - 24.02285410589502
-      - 11.795880880236
+    - - 24.045
+      - 11.5
       - 23.75918223089502
       - 13.158185567736
       - 22.17715098089502
@@ -907,7 +907,7 @@ countries: #addborders: type, areas, labelLon, labelLat; kL: fundingBase, fundin
         - 33.15
         - -55
         - -51.5
-    labelLon: 25.0
+    labelLon: 26.0
     labelLat: -52.9
     fundingBase: 130
     fundingCap: 1300
@@ -1117,8 +1117,8 @@ countries: #addborders: type, areas, labelLon, labelLat; kL: fundingBase, fundin
         - 18.5
         - -50.95
         - -48.9
-    labelLon: 13.3
-    labelLat: -50.1
+    labelLon: 16.1
+    labelLat: -50.9
     fundingBase: 125
     fundingCap: 1250
   - type: STR_DENMARK
@@ -1247,8 +1247,8 @@ countries: #addborders: type, areas, labelLon, labelLat; kL: fundingBase, fundin
         - 24.3
         - -47.9
         - -45.9
-    labelLon: 18.8
-    labelLat: -48.0
+    labelLon: 20.5
+    labelLat: -48.3
     fundingBase: 105
     fundingCap: 1050
   - type: STR_INDIA

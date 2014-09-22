@@ -3237,7 +3237,7 @@ void GeoscapeState::btnGraphsClick(Action*)
 
 	timerReset(); // kL
 
-	_game->pushState(new GraphsState());
+	_game->pushState(new GraphsState(_game->getSavedGame()->getCurrentGraph()));
 }
 
 /**

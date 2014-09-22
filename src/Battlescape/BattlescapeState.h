@@ -67,8 +67,8 @@ private:
 		_mouseOverIcons,
 		_mouseOverThreshold;
 	int
-		_fuseFrame, // kL
-		_showConsole, // kL
+		_fuseFrame,
+		_showConsole,
 		_totalMouseMoveX,
 		_totalMouseMoveY,
 		_xBeforeMouseScrolling,
@@ -115,9 +115,9 @@ private:
 		* _btnRightHandItem,
 
 		* _btnVisibleUnit[VISIBLE_MAX],
-		* _btnWounds, // kL
+		* _btnWounds,
 
-		* _btnZeroTUs; // kL
+		* _btnZeroTUs;
 //	ImageButton* _reserve;
 //	ImageButton* _btnReserveNone, * _btnReserveSnap, * _btnReserveAimed, * _btnReserveAuto, * _btnReserveKneel, * _btnZeroTUs;
 	Map* _map;
@@ -137,29 +137,29 @@ private:
 		* _numAmmoLeft,
 		* _numAmmoRight,
 
-		* _numWounds; // kL
+		* _numWounds;
 	Position
 		_cursorPosition,
 		_mapOffsetBeforeDragScroll;
 	SavedBattleGame* _save;
 	Surface
 		* _rank,
-		* _kneel; // kL
-//		* _srfWounds; // kL
+		* _kneel;
+//		* _srfWounds;
 	Text
-		* _txtBaseLabel, // kL
-		* _txtConsole1, // kL
-		* _txtConsole2, // kL
-		* _txtConsole3, // kL
-		* _txtConsole4, // kL
+		* _txtBaseLabel,
+		* _txtConsole1,
+		* _txtConsole2,
+//		* _txtConsole3,
+//		* _txtConsole4,
 		* _txtDebug,
 //		* _txtTooltip;
 		* _txtName,
-		* _txtShade, // kL
-		* _txtTerrain, // kL
-		* _txtTurn; // kL
-//	TextList* _lstConsole; // kL
-	TextList* _lstExp; // kL
+		* _txtShade,
+		* _txtTerrain,
+		* _txtTurn;
+//	TextList* _lstConsole;
+	TextList* _lstExp;
 	Timer
 		* _animTimer,
 		* _gameTimer;
@@ -307,8 +307,7 @@ private:
 		/// Show debug message.
 		void debug(const std::wstring& message);
 		/// Show warning message.
-//kL	void warning(const std::string& message);
-		void warning( // kL
+		void warning(
 				const std::string& message,
 				const bool useArg = false,
 				const int arg = -1);

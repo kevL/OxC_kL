@@ -229,11 +229,13 @@ private:
 		_ironman,
 		_warned;
 	int
+		_curGraph, // kL
+//		_curGraphRowCountry, // kL
 		_monthsPassed;
 //kL	_globeZoom,
 	size_t
-		_globeZoom, // kL
-		_curRowMatrix; // kL
+		_curRowMatrix, // kL
+		_globeZoom; // kL
 //kL	_selectedBase;
 	double
 		_globeLat,
@@ -500,6 +502,11 @@ private:
 		void setGraphCountryToggles(const std::string& value);
 		/// Sets the GraphFinanceToggles.
 		void setGraphFinanceToggles(const std::string& value);
+
+		/// kL. Sets the current Graph page.
+		void setCurrentGraph(int page); // kL
+		/// kL. Gets the current Graph page.
+		int getCurrentGraph() const; // kL
 
 		/// Increment the month counter.
 		void addMonth();

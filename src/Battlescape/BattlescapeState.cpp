@@ -82,7 +82,7 @@
 #include "../Interface/NumberText.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
-//#include "../Interface/TurnCounter.h"
+//#include "../Interface/TurnCounter.h" // kL
 
 #include "../Menu/LoadGameState.h"
 #include "../Menu/PauseState.h"
@@ -283,8 +283,8 @@ BattlescapeState::BattlescapeState()
 
 	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);
 	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
-	_txtConsole3	= new Text(screenWidth / 2, y, 0, 0);
-	_txtConsole4	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
+//	_txtConsole3	= new Text(screenWidth / 2, y, 0, 0);
+//	_txtConsole4	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
 
 	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 
@@ -438,22 +438,22 @@ BattlescapeState::BattlescapeState()
 //	_turnCounter->setColor(Palette::blockOffset(8));
 	add(_txtConsole1);
 	add(_txtConsole2);
-	add(_txtConsole3);
-	add(_txtConsole4);
+//	add(_txtConsole3);
+//	add(_txtConsole4);
 
 	_txtConsole1->setColor(Palette::blockOffset(8)); // blue
 	_txtConsole1->setHighContrast();
 	_txtConsole2->setColor(Palette::blockOffset(8));
 	_txtConsole2->setHighContrast();
-	_txtConsole3->setColor(Palette::blockOffset(8));
-	_txtConsole3->setHighContrast();
-	_txtConsole4->setColor(Palette::blockOffset(8));
-	_txtConsole4->setHighContrast();
+//	_txtConsole3->setColor(Palette::blockOffset(8));
+//	_txtConsole3->setHighContrast();
+//	_txtConsole4->setColor(Palette::blockOffset(8));
+//	_txtConsole4->setHighContrast();
 
 	_txtConsole1->setVisible(_showConsole > 0);
 	_txtConsole2->setVisible(_showConsole > 1);
-	_txtConsole3->setVisible(_showConsole > 2);
-	_txtConsole4->setVisible(_showConsole > 3);
+//	_txtConsole3->setVisible(_showConsole > 2);
+//	_txtConsole4->setVisible(_showConsole > 3);
 
 	add(_txtTerrain);
 	add(_txtShade);
@@ -863,9 +863,7 @@ void BattlescapeState::init()
 //	_txtTooltip->setText(L"");
 
 /*	if (_save->getKneelReserved())
-	{
 		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
-	}
 
 	_btnReserveKneel->toggle(_save->getKneelReserved());
 	_battleGame->setKneelReserved(_save->getKneelReserved()); */
@@ -1054,8 +1052,8 @@ void BattlescapeState::mapOver(Action* action)
 	{
 		_txtConsole1->setText(L"");
 		_txtConsole2->setText(L"");
-		_txtConsole3->setText(L"");
-		_txtConsole4->setText(L"");
+//		_txtConsole3->setText(L"");
+//		_txtConsole4->setText(L"");
 
 		Position pos;
 		_map->getSelectorPosition(&pos);
@@ -1073,10 +1071,10 @@ void BattlescapeState::mapOver(Action* action)
 			size_t row = 0;
 			std::wostringstream
 				ss,
-				ss1,
-				ss2,
-				ss3,
-				ss4;
+				ss1, // Console #1
+				ss2; // Console #2
+//				ss3, // Console #3
+//				ss4; // Console #4
 			std::wstring
 				ws = L"",
 				ws2 = ws,
@@ -1176,7 +1174,7 @@ void BattlescapeState::mapOver(Action* action)
 				if (row == 50) // Console #2
 				{
 					ss << L"> more >";
-					row++;
+//					row++;
 				}
 				if (26 < row && row < 52)
 				{
@@ -1185,13 +1183,13 @@ void BattlescapeState::mapOver(Action* action)
 				}
 				if (row == 51)
 				{
-					if (_showConsole == 2)
-						break;
+//					if (_showConsole == 2)
+					break;
 
-					ss.str(L"");
+//					ss.str(L"");
 				}
 
-				if (row == 76) // Console #3
+/*				if (row == 76) // Console #3
 				{
 					ss << L"> more >";
 					row++;
@@ -1219,7 +1217,7 @@ void BattlescapeState::mapOver(Action* action)
 					ss4 << ss.str();
 				}
 				if (row == 102)
-					break;
+					break; */
 
 
 				row++;
@@ -1227,8 +1225,8 @@ void BattlescapeState::mapOver(Action* action)
 
 			_txtConsole1->setText(ss1.str());
 			_txtConsole2->setText(ss2.str());
-			_txtConsole3->setText(ss3.str());
-			_txtConsole4->setText(ss4.str());
+//			_txtConsole3->setText(ss3.str());
+//			_txtConsole4->setText(ss4.str());
 		}
 		else
 		{
@@ -2162,25 +2160,31 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_showConsole = 1;
 
 			_txtConsole2->setText(L"");
-			_txtConsole3->setText(L"");
-			_txtConsole4->setText(L"");
+//			_txtConsole3->setText(L"");
+//			_txtConsole4->setText(L"");
 		}
 		else if (_showConsole == 1)
 		{
 			_showConsole = 2;
 
-			_txtConsole3->setText(L"");
-			_txtConsole4->setText(L"");
+//			_txtConsole3->setText(L"");
+//			_txtConsole4->setText(L"");
 		}
 		else if (_showConsole == 2)
 		{
-			_showConsole = 3;
+//			_showConsole = 3;
+			_showConsole = 0;
 
 			_txtConsole1->setText(L"");
 			_txtConsole2->setText(L"");
-			_txtConsole4->setText(L"");
+//			_txtConsole4->setText(L"");
+
+			_txtTerrain->setVisible();
+			_txtShade->setVisible();
+			_txtTurn->setVisible();
+			_lstExp->setVisible();
 		}
-		else if (_showConsole == 3)
+/*		else if (_showConsole == 3)
 		{
 			_showConsole = 4;
 
@@ -2200,12 +2204,14 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
 			_lstExp->setVisible();
-		}
+		} */
 
-		_txtConsole1->setVisible(0 < _showConsole && _showConsole < 3);
+		_txtConsole1->setVisible(_showConsole > 0);
+		_txtConsole2->setVisible(_showConsole > 1);
+/*		_txtConsole1->setVisible(0 < _showConsole && _showConsole < 3);
 		_txtConsole2->setVisible(1 < _showConsole && _showConsole < 3);
 		_txtConsole3->setVisible(2 < _showConsole);
-		_txtConsole4->setVisible(3 < _showConsole);
+		_txtConsole4->setVisible(3 < _showConsole); */
 	}
 }
 
@@ -3383,8 +3389,8 @@ void BattlescapeState::mouseInIcons(Action*)
 
 	_txtConsole1->setText(L"");
 	_txtConsole2->setText(L"");
-	_txtConsole3->setText(L"");
-	_txtConsole4->setText(L"");
+//	_txtConsole3->setText(L"");
+//	_txtConsole4->setText(L"");
 
 	_txtTerrain->setVisible();
 	_txtShade->setVisible();
@@ -3725,6 +3731,15 @@ void BattlescapeState::updateExpData() // kL
 					2,
 					xpType.at(i).c_str(),
 					Text::formatNumber(xp[i]).c_str());
+
+		if (xp[i] > 10)
+			_lstExp->setCellColor(i, 1, Palette::blockOffset(0));	// white
+		else if (xp[i] > 5)
+			_lstExp->setCellColor(i, 1, Palette::blockOffset(10));	// brown
+		else if (xp[i] > 2)
+			_lstExp->setCellColor(i, 1, Palette::blockOffset(1));	// orange
+		else if (xp[i] > 0)
+			_lstExp->setCellColor(i, 1, Palette::blockOffset(3));	// green
 	}
 
 //	_lstExp->draw();

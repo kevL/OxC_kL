@@ -51,7 +51,7 @@ class GraphsState
 {
 
 private:
-	static const size_t GRAPH_MAX_BUTTONS = 19; // does not include TOTAL btn.
+	static const size_t GRAPH_MAX_BUTTONS = 19; // # visible btns. Does not include TOTAL btn.
 
 	bool
 		_alien,
@@ -129,13 +129,15 @@ private:
 			ToggleTextButton* btn,
 			Text* aliens,
 			Text* xcom);
+	/// kL. Shifts buttons to their pre-Graph cTor row.
+	void initButtons(); // kL
 
 
 	public:
 		static Sound* soundPop;
 
 		/// Creates the Graphs state.
-		GraphsState();
+		GraphsState(int curGraph = 0);
 		/// Cleans up the Graphs state.
 		~GraphsState();
 

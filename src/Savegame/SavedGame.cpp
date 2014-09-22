@@ -136,7 +136,9 @@ SavedGame::SavedGame()
 		_graphRegionToggles(""),
 		_graphCountryToggles(""),
 		_graphFinanceToggles(""),
-		_curRowMatrix(0) // kL
+		_curRowMatrix(0), // kL
+		_curGraph(0) // kL
+//		_curGraphRowCountry(0) // kL
 //kL	_selectedBase(0),
 //kL	_lastselectedArmor("STR_ARMOR_NONE_UC")
 {
@@ -2240,6 +2242,24 @@ void SavedGame::setGraphCountryToggles(const std::string& value)
 void SavedGame::setGraphFinanceToggles(const std::string& value)
 {
 	_graphFinanceToggles = value;
+}
+
+/**
+ * kL. Sets the current Graph page.
+ * @param page - current page shown by Graphs
+ */
+void SavedGame::setCurrentGraph(int page) // kL
+{
+	_curGraph = page;
+}
+
+/**
+ * kL. Gets the current Graph page.
+ * @return, current page to show in Graphs
+ */
+int SavedGame::getCurrentGraph() const // kL
+{
+	return _curGraph;
 }
 
 /**

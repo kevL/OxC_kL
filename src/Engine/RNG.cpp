@@ -59,7 +59,7 @@ uint64_t next()
 
 /**
 * Returns the current seed in use by the generator.
-* @return Current seed.
+* @return, current seed
 */
 uint64_t getSeed()
 {
@@ -68,7 +68,7 @@ uint64_t getSeed()
 
 /**
 * Changes the current seed in use by the generator.
-* @param n New seed.
+* @param n - new seed
 */
 void setSeed(uint64_t n)
 {
@@ -77,9 +77,9 @@ void setSeed(uint64_t n)
 
 /**
  * Generates a random integer number within a certain range.
- * @param min Minimum number, inclusive.
- * @param max Maximum number, inclusive.
- * @return Generated number.
+ * @param min - minimum number, inclusive
+ * @param max - maximum number, inclusive
+ * @return, generated number
  */
 int generate(
 		int min,
@@ -90,14 +90,14 @@ int generate(
 	if (max < min)	// CyberAngel
 		max = min;	// http://openxcom.org/bugs/openxcom/issues/736
 
-	return static_cast<int>(rand %(max - min + 1) + min);
+	return (static_cast<int>(rand %(max - min + 1)) + min);
 }
 
 /**
  * Generates a random decimal number within a certain range.
- * @param min Minimum number.
- * @param max Maximum number.
- * @return Generated number.
+ * @param min - minimum number
+ * @param max - maximum number
+ * @return, generated number
  */
 double generate(
 		double min,
@@ -128,10 +128,10 @@ double generate(
 }
 
 /**
- * Normal random variate generator
- * @param mean, mean
- * @param standardDeviation, standard deviation
- * @return, normally distributed value.
+ * Normal random variate generator.
+ * @param mean				- mean
+ * @param standardDeviation	- standard deviation
+ * @return, normally distributed value
  */
 double boxMuller(
 		double mean,
@@ -176,10 +176,9 @@ double boxMuller(
 }
 
 /**
- * Generates a random percent chance of an event occuring,
- * and returns the result.
- * @param value, Value percentage (0-100%)
- * @return, True if the chance succeeded.
+ * Generates a random percent chance of an event occuring and returns the result.
+ * @param value - value percentage (0-100%)
+ * @return, true if the chance succeeded
  */
 bool percent(int value)
 {
@@ -193,8 +192,8 @@ bool percent(int value)
 
 /**
  * Generates a random positive integer up to a number.
- * @param max Maximum number, exclusive.
- * @return, Generated number.
+ * @param max - maximum number, exclusive
+ * @return, generated number
  */
 int generateEx(int max)
 {

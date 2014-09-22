@@ -65,19 +65,17 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
 
-
 /*
-  1) Map origin is top corner.
-  2) X axis goes downright. (width of the map)
-  3) Y axis goes downleft. (length of the map
-  4) Z axis goes up (height of the map)
+1) Map origin is top corner.
+2) X axis goes downright. (width of the map)
+3) Y axis goes downleft. (length of the map
+4) Z axis goes up (height of the map)
 
-           0,0
-			/\
-	    y+ /  \ x+
-		   \  /
-		    \/
-*/
+   0,0
+    /\
+y+ /  \ x+
+   \  /
+    \/      */
 
 namespace OpenXcom
 {
@@ -2929,7 +2927,7 @@ const int Map::getSoundAngle(Position pos)
 	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
 
 //	return static_cast<int>(static_cast<double>(screenPos.x) / (static_cast<double>(midPoint) / 80.0)) + 360;
-	return screenPos.x * 45 / midPoint + 360;
+	return screenPos.x * 44 / midPoint + 360;
 }
 
 /**

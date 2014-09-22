@@ -55,6 +55,8 @@ namespace OpenXcom
 
 Sound* GraphsState::soundPop = 0;
 
+static int curRowCountry = 0;
+
 
 /**
  * Helper struct for scrolling past GRAPH_MAX_BUTTONS.
@@ -95,11 +97,12 @@ struct GraphBtnInfo
 /**
  * Initializes all the elements in the Graphs screen.
  */
-GraphsState::GraphsState()
+GraphsState::GraphsState(int curGraph)
 	:
 		_btnRegionsOffset(0),
 		_btnCountriesOffset(0),
 		_current(-1),
+//		_curRowCountry(0),
 		_vis(true)
 {
 	_bg				= new InteractiveSurface(320, 200, 0, 0);
@@ -184,7 +187,7 @@ GraphsState::GraphsState()
 
 		// always save all the regions in toggles
 		_regionToggles.push_back(new GraphBtnInfo(
-												tr((*region)->getRules()->getType()),
+												tr((*region)->getRules()->getType()), // name of Region
 												colorOffset * 4 - 42,
 												alienAct,
 												xcomAct,
@@ -312,7 +315,7 @@ GraphsState::GraphsState()
 
 		// always save all the countries in toggles
 		_countryToggles.push_back(new GraphBtnInfo(
-												tr((*country)->getRules()->getType()),
+												tr((*country)->getRules()->getType()), // name of Country
 												colorOffset * 4 - 42,
 												alienAct,
 												xcomAct,
@@ -329,7 +332,7 @@ GraphsState::GraphsState()
 													static_cast<int>(offset) * 10));
 			_btnCountries.at(offset)->setColor(Palette::blockOffset(9)+7);
 			_btnCountries.at(offset)->setInvertColor(colorOffset * 4 - 42);
-			_btnCountries.at(offset)->setText(tr((*country)->getRules()->getType()));
+			_btnCountries.at(offset)->setText(tr((*country)->getRules()->getType())); // name of Country
 			_btnCountries.at(offset)->onMousePress(
 							(ActionHandler)& GraphsState::btnCountryListClick,
 							SDL_BUTTON_LEFT);
@@ -604,8 +607,34 @@ GraphsState::GraphsState()
 	}
 
 
+	initButtons();
 
-	btnUfoRegionClick(NULL); // initialize this State NOW.
+	switch (curGraph)
+	{
+		case 0:
+			btnUfoRegionClick(NULL);
+		break;
+		case 1:
+			btnXcomRegionClick(NULL);
+		break;
+		case 2:
+			btnUfoCountryClick(NULL);
+		break;
+		case 3:
+			btnXcomCountryClick(NULL);
+		break;
+		case 4:
+			btnIncomeClick(NULL);
+		break;
+		case 5:
+			btnFinanceClick(NULL);
+		break;
+
+		default:
+			btnUfoRegionClick(NULL);
+		break;
+	}
+
 
 	_game->getResourcePack()->getSurface("GRAPHS.SPK")->blit(_bg);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -803,6 +832,7 @@ void GraphsState::btnUfoRegionClick(Action*)
 		return;
 
 	_current = 0;
+	_game->getSavedGame()->setCurrentGraph(0);
 
 //	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
@@ -844,6 +874,7 @@ void GraphsState::btnXcomRegionClick(Action*)
 		return;
 
 	_current = 1;
+	_game->getSavedGame()->setCurrentGraph(1);
 
 //	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
@@ -885,6 +916,7 @@ void GraphsState::btnUfoCountryClick(Action*)
 		return;
 
 	_current = 2;
+	_game->getSavedGame()->setCurrentGraph(2);
 
 //	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
@@ -926,6 +958,7 @@ void GraphsState::btnXcomCountryClick(Action*)
 		return;
 
 	_current = 3;
+	_game->getSavedGame()->setCurrentGraph(3);
 
 //	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
@@ -967,6 +1000,7 @@ void GraphsState::btnIncomeClick(Action*)
 		return;
 
 	_current = 4;
+	_game->getSavedGame()->setCurrentGraph(4);
 
 //	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
@@ -1003,6 +1037,7 @@ void GraphsState::btnFinanceClick(Action*)
 		return;
 
 	_current = 5;
+	_game->getSavedGame()->setCurrentGraph(5);
 
 //	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
@@ -1984,6 +2019,24 @@ void GraphsState::drawFinanceLines() // Council Analytics
 }
 
 /**
+ * kL. Shifts buttons to their pre-Graph cTor row.
+ */
+void GraphsState::initButtons() // kL
+{
+	if (_countryToggles.size() <= GRAPH_MAX_BUTTONS) // if too few countries - return
+		return;
+
+	scrollButtons(
+			_countryToggles,
+			_btnCountries,
+			_txtCountryActivityAlien,
+			_txtCountryActivityXCom,
+			_blinkCountry,
+			_btnCountriesOffset,
+			curRowCountry);
+}
+
+/**
  * 'Shift' the buttons to display only GRAPH_MAX_BUTTONS - reset their state from toggles
  */
 void GraphsState::shiftButtons(Action* action)
@@ -2071,6 +2124,7 @@ void GraphsState::scrollButtons(
 	// kL_note: This changes either '_btnCountriesOffset'
 	// or '_btnRegionsOffset' throughout this here class-object:
 	offset += static_cast<size_t>(step);
+	curRowCountry = offset; // aka _btnCountriesOffset ( note: would conflict w/ _btnRegionsOffset )
 
 	size_t row = 0;
 

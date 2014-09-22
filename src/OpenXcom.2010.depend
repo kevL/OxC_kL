@@ -4432,7 +4432,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1410833452 f:\git\openxcom\src\savegame\savedgame.h
+1411358027 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
 	<string>
 	<vector>
@@ -4539,7 +4539,7 @@
 1404096023 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1411218788 f:\git\openxcom\src\geoscape\geoscapestate.h
+1411354820 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<list>
 	"../Engine/State.h"
 
@@ -5647,7 +5647,7 @@
 1404096022 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1411081431 f:\git\openxcom\src\battlescape\battlescapestate.h
+1411348850 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5917,7 +5917,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1411048302 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1411347977 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6038,7 +6038,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1411190400 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1411350460 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6442,7 +6442,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1411306875 source:f:\git\openxcom\src\battlescape\map.cpp
+1411365740 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6575,7 +6575,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1410557021 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1411365960 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6686,7 +6686,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1411097964 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1411346206 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6765,7 +6765,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1411306026 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1411342140 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7173,7 +7173,7 @@
 	<fstream>
 	"Exception.h"
 
-1410478794 source:f:\git\openxcom\src\engine\rng.cpp
+1411353464 source:f:\git\openxcom\src\engine\rng.cpp
 	"RNG.h"
 	<cmath>
 	<ctime>
@@ -7669,7 +7669,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1410659157 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1411351848 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7764,7 +7764,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1411299485 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1411355576 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7865,7 +7865,7 @@
 	"../Savegame/Waypoint.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1407525432 f:\git\openxcom\src\geoscape\graphsstate.h
+1411367419 f:\git\openxcom\src\geoscape\graphsstate.h
 	<string>
 	"../Engine/State.h"
 
@@ -7979,7 +7979,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1411190205 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1411367482 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -8278,7 +8278,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1411280509 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1411341918 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -9697,7 +9697,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1410833495 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1411358029 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9738,7 +9738,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1409092009 source:f:\git\openxcom\src\savegame\soldier.cpp
+1411366036 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
