@@ -8280,7 +8280,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1411481181 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1411488749 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -9555,7 +9555,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1411256075 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1411487208 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

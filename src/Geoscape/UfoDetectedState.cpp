@@ -175,7 +175,7 @@ UfoDetectedState::UfoDetectedState(
 
 	std::string heading = _ufo->getDirection();
 	if (_ufo->getStatus() != Ufo::FLYING)
-		heading = "STR_NONE_UC";
+		heading = "STR_UNKNOWN";
 	_lstInfo->addRow(
 					2,
 					tr("STR_HEADING").c_str(),

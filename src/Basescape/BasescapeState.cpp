@@ -743,9 +743,10 @@ void BasescapeState::miniLeftClick(Action*)
 
 		init();
 	}
-	else // courtesy kkmic, http://openxcom.org/forum/index.php?topic=1558.msg32461#msg32461
+	else if (base == _game->getSavedGame()->getBases()->size())
 	{
 		// aka: btnNewBaseClick();
+		// courtesy kkmic, http://openxcom.org/forum/index.php?topic=1558.msg32461#msg32461
 		Base* base = new Base(_game->getRuleset());
 
 		_game->popState();
