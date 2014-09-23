@@ -79,7 +79,8 @@ Craft::Craft(
 		_inBattlescape(false),
 		_inDogfight(false),
 		_name(L""),
-		_loadCur(0)
+		_loadCur(0),
+		_stopWarning(false) // do not save-to-file. Ie, warn player after loading
 {
 	_items = new ItemContainer();
 
@@ -667,7 +668,7 @@ int Craft::getFuel() const
  * Changes the amount of fuel currently contained in this craft.
  * @param fuel Amount of fuel.
  */
-void Craft::setFuel(int fuel)
+void Craft::setFuel(const int fuel)
 {
 	_fuel = fuel;
 
@@ -700,9 +701,9 @@ int Craft::getDamage() const
 
 /**
  * Changes the amount of damage this craft has taken.
- * @param damage Amount of damage.
+ * @param damage - amount of damage
  */
-void Craft::setDamage(int damage)
+void Craft::setDamage(const int damage)
 {
 	_damage = damage;
 
@@ -713,7 +714,7 @@ void Craft::setDamage(int damage)
 /**
  * Returns the ratio between the amount of damage this craft
  * has taken and the total it can take before it's destroyed.
- * @return, Percentage of damage.
+ * @return, percentage of damage
  */
 int Craft::getDamagePercent() const
 {
@@ -737,7 +738,7 @@ bool Craft::getLowFuel() const
  * (only has enough to head back to base).
  * @param low True if it's low, false otherwise.
  */
-void Craft::setLowFuel(bool low)
+void Craft::setLowFuel(const bool low)
 {
 	_lowFuel = low;
 }
@@ -757,7 +758,7 @@ bool Craft::getMissionComplete() const
  * and is forced to return to base.
  * @param mission True if it's returning, false otherwise.
  */
-void Craft::setMissionComplete(bool mission)
+void Craft::setMissionComplete(const bool mission)
 {
 	_mission = mission;
 }
@@ -800,12 +801,10 @@ int Craft::getFuelLimit() const
  */
 int Craft::getFuelLimit(Base* base) const
 {
-	int speed = _rules->getMaxSpeed(); // kL
-	double speedRadian = static_cast<double>(speed) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0; // kL
+	double speedRadian = static_cast<double>(_rules->getMaxSpeed()) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0;
 
 	return static_cast<int>(
-//kL		floor((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (_speedRadian * 120.0)));
-			ceil((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (speedRadian * 120.0))); // kL
+			ceil((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (speedRadian * 120.0)));
 }
 
 /**
@@ -830,24 +829,29 @@ void Craft::think()
 		&& _dest == dynamic_cast<Target*>(_base))
 	{
 		setInterceptionOrder(0);
-		checkup();
 		setDestination(NULL);
 		setSpeed(0);
+
 		_lowFuel = false;
 		_mission = false;
+		_stopWarning = false;
 		_takeoff = 0;
+
+		checkup();
 	}
 }
 
 /**
- * Checks the condition of all the craft's systems
- * to define its new status (eg. when arriving at base).
+ * Checks the condition of all the craft's systems to define its new status.
+ * That is, when arriving at base by flight or transfer.
+ * kL_Note: I now use this here and all over there too. Basically whenever
+ * a status-phase completes somewhere ....
  */
 void Craft::checkup()
 {
 	int
-		available = 0,
-		full = 0;
+		cw = 0,
+		loaded = 0;
 
 	for (std::vector<CraftWeapon*>::iterator
 			i = _weapons.begin();
@@ -857,26 +861,28 @@ void Craft::checkup()
 		if (*i == NULL)
 			continue;
 
-		available++;
+		cw++;
 
 		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
-			full++;
+			loaded++;
 		else
 			(*i)->setRearming(true);
 	}
 
 	if (_damage > 0)
-		_status = "STR_REPAIRS";
-	else if (available != full)
-		_status = "STR_REARMING";
+		_status = "STR_REPAIRS";	// 1st
+	else if (cw > loaded)
+		_status = "STR_REARMING";	// 2nd
+	else if (_fuel < _rules->getMaxFuel())
+		_status = "STR_REFUELLING";	// 3rd
 	else
-		_status = "STR_REFUELLING";
+		_status = "STR_READY";		// 4th Ready.
 }
 
 /**
  * Returns if a UFO is detected by the craft's radar.
- * @param target, Pointer to target
- * @return, True if detected, false otherwise
+ * @param target - pointer to target
+ * @return, true if detected, false otherwise
  */
 bool Craft::detect(Target* target) const
 {
@@ -909,7 +915,8 @@ void Craft::repair()
 	setDamage(_damage - _rules->getRepairRate());
 
 	if (_damage == 0)
-		_status = "STR_REARMING";
+		checkup(); // kL
+//		_status = "STR_REARMING";
 }
 
 /**
@@ -918,7 +925,7 @@ void Craft::repair()
  * @param rules - pointer to a ruleset
  * @return, the ammo ID missing for rearming, or "" if fully rearmed
  */
-std::string Craft::rearm(Ruleset* rules)
+std::string Craft::rearm(const Ruleset* rules)
 {
 	std::string ret = "";
 
@@ -929,8 +936,8 @@ std::string Craft::rearm(Ruleset* rules)
 	{
 		if (i == _weapons.end())
 		{
-			_status = "STR_REFUELLING";
-
+			checkup(); // kL
+//			_status = "STR_REFUELLING";
 			break;
 		}
 
@@ -949,10 +956,11 @@ std::string Craft::rearm(Ruleset* rules)
 										rules->getItem(clip)->getClipSize());
 
 				if ((*i)->isRearming()
-					&& clipsUsed >= baseClips) // base uses up all stock
+					&& clipsUsed < 0) // trick. See CraftWeapon::rearm()
 				{
+					clipsUsed = -clipsUsed;
 					ret = clip;
-					(*i)->setRearming(false);
+//					(*i)->setRearming(false);
 				}
 
 				_base->getItems()->removeItem(
@@ -962,11 +970,17 @@ std::string Craft::rearm(Ruleset* rules)
 			else
 			{
 				ret = clip;
-				(*i)->setRearming(false);
+//				(*i)->setRearming(false);
 			}
 
-			break;
+			break; // only 1 cw rearms per call.
 		}
+	}
+
+	if (ret == "")
+	{
+		_stopWarning = false; // reset warnings.
+		checkup(); // kL
 	}
 
 	return ret;
@@ -977,12 +991,15 @@ std::string Craft::rearm(Ruleset* rules)
  */
 void Craft::refuel()
 {
+	_stopWarning = false; // reset warnings.
+
 	setFuel(_fuel + _rules->getRefuelRate());
 
-	if (_fuel >= _rules->getMaxFuel())
+	if (_fuel == _rules->getMaxFuel())
 	{
-		_fuel = _rules->getMaxFuel(); // kL
-		_status = "STR_READY";
+		checkup(); // kL
+
+/*		_status = "STR_READY";
 
 		for (std::vector<CraftWeapon*>::iterator
 				i = _weapons.begin();
@@ -993,10 +1010,9 @@ void Craft::refuel()
 				&& (*i)->isRearming())
 			{
 				_status = "STR_REARMING";
-
 				break;
 			}
-		}
+		} */
 	}
 }
 
@@ -1013,18 +1029,17 @@ bool Craft::isInBattlescape() const
  * Changes the craft's battlescape status.
  * @param inbattle True if it's in battle, False otherwise.
  */
-void Craft::setInBattlescape(bool inbattle)
+void Craft::setInBattlescape(const bool battle)
 {
-	if (inbattle)
+	if (battle)
 		setSpeed(0);
 
-	_inBattlescape = inbattle;
+	_inBattlescape = battle;
 }
 
-/// Returns the craft destroyed status.
 /**
- * If the amount of damage the craft take is more
- * than its health it will be destroyed.
+ * Returns the craft destroyed status.
+ * If the amount of damage the craft take is more than its health it will be destroyed.
  * @return Is the craft destroyed?
  */
 bool Craft::isDestroyed() const
@@ -1164,6 +1179,25 @@ int Craft::getLoadCurrent()
 	_loadCur = getNumEquipment() + getNumSoldiers() * 10 + getNumVehicles() * 40;
 
 	return _loadCur;
+}
+
+/**
+ * Sets the stopWarning flag.
+ * So player don't get spammed with no-fuel and/or no-ammo messages.
+ * @param stop - true to inhibit warnings
+ */
+void Craft::setStopWarning(const bool stop)
+{
+	_stopWarning = stop;
+}
+
+/**
+ * Gets the stopWarning flag.
+ * @return, stopWarning
+ */
+bool Craft::getStopWarning() const
+{
+	return _stopWarning;
 }
 
 }

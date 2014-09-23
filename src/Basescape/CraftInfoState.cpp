@@ -29,6 +29,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
@@ -394,6 +395,9 @@ std::wstring CraftInfoState::formatTime(int total)
 
 	if (hours > 0)
 		ss << tr("STR_HOUR", hours);
+
+	if (_craft->getStopWarning())
+		ss << L" +";
 
 	ss << L")";
 

@@ -171,7 +171,7 @@ ProductProgress Production::step(
 	int done = getAmountProduced();
 	_timeSpent += _engineers;
 
-	if (!Options::canManufactureMoreItemsPerHour
+	if (Options::canManufactureMoreItemsPerHour == false
 		&& done < getAmountProduced())
 	{
 		// enforce pre-TFTD manufacturing rules: extra hours are wasted
@@ -182,7 +182,7 @@ ProductProgress Production::step(
 	{
 
 		int produced;
-		if (!getInfiniteAmount()) // std::min is required because we don't want to overproduce
+		if (getInfiniteAmount() == false) // std::min is required because we don't want to overproduce
 		{
 			produced = std::min(
 							getAmountProduced(),
@@ -213,7 +213,7 @@ ProductProgress Production::step(
 				}
 				else
 				{
-					// Check if it's ammo to reload a craft
+					// Check if it's fuel OR ammo for a Craft
 					if (r->getItem(i->first)->getBattleType() == BT_NONE)
 					{
 						for (std::vector<Craft*>::iterator
@@ -221,43 +221,72 @@ ProductProgress Production::step(
 								c != b->getCrafts()->end();
 								++c)
 						{
-							if ((*c)->getStatus() != "STR_READY")
-								continue;
-
-							for (std::vector<CraftWeapon*>::iterator
-									w = (*c)->getWeapons()->begin();
-									w != (*c)->getWeapons()->end();
-									++w)
+							if ((*c)->getStopWarning())
 							{
-								if (*w != 0
-									&& (*w)->getRules()->getClipItem() == i->first
-									&& (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+								if ((*c)->getStatus() == "STR_REFUELING")
 								{
-									(*w)->setRearming(true);
-									(*c)->setStatus("STR_REARMING");
+									if ((*c)->getRules()->getRefuelItem() == i->first)
+//										&& (*c)->getFuelPercentage() < 100)
+									{
+										(*c)->setStopWarning(false);
+									}
+								}
+								else if ((*c)->getStatus() == "STR_REARMING")
+								{
+									for (std::vector<CraftWeapon*>::iterator
+											cw = (*c)->getWeapons()->begin();
+											cw != (*c)->getWeapons()->end();
+											++cw)
+									{
+										if (*cw != NULL
+											&& (*cw)->getRules()->getClipItem() == i->first)
+//											&& (*cw)->getAmmo() < (*cw)->getRules()->getAmmoMax())
+										{
+											(*c)->setStopWarning(false);
+										}
+									}
 								}
 							}
 						}
 					}
 
-					// Check if it's fuel to refuel a craft
-					if (r->getItem(i->first)->getBattleType() == BT_NONE)
+					// kL_note: MISSING - check if it's ammo to load a tank (onboard a Craft)!
+					// from, ItemsArrivingState:
+/*					RuleItem* item = _game->getRuleset()->getItem((*j)->getItems());
+
+					if (r->getItem(i->first)->getBattleType() == BT_AMMO)
 					{
 						for (std::vector<Craft*>::iterator
 								c = b->getCrafts()->begin();
 								c != b->getCrafts()->end();
 								++c)
 						{
-							if ((*c)->getStatus() != "STR_READY")
-								continue;
-
-							if ((*c)->getRules()->getRefuelItem() == i->first
-								&& (*c)->getFuelPercentage() < 100)
+							for (std::vector<Vehicle*>::iterator // check if it's ammo to reload a vehicle
+									v = (*c)->getVehicles()->begin();
+									v != (*c)->getVehicles()->end();
+									++v)
 							{
-								(*c)->setStatus("STR_REFUELLING");
+								std::vector<std::string>::iterator ammo = std::find(
+																				(*v)->getRules()->getCompatibleAmmo()->begin(),
+																				(*v)->getRules()->getCompatibleAmmo()->end(),
+																				item->getType());
+								if (ammo != (*v)->getRules()->getCompatibleAmmo()->end()
+									&& (*v)->getAmmo() < item->getClipSize())
+								{
+									int used = std::min(
+													(*j)->getQuantity(),
+													item->getClipSize() - (*v)->getAmmo());
+									(*v)->setAmmo((*v)->getAmmo() + used);
+
+									// Note that the items have already been delivered --
+									// so they are removed from the base, not the transfer.
+									base->getItems()->removeItem(
+																item->getType(),
+																used);
+								}
 							}
 						}
-					}
+					} */
 
 					if (getSellItems()) // <- this may be Fucked. kL_note
 					{
@@ -275,13 +304,11 @@ ProductProgress Production::step(
 			if (count < produced)
 			{
 				// We need to ensure that player has enough cash/item to produce a new unit
-				if (!enoughMoney(g))
+				if (enoughMoney(g) == false)
 					return PROGRESS_NOT_ENOUGH_MONEY;
 
-				if (!enoughMaterials(b))
+				if (enoughMaterials(b) == false)
 					return PROGRESS_NOT_ENOUGH_MATERIALS;
-
-				// kL_note: NOT ENOUGH HANGAR SPACE!!!
 
 				startItem(b, g);
 			}

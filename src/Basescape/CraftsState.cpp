@@ -155,44 +155,53 @@ void CraftsState::init()
 {
 	//Log(LOG_INFO) << ". CraftsState::init()";
 	State::init();
-
 	_lstCrafts->clearList();
 
-	int row = 0;
+
+	RuleCraft* rule = NULL;
+	std::wstring status;
+
+	size_t row = 0;
 	for (std::vector<Craft*>::iterator
 			i = _base->getCrafts()->begin();
 			i != _base->getCrafts()->end();
-			++i)
+			++i,
+				++row)
 	{
-		std::wstring status = getAltStatus(*i);
 		std::wostringstream
 			ss1,
 			ss2,
 			ss3;
-		ss1 << (*i)->getNumWeapons() << "/" << (*i)->getRules()->getWeapons();
-		ss2 << (*i)->getNumSoldiers();
-		ss3 << (*i)->getNumVehicles();
+
+		rule = (*i)->getRules();
+
+		if (rule->getWeapons() > 0)
+			ss1 << (*i)->getNumWeapons() << L"/" << rule->getWeapons();
+		else
+			ss1 << L"-";
+
+		if (rule->getSoldiers() > 0)
+			ss2 << (*i)->getNumSoldiers();
+		else
+			ss2 << L"-";
+
+		if (rule->getVehicles() > 0)
+			ss3 << (*i)->getNumVehicles();
+		else
+			ss3 << L"-";
+
+
+		status = getAltStatus(*i);
 
 		_lstCrafts->addRow(
 						5,
 						(*i)->getName(_game->getLanguage()).c_str(),
-//						tr((*i)->getStatus()).c_str(),
 						status.c_str(),
 						ss1.str().c_str(),
 						ss2.str().c_str(),
 						ss3.str().c_str());
 
 		_lstCrafts->setCellColor(row, 1, _cellColor);
-//		if ((*j)->getStatus() == "STR_READY")
-//			_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
-//		colorStatusCell();
-
-//		_lstCrafts->setCellHighContrast(
-//									row,
-//									1,
-//									true);
-
-		row++;
 	}
 
 	_lstCrafts->draw(); // kL..
@@ -340,30 +349,6 @@ void CraftsState::lstCraftsPress(Action* action)
 		_game->popState(); // close Basescape view.
 	}
 }
-
-/**
- * kL. Pops out of Basescape and centers craft on Geoscape.
- * @param action, Pointer to an action.
- */
-/* void CraftsState::lstCraftsRightClick(Action* action) // kL
-{
-	double mx = action->getAbsoluteXMouse();
-	if (mx >= _lstCrafts->getArrowsLeftEdge()
-		&& mx < _lstCrafts->getArrowsRightEdge())
-	{
-		return;
-	}
-
-	//Log(LOG_INFO) << ". CraftsState::lstCraftsRightClick() row = " << _lstCrafts->getSelectedRow();
-	Craft* c = _base->getCrafts()->at(_lstCrafts->getSelectedRow());
-	_game->getSavedGame()->setGlobeLongitude(c->getLongitude());
-	_game->getSavedGame()->setGlobeLatitude(c->getLatitude());
-
-	kL_reCenter = true;
-
-	_game->popState(); // close Crafts window.
-	_game->popState(); // close Basescape view.
-} */
 
 /**
  * kL. Reorders a craft. Moves craft slot up.

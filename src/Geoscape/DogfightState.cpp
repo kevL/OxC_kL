@@ -2383,7 +2383,9 @@ void DogfightState::playSoundFX(
 	int dir = 360; // stereo center
 
 	if (randAngle)
-		dir += RNG::generate(-53, 53);
+		dir += (RNG::generate(-53, 53)
+				+ RNG::generate(-53, 53))
+			/ 2;
 
 	_game->getResourcePack()->getSound(
 									"GEO.CAT",

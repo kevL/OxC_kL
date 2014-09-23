@@ -40,9 +40,11 @@ class Ruleset;
  */
 class CraftWeapon
 {
+
 private:
 	bool _rearming;
 	int _ammo;
+
 	RuleCraftWeapon* _rules;
 
 

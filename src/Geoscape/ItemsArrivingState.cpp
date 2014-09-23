@@ -39,6 +39,7 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
@@ -160,7 +161,6 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 				base = *i;
 
 				if ((*j)->getType() == TRANSFER_ITEM) // check if there's an automated use for item
-//					&& _game->getRuleset()->getItem((*j)->getItems())->getBattleType() == BT_NONE)
 				{
 					RuleItem* item = _game->getRuleset()->getItem((*j)->getItems());
 
@@ -169,22 +169,33 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 							c != (*i)->getCrafts()->end();
 							++c)
 					{
-						if ((*c)->getStatus() == "STR_READY") // check if it's ammo to reload a craft
+						if ((*c)->getStatus() == "STR_OUT")
+							continue;
+
+						if ((*c)->getStatus() == "STR_REFUELING")
+						{
+							if ((*c)->getRules()->getRefuelItem() == item->getType())
+//								&& (*c)->getFuelPercentage() < 100)
+							{
+								(*c)->setStopWarning(false);
+							}
+						}
+						else if ((*c)->getStatus() == "STR_REARMING")
 						{
 							for (std::vector<CraftWeapon*>::iterator
-									w = (*c)->getWeapons()->begin();
-									w != (*c)->getWeapons()->end();
-									++w)
+									cw = (*c)->getWeapons()->begin();
+									cw != (*c)->getWeapons()->end();
+									++cw)
 							{
-								if (*w != 0
-									&& (*w)->getRules()->getClipItem() == item->getType()
-									&& (*w)->getAmmo() < (*w)->getRules()->getAmmoMax())
+								if (*cw != NULL
+									&& (*cw)->getRules()->getClipItem() == item->getType())
+//									&& (*cw)->getAmmo() < (*cw)->getRules()->getAmmoMax())
 								{
-									(*w)->setRearming(true);
-									(*c)->setStatus("STR_REARMING");
+									(*c)->setStopWarning(false);
 								}
 							}
 						}
+
 
 						for (std::vector<Vehicle*>::iterator // check if it's ammo to reload a vehicle
 								v = (*c)->getVehicles()->begin();

@@ -141,17 +141,18 @@ void CraftWeapon::setRearming(bool rearming)
  * Rearms this craft weapon's ammo.
  * @param baseClips	- the amount of clips available at the Base
  * @param clipSize	- the amount of rounds in a clip
- * @return, the amount of clips used
+ * @return, the amount of clips used (negative if not enough clips at Base)
  */
 int CraftWeapon::rearm(
 		const int baseClips,
 		const int clipSize)
 {
-	int
-		loadQty = baseClips * clipSize,
+	const int
 		fullQty = _rules->getAmmoMax(),
-		rateQty = _rules->getRearmRate(),
-		clipsRequested = 0;
+		rateQty = _rules->getRearmRate();
+	int
+		clipsRequested = 0,
+		loadQty = 0;
 
 	if (clipSize > 0)
 	{
@@ -163,14 +164,13 @@ int CraftWeapon::rearm(
 
 	if (baseClips >= clipsRequested)
 	{
-		if (clipSize == 0) // kL
+		if (clipSize == 0)
 			loadQty = rateQty;
 		else
 			loadQty = clipsRequested * clipSize; // Falko-note
 	}
 
 	setAmmo(_ammo + loadQty);
-
 	_rearming = (_ammo < fullQty);
 
 	if (clipSize < 1)
@@ -179,7 +179,10 @@ int CraftWeapon::rearm(
 	int ret = (loadQty + clipSize - 1) / clipSize; // kL_mod, round up.
 
 	if (ret < 1) // kL, safety.
-		return 1;
+		ret = 1;
+
+	if (clipsRequested > baseClips)
+		ret = -ret; // trick to tell Craft that there isn't enough clips at Base.
 
 	return ret;
 }

@@ -55,7 +55,8 @@ private:
 		_inBattlescape,
 		_inDogfight,
 		_lowFuel,
-		_mission;
+		_mission,
+		_stopWarning;
 	int
 		_loadCap,
 		_loadCur,
@@ -150,27 +151,27 @@ private:
 		/// Gets the craft's amount of fuel.
 		int getFuel() const;
 		/// Sets the craft's amount of fuel.
-		void setFuel(int fuel);
+		void setFuel(const int fuel);
 		/// Gets the craft's percentage of fuel.
 		int getFuelPercentage() const;
 
 		/// Gets the craft's amount of damage.
 		int getDamage() const;
 		/// Sets the craft's amount of damage.
-		void setDamage(int damage);
+		void setDamage(const int damage);
 		/// Gets the craft's percentage of damage.
 		int getDamagePercent() const;
 
 		/// Gets whether the craft is running out of fuel.
 		bool getLowFuel() const;
 		/// Sets whether the craft is running out of fuel.
-		void setLowFuel(bool low);
+		void setLowFuel(const bool low);
 
 
 		/// Gets whether the craft has just finished a mission.
 		bool getMissionComplete() const;
 		/// Sets whether the craft has just finished a mission.
-		void setMissionComplete(bool mission);
+		void setMissionComplete(const bool mission);
 
 		/// Gets the craft's distance from its base.
 		double getDistanceFromBase() const;
@@ -200,12 +201,12 @@ private:
 		/// Repairs the craft.
 		void repair();
 		/// Rearms the craft.
-		std::string rearm(Ruleset* rules);
+		std::string rearm(const Ruleset* rules);
 		/// Refuels the craft.
 		void refuel();
 
 		/// Sets the craft's battlescape status.
-		void setInBattlescape(bool inbattle);
+		void setInBattlescape(const bool battle);
 		/// Gets if the craft is in battlescape.
 		bool isInBattlescape() const;
 
@@ -240,6 +241,11 @@ private:
 		void setLoadCurrent(int load);
 		/// Gets current load.
 		int getLoadCurrent();
+
+		/// Sets the stopWarning flag.
+		void setStopWarning(const bool stop = true);
+		/// Gets the stopWarning flag.
+		bool getStopWarning() const;
 };
 
 }

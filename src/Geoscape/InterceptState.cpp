@@ -55,10 +55,10 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Intercept window.
- * @param game, Pointer to the core game.
- * @param globe, Pointer to the Geoscape globe.
- * @param base, Pointer to base to show contained crafts (NULL to show all crafts).
- * @param target, Pointer to target to intercept (NULL to ask user for target).
+ * @param globe		- pointer to the Geoscape globe
+ * @param base		- pointer to base to show contained crafts (NULL to show all crafts)
+ * @param target	- pointer to target to intercept (NULL to ask user for target)
+ * @param geo		- pointer to GeoscapeState
  */
 InterceptState::InterceptState(
 		Globe* globe,
@@ -164,7 +164,7 @@ InterceptState::InterceptState(
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		if (_base != 0
+		if (_base != NULL
 			&& *i != _base)
 		{
 			continue;

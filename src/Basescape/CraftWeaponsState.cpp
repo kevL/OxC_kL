@@ -153,7 +153,7 @@ CraftWeaponsState::CraftWeaponsState(
 			if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
 				ss << _base->getItems()->getItem(w->getLauncherItem());
 			else
-				ss << "-";
+				ss << L"-";
 
 			if (w->getClipItem() != "")
 				ss2 << _base->getItems()->getItem(w->getClipItem());
@@ -233,13 +233,14 @@ void CraftWeaponsState::lstWeaponsClick(Action*)
 		_base->getItems()->removeItem(cwRule->getLauncherItem());
 
 		CraftWeapon* sel = new CraftWeapon(
-									cwRule,
-									0);
+										cwRule,
+										0);
 		sel->setRearming(true);
 		_base->getCrafts()->at(_craftID)->getWeapons()->at(_weaponID) = sel;
 
-		if (_base->getCrafts()->at(_craftID)->getStatus() == "STR_READY")
-			_base->getCrafts()->at(_craftID)->setStatus("STR_REARMING");
+		_base->getCrafts()->at(_craftID)->checkup(); // kL
+//		if (_base->getCrafts()->at(_craftID)->getStatus() == "STR_READY")
+//			_base->getCrafts()->at(_craftID)->setStatus("STR_REARMING");
 	}
 
 	if (pop == true)

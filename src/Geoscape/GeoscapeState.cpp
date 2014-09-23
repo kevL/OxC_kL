@@ -1748,7 +1748,7 @@ void GeoscapeState::time10Minutes()
 			if ((*c)->getStatus() == "STR_OUT")
 			{
 				(*c)->consumeFuel();
-				if (!(*c)->getLowFuel()
+				if ((*c)->getLowFuel() == false
 					&& (*c)->getFuel() <= (*c)->getFuelLimit())
 				{
 					(*c)->setLowFuel(true);
@@ -2135,25 +2135,30 @@ void GeoscapeState::time30Minutes()
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
-			// kL_begin: moved down from time1Hour()
+			if ((*j)->getStatus() == "STR_OUT")
+				continue;
+
+			// kL_begin: moved up from time1Hour()
 			if ((*j)->getStatus() == "STR_REPAIRS")
 				(*j)->repair();
 			else if ((*j)->getStatus() == "STR_REARMING")
 			{
-				std::string s = (*j)->rearm(_game->getRuleset());
-				if (s != "")
+				std::string str = (*j)->rearm(_game->getRuleset());
+				if (str != ""
+					&& (*j)->getStopWarning() == false)
 				{
+					(*j)->setStopWarning();
+
 					std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
-									   .arg(tr(s))
+									   .arg(tr(str))
 									   .arg((*j)->getName(_game->getLanguage()))
 									   .arg((*i)->getName());
 					popup(new CraftErrorState(
 											this,
 											msg));
 				}
-			}
-			else // kL_end.
-			if ((*j)->getStatus() == "STR_REFUELLING")
+			} // kL_end.
+			else if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				std::string item = (*j)->getRules()->getRefuelItem();
 				if (item == "")
@@ -2164,10 +2169,12 @@ void GeoscapeState::time30Minutes()
 					{
 						(*i)->getItems()->removeItem(item);
 						(*j)->refuel();
-						(*j)->setLowFuel(false);
+//						(*j)->setLowFuel(false);
 					}
-					else if (!(*j)->getLowFuel())
+					else if ((*j)->getStopWarning() == false) //if ((*j)->getLowFuel() == false)
 					{
+						(*j)->setStopWarning();
+
 						std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
 										   .arg(tr(item))
 										   .arg((*j)->getName(_game->getLanguage()))
@@ -2176,10 +2183,11 @@ void GeoscapeState::time30Minutes()
 												this,
 												msg));
 
-						if ((*j)->getFuel() > 0)
-							(*j)->setStatus("STR_READY");
-						else
-							(*j)->setLowFuel(true);
+//						if ((*j)->getFuel() > 0)
+//							(*j)->setStatus("STR_READY");
+//						else
+//							(*j)->setLowFuel(true);	// kL_note: This is probably used to ground the Craft.
+													// And to NOT give repeated 'Not Enough Fuel' warnings.
 					}
 				}
 			}

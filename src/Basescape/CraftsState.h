@@ -75,8 +75,6 @@ private:
 		void btnOkClick(Action* action);
 		/// Handler for clicking the Crafts list.
 		void lstCraftsPress(Action* action);
-		/// kL. Pops out of Basescape and centers craft on Geoscape.
-//		void lstCraftsRightClick(Action* action); // kL
 
 		/// kL. Handler for clicking the Crafts reordering button.
 		void lstLeftArrowClick(Action* action); // kL

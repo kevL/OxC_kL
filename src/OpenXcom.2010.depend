@@ -4567,7 +4567,7 @@
 1404096023 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1410576895 f:\git\openxcom\src\savegame\craft.h
+1411430611 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
 	"CraftId.h"
@@ -4790,7 +4790,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1410820195 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1411438996 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -4830,11 +4830,11 @@
 1404096023 f:\git\openxcom\src\savegame\craftweaponprojectile.h
 	<string>
 
-1406255868 f:\git\openxcom\src\savegame\craftweapon.h
+1411430744 f:\git\openxcom\src\savegame\craftweapon.h
 	<string>
 	<yaml-cpp/yaml.h>
 
-1411190867 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1411391599 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -4857,7 +4857,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1411190859 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1411439853 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -4900,7 +4900,7 @@
 	"CraftId.h"
 	"MovingTarget.h"
 
-1411190850 source:f:\git\openxcom\src\basescape\craftweaponsstate.cpp
+1411431609 source:f:\git\openxcom\src\basescape\craftweaponsstate.cpp
 	"CraftWeaponsState.h"
 	<cmath>
 	<sstream>
@@ -6038,7 +6038,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1411350460 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1411370550 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -7669,7 +7669,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1411351848 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1411392193 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7764,7 +7764,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1411355576 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1411432368 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8011,7 +8011,7 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1411256693 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1411395055 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -8035,7 +8035,7 @@
 	"../Savegame/Target.h"
 	"../Savegame/Ufo.h"
 
-1411190169 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
+1411435656 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
 	"ItemsArrivingState.h"
 	"GeoscapeState.h"
 	"../Basescape/BasescapeState.h"
@@ -8049,6 +8049,7 @@
 	"../Interface/TextList.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleCraft.h"
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
@@ -9582,7 +9583,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1411226025 source:f:\git\openxcom\src\savegame\craft.cpp
+1411435321 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9606,7 +9607,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1410675932 source:f:\git\openxcom\src\savegame\craftweapon.cpp
+1411430848 source:f:\git\openxcom\src\savegame\craftweapon.cpp
 	"CraftWeapon.h"
 	"CraftWeaponProjectile.h"
 	"../Ruleset/RuleCraftWeapon.h"
@@ -9641,7 +9642,7 @@
 1404096023 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
-1405276291 source:f:\git\openxcom\src\savegame\production.cpp
+1411434918 source:f:\git\openxcom\src\savegame\production.cpp
 	"Production.h"
 	<limits>
 	"Base.h"

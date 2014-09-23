@@ -502,7 +502,7 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 		_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 		_base->getSoldiers()->insert(_base->getSoldiers()->end(), soldier);
 
-		initList(_lstSoldiers->getRows());
+		initList(std::max(0, (int)(_lstSoldiers->getRows() - _lstSoldiers->getVisibleRows())));
 	}
 	else
 	{
