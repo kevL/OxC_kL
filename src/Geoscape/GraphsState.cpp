@@ -535,11 +535,16 @@ GraphsState::GraphsState(int curGraph)
 					x <= 297 + grid;
 					x += 17)
 			{
-				Uint8 color = Palette::blockOffset(14)+grid+1;
+				Uint8 color = Palette::blockOffset(14)+1+grid;
 				if (grid == 4)
 					color = 0;
 
-				_bg->drawRect(x, y, 16 - (grid * 2), 13 - (grid * 2), color);
+				_bg->drawRect(
+							x,
+							y,
+							16 - (grid * 2),
+							13 - (grid * 2),
+							color);
 			}
 		}
 	}
@@ -573,18 +578,18 @@ GraphsState::GraphsState(int curGraph)
 
 	int month = _game->getSavedGame()->getTime()->getMonth();
 	for (size_t
-			iter = 0;
-			iter < 12;
-			++iter)
+			i = 0;
+			i < 12;
+			++i)
 	{
 		if (month > 11)
 		{
 			month = 0;
 			std::wostringstream ss;
 			ss << _game->getSavedGame()->getTime()->getYear();
-			_txtYears->setCellText(0, iter / 2, ss.str());
+			_txtYears->setCellText(0, i / 2, ss.str());
 
-			if (iter > 2)
+			if (i > 2)
 			{
 				std::wostringstream ss2;
 				ss2 << (_game->getSavedGame()->getTime()->getYear() - 1);
@@ -592,18 +597,18 @@ GraphsState::GraphsState(int curGraph)
 			}
 		}
 
-		_txtMonths->setCellText(0, iter, tr(months[month]));
+		_txtMonths->setCellText(0, i, tr(months[month]));
 
 		++month;
 	}
 
 	for (std::vector<Text*>::iterator // set up the vertical measurement units
-			iter = _txtScale.begin();
-			iter != _txtScale.end();
-			++iter)
+			i = _txtScale.begin();
+			i != _txtScale.end();
+			++i)
 	{
-		(*iter)->setAlign(ALIGN_RIGHT);
-		(*iter)->setColor(Palette::blockOffset(6)+7);
+		(*i)->setAlign(ALIGN_RIGHT);
+		(*i)->setColor(Palette::blockOffset(6)+7);
 	}
 
 
@@ -750,7 +755,6 @@ void GraphsState::blink()
 				++i)
 		{
 			if (*i == true)
-//				_txtRegionActivityAlien.at(offset)->setVisible(!_txtRegionActivityAlien.at(offset)->getVisible());
 				_txtRegionActivityAlien.at(offset)->setVisible(_vis);
 			else
 				_txtRegionActivityAlien.at(offset)->setVisible();
@@ -770,7 +774,6 @@ void GraphsState::blink()
 				++i)
 		{
 			if (*i == true)
-//				_txtCountryActivityAlien.at(offset)->setVisible(!_txtCountryActivityAlien.at(offset)->getVisible());
 				_txtCountryActivityAlien.at(offset)->setVisible(_vis);
 			else
 				_txtCountryActivityAlien.at(offset)->setVisible();
@@ -1258,8 +1261,9 @@ void GraphsState::resetScreen()
 
 /**
  * Update the text on the vertical scale.
- * @param lowerLimit - minimum value
- * @param upperLimit - maximum value
+ * @param lowerLimit	- minimum value
+ * @param upperLimit	- maximum value
+ * @param grid			-
  */
 void GraphsState::updateScale(
 		double lowerLimit,
@@ -1305,9 +1309,10 @@ void GraphsState::drawCountryLines()
 {
 	// calculate the totals, and set up our upward maximum
 	int
-		upperLimit	= 0,
-		lowerLimit	= 0,
-		totals[]	= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		upperLimit = 0,
+		lowerLimit = 0,
+
+		totals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	for (size_t
 			itMonth = 0;
@@ -1428,78 +1433,76 @@ void GraphsState::drawCountryLines()
 
 		int reduction = 0;
 		for (size_t
-				iter = 0;
-				iter != 12;
-				++iter)
+				i = 0;
+				i != 12;
+				++i)
 		{
-			int x = 312 - (static_cast<int>(iter) * 17);
+			int x = 312 - (static_cast<int>(i) * 17);
 			int y = 175 + static_cast<int>((static_cast<double>(lowerLimit) / units));
 
 			if (_alien)
 			{
-				if (iter < country->getActivityAlien().size())
+				if (i < country->getActivityAlien().size())
 				{
 					reduction = static_cast<int>(static_cast<double>(country->getActivityAlien()
-								.at(country->getActivityAlien().size() - (1 + iter))) / units);
+								.at(country->getActivityAlien().size() - (1 + i))) / units);
 					y -= reduction;
 
-					totals[iter] += country->getActivityAlien().at(country->getActivityAlien().size() - (1 + iter));
+					totals[i] += country->getActivityAlien().at(country->getActivityAlien().size() - (1 + i));
 				}
 			}
 			else if (_income)
 			{
-				if (iter < country->getFunding().size())
+				if (i < country->getFunding().size())
 				{
 					reduction = static_cast<int>(static_cast<double>(country->getFunding()
-								.at(country->getFunding().size() - (1 + iter))) / 1000.0 / units);
+								.at(country->getFunding().size() - (1 + i))) / 1000.0 / units);
 					y -= reduction;
 
-					totals[iter] += static_cast<int>(static_cast<double>(country->getFunding()
-								.at(country->getFunding().size() - (1 + iter))) / 1000.0);
+					totals[i] += static_cast<int>(static_cast<double>(country->getFunding()
+								.at(country->getFunding().size() - (1 + i))) / 1000.0);
 				}
 			}
 			else
 			{
-				if (iter < country->getActivityXcom().size())
+				if (i < country->getActivityXcom().size())
 				{
 					reduction = static_cast<int>(static_cast<double>(country->getActivityXcom()
-								.at(country->getActivityXcom().size() - (1 + iter))) / units);
+								.at(country->getActivityXcom().size() - (1 + i))) / units);
 					y -= reduction;
 
-					totals[iter] += country->getActivityXcom().at(country->getActivityXcom().size() - (1 + iter));
+					totals[i] += country->getActivityXcom().at(country->getActivityXcom().size() - (1 + i));
 				}
 			}
 
 			if (y > 175)
 				y = 175;
+
 			newLineVector.push_back(y);
 
-			if (newLineVector.size() > 1 && _alien)
+			if (newLineVector.size() > 1)
 			{
-				_alienCountryLines.at(itCountry)->drawLine(
-						x,
-						y,
-						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
-						colorOffset * 8 + 16);
-			}
-			else if (newLineVector.size() > 1 && _income)
-			{
-				_incomeLines.at(itCountry)->drawLine(
-						x,
-						y,
-						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
-						colorOffset * 8 + 16);
-			}
-			else if (newLineVector.size() > 1)
-			{
-				_xcomCountryLines.at(itCountry)->drawLine(
-						x,
-						y,
-						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
-						colorOffset * 8 + 16);
+				if (_alien)
+					_alienCountryLines.at(itCountry)->drawLine(
+							x,
+							y,
+							x + 17,
+							newLineVector.at(newLineVector.size() - 2),
+							colorOffset * 8 + 16);
+				else if (_income)
+					_incomeLines.at(itCountry)->drawLine(
+							x,
+							y,
+							x + 17,
+							newLineVector.at(newLineVector.size() - 2),
+							colorOffset * 8 + 16);
+				else
+					_xcomCountryLines.at(itCountry)->drawLine(
+							x,
+							y,
+							x + 17,
+							newLineVector.at(newLineVector.size() - 2),
+							colorOffset * 8 + 16);
 			}
 		}
 
@@ -1523,20 +1526,21 @@ void GraphsState::drawCountryLines()
 
 	std::vector<Sint16> newLineVector;
 	for (int
-			iter = 0;
-			iter < 12;
-			++iter)
+			i = 0;
+			i < 12;
+			++i)
 	{
-		int x = 312 - (iter * 17);
+		int x = 312 - (i * 17);
 		int y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
 
-		if (totals[iter] > 0)
+		if (totals[i] > 0)
 		{
-			int reduction = static_cast<int>(static_cast<double>(totals[iter]) / units);
+			int reduction = static_cast<int>(static_cast<double>(totals[i]) / units);
 			y -= reduction;
 		}
 
 		newLineVector.push_back(y);
+
 		if (newLineVector.size() > 1)
 		{
 			if (_alien)
@@ -1585,9 +1589,10 @@ void GraphsState::drawRegionLines()
 {
 	// calculate the totals, and set up our upward maximum
 	int
-		upperLimit	= 0,
-		lowerLimit	= 0,
-		totals[]	= {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+		upperLimit = 0,
+		lowerLimit = 0,
+
+		totals[] = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
 	for (size_t
 			itMonth = 0;
@@ -1689,57 +1694,57 @@ void GraphsState::drawRegionLines()
 
 		int reduction = 0;
 		for (size_t
-				iter = 0;
-				iter < 12;
-				++iter)
+				i = 0;
+				i < 12;
+				++i)
 		{
-			int x = 312 - (static_cast<int>(iter) * 17);
+			int x = 312 - (static_cast<int>(i) * 17);
 			int y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
 
 			if (_alien)
 			{
-				if (iter < region->getActivityAlien().size())
+				if (i < region->getActivityAlien().size())
 				{
 					reduction = static_cast<int>(static_cast<double>(region->getActivityAlien()
-							.at(region->getActivityAlien().size() - (1 + iter))) / units);
+							.at(region->getActivityAlien().size() - (1 + i))) / units);
 					y -= reduction;
 
-					totals[iter] += region->getActivityAlien().at(region->getActivityAlien().size() - (1 + iter));
+					totals[i] += region->getActivityAlien().at(region->getActivityAlien().size() - (1 + i));
 				}
 			}
 			else
 			{
-				if (iter < region->getActivityXcom().size())
+				if (i < region->getActivityXcom().size())
 				{
 					reduction = static_cast<int>(static_cast<double>(region->getActivityXcom()
-							.at(region->getActivityXcom().size() - (1 + iter))) / units);
+							.at(region->getActivityXcom().size() - (1 + i))) / units);
 					y -= reduction;
 
-					totals[iter] += region->getActivityXcom().at(region->getActivityXcom().size() - (1 + iter));
+					totals[i] += region->getActivityXcom().at(region->getActivityXcom().size() - (1 + i));
 				}
 			}
 
 			if (y > 175)
 				y = 175;
+
 			newLineVector.push_back(y);
 
-			if (newLineVector.size() > 1 && _alien)
+			if (newLineVector.size() > 1)
 			{
-				_alienRegionLines.at(itRegion)->drawLine(
-						x,
-						y,
-						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
-						colorOffset * 8 + 16);
-			}
-			else if (newLineVector.size() > 1)
-			{
-				_xcomRegionLines.at(itRegion)->drawLine(
-						x,
-						y,
-						x + 17,
-						newLineVector.at(newLineVector.size() - 2),
-						colorOffset * 8 + 16);
+				if (_alien)
+					_alienRegionLines.at(itRegion)->drawLine(
+							x,
+							y,
+							x + 17,
+							newLineVector.at(newLineVector.size() - 2),
+							colorOffset * 8 + 16);
+				else
+					_xcomRegionLines.at(itRegion)->drawLine(
+							x,
+							y,
+							x + 17,
+							newLineVector.at(newLineVector.size() - 2),
+							colorOffset * 8 + 16);
 			}
 		}
 
@@ -1759,21 +1764,22 @@ void GraphsState::drawRegionLines()
 
 	std::vector<Sint16> newLineVector;
 	for (int
-			iter = 0;
-			iter < 12;
-			++iter)
+			i = 0;
+			i < 12;
+			++i)
 	{
-		int x = 312 - (iter * 17);
+		int x = 312 - (i * 17);
 		int y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
 //		int y = 175;
 
-		if (totals[iter] > 0)
+		if (totals[i] > 0)
 		{
-			int reduction = static_cast<int>(static_cast<double>(totals[iter]) / units);
+			int reduction = static_cast<int>(static_cast<double>(totals[i]) / units);
 			y -= reduction;
 		}
 
 		newLineVector.push_back(y);
+
 		if (newLineVector.size() > 1)
 		{
 			if (_alien)
@@ -1846,6 +1852,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 				baseIncome += (*i)->getCashIncome();
 				baseExpenditure += (*i)->getCashSpent();
 			}
+
 			income[itMonth]			= baseIncome / 1000;		// kL, perhaps add Country funding
 			expenditure[itMonth]	= baseExpenditure / 1000;	// kL
 			maintenance[itMonth]	= _game->getSavedGame()->getBaseMaintenance() / 1000; // use current
@@ -1930,9 +1937,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 	int grid = 9;
 
 	while (range > static_cast<double>(test * grid))
-	{
 		test *= 2;
-	}
 
 	lowerLimit = 0;
 	upperLimit = test * grid;
@@ -1967,34 +1972,37 @@ void GraphsState::drawFinanceLines() // Council Analytics
 		std::vector<Sint16> newLineVector;
 
 		for (int
-				iter = 0;
-				iter < 12;
-				++iter)
+				i = 0;
+				i < 12;
+				++i)
 		{
-			int x = 312 - (iter * 17);
-			int y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units);
-			int reduction = 0;
+			int
+				x = 312 - (i * 17),
+				y = 175 + static_cast<int>(static_cast<double>(lowerLimit) / units),
+
+				reduction = 0;
 
 			switch (button)
 			{
 				case 0:
-					reduction = static_cast<int>(static_cast<double>(income[iter]) / units);
+					reduction = static_cast<int>(static_cast<double>(income[i]) / units);
 				break;
 				case 1:
-					reduction = static_cast<int>(static_cast<double>(expenditure[iter]) / units);
+					reduction = static_cast<int>(static_cast<double>(expenditure[i]) / units);
 				break;
 				case 2:
-					reduction = static_cast<int>(static_cast<double>(maintenance[iter]) / units);
+					reduction = static_cast<int>(static_cast<double>(maintenance[i]) / units);
 				break;
 				case 3:
-					reduction = static_cast<int>(static_cast<double>(balance[iter]) / units);
+					reduction = static_cast<int>(static_cast<double>(balance[i]) / units);
 				break;
 				case 4:
-					reduction = static_cast<int>(static_cast<double>(score[iter]) / units);
+					reduction = static_cast<int>(static_cast<double>(score[i]) / units);
 				break;
 			}
 
 			y -= reduction;
+
 			newLineVector.push_back(y);
 
 			Uint8 colorOffset = button %2? 8: 0;
