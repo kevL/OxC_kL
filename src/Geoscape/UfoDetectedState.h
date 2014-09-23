@@ -52,7 +52,10 @@ private:
 		* _txtBases,
 		* _txtDetected,
 		* _txtHyperwave,
-		* _txtUfo;
+		* _txtUfo,
+
+		* _txtShade,
+		* _txtTexture;
 	TextButton
 		* _btnCancel,
 		* _btnCentre,

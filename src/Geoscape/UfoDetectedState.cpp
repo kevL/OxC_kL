@@ -37,6 +37,8 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/Ruleset.h"
+#include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
 
 #include "../Savegame/AlienMission.h"
@@ -91,14 +93,17 @@ UfoDetectedState::UfoDetectedState(
 		_txtBases		= new Text(100, 41, 32, 135);
 	}
 	else
-		_window		= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
+		_window			= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 
-	_txtUfo			= new Text(192, 16, 32, 56);
+	_txtUfo			= new Text(112, 16, 26, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);
 	_lstInfo		= new TextList(192, 33, 32, 85);
 	_btnCentre		= new TextButton(192, 16, 32, 124);
 	_btnIntercept	= new TextButton(88, 16, 32, 144);
 	_btnCancel		= new TextButton(88, 16, 136, 144);
+
+	_txtTexture		= new Text(92, 9, 138, 56);
+	_txtShade		= new Text(60, 9, 170, 66);
 
 	if (hyper)
 	{
@@ -108,6 +113,9 @@ UfoDetectedState::UfoDetectedState(
 		_btnCentre->setY(135);
 		_btnIntercept->setY(155);
 		_btnCancel->setY(155);
+
+		_txtTexture->setY(19);
+		_txtShade->setY(29);
 
 		setPalette("PAL_GEOSCAPE", 2);
 	}
@@ -121,6 +129,9 @@ UfoDetectedState::UfoDetectedState(
 	add(_btnCentre);
 	add(_btnIntercept);
 	add(_btnCancel);
+
+	add(_txtTexture);
+	add(_txtShade);
 
 	if (hyper)
 	{
@@ -195,6 +206,103 @@ UfoDetectedState::UfoDetectedState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& UfoDetectedState::btnCancelClick,
 					Options::keyCancel);
+
+	if (ufo->getStatus() == Ufo::CRASHED
+		|| ufo->getStatus() == Ufo::LANDED)
+	{
+		// IMPORTANT: This does not return the actual battleField terrain; that is done
+		// in ConfirmLandingState. This is merely an indicator .... cf. DogfightState
+		// IE, the first terrain found for proper Globe-texture is chosen
+		std::string str = "";
+
+		int // look up polygon's texture
+			texture,
+			shade;
+		state->getGlobe()->getPolygonTextureAndShade(
+												_ufo->getLongitude(),
+												_ufo->getLatitude(),
+												&texture,
+												&shade);
+		RuleTerrain* terrain = NULL;
+
+		const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
+		for (std::vector<std::string>::const_iterator
+				i = terrains.begin();
+				i != terrains.end()
+					&& str == "";
+				++i)
+		{
+			//Log(LOG_INFO) << ". cycle terrains";
+			terrain = _game->getRuleset()->getTerrain(*i);
+			for (std::vector<int>::iterator
+					j = terrain->getTextures()->begin();
+					j != terrain->getTextures()->end()
+						&& str == "";
+					++j)
+			{
+				//Log(LOG_INFO) << ". . cycle textures";
+				if (*j == texture
+					&& (terrain->getHemisphere() == 0
+						|| (terrain->getHemisphere() < 0
+							&& _ufo->getLatitude() < 0.0)
+						|| (terrain->getHemisphere() > 0
+							&& _ufo->getLatitude() >= 0.0)))
+				{
+					//Log(LOG_INFO) << ". . . terrain-texture MATCH found!";
+					str = terrain->getName();
+				}
+			}
+		}
+		//Log(LOG_INFO) << ". str = " << str;
+
+		if (str == "")
+			str = "WATER";
+		else if (str == "JUNGLE"
+			|| str == "FORESTMOUNT"
+			|| str == "MUJUNGLE")
+		{
+			str = "FOREST";
+		}
+		else if (str == "CULTAFARMA"
+			|| str == "CULTAFARMB")
+		{
+			str = "CULTA";
+		}
+		else if (str == "DESERTMOUNT"
+			|| str == "ATLANTDESERT")
+		{
+			str = "DESERT";
+		}
+		else if (str == "POLARMOUNT")
+			str = "POLAR";
+		else if (str == "INDUSTRIALURBAN"
+			|| str == "MADURBAN"
+			|| str == "NATIVEURBAN"
+			|| str == "RAILYARDURBAN")
+	//		|| str == "COMRCURBAN" // these are Terror sites only:
+	//		|| str == "DAWNURBANA" // ie. not referenced by any of the Globe's polygon textures.
+	//		|| str == "DAWNURBANB"
+	//		|| str == "PORTURBAN"
+		{
+			str = "URBAN";
+		}
+
+		_txtShade->setColor(Palette::blockOffset(8)+10);
+		_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
+		_txtShade->setAlign(ALIGN_RIGHT);
+		_txtShade->setText(tr("STR_SHADE_").arg(shade));
+
+		_txtTexture->setColor(Palette::blockOffset(8)+10);
+		_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
+		_txtTexture->setAlign(ALIGN_RIGHT);
+
+		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(str))); // tr(terrain)
+	}
+	else
+	{
+		_txtShade->setVisible(false);
+		_txtTexture->setVisible(false);
+	}
 
 	if (hyper)
 	{

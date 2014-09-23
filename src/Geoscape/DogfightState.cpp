@@ -836,7 +836,7 @@ void DogfightState::animate()
 
 	_battle->clear();
 
-	if (!_ufo->isDestroyed())
+	if (_ufo->isDestroyed() == false)
 		drawUfo();
 
 	for (std::vector<CraftWeaponProjectile*>::iterator
@@ -2286,6 +2286,9 @@ int DogfightState::getInterceptionNumber() const
 
 /**
  * kL. Gets the globe texture icon to display for the interception.
+ * IMPORTANT: This does not return the actual battleField terrain; that is done
+ * in ConfirmLandingState. This is merely an indicator .... cf. UfoDetectedState
+ * IE, the first terrain found for proper Globe-texture is chosen
  * @return, string for the icon of the texture of the globe's surface under the dogfight ha!
  */
 const std::string DogfightState::getTextureIcon() // kL
@@ -2332,7 +2335,6 @@ const std::string DogfightState::getTextureIcon() // kL
 			}
 		}
 	}
-
 	//Log(LOG_INFO) << ". str = " << str;
 
 	if (str == "")

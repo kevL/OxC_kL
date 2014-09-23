@@ -1486,7 +1486,7 @@ void GeoscapeState::time5Seconds()
 							if ((*j)->getNumSoldiers() > 0
 								|| (*j)->getNumVehicles() > 0)
 							{
-								if (!(*j)->isInDogfight())
+								if ((*j)->isInDogfight() == false)
 								{
 									int // look up polygon's texture
 										texture,

@@ -48,15 +48,15 @@ private:
 		_texture;
 
 	Craft* _craft;
-	RuleTerrain* _terrain; // kL
+	RuleTerrain* _terrain;
 	Text
 		* _txtBegin,
 		* _txtMessage,
-		* _txtMessage2, // kL
+		* _txtMessage2,
 
-		* _txtBase,		// kL
-		* _txtShade,	// kL
-		* _txtTexture;	// kL
+		* _txtBase,
+		* _txtShade,
+		* _txtTexture;
 	TextButton
 		* _btnNo,
 		* _btnYes;

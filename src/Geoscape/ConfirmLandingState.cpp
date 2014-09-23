@@ -98,8 +98,8 @@ ConfirmLandingState::ConfirmLandingState(
 
 	add(_window);
 	add(_txtBase);
-	add(_txtShade);
 	add(_txtTexture);
+	add(_txtShade);
 	add(_txtMessage);
 	add(_txtMessage2);
 	add(_txtBegin);
@@ -127,7 +127,7 @@ ConfirmLandingState::ConfirmLandingState(
 	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
 	if (ufo != NULL) // NOTE: all this terrain stuff can and may fall through to BattlescapeGenerator.
 	{
-		std::string terrain = ufo->getTerrain();
+		std::string terrain = ufo->getTerrain(); // Ufo-object stores the terrain value.
 		//Log(LOG_INFO) << ". ufo VALID, terrain = " << terrain;
 
 		if (terrain == "")
@@ -167,7 +167,7 @@ ConfirmLandingState::ConfirmLandingState(
 
 			size_t pick = static_cast<size_t>(RNG::generate(
 														0,
-														static_cast<int>(choice.size() - 1)));
+														static_cast<int>(choice.size()) - 1));
 			_terrain = choice.at(pick);
 			//Log(LOG_INFO) << ". . pick = " << pick << ", choice = " << _terrain->getName();
 
