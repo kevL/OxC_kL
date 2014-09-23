@@ -4,13 +4,22 @@ extraSprites:
     height: 200
     singleImage: true
     files:
-      0: Resources/UI/icons.png
+      0: Resources/Sprites/ufograph/icons.png
+  - type: SCANBORD
+    width: 320
+    height: 200
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/scanbord.png
   - type: SMOKE.PCK
     files:
       0: Resources/Sprites/ufograph/smoke/
   - type: INTICON.PCK
     files:
       0: Resources/Sprites/geograph/inticon/
+  - type: BASEBITS.PCK
+    files:
+      0: Resources/Sprites/geograph/basebits/
   - type: INTERWIN # interception window
     width: 160
     height: 96
@@ -168,9 +177,3 @@ extraSprites:
     subY: 5
     files:
       0: Resources/Sprites/gender/digits.png
-  - type: SCANBORD
-    width: 320
-    height: 200
-    singleImage: true
-    files:
-      0: Resources/Sprites/ufograph/scanbord.png

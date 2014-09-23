@@ -42,7 +42,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Engine/Sound.h" // kL
+#include "../Engine/Sound.h"
 
 #include "../Geoscape/AllocatePsiTrainingState.h"
 #include "../Geoscape/BuildNewBaseState.h"
@@ -70,7 +70,7 @@
 namespace OpenXcom
 {
 
-Sound* BasescapeState::soundPop = 0; // kL
+Sound* BasescapeState::soundPop = 0;
 
 
 /**

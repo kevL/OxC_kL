@@ -648,7 +648,9 @@ void DebriefingState::prepareDebriefing()
 
 	Base* base = NULL;
 	Craft* craft = NULL;
+
 	std::vector<Craft*>::iterator craftIterator;
+
 
 	_missionStatistics->time = *save->getTime();
 	_missionStatistics->type = battle->getMissionType();
@@ -1180,8 +1182,8 @@ void DebriefingState::prepareDebriefing()
 /*								SoldierDeath* death = new SoldierDeath();
 								death->setTime(*save->getTime());
 
-//kL								(*i)->die(death);
-//kL								save->getDeadSoldiers()->push_back(*i);
+//kL							(*i)->die(death);
+//kL							save->getDeadSoldiers()->push_back(*i);
 								SoldierDead* dead = (*i)->die(death);		// kL, converts Soldier to SoldierDead class instance.
 								save->getDeadSoldiers()->push_back(dead);	// kL
 
@@ -1328,7 +1330,7 @@ void DebriefingState::prepareDebriefing()
 		// all vehicle objects in the craft are also referenced by base->getVehicles() !!)
 		delete craft;
 
-		craft = NULL; // To avoid a crash down there!!
+//		craft = NULL; // To avoid a crash down there!! uh, not after return; it won't.
 		base->getCrafts()->erase(craftIterator);
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 
@@ -1337,7 +1339,7 @@ void DebriefingState::prepareDebriefing()
 
 	if (aborted
 		&& mission == "STR_BASE_DEFENSE"
-		&& !base->getCrafts()->empty())
+		&& base->getCrafts()->empty() == false)
 	{
 		//Log(LOG_INFO) << ". aborted BASE_DEFENSE";
 
@@ -1353,7 +1355,7 @@ void DebriefingState::prepareDebriefing()
 	}
 
 
-	if ((!aborted
+	if ((aborted == false
 			|| success)		// RECOVER UFO:
 		&& soldierLive > 0)	// Run through all tiles to recover UFO components and items.
 	{
@@ -1567,51 +1569,49 @@ void DebriefingState::prepareDebriefing()
 					base,
 					craft,
 					true);
-
 //	else // kL, maybe...
-	// reequip crafts (only which is on the base) after a base defense mission;
-	// we MUST check the missionType here, to avoid non-base-defense missions case
-	if (mission == "STR_BASE_DEFENSE"
-		&& !_destroyBase)
+	if (mission == "STR_BASE_DEFENSE")
 	{
-		for (std::vector<Craft*>::iterator
-				c = base->getCrafts()->begin();
-				c != base->getCrafts()->end();
-				++c)
+		if (_destroyBase == false)
 		{
-			if ((*c)->getStatus() != "STR_OUT")
-				reequipCraft(
-							base,
-							*c,
-							false);
-		}
+			// reequip crafts (only those on the base) after a base defense mission;
+			for (std::vector<Craft*>::iterator
+					c = base->getCrafts()->begin();
+					c != base->getCrafts()->end();
+					++c)
+			{
+				if ((*c)->getStatus() != "STR_OUT")
+					reequipCraft(
+								base,
+								*c,
+								false);
+			}
 
-		// Clearing base->getVehicles() objects, they're not needed anymore.
-		for (std::vector<Vehicle*>::iterator
-				i = base->getVehicles()->begin();
-				i != base->getVehicles()->end();
-				++i)
-		{
-			delete *i;
-		}
-
-		base->getVehicles()->clear();
-	}
-
-	if (_destroyBase
-		&& save->getMonthsPassed() != -1)
-	{
-		for (std::vector<Base*>::iterator
-				i = save->getBases()->begin();
-				i != save->getBases()->end();
-				++i)
-		{
-			if (*i == base)
+			// clear base->getVehicles() objects, they not needed anymore.
+			for (std::vector<Vehicle*>::iterator
+					i = base->getVehicles()->begin();
+					i != base->getVehicles()->end();
+					++i)
 			{
 				delete *i;
-				save->getBases()->erase(i);
+			}
 
-				break;
+			base->getVehicles()->clear();
+		}
+		else if (save->getMonthsPassed() != -1)
+		{
+			for (std::vector<Base*>::iterator
+					i = save->getBases()->begin();
+					i != save->getBases()->end();
+					++i)
+			{
+				if (*i == base)
+				{
+					delete *i;
+					save->getBases()->erase(i);
+
+					break;
+				}
 			}
 		}
 

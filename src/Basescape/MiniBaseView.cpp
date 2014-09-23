@@ -22,7 +22,6 @@
 #include <cmath>
 
 #include "../Engine/Action.h"
-//#include "../Engine/Logger.h"
 #include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
 #include "../Engine/Timer.h"
@@ -329,7 +328,6 @@ void MiniBaseView::blink() // kL
 						else
 							setPixelColor(offset_x + 10, pixel_y, 0); // transparent
 					}
-
 
 					pixel_y += 2;
 				}
