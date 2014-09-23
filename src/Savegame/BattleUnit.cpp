@@ -2708,14 +2708,19 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
 
 /**
  * Gets the unit height taking into account kneeling/standing.
- * @return Unit's height.
+ * @return, unit's height
  */
 int BattleUnit::getHeight() const
 {
+	int ret = getStandHeight();;
+	
 	if (isKneeled())
-		return getKneelHeight();
+		ret = getKneelHeight();
 
-	return getStandHeight();
+	if (ret > 24)
+		ret = 24;
+
+	return ret;
 }
 
 // kL_begin:
