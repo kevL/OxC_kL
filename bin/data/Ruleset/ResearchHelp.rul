@@ -162,7 +162,8 @@ research:
       - STR_MUTON_CORPSE
       - STR_FLOATER_CORPSE
       - STR_CYBERDISC_CORPSE
-      - STR_CHRYSSALID_CORPSE
+      - STR_WASPITE_CORPSE
+      - STR_CYBERMITE_CORPSE
   - name: STR_MIND_PROBE
     cost: 60000
     points: 25
@@ -220,6 +221,13 @@ research:
       - STR_FLOATER_NAVIGATOR
       - STR_FLOATER_SOLDIER
       - STR_REAPER_TERRORIST
+      - STR_WASPITE_COMMANDER
+      - STR_WASPITE_LEADER
+      - STR_WASPITE_ENGINEER
+      - STR_WASPITE_MEDIC
+      - STR_WASPITE_NAVIGATOR
+      - STR_WASPITE_SOLDIER
+      - STR_CYBERMITE_TERRORIST
   - name: STR_LEADER_PLUS
     cost: 0
     requires:
@@ -233,6 +241,8 @@ research:
       - STR_ETHEREAL_LEADER
       - STR_FLOATER_COMMANDER
       - STR_FLOATER_LEADER
+      - STR_WASPITE_COMMANDER
+      - STR_WASPITE_LEADER
   - name: STR_THE_MARTIAN_SOLUTION
     cost: 50000
     points: 60
@@ -251,6 +261,7 @@ research:
       - STR_SNAKEMAN_COMMANDER
       - STR_ETHEREAL_COMMANDER
       - STR_FLOATER_COMMANDER
+      - STR_WASPITE_COMMANDER
   - name: STR_CYDONIA_OR_BUST
     cost: 60000
     points: 60
@@ -266,7 +277,7 @@ research:
       - STR_SNAKEMAN_NAVIGATOR
       - STR_MUTON_NAVIGATOR
       - STR_SECTOID_NAVIGATOR
-      - STR_UFO_NAVIGATION
+      - STR_WASPITE_NAVIGATOR
   - name: STR_UFO_NAVIGATION
     cost: 45000
     points: 30
@@ -327,6 +338,137 @@ research:
   - name: STR_EXAMINATION_ROOM
     cost: 15000
     needItem: true
+  - name: STR_WASPITE_CORPSE
+    cost: 180
+    points: 50
+    lookup: STR_WASPITE_AUTOPSY
+    needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+  - name: STR_CYBERMITE_CORPSE
+    cost: 180
+    points: 50
+    lookup: STR_CYBERMITE_AUTOPSY
+    needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+  - name: STR_WASPITE_SOLDIER
+    cost: 192
+    points: 50
+    lookup: STR_WASPITE
+    needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_WASPITE_NAVIGATOR
+    cost: 192
+    points: 50
+    lookup: STR_WASPITE
+    needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
+      - STR_HYPER_WAVE_DECODER
+    getOneFree:
+      - STR_ALIEN_RESEARCH
+      - STR_ALIEN_HARVEST
+      - STR_ALIEN_ABDUCTION
+      - STR_ALIEN_INFILTRATION
+      - STR_ALIEN_BASE
+      - STR_ALIEN_TERROR
+      - STR_ALIEN_RETALIATION
+      - STR_ALIEN_SUPPLY
+  - name: STR_WASPITE_MEDIC
+    cost: 192
+    points: 50
+    lookup: STR_WASPITE
+    needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
+    getOneFree:
+      - STR_SECTOID
+      - STR_FLOATER
+      - STR_SNAKEMAN
+      - STR_MUTON
+      - STR_ETHEREAL
+      - STR_CHRYSSALID
+      - STR_SECTOPOD
+      - STR_CYBERDISC
+      - STR_SILACOID
+      - STR_CELATID
+      - STR_REAPER
+      - STR_CYBERMITE
+      - STR_SECTOID_CORPSE
+      - STR_SNAKEMAN_CORPSE
+      - STR_MUTON_CORPSE
+      - STR_ETHEREAL_CORPSE
+      - STR_FLOATER_CORPSE
+      - STR_CHRYSSALID_CORPSE
+      - STR_SECTOPOD_CORPSE
+      - STR_CYBERDISC_CORPSE
+      - STR_SILACOID_CORPSE
+      - STR_CELATID_CORPSE
+      - STR_REAPER_CORPSE
+      - STR_WASPITE_CORPSE
+      - STR_CYBERMITE_CORPSE
+  - name: STR_WASPITE_LEADER
+    cost: 192
+    points: 50
+    lookup: STR_WASPITE
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_ALIEN_ORIGINS
+    needItem: true
+  - name: STR_WASPITE_ENGINEER
+    cost: 192
+    points: 50
+    lookup: STR_WASPITE
+    needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
+    getOneFree:
+      - STR_SMALL_SCOUT
+      - STR_MEDIUM_SCOUT
+      - STR_LARGE_SCOUT
+      - STR_HARVESTER
+      - STR_ABDUCTOR
+      - STR_TERROR_SHIP
+      - STR_BATTLESHIP
+      - STR_SUPPLY_SHIP
+  - name: STR_WASPITE_COMMANDER
+    cost: 192
+    points: 50
+    lookup: STR_WASPITE
+    needItem: true
+    unlocks:
+      - STR_LEADER_PLUS
+      - STR_CYDONIA_DEP
+      - STR_ALIEN_ORIGINS
+  - name: STR_WASPITE
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_CYBERMITE_TERRORIST
+    cost: 170
+    points: 50
+    lookup: STR_CYBERMITE
+    needItem: true
+    unlocks:
+      - STR_ALIEN_ORIGINS
+  - name: STR_CYBERMITE
+    cost: 0
+    points: 50
+    needItem: true
+  - name: STR_WASPITE_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
+  - name: STR_CYBERMITE_AUTOPSY
+    cost: 0
+    points: 50
+    needItem: true
+    unlocks:
+      - STR_ALIEN_CONTAINMENT
   - name: STR_ZOMBIE_CORPSE
     cost: 1800
     points: 50
