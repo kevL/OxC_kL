@@ -8280,7 +8280,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1411477981 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1411481181 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -12159,7 +12159,7 @@
 	"RuleInterface.h"
 	<climits>
 
-1408304868 f:\git\openxcom\src\interface\battlescapebutton.h
+1411481864 f:\git\openxcom\src\interface\battlescapebutton.h
 	"../Engine/InteractiveSurface.h"
 
 1409813040 source:f:\git\openxcom\src\interface\battlescapebutton.cpp

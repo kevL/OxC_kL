@@ -325,7 +325,7 @@ void TileEngine::addLight(
 
 /**
  * Calculates line of sight of a BattleUnit.
- * @param unit - pointer to battleunit to check line of sight for
+ * @param unit - pointer to a battleunit to check Field of View for
  * @return, true when new aliens are spotted
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
@@ -380,7 +380,12 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 				- _battleSave->getTile(unitPos)->getTerrainLevel()
 			>= 24 + 4)
 	{
-		++unitPos.z;
+		Tile* tileAbove = _battleSave->getTile(unitPos + Position(0, 0, 1));
+		if (tileAbove
+			&& tileAbove->hasNoFloor(NULL))
+		{
+			++unitPos.z;
+		}
 	}
 
 	for (int
@@ -717,7 +722,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	// ( kL_note: get a grip on yourself, );
 	// this way we stop if there are the same amount of visible units, but a
 	// different unit is seen, or we stop if there are more visible units seen
-		&& !unit->getVisibleUnits()->empty()
+		&& unit->getVisibleUnits()->empty() == false
 		&& unit->getUnitsSpottedThisTurn().size() > preVisUnits)
 	{
 		//Log(LOG_INFO) << "TileEngine::calculateFOV() Player NOT ret TRUE";
