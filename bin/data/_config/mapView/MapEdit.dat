@@ -9,7 +9,7 @@ Tileset:UFO - Terrain
 	rootpath:${rootPathUFO}
 	rmpPath:${rmpPathUFO}
 	blankPath:${blankUFO}
-	palette:UFO
+	palette:ufo
 
 	files:atlantdesert
 		${dep}:SANDS ATLANTDESERT DESERT
@@ -726,9 +726,9 @@ Tileset:UFO - Craft
 
 	files:xCom
 		AVENGER:AVENGER
-		FIRESTORM:FIRES
-		INTERCEPTOR:INTERC
-		LIGHTNING:LIGHTNIN
+		FIRES:FIRES
+		INTERC:INTERC
+		LIGHTNIN:LIGHTNIN
 		PLANE:PLANE
 	end
 
