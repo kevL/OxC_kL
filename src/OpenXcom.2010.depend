@@ -6040,7 +6040,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1411370550 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1411530907 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6444,7 +6444,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1411527413 source:f:\git\openxcom\src\battlescape\map.cpp
+1411573854 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6872,7 +6872,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1410898978 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1411573720 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"

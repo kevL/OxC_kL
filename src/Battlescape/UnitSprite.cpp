@@ -1894,11 +1894,11 @@ void UnitSprite::drawRoutine19()
 
 	if (_unit->getStatus() == STATUS_WALKING)
 	{
-		srf = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20) + 1 + ((_unit->getWalkingPhase() / 2) %4));
+		srf = _unitSurface->getFrame((_unit->getWalkingPhase() / 2 %4) + 5 * (_part + 4 * _unit->getDirection()));
 	}
 	else
 	{
-		srf = _unitSurface->getFrame((_part * 5) + (_unit->getDirection() * 20));
+		srf = _unitSurface->getFrame(5 * (_part + 4 * _unit->getDirection()));
 	}
 
 	srf->blit(this);
