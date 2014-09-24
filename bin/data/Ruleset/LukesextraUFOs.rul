@@ -343,5 +343,5 @@ MCDPatches:
     data:
       - MCDIndex: 23
         bigWall: 2
-      - MCDIndex: 23
+      - MCDIndex: 25
         bigWall: 3

@@ -286,8 +286,3 @@ terrains:
     terrains:
       - UBASE
     shade: 15
-MCDPatches:
-  - type: U_BASE2
-    data:
-      - MCDIndex: 9
-        specialType: 6
