@@ -36,6 +36,7 @@
 #include "StoresState.h"
 #include "SoldiersState.h"
 #include "TransferBaseState.h"
+#include "TransfersState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -85,14 +86,14 @@ BasescapeState::BasescapeState(
 		_base(base),
 		_globe(globe)
 {
-	_txtFacility	= new Text(192, 9, 0, 0);
 	_view			= new BaseView(192, 192, 0, 8);
+	_mini			= new MiniBaseView(128, 22, 192, 33);
+
+	_txtFacility	= new Text(192, 9, 0, 0);
 
 	_edtBase		= new TextEdit(this, 126, 17, 194, 0);
 	_txtRegion		= new Text(126, 9, 194, 15);
 	_txtFunds		= new Text(126, 9, 194, 24);
-
-	_mini			= new MiniBaseView(128, 22, 192, 33);
 
 	_btnBaseInfo	= new TextButton(128, 12, 192, 56);
 	_btnSoldiers	= new TextButton(128, 12, 192, 68);
@@ -103,30 +104,35 @@ BasescapeState::BasescapeState(
 	_btnPurchase	= new TextButton(128, 12, 192, 128);
 	_btnSell		= new TextButton(128, 12, 192, 140);
 	_btnTransfer	= new TextButton(128, 12, 192, 152);
-	_btnFacilities	= new TextButton(128, 12, 192, 164);
-	_btnNewBase		= new TextButton(128, 12, 192, 176);
+	_btnIncTrans	= new TextButton(128, 12, 192, 164);
+	_btnFacilities	= new TextButton(128, 12, 192, 176);
 	_btnGeoscape	= new TextButton(128, 12, 192, 188);
+//	_btnNewBase		= new TextButton(128, 12, 192, 176);
 
 	setPalette("PAL_BASESCAPE");
 
 	add(_view);
 	add(_mini);
+
 	add(_txtFacility);
+
 	add(_edtBase);
 	add(_txtRegion);
 	add(_txtFunds);
-	add(_btnAliens);
-	add(_btnNewBase);
+
 	add(_btnBaseInfo);
 	add(_btnSoldiers);
 	add(_btnCrafts);
-	add(_btnFacilities);
+	add(_btnAliens);
 	add(_btnResearch);
 	add(_btnManufacture);
-	add(_btnTransfer);
 	add(_btnPurchase);
 	add(_btnSell);
+	add(_btnTransfer);
+	add(_btnIncTrans);
+	add(_btnFacilities);
 	add(_btnGeoscape);
+//	add(_btnNewBase);
 
 	centerAllSurfaces();
 
@@ -143,11 +149,10 @@ BasescapeState::BasescapeState(
 
 	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_mini->setBases(_game->getSavedGame()->getBases());
-//	_mini->onMouseClick((ActionHandler)& BasescapeState::miniClick);
-	_mini->onMouseClick( // kL
+	_mini->onMouseClick(
 					(ActionHandler)& BasescapeState::miniLeftClick,
 					SDL_BUTTON_LEFT);
-	_mini->onMouseClick( // kL
+	_mini->onMouseClick(
 					(ActionHandler)& BasescapeState::miniRightClick,
 					SDL_BUTTON_RIGHT);
 	_mini->onKeyboardPress((ActionHandler)& BasescapeState::handleKeyPress);
@@ -165,14 +170,6 @@ BasescapeState::BasescapeState(
 
 	_txtFunds->setColor(Palette::blockOffset(13)+10);
 
-	_btnAliens->setColor(Palette::blockOffset(13)+5);
-	_btnAliens->setText(tr("STR_ALIENS"));
-	_btnAliens->onMouseClick((ActionHandler)& BasescapeState::btnAliens);
-
-	_btnNewBase->setColor(Palette::blockOffset(13)+5);
-	_btnNewBase->setText(tr("STR_BUILD_NEW_BASE_UC"));
-	_btnNewBase->onMouseClick((ActionHandler)& BasescapeState::btnNewBaseClick);
-
 	_btnBaseInfo->setColor(Palette::blockOffset(13)+5);
 	_btnBaseInfo->setText(tr("STR_BASE_INFORMATION"));
 	_btnBaseInfo->onMouseClick((ActionHandler)& BasescapeState::btnBaseInfoClick);
@@ -185,9 +182,9 @@ BasescapeState::BasescapeState(
 	_btnCrafts->setText(tr("STR_EQUIP_CRAFT"));
 	_btnCrafts->onMouseClick((ActionHandler)& BasescapeState::btnCraftsClick);
 
-	_btnFacilities->setColor(Palette::blockOffset(13)+5);
-	_btnFacilities->setText(tr("STR_BUILD_FACILITIES"));
-	_btnFacilities->onMouseClick((ActionHandler)& BasescapeState::btnFacilitiesClick);
+	_btnAliens->setColor(Palette::blockOffset(13)+5);
+	_btnAliens->setText(tr("STR_ALIENS"));
+	_btnAliens->onMouseClick((ActionHandler)& BasescapeState::btnAliens);
 
 	_btnResearch->setColor(Palette::blockOffset(13)+5);
 	_btnResearch->setText(tr("STR_RESEARCH"));
@@ -197,10 +194,6 @@ BasescapeState::BasescapeState(
 	_btnManufacture->setText(tr("STR_MANUFACTURE"));
 	_btnManufacture->onMouseClick((ActionHandler)& BasescapeState::btnManufactureClick);
 
-	_btnTransfer->setColor(Palette::blockOffset(13)+5);
-	_btnTransfer->setText(tr("STR_TRANSFER_UC"));
-	_btnTransfer->onMouseClick((ActionHandler)& BasescapeState::btnTransferClick);
-
 	_btnPurchase->setColor(Palette::blockOffset(13)+5);
 	_btnPurchase->setText(tr("STR_PURCHASE_RECRUIT"));
 	_btnPurchase->onMouseClick((ActionHandler)& BasescapeState::btnPurchaseClick);
@@ -209,12 +202,28 @@ BasescapeState::BasescapeState(
 	_btnSell->setText(tr("STR_SELL_SACK_UC"));
 	_btnSell->onMouseClick((ActionHandler)& BasescapeState::btnSellClick);
 
+	_btnTransfer->setColor(Palette::blockOffset(13)+5);
+	_btnTransfer->setText(tr("STR_TRANSFER_UC"));
+	_btnTransfer->onMouseClick((ActionHandler)& BasescapeState::btnTransferClick);
+
+	_btnIncTrans->setColor(Palette::blockOffset(13)+5);
+	_btnIncTrans->setText(tr("STR_TRANSIT_LC"));
+	_btnIncTrans->onMouseClick((ActionHandler)& BasescapeState::btnIncTransClick);
+
+	_btnFacilities->setColor(Palette::blockOffset(13)+5);
+	_btnFacilities->setText(tr("STR_BUILD_FACILITIES"));
+	_btnFacilities->onMouseClick((ActionHandler)& BasescapeState::btnFacilitiesClick);
+
 	_btnGeoscape->setColor(Palette::blockOffset(13)+5);
 	_btnGeoscape->setText(tr("STR_GEOSCAPE_UC"));
 	_btnGeoscape->onMouseClick((ActionHandler)& BasescapeState::btnGeoscapeClick);
 	_btnGeoscape->onKeyboardPress(
 					(ActionHandler)& BasescapeState::btnGeoscapeClick,
 					Options::keyCancel);
+
+//	_btnNewBase->setColor(Palette::blockOffset(13)+5);
+//	_btnNewBase->setText(tr("STR_BUILD_NEW_BASE_UC"));
+//	_btnNewBase->onMouseClick((ActionHandler)& BasescapeState::btnNewBaseClick);
 }
 
 /**
@@ -233,12 +242,11 @@ BasescapeState::~BasescapeState()
 		if (*i == _base)
 		{
 			exists = true;
-
 			break;
 		}
 	}
 
-	if (!exists)
+	if (exists == false)
 		delete _base;
 }
 
@@ -255,7 +263,7 @@ void BasescapeState::init()
 	_mini->draw();
 	_edtBase->setText(_base->getName());
 
-	for (std::vector<Region*>::iterator // Get region
+	for (std::vector<Region*>::iterator
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)
@@ -265,7 +273,6 @@ void BasescapeState::init()
 										_base->getLatitude()))
 		{
 			_txtRegion->setText(tr((*i)->getRules()->getType()));
-
 			break;
 		}
 	}
@@ -273,7 +280,7 @@ void BasescapeState::init()
 	_txtFunds->setText(tr("STR_FUNDS")
 						.arg(Text::formatFunding(_game->getSavedGame()->getFunds())));
 
-	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < MiniBaseView::MAX_BASES);
+//	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < MiniBaseView::MAX_BASES);
 
 	// kL_begin:
 	bool hasFunds		= (_game->getSavedGame()->getFunds() > 0);
@@ -357,7 +364,9 @@ void BasescapeState::init()
 	_btnPurchase->setVisible(hasFunds && (hasStores || hasQuarters || hasHangar)); // ie, hasFree... space
 	_btnSell->setVisible(hasStores || hasQuarters || hasCraft || hasAlienCont); // ie. hasFreeSoldiers || hasFreeScientists || hasFreeEngineers || hasLiveAliens || hasItemsInStorage
 	_btnTransfer->setVisible(hasFunds && (hasStores || hasQuarters || hasCraft || hasAlienCont)); // ditto.
-	_btnFacilities->setVisible(hasFunds); // kL_end.
+	_btnFacilities->setVisible(hasFunds);
+
+	_btnIncTrans->setVisible(_base->getTransfers()->empty() == false); // kL_end.
 }
 
 /**
@@ -366,7 +375,7 @@ void BasescapeState::init()
  */
 void BasescapeState::setBase(Base* base)
 {
-	if (!_game->getSavedGame()->getBases()->empty())
+	if (_game->getSavedGame()->getBases()->empty() == false)
 	{
 		bool exists = false; // Check if base still exists
 
@@ -380,8 +389,8 @@ void BasescapeState::setBase(Base* base)
 				_base = base;
 				_mini->setSelectedBase(i);
 //kL			_game->getSavedGame()->setSelectedBase(i);
-				exists = true;
 
+				exists = true;
 				break;
 			}
 		}
@@ -402,21 +411,10 @@ void BasescapeState::setBase(Base* base)
 }
 
 /**
- * kL. Goes to the Manage Alien Containment screen.
- * @param action - pointer to an action
- */
-void BasescapeState::btnAliens(Action*) // kL
-{
-	_game->pushState(new ManageAlienContainmentState(
-													_base,
-													OPT_GEOSCAPE));
-}
-
-/**
  * Goes to the Build New Base screen.
  * @param action - pointer to an action
  */
-void BasescapeState::btnNewBaseClick(Action*)
+/* void BasescapeState::btnNewBaseClick(Action*)
 {
 	Base* base = new Base(_game->getRuleset());
 
@@ -425,7 +423,7 @@ void BasescapeState::btnNewBaseClick(Action*)
 										base,
 										_globe,
 										false));
-}
+} */
 
 /**
  * Goes to the Base Info screen.
@@ -457,14 +455,14 @@ void BasescapeState::btnCraftsClick(Action*)
 }
 
 /**
- * Opens the Build Facilities window.
+ * Goes to the Manage Alien Containment screen.
  * @param action - pointer to an action
  */
-void BasescapeState::btnFacilitiesClick(Action*)
+void BasescapeState::btnAliens(Action*)
 {
-	_game->pushState(new BuildFacilitiesState(
-											_base,
-											this));
+	_game->pushState(new ManageAlienContainmentState(
+													_base,
+													OPT_GEOSCAPE));
 }
 
 /**
@@ -510,6 +508,26 @@ void BasescapeState::btnSellClick(Action*)
 void BasescapeState::btnTransferClick(Action*)
 {
 	_game->pushState(new TransferBaseState(_base));
+}
+
+/**
+ * Goes to the incoming Transfers window.
+ * @param action - pointer to an action
+ */
+void BasescapeState::btnIncTransClick(Action*)
+{
+	_game->pushState(new TransfersState(_base));
+}
+
+/**
+ * Opens the Build Facilities window.
+ * @param action - pointer to an action
+ */
+void BasescapeState::btnFacilitiesClick(Action*)
+{
+	_game->pushState(new BuildFacilitiesState(
+											_base,
+											this));
 }
 
 /**

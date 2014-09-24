@@ -216,7 +216,7 @@ BaseInfoState::BaseInfoState(
 					Options::keyCancel);
 
 	_btnTransfers->setColor(Palette::blockOffset(15)+6);
-	_btnTransfers->setText(tr("STR_TRANSFERS_UC"));
+	_btnTransfers->setText(tr("STR_TRANSFERS"));
 	_btnTransfers->onMouseClick((ActionHandler)& BaseInfoState::btnTransfersClick);
 
 	_btnStores->setColor(Palette::blockOffset(15)+6);

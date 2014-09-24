@@ -30,15 +30,14 @@ class Base;
 class BaseView;
 class Globe;
 class MiniBaseView;
-class Sound; // kL
+class Sound;
 class Text;
 class TextButton;
 class TextEdit;
 
 
 /**
- * Basescape screen that shows a base's layout
- * and lets the player manage their bases.
+ * Basescape screen that shows a base's layout and lets the player manage bases.
  */
 class BasescapeState
 	:
@@ -54,24 +53,25 @@ private:
 		* _txtRegion;
 	TextEdit* _edtBase;
 	TextButton
-		* _btnAliens, // kL
-		* _btnNewBase,
+		* _btnAliens,
 		* _btnBaseInfo,
-		* _btnSoldiers,
 		* _btnCrafts,
 		* _btnFacilities,
-		* _btnResearch,
+		* _btnGeoscape,
+		* _btnIncTrans,
 		* _btnManufacture,
-		* _btnTransfer,
 		* _btnPurchase,
+		* _btnResearch,
 		* _btnSell,
-		* _btnGeoscape;
+		* _btnSoldiers,
+		* _btnTransfer;
+//		* _btnNewBase,
 	Base* _base;
 	Globe* _globe;
 
 
 	public:
-		static Sound* soundPop; // kL
+		static Sound* soundPop;
 
 
 		/// Creates the Basescape state.
@@ -86,18 +86,14 @@ private:
 		/// Sets a new base to display.
 		void setBase(Base* base);
 
-		/// Handler for clicking the Alien Containment button.
-		void btnAliens(Action* action); // kL
-		/// Handler for clicking the Build New Base button.
-		void btnNewBaseClick(Action* action);
 		/// Handler for clicking the Base Information button.
 		void btnBaseInfoClick(Action* action);
 		/// Handler for clicking the Soldiers button.
 		void btnSoldiersClick(Action* action);
 		/// Handler for clicking the Equip Craft button.
 		void btnCraftsClick(Action* action);
-		/// Handler for clicking the Build Facilities button.
-		void btnFacilitiesClick(Action* action);
+		/// Handler for clicking the Alien Containment button.
+		void btnAliens(Action* action);
 		/// Handler for clicking the Research button.
 		void btnResearchClick(Action* action);
 		/// Handler for clicking the Manufacture button.
@@ -108,8 +104,14 @@ private:
 		void btnSellClick(Action* action);
 		/// Handler for clicking the Transfer button.
 		void btnTransferClick(Action* action);
+		/// Handler for clicking the Transfers button.
+		void btnIncTransClick(Action* action);
+		/// Handler for clicking the Build Facilities button.
+		void btnFacilitiesClick(Action* action);
 		/// Handler for clicking the Geoscape button.
 		void btnGeoscapeClick(Action* action);
+		/// Handler for clicking the Build New Base button.
+//		void btnNewBaseClick(Action* action);
 
 		/// Handler for left-clicking the base view.
 		void viewLeftClick(Action* action);
@@ -121,9 +123,9 @@ private:
 		void viewMouseOut(Action* action);
 
 		/// Handler for left-clicking the mini base view.
-		void miniLeftClick(Action* action); // kL
+		void miniLeftClick(Action* action);
 		/// Handler for right-clicking the mini base view.
-		void miniRightClick(Action* action); // kL
+		void miniRightClick(Action* action);
 
 		/// Handler for changing the text on the Name edit.
 		void edtBaseChange(Action* action);

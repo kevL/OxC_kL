@@ -1095,7 +1095,7 @@ void BattlescapeState::mapOver(Action* action)
 					if (item->getUnit() != NULL)
 					{
 						if (item->getUnit()->getType().compare(0, 11, "STR_FLOATER") == 0)
-							ws += tr("STR_FLOATER_CORPSE");
+							ws += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
 						else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 						{
 							ws += item->getUnit()->getName(_game->getLanguage());
@@ -1208,9 +1208,7 @@ void BattlescapeState::mapOver(Action* action)
 				}
 
 				if (row == 102) // Console #4
-				{
 					ss << L"> more >";
-				}
 				if (78 < row && row < 104)
 				{
 					ss4.str(L"");

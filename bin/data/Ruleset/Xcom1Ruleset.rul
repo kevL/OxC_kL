@@ -745,6 +745,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    blastRadius: 3
   - type: STR_AUTO_CANNON
     size: 0.5
     costBuy: 12750
@@ -815,6 +816,7 @@ items:
     battleType: 2
     invWidth: 2
     invHeight: 1
+    blastRadius: 2
   - type: STR_ROCKET_LAUNCHER
     size: 0.7
     costBuy: 4300
@@ -8882,7 +8884,7 @@ extraStrings:
       STR_AUTOSTAT: "stat"
       STR_MONTHLY_COSTS_: "Costs> {0}"
       STR_LOW_FUEL: "Low Fuel"
-      STR_MISSION_COMPLETE: "MISSION > return"
+      STR_MISSION_COMPLETE: "> MISSION <"
       STR_ACTION_NOT_ALLOWED_FLOAT: "> float <"
       STR_ACTION_NOT_ALLOWED_KNEEL: "> kneel <"
       STR_ACTION_NOT_ALLOWED_FLOOR: "> floor <"
@@ -8976,6 +8978,7 @@ extraStrings:
       STR_SHOT_TYPE_LAUNCH: "launch"
       STR_CONSOLE: "toggle battlescape console"
       STR_SOLDIER_NOT_AT_BASE: "Soldier Out on Mission"
+      STR_TRANSIT_LC: "transit"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

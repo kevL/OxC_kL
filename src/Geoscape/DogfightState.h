@@ -133,8 +133,8 @@ private:
 
 	/// kL. Plays a sound effect in stereo.
 	void playSoundFX(
-			int sound,
-			bool randAngle = false); // kL
+			const int sound,
+			const bool randAngle = false); // kL
 
 
 	public:

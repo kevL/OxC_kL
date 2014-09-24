@@ -2922,12 +2922,12 @@ const int Map::getSoundAngle(Position pos)
 	// convert the relative distance to a relative increment of an 80 degree angle
 	// we use +- 80 instead of +- 90, so as not to go ALL the way left or right
 	// we use +- 67 instead of +- 90, so as not to go ALL the way left or right ( pretty good here )
-	// we use +- 44 instead of +- 90, so as not to go ALL the way left or right ( this pretty much mimics position of screen w/ my speakers )
+	// we use +- 43 instead of +- 90, so as not to go ALL the way left or right ( this pretty much mimics position of screen w/ my speakers )
 	// which would effectively mute the sound out of one speaker.
 	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
 
 //	return static_cast<int>(static_cast<double>(screenPos.x) / (static_cast<double>(midPoint) / 80.0)) + 360;
-	return screenPos.x * 44 / midPoint + 360;
+	return screenPos.x * 43 / midPoint + 360;
 }
 
 /**

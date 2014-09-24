@@ -2217,7 +2217,7 @@ BattleUnit* TileEngine::hit(
  * @param power			- power of explosion
  * @param type			- damage type of explosion (enum ItemDamageType)
  * @param maxRadius		- maximum radius of explosion
- * @param attacker			- pointer to a unit that caused explosion
+ * @param attacker		- pointer to a unit that caused explosion
  */
 void TileEngine::explode(
 			const Position& voxelTarget,
@@ -2312,7 +2312,7 @@ void TileEngine::explode(
 //		for (int te = 90; te < 360; te += 180) // E & W
 //		for (int te = 45; te < 360; te += 180) // SE & NW
 //		for (int te = 225; te < 420; te += 180) // NW & SE
-		for (int // raytracing every 3 degrees makes sure we cover all tiles in a circle.
+		for (int // ray-tracing every 3 degrees makes sure we cover all tiles in a circle.
 				te = 0;
 				te <= 360;
 				te += 3)
@@ -2384,7 +2384,9 @@ void TileEngine::explode(
 //							_powerE -= 1;
 //						else
 						_powerE -= power / maxRadius; // per RSSwizard, http://openxcom.org/forum/index.php?topic=2927.msg32061#msg32061
+						//Log(LOG_INFO) << "maxRadius > 0, " << power << "/" << maxRadius << "=" << _powerE;
 					}
+					//else Log(LOG_INFO) << "maxRadius <= 0";
 
 
 					if (_powerE < 1)

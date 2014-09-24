@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1409185299 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1411520493 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -244,7 +244,7 @@
 	"begin_code.h"
 	"close_code.h"
 
-1409768615 f:\git\openxcom\src\basescape\basescapestate.h
+1411520815 f:\git\openxcom\src\basescape\basescapestate.h
 	"../Engine/State.h"
 
 1409768244 f:\git\openxcom\src\basescape\minibaseview.h
@@ -4441,7 +4441,7 @@
 	"CraftId.h"
 	"GameTime.h"
 
-1411447324 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1411523825 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4460,6 +4460,7 @@
 	"StoresState.h"
 	"SoldiersState.h"
 	"TransferBaseState.h"
+	"TransfersState.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -5610,7 +5611,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Vehicle.h"
 
-1411190417 source:f:\git\openxcom\src\basescape\transfersstate.cpp
+1411520484 source:f:\git\openxcom\src\basescape\transfersstate.cpp
 	"TransfersState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -5918,7 +5919,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1411347977 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1411518753 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6443,7 +6444,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1411365740 source:f:\git\openxcom\src\battlescape\map.cpp
+1411527413 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6766,7 +6767,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1411482102 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1411528440 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7670,7 +7671,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1411478251 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1411527653 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7709,7 +7710,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1411347555 f:\git\openxcom\src\geoscape\dogfightstate.h
+1411527613 f:\git\openxcom\src\geoscape\dogfightstate.h
 	<vector>
 	<string>
 	"../Engine/State.h"
@@ -9363,7 +9364,7 @@
 	<cmath>
 	"RuleItem.h"
 
-1410641207 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1411525516 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"

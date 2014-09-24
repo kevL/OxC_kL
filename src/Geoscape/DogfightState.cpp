@@ -2379,14 +2379,15 @@ const std::string DogfightState::getTextureIcon() // kL
  * @param randAngle	- true to randomize the sound angle, default false to center it
  */
 void DogfightState::playSoundFX(
-		int sound,
-		bool randAngle) // kL
+		const int sound,
+		const bool randAngle) // kL
 {
-	int dir = 360; // stereo center
+	const int var = 67;	// maximum deflection left or right
+	int dir = 360;		// stereo center
 
 	if (randAngle)
-		dir += (RNG::generate(-53, 53)
-				+ RNG::generate(-53, 53))
+		dir += (RNG::generate(-var, var)
+				+ RNG::generate(-var, var))
 			/ 2;
 
 	_game->getResourcePack()->getSound(

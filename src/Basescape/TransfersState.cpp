@@ -92,7 +92,7 @@ TransfersState::TransfersState(Base* base)
 	_txtTitle->setColor(Palette::blockOffset(15)+6);
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(tr("STR_TRANSFERS"));
+	_txtTitle->setText(tr("STR_TRANSFERS_UC"));
 
 	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));

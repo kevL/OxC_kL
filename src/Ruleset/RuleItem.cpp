@@ -250,10 +250,8 @@ void RuleItem::load(
 	_recover				= node["recover"].as<bool>(_recover);
 	_liveAlien				= node["liveAlien"].as<bool>(_liveAlien);
 
-	if (node["blastRadius"]) // kL
+	if (node["blastRadius"])
 		_blastRadius		= node["blastRadius"].as<int>(_blastRadius);
-//	else
-//		_blastRadius = -1; // kL: initialized @
 
 	_attraction				= node["attraction"].as<int>(_attraction);
 	_flatRate				= node["flatRate"].as<bool>(_flatRate);
@@ -702,13 +700,14 @@ int RuleItem::getExplosionRadius() const
 
 	if (_damageType == DT_HE
 		|| _damageType == DT_STUN
-		|| _damageType == DT_SMOKE)
+		|| _damageType == DT_SMOKE
+		|| _damageType == DT_IN)
 	{
 		return _power / 20;
 	}
 
-	if (_damageType == DT_IN)
-		return _power / 30;
+//	if (_damageType == DT_IN)
+//		return _power / 30;
 
 	return -1;
 }

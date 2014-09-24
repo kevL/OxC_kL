@@ -1254,8 +1254,6 @@ bool BattlescapeGenerator::addItem(
 
 	// tanks and aliens don't care about weight or multiple items; their
 	// loadouts are defined in the rulesets and more or less set in stone.
-
-
 /*kL
 	if (unit->getFaction() == FACTION_PLAYER // XCOM Soldiers!!! auto-equip
 		&& unit->hasInventory())
@@ -1298,7 +1296,6 @@ bool BattlescapeGenerator::addItem(
 			}
 		}
 	} */
-
 
 //	RuleInventory* ground = _rules->getInventory("STR_GROUND"); // removed.
 	RuleInventory* rightHand = _rules->getInventory("STR_RIGHT_HAND");
@@ -1432,7 +1429,7 @@ bool BattlescapeGenerator::addItem(
 	{
 		case BT_FIREARM:	// kL_note: These are also terrorist weapons:
 		case BT_MELEE:		// chryssalids, cyberdiscs, zombies, sectopods, reapers, celatids, silacoids
-			if (!rhWeapon)
+			if (rhWeapon == NULL)
 			{
 				item->moveToOwner(unit);
 				item->setSlot(rightHand);
@@ -1443,9 +1440,9 @@ bool BattlescapeGenerator::addItem(
 			// kL_note: only for plasma pistol + Blaster (see itemSets in Ruleset)
 			// Also now for advanced fixed/innate weapon rules.
 			if (!placed
-				&& !lhWeapon
-				&& (unit->getFaction() != FACTION_PLAYER
-					|| item->getRules()->isFixed()))
+				&& lhWeapon == NULL
+				&& (item->getRules()->isFixed()
+					|| unit->getFaction() != FACTION_PLAYER))
 			{
 				item->moveToOwner(unit);
 				item->setSlot(leftHand);
@@ -1456,9 +1453,10 @@ bool BattlescapeGenerator::addItem(
 		case BT_AMMO:
 		{
 			// find handheld weapons that can be loaded with this ammo
-			if ((rhWeapon->getRules()->isFixed()
+			if (rhWeapon
+				&& (rhWeapon->getRules()->isFixed()
 					|| unit->getFaction() != FACTION_PLAYER)
-				&& !rhWeapon->getAmmoItem()
+				&& rhWeapon->getAmmoItem() == NULL
 				&& rhWeapon->setAmmoItem(item) == 0)
 			{
 				item->setSlot(rightHand);
@@ -1472,7 +1470,7 @@ bool BattlescapeGenerator::addItem(
 			if (lhWeapon
 				&& (lhWeapon->getRules()->isFixed()
 					|| unit->getFaction() != FACTION_PLAYER)
-				&& !lhWeapon->getAmmoItem()
+				&& lhWeapon->getAmmoItem() == NULL
 				&& lhWeapon->setAmmoItem(item) == 0)
 			{
 				item->setSlot(leftHand);
@@ -1489,7 +1487,7 @@ bool BattlescapeGenerator::addItem(
 					i != 4;
 					++i)
 			{
-				if (!unit->getItem("STR_BELT", i)
+				if (unit->getItem("STR_BELT", i) == false
 					&& _rules->getInventory("STR_BELT")->fitItemInSlot(itemRule, i, 0))
 				{
 					item->moveToOwner(unit);
@@ -1509,7 +1507,7 @@ bool BattlescapeGenerator::addItem(
 						i != 3;
 						++i)
 				{
-					if (!unit->getItem("STR_BACK_PACK", i)
+					if (unit->getItem("STR_BACK_PACK", i) == false
 						&& _rules->getInventory("STR_BACK_PACK")->fitItemInSlot(itemRule, i, 0))
 					{
 						item->moveToOwner(unit);
@@ -1531,7 +1529,7 @@ bool BattlescapeGenerator::addItem(
 					i != 4;
 					++i)
 			{
-				if (!unit->getItem("STR_BELT", i))
+				if (unit->getItem("STR_BELT", i) == false)
 				{
 					item->moveToOwner(unit);
 					item->setSlot(_rules->getInventory("STR_BELT"));
@@ -1543,18 +1541,10 @@ bool BattlescapeGenerator::addItem(
 				}
 			}
 		break;
+		case BT_MINDPROBE:
 		case BT_MEDIKIT:
 		case BT_SCANNER:
-			if (!unit->getItem("STR_BACK_PACK"))
-			{
-				item->moveToOwner(unit);
-				item->setSlot(_rules->getInventory("STR_BACK_PACK"));
-
-				placed = true;
-			}
-		break;
-		case BT_MINDPROBE:
-			if (!unit->getItem("STR_BACK_PACK"))
+			if (unit->getItem("STR_BACK_PACK") == false)
 			{
 				item->moveToOwner(unit);
 				item->setSlot(_rules->getInventory("STR_BACK_PACK"));
