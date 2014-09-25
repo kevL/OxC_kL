@@ -751,9 +751,9 @@ private:
 		/// Gets the item in the main hand.
 		BattleItem* getMainHandWeapon(bool quickest = true) const;
 		/// Gets a grenade from the belt, if any.
-		BattleItem* getGrenadeFromBelt() const;
+		BattleItem* getGrenade() const;
 		/// Gets the name of a melee weapon we may be carrying or that's innate.
-		std::string getMeleeWeapon();
+		std::string getMeleeWeapon() const;
 
 		/// Reloads righthand weapon if needed.
 		bool checkAmmo();

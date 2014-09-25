@@ -324,15 +324,18 @@ void Map::draw()
 {
 	//Log(LOG_INFO) << "Map::draw()";
 
-	// kL_note: removed setting this here and in BattlescapeGame::handleState().
-//	if (!_redraw) return;
+	// kL_note: removed setting this here and in BattlescapeGame::handleState(),
+	// Camera::scrollXY(), ProjectileFlyBState::think() x2.
+	// NOTE: The calls to draw() in above functions are prob. redundant,
+	// since this state probably refreshes auto, via gameTicks ...
+//	if (_redraw == false) return;
+//	_redraw = false;
 
-//	Surface::draw();
-	// normally call for a Surface::draw();
-	// But we don't want to clear the background with color 0, which is transparent
+	// Normally call for a Surface::draw();
+	// but we don't want to clear the background with color 0, which is transparent
 	// (aka black) -- we use color 15 because that actually corresponds to the
 	// colour we DO want in all variations of the xcom and tftd palettes.
-	_redraw = false;
+//	Surface::draw();
 	clear(Palette::blockOffset(0)+15);
 
 	Tile* tile = NULL;
@@ -686,7 +689,7 @@ void Map::drawTerrain(Surface* surface)
 		floor,
 		object;
 
-	if (!_waypoints.empty()
+	if (_waypoints.empty() == false
 		|| (pathPreview
 			&& (_previewSetting & PATH_TU_COST)))
 	{
@@ -2075,8 +2078,6 @@ void Map::drawTerrain(Surface* surface)
 									- _arrow->getHeight()
 //kL								+ arrowBob[_cursorFrame],
 									+ static_cast<int>( // kL
-//										4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
-//										-4.0 * sin(180.0 / static_cast<double>(_animFrame + 1) / 8.0)),
 										-4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
 								0);
 		}
@@ -2094,11 +2095,6 @@ void Map::drawTerrain(Surface* surface)
 //kL							+ arrowBob[_animFrame],
 //kL							+ arrowBob[_cursorFrame], // DarkDefender
 								+ static_cast<int>( // kL
-//									4.0 * sin((static_cast<double>(_animFrame) * 2.0 * M_PI) / 8.0)),
-//									4.0 * sin(static_cast<double>(4 - _animFrame) * 45.0 / 8.0)), // fast up, slow down
-//									4.0 * sin(static_cast<double>(_animFrame - 4) * 22.5)),
-//									4.0 * sin(static_cast<double>(_animFrame) * M_PI / 4.0)),
-//									4.0 * sin(180.0 / static_cast<double>(_animFrame + 1) / 8.0)),
 									4.0 * sin(22.5 / static_cast<double>(_animFrame + 1))),
 							0);
 	}

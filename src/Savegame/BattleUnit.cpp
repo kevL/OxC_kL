@@ -2575,23 +2575,23 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	} */
 
 /**
- * Get a grenade from the belt (used for AI)
- * @return Pointer to item.
+ * Get a grenade from hand or belt (used for AI).
+ * @return, pointer to grenade, or NULL
  */
-BattleItem* BattleUnit::getGrenadeFromBelt() const
+BattleItem* BattleUnit::getGrenade() const
 {
 	// kL_begin: BattleUnit::getGrenadeFromBelt(), or hand.
-	BattleItem* handgrenade = getItem("STR_RIGHT_HAND");
-	if (!handgrenade
-		|| handgrenade->getRules()->getBattleType() != BT_GRENADE)
+	BattleItem* grenade = getItem("STR_RIGHT_HAND");
+	if (grenade == NULL
+		|| grenade->getRules()->getBattleType() != BT_GRENADE)
 	{
-		handgrenade = getItem("STR_LEFT_HAND");
+		grenade = getItem("STR_LEFT_HAND");
 	}
 
-	if (handgrenade
-		&& handgrenade->getRules()->getBattleType() == BT_GRENADE)
+	if (grenade
+		&& grenade->getRules()->getBattleType() == BT_GRENADE)
 	{
-		return handgrenade;
+		return grenade;
 	} // kL_end.
 
 	for (std::vector<BattleItem*>::const_iterator
@@ -2610,7 +2610,7 @@ BattleItem* BattleUnit::getGrenadeFromBelt() const
  * Gets the name of any melee weapon we may be carrying, or a built in one.
  * @return, the name of a melee weapon
  */
-std::string BattleUnit::getMeleeWeapon()
+std::string BattleUnit::getMeleeWeapon() const
 {
 	if (getItem("STR_RIGHT_HAND")
 		&& getItem("STR_RIGHT_HAND")->getRules()->getBattleType() == BT_MELEE)
@@ -2713,7 +2713,7 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
 int BattleUnit::getHeight() const
 {
 	int ret = getStandHeight();;
-	
+
 	if (isKneeled())
 		ret = getKneelHeight();
 

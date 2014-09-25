@@ -429,7 +429,7 @@ void Camera::scrollXY(
 	_map->refreshSelectorPosition();
 
 	if (redraw)
-//kL		_map->invalidate();
+//kL	_map->invalidate();
 		_map->draw(); // kL, old code.
 }
 

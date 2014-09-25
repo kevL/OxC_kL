@@ -77,6 +77,9 @@ RuleInventory::RuleInventory(const std::string& id)
 {
 }
 
+/**
+ * dTor.
+ */
 RuleInventory::~RuleInventory()
 {
 }
@@ -292,14 +295,14 @@ bool RuleInventory::fitItemInSlot(
 			}
 		}
 
-		return foundSlots == totalSlots;
+		return (foundSlots == totalSlots);
 	}
 }
 
 /**
- * Gets the time unit cost to place an item in another section.
- * @param slot The new section id.
- * @return The time unit cost.
+ * Gets the time unit cost to place an item in this slot to another.
+ * @param slot - the new section id
+ * @return, the time unit cost
  */
 int RuleInventory::getCost(RuleInventory* slot) const
 {

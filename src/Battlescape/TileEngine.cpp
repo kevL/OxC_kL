@@ -2308,7 +2308,7 @@ void TileEngine::explode(
 			fi <= 90;
 			fi += 5)
 	{
-//		for (int te = 90; te == 90; ++te) // kL_note: Looks like a TEST ray. ( 0 == south, 180 == north, goes CounterClock-wise )
+//		for (int te = 180; te == 180; ++te) // kL_note: Looks like a TEST ray. ( 0 == south, 180 == north, goes CounterClock-wise )
 //		for (int te = 90; te < 360; te += 180) // E & W
 //		for (int te = 45; te < 360; te += 180) // SE & NW
 //		for (int te = 225; te < 420; te += 180) // NW & SE
@@ -2337,8 +2337,8 @@ void TileEngine::explode(
 				//Log(LOG_INFO) << ". . . . .";
 				//++testIter;
 				//Log(LOG_INFO) << ". i = " << testIter;
-				//Log(LOG_INFO) << ". r = " << r; // << ", r_Max = " << r_Max;
 				//Log(LOG_INFO) << ". _powerE = " << _powerE;
+				//Log(LOG_INFO) << ". r = " << r << " _powerE = " << _powerE; // << ", r_Max = " << r_Max;
 
 				vect_x = static_cast<double>(centerX) + r * sin_te * cos_fi;
 				vect_y = static_cast<double>(centerY) + r * cos_te * cos_fi;
@@ -2391,7 +2391,7 @@ void TileEngine::explode(
 
 					if (_powerE < 1)
 					{
-						//Log(LOG_INFO) << ". _powerE < 1 BREAK[hori] " << Position(tileX, tileY, tileZ);
+						//Log(LOG_INFO) << ". _powerE < 1 BREAK[hori] " << Position(tileX, tileY, tileZ) << "\n";
 						break;
 					}
 
@@ -2400,7 +2400,7 @@ void TileEngine::explode(
 						_powerE -= z_Dec;
 						if (_powerE < 1)
 						{
-							//Log(LOG_INFO) << ". _powerE < 1 BREAK[vert] " << Position(tileX, tileY, tileZ);
+							//Log(LOG_INFO) << ". _powerE < 1 BREAK[vert] " << Position(tileX, tileY, tileZ) << "\n";
 							break;
 						}
 					}
@@ -2411,12 +2411,13 @@ void TileEngine::explode(
 													origin,
 													destTile,
 													type);
-					//Log(LOG_INFO) << ". horiBlock = " << horiBlock;
+					//if (horiBlock != 0) Log(LOG_INFO) << ". horiBlock = " << horiBlock;
+
 					int vertBlock = verticalBlockage(
 												origin,
 												destTile,
 												type);
-					//Log(LOG_INFO) << ". vertBlock = " << vertBlock;
+					//if (vertBlock != 0) Log(LOG_INFO) << ". vertBlock = " << vertBlock;
 
 					if (horiBlock < 0 // only visLike will return < 0 for this break here.
 						&& vertBlock < 0)
@@ -2430,7 +2431,7 @@ void TileEngine::explode(
 							_powerT -= horiBlock; // terrain takes 200% power to destruct. <- But this isn't for destruction.
 							if (_powerT < 1)
 							{
-								//Log(LOG_INFO) << ". horiBlock BREAK " << Position(tileX, tileY, tileZ);
+								//Log(LOG_INFO) << ". horiBlock BREAK " << Position(tileX, tileY, tileZ) << "\n";
 								break;
 							}
 						}
@@ -2440,7 +2441,7 @@ void TileEngine::explode(
 							_powerT -= vertBlock; // terrain takes 200% power to destruct. <- But this isn't for destruction.
 							if (_powerT < 1)
 							{
-								//Log(LOG_INFO) << ". vertBlock BREAK " << Position(tileX, tileY, tileZ);
+								//Log(LOG_INFO) << ". vertBlock BREAK " << Position(tileX, tileY, tileZ) << "\n";
 								break;
 							}
 						}
@@ -2452,10 +2453,7 @@ void TileEngine::explode(
 				if (type == DT_HE) // explosions do 50% damage to terrain and 50% to 150% damage to units
 				{
 					//Log(LOG_INFO) << ". setExplosive() _powerE = " << _powerE;
-					//Log(LOG_INFO) << ". setExplosive() _powerT = " << _powerT;
-
 					destTile->setExplosive(_powerE);
-//					destTile->setExplosive(_powerT);
 				}
 
 				_powerE = _powerT; // note: These two are becoming increasingly redundant !!!
@@ -2468,8 +2466,8 @@ void TileEngine::explode(
 				//Log(LOG_INFO) << ". post insert Tile";
 				if (tilePair.second) // true if a new tile was inserted.
 				{
-					//Log(LOG_INFO) << ". . > tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition(); //<< ". _powerE = " << _powerE << ". r = " << r;
-					//Log(LOG_INFO) << ". . > _powerE = " << _powerE;
+					//Log(LOG_INFO) << ". > tile TRUE : origin " << origin->getPosition() << " dest " << destTile->getPosition(); //<< ". _powerE = " << _powerE << ". r = " << r;
+					//Log(LOG_INFO) << ". > _powerE = " << _powerE;
 
 					targetUnit = destTile->getUnit();
 					if (targetUnit
@@ -2530,9 +2528,14 @@ void TileEngine::explode(
 							//Log(LOG_INFO) << ". . type == DT_HE";
 							if (targetUnit)
 							{
-								powerVsUnit = (static_cast<int>(RNG::generate(static_cast<double>(_powerE) * 0.5, static_cast<double>(_powerE) * 1.5)) // bell curve
-											 + static_cast<int>(RNG::generate(static_cast<double>(_powerE) * 0.5, static_cast<double>(_powerE) * 1.5)))
-											/ 2;
+								powerVsUnit = ( // bell curve
+											static_cast<int>(RNG::generate(
+																		static_cast<double>(_powerE) * 0.5,
+																		static_cast<double>(_powerE) * 1.5))
+										  + static_cast<int>(RNG::generate(
+																		static_cast<double>(_powerE) * 0.5,
+																		static_cast<double>(_powerE) * 1.5)))
+										/ 2;
 								//Log(LOG_INFO) << ". . DT_HE power = " << powerVsUnit << ", vs ID " << targetUnit->getId();
 
 								if (distance(
@@ -2603,9 +2606,14 @@ void TileEngine::explode(
 										{
 											buOut->setTakenExpl();
 
-											powerVsUnit = (static_cast<int>(RNG::generate(static_cast<double>(_powerE) * 0.5, static_cast<double>(_powerE) * 1.5)) // bell curve
-														 + static_cast<int>(RNG::generate(static_cast<double>(_powerE) * 0.5, static_cast<double>(_powerE) * 1.5)))
-														/ 2;
+											powerVsUnit = ( // bell curve
+														static_cast<int>(RNG::generate(
+																					static_cast<double>(_powerE) * 0.5,
+																					static_cast<double>(_powerE) * 1.5))
+													  + static_cast<int>(RNG::generate(
+																					static_cast<double>(_powerE) * 0.5,
+																					static_cast<double>(_powerE) * 1.5)))
+													/ 2;
 
 											buOut->damage(
 														Position(0, 0, 0),
@@ -2623,10 +2631,10 @@ void TileEngine::explode(
 													&& buOut->getOriginalFaction() == FACTION_PLAYER)
 												{
 													Game* game = _battleSave->getBattleState()->getGame();
-													game->pushState(new InfoboxOKState(game->getLanguage()->getString(
-																													"STR_HAS_BEEN_KILLED", // "has exploded ..."
-																													buOut->getGender())
-																												.arg(buOut->getName(game->getLanguage()))));
+													game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has exploded ..."
+																												"STR_HAS_BEEN_KILLED",
+																												buOut->getGender())
+																											.arg(buOut->getName(game->getLanguage()))));
 												}
 
 												_battleSave->removeItem(*it);
@@ -2814,8 +2822,8 @@ void TileEngine::explode(
 												&& buOut->getOriginalFaction() == FACTION_PLAYER)
 											{
 												Game* game = _battleSave->getBattleState()->getGame();
-												game->pushState(new InfoboxOKState(game->getLanguage()->getString(
-																											"STR_HAS_BEEN_KILLED", // "has exploded ..."
+												game->pushState(new InfoboxOKState(game->getLanguage()->getString( // "has been killed with Fire ..."
+																											"STR_HAS_BEEN_KILLED",
 																											buOut->getGender())
 																										.arg(buOut->getName(game->getLanguage()))));
 											}
@@ -2874,6 +2882,7 @@ void TileEngine::explode(
 
 				origin = destTile;
 				r += 1.0;
+				//Log(LOG_INFO) << " ";
 			}
 		}
 	}
@@ -4626,8 +4635,8 @@ int TileEngine::closeUfoDoors()
 
 /**
  * Calculates a line trajectory, using bresenham algorithm in 3D.
- * @param origin			- reference to the origin (voxelspace for 'doVoxelCheck'; tilespace otherwise)
- * @param target			- reference to the target (voxelspace for 'doVoxelCheck'; tilespace otherwise)
+ * @param origin			- reference the origin (voxelspace for 'doVoxelCheck'; tilespace otherwise)
+ * @param target			- reference the target (voxelspace for 'doVoxelCheck'; tilespace otherwise)
  * @param storeTrajectory	- true will store the whole trajectory - otherwise it just stores the last position
  * @param trajectory		- pointer to a vector of positions in which the trajectory will be stored
  * @param excludeUnit		- pointer to a unit to be excluded from collision detection
@@ -4755,7 +4764,7 @@ int TileEngine::calculateLine(
 				if (trajectory) // store the position of impact
 					trajectory->push_back(Position(cx, cy, cz));
 
-				//Log(LOG_INFO) << "TileEngine::calculateLine() [1]ret = " << result;
+				//Log(LOG_INFO) << ". cL() ret[1] = " << result;
 				return result;
 			}
 		}
@@ -4840,7 +4849,7 @@ int TileEngine::calculateLine(
 					if (trajectory != 0)
 						trajectory->push_back(Position(cx, cy, cz)); // store the position of impact
 
-					//Log(LOG_INFO) << "TileEngine::calculateLine() [2]ret = " << result;
+					//Log(LOG_INFO) << ". cL() ret[2] = " << result;
 					return result;
 				}
 			}
@@ -4869,24 +4878,24 @@ int TileEngine::calculateLine(
 								excludeAllBut);
 				if (result != VOXEL_EMPTY)
 				{
-					if (trajectory != 0) // store the position of impact
+					if (trajectory != NULL) // store the position of impact
 						trajectory->push_back(Position(cx, cy, cz));
 
-					//Log(LOG_INFO) << "TileEngine::calculateLine() [3]ret = " << result;
+					//Log(LOG_INFO) << ". cL() ret[3] = " << result;
 					return result;
 				}
 			}
 		}
 	}
 
-	//Log(LOG_INFO) << ". EXIT ret -1";
+	//Log(LOG_INFO) << ". cL() ret VOXEL_EMTPY";
 	return VOXEL_EMPTY;
 }
 
 /**
  * Calculates a parabola trajectory, used for throwing items.
- * @param origin			- reference to the origin in voxelspace
- * @param target			- reference to the target in voxelspace
+ * @param origin			- reference the origin in voxelspace
+ * @param target			- reference the target in voxelspace
  * @param storeTrajectory	- true will store the whole trajectory - otherwise it stores the last position only
  * @param trajectory		- poniter to a vector of positions in which the trajectory will be stored
  * @param excludeUnit		- pointer to a unit to exclude - makes sure the trajectory does not hit the shooter itself
@@ -4935,7 +4944,7 @@ int TileEngine::calculateParabola(
 
 	double
 		zA = sqrt(ro) * arc,
-		zK = 4.0 * zA / ro / ro;
+		zK = (4.0 * zA) / (ro * ro);
 
 	int
 		x = origin.x,
@@ -4950,7 +4959,8 @@ int TileEngine::calculateParabola(
 		x = static_cast<int>(static_cast<double>(origin.x) + static_cast<double>(i) * cos(te) * sin(fi));
 		y = static_cast<int>(static_cast<double>(origin.y) + static_cast<double>(i) * sin(te) * sin(fi));
 		z = static_cast<int>(static_cast<double>(origin.z) + static_cast<double>(i) * cos(fi)
-				- zK * (static_cast<double>(i) - ro / 2.0) * (static_cast<double>(i) - ro / 2.0) + zA);
+				- zK * (static_cast<double>(i) - ro / 2.0) * (static_cast<double>(i) - ro / 2.0)
+				+ zA);
 
 		if (storeTrajectory
 			&& trajectory)
@@ -4960,11 +4970,11 @@ int TileEngine::calculateParabola(
 
 		Position nextPosition = Position(x, y, z);
 		int test = calculateLine(
-								lastPosition,
-								nextPosition,
-								false,
-								NULL,
-								excludeUnit);
+							lastPosition,
+							nextPosition,
+							false,
+							NULL,
+							excludeUnit);
 //		int test = voxelCheck(
 //							Position(x, y, z),
 //							excludeUnit);
@@ -4973,35 +4983,37 @@ int TileEngine::calculateParabola(
 			if (lastPosition.z < nextPosition.z)
 				test = VOXEL_OUTOFBOUNDS;
 
-			if (!storeTrajectory // store only the position of impact
+			if (storeTrajectory == false // store only the position of impact
 				&& trajectory != NULL)
 			{
 				trajectory->push_back(nextPosition);
 			}
 
+			//Log(LOG_INFO) << ". cP() ret = " << test;
 			return test;
 		}
 
 		lastPosition = Position(x, y, z);
-		++i;
+		i++;
 	}
 
-	if (!storeTrajectory // store only the position of impact
+	if (storeTrajectory == false // store only the position of impact
 		&& trajectory != NULL)
 	{
 		trajectory->push_back(Position(x, y, z));
 	}
 
+	//Log(LOG_INFO) << ". cP() ret VOXEL_EMTPY";
 	return VOXEL_EMPTY;
 }
 
 /**
  * Validates a throw action.
- * @param action		- reference to the action to validate
+ * @param action		- reference the action to validate
  * @param originVoxel	- the origin point of the action
  * @param targetVoxel	- the target point of the action
- * @param curve			- pointer to a curvature of the throw
- * @param voxelType		- pointer to a type of voxel at which this parabola terminates
+ * @param curve			- pointer to a curvature of the throw (default NULL)
+ * @param voxelType		- pointer to a type of voxel at which this parabola terminates (default NULL)
  * @return, true if action is valid
  */
 bool TileEngine::validateThrow(
@@ -5011,7 +5023,7 @@ bool TileEngine::validateThrow(
 						double* curve,
 						int* voxelType)
 {
-	//Log(LOG_INFO) << "TileEngine::validateThrow(), cf Projectile::calculateThrow()";
+	//Log(LOG_INFO) << "\nTileEngine::validateThrow()"; //, cf Projectile::calculateThrow()";
 //kL	double arc = 0.5;
 //	double arc = 1.12;
 	double arc = 0.0;
@@ -5039,25 +5051,25 @@ bool TileEngine::validateThrow(
 	}
 	//Log(LOG_INFO) << ". starting arc = " << arc;
 
-	Tile* targetTile = _battleSave->getTile(action.target);
-	if (/*kL (action.type == BA_THROW
-			&& targetTile
-			&& targetTile->getMapData(MapData::O_OBJECT)
-			&& targetTile->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255) || */
+	Tile* tileTarget = _battleSave->getTile(action.target);
+	if ( /*kL (action.type == BA_THROW
+			&& tileTarget
+			&& tileTarget->getMapData(MapData::O_OBJECT)
+			&& tileTarget->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255) || */
 		ProjectileFlyBState::validThrowRange(
 											&action,
 											originVoxel,
-											targetTile)
+											tileTarget)
 										== false)
 	{
-		//Log(LOG_INFO) << ". . ret FALSE, validThrowRange not valid OR targetTile is nonwalkable.";
+		//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid"; // OR tileTarget is nonwalkable.";
 		return false; // object blocking - can't throw here
 	}
 
 
 	bool found = false;
 
-	while (!found // try several different curvatures
+	while (found == false // try several different curvatures
 		&& arc < 5.0)
 	{
 		int test = VOXEL_OUTOFBOUNDS;
@@ -5084,14 +5096,16 @@ bool TileEngine::validateThrow(
 			arc += 0.5;
 	}
 
-	if (arc >= 5.0)
-		//Log(LOG_INFO) << ". . ret FALSE, arc > 5";
+	if (arc > 5.0)
+	{
+		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 5";
 		return false;
+	}
 
 	if (curve)
 		*curve = arc;
 
-	//Log(LOG_INFO) << ". ret TRUE";
+	//Log(LOG_INFO) << ". vT() ret TRUE";
 	return true;
 }
 
@@ -5169,12 +5183,12 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 }
 
 /**
- * Checks if we hit a targetPos in voxel space.
- * @param targetPos			- reference to the voxel to check
+ * Checks if we hit a posTarget in voxel space.
+ * @param posTarget			- reference the voxel to check
  * @param excludeUnit		- pointer to unit NOT to do checks for
- * @param excludeAllUnits	- true to NOT do checks on any unit
- * @param onlyVisible		- true to consider only visible units
- * @param excludeAllBut		- pointer to an only unit to be considered
+ * @param excludeAllUnits	- true to NOT do checks on any unit (default false)
+ * @param onlyVisible		- true to consider only visible units (default false)
+ * @param excludeAllBut		- pointer to an only unit to be considered (default NULL)
  * @return,  -1 hit nothing
  *			0-3 tile-part (floor / westwall / northwall / content)
  *			  4 unit
@@ -5188,130 +5202,131 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  * VOXEL_OUTOFBOUNDS	//  5
  */
 int TileEngine::voxelCheck(
-		const Position& targetPos,
+		const Position& posTarget,
 		BattleUnit* excludeUnit,
 		bool excludeAllUnits,
 		bool onlyVisible,
 		BattleUnit* excludeAllBut)
 {
 	//Log(LOG_INFO) << "TileEngine::voxelCheck()"; // massive lag-to-file, Do not use.
-	Tile* targetTile = _battleSave->getTile(targetPos / Position(16, 16, 24)); // converts to tilespace -> Tile
-	//Log(LOG_INFO) << ". targetTile " << targetTile->getPosition();
+	Tile* tileTarget = _battleSave->getTile(posTarget / Position(16, 16, 24)); // converts to tilespace -> Tile
+	//Log(LOG_INFO) << ". tileTarget " << tileTarget->getPosition();
 	// check if we are out of the map
-	if (targetTile == NULL
-		|| targetPos.x < 0
-		|| targetPos.y < 0
-		|| targetPos.z < 0)
+	if (tileTarget == NULL
+		|| posTarget.x < 0
+		|| posTarget.y < 0
+		|| posTarget.z < 0)
 	{
-		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret 5";
+		//Log(LOG_INFO) << ". vC() ret VOXEL_OUTOFBOUNDS";
 		return VOXEL_OUTOFBOUNDS;
 	}
 
-	Tile* belowTile = _battleSave->getTile(targetTile->getPosition() + Position(0, 0,-1));
-	if (targetTile->isVoid()
-		&& targetTile->getUnit() == NULL
-		&& (!belowTile
-			|| belowTile->getUnit() == NULL))
+	Tile* tileBelow = _battleSave->getTile(tileTarget->getPosition() + Position(0, 0,-1));
+	if (tileTarget->isVoid()
+		&& tileTarget->getUnit() == NULL
+		&& (tileBelow == NULL
+			|| tileBelow->getUnit() == NULL))
 	{
-		//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret(1) -1";
+		//Log(LOG_INFO) << ". vC() ret VOXEL_EMPTY";
 		return VOXEL_EMPTY;
 	}
 
 	// kL_note: should allow items to be thrown through a gravLift down to the floor below
-	if ((targetPos.z %24 == 0
-			|| targetPos.z %24 == 1)
-		&& targetTile->getMapData(MapData::O_FLOOR)
-		&& targetTile->getMapData(MapData::O_FLOOR)->isGravLift())
+	if ((posTarget.z %24 == 0
+			|| posTarget.z %24 == 1)
+		&& tileTarget->getMapData(MapData::O_FLOOR)
+		&& tileTarget->getMapData(MapData::O_FLOOR)->isGravLift())
 	{
 		//Log(LOG_INFO) << "voxelCheck() isGravLift";
-		//Log(LOG_INFO) << ". level = " << targetTile->getPosition().z;
-
-		if (targetTile->getPosition().z == 0
-			|| (belowTile
-				&& belowTile->getMapData(MapData::O_FLOOR)
-				&& !belowTile->getMapData(MapData::O_FLOOR)->isGravLift()))
+		//Log(LOG_INFO) << ". level = " << tileTarget->getPosition().z;
+		if (tileTarget->getPosition().z == 0
+			|| (tileBelow
+				&& tileBelow->getMapData(MapData::O_FLOOR)
+				&& tileBelow->getMapData(MapData::O_FLOOR)->isGravLift() == false))
 		{
-			//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret 0";
-			//Log(LOG_INFO) << ". . EXIT, ret Voxel_Floor";
+			//Log(LOG_INFO) << ". vC() ret VOXEL_FLOOR";
 			return VOXEL_FLOOR;
 		}
 	}
 
 	// first we check TERRAIN tile/voxel data,
-	// not to allow 2x2 units stick through walls <- English pls??
-	for (int // terrain parts (floor, 2x walls, & content-object)
+	// not to allow 2x2 units to stick through walls
+	for (int // terrain parts ( 0=floor, 1/2=walls, 3=content-object )
 			i = 0;
 			i < 4;
 			++i)
 	{
-		if (targetTile->isUfoDoorOpen(i))
+		if (tileTarget->isUfoDoorOpen(i))
 			continue;
 
-		MapData* dataTarget = targetTile->getMapData(i);
+		MapData* dataTarget = tileTarget->getMapData(i);
 		if (dataTarget)
 		{
-			int x = 15 - targetPos.x %16;	// x-direction is reversed
-			int y = targetPos.y %16;		// y-direction is standard
+			int x = 15 - posTarget.x %16;	// x-direction is reversed
+			int y = posTarget.y %16;		// y-direction is standard
 
-			int LoftIdx = ((dataTarget->getLoftID((targetPos.z %24) / 2) * 16) + y); // wtf
+			int LoftIdx = ((dataTarget->getLoftID((posTarget.z %24) / 2) * 16) + y); // wtf
 			if (LoftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146
 				&& _voxelData->at(LoftIdx) & (1 << x))
 			{
-				//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret i = " << i;
+				//Log(LOG_INFO) << ". vC() ret = " << i;
 				return i;
 			}
 		}
 	}
 
-	if (!excludeAllUnits)
+	if (excludeAllUnits == false)
 	{
-		BattleUnit* buTarget = targetTile->getUnit();
+		BattleUnit* buTarget = tileTarget->getUnit();
 		// sometimes there is unit on the tile below, but sticks up into this tile with its head.
 		if (buTarget == NULL
-			&& targetTile->hasNoFloor(0))
+			&& tileTarget->hasNoFloor(0))
 		{
-			targetTile = _battleSave->getTile(Position( // tileBelow
-										targetPos.x / 16,
-										targetPos.y / 16,
-										targetPos.z / 24 - 1));
-			if (targetTile)
-				buTarget = targetTile->getUnit();
+			tileTarget = _battleSave->getTile(Position( // tileBelow
+										posTarget.x / 16,
+										posTarget.y / 16,
+										posTarget.z / 24 - 1));
+			if (tileTarget)
+				buTarget = tileTarget->getUnit();
 		}
 
 		if (buTarget
 			&& buTarget != excludeUnit
-			&& (!excludeAllBut || buTarget == excludeAllBut)
-			&& (!onlyVisible || buTarget->getVisible()))
+			&& (excludeAllBut == NULL
+				|| buTarget == excludeAllBut)
+			&& (onlyVisible == false
+				|| buTarget->getVisible()))
 		{
 			Position pTarget_bu = buTarget->getPosition();
-			int tz = (pTarget_bu.z * 24) + buTarget->getFloatHeight() - targetTile->getTerrainLevel(); // floor-level voxel
+			int tz = pTarget_bu.z * 24 + buTarget->getFloatHeight() - tileTarget->getTerrainLevel(); // floor-level voxel
 
-			if (targetPos.z > tz
-				&& targetPos.z <= tz + buTarget->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
+			if (posTarget.z > tz
+				&& posTarget.z <= tz + buTarget->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
 			{
 				int entry = 0;
 
-				int x = targetPos.x %16; // where on the x-axis
-				int y = targetPos.y %16; // where on the y-axis
-					// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction(), if (_currentAction.type == BA_HIT)
+				int x = posTarget.x %16; // where on the x-axis
+				int y = posTarget.y %16; // where on the y-axis
+				// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction(), if (_currentAction.type == BA_HIT)
 
 				if (buTarget->getArmor()->getSize() > 1) // for large units...
 				{
-					Position pTarget_tile = targetTile->getPosition();
+					Position pTarget_tile = tileTarget->getPosition();
 					entry = ((pTarget_tile.x - pTarget_bu.x) + ((pTarget_tile.y - pTarget_bu.y) * 2));
 				}
 
 				int LoftIdx = ((buTarget->getLoftemps(entry) * 16) + y);
 				//Log(LOG_INFO) << "LoftIdx = " << LoftIdx;
-				if (_voxelData->at(LoftIdx) & (1 << x))
-					// if the voxelData at LoftIdx is "1" solid:
-					//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret 4";
+				if (_voxelData->at(LoftIdx) & (1 << x)) // if the voxelData at LoftIdx is "1" solid:
+				{
+					//Log(LOG_INFO) << ". vC() ret VOXEL_UNIT";
 					return VOXEL_UNIT;
+				}
 			}
 		}
 	}
 
-	//Log(LOG_INFO) << "TileEngine::voxelCheck() EXIT, ret(2) -1"; // massive lag-to-file, Do not use.
+	//Log(LOG_INFO) << ". vC() ret VOXEL_EMPTY"; // massive lag-to-file, Do not use.
 	return VOXEL_EMPTY;
 }
 

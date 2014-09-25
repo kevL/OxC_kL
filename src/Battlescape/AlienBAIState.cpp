@@ -58,9 +58,9 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleAIState.
- * @param game Pointer to the game.
- * @param unit Pointer to the unit.
- * @param node Pointer to the node the unit originates from.
+ * @param save - pointer to SavedBattleGame
+ * @param unit - pointer to the unit
+ * @param node - pointer to the node the unit originates from
  */
 AlienBAIState::AlienBAIState(
 		SavedBattleGame* save,
@@ -464,17 +464,19 @@ void AlienBAIState::think(BattleAction* action)
 			action->weapon	= _attackAction->weapon; // this may have changed to a grenade.
 
 			if (action->weapon
-				&& action->type == BA_THROW
-				&& action->weapon->getRules()->getBattleType() == BT_GRENADE)
+				&& action->weapon->getRules()->getBattleType() == BT_GRENADE
+				&& action->type == BA_THROW)
 			{
-				RuleInventory* beltRule = _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_BELT");
-				RuleInventory* rhRule = _save->getBattleState()->getGame()->getRuleset()->getInventory("STR_RIGHT_HAND");
-				int cost = beltRule->getCost(rhRule);
-				//Log(LOG_INFO) << "AlienBAIState::think() move grenade from Belt to Hand, TU = " << cost;
+				RuleInventory* rule = action->weapon->getSlot();
+				int costTU = rule->getCost(_save->getBattleState()->getGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
-				_unit->spendTimeUnits(cost + _unit->getActionTUs(
-																BA_PRIME,
-																action->weapon));
+				if (action->weapon->getFuseTimer() == -1)
+					costTU += _unit->getActionTUs(
+												BA_PRIME,
+												action->weapon);
+
+				_unit->spendTimeUnits(costTU); // cf. grenadeAction()
+				//Log(LOG_INFO) << "AlienBAIState::think() Move & Prime GRENADE, costTU = " << costTU;
 			}
 
 			action->finalFacing	= _attackAction->finalFacing;					// if this is a firepoint action, set our facing.
@@ -936,7 +938,7 @@ void AlienBAIState::setupAttack()
 	{
 		if (_unit->getStats()->psiSkill
 			&& psiAction()
-			&& !_didPsi) // kL, also checked in AlienBAIState::psiAction().
+			&& _didPsi == false) // kL, also checked in AlienBAIState::psiAction().
 		{
 			//Log(LOG_INFO) << "do Psi attack";
 			// at this point we can save some time with other calculations - the unit WILL make a psionic attack this turn.
@@ -962,7 +964,7 @@ void AlienBAIState::setupAttack()
 			selectMeleeOrRanged();
 		}
 
-		if (_unit->getGrenadeFromBelt())
+		if (_unit->getGrenade())
 		{
 			//Log(LOG_INFO) << ". . . . . . grenadeAction()";
 			grenadeAction();
@@ -2343,7 +2345,10 @@ void AlienBAIState::grenadeAction()
 	// do we have a grenade on our belt?
 	// kL_note: this is already checked in setupAttack()
 	// Could use it to determine if grenade is already inHand though! ( see _grenade var.)
-	BattleItem* grenade = _unit->getGrenadeFromBelt();
+	BattleItem* grenade = _unit->getGrenade();
+
+	if (grenade == NULL)
+		return;
 
 	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
 	if (explosiveEfficacy(
@@ -2355,16 +2360,19 @@ void AlienBAIState::grenadeAction()
 	{
 //		if (_unit->getFaction() == FACTION_HOSTILE)
 //		{
-		int tu = 0;
+		RuleInventory* rule = grenade->getSlot();
+		int costTU = rule->getCost(_save->getBattleState()->getGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
-		if (!_grenade)
-			tu += 5;	// 5tu for moving grenade from belt to hand
-						// kL_note: unless it's already in-hand.....
-						// should re-implement that via think() above.
-		tu += _unit->getActionTUs(BA_PRIME, grenade);
-		tu += _unit->getActionTUs(BA_THROW, grenade);
+		if (grenade->getFuseTimer() == -1)
+			costTU += _unit->getActionTUs(
+										BA_PRIME,
+										grenade);
 
-		if (tu <= _unit->getStats()->tu) // do we have enough TUs to prime and throw the grenade?
+		costTU += _unit->getActionTUs(
+									BA_THROW,
+									grenade);
+
+		if (costTU <= _unit->getStats()->tu)
 		{
 			BattleAction action;
 			action.actor	= _unit;
@@ -2374,13 +2382,14 @@ void AlienBAIState::grenadeAction()
 
 			Position originVoxel = _save->getTileEngine()->getOriginVoxel(
 																		action,
-																		0);
+																		NULL);
 			Position targetVoxel = action.target * Position(16, 16, 24)
 									+ Position(
 											8,
 											8,
 											2 - _save->getTile(action.target)->getTerrainLevel());
-			if (_save->getTileEngine()->validateThrow( // check the range
+
+			if (_save->getTileEngine()->validateThrow(
 													action,
 													originVoxel,
 													targetVoxel))

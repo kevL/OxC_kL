@@ -92,7 +92,7 @@ MiniMapState::MiniMapState(
 
 	centerAllSurfaces();
 
-	_screen = false;												// kL
+//	_screen = false;												// kL
 	_bg->drawRect(48, 16, 221, 148, Palette::blockOffset(15)+15);	// kL
 
 /*	if (_game->getScreen()->getDY() > 50)

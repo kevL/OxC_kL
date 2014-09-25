@@ -378,7 +378,7 @@ void ProjectileFlyBState::init()
 		|| (Options::forceFire
 			&& (SDL_GetModState() & KMOD_CTRL) != 0
 			&& _parent->getSave()->getSide() == FACTION_PLAYER)
-		|| !_parent->getPanicHandled())
+		|| _parent->getPanicHandled() == false)
 	{
 		_targetVoxel = Position( // target nothing, targets the middle of the tile
 							_action.target.x * 16 + 8,
@@ -532,7 +532,6 @@ bool ProjectileFlyBState::createNewProjectile()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::createNewProjectile() -> create Projectile";
 	//Log(LOG_INFO) << ". _action_type = " << _action.type;
-
 	_action.autoShotCount++;
 
 	if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add.
@@ -784,7 +783,8 @@ void ProjectileFlyBState::think()
 			if (_action.cameraPosition.z != -1)
 			{
 				_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
-				_parent->getMap()->invalidate();
+//kL			_parent->getMap()->invalidate();
+				_parent->getMap()->draw(); // kL
 			}
 		}
 		else // think() FINISH.
@@ -808,10 +808,9 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_AIMEDSHOT)
 				{
 					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition); // jumps camera back to stored position when shot was taken.
-					_parent->getMap()->invalidate();
+//kL				_parent->getMap()->invalidate();
+					_parent->getMap()->draw(); // kL
 				}
-
-//				_parent->getMap()->invalidate(); // above^
 			}
 
 			if (_unit->getFaction() == _parent->getSave()->getSide() // kL
@@ -843,7 +842,7 @@ void ProjectileFlyBState::think()
 			_parent->popState();
 		}
 	}
-	else // impact !
+	else // projectile in motion ... ! impact !
 	{
 		if (_action.type != BA_THROW
 			&& _ammo
@@ -928,7 +927,10 @@ void ProjectileFlyBState::think()
 			{
 //				_parent->getMap()->resetCameraSmoothing();
 
-				if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add.
+				if (_action.type == BA_LAUNCH) // kL: Launches explode at final waypoint.
+					_projectileImpact = VOXEL_OBJECT;
+
+				if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add. SoldierDiary
 					&& _parent->getSave()->getTile(_action.target)->getUnit()) // Only counts for guns, not throws or launches
 				{
 					_parent->getSave()->getTile(_action.target)->getUnit()->getStatistics()->shotAtCounter++;
@@ -1033,7 +1035,7 @@ void ProjectileFlyBState::think()
 																->getUnit();
 						BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit(); // target (not necessarily who was hit)
 						if (victim
-							&& !victim->isOut())
+							&& victim->isOut() == false)
 						{
 							victim->getStatistics()->hitCounter++;
 							if (_unit->getOriginalFaction() == FACTION_PLAYER
@@ -1163,15 +1165,15 @@ bool ProjectileFlyBState::validThrowRange(
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
 
-	int offset_z = 2; // kL_note: this is prob +1 (.. +2) to get things up off of the lowest voxel of a targetTile.
+	int offset_z = 2; // kL_note: this is prob +1 (.. +2) to get things up off the lowest voxel of a targetTile.
 //	int delta_z = origin.z
 //					- (((action->target.z * 24)
 //						+ offset_z)
 //						- target->getTerrainLevel());
 	int delta_z = origin.z // voxelspace
-						- (action->target.z * 24)
-						- offset_z
-						+ target->getTerrainLevel();
+				- action->target.z * 24
+				- offset_z
+				+ target->getTerrainLevel();
 	double maxDist = static_cast<double>(
 							getMaxThrowDistance( // tilespace
 											weight,

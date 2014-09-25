@@ -176,7 +176,7 @@ int Projectile::calculateTrajectory(
 												&_trajectory,
 												bu);
 	if (test != VOXEL_EMPTY
-		&& !_trajectory.empty()
+		&& _trajectory.empty() == false
 		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
 		&& _action.autoShotCount == 1
 		&& (!Options::forceFire
@@ -441,7 +441,7 @@ int Projectile::calculateThrow(double accuracy)
 
 /**
  * Calculates the new target in voxel space, based on a given accuracy modifier.
- * @param origin		- reference to the start position of the trajectory in voxelspace
+ * @param origin		- reference the start position of the trajectory in voxelspace
  * @param target		- pointer to an end position of the trajectory in voxelspace
  * @param accuracy		- accuracy modifier
  * @param keepRange		- true if range affects accuracy. (default = false)
@@ -647,7 +647,7 @@ void Projectile::applyAccuracy(
 	int throwRule = 100;
 	Soldier* soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
 //	Soldier* soldier = _action.actor->getGeoscapeSoldier();
-	if (soldier)
+	if (soldier != NULL)
 	{
 		int throwRule = soldier->getRules()->getStatCaps().throwing;
 //		int minThrowRule = _save->getGeoscapeSave()->getSoldier(_action.actor->getId())->getRules()->getMinStats().throwing;
@@ -816,12 +816,12 @@ void Projectile::skipTrajectory()
 
 /**
  * Gets the Position of origin for the projectile.
+ * Instead of using the actor's position use the voxel origin translated to a tile position;
+ * this is a workaround for large units.
  * @return, origin as a tile position
  */
 Position Projectile::getOrigin()
 {
-	// instead of using the actor's position, we'll use the voxel origin translated to a tile position;
-	// this is a workaround for large units.
 	return _trajectory.front() / Position(16, 16, 24);
 }
 

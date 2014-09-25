@@ -215,7 +215,7 @@ void BattlescapeGame::init()
 
 /**
  * Handles the processing of the AI states of a unit.
- * @param unit, Pointer to a BattleUnit.
+ * @param unit - pointer to a BattleUnit
  */
 void BattlescapeGame::handleAI(BattleUnit* unit)
 {
@@ -225,7 +225,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 	if ( //kL unit->getTimeUnits() < 6 ||
 		_AIActionCounter > 1
-		|| !unit->reselectAllowed())
+		|| unit->reselectAllowed() == false)
 	{
 		if (_save->selectNextFactionUnit(
 									true,
@@ -272,7 +272,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		// it's also for good luck
 
 	BattleAIState* ai = unit->getCurrentAIState();
-	if (!ai)
+	if (ai == NULL)
 	{
 		//Log(LOG_INFO) << "BattlescapeGame::handleAI() !ai, assign AI";
 
@@ -343,10 +343,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	if (unit->getCharging() != NULL)
 	{
 		if (unit->getAggroSound() != -1
-			&& !_playedAggroSound)
+			&& _playedAggroSound == false)
 		{
 			_playedAggroSound = true;
-
 			getResourcePack()->getSoundByDepth(
 											_save->getDepth(),
 											unit->getAggroSound())
@@ -515,8 +514,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 /**
  * Toggles the Kneel/Standup status of the unit.
- * @param bu, Pointer to a unit.
- * @return, True if the action succeeded.
+ * @param bu - pointer to a unit
+ * @return, true if the action succeeded
  */
 bool BattlescapeGame::kneel(
 		BattleUnit* bu,

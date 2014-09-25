@@ -56,8 +56,7 @@ private:
 
 	static const int heightFromCenter[11];
 
-	bool
-		_personalLighting;
+	bool _personalLighting;
 	int
 		_powerE, // kL, effective power that actually explodes on a tile that's hit by HE.
 		_powerT; // kL, test power that checks if _powerE actually makes it to the next tile.
@@ -145,9 +144,9 @@ private:
 				BattleUnit* unit,
 				BattleUnit* target);
 		/// kL. Selects a fire method based on range & time units.
-		BattleActionType selectFireMethod(
+		BattleActionType selectFireMethod( // kL
 				BattleAction action,
-				int& tu); // kL
+				int& tu);
 
 		/// Checks validity of a snap shot to this position.
 /*		bool canMakeSnap(
@@ -273,9 +272,9 @@ private:
 
 		/// Checks the visibility of a given voxel.
 		bool isVoxelVisible(const Position& voxel);
-		/// Checks what type of voxel occupies targetPos in voxel space.
+		/// Checks what type of voxel occupies posTarget in voxel space.
 		int voxelCheck(
-				const Position& targetPos,
+				const Position& posTarget,
 				BattleUnit* excludeUnit,
 				bool excludeAllUnits = false,
 				bool onlyVisible = false,
