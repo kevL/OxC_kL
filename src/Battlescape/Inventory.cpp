@@ -588,12 +588,12 @@ void Inventory::setMouseOverItem(BattleItem* item)
  */
 void Inventory::think()
 {
-	// kL_begin:
-	if (_primeGrenade > -1)
+	if (_primeGrenade > -1) // kL_begin ->
 	{
-		std::wstring activated = L"";
+		std::wstring activated;
+
 		if (_primeGrenade > 0)
-			activated += Text::formatNumber(_primeGrenade) + L" ";
+			activated = Text::formatNumber(_primeGrenade) + L" ";
 
 		activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 
@@ -813,9 +813,10 @@ void Inventory::mouseClick(Action* action, State* state)
 						int explTurn = item->getFuseTimer();
 						if (explTurn > -1)
 						{
-							std::wstring activated = L"";
+							std::wstring activated;
+
 							if (explTurn > 0)
-								activated += Text::formatNumber(explTurn) + L" ";
+								activated = Text::formatNumber(explTurn) + L" ";
 
 							activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 

@@ -156,7 +156,7 @@ ArticleStateArmor::~ArticleStateArmor()
  *
  */
 void ArticleStateArmor::addStat(
-		std::string label,
+		const std::string& label,
 		int stat,
 		bool plus)
 {
@@ -180,8 +180,8 @@ void ArticleStateArmor::addStat(
  *
  */
 void ArticleStateArmor::addStat(
-		std::string label,
-		std::wstring stat)
+		const std::string& label,
+		const std::wstring& stat)
 {
 	_lstInfo->addRow(
 					2,

@@ -414,7 +414,7 @@ std::string getDataFile(const std::string& filename)
 #endif
 
 	std::string path = caseInsensitive(Options::getDataFolder(), name);
-	if (path != "") // Check current data path
+	if (path.empty() == false) // Check current data path
 		return path;
 
 	for (std::vector<std::string>::const_iterator // Check every other path
@@ -422,9 +422,9 @@ std::string getDataFile(const std::string& filename)
 			i != Options::getDataList().end();
 			++i)
 	{
-//kL		std::string path = caseInsensitive(*i, name);
+//kL	std::string path = caseInsensitive(*i, name);
 		path = caseInsensitive(*i, name); // kL
-		if (path != "")
+		if (path.empty() == false)
 		{
 			Options::setDataFolder(*i);
 
@@ -453,7 +453,7 @@ std::string getDataFolder(const std::string& foldername)
 #endif
 
 	std::string path = caseInsensitiveFolder(Options::getDataFolder(), name);
-	if (path != "") // Check current data path
+	if (path.empty() == false) // Check current data path
 		return path;
 
 	for (std::vector<std::string>::const_iterator // Check every other path
@@ -461,9 +461,9 @@ std::string getDataFolder(const std::string& foldername)
 			i != Options::getDataList().end();
 			++i)
 	{
-//kL		std::string path = caseInsensitiveFolder(*i, name);
+//kL	std::string path = caseInsensitiveFolder(*i, name);
 		path = caseInsensitiveFolder(*i, name); // kL
-		if (path != "")
+		if (path.empty() == false)
 		{
 			Options::setDataFolder(*i);
 
@@ -595,7 +595,7 @@ std::vector<std::string> getDataContents(
 //kL	std::vector<std::string> files;
 
 	std::string current = caseInsensitiveFolder(Options::getDataFolder(), folder);
-	if (current != "") // Check current data path
+	if (current.empty() == false) // Check current data path
 	{
 		std::vector<std::string> contents = getFolderContents(current, ext);
 		for (std::vector<std::string>::const_iterator
@@ -616,7 +616,7 @@ std::vector<std::string> getDataContents(
 		if (path == current)
 			continue;
 
-		if (path != "")
+		if (path.empty() == false)
 		{
 			std::vector<std::string> contents = getFolderContents(path, ext);
 			for (std::vector<std::string>::const_iterator

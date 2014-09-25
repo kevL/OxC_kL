@@ -6044,7 +6044,7 @@ Position TileEngine::getOriginVoxel(
 		if (action.actor->getArmor()->getSize() > 1)
 			offset = 16;
 		else if (action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND")
-			&& !action.weapon->getRules()->isTwoHanded())
+			&& action.weapon->getRules()->isTwoHanded() == false)
 		{
 			offset = 8;
 		}

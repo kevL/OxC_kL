@@ -39,10 +39,6 @@ namespace OpenXcom
  */
 SoldierNamePool::SoldierNamePool()
 	:
-		_maleFirst(),
-		_femaleFirst(),
-		_maleLast(),
-		_femaleLast(),
 		_totalWeight(0)
 {
 }

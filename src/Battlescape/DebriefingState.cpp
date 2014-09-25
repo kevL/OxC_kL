@@ -1117,7 +1117,7 @@ void DebriefingState::prepareDebriefing()
 			UnitFaction faction = (*j)->getFaction();
 			std::string type = (*j)->getType();
 
-			if ((*j)->getSpawnUnit() != "")
+			if ((*j)->getSpawnUnit().empty() == false)
 				type = (*j)->getSpawnUnit();
 
 			if (origFact == FACTION_PLAYER)
@@ -1234,7 +1234,7 @@ void DebriefingState::prepareDebriefing()
 				}
 
 				std::string corpseItem = (*j)->getArmor()->getCorpseGeoscape();
-				if ((*j)->getSpawnUnit() != "")
+				if ((*j)->getSpawnUnit().empty() == false)
 				{
 					Ruleset* rule = _game->getRuleset();
 					corpseItem = rule
@@ -1342,7 +1342,6 @@ void DebriefingState::prepareDebriefing()
 		&& base->getCrafts()->empty() == false)
 	{
 		//Log(LOG_INFO) << ". aborted BASE_DEFENSE";
-
 		for (std::vector<Craft*>::iterator
 				i = base->getCrafts()->begin();
 				i != base->getCrafts()->end();

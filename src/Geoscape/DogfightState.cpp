@@ -362,7 +362,7 @@ DogfightState::DogfightState(
 	graphic->getCrop()->h = 29;
 	graphic->blit(_preview);
 
-	if (ufo->getRules()->getModSprite() == "")
+	if (ufo->getRules()->getModSprite().empty())
 	{
 		graphic->setY(15);
 		graphic->getCrop()->y = 140 + 52 * _ufo->getRules()->getSprite();

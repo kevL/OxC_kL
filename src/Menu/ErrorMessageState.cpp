@@ -46,7 +46,7 @@ ErrorMessageState::ErrorMessageState(
 		const std::string& id,
 		SDL_Color* palette,
 		Uint8 color,
-		std::string bg,
+		const std::string& bg,
 		int bgColor)
 {
 	create(
@@ -70,7 +70,7 @@ ErrorMessageState::ErrorMessageState(
 		const std::wstring& msg,
 		SDL_Color* palette,
 		Uint8 color,
-		std::string bg,
+		const std::string& bg,
 		int bgColor)
 {
 	create(
@@ -104,13 +104,12 @@ void ErrorMessageState::create(
 		const std::wstring& wstr,
 		SDL_Color* palette,
 		Uint8 color,
-		std::string bg,
+		const std::string& bg,
 		int bgColor)
 {
 	_screen = false;
 
 	_window		= new Window(this, 256, 160, 32, 20, POPUP_BOTH);
-//kL	_txtMessage	= new Text(246, 120, 37, 30);
 	_txtMessage	= new Text(200, 120, 60, 30);
 	_btnOk		= new TextButton(120, 18, 100, 154);
 

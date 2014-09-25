@@ -47,7 +47,6 @@ ListSaveState::ListSaveState(OptionsOrigin origin)
 			origin,
 			1,
 			false),
-		_selected(L""),
 		_previousSelectedRow(-1),
 		_selectedRow(-1)
 {

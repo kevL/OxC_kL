@@ -41,7 +41,6 @@ Transfer::Transfer(int hours)
 		_hours(hours),
 		_soldier(NULL),
 		_craft(NULL),
-		_itemId(""),
 		_itemQty(0),
 		_scientists(0),
 		_engineers(0),

@@ -72,16 +72,9 @@ TransferItemsState::TransferItemsState(
 		Base* baseFrom,
 		Base* baseTo)
 	:
-		_baseQty(),
-		_destQty(),
-		_transferQty(),
-
 		_baseFrom(baseFrom),
 		_baseTo(baseTo),
 
-		_soldiers(),
-		_crafts(),
-		_items(),
 		_sel(0),
 		_offset(0),
 		_total(0),

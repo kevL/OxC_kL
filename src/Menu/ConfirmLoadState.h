@@ -59,7 +59,7 @@ private:
 		/// Creates a new confirmation state.
 		ConfirmLoadState(
 				OptionsOrigin origin,
-				std::string fileName);
+				const std::string& fileName);
 		/// Cleans up the confirmation state.
 		virtual ~ConfirmLoadState();
 

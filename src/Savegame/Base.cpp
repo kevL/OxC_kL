@@ -67,7 +67,6 @@ Base::Base(const Ruleset* rule)
 	:
 		Target(),
 		_rule(rule),
-		_name(L""),
 		_scientists(0),
 		_engineers(0),
 		_inBattlescape(false),
@@ -892,7 +891,7 @@ double Base::getIgnoredStores()
 					&& (*w)->isRearming())
 				{
 					std::string clip = (*w)->getRules()->getClipItem();
-					if (clip != "")
+					if (clip.empty() == false)
 					{
 						int baseQty = getItems()->getItem(clip);
 						if (baseQty > 0)

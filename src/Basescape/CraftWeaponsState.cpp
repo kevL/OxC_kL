@@ -51,10 +51,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Craft Weapons window.
- * @param game : Pointer to the core game.
- * @param base : Pointer to the base to get info from.
- * @param craft : ID of the selected craft.
- * @param weapon : ID of the selected weapon.
+ * @param base		- pointer to the base to get info from
+ * @param craft		- ID of the selected craft
+ * @param weapon	- ID of the selected weapon
  */
 CraftWeaponsState::CraftWeaponsState(
 		Base* base,
@@ -63,8 +62,7 @@ CraftWeaponsState::CraftWeaponsState(
 	:
 		_base(base),
 		_craftID(craftID),
-		_weaponID(weaponID),
-		_weaponRules()
+		_weaponID(weaponID)
 {
 	_screen = false;
 
@@ -155,7 +153,7 @@ CraftWeaponsState::CraftWeaponsState(
 			else
 				ss << L"-";
 
-			if (w->getClipItem() != "")
+			if (w->getClipItem().empty() == false)
 				ss2 << _base->getItems()->getItem(w->getClipItem());
 			else
 				ss2 << tr("STR_NOT_AVAILABLE");

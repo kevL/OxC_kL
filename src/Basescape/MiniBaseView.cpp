@@ -57,7 +57,6 @@ MiniBaseView::MiniBaseView(
 			height,
 			x,
 			y),
-		_bases(),
 		_texture(NULL),
 		_base(0),
 		_hoverBase(0),

@@ -50,7 +50,6 @@ RuleItem::RuleItem(const std::string& type)
 		_hitSound(-1),
 		_hitAnimation(0),
 		_power(0),
-		_compatibleAmmo(),
 		_damageType(DT_NONE),
 		_accuracyAuto(0),
 		_accuracySnap(0),
@@ -87,20 +86,15 @@ RuleItem::RuleItem(const std::string& type)
 		_arcingShot(false),
 		_listOrder(0),
 		_maxRange(200),
-//kL	_aimRange(200),
-//kL	_snapRange(15),
-//kL	_autoRange(7),
-		_aimRange(20),	// kL
-		_snapRange(10),	// kL
-		_autoRange(5),	// kL
+		_aimRange(20),
+		_snapRange(10),
+		_autoRange(5),
 		_minRange(0),
-//kL	_dropoff(2),
-		_dropoff(1),	// kL
+		_dropoff(1),
 		_bulletSpeed(0),
 		_explosionSpeed(0),
 		_autoShots(3),
 		_shotgunPellets(0),
-		_zombieUnit(""),
 		_strengthApplied(false),
 		_skillApplied(true),
 		_LOSRequired(false),

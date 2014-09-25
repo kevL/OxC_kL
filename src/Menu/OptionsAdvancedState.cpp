@@ -212,7 +212,7 @@ void OptionsAdvancedState::lstOptionsClick(Action* action)
 	if (!setting)
 		return;
 
-	std::wstring settingText = L"";
+	std::wstring settingText;
 	if (setting->type() == OPTION_BOOL)
 	{
 		bool* b = setting->asBool();

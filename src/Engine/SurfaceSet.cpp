@@ -42,8 +42,7 @@ SurfaceSet::SurfaceSet(
 		int height)
 	:
 		_width(width),
-		_height(height),
-		_frames()
+		_height(height)
 {
 }
 

@@ -2616,7 +2616,7 @@ void BattlescapeGame::dropItem(
  */
 BattleUnit* BattlescapeGame::convertUnit(
 		BattleUnit* unit,
-		std::string convertType,
+		const std::string& convertType,
 		int dirFace) // kL_add.
 {
 	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << convertType;

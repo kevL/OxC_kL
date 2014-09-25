@@ -92,7 +92,6 @@ Ruleset::Ruleset(Game* game) // kL
 		_costScientist(0),
 		_timePersonnel(0),
 		_initialFunding(0),
-		_alienFuel(""),
 		_startingTime(
 			6,
 			1,

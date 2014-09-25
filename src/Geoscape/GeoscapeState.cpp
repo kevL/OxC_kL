@@ -202,9 +202,6 @@ GeoscapeState::GeoscapeState()
 		_pause(false),
 		_zoomInEffectDone(false),
 		_zoomOutEffectDone(false),
-		_popups(),
-		_dogfights(),
-		_dogfightsToBeStarted(),
 		_minimizedDogfights(0),
 		_dfLon(0.0),
 		_dfLat(0.0),
@@ -2144,7 +2141,7 @@ void GeoscapeState::time30Minutes()
 			else if ((*j)->getStatus() == "STR_REARMING")
 			{
 				std::string str = (*j)->rearm(_game->getRuleset());
-				if (str != ""
+				if (str.empty() == false
 					&& (*j)->getStopWarning() == false)
 				{
 					(*j)->setStopWarning();
@@ -2161,7 +2158,7 @@ void GeoscapeState::time30Minutes()
 			else if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				std::string item = (*j)->getRules()->getRefuelItem();
-				if (item == "")
+				if (item.empty())
 					(*j)->refuel();
 				else
 				{
@@ -2594,7 +2591,7 @@ void GeoscapeState::time1Day()
 						possibilities.push_back(*gof);
 				}
 
-				if (possibilities.size() != 0)
+				if (possibilities.empty() == false)
 				{
 					size_t randFree = static_cast<size_t>(RNG::generate(
 																0,
@@ -2606,7 +2603,7 @@ void GeoscapeState::time1Day()
 															bonus,
 															_game->getRuleset());
 
-					if (bonus->getLookup() != "")
+					if (bonus->getLookup().empty() == false)
 						_game->getSavedGame()->addFinishedResearch(
 																_game->getRuleset()->getResearch(bonus->getLookup()),
 																_game->getRuleset());
@@ -2617,9 +2614,9 @@ void GeoscapeState::time1Day()
 			//if (newResearch) Log(LOG_INFO) << ". newResearch Valid";
 			//else Log(LOG_INFO) << ". newResearch NOT valid"; // end_TEST
 
-//kL		std::string name = research->getLookup() == ""? research->getName(): research->getLookup();
+//kL		std::string name = research->getLookup().empty()? research->getName(): research->getLookup();
 			std::string name = research->getLookup();
-			if (name == "")
+			if (name.empty())
 				name = research->getName(); // duh!
 			//Log(LOG_INFO) << ". Research = " << name;
 
@@ -2633,7 +2630,7 @@ void GeoscapeState::time1Day()
 													research,
 													_game->getRuleset());
 
-			if (research->getLookup() != "")
+			if (research->getLookup().empty() == false)
 				_game->getSavedGame()->addFinishedResearch(
 														_game->getRuleset()->getResearch(research->getLookup()),
 														_game->getRuleset());

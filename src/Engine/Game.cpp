@@ -74,8 +74,6 @@ Game::Game(const std::string& title)
 		_screen(NULL),
 		_cursor(NULL),
 		_lang(NULL),
-		_states(),
-		_deleted(),
 		_res(NULL),
 		_save(NULL),
 		_rules(NULL),

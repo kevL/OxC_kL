@@ -429,7 +429,7 @@ static int zoomSurface2X_XAxis_32bit(
 
 					*(pixelDst + (dst->pitch/sizeof(Uint32))*j) = dataDst;
 				}
-				while(say[dsty + ++j] == 0); // fill in all relevant rows
+				while (say[dsty + ++j] == 0); // fill in all relevant rows
 
 				dataSrc >>= 16;
 				pixelDst++; // forward 4 bytes!
@@ -523,7 +523,7 @@ static int zoomSurface4X_XAxis_32bit(
 
 					*(pixelDst + (dst->pitch/sizeof(Uint32))*j) = dataDst;
 				}
-				while(say[dsty + ++j] == 0); // fill in all relevant rows
+				while (say[dsty + ++j] == 0); // fill in all relevant rows
 
 				dataSrc >>= 8;
 				pixelDst++; // forward 4 bytes!
@@ -790,7 +790,8 @@ int Zoom::_zoomSurfaceY(
 			// check the resolution to see which scale we need
 			for (size_t factor = 2; factor <= 5; factor++)
 			{
-				if ((Uint32)dst->w == src->w * factor && (Uint32)dst->h == src->h * factor)
+				if (dst->w == src->w * (int)factor && dst->h == src->h * (int)factor)
+//				if ((Uint32)dst->w == src->w * (Uint32)factor && (Uint32)dst->h == src->h * (Uint32)factor)
 				{
 					xbrz::scale(factor, (uint32_t*)src->pixels, (uint32_t*)dst->pixels, src->w, src->h);
 					return 0;
@@ -835,7 +836,8 @@ int Zoom::_zoomSurfaceY(
 		// check the resolution to see which of scale2x, scale3x, etc. we need
 		for (size_t factor = 2; factor <= 4; factor++)
 		{
-			if ((Uint32)dst->w == src->w * factor && (Uint32)dst->h == src->h * factor && !scale_precondition(factor, src->format->BytesPerPixel, src->w, src->h))
+			if (dst->w == src->w * (int)factor && dst->h == src->h * (int)factor && !scale_precondition(factor, src->format->BytesPerPixel, src->w, src->h))
+//			if ((Uint32)dst->w == src->w * (Uint32)factor && (Uint32)dst->h == src->h * (Uint32)factor && !scale_precondition((Uint32)factor, src->format->BytesPerPixel, src->w, src->h))
 			{
 				scale(factor, dst->pixels, dst->pitch, src->pixels, src->pitch, src->format->BytesPerPixel, src->w, src->h);
 				return 0;

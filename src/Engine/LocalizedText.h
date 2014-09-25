@@ -64,9 +64,9 @@ private:
 		/// Create the empty string.
 		LocalizedText()
 			:
-				_text(L""),
 				_nextArg(1)
 		{
+			/* Empty by design. */
 		}
 
 		/// Return constant wide string.
@@ -81,9 +81,9 @@ private:
 
 		// Argument substitution.
 		/// Replace next argument.
-		LocalizedText arg(std::wstring const &) const OX_REQUIRED_RESULT;
+		LocalizedText arg(const std::wstring &) const OX_REQUIRED_RESULT;
 		/// Replace next argument.
-		LocalizedText& arg(std::wstring const &) OX_REQUIRED_RESULT;
+		LocalizedText& arg(const std::wstring &) OX_REQUIRED_RESULT;
 		/// Replace next argument.
 		template <typename T> LocalizedText arg(T) const OX_REQUIRED_RESULT;
 		/// Replace next argument.

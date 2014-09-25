@@ -116,9 +116,9 @@ ActionMenuItem::~ActionMenuItem()
  */
 void ActionMenuItem::setAction(
 		BattleActionType action,
-		std::wstring description,
-		std::wstring accuracy,
-		std::wstring timeunits,
+		const std::wstring& description,
+		const std::wstring& accuracy,
+		const std::wstring& timeunits,
 		int tu)
 {
 	_action = action;

@@ -33,11 +33,11 @@ namespace OpenXcom
  * @param fuseTimer, The turn until explosion of the item. (if it's an activated grenade-type)
  */
 EquipmentLayoutItem::EquipmentLayoutItem(
-		std::string itemType,
-		std::string slot,
+		const std::string& itemType,
+		const std::string& slot,
 		int slotX,
 		int slotY,
-		std::string ammoItem,
+		const std::string& ammoItem,
 		int fuseTimer)
 	:
 		_itemType(itemType),
@@ -59,7 +59,7 @@ EquipmentLayoutItem::EquipmentLayoutItem(const YAML::Node& node)
 }
 
 /**
- *
+ * dTor.
  */
 EquipmentLayoutItem::~EquipmentLayoutItem()
 {

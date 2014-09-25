@@ -200,7 +200,7 @@ int Projectile::calculateTrajectory(
 		}
 
 		if (hitPos != _action.target
-			&& _action.result == "")
+			&& _action.result.empty())
 		{
 			if (test == VOXEL_NORTHWALL)
 			{
@@ -322,7 +322,7 @@ int Projectile::calculateThrow(double accuracy)
 	if (_action.type != BA_THROW) // celatid acid-spit
 	{
 		targetUnit = _save->getTile(_action.target)->getUnit();
-		if (!targetUnit
+		if (targetUnit == NULL
 			&& _action.target.z > 0
 			&& _save->getTile(_action.target)->hasNoFloor(0))
 		{

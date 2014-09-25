@@ -56,7 +56,9 @@ namespace OpenXcom
 {
 
 LoadingPhase StartState::loading;
+
 std::string StartState::error;
+
 bool StartState::kL_ready; // kL
 
 
@@ -65,10 +67,8 @@ bool StartState::kL_ready; // kL
  */
 StartState::StartState()
 	:
-		_anim(0),		// load CTD
+		_anim(0)		// load CTD
 //		_ready(false)	// kL
-//		_output(L"")	// kL, load CTD
-		_dosart(L"")	// kL
 {
 	// updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
 //kL	Options::newDisplayWidth	= Options::displayWidth;
@@ -120,10 +120,10 @@ StartState::StartState()
 	_lang	= new Language();
 
 	_text	= new Text(
-//kL					Options::baseXResolution,
-//kL					Options::baseYResolution,
-//kL					0,
-//kL					0);
+//kL				Options::baseXResolution,
+//kL				Options::baseYResolution,
+//kL				0,
+//kL				0);
 					620,
 					380,
 					dx,

@@ -898,7 +898,7 @@ private:
 		/// Gets the unit's spawn unit.
 		std::string getSpawnUnit() const;
 		/// Sets the unit's spawn unit.
-		void setSpawnUnit(std::string spawnUnit);
+		void setSpawnUnit(const std::string& spawnUnit);
 
 		/// Get the faction that killed this unit.
 		UnitFaction killedBy() const;

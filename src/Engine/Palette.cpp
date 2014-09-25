@@ -72,14 +72,14 @@ void Palette::loadDat(
 		0,
 		sizeof(SDL_Color) * _count);
 
-	// Load file and put colors in pallete
+	// Load file and put colors in palette
 	std::ifstream palFile (filename.c_str(), std::ios::in | std::ios::binary);
 	if (!palFile)
 	{
 		throw Exception(filename + " not found");
 	}
 
-	// Move pointer to proper pallete
+	// Move pointer to proper palette
 	palFile.seekg(offset, std::ios::beg);
 
 	Uint8 value[3];

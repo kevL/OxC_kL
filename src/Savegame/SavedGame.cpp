@@ -133,9 +133,6 @@ SavedGame::SavedGame()
 //		_detail(true),
 //		_radarLines(false),
 		_monthsPassed(-1),
-		_graphRegionToggles(""),
-		_graphCountryToggles(""),
-		_graphFinanceToggles(""),
 		_curRowMatrix(0), // kL
 		_curGraph(0) // kL
 //		_curGraphRowCountry(0) // kL
@@ -1346,7 +1343,7 @@ void SavedGame::getAvailableResearchProjects(
 		if (itDiscovered != discovered.end())
 		{
 			bool cull = true;
-			if (research->getGetOneFree().size() != 0)
+			if (research->getGetOneFree().empty() == false)
 			{
 				for (std::vector<std::string>::const_iterator
 						ohBoy = research->getGetOneFree().begin();
@@ -1425,7 +1422,7 @@ void SavedGame::getAvailableResearchProjects(
 			continue;
 		}
 
-		if (research->getRequirements().size() != 0)
+		if (research->getRequirements().empty())
 		{
 			size_t tally(0);
 			for (size_t

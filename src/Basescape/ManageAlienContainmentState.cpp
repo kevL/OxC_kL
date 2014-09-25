@@ -68,12 +68,10 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 	:
 		_base(base),
 		_origin(origin),
-		_allowHelp(allowHelp), // kL
-		_qtys(),
-		_aliens(),
 		_sel(0),
-		_aliensSold(0)
+		_aliensSold(0),
 //kL	_researchAliens(0)
+		_allowHelp(allowHelp) // kL
 {
 	_overCrowded = Options::storageLimitsEnforced
 				&& _base->getAvailableContainment() < _base->getUsedContainment();

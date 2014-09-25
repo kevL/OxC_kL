@@ -72,13 +72,11 @@ Craft::Craft(
 		_damage(0),
 		_interceptionOrder(0),
 		_takeoff(0),
-		_weapons(),
 		_status("STR_READY"),
 		_lowFuel(false),
 		_mission(false),
 		_inBattlescape(false),
 		_inDogfight(false),
-		_name(L""),
 		_loadCur(0),
 		_stopWarning(false) // do not save-to-file. Ie, warn player after loading
 {
@@ -778,7 +776,7 @@ double Craft::getDistanceFromBase() const
  */
 int Craft::getFuelConsumption() const
 {
-	if (_rules->getRefuelItem() != "") // Firestorm, Lightning, Avenger, etc.
+	if (_rules->getRefuelItem().empty() == false) // Firestorm, Lightning, Avenger, etc.
 		return 1;
 
 	return static_cast<int>(
@@ -927,7 +925,7 @@ void Craft::repair()
  */
 std::string Craft::rearm(const Ruleset* rules)
 {
-	std::string ret = "";
+	std::string ret;
 
 	for (std::vector<CraftWeapon*>::iterator
 			i = _weapons.begin();
@@ -947,7 +945,7 @@ std::string Craft::rearm(const Ruleset* rules)
 			std::string clip = (*i)->getRules()->getClipItem();
 			int baseClips = _base->getItems()->getItem(clip);
 
-			if (clip == "")
+			if (clip.empty())
 				(*i)->rearm(0, 0);
 			else if (baseClips > 0)
 			{
@@ -977,7 +975,7 @@ std::string Craft::rearm(const Ruleset* rules)
 		}
 	}
 
-	if (ret == "")
+	if (ret.empty())
 	{
 		_stopWarning = false; // reset warnings.
 		checkup(); // kL

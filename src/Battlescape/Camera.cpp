@@ -63,7 +63,6 @@ Camera::Camera(
 		_screenWidth(map->getWidth()),
 		_screenHeight(map->getHeight()),
 		_mapOffset(-250, 250, 0),
-		_center(),
 		_scrollMouseX(0),
 		_scrollMouseY(0),
 		_scrollKeyX(0),

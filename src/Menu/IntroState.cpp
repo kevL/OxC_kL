@@ -360,7 +360,7 @@ AudioSequence(ResourcePack* resources)
 {
 }
 
-void operator ()()
+void operator()()
 {
 	while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 	{

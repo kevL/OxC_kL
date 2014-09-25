@@ -103,7 +103,6 @@ struct BattleAction
 			TU(0),
 			targeting(false),
 			value(0),
-			result(""),
 			strafe(false),
 			run(false),
 			diff(0),
@@ -232,7 +231,7 @@ private:
 		/// Converts a unit into a unit of another type.
 		BattleUnit* convertUnit(
 				BattleUnit* unit,
-				std::string convertType,
+				const std::string& convertType,
 				int dirFace = 3); // kL_add.
 		/// Handles kneeling action.
 		bool kneel(

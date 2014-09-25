@@ -125,10 +125,10 @@ void AlienMission::load(
 	{
 		int id = base.as<int>();
 
-		std::vector<AlienBase*>::const_iterator
-				found = std::find_if(game.getAlienBases()->begin(),
-				game.getAlienBases()->end(),
-				matchById(id));
+		std::vector<AlienBase*>::const_iterator found = std::find_if(
+																game.getAlienBases()->begin(),
+																game.getAlienBases()->end(),
+																matchById(id));
 		if (found == game.getAlienBases()->end())
 		{
 			throw Exception("Corrupted save: Invalid base for mission.");
@@ -690,13 +690,12 @@ void AlienMission::ufoReachedWaypoint(
 			// Remove UFO, replace with Base defense.
 			ufo.setDetected(false);
 
-			std::vector<Base*>::const_iterator found =
-					std::find_if(
-							game.getBases()->begin(),
-							game.getBases()->end(),
-							MatchBaseCoordinates(
-										ufo.getLongitude(),
-										ufo.getLatitude()));
+			std::vector<Base*>::const_iterator found = std::find_if(
+																game.getBases()->begin(),
+																game.getBases()->end(),
+																MatchBaseCoordinates(
+																				ufo.getLongitude(),
+																				ufo.getLatitude()));
 			if (found == game.getBases()->end())
 			{
 				ufo.setStatus(Ufo::DESTROYED);
@@ -955,7 +954,7 @@ void AlienMission::setRegion(
 		const std::string& region,
 		const Ruleset& rules)
 {
-	if (rules.getRegion(region)->getMissionRegion() != "")
+	if (rules.getRegion(region)->getMissionRegion().empty() == false)
 		_region = rules.getRegion(region)->getMissionRegion();
 	else
 		_region = region;

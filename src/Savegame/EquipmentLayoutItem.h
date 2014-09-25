@@ -50,11 +50,11 @@ private:
 	public:
 		/// Creates a new soldier-equipment layout item.
 		EquipmentLayoutItem(
-				std::string itemType,
-				std::string slot,
+				const std::string& itemType,
+				const std::string& slot,
 				int slotX,
 				int slotY,
-				std::string ammoItem,
+				const std::string& ammoItem,
 				int fuseTimer);
 		/// Creates a new soldier-equipment layout item and loads its contents from YAML.
 		EquipmentLayoutItem(const YAML::Node& node);

@@ -363,7 +363,7 @@ InventoryState::InventoryState(
 	_txtTus->setVisible(_tu);
 	_txtUseTU->setVisible(_tu);
 
-	bool vis = !_tu
+	bool vis = _tu == false
 				&& Options::showMoreStatsInInventoryView;
 	_txtFAcc->setVisible(vis);
 	_txtReact->setVisible(vis);
@@ -372,7 +372,6 @@ InventoryState::InventoryState(
 	_txtPStr->setVisible(vis);
 	_txtPSkill->setVisible(vis);
 
-//kL	_currentTooltip = "";
 	//Log(LOG_INFO) << "Create InventoryState EXIT";
 }
 
@@ -1346,7 +1345,7 @@ void InventoryState::invMouseOver(Action* action)
 	}
 	else
 	{
-//kL	if (_currentTooltip == "")
+//kL	if (_currentTooltip.empty())
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
 		_txtUseTU->setText(L"");

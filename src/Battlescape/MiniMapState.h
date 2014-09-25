@@ -76,7 +76,7 @@ private:
 		void handle(Action* action);
 
 		/// Handles timers.
-		void think ();
+		void think();
 };
 
 }

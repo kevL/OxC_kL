@@ -51,7 +51,6 @@ MapDataSet::MapDataSet(
 	:
 		_name(name),
 		_game(game), // kL_add.
-		_objects(),
 		_surfaceSet(NULL),
 		_loaded(false)
 {

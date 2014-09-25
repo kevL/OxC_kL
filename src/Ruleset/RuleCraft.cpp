@@ -43,7 +43,6 @@ RuleCraft::RuleCraft(const std::string& type)
 		_costBuy(0),
 		_costRent(0),
 		_costSell(0),
-		_refuelItem(""),
 		_repairRate(1),
 		_refuelRate(1),
 		_radarRange(600), // 672 // for detecting UFOs

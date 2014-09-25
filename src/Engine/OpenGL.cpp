@@ -391,10 +391,10 @@ void OpenGL::set_shader(const char* source_yaml_filename)
 
 		if (is_glsl)
 		{
-			if (fragment_source != "")
+			if (fragment_source.empty() == false)
 				set_fragment_shader(fragment_source.c_str());
 
-			if (vertex_source != "")
+			if (vertex_source.empty() == false)
 				set_vertex_shader(vertex_source.c_str());
 		}
 	}

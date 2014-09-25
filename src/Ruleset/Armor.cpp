@@ -30,11 +30,6 @@ namespace OpenXcom
 Armor::Armor(const std::string& type)
 	:
 		_type(type),
-		_spriteSheet(""),
-		_spriteInv(""),
-		_corpseGeo(""),
-		_storeItem(""),
-		_corpseBattle(),
 		_frontArmor(0),
 		_sideArmor(0),
 		_rearArmor(0),

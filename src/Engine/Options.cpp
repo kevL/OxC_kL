@@ -52,9 +52,9 @@ namespace Options
 
 
 std::string
-	_configFolder = "",
-	_dataFolder = "",
-	_userFolder = "";
+	_configFolder,
+	_dataFolder,
+	_userFolder;
 std::vector<std::string>
 	_dataList,
 	_userList;
@@ -488,10 +488,10 @@ bool init(
 void setFolders()
 {
 	_dataList = CrossPlatform::findDataFolders();
-	if (_dataFolder != "")
+	if (_dataFolder.empty() == false)
 		_dataList.insert(_dataList.begin(), _dataFolder);
 
-	if (_userFolder == "")
+	if (_userFolder.empty())
 	{
 		std::vector<std::string> user = CrossPlatform::findUserFolders();
 		_configFolder = CrossPlatform::findConfigFolder();
@@ -504,12 +504,11 @@ void setFolders()
 			if (CrossPlatform::folderExists(*i))
 			{
 				_userFolder = *i;
-
 				break;
 			}
 		}
 
-		if (_userFolder == "") // Set up folders
+		if (_userFolder.empty()) // Set up folders
 		{
 			for (std::vector<std::string>::iterator
 					i = user.begin();
@@ -519,14 +518,13 @@ void setFolders()
 				if (CrossPlatform::createFolder(*i))
 				{
 					_userFolder = *i;
-
 					break;
 				}
 			}
 		}
 	}
 
-	if (_configFolder == "")
+	if (_configFolder.empty())
 		_configFolder = _userFolder;
 }
 

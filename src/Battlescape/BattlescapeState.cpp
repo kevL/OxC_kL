@@ -116,8 +116,6 @@ namespace OpenXcom
 BattlescapeState::BattlescapeState()
 	:
 //		_reserve(0),
-//		_currentTooltip(""),
-		_popups(),
 		_xBeforeMouseScrolling(0),
 		_yBeforeMouseScrolling(0),
 		_totalMouseMoveX(0),
@@ -408,12 +406,12 @@ BattlescapeState::BattlescapeState()
 	_txtBaseLabel->setHighContrast();
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
-	std::wstring baseLabel = L"";
+	std::wstring baseLabel;
 
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end()
-				&& baseLabel == L"";
+				&& baseLabel.empty();
 			++i)
 	{
 		if ((*i)->isInBattlescape())
@@ -425,7 +423,7 @@ BattlescapeState::BattlescapeState()
 		for (std::vector<Craft*>::iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end()
-					&& baseLabel == L"";
+					&& baseLabel.empty();
 				++j)
 		{
 			if ((*j)->isInBattlescape())
@@ -1076,9 +1074,9 @@ void BattlescapeState::mapOver(Action* action)
 //				ss3, // Console #3
 //				ss4; // Console #4
 			std::wstring
-				ws = L"",
-				ws2 = ws,
-				ws3 = ws;
+				ws,
+				ws2,
+				ws3;
 			int qty = 1;
 
 			for (size_t
@@ -3267,7 +3265,7 @@ void BattlescapeState::finishBattle(
 												_save->getAmbientSound())
 											->stopLoop();
 
-	std::string nextStage = "";
+	std::string nextStage;
 
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT"
 		&& _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
@@ -3275,8 +3273,8 @@ void BattlescapeState::finishBattle(
 		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
 	}
 
-	if (nextStage != ""	// if there is a next mission stage
-		&& inExitArea)	// we have people in exit area OR we killed all aliens, load the next stage
+	if (nextStage.empty() == false	// if there is a next mission stage
+		&& inExitArea)				// we have people in exit area OR we killed all aliens, load the next stage
 	{
 		_popups.clear();
 		_save->setMissionType(nextStage);

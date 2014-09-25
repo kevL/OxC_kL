@@ -76,7 +76,7 @@ private:
 
 	public:
 		MapBlock(
-				std::string name,
+				const std::string& name,
 				int size_x,
 				int size_y,
 				MapBlockType type);

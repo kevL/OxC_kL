@@ -501,7 +501,7 @@ void UnitSprite::drawRoutine0()
 		}
 		else
 		{
-			if (_drawingRoutine == 10) // missing/wrong arms on muton here, investigate spriteset
+			if (_drawingRoutine == 10)
 			{
 				rightArm = _unitSurface->getFrame(rarm2H + unitDir);
 			}
@@ -1094,7 +1094,7 @@ void UnitSprite::drawRoutine2()
 		srf = _unitSurface->getFrame(64 + (turret * 8) + _unit->getTurretDirection());
 		int turretOffsetX = 0;
 		int turretOffsetY = -4;
-		if(hoverTank)
+		if (hoverTank)
 		{
 			turretOffsetX += offX[_unit->getDirection()];
 			turretOffsetY += offy[_unit->getDirection()];
@@ -1460,8 +1460,7 @@ void UnitSprite::drawRoutine6()
 		}
 	}
 
-	// if we are left handed or dual wielding...
-	if (_itemB)
+	if (_itemB) // if we are left handed or dual wielding...
 	{
 		leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + _unit->getDirection());

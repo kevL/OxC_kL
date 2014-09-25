@@ -179,7 +179,7 @@ private:
 		int getAvailableHangars() const;
 
 		/// Gets the number of available space lab (not used by a ResearchProject).
-		int getFreeLaboratories () const;
+		int getFreeLaboratories() const;
 		/// Gets the number of available space lab (not used by a Production).
 		int getFreeWorkshops() const;
 

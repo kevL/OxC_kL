@@ -42,8 +42,7 @@ RuleUfo::RuleUfo(const std::string& type)
 		_reload(0),
 		_breakOffTime(0),
 		_sightRange(600), // 268 // for detecting xCom bases
-		_battlescapeTerrainData(NULL),
-		_modSprite("")
+		_battlescapeTerrainData(NULL)
 {
 }
 

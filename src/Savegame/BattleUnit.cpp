@@ -1473,7 +1473,7 @@ void BattleUnit::knockOut(BattlescapeGame* battle)
 {
 	if (getArmor()->getSize() > 1) // large units die
 		_health = 0;
-	else if (_spawnUnit != "")
+	else if (_spawnUnit.empty() == false)
 	{
 //kL	setSpecialAbility(SPECAB_NONE); // do this in convertUnit()
 		BattleUnit* newUnit = battle->convertUnit(
@@ -3361,7 +3361,7 @@ std::string BattleUnit::getSpawnUnit() const
  * Sets a unit that is spawned when this one dies.
  * @param spawnUnit - special unit
  */
-void BattleUnit::setSpawnUnit(std::string spawnUnit)
+void BattleUnit::setSpawnUnit(const std::string& spawnUnit)
 {
 	_spawnUnit = spawnUnit;
 }

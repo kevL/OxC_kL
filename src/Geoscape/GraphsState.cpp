@@ -690,9 +690,9 @@ GraphsState::~GraphsState()
 {
 	delete _blinkTimer;
 
-	std::string graphRegionToggles	= "";
-	std::string graphCountryToggles	= "";
-	std::string graphFinanceToggles	= "";
+	std::string graphRegionToggles;
+	std::string graphCountryToggles;
+	std::string graphFinanceToggles;
 
 	for (size_t
 			i = 0;

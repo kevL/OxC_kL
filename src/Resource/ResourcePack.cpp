@@ -66,16 +66,6 @@ int ResourcePack::INTERCEPTOR_EXPLODE	= 13;
  * Initializes a blank resource set pointing to a folder.
  */
 ResourcePack::ResourcePack()
-	:
-		_playingMusic(""),
-		_palettes(),
-		_fonts(),
-		_surfaces(),
-		_sets(),
-		_sounds(),
-		_musics(),
-		_musicFile(), // sza_MusicRules
-		_musicAssignment() // sza_MusicRules
 {
 	//Log(LOG_INFO) << "Create ResourcePack";
 	_muteMusic = new Music();

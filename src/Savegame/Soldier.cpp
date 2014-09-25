@@ -55,13 +55,10 @@ Soldier::Soldier(
 		const std::vector<SoldierNamePool*>* names,
 		int id)
 	:
-		_name(L""),
 		_id(id),
 		_gainPsiSkl(0),
 		_gainPsiStr(0),
 		_rules(rules),
-		_initialStats(),
-		_currentStats(),
 		_rank(RANK_ROOKIE),
 		_craft(NULL),
 		_gender(GENDER_MALE),
@@ -71,9 +68,7 @@ Soldier::Soldier(
 		_recovery(0),
 		_recentlyPromoted(false),
 		_psiTraining(false),
-		_armor(armor),
-		_equipmentLayout()
-//		_diary()
+		_armor(armor)
 //kL	_death(0)
 {
 	_diary = new SoldierDiary();
@@ -579,26 +574,26 @@ void Soldier::trainPsi()
 	// If soldier has psiskill -10..-1, he was trained 20..59 days. 81.7% probability, he was trained more that 30 days.
 	if (_currentStats.psiSkill < -10 + _rules->getMinStats().psiSkill)
 		_currentStats.psiSkill = _rules->getMinStats().psiSkill;
-	else if(_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
+	else if (_currentStats.psiSkill <= _rules->getMaxStats().psiSkill)
 	{
 		int max = _rules->getMaxStats().psiSkill + _rules->getMaxStats().psiSkill / 2;
 		_gainPsiSkl = RNG::generate(_rules->getMaxStats().psiSkill, max);
 	}
 	else
 	{
-		if(_currentStats.psiSkill <= (psiSkillCap / 2)) _gainPsiSkl = RNG::generate(5, 12);
-		else if(_currentStats.psiSkill < psiSkillCap) _gainPsiSkl = RNG::generate(1, 3);
+		if (_currentStats.psiSkill <= (psiSkillCap / 2)) _gainPsiSkl = RNG::generate(5, 12);
+		else if (_currentStats.psiSkill < psiSkillCap) _gainPsiSkl = RNG::generate(1, 3);
 
 		if (Options::allowPsiStrengthImprovement)
 		{
-			if(_currentStats.psiStrength <= (psiStrengthCap / 2)) _gainPsiStr = RNG::generate(5, 12);
-			else if(_currentStats.psiStrength < psiStrengthCap) _gainPsiStr = RNG::generate(1, 3);
+			if (_currentStats.psiStrength <= (psiStrengthCap / 2)) _gainPsiStr = RNG::generate(5, 12);
+			else if (_currentStats.psiStrength < psiStrengthCap) _gainPsiStr = RNG::generate(1, 3);
 		}
 	}
 	_currentStats.psiSkill += _gainPsiSkl;
 	_currentStats.psiStrength += _gainPsiStr;
-	if(_currentStats.psiSkill > psiSkillCap) _currentStats.psiSkill = psiSkillCap;
-	if(_currentStats.psiStrength > psiStrengthCap) _currentStats.psiStrength = psiStrengthCap;
+	if (_currentStats.psiSkill > psiSkillCap) _currentStats.psiSkill = psiSkillCap;
+	if (_currentStats.psiStrength > psiStrengthCap) _currentStats.psiStrength = psiStrengthCap;
 /* kL_begin:
 // http://www.ufopaedia.org/index.php?title=Psi_Skill
 // -End of Month PsiLab Increase-

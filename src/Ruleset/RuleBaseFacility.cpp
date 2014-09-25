@@ -31,7 +31,6 @@ namespace OpenXcom
 RuleBaseFacility::RuleBaseFacility(const std::string& type)
 	:
 		_type(type),
-		_requires(),
 		_spriteShape(-1),
 		_spriteFacility(-1),
 		_lift(false),

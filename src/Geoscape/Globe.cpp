@@ -321,9 +321,8 @@ Globe::Globe(
 		_cenY(cenY),
 		_game(game),
 		_hover(false),
-		_blink(-1), //(true)
+		_blink(-1),
 //		_blinkVal(0),
-		_cacheLand(),
 		_isMouseScrolled(false),
 		_isMouseScrolling(false),
 		_mouseOverThreshold(false),
@@ -3108,12 +3107,12 @@ void Globe::setupRadii(
 	{
 		_earthData[rad].resize(width * height);
 
-		for(int
+		for (int
 				j = 0;
 				j < height;
 				++j)
 		{
-			for(int
+			for (int
 					i = 0;
 					i < width;
 					++i)

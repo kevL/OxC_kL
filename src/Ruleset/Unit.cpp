@@ -30,14 +30,9 @@ namespace OpenXcom
 Unit::Unit(const std::string& type)
 	:
 		_type(type),
-		_race(""),
-		_rank(""),
-		_armor(""),
 		_standHeight(0),
 		_kneelHeight(0),
 		_floatHeight(0),
-
-		_stats(),
 
 		_value(0),
 		_deathSound(0),
@@ -47,9 +42,7 @@ Unit::Unit(const std::string& type)
 		_aggression(0),
 		_energyRecovery(30),
 		_specab(SPECAB_NONE),
-		_spawnUnit(""),
-		_livingWeapon(false),
-		_meleeWeapon("")
+		_livingWeapon(false)
 {
 }
 

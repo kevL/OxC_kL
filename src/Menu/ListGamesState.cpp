@@ -345,7 +345,7 @@ void ListGamesState::lstSavesMouseOver(Action*)
 	if (!_inEditMode) // kL
 	{
 		//Log(LOG_INFO) << ". NOT inEditMode";
-		std::wstring wstr = L"";
+		std::wstring wstr;
 
 		int sel = _lstSaves->getSelectedRow() - _firstValidRow;
 		if (sel > -1

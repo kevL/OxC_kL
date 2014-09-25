@@ -69,9 +69,7 @@ InterceptState::InterceptState(
 		_globe(globe),
 		_base(base),
 		_target(target),
-		_geo(geo), // kL_add.
-		_crafts(),
-		_bases()
+		_geo(geo) // kL_add.
 {
 	_screen = false;
 

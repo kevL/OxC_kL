@@ -52,8 +52,7 @@ BuildFacilitiesState::BuildFacilitiesState(
 		State* state)
 	:
 		_base(base),
-		_state(state),
-		_facilities()
+		_state(state)
 {
 	_screen = false;
 

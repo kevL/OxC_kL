@@ -350,7 +350,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 				}
 			}
 
-			if (!targetUnit)
+			if (targetUnit == NULL)
 			{
 				if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 																						_action->actor->getPosition(),

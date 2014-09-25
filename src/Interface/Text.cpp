@@ -54,7 +54,6 @@ Text::Text(
 		_small(0),
 		_font(0),
 		_lang(0),
-		_text(L""),
 		_wrap(false),
 		_invert(false),
 		_contrast(false),
@@ -62,9 +61,7 @@ Text::Text(
 		_align(ALIGN_LEFT),
 		_valign(ALIGN_TOP),
 		_color(0),
-		_color2(0),
-		_lineHeight(),	// kL
-		_lineWidth()	// kL
+		_color2(0)
 {
 }
 
@@ -84,7 +81,7 @@ Text::~Text()
  */
 std::wstring Text::formatNumber(
 		int64_t value,
-		std::wstring currency,
+		const std::wstring& currency,
 		bool space)
 {
 	// In the future, the whole setlocale thing should be removed from here.

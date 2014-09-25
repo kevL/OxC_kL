@@ -51,11 +51,11 @@ struct DebriefingStat
 	int
 		qty,
 		score;
-	std::string item;
+	const std::string& item;
 
 	/// cTor.
 	DebriefingStat(
-			std::string _item,
+			const std::string& _item,
 			bool recovery = false)
 		:
 			item(_item),

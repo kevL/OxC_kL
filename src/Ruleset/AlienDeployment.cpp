@@ -75,14 +75,11 @@ namespace OpenXcom
 AlienDeployment::AlienDeployment(const std::string& type)
 	:
 		_type(type),
-		_data(),
 		_width(0),
 		_length(0),
 		_height(0),
 		_civilians(0),
-		_terrains(), // kL
-		_shade(-1),
-		_nextStage("")
+		_shade(-1)
 {
 }
 

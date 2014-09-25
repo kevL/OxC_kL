@@ -100,7 +100,6 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_worldShade(0),
 		_unitSequence(0),
 		_craftInventTile(NULL),
-		_alienRace(""),
 		_alienItemLevel(0),
 		_generateFuel(true),
 		_craftX(0),

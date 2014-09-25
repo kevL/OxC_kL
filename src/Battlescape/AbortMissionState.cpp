@@ -85,7 +85,7 @@ AbortMissionState::AbortMissionState(
 
 	centerAllSurfaces();
 
-	std::string nextStage = "";
+	std::string nextStage;
 	if (_battleGame->getMissionType() != "STR_UFO_GROUND_ASSAULT"
 		&& _battleGame->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 	{
@@ -100,7 +100,7 @@ AbortMissionState::AbortMissionState(
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER
 			&& !(*i)->isOut())
 		{
-			if ((nextStage != ""
+			if ((nextStage.empty() == false
 					&& (*i)->isInExitArea(END_POINT))
 				|| (nextStage == ""
 					&& (*i)->isInExitArea()))

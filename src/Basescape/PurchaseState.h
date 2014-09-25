@@ -81,7 +81,7 @@ private:
 		_items;
 
 	/// Is excluded in the options file.
-	bool isExcluded(std::string item);
+	bool isExcluded(const std::string& item);
 	/// Gets selected price.
 	int getPrice();
 

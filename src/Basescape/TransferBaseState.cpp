@@ -53,8 +53,7 @@ namespace OpenXcom
  */
 TransferBaseState::TransferBaseState(Base* base)
 	:
-		_base(base),
-		_bases()
+		_base(base)
 {
 	_window			= new Window(this, 260, 140, 30, 30);
 	_txtTitle		= new Text(228, 16, 46, 40);
@@ -135,7 +134,7 @@ TransferBaseState::TransferBaseState(Base* base)
 	{
 		if (*i != _base)
 		{
-			std::wstring area = L""; // Get area
+			std::wstring area;
 
 			for (std::vector<Region*>::iterator
 					j = _game->getSavedGame()->getRegions()->begin();
@@ -147,7 +146,6 @@ TransferBaseState::TransferBaseState(Base* base)
 												(*i)->getLatitude()))
 				{
 					area = tr((*j)->getRules()->getType());
-
 					break;
 				}
 			}

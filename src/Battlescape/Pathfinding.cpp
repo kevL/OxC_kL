@@ -57,7 +57,6 @@ int
 Pathfinding::Pathfinding(SavedBattleGame* save)
 	:
 		_save(save),
-		_nodes(),
 		_unit(NULL),
 		_pathPreviewed(false),
 		_strafeMove(false),
@@ -597,7 +596,7 @@ bool Pathfinding::aStarPath(
 	bool missile = target
 					&& maxTUCost == -1;
 
-	while (!openList.empty()) // if the openList is empty, we've reached the end
+	while (openList.empty() == false) // if the openList is empty, we've reached the end
 	{
 		PathfindingNode* currentNode = openList.pop();
 		Position const &currentPos = currentNode->getPosition();

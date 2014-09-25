@@ -57,8 +57,7 @@ namespace OpenXcom
 ResearchState::ResearchState(
 		Base* base)
 	:
-		_base(base),
-		_online() // kL
+		_base(base)
 {
 	//Log(LOG_INFO) << "Create ResearchState";
 	_window			= new Window(this, 320, 200, 0, 0);
@@ -189,7 +188,7 @@ void ResearchState::btnNewClick(Action*)
  * Goes to the Manage Alien Containment screen.
  * @param action Pointer to an action.
  */
-void ResearchState::btnAliens(Action*) // kL
+void ResearchState::btnAliens(Action*)
 {
 	_game->pushState(new ManageAlienContainmentState(
 													_base,
@@ -249,24 +248,18 @@ void ResearchState::init()
 	_online.clear();
 	_lstResearch->clearList();
 
-	size_t row = -1; // kL, intentional buffer underrun.
-
 	const std::vector<ResearchProject*>& rps (_base->getResearch()); // init.
 	for (std::vector<ResearchProject*>::const_iterator
 			rp = rps.begin();
 			rp != rps.end();
 			++rp)
 	{
-		row++; // =0 on first iteration
-
-		if ((*rp)->getOffline() == true) // kL
+		if ((*rp)->getOffline())
 		{
-			//Log(LOG_INFO) << ". offline[" << row << "] " << (*rp)->getRules()->getName();
 			_online.push_back(false);
 			continue;
 		}
 
-		//Log(LOG_INFO) << ". online[" << row << "] " << (*rp)->getRules()->getName();
 		_online.push_back(true);
 
 

@@ -64,7 +64,6 @@ Game* State::_game = NULL;
  */
 State::State()
 	:
-		_surfaces(),
 		_screen(true),
 		_modal(NULL)
 {

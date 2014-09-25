@@ -42,7 +42,7 @@ namespace OpenXcom
  */
 ConfirmLoadState::ConfirmLoadState(
 		OptionsOrigin origin,
-		std::string fileName)
+		const std::string& fileName)
 	:
 		_origin(origin),
 		_fileName(fileName)

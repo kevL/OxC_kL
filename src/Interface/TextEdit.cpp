@@ -50,7 +50,6 @@ TextEdit::TextEdit(
 			height,
 			x,
 			y),
-		_value(L""),
 		_blink(true),
 		_modal(true),
 		_ascii(L'A'),

@@ -50,7 +50,7 @@ private:
 			const std::wstring& wstr,
 			SDL_Color* palette,
 			Uint8 color,
-			std::string bg,
+			const std::string& bg,
 			int bgColor);
 
 	public:
@@ -59,14 +59,14 @@ private:
 				const std::string& id,
 				SDL_Color* palette,
 				Uint8 color,
-				std::string bg,
+				const std::string& bg,
 				int bgColor);
 		/// Creates the Error state.
 		ErrorMessageState(
 				const std::wstring& msg,
 				SDL_Color* palette,
 				Uint8 color,
-				std::string bg,
+				const std::string& bg,
 				int bgColor);
 		/// Cleans up the Error state.
 		~ErrorMessageState();

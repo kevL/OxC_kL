@@ -30,7 +30,6 @@ namespace OpenXcom
 AlienRace::AlienRace(const std::string& id)
 	:
 		_id(id),
-		_members(),
 		_retaliation(true)
 {
 }

@@ -56,7 +56,7 @@ void SDLInit(char *header)
   */
   printf("SDL: Version %d.%d.%d.\n", SDL_MAJOR_VERSION, SDL_MINOR_VERSION, SDL_PATCHLEVEL);
 
-  if(SDL_Init(SDL_INIT_VIDEO)<0) {
+  if (SDL_Init(SDL_INIT_VIDEO)<0) {
     fprintf(stderr, "SDL: Couldn't initialize: %s\n",SDL_GetError());
     exit(2);
   } else {
@@ -65,7 +65,7 @@ void SDLInit(char *header)
   atexit(SDL_Quit);
 /* Init screen
 */
-  if((flc.mainscreen=SDL_SetVideoMode(flc.screen_w, flc.screen_h, flc.screen_depth, (SDL_HWPALETTE|SDL_FULLSCREEN))) == NULL){
+  if ((flc.mainscreen=SDL_SetVideoMode(flc.screen_w, flc.screen_h, flc.screen_depth, (SDL_HWPALETTE|SDL_FULLSCREEN))) == NULL){
     fprintf(stderr, "SDL: Couldn't set video mode %dx%dx%d: %s\n", flc.screen_w, flc.screen_h, flc.screen_depth, SDL_GetError());
     exit(3);
   }
@@ -88,15 +88,15 @@ void SDLInit(char *header)
 
 void FlcReadFile(Uint32 size)
 {
-if(size>flc.membufSize) {
-    if(!(flc.pMembuf=(Uint8*)realloc(flc.pMembuf, size+1))) {
+if (size>flc.membufSize) {
+    if (!(flc.pMembuf=(Uint8*)realloc(flc.pMembuf, size+1))) {
       //printf("Realloc failed: %d\n", size);
       Log(LOG_FATAL) << "Realloc failed: " << size;
       throw Exception("Realloc failed!");
     }
   }
 
-  if(fread(flc.pMembuf, sizeof(Uint8), size, flc.file)==0) {
+  if (fread(flc.pMembuf, sizeof(Uint8), size, flc.file)==0) {
     //printf("Can't read flx file");
     Log(LOG_ERROR) << "Can't read flx file :(";
 		return;
@@ -105,7 +105,7 @@ if(size>flc.membufSize) {
 
 int FlcCheckHeader(const char *filename)
 {
-if((flc.file=fopen(filename, "rb"))==NULL) {
+if ((flc.file=fopen(filename, "rb"))==NULL) {
     Log(LOG_ERROR) << "Could not open flx file: " << filename;
 		return -1;
   }
@@ -131,12 +131,12 @@ if((flc.file=fopen(filename, "rb"))==NULL) {
 #endif
 
 
-  if((flc.HeaderCheck==SDL_SwapLE16(0x0AF12)) || (flc.HeaderCheck==SDL_SwapLE16(0x0AF11))) {
+  if ((flc.HeaderCheck==SDL_SwapLE16(0x0AF12)) || (flc.HeaderCheck==SDL_SwapLE16(0x0AF11))) {
     flc.screen_w=flc.HeaderWidth;
     flc.screen_h=flc.HeaderHeight;
 	Log(LOG_INFO) << "Playing flx, " << flc.screen_w << "x" << flc.screen_h << ", " << flc.HeaderFrames << " frames";
     flc.screen_depth=8;
-	if(flc.HeaderCheck == SDL_SwapLE16(0x0AF11)){
+	if (flc.HeaderCheck == SDL_SwapLE16(0x0AF11)){
       flc.HeaderSpeed*=1000.0/70.0;
     }
     return(0);
@@ -161,13 +161,13 @@ flc.pFrame=flc.pMembuf+flc.FrameSize-16;
 #endif
 
   flc.pFrame+=16;
-  if(flc.FrameCheck==0x0f1fa) {
+  if (flc.FrameCheck==0x0f1fa) {
     return(0);
   }
 
   flc.DelayOverride = 0; // not FRAME_TYPE means the value we read wasn't a delay at all
 
-  if(flc.FrameCheck==0x0f100) {
+  if (flc.FrameCheck==0x0f100) {
 #ifdef DEBUG
     printf("Ani info!!!\n");
 #endif
@@ -190,13 +190,13 @@ void COLORS256()
   pSrc=flc.pChunk+6;
   ReadU16(&NumColorPackets, pSrc);
   pSrc+=2;
-  while(NumColorPackets--) {
+  while (NumColorPackets--) {
     NumColorsSkip=*(pSrc++);
-    if(!(NumColors=*(pSrc++))) {
+    if (!(NumColors=*(pSrc++))) {
       NumColors=256;
     }
     i=0;
-    while(NumColors--) {
+    while (NumColors--) {
       flc.colors[i].r=*(pSrc++);
       flc.colors[i].g=*(pSrc++);
       flc.colors[i].b=*(pSrc++);
@@ -219,18 +219,18 @@ void SS2()
   ReadU16(&Lines, pSrc);
 
   pSrc+=2;
-  while(Lines--) {
+  while (Lines--) {
     ReadU16(&Count, pSrc);
     pSrc+=2;
 
-    while(Count & 0xc000) {
+    while (Count & 0xc000) {
 /* Upper bits 11 - Lines skip
 */
-      if((Count & 0xc000)==0xc000) { // 0xc000h = 1100000000000000
+      if ((Count & 0xc000)==0xc000) { // 0xc000h = 1100000000000000
         pDst+=(0x10000-Count)*flc.mainscreen->pitch;
       }
 
-      if((Count & 0xc000)==0x4000) { // 0x4000h = 0100000000000000
+      if ((Count & 0xc000)==0x4000) { // 0x4000h = 0100000000000000
 /* Upper bits 01 - Last pixel
 */
 #ifdef DEBUG
@@ -241,23 +241,23 @@ void SS2()
       pSrc+=2;
     }
 
-	if((Count & SDL_SwapLE16(0xc000))==0x0000) { // 0xc000h = 1100000000000000
+	if ((Count & SDL_SwapLE16(0xc000))==0x0000) { // 0xc000h = 1100000000000000
       pTmpDst=pDst;
-      while(Count--) {
+      while (Count--) {
         ColumSkip=*(pSrc++);
         pTmpDst+=ColumSkip;
         CountData=*(pSrc++);
-        if(CountData>0) {
-          while(CountData--) {
+        if (CountData>0) {
+          while (CountData--) {
             *(pTmpDst++)=*(pSrc++);
             *(pTmpDst++)=*(pSrc++);
           }
         } else {
-          if(CountData<0) {
+          if (CountData<0) {
             CountData=(0x100-CountData);
             Fill1=*(pSrc++);
             Fill2=*(pSrc++);
-            while(CountData--) {
+            while (CountData--) {
               *(pTmpDst++)=Fill1;
               *(pTmpDst++)=Fill2;
             }
@@ -277,20 +277,20 @@ void DECODE_BRUN()
   HeightCount=flc.HeaderHeight;
   pSrc=flc.pChunk+6;
   pDst=(Uint8*)flc.mainscreen->pixels + flc.offset;
-  while(HeightCount--) {
+  while (HeightCount--) {
     pTmpDst=pDst;
     PacketsCount=*(pSrc++);
-    while(PacketsCount--) {
+    while (PacketsCount--) {
       CountData=*(pSrc++);
-      if(CountData>0) {
+      if (CountData>0) {
         Fill=*(pSrc++);
-        while(CountData--) {
+        while (CountData--) {
           *(pTmpDst++)=Fill;
         }
       } else {
-        if(CountData<0) {
+        if (CountData<0) {
           CountData=(0x100-CountData);
-          while(CountData--) {
+          while (CountData--) {
           *(pTmpDst++)=*(pSrc++);
           }
         }
@@ -317,22 +317,22 @@ void DECODE_LC()
   pDst+=tmp*flc.mainscreen->pitch;
   ReadU16(&Lines, pSrc);
   pSrc+=2;
-  while(Lines--) {
+  while (Lines--) {
     pTmpDst=pDst;
     PacketsCount=*(pSrc++);
-    while(PacketsCount--) {
+    while (PacketsCount--) {
       CountSkip=*(pSrc++);
       pTmpDst+=CountSkip;
       CountData=*(pSrc++);
-      if(CountData>0) {
-        while(CountData--) {
+      if (CountData>0) {
+        while (CountData--) {
           *(pTmpDst++)=*(pSrc++);
         }
       } else {
-        if(CountData<0) {
+        if (CountData<0) {
           CountData=(0x100-CountData);
           Fill=*(pSrc++);
-          while(CountData--) {
+          while (CountData--) {
             *(pTmpDst++)=Fill;
           }
         }
@@ -351,13 +351,13 @@ void DECODE_COLOR()
   pSrc=flc.pChunk+6;
   ReadU16(&NumColorPackets, pSrc);
   pSrc+=2;
-  while(NumColorPackets--) {
+  while (NumColorPackets--) {
     NumColorsSkip=*(pSrc++);
-    if(!(NumColors=*(pSrc++))) {
+    if (!(NumColors=*(pSrc++))) {
       NumColors=256;
     }
     i=0;
-    while(NumColors--) {
+    while (NumColors--) {
       flc.colors[i].r=*(pSrc++)<<2;
       flc.colors[i].g=*(pSrc++)<<2;
       flc.colors[i].b=*(pSrc++)<<2;
@@ -375,7 +375,7 @@ void DECODE_COPY()
   int Lines = flc.screen_h;
   pSrc=flc.pChunk+6;
   pDst=(Uint8*)flc.mainscreen->pixels + flc.offset;
-  while(Lines-- > 0) {
+  while (Lines-- > 0) {
     memcpy(pDst, pSrc, flc.screen_w);
     pSrc+=flc.screen_w;
     pDst+=flc.mainscreen->pitch;
@@ -386,7 +386,7 @@ void BLACK()
 { Uint8 *pDst;
   int Lines = flc.screen_h;
   pDst=(Uint8*)flc.mainscreen->pixels + flc.offset;
-  while(Lines-- > 0) {
+  while (Lines-- > 0) {
     memset(pDst, 0, flc.screen_w);
     pDst+=flc.mainscreen->pitch;
   }
@@ -400,7 +400,7 @@ void FlcDoOneFrame()
   if ( SDL_LockSurface(flc.mainscreen) < 0 )
     return;
   // if (!ChunkCount) printf("Empty frame! %d\n", flc.FrameCount); // this is normal and used for delays
-  while(ChunkCount--) {
+  while (ChunkCount--) {
     ReadU32(&flc.ChunkSize, flc.pChunk+0);
     ReadU16(&flc.ChunkType, flc.pChunk+4);
 
@@ -462,7 +462,7 @@ static double oldTick=0.0;
 	do {
 		waitTicks = (oldTick + delay - SDL_GetTicks());
 
-		if(waitTicks > 0.0) {
+		if (waitTicks > 0.0) {
 			//SDL_Delay((int)Round(waitTicks)); // biased rounding? mehhh?
 			SDL_Delay(1);
 		}
@@ -473,7 +473,7 @@ static double oldTick=0.0;
 void FlcInitFirstFrame()
 { flc.FrameSize=16;
   flc.FrameCount=0;
-  if(fseek(flc.file, 128, SEEK_SET)) {
+  if (fseek(flc.file, 128, SEEK_SET)) {
     //printf("Fseek read failed\n");
     throw Exception("Fseek read failed for flx file");
   };
@@ -484,7 +484,7 @@ int FlcInit(const char *filename)
 { flc.pMembuf=NULL;
   flc.membufSize=0;
 
-  if(FlcCheckHeader(filename)) {
+  if (FlcCheckHeader(filename)) {
     Log(LOG_ERROR) << "Flx file failed header check.";
     //exit(1);
 	return -1;
@@ -513,15 +513,15 @@ void FlcMain(void (*frameCallBack)())
 
   FlcInitFirstFrame();
   flc.offset = flc.dy * flc.mainscreen->pitch + flc.mainscreen->format->BytesPerPixel * flc.dx;
-  while(!flc.quit) {
+  while (!flc.quit) {
 	if (frameCallBack) (*frameCallBack)();
     flc.FrameCount++;
-    if(FlcCheckFrame()) {
+    if (FlcCheckFrame()) {
       if (flc.FrameCount<=flc.HeaderFrames) {
         Log(LOG_ERROR) << "Frame failure -- corrupt file?";
 	return;
       } else {
-        if(flc.loop)
+        if (flc.loop)
           FlcInitFirstFrame();
         else {
           SDL_Delay(1000);
@@ -533,7 +533,7 @@ void FlcMain(void (*frameCallBack)())
 
     FlcReadFile(flc.FrameSize);
 
-	if(flc.FrameCheck!=SDL_SwapLE16(0x0f100)) {
+	if (flc.FrameCheck!=SDL_SwapLE16(0x0f100)) {
       FlcDoOneFrame();
       SDLWaitFrame();
       /* TODO: Track which rectangles have really changed */
@@ -549,7 +549,7 @@ void FlcMain(void (*frameCallBack)())
 
 	do
 	{
-		while(SDL_PollEvent(&event)) {
+		while (SDL_PollEvent(&event)) {
 		  switch(event.type) {
 			case SDL_MOUSEBUTTONDOWN:
 			case SDL_KEYDOWN:
@@ -598,15 +598,15 @@ main(int argc, char **argv)
 { int c;
 
   flc.loop=0;
-  for(c = 1; argv[c] && (argv[c][0] == '-'); ++c) {
-    if(strcmp(argv[c], "-l") == 0) {
+  for (c = 1; argv[c] && (argv[c][0] == '-'); ++c) {
+    if (strcmp(argv[c], "-l") == 0) {
       printf("Looping mode\n");
       flc.loop = 1;
     } else {
       FlxplayHelp();
     }
   }
-  if(!argv[c]) {
+  if (!argv[c]) {
     FlxplayHelp();
   }
 

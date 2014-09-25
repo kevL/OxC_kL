@@ -216,7 +216,7 @@ void ManufactureState::fillProductionList()
 	_lstManufacture->clearList();
 
 	const std::vector<Production*> productions(_base->getProductions());
-	for(std::vector<Production*>::const_iterator
+	for (std::vector<Production*>::const_iterator
 			i = productions.begin();
 			i != productions.end();
 			++i)

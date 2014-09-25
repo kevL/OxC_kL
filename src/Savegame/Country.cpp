@@ -270,7 +270,7 @@ if (aLien < xCom + 30) // if aLien is above xCom by 30 or less
 	} */
 
 	if (_newPact // about to be in cahoots
-		&& !_pact)
+		&& _pact == false)
 	{
 		_newPact = false;
 		_pact = true;

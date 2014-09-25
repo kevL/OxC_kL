@@ -66,15 +66,10 @@ SavedBattleGame::SavedBattleGame()
 		_mapsize_x(0),
 		_mapsize_y(0),
 		_mapsize_z(0),
-		_tiles(),
 		_selectedUnit(NULL),
 		_lastSelectedUnit(NULL),
-		_nodes(),
-		_units(),
-		_items(),
 		_pathfinding(NULL),
 		_tileEngine(NULL),
-		_missionType(""),
 		_globalShade(0),
 		_side(FACTION_PLAYER),
 		_turn(1),
@@ -82,15 +77,12 @@ SavedBattleGame::SavedBattleGame()
 		_aborted(false),
 		_itemId(0),
 		_objectiveDestroyed(false),
-		_fallingUnits(),
 		_unitsFalling(false),
 		_cheating(false),
 		_tuReserved(BA_NONE),
 		_depth(0),
 		_kneelReserved(false),
-		_terrain(""), // kL sza_MusicRules
 		_invBattle(NULL),
-		_alienRace(""), // kL
 		_ambience(-1)
 {
 	//Log(LOG_INFO) << "\nCreate SavedBattleGame";

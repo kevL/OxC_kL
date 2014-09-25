@@ -53,13 +53,13 @@ protected:
 
 	///
 	void addStat(
-			std::string label,
+			const std::string& label,
 			int stat,
 			bool plus = false);
 	///
 	void addStat(
-			std::string label,
-			std::wstring stat);
+			const std::string& label,
+			const std::wstring& stat);
 
 
 	public:

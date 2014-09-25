@@ -71,8 +71,6 @@ RuleInventory::RuleInventory(const std::string& id)
 		_x(0),
 		_y(0),
 		_type(INV_SLOT),
-		_slots(),
-		_costs(),
 		_listOrder(0)
 {
 }

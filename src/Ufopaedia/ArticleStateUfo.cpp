@@ -90,7 +90,7 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	graphic->getCrop()->h = 29;
 	graphic->blit(_image); */
 
-/*	if (ufo->getModSprite() == "")
+/*	if (ufo->getModSprite().empty())
 	{
 		graphic->getCrop()->y = 140 + 52 * static_cast<Sint16>(ufo->getSprite());
 		graphic->getCrop()->h = 52;
@@ -122,7 +122,6 @@ ArticleStateUfo::ArticleStateUfo(ArticleDefinitionUfo* defs)
 	_lstInfo = new TextList(300, 65, 10, 68);
 
 	add(_lstInfo);
-
 
 	centerAllSurfaces();
 
