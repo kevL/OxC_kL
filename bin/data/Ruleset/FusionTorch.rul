@@ -35,7 +35,6 @@ items:
     invHeight: 1
     hitSound: 52
     hitAnimation: 88
-    blastRadius: 0
     armor: 5
     listOrder: 3711
 research:
@@ -100,7 +99,7 @@ extraSprites:
     subX: 32
     subY: 40
     files:
-      88: Resources/FusionTorch/SMOKE/HitAnimation.gif
+      88: Resources/FusionTorch/SMOKE/FusionTorch_hit.png
 extraStrings:
   - type: en-US
     strings:
