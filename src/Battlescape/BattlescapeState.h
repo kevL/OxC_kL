@@ -255,10 +255,14 @@ private:
 		/// Handler for clicking the stats.
 		void btnStatsClick(Action* action);
 
-		/// Handler for clicking the left hand item button.
-		void btnLeftHandItemClick(Action* action);
-		/// Handler for clicking the right hand item button.
-		void btnRightHandItemClick(Action* action);
+		/// Handler for left-clicking the left hand item button.
+		void btnLeftHandLeftClick(Action* action);
+		/// Handler for right-clicking the left hand item button.
+		void btnLeftHandRightClick(Action* action);
+		/// Handler for left-clicking the right hand item button.
+		void btnRightHandLeftClick(Action* action);
+		/// Handler for right-clicking the right hand item button.
+		void btnRightHandRightClick(Action* action);
 
 		/// Handler for clicking a visible unit button.
 		void btnVisibleUnitClick(Action* action);

@@ -462,7 +462,7 @@ void SoldierInfoState::init()
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
 
-	_gender->clear(0);
+	_gender->clear();
 	Surface* gender;
 	if (_soldier->getGender() == GENDER_MALE)
 		gender = _game->getResourcePack()->getSurface("GENDER_M");

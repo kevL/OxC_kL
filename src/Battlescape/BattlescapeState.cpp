@@ -617,17 +617,29 @@ BattlescapeState::BattlescapeState()
 //	_btnStats->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnStats->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-	_btnLeftHandItem->onMouseClick((ActionHandler)& BattlescapeState::btnLeftHandItemClick);
+//	_btnLeftHandItem->onMouseClick((ActionHandler)& BattlescapeState::btnLeftHandItemClick);
+	_btnLeftHandItem->onMouseClick(
+					(ActionHandler)& BattlescapeState::btnLeftHandLeftClick,
+					SDL_BUTTON_LEFT);
+	_btnLeftHandItem->onMouseClick(
+					(ActionHandler)& BattlescapeState::btnLeftHandRightClick,
+					SDL_BUTTON_RIGHT);
 	_btnLeftHandItem->onKeyboardPress(
-					(ActionHandler)& BattlescapeState::btnLeftHandItemClick,
+					(ActionHandler)& BattlescapeState::btnLeftHandLeftClick,
 					Options::keyBattleUseLeftHand);
 //	_btnLeftHandItem->setTooltip("STR_USE_LEFT_HAND");
 //	_btnLeftHandItem->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
 //	_btnLeftHandItem->onMouseOut((ActionHandler)& BattlescapeState::txtTooltipOut);
 
-	_btnRightHandItem->onMouseClick((ActionHandler)& BattlescapeState::btnRightHandItemClick);
+//	_btnRightHandItem->onMouseClick((ActionHandler)& BattlescapeState::btnRightHandItemClick);
+	_btnRightHandItem->onMouseClick(
+					(ActionHandler)& BattlescapeState::btnRightHandLeftClick,
+					SDL_BUTTON_LEFT);
+	_btnRightHandItem->onMouseClick(
+					(ActionHandler)& BattlescapeState::btnRightHandRightClick,
+					SDL_BUTTON_RIGHT);
 	_btnRightHandItem->onKeyboardPress(
-					(ActionHandler)& BattlescapeState::btnRightHandItemClick,
+					(ActionHandler)& BattlescapeState::btnRightHandLeftClick,
 					Options::keyBattleUseRightHand);
 //	_btnRightHandItem->setTooltip("STR_USE_RIGHT_HAND");
 //	_btnRightHandItem->onMouseIn((ActionHandler)& BattlescapeState::txtTooltipIn);
@@ -1887,9 +1899,11 @@ void BattlescapeState::btnStatsClick(Action* action)
 		{
 			int posX = action->getXMouse();
 			int posY = action->getYMouse();
-			if ((posX < Camera::SCROLL_BORDER * action->getXScale() && posX > 0)
+			if ((posX < Camera::SCROLL_BORDER * action->getXScale()
+					&& posX > 0)
 				|| posX > (_map->getWidth() - Camera::SCROLL_BORDER) * action->getXScale()
-				|| (posY < (Camera::SCROLL_BORDER * action->getYScale()) && posY > 0)
+				|| (posY < (Camera::SCROLL_BORDER * action->getYScale())
+						&& posY > 0)
 				|| posY > (_map->getHeight() - Camera::SCROLL_BORDER) * action->getYScale())
 			{
 				// To avoid handling this event as a click on the stats
@@ -1909,7 +1923,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 
 		_battleGame->cancelCurrentAction(true);
 
-		if (!edge)
+		if (edge == false)
 			popup(new UnitInfoState(
 								_save->getSelectedUnit(),
 								this,
@@ -1922,10 +1936,8 @@ void BattlescapeState::btnStatsClick(Action* action)
  * Shows an action popup menu. When clicked, creates the action.
  * @param action, Pointer to an action.
  */
-void BattlescapeState::btnLeftHandItemClick(Action*)
+void BattlescapeState::btnLeftHandLeftClick(Action*)
 {
-//Old	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
-
 	if (playableUnitSelected())
 	{
 		// concession for touch devices:
@@ -1938,8 +1950,8 @@ void BattlescapeState::btnLeftHandItemClick(Action*)
 //kL		}
 
 		_battleGame->cancelCurrentAction();
-
 		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
+
 		_map->cacheUnits();
 		_map->draw();
 
@@ -1949,13 +1961,29 @@ void BattlescapeState::btnLeftHandItemClick(Action*)
 }
 
 /**
- * Shows an action popup menu. When clicked, create the action.
+ *
  * @param action, Pointer to an action.
  */
-void BattlescapeState::btnRightHandItemClick(Action*)
+void BattlescapeState::btnLeftHandRightClick(Action*)
 {
-//Old	if (_battleGame->getCurrentAction()->type != BA_NONE) return;
+	if (playableUnitSelected())
+	{
+		_battleGame->cancelCurrentAction();
 
+		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
+		updateSoldierInfo(false);
+
+		_map->cacheUnits();
+		_map->draw();
+	}
+}
+
+/**
+ * Sets left hand as Active Hand.
+ * @param action - pointer to an action
+ */
+void BattlescapeState::btnRightHandLeftClick(Action*)
+{
 	if (playableUnitSelected())
 	{
 		// concession for touch devices:
@@ -1968,13 +1996,31 @@ void BattlescapeState::btnRightHandItemClick(Action*)
 //kL		}
 
 		_battleGame->cancelCurrentAction();
-
 		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
+
 		_map->cacheUnits();
 		_map->draw();
 
 		BattleItem* rightHandItem = _save->getSelectedUnit()->getItem("STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
+	}
+}
+
+/**
+ * Sets right hand as Active Hand.
+ * @param action - pointer to an action
+ */
+void BattlescapeState::btnRightHandRightClick(Action*)
+{
+	if (playableUnitSelected())
+	{
+		_battleGame->cancelCurrentAction();
+
+		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
+		updateSoldierInfo(false);
+
+		_map->cacheUnits();
+		_map->draw();
 	}
 }
 
@@ -2643,10 +2689,10 @@ void BattlescapeState::blinkVisibleUnitButtons()
  */
 void BattlescapeState::animate()
 {
-	_map->animate(!_battleGame->isBusy());
+	_map->animate(_battleGame->isBusy() == false);
 
 	blinkVisibleUnitButtons();
-	drawFuse(); // kL
+	drawFuse();
 }
 
 /**
@@ -2656,8 +2702,8 @@ void BattlescapeState::animate()
  */
 void BattlescapeState::handleItemClick(BattleItem* item)
 {
-	if (item						// make sure there is an item
-		&& !_battleGame->isBusy())	// and the battlescape is in an idle state
+	if (item								// make sure there is an item
+		&& _battleGame->isBusy() == false)	// and the battlescape is in an idle state
 	{
 //kL	if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements())
 //kL		|| _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)

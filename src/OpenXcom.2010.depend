@@ -4742,7 +4742,7 @@
 1410038647 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<string>
 
-1409187467 f:\git\openxcom\src\battlescape\inventorystate.h
+1411666334 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
@@ -5649,7 +5649,7 @@
 1404096022 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1411348850 f:\git\openxcom\src\battlescape\battlescapestate.h
+1411663720 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -6040,7 +6040,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1411658930 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1411664771 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -7329,7 +7329,7 @@
 	"Game.h"
 	"Options.h"
 
-1411652210 source:f:\git\openxcom\src\engine\zoom.cpp
+1411659951 source:f:\git\openxcom\src\engine\zoom.cpp
 	"Zoom.h"
 	"Exception.h"
 	"Logger.h"
@@ -7768,7 +7768,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1411657758 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1411660737 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8811,7 +8811,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1409954762 source:f:\git\openxcom\src\menu\startstate.cpp
+1411659548 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"../version.h"
 	"ErrorMessageState.h"
@@ -9354,7 +9354,7 @@
 	<math.h>
 	"../Engine/RNG.h"
 
-1411654399 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
+1411660674 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
@@ -9745,7 +9745,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1411366036 source:f:\git\openxcom\src\savegame\soldier.cpp
+1411658410 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"

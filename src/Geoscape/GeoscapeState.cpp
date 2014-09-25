@@ -1767,7 +1767,6 @@ void GeoscapeState::time10Minutes()
 						if ((*ab)->isDiscovered())
 							continue;
 
-//						double craftRadar = 600.0;
 //						double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
 						double craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor;
 						//Log(LOG_INFO) << ". . craftRadar = " << (int)craftRadar;
@@ -2504,7 +2503,7 @@ void GeoscapeState::time1Day()
 
 				if ((*f)->getBuildTime() == 0)
 				{
-					if (!productionCompleteEvents.empty()) // myk002_begin: only show the action button for the last completion notification
+					if (productionCompleteEvents.empty() == false) // myk002_begin: only show the action button for the last completion notification
 						productionCompleteEvents.back().showGotoBaseButton = false;
 
 					productionCompleteEvents.push_back(
@@ -2533,8 +2532,8 @@ void GeoscapeState::time1Day()
 				finished.push_back(*rp);
 		}
 
-		if (!finished.empty())	// kL
-			timerReset();		// kL
+		if (finished.empty() == false)
+			timerReset();
 
 		std::vector<State*> researchCompleteEvents;								// myk002
 		std::vector<NewPossibleResearchInfo> newPossibleResearchEvents;			// myk002
@@ -2566,8 +2565,7 @@ void GeoscapeState::time1Day()
 				// ;) -> kL_note: heh i noticed that.
 			}
 
-//kL		if ((*rp)->getRules()->getGetOneFree().size() != 0)
-			if (!(*rp)->getRules()->getGetOneFree().empty()) // kL
+			if ((*rp)->getRules()->getGetOneFree().empty() == false)
 			{
 				std::vector<std::string> possibilities;
 
@@ -2662,11 +2660,11 @@ void GeoscapeState::time1Day()
 				RuleItem* item = _game->getRuleset()->getItem(newResearch->getName());
 				if (item
 					&& item->getBattleType() == BT_FIREARM
-					&& !item->getCompatibleAmmo()->empty())
+					&& item->getCompatibleAmmo()->empty() == false)
 				{
 					RuleManufacture* manufRule = _game->getRuleset()->getManufacture(item->getType());
 					if (manufRule
-						&& !manufRule->getRequirements().empty())
+						&& manufRule->getRequirements().empty() == false)
 					{
 						const std::vector<std::string> &req = manufRule->getRequirements();
 						RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
@@ -2676,7 +2674,7 @@ void GeoscapeState::time1Day()
 										req.end(),
 										ammo->getType())
 									!= req.end()
-							&& !_game->getSavedGame()->isResearched(manufRule->getRequirements()))
+							&& _game->getSavedGame()->isResearched(manufRule->getRequirements()) == false)
 						{
 							researchCompleteEvents.push_back(new ResearchRequiredState(item)); // myk002
 /*myk002
@@ -2686,9 +2684,9 @@ void GeoscapeState::time1Day()
 				}
 			}
 
-			if (!newPossibleResearch.empty()) // myk002_begin: only show the "allocate research" button for the last notification
+			if (newPossibleResearch.empty() == false) // myk002_begin: only show the "allocate research" button for the last notification
 			{
-				if (!newPossibleResearchEvents.empty())
+				if (newPossibleResearchEvents.empty() == false)
 					newPossibleResearchEvents.back().showResearchButton = false;
 
 				newPossibleResearchEvents.push_back(NewPossibleResearchInfo(
@@ -2700,7 +2698,7 @@ void GeoscapeState::time1Day()
 											*b,
 											newPossibleResearch)); */
 
-			if (!newPossibleManufacture.empty())
+			if (newPossibleManufacture.empty() == false)
 			{
 				if (!newPossibleManufactureEvents.empty()) // myk002_begin: only show the "allocate production" button for the last notification
 					newPossibleManufactureEvents.back().showManufactureButton = false;

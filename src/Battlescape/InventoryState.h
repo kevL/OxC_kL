@@ -33,7 +33,7 @@ class BattlescapeState;
 class BattleUnit;
 //class InteractiveSurface;
 class Inventory;
-class NumberText; // kL
+class NumberText;
 class SavedBattleGame;
 class Surface;
 class Text;
@@ -50,7 +50,7 @@ class InventoryState
 private:
 	const bool _tu;
 
-//kL	std::string _currentTooltip;
+//	std::string _currentTooltip;
 
 	BattlescapeButton
 		* _btnGround,
@@ -65,11 +65,12 @@ private:
 	BattlescapeState* _parent;
 	Inventory* _inv;
 	NumberText
-		* _numOrder, // kL
-		* _tuCost; // kL
+		* _numOrder,
+		* _tuCost;
 	SavedBattleGame* _battleGame;
 	Surface
 		* _bg,
+		* _gender,
 		* _selAmmo,
 		* _soldier;
 	Text
@@ -80,8 +81,8 @@ private:
 		* _txtTus,
 		* _txtFAcc,
 		* _txtReact,
-		* _txtThrow, // kL
-		* _txtMelee, // kL
+		* _txtThrow,
+		* _txtMelee,
 		* _txtPSkill,
 		* _txtPStr,
 		* _txtUseTU,
@@ -147,9 +148,9 @@ private:
 		void handle(Action* action);
 
 		/// Handler for showing tooltip.
-//kL	void txtTooltipIn(Action* action);
+//		void txtTooltipIn(Action* action);
 		/// Handler for hiding tooltip.
-//kL	void txtTooltipOut(Action* action);
+//		void txtTooltipOut(Action* action);
 };
 
 }

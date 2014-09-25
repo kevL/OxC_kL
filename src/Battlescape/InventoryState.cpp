@@ -109,6 +109,7 @@ InventoryState::InventoryState(
 	_soldier	= new Surface(320, 200, 0, 0);
 
 	_txtName	= new Text(200, 17, 36, 6);
+	_gender		= new Surface(7, 7, 28, 1);
 
 	_txtWeight	= new Text(70, 9, 237, 24); // 237 -> was, 245
 	_txtTus		= new Text(40, 9, 237, 24);
@@ -173,6 +174,7 @@ InventoryState::InventoryState(
 	add(_bg);
 	_game->getResourcePack()->getSurface("TAC01.SCR")->blit(_bg);
 
+	add(_gender);
 	add(_soldier);
 	add(_txtName, "textName", "inventory", _bg);
 
@@ -492,8 +494,10 @@ void InventoryState::init()
 //kL		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
 
 	unit->setCache(NULL);
+
 	_soldier->clear();
 	_btnRank->clear();
+	_gender->clear();
 
 //	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
@@ -502,8 +506,16 @@ void InventoryState::init()
 
 //	Soldier* soldier = _game->getSavedGame()->getSoldier(unit->getId());
 	Soldier* soldier = unit->getGeoscapeSoldier();
-	if (soldier)
+	if (soldier != NULL)
 	{
+		Surface* gender;
+		if (soldier->getGender() == GENDER_MALE)
+			gender = _game->getResourcePack()->getSurface("GENDER_M");
+		else
+			gender = _game->getResourcePack()->getSurface("GENDER_F");
+		if (gender != NULL)
+			gender->blit(_gender);
+
 /*		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(soldier->getRankSprite())->setX(0);
 		texture->getFrame(soldier->getRankSprite())->setY(0);
