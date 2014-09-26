@@ -392,14 +392,14 @@ BattlescapeState::BattlescapeState()
 	_warning->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("warning")->color); //Palette::blockOffset(1));
 
 	add(_btnLaunch);
-	add(_btnPsi);
 	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(0)->blit(_btnLaunch);
-	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
 	_btnLaunch->onMouseClick((ActionHandler)& BattlescapeState::btnLaunchClick);
-	_btnPsi->onMouseClick((ActionHandler)& BattlescapeState::btnPsiClick);
 	_btnLaunch->setVisible(false);
-	_btnPsi->setVisible(false);
 
+	add(_btnPsi);
+	_game->getResourcePack()->getSurfaceSet("SPICONS.DAT")->getFrame(1)->blit(_btnPsi);
+	_btnPsi->onMouseClick((ActionHandler)& BattlescapeState::btnPsiClick);
+	_btnPsi->setVisible(false);
 
 	add(_txtBaseLabel);
 	_txtBaseLabel->setColor(Palette::blockOffset(8));
@@ -1968,7 +1968,7 @@ void BattlescapeState::btnLeftHandRightClick(Action*)
 {
 	if (playableUnitSelected())
 	{
-		_battleGame->cancelCurrentAction();
+		_battleGame->cancelCurrentAction(true);
 
 		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
 		updateSoldierInfo(false);
@@ -2014,7 +2014,7 @@ void BattlescapeState::btnRightHandRightClick(Action*)
 {
 	if (playableUnitSelected())
 	{
-		_battleGame->cancelCurrentAction();
+		_battleGame->cancelCurrentAction(true);
 
 		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
 		updateSoldierInfo(false);

@@ -1977,7 +1977,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 								i < 10;
 								i++)
 						{
-							if (!ba.actor->spendTimeUnits(tu))
+							if (ba.actor->spendTimeUnits(tu) == false)
 								break;
 
 							statePushBack(new ProjectileFlyBState(
@@ -2038,11 +2038,11 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 		if (_currentAction.targeting)
 		{
 			if (_currentAction.type == BA_LAUNCH
-				&& !_currentAction.waypoints.empty())
+				&& _currentAction.waypoints.empty() == false)
 			{
 				_currentAction.waypoints.pop_back();
 
-				if (!getMap()->getWaypoints()->empty())
+				if (getMap()->getWaypoints()->empty() == false)
 					getMap()->getWaypoints()->pop_back();
 
 				if (_currentAction.waypoints.empty())
@@ -2053,7 +2053,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			else
 			{
 				if (Options::battleConfirmFireMode
-					&& !_currentAction.waypoints.empty())
+					&& _currentAction.waypoints.empty() == false)
 				{
 					_currentAction.waypoints.pop_back();
 					getMap()->getWaypoints()->pop_back();
@@ -2073,7 +2073,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 			}
 		}
 	}
-	else if (!_states.empty()
+	else if (_states.empty() == false
 		&& _states.front() != 0)
 	{
 		_states.front()->cancel();
@@ -2099,7 +2099,7 @@ BattleAction* BattlescapeGame::getCurrentAction()
  */
 bool BattlescapeGame::isBusy()
 {
-	return !_states.empty();
+	return (_states.empty() == false);
 }
 
 /**
@@ -2533,7 +2533,7 @@ void BattlescapeGame::requestEndTurn()
 	//Log(LOG_INFO) << "BattlescapeGame::requestEndTurn()";
 	cancelCurrentAction();
 
-	if (!_endTurnRequested)
+	if (_endTurnRequested == false)
 	{
 		_endTurnRequested = true;
 
@@ -2546,18 +2546,10 @@ void BattlescapeGame::requestEndTurn()
 /**
  * Sets the TU reserved type as a BattleAction.
  * @param bat		- a battleactiontype (BattlescapeGame.h)
- * @param player	- true if this requested by the player
  */
 void BattlescapeGame::setTUReserved(BattleActionType bat)
-//		bool player)
 {
-//	_batReserved = bat;
-
-//	if (player)
-//	{
-//		_playerBATReserved = bat;
 	_save->setTUReserved(bat);
-//	}
 }
 
 /**
@@ -2834,7 +2826,7 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 		}
 	}
 
-	BattleItem* targetItem = 0;
+	BattleItem* targetItem = NULL;
 	int maxWorth = 0;
 
 	// now select the most suitable candidate depending on attractiveness and distance
@@ -2914,7 +2906,6 @@ bool BattlescapeGame::worthTaking(
 						if ((*i)->getRules()->getName() == *j)
 						{
 							ammoFound = true;
-
 							break;
 						}
 					}
@@ -2922,7 +2913,7 @@ bool BattlescapeGame::worthTaking(
 			}
 		}
 
-		if (!ammoFound)
+		if (ammoFound == false)
 			return false;
 	}
 
@@ -2947,14 +2938,13 @@ bool BattlescapeGame::worthTaking(
 					if ((*i)->getRules()->getName() == *j)
 					{
 						weaponFound = true;
-
 						break;
 					}
 				}
 			}
 		}
 
-		if (!weaponFound)
+		if (weaponFound == false)
 			return false;
 	}
 //	}
@@ -3085,7 +3075,6 @@ bool BattlescapeGame::takeItem(
 						item->setSlotX(i);
 
 						placed = true;
-
 						break;
 					}
 				}
@@ -3105,7 +3094,6 @@ bool BattlescapeGame::takeItem(
 					item->setSlotX(i);
 
 					placed = true;
-
 					break;
 				}
 			}

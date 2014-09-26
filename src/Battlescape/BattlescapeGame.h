@@ -258,8 +258,7 @@ private:
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).
 		void requestEndTurn();
 		/// Sets the TU reserved type.
-		void setTUReserved(
-				BattleActionType bat);
+		void setTUReserved(BattleActionType bat);
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
 

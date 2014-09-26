@@ -5551,7 +5551,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 					if (liveAliens == 0
 						|| liveSoldiers == 0)
 					{
-						_battleSave->setSelectedUnit(0);
+						_battleSave->setSelectedUnit(NULL);
 						_battleSave->getBattleGame()->cancelCurrentAction(true);
 
 						_battleSave->getBattleGame()->requestEndTurn();
