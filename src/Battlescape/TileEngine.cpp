@@ -1856,7 +1856,7 @@ BattleActionType TileEngine::selectFireMethod( // kL
 /**
  * Handles bullet/weapon hits. A bullet/weapon hits a voxel.
  * kL_note: called from ExplosionBState
- * @param pTarget_voxel	- reference to the center of hit in voxelspace
+ * @param pTarget_voxel	- reference the center of hit in voxelspace
  * @param power			- power of the hit/explosion
  * @param type			- damage type of the hit (RuleItem.h)
  * @param attacker		- pointer to unit that caused the hit
@@ -1892,7 +1892,7 @@ BattleUnit* TileEngine::hit(
 		if (tile == NULL)
 		{
 			//Log(LOG_INFO) << ". Position& pTarget_voxel : NOT Valid, return NULL";
-			_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
+//			_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
 
 			return NULL;
 		}
@@ -1984,7 +1984,7 @@ BattleUnit* TileEngine::hit(
 				}
 			}
 
-			if (buTarget)
+			if (buTarget != NULL)
 			{
 				//Log(LOG_INFO) << ". . . buTarget Valid ID = " << buTarget->getId();
 
@@ -2161,14 +2161,15 @@ BattleUnit* TileEngine::hit(
 					}
 				}
 
-				if (buTarget->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not.
-					&& attacker											// shooter exists
-					&& attacker->getOriginalFaction() == FACTION_PLAYER	// shooter is Xcom
-					&& attacker->getFaction() == FACTION_PLAYER			// shooter is not Mc'd Xcom
-					&& attacker->getTurretType() < 0					// shooter is not a tank.
+				if (melee == false											// not melee
+					&& buTarget->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not.
+					&& attacker												// shooter exists
+					&& attacker->getOriginalFaction() == FACTION_PLAYER		// shooter is Xcom
+					&& attacker->getFaction() == FACTION_PLAYER				// shooter is not Mc'd Xcom
+					&& attacker->getTurretType() < 0)						// shooter is not a tank.
 //					&& type != DT_NONE
-					&& _battleSave->getBattleGame()->getCurrentAction()->type != BA_HIT
-					&& _battleSave->getBattleGame()->getCurrentAction()->type != BA_STUN)
+//					&& _battleSave->getBattleGame()->getCurrentAction()->type != BA_HIT
+//					&& _battleSave->getBattleGame()->getCurrentAction()->type != BA_STUN) // psst. STUN isn't set *anywhere*
 				{
 					//Log(LOG_INFO) << ". . addFiringExp() - huh, even for Melee?"; // okay they're working on it ...
 					// kL_note: with my workaround for Stunrods above, this needs to check
@@ -2192,14 +2193,14 @@ BattleUnit* TileEngine::hit(
 
 		//if (buTarget) Log(LOG_INFO) << "TileEngine::hit() EXIT, return buTarget";
 		//else Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[0]";
-		_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
+//		_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
 
 
 		return buTarget;
 	}
 	//else Log(LOG_INFO) << ". DT_ = " << static_cast<int>(type);
 
-	_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
+//	_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
 
 	//Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[1]";
 	return NULL;

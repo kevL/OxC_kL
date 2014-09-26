@@ -88,7 +88,7 @@ ActionMenuState::ActionMenuState(
 	RuleItem* weapon = _action->weapon->getRules();
 	int id = 0;
 
-	if (!weapon->isFixed()) // throwing (if not a fixed weapon)
+	if (weapon->isFixed() == false) // throwing (if not a fixed weapon)
 		addItem(
 				BA_THROW,
 				"STR_THROW",
@@ -356,11 +356,11 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 																						_action->actor->getPosition(),
 																						_action->actor->getDirection(),
 																						_action->actor,
-																						0,
+																						NULL,
 																						&_action->target))
 				{
 					Tile* tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
-					if (tile != 0
+					if (tile != NULL
 						&& tile->getUnit()
 						&& tile->getUnit()->isWoundable())
 					{
@@ -414,12 +414,13 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 		else if (_action->type == BA_STUN
 				|| _action->type == BA_HIT)
 		{
-			if (!_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+			if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 																					_action->actor->getPosition(),
 																					_action->actor->getDirection(),
 																					_action->actor,
 																					NULL,
-																					&_action->target))
+																					&_action->target)
+																				== false)
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 			}

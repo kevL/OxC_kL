@@ -427,7 +427,8 @@ void ExplosionBState::explode()
 	{
 		// kL_note: Try moving this to TileEngine::hit()
 		// so I can tell whether Firing XP is to be awarded or not, there.
-//		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
+		// dang, screws up multiple shot per turn.
+		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 
 		if (_unit != NULL
 			&& _unit->isOut() == false)

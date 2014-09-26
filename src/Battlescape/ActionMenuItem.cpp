@@ -108,11 +108,11 @@ ActionMenuItem::~ActionMenuItem()
 
 /**
  * Links with an action and fills in the text fields.
- * @param action, The battlescape action.
- * @param description, The actions description.
- * @param accuracy, The actions accuracy, including the Acc> prefix.
- * @param timeunits, The timeunits string, including the TUs> prefix.
- * @param tu, The timeunits value.
+ * @param action		- the battlescape action
+ * @param description	- reference the action's description
+ * @param accuracy		- reference the action's accuracy, including the 'acu' prefix
+ * @param timeunits		- reference the timeunits string, including the 'tu' prefix
+ * @param tu			- the timeunits value
  */
 void ActionMenuItem::setAction(
 		BattleActionType action,
