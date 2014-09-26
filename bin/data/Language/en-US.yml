@@ -844,7 +844,7 @@ en-US:
   STR_ITEMS_ARRIVING: "ARRIVALS"
   STR_DESTINATION_UC: "Destination"
   STR_PISTOL: "Pistol"
-  STR_PISTOL_CLIP: "clip-PR"
+  STR_PISTOL_CLIP: "clip-P"
   STR_RIFLE: "Rifle"
   STR_RIFLE_CLIP: "clip-R"
   STR_HEAVY_CANNON: "Cannon heavy"
