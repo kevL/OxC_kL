@@ -1754,7 +1754,8 @@ bool TileEngine::reactionShot(
 
 			_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
 																	_battleSave->getBattleGame(),
-																	action));
+																	action,
+																	false));
 			_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
 																	_battleSave->getBattleGame(),
 																	action));

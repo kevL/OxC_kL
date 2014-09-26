@@ -1942,7 +1942,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 								unit->getPosition().z);
 				statePushBack(new UnitTurnBState(
 												this,
-												ba));
+												ba,
+												false));
 			}
 
 			for (std::vector<BattleUnit*>::iterator
@@ -1953,7 +1954,8 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 				ba.target = (*j)->getPosition();
 				statePushBack(new UnitTurnBState(
 												this,
-												ba));
+												ba,
+												false));
 			}
 
 			if (_save->getTile(ba.target) != NULL)

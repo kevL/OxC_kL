@@ -47,11 +47,13 @@ namespace OpenXcom
  */
 UnitTurnBState::UnitTurnBState(
 		BattlescapeGame* parent,
-		BattleAction action)
+		BattleAction action,
+		bool chargeTUs)
 	:
 		BattleState(
 			parent,
 			action),
+		_chargeTUs(chargeTUs),
 		_unit(NULL),
 		_turret(false)
 {
@@ -102,7 +104,8 @@ void UnitTurnBState::init()
 	}
 
 
-	if (_unit->getStatus() != STATUS_TURNING) // try to open a door
+	if (_chargeTUs
+		&& _unit->getStatus() != STATUS_TURNING) // try to open a door
 	{
 		if (_action.type == BA_NONE)
 		{
@@ -149,14 +152,14 @@ void UnitTurnBState::think()
 		factPlayer	= _unit->getFaction() == FACTION_PLAYER,
 		factSide	= _unit->getFaction() == _parent->getSave()->getSide();
 
-	int tu = 1;					// one tu per facing change
+	int tu = 1;							// one tu per facing change
 	bool tank = _unit->getTurretType() > -1;
 
-	if (!factSide)				// reaction fire permits free turning
+	if (factSide == false)				// reaction fire permits free turning
 		tu = 0;
-	else if (tank				// if xCom tank
-		&& !_action.strafe		// but not swivelling turret
-		&& !_action.targeting)	// or not taking a shot at something...
+	else if (tank						// if xCom tank
+		&& _action.strafe == false		// but not swivelling turret
+		&& _action.targeting == false)	// or not taking a shot at something...
 	{
 		if (_unit->getArmor()->getMovementType() == MT_FLY)
 			tu = 2; // hover vehicles cost 2 per facing change
@@ -164,13 +167,20 @@ void UnitTurnBState::think()
 			tu = 3; // tracked vehicles cost 3 per facing change
 	}
 
+	if (tu == 0
+		&& _chargeTUs)
+	{
+		tu = 1;
+	}
 
-	if (factSide
+	if (_chargeTUs
+		&& factSide
 		&& _parent->getPanicHandled()
-		&& !_action.targeting
-		&& !_parent->checkReservedTU(
+		&& _action.targeting == false
+		&& _parent->checkReservedTU(
 									_unit,
-									tu))
+									tu)
+								== false)
 	{
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
 		_unit->setStatus(STATUS_STANDING);
@@ -189,8 +199,9 @@ void UnitTurnBState::think()
 
 		if ((newVis
 				&& factPlayer)
-			|| (factSide
-				&& !factPlayer
+			|| (_chargeTUs
+				&& factSide
+				&& factPlayer == false
 				&& _action.type == BA_NONE
 				&& _parent->getPanicHandled()
 				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted))

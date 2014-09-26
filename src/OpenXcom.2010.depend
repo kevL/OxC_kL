@@ -5400,7 +5400,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1411176953 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1411666573 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -5817,7 +5817,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1411648795 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1411701140 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5897,7 +5897,7 @@
 	<string>
 	"BattleState.h"
 
-1410732159 f:\git\openxcom\src\battlescape\unitturnbstate.h
+1411700066 f:\git\openxcom\src\battlescape\unitturnbstate.h
 	<string>
 	"BattleState.h"
 
@@ -6407,7 +6407,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1411649768 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1411666687 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
