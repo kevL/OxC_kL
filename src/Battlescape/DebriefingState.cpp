@@ -59,7 +59,7 @@
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleUfo.h" //
+#include "../Ruleset/RuleUfo.h"
 
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/AlienMission.h"
@@ -73,7 +73,7 @@
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
-#include "../Savegame/SoldierDead.h" // kL
+#include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDeath.h"
 #include "../Savegame/SoldierDiary.h"
 #include "../Savegame/TerrorSite.h"
@@ -99,6 +99,8 @@ DebriefingState::DebriefingState()
 		_limitsEnforced(0)
 {
 	//Log(LOG_INFO) << "Create DebriefingState";
+	_rules = _game->getRuleset();
+
 	Options::baseXResolution = Options::baseXGeoscape;
 	Options::baseYResolution = Options::baseYGeoscape;
 	_game->getScreen()->resetDisplay(false);
@@ -220,13 +222,16 @@ DebriefingState::DebriefingState()
 		civiliansSaved = 0,
 		civiliansDead = 0;
 
+	//Log(LOG_INFO) << ". iterate _stats";
 	for (std::vector<DebriefingStat*>::iterator
 			i = _stats.begin();
 			i != _stats.end();
 			++i)
 	{
+		//Log(LOG_INFO) << ". . item: " << (*i)->item;
 		if ((*i)->qty == 0)
 			continue;
+		//Log(LOG_INFO) << ". . add item";
 
 
 		std::wostringstream
@@ -265,6 +270,7 @@ DebriefingState::DebriefingState()
 			civiliansDead += (*i)->qty;
 		}
 	}
+	//Log(LOG_INFO) << ". iterate _stats DONE";
 
 	if (civiliansSaved
 		&& !civiliansDead)
@@ -375,12 +381,12 @@ DebriefingState::DebriefingState()
 															_missionStatistics);
 
 			if ((*j)->getStatus() != STATUS_DEAD
-				&& (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
+				&& (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_rules))
 			{
 				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
 			}
 			else if ((*j)->getStatus() == STATUS_DEAD
-				&& (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_game->getRuleset()))
+				&& (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_rules))
 			{
 				// Quietly award dead soldiers their commendations as well
 			}
@@ -416,16 +422,17 @@ DebriefingState::~DebriefingState()
 		delete *i;
 	}
 
-	for (std::map<int, RecoveryItem*>::iterator
-			i = _recoveryStats.begin();
-			i != _recoveryStats.end();
+	for (std::map<int, SpecialType*>::iterator
+			i = _specialTypes.begin();
+			i != _specialTypes.end();
 			++i)
 	{
 		delete i->second;
 	}
-	_recoveryStats.clear();
+	_specialTypes.clear();
 
 	_rounds.clear();
+	//Log(LOG_INFO) << "Delete DebriefingState EXIT";
 }
 
 /**
@@ -531,8 +538,8 @@ void DebriefingState::addStat(
 	{
 		if ((*i)->item == name)
 		{
-			(*i)->score = (*i)->score + score;
-			(*i)->qty = (*i)->qty + quantity;
+			(*i)->score += score;
+			(*i)->qty += quantity;
 
 			break;
 		}
@@ -588,21 +595,23 @@ void ClearAlienBase::operator()(AlienMission* am) const
  */
 void DebriefingState::prepareDebriefing()
 {
+	//Log(LOG_INFO) << "DebriefingState::prepareDebriefing()";
+
 	for (std::vector<std::string>::const_iterator
-			i = _game->getRuleset()->getItemsList().begin();
-			i != _game->getRuleset()->getItemsList().end();
+			i = _rules->getItemsList().begin();
+			i != _rules->getItemsList().end();
 			++i)
 	{
-		if (_game->getRuleset()->getItem(*i)->getSpecialType() > 1)
+		if (_rules->getItem(*i)->getSpecialType() > 1)
 		{
-			RecoveryItem* item = new RecoveryItem();
+			SpecialType* item = new SpecialType();
 			item->name = *i;
-			item->value = _game->getRuleset()->getItem(*i)->getRecoveryPoints();
-			_recoveryStats[_game->getRuleset()->getItem(*i)->getSpecialType()] = item;
+			item->value = _rules->getItem(*i)->getRecoveryPoints();
+
+			_specialTypes[_rules->getItem(*i)->getSpecialType()] = item;
 		}
 	}
 
-	//Log(LOG_INFO) << "DebriefingState::prepareDebriefing()";
 	_stats.push_back(new DebriefingStat("STR_ALIENS_KILLED"));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_CORPSES_RECOVERED"));
 	_stats.push_back(new DebriefingStat("STR_LIVE_ALIENS_RECOVERED"));
@@ -617,9 +626,9 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_TANKS_DESTROYED"));
 	_stats.push_back(new DebriefingStat("STR_XCOM_CRAFT_LOST"));
 
-	for (std::map<int, RecoveryItem*>::const_iterator
-			i = _recoveryStats.begin();
-			i != _recoveryStats.end();
+	for (std::map<int, SpecialType*>::const_iterator
+			i = _specialTypes.begin(); // <int <name, value> >
+			i != _specialTypes.end();
 			++i)
 	{
 		_stats.push_back(new DebriefingStat(
@@ -637,7 +646,9 @@ void DebriefingState::prepareDebriefing()
 	_stats.push_back(new DebriefingStat("STR_ALIEN_ALLOYS", true));
 	_stats.push_back(new DebriefingStat("STR_ALIEN_HABITAT", true)); */
 
-	_stats.push_back(new DebriefingStat(_game->getRuleset()->getAlienFuel(), true));
+	_stats.push_back(new DebriefingStat(
+									_rules->getAlienFuel(),
+									true));
 
 	SavedGame* save = _game->getSavedGame();
 	SavedBattleGame* battle = save->getSavedBattle();
@@ -1141,15 +1152,15 @@ void DebriefingState::prepareDebriefing()
 								base);
 
 						soldier->calcStatString( // calculate new statString
-											_game->getRuleset()->getStatStrings(),
+											_rules->getStatStrings(),
 											Options::psiStrengthEval
-												&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()));
+												&& _game->getSavedGame()->isResearched(_rules->getPsiRequirements()));
 					}
 					else // not soldier -> tank
 					{
 						base->getItems()->addItem(type);
 
-						RuleItem* tankRule = _game->getRuleset()->getItem(type);
+						RuleItem* tankRule = _rules->getItem(type);
 						BattleItem* ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
 
 						if (tankRule->getCompatibleAmmo()->empty() == false
@@ -1230,13 +1241,13 @@ void DebriefingState::prepareDebriefing()
 					if ((*k)->getRules()->isFixed() == false)
 						(*j)->getTile()->addItem(
 												*k,
-												_game->getRuleset()->getInventory("STR_GROUND"));
+												_rules->getInventory("STR_GROUND"));
 				}
 
 				std::string corpseItem = (*j)->getArmor()->getCorpseGeoscape();
 				if ((*j)->getSpawnUnit().empty() == false)
 				{
-					Ruleset* rule = _game->getRuleset();
+					Ruleset* rule = _rules;
 					corpseItem = rule
 									->getArmor(rule->getUnit((*j)->getSpawnUnit())->getArmor())
 									->getCorpseGeoscape();
@@ -1251,12 +1262,12 @@ void DebriefingState::prepareDebriefing()
 							"STR_ALIENS_KILLED",
 							value); // kL, duplicated in function below.
 
-				RuleResearch* research = _game->getRuleset()->getResearch(type);
+				RuleResearch* research = _rules->getResearch(type);
 				if (research != NULL
 					&& save->isResearchAvailable(
 											research,
 											save->getDiscoveredResearch(),
-											_game->getRuleset()))
+											_rules))
 				{
 					if (base->getAvailableContainment() == 0)
 					{
@@ -1280,7 +1291,7 @@ void DebriefingState::prepareDebriefing()
 					if (Options::canSellLiveAliens)
 						_game->getSavedGame()->setFunds(
 													_game->getSavedGame()->getFunds()
-													+ _game->getRuleset()->getItem(type)->getSellCost());
+													+ _rules->getItem(type)->getSellCost());
 					else
 						base->getItems()->addItem(corpseItem);
 				}
@@ -1330,7 +1341,7 @@ void DebriefingState::prepareDebriefing()
 		// all vehicle objects in the craft are also referenced by base->getVehicles() !!)
 		delete craft;
 
-//		craft = NULL; // To avoid a crash down there!! uh, not after return; it won't.
+		craft = NULL; // To avoid a crash down there!! uh, not after return; it won't.
 		base->getCrafts()->erase(craftIterator);
 		_txtTitle->setText(tr("STR_CRAFT_IS_LOST"));
 
@@ -1387,10 +1398,10 @@ void DebriefingState::prepareDebriefing()
 					if (battle->getTiles()[i]->getMapData(part))
 					{
 						size_t specialType = battle->getTiles()[i]->getMapData(part)->getSpecialType();
-						if (_recoveryStats.find(specialType) != _recoveryStats.end())
+						if (_specialTypes.find(specialType) != _specialTypes.end())
 							addStat(
-								_recoveryStats[specialType]->name,
-								_recoveryStats[specialType]->value);
+								_specialTypes[specialType]->name,
+								_specialTypes[specialType]->value);
 /*						switch (battle->getTiles()[i]->getMapData(part)->getSpecialType())
 						{
 							case UFO_POWER_SOURCE:
@@ -1537,7 +1548,7 @@ void DebriefingState::prepareDebriefing()
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
 			// kL_note: change to divided by 6 or divided by 120 in case of an alien base.
-			if ((*i)->item == _recoveryStats[ALIEN_ALLOYS]->name)
+			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->name)
 //			if ((*i)->item == "STR_ALIEN_ALLOYS")
 			{
 //kL			int alloy = 10;
@@ -1785,13 +1796,13 @@ void DebriefingState::reequipCraft(
 		}
 
 
-		RuleItem* tankRule = _game->getRuleset()->getItem(i->first);
-		Unit* tankUnit = _game->getRuleset()->getUnit(tankRule->getType());
+		RuleItem* tankRule = _rules->getItem(i->first);
+		Unit* tankUnit = _rules->getUnit(tankRule->getType());
 
 		int size = 4;
 		if (tankUnit)
 		{
-			size = _game->getRuleset()->getArmor(tankUnit->getArmor())->getSize();
+			size = _rules->getArmor(tankUnit->getArmor())->getSize();
 			size *= size;
 		}
 
@@ -1814,7 +1825,7 @@ void DebriefingState::reequipCraft(
 		}
 		else // so this tank requires ammo
 		{
-			RuleItem* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+			RuleItem* ammoRule = _rules->getItem(tankRule->getCompatibleAmmo()->front());
 			int ammoPerVehicle = ammoRule->getClipSize();
 
 			int baseQty = base->getItems()->getItem(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
@@ -1890,9 +1901,9 @@ void DebriefingState::recoverItems(
 			item != battleItems->end();
 			++item)
 	{
-		if ((*item)->getRules()->getName() == _game->getRuleset()->getAlienFuel())
+		if ((*item)->getRules()->getName() == _rules->getAlienFuel())
 			addStat( // special case of an item counted as a stat
-					_game->getRuleset()->getAlienFuel(),
+					_rules->getAlienFuel(),
 					100,
 					50); // kL
 		else
@@ -1924,9 +1935,9 @@ void DebriefingState::recoverItems(
 									(*item)->getUnit()->getValue()); // kL, duplicated above.
 
 						if (_game->getSavedGame()->isResearchAvailable(
-								_game->getRuleset()->getResearch((*item)->getUnit()->getType()),
+								_rules->getResearch((*item)->getUnit()->getType()),
 								_game->getSavedGame()->getDiscoveredResearch(),
-								_game->getRuleset()))
+								_rules))
 						{
 							if (base->getAvailableContainment() == 0)
 							{

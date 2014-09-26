@@ -24,6 +24,7 @@
 #include <string>
 #include <vector>
 
+#include "../Engine/Logger.h"
 #include "../Engine/State.h"
 
 #include "../Savegame/SavedGame.h"
@@ -38,6 +39,7 @@ class Country;
 class Craft;
 class Region;
 class RuleItem;
+class Ruleset;
 class Soldier;
 class Text;
 class TextButton;
@@ -51,7 +53,7 @@ struct DebriefingStat
 	int
 		qty,
 		score;
-	const std::string& item;
+	std::string item;
 
 	/// cTor.
 	DebriefingStat(
@@ -59,10 +61,11 @@ struct DebriefingStat
 			bool recovery = false)
 		:
 			item(_item),
-			qty(0),
 			score(0),
+			qty(0),
 			recovery(recovery)
 	{
+		//Log(LOG_INFO) << "create DebriefingStat";
 	};
 };
 
@@ -75,7 +78,7 @@ struct ReequipStat
 };
 
 
-struct RecoveryItem
+struct SpecialType
 {
 	std::string name;
 	int value;
@@ -103,6 +106,7 @@ private:
 	Base* _base;
 	Country* _country;
 	Region* _region;
+	Ruleset* _rules;
 	Text
 		* _txtBaseLabel, // kL
 		* _txtItem,
@@ -120,7 +124,7 @@ private:
 
 	MissionStatistics* _missionStatistics;
 
-	std::map<int, RecoveryItem*> _recoveryStats;
+	std::map<int, SpecialType*> _specialTypes;
 	std::map<RuleItem*, int> _rounds;
 
 	std::vector<ReequipStat> _missingItems;

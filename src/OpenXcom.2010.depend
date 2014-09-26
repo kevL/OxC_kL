@@ -5660,7 +5660,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1411714022 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
+1411715453 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
 	"ActionMenuItem.h"
 	"../Engine/Game.h"
 	"../Engine/Palette.h"
@@ -5677,7 +5677,7 @@
 1409185151 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1411714022 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1411716275 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	<cmath>
 	<sstream>
@@ -5807,10 +5807,11 @@
 1406595105 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1411714023 f:\git\openxcom\src\battlescape\debriefingstate.h
+1411726571 f:\git\openxcom\src\battlescape\debriefingstate.h
 	<map>
 	<string>
 	<vector>
+	"../Engine/Logger.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
@@ -6243,7 +6244,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1411714023 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1411722991 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6325,7 +6326,7 @@
 1410509529 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1411713638 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1411714935 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6767,7 +6768,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1411707094 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1411716566 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9325,7 +9326,7 @@
 	"MapData.h"
 	"../Engine/Logger.h"
 
-1411714025 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1411719868 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -9334,6 +9335,7 @@
 	"../Engine/CrossPlatform.h"
 	"../Engine/Exception.h"
 	"../Engine/Game.h"
+	"../Engine/Logger.h"
 	"../Engine/SurfaceSet.h"
 	"../Resource/ResourcePack.h"
 

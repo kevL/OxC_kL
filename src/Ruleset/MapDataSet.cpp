@@ -29,7 +29,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h" // kL
-//#include "../Engine/Logger.h" // kL
+#include "../Engine/Logger.h" // kL
 #include "../Engine/SurfaceSet.h"
 
 #include "../Resource/ResourcePack.h" // kL
@@ -321,12 +321,12 @@ void MapDataSet::loadData()
 
 	if (srfSet != NULL)
 	{
-		//Log(LOG_INFO) << ". . Overriding terrain SurfaceSet";
+		//Log(LOG_INFO) << ". . Overriding terrain SurfaceSet:" << _name << ".PCK";
 		_surfaceSet = srfSet;
 	}
 	else // kL_end.
 	{
-		//Log(LOG_INFO) << ". . Creating new terrain SurfaceSet";
+		//Log(LOG_INFO) << ". . Creating new terrain SurfaceSet:" << _name << ".PCK";
 		std::ostringstream
 			s1,
 			s2;
@@ -366,12 +366,12 @@ void MapDataSet::unloadData()
 
 		if (srfSet)
 		{
-			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet POINTER";
+			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet POINTER:" << _name << ".PCK";
 			delete &_surfaceSet;
 		}
 		else // kL_end.
 		{
-			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet";
+			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet:" << _name << ".PCK";
 			delete _surfaceSet;
 		}
 
