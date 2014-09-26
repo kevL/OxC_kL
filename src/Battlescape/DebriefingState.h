@@ -24,7 +24,7 @@
 #include <string>
 #include <vector>
 
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/State.h"
 
 #include "../Savegame/SavedGame.h"

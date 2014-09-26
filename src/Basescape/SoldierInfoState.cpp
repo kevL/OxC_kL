@@ -95,7 +95,7 @@ SoldierInfoState::SoldierInfoState(
 
 	_txtRank		= new Text(112, 9, 0, 49);
 	_txtCraft		= new Text(112, 9, 0, 57);
-	_txtPsionic		= new Text(75, 9, 5, 67);
+	_txtPsionic		= new Text(75, 9, 6, 67);
 
 	_txtMissions	= new Text(80, 9, 112, 49);
 	_txtKills		= new Text(80, 9, 112, 57);
@@ -271,17 +271,14 @@ SoldierInfoState::SoldierInfoState(
 	_btnDiary->setText(tr("STR_DIARY"));
 	_btnDiary->onMouseClick((ActionHandler)& SoldierInfoState::btnDiaryClick);
 
-	// kL_begin:
 	_btnAutoStat->setColor(Palette::blockOffset(15)+6);
 	_btnAutoStat->setText(tr("STR_AUTOSTAT"));
-//	_btnAutoStat->onMouseClick((ActionHandler)& SoldierInfoState::btnAutoStat);
 	_btnAutoStat->onMouseClick(
 					(ActionHandler)& SoldierInfoState::btnAutoStat,
 					SDL_BUTTON_LEFT);
 	_btnAutoStat->onMouseClick(
 					(ActionHandler)& SoldierInfoState::btnAutoStatAll,
 					SDL_BUTTON_RIGHT);
-	// kL_end.
 
 	_txtArmor->setColor(Palette::blockOffset(13));
 	_txtArmor->setText(tr("STR_ARMOR"));
@@ -304,8 +301,9 @@ SoldierInfoState::SoldierInfoState(
 
 	_txtRecovDay->setHighContrast();
 
-	_txtPsionic->setColor(Palette::blockOffset(15)+1);
+	_txtPsionic->setColor(Palette::blockOffset(1));
 	_txtPsionic->setText(tr("STR_IN_PSIONIC_TRAINING"));
+	_txtPsionic->setHighContrast();
 
 
 	_txtTimeUnits->setColor(Palette::blockOffset(15)+1);

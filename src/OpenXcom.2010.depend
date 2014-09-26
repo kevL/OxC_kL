@@ -5400,7 +5400,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1411714022 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1411751014 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -5537,13 +5537,14 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 
-1411714022 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
+1411756399 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
 	"TransferBaseState.h"
 	<sstream>
 	"TransferItemsState.h"
 	"../Basescape/StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Interface/Text.h"
@@ -5660,7 +5661,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1411715453 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
+1411726838 source:f:\git\openxcom\src\battlescape\actionmenuitem.cpp
 	"ActionMenuItem.h"
 	"../Engine/Game.h"
 	"../Engine/Palette.h"
@@ -5807,11 +5808,10 @@
 1406595105 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1411726571 f:\git\openxcom\src\battlescape\debriefingstate.h
+1411727019 f:\git\openxcom\src\battlescape\debriefingstate.h
 	<map>
 	<string>
 	<vector>
-	"../Engine/Logger.h"
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
@@ -6244,7 +6244,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1411722991 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1411727031 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6255,7 +6255,6 @@
 	"../Basescape/SellState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Music.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
@@ -7930,7 +7929,7 @@
 	<string>
 	<vector>
 
-1411714024 source:f:\git\openxcom\src\geoscape\globe.cpp
+1411755139 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9326,7 +9325,7 @@
 	"MapData.h"
 	"../Engine/Logger.h"
 
-1411719868 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1411726532 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>

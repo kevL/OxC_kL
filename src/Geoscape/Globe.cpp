@@ -1884,10 +1884,10 @@ void Globe::drawDetail()
 
 //	if (!Options::globeDetail) return;
 
-	if (_zoom > 0 // Draw the country borders
+	if (_zoom > 0 // draw the country borders
 		&& Options::globeDetail)
 	{
-		_countries->lock(); // Lock the surface
+		_countries->lock(); // lock the surface
 		for (std::list<Polyline*>::iterator
 				i = _rules->getPolylines()->begin();
 				i != _rules->getPolylines()->end();
@@ -1902,7 +1902,7 @@ void Globe::drawDetail()
 					j < (*i)->getPoints() - 1;
 					++j)
 			{
-				if (pointBack( // Don't draw if polyline is facing back
+				if (pointBack( // don't draw if polyline is facing back
 							(*i)->getLongitude(j),
 							(*i)->getLatitude(j))
 					|| pointBack(
@@ -1912,7 +1912,7 @@ void Globe::drawDetail()
 					continue;
 				}
 
-				polarToCart( // Convert coordinates
+				polarToCart( // convert coordinates
 						(*i)->getLongitude(j),
 						(*i)->getLatitude(j),
 						&x[0],
@@ -1931,10 +1931,10 @@ void Globe::drawDetail()
 								Palette::blockOffset(10)+2);
 			}
 		}
-		_countries->unlock(); // Unlock the surface
+		_countries->unlock(); // unlock the surface
 	}
 
-	if (_zoom > 1) // Draw the city markers
+	if (_zoom > 1) // draw the city markers
 	{
 		Sint16
 			x,
@@ -1950,14 +1950,14 @@ void Globe::drawDetail()
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
-				if (pointBack( // Don't draw if city is facing back
+				if (pointBack( // don't draw if city is facing back
 							(*j)->getLongitude(),
 							(*j)->getLatitude()))
 				{
 					continue;
 				}
 
-				polarToCart( // Convert coordinates
+				polarToCart( // convert coordinates
 						(*j)->getLongitude(),
 						(*j)->getLatitude(),
 						&x,
@@ -1979,7 +1979,7 @@ void Globe::drawDetail()
 
 	Text* label = new Text(100, 9, 0, 0);
 
-	if (_zoom > 2 // Draw the country names
+	if (_zoom > 2 // draw the country labels
 		&& Options::globeDetail)
 	{
 		label->setPalette(getPalette());
@@ -2006,7 +2006,7 @@ void Globe::drawDetail()
 				continue;
 			}
 
-			polarToCart( // Convert coordinates
+			polarToCart( // convert coordinates
 					(*i)->getRules()->getLabelLongitude(),
 					(*i)->getRules()->getLabelLatitude(),
 					&x,
@@ -2020,7 +2020,7 @@ void Globe::drawDetail()
 		}
 	}
 
-	if (_zoom > 3 // Draw the city labels
+	if (_zoom > 3 // draw the city labels
 		&& Options::globeDetail)
 	{
 		label->setPalette(getPalette());
@@ -2045,14 +2045,14 @@ void Globe::drawDetail()
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
-				if (pointBack( // Don't draw if city is facing back
+				if (pointBack( // don't draw if label is facing back
 							(*j)->getLongitude(),
 							(*j)->getLatitude()))
 				{
 					continue;
 				}
 
-				polarToCart( // Convert coordinates
+				polarToCart( // convert coordinates
 						(*j)->getLongitude(),
 						(*j)->getLatitude(),
 						&x,
@@ -2067,7 +2067,7 @@ void Globe::drawDetail()
 		}
 	}
 
-	if (Options::globeDetail) // Draw xCom base labels.
+	if (Options::globeDetail) // draw xCom base labels
 	{
 		label->setPalette(getPalette());
 		label->initText(
@@ -2075,25 +2075,27 @@ void Globe::drawDetail()
 					_game->getResourcePack()->getFont("FONT_SMALL"),
 					_game->getLanguage());
 		label->setAlign(ALIGN_LEFT);
-		label->setColor(Palette::blockOffset(6)+3);
+		label->setColor(Palette::blockOffset(6)+4); // lavender
+//		label->setColor(Palette::blockOffset(11)); // purple
+//		label->setHighContrast();
 
 		Sint16
 			x,
 			y;
 
-		for (std::vector<Base*>::iterator // Draw the base labels
+		for (std::vector<Base*>::iterator
 				i = _game->getSavedGame()->getBases()->begin();
 				i != _game->getSavedGame()->getBases()->end();
 				++i)
 		{
-			// Cheap hack to hide a base when it hasn't been placed yet
+			// cheap hack to hide a base when it hasn't been placed yet
 			if (((*i)->getLongitude() != 0.0
 					|| (*i)->getLatitude() != 0.0)
-				&& !pointBack( // Don't draw if city is facing back
+				&& !pointBack( // don't draw if city is facing back
 							(*i)->getLongitude(),
 							(*i)->getLatitude()))
 			{
-				polarToCart( // Convert coordinates
+				polarToCart( // convert coordinates
 						(*i)->getLongitude(),
 						(*i)->getLatitude(),
 						&x,

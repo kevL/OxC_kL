@@ -2025,8 +2025,8 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
         lon: 116.782
         lat: 75.2393
     areas:
-      - - 180
-        - 180
+      - - 0   #kL_fix
+        - 360 #kL_fix
         - 60
         - 90
     missionZones:
@@ -2175,8 +2175,8 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
         lon: 128.75
         lat: -71.75
     areas:
-      - - 180
-        - 180
+      - - 0   #kL_fix
+        - 360 #kL_fix
         - -90
         - -70
     missionZones:
