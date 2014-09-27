@@ -211,6 +211,16 @@ NewBattleState::NewBattleState()
 	}
 
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
+	for (std::vector<std::string>::iterator
+			i = _alienRaces.begin();
+			i != _alienRaces.end();
+			)
+	{
+		if ((*i).find("_UNDERWATER") != std::string::npos)
+			i = _alienRaces.erase(i);
+		else
+			++i;
+	}
 
 	std::vector<std::string> difficulty;
 	difficulty.push_back("STR_1_BEGINNER");
@@ -516,13 +526,13 @@ void NewBattleState::initSave()
 			stats->firing		+= RNG::generate(0, 5);
 			stats->throwing		+= RNG::generate(0, 5);
 			stats->strength		+= RNG::generate(0, 5);
-			stats->psiStrength	+= RNG::generate(0, 5);
 			stats->melee		+= RNG::generate(0, 5);
+			stats->psiStrength	+= RNG::generate(0, 5);
 			stats->psiSkill		+= RNG::generate(0, 20);
 		}
 
 		UnitStats* stats = soldier->getCurrentStats();
-//kL		stats->bravery = (int)ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
+//kL	stats->bravery = (int)ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
 		stats->bravery = static_cast<int>(floor((static_cast<double>(stats->bravery) / 10.0) + 0.5)) * 10; // kL, lulzor
 
 		base->getSoldiers()->push_back(soldier);
