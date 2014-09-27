@@ -56,7 +56,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldiers screen.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the base to get info from
  */
 SoldiersState::SoldiersState(
 		Base* base)
@@ -178,7 +178,8 @@ void SoldiersState::init()
 	for (std::vector<Soldier*>::iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
-			++i)
+			++i,
+				++row)
 	{
 		_lstSoldiers->addRow(
 							3,
@@ -208,30 +209,18 @@ void SoldiersState::init()
 										2);
 			}
 		}
-
-		row++;
 	}
-
-/*	if (row > 0
-		&& _lstSoldiers->getScroll() >= row)
-	{
-		_lstSoldiers->scrollTo(0);
-	}
-	else if (_curRow > 0)
-		_lstSoldiers->scrollTo(_curRow); */
-
-	_curRow = _base->getCurrentRowSoldiers();
 
 	if (row > 0)
 	{
 		if (_lstSoldiers->getScroll() > row - 1
-			|| _curRow > row - 1)
+			|| _base->getCurrentSoldier() > row - 1)
 		{
-			_curRow = 0;
 			_lstSoldiers->scrollTo(0);
+			_base->setCurrentSoldier(0);
 		}
-		else if (_curRow > 0)
-			_lstSoldiers->scrollTo(_curRow);
+		else if (_base->getCurrentSoldier() > 0)
+			_lstSoldiers->scrollTo(_base->getCurrentSoldier());
 	}
 
 	_lstSoldiers->draw();
@@ -243,7 +232,7 @@ void SoldiersState::init()
  */
 void SoldiersState::btnOkClick(Action*)
 {
-	_base->setCurrentRowSoldiers(_curRow);
+	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	_game->popState();
 }
@@ -254,8 +243,7 @@ void SoldiersState::btnOkClick(Action*)
  */
 void SoldiersState::btnPsiTrainingClick(Action*)
 {
-	_base->setCurrentRowSoldiers(_curRow);
-
+	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 	_game->pushState(new AllocatePsiTrainingState(_base));
 }
 
@@ -266,8 +254,7 @@ void SoldiersState::btnPsiTrainingClick(Action*)
  */
 void SoldiersState::btnArmorClick(Action*)
 {
-	_base->setCurrentRowSoldiers(_curRow);
-
+	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 	_game->pushState(new CraftArmorState(
 										_base,
 										0));
@@ -279,8 +266,6 @@ void SoldiersState::btnArmorClick(Action*)
  */
 void SoldiersState::btnMemorialClick(Action*)
 {
-//	_base->setCurrentRowSoldiers(_curRow);
-
 	_game->pushState(new SoldierMemorialState());
 }
 
@@ -300,7 +285,7 @@ void SoldiersState::lstSoldiersPress(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		_curRow = _lstSoldiers->getScroll();
+		_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 		_game->pushState(new SoldierInfoState(
 											_base,
@@ -314,7 +299,7 @@ void SoldiersState::lstSoldiersPress(Action* action)
  */
 void SoldiersState::lstLeftArrowClick(Action* action) // kL
 {
-	_curRow = _lstSoldiers->getScroll();
+	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
@@ -334,13 +319,13 @@ void SoldiersState::lstLeftArrowClick(Action* action) // kL
 			}
 			else
 			{
-				_curRow--;
+				_base->setCurrentSoldier(_lstSoldiers->getScroll() - 1);
 				_lstSoldiers->scrollUp(false);
 			}
 		}
 		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 		{
-			_curRow++;
+			_base->setCurrentSoldier(_lstSoldiers->getScroll() + 1);
 
 			_base->getSoldiers()->erase(_base->getSoldiers()->begin() + row);
 			_base->getSoldiers()->insert(
@@ -358,7 +343,7 @@ void SoldiersState::lstLeftArrowClick(Action* action) // kL
  */
 void SoldiersState::lstRightArrowClick(Action* action) // kL
 {
-	_curRow = _lstSoldiers->getScroll();
+	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	size_t row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
@@ -382,7 +367,7 @@ void SoldiersState::lstRightArrowClick(Action* action) // kL
 			}
 			else
 			{
-				_curRow++;
+				_base->setCurrentSoldier(_lstSoldiers->getScroll() + 1);
 				_lstSoldiers->scrollDown(false);
 			}
 		}

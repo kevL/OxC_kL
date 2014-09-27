@@ -71,10 +71,10 @@ Base::Base(const Ruleset* rule)
 		_engineers(0),
 		_inBattlescape(false),
 		_retaliationTarget(false),
-		_cashIncome(0),	// kL
-		_cashSpent(0),	// kL
-		_defenseResult(0), // kL
-		_curRowSoldiers(0) // kL
+		_cashIncome(0),
+		_cashSpent(0),
+		_defenseResult(0),
+		_curSoldier(0)
 {
 	_items = new ItemContainer();
 }
@@ -278,8 +278,8 @@ void Base::load(
 	_scientists		= node["scientists"].as<int>(_scientists);
 	_engineers		= node["engineers"].as<int>(_engineers);
 	_inBattlescape	= node["inBattlescape"].as<bool>(_inBattlescape);
-	_cashIncome		= node["cashIncome"].as<int>(_cashIncome);	// kL
-	_cashSpent		= node["cashSpent"].as<int>(_cashSpent);	// kL
+	_cashIncome		= node["cashIncome"].as<int>(_cashIncome);
+	_cashSpent		= node["cashSpent"].as<int>(_cashSpent);
 
 	for (YAML::const_iterator
 			i = node["transfers"].begin();
@@ -446,7 +446,8 @@ void Base::setName(const std::wstring& name)
  */
 int Base::getMarker() const
 {
-	if (AreSame(_lon, 0.0) && AreSame(_lat, 0.0)) // Cheap hack to hide bases when they haven't been placed yet
+	// Cheap hack to hide bases when they haven't been placed yet
+	if (AreSame(_lon, 0.0) && AreSame(_lat, 0.0))
 		return -1;
 
 	return 0;
@@ -637,14 +638,14 @@ int Base::getAvailableSoldiers(bool combatReady) const
 			++i)
 	{
 		if (!combatReady
-			&& (*i)->getCraft() == 0)
+			&& (*i)->getCraft() == NULL)
 		{
 			total++;
 		}
 		else if (combatReady
-			&& (((*i)->getCraft() != 0
+			&& (((*i)->getCraft() != NULL
 					&& (*i)->getCraft()->getStatus() != "STR_OUT")
-				|| ((*i)->getCraft() == 0
+				|| ((*i)->getCraft() == NULL
 					&& (*i)->getWoundRecovery() == 0)))
 		{
 			total++;
@@ -840,11 +841,9 @@ double Base::getUsedStores()
 bool Base::storesOverfull(double offset)
 {
 	double capacity = static_cast<double>(getAvailableStores());
-//	double capacity = static_cast<double>(getAvailableStores()) + 0.1; // kL (damn!)
 	double used = getUsedStores();
 
-//	return (used + offset > capacity);
-	return (used + offset > capacity + 0.05); // kL
+	return (used + offset > capacity + 0.05);
 }
 
 /**
@@ -1326,8 +1325,7 @@ int Base::getPersonnelMaintenance() const
 {
 	int total = 0;
 
-//kL	total += static_cast<int>(_soldiers.size()) * _rule->getSoldierCost();
-	total += getTotalSoldiers() * _rule->getSoldierCost(); // kL, personel-transfer bugfix.
+	total += getTotalSoldiers() * _rule->getSoldierCost();
 	total += getTotalEngineers() * _rule->getEngineerCost();
 	total += getTotalScientists() * _rule->getScientistCost();
 
@@ -1766,405 +1764,6 @@ void Base::researchHelp(const std::string& aLien) // kL
 		}
 	}
 }
-/*	bool found = false;
-	float
-		spent,
-		cost;
-	std::string help;
-
-	if (aLien.find("_SOLDIER") != std::string::npos)
-	{
-		for (std::vector<ResearchProject*>::const_iterator
-				i = _research.begin();
-				i != _research.end()
-					&& !found; // only the first project found gets the benefit. Could do a menu allowing player to choose...
-				++i)
-		{
-			help = (*i)->getRules()->getName();
-			spent = static_cast<float>((*i)->getSpent());
-			cost = static_cast<float>((*i)->getCost());
-
-			if (help.compare("STR_HEAVY_PLASMA") == 0
-				|| help.compare("STR_PLASMA_RIFLE") == 0
-				|| help.compare("STR_PLASMA_PISTOL") == 0
-				|| help.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
-				found = true;
-			}
-			else if (help.compare("STR_ALIEN_ORIGINS") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
-				found = true;
-			}
-			else if (help.compare("STR_POWER_SUIT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
-				found = true;
-			}
-			else if (help.compare("STR_HEAVY_PLASMA_CLIP") == 0
-				|| help.compare("STR_PLASMA_RIFLE_CLIP") == 0
-				|| help.compare("STR_PLASMA_PISTOL_CLIP") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
-				found = true;
-			}
-			else if (help.compare("STR_ALIEN_GRENADE") == 0
-				|| help.compare("STR_ALIEN_ENTERTAINMENT") == 0
-				|| help.compare("STR_PERSONAL_ARMOR") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
-				found = true;
-			}
-
-			// always takes an extra day to complete (and guards vs. potential code-flow bork!)
-			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
-				(*i)->setSpent(static_cast<int>(cost) - 1);
-		}
-	}
-	else if (aLien.find("_NAVIGATOR") != std::string::npos)
-	{
-		for (std::vector<ResearchProject*>::const_iterator
-				i = _research.begin();
-				i != _research.end()
-					&& !found;
-				++i)
-		{
-			help = (*i)->getRules()->getName();
-			spent = static_cast<float>((*i)->getSpent());
-			cost = static_cast<float>((*i)->getCost());
-
-			if (help.compare("STR_CYDONIA_OR_BUST") == 0
-				|| help.compare("STR_POWER_SUIT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.15f)));
-				found = true;
-			}
-			else if (help == "STR_HEAVY_PLASMA"
-				|| help == "STR_HEAVY_PLASMA_CLIP"
-				|| help == "STR_PLASMA_RIFLE"
-				|| help == "STR_PLASMA_RIFLE_CLIP"
-				|| help == "STR_PLASMA_PISTOL"
-				|| help == "STR_PLASMA_PISTOL_CLIP"
-				|| help == "STR_NEW_FIGHTER_CRAFT"
-				|| help == "STR_NEW_FIGHTER_TRANSPORTER"
-				|| help == "STR_ULTIMATE_CRAFT"
-				|| help == "STR_PLASMA_CANNON"
-				|| help == "STR_FUSION_MISSILE")
-//					|| help == "hovertank-plasma" // <-
-//					|| help == "hovertank-fusion" // <-
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
-				found = true;
-			}
-			else if (help.compare("STR_UFO_POWER_SOURCE") == 0
-				|| help.compare("STR_UFO_CONSTRUCTION") == 0
-				|| help.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
-				found = true;
-			}
-			else if (help.compare("STR_FLYING_SUIT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.3f)));
-				found = true;
-			}
-			else if (help.compare("STR_ALIEN_ORIGINS") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.35f)));
-				found = true;
-			}
-			else if (help.compare("STR_GRAV_SHIELD") == 0
-				|| help.compare("STR_ALIEN_ALLOYS") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
-				found = true;
-			}
-			else if (help.compare("STR_MOTION_SCANNER") == 0
-				|| help.compare("STR_ALIEN_ENTERTAINMENT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
-				found = true;
-			}
-			else if (help.compare("STR_HYPER_WAVE_DECODER") == 0
-				|| help.compare("STR_UFO_NAVIGATION") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
-				found = true;
-			}
-
-			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
-				(*i)->setSpent(static_cast<int>(cost) - 1);
-		}
-	}
-	else if (aLien.find("_MEDIC") != std::string::npos)
-	{
-		for (std::vector<ResearchProject*>::const_iterator
-				i = _research.begin();
-				i != _research.end()
-					&& !found;
-				++i)
-		{
-			help = (*i)->getRules()->getName();
-			spent = static_cast<float>((*i)->getSpent());
-			cost = static_cast<float>((*i)->getCost());
-
-			if (help.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
-				found = true;
-			}
-			else if (help.compare("STR_ALIEN_ORIGINS") == 0
-				|| help.compare("STR_ALIEN_ENTERTAINMENT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
-				found = true;
-			}
-			else if (help == "STR_MEDI_KIT")
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.4f)));
-				found = true;
-			}
-			else if (help.compare("STR_ETHEREAL_CORPSE") == 0
-				|| help.compare("STR_SECTOPOD_CORPSE") == 0
-				|| help.compare("STR_SECTOID_CORPSE") == 0
-				|| help.compare("STR_CYBERDISC_CORPSE") == 0
-				|| help.compare("STR_SNAKEMAN_CORPSE") == 0
-				|| help.compare("STR_CHRYSSALID_CORPSE") == 0
-				|| help.compare("STR_MUTON_CORPSE") == 0
-				|| help.compare("STR_SILACOID_CORPSE") == 0
-				|| help.compare("STR_CELATID_CORPSE") == 0
-				|| help.compare("STR_FLOATER_CORPSE") == 0
-				|| help.compare("STR_REAPER_CORPSE") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
-				found = true;
-			}
-			else if (help.compare("STR_PSI_AMP") == 0
-				|| help.compare("STR_SMALL_LAUNCHER") == 0
-				|| help.compare("STR_STUN_BOMB") == 0
-				|| help.compare("STR_MIND_PROBE") == 0
-				|| help.compare("STR_MIND_SHIELD") == 0
-				|| help.compare("STR_PSI_LAB") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
-				found = true;
-			}
-			else if (help.compare("STR_ALIEN_FOOD") == 0
-				|| help.compare("STR_ALIEN_SURGERY") == 0
-				|| help.compare("STR_EXAMINATION_ROOM") == 0
-				|| help.compare("STR_ALIEN_REPRODUCTION") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
-				found = true;
-			}
-
-			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
-				(*i)->setSpent(static_cast<int>(cost) - 1);
-		}
-	}
-	else if (aLien.find("_ENGINEER") != std::string::npos)
-	{
-		for (std::vector<ResearchProject*>::const_iterator
-				i = _research.begin();
-				i != _research.end()
-					&& !found;
-				++i)
-		{
-			help = (*i)->getRules()->getName();
-			spent = static_cast<float>((*i)->getSpent());
-			cost = static_cast<float>((*i)->getCost());
-
-			if (help.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
-				found = true;
-			}
-			else if (help.compare("STR_ALIEN_ORIGINS") == 0
-				|| help.compare("STR_SMALL_LAUNCHER") == 0
-				|| help.compare("STR_STUN_BOMB") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
-				found = true;
-			}
-			else if (help.compare("STR_NEW_FIGHTER_CRAFT") == 0
-				|| help.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-				|| help.compare("STR_ULTIMATE_CRAFT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.3f)));
-				found = true;
-			}
-			else if (help.compare("STR_MOTION_SCANNER") == 0
-				|| help.compare("STR_HEAVY_PLASMA") == 0
-				|| help.compare("STR_HEAVY_PLASMA_CLIP") == 0
-				|| help.compare("STR_PLASMA_RIFLE") == 0
-				|| help.compare("STR_PLASMA_RIFLE_CLIP") == 0
-				|| help.compare("STR_PLASMA_PISTOL") == 0
-				|| help.compare("STR_PLASMA_PISTOL_CLIP") == 0
-				|| help.compare("STR_ALIEN_GRENADE") == 0
-				|| help.compare("STR_ELERIUM_115") == 0
-				|| help.compare("STR_UFO_POWER_SOURCE") == 0
-				|| help.compare("STR_UFO_CONSTRUCTION") == 0
-				|| help.compare("STR_ALIEN_ALLOYS") == 0
-				|| help.compare("STR_PLASMA_CANNON") == 0
-				|| help.compare("STR_FUSION_MISSILE") == 0
-				|| help.compare("STR_PLASMA_DEFENSE") == 0
-				|| help.compare("STR_FUSION_DEFENSE") == 0
-				|| help.compare("STR_GRAV_SHIELD") == 0
-				|| help.compare("STR_PERSONAL_ARMOR") == 0
-				|| help.compare("STR_POWER_SUIT") == 0
-				|| help.compare("STR_FLYING_SUIT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
-				found = true;
-			}
-			else if (help.compare("STR_BLASTER_LAUNCHER") == 0
-				|| help.compare("STR_BLASTER_BOMB") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.7f)));
-				found = true;
-			}
-
-			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
-				(*i)->setSpent(static_cast<int>(cost) - 1);
-		}
-	}
-	else if (aLien.find("_LEADER") != std::string::npos)
-	{
-		for (std::vector<ResearchProject*>::const_iterator
-				i = _research.begin();
-				i != _research.end()
-					&& !found;
-				++i)
-		{
-			help = (*i)->getRules()->getName();
-			spent = static_cast<float>((*i)->getSpent());
-			cost = static_cast<float>((*i)->getCost());
-
-			if (help.compare("STR_NEW_FIGHTER_CRAFT") == 0
-				|| help.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-				|| help.compare("STR_ULTIMATE_CRAFT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.1f)));
-				found = true;
-			}
-			else if (help.compare("STR_HEAVY_PLASMA") == 0
-				|| help.compare("STR_HEAVY_PLASMA_CLIP") == 0
-				|| help.compare("STR_PLASMA_RIFLE") == 0
-				|| help.compare("STR_PLASMA_RIFLE_CLIP") == 0
-				|| help.compare("STR_PLASMA_PISTOL") == 0
-				|| help.compare("STR_PLASMA_PISTOL_CLIP") == 0
-				|| help.compare("STR_BLASTER_BOMB") == 0
-				|| help.compare("STR_SMALL_LAUNCHER") == 0
-				|| help.compare("STR_STUN_BOMB") == 0
-				|| help.compare("STR_ELERIUM_115") == 0
-				|| help.compare("STR_ALIEN_ALLOYS") == 0
-				|| help.compare("STR_PLASMA_CANNON") == 0
-				|| help.compare("STR_FUSION_MISSILE") == 0
-				|| help.compare("STR_CYDONIA_OR_BUST") == 0
-				|| help.compare("STR_PERSONAL_ARMOR") == 0
-				|| help.compare("STR_POWER_SUIT") == 0
-				|| help.compare("STR_FLYING_SUIT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
-				found = true;
-			}
-			else if (help.compare("STR_PSI_AMP") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
-				found = true;
-			}
-			else if (help.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.3f)));
-				found = true;
-			}
-			else if (help.compare("STR_ALIEN_ORIGINS") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
-				found = true;
-			}
-			else if (help.compare("STR_BLASTER_LAUNCHER") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
-				found = true;
-			}
-			else if (help.compare("STR_EXAMINATION_ROOM") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
-				found = true;
-			}
-
-			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
-				(*i)->setSpent(static_cast<int>(cost) - 1);
-		}
-	}
-	else if (aLien.find("_COMMANDER") != std::string::npos)
-	{
-		for (std::vector<ResearchProject*>::const_iterator
-				i = _research.begin();
-				i != _research.end()
-					&& !found;
-				++i)
-		{
-			help = (*i)->getRules()->getName();
-			spent = static_cast<float>((*i)->getSpent());
-			cost = static_cast<float>((*i)->getCost());
-
-			if (help.compare("STR_HEAVY_PLASMA") == 0
-				|| help.compare("STR_HEAVY_PLASMA_CLIP") == 0
-				|| help.compare("STR_PLASMA_RIFLE") == 0
-				|| help.compare("STR_PLASMA_RIFLE_CLIP") == 0
-				|| help.compare("STR_PLASMA_PISTOL") == 0
-				|| help.compare("STR_PLASMA_PISTOL_CLIP") == 0
-				|| help.compare("STR_SMALL_LAUNCHER") == 0
-				|| help.compare("STR_STUN_BOMB") == 0
-				|| help.compare("STR_NEW_FIGHTER_CRAFT") == 0
-				|| help.compare("STR_NEW_FIGHTER_TRANSPORTER") == 0
-				|| help.compare("STR_ULTIMATE_CRAFT") == 0
-				|| help.compare("STR_PLASMA_CANNON") == 0
-				|| help.compare("STR_FUSION_MISSILE") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.2f)));
-				found = true;
-			}
-			else if (help.compare("STR_BLASTER_BOMB") == 0
-					|| help.compare("STR_ELERIUM_115") == 0
-					|| help.compare("STR_ALIEN_ALLOYS") == 0
-					|| help.compare("STR_PERSONAL_ARMOR") == 0
-					|| help.compare("STR_POWER_SUIT") == 0
-					|| help.compare("STR_FLYING_SUIT") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.25f)));
-				found = true;
-			}
-			else if (help.compare("STR_PSI_AMP") == 0
-				|| help.compare("STR_CYDONIA_OR_BUST") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.5f)));
-				found = true;
-			}
-			else if (help.compare("STR_THE_MARTIAN_SOLUTION") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.6f)));
-				found = true;
-			}
-			else if (help.compare("STR_ALIEN_ORIGINS") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.7f)));
-				found = true;
-			}
-			else if (help.compare("STR_BLASTER_LAUNCHER") == 0
-				|| help.compare("STR_EXAMINATION_ROOM") == 0)
-			{
-				(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * 0.8f)));
-				found = true;
-			}
-
-			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
-				(*i)->setSpent(static_cast<int>(cost) - 1);
-		}
-	} */
 
 /**
  * Returns whether or not a base is equipped with hyper-wave detection facilities.
@@ -2736,7 +2335,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 		}
 	}
 
-	BaseFacility* lastFacility = 0;
+	BaseFacility* lastFacility = NULL;
 	for (std::vector<std::pair<std::vector<BaseFacility*>::iterator, bool>* >::iterator
 			i = facilitiesConnStates.begin();
 			i != facilitiesConnStates.end();
@@ -2780,7 +2379,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 						++i)
 				{
 					if ((*i)->getCraft() == (*facility)->getCraft())
-						(*i)->setCraft(0);
+						(*i)->setCraft(NULL);
 				}
 			}
 
@@ -3059,17 +2658,17 @@ int Base::getDefenseResult() const
 /**
  * Sets the current row of Soldiers list.
  */
-void Base::setCurrentRowSoldiers(size_t row)
+void Base::setCurrentSoldier(const size_t row)
 {
-	_curRowSoldiers = row;
+	_curSoldier = row;
 }
 
 /**
  * Gets the current row of Soldiers list.
  */
-size_t Base::getCurrentRowSoldiers() const
+size_t Base::getCurrentSoldier() const
 {
-	return _curRowSoldiers;
+	return _curSoldier;
 } // kL_end.
 
 }

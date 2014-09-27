@@ -44,9 +44,7 @@ class CraftSoldiersState
 {
 
 private:
-	size_t
-		_craftID,
-		_curRow;
+	size_t _craftID;
 
 	Base* _base;
 	Text

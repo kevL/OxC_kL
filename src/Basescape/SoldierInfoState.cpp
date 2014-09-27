@@ -61,9 +61,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldier Info screen.
- * @param game, Pointer to the core game.
- * @param base, Pointer to the base to get info from. NULL to use the dead soldiers list.
- * @param soldierID, ID of the selected soldier.
+ * @param base		- pointer to the base to get info from
+ * @param soldierID	- ID of the selected soldier
  */
 SoldierInfoState::SoldierInfoState(
 		Base* base,
@@ -71,7 +70,7 @@ SoldierInfoState::SoldierInfoState(
 	:
 		_base(base),
 		_soldierID(soldierID),
-		_soldier(NULL) // kL
+		_soldier(NULL)
 {
 	_list = _base->getSoldiers();
 
@@ -939,7 +938,7 @@ void SoldierInfoState::btnOkClick(Action*)
 
 	if (_game->getSavedGame()->getMonthsPassed() > -1
 		&& Options::storageLimitsEnforced
-		&& _base != NULL
+//		&& _base != NULL
 		&& _base->storesOverfull())
 	{
 		_game->pushState(new SellState(_base));

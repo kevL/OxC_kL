@@ -66,7 +66,7 @@ private:
 		_engineers,
 		_scientists,
 		_defenseResult;
-	size_t _curRowSoldiers; // kL
+	size_t _curSoldier; // kL
 
 	ItemContainer* _items;
 	const Ruleset* _rule;
@@ -290,9 +290,9 @@ private:
 		int getDefenseResult() const;
 
 		/// Sets the current row of Soldiers list.
-		void setCurrentRowSoldiers(size_t row);
+		void setCurrentSoldier(const size_t row);
 		/// Gets the current row of Soldiers list.
-		size_t getCurrentRowSoldiers() const;
+		size_t getCurrentSoldier() const;
 // kL_end.
 };
 

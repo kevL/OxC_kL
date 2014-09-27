@@ -44,9 +44,7 @@ class AllocatePsiTrainingState
 
 private:
 	int _labSpace;
-	size_t
-		_curRow,
-		_sel;
+	size_t _sel;
 
 	Base* _base;
 	Text

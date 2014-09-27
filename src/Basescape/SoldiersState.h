@@ -42,8 +42,6 @@ class SoldiersState
 {
 
 private:
-	size_t _curRow;
-
 	Base* _base;
 	Text
 		* _txtBaseLabel,

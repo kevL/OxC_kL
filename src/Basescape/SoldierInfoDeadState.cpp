@@ -58,7 +58,7 @@ namespace OpenXcom
 SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	:
 		_soldierID(soldierID),
-		_soldier(0)
+		_soldier(NULL)
 {
 	_list = _game->getSavedGame()->getDeadSoldiers();
 
@@ -387,7 +387,6 @@ void SoldierInfoDeadState::init()
 	if (_list->empty())
 	{
 		_game->popState();
-
 		return;
 	}
 
@@ -405,7 +404,7 @@ void SoldierInfoDeadState::init()
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
 
-	_gender->clear(0);
+	_gender->clear();
 	Surface* gender;
 	if (_soldier->getGender() == GENDER_MALE)
 		gender = _game->getResourcePack()->getSurface("GENDER_M");
