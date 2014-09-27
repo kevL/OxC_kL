@@ -30,10 +30,11 @@
 namespace OpenXcom
 {
 
-const float PROGRESS_LIMIT_UNKNOWN	= 0.09f;
-const float PROGRESS_LIMIT_POOR		= 0.23f;
-const float PROGRESS_LIMIT_AVERAGE	= 0.55f;
-const float PROGRESS_LIMIT_GOOD		= 0.86f;
+const double
+	PROGRESS_LIMIT_UNKNOWN	= 0.09,
+	PROGRESS_LIMIT_POOR		= 0.23,
+	PROGRESS_LIMIT_AVERAGE	= 0.55,
+	PROGRESS_LIMIT_GOOD		= 0.86;
 
 
 ResearchProject::ResearchProject(
@@ -44,7 +45,7 @@ ResearchProject::ResearchProject(
 		_assigned(0),
 		_spent(0),
 		_cost(cost),
-		_offline(false) // kL
+		_offline(false)
 {
 }
 
@@ -74,11 +75,11 @@ const RuleResearch* ResearchProject::getRules() const
 
 /**
  * Changes the number of scientists to the ResearchProject
- * @param nb, Number of scientists assigned to this ResearchProject
+ * @param qty - quantity of scientists assigned to this ResearchProject
  */
-void ResearchProject::setAssigned(int nb)
+void ResearchProject::setAssigned(const int qty)
 {
-	_assigned = nb;
+	_assigned = qty;
 }
 
 /**
@@ -94,7 +95,7 @@ int ResearchProject::getAssigned() const
  * Changes the cost of the ResearchProject
  * @param spent, New project cost(in man/day)
  */
-void ResearchProject::setSpent(int spent)
+void ResearchProject::setSpent(const int spent)
 {
 	_spent = spent;
 }
@@ -112,7 +113,7 @@ int ResearchProject::getSpent() const
  * Changes the cost of the ResearchProject
  * @param cost, New project cost(in man/day)
  */
-void ResearchProject::setCost(int cost)
+void ResearchProject::setCost(const int cost)
 {
 	_cost = cost;
 }
@@ -131,7 +132,7 @@ int ResearchProject::getCost() const
  * Used to remove the project from lists, while preserving its cost & spent values.
  * @param cost, New project cost(in man/day)
  */
-void ResearchProject::setOffline(bool offline) // kL
+void ResearchProject::setOffline(const bool offline) // kL
 {
 	_offline = offline;
 }
@@ -155,7 +156,7 @@ void ResearchProject::load(const YAML::Node& node)
 	setSpent(node["spent"].as<int>(getSpent()));
 	setCost(node["cost"].as<int>(getCost()));
 
-	setOffline(node["offline"].as<bool>(getOffline())); // kL
+	setOffline(node["offline"].as<bool>(getOffline()));
 }
 
 /**
@@ -171,7 +172,7 @@ YAML::Node ResearchProject::save() const
 	node["spent"]		= getSpent();
 	node["cost"]		= getCost();
 
-	node["offline"]		= getOffline(); // kL
+	node["offline"]		= getOffline();
 
 	return node;
 }
@@ -182,19 +183,19 @@ YAML::Node ResearchProject::save() const
 */
 std::string ResearchProject::getResearchProgress() const
 {
-	float progress = static_cast<float>(getSpent()) / static_cast<float>(getCost());
+	double progress = static_cast<double>(getSpent()) / static_cast<double>(getCost());
 
 	if (getAssigned() == 0)
 		return "STR_NONE";
-	else if (progress < PROGRESS_LIMIT_UNKNOWN)		// < 0.1f
+	else if (progress < PROGRESS_LIMIT_UNKNOWN)		// < 0.1
 		return "STR_UNKNOWN";
-	else if (progress < PROGRESS_LIMIT_POOR)		// < 0.2f
+	else if (progress < PROGRESS_LIMIT_POOR)		// < 0.2
 		return "STR_POOR";
-	else if (progress < PROGRESS_LIMIT_AVERAGE)		// < 0.5f
+	else if (progress < PROGRESS_LIMIT_AVERAGE)		// < 0.5
 		return "STR_AVERAGE";
-	else if (progress < PROGRESS_LIMIT_GOOD)		// < 0.8f
+	else if (progress < PROGRESS_LIMIT_GOOD)		// < 0.8
 		return "STR_GOOD";
-	else											// > 0.8f
+	else											// > 0.8
 		return "STR_EXCELLENT";
 /*kL
 	float progress = (float)getSpent() / getRules()->getCost();
@@ -220,18 +221,12 @@ std::string ResearchProject::getResearchProgress() const
 }
 
 /**
- * kL. Returns research time completed as a wide string. But try this differently ...
+ * kL. Returns research time completed as a wide string.
  * @return, time completed
  */
 std::wstring ResearchProject::getCostCompleted() const // kL
 {
-/*	float fProg = static_cast<float>(getSpent()) / static_cast<float>(getCost());
-	int iProg = static_cast<int>(fProg * 100.f); // truncate to 2 places
-	std::wstring wsProgress = Text::formatPercentage(iProg); */
-
-	std::wstring wsProgress = Text::formatNumber(getSpent(), L"", false);
-
-	return wsProgress;
+	return Text::formatNumber(getSpent(), L"", false);
 }
 
 }

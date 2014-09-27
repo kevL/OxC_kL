@@ -4420,7 +4420,7 @@
 	<vector>
 	<SDL.h>
 
-1411714025 f:\git\openxcom\src\savegame\base.h
+1411779400 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
 	<string>
 	<vector>
@@ -4973,7 +4973,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1411656331 f:\git\openxcom\src\savegame\researchproject.h
+1411783336 f:\git\openxcom\src\savegame\researchproject.h
 	<yaml-cpp/yaml.h>
 
 1411713105 source:f:\git\openxcom\src\basescape\manufactureinfostate.cpp
@@ -5400,7 +5400,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1411751014 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1411757758 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -5537,14 +5537,13 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/SavedGame.h"
 
-1411756399 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
+1411757744 source:f:\git\openxcom\src\basescape\transferbasestate.cpp
 	"TransferBaseState.h"
 	<sstream>
 	"TransferItemsState.h"
 	"../Basescape/StoresMatrixState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Interface/Text.h"
@@ -5920,7 +5919,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1411714023 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1411779093 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -8566,7 +8565,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1409092009 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1411779247 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	<algorithm>
 	<cmath>
@@ -9516,7 +9515,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1411714025 source:f:\git\openxcom\src\savegame\base.cpp
+1411785338 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9668,7 +9667,7 @@
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
-1411656376 source:f:\git\openxcom\src\savegame\researchproject.cpp
+1411783705 source:f:\git\openxcom\src\savegame\researchproject.cpp
 	"ResearchProject.h"
 	<algorithm>
 	"../Interface/Text.h"

@@ -38,7 +38,7 @@ class ResearchProject
 {
 
 private:
-	bool _offline; // kL
+	bool _offline;
 	int
 		_assigned,
 		_cost,
@@ -56,34 +56,37 @@ private:
 		/// Game logic. Called every new day to compute time spent.
 		bool step();
 
-		/// get the ResearchProject Ruleset
+		/// Gets the ResearchProject Ruleset.
 		const RuleResearch* getRules() const;
 
-		/// set the number of scientist assigned to this ResearchProject
-		void setAssigned(int nb);
-		/// get the number of scientist assigned to this ResearchProject
+		/// Sets the number of scientists assigned to this ResearchProject.
+		void setAssigned(const int qty);
+		/// Gets the number of scientist assigned to this ResearchProject.
 		int getAssigned() const;
-		/// set time already spent on this ResearchProject
-		void setSpent(int spent);
-		/// get time already spent on this ResearchProject
+
+		/// Sets time already spent on this ResearchProject.
+		void setSpent(const int spent);
+		/// Gets time already spent on this ResearchProject.
 		int getSpent() const;
-		/// set time cost of this ResearchProject
-		void setCost(int cost);
-		/// get time cost of this ResearchProject
+
+		/// Sets time cost of this ResearchProject.
+		void setCost(const int cost);
+		/// Gets time cost of this ResearchProject.
 		int getCost() const;
+
 		/// kL. Sets the project offline.
-		void setOffline(bool offline = true); // kL
+		void setOffline(const bool offline = true); // kL
 		/// kL. Gets whether the project is offline or not.
 		bool getOffline() const; // kL
 
-		/// load the ResearchProject from YAML
+		/// Loads the ResearchProject from YAML.
 		void load(const YAML::Node& node);
-		/// save the ResearchProject to YAML
+		/// Saves the ResearchProject to YAML.
 		YAML::Node save() const;
 
-		/// Get a string describing current progress.
+		/// Gets a string describing current progress.
 		std::string getResearchProgress() const;
-		/// Get a string of cost completed as a per cent value.
+		/// Gets a string of cost completed as a per cent value.
 		std::wstring getCostCompleted() const; // kL
 };
 

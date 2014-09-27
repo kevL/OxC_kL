@@ -192,11 +192,11 @@ private:
 		int getDefenseValue() const;
 
 		/// Gets the base's short range detection.
-//kL		int getShortRangeDetection() const;
+//kL	int getShortRangeDetection() const;
 		/// kL. Gets the base's short range detection value.
 		int getShortRangeValue() const; // kL
 		/// Gets the base's long range detection.
-//kL		int getLongRangeDetection() const;
+//kL	int getLongRangeDetection() const;
 		/// kL. Gets the base's long range detection.
 		int getLongRangeValue() const; // kL
 
@@ -221,7 +221,7 @@ private:
 				bool grantHelp = true,		// kL
 				bool goOffline = false);	// kL
 		/// kL. Research Help ala XcomUtil.
-		void researchHelp(std::string aLien); // kL
+		void researchHelp(const std::string& aLien); // kL
 
 		/// Adds a new Production to Base.
 		void addProduction(Production* prod);
