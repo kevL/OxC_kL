@@ -1386,9 +1386,9 @@ void BattlescapeGame::popState()
 		actionFailed = true;
 
 		// kL_begin: BattlescapeGame::popState(), remove action.Cursor if not enough tu's (ie, error.Message)
-		if (action.result == "STR_NOT_ENOUGH_TIME_UNITS"
-			|| action.result == "STR_NO_AMMUNITION_LOADED"
-			|| action.result == "STR_NO_ROUNDS_LEFT")
+		if (action.result.compare("STR_NOT_ENOUGH_TIME_UNITS") == 0
+			|| action.result.compare("STR_NO_AMMUNITION_LOADED") == 0
+			|| action.result.compare("STR_NO_ROUNDS_LEFT") == 0)
 		{
 			switch (action.type)
 			{
@@ -2194,71 +2194,79 @@ void BattlescapeGame::primaryAction(const Position& pos)
 							_save->selectUnit(pos))
 						!= _currentAction.actor->getVisibleUnits()->end())
 				{
-					// get the sound/animation started
-//kL				getMap()->setCursorType(CT_NONE);
-//kL				_parentState->getGame()->getCursor()->setVisible(false);
-//kL				_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
-					_currentAction.cameraPosition = Position(0, 0,-1); // kL (don't adjust the camera when coming out of ProjectileFlyB/ExplosionB states)
-
-
-					//Log(LOG_INFO) << ". . . . . . new ProjectileFlyBState";
-					statePushBack(new ProjectileFlyBState(
-														this,
-														_currentAction));
-
-					if (_currentAction.actor->getTimeUnits() >= _currentAction.TU) // kL_note: WAIT, check this *before* all the stuff above!!!
+					if (getTileEngine()->distance( // out of range
+												_currentAction.actor->getPosition(),
+												_currentAction.target)
+											<= _currentAction.weapon->getRules()->getMaxRange())
 					{
-						if (getTileEngine()->psiAttack(&_currentAction))
+						// get the sound/animation started
+//kL					getMap()->setCursorType(CT_NONE);
+//kL					_parentState->getGame()->getCursor()->setVisible(false);
+//kL					_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+						_currentAction.cameraPosition = Position(0, 0,-1); // kL (don't adjust the camera when coming out of ProjectileFlyB/ExplosionB states)
+
+
+						//Log(LOG_INFO) << ". . . . . . new ProjectileFlyBState";
+						statePushBack(new ProjectileFlyBState(
+															this,
+															_currentAction));
+
+						if (_currentAction.actor->getTimeUnits() >= _currentAction.TU) // kL_note: WAIT, check this *before* all the stuff above!!!
 						{
-							//Log(LOG_INFO) << ". . . . . . Psi successful";
-							Game* game = _parentState->getGame(); // show a little infobox if it's successful
-							if (_currentAction.type == BA_PANIC)
+							if (getTileEngine()->psiAttack(&_currentAction))
 							{
-								//Log(LOG_INFO) << ". . . . . . . . BA_Panic";
-								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
+								//Log(LOG_INFO) << ". . . . . . Psi successful";
+								Game* game = _parentState->getGame(); // show a little infobox if it's successful
+								if (_currentAction.type == BA_PANIC)
+								{
+									//Log(LOG_INFO) << ". . . . . . . . BA_Panic";
+									game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MORALE_ATTACK_SUCCESSFUL")));
+								}
+								else // BA_MINDCONTROL
+								{
+									//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
+									game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
+								}
+
+								//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
+//kL							_parentState->updateSoldierInfo();
+								_parentState->updateSoldierInfo(false); // kL
+								//Log(LOG_INFO) << ". . . . . . updateSoldierInfo() DONE";
+
+
+								// kL_begin: BattlescapeGame::primaryAction(), not sure where this bit came from.....
+								// it doesn't seem to be in the official oXc but it might
+								// stop some (psi-related) crashes i'm getting; (no, it was something else..),
+								// but then it probably never runs because I doubt that selectedUnit can be other than xCom.
+								// (yes, selectedUnit is currently operating unit of *any* faction)
+								// BUT -> primaryAction() here is never called by the AI; only by Faction_Player ...
+								// BUT <- it has to be, because this is how aLiens do their 'builtInPsi'
+								//
+								// I could do a test Lol
+
+//								if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
+//								{
+//								_currentAction.targeting = false;
+//								_currentAction.type = BA_NONE;
+//								}
+//								setupCursor();
+
+//								getMap()->setCursorType(CT_NONE);							// kL
+//								_parentState->getGame()->getCursor()->setVisible(false);	// kL
+//								_parentState->getMap()->refreshSelectorPosition();			// kL
+								// kL_end.
+
+								//Log(LOG_INFO) << ". . . . . . inVisible cursor, DONE";
 							}
-							else // BA_MINDCONTROL
-							{
-								//Log(LOG_INFO) << ". . . . . . . . BA_MindControl";
-								game->pushState(new InfoboxState(game->getLanguage()->getString("STR_MIND_CONTROL_SUCCESSFUL")));
-							}
-
-							//Log(LOG_INFO) << ". . . . . . updateSoldierInfo()";
-//kL						_parentState->updateSoldierInfo();
-							_parentState->updateSoldierInfo(false); // kL
-							//Log(LOG_INFO) << ". . . . . . updateSoldierInfo() DONE";
-
-
-							// kL_begin: BattlescapeGame::primaryAction(), not sure where this bit came from.....
-							// it doesn't seem to be in the official oXc but it might
-							// stop some (psi-related) crashes i'm getting; (no, it was something else..),
-							// but then it probably never runs because I doubt that selectedUnit can be other than xCom.
-							// (yes, selectedUnit is currently operating unit of *any* faction)
-							// BUT -> primaryAction() here is never called by the AI; only by Faction_Player ...
-							// BUT <- it has to be, because this is how aLiens do their 'builtInPsi'
-							//
-							// I could do a test Lol
-
-//							if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
-//							{
-//							_currentAction.targeting = false;
-//							_currentAction.type = BA_NONE;
-//							}
-//							setupCursor();
-
-//							getMap()->setCursorType(CT_NONE);							// kL
-//							_parentState->getGame()->getCursor()->setVisible(false);	// kL
-//							_parentState->getMap()->refreshSelectorPosition();			// kL
-							// kL_end.
-
-							//Log(LOG_INFO) << ". . . . . . inVisible cursor, DONE";
+						}
+						else
+						{
+							cancelCurrentAction();
+							_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 						}
 					}
 					else
-					{
-						cancelCurrentAction();
-						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
-					}
+						_parentState->warning("STR_OUT_OF_RANGE");
 				}
 				else
 					_parentState->warning("STR_NO_LINE_OF_FIRE");

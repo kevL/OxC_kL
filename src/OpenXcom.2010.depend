@@ -5817,7 +5817,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1411714022 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1411796945 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6687,7 +6687,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1411714023 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1411798069 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -7393,7 +7393,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1411713105 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1411789432 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	<climits>
 	<sstream>
