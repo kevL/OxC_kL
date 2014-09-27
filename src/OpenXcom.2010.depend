@@ -4653,7 +4653,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1411713105 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1411789300 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	<climits>
 	<string>
@@ -4836,7 +4836,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1411714022 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1411789307 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -5400,7 +5400,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1411757758 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1411788551 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
 	<sstream>
 	"SoldierDiaryOverviewState.h"
@@ -5431,7 +5431,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDiary.h"
 
-1408803652 f:\git\openxcom\src\basescape\soldierinfostate.h
+1411788573 f:\git\openxcom\src\basescape\soldierinfostate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -5439,7 +5439,7 @@
 	<string>
 	"../Ruleset/Unit.h"
 
-1411713105 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1411788958 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	<iomanip>
 	<sstream>
@@ -5492,7 +5492,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1411713105 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1411789336 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -9515,7 +9515,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1411785338 source:f:\git\openxcom\src\savegame\base.cpp
+1411786675 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>

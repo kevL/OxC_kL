@@ -45,7 +45,7 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
-#include "../Savegame/SavedGame.h" // kL
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 
 #include "../Ruleset/RuleCraft.h"
@@ -134,7 +134,7 @@ SoldiersState::SoldiersState(
 	_btnMemorial->setColor(Palette::blockOffset(13)+10);
 	_btnMemorial->setText(tr("STR_MEMORIAL"));
 	_btnMemorial->onMouseClick((ActionHandler)& SoldiersState::btnMemorialClick);
-	_btnMemorial->setVisible(!_game->getSavedGame()->getDeadSoldiers()->empty()); // kL
+	_btnMemorial->setVisible(_game->getSavedGame()->getDeadSoldiers()->empty() == false);
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));
@@ -155,8 +155,6 @@ SoldiersState::SoldiersState(
 	_lstSoldiers->onMousePress((ActionHandler)& SoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& SoldiersState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& SoldiersState::lstRightArrowClick);
-
-	_curRow = base->getCurrentRowSoldiers();
 }
 
 /**
@@ -221,6 +219,8 @@ void SoldiersState::init()
 	}
 	else if (_curRow > 0)
 		_lstSoldiers->scrollTo(_curRow); */
+
+	_curRow = _base->getCurrentRowSoldiers();
 
 	if (row > 0)
 	{

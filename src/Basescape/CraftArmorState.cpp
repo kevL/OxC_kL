@@ -128,8 +128,6 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstRightArrowClick);
 
-	_curRow = base->getCurrentRowSoldiers();
-
 //kL	Craft* craft = _base->getCrafts()->at(_craftID);
 /*	Craft* craft = NULL;							// kL
 	bool hasCraft = _base->getCrafts()->size() > 0;	// kL
@@ -262,6 +260,8 @@ void CraftArmorState::init()
 	}
 	else if (_curRow > 0)
 		_lstSoldiers->scrollTo(_curRow); */
+
+	_curRow = _base->getCurrentRowSoldiers();
 
 	if (row > 0)
 	{

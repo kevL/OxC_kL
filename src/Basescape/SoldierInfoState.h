@@ -69,7 +69,7 @@ private:
 		* _gender,
 		* _rank;
 	Text
-		* _txtArmor, // kL
+		* _txtArmor,
 		* _txtCraft,
 		* _txtKills,
 		* _txtMissions,
@@ -106,7 +106,7 @@ private:
 		* _btnNext,
 		* _btnOk,
 		* _btnPrev,
-		* _btnAutoStat, // kL
+		* _btnAutoStat,
 		* _btnSack,
 		* _btnDiary;
 	TextEdit* _edtSoldier;

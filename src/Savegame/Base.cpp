@@ -1753,13 +1753,14 @@ void Base::researchHelp(const std::string& aLien) // kL
 
 		if (AreSame(factor, 0.0) == false)
 		{
-			double cost = static_cast<double>((*i)->getCost());
+			int cost = (*i)->getCost();
 			double spent = static_cast<double>((*i)->getSpent());
 
-			(*i)->setSpent(static_cast<int>(spent + ((cost - spent) * factor)));
+			(*i)->setSpent(static_cast<int>(Round(
+							spent + ((static_cast<double>(cost) - spent) * factor))));
 
-			if ((*i)->getSpent() > static_cast<int>(cost) - 1)
-				(*i)->setSpent(static_cast<int>(cost) - 1);
+			if ((*i)->getSpent() > cost - 1)
+				(*i)->setSpent(cost - 1);
 
 			break;
 		}

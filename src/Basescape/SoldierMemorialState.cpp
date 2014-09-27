@@ -75,7 +75,6 @@ SoldierMemorialState::SoldierMemorialState()
 
 //kL	_game->getResourcePack()->playMusic("GMLOSE");
 //	_game->getResourcePack()->playMusic("GMWIN"); // kL
-//	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGRAVES)->play(); // sza_MusicRules
 	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGRAVES); // kL, sza_MusicRules
 
 	add(_window);
@@ -188,7 +187,6 @@ void SoldierMemorialState::btnOkClick(Action*)
 	_game->popState();
 
 //	_game->getResourcePack()->playMusic("GMGEO", true);
-//	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO)->play(); // sza_MusicRules
 	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, true); // kL, sza_MusicRules
 }
 

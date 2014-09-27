@@ -57,10 +57,9 @@ namespace OpenXcom
  */
 AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	:
+		_base(base),
 		_sel(0)
 {
-	_base = base;
-
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 10, 8);
 	_txtBaseLabel	= new Text(80, 9, 230, 8);
@@ -129,7 +128,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 
 	_lstSoldiers->setColor(Palette::blockOffset(13)+10);
 	_lstSoldiers->setArrowColor(Palette::blockOffset(13)+10);
-	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL); // kL
+	_lstSoldiers->setArrowColumn(193, ARROW_VERTICAL);
 //kL	_lstSoldiers->setAlign(ALIGN_RIGHT, 3);
 	_lstSoldiers->setColumns(4, 118, 48, 78, 34);
 	_lstSoldiers->setSelectable();
@@ -139,9 +138,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& AllocatePsiTrainingState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& AllocatePsiTrainingState::lstRightArrowClick);
 
-	_curRow = base->getCurrentRowSoldiers();
-
-//	init(); // kL -> might not need this at all ... is init() called auto by the engine
+//	init(); // kL -> might not need this at all ... is init() called auto by the engine Yep.
 /*kL
 	int row = 0;
 	for (std::vector<Soldier*>::const_iterator
@@ -210,7 +207,7 @@ AllocatePsiTrainingState::~AllocatePsiTrainingState()
  */
 void AllocatePsiTrainingState::init()
 {
-	State::init(); // kL
+	State::init();
 
 	_lstSoldiers->clearList();
 
@@ -227,10 +224,9 @@ void AllocatePsiTrainingState::init()
 			ssStr,
 			ssSkl;
 
-		int minPsi = (*soldier)->getRules()->getMinStats().psiSkill; // kL
+		int minPsi = (*soldier)->getRules()->getMinStats().psiSkill;
 
-//kL	if ((*soldier)->getCurrentStats()->psiSkill > 0
-		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi // kL
+		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi
 			|| (Options::psiStrengthEval
 				&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 		{
@@ -239,14 +235,12 @@ void AllocatePsiTrainingState::init()
 		else
 			ssStr << tr("STR_UNKNOWN").c_str();
 
-//kL	if ((*soldier)->getCurrentStats()->psiSkill > 0)
-		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi) // kL
-			ssSkl << (*soldier)->getCurrentStats()->psiSkill; //kL << "/+" << (*soldier)->getImprovement();
+		if ((*soldier)->getCurrentStats()->psiSkill >= minPsi)
+			ssSkl << (*soldier)->getCurrentStats()->psiSkill; // << "/+" << (*soldier)->getImprovement();
 		else
 		{
-//kL		ssSkl << "0/+0";
-//			ssSkl << "0"; // kL
-			ssSkl << tr("STR_UNKNOWN").c_str(); // kL
+//			ssSkl << "0/+0";
+			ssSkl << tr("STR_UNKNOWN").c_str();
 		}
 
 		if ((*soldier)->isInPsiTraining())
@@ -280,6 +274,8 @@ void AllocatePsiTrainingState::init()
 	}
 	else if (_curRow > 0)
 		_lstSoldiers->scrollTo(_curRow); */
+
+	_curRow = _base->getCurrentRowSoldiers();
 
 	if (row > 0)
 	{

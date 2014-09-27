@@ -170,7 +170,7 @@ SoldierInfoState::SoldierInfoState(
 	add(_btnOk);
 	add(_btnPrev);
 	add(_btnNext);
-	add(_btnAutoStat); // kL
+	add(_btnAutoStat);
 
 	add(_edtSoldier);
 	add(_txtRank);
@@ -181,7 +181,7 @@ SoldierInfoState::SoldierInfoState(
 	add(_txtRecovDay);
 	add(_txtPsionic);
 
-	add(_txtArmor); // kL
+	add(_txtArmor);
 	add(_btnArmor);
 	add(_btnSack);
 	add(_btnDiary);
@@ -444,7 +444,6 @@ void SoldierInfoState::init()
 	if (_list->empty())
 	{
 		_game->popState();
-
 		return;
 	}
 
@@ -799,8 +798,7 @@ void SoldierInfoState::btnAutoStat(Action*)
 
 	std::wostringstream stat;
 
-	int rank = _soldier->getRank();
-	switch (rank)
+	switch (_soldier->getRank())
 	{
 		case 0: stat << "r";
 		break;
@@ -825,8 +823,7 @@ void SoldierInfoState::btnAutoStat(Action*)
 	stat << current->reactions << ".";
 	stat << current->strength;
 
-	int bravery = current->bravery;
-	switch (bravery)
+	switch (current->bravery)
 	{
 		case 10: stat << "a";
 		break;
@@ -853,8 +850,7 @@ void SoldierInfoState::btnAutoStat(Action*)
 		break;
 	}
 
-	int minPsi = _soldier->getRules()->getMinStats().psiSkill;
-	if (current->psiSkill >= minPsi)
+	if (current->psiSkill >= _soldier->getRules()->getMinStats().psiSkill)
 	{
 		int psiStr = current->psiStrength;
 		int psiSkl = current->psiSkill;

@@ -157,8 +157,6 @@ CraftSoldiersState::CraftSoldiersState(
 	_lstSoldiers->onMousePress((ActionHandler)& CraftSoldiersState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftSoldiersState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftSoldiersState::lstRightArrowClick);
-
-	_curRow = base->getCurrentRowSoldiers();
 }
 
 /**
@@ -310,6 +308,8 @@ void CraftSoldiersState::init()
 	}
 	else if (_curRow > 0)
 		_lstSoldiers->scrollTo(_curRow); */
+
+	_curRow = _base->getCurrentRowSoldiers();
 
 	if (row > 0)
 	{
