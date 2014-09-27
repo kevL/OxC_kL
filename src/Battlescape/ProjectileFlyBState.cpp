@@ -353,17 +353,6 @@ void ProjectileFlyBState::init()
 		case BA_PANIC:
 		case BA_MINDCONTROL:
 			//Log(LOG_INFO) << ". . BA_PANIC/MINDCONTROL, new ExplosionBState, EXIT";
-/*			if (_parent->getTileEngine()->distance( // out of range
-												_action.actor->getPosition(),
-												_action.target)
-											> _action.weapon->getRules()->getMaxRange())
-			{
-				_action.result = "STR_OUT_OF_RANGE";
-				_parent->popState();
-
-				return;
-			} */
-
 			_parent->statePushFront(new ExplosionBState(
 													_parent,
 													Position(
