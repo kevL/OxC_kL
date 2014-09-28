@@ -20,8 +20,6 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
-#include <string> // kL
-
 
 namespace OpenXcom
 {
@@ -57,7 +55,7 @@ class BattlescapeGenerator
 private:
 	bool
 		_allowAutoLoadout,
-		_baseCraftEquip, // kL
+		_baseCraftEquip,
 		_generateFuel;
 	int
 		_alienItemLevel,
@@ -67,11 +65,10 @@ private:
 		_mapsize_x,
 		_mapsize_y,
 		_mapsize_z,
-//		_tankPos, // kL
 		_unitSequence,
 		_worldTexture,
 		_worldShade;
-	size_t _battleOrder; // kL
+	size_t _battleOrder;
 
 	AlienBase		* _alienBase;
 	Base			* _base;
@@ -81,10 +78,10 @@ private:
 	Ruleset			* _rules;
 	RuleTerrain
 		* _terrain,
-		* _worldTerrain; // kL
+		* _worldTerrain;
 	SavedBattleGame	* _save;
 	TerrorSite		* _terror;
-	Tile			* _craftInventTile;
+	Tile			* _tileCraft;
 	Ufo				* _ufo;
 
 	std::string _alienRace;

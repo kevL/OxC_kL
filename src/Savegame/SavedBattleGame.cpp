@@ -2235,7 +2235,7 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool xcom)
  * @param xcom - if no unit is passed in this determines whether bonus applies to xcom/aliens
  * @return, the resulting morale modifier
  */
-int SavedBattleGame::getMoraleModifier(
+int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia & Final Assault.
 		BattleUnit* unit,
 		bool xcom)
 {

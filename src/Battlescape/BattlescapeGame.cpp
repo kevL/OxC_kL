@@ -2194,7 +2194,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 							_save->selectUnit(pos))
 						!= _currentAction.actor->getVisibleUnits()->end())
 				{
-					if (getTileEngine()->distance( // out of range
+					if (getTileEngine()->distance( // in Range
 												_currentAction.actor->getPosition(),
 												_currentAction.target)
 											<= _currentAction.weapon->getRules()->getMaxRange())
