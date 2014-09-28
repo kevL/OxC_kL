@@ -1625,35 +1625,38 @@ void DebriefingState::prepareDebriefing()
 			}
 		}
 
-		AlienMission* am = save->getAlienMission(
-											_region->getRules()->getType(),
-											"STR_ALIEN_RETALIATION");
-		for (std::vector<Ufo*>::iterator
-				i = save->getUfos()->begin();
-				i != save->getUfos()->end();
-				)
+		if (_region)
 		{
-			if ((*i)->getMission() == am)
+			AlienMission* am = save->getAlienMission(
+												_region->getRules()->getType(),
+												"STR_ALIEN_RETALIATION");
+			for (std::vector<Ufo*>::iterator
+					i = save->getUfos()->begin();
+					i != save->getUfos()->end();
+					)
 			{
-				delete *i;
-				i = save->getUfos()->erase(i);
+				if ((*i)->getMission() == am)
+				{
+					delete *i;
+					i = save->getUfos()->erase(i);
+				}
+				else
+					++i;
 			}
-			else
-				++i;
-		}
 
-		for (std::vector<AlienMission*>::iterator
-				i = save->getAlienMissions().begin();
-				i != save->getAlienMissions().end();
-				++i)
-		{
-//kL		if ((AlienMission*)(*i) == am)
-			if (dynamic_cast<AlienMission*>(*i) == am) // kL
+			for (std::vector<AlienMission*>::iterator
+					i = save->getAlienMissions().begin();
+					i != save->getAlienMissions().end();
+					++i)
 			{
-				delete *i;
-				save->getAlienMissions().erase(i);
+//kL			if ((AlienMission*)(*i) == am)
+				if (dynamic_cast<AlienMission*>(*i) == am) // kL
+				{
+					delete *i;
+					save->getAlienMissions().erase(i);
 
-				break;
+					break;
+				}
 			}
 		}
 	}

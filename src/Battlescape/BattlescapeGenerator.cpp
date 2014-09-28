@@ -106,7 +106,7 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftY(0),
 		_craftZ(0),
 //		_tankPos(0), // kL
-		_baseCraftEquip(false), // kL
+		_baseEquipScreen(false), // kL
 		_battleOrder(0) // kL
 {
 	//Log(LOG_INFO) << "Create BattlescapeGenerator";
@@ -506,15 +506,13 @@ void BattlescapeGenerator::run()
 void BattlescapeGenerator::deployXCOM()
 {
 	//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM()";
-//kL	if (_craft != NULL) _base = _craft->getBase();
-
 	RuleInventory* ground = _rules->getInventory("STR_GROUND");
 
 	if (_craft != NULL)
 	{
 		_base = _craft->getBase();
 
-		if (!_baseCraftEquip) // kL
+		if (_baseEquipScreen == false)
 		{
 			//Log(LOG_INFO) << ". craft VALID";
 
@@ -529,7 +527,7 @@ void BattlescapeGenerator::deployXCOM()
 				//Log(LOG_INFO) << ". . isCraft: addXCOMVehicle " << (int)*i;
 				BattleUnit* unit = addXCOMVehicle(*i);
 				if (unit
-					&& !_save->getSelectedUnit())
+					&& _save->getSelectedUnit() == NULL)
 				{
 					_save->setSelectedUnit(unit);
 				}
@@ -537,9 +535,9 @@ void BattlescapeGenerator::deployXCOM()
 		}
 	}
 	else if (_base != NULL
-		&& !_baseCraftEquip) // kL
+		&& _baseEquipScreen == false)
 	{
-		// add vehicles that are in the base inventory
+		// add vehicles that are in Base inventory.
 		for (std::vector<Vehicle*>::iterator
 				i = _base->getVehicles()->begin();
 				i != _base->getVehicles()->end();
@@ -548,14 +546,37 @@ void BattlescapeGenerator::deployXCOM()
 			//Log(LOG_INFO) << ". . isBase: addXCOMVehicle " << (int)*i;
 			BattleUnit* unit = addXCOMVehicle(*i);
 			if (unit
-				&& !_save->getSelectedUnit())
+				&& _save->getSelectedUnit() == NULL)
 			{
 				_save->setSelectedUnit(unit);
 			}
 		}
+
+		if (_game->getSavedGame()->getMonthsPassed() == -1)
+		{
+			// add vehicles from Crafts at Base.
+			for (std::vector<Craft*>::iterator
+				i = _base->getCrafts()->begin();
+				i != _base->getCrafts()->end();
+				++i)
+			{
+				for (std::vector<Vehicle*>::iterator
+					j = (*i)->getVehicles()->begin();
+					j != (*i)->getVehicles()->end();
+					++j)
+				{
+					BattleUnit* unit = addXCOMVehicle(*j);
+					if (unit
+						&& _save->getSelectedUnit() == NULL)
+					{
+						_save->setSelectedUnit(unit);
+					}
+				}
+			}
+		}
 	}
 
-	// add soldiers that are in the craft or base
+	// add soldiers that are in the Craft or Base.
 	for (std::vector<Soldier*>::iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
@@ -576,9 +597,9 @@ void BattlescapeGenerator::deployXCOM()
 
 			if (unit)
 			{
-				unit->setBattleOrder(++_battleOrder); // kL
+				unit->setBattleOrder(++_battleOrder);
 
-				if (!_save->getSelectedUnit())
+				if (_save->getSelectedUnit() == NULL)
 					_save->setSelectedUnit(unit);
 			}
 		}
@@ -597,13 +618,12 @@ void BattlescapeGenerator::deployXCOM()
 		if ((*i)->getFaction() == FACTION_PLAYER) // kL_note: not really necessary because only xCom is on the field atm. Could exclude tanks ....
 		{
 			_tileCraft->setUnit(*i);
-
 			(*i)->setVisible(false);
 		}
 	}
 	//Log(LOG_INFO) << ". setUnit(s) DONE";
 
-	if (_craft != NULL) // add items that are in the craft
+	if (_craft != NULL) // add items that are in the Craft.
 	{
 		//Log(LOG_INFO) << ". . addCraftItems";
 		for (std::map<std::string, int>::iterator
@@ -619,79 +639,84 @@ void BattlescapeGenerator::deployXCOM()
 			{
 				//Log(LOG_INFO) << ". . . count+";
 				_tileCraft->addItem(
-											new BattleItem(
-														_rules->getItem(i->first),
-														_save->getCurrentItemId()),
-											ground);
+									new BattleItem(
+												_rules->getItem(i->first),
+												_save->getCurrentItemId()),
+									ground);
 				//Log(LOG_INFO) << ". . . count cycle";
 			}
 		}
 		//Log(LOG_INFO) << ". . addCraftItems DONE";
 	}
-	else // add items that are in the base
+	else // add items that are in the Base.
 	{
-		//Log(LOG_INFO) << ". . addBaseItems";
-		for (std::map<std::string, int>::iterator // add items from stores in base
-				i = _base->getItems()->getContents()->begin();
-				i != _base->getItems()->getContents()->end();
-				)
+		// add only items in Craft for skirmish mode;
+		// ie. Do NOT add items from Base in skirmish mode:
+		if (_game->getSavedGame()->getMonthsPassed() != -1)
 		{
-			// only put items in the battlescape that make sense
-			// (when the item has a sprite, it's probably ok)
-			RuleItem* rule = _rules->getItem(i->first);
-			if (rule->getBigSprite() > -1
-				&& rule->getBattleType() != BT_NONE
-				&& rule->getBattleType() != BT_CORPSE
-				&& !rule->isFixed()
-				&& _game->getSavedGame()->isResearched(rule->getRequirements()))
+			//Log(LOG_INFO) << ". . addBaseItems";
+			for (std::map<std::string, int>::iterator // add items from stores in base
+					i = _base->getItems()->getContents()->begin();
+					i != _base->getItems()->getContents()->end();
+					)
 			{
-				for (int
-						count = 0;
-						count < i->second;
-						count++)
+				// add only items in the battlescape that make sense
+				// (when the item has a sprite, it's probably ok)
+				RuleItem* rule = _rules->getItem(i->first);
+				if (rule->getBigSprite() > -1
+					&& rule->getBattleType() != BT_NONE
+					&& rule->getBattleType() != BT_CORPSE
+					&& rule->isFixed() == false
+					&& _game->getSavedGame()->isResearched(rule->getRequirements()))
 				{
-					_tileCraft->addItem(
-												new BattleItem(
-															_rules->getItem(i->first),
-															_save->getCurrentItemId()),
-												ground);
+					for (int
+							count = 0;
+							count < i->second;
+							count++)
+					{
+						_tileCraft->addItem(
+											new BattleItem(
+														_rules->getItem(i->first),
+														_save->getCurrentItemId()),
+											ground);
+					}
+
+					std::map<std::string, int>::iterator mark = i;
+
+					++i;
+					_base->getItems()->removeItem(
+												mark->first,
+												mark->second);
 				}
-
-				std::map<std::string, int>::iterator rem = i;
-
-				++i;
-				_base->getItems()->removeItem(
-											rem->first,
-											rem->second);
+				else
+					++i;
 			}
-			else
-				++i;
 		}
 		//Log(LOG_INFO) << ". . addBaseBaseItems DONE, add BaseCraftItems";
 
-		for (std::vector<Craft*>::iterator // add items from crafts in base
-				c = _base->getCrafts()->begin();
-				c != _base->getCrafts()->end();
-				++c)
+		for (std::vector<Craft*>::iterator // add items from Crafts at Base.
+				i = _base->getCrafts()->begin();
+				i != _base->getCrafts()->end();
+				++i)
 		{
-			if ((*c)->getStatus() == "STR_OUT")
+			if ((*i)->getStatus() == "STR_OUT")
 				continue;
 
 			for (std::map<std::string, int>::iterator
-					i = (*c)->getItems()->getContents()->begin();
-					i != (*c)->getItems()->getContents()->end();
-					++i)
+					j = (*i)->getItems()->getContents()->begin();
+					j != (*i)->getItems()->getContents()->end();
+					++j)
 			{
 				for (int
 						count = 0;
-						count < i->second;
+						count < j->second;
 						count++)
 				{
 					_tileCraft->addItem(
-												new BattleItem(
-															_rules->getItem(i->first),
-															_save->getCurrentItemId()),
-												ground);
+										new BattleItem(
+													_rules->getItem(j->first),
+													_save->getCurrentItemId()),
+										ground);
 				}
 			}
 		}
@@ -987,7 +1012,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 	}
 	else if (_craft // Transport craft deployments (Lightning & Avenger)
 		&& _craft->getRules()->getDeployment().empty() == false
-		&& _baseCraftEquip == false)
+		&& _baseEquipScreen == false)
 	{
 		//Log(LOG_INFO) << "addXCOMUnit() - use Deployment rule";
 		for (std::vector<std::vector<int> >::const_iterator
@@ -1303,6 +1328,7 @@ bool BattlescapeGenerator::addItem(
 //	bool loaded = false;
 
 /*kL
+	bool keep = true;
 	switch (item->getRules()->getBattleType())
 	{
 		case BT_FIREARM:
@@ -1339,38 +1365,54 @@ bool BattlescapeGenerator::addItem(
 			}
 		break;
 		case BT_AMMO:
-			// no weapon, or our weapon takes no ammo.
-			// won't be needing this. move on.
-			if (!rhWeapon
-				|| rhWeapon->getRules()->getCompatibleAmmo()->empty())
+		// xcom weapons will already be loaded, aliens and tanks, however, get their ammo added afterwards.
+		// so let's try to load them here.
+		if (rightWeapon && (rightWeapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
+			!rightWeapon->getRules()->getCompatibleAmmo()->empty() &&
+			!rightWeapon->getAmmoItem() &&
+			rightWeapon->setAmmoItem(item) == 0)
+		{
+			item->setSlot(rightHand);
+			placed = true;
+			break;
+		}
+		if (leftWeapon && (leftWeapon->getRules()->isFixed() || unit->getFaction() != FACTION_PLAYER) &&
+			!leftWeapon->getRules()->getCompatibleAmmo()->empty() &&
+			!leftWeapon->getAmmoItem() &&
+			leftWeapon->setAmmoItem(item))
+		{
+			item->setSlot(leftHand);
+			placed = true;
+			break;
+		}
+		// don't take ammo for weapons we don't have.
+		keep = (unit->getFaction() != FACTION_PLAYER);
+		if (rightWeapon)
+		{
+			for (std::vector<std::string>::iterator i = rightWeapon->getRules()->getCompatibleAmmo()->begin(); i != rightWeapon->getRules()->getCompatibleAmmo()->end(); ++i)
 			{
-				break;
+				if (*i == item->getRules()->getType())
+				{
+					keep = true;
+					break;
+				}
 			}
-
-			// xCom weapons will already be loaded; aliens and tanks, however,
-			// get their ammo added after those. So try to load them here.
-			if ((rhWeapon->getRules()->isFixed()
-					|| unit->getFaction() != FACTION_PLAYER)
-				&& !rhWeapon->getAmmoItem()
-				&& rhWeapon->setAmmoItem(item) == 0)
+		}
+		if (leftWeapon)
+		{
+			for (std::vector<std::string>::iterator i = leftWeapon->getRules()->getCompatibleAmmo()->begin(); i != leftWeapon->getRules()->getCompatibleAmmo()->end(); ++i)
 			{
-				item->setSlot(rightHand);
-				placed = true;
-
-				break;
+				if (*i == item->getRules()->getType())
+				{
+					keep = true;
+					break;
+				}
 			}
-
-			if (lhWeapon
-				&& (lhWeapon->getRules()->isFixed()
-					|| unit->getFaction() != FACTION_PLAYER)
-				&& !lhWeapon->getAmmoItem()
-				&& lhWeapon->setAmmoItem(item))
-			{
-				item->setSlot(leftHand);
-				placed = true;
-
-				break;
-			}
+		}
+		if (!keep)
+		{
+			break;
+		}
 		default:
 		if ((unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
 		{
@@ -3269,7 +3311,7 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 void BattlescapeGenerator::runInventory(Craft* craft)
 {
 	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory()";
-	_baseCraftEquip = true;
+	_baseEquipScreen = true;
 
 	int soldiers = craft->getNumSoldiers(); // we need to fake a map for soldier placement
 

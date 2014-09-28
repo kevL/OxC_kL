@@ -4739,7 +4739,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1411848776 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1411888647 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 
 1411714023 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
@@ -5816,7 +5816,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1411798821 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1411847303 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6242,7 +6242,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1411727031 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1411886749 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6765,7 +6765,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1411716566 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1411887039 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9557,7 +9557,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1411714025 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1411887316 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9673,7 +9673,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1411714025 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1411855190 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
