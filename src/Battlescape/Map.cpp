@@ -2894,9 +2894,9 @@ const int Map::getIconWidth()
 }
 
 /**
- * Returns the angle (left/right balance) of a sound effect based off a map position.
+ * Returns the angle (left/right balance) of a sound effect based on a map position.
  * @param pos - the map position to calculate the sound angle from
- * @return, the angle of the sound (280 to 440) aka. -80 left to +80 degrees right
+ * @return, the angle of the sound (360 = 0 degrees center)
  */
 const int Map::getSoundAngle(Position pos)
 {
@@ -2915,15 +2915,10 @@ const int Map::getSoundAngle(Position pos)
 								midPoint,
 								screenPos.x + _camera->getMapOffset().x - midPoint));
 
-	// convert the relative distance to a relative increment of an 80 degree angle
-	// we use +- 80 instead of +- 90, so as not to go ALL the way left or right
-	// we use +- 67 instead of +- 90, so as not to go ALL the way left or right ( pretty good here )
-	// we use +- 42 instead of +- 90, so as not to go ALL the way left or right ( this pretty much mimics position of screen w/ my speakers )
-	// which would effectively mute the sound out of one speaker.
-	// since Mix_SetPosition uses modulo 360, we can't feed it a negative number, so add 360 instead.
-
-//	return static_cast<int>(static_cast<double>(screenPos.x) / (static_cast<double>(midPoint) / 80.0)) + 360;
-	return screenPos.x * 42 / midPoint + 360;
+	// Convert the relative distance left or right to a relative angle off-center.
+	// Since Mix_SetPosition() uses modulo 360, we can't feed it a negative number, so add 360.
+	// The integer-factor below is the allowable maximum deflection from center
+	return (screenPos.x * 35 / midPoint) + 360;
 }
 
 /**

@@ -105,9 +105,8 @@ BattlescapeGenerator::BattlescapeGenerator(Game* game)
 		_craftX(0),
 		_craftY(0),
 		_craftZ(0),
-//		_tankPos(0), // kL
-		_baseEquipScreen(false), // kL
-		_battleOrder(0) // kL
+		_baseEquipScreen(false),
+		_battleOrder(0)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGenerator";
 	_allowAutoLoadout = !Options::disableAutoEquip;
@@ -188,7 +187,7 @@ void BattlescapeGenerator::setAlienRace(const std::string& alienRace)
 	//Log(LOG_INFO) << "gen, race = " << alienRace;
 	_alienRace = alienRace;
 
-	_game->getSavedGame()->getSavedBattle()->setAlienRace(alienRace); // kL
+	_game->getSavedGame()->getSavedBattle()->setAlienRace(alienRace);
 }
 
 /**
@@ -286,7 +285,7 @@ void BattlescapeGenerator::nextStage()
 	{
 		if ((*j)->getOriginalFaction() == FACTION_PLAYER)
 		{
-			if (!(*j)->isOut())
+			if ((*j)->isOut() == false)
 			{
 				(*j)->convertToFaction(FACTION_PLAYER);
 				(*j)->setTurnsExposed(255);
@@ -310,11 +309,10 @@ void BattlescapeGenerator::nextStage()
 											*j,
 											node->getPosition());
 
-					if (!_tileCraft)
+					if (_tileCraft == NULL)
 					{
 						_tileCraft = (*j)->getTile();
-
-						_save->setBattleInventory((*j)->getTile()); // kL
+						_save->setBattleInventory(_tileCraft);
 					}
 
 					_tileCraft->setUnit(*j);
@@ -864,7 +862,7 @@ void BattlescapeGenerator::deployXCOM()
 	{
 		if ((*i)->getSlot() == ground)
 		{
-			(*i)->setXCOMProperty(); // kL
+			(*i)->setXCOMProperty();
 
 			_save->getItems()->push_back(*i);
 
@@ -989,7 +987,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 //kL		_save->getTileEngine()->calculateFOV(unit);
 
 			_tileCraft = _save->getTile(node->getPosition());
-			_save->setBattleInventory(_tileCraft); // kL
+			_save->setBattleInventory(_tileCraft);
 
 			return unit;
 		}
@@ -1004,7 +1002,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 //kL			_save->getTileEngine()->calculateFOV(unit);
 
 				_tileCraft = _save->getTile(unit->getPosition());
-				_save->setBattleInventory(_tileCraft); // kL
+				_save->setBattleInventory(_tileCraft);
 
 				return unit;
 			}
@@ -1112,7 +1110,7 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile)
 		if (_tileCraft == NULL)
 		{
 			_tileCraft = tile;
-			_save->setBattleInventory(_tileCraft); // kL
+			_save->setBattleInventory(_tileCraft);
 		}
 
 		return true;
@@ -1208,7 +1206,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 					for (std::vector<BattleItem*>::iterator
 							k = _tileCraft->getInventory()->begin();
 							k != _tileCraft->getInventory()->end()
-								&& !loaded;
+								&& loaded == false;
 							++k)
 					{
 						if ((*k)->getRules()->getType() == (*j)->getAmmoItem()
@@ -2554,10 +2552,10 @@ void BattlescapeGenerator::generateMap()
 					}
 
 					_tileCraft = _save->getTile(Position( // let's put the inventory tile on the lower floor, just to be safe.
-																(i * 10) + 5,
-																(j * 10) + 5,
-																0));
-					_save->setBattleInventory(_tileCraft); // kL
+														(i * 10) + 5,
+														(j * 10) + 5,
+														0));
+					_save->setBattleInventory(_tileCraft);
 				}
 
 				if (i < _mapsize_x / 10 - 1 // drill east
@@ -3412,7 +3410,7 @@ void BattlescapeGenerator::loadWeapons()
 			for (std::vector<BattleItem*>::iterator
 					j = _tileCraft->getInventory()->begin();
 					j != _tileCraft->getInventory()->end()
-						&& !loaded;
+						&& loaded == false;
 					++j)
 			{
 				if ((*j)->getSlot() == _rules->getInventory("STR_GROUND")
@@ -3436,7 +3434,6 @@ void BattlescapeGenerator::loadWeapons()
 		if ((*i)->getSlot() != _rules->getInventory("STR_GROUND"))
 		{
 			i = _tileCraft->getInventory()->erase(i);
-
 			continue;
 		}
 
