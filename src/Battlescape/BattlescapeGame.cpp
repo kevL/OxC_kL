@@ -1885,14 +1885,13 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 //kL	unit->abortTurn(); // makes the unit go to status STANDING :p
 	unit->setStatus(STATUS_STANDING); // kL :P
 
-	int flee = RNG::generate(0, 99);
 	BattleAction ba;
 	ba.actor = unit;
 
 	switch (status)
 	{
-		case STATUS_PANICKING: // 1/2 chance to freeze and 1/2 chance try to flee
-			if (flee <= 50)
+		case STATUS_PANICKING:
+			if (RNG::percent(50)) // 50:50 freeze or flee.
 			{
 				BattleItem* item = unit->getItem("STR_RIGHT_HAND");
 				if (item)
@@ -1910,21 +1909,44 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 							false,
 							true);
 
-				unit->setCache(0);
+				unit->setCache(NULL);
 
-				ba.target = Position(
-								unit->getPosition().x + RNG::generate(-5, 5),
-								unit->getPosition().y + RNG::generate(-5, 5),
-								unit->getPosition().z);
-				if (_save->getTile(ba.target)) // only walk towards it when the place exists
+				for (int // try a few times to get a tile to run to.
+						i = 0;
+						i < 20;
+						++i)
 				{
-					_save->getPathfinding()->calculate(
-													ba.actor,
-													ba.target);
+					ba.target = Position(
+									unit->getPosition().x + RNG::generate(-5, 5),
+									unit->getPosition().y + RNG::generate(-5, 5),
+									unit->getPosition().z);
 
-					statePushBack(new UnitWalkBState(
-													this,
-													ba));
+					if (ba.target.z > 0
+						&& i > 9)
+					{
+						ba.target.z--;
+
+						if (ba.target.z > 0
+							&& i > 14)
+						{
+							ba.target.z--;
+						}
+					}
+
+					if (_save->getTile(ba.target))
+					{
+						_save->getPathfinding()->calculate(
+														ba.actor,
+														ba.target);
+
+						if (_save->getPathfinding()->getStartDirection() != -1)
+						{
+							statePushBack(new UnitWalkBState(
+															this,
+															ba));
+							break;
+						}
+					}
 				}
 			}
 		break;
