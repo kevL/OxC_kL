@@ -597,7 +597,7 @@ double Base::insideRadarRange(Target* target) const
 	//Log(LOG_INFO) << "Base::insideRadarRange()";
 	double ret = 0.0; // lets hope UFO is not *right on top of Base* Lol
 
-	const double targetDistance = getDistance(target) * 3440.0; // great circle distance
+	const double targetDistance = getDistance(target) * earthRadius; // great circle distance
 	//Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
 	if (targetDistance > static_cast<double>(_rule->getMaxRadarRange()) * greatCircleConversionFactor)
 		return ret;

@@ -73,10 +73,10 @@ MonthlyReportState::MonthlyReportState(
 		_gameOver(false),
 		_ratingTotal(0),
 		_fundingDiff(0),
-		_ratingLastMonth(0),
-		_happyList(0),
-		_sadList(0),
-		_pactList(0)
+		_ratingLastMonth(0)
+//		_happyList(0),
+//		_sadList(0),
+//		_pactList(0)
 {
 	_globe = globe;
 
@@ -181,7 +181,9 @@ MonthlyReportState::MonthlyReportState(
 	_txtMonth->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtMonth->setText(tr("STR_MONTH").arg(tr(m)).arg(year));
 
-	int difficulty_threshold = 250 * (static_cast<int>(_game->getSavedGame()->getDifficulty()) - 4);
+	const int
+		diff = static_cast<int>(_game->getSavedGame()->getDifficulty()),
+		difficulty_threshold = 250 * (diff - 4);
 		// 0 -> -1000
 		// 1 -> -750
 		// 2 -> -500
@@ -227,7 +229,7 @@ MonthlyReportState::MonthlyReportState(
 	// calculate satisfaction
 	std::wostringstream ss4;
 	std::wstring satisFactionString = tr("STR_COUNCIL_IS_DISSATISFIED");
-	if (_ratingTotal > 1500)
+	if (_ratingTotal > 1000 + 2000 * diff) // was 1500 flat.
 	{
 		satisFactionString = tr("STR_COUNCIL_IS_VERY_PLEASED");
 	}
@@ -256,7 +258,7 @@ MonthlyReportState::MonthlyReportState(
 	ss4 << satisFactionString;
 
 	bool resetWarning = true;
-	if (!_gameOver)
+	if (_gameOver == false)
 	{
 		if (_game->getSavedGame()->getFunds() <= -1000000)
 		{
@@ -349,7 +351,7 @@ void MonthlyReportState::calculateChanges()
 
 		if ((*k)->getActivityXcom().size() > 2)
 			_ratingLastMonth += (*k)->getActivityXcom().at(lastMonthOffset)
-								- (*k)->getActivityAlien().at(lastMonthOffset);
+							  - (*k)->getActivityAlien().at(lastMonthOffset);
 
 		xComSubTotal += (*k)->getActivityXcom().at(monthOffset);
 		aLienTotal += (*k)->getActivityAlien().at(monthOffset);
@@ -362,8 +364,8 @@ void MonthlyReportState::calculateChanges()
 	xComTotal = _game->getSavedGame()->getResearchScores().at(monthOffset) + xComSubTotal;
 
 	// the council is more lenient after the first month
-//kL	if (_game->getSavedGame()->getMonthsPassed() > 1)
-//kL		_game->getSavedGame()->getResearchScores().at(monthOffset) += 400;
+//	if (_game->getSavedGame()->getMonthsPassed() > 1)
+//		_game->getSavedGame()->getResearchScores().at(monthOffset) += 400;
 
 	if (_game->getSavedGame()->getResearchScores().size() > 2)
 		_ratingLastMonth += _game->getSavedGame()->getResearchScores().at(lastMonthOffset);
@@ -382,17 +384,16 @@ void MonthlyReportState::calculateChanges()
 			_pactList.push_back((*k)->getRules()->getType());
 
 		// determine satisfaction level, sign pacts, adjust funding, and update activity meters
-		int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()); // kL
+		const int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
 		(*k)->newMonth(
-//kL				xComTotal,
-					xComSubTotal, // kL, There. done
+					xComSubTotal, // There. done
 					aLienTotal,
-					diff); // kL
+					diff);
 
 		// and after they've made their decisions, calculate the difference,
 		// and add them to the appropriate lists.
 		_fundingDiff += (*k)->getFunding().back()
-						- (*k)->getFunding().at((*k)->getFunding().size() - 2);
+					  - (*k)->getFunding().at((*k)->getFunding().size() - 2);
 
 		switch ((*k)->getSatisfaction())
 		{
@@ -417,7 +418,7 @@ void MonthlyReportState::calculateChanges()
  */
 void MonthlyReportState::btnOkClick(Action*)
 {
-	if (!_gameOver)
+	if (_gameOver == false)
 	{
 		_game->popState();
 
@@ -439,13 +440,13 @@ void MonthlyReportState::btnOkClick(Action*)
 			}
 		}
 
-		if (!_soldiersMedalled.empty())
+		if (_soldiersMedalled.empty() == false)
 			_game->pushState(new CommendationState(_soldiersMedalled));
 
 		if (_psi)
 			_game->pushState(new PsiTrainingState());
 
-		if (_game->getSavedGame()->isIronman()) // Autosave
+		if (_game->getSavedGame()->isIronman())
 		{
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
@@ -482,7 +483,6 @@ void MonthlyReportState::btnOkClick(Action*)
 			_btnBigOk->setVisible();
 
 //			_game->getResourcePack()->playMusic("GMLOSE");
-//			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE)->play(); // kL: sza_MusicRules
 			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMLOSE); // kL, sza_MusicRules
 		}
 	}
@@ -502,7 +502,7 @@ std::wstring MonthlyReportState::countryList(
 {
 	std::wostringstream ss;
 
-	if (!countries.empty())
+	if (countries.empty() == false)
 	{
 		ss << "\n\n";
 		if (countries.size() == 1)

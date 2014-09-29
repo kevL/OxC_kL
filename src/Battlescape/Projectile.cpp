@@ -45,7 +45,7 @@
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
-#include "../Savegame/SavedGame.h" // kL
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
 
@@ -60,6 +60,7 @@ namespace OpenXcom
  * @param action		- the BattleAction (BattlescapeGame.h)
  * @param origin		- a position that this projectile originates at
  * @param targetVoxel	- a position that this projectile is targeted at
+ * @param bulletSprite	- the sprite to use
  */
 Projectile::Projectile(
 		ResourcePack* res,
@@ -85,7 +86,7 @@ Projectile::Projectile(
 		if (_action.type == BA_THROW)
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
-			_speed = _speed * 4 / 7; // kL
+			_speed = _speed * 4 / 7;
 			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
 		}
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
@@ -105,7 +106,7 @@ Projectile::Projectile(
 		}
 	}
 
-	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) >= 0)
+	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) > -1)
 		_reversed = true;
 }
 
@@ -179,8 +180,8 @@ int Projectile::calculateTrajectory(
 		&& _trajectory.empty() == false
 		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
 		&& _action.autoShotCount == 1
-		&& (!Options::forceFire
-			|| (SDL_GetModState() & KMOD_CTRL) == 0)
+		&& ((SDL_GetModState() & KMOD_CTRL) == 0
+			|| !Options::forceFire)
 		&& _save->getBattleGame()->getPanicHandled()
 		&& _action.type != BA_LAUNCH)
 	{
@@ -224,7 +225,7 @@ int Projectile::calculateTrajectory(
 			{
 				BattleUnit* hitUnit = _save->getTile(hitPos)->getUnit();
 				if (hitUnit != targetUnit
-					&& hitUnit->getVisible()) // kL
+					&& hitUnit->getVisible())
 				{
 					_trajectory.clear();
 
@@ -256,21 +257,20 @@ int Projectile::calculateTrajectory(
 	} */
 
 	// apply some accuracy modifiers. This will result in a new target voxel:
-	if (targetUnit // kL_begin:
+	if (targetUnit
 		&& targetUnit->getDashing())
 	{
 		accuracy -= 0.16;
 		//Log(LOG_INFO) << ". . . . targetUnit " << targetUnit->getId() << " is Dashing!!! accuracy = " << accuracy;
-	} // kL_end.
+	}
 
-	if (_action.type != BA_LAUNCH) // kL. Could base BL.. on psiSkill, or sumthin'
+	if (_action.type != BA_LAUNCH) // Could base BL.. on psiSkill, or sumthin'
 		applyAccuracy(
 					originVoxel,
 					&_targetVoxel,
 					accuracy,
 					false,
 					targetTile);
-//kL				extendLine); // default: True
 
 	//Log(LOG_INFO) << ". LoF calculated, Acu applied (if not BL)";
 	// finally do a line calculation and store this trajectory.
@@ -339,8 +339,8 @@ int Projectile::calculateThrow(double accuracy)
 //kL					- 2;
 						+ 2; // kL: midriff +2 voxels
 
-			if (targetUnit->getDashing())	// kL
-				accuracy -= 0.16;			// kL
+			if (targetUnit->getDashing())
+				accuracy -= 0.16;
 		}
 	}
 
@@ -444,73 +444,75 @@ int Projectile::calculateThrow(double accuracy)
  * @param origin		- reference the start position of the trajectory in voxelspace
  * @param target		- pointer to an end position of the trajectory in voxelspace
  * @param accuracy		- accuracy modifier
- * @param keepRange		- true if range affects accuracy. (default = false)
+ * @param keepRange		- true if range affects accuracy (default = false)
  * @param targetTile	- pointer to tile of the target (default = NULL)
  * @param extendLine	- true if this line should extend to maximum distance on the battle map (default = true)
  */
-void Projectile::applyAccuracy(
+void Projectile::applyAccuracy(// int smokeDensity, bool doCalcChance)
 		const Position& origin,
-		Position* target,
+		Position* const target,
 		double accuracy,
-		bool keepRange,
-		Tile* targetTile,
-		bool extendLine)
+		const bool keepRange,
+		const Tile* const targetTile,
+		const bool extendLine)
 {
 	//Log(LOG_INFO) << "Projectile::applyAccuracy(), accuracy = " << accuracy;
-	if (_action.type == BA_HIT)	// kL
-		return;					// kL
+	if (_action.type == BA_HIT)
+		return;
 
-	int
+	const int
 		delta_x = origin.x - target->x,
 		delta_y = origin.y - target->y,
-		delta_z = origin.z - target->z; // kL
+		delta_z = origin.z - target->z; // kL_add.
 
-//kL	double targetDist = sqrt(static_cast<double>(delta_x * delta_x) + static_cast<double>(delta_y * delta_y));
-	double targetDist = sqrt(
-							  static_cast<double>(delta_x * delta_x)
-							+ static_cast<double>(delta_y * delta_y)
-							+ static_cast<double>(delta_z * delta_z)); // kL
+	const double targetDist = sqrt(
+								  static_cast<double>(delta_x * delta_x)
+								+ static_cast<double>(delta_y * delta_y)
+								+ static_cast<double>(delta_z * delta_z)); // kL_add.
 	//Log(LOG_INFO) << ". targetDist = " << targetDist;
 
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 //kL	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
+
 	// kL_note: This is that hypothetically infinite point in space to aim for;
-	// the closer it's set, the more accurate shots become.
+	// the closer it's set, the more accurate shots become. I suspect ....
 	double maxRange = 3200.0; // kL. vSpace == 200 tiles in tSpace.
 	if (keepRange)
 		maxRange = targetDist;
+
 //kL	if (_action.type == BA_HIT)
 //kL		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper vs reaper)
 
 
-	RuleItem* weaponRule = _action.weapon->getRules();
+	const RuleItem* const rule = _action.weapon->getRules(); // <- after reading up, 'const' is basically worthless & wordy waste of effort.
 	if (_action.type != BA_THROW
-		&& !weaponRule->getArcingShot())
+		&& rule->getArcingShot() == false)
 	{
 		if (Options::battleUFOExtenderAccuracy
-			&& _save->getSide() == FACTION_PLAYER) // kL: only for xCom heheh
+//			&& _save->getSide() == FACTION_PLAYER) // kL: only for xCom heheh
+			&& _action.actor->getFaction() == FACTION_PLAYER)
 		{
 			//Log(LOG_INFO) << ". battleUFOExtenderAccuracy";
 
 			// kL_note: if distance is greater-than the weapon's
 			// max range, then ProjectileFlyBState won't allow the shot;
 			// so that's already been taken care of ....
-			int
-				lowerLimit = weaponRule->getMinRange(),
-				upperLimit = weaponRule->getAimRange();
+			const int shortLimit = rule->getMinRange();
+			int longLimit = rule->getAimRange();
 
 			if (_action.type == BA_SNAPSHOT)
-				upperLimit = weaponRule->getSnapRange();
+				longLimit = rule->getSnapRange();
 			else if (_action.type == BA_AUTOSHOT)
-				upperLimit = weaponRule->getAutoRange();
+				longLimit = rule->getAutoRange();
 
 			double modifier = 0.0;
-			int targetDist_tSpace = static_cast<int>(targetDist / 16.0);
-			if (targetDist_tSpace < lowerLimit)
-				modifier = static_cast<double>((weaponRule->getDropoff() * (lowerLimit - targetDist_tSpace)) / 100);
-			else if (upperLimit < targetDist_tSpace)
-				modifier = static_cast<double>((weaponRule->getDropoff() * (targetDist_tSpace - upperLimit)) / 100);
+
+			const int targetDist_tSpace = static_cast<int>(targetDist / 16.0);
+			if (targetDist_tSpace < shortLimit)
+				modifier = static_cast<double>((rule->getDropoff() * (shortLimit - targetDist_tSpace)) / 100);
+			else if (longLimit < targetDist_tSpace)
+				modifier = static_cast<double>((rule->getDropoff() * (targetDist_tSpace - longLimit)) / 100);
 
 			accuracy = std::max(
 								0.0,
@@ -522,59 +524,45 @@ void Projectile::applyAccuracy(
 			//Log(LOG_INFO) << ". battleRangeBasedAccuracy";
 			double acuPenalty = 0.0;
 
-			if (targetTile
-				&& targetTile->getUnit())
+			if (targetTile)
 			{
-				BattleUnit* targetUnit = targetTile->getUnit();
-				if (targetUnit) // Shade can be from 0 (day) to 15 (night).
+				const int smoke = targetTile->getSmoke();
+				if (smoke > 0)
+					acuPenalty += smoke * 0.01;
+
+				if (targetTile->getUnit())
 				{
-					if (targetUnit->getFaction() == FACTION_HOSTILE)
-						acuPenalty = 0.01 * static_cast<double>(targetTile->getShade());
+					BattleUnit* targetUnit = targetTile->getUnit();
+
+					if (_action.actor->getOriginalFaction() != FACTION_HOSTILE)
+						acuPenalty += 0.01 * static_cast<double>(targetTile->getShade());
 
 					// If targetUnit is kneeled, then accuracy reduced by ~6%.
 					// This is a compromise, because vertical deviation is ~2 times less.
 					if (targetUnit->isKneeled())
-						acuPenalty += 0.07;
+						acuPenalty += 0.08;
 				}
 			}
-			else // targeting tile-stuffs.
-				acuPenalty = 0.01 * static_cast<double>(_save->getGlobalShade());
+			else if (_action.actor->getOriginalFaction() != FACTION_HOSTILE) // targeting tile-stuffs.
+				acuPenalty += 0.01 * static_cast<double>(_save->getGlobalShade());
 
-			// kL_begin: modify rangedBasedAccuracy (shot-modes).
-			double baseDeviation = 0.0;
-			if (_action.actor->getFaction() == FACTION_PLAYER)
-				baseDeviation = 0.06; // give the poor aLiens an aiming advantage over xCom & Mc'd units
+			if (_action.type == BA_AUTOSHOT)
+				acuPenalty += (_action.autoShotCount - 1) * 0.03;
 
-			// NOTE: This should be done on the weapons themselves!!!!
-/*			switch (_action.type)
-			{
-				case BA_AIMEDSHOT:
-					baseDeviation += 0.16;
-				break;
-				case BA_SNAPSHOT:
-					baseDeviation += 0.18;
-				break;
-				case BA_AUTOSHOT:
-					baseDeviation += 0.22;
-				break;
 
-				default: // throw. Or hit.
-					baseDeviation += 0.18; // Snap.
-				break;
-
-			} */
-			baseDeviation += 0.15; // kL:instead of switch() above
+			double baseDeviation = 0.65;
+			if (_action.actor->getFaction() == FACTION_HOSTILE)
+				baseDeviation = 0.15; // give the poor aLiens an aiming advantage over xCom & Mc'd units
 
 			baseDeviation /= accuracy - acuPenalty + 0.13;
 			baseDeviation = std::max(
 									0.01,
-									baseDeviation); // kL_end.
-
+									baseDeviation);
 			//Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
 
 
 			// The angle deviations are spread using a normal distribution:
-			double
+			const double
 				dH = RNG::boxMuller(0.0, baseDeviation / 6.0),			// horizontal miss in radians
 				dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.78)),	// vertical miss in radians
 
@@ -606,7 +594,7 @@ void Projectile::applyAccuracy(
 
 	// kL_note: *** This should now be for Throwing and AcidSpitting only ***
 	//Log(LOG_INFO) << ". standard accuracy, Throw & AcidSpit";
-	// Wb.131112, nonRangeBased target formula.
+	// nonRangeBased target formula.
 	// beware of 'extendLine' below for BLs though... comes from calculateTrajectory() above....
 
 /*kL okay, so this is all just garbage:
@@ -643,30 +631,24 @@ void Projectile::applyAccuracy(
 	target->y += RNG::generate(0, deviation) - deviation / 2;
 	target->z += RNG::generate(0, deviation / 4) - deviation / 8; */
 
-	// kL_begin:
-	int throwRule = 100;
+	int toss = 100;
+
 	Soldier* soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
-//	Soldier* soldier = _action.actor->getGeoscapeSoldier();
 	if (soldier != NULL)
-	{
-		int throwRule = soldier->getRules()->getStatCaps().throwing;
-//		int minThrowRule = _save->getGeoscapeSave()->getSoldier(_action.actor->getId())->getRules()->getMinStats().throwing;
-		//Log(LOG_INFO) << ". . minThrowRule = " << minThrowRule;
-	}
-	//Log(LOG_INFO) << ". . throwRule = " << throwRule;
+		toss = soldier->getRules()->getStatCaps().throwing;
+	//Log(LOG_INFO) << ". . toss = " << toss;
 
 	accuracy = accuracy * 50.0 + 35.0; // arbitrary adjustment.
 	//Log(LOG_INFO) << ". . accuracy = " << accuracy;
 	//Log(LOG_INFO) << ". . targetDist = " << targetDist;
-//	double deviation = static_cast<double>(throwRule) - (accuracy * 100.0);
-	double deviation = static_cast<double>(throwRule) - accuracy;
+	double deviation = static_cast<double>(toss) - accuracy;
 	deviation = std::max(
 						0.0,
 						deviation * targetDist / 100.0);
 
 	//Log(LOG_INFO) << ". . deviation = " << deviation;
 
-	double
+	const double
 		dx = RNG::boxMuller(0.0, deviation),
 		dy = RNG::boxMuller(0.0, deviation),
 		dz = RNG::boxMuller(0.0, deviation);
@@ -701,7 +683,7 @@ void Projectile::applyAccuracy(
 		rotation += dRot; // add deviations
 		tilt += dTilt; */
 
-		double
+		const double
 			rotation = atan2(
 						static_cast<double>(target->y - origin.y),
 						static_cast<double>(target->x - origin.x))
@@ -717,7 +699,7 @@ void Projectile::applyAccuracy(
 
 		// calculate new target
 		// this new target can be very far out of the map, but we don't care about that right now
-		double
+		const double
 			cos_fi = cos(tilt * M_PI / 180.0),
 			sin_fi = sin(tilt * M_PI / 180.0),
 			cos_te = cos(rotation * M_PI / 180.0),

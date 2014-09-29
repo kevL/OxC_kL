@@ -138,7 +138,9 @@ namespace OpenXcom
 
 size_t kL_currentBase = 0;
 
-const double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
+const double
+	earthRadius					= 3440.0,
+	greatCircleConversionFactor	= (1.0 / 60.0) * (M_PI / 180.0 ) * earthRadius;
 
 Sound* GeoscapeState::soundPop = 0;
 
@@ -1670,10 +1672,8 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	}
 	else
 	{
-//		double ufoRange	= 600.0;
-//		double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
-		double ufoRange = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor;
-		double targetDist = _base.getDistance(ufo) * 3440.0;
+		const double ufoRange = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor;
+		const double targetDist = _base.getDistance(ufo) * earthRadius;
 		//Log(LOG_INFO) << ". . ufoRange = " << (int)ufoRange;
 		//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
 
@@ -1684,10 +1684,10 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 		}
 		else
 		{
-			double div = targetDist * 12.0 / ufoRange; // kL: should use log() ...
+			const double div = targetDist * 12.0 / ufoRange; // should use log() ...
 			int chance = static_cast<int>(
 							static_cast<double>(_base.getDetectionChance(_diffLevel) + ufo->getDetectors())
-								/ div); // kL
+							/ div);
 			if (ufo->getMissionType() == "STR_ALIEN_RETALIATION"
 				&& Options::aggressiveRetaliation)
 			{
@@ -1767,16 +1767,15 @@ void GeoscapeState::time10Minutes()
 						if ((*ab)->isDiscovered())
 							continue;
 
-//						double greatCircleConversionFactor = (1.0 / 60.0) * (M_PI / 180.0 ) * 3440;
-						double craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor;
+						const double craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor;
 						//Log(LOG_INFO) << ". . craftRadar = " << (int)craftRadar;
 
-						double targetDistance = (*c)->getDistance(*ab) * 3440.0;
+						const double targetDistance = (*c)->getDistance(*ab) * earthRadius;
 						//Log(LOG_INFO) << ". . targetDistance = " << (int)targetDistance;
 
 						if (targetDistance < craftRadar)
 						{
-							int chance = 100 - (diff * 10) - static_cast<int>(targetDistance / craftRadar * 50.0);
+							const int chance = 100 - (diff * 10) - static_cast<int>(targetDistance * 50.0 / craftRadar);
 							//Log(LOG_INFO) << ". . . craft in Range, chance = " << chance;
 
 							if (RNG::percent(chance))

@@ -2117,12 +2117,12 @@ BattleUnit* TileEngine::hit(
 							if (buTarget->getOriginalFaction() == FACTION_PLAYER)
 								modifier = _battleSave->getMoraleModifier();
 							else if (buTarget->getOriginalFaction() == FACTION_HOSTILE)
-								modifier = _battleSave->getMoraleModifier(0, false);
+								modifier = _battleSave->getMoraleModifier(NULL, false);
 
-							const int morale_loss = 10 * adjDamage * bravery / modifier;
-							//Log(LOG_INFO) << ". . . . morale_loss = " << morale_loss;
+							const int moraleLoss = 10 * adjDamage * bravery / modifier;
+							//Log(LOG_INFO) << ". . . . moraleLoss = " << moraleLoss;
 
-							buTarget->moraleChange(-morale_loss);
+							buTarget->moraleChange(-moraleLoss);
 						}
 					}
 

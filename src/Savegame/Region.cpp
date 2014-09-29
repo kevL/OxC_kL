@@ -32,14 +32,15 @@ namespace OpenXcom
 Region::Region(RuleRegion* rules)
 	:
 		_rules(rules),
-		_activityRecent(-1) // kL
+		_activityRecent(-1),
+		_activityRecentXCOM(-1)
 {
 	_activityAlien.push_back(0);
 	_activityXcom.push_back(0);
 }
 
 /**
- *
+ * dTor.
  */
 Region::~Region()
 {
@@ -51,10 +52,10 @@ Region::~Region()
  */
 void Region::load(const YAML::Node& node)
 {
-	_activityXcom	= node["activityXcom"].as< std::vector<int> >(_activityXcom);
-	_activityAlien	= node["activityAlien"].as< std::vector<int> >(_activityAlien);
-
-	_activityRecent	= node["activityRecent"].as<int>(_activityRecent); // kL
+	_activityXcom		= node["activityXcom"].as< std::vector<int> >(_activityXcom);
+	_activityAlien		= node["activityAlien"].as< std::vector<int> >(_activityAlien);
+	_activityRecent		= node["activityRecent"].as<int>(_activityRecent);
+	_activityRecentXCOM	= node["activityRecentXCOM"].as<int>(_activityRecentXCOM);
 }
 
 /**
@@ -65,10 +66,11 @@ YAML::Node Region::save() const
 {
 	YAML::Node node;
 
-	node["type"]			= _rules->getType();
-	node["activityXcom"]	= _activityXcom;
-	node["activityAlien"]	= _activityAlien;
-	node["activityRecent"]	= _activityRecent; // kL
+	node["type"]				= _rules->getType();
+	node["activityXcom"]		= _activityXcom;
+	node["activityAlien"]		= _activityAlien;
+	node["activityRecent"]		= _activityRecent;
+	node["activityRecentXCOM"]	= _activityRecentXCOM;
 
 	return node;
 }
@@ -165,35 +167,34 @@ bool Region::recentActivity( // kL
 }
 
 /**
- * kL. Sets recent alien activity in this region.
+ * kL. Handles recent XCOM activity in this region for GraphsState blink.
+ * @param activity	- true to reset the startcounter
+ * @param graphs	- not sure lol
  */
-/* void Region::setRecentActivity(bool activity) // kL
+bool Region::recentActivityXCOM( // kL
+		bool activity,
+		bool graphs)
 {
-	_activityRecent = activity;
-} */
+	if (activity)
+		_activityRecentXCOM = 0;
+	else if (_activityRecentXCOM != -1)
+	{
+		if (graphs)
+			return true;
+		else
+		{
+			++_activityRecentXCOM;
 
-/**
- * kL. Gets recent alien activity in this region.
- */
-/* bool Region::getRecentActivity() const // kL
-{
-	return _activityRecent;
-} */
+			if (_activityRecentXCOM == 24) // aLien bases show activity every 24 hrs.
+//			if (_activityRecentXCOM >= 12) // use this until my shorten kicks in ...
+				_activityRecentXCOM = -1;
+		}
+	}
 
-/**
- * kL. Sets last alien activity in this region.
- */
-/* void Region::setLastActivity(int activity) // kL
-{
-	_activityLast = activity;
-} */
+	if (_activityRecentXCOM == -1)
+		return false;
 
-/**
- * kL. Gets last alien activity in this region.
- */
-/* int Region::getLastActivity() const // kL
-{
-	return _activityLast;
-} */
+	return true;
+}
 
 }

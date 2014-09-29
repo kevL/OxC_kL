@@ -942,7 +942,7 @@ void BattlescapeGame::checkForCasualties(
 					|| (victim->getOriginalFaction() == FACTION_HOSTILE
 						&& slayer->getOriginalFaction() == FACTION_PLAYER))
 				{
-					int boost = 10 * bonus / 100;
+					const int boost = 10 * bonus / 100;
 					slayer->moraleChange(boost); // doubles what rest of squad gets below
 					//Log(LOG_INFO) << ". . slayer boost +" << boost;
 				}
@@ -952,7 +952,7 @@ void BattlescapeGame::checkForCasualties(
 				if (victim->getOriginalFaction() == FACTION_PLAYER
 					&& slayer->getOriginalFaction() == FACTION_PLAYER)
 				{
-					int hit = 5000 / bonus;
+					const int hit = 5000 / bonus;
 					slayer->moraleChange(-hit); // huge hit!
 					//Log(LOG_INFO) << ". . FF hit, slayer -" << hit;
 				}
@@ -961,7 +961,7 @@ void BattlescapeGame::checkForCasualties(
 				{
 					if (slayer->getOriginalFaction() == FACTION_PLAYER)
 					{
-						int civdeath = 2000 / bonus;
+						const int civdeath = 2000 / bonus;
 						slayer->moraleChange(-civdeath);
 						//Log(LOG_INFO) << ". . civdeath by xCom, soldier -" << civdeath;
 					}
@@ -977,11 +977,11 @@ void BattlescapeGame::checkForCasualties(
 //kL		if (victim->getFaction() != FACTION_NEUTRAL) // civie deaths now affect other Factions.
 //			{
 			// penalty for the death of a unit; civilians return standard 100.
-			int solo = _save->getMoraleModifier(victim);
+			const int solo = _save->getMoraleModifier(victim);
 			// these two are faction bonuses ('losers' mitigates the loss of solo, 'winners' boosts solo)
 			int
-				losers = 100,
-				winners = 100;
+				losers,
+				winners;
 
 			if (victim->getOriginalFaction() == FACTION_HOSTILE)
 			{
@@ -1001,7 +1001,7 @@ void BattlescapeGame::checkForCasualties(
 					buOther != _save->getUnits()->end();
 					++buOther)
 			{
-				if (!(*buOther)->isOut(true, true)
+				if ((*buOther)->isOut(true, true) == false
 //					&& (*buOther)->getArmor()->getSize() == 1) // not a large unit
 					&& (*buOther)->getTurretType() == -1) // not a Tank.
 				{
@@ -1040,7 +1040,7 @@ void BattlescapeGame::checkForCasualties(
 								|| victim->getOriginalFaction() == FACTION_NEUTRAL)))
 					{
 						// winning team(s) all get a morale boost
-						int boost = winners / 10;
+						const int boost = winners / 10;
 						(*buOther)->moraleChange(boost);
 
 						//Log(LOG_INFO) << ". . . winner +" << boost;
@@ -1131,7 +1131,7 @@ void BattlescapeGame::checkForCasualties(
 			_parentState->showPsiButton(
 									bu->getOriginalFaction() == FACTION_HOSTILE
 									&& bu->getStats()->psiSkill > 0
-									&& !bu->isOut(true, true));
+									&& bu->isOut(true, true) == false);
 	}
 	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
 }

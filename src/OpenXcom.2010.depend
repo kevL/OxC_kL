@@ -4540,7 +4540,7 @@
 1404096023 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1411713105 f:\git\openxcom\src\geoscape\geoscapestate.h
+1411920406 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<list>
 	"../Engine/State.h"
 
@@ -4577,7 +4577,7 @@
 1404096023 f:\git\openxcom\src\savegame\movingtarget.h
 	"Target.h"
 
-1404096023 f:\git\openxcom\src\savegame\region.h
+1411921833 f:\git\openxcom\src\savegame\region.h
 	<vector>
 	<yaml-cpp/yaml.h>
 
@@ -4757,7 +4757,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1410525150 f:\git\openxcom\src\savegame\savedbattlegame.h
+1411914477 f:\git\openxcom\src\savegame\savedbattlegame.h
 	<algorithm>
 	<iostream>
 	<string>
@@ -5816,7 +5816,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1411847303 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1411916511 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6039,7 +6039,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1411714023 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1411914332 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6314,7 +6314,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1404096023 f:\git\openxcom\src\savegame\country.h
+1411924261 f:\git\openxcom\src\savegame\country.h
 	<yaml-cpp/yaml.h>
 
 1410516787 source:f:\git\openxcom\src\battlescape\explosion.cpp
@@ -6442,7 +6442,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1411894550 source:f:\git\openxcom\src\battlescape\map.cpp
+1411898615 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6482,7 +6482,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1407628427 f:\git\openxcom\src\battlescape\projectile.h
+1411968943 f:\git\openxcom\src\battlescape\projectile.h
 	<vector>
 	"BattlescapeGame.h"
 	"Position.h"
@@ -6765,7 +6765,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1411887039 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1411914869 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7766,7 +7766,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1411714024 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1411920598 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7867,7 +7867,7 @@
 	"../Savegame/Waypoint.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1411714024 f:\git\openxcom\src\geoscape\graphsstate.h
+1411922773 f:\git\openxcom\src\geoscape\graphsstate.h
 	<string>
 	"../Engine/State.h"
 
@@ -7981,7 +7981,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1411714024 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1411923526 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -8077,7 +8077,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/Craft.h"
 
-1409954763 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
+1411925673 source:f:\git\openxcom\src\geoscape\monthlyreportstate.cpp
 	"MonthlyReportState.h"
 	<cmath>
 	<sstream>
@@ -8237,7 +8237,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1411713105 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1411920598 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	<cmath>
 	"ConfirmCydoniaState.h"
@@ -9353,7 +9353,7 @@
 	<math.h>
 	"../Engine/RNG.h"
 
-1411714025 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
+1411918188 source:f:\git\openxcom\src\ruleset\rulecraft.cpp
 	"RuleCraft.h"
 	"RuleTerrain.h"
 
@@ -9514,7 +9514,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1411844193 source:f:\git\openxcom\src\savegame\base.cpp
+1411920598 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9582,13 +9582,13 @@
 	"../Ruleset/RuleSoldier.h"
 	"../Ruleset/Unit.h"
 
-1411714025 source:f:\git\openxcom\src\savegame\country.cpp
+1411924501 source:f:\git\openxcom\src\savegame\country.cpp
 	"Country.h"
 	"../Engine/Logger.h"
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1411714025 source:f:\git\openxcom\src\savegame\craft.cpp
+1411920598 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9662,7 +9662,7 @@
 	"../Ruleset/RuleManufacture.h"
 	"../Ruleset/Ruleset.h"
 
-1411656297 source:f:\git\openxcom\src\savegame\region.cpp
+1411922112 source:f:\git\openxcom\src\savegame\region.cpp
 	"Region.h"
 	"../Ruleset/RuleRegion.h"
 
@@ -9673,7 +9673,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1411855190 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1411917135 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -12053,7 +12053,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1411713105 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1411898020 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	<string>
 	"SoldierDiaryMissionState.h"

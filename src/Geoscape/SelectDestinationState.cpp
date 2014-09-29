@@ -252,7 +252,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 		//Log(LOG_INFO) << ". dist = " << (int)(_craft->getDistance(w) * 3440.0) << " + " << (int)(_craft->getBase()->getDistance(w) * 3440.0);
 
-		if (static_cast<double>(range) < (_craft->getDistance(w) + _craft->getBase()->getDistance(w)) * 3440.0)
+		if (static_cast<double>(range) < (_craft->getDistance(w) + _craft->getBase()->getDistance(w)) * earthRadius)
 		{
 			//Log(LOG_INFO) << ". . outside Range";
 			_txtError->setVisible();

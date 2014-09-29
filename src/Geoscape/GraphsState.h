@@ -91,7 +91,9 @@ private:
 	std::vector<bool>
 		_financeToggles,
 		_blinkCountry,
-		_blinkRegion;
+		_blinkCountryXCOM,
+		_blinkRegion,
+		_blinkRegionXCOM;
 
 	std::vector<GraphBtnInfo*>
 		_regionToggles,
@@ -121,6 +123,7 @@ private:
 			std::vector<Text*>& actAlien,
 			std::vector<Text*>& actXCom,
 			std::vector<bool>& blink,
+			std::vector<bool>& blinkXCOM,
 			size_t& offset,
 			int step);
 	///

@@ -25,8 +25,7 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain
- * type of craft.
+ * Creates a blank ruleset for a certain type of craft.
  * @param type String defining the type.
  */
 RuleCraft::RuleCraft(const std::string& type)
@@ -46,7 +45,7 @@ RuleCraft::RuleCraft(const std::string& type)
 		_repairRate(1),
 		_refuelRate(1),
 		_radarRange(600), // 672	// for detecting UFOs
-		_sightRange(600), // 1696	// for detecting aLien bases
+		_sightRange(1000), // 1696	// for detecting aLien bases, was 600.
 		_transferTime(0),
 		_score(0),
 		_battlescapeTerrainData(NULL),

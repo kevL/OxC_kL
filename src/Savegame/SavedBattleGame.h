@@ -300,11 +300,11 @@ private:
 		void setBattleState(BattlescapeState* bs);
 
 		/// Gets the highest ranked, living unit of faction.
-		BattleUnit* getHighestRanked(bool xcom = true); // kL
+		BattleUnit* getHighestRanked(bool isXCOM = true);
 		/// Gets the morale modifier based on the highest ranked, living xcom/alien unit, or for a unit passed into this function.
 		int getMoraleModifier(
 				BattleUnit* unit = NULL,
-				bool xcom = true); // kL
+				bool isXCOM = true);
 
 		/// Checks whether a particular faction has eyes on *unit (whether any unit on that faction sees *unit).
 //kL	bool eyesOnTarget(UnitFaction faction, BattleUnit* unit);

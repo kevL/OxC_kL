@@ -3301,10 +3301,11 @@ void BattlescapeState::finishBattle(
 		int inExitArea)
 {
 	//Log(LOG_INFO) << "BattlescapeState::finishBattle()";
-	while (!_game->isState(this))
+	while (_game->isState(this) == false)
 		_game->popState();
 
 	_game->getCursor()->setVisible();
+
 	if (_save->getAmbientSound() != -1)
 		_game->getResourcePack()->getSoundByDepth(
 												0,
@@ -3344,7 +3345,7 @@ void BattlescapeState::finishBattle(
 		_game->popState();
 
 		if (abort
-			|| (!abort
+			|| (abort == false
 				&& inExitArea == 0))
 		{
 			//Log(LOG_INFO) << ". . missionAborted";

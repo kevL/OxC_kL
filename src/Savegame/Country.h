@@ -41,7 +41,8 @@ private:
 		_newPact,
 		_pact;
 	int
-		_activityRecent, // kL
+		_activityRecent,
+		_activityRecentXCOM,
 		_satisfaction;
 
 	RuleCountry* _rules;
@@ -90,9 +91,9 @@ private:
 
 		/// store last month's counters, start new counters, set this month's change.
 		void newMonth(
-				int xcomTotal,
-				int alienTotal,
-				int diff); // kL
+				const int xcomTotal,
+				const int alienTotal,
+				const int diff); // kL
 
 		/// are we signing a new pact?
 		bool getNewPact() const;
@@ -105,15 +106,10 @@ private:
 		bool recentActivity( // kL
 				bool activity = true,
 				bool graphs = false);
-
-/*		/// kL. Sets recent alien activity in this country.
-		void setRecentActivity(bool activity); // kL
-		/// kL. Gets recent alien activity in this country.
-		bool getRecentActivity() const; // kL
-		/// kL. Sets last alien activity in this country.
-		void setLastActivity(bool activity); // kL
-		/// kL. Gets last alien activity in this country.
-		int getLastActivity() const; // kL */
+		/// kL. Handles recent XCOM activity in this country for GraphsState blink.
+		bool recentActivityXCOM( // kL
+				bool activity = true,
+				bool graphs = false);
 };
 
 }

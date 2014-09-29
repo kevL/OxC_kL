@@ -38,7 +38,9 @@ class Region
 {
 private:
 
-	int _activityRecent; // kL
+	int
+		_activityRecent,
+		_activityRecentXCOM;
 
 	RuleRegion* _rules;
 
@@ -77,15 +79,10 @@ private:
 		bool recentActivity( // kL
 				bool activity = true,
 				bool graphs = false);
-
-/*		/// kL. Sets recent alien activity in this region.
-		void setRecentActivity(bool activity); // kL
-		/// kL. Gets recent alien activity in this region.
-		bool getRecentActivity() const; // kL
-		/// kL. Sets last alien activity in this region.
-		void setLastActivity(int activity); // kL
-		/// kL. Gets last alien activity in this region.
-		int getLastActivity() const; // kL */
+		/// kL. Handles recent XCOM activity in this region for GraphsState blink.
+		bool recentActivityXCOM( // kL
+				bool activity = true,
+				bool graphs = false);
 };
 
 }

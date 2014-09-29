@@ -72,6 +72,7 @@ struct GraphBtnInfo
 		_xcomAct;
 	bool
 		_blink,
+		_blinkXCOM,
 		_pushed;
 
 	GraphBtnInfo(
@@ -80,7 +81,8 @@ struct GraphBtnInfo
 			int alienAct,
 			int xcomAct,
 			Uint8 colorTxt,
-			bool blink)
+			bool blink,
+			bool blinkXCOM)
 		:
 			_name(name),
 			_color(color),
@@ -88,6 +90,7 @@ struct GraphBtnInfo
 			_xcomAct(xcomAct),
 			_colorTxt(colorTxt),
 			_blink(blink),
+			_blinkXCOM(blinkXCOM),
 			_pushed(false)
 	{
 	}
@@ -102,7 +105,6 @@ GraphsState::GraphsState(int curGraph)
 		_btnRegionsOffset(0),
 		_btnCountriesOffset(0),
 		_current(-1),
-//		_curRowCountry(0),
 		_vis(true)
 {
 	_bg				= new InteractiveSurface(320, 200, 0, 0);
@@ -131,7 +133,6 @@ GraphsState::GraphsState(int curGraph)
 
 
 	_blinkTimer = new Timer(250);
-//	_blinkTimer->onTimer((SurfaceHandler)& GraphsState::blink);
 	_blinkTimer->onTimer((StateHandler)& GraphsState::blink);
 	_blinkTimer->start();
 
@@ -170,7 +171,9 @@ GraphsState::GraphsState(int curGraph)
 	int
 		alienAct = 0,
 		xcomAct = 0;
-	bool blink = false;
+	bool
+		blink = false,
+		blinkXCOM = false;
 
 	/* REGIONS */
 	for (std::vector<Region*>::iterator
@@ -184,6 +187,7 @@ GraphsState::GraphsState(int curGraph)
 		alienAct = (*region)->getActivityAlien().back();
 		xcomAct = (*region)->getActivityXcom().back();
 		blink = (*region)->recentActivity(false, true);
+		blinkXCOM = (*region)->recentActivityXCOM(false, true);
 
 		// always save all the regions in toggles
 		_regionToggles.push_back(new GraphBtnInfo(
@@ -192,7 +196,8 @@ GraphsState::GraphsState(int curGraph)
 												alienAct,
 												xcomAct,
 												colorOffset * 8 + 16,
-												blink));
+												blink,
+												blinkXCOM));
 
 		// first add the GRAPH_MAX_BUTTONS ( having the respective country's information )
 		if (offset < GRAPH_MAX_BUTTONS) // leave a slot for the TOTAL btn.
@@ -228,6 +233,7 @@ GraphsState::GraphsState(int curGraph)
 			add(_txtRegionActivityAlien.at(offset));
 
 			_blinkRegion.push_back(blink);
+			_blinkRegionXCOM.push_back(blinkXCOM);
 
 
 			_txtRegionActivityXCom.push_back(new Text(
@@ -276,6 +282,7 @@ GraphsState::GraphsState(int curGraph)
 											0,
 											0,
 											0,
+											false,
 											false));
 
 	_btnRegionTotal->setColor(Palette::blockOffset(9)+7);
@@ -298,7 +305,8 @@ GraphsState::GraphsState(int curGraph)
 	colorOffset = 0;
 	alienAct = 0;
 	xcomAct = 0;
-	blink = false;
+	blink = false,
+	blinkXCOM = false;
 
 	/* COUNTRIES */
 	for (std::vector<Country*>::iterator
@@ -312,6 +320,7 @@ GraphsState::GraphsState(int curGraph)
 		alienAct = (*country)->getActivityAlien().back();
 		xcomAct = (*country)->getActivityXcom().back();
 		blink = (*country)->recentActivity(false, true);
+		blinkXCOM = (*country)->recentActivityXCOM(false, true);
 
 		// always save all the countries in toggles
 		_countryToggles.push_back(new GraphBtnInfo(
@@ -320,7 +329,8 @@ GraphsState::GraphsState(int curGraph)
 												alienAct,
 												xcomAct,
 												colorOffset * 8 + 16,
-												blink));
+												blink,
+												blinkXCOM));
 
 		// first add the GRAPH_MAX_BUTTONS ( having the respective country's information )
 		if (offset < GRAPH_MAX_BUTTONS) // leave a slot for the TOTAL btn.
@@ -356,6 +366,7 @@ GraphsState::GraphsState(int curGraph)
 			add(_txtCountryActivityAlien.at(offset));
 
 			_blinkCountry.push_back(blink);
+			_blinkCountryXCOM.push_back(blinkXCOM);
 
 
 			_txtCountryActivityXCom.push_back(new Text(
@@ -407,6 +418,7 @@ GraphsState::GraphsState(int curGraph)
 											0,
 											0,
 											0,
+											false,
 											false));
 
 	_btnCountryTotal->setColor(Palette::blockOffset(9)+7);
@@ -734,7 +746,7 @@ void GraphsState::think()
 }
 
 /**
- * Makes recent aLien activity Text blink.
+ * Makes recent activity Text blink.
  */
 void GraphsState::blink()
 {
@@ -781,19 +793,23 @@ void GraphsState::blink()
 			offset++;
 		}
 	}
-/*	else if (_alien == false
+	else if (_alien == false
 		&& _income == false
 		&& _country == false
 		&& _finance == false)
 	{
-		Log(LOG_INFO) << ". blink xCom Region act.";
-		for (std::vector<Text*>::iterator
-				i = _txtRegionActivityXCom.begin();
-				i != _txtRegionActivityXCom.end();
+		//Log(LOG_INFO) << ". blink xCom Region act.";
+		for (std::vector<bool>::iterator
+				i = _blinkRegionXCOM.begin();
+				i != _blinkRegionXCOM.end();
 				++i)
 		{
-			Log(LOG_INFO) << ". . iterat";
-			(*i)->setVisible(!(*i)->getVisible());
+			if (*i == true)
+				_txtRegionActivityXCom.at(offset)->setVisible(_vis);
+			else
+				_txtRegionActivityXCom.at(offset)->setVisible();
+
+			offset++;
 		}
 	}
 	else if (_alien == false
@@ -801,16 +817,20 @@ void GraphsState::blink()
 		&& _country == true
 		&& _finance == false)
 	{
-		Log(LOG_INFO) << ". blink xCom Country act.";
-		for (std::vector<Text*>::iterator
-				i = _txtCountryActivityXCom.begin();
-				i != _txtCountryActivityXCom.end();
+		//Log(LOG_INFO) << ". blink xCom Country act.";
+		for (std::vector<bool>::iterator
+				i = _blinkCountryXCOM.begin();
+				i != _blinkCountryXCOM.end();
 				++i)
 		{
-			Log(LOG_INFO) << ". . iterat";
-			(*i)->setVisible(!(*i)->getVisible());
+			if (*i == true)
+				_txtCountryActivityXCom.at(offset)->setVisible(_vis);
+			else
+				_txtCountryActivityXCom.at(offset)->setVisible();
+
+			offset++;
 		}
-	} */
+	}
 	//Log(LOG_INFO) << "GraphsState::blink() EXIT";
 }
 
@@ -2028,6 +2048,7 @@ void GraphsState::drawFinanceLines() // Council Analytics
 
 /**
  * kL. Shifts buttons to their pre-Graph cTor row.
+ * Countries only, since total Regions still fit on the list.
  */
 void GraphsState::initButtons() // kL
 {
@@ -2040,12 +2061,13 @@ void GraphsState::initButtons() // kL
 			_txtCountryActivityAlien,
 			_txtCountryActivityXCom,
 			_blinkCountry,
+			_blinkCountryXCOM,
 			_btnCountriesOffset,
 			curRowCountry);
 }
 
 /**
- * 'Shift' the buttons to display only GRAPH_MAX_BUTTONS - reset their state from toggles
+ * 'Shift' the buttons to display only GRAPH_MAX_BUTTONS - reset their state from toggles.
  */
 void GraphsState::shiftButtons(Action* action)
 {
@@ -2064,6 +2086,7 @@ void GraphsState::shiftButtons(Action* action)
 					_txtCountryActivityAlien,
 					_txtCountryActivityXCom,
 					_blinkCountry,
+					_blinkCountryXCOM,
 					_btnCountriesOffset,
 					-1);
 		}
@@ -2075,6 +2098,7 @@ void GraphsState::shiftButtons(Action* action)
 					_txtCountryActivityAlien,
 					_txtCountryActivityXCom,
 					_blinkCountry,
+					_blinkCountryXCOM,
 					_btnCountriesOffset,
 					1);
 		}
@@ -2091,6 +2115,7 @@ void GraphsState::shiftButtons(Action* action)
 					_txtRegionActivityAlien,
 					_txtRegionActivityXCom,
 					_blinkRegion,
+					_blinkRegionXCOM,
 					_btnRegionsOffset,
 					-1);
 		}
@@ -2102,6 +2127,7 @@ void GraphsState::shiftButtons(Action* action)
 					_txtRegionActivityAlien,
 					_txtRegionActivityXCom,
 					_blinkRegion,
+					_blinkRegionXCOM,
 					_btnRegionsOffset,
 					1);
 		}
@@ -2117,6 +2143,7 @@ void GraphsState::scrollButtons(
 		std::vector<Text*>& actAlien,
 		std::vector<Text*>& actXCom,
 		std::vector<bool>& blink,
+		std::vector<bool>& blinkXCOM,
 		size_t& offset,
 		int step)
 {
@@ -2140,6 +2167,7 @@ void GraphsState::scrollButtons(
 	std::vector<Text*>::iterator aliens = actAlien.begin();
 	std::vector<Text*>::iterator xcom = actXCom.begin();
 	std::vector<bool>::iterator bling = blink.begin();
+	std::vector<bool>::iterator blingXCOM = blinkXCOM.begin();
 
 	for (std::vector<GraphBtnInfo*>::iterator
 			info = toggles.begin();
@@ -2153,6 +2181,8 @@ void GraphsState::scrollButtons(
 		{
 			*bling = (*info)->_blink;
 			bling++;
+			*blingXCOM = (*info)->_blinkXCOM;
+			blingXCOM++;
 
 			updateButton(
 						*info,

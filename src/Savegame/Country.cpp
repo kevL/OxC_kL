@@ -42,7 +42,8 @@ Country::Country(
 		_newPact(false),
 		_funding(0),
 		_satisfaction(2),
-		_activityRecent(-1) // kL
+		_activityRecent(-1),
+		_activityRecentXCOM(-1)
 {
 	if (gen)
 		_funding.push_back(_rules->generateFunding());
@@ -52,7 +53,7 @@ Country::Country(
 }
 
 /**
- *
+ * dTor.
  */
 Country::~Country()
 {
@@ -64,12 +65,11 @@ Country::~Country()
  */
 void Country::load(const YAML::Node& node)
 {
-	_funding		= node["funding"].as<std::vector<int> >(_funding);
-
-	_activityXcom	= node["activityXcom"].as<std::vector<int> >(_activityXcom);
-	_activityAlien	= node["activityAlien"].as<std::vector<int> >(_activityAlien);
-
-	_activityRecent	= node["activityRecent"].as<int>(_activityRecent); // kL
+	_funding			= node["funding"].as<std::vector<int> >(_funding);
+	_activityXcom		= node["activityXcom"].as<std::vector<int> >(_activityXcom);
+	_activityAlien		= node["activityAlien"].as<std::vector<int> >(_activityAlien);
+	_activityRecent		= node["activityRecent"].as<int>(_activityRecent);
+	_activityRecentXCOM	= node["activityRecentXCOM"].as<int>(_activityRecentXCOM);
 
 	_pact		= node["pact"].as<bool>(_pact);
 	_newPact	= node["newPact"].as<bool>(_newPact);
@@ -83,11 +83,12 @@ YAML::Node Country::save() const
 {
 	YAML::Node node;
 
-	node["type"]			= _rules->getType();
-	node["funding"]			= _funding;
-	node["activityXcom"]	= _activityXcom;
-	node["activityAlien"]	= _activityAlien;
-	node["activityRecent"]	= _activityRecent; // kL
+	node["type"]				= _rules->getType();
+	node["funding"]				= _funding;
+	node["activityXcom"]		= _activityXcom;
+	node["activityAlien"]		= _activityAlien;
+	node["activityRecent"]		= _activityRecent;
+	node["activityRecentXCOM"]	= _activityRecentXCOM;
 
 	if (_pact)
 		node["pact"]	= _pact;
@@ -188,25 +189,22 @@ const std::vector<int>& Country::getActivityAlien() const
  */
 
 void Country::newMonth(
-		int xcomTotal,
-		int alienTotal,
-		int diff) // kL
+		const int xcomTotal,
+		const int alienTotal,
+		const int diff) // kL
 {
 	//Log(LOG_INFO) << "Country::newMonth()";
 	_satisfaction = 2;
 
-	int
+	const int
 		funding = getFunding().back(),
 
 		xCom = (xcomTotal / 10) + _activityXcom.back(),
 		aLien = (alienTotal / 20) + _activityAlien.back(),
 
-		oldFunding = _funding.back() / 1000,
-		newFunding = (oldFunding * RNG::generate(5, 20) / 100) * 1000;
-//		newFunding = _funding.back() * RNG::generate(5, 20) / 100; // kL
-			// but earlier formula maintains a nice $1000 multiple.
+		oldFunding = _funding.back() / 1000;
+	int newFunding = (oldFunding * RNG::generate(5, 20) / 100) * 1000;
 
-	// kL_begin:
 	if (xCom > aLien + ((diff + 1) * 20)) // country auto. increases funding
 	{
 		//Log(LOG_INFO) << ". auto funding increase";
@@ -245,29 +243,7 @@ void Country::newMonth(
 		//Log(LOG_INFO) << ". auto funding decrease";
 		newFunding = -newFunding;
 		_satisfaction = 1;
-	} // kL_end.
-
-/*kL
-if (aLien < xCom + 30) // if aLien is above xCom by 30 or less
-	{
-		if (aLien + 30 < xCom // if aLien is beneath xCom by 30 or more
-			&& RNG::generate(0, xCom) > aLien)
-		{
-			int cap = getRules()->getFundingCap() * 1000;
-
-			if (funding + newFunding > cap)
-				newFunding = cap - funding;
-
-			if (newFunding)
-				_satisfaction = 3;
-		}
 	}
-	else if (RNG::generate(0, aLien) > xCom
-		&& newFunding)
-	{
-		newFunding = -newFunding;
-		_satisfaction = 1;
-	} */
 
 	if (_newPact // about to be in cahoots
 		&& _pact == false)
@@ -275,8 +251,7 @@ if (aLien < xCom + 30) // if aLien is above xCom by 30 or less
 		_newPact = false;
 		_pact = true;
 
-//kL		addActivityAlien(150);
-		addActivityAlien(250); // kL
+		addActivityAlien(100 + 50 * diff); // should this be added to Region also
 	}
 
 	// set the new funding and reset the activity meters
@@ -356,38 +331,34 @@ bool Country::recentActivity( // kL
 }
 
 /**
- * kL. Sets recent alien activity in this country.
+ * kL. Handles recent XCOM activity in this country for GraphsState blink.
+ * @param activity	- true to reset the startcounter
+ * @param graphs	- not sure lol
  */
-/* void Country::setRecentActivity(bool activity) // kL
+bool Country::recentActivityXCOM( // kL
+		bool activity,
+		bool graphs)
 {
-	_activityRecent = activity;
-} */
+	if (activity)
+		_activityRecentXCOM = 0;
+	else if (_activityRecentXCOM != -1)
+	{
+		if (graphs)
+			return true;
+		else
+		{
+			++_activityRecentXCOM;
 
-/**
- * kL. Gets recent alien activity in this country.
- */
-/* bool Country::getRecentActivity() const // kL
-{
-	return _activityRecent;
-} */
+			if (_activityRecentXCOM == 24) // aLien bases show activity every 24 hrs.
+//			if (_activityRecentXCOM >= 12) // use this until my shorten kicks in ...
+				_activityRecentXCOM = -1;
+		}
+	}
 
-/**
- * kL. Sets last alien activity in this country.
- */
-/* void Country::setLastActivity() // kL
-{
-	++_activityLast;
+	if (_activityRecentXCOM == -1)
+		return false;
 
-	if (_activityLast > 23)
-		_activityLast = -1;
-} */
-
-/**
- * kL. Gets last alien activity in this country.
- */
-/* int Country::getLastActivity() const // kL
-{
-	return _activityLast;
-} */
+	return true;
+}
 
 }

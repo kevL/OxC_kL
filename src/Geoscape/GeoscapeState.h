@@ -30,7 +30,9 @@ namespace OpenXcom
 
 extern size_t kL_currentBase;
 
-extern const double greatCircleConversionFactor;
+extern const double
+	greatCircleConversionFactor,
+	earthRadius;
 
 
 class Base;

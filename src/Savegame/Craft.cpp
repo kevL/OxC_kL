@@ -889,7 +889,7 @@ bool Craft::detect(Target* target) const
 	if (AreSame(range, 0.0))
 		return false;
 
-	const double dist = getDistance(target) * 3440.0;
+	const double dist = getDistance(target) * earthRadius;
 	if (dist < range)
 		return true;
 

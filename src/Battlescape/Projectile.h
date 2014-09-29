@@ -63,11 +63,11 @@ private:
 	///
 	void applyAccuracy(
 			const Position& origin,
-			Position* target,
+			Position* const target,
 			double accuracy,
-			bool keepRange = false,
-			Tile* targetTile = NULL,
-			bool extendLine = true);
+			const bool keepRange = false,
+			const Tile* const targetTile = NULL,
+			const bool extendLine = true);
 
 
 	public:
