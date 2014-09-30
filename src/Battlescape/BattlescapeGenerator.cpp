@@ -876,9 +876,9 @@ void BattlescapeGenerator::deployXCOM()
 
 /**
  * Adds an XCom vehicle to the game.
- * Sets the correct turret depending on the ammo type.
- * @param tank, Pointer to the Vehicle.
- * @return, Pointer to the spawned unit.
+ * Sets the correct turret depending on the ammo type and adds auxilliary weapons if any.
+ * @param tank - pointer to Vehicle
+ * @return, pointer to the spawned unit; NULL if unable to create and equip
  */
 BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 {
@@ -984,7 +984,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 								node->getPosition());
 			unit->setDirection(RNG::generate(0, 7));
 			unit->deriveRank();
-//kL		_save->getTileEngine()->calculateFOV(unit);
+//			_save->getTileEngine()->calculateFOV(unit);
 
 			_tileCraft = _save->getTile(node->getPosition());
 			_save->setBattleInventory(_tileCraft);
@@ -999,7 +999,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 
 				unit->setDirection(RNG::generate(0, 7));
 				unit->deriveRank();
-//kL			_save->getTileEngine()->calculateFOV(unit);
+//				_save->getTileEngine()->calculateFOV(unit);
 
 				_tileCraft = _save->getTile(unit->getPosition());
 				_save->setBattleInventory(_tileCraft);
@@ -1041,12 +1041,12 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 			}
 		}
 	}
-	else // kL_note: mission w/ transport craft that does not have ruleset Deployments.
+	else // mission w/ transport craft that does not have ruleset Deployments.
 	{
 		//Log(LOG_INFO) << "addXCOMUnit() - NO Deployment rule";
 		int tankPos = 0;
 
-		for (int // kL_note: iterate through *all* tiles
+		for (int // iterate through *all* tiles
 				i = 0;
 				i < _mapsize_x * _mapsize_y * _mapsize_z;
 				++i)
@@ -1171,7 +1171,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 		{
 			// skip the vehicles, we need only X-Com soldiers WITH equipment-layout
 			if ((*i)->getArmor()->getSize() > 1
-				|| !(*i)->getGeoscapeSoldier()
+				|| (*i)->getGeoscapeSoldier() == NULL
 				|| (*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
 			{
 				continue;
@@ -1228,7 +1228,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 				// only place the weapon (or any other item..) onto the soldier when it's loaded with its layout-ammo (if any)
 				if (loaded)
 				{
-					item->setXCOMProperty(); // kL
+					item->setXCOMProperty();
 
 					item->moveToOwner(*i);
 
@@ -1496,8 +1496,8 @@ bool BattlescapeGenerator::addItem(
 				&& rhWeapon->setAmmoItem(item) == 0)
 			{
 				item->setSlot(rightHand);
-				placed = true;
 
+				placed = true;
 				break;
 			}
 
@@ -1510,8 +1510,8 @@ bool BattlescapeGenerator::addItem(
 				&& lhWeapon->setAmmoItem(item) == 0)
 			{
 				item->setSlot(leftHand);
-				placed = true;
 
+				placed = true;
 				break;
 			}
 
@@ -1531,12 +1531,11 @@ bool BattlescapeGenerator::addItem(
 					item->setSlotX(i);
 
 					placed = true;
-
 					break;
 				}
 			}
 
-			if (!placed)
+			if (placed == false)
 			{
 				for (int
 						i = 0;
@@ -1551,7 +1550,6 @@ bool BattlescapeGenerator::addItem(
 						item->setSlotX(i);
 
 						placed = true;
-
 						break;
 					}
 				}
@@ -1572,7 +1570,6 @@ bool BattlescapeGenerator::addItem(
 					item->setSlotX(i);
 
 					placed = true;
-
 					break;
 				}
 			}
@@ -1807,13 +1804,13 @@ BattleUnit* BattlescapeGenerator::addAlien(
 								0,
 								unit);
 
-	if (!node) // ie. if not spawning on a Civ-Scout node
+	if (node == NULL) // ie. if not spawning on a Civ-Scout node
 	{
 		for (int
 				i = 0;
 //kL			i < 7
 				i < 8 // kL
-					&& !node;
+					&& node == NULL;
 				i++)
 		{
 			node = _save->getSpawnNode(
@@ -1850,11 +1847,10 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		else
 			unit->setDirection(RNG::generate(0, 7));
 
-//kL		if (difficulty == 0) // kL_note: moved to BattleUnit::adjustStats()
-//kL			unit->halveArmor();
+//kL	if (difficulty == 0) // kL_note: moved to BattleUnit::adjustStats()
+//kL		unit->halveArmor();
 
-		// we only add a unit if it has a node to spawn on.
-		// (stops them spawning at 0,0,0)
+		// we only add a unit if it has a node to spawn on. (stops them spawning at 0,0,0)
 		_save->getUnits()->push_back(unit);
 	}
 	else
@@ -1922,8 +1918,7 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 
 		unit->setDirection(RNG::generate(0, 7));
 
-		// we only add a unit if it has a node to spawn on.
-		// (stops them spawning at 0,0,0)
+		// we only add a unit if it has a node to spawn on. (stops them spawning at 0,0,0)
 		_save->getUnits()->push_back(unit);
 	}
 	else if (placeUnitNearFriend(unit))
@@ -1940,7 +1935,7 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 	else
 	{
 		delete unit;
-		unit = 0;
+		unit = NULL;
 	}
 
 	return unit;
@@ -3391,7 +3386,7 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 /**
  * Loads all XCom weaponry before anything else is distributed.
  */
-void BattlescapeGenerator::loadWeapons()
+/* void BattlescapeGenerator::loadWeapons()
 {
 	// let's try to load this weapon, whether we equip it or not.
 	for (std::vector<BattleItem*>::iterator
@@ -3439,6 +3434,6 @@ void BattlescapeGenerator::loadWeapons()
 
 		++i;
 	}
-}
+} */
 
 }

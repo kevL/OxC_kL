@@ -1329,7 +1329,7 @@ std::vector<Position>& SavedBattleGame::getStorageSpace()
 void SavedBattleGame::randomizeItemLocations(Tile* tile)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::randomizeItemLocations()";
-	if (!_storageSpace.empty())
+	if (_storageSpace.empty() == false)
 	{
 		//Log(LOG_INFO) << ". storageSpace NOT empty";
 		for (std::vector<BattleItem*>::iterator
@@ -1464,7 +1464,6 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 	{
 		setSelectedUnit(NULL);
 		_battleState->getBattleGame()->cancelCurrentAction(true);
-
 		_battleState->getBattleGame()->requestEndTurn();
 	}
 }

@@ -1904,7 +1904,7 @@ void GeoscapeState::time10Minutes()
 											true,
 											hyperDet,
 											contact,
-											hyperBases));
+											&hyperBases));
 				}
 			}
 			else // ufo is already detected

@@ -157,7 +157,7 @@ private:
 		~BattlescapeGenerator();
 
 		/// kL. Sets the world terrainRule of where a ufo crashed or landed.
-		void BattlescapeGenerator::setWorldTerrain(RuleTerrain* terrain); // kL
+		void setWorldTerrain(RuleTerrain* terrain); // kL
 		/// Sets the polygon texture.
 		void setWorldTexture(int texture);
 		/// Sets the polygon shade.
@@ -192,7 +192,7 @@ private:
 		void runInventory(Craft* craft);
 
 		/// Load all Xcom weapons.
-		void loadWeapons();
+//		void loadWeapons();
 };
 
 }

@@ -44,9 +44,6 @@ class UfoDetectedState
 {
 
 private:
-
-	bool _contact;
-
 	GeoscapeState* _state;
 	Text
 		* _txtBases,
@@ -55,7 +52,7 @@ private:
 		* _txtUfo,
 
 		* _txtRegion,
-		* _txtShade,
+//		* _txtShade,
 		* _txtTexture;
 	TextButton
 		* _btnCancel,
@@ -77,7 +74,8 @@ private:
 				bool detected,
 				bool hyper,
 				bool contact = true,
-				std::vector<Base*> hyperBases = std::vector<Base*>());
+//				std::vector<Base*> hyperBases = std::vector<Base*>());
+				std::vector<Base*>* hyperBases = NULL);
 		/// Cleans up the Ufo Detected state.
 		~UfoDetectedState();
 

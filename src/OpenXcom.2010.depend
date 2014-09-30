@@ -4739,7 +4739,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1411888647 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1412045873 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 
 1411714023 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
@@ -5918,7 +5918,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1411892386 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1412046177 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6662,7 +6662,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1411972137 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1412043742 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -7766,7 +7766,7 @@
 1405220644 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1411920598 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1412093120 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7902,7 +7902,7 @@
 1404096023 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1412016397 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1412092968 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1411714024 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -8281,7 +8281,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1412018080 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1412093015 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -9676,7 +9676,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1411917135 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1412046589 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

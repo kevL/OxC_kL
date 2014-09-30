@@ -19,9 +19,6 @@
 
 #include "UfoDetectedState.h"
 
-//#include <sstream>
-//#include <vector>
-
 #include "GeoscapeState.h"
 #include "Globe.h"
 #include "InterceptState.h"
@@ -70,11 +67,10 @@ UfoDetectedState::UfoDetectedState(
 		bool detected,
 		bool hyper,
 		bool contact,
-		std::vector<Base*> hyperBases)	// yeh this should be pass-by-pointer ..... const ptr.
+		std::vector<Base*>* hyperBases)
 	:
 		_ufo(ufo),
-		_state(state),
-		_contact(contact)
+		_state(state)
 {
 	state->getGlobe()->rotateStop();
 
@@ -100,16 +96,16 @@ UfoDetectedState::UfoDetectedState(
 	else
 		_window			= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 
-	_txtUfo			= new Text(112, 16, 26, 56);
+	_txtUfo			= new Text(100, 16, 26, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);
 	_lstInfo		= new TextList(192, 33, 32, 85);
 	_btnCentre		= new TextButton(192, 16, 32, 124);
 	_btnIntercept	= new TextButton(88, 16, 32, 144);
 	_btnCancel		= new TextButton(88, 16, 136, 144);
 
-	_txtRegion		= new Text(92, 9, 138, 56);
-	_txtTexture		= new Text(92, 9, 138, 66);
-	_txtShade		= new Text(60, 9, 170, 76);
+	_txtRegion		= new Text(104, 9, 126, 56);
+	_txtTexture		= new Text(104, 9, 126, 66);
+//	_txtShade		= new Text(60, 9, 170, 76);
 
 	if (hyper)
 	{
@@ -122,7 +118,7 @@ UfoDetectedState::UfoDetectedState(
 
 		_txtRegion->setY(19);
 		_txtTexture->setY(29);
-		_txtShade->setY(39);
+//		_txtShade->setY(39);
 
 		setPalette("PAL_GEOSCAPE", 2);
 	}
@@ -139,7 +135,7 @@ UfoDetectedState::UfoDetectedState(
 
 	add(_txtRegion);
 	add(_txtTexture);
-	add(_txtShade);
+//	add(_txtShade);
 
 	if (hyper)
 	{
@@ -327,28 +323,34 @@ UfoDetectedState::UfoDetectedState(
 			|| str == "MADURBAN"
 			|| str == "NATIVEURBAN"
 			|| str == "RAILYARDURBAN")
-	//		|| str == "COMRCURBAN" // these are Terror sites only:
-	//		|| str == "DAWNURBANA" // ie. not referenced by any of the Globe's polygon textures.
-	//		|| str == "DAWNURBANB"
-	//		|| str == "PORTURBAN"
+//			|| str == "COMRCURBAN" // these are Terror sites only:
+//			|| str == "DAWNURBANA" // ie. not referenced by any of the Globe's polygon textures.
+//			|| str == "DAWNURBANB"
+//			|| str == "PORTURBAN"
 		{
 			str = "URBAN";
 		}
 
-		_txtShade->setColor(Palette::blockOffset(8)+10);
-		_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
-		_txtShade->setAlign(ALIGN_RIGHT);
-		_txtShade->setText(tr("STR_SHADE_").arg(shade));
+//		_txtShade->setColor(Palette::blockOffset(8)+10);
+//		_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
+//		_txtShade->setAlign(ALIGN_RIGHT);
+//		_txtShade->setText(tr("STR_SHADE_").arg(shade));
+
+		std::wostringstream ss;
+		ss << tr(str);
+		ss << L"> sun " << (15 - shade);
 
 		_txtTexture->setColor(Palette::blockOffset(8)+10);
 		_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 		_txtTexture->setAlign(ALIGN_RIGHT);
 
-		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(str))); // tr(terrain)
+//		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(str))); // tr(terrain)
+//		_txtTexture->setText(tr("STR_TEXTURE_").arg(ss.str()));
+		_txtTexture->setText(ss.str());
 	}
 	else
 	{
-		_txtShade->setVisible(false);
+//		_txtShade->setVisible(false);
 		_txtTexture->setVisible(false);
 	}
 
@@ -392,8 +394,8 @@ UfoDetectedState::UfoDetectedState(
 
 			std::wostringstream bases;
 			for (std::vector<Base*>::const_iterator
-					i = hyperBases.begin();
-					i != hyperBases.end();
+					i = hyperBases->begin();
+					i != hyperBases->end();
 					++i)
 			{
 				bases << (*i)->getName(_game->getLanguage()) << L"\n";
