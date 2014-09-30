@@ -54,6 +54,7 @@ private:
 		* _txtHyperwave,
 		* _txtUfo,
 
+		* _txtRegion,
 		* _txtShade,
 		* _txtTexture;
 	TextButton

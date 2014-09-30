@@ -5816,7 +5816,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1411916511 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1411973540 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -7902,7 +7902,7 @@
 1404096023 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1411714024 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1412016397 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1411714024 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -8281,9 +8281,8 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1411714024 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1412018080 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
-	<sstream>
 	"GeoscapeState.h"
 	"Globe.h"
 	"InterceptState.h"
@@ -8296,11 +8295,15 @@
 	"../Interface/TextList.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/RuleCountry.h"
+	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleTerrain.h"
 	"../Ruleset/RuleUfo.h"
 	"../Savegame/AlienMission.h"
 	"../Savegame/Base.h"
+	"../Savegame/Country.h"
+	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 

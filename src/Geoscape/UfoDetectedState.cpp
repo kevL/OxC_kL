@@ -19,7 +19,8 @@
 
 #include "UfoDetectedState.h"
 
-#include <sstream>
+//#include <sstream>
+//#include <vector>
 
 #include "GeoscapeState.h"
 #include "Globe.h"
@@ -37,12 +38,16 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/RuleCountry.h"
+#include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleTerrain.h"
 #include "../Ruleset/RuleUfo.h"
 
 #include "../Savegame/AlienMission.h"
 #include "../Savegame/Base.h"
+#include "../Savegame/Country.h"
+#include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
 
@@ -102,8 +107,9 @@ UfoDetectedState::UfoDetectedState(
 	_btnIntercept	= new TextButton(88, 16, 32, 144);
 	_btnCancel		= new TextButton(88, 16, 136, 144);
 
-	_txtTexture		= new Text(92, 9, 138, 56);
-	_txtShade		= new Text(60, 9, 170, 66);
+	_txtRegion		= new Text(92, 9, 138, 56);
+	_txtTexture		= new Text(92, 9, 138, 66);
+	_txtShade		= new Text(60, 9, 170, 76);
 
 	if (hyper)
 	{
@@ -114,8 +120,9 @@ UfoDetectedState::UfoDetectedState(
 		_btnIntercept->setY(155);
 		_btnCancel->setY(155);
 
-		_txtTexture->setY(19);
-		_txtShade->setY(29);
+		_txtRegion->setY(19);
+		_txtTexture->setY(29);
+		_txtShade->setY(39);
 
 		setPalette("PAL_GEOSCAPE", 2);
 	}
@@ -130,6 +137,7 @@ UfoDetectedState::UfoDetectedState(
 	add(_btnIntercept);
 	add(_btnCancel);
 
+	add(_txtRegion);
 	add(_txtTexture);
 	add(_txtShade);
 
@@ -149,11 +157,51 @@ UfoDetectedState::UfoDetectedState(
 	_txtUfo->setBig();
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 
-	_txtDetected->setColor(Palette::blockOffset(8)+5);
 	if (detected)
+	{
+		_txtDetected->setColor(Palette::blockOffset(8)+5);
 		_txtDetected->setText(tr("STR_DETECTED"));
+	}
 	else
-		_txtDetected->setText(L"");
+		_txtDetected->setVisible(false);
+
+
+	_txtRegion->setColor(Palette::blockOffset(8)+10);
+	_txtRegion->setAlign(ALIGN_RIGHT);
+	std::wostringstream ss;
+	double
+		lon = _ufo->getLongitude(),
+		lat = _ufo->getLatitude();
+
+	for (std::vector<Region*>::iterator
+			i = _game->getSavedGame()->getRegions()->begin();
+			i != _game->getSavedGame()->getRegions()->end();
+			++i)
+	{
+		if ((*i)->getRules()->insideRegion(
+										lon,
+										lat))
+		{
+			ss << tr((*i)->getRules()->getType());
+			break;
+		}
+	}
+
+	for (std::vector<Country*>::iterator
+			i = _game->getSavedGame()->getCountries()->begin();
+			i != _game->getSavedGame()->getCountries()->end();
+			++i)
+	{
+		if ((*i)->getRules()->insideCountry(
+										lon,
+										lat))
+		{
+			ss << L"> " << tr((*i)->getRules()->getType());
+			break;
+		}
+	}
+	_txtRegion->setText(ss.str());
+
 
 	_lstInfo->setColor(Palette::blockOffset(8)+5);
 	_lstInfo->setColumns(2, 80, 112);

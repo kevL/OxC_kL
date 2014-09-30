@@ -448,7 +448,7 @@ int Projectile::calculateThrow(double accuracy)
  * @param targetTile	- pointer to tile of the target (default = NULL)
  * @param extendLine	- true if this line should extend to maximum distance on the battle map (default = true)
  */
-void Projectile::applyAccuracy(// int smokeDensity, bool doCalcChance)
+void Projectile::applyAccuracy(
 		const Position& origin,
 		Position* const target,
 		double accuracy,
@@ -550,21 +550,21 @@ void Projectile::applyAccuracy(// int smokeDensity, bool doCalcChance)
 				acuPenalty += (_action.autoShotCount - 1) * 0.03;
 
 
-			double baseDeviation = 0.65;
+			double deviation = 0.65;
 			if (_action.actor->getFaction() == FACTION_HOSTILE)
-				baseDeviation = 0.15; // give the poor aLiens an aiming advantage over xCom & Mc'd units
+				deviation = 0.15; // give the poor aLiens an aiming advantage over xCom & Mc'd units
 
-			baseDeviation /= accuracy - acuPenalty + 0.13;
-			baseDeviation = std::max(
-									0.01,
-									baseDeviation);
-			//Log(LOG_INFO) << ". baseDeviation = " << baseDeviation;
+			deviation /= accuracy - acuPenalty + 0.13;
+			deviation = std::max(
+								0.01,
+								deviation);
+			//Log(LOG_INFO) << ". deviation = " << deviation;
 
 
 			// The angle deviations are spread using a normal distribution:
 			const double
-				dH = RNG::boxMuller(0.0, baseDeviation / 6.0),			// horizontal miss in radians
-				dV = RNG::boxMuller(0.0, baseDeviation / (6.0 * 1.78)),	// vertical miss in radians
+				dH = RNG::boxMuller(0.0, deviation / 6.0),			// horizontal miss in radians
+				dV = RNG::boxMuller(0.0, deviation / (6.0 * 1.78)),	// vertical miss in radians
 
 				te = atan2(
 						static_cast<double>(target->y - origin.y),
