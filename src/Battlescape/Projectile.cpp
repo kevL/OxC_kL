@@ -550,11 +550,11 @@ void Projectile::applyAccuracy(
 				acuPenalty += (_action.autoShotCount - 1) * 0.03;
 
 
-			double deviation = 0.65;
+			double deviation = 0.58;
 			if (_action.actor->getFaction() == FACTION_HOSTILE)
 				deviation = 0.15; // give the poor aLiens an aiming advantage over xCom & Mc'd units
 
-			deviation /= accuracy - acuPenalty + 0.13;
+			deviation /= accuracy - acuPenalty + 0.15;
 			deviation = std::max(
 								0.01,
 								deviation);
@@ -564,7 +564,7 @@ void Projectile::applyAccuracy(
 			// The angle deviations are spread using a normal distribution:
 			const double
 				dH = RNG::boxMuller(0.0, deviation / 6.0),			// horizontal miss in radians
-				dV = RNG::boxMuller(0.0, deviation / (6.0 * 1.78)),	// vertical miss in radians
+				dV = RNG::boxMuller(0.0, deviation / (6.0 * 1.77)),	// vertical miss in radians
 
 				te = atan2(
 						static_cast<double>(target->y - origin.y),

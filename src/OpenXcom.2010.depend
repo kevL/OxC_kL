@@ -6662,7 +6662,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1412043742 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1412097841 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -8281,7 +8281,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1412093015 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1412094234 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"

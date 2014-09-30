@@ -31,15 +31,15 @@ namespace OpenXcom
 
 /**
  * Initializes a item of the specified type.
- * @param rules Pointer to ruleset.
- * @param id The id of the item.
+ * @param rules	- pointer to RuleItem
+ * @param id	- the IG id of this item
  */
 BattleItem::BattleItem(
 		RuleItem* rules,
 		int* id)
 	:
-		_id(*id),
 		_rules(rules),
+		_id(*id),
 		_owner(NULL),
 		_previousOwner(NULL),
 		_unit(NULL),
@@ -56,31 +56,28 @@ BattleItem::BattleItem(
 		_XCOMProperty(false)
 //		_droppedOnAlienTurn(false)
 {
-	if (_rules
-		&& _rules->getBattleType() == BT_AMMO)
+	if (_rules)
 	{
-		setAmmoQuantity(_rules->getClipSize());
-	}
-	else if (_rules
-		&& _rules->getBattleType() == BT_MEDIKIT)
-	{
-		setHealQuantity(_rules->getHealQuantity());
-		setPainKillerQuantity(_rules->getPainKillerQuantity());
-		setStimulantQuantity(_rules->getStimulantQuantity());
+		if (_rules->getBattleType() == BT_AMMO)
+			setAmmoQuantity(_rules->getClipSize());
+		else if (_rules->getBattleType() == BT_MEDIKIT)
+		{
+			setHealQuantity(_rules->getHealQuantity());
+			setPainKillerQuantity(_rules->getPainKillerQuantity());
+			setStimulantQuantity(_rules->getStimulantQuantity());
+		}
+		else if ((_rules->getBattleType() == BT_FIREARM	// These weapons do not need ammo;
+				|| _rules->getBattleType() == BT_MELEE)	// (ammo)item points to weapon itself.
+			&& _rules->getCompatibleAmmo()->empty())
+		{
+			setAmmoQuantity(_rules->getClipSize()); // melee items have clipsize(0), lasers etc have clipsize(-1).
+//			setAmmoQuantity(-1); // needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
+
+			_ammoItem = this;
+		}
 	}
 
 	(*id)++;
-
-	if (_rules // weapon does not need ammo, ammoItem points to weapon itself.
-		&& (_rules->getBattleType() == BT_FIREARM
-			|| _rules->getBattleType() == BT_MELEE)
-		&& _rules->getCompatibleAmmo()->empty())
-	{
-		setAmmoQuantity(_rules->getClipSize()); // melee items have clipsize(0), lasers etc have clipsize(-1).
-//		setAmmoQuantity(-1); // needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
-
-		_ammoItem = this;
-	}
 }
 
 /**
@@ -92,24 +89,24 @@ BattleItem::~BattleItem()
 
 /**
  * Loads the item from a YAML file.
- * @param node YAML node.
+ * @param node - YAML node
  */
 void BattleItem::load(const YAML::Node& node)
 {
 	_inventoryX	= node["inventoryX"].as<int>(_inventoryX);
 	_inventoryY	= node["inventoryY"].as<int>(_inventoryY);
-	_ammoQty	= node["ammoQty"].as<int>(_ammoQty);
+	_ammoQty	= node["ammoQty"]	.as<int>(_ammoQty);
 	_painKiller	= node["painKiller"].as<int>(_painKiller);
-	_heal		= node["heal"].as<int>(_heal);
-	_stimulant	= node["stimulant"].as<int>(_stimulant);
-	_fuseTimer	= node["fuseTimer"].as<int>(_fuseTimer);
+	_heal		= node["heal"]		.as<int>(_heal);
+	_stimulant	= node["stimulant"]	.as<int>(_stimulant);
+	_fuseTimer	= node["fuseTimer"]	.as<int>(_fuseTimer);
 
 //	_droppedOnAlienTurn	= node["droppedOnAlienTurn"].as<bool>(_droppedOnAlienTurn);
 }
 
 /**
  * Saves the item to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node BattleItem::save() const
 {
@@ -161,7 +158,7 @@ YAML::Node BattleItem::save() const
 
 /**
  * Gets the ruleset for the item's type.
- * @return Pointer to ruleset.
+ * @return, pointer to ruleset
  */
 RuleItem* BattleItem::getRules() const
 {
@@ -170,7 +167,7 @@ RuleItem* BattleItem::getRules() const
 
 /**
  * Gets the turns until detonation. -1 = unprimed grenade
- * @return, Turns until detonation.
+ * @return, turns until detonation
  */
 int BattleItem::getFuseTimer() const
 {
@@ -179,7 +176,7 @@ int BattleItem::getFuseTimer() const
 
 /**
  * Sets the turns until detonation.
- * @param turns, Turns until detonation (player/alien turns, not game turns).
+ * @param turns - turns until detonation (player/alien turns, not game turns)
  */
 void BattleItem::setFuseTimer(int turn)
 {
@@ -207,7 +204,7 @@ int BattleItem::getAmmoQuantity() const
 
 /**
  * Changes the quantity of ammo in this item.
- * @param qty, Ammo quantity.
+ * @param qty - ammo quantity
  */
 void BattleItem::setAmmoQuantity(int qty)
 {
@@ -234,7 +231,7 @@ bool BattleItem::spendBullet()
 
 /**
  * Gets the item's owner.
- * @return Pointer to Battleunit.
+ * @return, pointer to BattleUnit
  */
 BattleUnit* BattleItem::getOwner() const
 {
@@ -243,7 +240,7 @@ BattleUnit* BattleItem::getOwner() const
 
 /**
  * Gets the item's previous owner.
- * @return Pointer to Battleunit.
+ * @return, pointer to BattleUnit
  */
 BattleUnit* BattleItem::getPreviousOwner() const
 {
@@ -252,7 +249,7 @@ BattleUnit* BattleItem::getPreviousOwner() const
 
 /**
  * Sets the item's owner.
- * @param owner Pointer to Battleunit.
+ * @param owner - pointer to BattleUnit
  */
 void BattleItem::setOwner(BattleUnit* owner)
 {
@@ -262,7 +259,7 @@ void BattleItem::setOwner(BattleUnit* owner)
 
 /**
  * Removes the item from the previous owner and moves it to the new owner.
- * @param owner, Pointer to Battleunit.
+ * @param owner - pointer to BattleUnit
  */
 void BattleItem::moveToOwner(BattleUnit* owner)
 {
@@ -295,7 +292,7 @@ void BattleItem::moveToOwner(BattleUnit* owner)
 
 /**
  * Gets the item's inventory slot.
- * @return The slot id.
+ * @return, the slot id
  */
 RuleInventory* BattleItem::getSlot() const
 {
@@ -304,7 +301,7 @@ RuleInventory* BattleItem::getSlot() const
 
 /**
  * Sets the item's inventory slot.
- * @param slot The slot id.
+ * @param slot - the slot id
  */
 void BattleItem::setSlot(RuleInventory* slot)
 {
@@ -313,7 +310,7 @@ void BattleItem::setSlot(RuleInventory* slot)
 
 /**
  * Gets the item's inventory X position.
- * @return X position.
+ * @return, X position
  */
 int BattleItem::getSlotX() const
 {
@@ -322,7 +319,7 @@ int BattleItem::getSlotX() const
 
 /**
  * Sets the item's inventory X position.
- * @param x X position.
+ * @param x - X position
  */
 void BattleItem::setSlotX(int x)
 {
@@ -331,7 +328,7 @@ void BattleItem::setSlotX(int x)
 
 /**
  * Gets the item's inventory Y position.
- * @return Y position.
+ * @return, Y position
  */
 int BattleItem::getSlotY() const
 {
@@ -340,7 +337,7 @@ int BattleItem::getSlotY() const
 
 /**
  * Sets the item's inventory Y position.
- * @param y Y position.
+ * @param y - Y position
  */
 void BattleItem::setSlotY(int y)
 {
@@ -349,10 +346,10 @@ void BattleItem::setSlotY(int y)
 
 /**
  * Checks if the item is covering certain inventory slot(s).
- * @param x Slot X position.
- * @param y Slot Y position.
- * @param item Item to check for overlap, or NULL if none.
- * @return True if it is covering.
+ * @param x		- slot X position
+ * @param y 	- slot Y position
+ * @param item	- pointer to an item to check for overlap, or NULL if none
+ * @return, true if it is covering
  */
 bool BattleItem::occupiesSlot(
 		int x,
@@ -393,7 +390,7 @@ BattleItem* BattleItem::getAmmoItem()
  * Determines if the item uses (needs?) ammo.
  * No ammo is needed if the item has itself assigned as its ammoItem.
  * See set/getAmmoItem()
- * @return, True if ammo is used.
+ * @return, true if ammo is used
  */
 bool BattleItem::needsAmmo() const
 {
@@ -402,7 +399,7 @@ bool BattleItem::needsAmmo() const
 
 /**
  * Sets an ammo item.
- * @param item, The ammo item.
+ * @param item - the ammo item
  * @return,	-2 = ammo doesn't fit or nothing happened
  *			-1 = weapon already contains ammo
  *			 0 = success or invalid item
@@ -440,7 +437,7 @@ int BattleItem::setAmmoItem(BattleItem* item)
 
 /**
  * Gets the item's tile.
- * @return The tile.
+ * @return, the tile
  */
 Tile* BattleItem::getTile() const
 {
@@ -449,7 +446,7 @@ Tile* BattleItem::getTile() const
 
 /**
  * Sets the item's tile.
- * @param tile The tile.
+ * @param tile - the tile
  */
 void BattleItem::setTile(Tile* tile)
 {
@@ -458,7 +455,7 @@ void BattleItem::setTile(Tile* tile)
 
 /**
  * Gets the item's id.
- * @return The item's id.
+ * @return, the item's id
  */
 int BattleItem::getId() const
 {
@@ -467,7 +464,7 @@ int BattleItem::getId() const
 
 /**
  * Gets a corpse's unit.
- * @return Pointer to BattleUnit.
+ * @return, pointer to BattleUnit
  */
 BattleUnit* BattleItem::getUnit() const
 {
@@ -476,7 +473,7 @@ BattleUnit* BattleItem::getUnit() const
 
 /**
  * Sets the corpse's unit.
- * @param unit Pointer to BattleUnit.
+ * @param unit - pointer to BattleUnit
  */
 void BattleItem::setUnit(BattleUnit* unit)
 {
@@ -485,7 +482,7 @@ void BattleItem::setUnit(BattleUnit* unit)
 
 /**
  * Sets the heal quantity of the item.
- * @param heal The new heal quantity.
+ * @param heal - the new heal quantity
  */
 void BattleItem::setHealQuantity(int heal)
 {
@@ -494,7 +491,7 @@ void BattleItem::setHealQuantity(int heal)
 
 /**
  * Gets the heal quantity of the item.
- * @return The new heal quantity.
+ * @return, the new heal quantity
  */
 int BattleItem::getHealQuantity() const
 {
@@ -503,7 +500,7 @@ int BattleItem::getHealQuantity() const
 
 /**
  * Sets the pain killer quantity of the item.
- * @param pk The new pain killer quantity.
+ * @param pk - the new pain killer quantity
  */
 void BattleItem::setPainKillerQuantity(int pk)
 {
@@ -512,7 +509,7 @@ void BattleItem::setPainKillerQuantity(int pk)
 
 /**
  * Gets the pain killer quantity of the item.
- * @return The new pain killer quantity.
+ * @return, the new pain killer quantity
  */
 int BattleItem::getPainKillerQuantity() const
 {
@@ -521,7 +518,7 @@ int BattleItem::getPainKillerQuantity() const
 
 /**
  * Sets the stimulant quantity of the item.
- * @param stimulant The new stimulant quantity.
+ * @param stimulant - the new stimulant quantity
  */
 void BattleItem::setStimulantQuantity(int stimulant)
 {
@@ -530,7 +527,7 @@ void BattleItem::setStimulantQuantity(int stimulant)
 
 /**
  * Gets the stimulant quantity of the item.
- * @return The new stimulant quantity.
+ * @return, the new stimulant quantity
  */
 int BattleItem::getStimulantQuantity() const
 {
@@ -541,7 +538,7 @@ int BattleItem::getStimulantQuantity() const
  * Sets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
  * kL_note: no, actually it's not: In its current implementation it is fundamentally useless.
  * kL_note: well it may bear only on artefacts for a Base Defense mission ....
- * @param flag, True if it's XCom property.
+ * @param flag - true if it's XCom property
  */
 void BattleItem::setXCOMProperty(bool flag)
 {
@@ -551,7 +548,7 @@ void BattleItem::setXCOMProperty(bool flag)
 /**
  * Gets the XCom property flag. This is to determine at debriefing what goes into the base/craft.
  * kL_note: no, actually it's not: In its current implementation it is fundamentally useless.
- * @return, True if it's XCom property.
+ * @return, true if it's XCom property
  */
 bool BattleItem::getXCOMProperty() const
 {
@@ -564,7 +561,7 @@ bool BattleItem::getXCOMProperty() const
  * kL_note: holy shit that's cynical. (or just fascits). Worse than 'honey traps' are
  * players, like me, who Mc aLiens and make them drop their weapons - on the xCom turn!
  * so, in a word or 25, TAKE THIS OUT.
- * @return True if the aliens dropped the item.
+ * @return. true if the aliens dropped the item
  */
 /* bool BattleItem::getTurnFlag() const
 {
@@ -574,7 +571,7 @@ bool BattleItem::getXCOMProperty() const
 /**
  * Sets the "dropped on non-player turn" flag. This is set when the item
  * is dropped in the battlescape or picked up in the inventory screen.
- * @param flag True if the aliens dropped the item.
+ * @param flag - true if the aliens dropped the item
  */
 /* void BattleItem::setTurnFlag(bool flag)
 {
@@ -583,7 +580,7 @@ bool BattleItem::getXCOMProperty() const
 
 /**
  * Converts an unconscious body into a dead one.
- * @param rules - the rules of the corpse item to convert this item into
+ * @param rules - pointer to rules of the corpse item to convert this item into
  */
 void BattleItem::convertToCorpse(RuleItem* rules)
 {

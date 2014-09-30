@@ -96,15 +96,15 @@ UfoDetectedState::UfoDetectedState(
 	else
 		_window			= new Window(this, 224, 120, 16, 48, POPUP_BOTH);
 
-	_txtUfo			= new Text(100, 16, 26, 56);
+	_txtUfo			= new Text(90, 16, 26, 56);
 	_txtDetected	= new Text(80, 9, 32, 73);
 	_lstInfo		= new TextList(192, 33, 32, 85);
 	_btnCentre		= new TextButton(192, 16, 32, 124);
 	_btnIntercept	= new TextButton(88, 16, 32, 144);
 	_btnCancel		= new TextButton(88, 16, 136, 144);
 
-	_txtRegion		= new Text(104, 9, 126, 56);
-	_txtTexture		= new Text(104, 9, 126, 66);
+	_txtRegion		= new Text(114, 9, 116, 56);
+	_txtTexture		= new Text(114, 9, 116, 66);
 //	_txtShade		= new Text(60, 9, 170, 76);
 
 	if (hyper)
