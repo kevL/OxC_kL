@@ -540,7 +540,7 @@ void Projectile::applyAccuracy(
 					// If targetUnit is kneeled, then accuracy reduced by ~6%.
 					// This is a compromise, because vertical deviation is ~2 times less.
 					if (targetUnit->isKneeled())
-						acuPenalty += 0.08;
+						acuPenalty += 0.076;
 				}
 			}
 			else if (_action.actor->getOriginalFaction() != FACTION_HOSTILE) // targeting tile-stuffs.
@@ -550,11 +550,12 @@ void Projectile::applyAccuracy(
 				acuPenalty += (_action.autoShotCount - 1) * 0.03;
 
 
-			double deviation = 0.58;
+			double deviation = 0.21;
 			if (_action.actor->getFaction() == FACTION_HOSTILE)
-				deviation = 0.15; // give the poor aLiens an aiming advantage over xCom & Mc'd units
+				deviation -= 0.06; // give the poor aLiens an aiming advantage over xCom & Mc'd units
+			// DO IT IN RULESET! not here. Okay do it here because of faction/MC-thing ...
 
-			deviation /= accuracy - acuPenalty + 0.15;
+			deviation /= accuracy - acuPenalty + 0.13;
 			deviation = std::max(
 								0.01,
 								deviation);
