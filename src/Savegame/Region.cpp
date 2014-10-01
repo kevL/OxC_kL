@@ -137,8 +137,8 @@ void Region::newMonth()
 
 /**
  * kL. Handles recent alien activity in this region for GraphsState blink.
- * @param activity	- true to reset the startcounter
- * @param graphs	- not sure lol
+ * @param activity	- true to reset the startcounter (default true)
+ * @param graphs	- not sure lol (default false)
  */
 bool Region::recentActivity( // kL
 		bool activity,
@@ -154,8 +154,7 @@ bool Region::recentActivity( // kL
 		{
 			++_activityRecent;
 
-			if (_activityRecent == 24) // aLien bases show activity every 24 hrs.
-//			if (_activityRecent >= 12) // use this until my shorten kicks in ...
+			if (_activityRecent == 24) // min: aLien bases show activity every 24 hrs.
 				_activityRecent = -1;
 		}
 	}
@@ -168,8 +167,8 @@ bool Region::recentActivity( // kL
 
 /**
  * kL. Handles recent XCOM activity in this region for GraphsState blink.
- * @param activity	- true to reset the startcounter
- * @param graphs	- not sure lol
+ * @param activity	- true to reset the startcounter (default true)
+ * @param graphs	- not sure lol (default false)
  */
 bool Region::recentActivityXCOM( // kL
 		bool activity,
@@ -185,8 +184,7 @@ bool Region::recentActivityXCOM( // kL
 		{
 			++_activityRecentXCOM;
 
-			if (_activityRecentXCOM == 24) // aLien bases show activity every 24 hrs.
-//			if (_activityRecentXCOM >= 12) // use this until my shorten kicks in ...
+			if (_activityRecentXCOM == 24) // min: aLien bases show activity every 24 hrs. /shrug
 				_activityRecentXCOM = -1;
 		}
 	}

@@ -95,20 +95,20 @@ class DebriefingState
 
 private:
 	bool
-		_destroyBase,
+		_destroyXCOMBase,
 		_manageContainment,
 		_noContainment;
 	int
 		_limitsEnforced;
 
-	std::wstring _baseLabel; // kL
+	std::wstring _baseLabel;
 
 	Base* _base;
 	Country* _country;
 	Region* _region;
 	Ruleset* _rules;
 	Text
-		* _txtBaseLabel, // kL
+		* _txtBaseLabel,
 		* _txtItem,
 		* _txtQuantity,
 		* _txtRating,

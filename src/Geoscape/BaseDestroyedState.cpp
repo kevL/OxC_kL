@@ -18,7 +18,7 @@
  */
 
 #include "BaseDestroyedState.h"
-#include "Globe.h" // kL
+#include "Globe.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -37,7 +37,7 @@
 
 #include "../Savegame/AlienMission.h"
 #include "../Savegame/Base.h"
-#include "../Savegame/Country.h" // kL
+#include "../Savegame/Country.h"
 #include "../Savegame/Region.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Ufo.h"
@@ -48,10 +48,10 @@ namespace OpenXcom
 
 BaseDestroyedState::BaseDestroyedState(
 		Base* base,
-		Globe* globe) // kL
+		Globe* globe)
 	:
 		_base(base),
-		_globe(globe) // kL
+		_globe(globe)
 {
 	_screen = false;
 
@@ -175,13 +175,13 @@ void BaseDestroyedState::finish()
 		}
 	}
 
-	// kL_begin:
-	double
-		lon = (_base)->getLongitude(),
-		lat = (_base)->getLatitude();
 
 //	pts = (_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 50) + (diff * 200);
-	int aLienPts = 200 + (_game->getSavedGame()->getDifficulty() * 200);
+	const int aLienPts = 200 + (_game->getSavedGame()->getDifficulty() * 200);
+
+	const double
+		lon = _base->getLongitude(),
+		lat = _base->getLatitude();
 
 	for (std::vector<Region*>::iterator
 			i = _game->getSavedGame()->getRegions()->begin();
@@ -213,7 +213,7 @@ void BaseDestroyedState::finish()
 
 			break;
 		}
-	} // kL_end.
+	}
 }
 
 /**

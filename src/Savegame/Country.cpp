@@ -133,7 +133,7 @@ void Country::setFunding(int funding)
 	_funding.back() = funding;
 }
 
-/*
+/**
  * Keith Richards would be so proud
  * @return satisfaction level, 0 = alien pact, 1 = unhappy, 2 = satisfied, 3 = happy.
  */
@@ -182,16 +182,17 @@ const std::vector<int>& Country::getActivityAlien() const
 }
 
 /**
- * reset all the counters, calculate this month's funding,
- * set the change value for the month.
- * @param xcomTotal, the council's xcom score
- * @param alienTotal, the council's alien score
+ * Resets all the counters, calculates monthly funding, and
+ * sets the delta value for the month.
+ * @param xcomTotal		- the council's xcom score
+ * @param alienTotal	- the council's alien score
+ * @param diff			- game difficulty
  */
 
 void Country::newMonth(
 		const int xcomTotal,
 		const int alienTotal,
-		const int diff) // kL
+		const int diff)
 {
 	//Log(LOG_INFO) << "Country::newMonth()";
 	_satisfaction = 2;
@@ -301,8 +302,8 @@ bool Country::getPact() const
 
 /**
  * kL. Handles recent alien activity in this country for GraphsState blink.
- * @param activity	- true to reset the startcounter
- * @param graphs	- not sure lol
+ * @param activity	- true to reset the startcounter (default true)
+ * @param graphs	- not sure lol (default false)
  */
 bool Country::recentActivity( // kL
 		bool activity,
@@ -332,8 +333,8 @@ bool Country::recentActivity( // kL
 
 /**
  * kL. Handles recent XCOM activity in this country for GraphsState blink.
- * @param activity	- true to reset the startcounter
- * @param graphs	- not sure lol
+ * @param activity	- true to reset the startcounter (default true)
+ * @param graphs	- not sure lol (default false)
  */
 bool Country::recentActivityXCOM( // kL
 		bool activity,

@@ -5806,7 +5806,7 @@
 1406595105 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1411727019 f:\git\openxcom\src\battlescape\debriefingstate.h
+1412142758 f:\git\openxcom\src\battlescape\debriefingstate.h
 	<map>
 	<string>
 	<vector>
@@ -6242,7 +6242,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1411886749 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1412145177 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6314,7 +6314,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1411924261 f:\git\openxcom\src\savegame\country.h
+1412144606 f:\git\openxcom\src\savegame\country.h
 	<yaml-cpp/yaml.h>
 
 1410516787 source:f:\git\openxcom\src\battlescape\explosion.cpp
@@ -6662,7 +6662,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1412097841 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1412102520 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"TileEngine.h"
@@ -7451,7 +7451,7 @@
 1404353861 f:\git\openxcom\src\geoscape\basedestroyedstate.h
 	"../Engine/State.h"
 
-1410854567 source:f:\git\openxcom\src\geoscape\basedestroyedstate.cpp
+1412143550 source:f:\git\openxcom\src\geoscape\basedestroyedstate.cpp
 	"BaseDestroyedState.h"
 	"Globe.h"
 	"../Engine/Game.h"
@@ -7671,7 +7671,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1411714024 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1412145337 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7710,7 +7710,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1411714024 f:\git\openxcom\src\geoscape\dogfightstate.h
+1412109646 f:\git\openxcom\src\geoscape\dogfightstate.h
 	<vector>
 	<string>
 	"../Engine/State.h"

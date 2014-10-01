@@ -52,8 +52,9 @@ class DogfightState
 {
 
 private:
-	static const int _ufoBlobs[8][13][13];
-	static const int _projectileBlobs[4][6][3];
+	static const int
+		_ufoBlobs[8][13][13],
+		_projectileBlobs[4][6][3];
 
 	bool
 		_end,
@@ -132,9 +133,9 @@ private:
 	const std::string getTextureIcon(); // kL
 
 	/// kL. Plays a sound effect in stereo.
-	void playSoundFX(
+	void playSoundFX( // kL
 			const int sound,
-			const bool randAngle = false); // kL
+			const bool randAngle = false);
 
 
 	public:

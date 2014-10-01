@@ -93,7 +93,7 @@ private:
 		void newMonth(
 				const int xcomTotal,
 				const int alienTotal,
-				const int diff); // kL
+				const int diff);
 
 		/// are we signing a new pact?
 		bool getNewPact() const;
