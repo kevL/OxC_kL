@@ -445,10 +445,10 @@ items:
     costBuy: 235000
     costSell: 47000
     transferTime: 96
-    weight: 1
+#    weight: 1
     bigSprite: 43
-    floorSprite: 0
-    handSprite: 0
+#    floorSprite: 0
+#    handSprite: 0
     bulletSprite: 4
     fireSound: 2
     compatibleAmmo:
@@ -459,8 +459,8 @@ items:
     tuAimed: 83
     battleType: 1
     fixedWeapon: true
-    invWidth: 2
-    invHeight: 3
+#    invWidth: 2
+#    invHeight: 3
     turretType: 0
     value: 35
   - type: STR_HWP_CANNON_SHELLS
@@ -468,26 +468,26 @@ items:
     costBuy: 7250
     costSell: 1450
     transferTime: 48
-    weight: 1
+#    weight: 1
     bigSprite: -1
-    floorSprite: 12
+#    floorSprite: 12
     hitSound: 13
     hitAnimation: 26
     power: 92
     damageType: 1
     clipSize: 18
     battleType: 2
-    invWidth: 2
-    invHeight: 1
+#    invWidth: 2
+#    invHeight: 1
   - type: STR_TANK_ROCKET_LAUNCHER
     size: 5
     costBuy: 325000
     costSell: 64000
     transferTime: 96
-    weight: 1
+#    weight: 1
     bigSprite: 42
-    floorSprite: 0
-    handSprite: 0
+#    floorSprite: 0
+#    handSprite: 0
     bulletSprite: 0
     fireSound: 52
     compatibleAmmo:
@@ -498,8 +498,8 @@ items:
     tuAimed: 64
     battleType: 1
     fixedWeapon: true
-    invWidth: 2
-    invHeight: 3
+#    invWidth: 2
+#    invHeight: 3
     turretType: 1
     value: 40
   - type: STR_HWP_ROCKETS
@@ -507,25 +507,25 @@ items:
     costBuy: 13000
     costSell: 2400
     transferTime: 48
-    weight: 1
+#    weight: 1
     bigSprite: -1
-    floorSprite: 16
+#    floorSprite: 16
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
     hitAnimation: 0
     power: 115
     damageType: 3
     clipSize: 6
     battleType: 2
-    invWidth: 1
-    invHeight: 3
+#    invWidth: 1
+#    invHeight: 3
   - type: STR_TANK_LASER_CANNON
     size: 5
     costSell: 406290 # 1354300
     transferTime: 96
-    weight: 1
+#    weight: 1
     bigSprite: 54
-    floorSprite: 0
-    handSprite: 0
+#    floorSprite: 0
+#    handSprite: 0
     bulletSprite: 5
     fireSound: 11
     hitSound: 19
@@ -539,18 +539,18 @@ items:
     battleType: 1
     fixedWeapon: true
     clipSize: -1
-    invWidth: 2
-    invHeight: 3
+#    invWidth: 2
+#    invHeight: 3
     turretType: 2
     value: 45
   - type: STR_HOVERTANK_PLASMA
     size: 6
     costSell: 849330 # 2831100
     transferTime: 96
-    weight: 1
+#    weight: 1
     bigSprite: 40
-    floorSprite: 0
-    handSprite: 0
+#    floorSprite: 0
+#    handSprite: 0
     bulletSprite: 8
     fireSound: 18
     hitSound: 19
@@ -564,18 +564,18 @@ items:
     battleType: 1
     fixedWeapon: true
     clipSize: -1
-    invWidth: 2
-    invHeight: 3
+#    invWidth: 2
+#    invHeight: 3
     turretType: 3
     value: 50
   - type: STR_HOVERTANK_LAUNCHER
     size: 6
     costSell: 705540 # 2351800
     transferTime: 96
-    weight: 1
+#    weight: 1
     bigSprite: 40
-    floorSprite: 0
-    handSprite: 0
+#    floorSprite: 0
+#    handSprite: 0
     bulletSprite: 10
     fireSound: 53
     compatibleAmmo:
@@ -584,28 +584,28 @@ items:
     tuAimed: 52
     tuLaunch: 78 #kL
     battleType: 1
-    noReaction: true # kL
     fixedWeapon: true
+    noReaction: true # kL
     waypoint: true
-    invWidth: 2
-    invHeight: 3
+#    invWidth: 2
+#    invHeight: 3
     turretType: 4
     value: 55
   - type: STR_HWP_FUSION_BOMB
     size: 0.6
     costSell: 216240 # 720800
     transferTime: 48
-    weight: 1
+#    weight: 1
     bigSprite: -1
-    floorSprite: 35
+#    floorSprite: 35
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
     hitAnimation: 0
     power: 216
     damageType: 3
     clipSize: 6
     battleType: 2
-    invWidth: 1
-    invHeight: 1
+#    invWidth: 1
+#    invHeight: 1
     blastRadius: 12
   - type: STR_PISTOL
     size: 0.2

@@ -382,8 +382,8 @@ void MapDataSet::unloadData()
 
 /**
  * Loads the LOFTEMPS.DAT into the ruleset voxeldata.
- * @param filename, Filename of the DAT file.
- * @param voxelData, The ruleset.
+ * @param filename	- reference the filename of the DAT file
+ * @param voxelData	- pointer to a vector of voxelDatums
  */
 void MapDataSet::loadLOFTEMPS(
 		const std::string& filename,
@@ -399,7 +399,9 @@ void MapDataSet::loadLOFTEMPS(
 
 	Uint16 value;
 
-	while (mapFile.read((char*)& value, sizeof(value)))
+	while (mapFile.read(
+						(char*)& value,
+						sizeof(value)))
 	{
 		value = SDL_SwapLE16(value);
 		voxelData->push_back(value);

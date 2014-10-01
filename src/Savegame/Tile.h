@@ -204,7 +204,9 @@ protected:
 		/// Destroys a tile part.
 		bool destroy(int part);
 		/// Damages a tile part.
-		bool damage(int part, int power);
+		bool damage(
+				int part,
+				int power);
 
 		/// Sets a "virtual" explosive on this tile, to detonate later.
 		void setExplosive(

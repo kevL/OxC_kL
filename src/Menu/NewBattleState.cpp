@@ -553,7 +553,7 @@ void NewBattleState::initSave()
 		{
 			base->getItems()->addItem(*i, 1);
 			if (rule->getBattleType() != BT_NONE
-				&& !rule->isFixed()
+				&& rule->isFixed() == false
 				&& rule->getBigSprite() > -1)
 			{
 				_craft->getItems()->addItem(*i, 1);
@@ -581,6 +581,7 @@ void NewBattleState::initSave()
 void NewBattleState::btnOkClick(Action*)
 {
 	save();
+
 	if (_missionTypes[_cbxMission->getSelected()] != "STR_BASE_DEFENSE"
 		&& _craft->getNumSoldiers() == 0
 		&& _craft->getNumVehicles() == 0)

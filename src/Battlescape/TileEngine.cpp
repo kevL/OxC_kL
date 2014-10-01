@@ -1147,7 +1147,6 @@ bool TileEngine::canTargetUnit(
 	int
 		relX = static_cast<int>(floor(static_cast<float>( relPos.y) * normal + 0.5f)),
 		relY = static_cast<int>(floor(static_cast<float>(-relPos.x) * normal + 0.5f)),
-
 		sliceTargets[10] =
 	{
 		 0,		 0,
@@ -1157,7 +1156,7 @@ bool TileEngine::canTargetUnit(
 		-relY,	 relX
 	};
 
-	if (!potentialUnit->isOut())
+	if (potentialUnit->isOut() == false)
 		heightRange = potentialUnit->getHeight();
 	else
 		heightRange = 12;
@@ -1213,7 +1212,7 @@ bool TileEngine::canTargetUnit(
 							++y)
 					{
 						// voxel of hit must be inside of scanned box
-						if (_trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
+						if (   _trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
 							&& _trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
 							&& _trajectory.at(0).z >= targetMinHeight
 							&& _trajectory.at(0).z <= targetMaxHeight)
@@ -1226,7 +1225,7 @@ bool TileEngine::canTargetUnit(
 			}
 			else if (test == VOXEL_EMPTY
 				&& hypothetical
-				&& !_trajectory.empty())
+				&& _trajectory.empty() == false)
 			{
 				//Log(LOG_INFO) << "TileEngine::canTargetUnit() EXIT[2] true";
 				return true;
@@ -5264,10 +5263,11 @@ int TileEngine::voxelCheck(
 		MapData* dataTarget = tileTarget->getMapData(i);
 		if (dataTarget)
 		{
-			int x = 15 - posTarget.x %16;	// x-direction is reversed
-			int y = posTarget.y %16;		// y-direction is standard
+			int
+				x = 15 - posTarget.x %16,	// x-direction is reversed
+				y = posTarget.y %16;		// y-direction is standard
 
-			int LoftIdx = ((dataTarget->getLoftID((posTarget.z %24) / 2) * 16) + y); // wtf
+			const int LoftIdx = ((dataTarget->getLoftID((posTarget.z %24) / 2) * 16) + y); // wtf
 			if (LoftIdx < static_cast<int>(_voxelData->size()) // davide, http://openxcom.org/forum/index.php?topic=2934.msg32146#msg32146
 				&& _voxelData->at(LoftIdx) & (1 << x))
 			{
@@ -5305,10 +5305,11 @@ int TileEngine::voxelCheck(
 			if (posTarget.z > tz
 				&& posTarget.z <= tz + buTarget->getHeight()) // if hit is between foot- and hair-level voxel layers (z-axis)
 			{
-				int entry = 0;
+				int
+					entry = 0,
 
-				int x = posTarget.x %16; // where on the x-axis
-				int y = posTarget.y %16; // where on the y-axis
+					x = posTarget.x %16, // where on the x-axis
+					y = posTarget.y %16; // where on the y-axis
 				// That should be (8,8,10) as per BattlescapeGame::handleNonTargetAction(), if (_currentAction.type == BA_HIT)
 
 				if (buTarget->getArmor()->getSize() > 1) // for large units...
@@ -5317,7 +5318,7 @@ int TileEngine::voxelCheck(
 					entry = ((pTarget_tile.x - pTarget_bu.x) + ((pTarget_tile.y - pTarget_bu.y) * 2));
 				}
 
-				int LoftIdx = ((buTarget->getLoftemps(entry) * 16) + y);
+				const int LoftIdx = ((buTarget->getLoftemps(entry) * 16) + y);
 				//Log(LOG_INFO) << "LoftIdx = " << LoftIdx;
 				if (_voxelData->at(LoftIdx) & (1 << x)) // if the voxelData at LoftIdx is "1" solid:
 				{

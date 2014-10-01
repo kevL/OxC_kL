@@ -1,0 +1,129 @@
+items:
+  - type: STR_SCOUT_DRONE
+    size: 3
+    costBuy: 93000
+    costSell: 22500
+    transferTime: 72
+#    weight: 1
+    bigSprite: 63
+    bulletSprite: 3
+    fireSound: 88
+    compatibleAmmo:
+      - STR_SCOUT_SMOKE
+    accuracySnap: 100
+    tuSnap: 23
+    battleType: 1
+    maxRange: 0
+    fixedWeapon: true
+    noReaction: true
+#    invWidth: 2
+#    invHeight: 3
+    listOrder: 1098
+  - type: STR_SCOUT_SMOKE
+    size: 0.1
+    costBuy: 125
+    costSell: 40
+    transferTime: 48
+#    weight: 0
+    bigSprite: -1
+    hitSound: 13
+    hitAnimation: 26
+    power: 42
+    damageType: 9
+    battleType: 2
+    clipSize: 6
+#    invWidth: 1
+#    invHeight: 1
+    blastRadius: 3
+    listOrder: 1099
+  - type: STR_SMALL_TANK_CORPSE
+    weight: 25
+    bigSprite: 63
+    floorSprite: 84
+    battleType: 11
+    armor: 28
+    invWidth: 2
+    invHeight: 3
+    recover: false
+armors:
+  - type: SMALL_TANK_ARMOR
+    spriteSheet: SCOUT.PCK
+    corpseBattle:
+      - STR_SMALL_TANK_CORPSE
+    frontArmor: 40
+    sideArmor: 30
+    rearArmor: 15
+    underArmor: 15
+    drawingRoutine: 4
+    size: 1
+    damageModifier:
+      - 1.0 #none
+      - 1.0 #ap
+      - 0.4 #in
+      - 0.8 #he
+      - 1.0 #laser
+      - 1.0 #plasma
+      - 0.0 #stun
+      - 1.0 #melee
+      - 1.4 #acid
+      - 0.0 #smoke
+    loftempsSet: [ 4 ]
+units:
+  - type: STR_SCOUT_DRONE
+    race: STR_SCOUT_DRONE
+    rank: STR_LIVE_TERRORIST
+    stats:
+      tu: 65
+      stamina: 88
+      health: 35
+      bravery: 110
+      reactions: 90
+      firing: 100
+      throwing: 0
+      strength: 20
+      psiStrength: 200
+      psiSkill: 0
+      melee: 0
+    armor: SMALL_TANK_ARMOR
+    standHeight: 10
+    kneelHeight: 10
+    value: 20
+    deathSound: 23
+    moveSound: 14
+    energyRecovery: 100
+ufopaedia:
+  - id: STR_SCOUT_DRONE
+    type_id: 3
+    section: STR_HEAVY_WEAPONS_PLATFORMS
+    image_id: STR_SCOUT_DRONE_UFOPEDIA_IMAGE #not actually used
+    text: STR_SCOUT_DRONE_UFOPEDIA
+    weapon: STR_SCOUT_SMOKE
+    listOrder: 1199
+extraStrings:
+  - type: en-US
+    strings:
+      STR_SCOUT_DRONE: "Tank-scout"
+      STR_SMALL_TANK_CORPSE: "Scout Tank corpse"
+      STR_SCOUT_SMOKE: "Smoke cannister"
+      STR_SCOUT_DRONE_UFOPEDIA: "This small but rugged drone is designed for reconnaissance. Although lacking in offensive weaponry and the armor of larger HWPs it is fast and able to quickly scout enemy positions by acting as a spotter without risk to xCom personnel. It features a built-in smoke dispenser to conceal itself and xCom operatives in the field from incoming hostile fire."
+extraSounds:
+  - type: BATTLE.CAT
+    files:
+      88: Resources/Scoutdrone/pop.wav
+extraSprites:
+  - type: BIGOBS.PCK
+    files:
+      63: Resources/Scoutdrone/bigobs_63.png
+      64: Resources/Scoutdrone/bigobs_64.png
+  - type: FLOOROB.PCK
+    files:
+      84: Resources/Scoutdrone/floorob_84.png
+  - type: SCOUT.PCK
+    files:
+      0: Resources/Scoutdrone/Drone/
+  - type: STR_SCOUT_DRONE_UFOPEDIA_IMAGE #not actually used
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/ScoutDrone/SD_UP.png

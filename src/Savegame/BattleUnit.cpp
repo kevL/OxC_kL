@@ -564,12 +564,11 @@ void BattleUnit::setDirection(
 	_toDirection		= dir;
 
 	// kL_begin:
-	if (getTurretType() == -1
+	if (_turretType == -1
 		|| turret == true)
 	{
 		_directionTurret = dir;
-	}
-	// kL_end.
+	} // kL_end.
 }
 
 /**
@@ -1246,7 +1245,7 @@ int BattleUnit::getMorale() const
  * @param power			- the amount of damage to inflict
  * @param type			- the type of damage being inflicted (RuleItem.h)
  * @param ignoreArmor	- true for stun & smoke damage; no armor reduction, although vulnerability is still factored
- * @return, damage done after adjustment
+ * @return, damage done to this BattleUnit after adjustments
  */
 int BattleUnit::damage(
 		const Position& relative,
@@ -1255,93 +1254,99 @@ int BattleUnit::damage(
 		bool ignoreArmor)
 {
 	//Log(LOG_INFO) << "BattleUnit::damage(), ID " << getId();
-	UnitSide side = SIDE_FRONT;
-	UnitBodyPart bodypart = BODYPART_TORSO;
-
-	power = static_cast<int>(Round(static_cast<double>(power) * static_cast<double>(_armor->getDamageModifier(type))));
+	power = static_cast<int>(Round(
+					static_cast<double>(power) * static_cast<double>(_armor->getDamageModifier(type))));
 	//Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type << " ModifiedPower " << power;
 
 //	if (power < 1) // kL_note: this early-out messes with got-hit sFx below_
 //		return 0;
 
-	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage
+	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage instead.
 		type = DT_STUN;
 
-	if (relative == Position(0, 0, 0))
-		side = SIDE_UNDER;
-	else
+	UnitBodyPart bodypart = BODYPART_TORSO;
+
+	if (ignoreArmor == false)
 	{
-		int relativeDir;
+		UnitSide side = SIDE_FRONT;
 
-		const int
-			abs_x = abs(relative.x),
-			abs_y = abs(relative.y);
-
-		if (abs_y > abs_x * 2)
-			relativeDir = 8 + 4 * (relative.y > 0);
-		else if (abs_x > abs_y * 2)
-			relativeDir = 10 + 4 * (relative.x < 0);
+		if (relative == Position(0, 0, 0))
+			side = SIDE_UNDER;
 		else
 		{
-			if (relative.x < 0)
+			int relativeDir;
+
+			const int
+				abs_x = abs(relative.x),
+				abs_y = abs(relative.y);
+
+			if (abs_y > abs_x * 2)
+				relativeDir = 8 + 4 * (relative.y > 0);
+			else if (abs_x > abs_y * 2)
+				relativeDir = 10 + 4 * (relative.x < 0);
+			else
 			{
-				if (relative.y > 0)
-					relativeDir = 13;
+				if (relative.x < 0)
+				{
+					if (relative.y > 0)
+						relativeDir = 13;
+					else
+						relativeDir = 15;
+				}
 				else
-					relativeDir = 15;
+				{
+					if (relative.y > 0)
+						relativeDir = 11;
+					else
+						relativeDir = 9;
+				}
+			}
+
+			switch ((relativeDir - _direction) %8)
+			{
+				case 0:	side = SIDE_FRONT;									break;
+				case 1:	side = RNG::percent(50)? SIDE_FRONT: SIDE_RIGHT;	break;
+				case 2:	side = SIDE_RIGHT;									break;
+				case 3:	side = RNG::percent(50)? SIDE_REAR: SIDE_RIGHT;		break;
+				case 4:	side = SIDE_REAR;									break;
+				case 5:	side = RNG::percent(50)? SIDE_REAR: SIDE_LEFT; 		break;
+				case 6:	side = SIDE_LEFT;									break;
+				case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
+			}
+
+			if (relative.z > getHeight() - 4)
+				bodypart = BODYPART_HEAD;
+			else if (relative.z > 5)
+			{
+				switch (side)
+				{
+					case SIDE_LEFT:		bodypart = BODYPART_LEFTARM;	break;
+					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM;	break;
+
+					default:			bodypart = BODYPART_TORSO;
+				}
 			}
 			else
 			{
-				if (relative.y > 0)
-					relativeDir = 11;
-				else
-					relativeDir = 9;
+				switch (side)
+				{
+					case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
+					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
+
+					default:
+						bodypart = (UnitBodyPart)RNG::generate(
+															BODYPART_RIGHTLEG,
+															BODYPART_LEFTLEG);
+				}
 			}
 		}
 
-		switch ((relativeDir - _direction) %8)
-		{
-			case 0:	side = SIDE_FRONT;									break;
-			case 1:	side = RNG::percent(50)? SIDE_FRONT: SIDE_RIGHT;	break;
-			case 2:	side = SIDE_RIGHT;									break;
-			case 3:	side = RNG::percent(50)? SIDE_REAR: SIDE_RIGHT;		break;
-			case 4:	side = SIDE_REAR;									break;
-			case 5:	side = RNG::percent(50)? SIDE_REAR: SIDE_LEFT; 		break;
-			case 6:	side = SIDE_LEFT;									break;
-			case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
-		}
-
-		if (relative.z > getHeight() - 4)
-			bodypart = BODYPART_HEAD;
-		else if (relative.z > 5)
-		{
-			switch (side)
-			{
-				case SIDE_LEFT:		bodypart = BODYPART_LEFTARM;	break;
-				case SIDE_RIGHT:	bodypart = BODYPART_RIGHTARM;	break;
-
-				default:			bodypart = BODYPART_TORSO;
-			}
-		}
-		else
-		{
-			switch (side)
-			{
-				case SIDE_LEFT: 	bodypart = BODYPART_LEFTLEG; 	break;
-				case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
-
-				default:
-					bodypart = (UnitBodyPart)RNG::generate(
-														BODYPART_RIGHTLEG,
-														BODYPART_LEFTLEG);
-			}
-		}
-	}
-
-	if (!ignoreArmor)
-	{
-		int armor = getArmor(side);
-		setArmor(armor - (power / 10) - 1, side); // armor damage
+		const int armor = getArmor(side);
+		setArmor( // armor damage
+				std::max(
+						0,
+						armor - (power / 10) - 1),
+				side);
 
 		power -= armor; // subtract armor-before-damage from power.
 	}
@@ -1368,8 +1373,8 @@ int BattleUnit::damage(
 					_stunLevel += RNG::generate(0, power / 3); // kL_note: was, 4
 				}
 
-				if (!ignoreArmor)	// kinda funky: only wearers of armor-types-that-are
-									// -resistant-to-damage-types can take fatal wounds
+				if (ignoreArmor == false)	// kinda funky: only wearers of armor-types-that-are
+											// -resistant-to-damage-types can take fatal wounds
 				{
 					if (isWoundable()) // fatal wounds
 					{
@@ -3072,7 +3077,7 @@ void BattleUnit::heal(
 	if (part < 0 || part > 5)
 		return;
 
-	if (!_fatalWounds[part])
+	if (_fatalWounds[part] == false)
 		return;
 
 	_fatalWounds[part] -= wounds;
@@ -3256,7 +3261,8 @@ int BattleUnit::getFloatHeight() const
  * Gets this unit's LOFT id, one per unit tile.
  * This is one slice only, as it is repeated over the entire height of the unit;
  * that is, each tile has only one LOFT.
- * @return, The unit's Line of Fire Template id.
+ * @param entry - an entry in LofTemps set
+ * @return, this unit's Line of Fire Template id
  */
 int BattleUnit::getLoftemps(int entry) const
 {

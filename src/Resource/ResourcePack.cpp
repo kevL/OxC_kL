@@ -36,30 +36,31 @@
 namespace OpenXcom
 {
 
-int ResourcePack::BUTTON_PRESS			= 0;
-int ResourcePack::WINDOW_POPUP[3]		= {1, 2, 3};
+int
+	ResourcePack::BUTTON_PRESS			= 0,
+	ResourcePack::WINDOW_POPUP[3]		= {1, 2, 3},
 
-int ResourcePack::EXPLOSION_OFFSET		= 0;
+	ResourcePack::EXPLOSION_OFFSET		= 0,
 
-int ResourcePack::SMALL_EXPLOSION		= 2;
-int ResourcePack::DOOR_OPEN				= 3;
-int ResourcePack::LARGE_EXPLOSION		= 5;
-int ResourcePack::FLYING_SOUND			= 15;
-int ResourcePack::ITEM_RELOAD			= 17;
-int ResourcePack::SLIDING_DOOR_OPEN		= 20;
-int ResourcePack::SLIDING_DOOR_CLOSE	= 21;
-int ResourcePack::WALK_OFFSET			= 22;
-int ResourcePack::ITEM_DROP				= 38;
-int ResourcePack::ITEM_THROW			= 39;
-int ResourcePack::MALE_SCREAM[3]		= {41, 42, 43};
-int ResourcePack::FEMALE_SCREAM[3]		= {44, 45, 46};
+	ResourcePack::SMALL_EXPLOSION		= 2,
+	ResourcePack::DOOR_OPEN				= 3,
+	ResourcePack::LARGE_EXPLOSION		= 5,
+	ResourcePack::FLYING_SOUND			= 15,
+	ResourcePack::ITEM_RELOAD			= 17,
+	ResourcePack::SLIDING_DOOR_OPEN		= 20,
+	ResourcePack::SLIDING_DOOR_CLOSE	= 21,
+	ResourcePack::WALK_OFFSET			= 22,
+	ResourcePack::ITEM_DROP				= 38,
+	ResourcePack::ITEM_THROW			= 39,
+	ResourcePack::MALE_SCREAM[3]		= {41, 42, 43},
+	ResourcePack::FEMALE_SCREAM[3]		= {44, 45, 46},
 
-int ResourcePack::UFO_FIRE				= 9; // was 8
-int ResourcePack::UFO_HIT				= 12;
-int ResourcePack::UFO_CRASH				= 11; // was 10
-int ResourcePack::UFO_EXPLODE			= 11;
-int ResourcePack::INTERCEPTOR_HIT		= 10;
-int ResourcePack::INTERCEPTOR_EXPLODE	= 13;
+	ResourcePack::UFO_FIRE				= 9, // was 8
+	ResourcePack::UFO_HIT				= 12,
+	ResourcePack::UFO_CRASH				= 11, // was 10
+	ResourcePack::UFO_EXPLODE			= 11,
+	ResourcePack::INTERCEPTOR_HIT		= 10,
+	ResourcePack::INTERCEPTOR_EXPLODE	= 13;
 
 
 /**

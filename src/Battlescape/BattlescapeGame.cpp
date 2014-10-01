@@ -2682,8 +2682,8 @@ BattleUnit* BattlescapeGame::convertUnit(
 	std::ostringstream newArmor;
 	newArmor << getRuleset()->getUnit(convertType)->getArmor();
 
-	int difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty());
-	int month = _parentState->getGame()->getSavedGame()->getMonthsPassed(); // kL
+	const int difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty());
+	const int month = _parentState->getGame()->getSavedGame()->getMonthsPassed(); // kL
 	BattleUnit* convertedUnit = new BattleUnit(
 											getRuleset()->getUnit(convertType),
 											FACTION_HOSTILE,
@@ -2698,8 +2698,8 @@ BattleUnit* BattlescapeGame::convertUnit(
 //kL		convertedUnit->halveArmor();
 
 	getSave()->getTile(unit->getPosition())->setUnit(
-												convertedUnit,
-												_save->getTile(unit->getPosition() + Position(0, 0,-1)));
+													convertedUnit,
+													_save->getTile(unit->getPosition() + Position(0, 0,-1)));
 	convertedUnit->setPosition(unit->getPosition());
 	convertedUnit->setTimeUnits(0);
 //kL	convertedUnit->setDirection(3);
@@ -3166,7 +3166,7 @@ bool BattlescapeGame::takeItem(
 
 /**
  * Returns the action type that is reserved.
- * @return, The type of action that is reserved.
+ * @return, the type of action that is reserved
  */
 BattleActionType BattlescapeGame::getReservedAction()
 {
@@ -3175,9 +3175,9 @@ BattleActionType BattlescapeGame::getReservedAction()
 
 /**
  * Tallies the living units in the game and, if required, converts units into their spawn unit.
- * @param &liveAliens, The integer in which to store the live alien tally.
- * @param &liveSoldiers, The integer in which to store the live XCom tally.
- * @param convert, Should we convert infected units?
+ * @param liveAliens	- reference in which to store the live alien tally
+ * @param liveSoldiers	- reference in which to store the live XCom tally
+ * @param convert		- true to convert infected units
  */
 void BattlescapeGame::tallyUnits(
 		int& liveAliens,
@@ -3195,15 +3195,15 @@ void BattlescapeGame::tallyUnits(
 				j != _save->getUnits()->end();
 				++j)
 		{
-			if ((*j)->getHealth() > 0							// this appears to be just a safety, in case Soldier(s)
-				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)	// didn't become zombies when they ought have.
-			{													// Chryssalids inflict SPECAB_RESPAWN, in ExplosionBState (melee hits)
+			if ((*j)->getHealth() > 0							// this converts infected but still living victims at endTurn().
+				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)	// Chryssalids inflict SPECAB_RESPAWN, in ExplosionBState (melee hits)
+			{
 				//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
 
 //kL			(*j)->setSpecialAbility(SPECAB_NONE); // do this in convertUnit()
 				convertUnit(
-						*j,
-						(*j)->getSpawnUnit());
+							*j,
+							(*j)->getSpawnUnit());
 
 				j = _save->getUnits()->begin();
 			}
@@ -3215,7 +3215,7 @@ void BattlescapeGame::tallyUnits(
 			j != _save->getUnits()->end();
 			++j)
 	{
-		if (!(*j)->isOut())
+		if ((*j)->isOut() == false)
 		{
 			if ((*j)->getOriginalFaction() == FACTION_HOSTILE)
 			{

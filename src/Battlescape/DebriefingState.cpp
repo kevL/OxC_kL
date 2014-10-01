@@ -1229,9 +1229,8 @@ void DebriefingState::prepareDebriefing()
 				if ((*j)->getSpawnUnit().empty() == false)
 				{
 					Ruleset* rule = _rules;
-					corpseItem = rule
-									->getArmor(rule->getUnit((*j)->getSpawnUnit())->getArmor())
-									->getCorpseGeoscape();
+					corpseItem = rule->getArmor(rule->getUnit((*j)->getSpawnUnit())->getArmor())
+									 ->getCorpseGeoscape();
 				}
 
 				if (base->getAvailableContainment() > 0)

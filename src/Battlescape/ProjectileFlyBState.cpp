@@ -251,7 +251,7 @@ void ProjectileFlyBState::init()
 			|| _action.type == BA_AUTOSHOT		// kL
 			|| _action.type == BA_AIMEDSHOT))	// kL
 	{
-		//Log(LOG_INFO) << ". convert BA_SNAPSHOT to BA_HIT";
+		//Log(LOG_INFO) << ". convert shotType to BA_HIT";
 		_action.type = BA_HIT;
 	}
 
@@ -280,8 +280,9 @@ void ProjectileFlyBState::init()
 
 				return;
 			}
-			else if (_action.weapon->getRules()->getMaxRange() > 0 // in case -1 gets used for infinite.
-				&& _parent->getTileEngine()->distance(
+			else if ( //_action.weapon->getRules()->getMaxRange() > 0 &&	// in case -1 gets used for infinite, or no shot allowed.
+																			// But this is just stupid. RuleItem defaults _maxRange @ 200
+				_parent->getTileEngine()->distance(
 												_unit->getPosition(),
 												_action.target)
 											> _action.weapon->getRules()->getMaxRange())
@@ -307,10 +308,11 @@ void ProjectileFlyBState::init()
 			Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
 																		_action,
 																		NULL);
-			if (!validThrowRange(
+			if (validThrowRange(
 							&_action,
 							originVoxel,
-							_parent->getSave()->getTile(_action.target)))
+							_parent->getSave()->getTile(_action.target))
+						== false)
 			{
 				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
@@ -331,12 +333,13 @@ void ProjectileFlyBState::init()
 		break;
 		case BA_HIT:
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack()";
-			if (!_parent->getTileEngine()->validMeleeRange(
+			if (_parent->getTileEngine()->validMeleeRange(
 													_unit->getPosition(),
 													_unit->getDirection(),
 													_unit,
 													NULL,
-													&_action.target))
+													&_action.target)
+												== false)
 			{
 				//Log(LOG_INFO) << ". . . out of hit range, EXIT";
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
