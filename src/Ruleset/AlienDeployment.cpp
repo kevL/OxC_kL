@@ -96,15 +96,15 @@ AlienDeployment::~AlienDeployment()
  */
 void AlienDeployment::load(const YAML::Node& node)
 {
-	_type			= node["type"].as<std::string>(_type);
-	_data			= node["data"].as< std::vector<DeploymentData> >(_data);
-	_width			= node["width"].as<int>(_width);
-	_length			= node["length"].as<int>(_length);
-	_height			= node["height"].as<int>(_height);
-	_civilians		= node["civilians"].as<int>(_civilians);
-	_terrains		= node["terrains"].as<std::vector<std::string> >(_terrains);
-	_shade			= node["shade"].as<int>(_shade);
-	_nextStage		= node["nextStage"].as<std::string>(_nextStage);
+	_type			= node["type"]		.as<std::string>(_type);
+	_data			= node["data"]		.as< std::vector<DeploymentData> >(_data);
+	_width			= node["width"]		.as<int>(_width);
+	_length			= node["length"]	.as<int>(_length);
+	_height			= node["height"]	.as<int>(_height);
+	_civilians		= node["civilians"]	.as<int>(_civilians);
+	_terrains		= node["terrains"]	.as<std::vector<std::string> >(_terrains);
+	_shade			= node["shade"]		.as<int>(_shade);
+	_nextStage		= node["nextStage"]	.as<std::string>(_nextStage);
 }
 
 /**

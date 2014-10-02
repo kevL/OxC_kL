@@ -122,7 +122,7 @@ BattlescapeGenerator::~BattlescapeGenerator()
 
 /**
  * Sets the XCom craft involved in the battle.
- * @param craft Pointer to XCom craft.
+ * @param craft - pointer to XCom craft
  */
 void BattlescapeGenerator::setCraft(Craft* craft)
 {
@@ -132,7 +132,7 @@ void BattlescapeGenerator::setCraft(Craft* craft)
 
 /**
  * Sets the ufo involved in the battle.
- * @param ufo Pointer to UFO.
+ * @param ufo - pointer to UFO
  */
 void BattlescapeGenerator::setUfo(Ufo* ufo)
 {
@@ -152,7 +152,7 @@ void BattlescapeGenerator::setWorldTerrain(RuleTerrain* terrain) // kL
 /**
  * Sets the world texture where a ufo crashed or landed.
  * This is used to determine the terrain if worldTerrain is "".
- * @param texture Texture id of the polygon on the globe.
+ * @param texture - texture id of the polygon on the globe
  */
 void BattlescapeGenerator::setWorldTexture(int texture)
 {
@@ -165,7 +165,7 @@ void BattlescapeGenerator::setWorldTexture(int texture)
 /**
  * Sets the world shade where a ufo crashed or landed.
  * This is used to determine the battlescape light level.
- * @param shade Shade of the polygon on the globe.
+ * @param shade - shade of the polygon on the globe
  */
 void BattlescapeGenerator::setWorldShade(int shade)
 {
@@ -196,7 +196,7 @@ void BattlescapeGenerator::setAlienRace(const std::string& alienRace)
  * because we're using monthsPassed -1 for new battle in other sections of code.
  * - this value should be from 0 to the size of the itemLevel array in the ruleset (default 9).
  * - at a certain number of months higher item levels appear more and more and lower ones will gradually disappear
- * @param alienItemLevel AlienItemLevel.
+ * @param alienItemLevel - alienItemLevel
  */
 void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
 {
@@ -205,7 +205,7 @@ void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
 
 /**
  * Sets the XCom base involved in the battle.
- * @param base Pointer to XCom base.
+ * @param base - pointer to XCom base
  */
 void BattlescapeGenerator::setBase(Base* base)
 {
@@ -215,7 +215,7 @@ void BattlescapeGenerator::setBase(Base* base)
 
 /**
  * Sets the terror site involved in the battle.
- * @param terror Pointer to terror site.
+ * @param terror - pointer to terror site
  */
 void BattlescapeGenerator::setTerrorSite(TerrorSite* terror)
 {
@@ -387,7 +387,7 @@ void BattlescapeGenerator::run()
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
-	if (ruleDeploy->getTerrains().empty())
+	if (ruleDeploy->getTerrains().empty()) // UFO crashed/landed
 	{
 		//Log(LOG_INFO) << "Generator run() terrains NOT available: worldTexture = " << _worldTexture;
 		//Log(LOG_INFO) << "Generator run() terrains NOT available: worldTerrain = " << _worldTerrain->getName();
@@ -404,7 +404,7 @@ void BattlescapeGenerator::run()
 		else
 			_terrain = _worldTerrain; // kL
 	}
-	else
+	else // set-piece battle like Cydonia or Terror site or Base assault/defense
 	{
 		//Log(LOG_INFO) << "Generator run() terrains available = " << ruleDeploy->getTerrains().size();
 		size_t pick = RNG::generate(
@@ -3259,7 +3259,7 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 		int tex,
 		double lat)
 {
-	RuleTerrain* ret = NULL; // test
+//	RuleTerrain* ret = NULL; // test
 	RuleTerrain* terrain = NULL;
 
 	const std::vector<std::string>& terrains = _rules->getTerrainList();
@@ -3268,14 +3268,15 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 			i != terrains.end();
 			++i)
 	{
-		Log(LOG_INFO) << "Gen:getTerrain() terrain = " << (*i);
+		//Log(LOG_INFO) << "Gen:getTerrain() terrain = " << (*i);
 		terrain = _rules->getTerrain(*i);
+
 		for (std::vector<int>::iterator
 				j = terrain->getTextures()->begin();
 				j != terrain->getTextures()->end();
 				++j)
 		{
-			Log(LOG_INFO) << "Gen:getTerrain() texture = " << (*j);
+			//Log(LOG_INFO) << "Gen:getTerrain() texture = " << (*j);
 			if (*j == tex
 				&& (terrain->getHemisphere() == 0
 					|| (terrain->getHemisphere() < 0
@@ -3283,17 +3284,18 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 					|| (terrain->getHemisphere() > 0
 						&& lat >= 0.0)))
 			{
-				Log(LOG_INFO) << "Gen:getTerrain() return = " << (*i);
-//test			return terrain;
-				ret = terrain; // test
+				//Log(LOG_INFO) << "Gen:getTerrain() return = " << (*i);
+				return terrain;
+//				ret = terrain;	// test
+//				break;			// test
 			}
 		}
 	}
 
 	assert(0 && "No matching terrain for globe texture");
 
-//test	return terrain;
-	return ret; // test
+	return terrain;
+//	return ret; // test
 }
 
 /**

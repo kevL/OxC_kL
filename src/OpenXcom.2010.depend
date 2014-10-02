@@ -4553,7 +4553,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1404096023 f:\git\openxcom\src\ruleset\ruleregion.h
+1412279059 f:\git\openxcom\src\ruleset\ruleregion.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -7564,7 +7564,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1411714024 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1412284986 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	<sstream>
 	"../Battlescape/BattlescapeGenerator.h"
@@ -7582,12 +7582,16 @@
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/AlienDeployment.h"
+	"../Ruleset/City.h"
+	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleTerrain.h"
 	"../Ruleset/RuleUfo.h"
 	"../Savegame/AlienBase.h"
 	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
+	"../Savegame/Region.h"
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"

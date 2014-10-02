@@ -211,7 +211,7 @@ bool RuleRegion::insideRegion(
  * Gets the list of cities contained in this region.
  * @return Pointer to a list.
  */
-std::vector<City*> *RuleRegion::getCities()
+std::vector<City*>* RuleRegion::getCities()
 {
 	return &_cities;
 }
@@ -266,6 +266,9 @@ std::pair<double, double> RuleRegion::getRandomPoint(size_t zone) const
 	return std::make_pair(0.0, 0.0);
 }
 
+/**
+ *
+ */
 const std::vector<MissionZone>& RuleRegion::getMissionZones() const
 {
 	return _missionZones;

@@ -168,15 +168,15 @@ terrains:
         frequency: 2
   - name: CULTA
     textures: [1, 2, 3, 4]
-    hemisphere: -1
+#    hemisphere: -1
   - name: CULTAFARMA
     mapDataSets:
       - BLANKS
       - CULTIVAT
       - BARN
     textures: [2]
-    largeBlockLimit: 2
     hemisphere: -1
+    largeBlockLimit: 2
     mapBlocks:
       - name: CULTA00
         width: 10
@@ -349,6 +349,7 @@ terrains:
       - CULTIVAT
       - BARN
     textures: [3]
+    hemisphere: 1
     largeBlockLimit: 2
     mapBlocks:
       - name: CULTA00
@@ -924,7 +925,7 @@ terrains:
       - PORTURBITS
       - ROADS
       - URBITS
-    textures: [1]
+#    textures: [1]
     largeBlockLimit: 5
     civilianTypes:
       - MALE_CIVILIAN
@@ -1026,8 +1027,8 @@ terrains:
       - URBAN
       - FRNITURE
       - MADDECOR
-    textures: [2]
-    hemisphere: 1
+#    textures: [2]
+#    hemisphere: 1
     largeBlockLimit: 5
     civilianTypes:
       - MALE_CIVILIAN
@@ -1255,8 +1256,8 @@ terrains:
       - FRNITURE
       - URBITS
       - CULTIVAT
-    textures: [4]
-    hemisphere: 1
+#    textures: [4]
+#    hemisphere: 1
     largeBlockLimit: 2
     civilianTypes:
       - MALE_CIVILIAN

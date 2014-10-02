@@ -29,9 +29,9 @@ namespace OpenXcom
 
 /**
  * Initializes a city with certain data.
- * @param name Name of the city.
- * @param lon Longitude of the city.
- * @param lat Latitude of the city.
+ * @param name	- name of the city
+ * @param lon	- longitude of the city
+ * @param lat	- latitude of the city
  */
 City::City(
 		const std::string& name,
@@ -45,7 +45,7 @@ City::City(
 }
 
 /**
- *
+ * dTor.
  */
 City::~City()
 {
@@ -64,7 +64,7 @@ void City::load(const YAML::Node &node)
 
 /**
  * Returns the name of the city.
- * @return The city's name.
+ * @return, the city's name
  */
 std::string City::getName() const
 {
@@ -73,7 +73,7 @@ std::string City::getName() const
 
 /**
  * Returns the latitude coordinate of the city.
- * @return The city's latitude in radians.
+ * @return, the city's latitude in radians
  */
 double City::getLatitude() const
 {
@@ -82,7 +82,7 @@ double City::getLatitude() const
 
 /**
  * Returns the longitude coordinate of the city.
- * @return The city's longitude in radians.
+ * @return, the city's longitude in radians
  */
 double City::getLongitude() const
 {

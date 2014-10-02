@@ -197,7 +197,6 @@ BaseInfoState::BaseInfoState(
 		if (_game->getSavedGame()->getBases()->at(i) == _base)
 		{
 			_mini->setSelectedBase(i);
-
 			break;
 		}
 	}
@@ -331,7 +330,7 @@ void BaseInfoState::init()
 
 	_edtBase->setText(_base->getName());
 
-	for (std::vector<Region*>::iterator // Get region
+	for (std::vector<Region*>::iterator
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)
@@ -341,7 +340,6 @@ void BaseInfoState::init()
 										_base->getLatitude()))
 		{
 			_txtRegion->setText(tr((*i)->getRules()->getType()));
-
 			break;
 		}
 	}

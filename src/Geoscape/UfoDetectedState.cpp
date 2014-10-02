@@ -319,17 +319,17 @@ UfoDetectedState::UfoDetectedState(
 		}
 		else if (str == "POLARMOUNT")
 			str = "POLAR";
-		else if (str == "INDUSTRIALURBAN"
-			|| str == "MADURBAN"
-			|| str == "NATIVEURBAN"
-			|| str == "RAILYARDURBAN")
-//			|| str == "COMRCURBAN" // these are Terror sites only:
-//			|| str == "DAWNURBANA" // ie. not referenced by any of the Globe's polygon textures.
+//		else if (str == "COMRCURBAN"	// these are Terror sites only:
+//			|| str == "DAWNURBANA"		// ie. not referenced by any of the Globe's polygon textures.
 //			|| str == "DAWNURBANB"
+//			|| str == "INDUSTRIALURBAN"
+//			|| str == "MADURBAN"
+//			|| str == "NATIVEURBAN"
 //			|| str == "PORTURBAN"
-		{
-			str = "URBAN";
-		}
+//			|| str == "RAILYARDURBAN")
+//		{
+//			str = "URBAN";
+//		}
 
 //		_txtShade->setColor(Palette::blockOffset(8)+10);
 //		_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);

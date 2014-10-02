@@ -106,8 +106,9 @@ private:
 
 
 	public:
-		static const int CITY_MISSION_ZONE	= 3;
-		static const int ALIEN_BASE_ZONE	= 4;
+		static const int
+			CITY_MISSION_ZONE	= 3,
+			ALIEN_BASE_ZONE		= 4;
 
 		/// Creates a blank region ruleset.
 		RuleRegion(const std::string& type);

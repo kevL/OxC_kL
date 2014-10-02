@@ -2359,17 +2359,17 @@ const std::string DogfightState::getTextureIcon() // kL
 	}
 	else if (str == "POLARMOUNT")
 		str = "POLAR";
-	else if (str == "INDUSTRIALURBAN"
-		|| str == "MADURBAN"
-		|| str == "NATIVEURBAN"
-		|| str == "RAILYARDURBAN")
-//		|| str == "COMRCURBAN" // these are Terror sites only:
-//		|| str == "DAWNURBANA" // ie. not referenced by any of the Globe's polygon textures.
+//	else if (str == "COMRCURBAN"	// these are Terror sites only:
+//		|| str == "DAWNURBANA"		// ie. not referenced by any of the Globe's polygon textures.
 //		|| str == "DAWNURBANB"
+//		|| str == "INDUSTRIALURBAN"
+//		|| str == "MADURBAN"
+//		|| str == "NATIVEURBAN"
 //		|| str == "PORTURBAN"
-	{
-		str = "URBAN";
-	}
+//		|| str == "RAILYARDURBAN")
+//	{
+//		str = "URBAN";
+//	}
 
 	//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT : " << str;
 	return str;

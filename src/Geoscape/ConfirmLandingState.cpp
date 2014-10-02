@@ -41,6 +41,9 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/AlienDeployment.h" // kL
+#include "../Ruleset/City.h" // kL
+#include "../Ruleset/RuleRegion.h" // kL
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleTerrain.h" // kL
 #include "../Ruleset/RuleUfo.h" // kL
@@ -48,6 +51,7 @@
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/Region.h" // kL
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Target.h"
@@ -60,7 +64,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Confirm Landing window.
- * @param game		- pointer to the core game
  * @param craft 	- pointer to the craft to confirm
  * @param texture	- texture of the landing site
  * @param shade		- shade of the landing site
@@ -124,6 +127,9 @@ ConfirmLandingState::ConfirmLandingState(
 	_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtTexture->setAlign(ALIGN_RIGHT);
 
+//	if (texture < 0)
+//		texture = 0; -> _texture, too.
+
 	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
 	if (ufo != NULL) // NOTE: all this terrain stuff can and may fall through to BattlescapeGenerator.
 	{
@@ -133,43 +139,93 @@ ConfirmLandingState::ConfirmLandingState(
 		if (terrain == "")
 		{
 			//Log(LOG_INFO) << ". . terrain NOT valid";
-			std::vector<RuleTerrain*> choice;
-			double lat = craft->getLatitude();
-			if (texture < 0)
-				texture = 0;
+			const double
+				lon = craft->getLongitude(),
+				lat = craft->getLatitude();
+			bool city = false;
 
-			const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
-			for (std::vector<std::string>::const_iterator
-					i = terrains.begin();
-					i != terrains.end();
+			for (std::vector<Region*>::iterator
+					i = _game->getSavedGame()->getRegions()->begin();
+					i != _game->getSavedGame()->getRegions()->end()
+						&& city == false;
 					++i)
 			{
-				//Log(LOG_INFO) << ". . . terrain = " << *i;
-				_terrain = _game->getRuleset()->getTerrain(*i);
-				for (std::vector<int>::iterator
-						j = _terrain->getTextures()->begin();
-						j != _terrain->getTextures()->end();
-						++j)
+				if ((*i)->getRules()->insideRegion(
+												lon,
+												lat))
 				{
-					//Log(LOG_INFO) << ". . . . texture = " << *j;
-					if (*j == texture
-						&& (_terrain->getHemisphere() == 0
-							|| (_terrain->getHemisphere() < 0
-								&& lat < 0.0)
-							|| (_terrain->getHemisphere() > 0
-								&& lat >= 0.0)))
+					for (std::vector<City*>::iterator
+							j = (*i)->getRules()->getCities()->begin();
+							j != (*i)->getRules()->getCities()->end()
+								&& city == false;
+							++j)
 					{
-						//Log(LOG_INFO) << ". . . . . _terrain = " << *i;
-						choice.push_back(_terrain);
+						if (AreSame(lon, (*j)->getLongitude())
+							&& AreSame(lat, (*j)->getLatitude()))
+						{
+							city = true;
+						}
 					}
 				}
 			}
 
-			size_t pick = static_cast<size_t>(RNG::generate(
-														0,
-														static_cast<int>(choice.size()) - 1));
-			_terrain = choice.at(pick);
-			//Log(LOG_INFO) << ". . pick = " << pick << ", choice = " << _terrain->getName();
+			if (city) // use these terrains for city missions.
+			{
+				AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment("STR_TERROR_MISSION");
+				size_t pick = RNG::generate(
+										0,
+										ruleDeploy->getTerrains().size() - 1);
+				_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
+
+				if (lat < 0.0 // northern hemisphere
+					&& _terrain->getName() == "NATIVEURBAN")
+				{
+					_terrain = _game->getRuleset()->getTerrain("DAWNURBANA");
+				}
+				else if (lat > 0.0 // southern hemisphere
+					&& _terrain->getName() == "DAWNURBANA")
+				{
+					_terrain = _game->getRuleset()->getTerrain("NATIVEURBAN");
+				}
+			}
+			else
+			{
+				std::vector<RuleTerrain*> choice;
+
+				const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
+				for (std::vector<std::string>::const_iterator
+						i = terrains.begin();
+						i != terrains.end();
+						++i)
+				{
+					//Log(LOG_INFO) << ". . . terrain = " << *i;
+					_terrain = _game->getRuleset()->getTerrain(*i);
+
+					for (std::vector<int>::iterator
+							j = _terrain->getTextures()->begin();
+							j != _terrain->getTextures()->end();
+							++j)
+					{
+						//Log(LOG_INFO) << ". . . . texture = " << *j;
+						if (*j == texture
+							&& (_terrain->getHemisphere() == 0
+								|| (_terrain->getHemisphere() < 0
+									&& lat < 0.0)
+								|| (_terrain->getHemisphere() > 0
+									&& lat >= 0.0)))
+						{
+							//Log(LOG_INFO) << ". . . . . _terrain = " << *i;
+							choice.push_back(_terrain);
+						}
+					}
+				}
+
+				size_t pick = static_cast<size_t>(RNG::generate(
+															0,
+															static_cast<int>(choice.size()) - 1));
+				_terrain = choice.at(pick);
+				//Log(LOG_INFO) << ". . pick = " << pick << ", choice = " << _terrain->getName();
+			}
 
 			ufo->setTerrain(_terrain->getName());
 			_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(_terrain->getName())));
