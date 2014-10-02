@@ -3748,11 +3748,13 @@ void BattlescapeState::updateExpData() // kL
 
 	BattleUnit* unit = _save->getSelectedUnit();
 
-//	if (unit == NULL
+	if (unit == NULL
+		|| unit->getType() != "SOLDIER")
 //		|| unit->getOriginalFaction() != FACTION_PLAYER
 //		|| unit->getTurretType() > -1)
-	if (unit->getType() != "SOLDIER")
+	{
 		return;
+	}
 
 	std::vector<std::wstring> xpType;
 	xpType.push_back(L"f ");

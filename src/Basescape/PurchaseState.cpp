@@ -63,7 +63,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Purchase/Hire screen.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the base to get info from
  */
 PurchaseState::PurchaseState(
 		Base* base)
@@ -224,6 +224,7 @@ PurchaseState::PurchaseState(
 					L"0");
 	_qtys.push_back(0);
 
+
 	_itemOffset = 3;
 
 	// Add craft-types to purchase list.
@@ -280,7 +281,7 @@ PurchaseState::PurchaseState(
 
 		// Special handling for treating craft weapons as items
 		RuleCraftWeapon* cwRule = _game->getRuleset()->getCraftWeapon(*i);
-		RuleItem* launcher = _game->getRuleset()->getItem(cwRule->getLauncherItem()); // kL
+		RuleItem* launcher = _game->getRuleset()->getItem(cwRule->getLauncherItem());
 
 		if (launcher != NULL
 			&& launcher->getBuyCost() > 0
@@ -290,6 +291,7 @@ PurchaseState::PurchaseState(
 			_items.push_back(launcher->getType());
 
 			std::wstring item = tr(launcher->getType());
+
 			// kL_begin: Add qty of craft weapons in transit to Purchase screen stores.
 			int tQty = _base->getItems()->getItem(launcher->getType()); // Gets the item type. Each item has a unique type.
 			for (std::vector<Transfer*>::const_iterator
@@ -306,8 +308,7 @@ PurchaseState::PurchaseState(
 			if (clipSize > 0)
 				item = item + L" (" + Text::formatNumber(clipSize) + L")";
 
-//kL		ss5 << _base->getItems()->getItem(launcher->getType());
-			ss5 << tQty; // kL
+			ss5 << tQty;
 			_lstItems->addRow(
 							4,
 							item.c_str(),
@@ -323,14 +324,13 @@ PurchaseState::PurchaseState(
 				if (*j == launcher->getType())
 				{
 					items.erase(j);
-
 					break;
 				}
 			}
 		}
 
 		// Handle craft weapon ammo.
-		RuleItem* clip = _game->getRuleset()->getItem(cwRule->getClipItem()); // kL
+		RuleItem* clip = _game->getRuleset()->getItem(cwRule->getClipItem());
 
 		if (clip != NULL
 			&& clip->getBuyCost() > 0
@@ -356,8 +356,7 @@ PurchaseState::PurchaseState(
 			if (clipSize > 1)
 				item = item + L"s (" + Text::formatNumber(clipSize) + L")";
 
-//kL		ss6 << _base->getItems()->getItem(clip->getType());
-			ss6 << tQty; // kL
+			ss6 << tQty;
 
 			item.insert(0, L"  ");
 			_lstItems->addRow(
@@ -366,7 +365,7 @@ PurchaseState::PurchaseState(
 							Text::formatFunding(clip->getBuyCost()).c_str(),
 							ss6.str().c_str(),
 							L"0");
-			_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15)+6); // kL
+			_lstItems->setRowColor(_qtys.size() - 1, Palette::blockOffset(15)+6);
 
 			for (std::vector<std::string>::iterator
 					j = items.begin();
@@ -376,7 +375,6 @@ PurchaseState::PurchaseState(
 				if (*j == clip->getType())
 				{
 					items.erase(j);
-
 					break;
 				}
 			}
@@ -395,6 +393,7 @@ PurchaseState::PurchaseState(
 		RuleItem* itemRule = _game->getRuleset()->getItem(*i);
 
 		if (itemRule->getBuyCost() != 0
+			&& _game->getSavedGame()->isResearched(itemRule->getRequirements())
 			&& !isExcluded(*i))
 		{
 			_qtys.push_back(0);
@@ -453,15 +452,13 @@ PurchaseState::PurchaseState(
 
 							std::wstring tv_a = tr(ammoRule->getType());
 							if (item == tv_a)
-							{
 								tQty += (*v)->getAmmo();
-							}
 						}
 					}
 				}
 			} // kL_end.
 
-			ss7 << tQty; // kL
+			ss7 << tQty;
 
 			if (itemRule->getBattleType() == BT_AMMO)		// #2, weapon clips & HWP rounds
 //kL			 || (itemRule->getBattleType() == BT_NONE	// #0, craft weapon rounds HANDLED ABOVE^
@@ -505,7 +502,7 @@ PurchaseState::PurchaseState(
 		}
 	}
 
-	ss8 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores(); // kL
+	ss8 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
 	_txtSpaceUsed->setText(ss8.str());
 
 	_timerInc = new Timer(250);
@@ -531,8 +528,8 @@ void PurchaseState::think()
 {
 	State::think();
 
-	_timerInc->think(this, 0);
-	_timerDec->think(this, 0);
+	_timerInc->think(this, NULL);
+	_timerDec->think(this, NULL);
 }
 
 /**
@@ -561,7 +558,7 @@ bool PurchaseState::isExcluded(const std::string& item)
 void PurchaseState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() - _total);
-	_base->setCashSpent(_total); // kL
+	_base->setCashSpent(_total);
 
 	for (size_t
 			i = 0;
@@ -579,11 +576,6 @@ void PurchaseState::btnOkClick(Action*)
 				{
 					Transfer* t = new Transfer(_game->getRuleset()->getPersonnelTime());
 					t->setSoldier(_game->getRuleset()->genSoldier(_game->getSavedGame()));
-//					t->setSoldier(new Soldier(
-//											_game->getRuleset()->getSoldier("XCOM"),
-//											_game->getRuleset()->getArmor("STR_ARMOR_NONE_UC"),
-//											&_game->getRuleset()->getPools(),
-//											_game->getSavedGame()->getId("STR_SOLDIER")));
 
 					_base->getTransfers()->push_back(t);
 				}
@@ -602,8 +594,8 @@ void PurchaseState::btnOkClick(Action*)
 
 				_base->getTransfers()->push_back(t);
 			}
-			else if (i >= 3
-				&& i < 3 + _crafts.size()) // Buy crafts
+			else if (i >= 3 // Buy crafts
+				&& i < 3 + _crafts.size())
 			{
 				for (int
 						c = 0;
@@ -739,8 +731,8 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
  */
 void PurchaseState::lstItemsMousePress(Action* action)
 {
-	if (Options::changeValueByMouseWheel < 1)	// kL
-		return;									// kL
+	if (Options::changeValueByMouseWheel < 1)
+		return;
 
 	_sel = _lstItems->getSelectedRow();
 
@@ -923,7 +915,10 @@ void PurchaseState::decrease()
 void PurchaseState::decreaseByValue(int change)
 {
 	if (change < 1
-		|| _qtys[_sel] < 1) return;
+		|| _qtys[_sel] < 1)
+	{
+		return;
+	}
 
 	change = std::min(_qtys[_sel], change);
 
@@ -981,15 +976,12 @@ void PurchaseState::updateItemStrings()
 	if (std::abs(_iQty) > 0.05)
 	{
 		ss1 << "(";
-//kL		if (_iQty > 0.05) ss1 << "+";
-		if (_iQty > 0.0) ss1 << "+"; // kL, >.05 already established; that just re-introduced a rounding error
+		if (_iQty > 0.0) ss1 << "+";
 		ss1 << std::fixed << std::setprecision(1) << _iQty << ")";
 	}
-//kL	ss1 << ":" << _base->getAvailableStores();
-//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
-	_txtSpaceUsed->setText(ss1.str()); // kL
+	_txtSpaceUsed->setText(ss1.str());
 
-	_btnOk->setVisible(_total > 0); // kL
+	_btnOk->setVisible(_total > 0);
 }
 
 }

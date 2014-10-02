@@ -291,7 +291,7 @@ void BattlescapeGenerator::nextStage()
 				(*j)->setTurnsExposed(255);
 				(*j)->getVisibleTiles()->clear();
 
-				if (!selectedFirstSoldier
+				if (selectedFirstSoldier == false
 					&& (*j)->getGeoscapeSoldier())
 				{
 					_save->setSelectedUnit(*j);
@@ -319,7 +319,7 @@ void BattlescapeGenerator::nextStage()
 					(*j)->setVisible(false);
 
 					if ((*j)->getId() > highestSoldierID)
-							highestSoldierID = (*j)->getId();
+						highestSoldierID = (*j)->getId();
 
 					(*j)->prepareNewTurn();
 				}
@@ -333,7 +333,7 @@ void BattlescapeGenerator::nextStage()
 			j != _save->getItems()->end();
 			++j)
 	{
-		if (!(*j)->getOwner()
+		if ((*j)->getOwner() == NULL
 			|| (*j)->getOwner()->getId() > highestSoldierID)
 		{
 			(*j)->setTile(NULL);

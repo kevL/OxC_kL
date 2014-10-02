@@ -46,6 +46,17 @@ Unit::Unit(const std::string& type)
 		_isMechanical(false)
 {
 }
+// kL_note about _isMechanical:
+// This var subsumes several more detailed ideas:
+// _isTrackedVehicle
+// _isPsiAttackable / _isSentient
+// _canRevive (from status_Unconscious)
+// _canChangeMorale (see isFearable())
+// _isInfectable (can have a spawnUnit string set on it)
+// _isMetal (cannot catch fire)
+//
+// etc.
+
 
 /**
  * dTor.

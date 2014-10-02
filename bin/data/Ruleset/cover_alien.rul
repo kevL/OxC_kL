@@ -181,12 +181,12 @@ units:
       tu: 65
       stamina: 100
       health: 40
-      bravery: 80
+      bravery: 60
       reactions: 64
       firing: 64
       throwing: 76
       strength: 50
-      psiStrength: 50
+      psiStrength: 60
       psiSkill: 0
       melee: 70
     armor: WASPITE_ARMOR0
@@ -198,30 +198,6 @@ units:
     moveSound: 15
     intelligence: 5
     aggression: 2
-  - type: STR_WASPITE_ENGINEER
-    race: STR_WASPITE
-    rank: STR_LIVE_ENGINEER
-    stats:
-      tu: 65
-      stamina: 100
-      health: 40
-      bravery: 80
-      reactions: 68
-      firing: 68
-      throwing: 80
-      strength: 50
-      psiStrength: 50
-      psiSkill: 0
-      melee: 70
-    armor: WASPITE_ARMOR1
-    standHeight: 21
-    kneelHeight: 16
-    floatHeight: 2
-    value: 18
-    deathSound: 51
-    moveSound: 15
-    intelligence: 7
-    aggression: 2
   - type: STR_WASPITE_NAVIGATOR
     race: STR_WASPITE
     rank: STR_LIVE_NAVIGATOR
@@ -229,14 +205,14 @@ units:
       tu: 65
       stamina: 100
       health: 40
-      bravery: 80
+      bravery: 70
       reactions: 64
       firing: 64
       throwing: 76
       strength: 50
-      psiStrength: 50
+      psiStrength: 65
       psiSkill: 0
-      melee: 70
+      melee: 65
     armor: WASPITE_ARMOR0
     standHeight: 21
     kneelHeight: 16
@@ -258,9 +234,9 @@ units:
       firing: 64
       throwing: 76
       strength: 50
-      psiStrength: 50
+      psiStrength: 70
       psiSkill: 0
-      melee: 70
+      melee: 50
     armor: WASPITE_ARMOR1
     standHeight: 21
     kneelHeight: 16
@@ -270,6 +246,30 @@ units:
     moveSound: 15
     intelligence: 6
     aggression: 1
+  - type: STR_WASPITE_ENGINEER
+    race: STR_WASPITE
+    rank: STR_LIVE_ENGINEER
+    stats:
+      tu: 65
+      stamina: 100
+      health: 40
+      bravery: 80
+      reactions: 68
+      firing: 68
+      throwing: 80
+      strength: 50
+      psiStrength: 75
+      psiSkill: 0
+      melee: 70
+    armor: WASPITE_ARMOR1
+    standHeight: 21
+    kneelHeight: 16
+    floatHeight: 2
+    value: 18
+    deathSound: 51
+    moveSound: 15
+    intelligence: 7
+    aggression: 2
   - type: STR_WASPITE_LEADER
     race: STR_WASPITE
     rank: STR_LIVE_LEADER
@@ -277,14 +277,14 @@ units:
       tu: 70
       stamina: 100
       health: 40
-      bravery: 80
+      bravery: 90
       reactions: 72
       firing: 72
       throwing: 80
       strength: 50
-      psiStrength: 55
+      psiStrength: 85
       psiSkill: 0
-      melee: 70
+      melee: 75
     armor: WASPITE_ARMOR1
     standHeight: 21
     kneelHeight: 16
@@ -301,14 +301,14 @@ units:
       tu: 75
       stamina: 100
       health: 40
-      bravery: 80
+      bravery: 100
       reactions: 76
       firing: 76
       throwing: 80
       strength: 50
-      psiStrength: 60
+      psiStrength: 95
       psiSkill: 0
-      melee: 70
+      melee: 80
     armor: WASPITE_ARMOR2
     standHeight: 21
     kneelHeight: 16
@@ -329,18 +329,19 @@ units:
       firing: 0
       throwing: 0
       strength: 30
-      psiStrength: 100
+      psiStrength: 200
       psiSkill: 0
       melee: 80
     armor: CYBERMITE_ARMOR
     standHeight: 6
-    kneelHeight: 5
+    kneelHeight: 6
     value: 25
     deathSound: 23
     intelligence: 2
     aggression: 2
     specab: 1
     livingWeapon: true
+    isMechanical: true
 alienRaces:
   - id: STR_WASPITE
     members:
@@ -389,7 +390,7 @@ ufopaedia:
     text: STR_CYBERMITE_AUTOPSY_UFOPAEDIA
     text_width: 158
     listOrder: 9351
-alienMissions:
+alienMissions: #kL_note: have not doubled the month-value yet
   - type: STR_ALIEN_RESEARCH
     raceWeights:
       0:
@@ -490,26 +491,26 @@ extraSprites:
     files:
       0: Resources/cover_alien/ufopaedia_CYBERMITE.gif
 extraStrings:
-  - type: en-GB
-    strings:
-      STR_WASPITE: Waspite
-      STR_CYBERMITE: Cybermite
-      STR_CYBERMITE_TERRORIST: Cybermite Terrorist
-      STR_WASPITE_SOLDIER: Waspite Soldier
-      STR_WASPITE_MEDIC: Waspite Medic
-      STR_WASPITE_ENGINEER: Waspite Engineer
-      STR_WASPITE_NAVIGATOR: Waspite Navigator
-      STR_WASPITE_LEADER: Waspite Leader
-      STR_WASPITE_COMMANDER: Waspite Commander
-      STR_WASPITE_CORPSE: Waspite Corpse
-      STR_CYBERMITE_CORPSE: Cybermite Corpse
-      STR_WASPITE_AUTOPSY: Waspite autopsy
-      STR_CYBERMITE_AUTOPSY: Cybermite autopsy
-      STR_WASPITE_UFOPAEDIA: Waspites are elite terror agents and combatants. They are a very aggressive, genetically engineered and cybernetically enhanced, making them fearsome enemies. Their overall frailty though hints to an artillery role, rather than infantry. The spiral device that replaces their original bodies generates an anti-gravity field, enabling them float through the air.
-      STR_WASPITE_AUTOPSY_UFOPAEDIA: The anatomy of this creature verges on insanity. The body consists of a spiral life support system device, combined with a symbiotic, bioengineered plant. Grafted on to the body, are a pair of mechanical arms and the insect-like head of the creature, which is presumably the only piece left of the original species. The plant portion of the body is vulnerable to fire.
-      STR_CYBERMITE_UFOPAEDIA: This miniature robot is an automated terror weapon and represents the pinnacle of the alien robotics. As soon as the powerful optical sensor spots a target, the creature runs to it and attacks. The miniaturized elerium core is set to ignite and explode once damaged enough, making the act of killing the creature deadly for anyone nearby.
-      STR_CYBERMITE_AUTOPSY_UFOPAEDIA: The most prominent feature of incredibly complex robot is its weapon, an alloy sting linked to a miniaturized tank which, from the traces found, is presumably filled with a potent toxin. The power core is too damaged to be fully understood but it seems to be designed to be very susceptible to damage and its likely this will cause it to explode.
   - type: en-US
+    strings:
+      STR_WASPITE: "Waspite"
+      STR_CYBERMITE: "Cybermite"
+      STR_CYBERMITE_TERRORIST: "Cybermite Terrorist"
+      STR_WASPITE_SOLDIER: "Waspite Soldier"
+      STR_WASPITE_MEDIC: "Waspite Medic"
+      STR_WASPITE_ENGINEER: "Waspite Engineer"
+      STR_WASPITE_NAVIGATOR: "Waspite Navigator"
+      STR_WASPITE_LEADER: "Waspite Leader"
+      STR_WASPITE_COMMANDER: "Waspite Commander"
+      STR_WASPITE_CORPSE: "Waspite Corpse"
+      STR_CYBERMITE_CORPSE: "Cybermite Corpse"
+      STR_WASPITE_AUTOPSY: "Waspite autopsy"
+      STR_CYBERMITE_AUTOPSY: "Cybermite autopsy"
+      STR_WASPITE_UFOPAEDIA: "Waspites are elite terror agents and combatants. They are a very aggressive, genetically engineered and cybernetically enhanced, making them fearsome enemies. Their overall frailty though hints to an artillery role, rather than infantry. The spiral device that replaces their original bodies generates an anti-gravity field, enabling them float through the air."
+      STR_WASPITE_AUTOPSY_UFOPAEDIA: "The anatomy of this creature verges on insanity. The body consists of a spiral life support system device, combined with a symbiotic, bioengineered plant. Grafted on to the body, are a pair of mechanical arms and the insect-like head of the creature, which is presumably the only piece left of the original species. The plant portion of the body is vulnerable to fire."
+      STR_CYBERMITE_UFOPAEDIA: "This miniature robot is an automated terror weapon and represents the pinnacle of the alien robotics. As soon as the powerful optical sensor spots a target, the creature runs to it and attacks. The miniaturized elerium core is set to ignite and explode once damaged enough, making the act of killing the creature deadly for anyone nearby."
+      STR_CYBERMITE_AUTOPSY_UFOPAEDIA: "The most prominent feature of incredibly complex robot is its weapon, an alloy sting linked to a miniaturized tank which, from the traces found, is presumably filled with a potent toxin. The power core is too damaged to be fully understood but it seems to be designed to be very susceptible to damage and its likely this will cause it to explode."
+  - type: en-GB
     strings:
       STR_WASPITE: Waspite
       STR_CYBERMITE: Cybermite

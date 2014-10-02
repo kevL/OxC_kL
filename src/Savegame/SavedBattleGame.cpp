@@ -1669,7 +1669,6 @@ Node* SavedBattleGame::getPatrolNode(
 		//Log(LOG_INFO) << " . return bestNode";
 		return bestNode;
 	}
-
 	//Log(LOG_INFO) << "SavedBattleGame::getPatrolNode() EXIT";
 }
 
@@ -1845,7 +1844,7 @@ void SavedBattleGame::prepareNewTurn()
 	}
 
 	reviveUnconsciousUnits();
-	// could-should do a calcFov(allUnits) here.
+	getTileEngine()->recalculateFOV(); // kL
 }
 
 /**

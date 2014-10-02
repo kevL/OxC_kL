@@ -2188,11 +2188,11 @@ void BattleUnit::prepareNewTurn()
 	}
 
 	if (_stunLevel > 0 // note ... mechanical creatures should no longer be getting stunned.
-		&& _armor->getSize() == 1
+		&& (_armor->getSize() == 1
+			|| isOut() == false)
 		&& (_type == "SOLDIER"
 			|| (_unitRules
 				&& _unitRules->getMechanical() == false)))
-//			|| isOut() == false))
 	{
 		healStun(1); // recover stun 1pt/turn
 	}
@@ -2224,8 +2224,8 @@ void BattleUnit::prepareNewTurn()
  */
 void BattleUnit::moraleChange(int change)
 {
-	if (isFearable() == false
-		&& change < 1) // kL
+	if (isFearable() == false)
+//		&& change < 1) // kL
 	{
 		return;
 	}
