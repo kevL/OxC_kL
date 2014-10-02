@@ -939,8 +939,8 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 
 /**
  * Selects the unit at the given position on the map.
- * @param pos Position.
- * @return Pointer to a BattleUnit, or NULL when none is found.
+ * @param pos - reference a Position
+ * @return, pointer to the BattleUnit, or NULL if none found
  */
 BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
 {
@@ -951,8 +951,8 @@ BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
 	{
 		return NULL;
 	}
-	else
-		return bu;
+
+	return bu;
 }
 
 /**
@@ -1829,8 +1829,8 @@ void SavedBattleGame::prepareNewTurn()
 		}
 	}
 
-	if (!tilesOnFire.empty()
-		|| !tilesOnSmoke.empty())
+	if (tilesOnFire.empty() == false
+		|| tilesOnSmoke.empty() == false)
 	{
 		for (int // do damage to units, average out the smoke, etc.
 				i = 0;
@@ -1845,10 +1845,11 @@ void SavedBattleGame::prepareNewTurn()
 	}
 
 	reviveUnconsciousUnits();
+	// could-should do a calcFov(allUnits) here.
 }
 
 /**
- * Checks for units that are unconcious and revives them if they shouldn't be.
+ * Checks for units that are unconscious and revives them if they shouldn't be.
  * kL, does this still need a check to see if the unit revives
  * *on a floor* (if not, drop him/her down to a floor tile) <- yes, it does. (also raise up onto terrainLevel)
  * Revived units need a tile to stand on. If the unit's current position is occupied, then
@@ -1862,10 +1863,13 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			i != getUnits()->end();
 			++i)
 	{
-		if ((*i)->getArmor()->getSize() == 1)
+		if ((*i)->getType() == "SOLDIER"
+			|| ((*i)->getUnitRules()
+				&& (*i)->getUnitRules()->getMechanical() == false
+				&& (*i)->getArmor()->getSize() == 1))
 		{
 			Position originalPosition = (*i)->getPosition();
-			if (originalPosition == Position(-1, -1, -1))
+			if (originalPosition == Position(-1,-1,-1))
 			{
 				for (std::vector<BattleItem*>::iterator
 						j = _items.begin();

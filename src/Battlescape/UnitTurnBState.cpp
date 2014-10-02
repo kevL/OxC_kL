@@ -148,23 +148,22 @@ void UnitTurnBState::init()
 void UnitTurnBState::think()
 {
 	//Log(LOG_INFO) << "UnitTurnBState::think() unitID = " << _unit->getId();
-	bool
-		factPlayer	= _unit->getFaction() == FACTION_PLAYER,
-		factSide	= _unit->getFaction() == _parent->getSave()->getSide();
+	const bool
+		playerTurn = _unit->getFaction() == FACTION_PLAYER,
+		onSide = _unit->getFaction() == _parent->getSave()->getSide();
 
-	int tu = 1;							// one tu per facing change
-	bool tank = _unit->getTurretType() > -1;
+	int tu = 1;								// one tu per facing change
 
-	if (factSide == false)				// reaction fire permits free turning
+	if (onSide == false)					// reaction fire permits free turning
 		tu = 0;
-	else if (tank						// if xCom tank
-		&& _action.strafe == false		// but not swivelling turret
-		&& _action.targeting == false)	// or not taking a shot at something...
+	else if (_unit->getTurretType() > -1	// if turreted vehicle
+		&& _action.strafe == false			// but not swivelling turret
+		&& _action.targeting == false)		// or not taking a shot at something...
 	{
 		if (_unit->getArmor()->getMovementType() == MT_FLY)
 			tu = 2; // hover vehicles cost 2 per facing change
 		else
-			tu = 3; // tracked vehicles cost 3 per facing change
+			tu = 3; // large tracked vehicles cost 3 per facing change
 	}
 
 	if (tu == 0
@@ -174,7 +173,7 @@ void UnitTurnBState::think()
 	}
 
 	if (_chargeTUs
-		&& factSide
+		&& onSide
 		&& _parent->getPanicHandled()
 		&& _action.targeting == false
 		&& _parent->checkReservedTU(
@@ -198,10 +197,10 @@ void UnitTurnBState::think()
 		_parent->getMap()->cacheUnit(_unit);
 
 		if ((newVis
-				&& factPlayer)
+				&& playerTurn)
 			|| (_chargeTUs
-				&& factSide
-				&& factPlayer == false
+				&& onSide
+				&& playerTurn == false
 				&& _action.type == BA_NONE
 				&& _parent->getPanicHandled()
 				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted))
@@ -213,8 +212,8 @@ void UnitTurnBState::think()
 			_unit->setStatus(STATUS_STANDING);
 
 			// keep this for Faction_Player only, till I figure out the AI better:
-			if (factPlayer
-				&& factSide
+			if (playerTurn
+				&& onSide
 				&& _action.targeting)
 			{
 				//Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();

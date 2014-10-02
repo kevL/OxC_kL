@@ -701,7 +701,7 @@ bool UnitWalkBState::doStatusWalk()
 						tBelow,
 						_onScreen);
 	}
-	else if (!_falling)
+	else if (_falling == false)
 	{
 		//Log(LOG_INFO) << ". WalkBState, !falling Abort path";
 		_unit->lookAt( // turn to blocking unit
@@ -713,7 +713,7 @@ bool UnitWalkBState::doStatusWalk()
 	}
 
 	// unit moved from one tile to the other, update the tiles & investigate new flooring
-	if (!_tileSwitchDone
+	if (_tileSwitchDone == false
 		&& _unit->getPosition() != _unit->getLastPosition())
 		// ( _pos != _lastpos ) <- set equal at Start, _walkPhase == 0.
 		// this clicks over in keepWalking(_walkPhase == middle)

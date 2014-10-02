@@ -1619,9 +1619,12 @@ BattleUnit* TileEngine::getReactor(
 	if (nextReactor
 		&& highestIniti > static_cast<int>(defender->getInitiative(tuSpent)))
 	{
-		if (nextReactor->getOriginalFaction() == FACTION_PLAYER
-			&& nextReactor->getFaction() == FACTION_PLAYER
-			&& nextReactor->getTurretType() < 0)
+		if (nextReactor->getType() == "SOLDIER"
+			&& nextReactor->getFaction() == nextReactor->getOriginalFaction())
+//			&& nextReactor->getOriginalFaction() == FACTION_PLAYER
+//			&& nextReactor->getFaction() == FACTION_PLAYER
+//			&& nextReactor->getUnitRules() == NULL)
+//			&& nextReactor->getTurretType() < 0)
 		{
 			nextReactor->addReactionExp();
 		}
@@ -2163,9 +2166,11 @@ BattleUnit* TileEngine::hit(
 				if (melee == false											// not melee
 					&& buTarget->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not.
 					&& attacker												// shooter exists
-					&& attacker->getOriginalFaction() == FACTION_PLAYER		// shooter is Xcom
-					&& attacker->getFaction() == FACTION_PLAYER				// shooter is not Mc'd Xcom
-					&& attacker->getTurretType() < 0)						// shooter is not a tank.
+					&& attacker->getType() == "SOLDIER"
+					&& attacker->getFaction() == attacker->getOriginalFaction())
+//					&& attacker->getOriginalFaction() == FACTION_PLAYER		// shooter is Xcom
+//					&& attacker->getFaction() == FACTION_PLAYER				// shooter is not Mc'd Xcom
+//					&& attacker->getTurretType() < 0)						// shooter is not a tank.
 //					&& type != DT_NONE
 //					&& _battleSave->getBattleGame()->getCurrentAction()->type != BA_HIT
 //					&& _battleSave->getBattleGame()->getCurrentAction()->type != BA_STUN) // psst. STUN isn't set *anywhere*
@@ -2868,10 +2873,12 @@ void TileEngine::explode(
 								targetUnit->killedBy(attacker->getFaction());
 							}
 
-							if (attacker->getOriginalFaction() == FACTION_PLAYER		// shooter is Xcom
-								&& attacker->getFaction() == FACTION_PLAYER				// shooter is not Mc'd Xcom
-								&& attacker->getTurretType() < 0						// shooter is not a tank.
-								&& targetUnit->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not; no Xp for shooting civies...
+							if (attacker->getType() == "SOLDIER"
+								&& attacker->getFaction() == attacker->getOriginalFaction()
+//								&& attacker->getOriginalFaction() == FACTION_PLAYER		// shooter is Xcom
+//								&& attacker->getFaction() == FACTION_PLAYER				// shooter is not Mc'd Xcom
+//								&& attacker->getTurretType() < 0						// shooter is not a tank.
+								&& targetUnit->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not; no Xp for shooting civies or Mc'd xCom ...
 								&& type != DT_SMOKE)									// sorry, no Xp for smoke!
 //								&& targetUnit->getFaction() != attacker->getFaction())
 							{
@@ -5502,7 +5509,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 //				if (victim->getTurretType() == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
 //				{
-				if (victim->getOriginalFaction() == FACTION_PLAYER)
+//				if (victim->getOriginalFaction() == FACTION_PLAYER)
+				if (victim->getType() == "SOLDIER")
 				{
 					if (victim->isKneeled())
 						enron /= 2;

@@ -25,7 +25,7 @@ namespace OpenXcom
 
 /**
  * Creates a certain type of unit.
- * @param type String defining the type.
+ * @param type - string defining the Unit's type
  */
 Unit::Unit(const std::string& type)
 	:
@@ -42,7 +42,8 @@ Unit::Unit(const std::string& type)
 		_aggression(0),
 		_energyRecovery(30),
 		_specab(SPECAB_NONE),
-		_livingWeapon(false)
+		_livingWeapon(false),
+		_isMechanical(false)
 {
 }
 
@@ -64,7 +65,6 @@ void Unit::load(
 		int modIndex)
 {
 	//Log(LOG_INFO) << "Unit::load()";
-
 	_type			= node["type"].as<std::string>(_type);
 	_race			= node["race"].as<std::string>(_race);
 	_rank			= node["rank"].as<std::string>(_rank);
@@ -82,6 +82,7 @@ void Unit::load(
 	_livingWeapon	= node["livingWeapon"].as<bool>(_livingWeapon);
 	_meleeWeapon	= node["meleeWeapon"].as<std::string>(_meleeWeapon);
 	_innateWeapons	= node["innateWeapons"].as<std::vector<std::string> >(_innateWeapons);
+	_isMechanical	= node["isMechanical"].as<bool>(_isMechanical);
 
 	if (node["deathSound"])
 	{
@@ -290,6 +291,15 @@ const std::string Unit::getMeleeWeapon() const
 const std::vector<std::string>& Unit::getInnateWeapons() const
 {
 	return _innateWeapons;
+}
+
+/**
+ * kL. Gets if this Unit is a mechanical apparatus.
+ * @return, true if this is a non-organic, mechanical unit on the battlefield
+ */
+bool Unit::getMechanical() const // kL
+{
+	return _isMechanical;
 }
 
 }

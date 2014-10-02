@@ -151,7 +151,10 @@ void Pathfinding::calculate(
 
 		if (_movementType == MT_FLY
 			&& _modALT //(SDL_GetModState() & KMOD_ALT) != 0 // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
-			&& unit->getTurretType() == -1					// hovertanks always hover.
+			&& (unit->getType() == "SOLDIER"
+				|| (unit->getUnitRules()
+					&& unit->getUnitRules()->getMechanical() == false))
+//			&& unit->getTurretType() == -1					// hovertanks always hover.
 			&& unit->getRaceString() != "STR_FLOATER"		// floaters always float
 			&& unit->getRaceString() != "STR_CELATID"		// celatids always .. float.
 			&& unit->getRaceString() != "STR_CYBERDISC")	// cyberdiscs always .. float
@@ -274,12 +277,17 @@ void Pathfinding::calculate(
 	// across 2+ tiles at 90deg. path-angle) -> now accounted for and *allowed*
 	Position startPos = unit->getPosition();
 
+	bool isTank = unit->getUnitRules()
+				&& unit->getUnitRules()->getMechanical();
+
 	_strafeMove = strafeRejected == false
 				&& Options::strafe
 				&& ((_modCTRL == true
-						&& unit->getTurretType() == -1)
+						&& isTank == false)
+//						&& unit->getTurretType() == -1)
 					|| (_modALT == true
-						&& unit->getTurretType() > -1)) // should create Ruleset param 'trackedVehicle'
+						&& isTank == true)) // should create Ruleset param 'trackedVehicle' <- DONE.
+//						&& unit->getTurretType() > -1))
 				&& startPos.z == endPos.z
 				&& abs(startPos.x - endPos.x) < 2
 				&& abs(startPos.y - endPos.y) < 2;

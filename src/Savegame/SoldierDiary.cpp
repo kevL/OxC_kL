@@ -60,7 +60,7 @@ SoldierDiary::SoldierDiary()
 		_nightMissionTotal(0),
 		_nightTerrorMissionTotal(0),
 		_monthsService(0),
-		_unconciousTotal(0),
+		_unconsciousTotal(0),
 		_shotAtCounterTotal(0),
 		_hitCounterTotal(0),
 		_loneSurvivorTotal(0),
@@ -150,7 +150,7 @@ void SoldierDiary::load(const YAML::Node& node)
 	_nightMissionTotal				= node["nightMissionTotal"].as<int>(_nightMissionTotal);
 	_nightTerrorMissionTotal		= node["nightTerrorMissionTotal"].as<int>(_nightTerrorMissionTotal);
 	_monthsService					= node["monthsService"].as<int>(_monthsService);
-	_unconciousTotal				= node["unconciousTotal"].as<int>(_unconciousTotal);
+	_unconsciousTotal				= node["unconsciousTotal"].as<int>(_unconsciousTotal);
 	_shotAtCounterTotal				= node["shotAtCounterTotal"].as<int>(_shotAtCounterTotal);
 	_hitCounterTotal				= node["hitCounterTotal"].as<int>(_hitCounterTotal);
 	_ironManTotal					= node["ironManTotal"].as<int>(_ironManTotal);
@@ -210,7 +210,7 @@ YAML::Node SoldierDiary::save() const
 	if (_nightMissionTotal)				node["nightMissionTotal"]			= _nightMissionTotal;
 	if (_nightTerrorMissionTotal)		node["nightTerrorMissionTotal"]		= _nightTerrorMissionTotal;
 	if (_monthsService)					node["monthsService"]				= _monthsService;
-	if (_unconciousTotal)				node["unconciousTotal"]				= _unconciousTotal;
+	if (_unconsciousTotal)				node["unconsciousTotal"]			= _unconsciousTotal;
 	if (_shotAtCounterTotal)			node["shotAtCounterTotal"]			= _shotAtCounterTotal;
 	if (_hitCounterTotal)				node["hitCounterTotal"]				= _hitCounterTotal;
 	if (_ironManTotal)					node["ironManTotal"]				= _ironManTotal;
@@ -281,8 +281,8 @@ void SoldierDiary::updateDiary(
 	if (missionStatistics->daylight != 0)
 		_nightMissionTotal++;
 
-	if (unitStatistics->wasUnconcious)
-		_unconciousTotal++;
+	if (unitStatistics->wasUnconscious)
+		_unconsciousTotal++;
 
 	if (missionStatistics->success
 		&& missionStatistics->type != "STR_SMALL_SCOUT"
@@ -421,8 +421,8 @@ bool SoldierDiary::manageCommendations(Ruleset* rules)
 						&& _nightTerrorMissionTotal < (*j).second.at(nextCommendationLevel["noNoun"]))
 					|| ((*j).first == "totalMonthlyService"
 						&& _monthsService < (*j).second.at(nextCommendationLevel["noNoun"]))
-					|| ((*j).first == "totalFellUnconcious"
-						&& _unconciousTotal < (*j).second.at(nextCommendationLevel["noNoun"]))
+					|| ((*j).first == "totalFellUnconscious"
+						&& _unconsciousTotal < (*j).second.at(nextCommendationLevel["noNoun"]))
 					|| ((*j).first == "totalShotAt10Times"
 						&& _shotAtCounter10in1Mission < (*j).second.at(nextCommendationLevel["noNoun"]))
 					|| ((*j).first == "totalHit5Times"

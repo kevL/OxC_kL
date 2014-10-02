@@ -254,26 +254,27 @@ void UnitDieBState::think()
 																			"STR_HAS_BECOME_UNCONSCIOUS",
 																			_unit->getGender())
 																		.arg(_unit->getName(game->getLanguage())))); */
-			std::string message;
-
-			if (_unit->getStatus() == STATUS_DEAD)
+//			if (_unit->getArmor()->getSize() == 1)
+			if (_unit->getType() == "SOLDIER")
 			{
-				if (_unit->getArmor()->getSize() == 1)
+				std::string message;
+
+				if (_unit->getStatus() == STATUS_DEAD)
 				{
 					if (_damageType == DT_NONE)
 						message = "STR_HAS_DIED_FROM_A_FATAL_WOUND";
 					else if (Options::battleNotifyDeath)
 						message = "STR_HAS_BEEN_KILLED";
 				}
-			}
-			else
-				message = "STR_HAS_BECOME_UNCONSCIOUS";
+				else
+					message = "STR_HAS_BECOME_UNCONSCIOUS";
 
-			if (message != "")
-				game->pushState(new InfoboxOKState(game->getLanguage()->getString(
-																				message,
-																				_unit->getGender())
-																			.arg(_unit->getName(game->getLanguage()))));
+				if (message != "")
+					game->pushState(new InfoboxOKState(game->getLanguage()->getString(
+																					message,
+																					_unit->getGender())
+																				.arg(_unit->getName(game->getLanguage()))));
+			}
 		}
 
 		// if all units from either faction are killed - auto-end the mission.

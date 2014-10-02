@@ -224,7 +224,9 @@ class Unit
 {
 
 private:
-	bool _livingWeapon;
+	bool
+		_isMechanical,
+		_livingWeapon;
 	int
 		_floatHeight,
 		_kneelHeight,
@@ -293,11 +295,11 @@ private:
 		/// Gets the unit's war cry.
 		int getAggroSound() const;
 
-		/// Gets the intelligence. This is the number of turns AI remembers your troop positions.
+		/// Gets the intelligence. This is the number of turns the AI remembers spotted xCom troop positions.
 		int getIntelligence() const;
-		/// Gets the aggression. Determines the chance of revenge and taking cover.
+		/// Gets the aggression. Determines an AI stance on the spectrum of taking revenge to taking cover.
 		int getAggression() const;
-		/// Gets the alien's special ability.
+		/// Gets the alien's special ability if any.
 		int getSpecialAbility() const;
 		/// Gets the unit's spawn unit.
 		std::string getSpawnUnit() const;
@@ -311,6 +313,9 @@ private:
 		const std::string getMeleeWeapon() const;
 		/// Gets a vector of integrated items this unit has available.
 		const std::vector<std::string>& getInnateWeapons() const;
+
+		/// kL. Gets if this Unit is a mechanical apparatus.
+		bool getMechanical() const; // kL
 };
 
 }

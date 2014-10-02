@@ -222,7 +222,7 @@ struct BattleUnitStatistics
 		ironMan,							// Tracks if the soldier was the only soldier on the mission
 		KIA,								// Tracks if the soldier was killed in battle
 		loneSurvivor,						// Tracks if the soldier was the only survivor
-		wasUnconcious;						// Tracks if the soldier fell unconcious
+		wasUnconscious;						// Tracks if the soldier fell unconscious
 
 	int
 		daysWounded,						// Tracks how many days the unit was wounded for
@@ -256,7 +256,7 @@ struct BattleUnitStatistics
 	///
 	void load(const YAML::Node& node)
 	{
-		if (const YAML::Node &YAMLkills = node["kills"])
+		if (const YAML::Node& YAMLkills = node["kills"])
 		{
 			for (YAML::const_iterator
 					i = YAMLkills.begin();
@@ -267,17 +267,17 @@ struct BattleUnitStatistics
 			}
 		}
 
-		wasUnconcious			= node["wasUnconcious"].as<bool>(wasUnconcious);
-		shotAtCounter			= node["shotAtCounter"].as<int>(shotAtCounter);
-		hitCounter				= node["hitCounter"].as<int>(hitCounter);
-		shotByFriendlyCounter	= node["shotByFriendlyCounter"].as<int>(shotByFriendlyCounter);
-		shotFriendlyCounter		= node["shotFriendlyCounter"].as<int>(shotFriendlyCounter);
-		loneSurvivor			= node["loneSurvivor"].as<bool>(loneSurvivor);
-		ironMan					= node["ironMan"].as<bool>(ironMan);
+		wasUnconscious			= node["wasUnconscious"]		.as<bool>(wasUnconscious);
+		shotAtCounter			= node["shotAtCounter"]			.as<int>(shotAtCounter);
+		hitCounter				= node["hitCounter"]			.as<int>(hitCounter);
+		shotByFriendlyCounter	= node["shotByFriendlyCounter"]	.as<int>(shotByFriendlyCounter);
+		shotFriendlyCounter		= node["shotFriendlyCounter"]	.as<int>(shotFriendlyCounter);
+		loneSurvivor			= node["loneSurvivor"]			.as<bool>(loneSurvivor);
+		ironMan					= node["ironMan"]				.as<bool>(ironMan);
 		longDistanceHitCounter	= node["longDistanceHitCounter"].as<int>(longDistanceHitCounter);
-		lowAccuracyHitCounter	= node["lowAccuracyHitCounter"].as<int>(lowAccuracyHitCounter);
-		shotsFiredCounter		= node["shotsFiredCounter"].as<int>(shotsFiredCounter);
-		shotsLandedCounter		= node["shotsLandedCounter"].as<int>(shotsLandedCounter);
+		lowAccuracyHitCounter	= node["lowAccuracyHitCounter"]	.as<int>(lowAccuracyHitCounter);
+		shotsFiredCounter		= node["shotsFiredCounter"]		.as<int>(shotsFiredCounter);
+		shotsLandedCounter		= node["shotsLandedCounter"]	.as<int>(shotsLandedCounter);
 	}
 
 	///
@@ -285,7 +285,7 @@ struct BattleUnitStatistics
 	{
 		YAML::Node node;
 
-		if (!kills.empty())
+		if (kills.empty() == false)
 		{
 			for (std::vector<BattleUnitKills*>::const_iterator
 					i = kills.begin();
@@ -296,7 +296,7 @@ struct BattleUnitStatistics
 			}
 		}
 
-		node["wasUnconcious"]			= wasUnconcious;
+		node["wasUnconscious"]			= wasUnconscious;
 		node["shotAtCounter"]			= shotAtCounter;
 		node["hitCounter"]				= hitCounter;
 		node["shotByFriendlyCounter"]	= shotByFriendlyCounter;
@@ -320,8 +320,8 @@ struct BattleUnitStatistics
 	/// cTor.
 	BattleUnitStatistics()
 		:
-			wasUnconcious(false),
-			kills(),
+			wasUnconscious(false),
+//			kills(),
 			shotAtCounter(0),
 			hitCounter(0),
 			shotByFriendlyCounter(0),
@@ -353,15 +353,15 @@ class BattleUnit
 private:
 	bool
 		_cacheInvalid,
+		_dashing, // kL
 		_diedByFire,
 		_dontReselect,
 		_floating,
 //kL	_hitByFire,
 		_kneeled,
 		_stopShot, // kL, to stop a unit from firing/throwing if it spots a new opponent during turning
-		_visible,
-		_dashing, // kL
-		_takenExpl; // kL, used to stop large units from taking damage for each part.
+		_takenExpl, // kL, used to stop large units from taking damage for each part.
+		_visible;
 	int
 		_coverReserve,
 		_currentArmor[5],

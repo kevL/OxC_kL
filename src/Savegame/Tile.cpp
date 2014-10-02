@@ -1077,9 +1077,12 @@ void Tile::prepareNewTurn()
 	}
 
 	if (_smoke > 0
-		&& _unit != NULL
-		&& !_unit->isOut(true)
-		&& _unit->getArmor()->getSize() == 1)
+		&& _unit
+		&& _unit->isOut(true) == false
+		&& (_unit->getType() == "SOLDIER"
+			|| (_unit->getUnitRules()
+				&& _unit->getUnitRules()->getMechanical() == false)))
+//		&& _unit->getArmor()->getSize() == 1)
 	{
 		if (_fire)
 		{

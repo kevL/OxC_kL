@@ -780,9 +780,11 @@ void Map::drawTerrain(Surface* surface)
 								// from below_ 'Draw soldier'. This ensures the rankIcon isn't half-hidden by a floor above & west of soldier.
 								// also, make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 								// ... should probably be a subfunction
-								if (bu->getFaction() == FACTION_PLAYER
-									&& bu != _save->getSelectedUnit()
-									&& bu->getTurretType() == -1) // no tanks, pls
+								if (bu != _save->getSelectedUnit()
+									&& bu->getUnitRules() == NULL)
+//									&& bu->getType() == "SOLDIER")
+//									&& bu->getFaction() == FACTION_PLAYER
+//									&& bu->getTurretType() == -1) // no tanks, pls
 								{
 //									drawRankIcon = false;
 
@@ -1311,9 +1313,10 @@ void Map::drawTerrain(Surface* surface)
 								// make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 								BattleUnit* buBelow = tileBelow->getUnit();
 								if (buBelow != NULL
-									&& buBelow->getFaction() == FACTION_PLAYER
 									&& buBelow != _save->getSelectedUnit()
-									&& buBelow->getTurretType() == -1) // no tanks, pls
+									&& buBelow->getUnitRules() == NULL)
+//									&& buBelow->getFaction() == FACTION_PLAYER
+//									&& buBelow->getTurretType() == -1) // no tanks, pls
 								{
 									Position offset;
 									calculateWalkingOffset(buBelow, &offset);
@@ -1548,10 +1551,11 @@ void Map::drawTerrain(Surface* surface)
 									&& (tileUp->getSprite(MapData::O_FLOOR) == NULL
 										|| _camera->getViewLevel() == itZ))
 								{
-									if (unit->getFaction() == FACTION_PLAYER
+									if (unit != _save->getSelectedUnit()
+										&& unit->getUnitRules() == NULL)
 										//unit != dynamic_cast<BattleUnit*>(_save->getSelectedUnit());
-										&& unit != _save->getSelectedUnit()
-										&& unit->getTurretType() == -1) // no tanks, pls
+//										&& unit->getFaction() == FACTION_PLAYER
+//										&& unit->getTurretType() == -1) // no tanks, pls
 									{
 										if (unit->getFatalWounds() > 0)
 //											&& unit->getFatalWounds() < 10)

@@ -103,7 +103,7 @@ private:
 		_nightMissionTotal,
 		_nightTerrorMissionTotal,
 		_monthsService,
-		_unconciousTotal,
+		_unconsciousTotal,
 		_shotAtCounterTotal,
 		_hitCounterTotal,
 		_ironManTotal,

@@ -1689,26 +1689,36 @@ void BattlescapeState::btnInventoryClick(Action*)
 		}
 	}
 
-	if (playableUnitSelected()
-		&& (_save->getSelectedUnit()->getArmor()->getSize() == 1
-			|| _save->getDebugMode())
-		&& (_save->getSelectedUnit()->getOriginalFaction() == FACTION_PLAYER
-			|| _save->getSelectedUnit()->getRankString() != "STR_LIVE_TERRORIST"))
+//		&& (unit->getArmor()->getSize() == 1
+//			|| _save->getDebugMode())
+//		&& (unit->getOriginalFaction() == FACTION_PLAYER
+//			|| unit->getRankString() != "STR_LIVE_TERRORIST"))
+
+	if (playableUnitSelected())
 	{
-		// clean up the waypoints
-		if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+		const BattleUnit* const unit = _save->getSelectedUnit();
+
+		if (_save->getDebugMode()
+			|| (unit->getType() == "SOLDIER"
+			|| (unit->getUnitRules()
+				&& unit->getUnitRules()->getMechanical() == false
+				&& unit->getType() != "STR_LIVE_TERRORIST")))
 		{
-			_battleGame->getCurrentAction()->waypoints.clear();
-			_battleGame->getMap()->getWaypoints()->clear();
-			showLaunchButton(false);
+			// clean up the waypoints
+			if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
+			{
+				_battleGame->getCurrentAction()->waypoints.clear();
+				_battleGame->getMap()->getWaypoints()->clear();
+				showLaunchButton(false);
+			}
+
+			_battleGame->getPathfinding()->removePreview();
+			_battleGame->cancelCurrentAction(true);
+
+			_game->pushState(new InventoryState(
+											!_save->getDebugMode(),
+											this));
 		}
-
-		_battleGame->getPathfinding()->removePreview();
-		_battleGame->cancelCurrentAction(true);
-
-		_game->pushState(new InventoryState(
-										!_save->getDebugMode(),
-										this));
 	}
 }
 
@@ -3738,12 +3748,11 @@ void BattlescapeState::updateExpData() // kL
 
 	BattleUnit* unit = _save->getSelectedUnit();
 
-	if (unit == NULL
-		|| unit->getOriginalFaction() != FACTION_PLAYER
-		|| unit->getTurretType() > -1)
-	{
+//	if (unit == NULL
+//		|| unit->getOriginalFaction() != FACTION_PLAYER
+//		|| unit->getTurretType() > -1)
+	if (unit->getType() != "SOLDIER")
 		return;
-	}
 
 	std::vector<std::wstring> xpType;
 	xpType.push_back(L"f ");

@@ -2456,12 +2456,13 @@ bool AlienBAIState::psiAction()
 				++i)
 		{
 			if ((*i)->getOriginalFaction() == FACTION_PLAYER	// they must be player units
-				&& (*i)->getArmor()->getSize() == 1				// don't target tanks
+				&& (*i)->getUnitRules() == NULL					// and not tanks
+//				&& (*i)->getArmor()->getSize() == 1				// don't target tanks
 				&& validTarget(									// will check for Mc, Exposed, etc.
 							*i,
 							true,
 							false)
-				&& (!LOSRequired
+				&& (LOSRequired == false
 					|| std::find(
 							_unit->getVisibleUnits()->begin(),
 							_unit->getVisibleUnits()->end(),
@@ -2616,10 +2617,10 @@ void AlienBAIState::meleeAttack()
 
 /**
  * Validates a target.
- * @param unit the target we want to validate.
- * @param assessDanger do we care if this unit was previously targetted with a grenade?
- * @param includeCivs do we include civilians in the threat assessment?
- * @return whether this target is someone we would like to kill.
+ * @param unit			- pointer to a target to validate
+ * @param assessDanger	- true if to care if target has already been grenaded
+ * @param includeCivs	- true to include civilians in the threat assessment
+ * @return, true if the target is something we would like to kill
  */
 bool AlienBAIState::validTarget(
 		BattleUnit* unit,

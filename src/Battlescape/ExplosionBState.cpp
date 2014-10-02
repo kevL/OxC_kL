@@ -499,7 +499,10 @@ void ExplosionBState::explode()
 			if (_item->getRules()->getZombieUnit().empty() == false // check if this unit turns others into zombies
 				&& victim
 				&& victim->getArmor()->getSize() == 1
-				&& victim->getTurretType() == -1
+				&& (victim->getType() == "SOLDIER"
+					|| (victim->getUnitRules()
+						&& victim->getUnitRules()->getMechanical() == false))
+//				&& victim->getTurretType() == -1
 				&& victim->getSpawnUnit().empty() == true
 //				&& victim->getSpecialAbility() == SPECAB_NONE // kL
 				&& victim->getOriginalFaction() != FACTION_HOSTILE) // only xCom & civies

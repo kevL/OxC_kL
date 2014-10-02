@@ -56,9 +56,10 @@ namespace OpenXcom
 
 /**
  * Initializes a BattleUnit from a Soldier
- * @param soldier Pointer to the Soldier.
- * @param faction Which faction the units belongs to.
- * @param diff For VictoryPts value per death.
+ * @param soldier		- pointer to a geoscape Soldier
+ * @param faction		- faction the soldier belongs to
+ * @param diff			- for VictoryPts value at death
+ * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
 BattleUnit::BattleUnit(
 		Soldier* soldier,
@@ -200,12 +201,14 @@ BattleUnit::BattleUnit(
 }
 
 /**
- * Creates a battleUnit from a (non-Soldier) unit object.
+ * Creates this BattleUnit from a (non-Soldier) unit object.
  * @param unit			- pointer to a unit object
  * @param faction		- faction the unit belongs to
  * @param id			- the unit's unique ID
  * @param armor			- pointer to unit's armor
- * @param difficulty	- the current game's difficulty setting (for aLien stat adjustment)
+ * @param diff			- the current game's difficulty setting (for aLien stat adjustment)
+ * @param month			- the current month (default 0)
+ * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
 BattleUnit::BattleUnit(
 		Unit* unit,
@@ -277,8 +280,8 @@ BattleUnit::BattleUnit(
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 	_type	= unit->getType();
-	_rank	= unit->getRank();
 	_race	= unit->getRace();
+	_rank	= unit->getRank();
 
 	_stats	= *unit->getStats();
 	_stats	+= *_armor->getStats();	// armors may modify effective stats
@@ -348,7 +351,7 @@ BattleUnit::~BattleUnit()
 			delete _cache[i];
 	}
 
-	if (!getGeoscapeSoldier())
+	if (getGeoscapeSoldier() == NULL)
 	{
 		for (std::vector<BattleUnitKills*>::const_iterator
 				i = _statistics->kills.begin();
@@ -473,7 +476,7 @@ YAML::Node BattleUnit::save() const
 	{
 		node["dontReselect"]	= _dontReselect;
 	}
-	if (!_spawnUnit.empty())
+	if (_spawnUnit.empty() == false)
 		node["spawnUnit"]		= _spawnUnit;
 
 	if (_originalFaction == FACTION_PLAYER) // kL_add.
@@ -1264,6 +1267,12 @@ int BattleUnit::damage(
 	if (type == DT_SMOKE) // smoke doesn't do real damage, but stun damage instead.
 		type = DT_STUN;
 
+	if (type == DT_STUN)
+	{
+		if (power < 0)
+			return 0;
+	}
+
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
 	if (ignoreArmor == false)
@@ -1353,8 +1362,14 @@ int BattleUnit::damage(
 
 	if (power > 0)
 	{
-		if (type == DT_STUN)
+		if (type == DT_STUN
+			&& (_type == "SOLDIER"	// note that this should be obviated in the rules for Armor damage vulnerability.
+				|| (_unitRules		// Rather than here
+					&& _unitRules->getMechanical() == false
+					&& _race != "STR_ZOMBIE")))
+		{
 			_stunLevel += power;
+		}
 		else
 		{
 			_health -= power; // health damage
@@ -1367,8 +1382,11 @@ int BattleUnit::damage(
 			}
 			else
 			{
-				if (_armor->getSize() == 1		// add some stun damage to not-large units
-					&& _race != "STR_ZOMBIE")	// unless it's a freakin Zombie.
+				if ( //_armor->getSize() == 1 &&					// add some stun to not-large units
+					_type == "SOLDIER"								// add some stun to xCom agents
+						|| (_unitRules
+							&& _unitRules->getMechanical() == false	// or to non-mechanical units
+							&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
 				{
 					_stunLevel += RNG::generate(0, power / 3); // kL_note: was, 4
 				}
@@ -2101,27 +2119,28 @@ void BattleUnit::prepareNewTurn()
 
 	setTimeUnits(prepTU);
 
-	if (!isOut()) // recover energy
+	if (isOut() == false) // recover energy
 	{
 		// kL_begin: advanced Energy recovery
 		int
 			stamina = getStats()->stamina,
 			enron = stamina;
 
-		if (_turretType == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
+//		if (_turretType == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
+		if (_faction == FACTION_PLAYER)
 		{
-			if (_faction == FACTION_PLAYER)
+			if (_type == "SOLDIER")
 			{
 				if (isKneeled())
 					enron /= 2;
 				else
 					enron /= 3;
 			}
-			else // aLiens.
-				enron = enron * _unitRules->getEnergyRecovery() / 100;
+			else // xCom tank.
+				enron = enron * 4 / 5; // value in Ruleset is 100%
 		}
-		else // xCom tank.
-			enron = enron * 4 / 5; // value in Ruleset is 100%
+		else // aLiens.
+			enron = enron * _unitRules->getEnergyRecovery() / 100;
 
 		enron = static_cast<int>(Round(static_cast<double>(enron) * getAccuracyModifier()));
 		// kL_end.
@@ -2168,9 +2187,12 @@ void BattleUnit::prepareNewTurn()
 		_currentAIState = NULL;
 	}
 
-	if (_stunLevel > 0
-		&& (_armor->getSize() == 1
-			|| isOut() == false))
+	if (_stunLevel > 0 // note ... mechanical creatures should no longer be getting stunned.
+		&& _armor->getSize() == 1
+		&& (_type == "SOLDIER"
+			|| (_unitRules
+				&& _unitRules->getMechanical() == false)))
+//			|| isOut() == false))
 	{
 		healStun(1); // recover stun 1pt/turn
 	}
@@ -3304,9 +3326,12 @@ int BattleUnit::getMoveSound() const
 bool BattleUnit::isWoundable() const
 {
 	return _type == "SOLDIER"
-			|| (Options::alienBleeding
-				&& _faction != FACTION_PLAYER
-				&& _armor->getSize() == 1);
+		|| (Options::alienBleeding
+			&& _unitRules
+			&& _unitRules->getMechanical() == false
+			&& _race != "STR_ZOMBIE");
+//			&& _faction != FACTION_PLAYER)
+//			&& _armor->getSize() == 1);
 }
 
 /**
@@ -3316,7 +3341,11 @@ bool BattleUnit::isWoundable() const
  */
 bool BattleUnit::isFearable() const
 {
-	return (_armor->getSize() == 1);
+//	return (_armor->getSize() == 1);
+	return _type == "SOLDIER"
+		|| (_unitRules
+			&& _unitRules->getMechanical() == false
+			&& _race != "STR_ZOMBIE");
 }
 
 /**
@@ -4005,9 +4034,11 @@ bool BattleUnit::isSelectable(
 		bool checkInventory) const
 {
 	return _faction == faction
-			&& !isOut()
-			&& (!checkReselect || reselectAllowed())
-			&& (!checkInventory || hasInventory());
+			&& isOut() == false
+			&& (checkReselect == false
+				|| reselectAllowed())
+			&& (checkInventory == false
+				|| hasInventory());
 }
 
 /**
@@ -4017,8 +4048,11 @@ bool BattleUnit::isSelectable(
  */
 bool BattleUnit::hasInventory() const
 {
-	return _armor->getSize() == 1
-		&& _rank != "STR_LIVE_TERRORIST";
+//	return _armor->getSize() == 1
+	return _type == "SOLDIER"
+		|| (_unitRules
+			&& _unitRules->getMechanical() == false
+			&& _rank != "STR_LIVE_TERRORIST");
 }
 
 /**
@@ -4136,7 +4170,8 @@ size_t BattleUnit::getBattleOrder() const // kL
 }
 
 /**
- * kL.
+ * kL. Sets the BattleGame for this BattleUnit.
+ * @param battleGame - pointer to BattleGame
  */
 void BattleUnit::setBattleGame(BattlescapeGame* battleGame) // kL
 {

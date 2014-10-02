@@ -71,7 +71,6 @@ armors:
 units:
   - type: STR_SCOUT_DRONE
     race: STR_SCOUT_DRONE
-    rank: STR_LIVE_TERRORIST
     stats:
       tu: 65
       stamina: 88
@@ -91,6 +90,7 @@ units:
     deathSound: 23
     moveSound: 14
     energyRecovery: 100
+    isMechanical: true
 ufopaedia:
   - id: STR_SCOUT_DRONE
     type_id: 3

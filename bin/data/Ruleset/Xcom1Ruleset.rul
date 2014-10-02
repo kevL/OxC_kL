@@ -3625,6 +3625,7 @@ units:
     deathSound: 23
     moveSound: 14
     energyRecovery: 100
+    isMechanical: true
   - type: STR_TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
@@ -3646,6 +3647,7 @@ units:
     deathSound: 23
     moveSound: 14
     energyRecovery: 100
+    isMechanical: true
   - type: STR_TANK_LASER_CANNON
     race: STR_TANK_LASER_CANNON
     stats:
@@ -3667,6 +3669,7 @@ units:
     deathSound: 23
     moveSound: 14
     energyRecovery: 100
+    isMechanical: true
   - type: STR_HOVERTANK_PLASMA
     race: STR_HOVERTANK_PLASMA
     stats:
@@ -3689,6 +3692,7 @@ units:
     deathSound: 23
     moveSound: 40
     energyRecovery: 100
+    isMechanical: true
   - type: STR_HOVERTANK_LAUNCHER
     race: STR_HOVERTANK_LAUNCHER
     stats:
@@ -3711,6 +3715,7 @@ units:
     deathSound: 23
     moveSound: 40
     energyRecovery: 100
+    isMechanical: true
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -3916,6 +3921,7 @@ units:
     energyRecovery: 100
     specab: 1
     livingWeapon: true
+    isMechanical: true
   - type: STR_FLOATER_SOLDIER
     race: STR_FLOATER
     rank: STR_LIVE_SOLDIER
@@ -4452,6 +4458,7 @@ units:
     aggression: 2
     energyRecovery: 100
     livingWeapon: true
+    isMechanical: true
   - type: STR_ZOMBIE
     race: STR_ZOMBIE
     rank: STR_LIVE_TERRORIST
