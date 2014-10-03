@@ -82,7 +82,7 @@ CraftEquipmentState::CraftEquipmentState(
 //	_tQty = craft->getNumEquipment();
 	//Log(LOG_INFO) << "_tQty = " << _tQty;
 
-	bool
+	const bool
 		hasCrew = craft->getNumSoldiers() > 0,
 		newBattle = _game->getSavedGame()->getMonthsPassed() == -1;
 
@@ -136,7 +136,7 @@ CraftEquipmentState::CraftEquipmentState(
 	_btnClear->onMouseClick((ActionHandler)& CraftEquipmentState::btnClearClick);
 //kL	_btnClear->setVisible(newBattle);
 
-	_btnInventory->setColor(Palette::blockOffset(15) + 1);
+	_btnInventory->setColor(Palette::blockOffset(15)+1);
 	_btnInventory->setText(tr("STR_INVENTORY"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftEquipmentState::btnInventoryClick);
 	_btnInventory->setVisible(hasCrew && !newBattle);
@@ -808,24 +808,22 @@ void CraftEquipmentState::btnClearClick(Action*)
 void CraftEquipmentState::btnInventoryClick(Action*)
 {
 	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick()";
-	SavedBattleGame* sbg = new SavedBattleGame();
+	SavedBattleGame* battle = new SavedBattleGame();
 	//Log(LOG_INFO) << ". bgame = " << bgame;
-	_game->getSavedGame()->setBattleGame(sbg);
-
+	_game->getSavedGame()->setBattleGame(battle);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 	//Log(LOG_INFO) << ". bgen = " << &bgen;
+
 	Craft* craft = _base->getCrafts()->at(_craftID);
 	//Log(LOG_INFO) << ". craft = " << craft;
-
 	bgen.runInventory(craft);
 	//Log(LOG_INFO) << ". bgen.runInventory() DONE";
 
-	// Fix system colors
+	// Set system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 	_game->getScreen()->clear();
-
 
 	_game->pushState(new InventoryState(
 									false,

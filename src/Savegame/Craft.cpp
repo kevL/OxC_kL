@@ -1016,7 +1016,7 @@ void Craft::refuel()
 
 /**
  * Returns the craft's battlescape status.
- * @return Is the craft on the battlescape?
+ * @return, true if the craft is on the battlescape
  */
 bool Craft::isInBattlescape() const
 {
@@ -1025,7 +1025,7 @@ bool Craft::isInBattlescape() const
 
 /**
  * Changes the craft's battlescape status.
- * @param inbattle True if it's in battle, False otherwise.
+ * @param inbattle - true if it's in battle
  */
 void Craft::setInBattlescape(const bool battle)
 {
@@ -1038,7 +1038,7 @@ void Craft::setInBattlescape(const bool battle)
 /**
  * Returns the craft destroyed status.
  * If the amount of damage the craft take is more than its health it will be destroyed.
- * @return Is the craft destroyed?
+ * @return, true if the craft is destroyed
  */
 bool Craft::isDestroyed() const
 {
@@ -1047,7 +1047,7 @@ bool Craft::isDestroyed() const
 
 /**
  * Returns the amount of space available for soldiers and vehicles.
- * @return Space available.
+ * @return, space available
  */
 int Craft::getSpaceAvailable() const
 {
@@ -1056,7 +1056,7 @@ int Craft::getSpaceAvailable() const
 
 /**
  * Returns the amount of space in use by soldiers and vehicles.
- * @return Space used.
+ * @return, space used
  */
 int Craft::getSpaceUsed() const
 {
@@ -1075,8 +1075,8 @@ int Craft::getSpaceUsed() const
 
 /**
  * Returns the total amount of vehicles of a certain type stored in the craft.
- * @param vehicle Vehicle type.
- * @return Number of vehicles.
+ * @param vehicle - vehicle type
+ * @return, number of vehicles
  */
 int Craft::getVehicleCount(const std::string& vehicle) const
 {
@@ -1096,7 +1096,7 @@ int Craft::getVehicleCount(const std::string& vehicle) const
 
 /**
  * Returns the craft's dogfight status.
- * @return Is the craft in a dogfight?
+ * @return, true if the craft is in a dogfight
  */
 bool Craft::isInDogfight() const
 {
@@ -1105,7 +1105,7 @@ bool Craft::isInDogfight() const
 
 /**
  * Changes the craft's dogfight status.
- * @param inDogfight True if it's in dogfight, False otherwise.
+ * @param inDogfight - true if it's in dogfight
  */
 void Craft::setInDogfight(bool inDogfight)
 {

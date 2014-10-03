@@ -27,15 +27,22 @@
 #include "SoldierInfoState.h"
 #include "SoldierMemorialState.h"
 
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Battlescape/InventoryState.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
+#include "../Engine/Logger.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Screen.h"
 
 #include "../Geoscape/AllocatePsiTrainingState.h"
 
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -45,6 +52,7 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Soldier.h"
 
@@ -74,10 +82,11 @@ SoldiersState::SoldiersState(
 
 	_lstSoldiers	= new TextList(293, 129, 8, 42);
 
-	_btnMemorial	= new TextButton(72, 16, 11, 177);
-	_btnPsiTrain	= new TextButton(71, 16, 87, 177);
-	_btnArmor		= new TextButton(71, 16, 162, 177);
-	_btnOk			= new TextButton(72, 16, 237, 177);
+	_btnMemorial	= new TextButton(56, 16, 10, 177);
+	_btnPsi			= new TextButton(56, 16, 71, 177);
+	_btnArmor		= new TextButton(56, 16, 132, 177);
+	_btnEquip		= new TextButton(56, 16, 193, 177);
+	_btnOk			= new TextButton(56, 16, 254, 177);
 
 	setPalette("PAL_BASESCAPE", 2);
 
@@ -90,8 +99,9 @@ SoldiersState::SoldiersState(
 	add(_txtCraft);
 	add(_lstSoldiers);
 	add(_btnMemorial);
-	add(_btnPsiTrain);
+	add(_btnPsi);
 	add(_btnArmor);
+	add(_btnEquip);
 	add(_btnOk);
 
 	centerAllSurfaces();
@@ -113,16 +123,25 @@ SoldiersState::SoldiersState(
 	ss << _base->getTotalSoldiers();
 	_txtSoldiers->setText(ss.str());
 
-	_btnPsiTrain->setColor(Palette::blockOffset(13)+10);
-	_btnPsiTrain->setText(tr("STR_PSIONIC_TRAINING"));
-	_btnPsiTrain->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
-	_btnPsiTrain->setVisible(
-						Options::anytimePsiTraining
-						&& _base->getAvailablePsiLabs() > 0);
+	_btnMemorial->setColor(Palette::blockOffset(13)+10);
+	_btnMemorial->setText(tr("STR_MEMORIAL"));
+	_btnMemorial->onMouseClick((ActionHandler)& SoldiersState::btnMemorialClick);
+	_btnMemorial->setVisible(_game->getSavedGame()->getDeadSoldiers()->empty() == false);
+
+	_btnPsi->setColor(Palette::blockOffset(13)+10);
+	_btnPsi->setText(tr("STR_PSIONIC_TRAINING"));
+	_btnPsi->onMouseClick((ActionHandler)& SoldiersState::btnPsiTrainingClick);
+	_btnPsi->setVisible(
+					Options::anytimePsiTraining
+					&& _base->getAvailablePsiLabs() > 0);
 
 	_btnArmor->setColor(Palette::blockOffset(13)+10);
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& SoldiersState::btnArmorClick);
+
+	_btnEquip->setColor(Palette::blockOffset(13)+10);
+	_btnEquip->setText(tr("STR_INVENTORY"));
+	_btnEquip->onMouseClick((ActionHandler)& SoldiersState::btnEquipClick);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
@@ -130,11 +149,6 @@ SoldiersState::SoldiersState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldiersState::btnOkClick,
 					Options::keyCancel);
-
-	_btnMemorial->setColor(Palette::blockOffset(13)+10);
-	_btnMemorial->setText(tr("STR_MEMORIAL"));
-	_btnMemorial->onMouseClick((ActionHandler)& SoldiersState::btnMemorialClick);
-	_btnMemorial->setVisible(_game->getSavedGame()->getDeadSoldiers()->empty() == false);
 
 	_txtName->setColor(Palette::blockOffset(15)+1);
 	_txtName->setText(tr("STR_NAME_UC"));
@@ -169,7 +183,17 @@ SoldiersState::~SoldiersState()
  */
 void SoldiersState::init()
 {
+	//Log(LOG_INFO) << "SoldiersState::init()";
 	State::init();
+
+	// return from Inventory Equipment Layout screen (pre-battle equip)
+	_game->getSavedGame()->setBattleGame(NULL);
+	_base->setInBattlescape(false);
+	// Restore system colors
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+	// end pre-battle Equip.
+
 
 	_lstSoldiers->clearList();
 
@@ -381,6 +405,34 @@ void SoldiersState::lstRightArrowClick(Action* action) // kL
 	}
 
 	init();
+}
+
+/**
+* kL. Displays the inventory screen for the soldiers at the base.
+* @param action - pointer to an action
+*/
+void SoldiersState::btnEquipClick(Action*) // kL
+{
+	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick()";
+	SavedBattleGame* battle = new SavedBattleGame();
+	//Log(LOG_INFO) << ". bgame = " << bgame;
+	_game->getSavedGame()->setBattleGame(battle);
+	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+	//Log(LOG_INFO) << ". bgen = " << &bgen;
+
+	bgen.runInventory(NULL, _base);
+	//Log(LOG_INFO) << ". bgen.runInventory() DONE";
+
+	// Set system colors
+	_game->getCursor()->setColor(Palette::blockOffset(9));
+	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+
+	_game->getScreen()->clear();
+
+	_game->pushState(new InventoryState(
+									false,
+									NULL));
+	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick() EXIT";
 }
 
 }

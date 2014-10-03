@@ -172,7 +172,6 @@ private:
 		void setCraft(Craft* craft);
 		/// Sets the ufo.
 		void setUfo(Ufo* ufo);
-
 		/// Sets the XCom base.
 		void setBase(Base* base);
 		/// Sets the terror site.
@@ -188,8 +187,10 @@ private:
 		/// Finds a spot near a friend to spawn at.
 		bool placeUnitNearFriend(BattleUnit* unit);
 
-		/// Generates an inventory battlescape.
-		void runInventory(Craft* craft);
+		/// Generates a fake battlescape for Craft & Base soldier-inventory.
+		void runInventory(
+				Craft* craft,
+				Base* base = NULL);
 
 		/// Load all Xcom weapons.
 //		void loadWeapons();

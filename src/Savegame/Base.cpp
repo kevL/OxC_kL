@@ -233,7 +233,7 @@ void Base::load(
 				*i,
 				_rule,
 				save);
-		s->setCraft(0);
+		s->setCraft(NULL);
 
 		if (const YAML::Node& craft = (*i)["craft"])
 		{
@@ -625,8 +625,8 @@ double Base::insideRadarRange(Target* target) const
 
 /**
  * Returns the amount of soldiers contained in the base without any assignments.
- * @param combatReady does what it says on the tin. ( bull..)
- * @return, Number of soldiers.
+ * @param combatReady - does what it says on the tin. ( bull..)
+ * @return, number of soldiers
  */
 int Base::getAvailableSoldiers(bool combatReady) const
 {
@@ -637,7 +637,7 @@ int Base::getAvailableSoldiers(bool combatReady) const
 			i != _soldiers.end();
 			++i)
 	{
-		if (!combatReady
+		if (combatReady == false
 			&& (*i)->getCraft() == NULL)
 		{
 			total++;
@@ -657,7 +657,7 @@ int Base::getAvailableSoldiers(bool combatReady) const
 
 /**
  * Returns the total amount of soldiers contained in the base.
- * @return, Number of soldiers.
+ * @return, number of soldiers
  */
 int Base::getTotalSoldiers() const
 {
@@ -677,7 +677,7 @@ int Base::getTotalSoldiers() const
 
 /**
  * Returns the amount of scientists contained in the base without any assignments.
- * @return, Number of scientists.
+ * @return, number of scientists
  */
 /*kL int Base::getAvailableScientists() const
 {
@@ -686,7 +686,7 @@ int Base::getTotalSoldiers() const
 
 /**
  * Returns the total amount of scientists contained in the base.
- * @return, Number of scientists.
+ * @return, number of scientists
  */
 int Base::getTotalScientists() const
 {
@@ -715,7 +715,7 @@ int Base::getTotalScientists() const
 
 /**
  * Returns the amount of engineers contained in the base without any assignments.
- * @return, Number of engineers.
+ * @return, number of engineers
  */
 /*kL int Base::getAvailableEngineers() const
 {
@@ -724,7 +724,7 @@ int Base::getTotalScientists() const
 
 /**
  * Returns the total amount of engineers contained in the base.
- * @return, Number of engineers.
+ * @return, number of engineers
  */
 int Base::getTotalEngineers() const
 {
@@ -752,7 +752,7 @@ int Base::getTotalEngineers() const
 
 /**
  * Returns the amount of living quarters used up by personnel in the base.
- * @return, Living space.
+ * @return, living space
  */
 int Base::getUsedQuarters() const
 {
@@ -761,7 +761,7 @@ int Base::getUsedQuarters() const
 
 /**
  * Returns the total amount of living quarters available in the base.
- * @return, Living space.
+ * @return, living space
  */
 int Base::getAvailableQuarters() const
 {
@@ -783,7 +783,7 @@ int Base::getAvailableQuarters() const
  * Returns the amount of stores used up
  * by equipment in the base
  * and equipment about to arrive.
- * @return, Storage space.
+ * @return, storage space
  */
 double Base::getUsedStores()
 {

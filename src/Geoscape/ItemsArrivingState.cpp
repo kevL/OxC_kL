@@ -264,7 +264,6 @@ void ItemsArrivingState::btnOkClick(Action*)
 void ItemsArrivingState::btnOk5SecsClick(Action*)
 {
 	_state->timerReset();
-
 	_game->popState();
 }
 
@@ -289,18 +288,14 @@ void ItemsArrivingState::btnOk5SecsClick(Action*)
  */
 void ItemsArrivingState::lstGoToBasePress(Action* action) // kL
 {
-	//Log(LOG_INFO) << ". ItemsArrivingState::lstGoToBasePress()";
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		//Log(LOG_INFO) << ". . row = " << _lstTransfers->getSelectedRow();
 		Base* base = _bases.at(_lstTransfers->getSelectedRow());
 		if (base) // make sure player hasn't deconstructed a base, when jumping back & forth between bases and the list.
-		{
 			_game->pushState(new BasescapeState(
 											base,
 											_state->getGlobe()));
-		}
 	}
 }
 

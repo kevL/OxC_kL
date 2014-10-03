@@ -141,6 +141,36 @@ void BattlescapeGenerator::setUfo(Ufo* ufo)
 }
 
 /**
+ * Sets the XCom base involved in the battle.
+ * @param base - pointer to XCom base
+ */
+void BattlescapeGenerator::setBase(Base* base)
+{
+	_base = base;
+	_base->setInBattlescape(true);
+}
+
+/**
+ * Sets the terror site involved in the battle.
+ * @param terror - pointer to terror site
+ */
+void BattlescapeGenerator::setTerrorSite(TerrorSite* terror)
+{
+	_terror = terror;
+	_terror->setInBattlescape(true);
+}
+
+/**
+ * Sets the alien base involved in the battle.
+ * @param base - pointer to alien base
+ */
+void BattlescapeGenerator::setAlienBase(AlienBase* base)
+{
+	_alienBase = base;
+	_alienBase->setInBattlescape(true);
+}
+
+/**
  * kL. Sets the world terrainRule of where a ufo crashed or landed.
  * @param texture - pointer to a terrainRule as determined in ConfirmLandingState
  */
@@ -201,26 +231,6 @@ void BattlescapeGenerator::setAlienRace(const std::string& alienRace)
 void BattlescapeGenerator::setAlienItemlevel(int alienItemLevel)
 {
 	_alienItemLevel = alienItemLevel;
-}
-
-/**
- * Sets the XCom base involved in the battle.
- * @param base - pointer to XCom base
- */
-void BattlescapeGenerator::setBase(Base* base)
-{
-	_base = base;
-	_base->setInBattlescape(true);
-}
-
-/**
- * Sets the terror site involved in the battle.
- * @param terror - pointer to terror site
- */
-void BattlescapeGenerator::setTerrorSite(TerrorSite* terror)
-{
-	_terror = terror;
-	_terror->setInBattlescape(true);
 }
 
 /**
@@ -680,11 +690,12 @@ void BattlescapeGenerator::deployXCOM()
 					}
 
 					std::map<std::string, int>::iterator mark = i;
-
 					++i;
-					_base->getItems()->removeItem(
-												mark->first,
-												mark->second);
+
+					if (_baseEquipScreen == false)
+						_base->getItems()->removeItem(
+													mark->first,
+													mark->second);
 				}
 				else
 					++i;
@@ -962,15 +973,16 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
  * Adds a soldier to the game and places him on a free spawnpoint.
  * Spawnpoints are either tiles in case of an XCom craft that landed
  * or they are mapnodes in case there's no craft.
- * @param unit, Pointer to the soldier.
- * @return Battleunit, Pointer to the spawned unit.
+ * @param unit - pointer to an xCom BattleUnit
+ * @return, pointer to the spawned unit if successful, else NULL
  */
 BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 {
 //	unit->setId(_unitCount++);
-	if (_craft == NULL
-		|| _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
-		|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+	if ((_craft == NULL
+			|| _save->getMissionType() == "STR_ALIEN_BASE_ASSAULT"
+			|| _save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT")
+		&& _baseEquipScreen == false)
 	{
 		Node* node = _save->getSpawnNode(
 									NR_XCOM,
@@ -1041,7 +1053,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 			}
 		}
 	}
-	else // mission w/ transport craft that does not have ruleset Deployments.
+	else // mission w/ transport craft that does not have ruleset Deployments. Or craft/base Equip.
 	{
 		//Log(LOG_INFO) << "addXCOMUnit() - NO Deployment rule";
 		int tankPos = 0;
@@ -3205,19 +3217,9 @@ void BattlescapeGenerator::explodePowerSources()
 }
 
 /**
- * Sets the alien base involved in the battle.
- * @param base Pointer to alien base.
- */
-void BattlescapeGenerator::setAlienBase(AlienBase* base)
-{
-	_alienBase = base;
-	_alienBase->setInBattlescape(true);
-}
-
-/**
  * Places a unit near a friendly unit.
- * @param unit, Pointer to the unit in question.
- * @return, True if the unit was successfully placed.
+ * @param unit - pointer to the BattleUnit in question
+ * @return, true if the unit was successfully placed
  */
 bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
 {
@@ -3225,23 +3227,25 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
 //kL	int tries = 100;
 	int tries = 3; // kL: these guys were getting too cramped up.
 	while (entryPoint == Position(-1,-1,-1)
-		&& tries)
+		&& tries > 0)
 	{
-		BattleUnit* k = _save->getUnits()->at(RNG::generate(
+		BattleUnit* bu = _save->getUnits()->at(RNG::generate(
 														0,
 														static_cast<int>(_save->getUnits()->size()) - 1));
-		if (k->getFaction() == unit->getFaction()
-			&& k->getPosition() != Position(-1,-1,-1)
-			&& k->getArmor()->getSize() == 1)
+		if (bu->getFaction() == unit->getFaction()
+			&& bu->getPosition() != Position(-1,-1,-1)
+			&& bu->getArmor()->getSize() == 1)
 		{
-			entryPoint = k->getPosition();
+			entryPoint = bu->getPosition();
 		}
 
-		--tries;
+		tries--;
 	}
 
 	if (tries
-		&& _save->placeUnitNearPosition(unit, entryPoint))
+		&& _save->placeUnitNearPosition(
+									unit,
+									entryPoint))
 	{
 		return true;
 	}
@@ -3299,17 +3303,25 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 }
 
 /**
-* Creates a mini-battle-save for managing inventory from the Geoscape's CraftEquip screen.
-* Kids, don't try this at home! yer tellin' me.
-* @param craft, Pointer to craft to handle.
-*/
-void BattlescapeGenerator::runInventory(Craft* craft)
+ * Creates a mini-battle-save for managing inventory from the Geoscape's CraftEquip or BaseEquip screen.
+ * Kids, don't try this at home! yer tellin' me.
+ * @param craft	- pointer to craft to handle
+ * @param base	- pointer to base to handle (default NULL)
+ */
+void BattlescapeGenerator::runInventory(
+		Craft* craft,
+		Base* base)
 {
 	//Log(LOG_INFO) << "BattlescapeGenerator::runInventory()";
 	_baseEquipScreen = true;
 
-	int soldiers = craft->getNumSoldiers(); // we need to fake a map for soldier placement
+	int soldiers = 0;
+	if (craft)
+		soldiers = craft->getNumSoldiers();
+	else
+		soldiers = base->getAvailableSoldiers(true);
 
+	// we need to fake a map for soldier placement
 	_mapsize_x = soldiers;
 	_mapsize_y = 1;
 	_mapsize_z = 1;
@@ -3351,8 +3363,14 @@ void BattlescapeGenerator::runInventory(Craft* craft)
 													false);
 	}
 
-	//Log(LOG_INFO) << ". setCraft()";
-	setCraft(craft); // generate the battleitems for inventory
+	if (craft)
+	{
+		//Log(LOG_INFO) << ". setCraft()";
+		setCraft(craft); // generate the battleitems for inventory
+	}
+	else
+		setBase(base);
+
 	//Log(LOG_INFO) << ". setCraft() DONE, deployXCOM()";
 	deployXCOM();
 	//Log(LOG_INFO) << ". deployXCOM() DONE";

@@ -2324,7 +2324,7 @@ void GeoscapeState::time1Hour()
 			(*transfer)->advance(*base);
 
 			if ((*transfer)->getHours() == 0
-				&& !arrivals)
+				&& arrivals == false)
 			{
 				arrivals = true;
 			}

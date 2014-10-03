@@ -694,7 +694,7 @@ void InventoryState::btnOkClick(Action*)
 
 	_game->popState();
 
-	if (!_tu) // pre-Battle inventory equip.
+	if (_tu == false) // pre-Battle inventory equip.
 	{
 		//Log(LOG_INFO) << ". tu = FALSE";
 		saveEquipmentLayout();

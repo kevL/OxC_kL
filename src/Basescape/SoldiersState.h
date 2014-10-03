@@ -54,9 +54,10 @@ private:
 		* _txtTitle;
 	TextButton
 		* _btnArmor,
+		* _btnEquip,
 		* _btnMemorial,
 		* _btnOk,
-		* _btnPsiTrain;
+		* _btnPsi;
 	TextList* _lstSoldiers;
 	Window* _window;
 
@@ -85,6 +86,9 @@ private:
 		void lstLeftArrowClick(Action* action); // kL
 		/// kL. Handler for clicking the Soldiers reordering button.
 		void lstRightArrowClick(Action* action); // kL
+
+		/// kL. Handler for clicking the Inventory button.
+		void btnEquipClick(Action* action); // kL
 };
 
 }
