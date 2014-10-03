@@ -2472,7 +2472,6 @@ void BattlescapeGame::secondaryAction(const Position& pos)
 	_currentAction.strafe = Options::strafe
 							&& (SDL_GetModState() & KMOD_CTRL) != 0
 							&& _currentAction.actor->getTurretType() > -1;
-//							&& _save->getSelectedUnit()->getTurretType() > -1;
 
 	statePushBack(new UnitTurnBState(
 									this,

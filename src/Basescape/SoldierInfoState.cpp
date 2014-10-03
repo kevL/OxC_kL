@@ -996,7 +996,7 @@ void SoldierInfoState::btnNextClick(Action*)
  */
 void SoldierInfoState::btnArmorClick(Action*)
 {
-	if (!_soldier->getCraft()
+	if (_soldier->getCraft() == NULL
 		|| (_soldier->getCraft()
 			&& _soldier->getCraft()->getStatus() != "STR_OUT"))
 	{

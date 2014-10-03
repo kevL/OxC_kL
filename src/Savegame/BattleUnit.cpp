@@ -1490,12 +1490,15 @@ int BattleUnit::getStun() const
  * Raises a unit's stun level sufficiently so that the unit is ready to become unconscious.
  * Used when another unit falls on top of this unit.
  * Zombified units first convert to their spawn unit.
- * @param battle, Pointer to the battlescape game.
+ * @param battle - pointer to BattlescapeGame
  */
 void BattleUnit::knockOut(BattlescapeGame* battle)
 {
-	if (getArmor()->getSize() > 1) // large units die
+	if (getArmor()->getSize() > 1		// large units die
+		|| _unitRules->getMechanical())	// so do scout drones
+	{
 		_health = 0;
+	}
 	else if (_spawnUnit.empty() == false)
 	{
 //kL	setSpecialAbility(SPECAB_NONE); // do this in convertUnit()

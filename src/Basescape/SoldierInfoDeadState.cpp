@@ -539,13 +539,13 @@ void SoldierInfoDeadState::init()
 		_barPsiStrength->setValue(current->psiStrength);
 		_barPsiStrength->setValue2(initial->psiStrength);
 
-		_txtPsiStrength->setVisible();
+//		_txtPsiStrength->setVisible();
 		_numPsiStrength->setVisible();
 		_barPsiStrength->setVisible();
 	}
 	else
 	{
-		_txtPsiStrength->setVisible(false);
+//		_txtPsiStrength->setVisible(false);
 		_numPsiStrength->setVisible(false);
 		_barPsiStrength->setVisible(false);
 	}
@@ -559,13 +559,13 @@ void SoldierInfoDeadState::init()
 		_barPsiSkill->setValue(current->psiSkill);
 		_barPsiSkill->setValue2(initial->psiSkill);
 
-		_txtPsiSkill->setVisible();
+//		_txtPsiSkill->setVisible();
 		_numPsiSkill->setVisible();
 		_barPsiSkill->setVisible();
 	}
 	else
 	{
-		_txtPsiSkill->setVisible(false);
+//		_txtPsiSkill->setVisible(false);
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
 	}

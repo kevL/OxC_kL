@@ -4254,7 +4254,7 @@ Tile* TileEngine::checkForTerrainExplosions()
 
 /**
  * Opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
- * @param unit			- pointer to a battleunit
+ * @param unit			- pointer to a BattleUnit trying the door
  * @param rightClick	- true if the player right-clicked
  * @param dir			- direction to check for a door
  * @return, -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
@@ -4271,12 +4271,13 @@ int TileEngine::unitOpensDoor(
 {
 	//Log(LOG_INFO) << "unitOpensDoor()";
 	int
-		TUCost = 0,
-		door = -1;
+		door = -1,
+		size = unit->getArmor()->getSize();
 
-	int size = unit->getArmor()->getSize();
-	if (size > 1
-		&& rightClick)
+	if (unit->getUnitRules() != NULL
+		&& (rightClick
+			|| (unit->getUnitRules()->getMechanical()
+				&& size == 1)))
 	{
 		return door;
 	}
@@ -4284,27 +4285,29 @@ int TileEngine::unitOpensDoor(
 	if (dir == -1)
 		dir = unit->getDirection();
 
-	Tile* tile;
+	Tile* tile = NULL;
+	int
+		z = unit->getTile()->getTerrainLevel() < -12? 1: 0, // if we're standing on stairs, check the tile above instead.
+		TUCost = 0;
 
-	int z = unit->getTile()->getTerrainLevel() < -12? 1: 0; // if we're standing on stairs, check the tile above instead.
 	for (int
 			x = 0;
 			x < size
 				&& door == -1;
-			x++)
+			++x)
 	{
 		for (int
 				y = 0;
 				y < size
 					&& door == -1;
-				y++)
+				++y)
 		{
 			std::vector<std::pair<Position, int> > checkPositions;
 			tile = _battleSave->getTile(
 								unit->getPosition()
 								+ Position(x, y, z));
 
-			if (!tile)
+			if (tile == NULL)
 				continue;
 
 			Position posUnit = unit->getPosition(); // kL

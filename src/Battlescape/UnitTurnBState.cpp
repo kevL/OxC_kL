@@ -42,8 +42,9 @@ namespace OpenXcom
 
 /**
  * Sets up an UnitTurnBState.
- * @param parent Pointer to the Battlescape.
- * @param action Pointer to an action.
+ * @param parent	- pointer to BattlescapeGame
+ * @param action	- the current BattleAction
+ * @param chargeTUs	- true if there is TU cost, false for reaction fire
  */
 UnitTurnBState::UnitTurnBState(
 		BattlescapeGame* parent,
@@ -92,8 +93,8 @@ void UnitTurnBState::init()
 
 	// if the unit has a turret and we are turning during targeting, then only the turret turns
 	_turret = _unit->getTurretType() != -1
-				&& (_action.strafe
-					|| _action.targeting);
+			&& (_action.strafe
+				|| _action.targeting);
 
 	if (_unit->getPosition().x != _action.target.x
 		|| _unit->getPosition().y != _action.target.y)
@@ -183,7 +184,6 @@ void UnitTurnBState::think()
 	{
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
 		_unit->setStatus(STATUS_STANDING);
-
 		_parent->popState();
 	}
 	else if (_unit->spendTimeUnits(tu))
@@ -225,8 +225,10 @@ void UnitTurnBState::think()
 		}
 
 		if (_unit->getStatus() == STATUS_STANDING)
+		{
 			//Log(LOG_INFO) << "UnitTurnBState::think(), popState()";
 			_parent->popState();
+		}
 		else
 			_parent->getBattlescapeState()->refreshVisUnits();
 	}
@@ -236,7 +238,6 @@ void UnitTurnBState::think()
 
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState() 2";
 		_unit->setStatus(STATUS_STANDING);
-
 		_parent->popState();
 	}
 	//Log(LOG_INFO) << "UnitTurnBState::think() EXIT";

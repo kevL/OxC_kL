@@ -1268,7 +1268,7 @@ void SavedBattleGame::resetUnitTiles()
 			i != _units.end();
 			++i)
 	{
-		if (!(*i)->isOut())
+		if ((*i)->isOut() == false)
 		{
 			int size = (*i)->getArmor()->getSize() - 1;
 
@@ -1278,12 +1278,12 @@ void SavedBattleGame::resetUnitTiles()
 				for (int // remove Unit from its current tile
 						x = size;
 						x > -1;
-						x--)
+						--x)
 				{
 					for (int
 							y = size;
 							y > -1;
-							y--)
+							--y)
 					{
 						getTile((*i)->getTile()->getPosition() + Position(x, y, 0))->setUnit(NULL);
 					}
@@ -1293,17 +1293,17 @@ void SavedBattleGame::resetUnitTiles()
 			for (int // set Unit onto its proper tile
 					x = size;
 					x > -1;
-					x--)
+					--x)
 			{
 				for (int
 						y = size;
 						y > -1;
-						y--)
+						--y)
 				{
 					Tile* tile = getTile((*i)->getPosition() + Position(x, y, 0));
 					tile->setUnit(
 							*i,
-							getTile(tile->getPosition() + Position(0, 0, -1)));
+							getTile(tile->getPosition() + Position(0, 0,-1)));
 				}
 			}
 		}

@@ -1977,7 +1977,7 @@ bool Pathfinding::previewPath(bool bRemove)
 	if (_path.empty())
 		return false;
 
-	if (!bRemove
+	if (bRemove == false
 		&& _pathPreviewed)
 	{
 		return false;
@@ -2001,7 +2001,8 @@ bool Pathfinding::previewPath(bool bRemove)
 		hathStood	= false,
 		dash		= Options::strafe
 						&& _modCTRL
-						&& size == 0
+						&& _unit->getType() == "SOLDIER"
+//						&& size == 0
 						&& _strafeMove == false,
 		bodySuit	= armorType == "STR_PERSONAL_ARMOR_UC",
 		powerSuit	= _unit->hasPowerSuit()

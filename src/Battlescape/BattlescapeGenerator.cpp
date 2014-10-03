@@ -1161,7 +1161,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 	if (item->getSlot() == ground)
 	{
 		RuleInventory* righthand = _rules->getInventory("STR_RIGHT_HAND");
-		bool loaded;
+		bool loaded = false;
 
 		// find the first soldier with a matching layout-slot
 		for (std::vector<BattleUnit*>::iterator
@@ -1170,8 +1170,8 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 				++i)
 		{
 			// skip the vehicles, we need only X-Com soldiers WITH equipment-layout
-			if ((*i)->getArmor()->getSize() > 1
-				|| (*i)->getGeoscapeSoldier() == NULL
+			if ((*i)->getGeoscapeSoldier() == NULL
+//kL			|| (*i)->getArmor()->getSize() > 1
 				|| (*i)->getGeoscapeSoldier()->getEquipmentLayout()->empty())
 			{
 				continue;

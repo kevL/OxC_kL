@@ -1190,12 +1190,12 @@ bool UnitWalkBState::groundCheck(int descent) // kL
 	for (int
 			x = size;
 			x > -1;
-			x--)
+			--x)
 	{
 		for (int
 				y = size;
 				y > -1;
-				y--)
+				--y)
 		{
 			tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -descent - 1));
 			if (!_parent->getSave()->getTile(

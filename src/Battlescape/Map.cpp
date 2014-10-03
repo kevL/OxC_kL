@@ -2922,7 +2922,7 @@ const int Map::getSoundAngle(Position pos)
 	// Convert the relative distance left or right to a relative angle off-center.
 	// Since Mix_SetPosition() uses modulo 360, we can't feed it a negative number, so add 360.
 	// The integer-factor below is the allowable maximum deflection from center
-	return (screenPos.x * 36 / midPoint) + 360;
+	return (screenPos.x * 35 / midPoint) + 360;
 }
 
 /**
