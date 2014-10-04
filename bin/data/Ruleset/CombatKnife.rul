@@ -47,7 +47,7 @@ extraSprites:
 extraSounds:
   - type: BATTLE.CAT
     files:
-      67: Resources/UpClose/CombatKnife/Sounds/KnifeSlice.wav
+      67: Resources/CombatKnife/KnifeSlice.wav
 extraStrings:
   - type: en-US
     strings:

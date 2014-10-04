@@ -1174,7 +1174,8 @@ void Craft::setLoadCurrent(int load)
  */
 int Craft::getLoadCurrent()
 {
-	_loadCur = getNumEquipment() + getNumSoldiers() * 10 + getNumVehicles() * 40;
+//	_loadCur = getNumEquipment() + getNumSoldiers() * 10 + getNumVehicles() * 40;
+	_loadCur = getNumEquipment() + getSpaceUsed() * 10;
 
 	return _loadCur;
 }

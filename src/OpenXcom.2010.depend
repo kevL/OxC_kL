@@ -4700,7 +4700,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/BattlescapeGame.h"
 
-1412375124 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1412459608 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -4710,7 +4710,6 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Engine/Screen.h"
@@ -8828,7 +8827,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1412409033 source:f:\git\openxcom\src\menu\startstate.cpp
+1412449960 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"../version.h"
 	"ErrorMessageState.h"
@@ -9609,7 +9608,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1412368409 source:f:\git\openxcom\src\savegame\craft.cpp
+1412454625 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
