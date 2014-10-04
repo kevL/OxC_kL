@@ -5491,7 +5491,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1412372992 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1412377089 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -5504,6 +5504,7 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/LocalizedText.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
@@ -5924,7 +5925,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1412293646 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1412377653 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6771,7 +6772,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1412296693 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1412379263 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>

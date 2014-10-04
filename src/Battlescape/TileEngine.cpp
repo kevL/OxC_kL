@@ -173,8 +173,9 @@ void TileEngine::calculateSunShading(Tile* tile)
  */
 void TileEngine::calculateTerrainLighting()
 {
-	const int layer		= 1;	// Static lighting layer.
-	const int fireLight	= 15;	// amount of light a fire generates
+	const int
+		layer		= 1,	// static lighting layer
+		fireLight	= 15;	// amount of light a fire generates
 
 	for (int // reset all light to 0 first
 			i = 0;
@@ -233,10 +234,11 @@ void TileEngine::calculateTerrainLighting()
  */
 void TileEngine::calculateUnitLighting()
 {
-	const int layer			= 2;		// Dynamic lighting layer.
-//kL	const int personalLight = 15;	// amount of light a unit generates
-	const int personalLight	= 12;		// kL, Try it...
-	const int fireLight		= 15;		// amount of light a fire generates
+	const int
+		layer			= 2,	// Dynamic lighting layer.
+//kL	personalLight	= 15,	// amount of light a unit generates
+		personalLight	= 12,	// kL, Try it... good.
+		fireLight		= 15;	// amount of light a fire generates
 
 	for (int // reset all light to 0 first
 			i = 0;

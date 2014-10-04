@@ -785,45 +785,36 @@ int Tile::getFuel(int part) const
 
 /**
  * Ignite starts fire on a tile, it will burn <fuel> rounds.
- * Fuel of a tile is the highest fuel of its objects,
+ * Fuel of a tile is the highest fuel of its objects
  * NOT the sum of the fuel of the objects!
  * @param power
  */
 void Tile::ignite(int power)
 {
-	//Log(LOG_INFO) << "Tile::ignite()";
 	if (_fire == 0)
 	{
-		int burn = getFlammability(); // <- lower is better :)
-		//Log(LOG_INFO) << ". burn = " << burn;
-		if (burn != 255)
+		int fuel = getFuel();
+		if (fuel > 0)
 		{
-			power -= (burn / 10) - 15;
-			//Log(LOG_INFO) << ". . power = " << power;
-			//Log(LOG_INFO) << ". . fuel = " << getFuel();
-			if (getFuel()
-				&& RNG::percent(power))
+			int burn = getFlammability(); // <- lower is better :)
+			if (burn < 255)
 			{
-//kL			_smoke = 15 - std::max(
-//kL								1,
-//kL								std::min(
-//kL										burn / 10,
-//kL										12));
-				// kL. from TileEngine::explode()
-				_smoke = std::max(
-								1,
-								std::min(
-										15 - (burn / 10),
-										12));
-				//Log(LOG_INFO) << ". . . smoke = " << _smoke << "\n";
+				power -= (burn / 10) - 15;
+				if (RNG::percent(power))
+				{
+					_smoke = std::max(
+									1,
+									std::min(
+											15 - (burn / 10),
+											12));
 
-				_fire = getFuel() + 1;
-				_overlaps = 1;
-				_animOffset = RNG::generate(0, 3);
+					_fire = fuel + 1;
+					_overlaps = 1;
+					_animOffset = RNG::generate(0, 3);
+				}
 			}
 		}
 	}
-	//else Log(LOG_INFO) << "Tile::ignite() fire EXISTS already\n";
 }
 
 /**

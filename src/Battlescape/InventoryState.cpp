@@ -128,9 +128,9 @@ InventoryState::InventoryState(
 
 	_txtItem	= new Text(160, 9, 128, 140);
 
-	_btnOk		= new BattlescapeButton(35, 22, 237, 0);
-	_btnPrev	= new BattlescapeButton(23, 22, 273, 0);
-	_btnNext	= new BattlescapeButton(23, 22, 297, 0);
+	_btnOk		= new BattlescapeButton(35, 23, 237, 0);
+	_btnPrev	= new BattlescapeButton(23, 23, 273, 0);
+	_btnNext	= new BattlescapeButton(23, 23, 297, 0);
 
 	_btnRank	= new BattlescapeButton(26, 23, 0, 0);
 	_btnUnload	= new BattlescapeButton(32, 25, 288, 32);
@@ -455,7 +455,7 @@ void InventoryState::init()
 		//Log(LOG_INFO) << ". early out <- no selectedUnit";
 		return;
 	}
-	else if (!unit->hasInventory()) // skip to the first unit with inventory
+	else if (unit->hasInventory() == false) // skip to the first unit with inventory
 	{
 		//Log(LOG_INFO) << ". . unit doesn't have Inventory";
 		if (_parent)
@@ -476,7 +476,7 @@ void InventoryState::init()
 		}
 
 		if (_battleGame->getSelectedUnit() == NULL
-			 || !_battleGame->getSelectedUnit()->hasInventory())
+			 || _battleGame->getSelectedUnit()->hasInventory() == false)
 		{
 			btnOkClick(NULL);
 
