@@ -1,0 +1,47 @@
+# Incendiary Grenade
+items:
+  - type: STR_INC_GRENADE
+    size: 0.1
+    costBuy: 320
+    costSell: 260
+    weight: 4
+    bigSprite: 411
+    floorSprite: 412
+    handSprite: 416
+    power: 78
+    damageType: 2
+    battleType: 4
+    listOrder: 3901
+ufopaedia:
+  - id: STR_INC_GRENADE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_INC_GRENADE_UFOPEDIA
+    listOrder: 4005
+extraSprites:
+  - type: BIGOBS.PCK
+    files:
+      411: Resources/Inc_grenade/Inc_grenade.GIF
+  - type: FLOOROB.PCK
+    files:
+      412: Resources/Inc_grenade/floorob_Inc_grenade.GIF
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      416: Resources/Inc_grenade/HandOb_Incgrenade.gif
+extraStrings:
+  - type: en-US
+    strings:
+      STR_INC_GRENADE: "Incendiary Grenade"
+      STR_INC_GRENADE_UFOPEDIA: "Incendiary Grenades are thrown incendiary devices that burn at extremely high temperatures through a violent chemical reaction. Move personnel away from ignition point."
+  - type: en-GB
+    strings:
+      STR_INC_GRENADE: "Incendiary Grenade"
+      STR_INC_GRENADE_UFOPEDIA: "Incendiary Grenades are thrown incendiary devices that burn at extremely high temperatures through a violent chemical reaction. Move personnel away from ignition point."
+  - type: ru
+    strings:
+      STR_INC_GRENADE: "Зажигательная граната"
+      STR_INC_GRENADE_UFOPEDIA: "Зажигательные гранаты используются в качестве метательных зажигательных устройств, горящих с очень высокой температурой благодаря бурной химической реакции. Не стойте возле места воспламенения."
