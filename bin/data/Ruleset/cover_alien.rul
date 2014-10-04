@@ -28,9 +28,9 @@ items:
     listOrder: 7020
   - type: CYBERMITE_WEAPON
     weight: 3
-    bigSprite: -3
-    floorSprite: 31
-    handSprite: 104
+#    bigSprite: -3
+#    floorSprite: 31
+#    handSprite: 104
     hitSound: 54
     clipSize: -1
     power: 80
@@ -39,10 +39,10 @@ items:
     tuMelee: 15
     battleType: 3
     fixedWeapon: true
-    invWidth: 2
-    invHeight: 3
+#    invWidth: 2
+#    invHeight: 3
     recover: false
-    listOrder: 11510
+#    listOrder: 11510
   - type: STR_WASPITE_SOLDIER
     size: 0.0
     recover: true
@@ -88,6 +88,7 @@ items:
 armors:
   - type: WASPITE_ARMOR0
     spriteSheet: WASPITE.PCK
+    spriteInv: inventory_WASPITE
     corpseBattle:
       - STR_WASPITE_CORPSE
     frontArmor: 18
@@ -110,6 +111,7 @@ armors:
     loftempsSet: [ 3 ]
   - type: WASPITE_ARMOR1
     spriteSheet: WASPITE.PCK
+    spriteInv: inventory_WASPITE
     corpseBattle:
       - STR_WASPITE_CORPSE
     frontArmor: 26
@@ -132,6 +134,7 @@ armors:
     loftempsSet: [ 3 ]
   - type: WASPITE_ARMOR2
     spriteSheet: WASPITE.PCK
+    spriteInv: inventory_WASPITE
     corpseBattle:
       - STR_WASPITE_CORPSE
     frontArmor: 34

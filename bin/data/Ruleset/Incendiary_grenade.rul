@@ -5,8 +5,8 @@ items:
     costBuy: 320
     costSell: 260
     weight: 4
-    bigSprite: 411
-    floorSprite: 412
+    bigSprite: 416
+    floorSprite: 416
     handSprite: 416
     power: 78
     damageType: 2
@@ -22,10 +22,10 @@ ufopaedia:
 extraSprites:
   - type: BIGOBS.PCK
     files:
-      411: Resources/Inc_grenade/Inc_grenade.png
+      416: Resources/Inc_grenade/Inc_grenade.png
   - type: FLOOROB.PCK
     files:
-      412: Resources/Inc_grenade/floorob_Inc_grenade.png
+      416: Resources/Inc_grenade/floorob_Inc_grenade.png
   - type: HANDOB.PCK
     width: 256
     height: 40

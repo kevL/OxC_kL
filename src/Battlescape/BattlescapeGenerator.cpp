@@ -1114,7 +1114,7 @@ bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile)
 	if (tile																		// is a tile
 		&& tile->getMapData(MapData::O_FLOOR)										// has a floor
 		&& tile->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT		// is a 'start point', ie. cargo tile
-		&& !tile->getMapData(MapData::O_OBJECT)										// no object content
+		&& tile->getMapData(MapData::O_OBJECT) == NULL								// no object content
 		&& tile->getMapData(MapData::O_FLOOR)->getTUCost(MT_WALK) < 255				// is walkable.
 		&& tile->getUnit() == NULL)													// kL, and no unit on Tile.
 	{

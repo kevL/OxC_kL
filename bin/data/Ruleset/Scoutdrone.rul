@@ -37,9 +37,9 @@ items:
     blastRadius: 3
     listOrder: 1099
   - type: STR_SMALL_TANK_CORPSE
-    weight: 25
-    bigSprite: 63
-    floorSprite: 84
+    weight: 30
+    bigSprite: 64
+    floorSprite: 77
     battleType: 11
     armor: 28
     invWidth: 2
@@ -117,7 +117,7 @@ extraSprites:
       64: Resources/Scoutdrone/bigobs_64.png
   - type: FLOOROB.PCK
     files:
-      84: Resources/Scoutdrone/floorob_84.png
+      77: Resources/Scoutdrone/floorob_84.png
   - type: SCOUT.PCK
     files:
       0: Resources/Scoutdrone/Drone/

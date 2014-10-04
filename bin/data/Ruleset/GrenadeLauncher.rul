@@ -4,9 +4,9 @@ items:
     costBuy: 5000
     costSell: 2250
     weight: 10
-    bigSprite: 60
-    floorSprite: 74
-    handSprite: 128
+    bigSprite: 79
+    floorSprite: 75
+    handSprite: 136
     bulletSprite: 11
     fireSound: 89
     compatibleAmmo:
@@ -30,10 +30,10 @@ items:
     costBuy: 200
     costSell: 150
     weight: 4
-    bigSprite: 61
+    bigSprite: 80
     floorSprite: 2
     hitSound: 0
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 48
     damageType: 3
     clipSize: 1
@@ -47,10 +47,10 @@ items:
     costBuy: 600
     costSell: 400
     weight: 4
-    bigSprite: 62
+    bigSprite: 81
     floorSprite: 2
     hitSound: 0
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 78
     damageType: 2
     clipSize: 1
@@ -64,10 +64,10 @@ items:
     costBuy: 300
     costSell: 200
     weight: 4
-    bigSprite: 63
+    bigSprite: 82
     floorSprite: 2
     hitSound: 0
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 57
     damageType: 9
     clipSize: 1
@@ -94,16 +94,16 @@ ufopaedia:
 extraSprites:
   - type: BIGOBS.PCK
     files:
-      60: Resources/GrenadeLauncher/BigGrenadeLauncher.png
-      61: Resources/GrenadeLauncher/BigLauncherFrag.png
-      62: Resources/GrenadeLauncher/BigLauncherInc.png
-      63: Resources/GrenadeLauncher/BigLauncherSmoke.png
+      79: Resources/GrenadeLauncher/BigGrenadeLauncher.png
+      80: Resources/GrenadeLauncher/BigLauncherFrag.png
+      81: Resources/GrenadeLauncher/BigLauncherInc.png
+      82: Resources/GrenadeLauncher/BigLauncherSmoke.png
   - type: FLOOROB.PCK
     files:
-      74: Resources/GrenadeLauncher/FloorGrenadeLauncher.png
+      75: Resources/GrenadeLauncher/FloorGrenadeLauncher.png
   - type: HANDOB.PCK
     files:
-      128: Resources/GrenadeLauncher/HANDOB/
+      136: Resources/GrenadeLauncher/HANDOB/
   - type: Projectiles
     height: 9
     width: 105

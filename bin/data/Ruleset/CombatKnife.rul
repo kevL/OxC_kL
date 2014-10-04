@@ -1,0 +1,75 @@
+# 9/9/2014  after discussion with Warboy in IRC chat about the knife and its hit mechanics, we concluded that the knife needed more balancing. This mod was developed before the melee mechanics were completely worked out, so in the process it became significantly less effective.  I am bumping the accuracy up significantly, and halving the power, but applying the unit's attack strength to it as well.
+# 9/16/2014 Added a melee hit sound to allow for better feedback when using the knife.
+# 9/24/2014 Updated with single sprite sheet for handobs for better Linux support.
+items:
+  - type: STR_COMBAT_KNIFE
+    size: 0.1
+    costBuy: 100
+    costSell: 50
+    weight: 4
+    bigSprite: 61
+    floorSprite: 76
+    handSprite: 144
+    meleeSound: 39
+    meleeHitSound: 67
+#    hitAnimation: 0
+    power: 30
+    strengthApplied: true
+    damageType: 7
+    accuracyMelee: 150
+    tuMelee: 12
+    battleType: 3
+    twoHanded: false
+    invWidth: 1
+    invHeight: 2
+    armor: 12
+    listOrder: 1899
+ufopaedia:
+  - id: STR_COMBAT_KNIFE
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_COMBAT_KNIFE_UFOPEDIA
+    listOrder: 1999
+extraSprites:
+  - type: BIGOBS.PCK
+    files:
+      61: Resources/CombatKnife/BigCombatKnife.png
+  - type: FLOOROB.PCK
+    files:
+      76: Resources/CombatKnife/FloorCombatKnife.png
+  - type: HANDOB.PCK
+    height: 40
+    width: 256
+    subX: 32
+    subY: 40
+    files:
+      144: Resources/CombatKnife/HANDOB/HandCombatKnife.png
+extraSounds:
+  - type: BATTLE.CAT
+    files:
+      67: Resources/UpClose/CombatKnife/Sounds/KnifeSlice.wav
+extraStrings:
+  - type: en-US
+    strings:
+      STR_COMBAT_KNIFE: "Daichi blade"
+      STR_COMBAT_KNIFE_UFOPEDIA: "Using this hardened blade a trained professional can silently kill a lightly-armored opponent with a single slash or thrust."
+  - type: en-GB
+    strings:
+      STR_COMBAT_KNIFE: Combat Knife
+      STR_COMBAT_KNIFE_UFOPEDIA: Using its hardened edge and point, a trained field operative can silently kill a lightly-armored enemy with a single slash or thrust.{NEWLINE}Suitable for close encounters of any kind.
+  - type: es
+    strings:
+      STR_COMBAT_KNIFE: Cuchillo de Combate
+      STR_COMBAT_KNIFE_UFOPEDIA: Utilizando su borde afilado, un agente de campo entrenado puede matar en silencio a un enemigo con armadura ligera de un solo golpe.{NEWLINE}Adecuado para los encuentros cercanos de cualquier fase.
+  - type: es-419
+    strings:
+      STR_COMBAT_KNIFE: Cuchillo de Combate
+      STR_COMBAT_KNIFE_UFOPEDIA: Utilizando su borde afilado, un agente de campo entrenado puede matar en silencio a un enemigo con armadura ligera de un solo golpe.{NEWLINE}Adecuado para los encuentros cercanos de cualquier tipo.
+  - type: de
+    strings:
+      STR_COMBAT_KNIFE: Kampfmesser
+      STR_COMBAT_KNIFE_UFOPEDIA: Mit der gehärteten Klinge und Spitze kann ein gut ausgebildeter Nahkämpfer Gegner mit leichter Panzerung mit einem einzigen Hieb oder Stich geräuschlos töten.{NEWLINE}Geeignet für unheimliche Begegnungen jeder Art.
+  - type: fr
+    strings:
+      STR_COMBAT_KNIFE: Poignard de combat
+      STR_COMBAT_KNIFE_UFOPAEDIA: Son tranchant aiguisé permet à un combattant aguerri de tuer, d'un seul coup et en silence, tout ennemi équipé d'une armure légère.{NEWLINE} Utile pour tout type de corps à corps.

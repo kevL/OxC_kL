@@ -182,7 +182,7 @@ crafts:
     speedMax: 783
     accel: 2
     soldiers: 14
-    vehicles: 3
+    vehicles: 2
     maxItems: 84 # 6 x soldier cap.
     costBuy: 450000
     costRent: 300000
@@ -278,7 +278,7 @@ crafts:
     costRent: 150000
     costSell: 10200000
     soldiers: 26
-    vehicles: 4
+    vehicles: 3
     maxItems: 156 # 6 x soldier cap.
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
@@ -511,7 +511,7 @@ items:
     bigSprite: -1
 #    floorSprite: 16
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 115
     damageType: 3
     clipSize: 6
@@ -599,7 +599,7 @@ items:
     bigSprite: -1
 #    floorSprite: 35
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 216
     damageType: 3
     clipSize: 6
@@ -722,7 +722,7 @@ items:
     bigSprite: 13
     floorSprite: 13
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 61
     damageType: 3
     clipSize: 6
@@ -738,7 +738,7 @@ items:
     bigSprite: 14
     floorSprite: 14
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 62
     damageType: 2
     clipSize: 6
@@ -793,7 +793,7 @@ items:
     bigSprite: 9
     floorSprite: 9
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 49
     damageType: 3
     clipSize: 12
@@ -809,7 +809,7 @@ items:
     bigSprite: 10
     floorSprite: 10
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 52
     damageType: 2
     clipSize: 12
@@ -847,7 +847,7 @@ items:
     bigSprite: 16
     floorSprite: 16
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 81
     damageType: 3
     clipSize: 1
@@ -862,7 +862,7 @@ items:
     bigSprite: 17
     floorSprite: 17
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 98
     damageType: 3
     clipSize: 1
@@ -877,7 +877,7 @@ items:
     bigSprite: 18
     floorSprite: 18
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 92
     damageType: 2
     clipSize: 1
@@ -1253,7 +1253,7 @@ items:
     bigSprite: 36
     floorSprite: 35
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 182
     damageType: 3
     clipSize: 1
@@ -1295,7 +1295,7 @@ items:
     bigSprite: 38
     floorSprite: 37
     hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-    hitAnimation: 0
+#    hitAnimation: 0
     power: 85
     damageType: 6
     clipSize: 1
