@@ -1,0 +1,174 @@
+items:
+  - type: STR_GRENADE_LAUNCHER
+    size: 0.4
+    costBuy: 5000
+    costSell: 2250
+    weight: 10
+    bigSprite: 60
+    floorSprite: 74
+    handSprite: 128
+    bulletSprite: 11
+    fireSound: 89
+    compatibleAmmo:
+      - STR_LAUNCHER_FRAG
+      - STR_LAUNCHER_INC
+      - STR_LAUNCHER_SMOKE
+    accuracySnap: 50
+    accuracyAimed: 75
+    tuSnap: 35
+    tuAimed: 55
+    battleType: 1
+    arcingShot: true
+    twoHanded: true
+    noReaction: true
+    invWidth: 1
+    invHeight: 3
+    armor: 25
+    listOrder: 3001
+  - type: STR_LAUNCHER_FRAG
+    size: 0.1
+    costBuy: 200
+    costSell: 150
+    weight: 4
+    bigSprite: 61
+    floorSprite: 2
+    hitSound: 0
+    hitAnimation: 0
+    power: 48
+    damageType: 3
+    clipSize: 1
+    battleType: 2
+    armor: 15
+    blastRadius: 4
+    listOrder: 3002
+    bulletSprite: 11
+  - type: STR_LAUNCHER_INC
+    size: 0.1
+    costBuy: 600
+    costSell: 400
+    weight: 4
+    bigSprite: 62
+    floorSprite: 2
+    hitSound: 0
+    hitAnimation: 0
+    power: 78
+    damageType: 2
+    clipSize: 1
+    battleType: 2
+    armor: 15
+    blastRadius: 3
+    listOrder: 3003
+    bulletSprite: 12
+  - type: STR_LAUNCHER_SMOKE
+    size: 0.1
+    costBuy: 300
+    costSell: 200
+    weight: 4
+    bigSprite: 63
+    floorSprite: 2
+    hitSound: 0
+    hitAnimation: 0
+    power: 57
+    damageType: 9
+    clipSize: 1
+    battleType: 2
+    armor: 15
+    blastRadius: 4
+    listOrder: 3004
+    bulletSprite: 13
+ufopaedia:
+  - id: STR_GRENADE_LAUNCHER
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_GRENADE_LAUNCHER_UFOPEDIA
+    listOrder: 2901
+  - id: STR_LAUNCHER_FRAG
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_LAUNCHER_INC
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+  - id: STR_LAUNCHER_SMOKE
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+extraSprites:
+  - type: BIGOBS.PCK
+    files:
+      60: Resources/GrenadeLauncher/BigGrenadeLauncher.png
+      61: Resources/GrenadeLauncher/BigLauncherFrag.png
+      62: Resources/GrenadeLauncher/BigLauncherInc.png
+      63: Resources/GrenadeLauncher/BigLauncherSmoke.png
+  - type: FLOOROB.PCK
+    files:
+      74: Resources/GrenadeLauncher/FloorGrenadeLauncher.png
+  - type: HANDOB.PCK
+    files:
+      128: Resources/GrenadeLauncher/HANDOB/
+  - type: Projectiles
+    height: 9
+    width: 105
+    subX: 3
+    subY: 3
+    files:
+      385: Resources/GrenadeLauncher/BulletSprites.png
+extraSounds:
+  - type: BATTLE.CAT
+    files:
+      89: Resources/GrenadeLauncher/pop.wav
+extraStrings:
+  - type: en-US
+    strings:
+      STR_GRENADE_LAUNCHER: "Grenade launcher"
+      STR_LAUNCHER_FRAG: "gl-HE"
+      STR_LAUNCHER_INC: "gl-IN"
+      STR_LAUNCHER_SMOKE: "gl-SM"
+      STR_GRENADE_LAUNCHER_UFOPEDIA: "The M-79 Grenade launcher has a variety of different munition types at its disposal, contributing to its effectiveness in a wide range of situations."
+  - type: en-GB
+    strings:
+      STR_GRENADE_LAUNCHER: Grenade Launcher
+      STR_LAUNCHER_FRAG: 40mm Grenade (HE)
+      STR_LAUNCHER_INC: 40mm Grenade (INC)
+      STR_LAUNCHER_SMOKE: 40mm Grenade (SMOKE)
+      STR_GRENADE_LAUNCHER_UFOPEDIA: The M-79 Grenade launcher has a variety of different munition types at its disposal, contributing to its effectiveness in a wide range of situations.
+  - type: es
+    strings:
+      STR_GRENADE_LAUNCHER: Lanza Granadas
+      STR_LAUNCHER_FRAG: Granada 40mm (HE)
+      STR_LAUNCHER_INC: Granada 40mm(INC)
+      STR_LAUNCHER_SMOKE: Granada 40mm(SMOKE)
+      STR_GRENADE_LAUNCHER_UFOPEDIA: El lanzador de granadas M-79 tiene distintos tipos de munición a su disposición, contribuyendo a una gran efectividad en las más diversas situaciones.
+  - type: es-419
+    strings:
+      STR_GRENADE_LAUNCHER: Lanza Granadas
+      STR_LAUNCHER_FRAG: Granada 40mm (HE)
+      STR_LAUNCHER_INC: Granada 40mm(INC)
+      STR_LAUNCHER_SMOKE: Granada 40mm(SMOKE)
+      STR_GRENADE_LAUNCHER_UFOPEDIA: El lanzador de granadas M-79 tiene distintos tipos de munición a su disposición, contribuyendo a una gran efectividad en las más diversas situaciones.
+  - type: ru
+    strings:
+      STR_GRENADE_LAUNCHER: Гранатомет М-79
+      STR_LAUNCHER_FRAG: 40мм Граната (Оск)
+      STR_LAUNCHER_INC: 40мм Граната (Заж)
+      STR_LAUNCHER_SMOKE: 40мм Граната (Дым)
+      STR_GRENADE_LAUNCHER_UFOPEDIA: Гранатомет М-79 имеет в распоряжении целый ряд различных типов боеприпасов, которые могут быть эффективны в разных боевых ситуациях.
+  - type: de
+    strings:
+      STR_GRENADE_LAUNCHER: Granatwerfer
+      STR_LAUNCHER_FRAG: 40mm Granate (Explosiv)
+      STR_LAUNCHER_INC: 40mm Granate (Brand)
+      STR_LAUNCHER_SMOKE: 40mm Granate (Rauch)
+      STR_GRENADE_LAUNCHER_UFOPEDIA: Der Granatwerfer eignet sich hervorragend für den Einsatz über mittlere und lange Distanzen und kann mit drei verschiedenen Munitionstypen verwendet werden.
+  - type: fr
+    strings:
+      STR_GRENADE_LAUNCHER: Lance-Grenades
+      STR_LAUNCHER_FRAG: Grenade Explosive 40mm
+      STR_LAUNCHER_INC: Grenade Incendiaire 40mm
+      STR_LAUNCHER_SMOKE: Grenade Fumigène 40mm
+      STR_GRENADE_LAUNCHER_UFOPEDIA: Le Lance-Grenades M-79, de par les types d'explosifs divers et variés dont il dispose, peut s'avérer très utile dans nombre de situations.
+  - type: pl-PL
+    strings:
+      STR_GRENADE_LAUNCHER: Granatnik
+      STR_LAUNCHER_FRAG: Granat wybuchowy 40 mm
+      STR_LAUNCHER_INC: Granat zapalający 40 mm
+      STR_LAUNCHER_SMOKE: Granat dymny 40 mm
+      STR_GRENADE_LAUNCHER_UFOPEDIA: Granatnik M-79 może korzystać z różnych typów amunicji, dzięki czemu sprawdza się w niemal każdej sytuacji.

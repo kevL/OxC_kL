@@ -8823,7 +8823,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1411714025 source:f:\git\openxcom\src\menu\startstate.cpp
+1412409033 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"../version.h"
 	"ErrorMessageState.h"

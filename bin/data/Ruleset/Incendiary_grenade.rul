@@ -11,6 +11,7 @@ items:
     power: 78
     damageType: 2
     battleType: 4
+    blastRadius: 3
     listOrder: 3901
 ufopaedia:
   - id: STR_INC_GRENADE

@@ -109,7 +109,7 @@ extraStrings:
 extraSounds:
   - type: BATTLE.CAT
     files:
-      88: Resources/Scoutdrone/pop.wav
+      88: Resources/Scoutdrone/Fire.wav
 extraSprites:
   - type: BIGOBS.PCK
     files:

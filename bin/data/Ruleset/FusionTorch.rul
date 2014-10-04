@@ -16,6 +16,7 @@ items:
     invWidth: 2
     invHeight: 3
     twoHanded: true
+    noReaction: true
     listOrder: 3710
     compatibleAmmo:
       - STR_FUSION_TORCH_POWER_CELL
@@ -103,49 +104,49 @@ extraSprites:
 extraStrings:
   - type: en-US
     strings:
-      STR_FUSION_TORCH: Fusion Torch
-      STR_FUSION_TORCH_POWER_CELL: Fusion Torch pCell
-      STR_FUSION_TORCH_UFOPEDIA: The Fusion Torch uses a highly concentrated laser to induce miniature nuclear reactions. The resulting effect disrupts matter and cuts through a target at close range. The strongest armors and even UFO hulls succumb to this device very quickly. It needs to be powered by a separately produced Fusion Torch Powercell.
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: This high energy powercell is required to operate a Fusion Torch. It provides only enough energy for 3 operations.
+      STR_FUSION_TORCH: "Fusion Torch"
+      STR_FUSION_TORCH_POWER_CELL: "Fusion Torch pCell"
+      STR_FUSION_TORCH_UFOPEDIA: "The Fusion Torch uses a highly concentrated laser to induce miniature nuclear reactions. The resulting effect disrupts matter and cuts through a target at close range. The strongest armors and even UFO hulls succumb to this device very quickly. It needs to be powered by a separately produced Fusion Torch Powercell."
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "This high energy powercell is required to operate a Fusion Torch. It provides only enough energy for 3 operations."
   - type: en-GB
     strings:
-      STR_FUSION_TORCH: Fusion Torch
-      STR_FUSION_TORCH_POWER_CELL: Fusion Torch Power Cell
-      STR_FUSION_TORCH_UFOPEDIA: The Fusion Torch uses a Matter-Antimatter reaction to create enormously powerful plasma jets.{NEWLINE}If close enough, the deeply penetrating plasma jet cuts through the target, melting it within seconds. Even the strongest armour plates and UFO hulls are no match for this device.{NEWLINE}However, it is only effective at close range and needs a separate power cell.
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: This high energy power cell is needed to operate the Fusion Torch. It provides enough energy for 5 plasma jets.
+      STR_FUSION_TORCH: "Fusion Torch"
+      STR_FUSION_TORCH_POWER_CELL: "Fusion Torch Power Cell"
+      STR_FUSION_TORCH_UFOPEDIA: "The Fusion Torch uses a Matter-Antimatter reaction to create enormously powerful plasma jets.{NEWLINE}If close enough, the deeply penetrating plasma jet cuts through the target, melting it within seconds. Even the strongest armour plates and UFO hulls are no match for this device.{NEWLINE}However, it is only effective at close range and needs a separate power cell."
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "This high energy power cell is needed to operate the Fusion Torch. It provides enough energy for 5 plasma jets."
   - type: de
     strings:
-      STR_FUSION_TORCH: Fusionsschneidbrenner
-      STR_FUSION_TORCH_POWER_CELL: Fusionsschneidbrenner Hochleistungsakku
-      STR_FUSION_TORCH_UFOPEDIA: Der Fusionsschneidbrenner nutzt eine Materie-Antimaterie Reaktion um extrem heiße Plasmaflammen zu erzeugen. Auch die stärksten Panzerungen und selbst die hochstabilen Außenhüllen von UFOs lassen sich damit binnen Sekunden zum Schmelzen bringen.{NEWLINE}Er kann jedoch nur auf sehr kurze Distanz eingesetzt werden und benötigt einen speziellen Hochleistungsakku.
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: Dieser Hochleistungsakku versorgt den Fusionsschneidbrenner mit Energie. Seine Kapazität reicht für 5 Plasmaflammen-Stöße.
+      STR_FUSION_TORCH: "Fusionsschneidbrenner"
+      STR_FUSION_TORCH_POWER_CELL: "Fusionsschneidbrenner Hochleistungsakku"
+      STR_FUSION_TORCH_UFOPEDIA: "Der Fusionsschneidbrenner nutzt eine Materie-Antimaterie Reaktion um extrem heiße Plasmaflammen zu erzeugen. Auch die stärksten Panzerungen und selbst die hochstabilen Außenhüllen von UFOs lassen sich damit binnen Sekunden zum Schmelzen bringen.{NEWLINE}Er kann jedoch nur auf sehr kurze Distanz eingesetzt werden und benötigt einen speziellen Hochleistungsakku."
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "Dieser Hochleistungsakku versorgt den Fusionsschneidbrenner mit Energie. Seine Kapazität reicht für 5 Plasmaflammen-Stöße."
   - type: pl-PL
     strings:
-      STR_FUSION_TORCH: Palnik fuzyjny
-      STR_FUSION_TORCH_POWER_CELL: Bateria palnika fuzyjnego
-      STR_FUSION_TORCH_UFOPEDIA: Palnik fuzyjny stosuje reakcję anihilacji materii z antymaterią dla wytworzenia niezwykle silnego strumienia plazmy.  W odpowiednio bliskiej odległości strumień ten przecina wszystko, w co trafi, topiąc twarde stopy w ciągu sekund.  Nawet najwytrzymalsze materiały, jak te stosowane w pancerzach UFO, są łatwo rozcinane przez palnik fuzyjny.  Sprzęt ten efektywny jest jednak tylko na zasięgu bezpośrednim i wymaga specjalnej baterii.
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: Ta wysokoenergetyczna bateria jest niezbędna do zasilania palnika fuzyjnego.  Przechowuje dość energii dla wytworzenia 5 strumieni plazmy.
+      STR_FUSION_TORCH: "Palnik fuzyjny"
+      STR_FUSION_TORCH_POWER_CELL: "Bateria palnika fuzyjnego"
+      STR_FUSION_TORCH_UFOPEDIA: "Palnik fuzyjny stosuje reakcję anihilacji materii z antymaterią dla wytworzenia niezwykle silnego strumienia plazmy.  W odpowiednio bliskiej odległości strumień ten przecina wszystko, w co trafi, topiąc twarde stopy w ciągu sekund.  Nawet najwytrzymalsze materiały, jak te stosowane w pancerzach UFO, są łatwo rozcinane przez palnik fuzyjny.  Sprzęt ten efektywny jest jednak tylko na zasięgu bezpośrednim i wymaga specjalnej baterii."
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "Ta wysokoenergetyczna bateria jest niezbędna do zasilania palnika fuzyjnego.  Przechowuje dość energii dla wytworzenia 5 strumieni plazmy."
   - type: fr
     strings:
-      STR_FUSION_TORCH: Torche à Fusion
-      STR_FUSION_TORCH_POWER_CELL: Cellule d'énergie de Torche à Fusion
-      STR_FUSION_TORCH_UFOPEDIA: La Torche à Fusion provoque des réactions Matière/Antimatière qui créent un puissant jet de plasma.{NEWLINE}Ce jet de plasma est capable de découper littéralement sa cible, faisant fondre la moindre particule en quelques secondes à peine. Ni la plus puissante des armures, ni les coques d'OVNI les plus solides, ne peuvent y résister.{NEWLINE}Malheureusement, l'effet est de courte distance (proximité immédiate) et nécessite une cellule dédiée.
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: Cette cellule à haute énergie est utilisée par la puissante Torche à Fusion. Elle procure suffisamment d'énergie pour 5 jets de plasma.
+      STR_FUSION_TORCH: "Torche à Fusion"
+      STR_FUSION_TORCH_POWER_CELL: "Cellule d'énergie de Torche à Fusion"
+      STR_FUSION_TORCH_UFOPEDIA: "La Torche à Fusion provoque des réactions Matière/Antimatière qui créent un puissant jet de plasma.{NEWLINE}Ce jet de plasma est capable de découper littéralement sa cible, faisant fondre la moindre particule en quelques secondes à peine. Ni la plus puissante des armures, ni les coques d'OVNI les plus solides, ne peuvent y résister.{NEWLINE}Malheureusement, l'effet est de courte distance (proximité immédiate) et nécessite une cellule dédiée."
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "Cette cellule à haute énergie est utilisée par la puissante Torche à Fusion. Elle procure suffisamment d'énergie pour 5 jets de plasma."
   - type: ru
     strings:
-      STR_FUSION_TORCH: Плазменная Горелка
-      STR_FUSION_TORCH_POWER_CELL: Батарея для Плазменной Горелки
-      STR_FUSION_TORCH_UFOPEDIA: Этот тип плазменной горелки использует реакцию материи-антиматерии для создания чрезвычайно мощной струи плазмы.{NEWLINE}На достаточно близком расстоянии струя плазмы прорезает цель насквозь, расплавляя её за считанные секунды. Даже самая прочная броня или корпус НЛО не выдержит мощность этого устройства.{NEWLINE}Однако, оно эффективно лишь на очень близком расстоянии и требует отдельной батареи.
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: Эта высокоэнергетическая батарея требуется для использования Плазменной Горелки. Одной батареи хватает на 5 применений.
+      STR_FUSION_TORCH: "Плазменная Горелка"
+      STR_FUSION_TORCH_POWER_CELL: "Батарея для Плазменной Горелки"
+      STR_FUSION_TORCH_UFOPEDIA: "Этот тип плазменной горелки использует реакцию материи-антиматерии для создания чрезвычайно мощной струи плазмы.{NEWLINE}На достаточно близком расстоянии струя плазмы прорезает цель насквозь, расплавляя её за считанные секунды. Даже самая прочная броня или корпус НЛО не выдержит мощность этого устройства.{NEWLINE}Однако, оно эффективно лишь на очень близком расстоянии и требует отдельной батареи."
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "Эта высокоэнергетическая батарея требуется для использования Плазменной Горелки. Одной батареи хватает на 5 применений."
   - type: es
     strings:
-      STR_FUSION_TORCH: Soplete de Fusión
-      STR_FUSION_TORCH_POWER_CELL: Célula Energética Soplete de Fusión
-      STR_FUSION_TORCH_UFOPEDIA: El Soplete de Fusión utiliza una reacción de Materia-Antimateria para crear un enorme haz potente de plasma.{NEWLINE}Estando suficientemente cerca, su chorro de plasma puede penetrar profundamente en el objetivo, derritiéndolo en segundos. Incluso las armaduras o el casco de un OVNI no serían capaz de resistirlo.{NEWLINE}No obstante, sólo es efectivo a muy corta distancia y necesita una célula de energía independiente.
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: Esta potente célula de energía es necesaria para que funcione el Solplete de Fusión. Proveé suficiente energía para 5 chorros de plasma.
+      STR_FUSION_TORCH: "Soplete de Fusión"
+      STR_FUSION_TORCH_POWER_CELL: "Célula Energética Soplete de Fusión"
+      STR_FUSION_TORCH_UFOPEDIA: "El Soplete de Fusión utiliza una reacción de Materia-Antimateria para crear un enorme haz potente de plasma.{NEWLINE}Estando suficientemente cerca, su chorro de plasma puede penetrar profundamente en el objetivo, derritiéndolo en segundos. Incluso las armaduras o el casco de un OVNI no serían capaz de resistirlo.{NEWLINE}No obstante, sólo es efectivo a muy corta distancia y necesita una célula de energía independiente."
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "Esta potente célula de energía es necesaria para que funcione el Solplete de Fusión. Proveé suficiente energía para 5 chorros de plasma."
   - type: es-419
     strings:
-      STR_FUSION_TORCH: Soplete de Fusión
-      STR_FUSION_TORCH_POWER_CELL: Célula Energética Soplete de Fusión
-      STR_FUSION_TORCH_UFOPEDIA: El Soplete de Fusión utiliza una reacción de Materia-Antimateria para crear un enorme haz potente de plasma.{NEWLINE}Estando suficientemente cerca, su chorro de plasma puede penetrar profundamente en el objetivo, derritiéndolo en segundos. Incluso las armaduras o el casco de un OVNI no serían capaz de resistirlo.{NEWLINE}No obstante, sólo es efectivo a muy corta distancia y necesita una célula de energía independiente.
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: Esta potente célula de energía es necesaria para que funcione el Solplete de Fusión. Proveé suficiente energía para 5 chorros de plasma.     
+      STR_FUSION_TORCH: "Soplete de Fusión"
+      STR_FUSION_TORCH_POWER_CELL: "Célula Energética Soplete de Fusión"
+      STR_FUSION_TORCH_UFOPEDIA: "El Soplete de Fusión utiliza una reacción de Materia-Antimateria para crear un enorme haz potente de plasma.{NEWLINE}Estando suficientemente cerca, su chorro de plasma puede penetrar profundamente en el objetivo, derritiéndolo en segundos. Incluso las armaduras o el casco de un OVNI no serían capaz de resistirlo.{NEWLINE}No obstante, sólo es efectivo a muy corta distancia y necesita una célula de energía independiente."
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "Esta potente célula de energía es necesaria para que funcione el Solplete de Fusión. Proveé suficiente energía para 5 chorros de plasma.     "
