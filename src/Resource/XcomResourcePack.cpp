@@ -19,7 +19,10 @@
 
 #include "XcomResourcePack.h"
 
+#include <climits>
 #include <sstream>
+
+#include "../fmath.h"
 
 #include "../Basescape/BasescapeState.h" // kL: soundPop
 
@@ -96,12 +99,14 @@ struct HairBleach
 /**
  * Initializes the resource pack by loading all the
  * resources contained in the original game folder.
+ * @param rules - pointer to the Ruleset
  */
 XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	:
 		ResourcePack()
 {
 	//Log(LOG_INFO) << "Create XcomResourcePack";
+	_ruleset = rules;
 
 	/* PALETTES */
 	const char* pal[] = // Load palettes
@@ -1689,6 +1694,8 @@ void XcomResourcePack::loadBattlescapeResources()
 			colors[255] = backPal[i];
 			_palettes[pals[i]]->setColors(colors, 256);
 
+			createTransparencyLUT(_palettes[pals[i]]);
+
 			delete tempSurface;
 		}
 	}
@@ -1938,6 +1945,84 @@ Music* XcomResourcePack::loadMusic(
 	}
 
 	return music;
+}
+
+/**
+ * Preamble:
+ * This is the most horrible function i've ever written, and it makes me sad.
+ * This is, however, a necessary evil, in order to save massive amounts of time in the draw function.
+ * When used with the default TFTD ruleset, this function loops 4,194,304 times
+ * (4 palettes, 4 tints, 4 levels of opacity, 256 colors, 256 comparisons per);
+ * each additional tint in the rulesets will result in over a million iterations more.
+ *
+ * kL_note: hmm, sounds like I'm going to take this out ...
+ * but, since it runs only at start ....
+ *
+ * @param pal - the palette to base the lookup table on
+ */
+void XcomResourcePack::createTransparencyLUT(Palette* pal)
+{
+	SDL_Color target;
+	std::vector<Uint8> lookUpTable;
+
+	// start with the color sets
+	for (std::vector<SDL_Color>::const_iterator
+			tint = _ruleset->getTransparencies()->begin();
+			tint != _ruleset->getTransparencies()->end();
+			++tint)
+	{
+		// then the opacity levels, using the alpha channel as the step
+		for (int
+				opacity = 1;
+				opacity < 1 + tint->unused * 4;
+				opacity += tint->unused)
+		{
+			// then the palette itself
+			for (int
+					color = 0;
+					color < 256;
+					++color)
+			{
+				// add the RGB values from the ruleset to those of the colors contained
+				// in the palette in order to determine the desired color:
+				// all this casting and clamping is required, we're dealing with Uint8s here,
+				// and there's a lot of potential for values to wrap around.
+				target.r = std::min(
+								255,
+								static_cast<int>(pal->getColors(color)->r) + (tint->r * opacity));
+				target.g = std::min(
+								255,
+								static_cast<int>(pal->getColors(color)->g) + (tint->g * opacity));
+				target.b = std::min(
+								255,
+								static_cast<int>(pal->getColors(color)->b) + (tint->b * opacity));
+
+				Uint8 closest = 0;
+				int low = INT_MAX;
+
+				// compare each color in the palette to find the closest match to the desired one
+				for (int
+						comparoperator = 0;
+						comparoperator < 256;
+						++comparoperator)
+				{
+					const int cur = Sqr(target.r - pal->getColors(comparoperator)->r)
+								  + Sqr(target.g - pal->getColors(comparoperator)->g)
+								  + Sqr(target.b - pal->getColors(comparoperator)->b);
+
+					if (cur < low)
+					{
+						closest = comparoperator;
+						low = cur;
+					}
+				}
+
+				lookUpTable.push_back(closest);
+			}
+		}
+	}
+
+	_transparencyLUTs.push_back(lookUpTable);
 }
 
 }

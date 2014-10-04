@@ -146,7 +146,10 @@ private:
 		_bigSprite,
 		_floorSprite,
 		_handSprite,
-		_bulletSprite;
+		_bulletSprite,
+
+		_vaporColor,
+		_vaporDensity;
 
 	double _size;
 
@@ -371,6 +374,11 @@ private:
 		const bool isWaterOnly() const;
 		/// Gets the associated special type of this item.
 		const int getSpecialType() const;
+
+		/// Gets the color offset to use for the vapor trail.
+		const int getVaporColor() const;
+		/// Gets the vapor cloud density.
+		const int getVaporDensity() const;
 
 		/// kL. Gets the item's default BattleAction.
 		BattleActionType getDefaultAction() const; // kL

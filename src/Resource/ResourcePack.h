@@ -44,8 +44,7 @@ class SurfaceSet;
  * Resource packs contain all the game media that's loaded externally,
  * like graphics, fonts, languages, audio and world map.
  * @note The game is still hardcoded to X-Com resources,
- * so for now this just serves to keep all the file loading
- * in one place.
+ * so for now this just serves to keep all the file loading in one place.
  */
 class ResourcePack
 {
@@ -70,32 +69,35 @@ private:
 
 		std::vector<Uint16> _voxelData;
 
+		std::vector<std::vector<Uint8> > _transparencyLUTs;
+
 
 		public:
-			static int BUTTON_PRESS;
-			static int WINDOW_POPUP[3];
+			static int
+				BUTTON_PRESS,
+				WINDOW_POPUP[3],
 
-			static int EXPLOSION_OFFSET;
+				EXPLOSION_OFFSET,
 
-			static int SMALL_EXPLOSION;
-			static int DOOR_OPEN;
-			static int LARGE_EXPLOSION;
-			static int FLYING_SOUND;
-			static int ITEM_RELOAD;
-			static int SLIDING_DOOR_OPEN;
-			static int SLIDING_DOOR_CLOSE;
-			static int WALK_OFFSET;
-			static int ITEM_DROP;
-			static int ITEM_THROW;
-			static int MALE_SCREAM[3];
-			static int FEMALE_SCREAM[3];
+				SMALL_EXPLOSION,
+				DOOR_OPEN,
+				LARGE_EXPLOSION,
+				FLYING_SOUND,
+				ITEM_RELOAD,
+				SLIDING_DOOR_OPEN,
+				SLIDING_DOOR_CLOSE,
+				WALK_OFFSET,
+				ITEM_DROP,
+				ITEM_THROW,
+				MALE_SCREAM[3],
+				FEMALE_SCREAM[3],
 
-			static int UFO_FIRE;
-			static int UFO_HIT;
-			static int UFO_CRASH;
-			static int UFO_EXPLODE;
-			static int INTERCEPTOR_HIT;
-			static int INTERCEPTOR_EXPLODE;
+				UFO_FIRE,
+				UFO_HIT,
+				UFO_CRASH,
+				UFO_EXPLODE,
+				INTERCEPTOR_HIT,
+				INTERCEPTOR_EXPLODE;
 
 
 			/// Create a new resource pack with a folder's contents.
@@ -150,10 +152,12 @@ private:
 			/// Gets list of voxel data.
 			std::vector<Uint16>* getVoxelData();
 
-		/// Returns a specific sound from either the land or underwater resource set.
-		Sound* getSoundByDepth(
-				unsigned int depth,
-				unsigned int sound) const;
+			/// Returns a specific sound from either the land or underwater resource set.
+			Sound* getSoundByDepth(
+					unsigned int depth,
+					unsigned int sound) const;
+
+			const std::vector<std::vector<Uint8> >* getLUTs() const;
 };
 
 }

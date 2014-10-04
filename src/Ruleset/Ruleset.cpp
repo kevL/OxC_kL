@@ -360,7 +360,7 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::map<std::string, RuleInterface *>::const_iterator
+	for (std::map<std::string, RuleInterface*>::const_iterator
 			i = _interfaces.begin();
 			i != _interfaces.end();
 			++i)
@@ -736,13 +736,13 @@ void Ruleset::loadFile(const std::string& filename)
 	if (doc["startingTime"])
 		_startingTime.load(doc["startingTime"]);
 
-	_costSoldier	= doc["costSoldier"].as<int>(_costSoldier);
-	_costEngineer	= doc["costEngineer"].as<int>(_costEngineer);
-	_costScientist	= doc["costScientist"].as<int>(_costScientist);
-	_timePersonnel	= doc["timePersonnel"].as<int>(_timePersonnel);
-	_initialFunding	= doc["initialFunding"].as<int>(_initialFunding);
-	_alienFuel		= doc["alienFuel"].as<std::string>(_alienFuel);
-	_radarCutoff	= doc["radarCutoff"].as<int>(_radarCutoff);
+	_costSoldier	= doc["costSoldier"]	.as<int>(_costSoldier);
+	_costEngineer	= doc["costEngineer"]	.as<int>(_costEngineer);
+	_costScientist	= doc["costScientist"]	.as<int>(_costScientist);
+	_timePersonnel	= doc["timePersonnel"]	.as<int>(_timePersonnel);
+	_initialFunding	= doc["initialFunding"]	.as<int>(_initialFunding);
+	_alienFuel		= doc["alienFuel"]		.as<std::string>(_alienFuel);
+	_radarCutoff	= doc["radarCutoff"]	.as<int>(_radarCutoff);
 
 	for (YAML::const_iterator
 			i = doc["ufoTrajectories"].begin();
@@ -871,7 +871,7 @@ void Ruleset::loadFile(const std::string& filename)
 	{
 		std::string type = (*i)["type"].as<std::string>();
 
-		std::auto_ptr<RuleCommendations> commendations (new RuleCommendations()); // init.
+		std::auto_ptr<RuleCommendations> commendations (new RuleCommendations());
 		commendations->load(*i);
 
 		_commendations[type] = commendations.release();
@@ -919,17 +919,17 @@ void Ruleset::loadFile(const std::string& filename)
 			i != doc["constants"].end();
 			++i)
 	{
-		ResourcePack::EXPLOSION_OFFSET		= (*i)["explosionOffset"].as<int>(ResourcePack::EXPLOSION_OFFSET);
-		ResourcePack::SMALL_EXPLOSION		= (*i)["smallExplosion"].as<int>(ResourcePack::SMALL_EXPLOSION);
-		ResourcePack::DOOR_OPEN				= (*i)["doorSound"].as<int>(ResourcePack::DOOR_OPEN);
-		ResourcePack::LARGE_EXPLOSION		= (*i)["largeExplosion"].as<int>(ResourcePack::LARGE_EXPLOSION);
-		ResourcePack::FLYING_SOUND			= (*i)["flyingSound"].as<int>(ResourcePack::FLYING_SOUND);
-		ResourcePack::ITEM_RELOAD			= (*i)["itemReload"].as<int>(ResourcePack::ITEM_RELOAD);
-		ResourcePack::SLIDING_DOOR_OPEN		= (*i)["slidingDoorSound"].as<int>(ResourcePack::SLIDING_DOOR_OPEN);
-		ResourcePack::SLIDING_DOOR_CLOSE	= (*i)["slidingDoorClose"].as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
-		ResourcePack::WALK_OFFSET			= (*i)["walkOffset"].as<int>(ResourcePack::WALK_OFFSET);
-		ResourcePack::ITEM_DROP				= (*i)["itemDrop"].as<int>(ResourcePack::ITEM_DROP);
-		ResourcePack::ITEM_THROW			= (*i)["itemThrow"].as<int>(ResourcePack::ITEM_THROW);
+		ResourcePack::EXPLOSION_OFFSET		= (*i)["explosionOffset"]	.as<int>(ResourcePack::EXPLOSION_OFFSET);
+		ResourcePack::SMALL_EXPLOSION		= (*i)["smallExplosion"]	.as<int>(ResourcePack::SMALL_EXPLOSION);
+		ResourcePack::DOOR_OPEN				= (*i)["doorSound"]			.as<int>(ResourcePack::DOOR_OPEN);
+		ResourcePack::LARGE_EXPLOSION		= (*i)["largeExplosion"]	.as<int>(ResourcePack::LARGE_EXPLOSION);
+		ResourcePack::FLYING_SOUND			= (*i)["flyingSound"]		.as<int>(ResourcePack::FLYING_SOUND);
+		ResourcePack::ITEM_RELOAD			= (*i)["itemReload"]		.as<int>(ResourcePack::ITEM_RELOAD);
+		ResourcePack::SLIDING_DOOR_OPEN		= (*i)["slidingDoorSound"]	.as<int>(ResourcePack::SLIDING_DOOR_OPEN);
+		ResourcePack::SLIDING_DOOR_CLOSE	= (*i)["slidingDoorClose"]	.as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
+		ResourcePack::WALK_OFFSET			= (*i)["walkOffset"]		.as<int>(ResourcePack::WALK_OFFSET);
+		ResourcePack::ITEM_DROP				= (*i)["itemDrop"]			.as<int>(ResourcePack::ITEM_DROP);
+		ResourcePack::ITEM_THROW			= (*i)["itemThrow"]			.as<int>(ResourcePack::ITEM_THROW);
 
 		if ((*i)["maleScream"])
 		{
@@ -974,12 +974,31 @@ void Ruleset::loadFile(const std::string& filename)
 			}
 		}
 
-		ResourcePack::UFO_FIRE				= (*i)["ufoFire"].as<int>(ResourcePack::UFO_FIRE);
-		ResourcePack::UFO_HIT				= (*i)["ufoHit"].as<int>(ResourcePack::UFO_HIT);
-		ResourcePack::UFO_CRASH				= (*i)["ufoCrash"].as<int>(ResourcePack::UFO_CRASH);
-		ResourcePack::UFO_EXPLODE			= (*i)["ufoExplode"].as<int>(ResourcePack::UFO_EXPLODE);
-		ResourcePack::INTERCEPTOR_HIT		= (*i)["intterceptorHit"].as<int>(ResourcePack::INTERCEPTOR_HIT);
+		ResourcePack::UFO_FIRE				= (*i)["ufoFire"]			.as<int>(ResourcePack::UFO_FIRE);
+		ResourcePack::UFO_HIT				= (*i)["ufoHit"]			.as<int>(ResourcePack::UFO_HIT);
+		ResourcePack::UFO_CRASH				= (*i)["ufoCrash"]			.as<int>(ResourcePack::UFO_CRASH);
+		ResourcePack::UFO_EXPLODE			= (*i)["ufoExplode"]		.as<int>(ResourcePack::UFO_EXPLODE);
+		ResourcePack::INTERCEPTOR_HIT		= (*i)["interceptorHit"]	.as<int>(ResourcePack::INTERCEPTOR_HIT);
 		ResourcePack::INTERCEPTOR_EXPLODE	= (*i)["interceptorExplode"].as<int>(ResourcePack::INTERCEPTOR_EXPLODE);
+	}
+
+	for (YAML::const_iterator
+			i = doc["transparencyLUTs"].begin();
+			i != doc["transparencyLUTs"].end();
+			++i)
+	{
+		for (YAML::const_iterator
+				j = (*i)["colors"].begin();
+				j != (*i)["colors"].end();
+				++j)
+		{
+			SDL_Color color;
+			color.r = (*j)[0].as<int>(0); // Uint8 or uint8_t, really.
+			color.g = (*j)[1].as<int>(0);
+			color.b = (*j)[2].as<int>(0);
+			color.unused = (*j)[3].as<int>(2);;
+			_transparencies.push_back(color);
+		}
 	}
 
 	for (std::vector<std::string>::const_iterator // refresh _psiRequirements for psiStrengthEval
@@ -1091,7 +1110,7 @@ SavedGame* Ruleset::newSave() const
 			i != save->getCountries()->end();
 			++i)
 	{
-//kL		int funding = (*i)->getFunding().back() + missing;
+//kL	int funding = (*i)->getFunding().back() + missing;
 		int funding = (*i)->getFunding().back(); // kL
 		if (funding < 0)
 			funding = (*i)->getFunding().back();
@@ -2197,6 +2216,14 @@ RuleGlobe* Ruleset::getGlobe() const
 const std::map<std::string, SoundDefinition*>* Ruleset::getSoundDefinitions() const
 {
 	return &_soundDefs;
+}
+
+/**
+ *
+ */
+const std::vector<SDL_Color>* Ruleset::getTransparencies() const
+{
+	return &_transparencies;
 }
 
 }

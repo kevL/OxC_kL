@@ -447,4 +447,12 @@ Sound* ResourcePack::getSoundByDepth(
 		return getSound("BATTLE2.CAT", sound);
 }
 
+/**
+ *
+ */
+const std::vector<std::vector<Uint8> >* ResourcePack::getLUTs() const
+{
+	return &_transparencyLUTs;
+}
+
 }

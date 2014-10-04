@@ -897,6 +897,9 @@
       <Filter>Engine\Scalers</Filter>
     </ClCompile>
     <ClCompile Include="Basescape\BaseDetectionState.cpp" />
+    <ClCompile Include="Battlescape\Particle.cpp">
+      <Filter>Battlescape</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h" />
@@ -1819,6 +1822,9 @@
       <Filter>Engine\Scalers</Filter>
     </ClInclude>
     <ClInclude Include="Basescape\BaseDetectionState.h" />
+    <ClInclude Include="Battlescape\Particle.h">
+      <Filter>Battlescape</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Filter Include="Geoscape">

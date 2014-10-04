@@ -28,6 +28,7 @@
 #include "BattlescapeState.h"
 #include "Camera.h"
 #include "Explosion.h"
+#include "Particle.h"
 #include "Pathfinding.h"
 #include "Position.h"
 #include "Projectile.h"
@@ -137,6 +138,10 @@ Map::Map(
 	_spriteHeight	= _res->getSurfaceSet("BLANKS.PCK")->getFrame(0)->getHeight();
 
 	_save = _game->getSavedGame()->getSavedBattle();
+
+	size_t depth = _save->getDepth();
+	if (_res->getLUTs()->size() > depth)
+		_transparencies = &_res->getLUTs()->at(depth);
 
 	_camera = new Camera(
 					_spriteWidth,
@@ -1715,6 +1720,53 @@ void Map::drawTerrain(Surface* surface)
 								screenPosition.x,
 								screenPosition.y,
 								shade);
+					}
+
+					// draw particle clouds
+					for (std::list<Particle*>::const_iterator
+							i = tile->getParticleCloud()->begin();
+							i != tile->getParticleCloud()->end();
+							++i)
+					{
+						const int
+							vaporX = static_cast<int>(static_cast<float>(screenPosition.x) + (*i)->getX()),
+							vaporY = static_cast<int>(static_cast<float>(screenPosition.y) + (*i)->getY());
+
+						if (_transparencies->size() >= (static_cast<size_t>((*i)->getColor()) + 1) * 1024)
+						{
+							switch ((*i)->getSize())
+							{
+								case 3:
+									surface->setPixelColor(
+												vaporX + 1,
+												vaporY + 1,
+												(*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixelColor(
+																																		vaporX + 1,
+																																		vaporY + 1)]);
+								case 2:
+									surface->setPixelColor(
+												vaporX + 1,
+												vaporY,
+												(*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixelColor(
+																																		vaporX + 1,
+																																		vaporY)]);
+								case 1:
+									surface->setPixelColor(
+												vaporX,
+												vaporY + 1,
+												(*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixelColor(
+																																		vaporX,
+																																		vaporY + 1)]);
+								default:
+									surface->setPixelColor(
+												vaporX,
+												vaporY,
+												(*_transparencies)[((*i)->getColor() * 1024) + ((*i)->getOpacity() * 256) + surface->getPixelColor(
+																																		vaporX,
+																																		vaporY)]);
+								break;
+							}
+						}
 					}
 
 					// Draw Path Preview

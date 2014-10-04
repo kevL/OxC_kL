@@ -23,6 +23,9 @@
 
 #include <cmath>
 
+#include "Map.h"
+#include "Camera.h"
+#include "Particle.h"
 #include "TileEngine.h"
 
 #include "../fmath.h"
@@ -61,6 +64,8 @@ namespace OpenXcom
  * @param origin		- a position that this projectile originates at
  * @param targetVoxel	- a position that this projectile is targeted at
  * @param bulletSprite	- the sprite to use
+ * @param vaporColor	-
+ * @param vaporDensity	-
  */
 Projectile::Projectile(
 		ResourcePack* res,
@@ -68,7 +73,9 @@ Projectile::Projectile(
 		BattleAction action,
 		Position origin,
 		Position targetVoxel,
-		int bulletSprite)
+		int bulletSprite,
+		int vaporColor,
+		int vaporDensity)
 	:
 		_res(res),
 		_save(save),
@@ -77,7 +84,9 @@ Projectile::Projectile(
 		_targetVoxel(targetVoxel),
 		_position(0),
 		_bulletSprite(bulletSprite),
-		_reversed(false)
+		_reversed(false),
+		_vaporColor(vaporColor),
+		_vaporDensity(vaporDensity)
 {
 	_speed = Options::battleFireSpeed; // this is the number of pixels the sprite will move between frames
 
@@ -732,6 +741,13 @@ bool Projectile::move()
 
 			return false;
 		}
+
+		if (_save->getDepth() > 0
+			&& _vaporColor != -1
+			&& _action.type != BA_THROW && RNG::percent(5))
+		{
+			addVaporCloud();
+		}
 	}
 
 	return true;
@@ -794,7 +810,8 @@ Surface* Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-	_position = _trajectory.size() - 1;
+//kL	while (move());
+	_position = _trajectory.size() - 1; // kL
 }
 
 /**
@@ -830,11 +847,48 @@ Position Projectile::getFinalTarget() const // kL
 }
 
 /**
- *
+ * Gets if this projectile is drawn back to front or front to back.
+ * @return, true if this is to be drawn in reverse order
  */
 bool Projectile::isReversed() const
 {
 	return _reversed;
+}
+
+/**
+ * Adds a cloud of vapor at the projectile's current position.
+ */
+void Projectile::addVaporCloud()
+{
+	Tile* tile = _save->getTile(_trajectory.at(_position) / Position(16, 16, 24));
+	if (tile)
+	{
+		Position
+			tilePos,
+			voxelPos;
+
+		_save->getBattleGame()->getMap()->getCamera()->convertMapToScreen(
+																	_trajectory.at(_position) / Position(16, 16, 24),
+																	&tilePos);
+		tilePos += _save->getBattleGame()->getMap()->getCamera()->getMapOffset();
+		_save->getBattleGame()->getMap()->getCamera()->convertVoxelToScreen(
+																	_trajectory.at(_position),
+																	&voxelPos);
+
+		for (int
+				i = 0;
+				i != _vaporDensity;
+				++i)
+		{
+			Particle* particle = new Particle(
+											static_cast<float>(voxelPos.x - tilePos.x + RNG::generate(0, 6) - 3),
+											static_cast<float>(voxelPos.y - tilePos.y + RNG::generate(0, 6) - 3),
+											static_cast<float>(RNG::generate(64, 214)),
+											_vaporColor,
+											19);
+			tile->addParticle(particle);
+		}
+	}
 }
 
 /**

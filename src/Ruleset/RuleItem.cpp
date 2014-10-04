@@ -107,6 +107,8 @@ RuleItem::RuleItem(const std::string& type)
 		_meleeAnimation(0),
 		_meleeHitSound(-1),
 		_specialType(-1),
+		_vaporColor(-1),
+		_vaporDensity(0),
 		_noResearch(false) // kL
 {
 }
@@ -270,6 +272,8 @@ void RuleItem::load(
 	_meleePower				= node["meleePower"].as<int>(_meleePower);
 	_underwaterOnly			= node["underwaterOnly"].as<bool>(_underwaterOnly);
 	_specialType			= node["specialType"].as<int>(_specialType);
+	_vaporColor				= node["vaporColor"].as<int>(_vaporColor);
+	_vaporDensity			= node["vaporDensity"].as<int>(_vaporDensity);
 
 	if (!_listOrder)
 		_listOrder = listOrder;
@@ -1002,6 +1006,24 @@ const bool RuleItem::isWaterOnly() const
 const int RuleItem::getSpecialType() const
 {
 	return _specialType;
+}
+
+/**
+ * Gets the color offset to use for the vapor trail.
+ * @return, the color offset
+ */
+const int RuleItem::getVaporColor() const
+{
+	return _vaporColor;
+}
+
+/**
+ * Gets the vapor cloud density for the vapor trail.
+ * @return, the vapor density
+ */
+const int RuleItem::getVaporDensity() const
+{
+	return _vaporDensity;
 }
 
 /**

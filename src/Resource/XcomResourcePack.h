@@ -33,6 +33,7 @@ class ExtraSounds;
 class ExtraSprites;
 class GMCatFile;
 class Music;
+class Palette;
 class Ruleset;
 
 
@@ -61,27 +62,34 @@ class XcomResourcePack
 		public ResourcePack
 {
 
-public:
-	/// Creates the X-Com Resource Pack.
-	XcomResourcePack(Ruleset* rules);
-	/// Cleans up the X-Com Resource Pack.
-	~XcomResourcePack();
+private:
+	Ruleset* _ruleset;
 
-	/// Loads battlescape specific resources
-	void loadBattlescapeResources();
 
-	/// Checks if an extension is a valid image file.
-	bool isImageFile(std::string extension);
+	public:
+		/// Creates the X-Com Resource Pack.
+		XcomResourcePack(Ruleset* rules);
+		/// Cleans up the X-Com Resource Pack.
+		~XcomResourcePack();
 
-	/// Loads a specified music file.
-	Music* loadMusic(
-			MusicFormat fmt,
-			const std::string& file,
-			int track,
-			float volume,
-			CatFile* adlibcat,
-			CatFile* aintrocat,
-			GMCatFile* gmcat);
+		/// Loads battlescape specific resources
+		void loadBattlescapeResources();
+
+		/// Checks if an extension is a valid image file.
+		bool isImageFile(std::string extension);
+
+		/// Loads a specified music file.
+		Music* loadMusic(
+				MusicFormat fmt,
+				const std::string& file,
+				int track,
+				float volume,
+				CatFile* adlibcat,
+				CatFile* aintrocat,
+				GMCatFile* gmcat);
+
+		/// Creates a transparency lookup table for a given palette.
+		void createTransparencyLUT(Palette* pal);
 };
 
 }

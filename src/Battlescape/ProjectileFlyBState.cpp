@@ -558,7 +558,9 @@ bool ProjectileFlyBState::createNewProjectile()
 										_action,
 										_origin,
 										_targetVoxel,
-										bulletSprite);
+										bulletSprite,
+										_ammo->getRules()->getVaporColor(),
+										_ammo->getRules()->getVaporDensity());
 
 	_parent->getMap()->setProjectile(projectile); // add the projectile on the map
 
@@ -992,7 +994,9 @@ void ProjectileFlyBState::think()
 														_action,
 														_origin,
 														_targetVoxel,
-														bulletSprite);
+														bulletSprite,
+														_ammo->getRules()->getVaporColor(),
+														_ammo->getRules()->getVaporDensity());
 
 							_projectileImpact = proj->calculateTrajectory( // let it trace to the point where it hits
 																	std::max(

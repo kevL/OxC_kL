@@ -37,6 +37,7 @@ namespace OpenXcom
 class BattleItem;
 class BattleUnit;
 class MapData;
+class Particle;
 class RuleInventory;
 class Surface;
 
@@ -76,6 +77,7 @@ protected:
 	Position _pos;
 
 	std::vector<BattleItem*> _inventory;
+	std::list<Particle*> _particles;
 
 
 	public:
@@ -305,6 +307,11 @@ protected:
 		void setDangerous();
 		/// Checks the danger flag on this tile.
 		bool getDangerous();
+
+		/// Adds a particle to this tile's array.
+		void addParticle(Particle* particle);
+		/// Gets a pointer to this tile's particle array.
+		std::list<Particle*>* getParticleCloud();
 };
 
 }

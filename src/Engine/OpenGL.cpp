@@ -172,7 +172,7 @@ bool OpenGL::lock(
 {
 	pitch = iwidth * ibpp;
 
-	return (data = buffer);
+	return (data = buffer) != NULL; // kL_adj.
 }
 
 /**

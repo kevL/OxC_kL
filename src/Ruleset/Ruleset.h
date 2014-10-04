@@ -24,6 +24,8 @@
 #include <string>
 #include <vector>
 
+#include <SDL.h>
+
 #include <yaml-cpp/yaml.h>
 
 #include "../Savegame/GameTime.h"
@@ -172,6 +174,8 @@ protected:
 	std::vector<std::pair<std::string, ExtraSounds*> >	_extraSounds;
 	std::vector<std::pair<std::string, ExtraSprites*> >	_extraSprites;
 	std::vector<std::pair<std::string, RuleMusic*> >	_music; // sza_MusicRules
+
+	std::vector<SDL_Color> _transparencies;
 
 
 	/// Loads a ruleset from a YAML file.
@@ -357,6 +361,9 @@ protected:
 
 		/// Gets the list of selective files for insertion into internal Cat files.
 		const std::map<std::string, SoundDefinition*>* getSoundDefinitions() const;
+
+		/// Gets the list of transparency colors,
+		const std::vector<SDL_Color>* getTransparencies() const;
 };
 
 }

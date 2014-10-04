@@ -4414,7 +4414,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1410483119 f:\git\openxcom\src\resource\resourcepack.h
+1412445380 f:\git\openxcom\src\resource\resourcepack.h
 	<map>
 	<string>
 	<vector>
@@ -4642,10 +4642,11 @@
 1409181874 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1411713105 f:\git\openxcom\src\ruleset\ruleset.h
+1412443422 f:\git\openxcom\src\ruleset\ruleset.h
 	<map>
 	<string>
 	<vector>
+	<SDL.h>
 	<yaml-cpp/yaml.h>
 	"../Savegame/GameTime.h"
 
@@ -4693,7 +4694,7 @@
 1408854832 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1411654637 f:\git\openxcom\src\ruleset\ruleitem.h
+1412438504 f:\git\openxcom\src\ruleset\ruleitem.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5737,7 +5738,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/Position.h"
 
-1412183644 f:\git\openxcom\src\savegame\tile.h
+1412438865 f:\git\openxcom\src\savegame\tile.h
 	<string>
 	<vector>
 	<SDL_types.h>
@@ -5787,7 +5788,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1410858106 f:\git\openxcom\src\battlescape\map.h
+1412436565 f:\git\openxcom\src\battlescape\map.h
 	<set>
 	<vector>
 	"Position.h"
@@ -5925,7 +5926,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1412377653 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1412416489 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -5988,7 +5989,7 @@
 	<exception>
 	<string>
 
-1409936448 f:\git\openxcom\src\resource\xcomresourcepack.h
+1412437813 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
 	"../Engine/Options.h"
 
@@ -6449,7 +6450,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1412292356 source:f:\git\openxcom\src\battlescape\map.cpp
+1412440583 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6457,6 +6458,7 @@
 	"BattlescapeState.h"
 	"Camera.h"
 	"Explosion.h"
+	"Particle.h"
 	"Pathfinding.h"
 	"Position.h"
 	"Projectile.h"
@@ -6489,7 +6491,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1411968943 f:\git\openxcom\src\battlescape\projectile.h
+1412436981 f:\git\openxcom\src\battlescape\projectile.h
 	<vector>
 	"BattlescapeGame.h"
 	"Position.h"
@@ -6669,9 +6671,12 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1412102520 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1412440924 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
+	"Map.h"
+	"Camera.h"
+	"Particle.h"
 	"TileEngine.h"
 	"../fmath.h"
 	"../Engine/Game.h"
@@ -6693,7 +6698,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1412187911 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1412437664 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -7142,7 +7147,7 @@
 	"Adlib/adlplayer.h"
 	"AdlibMusic.h"
 
-1411714024 source:f:\git\openxcom\src\engine\opengl.cpp
+1412446452 source:f:\git\openxcom\src\engine\opengl.cpp
 	"OpenGL.h"
 	<cstdlib>
 	<fstream>
@@ -9247,7 +9252,7 @@
 1404096023 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1412193872 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1412445734 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	<SDL_mixer.h>
 	"../Engine/Font.h"
@@ -9260,9 +9265,11 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1411653967 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1412443267 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
+	<climits>
 	<sstream>
+	"../fmath.h"
 	"../Basescape/BasescapeState.h"
 	"../Battlescape/Position.h"
 	"../Engine/AdlibMusic.h"
@@ -9379,7 +9386,7 @@
 	<cmath>
 	"RuleItem.h"
 
-1412188539 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1412438629 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"
@@ -9400,7 +9407,7 @@
 1411714025 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1411714025 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1412444666 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9797,12 +9804,13 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1412401092 source:f:\git\openxcom\src\savegame\tile.cpp
+1412439021 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
 	"BattleUnit.h"
 	"SerializationHelper.h"
+	"../Battlescape/Particle.h"
 	"../Engine/Exception.h"
 	"../Engine/Logger.h"
 	"../Engine/RNG.h"
@@ -12019,7 +12027,7 @@
 	"../Interface/Text.h"
 	"../Resource/ResourcePack.h"
 
-1410864734 f:\git\openxcom\src\fmath.h
+1412441218 f:\git\openxcom\src\fmath.h
 	<cmath>
 	<limits>
 
@@ -12282,4 +12290,11 @@
 1410577858 f:\git\openxcom\src\savegame\craftid.h
 	<string>
 	<utility>
+
+1412440006 source:f:\git\openxcom\src\battlescape\particle.cpp
+	"Particle.h"
+	"Position.h"
+
+1412439770 f:\git\openxcom\src\battlescape\particle.h
+	<SDL_types.h>
 

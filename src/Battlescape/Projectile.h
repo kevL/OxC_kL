@@ -47,7 +47,9 @@ private:
 	bool _reversed;
 	int
 		_bulletSprite,
-		_speed;
+		_speed,
+		_vaporColor,
+		_vaporDensity;
 	size_t _position;
 
 	BattleAction _action;
@@ -78,7 +80,9 @@ private:
 				BattleAction action,
 				Position origin,
 				Position target,
-				int bulletSprite);
+				int bulletSprite,
+				int vaporColor,
+				int vaporDensity);
 		/// Cleans up the Projectile.
 		~Projectile();
 
@@ -112,8 +116,11 @@ private:
 		/// kL. Gets the ACTUAL target for this projectile.
 		Position getFinalTarget() const; // kL
 
-		///
+		/// Gets if this this projectile is being drawn back-to-front or front-to-back.
 		bool isReversed() const;
+
+		/// Adds a cloud of particles at the projectile's location.
+		void addVaporCloud();
 
 		/// kL. Gets a pointer to the BattleAction actor directly.
 		BattleUnit* getActor() const; // kL

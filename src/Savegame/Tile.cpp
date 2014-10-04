@@ -25,6 +25,8 @@
 #include "BattleUnit.h"
 #include "SerializationHelper.h"
 
+#include "../Battlescape/Particle.h"
+
 #include "../Engine/Exception.h"
 #include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
@@ -110,6 +112,15 @@ Tile::Tile(const Position& pos)
 Tile::~Tile()
 {
 	_inventory.clear();
+
+	for (std::list<Particle*>::iterator
+			i = _particles.begin();
+			i != _particles.end();
+			++i)
+	{
+		delete *i;
+	}
+	_particles.clear();
 }
 
 /**
@@ -855,6 +866,20 @@ void Tile::animate()
 			_curFrame[i] = nextFrame;
 		}
 	}
+
+	for (std::list<Particle*>::iterator
+			i = _particles.begin();
+			i != _particles.end();
+			)
+	{
+		if ((*i)->animate() == false)
+		{
+			delete *i;
+			i = _particles.erase(i);
+		}
+		else
+			++i;
+	}
 }
 
 /**
@@ -1229,6 +1254,24 @@ void Tile::setDangerous()
 bool Tile::getDangerous()
 {
 	return _danger;
+}
+
+/**
+ * Adds a particle to this tile's internal storage buffer.
+ * @param particle - pointer to a particle to add
+ */
+void Tile::addParticle(Particle* particle)
+{
+	_particles.push_back(particle);
+}
+
+/**
+ * Gets a pointer to this tile's particle array.
+ * @return, pointer to the internal array of particles
+ */
+std::list<Particle*>* Tile::getParticleCloud()
+{
+	return &_particles;
 }
 
 }
