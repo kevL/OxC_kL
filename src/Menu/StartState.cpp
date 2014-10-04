@@ -67,8 +67,7 @@ bool StartState::kL_ready; // kL
  */
 StartState::StartState()
 	:
-		_anim(0)		// load CTD
-//		_ready(false)	// kL
+		_anim(0) // load CTD
 {
 	// updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
 //kL	Options::newDisplayWidth	= Options::displayWidth;
@@ -83,7 +82,7 @@ StartState::StartState()
 	int
 //		dx = (Options::baseXResolution - 320) / 2,	// kL
 //		dy = (Options::baseYResolution - 200) / 2;	// kL
-		dx = 20,	// kL
+		dx = 10,	// kL
 		dy = 20;	// kL
 //	_surface = new Surface(320, 200, dx, dy);		// kL
 
@@ -124,7 +123,7 @@ StartState::StartState()
 //kL				Options::baseYResolution,
 //kL				0,
 //kL				0);
-					620,
+					630,
 					380,
 					dx,
 					dy);
@@ -242,24 +241,13 @@ void StartState::think()
 		case LOADING_FAILED:
 			CrossPlatform::flashWindow();
 
-			// kL_begin: Old Loading ... screen.
-/*			_surface->clear();
-			_surface->drawString(1, 9, "ERROR:", 2);
-			_surface->drawString(1, 17, error.c_str(), 2);
-			_surface->drawString(1, 49, "Make sure you installed OpenXcom", 1);
-			_surface->drawString(1, 57, "correctly.", 1);
-			_surface->drawString(1, 73, "Check the requirements and", 1);
-			_surface->drawString(1, 81, "documentation for more details.", 1);
-			_surface->drawString(75, 183, "Press any key to quit", 1);
-*/			// kL_end.
-
 // load CTD_begin
 			addLine(L"");
-			addLine(L"ERROR: " + Language::utf8ToWstr(error));
-			addLine(L"Make sure you installed OpenXcom correctly.");
-			addLine(L"Check the wiki documentation for more details.");
-			addLine(L"");
-			addLine(L"Press any key to continue.");
+			addLine(L"ERROR:" + Language::utf8ToWstr(error));
+//			addLine(L"Make sure you installed OpenXcom correctly.");
+//			addLine(L"Check the wiki documentation for more details.");
+//			addLine(L"");
+//			addLine(L"Press any key to continue.");
 // load CTD_end.
 
 			loading = LOADING_DONE;
@@ -268,7 +256,7 @@ void StartState::think()
 			CrossPlatform::flashWindow();
 
 			Log(LOG_INFO) << "OpenXcom started!";
-			if (!Options::reload
+			if (Options::reload == false
 				&& Options::playIntro)
 			{
 				bool letterbox = Options::keepAspectRatio;
@@ -297,7 +285,7 @@ void StartState::think()
 				State* state = new MainMenuState();
 				_game->setState(state);
 
-				if (!Options::badMods.empty()) // Check for mod loading errors
+				if (Options::badMods.empty() == false) // Check for mod loading errors
 				{
 					std::wostringstream error;
 					error << tr("STR_MOD_UNSUCCESSFUL") << L'\x02';

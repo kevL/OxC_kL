@@ -21,21 +21,21 @@ ufopaedia:
 extraSprites:
   - type: BIGOBS.PCK
     files:
-      411: Resources/Inc_grenade/Inc_grenade.GIF
+      411: Resources/Inc_grenade/Inc_grenade.png
   - type: FLOOROB.PCK
     files:
-      412: Resources/Inc_grenade/floorob_Inc_grenade.GIF
+      412: Resources/Inc_grenade/floorob_Inc_grenade.png
   - type: HANDOB.PCK
     width: 256
     height: 40
     subX: 32
     subY: 40
     files:
-      416: Resources/Inc_grenade/HandOb_Incgrenade.gif
+      416: Resources/Inc_grenade/HandOb_Incgrenade.png
 extraStrings:
   - type: en-US
     strings:
-      STR_INC_GRENADE: "Incendiary Grenade"
+      STR_INC_GRENADE: "Grenade-IN"
       STR_INC_GRENADE_UFOPEDIA: "Incendiary Grenades are thrown incendiary devices that burn at extremely high temperatures through a violent chemical reaction. Move personnel away from ignition point."
   - type: en-GB
     strings:
