@@ -544,12 +544,19 @@ bool ProjectileFlyBState::createNewProjectile()
 		_unit->getStatistics()->shotsFiredCounter++;
 	}
 
-	int bulletSprite = -1;
+	int
+		bulletSprite = -1,
+		vaporColor = -1,
+		vaporDensity = -1;
+
 	if (_action.type != BA_THROW)
 	{
 		bulletSprite = _ammo->getRules()->getBulletSprite();
 		if (bulletSprite == -1)
 			bulletSprite = _action.weapon->getRules()->getBulletSprite();
+
+		vaporColor = _ammo->getRules()->getVaporColor();
+		vaporDensity = _ammo->getRules()->getVaporDensity();
 	}
 
 	Projectile* projectile = new Projectile(
@@ -559,8 +566,8 @@ bool ProjectileFlyBState::createNewProjectile()
 										_origin,
 										_targetVoxel,
 										bulletSprite,
-										_ammo->getRules()->getVaporColor(),
-										_ammo->getRules()->getVaporDensity());
+										vaporColor,
+										vaporDensity);
 
 	_parent->getMap()->setProjectile(projectile); // add the projectile on the map
 
