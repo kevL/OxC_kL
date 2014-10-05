@@ -338,7 +338,8 @@ UfoDetectedState::UfoDetectedState(
 
 		std::wostringstream ss;
 		ss << tr(str);
-		ss << L"> sun " << (15 - shade);
+//		ss << L"> sun " << (15 - shade);
+		ss << L"> shade " << shade;
 
 		_txtTexture->setColor(Palette::blockOffset(8)+10);
 		_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);

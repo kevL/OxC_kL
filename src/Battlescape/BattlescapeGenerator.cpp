@@ -904,11 +904,11 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 													0));
 	if (tankUnit)
 	{
-		if (unitRule->getInnateWeapons().empty() == false)
+		if (unitRule->getBuiltInWeapons().empty() == false)
 		{
 			for (std::vector<std::string>::const_iterator
-					i = unitRule->getInnateWeapons().begin();
-					i != unitRule->getInnateWeapons().end();
+					i = unitRule->getBuiltInWeapons().begin();
+					i != unitRule->getBuiltInWeapons().end();
 					++i)
 			{
 				RuleItem* itemRule = _rules->getItem(*i);
@@ -1711,11 +1711,11 @@ void BattlescapeGenerator::deployAliens(
 				RuleItem* itemRule;
 
 				// Built in weapons: the unit has this weapon regardless of loadout or what have you.
-				if (unitRule->getInnateWeapons().empty() == false)
+				if (unitRule->getBuiltInWeapons().empty() == false)
 				{
 					for (std::vector<std::string>::const_iterator
-							j = unitRule->getInnateWeapons().begin();
-							j != unitRule->getInnateWeapons().end();
+							j = unitRule->getBuiltInWeapons().begin();
+							j != unitRule->getBuiltInWeapons().end();
 							++j)
 					{
 						itemRule = _rules->getItem(*j);

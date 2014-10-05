@@ -6,7 +6,7 @@ items:
     size: 0.1
     costBuy: 100
     costSell: 50
-    weight: 4
+    weight: 3
     bigSprite: 61
     floorSprite: 76
     handSprite: 144
@@ -51,7 +51,7 @@ extraSounds:
 extraStrings:
   - type: en-US
     strings:
-      STR_COMBAT_KNIFE: "Daichi blade"
+      STR_COMBAT_KNIFE: "Combat blade"
       STR_COMBAT_KNIFE_UFOPEDIA: "Using this hardened blade a trained professional can silently kill a lightly-armored opponent with a single slash or thrust."
   - type: en-GB
     strings:

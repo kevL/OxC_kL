@@ -248,7 +248,7 @@ private:
 		_type,
 		_spawnUnit;
 
-	std::vector<std::string> _innateWeapons;
+	std::vector<std::string> _builtInWeapons;
 
 	SpecialAbility _specab;
 	UnitStats _stats;
@@ -312,7 +312,7 @@ private:
 		/// Gets the name of any melee weapon that may be built in to this unit.
 		const std::string getMeleeWeapon() const;
 		/// Gets a vector of integrated items this unit has available.
-		const std::vector<std::string>& getInnateWeapons() const;
+		const std::vector<std::string>& getBuiltInWeapons() const;
 
 		/// kL. Gets if this Unit is a mechanical apparatus.
 		bool getMechanical() const; // kL

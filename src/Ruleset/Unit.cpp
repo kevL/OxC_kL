@@ -46,17 +46,6 @@ Unit::Unit(const std::string& type)
 		_isMechanical(false)
 {
 }
-// kL_note about _isMechanical:
-// This var subsumes several more detailed ideas:
-// _isTrackedVehicle
-// _isPsiAttackable / _isSentient
-// _canRevive (from status_Unconscious)
-// _canChangeMorale (see isFearable())
-// _isInfectable (can have a spawnUnit string set on it)
-// _isMetal (cannot catch fire)
-//
-// etc.
-
 
 /**
  * dTor.
@@ -92,7 +81,7 @@ void Unit::load(
 	_spawnUnit		= node["spawnUnit"].as<std::string>(_spawnUnit);
 	_livingWeapon	= node["livingWeapon"].as<bool>(_livingWeapon);
 	_meleeWeapon	= node["meleeWeapon"].as<std::string>(_meleeWeapon);
-	_innateWeapons	= node["innateWeapons"].as<std::vector<std::string> >(_innateWeapons);
+	_builtInWeapons	= node["builtInWeapons"].as<std::vector<std::string> >(_builtInWeapons);
 	_isMechanical	= node["isMechanical"].as<bool>(_isMechanical);
 
 	if (node["deathSound"])
@@ -299,14 +288,25 @@ const std::string Unit::getMeleeWeapon() const
  * living weapon item that may be defined.
  * @return, list of weapons that are integral to this unit.
  */
-const std::vector<std::string>& Unit::getInnateWeapons() const
+const std::vector<std::string>& Unit::getBuiltInWeapons() const
 {
-	return _innateWeapons;
+	return _builtInWeapons;
 }
 
 /**
  * kL. Gets if this Unit is a mechanical apparatus.
- * @return, true if this is a non-organic, mechanical unit on the battlefield
+ *
+ * NOTE about _isMechanical
+ * This var subsumes several more detailed ideas:
+ * isTrackedVehicle
+ * isPsiAttackable / isSentient
+ * canRevive (from status_Unconscious)
+ * canChangeMorale (see isFearable())
+ * isInfectable (can have a spawnUnit string set on it)
+ * isMetal (cannot catch fire)
+ * etc.
+ *
+ * @return, true if this is a non-organic, purely mechanical unit on the battlefield
  */
 bool Unit::getMechanical() const // kL
 {

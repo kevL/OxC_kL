@@ -419,8 +419,8 @@ void Map::draw()
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
-		if (_save->getSide() == FACTION_PLAYER)
-			_save->getBattleState()->toggleIcons(true);
+//		if (_save->getSide() == FACTION_PLAYER)
+//			_save->getBattleState()->toggleIcons(true);
 
 		//Log(LOG_INFO) << ". . drawTerrain()";
 		drawTerrain(this);
@@ -437,7 +437,7 @@ void Map::draw()
 			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
 		}
 
-		_save->getBattleState()->toggleIcons(false);
+//		_save->getBattleState()->toggleIcons(false);
 
 		_message->blit(this);
 	}

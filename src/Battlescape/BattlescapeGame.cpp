@@ -181,7 +181,7 @@ void BattlescapeGame::think()
 		}
 		else // it's a player side && we have not handled all panicking units
 		{
-			if (!_playerPanicHandled)
+			if (_playerPanicHandled == false)
 			{
 				_playerPanicHandled = handlePanickingPlayer();
 				_save->getBattleState()->updateSoldierInfo();
@@ -715,9 +715,15 @@ void BattlescapeGame::endTurn()
 	//Log(LOG_INFO) << ". done save->endTurn";
 
 	if (_save->getSide() == FACTION_PLAYER)
+	{
 		setupCursor();
+		_save->getBattleState()->toggleIcons(true);
+	}
 	else
+	{
 		getMap()->setCursorType(CT_NONE);
+		_save->getBattleState()->toggleIcons(false);
+	}
 
 
 	checkForCasualties(

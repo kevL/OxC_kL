@@ -130,15 +130,17 @@ ConfirmLandingState::ConfirmLandingState(
 //	if (texture < 0)
 //		texture = 0; -> _texture, too.
 
+//	TerrorSite* ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+
 	if (ufo != NULL) // NOTE: all this terrain stuff can and may fall through to BattlescapeGenerator.
 	{
 		std::string terrain = ufo->getTerrain(); // Ufo-object stores the terrain value.
-		//Log(LOG_INFO) << ". ufo VALID, terrain = " << terrain;
+		Log(LOG_INFO) << ". ufo VALID tex " << texture << ", terrain = " << terrain;
 
 		if (terrain == "")
 		{
-			//Log(LOG_INFO) << ". . terrain NOT valid";
+			Log(LOG_INFO) << ". . terrain NOT valid";
 			const double
 				lon = craft->getLongitude(),
 				lat = craft->getLatitude();
@@ -171,6 +173,8 @@ ConfirmLandingState::ConfirmLandingState(
 
 			if (city) // use these terrains for city missions.
 			{
+				Log(LOG_INFO) << ". . . city VALID";
+
 				AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment("STR_TERROR_MISSION");
 				size_t pick = RNG::generate(
 										0,
@@ -190,6 +194,8 @@ ConfirmLandingState::ConfirmLandingState(
 			}
 			else
 			{
+				Log(LOG_INFO) << ". . . city NOT valid";
+
 				std::vector<RuleTerrain*> choice;
 
 				const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
@@ -198,7 +204,7 @@ ConfirmLandingState::ConfirmLandingState(
 						i != terrains.end();
 						++i)
 				{
-					//Log(LOG_INFO) << ". . . terrain = " << *i;
+					Log(LOG_INFO) << ". . . terrain = " << *i;
 					_terrain = _game->getRuleset()->getTerrain(*i);
 
 					for (std::vector<int>::iterator
@@ -206,7 +212,7 @@ ConfirmLandingState::ConfirmLandingState(
 							j != _terrain->getTextures()->end();
 							++j)
 					{
-						//Log(LOG_INFO) << ". . . . texture = " << *j;
+						Log(LOG_INFO) << ". . . . texture = " << *j;
 						if (*j == texture
 							&& (_terrain->getHemisphere() == 0
 								|| (_terrain->getHemisphere() < 0
@@ -214,7 +220,7 @@ ConfirmLandingState::ConfirmLandingState(
 								|| (_terrain->getHemisphere() > 0
 									&& lat >= 0.0)))
 						{
-							//Log(LOG_INFO) << ". . . . . _terrain = " << *i;
+							Log(LOG_INFO) << ". . . . . _terrain = " << *i;
 							choice.push_back(_terrain);
 						}
 					}
@@ -224,7 +230,7 @@ ConfirmLandingState::ConfirmLandingState(
 															0,
 															static_cast<int>(choice.size()) - 1));
 				_terrain = choice.at(pick);
-				//Log(LOG_INFO) << ". . pick = " << pick << ", choice = " << _terrain->getName();
+				Log(LOG_INFO) << ". . pick = " << pick << ", choice = " << _terrain->getName();
 			}
 
 			ufo->setTerrain(_terrain->getName());
@@ -232,14 +238,19 @@ ConfirmLandingState::ConfirmLandingState(
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". . terrain VALID";
+			Log(LOG_INFO) << ". . terrain VALID: " << terrain;
+
 			_terrain = _game->getRuleset()->getTerrain(terrain);
 			_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(terrain)));
 		}
 	}
-	else // TODO: TerrorSites will have to go in here ... they choose terrain/textures differently.
+//	else if (ts != NULL)
+//	{
+// TODO: TerrorSites will have to go in here ... they choose terrain/textures differently. See 'city' above^
+//	}
+	else
 	{
-		//Log(LOG_INFO) << ". ufo NOT valid";
+		Log(LOG_INFO) << ". ufo NOT valid";
 		_txtTexture->setVisible(false);
 	}
 

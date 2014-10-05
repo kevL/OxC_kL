@@ -1227,7 +1227,6 @@ void BattlescapeState::mapOver(Action* action)
 				if (row == 102)
 					break; */
 
-
 				row++;
 			}
 
@@ -1301,7 +1300,7 @@ void BattlescapeState::mapClick(Action* action)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if (!_mouseOverThreshold
+			if (_mouseOverThreshold == false
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll);
@@ -1324,7 +1323,7 @@ void BattlescapeState::mapClick(Action* action)
 			return;
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if (!_mouseOverThreshold
+		if (_mouseOverThreshold == false
 			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 		{
 			_isMouseScrolled = false;
@@ -2783,7 +2782,7 @@ void BattlescapeState::warning( // kL
 		const bool useArg,
 		const int arg)
 {
-	if (!useArg)										// kL
+	if (useArg == false)								// kL
 		_warning->showMessage(tr(message));
 	else												// kL
 		_warning->showMessage(tr(message).arg(arg));	// kL
@@ -2797,7 +2796,7 @@ void BattlescapeState::saveAIMap()
 //kL	Uint32 start = SDL_GetTicks(); // kL_note: Not used.
 
 	BattleUnit* unit = _save->getSelectedUnit();
-	if (!unit)
+	if (unit == NULL)
 		return;
 
 	int
@@ -3606,6 +3605,8 @@ void BattlescapeState::toggleIcons(bool vis)
 	_btnOptions->setVisible(vis);
 	_btnEndTurn->setVisible(vis);
 	_btnAbort->setVisible(vis);
+
+	_lstExp->setVisible(vis);
 }
 
 /**
@@ -3614,7 +3615,7 @@ void BattlescapeState::toggleIcons(bool vis)
 void BattlescapeState::refreshVisUnits() // kL
 {
 	//Log(LOG_INFO) << "BattlescapeState::refreshVisUnits()";
-	if (!playableUnitSelected())
+	if (playableUnitSelected() == false)
 		return;
 
 	for (int // remove red target indicators
@@ -3795,20 +3796,6 @@ void BattlescapeState::updateExpData() // kL
 		else if (xp[i] > 0)
 			_lstExp->setCellColor(i, 1, Palette::blockOffset(3));	// green
 	}
-
-//	_lstExp->draw();
-/*	std::wostringstream str;
-
-	str
-	<< L"f > " << unit->getExpFiring() << L"\n"
-	<< L"t > " << unit->getExpThrowing() << L"\n"
-	<< L"m > " << unit->getExpMelee() << L"\n"
-	<< L"r > " << unit->getExpReactions() << L"\n"
-	<< L"b > " << unit->getExpBravery() << L"\n"
-	<< L"p > " << unit->getExpPsiSkill() << L"\n"
-	<< L"p > " << unit->getExpPsiStrength();
-
-	_txtExp->setText(str.str()); */
 }
 
 }
