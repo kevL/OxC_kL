@@ -275,6 +275,8 @@ protected:
 
 		/// New turn preparations.
 		void prepareNewTurn();
+		/// kL. Ends this tile's turn. Units catch on fire.
+		void endTileTurn(); // kL
 
 		/// Gets inventory on this tile.
 		std::vector<BattleItem*>* getInventory();

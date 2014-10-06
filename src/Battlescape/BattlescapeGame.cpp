@@ -631,13 +631,13 @@ void BattlescapeGame::endTurn()
 	}
 
 	// check for terrain explosions
-	Tile* t = _save->getTileEngine()->checkForTerrainExplosions();
-	if (t)
+	Tile* tile = _save->getTileEngine()->checkForTerrainExplosions();
+	if (tile)
 	{
 		Position pos = Position(
-							t->getPosition().x * 16 + 8,
-							t->getPosition().y * 16 + 8,
-							t->getPosition().z * 24 + 10);
+							tile->getPosition().x * 16 + 8,
+							tile->getPosition().y * 16 + 8,
+							tile->getPosition().z * 24 + 10);
 
 		// kL_note: This seems to be screwing up for preBattle powersource explosions; they
 		// wait until the first turn, either endTurn or perhaps checkForCasualties or like that.
@@ -646,9 +646,9 @@ void BattlescapeGame::endTurn()
 										pos,
 										NULL,
 										NULL,
-										t));
+										tile));
 
-		t = _save->getTileEngine()->checkForTerrainExplosions();
+		tile = _save->getTileEngine()->checkForTerrainExplosions();
 
 		statePushBack(NULL);
 
@@ -679,23 +679,29 @@ void BattlescapeGame::endTurn()
 	// see also, Savegame/Tile::prepareNewTurn(), catch fire on fire tile
 	// fire damage by hit is caused by TileEngine::explode()
 	for (std::vector<BattleUnit*>::iterator
-			j = _save->getUnits()->begin();
-			j != _save->getUnits()->end();
-			++j)
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
-		if ((*j)->getFaction() == _save->getSide())
+		if ((*i)->getFaction() == _save->getSide())
 		{
-			int fire = (*j)->getFire(); // Catch fire first! do it here
+			tile = (*i)->getTile(); // TODO: corpse_items -> unit
+			if (tile != NULL
+				&& (*i)->getHealth() > 0
+				&& ((*i)->getType() == "SOLDIER"
+					|| ((*i)->getUnitRules()
+						&& (*i)->getUnitRules()->getMechanical() == false)))
+				tile->endTileTurn(); // smoke & fire stuff.
+/* moved to endTileTurn()
+			int fire = (*i)->getFire(); // Catch fire first! do it here
 			if (fire > 0)
 			{
-				int dam = RNG::generate(3, 9);
-
-				(*j)->damage(
+				(*i)->damage(
 							Position(0, 0, 0),
-							dam,
+							RNG::generate(3, 9),
 							DT_IN,
 							true);
-			}
+			} */
 		}
 	} // kL_end.
 	// that just might work...

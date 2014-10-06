@@ -1837,7 +1837,7 @@ void SavedBattleGame::prepareNewTurn()
 				++i)
 		{
 			if (getTiles()[i]->getSmoke() != 0)
-				getTiles()[i]->prepareNewTurn();
+				getTiles()[i]->prepareNewTurn(); // fixes overlaps
 		}
 
 		getTileEngine()->calculateTerrainLighting(); // fires could have been started, stopped or smoke could reveal/conceal units.

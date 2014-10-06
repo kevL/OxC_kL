@@ -1490,8 +1490,16 @@ items:
     recoveryPoints: 3
     battleType: 11
     armor: 26
-    power: 54 #kL_add: For Zombie explosions
-    blastRadius: 1 #kL_add: For Zombie explosions
+  - type: STR_ZOMBIE_CORPSE #kL_add!
+    size: 0.5
+    costSell: 1000
+    weight: 40
+    bigSprite: -1
+    battleType: 11
+    armor: 1 #blow this up easy.
+    power: 54 #for Zombie explosions
+    blastRadius: 1 #for Zombie explosions
+    recover: false
   - type: STR_REAPER_CORPSE
     size: 1
     costSell: 15000
@@ -3499,7 +3507,7 @@ armors:
     spriteSheet: ZOMBIE.PCK
     corpseBattle:
       - STR_ZOMBIE_CORPSE
-    corpseGeo: STR_CHRYSSALID_CORPSE #kL_add. For explosions.
+    corpseGeo: STR_ZOMBIE_CORPSE #kL_add. For explosions.
     frontArmor: 5
     sideArmor: 5
     rearArmor: 5
@@ -6205,7 +6213,7 @@ research:
     cost: 150
     points: 10
     dependencies:
-      - STR_ZOMBIE_CORPSE
+      - STR_ZOMBIE_CORPSE #kL_note. Can't get one of these
       - STR_CELATID_CORPSE
       - STR_ETHEREAL_CORPSE
       - STR_SILACOID_CORPSE
@@ -6278,7 +6286,7 @@ research:
     points: 30
     dependencies:
       - STR_NEW_FIGHTER_TRANSPORTER
-  - name: STR_ZOMBIE_CORPSE
+  - name: STR_ZOMBIE_CORPSE #kL_note. Can't get one of these
     cost: 180
     points: 50
     lookup: STR_ZOMBIE_AUTOPSY

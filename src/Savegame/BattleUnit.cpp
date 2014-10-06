@@ -1425,7 +1425,10 @@ int BattleUnit::damage(
 //		playHitSound(); // kL
 	if (_health > 0
 		&& _status != STATUS_UNCONSCIOUS
-		&& type != DT_STUN)
+		&& type != DT_STUN
+		&& !
+			(getUnitRules()
+			&& getUnitRules()->getMechanical()))
 	{
 		playHitSound(); // kL
 	}
@@ -2188,6 +2191,9 @@ void BattleUnit::prepareNewTurn()
 		_fire--;
 	} */
 
+	if (_fire > 0)
+		_fire--;
+
 	if (_health < 0)
 		_health = 0;
 
@@ -2221,8 +2227,11 @@ void BattleUnit::prepareNewTurn()
 			if (RNG::percent(30))
 				_status = STATUS_BERSERK;	// or shoot stuff.
 		}
-		else if (panic > 0)			// successfully avoided Panic
+		else if (panic > 0			// successfully avoided Panic
+			&& _type == "SOLDIER")
+		{
 			_expBravery++;
+		}
 	}
 
 //kL	_hitByFire = false;

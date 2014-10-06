@@ -325,7 +325,7 @@ void UnitDieBState::convertUnitToCorpse()
 	// remove the unconscious body item corresponding to this unit,
 	// and if it was being carried, keep track of what slot it was in
 	bool carried = (pos == Position(-1,-1,-1));
-	if (!carried)
+	if (carried == false)
 		_parent->getSave()->removeUnconsciousBodyItem(_unit);
 
 	BattleItem* itemToKeep = NULL;
@@ -333,7 +333,7 @@ void UnitDieBState::convertUnitToCorpse()
 
 	// move inventory from unit to the ground for non-large units
 	bool drop = size == 1
-				&& !carried // kL, i don't think this ever happens (ie, items have already been dropped). So let's bypass this section anyway!
+				&& carried == false // kL, i don't think this ever happens (ie, items have already been dropped). So let's bypass this section anyway!
 				&& (Options::weaponSelfDestruction == false
 					|| _unit->getOriginalFaction() != FACTION_HOSTILE
 					|| _unit->getStatus() == STATUS_UNCONSCIOUS);

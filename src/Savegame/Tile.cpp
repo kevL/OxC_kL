@@ -1092,6 +1092,7 @@ void Tile::prepareNewTurn()
 								15));
 	}
 
+/*
 	if (_smoke > 0
 		&& _unit
 		&& _unit->isOut(true) == false
@@ -1130,11 +1131,68 @@ void Tile::prepareNewTurn()
 						true);
 		}
 //		}
-	}
+	} */
 
 	_overlaps = 0;
 	_danger = false;
 	//Log(LOG_INFO) << "Tile::prepareNewTurn() EXIT";
+}
+
+/**
+ * kL. Ends this tile's turn. Units catch on fire.
+ * Separated from prepareNewTurn() above so that units take
+ * damage before smoke/fire spreads to them; this is so that units
+ * have to end their turn on a tile for smoke/fire to affect them.
+ */
+void Tile::endTileTurn()
+{
+	float armorVulnerability = _unit->getArmor()->getDamageModifier(DT_IN);
+
+	if (_smoke > 0)	// need to check if unit is unconscious (ie. a corpse item on this tile) and if so give unit damage.
+//		&& _unit	// this stuff is all done in BattlescapeGame::endTurn(), call to here.
+//		&& _unit->isOut(true) == false
+//		&& (_unit->getType() == "SOLDIER"
+//			|| (_unit->getUnitRules()
+//				&& _unit->getUnitRules()->getMechanical() == false)))
+	{
+		if (_fire)
+		{
+//			int burn = static_cast<int>(Round(40.f * armorVulnerability));
+			//Log(LOG_INFO) << "Tile::prepareNewTurn(), ID " << _unit->getId() << " burn = " << burn;
+			if (RNG::percent(static_cast<int>(Round(40.f * armorVulnerability)))) // try to set the unit on fire. Do damage from fire here, too.
+			{
+				int dur = RNG::generate(
+									0,
+									static_cast<int>(Round(5.f * armorVulnerability)));
+				if (dur > _unit->getFire())
+				{
+					//Log(LOG_INFO) << ". dur = " << dur;
+					_unit->setFire(dur);
+				}
+			}
+		}
+
+		if (_unit->getArmor()->getDamageModifier(DT_SMOKE) > 0.f) // try to knock this unit out.
+		{
+//			int power = (_smoke / 4) + 1;
+			//Log(LOG_INFO) << ". damage -> ID " << _unit->getId() << " power = " << power;
+			_unit->damage(
+						Position(0, 0, 0),
+						_smoke / 4 + 1,
+						DT_SMOKE, // -> DT_STUN
+						true);
+		}
+	}
+
+	if (_unit->getFire() > 0 // kL: moved here from BattlescapeGame::endTurn()
+		&& armorVulnerability > 0.f)
+	{
+		_unit->damage(
+					Position(0, 0, 0),
+					RNG::generate(3, 9),
+					DT_IN,
+					true);
+	}
 }
 
 /**
