@@ -5037,30 +5037,34 @@ bool TileEngine::validateThrow(
 						int* voxelType)
 {
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()"; //, cf Projectile::calculateThrow()";
-//kL	double arc = 0.5;
-//	double arc = 1.12;
+	Position posTarget = targetVoxel / Position(16, 16, 24);
+
 	double arc = 0.0;
 
-	double kneel = 0.0;
-	if (action.actor->isKneeled())
-		kneel = 0.16; // stock: 0.1 (higher value lets kneeled throws go farther w/out hitting ceiling...)
+	if (originVoxel / Position(16, 16, 24) != posTarget)
+	{
+		// kL_note: Unfortunately, this prevents weak units from throwing heavy
+		// objects at their own feet. ( needs starting arc ~0.8, less if kneeled )
+		if (action.type == BA_THROW)
+		{
+			arc = std::max(
+						0.48,
+						1.73 / sqrt(
+									sqrt(
+										static_cast<double>(action.actor->getStats()->strength) * (action.actor->getAccuracyModifier() / 2.0 + 0.5)
+										/ static_cast<double>(action.weapon->getRules()->getWeight()))));
+		}
+		// kL_note: And arcing shots from targetting their origin tile. ( needs starting arc ~0.1 )
+		else // spit, etc
+		{
+			// arcing projectile weapons assume a fixed strength and weight.(70 and 10 respectively)
+			// curvature should be approximately 1.06358350461 at this point.
+//			arc = 1.73 / sqrt(sqrt(70.0 / 10.0)) + kneel; // OR ...
+			arc = 1.0635835046056873518242669985672;
+		}
 
-	if (action.type == BA_THROW)
-	{
-		arc = std::max(
-					0.48,
-					1.73 / sqrt(
-								sqrt(
-									static_cast<double>(action.actor->getStats()->strength) * (action.actor->getAccuracyModifier() / 2.0 + 0.5)
-									/ static_cast<double>(action.weapon->getRules()->getWeight())))
-							+ kneel);
-	}
-	else // spit
-	{
-		// arcing projectile weapons assume a fixed strength and weight.(70 and 10 respectively)
-		// curvature should be approximately 1.06358350461 at this point.
-//		arc = 1.73 / sqrt(sqrt(70.0 / 10.0)) + kneel; // OR ...
-		arc = 1.0635835046056873518242669985672 + kneel;
+		if (action.actor->isKneeled())
+			arc += 0.15; // stock: 0.1 (higher value lets kneeled throws go farther w/out hitting ceiling...)
 	}
 	//Log(LOG_INFO) << ". starting arc = " << arc;
 
@@ -5081,12 +5085,14 @@ bool TileEngine::validateThrow(
 
 
 	bool found = false;
-
 	while (found == false // try several different curvatures
 		&& arc < 5.0)
 	{
+		//Log(LOG_INFO) << ". . arc = " << arc;
+
 		int test = VOXEL_OUTOFBOUNDS;
 		std::vector<Position> trajectory;
+
 		test = calculateParabola(
 							originVoxel,
 							targetVoxel,
@@ -5095,15 +5101,16 @@ bool TileEngine::validateThrow(
 							action.actor,
 							arc,
 							Position(0, 0, 0));
+		//Log(LOG_INFO) << ". . calculateParabola() = " << test;
+
 		if (test != VOXEL_OUTOFBOUNDS
-			&& (trajectory.at(0) / Position(16, 16, 24)) == (targetVoxel / Position(16, 16, 24)))
+			&& (trajectory.at(0) / Position(16, 16, 24)) == posTarget)
 		{
-			//Log(LOG_INFO) << ". . . Loop arc = " << arc;
-
-			if (voxelType)
-				*voxelType = test;
-
+			//Log(LOG_INFO) << ". . . found TRUE";
 			found = true;
+
+			if (voxelType != NULL)
+				*voxelType = test;
 		}
 		else
 			arc += 0.5;
@@ -5115,7 +5122,7 @@ bool TileEngine::validateThrow(
 		return false;
 	}
 
-	if (curve)
+	if (curve != NULL)
 		*curve = arc;
 
 	//Log(LOG_INFO) << ". vT() ret TRUE";
@@ -5826,7 +5833,7 @@ bool TileEngine::validMeleeRange(
 				tileTarget_above = _battleSave->getTile(Position(pos + Position(x, y, 1) + posTarget));
 				tileTarget_below = _battleSave->getTile(Position(pos + Position(x, y,-1) + posTarget));
 
-				if (!tileTarget->getUnit()) // kL
+				if (tileTarget->getUnit() == NULL) // kL
 				{
 					//Log(LOG_INFO) << ". . no targetUnit";
 
@@ -5891,8 +5898,8 @@ bool TileEngine::validMeleeRange(
 
 /**
  * Gets the AI to look through a window.
- * @param position	- Reference to the current position
- * @return, Direction or -1 when no window found.
+ * @param position - reference the current position
+ * @return, direction or -1 when no window found
  */
 int TileEngine::faceWindow(const Position& position)
 {
@@ -5902,7 +5909,7 @@ int TileEngine::faceWindow(const Position& position)
 	Tile* tile = _battleSave->getTile(position);
 	if (tile
 		&& tile->getMapData(MapData::O_NORTHWALL)
-		&& !tile->getMapData(MapData::O_NORTHWALL)->stopLOS())
+		&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)
 	{
 		return 0;
 	}
@@ -5910,7 +5917,7 @@ int TileEngine::faceWindow(const Position& position)
 	tile = _battleSave->getTile(position + tileEast);
 	if (tile
 		&& tile->getMapData(MapData::O_WESTWALL)
-		&& !tile->getMapData(MapData::O_WESTWALL)->stopLOS())
+		&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
 	{
 		return 2;
 	}
@@ -5918,7 +5925,7 @@ int TileEngine::faceWindow(const Position& position)
 	tile = _battleSave->getTile(position + tileSouth);
 	if (tile
 		&& tile->getMapData(MapData::O_NORTHWALL)
-		&& !tile->getMapData(MapData::O_NORTHWALL)->stopLOS())
+		&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)
 	{
 		return 4;
 	}
@@ -5926,7 +5933,7 @@ int TileEngine::faceWindow(const Position& position)
 	tile = _battleSave->getTile(position);
 	if (tile
 		&& tile->getMapData(MapData::O_WESTWALL)
-		&& !tile->getMapData(MapData::O_WESTWALL)->stopLOS())
+		&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
 	{
 		return 6;
 	}
@@ -5937,9 +5944,9 @@ int TileEngine::faceWindow(const Position& position)
 /**
  * Returns the direction from origin to target.
  * kL_note: This function is almost identical to BattleUnit::directionTo().
- * @param origin - Reference to the origin point of the action.
- * @param target - Reference to the target point of the action.
- * @return, direction.
+ * @param origin - Reference to the origin point of the action
+ * @param target - Reference to the target point of the action
+ * @return, direction
  */
 int TileEngine::getDirectionTo(
 		const Position& origin,
@@ -5949,25 +5956,26 @@ int TileEngine::getDirectionTo(
 		return 0;
 
 
-	double offset_x = target.x - origin.x;
-	double offset_y = target.y - origin.y;
+	double
+		offset_x = target.x - origin.x,
+		offset_y = target.y - origin.y,
 
 	// kL_note: atan2() usually takes the y-value first;
 	// and that's why things may seem so fucked up.
-	double theta = atan2( // radians: + = y > 0; - = y < 0;
-						-offset_y,
-						offset_x);
+		theta = atan2( // radians: + = y > 0; - = y < 0;
+					-offset_y,
+					offset_x),
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
-	double m_pi_8 = M_PI / 8.0;				// a circle divided into 16 sections (rads) -> 22.5 deg
-	double d = 0.1;							// kL, a bias toward cardinal directions. (0.1..0.12)
-	double pie[4] =
-	{
-		M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg
-		(M_PI * 3.0 / 4.0) - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
-		M_PI_2 - m_pi_8 - d,				// 1.1780972450961724644234912687298	-> 67.5 deg
-		m_pi_8 + d							// 0.39269908169872415480783042290994	-> 22.5 deg
-	};
+		m_pi_8 = M_PI / 8.0,				// a circle divided into 16 sections (rads) -> 22.5 deg
+		d = 0.1,							// kL, a bias toward cardinal directions. (0.1..0.12)
+		pie[4] =
+		{
+			M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg
+			(M_PI * 3.0 / 4.0) - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
+			M_PI_2 - m_pi_8 - d,				// 1.1780972450961724644234912687298	-> 67.5 deg
+			m_pi_8 + d							// 0.39269908169872415480783042290994	-> 22.5 deg
+		};
 
 	int dir = 2;
 	if (theta > pie[0] || theta < -pie[0])
@@ -6001,14 +6009,15 @@ Position TileEngine::getOriginVoxel(
 //kL	const int dirXshift[24] = {9, 15, 15, 13,  8,  1, 1, 3, 7, 13, 15, 15,  9,  3, 1, 1, 8, 14, 15, 14,  8,  2, 1, 2};
 //kL	const int dirYshift[24] = {1,  3,  9, 15, 15, 13, 7, 1, 1,  1,  7, 13, 15, 15, 9, 3, 1,  2,  8, 14, 15, 14, 8, 2};
 
-	if (!tile)
+	if (tile == NULL)
 		tile = action.actor->getTile();
 
-	Position origin = tile->getPosition();
-	Position originVoxel = Position(
-								origin.x * 16,
-								origin.y * 16,
-								origin.z * 24);
+	Position
+		origin = tile->getPosition(),
+		originVoxel = Position(
+							origin.x * 16,
+							origin.y * 16,
+							origin.z * 24);
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (action.actor->getPosition() == origin
@@ -6095,7 +6104,7 @@ void TileEngine::setDangerZone(
 		BattleUnit* unit)
 {
 	Tile* tile = _battleSave->getTile(pos);
-	if (!tile)
+	if (tile == NULL)
 		return;
 
 	// set the epicenter as dangerous

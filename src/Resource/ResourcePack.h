@@ -97,7 +97,10 @@ private:
 				UFO_CRASH,
 				UFO_EXPLODE,
 				INTERCEPTOR_HIT,
-				INTERCEPTOR_EXPLODE;
+				INTERCEPTOR_EXPLODE,
+
+				SMOKE_OFFSET,
+				UNDERWATER_SMOKE_OFFSET;
 
 
 			/// Create a new resource pack with a folder's contents.

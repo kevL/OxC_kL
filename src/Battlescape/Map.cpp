@@ -404,11 +404,11 @@ void Map::draw()
 		|| _projectileInFOV
 		|| _explosionInFOV
 		|| (_reveal > 0
-			&& !kL_preReveal))
+			&& kL_preReveal == false))
 	{
 		//Log(LOG_INFO) << ". . drawTerrain()";
 		if (_reveal > 0
-			&& !kL_preReveal)
+			&& kL_preReveal == false)
 		{
 			_reveal--;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
@@ -1172,7 +1172,13 @@ void Map::drawTerrain(Surface* surface)
 									int shade = 0;
 									if (tileWest->getFire() == 0)
 									{
-										frame = 7 + ((tileWest->getSmoke() + 1) / 2);
+										if (_save->getDepth() > 0)
+											frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+										else
+											frame = ResourcePack::SMOKE_OFFSET;
+//										frame += int(floor((tileWest->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+
+										frame += (tileWest->getSmoke() + 1) / 2;
 										shade = tileWestShade;
 									}
 
@@ -1369,7 +1375,7 @@ void Map::drawTerrain(Surface* surface)
 
 					// check if we got bullet && it is in Field Of View
 					if (_projectile)
-//kL						&& _projectileInFOV)
+//kL					&& _projectileInFOV)
 					{
 						tmpSurface = 0;
 
@@ -1705,7 +1711,13 @@ void Map::drawTerrain(Surface* surface)
 						int shade = 0;
 						if (tile->getFire() == 0)
 						{
-							frame = 7 + ((tile->getSmoke() + 1) / 2);
+							if (_save->getDepth() > 0)
+								frame = ResourcePack::UNDERWATER_SMOKE_OFFSET;
+							else
+								frame = ResourcePack::SMOKE_OFFSET;
+//							frame += int(floor((tile->getSmoke() / 6.0) - 0.1)); // see http://www.ufopaedia.org/images/c/cb/Smoke.gif
+
+							frame += (tile->getSmoke() + 1) / 2;
 							shade = tileShade;
 						}
 
@@ -1804,7 +1816,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 					}
 
-					if (!tile->isVoid()) // THIS CAME BEFORE Draw Path Preview above in Old builds.
+					if (tile->isVoid() == false) // THIS CAME BEFORE Draw Path Preview above in Old builds.
 					{
 						// Draw object
 						if (tile->getMapData(MapData::O_OBJECT)
@@ -1826,7 +1838,7 @@ void Map::drawTerrain(Surface* surface)
 						&& _selectorY > itY - _cursorSize
 						&& _selectorX < itX + 1
 						&& _selectorY < itY + 1
-						&& !_save->getBattleState()->getMouseOverIcons())
+						&& _save->getBattleState()->getMouseOverIcons() == false)
 					{
 						if (_camera->getViewLevel() == itZ)
 						{

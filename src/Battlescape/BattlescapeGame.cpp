@@ -2333,7 +2333,7 @@ void BattlescapeGame::primaryAction(const Position& pos)
 		}
 		else
 		{
-			//Log(LOG_INFO) << ". . . . Firing or Throwing";
+			//Log(LOG_INFO) << ". . . . FIRING or THROWING";
 			getMap()->setCursorType(CT_NONE);
 
 			if (Options::battleConfirmFireMode)

@@ -459,8 +459,8 @@ items:
     tuAimed: 83
     battleType: 1
     fixedWeapon: true
-#    invWidth: 2
-#    invHeight: 3
+    invWidth: 2
+    invHeight: 3
     turretType: 0
     value: 35
   - type: STR_HWP_CANNON_SHELLS
@@ -498,8 +498,8 @@ items:
     tuAimed: 64
     battleType: 1
     fixedWeapon: true
-#    invWidth: 2
-#    invHeight: 3
+    invWidth: 2
+    invHeight: 3
     turretType: 1
     value: 40
   - type: STR_HWP_ROCKETS
@@ -539,8 +539,8 @@ items:
     battleType: 1
     fixedWeapon: true
     clipSize: -1
-#    invWidth: 2
-#    invHeight: 3
+    invWidth: 2
+    invHeight: 3
     turretType: 2
     value: 45
   - type: STR_HOVERTANK_PLASMA
@@ -564,8 +564,8 @@ items:
     battleType: 1
     fixedWeapon: true
     clipSize: -1
-#    invWidth: 2
-#    invHeight: 3
+    invWidth: 2
+    invHeight: 3
     turretType: 3
     value: 50
   - type: STR_HOVERTANK_LAUNCHER
@@ -587,8 +587,8 @@ items:
     fixedWeapon: true
     noReaction: true # kL
     waypoint: true
-#    invWidth: 2
-#    invHeight: 3
+    invWidth: 2
+    invHeight: 3
     turretType: 4
     value: 55
   - type: STR_HWP_FUSION_BOMB

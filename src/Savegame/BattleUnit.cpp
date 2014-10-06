@@ -1557,6 +1557,9 @@ int BattleUnit::getFallingPhase() const
  */
 void BattleUnit::startAiming() // kL
 {
+	if (_armor->getShootFrames() == 0)
+		return;
+
 	_status = STATUS_AIMING;
 	_aimPhase = 0;
 
@@ -1572,12 +1575,9 @@ void BattleUnit::startAiming() // kL
  */
 void BattleUnit::keepAiming() // kL
 {
-	_aimPhase++;
-
-	if (_aimPhase == _armor->getShootFrames())
+	if (++_aimPhase == _armor->getShootFrames())
 	{
 		_aimPhase--;
-
 		_status = STATUS_STANDING;
 	}
 
@@ -1586,7 +1586,7 @@ void BattleUnit::keepAiming() // kL
 
 /**
  * kL. Returns the phase of the Aiming sequence.
- * @return, phase
+ * @return, aiming phase
  */
 int BattleUnit::getAimingPhase() const // kL
 {

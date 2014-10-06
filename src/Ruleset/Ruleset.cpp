@@ -919,17 +919,19 @@ void Ruleset::loadFile(const std::string& filename)
 			i != doc["constants"].end();
 			++i)
 	{
-		ResourcePack::EXPLOSION_OFFSET		= (*i)["explosionOffset"]	.as<int>(ResourcePack::EXPLOSION_OFFSET);
-		ResourcePack::SMALL_EXPLOSION		= (*i)["smallExplosion"]	.as<int>(ResourcePack::SMALL_EXPLOSION);
-		ResourcePack::DOOR_OPEN				= (*i)["doorSound"]			.as<int>(ResourcePack::DOOR_OPEN);
-		ResourcePack::LARGE_EXPLOSION		= (*i)["largeExplosion"]	.as<int>(ResourcePack::LARGE_EXPLOSION);
-		ResourcePack::FLYING_SOUND			= (*i)["flyingSound"]		.as<int>(ResourcePack::FLYING_SOUND);
-		ResourcePack::ITEM_RELOAD			= (*i)["itemReload"]		.as<int>(ResourcePack::ITEM_RELOAD);
-		ResourcePack::SLIDING_DOOR_OPEN		= (*i)["slidingDoorSound"]	.as<int>(ResourcePack::SLIDING_DOOR_OPEN);
-		ResourcePack::SLIDING_DOOR_CLOSE	= (*i)["slidingDoorClose"]	.as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
-		ResourcePack::WALK_OFFSET			= (*i)["walkOffset"]		.as<int>(ResourcePack::WALK_OFFSET);
-		ResourcePack::ITEM_DROP				= (*i)["itemDrop"]			.as<int>(ResourcePack::ITEM_DROP);
-		ResourcePack::ITEM_THROW			= (*i)["itemThrow"]			.as<int>(ResourcePack::ITEM_THROW);
+		ResourcePack::EXPLOSION_OFFSET			= (*i)["explosionOffset"]		.as<int>(ResourcePack::EXPLOSION_OFFSET);
+		ResourcePack::SMALL_EXPLOSION			= (*i)["smallExplosion"]		.as<int>(ResourcePack::SMALL_EXPLOSION);
+		ResourcePack::DOOR_OPEN					= (*i)["doorSound"]				.as<int>(ResourcePack::DOOR_OPEN);
+		ResourcePack::LARGE_EXPLOSION			= (*i)["largeExplosion"]		.as<int>(ResourcePack::LARGE_EXPLOSION);
+		ResourcePack::FLYING_SOUND				= (*i)["flyingSound"]			.as<int>(ResourcePack::FLYING_SOUND);
+		ResourcePack::ITEM_RELOAD				= (*i)["itemReload"]			.as<int>(ResourcePack::ITEM_RELOAD);
+		ResourcePack::SLIDING_DOOR_OPEN			= (*i)["slidingDoorSound"]		.as<int>(ResourcePack::SLIDING_DOOR_OPEN);
+		ResourcePack::SLIDING_DOOR_CLOSE		= (*i)["slidingDoorClose"]		.as<int>(ResourcePack::SLIDING_DOOR_CLOSE);
+		ResourcePack::WALK_OFFSET				= (*i)["walkOffset"]			.as<int>(ResourcePack::WALK_OFFSET);
+		ResourcePack::ITEM_DROP					= (*i)["itemDrop"]				.as<int>(ResourcePack::ITEM_DROP);
+		ResourcePack::ITEM_THROW				= (*i)["itemThrow"]				.as<int>(ResourcePack::ITEM_THROW);
+		ResourcePack::SMOKE_OFFSET				= (*i)["smokeOffset"]			.as<int>(ResourcePack::SMOKE_OFFSET);
+		ResourcePack::UNDERWATER_SMOKE_OFFSET	= (*i)["underwaterSmokeOffset"]	.as<int>(ResourcePack::UNDERWATER_SMOKE_OFFSET);
 
 		if ((*i)["maleScream"])
 		{

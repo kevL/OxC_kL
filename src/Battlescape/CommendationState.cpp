@@ -46,7 +46,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Medals screen.
- * @param game Pointer to the core game.
  */
 CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 {
@@ -186,19 +185,15 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 		if (titleRow != row - 1)
 		{
 			if (modularCom) // Medal name
-			{
 				_lstSoldiers->setCellText(
 										titleRow,
 										0,
 										tr((*com).first).arg(tr(noun).c_str()).c_str());
-			}
 			else
-			{
 				_lstSoldiers->setCellText(
 										titleRow,
 										0,
 										tr((*com).first).c_str());
-			}
 
 			_lstSoldiers->setRowColor(titleRow, Palette::blockOffset(15)-1);
 

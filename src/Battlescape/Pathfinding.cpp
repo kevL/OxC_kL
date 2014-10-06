@@ -783,8 +783,8 @@ int Pathfinding::getTUCost(
 			// if we are on a stairs try to go up a level
 			if (dir < DIR_UP
 				&& startTile->getTerrainLevel() < -15 // less than 1/3 step up.
-				&& !aboveDest->hasNoFloor(destTile)
-				&& !triedStairs)
+				&& aboveDest->hasNoFloor(destTile) == false
+				&& triedStairs == false)
 			{
 				partsGoingUp++;
 
@@ -798,7 +798,7 @@ int Pathfinding::getTUCost(
 					triedStairs = true;
 				}
 			}
-			else if (!fellDown // for safely walking down ramps or stairs ...
+			else if (fellDown == false // for safely walking down ramps or stairs ...
 				&& _movementType != MT_FLY
 				&& canFallDown(destTile)
 				&& belowDest
@@ -831,7 +831,7 @@ int Pathfinding::getTUCost(
 			}
 
 			// this means the destination is probably outside the map
-			if (!destTile)
+			if (destTile == NULL)
 				return 255;
 
 			if (dir < DIR_UP
@@ -866,7 +866,7 @@ int Pathfinding::getTUCost(
 
 			// check if we have floor, else fall down;
 			// for walking off roofs and finding yerself in mid-air ...
-			if (!fellDown
+			if (fellDown == false
 				&& _movementType != MT_FLY
 				&& canFallDown(startTile))
 			{
@@ -921,8 +921,8 @@ int Pathfinding::getTUCost(
 										MapData::O_FLOOR,
 										_movementType);
 
-				if (!fellDown
-					&& !triedStairs
+				if (fellDown == false
+					&& triedStairs == false
 					&& destTile->getMapData(MapData::O_OBJECT))
 				{
 					cost += destTile->getTUCost(
@@ -936,7 +936,7 @@ int Pathfinding::getTUCost(
 
 				// if we don't want to fall down and there is no floor,
 				// we can't know the TUs so it defaults to 4
-				if (!fellDown
+				if (fellDown == false
 					&& destTile->hasNoFloor(NULL))
 				{
 					cost = 4;
@@ -1131,6 +1131,13 @@ int Pathfinding::getTUCost(
 				&& destTile->getFire() > 0)
 			{
 				cost += 32; // try to find a better path, but don't exclude this path entirely.
+			}
+
+			// TFTD thing: tiles on fire are cost 2 TUs more for whatever reason.
+			if (_save->getDepth() > 0
+				&& destTile->getFire() > 0)
+			{
+				cost += 2;
 			}
 
 			// Propose: if flying then no extra TU cost

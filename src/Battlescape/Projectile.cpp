@@ -308,7 +308,7 @@ int Projectile::calculateTrajectory(
  */
 int Projectile::calculateThrow(double accuracy)
 {
-	//Log(LOG_INFO) << "Projectile::calculateThrow(), cf TileEngine::validateThrow()";
+	//Log(LOG_INFO) << "Projectile::calculateThrow()"; //, cf TileEngine::validateThrow()";
 /*	BattleUnit* bu = _save->getTile(_origin)->getUnit();
 	if (bu == NULL)
 	{
@@ -363,6 +363,7 @@ int Projectile::calculateThrow(double accuracy)
 										&arc,
 										&ret))
 	{
+		//Log(LOG_INFO) << ". validateThrow() TRUE";
 		// finally do a line calculation and store this trajectory, & make sure it's valid.
 		int test = VOXEL_OUTOFBOUNDS;
 		while (test == VOXEL_OUTOFBOUNDS)
@@ -388,6 +389,7 @@ int Projectile::calculateThrow(double accuracy)
 														_action.actor,
 														arc,
 														delta);
+			//Log(LOG_INFO) << ". . calculateParabola() = " << test;
 /*	static const double maxDeviation = 0.125;
 	static const double minDeviation = 0.0;
 	double baseDeviation = std::max(
@@ -444,6 +446,7 @@ int Projectile::calculateThrow(double accuracy)
 
 		return ret;
 	}
+	//Log(LOG_INFO) << ". validateThrow() FALSE";
 
 	return VOXEL_OUTOFBOUNDS;
 }
@@ -648,7 +651,7 @@ void Projectile::applyAccuracy(
 		toss = soldier->getRules()->getStatCaps().throwing;
 	//Log(LOG_INFO) << ". . toss = " << toss;
 
-	accuracy = accuracy * 50.0 + 35.0; // arbitrary adjustment.
+	accuracy = accuracy * 50.0 + 40.0; // arbitrary adjustment.
 	//Log(LOG_INFO) << ". . accuracy = " << accuracy;
 	//Log(LOG_INFO) << ". . targetDist = " << targetDist;
 	double deviation = static_cast<double>(toss) - accuracy;

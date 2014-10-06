@@ -447,12 +447,13 @@ void ProjectileFlyBState::init()
 		else if (targetTile->getMapData(MapData::O_OBJECT) != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has content-object";
-			if (!_parent->getTileEngine()->canTargetTile(
+			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
 													MapData::O_OBJECT,
 													&_targetVoxel,
-													_unit))
+													_unit)
+												== false)
 			{
 				_targetVoxel = Position(
 									_action.target.x * 16 + 8,
@@ -463,12 +464,13 @@ void ProjectileFlyBState::init()
 		else if (targetTile->getMapData(MapData::O_NORTHWALL) != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has northwall";
-			if (!_parent->getTileEngine()->canTargetTile(
+			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
 													MapData::O_NORTHWALL,
 													&_targetVoxel,
-													_unit))
+													_unit)
+												== false)
 			{
 				_targetVoxel = Position(
 									_action.target.x * 16 + 8,
@@ -479,12 +481,13 @@ void ProjectileFlyBState::init()
 		else if (targetTile->getMapData(MapData::O_WESTWALL) != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has westwall";
-			if (!_parent->getTileEngine()->canTargetTile(
+			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
 													MapData::O_WESTWALL,
 													&_targetVoxel,
-													_unit))
+													_unit)
+												== false)
 			{
 				_targetVoxel = Position(
 									_action.target.x * 16,
@@ -495,12 +498,13 @@ void ProjectileFlyBState::init()
 		else if (targetTile->getMapData(MapData::O_FLOOR) != NULL)
 		{
 			//Log(LOG_INFO) << ". targetTile has floor";
-			if (!_parent->getTileEngine()->canTargetTile(
+			if (_parent->getTileEngine()->canTargetTile(
 													&originVoxel,
 													targetTile,
 													MapData::O_FLOOR,
 													&_targetVoxel,
-													_unit))
+													_unit)
+												== false)
 			{
 				_targetVoxel = Position(
 									_action.target.x * 16 + 8,
@@ -767,6 +771,7 @@ void ProjectileFlyBState::think()
 		&& _unit->getArmor()->getShootFrames() > 0)
 	{
 		_unit->keepAiming();
+		return;
 	}
 
 	_parent->getSave()->getBattleState()->clearMouseScrollingState();
@@ -1138,11 +1143,12 @@ void ProjectileFlyBState::cancel()
 
 		Position pos = projectile->getPosition();
 		Camera* camera = _parent->getMap()->getCamera();
-		if (!camera->isOnScreen(Position(
+		if (camera->isOnScreen(Position(
 										pos.x / 16,
 										pos.y / 16,
-										pos.z / 24)))
-//kL										false))
+										pos.z / 24))
+//kL									false))
+									== false)
 		{
 			camera->centerOnPosition(Position(
 											pos.x / 16,
