@@ -79,7 +79,6 @@ void UnitTurnBState::init()
 	if (_unit->isOut(true, true))
 	{
 		_parent->popState();
-
 		return;
 	}
 

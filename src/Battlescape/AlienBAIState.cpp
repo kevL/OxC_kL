@@ -316,7 +316,7 @@ void AlienBAIState::think(BattleAction* action)
 
 	//Log(LOG_INFO) << ". . pos 4";
 	if (_psiAction->type != BA_NONE
-		&& !_didPsi) // <- new crash in here.
+		&& _didPsi == false)
 	{
 		//Log(LOG_INFO) << ". . . inside Psi";
 		_didPsi = true;
@@ -2430,7 +2430,7 @@ bool AlienBAIState::psiAction()
 	bool LOSRequired = itemRule->isLOSRequired();
 
 	int tuCost = itemRule->getTUUse();
-	if (!itemRule->getFlatRate())
+	if (itemRule->getFlatRate() == false)
 		tuCost = static_cast<int>(floor(static_cast<float>(_unit->getStats()->tu * tuCost) / 100.f));
 	//Log(LOG_INFO) << "AlienBAIState::psiAction() tuCost = " << tuCost;
 
@@ -2508,7 +2508,7 @@ bool AlienBAIState::psiAction()
 
 				if (chance2 == chance
 					&& (RNG::percent(50)
-						|| !_aggroTarget))
+						|| _aggroTarget == NULL))
 				{
 					bLoS = (LoS > 0);
 					_aggroTarget = *i;
@@ -2526,9 +2526,11 @@ bool AlienBAIState::psiAction()
 		if (bLoS)
 			chance -= LoS_mult;
 
-		if (!_aggroTarget			// if not target
-			|| chance < 23			// or chance of success is too low
-			|| RNG::percent(13))	// or aLien just don't feel like it... do FALSE.
+		if (_aggroTarget == NULL									// if not target
+			|| (_aggroTarget->getUnitRules()						// or target is Psi-Immune
+				&& _aggroTarget->getUnitRules()->getPsiImmune())
+			|| chance < 23											// or chance of success is too low
+			|| RNG::percent(13))									// or aLien just don't feel like it... do FALSE.
 		{
 			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False : not good.";
 			return false;

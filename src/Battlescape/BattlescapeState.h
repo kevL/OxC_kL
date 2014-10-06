@@ -319,12 +319,12 @@ private:
 		/// Displays a popup window.
 		void popup(State* state);
 
-		/// Finishes a battle.
+		/// Finishes a tactical battle.
 		void finishBattle(
 				bool abort,
 				int inExitArea);
 
-		/// Show the launch button.
+		/// Shows the launch button.
 		void showLaunchButton(bool show);
 		/// Shows the PSI button.
 		void showPsiButton(bool show);
@@ -352,7 +352,7 @@ private:
 		/// Is the player allowed to press buttons?
 		bool allowButtons(bool allowSaving = false) const;
 
-		/// Update the resolution settings, we just resized the window.
+		/// Updates the resolution settings, the window was just resized.
 		void resize(
 				int& dX,
 				int& dY);

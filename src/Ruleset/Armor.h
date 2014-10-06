@@ -58,12 +58,14 @@ private:
 	int
 		_deathFrames,
 		_shootFrames, // kL
+
 		_frontArmor,
 		_sideArmor,
 		_rearArmor,
 		_underArmor,
 
 		_drawingRoutine,
+
 		_size,
 		_weight;
 

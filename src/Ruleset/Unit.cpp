@@ -43,7 +43,8 @@ Unit::Unit(const std::string& type)
 		_energyRecovery(30),
 		_specab(SPECAB_NONE),
 		_livingWeapon(false),
-		_isMechanical(false)
+		_isMechanical(false), // kL: these two should perhaps go to Armor class.
+		_isPsiImmune(false)
 {
 }
 
@@ -83,6 +84,7 @@ void Unit::load(
 	_meleeWeapon	= node["meleeWeapon"].as<std::string>(_meleeWeapon);
 	_builtInWeapons	= node["builtInWeapons"].as<std::vector<std::string> >(_builtInWeapons);
 	_isMechanical	= node["isMechanical"].as<bool>(_isMechanical);
+	_isPsiImmune	= node["isPsiImmune"].as<bool>(_isPsiImmune);
 
 	if (node["deathSound"])
 	{
@@ -304,6 +306,7 @@ const std::vector<std::string>& Unit::getBuiltInWeapons() const
  * canChangeMorale (see isFearable())
  * isInfectable (can have a spawnUnit string set on it)
  * isMetal (cannot catch fire)
+ * canOpenDoors
  * etc.
  *
  * @return, true if this is a non-organic, purely mechanical unit on the battlefield
@@ -311,6 +314,15 @@ const std::vector<std::string>& Unit::getBuiltInWeapons() const
 bool Unit::getMechanical() const // kL
 {
 	return _isMechanical;
+}
+
+/**
+ * kL. Gets if this Unit is immune to psionic attacks.
+ * @return, true if unit is immune to Psi
+ */
+bool Unit::getPsiImmune() const // kL
+{
+	return _isPsiImmune;
 }
 
 }

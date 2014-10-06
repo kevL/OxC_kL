@@ -226,12 +226,13 @@ class Unit
 private:
 	bool
 		_isMechanical,
+		_isPsiImmune,
 		_livingWeapon;
 	int
 		_floatHeight,
 		_kneelHeight,
-		_standHeight;
-	int
+		_standHeight,
+
 		_aggression,
 		_aggroSound,
 		_deathSound,
@@ -316,6 +317,8 @@ private:
 
 		/// kL. Gets if this Unit is a mechanical apparatus.
 		bool getMechanical() const; // kL
+		/// kL. Gets if this Unit is immune to psionic attacks.
+		bool getPsiImmune() const; // kL
 };
 
 }

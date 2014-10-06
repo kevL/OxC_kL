@@ -4277,9 +4277,10 @@ int TileEngine::unitOpensDoor(
 		size = unit->getArmor()->getSize();
 
 	if (unit->getUnitRules() != NULL
-		&& (rightClick
-			|| (unit->getUnitRules()->getMechanical()
-				&& size == 1)))
+		&& (unit->getUnitRules()->getMechanical()
+				&& size == 1)
+			|| (rightClick
+				&& size == 2))
 	{
 		return door;
 	}
@@ -5400,12 +5401,21 @@ bool TileEngine::psiAttack(BattleAction* action)
 {
 	//Log(LOG_INFO) << "TileEngine::psiAttack()";
 	//Log(LOG_INFO) << ". attackerID " << action->actor->getId();
-	Tile* tile = _battleSave->getTile(action->target);
-	if (tile
-		&& tile->getUnit())
+	const Tile* const tile = _battleSave->getTile(action->target);
+	if (tile == NULL)
+		return false;
+
+	BattleUnit* const victim = tile->getUnit();
+	if (victim == NULL)
+		return false;
+
+
+	const bool psiImmune = victim->getUnitRules()
+						&& victim->getUnitRules()->getPsiImmune();
+
+	if (psiImmune == false)
 	{
 		//Log(LOG_INFO) << ". . tile EXISTS, so does Unit";
-		BattleUnit* victim = tile->getUnit();
 		//Log(LOG_INFO) << ". . defenderID " << victim->getId();
 		//Log(LOG_INFO) << ". . target(pos) " << action->target;
 
@@ -5590,6 +5600,9 @@ bool TileEngine::psiAttack(BattleAction* action)
 			victim->addPsiStrengthExp(2);
 		}
 	}
+	else
+		_battleSave->getBattleState()->warning("STR_ACTION_NOT_ALLOWED_PSIONIC");
+
 	//Log(LOG_INFO) << "TileEngine::psiAttack() ret FALSE";
 	return false;
 }

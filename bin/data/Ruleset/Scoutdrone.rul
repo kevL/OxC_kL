@@ -92,6 +92,7 @@ units:
     moveSound: 14
     energyRecovery: 100
     isMechanical: true
+    isPsiImmune: true
 ufopaedia:
   - id: STR_SCOUT_DRONE
     type_id: 3

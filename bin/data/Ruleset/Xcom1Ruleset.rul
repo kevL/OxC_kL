@@ -3629,6 +3629,7 @@ units:
     moveSound: 14
     energyRecovery: 100
     isMechanical: true
+    isPsiImmune: true
   - type: STR_TANK_ROCKET_LAUNCHER
     race: STR_TANK_ROCKET_LAUNCHER
     stats:
@@ -3651,6 +3652,7 @@ units:
     moveSound: 14
     energyRecovery: 100
     isMechanical: true
+    isPsiImmune: true
   - type: STR_TANK_LASER_CANNON
     race: STR_TANK_LASER_CANNON
     stats:
@@ -3673,6 +3675,7 @@ units:
     moveSound: 14
     energyRecovery: 100
     isMechanical: true
+    isPsiImmune: true
   - type: STR_HOVERTANK_PLASMA
     race: STR_HOVERTANK_PLASMA
     stats:
@@ -3696,6 +3699,7 @@ units:
     moveSound: 40
     energyRecovery: 100
     isMechanical: true
+    isPsiImmune: true
   - type: STR_HOVERTANK_LAUNCHER
     race: STR_HOVERTANK_LAUNCHER
     stats:
@@ -3719,6 +3723,7 @@ units:
     moveSound: 40
     energyRecovery: 100
     isMechanical: true
+    isPsiImmune: true
   - type: MALE_CIVILIAN
     race: STR_CIVILIAN
     stats:
@@ -3925,6 +3930,7 @@ units:
     specab: 1
     livingWeapon: true
     isMechanical: true
+    isPsiImmune: true
   - type: STR_FLOATER_SOLDIER
     race: STR_FLOATER
     rank: STR_LIVE_SOLDIER
@@ -4462,6 +4468,7 @@ units:
     energyRecovery: 100
     livingWeapon: true
     isMechanical: true
+    isPsiImmune: true
   - type: STR_ZOMBIE
     race: STR_ZOMBIE
     rank: STR_LIVE_TERRORIST
@@ -4487,6 +4494,7 @@ units:
     energyRecovery: 40
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
+    isPsiImmune: true
 alienRaces:
   - id: STR_SECTOID
     members:
@@ -8901,6 +8909,7 @@ extraStrings:
       STR_ACTION_NOT_ALLOWED_ROOF: "> roof <"
       STR_ACTION_NOT_ALLOWED_FLIGHT: "> flight <"
       STR_ACTION_NOT_ALLOWED_ALIEN: "> aLien <"
+      STR_ACTION_NOT_ALLOWED_PSIONIC: "> psionic <"
       STR_TIME_UNITS_RESERVED: "tu Reserved"
       STR_PANIC: "panic> {0}"
       STR_CONTROL: "control> {0}"

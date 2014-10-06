@@ -2738,7 +2738,7 @@ void BattlescapeState::handleState()
 
 /**
  * Sets the timer interval for think() calls of the state.
- * @param interval An interval in ms.
+ * @param interval - an interval in ms
  */
 void BattlescapeState::setStateInterval(Uint32 interval)
 {
@@ -2747,7 +2747,7 @@ void BattlescapeState::setStateInterval(Uint32 interval)
 
 /**
  * Gets pointer to the game. Some states need this info.
- * @return Pointer to game.
+ * @return, pointer to Game
  */
 Game* BattlescapeState::getGame() const
 {
@@ -2756,7 +2756,7 @@ Game* BattlescapeState::getGame() const
 
 /**
  * Gets pointer to the map. Some states need this info.
- * @return Pointer to map.
+ * @return, pointer to Map
  */
 Map* BattlescapeState::getMap() const
 {
@@ -2765,7 +2765,7 @@ Map* BattlescapeState::getMap() const
 
 /**
  * Shows a debug message in the topleft corner.
- * @param message Debug message.
+ * @param message - reference a debug message
  */
 void BattlescapeState::debug(const std::wstring& message)
 {
@@ -2775,17 +2775,19 @@ void BattlescapeState::debug(const std::wstring& message)
 
 /**
  * Shows a warning message.
- * @param message Warning message.
+ * @param message	- reference a message, usually a warning
+ * @param useArg	- true to add an argument to the message (default false)
+ * @param arg		- the argument to add as an integer (default -1)
  */
-void BattlescapeState::warning( // kL
+void BattlescapeState::warning(
 		const std::string& message,
 		const bool useArg,
 		const int arg)
 {
-	if (useArg == false)								// kL
+	if (useArg == false)
 		_warning->showMessage(tr(message));
-	else												// kL
-		_warning->showMessage(tr(message).arg(arg));	// kL
+	else
+		_warning->showMessage(tr(message).arg(arg));
 }
 
 /**

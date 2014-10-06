@@ -4383,7 +4383,7 @@
 	"../Ruleset/StatString.h"
 	"../Ruleset/Unit.h"
 
-1412488675 f:\git\openxcom\src\ruleset\unit.h
+1412589756 f:\git\openxcom\src\ruleset\unit.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -4684,7 +4684,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1410572697 f:\git\openxcom\src\ruleset\armor.h
+1412577439 f:\git\openxcom\src\ruleset\armor.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5655,7 +5655,7 @@
 1404096022 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1411714023 f:\git\openxcom\src\battlescape\battlescapestate.h
+1412590890 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -6046,7 +6046,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1412495486 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1412590834 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6776,7 +6776,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1412551505 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1412591141 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6915,7 +6915,7 @@
 1411714024 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1412292967 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1412574030 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -9488,7 +9488,7 @@
 1411655059 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
-1412490338 source:f:\git\openxcom\src\ruleset\unit.cpp
+1412589733 source:f:\git\openxcom\src\ruleset\unit.cpp
 	"Unit.h"
 
 1411713105 source:f:\git\openxcom\src\savegame\alienbase.cpp
