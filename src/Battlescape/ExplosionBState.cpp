@@ -139,7 +139,7 @@ void ExplosionBState::init()
 
 		_areaOfEffect = true;
 	}
-	else if (_unit // cyberdiscs!!!
+	else if (_unit // cyberdiscs!!! And ... ZOMBIES.
 		&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 	{
 		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();

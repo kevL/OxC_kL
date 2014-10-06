@@ -1490,6 +1490,8 @@ items:
     recoveryPoints: 3
     battleType: 11
     armor: 26
+    power: 54 #kL_add: For Zombie explosions
+    blastRadius: 1 #kL_add: For Zombie explosions
   - type: STR_REAPER_CORPSE
     size: 1
     costSell: 15000
@@ -3497,6 +3499,7 @@ armors:
     spriteSheet: ZOMBIE.PCK
     corpseBattle:
       - STR_ZOMBIE_CORPSE
+    corpseGeo: STR_CHRYSSALID_CORPSE #kL_add. For explosions.
     frontArmor: 5
     sideArmor: 5
     rearArmor: 5

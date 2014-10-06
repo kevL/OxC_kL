@@ -992,7 +992,7 @@ private:
 		/// Sets the unit has having died by fire damage.
 //		void setDiedByFire();
 		/// Gets if the unit died by fire damage.
-		bool getDiedByFire() const;
+//		bool getDiedByFire() const;
 		// kL_end.
 
 		/// Returns true if this unit selectable.

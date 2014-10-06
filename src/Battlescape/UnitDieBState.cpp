@@ -75,7 +75,7 @@ UnitDieBState::UnitDieBState(
 	if (_unit->getVisible())
 	{
 		Camera* deathCam = _parent->getMap()->getCamera();
-		if (!deathCam->isOnScreen(_unit->getPosition()))
+		if (deathCam->isOnScreen(_unit->getPosition()) == false)
 			deathCam->centerOnPosition(_unit->getPosition());
 
 		if (_unit->getFaction() == FACTION_PLAYER)
@@ -87,9 +87,7 @@ UnitDieBState::UnitDieBState(
 			_unit->lookAt(3); // inits STATUS_TURNING if not facing correctly. Else STATUS_STANDING
 		}
 		else
-		{
 			_unit->initDeathSpin(); // inits STATUS_TURNING
-		}
 	}
 	else
 	{
@@ -162,7 +160,6 @@ void UnitDieBState::think()
 		if (_unit->getSpinPhase() > -1)
 		{
 			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 2 / 7);
-
 			_unit->contDeathSpin(); // -> STATUS_STANDING
 		}
 		else
@@ -175,7 +172,7 @@ void UnitDieBState::think()
 		_unit->keepFalling(); // -> STATUS_DEAD or STATUS_UNCONSCIOUS ( ie. isOut() )
 	}
 // #2
-	else if (!_unit->isOut()) // this ought be Status_Standing/Disabled also.
+	else if (_unit->isOut() == false) // this ought be Status_Standing/Disabled also.
 	{
 		//Log(LOG_INFO) << ". . !isOut";
 		_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED);
@@ -196,8 +193,14 @@ void UnitDieBState::think()
 
 		_unit->setTurnsExposed(255);
 
-		if (_unit->getSpawnUnit().empty() == false
-			&& _unit->getDiedByFire() == false) // kL <- could screw with death animations, etc.
+/*		if (_unit->getDiedByFire()) // do this in BattleUnit::damage()
+		{
+			_unit->setSpawnUnit("");
+			_unit->setSpecialAbility(SPECAB_NONE); // SPECAB_EXPLODEONDEATH
+		} */
+
+		if (_unit->getSpawnUnit().empty() == false)
+//			&& _unit->getDiedByFire() == false) // kL <- could screw with death animations, etc.
 		{
 			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
 			BattleUnit* convertedUnit = _parent->convertUnit(

@@ -2590,7 +2590,7 @@ void TileEngine::explode(
 							}
 
 							bool done = false;
-							while (!done)
+							while (done == false)
 							{
 								done = destTile->getInventory()->empty();
 
@@ -2792,7 +2792,7 @@ void TileEngine::explode(
 
 							// kL: Adapted from DT_HE above^
 							bool done = false;
-							while (!done)
+							while (done == false)
 							{
 								done = fireTile->getInventory()->empty();
 

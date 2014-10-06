@@ -2661,7 +2661,8 @@ void BattlescapeGame::dropItem(
 /**
  * Converts a unit into a unit of another type.
  * @param unit			- pointer to a unit to convert
- * @param convertType	- the type of unit to convert to
+ * @param convertType	- reference the type of unit to convert to
+ * @param dirFace		- the direction to face after converting (default 3)
  * @return, pointer to the new unit
  */
 BattleUnit* BattlescapeGame::convertUnit(
@@ -2708,8 +2709,10 @@ BattleUnit* BattlescapeGame::convertUnit(
 	std::ostringstream newArmor;
 	newArmor << getRuleset()->getUnit(convertType)->getArmor();
 
-	const int difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty());
-	const int month = _parentState->getGame()->getSavedGame()->getMonthsPassed(); // kL
+	const int
+		difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty()),
+		month = _parentState->getGame()->getSavedGame()->getMonthsPassed();
+
 	BattleUnit* convertedUnit = new BattleUnit(
 											getRuleset()->getUnit(convertType),
 											FACTION_HOSTILE,

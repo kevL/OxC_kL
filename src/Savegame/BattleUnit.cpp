@@ -1378,7 +1378,15 @@ int BattleUnit::damage(
 				_health = 0;
 
 				if (type == DT_IN)
+				{
 					_diedByFire = true;
+					_spawnUnit = "";
+
+					if (_type == "STR_ZOMBIE")
+						_specab = SPECAB_EXPLODEONDEATH;
+					else
+						_specab = SPECAB_NONE;
+				}
 			}
 			else
 			{
@@ -1526,7 +1534,10 @@ void BattleUnit::startFalling()
  */
 void BattleUnit::keepFalling()
 {
-	_fallPhase++;
+	if (_diedByFire)
+		_fallPhase = _armor->getDeathFrames();
+	else
+		_fallPhase++;
 
 	if (_fallPhase == _armor->getDeathFrames())
 	{
@@ -4018,10 +4029,10 @@ bool BattleUnit::getTakenExpl() const
 /**
  * Gets if the unit died by fire damage.
  */
-bool BattleUnit::getDiedByFire() const
+/* bool BattleUnit::getDiedByFire() const
 {
 	return _diedByFire;
-} // kL_end.
+} */ // kL_end.
 
 /**
  * Checks if this unit can be selected.
