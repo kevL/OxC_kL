@@ -2813,7 +2813,7 @@ void Map::cacheUnit(BattleUnit* unit)
 
 /**
  * Puts a projectile sprite on the map.
- * @param projectile, Projectile to place.
+ * @param projectile - projectile to place
  */
 void Map::setProjectile(Projectile* projectile)
 {
@@ -2829,7 +2829,7 @@ void Map::setProjectile(Projectile* projectile)
 
 /**
  * Gets the current projectile sprite on the map.
- * @return Projectile or 0 if there is no projectile sprite on the map.
+ * @return, pointer to Projectile or NULL if there is no projectile sprite on the map
  */
 Projectile* Map::getProjectile() const
 {
@@ -2838,7 +2838,7 @@ Projectile* Map::getProjectile() const
 
 /**
  * Gets a list of explosion sprites on the map.
- * @return A list of explosion sprites.
+ * @return, list of explosion sprites
  */
 std::list<Explosion*>* Map::getExplosions()
 {
@@ -2847,7 +2847,7 @@ std::list<Explosion*>* Map::getExplosions()
 
 /**
  * Gets the pointer to the camera.
- * @return, Pointer to camera.
+ * @return, pointer to Camera
  */
 Camera* Map::getCamera()
 {

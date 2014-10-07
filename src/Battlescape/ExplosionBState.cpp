@@ -53,8 +53,9 @@ namespace OpenXcom
  * @param center		- center position in voxelspace
  * @param item			- pointer to item involved in the explosion (eg grenade)
  * @param unit			- pointer to unit involved in the explosion (eg unit throwing the grenade, cyberdisc, etc)
- * @param tile			- pointer to tile the explosion is on
- * @param lowerWeapon	- true to tell the unit causing this explosion to lower their weapon
+ * @param tile			- pointer to tile the explosion is on (default NULL)
+ * @param lowerWeapon	- true to tell the unit causing this explosion to lower their weapon (default false)
+ * @param success		- true if the (melee) attack was succesful (default false)
  */
 ExplosionBState::ExplosionBState(
 		BattlescapeGame* parent,
@@ -95,7 +96,7 @@ ExplosionBState::~ExplosionBState()
 void ExplosionBState::init()
 {
 	//Log(LOG_INFO) << "ExplosionBState::init()";
-	if (_item)
+	if (_item != NULL)
 	{
 		//Log(LOG_INFO) << ". type = " << (int)_item->getRules()->getDamageType();
 		_power = _item->getRules()->getPower();
@@ -127,12 +128,12 @@ void ExplosionBState::init()
 
 		// HE, incendiary, smoke or stun bombs create AOE explosions;
 		// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid
-		_areaOfEffect = !_pistolWhip
-						&& _item->getRules()->getBattleType() != BT_MELEE
-						&& _item->getRules()->getBattleType() != BT_PSIAMP
-						&& _item->getRules()->getExplosionRadius() > -1;
+		_areaOfEffect = _pistolWhip == false
+					 && _item->getRules()->getBattleType() != BT_MELEE
+					 && _item->getRules()->getBattleType() != BT_PSIAMP
+					 && _item->getRules()->getExplosionRadius() > -1;
 	}
-	else if (_tile)
+	else if (_tile != NULL)
 	{
 		_power = _tile->getExplosive();
 		//Log(LOG_INFO) << ". _power(_tile) = " << _power;
@@ -182,7 +183,7 @@ void ExplosionBState::init()
 				qty = _power,
 				offset;
 
-			if (_item)
+			if (_item != NULL)
 			{
 				frameStart = _item->getRules()->getHitAnimation();
 				radius = _item->getRules()->getExplosionRadius();
@@ -191,6 +192,7 @@ void ExplosionBState::init()
 				if (_item->getRules()->getDamageType() == DT_SMOKE
 					|| _item->getRules()->getDamageType() == DT_STUN)
 				{
+					frameStart = 8;
 					qty /= 2; // smoke & stun bombs do fewer anims.
 				}
 				else

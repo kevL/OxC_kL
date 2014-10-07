@@ -57,8 +57,10 @@ private:
 
 	BattleItem* _item;
 	BattleUnit* _unit;
-	Position _center;
 	Tile* _tile;
+
+	Position _center;
+
 
 	/// Calculates the effects of the explosion.
 	void explode();

@@ -17,6 +17,13 @@ extraSprites:
   - type: CURSOR.PCK
     files:
       0: Resources/Sprites/ufograph/cursor/
+  - type: X1.PCK
+    width: 1024
+    height: 128
+    subX: 128
+    subY: 64
+    files:
+      0: Resources/Sprites/ufograph/x1/x1.png
   - type: INTICON.PCK
     files:
       0: Resources/Sprites/geograph/inticon/

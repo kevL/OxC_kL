@@ -5874,7 +5874,7 @@
 	"BattleAIState.h"
 	"Position.h"
 
-1410523243 f:\git\openxcom\src\battlescape\explosionbstate.h
+1412704386 f:\git\openxcom\src\battlescape\explosionbstate.h
 	<string>
 	"BattleState.h"
 	"Position.h"
@@ -9759,7 +9759,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1411714025 source:f:\git\openxcom\src\savegame\soldier.cpp
+1412695756 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
