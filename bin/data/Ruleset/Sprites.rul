@@ -14,6 +14,9 @@ extraSprites:
   - type: SMOKE.PCK
     files:
       0: Resources/Sprites/ufograph/smoke/
+  - type: CURSOR.PCK
+    files:
+      0: Resources/Sprites/ufograph/cursor/
   - type: INTICON.PCK
     files:
       0: Resources/Sprites/geograph/inticon/
