@@ -20,11 +20,11 @@
 #ifndef OPENXCOM_RULEINVENTORY_H
 #define OPENXCOM_RULEINVENTORY_H
 
-#include <map>
-#include <string>
-#include <vector>
+//#include <map>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -50,9 +50,8 @@ class RuleItem;
 
 
 /**
- * Represents a specific section of the inventory,
- * containing information like available slots and
- * screen position.
+ * Represents a specific section of the inventory, containing
+ * information like available slots and screen position.
  */
 class RuleInventory
 {

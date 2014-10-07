@@ -20,6 +20,39 @@
 #include "RuleSoldier.h"
 
 
+namespace YAML
+{
+
+template<>
+struct convert<OpenXcom::RuleGender>
+{
+	///
+	static Node encode(const OpenXcom::RuleGender& rhs)
+	{
+		Node node;
+
+		node.push_back(rhs.male);
+		node.push_back(rhs.female);
+
+		return node;
+	}
+
+	///
+	static bool decode(const Node& node, OpenXcom::RuleGender& rhs)
+	{
+		if (!node.IsSequence() || node.size() != 2)
+			return false;
+
+		rhs.male = node[0].as<int>();
+		rhs.female = node[1].as<int>();
+
+		return true;
+	}
+};
+
+}
+
+
 namespace OpenXcom
 {
 
@@ -50,20 +83,23 @@ RuleSoldier::~RuleSoldier()
  */
 void RuleSoldier::load(const YAML::Node& node)
 {
-	_type			= node["type"].as<std::string>(_type);
-	_minStats.merge(node["minStats"].as<UnitStats>(_minStats));
-	_maxStats.merge(node["maxStats"].as<UnitStats>(_maxStats));
-	_statCaps.merge(node["statCaps"].as<UnitStats>(_statCaps));
-	_armor			= node["armor"].as<std::string>(_armor);
-	_standHeight	= node["standHeight"].as<int>(_standHeight);
-	_kneelHeight	= node["kneelHeight"].as<int>(_kneelHeight);
-	_floatHeight	= node["floatHeight"].as<int>(_floatHeight);
+	_type			= node["type"]			.as<std::string>(_type);
+	_minStats.merge(node["minStats"]		.as<UnitStats>(_minStats));
+	_maxStats.merge(node["maxStats"]		.as<UnitStats>(_maxStats));
+	_statCaps.merge(node["statCaps"]		.as<UnitStats>(_statCaps));
+	_armor			= node["armor"]			.as<std::string>(_armor);
+	_standHeight	= node["standHeight"]	.as<int>(_standHeight);
+	_kneelHeight	= node["kneelHeight"]	.as<int>(_kneelHeight);
+	_floatHeight	= node["floatHeight"]	.as<int>(_floatHeight);
+
+//	_genderRatio	= node["genderRatio"]	.as<std::vector<RuleGender> >(_genderRatio);
+	_genderRatio	= node["genderRatio"]	.as<RuleGender>(_genderRatio);
 }
 
 /**
  * Returns the language string that names
  * this unit. Each unit type has a unique name.
- * @return Unit name.
+ * @return, Unit name.
  */
 std::string RuleSoldier::getType() const
 {
@@ -72,7 +108,7 @@ std::string RuleSoldier::getType() const
 
 /**
  * Gets the minimum stats for the random stats generator.
- * @return The minimum stats.
+ * @return, The minimum stats.
  */
 UnitStats RuleSoldier::getMinStats() const
 {
@@ -81,7 +117,7 @@ UnitStats RuleSoldier::getMinStats() const
 
 /**
  * Gets the maximum stats for the random stats generator.
- * @return The maximum stats.
+ * @return, The maximum stats.
  */
 UnitStats RuleSoldier::getMaxStats() const
 {
@@ -90,7 +126,7 @@ UnitStats RuleSoldier::getMaxStats() const
 
 /**
  * Gets the stat caps.
- * @return The stat caps.
+ * @return, The stat caps.
  */
 UnitStats RuleSoldier::getStatCaps() const
 {
@@ -99,7 +135,7 @@ UnitStats RuleSoldier::getStatCaps() const
 
 /**
  * Gets the height of the soldier when it's standing.
- * @return The standing height.
+ * @return, The standing height.
  */
 int RuleSoldier::getStandHeight() const
 {
@@ -108,7 +144,7 @@ int RuleSoldier::getStandHeight() const
 
 /**
  * Gets the height of the soldier when it's kneeling.
- * @return The kneeling height.
+ * @return, The kneeling height.
  */
 int RuleSoldier::getKneelHeight() const
 {
@@ -117,7 +153,7 @@ int RuleSoldier::getKneelHeight() const
 
 /**
  * Gets the elevation of the soldier when it's flying.
- * @return The floating height.
+ * @return, The floating height.
  */
 int RuleSoldier::getFloatHeight() const
 {
@@ -126,11 +162,19 @@ int RuleSoldier::getFloatHeight() const
 
 /**
  * Gets the armor name.
- * @return The armor name.
+ * @return, The armor name.
  */
 std::string RuleSoldier::getArmor() const
 {
 	return _armor;
+}
+
+/** kL. Gets the gender ratio struct.
+ * @return, the gender ratio struct
+ */
+RuleGender RuleSoldier::getGenderRatio() const // kL
+{
+	return _genderRatio;
 }
 
 }

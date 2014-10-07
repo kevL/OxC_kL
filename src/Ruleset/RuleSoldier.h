@@ -28,6 +28,14 @@
 namespace OpenXcom
 {
 
+struct RuleGender
+{
+	int
+		male,
+		female;
+};
+
+
 /**
  * Represents the creation data for a specific type of unit.
  * This info is copied to either Soldier for XCom soldiers or BattleUnit for aliens and civilians.
@@ -50,6 +58,9 @@ private:
 		_minStats,
 		_maxStats,
 		_statCaps;
+
+//	std::vector<RuleGender> _genderRatio;
+	RuleGender _genderRatio;
 
 
 	public:
@@ -80,6 +91,9 @@ private:
 
 		/// Gets the armor name.
 		std::string getArmor() const;
+
+		/// kL. Gets the gender ratio struct.
+		RuleGender getGenderRatio() const; // kL
 };
 
 }

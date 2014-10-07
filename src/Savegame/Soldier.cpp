@@ -44,10 +44,10 @@ namespace OpenXcom
 
 /**
  * Initializes a new soldier, either blank or randomly generated.
- * @param rules, Soldier ruleset.
- * @param armor, Soldier armor.
- * @param names, List of name pools for soldier generation.
- * @param id, Pointer to unique soldier id for soldier generation.
+ * @param rules	- pointer to Soldier ruleset
+ * @param armor	- pointer to Soldier armor
+ * @param names	- pointer to a vector of pointers that becomes a list of name pools for soldier generation
+ * @param id	- unique soldier ID for soldier generation
  */
 Soldier::Soldier(
 		RuleSoldier* rules,
@@ -95,7 +95,22 @@ Soldier::Soldier(
 
 		_currentStats = _initialStats;
 
-		_gender	= (SoldierGender)RNG::generate(0, 1);	// kL
+		// kL_begin: gender Ratios
+		RuleGender gRatio = rules->getGenderRatio();
+		double
+			male = static_cast<double>(gRatio.male),
+			total = static_cast<double>(male + gRatio.female);
+
+		if (AreSame(total, 0.0)
+			|| RNG::percent(static_cast<int>(Round(male / total * 100.0))))
+		{
+			_gender = GENDER_MALE;
+		}
+		else
+			_gender = GENDER_FEMALE;
+		// kL_end.
+
+//		_gender	= (SoldierGender)RNG::generate(0, 1);	// kL
 		_look	= (SoldierLook)RNG::generate(0, 3);		// kL
 
 		if (_gender == GENDER_MALE)
