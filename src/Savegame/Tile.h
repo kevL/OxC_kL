@@ -274,7 +274,7 @@ protected:
 		bool getHasUnconsciousSoldier(); // kL
 
 		/// New turn preparations.
-		void prepareNewTurn();
+		void prepareTileTurn();
 		/// kL. Ends this tile's turn. Units catch on fire.
 		void endTileTurn(); // kL
 

@@ -1076,9 +1076,9 @@ bool Tile::getHasUnconsciousSoldier() // kL
  * Average out any smoke added by the number of overlaps.
  * Apply fire/smoke damage to units as applicable.
  */
-void Tile::prepareNewTurn()
+void Tile::prepareTileTurn()
 {
-	//Log(LOG_INFO) << "Tile::prepareNewTurn()";
+	//Log(LOG_INFO) << "Tile::prepareTileTurn()";
 
 	// we've received new smoke in this turn, but we're not on fire, average out the smoke.
 	if (_overlaps != 0
@@ -1105,7 +1105,7 @@ void Tile::prepareNewTurn()
 		{
 			float vuln = _unit->getArmor()->getDamageModifier(DT_IN);
 			int burn = static_cast<int>(Round(40.f * vuln));
-			//Log(LOG_INFO) << "Tile::prepareNewTurn(), ID " << _unit->getId() << " burn = " << burn;
+			//Log(LOG_INFO) << "Tile::prepareTileTurn(), ID " << _unit->getId() << " burn = " << burn;
 			if (RNG::percent(burn)) // try to set the unit on fire.
 			{
 				int dur = RNG::generate(
@@ -1135,12 +1135,12 @@ void Tile::prepareNewTurn()
 
 	_overlaps = 0;
 	_danger = false;
-	//Log(LOG_INFO) << "Tile::prepareNewTurn() EXIT";
+	//Log(LOG_INFO) << "Tile::prepareTileTurn() EXIT";
 }
 
 /**
  * kL. Ends this tile's turn. Units catch on fire.
- * Separated from prepareNewTurn() above so that units take
+ * Separated from prepareTileTurn() above so that units take
  * damage before smoke/fire spreads to them; this is so that units
  * have to end their turn on a tile for smoke/fire to affect them.
  */
@@ -1149,7 +1149,7 @@ void Tile::endTileTurn()
 	float armorVulnerability = _unit->getArmor()->getDamageModifier(DT_IN);
 
 	if (_smoke > 0)	// need to check if unit is unconscious (ie. a corpse item on this tile) and if so give unit damage.
-//		&& _unit	// this stuff is all done in BattlescapeGame::endTurn(), call to here.
+//		&& _unit	// this stuff is all done in BattlescapeGame::endGameTurn(), call to here.
 //		&& _unit->isOut(true) == false
 //		&& (_unit->getType() == "SOLDIER"
 //			|| (_unit->getUnitRules()
@@ -1158,7 +1158,7 @@ void Tile::endTileTurn()
 		if (_fire)
 		{
 //			int burn = static_cast<int>(Round(40.f * armorVulnerability));
-			//Log(LOG_INFO) << "Tile::prepareNewTurn(), ID " << _unit->getId() << " burn = " << burn;
+			//Log(LOG_INFO) << "Tile::endTileTurn(), ID " << _unit->getId() << " burn = " << burn;
 			if (RNG::percent(static_cast<int>(Round(40.f * armorVulnerability)))) // try to set the unit on fire. Do damage from fire here, too.
 			{
 				int dur = RNG::generate(
@@ -1184,7 +1184,7 @@ void Tile::endTileTurn()
 		}
 	}
 
-	if (_unit->getFire() > 0 // kL: moved here from BattlescapeGame::endTurn()
+	if (_unit->getFire() > 0 // kL: moved here from BattlescapeGame::endGameTurn()
 		&& armorVulnerability > 0.f)
 	{
 		_unit->damage(

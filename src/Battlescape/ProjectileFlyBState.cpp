@@ -131,7 +131,7 @@ void ProjectileFlyBState::init()
 	{
 		//Log(LOG_INFO) << ". targetUnit was dashing -> now set FALSE";
 		targetUnit->setDashing(false);
-	} */ // kL_end. -> I moved this to SavedBattleGame::prepareNewTurn()
+	} */ // kL_end. -> I moved this to SavedBattleGame::prepareBattleTurn()
 
 
 //kL	BattleItem* weapon = _action.weapon; // < was a pointer!! kL_note.

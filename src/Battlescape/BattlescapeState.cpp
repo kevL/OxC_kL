@@ -1682,7 +1682,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 				++i)
 		{
 			if ((*i)->getFaction() == _save->getSide())
-				(*i)->prepareNewTurn();
+				(*i)->prepareUnitTurn();
 
 			updateSoldierInfo();
 		}

@@ -572,9 +572,9 @@ bool BattlescapeGame::kneel(
 /**
  * Ends the turn.
  */
-void BattlescapeGame::endTurn()
+void BattlescapeGame::endGameTurn()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::endTurn()";
+	//Log(LOG_INFO) << "BattlescapeGame::endGameTurn()";
 	_debugPlay		= false;
 	_AISecondMove	= false;
 	_parentState->showLaunchButton(false);
@@ -612,7 +612,7 @@ void BattlescapeGame::endTurn()
 
 				statePushBack(NULL);
 
-				//Log(LOG_INFO) << "BattlescapeGame::endTurn(), hot grenades EXIT";
+				//Log(LOG_INFO) << "BattlescapeGame::endGameTurn(), hot grenades EXIT";
 				return;
 			}
 
@@ -652,7 +652,7 @@ void BattlescapeGame::endTurn()
 
 		statePushBack(NULL);
 
-		//Log(LOG_INFO) << "BattlescapeGame::endTurn(), terrain explosions EXIT";
+		//Log(LOG_INFO) << "BattlescapeGame::endGameTurn(), terrain explosions EXIT";
 		return;
 	}
 	//Log(LOG_INFO) << ". done explosions";
@@ -675,8 +675,8 @@ void BattlescapeGame::endTurn()
 	//Log(LOG_INFO) << ". done !neutral";
 
 	// kL_begin: battleUnit is burning...
-	// Fire damage is also in Savegame/BattleUnit::prepareNewTurn(), on fire
-	// see also, Savegame/Tile::prepareNewTurn(), catch fire on fire tile
+	// Fire damage is also in Savegame/BattleUnit::prepareUnitTurn(), on fire
+	// see also, Savegame/Tile::prepareTileTurn(), catch fire on fire tile
 	// fire damage by hit is caused by TileEngine::explode()
 	for (std::vector<BattleUnit*>::iterator
 			i = _save->getUnits()->begin();
@@ -691,7 +691,9 @@ void BattlescapeGame::endTurn()
 				&& ((*i)->getType() == "SOLDIER"
 					|| ((*i)->getUnitRules()
 						&& (*i)->getUnitRules()->getMechanical() == false)))
+			{
 				tile->endTileTurn(); // smoke & fire stuff.
+			}
 /* moved to endTileTurn()
 			int fire = (*i)->getFire(); // Catch fire first! do it here
 			if (fire > 0)
@@ -717,8 +719,8 @@ void BattlescapeGame::endTurn()
 			true);
 	//Log(LOG_INFO) << ". done tallyUnits";
 
-	_save->endTurn(); // <- this rolls over Faction-turns.
-	//Log(LOG_INFO) << ". done save->endTurn";
+	_save->endBattleTurn(); // <- this rolls over Faction-turns.
+	//Log(LOG_INFO) << ". done save->endBattleTurn";
 
 	if (_save->getSide() == FACTION_PLAYER)
 	{
@@ -746,7 +748,7 @@ void BattlescapeGame::endTurn()
 								false,
 								liveSoldiers);
 
-		//Log(LOG_INFO) << "BattlescapeGame::endTurn(), objectiveDestroyed EXIT";
+		//Log(LOG_INFO) << "BattlescapeGame::endGameTurn(), objectiveDestroyed EXIT";
 		return;
 	}
 
@@ -779,7 +781,7 @@ void BattlescapeGame::endTurn()
 	}
 
 	_endTurnRequested = false;
-	//Log(LOG_INFO) << "BattlescapeGame::endTurn() EXIT";
+	//Log(LOG_INFO) << "BattlescapeGame::endGameTurn() EXIT";
 }
 
 /**
@@ -1313,7 +1315,7 @@ void BattlescapeGame::handleState()
 		{
 			_states.pop_front();
 
-			endTurn();
+			endGameTurn();
 
 			return;
 		}
@@ -1363,7 +1365,7 @@ void BattlescapeGame::statePushBack(BattleState* bs)
 		if (_states.front() == 0) // end turn request
 		{
 			_states.pop_front();
-			endTurn();
+			endGameTurn();
 
 			return;
 		}
@@ -1628,10 +1630,10 @@ void BattlescapeGame::popState()
 
 			if (_states.empty())
 			{
-				//Log(LOG_INFO) << ". endTurn()";
-				endTurn();
+				//Log(LOG_INFO) << ". endGameTurn()";
+				endGameTurn();
 
-				//Log(LOG_INFO) << ". endTurn() DONE return";
+				//Log(LOG_INFO) << ". endGameTurn() DONE return";
 				return;
 			}
 			else

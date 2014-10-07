@@ -1031,9 +1031,9 @@ int SavedBattleGame::getTurn() const
 /**
  * Ends the current turn and progresses to the next one.
  */
-void SavedBattleGame::endTurn()
+void SavedBattleGame::endBattleTurn()
 {
-	//Log(LOG_INFO) << "SavedBattleGame::endTurn()";
+	//Log(LOG_INFO) << "SavedBattleGame::endBattleTurn()";
 	if (_side == FACTION_PLAYER) // end of Xcom turn.
 	{
 		//Log(LOG_INFO) << ". end Faction_Player";
@@ -1047,7 +1047,7 @@ void SavedBattleGame::endTurn()
 		_side = FACTION_HOSTILE;
 		_selectedUnit = NULL;
 
-		// kL_begin: sbg::endTurn() no Reselect xCom units at endTurn!!!
+		// kL_begin: sbg::endBattleTurn() no Reselect xCom units at endTurn!!!
 		for (std::vector<BattleUnit*>::iterator
 				i = getUnits()->begin();
 				i != getUnits()->end();
@@ -1074,8 +1074,8 @@ void SavedBattleGame::endTurn()
 		{
 			//Log(LOG_INFO) << ". . nextFactionUnit == 0";
 
-			prepareNewTurn();
-			//Log(LOG_INFO) << ". . prepareNewTurn DONE";
+			prepareBattleTurn();
+			//Log(LOG_INFO) << ". . prepareBattleTurn DONE";
 			_turn++;
 
 			_side = FACTION_PLAYER;
@@ -1103,7 +1103,7 @@ void SavedBattleGame::endTurn()
 	{
 		//Log(LOG_INFO) << ". end Faction_Neutral";
 
-		prepareNewTurn();
+		prepareBattleTurn();
 		_turn++;
 
 		_side = FACTION_PLAYER;
@@ -1159,9 +1159,9 @@ void SavedBattleGame::endTurn()
 			++i)
 	{
 		if ((*i)->getFaction() == _side)	// this causes an Mc'd unit to lose its turn. Because its faction
-											// hasn't reverted until *after* bu->prepareNewTurn() runs. So it
+											// hasn't reverted until *after* bu->prepareUnitTurn() runs. So it
 											// actually switches at the _end_ of its original faction's turn ...
-			(*i)->prepareNewTurn();			// Reverts faction, tu/stun recovery, Fire damage, etc.
+			(*i)->prepareUnitTurn();		// Reverts faction, tu/stun recovery, Fire damage, etc.
 
 
 		if ((*i)->getFaction() == FACTION_PLAYER) // including units Mc'd by xCom
@@ -1192,7 +1192,7 @@ void SavedBattleGame::endTurn()
 		}
 
 //		if ((*i)->getFaction() == _side)
-//			(*i)->prepareNewTurn();
+//			(*i)->prepareUnitTurn();
 	}
 	//Log(LOG_INFO) << "done looping units";
 
@@ -1203,7 +1203,7 @@ void SavedBattleGame::endTurn()
 	if (_side != FACTION_PLAYER)
 		selectNextFactionUnit();
 
-	//Log(LOG_INFO) << "SavedBattleGame::endTurn() EXIT";
+	//Log(LOG_INFO) << "SavedBattleGame::endBattleTurn() EXIT";
 }
 
 /**
@@ -1577,7 +1577,7 @@ Node* SavedBattleGame::getPatrolNode(
 			i < linksEnd;
 			++i)
 	{
-		if (!scout
+		if (scout == false
 			&& fromNode->getNodeLinks()->at(i) < 1)
 		{
 			continue; // nothing to patrol to
@@ -1630,7 +1630,7 @@ Node* SavedBattleGame::getPatrolNode(
 		if (Options::traceAI) Log(LOG_INFO) << (scout? "Scout ": "Guard ") << "found no patrol node! XXX XXX XXX";
 
 		if (unit->getArmor()->getSize() > 1
-			&& !scout)
+			&& scout == false)
 		{
 //			return Sectopod::CTD();
 			return getPatrolNode(
@@ -1652,14 +1652,13 @@ Node* SavedBattleGame::getPatrolNode(
 		size_t legit = static_cast<size_t>(RNG::generate(
 													0,
 													static_cast<int>(legitNodes.size()) - 1));
-
 		//Log(LOG_INFO) << " . return legitNodes @ " << legit;
 		return legitNodes[legit];
 	}
 	else
 	{
 		//Log(LOG_INFO) << " . !scout";
-		if (!bestNode)
+		if (bestNode == NULL)
 			//Log(LOG_INFO) << " . no bestNode, return NULL";
 			return NULL;
 
@@ -1675,25 +1674,25 @@ Node* SavedBattleGame::getPatrolNode(
 /**
  * Carries out new turn preparations such as fire and smoke spreading.
  */
-void SavedBattleGame::prepareNewTurn()
+void SavedBattleGame::prepareBattleTurn()
 {
-	//Log(LOG_INFO) << "SavedBattleGame::prepareNewTurn()";
+	//Log(LOG_INFO) << "SavedBattleGame::prepareBattleTurn()";
 	std::vector<Tile*> tilesOnFire;
 	std::vector<Tile*> tilesOnSmoke;
 
-	for (int
+	for (int // prepare a list of tiles on fire
 			i = 0;
 			i < _mapsize_x * _mapsize_y * _mapsize_z;
-			++i) // prepare a list of tiles on fire
+			++i)
 	{
 		if (getTiles()[i]->getFire() > 0)
 			tilesOnFire.push_back(getTiles()[i]);
 	}
 
-	for (std::vector<Tile*>::iterator
+	for (std::vector<Tile*>::iterator // first: fires spread
 			i = tilesOnFire.begin();
 			i != tilesOnFire.end();
-			++i) // first: fires spread
+			++i)
 	{
 		if ((*i)->getOverlaps() == 0) // if we haven't added fire here this turn
 		{
@@ -1710,12 +1709,12 @@ void SavedBattleGame::prepareNewTurn()
 					Pathfinding::directionToVector(dir, &pos);
 					Tile* tile = getTile((*i)->getPosition() + pos);
 
-					if (tile
+					if (tile // if there's no wall blocking the path of the flames...
 						&& getTileEngine()->horizontalBlockage(
 															*i,
 															tile,
 															DT_IN)
-														== 0) // if there's no wall blocking the path of the flames...
+														== 0)
 					{
 						//Log(LOG_INFO) << ". fire " << (*i)->getPosition() << " to " << tile->getPosition();
 						tile->ignite((*i)->getSmoke()); // attempt to set this tile on fire
@@ -1837,13 +1836,15 @@ void SavedBattleGame::prepareNewTurn()
 				++i)
 		{
 			if (getTiles()[i]->getSmoke() != 0)
-				getTiles()[i]->prepareNewTurn(); // fixes overlaps
+				getTiles()[i]->prepareTileTurn(); // normalizes overlaps
 		}
-
-		getTileEngine()->calculateTerrainLighting(); // fires could have been started, stopped or smoke could reveal/conceal units.
+		// fires could have been started, stopped or smoke could reveal/conceal units.
+//kL	getTileEngine()->calculateTerrainLighting();
 	}
 
 	reviveUnconsciousUnits();
+
+	getTileEngine()->calculateTerrainLighting(); // kL
 	getTileEngine()->recalculateFOV(); // kL
 }
 

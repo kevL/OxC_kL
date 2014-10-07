@@ -1424,11 +1424,12 @@ int BattleUnit::damage(
 //	if (!isOut(true, true)) // no sound if Stunned; deathscream handled by uh, UnitDieBState.
 //		playHitSound(); // kL
 	if (_health > 0
+		&& _visible
 		&& _status != STATUS_UNCONSCIOUS
 		&& type != DT_STUN
-		&& !
-			(getUnitRules()
-			&& getUnitRules()->getMechanical()))
+		&& (_type == "SOLDIER"
+			|| (_unitRules
+				&& _unitRules->getMechanical() == false)))
 	{
 		playHitSound(); // kL
 	}
@@ -2110,9 +2111,9 @@ double BattleUnit::getInitiative(int tuSpent)
 /**
  * Prepares unit for a new turn.
  */
-void BattleUnit::prepareNewTurn()
+void BattleUnit::prepareUnitTurn()
 {
-	//Log(LOG_INFO) << "BattleUnit::prepareNewTurn() ID " << getId();
+	//Log(LOG_INFO) << "BattleUnit::prepareUnitTurn() ID " << getId();
 	_faction = _originalFaction;
 	//Log(LOG_INFO) << ". _stopShot is " << _stopShot << " setFALSE";
 	//_stopShot = false;
@@ -2178,8 +2179,8 @@ void BattleUnit::prepareNewTurn()
 
 	_health -= getFatalWounds(); // suffer from fatal wounds
 
-	// Fire damage is also in Battlescape/BattlescapeGame::endTurn(), stand on fire tile
-	// see also, Savegame/Tile::prepareNewTurn(), catch fire on fire tile
+	// Fire damage is also in Battlescape/BattlescapeGame::endGameTurn(), stand on fire tile
+	// see also, Savegame/Tile::prepareTileTurn(), catch fire on fire tile
 	// fire damage by hit is caused by TileEngine::explode()
 /*kL	if (//kL !_hitByFire &&
 		_fire > 0) // suffer from fire
@@ -2238,7 +2239,7 @@ void BattleUnit::prepareNewTurn()
 	_dontReselect = false;
 	_motionPoints = 0;
 
-	//Log(LOG_INFO) << "BattleUnit::prepareNewTurn() EXIT";
+	//Log(LOG_INFO) << "BattleUnit::prepareUnitTurn() EXIT";
 }
 
 /**

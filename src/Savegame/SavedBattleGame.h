@@ -236,7 +236,7 @@ private:
 		/// Gets the turn number.
 		int getTurn() const;
 		/// Ends the turn.
-		void endTurn();
+		void endBattleTurn();
 		/// Sets debug mode.
 		void setDebugMode();
 		/// Gets debug mode.
@@ -267,7 +267,7 @@ private:
 				BattleUnit* unit,
 				Node* fromNode);
 		/// Carries out new turn preparations.
-		void prepareNewTurn();
+		void prepareBattleTurn();
 		/// Revives unconscious units (healthcheck).
 		void reviveUnconsciousUnits();
 		/// Removes the body item that corresponds to the unit.

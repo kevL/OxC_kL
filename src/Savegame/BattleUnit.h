@@ -703,7 +703,7 @@ private:
 		double getInitiative(int tuSpent = 0);
 
 		/// Prepare for a new turn.
-		void prepareNewTurn();
+		void prepareUnitTurn();
 
 		/// Morale change
 		void moraleChange(int change);

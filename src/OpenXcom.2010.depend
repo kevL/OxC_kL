@@ -4757,7 +4757,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1411914477 f:\git\openxcom\src\savegame\savedbattlegame.h
+1412657191 f:\git\openxcom\src\savegame\savedbattlegame.h
 	<algorithm>
 	<iostream>
 	<string>
@@ -4766,7 +4766,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1412558013 f:\git\openxcom\src\savegame\battleunit.h
+1412657191 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -4776,7 +4776,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1411714022 f:\git\openxcom\src\battlescape\battlescapegame.h
+1412657191 f:\git\openxcom\src\battlescape\battlescapegame.h
 	<list>
 	<string>
 	<vector>
@@ -5737,7 +5737,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/Position.h"
 
-1412616038 f:\git\openxcom\src\savegame\tile.h
+1412657191 f:\git\openxcom\src\savegame\tile.h
 	<string>
 	<vector>
 	<SDL_types.h>
@@ -5823,7 +5823,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1412619336 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1412636394 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6776,7 +6776,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1412591141 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1412655031 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9577,7 +9577,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1412617618 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1412655396 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9693,7 +9693,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1412615482 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1412636270 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -9803,7 +9803,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1412617281 source:f:\git\openxcom\src\savegame\tile.cpp
+1412619346 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"

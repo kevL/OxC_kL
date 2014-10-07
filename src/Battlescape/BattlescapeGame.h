@@ -167,7 +167,7 @@ private:
 
 
 	/// Ends the turn.
-	void endTurn();
+	void endGameTurn();
 	/// Picks the first soldier that is panicking.
 	bool handlePanickingPlayer();
 	/// Common function for hanlding panicking units.
@@ -179,6 +179,9 @@ private:
 
 
 	public:
+		static bool _debugPlay;
+
+
 		/// Creates the BattlescapeGame state.
 		BattlescapeGame(
 				SavedBattleGame* save,
@@ -193,6 +196,7 @@ private:
 
 		/// Determines whether a playable unit is selected.
 		bool playableUnitSelected();
+
 		/// Handles states timer.
 		void handleState();
 		/// Pushes a state to the front of the list.
@@ -201,12 +205,15 @@ private:
 		void statePushNext(BattleState* bs);
 		/// Pushes a state to the back of the list.
 		void statePushBack(BattleState* bs);
+
 		/// Handles the result of non target actions, like priming a grenade.
 		void handleNonTargetAction();
+
 		/// Removes current state.
 		void popState();
 		/// Sets state think interval.
 		void setStateInterval(Uint32 interval);
+
 		/// Checks for casualties in battle.
 		void checkForCasualties(
 				BattleItem* weapon,
@@ -220,29 +227,36 @@ private:
 				BattleUnit* bu,
 				int tu,
 				bool test = false);
+
 		/// Handles unit AI.
 		void handleAI(BattleUnit* unit);
+
 		/// Drops an item and affects it with gravity.
 		void dropItem(
 				const Position& position,
 				BattleItem* item,
 				bool newItem = false,
 				bool removeItem = false);
+
 		/// Converts a unit into a unit of another type.
 		BattleUnit* convertUnit(
 				BattleUnit* unit,
 				const std::string& convertType,
 				int dirFace = 3); // kL_add.
+
 		/// Handles kneeling action.
 		bool kneel(
 				BattleUnit* bu,
 				bool calcFoV = true);
+
 		/// Cancels the current action.
 		bool cancelCurrentAction(bool bForce = false);
 		/// Gets a pointer to access action members directly.
 		BattleAction* getCurrentAction();
+
 		/// Determines whether there is an action currently going on.
 		bool isBusy();
+
 		/// Activates primary action (left click).
 		void primaryAction(const Position& pos);
 		/// Activates secondary action (right click).
@@ -251,14 +265,17 @@ private:
 		void launchAction();
 		/// Handler for the psi button.
 		void psiButtonAction();
+
 		/// Moves a unit up or down.
 		void moveUpDown(
 				BattleUnit* unit,
 				int dir);
 		/// Requests the end of the turn (wait for explosions etc to really end the turn).
 		void requestEndTurn();
+
 		/// Sets the TU reserved type.
 		void setTUReserved(BattleActionType bat);
+
 		/// Sets up the cursor taking into account the action.
 		void setupCursor();
 
@@ -272,16 +289,15 @@ private:
 		Pathfinding* getPathfinding();
 		/// Gets the resourcepack.
 		ResourcePack* getResourcePack();
-
 		/// Gets the ruleset.
 		const Ruleset* getRuleset() const;
-		///
-		static bool _debugPlay;
+
 		/// Returns whether panic has been handled.
 		bool getPanicHandled()
 		{
 			return _playerPanicHandled;
 		}
+
 		/// Tries to find an item and pick it up if possible.
 		void findItem(BattleAction* action);
 		/// Checks through all the items on the ground and picks one.
@@ -298,17 +314,21 @@ private:
 		bool takeItem(
 				BattleItem* item,
 				BattleAction* action);
+
 		/// Returns the type of action that is reserved.
 		BattleActionType getReservedAction();
+
 		/// Tallies the living units, converting them if necessary.
 		void tallyUnits(
 				int& liveAliens,
 				int& liveSoldiers,
 				bool convert = false);
+
 		/// Sets the kneel reservation setting.
 		void setKneelReserved(bool reserved);
 		/// Checks the kneel reservation setting.
 		bool getKneelReserved();
+
 		/// Checks for and triggers proximity grenades.
 		bool checkForProximityGrenades(BattleUnit* unit);
 

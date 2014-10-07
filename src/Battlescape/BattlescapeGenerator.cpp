@@ -260,7 +260,7 @@ void BattlescapeGenerator::nextStage()
 
 	while (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
 	{
-		_game->getSavedGame()->getSavedBattle()->endTurn();
+		_game->getSavedGame()->getSavedBattle()->endBattleTurn();
 	}
 
 	_save->resetTurnCounter();
@@ -331,7 +331,7 @@ void BattlescapeGenerator::nextStage()
 					if ((*j)->getId() > highestSoldierID)
 						highestSoldierID = (*j)->getId();
 
-					(*j)->prepareNewTurn();
+					(*j)->prepareUnitTurn();
 				}
 			}
 		}

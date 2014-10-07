@@ -2391,7 +2391,7 @@ void TileEngine::explode(
 //						if (power / maxRadius < 1) // do min -1 per tile. Nah ...
 //							_powerE -= 1;
 //						else
-						_powerE -= power / maxRadius; // per RSSwizard, http://openxcom.org/forum/index.php?topic=2927.msg32061#msg32061
+						_powerE -= power / maxRadius + 1; // per RSSwizard, http://openxcom.org/forum/index.php?topic=2927.msg32061#msg32061
 						//Log(LOG_INFO) << "maxRadius > 0, " << power << "/" << maxRadius << "=" << _powerE;
 					}
 					//else Log(LOG_INFO) << "maxRadius <= 0";
@@ -2759,8 +2759,8 @@ void TileEngine::explode(
 							}
 //							}
 
-							// kL_note: fire damage is also caused by BattlescapeGame::endTurn()
-							// -- but previously by BattleUnit::prepareNewTurn()!!!!
+							// kL_note: fire damage is also caused by BattlescapeGame::endGameTurn()
+							// -- but previously by BattleUnit::prepareUnitTurn()!!!!
 							targetUnit = fireTile->getUnit();
 							if (targetUnit
 								&& targetUnit->getTakenExpl() == false)
@@ -5509,7 +5509,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 //				victim->setTimeUnits(victim->getStats()->tu);
 //				victim->setEnergy(victim->getStats()->stamina); // kL
 
-				// kL_begin: taken from BattleUnit::prepareNewTurn()
+				// kL_begin: taken from BattleUnit::prepareUnitTurn()
 				int prepTU = victim->getStats()->tu;
 				double underLoad = static_cast<double>(victim->getStats()->strength) / static_cast<double>(victim->getCarriedWeight());
 				underLoad *= victim->getAccuracyModifier() / 2.0 + 0.5;
