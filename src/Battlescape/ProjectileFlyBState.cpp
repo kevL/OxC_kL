@@ -1053,46 +1053,46 @@ void ProjectileFlyBState::think()
 						BattleUnit* victim = _parent->getSave()->getTile(
 																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
 																->getUnit();
-						if (victim)
+						if (victim != NULL)
 //kL						&& victim->isOut() == false)
 						{
-							if (victim->getGeoscapeSoldier() != NULL)
-								victim->getStatistics()->hitCounter++;
+							BattleUnitStatistics
+								* statsVictim = (victim->getGeoscapeSoldier() == NULL)? NULL: victim->getStatistics(),
+								* statsUnit = (_unit->getGeoscapeSoldier() == NULL)? NULL: _unit->getStatistics();
+
+							if (statsVictim != NULL)
+								statsVictim->hitCounter++;
 
 							if (victim->getOriginalFaction() == FACTION_PLAYER
 								&& _unit->getOriginalFaction() == FACTION_PLAYER)
 							{
-								if (victim->getGeoscapeSoldier() != NULL)
-									victim->getStatistics()->shotByFriendlyCounter++;
+								if (statsVictim != NULL)
+									statsVictim->shotByFriendlyCounter++;
 
-								if (_unit->getGeoscapeSoldier() != NULL)
-									_unit->getStatistics()->shotFriendlyCounter++;
+								if (statsUnit != NULL)
+									statsUnit->shotFriendlyCounter++;
 							}
 
 							BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit(); // target (not necessarily who was hit)
-							if (victim == target) // hit the target
+							if (target == victim) // hit the target
 							{
-								if (_unit->getGeoscapeSoldier() != NULL)
+								if (statsUnit != NULL)
 								{
-									_unit->getStatistics()->shotsLandedCounter++;
+									statsUnit->shotsLandedCounter++;
 
-									if (_parent->getTileEngine()->distance(
-																		_unit->getPosition(),
-																		victim->getPosition())
-																	> 30)
-									{
-										_unit->getStatistics()->longDistanceHitCounter++;
-									}
+									int dist = _parent->getTileEngine()->distance(
+																				victim->getPosition(),
+																				_unit->getPosition());
 
-									if (static_cast<int>(_unit->getFiringAccuracy(
+									if (dist > 30)
+										statsUnit->longDistanceHitCounter++;
+
+									if (dist > static_cast<int>(_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon)
-																			* 100.0)
-														< _parent->getTileEngine()->distance(
-																						_unit->getPosition(),
-																						victim->getPosition()))
+																			* 35.0))
 									{
-										_unit->getStatistics()->lowAccuracyHitCounter++;
+										statsUnit->lowAccuracyHitCounter++;
 									}
 								}
 							}

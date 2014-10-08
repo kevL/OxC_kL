@@ -379,7 +379,7 @@ bool Tile::isBigWall() const
 }
 
 /**
- * Gets the terrain level of this tile. For graphical Y offsets.
+ * Gets the terrain level of this tile. For graphical Y offsets, etc.
  * Notice that terrain level starts and 0 and goes upwards to -24.
  * @return, the level in pixels
  */

@@ -347,6 +347,7 @@ BattleUnit::~BattleUnit()
 			delete *i;
 		}
 	} */
+//	if (_geoscapeSoldier != NULL) // kL ... delete it anyway:
 	delete _statistics;
 
 	delete _currentAIState;
