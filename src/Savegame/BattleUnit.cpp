@@ -67,25 +67,30 @@ BattleUnit::BattleUnit(
 		int diff, // kL_add.
 		BattlescapeGame* battleGame) // kL_add
 	:
-		_battleGame(battleGame), // kL_add
-		_battleOrder(0), // kL
+		_geoscapeSoldier(soldier),
+		_unitRules(NULL),
 		_faction(faction),
 		_originalFaction(faction),
 		_killedBy(faction),
-		_id(0),
-		_pos(Position()),
+		_murdererId(0),
+		_battleGame(battleGame), // kL_add
+//		_id(0),
+		_rankInt(-1),
+		_turretType(-1),
 		_tile(NULL),
+		_pos(Position()),
 		_lastPos(Position()),
 		_direction(0),
 		_toDirection(0),
 		_directionTurret(0),
 		_toDirectionTurret(0),
 		_verticalDirection(0),
+		_faceDirection(-1),
 		_status(STATUS_STANDING),
 		_walkPhase(0),
 		_fallPhase(0),
-		_aimPhase(0), // kL
 		_spinPhase(-1),
+		_aimPhase(0), // kL
 		_kneeled(false),
 		_floating(false),
 		_dontReselect(false),
@@ -100,24 +105,20 @@ BattleUnit::BattleUnit(
 		_expPsiSkill(0),
 		_expPsiStrength(0),
 		_expMelee(0),
-		_motionPoints(0),
 		_kills(0),
+		_motionPoints(0),
 //kL	_hitByFire(false),
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(NULL),
 		_turnsExposed(255),
-		_geoscapeSoldier(soldier),
-		_unitRules(NULL),
-		_rankInt(-1),
-		_turretType(-1),
 		_hidingForTurn(false),
-		_statistics(),
-		_murdererId(0),
+		_battleOrder(0), // kL
 		_stopShot(false), // kL
 		_dashing(false), // kL
 		_takenExpl(false), // kL
-		_race(""), // kL
+		_diedByFire(false),
+//		_race(""), // kL
 
 		_deathSound(0), // kL, moved these here from def'ns below.
 		_aggroSound(-1),
@@ -125,15 +126,13 @@ BattleUnit::BattleUnit(
 		_intelligence(2),
 		_aggression(1),
 		_specab(SPECAB_NONE),
-		_faceDirection(-1),
 		_morale(100),
 		_stunLevel(0),
 		_type("SOLDIER"),
 		_activeHand("STR_RIGHT_HAND"),
 		_breathFrame(0),
-		_floorAbove(false),
 		_breathing(false),
-		_diedByFire(false)
+		_floorAbove(false)
 {
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 	_name			= soldier->getName(true);
@@ -141,12 +140,14 @@ BattleUnit::BattleUnit(
 	_rank			= soldier->getRankString();
 	_stats			= *soldier->getCurrentStats();
 
-	_standHeight	= soldier->getRules()->getStandHeight();
-	_kneelHeight	= soldier->getRules()->getKneelHeight();
-	_floatHeight	= soldier->getRules()->getFloatHeight();
 	_armor			= soldier->getArmor();
 	_stats			+= *_armor->getStats();	// armors may modify effective stats
 	_loftempsSet	= _armor->getLoftempsSet();
+
+	_standHeight	= soldier->getRules()->getStandHeight();
+	_kneelHeight	= soldier->getRules()->getKneelHeight();
+	_floatHeight	= soldier->getRules()->getFloatHeight();
+
 	_gender			= soldier->getGender();
 
 	int rankbonus = 0;
@@ -207,24 +208,31 @@ BattleUnit::BattleUnit(
 		int month, // kL_add.
 		BattlescapeGame* battleGame) // kL_add. May be NULL
 	:
-		_battleGame(battleGame), // kL_add
-		_battleOrder(0), // kL
+		_unitRules(unit),
+		_geoscapeSoldier(NULL),
+		_id(id),
 		_faction(faction),
 		_originalFaction(faction),
 		_killedBy(faction),
-		_id(id),
+		_murdererId(0),
+		_armor(armor),
+		_battleGame(battleGame), // kL_add
+		_rankInt(-1),
+		_turretType(-1),
 		_pos(Position()),
-		_tile(NULL),
 		_lastPos(Position()),
+		_tile(NULL),
 		_direction(0),
 		_toDirection(0),
 		_directionTurret(0),
 		_toDirectionTurret(0),
 		_verticalDirection(0),
+		_faceDirection(-1),
 		_status(STATUS_STANDING),
 		_walkPhase(0),
 		_fallPhase(0),
 		_spinPhase(-1),
+		_aimPhase(0), // kL
 		_kneeled(false),
 		_floating(false),
 		_dontReselect(false),
@@ -239,34 +247,29 @@ BattleUnit::BattleUnit(
 		_expPsiSkill(0),
 		_expPsiStrength(0),
 		_expMelee(0),
-		_motionPoints(0),
 		_kills(0),
+		_motionPoints(0),
 //kL	_hitByFire(false),
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(NULL),
 		_turnsExposed(255),
-		_armor(armor),
-		_geoscapeSoldier(NULL),
-		_unitRules(unit),
-		_rankInt(-1),
-		_turretType(-1),
 		_hidingForTurn(false),
-		_statistics(),
-		_murdererId(0),
 		_stopShot(false), // kL
 		_dashing(false), // kL
 		_takenExpl(false), // kL
+		_battleOrder(0), // kL
 
 		_morale(100), // kL, moved these here from def'ns below.
 		_stunLevel(0),
 		_activeHand("STR_RIGHT_HAND"),
 		_breathFrame(-1),
-		_floorAbove(false),
 		_breathing(false),
-		_faceDirection(-1),
+		_floorAbove(false),
 		_gender(GENDER_MALE),
-		_diedByFire(false)
+		_diedByFire(false),
+
+		_statistics(NULL) // kL, Soldier Diary
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 	_type	= unit->getType();
@@ -343,8 +346,8 @@ BattleUnit::~BattleUnit()
 		{
 			delete *i;
 		}
-	}
-	delete _statistics; */
+	} */
+	delete _statistics;
 
 	delete _currentAIState;
 }
@@ -1935,9 +1938,9 @@ void BattleUnit::clearVisibleTiles()
 /**
  * Calculates firing accuracy.
  * Formula = accuracyStat * weaponAccuracy * kneelingbonus(1.15) * one-handPenalty(0.8) * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
- * @param actionType
- * @param item
- * @return firing Accuracy
+ * @param actionType	-
+ * @param item			-
+ * @return, firing accuracy
  */
 double BattleUnit::getFiringAccuracy(
 		BattleActionType actionType,
@@ -1950,7 +1953,7 @@ double BattleUnit::getFiringAccuracy(
 	double ret;
 
 	if (actionType == BA_HIT
-		|| actionType == BA_STUN)
+		|| actionType == BA_STUN) // note: BA_STUN is not used in code.
 	{
 		ret = static_cast<double>(item->getRules()->getAccuracyMelee()) * getAccuracyModifier(item) / 100.0;
 		//Log(LOG_INFO) << ". ret[1] = " << ret;
@@ -4134,7 +4137,7 @@ bool BattleUnit::getFloorAbove()
 
 /**
  * Get the unit's statistics.
- * @return BattleUnitStatistics statistics.
+ * @return, BattleUnitStatistics statistics
  */
 BattleUnitStatistics* BattleUnit::getStatistics()
 {
@@ -4142,8 +4145,8 @@ BattleUnitStatistics* BattleUnit::getStatistics()
 }
 
 /**
- * Sets the unit murderer's id.
- * @param int murderer id.
+ * Sets the unit murderer's ID.
+ * @param id - murderer ID
  */
 void BattleUnit::setMurdererId(int id)
 {
@@ -4152,7 +4155,7 @@ void BattleUnit::setMurdererId(int id)
 
 /**
  * Gets the unit murderer's id.
- * @return int murderer id.
+ * @return, murderer idID
  */
 int BattleUnit::getMurdererId() const
 {

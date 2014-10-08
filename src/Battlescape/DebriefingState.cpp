@@ -368,40 +368,43 @@ DebriefingState::DebriefingState()
 	SavedGame* save = _game->getSavedGame();
 	SavedBattleGame* battle = save->getSavedBattle();
 
-	_missionStatistics->daylight = save->getSavedBattle()->getGlobalShade();
+	_missionStatistics->daylight = save->getSavedBattle()->getGlobalShade(); // Soldier Diary ->
 	_missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
 
+//	BattleUnitStatistics* statistics = NULL; // BattleUnit::getStatistics()
+//	Soldier* soldier = NULL; // BattleUnit::getGeoscapeSoldier() const
+
 	for (std::vector<BattleUnit*>::iterator
-			j = battle->getUnits()->begin();
-			j != battle->getUnits()->end();
-			++j)
+			i = battle->getUnits()->begin();
+			i != battle->getUnits()->end();
+			++i)
 	{
-		if ((*j)->getGeoscapeSoldier())
+		Soldier* soldier = (*i)->getGeoscapeSoldier();
+		if (soldier != NULL)
 		{
-			(*j)->getStatistics()->daysWounded = (*j)->getGeoscapeSoldier()->getWoundRecovery();
-			_missionStatistics->injuryList[(*j)->getGeoscapeSoldier()->getId()] = (*j)->getGeoscapeSoldier()->getWoundRecovery();
+			BattleUnitStatistics* statistics = (*i)->getStatistics();
 
-			if ((*j)->getStatus() == STATUS_DEAD)
-				(*j)->getStatistics()->KIA = true;
+			statistics->daysWounded = soldier->getWoundRecovery();
+			_missionStatistics->injuryList[soldier->getId()] = soldier->getWoundRecovery();
 
-			(*j)->getGeoscapeSoldier()->getDiary()->updateDiary(
-															(*j)->getStatistics(),
-															_missionStatistics);
+			if ((*i)->getStatus() == STATUS_DEAD)
+				statistics->KIA = true;
 
-			if ((*j)->getStatus() != STATUS_DEAD
-				&& (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_rules))
+			soldier->getDiary()->updateDiary(
+										statistics,
+										_missionStatistics);
+
+			if (soldier->getDiary()->manageCommendations(_rules))
 			{
-				_soldiersCommended.push_back((*j)->getGeoscapeSoldier());
-			}
-			else if ((*j)->getStatus() == STATUS_DEAD
-				&& (*j)->getGeoscapeSoldier()->getDiary()->manageCommendations(_rules))
-			{
-				// Quietly award dead soldiers their commendations as well
+				if ((*i)->getStatus() != STATUS_DEAD)
+					_soldiersCommended.push_back(soldier);
+//				else if ((*i)->getStatus() == STATUS_DEAD)
+					// Quietly award dead soldiers their commendations.
 			}
 		}
 	}
 
-	_game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics);
+	_game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics); // Soldier Diary_end.
 
 //	_game->getResourcePack()->playMusic("GMMARS");
 	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS); // kL, sza_MusicRules
@@ -673,9 +676,11 @@ void DebriefingState::prepareDebriefing()
 	_missionStatistics->time = *save->getTime();
 	_missionStatistics->type = battle->getMissionType();
 
-	int soldierExit = 0; // if this stays 0 the craft is lost...
-	int soldierLive = 0; // if this stays 0 the craft is lost...
-	int soldierOut = 0;
+	int
+		soldierExit	= 0, // if this stays 0 the craft is lost...
+		soldierLive	= 0, // if this stays 0 the craft is lost...
+		soldierDead	= 0, // Soldier Diary.
+		soldierOut	= 0;
 
 	for (std::vector<Base*>::iterator
 			i = save->getBases()->begin();
@@ -705,7 +710,6 @@ void DebriefingState::prepareDebriefing()
 					{
 						_region = *k;
 						_missionStatistics->region = _region->getRules()->getType();
-
 						break;
 					}
 				}
@@ -721,7 +725,6 @@ void DebriefingState::prepareDebriefing()
 					{
 						_country = *k;
 						_missionStatistics->country = _country->getRules()->getType();
-
 						break;
 					}
 				}
@@ -764,7 +767,6 @@ void DebriefingState::prepareDebriefing()
 				{
 					_region = *k;
 					_missionStatistics->region = _region->getRules()->getType();
-
 					break;
 				}
 			}
@@ -780,7 +782,6 @@ void DebriefingState::prepareDebriefing()
 				{
 					_country = *k;
 					_missionStatistics->country = _country->getRules()->getType();
-
 					break;
 				}
 			}
@@ -788,7 +789,7 @@ void DebriefingState::prepareDebriefing()
 			if (aborted)
 				_destroyXCOMBase = true;
 
-			bool facilDestroyed = false;
+			bool facDestroyed = false;
 			for (std::vector<BaseFacility*>::iterator
 					k = base->getFacilities()->begin();
 					k != base->getFacilities()->end();
@@ -796,7 +797,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				if (battle->getModuleMap()[(*k)->getX()][(*k)->getY()].second == 0) // this facility was demolished
 				{
-					facilDestroyed = true;
+					facDestroyed = true;
 					base->destroyFacility(k);
 				}
 				else
@@ -876,28 +877,26 @@ void DebriefingState::prepareDebriefing()
 	// we evaluate how many surviving XCom units there are,
 	// and if they are unconscious
 	// and how many have died (to use for commendations)
-	int deadSoldiers = 0;
-
 	for (std::vector<BattleUnit*>::iterator
-			j = battle->getUnits()->begin();
-			j != battle->getUnits()->end();
-			++j)
+			i = battle->getUnits()->begin();
+			i != battle->getUnits()->end();
+			++i)
 	{
-		if ((*j)->getOriginalFaction() == FACTION_PLAYER
-			&& (*j)->getStatus() != STATUS_DEAD)
+		if ((*i)->getOriginalFaction() == FACTION_PLAYER
+			&& (*i)->getStatus() != STATUS_DEAD)
 		{
-			if ((*j)->getStatus() == STATUS_UNCONSCIOUS
-				|| (*j)->getFaction() == FACTION_HOSTILE)
+			if ((*i)->getStatus() == STATUS_UNCONSCIOUS
+				|| (*i)->getFaction() == FACTION_HOSTILE)
 			{
 				soldierOut++;
 			}
 
 			soldierLive++;
 		}
-		else if ((*j)->getOriginalFaction() == FACTION_PLAYER
-			&& (*j)->getStatus() == STATUS_DEAD)
+		else if ((*i)->getOriginalFaction() == FACTION_PLAYER
+			&& (*i)->getStatus() == STATUS_DEAD)
 		{
-			deadSoldiers++;
+			soldierDead++;
 		}
 	}
 
@@ -907,14 +906,14 @@ void DebriefingState::prepareDebriefing()
 		soldierLive = 0;
 
 		for (std::vector<BattleUnit*>::iterator
-				j = battle->getUnits()->begin();
-				j != battle->getUnits()->end();
-				++j)
+				i = battle->getUnits()->begin();
+				i != battle->getUnits()->end();
+				++i)
 		{
-			if ((*j)->getOriginalFaction() == FACTION_PLAYER
-				&& (*j)->getStatus() != STATUS_DEAD)
+			if ((*i)->getOriginalFaction() == FACTION_PLAYER
+				&& (*i)->getStatus() != STATUS_DEAD)
 			{
-				(*j)->instaKill();
+				(*i)->instaKill();
 			}
 		}
 	}
@@ -922,26 +921,26 @@ void DebriefingState::prepareDebriefing()
 	if (soldierLive == 1)
 	{
 		for (std::vector<BattleUnit*>::iterator
-				j = battle->getUnits()->begin();
-				j != battle->getUnits()->end();
-				++j)
+				i = battle->getUnits()->begin();
+				i != battle->getUnits()->end();
+				++i)
 		{
-			// if only one soldier survived, give him a medal! (unless he killed all the others...)
-			if ((*j)->getStatus() != STATUS_DEAD
-				&& (*j)->getOriginalFaction() == FACTION_PLAYER
-				&& !(*j)->getStatistics()->hasFriendlyFired()
-				&& deadSoldiers != 0)
+			if ((*i)->getStatus() != STATUS_DEAD
+				&& (*i)->getGeoscapeSoldier() != NULL)
 			{
-				(*j)->getStatistics()->loneSurvivor = true;
-
-				break;
-			}
-			// if only one soldier survived AND none have died, means only one soldier went on the mission...
-			else if ((*j)->getStatus() != STATUS_DEAD
-				&& (*j)->getOriginalFaction() == FACTION_PLAYER
-				&& deadSoldiers != 0)
-			{
-				(*j)->getStatistics()->ironMan = true;
+				// if only one soldier survived, give him a medal! (unless he killed all the others...)
+				if ((*i)->getStatistics()->hasFriendlyFired() == false
+					&& soldierDead != 0)
+				{
+					(*i)->getStatistics()->loneSurvivor = true;
+					break;
+				}
+				// if only one soldier survived AND none have died, means only one soldier went on the mission...
+				else if (soldierDead == 0)
+				{
+					(*i)->getStatistics()->ironMan = true;
+					break;
+				}
 			}
 		}
 	}
@@ -1021,44 +1020,44 @@ void DebriefingState::prepareDebriefing()
 
 	// time to care about units.
 	for (std::vector<BattleUnit*>::iterator
-			j = battle->getUnits()->begin();
-			j != battle->getUnits()->end();
-			++j)
+			i = battle->getUnits()->begin();
+			i != battle->getUnits()->end();
+			++i)
 	{
-		if ((*j)->getTile() == NULL) // handle unconscious units; This unit is not on a tile...
+		if ((*i)->getTile() == NULL) // handle unconscious units; This unit is not on a tile...
 		{
-			Position pos = (*j)->getPosition();
+			Position pos = (*i)->getPosition();
 			if (pos == Position(-1,-1,-1)) // in fact, this Unit is in limbo...
 			{
 				for (std::vector<BattleItem*>::iterator // so look for its corpse...
-						k = battle->getItems()->begin();
-						k != battle->getItems()->end();
-						++k)
+						j = battle->getItems()->begin();
+						j != battle->getItems()->end();
+						++j)
 				{
-					if ((*k)->getUnit()
-						&& (*k)->getUnit() == *j) // found it: corpse is a dead BattleUnit!!
+					if ((*j)->getUnit()
+						&& (*j)->getUnit() == *i) // found it: corpse is a dead BattleUnit!!
 					{
-						if ((*k)->getOwner()) // corpse of BattleUnit has an Owner (ie. is being carried by another BattleUnit)
-							pos = (*k)->getOwner()->getPosition(); // Put the corpse down.. slowly.
-						else if ((*k)->getTile()) // corpse of BattleUnit is laying around somewhere
-							pos = (*k)->getTile()->getPosition(); // you're not dead yet, Get up.
+						if ((*j)->getOwner()) // corpse of BattleUnit has an Owner (ie. is being carried by another BattleUnit)
+							pos = (*j)->getOwner()->getPosition(); // Put the corpse down.. slowly.
+						else if ((*j)->getTile()) // corpse of BattleUnit is laying around somewhere
+							pos = (*j)->getTile()->getPosition(); // you're not dead yet, Get up.
 					}
 				}
 			}
 
-			(*j)->setTile(battle->getTile(pos));
+			(*i)->setTile(battle->getTile(pos));
 		}
 
 
-		int value = (*j)->getValue();
+		int value = (*i)->getValue();
 
-		UnitFaction origFact = (*j)->getOriginalFaction();
+		UnitFaction origFact = (*i)->getOriginalFaction();
 
-		UnitStatus status = (*j)->getStatus();
+		UnitStatus status = (*i)->getStatus();
 		if (status == STATUS_DEAD) // so this is a dead unit
 		{
 			if (origFact == FACTION_HOSTILE
-				&& (*j)->killedBy() == FACTION_PLAYER)
+				&& (*i)->killedBy() == FACTION_PLAYER)
 			{
 				addStat(
 						"STR_ALIENS_KILLED",
@@ -1066,7 +1065,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (origFact == FACTION_PLAYER)
 			{
-				Soldier* soldier = save->getSoldier((*j)->getId());
+				Soldier* soldier = save->getSoldier((*i)->getId());
 				if (soldier != NULL) // xCom soldier.
 				{
 					addStat(
@@ -1074,24 +1073,24 @@ void DebriefingState::prepareDebriefing()
 							-value);
 
 					for (std::vector<Soldier*>::iterator
-							i = base->getSoldiers()->begin();
-							i != base->getSoldiers()->end();
-							++i)
+							j = base->getSoldiers()->begin();
+							j != base->getSoldiers()->end();
+							++j)
 					{
-						if (*i == soldier) // the specific soldier at Base..
+						if (*j == soldier) // the specific soldier at Base..
 						{
-							(*j)->updateGeoscapeStats(*i);
+							(*i)->updateGeoscapeStats(*j);
 
 							// kL_begin: sorta mirror GeoscapeState::time1Day()
 							SoldierDeath* death = new SoldierDeath();
 							death->setTime(*save->getTime());
 
-							SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
+							SoldierDead* dead = (*j)->die(death); // converts Soldier to SoldierDead class instance.
 							save->getDeadSoldiers()->push_back(dead);
 
-							int iD = (*j)->getId(); // get ID from battleunit; could also use (*i) instead.
+							int iD = (*i)->getId(); // get ID from battleunit; could also use (*j) instead.
 
-							base->getSoldiers()->erase(i); // erase Soldier from Base_soldiers vector.
+							base->getSoldiers()->erase(j); // erase Soldier from Base_soldiers vector.
 
 							delete save->getSoldier(iD); // delete Soldier instance.
 
@@ -1107,7 +1106,7 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (origFact == FACTION_NEUTRAL)
 			{
-				if ((*j)->killedBy() == FACTION_PLAYER)
+				if ((*i)->killedBy() == FACTION_PLAYER)
 					addStat(
 							"STR_CIVILIANS_KILLED_BY_XCOM_OPERATIVES",
 							-(value * 2));
@@ -1120,30 +1119,30 @@ void DebriefingState::prepareDebriefing()
 		}
 		else // so this unit is NOT dead...
 		{
-			UnitFaction faction = (*j)->getFaction();
-			std::string type = (*j)->getType();
+			UnitFaction faction = (*i)->getFaction();
+			std::string type = (*i)->getType();
 
-			if ((*j)->getSpawnUnit().empty() == false)
-				type = (*j)->getSpawnUnit();
+			if ((*i)->getSpawnUnit().empty() == false)
+				type = (*i)->getSpawnUnit();
 
 			if (origFact == FACTION_PLAYER)
 			{
-				Soldier* soldier = save->getSoldier((*j)->getId());
+				Soldier* soldier = save->getSoldier((*i)->getId());
 
-				if (((*j)->isInExitArea()
+				if (((*i)->isInExitArea()
 						&& (mission != "STR_BASE_DEFENSE"
 							|| success))
 					|| aborted == false)
 				{
 					// so game is not aborted, or aborted and unit is on exit area
-					(*j)->postMissionProcedures(save);
+					(*i)->postMissionProcedures(save);
 
 					soldierExit++;
 
 					if (soldier != NULL)
 					{
 						recoverItems(
-								(*j)->getInventory(),
+								(*i)->getInventory(),
 								base);
 
 						soldier->calcStatString( // calculate new statString
@@ -1156,7 +1155,7 @@ void DebriefingState::prepareDebriefing()
 						base->getItems()->addItem(type);
 
 						RuleItem* tankRule = _rules->getItem(type);
-						BattleItem* ammoItem = (*j)->getItem("STR_RIGHT_HAND")->getAmmoItem();
+						BattleItem* ammoItem = (*i)->getItem("STR_RIGHT_HAND")->getAmmoItem();
 
 						if (tankRule->getCompatibleAmmo()->empty() == false
 							&& ammoItem != NULL
@@ -1177,23 +1176,23 @@ void DebriefingState::prepareDebriefing()
 					if (soldier != NULL)
 					{
 						for (std::vector<Soldier*>::iterator
-								i = base->getSoldiers()->begin();
-								i != base->getSoldiers()->end();
-								++i)
+								j = base->getSoldiers()->begin();
+								j != base->getSoldiers()->end();
+								++j)
 						{
-							if (*i == soldier)
+							if (*j == soldier)
 							{
-								(*j)->updateGeoscapeStats(*i);
+								(*i)->updateGeoscapeStats(*j);
 
 								SoldierDeath* death = new SoldierDeath();
 								death->setTime(*save->getTime());
 
-								SoldierDead* dead = (*i)->die(death); // converts Soldier to SoldierDead class instance.
+								SoldierDead* dead = (*j)->die(death); // converts Soldier to SoldierDead class instance.
 								save->getDeadSoldiers()->push_back(dead);
 
-								int iD = (*j)->getId(); // get ID from battleunit; could also use (*i) instead.
+								int iD = (*i)->getId(); // get ID from battleunit; could also use (*j) instead.
 
-								base->getSoldiers()->erase(i); // erase Soldier from Base_soldiers vector.
+								base->getSoldiers()->erase(j); // erase Soldier from Base_soldiers vector.
 
 								delete save->getSoldier(iD); // delete Soldier instance.
 
@@ -1206,30 +1205,30 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if (origFact == FACTION_HOSTILE	// Mc'd unit,
 				&& faction == FACTION_PLAYER		// counts as unconscious
-				&& (!aborted
-					|| (*j)->isInExitArea())
-				&& !(*j)->isOut()) // not Unconscious ... dead handled above.
+				&& (aborted == false
+					|| (*i)->isInExitArea())
+				&& (*i)->isOut() == false) // not Unconscious ... dead handled above.
 				// kL_note: so, this never actually runs unless early psi-exit
 				// when all aliens are dead or mind-controlled is turned on ....
 				// Except the two-stage Cydonia mission, in which case all this
 				// does not matter.
 			{
 				for (std::vector<BattleItem*>::iterator
-						k = (*j)->getInventory()->begin();
-						k != (*j)->getInventory()->end();
-						++k)
+						j = (*i)->getInventory()->begin();
+						j != (*i)->getInventory()->end();
+						++j)
 				{
-					if ((*k)->getRules()->isFixed() == false)
-						(*j)->getTile()->addItem(
-												*k,
+					if ((*j)->getRules()->isFixed() == false)
+						(*i)->getTile()->addItem(
+												*j,
 												_rules->getInventory("STR_GROUND"));
 				}
 
-				std::string corpseItem = (*j)->getArmor()->getCorpseGeoscape();
-				if ((*j)->getSpawnUnit().empty() == false)
+				std::string corpseItem = (*i)->getArmor()->getCorpseGeoscape();
+				if ((*i)->getSpawnUnit().empty() == false)
 				{
 					Ruleset* rule = _rules;
-					corpseItem = rule->getArmor(rule->getUnit((*j)->getSpawnUnit())->getArmor())
+					corpseItem = rule->getArmor(rule->getUnit((*i)->getSpawnUnit())->getArmor())
 									 ->getCorpseGeoscape();
 				}
 

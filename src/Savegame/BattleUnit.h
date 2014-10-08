@@ -363,6 +363,7 @@ private:
 		_takenExpl, // kL, used to stop large units from taking damage for each part.
 		_visible;
 	int
+		_aimPhase, // kL
 		_coverReserve,
 		_currentArmor[5],
 		_direction,
@@ -377,7 +378,6 @@ private:
 		_expThrowing,
 		_faceDirection, // used only during strafeing moves
 		_fallPhase,
-		_aimPhase, // kL
 		_fatalWounds[6],
 		_fire,
 		_health,
@@ -400,12 +400,13 @@ private:
 	BattlescapeGame* _battleGame; // kL.
 		// Note: don't even declare the class, what's with SavedGame* then; postMissionProcedures()
 	BattleUnit* _charging;
+	Surface* _cache[5];
+	Tile* _tile;
+
 	Position
 		_lastPos,
 		_pos,
 		_destination;
-	Surface* _cache[5];
-	Tile* _tile;
 	UnitFaction
 		_faction,
 		_originalFaction,

@@ -405,7 +405,7 @@ void MapData::setTUCosts(
 
 /**
  * Adds this to the graphical Y offset of units or objects on this tile.
- * @return, The Y offset.
+ * @return, Y offset
  */
 int MapData::getTerrainLevel() const
 {
@@ -414,7 +414,7 @@ int MapData::getTerrainLevel() const
 
 /**
  * Sets the Y offset for units/objects on this tile.
- * @param value The Y offset.
+ * @param value - Y offset
  */
 void MapData::setTerrainLevel(int value)
 {

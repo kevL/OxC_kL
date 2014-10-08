@@ -541,7 +541,7 @@ bool ProjectileFlyBState::createNewProjectile()
 	//Log(LOG_INFO) << ". _action_type = " << _action.type;
 	_action.autoShotCount++;
 
-	if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add.
+	if (_unit->getGeoscapeSoldier() != NULL // kL_add.
 		&& (_action.type != BA_THROW
 			|| _action.type != BA_LAUNCH))
 	{
@@ -947,10 +947,11 @@ void ProjectileFlyBState::think()
 				if (_action.type == BA_LAUNCH) // kL: Launches explode at final waypoint.
 					_projectileImpact = VOXEL_OBJECT;
 
-				if (_unit->getOriginalFaction() == FACTION_PLAYER // kL_add. SoldierDiary
-					&& _parent->getSave()->getTile(_action.target)->getUnit()) // Only counts for guns, not throws or launches
+				BattleUnit* const shotAt = _parent->getSave()->getTile(_action.target)->getUnit();
+				if (shotAt != NULL // Only counts for guns, not throws or launches
+					&& shotAt->getGeoscapeSoldier() != NULL) // kL_add. SoldierDiary
 				{
-					_parent->getSave()->getTile(_action.target)->getUnit()->getStatistics()->shotAtCounter++;
+					shotAt->getStatistics()->shotAtCounter++;
 				}
 
 				if (_action.type == BA_LAUNCH
@@ -1052,31 +1053,47 @@ void ProjectileFlyBState::think()
 						BattleUnit* victim = _parent->getSave()->getTile(
 																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
 																->getUnit();
-						BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit(); // target (not necessarily who was hit)
-						if (victim
-							&& victim->isOut() == false)
+						if (victim)
+//kL						&& victim->isOut() == false)
 						{
-							victim->getStatistics()->hitCounter++;
-							if (_unit->getOriginalFaction() == FACTION_PLAYER
-								&& victim->getOriginalFaction() == FACTION_PLAYER)
+							if (victim->getGeoscapeSoldier() != NULL)
+								victim->getStatistics()->hitCounter++;
+
+							if (victim->getOriginalFaction() == FACTION_PLAYER
+								&& _unit->getOriginalFaction() == FACTION_PLAYER)
 							{
-								victim->getStatistics()->shotByFriendlyCounter++;
-								_unit->getStatistics()->shotFriendlyCounter++;
+								if (victim->getGeoscapeSoldier() != NULL)
+									victim->getStatistics()->shotByFriendlyCounter++;
+
+								if (_unit->getGeoscapeSoldier() != NULL)
+									_unit->getStatistics()->shotFriendlyCounter++;
 							}
 
+							BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit(); // target (not necessarily who was hit)
 							if (victim == target) // hit the target
 							{
-								_unit->getStatistics()->shotsLandedCounter++;
-								if (_parent->getTileEngine()->distance(_unit->getPosition(), victim->getPosition()) > 30)
-									_unit->getStatistics()->longDistanceHitCounter++;
-
-								if (_unit->getFiringAccuracy(
-														_action.type,
-														_action.weapon) < _parent->getTileEngine()->distance( // kL_note: This is prob. wrong, for SoldierDiary.
-																										_unit->getPosition(),
-																										victim->getPosition()))
+								if (_unit->getGeoscapeSoldier() != NULL)
 								{
-									_unit->getStatistics()->lowAccuracyHitCounter++;
+									_unit->getStatistics()->shotsLandedCounter++;
+
+									if (_parent->getTileEngine()->distance(
+																		_unit->getPosition(),
+																		victim->getPosition())
+																	> 30)
+									{
+										_unit->getStatistics()->longDistanceHitCounter++;
+									}
+
+									if (static_cast<int>(_unit->getFiringAccuracy(
+																				_action.type,
+																				_action.weapon)
+																			* 100.0)
+														< _parent->getTileEngine()->distance(
+																						_unit->getPosition(),
+																						victim->getPosition()))
+									{
+										_unit->getStatistics()->lowAccuracyHitCounter++;
+									}
 								}
 							}
 						}

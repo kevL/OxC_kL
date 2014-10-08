@@ -4766,7 +4766,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1412718464 f:\git\openxcom\src\savegame\battleunit.h
+1412764676 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -6042,7 +6042,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1412657191 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1412762182 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6245,7 +6245,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1412182256 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1412767767 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6611,7 +6611,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1412736084 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1412737952 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6620,7 +6620,6 @@
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/TileEngine.h"
 	"../Engine/Game.h"
-	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/Ruleset.h"
@@ -6693,7 +6692,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1412657191 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1412769531 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6926,7 +6925,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1412728825 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1412757983 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -7175,7 +7174,7 @@
 
 1404096023 f:\git\openxcom\src\version.h
 
-1411714024 source:f:\git\openxcom\src\engine\palette.cpp
+1412757501 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
 	<fstream>
 	"Exception.h"
@@ -9572,7 +9571,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1412730049 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1412769471 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9798,7 +9797,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1412657190 source:f:\git\openxcom\src\savegame\tile.cpp
+1412757698 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"

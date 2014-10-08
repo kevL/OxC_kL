@@ -379,7 +379,8 @@ bool Tile::isBigWall() const
 }
 
 /**
- * If an object stands on this tile, this returns how high the unit is standing.
+ * Gets the terrain level of this tile. For graphical Y offsets.
+ * Notice that terrain level starts and 0 and goes upwards to -24.
  * @return, the level in pixels
  */
 int Tile::getTerrainLevel() const
@@ -390,7 +391,7 @@ int Tile::getTerrainLevel() const
 		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
 
 	if (_objects[MapData::O_OBJECT]) // kL_note: wait, aren't these negative=high
-		level = std::max(
+		level = std::min(
 						level,
 						_objects[MapData::O_OBJECT]->getTerrainLevel());
 
@@ -415,9 +416,9 @@ int Tile::getFootstepSound(Tile* tileBelow) const
 		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
 	}
 
-	if (!_objects[MapData::O_FLOOR]
-		&& !_objects[MapData::O_OBJECT]
-		&& tileBelow != 0
+	if (_objects[MapData::O_FLOOR] == NULL
+		&& _objects[MapData::O_OBJECT] == NULL
+		&& tileBelow != NULL
 		&& tileBelow->getTerrainLevel() == -24)
 	{
 		sound = tileBelow->getMapData(MapData::O_OBJECT)->getFootstepSound();

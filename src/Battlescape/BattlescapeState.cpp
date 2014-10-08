@@ -402,7 +402,7 @@ BattlescapeState::BattlescapeState()
 	_btnPsi->setVisible(false);
 
 	add(_txtBaseLabel);
-	_txtBaseLabel->setColor(Palette::blockOffset(8));
+	_txtBaseLabel->setColor(Palette::blockOffset(9));
 	_txtBaseLabel->setHighContrast();
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 
@@ -458,19 +458,19 @@ BattlescapeState::BattlescapeState()
 	add(_txtTurn);
 	add(_lstExp);
 
-	_txtTerrain->setColor(Palette::blockOffset(8)); // was yellow(9)
+	_txtTerrain->setColor(Palette::blockOffset(9)); // yellow
 	_txtTerrain->setHighContrast();
 	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_save->getTerrain())));
 
-	_txtShade->setColor(Palette::blockOffset(8));
+	_txtShade->setColor(Palette::blockOffset(9));
 	_txtShade->setHighContrast();
 	_txtShade->setText(tr("STR_SHADE_").arg(_save->getGlobalShade()));
 
-	_txtTurn->setColor(Palette::blockOffset(8));
+	_txtTurn->setColor(Palette::blockOffset(9));
 	_txtTurn->setHighContrast();
 	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
 
-	_lstExp->setColor(Palette::blockOffset(8));
+	_lstExp->setColor(Palette::blockOffset(8)); // blue
 	_lstExp->setHighContrast();
 	_lstExp->setColumns(2, 10, 15);
 
