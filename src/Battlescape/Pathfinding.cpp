@@ -29,7 +29,7 @@
 #include "../Battlescape/TileEngine.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 
 #include "../Ruleset/Armor.h"
@@ -106,10 +106,11 @@ PathfindingNode* Pathfinding::getNode(const Position& pos)
 
 /**
  * Calculates the shortest path; tries bresenham then A* paths.
- * @param unit		- pointer to a unit
- * @param endPos	- destination position
- * @param target	- pointer to a targeted unit
- * @param maxTUCost	- maximum time units this path can cost
+ * @param unit				- pointer to a unit
+ * @param endPos			- destination position
+ * @param target			- pointer to a targeted unit
+ * @param maxTUCost			- maximum time units this path can cost
+ * @param strafeRejected	- true if path needs to be recalculated w/out strafe
  */
 void Pathfinding::calculate(
 		BattleUnit* unit,
@@ -156,10 +157,11 @@ void Pathfinding::calculate(
 					&& unit->getUnitRules()->getMechanical() == false))
 //			&& unit->getTurretType() == -1					// hovertanks always hover.
 			&& unit->getRaceString() != "STR_FLOATER"		// floaters always float
-			&& unit->getRaceString() != "STR_CELATID"		// celatids always .. float.
-			&& unit->getRaceString() != "STR_CYBERDISC")	// cyberdiscs always .. float
+			&& unit->getRaceString() != "STR_CELATID")		// celatids always .. float.
+//			&& unit->getRaceString() != "STR_CYBERDISC")	// cyberdiscs always .. float; done w/ getMechanical()
 			// Ethereals *can* walk, but they don't like to. Should turn this into Ruleset param: 'alwaysFloat'
 		{
+			//Log(LOG_INFO) << ". MT_WALK";
 			_movementType = MT_WALK;
 		}
 	}
@@ -291,7 +293,6 @@ void Pathfinding::calculate(
 				&& startPos.z == endPos.z
 				&& abs(startPos.x - endPos.x) < 2
 				&& abs(startPos.y - endPos.y) < 2;
-
 	//if (_strafeMove) Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";
 	//else Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID";
 
@@ -682,7 +683,7 @@ bool Pathfinding::aStarPath(
  * But also updates the endPosition, because it is possible
  * the unit goes upstairs or falls down while walking.
  * @param startPos	- reference to the start position
- * @param dir		- direction facing
+ * @param dir		- direction of movement
  * @param endPos	- pointer to destination position
  * @param unit		- pointer to unit
  * @param target	- pointer to target unit for missiles
@@ -1147,8 +1148,11 @@ int Pathfinding::getTUCost(
 				// kL_begin: extra TU for strafe-moves ->	1 0 1
 				//											2 ^ 2
 				//											3 2 3
-				if (size > 0
-					&& abs(dir - ((_unit->getDirection() + 4) %8)) > 1)
+				int delta = abs((dir + 4) %8 - _unit->getDirection());
+
+				if (_unit->getUnitRules() // was, size>0
+					&& _unit->getUnitRules()->getMechanical()
+					&& 1 < delta && delta != 7)
 				{
 					_strafeMove = false;
 				}
@@ -1187,10 +1191,10 @@ int Pathfinding::getTUCost(
 	}
 
 	// for bigger sized units, check the path between part 1,1 and part 0,0 at end position
-	if (size)
+	if (size > 0)
 	{
 		double tCost = ceil(static_cast<double>(totalCost) / static_cast<double>((size + 1) * (size + 1))); // kL
-		totalCost = static_cast<int>(tCost); // kL: round those tanks up!
+		totalCost = static_cast<int>(Round(tCost)); // kL: round those tanks up!
 
 		Tile* startTile = _save->getTile(*endPos + Position(1, 1, 0));
 		Tile* destTile = _save->getTile(*endPos);
@@ -1204,7 +1208,7 @@ int Pathfinding::getTUCost(
 		{
 			return 255;
 		}
-		else if (!fellDown
+		else if (fellDown == false
 			&& abs(startTile->getTerrainLevel() - destTile->getTerrainLevel()) > 10)
 		{
 			return 255;
@@ -1312,10 +1316,10 @@ void Pathfinding::abortPath()
 
 /**
  * Determines whether a certain part of a tile blocks movement.
- * @param tile			- pointer to a specified tile, can be a null pointer
- * @param part			- part of the tile
- * @param missileTarget	- pointer to target for a missile
- * @param bigWallExclusion - for diagonal bigwalls
+ * @param tile				- pointer to a specified tile, can be a null pointer
+ * @param part				- part of the tile
+ * @param missileTarget		- pointer to target for a missile (default NULL)
+ * @param bigWallExclusion	- for diagonal bigwalls (default -1)
  * @return, true if movement is blocked
  */
 bool Pathfinding::isBlocked( // private
@@ -1469,7 +1473,7 @@ BIGWALL_E_S		// 8
 					// don't let any units fall on large units
 					if (//kL tileUnit != _unit &&
 						tileUnit != missileTarget
-						&& !tileUnit->isOut()
+						&& tileUnit->isOut() == false
 						&& tileUnit->getArmor()->getSize() > 1)
 					{
 						return true;
@@ -1477,7 +1481,7 @@ BIGWALL_E_S		// 8
 				}
 
 				// not gonna fall any further, so stop checking.
-				if (!testTile->hasNoFloor(NULL))
+				if (testTile->hasNoFloor(NULL) == false)
 					break;
 
 				pos.z--;
@@ -1513,7 +1517,7 @@ BIGWALL_E_S		// 8
  * @param startTile		- pointer to a start tile
  * @param endTile		- pointer to the destination tile
  * @param dir			- direction facing
- * @param missileTarget	- pointer to target for a missile
+ * @param missileTarget	- pointer to target for a missile (default NULL)
  * @return, true if movement is blocked
  */
 bool Pathfinding::isBlocked( // public
@@ -2010,7 +2014,10 @@ bool Pathfinding::previewPath(bool bRemove)
 						&& _modCTRL
 						&& _unit->getType() == "SOLDIER"
 //						&& size == 0
-						&& _strafeMove == false,
+						&& (_strafeMove == false
+							|| (_strafeMove == true
+								&& _path.size() == 1
+								&& _unit->getDirection() == _path.front())),
 		bodySuit	= armorType == "STR_PERSONAL_ARMOR_UC",
 		powerSuit	= _unit->hasPowerSuit()
 						|| (_unit->hasFlightSuit()
@@ -2074,7 +2081,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		gravLift = dir >= DIR_UP
 					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)
 					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)->isGravLift();
-		if (!gravLift)
+		if (gravLift == false)
 		{
 			if (hathStood == false
 				&& _unit->isKneeled())
@@ -2136,7 +2143,7 @@ bool Pathfinding::previewPath(bool bRemove)
 				tile = _save->getTile(start + Position(x, y, 0));
 				Tile* tileAbove = _save->getTile(start + Position(x, y, 1));
 
-				if (!bRemove)
+				if (bRemove == false)
 				{
 					if (i == _path.rend() - 1)
 						tile->setPreview(10);
@@ -2167,7 +2174,7 @@ bool Pathfinding::previewPath(bool bRemove)
 				}
 
 				color = 0;
-				if (!bRemove)
+				if (bRemove == false)
 				{
 					if (curTU > -1
 						&& energy > -1)
@@ -2200,7 +2207,7 @@ bool Pathfinding::previewPath(bool bRemove)
  */
 bool Pathfinding::removePreview()
 {
-	if (!_pathPreviewed)
+	if (_pathPreviewed == false)
 		return false;
 
 	previewPath(true);
@@ -2246,7 +2253,7 @@ std::vector<int> Pathfinding::findReachable(
 	unvisited.push(startNode);
 	std::vector<PathfindingNode*> reachable;
 
-	while (!unvisited.empty())
+	while (unvisited.empty() == false)
 	{
 		PathfindingNode* currentNode = unvisited.pop();
 		Position const &currentPos = currentNode->getPosition();
@@ -2280,7 +2287,7 @@ std::vector<int> Pathfinding::findReachable(
 				continue;
 
 			int totalTuCost = currentNode->getTUCost(false) + tuCost;
-			if (!nextNode->inOpenSet()
+			if (nextNode->inOpenSet() == false
 				|| nextNode->getTUCost(false) > totalTuCost) // If this node is unvisited or visited from a better path.
 			{
 				nextNode->connect(totalTuCost, currentNode, direction);

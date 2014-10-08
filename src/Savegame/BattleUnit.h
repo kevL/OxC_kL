@@ -570,11 +570,11 @@ private:
 		/// Gets the unit's faction.
 		UnitFaction getFaction() const;
 
-		/// Set the cached flag.
+		/// Sets this unit's cache and the cached flag.
 		void setCache(
 				Surface* cache,
 				int part = 0);
-		/// If this unit is cached on the battlescape.
+		/// Gets this unit's cache for the battlescape.
 		Surface* getCache(
 				bool* invalid,
 				int part = 0) const;

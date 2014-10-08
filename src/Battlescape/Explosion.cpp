@@ -78,8 +78,8 @@ bool Explosion::animate()
 			&& _frameCurrent == _frameStart + FRAMES_HIT)		// melee or psiamp
 		|| (_big
 			&& _frameCurrent == _frameStart + FRAMES_EXPLODE)	// explosion
-		|| (!_big
-			&& !_hit
+		|| (_big == false
+			&& _hit == false
 			&& _frameCurrent == _frameStart + FRAMES_BULLET))	// bullet
 	{
 		return false;

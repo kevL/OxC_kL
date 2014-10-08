@@ -4766,7 +4766,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1412657191 f:\git\openxcom\src\savegame\battleunit.h
+1412718464 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -5907,7 +5907,7 @@
 	<string>
 	"BattleState.h"
 
-1406960762 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1412727096 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	<climits>
 	"BattlescapeGame.h"
 	"BattleState.h"
@@ -6320,13 +6320,13 @@
 1412144606 f:\git\openxcom\src\savegame\country.h
 	<yaml-cpp/yaml.h>
 
-1410516787 source:f:\git\openxcom\src\battlescape\explosion.cpp
+1412707403 source:f:\git\openxcom\src\battlescape\explosion.cpp
 	"Explosion.h"
 
 1410509529 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1412657191 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1412704610 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6445,7 +6445,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1412543808 source:f:\git\openxcom\src\battlescape\map.cpp
+1412728170 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6611,7 +6611,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1412532579 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1412736084 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6877,7 +6877,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1411714023 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1412731472 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -6926,7 +6926,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1412296194 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1412728825 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -9572,7 +9572,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1412657191 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1412730049 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

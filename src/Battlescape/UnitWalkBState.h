@@ -52,13 +52,13 @@ private:
 		_preStepTurn;
 	int
 		_preStepCost,
-		_start;
+		_dirStart;
 	size_t _unitsSpotted;
 
-	BattleUnit* _unit;
-	Camera* _walkCam;
-	Pathfinding* _pf;
-	TileEngine* _terrain;
+	BattleUnit*		_unit;
+	Camera*			_walkCam;
+	Pathfinding*	_pf;
+	TileEngine*		_terrain;
 
 	/// This function begins unit movement.
 	bool doStatusStand();

@@ -138,24 +138,16 @@ BattleUnit::BattleUnit(
 	//Log(LOG_INFO) << "Create BattleUnit 1 : soldier ID = " << getId();
 	_name			= soldier->getName(true);
 	_id				= soldier->getId();
-//	_type			= "SOLDIER";
 	_rank			= soldier->getRankString();
 	_stats			= *soldier->getCurrentStats();
 
 	_standHeight	= soldier->getRules()->getStandHeight();
 	_kneelHeight	= soldier->getRules()->getKneelHeight();
 	_floatHeight	= soldier->getRules()->getFloatHeight();
-//	_deathSound		= 0; // this one is hardcoded
-//	_aggroSound		= -1;
-//	_moveSound		= -1; // this one is hardcoded
-//	_intelligence	= 2;
-//	_aggression		= 1;
-//	_specab			= SPECAB_NONE;
 	_armor			= soldier->getArmor();
 	_stats			+= *_armor->getStats();	// armors may modify effective stats
 	_loftempsSet	= _armor->getLoftempsSet();
 	_gender			= soldier->getGender();
-//	_faceDirection	= -1;
 
 	int rankbonus = 0;
 	switch (soldier->getRank())
@@ -178,8 +170,6 @@ BattleUnit::BattleUnit(
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
 	_health		= _stats.health;
-//	_morale		= 100;
-//	_stunLevel	= 0;
 
 	_currentArmor[SIDE_FRONT]	= _armor->getFrontArmor();
 	_currentArmor[SIDE_LEFT]	= _armor->getSideArmor();
@@ -192,12 +182,10 @@ BattleUnit::BattleUnit(
 	for (int i = 0; i < 5; ++i)
 		_cache[i] = 0;
 
-//	_activeHand = "STR_RIGHT_HAND";
-
 	lastCover = Position(-1,-1,-1);
-	//Log(LOG_INFO) << "Create BattleUnit 1, DONE";
 
 	_statistics = new BattleUnitStatistics();
+	//Log(LOG_INFO) << "Create BattleUnit 1, DONE";
 }
 
 /**
@@ -276,6 +264,8 @@ BattleUnit::BattleUnit(
 		_breathFrame(-1),
 		_floorAbove(false),
 		_breathing(false),
+		_faceDirection(-1),
+		_gender(GENDER_MALE),
 		_diedByFire(false)
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
@@ -286,18 +276,14 @@ BattleUnit::BattleUnit(
 	_stats	= *unit->getStats();
 	_stats	+= *_armor->getStats();	// armors may modify effective stats
 
-//	if (_originalFaction == FACTION_HOSTILE) // kL (note: overriding initialization above.)
 	if (faction == FACTION_HOSTILE)
 		adjustStats(
 				diff,
 				month); // kL_add
 
-
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
 	_health		= _stats.health;
-//	_morale		= 100;
-//	_stunLevel	= 0;
 
 	_standHeight	= unit->getStandHeight();
 	_kneelHeight	= unit->getKneelHeight();
@@ -311,8 +297,6 @@ BattleUnit::BattleUnit(
 	_specab			= (SpecialAbility)unit->getSpecialAbility();
 	_spawnUnit		= unit->getSpawnUnit();
 	_value			= unit->getValue();
-	_gender			= GENDER_MALE;
-	_faceDirection	= -1;
 
 	if (armor->getDrawingRoutine() == 14) // most aliens don't breathe per-se, that's exclusive to humanoids
 		_breathFrame = 0;
@@ -328,12 +312,10 @@ BattleUnit::BattleUnit(
 	for (int i = 0; i < 5; ++i)
 		_cache[i] = 0;
 
-//	_activeHand = "STR_RIGHT_HAND";
-
 	lastCover = Position(-1,-1,-1);
-	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
 
-	_statistics = new BattleUnitStatistics();
+//kL	_statistics = new BattleUnitStatistics(); // not needed by nonSoldiers, for Soldier Diary.
+	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
 }
 
 /**
@@ -351,6 +333,7 @@ BattleUnit::~BattleUnit()
 			delete _cache[i];
 	}
 
+/*kL: not needed for nonSoldiers, for Soldier Diary.
 	if (getGeoscapeSoldier() == NULL)
 	{
 		for (std::vector<BattleUnitKills*>::const_iterator
@@ -361,7 +344,7 @@ BattleUnit::~BattleUnit()
 			delete *i;
 		}
 	}
-	delete _statistics;
+	delete _statistics; */
 
 	delete _currentAIState;
 }
@@ -399,14 +382,14 @@ void BattleUnit::load(const YAML::Node& node)
 	_spawnUnit			= node["spawnUnit"].as<std::string>(_spawnUnit);
 	_motionPoints		= node["motionPoints"].as<int>(0);
 	_activeHand			= node["activeHand"].as<std::string>(_activeHand); // kL
-//	_dashing			= node["dashing"].as<bool>(_dashing); // kL
 
 	for (int i = 0; i < 5; i++)
 		_currentArmor[i]	= node["armor"][i].as<int>(_currentArmor[i]);
 	for (int i = 0; i < 6; i++)
 		_fatalWounds[i]		= node["fatalWounds"][i].as<int>(_fatalWounds[i]);
 
-	if (_originalFaction == FACTION_PLAYER) // kL_add.
+	if (_geoscapeSoldier != NULL) // kL_add.
+//		_originalFaction == FACTION_PLAYER) // kL_add.
 	{
 		_statistics->load(node["tempUnitStatistics"]);
 
@@ -479,7 +462,8 @@ YAML::Node BattleUnit::save() const
 	if (_spawnUnit.empty() == false)
 		node["spawnUnit"]		= _spawnUnit;
 
-	if (_originalFaction == FACTION_PLAYER) // kL_add.
+	if (_geoscapeSoldier != NULL) // kL_add.
+//		_originalFaction == FACTION_PLAYER) // kL_add.
 	{
 		node["tempUnitStatistics"]	= _statistics->save();
 
@@ -670,6 +654,7 @@ void BattleUnit::setStatus(int status) // kL
 		case 10:	_status = STATUS_DISABLED;		return; // kL
 
 		default:
+			_status = STATUS_STANDING;
 		return;
 	}
 }
@@ -677,7 +662,7 @@ void BattleUnit::setStatus(int status) // kL
 /**
  * Initialises variables to start walking.
  * @param direction		- the direction to walk
- * @param destination	- reference to the position we should end up at
+ * @param destination	- reference the position we should end up at
  * @param tileBelow		- pointer to the tile below destination position
  * @param cache			- true to redraw the unit's sprite ( not used. )
  */
@@ -730,8 +715,8 @@ void BattleUnit::startWalking(
 
 /**
  * This will increment the walking phase.
- * @param tileBelow	- pointer to tile currently below the unit
- * @param cache		- true to refresh the unit cache / redraw the unit's sprite
+ * @param tileBelow	- pointer to tile currently below this unit
+ * @param cache		- true to refresh the unit cache / redraw this unit's sprite
  */
 void BattleUnit::keepWalking(
 		Tile* tileBelow,
@@ -767,7 +752,7 @@ void BattleUnit::keepWalking(
 		}
 	}
 
-	if (!cache) // ie. not onScreen
+	if (cache == false) // ie. not onScreen
 	{
 		middle = 1; // kL: Mc'd units offscreen won't move without this (tho they turn, as if to start walking)
 		end = 2;
@@ -787,7 +772,7 @@ void BattleUnit::keepWalking(
 		_verticalDirection = 0;
 
 		if (_floating
-			&& !_tile->hasNoFloor(tileBelow))
+			&& _tile->hasNoFloor(tileBelow) == false)
 		{
 			_floating = false;
 		}
@@ -1077,7 +1062,7 @@ UnitFaction BattleUnit::getFaction() const
  * Sets the unit's cache flag.
  * Set to true when the unit has to be redrawn from scratch.
  * @param cache	- pointer to cache surface to use, NULL to redraw from scratch
- * @param part	- unit part to cache
+ * @param part	- unit part to cache (default 0)
  */
 void BattleUnit::setCache(
 		Surface* cache,
@@ -1095,8 +1080,8 @@ void BattleUnit::setCache(
 /**
  * Check if the unit is still cached in the Map cache.
  * When the unit needs to animate, it needs to be re-cached.
- * @param invalid	- pointer to get if the cache is invalid (kL_note:?)
- * @param part		- unit part to check
+ * @param invalid	- pointer to true if the cache is invalid
+ * @param part		- unit part to check (default 0)
  * @return, pointer to the cache surface used
  */
 Surface* BattleUnit::getCache(
@@ -1109,7 +1094,6 @@ Surface* BattleUnit::getCache(
 	*invalid = _cacheInvalid;
 
 	return _cache[part];
-	// kL_note: Is somebody 'too clever' again?
 }
 
 /**

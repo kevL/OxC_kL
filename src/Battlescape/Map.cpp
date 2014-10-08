@@ -2721,7 +2721,7 @@ void Map::cacheUnits()
 
 /**
  * Check if a certain unit needs to be redrawn.
- * @param unit, Pointer to battleUnit.
+ * @param unit - pointer to a BattleUnit
  */
 void Map::cacheUnit(BattleUnit* unit)
 {
@@ -2754,7 +2754,7 @@ void Map::cacheUnit(BattleUnit* unit)
 			//Log(LOG_INFO) << ". . i = " << i;
 
 			Surface* cache = unit->getCache(&d, i);
-			if (!cache) // no cache created yet
+			if (cache == NULL) // no cache created yet
 			{
 				//Log(LOG_INFO) << ". . . (!cache)";
 				cache = new Surface(
@@ -2772,8 +2772,8 @@ void Map::cacheUnit(BattleUnit* unit)
 			//Log(LOG_INFO) << ". . getItem()";
 			BattleItem* rhandItem = unit->getItem("STR_RIGHT_HAND");
 			BattleItem* lhandItem = unit->getItem("STR_LEFT_HAND");
-			if (!lhandItem
-				&& !rhandItem)
+			if (lhandItem == NULL
+				&& rhandItem == NULL)
 			{
 				unitSprite->setBattleItem(NULL);
 			}

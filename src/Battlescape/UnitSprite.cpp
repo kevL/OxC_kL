@@ -89,9 +89,9 @@ UnitSprite::~UnitSprite()
 
 /**
  * Changes the surface sets for the UnitSprite to get resources for rendering.
- * @param unitSurface Pointer to the unit surface set.
- * @param itemSurfaceA Pointer to the item surface set.
- * @param itemSurfaceB Pointer to the item surface set.
+ * @param unitSurface	- pointer to an unit surface set
+ * @param itemSurfaceA	- pointer to an item surface set
+ * @param itemSurfaceB	- pointer to an item surface set
  */
 void UnitSprite::setSurfaces(
 		SurfaceSet* unitSurface,
@@ -107,8 +107,8 @@ void UnitSprite::setSurfaces(
 
 /**
  * Links this sprite to a BattleUnit to get the data for rendering.
- * @param unit Pointer to the BattleUnit.
- * @param part The part number for large units.
+ * @param unit - pointer to a BattleUnit
+ * @param part - part number for large units
  */
 void UnitSprite::setBattleUnit(
 		BattleUnit* unit,
@@ -122,7 +122,7 @@ void UnitSprite::setBattleUnit(
 
 /**
  * Links this sprite to a BattleItem to get the data for rendering.
- * @param item Pointer to the BattleItem.
+ * @param item - pointer to a BattleItem
  */
 void UnitSprite::setBattleItem(BattleItem* item)
 {
@@ -1069,35 +1069,48 @@ void UnitSprite::drawRoutine2()
 	if (_unit->isOut())
 		return; // unit is drawn as an item
 
-	const int offX[8] = {-2,-7,-5, 0, 5, 7, 2, 0 }; // hovertank offsets
-	const int offy[8] = {-1,-3,-4,-5,-4,-3,-1,-1 };
+	const int
+		offX[8] = {-2,-7,-5, 0, 5, 7, 2, 0 }, // hovertank offsets
+		offY[8] = {-1,-3,-4,-5,-4,-3,-1,-1 },
+		hoverTank	= _unit->getArmor()->getMovementType() == MT_FLY? 32: 0,
+		turret		= _unit->getTurretType();
 
 	Surface* srf = NULL;
 
-	const int hoverTank	= _unit->getArmor()->getMovementType() == MT_FLY? 32: 0;
-	const int turret	= _unit->getTurretType();
-
 	// draw the animated propulsion below the hwp
-	if (_part > 0 && hoverTank != 0)
+	if (_part > 0
+		&& hoverTank != 0)
 	{
-		srf = _unitSurface->getFrame(104 + ((_part-1) * 8) + _animationFrame);
+		srf = _unitSurface->getFrame(104 + ((_part - 1) * 8) + _animationFrame);
 		srf->blit(this);
 	}
 
+	// kL_note: This is a fix, more of a workaround for tank's reverse strafing move.
+	// There's a problem somewhere that keeps switching BattleUnit::_direction back
+	// and forth ... in reverse gears. That is, _direction should remain constant
+	// throughout a single-tile strafe move with tanks. At least _faceDirection
+	// seems constant during these sprite-frames.
+	int dirFace = _unit->getDirection();
+	if (_unit->getFaceDirection() > -1)
+		dirFace = _unit->getFaceDirection();
+
 	// draw the tank itself
-	srf = _unitSurface->getFrame(hoverTank + (_part * 8) + _unit->getDirection());
+	srf = _unitSurface->getFrame(hoverTank + (_part * 8) + dirFace);
 	srf->blit(this);
 
 	// draw the turret, together with the last part
-	if (_part == 3 && turret != -1)
+	if (_part == 3
+		&& turret != -1)
 	{
 		srf = _unitSurface->getFrame(64 + (turret * 8) + _unit->getTurretDirection());
-		int turretOffsetX = 0;
-		int turretOffsetY = -4;
+		int
+			turretOffsetX = 0,
+			turretOffsetY = -4;
+
 		if (hoverTank)
 		{
-			turretOffsetX += offX[_unit->getDirection()];
-			turretOffsetY += offy[_unit->getDirection()];
+			turretOffsetX += offX[dirFace];
+			turretOffsetY += offY[dirFace];
 		}
 
 		srf->setX(turretOffsetX);
