@@ -290,18 +290,22 @@ void AlienBAIState::think(BattleAction* action)
 		else
 			action->weapon = NULL;
 	}
+//	else if () // kL_add -> Give the invisible 'meleeWeapon' param a try ....
+//	{
+//	}
+
 
 	//Log(LOG_INFO) << ". . pos 2";
-	if (_spottingEnemies
-		&& !_escapeTUs)
+	if (_spottingEnemies > 0
+		&& _escapeTUs == 0)
 	{
 		setupEscape();
 	}
 
 	//Log(LOG_INFO) << ". . pos 3";
 	if (_knownEnemies
-		&& !_melee
-		&& !_ambushTUs)
+		&& _melee == false
+		&& _ambushTUs == 0)
 	{
 		//Log(LOG_INFO) << ". . . . setupAmbush()";
 		setupAmbush();
@@ -336,17 +340,17 @@ void AlienBAIState::think(BattleAction* action)
 	//Log(LOG_INFO) << ". . pos 5";
 	if (_AIMode == AI_ESCAPE)
 	{
-		if (!_spottingEnemies
-			|| !_knownEnemies)
+		if (_spottingEnemies == 0
+			|| _knownEnemies == 0)
 		{
 			evaluate = true;
 		}
 	}
 	else if (_AIMode == AI_PATROL)
 	{
-		if (_spottingEnemies
-			|| _visibleEnemies
-			|| _knownEnemies
+		if (_spottingEnemies > 0
+			|| _visibleEnemies > 0
+			|| _knownEnemies > 0
 			|| RNG::percent(10))
 		{
 			evaluate = true;
@@ -354,8 +358,8 @@ void AlienBAIState::think(BattleAction* action)
 	}
 	else if (_AIMode == AI_AMBUSH)
 	{
-		if (!_rifle
-			|| !_ambushTUs
+		if (_rifle == false
+			|| _ambushTUs == 0
 			|| _visibleEnemies)
 		{
 			evaluate = true;
@@ -384,7 +388,7 @@ void AlienBAIState::think(BattleAction* action)
 	}
 
 	//Log(LOG_INFO) << ". . pos 7";
-	if (evaluate)
+	if (evaluate == true)
 	{
 		evaluateAIMode();
 
@@ -433,21 +437,12 @@ void AlienBAIState::think(BattleAction* action)
 				{
 					case 0:
 						_reserve = BA_AIMEDSHOT;
-//						_save->getBattleGame()->setTUReserved(
-//															BA_AIMEDSHOT,
-//															false);
 					break;
 					case 1:
 						_reserve = BA_AUTOSHOT;
-//						_save->getBattleGame()->setTUReserved(
-//															BA_AUTOSHOT,
-//															false);
 					break;
 					case 2:
 						_reserve = BA_SNAPSHOT;
-//						_save->getBattleGame()->setTUReserved(
-//															BA_SNAPSHOT,
-//															false);
 
 					default:
 					break;
@@ -461,7 +456,7 @@ void AlienBAIState::think(BattleAction* action)
 			//Log(LOG_INFO) << ". . . . AI_COMBAT";
 			action->type	= _attackAction->type;
 			action->target	= _attackAction->target;
-			action->weapon	= _attackAction->weapon; // this may have changed to a grenade.
+			action->weapon	= _attackAction->weapon; // this may have changed to a grenade. Or an innate meleeWeapon ...
 
 			if (action->weapon
 				&& action->weapon->getRules()->getBattleType() == BT_GRENADE
@@ -815,13 +810,13 @@ void AlienBAIState::setupAmbush()
 				tile->setMarkerColor(13);
 			}
 
-			if (!_save->getTileEngine()->canTargetUnit(
+			if (_save->getTileEngine()->canTargetUnit(
 													&origin,
 													tile,
 													&target,
 													_aggroTarget,
-													_unit)
-				&& !getSpottingUnits(pos))												// make sure we can't be seen here.
+													_unit) == false
+				&& getSpottingUnits(pos) == 0)											// make sure we can't be seen here.
 			{
 				_save->getPathfinding()->calculate(_unit, pos);
 				int ambushTUs = _save->getPathfinding()->getTotalTUCost();
@@ -909,7 +904,7 @@ void AlienBAIState::setupAmbush()
 					break;
 				}
 
-				--tries;
+				tries--;
 			}
 
 			if (_traceAI) Log(LOG_INFO) << "Ambush estimation will move to " << _ambushAction->target;
@@ -1230,7 +1225,7 @@ int AlienBAIState::countKnownTargets() const
 					true,
 					true))
 		{
-			++knownEnemies;
+			knownEnemies++;
 		}
 	}
 
@@ -1238,14 +1233,14 @@ int AlienBAIState::countKnownTargets() const
 }
 
 /**
- * counts how many enemies (xcom only) are spotting any given position.
- * @param pos the Position to check for spotters.
- * @return spotters.
+ * Counts how many enemies (xcom only) are spotting any given position.
+ * @param pos - the Position to check for spotters
+ * @return, spotters
  */
 int AlienBAIState::getSpottingUnits(Position pos) const
 {
 	// if we don't actually occupy the position being checked, we need to do a virtual LOF check.
-	bool checking = pos != _unit->getPosition();
+	bool checking = (pos != _unit->getPosition());
 	int tally = 0;
 
 	for (std::vector<BattleUnit*>::const_iterator
@@ -1310,6 +1305,7 @@ int AlienBAIState::selectNearestTarget()
 	Position
 		target,
 		origin = _save->getTileEngine()->getSightOriginVoxel(_unit);
+
 	origin.z -= 2;
 
 
@@ -1388,7 +1384,10 @@ bool AlienBAIState::selectClosestKnownEnemy()
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if (validTarget(*i, true, false))
+		if (validTarget(
+					*i,
+					true,
+					false))
 		{
 			int dist = _save->getTileEngine()->distance(
 													(*i)->getPosition(),
@@ -2019,7 +2018,7 @@ bool AlienBAIState::explosiveEfficacy(
 void AlienBAIState::meleeAction()
 {
 	if (_aggroTarget
-		&& !_aggroTarget->isOut()) // (true, true)
+		&& _aggroTarget->isOut() == false) // (true, true)
 	{
 		if (_save->getTileEngine()->validMeleeRange(
 												_unit,
@@ -2029,16 +2028,16 @@ void AlienBAIState::meleeAction()
 																					_aggroTarget->getPosition())))
 		{
 			meleeAttack();
-
 			return;
 		}
 	}
 
-	int attackCost		= _unit->getActionTUs(
-											BA_HIT,
-											_unit->getMainHandWeapon());
-	int chargeReserve	= _unit->getTimeUnits() - attackCost;
-	int distance		= (chargeReserve / 4) + 1;
+	int
+		attackCost = _unit->getActionTUs(
+										BA_HIT,
+										_unit->getMainHandWeapon()),
+		chargeReserve = _unit->getTimeUnits() - attackCost,
+		distance = (chargeReserve / 4) + 1;
 
 	_aggroTarget = NULL;
 
@@ -2051,10 +2050,10 @@ void AlienBAIState::meleeAction()
 														_unit->getPosition(),
 														(*i)->getPosition());
 		if (newDistance > 20
-			|| !validTarget(
+			|| validTarget(
 						*i,
 						true,
-						true))
+						true) == false)
 		{
 			continue;
 		}
@@ -2062,7 +2061,7 @@ void AlienBAIState::meleeAction()
 		// pick closest living unit that we can move to
 		if ((newDistance < distance
 				|| newDistance == 1)
-			&& !(*i)->isOut())
+			&& (*i)->isOut() == false)
 		{
 			if (newDistance == 1
 				|| selectPointNearTarget(*i, chargeReserve))
@@ -2076,7 +2075,7 @@ void AlienBAIState::meleeAction()
 		}
 	}
 
-	if (_aggroTarget)
+	if (_aggroTarget != NULL)
 	{
 		if (_save->getTileEngine()->validMeleeRange(
 												_unit,
@@ -2610,15 +2609,14 @@ bool AlienBAIState::psiAction()
 
 /**
  * Performs a melee attack action.
- * @param action Pointer to an action.
  */
 void AlienBAIState::meleeAttack()
 {
 	_unit->lookAt(
 			_aggroTarget->getPosition() + Position(
-											_unit->getArmor()->getSize() - 1,
-											_unit->getArmor()->getSize() - 1,
-											0));
+												_unit->getArmor()->getSize() - 1,
+												_unit->getArmor()->getSize() - 1,
+												0));
 
 	while (_unit->getStatus() == STATUS_TURNING)
 		_unit->turn();
@@ -2675,7 +2673,6 @@ void AlienBAIState::selectMeleeOrRanged()
 	if (mainWeapon == NULL) // kL safety.
 	{
 		_rifle = false;
-
 		return;
 	}
 
@@ -2685,7 +2682,6 @@ void AlienBAIState::selectMeleeOrRanged()
 //		|| _unit->getMainHandWeapon()->getAmmoItem() == NULL) // done in getMainHandWeapon()
 	{
 		_rifle = false;
-
 		return;
 	}
 
@@ -2694,7 +2690,6 @@ void AlienBAIState::selectMeleeOrRanged()
 	{
 		// no idea how we got here, but melee is definitely out of the question.
 		_melee = false;
-
 		return;
 	}
 

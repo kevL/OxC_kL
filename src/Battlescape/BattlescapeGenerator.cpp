@@ -896,7 +896,7 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 	std::string vehicle = tank->getRules()->getType();
 	Unit* unitRule = _rules->getUnit(vehicle);
 
-	BattleUnit* tankUnit = addXCOMUnit(new BattleUnit(
+	BattleUnit* tankUnit = addXCOMUnit(new BattleUnit( // add Vehicle as a unit.
 													unitRule,
 													FACTION_PLAYER,
 													_unitSequence++,
@@ -904,7 +904,43 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 													0));
 	if (tankUnit)
 	{
-		if (unitRule->getBuiltInWeapons().empty() == false)
+		tankUnit->setTurretType(tank->getRules()->getTurretType());
+
+		BattleItem* item = new BattleItem( // add Vehicle as an item and assign the unit as its owner.
+									_rules->getItem(vehicle),
+									_save->getCurrentItemId());
+		if (!addItem(
+					item,
+					tankUnit))
+		{
+			delete item;
+			delete tankUnit;
+
+			return NULL;
+		}
+
+		if (tank->getRules()->getCompatibleAmmo()->empty() == false)
+		{
+			std::string ammo = tank->getRules()->getCompatibleAmmo()->front();
+			BattleItem* ammoItem = new BattleItem( // add item(ammo) and assign the Vehicle-ITEM as its owner.
+											_rules->getItem(ammo),
+											_save->getCurrentItemId());
+			if (!addItem(
+						ammoItem,
+						tankUnit))
+			{
+				delete ammoItem;
+				delete item;
+				delete tankUnit;
+
+				return NULL;
+			}
+
+			ammoItem->setAmmoQuantity(tank->getAmmo());
+		}
+
+
+		if (unitRule->getBuiltInWeapons().empty() == false) // add item(builtInWeapon) -- what about ammo
 		{
 			for (std::vector<std::string>::const_iterator
 					i = unitRule->getBuiltInWeapons().begin();
@@ -927,41 +963,6 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 				}
 			}
 		}
-
-		BattleItem* item = new BattleItem(
-									_rules->getItem(vehicle),
-									_save->getCurrentItemId());
-		if (!addItem(
-					item,
-					tankUnit))
-		{
-			delete item;
-			delete tankUnit;
-
-			return NULL;
-		}
-
-		if (tank->getRules()->getCompatibleAmmo()->empty() == false)
-		{
-			std::string ammo = tank->getRules()->getCompatibleAmmo()->front();
-			BattleItem* ammoItem = new BattleItem(
-											_rules->getItem(ammo),
-											_save->getCurrentItemId());
-			if (!addItem(
-						ammoItem,
-						tankUnit))
-			{
-				delete ammoItem;
-				delete item;
-				delete tankUnit;
-
-				return NULL;
-			}
-
-			ammoItem->setAmmoQuantity(tank->getAmmo());
-		}
-
-		tankUnit->setTurretType(tank->getRules()->getTurretType());
 	}
 	else
 		return NULL;
@@ -1268,8 +1269,7 @@ bool BattlescapeGenerator::placeItemByLayout(BattleItem* item)
 
 /**
  * Adds an item to an XCom soldier (auto-equip ONLY). kL_note: I don't use this part.
- * kL_notes: Or an XCom tank, also adds items & terrorWeapons to aLiens, deployAliens()!
- *
+ * Or an XCom tank, also adds items & terrorWeapons to aLiens, deployAliens()!
  * @param item				- pointer to the Item
  * @param unit				- pointer to the Unit
  * @param allowSecondClip	- true to allow the unit to take a second clip
@@ -1281,8 +1281,156 @@ bool BattlescapeGenerator::addItem(
 		BattleUnit* unit)
 //		bool allowSecondClip
 {
-//kL	int weight = 0;
+	// kL_note: Old code that does what I want:
+	RuleInventory
+		* rightHand = _rules->getInventory("STR_RIGHT_HAND"),
+		* leftHand = _rules->getInventory("STR_LEFT_HAND");
+	BattleItem
+		* rhWeapon = unit->getItem("STR_RIGHT_HAND"),
+		* lhWeapon = unit->getItem("STR_LEFT_HAND");
 
+	bool placed = false;
+
+	switch (item->getRules()->getBattleType())
+	{
+		case BT_FIREARM:	// kL_note: These are also terrorist weapons:
+		case BT_MELEE:		// chryssalids, cyberdiscs, zombies, sectopods, reapers, celatids, silacoids
+			if (rhWeapon == NULL)
+			{
+				item->moveToOwner(unit);
+				item->setSlot(rightHand);
+
+				placed = true;
+			}
+
+			// kL_note: only for plasma pistol + Blaster (see itemSets in Ruleset)
+			// Also now for advanced fixed/innate weapon rules.
+			if (placed == false
+				&& lhWeapon == NULL
+				&& (item->getRules()->isFixed()
+					|| unit->getFaction() != FACTION_PLAYER))
+			{
+				item->moveToOwner(unit);
+				item->setSlot(leftHand);
+
+				placed = true;
+			}
+		break;
+		case BT_AMMO:
+		{
+			// find handheld weapons that can be loaded with this ammo
+			if (rhWeapon
+				&& (rhWeapon->getRules()->isFixed()
+					|| unit->getFaction() != FACTION_PLAYER)
+				&& rhWeapon->getAmmoItem() == NULL
+				&& rhWeapon->setAmmoItem(item) == 0)
+			{
+				item->setSlot(rightHand);
+
+				placed = true;
+				break;
+			}
+
+			// kL_note: only for plasma pistol + Blaster (see itemSets in Ruleset)
+			// Also now for advanced fixed/innate weapon rules.
+			if (lhWeapon
+				&& (lhWeapon->getRules()->isFixed()
+					|| unit->getFaction() != FACTION_PLAYER)
+				&& lhWeapon->getAmmoItem() == NULL
+				&& lhWeapon->setAmmoItem(item) == 0)
+			{
+				item->setSlot(leftHand);
+
+				placed = true;
+				break;
+			}
+
+			// else put the clip in Belt or Backpack
+			RuleItem* itemRule = item->getRules();
+
+			for (int
+					i = 0;
+					i != 4;
+					++i)
+			{
+				if (unit->getItem("STR_BELT", i) == false
+					&& _rules->getInventory("STR_BELT")->fitItemInSlot(itemRule, i, 0))
+				{
+					item->moveToOwner(unit);
+					item->setSlot(_rules->getInventory("STR_BELT"));
+					item->setSlotX(i);
+
+					placed = true;
+					break;
+				}
+			}
+
+			if (placed == false)
+			{
+				for (int
+						i = 0;
+						i != 3;
+						++i)
+				{
+					if (unit->getItem("STR_BACK_PACK", i) == false
+						&& _rules->getInventory("STR_BACK_PACK")->fitItemInSlot(itemRule, i, 0))
+					{
+						item->moveToOwner(unit);
+						item->setSlot(_rules->getInventory("STR_BACK_PACK"));
+						item->setSlotX(i);
+
+						placed = true;
+						break;
+					}
+				}
+			}
+		}
+		break;
+		case BT_GRENADE: // includes AlienGrenades & SmokeGrenades & HE-Packs.
+		case BT_PROXIMITYGRENADE:
+			for (int
+					i = 0;
+					i != 4;
+					++i)
+			{
+				if (unit->getItem("STR_BELT", i) == false)
+				{
+					item->moveToOwner(unit);
+					item->setSlot(_rules->getInventory("STR_BELT"));
+					item->setSlotX(i);
+
+					placed = true;
+					break;
+				}
+			}
+		break;
+		case BT_MINDPROBE:
+		case BT_MEDIKIT:
+		case BT_SCANNER:
+			if (unit->getItem("STR_BACK_PACK") == false)
+			{
+				item->moveToOwner(unit);
+				item->setSlot(_rules->getInventory("STR_BACK_PACK"));
+
+				placed = true;
+			}
+		break;
+
+		default:
+		break;
+	}
+
+	if (placed)
+	{
+		item->setXCOMProperty(unit->getFaction() == FACTION_PLAYER);
+		_save->getItems()->push_back(item);
+	}
+
+	// kL_note: If not placed, the items are deleted from wherever this function was called.
+	return placed;
+}
+// New code that sucks:
+//kL	int weight = 0;
 	// tanks and aliens don't care about weight or multiple items; their
 	// loadouts are defined in the rulesets and more or less set in stone.
 /*kL
@@ -1329,12 +1477,12 @@ bool BattlescapeGenerator::addItem(
 	} */
 
 //	RuleInventory* ground = _rules->getInventory("STR_GROUND"); // removed.
-	RuleInventory* rightHand = _rules->getInventory("STR_RIGHT_HAND");
+/*	RuleInventory* rightHand = _rules->getInventory("STR_RIGHT_HAND");
 	RuleInventory* leftHand = _rules->getInventory("STR_LEFT_HAND");
 	BattleItem* rhWeapon = unit->getItem("STR_RIGHT_HAND");
 	BattleItem* lhWeapon = unit->getItem("STR_LEFT_HAND");
 
-	bool placed = false;
+	bool placed = false; */
 //	bool loaded = false;
 
 /*kL
@@ -1472,147 +1620,6 @@ bool BattlescapeGenerator::addItem(
 		break;
 	} */
 
-	// kL_note: Old code that does what I want:
-	switch (item->getRules()->getBattleType())
-	{
-		case BT_FIREARM:	// kL_note: These are also terrorist weapons:
-		case BT_MELEE:		// chryssalids, cyberdiscs, zombies, sectopods, reapers, celatids, silacoids
-			if (rhWeapon == NULL)
-			{
-				item->moveToOwner(unit);
-				item->setSlot(rightHand);
-
-				placed = true;
-			}
-
-			// kL_note: only for plasma pistol + Blaster (see itemSets in Ruleset)
-			// Also now for advanced fixed/innate weapon rules.
-			if (!placed
-				&& lhWeapon == NULL
-				&& (item->getRules()->isFixed()
-					|| unit->getFaction() != FACTION_PLAYER))
-			{
-				item->moveToOwner(unit);
-				item->setSlot(leftHand);
-
-				placed = true;
-			}
-		break;
-		case BT_AMMO:
-		{
-			// find handheld weapons that can be loaded with this ammo
-			if (rhWeapon
-				&& (rhWeapon->getRules()->isFixed()
-					|| unit->getFaction() != FACTION_PLAYER)
-				&& rhWeapon->getAmmoItem() == NULL
-				&& rhWeapon->setAmmoItem(item) == 0)
-			{
-				item->setSlot(rightHand);
-
-				placed = true;
-				break;
-			}
-
-			// kL_note: only for plasma pistol + Blaster (see itemSets in Ruleset)
-			// Also now for advanced fixed/innate weapon rules.
-			if (lhWeapon
-				&& (lhWeapon->getRules()->isFixed()
-					|| unit->getFaction() != FACTION_PLAYER)
-				&& lhWeapon->getAmmoItem() == NULL
-				&& lhWeapon->setAmmoItem(item) == 0)
-			{
-				item->setSlot(leftHand);
-
-				placed = true;
-				break;
-			}
-
-			// else put the clip in Belt or Backpack
-			RuleItem* itemRule = item->getRules();
-
-			for (int
-					i = 0;
-					i != 4;
-					++i)
-			{
-				if (unit->getItem("STR_BELT", i) == false
-					&& _rules->getInventory("STR_BELT")->fitItemInSlot(itemRule, i, 0))
-				{
-					item->moveToOwner(unit);
-					item->setSlot(_rules->getInventory("STR_BELT"));
-					item->setSlotX(i);
-
-					placed = true;
-					break;
-				}
-			}
-
-			if (placed == false)
-			{
-				for (int
-						i = 0;
-						i != 3;
-						++i)
-				{
-					if (unit->getItem("STR_BACK_PACK", i) == false
-						&& _rules->getInventory("STR_BACK_PACK")->fitItemInSlot(itemRule, i, 0))
-					{
-						item->moveToOwner(unit);
-						item->setSlot(_rules->getInventory("STR_BACK_PACK"));
-						item->setSlotX(i);
-
-						placed = true;
-						break;
-					}
-				}
-			}
-		}
-		break;
-		case BT_GRENADE: // includes AlienGrenades & SmokeGrenades & HE-Packs.
-		case BT_PROXIMITYGRENADE:
-			for (int
-					i = 0;
-					i != 4;
-					++i)
-			{
-				if (unit->getItem("STR_BELT", i) == false)
-				{
-					item->moveToOwner(unit);
-					item->setSlot(_rules->getInventory("STR_BELT"));
-					item->setSlotX(i);
-
-					placed = true;
-					break;
-				}
-			}
-		break;
-		case BT_MINDPROBE:
-		case BT_MEDIKIT:
-		case BT_SCANNER:
-			if (unit->getItem("STR_BACK_PACK") == false)
-			{
-				item->moveToOwner(unit);
-				item->setSlot(_rules->getInventory("STR_BACK_PACK"));
-
-				placed = true;
-			}
-		break;
-
-		default:
-		break;
-	}
-
-	if (placed)
-	{
-		item->setXCOMProperty(unit->getFaction() == FACTION_PLAYER);
-
-		_save->getItems()->push_back(item);
-	}
-
-	// kL_note: If not placed, the items are deleted from wherever this function was called.
-	return placed;
-}
-
 /**
  * Deploys the aliens, according to the alien deployment rules.
  * @param race 			- pointer to the alien race
@@ -1649,9 +1656,9 @@ void BattlescapeGenerator::deployAliens(
 		itemLevel,
 		qty;
 
-	BattleItem* item;
-	BattleUnit* unit;
-	Unit* unitRule;
+	BattleItem* item = NULL;
+	BattleUnit* unit = NULL;
+	Unit* unitRule = NULL;
 
 	for (std::vector<DeploymentData>::iterator
 			data = deployment->getDeploymentData()->begin();
@@ -1702,13 +1709,9 @@ void BattlescapeGenerator::deployAliens(
 						(*data).alienRank,
 						outside);
 
-			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() do getAlienItemLevels()";
-			itemLevel = _rules->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
-			//Log(LOG_INFO) << "BattlescapeGenerator::deplyAliens() DONE getAlienItemLevels()";
-
 			if (unit != NULL)
 			{
-				RuleItem* itemRule;
+				RuleItem* itemRule = NULL;
 
 				// Built in weapons: the unit has this weapon regardless of loadout or what have you.
 				if (unitRule->getBuiltInWeapons().empty() == false)
@@ -1744,7 +1747,7 @@ void BattlescapeGenerator::deployAliens(
 					itemRule = _rules->getItem(terroristWeapon);
 					if (itemRule != NULL)
 					{
-						item = new BattleItem( // large aLiens add their weapons
+						item = new BattleItem( // terror aLiens add their weapons
 											itemRule,
 											_save->getCurrentItemId());
 						if (!addItem(
@@ -1759,12 +1762,14 @@ void BattlescapeGenerator::deployAliens(
 				}
 				else
 				{
+					itemLevel = _rules->getAlienItemLevels().at(month).at(RNG::generate(0, 9));
+
 					for (std::vector<std::string>::iterator
-							itemSet = (*data).itemSets.at(itemLevel).items.begin();
-							itemSet != (*data).itemSets.at(itemLevel).items.end();
-							++itemSet)
+							setItem = (*data).itemSets.at(itemLevel).items.begin();
+							setItem != (*data).itemSets.at(itemLevel).items.end();
+							++setItem)
 					{
-						itemRule = _rules->getItem(*itemSet);
+						itemRule = _rules->getItem(*setItem);
 						if (itemRule != NULL)
 						{
 							item = new BattleItem( // aLiens add items

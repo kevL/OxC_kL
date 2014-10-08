@@ -1,4 +1,10 @@
 extraSprites:
+  - type: CURSOR.PCK
+    files:
+      0: Resources/Sprites/ufograph/cursor/
+  - type: HIT.PCK
+    files:
+      0: Resources/Sprites/ufograph/hit/
   - type: ICONS.PCK
     width: 320
     height: 200
@@ -14,9 +20,6 @@ extraSprites:
   - type: SMOKE.PCK
     files:
       0: Resources/Sprites/ufograph/smoke/
-  - type: CURSOR.PCK
-    files:
-      0: Resources/Sprites/ufograph/cursor/
   - type: X1.PCK
     width: 1024
     height: 128

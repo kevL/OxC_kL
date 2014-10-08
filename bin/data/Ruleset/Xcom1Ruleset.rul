@@ -1941,6 +1941,19 @@ items:
     tuUse: 35 # kL: was 25
     flatRate: false #kL: was true
     recover: false
+  - type: STR_FIST
+    bigSprite: 56 #temp: Elerium
+    meleeSound: 39
+    meleeHitSound: 38
+#    hitAnimation: 0
+    power: 20
+    strengthApplied: true
+    damageType: 7
+    accuracyMelee: 150
+    tuMelee: 12
+    battleType: 3
+    twoHanded: false
+    recover: false
 ufos:
   - type: STR_SMALL_SCOUT
     size: STR_VERY_SMALL
@@ -4281,6 +4294,7 @@ units:
     intelligence: 2
     aggression: 2
     energyRecovery: 90
+    meleeWeapon: STR_FIST
   - type: STR_MUTON_NAVIGATOR
     race: STR_MUTON
     rank: STR_LIVE_NAVIGATOR
@@ -4304,6 +4318,7 @@ units:
     intelligence: 3
     aggression: 2
     energyRecovery: 90
+    meleeWeapon: STR_FIST
   - type: STR_MUTON_ENGINEER
     race: STR_MUTON
     rank: STR_LIVE_ENGINEER
@@ -4327,6 +4342,7 @@ units:
     intelligence: 4
     aggression: 2
     energyRecovery: 90
+    meleeWeapon: STR_FIST
   - type: STR_SILACOID_TERRORIST
     race: STR_SILACOID
     rank: STR_LIVE_TERRORIST

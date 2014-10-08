@@ -67,16 +67,16 @@ ExplosionBState::ExplosionBState(
 		bool success) // kL_add.
 	:
 		BattleState(parent),
-		_unit(unit),
 		_center(center),
 		_item(item),
+		_unit(unit),
 		_tile(tile),
+		_lowerWeapon(lowerWeapon),
+		_hitSuccess(success), // kL
 		_power(0),
 		_areaOfEffect(false),
-		_lowerWeapon(lowerWeapon),
 		_pistolWhip(false),
 		_hit(false),
-		_hitSuccess(success), // kL
 		_extend(3) // kL, extra think-cycles before this state Pops.
 {
 }
@@ -99,39 +99,42 @@ void ExplosionBState::init()
 	if (_item != NULL)
 	{
 		//Log(LOG_INFO) << ". type = " << (int)_item->getRules()->getDamageType();
-		_power = _item->getRules()->getPower();
-
-		// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
-		_pistolWhip = _unit != NULL
-					&& _unit->getFaction() == FACTION_PLAYER
-					&& _item->getRules()->getBattleType() != BT_MELEE
-					&& _parent->getCurrentAction()->type == BA_HIT;
-
-		if (_pistolWhip)
-			_power = _item->getRules()->getMeleePower();
-
-		// since melee aliens don't use a conventional weapon type, use their strength instead.
-		if (_unit != NULL
-			&& (_pistolWhip
-				|| _item->getRules()->getBattleType() == BT_MELEE)
-			&& _item->getRules()->isStrengthApplied())
+		if (_item->getRules()->getBattleType() != BT_PSIAMP) // kL: pass by. Let cTor initialization handle it.
 		{
-			int str = static_cast<int>(Round(
-						static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5)));
+			_power = _item->getRules()->getPower();
+
+			// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
+			_pistolWhip = _unit != NULL
+						&& _unit->getFaction() == FACTION_PLAYER
+						&& _item->getRules()->getBattleType() != BT_MELEE
+						&& _parent->getCurrentAction()->type == BA_HIT;
 
 			if (_pistolWhip)
-				str /= 2; // pistolwhipping adds only 1/2 str.
+				_power = _item->getRules()->getMeleePower();
 
-			_power += str;
+			// since melee aliens don't use a conventional weapon type, use their strength instead.
+			if (_unit != NULL
+				&& (_pistolWhip
+					|| _item->getRules()->getBattleType() == BT_MELEE)
+				&& _item->getRules()->isStrengthApplied())
+			{
+				int str = static_cast<int>(Round(
+							static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5)));
+
+				if (_pistolWhip)
+					str /= 2; // pistolwhipping adds only 1/2 str.
+
+				_power += str;
+			}
+			//Log(LOG_INFO) << ". _power(_item) = " << _power;
+
+			// HE, incendiary, smoke or stun bombs create AOE explosions;
+			// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid
+			_areaOfEffect = _pistolWhip == false
+						 && _item->getRules()->getBattleType() != BT_MELEE
+//						 && _item->getRules()->getBattleType() != BT_PSIAMP
+						 && _item->getRules()->getExplosionRadius() > -1;
 		}
-		//Log(LOG_INFO) << ". _power(_item) = " << _power;
-
-		// HE, incendiary, smoke or stun bombs create AOE explosions;
-		// all the rest hits one point: AP, melee (stun or AP), laser, plasma, acid
-		_areaOfEffect = _pistolWhip == false
-					 && _item->getRules()->getBattleType() != BT_MELEE
-					 && _item->getRules()->getBattleType() != BT_PSIAMP
-					 && _item->getRules()->getExplosionRadius() > -1;
 	}
 	else if (_tile != NULL)
 	{
@@ -275,7 +278,7 @@ void ExplosionBState::init()
 		else
 			_parent->popState();
 	}
-	else // create a bullet hit, or melee hit, or psi-hit, or acid spit
+	else // create a bullet hit, or melee hit, or psi-hit, or acid spit hit
 	{
 		//Log(LOG_INFO) << ". . new Explosion(point)";
 		_hit = _pistolWhip
@@ -293,6 +296,7 @@ void ExplosionBState::init()
 
 			if (_item->getRules()->getBattleType() != BT_PSIAMP)
 				sound = -1; // kL, done in ProjectileFlyBState for melee hits.
+
 //			sound = _item->getRules()->getMeleeHitSound(); // this would mute Psi-hit sound.
 		}
 
@@ -304,20 +308,24 @@ void ExplosionBState::init()
 													-1,
 													_parent->getMap()->getSoundAngle(centerPos));
 
-		Explosion* explosion = new Explosion( // animation. Don't burn the tile
-										_center,
-										anim,
-										0,
-										false,
-										_hit);
-		_parent->getMap()->getExplosions()->push_back(explosion);
+		if (_hitSuccess
+			|| _hit == false)
+		{
+			Explosion* explosion = new Explosion( // animation. Don't turn the tile
+											_center,
+											anim,
+											0,
+											false,
+											_hit);
+			_parent->getMap()->getExplosions()->push_back(explosion);
 
-		_parent->setStateInterval(std::max(
-										1,
-										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (10 * _item->getRules()->getExplosionSpeed()))));
+			_parent->setStateInterval(std::max(
+											1,
+											((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (10 * _item->getRules()->getExplosionSpeed()))));
+		}
 
 		Camera* exploCam = _parent->getMap()->getCamera();
-		if (!exploCam->isOnScreen(centerPos)
+		if (exploCam->isOnScreen(centerPos) == false
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{
@@ -415,7 +423,6 @@ void ExplosionBState::explode()
 		&& _item->getRules()->getBattleType() == BT_PSIAMP)
 	{
 		_parent->popState();
-
 		return;
 	}
 
@@ -531,7 +538,7 @@ void ExplosionBState::explode()
 	else if (_item == NULL) // explosion not caused by terrain or an item, must be a cyberdisc
 	{
 		int radius = 6;
-		if (_unit
+		if (_unit != NULL
 			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
 		{
 			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();

@@ -1550,29 +1550,29 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 
 	std::vector<BattleUnit*> spotters;
 	for (std::vector<BattleUnit*>::const_iterator
-			spotter = _battleSave->getUnits()->begin();
-			spotter != _battleSave->getUnits()->end();
-			++spotter)
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
+			++i)
 	{
-		if ((*spotter)->getTimeUnits() < 1
-			|| (*spotter)->getFaction() == _battleSave->getSide()
-			|| (*spotter)->getFaction() == FACTION_NEUTRAL
-			|| (*spotter)->isOut(true, true))
+		if ((*i)->getTimeUnits() < 1
+			|| (*i)->getFaction() == _battleSave->getSide()
+			|| (*i)->getFaction() == FACTION_NEUTRAL
+			|| (*i)->isOut(true, true))
 		{
 			continue;
 		}
 
-		if (((*spotter)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units
-				|| ((*spotter)->getOriginalFaction() == FACTION_PLAYER		// but Mc'd aLiens won't RF on other aLiens ...
-					&& (*spotter)->checkViewSector(unit->getPosition())))
-			&& visible(*spotter, tile))
+		if (((*i)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units
+				|| ((*i)->getOriginalFaction() == FACTION_PLAYER		// but Mc'd aLiens won't RF on other aLiens ...
+					&& (*i)->checkViewSector(unit->getPosition())))
+			&& visible(*i, tile))
 		{
-			//Log(LOG_INFO) << ". check ID " << (*spotter)->getId();
-			if ((*spotter)->getFaction() == FACTION_HOSTILE)
+			//Log(LOG_INFO) << ". check ID " << (*i)->getId();
+			if ((*i)->getFaction() == FACTION_HOSTILE)
 				unit->setTurnsExposed(0);
 
-			//Log(LOG_INFO) << ". reactor ID " << (*spotter)->getId() << ": initi = " << (int)(*spotter)->getInitiative();
-			spotters.push_back(*spotter);
+			//Log(LOG_INFO) << ". reactor ID " << (*i)->getId() << ": initi = " << (int)(*i)->getInitiative();
+			spotters.push_back(*i);
 		}
 	}
 
@@ -1598,18 +1598,18 @@ BattleUnit* TileEngine::getReactor(
 	int highestIniti = -1;
 
 	for (std::vector<BattleUnit*>::iterator
-			spotter = spotters.begin();
-			spotter != spotters.end();
-			++spotter)
+			i = spotters.begin();
+			i != spotters.end();
+			++i)
 	{
-		//Log(LOG_INFO) << ". . nextReactor ID " << (*spotter)->getId();
-		if ((*spotter)->isOut(true, true))
+		//Log(LOG_INFO) << ". . nextReactor ID " << (*i)->getId();
+		if ((*i)->isOut(true, true))
 			continue;
 
-		if ((*spotter)->getInitiative() > highestIniti)
+		if ((*i)->getInitiative() > highestIniti)
 		{
-			highestIniti = static_cast<int>((*spotter)->getInitiative());
-			nextReactor = *spotter;
+			highestIniti = static_cast<int>((*i)->getInitiative());
+			nextReactor = *i;
 		}
 	}
 

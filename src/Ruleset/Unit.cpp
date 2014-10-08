@@ -58,8 +58,8 @@ Unit::~Unit()
 
 /**
  * Loads the unit from a YAML file.
- * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
- * @param node YAML node.
+ * @param node		- YAML node
+ * @param modIndex	- a value that offsets the sounds and sprite values to avoid conflicts
  */
 void Unit::load(
 		const YAML::Node& node,
@@ -109,9 +109,8 @@ void Unit::load(
 }
 
 /**
- * Returns the language string that names
- * this unit. Each unit type has a unique name.
- * @return The unit's name.
+ * Returns the language string that names this unit. Each unit type has a unique name.
+ * @return, the unit's name
  */
 std::string Unit::getType() const
 {
@@ -120,7 +119,7 @@ std::string Unit::getType() const
 
 /**
  * Returns the unit's stats data object.
- * @return The unit's stats.
+ * @return, the unit's stats
  */
 UnitStats* Unit::getStats()
 {
@@ -129,7 +128,7 @@ UnitStats* Unit::getStats()
 
 /**
  * Returns the unit's height at standing.
- * @return The unit's height.
+ * @return, the unit's height
  */
 int Unit::getStandHeight() const
 {
@@ -138,7 +137,7 @@ int Unit::getStandHeight() const
 
 /**
  * Returns the unit's height at kneeling.
- * @return The unit's kneeling height.
+ * @return, the unit's kneeling height
  */
 int Unit::getKneelHeight() const
 {
@@ -147,7 +146,7 @@ int Unit::getKneelHeight() const
 
 /**
  * Returns the unit's floating elevation.
- * @return The unit's floating height.
+ * @return, the unit's floating height
  */
 int Unit::getFloatHeight() const
 {
@@ -156,7 +155,7 @@ int Unit::getFloatHeight() const
 
 /**
  * Gets the unit's armor type.
- * @return The unit's armor type.
+ * @return, the unit's armor type
  */
 std::string Unit::getArmor() const
 {
@@ -165,7 +164,7 @@ std::string Unit::getArmor() const
 
 /**
  * Gets the alien's race.
- * @return The alien's race.
+ * @return, the alien's race
  */
 std::string Unit::getRace() const
 {
@@ -174,7 +173,7 @@ std::string Unit::getRace() const
 
 /**
  * Gets the unit's rank.
- * @return The unit's rank.
+ * @return, the unit's rank
  */
 std::string Unit::getRank() const
 {
@@ -183,7 +182,7 @@ std::string Unit::getRank() const
 
 /**
  * Gets the unit's value - for scoring.
- * @return The unit's value.
+ * @return, the unit's value
  */
 int Unit::getValue() const
 {
@@ -192,7 +191,7 @@ int Unit::getValue() const
 
 /**
  * Gets the unit's death sound.
- * @return The id of the unit's death sound.
+ * @return, the ID of the unit's death sound
  */
 int Unit::getDeathSound() const
 {
@@ -201,7 +200,7 @@ int Unit::getDeathSound() const
 
 /**
  * Gets the unit's move sound.
- * @return The id of the unit's move sound.
+ * @return, the ID of the unit's movement sound
  */
 int Unit::getMoveSound() const
 {
@@ -210,7 +209,7 @@ int Unit::getMoveSound() const
 
 /**
  * Gets the unit's war cry.
- * @return The id of the unit's aggro sound.
+ * @return, the ID of the unit's aggro sound
  */
 int Unit::getAggroSound() const
 {
@@ -219,7 +218,7 @@ int Unit::getAggroSound() const
 
 /**
  * Gets the intelligence. This is the number of turns the AI remembers your troop positions.
- * @return The unit's intelligence.
+ * @return, the unit's intelligence
  */
 int Unit::getIntelligence() const
 {
@@ -228,7 +227,7 @@ int Unit::getIntelligence() const
 
 /**
  * Gets the aggression. Determines the chance of revenge and taking cover.
- * @return The unit's aggression.
+ * @return, the unit's aggression
  */
 int Unit::getAggression() const
 {
@@ -237,7 +236,7 @@ int Unit::getAggression() const
 
 /**
  * Gets the unit's special ability.
- * @return The unit's specab.
+ * @return, the unit's specab
  */
 int Unit::getSpecialAbility() const
 {
@@ -246,7 +245,7 @@ int Unit::getSpecialAbility() const
 
 /**
  * Gets the unit that is spawned when this one dies.
- * @return The unit's spawn unit.
+ * @return, the unit's spawn unit
  */
 std::string Unit::getSpawnUnit() const
 {
@@ -274,7 +273,7 @@ const bool Unit::isLivingWeapon() const
 }
 
 /**
- * Gets this unit's built in melee weapon (if any).
+ * Gets this unit's built in melee weapon if any.
  * @return, the name of the weapon
  */
 const std::string Unit::getMeleeWeapon() const
@@ -297,18 +296,16 @@ const std::vector<std::string>& Unit::getBuiltInWeapons() const
 
 /**
  * kL. Gets if this Unit is a mechanical apparatus.
- *
- * NOTE about _isMechanical
+ * NOTE about _isMechanical:
  * This var subsumes several more detailed ideas:
- * isTrackedVehicle
- * isPsiAttackable / isSentient
- * canRevive (from status_Unconscious)
- * canChangeMorale (see isFearable())
- * isInfectable (can have a spawnUnit string set on it)
- * isMetal (cannot catch fire)
- * canOpenDoors
+ * - isTrackedVehicle
+ * - isPsiAttackable / isSentient <- DONE
+ * - canRevive (from status_Unconscious)
+ * - canChangeMorale (see isFearable())
+ * - isInfectable (can have a spawnUnit string set on it)
+ * - isMetal (cannot catch fire)
+ * - canOpenDoors
  * etc.
- *
  * @return, true if this is a non-organic, purely mechanical unit on the battlefield
  */
 bool Unit::getMechanical() const // kL

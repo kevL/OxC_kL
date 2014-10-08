@@ -344,11 +344,9 @@ void ProjectileFlyBState::init()
 				//Log(LOG_INFO) << ". . . out of hit range, EXIT";
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
 				_parent->popState();
-
-				return;
 			}
-
-			performMeleeAttack();
+			else
+				performMeleeAttack();
 			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 
 			return;

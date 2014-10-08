@@ -68,7 +68,6 @@ bool Explosion::animate()
 	if (_frameDelay > 0)
 	{
 		_frameDelay--;
-
 		return true;
 	}
 
@@ -111,7 +110,7 @@ int Explosion::getCurrentFrame() const
 
 /**
  * Returns flag to indicate if it is a bullet hit (false), or a real explosion (true).
- * @return, true if it is a real explosion; false if it is a bullet, psi, or melee hit.
+ * @return, true if this is a real explosion; false if a bullet, psi, or melee hit
  */
 bool Explosion::isBig() const
 {
@@ -120,7 +119,7 @@ bool Explosion::isBig() const
 
 /**
  * Returns flag to indicate if it is a melee or psi hit.
- * @return, true if it is a melee hit or psi hit
+ * @return, true if this is a melee hit or psi hit
  */
 bool Explosion::isHit() const
 {

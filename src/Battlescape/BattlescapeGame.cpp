@@ -326,7 +326,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	_AIActionCounter = action.number;
 
 	//Log(LOG_INFO) << ". pre hunt for weapon";
-	if (unit->getMainHandWeapon() == NULL)
+	if (unit->getMainHandWeapon() == NULL) // TODO: and, if either no innate meleeWeapon, or a visible hostile is not within say 5 tiles.
 //		|| !unit->getMainHandWeapon()->getAmmoItem() == NULL) // done in getMainHandWeapon()
 	{
 		//Log(LOG_INFO) << ". . no mainhand weapon or no ammo";
@@ -2847,12 +2847,12 @@ void BattlescapeGame::findItem(BattleAction* action)
 			{
 				if (takeItemFromGround(targetItem, action) == 0)						// try to pick it up
 				{
-					if (!targetItem->getAmmoItem())										// if it isn't loaded or it is ammo
+					if (targetItem->getAmmoItem() == NULL)								// if it isn't loaded or it is ammo
 						action->actor->checkAmmo();										// try to load our weapon
 				}
 			}
-			else if (!targetItem->getTile()->getUnit()									// if we're not standing on it, we should try to get to it.
-				|| targetItem->getTile()->getUnit()->isOut(true, true))
+			else if (targetItem->getTile()->getUnit() == NULL							// if nobody's standing on it
+				|| targetItem->getTile()->getUnit()->isOut(true, true))						// we should try to get to it.
 			{
 				action->target = targetItem->getTile()->getPosition();
 				action->type = BA_WALK;
