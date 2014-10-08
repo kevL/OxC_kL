@@ -133,10 +133,12 @@ private:
 		* _numEnergy,
 		* _numHealth,
 		* _numMorale,
-		* _numLayers,
 		* _numAmmoLeft,
 		* _numAmmoRight,
 
+		* _numDir,
+		* _numDirTur,
+		* _numLayers,
 		* _numWounds;
 	Position
 		_cursorPosition,

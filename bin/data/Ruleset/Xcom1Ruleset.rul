@@ -3258,16 +3258,16 @@ armors:
     underArmor: 16
     drawingRoutine: 6
     damageModifier:
-      - 1.0
-      - 1.1
-      - 0.6
-      - 1.0
-      - 0.8
-      - 1.0
-      - 1.1
-      - 1.0
-      - 0.7
-      - 0.5
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.6 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 1.1 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.5 #smoke
     loftempsSet: [ 3 ]
   - type: SNAKEMAN_ARMOR1 #navigator
     spriteSheet: SNAKEMAN.PCK
@@ -3279,16 +3279,16 @@ armors:
     underArmor: 17
     drawingRoutine: 6
     damageModifier:
-      - 1.0
-      - 1.1
-      - 0.6
-      - 1.0
-      - 0.8
-      - 1.0
-      - 1.1
-      - 1.0
-      - 0.7
-      - 0.5
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.6 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 1.1 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.5 #smoke
     loftempsSet: [ 3 ]
   - type: SNAKEMAN_ARMOR2 #engineer
     spriteSheet: SNAKEMAN.PCK
@@ -3300,16 +3300,16 @@ armors:
     underArmor: 18
     drawingRoutine: 6
     damageModifier:
-      - 1.0
-      - 1.1
-      - 0.6
-      - 1.0
-      - 0.8
-      - 1.0
-      - 1.1
-      - 1.0
-      - 0.7
-      - 0.5
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.6 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 1.1 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.5 #smoke
     loftempsSet: [ 3 ]
   - type: SNAKEMAN_ARMOR3 #leader
     spriteSheet: SNAKEMAN.PCK
@@ -3321,16 +3321,16 @@ armors:
     underArmor: 22
     drawingRoutine: 6
     damageModifier:
-      - 1.0
-      - 1.1
-      - 0.6
-      - 1.0
-      - 0.8
-      - 1.0
-      - 1.1
-      - 1.0
-      - 0.7
-      - 0.5
+      - 1.0 #none
+      - 1.1 #ap
+      - 0.6 #in
+      - 1.0 #he
+      - 0.8 #laser
+      - 1.0 #plasma
+      - 1.1 #stun
+      - 1.0 #melee
+      - 0.7 #acid
+      - 0.5 #smoke
     loftempsSet: [ 3 ]
   - type: SNAKEMAN_ARMOR4 #commander
     spriteSheet: SNAKEMAN.PCK
@@ -3493,10 +3493,10 @@ armors:
     drawingRoutine: 7
     damageModifier:
       - 1.0 #none
-      - 1.2 #ap
+      - 1.1 #ap
       - 0.7 #in
       - 0.9 #he
-      - 1.0 #laser
+      - 1.2 #laser
       - 0.9 #plasma
       - 0.8 #stun
       - 0.9 #melee
@@ -9150,7 +9150,7 @@ interfaces:
       - id: icons
         size: [320, 56]
       - id: numLayers
-        color: 15
+        color: 92 #was 15
       - id: warning
         color: 16
         color2: 32

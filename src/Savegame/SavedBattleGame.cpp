@@ -772,8 +772,8 @@ void SavedBattleGame::getTileCoords(
 }
 
 /**
- * Gets the currently selected unit
- * @return Pointer to BattleUnit.
+ * Gets the currently selected unit.
+ * @return, pointer to BattleUnit
  */
 BattleUnit* SavedBattleGame::getSelectedUnit() const
 {
@@ -782,7 +782,7 @@ BattleUnit* SavedBattleGame::getSelectedUnit() const
 
 /**
  * Sets the currently selected unit.
- * @param unit Pointer to BattleUnit.
+ * @param unit - pointer to BattleUnit
  */
 void SavedBattleGame::setSelectedUnit(BattleUnit* unit)
 {

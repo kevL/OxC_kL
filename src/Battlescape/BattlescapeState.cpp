@@ -134,7 +134,7 @@ BattlescapeState::BattlescapeState()
 
 	std::fill_n(
 			_visibleUnit,
-			10,
+			20,
 			(BattleUnit*)(NULL));
 
 	const int
@@ -166,6 +166,8 @@ BattlescapeState::BattlescapeState()
 				visibleMapHeight);
 
 	_numLayers	= new NumberText(3, 5, x + 232, y + 6);
+	_numDir		= new NumberText(3, 5, x + 150, y + 6);
+	_numDirTur	= new NumberText(3, 5, x + 167, y + 6);
 
 	_rank		= new Surface(26, 23, x + 107, y + 33);
 	_kneel		= new Surface( 2,  2, x + 115, y + 19);
@@ -350,6 +352,8 @@ BattlescapeState::BattlescapeState()
 	add(_btnEndTurn, "buttonEndTurn", "battlescape", _icons);
 	add(_btnAbort, "buttonAbort", "battlescape", _icons);
 	add(_btnStats, "buttonStats", "battlescape", _icons);
+	add(_numDir);
+	add(_numDirTur);
 	add(_kneel); // this has to go overtop _btns.
 	add(_txtName, "textName", "battlescape", _icons);
 	add(_numTULaunch);
@@ -474,8 +478,14 @@ BattlescapeState::BattlescapeState()
 	_lstExp->setHighContrast();
 	_lstExp->setColumns(2, 10, 15);
 
-	_numLayers->setColor(Palette::blockOffset(5)+12);
+//	_numLayers->setColor(Palette::blockOffset(5)+12);
 	_numLayers->setValue(1);
+
+	_numDir->setColor(Palette::blockOffset(5)+12);
+	_numDir->setValue(0);
+
+	_numDirTur->setColor(Palette::blockOffset(5)+12);
+	_numDirTur->setValue(0);
 
 	_rank->setVisible(false);
 	_kneel->setVisible(false);
@@ -2308,11 +2318,10 @@ bool BattlescapeState::playableUnitSelected()
 
 /**
  * Updates a unit's onScreen stats & info.
+ * @param calcFoV - true to run calculateFOV() for the unit
  */
 void BattlescapeState::updateSoldierInfo(bool calcFoV)
 {
-	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo( " << calcFoV << " )";
-
 	for (int // remove red target indicators
 			i = 0;
 			i < VISIBLE_MAX;
@@ -2335,6 +2344,8 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_numAmmoLeft		->setVisible(false);
 
 	_kneel		->setVisible(false);
+	_numDir		->setVisible(false);
+	_numDirTur	->setVisible(false);
 
 	_numTULaunch->setVisible(false);
 	_numTUAim	->setVisible(false);
@@ -2345,10 +2356,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_btnWounds	->setVisible(false);
 
 
-	bool isPlayable = playableUnitSelected(); // not aLien or civilian; ie. xCom Soldier
-	//Log(LOG_INFO) << ". isPlayable = " << isPlayable;
-
-	if (!isPlayable) // not xCom Soldier; ie. aLien or civilian
+	if (playableUnitSelected() == false) // not xCom Soldier; ie. aLien or civilian turn
 	{
 		_txtName->setText(L"");
 
@@ -2372,7 +2380,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		_barMorale		->setVisible(false);
 		_barMorale		->setVisible(false);
 
-		//Log(LOG_INFO) << ". . return";
 		return;
 	}
 	else // not aLien or civilian; ie. xCom Soldier
@@ -2397,17 +2404,10 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	BattleUnit* selectedUnit = NULL;
-	if (_save->getSelectedUnit())
-	{
-		//Log(LOG_INFO) << ". . selectedUnit ID " << selectedUnit->getId();
-		selectedUnit = _save->getSelectedUnit();
-	}
-	else // safety.
-	{
-		//Log(LOG_INFO) << ". . selectedUnit = NULL return";
+	BattleUnit* selectedUnit = _save->getSelectedUnit();
+
+	if (selectedUnit == NULL)
 		return;
-	}
 
 
 	if (calcFoV)
@@ -2445,6 +2445,15 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 			_kneel->drawRect(0, 0, 2, 2, Palette::blockOffset(5)+12);
 			_kneel->setVisible();
 		}
+	}
+
+	_numDir->setValue(selectedUnit->getDirection());
+	_numDir->setVisible();
+
+	if (selectedUnit->getTurretType() > -1)
+	{
+		_numDirTur->setValue(selectedUnit->getTurretDirection());
+		_numDirTur->setVisible();
 	}
 
 /*	int wounds = selectedUnit->getFatalWounds();
