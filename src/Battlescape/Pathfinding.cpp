@@ -152,9 +152,9 @@ void Pathfinding::calculate(
 
 		if (_movementType == MT_FLY
 			&& _modALT //(SDL_GetModState() & KMOD_ALT) != 0 // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
-			&& (unit->getType() == "SOLDIER"
-				|| (unit->getUnitRules()
-					&& unit->getUnitRules()->getMechanical() == false))
+			&& (unit->getGeoscapeSoldier() != NULL
+//				|| (unit->getUnitRules() &&
+				|| unit->getUnitRules()->getMechanical() == false)
 //			&& unit->getTurretType() == -1					// hovertanks always hover.
 			&& unit->getRaceString() != "STR_FLOATER"		// floaters always float
 			&& unit->getRaceString() != "STR_CELATID")		// celatids always .. float.
@@ -2012,7 +2012,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		hathStood	= false,
 		dash		= Options::strafe
 						&& _modCTRL
-						&& _unit->getType() == "SOLDIER"
+						&& _unit->getGeoscapeSoldier() != NULL
 //						&& size == 0
 						&& (_strafeMove == false
 							|| (_strafeMove == true

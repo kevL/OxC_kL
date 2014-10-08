@@ -786,7 +786,8 @@ void Map::drawTerrain(Surface* surface)
 								// also, make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 								// ... should probably be a subfunction
 								if (bu != _save->getSelectedUnit()
-									&& bu->getUnitRules() == NULL)
+									&& bu->getGeoscapeSoldier() != NULL)
+//									&& bu->getUnitRules() == NULL)
 //									&& bu->getType() == "SOLDIER")
 //									&& bu->getFaction() == FACTION_PLAYER
 //									&& bu->getTurretType() == -1) // no tanks, pls
@@ -1325,7 +1326,8 @@ void Map::drawTerrain(Surface* surface)
 								BattleUnit* buBelow = tileBelow->getUnit();
 								if (buBelow != NULL
 									&& buBelow != _save->getSelectedUnit()
-									&& buBelow->getUnitRules() == NULL)
+									&& buBelow->getGeoscapeSoldier() != NULL)
+//									&& buBelow->getUnitRules() == NULL)
 //									&& buBelow->getFaction() == FACTION_PLAYER
 //									&& buBelow->getTurretType() == -1) // no tanks, pls
 								{
@@ -1563,7 +1565,8 @@ void Map::drawTerrain(Surface* surface)
 										|| _camera->getViewLevel() == itZ))
 								{
 									if (unit != _save->getSelectedUnit()
-										&& unit->getUnitRules() == NULL)
+										&& unit->getGeoscapeSoldier() != NULL)
+//										&& unit->getUnitRules() == NULL)
 										//unit != dynamic_cast<BattleUnit*>(_save->getSelectedUnit());
 //										&& unit->getFaction() == FACTION_PLAYER
 //										&& unit->getTurretType() == -1) // no tanks, pls

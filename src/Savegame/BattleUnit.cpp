@@ -1351,8 +1351,8 @@ int BattleUnit::damage(
 	if (power > 0)
 	{
 		if (type == DT_STUN
-			&& (_type == "SOLDIER"	// note that this should be obviated in the rules for Armor damage vulnerability.
-				|| (_unitRules		// Rather than here
+			&& (_geoscapeSoldier != NULL	// note that this should be obviated in the rules for Armor damage vulnerability.
+				|| (_unitRules				// Rather than here
 					&& _unitRules->getMechanical() == false
 					&& _race != "STR_ZOMBIE")))
 		{
@@ -1379,7 +1379,7 @@ int BattleUnit::damage(
 			else
 			{
 				if ( //_armor->getSize() == 1 &&					// add some stun to not-large units
-					_type == "SOLDIER"								// add some stun to xCom agents
+					_geoscapeSoldier != NULL						// add some stun to xCom agents
 						|| (_unitRules
 							&& _unitRules->getMechanical() == false	// or to non-mechanical units
 							&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
@@ -1415,7 +1415,7 @@ int BattleUnit::damage(
 		&& _visible
 		&& _status != STATUS_UNCONSCIOUS
 		&& type != DT_STUN
-		&& (_type == "SOLDIER"
+		&& (_geoscapeSoldier != NULL
 			|| (_unitRules
 				&& _unitRules->getMechanical() == false)))
 	{
@@ -1436,13 +1436,13 @@ void BattleUnit::playHitSound() // kL
 {
 	int sound = -1;
 
-	if (getType() == "MALE_CIVILIAN")
+	if (_type == "MALE_CIVILIAN")
 		sound = RNG::generate(41, 43);
-	else if (getType() == "FEMALE_CIVILIAN")
+	else if (_type == "FEMALE_CIVILIAN")
 		sound = RNG::generate(44, 46);
-	else if (getOriginalFaction() == FACTION_PLAYER) // getType() == "SOLDIER")
+	else if (_originalFaction == FACTION_PLAYER) // getType() == "SOLDIER")
 	{
-		if (getGender() == GENDER_MALE)
+		if (_gender == GENDER_MALE)
 		{
 			sound = RNG::generate(141, 151);
 			//Log(LOG_INFO) << "death Male, sound = " << sound;
@@ -2135,7 +2135,7 @@ void BattleUnit::prepareUnitTurn()
 //		if (_turretType == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
 		if (_faction == FACTION_PLAYER)
 		{
-			if (_type == "SOLDIER")
+			if (_geoscapeSoldier != NULL)
 			{
 				if (isKneeled())
 					enron /= 2;
@@ -2199,7 +2199,7 @@ void BattleUnit::prepareUnitTurn()
 	if (_stunLevel > 0 // note ... mechanical creatures should no longer be getting stunned.
 		&& (_armor->getSize() == 1
 			|| isOut() == false)
-		&& (_type == "SOLDIER"
+		&& (_geoscapeSoldier != NULL
 			|| (_unitRules
 				&& _unitRules->getMechanical() == false)))
 	{
@@ -2217,7 +2217,7 @@ void BattleUnit::prepareUnitTurn()
 				_status = STATUS_BERSERK;	// or shoot stuff.
 		}
 		else if (panic > 0			// successfully avoided Panic
-			&& _type == "SOLDIER")
+			&& _geoscapeSoldier != NULL)
 		{
 			_expBravery++;
 		}
@@ -3230,7 +3230,7 @@ std::wstring BattleUnit::getName(
 		Language* lang,
 		bool debugAppendId) const
 {
-	if (_type != "SOLDIER"
+	if (_geoscapeSoldier == NULL
 		&& lang != NULL)
 	{
 		std::wstring ret;
@@ -3337,7 +3337,7 @@ int BattleUnit::getMoveSound() const
  */
 bool BattleUnit::isWoundable() const
 {
-	return _type == "SOLDIER"
+	return _geoscapeSoldier != NULL
 		|| (Options::alienBleeding
 			&& _unitRules
 			&& _unitRules->getMechanical() == false
@@ -3354,9 +3354,9 @@ bool BattleUnit::isWoundable() const
 bool BattleUnit::isFearable() const
 {
 //	return (_armor->getSize() == 1);
-	return _type == "SOLDIER"
-		|| (_unitRules
-			&& _unitRules->getMechanical() == false
+	return _geoscapeSoldier != NULL
+//		|| (_unitRules &&
+		|| (_unitRules->getMechanical() == false
 			&& _race != "STR_ZOMBIE");
 }
 
@@ -4061,7 +4061,7 @@ bool BattleUnit::isSelectable(
 bool BattleUnit::hasInventory() const
 {
 //	return _armor->getSize() == 1
-	return _type == "SOLDIER"
+	return _geoscapeSoldier != NULL
 		|| (_unitRules
 			&& _unitRules->getMechanical() == false
 			&& _rank != "STR_LIVE_TERRORIST");

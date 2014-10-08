@@ -258,7 +258,8 @@ void UnitDieBState::think()
 																			_unit->getGender())
 																		.arg(_unit->getName(game->getLanguage())))); */
 //			if (_unit->getArmor()->getSize() == 1)
-			if (_unit->getType() == "SOLDIER")
+//			if (_unit->getType() == "SOLDIER")
+			if (_unit->getGeoscapeSoldier() != NULL)
 			{
 				std::string message;
 

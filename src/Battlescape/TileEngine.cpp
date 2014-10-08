@@ -1621,7 +1621,7 @@ BattleUnit* TileEngine::getReactor(
 	if (nextReactor
 		&& highestIniti > static_cast<int>(defender->getInitiative(tuSpent)))
 	{
-		if (nextReactor->getType() == "SOLDIER"
+		if (nextReactor->getGeoscapeSoldier() != NULL
 			&& nextReactor->getFaction() == nextReactor->getOriginalFaction())
 //			&& nextReactor->getOriginalFaction() == FACTION_PLAYER
 //			&& nextReactor->getFaction() == FACTION_PLAYER
@@ -2168,7 +2168,7 @@ BattleUnit* TileEngine::hit(
 				if (melee == false											// not melee
 					&& buTarget->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not.
 					&& attacker												// shooter exists
-					&& attacker->getType() == "SOLDIER"
+					&& attacker->getGeoscapeSoldier() != NULL
 					&& attacker->getFaction() == attacker->getOriginalFaction())
 //					&& attacker->getOriginalFaction() == FACTION_PLAYER		// shooter is Xcom
 //					&& attacker->getFaction() == FACTION_PLAYER				// shooter is not Mc'd Xcom
@@ -2875,7 +2875,7 @@ void TileEngine::explode(
 								targetUnit->killedBy(attacker->getFaction());
 							}
 
-							if (attacker->getType() == "SOLDIER"
+							if (attacker->getGeoscapeSoldier() != NULL
 								&& attacker->getFaction() == attacker->getOriginalFaction()
 //								&& attacker->getOriginalFaction() == FACTION_PLAYER		// shooter is Xcom
 //								&& attacker->getFaction() == FACTION_PLAYER				// shooter is not Mc'd Xcom
@@ -5532,7 +5532,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 //				if (victim->getTurretType() == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
 //				{
 //				if (victim->getOriginalFaction() == FACTION_PLAYER)
-				if (victim->getType() == "SOLDIER")
+				if (victim->getGeoscapeSoldier() != NULL)
 				{
 					if (victim->isKneeled())
 						enron /= 2;

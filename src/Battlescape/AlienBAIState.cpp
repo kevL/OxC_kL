@@ -2427,42 +2427,53 @@ bool AlienBAIState::psiAction()
 //	RuleItem* psiWeaponRules = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
 	RuleItem* itemRule = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
 
-	bool LOSRequired = itemRule->isLOSRequired();
-
 	int tuCost = itemRule->getTUUse();
 	if (itemRule->getFlatRate() == false)
 		tuCost = static_cast<int>(floor(static_cast<float>(_unit->getStats()->tu * tuCost) / 100.f));
 	//Log(LOG_INFO) << "AlienBAIState::psiAction() tuCost = " << tuCost;
 
-	if (_unit->getTimeUnits() < _escapeTUs + tuCost) // has the required TUs and can still make it to cover
+	if (_unit->getTimeUnits() < _escapeTUs + tuCost) // check if aLien has the required TUs and can still make it to cover
+	{
 		//Log(LOG_INFO) << ". not enough Tu, EXIT";
 		return false;
+	}
 	else // do it.
 	{
-		_aggroTarget = NULL;
+		const bool LOSRequired = itemRule->isLOSRequired();
+		const int
+			LoS_mult = 50, // increase chance of attack against a unit that is currently in LoS.
+			attackStr = static_cast<int>(floor(
+							static_cast<double>(_unit->getStats()->psiStrength * _unit->getStats()->psiSkill) / 50.0));
+		//Log(LOG_INFO) << ". . attackStr = " << attackStr << " ID = " << _unit->getId();
 
 		bool bLoS = false;
 		int
 			chance = 0,
-			chance2 = 0,
-			LoS_mult = 46;
+			chance2 = 0;
 
-		int attackStr = static_cast<int>(floor(
-							static_cast<float>(_unit->getStats()->psiStrength * _unit->getStats()->psiSkill) / 50.f));
-		//Log(LOG_INFO) << ". . attackStr = " << attackStr << " ID = " << _unit->getId();
+		_aggroTarget = NULL;
 
 		for (std::vector<BattleUnit*>::const_iterator
 				i = _save->getUnits()->begin();
 				i != _save->getUnits()->end();
 				++i)
 		{
-			if ((*i)->getOriginalFaction() == FACTION_PLAYER	// they must be player units
-				&& (*i)->getUnitRules() == NULL					// and not tanks
+			if ((*i)->getUnitRules()
+				&& (*i)->getUnitRules()->getPsiImmune())
+			{
+				continue;
+			}
+
+			// kL_note: aLiens should try to attack their own MC'd units now ....... DANGER mode.
+//			if ((*i)->getGeoscapeSoldier() != NULL
+//				&& (*i)->getFaction() == (*i)->getOriginalFaction()
+//			if ((*i)->getOriginalFaction() == FACTION_PLAYER	// they must be player units
+//				&& (*i)->getUnitRules() == NULL					// and not tanks or MC'd aLiens
 //				&& (*i)->getArmor()->getSize() == 1				// don't target tanks
-				&& validTarget(									// will check for Mc, Exposed, etc.
-							*i,
-							true,
-							false)
+			if (validTarget(									// will check for Mc, Exposed, etc.
+						*i,
+						true,
+						false)
 				&& (LOSRequired == false
 					|| std::find(
 							_unit->getVisibleUnits()->begin(),
@@ -2527,10 +2538,10 @@ bool AlienBAIState::psiAction()
 			chance -= LoS_mult;
 
 		if (_aggroTarget == NULL									// if not target
-			|| (_aggroTarget->getUnitRules()						// or target is Psi-Immune
-				&& _aggroTarget->getUnitRules()->getPsiImmune())
-			|| chance < 23											// or chance of success is too low
-			|| RNG::percent(13))									// or aLien just don't feel like it... do FALSE.
+//			|| (_aggroTarget->getUnitRules()						// or target is Psi-Immune
+//				&& _aggroTarget->getUnitRules()->getPsiImmune())
+			|| chance < 25											// or chance of success is too low
+			|| RNG::percent(15))									// or aLien just don't feel like it... do FALSE.
 		{
 			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False : not good.";
 			return false;
@@ -2555,7 +2566,7 @@ bool AlienBAIState::psiAction()
 
 		//if (_traceAI) Log(LOG_INFO) << "making a psionic attack this turn";
 
-		int morale = _aggroTarget->getMorale();
+		const int morale = _aggroTarget->getMorale();
 		if (morale > 0)		// panicAtk is valid since target has morale to chew away
 //			&& chance < 30)	// esp. when aLien atkStr is low
 		{
@@ -2642,7 +2653,7 @@ bool AlienBAIState::validTarget(
 	if (includeCivs)
 		return true;
 
-	return unit->getFaction() == FACTION_PLAYER;
+	return (unit->getFaction() == FACTION_PLAYER);
 }
 
 /**

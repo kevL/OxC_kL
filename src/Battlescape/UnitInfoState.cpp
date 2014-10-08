@@ -560,12 +560,13 @@ void UnitInfoState::init()
 	std::wostringstream ss;
 
 	int minPsi = 0;
-	if (_unit->getType() == "SOLDIER")
+	if (_unit->getGeoscapeSoldier() != NULL)
 	{
 		ss << tr(_unit->getRankString());
 		ss << " ";
 
-		minPsi = _game->getSavedGame()->getSoldier(_unit->getId())->getRules()->getMinStats().psiSkill - 1; // kL, shit..
+		minPsi = _unit->getGeoscapeSoldier()->getRules()->getMinStats().psiSkill - 1;
+//		minPsi = _game->getSavedGame()->getSoldier(_unit->getId())->getRules()->getMinStats().psiSkill - 1; // kL, shit..
 	}
 	ss << _unit->getName(_game->getLanguage(), BattlescapeGame::_debugPlay);
 	_txtName->setBig();
@@ -662,7 +663,7 @@ void UnitInfoState::init()
 	_numStrength->setText(ss.str());
 
 
-	if (_unit->getType() != "SOLDIER"
+	if (_unit->getGeoscapeSoldier() == NULL
 		|| _unit->getStats()->psiSkill > minPsi
 		|| (Options::psiStrengthEval
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))

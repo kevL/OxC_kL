@@ -603,8 +603,10 @@ void InventoryState::updateStats()
 			_txtMelee->setText(tr("STR_MELEEACC_SHORT").arg(unit->getStats()->melee));
 
 			int minPsi = 0;
-			if (unit->getType() == "SOLDIER")
-				minPsi = _game->getSavedGame()->getSoldier(unit->getId())->getRules()->getMinStats().psiSkill - 1;
+			if (unit->getGeoscapeSoldier() != NULL)
+				minPsi = unit->getGeoscapeSoldier()->getRules()->getMinStats().psiSkill - 1;
+//			if (unit->getType() == "SOLDIER")
+//				minPsi = _game->getSavedGame()->getSoldier(unit->getId())->getRules()->getMinStats().psiSkill - 1;
 
 			int psiSkill = unit->getStats()->psiSkill;
 			if (psiSkill > minPsi)

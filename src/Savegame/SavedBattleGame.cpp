@@ -1863,9 +1863,9 @@ void SavedBattleGame::reviveUnconsciousUnits()
 			i != getUnits()->end();
 			++i)
 	{
-		if ((*i)->getType() == "SOLDIER"
-			|| ((*i)->getUnitRules()
-				&& (*i)->getUnitRules()->getMechanical() == false
+		if ((*i)->getGeoscapeSoldier() != NULL
+//			|| ((*i)->getUnitRules() &&
+			|| ((*i)->getUnitRules()->getMechanical() == false
 				&& (*i)->getArmor()->getSize() == 1))
 		{
 			Position originalPosition = (*i)->getPosition();

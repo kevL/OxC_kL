@@ -1708,10 +1708,10 @@ void BattlescapeState::btnInventoryClick(Action*)
 		const BattleUnit* const unit = _save->getSelectedUnit();
 
 		if (_save->getDebugMode()
-			|| (unit->getType() == "SOLDIER"
-			|| (unit->getUnitRules()
-				&& unit->getUnitRules()->getMechanical() == false
-				&& unit->getType() != "STR_LIVE_TERRORIST")))
+			|| (unit->getGeoscapeSoldier() != NULL
+//				|| (unit->getUnitRules() &&
+				|| (unit->getUnitRules()->getMechanical() == false
+					&& unit->getType() != "STR_LIVE_TERRORIST")))
 		{
 			// clean up the waypoints
 			if (_battleGame->getCurrentAction()->type == BA_LAUNCH)
@@ -3761,7 +3761,7 @@ void BattlescapeState::updateExpData() // kL
 	BattleUnit* unit = _save->getSelectedUnit();
 
 	if (unit == NULL
-		|| unit->getType() != "SOLDIER")
+		|| unit->getGeoscapeSoldier() == NULL)
 //		|| unit->getOriginalFaction() != FACTION_PLAYER
 //		|| unit->getTurretType() > -1)
 	{

@@ -514,7 +514,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 
 /**
  * Toggles the Kneel/Standup status of the unit.
- * @param bu - pointer to a unit
+ * @param bu - pointer to a BattleUnit
  * @return, true if the action succeeded
  */
 bool BattlescapeGame::kneel(
@@ -522,9 +522,9 @@ bool BattlescapeGame::kneel(
 		bool calcFoV)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::kneel()";
-	if (bu->getType() == "SOLDIER")
+	if (bu->getGeoscapeSoldier() != NULL)
 	{
-		if (!bu->isFloating()) // kL_note: This prevents flying soldiers from 'kneeling' .....
+		if (bu->isFloating() == false) // kL_note: This prevents flying soldiers from 'kneeling' .....
 		{
 			int tu = 4;
 			if (bu->isKneeled())
@@ -536,7 +536,7 @@ bool BattlescapeGame::kneel(
 			{
 				if (bu->spendTimeUnits(tu))
 				{
-					bu->kneel(!bu->isKneeled());
+					bu->kneel(bu->isKneeled() == false);
 					// kneeling or standing up can reveal new terrain or units. I guess. -> sure can!
 					// but updateSoldierInfo() also does does calculateFOV(), so ...
 //					getTileEngine()->calculateFOV(bu);
@@ -688,9 +688,9 @@ void BattlescapeGame::endGameTurn()
 			tile = (*i)->getTile(); // TODO: corpse_items -> unit
 			if (tile != NULL
 				&& (*i)->getHealth() > 0
-				&& ((*i)->getType() == "SOLDIER"
-					|| ((*i)->getUnitRules()
-						&& (*i)->getUnitRules()->getMechanical() == false)))
+				&& ((*i)->getGeoscapeSoldier() != NULL
+//					|| ((*i)->getUnitRules() &&
+					|| (*i)->getUnitRules()->getMechanical() == false))
 			{
 				tile->endTileTurn(); // smoke & fire stuff.
 			}
@@ -838,7 +838,7 @@ void BattlescapeGame::checkForCasualties(
 
 	// Fetch the murder weapon
 	if (slayer
-		&& slayer->getGeoscapeSoldier())
+		&& slayer->getGeoscapeSoldier() != NULL)
 	{
 		if (weapon)
 		{
@@ -893,7 +893,7 @@ void BattlescapeGame::checkForCasualties(
 		// Awards: decide victim race and rank
 		if (victim->getOriginalFaction() == FACTION_PLAYER)			// xCom:
 		{
-			if (victim->getGeoscapeSoldier())						// Soldiers
+			if (victim->getGeoscapeSoldier() != NULL)				// Soldiers
 			{
 				killStatRank = victim->getGeoscapeSoldier()->getRankString();
 				killStatRace = "STR_HUMAN";
@@ -926,7 +926,7 @@ void BattlescapeGame::checkForCasualties(
 			//Log(LOG_INFO) << ". DEAD victim = " << victim->getId();
 
 			// slayer's Morale Bonus & diary ->
-			if (slayer)
+			if (slayer != NULL)
 			{
 				(*casualty)->killedBy(slayer->getFaction()); // used in DebriefingState.
 
@@ -1783,8 +1783,8 @@ bool BattlescapeGame::checkReservedTU(
 	}
 
 	const int tuKneel = (_save->getKneelReserved()
-							&& !bu->isKneeled()
-							&& bu->getType() == "SOLDIER")? 4
+							&& bu->isKneeled() == false
+							&& bu->getGeoscapeSoldier() != NULL)? 4
 						: 0;
 
 	// if no aimed shot is available, revert to none.

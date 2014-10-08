@@ -4766,7 +4766,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1412764676 f:\git\openxcom\src\savegame\battleunit.h
+1412799057 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -6408,7 +6408,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1412657191 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1412794780 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6771,7 +6771,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1412657191 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1412795010 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6805,7 +6805,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1412612379 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1412795098 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6847,7 +6847,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1410953367 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1412795268 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	<sstream>
 	"BattlescapeGame.h"

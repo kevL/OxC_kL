@@ -922,7 +922,7 @@ private:
 		/// call this after the default copy constructor deletes the cache
 		void invalidateCache();
 
-		///
+		/// Gets a BattleUnit's rules.
 		Unit* getUnitRules() const
 		{
 			return _unitRules;
@@ -931,11 +931,11 @@ private:
 		/// get the vector of units we've seen this turn.
 		std::vector<BattleUnit*>& getUnitsSpottedThisTurn();
 
-		/// set the rank integer
+		/// Sets the rank integer.
 		void setRankInt(int rank);
-		/// get the rank integer
+		/// Gets the rank integer.
 		int getRankInt() const;
-		/// derive a rank integer based on rank string (for xcom soldiers ONLY)
+		/// Derives a rank integer based on rank string (for xcom soldiers ONLY)
 		void deriveRank();
 
 		/// this function checks if a tile is visible, using maths.
