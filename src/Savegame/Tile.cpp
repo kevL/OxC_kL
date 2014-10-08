@@ -380,7 +380,7 @@ bool Tile::isBigWall() const
 
 /**
  * If an object stands on this tile, this returns how high the unit is standing.
- * @return the level in pixels
+ * @return, the level in pixels
  */
 int Tile::getTerrainLevel() const
 {
@@ -389,8 +389,10 @@ int Tile::getTerrainLevel() const
 	if (_objects[MapData::O_FLOOR])
 		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
 
-	if (_objects[MapData::O_OBJECT])
-		level += _objects[MapData::O_OBJECT]->getTerrainLevel();
+	if (_objects[MapData::O_OBJECT]) // kL_note: wait, aren't these negative=high
+		level = std::max(
+						level,
+						_objects[MapData::O_OBJECT]->getTerrainLevel());
 
 	return level;
 }

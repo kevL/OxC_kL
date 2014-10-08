@@ -212,7 +212,7 @@ void UnitWalkBState::think()
 		else if (_onScreen) // still walking ... make sure the unit sprites are up to date
 		{
 			//Log(LOG_INFO) << ". _onScreen : still walking ...";
-			if (_pf->getStrafeMove())
+			if (_pf->getStrafeMove()) // NOTE: This could be trimmed, because I had to make tanks use getFaceDirection() in UnitSprite::drawRoutine2() anyway ...
 			{
 				//Log(LOG_INFO) << ". WALKING strafe, unitDir = " << _unit->getDirection();
 				//Log(LOG_INFO) << ". WALKING strafe, faceDir = " << _unit->getFaceDirection();
