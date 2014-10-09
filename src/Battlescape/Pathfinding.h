@@ -167,7 +167,7 @@ private:
 				const int dir,
 				Position* endPos,
 				BattleUnit* unit,
-				BattleUnit* target,
+				BattleUnit* missileTarget,
 				bool missile);
 		/// Gets _totalTUCost; finds out whether we can hike somewhere in this turn or not.
 		int getTotalTUCost() const

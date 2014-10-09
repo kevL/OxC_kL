@@ -51,8 +51,8 @@ int
 
 
 /**
- * Sets up a Pathfinding.
- * @param save pointer to SavedBattleGame object.
+ * Sets up a Pathfinding object.
+ * @param save - pointer to SavedBattleGame.
  */
 Pathfinding::Pathfinding(SavedBattleGame* save)
 	:
@@ -96,8 +96,8 @@ Pathfinding::~Pathfinding()
 
 /**
  * Gets the Node on a given position on the map.
- * @param pos Position.
- * @return Pointer to node.
+ * @param pos - reference the Position
+ * @return, pointer to PathfindingNode
  */
 PathfindingNode* Pathfinding::getNode(const Position& pos)
 {
@@ -106,16 +106,16 @@ PathfindingNode* Pathfinding::getNode(const Position& pos)
 
 /**
  * Calculates the shortest path; tries bresenham then A* paths.
- * @param unit				- pointer to a unit
- * @param endPos			- destination position
- * @param target			- pointer to a targeted unit
- * @param maxTUCost			- maximum time units this path can cost
- * @param strafeRejected	- true if path needs to be recalculated w/out strafe
+ * @param unit				- pointer to a BattleUnit
+ * @param endPos			- destination Position
+ * @param missileTarget		- pointer to a targeted BattleUnit (default NULL)
+ * @param maxTUCost			- maximum time units this path can cost (default 1000)
+ * @param strafeRejected	- true if path needs to be recalculated w/out strafe (default false)
  */
 void Pathfinding::calculate(
 		BattleUnit* unit,
 		Position endPos,
-		BattleUnit* target,
+		BattleUnit* missileTarget,
 		int maxTUCost,
 		bool strafeRejected) // kL_add.
 {
@@ -140,7 +140,7 @@ void Pathfinding::calculate(
 		return;
 	}
 
-	if (target != NULL
+	if (missileTarget != NULL
 		&& maxTUCost == -1) // pathfinding for missile
 	{
 		maxTUCost = 10000;
@@ -171,11 +171,11 @@ void Pathfinding::calculate(
 	if (isBlocked( // check if destination is blocked
 				destTile,
 				MapData::O_FLOOR,
-				target)
+				missileTarget)
 		|| isBlocked(
 				destTile,
 				MapData::O_OBJECT,
-				target))
+				missileTarget))
 	{
 		return;
 	}
@@ -251,7 +251,7 @@ void Pathfinding::calculate(
 									destTile,
 									testTile,
 									dir[i],
-									target))
+									missileTarget))
 					{
 						return;
 					}
@@ -259,7 +259,7 @@ void Pathfinding::calculate(
 					{
 						BattleUnit* testUnit = testTile->getUnit();
 						if (testUnit != unit
-							&& testUnit != target
+							&& testUnit != missileTarget
 							&& testUnit->getVisible())
 						{
 							return;
@@ -305,7 +305,7 @@ void Pathfinding::calculate(
 		&& bresenhamPath(
 					startPos,
 					endPos,
-					target,
+					missileTarget,
 					sneak))
 	{
 		//Log(LOG_INFO) << "bresenhamPath";
@@ -321,13 +321,13 @@ void Pathfinding::calculate(
 			calculate(
 					unit,
 					endPos2,
-					target,
+					missileTarget,
 					maxTUCost,
 					true);
 
 			BattleAction* action = _save->getBattleGame()->getCurrentAction();
 			action->strafe = false;
-			action->run = true;
+			action->dash = true;
 			action->actor->setDashing(true);
 				// why these things were set up in BattlescapeGame::primaryAction()
 				// rather than here I don't know ....
@@ -348,7 +348,7 @@ void Pathfinding::calculate(
 	if (!aStarPath( // now try through A*
 				startPos,
 				endPos,
-				target,
+				missileTarget,
 				sneak,
 				maxTUCost))
 	{
@@ -367,13 +367,13 @@ void Pathfinding::calculate(
 			calculate(
 					unit,
 					endPos2,
-					target,
+					missileTarget,
 					maxTUCost,
 					true);
 
 			BattleAction* action = _save->getBattleGame()->getCurrentAction();
 			action->strafe = false;
-			action->run = true;
+			action->dash = true;
 			action->actor->setDashing(true);
 				// why these things were set up in BattlescapeGame::primaryAction()
 				// rather than here I don't know ....
@@ -386,17 +386,17 @@ void Pathfinding::calculate(
 /**
  * Calculates the shortest path using Brensenham path algorithm.
  * @note This only works in the X/Y plane.
- * @param origin The position to start from.
- * @param target The position we want to reach.
- * @param targetUnit Target of the path.
- * @param sneak Is the unit sneaking?
- * @param maxTUCost Maximum time units the path can cost.
- * @return True if a path exists, false otherwise.
+ * @param origin		- reference the position to start from
+ * @param target		- reference the position to end at
+ * @param missileTarget	- pointer to targeted BattleUnit
+ * @param sneak			- true if unit is sneaking (default false)
+ * @param maxTUCost		- maximum time units the path can cost (default 1000)
+ * @return, true if a path is found
  */
 bool Pathfinding::bresenhamPath(
 		const Position& origin,
 		const Position& target,
-		BattleUnit* targetUnit,
+		BattleUnit* missileTarget,
 		bool sneak,
 		int maxTUCost)
 {
@@ -500,8 +500,8 @@ bool Pathfinding::bresenhamPath(
 								dir,
 								&nextPoint,
 								_unit,
-								targetUnit,
-								(targetUnit && maxTUCost == 10000));
+								missileTarget,
+								(missileTarget && maxTUCost == 10000));
 			//Log(LOG_INFO) << ". TU Cost = " << tuCost;
 
 			if (sneak
@@ -521,21 +521,21 @@ bool Pathfinding::bresenhamPath(
 				&& (tuCost == lastTUCost
 					|| (isDiagonal
 						&& tuCost == lastTUCostDiagonal)
-					|| (!isDiagonal
+					|| (isDiagonal == false
 						&& tuCostDiagonal == lastTUCost)
 					|| lastTUCost == -1)
-				&& !isBlocked(
+				&& isBlocked(
 						_save->getTile(lastPoint),
 						_save->getTile(nextPoint),
 						dir,
-						targetUnit))
+						missileTarget) == false)
 			{
 				_path.push_back(dir);
 			}
 			else
 				return false;
 
-			if (targetUnit == NULL
+			if (missileTarget == NULL
 				&& tuCost != 255)
 			{
 				lastTUCost = tuCost;
@@ -573,21 +573,21 @@ bool Pathfinding::bresenhamPath(
  * The path information is set only if a valid path is found.
  * @param startPosition	- reference the position to start from
  * @param endPosition	- reference the position to end at
- * @param target		- pointer to a targetUnit of the path
- * @param sneak			- true if the unit is 'sneaking'
- * @param maxTUCost		- maximum time units this path can cost
- * @return, true if a path exists
+ * @param missileTarget	- pointer to targeted BattleUnit
+ * @param sneak			- true if the unit is sneaking (default false)
+ * @param maxTUCost		- maximum time units this path can cost (default 1000)
+ * @return, true if a path is found
  */
 bool Pathfinding::aStarPath(
 		const Position& startPosition,
 		const Position& endPosition,
-		BattleUnit* target,
+		BattleUnit* missileTarget,
 		bool sneak,
 		int maxTUCost)
 {
 	//Log(LOG_INFO) << "Pathfinding::aStarPath()";
 
-	// reset every node, so we have to check them all
+	// reset every node, so have to check them all
 	for (std::vector<PathfindingNode>::iterator
 			i = _nodes.begin();
 			i != _nodes.end();
@@ -596,22 +596,22 @@ bool Pathfinding::aStarPath(
 		i->reset();
 	}
 
-	// start position is the first one in our "open" list
+	// start position is the first one in the "open" list
 	PathfindingNode* start = getNode(startPosition);
 	start->connect(0, 0, 0, endPosition);
 	PathfindingOpenSet openList;
 	openList.push(start);
 
-	bool missile = target
-					&& maxTUCost == -1;
+	bool missile = missileTarget
+				&& maxTUCost == -1;
 
-	while (openList.empty() == false) // if the openList is empty, we've reached the end
+	while (openList.empty() == false) // if the openList is empty, reached the end
 	{
 		PathfindingNode* currentNode = openList.pop();
 		Position const &currentPos = currentNode->getPosition();
 		currentNode->setChecked();
 
-		if (currentPos == endPosition) // We found our target.
+		if (currentPos == endPosition) // found the target.
 		{
 			_path.clear();
 
@@ -625,7 +625,7 @@ bool Pathfinding::aStarPath(
 			return true;
 		}
 
-		for (int // Try all reachable neighbours.
+		for (int // try all reachable neighbours.
 				direction = 0;
 				direction < 10; // dir 0 thro 7, up/down
 				direction++)
@@ -639,7 +639,7 @@ bool Pathfinding::aStarPath(
 								direction,
 								&nextPos,
 								_unit,
-								target,
+								missileTarget,
 								missile);
 			//Log(LOG_INFO) << ". TU Cost = " << tuCost;
 			if (tuCost >= 255) // Skip unreachable / blocked
@@ -652,14 +652,14 @@ bool Pathfinding::aStarPath(
 			}
 
 			PathfindingNode* nextNode = getNode(nextPos);
-			if (nextNode->isChecked()) // Our algorithm means this node is already at minimum cost.
+			if (nextNode->isChecked()) // algorithm means this node is already at minimum cost
 				//Log(LOG_INFO) << ". node already Checked ... cont.";
 				continue;
 
 			_totalTUCost = currentNode->getTUCost(missile) + tuCost;
 
-			// If this node is unvisited or has only been visited from inferior paths...
-			if ((!nextNode->inOpenSet()
+			// if this node is unvisited or has only been visited from inferior paths...
+			if ((nextNode->inOpenSet() == false
 					|| nextNode->getTUCost(missile) > _totalTUCost)
 				&& _totalTUCost <= maxTUCost)
 			{
@@ -682,12 +682,12 @@ bool Pathfinding::aStarPath(
  * Gets the TU cost to move from 1 tile to the other (ONE STEP ONLY).
  * But also updates the endPosition, because it is possible
  * the unit goes upstairs or falls down while walking.
- * @param startPos	- reference to the start position
- * @param dir		- direction of movement
- * @param endPos	- pointer to destination position
- * @param unit		- pointer to unit
- * @param target	- pointer to target unit for missiles
- * @param missile	- true if a guided missile
+ * @param startPos		- reference to the start position
+ * @param dir			- direction of movement
+ * @param endPos		- pointer to destination Position
+ * @param unit			- pointer to unit
+ * @param missileTarget	- pointer to targeted BattleUnit
+ * @param missile		- true if a guided missile
  * @return, TU cost or 255 if movement is impossible
  */
 int Pathfinding::getTUCost(
@@ -695,7 +695,7 @@ int Pathfinding::getTUCost(
 		int dir,
 		Position* endPos,
 		BattleUnit* unit,
-		BattleUnit* target,
+		BattleUnit* missileTarget,
 		bool missile)
 {
 	//Log(LOG_INFO) << "Pathfinding::getTUCost()";
@@ -765,7 +765,7 @@ int Pathfinding::getTUCost(
 							startTile,
 							destTile,
 							dir,
-							target))
+							missileTarget))
 				{
 					return 255;
 				}
@@ -843,7 +843,7 @@ int Pathfinding::getTUCost(
 							startTile,
 							destTile,
 							dir,
-							target))
+							missileTarget))
 				{
 					return 255;
 				}
@@ -893,7 +893,7 @@ int Pathfinding::getTUCost(
 							startTile,
 							destTile,
 							dir,
-							target))
+							missileTarget))
 				{
 					return 255;
 				}
@@ -906,11 +906,11 @@ int Pathfinding::getTUCost(
 			if (isBlocked(
 						destTile,
 						MapData::O_FLOOR,
-						target)
+						missileTarget)
 				|| isBlocked(
 							destTile,
 							MapData::O_OBJECT,
-							target))
+							missileTarget))
 			{
 				return 255;
 			}
@@ -1150,7 +1150,7 @@ int Pathfinding::getTUCost(
 				//											3 2 3
 				int delta = abs((dir + 4) %8 - _unit->getDirection());
 
-				if (_unit->getUnitRules() // was, size>0
+				if (_unit->getUnitRules()
 					&& _unit->getUnitRules()->getMechanical()
 					&& 1 < delta && delta != 7)
 				{
@@ -1180,7 +1180,7 @@ int Pathfinding::getTUCost(
 
 					BattleAction* action = _save->getBattleGame()->getCurrentAction();
 					action->strafe = false;
-					action->run = true;
+					action->dash = true;
 					action->actor->setDashing(true);
 				} */ // kL_end.
 			}
@@ -1204,7 +1204,7 @@ int Pathfinding::getTUCost(
 					startTile,
 					destTile,
 					dirTest,
-					target))
+					missileTarget))
 		{
 			return 255;
 		}
@@ -1231,15 +1231,16 @@ int Pathfinding::getTUCost(
 /**
  * Converts direction to a vector. Direction starts north = 0 and goes clockwise.
  * @param direction	- source direction
- * @param vector	- pointer to a position (which acts as a vector)
+ * @param vector	- pointer to a Position (which acts as a vector)
  */
 void Pathfinding::directionToVector(
 		int const direction,
 		Position* vector)
 {
-	int x[10] = { 0, 1, 1, 1, 0,-1,-1,-1, 0, 0};
-	int y[10] = {-1,-1, 0, 1, 1, 1, 0,-1, 0, 0};
-	int z[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 1,-1};
+	int
+		x[10] = { 0, 1, 1, 1, 0,-1,-1,-1, 0, 0},
+		y[10] = {-1,-1, 0, 1, 1, 1, 0,-1, 0, 0},
+		z[10] = { 0, 0, 0, 0, 0, 0, 0, 0, 1,-1};
 
 	vector->x = x[direction];
 	vector->y = y[direction];
@@ -1248,8 +1249,8 @@ void Pathfinding::directionToVector(
 
 /**
  * Converts vector to a direction. Direction starts north = 0 and goes clockwise.
- * @param vector	- reference to a position (which acts as a vector)
- * @param dir		- reference to the resulting direction (up/down & same-tile sets dir = -1)
+ * @param vector	- reference a Position (which acts as a vector)
+ * @param dir		- reference the resulting direction (up/down & same-tile sets dir = -1)
  */
 void Pathfinding::vectorToDirection(
 		const Position& vector,
@@ -1257,8 +1258,9 @@ void Pathfinding::vectorToDirection(
 {
 	dir = -1;
 
-	int x[8] = { 0, 1, 1, 1, 0,-1,-1,-1};
-	int y[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
+	int
+		x[8] = { 0, 1, 1, 1, 0,-1,-1,-1},
+		y[8] = {-1,-1, 0, 1, 1, 1, 0,-1};
 
 	for (int
 			i = 0;
@@ -1269,7 +1271,6 @@ void Pathfinding::vectorToDirection(
 			&& y[i] == vector.y)
 		{
 			dir = i;
-
 			return;
 		}
 	}
@@ -1277,7 +1278,7 @@ void Pathfinding::vectorToDirection(
 
 /**
  * Checks whether a path is ready and gives the first direction.
- * @return, Direction where the unit needs to go next, -1 if it's the end of the path.
+ * @return, direction where the unit needs to go next, -1 if it's the end of the path
  */
 int Pathfinding::getStartDirection()
 {
@@ -1289,7 +1290,7 @@ int Pathfinding::getStartDirection()
 
 /**
  * Dequeues the next path direction. Ie, returns the direction and removes it from queue.
- * @return, Direction where the unit needs to go next, -1 if it's the end of the path.
+ * @return, direction where the unit needs to go next, -1 if it's the end of the path
  */
 int Pathfinding::dequeuePath()
 {
@@ -1316,11 +1317,11 @@ void Pathfinding::abortPath()
 
 /**
  * Determines whether a certain part of a tile blocks movement.
- * @param tile				- pointer to a specified tile, can be a null pointer
+ * @param tile				- pointer to a specified Tile, can be NULL
  * @param part				- part of the tile
- * @param missileTarget		- pointer to target for a missile (default NULL)
+ * @param missileTarget		- pointer to targeted BattleUnit (default NULL)
  * @param bigWallExclusion	- for diagonal bigwalls (default -1)
- * @return, true if movement is blocked
+ * @return, true if path is blocked
  */
 bool Pathfinding::isBlocked( // private
 		Tile* tile,
@@ -1514,11 +1515,11 @@ BIGWALL_E_S		// 8
 
 /**
  * Determines whether going from one tile to another blocks movement.
- * @param startTile		- pointer to a start tile
- * @param endTile		- pointer to the destination tile
- * @param dir			- direction facing
- * @param missileTarget	- pointer to target for a missile (default NULL)
- * @return, true if movement is blocked
+ * @param startTile		- pointer to start Tile
+ * @param endTile		- pointer to destination Tile
+ * @param dir			- direction of movement
+ * @param missileTarget	- pointer to targeted BattleUnit (default NULL)
+ * @return, true if path is blocked
  */
 bool Pathfinding::isBlocked( // public
 		Tile* startTile,
@@ -1718,11 +1719,11 @@ bool Pathfinding::isBlocked( // public
 
 /**
  * Determines whether a unit can fall down from this tile.
- * We can fall down here,
+ * Can fall down here
  * if the current position is higher than 0 (the tileBelow does not exist)
  * or if the tile has no floor (and there is no unit standing below).
  * @param tile - the current tile
- * @return, true if a unit can fall down
+ * @return, true if a unit on tile can fall down
  */
 // aha! (kL) This is why that sectoid stood in the air: it walked off
 // the top of a building but there was a cyberdisc below!!! NOT.
@@ -1738,9 +1739,9 @@ bool Pathfinding::canFallDown(Tile* tile)
 
 /**
  * Wrapper for canFallDown() above.
- * @param tile - the current tile
+ * @param tile - pointer to the current Tile
  * @param size - the size of the unit
- * @return, true if a unit can fall down
+ * @return, true if a unit on tile can fall down
  */
 bool Pathfinding::canFallDown(
 		Tile* tile,
@@ -1822,8 +1823,8 @@ bool Pathfinding::canFallDown(
 /**
  * Checks if vertical movement is valid.
  * Either there is a grav lift or the unit can fly, and there are no obstructions.
- * @param bu		- pointer to a unit
- * @param startPos	- starting position
+ * @param bu		- pointer to a BattleUnit
+ * @param startPos	- start Position
  * @param dir		- up or down
  * @return,	-1 kneeling (stop unless on gravLift)
 			 0 blocked (stop)
@@ -2227,7 +2228,7 @@ bool Pathfinding::isPathPreviewed() const
 /**
  * Locates all tiles reachable to @a *unit with a TU cost no more than @a tuMax.
  * Uses Dijkstra's algorithm.
- * @param unit	- pointer to a unit
+ * @param unit	- pointer to a BattleUnit
  * @param tuMax	- the maximum cost of the path to each tile
  * @return, an array of reachable tiles, sorted in ascending order of cost; the first tile is the start location
  */
@@ -2330,7 +2331,7 @@ bool Pathfinding::getStrafeMove() const
 
 /**
  * Sets _unit in order to abuse low-level pathfinding functions from outside the class.
- * @param unit Unit taking the path.
+ * @param unit - unit taking the path
  */
 void Pathfinding::setUnit(BattleUnit* unit)
 {

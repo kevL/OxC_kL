@@ -72,7 +72,7 @@ struct BattleAction
 		autoShotKill, // kL
 		desperate, // ignoring newly-spotted units
 		finalAction,
-		run,
+		dash,
 		strafe,
 		targeting;
 	int
@@ -104,7 +104,7 @@ struct BattleAction
 			targeting(false),
 			value(0),
 			strafe(false),
-			run(false),
+			dash(false),
 			diff(0),
 			autoShotCount(0),
 			autoShotKill(false), // kL
@@ -128,7 +128,7 @@ struct BattleAction
 			value = 0;
 			result = "";
 			strafe = false;
-			run = false;
+			dash = false;
 			diff = 0;
 			autoShotCount = 0;
 			autoShotKill = false;
@@ -259,9 +259,9 @@ private:
 		bool isBusy();
 
 		/// Activates primary action (left click).
-		void primaryAction(const Position& pos);
+		void primaryAction(const Position& posTarget);
 		/// Activates secondary action (right click).
-		void secondaryAction(const Position& pos);
+		void secondaryAction(const Position& posTarget);
 		/// Handler for the blaster launcher button.
 		void launchAction();
 		/// Handler for the psi button.

@@ -1949,7 +1949,7 @@ items:
 #    hitAnimation: 0
     power: 20
     strengthApplied: true
-    damageType: 7
+    damageType: 6
     accuracyMelee: 150 #this is CombatKnife values for now
     tuMelee: 12
     battleType: 3

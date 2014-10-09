@@ -87,7 +87,7 @@ units:
     armor: SMALL_TANK_ARMOR
     standHeight: 10
     kneelHeight: 10
-    value: 20
+    value: 22
     deathSound: 23
     moveSound: 14
     energyRecovery: 100

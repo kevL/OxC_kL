@@ -4521,7 +4521,7 @@ extraStrings: #improved nations: all.
       STR_UAE: "united arabs"
       STR_UK: "england"
       STR_UKRAINE: "ukraine"
-      STR_USA: "united states"
+      STR_USA: "states"
       STR_VENEZULA: "venezuela"
       STR_VIETNAM: "vietnam"
 #STR_ANTARCTICA

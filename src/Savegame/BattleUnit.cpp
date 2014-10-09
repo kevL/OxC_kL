@@ -3982,7 +3982,7 @@ bool BattleUnit::getStopShot() const
 }
 
 /**
- * Set a unit as dashing. *** Delete these and use BattleAction.run ****
+ * Set a unit as dashing. ** Delete these and use BattleAction.dash ***
  * ... although, that might not work so good; due to the unit 'dashing'
  * might not be the currentActor's currentBattleAction status.... Cf. Projectile
  */

@@ -448,7 +448,7 @@ bool UnitWalkBState::doStatusStand()
 
 		if (gravLift == false)
 		{
-			if (_action.run // allow dash when moving vertically 1 tile (or more).
+			if (_action.dash // allow dash when moving vertically 1 tile (or more).
 				|| (_action.strafe
 					&& dir >= _pf->DIR_UP))
 			{
@@ -1094,7 +1094,7 @@ void UnitWalkBState::setNormalWalkSpeed()
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 	{
-		if (_action.run)
+		if (_action.dash)
 			interval = Options::battleXcomSpeed * 2 / 3;
 		else
 			interval = Options::battleXcomSpeed;

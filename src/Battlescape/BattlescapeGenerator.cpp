@@ -1306,9 +1306,9 @@ bool BattlescapeGenerator::addItem(
 			// kL_note: only for plasma pistol + Blaster (see itemSets in Ruleset)
 			// Also now for advanced fixed/innate weapon rules.
 			if (placed == false
-				&& lhWeapon == NULL
-				&& (item->getRules()->isFixed()
-					|| unit->getFaction() != FACTION_PLAYER))
+				&& lhWeapon == NULL)
+//				&& (item->getRules()->isFixed()
+//					|| unit->getFaction() != FACTION_PLAYER))
 			{
 				item->moveToOwner(unit);
 				item->setSlot(leftHand);
