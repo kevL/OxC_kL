@@ -472,9 +472,13 @@ void AlienBAIState::think(BattleAction* action)
 				int costTU = rule->getCost(_save->getBattleState()->getGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
 				if (action->weapon->getFuseTimer() == -1)
+				{
 					costTU += _unit->getActionTUs(
 												BA_PRIME,
 												action->weapon);
+
+//					action->weapon->setFuseTimer(0); // kL: but this is going to be done in ProjectileFlyBState.
+				}
 
 				_unit->spendTimeUnits(costTU); // cf. grenadeAction()
 				//Log(LOG_INFO) << "AlienBAIState::think() Move & Prime GRENADE, costTU = " << costTU;
@@ -557,7 +561,7 @@ void AlienBAIState::setupPatrol()
 {
 	//Log(LOG_INFO) << "AlienBAIState::setupPatrol()";
 
-	Node* node;
+	Node* node = NULL;
 	_patrolAction->TU = 0;
 
 	if (_toNode != NULL
@@ -627,7 +631,7 @@ void AlienBAIState::setupPatrol()
 
 			// also anyone standing in fire should also probably move
 			if (_save->isCheating()
-				|| !_fromNode
+				|| _fromNode == NULL
 				|| _fromNode->getRank() == 0
 				||  (_save->getTile(_unit->getPosition())
 					&& _save->getTile(_unit->getPosition())->getFire()))
@@ -693,13 +697,13 @@ void AlienBAIState::setupPatrol()
 						++i)
 				{
 					if ((*i)->isTarget()
-						&& !(*i)->isAllocated())
+						&& (*i)->isAllocated() == false)
 					{
 						node = *i;
 						int dist = _save->getTileEngine()->distanceSq(
 																_unit->getPosition(),
 																node->getPosition());
-						if (!_toNode
+						if (_toNode == NULL
 							|| (dist < closest
 								&& node != _fromNode))
 						{
@@ -1056,10 +1060,10 @@ void AlienBAIState::setupEscape()
 	RNG::shuffle(randomTileSearch);
 
 	while (tries < 150
-		&& !coverFound)
+		&& coverFound == false)
 	{
 		_escapeAction->target = _unit->getPosition();		// start looking in a direction away from the enemy
-		if (!_save->getTile(_escapeAction->target))
+		if (_save->getTile(_escapeAction->target) == NULL)
 			_escapeAction->target = _unit->getPosition();	// cornered at the edge of the map perhaps?
 
 		score = 0;
@@ -1123,7 +1127,7 @@ void AlienBAIState::setupEscape()
 
 		int spotters = 0;
 
-		if (!tile)
+		if (tile == NULL)
 			score = -100001; // no you can't quit the battlefield by running off the map.
 		else
 		{
@@ -1221,6 +1225,7 @@ void AlienBAIState::setupEscape()
 int AlienBAIState::countKnownTargets() const
 {
 	int knownEnemies = 0;
+
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
@@ -1254,7 +1259,10 @@ int AlienBAIState::getSpottingUnits(Position pos) const
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if (validTarget(*i, false, false))
+		if (validTarget(
+					*i,
+					false,
+					false))
 		{
 			int dist = _save->getTileEngine()->distance(
 													pos,
@@ -1415,8 +1423,8 @@ bool AlienBAIState::selectClosestKnownEnemy()
  */
 bool AlienBAIState::selectRandomTarget()
 {
-	int farthest = -100;
 	_aggroTarget = NULL;
+	int farthest = -100;
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
@@ -1580,7 +1588,7 @@ void AlienBAIState::evaluateAIMode()
 	}
 
 	// melee/blaster units shouldn't consider ambush
-	if (!_rifle
+	if (_rifle == false
 		|| _ambushTUs == 0)
 	{
 		ambushOdds = 0.f;
@@ -1794,22 +1802,24 @@ void AlienBAIState::evaluateAIMode()
 
 /**
  * Find a position where we can see our target, and move there.
- * check the 11x11 grid for a position nearby where we can potentially target him.
- * @return, True if a possible position was found.
+ * Check the 11x11 grid for a position nearby where we can potentially target him.
+ * @return, true if a possible position was found
  */
 bool AlienBAIState::findFirePoint()
 {
-	if (!selectClosestKnownEnemy())
+	if (selectClosestKnownEnemy() == false)
 		return false;
 
 	std::vector<Position> randomTileSearch = _save->getTileSearch();
 	RNG::shuffle(randomTileSearch);
 
-	const int BASE_SYSTEMATIC_SUCCESS	= 100;
-	const int FAST_PASS_THRESHOLD		= 125;
+	const int
+		BASE_SYSTEMATIC_SUCCESS	= 100,
+		FAST_PASS_THRESHOLD		= 125;
+
+	_attackAction->type = BA_RETHINK;
 
 	Position target;
-	_attackAction->type = BA_RETHINK;
 
 	int bestScore = 0;
 
@@ -1859,7 +1869,7 @@ bool AlienBAIState::findFirePoint()
 				score = BASE_SYSTEMATIC_SUCCESS - getSpottingUnits(pos) * 10;
 				score += _unit->getTimeUnits() - _save->getPathfinding()->getTotalTUCost();
 
-				if (!_aggroTarget->checkViewSector(pos))
+				if (_aggroTarget->checkViewSector(pos) == false)
 					score += 10;
 
 				if (score > bestScore)
@@ -1883,7 +1893,6 @@ bool AlienBAIState::findFirePoint()
 		if (_traceAI) Log(LOG_INFO) << "Firepoint found at " << _attackAction->target << ", with a score of: " << bestScore;
 
 		_attackAction->type = BA_WALK;
-
 		return true;
 	}
 
@@ -2390,10 +2399,10 @@ void AlienBAIState::grenadeAction()
 																		action,
 																		NULL);
 			Position targetVoxel = action.target * Position(16, 16, 24)
-									+ Position(
-											8,
-											8,
-											2 - _save->getTile(action.target)->getTerrainLevel());
+								 + Position(
+										8,
+										8,
+										2 - _save->getTile(action.target)->getTerrainLevel());
 
 			if (_save->getTileEngine()->validateThrow(
 													action,

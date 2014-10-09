@@ -56,6 +56,9 @@ namespace OpenXcom
 
 /**
  * Sets up an ProjectileFlyBState [0].
+ * @param parent - pointer to the BattlescapeGame
+ * @param action - the queued BattleAction struct (BattlescapeGame.h)
+ * @param origin - an origin Position
  */
 ProjectileFlyBState::ProjectileFlyBState(
 		BattlescapeGame* parent,
@@ -79,6 +82,8 @@ ProjectileFlyBState::ProjectileFlyBState(
 
 /**
  * Sets up an ProjectileFlyBState [1].
+ * @param parent - pointer to the BattlescapeGame
+ * @param action - the queued BattleAction struct (BattlescapeGame.h)
  */
 ProjectileFlyBState::ProjectileFlyBState(
 		BattlescapeGame* parent,
@@ -604,8 +609,8 @@ bool ProjectileFlyBState::createNewProjectile()
 
 			sound = ResourcePack::ITEM_THROW;
 
-			if (_unit->getOriginalFaction() == FACTION_PLAYER
-				&& _unit->getFaction() == FACTION_PLAYER)
+			if (_unit->getGeoscapeSoldier() != NULL
+				&& _unit->getFaction() == _unit->getOriginalFaction())
 			{
 				_unit->addThrowingExp();
 			}

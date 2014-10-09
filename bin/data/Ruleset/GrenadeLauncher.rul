@@ -13,9 +13,9 @@ items:
       - STR_LAUNCHER_FRAG
       - STR_LAUNCHER_INC
       - STR_LAUNCHER_SMOKE
-    accuracySnap: 50
-    accuracyAimed: 75
-    tuSnap: 35
+    accuracySnap: 83
+    accuracyAimed: 106
+    tuSnap: 36
     tuAimed: 55
     battleType: 1
     arcingShot: true

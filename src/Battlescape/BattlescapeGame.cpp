@@ -682,15 +682,15 @@ void BattlescapeGame::endGameTurn()
 	if (_save->getSide() != FACTION_NEUTRAL) // tick down grenade timers
 	{
 		for (std::vector<BattleItem*>::iterator
-				grenade = _save->getItems()->begin();
-				grenade != _save->getItems()->end();
-				++grenade)
+				i = _save->getItems()->begin();
+				i != _save->getItems()->end();
+				++i)
 		{
-			if ((*grenade)->getOwner() == NULL
-				&& (*grenade)->getRules()->getBattleType() == BT_GRENADE
-				&& (*grenade)->getFuseTimer() > 0)
+			if ((*i)->getOwner() == NULL
+				&& (*i)->getRules()->getBattleType() == BT_GRENADE
+				&& (*i)->getFuseTimer() > 0)
 			{
-				(*grenade)->setFuseTimer((*grenade)->getFuseTimer() - 1);
+				(*i)->setFuseTimer((*i)->getFuseTimer() - 1);
 			}
 		}
 	}
@@ -2033,6 +2033,12 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 			if (_save->getTile(ba.target) != NULL)
 			{
 				ba.weapon = unit->getMainHandWeapon();
+				if (ba.weapon == NULL)				// kL
+					ba.weapon = unit->getGrenade();	// kL
+
+				// TODO: run up to another unit and slug it with the Universal Fist.
+				// Or w/ an already-equipped melee weapon
+
 				if (ba.weapon
 					&& (_save->getDepth() != 0
 						|| ba.weapon->getRules()->isWaterOnly() == false))
