@@ -193,6 +193,12 @@ void AlienBAIState::think(BattleAction* action)
 	action->weapon	= _unit->getMainHandWeapon(false);	// this switches BL/Pistol aLiens to use BL (when not reaction firing)
 														// It needs to be refined to account TU usage, also.
 
+	if (action->weapon == NULL // kL ->
+		&& _unit->getUnitRules()->getMeleeWeapon() == "STR_FIST")
+	{
+		action->weapon = _save->getBattleGame()->getFist();
+	}
+
 	_attackAction->diff		= static_cast<int>(_save->getBattleState()->getGame()->getSavedGame()->getDifficulty());
 	_attackAction->actor	= _unit;
 	_attackAction->weapon	= action->weapon;

@@ -1055,6 +1055,7 @@ items:
     accuracyMelee: 100
     tuMelee: 30
     battleType: 3
+    clipSize: -1
     twoHanded: true
     invWidth: 1
     invHeight: 3
@@ -1949,9 +1950,10 @@ items:
     power: 20
     strengthApplied: true
     damageType: 7
-    accuracyMelee: 150
+    accuracyMelee: 150 #this is CombatKnife values for now
     tuMelee: 12
     battleType: 3
+    clipSize: -1
     twoHanded: false
     recover: false
 ufos:
@@ -4150,6 +4152,7 @@ units:
     intelligence: 2
     aggression: 1
     energyRecovery: 80
+    meleeWeapon: STR_FIST
   - type: STR_SNAKEMAN_NAVIGATOR
     race: STR_SNAKEMAN
     rank: STR_LIVE_NAVIGATOR
@@ -4174,6 +4177,7 @@ units:
     intelligence: 3
     aggression: 1
     energyRecovery: 80
+    meleeWeapon: STR_FIST
   - type: STR_SNAKEMAN_ENGINEER
     race: STR_SNAKEMAN
     rank: STR_LIVE_ENGINEER
@@ -4198,6 +4202,7 @@ units:
     intelligence: 4
     aggression: 2
     energyRecovery: 80
+    meleeWeapon: STR_FIST
   - type: STR_SNAKEMAN_LEADER
     race: STR_SNAKEMAN
     rank: STR_LIVE_LEADER
@@ -4222,6 +4227,7 @@ units:
     intelligence: 5
     aggression: 2
     energyRecovery: 80
+    meleeWeapon: STR_FIST
   - type: STR_SNAKEMAN_COMMANDER
     race: STR_SNAKEMAN
     rank: STR_LIVE_COMMANDER
@@ -4246,6 +4252,7 @@ units:
     intelligence: 6
     aggression: 2
     energyRecovery: 80
+    meleeWeapon: STR_FIST
   - type: STR_CHRYSSALID_TERRORIST
     race: STR_CHRYSSALID
     rank: STR_LIVE_TERRORIST

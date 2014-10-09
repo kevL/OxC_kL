@@ -275,7 +275,7 @@ void RuleItem::load(
 	_vaporColor				= node["vaporColor"].as<int>(_vaporColor);
 	_vaporDensity			= node["vaporDensity"].as<int>(_vaporDensity);
 
-	if (!_listOrder)
+	if (_listOrder == 0)
 		_listOrder = listOrder;
 }
 
@@ -940,7 +940,7 @@ bool RuleItem::isSkillApplied() const
  */
 bool RuleItem::canReactionFire() const // kL
 {
-	return !_noReaction;
+	return (_noReaction == false);
 }
 
 /**

@@ -157,6 +157,7 @@ private:
 
 	BattleAction _currentAction;
 
+	BattleItem* _universalFist;
 	BattlescapeState* _parentState;
 	SavedBattleGame* _save;
 
@@ -340,6 +341,9 @@ private:
 
 		/// kL. Gets the BattlescapeState.
 		BattlescapeState* getBattlescapeState() const; // kL
+
+		/// kL. Gets the universal fist.
+		BattleItem* getFist() const; // kL
 };
 
 }

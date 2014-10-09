@@ -71,8 +71,9 @@ BattleItem::BattleItem(
 			&& _rules->getCompatibleAmmo()->empty())
 		{
 			setAmmoQuantity(_rules->getClipSize()); // melee items have clipsize(0), lasers etc have clipsize(-1).
-//			setAmmoQuantity(-1); // needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
-
+//			setAmmoQuantity(-1);	// needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
+									// But it creates problems w/ TANKS returning to Base. So do it in Ruleset:
+									// melee items need "clipSize: -1" to do reactionFire.
 			_ammoItem = this;
 		}
 	}

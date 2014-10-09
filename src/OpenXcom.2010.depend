@@ -4776,7 +4776,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1412657191 f:\git\openxcom\src\battlescape\battlescapegame.h
+1412816736 f:\git\openxcom\src\battlescape\battlescapegame.h
 	<list>
 	<string>
 	<vector>
@@ -5745,7 +5745,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1412809744 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1412816982 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5823,7 +5823,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1412805828 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1412849946 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6320,13 +6320,13 @@
 1412144606 f:\git\openxcom\src\savegame\country.h
 	<yaml-cpp/yaml.h>
 
-1412707403 source:f:\git\openxcom\src\battlescape\explosion.cpp
+1412809861 source:f:\git\openxcom\src\battlescape\explosion.cpp
 	"Explosion.h"
 
 1410509529 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1412704610 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1412811379 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6771,7 +6771,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1412805331 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1412851132 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9379,7 +9379,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1412438629 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1412820643 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"
@@ -9564,14 +9564,14 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1412099730 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1412821658 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1412799060 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1412850574 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9687,7 +9687,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1412799111 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1412816563 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

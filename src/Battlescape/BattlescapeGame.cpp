@@ -107,6 +107,10 @@ BattlescapeGame::BattlescapeGame(
 	_currentAction.type			= BA_NONE;
 	_currentAction.targeting	= false;
 
+	_universalFist = new BattleItem(
+								parentState->getGame()->getRuleset()->getItem("STR_FIST"),
+								save->getCurrentItemId());
+
 	for (std::vector<BattleUnit*>::iterator // kL
 			bu = _save->getUnits()->begin();
 			bu != _save->getUnits()->end();
@@ -135,6 +139,8 @@ BattlescapeGame::~BattlescapeGame()
 		delete *i;
 	}
 // *cough* so much for that hypothesis
+
+	delete _universalFist;
 }
 
 /**
@@ -404,29 +410,45 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 											this,
 											action));
 
-			// special behaviour here: add and remove the item all at once.
-			if (action.type == BA_HIT
-				&& action.weapon->getRules()->getType() != unit->getMeleeWeapon())
+			// specially fucked behaviour here: add and remove the item all at once.
+			// kL_note: The universalFist ought make this block redundant ...
+/*			if (action.type == BA_HIT)	// kL_note: I don't think the code ever gets here from the AI .....
+										// that is, if it does then action.weapon has been defined already and this conflicts ...
+//				&& action.weapon == NULL)
 			{
-				ss.clear();
-				ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
-				_parentState->debug(ss.str());
+				if (action.weapon->getRules()->getType() != unit->getMeleeWeapon()) // wait ... does this stop aLiens from using hand-held melee weapons. NO.
+				{
+					ss.clear();
+					ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
+					_parentState->debug(ss.str());
 
-				action.weapon = new BattleItem(
-											_parentState->getGame()->getRuleset()->getItem(unit->getMeleeWeapon()),
-											_save->getCurrentItemId());
+					action.weapon = new BattleItem(
+												_parentState->getGame()->getRuleset()->getItem(unit->getMeleeWeapon()),
+												_save->getCurrentItemId());
 
-				action.TU = unit->getActionTUs(
-											action.type,
-											action.weapon);
+					action.TU = unit->getActionTUs(
+												action.type,
+												action.weapon);
 
-				statePushBack(new ProjectileFlyBState(
-													this,
-													action));
-				_save->removeItem(action.weapon);
+					statePushBack(new ProjectileFlyBState(
+														this,
+														action));
+					_save->removeItem(action.weapon);
+					return;
+				}
+				else if (action.weapon->getRules()->getType() == unit->getMeleeWeapon())	// Fist already created:
+																							// This could prob be let fallthrough to a normal HIT attack ... if there even is one!!!
+				{
+					action.TU = unit->getActionTUs(
+												action.type,
+												action.weapon);
 
-				return;
-			}
+					statePushBack(new ProjectileFlyBState(
+														this,
+														action));
+					return;
+				}
+			} */
 		}
 		//Log(LOG_INFO) << ". . create Psi weapon DONE";
 
@@ -3417,6 +3439,15 @@ const int BattlescapeGame::getDepth() const
 BattlescapeState* BattlescapeGame::getBattlescapeState() const
 {
 	return _parentState;
+}
+
+/**
+ * kL. Gets the universal fist.
+ * @return, the universal fist!!
+ */
+BattleItem* BattlescapeGame::getFist() const // kL
+{
+	return _universalFist;
 }
 
 }

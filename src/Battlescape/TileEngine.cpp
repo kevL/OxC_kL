@@ -1472,6 +1472,7 @@ bool TileEngine::checkReactionFire(
 		int tuSpent)
 {
 	//Log(LOG_INFO) << "TileEngine::checkReactionFire() vs targetID " << unit->getId();
+	//Log(LOG_INFO) << ". tuSpent = " << tuSpent;
 	if (_battleSave->getSide() == FACTION_NEUTRAL) // no reaction on civilian turn.
 		return false;
 
@@ -1594,6 +1595,7 @@ BattleUnit* TileEngine::getReactor(
 		int tuSpent)
 {
 	//Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << defender->getId();
+	//Log(LOG_INFO) << ". tuSpent = " << tuSpent;
 	BattleUnit* nextReactor = NULL;
 	int highestIniti = -1;
 
@@ -1663,7 +1665,20 @@ bool TileEngine::reactionShot(
 		action.weapon = unit->getItem(unit->getActiveHand());
 	}
 	else
+	{
+		//Log(LOG_INFO) << "reactionShot() not XCOM";
 		action.weapon = unit->getMainHandWeapon();
+		//if (action.weapon != NULL) Log(LOG_INFO) << ". weapon[0] = " << action.weapon->getRules()->getType();
+		//else Log(LOG_INFO) << ". weapon[0] NULL";
+
+		if (action.weapon == NULL
+			&& action.actor->getUnitRules()->getMeleeWeapon() == "STR_FIST")
+		{
+			action.weapon = _battleSave->getBattleGame()->getFist();
+			//if (action.weapon != NULL) Log(LOG_INFO) << ". weapon[1] = " << action.weapon->getRules()->getType();
+			//else Log(LOG_INFO) << ". weapon[1] NULL";
+		}
+	}
 
 	if (action.weapon == NULL)
 		return false;
@@ -1687,7 +1702,9 @@ bool TileEngine::reactionShot(
 
 	if (action.type == BA_HIT)
 	{
-		tu = action.actor->getActionTUs(BA_HIT, action.weapon);
+		tu = action.actor->getActionTUs(
+									BA_HIT,
+									action.weapon);
 
 		if (tu < 1
 			|| tu > action.actor->getTimeUnits())
@@ -1716,6 +1733,16 @@ bool TileEngine::reactionShot(
 	}
 
 	action.TU = tu;
+	//Log(LOG_INFO) << ". TU = " << tu;
+
+	//Log(LOG_INFO) << ". canReact = " << action.weapon->getRules()->canReactionFire();
+	//Log(LOG_INFO) << ". isResearched = " << (action.actor->getOriginalFaction() == FACTION_HOSTILE
+	//		|| _battleSave->getGeoscapeSave()->isResearched(action.weapon->getRules()->getRequirements()));
+	//Log(LOG_INFO) << ". not Water = " << (_battleSave->getDepth() != 0
+	//		|| action.weapon->getRules()->isWaterOnly() == false);
+	//Log(LOG_INFO) << ". has Ammo item = " << (action.weapon->getAmmoItem() != NULL);
+	//Log(LOG_INFO) << ". ammo has Qty = " << (action.weapon->getAmmoItem()->getAmmoQuantity() > 0);
+	//Log(LOG_INFO) << ". can spend TU = " << action.actor->spendTimeUnits(action.TU);
 
 	if (action.weapon->getRules()->canReactionFire()
 		&& (action.actor->getOriginalFaction() == FACTION_HOSTILE	// is aLien, or has researched weapon.
@@ -1726,6 +1753,7 @@ bool TileEngine::reactionShot(
 		&& action.weapon->getAmmoItem()->getAmmoQuantity() > 0		// lasers & melee return 255
 		&& action.actor->spendTimeUnits(action.TU))					// spend the TU
 	{
+		//Log(LOG_INFO) << ". . targeting TRUE";
 		action.targeting = true;
 
 		if (unit->getFaction() == FACTION_HOSTILE)

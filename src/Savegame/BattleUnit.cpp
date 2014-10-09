@@ -2083,7 +2083,7 @@ int BattleUnit::getFatalWounds() const
 /**
  * Little formula that calculates initiative/reaction score.
  * Reactions Stat * Current Time Units / Max TUs
- * @param tuSpent -
+ * @param tuSpent - (default 0)
  * @return, Reaction score; aka INITIATIVE
  */
 double BattleUnit::getInitiative(int tuSpent)
@@ -2091,6 +2091,7 @@ double BattleUnit::getInitiative(int tuSpent)
 	double ret = static_cast<double>(
 						getStats()->reactions * (getTimeUnits() - tuSpent))
 						/ static_cast<double>(getStats()->tu);
+
 	ret *= getAccuracyModifier();
 
 	return ret;
@@ -2675,20 +2676,19 @@ std::string BattleUnit::getMeleeWeapon() const
  */
 bool BattleUnit::checkAmmo()
 {
-	if (getTimeUnits() < 15)
+	if (getTimeUnits() < 15) // should go to Ruleset.
 		return false;
 
 	BattleItem* weapon = getItem("STR_RIGHT_HAND");
-	if (!weapon
+	if (weapon == NULL
 		|| weapon->getAmmoItem() != NULL
 		|| weapon->getRules()->getBattleType() == BT_MELEE)
 	{
 		weapon = getItem("STR_LEFT_HAND");
-		if (!weapon
+		if (weapon == NULL
 			|| weapon->getAmmoItem() != NULL
 			|| weapon->getRules()->getBattleType() == BT_MELEE)
 		{
-
 			return false;
 		}
 	}
@@ -2706,19 +2706,18 @@ bool BattleUnit::checkAmmo()
 	{
 		ammo = *i;
 		for (std::vector<std::string>::iterator
-				c = weapon->getRules()->getCompatibleAmmo()->begin();
-				c != weapon->getRules()->getCompatibleAmmo()->end();
-				++c)
+				j = weapon->getRules()->getCompatibleAmmo()->begin();
+				j != weapon->getRules()->getCompatibleAmmo()->end();
+				++j)
 		{
-			if (*c == ammo->getRules()->getType())
+			if (*j == ammo->getRules()->getType())
 			{
 				wrongAmmo = false;
-
 				break;
 			}
 		}
 
-		if (!wrongAmmo)
+		if (wrongAmmo == false)
 			break;
 	}
 
@@ -2741,8 +2740,8 @@ bool BattleUnit::checkAmmo()
 bool BattleUnit::isInExitArea(SpecialTileType stt) const
 {
 	return _tile
-			&& _tile->getMapData(MapData::O_FLOOR)
-			&& _tile->getMapData(MapData::O_FLOOR)->getSpecialType() == stt;
+		&& _tile->getMapData(MapData::O_FLOOR)
+		&& _tile->getMapData(MapData::O_FLOOR)->getSpecialType() == stt;
 }
 
 /**

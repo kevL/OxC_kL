@@ -356,8 +356,9 @@ void SavedBattleGame::load(
 			if (type != "NULL")
 				item->setSlot(rule->getInventory(type));
 
-			int owner = (*i)["owner"].as<int>();
-			int unit = (*i)["unit"].as<int>();
+			int
+				owner = (*i)["owner"].as<int>(),
+				unit = (*i)["unit"].as<int>();
 
 			// match up items and units
 			for (std::vector<BattleUnit*>::iterator
@@ -454,7 +455,7 @@ void SavedBattleGame::loadMapResources(Game* game)
 		for (int
 				part = 0;
 				part < 4;
-				part++)
+				++part)
 		{
 			_tiles[i]->getMapData(
 								&mdID,
@@ -537,7 +538,7 @@ YAML::Node SavedBattleGame::save() const
 			i < _mapsize_z * _mapsize_y * _mapsize_x;
 			++i)
 	{
-		if (!_tiles[i]->isVoid())
+		if (_tiles[i]->isVoid() == false)
 		{
 			serializeInt(&w, Tile::serializationKey.index, i);
 			_tiles[i]->saveBinary(&w);
@@ -589,7 +590,7 @@ YAML::Node SavedBattleGame::save() const
 
 /**
  * Gets the array of tiles.
- * @return A pointer to the Tile array.
+ * @return, pointer to a pointer to the Tile array
  */
 Tile** SavedBattleGame::getTiles() const
 {
@@ -607,7 +608,7 @@ void SavedBattleGame::initMap(
 		int mapsize_y,
 		int mapsize_z)
 {
-	if (!_nodes.empty())
+	if (_nodes.empty() == false)
 	{
 		for (int
 				i = 0;
@@ -1224,7 +1225,7 @@ void SavedBattleGame::setDebugMode()
 
 /**
  * Gets the current debug mode.
- * @return Debug mode.
+ * @return, debug mode
  */
 bool SavedBattleGame::getDebugMode() const
 {
@@ -1233,7 +1234,7 @@ bool SavedBattleGame::getDebugMode() const
 
 /**
  * Gets the BattlescapeState.
- * @return Pointer to the BattlescapeState.
+ * @return, pointer to the BattlescapeState
  */
 BattlescapeState* SavedBattleGame::getBattleState()
 {
@@ -1241,8 +1242,8 @@ BattlescapeState* SavedBattleGame::getBattleState()
 }
 
 /**
- * Gets the BattlescapeState.
- * @return Pointer to the BattlescapeState.
+ * Gets the BattlescapeGame.
+ * @return, pointer to the BattlescapeGame
  */
 BattlescapeGame* SavedBattleGame::getBattleGame()
 {
@@ -1251,7 +1252,7 @@ BattlescapeGame* SavedBattleGame::getBattleGame()
 
 /**
  * Sets the BattlescapeState.
- * @param bs A Pointer to a BattlescapeState.
+ * @param bs - pointer to the BattlescapeState
  */
 void SavedBattleGame::setBattleState(BattlescapeState* bs)
 {
@@ -1435,7 +1436,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 
 /**
  * Sets whether the mission was aborted or successful.
- * @param flag, True if the mission was aborted, or false, if the mission was successful.
+ * @param flag - true if the mission was aborted, or false if the mission was successful.
  */
 void SavedBattleGame::setAborted(bool flag)
 {
@@ -1444,7 +1445,7 @@ void SavedBattleGame::setAborted(bool flag)
 
 /**
  * Returns whether the mission was aborted or successful.
- * @return, True if the mission was aborted, or false, if the mission was successful.
+ * @return, true if the mission was aborted, or false if the mission was successful
  */
 bool SavedBattleGame::isAborted() const
 {
@@ -1453,7 +1454,7 @@ bool SavedBattleGame::isAborted() const
 
 /**
  * Sets whether the objective is destroyed.
- * @param flag, True if the objective is destroyed.
+ * @param flag - true if the objective is destroyed
  */
 void SavedBattleGame::setObjectiveDestroyed(bool flag)
 {
@@ -1469,8 +1470,8 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 }
 
 /**
- * Returns whether the objective is detroyed.
- * @return, True if the objective is destroyed.
+ * Returns whether the objective is destroyed.
+ * @return, true if the objective is destroyed
  */
 bool SavedBattleGame::isObjectiveDestroyed()
 {
@@ -1479,7 +1480,7 @@ bool SavedBattleGame::isObjectiveDestroyed()
 
 /**
  * Gets the current item ID.
- * @return, Current item ID pointer.
+ * @return, pointer to current item ID
  */
 int* SavedBattleGame::getCurrentItemId()
 {
@@ -1488,9 +1489,9 @@ int* SavedBattleGame::getCurrentItemId()
 
 /**
  * Finds a fitting node where a unit can spawn.
- * @param nodeRank, Rank of the node (this is not the rank of the alien!)
+ * @param nodeRank	- rank of the node (this is not the rank of the alien!)
  * kL_note: actually, it pretty much is the rank of the aLien.
- * @param unit, Pointer to the unit (to test-set its position)
+ * @param unit		- pointer to the unit (to test-set its position)
  * @return, Pointer to the chosen node
  */
 Node* SavedBattleGame::getSpawnNode(
@@ -1611,7 +1612,7 @@ Node* SavedBattleGame::getPatrolNode(
 			&& node->getPosition().x > 0							// x-pos valid
 			&& node->getPosition().y > 0)							// y-pos valid
 		{
-			if (!bestNode
+			if (bestNode == NULL
 //kL				|| (bestNode->getRank() == Node::nodeRank[unit->getRankInt()][0]
 //kL					&& bestNode->getFlags() < node->getFlags())
 //kL				|| bestNode->getFlags() < node->getFlags())
