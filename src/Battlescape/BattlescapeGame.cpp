@@ -2435,10 +2435,10 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			}
 
 			_currentAction.strafe = Options::strafe
-									&& ((mod_CTRL
+								&& ((mod_CTRL
 										&& isTank == false)
-										|| (mod_ALT // tank, reverse gear 1 tile only.
-											&& isTank));
+									|| (mod_ALT // tank, reverse gear 1 tile only.
+										&& isTank));
 			_currentAction.dash = false;
 			_currentAction.actor->setDashing(false);
 

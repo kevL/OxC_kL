@@ -157,6 +157,7 @@ static int zoomSurface2X_64bit(
  * @param dst - Pointer to the zoomed surface (output).
  * @return, 0 for success or -1 for error.
  */
+/*
 static int zoomSurface2X_32bit(
 		SDL_Surface* src,
 		SDL_Surface* dst)
@@ -217,6 +218,7 @@ static int zoomSurface2X_32bit(
 
 	return 0;
 }
+*/
 #endif
 
 /**
@@ -297,6 +299,7 @@ static int zoomSurface4X_64bit(
  * @param dst - Pointer to the zoomed surface (output).
  * @return, 0 for success or -1 for error.
  */
+/*
 static int zoomSurface4X_32bit(
 		SDL_Surface* src,
 		SDL_Surface* dst)
@@ -346,6 +349,7 @@ static int zoomSurface4X_32bit(
 
 	return 0;
 }
+*/
 #endif
 
 /**

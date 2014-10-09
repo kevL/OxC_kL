@@ -68,29 +68,31 @@ Language::Language()
 	{
 		_names["en-US"]		= utf8ToWstr("English (US)");
 		_names["en-GB"]		= utf8ToWstr("English (UK)");
-		_names["bg-BG"]		= utf8ToWstr("Български");
-		_names["cs-CZ"]		= utf8ToWstr("Česky");
+		_names["bg"]		= utf8ToWstr("Български");
+		_names["cs"]		= utf8ToWstr("Česky");
 		_names["da"]		= utf8ToWstr("Dansk");
 		_names["de"]		= utf8ToWstr("Deutsch");
-		_names["es"]		= utf8ToWstr("Español (ES)");
+		_names["el"]		= utf8ToWstr("Ελληνικά");
+		_names["es-ES"]		= utf8ToWstr("Español (ES)");
 		_names["es-419"]	= utf8ToWstr("Español (AL)");
 		_names["fr"]		= utf8ToWstr("Français");
 		_names["fi"]		= utf8ToWstr("Suomi");
-		_names["grk"]		= utf8ToWstr("Ελληνικά");
-		_names["hu-HU"]		= utf8ToWstr("Magyar");
+		_names["hr"]		= utf8ToWstr("Hrvatski");
+		_names["hu"]		= utf8ToWstr("Magyar");
 		_names["it"]		= utf8ToWstr("Italiano");
-		_names["ja-JP"]		= utf8ToWstr("日本語");
+		_names["ja"]		= utf8ToWstr("日本語");
 		_names["ko"]		= utf8ToWstr("한국어");
 		_names["nl"]		= utf8ToWstr("Nederlands");
 		_names["no"]		= utf8ToWstr("Norsk");
-		_names["pl-PL"]		= utf8ToWstr("Polski");
+		_names["pl"]		= utf8ToWstr("Polski");
 		_names["pt-BR"]		= utf8ToWstr("Português (BR)");
 		_names["pt-PT"]		= utf8ToWstr("Português (PT)");
 		_names["ro"]		= utf8ToWstr("Română");
 		_names["ru"]		= utf8ToWstr("Русский");
-		_names["sk-SK"]		= utf8ToWstr("Slovenčina");
+		_names["sk"]		= utf8ToWstr("Slovenčina");
 		_names["sv"]		= utf8ToWstr("Svenska");
-		_names["tr-TR"]		= utf8ToWstr("Türkçe");
+		_names["th"]		= utf8ToWstr("ไทย");
+		_names["tr"]		= utf8ToWstr("Türkçe");
 		_names["uk"]		= utf8ToWstr("Українська");
 		_names["zh-CN"]		= utf8ToWstr("中文");
 		_names["zh-TW"]		= utf8ToWstr("文言");
@@ -101,7 +103,7 @@ Language::Language()
 
 	if (_cjk.empty())
 	{
-		_cjk.push_back("ja-JP");
+		_cjk.push_back("ja");
 //		_cjk.push_back("ko"); // has spacing between words
 		_cjk.push_back("zh-CN");
 		_cjk.push_back("zh-TW");
@@ -663,7 +665,10 @@ LocalizedText Language::getString(
 	if (s == _strings.end()) // Try proper form by language
 		s = _strings.find(id + _handler->getSuffix(n));
 
-	if (s == _strings.end())
+	if (s == _strings.end()) // Try default form
+		s = _strings.find(id + "_other");
+
+	if (s == _strings.end()) // Give up
 	{
 		Log(LOG_WARNING) << id << " not found in " << Options::language;
 

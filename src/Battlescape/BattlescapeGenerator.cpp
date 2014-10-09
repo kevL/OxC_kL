@@ -3087,7 +3087,7 @@ void BattlescapeGenerator::loadRMP(
 
 		if (pos_x < mapblock->getSizeX()
 			&& pos_y < mapblock->getSizeY()
-			&& pos_z < _mapsize_z )
+			&& pos_z < _mapsize_z)
 		{
 			Position pos = Position(
 								xoff + pos_x,
