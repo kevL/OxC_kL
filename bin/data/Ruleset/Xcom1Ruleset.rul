@@ -8227,28 +8227,28 @@ alienMissions:
     points: 10
     raceWeights:
       0:
-          STR_FLOATER: 20
-          STR_SECTOID: 70
-          STR_SNAKEMAN: 10
+        STR_FLOATER: 20
+        STR_SECTOID: 70
+        STR_SNAKEMAN: 10
       2:
-          STR_FLOATER: 30
-          STR_SECTOID: 60
-          STR_SNAKEMAN: 10
+        STR_FLOATER: 30
+        STR_SECTOID: 60
+        STR_SNAKEMAN: 10
       6:
-          STR_FLOATER: 30
-          STR_SECTOID: 30
-          STR_SNAKEMAN: 10
-          STR_MUTON: 30
+        STR_FLOATER: 30
+        STR_SECTOID: 30
+        STR_SNAKEMAN: 10
+        STR_MUTON: 30
       12:
-          STR_FLOATER: 30
-          STR_SECTOID: 20
-          STR_SNAKEMAN: 10
-          STR_MUTON: 40
+        STR_FLOATER: 30
+        STR_SECTOID: 20
+        STR_SNAKEMAN: 10
+        STR_MUTON: 40
       20:
-          STR_FLOATER: 30
-          STR_SECTOID: 30
-          STR_SNAKEMAN: 20
-          STR_MUTON: 20
+        STR_FLOATER: 30
+        STR_SECTOID: 30
+        STR_SNAKEMAN: 20
+        STR_MUTON: 20
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1
@@ -8266,25 +8266,25 @@ alienMissions:
     points: 30
     raceWeights:
       0:
-          STR_FLOATER: 30
-          STR_SECTOID: 50
-          STR_SNAKEMAN: 20
+        STR_FLOATER: 30
+        STR_SECTOID: 50
+        STR_SNAKEMAN: 20
       2:
-          STR_FLOATER: 50
-          STR_SECTOID: 50
+        STR_FLOATER: 50
+        STR_SECTOID: 50
       6:
-          STR_FLOATER: 40
-          STR_SECTOID: 30
-          STR_MUTON: 30
+        STR_FLOATER: 40
+        STR_SECTOID: 30
+        STR_MUTON: 30
       12:
-          STR_FLOATER: 50
-          STR_SECTOID: 10
-          STR_MUTON: 40
+        STR_FLOATER: 50
+        STR_SECTOID: 10
+        STR_MUTON: 40
       20:
-          STR_FLOATER: 30
-          STR_SECTOID: 30
-          STR_SNAKEMAN: 20
-          STR_MUTON: 20
+        STR_FLOATER: 30
+        STR_SECTOID: 30
+        STR_SNAKEMAN: 20
+        STR_MUTON: 20
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1
@@ -8322,20 +8322,20 @@ alienMissions:
     points: 50
     raceWeights:
       0:
-          STR_FLOATER: 40
-          STR_SECTOID: 60
+        STR_FLOATER: 40
+        STR_SECTOID: 60
       2:
-          STR_FLOATER: 60
-          STR_SECTOID: 40
+        STR_FLOATER: 60
+        STR_SECTOID: 40
       6:
-          STR_FLOATER: 50
-          STR_SECTOID: 50
+        STR_FLOATER: 50
+        STR_SECTOID: 50
       12:
-          STR_FLOATER: 70
-          STR_SECTOID: 30
+        STR_FLOATER: 70
+        STR_SECTOID: 30
       20:
-          STR_FLOATER: 50
-          STR_SECTOID: 50
+        STR_FLOATER: 50
+        STR_SECTOID: 50
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1
@@ -8361,30 +8361,30 @@ alienMissions:
     points: 100
     raceWeights:
       0:
-          STR_FLOATER: 20
-          STR_SECTOID: 60
-          STR_SNAKEMAN: 20
+        STR_FLOATER: 20
+        STR_SECTOID: 60
+        STR_SNAKEMAN: 20
       2:
-          STR_FLOATER: 30
-          STR_SECTOID: 50
-          STR_SNAKEMAN: 20
+        STR_FLOATER: 30
+        STR_SECTOID: 50
+        STR_SNAKEMAN: 20
       6:
-          STR_FLOATER: 10
-          STR_SECTOID: 20
-          STR_SNAKEMAN: 30
-          STR_MUTON: 40
+        STR_FLOATER: 10
+        STR_SECTOID: 20
+        STR_SNAKEMAN: 30
+        STR_MUTON: 40
       12:
-          STR_FLOATER: 10
-          STR_SECTOID: 20
-          STR_SNAKEMAN: 10
-          STR_MUTON: 30
-          STR_ETHEREAL: 30
+        STR_FLOATER: 10
+        STR_SECTOID: 20
+        STR_SNAKEMAN: 10
+        STR_MUTON: 30
+        STR_ETHEREAL: 30
       20:
-          STR_FLOATER: 10
-          STR_SECTOID: 20
-          STR_SNAKEMAN: 20
-          STR_MUTON: 40
-          STR_ETHEREAL: 10
+        STR_FLOATER: 10
+        STR_SECTOID: 20
+        STR_SNAKEMAN: 20
+        STR_MUTON: 40
+        STR_ETHEREAL: 10
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1
@@ -8422,30 +8422,30 @@ alienMissions:
     points: 350
     raceWeights:
       0:
-          STR_FLOATER: 50
-          STR_SECTOID: 30
-          STR_SNAKEMAN: 20
+        STR_FLOATER: 50
+        STR_SECTOID: 30
+        STR_SNAKEMAN: 20
       2:
-          STR_FLOATER: 40
-          STR_SECTOID: 30
-          STR_SNAKEMAN: 30
+        STR_FLOATER: 40
+        STR_SECTOID: 30
+        STR_SNAKEMAN: 30
       6:
-          STR_SECTOID: 10
-          STR_FLOATER: 20
-          STR_SNAKEMAN: 40
-          STR_MUTON: 30
+        STR_SECTOID: 10
+        STR_FLOATER: 20
+        STR_SNAKEMAN: 40
+        STR_MUTON: 30
       12:
-          STR_FLOATER: 20
-          STR_SECTOID: 10
-          STR_SNAKEMAN: 40
-          STR_MUTON: 20
-          STR_ETHEREAL: 10
+        STR_FLOATER: 20
+        STR_SECTOID: 10
+        STR_SNAKEMAN: 40
+        STR_MUTON: 20
+        STR_ETHEREAL: 10
       20:
-          STR_FLOATER: 20
-          STR_SECTOID: 20
-          STR_SNAKEMAN: 20
-          STR_MUTON: 20
-          STR_ETHEREAL: 20
+        STR_FLOATER: 20
+        STR_SECTOID: 20
+        STR_SNAKEMAN: 20
+        STR_MUTON: 20
+        STR_ETHEREAL: 20
     waves:
       - ufo: STR_SMALL_SCOUT
         count: 1
@@ -8471,27 +8471,27 @@ alienMissions:
     points: 200
     raceWeights:
       0:
-          STR_SECTOID: 30
-          STR_FLOATER: 70
+        STR_SECTOID: 30
+        STR_FLOATER: 70
       2:
-          STR_SECTOID: 40
-          STR_FLOATER: 60
+        STR_SECTOID: 40
+        STR_FLOATER: 60
       6:
-          STR_FLOATER: 20
-          STR_SECTOID: 30
-          STR_SNAKEMAN: 50
+        STR_FLOATER: 20
+        STR_SECTOID: 30
+        STR_SNAKEMAN: 50
       12:
-          STR_FLOATER: 10
-          STR_SECTOID: 20
-          STR_SNAKEMAN: 40
-          STR_MUTON: 20
-          STR_ETHEREAL: 10
+        STR_FLOATER: 10
+        STR_SECTOID: 20
+        STR_SNAKEMAN: 40
+        STR_MUTON: 20
+        STR_ETHEREAL: 10
       20:
-          STR_FLOATER: 10
-          STR_SECTOID: 20
-          STR_SNAKEMAN: 30
-          STR_MUTON: 30
-          STR_ETHEREAL: 10
+        STR_FLOATER: 10
+        STR_SECTOID: 20
+        STR_SNAKEMAN: 30
+        STR_MUTON: 30
+        STR_ETHEREAL: 10
     waves:
       - ufo: STR_MEDIUM_SCOUT
         count: 1
