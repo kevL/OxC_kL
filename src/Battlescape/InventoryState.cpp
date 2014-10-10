@@ -74,8 +74,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Inventory screen.
- * @param tu Does Inventory use up Time Units?
- * @param parent Pointer to parent Battlescape.
+ * @param tu		- true if in battle when inventory usage uses time units
+ * @param parent	- pointer to parent BattlescapeState
  */
 InventoryState::InventoryState(
 		bool tu,
@@ -686,7 +686,7 @@ void InventoryState::saveEquipmentLayout()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InventoryState::btnOkClick(Action*)
 {
@@ -763,7 +763,7 @@ void InventoryState::btnOkClick(Action*)
 
 /**
  * Selects the previous soldier.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InventoryState::btnPrevClick(Action*)
 {
@@ -786,7 +786,7 @@ void InventoryState::btnPrevClick(Action*)
 
 /**
  * Selects the next soldier.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InventoryState::btnNextClick(Action*)
 {
@@ -809,7 +809,7 @@ void InventoryState::btnNextClick(Action*)
 
 /**
  * Unloads the selected weapon.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InventoryState::btnUnloadClick(Action*)
 {
@@ -829,7 +829,7 @@ void InventoryState::btnUnloadClick(Action*)
 
 /**
  * Shows more ground items / rearranges them.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InventoryState::btnGroundClick(Action*)
 {
@@ -838,7 +838,7 @@ void InventoryState::btnGroundClick(Action*)
 
 /**
  * Shows the unit info screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InventoryState::btnRankClick(Action*)
 {
@@ -1230,7 +1230,7 @@ void InventoryState::invClick(Action*)
 
 /**
  * Shows item info.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InventoryState::invMouseOver(Action* action)
 {
@@ -1372,7 +1372,7 @@ void InventoryState::invMouseOver(Action* action)
 
 /**
  * Hides item info.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InventoryState::invMouseOut(Action*)
 {

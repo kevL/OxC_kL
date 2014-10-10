@@ -87,7 +87,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Debriefing screen.
- * @param game, Pointer to the core game.
  */
 DebriefingState::DebriefingState()
 	:
@@ -447,7 +446,7 @@ DebriefingState::~DebriefingState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void DebriefingState::btnOkClick(Action*)
 {

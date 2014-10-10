@@ -48,13 +48,13 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Aliens Base discovered window.
- * @param base Pointer to the alien base to get info from.
- * @param state Pointer to the Geoscape.
+ * Initializes all the elements in the AlienBase discovered window.
+ * @param base	- pointer to the AlienBase to get info from
+ * @param state	- pointer to the GeoscapeState
  */
 AlienBaseState::AlienBaseState(
-		AlienBase *base,
-		GeoscapeState *state)
+		AlienBase* base,
+		GeoscapeState* state)
 	:
 		_state(state),
 		_base(base)
@@ -104,7 +104,6 @@ AlienBaseState::AlienBaseState(
 										lat))
 		{
 			country = tr((*i)->getRules()->getType());
-
 			break;
 		}
 	}
@@ -119,7 +118,6 @@ AlienBaseState::AlienBaseState(
 										lat))
 		{
 			region = tr((*i)->getRules()->getType());
-
 			break;
 		}
 	}
@@ -127,9 +125,9 @@ AlienBaseState::AlienBaseState(
 
 	std::wstring location;
 
-	if (!country.empty())
+	if (country.empty() == false)
 		location = tr("STR_COUNTRIES_COMMA").arg(country).arg(region);
-	else if (!region.empty())
+	else if (region.empty() == false)
 		location = region;
 	else
 		location = tr("STR_UNKNOWN");
@@ -146,7 +144,7 @@ AlienBaseState::~AlienBaseState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void AlienBaseState::btnOkClick(Action*)
 {
@@ -155,7 +153,6 @@ void AlienBaseState::btnOkClick(Action*)
 	_state->getGlobe()->center(
 							_base->getLongitude(),
 							_base->getLatitude());
-
 	_game->popState();
 }
 

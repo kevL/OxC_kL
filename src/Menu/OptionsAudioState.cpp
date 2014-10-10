@@ -67,8 +67,7 @@ const std::wstring OptionsAudioState::sndFormats[] =
 
 /**
  * Initializes all the elements in the Audio Options screen.
- * @param game Pointer to the core game.
- * @param origin Game section that originated this state.
+ * @param origin - game section that originated this state
  */
 OptionsAudioState::OptionsAudioState(OptionsOrigin origin)
 	:
@@ -260,7 +259,7 @@ OptionsAudioState::~OptionsAudioState()
 
 /**
  * Updates the music volume.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsAudioState::slrMusicVolumeChange(Action*)
 {
@@ -273,7 +272,7 @@ void OptionsAudioState::slrMusicVolumeChange(Action*)
 
 /**
  * Updates the sound volume with the slider.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsAudioState::slrSoundVolumeChange(Action*)
 {
@@ -286,7 +285,7 @@ void OptionsAudioState::slrSoundVolumeChange(Action*)
 
 /**
  * Plays a game sound for volume preview.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsAudioState::slrSoundVolumeRelease(Action*)
 {
@@ -295,7 +294,7 @@ void OptionsAudioState::slrSoundVolumeRelease(Action*)
 
 /**
  * Updates the UI volume with the slider.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsAudioState::slrUiVolumeChange(Action*)
 {
@@ -308,7 +307,7 @@ void OptionsAudioState::slrUiVolumeChange(Action*)
 
 /**
  * Plays a UI sound for volume preview.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsAudioState::slrUiVolumeRelease(Action*)
 {
@@ -318,7 +317,7 @@ void OptionsAudioState::slrUiVolumeRelease(Action*)
 
 /**
  * Changes the Audio Sample Rate option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsAudioState::cbxSampleRateChange(Action*)
 {
@@ -328,7 +327,7 @@ void OptionsAudioState::cbxSampleRateChange(Action*)
 
 /**
  * Changes the Music Format option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsAudioState::cbxMusicFormatChange(Action*)
 {
@@ -338,7 +337,7 @@ void OptionsAudioState::cbxMusicFormatChange(Action*)
 
 /**
  * Changes the Sound Format option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsAudioState::cbxSoundFormatChange(Action*)
 {

@@ -44,10 +44,10 @@ namespace OpenXcom
 
 /**
  * Sets up a base view with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 BaseView::BaseView(
 		int width,
@@ -104,9 +104,9 @@ BaseView::~BaseView()
  * Changes the various resources needed for text rendering.
  * The different fonts need to be passed in advance since the text size can change mid-text.
  * text size can change mid-text, and the language affects how the text is rendered.
- * @param big, Pointer to large-size font.
- * @param small, Pointer to small-size font.
- * @param lang, Pointer to current language.
+ * @param big	- pointer to large-size font
+ * @param small	- pointer to small-size font
+ * @param lang	- pointer to current language
  */
 void BaseView::initText(
 		Font* big,
@@ -120,7 +120,7 @@ void BaseView::initText(
 
 /**
  * Changes the current base to display and initializes the internal base grid.
- * @param base Pointer to base to display.
+ * @param base - pointer to Base to display
  */
 void BaseView::setBase(Base* base)
 {
@@ -165,9 +165,8 @@ void BaseView::setBase(Base* base)
 }
 
 /**
- * Changes the texture to use for drawing
- * the various base elements.
- * @param texture Pointer to SurfaceSet to use.
+ * Changes the texture to use for drawing the various base elements.
+ * @param texture - pointer to SurfaceSet to use
  */
 void BaseView::setTexture(SurfaceSet* texture)
 {
@@ -176,7 +175,7 @@ void BaseView::setTexture(SurfaceSet* texture)
 
 /**
  * Returns the facility the mouse is currently over.
- * @return Pointer to base facility (0 if none).
+ * @return, pointer to base facility (0 if none)
  */
 BaseFacility* BaseView::getSelectedFacility() const
 {
@@ -193,10 +192,9 @@ void BaseView::resetSelectedFacility()
 	_selFacility = NULL;
 }
 
-
 /**
  * Returns the X position of the grid square the mouse is currently over.
- * @return X position on the grid.
+ * @return, X position on the grid
  */
 int BaseView::getGridX() const
 {
@@ -205,7 +203,7 @@ int BaseView::getGridX() const
 
 /**
  * Returns the Y position of the grid square the mouse is currently over.
- * @return Y position on the grid.
+ * @return, Y position on the grid
  */
 int BaseView::getGridY() const
 {
@@ -215,7 +213,7 @@ int BaseView::getGridY() const
 /**
  * If enabled, the base view will respond to player input,
  * highlighting the selected facility.
- * @param size Facility length (0 disables it).
+ * @param size - facility length (0 to disable)
  */
 void BaseView::setSelectable(int size)
 {
@@ -251,8 +249,8 @@ void BaseView::setSelectable(int size)
 /**
  * Returns if a certain facility can be successfully
  * placed on the currently selected square.
- * @param rule Facility type.
- * @return True if placeable, False otherwise.
+ * @param rule - pointer to facility type
+ * @return, true if placeable
  */
 bool BaseView::isPlaceable(RuleBaseFacility* rule) const
 {
@@ -312,8 +310,8 @@ bool BaseView::isPlaceable(RuleBaseFacility* rule) const
 
 /**
  * Returns if the placed facility is placed in queue or not.
- * @param rule Facility type.
- * @return True if queued, False otherwise.
+ * @param rule - pointer to facility type
+ * @return, true if queued
  */
 bool BaseView::isQueuedBuilding(RuleBaseFacility* rule) const
 {
@@ -416,8 +414,8 @@ void BaseView::reCalcQueuedBuildings()
 /**
  * Updates the neighborFacility's build time.
  * This is for internal use only (reCalcQueuedBuildings()).
- * @param facility Pointer to a base facility.
- * @param neighbor Pointer to a neighboring base facility.
+ * @param facility - pointer to a base facility
+ * @param neighbor - pointer to a neighboring base facility
  */
 void BaseView::updateNeighborFacilityBuildTime(
 		BaseFacility* facility,
@@ -697,7 +695,7 @@ void BaseView::draw()
 
 /**
  * Blits the base view and selector.
- * @param surface Pointer to surface to blit onto.
+ * @param surface - pointer to a Surface to blit onto
  */
 void BaseView::blit(Surface* surface)
 {
@@ -709,8 +707,8 @@ void BaseView::blit(Surface* surface)
 
 /**
  * Selects the facility the mouse is over.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void BaseView::mouseOver(Action* action, State* state)
 {
@@ -752,8 +750,8 @@ void BaseView::mouseOver(Action* action, State* state)
 
 /**
  * Deselects the facility.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void BaseView::mouseOut(Action* action, State* state)
 {

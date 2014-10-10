@@ -45,9 +45,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Aliens Terrorise window.
- * @param terror Pointer to the respective Terror Site.
- * @param city Terrorized city name.
- * @param state Pointer to the Geoscape.
+ * @param terror	- pointer to the respective Terror Site
+ * @param city		- reference the terrorized city's name
+ * @param state		- pointer to GeoscapeState
  */
 AlienTerrorState::AlienTerrorState(
 		TerrorSite* terror,
@@ -118,7 +118,7 @@ AlienTerrorState::~AlienTerrorState()
 
 /**
  * Picks a craft to intercept the UFO.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void AlienTerrorState::btnInterceptClick(Action*)
 {
@@ -138,7 +138,7 @@ void AlienTerrorState::btnInterceptClick(Action*)
 
 /**
  * Centers on the UFO and returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void AlienTerrorState::btnCentreClick(Action*)
 {
@@ -153,7 +153,7 @@ void AlienTerrorState::btnCentreClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void AlienTerrorState::btnCancelClick(Action*)
 {

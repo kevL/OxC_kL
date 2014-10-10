@@ -153,7 +153,7 @@ ProductionCompleteState::~ProductionCompleteState()
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ProductionCompleteState::btnOkClick(Action*)
 {
@@ -162,7 +162,7 @@ void ProductionCompleteState::btnOkClick(Action*)
 
 /**
  * Reduces the speed to 5 Secs and returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ProductionCompleteState::btnOk5SecsClick(Action*)
 {
@@ -173,7 +173,7 @@ void ProductionCompleteState::btnOk5SecsClick(Action*)
 
 /**
  * Goes to the base for the respective production.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ProductionCompleteState::btnGotoBaseClick(Action*)
 {

@@ -52,8 +52,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Briefing screen.
- * @param craft Pointer to the craft in the mission.
- * @param base Pointer to the base in the mission.
+ * @param craft	- pointer to the Craft in the mission
+ * @param base	- pointer to the Base in the mission
  */
 BriefingState::BriefingState(
 		Craft* craft,
@@ -180,7 +180,7 @@ BriefingState::~BriefingState()
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BriefingState::btnOkClick(Action*)
 {

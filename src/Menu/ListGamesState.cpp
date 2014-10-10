@@ -101,10 +101,9 @@ struct compareSaveTimestamp
 
 /**
  * Initializes all the elements in the Saved Game screen.
- * @param game, Pointer to the core game.
- * @param origin, Game section that originated this state.
- * @param firstValidRow, First row containing saves.
- * @param autoquick, Show auto/quick saved games?
+ * @param origin		- game section that originated this state
+ * @param firstValidRow	- first row containing saves
+ * @param autoquick		- true to show auto/quick saved games
  */
 ListGamesState::ListGamesState(
 		OptionsOrigin origin,
@@ -328,7 +327,7 @@ void ListGamesState::updateList()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ListGamesState::btnCancelClick(Action*)
 {
@@ -337,7 +336,7 @@ void ListGamesState::btnCancelClick(Action*)
 
 /**
  * Shows the details of the currently hovered save.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ListGamesState::lstSavesMouseOver(Action*)
 {
@@ -373,7 +372,7 @@ void ListGamesState::lstSavesMouseOut(Action*)
 
 /**
  * Deletes the selected save.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ListGamesState::lstSavesPress(Action* action)
 {
@@ -388,7 +387,7 @@ void ListGamesState::lstSavesPress(Action* action)
 
 /**
  * Sorts the saves by name.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ListGamesState::sortNameClick(Action*)
 {
@@ -408,7 +407,7 @@ void ListGamesState::sortNameClick(Action*)
 
 /**
  * Sorts the saves by date.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ListGamesState::sortDateClick(Action*)
 {

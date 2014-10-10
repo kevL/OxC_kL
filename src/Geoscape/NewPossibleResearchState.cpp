@@ -45,9 +45,9 @@ namespace OpenXcom
 {
 /**
  * Initializes all the elements in the EndResearch screen.
- * @param base Pointer to the base to get info from.
- * @param possibilities List of newly possible ResearchProject
- * @param showResearchButton
+ * @param base					- pointer to the Base to get info from
+ * @param possibilities			- reference the vector of pointers to RuleResearch projects
+ * @param showResearchButton	- true to show new research button
  */
 NewPossibleResearchState::NewPossibleResearchState(
 		Base* base,
@@ -115,7 +115,7 @@ NewPossibleResearchState::NewPossibleResearchState(
 
 		if (!_game->getSavedGame()->wasResearchPopped(*iter)
 			&& (*iter)->getRequirements().empty()
-			&& !liveAlien)
+			&& liveAlien == false)
 		{
 			_game->getSavedGame()->addPoppedResearch((*iter));
 			_lstPossibilities->addRow(
@@ -136,7 +136,7 @@ NewPossibleResearchState::NewPossibleResearchState(
 
 /**
  * return to the previous screen
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void NewPossibleResearchState::btnOkClick(Action*)
 {
@@ -145,7 +145,7 @@ void NewPossibleResearchState::btnOkClick(Action*)
 
 /**
  * Open the ResearchState so the player can dispatch available scientist.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void NewPossibleResearchState::btnResearchClick(Action*)
 {

@@ -38,8 +38,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Save Game screen.
- * @param game, Pointer to the core game.
- * @param origin, Game section that originated this state.
+ * @param origin - game section that originated this state
  */
 ListSaveState::ListSaveState(OptionsOrigin origin)
 	:
@@ -100,7 +99,7 @@ void ListSaveState::updateList()
 
 /**
  * Names the selected save.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ListSaveState::lstSavesPress(Action* action)
 {
@@ -173,7 +172,7 @@ void ListSaveState::edtSaveKeyPress(Action* action)
 
 /**
  * Saves the selected save.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ListSaveState::btnSaveGameClick(Action*)
 {

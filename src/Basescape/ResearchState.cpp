@@ -52,7 +52,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Research screen.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the base to get info from
  */
 ResearchState::ResearchState(
 		Base* base)
@@ -168,7 +168,7 @@ ResearchState::~ResearchState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ResearchState::btnOkClick(Action*)
 {
@@ -177,7 +177,7 @@ void ResearchState::btnOkClick(Action*)
 
 /**
  * Pops up the NewResearchListState screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ResearchState::btnNewClick(Action*)
 {
@@ -186,7 +186,7 @@ void ResearchState::btnNewClick(Action*)
 
 /**
  * Goes to the Manage Alien Containment screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ResearchState::btnAliens(Action*)
 {
@@ -197,7 +197,7 @@ void ResearchState::btnAliens(Action*)
 
 /**
  * Selects a ResearchProject to begin research.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ResearchState::onSelectProject(Action*)
 {

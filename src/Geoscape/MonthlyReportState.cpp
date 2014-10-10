@@ -61,9 +61,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Monthly Report screen.
- * @param game Pointer to the core game.
- * @param psi Show psi training afterwards?
- * @param globe Pointer to the globe.
+ * @param psi	- true to how psi training afterwards
+ * @param globe	- pointer to Globe
  */
 MonthlyReportState::MonthlyReportState(
 		bool psi,
@@ -414,7 +413,7 @@ void MonthlyReportState::calculateChanges()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MonthlyReportState::btnOkClick(Action*)
 {
@@ -491,9 +490,9 @@ void MonthlyReportState::btnOkClick(Action*)
 /**
  * Builds a sentence from a list of countries, adding the appropriate
  * separators and pluralization.
- * @param countries List of country string IDs.
- * @param singular String ID to append at the end if the list is singular.
- * @param plural String ID to append at the end if the list is plural.
+ * @param countries	- list of country string IDs
+ * @param singular	- string ID to append at the end if the list is singular
+ * @param plural	- string ID to append at the end if the list is plural
  */
 std::wstring MonthlyReportState::countryList(
 		const std::vector<std::string>& countries,

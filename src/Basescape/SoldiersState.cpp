@@ -64,10 +64,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldiers screen.
- * @param base - pointer to the base to get info from
+ * @param base - pointer to the Base to get info from
  */
-SoldiersState::SoldiersState(
-		Base* base)
+SoldiersState::SoldiersState(Base* base)
 	:
 		_base(base)
 {
@@ -252,7 +251,7 @@ void SoldiersState::init()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldiersState::btnOkClick(Action*)
 {
@@ -263,7 +262,7 @@ void SoldiersState::btnOkClick(Action*)
 
 /**
  * Opens the Psionic Training screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldiersState::btnPsiTrainingClick(Action*)
 {
@@ -274,7 +273,7 @@ void SoldiersState::btnPsiTrainingClick(Action*)
 /**
  * Goes to the Select Armor screen.
  * kL. Taken from CraftInfoState.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldiersState::btnArmorClick(Action*)
 {
@@ -286,7 +285,7 @@ void SoldiersState::btnArmorClick(Action*)
 
 /**
  * Opens the Memorial screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldiersState::btnMemorialClick(Action*)
 {

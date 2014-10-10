@@ -42,9 +42,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in a Base Name window.
- * @param base Pointer to the base to name.
- * @param globe Pointer to the Geoscape globe.
- * @param first Is this the first base in the game?
+ * @param base	- pointer to the Base to name
+ * @param globe	- pointer to the Geoscape globe
+ * @param first	- true if this is the first base in the game
  */
 BaseNameState::BaseNameState(
 		Base* base,
@@ -106,7 +106,7 @@ BaseNameState::~BaseNameState()
 
 /**
  * Updates the base name and disables the OK button if no name is entered.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseNameState::edtNameChange(Action* action)
 {
@@ -124,7 +124,7 @@ void BaseNameState::edtNameChange(Action* action)
 
 /**
  * Returns to the previous screen
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseNameState::btnOkClick(Action*)
 {

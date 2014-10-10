@@ -64,9 +64,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Transfer screen.
- * @param game Pointer to the core game.
- * @param baseFrom Pointer to the source base.
- * @param baseTo Pointer to the destination base.
+ * @param baseFrom	- pointer to the source Base
+ * @param baseTo	- pointer to the destination Base
  */
 TransferItemsState::TransferItemsState(
 		Base* baseFrom,
@@ -214,8 +213,7 @@ TransferItemsState::~TransferItemsState()
 }
 
 /**
- * Re-initialize the Transfer menu.
- * Called when cancelling TransferConfirmState.
+ * Re-initialize the Transfer menu. Called when cancelling TransferConfirmState.
  */
 void TransferItemsState::init()
 {
@@ -618,7 +616,7 @@ void TransferItemsState::think()
 
 /**
  * Transfers the selected items.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferItemsState::btnOkClick(Action*)
 {
@@ -632,7 +630,7 @@ void TransferItemsState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferItemsState::btnCancelClick(Action*)
 {
@@ -794,7 +792,7 @@ void TransferItemsState::completeTransfer()
 
 /**
  * Starts increasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferItemsState::lstItemsLeftArrowPress(Action* action)
 {
@@ -809,7 +807,7 @@ void TransferItemsState::lstItemsLeftArrowPress(Action* action)
 
 /**
  * Stops increasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferItemsState::lstItemsLeftArrowRelease(Action* action)
 {
@@ -818,9 +816,8 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action* action)
 }
 
 /**
- * Increases the selected item;
- * by one on left-click; to max on right-click.
- * @param action Pointer to an action.
+ * Increases the selected item; by one on left-click; to max on right-click.
+ * @param action - pointer to an action
  */
 void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 {
@@ -838,7 +835,7 @@ void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 
 /**
  * Starts decreasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferItemsState::lstItemsRightArrowPress(Action* action)
 {
@@ -853,7 +850,7 @@ void TransferItemsState::lstItemsRightArrowPress(Action* action)
 
 /**
  * Stops decreasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferItemsState::lstItemsRightArrowRelease(Action* action)
 {
@@ -862,9 +859,8 @@ void TransferItemsState::lstItemsRightArrowRelease(Action* action)
 }
 
 /**
- * Decreases the selected item;
- * by one on left-click; to 0 on right-click.
- * @param action Pointer to an action.
+ * Decreases the selected item; by one on left-click; to 0 on right-click.
+ * @param action - pointer to an action
  */
 void TransferItemsState::lstItemsRightArrowClick(Action* action)
 {
@@ -882,7 +878,7 @@ void TransferItemsState::lstItemsRightArrowClick(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferItemsState::lstItemsMousePress(Action* action)
 {
@@ -917,7 +913,7 @@ void TransferItemsState::lstItemsMousePress(Action* action)
 
 /**
  * Gets the transfer cost of the currently selected item.
- * @return, Transfer cost
+ * @return, transfer cost
  */
 int TransferItemsState::getCost() const
 {
@@ -946,7 +942,7 @@ int TransferItemsState::getCost() const
 
 /**
  * Gets the quantity of the currently selected item on the base.
- * @return Item quantity.
+ * @return, item quantity
  */
 int TransferItemsState::getQuantity() const
 {
@@ -977,7 +973,7 @@ void TransferItemsState::increase()
 
 /**
  * Increases the quantity of the selected item to transfer.
- * @param change How many we want to add.
+ * @param change - how many to add
  */
 void TransferItemsState::increaseByValue(int change)
 {
@@ -1185,7 +1181,7 @@ void TransferItemsState::decrease()
 
 /**
  * Decreases the quantity of the selected item to transfer.
- * @param change How many we want to remove.
+ * @param change - how many to remove
  */
 void TransferItemsState::decreaseByValue(int change)
 {
@@ -1299,7 +1295,7 @@ void TransferItemsState::updateItemStrings()
 
 /**
  * Gets the total cost of the current transfer.
- * @return Total cost.
+ * @return, total cost
  */
 int TransferItemsState::getTotal() const
 {
@@ -1317,7 +1313,7 @@ int TransferItemsState::getTotal() const
 
 /**
  * Gets the shortest distance between the two bases.
- * @return Distance.
+ * @return, distance
  */
 double TransferItemsState::getDistance() const
 {
@@ -1350,8 +1346,8 @@ double TransferItemsState::getDistance() const
 
 /**
  * Gets type of selected item.
- * @param selected, The selected item.
- * @return, The type of the selected item.
+ * @param selected - the selected item
+ * @return, the type of the selected item
  */
 enum TransferType TransferItemsState::getType(size_t selected) const
 {
@@ -1374,8 +1370,8 @@ enum TransferType TransferItemsState::getType(size_t selected) const
 
 /**
  * Gets the index of the selected item.
- * @param selected Currently selected item.
- * @return Index of the selected item.
+ * @param selected - currently selected item
+ * @return, index of the selected item
  */
 size_t TransferItemsState::getItemIndex(size_t selected) const
 {

@@ -34,10 +34,10 @@ namespace OpenXcom
 
 /**
  * Creates a FPS counter of the specified size.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 FpsCounter::FpsCounter(
 		int width,
@@ -73,9 +73,9 @@ FpsCounter::~FpsCounter()
 
 /**
  * Replaces a certain amount of colors in the FPS counter palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void FpsCounter::setPalette(
 		SDL_Color* colors,
@@ -88,7 +88,7 @@ void FpsCounter::setPalette(
 
 /**
  * Sets the text color of the counter.
- * @param color The color to set.
+ * @param color - the color to set
  */
 void FpsCounter::setColor(Uint8 color)
 {
@@ -97,7 +97,7 @@ void FpsCounter::setColor(Uint8 color)
 
 /**
  * Shows / hides the FPS counter.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void FpsCounter::handle(Action* action)
 {

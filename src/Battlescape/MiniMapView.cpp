@@ -47,20 +47,21 @@
 namespace OpenXcom
 {
 
-const int CELL_WIDTH	= 4;
-const int CELL_HEIGHT	= 4;
-const int MAX_FRAME		= 2;
+const int
+	CELL_WIDTH	= 4,
+	CELL_HEIGHT	= 4,
+	MAX_FRAME	= 2;
 
 
 /**
  * Initializes all the elements in the MiniMapView.
- * @param w, The MiniMapView width.
- * @param h, The MiniMapView height.
- * @param x, The MiniMapView x origin.
- * @param y, The MiniMapView y origin.
- * @param game, Pointer to the core game.
- * @param camera, The Battlescape camera.
- * @param battleGame, Pointer to the SavedBattleGame.
+ * @param w				- the MiniMapView width
+ * @param h				- the MiniMapView height
+ * @param x				- the MiniMapView x origin
+ * @param y				- the MiniMapView y origin
+ * @param game			- pointer to the core Game
+ * @param camera		- pointer to the battlescape Camera
+ * @param battleGame	- pointer to the SavedBattleGame
  */
 MiniMapView::MiniMapView(
 		int w,
@@ -291,7 +292,7 @@ void MiniMapView::draw()
 
 /**
  * Increments the displayed level.
- * @return New display level.
+ * @return, new display level
  */
 int MiniMapView::up()
 {
@@ -303,7 +304,7 @@ int MiniMapView::up()
 
 /**
  * Decrements the displayed level.
- * @return New display level.
+ * @return, new display level
  */
 int MiniMapView::down()
 {
@@ -315,8 +316,8 @@ int MiniMapView::down()
 
 /**
  * Handles mouse presses on the minimap. Enters mouse-moving mode when the drag-scroll button is used.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void MiniMapView::mousePress(Action* action, State* state)
 {
@@ -355,8 +356,8 @@ void MiniMapView::mousePress(Action* action, State* state)
 
 /**
  * Handles mouse clicks on the minimap. Will change the camera center to the clicked point.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void MiniMapView::mouseClick(Action* action, State* state)
 {
@@ -437,8 +438,8 @@ void MiniMapView::mouseClick(Action* action, State* state)
 /**
  * Handles moving over the minimap.
  * Will change the camera center when the mouse is moved in mouse-moving mode.
- * @param action, Pointer to an action.
- * @param state, State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void MiniMapView::mouseOver(Action* action, State* state)
 {
@@ -618,8 +619,8 @@ void MiniMapView::mouseOver(Action* action, State* state)
 /**
  * Handles moving into the minimap.
  * Stops the mouse-scrolling mode, if it's left on.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void MiniMapView::mouseIn(Action* action, State* state)
 {

@@ -36,11 +36,11 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in an error window.
- * @param id Language ID for the message to display.
- * @param palette Parent state palette.
- * @param color Color of the UI controls.
- * @param bg Background image.
- * @param bgColor Background color (-1 for Battlescape).
+ * @param id		- reference the language ID for the message to display
+ * @param palette	- pointer to the parent state palette
+ * @param color		- color of the UI controls
+ * @param bg		- reference the background image
+ * @param bgColor	- background color (-1 for Battlescape)
  */
 ErrorMessageState::ErrorMessageState(
 		const std::string& id,
@@ -60,11 +60,11 @@ ErrorMessageState::ErrorMessageState(
 
 /**
  * Initializes all the elements in an error window.
- * @param msg Text string for the message to display.
- * @param palette Parent state palette.
- * @param color Color of the UI controls.
- * @param bg Background image.
- * @param bgColor Background color (-1 for Battlescape).
+ * @param msg		- reference the text string for the message to display
+ * @param palette	- pointer to the parent state palette
+ * @param color		- color of the UI controls
+ * @param bg		- reference the background image
+ * @param bgColor	- background color (-1 for Battlescape)
  */
 ErrorMessageState::ErrorMessageState(
 		const std::wstring& msg,
@@ -91,13 +91,12 @@ ErrorMessageState::~ErrorMessageState()
 
 /**
  * Creates the elements in an error window.
- * @param msg Language ID for the message to display.
- * @param wmsg Text string for the message to display.
- * @param palette Parent state palette.
- * @param color Color of the UI controls.
- * @param bg Background image.
- * @param bgColor Background color (-1 for Battlescape).
-
+ * @param msg		- reference the language ID for the message to display
+ * @param wmsg		- reference the text string for the message to display
+ * @param palette	- pointer to the parent state palette
+ * @param color		- color of the UI controls
+ * @param bg		- background image
+ * @param bgColor	- background color (-1 for Battlescape)
  */
 void ErrorMessageState::create(
 		const std::string& str,
@@ -160,7 +159,7 @@ void ErrorMessageState::create(
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ErrorMessageState::btnOkClick(Action*)
 {

@@ -47,8 +47,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Confirm New Base window.
- * @param base Pointer to the base to place.
- * @param globe Pointer to the Geoscape globe.
+ * @param base	- pointer to the base to place
+ * @param globe	- pointer to the Geoscape globe
  */
 ConfirmNewBaseState::ConfirmNewBaseState(
 		Base* base,
@@ -120,7 +120,7 @@ ConfirmNewBaseState::ConfirmNewBaseState(
 }
 
 /**
- *
+ * dTor.
  */
 ConfirmNewBaseState::~ConfirmNewBaseState()
 {
@@ -128,7 +128,7 @@ ConfirmNewBaseState::~ConfirmNewBaseState()
 
 /**
  * Go to the Place Access Lift screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ConfirmNewBaseState::btnOkClick(Action*)
 {
@@ -156,12 +156,11 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ConfirmNewBaseState::btnCancelClick(Action*)
 {
 	_globe->onMouseOver(0);
-
 	_game->popState();
 }
 

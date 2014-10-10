@@ -311,7 +311,7 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InterceptState::btnCancelClick(Action*)
 {
@@ -320,7 +320,7 @@ void InterceptState::btnCancelClick(Action*)
 
 /**
  * Goes to the base for the respective craft.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InterceptState::btnGotoBaseClick(Action*)
 {
@@ -335,7 +335,7 @@ void InterceptState::btnGotoBaseClick(Action*)
 
 /**
  * Pick a target for the selected craft.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InterceptState::lstCraftsLeftClick(Action*)
 {
@@ -352,7 +352,7 @@ void InterceptState::lstCraftsLeftClick(Action*)
 
 /**
  * Centers on the selected craft.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InterceptState::lstCraftsRightClick(Action*)
 {

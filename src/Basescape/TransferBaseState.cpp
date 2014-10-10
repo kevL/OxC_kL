@@ -49,7 +49,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Transfer to Base window.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the base to get info from
  */
 TransferBaseState::TransferBaseState(Base* base)
 	:
@@ -174,7 +174,7 @@ TransferBaseState::~TransferBaseState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferBaseState::btnCancelClick(Action*)
 {
@@ -183,7 +183,7 @@ void TransferBaseState::btnCancelClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferBaseState::btnMatrixClick(Action*)
 {
@@ -192,7 +192,7 @@ void TransferBaseState::btnMatrixClick(Action*)
 
 /**
  * Shows the Transfer screen for the selected base.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferBaseState::lstBasesClick(Action*)
 {

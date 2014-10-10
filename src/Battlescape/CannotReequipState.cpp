@@ -43,8 +43,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Cannot Reequip screen.
- * @param game Pointer to the core game.
- * @param missingItems List of items still needed for reequip.
+ * @param missingItems - vector of ReequipStat items still missing
  */
 CannotReequipState::CannotReequipState(std::vector<ReequipStat> missingItems)
 {
@@ -130,7 +129,7 @@ CannotReequipState::~CannotReequipState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CannotReequipState::btnOkClick(Action*)
 {

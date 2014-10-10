@@ -48,11 +48,10 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Prime Grenade window.
- * @param game				- pointer to the core game
- * @param action			- pointer to the action
+ * @param action			- pointer to the BattleAction (BattlescapeGame.h)
  * @param inInventoryView	- true if called from inventory
  * @param grenade			- pointer to associated grenade
- * @param inventory			- pointer to the inventory
+ * @param inventory			- pointer to Inventory
  */
 PrimeGrenadeState::PrimeGrenadeState(
 		BattleAction* action,
@@ -201,7 +200,7 @@ PrimeGrenadeState::~PrimeGrenadeState()
 
 /**
  * Closes the window on right-click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PrimeGrenadeState::handle(Action* action)
 {
@@ -219,7 +218,7 @@ void PrimeGrenadeState::handle(Action* action)
 
 /**
  * Executes the action corresponding to this action menu item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PrimeGrenadeState::btnClick(Action* action)
 {

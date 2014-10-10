@@ -50,8 +50,8 @@ namespace OpenXcom
 {
 /**
  * Initializes all the elements in the MiniMapState screen.
- * @param camera The Battlescape camera.
- * @param battleGame The Battlescape save.
+ * @param camera		- pointer to the battlescape Camera
+ * @param battleGame	- pointer to the SavedBattleGame
  */
 MiniMapState::MiniMapState(
 		Camera* camera,
@@ -147,7 +147,7 @@ MiniMapState::~MiniMapState()
 
 /**
  * Handles mouse-wheeling.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MiniMapState::handle(Action* action)
 {
@@ -164,7 +164,7 @@ void MiniMapState::handle(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MiniMapState::btnOkClick(Action*)
 {
@@ -185,7 +185,7 @@ void MiniMapState::btnOkClick(Action*)
 
 /**
  * Changes the currently displayed minimap level.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MiniMapState::btnLevelUpClick(Action*)
 {
@@ -198,7 +198,7 @@ void MiniMapState::btnLevelUpClick(Action*)
 
 /**
  * Changes the currently displayed minimap level.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MiniMapState::btnLevelDownClick(Action*)
 {

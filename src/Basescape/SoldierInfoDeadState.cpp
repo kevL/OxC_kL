@@ -50,10 +50,8 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Soldier Dead Info screen.
- * kL: based on SoldierInfoState (see, if/when having issues)
- * @param game, Pointer to the core game.
- * @param soldierID, ID of the selected soldier.
+ * Initializes all the elements in the SoldierInfoDeadState screen.
+ * @param soldierID - ID of the selected soldier
  */
 SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	:
@@ -573,7 +571,7 @@ void SoldierInfoDeadState::init()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierInfoDeadState::btnOkClick(Action*)
 {
@@ -583,7 +581,7 @@ void SoldierInfoDeadState::btnOkClick(Action*)
 /**
  * Goes to the previous soldier.
  * kL: reversed these because SoldierMemorialState uses a reversed vector.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierInfoDeadState::btnNextClick(Action*)
 // void SoldierInfoDeadState::btnPrevClick(Action*)
@@ -599,7 +597,7 @@ void SoldierInfoDeadState::btnNextClick(Action*)
 /**
  * Goes to the next soldier.
  * kL: reversed these because SoldierMemorialState uses a reversed vector.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierInfoDeadState::btnPrevClick(Action*)
 //void SoldierInfoDeadState::btnNextClick(Action*)
@@ -622,7 +620,7 @@ void SoldierInfoDeadState::setSoldierID(size_t soldierID)
 
 /**
  * Shows the Diary Soldier window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierInfoDeadState::btnDiaryClick(Action*)
 {

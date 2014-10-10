@@ -42,8 +42,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Low Fuel window.
- * @param craft Pointer to the craft to display.
- * @param state Pointer to the Geoscape.
+ * @param craft - pointer to the Craft to display
+ * @param state - pointer to the GeoscapeState
  */
 LowFuelState::LowFuelState(
 		Craft* craft,
@@ -104,12 +104,11 @@ LowFuelState::LowFuelState(
  */
 LowFuelState::~LowFuelState()
 {
-
 }
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void LowFuelState::btnOkClick(Action*)
 {
@@ -118,7 +117,7 @@ void LowFuelState::btnOkClick(Action*)
 
 /**
  * Closes the window and sets the timer to 5 Secs.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void LowFuelState::btnOk5SecsClick(Action*)
 {

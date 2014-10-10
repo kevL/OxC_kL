@@ -38,7 +38,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements.
- * @param msg Message string.
+ * @param msg - reference a message string
  */
 InfoboxState::InfoboxState(const std::wstring& msg)
 {
@@ -83,7 +83,7 @@ InfoboxState::~InfoboxState()
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void InfoboxState::handle(Action* action)
 {

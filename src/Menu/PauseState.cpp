@@ -46,7 +46,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Pause window.
- * @param origin Game section that originated this state.
+ * @param origin - game section that originated this state
  */
 PauseState::PauseState(OptionsOrigin origin)
 	:
@@ -150,7 +150,7 @@ PauseState::~PauseState()
 
 /**
  * Opens the Load Game screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PauseState::btnLoadClick(Action*)
 {
@@ -159,7 +159,7 @@ void PauseState::btnLoadClick(Action*)
 
 /**
  * Opens the Save Game screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PauseState::btnSaveClick(Action*)
 {
@@ -184,7 +184,7 @@ void PauseState::btnOptionsClick(Action*)
 
 /**
  * Opens the Abandon Game window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PauseState::btnAbandonClick(Action*)
 {
@@ -193,7 +193,7 @@ void PauseState::btnAbandonClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PauseState::btnCancelClick(Action*)
 {

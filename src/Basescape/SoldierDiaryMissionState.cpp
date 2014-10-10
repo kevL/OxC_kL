@@ -45,7 +45,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldier Diary Mission-description window.
- * @param base		- pointer to the base to get info from
+ * @param base		- pointer to the Base to get info from
  * @param soldierId	- ID of the selected soldier
  * @param rowEntry	- listrow to get mission info from
  */
@@ -338,7 +338,7 @@ SoldierDiaryMissionState::~SoldierDiaryMissionState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierDiaryMissionState::btnOkClick(Action*)
 {

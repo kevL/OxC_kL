@@ -60,8 +60,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Sell/Sack screen.
- * @param base Pointer to the base to get info from.
- * @param origin Game section that originated this state.
+ * @param base		- pointer to the base to get info from
+ * @param origin	- game section that originated this state
  */
 SellState::SellState(
 		Base* base,
@@ -490,7 +490,7 @@ size_t SellState::getCraftIndex(size_t selected) const
 
 /**
  * Sells the selected items.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SellState::btnOkClick(Action*)
 {
@@ -678,7 +678,7 @@ void SellState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SellState::btnCancelClick(Action*)
 {
@@ -687,7 +687,7 @@ void SellState::btnCancelClick(Action*)
 
 /**
  * Starts increasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SellState::lstItemsLeftArrowPress(Action* action)
 {
@@ -702,7 +702,7 @@ void SellState::lstItemsLeftArrowPress(Action* action)
 
 /**
  * Stops increasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SellState::lstItemsLeftArrowRelease(Action* action)
 {
@@ -713,9 +713,8 @@ void SellState::lstItemsLeftArrowRelease(Action* action)
 }
 
 /**
- * Increases the selected item;
- * by one on left-click, to max on right-click.
- * @param action Pointer to an action.
+ * Increases the selected item; by one on left-click, to max on right-click.
+ * @param action - pointer to an action
  */
 void SellState::lstItemsLeftArrowClick(Action* action)
 {
@@ -733,7 +732,7 @@ void SellState::lstItemsLeftArrowClick(Action* action)
 
 /**
  * Starts decreasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SellState::lstItemsRightArrowPress(Action* action)
 {
@@ -748,7 +747,7 @@ void SellState::lstItemsRightArrowPress(Action* action)
 
 /**
  * Stops decreasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SellState::lstItemsRightArrowRelease(Action* action)
 {
@@ -759,9 +758,8 @@ void SellState::lstItemsRightArrowRelease(Action* action)
 }
 
 /**
- * Decreases the selected item;
- * by one on left-click, to 0 on right-click.
- * @param action Pointer to an action.
+ * Decreases the selected item; by one on left-click, to 0 on right-click.
+ * @param action - pointer to an action
  */
 void SellState::lstItemsRightArrowClick(Action* action)
 {
@@ -779,7 +777,7 @@ void SellState::lstItemsRightArrowClick(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SellState::lstItemsMousePress(Action* action)
 {
@@ -814,7 +812,7 @@ void SellState::lstItemsMousePress(Action* action)
 
 /**
  * Gets the price of the currently selected item.
- * @return Price of the selected item.
+ * @return, price of the selected item
  */
 int SellState::getPrice()
 {
@@ -839,7 +837,7 @@ int SellState::getPrice()
 
 /**
  * Gets the quantity of the currently selected item on the base.
- * @return Quantity of selected item on the base.
+ * @return, quantity of selected item on the base
  */
 int SellState::getQuantity()
 {
@@ -913,8 +911,8 @@ void SellState::decrease()
 
 /**
  * Increases or decreases the quantity of the selected item to sell.
- * @param change How much we want to add or remove.
- * @param dir Direction to change, +1 to increase or -1 to decrease.
+ * @param change	- how much to add or remove
+ * @param dir		- direction to change, +1 to increase or -1 to decrease
  */
 void SellState::changeByValue(
 		int change,
@@ -1136,8 +1134,8 @@ void SellState::updateItemStrings()
 
 /**
  * Gets the Type of the selected item.
- * @param selected Currently selected item.
- * @return The type of the selected item.
+ * @param selected - currently selected item
+ * @return, the type of the selected item
  */
 enum SellType SellState::getType(size_t selected) const
 {
@@ -1160,16 +1158,16 @@ enum SellType SellState::getType(size_t selected) const
 
 /**
  * Gets the index of the selected item.
- * @param selected Currently selected item.
- * @return Index of the selected item.
+ * @param selected - currently selected item
+ * @return, index of the selected item
  */
 size_t SellState::getItemIndex(size_t selected) const
 {
 	return static_cast<int>(selected)
-			- static_cast<int>(_soldiers.size())
-			- static_cast<int>(_crafts.size())
-			- _hasSci
-			- _hasEng;
+		 - static_cast<int>(_soldiers.size())
+		 - static_cast<int>(_crafts.size())
+		 - _hasSci
+		 - _hasEng;
 }
 
 }

@@ -58,12 +58,12 @@ namespace OpenXcom
 
 /**
  * Sets up an inventory with the specified size and position.
- * @param game, Pointer to core game.
- * @param width, Width in pixels.
- * @param height, Height in pixels.
- * @param x, X position in pixels.
- * @param y, Y position in pixels.
- * @param base, True if inventory is accessed from Basescape's CraftEquip screen.
+ * @param game		- pointer to core Game
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
+ * @param base		- true if inventory is accessed from Basescape's CraftEquip screen
  */
 Inventory::Inventory(
 		Game* game,
@@ -130,9 +130,9 @@ Inventory::~Inventory()
 
 /**
  * Replaces a certain amount of colors in the inventory's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void Inventory::setPalette(
 		SDL_Color* colors,
@@ -151,9 +151,9 @@ void Inventory::setPalette(
 
 /**
  * Changes the inventory's Time Units mode.
- * - when True inventory actions cost soldier time units (for battle).
+ * - when True inventory actions cost soldier time units (for battle);
  * - when False inventory actions don't cost anything (for pre-equip).
- * @param tu, Time Units mode.
+ * @param tu - true for Time Units mode; false for pre-battle equip
  */
 void Inventory::setTuMode(bool tu)
 {
@@ -162,7 +162,7 @@ void Inventory::setTuMode(bool tu)
 
 /**
  * Changes the unit to display the inventory of.
- * @param unit, Pointer to a battle unit.
+ * @param unit - pointer to a BattleUnit
  */
 void Inventory::setSelectedUnit(BattleUnit* unit)
 {
@@ -513,9 +513,9 @@ bool Inventory::overlapItems(
 
 /**
  * Gets the inventory slot located in the specified mouse position.
- * @param x Mouse X position. Returns the slot's X position.
- * @param y Mouse Y position. Returns the slot's Y position.
- * @return Slot rules, or NULL if none.
+ * @param x - pointer to mouse X position; returns the slot's X position
+ * @param y - pointer to mouse Y position; returns the slot's Y position
+ * @return, pointer to slot rules, or NULL if none
  */
 RuleInventory* Inventory::getSlotInPosition(
 		int* x,
@@ -535,7 +535,7 @@ RuleInventory* Inventory::getSlotInPosition(
 
 /**
  * Returns the item currently grabbed by the player.
- * @return Pointer to selected item, or NULL if none.
+ * @return, pointer to selected item, or NULL if none
  */
 BattleItem* Inventory::getSelectedItem() const
 {
@@ -544,7 +544,7 @@ BattleItem* Inventory::getSelectedItem() const
 
 /**
  * Changes the item currently grabbed by the player.
- * @param item Pointer to selected item, or NULL if none.
+ * @param item - pointer to selected item, or NULL if none
  */
 void Inventory::setSelectedItem(BattleItem* item)
 {
@@ -567,7 +567,7 @@ void Inventory::setSelectedItem(BattleItem* item)
 
 /**
  * Returns the item currently under mouse cursor.
- * @return Pointer to item, or NULL if none.
+ * @return, pointer to item, or NULL if none
  */
 BattleItem* Inventory::getMouseOverItem() const
 {
@@ -576,7 +576,7 @@ BattleItem* Inventory::getMouseOverItem() const
 
 /**
  * Changes the item currently under mouse cursor.
- * @param item Pointer to item, or NULL if none.
+ * @param item - pointer to item, or NULL if none
  */
 void Inventory::setMouseOverItem(BattleItem* item)
 {
@@ -635,8 +635,8 @@ void Inventory::blit(Surface* surface)
 
 /**
  * kL. Handles the cursor out.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 /* void Inventory::mouseOut(Action* action, State* state) // kL
 {
@@ -645,8 +645,8 @@ void Inventory::blit(Surface* surface)
 
 /**
  * Handles the cursor over.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Inventory::mouseOver(Action* action, State* state)
 {

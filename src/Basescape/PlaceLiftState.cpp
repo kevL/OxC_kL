@@ -48,9 +48,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Place Lift screen.
- * @param base Pointer to the base to get info from.
- * @param globe Pointer to the Geoscape globe.
- * @param first Is this a custom starting base?
+ * @param base	- pointer to the Base to get info from
+ * @param globe	- pointer to the geoscape Globe
+ * @param first	- true if this a custom starting base
  */
 PlaceLiftState::PlaceLiftState(
 		Base* base,
@@ -89,7 +89,7 @@ PlaceLiftState::~PlaceLiftState()
 
 /**
  * Processes clicking on facilities.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PlaceLiftState::viewClick(Action*)
 {

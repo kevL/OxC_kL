@@ -52,7 +52,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Craft Soldiers screen.
- * @param base	- pointer to the base to get info from
+ * @param base	- pointer to the Base to get info from
  * @param craft	- ID of the selected craft
  */
 CraftSoldiersState::CraftSoldiersState(
@@ -168,7 +168,7 @@ CraftSoldiersState::~CraftSoldiersState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftSoldiersState::btnOkClick(Action*)
 {
@@ -179,7 +179,7 @@ void CraftSoldiersState::btnOkClick(Action*)
 
 /**
  * kL. Unloads all soldiers from current transport craft.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftSoldiersState::btnUnloadClick(Action*) // kL
 {
@@ -326,7 +326,7 @@ void CraftSoldiersState::init()
 
 /**
  * Reorders a soldier up.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftSoldiersState::lstLeftArrowClick(Action* action)
 {
@@ -385,7 +385,7 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 
 /**
  * Moves a soldier up on the list.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  * @param row Selected soldier row.
  * @param max Move the soldier to the top?
  */
@@ -418,7 +418,7 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 
 /**
  * Reorders a soldier down.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftSoldiersState::lstRightArrowClick(Action* action)
 {
@@ -479,9 +479,9 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 
 /**
  * Moves a soldier down on the list.
- * @param action Pointer to an action.
- * @param row Selected soldier row.
- * @param max Move the soldier to the bottom?
+ * @param action	- pointer to an action
+ * @param row		- selected soldier row
+ * @param max		- true to move the soldier to the bottom
  */
 /*kL void CraftSoldiersState::moveSoldierDown(Action* action, size_t row, bool max)
 {
@@ -511,9 +511,8 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 } */
 
 /**
- * LMB assigns and de-assigns soldiers from a craft.
- * RMB shows soldier info.
- * @param action Pointer to an action
+ * LMB assigns and de-assigns soldiers from a craft. RMB shows soldier info.
+ * @param action - pointer to an action
  */
 void CraftSoldiersState::lstSoldiersPress(Action* action)
 {
@@ -576,7 +575,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /*kL void CraftSoldiersState::lstSoldiersMousePress(Action* action)
 {

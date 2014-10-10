@@ -50,8 +50,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the ResearchProject screen.
- * @param base Pointer to the base to get info from.
- * @param rule A RuleResearch which will be used to create a new ResearchProject
+ * @param base - pointer to the Base to get info from
+ * @param rule - pointer to a RuleResearch which will be used to create a new ResearchProject
  */
 ResearchInfoState::ResearchInfoState(
 		Base* base,
@@ -68,8 +68,8 @@ ResearchInfoState::ResearchInfoState(
 
 /**
  * Initializes all the elements in the ResearchProject screen.
- * @param base Pointer to the base to get info from.
- * @param project A ResearchProject to modify
+ * @param base		- pointer to the Base to get info from
+ * @param project	- pointer to a ResearchProject to modify
  */
 ResearchInfoState::ResearchInfoState(
 		Base* base,
@@ -222,7 +222,7 @@ void ResearchInfoState::buildUi()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ResearchInfoState::btnOkClick(Action*)
 {
@@ -234,7 +234,7 @@ void ResearchInfoState::btnOkClick(Action*)
 /**
  * Returns to the previous screen, removing the current project from the active
  * research list.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ResearchInfoState::btnCancelClick(Action*)
 {
@@ -274,7 +274,7 @@ void ResearchInfoState::setAssignedScientist()
 
 /**
  * Increases or decreases the scientists according the mouse-wheel used.
- * @param action Pointer to an Action.
+ * @param action - pointer to an action
  */
 /* void ResearchInfoState::handleWheel(Action* action)
 {
@@ -286,7 +286,7 @@ void ResearchInfoState::setAssignedScientist()
 
 /**
  * Starts the timeMore timer.
- * @param action Pointer to an Action.
+ * @param action - pointer to an action
  */
 void ResearchInfoState::morePress(Action* action)
 {
@@ -296,7 +296,7 @@ void ResearchInfoState::morePress(Action* action)
 
 /**
  * Stops the timeMore timer.
- * @param action Pointer to an Action.
+ * @param action - pointer to an action
  */
 void ResearchInfoState::moreRelease(Action* action)
 {
@@ -310,7 +310,7 @@ void ResearchInfoState::moreRelease(Action* action)
 /**
  * Allocates scientists to the current project;
  * one scientist on left-click, all scientists on right-click.
- * @param action Pointer to an Action.
+ * @param action - pointer to an action
  */
 void ResearchInfoState::moreClick(Action* action)
 {
@@ -322,7 +322,7 @@ void ResearchInfoState::moreClick(Action* action)
 
 /**
  * Starts the timeLess timer.
- * @param action Pointer to an Action.
+ * @param action - pointer to an action
  */
 void ResearchInfoState::lessPress(Action* action)
 {
@@ -332,7 +332,7 @@ void ResearchInfoState::lessPress(Action* action)
 
 /**
  * Stops the timeLess timer.
- * @param action Pointer to an Action.
+ * @param action - pointer to an action
  */
 void ResearchInfoState::lessRelease(Action* action)
 {
@@ -346,7 +346,7 @@ void ResearchInfoState::lessRelease(Action* action)
 /**
  * Removes scientists from the current project;
  * one scientist on left-click, all scientists on right-click.
- * @param action Pointer to an Action.
+ * @param action - pointer to an action
  */
 void ResearchInfoState::lessClick(Action* action)
 {

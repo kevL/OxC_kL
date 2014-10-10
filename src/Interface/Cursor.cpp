@@ -30,14 +30,13 @@ namespace OpenXcom
 {
 
 /**
- * Sets up a cursor with the specified size and position
- * and hides the system cursor.
+ * Sets up a cursor with the specified size and position and hides the system cursor.
  * @note The size and position don't really matter since
  * it's a 9x13 shape, they're just there for inheritance.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 Cursor::Cursor(
 		int width,
@@ -63,7 +62,7 @@ Cursor::~Cursor()
 
 /**
  * Automatically updates the cursor position when the mouse moves.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void Cursor::handle(Action* action)
 {

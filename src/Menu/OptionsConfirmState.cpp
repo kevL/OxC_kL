@@ -41,7 +41,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Confirm Display Options screen.
- * @param origin Game section that originated this state.
+ * @param origin - game section that originated this state.
  */
 OptionsConfirmState::OptionsConfirmState(OptionsOrigin origin)
 	:
@@ -134,7 +134,7 @@ void OptionsConfirmState::countdown()
 
 /**
  * Goes back to the Main Menu.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsConfirmState::btnYesClick(Action*)
 {
@@ -144,7 +144,7 @@ void OptionsConfirmState::btnYesClick(Action*)
 
 /**
  * Restores the original display options.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsConfirmState::btnNoClick(Action*)
 {

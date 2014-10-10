@@ -99,6 +99,7 @@ struct GraphBtnInfo
 
 /**
  * Initializes all the elements in the Graphs screen.
+ * @param curGraph - the graph that was last selected
  */
 GraphsState::GraphsState(int curGraph)
 	:
@@ -836,7 +837,7 @@ void GraphsState::blink()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GraphsState::btnGeoscapeClick(Action*)
 {

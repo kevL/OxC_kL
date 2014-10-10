@@ -47,9 +47,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Build Facilities window.
- * @param base Pointer to the base to get info from.
- * @param state Pointer to the base state to refresh.
- * @param globe Pointer to the globe to refresh.
+ * @param base	- pointer to the Base to get info from
+ * @param state	- pointer to the base state to refresh
+ * @param globe	- pointer to the Blobe to refresh
  */
 SelectStartFacilityState::SelectStartFacilityState(
 		Base* base,
@@ -97,7 +97,7 @@ void SelectStartFacilityState::populateBuildList()
 
 /**
  * Resets the base building.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SelectStartFacilityState::btnOkClick(Action*)
 {
@@ -122,7 +122,7 @@ void SelectStartFacilityState::btnOkClick(Action*)
 
 /**
  * Places the selected facility.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SelectStartFacilityState::lstFacilitiesClick(Action*)
 {

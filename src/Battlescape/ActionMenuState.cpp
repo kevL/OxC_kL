@@ -206,7 +206,7 @@ ActionMenuState::~ActionMenuState()
 /**
  * Adds a new menu item for an action.
  * @param baType	- action type (BattlescapeGame.h)
- * @param desc		- reference to the action description
+ * @param desc		- reference the action description
  * @param id		- pointer to the new item-action ID
  */
 void ActionMenuState::addItem(
@@ -259,7 +259,7 @@ void ActionMenuState::addItem(
 
 /**
  * Closes the window on click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ActionMenuState::handle(Action* action)
 {
@@ -277,7 +277,7 @@ void ActionMenuState::handle(Action* action)
 
 /**
  * Executes the action corresponding to this action menu item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ActionMenuState::btnActionMenuItemClick(Action* action)
 {
@@ -433,8 +433,8 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 
 /**
  * Updates the scale.
- * @param dX delta of X;
- * @param dY delta of Y;
+ * @param dX - delta of X
+ * @param dY - delta of Y
  */
 void ActionMenuState::resize(
 		int& dX,

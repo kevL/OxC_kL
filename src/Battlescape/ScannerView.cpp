@@ -38,12 +38,12 @@ namespace OpenXcom
 
 /**
  * Initializes the Scanner view.
- * @param w The ScannerView width.
- * @param h The ScannerView height.
- * @param x The ScannerView x origin.
- * @param y The ScannerView y origin.
- * @param game Pointer to the core game.
- * @param unit The current unit.
+ * @param w		- the ScannerView width
+ * @param h		- the ScannerView height
+ * @param x		- the ScannerView x origin
+ * @param y		- the ScannerView y origin
+ * @param game	- pointer to the core Game
+ * @param unit	- the current BattleUnit
  */
 ScannerView::ScannerView(
 		int w,
@@ -128,8 +128,8 @@ void ScannerView::draw()
 
 /**
  * Handles clicks on the scanner view.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void ScannerView::mouseClick(Action*, State*)
 {

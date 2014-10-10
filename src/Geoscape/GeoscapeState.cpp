@@ -851,7 +851,7 @@ void GeoscapeState::blit()
 
 /**
  * Handle key shortcuts.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::handle(Action* action)
 {
@@ -3127,7 +3127,7 @@ Globe* GeoscapeState::getGlobe() const
 /**
  * Processes any left-clicks on globe markers,
  * or right-clicks to scroll the globe.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::globeClick(Action* action)
 {
@@ -3176,7 +3176,7 @@ void GeoscapeState::globeClick(Action* action)
 
 /**
  * Opens the Intercept window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnInterceptClick(Action*)
 {
@@ -3189,7 +3189,7 @@ void GeoscapeState::btnInterceptClick(Action*)
 
 /**
  * Goes to the Basescape screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnBasesClick(Action*)
 {
@@ -3229,7 +3229,7 @@ void GeoscapeState::btnBasesClick(Action*)
 
 /**
  * Goes to the Graphs screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnGraphsClick(Action*)
 {
@@ -3242,7 +3242,7 @@ void GeoscapeState::btnGraphsClick(Action*)
 
 /**
  * Goes to the Ufopaedia window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnUfopaediaClick(Action*)
 {
@@ -3253,7 +3253,7 @@ void GeoscapeState::btnUfopaediaClick(Action*)
 
 /**
  * Opens the Options window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnOptionsClick(Action*)
 {
@@ -3264,7 +3264,7 @@ void GeoscapeState::btnOptionsClick(Action*)
 
 /**
  * Goes to the Funding screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnFundingClick(Action*)
 {
@@ -3287,7 +3287,7 @@ void GeoscapeState::btnDetailPress(Action* action)
 
 /**
  * Starts rotating the globe to the left.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnRotateLeftPress(Action*)
 {
@@ -3296,7 +3296,7 @@ void GeoscapeState::btnRotateLeftPress(Action*)
 
 /**
  * Stops rotating the globe to the left.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnRotateLeftRelease(Action*)
 {
@@ -3305,7 +3305,7 @@ void GeoscapeState::btnRotateLeftRelease(Action*)
 
 /**
  * Starts rotating the globe to the right.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnRotateRightPress(Action*)
 {
@@ -3314,7 +3314,7 @@ void GeoscapeState::btnRotateRightPress(Action*)
 
 /**
  * Stops rotating the globe to the right.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnRotateRightRelease(Action*)
 {
@@ -3323,7 +3323,7 @@ void GeoscapeState::btnRotateRightRelease(Action*)
 
 /**
  * Starts rotating the globe upwards.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnRotateUpPress(Action*)
 {
@@ -3332,7 +3332,7 @@ void GeoscapeState::btnRotateUpPress(Action*)
 
 /**
  * Stops rotating the globe upwards.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnRotateUpRelease(Action*)
 {
@@ -3341,7 +3341,7 @@ void GeoscapeState::btnRotateUpRelease(Action*)
 
 /**
  * Starts rotating the globe downwards.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnRotateDownPress(Action*)
 {
@@ -3350,7 +3350,7 @@ void GeoscapeState::btnRotateDownPress(Action*)
 
 /**
  * Stops rotating the globe downwards.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnRotateDownRelease(Action*)
 {
@@ -3359,7 +3359,7 @@ void GeoscapeState::btnRotateDownRelease(Action*)
 
 /**
  * Zooms into the globe.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnZoomInLeftClick(Action*)
 {
@@ -3368,7 +3368,7 @@ void GeoscapeState::btnZoomInLeftClick(Action*)
 
 /**
  * Zooms the globe maximum.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void GeoscapeState::btnZoomInRightClick(Action*)
 {
@@ -3377,7 +3377,7 @@ void GeoscapeState::btnZoomInLeftClick(Action*)
 
 /**
  * Zooms out of the globe.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void GeoscapeState::btnZoomOutLeftClick(Action*)
 {
@@ -3386,7 +3386,7 @@ void GeoscapeState::btnZoomOutLeftClick(Action*)
 
 /**
  * Zooms the globe minimum.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void GeoscapeState::btnZoomOutRightClick(Action*)
 {

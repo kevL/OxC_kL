@@ -36,7 +36,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Ufo Lost window.
- * @param id Name of the UFO.
+ * @param id - reference the name of the UFO
  */
 UfoLostState::UfoLostState(const std::wstring& id)
 	:
@@ -88,7 +88,7 @@ UfoLostState::~UfoLostState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void UfoLostState::btnOkClick(Action*)
 {

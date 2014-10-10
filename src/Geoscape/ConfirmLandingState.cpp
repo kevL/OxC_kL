@@ -64,7 +64,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Confirm Landing window.
- * @param craft 	- pointer to the craft to confirm
+ * @param craft 	- pointer to the Craft to confirm
  * @param texture	- texture of the landing site
  * @param shade		- shade of the landing site
  */
@@ -334,7 +334,7 @@ void ConfirmLandingState::init()
 
 /**
  * Enters the mission.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ConfirmLandingState::btnYesClick(Action*)
 {
@@ -389,7 +389,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 /**
  * Returns the craft to base and closes the window.
  * kL: CHANGE the craft goes into Patrol mode.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ConfirmLandingState::btnNoClick(Action*)
 {

@@ -53,8 +53,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Base Info screen.
- * @param base Pointer to the base to get info from.
- * @param state Pointer to the Basescape state.
+ * @param base	- pointer to the base to get info from
+ * @param state	- pointer to the Basescape state
  */
 BaseInfoState::BaseInfoState(
 		Base* base,
@@ -464,7 +464,7 @@ void BaseInfoState::init()
 
 /**
  * Changes the base name.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseInfoState::edtBaseChange(Action* action)
 {
@@ -473,7 +473,7 @@ void BaseInfoState::edtBaseChange(Action* action)
 
 /**
  * Selects a new base to display.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseInfoState::miniClick(Action*)
 {
@@ -490,7 +490,7 @@ void BaseInfoState::miniClick(Action*)
 
 /**
  * Selects a new base to display.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseInfoState::handleKeyPress(Action* action)
 {
@@ -530,7 +530,7 @@ void BaseInfoState::handleKeyPress(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseInfoState::btnOkClick(Action*)
 {
@@ -539,7 +539,7 @@ void BaseInfoState::btnOkClick(Action*)
 
 /**
  * Goes to the Transfers window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseInfoState::btnTransfersClick(Action*)
 {
@@ -548,7 +548,7 @@ void BaseInfoState::btnTransfersClick(Action*)
 
 /**
  * Goes to the Stores screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseInfoState::btnStoresClick(Action*)
 {
@@ -557,7 +557,7 @@ void BaseInfoState::btnStoresClick(Action*)
 
 /**
  * Goes to the Monthly Costs screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseInfoState::btnMonthlyCostsClick(Action*)
 {

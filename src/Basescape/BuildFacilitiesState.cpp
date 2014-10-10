@@ -44,8 +44,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Build Facilities window.
- * @param base Pointer to the base to get info from.
- * @param state Pointer to the base state to refresh.
+ * @param base	- pointer to the Base to get info from
+ * @param state	- pointer to the base state to refresh
  */
 BuildFacilitiesState::BuildFacilitiesState(
 		Base* base,
@@ -156,7 +156,7 @@ void BuildFacilitiesState::init()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BuildFacilitiesState::btnOkClick(Action*)
 {
@@ -165,7 +165,7 @@ void BuildFacilitiesState::btnOkClick(Action*)
 
 /**
  * Places the selected facility.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BuildFacilitiesState::lstFacilitiesClick(Action*)
 {

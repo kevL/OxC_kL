@@ -42,7 +42,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Difficulty window.
- * @param game Pointer to the core game.
  */
 NewGameState::NewGameState()
 {
@@ -148,7 +147,7 @@ NewGameState::~NewGameState()
 
 /**
  * Sets up a new saved game and jumps to the Geoscape.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void NewGameState::btnOkClick(Action*)
 {
@@ -192,7 +191,7 @@ void NewGameState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void NewGameState::btnCancelClick(Action*)
 {

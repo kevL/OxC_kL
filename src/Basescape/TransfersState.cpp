@@ -43,7 +43,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Transfers window.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the Base to get info from
  */
 TransfersState::TransfersState(Base* base)
 	:
@@ -141,7 +141,7 @@ TransfersState::~TransfersState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransfersState::btnOkClick(Action*)
 {

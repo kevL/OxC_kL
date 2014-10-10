@@ -53,7 +53,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Psi Training screen.
- * @param base - pointer to the base to handle
+ * @param base - pointer to the Base to get info from
  */
 AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	:
@@ -227,7 +227,7 @@ void AllocatePsiTrainingState::init()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void AllocatePsiTrainingState::btnOkClick(Action*)
 {
@@ -237,8 +237,7 @@ void AllocatePsiTrainingState::btnOkClick(Action*)
 }
 
 /**
- * LMB assigns & removes a soldier from Psi Training.
- * RMB shows soldier info.
+ * LMB assigns & removes a soldier from Psi Training. RMB shows soldier info.
  * @param action - pointer to an action
  */
 void AllocatePsiTrainingState::lstSoldiersPress(Action* action)

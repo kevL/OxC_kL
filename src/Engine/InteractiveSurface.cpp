@@ -31,10 +31,10 @@ const SDLKey InteractiveSurface::SDLK_ANY = (SDLKey) - 1; // using an unused key
 
 /**
  * Sets up a blank interactive surface with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 InteractiveSurface::InteractiveSurface(
 		int width,
@@ -306,8 +306,8 @@ void InteractiveSurface::mousePress(Action* action, State* state)
  * Called every time there's a mouse release over the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void InteractiveSurface::mouseRelease(Action* action, State* state)
 {
@@ -331,8 +331,8 @@ void InteractiveSurface::mouseRelease(Action* action, State* state)
  * Called every time there's a mouse click on the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void InteractiveSurface::mouseClick(Action* action, State* state)
 {
@@ -356,8 +356,8 @@ void InteractiveSurface::mouseClick(Action* action, State* state)
  * Called every time the mouse moves into the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void InteractiveSurface::mouseIn(Action* action, State* state)
 {
@@ -369,8 +369,8 @@ void InteractiveSurface::mouseIn(Action* action, State* state)
  * Called every time the mouse moves over the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void InteractiveSurface::mouseOver(Action* action, State* state)
 {
@@ -382,8 +382,8 @@ void InteractiveSurface::mouseOver(Action* action, State* state)
  * Called every time the mouse moves out of the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void InteractiveSurface::mouseOut(Action* action, State* state)
 {
@@ -395,8 +395,8 @@ void InteractiveSurface::mouseOut(Action* action, State* state)
  * Called every time there's a keyboard press when the surface is focused.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void InteractiveSurface::keyboardPress(Action* action, State* state)
 {
@@ -423,8 +423,8 @@ void InteractiveSurface::keyboardPress(Action* action, State* state)
  * Called every time there's a keyboard release over the surface.
  * Allows the surface to have custom functionality for this action,
  * and can be called externally to simulate the action.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void InteractiveSurface::keyboardRelease(Action* action, State* state)
 {

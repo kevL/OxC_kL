@@ -51,8 +51,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Matrix window.
- * @param game - pointer to the core game
- * @param base - pointer to the accessing base
+ * @param base - pointer to the accessing Base
  */
 StoresMatrixState::StoresMatrixState(Base* base)
 	:
@@ -420,7 +419,7 @@ StoresMatrixState::~StoresMatrixState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void StoresMatrixState::btnOkClick(Action*)
 {

@@ -43,7 +43,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Abandon Game screen.
- * @param origin Game section that originated this state.
+ * @param origin - game section that originated this state
  */
 AbandonGameState::AbandonGameState(OptionsOrigin origin)
 	:
@@ -109,7 +109,7 @@ AbandonGameState::~AbandonGameState()
 
 /**
  * Goes back to the Main Menu.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void AbandonGameState::btnYesClick(Action*)
 {
@@ -139,7 +139,7 @@ void AbandonGameState::btnYesClick(Action*)
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void AbandonGameState::btnNoClick(Action*)
 {

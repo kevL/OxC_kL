@@ -265,7 +265,7 @@ void ManageAlienContainmentState::think()
 
 /**
  * Deals with the selected aliens.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManageAlienContainmentState::btnOkClick(Action*)
 {
@@ -338,7 +338,7 @@ void ManageAlienContainmentState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManageAlienContainmentState::btnCancelClick(Action*)
 {
@@ -347,7 +347,7 @@ void ManageAlienContainmentState::btnCancelClick(Action*)
 
 /**
  * Starts increasing the alien count.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManageAlienContainmentState::lstItemsRightArrowPress(Action* action)
 {
@@ -362,7 +362,7 @@ void ManageAlienContainmentState::lstItemsRightArrowPress(Action* action)
 
 /**
  * Stops increasing the alien count.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManageAlienContainmentState::lstItemsRightArrowRelease(Action* action)
 {
@@ -375,7 +375,7 @@ void ManageAlienContainmentState::lstItemsRightArrowRelease(Action* action)
 /**
  * Increases the selected alien count;
  * by one on left-click, to max on right-click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManageAlienContainmentState::lstItemsRightArrowClick(Action* action)
 {
@@ -393,7 +393,7 @@ void ManageAlienContainmentState::lstItemsRightArrowClick(Action* action)
 
 /**
  * Starts decreasing the alien count.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManageAlienContainmentState::lstItemsLeftArrowPress(Action* action)
 {
@@ -408,7 +408,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowPress(Action* action)
 
 /**
  * Stops decreasing the alien count.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManageAlienContainmentState::lstItemsLeftArrowRelease(Action* action)
 {
@@ -421,7 +421,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowRelease(Action* action)
 /**
  * Decreases the selected alien count;
  * by one on left-click, to 0 on right-click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManageAlienContainmentState::lstItemsLeftArrowClick(Action* action)
 {
@@ -439,7 +439,7 @@ void ManageAlienContainmentState::lstItemsLeftArrowClick(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManageAlienContainmentState::lstItemsMousePress(Action* action)
 {

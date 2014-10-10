@@ -55,8 +55,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Craft Info screen.
- * @param base Pointer to the base to get info from.
- * @param craftId ID of the selected craft.
+ * @param base		- pointer to the Base to get info from
+ * @param craftId	- ID of the selected craft
  */
 CraftInfoState::CraftInfoState(
 		Base* base,
@@ -381,7 +381,7 @@ void CraftInfoState::init()
 
 /**
  * Turns an amount of time into a day/hour string.
- * @param total
+ * @param total -
  */
 std::wstring CraftInfoState::formatTime(int total)
 {
@@ -406,7 +406,7 @@ std::wstring CraftInfoState::formatTime(int total)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftInfoState::btnOkClick(Action*)
 {
@@ -415,7 +415,7 @@ void CraftInfoState::btnOkClick(Action*)
 
 /**
  * Goes to the Select Armament window for the first weapon.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftInfoState::btnW1Click(Action*)
 {
@@ -427,7 +427,7 @@ void CraftInfoState::btnW1Click(Action*)
 
 /**
  * Goes to the Select Armament window for the second weapon.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftInfoState::btnW2Click(Action*)
 {
@@ -439,7 +439,7 @@ void CraftInfoState::btnW2Click(Action*)
 
 /**
  * Goes to the Select Squad screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftInfoState::btnCrewClick(Action*)
 {
@@ -450,7 +450,7 @@ void CraftInfoState::btnCrewClick(Action*)
 
 /**
  * Goes to the Select Equipment screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftInfoState::btnEquipClick(Action*)
 {
@@ -461,7 +461,7 @@ void CraftInfoState::btnEquipClick(Action*)
 
 /**
  * Goes to the Select Armor screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftInfoState::btnArmorClick(Action*)
 {
@@ -472,7 +472,7 @@ void CraftInfoState::btnArmorClick(Action*)
 
 /**
  * Changes the Craft name.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftInfoState::edtCraftChange(Action* action)
 {

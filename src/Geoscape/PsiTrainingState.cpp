@@ -46,7 +46,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Psi Training screen.
- * @param game Pointer to the core game.
  */
 PsiTrainingState::PsiTrainingState()
 {
@@ -110,7 +109,7 @@ PsiTrainingState::PsiTrainingState()
 }
 
 /**
- *
+ * dTor.
  */
 PsiTrainingState::~PsiTrainingState()
 {
@@ -118,7 +117,7 @@ PsiTrainingState::~PsiTrainingState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PsiTrainingState::btnOkClick(Action*)
 {
@@ -127,7 +126,7 @@ void PsiTrainingState::btnOkClick(Action*)
 
 /**
  * Goes to the allocation screen for the corresponding base.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PsiTrainingState::btnBaseXClick(Action* action)
 {

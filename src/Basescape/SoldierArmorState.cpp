@@ -47,8 +47,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldier Armor window.
- * @param base Pointer to the base to get info from.
- * @param soldier ID of the selected soldier.
+ * @param base		- pointer to the Base to get info from
+ * @param soldier	- ID of the selected soldier
  */
 SoldierArmorState::SoldierArmorState(
 		Base* base,
@@ -160,7 +160,7 @@ SoldierArmorState::~SoldierArmorState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierArmorState::btnCancelClick(Action*)
 {
@@ -169,7 +169,7 @@ void SoldierArmorState::btnCancelClick(Action*)
 
 /**
  * Equips the armor on the soldier and returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierArmorState::lstArmorClick(Action*)
 {

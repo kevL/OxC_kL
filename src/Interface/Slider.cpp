@@ -35,10 +35,10 @@ namespace OpenXcom
 
 /**
  * Sets up a slider with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 Slider::Slider(
 		int width,
@@ -109,7 +109,7 @@ Slider::~Slider()
 
 /**
  * Changes the position of the surface in the X axis.
- * @param x X position in pixels.
+ * @param x - X position in pixels
  */
 void Slider::setX(int x)
 {
@@ -129,7 +129,7 @@ void Slider::setX(int x)
 
 /**
  * Changes the position of the surface in the Y axis.
- * @param y Y position in pixels.
+ * @param y - Y position in pixels
  */
 void Slider::setY(int y)
 {
@@ -147,9 +147,9 @@ void Slider::setY(int y)
  * The different fonts need to be passed in advance since the
  * text size can change mid-text, and the language affects
  * how the text is rendered.
- * @param big Pointer to large-size font.
- * @param small Pointer to small-size font.
- * @param lang Pointer to current language.
+ * @param big	- pointer to large-size font
+ * @param small	- pointer to small-size font
+ * @param lang	- pointer to current language
  */
 void Slider::initText(
 		Font* big,
@@ -163,9 +163,8 @@ void Slider::initText(
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for
- * Battlescape.
- * @param contrast High contrast setting.
+ * Enables/disables high contrast color. Mostly used for Battlescape.
+ * @param contrast - high contrast setting
  */
 void Slider::setHighContrast(bool contrast)
 {
@@ -178,7 +177,7 @@ void Slider::setHighContrast(bool contrast)
 
 /**
  * Changes the color used to render the slider.
- * @param color Color value.
+ * @param color - color value
  */
 void Slider::setColor(Uint8 color)
 {
@@ -191,7 +190,7 @@ void Slider::setColor(Uint8 color)
 
 /**
  * Returns the color used to render the slider.
- * @return Color value.
+ * @return, color value
  */
 Uint8 Slider::getColor() const
 {
@@ -200,9 +199,9 @@ Uint8 Slider::getColor() const
 
 /**
  * Replaces a certain amount of colors in the slider's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void Slider::setPalette(
 		SDL_Color* colors,
@@ -219,10 +218,9 @@ void Slider::setPalette(
 }
 
 /**
- * Automatically updates the slider
- * when the mouse moves.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * Automatically updates the slider when the mouse moves.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Slider::handle(Action* action, State* state)
 {
@@ -250,7 +248,7 @@ void Slider::handle(Action* action, State* state)
 
 /**
  * Moves the slider to the new value position.
- * @param value New value.
+ * @param value - new value
  */
 void Slider::setPosition(double pos)
 {
@@ -260,8 +258,8 @@ void Slider::setPosition(double pos)
 
 /**
  * Changes the range of values the slider can contain.
- * @param min Minimum value.
- * @param max Maximum value.
+ * @param min - minimum value
+ * @param max - maximum value
  */
 void Slider::setRange(
 		int min,
@@ -275,7 +273,7 @@ void Slider::setRange(
 
 /**
  * Changes the current value of the slider and positions it appropriately.
- * @param value New value.
+ * @param value - new value
  */
 void Slider::setValue(int value)
 {
@@ -299,7 +297,7 @@ int Slider::getValue() const
 
 /**
  * Blits the slider contents.
- * @param surface Pointer to surface to blit onto.
+ * @param surface - pointer to a Surface to blit onto
  */
 void Slider::blit(Surface* surface)
 {
@@ -318,8 +316,8 @@ void Slider::blit(Surface* surface)
 
 /**
  * The slider only moves while the button is pressed.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Slider::mousePress(Action* action, State* state)
 {
@@ -342,8 +340,8 @@ void Slider::mousePress(Action* action, State* state)
 
 /**
  * The slider stops moving when the button is released.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Slider::mouseRelease(Action* action, State* state)
 {

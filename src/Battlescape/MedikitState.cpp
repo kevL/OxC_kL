@@ -53,8 +53,8 @@ namespace OpenXcom
 
 /**
  * Helper function that returns a string representation of a type (mainly used for numbers).
- * @param t The value to stringify.
- * @return A string representation of the value.
+ * @param t - the value to stringify
+ * @return, a string representation of the value
  */
 template<typename type>
 std::wstring toString(type t)
@@ -82,8 +82,8 @@ class MedikitTitle
 
 /**
  * Initializes a Medikit title.
- * @param y The title's y origin.
- * @param title The title.
+ * @param y		- the title's y origin
+ * @param title	- reference the title
  */
 MedikitTitle::MedikitTitle(
 		int y,
@@ -110,7 +110,7 @@ class MedikitTxt
 
 /**
  * Initializes a Medikit text.
- * @param y The text's y origin.
+ * @param y - the text's y origin
  */
 MedikitTxt::MedikitTxt(int y)
 	:
@@ -137,7 +137,7 @@ class MedikitButton
 
 /**
  * Initializes a Medikit button.
- * @param y The button's y origin.
+ * @param y - the button's y origin
  */
 MedikitButton::MedikitButton(int y)
 	:
@@ -147,8 +147,8 @@ MedikitButton::MedikitButton(int y)
 
 /**
  * Initializes the Medikit State.
- * @param targetUnit The wounded unit.
- * @param action The healing action.
+ * @param targetUnit	- the wounded BattleUnit
+ * @param action		- the healing BattleAction (BattlescapeGame.h)
  */
 MedikitState::MedikitState(
 		BattleUnit* targetUnit,
@@ -295,7 +295,7 @@ MedikitState::MedikitState(
 
 /**
  * Closes the window on right-click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MedikitState::handle(Action* action)
 {
@@ -310,7 +310,7 @@ void MedikitState::handle(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MedikitState::onEndClick(Action*)
 {
@@ -330,7 +330,7 @@ void MedikitState::onEndClick(Action*)
 
 /**
  * Handler for clicking on the heal button.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MedikitState::onHealClick(Action*)
 {
@@ -362,7 +362,7 @@ void MedikitState::onHealClick(Action*)
 
 /**
  * Handler for clicking on the stimulant button.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MedikitState::onStimulantClick(Action*)
 {
@@ -396,7 +396,7 @@ void MedikitState::onStimulantClick(Action*)
 
 /**
  * Handler for clicking on the pain killer button.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MedikitState::onPainKillerClick(Action*)
 {

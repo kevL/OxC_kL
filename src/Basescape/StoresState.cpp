@@ -47,7 +47,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Stores window.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the base to get info from
  */
 StoresState::StoresState(Base* base)
 	:
@@ -229,7 +229,7 @@ StoresState::StoresState(Base* base)
 }
 
 /**
- *
+ * dTor.
  */
 StoresState::~StoresState()
 {
@@ -237,7 +237,7 @@ StoresState::~StoresState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void StoresState::btnOkClick(Action*)
 {

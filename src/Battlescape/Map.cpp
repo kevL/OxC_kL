@@ -2348,8 +2348,8 @@ void Map::drawTerrain(Surface* surface)
 
 /**
  * Handles mouse presses on the map.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Map::mousePress(Action* action, State* state)
 {
@@ -2359,8 +2359,8 @@ void Map::mousePress(Action* action, State* state)
 
 /**
  * Handles mouse releases on the map.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Map::mouseRelease(Action* action, State* state)
 {
@@ -2370,8 +2370,8 @@ void Map::mouseRelease(Action* action, State* state)
 
 /**
  * Handles keyboard presses on the map.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Map::keyboardPress(Action* action, State* state)
 {
@@ -2381,8 +2381,8 @@ void Map::keyboardPress(Action* action, State* state)
 
 /**
  * Handles keyboard releases on the map.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Map::keyboardRelease(Action* action, State* state)
 {
@@ -2392,8 +2392,8 @@ void Map::keyboardRelease(Action* action, State* state)
 
 /**
  * Handles mouse over events on the map.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Map::mouseOver(Action* action, State* state)
 {

@@ -295,7 +295,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 
 /**
  * kL. Reorders a soldier up.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftArmorState::lstLeftArrowClick(Action* action) // kL
 {
@@ -339,7 +339,7 @@ void CraftArmorState::lstLeftArrowClick(Action* action) // kL
 
 /**
  * kL. Reorders a soldier down.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftArmorState::lstRightArrowClick(Action* action) // kL
 {

@@ -42,10 +42,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Place Facility window.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
- * @param select Pointer to the selection state.
- * @param rule Pointer to the facility ruleset to build.
+ * @param base		- pointer to the base to get info from
+ * @param select	- pointer to the selection state
+ * @param rule		- pointer to the facility ruleset to build
  */
 PlaceStartFacilityState::PlaceStartFacilityState(
 		Base* base,
@@ -64,7 +63,7 @@ PlaceStartFacilityState::PlaceStartFacilityState(
 }
 
 /**
- *
+ * dTor.
  */
 PlaceStartFacilityState::~PlaceStartFacilityState()
 {
@@ -72,11 +71,11 @@ PlaceStartFacilityState::~PlaceStartFacilityState()
 
 /**
  * Processes clicking on facilities.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PlaceStartFacilityState::viewClick(Action*)
 {
-	if (!_view->isPlaceable(_rule))
+	if (_view->isPlaceable(_rule) == false)
 	{
 		_game->popState();
 		_game->pushState(new ErrorMessageState(

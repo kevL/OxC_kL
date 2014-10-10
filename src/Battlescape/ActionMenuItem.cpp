@@ -36,10 +36,10 @@ namespace OpenXcom
 
 /**
  * Sets up an Action menu item.
- * @param id, The unique identifier of the menu item.
- * @param game, Pointer to the game.
- * @param x, Position on the x-axis.
- * @param y, Position on the y-asis.
+ * @param id	- the unique identifier of the menu item
+ * @param game	- pointer to the core Game
+ * @param x		- position on the x-axis
+ * @param y		- Position on the y-axis
  */
 ActionMenuItem::ActionMenuItem(
 		int id,
@@ -133,7 +133,7 @@ void ActionMenuItem::setAction(
 
 /**
  * Gets the action that was linked to this menu item.
- * @return Action that was linked to this menu item.
+ * @return, the BattleActionType that was linked to this menu item
  */
 BattleActionType ActionMenuItem::getAction() const
 {
@@ -142,7 +142,7 @@ BattleActionType ActionMenuItem::getAction() const
 
 /**
  * Gets the action tus that were linked to this menu item.
- * @return The timeunits that were linked to this menu item.
+ * @return, the timeunits that were linked to this menu item
  */
 int ActionMenuItem::getTUs() const
 {
@@ -151,9 +151,9 @@ int ActionMenuItem::getTUs() const
 
 /**
  * Replaces a certain amount of colors in the surface's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void ActionMenuItem::setPalette(
 		SDL_Color* colors,
@@ -181,8 +181,8 @@ void ActionMenuItem::draw()
 
 /**
  * Processes a mouse hover in event.
- * @param action Pointer to an action.
- * @param state Pointer to a state.
+ * @param action - pointer to an action
+ * @param state - pointer to a state
  */
 void ActionMenuItem::mouseIn(Action* action, State* state)
 {
@@ -196,8 +196,8 @@ void ActionMenuItem::mouseIn(Action* action, State* state)
 
 /**
  * Processes a mouse hover out event.
- * @param action Pointer to an action.
- * @param state Pointer to a state.
+ * @param action - pointer to an action
+ * @param state - pointer to a state
  */
 void ActionMenuItem::mouseOut(Action* action, State* state)
 {

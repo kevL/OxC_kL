@@ -291,8 +291,8 @@ void TextButton::draw()
 
 /**
  * Sets the button as the pressed button if it's part of a group.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void TextButton::mousePress(Action* action, State* state)
 {
@@ -329,8 +329,8 @@ void TextButton::mousePress(Action* action, State* state)
 
 /**
  * Sets the button as the released button.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void TextButton::mouseRelease(Action* action, State* state)
 {
@@ -343,7 +343,7 @@ void TextButton::mouseRelease(Action* action, State* state)
 /**
  * Hooks up the button to work as part of an existing combobox,
  * toggling its state when it's pressed.
- * @param comboBox Pointer to ComboBox.
+ * @param comboBox - pointer to ComboBox
  */
 void TextButton::setComboBox(ComboBox *comboBox)
 {
@@ -355,12 +355,18 @@ void TextButton::setComboBox(ComboBox *comboBox)
 		_text->setX(0);
 }
 
+/**
+ *
+ */
 void TextButton::setWidth(int width)
 {
 	Surface::setWidth(width);
 	_text->setWidth(width);
 }
 
+/**
+ *
+ */
 void TextButton::setHeight(int height)
 {
 	Surface::setHeight(height);

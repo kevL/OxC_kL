@@ -65,9 +65,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Craft Equipment screen.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
- * @param craft ID of the selected craft.
+ * @param base	- pointer to the Base to get info from
+ * @param craft	- ID of the selected craft
  */
 CraftEquipmentState::CraftEquipmentState(
 		Base* base,
@@ -333,7 +332,7 @@ void CraftEquipmentState::think()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftEquipmentState::btnOkClick(Action*)
 {
@@ -342,7 +341,7 @@ void CraftEquipmentState::btnOkClick(Action*)
 
 /**
  * Starts moving the item to the base.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftEquipmentState::lstEquipmentLeftArrowPress(Action* action)
 {
@@ -357,7 +356,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowPress(Action* action)
 
 /**
  * Stops moving the item to the base.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action* action)
 {
@@ -367,7 +366,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action* action)
 
 /**
  * Moves all the items to the base on right-click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftEquipmentState::lstEquipmentLeftArrowClick(Action* action)
 {
@@ -385,7 +384,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowClick(Action* action)
 
 /**
  * Starts moving the item to the craft.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftEquipmentState::lstEquipmentRightArrowPress(Action* action)
 {
@@ -400,7 +399,7 @@ void CraftEquipmentState::lstEquipmentRightArrowPress(Action* action)
 
 /**
  * Stops moving the item to the craft.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftEquipmentState::lstEquipmentRightArrowRelease(Action* action)
 {
@@ -410,7 +409,7 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action* action)
 
 /**
  * Moves all the items (as much as possible) to the craft on right-click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftEquipmentState::lstEquipmentRightArrowClick(Action* action)
 {

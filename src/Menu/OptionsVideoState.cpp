@@ -350,7 +350,7 @@ OptionsVideoState::~OptionsVideoState()
 
 /**
  * Selects a bigger display resolution.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::btnDisplayResolutionUpClick(Action*)
 {
@@ -367,7 +367,7 @@ void OptionsVideoState::btnDisplayResolutionUpClick(Action*)
 
 /**
  * Selects a smaller display resolution.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::btnDisplayResolutionDownClick(Action*)
 {
@@ -401,7 +401,7 @@ void OptionsVideoState::updateDisplayResolution()
 
 /**
  * Changes the Display Width option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::txtDisplayWidthChange(Action*)
 {
@@ -436,7 +436,7 @@ void OptionsVideoState::txtDisplayWidthChange(Action*)
 
 /**
  * Changes the Display Height option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::txtDisplayHeightChange(Action*)
 {
@@ -471,7 +471,7 @@ void OptionsVideoState::txtDisplayHeightChange(Action*)
 
 /**
  * Changes the Language option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::cbxLanguageChange(Action*)
 {
@@ -480,7 +480,7 @@ void OptionsVideoState::cbxLanguageChange(Action*)
 
 /**
  * Changes the Filter options.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::cbxFilterChange(Action*)
 {
@@ -523,7 +523,7 @@ void OptionsVideoState::cbxFilterChange(Action*)
 
 /**
  * Changes the Display Mode options.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::updateDisplayMode(Action*)
 {
@@ -557,7 +557,7 @@ void OptionsVideoState::updateDisplayMode(Action*)
 
 /**
  * Changes the Letterboxing option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::btnLetterboxClick(Action*)
 {
@@ -566,7 +566,7 @@ void OptionsVideoState::btnLetterboxClick(Action*)
 
 /**
  * Changes the Lock Mouse option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::btnLockMouseClick(Action*)
 {
@@ -576,7 +576,7 @@ void OptionsVideoState::btnLockMouseClick(Action*)
 
 /**
  * Changes the geoscape scale.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::updateGeoscapeScale(Action*)
 {
@@ -585,7 +585,7 @@ void OptionsVideoState::updateGeoscapeScale(Action*)
 
 /**
  * Updates the Battlescape scale.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::updateBattlescapeScale(Action*)
 {
@@ -614,7 +614,7 @@ void OptionsVideoState::resize(
 
 /**
  * Takes care of any events from the core game engine.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsVideoState::handle(Action* action)
 {

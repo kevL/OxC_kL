@@ -60,7 +60,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Options window.
- * @param origin Game section that originated this state.
+ * @param origin - game section that originated this state
  */
 OptionsBaseState::OptionsBaseState(OptionsOrigin origin)
 	:
@@ -224,7 +224,7 @@ void OptionsBaseState::setCategory(TextButton* button)
 
 /**
  * Saves the new options and returns to the proper origin screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsBaseState::btnOkClick(Action*)
 {
@@ -285,7 +285,7 @@ void OptionsBaseState::btnOkClick(Action*)
 
 /**
  * Loads previous options and returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsBaseState::btnCancelClick(Action*)
 {
@@ -317,7 +317,7 @@ void OptionsBaseState::btnCancelClick(Action*)
 
 /**
  * Restores the Options to default settings.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsBaseState::btnDefaultClick(Action* action)
 {

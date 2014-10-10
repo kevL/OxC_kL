@@ -45,7 +45,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the BaseDetection window.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the base to get info from
  */
 BaseDetectionState::BaseDetectionState(Base* base)
 	:
@@ -182,7 +182,7 @@ BaseDetectionState::~BaseDetectionState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseDetectionState::btnOkClick(Action*)
 {

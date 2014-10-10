@@ -46,8 +46,7 @@ const int Screen::ORIGINAL_HEIGHT	= 200;
 
 
 /**
- * Sets up all the internal display flags depending on
- * the current video settings.
+ * Sets up all the internal display flags depending on the current video settings.
  */
 void Screen::makeVideoFlags()
 {
@@ -160,7 +159,7 @@ Surface* Screen::getSurface()
 
 /**
  * Handles screen key shortcuts.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void Screen::handle(Action* action)
 {

@@ -42,7 +42,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Geoscape Options screen.
- * @param origin Game section that originated this state.
+ * @param origin - game section that originated this state
  */
 OptionsGeoscapeState::OptionsGeoscapeState(OptionsOrigin origin)
 	:
@@ -190,7 +190,7 @@ OptionsGeoscapeState::~OptionsGeoscapeState()
 
 /**
  * Changes the Drag Scroll option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsGeoscapeState::cbxDragScrollChange(Action*)
 {
@@ -199,7 +199,7 @@ void OptionsGeoscapeState::cbxDragScrollChange(Action*)
 
 /**
  * Updates the scroll speed.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsGeoscapeState::slrScrollSpeedChange(Action*)
 {
@@ -208,7 +208,7 @@ void OptionsGeoscapeState::slrScrollSpeedChange(Action*)
 
 /**
  * Updates the dogfight speed.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsGeoscapeState::slrDogfightSpeedChange(Action*)
 {
@@ -217,7 +217,7 @@ void OptionsGeoscapeState::slrDogfightSpeedChange(Action*)
 
 /**
  * Updates the clock speed.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsGeoscapeState::slrClockSpeedChange(Action*)
 {
@@ -226,7 +226,7 @@ void OptionsGeoscapeState::slrClockSpeedChange(Action*)
 
 /**
  * Changes the Globe Country Borders option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsGeoscapeState::btnGlobeCountriesClick(Action*)
 {
@@ -235,7 +235,7 @@ void OptionsGeoscapeState::btnGlobeCountriesClick(Action*)
 
 /**
  * Changes the Globe Radar Ranges option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsGeoscapeState::btnGlobeRadarsClick(Action*)
 {
@@ -244,7 +244,7 @@ void OptionsGeoscapeState::btnGlobeRadarsClick(Action*)
 
 /**
  * Changes the Globe Flight Paths option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsGeoscapeState::btnGlobePathsClick(Action*)
 {
@@ -253,7 +253,7 @@ void OptionsGeoscapeState::btnGlobePathsClick(Action*)
 
 /**
  * Changes the Show Funds option.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsGeoscapeState::btnShowFundsClick(Action*)
 {

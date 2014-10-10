@@ -58,13 +58,11 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Items Arriving window.
- * @param game Pointer to the core game.
- * @param state Pointer to the Geoscape state.
+ * @param state - pointer to the Geoscape state
  */
 ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	:
 		_state(state)
-//		_base(NULL)
 {
 	_screen = false;
 
@@ -250,7 +248,7 @@ ItemsArrivingState::~ItemsArrivingState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ItemsArrivingState::btnOkClick(Action*)
 {
@@ -259,7 +257,7 @@ void ItemsArrivingState::btnOkClick(Action*)
 
 /**
  * Reduces the speed to 5 Secs and returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ItemsArrivingState::btnOk5SecsClick(Action*)
 {
@@ -269,7 +267,7 @@ void ItemsArrivingState::btnOk5SecsClick(Action*)
 
 /**
  * Goes to the base for the respective transfer.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void ItemsArrivingState::btnGotoBaseClick(Action*)
 {

@@ -51,7 +51,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Manufacture screen.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the base to get info from
  */
 ManufactureState::ManufactureState(
 		Base* base)
@@ -192,7 +192,7 @@ void ManufactureState::init()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManufactureState::btnOkClick(Action*)
 {
@@ -201,7 +201,7 @@ void ManufactureState::btnOkClick(Action*)
 
 /**
  * Opens the screen with the list of possible productions.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManufactureState::btnNewProductionClick(Action*)
 {
@@ -305,7 +305,7 @@ void ManufactureState::fillProductionList()
 
 /**
  * Opens the screen displaying production settings.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ManufactureState::lstManufactureClick(Action*)
 {

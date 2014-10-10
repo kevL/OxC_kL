@@ -44,9 +44,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in a Dismantle Facility window.
- * @param base Pointer to the base to get info from.
- * @param view Pointer to the baseview to update.
- * @param fac Pointer to the facility to dismantle.
+ * @param base	- pointer to the Base to get info from
+ * @param view	- pointer to the baseview to update
+ * @param fac	- pointer to the facility to dismantle
  */
 DismantleFacilityState::DismantleFacilityState(
 		Base* base,
@@ -109,9 +109,8 @@ DismantleFacilityState::~DismantleFacilityState()
 }
 
 /**
- * Dismantles the facility and returns
- * to the previous screen.
- * @param action Pointer to an action.
+ * Dismantles the facility and returns to the previous screen.
+ * @param action - pointer to an action
  */
 void DismantleFacilityState::btnOkClick(Action*)
 {
@@ -162,7 +161,7 @@ void DismantleFacilityState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void DismantleFacilityState::btnCancelClick(Action*)
 {

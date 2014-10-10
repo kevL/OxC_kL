@@ -48,9 +48,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Abort Mission window.
- * @param game Pointer to the core game.
- * @param battleGame Pointer to the saved game.
- * @param state Pointer to the Battlescape state.
+ * @param battleGame	- pointer to the SavedBattleGame
+ * @param state			- pointer to the BattlescapeState
  */
 AbortMissionState::AbortMissionState(
 		SavedBattleGame* battleGame,
@@ -171,7 +170,7 @@ AbortMissionState::~AbortMissionState()
 
 /**
  * Confirms mission abort.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void AbortMissionState::btnOkClick(Action*)
 {
@@ -187,7 +186,7 @@ void AbortMissionState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void AbortMissionState::btnCancelClick(Action*)
 {

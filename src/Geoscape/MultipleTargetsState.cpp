@@ -50,10 +50,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Multiple Targets window.
- * @param game		- pointer to the core game
- * @param targets	- vector of pointers to targets to display
- * @param craft		- pointer to craft to retarget (NULL if none)
- * @param state		- pointer to the Geoscape state
+ * @param targets	- vector of pointers to Target for display
+ * @param craft		- pointer to Craft to retarget (NULL if none)
+ * @param state		- pointer to the GeoscapeState
  */
 MultipleTargetsState::MultipleTargetsState(
 		std::vector<Target*> targets,
@@ -154,7 +153,7 @@ void MultipleTargetsState::init()
 
 /**
  * Displays the right popup for a specific target.
- * @param target, Pointer to target.
+ * @param target - pointer to a Target
  */
 void MultipleTargetsState::popupTarget(Target* target)
 {
@@ -218,7 +217,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MultipleTargetsState::btnCancelClick(Action*)
 {
@@ -227,7 +226,7 @@ void MultipleTargetsState::btnCancelClick(Action*)
 
 /**
  * Pick a target to display.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MultipleTargetsState::btnTargetClick(Action* action)
 {

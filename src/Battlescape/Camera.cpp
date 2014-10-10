@@ -36,13 +36,13 @@ namespace OpenXcom
 
 /**
  * Sets up a camera.
- * @param spriteWidth, Width of map sprite.
- * @param spriteHeight, Height of map sprite.
- * @param mapsize_x, Current map size in X axis.
- * @param mapsize_y, Current map size in Y axis.
- * @param mapsize_z, Current map size in Z axis.
- * @param map, Pointer to map surface.
- * @param visibleMapHeight, Current height the view is at.
+ * @param spriteWidth		- width of map sprite
+ * @param spriteHeight		- height of map sprite
+ * @param mapsize_x			- current map size in X axis
+ * @param mapsize_y			- current map size in Y axis
+ * @param mapsize_z			- current map size in Z axis
+ * @param map				- pointer to Map surface
+ * @param visibleMapHeight	- current height the view is at
  */
 Camera::Camera(
 		int spriteWidth,
@@ -113,8 +113,8 @@ void Camera::minMaxInt(
 
 /**
  * Handles camera mouse shortcuts.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Camera::mousePress(Action* action, State*)
 {
@@ -136,8 +136,8 @@ void Camera::mousePress(Action* action, State*)
 
 /**
  * Handles camera mouse shortcuts.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Camera::mouseRelease(Action* action, State*)
 {
@@ -167,8 +167,8 @@ void Camera::mouseRelease(Action* action, State*)
 
 /**
  * Handles mouse over events.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Camera::mouseOver(Action* action, State*)
 {
@@ -272,8 +272,8 @@ void Camera::mouseOver(Action* action, State*)
 
 /**
  * Handles camera keyboard shortcuts.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Camera::keyboardPress(Action* action, State*)
 {
@@ -309,8 +309,8 @@ void Camera::keyboardPress(Action* action, State*)
 
 /**
  * Handles camera keyboard shortcuts.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Camera::keyboardRelease(Action* action, State*)
 {

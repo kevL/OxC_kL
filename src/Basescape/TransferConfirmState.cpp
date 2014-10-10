@@ -40,8 +40,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Confirm Transfer window.
- * @param base Pointer to the destination base.
- * @param state Pointer to the Transfer state.
+ * @param base	- pointer to the destination base
+ * @param state	- pointer to the Transfer state
  */
 TransferConfirmState::TransferConfirmState(
 		Base* base,
@@ -104,7 +104,7 @@ TransferConfirmState::TransferConfirmState(
 }
 
 /**
- *
+ * dTor.
  */
 TransferConfirmState::~TransferConfirmState()
 {
@@ -112,7 +112,7 @@ TransferConfirmState::~TransferConfirmState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferConfirmState::btnCancelClick(Action*)
 {
@@ -121,7 +121,7 @@ void TransferConfirmState::btnCancelClick(Action*)
 
 /**
  * Completes the transfer.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void TransferConfirmState::btnOkClick(Action*)
 {

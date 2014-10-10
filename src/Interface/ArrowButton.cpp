@@ -30,11 +30,11 @@ namespace OpenXcom
 
 /**
  * Sets up an arrow button with the specified size and position.
- * @param shape Shape of the arrow.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param shape		- shape of the arrow
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 ArrowButton::ArrowButton(
 		ArrowShape shape,
@@ -349,8 +349,8 @@ void ArrowButton::scroll()
 
 /**
  * Starts scrolling the associated list.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void ArrowButton::mousePress(Action* action, State* state)
 {
@@ -369,8 +369,8 @@ void ArrowButton::mousePress(Action* action, State* state)
 
 /**
  * Stops scrolling the associated list.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void ArrowButton::mouseRelease(Action* action, State* state)
 {
@@ -385,8 +385,8 @@ void ArrowButton::mouseRelease(Action* action, State* state)
 
 /**
  * Scrolls the associated list to top or bottom.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void ArrowButton::mouseClick(Action* action, State* state)
 {

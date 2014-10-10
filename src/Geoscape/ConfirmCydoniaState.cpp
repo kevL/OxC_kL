@@ -45,6 +45,10 @@
 namespace OpenXcom
 {
 
+/**
+ * Initializes the journey to Cydonia on mars.
+ * @param craft - pointer to the Craft taking the journey
+ */
 ConfirmCydoniaState::ConfirmCydoniaState(Craft* craft)
 	:
 		_craft(craft)
@@ -98,7 +102,7 @@ ConfirmCydoniaState::~ConfirmCydoniaState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ConfirmCydoniaState::btnYesClick(Action*)
 {
@@ -120,7 +124,7 @@ void ConfirmCydoniaState::btnYesClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ConfirmCydoniaState::btnNoClick(Action*)
 {

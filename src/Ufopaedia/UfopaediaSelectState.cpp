@@ -43,6 +43,7 @@ namespace OpenXcom
 
 /**
  * cTor.
+ * @param section - reference the section desired
  */
 UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
 	:
@@ -100,7 +101,7 @@ UfopaediaSelectState::~UfopaediaSelectState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void UfopaediaSelectState::btnOkClick(Action*)
 {
@@ -109,7 +110,7 @@ void UfopaediaSelectState::btnOkClick(Action*)
 
 /**
  *
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void UfopaediaSelectState::lstSelectionClick(Action*)
 {

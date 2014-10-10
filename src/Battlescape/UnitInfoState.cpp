@@ -55,11 +55,10 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Unit Info screen.
- * @param game			- Pointer to the core game.
- * @param unit			- Pointer to the selected unit.
- * @param parent		- Pointer to parent Battlescape.
- * @param fromInventory	- Is player coming from the inventory?
- * @param mindProbe		- Is player using a Mind Probe?
+ * @param unit			- pointer to the selected unit
+ * @param parent		- pointer to parent Battlescape
+ * @param fromInventory	- true if player is here from the inventory
+ * @param mindProbe		- true if player is using a Mind Probe
  */
 UnitInfoState::UnitInfoState(
 		BattleUnit* unit,
@@ -179,7 +178,7 @@ UnitInfoState::UnitInfoState(
 	_numUnderArmor	= new Text(18, 9, 151, yPos);
 	_barUnderArmor	= new Bar(180, 5, 170, yPos + 1);
 
-	if (!_mindProbe)
+	if (_mindProbe == false)
 	{
 		_btnPrev	= new TextButton(18, 18, 2, 2);
 		_btnNext	= new TextButton(18, 18, 300, 2);
@@ -746,7 +745,7 @@ void UnitInfoState::init()
 
 /**
  * Closes the window on right-click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void UnitInfoState::handle(Action* action)
 {
@@ -793,7 +792,7 @@ void UnitInfoState::btnPrevClick(Action* action)
 
 /**
  * Selects the next unit.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void UnitInfoState::btnNextClick(Action* action)
 {
@@ -818,7 +817,7 @@ void UnitInfoState::btnNextClick(Action* action)
 
 /**
  * Exits the screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void UnitInfoState::exitClick(Action*)
 {

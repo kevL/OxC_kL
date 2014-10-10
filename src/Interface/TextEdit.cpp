@@ -32,11 +32,11 @@ namespace OpenXcom
 
 /**
  * Sets up a blank text edit with the specified size and position.
- * @param state Pointer to state the text edit belongs to.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param state		- pointer to state the text edit belongs to
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 TextEdit::TextEdit(
 		State* state,
@@ -84,8 +84,8 @@ TextEdit::~TextEdit()
 
 /**
  * Passes events to internal components.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void TextEdit::handle(Action* action, State* state)
 {
@@ -105,8 +105,8 @@ void TextEdit::handle(Action* action, State* state)
 
 /**
  * Controls the blinking animation when the text edit is focused.
- * @param focus True if focused, false otherwise.
- * @param modal True to lock input to this control, false otherwise.
+ * @param focus - true if focused
+ * @param modal - true to lock input to this control
  */
 void TextEdit::setFocus(
 		bool focus,
@@ -150,7 +150,7 @@ void TextEdit::setFocus(
 
 /** kL_note: Is this still needed....
  * Check if the player is currently typing in this box.
- * @return, True if the player is typing in this box.
+ * @return, true if the player is typing in this box
  */
 /* bool TextEdit::isFocused()
 {
@@ -179,9 +179,9 @@ void TextEdit::setSmall()
  * Changes the various fonts for the text edit to use.
  * The different fonts need to be passed in advance since the
  * text size can change mid-text.
- * @param big Pointer to large-size font.
- * @param small Pointer to small-size font.
- * @param lang Pointer to current language.
+ * @param big	- pointer to large-size font
+ * @param small	- pointer to small-size font
+ * @param lang	- pointer to current language
  */
 void TextEdit::initText(
 		Font* big,
@@ -194,7 +194,7 @@ void TextEdit::initText(
 
 /**
  * Changes the string displayed on screen.
- * @param text Text string.
+ * @param text - reference the text string
  */
 void TextEdit::setText(const std::wstring& text)
 {
@@ -205,7 +205,7 @@ void TextEdit::setText(const std::wstring& text)
 
 /**
  * Returns the string displayed on screen.
- * @return Text string.
+ * @return, text string
  */
 std::wstring TextEdit::getText() const
 {
@@ -216,7 +216,7 @@ std::wstring TextEdit::getText() const
  * Enables/disables text wordwrapping. When enabled, lines of
  * text are automatically split to ensure they stay within the
  * drawing area, otherwise they simply go off the edge.
- * @param wrap Wordwrapping setting.
+ * @param wrap - wordwrapping setting
  */
 void TextEdit::setWordWrap(bool wrap)
 {
@@ -226,7 +226,7 @@ void TextEdit::setWordWrap(bool wrap)
 /**
  * Enables/disables color inverting. Mostly used to make
  * button text look pressed along with the button.
- * @param invert Invert setting.
+ * @param invert - invert setting
  */
 void TextEdit::setInvert(bool invert)
 {
@@ -235,9 +235,8 @@ void TextEdit::setInvert(bool invert)
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for
- * Battlescape text.
- * @param contrast High contrast setting.
+ * Enables/disables high contrast color. Mostly used for Battlescape text.
+ * @param contrast - high contrast setting
  */
 void TextEdit::setHighContrast(bool contrast)
 {
@@ -246,9 +245,8 @@ void TextEdit::setHighContrast(bool contrast)
 }
 
 /**
- * Changes the way the text is aligned horizontally
- * relative to the drawing area.
- * @param align Horizontal alignment.
+ * Changes the way the text is aligned horizontally relative to the drawing area.
+ * @param align - horizontal alignment
  */
 void TextEdit::setAlign(TextHAlign align)
 {
@@ -256,9 +254,8 @@ void TextEdit::setAlign(TextHAlign align)
 }
 
 /**
- * Changes the way the text is aligned vertically
- * relative to the drawing area.
- * @param valign Vertical alignment.
+ * Changes the way the text is aligned vertically relative to the drawing area.
+ * @param valign - vertical alignment
  */
 void TextEdit::setVerticalAlign(TextVAlign valign)
 {
@@ -267,7 +264,7 @@ void TextEdit::setVerticalAlign(TextVAlign valign)
 
 /**
  * Restricts the text to only numerical input.
- * @param numerical Numerical restriction.
+ * @param numerical - numerical restriction
  */
 void TextEdit::setNumerical(bool numerical)
 {
@@ -278,7 +275,7 @@ void TextEdit::setNumerical(bool numerical)
  * Changes the color used to render the text. Unlike regular graphics,
  * fonts are greyscale so they need to be assigned a specific position
  * in the palette to be displayed.
- * @param color Color value.
+ * @param color - color value
  */
 void TextEdit::setColor(Uint8 color)
 {
@@ -288,7 +285,7 @@ void TextEdit::setColor(Uint8 color)
 
 /**
  * Returns the color used to render the text.
- * @return Color value.
+ * @return, color value
  */
 Uint8 TextEdit::getColor() const
 {
@@ -299,7 +296,7 @@ Uint8 TextEdit::getColor() const
  * Changes the secondary color used to render the text. The text
  * switches between the primary and secondary color whenever there's
  * a 0x01 in the string.
- * @param color Color value.
+ * @param color - color value
  */
 void TextEdit::setSecondaryColor(Uint8 color)
 {
@@ -308,7 +305,7 @@ void TextEdit::setSecondaryColor(Uint8 color)
 
 /**
  * Returns the secondary color used to render the text.
- * @return Color value.
+ * @return, color value
  */
 Uint8 TextEdit::getSecondaryColor() const
 {
@@ -317,9 +314,9 @@ Uint8 TextEdit::getSecondaryColor() const
 
 /**
  * Replaces a certain amount of colors in the text edit's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void TextEdit::setPalette(
 		SDL_Color* colors,
@@ -341,8 +338,7 @@ void TextEdit::think()
 }
 
 /**
- * Plays the blinking animation when the
- * text edit is focused.
+ * Plays the blinking animation when the text edit is focused.
  */
 void TextEdit::blink()
 {
@@ -352,7 +348,7 @@ void TextEdit::blink()
 
 /**
  * Adds a flashing | caret to the text
- * to show when it's focused and editable.
+ * to show when this is focused and editable.
  */
 void TextEdit::draw()
 {
@@ -413,8 +409,8 @@ void TextEdit::draw()
  * Checks if adding a certain character to
  * the text edit will exceed the maximum width.
  * Used to make sure user input stays within bounds.
- * @param c Character to add.
- * @return True if it exceeds, False if it doesn't.
+ * @param c - character to add
+ * @return, true if it exceeds
  */
 bool TextEdit::exceedsMaxWidth(wchar_t c)
 {
@@ -435,8 +431,8 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 
 /**
  * Focuses the text edit when it's pressed on.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void TextEdit::mousePress(Action* action, State* state)
 {
@@ -478,8 +474,8 @@ void TextEdit::mousePress(Action* action, State* state)
 /**
  * Changes the text edit according to keyboard input,
  * and unfocuses the text if Enter is pressed.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void TextEdit::keyboardPress(Action* action, State* state)
 {

@@ -51,7 +51,6 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Main Menu window.
- * @param game Pointer to the core game.
  */
 MainMenuState::MainMenuState()
 {
@@ -148,7 +147,7 @@ MainMenuState::~MainMenuState()
 
 /**
  * Opens the New Game window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MainMenuState::btnNewGameClick(Action*)
 {
@@ -157,7 +156,7 @@ void MainMenuState::btnNewGameClick(Action*)
 
 /**
  * Opens the New Battle screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MainMenuState::btnNewBattleClick(Action*)
 {
@@ -166,7 +165,7 @@ void MainMenuState::btnNewBattleClick(Action*)
 
 /**
  * Opens the Load Game screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MainMenuState::btnLoadClick(Action*)
 {
@@ -175,7 +174,7 @@ void MainMenuState::btnLoadClick(Action*)
 
 /**
  * Opens the Options screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MainMenuState::btnOptionsClick(Action*)
 {
@@ -186,7 +185,7 @@ void MainMenuState::btnOptionsClick(Action*)
 
 /**
  * Quits the game.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MainMenuState::btnQuitClick(Action*)
 {

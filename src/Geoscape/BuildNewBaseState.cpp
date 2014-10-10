@@ -52,10 +52,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Build New Base window.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to place.
- * @param globe Pointer to the Geoscape globe.
- * @param first Is this the first base in the game?
+ * @param base	- pointer to the Base to place
+ * @param globe	- pointer to the geoscape Globe
+ * @param first	- true if this the first base in the game
  */
 BuildNewBaseState::BuildNewBaseState(
 		Base* base,
@@ -73,10 +72,8 @@ BuildNewBaseState::BuildNewBaseState(
 	_screen = false;
 
 	_oldshowradar = Options::globeRadarLines;
-
-	if (!_oldshowradar)
+	if (_oldshowradar == false)
 		Options::globeRadarLines = true;
-
 
 	int dx = _game->getScreen()->getDX();
 //kL	int dy = _game->getScreen()->getDY();
@@ -169,7 +166,7 @@ BuildNewBaseState::BuildNewBaseState(
 }
 
 /**
- *
+ * dTor.
  */
 BuildNewBaseState::~BuildNewBaseState()
 {
@@ -203,7 +200,7 @@ void BuildNewBaseState::think()
 
 /**
  * Handles the globe.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BuildNewBaseState::handle(Action* action)
 {
@@ -213,7 +210,7 @@ void BuildNewBaseState::handle(Action* action)
 
 /**
  * Processes mouse-hover event for base placement,
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BuildNewBaseState::globeHover(Action* action)
 {
@@ -263,7 +260,7 @@ void BuildNewBaseState::hoverRedraw(void)
 /**
  * Processes any left-clicks for base placement,
  * or right-clicks to scroll the globe.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BuildNewBaseState::globeClick(Action* action)
 {
@@ -320,7 +317,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe to the left.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnRotateLeftPress(Action*)
 {
@@ -329,7 +326,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe to the left.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnRotateLeftRelease(Action*)
 {
@@ -338,7 +335,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe to the right.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnRotateRightPress(Action*)
 {
@@ -347,7 +344,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe to the right.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnRotateRightRelease(Action*)
 {
@@ -356,7 +353,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe upwards.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnRotateUpPress(Action*)
 {
@@ -365,7 +362,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe upwards.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnRotateUpRelease(Action*)
 {
@@ -374,7 +371,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe downwards.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnRotateDownPress(Action*)
 {
@@ -383,7 +380,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe downwards.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnRotateDownRelease(Action*)
 {
@@ -392,7 +389,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Zooms into the globe.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnZoomInLeftClick(Action*)
 {
@@ -401,7 +398,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Zooms the globe maximum.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnZoomInRightClick(Action*)
 {
@@ -410,7 +407,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Zooms out of the globe.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnZoomOutLeftClick(Action*)
 {
@@ -419,7 +416,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Zooms the globe minimum.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 /* void BuildNewBaseState::btnZoomOutRightClick(Action*)
 {
@@ -428,7 +425,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BuildNewBaseState::btnCancelClick(Action*)
 {
@@ -439,8 +436,8 @@ void BuildNewBaseState::btnCancelClick(Action*)
 
 /**
  * Updates the scale.
- * @param dX delta of X;
- * @param dY delta of Y;
+ * @param dX - delta of X
+ * @param dY - delta of Y
  */
 void BuildNewBaseState::resize(
 		int& dX,

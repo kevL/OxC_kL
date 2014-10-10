@@ -97,8 +97,8 @@ void BattlescapeButton::setGroup(BattlescapeButton** group)
 /**
  * Sets the button as the pressed button if it's part of a group,
  * and inverts the colors when pressed.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void BattlescapeButton::mousePress(Action* action, State* state)
 {
@@ -125,8 +125,8 @@ void BattlescapeButton::mousePress(Action* action, State* state)
 
 /**
  * Sets the button as the released button if it's part of a group.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void BattlescapeButton::mouseRelease(Action* action, State* state)
 {
@@ -141,7 +141,7 @@ void BattlescapeButton::mouseRelease(Action* action, State* state)
 
 /**
  * Invert a button explicitly either ON or OFF and keep track of the state using our internal variables.
- * @param press Set this button as pressed.
+ * @param press - true to set this button as pressed
  */
 void BattlescapeButton::toggle(bool press)
 {
@@ -170,7 +170,8 @@ void BattlescapeButton::allowClickInversion()
 }
 
 /**
- * TFTD mode: much like click inversion, but does a colour swap rather than a palette shift.
+ * TFTD mode: much like click inversion, but does a color swap rather than a palette shift.
+ * @param mode -
  */
 void BattlescapeButton::setTftdMode(bool mode)
 {
@@ -250,7 +251,7 @@ void BattlescapeButton::initSurfaces()
 /**
  * Blits this surface or the alternate surface onto another one,
  * depending on whether the button is "pressed" or not.
- * @param surface Pointer to surface to blit onto.
+ * @param surface - pointer to a Surface to blit onto
  */
 void BattlescapeButton::blit(Surface* surface)
 {

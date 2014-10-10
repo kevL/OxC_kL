@@ -57,8 +57,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Base Defense screen.
- * @param base	- pointer to a base being attacked
- * @param ufo	- pointer to the attacking ufo
+ * @param base	- pointer to a Base being attacked
+ * @param ufo	- pointer to the attacking Ufo
  * @param state	- pointer to GeoscapeState
  */
 BaseDefenseState::BaseDefenseState(
@@ -300,7 +300,7 @@ void BaseDefenseState::nextStep()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void BaseDefenseState::btnOkClick(Action*)
 {

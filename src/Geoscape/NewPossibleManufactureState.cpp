@@ -42,9 +42,9 @@ namespace OpenXcom
 {
 /**
  * Initializes all the elements in the EndManufacture screen.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
- * @param possibilities List of newly possible ManufactureProject
+ * @param base					- pointer to the base to get info from
+ * @param possibilities			- reference the vector of pointers to RuleManufacture for projects
+ * @param showManufactureButton	- true to show the goto manufacture button
  */
 NewPossibleManufactureState::NewPossibleManufactureState(
 		Base* base,
@@ -116,7 +116,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 
 /**
  * return to the previous screen
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void NewPossibleManufactureState::btnOkClick(Action*)
 {
@@ -125,7 +125,7 @@ void NewPossibleManufactureState::btnOkClick(Action*)
 
 /**
  * Open the ManufactureState so the player can dispatch available scientist.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void NewPossibleManufactureState::btnManufactureClick(Action*)
 {

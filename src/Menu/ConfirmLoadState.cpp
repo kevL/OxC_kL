@@ -37,8 +37,8 @@ namespace OpenXcom
 {
 /**
  * Initializes all the elements in the Confirm Load screen.
- * @param origin Game section that originated this state.
- * @param fileName Name of the save file without extension.
+ * @param origin	- game section that originated this state
+ * @param fileName	- reference the name of the save file without extension
  */
 ConfirmLoadState::ConfirmLoadState(
 		OptionsOrigin origin,
@@ -103,7 +103,7 @@ ConfirmLoadState::~ConfirmLoadState()
 
 /**
  * Proceed to load the save.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ConfirmLoadState::btnYesClick(Action*)
 {
@@ -117,7 +117,7 @@ void ConfirmLoadState::btnYesClick(Action*)
 
 /**
  * Abort loading and return to save list.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ConfirmLoadState::btnNoClick(Action*)
 {

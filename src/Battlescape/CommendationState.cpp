@@ -45,7 +45,8 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Medals screen.
+ * Initializes all the elements in the Medals screen post-mission.
+ * @param soldiersMedalled - vector of pointers to Soldier objects
  */
 CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 {
@@ -214,7 +215,7 @@ CommendationState::~CommendationState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CommendationState::btnOkClick(Action*)
 {

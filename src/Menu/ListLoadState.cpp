@@ -35,7 +35,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Load Game screen.
- * @param origin Game section that originated this state.
+ * @param origin - game section that originated this state
  */
 ListLoadState::ListLoadState(OptionsOrigin origin)
 	:
@@ -58,7 +58,7 @@ ListLoadState::~ListLoadState()
 
 /**
  * Loads the selected save.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void ListLoadState::lstSavesPress(Action* action)
 {

@@ -98,13 +98,13 @@ struct GlobeStaticData
 	const int random_surf_size;
 
 	/**
-	 * Function returning normal vector of sphere surface
-	 * @param ox x cord of sphere center
-	 * @param oy y cord of sphere center
-	 * @param r radius of sphere
-	 * @param x cord of point where we getting this vector
-	 * @param y cord of point where we getting this vector
-	 * @return normal vector of sphere surface
+	 * Function returning normal vector of sphere surface.
+	 * @param ox	- x cord of sphere center
+	 * @param oy	- y cord of sphere center
+	 * @param r		- radius of sphere
+	 * @param x		- cord of point where we getting this vector
+	 * @param y		- cord of point where we getting this vector
+	 * @return, normal vector of sphere surface
 	 */
 	inline Cord circle_norm(
 			double ox,
@@ -291,13 +291,13 @@ struct CreateShadow
 
 /**
  * Sets up a globe with the specified size and position.
- * @param game Pointer to core game.
- * @param cenX X position of the center of the globe.
- * @param cenY Y position of the center of the globe.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param game		- pointer to the core Game
+ * @param cenX		- X position of the center of the globe
+ * @param cenY		- Y position of the center of the globe
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 Globe::Globe(
 		Game* game,
@@ -2620,7 +2620,7 @@ void Globe::drawMarkers()
 
 /**
  * Blits the globe onto another surface.
- * @param surface Pointer to another surface.
+ * @param surface - pointer to another Surface
  */
 void Globe::blit(Surface* surface)
 {
@@ -2633,8 +2633,8 @@ void Globe::blit(Surface* surface)
 
 /**
  * Ignores any mouse hovers that are outside the globe.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Globe::mouseOver(Action* action, State* state)
 {
@@ -2752,8 +2752,8 @@ void Globe::mouseOver(Action* action, State* state)
 
 /**
  * Ignores any mouse clicks that are outside the globe.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Globe::mousePress(Action* action, State* state)
 {
@@ -2795,8 +2795,8 @@ void Globe::mousePress(Action* action, State* state)
 
 /**
  * Ignores any mouse clicks that are outside the globe.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Globe::mouseRelease(Action* action, State* state)
 {
@@ -2823,8 +2823,8 @@ void Globe::mouseRelease(Action* action, State* state)
 /**
  * Ignores any mouse clicks that are outside the globe
  * and handles globe rotation and zooming.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void Globe::mouseClick(Action* action, State* state)
 {
@@ -2920,7 +2920,7 @@ void Globe::keyboardPress(Action* action, State* state)
 
 /**
  * Move the mouse back to where it started after we finish drag scrolling.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void Globe::stopScrolling(Action* action)
 {

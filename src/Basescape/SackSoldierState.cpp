@@ -43,8 +43,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in a Sack Soldier window.
- * @param base Pointer to the base to get info from.
- * @param soldierId Pointer to the soldier to sack.
+ * @param base 		- pointer to the Base to get info from
+ * @param soldierId	- pointer to the soldier to sack
  */
 SackSoldierState::SackSoldierState(
 		Base* base,
@@ -107,7 +107,7 @@ SackSoldierState::~SackSoldierState()
 /**
  * Sacks the soldier and returns
  * to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SackSoldierState::btnOkClick(Action*)
 {
@@ -123,7 +123,7 @@ void SackSoldierState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SackSoldierState::btnCancelClick(Action*)
 {

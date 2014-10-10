@@ -38,8 +38,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in a Cannot Rearm window.
- * @param state Pointer to the Geoscape state.
- * @param msg Error message.
+ * @param state	- pointer to the GeoscapeState
+ * @param msg	- reference the error message
  */
 CraftErrorState::CraftErrorState(
 		GeoscapeState* state,
@@ -97,7 +97,7 @@ CraftErrorState::~CraftErrorState()
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftErrorState::btnOkClick(Action*)
 {
@@ -106,7 +106,7 @@ void CraftErrorState::btnOkClick(Action*)
 
 /**
  * Closes the window.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftErrorState::btnOk5SecsClick(Action*)
 {

@@ -45,10 +45,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Monthly Costs screen.
- * @param base Pointer to the base to get info from.
+ * @param base - pointer to the base to get info from
  */
-MonthlyCostsState::MonthlyCostsState(
-		Base* base)
+MonthlyCostsState::MonthlyCostsState(Base* base)
 	:
 		_base(base)
 {
@@ -221,7 +220,7 @@ MonthlyCostsState::~MonthlyCostsState()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void MonthlyCostsState::btnOkClick(Action*)
 {

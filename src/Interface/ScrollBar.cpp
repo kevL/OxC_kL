@@ -34,10 +34,10 @@ namespace OpenXcom
 
 /**
  * Sets up a scrollbar with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 ScrollBar::ScrollBar(
 		int width,
@@ -78,7 +78,7 @@ ScrollBar::~ScrollBar()
 
 /**
  * Changes the position of the surface in the X axis.
- * @param x X position in pixels.
+ * @param x - X position in pixels
  */
 void ScrollBar::setX(int x)
 {
@@ -90,7 +90,7 @@ void ScrollBar::setX(int x)
 
 /**
  * Changes the position of the surface in the Y axis.
- * @param y Y position in pixels.
+ * @param y - Y position in pixels
  */
 void ScrollBar::setY(int y)
 {
@@ -102,7 +102,7 @@ void ScrollBar::setY(int y)
 
 /**
  * Changes the height of the scrollbar.
- * @param height New height in pixels.
+ * @param height - new height in pixels
  */
 void ScrollBar::setHeight(int height)
 {
@@ -116,7 +116,7 @@ void ScrollBar::setHeight(int height)
 
 /**
  * Changes the color used to render the scrollbar.
- * @param color Color value.
+ * @param color - color value
  */
 void ScrollBar::setColor(Uint8 color)
 {
@@ -125,7 +125,7 @@ void ScrollBar::setColor(Uint8 color)
 
 /**
  * Returns the color used to render the scrollbar.
- * @return Color value.
+ * @return, color value
  */
 Uint8 ScrollBar::getColor() const
 {
@@ -133,9 +133,8 @@ Uint8 ScrollBar::getColor() const
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for
- * Battlescape text.
- * @param contrast High contrast setting.
+ * Enables/disables high contrast color. Mostly used for Battlescape text.
+ * @param contrast - high contrast setting
  */
 void ScrollBar::setHighContrast(bool contrast)
 {
@@ -143,9 +142,8 @@ void ScrollBar::setHighContrast(bool contrast)
 }
 
 /**
- * Changes the list associated with the scrollbar.
- * This makes the button scroll that list.
- * @param list Pointer to text list.
+ * Changes the list associated with the scrollbar. This makes the button scroll that list.
+ * @param list - pointer to TextList
  */
 void ScrollBar::setTextList(TextList* list)
 {
@@ -154,7 +152,7 @@ void ScrollBar::setTextList(TextList* list)
 
 /**
  * Changes the surface used to draw the background of the track.
- * @param bg New background.
+ * @param bg - pointer to a Surface
  */
 void ScrollBar::setBackground(Surface* bg)
 {
@@ -163,9 +161,9 @@ void ScrollBar::setBackground(Surface* bg)
 
 /**
  * Replaces a certain amount of colors in the scrollbar's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void ScrollBar::setPalette(
 		SDL_Color* colors,
@@ -180,8 +178,8 @@ void ScrollBar::setPalette(
 
 /**
  * Automatically updates the scrollbar when the mouse moves.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void ScrollBar::handle(Action* action, State* state)
 {
@@ -207,7 +205,7 @@ void ScrollBar::handle(Action* action, State* state)
 
 /**
  * Blits the scrollbar contents.
- * @param surface Pointer to surface to blit onto.
+ * @param surface - pointer to a Surface to blit onto
  */
 void ScrollBar::blit(Surface* surface)
 {
@@ -225,8 +223,8 @@ void ScrollBar::blit(Surface* surface)
 
 /**
  * The scrollbar only moves while the button is pressed.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void ScrollBar::mousePress(Action* action, State* state)
 {
@@ -253,8 +251,8 @@ void ScrollBar::mousePress(Action* action, State* state)
 
 /**
  * The scrollbar stops moving when the button is released.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void ScrollBar::mouseRelease(Action* action, State* state)
 {

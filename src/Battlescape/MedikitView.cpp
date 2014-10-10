@@ -56,14 +56,14 @@ const std::string PARTS_STRING[6] =
 
 /**
  * Initializes the Medikit view.
- * @param w The MinikitView width.
- * @param h The MinikitView height.
- * @param x The MinikitView x origin.
- * @param y The MinikitView y origin.
- * @param game Pointer to the core game.
- * @param unit The wounded unit.
- * @param partTxt A pointer to a Text. Will be updated with the selected body part.
- * @param woundTxt A pointer to a Text. Will be updated with the amount of fatal wound.
+ * @param w			- the MinikitView width
+ * @param h			- the MinikitView height
+ * @param x			- the MinikitView x origin
+ * @param y			- the MinikitView y origin
+ * @param game		- pointer to the core Game
+ * @param unit		- pointer to the wounded BattleUnit
+ * @param partTxt	- pointer to a Text; will be updated with the selected body part
+ * @param woundTxt	- pointer to a Text; will be updated with the amount of fatal woundage
  */
 MedikitView::MedikitView(
 		int w,
@@ -149,8 +149,8 @@ void MedikitView::draw()
 
 /**
  * Handles clicks on the medikit view.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void MedikitView::mouseClick(Action* action, State*)
 {

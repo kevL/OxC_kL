@@ -553,7 +553,7 @@ bool PurchaseState::isExcluded(const std::string& item)
 
 /**
  * Purchases the selected items.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PurchaseState::btnOkClick(Action*)
 {
@@ -630,7 +630,7 @@ void PurchaseState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PurchaseState::btnCancelClick(Action*)
 {
@@ -639,7 +639,7 @@ void PurchaseState::btnCancelClick(Action*)
 
 /**
  * Starts increasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PurchaseState::lstItemsLeftArrowPress(Action* action)
 {
@@ -654,7 +654,7 @@ void PurchaseState::lstItemsLeftArrowPress(Action* action)
 
 /**
  * Stops increasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PurchaseState::lstItemsLeftArrowRelease(Action* action)
 {
@@ -665,7 +665,7 @@ void PurchaseState::lstItemsLeftArrowRelease(Action* action)
 /**
  * Increases the item by one on left-click,
  * to max on right-click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PurchaseState::lstItemsLeftArrowClick(Action* action)
 {
@@ -683,7 +683,7 @@ void PurchaseState::lstItemsLeftArrowClick(Action* action)
 
 /**
  * Starts decreasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PurchaseState::lstItemsRightArrowPress(Action* action)
 {
@@ -698,7 +698,7 @@ void PurchaseState::lstItemsRightArrowPress(Action* action)
 
 /**
  * Stops decreasing the item.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PurchaseState::lstItemsRightArrowRelease(Action* action)
 {
@@ -709,7 +709,7 @@ void PurchaseState::lstItemsRightArrowRelease(Action* action)
 /**
  * Decreases the item by one on left-click,
  * to 0 on right-click.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PurchaseState::lstItemsRightArrowClick(Action* action)
 {
@@ -727,7 +727,7 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void PurchaseState::lstItemsMousePress(Action* action)
 {

@@ -55,7 +55,7 @@ namespace OpenXcom
  * Initializes all the elements in the Soldiers screen.
  * @param base						- pointer to the base to get info from
  * @param soldierId					- ID of the selected soldier
- * @param soldierDiaryOverviewState	-
+ * @param soldierDiaryOverviewState	- pointer to said
  * @param display					- subscreen to display
  */
 SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
@@ -810,7 +810,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierDiaryPerformanceState::btnOkClick(Action*)
 {
@@ -821,7 +821,7 @@ void SoldierDiaryPerformanceState::btnOkClick(Action*)
 
 /**
  * Goes to the previous soldier.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierDiaryPerformanceState::btnPrevClick(Action*)
 {
@@ -841,7 +841,7 @@ void SoldierDiaryPerformanceState::btnPrevClick(Action*)
 
 /**
  * Goes to the next soldier.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierDiaryPerformanceState::btnNextClick(Action*)
 {

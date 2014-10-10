@@ -33,20 +33,21 @@
 namespace OpenXcom
 {
 
-const int ComboBox::HORIZONTAL_MARGIN	= 2;
-const int ComboBox::VERTICAL_MARGIN		= 3;
-const int ComboBox::MAX_ITEMS			= 10;
-const int ComboBox::BUTTON_WIDTH		= 14;
-const int ComboBox::TEXT_HEIGHT			= 8;
+const int
+	ComboBox::HORIZONTAL_MARGIN	= 2,
+	ComboBox::VERTICAL_MARGIN	= 3,
+	ComboBox::MAX_ITEMS			= 10,
+	ComboBox::BUTTON_WIDTH		= 14,
+	ComboBox::TEXT_HEIGHT		= 8;
 
 
 /**
  * Sets up a combobox with the specified size and position.
- * @param state Pointer to state the combobox belongs to.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param state 	- pointer to state the combobox belongs to
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 ComboBox::ComboBox(
 		State* state,
@@ -373,8 +374,8 @@ void ComboBox::blit(Surface* surface)
 
 /**
  * Passes events to internal components.
- * @param action Pointer to an action.
- * @param state State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void ComboBox::handle(Action* action, State* state)
 {

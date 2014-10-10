@@ -41,7 +41,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Advanced Options window.
- * @param origin Game section that originated this state.
+ * @param origin - game section that originated this state
  */
 OptionsAdvancedState::OptionsAdvancedState(OptionsOrigin origin)
 	:
@@ -196,7 +196,7 @@ OptionInfo* OptionsAdvancedState::getSetting(size_t sel)
 
 /**
  * Changes the clicked setting.
- * @param action Pointer to an action.
+ * @param action - pointer to an action
  */
 void OptionsAdvancedState::lstOptionsClick(Action* action)
 {
