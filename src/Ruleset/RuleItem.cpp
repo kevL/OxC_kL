@@ -109,6 +109,7 @@ RuleItem::RuleItem(const std::string& type)
 		_specialType(-1),
 		_vaporColor(-1),
 		_vaporDensity(0),
+		_vaporProbability(5),
 		_noResearch(false) // kL
 {
 }
@@ -274,6 +275,7 @@ void RuleItem::load(
 	_specialType			= node["specialType"].as<int>(_specialType);
 	_vaporColor				= node["vaporColor"].as<int>(_vaporColor);
 	_vaporDensity			= node["vaporDensity"].as<int>(_vaporDensity);
+	_vaporProbability		= node["vaporProbability"].as<int>(_vaporProbability);
 
 	if (_listOrder == 0)
 		_listOrder = listOrder;
@@ -1024,6 +1026,15 @@ const int RuleItem::getVaporColor() const
 const int RuleItem::getVaporDensity() const
 {
 	return _vaporDensity;
+}
+
+/**
+ * Gets the vapor cloud probability for the vapor trail.
+ * @return, the vapor probability
+ */
+const int RuleItem::getVaporProbability() const
+{
+	return _vaporProbability;
 }
 
 /**

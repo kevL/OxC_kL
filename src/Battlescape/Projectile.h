@@ -49,7 +49,8 @@ private:
 		_bulletSprite,
 		_speed,
 		_vaporColor,
-		_vaporDensity;
+		_vaporDensity,
+		_vaporProbability;
 	size_t _position;
 
 	BattleAction _action;
@@ -80,9 +81,7 @@ private:
 				BattleAction action,
 				Position origin,
 				Position target,
-				int bulletSprite,
-				int vaporColor,
-				int vaporDensity);
+				BattleItem* ammo);
 		/// Cleans up the Projectile.
 		~Projectile();
 

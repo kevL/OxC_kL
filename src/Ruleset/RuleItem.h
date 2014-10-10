@@ -149,7 +149,8 @@ private:
 		_bulletSprite,
 
 		_vaporColor,
-		_vaporDensity;
+		_vaporDensity,
+		_vaporProbability;
 
 	double _size;
 
@@ -379,6 +380,8 @@ private:
 		const int getVaporColor() const;
 		/// Gets the vapor cloud density.
 		const int getVaporDensity() const;
+		/// Gets the vapor cloud probability.
+		const int getVaporProbability() const;
 
 		/// kL. Gets the item's default BattleAction.
 		BattleActionType getDefaultAction() const; // kL

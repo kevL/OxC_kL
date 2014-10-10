@@ -61,11 +61,9 @@ namespace OpenXcom
  * @param res			- pointer to ResourcePack
  * @param save			- pointer to SavedBattleGame
  * @param action		- the BattleAction (BattlescapeGame.h)
- * @param origin		- a position that this projectile originates at
- * @param targetVoxel	- a position that this projectile is targeted at
- * @param bulletSprite	- the sprite to use
- * @param vaporColor	-
- * @param vaporDensity	-
+ * @param origin		- position that this projectile originates at
+ * @param targetVoxel	- position that this projectile is targeted at
+ * @param ammo			- pointer to the ammo that produced this projectile when applicable
  */
 Projectile::Projectile(
 		ResourcePack* res,
@@ -73,9 +71,7 @@ Projectile::Projectile(
 		BattleAction action,
 		Position origin,
 		Position targetVoxel,
-		int bulletSprite,
-		int vaporColor,
-		int vaporDensity)
+		BattleItem* ammo)
 	:
 		_res(res),
 		_save(save),
@@ -83,34 +79,56 @@ Projectile::Projectile(
 		_origin(origin),
 		_targetVoxel(targetVoxel),
 		_position(0),
-		_bulletSprite(bulletSprite),
+		_bulletSprite(-1),
 		_reversed(false),
-		_vaporColor(vaporColor),
-		_vaporDensity(vaporDensity)
+		_vaporColor(-1),
+		_vaporDensity(-1),
+		_vaporProbability(5)
 {
 	_speed = Options::battleFireSpeed; // this is the number of pixels the sprite will move between frames
 
-	if (_action.weapon)
+	if (_action.weapon != NULL)
 	{
 		if (_action.type == BA_THROW)
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
-			_speed = _speed * 4 / 7;
 			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
+			_speed = _speed * 4 / 7;
 		}
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
 		{
 			//Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
-			if (_action.weapon->getRules()->getBulletSpeed() != 0)
-				_speed = std::max(
-								1,
-								_speed + _action.weapon->getRules()->getBulletSpeed());
-			else if (_action.weapon->getAmmoItem()
-				&& _action.weapon->getAmmoItem()->getRules()->getBulletSpeed() != 0)
+			if (ammo != NULL) // try to get all the required info from the ammo, if present
+			{
+				_bulletSprite		= ammo->getRules()->getBulletSprite();
+				_vaporColor			= ammo->getRules()->getVaporColor();
+				_vaporDensity		= ammo->getRules()->getVaporDensity();
+				_vaporProbability	= ammo->getRules()->getVaporProbability();
+				_speed				= std::max(
+											1,
+											_speed + ammo->getRules()->getBulletSpeed());
+			}
+
+			// no ammo, or the ammo didn't contain the info we wanted, see what the weapon has on offer.
+			if (_bulletSprite == -1)
+				_bulletSprite = _action.weapon->getRules()->getBulletSprite();
+
+			if (_vaporColor == -1)
+				_vaporColor = _action.weapon->getRules()->getVaporColor();
+
+			if (_vaporDensity == -1)
+				_vaporDensity = _action.weapon->getRules()->getVaporDensity();
+
+			if (_vaporProbability == 5) // uhhh why.
+				_vaporProbability = _action.weapon->getRules()->getVaporProbability();
+
+			if (ammo == NULL
+				|| ammo != _action.weapon
+				|| ammo->getRules()->getBulletSpeed() == 0)
 			{
 				_speed = std::max(
 								1,
-								_speed + _action.weapon->getAmmoItem()->getRules()->getBulletSpeed());
+								_speed + _action.weapon->getRules()->getBulletSpeed());
 			}
 		}
 	}
@@ -747,7 +765,8 @@ bool Projectile::move()
 
 		if (_save->getDepth() > 0
 			&& _vaporColor != -1
-			&& _action.type != BA_THROW && RNG::percent(5))
+			&& _action.type != BA_THROW
+			&& RNG::percent(_vaporProbability))
 		{
 			addVaporCloud();
 		}
@@ -813,8 +832,8 @@ Surface* Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-//kL	while (move());
-	_position = _trajectory.size() - 1; // kL
+//	_position = _trajectory.size() - 1; // kL, old
+	while (move()); // new
 }
 
 /**

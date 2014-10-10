@@ -57,7 +57,7 @@ namespace OpenXcom
 /**
  * Sets up an ProjectileFlyBState [0].
  * @param parent - pointer to the BattlescapeGame
- * @param action - the queued BattleAction struct (BattlescapeGame.h)
+ * @param action - the current BattleAction struct (BattlescapeGame.h)
  * @param origin - an origin Position
  */
 ProjectileFlyBState::ProjectileFlyBState(
@@ -83,7 +83,7 @@ ProjectileFlyBState::ProjectileFlyBState(
 /**
  * Sets up an ProjectileFlyBState [1].
  * @param parent - pointer to the BattlescapeGame
- * @param action - the queued BattleAction struct (BattlescapeGame.h)
+ * @param action - the current BattleAction struct (BattlescapeGame.h)
  */
 ProjectileFlyBState::ProjectileFlyBState(
 		BattlescapeGame* parent,
@@ -551,30 +551,13 @@ bool ProjectileFlyBState::createNewProjectile()
 		_unit->getStatistics()->shotsFiredCounter++;
 	}
 
-	int
-		bulletSprite = -1,
-		vaporColor = -1,
-		vaporDensity = -1;
-
-	if (_action.type != BA_THROW)
-	{
-		bulletSprite = _ammo->getRules()->getBulletSprite();
-		if (bulletSprite == -1)
-			bulletSprite = _action.weapon->getRules()->getBulletSprite();
-
-		vaporColor = _ammo->getRules()->getVaporColor();
-		vaporDensity = _ammo->getRules()->getVaporDensity();
-	}
-
 	Projectile* projectile = new Projectile(
 										_parent->getResourcePack(),
 										_parent->getSave(),
 										_action,
 										_origin,
 										_targetVoxel,
-										bulletSprite,
-										vaporColor,
-										vaporDensity);
+										_ammo);
 
 	_parent->getMap()->setProjectile(projectile); // add the projectile on the map
 
@@ -794,6 +777,7 @@ void ProjectileFlyBState::think()
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots()
 			&& _unit->isOut() == false
+			&& _ammo != NULL // kL
 			&& _ammo->getAmmoQuantity() != 0
 			&& (hasFloor
 				|| unitCanFly))
@@ -865,7 +849,7 @@ void ProjectileFlyBState::think()
 	else // projectile in motion ... ! impact !
 	{
 		if (_action.type != BA_THROW
-			&& _ammo
+			&& _ammo != NULL
 			&& _ammo->getRules()->getShotgunPellets() != 0)
 		{
 			// shotgun pellets move to their terminal location instantly as fast as possible
@@ -958,7 +942,7 @@ void ProjectileFlyBState::think()
 				}
 
 				if (_action.type == BA_LAUNCH
-					&& _ammo
+					&& _ammo != NULL
 					&& _ammo->spendBullet() == false)
 				{
 					_parent->getSave()->removeItem(_ammo);
@@ -971,7 +955,7 @@ void ProjectileFlyBState::think()
 					// projectiles generally move 2 voxels at a time
 					int offset = 0;
 
-					if (_ammo
+					if (_ammo != NULL
 //kL					&& _ammo->getRules()->getExplosionRadius() != 0
 						&& _ammo->getRules()->getExplosionRadius() > -1		// kL
 //						&& (_ammo->getRules()->getDamageType() == DT_HE		// kL
@@ -994,56 +978,53 @@ void ProjectileFlyBState::think()
 
 					// special shotgun behaviour: trace extra projectile paths,
 					// and add bullet hits at their termination points.
-					if (_ammo
-						&& _ammo->getRules()->getShotgunPellets() != 0)
+					if (_ammo != NULL)
 					{
-						int bulletSprite = _ammo->getRules()->getBulletSprite();
-						if (bulletSprite == -1)
-							bulletSprite = _action.weapon->getRules()->getBulletSprite();
-
-						int i = 1;
-						while (i != _ammo->getRules()->getShotgunPellets())
+						int shot = _ammo->getRules()->getShotgunPellets();
+						if (shot != 0)
 						{
-							Projectile* proj = new Projectile( // create a projectile
-														_parent->getResourcePack(),
-														_parent->getSave(),
-														_action,
-														_origin,
-														_targetVoxel,
-														bulletSprite,
-														_ammo->getRules()->getVaporColor(),
-														_ammo->getRules()->getVaporDensity());
-
-							_projectileImpact = proj->calculateTrajectory( // let it trace to the point where it hits
-																	std::max(
-																			0.0,
-																			_unit->getFiringAccuracy(
-																								_action.type,
-																								_action.weapon)
-																							- i * 0.05)); // pellet spread.
-
-							if (_projectileImpact != VOXEL_EMPTY)
+							int i = 0;
+							while (i != shot)
 							{
-								proj->skipTrajectory(); // as above: skip the shot to the end of its path
+								Projectile* proj = new Projectile( // create a projectile
+															_parent->getResourcePack(),
+															_parent->getSave(),
+															_action,
+															_origin,
+															_targetVoxel,
+															_ammo);
 
-								if (_projectileImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
+								_projectileImpact = proj->calculateTrajectory( // let it trace to the point where it hits
+																		std::max(
+																				0.0,
+																				_unit->getFiringAccuracy(
+																									_action.type,
+																									_action.weapon)
+																								- i * 0.05)); // pellet spread.
+
+								if (_projectileImpact != VOXEL_EMPTY)
 								{
-									Explosion* explosion = new Explosion(
-																		proj->getPosition(1),
-																		_ammo->getRules()->getHitAnimation());
+									proj->skipTrajectory(); // as above: skip the shot to the end of its path
 
-									_parent->getMap()->getExplosions()->push_back(explosion);
-									_parent->getSave()->getTileEngine()->hit(
+									if (_projectileImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
+									{
+										Explosion* explosion = new Explosion(
 																			proj->getPosition(1),
-																			_ammo->getRules()->getPower(),
-																			_ammo->getRules()->getDamageType(),
-																			NULL); // kL_note: was _unit
+																			_ammo->getRules()->getHitAnimation());
+
+										_parent->getMap()->getExplosions()->push_back(explosion);
+										_parent->getSave()->getTileEngine()->hit(
+																				proj->getPosition(1),
+																				_ammo->getRules()->getPower(),
+																				_ammo->getRules()->getDamageType(),
+																				NULL);
+									}
+
+									++i;
 								}
 
-								++i;
+								delete proj;
 							}
-
-							delete proj;
 						}
 					}
 
