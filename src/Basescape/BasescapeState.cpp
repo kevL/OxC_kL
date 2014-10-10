@@ -377,7 +377,7 @@ void BasescapeState::setBase(Base* base)
 {
 	if (_game->getSavedGame()->getBases()->empty() == false)
 	{
-		bool exists = false; // Check if base still exists
+		bool exists = false; // check if base still exists
 
 		for (size_t
 				i = 0;
@@ -395,14 +395,14 @@ void BasescapeState::setBase(Base* base)
 			}
 		}
 
-		if (exists == false) // If base was removed, select first one
+		if (exists == false) // if base was removed, select first one
 		{
 			_base = _game->getSavedGame()->getBases()->front();
 			_mini->setSelectedBase(0);
 //kL		_game->getSavedGame()->setSelectedBase(0);
 		}
 	}
-	else // Use a blank base for special case when player has no bases
+	else // use a blank base for special case when player has no bases
 	{
 		_base = new Base(_game->getRuleset());
 		_mini->setSelectedBase(0);
@@ -480,7 +480,9 @@ void BasescapeState::btnResearchClick(Action*)
  */
 void BasescapeState::btnManufactureClick(Action*)
 {
-	_game->pushState(new ManufactureState(_base));
+	_game->pushState(new ManufactureState(
+										_base,
+										this));
 }
 
 /**
@@ -630,7 +632,9 @@ void BasescapeState::viewLeftClick(Action*)
 	else if (fac->getRules()->getWorkshops() > 0)
 	{
 		bPop = true;
-		_game->pushState(new ManufactureState(_base));
+		_game->pushState(new ManufactureState(
+											_base,
+											this));
 	}
 	else if (fac->getRules()->getAliens() > 0)
 	{
@@ -755,9 +759,8 @@ void BasescapeState::miniLeftClick(Action*)
 	if (base < _game->getSavedGame()->getBases()->size()
 		&& _base != _game->getSavedGame()->getBases()->at(base))
 	{
-		_txtFacility->setText(L"");
-
 		_base = _game->getSavedGame()->getBases()->at(base);
+		_txtFacility->setText(L"");
 
 		init();
 	}

@@ -37,8 +37,7 @@ class TextEdit;
 
 
 /**
- * Base Info screen that shows all the
- * stats of a base from the Basescape.
+ * Base Info screen that shows all the stats of a base from the Basescape.
  */
 class BaseInfoState
 	:

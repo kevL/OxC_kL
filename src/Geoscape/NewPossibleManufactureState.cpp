@@ -124,13 +124,15 @@ void NewPossibleManufactureState::btnOkClick(Action*)
 }
 
 /**
- * Open the ManufactureState so the player can dispatch available scientist.
+ * Open the ManufactureState so the player can dispatch available engineers.
  * @param action - pointer to an action
  */
 void NewPossibleManufactureState::btnManufactureClick(Action*)
 {
 	_game->popState();
-	_game->pushState(new ManufactureState(_base));
+	_game->pushState(new ManufactureState(
+										_base,
+										NULL));
 }
 
 }

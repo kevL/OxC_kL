@@ -846,7 +846,7 @@ void Map::drawTerrain(Surface* surface)
 						&& _selectorY > itY - _cursorSize
 						&& _selectorX < itX + 1
 						&& _selectorY < itY + 1
-						&& !_save->getBattleState()->getMouseOverIcons())
+						&& _save->getBattleState()->getMouseOverIcons() == false)
 					{
 						if (_camera->getViewLevel() == itZ)
 						{

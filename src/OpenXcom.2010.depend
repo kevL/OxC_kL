@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1412943544 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1412969894 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -23,7 +23,7 @@
 	"../Savegame/Region.h"
 	"../Savegame/SavedGame.h"
 
-1408670905 f:\git\openxcom\src\basescape\baseinfostate.h
+1412969804 f:\git\openxcom\src\basescape\baseinfostate.h
 	"../Engine/State.h"
 
 1407383407 f:\git\openxcom\src\engine\state.h
@@ -4441,7 +4441,7 @@
 	"CraftId.h"
 	"GameTime.h"
 
-1412949802 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1412970823 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -4510,7 +4510,7 @@
 	<string>
 	"../Engine/State.h"
 
-1404096022 f:\git\openxcom\src\basescape\manufacturestate.h
+1412970113 f:\git\openxcom\src\basescape\manufacturestate.h
 	"../Engine/State.h"
 
 1411714022 f:\git\openxcom\src\basescape\purchasestate.h
@@ -5082,7 +5082,7 @@
 	<windows.h>
 	<stddef.h>
 
-1412948873 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1412968070 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	<cmath>
 	"../Engine/Action.h"
@@ -5823,7 +5823,7 @@
 1404096022 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1412892283 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1412963968 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6445,7 +6445,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1412943544 source:f:\git\openxcom\src\battlescape\map.cpp
+1412964079 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -8140,7 +8140,7 @@
 1404096023 f:\git\openxcom\src\geoscape\targetinfostate.h
 	"../Engine/State.h"
 
-1412943546 source:f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.cpp
+1412970914 source:f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.cpp
 	"NewPossibleManufactureState.h"
 	"../Basescape/ManufactureState.h"
 	"../Engine/Game.h"
@@ -9259,7 +9259,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1412443267 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1412954310 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	<climits>
 	<sstream>

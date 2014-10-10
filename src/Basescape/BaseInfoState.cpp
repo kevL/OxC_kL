@@ -195,7 +195,7 @@ BaseInfoState::BaseInfoState(
 			i < _game->getSavedGame()->getBases()->size();
 			++i)
 	{
-		if (_game->getSavedGame()->getBases()->at(i) == _base)
+		if (_game->getSavedGame()->getBases()->at(i) == base)
 		{
 			_mini->setSelectedBase(i);
 			break;
@@ -479,9 +479,12 @@ void BaseInfoState::edtBaseChange(Action* action)
 void BaseInfoState::miniClick(Action*)
 {
 	size_t base = _mini->getHoveredBase();
-	if (base < _game->getSavedGame()->getBases()->size())
+
+	if (base < _game->getSavedGame()->getBases()->size()
+		&& _base != _game->getSavedGame()->getBases()->at(base))
 	{
 		_mini->setSelectedBase(base);
+
 		_base = _game->getSavedGame()->getBases()->at(base);
 		_state->setBase(_base);
 

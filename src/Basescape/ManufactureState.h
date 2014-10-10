@@ -27,6 +27,8 @@ namespace OpenXcom
 {
 
 class Base;
+class BasescapeState;
+class MiniBaseView;
 class Text;
 class TextButton;
 class TextList;
@@ -44,6 +46,8 @@ class ManufactureState
 
 private:
 	Base* _base;
+	BasescapeState* _state;
+	MiniBaseView* _mini;
 	Text
 		* _txtAvailable,
 		* _txtAllocated,
@@ -69,7 +73,8 @@ private:
 	public:
 		/// Creates the Manufacture state.
 		ManufactureState(
-				Base* base);
+				Base* base,
+				BasescapeState* state);
 		/// Cleans up the Manufacture state.
 		~ManufactureState();
 
@@ -83,6 +88,8 @@ private:
 		void btnOkClick(Action* action);
 		/// Handler for the New Production button.
 		void btnNewProductionClick(Action* action);
+		/// Handler for clicking the mini base view.
+		void miniClick(Action* action);
 };
 
 }

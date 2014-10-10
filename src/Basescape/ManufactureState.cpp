@@ -22,7 +22,9 @@
 #include <limits>
 #include <sstream>
 
+#include "BasescapeState.h"
 #include "ManufactureInfoState.h"
+#include "MiniBaseView.h"
 #include "NewManufactureListState.h"
 
 #include "../Engine/Game.h"
@@ -51,22 +53,28 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Manufacture screen.
- * @param base - pointer to the Base to get info from
+ * @param base	- pointer to the Base to get info from
+ * @param state	- pointer to the BasescapeState, can be NULL if geoscape-invoked
  */
 ManufactureState::ManufactureState(
-		Base* base)
+		Base* base,
+		BasescapeState* state)
 	:
-		_base(base)
+		_base(base),
+		_state(state)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
+
+	_mini			= new MiniBaseView(128, 16, 180, 26);
+
 	_txtTitle		= new Text(300, 17, 16, 9);
 	_txtBaseLabel	= new Text(80, 9, 16, 9);
 
-	_txtAllocated	= new Text(140, 9, 16, 25);
-	_txtAvailable	= new Text(140, 9, 16, 34);
+	_txtAllocated	= new Text(60, 9, 16, 25);
+	_txtAvailable	= new Text(60, 9, 16, 34);
 
-	_txtSpace		= new Text(140, 9, 160, 25);
-	_txtFunds		= new Text(140, 9, 160, 34);
+	_txtSpace		= new Text(100, 9, 80, 25);
+	_txtFunds		= new Text(100, 9, 80, 34);
 
 	_txtItem		= new Text(120, 9, 16, 52);
 	_txtEngineers	= new Text(45, 9, 145, 52);
@@ -82,6 +90,7 @@ ManufactureState::ManufactureState(
 	setPalette("PAL_BASESCAPE", 6);
 
 	add(_window);
+	add(_mini);
 	add(_txtTitle);
 	add(_txtBaseLabel);
 	add(_txtAvailable);
@@ -103,6 +112,25 @@ ManufactureState::ManufactureState(
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
+	_mini->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
+	_mini->setBases(_game->getSavedGame()->getBases());
+	for (size_t
+			i = 0;
+			i < _game->getSavedGame()->getBases()->size();
+			++i)
+	{
+		if (_game->getSavedGame()->getBases()->at(i) == base)
+		{
+			_mini->setSelectedBase(i);
+			break;
+		}
+	}
+	_mini->onMouseClick(
+					(ActionHandler)& ManufactureState::miniClick,
+					SDL_BUTTON_LEFT);
+//	_mini->onMouseOver((ActionHandler)& ManufactureState::viewMouseOver);
+//	_mini->onMouseOut((ActionHandler)& ManufactureState::viewMouseOut);
+
 	_btnNew->setColor(Palette::blockOffset(13)+10);
 	_btnNew->setText(tr("STR_NEW_PRODUCTION"));
 	_btnNew->onMouseClick((ActionHandler)& ManufactureState::btnNewProductionClick);
@@ -120,7 +148,7 @@ ManufactureState::ManufactureState(
 	_txtTitle->setText(tr("STR_CURRENT_PRODUCTION"));
 
 	_txtBaseLabel->setColor(Palette::blockOffset(15)+6);
-	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+//	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
 	_txtAvailable->setColor(Palette::blockOffset(15)+6);
 	_txtAvailable->setSecondaryColor(Palette::blockOffset(13));
@@ -170,7 +198,7 @@ ManufactureState::ManufactureState(
 //	_lstManufacture->setWordWrap();
 	_lstManufacture->onMouseClick((ActionHandler)& ManufactureState::lstManufactureClick);
 
-	fillProductionList();
+//	fillProductionList();
 }
 
 /**
@@ -186,6 +214,9 @@ ManufactureState::~ManufactureState()
 void ManufactureState::init()
 {
 	State::init();
+
+	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+
 
 	fillProductionList();
 }
@@ -313,6 +344,29 @@ void ManufactureState::lstManufactureClick(Action*)
 	_game->pushState(new ManufactureInfoState(
 											_base,
 											productions[_lstManufacture->getSelectedRow()]));
+}
+
+/**
+ * Selects a new base to display.
+ * @param action - pointer to an action
+ */
+void ManufactureState::miniClick(Action*)
+{
+	if (_state != NULL) // cannot switch bases if coming from geoscape.
+	{
+		size_t base = _mini->getHoveredBase();
+
+		if (base < _game->getSavedGame()->getBases()->size()
+			&& _base != _game->getSavedGame()->getBases()->at(base))
+		{
+			_mini->setSelectedBase(base);
+
+			_base = _game->getSavedGame()->getBases()->at(base);
+			_state->setBase(_base);
+
+			init();
+		}
+	}
 }
 
 }

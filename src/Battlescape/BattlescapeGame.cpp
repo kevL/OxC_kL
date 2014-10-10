@@ -3103,11 +3103,12 @@ int BattlescapeGame::takeItemFromGround(
 		BattleAction* action)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::takeItemFromGround()";
-	const int TAKEITEM_ERROR	= -1;
-	const int TAKEITEM_SUCCESS	=  0;
-	const int TAKEITEM_NOTU		=  1;
-	const int TAKEITEM_NOSPACE	=  2;
-	const int TAKEITEM_NOFIT	=  3;
+	const int
+		TAKEITEM_ERROR		= -1,
+		TAKEITEM_SUCCESS	=  0,
+		TAKEITEM_NOTU		=  1,
+		TAKEITEM_NOSPACE	=  2,
+		TAKEITEM_NOFIT		=  3;
 
 	int freeSlots = 25;
 
