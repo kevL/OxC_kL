@@ -321,8 +321,8 @@ UfoDetectedState::UfoDetectedState(
 			str = "POLAR";
 //		else if (str == "COMRCURBAN"	// these are Terror sites only:
 //			|| str == "DAWNURBANA"		// ie. not referenced by any of the Globe's polygon textures.
-//			|| str == "DAWNURBANB"
-//			|| str == "INDUSTRIALURBAN"
+//			|| str == "DAWNURBANB"		// but NOTE: if UFO lands directly on a city,
+//			|| str == "INDUSTRIALURBAN"	// one of these should pop via ConfirmLandingState
 //			|| str == "MADURBAN"
 //			|| str == "NATIVEURBAN"
 //			|| str == "PORTURBAN"

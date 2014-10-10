@@ -53,9 +53,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Action Menu window.
- * @param action Pointer to the action.
- * @param x Position on the x-axis.
- * @param y position on the y-axis.
+ * @param action	- pointer to BattleAction (BattlescapeGame.h)
+ * @param x			- position on the x-axis
+ * @param y			- position on the y-axis
  */
 ActionMenuState::ActionMenuState(
 		BattleAction* action,
@@ -316,12 +316,10 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 				_game->popState();
 			}
 			else
-			{
 				_game->pushState(new PrimeGrenadeState(
 													_action,
 													false,
 													NULL));
-			}
 		}
 		else if (_action->type == BA_DEFUSE) // kL_add.
 		{
@@ -337,7 +335,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			for (std::vector<BattleUnit*>::const_iterator
 					i = units->begin();
 					i != units->end()
-						&& !targetUnit;
+						&& targetUnit == NULL;
 					++i)
 			{
 				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
@@ -350,22 +348,20 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 				}
 			}
 
-			if (targetUnit == NULL)
-			{
-				if (_game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
+			if (targetUnit == NULL
+				&& _game->getSavedGame()->getSavedBattle()->getTileEngine()->validMeleeRange(
 																						_action->actor->getPosition(),
 																						_action->actor->getDirection(),
 																						_action->actor,
 																						NULL,
 																						&_action->target))
+			{
+				Tile* tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
+				if (tile != NULL
+					&& tile->getUnit()
+					&& tile->getUnit()->isWoundable())
 				{
-					Tile* tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
-					if (tile != NULL
-						&& tile->getUnit()
-						&& tile->getUnit()->isWoundable())
-					{
-						targetUnit = tile->getUnit();
-					}
+					targetUnit = tile->getUnit();
 				}
 			}
 
@@ -430,7 +426,6 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 		else // shoot, throw, psi-attack, mind-probe
 		{
 			_action->targeting = true;
-
 			_game->popState();
 		}
 	}
