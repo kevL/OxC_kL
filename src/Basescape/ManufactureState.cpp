@@ -51,7 +51,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Manufacture screen.
- * @param base - pointer to the base to get info from
+ * @param base - pointer to the Base to get info from
  */
 ManufactureState::ManufactureState(
 		Base* base)

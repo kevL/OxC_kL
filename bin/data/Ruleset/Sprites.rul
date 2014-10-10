@@ -1,93 +1,59 @@
 extraSprites:
-  - type: CURSOR.PCK
-    files:
-      0: Resources/Sprites/ufograph/cursor/
-  - type: HIT.PCK
-    files:
-      0: Resources/Sprites/ufograph/hit/
-  - type: ICONS.PCK
-    width: 320
-    height: 200
-    singleImage: true
-    files:
-      0: Resources/Sprites/ufograph/icons.png
-  - type: SCANBORD
-    width: 320
-    height: 200
-    singleImage: true
-    files:
-      0: Resources/Sprites/ufograph/scanbord.png
-  - type: SMOKE.PCK
-    files:
-      0: Resources/Sprites/ufograph/smoke/
-  - type: X1.PCK
-    width: 1024
-    height: 128
-    subX: 128
-    subY: 64
-    files:
-      0: Resources/Sprites/ufograph/x1/x1.png
-  - type: INTICON.PCK
-    files:
-      0: Resources/Sprites/geograph/inticon/
-  - type: BASEBITS.PCK
-    files:
-      0: Resources/Sprites/geograph/basebits/
-  - type: INTERWIN # interception window
+  - type: INTERWIN #interception window
     width: 160
     height: 96
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/interwin.png
-  - type: INTERWIN_ # border UFO preview
+  - type: INTERWIN_ #border UFO preview
     width: 160
     height: 96
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/interwin_.png
-  - type: INTERWIN_0 # small scout
+  - type: INTERWIN_0 #small scout
     width: 160
     height: 52
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/interwin_0.png
-  - type: INTERWIN_1 # medium scout
+  - type: INTERWIN_1 #medium scout
     width: 160
     height: 52
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/interwin_1.png
-  - type: INTERWIN_2 # large scout
+  - type: INTERWIN_2 #large scout
     width: 160
     height: 52
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/interwin_2.png
-  - type: INTERWIN_3 # harvester
+  - type: INTERWIN_3 #harvester
     width: 160
     height: 52
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/interwin_3.png
-  - type: INTERWIN_4 # abductor
+  - type: INTERWIN_4 #abductor
     width: 160
     height: 52
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/interwin_4.png
-  - type: INTERWIN_5 # terror ship
+  - type: INTERWIN_5 #terror ship
     width: 160
     height: 52
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/interwin_5.png
-  - type: INTERWIN_6 # battle ship
+  - type: INTERWIN_6 #battle ship
     width: 160
     height: 52
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/interwin_6.png
-  - type: INTERWIN_7 # supply ship
+  - type: INTERWIN_7 #supply ship
     width: 160
     height: 52
     singleImage: true
@@ -135,18 +101,33 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/textures/tex_urban.png
-  - type: GENDER_M
-    width: 7
-    height: 7
+  - type: BASEBITS.PCK
+    files:
+      0: Resources/Sprites/geograph/basebits/
+  - type: CURSOR.PCK
+    files:
+      0: Resources/Sprites/ufograph/cursor/
+  - type: HIT.PCK
+    files:
+      0: Resources/Sprites/ufograph/hit/
+  - type: ICONS.PCK
+    width: 320
+    height: 200
     singleImage: true
     files:
-      0: Resources/Sprites/gender/gender_m.png
-  - type: GENDER_F
-    width: 7
-    height: 7
+      0: Resources/Sprites/ufograph/icons.png
+  - type: INTICON.PCK
+    files:
+      0: Resources/Sprites/geograph/inticon/
+  - type: SCANBORD
+    width: 320
+    height: 200
     singleImage: true
     files:
-      0: Resources/Sprites/gender/gender_f.png
+      0: Resources/Sprites/ufograph/scanbord.png
+  - type: SMOKE.PCK
+    files:
+      0: Resources/Sprites/ufograph/smoke/
   - type: RANK_ROOKIE
     width: 9
     height: 7
@@ -183,6 +164,13 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/ufograph/smoke/ranks/rank_commander.png
+  - type: X1.PCK
+    width: 1024
+    height: 128
+    subX: 128
+    subY: 64
+    files:
+      0: Resources/Sprites/ufograph/x1/x1.png
   - type: DIGITS
     width: 30
     height: 5
@@ -190,3 +178,15 @@ extraSprites:
     subY: 5
     files:
       0: Resources/Sprites/gender/digits.png
+  - type: GENDER_F
+    width: 7
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/gender/gender_f.png
+  - type: GENDER_M
+    width: 7
+    height: 7
+    singleImage: true
+    files:
+      0: Resources/Sprites/gender/gender_m.png

@@ -4441,7 +4441,7 @@
 	"CraftId.h"
 	"GameTime.h"
 
-1411714022 source:f:\git\openxcom\src\basescape\basescapestate.cpp
+1412949802 source:f:\git\openxcom\src\basescape\basescapestate.cpp
 	"BasescapeState.h"
 	"BaseDetectionState.h"
 	"BaseInfoState.h"
@@ -5034,7 +5034,7 @@
 1404096022 f:\git\openxcom\src\basescape\manufacturestartstate.h
 	"../Engine/State.h"
 
-1412943545 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
+1412948559 source:f:\git\openxcom\src\basescape\manufacturestate.cpp
 	"ManufactureState.h"
 	<limits>
 	<sstream>
@@ -5082,7 +5082,7 @@
 	<windows.h>
 	<stddef.h>
 
-1411714022 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1412948873 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	<cmath>
 	"../Engine/Action.h"
@@ -6665,7 +6665,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1412608357 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1412947714 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"Map.h"
@@ -6692,7 +6692,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1412861341 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1412946831 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -9379,7 +9379,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1412820643 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1412944302 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"

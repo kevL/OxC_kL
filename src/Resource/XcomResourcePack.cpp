@@ -348,40 +348,20 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	// here we create an "alternate" background surface for the base info screen.
 	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
 	_surfaces["ALTBACK07.SCR"]->loadScr(CrossPlatform::getDataFile("GEOGRAPH/BACK07.SCR"));
-	for (int
-			y = 172;
-			y >= 152;
-			--y)
-		for (int
-				x = 5;
-				x <= 314;
-				++x)
+	for (int y = 172; y >= 152; --y)
+		for (int x = 5; x <= 314; ++x)
 			_surfaces["ALTBACK07.SCR"]->setPixelColor(
 												x,
 												y + 4,
 												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y));
-
-	for (int
-			y = 147;
-			y >= 134;
-			--y)
-		for (int
-				x = 5;
-				x <= 314;
-				++x)
+	for (int y = 147; y >= 134; --y)
+		for (int x = 5; x <= 314; ++x)
 			_surfaces["ALTBACK07.SCR"]->setPixelColor(
 												x,
 												y + 9,
 												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y));
-
-	for (int
-			y = 132;
-			y >= 109;
-			--y)
-		for (int
-				x = 5;
-				x <= 314;
-				++x)
+	for (int y = 132; y >= 109; --y)
+		for (int x = 5; x <= 314; ++x)
 			_surfaces["ALTBACK07.SCR"]->setPixelColor(
 												x,
 												y + 10,
@@ -699,7 +679,7 @@ MOVED TO Ruleset !
 					if (_musicFile.find(filename) != _musicFile.end())
 						loaded = true;
 
-					if (!loaded) // Try digital tracks
+					if (loaded == false) // Try digital tracks
 					{
 
 
@@ -722,10 +702,10 @@ MOVED TO Ruleset !
 							{
 								ExtraMusic* musicRule = m->second;
 								// check if there is an entry which overrides something but does not specify the terrain
-								if (!musicRule->hasTerrainSpecification())
+								if (musicRule->hasTerrainSpecification() == false)
 								{
 									std::string overridden = musicRule->getOverridden();
-									if (!overridden.empty()
+									if (overridden.empty() == false
 										&& overridden.compare(mus[l]) == 0)
 									{
 										// Found one, let's use it!
@@ -742,7 +722,7 @@ MOVED TO Ruleset !
 							}
 						}
 
-						if (!loaded) // sza_End.
+						if (loaded == false) // sza_End.
 						{ // sza_Add.
 
 							// kL_begin: moved here from above.
@@ -776,7 +756,7 @@ MOVED TO Ruleset !
 						} // sza_Add.
 					}
 
-					if (!loaded)
+					if (loaded == false)
 					{
 						if (adlibcat // Try Adlib music
 							&& Options::audioBitDepth == 16)
@@ -820,7 +800,7 @@ MOVED TO Ruleset !
 						}
 					}
 
-					if (!loaded)
+					if (loaded == false)
 					{
 						throw Exception(filename + " music not found");
 					}
@@ -1054,9 +1034,7 @@ MOVED TO Ruleset !
 					throw Exception(catsWin[i] + " not found");
 				}
 				else
-				{
 					_sounds[catsId[i]] = sound;
-				}
 			}
 		}
 		else
@@ -1114,7 +1092,7 @@ MOVED TO Ruleset !
 	GraphsState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for switching Graphs screens. Or just returning to Geoscape.
 
 	/* BATTLESCAPE RESOURCES */
-	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end?
+	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end
 
 	// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
 	// this is done after loading them, but BEFORE loading the extraSprites, in case a modder wants to replace them.

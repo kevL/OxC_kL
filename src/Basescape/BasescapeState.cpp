@@ -76,8 +76,8 @@ Sound* BasescapeState::soundPop = 0;
 
 /**
  * Initializes all the elements in the Basescape screen.
- * @param base Pointer to the base to get info from.
- * @param globe Pointer to the Geoscape globe.
+ * @param base	- pointer to the Base to get info from
+ * @param globe	- pointer to the geoscape Globe
  */
 BasescapeState::BasescapeState(
 		Base* base,
@@ -395,7 +395,7 @@ void BasescapeState::setBase(Base* base)
 			}
 		}
 
-		if (!exists) // If base was removed, select first one
+		if (exists == false) // If base was removed, select first one
 		{
 			_base = _game->getSavedGame()->getBases()->front();
 			_mini->setSelectedBase(0);

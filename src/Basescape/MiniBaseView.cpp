@@ -40,11 +40,11 @@ namespace OpenXcom
 {
 
 /**
- * Sets up a mini base view with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * Sets up a MiniBaseView with the specified size and position.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 MiniBaseView::MiniBaseView(
 		int width,
@@ -205,9 +205,9 @@ void MiniBaseView::draw()
 
 			if (base->getCrafts()->empty() == false)
 			{
-				int pixel_y = 17;
 				RuleCraft* craftRule = NULL;
 
+				int pixel_y = 17;
 				for (std::vector<Craft*>::iterator
 						craft = base->getCrafts()->begin();
 						craft != base->getCrafts()->end();
@@ -248,8 +248,8 @@ void MiniBaseView::draw()
 
 /**
  * Selects the base the mouse is over.
- * @param action, Pointer to an action.
- * @param state, State that the action handlers belong to.
+ * @param action - pointer to an action
+ * @param state - state that the action handlers belong to
  */
 void MiniBaseView::mouseOver(Action* action, State* state)
 {

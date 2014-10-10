@@ -53,8 +53,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Base Info screen.
- * @param base	- pointer to the base to get info from
- * @param state	- pointer to the Basescape state
+ * @param base	- pointer to the Base to get info from
+ * @param state	- pointer to the BasescapeState
  */
 BaseInfoState::BaseInfoState(
 		Base* base,
@@ -65,6 +65,7 @@ BaseInfoState::BaseInfoState(
 {
 	_bg					= new Surface(320, 200, 0, 0);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
+//	_mini				= new MiniBaseView(128, 22, 182, 5);
 
 	_btnMonthlyCosts	= new TextButton(72, 14, 10, 179);
 	_btnTransfers		= new TextButton(72, 14, 86, 179);
