@@ -300,6 +300,12 @@ research:
       - STR_ELERIUM_115
       - STR_UFO_POWER_SOURCE
       - STR_UFO_NAVIGATION
+  - name: STR_UNMANNED_AIRCRAFT
+#    listOrder: 3107
+    cost: 30000
+    points: 20
+    dependencies:
+      - STR_UFO_CONSTRUCTION
   - name: STR_NEW_FIGHTER_CRAFT
     cost: 60000
     points: 30
@@ -340,14 +346,14 @@ research:
     cost: 15000
     needItem: true
   - name: STR_WASPITE_CORPSE
-    cost: 180
+    cost: 1800
     points: 50
     lookup: STR_WASPITE_AUTOPSY
     needItem: true
     unlocks:
       - STR_ALIEN_CONTAINMENT
   - name: STR_CYBERMITE_CORPSE
-    cost: 180
+    cost: 1800
     points: 50
     lookup: STR_CYBERMITE_AUTOPSY
     needItem: true

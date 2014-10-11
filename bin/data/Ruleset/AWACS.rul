@@ -1,0 +1,177 @@
+# X-COM 1 (UFO: Enemy Unknown) ruleset
+crafts:
+  - type: STR_HAWKEYE
+    sprite: 26
+    fuelMax: 1350
+    damageMax: 125
+    speedMax: 410
+    accel: 1
+    costBuy: 500000
+    costRent: 350000
+    refuelRate: 75
+    radarRange: 1200
+#    radarChance: 40
+    transferTime: 96
+    score: 200
+    listOrder: 207
+  - type: STR_AWACS
+    sprite: 27
+    fuelMax: 1750
+    damageMax: 140
+    speedMax: 723
+    accel: 1
+    costBuy: 650000
+    costRent: 475000
+    refuelRate: 75
+    radarRange: 1650
+#    radarChance: 40
+    transferTime: 96
+    score: 225
+    listOrder: 208
+  - type: STR_DARKSTAR
+    sprite: 28
+    fuelMax: 2250
+    damageMax: 75
+    speedMax: 380
+    accel: 1
+    costSell: 850000
+    refuelRate: 150
+    radarRange: 1850
+#    radarChance: 60
+    transferTime: 96
+    score: 150
+    listOrder: 209
+#-----------------------------------
+#research:
+#  - name: STR_UNMANNED_AIRCRAFT
+#    listOrder: 3107
+#    cost: 300
+#    points: 20
+#    dependencies:
+#      - STR_UFO_CONSTRUCTION
+#-----------------------------------
+manufacture:
+  - name: STR_DARKSTAR
+    category: STR_CRAFT
+    listOrder: 3507
+    requires:
+      - STR_UNMANNED_AIRCRAFT
+    space: 27
+    time: 15000
+    cost: 735000
+    requiredItems:
+      STR_ALIEN_ALLOYS: 46
+      STR_UFO_NAVIGATION: 2
+#-----------------------------------
+ufopaedia:
+  - id: STR_HAWKEYE
+    type_id: 1
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: HAWKEYE_BIG
+    text: STR_HAWKEYE_UFOPEDIA
+    listOrder: 407
+    rect_stats:
+      x: 180
+      y: 134
+      width: 140
+      height: 60
+    rect_text:
+      x: 5
+      y: 40
+      width: 170
+      height: 60
+  - id: STR_AWACS
+    type_id: 1
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: AWACS_BIG
+    text: STR_AWACS_UFOPEDIA
+    listOrder: 408
+    rect_stats:
+      x: 190
+      y: 10
+      width: 140
+      height: 60
+    rect_text:
+      x: 5
+      y: 40
+      width: 140
+      height: 60
+  - id: STR_DARKSTAR
+    type_id: 1
+    section: STR_XCOM_CRAFT_ARMAMENT
+    image_id: DARKSTAR_BIG
+    text: STR_DARKSTAR_UFOPEDIA
+    listOrder: 409
+    requires:
+      - STR_UNMANNED_AIRCRAFT
+    rect_stats:
+      x: 5
+      y: 134
+      width: 140
+      height: 60
+    rect_text:
+      x: 5
+      y: 40
+      width: 260
+      height: 60
+#-----------------------------------
+extraSprites:
+  - type: BASEBITS.PCK
+    files:
+      59: Resources/AWACS/HAWKEYE_base_view.gif
+      60: Resources/AWACS/AWACS_base_view.gif
+      61: Resources/AWACS/DARKSTAR_base_view.gif
+  - type: INTICON.PCK
+    width: 352
+    height: 80
+    subX: 32
+    subY: 40
+    files:
+      26: Resources/AWACS/AWACS_geoscape.png
+  - type: HAWKEYE_BIG
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/AWACS/HAWKEYE_ufopaedia.png
+  - type: AWACS_BIG
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/AWACS/AWACS_ufopaedia.png
+  - type: DARKSTAR_BIG
+    singleImage: true
+    width: 320
+    height: 200
+    files:
+      0: Resources/AWACS/DARKSTAR_ufopaedia.png
+#-----------------------------------
+extraStrings:
+  - type: en-US
+    strings:
+      STR_UNMANNED_AIRCRAFT: "Unmanned Aircraft"
+      STR_HAWKEYE: "HAWKEYE"
+      STR_HAWKEYE_UFOPEDIA: "A SPECIAL MODIFICATION FOR XCOM WITH ADDITIONAL FUEL TANK AND INCREASED RADAR RANGE."
+      STR_AWACS: "AWACS"
+      STR_AWACS_UFOPEDIA: "THE NEW GENERATION OF AWACS. LATEST TECHNOLOGY ALLOWS DETECT ALL KIND OF TARGETS ON SIGNIFICANT DISTANCE."
+      STR_DARKSTAR: "DARKSTAR"
+      STR_DARKSTAR_UFOPEDIA: "USE OF ALIEN TECHNOLOGY AND ULTRALIGHT ALIEN ALLOYS ALLOWED DEVELOP AN UNMANNED AIRCRAFT WITH PREVIOUSLY UNREACHABLE UPTIME.  THE RADAR HAS BEEN CONFIGURED FOR BETTER DETECTION OF UFO."
+  - type: en-GB
+    strings:
+      STR_UNMANNED_AIRCRAFT: Unmanned Aircraft
+      STR_HAWKEYE: HAWKEYE
+      STR_HAWKEYE_UFOPEDIA: A SPECIAL MODIFICATION FOR XCOM WITH ADDITIONAL FUEL TANK AND INCREASED RADAR RANGE.
+      STR_AWACS: AWACS
+      STR_AWACS_UFOPEDIA: THE NEW GENERATION OF AWACS. LATEST TECHNOLOGY ALLOWS DETECT ALL KIND OF TARGETS ON SIGNIFICANT DISTANCE.
+      STR_DARKSTAR: DARKSTAR
+      STR_DARKSTAR_UFOPEDIA: USE OF ALIEN TECHNOLOGY AND ULTRALIGHT ALIEN ALLOYS ALLOWED DEVELOP AN UNMANNED AIRCRAFT WITH PREVIOUSLY UNREACHABLE UPTIME.  THE RADAR HAS BEEN CONFIGURED FOR BETTER DETECTION OF UFO.
+  - type: ru
+    strings:
+      STR_UNMANNED_AIRCRAFT: Беспилотный самолет
+      STR_HAWKEYE: ХОКАЙ
+      STR_HAWKEYE_UFOPEDIA: СПЕЦИАЛЬНАЯ МОДИФИКАЦИЯ ДЛЯ ХСОМ, С ДОПОЛНИТЕЛЬНЫМ ТОПЛИВНЫМ БАКОМ И УВЕЛИЧЕННОЙ ДАЛЬНОСТЬЮ РАДАРА.
+      STR_AWACS: АВАКС
+      STR_AWACS_UFOPEDIA: НОВЕЙШЕЕ ПОКОЛЕНИЕ АВАКС. СОВРЕМЕННЫЕ ТЕХНОЛОГИИ ПОЗВОЛЯЮТ ОБНАРУЖИВАТЬ ВСЕ ВИДЫ ЦЕЛЕЙ НА ЗНАЧИТЕЛЬНОМ РАССТОЯНИИ.
+      STR_DARKSTAR: ДАРКСТАР
+      STR_DARKSTAR_UFOPEDIA: ИСПОЛЬЗОВАНИЕ СВЕРХЛЕГКИХ ВНЕЗЕМНЫХ СПЛАВОВ И ТЕХНОЛОГИЙ ПРИШЕЛЬЦЕВ ПОЗВОЛИЛО РАЗРАБОТАТЬ БЕСПИЛОТНЫЙ ЛЕТАТЕЛЬНЫЙ АППАРАТ С РАНЕЕ НЕДОСТИЖИМЫМ ВРЕМЕНЕМ АВТОНОМНОЙ РАБОТЫ.{NEWLINE}РАДАР БЫЛ ПЕРЕНАСТРОЕН ДЛЯ ЛУЧШЕГО ОБНАРУЖЕНИЯ НЛО.
