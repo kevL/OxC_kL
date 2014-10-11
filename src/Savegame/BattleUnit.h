@@ -1029,6 +1029,9 @@ private:
 
 		/// kL. Sets the BattleGame for this unit.
 		void setBattleGame(BattlescapeGame* battleGame); // kL
+
+		/// kL. Sets this unit's parameters as down (collapsed / unconscious / dead).
+		void setDown(); // kL
 };
 
 }

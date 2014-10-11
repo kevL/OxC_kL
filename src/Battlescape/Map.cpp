@@ -2207,15 +2207,15 @@ void Map::drawTerrain(Surface* surface)
 					{
 						tile = _save->getTile(mapPosition);
 
-						if (!tile
-							|| !tile->isDiscovered(0)
+						if (tile == NULL
+							|| tile->isDiscovered(0) == false
 							|| tile->getPreview() == -1)
 						{
 							continue;
 						}
 
-//kL					int offset_y = -tile->getTerrainLevel();
-						int offset_y = 0; // kL
+						int offset_y = -tile->getTerrainLevel();
+//						int offset_y = 0; // kL
 						if (_previewSetting & PATH_ARROWS)
 						{
 							Tile* tileBelow = _save->getTile(mapPosition - Position(0, 0, 1));

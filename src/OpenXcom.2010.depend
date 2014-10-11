@@ -4766,7 +4766,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1412799057 f:\git\openxcom\src\savegame\battleunit.h
+1413040794 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -5098,7 +5098,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
 
-1412943546 source:f:\git\openxcom\src\basescape\monthlycostsstate.cpp
+1413034269 source:f:\git\openxcom\src\basescape\monthlycostsstate.cpp
 	"MonthlyCostsState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -6044,7 +6044,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1412943546 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1413042628 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6447,7 +6447,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1412964079 source:f:\git\openxcom\src\battlescape\map.cpp
+1413037411 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6773,7 +6773,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1412853137 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1413039126 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6807,7 +6807,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1412795098 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1413040164 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -9573,7 +9573,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1412880318 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1413040914 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

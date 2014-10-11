@@ -191,7 +191,7 @@ void UnitDieBState::think()
 			_unit->instaKill();
 		}
 
-		_unit->setTurnsExposed(255);
+		_unit->setDown();
 
 /*		if (_unit->getDiedByFire()) // do this in BattleUnit::damage()
 		{
@@ -236,29 +236,7 @@ void UnitDieBState::think()
 			&& _unit->getSpawnUnit().empty())
 		{
 			Game* game = _parent->getSave()->getBattleState()->getGame();
-/*			if (_unit->getStatus() == STATUS_DEAD)
-			{
-				if (_unit->getArmor()->getSize() == 1)
-				{
-					if (_damageType == DT_NONE)
-						game->pushState(new InfoboxOKState(game->getLanguage()->getString(
-																					"STR_HAS_DIED_FROM_A_FATAL_WOUND",
-																					_unit->getGender())
-																				.arg(_unit->getName(game->getLanguage()))));
-					else if (Options::battleNotifyDeath)
-						game->pushState(new InfoboxOKState(game->getLanguage()->getString(
-																					"STR_HAS_BEEN_KILLED",
-																					_unit->getGender())
-																				.arg(_unit->getName(game->getLanguage()))));
-				}
-			}
-			else
-				game->pushState(new InfoboxOKState(game->getLanguage()->getString(
-																			"STR_HAS_BECOME_UNCONSCIOUS",
-																			_unit->getGender())
-																		.arg(_unit->getName(game->getLanguage())))); */
-//			if (_unit->getArmor()->getSize() == 1)
-//			if (_unit->getType() == "SOLDIER")
+
 			if (_unit->getGeoscapeSoldier() != NULL)
 			{
 				std::string message;

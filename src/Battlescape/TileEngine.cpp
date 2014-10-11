@@ -2577,9 +2577,9 @@ void TileEngine::explode(
 								if (distance(
 											destTile->getPosition(),
 											Position(
-												centerX,
-												centerY,
-												centerZ))
+													centerX,
+													centerY,
+													centerZ))
 										< 2)
 								{
 									//Log(LOG_INFO) << ". . . powerVsUnit = " << powerVsUnit << " DT_HE, GZ";

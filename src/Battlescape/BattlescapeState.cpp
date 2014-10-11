@@ -1678,7 +1678,7 @@ void BattlescapeState::btnKneelClick(Action*)
 }
 
 /**
- * Goes to the soldier info screen.
+ * Goes to the inventory screen.
  * Additionally resets TUs for current side in debug mode.
  * @param action - pointer to an action
  */
@@ -1711,7 +1711,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 			|| (unit->getGeoscapeSoldier() != NULL
 //				|| (unit->getUnitRules() &&
 				|| (unit->getUnitRules()->getMechanical() == false
-					&& unit->getType() != "STR_LIVE_TERRORIST")))
+					&& unit->getRankString() != "STR_LIVE_TERRORIST")))
 		{
 			// clean up the waypoints
 			if (_battleGame->getCurrentAction()->type == BA_LAUNCH)

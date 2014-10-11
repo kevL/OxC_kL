@@ -1101,8 +1101,8 @@ Surface* BattleUnit::getCache(
 }
 
 /**
- * Kneel down/stand up.
- * @param kneeled, Whether to kneel or stand up
+ * Kneels or stands this unit.
+ * @param kneeled - true to kneel, false to stand up
  */
 void BattleUnit::kneel(bool kneeled)
 {
@@ -1112,8 +1112,8 @@ void BattleUnit::kneel(bool kneeled)
 }
 
 /**
- * Is kneeled down?
- * @return true/false
+ * Gets if this unit is kneeling.
+ * @return, true if kneeled
  */
 bool BattleUnit::isKneeled() const
 {
@@ -1121,8 +1121,9 @@ bool BattleUnit::isKneeled() const
 }
 
 /**
- * Is floating? A unit is floating when there is no ground under him/her.
- * @return true/false
+ * Gets if this unit is floating.
+ * A unit is floating if there is no ground underneath.
+ * @return, true if floating
  */
 bool BattleUnit::isFloating() const
 {
@@ -1196,7 +1197,7 @@ int BattleUnit::directionTo(const Position& point) const
 
 /**
  * Returns the soldier's amount of time units.
- * @return Time units.
+ * @return, current time units
  */
 int BattleUnit::getTimeUnits() const
 {
@@ -1205,7 +1206,7 @@ int BattleUnit::getTimeUnits() const
 
 /**
  * Returns the soldier's amount of energy.
- * @return Energy.
+ * @return, current stamina
  */
 int BattleUnit::getEnergy() const
 {
@@ -1214,7 +1215,7 @@ int BattleUnit::getEnergy() const
 
 /**
  * Returns the soldier's amount of health.
- * @return Health.
+ * @return, current health
  */
 int BattleUnit::getHealth() const
 {
@@ -1223,7 +1224,7 @@ int BattleUnit::getHealth() const
 
 /**
  * Returns the soldier's amount of morale.
- * @return Morale.
+ * @return, current morale
  */
 int BattleUnit::getMorale() const
 {
@@ -3596,7 +3597,7 @@ int BattleUnit::getCarriedWeight(BattleItem* dragItem) const
 /**
  * Sets how long since this unit was last exposed.
  * Use "255" for NOT exposed.
- * @param turns, # turns unit has been exposed
+ * @param turns - # turns this unit has been exposed
  */
 void BattleUnit::setTurnsExposed(int turns)
 {
@@ -3611,7 +3612,7 @@ void BattleUnit::setTurnsExposed(int turns)
 
 /**
  * Gets how long since this unit was exposed.
- * @return, # turns unit has been exposed
+ * @return, # turns this unit has been exposed
  */
 int BattleUnit::getTurnsExposed() const
 {
@@ -4061,8 +4062,8 @@ bool BattleUnit::hasInventory() const
 {
 //	return _armor->getSize() == 1
 	return _geoscapeSoldier != NULL
-		|| (_unitRules
-			&& _unitRules->getMechanical() == false
+		|| ( //_unitRules &&
+			_unitRules->getMechanical() == false
 			&& _rank != "STR_LIVE_TERRORIST");
 }
 
@@ -4092,7 +4093,7 @@ void BattleUnit::breathe()
 		return;
 	}
 
-	if (!_breathing
+	if (_breathing == false
 		|| _status == STATUS_WALKING)
 	{
 		// deviation from original: TFTD used a static 10% chance for every animation frame,
@@ -4187,6 +4188,23 @@ size_t BattleUnit::getBattleOrder() const // kL
 void BattleUnit::setBattleGame(BattlescapeGame* battleGame) // kL
 {
 	_battleGame = battleGame;
+}
+
+/**
+ * kL. Sets this unit's parameters as down (collapsed / unconscious / dead).
+ */
+void BattleUnit::setDown() // kL
+{
+	if (_geoscapeSoldier != NULL)
+	{
+		_turnsExposed = 255;	// don't aggro the AI
+		_kneeled = false;		// don't get hunkerdown bonus against HE detonations
+
+		// could add or remove more, I guess .....
+		// but These don't seem to affect anything:
+		_floating = false;
+		_dashing = false;
+	}
 }
 
 }
