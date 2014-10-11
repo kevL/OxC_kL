@@ -75,7 +75,7 @@ ActionMenuItem::ActionMenuItem(
 	_txtTU		= new Text(50, 20, 214, 13);
 
 	_frame->setColor(actionMenu->border); //Palette::blockOffset(0)+7);
-	_frame->setBackground(actionMenu->color2); //Palette::blockOffset(0)+14);
+	_frame->setSecondaryColor(actionMenu->color2); //Palette::blockOffset(0)+14);
 	_frame->setHighContrast();
 	_frame->setThickness(8);
 
@@ -187,7 +187,7 @@ void ActionMenuItem::draw()
 void ActionMenuItem::mouseIn(Action* action, State* state)
 {
 	_highlighted = true;
-	_frame->setBackground(_frame->getBackground() - _highlightModifier); //Palette::blockOffset(0)+10);
+	_frame->setSecondaryColor(_frame->getSecondaryColor() - _highlightModifier); //Palette::blockOffset(0)+10);
 
 	draw();
 	InteractiveSurface::mouseIn(action, state);
@@ -202,7 +202,7 @@ void ActionMenuItem::mouseIn(Action* action, State* state)
 void ActionMenuItem::mouseOut(Action* action, State* state)
 {
 	_highlighted = false;
-	_frame->setBackground(_frame->getBackground() + _highlightModifier); //Palette::blockOffset(0)+14);
+	_frame->setSecondaryColor(_frame->getSecondaryColor() + _highlightModifier); //Palette::blockOffset(0)+14);
 
 	draw();
 	InteractiveSurface::mouseOut(action, state);

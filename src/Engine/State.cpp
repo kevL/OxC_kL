@@ -160,35 +160,9 @@ void State::add(
 
 		if (element->color)
 		{
-			NumberText* numText = dynamic_cast<NumberText*>(surface);
-			Text* text = dynamic_cast<Text*>(surface);
-			Bar* bar = dynamic_cast<Bar*>(surface);
-			TextButton* tb = dynamic_cast<TextButton*>(surface);
-			Frame* frame = dynamic_cast<Frame*>(surface);
-
-			if (bsbtn)
-				bsbtn->setColor(element->color);
-
-			if (numText)
-				numText->setColor(element->color);
-			else if (text)
-			{
-				text->setColor(element->color);
-				text->setSecondaryColor(element->color2);
-			}
-			else if (bar)
-			{
-				bar->setColor(element->color);
-				bar->setColor2(element->color2);
-				bar->setBorderColor(element->border);
-			}
-			else if (tb)
-				tb->setColor(element->color);
-			else if (frame)
-			{
-				frame->setColor(element->border);
-				frame->setBackground(element->color2);
-			}
+			surface->setColor(element->color);
+			surface->setSecondaryColor(element->color2);
+			surface->setBorderColor(element->border);
 		}
 
 		surface->invalidate(false);

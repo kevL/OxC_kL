@@ -241,7 +241,7 @@ MedikitState::MedikitState(
 	_numTimeUnits->setColor(Palette::blockOffset(4));
 
 	_barHealth->setColor(Palette::blockOffset(2)+2);
-	_barHealth->setColor2(Palette::blockOffset(5)+2);
+	_barHealth->setSecondaryColor(Palette::blockOffset(5)+2);
 	_barHealth->setScale();
 	_barEnergy->setColor(Palette::blockOffset(1));
 	_barEnergy->setScale();

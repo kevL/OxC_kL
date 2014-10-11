@@ -253,7 +253,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numTimeUnits->setColor(Palette::blockOffset(13));
 
 	_barTimeUnits->setColor(Palette::blockOffset(3));
-	_barTimeUnits->setColor2(Palette::blockOffset(3)+4);
+	_barTimeUnits->setSecondaryColor(Palette::blockOffset(3)+4);
 	_barTimeUnits->setScale();
 	_barTimeUnits->setInvert();
 
@@ -264,7 +264,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numStamina->setColor(Palette::blockOffset(13));
 
 	_barStamina->setColor(Palette::blockOffset(9));
-	_barStamina->setColor2(Palette::blockOffset(9)+4);
+	_barStamina->setSecondaryColor(Palette::blockOffset(9)+4);
 	_barStamina->setScale();
 	_barStamina->setInvert();
 
@@ -275,7 +275,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numHealth->setColor(Palette::blockOffset(13));
 
 	_barHealth->setColor(Palette::blockOffset(2));
-	_barHealth->setColor2(Palette::blockOffset(2)+4);
+	_barHealth->setSecondaryColor(Palette::blockOffset(2)+4);
 	_barHealth->setScale();
 	_barHealth->setInvert();
 
@@ -286,7 +286,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numBravery->setColor(Palette::blockOffset(13));
 
 	_barBravery->setColor(Palette::blockOffset(4));
-	_barBravery->setColor2(Palette::blockOffset(4)+4);
+	_barBravery->setSecondaryColor(Palette::blockOffset(4)+4);
 	_barBravery->setScale();
 	_barBravery->setInvert();
 
@@ -297,7 +297,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numReactions->setColor(Palette::blockOffset(13));
 
 	_barReactions->setColor(Palette::blockOffset(1));
-	_barReactions->setColor2(Palette::blockOffset(1)+4);
+	_barReactions->setSecondaryColor(Palette::blockOffset(1)+4);
 	_barReactions->setScale();
 	_barReactions->setInvert();
 
@@ -308,7 +308,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numFiring->setColor(Palette::blockOffset(13));
 
 	_barFiring->setColor(Palette::blockOffset(8));
-	_barFiring->setColor2(Palette::blockOffset(8)+4);
+	_barFiring->setSecondaryColor(Palette::blockOffset(8)+4);
 	_barFiring->setScale();
 	_barFiring->setInvert();
 
@@ -319,7 +319,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numThrowing->setColor(Palette::blockOffset(13));
 
 	_barThrowing->setColor(Palette::blockOffset(10));
-	_barThrowing->setColor2(Palette::blockOffset(10)+4);
+	_barThrowing->setSecondaryColor(Palette::blockOffset(10)+4);
 	_barThrowing->setScale();
 	_barThrowing->setInvert();
 
@@ -330,7 +330,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numMelee->setColor(Palette::blockOffset(13));
 
 	_barMelee->setColor(Palette::blockOffset(4));
-	_barMelee->setColor2(Palette::blockOffset(4)+4);
+	_barMelee->setSecondaryColor(Palette::blockOffset(4)+4);
 	_barMelee->setScale();
 	_barMelee->setInvert();
 
@@ -341,7 +341,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numStrength->setColor(Palette::blockOffset(13));
 
 	_barStrength->setColor(Palette::blockOffset(5));
-	_barStrength->setColor2(Palette::blockOffset(5)+4);
+	_barStrength->setSecondaryColor(Palette::blockOffset(5)+4);
 	_barStrength->setScale();
 	_barStrength->setInvert();
 
@@ -352,7 +352,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numPsiStrength->setColor(Palette::blockOffset(13));
 
 	_barPsiStrength->setColor(Palette::blockOffset(11));
-	_barPsiStrength->setColor2(Palette::blockOffset(11)+4);
+	_barPsiStrength->setSecondaryColor(Palette::blockOffset(11)+4);
 	_barPsiStrength->setScale();
 	_barPsiStrength->setInvert();
 
@@ -363,7 +363,7 @@ SoldierInfoDeadState::SoldierInfoDeadState(size_t soldierID)
 	_numPsiSkill->setColor(Palette::blockOffset(13));
 
 	_barPsiSkill->setColor(Palette::blockOffset(11));
-	_barPsiSkill->setColor2(Palette::blockOffset(11)+4);
+	_barPsiSkill->setSecondaryColor(Palette::blockOffset(11)+4);
 	_barPsiSkill->setScale();
 	_barPsiSkill->setInvert();
 }
@@ -584,7 +584,6 @@ void SoldierInfoDeadState::btnOkClick(Action*)
  * @param action - pointer to an action
  */
 void SoldierInfoDeadState::btnNextClick(Action*)
-// void SoldierInfoDeadState::btnPrevClick(Action*)
 {
 	if (_soldierID == 0)
 		_soldierID = _list->size() - 1;
@@ -600,7 +599,6 @@ void SoldierInfoDeadState::btnNextClick(Action*)
  * @param action - pointer to an action
  */
 void SoldierInfoDeadState::btnPrevClick(Action*)
-//void SoldierInfoDeadState::btnNextClick(Action*)
 {
 	_soldierID++;
 

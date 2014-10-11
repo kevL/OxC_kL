@@ -29,10 +29,10 @@ namespace OpenXcom
 
 /**
  * Sets up a blank bar with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 Bar::Bar(
 		int width,
@@ -66,7 +66,7 @@ Bar::~Bar()
 
 /**
  * Changes the color used to draw the border and contents.
- * @param color Color value.
+ * @param color - color value
  */
 void Bar::setColor(Uint8 color)
 {
@@ -76,7 +76,7 @@ void Bar::setColor(Uint8 color)
 
 /**
  * Returns the color used to draw the bar.
- * @return Color value.
+ * @return, color value
  */
 Uint8 Bar::getColor() const
 {
@@ -85,9 +85,9 @@ Uint8 Bar::getColor() const
 
 /**
  * Changes the color used to draw the second contents.
- * @param color Color value.
+ * @param color - color value
  */
-void Bar::setColor2(Uint8 color)
+void Bar::setSecondaryColor(Uint8 color)
 {
 	_color2 = color;
 	_redraw = true;
@@ -95,16 +95,16 @@ void Bar::setColor2(Uint8 color)
 
 /**
  * Returns the second color used to draw the bar.
- * @return Color value.
+ * @return, color value
  */
-Uint8 Bar::getColor2() const
+Uint8 Bar::getSecondaryColor() const
 {
 	return _color2;
 }
 
 /**
  * Changes the scale factor used to draw the bar values.
- * @param scale Scale in pixels/unit.
+ * @param scale - scale in pixels/unit
  */
 void Bar::setScale(double scale)
 {
@@ -114,7 +114,7 @@ void Bar::setScale(double scale)
 
 /**
  * Returns the scale factor used to draw the bar values.
- * @return Scale in pixels/unit.
+ * @return, scale in pixels/unit
  */
 double Bar::getScale() const
 {
@@ -123,7 +123,7 @@ double Bar::getScale() const
 
 /**
  * Changes the maximum value used to draw the outer border.
- * @param max Maximum value.
+ * @param max - maximum value
  */
 void Bar::setMax(double max)
 {
@@ -133,7 +133,7 @@ void Bar::setMax(double max)
 
 /**
  * Returns the maximum value used to draw the outer border.
- * @return Maximum value.
+ * @return, maximum value
  */
 double Bar::getMax() const
 {
@@ -142,7 +142,7 @@ double Bar::getMax() const
 
 /**
  * Changes the value used to draw the inner contents.
- * @param value Current value.
+ * @param value - current value
  */
 void Bar::setValue(double value)
 {
@@ -152,7 +152,7 @@ void Bar::setValue(double value)
 
 /**
  * Returns the value used to draw the inner contents.
- * @return Current value.
+ * @return, current value
  */
 double Bar::getValue() const
 {
@@ -161,7 +161,7 @@ double Bar::getValue() const
 
 /**
  * Changes the value used to draw the second inner contents.
- * @param value Current value.
+ * @param value - current value
  */
 void Bar::setValue2(double value)
 {
@@ -171,7 +171,7 @@ void Bar::setValue2(double value)
 
 /**
  * Returns the value used to draw the second inner contents.
- * @return Current value.
+ * @return, current value
  */
 double Bar::getValue2() const
 {
@@ -180,7 +180,7 @@ double Bar::getValue2() const
 
 /**
  * Defines whether the second value should be drawn on top. Default this is true.
- * @param onTop Second value on top?
+ * @param onTop - true if second value on top
  */
 void Bar::setSecondValueOnTop(bool onTop)
 {
@@ -190,7 +190,7 @@ void Bar::setSecondValueOnTop(bool onTop)
 /**
  * Enables/disables color inverting. Some bars have
  * darker borders and others have lighter borders.
- * @param invert Invert setting.
+ * @param invert - invert setting
  */
 void Bar::setInvert(bool invert)
 {
@@ -272,8 +272,8 @@ void Bar::draw()
 
 /**
  * Sets the border color for the bar.
- * @param bc the color for the outline of the bar.
- * @note will use base colour + 4 if none is defined here.
+ * @param bc - the color for the outline of the bar
+ * @note will use base colour + 4 if none is defined here
  */
 void Bar::setBorderColor(Uint8 bc)
 {

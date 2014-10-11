@@ -27,10 +27,10 @@ namespace OpenXcom
 
 /**
  * Sets up a blank frame with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 Frame::Frame(
 		int width,
@@ -59,7 +59,7 @@ Frame::~Frame()
 
 /**
  * Changes the color used to draw the shaded border.
- * @param color Color value.
+ * @param color - color value
  */
 void Frame::setColor(Uint8 color)
 {
@@ -68,8 +68,20 @@ void Frame::setColor(Uint8 color)
 }
 
 /**
+ * Changes the color used to draw the shaded border.
+ * Only really to be used in conjunction with the State add()
+ * function as a convenient wrapper to avoid ugly quacks at that end;
+ * better to have them here!
+ * @param color - color value
+ */
+void Frame::setBorderColor(Uint8 color)
+{
+	setColor(color);
+}
+
+/**
  * Returns the color used to draw the shaded border.
- * @return Color value.
+ * @return, color value
  */
 Uint8 Frame::getColor() const
 {
@@ -78,9 +90,9 @@ Uint8 Frame::getColor() const
 
 /**
 * Changes the color used to draw the background.
-* @param bg Color value.
+* @param bg - color value
 */
-void Frame::setBackground(Uint8 bg)
+void Frame::setSecondaryColor(Uint8 bg)
 {
 	_bg = bg;
 	_redraw = true;
@@ -88,16 +100,16 @@ void Frame::setBackground(Uint8 bg)
 
 /**
 * Returns the color used to draw the background.
-* @return Color value.
+* @return, color value
 */
-Uint8 Frame::getBackground() const
+Uint8 Frame::getSecondaryColor() const
 {
 	return _bg;
 }
 
 /**
  * Enables/disables high contrast color. Mostly used for Battlescape UI.
- * @param contrast High contrast setting.
+ * @param contrast - high contrast setting
  */
 void Frame::setHighContrast(bool contrast)
 {
@@ -107,7 +119,7 @@ void Frame::setHighContrast(bool contrast)
 
 /**
 * Changes the thickness of the border to draw.
-* @param thickness Thickness in pixels.
+* @param thickness - thickness in pixels
 */
 void Frame::setThickness(int thickness)
 {

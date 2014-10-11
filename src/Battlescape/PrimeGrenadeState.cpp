@@ -22,7 +22,7 @@
 #include <cmath>
 #include <sstream>
 
-#include "Inventory.h" // kL
+#include "Inventory.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -57,12 +57,12 @@ PrimeGrenadeState::PrimeGrenadeState(
 		BattleAction* action,
 		bool inInventoryView,
 		BattleItem* grenade,
-		Inventory* inventory) // kL_add.
+		Inventory* inventory)
 	:
 		_action(action),
 		_inInventoryView(inInventoryView),
 		_grenade(grenade),
-		_inventory(inventory) // kL_add.
+		_inventory(inventory)
 {
 	_screen = false;
 
@@ -71,8 +71,8 @@ PrimeGrenadeState::PrimeGrenadeState(
 
 	_srfBG		= new Surface(192, 93, 65, 45);
 
-	_txtTurn0	= new Text(190, 18, 66, 67); // kL
-	_isfBtn0	= new InteractiveSurface(190, 22, 66, 65); // kL
+	_txtTurn0	= new Text(190, 18, 66, 67);
+	_isfBtn0	= new InteractiveSurface(190, 22, 66, 65);
 
 	int
 		x = 67,
@@ -84,10 +84,10 @@ PrimeGrenadeState::PrimeGrenadeState(
 			++i)
 	{
 		_isfBtn[i] = new InteractiveSurface(
-											22,
-											22,
-											x - 1 + ((i %8) * 24),
-											y - 4 + ((i / 8) * 24));
+										22,
+										22,
+										x - 1 + ((i %8) * 24),
+										y - 4 + ((i / 8) * 24));
 		_txtTurn[i] = new Text(
 							20,
 							20,
@@ -102,19 +102,16 @@ PrimeGrenadeState::PrimeGrenadeState(
 
 	Element* grenadeBackground = _game->getRuleset()->getInterface("battlescape")->getElement("grenadeBackground");
 
-/*	SDL_Rect square;
-	square.x = 0;
-	square.y = 0;
-	square.w = _srfBG->getWidth();
-	square.h = _srfBG->getHeight();
-	_srfBG->drawRect(&square, Palette::blockOffset(6)+9); */
 	add(_srfBG);
-	_srfBG->drawRect(0, 0, _srfBG->getWidth(), _srfBG->getHeight(), grenadeBackground->color); //Palette::blockOffset(6)+9);
+	_srfBG->drawRect(
+					0,
+					0,
+					_srfBG->getWidth(),
+					_srfBG->getHeight(),
+					grenadeBackground->color); //Palette::blockOffset(6)+9);
 
 	add(_fraTop, "grenadeMenu", "battlescape");
-//	_fraTop->setColor(Palette::blockOffset(6)+3);
-//kL	_fraTop->setBackground(Palette::blockOffset(6)+12);
-	_fraTop->setBackground(Palette::blockOffset(8)+4); // kL
+	_fraTop->setSecondaryColor(Palette::blockOffset(8)+4);
 	_fraTop->setThickness(3);
 	_fraTop->setHighContrast();
 
@@ -122,26 +119,23 @@ PrimeGrenadeState::PrimeGrenadeState(
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setBig();
 	_txtTitle->setText(tr("STR_SET_TIMER"));
-//	_txtTitle->setColor(Palette::blockOffset(1)-1);
 	_txtTitle->setHighContrast();
 
-	// kL_begin:
 	add(_isfBtn0);
 	_isfBtn0->onMouseClick((ActionHandler)& PrimeGrenadeState::btnClick);
 
-/*	square.x = 0; // dark border
-	square.y = 0;
-	square.w = _isfBtn0->getWidth();
-	square.h = _isfBtn0->getHeight();
-	_isfBtn0->drawRect(&square, Palette::blockOffset(0)+15); */
-	_isfBtn0->drawRect(0, 0, _isfBtn0->getWidth(), _isfBtn0->getHeight(), Palette::blockOffset(0)+15);
-
-/*	square.x = 1; // inside fill
-	square.y = 1;
-	square.w = _isfBtn0->getWidth() - 2;
-	square.h = _isfBtn0->getHeight() - 2;
-	_isfBtn0->drawRect(&square, Palette::blockOffset(6)+12); */
-	_isfBtn0->drawRect(1, 1, _isfBtn0->getWidth() - 2, _isfBtn0->getHeight() - 2, Palette::blockOffset(6)+12);
+	_isfBtn0->drawRect(
+					0,
+					0,
+					_isfBtn0->getWidth(),
+					_isfBtn0->getHeight(),
+					Palette::blockOffset(0)+15);
+	_isfBtn0->drawRect(
+					1,
+					1,
+					_isfBtn0->getWidth() - 2,
+					_isfBtn0->getHeight() - 2,
+					Palette::blockOffset(6)+12);
 
 	add(_txtTurn0);
 	std::wostringstream ss0;
@@ -152,7 +146,6 @@ PrimeGrenadeState::PrimeGrenadeState(
 	_txtTurn0->setHighContrast();
 	_txtTurn0->setAlign(ALIGN_CENTER);
 	_txtTurn0->setVerticalAlign(ALIGN_MIDDLE);
-	// kL_end.
 
 	for (int
 			i = 0;
@@ -180,8 +173,6 @@ PrimeGrenadeState::PrimeGrenadeState(
 		std::wostringstream ss;
 		ss << i + 1;
 		_txtTurn[i]->setText(ss.str());
-//		_txtTurn[i]->setBig();
-//		_txtTurn[i]->setColor(Palette::blockOffset(1)-1);
 		_txtTurn[i]->setHighContrast();
 		_txtTurn[i]->setAlign(ALIGN_CENTER);
 		_txtTurn[i]->setVerticalAlign(ALIGN_MIDDLE);
@@ -209,7 +200,7 @@ void PrimeGrenadeState::handle(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONUP
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (!_inInventoryView)
+		if (_inInventoryView == false)
 			_action->value = -1;
 
 		_game->popState();
@@ -227,11 +218,10 @@ void PrimeGrenadeState::btnClick(Action* action)
 	if (action->getDetails()->type == SDL_MOUSEBUTTONUP
 		&& action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		if (!_inInventoryView)
+		if (_inInventoryView == false)
 			_action->value = -1;
 
 		_game->popState();
-
 		return;
 	}
 
@@ -255,14 +245,14 @@ void PrimeGrenadeState::btnClick(Action* action)
 		if (_inInventoryView)
 		{
 			_grenade->setFuseTimer(btnID);
-			_inventory->setPrimeGrenade(btnID); // kL
+			_inventory->setPrimeGrenade(btnID);
 		}
 		else
 			_action->value = btnID;
 
 		_game->popState(); // get rid of the Set Timer menu
 
-		if (!_inInventoryView)
+		if (_inInventoryView == false)
 			_game->popState(); // get rid of the Action menu.
 	}
 }
