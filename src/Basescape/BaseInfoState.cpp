@@ -74,7 +74,7 @@ BaseInfoState::BaseInfoState(
 
 	_edtBase			= new TextEdit(this, 127, 16, 8, 9);
 
-	_txtPersonnel		= new Text(212, 9, 8, 31);
+	_txtPersonnel		= new Text(204, 9, 8, 31);
 	_txtRegion			= new Text(100, 9, 212, 31);
 
 	_txtSoldiers		= new Text(114, 9, 8, 41);

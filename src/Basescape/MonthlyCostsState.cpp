@@ -55,20 +55,20 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 
 	_txtTitle		= new Text(300, 17, 11, 10);
 
-	_txtCost		= new Text(70, 9, 141, 31);
-	_txtQuantity	= new Text(44, 9, 211, 31);
-	_txtTotal		= new Text(54, 9, 255, 31);
+	_txtCost		= new Text(62, 9, 140, 31);
+	_txtQuantity	= new Text(43, 9, 202, 31);
+	_txtTotal		= new Text(56, 9, 245, 31);
 
 	_txtRental		= new Text(150, 9, 16, 46);
-	_lstCrafts		= new TextList(293, 41, 16, 57);
+	_lstCrafts		= new TextList(285, 41, 16, 57);
 
 	_txtSalaries	= new Text(150, 9, 16, 100);
-	_lstSalaries	= new TextList(293, 25, 16, 111);
+	_lstSalaries	= new TextList(285, 25, 16, 111);
 
-	_lstMaintenance	= new TextList(293, 9, 16, 142);
+	_lstMaintenance	= new TextList(285, 9, 16, 142);
 
 	_txtIncome		= new Text(150, 9, 16, 159);
-	_lstTotal		= new TextList(100, 9, 200, 159);
+	_lstTotal		= new TextList(101, 9, 200, 159);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -129,7 +129,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	_txtIncome->setText(ss.str());
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
-	_lstCrafts->setColumns(4, 125, 70, 44, 54);
+	_lstCrafts->setColumns(4, 124, 62, 43, 56);
 	_lstCrafts->setDot();
 
 	const std::vector<std::string>& crafts = _game->getRuleset()->getCraftsList();
@@ -158,7 +158,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	}
 
 	_lstSalaries->setColor(Palette::blockOffset(13)+10);
-	_lstSalaries->setColumns(4, 125, 70, 44, 54);
+	_lstSalaries->setColumns(4, 124, 62, 43, 56);
 	_lstSalaries->setDot();
 
 	std::wostringstream
@@ -194,7 +194,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 											* _game->getRuleset()->getScientistCost()).c_str());
 
 	_lstMaintenance->setColor(Palette::blockOffset(13)+10);
-	_lstMaintenance->setColumns(2, 239, 54);
+	_lstMaintenance->setColumns(2, 229, 56);
 	_lstMaintenance->setDot();
 	_lstMaintenance->addRow(
 						2,
@@ -203,7 +203,7 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	_lstMaintenance->setCellColor(0, 0, Palette::blockOffset(15)+1);
 
 	_lstTotal->setColor(Palette::blockOffset(13));
-	_lstTotal->setColumns(2, 45, 55);
+	_lstTotal->setColumns(2, 45, 56);
 	_lstTotal->setDot();
 	_lstTotal->addRow(
 					2,
