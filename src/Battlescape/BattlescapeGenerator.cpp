@@ -1819,8 +1819,10 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		int alienRank,
 		bool outside)
 {
-	int difficulty = static_cast<int>(_game->getSavedGame()->getDifficulty());
-	int month = _game->getSavedGame()->getMonthsPassed();
+	int
+		difficulty = static_cast<int>(_game->getSavedGame()->getDifficulty()),
+		month = _game->getSavedGame()->getMonthsPassed();
+
 	BattleUnit* unit = new BattleUnit(
 									rules,
 									FACTION_HOSTILE,
@@ -1869,11 +1871,11 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
 
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
-		if (_save->getTileEngine()->distance(
+		if (RNG::percent(difficulty * 20
+			&& _save->getTileEngine()->distance(
 											node->getPosition(),
 											craft)
-										< 25
-			&& RNG::percent(difficulty * 20))
+										< 25))
 		{
 			dir = unit->directionTo(craft);
 		}
@@ -1893,20 +1895,23 @@ BattleUnit* BattlescapeGenerator::addAlien(
 	{
 		// ASSASSINATION CHALLENGE SPECIAL: screw the player, just because we didn't find a node,
 		// doesn't mean we can't ruin Tornis's day: spawn as many aliens as possible.
-		if (_game->getSavedGame()->getDifficulty() >= DIFF_SUPERHUMAN
-			&& placeUnitNearFriend(unit))
+//		if (_game->getSavedGame()->getDifficulty() >= static_cast<int>(DIFF_SUPERHUMAN) &&
+		if (placeUnitNearFriend(unit))
 		{
 			unit->setAIState(new AlienBAIState(
 											_game->getSavedGame()->getSavedBattle(),
 											unit,
-											0));
+											NULL));
 			unit->setRankInt(alienRank);
 
 			Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 			int dir = _save->getTileEngine()->faceWindow(unit->getPosition());
 
-			if (_save->getTileEngine()->distance(unit->getPosition(), craft) < 21
-				&& RNG::percent(20 * difficulty))
+			if (RNG::percent(difficulty * 20
+				&& _save->getTileEngine()->distance(
+												unit->getPosition(),
+												craft)
+											< 25))
 			{
 				dir = unit->directionTo(craft);
 			}
