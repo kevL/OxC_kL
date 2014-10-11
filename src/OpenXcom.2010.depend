@@ -9573,7 +9573,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1413040914 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1413042313 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9689,7 +9689,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1412816563 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1413044640 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

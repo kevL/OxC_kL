@@ -1381,7 +1381,6 @@ void SavedBattleGame::removeItem(BattleItem* item)
 			if (*i == item)
 			{
 				tile->getInventory()->erase(i);
-
 				break;
 			}
 		}
@@ -1397,7 +1396,6 @@ void SavedBattleGame::removeItem(BattleItem* item)
 			if (*i == item)
 			{
 				bu->getInventory()->erase(i);
-
 				break;
 			}
 		}
