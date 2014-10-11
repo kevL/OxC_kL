@@ -101,6 +101,12 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/textures/tex_urban.png
+  - type: BACK07.SCR #-> ALTBACK07.SCR (see XcomResourcePack.cpp)
+    width: 320
+    height: 200
+    singleImage: true
+    files:
+      0: Resources/Sprites/geograph/back/back07.png
   - type: BASEBITS.PCK
     files:
       0: Resources/Sprites/geograph/basebits/

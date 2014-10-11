@@ -247,7 +247,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	}
 
 	// kL_begin:
-	Surface* kL_Geo = new Surface(
+/*	Surface* kL_Geo = new Surface(
 								Screen::ORIGINAL_WIDTH - 64,	// 256
 								Screen::ORIGINAL_HEIGHT);		// 200
 	Surface* oldGeo = _surfaces["GEOBORD.SCR"];
@@ -264,7 +264,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			kL_Geo->setPixelColor(x, y, oldGeo->getPixelColor(x, y));
 		}
 	}
-	_surfaces["LGEOBORD.SCR"] = kL_Geo; // kL_end.
+	_surfaces["LGEOBORD.SCR"] = kL_Geo; */ // kL_end.
 
 	// bigger Geoscape background
 /*	int
@@ -346,7 +346,8 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	_surfaces["ALTGEOBORD.SCR"] = newGeo; */
 
 	// here we create an "alternate" background surface for the base info screen.
-	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
+	// kL_note: Move this after_ loading extraSprites, so a modified BACK07.SCR gets stretched
+/*	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
 	_surfaces["ALTBACK07.SCR"]->loadScr(CrossPlatform::getDataFile("GEOGRAPH/BACK07.SCR"));
 	for (int y = 172; y >= 152; --y)
 		for (int x = 5; x <= 314; ++x)
@@ -365,7 +366,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			_surfaces["ALTBACK07.SCR"]->setPixelColor(
 												x,
 												y + 10,
-												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y));
+												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y)); */
 
 	std::vector<std::string> spks = CrossPlatform::getFolderContents(geograph, "SPK");
 	for (std::vector<std::string>::iterator
@@ -1096,10 +1097,12 @@ MOVED TO Ruleset !
 
 	// we create extra rows on the soldier stat screens by shrinking them all down one pixel.
 	// this is done after loading them, but BEFORE loading the extraSprites, in case a modder wants to replace them.
+	// kL_note: Actually, let's do it *after* loading extraSprites, in case a modder wants to alter the original
+	// and still have this stretching happen:
 
 	// first, let's do the base info screen
 	// erase the old lines, copying from a +2 offset to account for the dithering
-	for (int y = 91; y < 199; y += 12)
+/*	for (int y = 91; y < 199; y += 12)
 		for (int x = 0; x < 149; ++x)
 			_surfaces["BACK06.SCR"]->setPixelColor(
 												x,
@@ -1118,7 +1121,7 @@ MOVED TO Ruleset !
 			_surfaces["BACK06.SCR"]->setPixelColor(
 												x,
 												y,
-												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79? 2: 1)));
+												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79? 2: 1))); */
 
 	// now, let's adjust the battlescape info screen.
 	// erase the old lines, no need to worry about dithering on this one.
@@ -1378,6 +1381,48 @@ MOVED TO Ruleset !
 			}
 		}
 	}
+
+	// kL_begin: from before^ loading extraSprites
+	for (int y = 91; y < 199; y += 12)
+		for (int x = 0; x < 149; ++x)
+			_surfaces["BACK06.SCR"]->setPixelColor(
+												x,
+												y,
+												_surfaces["BACK06.SCR"]->getPixelColor(x, y + 2));
+	for (int y = 89; y < 199; y += 11)
+		for (int x = 0; x < 149; ++x)
+			_surfaces["BACK06.SCR"]->setPixelColor(
+												x,
+												y,
+												_surfaces["BACK06.SCR"]->getPixelColor(x, 199));
+	for (int y = 72; y < 80; ++y)
+		for (int x = 0; x < 320; ++x)
+			_surfaces["BACK06.SCR"]->setPixelColor(
+												x,
+												y,
+												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79? 2: 1)));
+
+	Surface* altBack07 = new Surface(320, 200);
+	altBack07->copy(_surfaces["BACK07.SCR"]);
+	for (int y = 172; y >= 152; --y)
+		for (int x = 5; x <= 314; ++x)
+			altBack07->setPixelColor(
+									x,
+									y + 4,
+									altBack07->getPixelColor(x, y));
+	for (int y = 147; y >= 134; --y)
+		for (int x = 5; x <= 314; ++x)
+			altBack07->setPixelColor(
+									x,
+									y + 9,
+									altBack07->getPixelColor(x, y));
+	for (int y = 132; y >= 109; --y)
+		for (int x = 5; x <= 314; ++x)
+			altBack07->setPixelColor(
+									x,
+									y + 10,
+									altBack07->getPixelColor(x, y));
+	_surfaces["ALTBACK07.SCR"] = altBack07; // kL_end.
 
 	// copy constructor doesn't like doing this directly,
 	// so let's make a second handobs file the old fashioned way.
@@ -1759,10 +1804,10 @@ void XcomResourcePack::loadBattlescapeResources()
 					i < 16;
 					++i)
 			{
-				Surface* surf = xcom_1->getFrame(4 * 8 + i);
-				ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+				Surface* srf = xcom_1->getFrame(4 * 8 + i);
+				ShaderMove<Uint8> head = ShaderMove<Uint8>(srf);
 				GraphSubset dim = head.getBaseDomain();
-				surf->lock();
+				srf->lock();
 				dim.beg_y = 6;
 				dim.end_y = 9;
 				head.setDomain(dim);
@@ -1771,7 +1816,7 @@ void XcomResourcePack::loadBattlescapeResources()
 				dim.end_y = 10;
 				head.setDomain(dim);
 				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
-				surf->unlock();
+				srf->unlock();
 			}
 
 			for (int // fall frame
@@ -1779,17 +1824,17 @@ void XcomResourcePack::loadBattlescapeResources()
 					i < 3;
 					++i)
 			{
-				Surface* surf = xcom_1->getFrame(264 + i);
-				ShaderMove<Uint8> head = ShaderMove<Uint8>(surf);
+				Surface* srf = xcom_1->getFrame(264 + i);
+				ShaderMove<Uint8> head = ShaderMove<Uint8>(srf);
 				GraphSubset dim = head.getBaseDomain();
 				dim.beg_y = 0;
 				dim.end_y = 24;
 				dim.beg_x = 11;
 				dim.end_x = 20;
 				head.setDomain(dim);
-				surf->lock();
+				srf->lock();
 				ShaderDraw<HairBleach>(head, ShaderScalar<Uint8>(HairBleach::Face + 6));
-				surf->unlock();
+				srf->unlock();
 			}
 		}
 	}
@@ -1834,14 +1879,14 @@ bool XcomResourcePack::isImageFile(std::string extension)
 
 /**
  * Loads the specified music file format.
- * @param fmt Format of the music.
- * @param file Filename of the music.
- * @param track Track number of the music, if stored in a CAT.
- * @param volume Volume modifier of the music, if stored in a CAT.
- * @param adlibcat Pointer to ADLIB.CAT if available.
- * @param aintrocat Pointer to AINTRO.CAT if available.
- * @param gmcat Pointer to GM.CAT if available.
- * @return, Pointer to the music file, or NULL if it couldn't be loaded.
+ * @param fmt		- format of the music
+ * @param file		- reference the filename of the music
+ * @param track		- track number of the music, if stored in a CAT
+ * @param volume	- volume modifier of the music, if stored in a CAT
+ * @param adlibcat	- pointer to ADLIB.CAT if available
+ * @param aintrocat	- pointer to AINTRO.CAT if available
+ * @param gmcat		- pointer to GM.CAT if available
+ * @return, pointer to the music file, or NULL if it couldn't be loaded
  */
 Music* XcomResourcePack::loadMusic(
 		MusicFormat fmt,

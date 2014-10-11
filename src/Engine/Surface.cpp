@@ -637,7 +637,7 @@ void Surface::blit(Surface* surface)
  * Only the content that would overlap both surfaces is copied, in
  * accordance with their positions. This is handy for applying
  * effects over another surface without modifying the original.
- * @param surface Pointer to surface to copy from.
+ * @param surface - pointer to a Surface to copy from
  */
 void Surface::copy(Surface* surface)
 {
@@ -658,8 +658,9 @@ void Surface::copy(Surface* surface)
 				&from,
 				_surface,
 				NULL); */
-	const int from_x = getX() - surface->getX();
-	const int from_y = getY() - surface->getY();
+	const int
+		from_x = getX() - surface->getX(),
+		from_y = getY() - surface->getY();
 
 	lock();
 	for (int
