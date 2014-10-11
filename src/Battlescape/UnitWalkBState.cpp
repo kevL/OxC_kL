@@ -742,16 +742,16 @@ bool UnitWalkBState::doStatusWalk()
 		for (int
 				x = size;
 				x > -1;
-				x--)
+				--x)
 		{
 			for (int
 					y = size;
 					y > -1;
-					y--)
+					--y)
 			{
 				tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y,-1));
 
-				if ( //kL _unit->getArmor()->getMovementType() == MT_FLY ||
+				if ( //kL _unit->getMovementType() == MT_FLY ||
 					_parent->getSave()->getTile(
 											_unit->getPosition() + Position(x, y, 0))
 										->hasNoFloor(tileBelow)
@@ -771,12 +771,12 @@ bool UnitWalkBState::doStatusWalk()
 		for (int
 				x = size;
 				x > -1;
-				x--)
+				--x)
 		{
 			for (int
 					y = size;
 					y > -1;
-					y--)
+					--y)
 			{
 				//Log(LOG_INFO) << ". . set unit on new tile";
 				_parent->getSave()->getTile(

@@ -436,7 +436,7 @@ void UnitSprite::drawRoutine0()
 			legs = _unitSurface->getFrame(legsKneel + unitDir);
 		}
 		else if (_unit->isFloating()
-			&& _unit->getArmor()->getMovementType() == MT_FLY)
+			&& _unit->getMovementType() == MT_FLY)
 		{
 //			//Log(LOG_INFO) << "UnitSprite::drawRoutine0() : " << _unit->getId() << " isFloating in FlyingSuit";
 			legs = _unitSurface->getFrame(legsFloat + unitDir);
@@ -1072,7 +1072,7 @@ void UnitSprite::drawRoutine2()
 	const int
 		offX[8] = {-2,-7,-5, 0, 5, 7, 2, 0 }, // hovertank offsets
 		offY[8] = {-1,-3,-4,-5,-4,-3,-1,-1 },
-		hoverTank	= _unit->getArmor()->getMovementType() == MT_FLY? 32: 0,
+		hoverTank	= _unit->getMovementType() == MT_FLY? 32: 0,
 		turret		= _unit->getTurretType();
 
 	Surface* srf = NULL;
@@ -1768,7 +1768,7 @@ void UnitSprite::drawRoutine11()
 		return; // unit is drawn as an item
 
 	int hoverTank = 0;
-	if (_unit->getArmor()->getMovementType() == MT_FLY)
+	if (_unit->getMovementType() == MT_FLY)
 	{
 		hoverTank = 128;
 	}

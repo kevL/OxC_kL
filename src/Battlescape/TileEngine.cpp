@@ -4480,7 +4480,7 @@ int TileEngine::unitOpensDoor(
 
 				TUCost = tile->getTUCost(
 										part,
-										unit->getArmor()->getMovementType());
+										unit->getMovementType());
 				//Log(LOG_INFO) << ". normal door, RMB, part = " << part << ", TUcost = " << TUCost;
 			}
 			else if (door == 1
@@ -4488,7 +4488,7 @@ int TileEngine::unitOpensDoor(
 			{
 				TUCost = tile->getTUCost(
 										part,
-										unit->getArmor()->getMovementType());
+										unit->getMovementType());
 				//Log(LOG_INFO) << ". UFO door, part = " << part << ", TUcost = " << TUCost;
 			}
 		}
@@ -5683,8 +5683,8 @@ Tile* TileEngine::applyGravity(Tile* tile)
 													posBelow.x + x,
 													posBelow.y + y,
 													posBelow.z - 1));
-					if (!dt->hasNoFloor(dtb))	// note: polar water has no floor, so units that die on them ... uh, sink.
-						canFall = false;		// ... before I changed the loop condition to > 0, that is
+					if (dt->hasNoFloor(dtb) == false)	// note: polar water has no floor, so units that die on them ... uh, sink.
+						canFall = false;				// ... before I changed the loop condition to > 0, that is
 				}
 			}
 
@@ -5716,7 +5716,7 @@ Tile* TileEngine::applyGravity(Tile* tile)
 			}
 			else // if (!unit->isOut(true, true))
 			{
-				if (unit->getArmor()->getMovementType() == MT_FLY)
+				if (unit->getMovementType() == MT_FLY)
 				{
 					// move to the position you're already in. this will unset the kneeling flag, set the floating flag, etc.
 					unit->startWalking(

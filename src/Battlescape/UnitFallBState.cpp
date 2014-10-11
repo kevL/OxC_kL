@@ -107,12 +107,12 @@ void UnitFallBState::think()
 
 		bool
 			fallCheck = true,
-			falling = true;
-		int size = (*unit)->getArmor()->getSize() - 1;
-		bool onScreen = (*unit)->getVisible()
+			falling = true,
+			onScreen = (*unit)->getVisible()
 					&& _parent->getMap()->getCamera()->isOnScreen(
-															(*unit)->getPosition());
-//															true);
+																(*unit)->getPosition());
+//																true);
+		int size = (*unit)->getArmor()->getSize() - 1;
 		Tile* tBelow = NULL;
 
 		for (int
@@ -132,7 +132,7 @@ void UnitFallBState::think()
 											(*unit)->getPosition()
 											+ Position(x, y, 0))
 										->hasNoFloor(tBelow)
-					|| (*unit)->getArmor()->getMovementType() == MT_FLY)
+					|| (*unit)->getMovementType() == MT_FLY)
 				{
 					//Log(LOG_INFO) << ". . fallCheck set FALSE";
 					fallCheck = false;
@@ -147,7 +147,7 @@ void UnitFallBState::think()
 		falling = fallCheck
 					&& (*unit)->getPosition().z != 0
 					&& (*unit)->getTile()->hasNoFloor(tBelow)
-//kL				&& (*unit)->getArmor()->getMovementType() != MT_FLY // done above in fallCheck
+//kL				&& (*unit)->getMovementType() != MT_FLY // done above in fallCheck
 					&& (*unit)->getWalkingPhase() == 0;
 
 		BattleUnit* uBelow = NULL;
@@ -205,7 +205,7 @@ void UnitFallBState::think()
 		falling = fallCheck
 					&& (*unit)->getPosition().z != 0
 					&& (*unit)->getTile()->hasNoFloor(tBelow)
-//					&& (*unit)->getArmor()->getMovementType() != MT_FLY // done above in fallCheck
+//					&& (*unit)->getMovementType() != MT_FLY // done above in fallCheck
 					&& (*unit)->getWalkingPhase() == 0;
 
 		//Log(LOG_INFO) << ". new fallCheck = " << fallCheck;
@@ -339,7 +339,7 @@ void UnitFallBState::think()
 																								t,
 																								dir,
 																								uBelow),
-								unitCanFly = uBelow->getArmor()->getMovementType() == MT_FLY,
+								unitCanFly = uBelow->getMovementType() == MT_FLY,
 								canMoveToTile = t
 											&& alreadyOccupied == false
 											&& alreadyTaken == false

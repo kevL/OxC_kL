@@ -148,7 +148,7 @@ void Pathfinding::calculate(
 	}
 	else
 	{
-		_movementType = unit->getArmor()->getMovementType();
+		_movementType = unit->getMovementType();
 
 		if (_movementType == MT_FLY
 			&& _modALT //(SDL_GetModState() & KMOD_ALT) != 0 // this forces soldiers in flyingsuits to walk on (or fall to) the ground.
@@ -1856,7 +1856,7 @@ int Pathfinding::validateUpDown(
 
 	if (gravLift)
 		return 1;
-	else if (bu->getArmor()->getMovementType() == MT_FLY)
+	else if (bu->getMovementType() == MT_FLY)
 	{
 		if (dir == DIR_UP
 			&& (SDL_GetModState() & KMOD_ALT) != 0) // for, BattlescapeState::btnUnitUpClick()
@@ -2339,7 +2339,7 @@ void Pathfinding::setUnit(BattleUnit* unit)
 
 	if (unit != NULL)
 	{
-		_movementType = unit->getArmor()->getMovementType();
+		_movementType = unit->getMovementType();
 
 /*		if (_movementType == MT_FLY
 			&& (SDL_GetModState() & KMOD_ALT) != 0)

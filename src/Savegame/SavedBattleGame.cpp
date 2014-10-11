@@ -175,7 +175,9 @@ void SavedBattleGame::load(
 	_missionType		= node["missionType"].as<std::string>(_missionType);
 	_globalShade		= node["globalshade"].as<int>(_globalShade);
 	_turn				= node["turn"].as<int>(_turn);
+	_depth				= node["depth"].as<int>(_depth);
 	_terrain			= node["terrain"].as<std::string>(_terrain); // sza_MusicRules
+
 	int selectedUnit	= node["selectedUnit"].as<int>();
 
 	for (YAML::const_iterator
@@ -272,7 +274,7 @@ void SavedBattleGame::load(
 		if (id < BattleUnit::MAX_SOLDIER_ID)	// BattleUnit is linked to a geoscape soldier
 			unit = new BattleUnit(				// look up the matching soldier
 								savedGame->getSoldier(id),
-								faction,
+								_depth,
 								static_cast<int>(savedGame->getDifficulty())); // kL_add: For VictoryPts value per death.
 		else
 		{
@@ -285,6 +287,7 @@ void SavedBattleGame::load(
 								id,
 								rule->getArmor(armor),
 								static_cast<int>(savedGame->getDifficulty()),
+								_depth,
 								savedGame->getMonthsPassed()); // kL_add.
 		}
 		//Log(LOG_INFO) << "SavedGame::load(), difficulty = " << savedGame->getDifficulty();
@@ -420,7 +423,6 @@ void SavedBattleGame::load(
 	_objectiveDestroyed	= node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
 	_tuReserved			= (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
 	_kneelReserved		= node["kneelReserved"].as<bool>(_kneelReserved);
-	_depth				= node["depth"].as<int>(_depth);
 	_alienRace			= node["alienRace"].as<std::string>(_alienRace);
 }
 
@@ -1504,16 +1506,16 @@ Node* SavedBattleGame::getSpawnNode(
 			i != getNodes()->end();
 			++i)
 	{
-		if ((*i)->getRank() == nodeRank								// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL)				// the small unit bit is not set
-				|| unit->getArmor()->getSize() == 1)					// or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING)				// the flying unit bit is not set
-				|| unit->getArmor()->getMovementType() == MT_FLY)		// or the unit can fly
-			&& (*i)->getPriority() > 0								// priority 0 is not spawnplace
-			&& setUnitPosition(										// check if unit can be set at this node
-							unit,										// ie. it's big enough
-							(*i)->getPosition(),						// and there's not already a unit there.
-							true))										// runs w/ false on return to bgen::addAlien()
+		if ((*i)->getRank() == nodeRank					// ranks must match
+			&& (!((*i)->getType() & Node::TYPE_SMALL)	// the small unit bit is not set
+				|| unit->getArmor()->getSize() == 1)		// or the unit is small
+			&& (!((*i)->getType() & Node::TYPE_FLYING)	// the flying unit bit is not set
+				|| unit->getMovementType() == MT_FLY)		// or the unit can fly
+			&& (*i)->getPriority() > 0					// priority 0 is not spawnplace
+			&& setUnitPosition(							// check if unit can be set at this node
+							unit,							// ie. it's big enough
+							(*i)->getPosition(),			// and there's not already a unit there.
+							true))							// runs w/ false on return to bgen::addAlien()
 		{
 			if ((*i)->getPriority() > priority) // hold it. This does not *weight* the nodes by priority. but so waht
 			{
@@ -1590,25 +1592,25 @@ Node* SavedBattleGame::getPatrolNode(
 
 		if ((node->getFlags() > 0
 				|| node->getRank() > 0
-				|| scout)											// for non-scouts we find a node with a desirability above 0
-			&& (!(node->getType() & Node::TYPE_SMALL)				// the small unit bit is not set
-				|| unit->getArmor()->getSize() == 1)					// or the unit is small
-			&& (!(node->getType() & Node::TYPE_FLYING)				// the flying unit bit is not set
-				|| unit->getArmor()->getMovementType() == MT_FLY)		// or the unit can fly
-			&& !node->isAllocated()									// check if not allocated
-			&& !(node->getType() & Node::TYPE_DANGEROUS)			// don't go there if an alien got shot there; stupid behavior like that
-			&& setUnitPosition(										// check if unit can be set at this node
-							unit,										// ie. it's big enough
-							node->getPosition(),						// and there's not already a unit there.
-							true)										// but don't actually set the unit...
-			&& getTile(node->getPosition())							// the node is on a tile
-			&& !getTile(node->getPosition())->getFire()				// you are not a firefighter; do not patrol into fire
-			&& (!getTile(node->getPosition())->getDangerous()		// aliens don't run into a grenade blast
-				|| unit->getFaction() != FACTION_HOSTILE)				// but civies do!
-			&& (node != fromNode									// scouts push forward
-				|| !scout)												// others can mill around.. ie, stand there
-			&& node->getPosition().x > 0							// x-pos valid
-			&& node->getPosition().y > 0)							// y-pos valid
+				|| scout)										// for non-scouts we find a node with a desirability above 0
+			&& (!(node->getType() & Node::TYPE_SMALL)			// the small unit bit is not set
+				|| unit->getArmor()->getSize() == 1)				// or the unit is small
+			&& (!(node->getType() & Node::TYPE_FLYING)			// the flying unit bit is not set
+				|| unit->getMovementType() == MT_FLY)				// or the unit can fly
+			&& !node->isAllocated()								// check if not allocated
+			&& !(node->getType() & Node::TYPE_DANGEROUS)		// don't go there if an alien got shot there; stupid behavior like that
+			&& setUnitPosition(									// check if unit can be set at this node
+							unit,									// ie. it's big enough
+							node->getPosition(),					// and there's not already a unit there.
+							true)									// but don't actually set the unit...
+			&& getTile(node->getPosition())						// the node is on a tile
+			&& !getTile(node->getPosition())->getFire()			// you are not a firefighter; do not patrol into fire
+			&& (!getTile(node->getPosition())->getDangerous()	// aliens don't run into a grenade blast
+				|| unit->getFaction() != FACTION_HOSTILE)			// but civies do!
+			&& (node != fromNode								// scouts push forward
+				|| !scout)											// others can mill around.. ie, stand there
+			&& node->getPosition().x > 0						// x-pos valid
+			&& node->getPosition().y > 0)						// y-pos valid
 		{
 			if (bestNode == NULL
 //kL				|| (bestNode->getRank() == Node::nodeRank[unit->getRankInt()][0]
@@ -1970,9 +1972,9 @@ bool SavedBattleGame::setUnitPosition(
 			if (tile == NULL
 				|| (tile->getUnit() != NULL
 					&& tile->getUnit() != bu)
-				|| tile->getTUCost(MapData::O_OBJECT, bu->getArmor()->getMovementType()) == 255
+				|| tile->getTUCost(MapData::O_OBJECT, bu->getMovementType()) == 255
 				|| (tile->hasNoFloor(tileBelow)
-					&& bu->getArmor()->getMovementType() != MT_FLY)
+					&& bu->getMovementType() != MT_FLY)
 				|| (tileAbove // kL:
 					&& tileAbove->getUnit() != NULL
 					&& tileAbove->getUnit() != bu
@@ -2078,7 +2080,7 @@ bool SavedBattleGame::placeUnitNearPosition(
 	}
 
 /*kL: uhh no.
-	if (unit->getArmor()->getMovementType() == MT_FLY)
+	if (unit->getMovementType() == MT_FLY)
 	{
 		Tile* tile = getTile(entryPoint + Position(0, 0, 1));
 		if (tile

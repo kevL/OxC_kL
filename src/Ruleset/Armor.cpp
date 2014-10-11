@@ -145,7 +145,7 @@ void Armor::load(const YAML::Node& node)
 /**
  * Returns the language string that names this armor.
  * Each armor has a unique name.
- * @return, The armor name.
+ * @return, armor name
  */
 std::string Armor::getType() const
 {
@@ -154,7 +154,7 @@ std::string Armor::getType() const
 
 /**
  * Gets the unit's sprite sheet.
- * @return, The sprite sheet name.
+ * @return, sprite sheet name
  */
 std::string Armor::getSpriteSheet() const
 {
@@ -163,7 +163,7 @@ std::string Armor::getSpriteSheet() const
 
 /**
  * Gets the unit's inventory sprite.
- * @return, The inventory sprite name.
+ * @return, inventory sprite name
  */
 std::string Armor::getSpriteInventory() const
 {
@@ -172,7 +172,7 @@ std::string Armor::getSpriteInventory() const
 
 /**
  * Gets the front armor level.
- * @return, The front armor level.
+ * @return, front armor level
  */
 int Armor::getFrontArmor() const
 {
@@ -181,7 +181,7 @@ int Armor::getFrontArmor() const
 
 /**
  * Gets the side armor level.
- * @return, The side armor level.
+ * @return, side armor level
  */
 int Armor::getSideArmor() const
 {
@@ -190,7 +190,7 @@ int Armor::getSideArmor() const
 
 /**
  * Gets the rear armor level.
- * @return, The rear armor level.
+ * @return, rear armor level
  */
 int Armor::getRearArmor() const
 {
@@ -199,7 +199,7 @@ int Armor::getRearArmor() const
 
 /**
  * Gets the under armor level.
- * @return, The under armor level.
+ * @return, under armor level
  */
 int Armor::getUnderArmor() const
 {
@@ -208,7 +208,7 @@ int Armor::getUnderArmor() const
 
 /**
  * Gets the corpse item used in the Geoscape.
- * @return, The name of the corpse item.
+ * @return, name of the corpse item
  */
 std::string Armor::getCorpseGeoscape() const
 {
@@ -218,7 +218,7 @@ std::string Armor::getCorpseGeoscape() const
 /**
  * Gets the list of corpse items dropped by the unit
  * in the Battlescape (one per unit tile).
- * @return, The list of corpse items.
+ * @return, list of corpse items
  */
 const std::vector<std::string>& Armor::getCorpseBattlescape() const
 {
@@ -227,7 +227,7 @@ const std::vector<std::string>& Armor::getCorpseBattlescape() const
 
 /**
  * Gets the storage item needed to equip this.
- * @return, The name of the store item.
+ * @return, name of the store item
  */
 std::string Armor::getStoreItem() const
 {
@@ -236,7 +236,7 @@ std::string Armor::getStoreItem() const
 
 /**
  * Gets the drawing routine ID.
- * @return, The drawing routine ID.
+ * @return, drawing routine ID
  */
 int Armor::getDrawingRoutine() const
 {
@@ -246,7 +246,10 @@ int Armor::getDrawingRoutine() const
 /**
  * Gets the movement type of this armor.
  * Useful for determining whether the armor can fly.
- * @return, The movement type.
+ * @important: do not use this function outside the BattleUnit constructor,
+ * unless you are SURE you know what you are doing.
+ * For more information, see the BattleUnit constructor.
+ * @return, MovementType enum
  */
 MovementType Armor::getMovementType() const
 {
@@ -254,8 +257,8 @@ MovementType Armor::getMovementType() const
 }
 
 /**
- * Gets the size of the unit. Normally this is 1 (small) or 2 (big).
- * @return, The unit's size.
+ * Gets the size of this armor. Normally 1 (small) or 2 (big).
+ * @return, size
  */
 int Armor::getSize() const
 {
@@ -264,16 +267,16 @@ int Armor::getSize() const
 
 /**
  * Gets the damage modifier for a certain damage type.
- * @param dt The damageType.
- * @return, The damage modifier 0->1.
+ * @param dt - the damageType
+ * @return, damage modifier ( 0.f to 1.f+ )
  */
 float Armor::getDamageModifier(ItemDamageType dType)
 {
 	return _damageModifier[static_cast<int>(dType)];
 }
 
-/** Gets the loftempSet.
- * @return, The loftempsSet.
+/** Gets the Line Of Fire Template set.
+ * @return, loftempsSet as a vector of ints
  */
 std::vector<int> Armor::getLoftempsSet() const
 {
@@ -282,7 +285,7 @@ std::vector<int> Armor::getLoftempsSet() const
 
 /**
   * Gets pointer to the armor's stats.
-  * @return, stats, Pointer to the armor's stats.
+  * @return, pointer to the armor's UnitStats
   */
 UnitStats* Armor::getStats()
 {

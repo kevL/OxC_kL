@@ -57,21 +57,21 @@ namespace OpenXcom
 /**
  * Initializes a BattleUnit from a Soldier
  * @param soldier		- pointer to a geoscape Soldier
- * @param faction		- faction the soldier belongs to
+ * @param depth			- the depth of the battlefield (used to determine movement type in case of MT_FLOAT)
  * @param diff			- for VictoryPts value at death
  * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
 BattleUnit::BattleUnit(
 		Soldier* soldier,
-		UnitFaction faction,
+		int depth,
 		int diff, // kL_add.
 		BattlescapeGame* battleGame) // kL_add
 	:
 		_geoscapeSoldier(soldier),
 		_unitRules(NULL),
-		_faction(faction),
-		_originalFaction(faction),
-		_killedBy(faction),
+		_faction(FACTION_PLAYER),
+		_originalFaction(FACTION_PLAYER),
+		_killedBy(FACTION_PLAYER),
 		_murdererId(0),
 		_battleGame(battleGame), // kL_add
 //		_id(0),
@@ -143,6 +143,14 @@ BattleUnit::BattleUnit(
 	_armor			= soldier->getArmor();
 	_stats			+= *_armor->getStats();	// armors may modify effective stats
 	_loftempsSet	= _armor->getLoftempsSet();
+	_movementType	= _armor->getMovementType();
+	if (_movementType == MT_FLOAT)
+	{
+		if (depth > 0)
+			_movementType = MT_FLY;
+		else
+			_movementType = MT_WALK;
+	}
 
 	_standHeight	= soldier->getRules()->getStandHeight();
 	_kneelHeight	= soldier->getRules()->getKneelHeight();
@@ -196,6 +204,7 @@ BattleUnit::BattleUnit(
  * @param id			- the unit's unique ID
  * @param armor			- pointer to unit's armor
  * @param diff			- the current game's difficulty setting (for aLien stat adjustment)
+ * @param depth			- the depth of the battlefield (used to determine movement type in case of MT_FLOAT)
  * @param month			- the current month (default 0)
  * @param battleGame	- pointer to the BattlescapeGame (default NULL)
  */
@@ -205,6 +214,7 @@ BattleUnit::BattleUnit(
 		int id,
 		Armor* armor,
 		int diff,
+		int depth,
 		int month, // kL_add.
 		BattlescapeGame* battleGame) // kL_add. May be NULL
 	:
@@ -300,6 +310,14 @@ BattleUnit::BattleUnit(
 	_specab			= (SpecialAbility)unit->getSpecialAbility();
 	_spawnUnit		= unit->getSpawnUnit();
 	_value			= unit->getValue();
+	_movementType	= _armor->getMovementType();
+	if (_movementType == MT_FLOAT)
+	{
+		if (depth > 0)
+			_movementType = MT_FLY;
+		else
+			_movementType = MT_WALK;
+	}
 
 	if (armor->getDrawingRoutine() == 14) // most aliens don't breathe per-se, that's exclusive to humanoids
 		_breathFrame = 0;
@@ -2358,41 +2376,40 @@ void BattleUnit::setTile(
 {
 	//Log(LOG_INFO) << "BattleUnit::setTile()";
 	_tile = tile;
-	if (!_tile)
+	if (_tile == NULL)
 	{
 		_floating = false;
-
 		return;
 	}
 
 	// unit could have changed from flying to walking or vice versa
 	if (_status == STATUS_WALKING
 		&& _tile->hasNoFloor(tileBelow)
-		&& _armor->getMovementType() == MT_FLY)
+		&& _movementType == MT_FLY)
 	{
 		_status = STATUS_FLYING;
 		_floating = true;
 		//Log(LOG_INFO) << ". STATUS_WALKING, _floating = " << _floating;
 	}
 	else if (_status == STATUS_FLYING
-		&& !_tile->hasNoFloor(tileBelow)
+		&& _tile->hasNoFloor(tileBelow) == false
 		&& _verticalDirection == 0)
 	{
 		_status = STATUS_WALKING;
 		_floating = false;
 		//Log(LOG_INFO) << ". STATUS_FLYING, _floating = " << _floating;
 	}
-/*	else if (_status == STATUS_STANDING			// kL. keeping this section in tho it was taken out
-		&& _armor->getMovementType() == MT_FLY)	// when STATUS_UNCONSCIOUS below was inserted.
-												// Problem: when loading a save, _floating goes TRUE!
+/*	else if (_status == STATUS_STANDING	// kL. keeping this section in tho it was taken out
+		&& _movementType == MT_FLY)		// when STATUS_UNCONSCIOUS below was inserted.
+										// Problem: when loading a save, _floating goes TRUE!
 	{
 		_floating = _tile->hasNoFloor(tileBelow);
 		//Log(LOG_INFO) << ". STATUS_STANDING, _floating = " << _floating;
 	} */
 	else if (_status == STATUS_UNCONSCIOUS) // <- kL_note: not so sure having flying unconscious soldiers is a good deal.
 	{
-		_floating = _armor->getMovementType() == MT_FLY
-					&& _tile->hasNoFloor(tileBelow);
+		_floating = _movementType == MT_FLY
+				 && _tile->hasNoFloor(tileBelow);
 		//Log(LOG_INFO) << ". STATUS_UNCONSCIOUS, _floating = " << _floating;
 	}
 	//Log(LOG_INFO) << "BattleUnit::setTile() EXIT";
@@ -4134,6 +4151,16 @@ void BattleUnit::setFloorAbove(bool floor)
 bool BattleUnit::getFloorAbove()
 {
 	return _floorAbove;
+}
+
+/**
+ * Gets this unit's movement type.
+ * Use this instead of checking the rules of the armor.
+ * @return, MovementType enum
+ */
+MovementType BattleUnit::getMovementType() const
+{
+	return _movementType;
 }
 
 /**

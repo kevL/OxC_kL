@@ -772,7 +772,7 @@ void ProjectileFlyBState::think()
 		bool
 			hasFloor = tile
 					&& tile->hasNoFloor(tileBelow) == false,
-			unitCanFly = _unit->getArmor()->getMovementType() == MT_FLY;
+			unitCanFly = _unit->getMovementType() == MT_FLY;
 
 		if (_action.type == BA_AUTOSHOT
 			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots()

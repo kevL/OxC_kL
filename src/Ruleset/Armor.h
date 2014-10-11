@@ -116,6 +116,7 @@ private:
 		int getDrawingRoutine() const;
 
 		/// Gets whether the armor can fly.
+		/// DO NOT USE THIS FUNCTION OUTSIDE THE BATTLEUNIT CONSTRUCTOR OR I WILL HUNT YOU DOWN and kiss you.
 		MovementType getMovementType() const;
 
 		/// Gets whether this is a normal or big unit.

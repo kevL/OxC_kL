@@ -456,6 +456,7 @@ private:
 	Soldier* _geoscapeSoldier;
 	Unit* _unitRules;
 
+	MovementType _movementType;
 	SoldierGender _gender;
 	SpecialAbility _specab;
 
@@ -479,7 +480,7 @@ private:
 		/// Creates a BattleUnit.
 		BattleUnit( // xCom operatives
 				Soldier* soldier,
-				UnitFaction faction,
+				int depth,
 				int diff, // kL_add: For VictoryPts value per death.
 				BattlescapeGame* battleGame = NULL); // kL_add: for playing sound when hit.
 		/// Creates a BattleUnit.
@@ -489,6 +490,7 @@ private:
 				int id,
 				Armor* armor,
 				int diff,
+				int depth,
 				int month = 0, // kL_add: For upping aLien stats as time progresses.
 				BattlescapeGame* battleGame = NULL); // kL_add: for playing sound when hit (only civies).
 		/// Cleans up the BattleUnit.
@@ -1005,9 +1007,9 @@ private:
 		/// Returns true if this unit has an inventory.
 		bool hasInventory() const;
 
-		/// Is this unit breathing and if so what frame?
+		/// Gets if this unit is breathing and if so on what frame.
 		int getBreathFrame() const;
-		/// Start breathing and/or update the breathing frame.
+		/// Starts this unit breathing and/or updates its breathing frame.
 		void breathe();
 
 		/// Sets the flag for "floor above me" meaning stop rendering bubbles.
@@ -1015,16 +1017,19 @@ private:
 		/// Gets the flag for "floor above me".
 		bool getFloorAbove();
 
-		/// Gets the unit's mission statistics.
+		/// Gets this unit's movement type.
+		MovementType getMovementType() const;
+
+		/// Gets this unit's mission statistics.
 		BattleUnitStatistics* getStatistics();
-		/// Sets the unit murderer's id.
+		/// Sets this unit murderer's id.
 		void setMurdererId(int id);
-		/// Gets the unit murderer's id.
+		/// Gets this unit murderer's id.
 		int getMurdererId() const;
 
-		/// kL. Sets the unit's order in battle.
+		/// kL. Sets this unit's order in battle.
 		void setBattleOrder(size_t order); // kL
-		/// kL. Gets the unit's order in battle.
+		/// kL. Gets this unit's order in battle.
 		size_t getBattleOrder() const; // kL
 
 		/// kL. Sets the BattleGame for this unit.

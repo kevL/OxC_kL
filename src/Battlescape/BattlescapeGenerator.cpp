@@ -600,7 +600,7 @@ void BattlescapeGenerator::deployXCOM()
 			//Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
 			BattleUnit* unit = addXCOMUnit(new BattleUnit(
 														*i,
-														FACTION_PLAYER,
+														_save->getDepth(),
 														static_cast<int>(_game->getSavedGame()->getDifficulty()))); // kL_add: For VictoryPts value per death.
 
 			if (unit)
@@ -901,7 +901,8 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 													FACTION_PLAYER,
 													_unitSequence++,
 													_rules->getArmor(unitRule->getArmor()),
-													0));
+													0,
+													_save->getDepth()));
 	if (tankUnit)
 	{
 		tankUnit->setTurretType(tank->getRules()->getTurretType());
@@ -1036,7 +1037,24 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 								(*i)[0] + (_craftX * 10),
 								(*i)[1] + (_craftY * 10),
 								(*i)[2] + _craftZ);
-			if (canPlaceXCOMUnit(_save->getTile(pos)))
+			bool canPlace = true;
+
+			for (int
+					x = 0;
+					x < unit->getArmor()->getSize();
+					++x)
+			{
+				for (int
+						y = 0;
+						y < unit->getArmor()->getSize();
+						++y)
+				{
+					canPlace = canPlace
+							&& canPlaceXCOMUnit(_save->getTile(pos + Position(x, y, 0)));
+				}
+			}
+
+			if (canPlace)
 			{
 				//Log(LOG_INFO) << ". canPlaceXCOMUnit()";
 				if (_save->setUnitPosition(
@@ -1809,6 +1827,7 @@ BattleUnit* BattlescapeGenerator::addAlien(
 									_unitSequence++,
 									_rules->getArmor(rules->getArmor()),
 									difficulty,
+									_save->getDepth(),
 									month); // kL_add.
 
 	// following data is the order in which certain alien ranks spawn on certain node ranks;
@@ -1922,7 +1941,8 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 									FACTION_NEUTRAL,
 									_unitSequence++,
 									_rules->getArmor(rules->getArmor()),
-									0);
+									0,
+									_save->getDepth());
 
 	Node* node = _save->getSpawnNode(0, unit);
 	if (node)

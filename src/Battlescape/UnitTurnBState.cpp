@@ -160,7 +160,7 @@ void UnitTurnBState::think()
 		&& _action.strafe == false			// but not swivelling turret
 		&& _action.targeting == false)		// or not taking a shot at something...
 	{
-		if (_unit->getArmor()->getMovementType() == MT_FLY)
+		if (_unit->getMovementType() == MT_FLY)
 			tu = 2; // hover vehicles cost 2 per facing change
 		else
 			tu = 3; // large tracked vehicles cost 3 per facing change

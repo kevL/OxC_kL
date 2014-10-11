@@ -53,7 +53,8 @@ enum MovementType
 {
 	MT_WALK,	// 0
 	MT_FLY,		// 1
-	MT_SLIDE	// 2
+	MT_SLIDE,	// 2
+	MT_FLOAT	// 3
 };
 
 

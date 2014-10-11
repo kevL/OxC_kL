@@ -2768,6 +2768,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 											_save->getUnits()->back()->getId() + 1,
 											getRuleset()->getArmor(newArmor.str()),
 											difficulty,
+											getDepth(),
 											month, // kL_add.
 											this); // kL_add
 	// kL_note: what about setting _zombieUnit=true ? It's not generic but it's the only case, afaict

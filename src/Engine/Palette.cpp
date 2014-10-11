@@ -206,7 +206,7 @@ void Palette::setColors(
 		_colors[i].b = pal[i].b;
 		_colors[i].unused = 255;
 
-		if (i > 0
+		if (i > 15
 			&& _colors[i].r == _colors[0].r
 			&& _colors[i].g == _colors[0].g
 			&& _colors[i].b == _colors[0].b)
