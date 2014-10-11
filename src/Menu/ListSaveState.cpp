@@ -107,8 +107,9 @@ void ListSaveState::lstSavesPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		_btnSaveGame->setVisible(); // kL
-		_inEditMode = true; // kL
+		_btnSaveGame->setVisible();			// kL
+		_inEditMode = true;					// kL
+		_lstSaves->setSelectable(false);	// kL
 
 		_previousSelectedRow = _selectedRow;
 		_selectedRow = _lstSaves->getSelectedRow();
@@ -186,13 +187,14 @@ void ListSaveState::btnSaveGameClick(Action*)
 void ListSaveState::saveGame()
 {
 	// kL_begin:
-	if (!_inEditMode)
+	if (_inEditMode == false)
 		return;
-	else
-	{
-		_btnSaveGame->setVisible(false);
-		_inEditMode = false;
-	} // kL_end.
+
+	_btnSaveGame->setVisible(false);
+	_inEditMode = false;
+	_lstSaves->setSelectable();
+	// kL_end.
+
 
 	_game->getSavedGame()->setName(_edtSave->getText());
 	std::string

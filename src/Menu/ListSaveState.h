@@ -33,8 +33,7 @@ class TextEdit;
 
 
 /**
- * Save Game screen for listing info on available
- * saved games and saving them.
+ * Save Game screen for listing info on available saved games and saving them.
  */
 class ListSaveState
 	:
