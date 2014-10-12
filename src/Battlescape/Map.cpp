@@ -853,14 +853,17 @@ void Map::drawTerrain(Surface* surface)
 							if (_cursorType != CT_AIM)
 							{
 								if (unit
-									&& (unit->getVisible() || _save->getDebugMode()))
+									&& (unit->getVisible()
+										|| _save->getDebugMode())
+									&& (_cursorType != CT_PSI
+										|| unit->getFaction() != _save->getSide()))
 								{
 									frame = (_animFrame %2); // yellow box
 								}
 								else
 									frame = 0; // red box
 							}
-							else
+							else // CT_AIM ->
 							{
 								if (unit
 									&& (unit->getVisible() || _save->getDebugMode()))
@@ -1848,14 +1851,17 @@ void Map::drawTerrain(Surface* surface)
 							if (_cursorType != CT_AIM)
 							{
 								if (unit
-									&& (unit->getVisible() || _save->getDebugMode()))
+									&& (unit->getVisible()
+										|| _save->getDebugMode())
+									&& (_cursorType != CT_PSI
+										|| unit->getFaction() != _save->getSide()))
 								{
 									frame = 3 + (_animFrame %2); // yellow box
 								}
 								else
 									frame = 3; // red box
 							}
-							else
+							else // CT_AIM ->
 							{
 								if (unit
 									&& (unit->getVisible() || _save->getDebugMode()))

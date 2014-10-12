@@ -2569,6 +2569,7 @@ void TileEngine::explode(
 							//Log(LOG_INFO) << ". . type == DT_HE";
 							if (targetUnit)
 							{
+								//Log(LOG_INFO) << ". . powerE = " << _powerE << " vs. " << targetUnit->getId();
 								powerVsUnit = ( // bell curve
 											static_cast<int>(RNG::generate(
 																		static_cast<double>(_powerE) * 0.5,
@@ -2577,7 +2578,7 @@ void TileEngine::explode(
 																		static_cast<double>(_powerE) * 0.5,
 																		static_cast<double>(_powerE) * 1.5)))
 										/ 2;
-								//Log(LOG_INFO) << ". . DT_HE power = " << powerVsUnit << ", vs ID " << targetUnit->getId();
+								//Log(LOG_INFO) << ". . DT_HE = " << powerVsUnit; // << ", vs ID " << targetUnit->getId();
 
 								if (distance(
 											destTile->getPosition(),
@@ -2646,14 +2647,17 @@ void TileEngine::explode(
 																				static_cast<double>(_powerE) * 0.5,
 																				static_cast<double>(_powerE) * 1.5)))
 												/ 2;
+										//Log(LOG_INFO) << ". . . INVENTORY: power = " << powerVsUnit;
 
 										bu->damage(
 												Position(0, 0, 0),
 												powerVsUnit,
 												DT_HE);
+										//Log(LOG_INFO) << ". . . INVENTORY: damage = " << damage;
 
 										if (bu->getHealth() < 1)
 										{
+											//Log(LOG_INFO) << ". . . . INVENTORY: instaKill";
 											bu->instaKill();
 
 											if (attacker != NULL)
@@ -2668,8 +2672,7 @@ void TileEngine::explode(
 																											bu->getGender())
 																										.arg(bu->getName(game->getLanguage()))));
 											}
-
-											_battleSave->removeItem(*i);
+//											_battleSave->removeItem(*i);
 										}
 
 										break;
@@ -2678,11 +2681,13 @@ void TileEngine::explode(
 										&& ((*i)->getUnit() == NULL
 											|| (*i)->getUnit()->getStatus() == STATUS_DEAD))
 									{
+										//Log(LOG_INFO) << ". . . INVENTORY: removeItem = " << (*i)->getRules()->getType();
 										_battleSave->removeItem(*i);
 										break;
 									}
 									else
 									{
+										//Log(LOG_INFO) << ". . . INVENTORY: bypass item = " << (*i)->getRules()->getType();
 										++i;
 										done = (i == destTile->getInventory()->end());
 									}
@@ -2856,6 +2861,7 @@ void TileEngine::explode(
 																											bu->getGender())
 																										.arg(bu->getName(game->getLanguage()))));
 											}
+//											_battleSave->removeItem(*i);
 										}
 
 										break;

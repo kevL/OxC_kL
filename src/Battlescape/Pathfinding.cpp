@@ -2291,7 +2291,10 @@ std::vector<int> Pathfinding::findReachable(
 			if (nextNode->inOpenSet() == false
 				|| nextNode->getTUCost(false) > totalTuCost) // If this node is unvisited or visited from a better path.
 			{
-				nextNode->connect(totalTuCost, currentNode, direction);
+				nextNode->connect(
+								totalTuCost,
+								currentNode,
+								direction);
 
 				unvisited.push(nextNode);
 			}

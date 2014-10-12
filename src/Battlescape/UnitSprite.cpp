@@ -1944,24 +1944,18 @@ void UnitSprite::sortRifles()
 		if (_itemB) // kL
 		{
 			if (_unit->getActiveHand() == "STR_LEFT_HAND")
-			{
 				_itemA = _itemB;
-			}
 
 			_itemB = NULL;
 		}
 		else if (_unit->getStatus() != STATUS_AIMING)
-		{
 			_itemB = NULL;
-		}
 	}
 //kL	else if (_itemB && _itemB->getRules()->isTwoHanded())
 	else if (_itemB) // kL
 	{
 		if (_unit->getStatus() != STATUS_AIMING)
-		{
 			_itemA = NULL;
-		}
 	}
 }
 
