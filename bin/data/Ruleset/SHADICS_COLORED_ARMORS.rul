@@ -22,8 +22,8 @@ items:
   - type: STR_CORPSE_BLUESUIT_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 66
+    floorSprite: 79
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -36,8 +36,8 @@ items:
   - type: STR_CORPSE_GREENSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 67
+    floorSprite: 80
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -50,8 +50,8 @@ items:
   - type: STR_CORPSE_ORANGESUIT_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 68
+    floorSprite: 81
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -64,8 +64,8 @@ items:
   - type: STR_CORPSE_PINKSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 69
+    floorSprite: 82
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -78,8 +78,8 @@ items:
   - type: STR_CORPSE_PURPLESUIT_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 70
+    floorSprite: 83
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -92,8 +92,8 @@ items:
   - type: STR_CORPSE_REDSUIT_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 71
+    floorSprite: 84
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -120,8 +120,8 @@ items:
   - type: STR_CORPSE_BLUE_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 66
+    floorSprite: 79
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -134,8 +134,8 @@ items:
   - type: STR_CORPSE_GREEN_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 67
+    floorSprite: 80
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -148,8 +148,8 @@ items:
   - type: STR_CORPSE_ORANGE_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 68
+    floorSprite: 81
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -162,8 +162,8 @@ items:
   - type: STR_CORPSE_PINK_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 69
+    floorSprite: 82
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -176,8 +176,8 @@ items:
   - type: STR_CORPSE_PURPLE_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 70
+    floorSprite: 83
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -190,8 +190,8 @@ items:
   - type: STR_CORPSE_RED_ARMOR
     name: STR_CORPSE
     weight: 33
-    bigSprite: 65
-    floorSprite: 78
+    bigSprite: 71
+    floorSprite: 84
     invWidth: 2
     invHeight: 3
     armor: 40
@@ -406,7 +406,7 @@ armors:
     loftempsSet: [ 3 ]
   - type: STR_GREEN_ARMOR_UC
     spriteSheet: GREEN.PCK
-    spriteInv: MAN_13
+    spriteInv: MAN_10
     corpseBattle:
       - STR_CORPSE_GREEN_ARMOR
     storeItem: STR_GREEN_ARMOR
@@ -804,348 +804,343 @@ ufopaedia:
 extraSprites:
   - type: BIGOBS.PCK
     files:
-      65: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_Corpse_Inv.gif
+      65: Resources/Colored_ARMOR/BLACK/Screens/BLACK_Corpse_Inv.gif
       66: Resources/Colored_ARMOR/BLUE/Screens/BLUE_Corpse_Inv.gif
       67: Resources/Colored_ARMOR/GREEN/Screens/GREEN_Corpse_Inv.gif
       68: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_Corpse_Inv.gif
       69: Resources/Colored_ARMOR/PINK/Screens/PINK_Corpse_Inv.gif
       70: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_Corpse_Inv.gif
       71: Resources/Colored_ARMOR/RED/Screens/RED_Corpse_Inv.gif
-      72: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_Corpse_Inv.gif
-      73: Resources/Colored_ARMOR/BLUE/Screens/BLUE_Corpse_Inv.gif
-      74: Resources/Colored_ARMOR/GREEN/Screens/GREEN_Corpse_Inv.gif
-      75: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_Corpse_Inv.gif
-      76: Resources/Colored_ARMOR/PINK/Screens/PINK_Corpse_Inv.gif
-      77: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_Corpse_Inv.gif
-      78: Resources/Colored_ARMOR/RED/Screens/RED_Corpse_Inv.gif
   - type: FLOOROB.PCK
     files:
-      78: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_Corpse.png
+      78: Resources/Colored_ARMOR/BLACK/Screens/BLACK_Corpse.png
       79: Resources/Colored_ARMOR/BLUE/Screens/BLUE_Corpse.png
       80: Resources/Colored_ARMOR/GREEN/Screens/GREEN_Corpse.png
       81: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_Corpse.png
       82: Resources/Colored_ARMOR/PINK/Screens/PINK_Corpse.png
       83: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_Corpse.png
       84: Resources/Colored_ARMOR/RED/Screens/RED_Corpse.png
-      85: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_Corpse.png
-      86: Resources/Colored_ARMOR/BLUE/Screens/BLUE_Corpse.png
-      87: Resources/Colored_ARMOR/GREEN/Screens/GREEN_Corpse.png
-      88: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_Corpse.png
-      89: Resources/Colored_ARMOR/PINK/Screens/PINK_Corpse.png
-      90: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_Corpse.png
-      91: Resources/Colored_ARMOR/RED/Screens/RED_Corpse.png
-  - type: MAN_15F0.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_FlyingSuit.gif
-  - type: MAN_15F1.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_FlyingSuit.gif
-  - type: MAN_15F2.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_FlyingSuit.gif
-  - type: MAN_15F3.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_FlyingSuit.gif
-  - type: MAN_15M0.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_FlyingSuit.gif
-  - type: MAN_15M1.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_FlyingSuit.gif
-  - type: MAN_15M2.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_FlyingSuit.gif
-  - type: MAN_15M3.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_FlyingSuit.gif
+# ---- Flight Suits ------
   - type: BLACKSUIT.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/BLACK_FLY.png
-  - type: MAN_14F0.SPK
+      0: Resources/Colored_ARMOR/BLACK/BLACK_FLY.png
+  - type: MAN_15F0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_f1.gif
-  - type: MAN_14F1.SPK
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_FlyingSuit.gif
+  - type: MAN_15F1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_f2.gif
-  - type: MAN_14F2.SPK
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_FlyingSuit.gif
+  - type: MAN_15F2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_f3.gif
-  - type: MAN_14F3.SPK
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_FlyingSuit.gif
+  - type: MAN_15F3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_f4.gif
-  - type: MAN_14M0.SPK
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_FlyingSuit.gif
+  - type: MAN_15M0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_m1.gif
-  - type: MAN_14M1.SPK
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_FlyingSuit.gif
+  - type: MAN_15M1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_m2.gif
-  - type: MAN_14M2.SPK
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_FlyingSuit.gif
+  - type: MAN_15M2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_m3.gif
-  - type: MAN_14M3.SPK
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_FlyingSuit.gif
+  - type: MAN_15M3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_m4.gif
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_FlyingSuit.gif
   - type: BLUESUIT.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/BLUE_FLY.png
-  - type: MAN_16F0.SPK
+      0: Resources/Colored_ARMOR/BLUE/BLUE_FLY.png
+  - type: MAN_14F0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_f1.gif
-  - type: MAN_16F1.SPK
+      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_f0.gif
+  - type: MAN_14F1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_f2.gif
-  - type: MAN_16F2.SPK
+      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_f1.gif
+  - type: MAN_14F2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_f3.gif
-  - type: MAN_16F3.SPK
+      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_f2.gif
+  - type: MAN_14F3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_f4.gif
-  - type: MAN_16M0.SPK
+      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_f3.gif
+  - type: MAN_14M0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_m1.gif
-  - type: MAN_16M1.SPK
+      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_m0.gif
+  - type: MAN_14M1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_m2.gif
-  - type: MAN_16M2.SPK
+      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_m1.gif
+  - type: MAN_14M2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_m3.gif
-  - type: MAN_16M3.SPK
+      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_m2.gif
+  - type: MAN_14M3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_m4.gif
+      0: Resources/Colored_ARMOR/BLUE/Screens/BLUE_FLYING_SUITE_m3.gif
   - type: GREENSUIT.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/GREEN_FLY.png
-  - type: MAN_17F0.SPK
+      0: Resources/Colored_ARMOR/GREEN/GREEN_FLY.png
+  - type: MAN_16F0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_f1.gif
-  - type: MAN_17F1.SPK
+      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_f0.gif
+  - type: MAN_16F1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_f2.gif
-  - type: MAN_17F2.SPK
+      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_f1.gif
+  - type: MAN_16F2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_f3.gif
-  - type: MAN_17F3.SPK
+      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_f2.gif
+  - type: MAN_16F3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_f4.gif
-  - type: MAN_17M0.SPK
+      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_f3.gif
+  - type: MAN_16M0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_m1.gif
-  - type: MAN_17M1.SPK
+      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_m0.gif
+  - type: MAN_16M1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_m2.gif
-  - type: MAN_17M2.SPK
+      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_m1.gif
+  - type: MAN_16M2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_m3.gif
-  - type: MAN_17M3.SPK
+      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_m2.gif
+  - type: MAN_16M3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_m4.gif
+      0: Resources/Colored_ARMOR/GREEN/Screens/GREEN_FLYING_SUITE_m3.gif
   - type: ORANGESUIT.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/ORANGE_FLY.png
-  - type: MAN_18F0.SPK
+      0: Resources/Colored_ARMOR/ORANGE/ORANGE_FLY.png
+  - type: MAN_17F0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_f1.gif
-  - type: MAN_18F1.SPK
+      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_f0.gif
+  - type: MAN_17F1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_f2.gif
-  - type: MAN_18F2.SPK
+      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_f1.gif
+  - type: MAN_17F2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_f3.gif
-  - type: MAN_18F3.SPK
+      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_f2.gif
+  - type: MAN_17F3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_f4.gif
-  - type: MAN_18M0.SPK
+      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_f3.gif
+  - type: MAN_17M0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_m1.gif
-  - type: MAN_18M1.SPK
+      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_m0.gif
+  - type: MAN_17M1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_m2.gif
-  - type: MAN_18M2.SPK
+      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_m1.gif
+  - type: MAN_17M2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_m3.gif
-  - type: MAN_18M3.SPK
+      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_m2.gif
+  - type: MAN_17M3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_m4.gif
+      0: Resources/Colored_ARMOR/ORANGE/Screens/ORANGE_FLYING_SUITE_m3.gif
   - type: PINKSUIT.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/ROSA_FLY.png
-  - type: MAN_20F0.SPK
+      0: Resources/Colored_ARMOR/PINK/PINK_FLY.png
+  - type: MAN_18F0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_f1.gif
-  - type: MAN_20F1.SPK
+      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_f0.gif
+  - type: MAN_18F1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_f2.gif
-  - type: MAN_20F2.SPK
+      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_f1.gif
+  - type: MAN_18F2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_f3.gif
-  - type: MAN_20F3.SPK
+      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_f2.gif
+  - type: MAN_18F3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_f4.gif
-  - type: MAN_20M0.SPK
+      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_f3.gif
+  - type: MAN_18M0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_m1.gif
-  - type: MAN_20M1.SPK
+      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_m0.gif
+  - type: MAN_18M1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_m2.gif
-  - type: MAN_20M2.SPK
+      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_m1.gif
+  - type: MAN_18M2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_m3.gif
-  - type: MAN_20M3.SPK
+      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_m2.gif
+  - type: MAN_18M3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_m4.gif
+      0: Resources/Colored_ARMOR/PINK/Screens/PINK_FLYING_SUITE_m3.gif
   - type: PURPLESUIT.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/PURPLE_FLY.png
-  - type: MAN_21F0.SPK
+      0: Resources/Colored_ARMOR/PURPLE/PURPLE_FLY.png
+  - type: MAN_20F0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_f1.gif
-  - type: MAN_21F1.SPK
+      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_f0.gif
+  - type: MAN_20F1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_f2.gif
-  - type: MAN_21F2.SPK
+      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_f1.gif
+  - type: MAN_20F2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_f3.gif
-  - type: MAN_21F3.SPK
+      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_f2.gif
+  - type: MAN_20F3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_f4.gif
-  - type: MAN_21M0.SPK
+      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_f3.gif
+  - type: MAN_20M0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_m1.gif
-  - type: MAN_21M1.SPK
+      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_m0.gif
+  - type: MAN_20M1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_m2.gif
-  - type: MAN_21M2.SPK
+      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_m1.gif
+  - type: MAN_20M2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_m3.gif
-  - type: MAN_21M3.SPK
+      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_m2.gif
+  - type: MAN_20M3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_m4.gif
+      0: Resources/Colored_ARMOR/PURPLE/Screens/PURPLE_FLYING_SUITE_m3.gif
   - type: REDSUIT.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/RED_FLY.png
-  - type: MAN_13F0.SPK
+      0: Resources/Colored_ARMOR/RED/RED_FLY.png
+  - type: MAN_21F0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_PowerSuit.gif
-  - type: MAN_13F1.SPK
+      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_f0.gif
+  - type: MAN_21F1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_PowerSuit.gif
-  - type: MAN_13F2.SPK
+      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_f1.gif
+  - type: MAN_21F2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_PowerSuit.gif
-  - type: MAN_13F3.SPK
+      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_f2.gif
+  - type: MAN_21F3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_PowerSuit.gif
-  - type: MAN_13M0.SPK
+      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_f3.gif
+  - type: MAN_21M0.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_PowerSuit.gif
-  - type: MAN_13M1.SPK
+      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_m0.gif
+  - type: MAN_21M1.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_PowerSuit.gif
-  - type: MAN_13M2.SPK
+      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_m1.gif
+  - type: MAN_21M2.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_PowerSuit.gif
-  - type: MAN_13M3.SPK
+      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_m2.gif
+  - type: MAN_21M3.SPK
     singleImage: true
     files:
-      0: Resources/Colored_ARMOR/LITEBROWN/Screens/LITEBROWN_PowerSuit.gif
+      0: Resources/Colored_ARMOR/RED/Screens/RED_FLYING_SUITE_m3.gif
+# ---- Power Suits ------
   - type: BLACK.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/BLACK.png
+      0: Resources/Colored_ARMOR/BLACK/BLACK.png
+  - type: MAN_13F0.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_PowerSuit.gif
+  - type: MAN_13F1.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_PowerSuit.gif
+  - type: MAN_13F2.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_PowerSuit.gif
+  - type: MAN_13F3.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_PowerSuit.gif
+  - type: MAN_13M0.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_PowerSuit.gif
+  - type: MAN_13M1.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_PowerSuit.gif
+  - type: MAN_13M2.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_PowerSuit.gif
+  - type: MAN_13M3.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/BLACK/Screens/BLACK_PowerSuit.gif
+  - type: BLUE.PCK
+    subX: 32
+    subY: 40
+    width: 512
+    height: 720
+    files:
+      0: Resources/Colored_ARMOR/BLUE/BLUE.png
   - type: MAN_7F0.SPK
     singleImage: true
     files:
@@ -1178,52 +1173,52 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Colored_ARMOR/BLUE/Screens/blue_m3.gif
-  - type: BLUE.PCK
-    subX: 32
-    subY: 40
-    width: 512
-    height: 720
-    files:
-      0: Resources/Colored_ARMOR/BLUE.png
-  - type: MAN_13F0.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/green_f0.gif
-  - type: MAN_13F1.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/green_f1.gif
-  - type: MAN_13F2.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/green_f2.gif
-  - type: MAN_13F3.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/green_f3.gif
-  - type: MAN_13M0.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/green_m0.gif
-  - type: MAN_13M1.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/green_m1.gif
-  - type: MAN_13M2.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/green_m2.gif
-  - type: MAN_13M3.SPK
-    singleImage: true
-    files:
-      0: Resources/Colored_ARMOR/GREEN/Screens/green_m3.gif
   - type: GREEN.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/GREEN.png
+      0: Resources/Colored_ARMOR/GREEN/GREEN.png
+  - type: MAN_10F0.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/GREEN/Screens/green_f0.gif
+  - type: MAN_10F1.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/GREEN/Screens/green_f1.gif
+  - type: MAN_10F2.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/GREEN/Screens/green_f2.gif
+  - type: MAN_10F3.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/GREEN/Screens/green_f3.gif
+  - type: MAN_10M0.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/GREEN/Screens/green_m0.gif
+  - type: MAN_10M1.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/GREEN/Screens/green_m1.gif
+  - type: MAN_10M2.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/GREEN/Screens/green_m2.gif
+  - type: MAN_10M3.SPK
+    singleImage: true
+    files:
+      0: Resources/Colored_ARMOR/GREEN/Screens/green_m3.gif
+  - type: ORANGE.PCK
+    subX: 32
+    subY: 40
+    width: 512
+    height: 720
+    files:
+      0: Resources/Colored_ARMOR/ORANGE/ORANGE.png
   - type: MAN_11F0.SPK
     singleImage: true
     files:
@@ -1256,13 +1251,13 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Colored_ARMOR/ORANGE/Screens/orange_m3.gif
-  - type: ORANGE.PCK
+  - type: PINK.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/ORANGE.png
+      0: Resources/Colored_ARMOR/PINK/PINK.png
   - type: MAN_19F0.SPK
     singleImage: true
     files:
@@ -1295,13 +1290,13 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Colored_ARMOR/PINK/Screens/pink_m3.gif
-  - type: PINK.PCK
+  - type: PURPLE.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/ROSA.png
+      0: Resources/Colored_ARMOR/PURPLE/PURPLE.png
   - type: MAN_12F0.SPK
     singleImage: true
     files:
@@ -1334,13 +1329,13 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Colored_ARMOR/PURPLE/Screens/purple_m3.gif
-  - type: PURPLE.PCK
+  - type: RED.PCK
     subX: 32
     subY: 40
     width: 512
     height: 720
     files:
-      0: Resources/Colored_ARMOR/PURPLE.png
+      0: Resources/Colored_ARMOR/RED/RED.png
   - type: MAN_6F0.SPK
     singleImage: true
     files:
@@ -1373,13 +1368,6 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Colored_ARMOR/RED/Screens/red_m3.gif
-  - type: RED.PCK
-    subX: 32
-    subY: 40
-    width: 512
-    height: 720
-    files:
-      0: Resources/Colored_ARMOR/RED.png
 extraStrings:
   - type: en-US
     strings:
