@@ -67,7 +67,8 @@ MiniMapState::MiniMapState(
 
 	_bg			= new InteractiveSurface(320, 200);
 	_miniView	= new MiniMapView(
-								221, 148, 48, 16,
+//								221, 148, 48, 16,
+								223, 150, 47, 15,
 								_game,
 								camera,
 								battleGame);
@@ -80,11 +81,11 @@ MiniMapState::MiniMapState(
 
 	battleGame->setPaletteByDepth(this);
 
+	add(_miniView); // put miniView *under* the background.
 	add(_bg);
 //	_game->getResourcePack()->getSurface("SCANBORD.PCK")->blit(_bg);
 	_game->getResourcePack()->getSurface("SCANBORD")->blit(_bg);
 
-	add(_miniView);
 	add(_btnLvlUp, "buttonUp", "minimap", _bg);
 	add(_btnLvlDwn, "buttonDown", "minimap", _bg);
 	add(_btnOk, "buttonOK", "minimap", _bg);
@@ -93,7 +94,7 @@ MiniMapState::MiniMapState(
 	centerAllSurfaces();
 
 //	_screen = false;												// kL
-	_bg->drawRect(48, 16, 221, 148, Palette::blockOffset(15)+15);	// kL
+//	_bg->drawRect(48, 16, 221, 148, Palette::blockOffset(15)+15);	// kL
 
 /*	if (_game->getScreen()->getDY() > 50)
 	{
@@ -109,6 +110,12 @@ MiniMapState::MiniMapState(
 		_bg->drawRect(46, 14, 223, 151, Palette::blockOffset(15)+15);
 	} */
 
+//	_bg->onMouseClick(	// kL, have to change this to InteractiveSurface,
+						// and define a pixel area outside the actual MiniMapView
+						// window that is responsive to RMB - while still allowing
+						// RMB dragging within the MiniMapView window.
+//					(ActionHandler)& MiniMapState::btnOkClick,
+//					SDL_BUTTON_RIGHT);
 
 	_btnLvlUp->onMouseClick((ActionHandler)& MiniMapState::btnLevelUpClick);
 	_btnLvlDwn->onMouseClick((ActionHandler)& MiniMapState::btnLevelDownClick);

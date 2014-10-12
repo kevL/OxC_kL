@@ -91,7 +91,7 @@ MiniMapView::MiniMapView(
 		_totalMouseMoveY(0),
 		_mouseOverThreshold(false)
 {
-	_set = _game->getResourcePack()->getSurfaceSet("SCANG.DAT");
+	_set = game->getResourcePack()->getSurfaceSet("SCANG.DAT");
 }
 
 /**
@@ -105,7 +105,7 @@ void MiniMapView::draw()
 
 	InteractiveSurface::draw();
 
-	if (!_set)
+	if (_set == NULL)
 		return;
 
 /*	SDL_Rect current;
@@ -120,7 +120,7 @@ void MiniMapView::draw()
 	for (int
 			lvl = 0;
 			lvl <= _camera->getCenterPosition().z;
-			lvl++)
+			++lvl)
 	{
 		int py = _startY;
 
@@ -136,17 +136,15 @@ void MiniMapView::draw()
 					x < getWidth() + Surface::getX();
 					x += CELL_WIDTH)
 			{
-				MapData* data = NULL;
-
-				Tile* tile = NULL;
 				Position p (px, py, lvl); // <- initialization. kL_note
 //				Position p = Position(px, py, lvl); // kL (supposedly not as efficient)
-				tile = _battleGame->getTile(p);
 
-				if (!tile)
+				MapData* data = NULL;
+				Tile* tile = _battleGame->getTile(p);
+
+				if (tile == NULL)
 				{
 					px++;
-
 					continue;
 				}
 
@@ -157,11 +155,11 @@ void MiniMapView::draw()
 				for (int
 						i = 0;
 						i < 4;
-						i++)
+						++i)
 				{
 					Surface* srf = NULL;
-
 					data = tile->getMapData(i);
+
 					if (data
 						&& data->getMiniMapIndex())
 					{
@@ -201,8 +199,8 @@ void MiniMapView::draw()
 					&& unit->getVisible()) // visible, alive units
 				{
 					int
-						size	= tile->getUnit()->getArmor()->getSize(),
-						frame	= tile->getUnit()->getMiniMapSpriteIndex()
+						size = tile->getUnit()->getArmor()->getSize(),
+						frame = tile->getUnit()->getMiniMapSpriteIndex()
 								+ tile->getPosition().x - tile->getUnit()->getPosition().x
 								+ ((tile->getPosition().y - tile->getUnit()->getPosition().y) * size)
 								+ (_frame * size * size);
@@ -235,7 +233,7 @@ void MiniMapView::draw()
 				}
 
 				if (tile->isDiscovered(2)
-					&& !tile->getInventory()->empty()) // at least one item on this tile
+					&& tile->getInventory()->empty() == false) // at least one item on this tile
 				{
 					int frame = 9 + _frame;
 
@@ -316,8 +314,8 @@ int MiniMapView::down()
 
 /**
  * Handles mouse presses on the minimap. Enters mouse-moving mode when the drag-scroll button is used.
- * @param action - pointer to an action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an action
+ * @param state		- state that the action handlers belong to
  */
 void MiniMapView::mousePress(Action* action, State* state)
 {
@@ -356,8 +354,8 @@ void MiniMapView::mousePress(Action* action, State* state)
 
 /**
  * Handles mouse clicks on the minimap. Will change the camera center to the clicked point.
- * @param action - pointer to an action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an action
+ * @param state		- state that the action handlers belong to
  */
 void MiniMapView::mouseClick(Action* action, State* state)
 {
@@ -374,7 +372,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if (!_mouseOverThreshold
+			if (_mouseOverThreshold == false
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
 				_camera->centerOnPosition(_posBeforeDragScroll);
@@ -398,7 +396,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 			return;
 
 		// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-		if (!_mouseOverThreshold
+		if (_mouseOverThreshold == false
 			&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 		{
 			_isMouseScrolled = false;
@@ -438,8 +436,8 @@ void MiniMapView::mouseClick(Action* action, State* state)
 /**
  * Handles moving over the minimap.
  * Will change the camera center when the mouse is moved in mouse-moving mode.
- * @param action - pointer to an action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an action
+ * @param state		- state that the action handlers belong to
  */
 void MiniMapView::mouseOver(Action* action, State* state)
 {
@@ -456,7 +454,7 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if (!_mouseOverThreshold
+			if (_mouseOverThreshold == false
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
 					_camera->centerOnPosition(_posBeforeDragScroll);
@@ -487,9 +485,9 @@ void MiniMapView::mouseOver(Action* action, State* state)
 		_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
 		_totalMouseMoveY += static_cast<int>(action->getDetails()->motion.yrel);
 
-		if (!_mouseOverThreshold) // check threshold
+		if (_mouseOverThreshold == false) // check threshold
 			_mouseOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
-									|| std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
+							   || std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 		// Calculate the move
 /*Old
@@ -619,15 +617,14 @@ void MiniMapView::mouseOver(Action* action, State* state)
 /**
  * Handles moving into the minimap.
  * Stops the mouse-scrolling mode, if it's left on.
- * @param action - pointer to an action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an action
+ * @param state		- state that the action handlers belong to
  */
 void MiniMapView::mouseIn(Action* action, State* state)
 {
 	InteractiveSurface::mouseIn(action, state);
 
 	_isMouseScrolling = false;
-
 	setButtonPressed(SDL_BUTTON_RIGHT, false);
 }
 

@@ -215,12 +215,9 @@ void AlienBAIState::think(BattleAction* action)
 	_blaster	= false;
 	_grenade	= false; // kL
 
-//	int rand = RNG::generate(0, 10); // kL
 	_reachable	= _save->getPathfinding()->findReachable(
 													_unit,
 													_unit->getTimeUnits());
-//														- rand);
-
 //	_wasHitBy.clear();
 
 	if (_unit->getCharging()
@@ -258,36 +255,33 @@ void AlienBAIState::think(BattleAction* action)
 				if (rule->isWaypoint() == false)
 				{
 					_rifle = true;
+					int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs(
+																			BA_SNAPSHOT,
+																			action->weapon);
 					_reachableWithAttack = _save->getPathfinding()->findReachable(
 																			_unit,
-																			_unit->getTimeUnits()
-																				- _unit->getActionTUs(
-																								BA_SNAPSHOT,
-																								action->weapon));
-//																				- rand); // kL
+																			preShotTU);
 				}
 				else
 				{
 					_blaster = true;
+					int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs(
+																			BA_LAUNCH,
+																			action->weapon);
 					_reachableWithAttack = _save->getPathfinding()->findReachable(
 																			_unit,
-																			_unit->getTimeUnits()
-																				- _unit->getActionTUs(
-																								BA_AIMEDSHOT,
-																								action->weapon));
-//																				- rand); // kL
+																			preShotTU);
 				}
 			}
 			else if (rule->getBattleType() == BT_MELEE)
 			{
 				_melee = true;
+				int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs(
+																		BA_HIT,
+																		action->weapon);
 				_reachableWithAttack = _save->getPathfinding()->findReachable(
 																		_unit,
-																		_unit->getTimeUnits()
-																			- _unit->getActionTUs(
-																								BA_HIT,
-																								action->weapon));
-//																			- rand); // kL
+																		preShotTU);
 			}
 			else if (rule->getBattleType() == BT_GRENADE)	// kL
 				_grenade = true;							// kL, this is no longer useful since I fixed
@@ -2139,11 +2133,13 @@ void AlienBAIState::wayPointAction()
 										*i,
 										-1);
 
+		int radius = _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getExplosionRadius(); // kL
 		if (_save->getPathfinding()->getStartDirection() != -1
 			&& explosiveEfficacy(
 							(*i)->getPosition(),
 							_unit,
-							(_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() / 20) + 1,
+//kL						(_unit->getMainHandWeapon()->getAmmoItem()->getRules()->getPower() / 20) + 1,
+							radius, // kL
 							_attackAction->diff))
 		{
 			_aggroTarget = *i;
@@ -2162,10 +2158,8 @@ void AlienBAIState::wayPointAction()
 		if (_attackAction->TU > _unit->getTimeUnits())
 		{
 			_attackAction->type = BA_RETHINK;
-
 			return;
 		}
-
 
 		_attackAction->waypoints.clear();
 
@@ -2176,34 +2170,34 @@ void AlienBAIState::wayPointAction()
 										-1);
 
 		Position
-			lastPt = _unit->getPosition(),
-			lastPos = _unit->getPosition(),
-			curPos = _unit->getPosition(),
-			dirVector;
+			posEnd = _unit->getPosition(),
+			posLast = _unit->getPosition(),
+			posCur = _unit->getPosition(),
+			dirVect;
 
 		int
 			collision,
-			pathDir = _save->getPathfinding()->dequeuePath();
+			dirPath = _save->getPathfinding()->dequeuePath();
 
-		while (pathDir != -1)
+		while (dirPath != -1)
 		{
-			lastPos = curPos;
+			posLast = posCur;
 
 			_save->getPathfinding()->directionToVector(
-													pathDir,
-													&dirVector);
+													dirPath,
+													&dirVect);
 
-			curPos = curPos + dirVector;
+			posCur += dirVect;
 
 			Position
 				voxelPosA(
-						(curPos.x * 16) + 8,
-						(curPos.y * 16) + 8,
-						(curPos.z * 24) + 16),
+						(posCur.x * 16) + 8,
+						(posCur.y * 16) + 8,
+						(posCur.z * 24) + 16),
 				voxelPosB(
-						(lastPt.x * 16) + 8,
-						(lastPt.y * 16) + 8,
-						(lastPt.z * 24) + 16);
+						(posEnd.x * 16) + 8,
+						(posEnd.y * 16) + 8,
+						(posEnd.z * 24) + 16);
 
 			collision = _save->getTileEngine()->calculateLine(
 															voxelPosA,
@@ -2212,31 +2206,28 @@ void AlienBAIState::wayPointAction()
 															NULL,
 															_unit);
 
-			if (collision > VOXEL_EMPTY
-				&& collision < VOXEL_UNIT)
+			if (VOXEL_EMPTY < collision && collision < VOXEL_UNIT)
 			{
-				_attackAction->waypoints.push_back(lastPos);
-
-				lastPt = lastPos;
+				_attackAction->waypoints.push_back(posLast);
+				posEnd = posLast;
 			}
 			else if (collision == VOXEL_UNIT)
 			{
-				BattleUnit* target = _save->getTile(curPos)->getUnit();
+				BattleUnit* target = _save->getTile(posCur)->getUnit();
 				if (target == _aggroTarget)
 				{
-					_attackAction->waypoints.push_back(curPos);
-
-					lastPt = curPos;
+					_attackAction->waypoints.push_back(posCur);
+					posEnd = posCur;
 				}
 			}
 
-			pathDir = _save->getPathfinding()->dequeuePath();
+			dirPath = _save->getPathfinding()->dequeuePath();
 		}
 
 		_attackAction->target = _attackAction->waypoints.front();
 
 		if (static_cast<int>(_attackAction->waypoints.size()) > (_attackAction->diff * 2) + 6
-			|| lastPt != _aggroTarget->getPosition())
+			|| posEnd != _aggroTarget->getPosition())
 		{
 			_attackAction->type = BA_RETHINK;
 		}
@@ -2736,12 +2727,13 @@ void AlienBAIState::selectMeleeOrRanged()
 		if (RNG::percent(meleeOdds))
 		{
 			_rifle = false;
+
+			int preShotTU = _unit->getTimeUnits() - _unit->getActionTUs(
+																	BA_HIT,
+																	meleeWeapon);
 			_reachableWithAttack = _save->getPathfinding()->findReachable(
-																		_unit,
-																		_unit->getTimeUnits()
-																			- _unit->getActionTUs(
-																								BA_HIT,
-																								meleeWeapon));
+																	_unit,
+																	preShotTU);
 
 			return;
 		}

@@ -896,7 +896,7 @@ bool RuleItem::isPistol() const
 {
 	return (_battleType == BT_FIREARM
 				|| _battleType == BT_MELEE)
-			&& !_twoHanded;
+			&& _twoHanded == false;
 }
 
 /**
