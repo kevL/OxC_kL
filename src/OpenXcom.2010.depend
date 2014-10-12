@@ -6536,7 +6536,7 @@
 	"../Ruleset/RuleInterface.h"
 	"../Savegame/BattleUnit.h"
 
-1412943544 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
+1413116371 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
 	"MiniMapState.h"
 	<iostream>
 	<sstream>
@@ -7272,7 +7272,7 @@
 	<map>
 	<string>
 
-1413053174 source:f:\git\openxcom\src\engine\state.cpp
+1413117385 source:f:\git\openxcom\src\engine\state.cpp
 	"State.h"
 	<climits>
 	"Font.h"
@@ -7284,14 +7284,10 @@
 	"Screen.h"
 	"Surface.h"
 	"../Interface/ArrowButton.h"
-	"../Interface/Bar.h"
 	"../Interface/BattlescapeButton.h"
 	"../Interface/ComboBox.h"
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
-	"../Interface/Frame.h"
-	"../Interface/NumberText.h"
-	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextEdit.h"
 	"../Interface/TextList.h"

@@ -462,6 +462,8 @@ GeoscapeState::GeoscapeState()
 	add(_txtDebug);
 
 	_game->getResourcePack()->getSurface("Cygnus_BG")->blit(_srfSpace);			// kL
+//	_game->getResourcePack()->getSurface("Antares_BG")->blit(_srfSpace);		// kL
+
 //	_game->getResourcePack()->getSurface("LGEOBORD.SCR")->blit(_srfSpace);		// kL
 //	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_srfSpace);	// kL
 //	_game->getResourcePack()->getSurface("GEOBORD.SCR")->blit(_bg);				// kL
