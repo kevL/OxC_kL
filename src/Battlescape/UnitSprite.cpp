@@ -114,6 +114,8 @@ void UnitSprite::setBattleUnit(
 		BattleUnit* unit,
 		int part)
 {
+	_drawingRoutine = unit->getArmor()->getDrawingRoutine();
+
 	_unit = unit;
 	_part = part;
 
@@ -181,10 +183,9 @@ void UnitSprite::setAnimationFrame(int frame)
  */
 void UnitSprite::draw()
 {
- 	Surface::draw();
-
-	_drawingRoutine = _unit->getArmor()->getDrawingRoutine();
 	//Log(LOG_INFO) << "UnitSprite::draw() Routine " << _drawingRoutine;
+	Surface::draw();
+
 	// Array of drawing routines
 	void (UnitSprite::*routines[])() =
 	{
@@ -204,12 +205,13 @@ void UnitSprite::draw()
 		&UnitSprite::drawRoutine12,
 		&UnitSprite::drawRoutine0,
 		&UnitSprite::drawRoutine0,
+		&UnitSprite::drawRoutine0,
 		&UnitSprite::drawRoutine12,
 		&UnitSprite::drawRoutine4,
 		&UnitSprite::drawRoutine4,
-		&UnitSprite::drawRoutine18,
 		&UnitSprite::drawRoutine19,
-		&UnitSprite::drawRoutine20}; */
+		&UnitSprite::drawRoutine20,
+		&UnitSprite::drawRoutine21}; */
 
 	// Call the matching routine
 	(this->*(routines[_drawingRoutine]))();
@@ -219,7 +221,8 @@ void UnitSprite::draw()
  * Drawing routine for XCom soldiers in overalls, sectoids (routine 0),
  * mutons (routine 10),
  * aquanauts (routine 13),
- * aquatoids, calcinites, deep ones, gill men, lobster men, tasoths (routine 14).
+ * calcinites, deep ones, gill men, lobster men, tasoths (routine 14),
+ * aquatoids (routine 15) (this one is no different, it just precludes breathing animations).
  */
 void UnitSprite::drawRoutine0()
 {
@@ -255,8 +258,7 @@ void UnitSprite::drawRoutine0()
 		{
 			die = 259; // aquanaut underwater death frame
 			maleTorso = 32; // aquanaut underwater ion armour torso
-			if ( (_unit->getArmor()->getType() == "STR_ARMOR_NONE_UC") ||
-				 (_unit->getArmor()->getType() == "STR_PERSONAL_ARMOR_UC") )
+			if (_unit->getArmor()->getForcedTorso() == TORSO_USE_GENDER)
 			{
 				femaleTorso = 32; // aquanaut underwater plastic aqua armour torso
 			}
@@ -388,21 +390,31 @@ void UnitSprite::drawRoutine0()
 		return;
 	}
 
-	if (_unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
+	if (_drawingRoutine == 10 || _helmet)
 	{
-		torso = _unitSurface->getFrame(maleTorso + unitDir);
-	}
-	else if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC") // the mod Colored Armors might muck w/ this.
-	{
-		torso = _unitSurface->getFrame(femaleTorso + unitDir);
-	}
-	else if (_unit->getGender() == GENDER_FEMALE)
-	{
-		torso = _unitSurface->getFrame(femaleTorso + unitDir);
+		if ((_unit->getGender() == GENDER_FEMALE
+				&& _unit->getArmor()->getForcedTorso() != TORSO_ALWAYS_MALE)
+			|| _unit->getArmor()->getForcedTorso() == TORSO_ALWAYS_FEMALE)
+//		if (_unit->getArmor()->getType() == "STR_FLYING_SUIT_UC") // the mod Colored Armors might muck w/ these.
+		{
+			torso = _unitSurface->getFrame(femaleTorso + unitDir);
+		}
+		else
+//		if (_unit->getArmor()->getType() == "STR_POWER_SUIT_UC")
+		{
+			torso = _unitSurface->getFrame(maleTorso + unitDir);
+		}
 	}
 	else
 	{
-		torso = _unitSurface->getFrame(maleTorso + unitDir);
+		if (_unit->getGender() == GENDER_FEMALE)
+		{
+			torso = _unitSurface->getFrame(femaleTorso + unitDir);
+		}
+		else
+		{
+			torso = _unitSurface->getFrame(maleTorso + unitDir);
+		}
 	}
 
 	bool isWalking = _unit->getStatus() == STATUS_WALKING;
@@ -1143,7 +1155,7 @@ void UnitSprite::drawRoutine3()
 
 /**
  * Drawing routine for civilians, ethereals, zombies (routine 4),
- * tftd civilians, tftd zombies (routine 16), more tftd civilians (routine 17).
+ * tftd civilians, tftd zombies (routine 17), more tftd civilians (routine 18). // <- wtf. says routines 16 & 17 below.
  * Very easy: first 8 is standing positions, then 8 walking sequences of 8, finally death sequence of 3
  */
 void UnitSprite::drawRoutine4()
@@ -1834,7 +1846,7 @@ void UnitSprite::drawRoutine11()
 }
 
 /**
-* Drawing routine for hallucinoids (routine 12) and biodrones (routine 15).
+* Drawing routine for hallucinoids (routine 12) and biodrones (routine 16). // <- wtf. says routine 15 below.
 */
 void UnitSprite::drawRoutine12()
 {
@@ -1862,7 +1874,7 @@ void UnitSprite::drawRoutine12()
 /**
  * Drawing routine for tentaculats.
  */
-void UnitSprite::drawRoutine18()
+void UnitSprite::drawRoutine19()
 {
 	if (_unit->isOut())
 		return; // unit is drawn as an item
@@ -1897,7 +1909,7 @@ void UnitSprite::drawRoutine18()
 /**
  * Drawing routine for triscenes.
  */
-void UnitSprite::drawRoutine19()
+void UnitSprite::drawRoutine20()
 {
 	if (_unit->isOut())
 		return; // unit is drawn as an item
@@ -1919,7 +1931,7 @@ void UnitSprite::drawRoutine19()
 /**
  * Drawing routine for xarquids.
  */
-void UnitSprite::drawRoutine20()
+void UnitSprite::drawRoutine21()
 {
 	if (_unit->isOut())
 		return; // unit is drawn as an item

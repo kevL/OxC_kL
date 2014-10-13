@@ -4684,14 +4684,14 @@
 	<vector>
 	"../Engine/State.h"
 
-1413140560 f:\git\openxcom\src\ruleset\armor.h
+1413236613 f:\git\openxcom\src\ruleset\armor.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
 	"MapData.h"
 	"Unit.h"
 
-1413140560 f:\git\openxcom\src\ruleset\mapdata.h
+1413239830 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
 1413140561 f:\git\openxcom\src\ruleset\ruleitem.h
@@ -5716,7 +5716,7 @@
 1413140555 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1413140556 f:\git\openxcom\src\battlescape\pathfinding.h
+1413235002 f:\git\openxcom\src\battlescape\pathfinding.h
 	<vector>
 	"PathfindingNode.h"
 	"Position.h"
@@ -6006,7 +6006,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1413140560 f:\git\openxcom\src\ruleset\mcdpatch.h
+1413236921 f:\git\openxcom\src\ruleset\mcdpatch.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -6493,7 +6493,7 @@
 	"BattlescapeGame.h"
 	"Position.h"
 
-1413140556 f:\git\openxcom\src\battlescape\unitsprite.h
+1413235417 f:\git\openxcom\src\battlescape\unitsprite.h
 	"../Engine/Surface.h"
 
 1413140555 source:f:\git\openxcom\src\battlescape\medikitstate.cpp
@@ -6613,7 +6613,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1413140556 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1413235324 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -6878,7 +6878,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1413140556 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1413236398 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -9309,7 +9309,7 @@
 1413140560 source:f:\git\openxcom\src\ruleset\alienrace.cpp
 	"AlienRace.h"
 
-1413140560 source:f:\git\openxcom\src\ruleset\armor.cpp
+1413236796 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 
 1413140560 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
@@ -9332,7 +9332,7 @@
 	"MapBlock.h"
 	"../Battlescape/Position.h"
 
-1412770687 source:f:\git\openxcom\src\ruleset\mapdata.cpp
+1413240368 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
 	"../Engine/Logger.h"
 
@@ -9349,7 +9349,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/ResourcePack.h"
 
-1413140560 source:f:\git\openxcom\src\ruleset\mcdpatch.cpp
+1413239778 source:f:\git\openxcom\src\ruleset\mcdpatch.cpp
 	"MCDPatch.h"
 	"MapData.h"
 	"MapDataSet.h"
@@ -9488,7 +9488,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1413140561 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1413242030 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
@@ -9526,7 +9526,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1413140561 source:f:\git\openxcom\src\savegame\base.cpp
+1413240569 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<algorithm>
 	<cmath>
@@ -9685,7 +9685,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1413140561 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1413238153 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -9795,7 +9795,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1413140562 source:f:\git\openxcom\src\savegame\tile.cpp
+1413238569 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"

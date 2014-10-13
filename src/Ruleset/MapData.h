@@ -271,6 +271,9 @@ private:
 
 		/// Check if this is an xcom base object.
 		bool isBaseModule();
+
+		/// Sets this tile as not stopping LOS. // kL_note: "not" drop more LSD.
+//		void setStopLOS(bool stopLOS);
 };
 
 }

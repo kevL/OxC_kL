@@ -1965,9 +1965,10 @@ bool SavedBattleGame::setUnitPosition(
 				y > -1;
 				--y)
 		{
-			Tile* tile = getTile(pos + Position(x, y, 0));
-			Tile* tileBelow = getTile(pos + Position(x, y,-1));
-			Tile* tileAbove = getTile(pos + Position(x, y, 1)); // kL
+			Tile
+				* tile = getTile(pos + Position(x, y, 0)),
+				* tileBelow = getTile(pos + Position(x, y,-1)),
+				* tileAbove = getTile(pos + Position(x, y, 1)); // kL
 
 			if (tile == NULL
 				|| (tile->getUnit() != NULL
@@ -1975,7 +1976,10 @@ bool SavedBattleGame::setUnitPosition(
 				|| tile->getTUCost(MapData::O_OBJECT, bu->getMovementType()) == 255
 				|| (tile->hasNoFloor(tileBelow)
 					&& bu->getMovementType() != MT_FLY)
-				|| (tileAbove // kL:
+				|| (tile->getMapData(MapData::O_OBJECT)
+					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > 0
+					&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < 4)
+				|| (tileAbove // kL ->
 					&& tileAbove->getUnit() != NULL
 					&& tileAbove->getUnit() != bu
 					&& bu->getHeight() - tile->getTerrainLevel() > 26)) // don't stuck yer head up someone's flying arse.

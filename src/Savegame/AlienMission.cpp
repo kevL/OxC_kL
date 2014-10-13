@@ -58,7 +58,8 @@ namespace OpenXcom
 {
 
 /**
- * cTor.
+ * Creates an AlienMission.
+ * @param rule - reference RuleAlienMission
  */
 AlienMission::AlienMission(const RuleAlienMission& rule)
 	:
@@ -106,8 +107,9 @@ private:
 
 
 /**
- * @param node The YAML node containing the data.
- * @param game The game data, required to locate the alien base.
+ * Loads an AlienMission.
+ * @param node - reference the YAML node containing the data
+ * @param game - reference the SavedGame data, required to locate the alien base
  */
 void AlienMission::load(
 		const YAML::Node& node,
@@ -140,7 +142,7 @@ void AlienMission::load(
 }
 
 /**
- *
+ * Saves an AlienMission.
  */
 YAML::Node AlienMission::save() const
 {
@@ -161,7 +163,8 @@ YAML::Node AlienMission::save() const
 }
 
 /**
- *
+ * Gets the type of this AlienMission.
+ * @return, reference string
  */
 const std::string& AlienMission::getType() const
 {
@@ -171,7 +174,7 @@ const std::string& AlienMission::getType() const
 /**
  * Check if a mission is over and can be safely removed from the game.
  * A mission is over if it will spawn no more UFOs and it has no UFOs still in the game.
- * @return, If the mission can be safely removed from game.
+ * @return, true if the mission can be safely removed
  */
 bool AlienMission::isOver() const
 {
@@ -179,7 +182,7 @@ bool AlienMission::isOver() const
 		return false; // Infiltrations continue for ever.
 
 	if (_nextWave == _rule.getWaveCount()
-		&& !_liveUfos)
+		&& _liveUfos == 0)
 	{
 		return true;
 	}
@@ -220,7 +223,9 @@ private:
 
 
 /**
- *
+ * Advances this AlienMission.
+ * @param engine	- reference the Game data
+ * @param globe		- reference the Globe
  */
 void AlienMission::think(
 		Game& engine,
@@ -268,8 +273,8 @@ void AlienMission::think(
 				c != game.getCountries()->end();
 				++c)
 		{
-			if (!(*c)->getPact()
-				&& !(*c)->getNewPact()
+			if ((*c)->getPact() == false
+				&& (*c)->getNewPact() == false
 				&& ruleset.getRegion(_region)->insideRegion(
 														(*c)->getRules()->getLabelLongitude(),
 														(*c)->getRules()->getLabelLatitude()))
@@ -284,7 +289,6 @@ void AlienMission::think(
 				spawnAlienBase(
 							globe,
 							engine);
-
 				break;
 			}
 		}
@@ -316,7 +320,7 @@ void AlienMission::think(
  * @param globe			- reference to the globe, for land checks
  * @param ufoRule		- reference to the rule for the desired UFO
  * @param trajectory	- reference to the rule for the desired trajectory
- * @return, pointer to the spawned UFO; if the mission does not desire to spawn a UFO, 0 is returned
+ * @return, pointer to the spawned UFO; if the mission does not desire to spawn a UFO, NULL is returned
  */
 Ufo* AlienMission::spawnUfo(
 		const SavedGame& game,
@@ -472,7 +476,8 @@ Ufo* AlienMission::spawnUfo(
 }
 
 /**
- *
+ * Starts this AlienMission.
+ * @param initialCount - countdown till next UFO
  */
 void AlienMission::start(size_t initialCount)
 {
@@ -490,7 +495,8 @@ void AlienMission::start(size_t initialCount)
 }
 
 
-/** @brief Match a base from it's coordinates.
+/**
+ * @brief Match a base from it's coordinates.
  * This function object uses coordinates to match a base.
  */
 class MatchBaseCoordinates
@@ -529,9 +535,9 @@ private:
  * It takes care of sending the UFO to the next waypoint, landing UFOs and
  * marking them for removal as required. It must set the game data
  * in a way that the rest of the code understands what to do.
- * @param ufo		- the UFO that reached its waypoint
- * @param engine	- the game engine, required to get access to game data and game rules
- * @param globe		- the earth globe, required to get access to land checks
+ * @param ufo		- reference the Ufo that reached its waypoint
+ * @param engine	- reference the Game engine, required to get access to game data and game rules
+ * @param globe		- reference the Globe, required to get access to land checks
  */
 void AlienMission::ufoReachedWaypoint(
 		Ufo& ufo,
@@ -721,9 +727,9 @@ void AlienMission::ufoReachedWaypoint(
 /**
  * This function is called when one of the mission's UFOs is shot down (crashed or destroyed).
  * Currently the only thing that happens is delaying the next UFO in the mission sequence.
- * @param ufo, The UFO that was shot down.
- * @param engine, The game engine, unused for now.
- * @param globe, The earth globe, unused for now.
+ * @param ufo		- reference the Ufo that was shot down
+ * @param engine	- reference the Game engine, unused for now
+ * @param globe		- reference the Globe, unused for now
  */
 void AlienMission::ufoShotDown(
 		Ufo& ufo,
@@ -750,9 +756,9 @@ void AlienMission::ufoShotDown(
  * This function is called when one of the mission's UFOs has finished its time on the ground.
  * It takes care of sending the UFO to the next waypoint and marking them for removal as required.
  * It must set the game data in a way that the rest of the code understands what to do.
- * @param ufo		- UFO that reached its waypoint
- * @param engine	- game engine, required to get access to game data and game rules
- * @param globe		- earth globe, required to get access to land checks
+ * @param ufo		- reference the Ufo that reached its waypoint
+ * @param engine	- reference the Game engine, required to get access to game data and game rules
+ * @param globe		- reference the Globe, required to get access to land checks
  */
 void AlienMission::ufoLifting(
 		Ufo& ufo,
@@ -803,7 +809,7 @@ void AlienMission::ufoLifting(
 /**
  * The new time must be a multiple of 30 minutes, and more than 0.
  * Calling this on a finished mission has no effect.
- * @param minutes The minutes until the next UFO wave will spawn.
+ * @param minutes - the minutes until the next UFO wave will spawn
  */
 void AlienMission::setWaveCountdown(size_t minutes)
 {
@@ -818,7 +824,7 @@ void AlienMission::setWaveCountdown(size_t minutes)
 /**
  * Assigns a unique ID to this mission.
  * It is an error to assign two IDs to the same mission.
- * @param id The UD to assign.
+ * @param id - the ID to assign
  */
 void AlienMission::setId(int id)
 {
@@ -828,7 +834,8 @@ void AlienMission::setId(int id)
 }
 
 /**
- * @return The unique ID assigned to this mission.
+ * Gets the unique ID of this mission.
+ * @return, the unique ID assigned to this mission
  */
 int AlienMission::getId() const
 {
@@ -840,7 +847,7 @@ int AlienMission::getId() const
 /**
  * Sets the alien base associated with this mission.
  * Only the alien supply missions care about this.
- * @param base A pointer to an alien base.
+ * @param base - pointer to an AlienBase
  */
 void AlienMission::setAlienBase(const AlienBase* base)
 {
@@ -849,7 +856,7 @@ void AlienMission::setAlienBase(const AlienBase* base)
 
 /**
  * Only alien supply missions ever have a valid pointer.
- * @return A pointer (possibly 0) of the AlienBase for this mission.
+ * @return, pointer (possibly NULL) of the AlienBase for this mission
  */
 const AlienBase* AlienMission::getAlienBase() const
 {
@@ -860,7 +867,7 @@ const AlienBase* AlienMission::getAlienBase() const
  * Add alien points to the country and region at the coordinates given.
  * @param lon		- longitudinal coordinates to check
  * @param lat		- latitudinal coordinates to check
- * @param engine	- reference to the game engine, required to get access to game data and game rules
+ * @param engine	- reference the Game engine, required to get access to game data and game rules
  */
 void AlienMission::addScore(
 		const double lon,
@@ -901,9 +908,9 @@ void AlienMission::addScore(
 }
 
 /**
- * Spawn an alien base.
- * @param globe, The earth globe, required to get access to land checks.
- * @param engine, The game engine, required to get access to game data and game rules.
+ * Spawns an AlienBase.
+ * @param globe		- reference the Globe, required to get access to land checks
+ * @param engine	- reference the Game engine, required to get access to game data and game rules
  */
 void AlienMission::spawnAlienBase(
 		const Globe& globe,
@@ -911,23 +918,22 @@ void AlienMission::spawnAlienBase(
 {
 	//Log(LOG_INFO) << "AlienMission::spawnAlienBase()";
 	SavedGame& game = *engine.getSavedGame();
-	unsigned diff = static_cast<unsigned>(game.getDifficulty()); // kL
 
-//kL	if (game.getAlienBases()->size() > 8)
-	if (game.getAlienBases()->size() > 8 + diff) // kL
+	size_t diff = static_cast<size_t>(game.getDifficulty()); // kL_begin:
+	if (game.getAlienBases()->size() > 8 + diff)
 	{
 		//Log(LOG_INFO) << ". too many aLien bases!! EXIT";
 		return;
-	}
+	} // kL_end.
 
 	const Ruleset& ruleset = *engine.getRuleset();
 	// Once the last UFO is spawned, the aliens build their base.
 	const RuleRegion& regionRules = *ruleset.getRegion(_region);
 
 	std::pair<double, double> pos = getLandPoint(
-												globe,
-												regionRules,
-												RuleRegion::ALIEN_BASE_ZONE);
+											globe,
+											regionRules,
+											RuleRegion::ALIEN_BASE_ZONE);
 
 	AlienBase* ab = new AlienBase();
 	ab->setAlienRace(_race);
@@ -943,12 +949,12 @@ void AlienMission::spawnAlienBase(
 }
 
 /**
- * Sets the mission's region. if the region is incompatible with actually
+ * Sets the mission's region. If the region is incompatible with actually
  * carrying out an attack, use the "fallback" region as defined in the ruleset.
  * This is a slight difference from the original,
  * which just defaulted them to zone[0], North America.
- * @param region the region we want to try to set the mission to.
- * @param rules the ruleset, in case we need to swap out the region.
+ * @param region	- reference the region we want to try to set the mission to
+ * @param rules		- reference the ruleset, in case we need to swap out the region
  */
 void AlienMission::setRegion(
 		const std::string& region,
@@ -962,11 +968,11 @@ void AlienMission::setRegion(
 
 /**
  * Select a destination based on the criteria of our trajectory and desired waypoint.
- * @param trajectory, The trajectory in question.
- * @param nextWaypoint, The next logical waypoint in sequence (0 for newly spawned UFOs)
- * @param globe, The earth globe, required to get access to land checks.
- * @param region, The ruleset for the region of our mission.
- * @return, A set of lon and lat coordinates based on the criteria of the trajectory.
+ * @param trajectory	- reference the trajectory in question
+ * @param nextWaypoint	- the next logical waypoint in sequence (0 for newly spawned UFOs)
+ * @param globe			- reference the Globe, required to get access to land checks
+ * @param region		- reference the ruleset for the region of this mission
+ * @return, pair of lon and lat coordinates based on the criteria of the trajectory
  */
 std::pair<double, double> AlienMission::getWaypoint(
 		const UfoTrajectory& trajectory,
@@ -974,7 +980,7 @@ std::pair<double, double> AlienMission::getWaypoint(
 		const Globe& globe,
 		const RuleRegion &region)
 {
-	/* LOOK MA! NO HANDS!
+/*	LOOK MA! NO HANDS!
 	if (trajectory.getAltitude(nextWaypoint) == "STR_GROUND")
 	{
 		return getLandPoint(
@@ -989,6 +995,9 @@ std::pair<double, double> AlienMission::getWaypoint(
 /**
  * Get a random point inside the given region zone.
  * The point will be used to land a UFO, so it HAS to be on land.
+ * @param globe		- reference the Globe
+ * @param region	- reference RuleRegion
+ * @param zone		- zone number in the region
  */
 std::pair<double, double> AlienMission::getLandPoint(
 		const Globe& globe,

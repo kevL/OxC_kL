@@ -2940,6 +2940,7 @@ armors:
       - 0.95 #acid
       - 0.0 #smoke
     loftempsSet: [ 3 ]
+    forcedTorso: 1
   - type: STR_FLYING_SUIT_UC
     spriteSheet: XCOM_2.PCK
     spriteInv: MAN_3
@@ -2963,6 +2964,7 @@ armors:
       - 0.95 #acid
       - 0.0 #smoke
     loftempsSet: [ 3 ]
+    forcedTorso: 2
   - type: SECTOID_ARMOR0 #soldier, navigator, medic, engineer
     spriteSheet: SECTOID.PCK
     corpseBattle:

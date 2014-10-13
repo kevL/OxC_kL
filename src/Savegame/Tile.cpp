@@ -335,8 +335,11 @@ int Tile::getTUCost(
 			return 0;
 		}
 
-		if (_objects[part]->getBigWall() >= 4)
+		if (part == MapData::O_OBJECT
+			&& _objects[part]->getBigWall() > 3)
+		{
 			return 0;
+		}
 
 		//int ret = _objects[part]->getTUCost(movementType);
 		//Log(LOG_INFO) << ". ret = " << ret;
@@ -411,7 +414,8 @@ int Tile::getFootstepSound(Tile* tileBelow) const
 		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
 
 	if (_objects[MapData::O_OBJECT]
-		&& _objects[MapData::O_OBJECT]->getBigWall() == 0)
+		&& _objects[MapData::O_OBJECT]->getBigWall() == 0
+		&& _objects[MapData::O_OBJECT]->getFootstepSound() > -1)
 	{
 		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
 	}

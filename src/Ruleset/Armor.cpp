@@ -41,7 +41,8 @@ Armor::Armor(const std::string& type)
 		_deathFrames(3),
 		_shootFrames(0), // kL
 		_constantAnimation(false),
-		_canHoldWeapon(false)
+		_canHoldWeapon(false),
+		_forcedTorso(TORSO_USE_GENDER)
 {
 	_stats.tu			= 0;
 	_stats.stamina		= 0;
@@ -126,6 +127,8 @@ void Armor::load(const YAML::Node& node)
 	_shootFrames = node["shootFrames"].as<int>(_shootFrames);
 	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
 
+	_forcedTorso = (ForcedTorso)node["forcedTorso"].as<int>(_forcedTorso);
+
 	if (_drawingRoutine == 0
 		|| _drawingRoutine == 1
 		|| _drawingRoutine == 4
@@ -133,8 +136,9 @@ void Armor::load(const YAML::Node& node)
 		|| _drawingRoutine == 10
 		|| _drawingRoutine == 13
 		|| _drawingRoutine == 14
-		|| _drawingRoutine == 16
-		|| _drawingRoutine == 17)
+		|| _drawingRoutine == 15
+		|| _drawingRoutine == 17
+		|| _drawingRoutine == 18)
 	{
 		_canHoldWeapon = true;
 	}
@@ -335,6 +339,15 @@ bool Armor::getConstantAnimation() const
 bool Armor::getCanHoldWeapon() const
 {
 	return _canHoldWeapon;
+}
+
+/**
+ * Checks if this armor ignores gender (power suit/flying suit).
+ * @return, the torso to force on the sprite
+ */
+ForcedTorso Armor::getForcedTorso()
+{
+	return _forcedTorso;
 }
 
 }

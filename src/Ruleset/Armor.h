@@ -32,6 +32,14 @@
 namespace OpenXcom
 {
 
+enum ForcedTorso
+{
+	TORSO_USE_GENDER,	// 0
+	TORSO_ALWAYS_MALE,	// 1
+	TORSO_ALWAYS_FEMALE	// 2
+};
+
+
 /**
  * Represents a specific type of armor.
  * Not only soldier armor, but also alien armor - some alien
@@ -71,6 +79,7 @@ private:
 
 	float _damageModifier[DAMAGE_TYPES];
 
+	ForcedTorso _forcedTorso;
 	MovementType _movementType;
 	UnitStats _stats;
 
@@ -144,6 +153,9 @@ private:
 
 		/// Gets if armor can hold weapon.
 		bool getCanHoldWeapon() const;
+
+		/// Checks if this armor ignores gender (power suit/flying suit).
+		ForcedTorso getForcedTorso();
 };
 
 }

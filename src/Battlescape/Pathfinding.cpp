@@ -1373,13 +1373,14 @@ BIGWALL_E_S		// 8
 		//Log(LOG_INFO) << ". part is Westwall";
 		if (tile->getMapData(MapData::O_OBJECT)
 			&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_WEST
+				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_W_N
 				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
 
 		Tile* tileWest = _save->getTile(tile->getPosition() + Position(-1, 0, 0));
-		if (!tileWest)
+		if (tileWest == NULL)
 			return true; // do not look outside of map
 
 		if (tileWest->getMapData(MapData::O_OBJECT)
@@ -1396,13 +1397,14 @@ BIGWALL_E_S		// 8
 		//Log(LOG_INFO) << ". part is Northwall";
 		if (tile->getMapData(MapData::O_OBJECT)
 			&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_NORTH
+				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_W_N
 				|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == BIGWALL_BLOCK)) // kL
 		{
 			return true; // blocking part
 		}
 
 		Tile* tileNorth = _save->getTile(tile->getPosition() + Position(0,-1, 0));
-		if (!tileNorth)
+		if (tileNorth == NULL)
 			return true; // do not look outside of map
 
 		if (tileNorth->getMapData(MapData::O_OBJECT)

@@ -43,7 +43,7 @@ MCDPatch::~MCDPatch()
 /**
  * Loads the MCD Patch from a YAML file.
  * TODO: fill this out with more data.
- * @param node YAML node.
+ * @param node - YAML node
  */
 void MCDPatch::load(const YAML::Node& node)
 {
@@ -122,6 +122,12 @@ void MCDPatch::load(const YAML::Node& node)
 			_fuels.push_back(std::make_pair(MCDIndex, fuel));
 		}
 
+		if ((*i)["footstepSound"])
+		{
+			int footstepSound = (*i)["footstepSound"].as<int>();
+			_footstepSounds.push_back(std::make_pair(MCDIndex, footstepSound));
+		}
+
 		if ((*i)["HEBlock"])
 		{
 			int HEBlock = (*i)["HEBlock"].as<int>();
@@ -132,6 +138,12 @@ void MCDPatch::load(const YAML::Node& node)
 		{
 			bool noFloor = (*i)["noFloor"].as<bool>();
 			_noFloors.push_back(std::make_pair(MCDIndex, noFloor));
+		}
+
+		if ((*i)["stopLOS"])
+		{
+			bool stopLOS = (*i)["stopLOS"].as<bool>();
+			_stopLOSses.push_back(std::make_pair(MCDIndex, stopLOS));
 		}
 
 		if ((*i)["LOFTS"])
@@ -239,6 +251,14 @@ void MCDPatch::modifyData(MapDataSet* dataSet) const
 	}
 
 	for (std::vector<std::pair<size_t, int> >::const_iterator
+			i = _footstepSounds.begin();
+			i != _footstepSounds.end();
+			++i)
+	{
+		dataSet->getObjects()->at(i->first)->setFootstepSound(i->second);
+	}
+
+	for (std::vector<std::pair<size_t, int> >::const_iterator
 			i = _HEBlocks.begin();
 			i != _HEBlocks.end();
 			++i)
@@ -252,6 +272,14 @@ void MCDPatch::modifyData(MapDataSet* dataSet) const
 			++i)
 	{
 		dataSet->getObjects()->at(i->first)->setNoFloor(i->second);
+	}
+
+	for (std::vector<std::pair<size_t, bool> >::const_iterator
+			i = _stopLOSses.begin();
+			i != _stopLOSses.end();
+			++i)
+	{
+		dataSet->getObjects()->at(i->first)->setStopLOS(i->second);
 	}
 
 	for (std::vector<std::pair<size_t, std::vector<int> > >::const_iterator

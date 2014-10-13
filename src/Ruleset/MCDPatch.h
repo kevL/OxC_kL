@@ -43,6 +43,7 @@ private:
 		_deathTiles,
 		_explosives,
 		_flammabilities,
+		_footstepSounds,
 		_fuels,
 		_HEBlocks,
 		_specialTypes,
@@ -50,7 +51,9 @@ private:
 		_TUWalks,
 		_TUFlys,
 		_TUSlides;
-	std::vector<std::pair<size_t, bool> > _noFloors;
+	std::vector<std::pair<size_t, bool> >
+		_noFloors,
+		_stopLOSses;
 	std::vector<std::pair<size_t, std::vector<int> > > _LOFTS;
 
 

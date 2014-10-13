@@ -275,7 +275,8 @@ void Country::newMonth(
 }
 
 /**
- * @return, if we will sign a new pact.
+ * Gets if this country has signed a brand new pact with aLiens.
+ * @return, true if this country will sign a new pact with aLiens
  */
 bool Country::getNewPact() const
 {
@@ -283,7 +284,7 @@ bool Country::getNewPact() const
 }
 
 /**
- * sign a new pact at month's end.
+ * Signs a pact with aLiens at month's end.
  */
 void Country::setNewPact()
 {
@@ -291,9 +292,10 @@ void Country::setNewPact()
 }
 
 /**
- * no setter for this one, as it gets set automatically
- * at month's end if _newPact is set.
- * @return, if we have signed a pact.
+ * Gets if this country already has a pact with aLiens.
+ * There is no setter for this one, since it gets set automatically at the end
+ * of the month if _newPact is true.
+ * @return, true if country has a pact with aLiens
  */
 bool Country::getPact() const
 {

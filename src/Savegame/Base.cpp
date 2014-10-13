@@ -1114,7 +1114,7 @@ int Base::getAllocatedEngineers() const
 
 /**
  * Returns the total defense value of all the facilities in the base.
- * @return, Defense value.
+ * @return, defense value
  */
 int Base::getDefenseValue() const
 {
@@ -1129,7 +1129,7 @@ int Base::getDefenseValue() const
 			total += (*i)->getRules()->getDefenseValue();
 	}
 
-	return total;
+	return total; // /8;
 }
 
 /**

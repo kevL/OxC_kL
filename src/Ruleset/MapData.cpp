@@ -27,7 +27,7 @@ namespace OpenXcom
 
 /**
  * Creates a new Map Data Object.
- * @param dataset The dataset this object belongs to.
+ * @param dataset - the dataset this object belongs to
  */
 MapData::MapData(MapDataSet* dataset)
 	:
@@ -80,7 +80,7 @@ const int MapData::O_OBJECT		= 3;
 
 /**
  * Gets the dataset this object belongs to.
- * @return, Pointer to MapDataSet.
+ * @return, pointer to MapDataSet
  */
 MapDataSet* MapData::getDataset() const
 {
@@ -89,8 +89,8 @@ MapDataSet* MapData::getDataset() const
 
 /**
  * Gets the sprite index.
- * @param frameID Animation frame 0-7.
- * @return, The original sprite index.
+ * @param frameID - animation frame 0-7
+ * @return, the original sprite index
  */
 int MapData::getSprite(int frameID) const
 {
@@ -99,8 +99,8 @@ int MapData::getSprite(int frameID) const
 
 /**
  * Sets the sprite index for a certain frame.
- * @param frameID Animation frame
- * @param value The sprite index in the surfaceset of the mapdataset.
+ * @param frameID	- animation frame
+ * @param value		- the sprite index in the surfaceset of the mapdataset
  */
 void MapData::setSprite(
 		int frameID,
@@ -111,7 +111,7 @@ void MapData::setSprite(
 
 /**
  * Gets whether this is an animated ufo door.
- * @return, True if this is an animated ufo door.
+ * @return, true if this is an animated ufo door
  */
 bool MapData::isUFODoor() const
 {
@@ -120,7 +120,7 @@ bool MapData::isUFODoor() const
 
 /**
  * kL. Gets whether this stops LoS.
- * @return, True if this stops LoS.
+ * @return, true if this stops LoS
  */
 bool MapData::stopLOS() const // kL
 {
@@ -129,7 +129,7 @@ bool MapData::stopLOS() const // kL
 
 /**
  * Gets whether this is a floor.
- * @return, True if this is a floor.
+ * @return, true if this is a floor
  */
 bool MapData::isNoFloor() const
 {
@@ -148,9 +148,9 @@ bool MapData::isNoFloor() const
  * 5: acts as a north wall
  * 6: acts as an east wall
  * 7: acts as a south wall
- * 8: acts as a south and east wall.
- * 9: acts as a north and west wall.
- * @return, An integer representing what kind of bigwall this is.
+ * 8: acts as a south and east wall
+ * 9: acts as a north and west wall
+ * @return, an integer representing what kind of bigwall this is
  */
 int MapData::getBigWall() const
 {
@@ -159,7 +159,7 @@ int MapData::getBigWall() const
 
 /**
  * Gets whether this is a normal door.
- * @return, True if this is a normal door.
+ * @return, true if this is a normal door
  */
 bool MapData::isDoor() const
 {
@@ -168,7 +168,7 @@ bool MapData::isDoor() const
 
 /**
  * Gets whether this is a grav lift.
- * @return, True if this is a grav lift.
+ * @return, true if this is a grav lift
  */
 bool MapData::isGravLift() const
 {
@@ -186,11 +186,12 @@ bool MapData::blockFire() const // kL
 
 /**
  * kL. Sets whether this stops LoS.
- * @return, true if this stops LoS
+ * @return, true if this stops LoS (default true)
  */
 void MapData::setStopLOS(bool stopLOS) // kL
 {
 	_stopLOS = stopLOS;
+	_block[1] = stopLOS? 100: 0;
 }
 
 /**
@@ -229,8 +230,8 @@ void MapData::setFlags(
 
 /**
  * Gets the amount of blockage of a certain type.
- * @param type Type.
- * @return, The blockage (0-255).
+ * @param type - ItemDamageType (RuleItem.h)
+ * @return, the blockage (0-255)
  */
 int MapData::getBlock(ItemDamageType type) const
 {
@@ -300,7 +301,7 @@ void MapData::setBlock(
 
 /**
  * Sets the amount of HE blockage.
- * @param HEBlock The high explosive blockage.
+ * @param HEBlock - the high explosive blockage
  */
 void MapData::setHEBlock(int HEBlock)
 {
@@ -309,7 +310,7 @@ void MapData::setHEBlock(int HEBlock)
 
 /**
  * Gets the Y offset for drawing.
- * @return, The height in pixels.
+ * @return, the height in pixels
  */
 int MapData::getYOffset() const
 {
@@ -318,7 +319,7 @@ int MapData::getYOffset() const
 
 /**
  * Sets the offset on the Y axis for drawing this object.
- * @param value The offset.
+ * @param value - the offset
  */
 void MapData::setYOffset(int value)
 {
@@ -327,7 +328,7 @@ void MapData::setYOffset(int value)
 
 /**
  * Gets the type of object.
- * @return, The object type (0-3).
+ * @return, the object type (0-3)
  */
 int MapData::getObjectType() const
 {
@@ -336,7 +337,7 @@ int MapData::getObjectType() const
 
 /**
  * Gets info about special tile types.
- * @return, The special tile type.
+ * @return, the special tile type
  */
 SpecialTileType MapData::getSpecialType() const
 {
@@ -345,8 +346,8 @@ SpecialTileType MapData::getSpecialType() const
 
 /**
  * Sets a special tile type and object type.
- * @param value Special tile type.
- * @param otype Object type.
+ * @param value - special tile type (MapData.h)
+ * @param otype - object type
  */
 void MapData::setSpecialType(
 		int value,
@@ -421,7 +422,7 @@ void MapData::setTerrainLevel(int value)
 
 /**
  * Gets the index to the footstep sound.
- * @return, The sound ID.
+ * @return, the sound ID
  */
 int MapData::getFootstepSound() const
 {
@@ -430,7 +431,7 @@ int MapData::getFootstepSound() const
 
 /**
  * Sets the index to the footstep sound.
- * @param value The sound ID.
+ * @param value - Tte sound ID
  */
 void MapData::setFootstepSound(int value)
 {
@@ -439,7 +440,7 @@ void MapData::setFootstepSound(int value)
 
 /**
  * Gets the alternative object ID.
- * @return, The alternative object ID.
+ * @return, the alternative object ID
  */
 int MapData::getAltMCD() const
 {
@@ -448,7 +449,7 @@ int MapData::getAltMCD() const
 
 /**
  * Sets the alternative object ID.
- * @param value The alternative object ID.
+ * @param value - The alternative object ID
  */
 void MapData::setAltMCD(int value)
 {
@@ -457,7 +458,7 @@ void MapData::setAltMCD(int value)
 
 /**
  * Gets the dead object ID.
- * @return, The dead object ID.
+ * @return, the dead object ID
  */
 int MapData::getDieMCD() const
 {
@@ -466,7 +467,7 @@ int MapData::getDieMCD() const
 
 /**
  * Sets the dead object ID.
- * @param value The dead object ID.
+ * @param value - the dead object ID
  */
 void MapData::setDieMCD(int value)
 {
@@ -475,7 +476,7 @@ void MapData::setDieMCD(int value)
 
 /**
  * Gets the amount of light the object is emitting.
- * @return, The amount of light emitted.
+ * @return, the amount of light emitted
  */
 int MapData::getLightSource() const
 {
@@ -487,7 +488,7 @@ int MapData::getLightSource() const
 
 /**
  * Sets the amount of light the object is emitting.
- * @param value The amount of light emitted.
+ * @param value - the amount of light emitted
  */
 void MapData::setLightSource(int value)
 {
@@ -495,9 +496,8 @@ void MapData::setLightSource(int value)
 }
 
 /**
- * Gets the amount of armor.
- * Total hitpoints of a tile before destroyed.
- * @return, The amount of armor.
+ * Gets the amount of armor. Total hitpoints of a tile before destroyed.
+ * @return, the amount of armor
  */
 int MapData::getArmor() const
 {
@@ -505,9 +505,8 @@ int MapData::getArmor() const
 }
 
 /**
- * Sets the amount of armor.
- * Total hitpoints of a tile before destroyed.
- * @param value The amount of armor.
+ * Sets the amount of armor. Total hitpoints of a tile before destroyed.
+ * @param value - the amount of armor
  */
 void MapData::setArmor(int value)
 {
@@ -516,7 +515,7 @@ void MapData::setArmor(int value)
 
 /**
  * Gets the amount of flammable (how flammable this object is).
- * @return, The amount of flammable.
+ * @return, the amount of flammable
  */
 int MapData::getFlammable() const
 {
@@ -525,7 +524,7 @@ int MapData::getFlammable() const
 
 /**
  * Sets the amount of flammable (how flammable this object is).
- * @param value The amount of flammable.
+ * @param value - the amount of flammable
  */
 void MapData::setFlammable(int value)
 {
@@ -534,7 +533,7 @@ void MapData::setFlammable(int value)
 
 /**
  * Gets the amount of fuel.
- * @return, The amount of fuel.
+ * @return, the amount of fuel
  */
 int MapData::getFuel() const
 {
@@ -543,7 +542,7 @@ int MapData::getFuel() const
 
 /**
  * Sets the amount of fuel.
- * @param value The amount of fuel.
+ * @param value - the amount of fuel
  */
 void MapData::setFuel(int value)
 {
@@ -552,8 +551,8 @@ void MapData::setFuel(int value)
 
 /**
  * Gets the loft index for a certain layer.
- * @param layer The layer.
- * @return, The loft index.
+ * @param layer - the layer
+ * @return, the LOFT index
  */
 int MapData::getLoftID(int layer) const
 {
@@ -562,8 +561,8 @@ int MapData::getLoftID(int layer) const
 
 /**
  * Sets the loft index for a certain layer.
- * @param loft The loft index.
- * @param layer The layer.
+ * @param loft	- the LOFT index
+ * @param layer	- the layer
  */
 void MapData::setLoftID(
 		int loft,
@@ -574,7 +573,7 @@ void MapData::setLoftID(
 
 /**
  * Gets the amount of explosive.
- * @return, The amount of explosive.
+ * @return, the amount of explosive
  */
 int MapData::getExplosive() const
 {
@@ -583,7 +582,7 @@ int MapData::getExplosive() const
 
 /**
  * Sets the amount of explosive.
- * @param value The amount of explosive.
+ * @param value - the amount of explosive
  */
 void MapData::setExplosive(int value)
 {
@@ -592,7 +591,7 @@ void MapData::setExplosive(int value)
 
 /**
  * Sets the SCANG.DAT index for minimap.
- * @param i The minimap index.
+ * @param i - the minimap index
  */
 void MapData::setMiniMapIndex(unsigned short i)
 {
@@ -601,7 +600,7 @@ void MapData::setMiniMapIndex(unsigned short i)
 
 /**
  * Gets the SCANG.DAT index for minimap.
- * @return, The minimap index.
+ * @return, the minimap index
  */
 unsigned short MapData::getMiniMapIndex() const
 {
@@ -610,7 +609,7 @@ unsigned short MapData::getMiniMapIndex() const
 
 /**
  * Sets the bigWall value.
- * @param bigWall The new bigWall value.
+ * @param bigWall - the new bigWall value
  */
 void MapData::setBigWall(const int bigWall)
 {
@@ -619,7 +618,7 @@ void MapData::setBigWall(const int bigWall)
 
 /**
  * Sets the TUWalk value.
- * @param TUWalk The new TUWalk value.
+ * @param TUWalk - the new TUWalk value
  */
 void MapData::setTUWalk(const int TUWalk)
 {
@@ -628,7 +627,7 @@ void MapData::setTUWalk(const int TUWalk)
 
 /**
  * Sets the TUFly value.
- * @param TUFly The new TUFly value.
+ * @param TUFly - the new TUFly value
  */
 void MapData::setTUFly(const int TUFly)
 {
@@ -637,7 +636,7 @@ void MapData::setTUFly(const int TUFly)
 
 /**
  * Sets the TUSlide value.
- * @param TUSlide The new TUSlide value.
+ * @param TUSlide - the new TUSlide value
  */
 void MapData::setTUSlide(const int TUSlide)
 {
@@ -661,5 +660,15 @@ bool MapData::isBaseModule()
 {
 	return _baseModule;
 }
+
+/**
+ * Set the "stopLOS" flag.
+ * @param stopLOS - true to stop LoS
+ */
+/* void MapData::setStopLOS(bool stopLOS)
+{
+	_stopLOS = stopLOS;
+	_block[1] = stopLOS ? 255 : 0;
+} */
 
 }
