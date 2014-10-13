@@ -110,13 +110,13 @@ struct BattleUnitKills
 	UnitStatus status;
 
 
-	/// Make turn unique across all kills
+	/// Makes turn unique across all kills.
 	int makeTurnUnique()
 	{
-		return turn += mission * 300; // Maintains divisibility by 3 as well
+		return turn += mission * 300; // Maintains divisibility by 3 as well.
 	}
 
-	/// Check to see if turn was on HOSTILE side
+	/// Checks to see if turn was on HOSTILE side.
 	bool hostileTurn()
 	{
 		if ((turn - 1) %3 == 0)
@@ -154,7 +154,7 @@ struct BattleUnitKills
 		return node;
 	}
 
-	/// Convert victim State to string
+	/// Converts victim Status to string.
 	std::string getUnitStatusString() const
 	{
 		switch (status)
@@ -166,7 +166,7 @@ struct BattleUnitKills
 		}
 	}
 
-	/// Convert victim Faction to string
+	/// Converts victim Faction to string.
 	std::string getUnitFactionString() const
 	{
 		switch (faction)
@@ -222,6 +222,7 @@ struct BattleUnitStatistics
 		ironMan,							// Tracks if the soldier was the only soldier on the mission
 		KIA,								// Tracks if the soldier was killed in battle
 		loneSurvivor,						// Tracks if the soldier was the only survivor
+		nikeCross,							// Tracks if a soldier killed every alien
 		wasUnconscious;						// Tracks if the soldier fell unconscious
 
 	int
@@ -238,7 +239,7 @@ struct BattleUnitStatistics
 	std::vector<BattleUnitKills*> kills;	// Tracks kills
 
 
-	/// Friendly fire check
+	/// Checks if unit has fired on a friendly.
 	bool hasFriendlyFired()
 	{
 		for (std::vector<BattleUnitKills*>::const_iterator
@@ -278,6 +279,7 @@ struct BattleUnitStatistics
 		lowAccuracyHitCounter	= node["lowAccuracyHitCounter"]	.as<int>(lowAccuracyHitCounter);
 		shotsFiredCounter		= node["shotsFiredCounter"]		.as<int>(shotsFiredCounter);
 		shotsLandedCounter		= node["shotsLandedCounter"]	.as<int>(shotsLandedCounter);
+		nikeCross				= node["nikeCross"]				.as<bool>(nikeCross);
 	}
 
 	///
@@ -307,6 +309,8 @@ struct BattleUnitStatistics
 		node["lowAccuracyHitCounter"]	= lowAccuracyHitCounter;
 		node["shotsFiredCounter"]		= shotsFiredCounter;
 		node["shotsLandedCounter"]		= shotsLandedCounter;
+		if (nikeCross)
+			node["nikeCross"]			= nikeCross;
 
 		return node;
 	}
@@ -332,7 +336,8 @@ struct BattleUnitStatistics
 			lowAccuracyHitCounter(0),
 			shotsFiredCounter(0),
 			shotsLandedCounter(0),
-			KIA(false)
+			KIA(false),
+			nikeCross(false)
 	{
 	}
 

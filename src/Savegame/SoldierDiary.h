@@ -117,7 +117,10 @@ private:
 		_reactionFireTotal,
 		_timesWoundedTotal,
 		_valiantCruxTotal,
-		_KIA;
+		_KIA,
+		_trapKillTotal,
+		_alienBaseAssaultTotal,
+		_allAliensKilledTotal;
 
 	std::vector<int> _missionIdList;
 	std::vector<SoldierCommendations*> _commendations;
@@ -157,7 +160,8 @@ private:
 		/// Update the diary statistics.
 		void updateDiary(
 				BattleUnitStatistics* unitStatistics,
-				MissionStatistics* missionStatistics);
+				MissionStatistics* missionStatistics,
+				Ruleset* rules);
 
 		/// Get the list of kills, mapped by rank.
 		std::map<std::string, int> getAlienRankTotal();
@@ -168,13 +172,13 @@ private:
 		/// Get the list of kills, mapped by weapon ammo used.
 		std::map<std::string, int> getWeaponAmmoTotal();
 		/// Get the list of missions, mapped by region.
-		std::map<std::string, int> &getRegionTotal();
+		std::map<std::string, int>& getRegionTotal();
 		/// Get the list of missions, mapped by country.
-		std::map<std::string, int> &getCountryTotal();
+		std::map<std::string, int>& getCountryTotal();
 		/// Get the list of missions, mapped by type.
-		std::map<std::string, int> &getTypeTotal();
+		std::map<std::string, int>& getTypeTotal();
 		/// Get the list of missions, mapped by UFO.
-		std::map<std::string, int> &getUFOTotal();
+		std::map<std::string, int>& getUFOTotal();
 
 		/// Get the total score.
 		int getScoreTotal() const;

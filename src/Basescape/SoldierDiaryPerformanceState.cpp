@@ -364,7 +364,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_txtMedalInfo->setColor(Palette::blockOffset(13)+10);
 	_txtMedalInfo->setWordWrap();
 
-	init(); // Populate the list
+//	init(); // Populate the list
 	//Log(LOG_INFO) << "Create SoldierDiaryPerformanceState EXIT";
 }
 
@@ -472,7 +472,6 @@ void SoldierDiaryPerformanceState::init()
 		if (_listDead->empty())
 		{
 			_game->popState();
-
 			return;
 		}
 
@@ -502,7 +501,6 @@ void SoldierDiaryPerformanceState::init()
 		if (_list->empty())
 		{
 			_game->popState();
-
 			return;
 		}
 
@@ -722,7 +720,7 @@ void SoldierDiaryPerformanceState::init()
  */
 void SoldierDiaryPerformanceState::drawSprites()
 {
-	if (!_displayAwards)
+	if (_displayAwards == false)
 		return;
 
 	for (int // clear sprites

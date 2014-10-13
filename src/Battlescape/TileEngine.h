@@ -50,11 +50,12 @@ class TileEngine
 {
 
 private:
-	static const int MAX_VIEW_DISTANCE			= 20;
-	static const int MAX_VOXEL_VIEW_DISTANCE	= MAX_VIEW_DISTANCE * 16;
-	static const int MAX_SHADE_TO_SEE_UNITS		= 8; // was 9
+	static const int
+		MAX_VIEW_DISTANCE		= 20,
+		MAX_VOXEL_VIEW_DISTANCE	= 20 * 16,
+		MAX_SHADE_TO_SEE_UNITS	= 8, // was 9
 
-	static const int heightFromCenter[11];
+		heightFromCenter[11];
 
 	bool _personalLighting;
 	int

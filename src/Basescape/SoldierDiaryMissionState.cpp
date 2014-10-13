@@ -191,7 +191,7 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 
 	_txtDaylight->setColor(Palette::blockOffset(13)+5);
 	_txtDaylight->setSecondaryColor(Palette::blockOffset(13));
-	if (missionStatistics->at(missionId)->daylight < 6)
+	if (missionStatistics->at(missionId)->shade < 9)
 		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_DAY")));
 	else
 		_txtDaylight->setText(tr("STR_DAYLIGHT_TYPE").arg(tr("STR_NIGHT")));
@@ -229,19 +229,16 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 				continue;
 
 			std::wstringstream
-				wssRank,
 				wssRace,
+				wssRank,
 				wssWeapon,
-				wssAmmo;
+				wssUnit,
+				wssStatus;
+//				wssAmmo;
 
 			wssRace << tr((*j)->race.c_str());
 			wssRank << tr((*j)->rank.c_str());
 			wssWeapon << tr((*j)->weapon.c_str());
-
-			std::wstringstream
-				wssUnit,
-				wssStatus;
-
 			wssUnit << wssRace.str().c_str() << " " << wssRank.str().c_str();
 
 			if ((*j)->getUnitStatusString() == "STATUS_DEAD")
@@ -278,19 +275,16 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 				continue;
 
 			std::wstringstream
-				wssRank,
 				wssRace,
+				wssRank,
 				wssWeapon,
-				wssAmmo;
+				wssUnit,
+				wssStatus;
+//				wssAmmo;
 
 			wssRace << tr((*j)->race.c_str());
 			wssRank << tr((*j)->rank.c_str());
 			wssWeapon << tr((*j)->weapon.c_str());
-
-			std::wstringstream
-				wssUnit,
-				wssStatus;
-
 			wssUnit << wssRace.str().c_str() << " " << wssRank.str().c_str();
 
 			if ((*j)->getUnitStatusString() == "STATUS_DEAD")

@@ -212,7 +212,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 					(ActionHandler)& SoldierDiaryOverviewState::btnOkClick,
 					Options::keyCancel);
 
-	init(); // Populate the list
+//	init(); // Populate the list
 }
 
 /**
@@ -235,7 +235,6 @@ void SoldierDiaryOverviewState::init()
 		if (_listDead->empty())
 		{
 			_game->popState();
-
 			return;
 		}
 
@@ -250,7 +249,6 @@ void SoldierDiaryOverviewState::init()
 		if (_list->empty())
 		{
 			_game->popState();
-
 			return;
 		}
 
@@ -287,7 +285,6 @@ void SoldierDiaryOverviewState::init()
 					if (missionId == *k)
 					{
 						wasOnMission = true;
-
 						break;
 					}
 				}
@@ -303,13 +300,12 @@ void SoldierDiaryOverviewState::init()
 				if (missionId == *k)
 				{
 					wasOnMission = true;
-
 					break;
 				}
 			}
 		}
 
-		if (!wasOnMission)
+		if (wasOnMission == false)
 			continue;
 
 		// See if this mission is part of the soldier's vector of missions

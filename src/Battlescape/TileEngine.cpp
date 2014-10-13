@@ -782,9 +782,9 @@ void TileEngine::recalculateFOV()
 
 /**
  * Checks for an opposing unit on a tile.
- * @param unit, The watcher.
- * @param tile, The tile to check for
- * @return, True if visible.
+ * @param unit - the watcher
+ * @param tile - the tile to check for
+ * @return, true if visible
  */
 bool TileEngine::visible(
 		BattleUnit* unit,
@@ -793,8 +793,8 @@ bool TileEngine::visible(
 	//Log(LOG_INFO) << "TileEngine::visible() spotterID = " << unit->getId();
 
 	// if there is no tile or no unit, we can't see it
-	if (!tile
-		|| !tile->getUnit())
+	if (tile == NULL
+		|| tile->getUnit() == NULL)
 	{
 		return false;
 	}
@@ -879,7 +879,7 @@ bool TileEngine::visible(
 		//Log(LOG_INFO) << ". . . dist = " << dist;
 		//Log(LOG_INFO) << ". . . factor = " << factor;
 
-		Tile* t = _battleSave->getTile(unit->getPosition()); // origin tile
+		Tile* test = _battleSave->getTile(unit->getPosition()); // origin tile
 
 //		for (uint16_t
 		for (size_t
@@ -888,29 +888,28 @@ bool TileEngine::visible(
 				i++)
 		{
 			//Log(LOG_INFO) << ". . . . . . tracing Trajectory...";
-			if (t != _battleSave->getTile(Position(
-										_trajectory.at(i).x / 16,
-										_trajectory.at(i).y / 16,
-										_trajectory.at(i).z / 24)))
+			if (test != _battleSave->getTile(Position(
+												_trajectory.at(i).x / 16,
+												_trajectory.at(i).y / 16,
+												_trajectory.at(i).z / 24)))
 			{
-				t = _battleSave->getTile(Position(
-										_trajectory.at(i).x / 16,
-										_trajectory.at(i).y / 16,
-										_trajectory.at(i).z / 24));
+				test = _battleSave->getTile(Position(
+												_trajectory.at(i).x / 16,
+												_trajectory.at(i).y / 16,
+												_trajectory.at(i).z / 24));
 			}
 
 			// the 'origin tile' now steps along through voxel/tile-space, picking up extra
 			// weight (subtracting distance for both distance and obscuration) as it goes
-			effDist += static_cast<float>(t->getSmoke()) * factor / 3.f;
+			effDist += static_cast<float>(test->getSmoke()) * factor / 3.f;
 			//Log(LOG_INFO) << ". . . . . . . . -smoke : " << effDist;
-			effDist += static_cast<float>(t->getFire()) * factor / 2.f;
+			effDist += static_cast<float>(test->getFire()) * factor / 2.f;
 			//Log(LOG_INFO) << ". . . . . . . . -fire : " << effDist;
 
 			if (effDist > static_cast<float>(MAX_VOXEL_VIEW_DISTANCE))
 			{
 				//Log(LOG_INFO) << ". . . . Distance is too far. ret FALSE - effDist = " << (int)effDist / 16;
 				unitIsSeen = false;
-
 				break;
 			}
 			//else Log(LOG_INFO) << ". . . . unit is Seen, effDist = " << (int)effDist / 16;
@@ -922,10 +921,10 @@ bool TileEngine::visible(
 		if (unitIsSeen)
 		{
 			// have to check if targetUnit is poking its head up from tileBelow
-			Tile* tBelow = _battleSave->getTile(t->getPosition() + Position(0, 0, -1));
+			Tile* tBelow = _battleSave->getTile(test->getPosition() + Position(0, 0, -1));
 			if (!
-				(t->getUnit() == targetUnit
-					|| (tBelow // could add a check for && t->hasNoFloor() around here.
+				(test->getUnit() == targetUnit
+					|| (tBelow // could add a check for && test->hasNoFloor() around here.
 						&& tBelow->getUnit()
 						&& tBelow->getUnit() == targetUnit)))
 			{

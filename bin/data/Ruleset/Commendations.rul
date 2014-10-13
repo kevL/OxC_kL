@@ -8,7 +8,7 @@ extraSprites:
     width: 31
     height: 8
     files:
-      0: Resources/CommendationDecorations/
+      0: Resources/Commendations/Decorations/
 extraStrings:
   - type: en-US
     strings:
@@ -84,6 +84,12 @@ extraStrings:
       STR_MEDAL_VALIANT_CRUX_DESCRIPTION: "Given to a soldier who protected all civilians during a terror mission."
       STR_MEDAL_FALLEN_NAME: "Order of the Fallen"
       STR_MEDAL_FALLEN_DESCRIPTION: "Given to a soldier to honor their death and their commitment to the defense of Earth."
+      STR_MEDAL_TRAP_NAME: "Prowler Cross"
+      STR_MEDAL_TRAP_DESCRIPTION: "Given to a soldier for exploiting guerrilla tactics."
+      STR_MEDAL_ALIEN_BASE_ASSAULT_NAME: "Terran Cross"
+      STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION: "Given to a soldier who has been part of a successful alien base assault mission."
+      STR_MEDAL_NIKE_CROSS_NAME: "Nike Cross"
+      STR_MEDAL_NIKE_CROSS_DESCRIPTION: "Given to a soldier who single handedly killed every alien in a mission."
       STR_AWARD_0: "1st"
       STR_AWARD_1: "2nd"
       STR_AWARD_2: "3rd"
@@ -172,6 +178,7 @@ extraStrings:
 #   totalReactionFire
 #   totalTimesWounded
 #   totalValientCrux
+#   totalTrapKills
 #   isDead
 # The following criteria use a hardcoded noun for the name/description.
 # They are INCOMPATIBLE with eachother. If used together,
@@ -184,7 +191,9 @@ extraStrings:
 # To use, you must define a killCriteria.
 # The killCriteria can list any race, rank, weapon, ammo, 
 # or one of these statuses: STATUS_DEAD and STATUS_UNCONSCIOUS,
-# or one of these faction   s: FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_PLAYER
+# or one of these factions: FACTION_HOSTILE, FACTION_NEUTRAL, FACTION_PLAYER
+# or one of these battle types: BT_FIREARM, BT_AMMO, BT_MELEE, BT_GRENADE, BT_PROXIMITYGRENADE, BT_MEDIKIT, BT_SCANNER, BT_MINDPROBE, BT_PSIAMP, BT_FLARE, BT_CORPSE
+# or one of these damage types: DT_AP, DT_IN, DT_HE, DT_LASER, DT_PLASMA, DT_STUN, DT_MELEE, DT_ACID, DT_SMOKE
 # Use the strings from the ruleset to define them (mods can be used too). 
 # For example, look at "STR_MEDAL_BOLTS_CROSS_NAME". It is awarded if a soldier
 # stuns one hostile commander or stuns one hostile leader.
@@ -192,7 +201,7 @@ extraStrings:
 #   killsWithCriteriaMission
 #   killsWithCriteriaTurn
 # It is possible to reduce the amount of awards a commendation gets, but still reaching
-# the triple gold star decoration. To do this, repeat the numbres in the criteria vector.
+# the triple gold star decoration. To do this, repeat the numbers in the criteria vector.
 # For example, [5, 10, 20, 20, 20, 20, 40, 40, 40, 40] will have one award for 5, will have a 
 # second award for 10 (bronze star), will have a third award for 20 (2 silver stars) and 
 # will have a fourth award for 40 (3 gold stars). 
@@ -201,7 +210,7 @@ commendations:
     description: STR_MEDAL_MERIT_STAR_DESCRIPTION
     sprite: 0
     criteria:
-      killsWithCriteriaCareer: [5, 10, 15, 20, 30, 40, 50, 65, 80, 100]
+      killsWithCriteriaCareer: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
     killCriteria:
       -
         1: ["STATUS_DEAD", "FACTION_HOSTILE"]
@@ -209,12 +218,12 @@ commendations:
     description: STR_MEDAL_MILITARY_CROSS_DESCRIPTION
     sprite: 1
     criteria:
-      totalMissions: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
+      totalMissions: [4, 8, 12, 16, 20, 25, 30, 35, 40, 50]
   - type: STR_MEDAL_ORDER_OF_RESTRAINT_NAME
     description: STR_MEDAL_ORDER_OF_RESTRAINT_DESCRIPTION
     sprite: 2
     criteria:
-      killsWithCriteriaCareer: [3, 5, 10, 15, 20, 25, 30, 35, 40, 50]
+      killsWithCriteriaCareer: [4, 8, 12, 12, 12, 12, 16, 16, 16, 16]
     killCriteria:
       -
         1: ["FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
@@ -222,12 +231,12 @@ commendations:
     description: STR_MEDAL_DEFENDER_MEDAL_DESCRIPTION
     sprite: 3
     criteria:
-      totalBaseDefenseMissions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      totalBaseDefenseMissions: [1, 1, 1, 1, 1, 1, 1, 1, 2, 3]
   - type: STR_MEDAL_LONGEST_NIGHT_NAME
     description: STR_MEDAL_LONGEST_NIGHT_DESCRIPTION
     sprite: 4
     criteria:
-      totalNightTerrorMissions: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      totalNightTerrorMissions: [1, 2, 3, 3, 3, 3, 4, 4, 4, 4]
   - type: STR_MEDAL_HONOR_CROSS_NAME
     description: STR_MEDAL_HONOR_CROSS_DESCRIPTION
     sprite: 5
@@ -242,35 +251,35 @@ commendations:
     description: STR_MEDAL_WEAPON_PROFICIENCY_DESCRIPTION
     sprite: 7
     criteria:
-      totalKillsWithAWeapon: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+      totalKillsWithAWeapon: [10, 10, 20, 20, 20, 20, 30, 30, 30, 30]
   - type: STR_MEDAL_CAMPAIGN_RIBBON_NAME
     description: STR_MEDAL_CAMPAIGN_RIBBON_DESCRIPTION
     sprite: 8
     criteria:
-      totalMissionsInARegion: [5, 10, 15, 20, 25, 30, 35, 40, 45, 50]
+      totalMissionsInARegion: [10, 10, 20, 20, 20, 20, 30, 30, 30, 30]
   - type: STR_MEDAL_XENOCIDE_MEDAL_NAME
     description: STR_MEDAL_XENOCIDE_MEDAL_DESCRIPTION
     sprite: 9
     criteria:
-      totalKillsByRace: [10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+      totalKillsByRace: [10, 10, 20, 20, 20, 20, 30, 30, 30, 30]
   - type: STR_MEDAL_MEDAL_OF_HEROISM_NAME
     description: STR_MEDAL_MEDAL_OF_HEROISM_DESCRIPTION
     sprite: 10
     criteria:
-      totalFellUnconcious: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      totalFellUnconcious: [2, 4, 6, 6, 6, 6, 8, 8, 8, 8]
   - type: STR_MEDAL_HELLRAISER_MEDAL_NAME
     description: STR_MEDAL_HELLRAISER_MEDAL_DESCRIPTION
     sprite: 11
     criteria:
-      killsWithCriteriaCareer: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+      killsWithCriteriaCareer: [5, 10, 15, 15, 15, 15, 20, 20, 20, 20]
     killCriteria:
       -
-        1: ["STR_INCENDIARY_ROCKET", "FACTION_HOSTILE"]
+        1: ["DT_IN", "FACTION_HOSTILE", "STATUS_DEAD"]
   - type: STR_MEDAL_DISTINGUISHED_SERVICE_NAME
     description: STR_MEDAL_DISTINGUISHED_SERVICE_DESCRIPTION
     sprite: 12
     criteria:
-      killsWithCriteriaCareer: [1, 5, 10, 15, 20, 25, 30, 35, 40, 50]
+      killsWithCriteriaCareer: [1, 5, 10, 10, 10, 10, 15, 15, 15, 15]
     killCriteria:
       -
         1: ["STR_SECTOID", "STR_LIVE_SOLDIER", "FACTION_HOSTILE", "STATUS_DEAD"]
@@ -282,7 +291,7 @@ commendations:
     description: STR_MEDAL_BOLTS_CROSS_DESCRIPTION
     sprite: 13
     criteria:
-      killsWithCriteriaCareer: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      killsWithCriteriaCareer: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
     killCriteria:
       -
         1: ["STR_LIVE_COMMANDER", "FACTION_HOSTILE", "STATUS_UNCONSCIOUS"]
@@ -292,41 +301,37 @@ commendations:
     description: STR_MEDAL_GRENADIERS_MEDAL_DESCRIPTION
     sprite: 14
     criteria:
-      killsWithCriteriaTurn: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      killsWithCriteriaTurn: [1, 2, 3, 3, 3, 3, 4, 4, 4, 4]
     killCriteria:
       -
-        3: ["FACTION_HOSTILE", "STATUS_DEAD", "STR_GRENADE"]
+        3: ["FACTION_HOSTILE", "STATUS_DEAD", "BT_GRENADE"]
       -
-        3: ["FACTION_HOSTILE", "STATUS_DEAD", "STR_PROXIMITY_GRENADE"]
-      -
-        3: ["FACTION_HOSTILE", "STATUS_DEAD", "STR_ALIEN_GRENADE"]
-      -
-        3: ["FACTION_HOSTILE", "STATUS_DEAD", "STR_HIGH_EXPLOSIVE"]
+        3: ["FACTION_HOSTILE", "STATUS_DEAD", "BT_PROXIMITYGRENADE"]
   - type: STR_MEDAL_STAR_OF_ASCLEPIUS_NAME
     description: STR_MEDAL_STAR_OF_ASCLEPIUS_DESCRIPTION
     sprite: 15
     criteria:
-      totalShotAt10Times: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      totalShotAt10Times: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
   - type: STR_MEDAL_MAN_OF_STEEL_NAME
     description: STR_MEDAL_MAN_OF_STEEL_DESCRIPTION
     sprite: 16
     criteria: 
-      totalHit5Times: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      totalHit5Times: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
   - type: STR_MEDAL_BLACK_CROSS_NAME
     description: STR_MEDAL_BLACK_CROSS_DESCRIPTION
     sprite: 17
     criteria:
-      totalFriendlyFired: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      totalFriendlyFired: [1, 2, 3, 3, 3, 3, 4, 4, 4, 4]
   - type: STR_MEDAL_STAR_OF_VALOR_NAME
     description: STR_MEDAL_STAR_OF_VALOR_DESCRIPTION
     sprite: 18
     criteria:
-      total_lone_survivor: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      total_lone_survivor: [1, 1, 1, 1, 1, 1, 1, 1]
   - type: STR_MEDAL_IRON_MAN_NAME
     description: STR_MEDAL_IRON_MAN_DESCRIPTION
     sprite: 19
     criteria:
-      totalIronMan: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      totalIronMan: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
   - type: STR_MEDAL_ORDER_OF_EARTH_NAME
     description: STR_MEDAL_ORDER_OF_EARTH_DESCRIPTION
     sprite: 20
@@ -336,17 +341,17 @@ commendations:
     description: STR_MEDAL_SNIPER_TMPDESCRIPTION
     sprite: 21
     criteria:
-      totalLongDistanceHits: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+      totalLongDistanceHits: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
   - type: STR_MEDAL_LUCKYSHOT_TMPNAME
     description: STR_MEDAL_LUCKYSHOT_TMPDESCRIPTION
     sprite: 22
     criteria:
-      totalLowAccuracyHits: [3, 6, 9, 12, 15, 18, 21, 24, 27, 30]
+      totalLowAccuracyHits: [3, 6, 9, 9, 9, 9, 12, 12, 12, 12]
   - type: STR_MEDAL_DBLKILL_TMPNAME
     description: STR_MEDAL_DBLKILL_TMPDESCRIPTION
     sprite: 23
     criteria:
-      killsWithCriteriaTurn: [1, 2, 3, 4, 5, 7, 9, 11, 15, 20]
+      killsWithCriteriaTurn: [1, 2, 3, 3, 3, 3, 4, 4, 4, 4]
     killCriteria:
       -
         2: ["STATUS_DEAD", "FACTION_HOSTILE"]
@@ -354,12 +359,12 @@ commendations:
     description: STR_MEDAL_REACTIONFIRE_TMPDESCRIPTION
     sprite: 24
     criteria:
-      totalReactionFire: [1, 3, 5, 7, 9, 12, 15, 18, 21, 25]
+      totalReactionFire: [2, 4, 6, 6, 6, 6, 8, 8, 8, 8]
   - type: STR_MEDAL_PURPLE_HEART_NAME
     description: STR_MEDAL_PURPLE_HEART_DESCRIPTION
     sprite: 25
     criteria:
-      totalTimesWounded: [1, 3, 5, 7, 9, 12, 15, 18, 21, 25]
+      totalTimesWounded: [1]
   - type: STR_MEDAL_CRIMSON_HEART_NAME
     description: STR_MEDAL_CRIMSON_HEART_DESCRIPTION
     sprite: 26
@@ -369,7 +374,7 @@ commendations:
     description: STR_MEDAL_ORDER_OF_GLORY_DESCRIPTION
     sprite: 27
     criteria:
-      killsWithCriteriaMission: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      killsWithCriteriaMission: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]
     killCriteria:
       -
         7: ["STATUS_DEAD", "FACTION_HOSTILE"]
@@ -377,9 +382,24 @@ commendations:
     description: STR_MEDAL_VALIANT_CRUX_DESCRIPTION
     sprite: 28
     criteria:
-      totalValientCrux: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      totalValientCrux: [1, 2, 3, 3, 3, 3, 4, 4, 4, 4]
   - type: STR_MEDAL_FALLEN_NAME
     description: STR_MEDAL_FALLEN_DESCRIPTION
     sprite: 29
     criteria:
       isDead: [1]
+  - type: STR_MEDAL_TRAP_NAME
+    description: STR_MEDAL_TRAP_DESCRIPTION
+    sprite: 30
+    criteria:
+      totalTrapKills: [1, 3, 5, 5, 5, 5, 8, 8, 8, 8]
+  - type: STR_MEDAL_ALIEN_BASE_ASSAULT_NAME
+    description: STR_MEDAL_ALIEN_BASE_ASSAULT_DESCRIPTION
+    sprite: 31
+    criteria:
+      totalAlienBaseAssaults: [1, 1, 1, 1, 1, 1, 1, 1, 2, 3]
+  - type: STR_MEDAL_NIKE_CROSS_NAME
+    description: STR_MEDAL_NIKE_CROSS_DESCRIPTION
+    sprite: 32
+    criteria:
+      totalAllAliensKilled: [1, 1, 2, 2, 2, 2, 3, 3, 3, 3]

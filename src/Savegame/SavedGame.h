@@ -93,7 +93,7 @@ struct MissionStatistics
 		valiantCrux;
 
 	int
-		daylight,
+		shade,
 		id,
 		score;
 
@@ -135,7 +135,7 @@ struct MissionStatistics
 		score		= node["score"].as<int>(score);
 		rating		= node["rating"].as<std::string>(rating);
 		alienRace	= node["alienRace"].as<std::string>(alienRace);
-		daylight	= node["daylight"].as<int>(daylight);
+		shade		= node["shade"].as<int>(shade);
 		injuryList	= node["injuryList"].as<std::map<int, int> >(injuryList);
 		valiantCrux	= node["valiantCrux"].as<bool>(valiantCrux);
 	}
@@ -155,7 +155,7 @@ struct MissionStatistics
 		node["score"]		= score;
 		node["rating"]		= rating;
 		node["alienRace"]	= alienRace;
-		node["daylight"]	= daylight;
+		node["shade"]		= shade;
 		node["injuryList"]	= injuryList;
 
 		if (valiantCrux)
@@ -185,7 +185,7 @@ struct MissionStatistics
 			score(0),
 			rating(""),
 			alienRace("STR_UNKNOWN"),
-			daylight(0),
+			shade(0),
 			injuryList(),
 			valiantCrux(false)
 	{

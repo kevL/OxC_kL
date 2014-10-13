@@ -219,7 +219,8 @@ DebriefingState::DebriefingState()
 		stats_dy		= 0,
 		recovery_dy		= 0,
 		civiliansSaved	= 0,
-		civiliansDead	= 0;
+		civiliansDead	= 0,
+		aliensKilled	= 0;
 
 	//Log(LOG_INFO) << ". iterate _stats";
 	for (std::vector<DebriefingStat*>::iterator
@@ -268,11 +269,15 @@ DebriefingState::DebriefingState()
 		{
 			civiliansDead += (*i)->qty;
 		}
+
+		if ((*i)->item == "STR_ALIENS_KILLED")
+			aliensKilled += (*i)->qty;
 	}
 	//Log(LOG_INFO) << ". iterate _stats DONE";
 
 	if (civiliansSaved > 0
-		&& civiliansDead == 0)
+		&& civiliansDead == 0 &&
+		_missionStatistics->success == true)
 	{
 		_missionStatistics->valiantCrux = true;
 	}
@@ -367,7 +372,7 @@ DebriefingState::DebriefingState()
 	SavedGame* save = _game->getSavedGame();
 	SavedBattleGame* battle = save->getSavedBattle();
 
-	_missionStatistics->daylight = save->getSavedBattle()->getGlobalShade(); // Soldier Diary ->
+	_missionStatistics->shade = save->getSavedBattle()->getGlobalShade(); // Soldier Diary ->
 	_missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
 
 //	BattleUnitStatistics* statistics = NULL; // BattleUnit::getStatistics()
@@ -383,6 +388,24 @@ DebriefingState::DebriefingState()
 		{
 			BattleUnitStatistics* statistics = (*i)->getStatistics();
 
+			int soldierAlienKills = 0;
+
+			for (std::vector<BattleUnitKills*>::const_iterator
+					k = statistics->kills.begin();
+					k != statistics->kills.end();
+					++k)
+			{
+				if ((*k)->faction == FACTION_HOSTILE)
+					soldierAlienKills++;
+			}
+
+			if (aliensKilled > 0
+				&& aliensKilled == soldierAlienKills
+				&& _missionStatistics->success == true)
+			{
+				statistics->nikeCross = true;
+			}
+
 			statistics->daysWounded = soldier->getWoundRecovery();
 			_missionStatistics->injuryList[soldier->getId()] = soldier->getWoundRecovery();
 
@@ -391,7 +414,8 @@ DebriefingState::DebriefingState()
 
 			soldier->getDiary()->updateDiary(
 										statistics,
-										_missionStatistics);
+										_missionStatistics,
+										_rules);
 
 			if (soldier->getDiary()->manageCommendations(_rules))
 			{
@@ -530,7 +554,7 @@ void DebriefingState::btnOkClick(Action*)
 
 /**
  * Adds to the debriefing stats.
- * @param name		- the untranslated name of the stat
+ * @param name		- reference the untranslated name of the stat
  * @param score		- the score to add
  * @param quantity	- the quantity to add
  */
@@ -844,7 +868,7 @@ void DebriefingState::prepareDebriefing()
 			{
 				(*i)->setSecondsRemaining(15); // UFO lifts off ...
 			}
-			else if (!aborted) // successful mission ( kL: failed mission leaves UFO still crashed! )
+			else if (aborted == false) // successful mission ( kL: failed mission leaves UFO still crashed! )
 //kL			|| (*i)->getStatus() == Ufo::CRASHED) // UFO can't fly
 			{
 				delete *i;
@@ -927,17 +951,16 @@ void DebriefingState::prepareDebriefing()
 			if ((*i)->getStatus() != STATUS_DEAD
 				&& (*i)->getGeoscapeSoldier() != NULL)
 			{
-				// if only one soldier survived, give him a medal! (unless he killed all the others...)
-				if ((*i)->getStatistics()->hasFriendlyFired() == false
-					&& soldierDead != 0)
-				{
-					(*i)->getStatistics()->loneSurvivor = true;
-					break;
-				}
 				// if only one soldier survived AND none have died, means only one soldier went on the mission...
-				else if (soldierDead == 0)
+				if (soldierDead == 0)
 				{
 					(*i)->getStatistics()->ironMan = true;
+					break;
+				}
+				// if only one soldier survived, give him a medal! (unless he killed all the others...)
+				else if ((*i)->getStatistics()->hasFriendlyFired() == false)
+				{
+					(*i)->getStatistics()->loneSurvivor = true;
 					break;
 				}
 			}
@@ -945,14 +968,6 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	std::string mission = battle->getMissionType();
-
-	// kL_begin: Do all missionTypes here, for SoldierDiary race stat.
-//	if (mission == "STR_BASE_DEFENSE")
-/*	if (battle->getAlienRace() != "") // safety.
-		_missionStatistics->alienRace = battle->getAlienRace();
-	else
-		_missionStatistics->alienRace = "STR_UNKNOWN";
-	// */ // kL_end.
 
 	// alien base disappears (if you didn't abort)
 	if (mission == "STR_ALIEN_BASE_ASSAULT")
@@ -973,7 +988,6 @@ void DebriefingState::prepareDebriefing()
 					&& battle->getTiles()[i]->getMapData(3)->getSpecialType() == UFO_NAVIGATION)
 				{
 					destroyAlienBase = false;
-
 					break;
 				}
 			}
@@ -1010,7 +1024,6 @@ void DebriefingState::prepareDebriefing()
 				else
 				{
 					(*i)->setInBattlescape(false);
-
 					break;
 				}
 			}

@@ -47,8 +47,9 @@ class SoldierDiaryPerformanceState
 {
 
 private:
-	static const int LIST_ROWS		= 12;
-	static const int LIST_SPRITES_y	= 49;
+	static const int
+		LIST_ROWS		= 12,
+		LIST_SPRITES_y	= 49;
 
 	bool
 		_displayKills,
