@@ -516,6 +516,8 @@ bool SoldierDiary::manageCommendations(Ruleset* rules)
 					doAward = false;
 					break;
 				}
+				else
+					doAward = true;
 			}
 			else if ((*j).first == "killsWithCriteriaCareer"
 				|| (*j).first == "killsWithCriteriaMission"
@@ -598,7 +600,7 @@ bool SoldierDiary::manageCommendations(Ruleset* rules)
 									detail != andCriteria->second.end();
 									++detail)
 							{
-								std::string battleTypes[] =
+								std::string battleType_arr[] =
 								{
 									"BT_NONE",
 									"BT_FIREARM",
@@ -615,17 +617,18 @@ bool SoldierDiary::manageCommendations(Ruleset* rules)
 									"BT_END"
 								};
 
+								std::vector<std::string> battleType_vec (battleType_arr, battleType_arr + 13); // init.
 								int battleType = 0;
 								for (
 										;
-										battleType != battleTypes->size();
+										battleType != battleType_vec.size();
 										++battleType)
 								{
-									if (*detail == battleTypes[battleType])
+									if (*detail == battleType_vec[battleType])
 										break;
 								}
 
-								std::string damageTypes[] =
+								std::string damageType_arr[] =
 								{
 									"DT_NONE",
 									"DT_AP",
@@ -640,25 +643,28 @@ bool SoldierDiary::manageCommendations(Ruleset* rules)
 									"DT_END"
 								};
 
+								std::vector<std::string> damageType_vec (damageType_arr, damageType_arr + 11); // init.
 								int damageType = 0;
 								for (
 										;
-										damageType != damageTypes->size();
+										damageType != damageType_vec.size();
 										++damageType)
 								{
-									if (*detail == damageTypes[damageType])
+									if (*detail == damageType_vec[damageType])
 										break;
 								}
 
 								// See if we find no matches with any criteria; if so, break and try the next kill.
-								if ((*singleKill)->rank != *detail
-									&& (*singleKill)->race != *detail
-									&& (*singleKill)->weapon != *detail
-									&& (*singleKill)->weaponAmmo != *detail
-									&& (*singleKill)->getUnitStatusString() != *detail
-									&& (*singleKill)->getUnitFactionString() != *detail
-									&& rules->getItem((*singleKill)->weaponAmmo)->getDamageType() != damageType
-									&& rules->getItem((*singleKill)->weapon)->getBattleType() != battleType)
+								if ((*singleKill)->weapon == "STR_WEAPON_UNKNOWN"
+									|| (*singleKill)->weaponAmmo == "STR_WEAPON_UNKNOWN"
+									|| ((*singleKill)->rank != *detail
+										&& (*singleKill)->race != *detail
+										&& (*singleKill)->weapon != *detail
+										&& (*singleKill)->weaponAmmo != *detail
+										&& (*singleKill)->getUnitStatusString() != *detail
+										&& (*singleKill)->getUnitFactionString() != *detail
+										&& rules->getItem((*singleKill)->weaponAmmo)->getDamageType() != damageType
+										&& rules->getItem((*singleKill)->weapon)->getBattleType() != battleType))
 								{
 									found = false;
 									break;
@@ -681,7 +687,12 @@ bool SoldierDiary::manageCommendations(Ruleset* rules)
 							doAward = false;
 							break;
 						}
+						else
+							doAward = true;
 					}
+
+					if (doAward)
+						break; // Stop looking because we are getting one regardless.
 				}
 
 				if (doAward)
@@ -713,10 +724,11 @@ bool SoldierDiary::manageCommendations(Ruleset* rules)
 						++k)
 				{
 					if ((*k)->getType() == (*i).first
-						&& (*k)->getNoun() == (*j))
+						&& (*k)->getNoun() == *j)
 					{
-						(*k)->addDecoration();
 						newCom = false;
+						(*k)->addDecoration();
+
 						break;
 					}
 				}
@@ -743,7 +755,7 @@ bool SoldierDiary::manageCommendations(Ruleset* rules)
  * @param statTotal				- pair<string, int>
  * @param criteria				- int
  */
-void SoldierDiary::manageModularCommendations(
+/* void SoldierDiary::manageModularCommendations(
 		std::map<std::string, int>& nextCommendationLevel,
 		std::map<std::string, int>& modularCommendations,
 		std::pair<std::string, int> statTotal,
@@ -758,7 +770,7 @@ void SoldierDiary::manageModularCommendations(
 	{
 		modularCommendations[statTotal.first]++;
 	}
-}
+} */
 
 /**
  * Award commendations to the soldier.
@@ -769,7 +781,7 @@ void SoldierDiary::awardCommendation(
 		std::string type,
 		std::string noun)
 {
-	bool newCommendation = true;
+	bool newCom = true;
 
 	for (std::vector<SoldierCommendations*>::iterator
 			i = _commendations.begin();
@@ -780,13 +792,13 @@ void SoldierDiary::awardCommendation(
 			&& (*i)->getNoun() == noun)
 		{
 			(*i)->addDecoration();
-			newCommendation = false;
+			newCom = false;
 
 			break;
 		}
 	}
 
-	if (newCommendation)
+	if (newCom)
 		_commendations.push_back(new SoldierCommendations(
 														type,
 														noun));

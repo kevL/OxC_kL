@@ -23,7 +23,6 @@
 #include <yaml-cpp/yaml.h>
 
 #include "BattleUnit.h"
-#include "GameTime.h"
 #include "SavedGame.h"
 
 #include "../Ruleset/Ruleset.h"
@@ -32,7 +31,6 @@
 namespace OpenXcom
 {
 
-class GameTime;
 class Ruleset;
 
 
@@ -133,11 +131,11 @@ private:
 		_UFOTotal;
 
 	///
-	void manageModularCommendations(
+/*	void manageModularCommendations(
 			std::map<std::string, int>& nextCommendationLevel,
 			std::map<std::string, int>& modularCommendations,
 			std::pair<std::string, int> statTotal,
-			int criteria);
+			int criteria); */
 	///
 	void awardCommendation(
 			std::string type,
