@@ -33,7 +33,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
@@ -234,17 +234,18 @@ void SoldiersState::init()
 		}
 	}
 
-	if (row > 0)
+	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
+/*	if (row > 0) // all taken care of in TextList
 	{
-		if (_lstSoldiers->getScroll() > row - 1
-			|| _base->getCurrentSoldier() > row - 1)
+		if (_lstSoldiers->getScroll() > row
+			|| _base->getCurrentSoldier() > row)
 		{
 			_lstSoldiers->scrollTo(0);
 			_base->setCurrentSoldier(0);
 		}
 		else if (_base->getCurrentSoldier() > 0)
 			_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-	}
+	} */
 
 	_lstSoldiers->draw();
 }
@@ -256,7 +257,6 @@ void SoldiersState::init()
 void SoldiersState::btnOkClick(Action*)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
-
 	_game->popState();
 }
 
@@ -289,6 +289,7 @@ void SoldiersState::btnArmorClick(Action*)
  */
 void SoldiersState::btnMemorialClick(Action*)
 {
+	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 	_game->pushState(new SoldierMemorialState());
 }
 
@@ -309,7 +310,6 @@ void SoldiersState::lstSoldiersPress(Action* action)
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_base->setCurrentSoldier(_lstSoldiers->getScroll());
-
 		_game->pushState(new SoldierInfoState(
 											_base,
 											_lstSoldiers->getSelectedRow()));
@@ -407,31 +407,27 @@ void SoldiersState::lstRightArrowClick(Action* action) // kL
 }
 
 /**
-* kL. Displays the inventory screen for the soldiers at the base.
+* kL. Displays the inventory screen for the soldiers at base.
 * @param action - pointer to an action
 */
 void SoldiersState::btnEquipClick(Action*) // kL
 {
-	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick()";
+	_base->setCurrentSoldier(_lstSoldiers->getScroll());
+
 	SavedBattleGame* battle = new SavedBattleGame();
-	//Log(LOG_INFO) << ". bgame = " << bgame;
 	_game->getSavedGame()->setBattleGame(battle);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-	//Log(LOG_INFO) << ". bgen = " << &bgen;
 
 	bgen.runInventory(NULL, _base);
-	//Log(LOG_INFO) << ". bgen.runInventory() DONE";
 
 	// Set system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
 	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
 
 	_game->getScreen()->clear();
-
 	_game->pushState(new InventoryState(
 									false,
 									NULL));
-	//Log(LOG_INFO) << "CraftEquipmentState::btnInventoryClick() EXIT";
 }
 
 }

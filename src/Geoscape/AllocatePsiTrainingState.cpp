@@ -210,17 +210,18 @@ void AllocatePsiTrainingState::init()
 		}
 	}
 
-	if (row > 0)
+	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
+/*	if (row > 0) // all taken care of in TextList
 	{
-		if (_lstSoldiers->getScroll() > row - 1
-			|| _base->getCurrentSoldier() > row - 1)
+		if (_lstSoldiers->getScroll() > row
+			|| _base->getCurrentSoldier() > row)
 		{
 			_lstSoldiers->scrollTo(0);
 			_base->setCurrentSoldier(0);
 		}
 		else if (_base->getCurrentSoldier() > 0)
 			_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-	}
+	} */
 
 	_lstSoldiers->draw();
 }

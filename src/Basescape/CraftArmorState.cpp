@@ -63,7 +63,6 @@ CraftArmorState::CraftArmorState(
 		_base(base),
 		_craftID(craftID)
 {
-	//Log(LOG_INFO) << "Create CraftArmorState";
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 11, 10);
 	_txtBaseLabel	= new Text(80, 9, 224, 10);
@@ -126,8 +125,6 @@ CraftArmorState::CraftArmorState(
 	_lstSoldiers->onMousePress((ActionHandler)& CraftArmorState::lstSoldiersPress);
 	_lstSoldiers->onLeftArrowClick((ActionHandler)& CraftArmorState::lstLeftArrowClick);
 	_lstSoldiers->onRightArrowClick((ActionHandler)& CraftArmorState::lstRightArrowClick);
-
-	//Log(LOG_INFO) << "CraftArmorState::CraftArmorState() EXIT";
 }
 
 /**
@@ -135,7 +132,6 @@ CraftArmorState::CraftArmorState(
  */
 CraftArmorState::~CraftArmorState()
 {
-	//Log(LOG_INFO) << "Delete CraftArmorState";
 }
 
 /**
@@ -197,17 +193,18 @@ void CraftArmorState::init()
 		}
 	}
 
-	if (row > 0)
+	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
+/*	if (row > 0) // all taken care of in TextList
 	{
-		if (_lstSoldiers->getScroll() > row - 1
-			|| _base->getCurrentSoldier() > row - 1)
+		if (_lstSoldiers->getScroll() > row
+			|| _base->getCurrentSoldier() > row)
 		{
 			_lstSoldiers->scrollTo(0);
 			_base->setCurrentSoldier(0);
 		}
 		else if (_base->getCurrentSoldier() > 0)
 			_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-	}
+	} */
 
 	_lstSoldiers->draw();
 }
@@ -219,7 +216,6 @@ void CraftArmorState::init()
 void CraftArmorState::btnOkClick(Action*)
 {
 	_base->setCurrentSoldier(_base->getCurrentSoldier());
-
 	_game->popState();
 }
 

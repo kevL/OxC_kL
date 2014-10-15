@@ -4654,7 +4654,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413140553 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1413373183 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	<climits>
 	<string>
@@ -4835,7 +4835,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413140553 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
+1413373214 source:f:\git\openxcom\src\basescape\craftsoldiersstate.cpp
 	"CraftSoldiersState.h"
 	<climits>
 	<sstream>
@@ -4844,7 +4844,6 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/LocalizedText.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
@@ -5223,7 +5222,7 @@
 1413140554 f:\git\openxcom\src\basescape\placestartfacilitystate.h
 	"PlaceFacilityState.h"
 
-1413340026 source:f:\git\openxcom\src\basescape\purchasestate.cpp
+1413347124 source:f:\git\openxcom\src\basescape\purchasestate.cpp
 	"PurchaseState.h"
 	<cfloat>
 	<climits>
@@ -7396,7 +7395,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1413140557 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
+1413373239 source:f:\git\openxcom\src\geoscape\allocatepsitrainingstate.cpp
 	"AllocatePsiTrainingState.h"
 	<climits>
 	<sstream>

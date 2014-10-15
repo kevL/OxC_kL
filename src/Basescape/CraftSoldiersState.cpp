@@ -28,7 +28,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/LocalizedText.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
@@ -62,7 +62,6 @@ CraftSoldiersState::CraftSoldiersState(
 		_base(base),
 		_craftID(craftID)
 {
-	//Log(LOG_INFO) << "Create CraftSoldiersState";
 	_window			= new Window(this, 320, 200, 0, 0);
 
 	_txtTitle		= new Text(300, 17, 16, 8);
@@ -163,7 +162,6 @@ CraftSoldiersState::CraftSoldiersState(
  */
 CraftSoldiersState::~CraftSoldiersState()
 {
-	//Log(LOG_INFO) << "Delete CraftSoldiersState";
 }
 
 /**
@@ -249,7 +247,6 @@ void CraftSoldiersState::btnUnloadClick(Action*) // kL
  */
 void CraftSoldiersState::init()
 {
-	//Log(LOG_INFO) << ". CraftSoldiersState::init()";
 	State::init();
 
 	_lstSoldiers->clearList();
@@ -300,17 +297,18 @@ void CraftSoldiersState::init()
 		}
 	}
 
-	if (row > 0)
+	_lstSoldiers->scrollTo(_base->getCurrentSoldier());
+/*	if (row > 0) // all taken care of in TextList
 	{
-		if (_lstSoldiers->getScroll() > row - 1
-			|| _base->getCurrentSoldier() > row - 1)
+		if (_lstSoldiers->getScroll() > row
+			|| _base->getCurrentSoldier() > row)
 		{
 			_lstSoldiers->scrollTo(0);
 			_base->setCurrentSoldier(0);
 		}
 		else if (_base->getCurrentSoldier() > 0)
 			_lstSoldiers->scrollTo(_base->getCurrentSoldier());
-	}
+	} */
 
 	_lstSoldiers->draw();
 
@@ -330,7 +328,6 @@ void CraftSoldiersState::init()
  */
 void CraftSoldiersState::lstLeftArrowClick(Action* action)
 {
-	//Log(LOG_INFO) << ". CraftSoldiersState::lstLeftArrowClick() row = " << row;
 /*	size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
@@ -422,7 +419,6 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
  */
 void CraftSoldiersState::lstRightArrowClick(Action* action)
 {
-	//Log(LOG_INFO) << ". CraftSoldiersState::lstRightArrowClick() row = " << row;
 /*	size_t row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
 	if (0 < numSoldiers && INT_MAX >= numSoldiers && row < (int)numSoldiers - 1)
