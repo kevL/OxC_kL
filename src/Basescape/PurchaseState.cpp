@@ -391,8 +391,7 @@ PurchaseState::PurchaseState(
 		ss7.str(L"");
 
 		RuleItem* itemRule = _game->getRuleset()->getItem(*i);
-		Log(LOG_INFO) << (*i) << " IDX = " << itemRule->getListOrder();
-
+		//Log(LOG_INFO) << (*i) << " list# " << itemRule->getListOrder(); // Prints listOrder to LOG.
 
 		if (itemRule->getBuyCost() != 0
 			&& _game->getSavedGame()->isResearched(itemRule->getRequirements())
