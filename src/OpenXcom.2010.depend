@@ -5492,7 +5492,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1413140555 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1413375568 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -5505,7 +5505,6 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/LocalizedText.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
@@ -11590,7 +11589,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1413140555 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
+1413393610 source:f:\git\openxcom\src\basescape\storesmatrixstate.cpp
 	"StoresMatrixState.h"
 	<sstream>
 	"../Engine/Game.h"

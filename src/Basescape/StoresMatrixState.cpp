@@ -399,13 +399,14 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		}
 	}
 
-	if (row > 0
+	_lstMatrix->scrollTo(savedGame->getCurrentRowMatrix());
+/*	if (row > 0 // all taken care of in TextList
 		&& savedGame->getCurrentRowMatrix() >= row)
 	{
 		_lstMatrix->scrollTo(0);
 	}
 	else if (savedGame->getCurrentRowMatrix() > 0)
-		_lstMatrix->scrollTo(savedGame->getCurrentRowMatrix());
+		_lstMatrix->scrollTo(savedGame->getCurrentRowMatrix()); */
 
 //	_lstMatrix->draw(); // only needed when list changes while state is active. Eg, on re-inits
 }
