@@ -69,9 +69,7 @@ void StatString::load(const YAML::Node &node)
 			i++)
 	{
 		if (node[conditionNames[i]])
-		{
 			_conditions.push_back(getCondition(conditionNames[i], node));
-		}
 	}
 }
 
@@ -91,13 +89,10 @@ StatStringCondition* StatString::getCondition(
 		maxValue = 255;
 
 	if (node[conditionName][0])
-	{
 		minValue = node[conditionName][0].as<int>(minValue);
-	}
+
 	if (node[conditionName][1])
-	{
 		maxValue = node[conditionName][1].as<int>(maxValue);
-	}
 
 	StatStringCondition* thisCondition = new StatStringCondition(
 															conditionName,
@@ -143,22 +138,22 @@ const std::wstring StatString::calcStatString(
 		maxVal;
 	std::string conditionName, string;
 	std::wstring
-		wstring,
+		ws,
 		statString;
 	bool continueCalc = true;
 	std::map<std::string, int> currentStatsMap = getCurrentStats(currentStats);
 
-	for (std::vector<StatString *>::const_iterator
+	for (std::vector<StatString*>::const_iterator
 			i1 = statStrings.begin();
 			i1 != statStrings.end()
 				&& continueCalc;
 			++i1)
 	{
 		string = (*i1)->getString();
-		const std::vector<StatStringCondition* > conditions = (*i1)->getConditions();
+		const std::vector<StatStringCondition*> conditions = (*i1)->getConditions();
 		conditionsMet = 0;
 
-		for (std::vector<StatStringCondition* >::const_iterator
+		for (std::vector<StatStringCondition*>::const_iterator
 				i2 = conditions.begin();
 				i2 != conditions.end()
 					&& continueCalc;
@@ -178,14 +173,14 @@ const std::wstring StatString::calcStatString(
 				{
 					conditionsMet++;
 				}
+
 				if (conditionsMet == conditions.size())
 				{
-					wstring.assign(string.begin(), string.end());
-					statString = statString + wstring;
-					if (wstring.length() > 1)
-					{
+					ws.assign(string.begin(), string.end());
+					statString = statString + ws;
+
+					if (ws.length() > 1)
 						continueCalc = false;
-					}
 				}
 			}
 		}

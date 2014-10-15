@@ -49,6 +49,7 @@ private:
 		_floatHeight,
 		_kneelHeight,
 		_standHeight;
+//		_femaleFrequency;
 
 	std::string
 		_armor,
@@ -58,8 +59,6 @@ private:
 		_minStats,
 		_maxStats,
 		_statCaps;
-
-//	std::vector<RuleGender> _genderRatio;
 	RuleGender _genderRatio;
 
 
@@ -94,6 +93,8 @@ private:
 
 		/// kL. Gets the gender ratio struct.
 		RuleGender getGenderRatio() const; // kL
+		/// Gets the female appearance ratio.
+//		int getFemaleFrequency() const;
 };
 
 }

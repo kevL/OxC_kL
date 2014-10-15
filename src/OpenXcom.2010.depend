@@ -4377,7 +4377,7 @@
 	<sstream>
 	<string>
 
-1413140562 f:\git\openxcom\src\savegame\soldier.h
+1413410099 f:\git\openxcom\src\savegame\soldier.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"../Ruleset/StatString.h"
@@ -5435,7 +5435,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1413140561 f:\git\openxcom\src\ruleset\rulesoldier.h
+1413412332 f:\git\openxcom\src\ruleset\rulesoldier.h
 	<string>
 	"../Ruleset/Unit.h"
 
@@ -6245,7 +6245,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1413284183 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1413410081 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6611,7 +6611,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1413235324 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1413407360 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -7772,7 +7772,7 @@
 1413140558 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1413140558 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1413410021 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9234,7 +9234,7 @@
 	<string>
 	"../Engine/State.h"
 
-1413140561 f:\git\openxcom\src\ruleset\soldiernamepool.h
+1413412273 f:\git\openxcom\src\ruleset\soldiernamepool.h
 	<string>
 	<vector>
 	"../Savegame/Soldier.h"
@@ -9396,7 +9396,7 @@
 1413140561 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1413339303 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1413409807 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9464,7 +9464,7 @@
 	"RuleTerrain.h"
 	"RuleUfo.h"
 
-1413140561 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
+1413407868 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
 	"SoldierNamePool.h"
 	<fstream>
 	<iostream>
@@ -11892,7 +11892,7 @@
 	"../Interface/TextEdit.h"
 	"../Interface/TextList.h"
 
-1399140748 f:\git\openxcom\src\ruleset\statstring.h
+1413410913 f:\git\openxcom\src\ruleset\statstring.h
 	<yaml-cpp/yaml.h>
 	"Unit.h"
 	"StatStringCondition.h"

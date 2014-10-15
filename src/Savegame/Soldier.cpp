@@ -22,7 +22,7 @@
 #include "Craft.h"
 #include "EquipmentLayoutItem.h"
 #include "SavedGame.h"
-#include "SoldierDead.h" // kL
+#include "SoldierDead.h"
 #include "SoldierDeath.h"
 #include "SoldierDiary.h"
 
@@ -30,7 +30,7 @@
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 
-#include "../Interface/Text.h" // kL, format days Wounded for Craft string.
+#include "../Interface/Text.h"
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
@@ -44,9 +44,9 @@ namespace OpenXcom
 
 /**
  * Initializes a new soldier, either blank or randomly generated.
- * @param rules	- pointer to Soldier ruleset
- * @param armor	- pointer to Soldier armor
- * @param names	- pointer to a vector of pointers that becomes a list of name pools for soldier generation
+ * @param rules	- pointer to RuleSoldier
+ * @param armor	- pointer to Armor
+ * @param names	- pointer to a vector of pointers to SoldierNamePool
  * @param id	- unique soldier ID for soldier generation
  */
 Soldier::Soldier(
@@ -69,7 +69,6 @@ Soldier::Soldier(
 		_recentlyPromoted(false),
 		_psiTraining(false),
 		_armor(armor)
-//kL	_death(0)
 {
 	_diary = new SoldierDiary();
 
@@ -90,8 +89,7 @@ Soldier::Soldier(
 		_initialStats.melee			= RNG::generate(minStats.melee, maxStats.melee);
 
 //kL	_initialStats.psiSkill = minStats.psiSkill;
-//		_initialStats.psiSkill = minStats.psiSkill - 2; // kL
-		_initialStats.psiSkill = 0;						// kL
+		_initialStats.psiSkill = 0; // kL
 
 		_currentStats = _initialStats;
 
@@ -108,23 +106,21 @@ Soldier::Soldier(
 		}
 		else
 			_gender = GENDER_FEMALE;
-		// kL_end.
 
-//		_gender	= (SoldierGender)RNG::generate(0, 1);	// kL
-		_look	= (SoldierLook)RNG::generate(0, 3);		// kL
+//		_gender = (SoldierGender)RNG::generate(0, 1);
+		_look = (SoldierLook)RNG::generate(0, 3);
 
 		if (_gender == GENDER_MALE)
-//			_name = L"uncle Adolf";
-			_name = L"pfc.Fritz";						// kL
+			_name = L"pfc.Fritz";
 		else
-//			_name = L"Eva Braun";
-			_name = L"pfc.Frita";						// kL
+			_name = L"pfc.Frita";
+		// kL_end.
 
 /*kL
-		if (!names->empty())
+		if (names->empty() == false)
 		{
 			size_t nationality = RNG::generate(0, names->size() - 1);
-			_name = names->at(nationality)->genName(&_gender);
+			_name = names->at(nationality)->genName(&_gender, rules->getFemaleFrequency());
 
 			// Once we add the ability to mod in extra looks, this will
 			// need to reference the ruleset for the maximum amount of looks.
@@ -133,7 +129,7 @@ Soldier::Soldier(
 		else
 		{
 			_name	= L"";
-			_gender	= (SoldierGender)RNG::generate(0, 1);
+			_gender = (RNG::percent(rules->getFemaleFrequency())? GENDER_FEMALE: GENDER_MALE);
 			_look	= (SoldierLook)RNG::generate(0, 3);
 		} */
 	}
@@ -152,15 +148,14 @@ Soldier::~Soldier()
 		delete *i;
 	}
 
-//kL	delete _death;
 	delete _diary;
 }
 
 /**
  * Loads the soldier from a YAML file.
- * @param node YAML node.
- * @param rule Game ruleset.
- * @param save Pointer to savegame.
+ * @param node - reference a YAML node
+ * @param rule - pointer to the Ruleset
+ * @param save - pointer to SavedGame
  */
 void Soldier::load(
 		const YAML::Node& node,
@@ -202,24 +197,16 @@ void Soldier::load(
 		}
 	}
 
-	// kL_note: This should be obsolete, since SoldierDead was put in.
-	// ie, SoldierDeath is part of SoldierDead, not class Soldier here.
-/*kL	if (node["death"])
-	{
-		_death = new SoldierDeath();
-		_death->load(node["death"]);
-	} */
-
 	if (node["diary"])
 	{
 		_diary = new SoldierDiary();
 		_diary->load(node["diary"]);
 	}
 
-	calcStatString(
-			rule->getStatStrings(),
-			(Options::psiStrengthEval
-				&& save->isResearched(rule->getPsiRequirements())));
+//	calcStatString(
+//			rule->getStatStrings(),
+//			(Options::psiStrengthEval
+//				&& save->isResearched(rule->getPsiRequirements())));
 }
 
 /**
@@ -766,34 +753,11 @@ int Soldier::getPsiStrImprovement()
 
 /**
  * Kills the soldier in the Geoscape.
- * @param death, Pointer to death data.
- * @return, Pointer to a SoldierDead template.
+ * @param death - pointer to SoldierDeath time-data
+ * @return, pointer to SoldierDead
  */
-//kL void Soldier::die(SoldierDeath* death)
 SoldierDead* Soldier::die(SoldierDeath* death)
 {
-	// Clean up associations
-/*	_craft = NULL;
-	_armor = NULL; // kL
-	_psiTraining = false;
-	_recentlyPromoted = false;
-	_recovery = 0;
-	_gainPsiSkl = 0; // kL
-
-	for (std::vector<EquipmentLayoutItem*>::iterator
-			i = _equipmentLayout.begin();
-			i != _equipmentLayout.end();
-			++i)
-	{
-		delete *i;
-	}
-
-	_equipmentLayout.clear();
-	// wait a second: The soldier is about to get deleted from the Roster anyway!!!
-	// So just pass the required info into SoldierDead below and forget above stuff.
-	// _death/SoldierDeath ought be cleaned out of class_vars also
-*/
-	// kL_begin:
 	SoldierDead* dead = new SoldierDead(
 									_name,
 									_id,
@@ -809,13 +773,11 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 									// base if I want to...
 
 	return dead;
-//	SavedGame::getDeadSoldiers()->push_back(ds);
-	// kL_end.
 }
 
 /**
  * Gets the soldier's diary.
- * @return Diary.
+ * @return, pointer to SoldierDiary
  */
 SoldierDiary* Soldier::getDiary()
 {
@@ -827,7 +789,7 @@ SoldierDiary* Soldier::getDiary()
  * @param statStrings		- reference to a vector of pointers to statString rules
  * @param psiStrengthEval	- true if psi stats are available
  */
-void Soldier::calcStatString(
+/* void Soldier::calcStatString(
 		const std::vector<StatString*>& statStrings,
 		bool psiStrengthEval)
 {
@@ -835,6 +797,6 @@ void Soldier::calcStatString(
 										_currentStats,
 										statStrings,
 										psiStrengthEval);
-}
+} */
 
 }

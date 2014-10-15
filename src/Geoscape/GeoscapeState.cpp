@@ -2697,7 +2697,7 @@ void GeoscapeState::time1Day()
 
 			if (newPossibleManufacture.empty() == false)
 			{
-				if (!newPossibleManufactureEvents.empty()) // myk002_begin: only show the "allocate production" button for the last notification
+				if (newPossibleManufactureEvents.empty() == false) // myk002_begin: only show the "allocate production" button for the last notification
 					newPossibleManufactureEvents.back().showManufactureButton = false;
 
 				newPossibleManufactureEvents.push_back(NewPossibleManufactureInfo(
@@ -2762,7 +2762,6 @@ void GeoscapeState::time1Day()
 				_game->getSavedGame()->getDeadSoldiers()->push_back(dead);
 
 				int iD = (*s)->getId();
-
 				s = (*b)->getSoldiers()->erase(s); // erase Soldier from Base_soldiers vector.
 
 				delete _game->getSavedGame()->getSoldier(iD); // delete Soldier instance.
@@ -2788,21 +2787,21 @@ void GeoscapeState::time1Day()
 					++s)
 			{
 				(*s)->trainPsi1Day();
-
-				(*s)->calcStatString(
-								_game->getRuleset()->getStatStrings(),
-								(Options::psiStrengthEval
-									&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
+//				(*s)->calcStatString(
+//								_game->getRuleset()->getStatStrings(),
+//								(Options::psiStrengthEval
+//									&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
 			}
 		}
 
 		// myk002_begin: if research has been completed but no new research
 		// events are triggered, show an empty NewPossibleResearchState so
 		// players have a chance to allocate the now-free scientists
-		if (!researchCompleteEvents.empty() && newPossibleResearchEvents.empty())
+		if (researchCompleteEvents.empty() == false
+			&& newPossibleResearchEvents.empty())
 		{
 			newPossibleResearchEvents.push_back(NewPossibleResearchInfo(
-																	std::vector<RuleResearch *>(),
+																	std::vector<RuleResearch*>(),
 																	true));
 		}
 
@@ -3044,10 +3043,10 @@ void GeoscapeState::time1Month()
 				if ((*s)->isInPsiTraining())
 				{
 					(*s)->trainPsi();
-					(*s)->calcStatString(
-									_game->getRuleset()->getStatStrings(),
-									(Options::psiStrengthEval
-									&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
+//					(*s)->calcStatString(
+//									_game->getRuleset()->getStatStrings(),
+//									(Options::psiStrengthEval
+//									&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
 				}
 			}
 		}

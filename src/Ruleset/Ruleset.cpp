@@ -2047,8 +2047,8 @@ std::vector<std::string> Ruleset::getPsiRequirements() const
 
 /**
  * Creates a new randomly-generated soldier.
- * @param save Saved game the soldier belongs to.
- * @return Newly generated soldier.
+ * @param save - pointer to SavedGame
+ * @return, pointer to the newly generated soldier
  */
 Soldier* Ruleset::genSoldier(SavedGame* save) const
 {
@@ -2061,10 +2061,9 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 			i = 0;
 			i < 10
 				&& duplicate;
-			i++)
+			++i)
 	{
 		delete soldier;
-
 		soldier = new Soldier(
 							getSoldier("XCOM"),
 							getArmor("STR_ARMOR_NONE_UC"),
@@ -2076,13 +2075,13 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 		for (std::vector<Base*>::iterator
 				i = save->getBases()->begin();
 				i != save->getBases()->end()
-					&& !duplicate;
+					&& duplicate == false;
 				++i)
 		{
 			for (std::vector<Soldier*>::iterator
 					j = (*i)->getSoldiers()->begin();
 					j != (*i)->getSoldiers()->end()
-						&& !duplicate;
+						&& duplicate == false;
 					++j)
 			{
 				if ((*j)->getName() == soldier->getName())
@@ -2090,13 +2089,13 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 			}
 
 			for (std::vector<Transfer*>::iterator
-					k = (*i)->getTransfers()->begin();
-					k != (*i)->getTransfers()->end()
-						&& !duplicate;
-					++k)
+					j = (*i)->getTransfers()->begin();
+					j != (*i)->getTransfers()->end()
+						&& duplicate == false;
+					++j)
 			{
-				if ((*k)->getType() == TRANSFER_SOLDIER
-					&& (*k)->getSoldier()->getName() == soldier->getName())
+				if ((*j)->getType() == TRANSFER_SOLDIER
+					&& (*j)->getSoldier()->getName() == soldier->getName())
 				{
 					duplicate = true;
 				}
@@ -2104,10 +2103,10 @@ Soldier* Ruleset::genSoldier(SavedGame* save) const
 		}
 	}
 
-	soldier->calcStatString( // calculate new statString
-						getStatStrings(),
-						(Options::psiStrengthEval
-							&& save->isResearched(getPsiRequirements())));
+//	soldier->calcStatString( // calculate new statString
+//						getStatStrings(),
+//						(Options::psiStrengthEval
+//							&& save->isResearched(getPsiRequirements())));
 
 	return soldier;
 }

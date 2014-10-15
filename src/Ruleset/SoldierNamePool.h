@@ -40,6 +40,7 @@ class SoldierNamePool
 
 private:
 	int _totalWeight;
+//		_femaleFrequency;
 	std::vector<int> _lookWeights;
 	std::vector<std::wstring>
 		_maleFirst,
@@ -59,6 +60,7 @@ private:
 
 		/// Generates a new name from the pool.
 		std::wstring genName(SoldierGender* gender) const;
+//				int femaleFrequency) const;
 		/// Generates an int representing the index of the soldier's look, when passed the maximum index value.
 		size_t genLook(size_t numLooks);
 };

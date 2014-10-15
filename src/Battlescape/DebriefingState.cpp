@@ -1155,10 +1155,10 @@ void DebriefingState::prepareDebriefing()
 								(*i)->getInventory(),
 								base);
 
-						soldier->calcStatString( // calculate new statString
-											_rules->getStatStrings(),
-											Options::psiStrengthEval
-												&& _game->getSavedGame()->isResearched(_rules->getPsiRequirements()));
+//						soldier->calcStatString( // calculate new statString
+//											_rules->getStatStrings(),
+//											Options::psiStrengthEval
+//												&& _game->getSavedGame()->isResearched(_rules->getPsiRequirements()));
 					}
 					else // not soldier -> tank
 					{

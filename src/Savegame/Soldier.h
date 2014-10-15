@@ -63,7 +63,7 @@ class Language;
 class Ruleset;
 class RuleSoldier;
 class SavedGame;
-class SoldierDead; // kL
+class SoldierDead;
 class SoldierDeath;
 class SoldierDiary;
 class SoldierNamePool;
@@ -71,8 +71,7 @@ class SoldierNamePool;
 
 /**
  * Represents a soldier hired by the player.
- * Soldiers have a wide variety of stats that affect
- * their performance during battles.
+ * Soldiers have a wide variety of stats that affect their performance during battles.
  */
 class Soldier
 {
@@ -96,7 +95,6 @@ private:
 	Armor* _armor;
 	Craft* _craft;
 	RuleSoldier* _rules;
-//kL	SoldierDeath* _death;
 	SoldierDiary* _diary;
 
 	SoldierGender _gender;
@@ -208,19 +206,16 @@ private:
 		/// Gets this soldier's psiStrength improvement score for this month.
 		int getPsiStrImprovement();
 
-		/// Gets the soldier death time.
-//kL	SoldierDeath* getDeath() const;
 		/// Kills the soldier and sends it to the dead soldiers' List.
-//kL	void die(SoldierDeath* death);
 		SoldierDead* die(SoldierDeath* death);
 
 		/// Gets the soldier's diary.
 		SoldierDiary* getDiary();
 
 		/// Calculates a statString.
-		void calcStatString(
-				const std::vector<StatString*>& statStrings,
-				bool psiStrengthEval);
+//		void calcStatString(
+//				const std::vector<StatString*>& statStrings,
+//				bool psiStrengthEval);
 };
 
 }
