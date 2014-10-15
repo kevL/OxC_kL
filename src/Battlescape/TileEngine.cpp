@@ -4505,7 +4505,7 @@ int TileEngine::unitOpensDoor(
 		{
 			if (unit->spendTimeUnits(TUCost))
 			{
-				tile->animate(); // ensures frame advances for ufo doors to update TU cost
+//				tile->animate(); // ensures frame advances for ufo doors to update TU cost
 
 				if (rightClick) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
 				{
