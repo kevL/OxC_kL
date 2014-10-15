@@ -1,0 +1,85 @@
+items:
+  - type: STR_LMG
+    size: 0.4
+    costBuy: 5800
+    costSell: 2600
+    weight: 12
+    bigSprite: 107
+    floorSprite: 87
+    handSprite: 200
+    fireSound: 55
+    compatibleAmmo:
+      - STR_LMG_CLIP
+    accuracySnap: 50
+    accuracyAuto: 35
+    tuSnap: 25
+    tuAuto: 45
+    battleType: 1
+    twoHanded: true
+    invWidth: 1
+    invHeight: 3
+    armor: 30
+    autoShots: 5
+    listOrder: 2260
+  - type: STR_LMG_CLIP
+    size: 0.1
+    costBuy: 350
+    costSell: 75
+    weight: 6
+    bigSprite: 108
+    floorSprite: 88
+    bulletSprite: 14
+    hitSound: 22
+    hitAnimation: 26
+    power: 26
+    damageType: 1
+    clipSize: 30
+    battleType: 2
+    armor: 23
+    invWidth: 2
+    invHeight: 1
+    autoShots: 5
+    listOrder: 2261
+ufopaedia:
+  - id: STR_LMG
+    type_id: 4
+    section: STR_WEAPONS_AND_EQUIPMENT
+    text: STR_LMG_UFOPEDIA
+    listOrder: 2202
+  - id: STR_LMG_CLIP
+    type_id: 4
+    section: STR_NOT_AVAILABLE
+extraSprites:
+  - type: BIGOBS.PCK
+    files:
+      107: Resources/LightMachinegun/LMG.png
+      108: Resources/LightMachinegun/Clip.png
+  - type: FLOOROB.PCK
+    files:
+      87: Resources/LightMachinegun/floorob_LMG.png
+      88: Resources/LightMachinegun/floorob_Ammo.png
+  - type: HANDOB.PCK
+    files:
+      200: Resources/LightMachinegun/HandOb_LMG/
+#  - type: Projectiles
+#    height: 3
+#    width: 65
+#    subX: 3
+#    subY: 3
+#    files:
+#      490: Resources/LightMachinegun/BulletSprite.png
+extraSounds:
+  - type: BATTLE.CAT
+    files:
+      55: Resources/LightMachinegun/Sounds/fire.wav
+extraStrings:
+  - type: en-US
+    strings:
+      STR_LMG: "Light machine gun"
+      STR_LMG_CLIP: "clip-LMG"
+      STR_LMG_UFOPEDIA: "A heavier variant of the custom-designed X-Com rifle. The extra weight comes from a heavier barrel and integral bipod system, capable of facilitating heavy fire on medium-to-short range targets. Powerful recoil and obtuse handling make it unsuitable for longe-range shooting."
+  - type: en
+    strings:
+      STR_LMG: Light machine gun
+      STR_LMG_CLIP: Light machine gun Clip
+      STR_LMG_UFOPEDIA: A heavier variant of the custom-designed X-Com rifle. The extra weight comes from a heavier barrel and integral bipod system, capable of facilitating heavy fire on medium-to-short range targets. Powerful recoil and obtuse handling make it unsuitable for longe-range shooting.

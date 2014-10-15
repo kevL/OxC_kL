@@ -1305,7 +1305,7 @@ RuleItem* Ruleset::getItem(const std::string& id) const
 
 /**
  * Returns the list of all items provided by the ruleset.
- * @return List of items.
+ * @return, reference to a vector of item-types
  */
 const std::vector<std::string>& Ruleset::getItemsList() const
 {
@@ -1314,8 +1314,8 @@ const std::vector<std::string>& Ruleset::getItemsList() const
 
 /**
  * Returns the rules for the specified UFO.
- * @param id UFO type.
- * @return Rules for the UFO.
+ * @param id - reference the UFO type
+ * @return, pointer to Rules for the UFO
  */
 RuleUfo* Ruleset::getUfo(const std::string& id) const
 {

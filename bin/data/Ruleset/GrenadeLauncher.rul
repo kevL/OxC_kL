@@ -1,5 +1,6 @@
 items:
   - type: STR_GRENADE_LAUNCHER
+    listOrder: 3001
     size: 0.4
     costBuy: 5000
     costSell: 2250
@@ -7,7 +8,7 @@ items:
     bigSprite: 79
     floorSprite: 75
     handSprite: 136
-    bulletSprite: 11
+#    bulletSprite: 11
     fireSound: 89
     compatibleAmmo:
       - STR_LAUNCHER_FRAG
@@ -24,58 +25,57 @@ items:
     invWidth: 1
     invHeight: 3
     armor: 25
-    listOrder: 3001
   - type: STR_LAUNCHER_FRAG
+    listOrder: 3002
     size: 0.1
     costBuy: 200
     costSell: 150
     weight: 4
     bigSprite: 80
     floorSprite: 2
-    hitSound: 0
+    bulletSprite: 11
 #    hitAnimation: 0
+    hitSound: 0
     power: 48
     damageType: 3
-    clipSize: 1
     battleType: 2
-    armor: 15
     blastRadius: 4
-    listOrder: 3002
-    bulletSprite: 11
+    clipSize: 1
+    armor: 15
   - type: STR_LAUNCHER_INC
+    listOrder: 3003
     size: 0.1
     costBuy: 600
     costSell: 400
     weight: 4
     bigSprite: 81
     floorSprite: 2
-    hitSound: 0
+    bulletSprite: 12
 #    hitAnimation: 0
+    hitSound: 0
     power: 78
     damageType: 2
-    clipSize: 1
     battleType: 2
-    armor: 15
     blastRadius: 3
-    listOrder: 3003
-    bulletSprite: 12
+    clipSize: 1
+    armor: 15
   - type: STR_LAUNCHER_SMOKE
+    listOrder: 3004
     size: 0.1
     costBuy: 300
     costSell: 200
     weight: 4
     bigSprite: 82
     floorSprite: 2
-    hitSound: 0
+    bulletSprite: 13
 #    hitAnimation: 0
+    hitSound: 0
     power: 57
     damageType: 9
-    clipSize: 1
     battleType: 2
-    armor: 15
     blastRadius: 4
-    listOrder: 3004
-    bulletSprite: 13
+    clipSize: 1
+    armor: 15
 ufopaedia:
   - id: STR_GRENADE_LAUNCHER
     type_id: 4
@@ -104,13 +104,13 @@ extraSprites:
   - type: HANDOB.PCK
     files:
       136: Resources/GrenadeLauncher/HANDOB/
-  - type: Projectiles
-    height: 9
-    width: 105
-    subX: 3
-    subY: 3
-    files:
-      385: Resources/GrenadeLauncher/BulletSprites.png
+#  - type: Projectiles
+#    height: 9
+#    width: 105
+#    subX: 3
+#    subY: 3
+#    files:
+#      385: Resources/GrenadeLauncher/BulletSprites.png
 extraSounds:
   - type: BATTLE.CAT
     files:

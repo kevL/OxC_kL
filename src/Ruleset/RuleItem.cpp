@@ -123,9 +123,9 @@ RuleItem::~RuleItem()
 
 /**
  * Loads the item from a YAML file.
- * @param node, YAML node.
- * @param modIndex, Offsets the sounds and sprite values to avoid conflicts.
- * @param listOrder, The list weight for this item.
+ * @param node		- reference the YAML node
+ * @param modIndex	- offsets the sounds and sprite values to avoid conflicts
+ * @param listOrder	- the list weight for this item
  */
 void RuleItem::load(
 		const YAML::Node& node,
@@ -789,7 +789,7 @@ int RuleItem::getAttraction() const
 
 /**
  * Gets the list weight for this research item
- * @return, The list weight.
+ * @return, the list weight
  */
 int RuleItem::getListOrder() const
 {

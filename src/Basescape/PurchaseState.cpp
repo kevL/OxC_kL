@@ -244,7 +244,7 @@ PurchaseState::PurchaseState(
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
 
-			++_itemOffset;
+			_itemOffset++;
 
 			int crafts = 0;
 			for (std::vector<Craft*>::iterator
@@ -285,7 +285,7 @@ PurchaseState::PurchaseState(
 
 		if (launcher != NULL
 			&& launcher->getBuyCost() > 0
-			&& !isExcluded(launcher->getType()))
+			&& isExcluded(launcher->getType()) == false)
 		{
 			_qtys.push_back(0);
 			_items.push_back(launcher->getType());
@@ -334,7 +334,7 @@ PurchaseState::PurchaseState(
 
 		if (clip != NULL
 			&& clip->getBuyCost() > 0
-			&& !isExcluded(clip->getType()))
+			&& isExcluded(clip->getType()) == false)
 		{
 			_qtys.push_back(0);
 			_items.push_back(clip->getType());
@@ -391,10 +391,12 @@ PurchaseState::PurchaseState(
 		ss7.str(L"");
 
 		RuleItem* itemRule = _game->getRuleset()->getItem(*i);
+		Log(LOG_INFO) << (*i) << " IDX = " << itemRule->getListOrder();
+
 
 		if (itemRule->getBuyCost() != 0
 			&& _game->getSavedGame()->isResearched(itemRule->getRequirements())
-			&& !isExcluded(*i))
+			&& isExcluded(*i) == false)
 		{
 			_qtys.push_back(0);
 			_items.push_back(*i);

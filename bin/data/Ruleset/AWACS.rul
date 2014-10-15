@@ -34,8 +34,8 @@ crafts:
     damageMax: 75
     speedMax: 380
     accel: 1
-    costSell: 850000
-    refuelRate: 150
+    costSell: 650000
+    refuelRate: 100
     radarRange: 1850
 #    radarChance: 60
     transferTime: 96

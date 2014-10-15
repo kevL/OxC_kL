@@ -1904,6 +1904,16 @@ items:
     recover: true
     liveAlien: true
     costSell: 80000
+  - type: STR_SILACOID_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 100000
+  - type: STR_CELATID_TERRORIST
+    size: 0.0
+    recover: true
+    liveAlien: true
+    costSell: 100000
   - type: STR_ETHEREAL_SOLDIER
     size: 0.0
     recover: true
@@ -1919,16 +1929,6 @@ items:
     recover: true
     liveAlien: true
     costSell: 90000
-  - type: STR_SILACOID_TERRORIST
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 100000
-  - type: STR_CELATID_TERRORIST
-    size: 0.0
-    recover: true
-    liveAlien: true
-    costSell: 100000
   - type: STR_SECTOPOD_TERRORIST
     size: 0.0
     recover: true

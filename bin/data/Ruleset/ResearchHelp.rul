@@ -300,9 +300,14 @@ research:
       - STR_ELERIUM_115
       - STR_UFO_POWER_SOURCE
       - STR_UFO_NAVIGATION
+  - name: STR_THUNDERSTORM_INTERCEPTOR
+    cost: 12000
+    points: 25
+    dependencies:
+      - STR_ALIEN_ALLOYS
   - name: STR_UNMANNED_AIRCRAFT
 #    listOrder: 3107
-    cost: 30000
+    cost: 6000
     points: 20
     dependencies:
       - STR_UFO_CONSTRUCTION

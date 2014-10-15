@@ -11,7 +11,7 @@ items:
     recoveryPoints: 5
     battleType: 11
     armor: 26
-    listOrder: 6710
+    listOrder: 7901
   - type: STR_CYBERMITE_CORPSE
     size: 0.4
     costSell: 20000
@@ -25,7 +25,7 @@ items:
     battleType: 11
     armor: 26
     blastRadius: 4
-    listOrder: 7020
+    listOrder: 7902
   - type: CYBERMITE_WEAPON
     weight: 3
 #    bigSprite: -3

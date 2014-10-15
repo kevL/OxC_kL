@@ -194,7 +194,7 @@ StoresState::StoresState(Base* base)
 			}
 
 			if (itRule->isFixed() // tank w/ Ordnance.
-				&& !itRule->getCompatibleAmmo()->empty())
+				&& itRule->getCompatibleAmmo()->empty() == false)
 			{
 				clRule = rules->getItem(itRule->getCompatibleAmmo()->front());
 				clipSize = clRule->getClipSize();
@@ -202,13 +202,13 @@ StoresState::StoresState(Base* base)
 					item = item + L" (" + Text::formatNumber(clipSize) + L")";
 			}
 
-			if (!sg->isResearched(itRule->getType())				// not researched
-				&& (!sg->isResearched(itRule->getRequirements())	// and has requirements to use that have not been researched
-					|| rules->getItem(*i)->getAlien()					// or is an alien
-					|| itRule->getBattleType() == BT_CORPSE				// or is a corpse
-					|| itRule->getBattleType() == BT_NONE)				// or is not a battlefield item
-				&& craftOrdnance == false							// and is not craft ordnance
-				&& !itRule->isResearchExempt())
+			if (sg->isResearched(itRule->getType()) == false				// not researched
+				&& (sg->isResearched(itRule->getRequirements()) == false	// and has requirements to use that have not been researched
+					|| rules->getItem(*i)->getAlien()							// or is an alien
+					|| itRule->getBattleType() == BT_CORPSE						// or is a corpse
+					|| itRule->getBattleType() == BT_NONE)						// or is not a battlefield item
+				&& craftOrdnance == false									// and is not craft ordnance
+				&& itRule->isResearchExempt() == false)
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow

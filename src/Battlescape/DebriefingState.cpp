@@ -1101,9 +1101,7 @@ void DebriefingState::prepareDebriefing()
 							save->getDeadSoldiers()->push_back(dead);
 
 							int iD = (*i)->getId(); // get ID from battleunit; could also use (*j) instead.
-
 							base->getSoldiers()->erase(j); // erase Soldier from Base_soldiers vector.
-
 							delete save->getSoldier(iD); // delete Soldier instance.
 
 							// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!
@@ -1203,9 +1201,7 @@ void DebriefingState::prepareDebriefing()
 								save->getDeadSoldiers()->push_back(dead);
 
 								int iD = (*i)->getId(); // get ID from battleunit; could also use (*j) instead.
-
 								base->getSoldiers()->erase(j); // erase Soldier from Base_soldiers vector.
-
 								delete save->getSoldier(iD); // delete Soldier instance.
 
 								// note: Could return any armor the soldier was wearing to Stores. CHEATER!!!!!
@@ -1480,12 +1476,11 @@ void DebriefingState::prepareDebriefing()
 				++i)
 		{
 			// alien alloys recovery values are divided by 10 or divided by 150 in case of an alien base
-			// kL_note: change to divided by 6 or divided by 120 in case of an alien base.
 			if ((*i)->item == _specialTypes[ALIEN_ALLOYS]->name)
 			{
-				int alloy = 6;
+				int alloy = 10;
 				if (mission == "STR_ALIEN_BASE_ASSAULT")
-					alloy = 120;
+					alloy = 150;
 
 				(*i)->qty = (*i)->qty / alloy;
 				(*i)->score = (*i)->score / alloy;
@@ -1896,7 +1891,7 @@ void DebriefingState::recoverItems(
 								"STR_CIVILIANS_SAVED",
 								(*item)->getUnit()->getValue()); // duplicated above.
 				}
-				else if (!_game->getSavedGame()->isResearched((*item)->getRules()->getType()))
+				else if (_game->getSavedGame()->isResearched((*item)->getRules()->getType()) == false)
 					addStat( // add pts. for unresearched items only
 							"STR_ALIEN_ARTIFACTS_RECOVERED",
 							(*item)->getRules()->getRecoveryPoints());
@@ -1917,8 +1912,8 @@ void DebriefingState::recoverItems(
 					{
 						BattleItem* clip = (*item)->getAmmoItem();
 						if (clip
-							&& clip->getRules()->getClipSize() > 0
-							&& clip != *item)
+							&& clip != *item
+							&& clip->getRules()->getClipSize() > 0)
 						{
 							_rounds[clip->getRules()] += clip->getAmmoQuantity();
 						}
