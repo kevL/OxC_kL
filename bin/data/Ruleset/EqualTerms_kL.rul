@@ -1396,6 +1396,7 @@ extraSprites:
       560: Resources/EqualTerms1/Shotgun/ReinforcedShotgun_h.png
       568: Resources/EqualTerms1/SSRL/SSRL_h.png
 #------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
   - type: MAN_0aF0.SPK #STREET ARCTIC
     singleImage: true
     files:
@@ -1430,11 +1431,13 @@ extraSprites:
       0: Resources/EqualTerms1/Armor/Arctic/man_0m3.png
 #  - type: XCOM_0a.PCK
   - type: XCOM_1a.PCK
-    width: 32
-    height: 40
+    width: 512
+    height: 720
+    subX: 32
+    subY: 40
     files:
 #      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Street/
-      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Kevlar/
+      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Kevlar/xcom1a.png
 #------------------------------------------------------------------------------
   - type: MAN_0jF0.SPK #STREET JUNGLE
     singleImage: true
@@ -1470,11 +1473,13 @@ extraSprites:
       0: Resources/EqualTerms1/Armor/Jungle/man_0m3.png
 #  - type: XCOM_0j.PCK
   - type: XCOM_1j.PCK
-    width: 32
-    height: 40
+    width: 512
+    height: 720
+    subX: 32
+    subY: 40
     files:
 #      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Street/
-      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Kevlar/
+      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Kevlar/xcom1j.png
 #------------------------------------------------------------------------------
   - type: MAN_0uF0.SPK #STREET URBAN
     singleImage: true
@@ -1510,11 +1515,13 @@ extraSprites:
       0: Resources/EqualTerms1/Armor/Urban/man_0m3.png
 #  - type: XCOM_0u.PCK
   - type: XCOM_1u.PCK
-    width: 32
-    height: 40
+    width: 512
+    height: 720
+    subX: 32
+    subY: 40
     files:
 #      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Street/
-      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Kevlar/
+      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Kevlar/xcom1u.png
 #------------------------------------------------------------------------------
   - type: MAN_1aF0.SPK #KEVLAR ARCTIC
     singleImage: true
@@ -1549,10 +1556,12 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Arctic/man_1m3.gif
   - type: XCOM_1a.PCK
-    width: 32
-    height: 40
+    width: 512
+    height: 720
+    subX: 32
+    subY: 40
     files:
-      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Kevlar/
+      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Kevlar/xcom1a.png
 #------------------------------------------------------------------------------
   - type: MAN_1jF0.SPK #KEVLAR JUNGLE
     singleImage: true
@@ -1587,10 +1596,12 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Jungle/man_1m3.gif
   - type: XCOM_1j.PCK
-    width: 32
-    height: 40
+    width: 512
+    height: 720
+    subX: 32
+    subY: 40
     files:
-      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Kevlar/
+      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Kevlar/xcom1j.png
 #------------------------------------------------------------------------------
   - type: MAN_1uF0.SPK #KEVLAR URBAN
     singleImage: true
@@ -1625,10 +1636,12 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Urban/man_1m3.gif
   - type: XCOM_1u.PCK
-    width: 32
-    height: 40
+    width: 512
+    height: 720
+    subX: 32
+    subY: 40
     files:
-      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Kevlar/
+      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Kevlar/xcom1u.png
 #------------------------------------------------------------------------------
   - type: MAN_1DSaF0.SPK #ARCTIC TACTICAL
     singleImage: true
@@ -1663,10 +1676,12 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Arctic/man_Dm3.gif
   - type: XCOM_1DSa.PCK
-    width: 32
-    height: 40
+    width: 512
+    height: 720
+    subX: 32
+    subY: 40
     files:
-      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Tactical/
+      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Tactical/xcomDSa.png
 #------------------------------------------------------------------------------
   - type: MAN_1DSjF0.SPK #JUNGLE TACTICAL
     singleImage: true
@@ -1701,10 +1716,12 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Jungle/man_Dm3.gif
   - type: XCOM_1DSj.PCK
-    width: 32
-    height: 40
+    width: 512
+    height: 720
+    subX: 32
+    subY: 40
     files:
-      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Tactical/
+      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Tactical/xcomDSj.png
 #------------------------------------------------------------------------------
   - type: MAN_1DSuF0.SPK #URBAN TACTICAL
     singleImage: true
@@ -1739,10 +1756,12 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Urban/man_Dm3.gif
   - type: XCOM_1DSu.PCK
-    width: 32
-    height: 40
+    width: 512
+    height: 720
+    subX: 32
+    subY: 40
     files:
-      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Tactical/
+      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Tactical/xcomDSu.png
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 extraSounds:

@@ -121,8 +121,12 @@ extraSprites:
     files:
       77: Resources/Scoutdrone/floorob_84.png
   - type: SCOUT.PCK
+    width: 256
+    height: 400
+    subX: 32
+    subY: 40
     files:
-      0: Resources/Scoutdrone/Drone/
+      0: Resources/Scoutdrone/Drone/SD.png
   - type: STR_SCOUT_DRONE_UFOPEDIA_IMAGE #not actually used
     singleImage: true
     width: 320
