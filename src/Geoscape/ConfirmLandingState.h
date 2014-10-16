@@ -43,6 +43,7 @@ class ConfirmLandingState
 {
 
 private:
+	bool _city;
 	int
 		_shade,
 		_texture;

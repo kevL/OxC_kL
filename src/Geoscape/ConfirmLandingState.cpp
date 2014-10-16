@@ -41,17 +41,17 @@
 
 #include "../Resource/ResourcePack.h"
 
-#include "../Ruleset/AlienDeployment.h" // kL
-#include "../Ruleset/City.h" // kL
-#include "../Ruleset/RuleRegion.h" // kL
+#include "../Ruleset/AlienDeployment.h"
+#include "../Ruleset/City.h"
+#include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
-#include "../Ruleset/RuleTerrain.h" // kL
-#include "../Ruleset/RuleUfo.h" // kL
+#include "../Ruleset/RuleTerrain.h"
+#include "../Ruleset/RuleUfo.h"
 
 #include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
-#include "../Savegame/Region.h" // kL
+#include "../Savegame/Region.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/Target.h"
@@ -76,7 +76,8 @@ ConfirmLandingState::ConfirmLandingState(
 		_craft(craft),
 		_texture(texture),
 		_shade(shade),
-		_terrain(NULL)
+		_terrain(NULL),
+		_city(false)
 {
 	//Log(LOG_INFO) << "Create ConfirmLandingState()";
 	// TODO: show Country & Region
@@ -144,34 +145,33 @@ ConfirmLandingState::ConfirmLandingState(
 			const double
 				lon = craft->getLongitude(),
 				lat = craft->getLatitude();
-			bool city = false;
 
-			for (std::vector<Region*>::iterator
+			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
 					i != _game->getSavedGame()->getRegions()->end()
-						&& city == false;
+						&& _city == false;
 					++i)
 			{
 				if ((*i)->getRules()->insideRegion(
 												lon,
 												lat))
 				{
-					for (std::vector<City*>::iterator
+					for (std::vector<City*>::const_iterator
 							j = (*i)->getRules()->getCities()->begin();
 							j != (*i)->getRules()->getCities()->end()
-								&& city == false;
+								&& _city == false;
 							++j)
 					{
 						if (AreSame(lon, (*j)->getLongitude())
 							&& AreSame(lat, (*j)->getLatitude()))
 						{
-							city = true;
+							_city = true;
 						}
 					}
 				}
 			}
 
-			if (city) // use these terrains for city missions.
+			if (_city) // use these terrains for _city missions.
 			{
 				Log(LOG_INFO) << ". . . city VALID";
 
@@ -207,7 +207,7 @@ ConfirmLandingState::ConfirmLandingState(
 					Log(LOG_INFO) << ". . . terrain = " << *i;
 					_terrain = _game->getRuleset()->getTerrain(*i);
 
-					for (std::vector<int>::iterator
+					for (std::vector<int>::const_iterator
 							j = _terrain->getTextures()->begin();
 							j != _terrain->getTextures()->end();
 							++j)
@@ -349,6 +349,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 
 	BattlescapeGenerator battleGen (_game); // init.
 
+	battleGen.setIsCity(_city); // kL
 	battleGen.setWorldTerrain(_terrain); // kL
 	battleGen.setWorldTexture(_texture);
 	battleGen.setWorldShade(_shade);
@@ -381,7 +382,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 		throw Exception("No mission available!");
 	}
 
-	battleGen.run();
+	battleGen.run(); // <- DETERMINE ALL TACTICAL DATA.
 
 	_game->pushState(new BriefingState(_craft));
 }
@@ -395,7 +396,6 @@ void ConfirmLandingState::btnNoClick(Action*)
 {
 //kL	_craft->returnToBase();
 	_craft->setDestination(NULL); // kL
-
 	_game->popState();
 }
 

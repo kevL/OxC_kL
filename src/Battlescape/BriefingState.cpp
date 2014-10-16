@@ -52,8 +52,8 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Briefing screen.
- * @param craft	- pointer to the Craft in the mission
- * @param base	- pointer to the Base in the mission
+ * @param craft		- pointer to the Craft in the mission (default NULL)
+ * @param base		- pointer to the Base in the mission (default NULL)
  */
 BriefingState::BriefingState(
 		Craft* craft,
@@ -72,15 +72,17 @@ BriefingState::BriefingState(
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
-	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
-	if (mission == "STR_TERROR_MISSION"
-		|| mission == "STR_BASE_DEFENSE")
+
+	_mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
+
+	if (_mission == "STR_TERROR_MISSION"
+		|| _mission == "STR_BASE_DEFENSE")
 	{
 		setPalette("PAL_GEOSCAPE", 2);
 		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE); // kL, sza_MusicRules
 	}
-	else if (mission == "STR_MARS_CYDONIA_LANDING"
-		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
+	else if (_mission == "STR_MARS_CYDONIA_LANDING"
+		|| _mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		setPalette("PAL_GEOSCAPE", 6);
 		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR); // kL, sza_MusicRules
@@ -91,15 +93,15 @@ BriefingState::BriefingState(
 		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND); // kL, sza_MusicRules
 	}
 
-	if (mission == "STR_ALIEN_BASE_ASSAULT"
-		|| mission == "STR_MARS_CYDONIA_LANDING")
+	if (_mission == "STR_ALIEN_BASE_ASSAULT"
+		|| _mission == "STR_MARS_CYDONIA_LANDING")
 	{
 		_txtCraft->setY(40);
 		_txtBriefing->setY(56);
 		_txtTarget->setVisible(false);
 	}
 
-	if (mission == "STR_MARS_THE_FINAL_ASSAULT")
+	if (_mission == "STR_MARS_THE_FINAL_ASSAULT")
 		_txtCraft->setVisible(false);
 
 
@@ -135,38 +137,38 @@ BriefingState::BriefingState(
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setBig();
 
-	std::wstring s;
-	if (craft)
+	std::wstring ws;
+	if (craft != NULL)
 	{
-		if (craft->getDestination())
+		if (craft->getDestination() != NULL)
 			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
 
-		s = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
+		ws = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
 	}
-	else if (base)
-		s = tr("STR_BASE_UC_").arg(base->getName());
+	else if (base != NULL)
+		ws = tr("STR_BASE_UC_").arg(base->getName());
 
-	_txtCraft->setText(s);
+	_txtCraft->setText(ws);
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap();
 
 	// Show respective mission briefing
-	if (mission == "STR_ALIEN_BASE_ASSAULT"
-		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
+	if (_mission == "STR_ALIEN_BASE_ASSAULT"
+		|| _mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 	}
 	else
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK16.SCR"));
 
-	_txtTitle->setText(tr(mission));
+	_txtTitle->setText(tr(_mission));
 
 	std::ostringstream briefingtext;
-	briefingtext << mission.c_str() << "_BRIEFING";
+	briefingtext << _mission.c_str() << "_BRIEFING";
 	_txtBriefing->setText(tr(briefingtext.str()));
 
-	if (mission == "STR_BASE_DEFENSE")
+	if (_mission == "STR_BASE_DEFENSE")
 		base->setIsRetaliationTarget(false); // And make sure the base is unmarked.
 }
 

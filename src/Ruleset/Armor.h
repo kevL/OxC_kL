@@ -62,7 +62,8 @@ private:
 		_storeItem;
 	bool
 		_canHoldWeapon,
-		_constantAnimation;
+		_constantAnimation,
+		_isBasic;
 	int
 		_deathFrames,
 		_shootFrames, // kL
@@ -155,7 +156,10 @@ private:
 		bool getCanHoldWeapon() const;
 
 		/// Checks if this armor ignores gender (power suit/flying suit).
-		ForcedTorso getForcedTorso();
+		ForcedTorso getForcedTorso() const;
+
+		/// kL. Gets if this Armor is basic (lowest rank, standard issue wear).
+		bool getIsBasic() const; // kL
 };
 
 }

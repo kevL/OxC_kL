@@ -596,7 +596,7 @@ int Craft::getNumSoldiers() const
 		return 0;
 
 	int total = 0;
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i)

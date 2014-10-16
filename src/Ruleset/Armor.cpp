@@ -25,7 +25,7 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleset for a certain type of armor.
- * @param type String defining the type.
+ * @param type - reference string defining the type
  */
 Armor::Armor(const std::string& type)
 	:
@@ -42,7 +42,8 @@ Armor::Armor(const std::string& type)
 		_shootFrames(0), // kL
 		_constantAnimation(false),
 		_canHoldWeapon(false),
-		_forcedTorso(TORSO_USE_GENDER)
+		_forcedTorso(TORSO_USE_GENDER),
+		_isBasic(false) // kL
 {
 	_stats.tu			= 0;
 	_stats.stamina		= 0;
@@ -74,7 +75,7 @@ Armor::~Armor()
 
 /**
  * Loads the armor from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void Armor::load(const YAML::Node& node)
 {
@@ -104,6 +105,7 @@ void Armor::load(const YAML::Node& node)
 	_movementType	= (MovementType)node["movementType"].as<int>(_movementType);
 	_size			= node["size"].as<int>(_size);
 	_weight			= node["weight"].as<int>(_weight);
+	_isBasic		= node["isBasic"].as<bool>(_isBasic); // kL
 
 	_stats.merge(node["stats"].as<UnitStats>(_stats));
 
@@ -345,9 +347,18 @@ bool Armor::getCanHoldWeapon() const
  * Checks if this armor ignores gender (power suit/flying suit).
  * @return, the torso to force on the sprite
  */
-ForcedTorso Armor::getForcedTorso()
+ForcedTorso Armor::getForcedTorso() const
 {
 	return _forcedTorso;
+}
+
+/**
+ * kL. Gets if this Armor is basic (lowest rank, standard issue wear).
+ * @return, true if basic
+ */
+bool Armor::getIsBasic() const // kL
+{
+	return _isBasic;
 }
 
 }

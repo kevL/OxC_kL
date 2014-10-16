@@ -43,6 +43,8 @@ class BriefingState
 {
 
 private:
+	std::string _mission;
+
 	Text
 		* _txtBriefing,
 		* _txtCraft,
@@ -55,8 +57,8 @@ private:
 	public:
 		/// Creates the Briefing state.
 		BriefingState(
-				Craft* craft = 0,
-				Base* base = 0);
+				Craft* craft = NULL,
+				Base* base = NULL);
 		/// Cleans up the Briefing state.
 		~BriefingState();
 

@@ -646,6 +646,55 @@ items:
 #    blastRadius: 6 # 5
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
+#  - type: STR_STREET_ARCTIC
+#    size: 0.8
+#    costBuy: 4000
+#    costSell: 3100
+#    listOrder: 7305
+#------------------------------------------------------------------------------
+  - type: STR_CORPSE_STREET_ARCTIC
+    name: STR_CORPSE
+    weight: 20
+    bigSprite: 64
+    floorSprite: 77
+    invWidth: 2
+    invHeight: 3
+    armor: 30
+    recover: false
+#------------------------------------------------------------------------------
+#  - type: STR_STREET_JUNGLE
+#    size: 0.8
+#    costBuy: 4000
+#    costSell: 3100
+#    listOrder: 7310
+#------------------------------------------------------------------------------
+  - type: STR_CORPSE_STREET_JUNGLE
+    name: STR_CORPSE
+    weight: 20
+    bigSprite: 64
+    floorSprite: 77
+    invWidth: 2
+    invHeight: 3
+    armor: 30
+    recover: false
+#------------------------------------------------------------------------------
+#  - type: STR_STREET_URBAN
+#    size: 0.8
+#    costBuy: 4000
+#    costSell: 3100
+#    listOrder: 7315
+#------------------------------------------------------------------------------
+  - type: STR_CORPSE_STREET_URBAN
+    name: STR_CORPSE
+    weight: 20
+    bigSprite: 64
+    floorSprite: 77
+    invWidth: 2
+    invHeight: 3
+    armor: 30
+    recover: false
+#------------------------------------------------------------------------------
+#------------------------------------------------------------------------------
   - type: STR_KEVLAR_ARCTIC
     size: 0.8
     costBuy: 4000
@@ -694,13 +743,14 @@ items:
     armor: 30
     recover: false
 #------------------------------------------------------------------------------
-  - type: STR_TACTICAL_URBAN
+#------------------------------------------------------------------------------
+  - type: STR_TACTICAL_ARCTIC
     size: 0.8
     costBuy: 6000
     costSell: 4500
-    listOrder: 7330
+    listOrder: 7320
 #------------------------------------------------------------------------------
-  - type: STR_CORPSE_TACTICAL_URBAN
+  - type: STR_CORPSE_TACTICAL_ARCTIC
     name: STR_CORPSE
     weight: 28
     bigSprite: 64
@@ -726,13 +776,13 @@ items:
     armor: 30
     recover: false
 #------------------------------------------------------------------------------
-  - type: STR_TACTICAL_ARCTIC
+  - type: STR_TACTICAL_URBAN
     size: 0.8
     costBuy: 6000
     costSell: 4500
-    listOrder: 7320
+    listOrder: 7330
 #------------------------------------------------------------------------------
-  - type: STR_CORPSE_TACTICAL_ARCTIC
+  - type: STR_CORPSE_TACTICAL_URBAN
     name: STR_CORPSE
     weight: 28
     bigSprite: 64
@@ -790,6 +840,78 @@ items:
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 armors:
+#------------------------------------------------------------------------------
+  - type: STR_STREET_ARCTIC_UC
+    spriteSheet: XCOM_0a.PCK
+    spriteInv: MAN_0a
+    corpseItem: STR_CORPSE_STREET_ARCTIC
+#    storeItem: STR_STREET_ARCTIC
+    storeItem: STR_NONE
+    isBasic: true
+    frontArmor: 12
+    sideArmor: 9
+    rearArmor: 6
+    underArmor: 2
+    damageModifier:
+      - 1.0 #none
+      - 1.13 #ap
+      - 1.07 #in
+      - 1.1 #he
+      - 1.11 #laser
+      - 1.17 #plasma
+      - 1.19 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 1.12 #smoke
+    loftempsSet: [ 3 ]
+#------------------------------------------------------------------------------
+  - type: STR_STREET_JUNGLE_UC
+    spriteSheet: XCOM_0j.PCK
+    spriteInv: MAN_0j
+    corpseItem: STR_CORPSE_STREET_JUNGLE
+#    storeItem: STR_STREET_JUNGLE
+    storeItem: STR_NONE
+    isBasic: true
+    frontArmor: 12
+    sideArmor: 9
+    rearArmor: 6
+    underArmor: 2
+    damageModifier:
+      - 1.0 #none
+      - 1.13 #ap
+      - 1.07 #in
+      - 1.1 #he
+      - 1.11 #laser
+      - 1.17 #plasma
+      - 1.19 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 1.12 #smoke
+    loftempsSet: [ 3 ]
+#------------------------------------------------------------------------------
+  - type: STR_STREET_URBAN_UC
+    spriteSheet: XCOM_0u.PCK
+    spriteInv: MAN_0u
+    corpseItem: STR_CORPSE_STREET_URBAN
+#    storeItem: STR_STREET_URBAN
+    storeItem: STR_NONE
+    isBasic: true
+    frontArmor: 12
+    sideArmor: 9
+    rearArmor: 6
+    underArmor: 2
+    damageModifier:
+      - 1.0 #none
+      - 1.13 #ap
+      - 1.07 #in
+      - 1.1 #he
+      - 1.11 #laser
+      - 1.17 #plasma
+      - 1.19 #stun
+      - 1.2 #melee
+      - 1.5 #acid
+      - 1.12 #smoke
+    loftempsSet: [ 3 ]
 #------------------------------------------------------------------------------
   - type: STR_KEVLAR_ARCTIC_UC
     spriteSheet: XCOM_1a.PCK
@@ -878,6 +1000,35 @@ armors:
       - 1.0
       - 1.0
 #------------------------------------------------------------------------------
+  - type: STR_TACTICAL_ARCTIC_UC
+    spriteSheet: XCOM_1DSa.PCK
+    spriteInv: MAN_1DSa
+    corpseItem: STR_CORPSE_TACTICAL_ARCTIC
+    storeItem: STR_TACTICAL_ARCTIC
+    loftemps: 3
+    weight: 7
+    frontArmor: 22
+    sideArmor: 16
+    rearArmor: 18
+    underArmor: 10
+    stats:
+      tu: -4
+      stamina: -5
+      reactions: -3
+      firing: -1
+      throwing: -3
+    damageModifier:
+      - 1.0
+      - 0.8
+      - 0.75
+      - 0.90
+      - 0.95
+      - 0.98
+      - 0.97
+      - 0.92
+      - 1.0
+      - 1.0
+#------------------------------------------------------------------------------
   - type: STR_TACTICAL_JUNGLE_UC
     spriteSheet: XCOM_1DSj.PCK
     spriteInv: MAN_1DSj
@@ -912,35 +1063,6 @@ armors:
     spriteInv: MAN_1DSu
     corpseItem: STR_CORPSE_TACTICAL_URBAN
     storeItem: STR_TACTICAL_URBAN
-    loftemps: 3
-    weight: 7
-    frontArmor: 22
-    sideArmor: 16
-    rearArmor: 18
-    underArmor: 10
-    stats:
-      tu: -4
-      stamina: -5
-      reactions: -3
-      firing: -1
-      throwing: -3
-    damageModifier:
-      - 1.0
-      - 0.8
-      - 0.75
-      - 0.90
-      - 0.95
-      - 0.98
-      - 0.97
-      - 0.92
-      - 1.0
-      - 1.0
-#------------------------------------------------------------------------------
-  - type: STR_TACTICAL_ARCTIC_UC
-    spriteSheet: XCOM_1DSa.PCK
-    spriteInv: MAN_1DSa
-    corpseItem: STR_CORPSE_TACTICAL_ARCTIC
-    storeItem: STR_TACTICAL_ARCTIC
     loftemps: 3
     weight: 7
     frontArmor: 22
@@ -1274,7 +1396,127 @@ extraSprites:
       560: Resources/EqualTerms1/Shotgun/ReinforcedShotgun_h.png
       568: Resources/EqualTerms1/SSRL/SSRL_h.png
 #------------------------------------------------------------------------------
-  - type: MAN_1aF0.SPK #Kevlar Arctic Start
+  - type: MAN_0aF0.SPK #STREET ARCTIC
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Arctic/man_0f0.png
+  - type: MAN_0aF1.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Arctic/man_0f1.png
+  - type: MAN_0aF2.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Arctic/man_0f2.png
+  - type: MAN_0aF3.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Arctic/man_0f3.png
+  - type: MAN_0aM0.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Arctic/man_0m0.png
+  - type: MAN_0aM1.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Arctic/man_0m1.png
+  - type: MAN_0aM2.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Arctic/man_0m2.png
+  - type: MAN_0aM3.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Arctic/man_0m3.png
+#  - type: XCOM_0a.PCK
+  - type: XCOM_1a.PCK
+    width: 32
+    height: 40
+    files:
+#      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Street/
+      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Kevlar/
+#------------------------------------------------------------------------------
+  - type: MAN_0jF0.SPK #STREET JUNGLE
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Jungle/man_0f0.png
+  - type: MAN_0jF1.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Jungle/man_0f1.png
+  - type: MAN_0jF2.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Jungle/man_0f2.png
+  - type: MAN_0jF3.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Jungle/man_0f3.png
+  - type: MAN_0jM0.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Jungle/man_0m0.png
+  - type: MAN_0jM1.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Jungle/man_0m1.png
+  - type: MAN_0jM2.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Jungle/man_0m2.png
+  - type: MAN_0jM3.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Jungle/man_0m3.png
+#  - type: XCOM_0j.PCK
+  - type: XCOM_1j.PCK
+    width: 32
+    height: 40
+    files:
+#      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Street/
+      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Kevlar/
+#------------------------------------------------------------------------------
+  - type: MAN_0uF0.SPK #STREET URBAN
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Urban/man_0f0.png
+  - type: MAN_0uF1.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Urban/man_0f1.png
+  - type: MAN_0uF2.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Urban/man_0f2.png
+  - type: MAN_0uF3.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Urban/man_0f3.png
+  - type: MAN_0uM0.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Urban/man_0m0.png
+  - type: MAN_0uM1.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Urban/man_0m1.png
+  - type: MAN_0uM2.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Urban/man_0m2.png
+  - type: MAN_0uM3.SPK
+    singleImage: true
+    files:
+      0: Resources/EqualTerms1/Armor/Urban/man_0m3.png
+#  - type: XCOM_0u.PCK
+  - type: XCOM_1u.PCK
+    width: 32
+    height: 40
+    files:
+#      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Street/
+      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Kevlar/
+#------------------------------------------------------------------------------
+  - type: MAN_1aF0.SPK #KEVLAR ARCTIC
     singleImage: true
     files:
       0: Resources/EqualTerms1/Armor/Arctic/man_1f0.gif
@@ -1312,7 +1554,7 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Kevlar/
 #------------------------------------------------------------------------------
-  - type: MAN_1jF0.SPK #Kevlar Jungle Start
+  - type: MAN_1jF0.SPK #KEVLAR JUNGLE
     singleImage: true
     files:
       0: Resources/EqualTerms1/Armor/Jungle/man_1f0.gif
@@ -1350,7 +1592,7 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Kevlar/
 #------------------------------------------------------------------------------
-  - type: MAN_1uF0.SPK #Kevlar Urban Start
+  - type: MAN_1uF0.SPK #KEVLAR URBAN
     singleImage: true
     files:
       0: Resources/EqualTerms1/Armor/Urban/man_1f0.gif
@@ -1388,7 +1630,7 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Urban/BScapeView/Kevlar/
 #------------------------------------------------------------------------------
-  - type: MAN_1DSaF0.SPK #start of Arctic tactical
+  - type: MAN_1DSaF0.SPK #ARCTIC TACTICAL
     singleImage: true
     files:
       0: Resources/EqualTerms1/Armor/Arctic/man_Df0.gif
@@ -1426,7 +1668,7 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Tactical/
 #------------------------------------------------------------------------------
-  - type: MAN_1DSjF0.SPK #start of Jungle tactical
+  - type: MAN_1DSjF0.SPK #JUNGLE TACTICAL
     singleImage: true
     files:
       0: Resources/EqualTerms1/Armor/Jungle/man_Df0.gif
@@ -1464,7 +1706,7 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Tactical/
 #------------------------------------------------------------------------------
-  - type: MAN_1DSuF0.SPK #start of UrbanCombat tactical
+  - type: MAN_1DSuF0.SPK #URBAN TACTICAL
     singleImage: true
     files:
       0: Resources/EqualTerms1/Armor/Urban/man_Df0.gif
@@ -1557,24 +1799,24 @@ extraStrings:
       STR_SSRL_UFOPEDIA: "A disposable single-shot rocket launcher (designated SSRL) manufactured by Bazalt & Dynamit Nobel Defence and uses a tight-pattern shaped-explosive warhead. It has a small explosive pattern, making it ineffective as a suppressive anti-personnel weapon, but effective against alien heavy weapons platforms."
       STR_APFSDS_ROCKET: "Rocket-AP"
       STR_ROCKET_LAUNCHER_UFOPEDIA: "This breech loading rocket launcher produced by Raytheon with munitions from Dynamit Nobel Defence can fire four different semi-guided rocket types."
-      STR_KEVLAR_ARCTIC: "Light Armor (Arctic)"
-      STR_KEVLAR_ARCTIC_UC: "Light Armor (Arctic)"
+      STR_KEVLAR_ARCTIC: "KevLar arctic"
+      STR_KEVLAR_ARCTIC_UC: "KevLar arctic"
       STR_KEVLAR_ARCTIC_UFOPEDIA: "Adapted from typical SWAT team use, this light armor vest produced by Dragon Skin is constructed to X-com's specifications. Using a 24 layer special aramid blend and an overlapping weave of lighter carbon fiber-reinforced silicon carbide disks, this armor provides adequate protection, while not impairing the mobility of the soldier."
-      STR_KEVLAR_JUNGLE: "Light Armor (Jungle)"
-      STR_KEVLAR_JUNGLE_UC: "Light Armor (Jungle)"
+      STR_KEVLAR_JUNGLE: "KevLar jungle"
+      STR_KEVLAR_JUNGLE_UC: "KevLar jungle"
       STR_KEVLAR_JUNGLE_UFOPEDIA: "Adapted from typical SWAT team use, this light armor vest produced by Dragon Skin is constructed to X-com's specifications. Using a 24 layer special aramid blend and an overlapping weave of lighter carbon fiber-reinforced silicon carbide disks, this armor provides adequate protection, while not impairing the mobility of the soldier."
-      STR_KEVLAR_URBAN: "Light Armor (Urban)"
-      STR_KEVLAR_URBAN_UC: "Light Armor (Urban)"
+      STR_KEVLAR_URBAN: "KevLar urban"
+      STR_KEVLAR_URBAN_UC: "KevLar urban"
       STR_KEVLAR_URBAN_UFOPEDIA: "Adapted from typical SWAT team use, this light armor vest produced by Dragon Skin is constructed to X-com's specifications. Using a 24 layer special aramid blend and an overlapping weave of lighter carbon fiber-reinforced silicon carbide disks, this armor provides adequate protection, while not impairing the mobility of the soldier."
-      STR_TACTICAL_URBAN: "Tactical Armor (Urban)"
-      STR_TACTICAL_URBAN_UC: "Tactical Armor (Urban)"
-      STR_TACTICAL_URBAN_UFOPEDIA: "Composed of 36 layers of aramids blended for strength and heat resistance and backed by heavy duty overlapping carbon fiber-reinforced silicon carbide disks, this tactical vest specially produced for X-com by Dragon Skin is the best protection current human technology can provide. However, this level of protection does tend to hinder a soldier's movements."
-      STR_TACTICAL_JUNGLE: "Tactical Armor (Jungle)"
-      STR_TACTICAL_JUNGLE_UC: "Tactical Armor (Jungle)"
-      STR_TACTICAL_JUNGLE_UFOPEDIA: "Composed of 36 layers of aramids blended for strength and heat resistance and backed by heavy duty overlapping carbon fiber-reinforced silicon carbide disks, this tactical vest specially produced for X-com by Dragon Skin is the best protection current human technology can provide. However, this level of protection does tend to hinder a soldier's movements."
-      STR_TACTICAL_ARCTIC: "Tactical Armor (Arctic)"
-      STR_TACTICAL_ARCTIC_UC: "Tactical Armor (Arctic)"
+      STR_TACTICAL_ARCTIC: "TacTical arctic"
+      STR_TACTICAL_ARCTIC_UC: "TacTical arctic"
       STR_TACTICAL_ARCTIC_UFOPEDIA: "Composed of 36 layers of aramids blended for strength and heat resistance and backed by heavy duty overlapping carbon fiber-reinforced silicon carbide disks, this tactical vest specially produced for X-com by Dragon Skin is the best protection current human technology can provide. However, this level of protection does tend to hinder a soldier's movements."
+      STR_TACTICAL_JUNGLE: "TacTical jungle"
+      STR_TACTICAL_JUNGLE_UC: "TacTical jungle"
+      STR_TACTICAL_JUNGLE_UFOPEDIA: "Composed of 36 layers of aramids blended for strength and heat resistance and backed by heavy duty overlapping carbon fiber-reinforced silicon carbide disks, this tactical vest specially produced for X-com by Dragon Skin is the best protection current human technology can provide. However, this level of protection does tend to hinder a soldier's movements."
+      STR_TACTICAL_URBAN: "TacTical urban"
+      STR_TACTICAL_URBAN_UC: "TacTical urban"
+      STR_TACTICAL_URBAN_UFOPEDIA: "Composed of 36 layers of aramids blended for strength and heat resistance and backed by heavy duty overlapping carbon fiber-reinforced silicon carbide disks, this tactical vest specially produced for X-com by Dragon Skin is the best protection current human technology can provide. However, this level of protection does tend to hinder a soldier's movements."
 #------------------------------------------------------------------------------
   - type: en-GB
     strings:

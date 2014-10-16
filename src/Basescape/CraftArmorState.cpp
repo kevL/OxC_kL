@@ -150,7 +150,7 @@ void CraftArmorState::init()
 
 	size_t row = 0;
 
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i,

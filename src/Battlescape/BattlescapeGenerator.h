@@ -56,6 +56,7 @@ private:
 	bool
 		_allowAutoLoadout,
 		_baseEquipScreen,
+		_isCity,
 		_generateFuel;
 	int
 		_alienItemLevel,
@@ -84,15 +85,13 @@ private:
 	Tile			* _tileCraft;
 	Ufo				* _ufo;
 
-	std::string _alienRace;
+	std::string
+		_alienRace,
+		_mission;
 
 
 	/// Generates a new battlescape map.
 	void generateMap();
-	/// Gets battlescape terrain.
-	RuleTerrain* getTerrain(
-			int tex,
-			double lat);
 
 	/// Loads an XCom MAP file.
 	int loadMAP(
@@ -149,6 +148,14 @@ private:
 	/// Possibly explodes ufo powersources.
 	void explodePowerSources();
 
+	/// Gets battlescape terrain.
+	RuleTerrain* getTerrain(
+			int tex,
+			double lat);
+
+	/// kL. Sets xCom soldiers' combat clothing style - spritesheets & paperdolls.
+	void setTacticalSprites(); // kL
+
 
 	public:
 		/// Creates a new BattlescapeGenerator class
@@ -156,7 +163,9 @@ private:
 		/// Cleans up the BattlescapeGenerator.
 		~BattlescapeGenerator();
 
-		/// kL. Sets the world terrainRule of where a ufo crashed or landed.
+		/// kL. Sets if Ufo has landed/crashed at a city.
+		void setIsCity(const bool isCity = true); // kL
+		/// kL. Sets the terrainRule of where a ufo crashed or landed.
 		void setWorldTerrain(RuleTerrain* terrain); // kL
 		/// Sets the polygon texture.
 		void setWorldTexture(int texture);

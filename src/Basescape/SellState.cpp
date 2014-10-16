@@ -227,7 +227,7 @@ SellState::SellState(
 	_lstItems->onRightArrowClick((ActionHandler)& SellState::lstItemsRightArrowClick);
 	_lstItems->onMousePress((ActionHandler)& SellState::lstItemsMousePress);
 
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i)
@@ -247,7 +247,7 @@ SellState::SellState(
 		}
 	}
 
-	for (std::vector<Craft*>::iterator
+	for (std::vector<Craft*>::const_iterator
 			i = _base->getCrafts()->begin();
 			i != _base->getCrafts()->end();
 			++i)
@@ -323,7 +323,7 @@ SellState::SellState(
 		if (Options::storageLimitsEnforced
 			&& origin == OPT_BATTLESCAPE)
 		{
-			for (std::vector<Transfer*>::iterator
+			for (std::vector<Transfer*>::const_iterator
 					j = _base->getTransfers()->begin();
 					j != _base->getTransfers()->end();
 					++j)
@@ -332,7 +332,7 @@ SellState::SellState(
 					qty += (*j)->getQuantity();
 			}
 
-			for (std::vector<Craft*>::iterator
+			for (std::vector<Craft*>::const_iterator
 					j = _base->getCrafts()->begin();
 					j != _base->getCrafts()->end();
 					++j)
@@ -507,7 +507,7 @@ void SellState::btnOkClick(Action*)
 			switch (getType(i))
 			{
 				case SELL_SOLDIER:
-					for (std::vector<Soldier*>::iterator
+					for (std::vector<Soldier*>::const_iterator
 							s = _base->getSoldiers()->begin();
 							s != _base->getSoldiers()->end();
 							++s)
@@ -530,7 +530,7 @@ void SellState::btnOkClick(Action*)
 					Craft* craft = _crafts[getCraftIndex(i)];
 
 					// Remove weapons from craft
-					for (std::vector<CraftWeapon*>::iterator
+					for (std::vector<CraftWeapon*>::const_iterator
 							w = craft->getWeapons()->begin();
 							w != craft->getWeapons()->end();
 							++w)
@@ -545,7 +545,7 @@ void SellState::btnOkClick(Action*)
 					}
 
 					// Remove items from craft
-					for (std::map<std::string, int>::iterator
+					for (std::map<std::string, int>::const_iterator
 							it = craft->getItems()->getContents()->begin();
 							it != craft->getItems()->getContents()->end();
 							++it)
@@ -554,7 +554,7 @@ void SellState::btnOkClick(Action*)
 					}
 
 					// Remove soldiers from craft
-					for (std::vector<Soldier*>::iterator
+					for (std::vector<Soldier*>::const_iterator
 							s = _base->getSoldiers()->begin();
 							s != _base->getSoldiers()->end();
 							++s)
@@ -564,7 +564,7 @@ void SellState::btnOkClick(Action*)
 					}
 
 					// Clear Hangar
-					for (std::vector<BaseFacility*>::iterator
+					for (std::vector<BaseFacility*>::const_iterator
 							f = _base->getFacilities()->begin();
 							f != _base->getFacilities()->end();
 							++f)
@@ -578,7 +578,7 @@ void SellState::btnOkClick(Action*)
 					}
 
 					// Remove craft
-					for (std::vector<Craft*>::iterator
+					for (std::vector<Craft*>::const_iterator
 							c = _base->getCrafts()->begin();
 							c != _base->getCrafts()->end();
 							++c)
@@ -611,7 +611,7 @@ void SellState::btnOkClick(Action*)
 													INT_MAX);
 
 						// if we still need to remove any, remove them from the crafts first, and keep a running tally
-						for (std::vector<Craft*>::iterator
+						for (std::vector<Craft*>::const_iterator
 								j = _base->getCrafts()->begin();
 								j != _base->getCrafts()->end()
 									&& toRemove;
@@ -636,7 +636,7 @@ void SellState::btnOkClick(Action*)
 						}
 
 						// if there are STILL any left to remove, take them from the transfers, and if necessary, delete it.
-						for (std::vector<Transfer*>::iterator
+						for (std::vector<Transfer*>::const_iterator
 								j = _base->getTransfers()->begin();
 								j != _base->getTransfers()->end()
 									&& toRemove;
@@ -863,7 +863,7 @@ int SellState::getQuantity()
 			if (Options::storageLimitsEnforced
 				&& _origin == OPT_BATTLESCAPE)
 			{
-				for (std::vector<Transfer*>::iterator
+				for (std::vector<Transfer*>::const_iterator
 						j = _base->getTransfers()->begin();
 						j != _base->getTransfers()->end();
 						++j)
@@ -872,7 +872,7 @@ int SellState::getQuantity()
 						qty += (*j)->getQuantity();
 				}
 
-				for (std::vector<Craft*>::iterator
+				for (std::vector<Craft*>::const_iterator
 						j = _base->getCrafts()->begin();
 						j != _base->getCrafts()->end();
 						++j)
@@ -965,7 +965,7 @@ void SellState::changeByValue(
 			//Log(LOG_INFO) << ". SELL_CRAFT";
 			craft = _crafts[getCraftIndex(_sel)];
 			//Log(LOG_INFO) << ". craft = " << getCraftIndex(_sel);
-			for (std::vector<CraftWeapon*>::iterator
+			for (std::vector<CraftWeapon*>::const_iterator
 					w = craft->getWeapons()->begin();
 					w != craft->getWeapons()->end();
 					++w)

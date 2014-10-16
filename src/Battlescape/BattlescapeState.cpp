@@ -3300,9 +3300,8 @@ void BattlescapeState::saveVoxelMap()
 }
 
 /**
- * Adds a new popup window to the queue
- * (this prevents popups from overlapping).
- * @param state, Pointer to popup state.
+ * Adds a new popup window to the queue (this prevents popups from overlapping).
+ * @param state - pointer to popup State
  */
 void BattlescapeState::popup(State* state)
 {
@@ -3312,15 +3311,15 @@ void BattlescapeState::popup(State* state)
 /**
  * Finishes up the current battle, shuts down the battlescape
  * and presents the debriefing screen for the mission.
- * @param abort, Was the mission aborted?
- * @param inExitArea, Number of soldiers in the exit area OR number of survivors
- *		when battle finished due to either all aliens or objective being destroyed.
+ * @param abort			- true if the mission was aborted
+ * @param inExitArea	- number of soldiers in the exit area OR number of
+ *							survivors when battle finished due to either all
+ *							aliens or objective being destroyed
  */
 void BattlescapeState::finishBattle(
 		bool abort,
 		int inExitArea)
 {
-	//Log(LOG_INFO) << "BattlescapeState::finishBattle()";
 	while (_game->isState(this) == false)
 		_game->popState();
 
@@ -3352,13 +3351,10 @@ void BattlescapeState::finishBattle(
 		bgen.nextStage();
 
 		_game->popState();
-		_game->pushState(new BriefingState(
-										0,
-										0));
+		_game->pushState(new BriefingState());
 	}
 	else
 	{
-		//Log(LOG_INFO) << ". stopTimers, popState";
 		_popups.clear();
 		_animTimer->stop();
 		_gameTimer->stop();
@@ -3368,8 +3364,6 @@ void BattlescapeState::finishBattle(
 			|| (abort == false
 				&& inExitArea == 0))
 		{
-			//Log(LOG_INFO) << ". . missionAborted";
-
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
 			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT"
@@ -3379,11 +3373,7 @@ void BattlescapeState::finishBattle(
 				_game->pushState(new DefeatState());
 			}
 			else
-			{
-				//Log(LOG_INFO) << ". . . new DebriefingState";
 				_game->pushState(new DebriefingState());
-				//Log(LOG_INFO) << ". . . new DebriefingState DONE";
-			}
 		}
 		else
 		{
@@ -3398,13 +3388,9 @@ void BattlescapeState::finishBattle(
 				_game->pushState(new DebriefingState());
 		}
 
-		//Log(LOG_INFO) << ". . set Cursor & FPS colors";
-
 		_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 		_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 	}
-
-	//Log(LOG_INFO) << "BattlescapeState::finishBattle() EXIT";
 }
 
 /**
