@@ -1,4 +1,4 @@
-﻿# Terrain Pack by Hobbes # version 2.2
+﻿# Terrain Pack by Hobbes # version 2.4
 terrains:
   - name: ATLANTDESERT
     mapDataSets:
@@ -1196,7 +1196,7 @@ terrains:
       - BLANKS
       - SANDS
       - MUJUNGLE
-      - JUNGLE
+      - JUNGLEBITS
     textures: [0, 6]
     hemisphere: 1
     largeBlockLimit: 3

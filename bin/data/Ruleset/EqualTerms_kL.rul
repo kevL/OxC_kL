@@ -1799,6 +1799,9 @@ extraStrings:
       STR_SSRL_UFOPEDIA: "A disposable single-shot rocket launcher (designated SSRL) manufactured by Bazalt & Dynamit Nobel Defence and uses a tight-pattern shaped-explosive warhead. It has a small explosive pattern, making it ineffective as a suppressive anti-personnel weapon, but effective against alien heavy weapons platforms."
       STR_APFSDS_ROCKET: "Rocket-AP"
       STR_ROCKET_LAUNCHER_UFOPEDIA: "This breech loading rocket launcher produced by Raytheon with munitions from Dynamit Nobel Defence can fire four different semi-guided rocket types."
+      STR_STREET_ARCTIC_UC: "Street arctic" #kL
+      STR_STREET_JUNGLE_UC: "Street jungle" #kL
+      STR_STREET_URBAN_UC: "Street urban" #kL
       STR_KEVLAR_ARCTIC: "KevLar arctic"
       STR_KEVLAR_ARCTIC_UC: "KevLar arctic"
       STR_KEVLAR_ARCTIC_UFOPEDIA: "Adapted from typical SWAT team use, this light armor vest produced by Dragon Skin is constructed to X-com's specifications. Using a 24 layer special aramid blend and an overlapping weave of lighter carbon fiber-reinforced silicon carbide disks, this armor provides adequate protection, while not impairing the mobility of the soldier."
