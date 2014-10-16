@@ -3032,8 +3032,8 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 
 /**
  * Converts an amount of experience to a stat increase.
- * @param (int)exp, Experience counter.
- * @return, Stat increase.
+ * @param exp - experience count from battle mission
+ * @return, stat increase
  */
 int BattleUnit::improveStat(int exp)
 {
@@ -3048,7 +3048,7 @@ int BattleUnit::improveStat(int exp)
 
 /**
  * Get the unit's minimap sprite index. Used to display the unit on the minimap
- * @return the unit minimap index
+ * @return, the unit minimap index
  */
 int BattleUnit::getMiniMapSpriteIndex() const
 {
@@ -3084,8 +3084,8 @@ int BattleUnit::getMiniMapSpriteIndex() const
 }
 
 /**
- * Set the turret type. -1 is no turret.
- * @param turretType
+ * Sets the turret type. -1 is no turret.
+ * @param turretType - the turret type to set
  */
 void BattleUnit::setTurretType(int turretType)
 {
@@ -3093,8 +3093,8 @@ void BattleUnit::setTurretType(int turretType)
 }
 
 /**
- * Get the turret type. -1 is no turret.
- * @return type
+ * Gets the turret type. -1 is no turret.
+ * @return, turret type
  */
 int BattleUnit::getTurretType() const
 {
@@ -3102,9 +3102,9 @@ int BattleUnit::getTurretType() const
 }
 
 /**
- * Get the amount of fatal wound for a body part.
- * @param part, The body part (in the range 0-5)
- * @return, The amount of fatal wound of a body part
+ * Gets the amount of fatal wound for a body part.
+ * @param part - the body part (in the range 0-5)
+ * @return, the amount of fatal wound of a body part
  */
 int BattleUnit::getFatalWound(int part) const
 {
@@ -3115,7 +3115,7 @@ int BattleUnit::getFatalWound(int part) const
 }
 
 /**
- * Heal a fatal wound of the soldier.
+ * Heals a fatal wound of the soldier.
  * @param part		- the body part to heal
  * @param wounds	- the amount of fatal wound healed
  * @param health	- the amount of health to add to soldier health
@@ -3141,7 +3141,7 @@ void BattleUnit::heal(
 }
 
 /**
- * Restore soldier morale.
+ * Restores soldier morale.
  */
 void BattleUnit::painKillers()
 {
@@ -3156,9 +3156,9 @@ void BattleUnit::painKillers()
 }
 
 /**
- * Restore soldier energy and reduce stun level.
- * @param energy, The amount of energy to add
- * @param stun, The amount of stun level to reduce
+ * Restores soldier energy and reduce stun level.
+ * @param energy	- the amount of energy to add
+ * @param stun		- the amount of stun level to reduce
  */
 void BattleUnit::stimulant(
 		int energy,
@@ -3174,7 +3174,7 @@ void BattleUnit::stimulant(
 /**
  * Gets motion points for the motion scanner.
  * More points is a larger blip on the scanner.
- * @return points.
+ * @return, motion points
  */
 int BattleUnit::getMotionPoints() const
 {
@@ -3183,7 +3183,7 @@ int BattleUnit::getMotionPoints() const
 
 /**
  * Gets the unit's armor.
- * @return, Pointer to armor.
+ * @return, pointer to Armor
  */
 Armor* BattleUnit::getArmor() const
 {

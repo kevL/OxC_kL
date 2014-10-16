@@ -9450,7 +9450,7 @@
 	"../Savegame/Soldier.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1413140561 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
+1413412482 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
 1413140561 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
@@ -9464,7 +9464,7 @@
 	"RuleTerrain.h"
 	"RuleUfo.h"
 
-1413407868 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
+1413412174 source:f:\git\openxcom\src\ruleset\soldiernamepool.cpp
 	"SoldierNamePool.h"
 	<fstream>
 	<iostream>
@@ -11950,7 +11950,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1413140561 source:f:\git\openxcom\src\ruleset\statstring.cpp
+1413410577 source:f:\git\openxcom\src\ruleset\statstring.cpp
 	<vector>
 	"StatString.h"
 

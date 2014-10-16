@@ -236,7 +236,7 @@ YAML::Node Soldier::save() const
 	node["gainPsiSkl"]		= _gainPsiSkl;
 	node["gainPsiStr"]		= _gainPsiStr;
 
-	if (!_equipmentLayout.empty())
+	if (_equipmentLayout.empty() == false)
 	{
 		for (std::vector<EquipmentLayoutItem*>::const_iterator
 				i = _equipmentLayout.begin();
@@ -247,13 +247,8 @@ YAML::Node Soldier::save() const
 		}
 	}
 
-	// kL_note: This should be obsolete, since SoldierDead was put in.
-	// ie, SoldierDeath is part of SoldierDead, not class Soldier.
-/*kL	if (_death != 0)
-		node["death"] = _death->save(); */
-
-	if (!_diary->getMissionIdList().empty()
-		|| !_diary->getSoldierCommendations()->empty())
+	if (_diary->getMissionIdList().empty() == false
+		|| _diary->getSoldierCommendations()->empty() == false)
 	{
 		node["diary"] = _diary->save();
 	}
@@ -310,7 +305,7 @@ std::wstring Soldier::getName(
 		size_t maxLength) const
 {
 	if (statstring
-		&& !_statString.empty())
+		&& _statString.empty() == false)
 	{
 		if (_name.length() + _statString.length() > maxLength)
 		{
@@ -655,7 +650,7 @@ void Soldier::trainPsi1Day()
 {
 	_gainPsiSkl = 0; // was used in AllocatePsiTrainingState.
 
-	if (!_psiTraining)
+	if (_psiTraining == false)
 		return;
 
 	int const psiSkill = _currentStats.psiSkill;
@@ -672,8 +667,8 @@ void Soldier::trainPsi1Day()
 									500 / psiSkill));
 		if (RNG::percent(chance))
 		{
-			++_gainPsiSkl;
-			++_currentStats.psiSkill;
+			_gainPsiSkl++;
+			_currentStats.psiSkill++;
 		}
 
 		if (Options::allowPsiStrengthImprovement)
@@ -688,8 +683,8 @@ void Soldier::trainPsi1Day()
 										500 / psiStrength));
 				if (RNG::percent(chance))
 				{
-					++_gainPsiStr;
-					++_currentStats.psiStrength;
+					_gainPsiStr++;
+					_currentStats.psiStrength++;
 				}
 			}
 		}

@@ -450,7 +450,6 @@ void SoldierInfoState::init()
 		_soldierID = 0;
 
 	_soldier = _list->at(_soldierID);
-//kL	_edtSoldier->setBig();
 	_edtSoldier->setText(_soldier->getName());
 
 	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -739,7 +738,6 @@ void SoldierInfoState::init()
 		ss << armored.psiSkill;
 		_numPsiSkill->setText(ss.str());
 		_barPsiSkill->setValue(armored.psiSkill);
-//		_barPsiSkill->setValue2(0.0); // kL
 		if (initial->psiSkill > current->psiSkill)
 			_barPsiSkill->setMax(initial->psiSkill);
 		else
@@ -817,7 +815,6 @@ void SoldierInfoState::btnAutoStat(Action*)
 	}
 
 	UnitStats* current = _soldier->getCurrentStats();
-
 	stat << current->firing << ".";
 	stat << current->reactions << ".";
 	stat << current->strength;
@@ -845,17 +842,18 @@ void SoldierInfoState::btnAutoStat(Action*)
 		case 100: stat << "j";
 		break;
 
-		default: stat << "";
+		default: stat << "z";
 		break;
 	}
 
 	if (current->psiSkill >= _soldier->getRules()->getMinStats().psiSkill)
 	{
-		int psiStr = current->psiStrength;
-		int psiSkl = current->psiSkill;
+		int
+			psiStr = current->psiStrength,
+			psiSkl = current->psiSkill,
 
-		int psiDefense = psiStr + psiSkl / 5;
-		int psiAttack = psiStr * psiSkl / 100;
+			psiDefense = psiStr + psiSkl / 5,
+			psiAttack = psiStr * psiSkl / 100;
 
 		stat << psiDefense;
 
