@@ -453,7 +453,7 @@ extraSprites:
   - type: inventory_WASPITE
     singleImage: true
     files:
-      0: Resources/cover_alien/inventory_WASPITE.gif
+      0: Resources/cover_alien/inventory_WASPITE.png
   - type: CYBERMITE.PCK
     width: 512
     height: 240
@@ -463,36 +463,36 @@ extraSprites:
       0: Resources/cover_alien/CYBERMITE.png
   - type: BIGOBS.PCK
     files:
-      105: Resources/cover_alien/bigobs_WASPITE_CORPSE.gif
-      106: Resources/cover_alien/bigobs_CYBERMITE_CORPSE.gif
+      105: Resources/cover_alien/bigobs_WASPITE_CORPSE.png
+      106: Resources/cover_alien/bigobs_CYBERMITE_CORPSE.png
   - type: FLOOROB.PCK
     files:
-      105: Resources/cover_alien/floorob_WASPITE_CORPSE.gif
-      106: Resources/cover_alien/floorob_CYBERMITE_CORPSE.gif
+      105: Resources/cover_alien/floorob_WASPITE_CORPSE.png
+      106: Resources/cover_alien/floorob_CYBERMITE_CORPSE.png
   - type: UFOPAEDIA_IMG_WASPITE_AUTOPSY
     singleImage: true
     width: 320
     height: 200
     files: 
-      0: Resources/cover_alien/ufopaedia_WASPITE_AUTOPSY.gif
+      0: Resources/cover_alien/ufopaedia_WASPITE_AUTOPSY.png
   - type: UFOPAEDIA_IMG_WASPITE
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/cover_alien/ufopaedia_WASPITE.gif
+      0: Resources/cover_alien/ufopaedia_WASPITE.png
   - type: UFOPAEDIA_IMG_CYBERMITE_AUTOPSY
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/cover_alien/ufopaedia_CYBERMITE_AUTOPSY.gif
+      0: Resources/cover_alien/ufopaedia_CYBERMITE_AUTOPSY.png
   - type: UFOPAEDIA_IMG_CYBERMITE
     singleImage: true
     width: 320
     height: 200
     files:
-      0: Resources/cover_alien/ufopaedia_CYBERMITE.gif
+      0: Resources/cover_alien/ufopaedia_CYBERMITE.png
 extraStrings:
   - type: en-US
     strings:

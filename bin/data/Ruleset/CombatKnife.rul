@@ -39,8 +39,8 @@ extraSprites:
     files:
       76: Resources/CombatKnife/FloorCombatKnife.png
   - type: HANDOB.PCK
-    height: 40
     width: 256
+    height: 40
     subX: 32
     subY: 40
     files:
