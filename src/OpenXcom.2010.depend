@@ -5921,7 +5921,7 @@
 
 1413140561 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1413465026 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1413467320 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6122,7 +6122,7 @@
 	<math.h>
 	"SDL.h"
 
-1413465445 f:\git\openxcom\src\battlescape\briefingstate.h
+1413472255 f:\git\openxcom\src\battlescape\briefingstate.h
 	"../Engine/State.h"
 
 1413140556 f:\git\openxcom\src\battlescape\minimapstate.h
@@ -6176,7 +6176,7 @@
 1413140555 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1413465455 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1413472150 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	<sstream>
 	"AliensCrashState.h"

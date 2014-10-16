@@ -59,17 +59,17 @@ SoldierArmorState::SoldierArmorState(
 {
 	_screen = false;
 
-	_window			= new Window(this, 192, 120, 64, 40, POPUP_BOTH);
+	_window			= new Window(this, 192, 123, 64, 39, POPUP_BOTH);
 
 //kL	_txtTitle		= new Text(182, 9, 69, 48);
-	_txtSoldier		= new Text(182, 9, 69, 55);
+	_txtSoldier		= new Text(182, 9, 69, 50);
 
-	_txtType		= new Text(102, 9, 84, 72);
-	_txtQuantity	= new Text(42, 9, 194, 72);
+	_txtType		= new Text(102, 9, 84, 65);
+	_txtQuantity	= new Text(42, 9, 194, 65);
 
-	_lstArmor		= new TextList(168, 41, 76, 88);
+	_lstArmor		= new TextList(160, 57, 76, 76);
 
-	_btnCancel		= new TextButton(152, 16, 84, 136);
+	_btnCancel		= new TextButton(152, 16, 84, 138);
 
 	setPalette("PAL_BASESCAPE", 4);
 
@@ -111,7 +111,7 @@ SoldierArmorState::SoldierArmorState(
 
 	_lstArmor->setColor(Palette::blockOffset(13));
 	_lstArmor->setArrowColor(Palette::blockOffset(13)+5);
-	_lstArmor->setColumns(2, 110, 42);
+	_lstArmor->setColumns(2, 110, 35);
 	_lstArmor->setSelectable();
 	_lstArmor->setBackground(_window);
 	_lstArmor->setMargin();
@@ -141,7 +141,6 @@ SoldierArmorState::SoldierArmorState(
 		else if (armor->getStoreItem() == "STR_NONE")
 		{
 			_armors.push_back(armor);
-
 			_lstArmor->addRow(
 							1,
 							tr(armor->getType()).c_str());

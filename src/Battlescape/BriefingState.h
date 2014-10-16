@@ -34,8 +34,7 @@ class Window;
 
 
 /**
- * Briefing screen which displays info
- * about a Crash Site mission.
+ * Briefing screen which displays info about a mission.
  */
 class BriefingState
 	:
@@ -43,8 +42,6 @@ class BriefingState
 {
 
 private:
-	std::string _mission;
-
 	Text
 		* _txtBriefing,
 		* _txtCraft,
