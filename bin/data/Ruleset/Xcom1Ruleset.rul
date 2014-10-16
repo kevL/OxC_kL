@@ -1947,11 +1947,11 @@ items:
     meleeSound: 39
     meleeHitSound: 38
 #    hitAnimation: 0
-    power: 20
+    power: 18
     strengthApplied: true
     damageType: 6
-    accuracyMelee: 150 #this is CombatKnife values for now
-    tuMelee: 12
+    accuracyMelee: 110
+    tuMelee: 13
     battleType: 3
     clipSize: -1
     twoHanded: false
@@ -3762,7 +3762,7 @@ units:
       strength: 30
       psiStrength: 5
       psiSkill: 0
-      melee: 50
+      melee: 15
     armor: CIVM_ARMOR
     standHeight: 21
     kneelHeight: 14
@@ -3782,7 +3782,7 @@ units:
       strength: 30
       psiStrength: 5
       psiSkill: 0
-      melee: 50
+      melee: 15
     armor: CIVF_ARMOR
     standHeight: 21
     kneelHeight: 14
@@ -3803,7 +3803,7 @@ units:
       strength: 40
       psiStrength: 57
       psiSkill: 0
-      melee: 76
+      melee: 15
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
@@ -3811,52 +3811,6 @@ units:
     deathSound: 10
     intelligence: 3
     aggression: 1
-    energyRecovery: 60
-  - type: STR_SECTOID_ENGINEER
-    race: STR_SECTOID
-    rank: STR_LIVE_ENGINEER
-    stats:
-      tu: 54
-      stamina: 90
-      health: 46
-      bravery: 90
-      reactions: 63
-      firing: 52
-      throwing: 58
-      strength: 40
-      psiStrength: 87
-      psiSkill: 0
-      melee: 76
-    armor: SECTOID_ARMOR0
-    standHeight: 16
-    kneelHeight: 12
-    value: 14
-    deathSound: 10
-    intelligence: 6
-    aggression: 2
-    energyRecovery: 60
-  - type: STR_SECTOID_MEDIC
-    race: STR_SECTOID
-    rank: STR_LIVE_MEDIC
-    stats:
-      tu: 54
-      stamina: 90
-      health: 41
-      bravery: 80
-      reactions: 63
-      firing: 52
-      throwing: 58
-      strength: 40
-      psiStrength: 77
-      psiSkill: 0
-      melee: 76
-    armor: SECTOID_ARMOR0
-    standHeight: 16
-    kneelHeight: 12
-    value: 12
-    deathSound: 10
-    intelligence: 5
-    aggression: 0
     energyRecovery: 60
   - type: STR_SECTOID_NAVIGATOR
     race: STR_SECTOID
@@ -3872,7 +3826,7 @@ units:
       strength: 40
       psiStrength: 67
       psiSkill: 0
-      melee: 76
+      melee: 12
     armor: SECTOID_ARMOR0
     standHeight: 16
     kneelHeight: 12
@@ -3880,6 +3834,52 @@ units:
     deathSound: 10
     intelligence: 4
     aggression: 1
+    energyRecovery: 60
+  - type: STR_SECTOID_MEDIC
+    race: STR_SECTOID
+    rank: STR_LIVE_MEDIC
+    stats:
+      tu: 54
+      stamina: 90
+      health: 41
+      bravery: 80
+      reactions: 63
+      firing: 52
+      throwing: 58
+      strength: 40
+      psiStrength: 77
+      psiSkill: 0
+      melee: 10
+    armor: SECTOID_ARMOR0
+    standHeight: 16
+    kneelHeight: 12
+    value: 12
+    deathSound: 10
+    intelligence: 5
+    aggression: 0
+    energyRecovery: 60
+  - type: STR_SECTOID_ENGINEER
+    race: STR_SECTOID
+    rank: STR_LIVE_ENGINEER
+    stats:
+      tu: 54
+      stamina: 90
+      health: 46
+      bravery: 90
+      reactions: 63
+      firing: 52
+      throwing: 58
+      strength: 40
+      psiStrength: 87
+      psiSkill: 0
+      melee: 15
+    armor: SECTOID_ARMOR0
+    standHeight: 16
+    kneelHeight: 12
+    value: 14
+    deathSound: 10
+    intelligence: 6
+    aggression: 2
     energyRecovery: 60
   - type: STR_SECTOID_LEADER
     race: STR_SECTOID
@@ -3895,7 +3895,7 @@ units:
       strength: 45
       psiStrength: 89
       psiSkill: 41
-      melee: 76
+      melee: 18
     armor: SECTOID_ARMOR1
     standHeight: 16
     kneelHeight: 12
@@ -3918,7 +3918,7 @@ units:
       strength: 50
       psiStrength: 109
       psiSkill: 42
-      melee: 76
+      melee: 23
     armor: SECTOID_ARMOR2
     standHeight: 16
     kneelHeight: 12
@@ -3970,7 +3970,7 @@ units:
       strength: 40
       psiStrength: 36
       psiSkill: 0
-      melee: 70
+      melee: 39
     armor: FLOATER_ARMOR0
     standHeight: 21
     kneelHeight: 16
@@ -3980,6 +3980,56 @@ units:
     moveSound: 15
     intelligence: 4
     aggression: 2
+    energyRecovery: 60
+  - type: STR_FLOATER_NAVIGATOR
+    race: STR_FLOATER
+    rank: STR_LIVE_NAVIGATOR
+    stats:
+      tu: 50
+      stamina: 90
+      health: 40
+      bravery: 50
+      reactions: 50
+      firing: 50
+      throwing: 58
+      strength: 40
+      psiStrength: 46
+      psiSkill: 0
+      melee: 37
+    armor: FLOATER_ARMOR0
+    standHeight: 21
+    kneelHeight: 16
+    floatHeight: 2
+    value: 12
+    deathSound: 255
+    moveSound: 15
+    intelligence: 5
+    aggression: 2
+    energyRecovery: 60
+  - type: STR_FLOATER_MEDIC
+    race: STR_FLOATER
+    rank: STR_LIVE_MEDIC
+    stats:
+      tu: 50
+      stamina: 90
+      health: 45
+      bravery: 60
+      reactions: 50
+      firing: 50
+      throwing: 58
+      strength: 40
+      psiStrength: 56
+      psiSkill: 0
+      melee: 35
+    armor: FLOATER_ARMOR0
+    standHeight: 21
+    kneelHeight: 16
+    floatHeight: 2
+    value: 14
+    deathSound: 255
+    moveSound: 15
+    intelligence: 6
+    aggression: 1
     energyRecovery: 60
   - type: STR_FLOATER_ENGINEER
     race: STR_FLOATER
@@ -4005,57 +4055,7 @@ units:
     moveSound: 15
     intelligence: 7
     aggression: 2
-    energyRecovery: 60
-  - type: STR_FLOATER_NAVIGATOR
-    race: STR_FLOATER
-    rank: STR_LIVE_NAVIGATOR
-    stats:
-      tu: 50
-      stamina: 90
-      health: 40
-      bravery: 50
-      reactions: 50
-      firing: 50
-      throwing: 58
-      strength: 40
-      psiStrength: 46
-      psiSkill: 0
-      melee: 70
-    armor: FLOATER_ARMOR0
-    standHeight: 21
-    kneelHeight: 16
-    floatHeight: 2
-    value: 12
-    deathSound: 255
-    moveSound: 15
-    intelligence: 5
-    aggression: 2
-    energyRecovery: 60
-  - type: STR_FLOATER_MEDIC
-    race: STR_FLOATER
-    rank: STR_LIVE_MEDIC
-    stats:
-      tu: 50
-      stamina: 90
-      health: 45
-      bravery: 60
-      reactions: 50
-      firing: 50
-      throwing: 58
-      strength: 40
-      psiStrength: 56
-      psiSkill: 0
-      melee: 70
-    armor: FLOATER_ARMOR0
-    standHeight: 21
-    kneelHeight: 16
-    floatHeight: 2
-    value: 14
-    deathSound: 255
-    moveSound: 15
-    intelligence: 6
-    aggression: 1
-    energyRecovery: 60
+    energyRecovery: 42
   - type: STR_FLOATER_LEADER
     race: STR_FLOATER
     rank: STR_LIVE_LEADER
@@ -4080,7 +4080,7 @@ units:
     moveSound: 15
     intelligence: 8
     aggression: 0
-    energyRecovery: 60
+    energyRecovery: 47
   - type: STR_FLOATER_COMMANDER
     race: STR_FLOATER
     rank: STR_LIVE_COMMANDER
@@ -4095,7 +4095,7 @@ units:
       strength: 50
       psiStrength: 86
       psiSkill: 0
-      melee: 76
+      melee: 52
     armor: FLOATER_ARMOR2
     standHeight: 21
     kneelHeight: 16
@@ -4120,7 +4120,7 @@ units:
       strength: 90
       psiStrength: 49
       psiSkill: 0
-      melee: 80
+      melee: 75
     armor: REAPER_ARMOR
     standHeight: 23
     kneelHeight: 16
@@ -4144,7 +4144,7 @@ units:
       strength: 47
       psiStrength: 65
       psiSkill: 0
-      melee: 76
+      melee: 48
     armor: SNAKEMAN_ARMOR0
     standHeight: 18
     kneelHeight: 18
@@ -4169,7 +4169,7 @@ units:
       strength: 47
       psiStrength: 75
       psiSkill: 0
-      melee: 76
+      melee: 45
     armor: SNAKEMAN_ARMOR1
     standHeight: 18
     kneelHeight: 18
@@ -4194,7 +4194,7 @@ units:
       strength: 47
       psiStrength: 85
       psiSkill: 0
-      melee: 76
+      melee: 48
     armor: SNAKEMAN_ARMOR2
     standHeight: 18
     kneelHeight: 18
@@ -4219,7 +4219,7 @@ units:
       strength: 52
       psiStrength: 95
       psiSkill: 0
-      melee: 76
+      melee: 53
     armor: SNAKEMAN_ARMOR3
     standHeight: 18
     kneelHeight: 18
@@ -4244,7 +4244,7 @@ units:
       strength: 57
       psiStrength: 105
       psiSkill: 0
-      melee: 76
+      melee: 58
     armor: SNAKEMAN_ARMOR4
     standHeight: 18
     kneelHeight: 18
@@ -4269,7 +4269,7 @@ units:
       strength: 110
       psiStrength: 114
       psiSkill: 0
-      melee: 80
+      melee: 82
     armor: CHRYSSALID_ARMOR
     standHeight: 21
     kneelHeight: 16
@@ -4280,6 +4280,7 @@ units:
     aggression: 2
     energyRecovery: 80
     livingWeapon: true
+#    meleeWeapon: STR_FIST
   - type: STR_MUTON_SOLDIER
     race: STR_MUTON
     rank: STR_LIVE_SOLDIER
@@ -4294,7 +4295,7 @@ units:
       strength: 70
       psiStrength: 37
       psiSkill: 0
-      melee: 76
+      melee: 69
     armor: MUTON_ARMOR0
     standHeight: 21
     kneelHeight: 16
@@ -4318,7 +4319,7 @@ units:
       strength: 75
       psiStrength: 47
       psiSkill: 0
-      melee: 76
+      melee: 65
     armor: MUTON_ARMOR1
     standHeight: 21
     kneelHeight: 16
@@ -4342,7 +4343,7 @@ units:
       strength: 80
       psiStrength: 57
       psiSkill: 0
-      melee: 76
+      melee: 75
     armor: MUTON_ARMOR2
     standHeight: 21
     kneelHeight: 16
@@ -4366,7 +4367,7 @@ units:
       strength: 70
       psiStrength: 153
       psiSkill: 0
-      melee: 80
+      melee: 79
     armor: SILACOID_ARMOR
     standHeight: 10
     kneelHeight: 10
@@ -4392,7 +4393,7 @@ units:
       strength: 40
       psiStrength: 82
       psiSkill: 0
-      melee: 80
+      melee: 0
     armor: CELATID_ARMOR
     standHeight: 10
     kneelHeight: 10
@@ -4418,7 +4419,7 @@ units:
       strength: 48
       psiStrength: 99
       psiSkill: 36
-      melee: 85
+      melee: 56
     armor: ETHEREAL_ARMOR0
     standHeight: 20
     kneelHeight: 15
@@ -4442,7 +4443,7 @@ units:
       strength: 48
       psiStrength: 114
       psiSkill: 37
-      melee: 85
+      melee: 66
     armor: ETHEREAL_ARMOR1
     standHeight: 20
     kneelHeight: 15
@@ -4466,7 +4467,7 @@ units:
       strength: 48
       psiStrength: 133
       psiSkill: 38
-      melee: 85
+      melee: 78
     armor: ETHEREAL_ARMOR2
     standHeight: 20
     kneelHeight: 15
@@ -4490,7 +4491,7 @@ units:
       strength: 90
       psiStrength: 200
       psiSkill: 0
-      melee: 80
+      melee: 0
     armor: SECTOPOD_ARMOR
     standHeight: 23
     kneelHeight: 16
@@ -4516,7 +4517,7 @@ units:
       strength: 84
       psiStrength: 200
       psiSkill: 0
-      melee: 80
+      melee: 51
     armor: ZOMBIE_ARMOR
     standHeight: 18
     kneelHeight: 18
@@ -4528,6 +4529,7 @@ units:
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
     isPsiImmune: true
+    meleeWeapon: STR_FIST
 alienRaces:
   - id: STR_SECTOID
     members:
