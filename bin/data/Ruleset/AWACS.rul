@@ -1,6 +1,7 @@
 # X-COM 1 (UFO: Enemy Unknown) ruleset
 crafts:
   - type: STR_HAWKEYE
+    listOrder: 207
     sprite: 26
     fuelMax: 1350
     damageMax: 125
@@ -13,8 +14,8 @@ crafts:
 #    radarChance: 40
     transferTime: 96
     score: 200
-    listOrder: 207
   - type: STR_AWACS
+    listOrder: 208
     sprite: 27
     fuelMax: 1750
     damageMax: 140
@@ -27,8 +28,8 @@ crafts:
 #    radarChance: 40
     transferTime: 96
     score: 225
-    listOrder: 208
   - type: STR_DARKSTAR
+    listOrder: 209
     sprite: 28
     fuelMax: 2250
     damageMax: 75
@@ -40,7 +41,6 @@ crafts:
 #    radarChance: 60
     transferTime: 96
     score: 150
-    listOrder: 209
 #-----------------------------------
 #research:
 #  - name: STR_UNMANNED_AIRCRAFT
@@ -122,12 +122,13 @@ extraSprites:
       60: Resources/AWACS/AWACS_base_view.gif
       61: Resources/AWACS/DARKSTAR_base_view.gif
   - type: INTICON.PCK
-    width: 352
-    height: 80
+    width: 96
+    height: 40
     subX: 32
     subY: 40
     files:
-      26: Resources/AWACS/AWACS_geoscape.png
+      26: Resources/AWACS/AWACS_geoscape1.png
+      37: Resources/AWACS/AWACS_geoscape2.png
   - type: HAWKEYE_BIG
     singleImage: true
     width: 320
@@ -150,7 +151,7 @@ extraSprites:
 extraStrings:
   - type: en-US
     strings:
-      STR_UNMANNED_AIRCRAFT: "Unmanned Aircraft"
+      STR_UNMANNED_AIRCRAFT: "UAV"
       STR_HAWKEYE: "HAWKEYE"
       STR_HAWKEYE_UFOPEDIA: "A SPECIAL MODIFICATION FOR XCOM WITH ADDITIONAL FUEL TANK AND INCREASED RADAR RANGE."
       STR_AWACS: "AWACS"
