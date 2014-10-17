@@ -118,9 +118,9 @@ ufopaedia:
 extraSprites:
   - type: BASEBITS.PCK
     files:
-      59: Resources/AWACS/HAWKEYE_base_view.gif
-      60: Resources/AWACS/AWACS_base_view.gif
-      61: Resources/AWACS/DARKSTAR_base_view.gif
+      59: Resources/AWACS/HAWKEYE_base_view.png
+      60: Resources/AWACS/AWACS_base_view.png
+      61: Resources/AWACS/DARKSTAR_base_view.png
   - type: INTICON.PCK
     width: 96
     height: 40
