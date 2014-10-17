@@ -5381,7 +5381,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Transfer.h"
 
-1413140555 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
+1413481823 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
 	"SoldierArmorState.h"
 	<sstream>
 	"../Engine/Game.h"

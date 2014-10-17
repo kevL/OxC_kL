@@ -97,13 +97,10 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 					tr("STR_KILOMETERS").arg(weapon->getRange()).c_str());
 	_lstInfo->setCellColor(1, 1, Palette::blockOffset(15)+4);
 
-//kL	_lstInfo->addRow(2, tr("STR_ACCURACY").c_str(), Text::formatPercentage(weapon->getAccuracy()).c_str());
-	std::wostringstream ss2;
-	ss2 << weapon->getAccuracy();
 	_lstInfo->addRow(
 					2,
 					tr("STR_ACCURACY").c_str(),
-					ss2.str().c_str());
+					Text::formatNumber(weapon->getAccuracy()).c_str());
 	_lstInfo->setCellColor(2, 1, Palette::blockOffset(15)+4);
 
 	_lstInfo->addRow(
@@ -111,6 +108,13 @@ ArticleStateCraftWeapon::ArticleStateCraftWeapon(ArticleDefinitionCraftWeapon* d
 					tr("STR_RE_LOAD_TIME").c_str(),
 					tr("STR_SECONDS").arg(weapon->getStandardReload()).c_str());
 	_lstInfo->setCellColor(3, 1, Palette::blockOffset(15)+4);
+
+	_lstInfo->addRow(
+					2,
+					tr("STR_ROUNDS").c_str(),
+					Text::formatNumber(weapon->getAmmoMax()).c_str());
+	_lstInfo->setCellColor(4, 1, Palette::blockOffset(15)+4);
+
 
 	centerAllSurfaces();
 }
