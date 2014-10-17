@@ -543,91 +543,91 @@ items:
 #    power: 120
 #    blastRadius: 11
 #------------------------------------------------------------------------------
-  - type: STR_LASER_PISTOL
-    power: 45 # 46
-    accuracyAuto: 45 # 28
-    accuracySnap: 50 # 40
-    accuracyAimed: 70 # 68
-    tuAuto: 35 # 25
-    tuSnap: 16 # 20
-    tuAimed: 45 # 55
-    maxRange: 100 # 0
-    aimRange: 25 # 0
-    snapRange: 9 # 0
-    autoRange: 9 # 0
-    dropoff: 1 # 0
-    autoShots: 4 # 0
+#  - type: STR_LASER_PISTOL
+#    power: 45 # 46
+#    accuracyAuto: 45 # 28
+#    accuracySnap: 50 # 40
+#    accuracyAimed: 70 # 68
+#    tuAuto: 35 # 25
+#    tuSnap: 16 # 20
+#    tuAimed: 45 # 55
+#    maxRange: 100 # 0
+#    aimRange: 25 # 0
+#    snapRange: 9 # 0
+#    autoRange: 9 # 0
+#    dropoff: 1 # 0
+#    autoShots: 4 # 0
 #------------------------------------------------------------------------------
-  - type: STR_LASER_RIFLE
-    accuracyAuto: 55 # 46
-    accuracySnap: 50 # 65
-    accuracyAimed: 100 # 84
-    tuAuto: 30 # 34
-    tuSnap: 25 # (unchanged)
-    tuAimed: 55 # 50
-    maxRange: 200 # 0
-    aimRange: 90 # 0
-    snapRange: 24 # 0
-    autoRange: 19 # 0
-    minRange: 3
-    dropoff: 1 # 0
-    autoShots: 3 # 0
+#  - type: STR_LASER_RIFLE
+#    accuracyAuto: 55 # 46
+#    accuracySnap: 50 # 65
+#    accuracyAimed: 100 # 84
+#    tuAuto: 30 # 34
+#    tuSnap: 25 # (unchanged)
+#    tuAimed: 55 # 50
+#    maxRange: 200 # 0
+#    aimRange: 90 # 0
+#    snapRange: 24 # 0
+#    autoRange: 19 # 0
+#    minRange: 3
+#    dropoff: 1 # 0
+#    autoShots: 3 # 0
 #------------------------------------------------------------------------------
-  - type: STR_HEAVY_LASER
-    power: 120 # 85
-    accuracyAimed: 130 # 84
-    accuracySnap: 50 # ??
-    tuSnap: 40 # 33
-    tuAimed: 75 # (unchanged)
-    maxRange: 200 # 0
-    aimRange: 140 # 0
-    snapRange: 13 # 0
-    minRange: 8
-    dropoff: 1 # 0
+#  - type: STR_HEAVY_LASER
+#    power: 120 # 85
+#    accuracyAimed: 130 # 84
+#    accuracySnap: 50 # ??
+#    tuSnap: 40 # 33
+#    tuAimed: 75 # (unchanged)
+#    maxRange: 200 # 0
+#    aimRange: 140 # 0
+#    snapRange: 13 # 0
+#    minRange: 8
+#    dropoff: 1 # 0
 #------------------------------------------------------------------------------
-  - type: STR_HEAVY_PLASMA
-    accuracyAuto: 42 # 50
-    accuracySnap: 50 # 75
-    accuracyAimed: 90 # 110
-    tuAuto: 40 # 35
-    tuSnap: 30 # (unchanged)
-    tuAimed: 65 # 60
-    maxRange: 200 # 0
-    aimRange: 90 # 0
-    snapRange: 20 # 0
-    autoRange: 25 # 0
-    minRange: 6
-    dropoff: 3 # 0
+#  - type: STR_HEAVY_PLASMA
+#    accuracyAuto: 42 # 50
+#    accuracySnap: 50 # 75
+#    accuracyAimed: 90 # 110
+#    tuAuto: 40 # 35
+#    tuSnap: 30 # (unchanged)
+#    tuAimed: 65 # 60
+#    maxRange: 200 # 0
+#    aimRange: 90 # 0
+#    snapRange: 20 # 0
+#    autoRange: 25 # 0
+#    minRange: 6
+#    dropoff: 3 # 0
 #------------------------------------------------------------------------------
 #  - type: STR_HEAVY_PLASMA_CLIP
 #    power: 110 # 115
 #------------------------------------------------------------------------------
-  - type: STR_PLASMA_RIFLE
-    accuracyAuto: 40 # 55
-    accuracySnap: 55 # 86
-    accuracyAimed: 105 # 100
-    tuAuto: 35 # 36
-    tuSnap: 25 # 30
-    tuAimed: 55 # 60
-    maxRange: 200 # 0
-    aimRange: 85 # 0
-    snapRange: 25 # 0
-    autoRange: 20 # 0
-    minRange: 4
-    dropoff: 2 # 0
+#  - type: STR_PLASMA_RIFLE
+#    accuracyAuto: 40 # 55
+#    accuracySnap: 55 # 86
+#    accuracyAimed: 105 # 100
+#    tuAuto: 35 # 36
+#    tuSnap: 25 # 30
+#    tuAimed: 55 # 60
+#    maxRange: 200 # 0
+#    aimRange: 85 # 0
+#    snapRange: 25 # 0
+#    autoRange: 20 # 0
+#    minRange: 4
+#    dropoff: 2 # 0
 #------------------------------------------------------------------------------
-  - type: STR_PLASMA_PISTOL
-    accuracyAuto: 38 # 50
-    accuracySnap: 55 # 65
-    accuracyAimed: 75 # 85
-    tuAuto: 33 # 30
-    tuSnap: 20 # 30
-    tuAimed: 40 # 60
-    maxRange: 100 # 0
-    aimRange: 30 # 0
-    snapRange: 8 # 0
-    autoRange: 8 # 0
-    dropoff: 3 # 0
+#  - type: STR_PLASMA_PISTOL
+#    accuracyAuto: 38 # 50
+#    accuracySnap: 55 # 65
+#    accuracyAimed: 75 # 85
+#    tuAuto: 33 # 30
+#    tuSnap: 20 # 30
+#    tuAimed: 40 # 60
+#    maxRange: 100 # 0
+#    aimRange: 30 # 0
+#    snapRange: 8 # 0
+#    autoRange: 8 # 0
+#    dropoff: 3 # 0
 #------------------------------------------------------------------------------
 #  - type: STR_PLASMA_PISTOL_CLIP
 #    power: 65 # 52

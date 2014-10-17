@@ -255,8 +255,8 @@ void MiniMapView::draw()
 
 
 	// kL_note: looks like the crosshairs for the MiniMap
-	Sint16 centerX = static_cast<Sint16>(getWidth() / 2);
-	Sint16 centerY = static_cast<Sint16>(getHeight() / 2);
+	Sint16 centerX = static_cast<Sint16>(getWidth() / 2) - 1;
+	Sint16 centerY = static_cast<Sint16>(getHeight() / 2) - 1;
 	Sint16 xOffset = static_cast<Sint16>(CELL_WIDTH / 2);
 	Sint16 yOffset = static_cast<Sint16>(CELL_HEIGHT / 2);
 

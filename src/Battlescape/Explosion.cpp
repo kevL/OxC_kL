@@ -23,9 +23,10 @@
 namespace OpenXcom
 {
 
-const int Explosion::FRAMES_BULLET	= 10;
-const int Explosion::FRAMES_EXPLODE	= 8;
-const int Explosion::FRAMES_HIT		= 4;
+const int
+	Explosion::FRAMES_BULLET	= 10,
+	Explosion::FRAMES_EXPLODE	= 8,
+	Explosion::FRAMES_HIT		= 4;
 
 
 /**

@@ -105,9 +105,9 @@ void ExplosionBState::init()
 
 			// getCurrentAction() only works for player actions: aliens cannot melee attack with rifle butts.
 			_pistolWhip = _unit != NULL
-						&& _unit->getFaction() == FACTION_PLAYER
-						&& _item->getRules()->getBattleType() != BT_MELEE
-						&& _parent->getCurrentAction()->type == BA_HIT;
+					   && _unit->getFaction() == FACTION_PLAYER
+					   && _item->getRules()->getBattleType() != BT_MELEE
+					   && _parent->getCurrentAction()->type == BA_HIT;
 
 			if (_pistolWhip)
 				_power = _item->getRules()->getMeleePower();
@@ -247,7 +247,7 @@ void ExplosionBState::init()
 				_parent->getMap()->getExplosions()->push_back(explosion);
 			}
 
-			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED * 10 / 7);
+			_parent->setStateInterval(BattlescapeState::DEFAULT_ANIM_SPEED); // * 10 / 7);
 
 
 			int sound = -1;
@@ -266,11 +266,11 @@ void ExplosionBState::init()
 														_parent->getMap()->getSoundAngle(centerPos));
 
 			Camera* exploCam = _parent->getMap()->getCamera();
-			if (!exploCam->isOnScreen(centerPos))
+			if (exploCam->isOnScreen(centerPos) == false)
 			{
 				exploCam->centerOnPosition(
-											centerPos,
-											false);
+										centerPos,
+										false);
 			}
 			else if (exploCam->getViewLevel() != centerPos.z)
 				exploCam->setViewLevel(centerPos.z);
@@ -346,6 +346,29 @@ void ExplosionBState::init()
  */
 void ExplosionBState::think()
 {
+	for (std::list<Explosion*>::const_iterator
+			i = _parent->getMap()->getExplosions()->begin();
+			i != _parent->getMap()->getExplosions()->end();
+			)
+	{
+		if ((*i)->animate() == false)
+		{
+			delete *i;
+			i = _parent->getMap()->getExplosions()->erase(i);
+		}
+		else
+			++i;
+	}
+
+	if (_parent->getMap()->getExplosions()->empty())
+		_extend--;
+
+	if (_extend < 1)
+	{
+		explode();
+		return;
+	}
+}
 /*	for (std::list<Explosion*>::const_iterator
 			i = _parent->getMap()->getExplosions()->begin();
 			i != _parent->getMap()->getExplosions()->end();
@@ -355,51 +378,15 @@ void ExplosionBState::think()
 		{
 			delete *i;
 			i = _parent->getMap()->getExplosions()->erase(i);
-
 			if (_parent->getMap()->getExplosions()->empty())
 			{
 				explode();
-
 				return;
 			}
 		}
 		else
 			++i;
 	} */
-
-	for (std::list<Explosion*>::const_iterator
-			i = _parent->getMap()->getExplosions()->begin();
-			i != _parent->getMap()->getExplosions()->end();
-			)
-	{
-		//Log(LOG_INFO) << "iterate";
-		if ((*i)->animate() == false)
-		{
-			//Log(LOG_INFO) << "done anim.";
-			delete *i;
-			i = _parent->getMap()->getExplosions()->erase(i);
-		}
-		else
-		{
-			//Log(LOG_INFO) << "next anim";
-			i++;
-		}
-	}
-
-	if (_parent->getMap()->getExplosions()->empty())
-	{
-		_extend--;
-		//Log(LOG_INFO) << "explosions Empty, extend = " << _extend;
-	}
-
-	if (_extend < 1)
-	{
-		//Log(LOG_INFO) << "extend is 0";
-		explode();
-
-		return;
-	}
-}
 
 /**
  * Explosions cannot be cancelled.

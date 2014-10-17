@@ -1671,6 +1671,7 @@ bool TileEngine::reactionShot(
 		//else Log(LOG_INFO) << ". weapon[0] NULL";
 
 		if (action.weapon == NULL
+			&& action.actor->getUnitRules() != NULL
 			&& action.actor->getUnitRules()->getMeleeWeapon() == "STR_FIST")
 		{
 			action.weapon = _battleSave->getBattleGame()->getFist();
@@ -1689,8 +1690,8 @@ bool TileEngine::reactionShot(
 	else
 	{
 		action.type = selectFireMethod(action, tu);
-		if (tu < 1
-			|| tu > action.actor->getTimeUnits())
+		if (tu < 1)
+//			|| tu > action.actor->getTimeUnits()) // checked in selectFireMethod()
 		{
 			return false;
 		}
@@ -1812,69 +1813,78 @@ BattleActionType TileEngine::selectFireMethod( // kL
 	//Log(LOG_INFO) << "TileEngine::selectFireMethod()";
 	action.type = BA_NONE;
 
-	int
-		tuUnit = action.actor->getTimeUnits(),
-		distance = _battleSave->getTileEngine()->distance(
-														action.actor->getPosition(),
-														action.target);
-	if (distance <= action.weapon->getRules()->getAutoRange())
+	RuleItem* rule = action.weapon->getRules();
+
+	int dist = _battleSave->getTileEngine()->distance(
+													action.actor->getPosition(),
+													action.target);
+	if (dist > rule->getMaxRange()
+		|| dist < rule->getMinRange())
 	{
-		if (action.weapon->getRules()->getTUAuto()
-			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+		tu = 0;
+		return BA_NONE;
+	}
+
+	int tuAvail = action.actor->getTimeUnits();
+
+	if (dist <= rule->getAutoRange())
+	{
+		if (rule->getTUAuto()
+			&& tuAvail >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
 			tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
-		else if (action.weapon->getRules()->getTUSnap()
-			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+		else if (rule->getTUSnap()
+			&& tuAvail >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
 			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
-		else if (action.weapon->getRules()->getTUAimed()
-			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+		else if (rule->getTUAimed()
+			&& tuAvail >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
 			tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
 	}
-	else if (distance <= action.weapon->getRules()->getSnapRange())
+	else if (dist <= rule->getSnapRange())
 	{
-		if (action.weapon->getRules()->getTUSnap()
-			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+		if (rule->getTUSnap()
+			&& tuAvail >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
 			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
-		else if (action.weapon->getRules()->getTUAimed()
-			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+		else if (rule->getTUAimed()
+			&& tuAvail >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
 			tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
-		else if (action.weapon->getRules()->getTUAuto()
-			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+		else if (rule->getTUAuto()
+			&& tuAvail >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
 			tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);
 		}
 	}
-	else if (distance <= action.weapon->getRules()->getAimRange())
+	else // if (dist <= rule->getAimRange())
 	{
-		if (action.weapon->getRules()->getTUAimed()
-			&& tuUnit >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
+		if (rule->getTUAimed()
+			&& tuAvail >= action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon))
 		{
 			action.type = BA_AIMEDSHOT;
 			tu = action.actor->getActionTUs(BA_AIMEDSHOT, action.weapon);
 		}
-		else if (action.weapon->getRules()->getTUSnap()
-			&& tuUnit >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
+		else if (rule->getTUSnap()
+			&& tuAvail >= action.actor->getActionTUs(BA_SNAPSHOT, action.weapon))
 		{
 			action.type = BA_SNAPSHOT;
 			tu = action.actor->getActionTUs(BA_SNAPSHOT, action.weapon);
 		}
-		else if (action.weapon->getRules()->getTUAuto()
-			&& tuUnit >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
+		else if (rule->getTUAuto()
+			&& tuAvail >= action.actor->getActionTUs(BA_AUTOSHOT, action.weapon))
 		{
 			action.type = BA_AUTOSHOT;
 			tu = action.actor->getActionTUs(BA_AUTOSHOT, action.weapon);

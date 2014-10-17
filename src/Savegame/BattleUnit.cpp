@@ -1777,15 +1777,14 @@ int BattleUnit::getActionTUs(
 
 /**
  * Spends time units if it can. Return false if it can't.
- * @param tu
- * @return flag if it could spend the time units or not.
+ * @param tu - the TU to check & spend
+ * @return, true if this unit could spend the time units
  */
 bool BattleUnit::spendTimeUnits(int tu)
 {
 	if (tu <= _tu)
 	{
 		_tu -= tu;
-
 		return true;
 	}
 
@@ -1794,15 +1793,14 @@ bool BattleUnit::spendTimeUnits(int tu)
 
 /**
  * Spends energy if it can. Return false if it can't.
- * @param energy
- * @return flag if it could spend the time units or not.
+ * @param energy - the stamina to check & expend
+ * @return, true if this unit could expend the stamina
  */
 bool BattleUnit::spendEnergy(int energy)
 {
 	if (energy <= _energy)
 	{
 		_energy -= energy;
-
 		return true;
 	}
 
@@ -1811,7 +1809,7 @@ bool BattleUnit::spendEnergy(int energy)
 
 /**
  * Sets a specific number of timeunits.
- * @param tu
+ * @param tu - the TU for this unit to set
  */
 void BattleUnit::setTimeUnits(int tu)
 {
@@ -1826,7 +1824,7 @@ void BattleUnit::setTimeUnits(int tu)
 
 /**
  * Sets a specific number of energy.
- * @param energy
+ * @param energy - the energy to set for this unit
  */
 void BattleUnit::setEnergy(int energy)
 {
@@ -1841,7 +1839,7 @@ void BattleUnit::setEnergy(int energy)
 
 /**
  * Sets whether this unit is visible.
- * @param flag
+ * @param flag - true if visible
  */
 void BattleUnit::setVisible(bool flag)
 {
@@ -1850,7 +1848,7 @@ void BattleUnit::setVisible(bool flag)
 
 /**
  * Gets whether this unit is visible.
- * @return flag
+ * @return, true if visible
  */
 bool BattleUnit::getVisible() const
 {

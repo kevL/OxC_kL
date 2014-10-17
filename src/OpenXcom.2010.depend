@@ -6560,7 +6560,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1413140556 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1413560087 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<cmath>
 	<sstream>
@@ -6771,7 +6771,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1413283217 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1413567086 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9375,7 +9375,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1413339855 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1413567103 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"
@@ -9567,7 +9567,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1413423215 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1413565594 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9914,7 +9914,7 @@
 	"../Ruleset/RuleCraft.h"
 	"../Ruleset/Ruleset.h"
 
-1413140562 source:f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.cpp
+1413506666 source:f:\git\openxcom\src\ufopaedia\articlestatecraftweapon.cpp
 	"ArticleStateCraftWeapon.h"
 	<sstream>
 	"Ufopaedia.h"
