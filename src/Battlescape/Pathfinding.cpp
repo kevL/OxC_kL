@@ -218,8 +218,8 @@ void Pathfinding::calculate(
 	if (size > 0) // for large units only.
 	{
 		//Log(LOG_INFO) << ". checking large unit blockage";
-		int i = 0;
 		const int dir[3] = {4, 2, 3};
+		int i = 0;
 
 		for (int
 				x = 0;
@@ -266,7 +266,7 @@ void Pathfinding::calculate(
 						}
 					}
 
-					++i;
+					i++;
 				}
 			}
 		}
@@ -299,7 +299,7 @@ void Pathfinding::calculate(
 
 	// look for a possible fast and accurate bresenham path and skip A*
 	bool sneak = unit->getFaction() == FACTION_HOSTILE
-				&& Options::sneakyAI;
+			  && Options::sneakyAI;
 
 	if (startPos.z == endPos.z
 		&& bresenhamPath(

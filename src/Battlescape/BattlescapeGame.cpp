@@ -2459,7 +2459,8 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			pf->vectorToDirection(pos, dir);
 
 			if (_currentAction.strafe
-				&& isTank == false
+				&& _currentAction.actor->getGeoscapeSoldier() != NULL
+//				&& isTank == false
 				&& (posUnit.z != posTarget.z
 					|| dist > 1
 					|| (posUnit.z == posTarget.z
@@ -2483,7 +2484,6 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 					&& pf->previewPath() == false)
 //kL				&& pf->getStartDirection() != -1)
 				{
-					//Log(LOG_INFO) << "primary: bPreviewed";
 					pf->removePreview();
 					bPreviewed = false;
 				}
@@ -2491,7 +2491,6 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 				if (bPreviewed == false) // -= start walking =- //
 //kL				&& pf->getStartDirection() != -1)
 				{
-					//Log(LOG_INFO) << "primary: !bPreviewed";
 					getMap()->setCursorType(CT_NONE);
 					_parentState->getGame()->getCursor()->setVisible(false);
 

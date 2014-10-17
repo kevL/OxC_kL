@@ -6320,13 +6320,13 @@
 1413140561 f:\git\openxcom\src\savegame\country.h
 	<yaml-cpp/yaml.h>
 
-1413140555 source:f:\git\openxcom\src\battlescape\explosion.cpp
+1413570160 source:f:\git\openxcom\src\battlescape\explosion.cpp
 	"Explosion.h"
 
 1413140555 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1413140555 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1413570487 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
