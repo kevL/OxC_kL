@@ -1650,6 +1650,10 @@ void Map::drawTerrain(Surface* surface)
 									0);
 						}
 
+						Uint8 color = 3; // red
+						if (unit->getFatalWounds() == 0)
+							color = 1; // white
+
 						tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
 						tmpSurface->blitNShade(
 								surface,
@@ -1657,8 +1661,7 @@ void Map::drawTerrain(Surface* surface)
 								screenPosition.y + 1,
 								0,
 								false,
-								3); // 1=white, 3=red.
-
+								color);
 					} // kL_end.
 
 					// if we can see through the floor, draw the soldier below it if it is on stairs

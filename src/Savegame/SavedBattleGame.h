@@ -259,7 +259,7 @@ private:
 		int* getCurrentItemId();
 		/// Gets a spawn node.
 		Node* getSpawnNode(
-				int nodeRank,
+				int unitRank,
 				BattleUnit* unit);
 		/// Gets a patrol node.
 		Node* getPatrolNode(

@@ -55,37 +55,23 @@ LowFuelState::LowFuelState(
 	_screen = false;
 
 	_window		= new Window(this, 224, 120, 16, 40, POPUP_BOTH);
-	_btnOk		= new TextButton(90, 18, 30, 120);
-	_btnOk5Secs	= new TextButton(90, 18, 136, 120);
 	_txtTitle	= new Text(214, 17, 21, 60);
 	_txtMessage	= new Text(214, 17, 21, 90);
+	_btnOk5Secs	= new TextButton(90, 18, 30, 120);
+	_btnOk		= new TextButton(90, 18, 136, 120);
 
 	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
-	add(_btnOk);
-	add(_btnOk5Secs);
 	add(_txtTitle);
 	add(_txtMessage);
+	add(_btnOk5Secs);
+	add(_btnOk);
 
 	centerAllSurfaces();
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
-
-	_btnOk->setColor(Palette::blockOffset(8)+5);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& LowFuelState::btnOkClick);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& LowFuelState::btnOkClick,
-					Options::keyCancel);
-
-	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
-	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
-	_btnOk5Secs->onMouseClick((ActionHandler)& LowFuelState::btnOk5SecsClick);
-	_btnOk5Secs->onKeyboardPress(
-					(ActionHandler)& LowFuelState::btnOk5SecsClick,
-					Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(8)+10);
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -96,7 +82,19 @@ LowFuelState::LowFuelState(
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setText(tr("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
 
+	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
+	_btnOk5Secs->setText(tr("STR_OK_5_SECONDS"));
+	_btnOk5Secs->onMouseClick((ActionHandler)& LowFuelState::btnOk5SecsClick);
+	_btnOk5Secs->onKeyboardPress(
+					(ActionHandler)& LowFuelState::btnOk5SecsClick,
+					Options::keyOk);
 
+	_btnOk->setColor(Palette::blockOffset(8)+5);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& LowFuelState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& LowFuelState::btnOkClick,
+					Options::keyCancel);
 }
 
 /**

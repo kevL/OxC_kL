@@ -28,10 +28,10 @@ namespace OpenXcom
  */
 RuleCommendations::RuleCommendations()
 	:
-		_description(""),
-		_criteria(),
-		_sprite(),
-		_killCriteria()
+		_sprite(-1)
+//		_description(""),
+//		_criteria(),
+//		_killCriteria()
 {
 }
 
@@ -44,19 +44,19 @@ RuleCommendations::~RuleCommendations()
 
 /**
  * Loads the commendations from YAML.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void RuleCommendations::load(const YAML::Node& node)
 {
-	_description	= node["description"].as<std::string>(_description);
-	_criteria		= node["criteria"].as< std::map<std::string, std::vector<int> > >(_criteria);
-	_sprite			= node["sprite"].as<int>(_sprite);
-	_killCriteria	= node["killCriteria"].as<std::vector<std::map<int, std::vector<std::string> > > >(_killCriteria);
+	_description	= node["description"]	.as<std::string>(_description);
+	_criteria		= node["criteria"]		.as< std::map<std::string, std::vector<int> > >(_criteria);
+	_sprite			= node["sprite"]		.as<int>(_sprite);
+	_killCriteria	= node["killCriteria"]	.as<std::vector<std::map<int, std::vector<std::string> > > >(_killCriteria);
 }
 
 /**
  * Get the commendation's description.
- * @return string Commendation description.
+ * @return, commendation description
  */
 std::string RuleCommendations::getDescription() const
 {
@@ -65,7 +65,7 @@ std::string RuleCommendations::getDescription() const
 
 /**
  * Get the commendation's award criteria.
- * @return map<string, int> Commendation criteria.
+ * @return, pointer to a map of (strings & vectors of ints) that denote commendation criteria
  */
 std::map<std::string, std::vector<int> >* RuleCommendations::getCriteria()
 {
@@ -74,7 +74,7 @@ std::map<std::string, std::vector<int> >* RuleCommendations::getCriteria()
 
 /**
  * Get the commendation's award kill criteria.
- * @return vecotr<string> Commendation kill criteria.
+ * @return, pointer to a vector of maps of (ints & vectors of strings) that denote commendation kill criteria
  */
 std::vector<std::map<int, std::vector<std::string> > >* RuleCommendations::getKillCriteria()
 {
@@ -83,7 +83,7 @@ std::vector<std::map<int, std::vector<std::string> > >* RuleCommendations::getKi
 
 /**
  * Get the commendation's sprite.
- * @return int Sprite number.
+ * @return, sprite number
  */
 int RuleCommendations::getSprite() const
 {

@@ -36,7 +36,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Ufo Lost window.
- * @param id - reference the name of the UFO
+ * @param id - reference the ID of the UFO
  */
 UfoLostState::UfoLostState(const std::wstring& id)
 	:

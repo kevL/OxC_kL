@@ -4757,7 +4757,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413608544 f:\git\openxcom\src\savegame\savedbattlegame.h
+1413613455 f:\git\openxcom\src\savegame\savedbattlegame.h
 	<algorithm>
 	<iostream>
 	<string>
@@ -5921,7 +5921,7 @@
 
 1413140561 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1413611140 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1413612932 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -6230,7 +6230,7 @@
 	"DebriefingState.h"
 	"../Engine/State.h"
 
-1413140555 source:f:\git\openxcom\src\battlescape\civilianbaistate.cpp
+1413612549 source:f:\git\openxcom\src\battlescape\civilianbaistate.cpp
 	"CivilianBAIState.h"
 	<cmath>
 	"BattlescapeState.h"
@@ -6771,7 +6771,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1413610989 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1413612708 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -8069,7 +8069,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1413140558 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
+1413616385 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
 	"LowFuelState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -8313,7 +8313,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1413140558 source:f:\git\openxcom\src\geoscape\ufoloststate.cpp
+1413616240 source:f:\git\openxcom\src\geoscape\ufoloststate.cpp
 	"UfoLostState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -9683,7 +9683,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1413608849 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1413614556 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -11897,7 +11897,7 @@
 	"Unit.h"
 	"StatStringCondition.h"
 
-1398481998 f:\git\openxcom\src\ruleset\statstringcondition.h
+1413615633 f:\git\openxcom\src\ruleset\statstringcondition.h
 	<string>
 
 1413140559 f:\git\openxcom\src\menu\loadgamestate.h
@@ -11954,7 +11954,7 @@
 	<vector>
 	"StatString.h"
 
-1401489077 source:f:\git\openxcom\src\ruleset\statstringcondition.cpp
+1413615567 source:f:\git\openxcom\src\ruleset\statstringcondition.cpp
 	"StatStringCondition.h"
 
 1413140556 source:f:\git\openxcom\src\engine\adlib\adlplayer.cpp
@@ -12088,7 +12088,7 @@
 1413165583 f:\git\openxcom\src\basescape\soldierdiaryperformancestate.h
 	"../Engine/State.h"
 
-1413140560 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
+1413616040 source:f:\git\openxcom\src\ruleset\rulecommendations.cpp
 	"RuleCommendations.h"
 
 1413140560 f:\git\openxcom\src\ruleset\rulecommendations.h

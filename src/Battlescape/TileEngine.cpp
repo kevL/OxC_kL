@@ -5941,7 +5941,6 @@ bool TileEngine::validMeleeRange(
 			}
 		}
 	}
-
 	//Log(LOG_INFO) << "TileEngine::validMeleeRange() EXIT false";
 	return false;
 }

@@ -1821,10 +1821,10 @@ void BattlescapeGenerator::deployAliens(
 
 /**
  * Adds an alien to the game and places him on a free spawnpoint.
- * @param rules		- pointer to the Unit which holds info about the alien
+ * @param rules		- pointer to the Unit rule which holds info about aLiens
  * @param alienRank	- rank of the alien, used for spawn point search
  * @param outside	- true if the alien should spawn outside the UFO
- * @return, pointer to the created unit
+ * @return, pointer to the created BattleUnit
  */
 BattleUnit* BattlescapeGenerator::addAlien(
 		Unit* rules,

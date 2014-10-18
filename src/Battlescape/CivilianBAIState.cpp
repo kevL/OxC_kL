@@ -384,11 +384,9 @@ void CivilianBAIState::setupEscape()
 
 	selectNearestTarget(); // gets an _aggroTarget
 	if (_aggroTarget)
-	{
 		dist = _save->getTileEngine()->distance(
 											_unit->getPosition(),
 											_aggroTarget->getPosition());
-	}
 
 	Tile* tile = NULL;
 	Position bestTile(0, 0, 0);
@@ -429,11 +427,7 @@ void CivilianBAIState::setupEscape()
 		}
 		else
 		{
-			if (tries == 121
-				&& _traceAI)
-			{
-				Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore;
-			}
+			if (_traceAI && tries == 121) Log(LOG_INFO) << "best score after systematic search was: " << bestTileScore;
 
 			score = BASE_DESPERATE_SUCCESS; // ruuuuuuun
 

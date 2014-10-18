@@ -1489,33 +1489,75 @@ int* SavedBattleGame::getCurrentItemId()
 
 /**
  * Finds a fitting node where a unit can spawn.
- * @param nodeRank	- rank of the node (this is not the rank of the alien!)
- * kL_note: actually, it pretty much is the rank of the aLien.
+ * bgen.addAlien() uses a fallback mechanism to test assorted nodeRanks ...
+ * @param unitRank	- rank of the unit attempting to spawn
  * @param unit		- pointer to the unit (to test-set its position)
  * @return, pointer to the chosen node
  */
 Node* SavedBattleGame::getSpawnNode(
-		int nodeRank,
+		int unitRank,
 		BattleUnit* unit)
 {
 	std::vector<Node*> legitNodes;
-	int priority = -1;
 
 	for (std::vector<Node*>::iterator
 			i = getNodes()->begin();
 			i != getNodes()->end();
 			++i)
 	{
-		if ((*i)->getRank() == nodeRank					// ranks must match
-			&& (!((*i)->getType() & Node::TYPE_SMALL)	// the small unit bit is not set
+		if ((*i)->getPriority() > 0						// spawn-priority 0 is not spawnplace
+			&& (*i)->getRank() == unitRank				// ranks must match
+			&& (!((*i)->getType() & Node::TYPE_SMALL)	// the small unit bit is not set on the node
 				|| unit->getArmor()->getSize() == 1)		// or the unit is small
-			&& (!((*i)->getType() & Node::TYPE_FLYING)	// the flying unit bit is not set
+			&& (!((*i)->getType() & Node::TYPE_FLYING)	// the flying unit bit is not set on the node
 				|| unit->getMovementType() == MT_FLY)		// or the unit can fly
-			&& (*i)->getPriority() > 0					// priority 0 is not spawnplace
 			&& setUnitPosition(							// check if unit can be set at this node
 							unit,							// ie. it's big enough
 							(*i)->getPosition(),			// and there's not already a unit there.
-							true))							// runs w/ false on return to bgen::addAlien()
+							true))							// testOnly, runs w/ false on return to bgen::addAlien()
+		{
+			for (int
+					j = (*i)->getPriority();
+					j != 0;
+					--j)
+			{
+				legitNodes.push_back(*i);
+			}
+		}
+	}
+
+	if (legitNodes.empty() == true)
+		return NULL;
+
+	size_t legit = static_cast<size_t>(RNG::generate(
+												0,
+												static_cast<int>(legitNodes.size()) - 1));
+
+	return legitNodes[legit];
+}
+/*
+Node* SavedBattleGame::getSpawnNode(
+		int unitRank,
+		BattleUnit* unit)
+{
+	std::vector<Node*> legitNodes;
+	int priority = 0;
+
+	for (std::vector<Node*>::iterator
+			i = getNodes()->begin();
+			i != getNodes()->end();
+			++i)
+	{
+		if ((*i)->getPriority() > 0						// spawn-priority 0 is not spawnplace
+			&& (*i)->getRank() == unitRank				// ranks must match
+			&& (!((*i)->getType() & Node::TYPE_SMALL)	// the small unit bit is not set on the node
+				|| unit->getArmor()->getSize() == 1)		// or the unit is small
+			&& (!((*i)->getType() & Node::TYPE_FLYING)	// the flying unit bit is not set on the node
+				|| unit->getMovementType() == MT_FLY)		// or the unit can fly
+			&& setUnitPosition(							// check if unit can be set at this node
+							unit,							// ie. it's big enough
+							(*i)->getPosition(),			// and there's not already a unit there.
+							true))							// testOnly, runs w/ false on return to bgen::addAlien()
 		{
 			if ((*i)->getPriority() > priority) // hold it. This does not *weight* the nodes by priority. but so waht -> BECAUSE!!!!
 			{
@@ -1536,7 +1578,7 @@ Node* SavedBattleGame::getSpawnNode(
 												static_cast<int>(legitNodes.size()) - 1));
 
 	return legitNodes[legit];
-}
+} */
 
 /**
  * Finds a fitting node where a unit can patrol to.
