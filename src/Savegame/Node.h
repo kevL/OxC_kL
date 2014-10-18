@@ -66,21 +66,22 @@ private:
 
 
 	public:
-		static const int CRAFTSEGMENT	= 1000;
-		static const int UFOSEGMENT		= 2000;
+		static const int
+			CRAFTSEGMENT	= 1000,
+			UFOSEGMENT		= 2000,
 
-		static const int TYPE_FLYING	= 0x01;	// non-flying unit cannot spawn here when this bit is set
-		static const int TYPE_SMALL		= 0x02;	// large unit cannot spawn here when this bit is set
-		static const int TYPE_DANGEROUS	= 0x04;	// an alien was shot here, stop patrolling to it like an idiot with a death wish
+			TYPE_FLYING		= 0x01,	// non-flying unit cannot spawn here when this bit is set
+			TYPE_SMALL		= 0x02,	// large unit cannot spawn here when this bit is set
+			TYPE_DANGEROUS	= 0x04,	// an alien was shot here, stop patrolling to it like an idiot with a death wish
 
-//kL		static const int nodeRank[8][7];		// maps alien ranks to node (.RMP) ranks
-		static const int nodeRank[8][8];		// kL
+//kL		static const int nodeRank[8][7]; // maps alien ranks to node (.RMP) ranks
+			nodeRank[8][8]; // kL
 
 		/// Creates a Node.
 		Node();
 		///
 		Node(
-				int id,
+				size_t id,
 				Position pos,
 				int segment,
 				int type,

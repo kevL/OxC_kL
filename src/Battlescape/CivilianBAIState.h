@@ -37,7 +37,8 @@ struct BattleAction;
 
 
 /**
- * This is the intial AI state of units, walking around and looking for intruders.
+ * This is the initial AI state of civilian BattleUnits
+ * walking around and looking to get killed.
  */
 class CivilianBAIState
 	:

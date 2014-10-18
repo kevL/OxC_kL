@@ -278,10 +278,10 @@ private:
 				BattleUnit* bu,
 				const Position& pos,
 				bool testOnly = false);
-		/// Attempts to place a unit on or near entryPoint.
+		/// Attempts to place a unit on or near Position pos.
 		bool placeUnitNearPosition(
 				BattleUnit* unit,
-				Position entryPoint);
+				Position pos);
 
 		/// Adds this unit to the vector of falling units.
 		bool addFallingUnit(BattleUnit* unit);

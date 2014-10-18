@@ -57,7 +57,7 @@ namespace OpenXcom
 //bool const kL_bDebug = true;
 
 /**
- * Sets up a BattleAIState.
+ * Sets up an AlienBAIState w/ BattleAIState.
  * @param save - pointer to SavedBattleGame
  * @param unit - pointer to the unit
  * @param node - pointer to the node the unit originates from

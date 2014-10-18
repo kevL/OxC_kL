@@ -85,7 +85,7 @@ Node::Node()
  * @param priority
  */
 Node::Node(
-		int id,
+		size_t id,
 		Position pos,
 		int segment,
 		int type,
@@ -115,7 +115,7 @@ Node::~Node()
 
 /**
  * Loads the UFO from a YAML file.
- * @param node, YAML node.
+ * @param node - reference a YAML node
  */
 void Node::load(const YAML::Node& node)
 {
@@ -133,7 +133,7 @@ void Node::load(const YAML::Node& node)
 
 /**
  * Saves the UFO to a YAML file.
- * @return, YAML node.
+ * @return, YAML node
  */
 YAML::Node Node::save() const
 {

@@ -1727,7 +1727,7 @@ void BattlescapeGenerator::deployAliens(
 		for (int
 				i = 0;
 				i < qty;
-				i++)
+				++i)
 		{
 			outside = false;
 			if (_ufo)
@@ -1858,10 +1858,9 @@ BattleUnit* BattlescapeGenerator::addAlien(
 	{
 		for (int
 				i = 0;
-//kL			i < 7
-				i < 8 // kL
+				i < 8
 					&& node == NULL;
-				i++)
+				++i)
 		{
 			node = _save->getSpawnNode(
 									Node::nodeRank[alienRank][i],
@@ -1869,10 +1868,11 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		}
 	}
 
-	if (node
-		&& _save->setUnitPosition(
-								unit,
-								node->getPosition()))
+	if ((node
+			&& _save->setUnitPosition(
+									unit,
+									node->getPosition()))
+		|| placeUnitNearFriend(unit))
 	{
 		unit->setAIState(new AlienBAIState(
 										_game->getSavedGame()->getSavedBattle(),
@@ -1880,7 +1880,7 @@ BattleUnit* BattlescapeGenerator::addAlien(
 										node));
 		unit->setRankInt(alienRank);
 
-		int dir = _save->getTileEngine()->faceWindow(node->getPosition());
+		int dir = -1;
 
 		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
 		if (RNG::percent(difficulty * 20
@@ -1891,55 +1891,22 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		{
 			dir = unit->directionTo(craft);
 		}
-
-		if (dir != -1)
-			unit->setDirection(dir);
 		else
-			unit->setDirection(RNG::generate(0, 7));
+			dir = _save->getTileEngine()->faceWindow(node->getPosition());
 
-//kL	if (difficulty == 0) // kL_note: moved to BattleUnit::adjustStats()
-//kL		unit->halveArmor();
+		if (dir == -1)
+			dir = RNG::generate(0, 7);
+		unit->setDirection(dir);
 
-		// we only add a unit if it has a node to spawn on. (stops them spawning at 0,0,0)
+//		if (difficulty == 0) // kL_note: moved to BattleUnit::adjustStats()
+//			unit->halveArmor();
+
 		_save->getUnits()->push_back(unit);
 	}
 	else
 	{
-		// ASSASSINATION CHALLENGE SPECIAL: screw the player, just because we didn't find a node,
-		// doesn't mean we can't ruin Tornis's day: spawn as many aliens as possible.
-//		if (_game->getSavedGame()->getDifficulty() >= static_cast<int>(DIFF_SUPERHUMAN) &&
-		if (placeUnitNearFriend(unit))
-		{
-			unit->setAIState(new AlienBAIState(
-											_game->getSavedGame()->getSavedBattle(),
-											unit,
-											NULL));
-			unit->setRankInt(alienRank);
-
-			Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
-			int dir = _save->getTileEngine()->faceWindow(unit->getPosition());
-
-			if (RNG::percent(difficulty * 20
-				&& _save->getTileEngine()->distance(
-												unit->getPosition(),
-												craft)
-											< 25))
-			{
-				dir = unit->directionTo(craft);
-			}
-
-			if (dir != -1)
-				unit->setDirection(dir);
-			else
-				unit->setDirection(RNG::generate(0, 7));
-
-			_save->getUnits()->push_back(unit);
-		}
-		else
-		{
-			delete unit;
-			unit = NULL;
-		}
+		delete unit;
+		return NULL;
 	}
 
 	return unit;
@@ -1947,16 +1914,12 @@ BattleUnit* BattlescapeGenerator::addAlien(
 
 /**
  * Spawns 1-16 civilians on a terror mission.
- * @param civilians, Maximum number of civilians to spawn.
+ * @param civilians - maximum number of civilians to spawn
  */
 void BattlescapeGenerator::deployCivilians(int civilians)
 {
-	if (civilians)
+	if (civilians > 0)
 	{
-		// inevitably someone will point out that ufopaedia says 0-16 civilians.
-		// to that person: i looked at the code and it says otherwise.
-		// 0 civilians would only be a possibility if there were already 80 units,
-		// or no spawn nodes for civilians.
 		int rand = RNG::generate(
 								civilians / 2,
 								civilians);
@@ -1978,8 +1941,8 @@ void BattlescapeGenerator::deployCivilians(int civilians)
 
 /**
  * Adds a civilian to the game and places him on a free spawnpoint.
- * @param rules - pointer to the Unit which holds info about the civilian
- * @return, pointer to the created unit
+ * @param rules - pointer to the Unit rule which holds info about civilians
+ * @return, pointer to the created BattleUnit
  */
 BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 {
@@ -1991,21 +1954,14 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 									0,
 									_save->getDepth());
 
-	Node* node = _save->getSpawnNode(0, unit);
-	if (node)
-	{
-		_save->setUnitPosition(unit, node->getPosition());
-		unit->setAIState(new CivilianBAIState(
-										_game->getSavedGame()->getSavedBattle(),
-										unit,
-										node));
-
-		unit->setDirection(RNG::generate(0, 7));
-
-		// we only add a unit if it has a node to spawn on. (stops them spawning at 0,0,0)
-		_save->getUnits()->push_back(unit);
-	}
-	else if (placeUnitNearFriend(unit))
+	Node* node = _save->getSpawnNode(
+								0,
+								unit);
+	if ((node != NULL
+			&& _save->setUnitPosition(
+									unit,
+									node->getPosition()))
+		|| placeUnitNearFriend(unit))
 	{
 		unit->setAIState(new CivilianBAIState(
 										_game->getSavedGame()->getSavedBattle(),
@@ -2019,7 +1975,7 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 	else
 	{
 		delete unit;
-		unit = NULL;
+		return NULL;
 	}
 
 	return unit;
@@ -2414,7 +2370,7 @@ void BattlescapeGenerator::generateMap()
 		for (int // add two lifts (not on top of the command center)
 				i = 0;
 				i < 2;
-				i++)
+				++i)
 		{
 			while (blocks[randX][randY] != NULL)
 			{
@@ -2535,12 +2491,12 @@ void BattlescapeGenerator::generateMap()
 	for (int
 			itY = 0;
 			itY < _mapsize_y / 10;
-			itY++)
+			++itY)
 	{
 		for (int
 				itX = 0;
 				itX < _mapsize_x / 10;
-				itX++)
+				++itX)
 		{
 			segments[itX][itY] = segment;
 			if (blocks[itX][itY] != 0
@@ -2801,7 +2757,7 @@ void BattlescapeGenerator::generateMap()
 			for (int
 					j = 0;
 					j < ufoMap->getSizeY() / 10;
-					j++)
+					++j)
 			{
 				segments[ufoX + i][ufoY + j] = Node::UFOSEGMENT;
 			}
@@ -2848,7 +2804,7 @@ void BattlescapeGenerator::generateMap()
 			for (int
 					j = 0;
 					j < craftMap->getSizeY() / 10;
-					j++)
+					++j)
 			{
 				segments[_craftX + i][_craftY + j] = Node::CRAFTSEGMENT;
 			}
@@ -2896,7 +2852,7 @@ void BattlescapeGenerator::generateMap()
 			for (int
 					n = 0;
 					n < 4;
-					n++)
+					++n)
 			{
 				if (*j == neighbourDirections[n])
 				{
@@ -3014,7 +2970,7 @@ int BattlescapeGenerator::loadMAP(
 		for (int
 				part = 0;
 				part < 4;
-				part++)
+				++part)
 		{
 			terrainObjectID = static_cast<unsigned char>(value[part]);
 			if (terrainObjectID > 0)
@@ -3027,7 +2983,7 @@ int BattlescapeGenerator::loadMAP(
 
 				_save->getTile(Position(x, y, z))->setMapData(
 															md,
-															mapDataID,
+															static_cast<int>(mapDataID),
 															mapDataSetID,
 															part);
 			}
@@ -3078,11 +3034,8 @@ int BattlescapeGenerator::loadMAP(
 
 	mapFile.close();
 
-	if (_generateFuel)
-	{
-		// if one of the mapBlocks has an items array defined, don't deploy fuel algorithmically
+	if (_generateFuel) // if one of the mapBlocks has an items array defined, don't deploy fuel algorithmically
 		_generateFuel = mapblock->getItems()->empty();
-	}
 
 	for (std::map<std::string, std::vector<Position> >::const_iterator
 			i = mapblock->getItems()->begin();
@@ -3135,11 +3088,13 @@ void BattlescapeGenerator::loadRMP(
 		throw Exception(filename.str() + " not found");
 	}
 
-	size_t nodeOffset = _save->getNodes()->size();
 	int
+		nodeOffset = static_cast<int>(_save->getNodes()->size()),
+
 		pos_x,
 		pos_y,
 		pos_z,
+
 		type,
 		rank,
 		flags,
@@ -3152,7 +3107,7 @@ void BattlescapeGenerator::loadRMP(
 		pos_y = static_cast<int>(value[0]);
 		pos_z = static_cast<int>(value[2]);
 
-		if (pos_x < mapblock->getSizeX()
+		if (   pos_x < mapblock->getSizeX()
 			&& pos_y < mapblock->getSizeY()
 			&& pos_z < _mapsize_z)
 		{
@@ -3161,11 +3116,11 @@ void BattlescapeGenerator::loadRMP(
 								yoff + pos_y,
 								mapblock->getSizeZ() - pos_z - 1);
 
-			type		= value[19];
-			rank		= value[20];
-			flags		= value[21];
-			reserved	= value[22];
-			priority	= value[23];
+			type		= static_cast<int>(value[19]);
+			rank		= static_cast<int>(value[20]);
+			flags		= static_cast<int>(value[21]);
+			reserved	= static_cast<int>(value[22]);
+			priority	= static_cast<int>(value[23]);
 
 			Node* node = new Node(
 								_save->getNodes()->size(),
@@ -3183,6 +3138,7 @@ void BattlescapeGenerator::loadRMP(
 					++j)
 			{
 				int connectID = static_cast<int>(value[j * 3 + 4]);
+
 				if (connectID < 251) // don't touch special values
 					connectID += nodeOffset;
 				else // 255/-1 = unused, 254/-2 = north, 253/-3 = east, 252/-4 = south, 251/-5 = west
@@ -3295,10 +3251,13 @@ void BattlescapeGenerator::explodePowerSources()
  */
 bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
 {
-	Position entryPoint = Position(-1,-1,-1);
-//kL	int tries = 100;
-	int tries = 3; // kL: these guys were getting too cramped up.
-	while (entryPoint == Position(-1,-1,-1)
+	if (unit == NULL)
+		return false;
+
+	Position posEntry = Position(-1,-1,-1);
+
+	int tries = 100;
+	while (posEntry == Position(-1,-1,-1)
 		&& tries > 0)
 	{
 		BattleUnit* bu = _save->getUnits()->at(RNG::generate(
@@ -3308,7 +3267,7 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
 			&& bu->getPosition() != Position(-1,-1,-1)
 			&& bu->getArmor()->getSize() == 1)
 		{
-			entryPoint = bu->getPosition();
+			posEntry = bu->getPosition();
 		}
 
 		tries--;
@@ -3317,7 +3276,7 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
 	if (tries
 		&& _save->placeUnitNearPosition(
 									unit,
-									entryPoint))
+									posEntry))
 	{
 		return true;
 	}

@@ -366,7 +366,7 @@ InventoryState::InventoryState(
 	_txtUseTU->setVisible(_tu);
 
 	bool vis = _tu == false
-				&& Options::showMoreStatsInInventoryView;
+			&& Options::showMoreStatsInInventoryView;
 	_txtFAcc->setVisible(vis);
 	_txtReact->setVisible(vis);
 	_txtThrow->setVisible(vis); // kL

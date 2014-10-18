@@ -5953,8 +5953,9 @@ bool TileEngine::validMeleeRange(
  */
 int TileEngine::faceWindow(const Position& position)
 {
-	static const Position tileEast = Position(1, 0, 0);
-	static const Position tileSouth = Position(0, 1, 0);
+	static const Position
+		tileEast = Position(1, 0, 0),
+		tileSouth = Position(0, 1, 0);
 
 	Tile* tile = _battleSave->getTile(position);
 	if (tile

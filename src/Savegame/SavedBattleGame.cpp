@@ -1492,7 +1492,7 @@ int* SavedBattleGame::getCurrentItemId()
  * @param nodeRank	- rank of the node (this is not the rank of the alien!)
  * kL_note: actually, it pretty much is the rank of the aLien.
  * @param unit		- pointer to the unit (to test-set its position)
- * @return, Pointer to the chosen node
+ * @return, pointer to the chosen node
  */
 Node* SavedBattleGame::getSpawnNode(
 		int nodeRank,
@@ -1517,7 +1517,7 @@ Node* SavedBattleGame::getSpawnNode(
 							(*i)->getPosition(),			// and there's not already a unit there.
 							true))							// runs w/ false on return to bgen::addAlien()
 		{
-			if ((*i)->getPriority() > priority) // hold it. This does not *weight* the nodes by priority. but so waht
+			if ((*i)->getPriority() > priority) // hold it. This does not *weight* the nodes by priority. but so waht -> BECAUSE!!!!
 			{
 				priority = (*i)->getPriority();
 				legitNodes.clear(); // drop the last nodes, as we found a higher priority now
@@ -1945,7 +1945,7 @@ void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
  * Places units on the map. Handles large units that are placed on multiple tiles.
  * @param bu		- pointer to a unit to be placed
  * @param pos		- reference the position to place the unit
- * @param testOnly	- true just checks if unit can be placed at the position
+ * @param testOnly	- true just checks if unit can be placed at the position (default false)
  * @return, true if unit was placed successfully
  */
 bool SavedBattleGame::setUnitPosition(
@@ -1953,8 +1953,10 @@ bool SavedBattleGame::setUnitPosition(
 		const Position& pos,
 		bool testOnly)
 {
-	int size = bu->getArmor()->getSize() - 1;
+	if (bu == NULL)
+		return false;
 
+	int size = bu->getArmor()->getSize() - 1;
 	for (int // first check if the tiles are occupied
 			x = size;
 			x > -1;
@@ -1996,7 +1998,7 @@ bool SavedBattleGame::setUnitPosition(
 
 		for (int
 				dir = 2;
-				dir <= 4;
+				dir < 5;
 				++dir)
 		{
 			if (getPathfinding()->isBlocked(
@@ -2040,44 +2042,44 @@ bool SavedBattleGame::setUnitPosition(
 
 /**
  * Places a unit on or near a position.
- * @param unit			- pointer to a unit to place
- * @param entryPoint	- the position around which to attempt to place the unit
+ * @param unit	- pointer to a unit to place
+ * @param pos	- the position around which to attempt to place the unit
  * @return, true if unit was successfully placed
  */
 bool SavedBattleGame::placeUnitNearPosition(
 		BattleUnit* unit,
-		Position entryPoint)
+		Position pos)
 {
+	if (unit == NULL)
+		return false;
+
 	if (setUnitPosition(
 					unit,
-					entryPoint))
+					pos))
 	{
 		return true;
 	}
 
-	int dirRand = RNG::generate(0, 7); // kL_begin:
+	int dirRand = RNG::generate(0, 7);
 	for (int
 			dir = dirRand;
 			dir < dirRand + 8;
-			++dir) // kL_end.
-//	for (int
-//			dir = 0;
-//			dir < 8;
-//			++dir)
+			++dir)
 	{
 		Position offset;
-//kL	getPathfinding()->directionToVector(dir, &offset);
-		getPathfinding()->directionToVector(dir %8, &offset); // kL
+		getPathfinding()->directionToVector(
+										dir %8,
+										&offset);
 
-		Tile* tile = getTile(entryPoint + offset);
+		Tile* tile = getTile(pos + offset);
 		if (tile
-			&& !getPathfinding()->isBlocked(
-										getTile(entryPoint),
+			&& getPathfinding()->isBlocked(
+										getTile(pos),
 										tile,
-										dir)
+										dir) == false
 			&& setUnitPosition(
 							unit,
-							entryPoint + offset))
+							pos + offset))
 		{
 			return true;
 		}
@@ -2086,12 +2088,12 @@ bool SavedBattleGame::placeUnitNearPosition(
 /*kL: uhh no.
 	if (unit->getMovementType() == MT_FLY)
 	{
-		Tile* tile = getTile(entryPoint + Position(0, 0, 1));
+		Tile* tile = getTile(pos + Position(0, 0, 1));
 		if (tile
-			&& tile->hasNoFloor(getTile(entryPoint))
+			&& tile->hasNoFloor(getTile(pos))
 			&& setUnitPosition(
 							unit,
-							entryPoint + Position(0, 0, 1)))
+							pos + Position(0, 0, 1)))
 		{
 			return true;
 		}
