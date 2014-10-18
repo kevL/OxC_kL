@@ -93,6 +93,9 @@ Soldier::Soldier(
 
 		_currentStats = _initialStats;
 
+		_look = (SoldierLook)RNG::generate(0, 3);
+//		_gender = (SoldierGender)RNG::generate(0, 1);
+
 		// kL_begin: gender Ratios
 		RuleGender gRatio = rules->getGenderRatio();
 		double
@@ -107,15 +110,11 @@ Soldier::Soldier(
 		else
 			_gender = GENDER_FEMALE;
 
-//		_gender = (SoldierGender)RNG::generate(0, 1);
-		_look = (SoldierLook)RNG::generate(0, 3);
-
 		if (_gender == GENDER_MALE)
 			_name = L"pfc.Fritz";
 		else
 			_name = L"pfc.Frita";
 		// kL_end.
-
 /*kL
 		if (names->empty() == false)
 		{

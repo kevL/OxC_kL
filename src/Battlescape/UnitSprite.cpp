@@ -358,16 +358,16 @@ void UnitSprite::drawRoutine0()
 			&& Options::battleHairBleach)
 		{
 			SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
-
-			if (look)
+			if (look != LOOK_BLONDE)
 			{
-				Uint8 face_color = ColorFace::Face;
-				Uint8 hair_color = ColorFace::Hair;
+				Uint8
+					face_color = ColorFace::Face,
+					hair_color = ColorFace::Hair;
 
 				switch (look)
 				{
-					case LOOK_BLONDE:
-					break;
+//					case LOOK_BLONDE:
+//					break;
 					case LOOK_BROWNHAIR:
 						hair_color = (10<<4) + 4;
 					break;
@@ -624,7 +624,7 @@ void UnitSprite::drawRoutine0()
 		itemA? itemA->setY(itemA->getY() + offYKneel): void();
 		itemB? itemB->setY(itemB->getY() + offYKneel): void();
 	}
-	else if (!isWalking)
+	else if (isWalking == false)
 	{
 		leftArm->setY(0);
 		rightArm->setY(0);
@@ -651,15 +651,16 @@ void UnitSprite::drawRoutine0()
 		&& _drawingRoutine == 0)
 	{
 		SoldierLook look = _unit->getGeoscapeSoldier()->getLook();
-		if (look)
+		if (look != LOOK_BLONDE)
 		{
-			Uint8 face_color = ColorFace::Face;
-			Uint8 hair_color = ColorFace::Hair;
+			Uint8
+				face_color = ColorFace::Face,
+				hair_color = ColorFace::Hair;
 
 			switch (look)
 			{
-				case LOOK_BLONDE:
-				break;
+//				case LOOK_BLONDE:
+//				break;
 				case LOOK_BROWNHAIR:
 					hair_color = (10<<4) + 4;
 				break;

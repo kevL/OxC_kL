@@ -49,8 +49,8 @@ enum ForcedTorso
 class Armor
 {
 
-public:
-	static const int DAMAGE_TYPES = 10;
+	public:
+		static const int DAMAGE_TYPES = 10;
 
 
 private:

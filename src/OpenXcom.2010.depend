@@ -4684,7 +4684,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1413437254 f:\git\openxcom\src\ruleset\armor.h
+1413662414 f:\git\openxcom\src\ruleset\armor.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5823,7 +5823,7 @@
 1413140555 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1413597976 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1413656909 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6692,7 +6692,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1413140556 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1413658612 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
