@@ -73,6 +73,10 @@ struct convert<OpenXcom::TrajectoryWaypoint>
 namespace OpenXcom
 {
 
+/**
+ * cTor. Creates a UfoTrajectory.
+ * @param id - reference the ID
+ */
 UfoTrajectory::UfoTrajectory(const std::string& id)
 	:
 		_id(id),
@@ -83,19 +87,19 @@ UfoTrajectory::UfoTrajectory(const std::string& id)
 /**
  * Overwrites trajectory data with the data stored in @a node.
  * Only the fields contained in the node will be overwritten.
- * @param node The node containing the new values.
+ * @param node - reference the node containing the new values
  */
 void UfoTrajectory::load(const YAML::Node& node)
 {
-	_id				= node["id"].as<std::string>(_id);
-	_groundTimer	= node["groundTimer"].as<size_t>(_groundTimer);
-	_waypoints		= node["waypoints"].as<std::vector<TrajectoryWaypoint> >(_waypoints);
+	_id				= node["id"]			.as<std::string>(_id);
+	_groundTimer	= node["groundTimer"]	.as<size_t>(_groundTimer);
+	_waypoints		= node["waypoints"]		.as<std::vector<TrajectoryWaypoint> >(_waypoints);
 }
 
 /**
  * Gets the altitude at a waypoint.
- * @param wp The waypoint.
- * @return The altitude.
+ * @param wp - the waypoint ID
+ * @return, altitude
  */
 std::string UfoTrajectory::getAltitude(size_t wp) const
 {

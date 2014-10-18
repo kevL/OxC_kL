@@ -190,24 +190,26 @@ void Inventory::drawGrid()
 
 	Text text = Text(16, 9, 0, 0);
 	text.setPalette(_grid->getPalette());
+	text.setHighContrast();
 	text.initText(
 				_game->getResourcePack()->getFont("FONT_BIG"),
 				_game->getResourcePack()->getFont("FONT_SMALL"),
 				_game->getLanguage());
-	RuleInterface* rule = _game->getRuleset()->getInterface("inventory");
-	text.setColor(rule->getElement("textSlots")->color);
-//	text.setColor(Palette::blockOffset(4)-1);
-	text.setHighContrast();
-	Uint8 color = rule->getElement("grid")->color;
-//	Uint8 color = Palette::blockOffset(0)+8;
 
+	RuleInterface* rule = _game->getRuleset()->getInterface("inventory");
+	text.setColor(rule->getElement("textSlots")->color); // Palette::blockOffset(4)-1
+
+	Uint8 color = rule->getElement("grid")->color; // Palette::blockOffset(0)+8
+	bool doLabel;
 
 	for (std::map<std::string, RuleInventory*>::iterator
 			i = _game->getRuleset()->getInventories()->begin();
 			i != _game->getRuleset()->getInventories()->end();
 			++i)
 	{
-		if (i->second->getType() == INV_SLOT) // Draw grid
+		doLabel = true;
+
+		if (i->second->getType() == INV_SLOT) // draw grid
 		{
 			for (std::vector<RuleSlot>::iterator
 					j = i->second->getSlots()->begin();
@@ -229,7 +231,7 @@ void Inventory::drawGrid()
 				_grid->drawRect(&r, 0);
 			}
 		}
-		else if (i->second->getType() == INV_HAND)
+		else if (i->second->getType() == INV_HAND) // draw grid
 		{
 			SDL_Rect r;
 
@@ -245,8 +247,10 @@ void Inventory::drawGrid()
 			r.h -= 2;
 			_grid->drawRect(&r, 0);
 		}
-		else if (i->second->getType() == INV_GROUND)
+		else if (i->second->getType() == INV_GROUND) // draw grid
 		{
+			doLabel = false;
+
 			for (int
 					x = i->second->getX();
 					x <= 320;
@@ -274,13 +278,16 @@ void Inventory::drawGrid()
 			}
 		}
 
-		text.setX(i->second->getX()); // Draw label
-		text.setY(
-				i->second->getY()
-					- text.getFont()->getHeight()
-					- text.getFont()->getSpacing());
-		text.setText(_game->getLanguage()->getString(i->second->getId()));
-		text.blit(_grid);
+		if (doLabel == true)
+		{
+			text.setX(i->second->getX()); // draw label
+			text.setY(
+					i->second->getY()
+						- text.getFont()->getHeight()
+						- text.getFont()->getSpacing());
+			text.setText(_game->getLanguage()->getString(i->second->getId()));
+			text.blit(_grid);
+		}
 	}
 }
 

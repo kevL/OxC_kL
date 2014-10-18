@@ -1396,7 +1396,7 @@ RuleSoldier* Ruleset::getSoldier(const std::string& name) const
 
 /**
  * Gets the list of commendations
- * @return The list of commendations.
+ * @return, the list of commendations
  */
 std::map<std::string, RuleCommendations*> Ruleset::getCommendation() const
 {

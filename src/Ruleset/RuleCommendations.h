@@ -39,8 +39,8 @@ private:
 	int _sprite;
 	std::string _description;
 
-	std::vector<std::map<int, std::vector<std::string> > > _killCriteria;
 	std::map<std::string, std::vector<int> > _criteria;
+	std::vector<std::map<int, std::vector<std::string> > > _killCriteria;
 
 
 	public:
@@ -55,13 +55,13 @@ private:
 		/// Get the commendation's description.
 		std::string getDescription() const;
 
-		/// Get the commendation's award criteria.
-		std::map<std::string, std::vector<int> >* getCriteria();
-		/// Get the commendation's award kill related criteria.
-		std::vector<std::map<int, std::vector<std::string> > >* getKillCriteria();
-
 		/// Get the commendation's sprite.
 		int getSprite() const;
+
+		/// Get the commendation's award criteria.
+		std::map<std::string, std::vector<int> >* getCriteria();
+		/// Get the commendation's award kill-related criteria.
+		std::vector<std::map<int, std::vector<std::string> > >* getKillCriteria();
 };
 
 }

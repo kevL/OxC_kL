@@ -77,7 +77,10 @@ SoldierDiary::SoldierDiary()
 		_reactionFireTotal(0),
 		_timesWoundedTotal(0),
 		_valiantCruxTotal(0),
-		_KIA(0)
+		_KIA(0),
+		_trapKillTotal(0),
+		_alienBaseAssaultTotal(0),
+		_allAliensKilledTotal(0)
 {
 }
 
@@ -1021,10 +1024,10 @@ SoldierCommendations::~SoldierCommendations()
  */
 void SoldierCommendations::load(const YAML::Node& node)
 {
-	_type				= node["commendationName"].as<std::string>(_type);
-	_noun				= node["noun"].as<std::string>("noNoun");
-	_decorationLevel	= node["decorationLevel"].as<int>(_decorationLevel);
-	_isNew				= node["isNew"].as<bool>(false);
+	_type				= node["commendationName"]	.as<std::string>(_type);
+	_noun				= node["noun"]				.as<std::string>("noNoun");
+	_decorationLevel	= node["decorationLevel"]	.as<int>(_decorationLevel);
+	_isNew				= node["isNew"]				.as<bool>(false);
 }
 
 /**

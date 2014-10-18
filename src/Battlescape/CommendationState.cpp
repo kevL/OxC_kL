@@ -67,16 +67,6 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
-	_btnOk->setColor(Palette::blockOffset(15)-1);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& CommendationState::btnOkClick);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& CommendationState::btnOkClick,
-					Options::keyOk);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& CommendationState::btnOkClick,
-					Options::keyCancel);
-
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setText(tr("STR_MEDALS"));
 	_txtTitle->setAlign(ALIGN_CENTER);
@@ -87,6 +77,16 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	_lstSoldiers->setSelectable();
 	_lstSoldiers->setBackground(_window);
 	_lstSoldiers->setMargin();
+
+	_btnOk->setColor(Palette::blockOffset(15)-1);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& CommendationState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CommendationState::btnOkClick,
+					Options::keyOk);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CommendationState::btnOkClick,
+					Options::keyCancel);
 
 
 	std::string noun;
@@ -109,7 +109,6 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 		if (titleChosen)
 		{
 			_lstSoldiers->addRow(2, L"", L""); // Blank row, will be filled in later
-
 			row++;
 		}
 
@@ -131,7 +130,6 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 					&& noun == "noNoun")
 				{
 					(*soldierCom)->makeOld();
-
 					row++;
 
 					if ((*soldierCom)->getNoun() != "noNoun")

@@ -1514,7 +1514,7 @@ Node* SavedBattleGame::getSpawnNode(
 			&& setUnitPosition(							// check if unit can be set at this node
 							unit,							// ie. it's big enough
 							(*i)->getPosition(),			// and there's not already a unit there.
-							true))							// testOnly, runs w/ false on return to bgen::addAlien()
+							true))							// testOnly, runs again w/ FALSE on return to bgen::addAlien()
 		{
 			for (int
 					j = (*i)->getPriority();
