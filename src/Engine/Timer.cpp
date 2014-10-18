@@ -33,6 +33,7 @@ namespace
 
 const Uint32 accurate = 4;
 
+
 Uint32 slowTick()
 {
 /*kL
@@ -64,8 +65,8 @@ int Timer::maxFrameSkip		= 8; // this is a pretty good default at 60FPS.
 
 /**
  * Initializes a new timer with a set interval.
- * @param interval Time interval in milliseconds.
- * @param frameSkipping Use frameskipping.
+ * @param interval		- time interval in milliseconds
+ * @param frameSkipping - true to use frameskipping
  */
 Timer::Timer(
 		Uint32 interval,
@@ -108,7 +109,7 @@ void Timer::stop()
 
 /**
  * Returns the time passed since the last interval.
- * @return Time in milliseconds.
+ * @return, time in milliseconds
  */
 Uint32 Timer::getTime() const
 {
@@ -120,7 +121,7 @@ Uint32 Timer::getTime() const
 
 /**
  * Returns if the timer has been started.
- * @return Running state.
+ * @return, true if running state
  */
 bool Timer::isRunning() const
 {
@@ -130,8 +131,8 @@ bool Timer::isRunning() const
 /**
  * The timer keeps calculating the passed time while it's running,
  * calling the respective action handler whenever the set interval passes.
- * @param state, State that the action handler belongs to.
- * @param surface, Surface that the action handler belongs to.
+ * @param state		- State that the action handler belongs to
+ * @param surface	- Surface that the action handler belongs to
  */
 void Timer::think(
 		State* state,
@@ -164,9 +165,9 @@ void Timer::think(
 				_frameSkipStart += _interval;
 
 				// breaking here after one iteration effectively returns this function to its old functionality:
-				if (!game
-					|| !_frameSkipping
-					|| !game->isState(state)) // if game isn't set, we can't verify *state
+				if (game == NULL
+					|| _frameSkipping == false
+					|| game->isState(state) == false) // if game isn't set, we can't verify *state
 				{
 					break;
 				}
@@ -189,7 +190,7 @@ void Timer::think(
 
 /**
  * Changes the timer's interval to a new value.
- * @param interval Interval in milliseconds.
+ * @param interval - interval in milliseconds
  */
 void Timer::setInterval(Uint32 interval)
 {
@@ -198,7 +199,7 @@ void Timer::setInterval(Uint32 interval)
 
 /**
  * Sets a state function for the timer to call every interval.
- * @param handler Event handler.
+ * @param handler - event handler
  */
 void Timer::onTimer(StateHandler handler)
 {
@@ -207,7 +208,7 @@ void Timer::onTimer(StateHandler handler)
 
 /**
  * Sets a surface function for the timer to call every interval.
- * @param handler Event handler.
+ * @param handler - event handler
  */
 void Timer::onTimer(SurfaceHandler handler)
 {
@@ -215,8 +216,8 @@ void Timer::onTimer(SurfaceHandler handler)
 }
 
 /**
- * Sets frame skipping on or off
- * @param skip Enable frameskipping.
+ * Sets frame skipping on or off.
+ * @param skip - true to enable frameskipping
  */
 void Timer::setFrameSkipping(bool skip)
 {

@@ -5823,7 +5823,7 @@
 1413140555 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1413140555 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1413597976 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5907,7 +5907,7 @@
 	<string>
 	"BattleState.h"
 
-1413140556 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1413599634 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	<climits>
 	"BattlescapeGame.h"
 	"BattleState.h"
@@ -6611,7 +6611,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1413407360 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1413580923 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	<list>
 	"PathfindingNode.h"
@@ -7323,7 +7323,7 @@
 	"Exception.h"
 	"Logger.h"
 
-1413140557 source:f:\git\openxcom\src\engine\timer.cpp
+1413598432 source:f:\git\openxcom\src\engine\timer.cpp
 	"Timer.h"
 	<assert.h>
 	"Game.h"

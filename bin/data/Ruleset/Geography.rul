@@ -2047,7 +2047,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 55.625
           - 73.625
         - - 0
-          - 359.875
+          - 360
           - 85
           - 90
       - - - 291.125
@@ -2067,7 +2067,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 70
           - 72.75
         - - 0
-          - 359.875
+          - 360
           - 87.5
           - 90
       - - - 291.125
@@ -2087,7 +2087,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 70
           - 72.75
         - - 0
-          - 359.875
+          - 360
           - 87.5
           - 90
       - - - 291.125
@@ -2115,7 +2115,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 70
           - 72.75
         - - 0
-          - 359.875
+          - 360
           - 87.5
           - 90
       - - - 121.625
@@ -2128,7 +2128,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 2
         - - 180
           - 200
-          - -0.0
+          - 0
           - 10
         - - 355
           - 5
@@ -2201,7 +2201,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -79.75
           - -74
         - - 0
-          - 359.875
+          - 360
           - -90
           - -85
       - - - 302.25
@@ -2225,7 +2225,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -78.875
           - -76.75
         - - 0
-          - 359.875
+          - 360
           - -90
           - -88.125
       - - - 302.25
@@ -2249,7 +2249,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -78.875
           - -76.75
         - - 0
-          - 359.875
+          - 360
           - -90
           - -88.125
       - - - 302.25
@@ -2281,7 +2281,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -78.875
           - -76.75
         - - 0
-          - 359.875
+          - 360
           - -90
           - -88.125
       - - - 121.625
@@ -2289,7 +2289,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -46.25
           - -21.75
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180
@@ -2451,11 +2451,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 41
           - 41.625
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180
@@ -2662,11 +2662,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -7.375
           - -6.75
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180
@@ -2766,7 +2766,7 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
         lon: 350.776
         lat: -38.6697
       - name: STR_LONDON
-        lon: 359.875
+        lon: 360
         lat: -51.5
       - name: STR_LYON
         lon: 4.873811569815018
@@ -2893,11 +2893,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 358.875
           - -39.375
           - -37.75
-      - - - 359.875
-          - 359.875
+      - - - 0 #wtf CITY
+          - 0
           - -51.5
           - -51.5
-        - - 2.375
+        - - 2.375 #wtf
           - 2.375
           - -48.75
           - -48.75
@@ -2905,19 +2905,19 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 13.375
           - -52.5
           - -52.5
-        - - 37.625
+        - - 37.625 #wtf
           - 37.625
           - -55.75
           - -55.75
-        - - 12.5
+        - - 12.5 #wtf
           - 12.5
           - -41.875
           - -41.875
-        - - 356.25
+        - - 356.25 #wtf
           - 356.25
           - -40.375
           - -40.375
-        - - 19.125
+        - - 19.125 #wtf
           - 19.125
           - -47.5
           - -47.5
@@ -2942,11 +2942,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -52.375
           - -47.625
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180
@@ -3142,11 +3142,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -26
           - -19
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180
@@ -3495,11 +3495,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -40.75
           - -36.875
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180
@@ -3659,11 +3659,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 20.5
           - 20.75
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 119.625
@@ -3799,11 +3799,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -66.125
           - -58.125
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180
@@ -4010,11 +4010,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 22.875
           - 27.125
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180
@@ -4246,11 +4246,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - -8.375
           - -7.875
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180
@@ -4418,11 +4418,11 @@ regions: #addborders: cites, areas, missionZones; kL: cost; Org: regionWeight, m
           - 12.25
           - 15.625
       - - - 0
-          - 359.875
+          - 360
           - -90
           - -80
         - - 0
-          - 359.875
+          - 360
           - 80
           - 90
         - - 180

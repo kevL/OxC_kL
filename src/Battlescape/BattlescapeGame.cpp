@@ -1692,8 +1692,8 @@ void BattlescapeGame::popState()
 
 /**
  * Determines whether there are any actions pending for the given unit.
- * @param bu BattleUnit.
- * @return True if there are no actions pending.
+ * @param bu - pointer to a BattleUnit
+ * @return, true if there are no actions pending
  */
 bool BattlescapeGame::noActionsPending(BattleUnit* bu)
 {
@@ -1717,7 +1717,7 @@ bool BattlescapeGame::noActionsPending(BattleUnit* bu)
 
 /**
  * Sets the timer interval for think() calls of the state.
- * @param interval, An interval in ms.
+ * @param interval - interval in ms
  */
 void BattlescapeGame::setStateInterval(Uint32 interval)
 {

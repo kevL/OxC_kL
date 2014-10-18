@@ -76,7 +76,7 @@ private:
 	bool visForUnits();
 
 	/// Handles some calculations when the walking is finished.
-	void setNormalWalkSpeed();
+	void setNormalWalkSpeed(bool gravLift);
 
 	/// Handles the stepping sounds.
 	void playMovementSound();

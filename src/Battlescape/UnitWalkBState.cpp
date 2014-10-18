@@ -94,7 +94,7 @@ void UnitWalkBState::init()
 	_unit = _action.actor;
 	//Log(LOG_INFO) << "\nUnitWalkBState::init() unitID = " << _unit->getId();
 
-	setNormalWalkSpeed();
+//	setNormalWalkSpeed();
 
 	_pf = _parent->getPathfinding();
 	_terrain = _parent->getTileEngine();
@@ -320,14 +320,16 @@ bool UnitWalkBState::doStatusStand()
 
 	Tile* tile = _parent->getSave()->getTile(_unit->getPosition());
 	bool gravLift = dir >= _pf->DIR_UP // Assumes tops & bottoms of gravLifts always have floors/ceilings.
-				&& tile->getMapData(MapData::O_FLOOR)
-				&& tile->getMapData(MapData::O_FLOOR)->isGravLift();
+				 && tile->getMapData(MapData::O_FLOOR)
+				 && tile->getMapData(MapData::O_FLOOR)->isGravLift();
+
+	setNormalWalkSpeed(gravLift);
 
 	if (dir > -1
-		&& _kneelCheck				== true		// check if unit is kneeled
-		&& _unit->isKneeled()		== true		// unit is kneeled
-		&& gravLift					== false	// not on a gravLift
-		&& _pf->getPath().empty()	== false)	// not the final tile of path; that is, the unit is actually going to move.
+		&& _kneelCheck == true				// check if unit is kneeled
+		&& _unit->isKneeled() == true		// unit is kneeled
+		&& gravLift == false				// not on a gravLift
+		&& _pf->getPath().empty() == false)	// not the final tile of path; that is, the unit is actually going to move.
 	{
 		//Log(LOG_INFO) << ". kneeled, and path Valid";
 		_kneelCheck = false;
@@ -1087,8 +1089,9 @@ bool UnitWalkBState::visForUnits()
 
 /**
  * Sets the animation speed of soldiers or aliens.
+ * @param gravLift - true if moving up/down a gravLift
  */
-void UnitWalkBState::setNormalWalkSpeed()
+void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
 {
 	int interval = 1;
 
@@ -1101,6 +1104,9 @@ void UnitWalkBState::setNormalWalkSpeed()
 	}
 	else
 		interval = Options::battleAlienSpeed;
+
+	if (gravLift)
+		interval = interval * 3 / 2;
 
 	_parent->setStateInterval(static_cast<Uint32>(interval));
 }
