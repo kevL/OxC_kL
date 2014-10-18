@@ -108,7 +108,7 @@ void UnitSprite::setSurfaces(
 /**
  * Links this sprite to a BattleUnit to get the data for rendering.
  * @param unit - pointer to a BattleUnit
- * @param part - part number for large units
+ * @param part - part number for large units (default 0)
  */
 void UnitSprite::setBattleUnit(
 		BattleUnit* unit,
@@ -146,11 +146,14 @@ namespace
 
 struct ColorFace
 {
-	static const Uint8 ColorGroup = 15 << 4;
-	static const Uint8 ColorShade = 15;
+	static const Uint8
+		ColorGroup = 15 << 4,
+		ColorShade = 15,
 
-	static const Uint8 Hair = 9 << 4;
-	static const Uint8 Face = 6 << 4;
+		Hair = 9 << 4,
+		Face = 6 << 4;
+
+	///
 	static inline void func(
 			Uint8& src,
 			const Uint8& hair_color,

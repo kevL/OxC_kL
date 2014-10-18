@@ -2219,23 +2219,34 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 							_save->selectUnit(posTarget))
 						!= _currentAction.actor->getVisibleUnits()->end())
 				{
-					if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
+					if (getTileEngine()->distance( // in Range
+												_currentAction.actor->getPosition(),
+												_currentAction.target)
+											<= _currentAction.weapon->getRules()->getMaxRange())
 					{
-						_parentState->getGame()->getResourcePack()->getSoundByDepth(
-																				_save->getDepth(),
-																				_currentAction.weapon->getRules()->getHitSound())
-																			->play(
-																				-1,
-																				getMap()->getSoundAngle(posTarget));
+						if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
+						{
+							_parentState->getGame()->getResourcePack()->getSoundByDepth(
+																					_save->getDepth(),
+																					_currentAction.weapon->getRules()->getHitSound())
+																				->play(
+																					-1,
+																					getMap()->getSoundAngle(posTarget));
 
-						_parentState->getGame()->pushState(new UnitInfoState(
-																		_save->selectUnit(posTarget),
-																		_parentState,
-																		false,
-																		true));
+							_parentState->getGame()->pushState(new UnitInfoState(
+																			_save->selectUnit(posTarget),
+																			_parentState,
+																			false,
+																			true));
+						}
+						else
+						{
+							cancelCurrentAction();
+							_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+						}
 					}
 					else
-						_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
+						_parentState->warning("STR_OUT_OF_RANGE");
 				}
 				else
 					_parentState->warning("STR_NO_LINE_OF_FIRE");

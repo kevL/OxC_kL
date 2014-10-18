@@ -6373,7 +6373,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1413140555 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1413652767 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -9475,7 +9475,7 @@
 	"../Engine/RNG.h"
 	"../Savegame/Soldier.h"
 
-1413140561 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
+1413651942 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
 1413140561 source:f:\git\openxcom\src\ruleset\unit.cpp

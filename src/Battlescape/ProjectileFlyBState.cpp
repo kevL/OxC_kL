@@ -406,7 +406,7 @@ void ProjectileFlyBState::init()
 		// determine the target voxel.
 		// aim at the center of the unit, the object, the walls or the floor (in that priority)
 		// if there is no LOF to the center, try elsewhere (more outward).
-		// Store this target voxel.
+		// Store that target voxel.
 		Tile* targetTile = _parent->getSave()->getTile(_action.target);
 		Position hitPos;
 
@@ -434,11 +434,10 @@ void ProjectileFlyBState::init()
 		// kL_begin: AutoShot vs. tile w/ dead or stunned Unit just sprays through the middle of the tile.
 		// note, however, this also affects attempts to target a tile where there is/was(?) a dead unit...
 		// So let's narrow it down some........... ie. to do this correctly I'd need some sort of 'autoShotKill' boolean
-		else if (_action.autoShotCount > 1
-			&& _action.autoShotKill) // note: If targetUnit is still alive after the first shot, see ABOVE^^
+		else if (_action.autoShotKill // note: If targetUnit is still alive after the first shot, do ABOVE^^
+			&& _action.autoShotCount > 1) // NOTE: I think autoShotKill is redundant w/ (autoShotCount > 1), when tucked in here between target->Voxel & stuff below_
 //			&& targetTile->getUnit()
-//			&& targetTile->getUnit()->isOut(true, true)) // NOT Working
-//		_action.autoShotKill //_action.autoShotCount
+//			&& targetTile->getUnit()->isOut(true, true)) // NOT Working -> would have to cycle through tile's inventory, and find corpse item ...
 //			&& _action.autoShotCount < _action.weapon->getRules()->getAutoShots())
 		{
 			//Log(LOG_INFO) << ". targetTile vs. Autoshot!";
@@ -610,7 +609,6 @@ bool ProjectileFlyBState::createNewProjectile()
 			_unit->setStatus(STATUS_STANDING);
 
 			_parent->popState();
-
 			return false;
 		}
 	}
@@ -620,6 +618,9 @@ bool ProjectileFlyBState::createNewProjectile()
 																			_action.type,
 																			_action.weapon));
 		//Log(LOG_INFO) << ". acid spit, part = " << _projectileImpact;
+
+		if (_projectileImpact == VOXEL_UNIT)
+			_action.autoShotKill = true;
 
 		if (_projectileImpact != VOXEL_EMPTY
 			 && _projectileImpact != VOXEL_OUTOFBOUNDS)
@@ -651,11 +652,10 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(NULL);
 
 			_action.result = "STR_NO_LINE_OF_FIRE";
-			_action.TU = 0; // kL
-			_unit->setStatus(STATUS_STANDING); // kL
+			_action.TU = 0;
+			_unit->setStatus(STATUS_STANDING);
 
 			_parent->popState();
-
 			return false;
 		}
 	}
@@ -691,8 +691,8 @@ bool ProjectileFlyBState::createNewProjectile()
 																					_action.weapon));
 		//Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 
-		if (_projectileImpact == VOXEL_UNIT)	// kL
-			_action.autoShotKill = true;		// kL
+		if (_projectileImpact == VOXEL_UNIT)
+			_action.autoShotKill = true;
 
 		if (_projectileImpact != VOXEL_EMPTY
 			|| _action.type == BA_LAUNCH)
@@ -724,11 +724,10 @@ bool ProjectileFlyBState::createNewProjectile()
 			_parent->getMap()->setProjectile(NULL);
 
 			_action.result = "STR_NO_LINE_OF_FIRE";
-			_action.TU = 0; // kL
-			_unit->setStatus(STATUS_STANDING); // kL
+			_action.TU = 0;
+			_unit->setStatus(STATUS_STANDING);
 
 			_parent->popState();
-
 			return false;
 		}
 	}
