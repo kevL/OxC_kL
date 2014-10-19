@@ -32,7 +32,7 @@
 namespace OpenXcom
 {
 
-extern bool kL_preReveal; // kL
+extern bool kL_noReveal; // kL
 
 
 class BattlescapeMessage;
@@ -68,8 +68,9 @@ class Map
 {
 
 private:
-	static const int SCROLL_INTERVAL	= 15;
-	static const int BULLET_SPRITES		= 35;
+	static const int
+		SCROLL_INTERVAL	= 15,
+		BULLET_SPRITES	= 35;
 
 	CursorType _cursorType;
 
@@ -87,7 +88,7 @@ private:
 		_messageColor,
 		_mouseX,
 		_mouseY,
-		_reveal, // kL
+		_reveal,
 		_selectorX,
 		_selectorY,
 		_spriteWidth,
@@ -96,7 +97,7 @@ private:
 
 	PathPreview			_previewSetting;
 
-	BattlescapeMessage	* _message;
+	BattlescapeMessage	* _hidden;
 	Camera				* _camera;
 	Game				* _game;
 	NumberText			* _txtAccuracy;
@@ -105,7 +106,7 @@ private:
 	SavedBattleGame		* _save;
 	Surface
 						* _arrow,
-						* _arrow_kneel; // DarkDefender
+						* _arrow_kneel;
 	SurfaceSet			* _projectileSet;
 	Timer
 						* _scrollMouseTimer,

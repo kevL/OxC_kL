@@ -474,14 +474,12 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			|| action.type == BA_PANIC)
 		{
 			//Log(LOG_INFO) << ". . . in action.type Psi";
-
 			bool success = _save->getTileEngine()->psiAttack(&action);
 			//Log(LOG_INFO) << ". . . success = " << success;
 			if (success
 				&& action.type == BA_MINDCONTROL)
 			{
 				//Log(LOG_INFO) << ". . . inside success MC";
-				// show a little infobox with the name of the unit and "... is under alien control"
 				BattleUnit* unit = _save->getTile(action.target)->getUnit();
 				Game* game = _parentState->getGame();
 				game->pushState(new InfoboxState(game->getLanguage()->getString(

@@ -2413,12 +2413,12 @@ void AlienBAIState::grenadeAction()
 }
 
 /**
- * Attempts a psionic attack on an enemy we know of.
+ * Evaluates a psionic attack on an 'exposed' enemy.
  *
  * Psionic targetting: pick from any of the exposed units.
  * Exposed means they have been previously spotted, and are therefore known to
  * the AI, regardless of whether we can see them or not, because we're psycho.
- * @return, true if a psionic attack is performed
+ * @return, true if a psionic attack should be performed
  */
 bool AlienBAIState::psiAction()
 {
@@ -2437,7 +2437,7 @@ bool AlienBAIState::psiAction()
 		tuCost = static_cast<int>(floor(static_cast<float>(_unit->getStats()->tu * tuCost) / 100.f));
 	//Log(LOG_INFO) << "AlienBAIState::psiAction() tuCost = " << tuCost;
 
-	if (_unit->getTimeUnits() < _escapeTUs + tuCost) // check if aLien has the required TUs and can still make it to cover
+	if (_unit->getTimeUnits() < tuCost + _escapeTUs) // check if aLien has the required TUs and can still make it to cover
 	{
 		//Log(LOG_INFO) << ". not enough Tu, EXIT";
 		return false;
@@ -2463,22 +2463,13 @@ bool AlienBAIState::psiAction()
 				i != _save->getUnits()->end();
 				++i)
 		{
-			if ((*i)->getUnitRules()
-				&& (*i)->getUnitRules()->getPsiImmune())
-			{
+			if ((*i)->getUnitRules())
 				continue;
-			}
 
-			// kL_note: aLiens should try to attack their own MC'd units now ....... DANGER mode.
-//			if ((*i)->getGeoscapeSoldier() != NULL
-//				&& (*i)->getFaction() == (*i)->getOriginalFaction()
-//			if ((*i)->getOriginalFaction() == FACTION_PLAYER	// they must be player units
-//				&& (*i)->getUnitRules() == NULL					// and not tanks or MC'd aLiens
-//				&& (*i)->getArmor()->getSize() == 1				// don't target tanks
-			if (validTarget(									// will check for Mc, Exposed, etc.
-						*i,
-						true,
-						false)
+			if (validTarget( // will check for Mc, Exposed, etc.
+							*i,
+							true,
+							false)
 				&& (LOSRequired == false
 					|| std::find(
 							_unit->getVisibleUnits()->begin(),
@@ -2543,8 +2534,6 @@ bool AlienBAIState::psiAction()
 			chance -= LoS_mult;
 
 		if (_aggroTarget == NULL									// if not target
-//			|| (_aggroTarget->getUnitRules()						// or target is Psi-Immune
-//				&& _aggroTarget->getUnitRules()->getPsiImmune())
 			|| chance < 25											// or chance of success is too low
 			|| RNG::percent(15))									// or aLien just don't feel like it... do FALSE.
 		{
@@ -2602,8 +2591,8 @@ bool AlienBAIState::psiAction()
 			}
 		}
 
-		_psiAction->target	= _aggroTarget->getPosition();
-		_psiAction->type	= BA_MINDCONTROL;
+		_psiAction->target = _aggroTarget->getPosition();
+		_psiAction->type = BA_MINDCONTROL;
 
 		//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT . do MindControl vs " << _aggroTarget->getId();
 		return true;
@@ -2636,7 +2625,7 @@ void AlienBAIState::meleeAttack()
 /**
  * Validates a target.
  * @param unit			- pointer to a target to validate
- * @param assessDanger	- true if to care if target has already been grenaded
+ * @param assessDanger	- true to care if target has already been grenaded
  * @param includeCivs	- true to include civilians in the threat assessment
  * @return, true if the target is something we would like to kill
  */

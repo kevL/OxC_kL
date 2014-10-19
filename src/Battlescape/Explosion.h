@@ -35,21 +35,21 @@ class Explosion
 {
 
 private:
-	bool
-		_big,
-		_hit;
+	bool _big;
 	int
 		_frameCurrent,
 		_frameDelay,
-		_frameStart;
+		_frameStart,
+		_hit;
 
 	Position _position;
 
 
 	public:
-		static const int FRAMES_BULLET;
-		static const int FRAMES_EXPLODE;
-		static const int FRAMES_HIT;
+		static const int
+			FRAMES_BULLET,
+			FRAMES_EXPLODE,
+			FRAMES_HIT;
 
 		/// Creates a new Explosion.
 		Explosion(
@@ -57,7 +57,7 @@ private:
 				int frameStart,
 				int frameDelay = 0,
 				bool big = false,
-				bool hit = false);
+				int hit = 0);
 		/// Cleans up the Explosion.
 		~Explosion();
 
@@ -73,7 +73,7 @@ private:
 		/// Checks if this is a real explosion.
 		bool isBig() const;
 		/// Checks if this is a melee or psi hit.
-		bool isHit() const;
+		int isHit() const;
 };
 
 }

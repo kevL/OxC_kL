@@ -19,6 +19,8 @@
 
 #include "Explosion.h"
 
+//#include "../Engine/Logger.h"
+
 
 namespace OpenXcom
 {
@@ -32,17 +34,20 @@ const int
 /**
  * Sets up a Explosion sprite with the specified size and position.
  * @param position		- explosion center position in voxel x/y/z
- * @param frameStart	- can be used to offset different explosions at different frames
- * @param frameDelay	- can be used to delay the start of explosion (default 0)
+ * @param frameStart	- used to offset different explosions to different frames on the spritesheet
+ * @param frameDelay	- used to delay the start of explosion (default 0)
  * @param big			- flag to indicate it is a real explosion (true), or a bullet hit (default false)
- * @param hit			- true for melee and psi attacks (default false)
+ * @param hit			- used for melee and psi attacks (was bool default false)
+ *						 1 - is a melee attack that SUCCEEDED or Psi-attack
+ *						 0 - is not a hit-type attack
+ *						-1 - is a melee attack that MISSED
  */
 Explosion::Explosion(
 		Position position,
 		int frameStart,
 		int frameDelay,
 		bool big,
-		bool hit)
+		int hit)
 	:
 		_position(position),
 		_frameStart(frameStart),
@@ -51,6 +56,7 @@ Explosion::Explosion(
 		_big(big),
 		_hit(hit)
 {
+	//Log(LOG_INFO) << "Explosion: hit = " << hit;
 }
 
 /**
@@ -66,6 +72,9 @@ Explosion::~Explosion()
  */
 bool Explosion::animate()
 {
+//	if (_hit == -1) // Do not show unsuccessful melee attack explosions.
+//		return false;
+
 	if (_frameDelay > 0)
 	{
 		_frameDelay--;
@@ -74,12 +83,12 @@ bool Explosion::animate()
 
 	_frameCurrent++;
 
-	if ((_hit
+	if ((_hit != 0
 			&& _frameCurrent == _frameStart + FRAMES_HIT)		// melee or psiamp
 		|| (_big
 			&& _frameCurrent == _frameStart + FRAMES_EXPLODE)	// explosion
 		|| (_big == false
-			&& _hit == false
+			&& _hit == 0
 			&& _frameCurrent == _frameStart + FRAMES_BULLET))	// bullet
 	{
 		return false;
@@ -119,10 +128,12 @@ bool Explosion::isBig() const
 }
 
 /**
- * Returns flag to indicate if it is a melee or psi hit.
- * @return, true if this is a melee hit or psi hit
+ * Returns flag to indicate if it is a melee or psi attack.
+ * @return,	 1 - psi attack or successful melee attack
+ *			 0 - not a melee or psi attack
+ *			-1 - unsuccessful melee attack
  */
-bool Explosion::isHit() const
+int Explosion::isHit() const
 {
 	return _hit;
 }

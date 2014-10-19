@@ -174,7 +174,7 @@ int Projectile::calculateTrajectory(double accuracy)
 /**
  * Calculates the trajectory for a straight path.
  * First determines if there is LoF, then calculates & stores a modified trajectory that is actually pathed.
- * @param accuracy - accuracy of the projectile's trajectory (a battleunit's accuracy)
+ * @param accuracy - accuracy of the projectile's trajectory (a BattleUnit's accuracy)
  * @return,  -1 nothing to hit / no line of fire
  *			0-3 tile-part (floor / westwall / northwall / content)
  *			  4 unit

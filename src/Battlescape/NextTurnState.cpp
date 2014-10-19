@@ -23,7 +23,7 @@
 
 #include "BattlescapeState.h"
 #include "DebriefingState.h"
-#include "Map.h" // kL, extern 'kL_preReveal'
+#include "Map.h" // kL, extern 'kL_noReveal'
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -137,7 +137,7 @@ NextTurnState::NextTurnState(
 
 	_state->clearMouseScrollingState();
 
-	kL_preReveal = true;
+	kL_noReveal = true;
 	//Log(LOG_INFO) << ". preReveal TRUE";
 
 	if (Options::skipNextTurnScreen)

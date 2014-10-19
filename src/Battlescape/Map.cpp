@@ -81,17 +81,17 @@ y+ /  \ x+
 namespace OpenXcom
 {
 
-bool kL_preReveal = true;
+bool kL_noReveal = true;
 
 
 /**
  * Sets up a map with the specified size and position.
- * @param game Pointer to the core game.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
- * @param visibleMapHeight Current visible map height.
+ * @param game				- pointer to the core Game
+ * @param width				- width in pixels
+ * @param height			- height in pixels
+ * @param x					- X position in pixels
+ * @param y					- Y position in pixels
+ * @param visibleMapHeight	- current visible map height
  */
 Map::Map(
 		Game* game,
@@ -152,16 +152,16 @@ Map::Map(
 					this,
 					visibleMapHeight);
 
-	_message = new BattlescapeMessage( // "Hidden Movement..." screen
-									320,
-									visibleMapHeight < 200? visibleMapHeight: 200,
-									0,
-									0);
-	_message->setX(_game->getScreen()->getDX());
-	_message->setY(_game->getScreen()->getDY());
-//	_message->setY((visibleMapHeight - _message->getHeight()) / 2);
-//	_message->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color);
-	_message->setTextColor(_messageColor);
+	_hidden = new BattlescapeMessage( // "Hidden Movement..." screen
+								320,
+								visibleMapHeight < 200? visibleMapHeight: 200,
+								0,
+								0);
+	_hidden->setX(_game->getScreen()->getDX());
+	_hidden->setY(_game->getScreen()->getDY());
+//	_hidden->setY((visibleMapHeight - _hidden->getHeight()) / 2);
+//	_hidden->setTextColor(_game->getRuleset()->getInterface("battlescape")->getElement("messageWindows")->color);
+	_hidden->setTextColor(_messageColor);
 
 	_scrollMouseTimer = new Timer(SCROLL_INTERVAL);
 	_scrollMouseTimer->onTimer((SurfaceHandler)& Map::scrollMouse);
@@ -194,7 +194,7 @@ Map::~Map()
 	delete _scrollMouseTimer;
 	delete _scrollKeyTimer;
 	delete _arrow;
-	delete _message;
+	delete _hidden;
 	delete _camera;
 	delete _txtAccuracy;
 }
@@ -345,7 +345,6 @@ void Map::draw()
 
 	Tile* tile = NULL;
 
-	_projectileInFOV = _save->getDebugMode();
 	if (_projectile)
 //kL		&& _save->getSide() == FACTION_PLAYER)
 	{
@@ -362,8 +361,10 @@ void Map::draw()
 			_projectileInFOV = true;
 		}
 	}
+	else
+		_projectileInFOV = _save->getDebugMode();
 
-	_explosionInFOV = _save->getDebugMode();
+
 	if (_explosions.empty() == false)
 	{
 		for (std::list<Explosion*>::iterator
@@ -381,11 +382,12 @@ void Map::draw()
 					|| _save->getSide() != FACTION_PLAYER))	// kL: shows hit-explosion during aLien berserk
 			{
 				_explosionInFOV = true;
-
 				break;
 			}
 		}
 	}
+	else
+		_explosionInFOV = _save->getDebugMode();
 
 
 	//Log(LOG_INFO) << ". selUnit & selUnit->VISIBLE = " << (_save->getSelectedUnit() && _save->getSelectedUnit()->getVisible());
@@ -394,8 +396,8 @@ void Map::draw()
 	//Log(LOG_INFO) << ". deBug = " << _save->getDebugMode();
 	//Log(LOG_INFO) << ". projectile = " << _projectileInFOV;
 	//Log(LOG_INFO) << ". explosion = " << _explosionInFOV;
-	//Log(LOG_INFO) << ". reveal & !preReveal = " << (_reveal > 0 && !kL_preReveal);
-	//Log(LOG_INFO) << ". kL_preReveal = " << kL_preReveal;
+	//Log(LOG_INFO) << ". reveal & !preReveal = " << (_reveal > 0 && !kL_noReveal);
+	//Log(LOG_INFO) << ". kL_noReveal = " << kL_noReveal;
 	if (_save->getSelectedUnit() == NULL
 		|| (_save->getSelectedUnit()
 			&& _save->getSelectedUnit()->getVisible())
@@ -404,18 +406,18 @@ void Map::draw()
 		|| _projectileInFOV
 		|| _explosionInFOV
 		|| (_reveal > 0
-			&& kL_preReveal == false))
+			&& kL_noReveal == false))
 	{
 		//Log(LOG_INFO) << ". . drawTerrain()";
 		if (_reveal > 0
-			&& kL_preReveal == false)
+			&& kL_noReveal == false)
 		{
 			_reveal--;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
 		}
 		else
 		{
-			_reveal = 3;
+			_reveal = 120;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
 		}
 
@@ -428,18 +430,18 @@ void Map::draw()
 	else // "Hidden Movement ..."
 	{
 		//Log(LOG_INFO) << ". . blit( Hidden Movement ... )";
-		if (kL_preReveal
-			&& _save->getSelectedUnit()->getVisible())
+		if (kL_noReveal)
+//			&& _save->getSelectedUnit()
+//			&& _save->getSelectedUnit()->getVisible())
 		{
-			kL_preReveal = false;
+			kL_noReveal = false;
 			_reveal = 0;
-			//Log(LOG_INFO) << ". . . . . . kL_preReveal, set " << kL_preReveal;
+			//Log(LOG_INFO) << ". . . . . . kL_noReveal, set " << kL_noReveal;
 			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
 		}
 
 //		_save->getBattleState()->toggleIcons(false);
-
-		_message->blit(this);
+		_hidden->blit(this);
 	}
 }
 
@@ -464,19 +466,19 @@ void Map::setPalette(
 		(*i)->getSurfaceset()->setPalette(colors, firstcolor, ncolors);
 	}
 
-	_message->setPalette(colors, firstcolor, ncolors);
-	_message->setBackground(_res->getSurface("TAC00.SCR"));
-	_message->initText(
+	_hidden->setPalette(colors, firstcolor, ncolors);
+	_hidden->setBackground(_res->getSurface("TAC00.SCR"));
+	_hidden->initText(
 					_res->getFont("FONT_BIG"),
 					_res->getFont("FONT_SMALL"),
 					_game->getLanguage());
-	_message->setText(_game->getLanguage()->getString("STR_HIDDEN_MOVEMENT"));
+	_hidden->setText(_game->getLanguage()->getString("STR_HIDDEN_MOVEMENT"));
 }
 
 /**
  * Draw the terrain.
  * Keep this function as optimised as possible. It's big so minimise overhead of function calls.
- * @param surface, The surface to draw on.
+ * @param surface - the surface to draw on
  */
 void Map::drawTerrain(Surface* surface)
 {
@@ -2329,7 +2331,7 @@ void Map::drawTerrain(Surface* surface)
 							bulletScreen.y - 64,
 							0);
 				}
-				else if ((*i)->isHit()) // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
+				else if ((*i)->isHit() == 1) // melee or psiamp, http://ufopaedia.org/index.php?title=HIT.PCK
 				{
 					tmpSurface = _res->getSurfaceSet("HIT.PCK")->getFrame((*i)->getCurrentFrame());
 					tmpSurface->blitNShade(
@@ -2338,7 +2340,7 @@ void Map::drawTerrain(Surface* surface)
 							bulletScreen.y - 25,
 							0);
 				}
-				else // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
+				else if ((*i)->isHit() != -1) // bullet, http://ufopaedia.org/index.php?title=SMOKE.PCK
 				{
 					tmpSurface = _res->getSurfaceSet("SMOKE.PCK")->getFrame((*i)->getCurrentFrame());
 					tmpSurface->blitNShade(
@@ -2906,7 +2908,7 @@ void Map::setButtonsPressed(
 /**
  * Sets the unitDying flag.
  * This reveals the dying unit during Hidden Movement.
- * @param flag, True if the unit is dying.
+ * @param flag, true if a unit is dying
  */
 void Map::setUnitDying(bool flag)
 {
@@ -2925,7 +2927,7 @@ void Map::refreshSelectorPosition()
 
 /**
  * Special handling for setting the height of the map viewport.
- * @param height the new base screen height.
+ * @param height - the new base screen height
  */
 void Map::setHeight(int height)
 {
@@ -2933,8 +2935,8 @@ void Map::setHeight(int height)
 
 	_visibleMapHeight = height - _iconHeight;
 
-	_message->setHeight((_visibleMapHeight < 200)? _visibleMapHeight: 200);
-	_message->setY((_visibleMapHeight - _message->getHeight()) / 2);
+	_hidden->setHeight((_visibleMapHeight < 200)? _visibleMapHeight: 200);
+	_hidden->setY((_visibleMapHeight - _hidden->getHeight()) / 2);
 }
 
 /**
@@ -2945,7 +2947,7 @@ void Map::setWidth(int width)
 {
 	Surface::setWidth(width);
 
-	_message->setX(_message->getX() + (width - getWidth()) / 2);
+	_hidden->setX(_hidden->getX() + (width - getWidth()) / 2);
 }
 
 /**
@@ -2954,11 +2956,12 @@ void Map::setWidth(int width)
  */
 const int Map::getMessageY()
 {
-	return _message->getY();
+	return _hidden->getY();
 }
 
 /**
  * Gets the icon height.
+ * @return, icon panel height
  */
 const int Map::getIconHeight()
 {
@@ -2967,6 +2970,7 @@ const int Map::getIconHeight()
 
 /**
  * Gets the icon width.
+ * @return, icon panel width
  */
 const int Map::getIconWidth()
 {

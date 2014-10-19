@@ -44,7 +44,7 @@
 
 #include "../Engine/Game.h"		// kL, for message when unconscious unit explodes.
 #include "../Engine/Language.h"	// kL, for message when unconscious unit explodes.
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 
@@ -1896,7 +1896,7 @@ BattleActionType TileEngine::selectFireMethod( // kL
 
 /**
  * Handles bullet/weapon hits. A bullet/weapon hits a voxel.
- * kL_note: called from ExplosionBState
+ * kL_note: called from ExplosionBState::explode()
  * @param pTarget_voxel	- reference the center of hit in voxelspace
  * @param power			- power of the hit/explosion
  * @param type			- damage type of the hit (RuleItem.h)
@@ -1916,7 +1916,7 @@ BattleUnit* TileEngine::hit(
 	//			<< " : power = " << power
 	//			<< " : type = " << (int)type;
 
-	if (type != DT_NONE) // bypass Psi-attacks.
+	if (type != DT_NONE) // bypass Psi-attacks. Psi-attacks don't get this far anymore .... But leave it in for safety.
 	{
 		//Log(LOG_INFO) << "DT_ type = " << static_cast<int>(type);
 		Position pTarget_tile = Position(
@@ -1996,7 +1996,7 @@ BattleUnit* TileEngine::hit(
 
 			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 		}
-		else if (part == VOXEL_UNIT)	// battleunit part
+		else if (part == VOXEL_UNIT) // battleunit part
 		{
 			//Log(LOG_INFO) << ". . battleunit hit";
 
@@ -5445,6 +5445,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 	BattleUnit* const victim = tile->getUnit();
 	if (victim == NULL)
 		return false;
+	//Log(LOG_INFO) << "psiAttack: vs ID " << victim->getId();
 
 
 	const bool psiImmune = victim->getUnitRules()
@@ -5456,19 +5457,18 @@ bool TileEngine::psiAttack(BattleAction* action)
 		//Log(LOG_INFO) << ". . defenderID " << victim->getId();
 		//Log(LOG_INFO) << ". . target(pos) " << action->target;
 
-		double attack = static_cast<double>(action->actor->getStats()->psiStrength)
-							* static_cast<double>(action->actor->getStats()->psiSkill)
-							/ 50.0;
-		//Log(LOG_INFO) << ". . . attack = " << (int)attack;
+		UnitStats
+			* statsActor = action->actor->getStats(),
+			* statsVictim = victim->getStats();
 
-		double defense = static_cast<double>(victim->getStats()->psiStrength)
-							+ (static_cast<double>(victim->getStats()->psiSkill)
-								/ 5.0);
-		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
-
-		double dist = static_cast<double>(distance(
+		double
+			attack = static_cast<double>(statsActor->psiStrength * statsActor->psiSkill) / 50.0,
+			defense = static_cast<double>(statsVictim->psiStrength) + (static_cast<double>(statsVictim->psiSkill) / 5.0),
+			dist = static_cast<double>(distance(
 											action->actor->getPosition(),
 											action->target));
+		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
+		//Log(LOG_INFO) << ". . . attack = " << (int)attack;
 		//Log(LOG_INFO) << ". . . dist = " << dist;
 
 //kL	attack -= dist;
@@ -5518,10 +5518,9 @@ bool TileEngine::psiAttack(BattleAction* action)
 			if (action->type == BA_PANIC)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
-
 				int moraleLoss = 110
-								- victim->getStats()->bravery * 3 / 2
-								+ action->actor->getStats()->psiStrength / 2;
+								- statsVictim->bravery * 3 / 2
+								+ statsActor->psiStrength / 2;
 				if (moraleLoss > 0)
 					victim->moraleChange(-moraleLoss);
 			}
@@ -5531,24 +5530,24 @@ bool TileEngine::psiAttack(BattleAction* action)
 				if (victim->getFaction() != FACTION_HOSTILE) // kL_begin: Morale loss for getting Mc'd.
 				{
 					victim->moraleChange(
-									_battleSave->getMoraleModifier(NULL, true) / 10 + victim->getStats()->bravery / 2 - 110);
+									_battleSave->getMoraleModifier(NULL, true) / 10 + statsVictim->bravery / 2 - 110);
 				}
 				else if (action->actor->getFaction() == FACTION_PLAYER)
 				{
 					if (victim->getOriginalFaction() == FACTION_HOSTILE)
 						victim->moraleChange(
-										_battleSave->getMoraleModifier(NULL, false) / 10 + victim->getStats()->bravery - 110);
+										_battleSave->getMoraleModifier(NULL, false) / 10 + statsVictim->bravery - 110);
 					else
-						victim->moraleChange(victim->getStats()->bravery / 2);
+						victim->moraleChange(statsVictim->bravery / 2);
 				} // kL_end.
 
-				victim->convertToFaction(action->actor->getFaction()); // moved below, must be done *after* energyRecovery.
-//				victim->setTimeUnits(victim->getStats()->tu);
-//				victim->setEnergy(victim->getStats()->stamina); // kL
+				victim->convertToFaction(action->actor->getFaction());
+//				victim->setTimeUnits(statsVictim->tu);
+//				victim->setEnergy(statsVictim->stamina); // kL
 
 				// kL_begin: taken from BattleUnit::prepareUnitTurn()
-				int prepTU = victim->getStats()->tu;
-				double underLoad = static_cast<double>(victim->getStats()->strength) / static_cast<double>(victim->getCarriedWeight());
+				int prepTU = statsVictim->tu;
+				double underLoad = static_cast<double>(statsVictim->strength) / static_cast<double>(victim->getCarriedWeight());
 				underLoad *= victim->getAccuracyModifier() / 2.0 + 0.5;
 				if (underLoad < 1.0)
 					prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
@@ -5563,7 +5562,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 				victim->setTimeUnits(prepTU);
 
 				int // advanced Energy recovery
-					stamina = victim->getStats()->stamina,
+					stamina = statsVictim->stamina,
 					enron = stamina;
 
 //				if (victim->getTurretType() == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
@@ -5609,7 +5608,6 @@ bool TileEngine::psiAttack(BattleAction* action)
 					&& Options::allowPsionicCapture)
 				{
 					//Log(LOG_INFO) << ". . . . inside tallyUnits";
-
 					int liveAliens = 0;
 					int liveSoldiers = 0;
 
@@ -5637,7 +5635,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 			victim->addPsiStrengthExp(2);
 		}
 	}
-	else
+	else if (action->actor->getFaction() == FACTION_PLAYER)
 		_battleSave->getBattleState()->warning("STR_ACTION_NOT_ALLOWED_PSIONIC");
 
 	//Log(LOG_INFO) << "TileEngine::psiAttack() ret FALSE";

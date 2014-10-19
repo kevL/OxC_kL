@@ -34,7 +34,7 @@
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
@@ -156,8 +156,8 @@ void ProjectileFlyBState::init()
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
 		//Log(LOG_INFO) << ". actor is Out, EXIT";
 		_unit->setStopShot(false); // kL
-		_parent->popState();
 
+		_parent->popState();
 		return;
 	}
 	else if (_action.weapon == NULL)	// can't shoot without weapon.
@@ -166,16 +166,16 @@ void ProjectileFlyBState::init()
 	{
 		//Log(LOG_INFO) << ". no weapon, EXIT";
 		_unit->setStopShot(false); // kL
-		_parent->popState();
 
+		_parent->popState();
 		return;
 	}
 	else if (_parent->getSave()->getTile(_action.target) == NULL) // invalid target position
 	{
 		//Log(LOG_INFO) << ". no targetPos, EXIT";
 		_unit->setStopShot(false); // kL
-		_parent->popState();
 
+		_parent->popState();
 		return;
 	}
 	else if (_parent->getPanicHandled()
@@ -186,8 +186,8 @@ void ProjectileFlyBState::init()
 		//Log(LOG_INFO) << ". not enough time units, EXIT";
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		_unit->setStopShot(false); // kL
-		_parent->popState();
 
+		_parent->popState();
 		return;
 	}
 	// kL_begin: ProjectileFlyBState::init() Give back time units; pre-end Reaction Fire. +stopShot!!
@@ -202,7 +202,6 @@ void ProjectileFlyBState::init()
 													_action.type,
 													_action.weapon));
 		_parent->popState();
-
 		//Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs. EXIT";
 		return;
 	}
@@ -220,7 +219,6 @@ void ProjectileFlyBState::init()
 															_action.type,
 															_action.weapon));
 				_parent->popState();
-
 				//Log(LOG_INFO) << ". . . reactionFire refund (targetUnit exists) EXIT";
 				return;
 			}
@@ -232,7 +230,6 @@ void ProjectileFlyBState::init()
 														_action.type,
 														_action.weapon));
 			_parent->popState();
-
 			//Log(LOG_INFO) << ". . reactionFire refund (no targetUnit) EXIT";
 			return;
 		} // kL_end.
@@ -273,16 +270,16 @@ void ProjectileFlyBState::init()
 			{
 				//Log(LOG_INFO) << ". . . no ammo, EXIT";
 				_action.result = "STR_NO_AMMUNITION_LOADED";
-				_parent->popState();
 
+				_parent->popState();
 				return;
 			}
 			else if (_ammo->getAmmoQuantity() == 0)
 			{
 				//Log(LOG_INFO) << ". . . no ammo Quantity, EXIT";
 				_action.result = "STR_NO_ROUNDS_LEFT";
-				_parent->popState();
 
+				_parent->popState();
 				return;
 			}
 			else if ( //_action.weapon->getRules()->getMaxRange() > 0 &&	// in case -1 gets used for infinite, or no shot allowed.
@@ -301,8 +298,8 @@ void ProjectileFlyBState::init()
 			{
 				//Log(LOG_INFO) << ". . . out of range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
-				_parent->popState();
 
+				_parent->popState();
 				return;
 			}
 //			}
@@ -321,8 +318,8 @@ void ProjectileFlyBState::init()
 			{
 				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
-				_parent->popState();
 
+				_parent->popState();
 				return;
 			}
 
@@ -367,14 +364,12 @@ void ProjectileFlyBState::init()
 															(_action.target.z * 24) + 10),
 													_action.weapon,
 													_unit));
-
 			return;
 		break;
 
 		default:
 			//Log(LOG_INFO) << ". . default, EXIT";
 			_parent->popState();
-
 			return;
 		break;
 	}
@@ -1019,7 +1014,7 @@ void ProjectileFlyBState::think()
 																				NULL);
 									}
 
-									++i;
+									i++;
 								}
 
 								delete proj;

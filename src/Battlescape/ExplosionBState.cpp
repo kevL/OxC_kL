@@ -27,7 +27,7 @@
 #include "UnitDieBState.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
@@ -308,21 +308,35 @@ void ExplosionBState::init()
 													-1,
 													_parent->getMap()->getSoundAngle(centerPos));
 
-		if (_hitSuccess
-			|| _hit == false)
-		{
-			Explosion* explosion = new Explosion( // animation. Don't turn the tile
-											_center,
-											anim,
-											0,
-											false,
-											_hit);
-			_parent->getMap()->getExplosions()->push_back(explosion);
+//		if (_hitSuccess
+//			|| _hit == false)	// note: This would prevent map-reveal on aLien melee attacks.
+								// Because reveal depends if Explosions are queued ....
+//		{
 
-			_parent->setStateInterval(std::max(
-											1,
-											((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (10 * _item->getRules()->getExplosionSpeed()))));
+		int hitResult = 0;
+		if (_hit)
+		{
+			if (_hitSuccess
+				|| _item->getRules()->getBattleType() == BT_PSIAMP)
+			{
+				hitResult = 1;
+			}
+			else
+				hitResult = -1;
 		}
+
+		Explosion* explosion = new Explosion( // animation. Don't turn the tile
+										_center,
+										anim,
+										0,
+										false,
+										hitResult);
+		_parent->getMap()->getExplosions()->push_back(explosion);
+
+		_parent->setStateInterval(std::max(
+										1,
+										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (10 * _item->getRules()->getExplosionSpeed()))));
+//		}
 
 		Camera* exploCam = _parent->getMap()->getCamera();
 		if (exploCam->isOnScreen(centerPos) == false
@@ -361,7 +375,7 @@ void ExplosionBState::think()
 	}
 
 	if (_parent->getMap()->getExplosions()->empty())
-		_extend--;
+		_extend--; // not working as intended; needs to go to Explosion class, so that explosions-vector doesn't 'empty' so fast.
 
 	if (_extend < 1)
 	{
@@ -453,8 +467,8 @@ void ExplosionBState::explode()
 		if (_hitSuccess == false) // MISS.
 		{
 			_parent->getMap()->cacheUnits();
-			_parent->popState();
 
+			_parent->popState();
 			return;
 		}
 	}
