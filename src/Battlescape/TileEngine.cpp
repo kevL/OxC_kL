@@ -6078,7 +6078,7 @@ Position TileEngine::getOriginVoxel(
 							origin.x * 16,
 							origin.y * 16,
 							origin.z * 24);
-	Log(LOG_INFO) << "TileEngine::getOriginVoxel() origin[0] = " << originVoxel;
+	//Log(LOG_INFO) << "TileEngine::getOriginVoxel() origin[0] = " << originVoxel;
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (action.actor->getPosition() == origin
@@ -6150,7 +6150,7 @@ Position TileEngine::getOriginVoxel(
 		originVoxel.z += 16;
 	}
 
-	Log(LOG_INFO) << "TileEngine::getOriginVoxel() origin[1] = " << originVoxel;
+	//Log(LOG_INFO) << "TileEngine::getOriginVoxel() origin[1] = " << originVoxel;
 	return originVoxel;
 }
 

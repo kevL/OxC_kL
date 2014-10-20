@@ -5,7 +5,7 @@ items:
   - type: STR_MACHINE_PISTOL
     listOrder: 2001
     size: 0.3
-    costBuy: 800
+    costBuy: 4000
     costSell: 600
     weight: 5
     bigSprite: 500
@@ -33,7 +33,7 @@ items:
   - type: STR_MACHINE_PISTOL_CLIP
     listOrder: 2002
     size: 0.1
-    costBuy: 70
+    costBuy: 350
     costSell: 52
     weight: 1
     bigSprite: 4
@@ -50,7 +50,7 @@ items:
   - type: STR_MAGNUM
     listOrder: 2003
     size: 0.2
-    costBuy: 2200
+    costBuy: 3200
     costSell: 1600
     weight: 5
     bigSprite: 502
@@ -92,7 +92,7 @@ items:
   - type: STR_SMG
     listOrder: 2255
     size: 0.4
-    costBuy: 2000
+    costBuy: 3400
     costSell: 1600
     weight: 6
     bigSprite: 504
@@ -121,7 +121,7 @@ items:
   - type: STR_SMG_CLIP
     listOrder: 2256
     size: 0.1
-    costBuy: 100
+    costBuy: 250
     costSell: 70
     weight: 2
     bigSprite: 505
@@ -140,7 +140,7 @@ items:
   - type: STR_ASSAULT_RIFLE
     listOrder: 2201
     size: 0.3
-    costBuy: 3000
+    costBuy: 3300
     costSell: 2250
     weight: 9
     bigSprite: 506
@@ -170,7 +170,7 @@ items:
   - type: STR_ASSAULT_RIFLE_CLIP
     listOrder: 2202
     size: 0.1
-    costBuy: 200
+    costBuy: 300
     costSell: 150
     weight: 3
     bigSprite: 507
@@ -186,7 +186,7 @@ items:
   - type: STR_MARKSMANS_RIFLE
     listOrder: 2205
     size: 0.4
-    costBuy: 4000
+    costBuy: 5050
     costSell: 3000
     weight: 10
     bigSprite: 508
@@ -212,7 +212,7 @@ items:
   - type: STR_MARKSMANS_RIFLE_CLIP
     listOrder: 2206
     size: 0.1
-    costBuy: 250
+    costBuy: 750
     costSell: 200
     weight: 3
     bigSprite: 509
@@ -231,7 +231,7 @@ items:
   - type: STR_SNIPER_RIFLE
     listOrder: 2210
     size: 0.4
-    costBuy: 6400
+    costBuy: 7950
     costSell: 4800
     weight: 12
     bigSprite: 510
@@ -257,7 +257,7 @@ items:
   - type: STR_SNIPER_RIFLE_AMMO
     listOrder: 2211
     size: 0.2
-    costBuy: 300
+    costBuy: 1175
     costSell: 225
     weight: 4
     bigSprite: 511
@@ -275,7 +275,7 @@ items:
   - type: STR_SAW
     listOrder: 2250
     size: 0.6
-    costBuy: 13500
+    costBuy: 16350
     costSell: 10125
     weight: 13
     bigSprite: 512
@@ -305,7 +305,7 @@ items:
   - type: STR_SAW_AP_AMMO
     listOrder: 2251
     size: 0.3
-    costBuy: 500
+    costBuy: 860
     costSell: 400
     weight: 6
     bigSprite: 513
@@ -323,7 +323,7 @@ items:
   - type: STR_SHOTGUN
     listOrder: 2270
     size: 0.3
-    costBuy: 3000
+    costBuy: 2300
     costSell: 2000
     weight: 8
     bigSprite: 514
@@ -375,7 +375,7 @@ items:
   - type: STR_SHOTGUN_SHELLS
     listOrder: 2272
     size: 0.2
-    costBuy: 200
+    costBuy: 350
     costSell: 150
     weight: 3
     bigSprite: 516
@@ -428,7 +428,7 @@ items:
   - type: STR_INCENDIARY_GRENADE
     listOrder: 3905
     size: 0.1
-    costBuy: 200
+    costBuy: 350
     costSell: 150
     weight: 4
     bigSprite: 519
@@ -441,7 +441,7 @@ items:
   - type: STR_SSRL
     listOrder: 3404
     size: 0.8
-    costBuy: 1750
+    costBuy: 2750
     costSell: 850
     weight: 12
     bigSprite: 520
@@ -472,7 +472,7 @@ items:
   - type: STR_APFSDS_ROCKET
     listOrder: 3401
     size: 0.6
-    costBuy: 900
+    costBuy: 9000
     costSell: 650
     weight: 13
     bigSprite: 521
@@ -1784,31 +1784,31 @@ extraStrings:
 #      STR_AVALANCHE_NONUKE_UFOPEDIA: "Built on the AIM-120 platform armed a warhead with three kinetic penetrators, this missile is equiped with vectoured thrust engines, and is the longest range AAM with sufficient manuverablity to be viable against alien craft."
 #      STR_SMALL_RADAR_ETSYSTEM_UFOPEDIA: "A short range passive radar system with an effective range of 500 nautical miles and is linked to satellite systems for ground search. Each small radar system on base has a 10% chance of detecting an average sized object at that range every 10 minutes."
 #      STR_LARGE_RADAR_ETSYSTEM_UFOPEDIA: "A long range passive radar system with an effective range of 1100 nautical miles and is linked to satellite systems for ground search. Each large radar system on base has a 5% chance of detecting an average sized object at that range every 10 minutes."
-      STR_MACHINE_PISTOL: "Machine pistol"
+      STR_MACHINE_PISTOL: "Pistol auto"
       STR_MACHINE_PISTOL_UFOPEDIA: "Designed jointly by CZ and the Russian firm IZHMASH, the standard X-Com sidearm is a machine pistol firing a 5.7mm tungsten core AP round, with select-fire capability and a 18 round magazine."
-      STR_MAGNUM: "Magnum revolver"
+      STR_MAGNUM: "Pistol magnum"
       STR_MAGNUM_UFOPEDIA: "While not initially apportioned for the procurement program for X-Com, a number of customized heavy revolvers have found their way into the X-Com armory and additional weapons can be purchased through special channels. Shooting a tungsten core .454 Casull magnum AP round, the damage potential of this weapon is almost as massive as its kick, or as big as the nearly blinding fireball from the barrel."
       STR_MAGNUM_AMMO: "clip-Mag"
       STR_MACHINE_PISTOL_CLIP: "clip-MP"
-      STR_ASSAULT_RIFLE: "Assault rifle"
+      STR_ASSAULT_RIFLE: "Rifle assault"
       STR_ASSAULT_RIFLE_UFOPEDIA: "Developed by both Colt and FN for the X-Com project, this assault rifle utilizes the SOCOM tested 6.8mm spc round, with a steel tipped, tungsten core AP bullet. The weapon's magazine holds 30 rounds."
       STR_ASSAULT_RIFLE_CLIP: "clip-AR"
-      STR_SNIPER_RIFLE: "Sniper rifle"
+      STR_SNIPER_RIFLE: "Rifle sniper"
       STR_SNIPER_RIFLE_UFOPEDIA: "This bolt action bullpup sniper rifle fires the fearsome .50 caliber BMG round and is typically classified as an anti-materiel weapon, suited for destroying structures and light armored vehicles. While cumbersome, this weapon is accurate out to two kilometers and has horrific wounding potential."
       STR_SNIPER_RIFLE_AMMO: "clip-Snp"
       STR_SAW: "SAW"
       STR_SAW_UFOPEDIA: "The Squad-Automatic-Weapon, or SAW combines the 5.56mm AP round with an extremely high rate of fire, allowing a soldier to carry the suppressive fire of a light machinegun and not hinder their mobility too greatly."
       STR_SAW_AP_AMMO: "clip-SAW"
       STR_SHOTGUN: "Shotgun"
-      STR_REINFORCED_SHOTGUN: "Super Shotgun"
+      STR_REINFORCED_SHOTGUN: "Shotgun super"
       STR_SHOTGUN_SHELLS: "clip-Shot"
       STR_ALLOY_SHOTGUN_SHELLS: "clip-Shot-A"
       STR_ELERIUM_SHOTGUN_SHELLS: "clip-Shot-E"
       STR_SHOTGUN_UFOPEDIA: "The standard issue X-Com tactical shotgun is a custom design based on the classic Remington 870 combat shotgun. It uses 3 inch magnum 12 gauge rounds loaded with tungsten flechettes to deliver large amounts of damage to targets at close range. However, the low penetrative power and spread of the projectiles limits its effectiveness against armored targets or at long ranges."
       STR_REINFORCED_SHOTGUN_UFOPEDIA: "Utilizing the properties of Alien Alloys, this semi-automatic shotgun features a stronger, narrower barrel compared to the conventional counterpart. This allows it to fire higher velocity ammunition, providing greater stopping power."
-      STR_MARKSMANS_RIFLE: "Marksman rifle"
+      STR_MARKSMANS_RIFLE: "Rifle marksman"
       STR_MARKSMANS_RIFLE_UFOPEDIA: "Designed for precision shooting for a more mobile squad, the Marksman's rifle exists between the heavier and immobile anti-materiel rifle, and the standard assault rifle. The weapon was designed and accuratized by engineers at Colt and H&K for semi-automatic firing and utilizes the 7.62mm NATO round with a tungsten core AP bullet."
-      STR_MARKSMANS_RIFLE_CLIP: "clip-Mark"
+      STR_MARKSMANS_RIFLE_CLIP: "clip-Mrk"
       STR_SMG: "SMG"
       STR_SMG_UFOPEDIA: "This classic H&K weapon was redesigned for the specific needs the X-Com project to use a tungsten core, steel tipped +p+ 9mm round. Constructed with recoil compensation and paired assault strap, the weapon can be used one handed. This weapon is well suited for building entries as it is much more manuverable than the heavier assault rifles and more accurate than the machine pistol. It utilizes a 35 round clip."
       STR_SMG_CLIP: "clip-SMG"

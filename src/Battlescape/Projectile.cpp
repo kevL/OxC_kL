@@ -221,7 +221,7 @@ int Projectile::calculateTrajectory(
 								_trajectory.at(0).x / 16,
 								_trajectory.at(0).y / 16,
 								_trajectory.at(0).z / 24);
-		Log(LOG_INFO) << ". hitPos = " << hitPos;
+		//Log(LOG_INFO) << ". hitPos = " << hitPos;
 
 		if (test == VOXEL_UNIT
 			&& _save->getTile(hitPos)
@@ -507,18 +507,14 @@ void Projectile::applyAccuracy(
 								+ static_cast<double>(delta_y * delta_y)
 								+ static_cast<double>(delta_z * delta_z)); // kL_add.
 	//Log(LOG_INFO) << ". targetDist = " << targetDist;
-	const double targetDist2 = sqrt(
-								  static_cast<double>(delta_x * delta_x)
-								+ static_cast<double>(delta_y * delta_y));
-	//Log(LOG_INFO) << ". targetDist2 = " << targetDist;
 
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
-//kL	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
+	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
 
 	// kL_note: This is that hypothetically infinite point in space to aim for;
 	// the closer it's set, the more accurate shots become. I suspect ....
-	double maxRange = 3200.0; // kL. vSpace == 200 tiles in tSpace.
+//	double maxRange = 3200.0; // kL. vSpace == 200 tiles in tSpace.
 	if (keepRange)
 		maxRange = targetDist;
 	//Log(LOG_INFO) << ". maxRange = " << maxRange;
