@@ -592,10 +592,10 @@ void Map::drawTerrain(Surface* surface)
 					}
 				}
 
-				if (!_smoothingEngaged)
+				if (_smoothingEngaged == false)
 				{
 					Position target = _projectile->getFinalTarget();	// kL
-					if (!_camera->isOnScreen(target)					// kL
+					if (_camera->isOnScreen(target) == false			// kL
 						|| bulletScreen.x < 1
 						|| bulletScreen.x > surface->getWidth() - 1
 						|| bulletScreen.y < 1
@@ -719,17 +719,17 @@ void Map::drawTerrain(Surface* surface)
 	for (int
 			itZ = beginZ;
 			itZ <= endZ;
-			itZ++)
+			++itZ)
 	{
 		for (int
 				itX = beginX;
 				itX <= endX;
-				itX++)
+				++itX)
 		{
 			for (int
 					itY = beginY;
 					itY <= endY;
-					itY++)
+					++itY)
 			{
 				mapPosition = Position(
 									itX,

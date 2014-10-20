@@ -142,17 +142,15 @@ double boxMuller(
 		double mean,
 		double standardDeviation)
 {
-//kL	static int use_last = 0;
-	static bool use_last = false; // kL
+	static bool use_last = false;
 
 	static double y2;
 	double y1;
 
-	if (use_last) /* use value from previous call */
+	if (use_last) // use value from previous call
 	{
 		y1 = y2;
-//kL	use_last = 0;
-		use_last = false; // kL
+		use_last = false;
 	}
 	else
 	{
@@ -173,8 +171,7 @@ double boxMuller(
 		y1 = x1 * w;
 		y2 = x2 * w;
 
-//kL	use_last = 1;
-		use_last = true; // kL
+		use_last = true;
 	}
 
 	return (mean + (y1 * standardDeviation));

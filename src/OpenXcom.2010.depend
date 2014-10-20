@@ -4757,7 +4757,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413613455 f:\git\openxcom\src\savegame\savedbattlegame.h
+1413744206 f:\git\openxcom\src\savegame\savedbattlegame.h
 	<algorithm>
 	<iostream>
 	<string>
@@ -6326,7 +6326,7 @@
 1413729704 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1413728682 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1413773126 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6335,6 +6335,7 @@
 	"TileEngine.h"
 	"UnitDieBState.h"
 	"../Engine/Game.h"
+	"../Engine/Logger.h"
 	"../Engine/RNG.h"
 	"../Engine/Sound.h"
 	"../Resource/ResourcePack.h"
@@ -6444,7 +6445,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1413729888 source:f:\git\openxcom\src\battlescape\map.cpp
+1413743238 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6664,7 +6665,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1413140556 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1413773126 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"Map.h"
@@ -6691,7 +6692,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1413701237 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1413773011 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6704,6 +6705,7 @@
 	"Projectile.h"
 	"TileEngine.h"
 	"../Engine/Game.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/RNG.h"
 	"../Engine/Sound.h"
@@ -6769,7 +6771,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1413701349 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1413772407 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6790,6 +6792,7 @@
 	"../fmath.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/RNG.h"
 	"../Resource/ResourcePack.h"
@@ -7176,7 +7179,7 @@
 	<fstream>
 	"Exception.h"
 
-1413140556 source:f:\git\openxcom\src\engine\rng.cpp
+1413755555 source:f:\git\openxcom\src\engine\rng.cpp
 	"RNG.h"
 	<math.h>
 	<time.h>

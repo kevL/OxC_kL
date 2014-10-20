@@ -27,7 +27,7 @@
 #include "UnitDieBState.h"
 
 #include "../Engine/Game.h"
-//#include "../Engine/Logger.h"
+#include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
@@ -79,6 +79,7 @@ ExplosionBState::ExplosionBState(
 		_hit(false),
 		_extend(3) // kL, extra think-cycles before this state Pops.
 {
+	//Log(LOG_INFO) << "Create ExplosionBState center = " << center;
 }
 
 /**
@@ -325,6 +326,7 @@ void ExplosionBState::init()
 				hitResult = -1;
 		}
 
+		//Log(LOG_INFO) << ". . ExplosionB::init() center = " << _center;
 		Explosion* explosion = new Explosion( // animation. Don't turn the tile
 										_center,
 										anim,
@@ -499,6 +501,7 @@ void ExplosionBState::explode()
 			if (_pistolWhip)
 				type = DT_STUN;
 
+			//Log(LOG_INFO) << ". . ExplosionB::explode() center = " << _center;
 			BattleUnit* victim = tileEngine->hit(
 												_center,
 												_power,
@@ -576,10 +579,9 @@ void ExplosionBState::explode()
 	if (tile != NULL) // check for terrain explosions
 	{
 		Position pVoxel = Position(
-								tile->getPosition().x * 16,
-								tile->getPosition().y * 16,
-								tile->getPosition().z * 24);
-		pVoxel += Position(8, 8, 0);
+								tile->getPosition().x * 16 + 8,
+								tile->getPosition().y * 16 + 8,
+								tile->getPosition().z * 24 + 2);
 		_parent->statePushFront(new ExplosionBState(
 												_parent,
 												pVoxel,

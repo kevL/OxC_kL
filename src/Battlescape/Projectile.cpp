@@ -85,6 +85,9 @@ Projectile::Projectile(
 		_vaporDensity(-1),
 		_vaporProbability(5)
 {
+	//Log(LOG_INFO) << "Create Projectile origin = " << origin;
+	//Log(LOG_INFO) << "Create Projectile target = " << targetVoxel;
+
 	_speed = Options::battleFireSpeed; // this is the number of pixels the sprite will move between frames
 
 	if (_action.weapon != NULL)
@@ -192,23 +195,25 @@ int Projectile::calculateTrajectory(
 		Position originVoxel)
 {
 	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
+	//Log(LOG_INFO) << ". originVoxel = " << originVoxel;
+
 	Tile* targetTile = _save->getTile(_action.target);
 	BattleUnit* targetUnit = targetTile->getUnit();
 
-	BattleUnit* bu = _action.actor;
+	BattleUnit* actor = _action.actor;
 
 	int test = _save->getTileEngine()->calculateLine(
 												originVoxel,
 												_targetVoxel,
 												false,
 												&_trajectory,
-												bu);
+												actor);
 	if (test != VOXEL_EMPTY
 		&& _trajectory.empty() == false
 		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
 		&& _action.autoShotCount == 1
-		&& ((SDL_GetModState() & KMOD_CTRL) == 0
-			|| !Options::forceFire)
+		&& (!Options::forceFire
+			|| (SDL_GetModState() & KMOD_CTRL) == 0)
 		&& _save->getBattleGame()->getPanicHandled()
 		&& _action.type != BA_LAUNCH)
 	{
@@ -216,6 +221,7 @@ int Projectile::calculateTrajectory(
 								_trajectory.at(0).x / 16,
 								_trajectory.at(0).y / 16,
 								_trajectory.at(0).z / 24);
+		Log(LOG_INFO) << ". hitPos = " << hitPos;
 
 		if (test == VOXEL_UNIT
 			&& _save->getTile(hitPos)
@@ -235,7 +241,6 @@ int Projectile::calculateTrajectory(
 				if (hitPos.y - 1 != _action.target.y)
 				{
 					_trajectory.clear();
-
 					return VOXEL_EMPTY;
 				}
 			}
@@ -244,7 +249,6 @@ int Projectile::calculateTrajectory(
 				if (hitPos.x - 1 != _action.target.x)
 				{
 					_trajectory.clear();
-
 					return VOXEL_EMPTY;
 				}
 			}
@@ -255,14 +259,12 @@ int Projectile::calculateTrajectory(
 					&& hitUnit->getVisible())
 				{
 					_trajectory.clear();
-
 					return VOXEL_EMPTY;
 				}
 			}
 			else
 			{
 				_trajectory.clear();
-
 				return VOXEL_EMPTY;
 			}
 		}
@@ -287,17 +289,22 @@ int Projectile::calculateTrajectory(
 	if (targetUnit
 		&& targetUnit->getDashing())
 	{
-		accuracy -= 0.16;
+		accuracy -= 0.17;
 		//Log(LOG_INFO) << ". . . . targetUnit " << targetUnit->getId() << " is Dashing!!! accuracy = " << accuracy;
 	}
 
-	if (_action.type != BA_LAUNCH) // Could base BL.. on psiSkill, or sumthin'
+	if (_action.type != BA_LAUNCH // Could base BL.. on psiSkill, or sumthin'
+		&& originVoxel / Position(16, 16, 24) != _targetVoxel / Position(16, 16, 24)) // somthing wrong with targeting unitTile itself. always comes out as +1 tile east
+	{
 		applyAccuracy(
 					originVoxel,
 					&_targetVoxel,
 					accuracy,
 					false,
 					targetTile);
+	}
+	//Log(LOG_INFO) << ". origin applyAccuracy() = " << originVoxel;
+	//Log(LOG_INFO) << ". target applyAccuracy() = " << _targetVoxel;
 
 	//Log(LOG_INFO) << ". LoF calculated, Acu applied (if not BL)";
 	// finally do a line calculation and store this trajectory.
@@ -306,7 +313,7 @@ int Projectile::calculateTrajectory(
 											_targetVoxel,
 											true,
 											&_trajectory,
-											bu);
+											actor);
 }
 
 /**
@@ -500,6 +507,10 @@ void Projectile::applyAccuracy(
 								+ static_cast<double>(delta_y * delta_y)
 								+ static_cast<double>(delta_z * delta_z)); // kL_add.
 	//Log(LOG_INFO) << ". targetDist = " << targetDist;
+	const double targetDist2 = sqrt(
+								  static_cast<double>(delta_x * delta_x)
+								+ static_cast<double>(delta_y * delta_y));
+	//Log(LOG_INFO) << ". targetDist2 = " << targetDist;
 
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
@@ -510,6 +521,7 @@ void Projectile::applyAccuracy(
 	double maxRange = 3200.0; // kL. vSpace == 200 tiles in tSpace.
 	if (keepRange)
 		maxRange = targetDist;
+	//Log(LOG_INFO) << ". maxRange = " << maxRange;
 
 //kL	if (_action.type == BA_HIT)
 //kL		maxRange = 45.0; // up to 2 tiles diagonally (as in the case of reaper vs reaper)
@@ -611,11 +623,19 @@ void Projectile::applyAccuracy(
 
 			if (extendLine) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
 			{
+				//Log(LOG_INFO) << "Projectile::applyAccuracy() extendLine";
 				// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
 				target->x = static_cast<int>(Round(static_cast<double>(origin.x) + maxRange * cos(te) * cos_fi));
 				target->y = static_cast<int>(Round(static_cast<double>(origin.y) + maxRange * sin(te) * cos_fi));
 				target->z = static_cast<int>(Round(static_cast<double>(origin.z) + maxRange * sin(fi)));
+//				target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos(te) * cos_fi);
+//				target->y = static_cast<int>(static_cast<double>(origin.y) + maxRange * sin(te) * cos_fi);
+//				target->z = static_cast<int>(static_cast<double>(origin.z) + maxRange * sin(fi));
 			}
+
+			//Log(LOG_INFO) << "Projectile::applyAccuracy() x = " << target->x;
+			//Log(LOG_INFO) << "Projectile::applyAccuracy() y = " << target->y;
+			//Log(LOG_INFO) << "Projectile::applyAccuracy() z = " << target->z;
 
 			//Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
 			return;
@@ -744,8 +764,8 @@ void Projectile::applyAccuracy(
 }
 
 /**
- * Moves further in the trajectory.
- * @return, false if the trajectory is finished - no new position exists in the trajectory
+ * Moves further along the trajectory-path.
+ * @return, true while trajectory is pathing; false when finished - no new position exists in the trajectory vector
  */
 bool Projectile::move()
 {
@@ -758,8 +778,7 @@ bool Projectile::move()
 
 		if (_position == _trajectory.size())
 		{
-			_position--;
-
+			_position--; // ie. don't pass the end of the _trajectory vector
 			return false;
 		}
 
@@ -782,15 +801,25 @@ bool Projectile::move()
  */
 Position Projectile::getPosition(int offset) const
 {
+	Position ret;
+
 	int posOffset = static_cast<int>(_position) + offset;
 
 	if (posOffset > -1
 		&& posOffset < static_cast<int>(_trajectory.size()))
 	{
-		return _trajectory.at(posOffset);
+		ret = _trajectory.at(posOffset);
+		//Log(LOG_INFO) << "projPos[0] " << ret;
+//		return _trajectory.at(posOffset);
 	}
 	else
-		return _trajectory.at(_position);
+	{
+		ret = _trajectory.at(_position);
+		//Log(LOG_INFO) << "projPos[1] " << ret;
+//		return _trajectory.at(_position);
+	}
+
+	return ret;
 }
 
 /**
@@ -915,7 +944,7 @@ void Projectile::addVaporCloud()
 
 /**
  * kL. Gets a pointer to the BattleAction actor directly.
- * @return, pointer to the acting Battleunit
+ * @return, pointer to the acting BattleUnit
  */
 BattleUnit* Projectile::getActor() const // kL
 {

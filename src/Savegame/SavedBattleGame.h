@@ -175,8 +175,8 @@ private:
 		/**
 		 * Converts coordinates into a unique index.
 		 * getTile() calls this every time, so should be inlined along with it.
-		 * @param pos The position to convert.
-		 * @return A unique index.
+		 * @param pos - a position to convert
+		 * @return, the unique index
 		 */
 		inline int getTileIndex(const Position& pos) const
 		{
@@ -193,12 +193,12 @@ private:
 		/**
 		 * Gets the Tile at a given position on the map.
 		 * This method is called over 50mil+ times per turn so it seems useful to inline it.
-		 * @param pos Map position.
-		 * @return Pointer to the tile at that position.
+		 * @param pos - reference a Map position
+		 * @return, pointer to the tile at that position
 		 */
 		inline Tile* getTile(const Position& pos) const
 		{
-			if (pos.x < 0
+			if (   pos.x < 0
 				|| pos.y < 0
 				|| pos.z < 0
 				|| pos.x >= _mapsize_x

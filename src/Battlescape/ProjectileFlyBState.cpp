@@ -34,7 +34,7 @@
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
-//#include "../Engine/Logger.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
@@ -68,16 +68,17 @@ ProjectileFlyBState::ProjectileFlyBState(
 		BattleState(
 			parent,
 			action),
+		_origin(origin),
+		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
 		_unit(NULL),
 		_ammo(NULL),
 		_projectileItem(NULL),
-		_origin(origin),
-		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
 		_projectileImpact(0),
 		_initialized(false),
 		_targetFloor(false),
 		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
 {
+	//Log(LOG_INFO) << "Create ProjectileFlyBState[0]: origin = " << origin;
 }
 
 /**
@@ -92,16 +93,17 @@ ProjectileFlyBState::ProjectileFlyBState(
 		BattleState(
 			parent,
 			action),
+		_origin(action.actor->getPosition()),
+		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
 		_unit(NULL),
 		_ammo(NULL),
-		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
 		_projectileItem(NULL),
-		_origin(action.actor->getPosition()),
 		_projectileImpact(0),
 		_initialized(false),
 		_targetFloor(false),
 		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
 {
+	//Log(LOG_INFO) << "Create ProjectileFlyBState[1]: origin = " << _origin;
 }
 
 /**
@@ -143,6 +145,7 @@ void ProjectileFlyBState::init()
 //kL	_projectileItem = 0; // already initialized.
 
 	_unit = _action.actor;
+	//Log(LOG_INFO) << "projFlyB unitPos = " << _unit->getPosition();
 	if (_action.weapon != NULL) // kL
 		_ammo = _action.weapon->getAmmoItem(); // _ammo is the weapon itself, if self-powered or BT_MELEE.
 
@@ -381,6 +384,7 @@ void ProjectileFlyBState::init()
 			&& _parent->getSave()->getSide() == FACTION_PLAYER)
 		|| _parent->getPanicHandled() == false)
 	{
+		//Log(LOG_INFO) << "projFlyB targetPos[0] = " << _action.target;
 		_targetVoxel = Position( // target nothing, targets the middle of the tile
 							_action.target.x * 16 + 8,
 							_action.target.y * 16 + 8,
@@ -394,7 +398,10 @@ void ProjectileFlyBState::init()
 				_targetVoxel.z += 4; // launched missiles go slightly higher than the middle.
 		}
 		else if ((SDL_GetModState() & KMOD_ALT) != 0) // note: CTRL+ALT !
+		{
+			//Log(LOG_INFO) << "projFlyB targetPos[1] = " << _action.target;
 			_targetVoxel.z -= 10; // force fire at floor (useful for HE ammo-types)
+		}
 	}
 	else
 	{
@@ -414,10 +421,12 @@ void ProjectileFlyBState::init()
 			if (_origin == _action.target
 				|| targetTile->getUnit() == _unit)
 			{
+				//Log(LOG_INFO) << "projFlyB targetPos[2] = " << _action.target;
 				_targetVoxel = Position( // don't shoot yourself but shoot at the floor
 									_action.target.x * 16 + 8,
 									_action.target.y * 16 + 8,
 									_action.target.z * 24);
+				//Log(LOG_INFO) << "projFlyB targetVoxel[2] = " << _targetVoxel;
 			}
 			else
 				_parent->getTileEngine()->canTargetUnit(
@@ -685,6 +694,7 @@ bool ProjectileFlyBState::createNewProjectile()
 																					_action.type,
 																					_action.weapon));
 		//Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
+		//Log(LOG_INFO) << ". finalTarget = " << projectile->getFinalTarget();
 
 		if (_projectileImpact == VOXEL_UNIT)
 			_action.autoShotKill = true;

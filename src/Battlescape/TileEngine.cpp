@@ -44,7 +44,7 @@
 
 #include "../Engine/Game.h"		// kL, for message when unconscious unit explodes.
 #include "../Engine/Language.h"	// kL, for message when unconscious unit explodes.
-//#include "../Engine/Logger.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 
@@ -4791,6 +4791,7 @@ int TileEngine::calculateLine(
 		cx = x; // copy position
 		cy = y;
 		cz = z;
+
 		if (swap_xz) // unswap (in reverse)
 			std::swap(cx, cz);
 		if (swap_xy)
@@ -4804,6 +4805,7 @@ int TileEngine::calculateLine(
 
 		if (doVoxelCheck) // passes through this voxel, for Unit visibility & LoS/LoF
 		{
+			//Log(LOG_INFO) << ". TileEngine::calculateLine() checkPos = " << Position(cx, cy, cz);
 			result = voxelCheck(
 							Position(cx, cy, cz),
 							excludeUnit,
@@ -4812,8 +4814,11 @@ int TileEngine::calculateLine(
 							excludeAllBut);
 			if (result != VOXEL_EMPTY) // hit.
 			{
-				if (trajectory) // store the position of impact
+				if (trajectory != NULL) // store the position of impact
+				{
+					//Log(LOG_INFO) << "TileEngine::calculateLine() traj[0] " << Position(cx, cy, cz);
 					trajectory->push_back(Position(cx, cy, cz));
+				}
 
 				//Log(LOG_INFO) << ". cL() ret[1] = " << result;
 				return result;
@@ -4821,17 +4826,18 @@ int TileEngine::calculateLine(
 		}
 		else // for Terrain visibility, ie. FoV / Fog of War.
 		{
-			Tile* startTile = _battleSave->getTile(lastPoint);
-			Tile* endTile = _battleSave->getTile(Position(cx, cy, cz));
+			Tile
+				* startTile = _battleSave->getTile(lastPoint),
+				* endTile = _battleSave->getTile(Position(cx, cy, cz));
 
 			horiBlock = horizontalBlockage(
-									startTile,
-									endTile,
-									DT_NONE);
+										startTile,
+										endTile,
+										DT_NONE);
 			vertBlock = verticalBlockage(
-									startTile,
-									endTile,
-									DT_NONE);
+										startTile,
+										endTile,
+										DT_NONE);
 			// kL_TEST:
 /*			BattleUnit* selUnit = _battleSave->getSelectedUnit();
 			if (selUnit
@@ -4897,8 +4903,11 @@ int TileEngine::calculateLine(
 								excludeAllBut);
 				if (result != VOXEL_EMPTY)
 				{
-					if (trajectory != 0)
+					if (trajectory != NULL)
+					{
+						//Log(LOG_INFO) << "TileEngine::calculateLine() traj[1] " << Position(cx, cy, cz);
 						trajectory->push_back(Position(cx, cy, cz)); // store the position of impact
+					}
 
 					//Log(LOG_INFO) << ". cL() ret[2] = " << result;
 					return result;
@@ -4916,9 +4925,9 @@ int TileEngine::calculateLine(
 				cx = x;
 				cz = z;
 				cy = y;
-				if (swap_xz)
+				if (swap_xz != 0)
 					std::swap(cx, cz);
-				if (swap_xy)
+				if (swap_xy != 0)
 					std::swap(cx, cy);
 
 				result = voxelCheck(
@@ -4930,7 +4939,10 @@ int TileEngine::calculateLine(
 				if (result != VOXEL_EMPTY)
 				{
 					if (trajectory != NULL) // store the position of impact
+					{
+						//Log(LOG_INFO) << "TileEngine::calculateLine() traj[2] " << Position(cx, cy, cz);
 						trajectory->push_back(Position(cx, cy, cz));
+					}
 
 					//Log(LOG_INFO) << ". cL() ret[3] = " << result;
 					return result;
@@ -5342,9 +5354,9 @@ int TileEngine::voxelCheck(
 			&& tileTarget->hasNoFloor(0))
 		{
 			tileTarget = _battleSave->getTile(Position( // tileBelow
-										posTarget.x / 16,
-										posTarget.y / 16,
-										posTarget.z / 24 - 1));
+													posTarget.x / 16,
+													posTarget.y / 16,
+													posTarget.z / 24 - 1));
 			if (tileTarget)
 				buTarget = tileTarget->getUnit();
 		}
@@ -6046,9 +6058,9 @@ int TileEngine::getDirectionTo(
 
 /**
  * Gets the origin-voxel of a shot or missile.
- * @param action	- Reference to the BattleAction
- * @param tile		- Pointer to a start tile
- * @return, Position of the origin in voxel-space
+ * @param action	- reference the BattleAction
+ * @param tile		- pointer to a start tile
+ * @return, position of the origin in voxel-space
  */
 Position TileEngine::getOriginVoxel(
 		BattleAction& action,
@@ -6066,6 +6078,7 @@ Position TileEngine::getOriginVoxel(
 							origin.x * 16,
 							origin.y * 16,
 							origin.z * 24);
+	Log(LOG_INFO) << "TileEngine::getOriginVoxel() origin[0] = " << originVoxel;
 
 	// take into account soldier height and terrain level if the projectile is launched from a soldier
 	if (action.actor->getPosition() == origin
@@ -6073,8 +6086,8 @@ Position TileEngine::getOriginVoxel(
 	{
 		// calculate vertical offset of the starting point of the projectile
 		originVoxel.z += action.actor->getHeight()
-					+ action.actor->getFloatHeight()
-					- tile->getTerrainLevel();
+					  + action.actor->getFloatHeight()
+					  - tile->getTerrainLevel();
 //kL					- 4; // for good luck. (kL_note: looks like 2 voxels lower than LoS origin or something like it.)
 			// Ps. don't need luck - need precision.
 
@@ -6137,6 +6150,7 @@ Position TileEngine::getOriginVoxel(
 		originVoxel.z += 16;
 	}
 
+	Log(LOG_INFO) << "TileEngine::getOriginVoxel() origin[1] = " << originVoxel;
 	return originVoxel;
 }
 
