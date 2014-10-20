@@ -6088,7 +6088,7 @@ Position TileEngine::getOriginVoxel(
 		originVoxel.z += action.actor->getHeight()
 					  + action.actor->getFloatHeight()
 					  - tile->getTerrainLevel();
-//kL					- 4; // for good luck. (kL_note: looks like 2 voxels lower than LoS origin or something like it.)
+//kL				  - 4; // for good luck. (kL_note: looks like 2 voxels lower than LoS origin or something like it.)
 			// Ps. don't need luck - need precision.
 
 //		if (action.type == BA_THROW)	// kL
@@ -6125,8 +6125,8 @@ Position TileEngine::getOriginVoxel(
 		originVoxel.y += offset;
 			// screw Warboy's obscurantist glamor-elitist campaign!!!! Have fun with that!!
 			// MUCH more predictable results. <- I didn't write that; just iterating it.
-
-/*kL		int offset = 0;
+/*kL
+		int offset = 0;
 		if (action.actor->getArmor()->getSize() > 1)
 			offset = 16;
 		else if (action.weapon == action.weapon->getOwner()->getItem("STR_LEFT_HAND")

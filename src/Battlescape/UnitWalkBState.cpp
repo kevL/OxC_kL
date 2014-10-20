@@ -334,9 +334,7 @@ bool UnitWalkBState::doStatusStand()
 		//Log(LOG_INFO) << ". kneeled, and path Valid";
 		_kneelCheck = false;
 
-		if (_parent->kneel(
-						_unit,
-						false))
+		if (_parent->kneel(_unit))
 		{
 			//Log(LOG_INFO) << ". . Stand up";
 			_unit->setCache(NULL);
@@ -346,18 +344,16 @@ bool UnitWalkBState::doStatusStand()
 			{
 				_pf->abortPath();
 				_parent->popState();
-
 				return false;
 			}
 		}
 		else
 		{
 			//Log(LOG_INFO) << ". . don't stand: not enough TU";
-			_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
+			_action.result = "STR_NOT_ENOUGH_TIME_UNITS"; // note: redundant w/ kneel() error messages ...
 
 			_pf->abortPath();
 			_parent->popState();
-
 			return false;
 		}
 	}
@@ -378,7 +374,6 @@ bool UnitWalkBState::doStatusStand()
 		_parent->getMap()->cacheUnit(_unit);	// although _cacheInvalid might be set elsewhere but i doubt it.
 
 		postPathProcedures();
-
 		return false;
 	}
 
@@ -499,13 +494,11 @@ bool UnitWalkBState::doStatusStand()
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
 
-			_pf->abortPath();
-
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
+			_pf->abortPath();
 			_parent->popState();
-
 			return false;
 		}
 		else if (energy > _unit->getEnergy())
@@ -514,24 +507,21 @@ bool UnitWalkBState::doStatusStand()
 			if (_parent->getPanicHandled())
 				_action.result = "STR_NOT_ENOUGH_ENERGY";
 
-			_pf->abortPath();
-
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
+			_pf->abortPath();
 			_parent->popState();
-
 			return false;
 		}
 		else if (_parent->getPanicHandled()
 			&& _parent->checkReservedTU(_unit, tu) == false)
 		{
 			//Log(LOG_INFO) << ". . checkReservedTU(_unit, tu) == false";
-			_pf->abortPath();
-
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
+			_pf->abortPath();
 			return false;
 		}
 		// we are looking in the wrong way, turn first (unless strafing)

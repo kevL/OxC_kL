@@ -246,9 +246,7 @@ private:
 				int dirFace = 3); // kL_add.
 
 		/// Handles kneeling action.
-		bool kneel(
-				BattleUnit* bu,
-				bool calcFoV = true);
+		bool kneel(BattleUnit* bu);
 
 		/// Cancels the current action.
 		bool cancelCurrentAction(bool bForce = false);

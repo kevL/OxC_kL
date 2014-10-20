@@ -533,58 +533,64 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 }
 
 /**
- * Toggles the Kneel/Standup status of the unit.
+ * Toggles the kneel/stand status of a unit.
  * @param bu - pointer to a BattleUnit
  * @return, true if the action succeeded
  */
-bool BattlescapeGame::kneel(
-		BattleUnit* bu,
-		bool calcFoV)
+bool BattlescapeGame::kneel(BattleUnit* bu)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::kneel()";
 	if (bu->getGeoscapeSoldier() != NULL)
 	{
 		if (bu->isFloating() == false) // kL_note: This prevents flying soldiers from 'kneeling' .....
 		{
-			int tu = 4;
+			int tu = 3;
 			if (bu->isKneeled())
-				tu = 8;
+				tu = 10;
 
 			if (checkReservedTU(bu, tu)
-				|| (tu == 4 //kL !bu->isKneeled()
+				|| (tu == 3
 					&& _save->getKneelReserved()))
 			{
-				if (bu->spendTimeUnits(tu))
+				if (bu->getTimeUnits() >= tu)
 				{
-					bu->kneel(bu->isKneeled() == false);
-					// kneeling or standing up can reveal new terrain or units. I guess. -> sure can!
-					// but updateSoldierInfo() also does does calculateFOV(), so ...
-//					getTileEngine()->calculateFOV(bu);
+					if (tu == 3
+						|| (tu == 10
+							&& bu->spendEnergy(tu / 2)))
+					{
+						bu->spendTimeUnits(tu);
+						bu->kneel(bu->isKneeled() == false);
+						// kneeling or standing up can reveal new terrain or units. I guess. -> sure can!
+						// but updateSoldierInfo() also does does calculateFOV(), so ...
+//						getTileEngine()->calculateFOV(bu);
 
-					getMap()->cacheUnits();
-//kL					_parentState->updateSoldierInfo(false); // <- also does calculateFOV() !
-						// wait... shouldn't one of those calcFoV's actually trigger!! ? !
-						// Hopefully it's done after returning, in another updateSoldierInfo... or newVis check.
-						// So.. I put this in BattlescapeState::btnKneelClick() instead; updates will
-						// otherwise be handled by walking or what have you. Doing it this way conforms
-						// updates/FoV checks with my newVis routines.
+						getMap()->cacheUnits();
+//kL						_parentState->updateSoldierInfo(false); // <- also does calculateFOV() !
+							// wait... shouldn't one of those calcFoV's actually trigger!! ? !
+							// Hopefully it's done after returning, in another updateSoldierInfo... or newVis check.
+							// So.. I put this in BattlescapeState::btnKneelClick() instead; updates will
+							// otherwise be handled by walking or what have you. Doing it this way conforms
+							// updates/FoV checks with my newVis routines.
 
-//kL					getTileEngine()->checkReactionFire(bu);
-						// ditto..
+//kL						getTileEngine()->checkReactionFire(bu);
+							// ditto..
 
-					return true;
+						return true;
+					}
+					else
+						_parentState->warning("STR_NOT_ENOUGH_ENERGY");
 				}
-				else // not enough tu
+				else
 					_parentState->warning("STR_NOT_ENOUGH_TIME_UNITS");
 			}
-			else // tu Reserved
+			else
 				_parentState->warning("STR_TIME_UNITS_RESERVED");
 		}
-		else // floating
+		else
 			_parentState->warning("STR_ACTION_NOT_ALLOWED_FLOAT");
 	}
-	else // alien.
-		_parentState->warning("STR_ACTION_NOT_ALLOWED_ALIEN");
+	else
+		_parentState->warning("STR_ACTION_NOT_ALLOWED_ALIEN"); // or HWP ...
 
 	return false;
 }

@@ -1641,7 +1641,7 @@ void BattlescapeState::btnShowMapClick(Action*)
  */
 void BattlescapeState::btnKneelClick(Action*)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 	{
 		BattleUnit* bu = _save->getSelectedUnit();
 		if (bu)
