@@ -269,36 +269,36 @@ void Tile::saveBinary(Uint8** buffer) const
 
 /**
  * Sets the MapData references of parts 0 to 3.
- * @param dat			- pointer to the data object
- * @param mapDataID		- mapDataID
- * @param mapDataSetID	- mapDataSetID
- * @param part			- the part number
+ * @param data		- pointer to MapData
+ * @param dataID	- dataID
+ * @param dataSetID	- dataSetID
+ * @param part		- the part number
  */
 void Tile::setMapData(
-		MapData* dat,
-		int mapDataID,
-		int mapDataSetID,
+		MapData* data,
+		int dataID,
+		int dataSetID,
 		int part)
 {
-	_objects[part]		= dat;
-	_mapDataID[part]	= mapDataID;
-	_mapDataSetID[part]	= mapDataSetID;
+	_objects[part] = data;
+	_mapDataID[part] = dataID;
+	_mapDataSetID[part] = dataSetID;
 }
 
 /**
  * Gets the MapData references of parts 0 to 3.
- * @param mapDataID		- pointer to mapDataID
- * @param mapDataSetID	- pointer to mapDataSetID
- * @param part			- the part number
+ * @param dataID	- pointer to dataID
+ * @param dataSetID	- pointer to dataSetID
+ * @param part		- the part number
  * @return, the object ID
  */
 void Tile::getMapData(
-		int* mapDataID,
-		int* mapDataSetID,
+		int* dataID,
+		int* dataSetID,
 		int part) const
 {
-	*mapDataID		= _mapDataID[part];
-	*mapDataSetID	= _mapDataSetID[part];
+	*dataID = _mapDataID[part];
+	*dataSetID = _mapDataSetID[part];
 }
 
 /**

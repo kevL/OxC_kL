@@ -128,14 +128,14 @@ protected:
 
 		/// Sets the pointer to the mapdata for a specific part of the tile
 		void setMapData(
-				MapData* dat,
-				int mapDataID,
-				int mapDataSetID,
+				MapData* data,
+				int dataID,
+				int dataSetID,
 				int part);
 		/// Gets the IDs to the mapdata for a specific part of the tile
 		void getMapData(
-				int* mapDataID,
-				int* mapDataSetID,
+				int* dataID,
+				int* dataSetID,
 				int part) const;
 
 		/// Gets whether this tile has no objects
@@ -181,8 +181,8 @@ protected:
 		bool isUfoDoorOpen(int part) const
 		{
 			return _objects[part]
-					&& _objects[part]->isUFODoor()
-					&& _curFrame[part] != 0;
+				&& _objects[part]->isUFODoor()
+				&& _curFrame[part] != 0;
 		}
 		/// Closes ufo door.
 		int closeUfoDoor();

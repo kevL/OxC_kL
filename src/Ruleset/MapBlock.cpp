@@ -27,6 +27,10 @@ namespace OpenXcom
 
 /**
  * MapBlock construction.
+ * @param name		- reference the name of this MapBlock
+ * @param size_x	- size X
+ * @param size_y	- size Y
+ * @param type		- MapBlockType enum (MapBlock.h)
  */
 MapBlock::MapBlock(
 		const std::string& name,

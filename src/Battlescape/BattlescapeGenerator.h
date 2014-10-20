@@ -96,10 +96,10 @@ private:
 	/// Loads an XCom MAP file.
 	int loadMAP(
 			MapBlock* mapblock,
-			int xoff,
-			int yoff,
+			int offset_x,
+			int offset_y,
 			RuleTerrain* terrain,
-			int objectIDOffset,
+			int dataSetOffset,
 			bool discovered = false,
 			bool craft = false);
 	/// Loads an XCom RMP file.

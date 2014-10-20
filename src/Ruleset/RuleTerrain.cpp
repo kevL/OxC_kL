@@ -194,10 +194,10 @@ std::string RuleTerrain::getName() const
 
 /**
  * Gets a random mapblock within the given constraints.
- * @param maxsize The maximum size of the mapblock (10 or 20 or 999 - don't care).
- * @param type Whether this must be a block of a certain type.
- * @param force Whether to enforce the max size.
- * @return, Pointer to the mapblock.
+ * @param maxsize	- the maximum size of the mapblock (10 or 20 or 999 - don't care)
+ * @param type		- the MapBlockType that the returned MapBlock must be (MapBlock.h enum)
+ * @param force		- true to enforce the max size (default false)
+ * @return, pointer to a mapblock or NULL if none found
  */
 MapBlock* RuleTerrain::getRandomMapBlock(
 		int maxsize,
@@ -213,7 +213,7 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 	{
 		if (((force
 					&& (*i)->getSizeX() == maxsize)
-				|| (!force
+				|| (force == false
 					&& (*i)->getSizeX() <= maxsize))
 			&& ((*i)->getType() == type
 				|| (*i)->getSubType() == type))
@@ -242,9 +242,9 @@ MapBlock* RuleTerrain::getRandomMapBlock(
 }
 
 /**
- * Gets a mapblock with a given name.
- * @param name The name of the mapblock.
- * @return, Pointer to mapblock.
+ * Gets a MapBlock with a given name.
+ * @param name - reference the name of a MapBlock
+ * @return, pointer to MapBlock or NULL if not found
  */
 MapBlock* RuleTerrain::getMapBlock(const std::string& name)
 {
@@ -262,31 +262,31 @@ MapBlock* RuleTerrain::getMapBlock(const std::string& name)
 
 /**
  * Gets a mapdata object.
- * @param id The id in the terrain.
- * @param mapDataSetID The id of the map data set.
- * @return, Pointer to MapData object.
+ * @param id			- pointer to the ID in the terrain
+ * @param mapDataSetID	- pointer to the ID of the MapDataSet
+ * @return, pointer to MapData object
  */
 MapData* RuleTerrain::getMapData(
 		unsigned int* id,
 		int* mapDataSetID) const
 {
-	MapDataSet* mdf = NULL;
+	MapDataSet* dataSet = NULL;
 
 	for (std::vector<MapDataSet*>::const_iterator
 			i = _mapDataSets.begin();
 			i != _mapDataSets.end();
 			++i)
 	{
-		mdf = *i;
+		dataSet = *i;
 
-		if (*id < static_cast<int>(mdf->getSize()))
+		if (*id < static_cast<int>(dataSet->getSize()))
 			break;
 
-		*id -= mdf->getSize();
+		*id -= dataSet->getSize();
 		(*mapDataSetID)++;
 	}
 
-	return mdf->getObjects()->at(*id);
+	return dataSet->getObjects()->at(*id);
 }
 
 /**
