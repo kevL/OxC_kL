@@ -47,9 +47,9 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Load Game screen.
- * @param origin Game section that originated this state.
- * @param filename Name of the save file without extension.
- * @param palette Parent state palette.
+ * @param origin	- game section that originated this state
+ * @param filename	- reference the name of the save file without extension
+ * @param palette	- pointer to parent state palette
  */
 LoadGameState::LoadGameState(
 		OptionsOrigin origin,
@@ -65,9 +65,9 @@ LoadGameState::LoadGameState(
 
 /**
  * Initializes all the elements in the Load Game screen.
- * @param origin Game section that originated this state.
- * @param type Type of auto-load being used.
- * @param palette Parent state palette.
+ * @param origin	- game section that originated this state
+ * @param type		- type of auto-load being used
+ * @param palette	- pointer to parent state palette
  */
 LoadGameState::LoadGameState(
 		OptionsOrigin origin,
@@ -105,7 +105,7 @@ LoadGameState::~LoadGameState()
 
 /**
  * Builds the interface.
- * @param palette Parent state palette.
+ * @param palette - pointer to parent state palette
  */
 void LoadGameState::buildUi(SDL_Color* palette)
 {
@@ -162,11 +162,11 @@ void LoadGameState::think()
 		_game->popState();
 
 		// Load the game
-		SavedGame* s = new SavedGame();
+		SavedGame* save = new SavedGame();
 		try
 		{
-			s->load(_filename, _game->getRuleset());
-			_game->setSavedGame(s);
+			save->load(_filename, _game->getRuleset());
+			_game->setSavedGame(save);
 
 			Options::baseXResolution = Options::baseXGeoscape;
 			Options::baseYResolution = Options::baseYGeoscape;
@@ -174,7 +174,7 @@ void LoadGameState::think()
 			_game->getScreen()->resetDisplay(false);
 			_game->setState(new GeoscapeState());
 
-			if (_game->getSavedGame()->getSavedBattle() != 0)
+			if (_game->getSavedGame()->getSavedBattle() != NULL)
 			{
 				_game->getSavedGame()->getSavedBattle()->loadMapResources(_game);
 
@@ -208,10 +208,10 @@ void LoadGameState::think()
 													"TAC00.SCR",
 													-1));
 
-			if (_game->getSavedGame() == s)
-				_game->setSavedGame(0);
+			if (_game->getSavedGame() == save)
+				_game->setSavedGame(NULL);
 			else
-				delete s;
+				delete save;
 		}
 		catch (YAML::Exception &e)
 		{
@@ -233,10 +233,10 @@ void LoadGameState::think()
 													"TAC00.SCR",
 													-1));
 
-			if (_game->getSavedGame() == s)
-				_game->setSavedGame(0);
+			if (_game->getSavedGame() == save)
+				_game->setSavedGame(NULL);
 			else
-				delete s;
+				delete save;
 		}
 
 		CrossPlatform::flashWindow();

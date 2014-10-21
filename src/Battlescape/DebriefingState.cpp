@@ -276,8 +276,8 @@ DebriefingState::DebriefingState()
 	//Log(LOG_INFO) << ". iterate _stats DONE";
 
 	if (civiliansSaved > 0
-		&& civiliansDead == 0 &&
-		_missionStatistics->success == true)
+		&& civiliansDead == 0
+		&& _missionStatistics->success == true)
 	{
 		_missionStatistics->valiantCrux = true;
 	}
@@ -419,8 +419,8 @@ DebriefingState::DebriefingState()
 
 			if (soldier->getDiary()->manageCommendations(_rules))
 			{
-				if ((*i)->getStatus() != STATUS_DEAD)
-					_soldiersCommended.push_back(soldier);
+//				if ((*i)->getStatus() != STATUS_DEAD)
+				_soldiersCommended.push_back(soldier);
 //				else if ((*i)->getStatus() == STATUS_DEAD)
 					// Quietly award dead soldiers their commendations.
 			}

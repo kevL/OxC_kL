@@ -28,29 +28,32 @@
 
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
-#include "../Engine/Game.h" // kL
-#include "../Engine/Logger.h" // kL
+#include "../Engine/Game.h"
+#include "../Engine/Logger.h"
 #include "../Engine/SurfaceSet.h"
 
-#include "../Resource/ResourcePack.h" // kL
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
 {
 
-MapData* MapDataSet::_blankTile		= NULL;
-MapData* MapDataSet::_scorchedTile	= NULL;
+MapData
+	* MapDataSet::_blankTile	= NULL,
+	* MapDataSet::_scorchedTile	= NULL;
 
 
 /**
  * MapDataSet construction.
+ * @param name - reference the name of the data
+ * @param game - pointer to Game (default NULL)
  */
 MapDataSet::MapDataSet(
 		const std::string& name,
-		Game* game) // kL
+		Game* game)
 	:
 		_name(name),
-		_game(game), // kL_add.
+		_game(game),
 		_surfaceSet(NULL),
 		_loaded(false)
 {
@@ -204,7 +207,7 @@ void MapDataSet::loadData()
 		for (int
 				frame = 0;
 				frame < 8;
-				frame++)
+				++frame)
 		{
 			to->setSprite(
 					frame,
@@ -252,7 +255,7 @@ void MapDataSet::loadData()
 		for (int
 				layer = 0;
 				layer < 12;
-				layer++)
+				++layer)
 		{
 			int loft = (int)mcd.LOFT[layer];
 			to->setLoftID(loft, layer);
@@ -271,7 +274,7 @@ void MapDataSet::loadData()
 	}
 
 
-	if (!mapFile.eof())
+	if (mapFile.eof() == false)
 	{
 		throw Exception("Invalid MCD file");
 	}

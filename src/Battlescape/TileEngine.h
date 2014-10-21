@@ -53,11 +53,11 @@ private:
 	static const int
 		MAX_VIEW_DISTANCE		= 20,
 		MAX_VOXEL_VIEW_DISTANCE	= 20 * 16,
-		MAX_SHADE_TO_SEE_UNITS	= 8, // was 9
+		MAX_SHADE_TO_SEE_UNITS	= 8,
 
 		heightFromCenter[11];
 
-	bool _personalLighting;
+	bool _unitLighting;
 	int
 		_powerE, // kL, effective power that actually explodes on a tile that's hit by HE.
 		_powerT; // kL, test power that checks if _powerE actually makes it to the next tile.

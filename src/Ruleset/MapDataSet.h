@@ -31,7 +31,7 @@
 namespace OpenXcom
 {
 
-class Game; // kL
+class Game;
 class MapData;
 class ResourcePack;
 class SurfaceSet;
@@ -51,10 +51,11 @@ private:
 
 	std::string _name;
 
-	static MapData* _blankTile;
-	static MapData* _scorchedTile;
+	static MapData
+		* _blankTile,
+		* _scorchedTile;
 
-	Game* _game; // kL
+	Game* _game;
 	SurfaceSet* _surfaceSet;
 
 	std::vector<MapData*> _objects;
@@ -64,7 +65,7 @@ private:
 		///
 		MapDataSet(
 				const std::string& name,
-				Game* game = NULL); // kL_add
+				Game* game = NULL);
 		///
 		~MapDataSet();
 

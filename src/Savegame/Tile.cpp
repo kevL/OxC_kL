@@ -543,7 +543,8 @@ void Tile::setDiscovered(
 	{
 		_discovered[part] = flag;
 
-		if (part == 2 && flag)
+		if (flag == true
+			&& part == 2)
 		{
 			_discovered[0] = true;
 			_discovered[1] = true;
@@ -1233,19 +1234,16 @@ int Tile::getMarkerColor()
  * Sets the tile visible flag.
  * @param visibility - true if visible
  */
-//kL void Tile::setVisible(int visibility)
-void Tile::setVisible(bool vis) // kL
+void Tile::setVisible(bool vis)
 {
-//kL	_visible += visibility;
-	_visible = vis; // kL
+	_visible = vis;
 }
 
 /**
  * Gets the tile visible flag.
  * @return, true if visible
  */
-//kL int Tile::getVisible()
-bool Tile::getVisible() // kL
+bool Tile::getVisible()
 {
 	return _visible;
 }

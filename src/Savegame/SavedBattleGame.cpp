@@ -58,7 +58,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes a brand new battlescape saved game.
+ * Initializes a brand new SavedBattleGame.
  */
 SavedBattleGame::SavedBattleGame()
 	:
@@ -158,10 +158,10 @@ SavedBattleGame::~SavedBattleGame()
 }
 
 /**
- * Loads the saved battle game from a YAML file.
- * @param node YAML node.
- * @param rule for the saved game.
- * @param savedGame Pointer to saved game.
+ * Loads the SavedBattleGame from a YAML file.
+ * @param node		- reference a YAML node
+ * @param rule		- pointer to the Ruleset
+ * @param savedGame	- pointer to the SavedGame
  */
 void SavedBattleGame::load(
 		const YAML::Node& node,
@@ -230,8 +230,9 @@ void SavedBattleGame::load(
 		// load binary tile data!
 		YAML::Binary binTiles = node["binTiles"].as<YAML::Binary>();
 
-		Uint8* r = (Uint8*)binTiles.data();
-		Uint8* dataEnd = r + totalTiles * serKey.totalBytes;
+		Uint8
+			* r = (Uint8*)binTiles.data(),
+			* dataEnd = r + totalTiles * serKey.totalBytes;
 
 		while (r < dataEnd)
 		{
@@ -299,7 +300,7 @@ void SavedBattleGame::load(
 		{
 			if (unit->getId() == selectedUnit
 				|| (_selectedUnit == NULL
-					&& !unit->isOut()))
+					&& unit->isOut() == false))
 			{
 				_selectedUnit = unit;
 			}
@@ -428,7 +429,7 @@ void SavedBattleGame::load(
 
 /**
  * Loads the resources required by the map in the battle save.
- * @param game, Pointer to the game.
+ * @param game - pointer to Game
  */
 void SavedBattleGame::loadMapResources(Game* game)
 {
@@ -532,8 +533,9 @@ YAML::Node SavedBattleGame::save() const
 	node["tileBoolFieldsSize"]	= Tile::serializationKey.boolFields;
 
 	size_t tileDataSize = Tile::serializationKey.totalBytes * _mapsize_z * _mapsize_y * _mapsize_x;
-	Uint8* tileData = (Uint8*) calloc(tileDataSize, 1);
-	Uint8* w = tileData;
+	Uint8
+		* tileData = (Uint8*) calloc(tileDataSize, 1),
+		* w = tileData;
 
 	for (int
 			i = 0;
@@ -601,9 +603,9 @@ Tile** SavedBattleGame::getTiles() const
 
 /**
  * Initializes the array of tiles and creates a pathfinding object.
- * @param mapsize_x
- * @param mapsize_y
- * @param mapsize_z
+ * @param mapsize_x -
+ * @param mapsize_y -
+ * @param mapsize_z -
  */
 void SavedBattleGame::initMap(
 		int mapsize_x,
