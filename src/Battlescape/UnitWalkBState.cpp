@@ -1125,18 +1125,19 @@ void UnitWalkBState::playMovementSound()
 	{
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
-			Tile* tile = _unit->getTile();
-			Tile* tBelow = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0,-1));
+			Tile
+				* tile = _unit->getTile(),
+				* belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0,-1));
 
 			if (_unit->getWalkingPhase() == 3) // play footstep sound 1
 			{
-				if (tile->getFootstepSound(tBelow))
-					sound = ResourcePack::WALK_OFFSET + 1 + (tile->getFootstepSound(tBelow) * 2);
+				if (tile->getFootstepSound(belowTile))
+					sound = ResourcePack::WALK_OFFSET + 1 + (tile->getFootstepSound(belowTile) * 2);
 			}
 			else if (_unit->getWalkingPhase() == 7) // play footstep sound 2
 			{
-				if (tile->getFootstepSound(tBelow))
-					sound = ResourcePack::WALK_OFFSET + (tile->getFootstepSound(tBelow) * 2);
+				if (tile->getFootstepSound(belowTile))
+					sound = ResourcePack::WALK_OFFSET + (tile->getFootstepSound(belowTile) * 2);
 			}
 		}
 		else if (_unit->getStatus() == STATUS_FLYING)

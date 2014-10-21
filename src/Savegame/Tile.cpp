@@ -308,12 +308,12 @@ void Tile::getMapData(
  */
 bool Tile::isVoid() const
 {
-	return _objects[0] == NULL		// floor
-			&& _objects[1] == NULL	// westwall
-			&& _objects[2] == NULL	// northwall
-			&& _objects[3] == NULL	// content
-			&& _smoke == 0
-			&& _inventory.empty();
+	return _objects[0] == NULL	// floor
+		&& _objects[1] == NULL	// westwall
+		&& _objects[2] == NULL	// northwall
+		&& _objects[3] == NULL	// content
+		&& _smoke == 0
+		&& _inventory.empty();
 }
 
 /**
@@ -402,26 +402,30 @@ int Tile::getTerrainLevel() const
 }
 
 /**
- * Gets a tile's footstep sound.
- * @param tileBelow - pointer to the tile below this tile
+ * Gets this tile's footstep sound.
+ * @param tileBelow - pointer to the Tile below this tile
  * @return, sound ID
+ *			0 - none
+ *			1 - metal
+ *			2 - wood/stone
+ *			3 - dirt
+ *			4 - mud
+ *			5 - sand
+ *			6 - snow (mars)
  */
 int Tile::getFootstepSound(Tile* tileBelow) const
 {
 	int sound = 0;
 
-	if (_objects[MapData::O_FLOOR])
-		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
-
 	if (_objects[MapData::O_OBJECT]
 		&& _objects[MapData::O_OBJECT]->getBigWall() == 0
-		&& _objects[MapData::O_OBJECT]->getFootstepSound() > -1)
+		&& _objects[MapData::O_OBJECT]->getFootstepSound() > 0)
 	{
 		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
 	}
-
-	if (_objects[MapData::O_FLOOR] == NULL
-		&& _objects[MapData::O_OBJECT] == NULL
+	else if (_objects[MapData::O_FLOOR])
+		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
+	else if (_objects[MapData::O_OBJECT] == NULL
 		&& tileBelow != NULL
 		&& tileBelow->getTerrainLevel() == -24)
 	{

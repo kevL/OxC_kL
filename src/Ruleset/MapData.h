@@ -114,10 +114,11 @@ private:
 
 
 	public:
-		static const int O_FLOOR;
-		static const int O_WESTWALL;
-		static const int O_NORTHWALL;
-		static const int O_OBJECT;
+		static const int
+			O_FLOOR,
+			O_WESTWALL,
+			O_NORTHWALL,
+			O_OBJECT;
 
 		/// cTor.
 		MapData(MapDataSet* dataset);

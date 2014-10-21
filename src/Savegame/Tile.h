@@ -115,8 +115,8 @@ protected:
 
 		/**
 		 * Gets the MapData pointer of a part of the tile.
-		 * @param part, The part 0-3.
-		 * @return, Pointer to mapdata
+		 * @param part - the part 0-3
+		 * @return, pointer to MapData
 		 */
 		MapData* getMapData(int part) const
 		{

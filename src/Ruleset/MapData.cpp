@@ -72,10 +72,12 @@ MapData::~MapData()
 
 // Explicit storage for MapData constants.
 // Pathfinding::O_BIGWALL		= -1
-const int MapData::O_FLOOR		= 0;
-const int MapData::O_WESTWALL	= 1;
-const int MapData::O_NORTHWALL	= 2;
-const int MapData::O_OBJECT		= 3;
+
+const int
+	MapData::O_FLOOR		= 0,
+	MapData::O_WESTWALL		= 1,
+	MapData::O_NORTHWALL	= 2,
+	MapData::O_OBJECT		= 3;
 
 
 /**
@@ -431,7 +433,7 @@ int MapData::getFootstepSound() const
 
 /**
  * Sets the index to the footstep sound.
- * @param value - Tte sound ID
+ * @param value - the sound ID
  */
 void MapData::setFootstepSound(int value)
 {
