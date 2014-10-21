@@ -218,13 +218,11 @@ void BaseDefenseState::nextStep()
 								L" ",
 								L" ");
 				_row++;
-
 				return;
 			}
 			else if (_passes == _gravShields)
 			{
 				_action = BDA_END;
-
 				return;
 			}
 		}
@@ -242,7 +240,6 @@ void BaseDefenseState::nextStep()
 								L" ",
 								L" ");
 				++_row;
-
 				return;
 
 			case BDA_FIRE:
@@ -257,7 +254,6 @@ void BaseDefenseState::nextStep()
 									_row,
 									1,
 									tr("STR_FIRING").c_str());
-
 				return;
 
 			case BDA_RESOLVE:
@@ -289,7 +285,6 @@ void BaseDefenseState::nextStep()
 					_action = BDA_NONE;
 
 				++_attacks;
-
 				return;
 
 			default:
@@ -310,11 +305,9 @@ void BaseDefenseState::btnOkClick(Action*)
 
 	if (_ufo->getStatus() != Ufo::DESTROYED)
 	{
-		// the UFO has finished its duty, whatever happens in the base defense
-//kL	_ufo->setStatus(Ufo::DESTROYED); // done in GeoscapeState::handleBaseDefense()
+//		_ufo->setStatus(Ufo::DESTROYED);
 
-		_base->setDefenseResult(_ufo->getDamagePercent()); // kL
-
+		_base->setDefenseResult(_ufo->getDamagePercent());
 		_state->handleBaseDefense(
 								_base,
 								_ufo);

@@ -396,7 +396,7 @@ void BattlescapeGenerator::nextStage()
 void BattlescapeGenerator::run()
 {
 	AlienDeployment* ruleDeploy = NULL;
-	if (_ufo)
+	if (_ufo != NULL)
 		ruleDeploy = _rules->getDeployment(_ufo->getRules()->getType());
 	else
 		ruleDeploy = _rules->getDeployment(_mission);

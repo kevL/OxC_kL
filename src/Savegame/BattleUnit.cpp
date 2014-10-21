@@ -2522,15 +2522,17 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	// probably AI patrol state
 
 	//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon()";
-	BattleItem* rhtWeapon = getItem("STR_RIGHT_HAND");
-	BattleItem* lftWeapon = getItem("STR_LEFT_HAND");
+	BattleItem
+		* rhtWeapon = getItem("STR_RIGHT_HAND"),
+		* lftWeapon = getItem("STR_LEFT_HAND");
 
-	bool isRht = rhtWeapon
+	bool
+		isRht = rhtWeapon
 				&& (rhtWeapon->getRules()->getBattleType() == BT_MELEE
 					|| (rhtWeapon->getRules()->getBattleType() == BT_FIREARM
 						&& rhtWeapon->getAmmoItem()
-						&& rhtWeapon->getAmmoItem()->getAmmoQuantity()));
-	bool isLft = lftWeapon
+						&& rhtWeapon->getAmmoItem()->getAmmoQuantity())),
+		isLft = lftWeapon
 				&& (lftWeapon->getRules()->getBattleType() == BT_MELEE
 					|| (lftWeapon->getRules()->getBattleType() == BT_FIREARM
 						&& lftWeapon->getAmmoItem()
@@ -2564,6 +2566,7 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 			if (lftTU = rule->getTUAimed() == 0)
 				if (lftTU = rule->getTULaunch() == 0)
 					lftTU = rule->getTUMelee();
+	// note: Should probly account for 'noReaction' weapons ...
 
 	//Log(LOG_INFO) << ". . rhtTU = " << rhtTU;
 	//Log(LOG_INFO) << ". . lftTU = " << lftTU;

@@ -1106,7 +1106,7 @@ void BattlescapeState::mapOver(Action* action)
 					invSize != tile->getInventory()->size() + 1;
 					++invSize)
 			{
-				ws = L"- ";
+				ws = L"> ";
 
 				if (invSize < tile->getInventory()->size())
 				{
@@ -1137,7 +1137,7 @@ void BattlescapeState::mapOver(Action* action)
 							&& item->getAmmoItem() != item)
 						{
 							std::wstring s = tr(item->getAmmoItem()->getRules()->getType());
-							ws += L" > " + s + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
+							ws += L" | " + s + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
 						}
 						else if ((item->getRules()->getBattleType() == BT_GRENADE
 								|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)

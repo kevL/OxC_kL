@@ -1258,7 +1258,6 @@ void GeoscapeState::time5Seconds()
 							else
 							{
 								handleBaseDefense(base, *i);
-
 								return;
 							}
 						}
@@ -3549,21 +3548,21 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 
 /**
  * Handle base defense.
- * @param base	- base to defend
- * @param ufo	- ufo attacking base
+ * @param base	- pointer to Base to defend
+ * @param ufo	- pointer to Ufo attacking base
  */
 void GeoscapeState::handleBaseDefense(
 		Base* base,
 		Ufo* ufo)
 {
-	ufo->setStatus(Ufo::DESTROYED); // Whatever happens in the base defense, the UFO has finished its duty
+	ufo->setStatus(Ufo::DESTROYED);
 
 	if (base->getAvailableSoldiers(true) > 0)
-//		|| !base->getVehicles()->empty()) // kL_note: Tanks can't defend the base.
+//		|| !base->getVehicles()->empty())
 	{
-		SavedBattleGame* sbg = new SavedBattleGame();
-		_game->getSavedGame()->setBattleGame(sbg);
-		sbg->setMissionType("STR_BASE_DEFENSE");
+		SavedBattleGame* battle = new SavedBattleGame();
+		_game->getSavedGame()->setBattleGame(battle);
+		battle->setMissionType("STR_BASE_DEFENSE");
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 		bgen.setBase(base);
@@ -3577,9 +3576,9 @@ void GeoscapeState::handleBaseDefense(
 							base));
 	}
 	else
-		popup(new BaseDestroyedState( // Please garrison your bases in future
+		popup(new BaseDestroyedState(
 									base,
-									_globe)); // kL
+									_globe));
 }
 
 /**

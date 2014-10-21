@@ -6408,7 +6408,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1413869141 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1413878549 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -9334,7 +9334,7 @@
 	"MapData.h"
 	"../Engine/Logger.h"
 
-1413870399 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1413878494 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -9683,7 +9683,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1413870314 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1413878445 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
