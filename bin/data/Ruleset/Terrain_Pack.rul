@@ -1740,21 +1740,21 @@ alienDeployments:
 extraStrings:
   - type: en-US
     strings:
-      STR_NATIVEURBAN: Native (Farm + Jungle)
-      STR_CULTAFARMA: Expanded Farm A
-      STR_CULTAFARMB: Expanded Farm B
-      STR_MADURBAN: Expanded Urban
-      STR_PORTURBAN: Port
-      STR_INDUSTRIALURBAN: Industrial
-      STR_RAILYARDURBAN: Railyard
-      STR_DAWNURBANA: Dawn City A
-      STR_DAWNURBANB: Dawn City B
-      STR_POLARMOUNT: Polar Mountain
-      STR_FORESTMOUNT: Forest Mountain
-      STR_DESERTMOUNT: Desert Mountain
-      STR_ATLANTDESERT: Atlantis + Desert
-      STR_MUJUNGLE: Mu + Jungle
-      STR_COMRCURBAN: Commercial
+      STR_NATIVEURBAN: "Native (Farm + Jungle)"
+      STR_CULTAFARMA: "Expanded Farm A"
+      STR_CULTAFARMB: "Expanded Farm B"
+      STR_MADURBAN: "Expanded Urban"
+      STR_PORTURBAN: "Port"
+      STR_INDUSTRIALURBAN: "Industrial"
+      STR_RAILYARDURBAN: "Railyard"
+      STR_DAWNURBANA: "Dawn City A"
+      STR_DAWNURBANB: "Dawn City B"
+      STR_POLARMOUNT: "Polar Mountain"
+      STR_FORESTMOUNT: "Forest Mountain"
+      STR_DESERTMOUNT: "Desert Mountain"
+      STR_ATLANTDESERT: "Atlantis + Desert"
+      STR_MUJUNGLE: "Mu + Jungle"
+      STR_COMRCURBAN: "Commercial"
   - type: en-GB
     strings:
       STR_NATIVEURBAN: Native (Farm + Jungle)

@@ -444,14 +444,14 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									&& unit->getFaction() == FACTION_HOSTILE))
 							{
 								// adds seenUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
-								unit->addToVisibleUnits(seenUnit); // note: This returns a boolean; i can use that...... yeah, done & done.
-								unit->addToVisibleTiles(seenUnit->getTile()); // this reveals the TILE (ie. no 'shadowed' aLiens)
+								unit->addToVisibleUnits(seenUnit);
+								unit->addToVisibleTiles(seenUnit->getTile());
 
 								if (unit->getFaction() == FACTION_HOSTILE
 									&& seenUnit->getFaction() != FACTION_HOSTILE
-									&& _battleSave->getSide() == FACTION_HOSTILE) // per Original.
+									&& _battleSave->getSide() == FACTION_HOSTILE)
 								{
-									seenUnit->setTurnsExposed(0);	// note that xCom can be seen by enemies but *not* be Exposed. hehe
+									seenUnit->setTurnsExposed(0);	// note that xCom agents can be seen by enemies but *not* become Exposed.
 																	// Only reactionFire should set them Exposed during xCom's turn.
 								}
 							}
@@ -689,9 +689,9 @@ void TileEngine::recalculateFOV()
 
 /**
  * Checks for an opposing unit on a tile.
- * @param unit - the watcher
- * @param tile - the tile to check for
- * @return, true if unit on tile is visible
+ * @param unit - pointer a BattleUnit that's looking at tile
+ * @param tile - pointer to a Tile that unit is looking at
+ * @return, true if a unit is on that tile and is seen
  */
 bool TileEngine::visible(
 		BattleUnit* unit,
@@ -758,11 +758,11 @@ bool TileEngine::visible(
 					&_trajectory,
 					unit);
 
-		float
-			effDist = static_cast<float>(_trajectory.size()),
-			factor = static_cast<float>(dist) * 16.f / effDist; // how many 'real distance' units there are in each 'effective distance' unit.
+		double
+			distEffective = static_cast<double>(_trajectory.size()),
+			distReal = static_cast<double>(dist) * 16.0 / distEffective;
 
-		Tile* testTile = _battleSave->getTile(unit->getPosition()); // origin tile
+		Tile* testTile = _battleSave->getTile(unit->getPosition());
 
 		for (size_t
 				i = 0;
@@ -770,22 +770,22 @@ bool TileEngine::visible(
 				++i)
 		{
 			if (testTile != _battleSave->getTile(Position(
-												_trajectory.at(i).x / 16,
-												_trajectory.at(i).y / 16,
-												_trajectory.at(i).z / 24)))
+													_trajectory.at(i).x / 16,
+													_trajectory.at(i).y / 16,
+													_trajectory.at(i).z / 24)))
 			{
 				testTile = _battleSave->getTile(Position(
-												_trajectory.at(i).x / 16,
-												_trajectory.at(i).y / 16,
-												_trajectory.at(i).z / 24));
+													_trajectory.at(i).x / 16,
+													_trajectory.at(i).y / 16,
+													_trajectory.at(i).z / 24));
 			}
 
 			// the 'origin tile' now steps along through voxel/tile-space, picking up extra
 			// weight (subtracting distance for both distance and obscuration) as it goes
-			effDist += static_cast<float>(testTile->getSmoke()) * factor / 3.f;
-			effDist += static_cast<float>(testTile->getFire()) * factor / 2.f;
+			distEffective += static_cast<double>(testTile->getSmoke()) * distReal / 3.0;
+			distEffective += static_cast<double>(testTile->getFire()) * distReal / 2.0;
 
-			if (effDist > static_cast<float>(MAX_VOXEL_VIEW_DISTANCE))
+			if (distEffective > static_cast<double>(MAX_VOXEL_VIEW_DISTANCE))
 			{
 				isSeen = false;
 				break;
@@ -847,8 +847,7 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* unit)
 	{
 		while (originVoxel.z >= (unit->getPosition().z + 1) * 24)
 		{
-			// careful with that ceiling, Eugene.
-			originVoxel.z--;
+			originVoxel.z--; // careful with that ceiling, Eugene.
 		}
 	}
 
@@ -969,7 +968,7 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* unit)
  * @param tile			- pointer to a tile to check for
  * @param scanVoxel		- pointer to voxel that is returned coordinate of hit
  * @param excludeUnit	- pointer to unitSelf (to not hit self)
- * @param potentialUnit	- pointer to a hypothetical unit to draw a virtual line of fire for AI; if left blank, this function behaves normally
+ * @param potentialUnit	- pointer to a hypothetical unit to draw a virtual line of fire for AI; if left blank, this function behaves normally (default NULL)
  * @return, true if the unit can be targeted
  */
 bool TileEngine::canTargetUnit(
@@ -979,8 +978,6 @@ bool TileEngine::canTargetUnit(
 		BattleUnit* excludeUnit,
 		BattleUnit* potentialUnit)
 {
-	//Log(LOG_INFO) << "TileEngine::canTargetUnit()";
-//kL	Position targetVoxel = Position((tile->getPosition().x * 16) + 7, (tile->getPosition().y * 16) + 8, tile->getPosition().z * 24);
 	Position targetVoxel = Position(
 								tile->getPosition().x * 16 + 8,
 								tile->getPosition().y * 16 + 8,
@@ -996,10 +993,11 @@ bool TileEngine::canTargetUnit(
 			return false; // no unit in this tile, even if it's elevated and appearing in it.
 	}
 
-	if (potentialUnit == excludeUnit)
-		return false; // skip self
+	if (potentialUnit == excludeUnit) // skip self
+		return false;
 
-	int targetMinHeight = targetVoxel.z
+	int
+		targetMinHeight = targetVoxel.z
 						- tile->getTerrainLevel()
 						+ potentialUnit->getFloatHeight(),
 		targetMaxHeight = targetMinHeight,
@@ -1010,6 +1008,7 @@ bool TileEngine::canTargetUnit(
 		xOffset = potentialUnit->getPosition().x - tile->getPosition().x,
 		yOffset = potentialUnit->getPosition().y - tile->getPosition().y,
 		targetSize = potentialUnit->getArmor()->getSize() - 1;
+
 	if (targetSize > 0)
 		unitRadius = 3;
 
@@ -1043,8 +1042,7 @@ bool TileEngine::canTargetUnit(
 	if (heightRange < 0)
 		heightRange = 0;
 
-	// scan ray from top to bottom plus different parts of target cylinder
-	for (int
+	for (int // scan ray from top to bottom plus different parts of target cylinder
 			i = 0;
 			i <= heightRange;
 			++i)
@@ -1073,9 +1071,10 @@ bool TileEngine::canTargetUnit(
 								false,
 								&_trajectory,
 								excludeUnit);
+
 			if (test == VOXEL_UNIT)
 			{
-				for (int
+				for (int // voxel of hit must be inside of scanned box
 						x = 0;
 						x <= targetSize;
 						++x)
@@ -1085,29 +1084,25 @@ bool TileEngine::canTargetUnit(
 							y <= targetSize;
 							++y)
 					{
-						// voxel of hit must be inside of scanned box
 						if (   _trajectory.at(0).x / 16 == (scanVoxel->x / 16) + x + xOffset
 							&& _trajectory.at(0).y / 16 == (scanVoxel->y / 16) + y + yOffset
 							&& _trajectory.at(0).z >= targetMinHeight
 							&& _trajectory.at(0).z <= targetMaxHeight)
 						{
-							//Log(LOG_INFO) << "TileEngine::canTargetUnit() EXIT[1] true";
 							return true;
 						}
 					}
 				}
 			}
 			else if (test == VOXEL_EMPTY
-				&& hypothetical
+				&& hypothetical == true
 				&& _trajectory.empty() == false)
 			{
-				//Log(LOG_INFO) << "TileEngine::canTargetUnit() EXIT[2] true";
 				return true;
 			}
 		}
 	}
 
-	//Log(LOG_INFO) << "TileEngine::canTargetUnit() EXIT false";
 	return false;
 }
 
@@ -1127,7 +1122,6 @@ bool TileEngine::canTargetTile(
 		Position* scanVoxel,
 		BattleUnit* excludeUnit)
 {
-	//Log(LOG_INFO) << "TileEngine::canTargetTile()";
 	static int
 		sliceObjectSpiral[82] =
 		{
@@ -1181,10 +1175,6 @@ bool TileEngine::canTargetTile(
 	{
 		spiralArray = sliceObjectSpiral;
 		spiralCount = 41;
-//		minZfound = true;
-//		minZ = 0;
-//		maxZfound = true;
-//		maxZ = 0;
 		minZfound = maxZfound = true;
 		minZ = maxZ = 0;
 	}
@@ -1192,7 +1182,7 @@ bool TileEngine::canTargetTile(
 		//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False (part is not a tileObject)";
 		return false;
 
-	if (!minZfound) // find out height range
+	if (minZfound == false) // find out height range
 	{
 		for (int
 				j = 1;
@@ -1233,7 +1223,6 @@ bool TileEngine::canTargetTile(
 	}
 
 	if (minZfound == false)
-		//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False (!minZfound)";
 		return false; // empty object!!!
 
 	if (maxZfound == false)
@@ -1276,10 +1265,7 @@ bool TileEngine::canTargetTile(
 	}
 
 	if (maxZfound == false)
-	{
-		//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False (!maxZfound)";
 		return false; // it's impossible to get there
-	}
 
 	if (minZ > maxZ)
 		minZ = maxZ;
@@ -1317,14 +1303,12 @@ bool TileEngine::canTargetTile(
 					&& _trajectory.at(0).y / 16 == scanVoxel->y / 16
 					&& _trajectory.at(0).z / 24 == scanVoxel->z / 24)
 				{
-					//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret True (test == part)";
 					return true;
 				}
 			}
 		}
 	}
 
-	//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False";
 	return false;
 }
 
@@ -4564,10 +4548,10 @@ int TileEngine::closeUfoDoors()
  * @param target			- reference the target (voxelspace for 'doVoxelCheck'; tilespace otherwise)
  * @param storeTrajectory	- true will store the whole trajectory - otherwise it just stores the last position
  * @param trajectory		- pointer to a vector of positions in which the trajectory will be stored
- * @param excludeUnit		- pointer to a unit to be excluded from collision detection
- * @param doVoxelCheck		- check against voxel or tile blocking? (first one for unit visibility and line of fire, second one for terrain visibility)
- * @param onlyVisible		- skip invisible units? used in FPS view
- * @param excludeAllBut		- pointer to a unit that's to be considered exclusively for ray hits [optional]
+ * @param excludeUnit		- pointer to a BattleUnit to be excluded from collision detection
+ * @param doVoxelCheck		- true to check against a voxel; false to check tile blocking for FoV (true for unit visibility and line of fire, false for terrain visibility) (default true)
+ * @param onlyVisible		- true to skip invisible units (default false) (used in FPS view)
+ * @param excludeAllBut		- pointer to a unit that's to be considered exclusively for ray hits [optional] (default NULL)
  * @return,  -1 hit nothing
  *			0-3 tile-part
  *			  4 unit
@@ -4582,32 +4566,31 @@ int TileEngine::closeUfoDoors()
  * VOXEL_OUTOFBOUNDS	//  5
  */
 int TileEngine::calculateLine(
-				const Position& origin,
-				const Position& target,
-				bool storeTrajectory,
-				std::vector<Position>* trajectory,
-				BattleUnit* excludeUnit,
-				bool doVoxelCheck, // false is used only for calculateFOV()
-				bool onlyVisible,
-				BattleUnit* excludeAllBut)
+		const Position& origin,
+		const Position& target,
+		bool storeTrajectory,
+		std::vector<Position>* trajectory,
+		BattleUnit* excludeUnit,
+		bool doVoxelCheck, // false is used only for calculateFOV()
+		bool onlyVisible,
+		BattleUnit* excludeAllBut)
 {
+	bool
+		swap_xy,
+		swap_xz;
 	int
 		x, x0, x1,
 		delta_x, step_x,
-
 		y, y0, y1,
 		delta_y, step_y,
-
 		z, z0, z1,
 		delta_z, step_z,
-
-		swap_xy, swap_xz,
 
 		drift_xy, drift_xz,
 
 		cx, cy, cz,
 
-		result, horiBlock, vertBlock;
+		horiBlock, vertBlock, ret;
 
 	Position lastPoint (origin);
 
@@ -4621,14 +4604,14 @@ int TileEngine::calculateLine(
 	z1 = target.z;
 
 	swap_xy = abs(y1 - y0) > abs(x1 - x0); // 'steep' xy Line, make longest delta x plane
-	if (swap_xy)
+	if (swap_xy == true)
 	{
 		std::swap(x0, y0);
 		std::swap(x1, y1);
 	}
 
 	swap_xz = abs(z1 - z0) > abs(x1 - x0); // do same for xz
-	if (swap_xz)
+	if (swap_xz == true)
 	{
 		std::swap(x0, z0);
 		std::swap(x1, z1);
@@ -4638,58 +4621,48 @@ int TileEngine::calculateLine(
 	delta_y = abs(y1 - y0);
 	delta_z = abs(z1 - z0);
 
-	drift_xy = delta_x / 2; // drift controls when to step in 'shallow' planes;
-	drift_xz = delta_x / 2; // starting value keeps Line centered
+	drift_xy = drift_xz = delta_x / 2;	// drift controls when to step in 'shallow' planes;
+//	drift_xz = delta_x / 2;				// starting value keeps Line centered
 
-	step_x = 1; // direction of Line
-	if (x0 > x1)
-		step_x = -1;
-
-	step_y = 1;
-	if (y0 > y1)
-		step_y = -1;
-
-	step_z = 1;
-	if (z0 > z1)
-		step_z = -1;
+	step_x = step_y = step_z = 1; // direction of Line
+	if (x0 > x1) step_x = -1;
+	if (y0 > y1) step_y = -1;
+	if (z0 > z1) step_z = -1;
 
 	y = y0; // starting point
 	z = z0;
-
-	for ( // step through longest delta (which we have swapped to x)
-			x = x0;
+	for (
+			x = x0; // step through longest delta (which we have swapped to x)
 			x != x1 + step_x;
 			x += step_x)
 	{
-		cx = x; // copy position
-		cy = y;
-		cz = z;
-
-		if (swap_xz) // unswap (in reverse)
+		cx = x; cy = y; cz = z; // copy position
+		if (swap_xz == true) // unswap (in reverse)
 			std::swap(cx, cz);
-		if (swap_xy)
+		if (swap_xy == true)
 			std::swap(cx, cy);
 
-		if (storeTrajectory = true
+		if (storeTrajectory == true
 			&& trajectory != NULL)
 		{
 			trajectory->push_back(Position(cx, cy, cz));
 		}
 
-		if (doVoxelCheck) // passes through this voxel, for Unit visibility & LoS/LoF
+		if (doVoxelCheck == true) // passes through this voxel, for Unit visibility & LoS/LoF
 		{
-			result = voxelCheck(
-							Position(cx, cy, cz),
-							excludeUnit,
-							false,
-							onlyVisible,
-							excludeAllBut);
-			if (result != VOXEL_EMPTY) // hit.
+			ret = voxelCheck(
+						Position(cx, cy, cz),
+						excludeUnit,
+						false,
+						onlyVisible,
+						excludeAllBut);
+
+			if (ret != VOXEL_EMPTY) // hit.
 			{
 				if (trajectory != NULL) // store the position of impact
 					trajectory->push_back(Position(cx, cy, cz));
 
-				return result;
+				return ret;
 			}
 		}
 		else // for Terrain visibility, ie. FoV / Fog of War.
@@ -4698,11 +4671,11 @@ int TileEngine::calculateLine(
 				* startTile = _battleSave->getTile(lastPoint),
 				* endTile = _battleSave->getTile(Position(cx, cy, cz));
 
-/*			if (_battleSave->getSelectedUnit()->getId() == 389)
-			{
-				int dist = distance(origin, Position(cx, cy, cz));
-				Log(LOG_INFO) << "unitID = " << _battleSave->getSelectedUnit()->getId() << " dist = " << dist;
-			} */
+//			if (_battleSave->getSelectedUnit()->getId() == 389)
+//			{
+//				int dist = distance(origin, Position(cx, cy, cz));
+//				Log(LOG_INFO) << "unitID = " << _battleSave->getSelectedUnit()->getId() << " dist = " << dist;
+//			}
 
 			horiBlock = horizontalBlockage(
 										startTile,
@@ -4758,28 +4731,27 @@ int TileEngine::calculateLine(
 			y = y + step_y;
 			drift_xy = drift_xy + delta_x;
 
-			if (doVoxelCheck) // check for xy diagonal intermediate voxel step, for Unit visibility
+			if (doVoxelCheck == true) // check for xy diagonal intermediate voxel step, for Unit visibility
 			{
-				cx = x;
-				cz = z;
-				cy = y;
-				if (swap_xz)
+				cx = x; cy = y; cz = z;
+				if (swap_xz == true)
 					std::swap(cx, cz);
-				if (swap_xy)
+				if (swap_xy == true)
 					std::swap(cx, cy);
 
-				result = voxelCheck(
-								Position(cx, cy, cz),
-								excludeUnit,
-								false,
-								onlyVisible,
-								excludeAllBut);
-				if (result != VOXEL_EMPTY)
+				ret = voxelCheck(
+							Position(cx, cy, cz),
+							excludeUnit,
+							false,
+							onlyVisible,
+							excludeAllBut);
+
+				if (ret != VOXEL_EMPTY)
 				{
 					if (trajectory != NULL)
 						trajectory->push_back(Position(cx, cy, cz)); // store the position of impact
 
-					return result;
+					return ret;
 				}
 			}
 		}
@@ -4789,28 +4761,27 @@ int TileEngine::calculateLine(
 			z = z + step_z;
 			drift_xz = drift_xz + delta_x;
 
-			if (doVoxelCheck) // check for xz diagonal intermediate voxel step
+			if (doVoxelCheck == true) // check for xz diagonal intermediate voxel step
 			{
-				cx = x;
-				cz = z;
-				cy = y;
-				if (swap_xz != 0)
+				cx = x; cy = y; cz = z;
+				if (swap_xz == true)
 					std::swap(cx, cz);
-				if (swap_xy != 0)
+				if (swap_xy == true)
 					std::swap(cx, cy);
 
-				result = voxelCheck(
-								Position(cx, cy, cz),
-								excludeUnit,
-								false,
-								onlyVisible,
-								excludeAllBut);
-				if (result != VOXEL_EMPTY)
+				ret = voxelCheck(
+							Position(cx, cy, cz),
+							excludeUnit,
+							false,
+							onlyVisible,
+							excludeAllBut);
+
+				if (ret != VOXEL_EMPTY)
 				{
 					if (trajectory != NULL) // store the position of impact
 						trajectory->push_back(Position(cx, cy, cz));
 
-					return result;
+					return ret;
 				}
 			}
 		}
@@ -4842,13 +4813,13 @@ int TileEngine::calculateLine(
  * VOXEL_OUTOFBOUNDS	//  5
  */
 int TileEngine::calculateParabola(
-				const Position& origin,
-				const Position& target,
-				bool storeTrajectory,
-				std::vector<Position>* trajectory,
-				BattleUnit* excludeUnit,
-				double arc,
-				const Position delta)
+		const Position& origin,
+		const Position& target,
+		bool storeTrajectory,
+		std::vector<Position>* trajectory,
+		BattleUnit* excludeUnit,
+		double arc,
+		const Position delta)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateParabola()";
 	double
