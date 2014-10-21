@@ -2908,7 +2908,7 @@ void BattlescapeGenerator::generateMap()
  * @param terrain		- pointer to RuleTerrain
  * @param dataSetOffset	-
  * @param discovered	- true if this MapBlock is discovered (eg. landingsite of the Skyranger)
- * @param craft			- true if Craft or Ufo has landed on the MAP
+ * @param craft			- true if xCom Craft has landed on the MAP
  * @return, height of the loaded mapblock (needed for spawnpoint calculation)
  * @sa http://www.ufopaedia.org/index.php?title=MAPS
  * @note Y-axis is in reverse order.
@@ -2944,18 +2944,15 @@ int BattlescapeGenerator::loadMAP(
 	size_x = static_cast<int>(mapSize[1]);
 	size_z = static_cast<int>(mapSize[2]);
 
-	int
-		x = offset_x,
-		y = offset_y,
-		z = 0;
-
 	if (size_z > _save->getMapSizeZ())
 	{
 		throw Exception("Height of map too big for this mission");
 	}
 
-	z += size_z - 1;
-	mapblock->setSizeZ(size_z);
+	int
+		x = offset_x,
+		y = offset_y,
+		z = size_z - 1;
 
 	for (int
 			i = _mapsize_z - 1;
@@ -2968,7 +2965,7 @@ int BattlescapeGenerator::loadMAP(
 		{
 			z += i;
 
-			if (craft)
+			if (craft == true)
 				_craftZ = i;
 
 			break;
@@ -2979,6 +2976,8 @@ int BattlescapeGenerator::loadMAP(
 	{
 		throw Exception("Something is wrong in your map definitions");
 	}
+
+	mapblock->setSizeZ(size_z);
 
 	unsigned int objectID;
 	unsigned char value[4];
@@ -2993,8 +2992,7 @@ int BattlescapeGenerator::loadMAP(
 		{
 			objectID = static_cast<unsigned int>(value[part]);
 
-			// kL_begin: Remove natural terrain that is inside Craft or Ufo.
-			// This mimics UFO:orig behavior.
+			// kL_begin: Remove natural terrain that is inside Craft or Ufo. This mimics UFO:orig behavior.
 			if (part != 0			// not if it's a floor since Craft/Ufo part will overwrite it anyway
 				&& objectID == 0	// and only if no Craft/Ufo part would overwrite the part
 				&& value[0] != 0)	// but only if there *is* a floor-part to the Craft/Ufo, so it would (have) be(en) inside the Craft/Ufo
@@ -3026,9 +3024,16 @@ int BattlescapeGenerator::loadMAP(
 			{
 				_save->getTile(Position(x, y, z))->setMapData(NULL,-1,-1, part);
 			} */
+
+			if (craft
+				&& objectID != 0
+				&& z != _craftZ)
+			{
+				_save->getTile(Position(x, y, z))->setDiscovered(true, 2);
+			}
 		}
 
-		if (craft
+/*		if (craft
 			&& _craftZ == z)
 		{
 			for (int
@@ -3038,9 +3043,9 @@ int BattlescapeGenerator::loadMAP(
 			{
 				_save->getTile(Position(x, y, z2))->setDiscovered(true, 2);
 			}
-		}
+		} */
 
-		_save->getTile(Position(x, y, z))->setDiscovered(discovered, 2);
+//		_save->getTile(Position(x, y, z))->setDiscovered(discovered, 2);
 
 		x++;
 

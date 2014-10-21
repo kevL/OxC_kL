@@ -327,7 +327,7 @@ void TileEngine::addLight(
 
 /**
  * Calculates line of sight of a BattleUnit.
- * @param unit - pointer to a battleunit to check Field of View for
+ * @param unit - pointer to a BattleUnit to check field of view for
  * @return, true when new aliens are spotted
  */
 bool TileEngine::calculateFOV(BattleUnit* unit)
@@ -386,7 +386,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 		if (tileAbove
 			&& tileAbove->hasNoFloor(NULL))
 		{
-			++unitPos.z;
+			unitPos.z++;
 		}
 	}
 
@@ -395,7 +395,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 			x <= MAX_VIEW_DISTANCE;
 			++x)
 	{
-		if (!diag)
+		if (diag == false)
 		{
 			//Log(LOG_INFO) << ". not Diagonal";
 			y1 = -x;
@@ -415,8 +415,8 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 				//Log(LOG_INFO) << "for (int z = 0; z < _battleSave->getMapSizeZ(); z++), z = " << z;
 
 //				int dist = distance(position, (*i)->getPosition());
-				const int distSqr = x * x + y * y;
-//				const int distSqr = x * x + y * y + z * z; // kL
+//				const int distSqr = x * x + y * y;
+				const int distSqr = x * x + y * y + z * z; // kL
 				//Log(LOG_INFO) << "distSqr = " << distSqr << " ; x = " << x << " ; y = " << y << " ; z = " << z; // <- HUGE write to file.
 				//Log(LOG_INFO) << "x = " << x << " ; y = " << y << " ; z = " << z; // <- HUGE write to file.
 
@@ -426,8 +426,10 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 				{
 					//Log(LOG_INFO) << "inside distSqr";
 
-					int deltaPos_x = (sign_x[dir] * (swap? y: x));
-					int deltaPos_y = (sign_y[dir] * (swap? x: y));
+					int
+						deltaPos_x = (sign_x[dir] * (swap? y: x)),
+						deltaPos_y = (sign_y[dir] * (swap? x: y));
+
 					testPos.x = unitPos.x + deltaPos_x;
 					testPos.y = unitPos.y + deltaPos_y;
 					//Log(LOG_INFO) << "testPos.x = " << testPos.x;
@@ -443,7 +445,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 						//Log(LOG_INFO) << ". . calculateFOV(), visible() CHECK.. " << revealUnit->getId();
 						if (revealUnit
-							&& !revealUnit->isOut(true, true)
+							&& revealUnit->isOut(true, true) == false
 							&& visible(
 									unit,
 									_battleSave->getTile(testPos))) // reveal units & tiles <- This seems uneven.
@@ -452,7 +454,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							//Log(LOG_INFO) << ". . calcFoV, distance = " << distance(unit->getPosition(), revealUnit->getPosition());
 
 							//Log(LOG_INFO) << ". . calculateFOV(), visible() TRUE id = " << revealUnit->getId();
-							if (!revealUnit->getVisible()) // spottedID = " << revealUnit->getId();
+							if (revealUnit->getVisible() == false) // spottedID = " << revealUnit->getId();
 							{
 								//Log(LOG_INFO) << ". . calculateFOV(), getVisible() FALSE";
 								ret = true;
@@ -465,7 +467,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 								revealUnit->getTile()->setVisible();
 //								revealUnit->getTile()->setDiscovered(true, 2); // kL_below. sprite caching for floor+content: DO I WANT THIS.
 
-								if (!revealUnit->getVisible())
+								if (revealUnit->getVisible() == false)
 									revealUnit->setVisible();
 							}
 							//Log(LOG_INFO) << ". . calculateFOV(), FACTION_PLAYER, Done";
@@ -500,18 +502,18 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							// this sets tiles to discovered if they are in LOS -
 							// tile visibility is not calculated in voxelspace but in tilespace;
 							// large units have "4 pair of eyes"
-							int size = unit->getArmor()->getSize();
+							int unitSize = unit->getArmor()->getSize();
 
 							for (int
 									xPlayer = 0;
-									xPlayer < size;
-									xPlayer++)
+									xPlayer < unitSize;
+									++xPlayer)
 							{
 								//Log(LOG_INFO) << ". . . . calculateLine() inside [1]for Loop";
 								for (int
 										yPlayer = 0;
-										yPlayer < size;
-										yPlayer++)
+										yPlayer < unitSize;
+										++yPlayer)
 								{
 									//Log(LOG_INFO) << ". . . . calculateLine() inside [2]for Loop";
 									_trajectory.clear();
@@ -565,7 +567,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 																					posTraj.x + 1,
 																					posTraj.y,
 																					posTraj.z));
-										if (edgeTile) // show Tile EAST
+										if (edgeTile != NULL) // show Tile EAST
 //kL										edgeTile->setDiscovered(true, 0);
 										// kL_begin:
 										{
@@ -607,7 +609,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 																			posTraj.x,
 																			posTraj.y + 1,
 																			posTraj.z));
-										if (edgeTile) // show Tile SOUTH
+										if (edgeTile != NULL) // show Tile SOUTH
 //kL										edgeTile->setDiscovered(true, 1);
 										// kL_begin:
 										{
@@ -649,7 +651,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 																			posTraj.x - 1,
 																			posTraj.y,
 																			posTraj.z));
-										if (edgeTile) // show Tile WEST
+										if (edgeTile != NULL) // show Tile WEST
 										{
 											//Log(LOG_INFO) << "calculateFOV() West edgeTile VALID";
 											//Log(LOG_INFO) << "part = 3";
@@ -674,7 +676,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 																			posTraj.x,
 																			posTraj.y - 1,
 																			posTraj.z));
-										if (edgeTile) // show Tile NORTH
+										if (edgeTile != NULL) // show Tile NORTH
 										{
 											//Log(LOG_INFO) << "calculateFOV() North edgeTile VALID";
 											//Log(LOG_INFO) << "part = 3";
@@ -969,8 +971,8 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* unit)
 	} */
 
 	if (originVoxel.z >= (unit->getPosition().z + 1) * 24
-		&& (!tileAbove
-			|| !tileAbove->hasNoFloor(0)))
+		&& (tileAbove == NULL
+			|| tileAbove->hasNoFloor(NULL) == false))
 	{
 		while (originVoxel.z >= (unit->getPosition().z + 1) * 24)
 		{
@@ -1255,22 +1257,21 @@ bool TileEngine::canTargetTile(
 		BattleUnit* excludeUnit)
 {
 	//Log(LOG_INFO) << "TileEngine::canTargetTile()";
-	static int sliceObjectSpiral[82] =
-	{
-		8,8,  8,6, 10,6, 10,8, 10,10, 8,10,  6,10,  6,8,  6,6,											// first circle
-		8,4, 10,4, 12,4, 12,6, 12,8, 12,10, 12,12, 10,12, 8,12, 6,12, 4,12, 4,10, 4,8, 4,6, 4,4, 6,4,	// second circle
-		8,1, 12,1, 15,1, 15,4, 15,8, 15,12, 15,15, 12,15, 8,15, 4,15, 1,15, 1,12, 1,8, 1,4, 1,1, 4,1	// third circle
-	};
-
-	static int northWallSpiral[14] =
-	{
-		7,0, 9,0, 6,0, 11,0, 4,0, 13,0, 2,0
-	};
-
-	static int westWallSpiral[14] =
-	{
-		0,7, 0,9, 0,6, 0,11, 0,4, 0,13, 0,2
-	};
+	static int
+		sliceObjectSpiral[82] =
+		{
+			8,8,  8,6, 10,6, 10,8, 10,10, 8,10,  6,10,  6,8,  6,6,											// first circle
+			8,4, 10,4, 12,4, 12,6, 12,8, 12,10, 12,12, 10,12, 8,12, 6,12, 4,12, 4,10, 4,8, 4,6, 4,4, 6,4,	// second circle
+			8,1, 12,1, 15,1, 15,4, 15,8, 15,12, 15,15, 12,15, 8,15, 4,15, 1,15, 1,12, 1,8, 1,4, 1,1, 4,1	// third circle
+		},
+		northWallSpiral[14] =
+		{
+			7,0, 9,0, 6,0, 11,0, 4,0, 13,0, 2,0
+		},
+		westWallSpiral[14] =
+		{
+			0,7, 0,9, 0,6, 0,11, 0,4, 0,13, 0,2
+		};
 
 	Position targetVoxel = Position(
 								tile->getPosition().x * 16,
@@ -1348,7 +1349,7 @@ bool TileEngine::canTargetTile(
 							true)
 						== part) // bingo
 				{
-					if (!minZfound)
+					if (minZfound == false)
 					{
 						minZ = j * 2;
 						minZfound = true;
@@ -1360,11 +1361,11 @@ bool TileEngine::canTargetTile(
 		}
 	}
 
-	if (!minZfound)
+	if (minZfound == false)
 		//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False (!minZfound)";
 		return false; // empty object!!!
 
-	if (!maxZfound)
+	if (maxZfound == false)
 	{
 		for (int
 				j = 10;
@@ -1391,7 +1392,7 @@ bool TileEngine::canTargetTile(
 							true)
 						== part) // bingo
 				{
-					if (!maxZfound)
+					if (maxZfound == false)
 					{
 						maxZ = j * 2;
 						maxZfound = true;
@@ -1403,7 +1404,7 @@ bool TileEngine::canTargetTile(
 		}
 	}
 
-	if (!maxZfound)
+	if (maxZfound == false)
 	{
 		//Log(LOG_INFO) << "TileEngine::canTargetTile() EXIT, ret False (!maxZfound)";
 		return false; // it's impossible to get there
@@ -3558,9 +3559,9 @@ int TileEngine::horizontalBlockage(
 /**
  * Calculates the amount of power that is blocked going from one tile to another on a different z-level.
  * Can cross more than one level (used for lighting). Only floor & object tiles are taken into account ... not really!
- * @param startTile	- pointer to tile where the power starts
- * @param endTile	- pointer to adjacent tile where the power ends
- * @param type		- type of power (RuleItem.h)
+ * @param startTile	- pointer to Tile where the power starts
+ * @param endTile	- pointer to adjacent Tile where the power ends
+ * @param type		- ItemDamageType of power (RuleItem.h)
  * @return, (int)block	-99 special case for Content-objects to block vision, and for invalid tiles
  *						-1 hardblock power / vision (can be less than -1)
  *						 0 no block
@@ -3603,7 +3604,7 @@ int TileEngine::verticalBlockage(
 			for ( // this checks directly up.
 					z += 1;
 					z <= endTile->getPosition().z;
-					z++)
+					++z)
 			{
 				block += blockage(
 								_battleSave->getTile(Position(x, y, z)),
@@ -3655,7 +3656,7 @@ int TileEngine::verticalBlockage(
 			for ( // this checks directly down.
 					;
 					z > endTile->getPosition().z;
-					z--)
+					--z)
 			{
 				block += blockage(
 								_battleSave->getTile(Position(x, y, z)),
