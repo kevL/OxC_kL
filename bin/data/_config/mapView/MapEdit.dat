@@ -606,6 +606,7 @@ Tileset:UFO - Terrain
 		UBASE_13:${dep}
 		UBASE_14:${dep}
 		UBASE_15:${dep}
+		UBASE_16:${dep}
 		UBASE_19:${dep}
 		UBASE_20:${dep}
 		UBASE_21:${dep}
