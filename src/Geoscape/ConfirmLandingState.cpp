@@ -253,6 +253,7 @@ ConfirmLandingState::ConfirmLandingState(
 	{
 		//Log(LOG_INFO) << ". ufo NOT valid";
 		_txtTexture->setVisible(false);
+		_txtShade->setVisible(false);
 	}
 
 /*kL

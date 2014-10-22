@@ -216,8 +216,8 @@ DebriefingState::DebriefingState()
 
 	int
 		total			= 0,
-		stats_dy		= 0,
-		recovery_dy		= 0,
+		stats_y			= 0,
+		recovery_y		= 0,
 		civiliansSaved	= 0,
 		civiliansDead	= 0,
 		aliensKilled	= 0;
@@ -249,7 +249,7 @@ DebriefingState::DebriefingState()
 								tr((*i)->item).c_str(),
 								ss.str().c_str(),
 								ss2.str().c_str());
-			recovery_dy += 8;
+			recovery_y += 8;
 		}
 		else
 		{
@@ -258,7 +258,7 @@ DebriefingState::DebriefingState()
 							tr((*i)->item).c_str(),
 							ss.str().c_str(),
 							ss2.str().c_str());
-			stats_dy += 8;
+			stats_y += 8;
 		}
 
 		if ((*i)->item == "STR_CIVILIANS_SAVED")
@@ -289,16 +289,16 @@ DebriefingState::DebriefingState()
 					tr("STR_TOTAL_UC").c_str(),
 					ss3.str().c_str());
 
-	if (recovery_dy > 0)
+	if (recovery_y > 0)
 	{
-		_txtRecovery->setY(_lstStats->getY() + stats_dy + 5);
+		_txtRecovery->setY(_lstStats->getY() + stats_y + 5);
 		_lstRecovery->setY(_txtRecovery->getY() + 8);
-		_lstTotal->setY(_lstRecovery->getY() + recovery_dy + 5);
+		_lstTotal->setY(_lstRecovery->getY() + recovery_y + 5);
 	}
 	else
 	{
 		_txtRecovery->setText(L"");
-		_lstTotal->setY(_lstStats->getY() + stats_dy + 5);
+		_lstTotal->setY(_lstStats->getY() + stats_y + 5);
 	}
 
 	// add the points to activity scores
@@ -399,7 +399,7 @@ DebriefingState::DebriefingState()
 					soldierAlienKills++;
 			}
 
-			if (aliensKilled > 0
+			if (aliensKilled > 0 // add: && (aliensStunned && allAliensStunnedBy == soldier)
 				&& aliensKilled == soldierAlienKills
 				&& _missionStatistics->success == true)
 			{
@@ -948,8 +948,8 @@ void DebriefingState::prepareDebriefing()
 				i != battle->getUnits()->end();
 				++i)
 		{
-			if ((*i)->getStatus() != STATUS_DEAD
-				&& (*i)->getGeoscapeSoldier() != NULL)
+			if ((*i)->getGeoscapeSoldier() != NULL
+				&& (*i)->getStatus() != STATUS_DEAD)
 			{
 				// if only one soldier survived AND none have died, means only one soldier went on the mission...
 				if (soldierDead == 0)

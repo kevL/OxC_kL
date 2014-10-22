@@ -1199,7 +1199,7 @@ terrains:
       - JUNGLEBITS
     textures: [0, 6]
     hemisphere: 1
-    largeBlockLimit: 3
+    largeBlockLimit: 2 #was 3
     mapBlocks:
       - name: MUJUNGLE00
         width: 10
