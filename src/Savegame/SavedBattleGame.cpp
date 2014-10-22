@@ -664,15 +664,15 @@ void SavedBattleGame::initMap(
  */
 void SavedBattleGame::initUtilities(ResourcePack* res)
 {
-	_pathfinding	= new Pathfinding(this);
-	_tileEngine		= new TileEngine(
-								this,
-								res->getVoxelData());
+	_pathfinding = new Pathfinding(this);
+	_tileEngine = new TileEngine(
+							this,
+							res->getVoxelData());
 }
 
 /**
  * Sets the mission type.
- * @param missionType The mission type.
+ * @param missionType - reference a mission type
  */
 void SavedBattleGame::setMissionType(const std::string& missionType)
 {
@@ -681,7 +681,7 @@ void SavedBattleGame::setMissionType(const std::string& missionType)
 
 /**
  * Gets the mission type.
- * @return The mission type.
+ * @return, the mission type
  */
 std::string SavedBattleGame::getMissionType() const
 {

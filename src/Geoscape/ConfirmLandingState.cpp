@@ -346,45 +346,45 @@ void ConfirmLandingState::btnYesClick(Action*)
 	TerrorSite* ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
 	AlienBase* ab = dynamic_cast<AlienBase*>(_craft->getDestination());
 
-	SavedBattleGame* battleGame = new SavedBattleGame();
-	_game->getSavedGame()->setBattleGame(battleGame);
+	SavedBattleGame* battle = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(battle);
 
-	BattlescapeGenerator battleGen (_game); // init.
+	BattlescapeGenerator bGen (_game); // init.
 
-	battleGen.setIsCity(_city); // kL
-	battleGen.setWorldTerrain(_terrain); // kL
-	battleGen.setWorldTexture(_texture);
-	battleGen.setWorldShade(_shade);
-	battleGen.setCraft(_craft);
+	bGen.setWorldTerrain(_terrain); // kL
+	bGen.setWorldTexture(_texture);
+	bGen.setWorldShade(_shade);
+	bGen.setCraft(_craft);
 
 	if (ufo != NULL)
 	{
 		if (ufo->getStatus() == Ufo::CRASHED)
-			battleGame->setMissionType("STR_UFO_CRASH_RECOVERY");
+			battle->setMissionType("STR_UFO_CRASH_RECOVERY");
 		else
-			battleGame->setMissionType("STR_UFO_GROUND_ASSAULT");
+			battle->setMissionType("STR_UFO_GROUND_ASSAULT");
 
-		battleGen.setUfo(ufo);
-		battleGen.setAlienRace(ufo->getAlienRace());
+		bGen.setUfo(ufo);
+		bGen.setAlienRace(ufo->getAlienRace());
+		bGen.setIsCity(_city); // kL
 	}
 	else if (ts != NULL)
 	{
-		battleGame->setMissionType("STR_TERROR_MISSION");
-		battleGen.setTerrorSite(ts);
-		battleGen.setAlienRace(ts->getAlienRace());
+		battle->setMissionType("STR_TERROR_MISSION");
+		bGen.setTerrorSite(ts);
+		bGen.setAlienRace(ts->getAlienRace());
 	}
 	else if (ab != NULL)
 	{
-		battleGame->setMissionType("STR_ALIEN_BASE_ASSAULT");
-		battleGen.setAlienBase(ab);
-		battleGen.setAlienRace(ab->getAlienRace());
+		battle->setMissionType("STR_ALIEN_BASE_ASSAULT");
+		bGen.setAlienBase(ab);
+		bGen.setAlienRace(ab->getAlienRace());
 	}
 	else
 	{
 		throw Exception("No mission available!");
 	}
 
-	battleGen.run(); // <- DETERMINE ALL TACTICAL DATA.
+	bGen.run(); // <- DETERMINE ALL TACTICAL DATA.
 
 	_game->pushState(new BriefingState(_craft));
 }

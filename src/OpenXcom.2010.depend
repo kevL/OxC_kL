@@ -4739,7 +4739,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1413836107 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1414012652 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 
 1413140555 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
@@ -5921,7 +5921,7 @@
 
 1413140561 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1413907761 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1414012652 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -7566,7 +7566,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1414003032 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1414010170 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	<sstream>
 	"../Battlescape/BattlescapeGenerator.h"
@@ -9300,7 +9300,7 @@
 1413140560 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1413140560 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1414007330 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 	"../Engine/RNG.h"
 
@@ -9396,7 +9396,7 @@
 1413140561 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1413643795 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1414009971 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9460,7 +9460,7 @@
 	"RuleTerrain.h"
 	"../Engine/RNG.h"
 
-1413140561 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
+1414010806 source:f:\git\openxcom\src\ruleset\ruleufo.cpp
 	"RuleTerrain.h"
 	"RuleUfo.h"
 
@@ -9683,7 +9683,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1413878445 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1414011058 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

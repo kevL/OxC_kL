@@ -80,7 +80,7 @@ private:
 	RuleTerrain
 		* _terrain,
 		* _worldTerrain;
-	SavedBattleGame	* _save;
+	SavedBattleGame	* _battleSave;
 	TerrorSite		* _terror;
 	Tile			* _tileCraft;
 	Ufo				* _ufo;
