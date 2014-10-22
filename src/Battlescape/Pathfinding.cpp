@@ -2032,7 +2032,7 @@ bool Pathfinding::previewPath(bool bRemove)
 		usedTU		= 0, // only for soldiers reserving TUs
 		tu			= 0, // cost per tile
 		energy		= _unit->getEnergy(),
-		energyLim	= energy,
+		energyLimit	= energy,
 		size		= _unit->getArmor()->getSize() - 1,
 		dir			= -1,
 		color		= 0;
@@ -2042,19 +2042,19 @@ bool Pathfinding::previewPath(bool bRemove)
 	bool
 		hathStood	= false,
 		dash		= Options::strafe
-						&& _modCTRL
-						&& _unit->getGeoscapeSoldier() != NULL
-//						&& size == 0
-						&& (_strafeMove == false
-							|| (_strafeMove == true
-								&& _path.size() == 1
-								&& _unit->getDirection() == _path.front())),
+				   && _modCTRL
+				   && _unit->getGeoscapeSoldier() != NULL
+//				   && size == 0
+				   && (_strafeMove == false
+						|| (_strafeMove == true
+							&& _path.size() == 1
+							&& _unit->getDirection() == _path.front())),
 		bodySuit	= armorType == "STR_PERSONAL_ARMOR_UC",
 		powerSuit	= _unit->hasPowerSuit()
-						|| (_unit->hasFlightSuit()
-							&& _movementType == MT_WALK),
+				   || (_unit->hasFlightSuit()
+						&& _movementType == MT_WALK),
 		flightSuit	= _unit->hasFlightSuit()
-						&& _movementType == MT_FLY,
+				   && _movementType == MT_FLY,
 		gravLift	= false,
 		reserveOk	= false;
 
@@ -2107,11 +2107,11 @@ bool Pathfinding::previewPath(bool bRemove)
 			return false;	// kL
 		} */
 
-		energyLim = energy;
+		energyLimit = energy;
 
 		gravLift = dir >= DIR_UP
-					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)
-					&& _save->getTile(start)->getMapData(MapData::O_FLOOR)->isGravLift();
+				&& _save->getTile(start)->getMapData(MapData::O_FLOOR)
+				&& _save->getTile(start)->getMapData(MapData::O_FLOOR)->isGravLift();
 		if (gravLift == false)
 		{
 			if (hathStood == false
@@ -2119,8 +2119,9 @@ bool Pathfinding::previewPath(bool bRemove)
 			{
 				hathStood = true;
 
-				curTU -= 8;
-				usedTU += 8;
+				curTU	-= 10; // 10tu + 5energy to stand up.
+				usedTU	+= 10;
+				energy	-= 5;
 			}
 
 			if (dash)
@@ -2143,10 +2144,10 @@ bool Pathfinding::previewPath(bool bRemove)
 				energy += 2;
 			//Log(LOG_INFO) << ". . energy left = " << energy;
 
-			if (energy > energyLim)
+			if (energy > energyLimit)
 			{
-				//Log(LOG_INFO) << ". hit energyLim of " << energyLim;
-				energy = energyLim;
+				//Log(LOG_INFO) << ". hit energyLimit of " << energyLimit;
+				energy = energyLimit;
 			}
 		}
 		//Log(LOG_INFO) << ". . tu[1] = " << tu;
@@ -2164,12 +2165,12 @@ bool Pathfinding::previewPath(bool bRemove)
 		for (int
 				x = size;
 				x > -1;
-				x--)
+				--x)
 		{
 			for (int
 					y = size;
 					y > -1;
-					y--)
+					--y)
 			{
 				tile = _save->getTile(start + Position(x, y, 0));
 				Tile* tileAbove = _save->getTile(start + Position(x, y, 1));
