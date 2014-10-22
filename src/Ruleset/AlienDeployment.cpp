@@ -51,12 +51,12 @@ struct convert<OpenXcom::DeploymentData>
 		if (!node.IsMap())
 			return false;
 
-		rhs.alienRank				= node["alienRank"].as<int>(rhs.alienRank);
-		rhs.lowQty					= node["lowQty"].as<int>(rhs.lowQty);
-		rhs.highQty					= node["highQty"].as<int>(rhs.highQty);
-		rhs.dQty					= node["dQty"].as<int>(rhs.dQty);
-		rhs.percentageOutsideUfo	= node["percentageOutsideUfo"].as<int>(rhs.percentageOutsideUfo);
-		rhs.itemSets				= node["itemSets"].as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
+		rhs.alienRank				= node["alienRank"]				.as<int>(rhs.alienRank);
+		rhs.lowQty					= node["lowQty"]				.as<int>(rhs.lowQty);
+		rhs.highQty					= node["highQty"]				.as<int>(rhs.highQty);
+		rhs.dQty					= node["dQty"]					.as<int>(rhs.dQty);
+		rhs.percentageOutsideUfo	= node["percentageOutsideUfo"]	.as<int>(rhs.percentageOutsideUfo);
+		rhs.itemSets				= node["itemSets"]				.as< std::vector<OpenXcom::ItemSet> >(rhs.itemSets);
 
 		return true;
 	}
@@ -70,7 +70,7 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleset for a certain type of deployment data.
- * @param type, String defining the type.
+ * @param type - reference a string defining the type of AlienMission
  */
 AlienDeployment::AlienDeployment(const std::string& type)
 	:
@@ -92,7 +92,7 @@ AlienDeployment::~AlienDeployment()
 
 /**
  * Loads the Deployment from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void AlienDeployment::load(const YAML::Node& node)
 {
@@ -110,7 +110,7 @@ void AlienDeployment::load(const YAML::Node& node)
 /**
  * Returns the language string that names this deployment.
  * Each deployment type has a unique name.
- * @return, Deployment name.
+ * @return, deployment name
  */
 std::string AlienDeployment::getType() const
 {
@@ -119,7 +119,7 @@ std::string AlienDeployment::getType() const
 
 /**
  * Gets a pointer to the data.
- * @return, Pointer to the data.
+ * @return, pointer to the data
  */
 std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 {
@@ -128,9 +128,9 @@ std::vector<DeploymentData>* AlienDeployment::getDeploymentData()
 
 /**
  * Gets dimensions.
- * @param width Width.
- * @param length Length.
- * @param height Height.
+ * @param width		- pointer to width
+ * @param length 	- pointer to length
+ * @param height	- pointer to height
  */
 void AlienDeployment::getDimensions(
 		int* width,
@@ -144,7 +144,7 @@ void AlienDeployment::getDimensions(
 
 /**
  * Gets the number of civilians.
- * @return, The number of civilians.
+ * @return, the number of civilians
  */
 int AlienDeployment::getCivilians() const
 {
@@ -154,7 +154,7 @@ int AlienDeployment::getCivilians() const
 /**
  * Gets the terrain for battlescape generation.
  * kL_note: See note in header file.
- * @return, The terrain.
+ * @return, the terrain
  */
 /* std::string AlienDeployment::getTerrain() const
 {
@@ -163,16 +163,14 @@ int AlienDeployment::getCivilians() const
 		unsigned terrain = RNG::generate(
 										0,
 										_terrains.size() - 1);
-
 		return _terrains.at(terrain);
 	}
-
 	return "";
 } */
 
 /**
  * Gets the terrains for battlescape generation.
- * @return, The terrains.
+ * @return, vector of the terrain strings
  */
 std::vector<std::string> AlienDeployment::getTerrains() const
 {
@@ -181,7 +179,7 @@ std::vector<std::string> AlienDeployment::getTerrains() const
 
 /**
  * Gets the shade level for battlescape generation.
- * @return, The shade level.
+ * @return, the shade level
  */
 int AlienDeployment::getShade() const
 {
@@ -190,7 +188,7 @@ int AlienDeployment::getShade() const
 
 /**
  * Gets the next stage of the mission.
- * @return, The next stage of the mission.
+ * @return, the next stage of the mission
  */
 std::string AlienDeployment::getNextStage() const
 {

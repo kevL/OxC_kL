@@ -6245,7 +6245,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1413856885 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1414000746 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -7566,7 +7566,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413842887 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
+1414003032 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
 	<sstream>
 	"../Battlescape/BattlescapeGenerator.h"

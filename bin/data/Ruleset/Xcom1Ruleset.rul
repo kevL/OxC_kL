@@ -5444,30 +5444,6 @@ alienDeployments:
       - URBAN
   - type: STR_ALIEN_BASE_ASSAULT
     data:
-      - alienRank: 6 #terrorist1
-        lowQty: 1
-        highQty: 3
-        dQty: 2
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
-      - alienRank: 7 #terrorist2
-        lowQty: 0
-        highQty: 2
-        dQty: 2
-        percentageOutsideUfo: 0
-        itemSets:
-          -
-            []
-          -
-            []
-          -
-            []
       - alienRank: 0 #commander
         lowQty: 1
         highQty: 1
@@ -5492,7 +5468,7 @@ alienDeployments:
       - alienRank: 1 #leader
         lowQty: 2
         highQty: 4
-        dQty: 0
+        dQty: 1
         percentageOutsideUfo: 0
         itemSets:
           -
@@ -5511,8 +5487,8 @@ alienDeployments:
             - STR_BLASTER_BOMB
             - STR_BLASTER_BOMB
       - alienRank: 2 #engineer
-        lowQty: 1
-        highQty: 2
+        lowQty: 3
+        highQty: 5
         dQty: 0
         percentageOutsideUfo: 0
         itemSets:
@@ -5533,8 +5509,8 @@ alienDeployments:
             - STR_BLASTER_BOMB
       - alienRank: 3 #medic
         lowQty: 1
-        highQty: 1
-        dQty: 0
+        highQty: 3
+        dQty: 2
         percentageOutsideUfo: 0
         itemSets:
           -
@@ -5553,7 +5529,7 @@ alienDeployments:
             - STR_STUN_BOMB
             - STR_STUN_BOMB
       - alienRank: 4 #navigator
-        lowQty: 1
+        lowQty: 2
         highQty: 2
         dQty: 0
         percentageOutsideUfo: 0
@@ -5568,8 +5544,8 @@ alienDeployments:
             - STR_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
       - alienRank: 5 #soldier
-        lowQty: 5
-        highQty: 8
+        lowQty: 8
+        highQty: 10
         dQty: 6
         percentageOutsideUfo: 0
         itemSets:
@@ -5585,8 +5561,32 @@ alienDeployments:
             - STR_HEAVY_PLASMA
             - STR_HEAVY_PLASMA_CLIP
             - STR_ALIEN_GRENADE
-    width: 50
-    length: 50
+      - alienRank: 6 #terrorist1
+        lowQty: 2
+        highQty: 3
+        dQty: 3
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+      - alienRank: 7 #terrorist2
+        lowQty: 1
+        highQty: 2
+        dQty: 2
+        percentageOutsideUfo: 0
+        itemSets:
+          -
+            []
+          -
+            []
+          -
+            []
+    width: 60
+    length: 60
     height: 2
     terrains:
       - UBASE
