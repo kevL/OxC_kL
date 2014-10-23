@@ -12,3 +12,10 @@ extraSprites:
     subY: 40
     files:
       0: Resources/Sprites/Units/sectoid/
+  - type: CYBER.PCK
+    width: 512
+    height: 680
+    subX: 32
+    subY: 40
+    files:
+      0: Resources/Sprites/Units/cybam/
