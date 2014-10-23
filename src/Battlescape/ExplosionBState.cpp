@@ -196,11 +196,11 @@ void ExplosionBState::init()
 				if (_item->getRules()->getDamageType() == DT_SMOKE
 					|| _item->getRules()->getDamageType() == DT_STUN)
 				{
-					frameStart = 8;
-					qty /= 2; // smoke & stun bombs do fewer anims.
+//					frameStart = 8;
+					qty = qty * 2 / 3; // smoke & stun bombs do fewer anims.
 				}
 				else
-					qty *= 2; // bump this up.
+					qty = qty * 3 / 2; // bump this up.
 			}
 			else
 				radius = _power / 9; // <- for cyberdiscs & terrain expl.
@@ -240,7 +240,7 @@ void ExplosionBState::init()
 				}
 
 				Explosion* explosion = new Explosion( // animation
-												pos + Position(10, 10, 0), // jogg the anim down a few pixels. Tks.
+												pos + Position(11, 11, 0), // jogg the anim down a few pixels. Tks.
 												frameStart,
 												frameDelay,
 												true);
@@ -253,7 +253,9 @@ void ExplosionBState::init()
 
 			int sound = -1;
 
-			if (_power < 73)
+			if (_item != NULL)
+				sound = _item->getRules()->getHitSound();
+			else if (_power < 73)
 				sound = ResourcePack::SMALL_EXPLOSION;
 			else
 				sound = ResourcePack::LARGE_EXPLOSION;

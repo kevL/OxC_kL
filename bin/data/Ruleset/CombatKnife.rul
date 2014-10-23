@@ -12,7 +12,6 @@ items:
     handSprite: 144
     meleeSound: 39
     meleeHitSound: 67
-#    hitAnimation: 0
     power: 30
     strengthApplied: true
     damageType: 7

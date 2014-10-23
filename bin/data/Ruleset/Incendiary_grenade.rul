@@ -9,7 +9,8 @@ items:
     bigSprite: 416
     floorSprite: 416
     handSprite: 416
-    power: 78
+    hitSound: 5
+    power: 83
     damageType: 2
     battleType: 4
     blastRadius: 4

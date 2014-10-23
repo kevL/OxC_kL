@@ -4,7 +4,6 @@ items:
     costBuy: 93000
     costSell: 22500
     transferTime: 72
-#    weight: 1
     bigSprite: 63
     bulletSprite: 3
     fireSound: 88
@@ -25,16 +24,13 @@ items:
     costBuy: 125
     costSell: 40
     transferTime: 48
-#    weight: 0
     bigSprite: -1
     hitSound: 13
-#    hitAnimation: 26 #kL_note: should be 0.
+    hitAnimation: 8
     power: 42
     damageType: 9
     battleType: 2
     clipSize: 6
-#    invWidth: 1
-#    invHeight: 1
     blastRadius: 3
     listOrder: 1099
   - type: STR_SMALL_TANK_CORPSE

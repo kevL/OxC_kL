@@ -8,7 +8,6 @@ items:
     bigSprite: 79
     floorSprite: 75
     handSprite: 136
-#    bulletSprite: 11
     fireSound: 89
     compatibleAmmo:
       - STR_LAUNCHER_FRAG
@@ -34,8 +33,7 @@ items:
     bigSprite: 80
     floorSprite: 2
     bulletSprite: 11
-#    hitAnimation: 0
-    hitSound: 0
+    hitSound: 12
     power: 48
     damageType: 3
     battleType: 2
@@ -51,8 +49,7 @@ items:
     bigSprite: 81
     floorSprite: 2
     bulletSprite: 12
-#    hitAnimation: 0
-    hitSound: 0
+    hitSound: 12
     power: 78
     damageType: 2
     battleType: 2
@@ -68,8 +65,8 @@ items:
     bigSprite: 82
     floorSprite: 2
     bulletSprite: 13
-#    hitAnimation: 0
-    hitSound: 0
+    hitAnimation: 8
+    hitSound: 12
     power: 57
     damageType: 9
     battleType: 2

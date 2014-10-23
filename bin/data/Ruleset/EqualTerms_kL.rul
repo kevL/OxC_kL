@@ -23,11 +23,11 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
-    maxRange: 100
-    aimRange: 30
-    snapRange: 10
-    autoRange: 5
-    dropoff: 5
+#    maxRange: 100
+#    aimRange: 30
+#    snapRange: 10
+#    autoRange: 5
+#    dropoff: 5
     autoShots: 6
 #------------------------------------------------------------------------------
   - type: STR_MACHINE_PISTOL_CLIP
@@ -66,11 +66,11 @@ items:
     battleType: 1
     invWidth: 1
     invHeight: 2
-    maxRange: 100
-    aimRange: 45
-    snapRange: 15
-    minRange: 1
-    dropoff: 4
+#    maxRange: 100
+#    aimRange: 45
+#    snapRange: 15
+#    minRange: 1
+#    dropoff: 4
 #------------------------------------------------------------------------------
   - type: STR_MAGNUM_AMMO
     listOrder: 2004
@@ -111,11 +111,11 @@ items:
     twoHanded: false
     invWidth: 1
     invHeight: 2
-    maxRange: 125
-    autoRange: 25
-    aimRange: 50
-    snapRange: 17
-    dropoff: 3
+#    maxRange: 125
+#    autoRange: 25
+#    aimRange: 50
+#    snapRange: 17
+#    dropoff: 3
     autoShots: 5
 #------------------------------------------------------------------------------
   - type: STR_SMG_CLIP
@@ -159,12 +159,12 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    maxRange: 200
-    aimRange: 100
-    snapRange: 25
-    autoRange: 22
-    minRange: 3
-    dropoff: 3
+#    maxRange: 200
+#    aimRange: 100
+#    snapRange: 25
+#    autoRange: 22
+#    minRange: 3
+#    dropoff: 3
     autoShots: 5
 #------------------------------------------------------------------------------
   - type: STR_ASSAULT_RIFLE_CLIP
@@ -203,11 +203,11 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    maxRange: 200
-    aimRange: 125
-    snapRange: 35
-    minRange: 4
-    dropoff: 2
+#    maxRange: 200
+#    aimRange: 125
+#    snapRange: 35
+#    minRange: 4
+#    dropoff: 2
 #------------------------------------------------------------------------------
   - type: STR_MARKSMANS_RIFLE_CLIP
     listOrder: 2206
@@ -248,11 +248,11 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    maxRange: 200
-    aimRange: 150
-    snapRange: 15
-    minRange: 8
-    dropoff: 2
+#    maxRange: 200
+#    aimRange: 150
+#    snapRange: 15
+#    minRange: 8
+#    dropoff: 2
 #------------------------------------------------------------------------------
   - type: STR_SNIPER_RIFLE_AMMO
     listOrder: 2211
@@ -294,12 +294,12 @@ items:
     twoHanded: true
     invWidth: 2
     invHeight: 3
-    maxRange: 200
-    aimRange: 75
-    snapRange: 22
-    autoRange: 35
-    minRange: 3
-    dropoff: 2
+#    maxRange: 200
+#    aimRange: 75
+#    snapRange: 22
+#    autoRange: 35
+#    minRange: 3
+#    dropoff: 2
     autoShots: 7
 #------------------------------------------------------------------------------
   - type: STR_SAW_AP_AMMO
@@ -313,7 +313,7 @@ items:
     bulletSprite: 2
     hitAnimation: 26
     hitSound: 13
-    power: 40
+    power: 39
     damageType: 1
     clipSize: 35
     battleType: 2
@@ -341,9 +341,9 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    aimRange: 20
-    snapRange: 8
-    dropoff: 5
+#    aimRange: 20
+#    snapRange: 8
+#    dropoff: 5
 #------------------------------------------------------------------------------
   - type: STR_REINFORCED_SHOTGUN
     listOrder: 2271
@@ -366,9 +366,9 @@ items:
     twoHanded: true
     invWidth: 1
     invHeight: 3
-    aimRange: 25
-    snapRange: 9
-    dropoff: 5
+#    aimRange: 25
+#    snapRange: 9
+#    dropoff: 5
     requires:
       - STR_REINFORCED_SHOTGUN
 #------------------------------------------------------------------------------
@@ -433,7 +433,8 @@ items:
     weight: 4
     bigSprite: 519
     floorSprite: 519
-    power: 62
+    hitSound: 12
+    power: 57
     damageType: 2
     battleType: 4
     blastRadius: 2
@@ -450,16 +451,16 @@ items:
     bulletSprite: 0
     fireSound: 167
     hitSound: 64
-    power: 100
+    power: 89
     accuracySnap: 55
     accuracyAimed: 100
     tuSnap: 40
     tuAimed: 66
-    maxRange: 200
-    aimRange: 80
-    snapRange: 15
-    minRange: 8
-    dropoff: 2
+#    maxRange: 200
+#    aimRange: 80
+#    snapRange: 15
+#    minRange: 8
+#    dropoff: 2
     clipSize: 1
     battleType: 1
     twoHanded: true
@@ -477,8 +478,8 @@ items:
     weight: 13
     bigSprite: 521
     floorSprite: 521
-    hitSound: 0
-    power: 150
+    hitSound: 5
+    power: 145
     damageType: 1
     clipSize: 1
     battleType: 2

@@ -510,7 +510,7 @@ items:
 #    weight: 1
     bigSprite: -1
 #    floorSprite: 16
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 5
 #    hitAnimation: 0
     power: 115
     damageType: 3
@@ -598,7 +598,7 @@ items:
 #    weight: 1
     bigSprite: -1
 #    floorSprite: 35
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 5
 #    hitAnimation: 0
     power: 216
     damageType: 3
@@ -721,7 +721,7 @@ items:
     weight: 6
     bigSprite: 13
     floorSprite: 13
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 12
 #    hitAnimation: 0
     power: 61
     damageType: 3
@@ -737,7 +737,7 @@ items:
     weight: 6
     bigSprite: 14
     floorSprite: 14
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 12
 #    hitAnimation: 0
     power: 62
     damageType: 2
@@ -792,7 +792,7 @@ items:
     weight: 7
     bigSprite: 9
     floorSprite: 9
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 12
 #    hitAnimation: 0
     power: 49
     damageType: 3
@@ -808,7 +808,7 @@ items:
     weight: 7
     bigSprite: 10
     floorSprite: 10
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 12
 #    hitAnimation: 0
     power: 52
     damageType: 2
@@ -846,7 +846,7 @@ items:
     weight: 9
     bigSprite: 16
     floorSprite: 16
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 5
 #    hitAnimation: 0
     power: 81
     damageType: 3
@@ -861,7 +861,7 @@ items:
     weight: 13
     bigSprite: 17
     floorSprite: 17
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 5
 #    hitAnimation: 0
     power: 98
     damageType: 3
@@ -876,7 +876,7 @@ items:
     weight: 11
     bigSprite: 18
     floorSprite: 18
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 5
 #    hitAnimation: 0
     power: 92
     damageType: 2
@@ -971,6 +971,7 @@ items:
     weight: 5
     bigSprite: 20
     floorSprite: 20
+    hitAnimation: 8
     power: 57
     damageType: 9
     battleType: 4
@@ -1253,7 +1254,7 @@ items:
     weight: 5
     bigSprite: 36
     floorSprite: 35
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
+    hitSound: 5
 #    hitAnimation: 0
     power: 182
     damageType: 3
@@ -1295,8 +1296,8 @@ items:
     weight: 4
     bigSprite: 38
     floorSprite: 37
-    hitSound: 0 # not used. hard-coded (dependent on explosive power +/- 80)
-#    hitAnimation: 0
+    hitSound: 12
+    hitAnimation: 16
     power: 85
     damageType: 6
     clipSize: 1
