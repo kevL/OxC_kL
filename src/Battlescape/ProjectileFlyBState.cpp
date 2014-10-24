@@ -1045,8 +1045,14 @@ void ProjectileFlyBState::think()
 //kL						&& victim->isOut() == false)
 						{
 							BattleUnitStatistics
-								* statsVictim = (victim->getGeoscapeSoldier() == NULL)? NULL: victim->getStatistics(),
-								* statsUnit = (_unit->getGeoscapeSoldier() == NULL)? NULL: _unit->getStatistics();
+								* statsVictim = NULL,
+								* statsUnit = NULL;
+
+							if (_unit->getGeoscapeSoldier() != NULL)
+								statsUnit = _unit->getStatistics();
+
+							if (victim->getGeoscapeSoldier() != NULL)
+								statsVictim = victim->getStatistics();
 
 							if (statsVictim != NULL)
 								statsVictim->hitCounter++;

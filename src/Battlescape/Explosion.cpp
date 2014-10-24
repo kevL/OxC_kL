@@ -37,7 +37,7 @@ const int
  * @param frameStart	- used to offset different explosions to different frames on the spritesheet
  * @param frameDelay	- used to delay the start of explosion (default 0)
  * @param big			- flag to indicate it is a real explosion (true), or a bullet hit (default false)
- * @param hit			- used for melee and psi attacks (was bool default false)
+ * @param hit			- used for melee and psi attacks (default 0)
  *						 1 - is a melee attack that SUCCEEDED or Psi-attack
  *						 0 - is not a hit-type attack
  *						-1 - is a melee attack that MISSED
@@ -72,9 +72,6 @@ Explosion::~Explosion()
  */
 bool Explosion::animate()
 {
-//	if (_hit == -1) // Do not show unsuccessful melee attack explosions.
-//		return false;
-
 	if (_frameDelay > 0)
 	{
 		_frameDelay--;
