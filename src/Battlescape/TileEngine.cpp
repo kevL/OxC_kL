@@ -1877,44 +1877,46 @@ BattleUnit* TileEngine::hit(
 //kL				targetUnit->killedBy(unit->getFaction());
 //				} // kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
 
-				const int size = targetUnit->getArmor()->getSize() * 8;
+				const int unitSize = targetUnit->getArmor()->getSize() * 8;
 				const Position
 					targetPos = targetUnit->getPosition() * Position(16, 16, 24) // convert tilespace to voxelspace
 							  + Position(
-										size,
-										size,
+										unitSize,
+										unitSize,
 										targetUnit->getFloatHeight() - tile->getTerrainLevel()),
-					relPos = targetPos_voxel
-						   - targetPos
-						   - Position(
-									0,
-									0,
-									vertOffset);
+					relativePos = targetPos_voxel
+								- targetPos
+								- Position(
+										0,
+										0,
+										vertOffset);
 
 				// kL_begin: TileEngine::hit(), Silacoids can set targets on fire!!
 //kL			if (type == DT_IN)
 				if (attacker->getSpecialAbility() == SPECAB_BURNFLOOR)
 				{
-					float modifier = targetUnit->getArmor()->getDamageModifier(DT_IN);
+					const float modifier = targetUnit->getArmor()->getDamageModifier(DT_IN);
 					if (modifier > 0.f)
 					{
 						// generate(4, 11)
-						int firePower = RNG::generate( // kL: 25% - 75% / 2
+						const int
+							firePower = RNG::generate( // kL: 25% - 75% / 2
 													power / 8,
-													power * 3 / 8);
+													power * 3 / 8),
+							burnTime = RNG::generate(
+													0,
+													static_cast<int>(Round(5.f * modifier)));
 						//Log(LOG_INFO) << ". . . . DT_IN : firePower = " << firePower;
 
 						// generate(5, 10)
-						int check = targetUnit->damage(
-													Position(0, 0, 0),
-													firePower,
-													DT_IN,
-													true);
+//						int check = targetUnit->damage(
+						targetUnit->damage(
+										Position(0, 0, 0),
+										firePower,
+										DT_IN,
+										true);
 						//Log(LOG_INFO) << ". . . . DT_IN : " << targetUnit->getId() << " takes " << check;
 
-						int burnTime = RNG::generate(
-													0,
-													static_cast<int>(Round(5.f * modifier)));
 						if (targetUnit->getFire() < burnTime)
 							targetUnit->setFire(burnTime); // catch fire and burn
 					}
@@ -1943,14 +1945,14 @@ BattleUnit* TileEngine::hit(
 									  || type == DT_SMOKE;	// note it still gets Vuln.modifier, but not armorReduction.
 				const int
 					wounds = targetUnit->getFatalWounds(),
-					adjDamage = targetUnit->damage(
-												relPos,
-												power,
-												type,
-												ignoreArmor);
-				//Log(LOG_INFO) << ". . . adjDamage = " << adjDamage;
+					damage = targetUnit->damage(
+											relativePos,
+											power,
+											type,
+											ignoreArmor);
+				//Log(LOG_INFO) << ". . . damage = " << damage;
 
-				if (adjDamage > 0)
+				if (damage > 0)
 //					&& !targetUnit->isOut()
 				{
 					if (attacker // kL_begin:
@@ -1974,7 +1976,7 @@ BattleUnit* TileEngine::hit(
 							else if (targetUnit->getOriginalFaction() == FACTION_HOSTILE)
 								modifier = _battleSave->getMoraleModifier(NULL, false);
 
-							const int moraleLoss = 10 * adjDamage * bravery / modifier;
+							const int moraleLoss = 10 * damage * bravery / modifier;
 							//Log(LOG_INFO) << ". . . . moraleLoss = " << moraleLoss;
 							targetUnit->moraleChange(-moraleLoss);
 						}

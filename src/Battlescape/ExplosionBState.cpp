@@ -252,9 +252,11 @@ void ExplosionBState::init()
 
 
 			int sound = -1;
-
 			if (_item != NULL)
-				sound = _item->getRules()->getHitSound();
+			{
+				if (_item->getRules()->getHitSound() != -1) // set item's hitSound to -1 for silent.
+					sound = _item->getRules()->getHitSound();
+			}
 			else if (_power < 73)
 				sound = ResourcePack::SMALL_EXPLOSION;
 			else

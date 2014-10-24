@@ -172,7 +172,7 @@ extraSprites:
       0: Resources/Sprites/ufograph/smoke/ranks/rank_commander.png
   - type: X1.PCK
     width: 1024
-    height: 128
+    height: 192
     subX: 128
     subY: 64
     files:
