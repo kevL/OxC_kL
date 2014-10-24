@@ -1959,15 +1959,12 @@ bool AlienBAIState::explosiveEfficacy(
 			i != _save->getUnits()->end();
 			++i)
 	{
-		if ((*i)->isOut(true) == false	// don't grenade dead guys
-			&& *i != attacker			// don't count ourself twice
-//			&& *i != target				// don't count the target twice (kL_note: not been coconutted yet)
-			// don't count units that probably won't be affected cause they're out of range
+		if ((*i)->isOut(true) == false
+			&& *i != attacker
 			&& abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight
 			&& _save->getTileEngine()->distance(
 											(*i)->getPosition(),
-											targetPos)
-										<= radius)
+											targetPos) <= radius)
 		{
 			if (((*i)->getTile()
 					&& (*i)->getTile()->getDangerous())		// don't count people who were already grenaded this turn
