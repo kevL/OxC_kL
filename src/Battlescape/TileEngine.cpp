@@ -1753,15 +1753,15 @@ BattleActionType TileEngine::selectFireMethod( // kL
 /**
  * Handles bullet/weapon hits. A bullet/weapon hits a voxel.
  * kL_note: called from ExplosionBState::explode()
- * @param pTarget_voxel	- reference the center of hit in voxelspace
- * @param power			- power of the hit/explosion
- * @param type			- damage type of the hit (RuleItem.h)
- * @param attacker		- pointer to unit that caused the hit
- * @param melee			- true if no projectile, trajectory, etc. is needed. kL
+ * @param targetPos_voxel	- reference the center of hit in voxelspace
+ * @param power				- power of the hit/explosion
+ * @param type				- damage type of the hit (RuleItem.h)
+ * @param attacker			- pointer to unit that caused the hit
+ * @param melee				- true if no projectile, trajectory, etc. is needed. kL
  * @return, pointer to the BattleUnit that got hit
  */
 BattleUnit* TileEngine::hit(
-		const Position& pTarget_voxel,
+		const Position& targetPos_voxel,
 		int power,
 		ItemDamageType type,
 		BattleUnit* attacker,
@@ -1775,43 +1775,25 @@ BattleUnit* TileEngine::hit(
 	if (type != DT_NONE) // bypass Psi-attacks. Psi-attacks don't get this far anymore .... But leave it in for safety.
 	{
 		//Log(LOG_INFO) << "DT_ type = " << static_cast<int>(type);
-		Position pTarget_tile = Position(
-										pTarget_voxel.x / 16,
-										pTarget_voxel.y / 16,
-										pTarget_voxel.z / 24);
-		Tile* tile = _battleSave->getTile(pTarget_tile);
-/*		Tile* tile = _battleSave->getTile(Position(
-										pTarget_voxel.x / 16,
-										pTarget_voxel.y / 16,
-										pTarget_voxel.z / 24)); */
-		//Log(LOG_INFO) << ". targetTile " << tile->getPosition() << " targetVoxel " << pTarget_voxel;
-
+		Position targetPos_tile = Position(
+									targetPos_voxel.x / 16,
+									targetPos_voxel.y / 16,
+									targetPos_voxel.z / 24);
+		Tile* tile = _battleSave->getTile(targetPos_tile);
+		//Log(LOG_INFO) << ". targetTile " << tile->getPosition() << " targetVoxel " << targetPos_voxel;
 		if (tile == NULL)
 		{
-			//Log(LOG_INFO) << ". Position& pTarget_voxel : NOT Valid, return NULL";
-//			_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
-
+			//Log(LOG_INFO) << ". Position& targetPos_voxel : NOT Valid, return NULL";
 			return NULL;
 		}
 
-		BattleUnit* buTarget = NULL;
-		if (tile->getUnit())
-		{
-			buTarget = tile->getUnit();
-			//Log(LOG_INFO) << ". . buTarget Valid ID = " << buTarget->getId();
-		}
+		BattleUnit* targetUnit = NULL;
 
-		// This is returning part < 4 when using a stunRod against a unit outside the north (or east) UFO wall. ERROR!!!
-		// later: Now it's returning VOXEL_EMPTY (-1) when a silicoid attacks a poor civvie!!!!! And on acid-spits!!!
-//kL	int const part = voxelCheck(pTarget_voxel, attacker);
-		// kL_note: for melee==TRUE, just put part=VOXEL_UNIT here. Like,
-		// and take out the 'melee' parameter from voxelCheck() unless
-		// I want to flesh-out melee & psi attacks more than they are.
-		int part = VOXEL_UNIT; // kL, no longer const
+		int part = VOXEL_UNIT;
 		if (melee == false) // kL
 		{
 			part = voxelCheck(
-							pTarget_voxel,
+							targetPos_voxel,
 							attacker,
 							false,
 							false,
@@ -1824,22 +1806,20 @@ BattleUnit* TileEngine::hit(
 			&& type != DT_SMOKE)
 		{
 			//Log(LOG_INFO) << ". . terrain hit";
-//kL		const int randPower = RNG::generate(power / 4, power * 3 / 4); // RNG::boxMuller(power, power/6)
-			power = RNG::generate( // 25% to 75%
+			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
+			power = RNG::generate( // 25% to 75% linear.
 								power / 4,
 								power * 3 / 4);
 			//Log(LOG_INFO) << ". . RNG::generate(power) = " << power;
 
 			if (part == VOXEL_OBJECT
+				&& tile->getMapData(VOXEL_OBJECT)->isBaseModule()
+				&& power >= tile->getMapData(MapData::O_OBJECT)->getArmor()
 				&& _battleSave->getMissionType() == "STR_BASE_DEFENSE")
 			{
-				if (power >= tile->getMapData(MapData::O_OBJECT)->getArmor()
-					&& tile->getMapData(VOXEL_OBJECT)->isBaseModule())
-				{
-					_battleSave->getModuleMap()
-										[(pTarget_voxel.x / 16) / 10]
-										[(pTarget_voxel.y / 16) / 10].second--;
-				}
+				_battleSave->getModuleMap()
+									[(targetPos_voxel.x / 16) / 10]
+									[(targetPos_voxel.y / 16) / 10].second--;
 			}
 
 			// kL_note: This may be necessary only on aLienBase missions...
@@ -1849,76 +1829,64 @@ BattleUnit* TileEngine::hit(
 			{
 				_battleSave->setObjectiveDestroyed(true);
 			}
-
-			// kL_note: This would be where to adjust damage based on effectiveness of weapon vs Terrain!
 		}
 		else if (part == VOXEL_UNIT) // battleunit part
 		{
 			//Log(LOG_INFO) << ". . battleunit hit";
-
 			// power 0 - 200% -> 1 - 200%
-//kL		const int randPower = RNG::generate(1, power * 2); // RNG::boxMuller(power, power / 3)
-
 			int vertOffset = 0;
 
-			if (buTarget == NULL)
+			if (tile->getUnit())
 			{
-				//Log(LOG_INFO) << ". . . buTarget NOT Valid, check tileBelow";
+				targetUnit = tile->getUnit();
+				//Log(LOG_INFO) << ". . targetUnit Valid ID = " << targetUnit->getId();
+			}
 
+			if (targetUnit == NULL)
+			{
+				//Log(LOG_INFO) << ". . . targetUnit NOT Valid, check belowTile";
 				// it's possible we have a unit below the actual tile, when he
 				// stands on a stairs and sticks his head up into the above tile.
 				// kL_note: yeah, just like in LoS calculations!!!! cf. visible() etc etc .. idiots.
-				Tile* tileBelow = _battleSave->getTile(pTarget_tile + Position(0, 0,-1));
-/*				Tile* tileBelow = _battleSave->getTile(Position(
-															pTarget_voxel.x / 16,
-															pTarget_voxel.y / 16,
-															pTarget_voxel.z / 24 - 1)); */
-				if (tileBelow
-					&& tileBelow->getUnit())
+				Tile* belowTile = _battleSave->getTile(targetPos_tile + Position(0, 0,-1));
+				if (belowTile
+					&& belowTile->getUnit())
 				{
-					buTarget = tileBelow->getUnit();
+					targetUnit = belowTile->getUnit();
 					vertOffset = 24;
 				}
 			}
 
-			if (buTarget != NULL)
+			if (targetUnit != NULL)
 			{
-				//Log(LOG_INFO) << ". . . buTarget Valid ID = " << buTarget->getId();
+				//Log(LOG_INFO) << ". . . targetUnit Valid ID = " << targetUnit->getId();
 
 				// kL_note: This section needs adjusting ...!
-//kL			const int wounds = buTarget->getFatalWounds();
+//kL			const int wounds = targetUnit->getFatalWounds();
 
-				// "adjustedDamage = buTarget->damage(relative, rndPower, type);" -> GOES HERE
+				// "adjustedDamage = targetUnit->damage(relative, rndPower, type);" -> GOES HERE
 
 				// if targetUnit is going to bleed to death and is not a player, give credit for the kill.
 				// kL_note: not just if not a player; Give Credit!!!
 				// NOTE: Move this code-chunk below(s).
 //kL				if (unit
-//kL				&& buTarget->getFaction() != FACTION_PLAYER
-//					&& buTarget->getOriginalFaction() != FACTION_PLAYER // kL
-//kL				&& wounds < buTarget->getFatalWounds())
+//kL				&& targetUnit->getFaction() != FACTION_PLAYER
+//					&& targetUnit->getOriginalFaction() != FACTION_PLAYER // kL
+//kL				&& wounds < targetUnit->getFatalWounds())
 //				{
-//kL				buTarget->killedBy(unit->getFaction());
+//kL				targetUnit->killedBy(unit->getFaction());
 //				} // kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
 
-/*kL			const int size = buTarget->getArmor()->getSize() * 8;
-				const Position targetPos = (buTarget->getPosition() * Position(16, 16, 24)) // convert tilespace to voxelspace
-						+ Position(
-								size,
-								size,
-								buTarget->getFloatHeight() - tile->getTerrainLevel());
-				const Position relPos = pTarget_voxel - targetPos - Position(0, 0, vertOffset); */
-
-				const int size = buTarget->getArmor()->getSize() * 8;
+				const int size = targetUnit->getArmor()->getSize() * 8;
 				const Position
-					targetPos = buTarget->getPosition() * Position(16, 16, 24) // convert tilespace to voxelspace
-								+ Position(
+					targetPos = targetUnit->getPosition() * Position(16, 16, 24) // convert tilespace to voxelspace
+							  + Position(
 										size,
 										size,
-										buTarget->getFloatHeight() - tile->getTerrainLevel()),
-					relPos = pTarget_voxel
-							- targetPos
-							- Position(
+										targetUnit->getFloatHeight() - tile->getTerrainLevel()),
+					relPos = targetPos_voxel
+						   - targetPos
+						   - Position(
 									0,
 									0,
 									vertOffset);
@@ -1927,7 +1895,7 @@ BattleUnit* TileEngine::hit(
 //kL			if (type == DT_IN)
 				if (attacker->getSpecialAbility() == SPECAB_BURNFLOOR)
 				{
-					float modifier = buTarget->getArmor()->getDamageModifier(DT_IN);
+					float modifier = targetUnit->getArmor()->getDamageModifier(DT_IN);
 					if (modifier > 0.f)
 					{
 						// generate(4, 11)
@@ -1937,54 +1905,45 @@ BattleUnit* TileEngine::hit(
 						//Log(LOG_INFO) << ". . . . DT_IN : firePower = " << firePower;
 
 						// generate(5, 10)
-						int check = buTarget->damage(
+						int check = targetUnit->damage(
 													Position(0, 0, 0),
 													firePower,
 													DT_IN,
 													true);
-						//Log(LOG_INFO) << ". . . . DT_IN : " << buTarget->getId() << " takes " << check;
+						//Log(LOG_INFO) << ". . . . DT_IN : " << targetUnit->getId() << " takes " << check;
 
 						int burnTime = RNG::generate(
 													0,
 													static_cast<int>(Round(5.f * modifier)));
-						if (buTarget->getFire() < burnTime)
-							buTarget->setFire(burnTime); // catch fire and burn
+						if (targetUnit->getFire() < burnTime)
+							targetUnit->setFire(burnTime); // catch fire and burn
 					}
 				} // kL_end.
 
-				double range = 100.0;
+				double delta = 100.0;
 				if (type == DT_HE
 					|| Options::TFTDDamage)
 				{
-					range = 50.0;
+					delta = 50.0;
 				}
 
-				int
-					min = static_cast<int>(static_cast<double>(power) * (100.0 - range) / 100.0) + 1,
-					max = static_cast<int>(static_cast<double>(power) * (100.0 + range) / 100.0);
+				const int
+					low = static_cast<int>(static_cast<double>(power) * (100.0 - delta) / 100.0) + 1,
+					high = static_cast<int>(static_cast<double>(power) * (100.0 + delta) / 100.0);
 
-				power = (RNG::generate(min, max) // bell curve
-					   + RNG::generate(min, max))
+				power = (RNG::generate(low, high) // bell curve
+					   + RNG::generate(low, high))
 					/ 2;
 
-/*				if (type == DT_HE
-					|| Options::TFTDDamage)
-				{
-					power = RNG::generate(
-										power / 2,
-										power * 3 / 2);
-				}
-				else
-					power = RNG::generate(
-										1,
-										power * 2); */
+/*				if (type == DT_HE || Options::TFTDDamage) power = RNG::generate(power / 2, power * 3 / 2);
+				else power = RNG::generate(1, power * 2); */
 				//Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
 
-
-				const int wounds = buTarget->getFatalWounds();
-				bool ignoreArmor = type == DT_STUN			// kL. stun ignores armor... does now! UHM....
-									|| type == DT_SMOKE;	// note it still gets Vuln.modifier, but not armorReduction.
-				int adjDamage = buTarget->damage(
+				const bool ignoreArmor = type == DT_STUN	// kL. stun ignores armor... does now! UHM....
+									  || type == DT_SMOKE;	// note it still gets Vuln.modifier, but not armorReduction.
+				const int
+					wounds = targetUnit->getFatalWounds(),
+					adjDamage = targetUnit->damage(
 												relPos,
 												power,
 												type,
@@ -1992,44 +1951,42 @@ BattleUnit* TileEngine::hit(
 				//Log(LOG_INFO) << ". . . adjDamage = " << adjDamage;
 
 				if (adjDamage > 0)
-//					&& !buTarget->isOut()
+//					&& !targetUnit->isOut()
 				{
-					// kL_begin:
-					if (attacker
-						&& (wounds < buTarget->getFatalWounds()
-							|| buTarget->getHealth() == 0)) // kL .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
+					if (attacker // kL_begin:
+						&& (wounds < targetUnit->getFatalWounds()
+							|| targetUnit->getHealth() == 0)) // kL .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 					{
-						buTarget->killedBy(attacker->getFaction());
+						targetUnit->killedBy(attacker->getFaction());
 					} // kL_end.
 					// kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
 					// I mean, shouldn't that be checking that the thing actually DIES?
 					// And, prob don't have to state if killed by aLiens: probly assumed in DebriefingState.
 
-					if (buTarget->getHealth() > 0)
+					if (targetUnit->getHealth() > 0)
 					{
-						const int bravery = (110 - buTarget->getStats()->bravery) / 10;
+						const int bravery = (110 - targetUnit->getStats()->bravery) / 10;
 						if (bravery > 0)
 						{
 							int modifier = 100;
-							if (buTarget->getOriginalFaction() == FACTION_PLAYER)
+							if (targetUnit->getOriginalFaction() == FACTION_PLAYER)
 								modifier = _battleSave->getMoraleModifier();
-							else if (buTarget->getOriginalFaction() == FACTION_HOSTILE)
+							else if (targetUnit->getOriginalFaction() == FACTION_HOSTILE)
 								modifier = _battleSave->getMoraleModifier(NULL, false);
 
 							const int moraleLoss = 10 * adjDamage * bravery / modifier;
 							//Log(LOG_INFO) << ". . . . moraleLoss = " << moraleLoss;
-
-							buTarget->moraleChange(-moraleLoss);
+							targetUnit->moraleChange(-moraleLoss);
 						}
 					}
 
 					//Log(LOG_INFO) << ". . check for Cyberdisc expl.";
-					//Log(LOG_INFO) << ". . health = " << buTarget->getHealth();
-					//Log(LOG_INFO) << ". . stunLevel = " << buTarget->getStun();
-					if (buTarget->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
-						&& (buTarget->getHealth() == 0
-							|| buTarget->getStun() >= buTarget->getHealth()))
-//						&& !buTarget->isOut(false, true))	// kL. don't explode if stunned. Maybe... wrong!!!
+					//Log(LOG_INFO) << ". . health = " << targetUnit->getHealth();
+					//Log(LOG_INFO) << ". . stunLevel = " << targetUnit->getStun();
+					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
+						&& (targetUnit->getHealth() == 0
+							|| targetUnit->getStun() >= targetUnit->getHealth()))
+//						&& !targetUnit->isOut(false, true))	// kL. don't explode if stunned. Maybe... wrong!!!
 															// Cannot be STATUS_DEAD OR STATUS_UNCONSCIOUS!
 					{
 						//Log(LOG_INFO) << ". . . Cyberdisc down!!";
@@ -2042,24 +1999,24 @@ BattleUnit* TileEngine::hit(
 							// but ExplosionBState::explode() creates a hit() ! -> terrain..
 
 							Position unitPos = Position(
-//kL												buTarget->getPosition().x * 16,
-//kL												buTarget->getPosition().y * 16,
-//kL												buTarget->getPosition().z * 24);
-													buTarget->getPosition().x * 16 + 16,	// kL, cyberdisc a big unit.
-													buTarget->getPosition().y * 16 + 16,	// kL
-													buTarget->getPosition().z * 24 + 12);	// kL
+//kL												targetUnit->getPosition().x * 16,
+//kL												targetUnit->getPosition().y * 16,
+//kL												targetUnit->getPosition().z * 24);
+													targetUnit->getPosition().x * 16 + 16,	// kL, cyberdisc a big unit.
+													targetUnit->getPosition().y * 16 + 16,	// kL
+													targetUnit->getPosition().z * 24 + 12);	// kL
 
 							_battleSave->getBattleGame()->statePushNext(new ExplosionBState(
 																						_battleSave->getBattleGame(),
 																						unitPos,
 																						NULL,
-																						buTarget));
+																						targetUnit));
 						}
 					}
 				}
 
 				if (melee == false											// not melee
-					&& buTarget->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not.
+					&& targetUnit->getOriginalFaction() == FACTION_HOSTILE	// target is aLien Mc'd or not.
 					&& attacker												// shooter exists
 					&& attacker->getGeoscapeSoldier() != NULL
 					&& attacker->getFaction() == attacker->getOriginalFaction())
@@ -2082,24 +2039,19 @@ BattleUnit* TileEngine::hit(
 		//Log(LOG_INFO) << ". applyGravity()";
 		applyGravity(tile);
 		//Log(LOG_INFO) << ". calculateSunShading()";
-		calculateSunShading();								// roofs could have been destroyed
+		calculateSunShading();									// roofs could have been destroyed
 		//Log(LOG_INFO) << ". calculateTerrainLighting()";
-		calculateTerrainLighting();							// fires could have been started
+		calculateTerrainLighting();								// fires could have been started
 		//Log(LOG_INFO) << ". calculateFOV()";
-//		calculateFOV(pTarget_voxel / Position(16, 16, 24));	// walls & objects could have been ruined
-		calculateFOV(pTarget_tile);
+//		calculateFOV(targetPos_voxel / Position(16, 16, 24));	// walls & objects could have been ruined
+		calculateFOV(targetPos_tile);
 
 
-		//if (buTarget) Log(LOG_INFO) << "TileEngine::hit() EXIT, return buTarget";
+		//if (targetUnit) Log(LOG_INFO) << "TileEngine::hit() EXIT, return targetUnit";
 		//else Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[0]";
-//		_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
-
-
-		return buTarget;
+		return targetUnit;
 	}
 	//else Log(LOG_INFO) << ". DT_ = " << static_cast<int>(type);
-
-//	_battleSave->getBattleGame()->getCurrentAction()->type = BA_NONE; // kL, moved from ExplosionBState::explode() x3
 
 	//Log(LOG_INFO) << "TileEngine::hit() EXIT, return NULL[1]";
 	return NULL;

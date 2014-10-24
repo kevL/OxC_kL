@@ -5726,7 +5726,7 @@
 1413140556 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1413871355 f:\git\openxcom\src\battlescape\tileengine.h
+1414095958 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -6326,7 +6326,7 @@
 1413729704 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1413773126 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1414083484 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6771,7 +6771,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1413922856 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1414098026 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>

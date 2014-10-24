@@ -1,21 +1,36 @@
 extraSprites:
   - type: BIGOBS.PCK
+    width: 256
+    height: 384
+    subX: 32
+    subY: 48
     files:
-      0: Resources/Sprites/Units/bigobs/
+      0: Resources/Sprites/Units/bigobs/bigobs.png
   - type: FLOOROB.PCK
+    width: 256
+    height: 400
+    subX: 32
+    subY: 40
     files:
-      0: Resources/Sprites/Units/floorob/
+      0: Resources/Sprites/Units/floorob/floorob.png
+  - type: HANDOB.PCK
+    width: 512
+    height: 320
+    subX: 32
+    subY: 40
+    files:
+      0: Resources/Sprites/Units/handob/handob.png
   - type: SECTOID.PCK
     width: 512
     height: 680
     subX: 32
     subY: 40
     files:
-      0: Resources/Sprites/Units/sectoid/
+      0: Resources/Sprites/Units/sectoid/sectoid.png
   - type: CYBER.PCK
-    width: 512
-    height: 680
+    width: 256
+    height: 320
     subX: 32
     subY: 40
     files:
-      0: Resources/Sprites/Units/cybam/
+      0: Resources/Sprites/Units/cybam/cybam.png

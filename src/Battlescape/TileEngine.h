@@ -165,7 +165,7 @@ private:
 
 		/// Handles bullet/weapon hits.
 		BattleUnit* hit(
-				const Position& pTarget_voxel,
+				const Position& targetPos_voxel,
 				int power,
 				ItemDamageType type,
 				BattleUnit* attacker,
