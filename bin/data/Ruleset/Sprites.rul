@@ -110,6 +110,9 @@ extraSprites:
   - type: BASEBITS.PCK
     files:
       0: Resources/Sprites/geograph/basebits/
+  - type: INTICON.PCK
+    files:
+      0: Resources/Sprites/geograph/inticon/
   - type: CURSOR.PCK
     files:
       0: Resources/Sprites/ufograph/cursor/
@@ -122,9 +125,6 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/ufograph/icons.png
-  - type: INTICON.PCK
-    files:
-      0: Resources/Sprites/geograph/inticon/
   - type: SCANBORD
     width: 320
     height: 200
@@ -132,8 +132,12 @@ extraSprites:
     files:
       0: Resources/Sprites/ufograph/scanbord.png
   - type: SMOKE.PCK
+    width: 256
+    height: 280
+    subX: 32
+    subY: 40
     files:
-      0: Resources/Sprites/ufograph/smoke/
+      0: Resources/Sprites/ufograph/smoke/smoke.png
   - type: RANK_ROOKIE
     width: 9
     height: 7
@@ -172,7 +176,7 @@ extraSprites:
       0: Resources/Sprites/ufograph/smoke/ranks/rank_commander.png
   - type: X1.PCK
     width: 1024
-    height: 192
+    height: 256
     subX: 128
     subY: 64
     files:

@@ -972,7 +972,7 @@ items:
     weight: 5
     bigSprite: 20
     floorSprite: 20
-    hitAnimation: 8
+    hitAnimation: 24
     hitSound: 12
     power: 57
     damageType: 9
