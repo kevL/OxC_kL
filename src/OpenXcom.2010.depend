@@ -5823,7 +5823,7 @@
 1413140555 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1413825631 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1414135239 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6200,7 +6200,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1413140555 source:f:\git\openxcom\src\battlescape\camera.cpp
+1414135002 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6326,7 +6326,7 @@
 1413729704 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1414113272 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1414113796 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"Camera.h"
 	"BattlescapeState.h"
@@ -6876,7 +6876,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1413659823 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1414120307 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -9683,7 +9683,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1414011058 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1414131567 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

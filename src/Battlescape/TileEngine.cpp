@@ -1638,7 +1638,8 @@ bool TileEngine::reactionShot(
 		if (action.targeting)
 		{
 			action.TU = 0;
-			action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
+			if (action.actor->getFaction() != FACTION_HOSTILE) // kL
+				action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
 
 			_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(
 																	_battleSave->getBattleGame(),

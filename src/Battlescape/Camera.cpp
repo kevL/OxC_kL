@@ -461,7 +461,7 @@ void Camera::up()
 	if (_mapOffset.z < _mapsize_z - 1)
 	{
 		_mapOffset.z++;
-//kL		_mapOffset.y += _spriteHeight * 3 / 5;
+//kL	_mapOffset.y += _spriteHeight * 3 / 5;
 		_mapOffset.y += (_spriteHeight / 2) + 4; // kL
 
 		_map->draw();
@@ -476,7 +476,7 @@ void Camera::down()
 	if (_mapOffset.z > 0)
 	{
 		_mapOffset.z--;
-//kL		_mapOffset.y -= _spriteHeight * 3 / 5;
+//kL	_mapOffset.y -= _spriteHeight * 3 / 5;
 		_mapOffset.y -= (_spriteHeight / 2) + 4; // kL
 
 		_map->draw();
@@ -704,9 +704,9 @@ bool Camera::isOnScreen(
 	screenPos.y += _mapOffset.y;
 
 	return screenPos.x > -8 // kL_etc:
-			&& screenPos.x < _screenWidth
-			&& screenPos.y > -12
-			&& screenPos.y < _screenHeight - 72; // <- icons.
+		&& screenPos.x < _screenWidth
+		&& screenPos.y > -12
+		&& screenPos.y < _screenHeight - 72; // <- icons.
 /*kL
 	if (unitWalking)
 	{
@@ -736,7 +736,7 @@ void Camera::resize()
 }
 
 /**
- *
+ * Stops the mouse scrolling.
  */
 void Camera::stopMouseScrolling()
 {

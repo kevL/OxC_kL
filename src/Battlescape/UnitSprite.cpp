@@ -420,8 +420,9 @@ void UnitSprite::drawRoutine0()
 		}
 	}
 
-	bool isWalking = _unit->getStatus() == STATUS_WALKING;
-	bool isKneeled = _unit->isKneeled();
+	const bool
+		isWalking = _unit->getStatus() == STATUS_WALKING,
+		isKneeled = _unit->isKneeled();
 
 	if (isWalking) // when walking, torso(fixed sprite) has to be animated up/down
 	{
@@ -641,10 +642,11 @@ void UnitSprite::drawRoutine0()
 		itemB->setY(itemB->getY() + (22 - _unit->getStandHeight()));
 	}
 
-	Surface* newTorso		= new Surface(*torso);
-	Surface* newLegs		= new Surface(*legs);
-	Surface* newLeftArm		= new Surface(*leftArm);
-	Surface* newRightArm	= new Surface(*rightArm);
+	Surface
+		* newTorso		= new Surface(*torso),
+		* newLegs		= new Surface(*legs),
+		* newLeftArm	= new Surface(*leftArm),
+		* newRightArm	= new Surface(*rightArm);
 
 	if (_unit->getGeoscapeSoldier()
 		&& Options::battleHairBleach
@@ -1361,12 +1363,12 @@ void UnitSprite::drawRoutine6()
 		return; // unit is drawn as an item
 
 	Surface
-			* torso		= NULL,
-			* legs		= NULL,
-			* leftArm	= NULL,
-			* rightArm	= NULL,
-			* itemA		= NULL,
-			* itemB		= NULL;
+		* torso		= NULL,
+		* legs		= NULL,
+		* leftArm	= NULL,
+		* rightArm	= NULL,
+		* itemA		= NULL,
+		* itemB		= NULL;
 
 	// magic numbers
 	const int
@@ -1432,9 +1434,7 @@ void UnitSprite::drawRoutine6()
 		leftArm->setX(xoffWalk);
 	}
 	else
-	{
 		legs = _unitSurface->getFrame(legsStand + _unit->getDirection());
-	}
 
 	sortRifles();
 
@@ -1455,10 +1455,8 @@ void UnitSprite::drawRoutine6()
 			itemA->setX(0);
 			itemA->setY(0);
 
-			if (!_itemA->getRules()->isTwoHanded())
-			{
+			if (_itemA->getRules()->isTwoHanded() == false)
 				itemA->setY(yoffStand[unitDir]);
-			}
 		}
 
 		// draw arms holding the item
@@ -1466,18 +1464,12 @@ void UnitSprite::drawRoutine6()
 		{
 			leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
 			if (_unit->getStatus() == STATUS_AIMING)
-			{
 				rightArm = _unitSurface->getFrame(rarmShoot + _unit->getDirection());
-			}
 			else
-			{
 				rightArm = _unitSurface->getFrame(rarm2H + _unit->getDirection());
-			}
 		}
 		else
-		{
 			rightArm = _unitSurface->getFrame(rarm1H + _unit->getDirection());
-		}
 
 		// the fixed arm(s) have to be animated up/down when walking
 		if (_unit->getStatus() == STATUS_WALKING)
@@ -1493,7 +1485,7 @@ void UnitSprite::drawRoutine6()
 	{
 		leftArm = _unitSurface->getFrame(larm2H + _unit->getDirection());
 		itemB = _itemSurfaceB->getFrame(_itemB->getRules()->getHandSprite() + _unit->getDirection());
-		if (!_itemB->getRules()->isTwoHanded())
+		if (_itemB->getRules()->isTwoHanded() == false)
 		{
 			itemB->setX(offX2[_unit->getDirection()]);
 			itemB->setY(offY2[_unit->getDirection()]);
@@ -1503,10 +1495,8 @@ void UnitSprite::drawRoutine6()
 			itemB->setX(0);
 			itemB->setY(0);
 
-			if (!_itemB->getRules()->isTwoHanded())
-			{
+			if (_itemB->getRules()->isTwoHanded() == false)
 				itemB->setY(yoffStand[unitDir]);
-			}
 
 			rightArm = _unitSurface->getFrame(rarm2H + unitDir);
 		}

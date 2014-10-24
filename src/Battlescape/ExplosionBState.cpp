@@ -240,7 +240,7 @@ void ExplosionBState::init()
 				}
 
 				Explosion* explosion = new Explosion( // animation
-												pos + Position(11, 11, 0), // jogg the anim down a few pixels. Tks.
+												pos + Position(12, 12, 0), // jogg the anim down a few pixels. Tks.
 												frameStart,
 												frameDelay,
 												true);

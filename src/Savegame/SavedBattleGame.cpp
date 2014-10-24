@@ -2182,8 +2182,8 @@ bool SavedBattleGame::placeUnitNearPosition(
 bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::addFallingUnit() ID = " << unit->getId();
-
 	bool add = true;
+
 	for (std::list<BattleUnit*>::iterator
 			i = _fallingUnits.begin();
 			i != _fallingUnits.end();
@@ -2195,7 +2195,7 @@ bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 			break;
 	}
 
-	if (add)
+	if (add == true)
 	{
 		_fallingUnits.push_front(unit);
 		_unitsFalling = true;
@@ -2206,7 +2206,7 @@ bool SavedBattleGame::addFallingUnit(BattleUnit* unit)
 
 /**
  * Gets all units in the battlescape that are falling.
- * @return The falling units in the battlescape.
+ * @return, pointer to the list of pointers to the falling BattleUnits
  */
 std::list<BattleUnit*>* SavedBattleGame::getFallingUnits()
 {
@@ -2215,7 +2215,7 @@ std::list<BattleUnit*>* SavedBattleGame::getFallingUnits()
 
 /**
  * Toggles the switch that says "there are units falling, start the fall state".
- * @param fall, True if there are any units falling in the battlescape.
+ * @param fall, true if there are any units falling in the battlescap
  */
 void SavedBattleGame::setUnitsFalling(bool fall)
 {
@@ -2224,7 +2224,7 @@ void SavedBattleGame::setUnitsFalling(bool fall)
 
 /**
  * Returns whether there are any units falling in the battlescape.
- * @return, True if there are any units falling in the battlescape.
+ * @return, true if there are any units falling in the battlescape
  */
 bool SavedBattleGame::getUnitsFalling() const
 {
@@ -2233,7 +2233,7 @@ bool SavedBattleGame::getUnitsFalling() const
 
 /**
  * Gets the highest ranked, living, non Mc'd unit of faction.
- * @param isXCOM - true if examining Faction_Player, false for Faction_Hostile
+ * @param isXCOM - true if examining Faction_Player, false for Faction_Hostile (default true)
  * @return, pointer to highest ranked BattleUnit of faction
  */
 BattleUnit* SavedBattleGame::getHighestRanked(bool isXCOM)
@@ -2242,34 +2242,34 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool isXCOM)
 	BattleUnit* leader = NULL;
 
 	for (std::vector<BattleUnit*>::iterator
-			bu = _units.begin();
-			bu != _units.end();
-			++bu)
+			i = _units.begin();
+			i != _units.end();
+			++i)
 	{
-		if (*bu
-			&& (*bu)->isOut(true, true) == false)
+		if (*i
+			&& (*i)->isOut(true, true) == false)
 		{
-			if (isXCOM)
+			if (isXCOM == true)
 			{
 				//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is Xcom";
-				if ((*bu)->getOriginalFaction() == FACTION_PLAYER
-					&& (*bu)->getFaction() == FACTION_PLAYER)
+				if ((*i)->getOriginalFaction() == FACTION_PLAYER
+					&& (*i)->getFaction() == FACTION_PLAYER)
 				{
 					if (leader == NULL
-						|| (*bu)->getRankInt() > leader->getRankInt())
+						|| (*i)->getRankInt() > leader->getRankInt())
 					{
-						leader = *bu;
+						leader = *i;
 					}
 				}
 			}
-			else if ((*bu)->getOriginalFaction() == FACTION_HOSTILE
-				&& (*bu)->getFaction() == FACTION_HOSTILE)
+			else if ((*i)->getOriginalFaction() == FACTION_HOSTILE
+				&& (*i)->getFaction() == FACTION_HOSTILE)
 			{
 				//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is aLien";
 				if (leader == NULL
-					|| (*bu)->getRankInt() < leader->getRankInt())
+					|| (*i)->getRankInt() < leader->getRankInt())
 				{
-					leader = *bu;
+					leader = *i;
 				}
 			}
 		}
@@ -2277,16 +2277,15 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool isXCOM)
 
 	//if (leader) Log(LOG_INFO) << ". leaderID = " << leader->getId();
 	//else Log(LOG_INFO) << ". leaderID = 0";
-
 	return leader;
 }
 
 /**
  * Gets a morale modifier.
- * Either a bonus based on the highest ranked living unit of the faction
- * or a penalty for a deceased unit.
- * @param unit		- pointer to unit deceased; higher rank gives higher penalty
- * @param isXCOM	- if no unit is passed in this determines whether bonus applies to xCom or aLiens
+ * Either a bonus/penalty for faction based on the highest ranked living unit of the faction
+ * or a penalty for a single deceased BattleUnit.
+ * @param unit		- pointer to BattleUnit deceased; higher rank is higher penalty (default NULL)
+ * @param isXCOM	- if no unit is passed in this determines whether penalty applies to xCom or aLiens (default true)
  * @return, morale modifier
  */
 int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia & Final Assault.
@@ -2294,31 +2293,67 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 		bool isXCOM)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier()";
+	if (unit != NULL
+		&& unit->getOriginalFaction() == FACTION_NEUTRAL)
+	{
+		return 100;
+	}
+
 	int ret = 100;
 
-	bool isMars = false;
-
-	int missionFactor = 0;
-	if (_missionType == "STR_TERROR_MISSION"
-		|| _missionType == "STR_ALIEN_BASE_ASSAULT"
-		|| _missionType == "STR_BASE_DEFENSE")
+	if (unit != NULL) // morale Loss when 'unit' slain
 	{
-		missionFactor = 1;
-	}
-	else if (_missionType == "STR_MARS_CYDONIA_LANDING"
-		|| _missionType == "STR_MARS_THE_FINAL_ASSAULT")
-	{
-		missionFactor = 2;
-		isMars = true;
-	}
+		//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), unit slain Penalty";
+		if (unit->getOriginalFaction() == FACTION_PLAYER) // xCom dies. MC'd or not
+		{
+			switch (unit->getRankInt())
+			{
+				case 5:			// commander
+					ret += 30;	// 200
+				case 4:			// colonel
+					ret += 25;	// 170
+				case 3:			// captain
+					ret += 20;	// 145
+				case 2:			// sergeant
+					ret += 10;	// 125
+				case 1:			// squaddie
+					ret += 15;	// 115
+			}
+			//Log(LOG_INFO) << ". . xCom lossModifi = " << ret;
+		}
+		else if (unit->getFaction() == FACTION_HOSTILE) // aLien dies. MC'd aliens return 100, or 50 on Mars
+		{
+			switch (unit->getRankInt()) // soldiers are rank #5, terrorists are ranks #6 and #7
+			{
+				case 0:			// commander
+					ret += 30;	// 200
+				case 1:			// leader
+					ret += 25;	// 170
+				case 2:			// engineer
+					ret += 20;	// 145
+				case 3:			// medic
+					ret += 10;	// 125
+				case 4:			// navigator
+					ret += 15;	// 115
+			}
 
-	if (unit == NULL) // leadership Bonus
+			if (_missionType == "STR_MARS_CYDONIA_LANDING"
+				|| _missionType == "STR_MARS_THE_FINAL_ASSAULT")
+			{
+				ret /= 2; // less hit for losing a unit on Cydonia.
+			}
+			//Log(LOG_INFO) << ". . aLien lossModifi = " << ret;
+		}
+	}
+	else // leadership Bonus
 	{
 		//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), leadership Bonus";
-		if (isXCOM)
+		BattleUnit* leader = NULL;
+
+		if (isXCOM == true)
 		{
-			BattleUnit* leader = getHighestRanked();
-			if (leader)
+			leader = getHighestRanked();
+			if (leader != NULL)
 			{
 				switch (leader->getRankInt())
 				{
@@ -2334,20 +2369,16 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 						ret += 15;	// 100
 					case 0:			// rookies...
 						ret -= 15;	// 85
-
-					default:
-					break;
 				}
 			}
-
 			//Log(LOG_INFO) << ". . xCom leaderModifi = " << ret;
 		}
 		else // aLien
 		{
-			BattleUnit* leader = getHighestRanked(false);
-			if (leader)
+			leader = getHighestRanked(false);
+			if (leader != NULL)
 			{
-				switch (leader->getRankInt())
+				switch (leader->getRankInt()) // terrorists are ranks #6 and #7
 				{
 					case 0:			// commander
 						ret += 25;	// 150
@@ -2361,69 +2392,21 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 						ret += 10;	// 100
 					case 5:			// soldiers...
 						ret -= 10;	// 90
-
-					// kL_note: terrorists are ranks #6 and #7
-
-					default:
-					break;
 				}
 			}
 
-			ret += missionFactor * 50; // higher morale.
-
+			if (_missionType == "STR_TERROR_MISSION"
+				|| _missionType == "STR_ALIEN_BASE_ASSAULT"
+				|| _missionType == "STR_BASE_DEFENSE")
+			{
+				ret += 50; // higher morale.
+			}
+			else if (_missionType == "STR_MARS_CYDONIA_LANDING"
+						|| _missionType == "STR_MARS_THE_FINAL_ASSAULT")
+			{
+				ret += 100; // higher morale.
+			}
 			//Log(LOG_INFO) << ". . aLien leaderModifi = " << ret;
-		}
-	}
-	else // morale Loss when 'unit' slain
-	{
-		//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), unit slain Penalty";
-		if (unit->getOriginalFaction() == FACTION_PLAYER) // xCom dies. (mind controlled or not)
-		{
-			switch (unit->getRankInt())
-			{
-				case 5:			// commander
-					ret += 30;	// 200
-				case 4:			// colonel
-					ret += 25;	// 170
-				case 3:			// captain
-					ret += 20;	// 145
-				case 2:			// sergeant
-					ret += 10;	// 125
-				case 1:			// squaddie
-					ret += 15;	// 115
-
-				default:
-				break;
-			}
-
-			//Log(LOG_INFO) << ". . xCom lossModifi = " << ret;
-		}
-		else if (unit->getFaction() == FACTION_HOSTILE) // aLien dies.
-		{
-			switch (unit->getRankInt())
-			{
-				case 0:			// commander
-					ret += 30;	// 200
-				case 1:			// leader
-					ret += 25;	// 170
-				case 2:			// engineer
-					ret += 20;	// 145
-				case 3:			// medic
-					ret += 10;	// 125
-				case 4:			// navigator
-					ret += 15;	// 115
-
-				// note: soldiers are rank #5, terrorists are ranks #6 and #7
-
-				default:
-				break;
-			}
-			// else if a mind-controlled alien dies nobody cares.
-
-			if (isMars) // less hit for losing a leader on Cydonia.
-				ret /= 2;
-
-			//Log(LOG_INFO) << ". . aLien lossModifi = " << ret;
 		}
 	}
 
