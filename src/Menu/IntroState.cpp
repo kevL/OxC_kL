@@ -461,15 +461,13 @@ void IntroState::init()
 #ifndef __NO_MUSIC
 		// fade out!
 		Mix_FadeOutChannel(-1, 45 * 20);
-		if (Mix_GetMusicType(0) != MUS_MID)
+		if (Mix_GetMusicType(NULL) != MUS_MID)
 		{
 			Mix_FadeOutMusic(45 * 20);
 			func_fade();
-		} // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
-		else
-		{
-			Mix_HaltMusic();
 		}
+		else // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
+			Mix_HaltMusic();
 #endif
 
 		SDL_Color pal[256];

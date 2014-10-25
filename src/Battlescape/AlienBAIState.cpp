@@ -1939,7 +1939,6 @@ bool AlienBAIState::explosiveEfficacy(
 			effect -= 15;
 	}
 
-	// don't want to ruin our own base, but do ruin xCom's day
 	if (_save->getMissionType() == "STR_ALIEN_BASE_ASSAULT")
 		effect -= 25;
 	else if (_save->getMissionType() == "STR_BASE_DEFENSE"
@@ -1963,8 +1962,8 @@ bool AlienBAIState::explosiveEfficacy(
 			&& *i != attacker
 			&& abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight
 			&& _save->getTileEngine()->distance(
-											(*i)->getPosition(),
-											targetPos) <= radius)
+											targetPos,
+											(*i)->getPosition()) <= radius)
 		{
 			if (((*i)->getTile()
 					&& (*i)->getTile()->getDangerous())		// don't count people who were already grenaded this turn

@@ -1319,7 +1319,8 @@ void SavedBattleGame::resetUnitTiles()
 }
 
 /**
- * Gives access to the storageSpace vector, for distribution of items in base defense missions.
+ * Gives access to the storageSpace vector
+ * for distribution of items in base defense missions.
  * @return, reference a vector of storage positions
  */
 std::vector<Position>& SavedBattleGame::getStorageSpace()
@@ -1328,54 +1329,45 @@ std::vector<Position>& SavedBattleGame::getStorageSpace()
 }
 
 /**
- * Move all the leftover items in base defense missions to random locations in the storage facilities.
+ * Move all the leftover items in base defense missions
+ * to random locations in the storage facilities.
  * @param tile - pointer to a tile where all the goodies are initially stored
  */
 void SavedBattleGame::randomizeItemLocations(Tile* tile)
 {
-	//Log(LOG_INFO) << "SavedBattleGame::randomizeItemLocations()";
 	if (_storageSpace.empty() == false)
 	{
-		//Log(LOG_INFO) << ". storageSpace NOT empty";
 		for (std::vector<BattleItem*>::iterator
 				i = tile->getInventory()->begin();
 				i != tile->getInventory()->end();
 				)
 		{
-			//Log(LOG_INFO) << ". . iterate battleItems";
 			if ((*i)->getSlot()->getId() == "STR_GROUND")
 			{
-				//Log(LOG_INFO) << ". . . slot = GROUND";
 				getTile(_storageSpace.at(RNG::generate(
 													0,
-													_storageSpace.size() - 1)))
-												->addItem(
-														*i,
-														(*i)->getSlot());
+													_storageSpace.size() - 1)))->addItem(
+																					*i,
+																					(*i)->getSlot());
 
 				i = tile->getInventory()->erase(i);
 			}
 			else
-			{
-				//Log(LOG_INFO) << ". . . slot Not GROUND";
 				++i;
-			}
 		}
 	}
 }
 
 /**
- * Removes an item from the game; when ammo item is depleted for example.
- * @param item - an item to remove
+ * Removes an item from the game - when ammo item is depleted for example.
+ * Due to strange design the item has to be removed
+ * from the tile it is on too if it is on a tile.
+ * @param item - item to remove
  */
 void SavedBattleGame::removeItem(BattleItem* item)
 {
-	//Log(LOG_INFO) << "SavedBattleGame::removeItem()";
-
-	// due to strange design, the item has to be removed from the tile it is on too (if it is on a tile)
-	BattleUnit* bu = item->getOwner();
 	Tile* tile = item->getTile();
-	if (tile)
+	if (tile != NULL)
 	{
 		for (std::vector<BattleItem*>::iterator
 				i = tile->getInventory()->begin();
@@ -1390,7 +1382,8 @@ void SavedBattleGame::removeItem(BattleItem* item)
 		}
 	}
 
-	if (bu)
+	BattleUnit* bu = item->getOwner();
+	if (bu != NULL)
 	{
 		for (std::vector<BattleItem*>::iterator
 				i = bu->getInventory()->begin();
@@ -1413,8 +1406,6 @@ void SavedBattleGame::removeItem(BattleItem* item)
 		if (*i == item)
 		{
 			_items.erase(i);
-
-			//Log(LOG_INFO) << "SavedBattleGame::removeItem() EXIT[0]";
 			return;
 		}
 	}
@@ -1433,7 +1424,6 @@ void SavedBattleGame::removeItem(BattleItem* item)
 			++it;
 		}
 	} */
-	//Log(LOG_INFO) << "SavedBattleGame::removeItem() EXIT[1]";
 }
 
 /**
@@ -1972,14 +1962,13 @@ void SavedBattleGame::reviveUnconsciousUnits()
 void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 {
 	for (std::vector<BattleItem*>::iterator
-			corpse = getItems()->begin();
-			corpse != getItems()->end();
-			++corpse)
+			i = getItems()->begin();
+			i != getItems()->end();
+			++i)
 	{
-		if ((*corpse)->getUnit() == bu)
+		if ((*i)->getUnit() == bu)
 		{
-			removeItem(*corpse);
-
+			removeItem(*i);
 			return;
 		}
 	}

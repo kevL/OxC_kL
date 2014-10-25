@@ -169,8 +169,9 @@ BattlescapeState::BattlescapeState()
 	_numDir		= new NumberText(3, 5, x + 150, y + 6);
 	_numDirTur	= new NumberText(3, 5, x + 167, y + 6);
 
-	_rank		= new Surface(26, 23, x + 107, y + 33);
 	_kneel		= new Surface( 2,  2, x + 115, y + 19);
+	_rank		= new Surface(26, 23, x + 107, y + 33);
+	_weight		= new Surface( 2,  2, x + 108, y + 34);
 
 	_btnWounds	= new InteractiveSurface(14, 14, x + 5, y - 17);
 	_numWounds	= new NumberText(9, 9, x, y - 12); // X gets adjusted in updateSoldierInfo()
@@ -189,18 +190,19 @@ BattlescapeState::BattlescapeState()
 	_btnOptions			= new BattlescapeButton(32,  16, x + 208, y + 16);
 	_btnEndTurn			= new BattlescapeButton(32,  16, x + 240, y);
 	_btnAbort			= new BattlescapeButton(32,  16, x + 240, y + 16);
-	_btnStats			= new InteractiveSurface(164, 23, x + 107, y + 33);
+
 /*	_btnReserveNone		= new BattlescapeButton(17, 11, x + 60, y + 33);
 	_btnReserveSnap		= new BattlescapeButton(17, 11, x + 78, y + 33);
 	_btnReserveAimed	= new BattlescapeButton(17, 11, x + 60, y + 45);
 	_btnReserveAuto		= new BattlescapeButton(17, 11, x + 78, y + 45);
 	_btnReserveKneel	= new BattlescapeButton(10, 23, x + 96, y + 33);
 	_btnZeroTUs			= new BattlescapeButton(10, 23, x + 49, y + 33); */
-	_btnZeroTUs			= new InteractiveSurface(57, 23,x + 49, y + 33);
+	_btnStats			= new InteractiveSurface(164, 23, x + 107, y + 33);
+	_btnZeroTUs			= new InteractiveSurface( 57, 23, x +  49, y + 33);
 
-	_btnLeftHandItem	= new InteractiveSurface(32, 48, x + 8, y + 5);
+	_btnLeftHandItem	= new InteractiveSurface(32, 48, x +   8, y + 5);
 	_btnRightHandItem	= new InteractiveSurface(32, 48, x + 280, y + 5);
-	_numAmmoLeft		= new NumberText(30, 5, x + 8, y + 4);
+	_numAmmoLeft		= new NumberText(30, 5, x +   8, y + 4);
 	_numAmmoRight		= new NumberText(30, 5, x + 280, y + 4);
 
 	const int
@@ -355,6 +357,7 @@ BattlescapeState::BattlescapeState()
 	add(_numDir);
 	add(_numDirTur);
 	add(_kneel); // this has to go overtop _btns.
+	add(_weight); // this has to go overtop _btns.
 	add(_txtName, "textName", "battlescape", _icons);
 	add(_numTULaunch);
 	add(_numTUAim);
@@ -488,7 +491,15 @@ BattlescapeState::BattlescapeState()
 	_numDirTur->setValue(0);
 
 	_rank->setVisible(false);
+
+	_kneel->drawRect(0, 0, 2, 2, Palette::blockOffset(5)+12);
 	_kneel->setVisible(false);
+
+	Surface* srfOverload = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(97); // 274, brown dot 2px; 97, red sq 3px
+	srfOverload->setX(-1);
+	srfOverload->setY(-1);
+	srfOverload->blit(_weight);
+	_weight->setVisible(false);
 
 	_btnWounds->setVisible(false);
 	_btnWounds->onMouseClick((ActionHandler)& BattlescapeState::btnWoundedClick);
@@ -1644,7 +1655,7 @@ void BattlescapeState::btnKneelClick(Action*)
 	if (allowButtons() == true)
 	{
 		BattleUnit* bu = _save->getSelectedUnit();
-		if (bu)
+		if (bu != NULL)
 		{
 			//Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
 			if (_battleGame->kneel(bu))
@@ -1703,7 +1714,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 //		&& (unit->getOriginalFaction() == FACTION_PLAYER
 //			|| unit->getRankString() != "STR_LIVE_TERRORIST"))
 
-	if (playableUnitSelected())
+	if (playableUnitSelected() == true)
 	{
 		const BattleUnit* const unit = _save->getSelectedUnit();
 
@@ -1783,7 +1794,7 @@ void BattlescapeState::btnPrevSoldierClick(Action*)
  */
 void BattlescapeState::btnPrevStopClick(Action*)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 	{
 		selectPreviousFactionUnit(true, true);
 		_map->refreshSelectorPosition();
@@ -1801,7 +1812,7 @@ void BattlescapeState::selectNextFactionUnit(
 		bool setDontReselect,
 		bool checkInventory)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
@@ -1832,7 +1843,7 @@ void BattlescapeState::selectPreviousFactionUnit(
 		bool setDontReselect,
 		bool checkInventory)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 	{
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
@@ -1878,7 +1889,7 @@ void BattlescapeState::btnHelpClick(Action*)
 void BattlescapeState::btnEndTurnClick(Action*)
 {
 	//Log(LOG_INFO) << "BattlescapeState::btnEndTurnClick()";
-	if (allowButtons())
+	if (allowButtons() == true)
 	{
 //		_txtTooltip->setText(L"");
 		_battleGame->requestEndTurn();
@@ -1892,7 +1903,7 @@ void BattlescapeState::btnEndTurnClick(Action*)
  */
 void BattlescapeState::btnAbortClick(Action*)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 	{
 		//Log(LOG_INFO) << "BattlescapeState::btnAbortClick()";
 		_game->pushState(new AbortMissionState(
@@ -1908,7 +1919,7 @@ void BattlescapeState::btnAbortClick(Action*)
  */
 void BattlescapeState::btnStatsClick(Action* action)
 {
-	if (playableUnitSelected())
+	if (playableUnitSelected() == true)
 	{
 		bool edge = false;
 
@@ -1957,7 +1968,7 @@ void BattlescapeState::btnStatsClick(Action* action)
  */
 void BattlescapeState::btnLeftHandLeftClick(Action*)
 {
-	if (playableUnitSelected())
+	if (playableUnitSelected() == true)
 	{
 		// concession for touch devices:
 		// click on the item to cancel action, and don't pop up a menu to select a new one
@@ -1985,7 +1996,7 @@ void BattlescapeState::btnLeftHandLeftClick(Action*)
  */
 void BattlescapeState::btnLeftHandRightClick(Action*)
 {
-	if (playableUnitSelected())
+	if (playableUnitSelected() == true)
 	{
 		_battleGame->cancelCurrentAction(true);
 
@@ -2003,7 +2014,7 @@ void BattlescapeState::btnLeftHandRightClick(Action*)
  */
 void BattlescapeState::btnRightHandLeftClick(Action*)
 {
-	if (playableUnitSelected())
+	if (playableUnitSelected() == true)
 	{
 		// concession for touch devices:
 		// click on the item to cancel action, and don't pop up a menu to select a new one
@@ -2031,7 +2042,7 @@ void BattlescapeState::btnRightHandLeftClick(Action*)
  */
 void BattlescapeState::btnRightHandRightClick(Action*)
 {
-	if (playableUnitSelected())
+	if (playableUnitSelected() == true)
 	{
 		_battleGame->cancelCurrentAction(true);
 
@@ -2073,7 +2084,7 @@ void BattlescapeState::btnVisibleUnitClick(Action* action)
  */
 void BattlescapeState::btnWoundedClick(Action* action)
 {
-	if (playableUnitSelected())
+	if (playableUnitSelected() == true)
 		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
@@ -2160,8 +2171,8 @@ void BattlescapeState::btnPsiClick(Action* action)
  */
 void BattlescapeState::btnReloadClick(Action*)
 {
-	if (playableUnitSelected()
-		&& _save->getSelectedUnit()->checkAmmo())
+	if (playableUnitSelected() == true
+		&& _save->getSelectedUnit()->checkAmmo() == true)
 	{
 		_game->getResourcePack()->getSoundByDepth(
 												_save->getDepth(),
@@ -2180,7 +2191,7 @@ void BattlescapeState::btnReloadClick(Action*)
  */
 void BattlescapeState::btnZeroTUsClick(Action* action)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 	{
 		SDL_Event ev;
 		ev.type = SDL_MOUSEBUTTONDOWN;
@@ -2189,10 +2200,9 @@ void BattlescapeState::btnZeroTUsClick(Action* action)
 		Action a = Action(&ev, 0.0, 0.0, 0, 0);
 		action->getSender()->mousePress(&a, this);
 
-		if (_battleGame->getSave()->getSelectedUnit())
+		if (_battleGame->getSave()->getSelectedUnit() != NULL)
 		{
 			_battleGame->getSave()->getSelectedUnit()->setTimeUnits(0);
-
 			updateSoldierInfo();
 		}
 	}
@@ -2204,7 +2214,7 @@ void BattlescapeState::btnZeroTUsClick(Action* action)
  */
 void BattlescapeState::btnPersonalLightingClick(Action*)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 		_save->getTileEngine()->togglePersonalLighting();
 }
 
@@ -2214,7 +2224,7 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
  */
 void BattlescapeState::btnConsoleToggle(Action*) // kL
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 	{
 		if (_showConsole == 0)
 		{
@@ -2313,7 +2323,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 bool BattlescapeState::playableUnitSelected()
 {
 	return _save->getSelectedUnit() != NULL
-			&& allowButtons();
+		&& allowButtons();
 }
 
 /**
@@ -2344,6 +2354,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_numAmmoLeft		->setVisible(false);
 
 	_kneel		->setVisible(false);
+	_weight		->setVisible(false);
 	_numDir		->setVisible(false);
 	_numDirTur	->setVisible(false);
 
@@ -2428,7 +2439,9 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	_txtName->setText(selectedUnit->getName(_game->getLanguage(), false));
+	_txtName->setText(selectedUnit->getName(
+										_game->getLanguage(),
+										false));
 
 //	Soldier* soldier = _game->getSavedGame()->getSoldier(selectedUnit->getId());
 	Soldier* soldier = selectedUnit->getGeoscapeSoldier();
@@ -2439,13 +2452,18 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
 		texture->getFrame(20 + soldier->getRank())->blit(_rank);
 
-		if (selectedUnit->isKneeled())
+		if (selectedUnit->isKneeled() == true)
 		{
 //			drawKneelIndicator();
-			_kneel->drawRect(0, 0, 2, 2, Palette::blockOffset(5)+12);
+//			_kneel->drawRect(0, 0, 2, 2, Palette::blockOffset(5)+12);
 			_kneel->setVisible();
 		}
 	}
+
+	const int strength = static_cast<int>(Round(
+							static_cast<double>(selectedUnit->getStats()->strength) * (selectedUnit->getAccuracyModifier() / 2.0 + 0.5)));
+	if (selectedUnit->getCarriedWeight() > strength)
+		_weight->setVisible();
 
 	_numDir->setValue(selectedUnit->getDirection());
 	_numDir->setVisible();
@@ -2473,7 +2491,6 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		{
 			//Log(LOG_INFO) << ". srtStatus is VALID";
 			srtStatus->getFrame(4)->blit(_btnWounds); // red heart icon
-
 			_btnWounds->setVisible();
 		}
 
@@ -2720,7 +2737,7 @@ void BattlescapeState::animate()
  */
 void BattlescapeState::handleItemClick(BattleItem* item)
 {
-	if (item								// make sure there is an item
+	if (item != NULL						// make sure there is an item
 		&& _battleGame->isBusy() == false)	// and the battlescape is in an idle state
 	{
 //kL	if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements())
@@ -3659,9 +3676,9 @@ void BattlescapeState::drawFuse() // kL
 
 	BattleUnit* selectedUnit = _save->getSelectedUnit();
 
-	const int pulse[8] = {0, 1, 2, 3, 4, 3, 2, 1};
+	const int pulse[22] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3};
 
-	if (_fuseFrame == 8)
+	if (_fuseFrame == 22)
 		_fuseFrame = 0;
 
 	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
@@ -3672,7 +3689,6 @@ void BattlescapeState::drawFuse() // kL
 				|| ltItem->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 			&& ltItem->getFuseTimer() > -1))
 	{
-		//Log(LOG_INFO) << "drawFuse() ltItem VALID";
 		_btnLeftHandItem->lock();
 		srf->blitNShade(
 					_btnLeftHandItem,
@@ -3680,7 +3696,7 @@ void BattlescapeState::drawFuse() // kL
 					_btnLeftHandItem->getY(),
 					pulse[_fuseFrame],
 					false,
-					Palette::blockOffset(2)+3);
+					3); // red
 		_btnLeftHandItem->unlock();
 	}
 
@@ -3697,7 +3713,7 @@ void BattlescapeState::drawFuse() // kL
 					_btnRightHandItem->getY(),
 					pulse[_fuseFrame],
 					false,
-					Palette::blockOffset(2)+3);
+					3); // red
 		_btnRightHandItem->unlock();
 	}
 
@@ -3748,8 +3764,6 @@ void BattlescapeState::updateExpData() // kL
 
 	if (unit == NULL
 		|| unit->getGeoscapeSoldier() == NULL)
-//		|| unit->getOriginalFaction() != FACTION_PLAYER
-//		|| unit->getTurretType() > -1)
 	{
 		return;
 	}

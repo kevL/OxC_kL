@@ -23,6 +23,7 @@
 #include "LoadGameState.h"
 
 #include "../Engine/Action.h"
+#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 
@@ -66,6 +67,16 @@ void ListLoadState::lstSavesPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
+#ifndef __NO_MUSIC
+		if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
+		{
+			Mix_FadeOutMusic(1200);
+			func_fade();
+		}
+		else
+			Mix_HaltMusic();
+#endif
+
 		bool confirm = false;
 
 		for (std::vector<std::string>::const_iterator
@@ -80,7 +91,6 @@ void ListLoadState::lstSavesPress(Action* action)
 					== Options::rulesets.end())
 			{
 				confirm = true;
-
 				break;
 			}
 		}

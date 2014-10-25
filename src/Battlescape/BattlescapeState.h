@@ -145,8 +145,9 @@ private:
 		_mapOffsetBeforeDragScroll;
 	SavedBattleGame* _save;
 	Surface
-		* _rank,
-		* _kneel;
+		* _weight,
+		* _kneel,
+		* _rank;
 //		* _srfWounds;
 	Text
 		* _txtBaseLabel,

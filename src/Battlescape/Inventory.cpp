@@ -84,7 +84,7 @@ Inventory::Inventory(
 		_tu(true),
 		_base(base),
 		_groundOffset(0),
-		_animFrame(0),
+		_fuseFrame(0),
 		_grenadeFuses(),	// kL
 		_primeGrenade(-1),	// kL
 		_tuCost(-1)			// kL
@@ -1435,14 +1435,11 @@ void Inventory::showWarning(const std::wstring& msg)
  */
 void Inventory::drawPrimers()
 {
-//	const int pulse[4] = {9, 10, 11, 10}; // ScanG.dat, crosshairs
-	const int pulse[8] = {0, 1, 2, 3, 4, 3, 2, 1}; // pass to shader call
+	const int pulse[22] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3};
 
-//	if (_animFrame == 4)
-	if (_animFrame == 8)
-		_animFrame = 0;
+	if (_fuseFrame == 22)
+		_fuseFrame = 0;
 
-//	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(pulse[_animFrame]);
 	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
 	for (std::vector<std::pair<int, int> >::const_iterator
 			i = _grenadeFuses.begin();
@@ -1453,13 +1450,12 @@ void Inventory::drawPrimers()
 					_items,
 					(*i).first,
 					(*i).second,
-//					0,
-					pulse[_animFrame],
-					false,						// kL
-					Palette::blockOffset(2)+3);	// kL
+					pulse[_fuseFrame],
+					false,
+					3); // red
 	}
 
-	_animFrame++;
+	_fuseFrame++;
 }
 
 /**

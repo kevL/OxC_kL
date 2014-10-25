@@ -5655,7 +5655,7 @@
 1413140555 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1413140555 f:\git\openxcom\src\battlescape\battlescapestate.h
+1414211754 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5745,7 +5745,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1413693825 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1414206073 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5969,7 +5969,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
 
-1413140555 f:\git\openxcom\src\battlescape\inventory.h
+1414214630 f:\git\openxcom\src\battlescape\inventory.h
 	<map>
 	<string>
 	"../Engine/InteractiveSurface.h"
@@ -6042,7 +6042,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1413909527 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1414214898 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6373,7 +6373,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1413652767 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1414214601 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
 	<cmath>
 	"PrimeGrenadeState.h"
@@ -6408,7 +6408,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1413878549 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1414209218 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -6445,7 +6445,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1414140787 source:f:\git\openxcom\src\battlescape\map.cpp
+1414213786 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6692,7 +6692,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1414139895 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1414211528 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -8463,7 +8463,7 @@
 	"Engine/Screen.h"
 	"Menu/StartState.h"
 
-1413140559 f:\git\openxcom\src\menu\startstate.h
+1414198614 f:\git\openxcom\src\menu\startstate.h
 	<sstream>
 	"../Engine/State.h"
 
@@ -8536,7 +8536,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1413140559 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1414211179 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	<sstream>
 	"ListLoadState.h"
@@ -8544,6 +8544,7 @@
 	"NewGameState.h"
 	"OptionsVideoState.h"
 	"../version.h"
+	"../Engine/Adlib/adlplayer.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Logger.h"
@@ -8818,7 +8819,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1413140559 source:f:\git\openxcom\src\menu\startstate.cpp
+1414198641 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"../version.h"
 	"ErrorMessageState.h"
@@ -9567,7 +9568,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1413906590 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1414208704 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9683,7 +9684,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1414131567 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1414222031 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -9793,7 +9794,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1413926489 source:f:\git\openxcom\src\savegame\tile.cpp
+1414207477 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
@@ -11655,7 +11656,7 @@
 	"../Engine/Options.h"
 	"../Engine/State.h"
 
-1413140559 source:f:\git\openxcom\src\menu\introstate.cpp
+1414184837 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	<SDL_mixer.h>
 	"MainMenuState.h"
@@ -11869,11 +11870,12 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1413140559 source:f:\git\openxcom\src\menu\listloadstate.cpp
+1414210912 source:f:\git\openxcom\src\menu\listloadstate.cpp
 	"ListLoadState.h"
 	"ConfirmLoadState.h"
 	"LoadGameState.h"
 	"../Engine/Action.h"
+	"../Engine/Adlib/adlplayer.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Interface/Text.h"

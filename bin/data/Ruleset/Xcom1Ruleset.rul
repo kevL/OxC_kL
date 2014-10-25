@@ -4536,7 +4536,7 @@ units:
     spawnUnit: STR_CHRYSSALID_TERRORIST
     livingWeapon: true
     isPsiImmune: true
-    meleeWeapon: STR_FIST
+#    meleeWeapon: STR_FIST
 alienRaces:
   - id: STR_SECTOID
     members:

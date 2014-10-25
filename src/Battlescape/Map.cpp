@@ -404,12 +404,12 @@ void Map::draw()
 		|| _unitDying
 		|| _save->getDebugMode()
 		|| _projectileInFOV
-		|| _explosionInFOV
-		|| (_reveal > 0
-			&& kL_noReveal == false))
+		|| _explosionInFOV)
+/*		|| (_reveal > 0
+			&& kL_noReveal == false)) */
 	{
 		//Log(LOG_INFO) << ". . drawTerrain()";
-		if (_reveal > 0
+/*		if (_reveal > 0
 			&& kL_noReveal == false)
 		{
 			_reveal--;
@@ -419,18 +419,26 @@ void Map::draw()
 		{
 			_reveal = 120;
 			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
-		}
+		} */
 
 //		if (_save->getSide() == FACTION_PLAYER)
 //			_save->getBattleState()->toggleIcons(true);
 
 		//Log(LOG_INFO) << ". . drawTerrain()";
+		kL_noReveal = false;
+
 		drawTerrain(this);
+
+//		if (_reveal > 0
+//			&& kL_noReveal == false)
+//		{
+//			SDL_Delay(450); // test this out ......
+//		}
 	}
 	else // "Hidden Movement ..."
 	{
 		//Log(LOG_INFO) << ". . blit( Hidden Movement ... )";
-		if (kL_noReveal)
+/*		if (kL_noReveal == true)
 //			&& _save->getSelectedUnit()
 //			&& _save->getSelectedUnit()->getVisible())
 		{
@@ -438,9 +446,15 @@ void Map::draw()
 			_reveal = 0;
 			//Log(LOG_INFO) << ". . . . . . kL_noReveal, set " << kL_noReveal;
 			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
-		}
+		} */
 
 //		_save->getBattleState()->toggleIcons(false);
+		if (kL_noReveal == false)
+		{
+			SDL_Delay(372); // test this out ......
+			kL_noReveal = true;
+		}
+
 		_hidden->blit(this);
 	}
 }
@@ -789,13 +803,7 @@ void Map::drawTerrain(Surface* surface)
 								// ... should probably be a subfunction
 								if (bu != _save->getSelectedUnit()
 									&& bu->getGeoscapeSoldier() != NULL)
-//									&& bu->getUnitRules() == NULL)
-//									&& bu->getType() == "SOLDIER")
-//									&& bu->getFaction() == FACTION_PLAYER
-//									&& bu->getTurretType() == -1) // no tanks, pls
 								{
-//									drawRankIcon = false;
-
 									Position offset;
 									calculateWalkingOffset(bu, &offset);
 
@@ -833,6 +841,20 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.x + offset.x + 2 + 16,
 													screenPosition.y + offset.y + 3 + 32,
 													0);
+										}
+
+										const int strength = static_cast<int>(Round(
+																static_cast<double>(bu->getStats()->strength) * (bu->getAccuracyModifier() / 2.0 + 0.5)));
+										if (bu->getCarriedWeight() > strength)
+										{
+											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 3 + 16,
+													screenPosition.y + offset.y + 4 + 32,
+													0,
+													false,
+													3); // 1=white, 3=red
 										}
 									}
 								}
@@ -1241,7 +1263,7 @@ void Map::drawTerrain(Surface* surface)
 
 
 					// Draw walls
-					if (!tile->isVoid())
+					if (tile->isVoid() == false)
 					{
 						// Draw west wall
 						tmpSurface = tile->getSprite(MapData::O_WESTWALL);
@@ -1373,6 +1395,20 @@ void Map::drawTerrain(Surface* surface)
 													screenPosition.x + offset.x + 2,
 													screenPosition.y + offset.y + 3 + 24,
 													0);
+										}
+
+										const int strength = static_cast<int>(Round(
+																static_cast<double>(buBelow->getStats()->strength) * (buBelow->getAccuracyModifier() / 2.0 + 0.5)));
+										if (buBelow->getCarriedWeight() > strength)
+										{
+											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
+											tmpSurface->blitNShade(
+													surface,
+													screenPosition.x + offset.x + 3,
+													screenPosition.y + offset.y + 4 + 24,
+													0,
+													false,
+													3); // 1=white, 3=red
 										}
 									}
 								}
@@ -1630,6 +1666,20 @@ void Map::drawTerrain(Surface* surface)
 														screenPosition.x + offset.x + 2,
 														screenPosition.y + offset.y + 3,
 														0);
+											}
+
+											const int strength = static_cast<int>(Round(
+																	static_cast<double>(unit->getStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
+											if (unit->getCarriedWeight() > strength)
+											{
+												tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
+												tmpSurface->blitNShade(
+														surface,
+														screenPosition.x + offset.x + 3,
+														screenPosition.y + offset.y + 4,
+														0,
+														false,
+														3); // 1=white, 3=red
 											}
 										}
 									}

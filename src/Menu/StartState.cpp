@@ -19,7 +19,7 @@
 
 #include "StartState.h"
 
-#include "../version.h" // load CTD
+#include "../version.h"
 
 #include "ErrorMessageState.h"
 #include "IntroState.h"
@@ -28,7 +28,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
-#include "../Engine/Font.h" // load CTD
+#include "../Engine/Font.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
@@ -38,11 +38,11 @@
 #include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 //kL #include "../Engine/Surface.h"
-#include "../Engine/Timer.h" // load CTD
+#include "../Engine/Timer.h"
 
 #include "../Interface/FpsCounter.h"
 #include "../Interface/Cursor.h"
-#include "../Interface/Text.h" // load CTD
+#include "../Interface/Text.h"
 
 #include "../Resource/XcomResourcePack.h"
 
@@ -67,7 +67,7 @@ bool StartState::kL_ready; // kL
  */
 StartState::StartState()
 	:
-		_anim(0) // load CTD
+		_anim(0)
 {
 	// updateScale() uses newDisplayWidth/Height and needs to be set ahead of time
 //kL	Options::newDisplayWidth	= Options::displayWidth;
@@ -87,7 +87,7 @@ StartState::StartState()
 //	_surface = new Surface(320, 200, dx, dy);		// kL
 
 	loading = LOADING_STARTED;
-	_thread = 0;
+	_thread = NULL;
 	error = "";
 
 	// kL_begin: Old Loading screen ... pre 2014 may 26.
@@ -190,9 +190,9 @@ StartState::~StartState()
 	if (_thread != NULL)
 		SDL_KillThread(_thread);
 
-	delete _font; // load CTD
-	delete _timer; // load CTD
-	delete _lang; // load CTD
+	delete _font;
+	delete _timer;
+	delete _lang;
 }
 
 /**
@@ -223,9 +223,7 @@ void StartState::init()
 							load,
 							(void*)_game);
 	if (_thread == NULL) // If we can't create the thread, just load it as usual
-	{
 		load((void*)_game);
-	}
 }
 
 /**
@@ -234,7 +232,7 @@ void StartState::init()
 void StartState::think()
 {
 	State::think();
-	_timer->think(this, NULL); // load CTD
+	_timer->think(this, NULL);
 
 	switch (loading)
 	{
@@ -540,8 +538,8 @@ void StartState::addChar_kL(const size_t nextChar) // kL
 void StartState::addCursor_kL() // kL
 {
 	int
-		x = _text->getTextWidth((_text->getTextHeight() - _font->getHeight()) / _font->getHeight()) + 20,	// kL
-		y = _text->getTextHeight() - _font->getHeight() + 20;												// kL
+		x = _text->getTextWidth((_text->getTextHeight() - _font->getHeight()) / _font->getHeight()) + 20,
+		y = _text->getTextHeight() - _font->getHeight() + 20;
 
 	_cursor->setX(x);
 	_cursor->setY(y);
@@ -549,8 +547,8 @@ void StartState::addCursor_kL() // kL
 
 /**
  * Loads game data and updates status accordingly.
- * @param game_ptr Pointer to the game.
- * @return Thread status, 0 = ok
+ * @param game_ptr - pointer to Game!
+ * @return, thread status 0 = ok
  */
 int StartState::load(void* game_ptr)
 {

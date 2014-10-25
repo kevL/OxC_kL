@@ -580,11 +580,13 @@ void InventoryState::updateStats()
 
 	if (Options::showMoreStatsInInventoryView)
 	{
-		int str = static_cast<int>(Round(
-					static_cast<double>(unit->getStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
-		int weight = unit->getCarriedWeight(_inv->getSelectedItem());
-		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(str));
-		if (weight > str)
+		const int
+			weight = unit->getCarriedWeight(_inv->getSelectedItem()),
+			strength = static_cast<int>(Round(
+								static_cast<double>(unit->getStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
+
+		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(strength));
+		if (weight > strength)
 			_txtWeight->setSecondaryColor(Palette::blockOffset(2)); // +5 gives green border (high contrast)
 		else
 			_txtWeight->setSecondaryColor(Palette::blockOffset(3));

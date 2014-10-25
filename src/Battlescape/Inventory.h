@@ -52,7 +52,7 @@ private:
 		_base,
 		_tu;
 	int
-		_animFrame,
+		_fuseFrame,
 		_depth,
 		_groundOffset,
 		_tuCost, // kL

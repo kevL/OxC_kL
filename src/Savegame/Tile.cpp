@@ -52,8 +52,7 @@ Tile::SerializationKey Tile::serializationKey =
 	1,	// _smoke
 	1,	// _animOffset
 	1,	// one 8-bit bool field
-//kL	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1	// total bytes to save one tile
-	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1 + 1	// kL
+	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1 + 1
 };
 
 
@@ -82,19 +81,19 @@ Tile::Tile(const Position& pos)
 			i < 4;
 			++i)
 	{
-		_objects[i]			=  0;
-		_mapDataID[i]		= -1;
-		_mapDataSetID[i]	= -1;
-		_curFrame[i]		=  0;
+		_objects[i] =  0;
+		_mapDataID[i] = -1;
+		_mapDataSetID[i] = -1;
+		_curFrame[i] =  0;
 	}
 
 	for (int
 			layer = 0;
 			layer < LIGHTLAYERS;
-			layer++)
+			++layer)
 	{
-		_light[layer]		=  0;
-		_lastLight[layer]	= -1;
+		_light[layer] =  0;
+		_lastLight[layer] = -1;
 	}
 
 	for (int
@@ -125,7 +124,7 @@ Tile::~Tile()
 
 /**
  * Load the tile from a YAML node.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void Tile::load(const YAML::Node& node)
 {
@@ -141,7 +140,7 @@ void Tile::load(const YAML::Node& node)
 
 	_fire		= node["fire"].as<int>(_fire);
 	_smoke		= node["smoke"].as<int>(_smoke);
-	_animOffset	= node["animOffset"].as<int>(_animOffset); // kL
+	_animOffset	= node["animOffset"].as<int>(_animOffset);
 
 	for (int
 			i = 0;
@@ -179,10 +178,9 @@ void Tile::loadBinary(
 
 	_smoke		= unserializeInt(&buffer, serKey._smoke);
 	_fire		= unserializeInt(&buffer, serKey._fire);
-	_animOffset	= unserializeInt(&buffer, serKey._animOffset); // kL
+	_animOffset	= unserializeInt(&buffer, serKey._animOffset);
 
-//kL	Uint8 boolFields = unserializeInt(&buffer, serKey.boolFields);
-	Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields)); // kL
+	Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields));
 
 	_discovered[0] = (boolFields & 1)? true: false;
 	_discovered[1] = (boolFields & 2)? true: false;
@@ -205,7 +203,7 @@ YAML::Node Tile::save() const
 	for (int
 			i = 0;
 			i < 4;
-			i++)
+			++i)
 	{
 		node["mapDataID"].push_back(_mapDataID[i]);
 		node["mapDataSetID"].push_back(_mapDataSetID[i]);
@@ -213,7 +211,7 @@ YAML::Node Tile::save() const
 
 	if (_smoke) node["smoke"]			= _smoke;
 	if (_fire) node["fire"]				= _fire;
-	if (_animOffset) node["animOffset"]	= _animOffset; // kL
+	if (_animOffset) node["animOffset"]	= _animOffset;
 
 	if (_discovered[0]
 		|| _discovered[1]
@@ -222,7 +220,7 @@ YAML::Node Tile::save() const
 		for (int
 				i = 0;
 				i < 3;
-				i++)
+				++i)
 		{
 			node["discovered"].push_back(_discovered[i]);
 		}
@@ -238,7 +236,7 @@ YAML::Node Tile::save() const
 
 /**
  * Saves the tile to binary.
- * @param buffer pointer to buffer.
+ * @param buffer - pointer to pointer to buffer
  */
 void Tile::saveBinary(Uint8** buffer) const
 {
@@ -326,7 +324,6 @@ int Tile::getTUCost(
 		int part,
 		MovementType movementType) const
 {
-	//Log(LOG_INFO) << "Tile::getTUCost() part = " << part << " MT = " << (int)movementType;
 	if (_objects[part])
 	{
 		if (_objects[part]->isUFODoor()
@@ -341,9 +338,6 @@ int Tile::getTUCost(
 			return 0;
 		}
 
-		//int ret = _objects[part]->getTUCost(movementType);
-		//Log(LOG_INFO) << ". ret = " << ret;
-		//return ret;
 		return _objects[part]->getTUCost(movementType);
 	}
 
@@ -393,7 +387,7 @@ int Tile::getTerrainLevel() const
 	if (_objects[MapData::O_FLOOR])
 		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
 
-	if (_objects[MapData::O_OBJECT]) // kL_note: wait, aren't these negative=high
+	if (_objects[MapData::O_OBJECT])
 		level = std::min(
 						level,
 						_objects[MapData::O_OBJECT]->getTerrainLevel());
@@ -438,7 +432,7 @@ int Tile::getFootstepSound(Tile* tileBelow) const
 /**
  * Open a door on this tile.
  * @param part		- a tile part
- * @param unit		- pointer to a unit
+ * @param unit		- pointer to a BattleUnit
  * @param reserve	- see BA_* enum for TU reserves
  * @return, Value: -1 no door opened
  *					0 normal door
@@ -451,58 +445,55 @@ int Tile::openDoor(
 		BattleUnit* unit,
 		BattleActionType reserve)
 {
-	// kL_note: Am parsing this tighter with if/else's
-	// May lead to ambiguity, esp. if isDoor() & isUFODoor() are not exclusive;
-	// or if setMapData() is doing something ...... -> to UFO doors.
-
-	if (!_objects[part])
-		return -1;
-	else if (_objects[part]->isDoor())
+	if (_objects[part] != NULL)
 	{
-		if (_unit
-			&& _unit != unit
-			&& _unit->getPosition() != getPosition())
+		if (_objects[part]->isDoor())
 		{
-			return -1;
-		}
+			if (_unit
+				&& _unit != unit
+				&& _unit->getPosition() != getPosition())
+			{
+				return -1;
+			}
 
-		if (unit
-			&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType())
+			if (unit != NULL
+				&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType())
 										+ unit->getActionTUs(
 														reserve,
 														unit->getMainHandWeapon(false)))
-		{
-			return 4;
-		}
-
-		setMapData(
-				_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
-				_objects[part]->getAltMCD(),
-				_mapDataSetID[part],
-				_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
-		setMapData(0,-1,-1, part);
-
-		return 0;
-	}
-	else if (_objects[part]->isUFODoor())
-	{
-		if (_curFrame[part] == 0) // ufo door part 0 - door is closed
-		{
-			if (unit
-				&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType())
-											+ unit->getActionTUs(
-															reserve,
-															unit->getMainHandWeapon(false)))
 			{
 				return 4;
 			}
 
-			_curFrame[part] = 1; // start opening door
+			setMapData(
+					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD()),
+					_objects[part]->getAltMCD(),
+					_mapDataSetID[part],
+					_objects[part]->getDataset()->getObjects()->at(_objects[part]->getAltMCD())->getObjectType());
 
-			return 1;
+			setMapData(NULL,-1,-1, part);
+
+			return 0;
 		}
-		else if (_curFrame[part] != 7) // ufo door != part 7 -> door is still opening
-			return 3;
+		else if (_objects[part]->isUFODoor())
+		{
+			if (_curFrame[part] == 0) // ufo door part 0 - door is closed
+			{
+				if (unit != NULL
+					&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType())
+											+ unit->getActionTUs(
+															reserve,
+															unit->getMainHandWeapon(false)))
+				{
+					return 4;
+				}
+
+				_curFrame[part] = 1; // start opening door
+				return 1;
+			}
+			else if (_curFrame[part] != 7) // ufo door != part 7 -> door is still opening
+				return 3;
+		}
 	}
 
 	return -1;
@@ -518,7 +509,7 @@ int Tile::closeUfoDoor()
 	for (int
 			part = 0;
 			part < 4;
-			part++)
+			++part)
 	{
 		if (isUfoDoorOpen(part))
 		{
@@ -607,7 +598,7 @@ int Tile::getShade() const
 	for (int
 			layer = 0;
 			layer < LIGHTLAYERS;
-			layer++)
+			++layer)
 	{
 		if (_light[layer] > light)
 			light = _light[layer];
@@ -622,71 +613,57 @@ int Tile::getShade() const
  * Destroy a part on this tile. We first remove the old object, then replace it with the destroyed one.
  * This is because the object type of the old and new one are not necessarily the same.
  * If the destroyed part is an explosive, set the tile's explosive value, which will trigger a chained explosion.
- * @param part
- * @return bool, Return true objective was destroyed
+ * @param part - this Tile's part for destruction
+ * @return, true if objective was destroyed
  */
 bool Tile::destroy(int part)
 {
-	//Log(LOG_INFO) << "Tile::destroy()";
 	bool _objective = false;
 
 	if (_objects[part])
 	{
-		//Log(LOG_INFO) << ". objects[part] is Valid";
 		if (_objects[part]->isGravLift()
 			|| _objects[part]->getArmor() == 255) // kL
 		{
 			return false;
 		}
 
-		//Log(LOG_INFO) << ". . . tile part DESTROYED";
 		_objective = _objects[part]->getSpecialType() == MUST_DESTROY;
-		MapData* originalPart = _objects[part];
 
-		int originalMapDataSetID = _mapDataSetID[part];
+		MapData* origPart = _objects[part];
+		int origMapDataSetID = _mapDataSetID[part];
+
 		setMapData(
-				 0,
+				 NULL,
 				-1,
 				-1,
 				part);
 
-		//Log(LOG_INFO) << ". preDie";
-		if (originalPart->getDieMCD())
+		if (origPart->getDieMCD())
 		{
-			//Log(LOG_INFO) << ". . getDieMCD()";
-			MapData* dead = originalPart->getDataset()->getObjects()->at(originalPart->getDieMCD());
+			MapData* dead = origPart->getDataset()->getObjects()->at(origPart->getDieMCD());
 			setMapData(
 					dead,
-					originalPart->getDieMCD(),
-					originalMapDataSetID,
+					origPart->getDieMCD(),
+					origMapDataSetID,
 					dead->getObjectType());
 		}
 
-		//Log(LOG_INFO) << ". preExplode";
-		if (originalPart->getExplosive())
-		{
-			//Log(LOG_INFO) << ". . getExplosive()";
-			setExplosive(originalPart->getExplosive());
-		}
+		if (origPart->getExplosive())
+			setExplosive(origPart->getExplosive());
 	}
 
-	//Log(LOG_INFO) << ". preScorchEarth";
-	// check if the floor on the lowest level is gone
-	if (part == MapData::O_FLOOR
+	if (part == MapData::O_FLOOR // check if the floor on the lowest level is gone
 		&& getPosition().z == 0
 		&& _objects[MapData::O_FLOOR] == 0)
 	{
-		//Log(LOG_INFO) << ". . getScorchedEarthTile()";
-
-		// replace with scorched earth
-		setMapData(
+		setMapData( // replace with scorched earth
 				MapDataSet::getScorchedEarthTile(),
 				1,
 				0,
 				MapData::O_FLOOR);
 	}
 
-	//Log(LOG_INFO) << ". ret = " << _objective;
 	return _objective;
 }
 
@@ -700,16 +677,11 @@ bool Tile::damage(
 		int part,
 		int power)
 {
-	//Log(LOG_INFO) << "Tile::destroy()";
 	bool objective = false;
 
 	if (power >= _objects[part]->getArmor())
-	{
-		//Log(LOG_INFO) << ". . destroy(part)";
 		objective = destroy(part);
-	}
 
-	//Log(LOG_INFO) << ". ret = " << objective;
 	return objective;
 }
 
@@ -718,7 +690,7 @@ bool Tile::damage(
  * detonate it later, because the same tile can be visited multiple times
  * by "explosion rays". The explosive power that gets set on a tile is
  * that of the most powerful ray that passes through it -- see TileEngine::explode().
- * @param power
+ * @param power - how big the BOOM will be / how much tile-destruction
  */
 void Tile::setExplosive(
 		int power,
@@ -735,7 +707,7 @@ void Tile::setExplosive(
  * Gets if & how powerfully this tile will explode.
  * Don't confuse this with a tile's inherent explosive power;
  * this value is set by explosions external to the tile itself.
- * @return, how big the BOOM will be / how much tile-destruction there will be
+ * @return, how big the BOOM will be / how much tile-destruction
  */
 int Tile::getExplosive() const
 {
@@ -744,7 +716,7 @@ int Tile::getExplosive() const
 
 /**
  * Flammability of a tile is the flammability of its most flammable part.
- * @return, the lower the value, the higher the chance the tile catches fire
+ * @return, the lower the value the higher the chance the tile catches fire
  */
 int Tile::getFlammability() const
 {
@@ -767,7 +739,7 @@ int Tile::getFlammability() const
 
 /**
  * Fuel of a tile is the highest fuel of its parts/objects.
- * @return, how many turns burn
+ * @return, how many turns to burn
  */
 int Tile::getFuel() const
 {
@@ -810,7 +782,7 @@ int Tile::getFuel(int part) const
  * Ignite starts fire on a tile, it will burn <fuel> rounds.
  * Fuel of a tile is the highest fuel of its objects
  * NOT the sum of the fuel of the objects!
- * @param power
+ * @param power - power to get things going
  */
 void Tile::ignite(int power)
 {
@@ -897,7 +869,7 @@ void Tile::animate()
 /**
  * Get the number of frames the fire or smoke animation is off-sync.
  * To void fire and smoke animations of different tiles moving nice in sync - it looks fake.
- * @return int, Offset
+ * @return, offset
  */
 int Tile::getAnimationOffset() const
 {
@@ -906,8 +878,8 @@ int Tile::getAnimationOffset() const
 
 /**
  * Get the sprite of a certain part of the tile.
- * @param part
- * @return Pointer to the sprite.
+ * @param part - this Tile's part to get a sprite for
+ * @return, pointer to the sprite
  */
 Surface* Tile::getSprite(int part) const
 {
@@ -1040,8 +1012,9 @@ void Tile::removeItem(BattleItem* item)
  */
 int Tile::getTopItemSprite()
 {
-	int weight = -1;
-	int sprite = -1;
+	int
+		weight = -1,
+		sprite = -1;
 
 	for (std::vector<BattleItem*>::iterator
 			i = _inventory.begin();
@@ -1302,7 +1275,7 @@ int Tile::getOverlaps() const
  */
 void Tile::addOverlap()
 {
-	++_overlaps;
+	_overlaps++;
 }
 
 /**

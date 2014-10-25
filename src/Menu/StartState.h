@@ -28,10 +28,10 @@
 namespace OpenXcom
 {
 
-class Font; // load CTD
-class Language; // load CTD
-class Text; // load CTD
-class Timer; // load CTD
+class Font;
+class Language;
+class Text;
+class Timer;
 //class Surface; // kL
 
 
@@ -53,7 +53,6 @@ class StartState
 {
 
 private:
-	// load CTD
 //kL	int _anim;
 	size_t _anim; // kL
 
@@ -63,12 +62,11 @@ private:
 		* _cursor,
 		* _text;
 	Timer* _timer;
-	// load CTD_end.
 
 	SDL_Thread* _thread;
 //	Surface* _surface; // kL
 
-	std::wostringstream _output; // load CTD
+	std::wostringstream _output;
 	std::wstring _dosart; // kL
 
 
@@ -91,9 +89,9 @@ private:
 		void handle(Action* action);
 
 		/// Animates the terminal.
-		void animate(); // load CTD
+		void animate();
 		/// Adds a line of text.
-		void addLine(const std::wstring& line); // load CTD
+		void addLine(const std::wstring& line);
 		/// kL.
 		void addLine_kL(); // kL
 		/// kL.

@@ -1307,7 +1307,7 @@ void ProjectileFlyBState::performMeleeAttack()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack()";
 	BattleUnit* buTarget = _parent->getSave()->getTile(_action.target)->getUnit();
-	int height = buTarget->getFloatHeight() + (buTarget->getHeight() / 2);
+	const int height = buTarget->getFloatHeight() + (buTarget->getHeight() / 2);
 
 	Position voxel;
 	_parent->getSave()->getPathfinding()->directionToVector(
@@ -1325,12 +1325,12 @@ void ProjectileFlyBState::performMeleeAttack()
 
 	// kL: from ExplosionBState, moved here to play a proper hit/miss sFx
 	bool success = false;
-	int percent = static_cast<int>(Round(_unit->getFiringAccuracy(
-														BA_HIT,
-//														_ammo)			// Ammo is the weapon since (melee==true).
-														_action.weapon)	// Not necessarily ...
-													* 100.0));
-	//Log(LOG_INFO) << ". hit percent = " << percent;
+	const int percent = static_cast<int>(Round(_unit->getFiringAccuracy(
+																	BA_HIT,
+//																	_ammo)			// Ammo is the weapon since (melee==true).
+																	_action.weapon)	// Not necessarily ...
+																* 100.0));
+	//Log(LOG_INFO) << ". ID " << _unit->getId() << " weapon " << _action.weapon->getRules()->getType() << " hit percent = " << percent;
 	if (RNG::percent(percent))
 	{
 		//Log(LOG_INFO) << ". success";
@@ -1338,7 +1338,6 @@ void ProjectileFlyBState::performMeleeAttack()
 	}
 
 	int sound = -1;
-
 	if (success == false)
 	{
 		sound = ResourcePack::ITEM_THROW;

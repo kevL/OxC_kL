@@ -1974,12 +1974,12 @@ double BattleUnit::getFiringAccuracy(
 		|| actionType == BA_STUN) // note: BA_STUN is not used in code.
 	{
 		ret = static_cast<double>(item->getRules()->getAccuracyMelee()) * getAccuracyModifier(item) / 100.0;
-		//Log(LOG_INFO) << ". ret[1] = " << ret;
+		//Log(LOG_INFO) << ". weaponACU = " << item->getRules()->getAccuracyMelee() << " ret[1] = " << ret;
 
 		if (item->getRules()->isSkillApplied())
 		{
 			ret = ret * static_cast<double>(getStats()->melee) / 100.0;
-			//Log(LOG_INFO) << ". ret[2] = " << ret;
+			//Log(LOG_INFO) << ". meleeStat = " << getStats()->melee << " ret[2] = " << ret;
 		}
 	}
 	else
@@ -2006,7 +2006,7 @@ double BattleUnit::getFiringAccuracy(
 		ret *= getAccuracyModifier();
 	}
 
-	//Log(LOG_INFO) << ". ret[0] = " << ret;
+	//Log(LOG_INFO) << ". fire ACU ret[0] = " << ret;
 	return ret;
 }
 
@@ -2050,6 +2050,7 @@ double BattleUnit::getAccuracyModifier(BattleItem* item)
 	if (ret < 0.1) // limit low @ 10%
 		ret = 0.1;
 
+	//Log(LOG_INFO) << ". . ACU modi = " << ret;
 	return ret;
 }
 
@@ -3595,7 +3596,7 @@ int BattleUnit::getCarriedWeight(BattleItem* dragItem) const
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i) == dragItem)
+		if (*i == dragItem)
 			continue;
 
 		weight += (*i)->getRules()->getWeight();
