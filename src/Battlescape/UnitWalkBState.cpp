@@ -696,12 +696,12 @@ bool UnitWalkBState::doStatusWalk()
 		|| _parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit)
 	{
 		//Log(LOG_INFO) << ". WalkBState, keepWalking()";
-		playMovementSound();
-
 		tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
 		_unit->keepWalking( // advances _walkPhase
 						tileBelow,
 						_onScreen);
+
+		playMovementSound();
 	}
 	else if (_falling == false)
 	{

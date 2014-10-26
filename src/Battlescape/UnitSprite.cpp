@@ -1193,12 +1193,12 @@ void UnitSprite::drawRoutine4()
 		unitDir = _unit->getDirection();
 
 /*TFTD
-	if (_drawingRoutine == 16) // tftd civilian - first set
+	if (_drawingRoutine == 17) // tftd civilian - first set
 	{
 		stand = 64;
 		walk = 0;
 	}
-	else if (_drawingRoutine == 17) // tftd civilian - second set
+	else if (_drawingRoutine == 18) // tftd civilian - second set
 	{
 		stand = 140;
 		walk = 76;
@@ -1217,7 +1217,7 @@ void UnitSprite::drawRoutine4()
 	{
 		srf = _unitSurface->getFrame(walk + (8 * _unit->getDirection()) + _unit->getWalkingPhase());
 	}
-	else // if (_drawingRoutine != 16) // TFTD
+	else // if (_drawingRoutine != 17) // TFTD
 	{
 		srf = _unitSurface->getFrame(stand + _unit->getDirection());
 	}
