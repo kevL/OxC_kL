@@ -66,11 +66,11 @@ BattleItem::BattleItem(
 			setPainKillerQuantity(_rules->getPainKillerQuantity());
 			setStimulantQuantity(_rules->getStimulantQuantity());
 		}
-		else if ((_rules->getBattleType() == BT_FIREARM	// These weapons do not need ammo;
-				|| _rules->getBattleType() == BT_MELEE)	// (ammo)item points to weapon itself.
-			&& _rules->getCompatibleAmmo()->empty())
+		else if (_rules->getCompatibleAmmo()->empty() == true
+			&& (_rules->getBattleType() == BT_FIREARM		// These weapons do not need ammo;
+				|| _rules->getBattleType() == BT_MELEE))	// (ammo)item points to weapon itself.
 		{
-			setAmmoQuantity(_rules->getClipSize()); // melee items have clipsize(0), lasers etc have clipsize(-1).
+			setAmmoQuantity(_rules->getClipSize()); // melee, lasers, etc have clipsize(-1).
 //			setAmmoQuantity(-1);	// needed for melee-item reaction hits, etc. (can be set in Ruleset but do it here)
 									// But it creates problems w/ TANKS returning to Base. So do it in Ruleset:
 									// melee items need "clipSize: -1" to do reactionFire.
@@ -407,29 +407,27 @@ bool BattleItem::needsAmmo() const
  */
 int BattleItem::setAmmoItem(BattleItem* item)
 {
-	if (!needsAmmo())
-		return -2;
-
-	if (item == NULL)
+	if (needsAmmo() == true)
 	{
-		_ammoItem = NULL;
-
-		return 0;
-	}
-
-	if (_ammoItem)
-		return -1;
-
-	for (std::vector<std::string>::iterator
-			i = _rules->getCompatibleAmmo()->begin();
-			i != _rules->getCompatibleAmmo()->end();
-			++i)
-	{
-		if (*i == item->getRules()->getType())
+		if (item == NULL)
 		{
-			_ammoItem = item;
-
+			_ammoItem = NULL;
 			return 0;
+		}
+
+		if (_ammoItem != NULL)
+			return -1;
+
+		for (std::vector<std::string>::iterator
+				i = _rules->getCompatibleAmmo()->begin();
+				i != _rules->getCompatibleAmmo()->end();
+				++i)
+		{
+			if (*i == item->getRules()->getType())
+			{
+				_ammoItem = item;
+				return 0;
+			}
 		}
 	}
 
@@ -438,7 +436,7 @@ int BattleItem::setAmmoItem(BattleItem* item)
 
 /**
  * Gets the item's tile.
- * @return, the tile
+ * @return, Pointer to the Tile
  */
 Tile* BattleItem::getTile() const
 {
@@ -447,7 +445,7 @@ Tile* BattleItem::getTile() const
 
 /**
  * Sets the item's tile.
- * @param tile - the tile
+ * @param tile - pointer to a Tile
  */
 void BattleItem::setTile(Tile* tile)
 {

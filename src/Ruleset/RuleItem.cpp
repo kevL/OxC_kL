@@ -692,19 +692,22 @@ int RuleItem::getTUUse() const
  * Small explosions don't have a restriction. Larger explosions are restricted
  * using a formula, with a maximum of radius 10 no matter how large the explosion.
  * kL_note: nah...
- * @return, the radius
+ * @return, the radius (-1 if not explosive)
  */
 int RuleItem::getExplosionRadius() const
 {
 	if (_blastRadius > -1)
 		return _blastRadius;
 
-	if (_damageType == DT_HE
-		|| _damageType == DT_STUN
-		|| _damageType == DT_SMOKE
-		|| _damageType == DT_IN)
+	if (_blastRadius == -1)
 	{
-		return _power / 20;
+		if (_damageType == DT_HE
+			|| _damageType == DT_STUN
+			|| _damageType == DT_SMOKE
+			|| _damageType == DT_IN)
+		{
+			return _power / 20;
+		}
 	}
 
 //	if (_damageType == DT_IN)

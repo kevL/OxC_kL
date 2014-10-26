@@ -1689,31 +1689,34 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// kL_begin:
-					if (unit == NULL
-						&& tile->getHasUnconsciousSoldier())
+					if (unit == NULL)
 					{
-						tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
-						if (tmpSurface != NULL)
+						const int status = tile->getHasUnconsciousSoldier();
+						if (status != 0)
 						{
+							tmpSurface = _res->getSurface("RANK_ROOKIE"); // background panel for red cross icon.
+							if (tmpSurface != NULL)
+							{
+								tmpSurface->blitNShade(
+										surface,
+										screenPosition.x,
+										screenPosition.y,
+										0);
+							}
+
+							Uint8 color = 1; // white, unconscious soldier here
+							if (status == 2)
+								color = 3; // red, wounded unconscious soldier
+
+							tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
 							tmpSurface->blitNShade(
 									surface,
-									screenPosition.x,
-									screenPosition.y,
-									0);
+									screenPosition.x + 2,
+									screenPosition.y + 1,
+									0,
+									false,
+									color);
 						}
-
-						Uint8 color = 3; // red
-						if (unit->getFatalWounds() == 0)
-							color = 1; // white
-
-						tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(11); // 11, small gray cross; 209, big red cross
-						tmpSurface->blitNShade(
-								surface,
-								screenPosition.x + 2,
-								screenPosition.y + 1,
-								0,
-								false,
-								color);
 					} // kL_end.
 
 					// if we can see through the floor, draw the soldier below it if it is on stairs
@@ -2028,7 +2031,7 @@ void Map::drawTerrain(Surface* surface)
 
 									Position originVoxel = _save->getTileEngine()->getOriginVoxel(
 																								*action,
-																								0);
+																								NULL);
 									Position targetVoxel = Position(
 																itX * 16 + 8,
 																itY * 16 + 8,
@@ -2040,12 +2043,12 @@ void Map::drawTerrain(Surface* surface)
 									unsigned accuracy = 0;
 									Uint8 color = Palette::blockOffset(2)+3; // red
 
-									bool canThrow = _save->getTileEngine()->validateThrow(
-																						*action,
-																						originVoxel,
-																						targetVoxel);
+									const bool canThrow = _save->getTileEngine()->validateThrow(
+																							*action,
+																							originVoxel,
+																							targetVoxel);
 									//Log(LOG_INFO) << ". canThrow = " << canThrow;
-									if (canThrow)
+									if (canThrow == true)
 									{
 										accuracy = static_cast<unsigned>(Round(_save->getSelectedUnit()->getThrowingAccuracy() * 100.0));
 										color = Palette::blockOffset(3)+3; // green
@@ -2239,17 +2242,17 @@ void Map::drawTerrain(Surface* surface)
 		for (int
 				itZ = beginZ;
 				itZ <= endZ;
-				itZ++)
+				++itZ)
 		{
 			for (int
 					itX = beginX;
 					itX <= endX;
-					itX++)
+					++itX)
 			{
 				for (int
 						itY = beginY;
 						itY <= endY;
-						itY++)
+						++itY)
 				{
 					mapPosition = Position(
 										itX,
@@ -2566,9 +2569,9 @@ void Map::getSelectorPosition(Position* pos) const
 }
 
 /**
- * Calculates the offset of a soldier, when it is walking between 2 tiles.
- * @param unit, Pointer to BattleUnit.
- * @param offset, Pointer to the offset to return the calculation.
+ * Calculates the offset of a BattleUnit when it is walking between 2 tiles.
+ * @param unit		- pointer to BattleUnit
+ * @param offset	- pointer to the offset to return the calculation.
  */
 void Map::calculateWalkingOffset(
 		BattleUnit* unit,
@@ -2689,18 +2692,19 @@ void Map::calculateWalkingOffset(
 			if (_camera->getViewLevel() > unit->getPosition().z)
 			{
 				for (int
-						z = _camera->getViewLevel();
+						z = std::min(
+								_camera->getViewLevel(),
+								_save->getMapSizeZ());
 						z != unit->getPosition().z;
 						--z)
 				{
-					if (!_save->getTile(Position(
+					if (_save->getTile(Position(
 											unit->getPosition().x,
 											unit->getPosition().y,
 											z))
-										->hasNoFloor(0))
+										->hasNoFloor(NULL) == false)
 					{
 						unit->setFloorAbove(true);
-
 						break;
 					}
 				}
@@ -2711,42 +2715,42 @@ void Map::calculateWalkingOffset(
 
 /**
   * Terrainlevel goes from 0 to -24 (bottom to top).
-  * For a large sized unit, we need to pick the highest
-  * terrain level, which is the lowest number...
-  * @param pos, Position.
-  * @param size, Size of the unit we want to get the level from.
-  * @return, terrainlevel.
+  * For a large sized unit, pick the highest terrain level, which is the lowest number...
+  * @param pos	- Position
+  * @param size	- size of the unit to get the level from
+  * @return, terrain height
   */
 int Map::getTerrainLevel(
 		Position pos,
 		int size)
 {
-	int lowestLevel = 0;
-	int lowTest = 0;
+	int
+		lowLevel = 0,
+		lowTest = 0;
 
 	for (int
 			x = 0;
 			x < size;
-			x++)
+			++x)
 	{
 		for (int
 				y = 0;
 				y < size;
-				y++)
+				++y)
 		{
 			lowTest = _save->getTile(pos + Position(x, y, 0))->getTerrainLevel();
-			if (lowTest < lowestLevel)
-				lowestLevel = lowTest;
+			if (lowTest < lowLevel)
+				lowLevel = lowTest;
 		}
 	}
 
-	return lowestLevel;
+	return lowLevel;
 }
 
 /**
  * Sets the 3D cursor to selection/aim mode.
- * @param type Cursor type.
- * @param size Size of cursor.
+ * @param type - CursorType
+ * @param size - size of cursor
  */
 void Map::setCursorType(
 		CursorType type,
@@ -2762,7 +2766,7 @@ void Map::setCursorType(
 
 /**
  * Gets the cursor type.
- * @return cursortype.
+ * @return, CursorType
  */
 CursorType Map::getCursorType() const
 {
@@ -2770,7 +2774,7 @@ CursorType Map::getCursorType() const
 }
 
 /**
- * Checks all units for if they need to be redrawn.
+ * Checks all units for need to be redrawn.
  */
 void Map::cacheUnits()
 {
@@ -2888,7 +2892,6 @@ void Map::setProjectile(Projectile* projectile)
 	{
 		_launch = true;
 	}
-
 }
 
 /**
@@ -2958,7 +2961,7 @@ void Map::setButtonsPressed(
 /**
  * Sets the unitDying flag.
  * This reveals the dying unit during Hidden Movement.
- * @param flag, true if a unit is dying
+ * @param flag - true if a unit is dying
  */
 void Map::setUnitDying(bool flag)
 {

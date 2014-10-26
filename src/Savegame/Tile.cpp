@@ -1036,24 +1036,36 @@ int Tile::getTopItemSprite()
 
 /**
  * kL. Gets if the tile has an unconscious xCom unit in its inventory.
- * @return, true if there's an unconscious soldier on this tile
+ * @return,	0 - no living Soldier
+ *			1 - stunned Soldier
+ *			2 - stunned and wounded Soldier
  */
-bool Tile::getHasUnconsciousSoldier() // kL
+int Tile::getHasUnconsciousSoldier() // kL
 {
+	int ret = 0;
+
 	for (std::vector<BattleItem*>::iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i)->getUnit()
-			&& (*i)->getUnit()->getOriginalFaction() == FACTION_PLAYER
-			&& (*i)->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+		BattleUnit* bu = (*i)->getUnit();
+
+		if (bu != NULL
+			&& bu->getOriginalFaction() == FACTION_PLAYER
+			&& bu->getStatus() == STATUS_UNCONSCIOUS)
 		{
-			return true;
+			if (bu->getFatalWounds() == 0)
+				ret = 1;
+			else
+				ret = 2;
 		}
+
+		if (ret == 2)
+			break;
 	}
 
-	return false;
+	return ret;
 }
 
 /**

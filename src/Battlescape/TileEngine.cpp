@@ -1413,15 +1413,15 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 		if ((*i)->getTimeUnits() < 1
 			|| (*i)->getFaction() == _battleSave->getSide()
 			|| (*i)->getFaction() == FACTION_NEUTRAL
-			|| (*i)->isOut(true, true))
+			|| (*i)->isOut(true, true) == true)
 		{
 			continue;
 		}
 
 		if (((*i)->getFaction() == FACTION_HOSTILE					// Mc'd xCom units will RF on loyal xCom units
-				|| ((*i)->getOriginalFaction() == FACTION_PLAYER		// but Mc'd aLiens won't RF on other aLiens ...
-					&& (*i)->checkViewSector(unit->getPosition())))
-			&& visible(*i, tile))
+				|| ((*i)->getOriginalFaction() == FACTION_PLAYER	// but Mc'd aLiens won't RF on other aLiens ...
+					&& (*i)->checkViewSector(unit->getPosition()) == true))
+			&& visible(*i, tile) == true)
 		{
 			//Log(LOG_INFO) << ". check ID " << (*i)->getId();
 			if ((*i)->getFaction() == FACTION_HOSTILE)
@@ -1460,7 +1460,7 @@ BattleUnit* TileEngine::getReactor(
 			++i)
 	{
 		//Log(LOG_INFO) << ". . nextReactor ID " << (*i)->getId();
-		if ((*i)->isOut(true, true))
+		if ((*i)->isOut(true, true) == true)
 			continue;
 
 		if ((*i)->getInitiative() > highestIniti)
@@ -1475,15 +1475,11 @@ BattleUnit* TileEngine::getReactor(
 	// nextReactor has to *best* defender.Initi to get initiative
 	// Analysis: It appears that defender's tu for firing/throwing
 	// are not subtracted before getInitiative() is called.
-	if (nextReactor
+	if (nextReactor != NULL
 		&& highestIniti > static_cast<int>(defender->getInitiative(tuSpent)))
 	{
 		if (nextReactor->getGeoscapeSoldier() != NULL
 			&& nextReactor->getFaction() == nextReactor->getOriginalFaction())
-//			&& nextReactor->getOriginalFaction() == FACTION_PLAYER
-//			&& nextReactor->getFaction() == FACTION_PLAYER
-//			&& nextReactor->getUnitRules() == NULL)
-//			&& nextReactor->getTurretType() < 0)
 		{
 			nextReactor->addReactionExp();
 		}
@@ -1494,7 +1490,7 @@ BattleUnit* TileEngine::getReactor(
 		nextReactor = defender;
 	}
 
-	//Log(LOG_INFO) << ". highestIniti (nextReactor) = " << highestIniti;
+	//Log(LOG_INFO) << ". highestIniti = " << highestIniti;
 	return nextReactor;
 }
 
@@ -1509,6 +1505,10 @@ bool TileEngine::reactionShot(
 		BattleUnit* target)
 {
 	//Log(LOG_INFO) << "TileEngine::reactionShot() reactID " << unit->getId() << " vs targetID " << target->getId();
+
+//	if (target->isOut(true, true) == true) // not gonna stop shit.
+//		return false;
+
 	BattleAction action;
 	action.actor = unit;
 	action.target = target->getPosition();
@@ -1598,7 +1598,7 @@ bool TileEngine::reactionShot(
 	//		|| action.weapon->getRules()->isWaterOnly() == false);
 	//Log(LOG_INFO) << ". has Ammo item = " << (action.weapon->getAmmoItem() != NULL);
 	//Log(LOG_INFO) << ". ammo has Qty = " << (action.weapon->getAmmoItem()->getAmmoQuantity() > 0);
-	//Log(LOG_INFO) << ". can spend TU = " << action.actor->spendTimeUnits(action.TU);
+	//Log(LOG_INFO) << ". can spend TU = " << (action.actor->getTimeUnits() >= action.TU);
 
 	if (action.weapon->getRules()->canReactionFire()
 		&& (action.actor->getOriginalFaction() == FACTION_HOSTILE	// is aLien, or has researched weapon.
@@ -1607,7 +1607,8 @@ bool TileEngine::reactionShot(
 			|| action.weapon->getRules()->isWaterOnly() == false)
 		&& action.weapon->getAmmoItem() != NULL						// lasers & melee are their own ammo-items
 		&& action.weapon->getAmmoItem()->getAmmoQuantity() > 0		// lasers & melee return 255
-		&& action.actor->spendTimeUnits(action.TU))					// spend the TU
+//		&& action.actor->spendTimeUnits(action.TU))					// spend the TU
+		&& action.actor->getTimeUnits() >= action.TU)				// has the TU, spend below_
 	{
 		//Log(LOG_INFO) << ". . targeting TRUE";
 		action.targeting = true;
@@ -1631,12 +1632,15 @@ bool TileEngine::reactionShot(
 										action.weapon->getAmmoItem()->getRules()->getExplosionRadius(),
 										-1) == false)
 			{
+				//Log(LOG_INFO) << ". . . targeting set FALSE";
 				action.targeting = false;
 			}
 		}
 
-		if (action.targeting)
+		if (action.targeting
+			&& action.actor->spendTimeUnits(action.TU))
 		{
+			//Log(LOG_INFO) << ". . . targeting . . .";
 			action.TU = 0;
 			if (action.actor->getFaction() != FACTION_HOSTILE) // kL
 				action.cameraPosition = _battleSave->getBattleState()->getMap()->getCamera()->getMapOffset();
@@ -1648,7 +1652,6 @@ bool TileEngine::reactionShot(
 			_battleSave->getBattleGame()->statePushBack(new ProjectileFlyBState(
 																	_battleSave->getBattleGame(),
 																	action));
-
 			return true;
 		}
 	}
@@ -2764,7 +2767,7 @@ void TileEngine::explode(
 			applyGravity(*i);
 
 			Tile* tileAbove = _battleSave->getTile((*i)->getPosition() + Position(0, 0, 1));
-			if (tileAbove)
+			if (tileAbove != NULL)
 				applyGravity(tileAbove);
 		}
 		//Log(LOG_INFO) << ". explode Tiles DONE";

@@ -1306,7 +1306,7 @@ void ProjectileFlyBState::targetFloor()
 void ProjectileFlyBState::performMeleeAttack()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::performMeleeAttack()";
-	BattleUnit* buTarget = _parent->getSave()->getTile(_action.target)->getUnit();
+	const BattleUnit* const buTarget = _parent->getSave()->getTile(_action.target)->getUnit();
 	const int height = buTarget->getFloatHeight() + (buTarget->getHeight() / 2);
 
 	Position voxel;

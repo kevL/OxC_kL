@@ -107,7 +107,7 @@ BattlescapeGame::BattlescapeGame(
 	_currentAction.targeting = false;
 
 	_universalFist = new BattleItem(
-								parentState->getGame()->getRuleset()->getItem("STR_FIST"),
+								getRuleset()->getItem("STR_FIST"),
 								save->getCurrentItemId());
 
 	for (std::vector<BattleUnit*>::iterator // kL
@@ -2768,7 +2768,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 /**
  * Gets the map.
- * @return map.
+ * @return, pointer to Map
  */
 Map* BattlescapeGame::getMap()
 {
@@ -2776,8 +2776,8 @@ Map* BattlescapeGame::getMap()
 }
 
 /**
- * Gets the save.
- * @return save.
+ * Gets the battle game save data object.
+ * @return, pointer to SavedBattleGame
  */
 SavedBattleGame* BattlescapeGame::getSave()
 {
@@ -2786,7 +2786,7 @@ SavedBattleGame* BattlescapeGame::getSave()
 
 /**
  * Gets the tilengine.
- * @return tilengine.
+ * @return, pointer to TileEngine
  */
 TileEngine* BattlescapeGame::getTileEngine()
 {
@@ -2795,7 +2795,7 @@ TileEngine* BattlescapeGame::getTileEngine()
 
 /**
  * Gets the pathfinding.
- * @return pathfinding.
+ * @return, pointer to Pathfinding
  */
 Pathfinding* BattlescapeGame::getPathfinding()
 {
@@ -2804,7 +2804,7 @@ Pathfinding* BattlescapeGame::getPathfinding()
 
 /**
  * Gets the resourcepack.
- * @return resourcepack.
+ * @return, pointer to ResourcePack
  */
 ResourcePack* BattlescapeGame::getResourcePack()
 {
@@ -2813,7 +2813,7 @@ ResourcePack* BattlescapeGame::getResourcePack()
 
 /**
  * Gets the ruleset.
- * @return ruleset.
+ * @return, pointer to Ruleset
  */
 const Ruleset* BattlescapeGame::getRuleset() const
 {

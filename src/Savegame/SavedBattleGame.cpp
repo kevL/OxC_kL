@@ -169,14 +169,14 @@ void SavedBattleGame::load(
 		SavedGame* savedGame)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::load()";
-	_mapsize_x			= node["width"].as<int>(_mapsize_x);
-	_mapsize_y			= node["length"].as<int>(_mapsize_y);
-	_mapsize_z			= node["height"].as<int>(_mapsize_z);
-	_missionType		= node["missionType"].as<std::string>(_missionType);
-	_globalShade		= node["globalshade"].as<int>(_globalShade);
-	_turn				= node["turn"].as<int>(_turn);
-	_depth				= node["depth"].as<int>(_depth);
-	_terrain			= node["terrain"].as<std::string>(_terrain); // sza_MusicRules
+	_mapsize_x			= node["width"]			.as<int>(_mapsize_x);
+	_mapsize_y			= node["length"]		.as<int>(_mapsize_y);
+	_mapsize_z			= node["height"]		.as<int>(_mapsize_z);
+	_missionType		= node["missionType"]	.as<std::string>(_missionType);
+	_globalShade		= node["globalshade"]	.as<int>(_globalShade);
+	_turn				= node["turn"]			.as<int>(_turn);
+	_depth				= node["depth"]			.as<int>(_depth);
+	_terrain			= node["terrain"]		.as<std::string>(_terrain); // sza_MusicRules
 
 	int selectedUnit	= node["selectedUnit"].as<int>();
 
@@ -218,13 +218,13 @@ void SavedBattleGame::load(
 				0,
 				sizeof(Tile::SerializationKey));
 
-		serKey.index			= node["tileIndexSize"].as<Uint8>(serKey.index);
-		serKey.totalBytes		= node["tileTotalBytesPer"].as<Uint32>(serKey.totalBytes);
-		serKey._fire			= node["tileFireSize"].as<Uint8>(serKey._fire);
-		serKey._smoke			= node["tileSmokeSize"].as<Uint8>(serKey._smoke);
-		serKey._animOffset		= node["tileOffsetSize"].as<Uint8>(serKey._animOffset); // kL
-		serKey._mapDataID		= node["tileIDSize"].as<Uint8>(serKey._mapDataID);
-		serKey._mapDataSetID	= node["tileSetIDSize"].as<Uint8>(serKey._mapDataSetID);
+		serKey.index			= node["tileIndexSize"]		.as<Uint8>(serKey.index);
+		serKey.totalBytes		= node["tileTotalBytesPer"]	.as<Uint32>(serKey.totalBytes);
+		serKey._fire			= node["tileFireSize"]		.as<Uint8>(serKey._fire);
+		serKey._smoke			= node["tileSmokeSize"]		.as<Uint8>(serKey._smoke);
+		serKey._animOffset		= node["tileOffsetSize"]	.as<Uint8>(serKey._animOffset); // kL
+		serKey._mapDataID		= node["tileIDSize"]		.as<Uint8>(serKey._mapDataID);
+		serKey._mapDataSetID	= node["tileSetIDSize"]		.as<Uint8>(serKey._mapDataSetID);
 		serKey.boolFields		= node["tileBoolFieldsSize"].as<Uint8>(1); // boolean flags used to be stored in an unmentioned byte (Uint8) :|
 
 		// load binary tile data!
@@ -392,7 +392,7 @@ void SavedBattleGame::load(
 	}
 
 	// tie ammo items to their weapons, running through the items again
-	std::vector<BattleItem*>::iterator weaponi = _items.begin();
+	std::vector<BattleItem*>::iterator itWeapon = _items.begin();
 	for (YAML::const_iterator
 			i = node["items"].begin();
 			i != node["items"].end();
@@ -404,27 +404,26 @@ void SavedBattleGame::load(
 			if (ammo != -1)
 			{
 				for (std::vector<BattleItem*>::iterator
-						ammoi = _items.begin();
-						ammoi != _items.end();
-						++ammoi)
+						itAmmo = _items.begin();
+						itAmmo != _items.end();
+						++itAmmo)
 				{
-					if ((*ammoi)->getId() == ammo)
+					if ((*itAmmo)->getId() == ammo)
 					{
-						(*weaponi)->setAmmoItem((*ammoi));
-
+						(*itWeapon)->setAmmoItem(*itAmmo);
 						break;
 					}
 				}
 			}
 
-			++weaponi;
+			++itWeapon;
 		}
 	}
 
-	_objectiveDestroyed	= node["objectiveDestroyed"].as<bool>(_objectiveDestroyed);
-	_tuReserved			= (BattleActionType)node["tuReserved"].as<int>(_tuReserved);
-	_kneelReserved		= node["kneelReserved"].as<bool>(_kneelReserved);
-	_alienRace			= node["alienRace"].as<std::string>(_alienRace);
+	_objectiveDestroyed	= node["objectiveDestroyed"]			.as<bool>(_objectiveDestroyed);
+	_tuReserved			= (BattleActionType)node["tuReserved"]	.as<int>(_tuReserved);
+	_kneelReserved		= node["kneelReserved"]					.as<bool>(_kneelReserved);
+	_alienRace			= node["alienRace"]						.as<std::string>(_alienRace);
 }
 
 /**

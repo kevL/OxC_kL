@@ -3706,8 +3706,9 @@ void BattleUnit::deriveRank()
  */
 bool BattleUnit::checkViewSector(Position pos) const
 {
-	int dx = pos.x - _pos.x;
-	int dy = _pos.y - pos.y;
+	int
+		dx = pos.x - _pos.x,
+		dy = _pos.y - pos.y;
 
 	switch (_direction)
 	{
