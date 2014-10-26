@@ -1149,21 +1149,21 @@ void Inventory::mouseClick(Action* action, State* state)
 /**
  * Unloads the selected weapon, placing the gun
  * on the right hand and the ammo on the left hand.
- * @return The success of the weapon being unloaded.
+ * @return, true if the weapon was successfully unloaded
  */
 bool Inventory::unload()
 {
-	if (_selItem == NULL) // Must be holding an item
+	if (_selItem == NULL)
 		return false;
 
-	if (_selItem->getAmmoItem() == NULL // Item must be loaded
-		&& !_selItem->getRules()->getCompatibleAmmo()->empty())
+	if (_selItem->getAmmoItem() == NULL
+		&& _selItem->getRules()->getCompatibleAmmo()->empty() == false)
 	{
 		_warning->showMessage(_game->getLanguage()->getString("STR_NO_AMMUNITION_LOADED"));
 	}
 
 	if (_selItem->getAmmoItem() == NULL
-		|| !_selItem->needsAmmo())
+		|| _selItem->needsAmmo() == false)
 	{
 		return false;
 	}
@@ -1177,12 +1177,11 @@ bool Inventory::unload()
 			&& *i != _selItem)
 		{
 			_warning->showMessage(_game->getLanguage()->getString("STR_BOTH_HANDS_MUST_BE_EMPTY"));
-
-			return false; // Hands must be free
+			return false;
 		}
 	}
 
-	if (!_tu
+	if (_tu == false
 		|| _selUnit->spendTimeUnits(8))
 	{
 		moveItem(
@@ -1203,7 +1202,6 @@ bool Inventory::unload()
 	else
 	{
 		_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-
 		return false;
 	}
 
@@ -1214,7 +1212,7 @@ bool Inventory::unload()
  * Arranges items on the ground for the inventory display.
  * Since items on the ground aren't assigned to anyone
  * they don't actually have permanent slot positions.
- * @param alterOffset Whether to alter the ground offset.
+ * @param alterOffset - true to alter the ground offset
  */
 void Inventory::arrangeGround(bool alterOffset)
 {
@@ -1253,14 +1251,14 @@ void Inventory::arrangeGround(bool alterOffset)
 			y = 0;
 
 			fit = false;
-			while (!fit)
+			while (fit == false)
 			{
 				fit = true; // assume we can put the item here, if one of the following checks fails, we can't.
 				for (int
 						xd = 0;
 						xd < (*i)->getRules()->getInventoryWidth()
 							&& fit;
-						xd++)
+						++xd)
 				{
 					if ((x + xd) %slotsX < x %slotsX)
 						fit = false;
@@ -1270,7 +1268,7 @@ void Inventory::arrangeGround(bool alterOffset)
 								yd = 0;
 								yd < (*i)->getRules()->getInventoryHeight()
 									&& fit;
-								yd++)
+								++yd)
 						{
 							BattleItem* item = _selUnit->getItem(
 																ground,
@@ -1284,7 +1282,7 @@ void Inventory::arrangeGround(bool alterOffset)
 					}
 				}
 
-				if (fit)
+				if (fit == true)
 				{
 					(*i)->setSlotX(x);
 					(*i)->setSlotY(y);
@@ -1309,7 +1307,7 @@ void Inventory::arrangeGround(bool alterOffset)
 		}
 	}
 
-	if (alterOffset)
+	if (alterOffset == true)
 	{
 		int itemWidth = 0;
 		if (_selItem != NULL)
@@ -1362,14 +1360,14 @@ bool Inventory::fitItem(
 				{
 					placed = true;
 				}
-				else if (!overlapItems(
+				else if (overlapItems(
 									_selUnit,
 									item,
 									newSlot,
 									x2,
-									y2))
+									y2) == false)
 				{
-					if (!_tu
+					if (_tu == false
 						|| _selUnit->spendTimeUnits(item->getSlot()->getCost(newSlot)))
 					{
 						placed = true;
@@ -1384,12 +1382,10 @@ bool Inventory::fitItem(
 																_depth,
 																ResourcePack::ITEM_DROP)
 															->play();
-
 						drawItems();
 					}
 					else if (test == false)
 						_warning->showMessage(_game->getLanguage()->getString("STR_NOT_ENOUGH_TIME_UNITS"));
-//						warning = "STR_NOT_ENOUGH_TIME_UNITS";
 				}
 			}
 		}
@@ -1460,7 +1456,7 @@ void Inventory::drawPrimers()
 
 /**
  * kL. Sets grenade to show a warning in Inventory.
- * @param turn, Turns until grenade is to explode
+ * @param turn - turns until grenade is to explode
  */
 void Inventory::setPrimeGrenade(int turn) // kL
 {
@@ -1469,6 +1465,7 @@ void Inventory::setPrimeGrenade(int turn) // kL
 
 /**
  * kL. Gets the TU cost for moving items around.
+ * @return, time unit cost
  */
 int Inventory::getTUCost() const // kL
 {

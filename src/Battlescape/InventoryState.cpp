@@ -74,7 +74,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Inventory screen.
- * @param tu		- true if in battle when inventory usage uses time units
+ * @param tu		- true if in battle when inventory use costs time units
  * @param parent	- pointer to parent BattlescapeState
  */
 InventoryState::InventoryState(
@@ -134,7 +134,7 @@ InventoryState::InventoryState(
 
 	_btnRank	= new BattlescapeButton(26, 23, 0, 0);
 	_btnUnload	= new BattlescapeButton(32, 25, 288, 32);
-	_btnGround	= new BattlescapeButton(30, 15, 290, 137);
+	_btnGround	= new BattlescapeButton(32, 15, 288, 137);
 
 /*	_btnCreateTemplate	= new BattlescapeButton(
 											32,
@@ -499,7 +499,6 @@ void InventoryState::init()
 	_btnRank->clear();
 	_gender->clear();
 
-//	_txtName->setBig();
 	_txtName->setText(unit->getName(_game->getLanguage()));
 
 	_inv->setSelectedUnit(unit);
@@ -782,7 +781,6 @@ void InventoryState::btnPrevClick(Action*)
 											false,
 											false,
 											true);
-
 	init();
 }
 
@@ -805,7 +803,6 @@ void InventoryState::btnNextClick(Action*)
 										false,
 										false,
 										true);
-
 	init();
 }
 
@@ -815,10 +812,8 @@ void InventoryState::btnNextClick(Action*)
  */
 void InventoryState::btnUnloadClick(Action*)
 {
-	if (_inv->unload())
+	if (_inv->unload() == true)
 	{
-		_inv->unload();
-
 		_txtItem->setText(L"");
 		_txtAmmo->setText(L"");
 		_txtUseTU->setText(L"");
