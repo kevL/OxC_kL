@@ -824,7 +824,7 @@ void Map::drawTerrain(Surface* surface)
 												surface,
 												screenPosition.x + offset.x + 4 + 16,
 												screenPosition.y + offset.y + 4 + 32,
-												0,
+												_animFrame * 2,
 												false,
 												3); // 1=white, 3=red
 									}
@@ -1378,7 +1378,7 @@ void Map::drawTerrain(Surface* surface)
 												surface,
 												screenPosition.x + offset.x + 4,
 												screenPosition.y + offset.y + 4 + 24,
-												0,
+												_animFrame * 2,
 												false,
 												3); // 1=white, 3=red
 									}
@@ -1633,7 +1633,7 @@ void Map::drawTerrain(Surface* surface)
 													surface,
 													screenPosition.x + offset.x + 4,
 													screenPosition.y + offset.y + 4,
-													0,
+													_animFrame * 2,
 													false,
 													3); // 1=white, 3=red.
 
@@ -1713,7 +1713,7 @@ void Map::drawTerrain(Surface* surface)
 									surface,
 									screenPosition.x + 2,
 									screenPosition.y + 1,
-									0,
+									_animFrame * 2,
 									false,
 									color);
 						}

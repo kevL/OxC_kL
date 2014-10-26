@@ -1058,11 +1058,8 @@ int Tile::getHasUnconsciousSoldier() // kL
 			if (bu->getFatalWounds() == 0)
 				ret = 1;
 			else
-				ret = 2;
+				return 2;
 		}
-
-		if (ret == 2)
-			break;
 	}
 
 	return ret;
