@@ -701,6 +701,7 @@ items:
     costBuy: 4000
     costSell: 3100
     listOrder: 7305
+    noResearch: true
 #------------------------------------------------------------------------------
   - type: STR_CORPSE_KEVLAR_ARCTIC
     name: STR_CORPSE
@@ -717,6 +718,7 @@ items:
     costBuy: 4000
     costSell: 3100
     listOrder: 7310
+    noResearch: true
 #------------------------------------------------------------------------------
   - type: STR_CORPSE_KEVLAR_JUNGLE
     name: STR_CORPSE
@@ -733,6 +735,7 @@ items:
     costBuy: 4000
     costSell: 3100
     listOrder: 7315
+    noResearch: true
 #------------------------------------------------------------------------------
   - type: STR_CORPSE_KEVLAR_URBAN
     name: STR_CORPSE
@@ -750,6 +753,7 @@ items:
     costBuy: 6000
     costSell: 4500
     listOrder: 7320
+    noResearch: true
 #------------------------------------------------------------------------------
   - type: STR_CORPSE_TACTICAL_ARCTIC
     name: STR_CORPSE
@@ -766,6 +770,7 @@ items:
     costBuy: 6000
     costSell: 4500
     listOrder: 7325
+    noResearch: true
 #------------------------------------------------------------------------------
   - type: STR_CORPSE_TACTICAL_JUNGLE
     name: STR_CORPSE
@@ -782,6 +787,7 @@ items:
     costBuy: 6000
     costSell: 4500
     listOrder: 7330
+    noResearch: true
 #------------------------------------------------------------------------------
   - type: STR_CORPSE_TACTICAL_URBAN
     name: STR_CORPSE
