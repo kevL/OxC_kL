@@ -142,7 +142,6 @@ void LoadGameState::init()
 		&& !CrossPlatform::fileExists(Options::getUserFolder() + _filename))
 	{
 		_game->popState();
-
 		return;
 	}
 }

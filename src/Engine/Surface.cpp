@@ -965,6 +965,7 @@ struct ColorReplace
 * @param src source pixel
 * @param shade value of shade of this surface
 * @param newColor new color to set (it should be offseted by 4)
+* @param notused
 */
 static inline void func(
 		Uint8& dest,
@@ -982,6 +983,7 @@ static inline void func(
 			dest = newColor | newShade;
 	}
 }
+
 };
 
 
@@ -990,6 +992,7 @@ static inline void func(
  */
 struct StandartShade
 {
+
 /**
 * Function used by ShaderDraw in Surface::blitNShade
 * set shade
@@ -1015,6 +1018,7 @@ static inline void func(
 			dest = (src & (15 << 4)) | newShade;
 	}
 }
+
 };
 
 

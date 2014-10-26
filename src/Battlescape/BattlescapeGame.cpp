@@ -77,8 +77,8 @@ bool BattlescapeGame::_debugPlay = false;
 
 /**
  * Initializes all the elements in the Battlescape screen.
- * @param save Pointer to the save game.
- * @param parentState Pointer to the parent battlescape state.
+ * @param save			- pointer to the SavedBattleGame
+ * @param parentState	- pointer to the parent BattlescapeState
  */
 BattlescapeGame::BattlescapeGame(
 		SavedBattleGame* save,
@@ -88,14 +88,13 @@ BattlescapeGame::BattlescapeGame(
 		_parentState(parentState),
 		_playedAggroSound(false),
 		_endTurnRequested(false)
-//		_kneelReserved(false)
 {
 	//Log(LOG_INFO) << "Create BattlescapeGame";
-	_debugPlay				= false;
-	_playerPanicHandled		= true;
-	_AIActionCounter		= 0;
-	_AISecondMove			= false;
-	_currentAction.actor	= NULL;
+	_debugPlay = false;
+	_playerPanicHandled = true;
+	_AIActionCounter = 0;
+	_AISecondMove = false;
+	_currentAction.actor = NULL;
 
 	checkForCasualties(
 					NULL,
@@ -104,19 +103,19 @@ BattlescapeGame::BattlescapeGame(
 
 	cancelCurrentAction();
 
-	_currentAction.type			= BA_NONE;
-	_currentAction.targeting	= false;
+	_currentAction.type = BA_NONE;
+	_currentAction.targeting = false;
 
 	_universalFist = new BattleItem(
 								parentState->getGame()->getRuleset()->getItem("STR_FIST"),
 								save->getCurrentItemId());
 
 	for (std::vector<BattleUnit*>::iterator // kL
-			bu = _save->getUnits()->begin();
-			bu != _save->getUnits()->end();
-			++bu)
+			i = _save->getUnits()->begin();
+			i != _save->getUnits()->end();
+			++i)
 	{
-		(*bu)->setBattleGame(this);
+		(*i)->setBattleGame(this);
 	}
 }
 
@@ -125,12 +124,6 @@ BattlescapeGame::BattlescapeGame(
  */
 BattlescapeGame::~BattlescapeGame()
 {
-	//Log(LOG_INFO) << "Delete BattlescapeGame";
-
-// THIS CAUSES ctd BECAUSE, WHEN RELOADING FROM Main-Menu,
-// A new BATTLESCAPE_GAME IS CREATED *BEFORE* THE OLD ONE IS dTor'D
-// ( i think ) So this loop 'deletes' the fresh BattlescapeGame's states .....
-// leaving the old states that should (have) be(en) deleted intact.
 	for (std::list<BattleState*>::iterator
 			i = _states.begin();
 			i != _states.end();
@@ -138,7 +131,6 @@ BattlescapeGame::~BattlescapeGame()
 	{
 		delete *i;
 	}
-// *cough* so much for that hypothesis
 
 	delete _universalFist;
 }
@@ -203,7 +195,6 @@ void BattlescapeGame::think()
 			_save->setUnitsFalling(false);
 		}
 	}
-
 	//Log(LOG_INFO) << "BattlescapeGame::think() EXIT";
 }
 
@@ -600,13 +591,12 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
  */
 void BattlescapeGame::endGameTurn()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::endGameTurn()";
-	_debugPlay		= false;
-	_AISecondMove	= false;
+	_debugPlay = false;
+	_AISecondMove = false;
 	_parentState->showLaunchButton(false);
 
-	_currentAction.targeting	= false;
-	_currentAction.type			= BA_NONE;
+	_currentAction.targeting = false;
+	_currentAction.type = BA_NONE;
 	_currentAction.waypoints.clear();
 
 	getMap()->getWaypoints()->clear();
@@ -618,12 +608,12 @@ void BattlescapeGame::endGameTurn()
 			++i) // check for hot grenades on the ground
 	{
 		for (std::vector<BattleItem*>::iterator
-				it = _save->getTiles()[i]->getInventory()->begin();
-				it != _save->getTiles()[i]->getInventory()->end();
+				j = _save->getTiles()[i]->getInventory()->begin();
+				j != _save->getTiles()[i]->getInventory()->end();
 				)
 		{
-			if ((*it)->getRules()->getBattleType() == BT_GRENADE
-				&& (*it)->getFuseTimer() == 0) // it's a grenade to explode now
+			if ((*j)->getRules()->getBattleType() == BT_GRENADE
+				&& (*j)->getFuseTimer() == 0) // it's a grenade to explode now
 			{
 				pos.x = _save->getTiles()[i]->getPosition().x * 16 + 8;
 				pos.y = _save->getTiles()[i]->getPosition().y * 16 + 8;
@@ -632,20 +622,17 @@ void BattlescapeGame::endGameTurn()
 				statePushNext(new ExplosionBState(
 												this,
 												pos,
-												*it,
-												(*it)->getPreviousOwner()));
-				_save->removeItem(*it);
+												*j,
+												(*j)->getPreviousOwner()));
+				_save->removeItem(*j);
 
 				statePushBack(NULL);
-
-				//Log(LOG_INFO) << "BattlescapeGame::endGameTurn(), hot grenades EXIT";
 				return;
 			}
 
-			++it;
+			++j;
 		}
 	}
-	//Log(LOG_INFO) << ". done grenades";
 
 	if (_save->getTileEngine()->closeUfoDoors()
 		&& ResourcePack::SLIDING_DOOR_CLOSE != -1) // try, close doors between grenade & terrain explosions
@@ -658,12 +645,12 @@ void BattlescapeGame::endGameTurn()
 
 	// check for terrain explosions
 	Tile* tile = _save->getTileEngine()->checkForTerrainExplosions();
-	if (tile)
+	if (tile != NULL)
 	{
-		Position pos = Position(
-							tile->getPosition().x * 16 + 8,
-							tile->getPosition().y * 16 + 8,
-							tile->getPosition().z * 24 + 10);
+		pos = Position(
+					tile->getPosition().x * 16 + 8,
+					tile->getPosition().y * 16 + 8,
+					tile->getPosition().z * 24 + 10);
 
 		// kL_note: This seems to be screwing up for preBattle powersource explosions; they
 		// wait until the first turn, either endTurn or perhaps checkForCasualties or like that.
@@ -677,11 +664,8 @@ void BattlescapeGame::endGameTurn()
 		tile = _save->getTileEngine()->checkForTerrainExplosions();
 
 		statePushBack(NULL);
-
-		//Log(LOG_INFO) << "BattlescapeGame::endGameTurn(), terrain explosions EXIT";
 		return;
 	}
-	//Log(LOG_INFO) << ". done explosions";
 
 	if (_save->getSide() != FACTION_NEUTRAL) // tick down grenade timers
 	{
@@ -698,12 +682,8 @@ void BattlescapeGame::endGameTurn()
 			}
 		}
 	}
-	//Log(LOG_INFO) << ". done !neutral";
 
 	// kL_begin: battleUnit is burning...
-	// Fire damage is also in Savegame/BattleUnit::prepareUnitTurn(), on fire
-	// see also, Savegame/Tile::prepareTileTurn(), catch fire on fire tile
-	// fire damage by hit is caused by TileEngine::explode()
 	for (std::vector<BattleUnit*>::iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
@@ -715,38 +695,25 @@ void BattlescapeGame::endGameTurn()
 			if (tile != NULL
 				&& (*i)->getHealth() > 0
 				&& ((*i)->getGeoscapeSoldier() != NULL
-//					|| ((*i)->getUnitRules() &&
 					|| (*i)->getUnitRules()->getMechanical() == false))
 			{
 				tile->endTileTurn(); // smoke & fire stuff.
 			}
-/* moved to endTileTurn()
-			int fire = (*i)->getFire(); // Catch fire first! do it here
-			if (fire > 0)
-			{
-				(*i)->damage(
-							Position(0, 0, 0),
-							RNG::generate(3, 9),
-							DT_IN,
-							true);
-			} */
 		}
 	} // kL_end.
 	// that just might work...
-	//Log(LOG_INFO) << ". done fire damage";
 
 	// if all units from either faction are killed - the mission is over.
-	int liveAliens = 0;
-	int liveSoldiers = 0;
+	int
+		liveAliens = 0,
+		liveSoldiers = 0;
 	// we'll tally them NOW, so that any infected units will... change
 	tallyUnits(
 			liveAliens,
 			liveSoldiers,
 			true);
-	//Log(LOG_INFO) << ". done tallyUnits";
 
 	_save->endBattleTurn(); // <- this rolls over Faction-turns.
-	//Log(LOG_INFO) << ". done save->endBattleTurn";
 
 	if (_save->getSide() == FACTION_PLAYER)
 	{
@@ -759,11 +726,9 @@ void BattlescapeGame::endGameTurn()
 		_save->getBattleState()->toggleIcons(false);
 	}
 
-
 	checkForCasualties(
 					NULL,
 					NULL);
-	//Log(LOG_INFO) << ". done checkForCasualties";
 
 	// turn off MCed alien lighting.
 	_save->getTileEngine()->calculateUnitLighting();
@@ -773,8 +738,6 @@ void BattlescapeGame::endGameTurn()
 		_parentState->finishBattle(
 								false,
 								liveSoldiers);
-
-		//Log(LOG_INFO) << "BattlescapeGame::endGameTurn(), objectiveDestroyed EXIT";
 		return;
 	}
 
@@ -785,29 +748,26 @@ void BattlescapeGame::endGameTurn()
 
 		_parentState->updateSoldierInfo();
 
-		if (playableUnitSelected()) // <- only Faction_Player (or Debug-mode)
+		if (playableUnitSelected() == true) // <- only Faction_Player (or Debug-mode)
 		{
 			getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 			setupCursor();
 		}
 	}
-	//Log(LOG_INFO) << ". done updates";
 
 	bool battleComplete = liveAliens == 0
-						|| liveSoldiers == 0;
+					   || liveSoldiers == 0;
 
-	if (_endTurnRequested
+	if (_endTurnRequested == true
 		&& (_save->getSide() != FACTION_NEUTRAL
-			|| battleComplete))
+			|| battleComplete == true))
 	{
-		//Log(LOG_INFO) << ". . pushState(nextTurnState)";
 		_parentState->getGame()->pushState(new NextTurnState(
 														_save,
 														_parentState));
 	}
 
 	_endTurnRequested = false;
-	//Log(LOG_INFO) << "BattlescapeGame::endGameTurn() EXIT";
 }
 
 /**
@@ -2586,12 +2546,11 @@ void BattlescapeGame::moveUpDown(
 		BattleUnit* unit,
 		int dir)
 {
-	//Log(LOG_INFO) << "BattlescapeGame::moveUpDown()";
 	_currentAction.target = unit->getPosition();
 
 	if (dir == Pathfinding::DIR_UP)
 	{
-		if ((SDL_GetModState() & KMOD_ALT) != 0) // kL
+		if ((SDL_GetModState() & KMOD_ALT) != 0)
 			return;
 
 		_currentAction.target.z++;
@@ -2602,28 +2561,17 @@ void BattlescapeGame::moveUpDown(
 	getMap()->setCursorType(CT_NONE);
 	_parentState->getGame()->getCursor()->setVisible(false);
 
-	// kL_note: taking this out so I can go up/down *kneeled* on GravLifts.
-	// might be a problem with soldiers in flying suits, later...
-/*kL	if (_save->getSelectedUnit()->isKneeled())
-	{
-		//Log(LOG_INFO) << "BattlescapeGame::moveUpDown()";
-
-		kneel(_save->getSelectedUnit());
-	} */
-
-	// kL_begin:
-	_currentAction.strafe = false; // kL, redundancy checks ......
+	_currentAction.strafe = false; // redundancy checks ......
 	_currentAction.dash = false;
 	_currentAction.actor->setDashing(false);
 
 	if (Options::strafe
 		&& (SDL_GetModState() & KMOD_CTRL) != 0
 		&& unit->getGeoscapeSoldier() != NULL)
-//		&& unit->getArmor()->getSize() == 1)
 	{
 		_currentAction.dash = true;
 		_currentAction.actor->setDashing(true);
-	} // kL_end.
+	}
 
 	_save->getPathfinding()->calculate(
 									_currentAction.actor,
@@ -2639,17 +2587,13 @@ void BattlescapeGame::moveUpDown(
  */
 void BattlescapeGame::requestEndTurn()
 {
-	//Log(LOG_INFO) << "BattlescapeGame::requestEndTurn()";
 	cancelCurrentAction();
 
 	if (_endTurnRequested == false)
 	{
 		_endTurnRequested = true;
-
 		statePushBack(NULL);
 	}
-
-	//Log(LOG_INFO) << "BattlescapeGame::requestEndTurn() EXIT";
 }
 
 /**

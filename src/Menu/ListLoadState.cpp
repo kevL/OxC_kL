@@ -68,13 +68,16 @@ void ListLoadState::lstSavesPress(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 #ifndef __NO_MUSIC
-		if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
+		if (_origin == OPT_MENU)
 		{
-			Mix_FadeOutMusic(1200);
-			func_fade();
+			if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
+			{
+				Mix_FadeOutMusic(1200);
+				func_fade();
+			}
+			else
+				Mix_HaltMusic();
 		}
-		else
-			Mix_HaltMusic();
 #endif
 
 		bool confirm = false;

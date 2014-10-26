@@ -1406,20 +1406,18 @@ int BattleUnit::damage(
 					_stunLevel += RNG::generate(0, power / 3); // kL_note: was, 4
 				}
 
-				if (ignoreArmor == false)	// kinda funky: only wearers of armor-types-that-are
-											// -resistant-to-damage-types can take fatal wounds
+				if (ignoreArmor == false)// Only wearers of armors-that-are-resistant-to-damage-type can take fatal wounds.
 				{
 					if (isWoundable()) // fatal wounds
 					{
 						if (RNG::generate(0, 10) < power) // kL: refactor this.
 						{
-							int wounds = RNG::generate(1, 3);
+							const int wounds = RNG::generate(1, 3);
 							_fatalWounds[bodypart] += wounds;
 
 							moraleChange(-wounds * 3);
 						}
 					}
-
 //					setArmor(getArmor(side) - (power / 10) - 1, side); // armor damage
 				}
 			}
@@ -1449,7 +1447,7 @@ int BattleUnit::damage(
 }
 
 /**
- * kL. Plays a grunt sFx when hit/damaged.
+ * kL. Plays a grunt sFx when this BattleUnit gets damaged or hit.
  */
 void BattleUnit::playHitSound() // kL
 {
@@ -1487,7 +1485,7 @@ void BattleUnit::playHitSound() // kL
 
 /**
  * Do an amount of stun recovery.
- * @param power
+ * @param power - stun to recover
  */
 void BattleUnit::healStun(int power)
 {
@@ -1499,6 +1497,7 @@ void BattleUnit::healStun(int power)
 
 /**
  * Gets the amount of stun damage this unit has.
+ * @return, stun level
  */
 int BattleUnit::getStun() const
 {
@@ -3241,7 +3240,7 @@ bool BattleUnit::hasFlightSuit() const // kL
 /**
  * Gets a unit's name.
  * An aLien's name is the translation of its race and rank; hence the language pointer needed.
- * @param lang			- pointer to language
+ * @param lang			- pointer to Language
  * @param debugAppendId	- append unit ID to name for debug purposes
  * @return, name of the unit
  */
@@ -3271,21 +3270,19 @@ std::wstring BattleUnit::getName(
 
 	return _name;
 }
+
 /**
  * Gets a pointer to the unit's stats.
- * @return stats Pointer to the unit's stats.
+ * @return, pointer to this unit's stats if it's not an XCOM Soldier else NULL
  */
 UnitStats* BattleUnit::getStats()
 {
-	//Log(LOG_INFO) << "UnitStats* BattleUnit::getStats(), unitID = " << getId();
-//	adjustStats(3);		// kL, should be gameDifficulty in there <-
-
 	return &_stats;
 }
 
 /**
  * Gets a unit's stand height.
- * @return The unit's height in voxels, when standing up.
+ * @return, this unit's height in voxels when standing
  */
 int BattleUnit::getStandHeight() const
 {
@@ -3294,7 +3291,7 @@ int BattleUnit::getStandHeight() const
 
 /**
  * Gets a unit's kneel height.
- * @return The unit's height in voxels, when kneeling.
+ * @return, this unit's height in voxels when kneeling
  */
 int BattleUnit::getKneelHeight() const
 {
@@ -3303,7 +3300,7 @@ int BattleUnit::getKneelHeight() const
 
 /**
  * Gets a unit's floating elevation.
- * @return The unit's elevation over the ground in voxels, when flying.
+ * @return, this unit's elevation over the ground in voxels when floating or flying
  */
 int BattleUnit::getFloatHeight() const
 {
@@ -3324,7 +3321,7 @@ int BattleUnit::getLoftemps(int entry) const
 
 /**
  * Gets the unit's value. Used for score at debriefing.
- * @return value score
+ * @return, value score
  */
 int BattleUnit::getValue() const
 {
@@ -3333,7 +3330,7 @@ int BattleUnit::getValue() const
 
 /**
  * Gets the unit's death sound.
- * @return id.
+ * @return, death sound ID
  */
 int BattleUnit::getDeathSound() const
 {
@@ -3342,7 +3339,7 @@ int BattleUnit::getDeathSound() const
 
 /**
  * Gets the unit's move sound.
- * @return id.
+ * @return, move sound ID
  */
 int BattleUnit::getMoveSound() const
 {
@@ -3358,11 +3355,8 @@ bool BattleUnit::isWoundable() const
 {
 	return _geoscapeSoldier != NULL
 		|| (Options::alienBleeding
-			&& _unitRules
 			&& _unitRules->getMechanical() == false
 			&& _race != "STR_ZOMBIE");
-//			&& _faction != FACTION_PLAYER)
-//			&& _armor->getSize() == 1);
 }
 
 /**
@@ -3372,9 +3366,7 @@ bool BattleUnit::isWoundable() const
  */
 bool BattleUnit::isFearable() const
 {
-//	return (_armor->getSize() == 1);
 	return _geoscapeSoldier != NULL
-//		|| (_unitRules &&
 		|| (_unitRules->getMechanical() == false
 			&& _race != "STR_ZOMBIE");
 }

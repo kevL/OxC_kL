@@ -5683,7 +5683,7 @@
 1413140558 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1413140555 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1414282537 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	<cmath>
 	<sstream>
@@ -5823,7 +5823,7 @@
 1413140555 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1414135239 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1414287954 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6042,7 +6042,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1414214898 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1414287667 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6075,6 +6075,7 @@
 	"UnitWalkBState.h"
 	"WarningMessage.h"
 	"../Engine/Action.h"
+	"../Engine/Adlib/adlplayer.h"
 	"../Engine/CrossPlatform.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
@@ -6245,7 +6246,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1414000746 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1414288800 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6254,6 +6255,7 @@
 	"PromotionsState.h"
 	"../Basescape/ManageAlienContainmentState.h"
 	"../Basescape/SellState.h"
+	"../Engine/Adlib/adlplayer.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Music.h"
@@ -6445,7 +6447,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1414213786 source:f:\git\openxcom\src\battlescape\map.cpp
+1414268361 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6771,7 +6773,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1414136266 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1414266525 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7298,7 +7300,7 @@
 1413140559 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1413140557 source:f:\git\openxcom\src\engine\surface.cpp
+1414266675 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
 	<fstream>
 	<vector>
@@ -8467,10 +8469,11 @@
 	<sstream>
 	"../Engine/State.h"
 
-1413140559 source:f:\git\openxcom\src\menu\abandongamestate.cpp
+1414289322 source:f:\git\openxcom\src\menu\abandongamestate.cpp
 	"AbandonGameState.h"
 	"MainMenuState.h"
 	"SaveGameState.h"
+	"../Engine/Adlib/adlplayer.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -8536,7 +8539,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1414211179 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1414282775 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	<sstream>
 	"ListLoadState.h"
@@ -8762,7 +8765,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1413140559 source:f:\git\openxcom\src\menu\pausestate.cpp
+1414282990 source:f:\git\openxcom\src\menu\pausestate.cpp
 	"PauseState.h"
 	"AbandonGameState.h"
 	"ListLoadState.h"
@@ -9568,7 +9571,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1414208704 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1414270967 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9794,7 +9797,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1414207477 source:f:\git\openxcom\src\savegame\tile.cpp
+1414265331 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
@@ -11870,7 +11873,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1414210912 source:f:\git\openxcom\src\menu\listloadstate.cpp
+1414283199 source:f:\git\openxcom\src\menu\listloadstate.cpp
 	"ListLoadState.h"
 	"ConfirmLoadState.h"
 	"LoadGameState.h"
@@ -11916,7 +11919,7 @@
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
-1413870097 source:f:\git\openxcom\src\menu\loadgamestate.cpp
+1414286608 source:f:\git\openxcom\src\menu\loadgamestate.cpp
 	"LoadGameState.h"
 	<sstream>
 	"ErrorMessageState.h"

@@ -22,6 +22,7 @@
 #include "MainMenuState.h"
 #include "SaveGameState.h"
 
+#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 
 #include "../Engine/Language.h"
@@ -113,7 +114,21 @@ AbandonGameState::~AbandonGameState()
  */
 void AbandonGameState::btnYesClick(Action*)
 {
-	if (!_game->getSavedGame()->isIronman())
+#ifndef __NO_MUSIC
+	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
+	{
+		Mix_FadeOutMusic(900);
+		func_fade();
+
+		while (Mix_PlayingMusic() == 1)
+		{
+		}
+	}
+	else
+		Mix_HaltMusic();
+#endif
+
+	if (_game->getSavedGame()->isIronman() == false)
 	{
 		// This uses baseX/Y options for Geoscape & Basescape:
 //		Options::baseXResolution = Options::baseXGeoscape; // kL

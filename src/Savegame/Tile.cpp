@@ -52,13 +52,13 @@ Tile::SerializationKey Tile::serializationKey =
 	1,	// _smoke
 	1,	// _animOffset
 	1,	// one 8-bit bool field
-	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1 + 1
+	4 + (2 * 4) + (2 * 4) + 1 + 1 + 1 + 1 // total bytes to save one tile
 };
 
 
 /**
-* constructor
-* @param pos Position.
+* cTor.
+* @param pos - reference Position
 */
 Tile::Tile(const Position& pos)
 	:
@@ -73,8 +73,8 @@ Tile::Tile(const Position& pos)
 		_preview(-1),
 		_tuMarker(-1),
 		_overlaps(0),
-		_danger(false),
-		_inventory() // kL
+		_danger(false)
+//		_inventory() // kL
 {
 	for (int
 			i = 0;

@@ -29,6 +29,7 @@
 #include "../Basescape/ManageAlienContainmentState.h"
 #include "../Basescape/SellState.h"
 
+#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
@@ -302,7 +303,7 @@ DebriefingState::DebriefingState()
 	}
 
 	// add the points to activity scores
-	if (_region)
+	if (_region != NULL)
 	{
 		//Log(LOG_INFO) << ". aLien act.ScoreREGION = " << _region->getActivityAlien().back();
 		if (_destroyXCOMBase)
@@ -318,7 +319,7 @@ DebriefingState::DebriefingState()
 		}
 	}
 
-	if (_country)
+	if (_country != NULL)
 	{
 		//Log(LOG_INFO) << ". aLien act.ScoreCOUNTRY = " << _country->getActivityAlien().back();
 		if (_destroyXCOMBase)
@@ -475,6 +476,20 @@ DebriefingState::~DebriefingState()
 void DebriefingState::btnOkClick(Action*)
 {
 	//Log(LOG_INFO) << "DebriefingState::btnOkClick()";
+#ifndef __NO_MUSIC
+	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
+	{
+		Mix_FadeOutMusic(900);
+		func_fade();
+
+		while (Mix_PlayingMusic() == 1)
+		{
+		}
+	}
+	else
+		Mix_HaltMusic();
+#endif
+
 	std::vector<Soldier*> participants;
 	for (std::vector<BattleUnit*>::const_iterator
 			i = _game->getSavedGame()->getSavedBattle()->getUnits()->begin();
@@ -504,9 +519,9 @@ void DebriefingState::btnOkClick(Action*)
 			if (_missingItems.empty() == false)
 				_game->pushState(new CannotReequipState(_missingItems));
 
-			if (_noContainment)
+			if (_noContainment == true)
 				_game->pushState(new NoContainmentState());
-			else if (_manageContainment)
+			else if (_manageContainment == true)
 			{
 				_game->pushState(new ManageAlienContainmentState(
 																_base,
@@ -523,7 +538,7 @@ void DebriefingState::btnOkClick(Action*)
 
 			if (_manageContainment == false
 				&& Options::storageLimitsEnforced
-				&& _base->storesOverfull())
+				&& _base->storesOverfull() == true)
 			{
 				_game->pushState(new SellState(
 											_base,
@@ -538,7 +553,7 @@ void DebriefingState::btnOkClick(Action*)
 			}
 		}
 
-		if (_game->getSavedGame()->isIronman()) // Autosave after mission
+		if (_game->getSavedGame()->isIronman() == true) // Autosave after mission
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
 											SAVE_IRONMAN,
@@ -1591,8 +1606,8 @@ void DebriefingState::prepareDebriefing()
 
 /**
  * Reequips a craft after a mission.
- * @param base					- pointer to a base to reequip from
- * @param craft					- pointer to a craft to reequip
+ * @param base					- pointer to a Base to reequip from
+ * @param craft					- pointer to a Craft to reequip
  * @param vehicleDestruction	- true if vehicles on the craft can be destroyed
  */
 void DebriefingState::reequipCraft(
@@ -1619,7 +1634,6 @@ void DebriefingState::reequipCraft(
 			base->getItems()->removeItem(
 										i->first,
 										i->second);
-
 //			used = i->second; // kL
 		}
 		else
@@ -1633,7 +1647,6 @@ void DebriefingState::reequipCraft(
 										i->first,
 										lost);
 //										i->second - qty); // kL
-
 //			used = lost; // kL
 
 			ReequipStat stat =
@@ -1727,13 +1740,13 @@ void DebriefingState::reequipCraft(
 		Unit* tankUnit = _rules->getUnit(tankRule->getType());
 
 		int size = 4;
-		if (tankUnit)
+		if (tankUnit != NULL)
 		{
 			size = _rules->getArmor(tankUnit->getArmor())->getSize();
 			size *= size;
 		}
 
-		if (tankRule->getCompatibleAmmo()->empty()) // so this tank does NOT require ammo
+		if (tankRule->getCompatibleAmmo()->empty() == true) // so this tank does NOT require ammo
 		{
 			for (int
 					j = 0;
@@ -1813,10 +1826,9 @@ void DebriefingState::reequipCraft(
 
 /**
  * Recovers items from the battlescape.
- *
  * Converts the battlescape inventory into a geoscape itemcontainer.
- * @param battleItems	- items recovered from the battlescape
- * @param base			- base to add the items to
+ * @param battleItems	- pointer to a vector of pointers to BattleItems on the battlescape
+ * @param base			- base to add recovered items to
  */
 void DebriefingState::recoverItems(
 		std::vector<BattleItem*>* battleItems,

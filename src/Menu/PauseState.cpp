@@ -58,7 +58,6 @@ PauseState::PauseState(OptionsOrigin origin)
 	if (_origin == OPT_GEOSCAPE)
 		x = 20;
 
-
 	_window		= new Window(this, 216, 158, x, 20, POPUP_BOTH);
 
 	_txtTitle	= new Text(206, 15, x + 5, 30);
@@ -71,12 +70,10 @@ PauseState::PauseState(OptionsOrigin origin)
 	_btnOptions	= new TextButton(180, 20, x + 18, 125);
 	_btnCancel	= new TextButton(180, 18, x + 18, 151);
 
-
 	if (_origin == OPT_BATTLESCAPE)
 		_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
 	else
 		setPalette("PAL_GEOSCAPE", 0);
-
 
 	add(_window);
 	add(_txtTitle);
@@ -87,7 +84,6 @@ PauseState::PauseState(OptionsOrigin origin)
 	add(_btnCancel);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));

@@ -56,6 +56,7 @@
 #include "WarningMessage.h"
 
 #include "../Engine/Action.h"
+#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
@@ -495,10 +496,11 @@ BattlescapeState::BattlescapeState()
 	_kneel->drawRect(0, 0, 2, 2, Palette::blockOffset(5)+12);
 	_kneel->setVisible(false);
 
-	Surface* srfOverload = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(97); // 274, brown dot 2px; 97, red sq 3px
+/*	Surface* srfOverload = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(97); // 274, brown dot 2px; 97, red sq 3px
 	srfOverload->setX(-1);
 	srfOverload->setY(-1);
-	srfOverload->blit(_weight);
+	srfOverload->blit(_weight); */
+	_weight->drawRect(0, 0, 2, 2, Palette::blockOffset(1)+6); // yellow-red
 	_weight->setVisible(false);
 
 	_btnWounds->setVisible(false);
@@ -3348,6 +3350,20 @@ void BattlescapeState::finishBattle(
 												_save->getAmbientSound())
 											->stopLoop();
 
+#ifndef __NO_MUSIC
+		if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
+		{
+			Mix_FadeOutMusic(900);
+			func_fade();
+
+			while (Mix_PlayingMusic() == 1)
+			{
+			}
+		}
+		else
+			Mix_HaltMusic();
+#endif
+
 	std::string nextStage;
 
 	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT"
@@ -3357,7 +3373,7 @@ void BattlescapeState::finishBattle(
 	}
 
 	if (nextStage.empty() == false	// if there is a next mission stage
-		&& inExitArea)				// we have people in exit area OR we killed all aliens, load the next stage
+		&& inExitArea > 0)			// there are people in exit area OR all aliens are dead, load the next stage
 	{
 		_popups.clear();
 		_save->setMissionType(nextStage);
@@ -3412,7 +3428,7 @@ void BattlescapeState::finishBattle(
 
 /**
  * Shows the launch button.
- * @param show Show launch button?
+ * @param show - true to show launch button
  */
 void BattlescapeState::showLaunchButton(bool show)
 {
@@ -3421,7 +3437,7 @@ void BattlescapeState::showLaunchButton(bool show)
 
 /**
  * Shows the PSI button.
- * @param show Show PSI button?
+ * @param show - true to show PSI button
  */
 void BattlescapeState::showPsiButton(bool show)
 {
@@ -3438,7 +3454,7 @@ void BattlescapeState::clearMouseScrollingState()
 
 /**
  * Returns a pointer to the battlegame, in case we need its functions.
- * @return, Pointer to BattlescapeGame
+ * @return, pointer to BattlescapeGame
  */
 BattlescapeGame* BattlescapeState::getBattleGame()
 {
@@ -3475,7 +3491,7 @@ void BattlescapeState::mouseOutIcons(Action*)
 
 /**
  * Checks if the mouse is over the icons.
- * @return, True if the mouse is over the icons.
+ * @return, true if the mouse is over the icons
  */
 bool BattlescapeState::getMouseOverIcons() const
 {
@@ -3488,8 +3504,8 @@ bool BattlescapeState::getMouseOverIcons() const
  * the alien turn,and while a player's units are panicking.
  * The save button is an exception as we want to still be able to save if something
  * goes wrong during the alien turn, and submit the save file for dissection.
- * @param allowSaving, True if the help button was clicked.
- * @return, True if the player can still press buttons.
+ * @param allowSaving - true if the help button was clicked
+ * @return, true if the player can still press buttons
  */
 bool BattlescapeState::allowButtons(bool allowSaving) const
 {
@@ -3577,7 +3593,7 @@ void BattlescapeState::resize(
 
 /**
  * kL. Returns the TurnCounter used by the Battlescape.
- * @return, Pointer to the TurnCounter.
+ * @return, pointer to TurnCounter
  */
 /* TurnCounter* BattlescapeState::getTurnCounter() const
 {
@@ -3599,6 +3615,7 @@ void BattlescapeState::updateTurn() // kL
 
 /**
  * kL. Toggles the icons' surfaces' visibility for Hidden Movement.
+ * @param vis - true to show show icons
  */
 void BattlescapeState::toggleIcons(bool vis)
 {

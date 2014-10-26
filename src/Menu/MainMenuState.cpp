@@ -180,7 +180,6 @@ void MainMenuState::btnLoadClick(Action*)
 void MainMenuState::btnOptionsClick(Action*)
 {
 	Options::backupDisplay();
-
 	_game->pushState(new OptionsVideoState(OPT_MENU));
 }
 

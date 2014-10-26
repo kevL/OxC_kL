@@ -2332,7 +2332,7 @@ void TileEngine::explode(
 					{
 						case DT_STUN: // power 0 - 200%
 						{
-							if (targetUnit)
+							if (targetUnit != NULL)
 							{
 								powerUnit = RNG::generate(1, _powerE * 2) // bell curve
 										  + RNG::generate(1, _powerE * 2);
@@ -2369,7 +2369,7 @@ void TileEngine::explode(
 							}
 						}
 						break;
-						case DT_HE: // power 50 - 150%, 65% of that if kneeled. 85% @ GZ
+						case DT_HE: // power 50 - 150%. 70% of that if kneeled, 85% if kneeled @ GZ
 						{
 							//Log(LOG_INFO) << ". . type == DT_HE";
 							if (targetUnit != NULL)
@@ -2546,7 +2546,31 @@ void TileEngine::explode(
 						break;
 						case DT_IN:
 						{
-							Tile
+							if (targetUnit != NULL)
+							{
+								targetUnit->setTakenExpl();
+								powerUnit = RNG::generate( // 25% - 75%
+														_powerE / 4,
+														_powerE * 3 / 4);
+								targetUnit->damage(
+												Position(0, 0, 0),
+												powerUnit,
+												DT_IN,
+												true);
+								//Log(LOG_INFO) << ". . DT_IN : " << targetUnit->getId() << " takes " << firePower << " firePower";
+
+								float vulnerable = targetUnit->getArmor()->getDamageModifier(DT_IN);
+								if (vulnerable > 0.f)
+								{
+									const int burn = RNG::generate(
+																0,
+																static_cast<int>(Round(5.f * vulnerable)));
+									if (targetUnit->getFire() < burn)
+										targetUnit->setFire(burn); // catch fire and burn!!
+								}
+							}
+
+							Tile // NOTE: Should check if tileBelow's have already had napalm drop on them from this explosion ....
 								* fireTile = destTile,
 								* tileBelow = _battleSave->getTile(fireTile->getPosition() - Position(0, 0, 1));
 
@@ -2588,7 +2612,7 @@ void TileEngine::explode(
 //							}
 
 							targetUnit = fireTile->getUnit();
-							if (targetUnit
+							if (targetUnit != NULL
 								&& targetUnit->getTakenExpl() == false)
 							{
 								targetUnit->setTakenExpl();

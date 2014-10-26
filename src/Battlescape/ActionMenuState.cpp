@@ -342,7 +342,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 				if ((*i)->getPosition() == _action->actor->getPosition()
 					&& *i != _action->actor
 					&& (*i)->getStatus() == STATUS_UNCONSCIOUS
-					&& (*i)->isWoundable())
+					&& (*i)->isWoundable() == true)
 				{
 					targetUnit = *i;
 				}
@@ -358,8 +358,8 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 			{
 				Tile* tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
 				if (tile != NULL
-					&& tile->getUnit()
-					&& tile->getUnit()->isWoundable())
+					&& tile->getUnit() != NULL
+					&& tile->getUnit()->isWoundable() == true)
 				{
 					targetUnit = tile->getUnit();
 				}
