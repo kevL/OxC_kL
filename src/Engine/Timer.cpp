@@ -60,6 +60,7 @@ Uint32 slowTick()
 
 
 Uint32 Timer::gameSlowSpeed	= 1;
+
 int Timer::maxFrameSkip		= 8; // this is a pretty good default at 60FPS.
 
 

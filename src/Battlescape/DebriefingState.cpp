@@ -479,6 +479,8 @@ void DebriefingState::btnOkClick(Action*)
 #ifndef __NO_MUSIC
 	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
 	{
+		_game->setInputActive(false);
+
 		Mix_FadeOutMusic(900);
 		func_fade();
 

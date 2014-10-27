@@ -70,6 +70,8 @@ void ListLoadState::lstSavesPress(Action* action)
 #ifndef __NO_MUSIC
 		if (_origin == OPT_MENU)
 		{
+			_game->setInputActive(false);
+
 			if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
 			{
 				Mix_FadeOutMusic(1200);

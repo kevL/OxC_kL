@@ -75,7 +75,7 @@ int main(
 
 		std::ostringstream title;
 //kL	title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
-		title << "OxC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
+		title << "0xC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
 
 		game = new Game(title.str());
 

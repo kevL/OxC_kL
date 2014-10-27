@@ -1886,7 +1886,7 @@ void BattlescapeState::btnHelpClick(Action*)
 /**
  * Requests the end of turn. This will add a 0 to the end of the state queue,
  * so all ongoing actions, like explosions are finished first before really switching turn.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void BattlescapeState::btnEndTurnClick(Action*)
 {
@@ -1900,8 +1900,8 @@ void BattlescapeState::btnEndTurnClick(Action*)
 }
 
 /**
- * Aborts the game.
- * @param action, Pointer to an action.
+ * Aborts the mission.
+ * @param action - pointer to an action
  */
 void BattlescapeState::btnAbortClick(Action*)
 {
@@ -1917,7 +1917,7 @@ void BattlescapeState::btnAbortClick(Action*)
 
 /**
  * Shows the selected soldier's info.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void BattlescapeState::btnStatsClick(Action* action)
 {
@@ -1966,7 +1966,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 
 /**
  * Shows an action popup menu. When clicked, creates the action.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void BattlescapeState::btnLeftHandLeftClick(Action*)
 {
@@ -1993,8 +1993,8 @@ void BattlescapeState::btnLeftHandLeftClick(Action*)
 }
 
 /**
- *
- * @param action, Pointer to an action.
+ * Sets left hand as Active Hand.
+ * @param action - pointer to an action
  */
 void BattlescapeState::btnLeftHandRightClick(Action*)
 {
@@ -2011,7 +2011,7 @@ void BattlescapeState::btnLeftHandRightClick(Action*)
 }
 
 /**
- * Sets left hand as Active Hand.
+ * Shows an action popup menu. When clicked, creates the action.
  * @param action - pointer to an action
  */
 void BattlescapeState::btnRightHandLeftClick(Action*)
@@ -2058,7 +2058,7 @@ void BattlescapeState::btnRightHandRightClick(Action*)
 
 /**
  * Centers on the unit corresponding to this button.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void BattlescapeState::btnVisibleUnitClick(Action* action)
 {
@@ -2094,7 +2094,7 @@ void BattlescapeState::btnWoundedClick(Action* action)
 
 /**
  * Launches the blaster bomb.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void BattlescapeState::btnLaunchClick(Action* action)
 {
@@ -2104,7 +2104,7 @@ void BattlescapeState::btnLaunchClick(Action* action)
 
 /**
  * Uses psionics.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void BattlescapeState::btnPsiClick(Action* action)
 {
@@ -2290,7 +2290,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 
 /**
 * Shows a tooltip for the appropriate button.
-* @param action Pointer to an action.
+* @param action - pointer to an action
 */
 /* void BattlescapeState::txtTooltipIn(Action* action)
 {
@@ -2303,7 +2303,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 
 /**
 * Clears the tooltip text.
-* @param action Pointer to an action.
+* @param action - pointer to an action
 */
 /* void BattlescapeState::txtTooltipOut(Action* action)
 {
@@ -2320,7 +2320,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
  * Determines whether a playable unit is selected. Normally only player side
  * units can be selected, but in debug mode one can play with aliens too :)
  * Is used to see if stats can be displayed and action buttons will work.
- * @return, True if a playable unit is selected.
+ * @return, true if a playable unit is selected
  */
 bool BattlescapeState::playableUnitSelected()
 {
@@ -2735,7 +2735,7 @@ void BattlescapeState::animate()
 /**
  * Popups a context sensitive list of actions the user can choose from.
  * Some actions result in a change of gamestate.
- * @param item Item the user clicked on (righthand/lefthand)
+ * @param item - pointer to BattleItem the user clicked on (righthand/lefthand)
  */
 void BattlescapeState::handleItemClick(BattleItem* item)
 {
@@ -3351,17 +3351,19 @@ void BattlescapeState::finishBattle(
 											->stopLoop();
 
 #ifndef __NO_MUSIC
-		if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
-		{
-			Mix_FadeOutMusic(900);
-			func_fade();
+	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
+	{
+		_game->setInputActive(false);
 
-			while (Mix_PlayingMusic() == 1)
-			{
-			}
+		Mix_FadeOutMusic(900);
+		func_fade();
+
+		while (Mix_PlayingMusic() == 1)
+		{
 		}
-		else
-			Mix_HaltMusic();
+	}
+	else
+		Mix_HaltMusic();
 #endif
 
 	std::string nextStage;

@@ -25,11 +25,11 @@ namespace OpenXcom
 
 /**
  * Creates a new action.
- * @param scaleX, Screen's X scaling factor.
- * @param scaleY, Screen's Y scaling factor.
- * @param topBlackBand, Screen's top black band height.
- * @param leftBlackBand, Screen's left black band width.
- * @param ev, Pointer to SDL_event.
+ * @param ev			- pointer to an SDL_event
+ * @param scaleX		- screen's X scaling factor
+ * @param scaleY		- screen's Y scaling factor
+ * @param topBlackBand	- screen's top black band height
+ * @param leftBlackBand	- screen's left black band width
  */
 Action::Action(
 		SDL_Event* ev,
@@ -51,6 +51,9 @@ Action::Action(
 {
 }
 
+/**
+ * dTor.
+ */
 Action::~Action()
 {
 }

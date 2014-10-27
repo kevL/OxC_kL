@@ -923,7 +923,7 @@ void Surface::setPalette(
  * for temporary effects like window popups,
  * so as to not override the default visibility setting.
  * @note Do not confuse with setVisible!
- * @param hidden Shown or hidden.
+ * @param hidden - shown or hidden
  */
 void Surface::setHidden(bool hidden)
 {

@@ -67,7 +67,7 @@ const double Game::VOLUME_GRADIENT = 10.0;
 /**
  * Starts up SDL with all the subsystems and SDL_mixer for audio processing,
  * creates the display screen and sets up the cursor.
- * @param title Title of the game window.
+ * @param title - reference the title of the game window
  */
 Game::Game(const std::string& title)
 	:
@@ -79,7 +79,7 @@ Game::Game(const std::string& title)
 		_rules(NULL),
 		_quit(false),
 		_init(false),
-		_mouseActive(true),
+		_inputActive(true),
 		_timeUntilNextFrame(0)
 {
 	//Log(LOG_INFO) << "Create Game";
@@ -210,16 +210,16 @@ void Game::run()
 	// this will avoid processing SDL's resize event on startup, workaround for the heap allocation error it causes.
 	bool startupEvent = Options::allowResize;
 
-	while (!_quit)
+
+	while (_quit == false)
 	{
-		while (!_deleted.empty()) // Clean up states
+		while (_deleted.empty() == false) // Clean up states
 		{
 			delete _deleted.back();
-
 			_deleted.pop_back();
 		}
 
-		if (!_init) // Initialize active state
+		if (_init == false) // Initialize active state
 		{
 			_init = true;
 			_states.back()->init();
@@ -244,12 +244,22 @@ void Game::run()
 			_states.back()->handle(&action);
 		}
 
-		while (SDL_PollEvent(&_event)) // Process events
+		while (SDL_PollEvent(&_event) == 1) // Process SDL input events
 		{
+			if (_inputActive == false // kL->
+				&& _event.type != SDL_MOUSEMOTION)
+			{
+//				_event.type = SDL_IGNORE; // discard buffered events
+				continue;
+			}
+
 			if (CrossPlatform::isQuitShortcut(_event))
 				_event.type = SDL_QUIT;
+
 			switch (_event.type)
 			{
+//				case SDL_IGNORE:
+//				break;
 				case SDL_QUIT:
 					quit();
 				break;
@@ -269,14 +279,14 @@ void Game::run()
 				case SDL_VIDEORESIZE:
 					if (Options::allowResize)
 					{
-						if (!startupEvent)
+						if (startupEvent == false)
 						{
-							Options::newDisplayWidth	= Options::displayWidth = std::max(
-																						Screen::ORIGINAL_WIDTH,
-																						_event.resize.w);
-							Options::newDisplayHeight	= Options::displayHeight = std::max(
-																						Screen::ORIGINAL_HEIGHT,
-																						_event.resize.h);
+							Options::newDisplayWidth = Options::displayWidth = std::max(
+																					Screen::ORIGINAL_WIDTH,
+																					_event.resize.w);
+							Options::newDisplayHeight = Options::displayHeight = std::max(
+																					Screen::ORIGINAL_HEIGHT,
+																					_event.resize.h);
 							int
 								dX = 0,
 								dY = 0;
@@ -311,8 +321,8 @@ void Game::run()
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
-					if (!_mouseActive)		// Skip mouse events if they're disabled
-						continue;
+//kL				if (_inputActive == false) // Skip [ie. postpone] mouse events if they're disabled
+//kL					continue;
 
 					runningState = RUNNING;	// re-gain focus on mouse-over or keypress.
 											// Go on, feed the event to others
@@ -355,6 +365,10 @@ void Game::run()
 			}
 		}
 
+		if (_inputActive == false)	// kL
+			_inputActive = true;	// kL
+
+
 		if (runningState != PAUSED) // Process rendering
 		{
 			_states.back()->think(); // Process logic
@@ -375,7 +389,7 @@ void Game::run()
 			else
 				_timeUntilNextFrame = 0;
 
-			if (_init
+			if (_init == true
 				&& _timeUntilNextFrame < 1)
 			{
 				// make a note of when this frame update occured.
@@ -390,7 +404,7 @@ void Game::run()
 					--i;
 				}
 				while (i != _states.begin()
-					&& !(*i)->isScreen());
+					&& (*i)->isScreen() == false);
 
 				for (
 						;
@@ -406,30 +420,6 @@ void Game::run()
 				_screen->flip();
 			}
 		}
-
-/*		if (!_init) // Initialize active state
-		{
-			_init = true;
-			_states.back()->init();
-
-			_states.back()->resetAll(); // Unpress buttons
-
-			SDL_Event ev; // Refresh mouse position
-			int
-				x,
-				y;
-			SDL_GetMouseState(&x, &y);
-			ev.type = SDL_MOUSEMOTION;
-			ev.motion.x = x;
-			ev.motion.y = y;
-			Action action = Action(
-								&ev,
-								_screen->getXScale(),
-								_screen->getYScale(),
-								_screen->getCursorTopBlackBand(),
-								_screen->getCursorLeftBlackBand());
-			_states.back()->handle(&action);
-		} */
 
 		switch (runningState) // Save on CPU
 		{
@@ -455,8 +445,8 @@ void Game::run()
 void Game::quit()
 {
 	if (_save != NULL // Always save ironman
-		&& _save->isIronman()
-		&& !_save->getName().empty())
+		&& _save->isIronman() == true
+		&& _save->getName().empty() == false)
 	{
 		std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_save->getName())) + ".sav";
 		_save->save(filename);
@@ -518,7 +508,7 @@ double Game::volumeExponent(int volume)
 
 /**
  * Returns the display screen used by the game.
- * @return Pointer to the screen.
+ * @return, pointer to the Screen
  */
 Screen* Game::getScreen() const
 {
@@ -527,7 +517,7 @@ Screen* Game::getScreen() const
 
 /**
  * Returns the mouse cursor used by the game.
- * @return Pointer to the cursor.
+ * @return, pointer to the Cursor
  */
 Cursor* Game::getCursor() const
 {
@@ -536,7 +526,7 @@ Cursor* Game::getCursor() const
 
 /**
  * Returns the FpsCounter used by the game.
- * @return Pointer to the FpsCounter.
+ * @return, pointer to the FpsCounter
  */
 FpsCounter* Game::getFpsCounter() const
 {
@@ -547,11 +537,11 @@ FpsCounter* Game::getFpsCounter() const
  * Pops all the states currently in stack and pushes in the new state.
  * A shortcut for cleaning up all the old states when they're not necessary,
  * like in one-way transitions.
- * @param state, Pointer to the new state.
+ * @param state - pointer to the new State.
  */
 void Game::setState(State* state)
 {
-	while (!_states.empty())
+	while (_states.empty() == false)
 		popState();
 
 	pushState(state);
@@ -562,7 +552,7 @@ void Game::setState(State* state)
 /**
  * Pushes a new state into the top of the stack and initializes it.
  * The new state will be used once the next game cycle starts.
- * @param state, Pointer to the new state.
+ * @param state - pointer to the new state
  */
 void Game::pushState(State* state)
 {
@@ -587,7 +577,7 @@ void Game::popState()
 
 /**
  * Returns the language currently in use by the game.
- * @return Pointer to the language.
+ * @return, pointer to the Language
  */
 Language* Game::getLanguage() const
 {
@@ -596,7 +586,7 @@ Language* Game::getLanguage() const
 
 /**
 * Changes the language currently in use by the game.
-* @param filename Filename of the language file.
+* @param filename - reference the filename of the language file
 */
 void Game::loadLanguage(const std::string& filename)
 {
@@ -605,7 +595,7 @@ void Game::loadLanguage(const std::string& filename)
 
 	ExtraStrings* strings = 0;
 	std::map<std::string, ExtraStrings *> extraStrings = _rules->getExtraStrings();
-	if (!extraStrings.empty())
+	if (extraStrings.empty() == false)
 	{
 		if (extraStrings.find(filename) != extraStrings.end())
 			strings = extraStrings[filename];
@@ -624,7 +614,7 @@ void Game::loadLanguage(const std::string& filename)
 
 /**
  * Returns the resource pack currently in use by the game.
- * @return Pointer to the resource pack.
+ * @return, pointer to the ResourcePack
  */
 ResourcePack* Game::getResourcePack() const
 {
@@ -633,7 +623,7 @@ ResourcePack* Game::getResourcePack() const
 
 /**
  * Sets a new resource pack for the game to use.
- * @param res Pointer to the resource pack.
+ * @param res - pointer to the ResourcePack
  */
 void Game::setResourcePack(ResourcePack* res)
 {
@@ -643,7 +633,7 @@ void Game::setResourcePack(ResourcePack* res)
 
 /**
  * Returns the saved game currently in use by the game.
- * @return Pointer to the saved game.
+ * @return, pointer to the SavedGame
  */
 SavedGame* Game::getSavedGame() const
 {
@@ -652,7 +642,7 @@ SavedGame* Game::getSavedGame() const
 
 /**
  * Sets a new saved game for the game to use.
- * @param save Pointer to the saved game.
+ * @param save - pointer to the SavedGame
  */
 void Game::setSavedGame(SavedGame* save)
 {
@@ -662,7 +652,7 @@ void Game::setSavedGame(SavedGame* save)
 
 /**
  * Returns the ruleset currently in use by the game.
- * @return Pointer to the ruleset.
+ * @return, pointer to the Ruleset
  */
 Ruleset* Game::getRuleset() const
 {
@@ -676,8 +666,7 @@ void Game::loadRuleset()
 {
 	Options::badMods.clear();
 
-//kL	_rules = new Ruleset();
-	_rules = new Ruleset(this); // kL
+	_rules = new Ruleset(this);
 
 	if (Options::rulesets.empty())
 		Options::rulesets.push_back("Xcom1Ruleset");
@@ -690,7 +679,6 @@ void Game::loadRuleset()
 		try
 		{
 			_rules->load(*i);
-
 			++i;
 		}
 		catch (YAML::Exception &e)
@@ -713,31 +701,30 @@ void Game::loadRuleset()
 }
 
 /**
- * Sets whether the mouse is activated.
- * If it is, mouse events are processed, otherwise
- * they are ignored and the cursor is hidden.
- * @param active Is mouse activated?
+ * Sets whether SDL input is activated.
+ * All input events are processed if true, otherwise only mouse motion is handled.
+ * @param active - true if SDL input is active
  */
-void Game::setMouseActive(bool active)
+void Game::setInputActive(bool active)
 {
-	_mouseActive = active;
-	_cursor->setVisible(active);
+	_inputActive = active;
+//	_cursor->setVisible(active);
 }
 
 /**
  * Returns whether current state is *state
- * @param state - Pointer to a state to test against the stack state
- * @return, True if *state is the current state
+ * @param state - pointer to a State to test against the stack state
+ * @return, true if *state is the current state
  */
 bool Game::isState(State* state) const
 {
-	return !_states.empty()
-			&& _states.back() == state;
+	return _states.empty() == false
+		&& _states.back() == state;
 }
 
 /**
  * Checks if the game is currently quitting.
- * @return, True if the game is in the process of shutting down.
+ * @return, true if the game is in the process of shutting down
  */
 bool Game::isQuitting() const
 {

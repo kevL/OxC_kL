@@ -53,7 +53,7 @@ private:
 
 	bool
 		_init,
-		_mouseActive,
+		_inputActive,
 		_quit;
 	int
 		_delaytime,
@@ -129,7 +129,7 @@ private:
 		void loadRuleset();
 
 		/// Sets whether the mouse cursor is activated.
-		void setMouseActive(bool active);
+		void setInputActive(bool active);
 
 		/// Returns whether current state is the param state
 		bool isState(State* state) const;

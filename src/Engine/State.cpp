@@ -90,8 +90,8 @@ State::~State()
  * Adds a new child surface for the state to take care of, giving
  * it the game's display palette. Once associated, the state handles
  * all of the surface's behaviour and management automatically.
- * @param surface, Child surface.
- * @note, Since visible elements can overlap one another, they have to
+ * @param surface - child surface
+ * @note, Since visible elements can overlap one another they have to
  * be added in ascending Z-Order to be blitted correctly onto the screen.
  */
 void State::add(Surface* surface)
@@ -189,7 +189,7 @@ void State::add(
  * states automatically cover the whole screen, (whether they
  * actually use it all or not) so states behind them can be
  * safely ignored since they'd be covered up.
- * @return, True if it's a screen, False otherwise.
+ * @return, true if full-screen
  */
 bool State::isScreen() const
 {
@@ -245,11 +245,11 @@ void State::think()
 /**
  * Takes care of any events from the core game engine,
  * and passes them on to its InteractiveSurface child elements.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void State::handle(Action* action)
 {
-	if (!_modal)
+	if (_modal == NULL)
 	{
 		for (std::vector<Surface*>::reverse_iterator
 				i = _surfaces.rbegin();
@@ -591,6 +591,7 @@ void State::recenter(
 /**
  * Sets a pointer to the Game object.
  * This pointer can be used universally by all subStates.
+ * @param game - THE pointer to Game
  */
 void State::setGamePtr(Game* game)
 {

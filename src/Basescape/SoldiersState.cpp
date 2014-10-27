@@ -31,6 +31,7 @@
 #include "../Battlescape/InventoryState.h"
 
 #include "../Engine/Action.h"
+#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 //#include "../Engine/Logger.h"
@@ -289,6 +290,22 @@ void SoldiersState::btnArmorClick(Action*)
  */
 void SoldiersState::btnMemorialClick(Action*)
 {
+#ifndef __NO_MUSIC
+	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
+	{
+		_game->setInputActive(false);
+
+		Mix_FadeOutMusic(900);
+		func_fade();
+
+		while (Mix_PlayingMusic() == 1)
+		{
+		}
+	}
+	else
+		Mix_HaltMusic();
+#endif
+
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 	_game->pushState(new SoldierMemorialState());
 }

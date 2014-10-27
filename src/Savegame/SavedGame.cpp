@@ -862,7 +862,7 @@ void SavedGame::setDifficulty(GameDifficulty difficulty)
 /**
  * Returns if the game is set to ironman mode.
  * Ironman games cannot be manually saved.
- * @return Tony Stark
+ * @return, Tony Stark
  */
 bool SavedGame::isIronman() const
 {
@@ -872,7 +872,7 @@ bool SavedGame::isIronman() const
 /**
  * Changes if the game is set to ironman mode.
  * Ironman games cannot be manually saved.
- * @param ironman Tony Stark
+ * @param ironman - Tony Stark
  */
 void SavedGame::setIronman(bool ironman)
 {
@@ -881,7 +881,7 @@ void SavedGame::setIronman(bool ironman)
 
 /**
  * Returns the current longitude of the Geoscape globe.
- * @return Longitude.
+ * @return, longitude
  */
 double SavedGame::getGlobeLongitude() const
 {
@@ -890,7 +890,7 @@ double SavedGame::getGlobeLongitude() const
 
 /**
  * Changes the current longitude of the Geoscape globe.
- * @param lon Longitude.
+ * @param lon - longitude
  */
 void SavedGame::setGlobeLongitude(double lon)
 {
@@ -899,7 +899,7 @@ void SavedGame::setGlobeLongitude(double lon)
 
 /**
  * Returns the current latitude of the Geoscape globe.
- * @return Latitude.
+ * @return, latitude
  */
 double SavedGame::getGlobeLatitude() const
 {
@@ -908,7 +908,7 @@ double SavedGame::getGlobeLatitude() const
 
 /**
  * Changes the current latitude of the Geoscape globe.
- * @param lat Latitude.
+ * @param lat - latitude
  */
 void SavedGame::setGlobeLatitude(double lat)
 {
@@ -917,7 +917,7 @@ void SavedGame::setGlobeLatitude(double lat)
 
 /**
  * Returns the current zoom level of the Geoscape globe.
- * @return, Zoom level.
+ * @return, zoom level
  */
 size_t SavedGame::getGlobeZoom() const
 {
@@ -926,7 +926,7 @@ size_t SavedGame::getGlobeZoom() const
 
 /**
  * Changes the current zoom level of the Geoscape globe.
- * @param zoom, Zoom level.
+ * @param zoom - zoom level
  */
 void SavedGame::setGlobeZoom(size_t zoom)
 {
@@ -996,7 +996,7 @@ void SavedGame::monthlyFunding()
 
 /**
  * Returns the player's current funds.
- * @return Current funds.
+ * @return, current funds
  */
 int64_t SavedGame::getFunds() const
 {
@@ -1005,7 +1005,7 @@ int64_t SavedGame::getFunds() const
 
 /**
  * Returns the player's funds for the last 12 months.
- * @return funds.
+ * @return, funds
  */
 std::vector<int64_t>& SavedGame::getFundsList()
 {
@@ -1014,7 +1014,7 @@ std::vector<int64_t>& SavedGame::getFundsList()
 
 /**
  * Changes the player's funds to a new value.
- * @param funds New funds.
+ * @param funds - new funds
  */
 void SavedGame::setFunds(int64_t funds)
 {
@@ -1023,7 +1023,7 @@ void SavedGame::setFunds(int64_t funds)
 
 /**
  * return the list of monthly maintenance costs
- * @return list of maintenances.
+ * @return, reference to a vector of maintenances
  */
 std::vector<int64_t>& SavedGame::getMaintenances()
 {
@@ -1032,7 +1032,7 @@ std::vector<int64_t>& SavedGame::getMaintenances()
 
 /**
  * kL. Return the list of monthly income values.
- * @return vector<int>, List of income values
+ * @return, reference to a vector of incomes
  */
 std::vector<int64_t>& SavedGame::getIncomeList() // kL
 {
@@ -1041,7 +1041,7 @@ std::vector<int64_t>& SavedGame::getIncomeList() // kL
 
 /**
  * kL. Return the list of monthly expenditure values.
- * @return vector<int>, List of income values
+ * @return, reference to a vector of expenditures
  */
 std::vector<int64_t>& SavedGame::getExpenditureList() // kL
 {
@@ -1050,7 +1050,7 @@ std::vector<int64_t>& SavedGame::getExpenditureList() // kL
 
 /**
  * Returns the current time of the game.
- * @return, Pointer to the game time.
+ * @return, pointer to the GameTime
  */
 GameTime* SavedGame::getTime() const
 {
@@ -1059,7 +1059,7 @@ GameTime* SavedGame::getTime() const
 
 /**
  * Changes the current time of the game.
- * @param time, Game time.
+ * @param time - GameTime
  */
 void SavedGame::setTime(GameTime time)
 {
@@ -1068,8 +1068,8 @@ void SavedGame::setTime(GameTime time)
 
 /**
  * Returns the latest ID for the specified object and increases it.
- * @param name, Object name.
- * @return, Latest ID number.
+ * @param name - reference an object name
+ * @return, latest ID number
  */
 int SavedGame::getId(const std::string& name)
 {
@@ -1087,7 +1087,7 @@ int SavedGame::getId(const std::string& name)
 
 /**
  * Returns the list of countries in the game world.
- * @return, Pointer to country list.
+ * @return, pointer to a vector of pointers to the Countries
  */
 std::vector<Country*>* SavedGame::getCountries()
 {
@@ -1096,7 +1096,7 @@ std::vector<Country*>* SavedGame::getCountries()
 
 /**
  * Adds up the monthly funding of all the countries.
- * @return, Total funding.
+ * @return, total funding
  */
 int SavedGame::getCountryFunding() const
 {
@@ -1115,7 +1115,7 @@ int SavedGame::getCountryFunding() const
 
 /**
  * Returns the list of world regions.
- * @return, Pointer to region list.
+ * @return, pointer to a vector of pointers to the Regions
  */
 std::vector<Region*>* SavedGame::getRegions()
 {
@@ -1124,7 +1124,7 @@ std::vector<Region*>* SavedGame::getRegions()
 
 /**
  * Returns the list of player bases.
- * @return, Pointer to base list.
+ * @return, pointer to a vector of pointers to all Bases
  */
 std::vector<Base*>* SavedGame::getBases()
 {
@@ -1133,7 +1133,7 @@ std::vector<Base*>* SavedGame::getBases()
 
 /**
  * Returns an immutable list of player bases.
- * @return, Pointer to base list.
+ * @return, pointer to a vector of pointers to all Bases
  */
 const std::vector<Base*>* SavedGame::getBases() const
 {
@@ -1142,7 +1142,7 @@ const std::vector<Base*>* SavedGame::getBases() const
 
 /**
  * Adds up the monthly maintenance of all the bases.
- * @return, Total maintenance.
+ * @return, total maintenance
  */
 int SavedGame::getBaseMaintenance() const
 {
@@ -1160,7 +1160,7 @@ int SavedGame::getBaseMaintenance() const
 
 /**
  * Returns the list of alien UFOs.
- * @return, Pointer to UFO list.
+ * @return, pointer to a vector of pointers to all Ufos
  */
 std::vector<Ufo*>* SavedGame::getUfos()
 {
@@ -1169,7 +1169,7 @@ std::vector<Ufo*>* SavedGame::getUfos()
 
 /**
  * Returns the list of craft waypoints.
- * @return, Pointer to waypoint list.
+ * @return, pointer to a vector of pointers to all Waypoints
  */
 std::vector<Waypoint*>* SavedGame::getWaypoints()
 {
@@ -1178,7 +1178,7 @@ std::vector<Waypoint*>* SavedGame::getWaypoints()
 
 /**
  * Returns the list of terror sites.
- * @return, Pointer to terror site list.
+ * @return, pointer to a vector of pointers to all TerrorSites
  */
 std::vector<TerrorSite*>* SavedGame::getTerrorSites()
 {
@@ -1186,8 +1186,8 @@ std::vector<TerrorSite*>* SavedGame::getTerrorSites()
 }
 
 /**
- * Get pointer to the battleGame object.
- * @return, Pointer to the battleGame object.
+ * Get pointer to the SavedBattleGame object.
+ * @return, pointer to the SavedBattleGame object
  */
 SavedBattleGame* SavedGame::getSavedBattle()
 {

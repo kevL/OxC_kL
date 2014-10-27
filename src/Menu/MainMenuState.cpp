@@ -192,13 +192,13 @@ void MainMenuState::btnQuitClick(Action*)
 #ifndef __NO_MUSIC
 		if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
 		{
+			_game->setInputActive(false);
+
 			Mix_FadeOutMusic(900);
 			func_fade();
 
-//			while (Mix_FadingMusic() == MIX_FADING_OUT)
 			while (Mix_PlayingMusic() == 1)
 			{
-//				SDL_Delay(100);
 			}
 		}
 		else

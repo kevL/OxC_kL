@@ -463,6 +463,8 @@ void IntroState::init()
 		Mix_FadeOutChannel(-1, 45 * 20);
 		if (Mix_GetMusicType(NULL) != MUS_MID)
 		{
+			_game->setInputActive(false);
+
 			Mix_FadeOutMusic(45 * 20);
 			func_fade();
 		}
