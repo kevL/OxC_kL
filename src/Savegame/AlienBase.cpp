@@ -42,7 +42,7 @@ AlienBase::AlienBase()
 }
 
 /**
- *
+ * dTor.
  */
 AlienBase::~AlienBase()
 {

@@ -58,6 +58,7 @@ private:
 		_country,
 		_finance,
 		_income,
+		_reset,
 		_vis;
 
 	int _current;
@@ -79,6 +80,7 @@ private:
 		* _txtScore,
 		* _txtFactor,
 		* _txtTitle;
+	TextButton* _btnReset;
 	TextList
 		* _txtMonths,
 		* _txtYears;
@@ -112,9 +114,9 @@ private:
 		_txtRegionActivityXCom,
 		_txtScale;
 	std::vector<ToggleTextButton*>
-		_btnRegions,
 		_btnCountries,
-		_btnFinances;
+		_btnFinances,
+		_btnRegions;
 
 	/// Scroll button lists: scroll and repaint buttons functions
 	void scrollButtons(
@@ -169,6 +171,8 @@ private:
 		void btnCountryListClick(Action* action);
 		/// Handler for clicking  on a finances button.
 		void btnFinanceListClick(Action* action);
+		/// Resets aLien/xCom activity and the blink indicators.
+		void btnResetPress(Action* action);
 
 		/// Reset all the elements on screen.
 		void resetScreen();

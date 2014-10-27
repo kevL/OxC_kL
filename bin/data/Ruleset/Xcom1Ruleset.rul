@@ -9075,6 +9075,7 @@ extraStrings:
       STR_CONSOLE: "toggle battlescape console"
       STR_SOLDIER_NOT_AT_BASE: "Soldier Out on Mission"
       STR_TRANSIT_LC: "transit"
+      STR_RESET_UC: "reset"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
@@ -9212,7 +9213,7 @@ interfaces:
         color: -1
         color2: 14
         border: 4
-      # The usage of the following is hard-coded, these ones MUST be defined
+      # The usage of the following is hard-coded, these MUST be defined
       - id: visibleUnits
         pos: [300, -16]
         color: 16

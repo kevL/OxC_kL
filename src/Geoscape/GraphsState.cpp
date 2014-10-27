@@ -99,14 +99,15 @@ struct GraphBtnInfo
 
 /**
  * Initializes all the elements in the Graphs screen.
- * @param curGraph - the graph that was last selected
+ * @param curGraph - the graph that was last selected (default 0)
  */
 GraphsState::GraphsState(int curGraph)
 	:
 		_btnRegionsOffset(0),
 		_btnCountriesOffset(0),
 		_current(-1),
-		_vis(true)
+		_vis(true),
+		_reset(false)
 {
 	_bg				= new InteractiveSurface(320, 200, 0, 0);
 	_bg->onMousePress(
@@ -123,6 +124,8 @@ GraphsState::GraphsState(int curGraph)
 	_btnIncome		= new InteractiveSurface(32, 24, 224, 0);
 	_btnFinance		= new InteractiveSurface(32, 24, 256, 0);
 	_btnGeoscape	= new InteractiveSurface(32, 28, 288, 0); // on-off trick using y to drop to Geo-btn.
+
+	_btnReset		= new TextButton(40, 18, 280, 28);
 
 	_txtTitle		= new Text(220, 17, 100, 28);
 	_txtFactor		= new Text(35, 9, 96, 28);
@@ -147,6 +150,7 @@ GraphsState::GraphsState(int curGraph)
 	add(_btnIncome);
 	add(_btnFinance);
 	add(_btnGeoscape);
+	add(_btnReset);
 	add(_txtMonths);
 	add(_txtYears);
 	add(_txtTitle);
@@ -530,6 +534,12 @@ GraphsState::GraphsState(int curGraph)
 		_btnFinances.at(i)->setPressed(_financeToggles[i]);
 	}
 
+	_btnReset->setColor(Palette::blockOffset(9)+7);
+	_btnReset->setText(tr("STR_RESET_UC"));
+	_btnReset->onMousePress(
+					(ActionHandler)& GraphsState::btnResetPress,
+					SDL_BUTTON_LEFT);
+
 
 	_bg->drawRect(125, 49, 188, 127, Palette::blockOffset(10)); // set up the grid
 
@@ -752,7 +762,10 @@ void GraphsState::think()
 void GraphsState::blink()
 {
 	//Log(LOG_INFO) << "GraphsState::blink()";
-	_vis = !_vis;
+	if (_reset == true)
+		_vis = true;
+	else
+		_vis = !_vis;
 
 	size_t offset = 0;
 
@@ -1160,6 +1173,30 @@ void GraphsState::btnFinanceListClick(Action* action)
 	_financeToggles.at(row) = button->getPressed();
 
 	drawLines();
+}
+
+/**
+ * Resets aLien/xCom activity and the blink indicators.
+ */
+void GraphsState::btnResetPress(Action*)
+{
+	_reset = true;
+
+	for (std::vector<Region*>::iterator
+			i = _game->getSavedGame()->getRegions()->begin();
+			i != _game->getSavedGame()->getRegions()->end();
+			++i)
+	{
+		(*i)->resetActivity();
+	}
+
+	for (std::vector<Country*>::iterator
+			i = _game->getSavedGame()->getCountries()->begin();
+			i != _game->getSavedGame()->getCountries()->end();
+			++i)
+	{
+		(*i)->resetActivity();
+	}
 }
 
 /**

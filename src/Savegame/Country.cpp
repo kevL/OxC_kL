@@ -303,9 +303,10 @@ bool Country::getPact() const
 }
 
 /**
- * kL. Handles recent alien activity in this country for GraphsState blink.
+ * kL. Handles recent aLien activity in this country for GraphsState blink.
  * @param activity	- true to reset the startcounter (default true)
  * @param graphs	- not sure lol (default false)
+ * @return, true if there is activity
  */
 bool Country::recentActivity( // kL
 		bool activity,
@@ -322,7 +323,6 @@ bool Country::recentActivity( // kL
 			++_activityRecent;
 
 			if (_activityRecent == 24) // aLien bases show activity every 24 hrs.
-//			if (_activityRecent >= 12) // use this until my shorten kicks in ...
 				_activityRecent = -1;
 		}
 	}
@@ -337,6 +337,7 @@ bool Country::recentActivity( // kL
  * kL. Handles recent XCOM activity in this country for GraphsState blink.
  * @param activity	- true to reset the startcounter (default true)
  * @param graphs	- not sure lol (default false)
+ * @return, true if there is activity
  */
 bool Country::recentActivityXCOM( // kL
 		bool activity,
@@ -353,7 +354,6 @@ bool Country::recentActivityXCOM( // kL
 			++_activityRecentXCOM;
 
 			if (_activityRecentXCOM == 24) // aLien bases show activity every 24 hrs.
-//			if (_activityRecentXCOM >= 12) // use this until my shorten kicks in ...
 				_activityRecentXCOM = -1;
 		}
 	}
@@ -362,6 +362,15 @@ bool Country::recentActivityXCOM( // kL
 		return false;
 
 	return true;
+}
+
+/**
+ * kL. Resets activity.
+ */
+void Country::resetActivity() // kL
+{
+	_activityRecent = -1;
+	_activityRecentXCOM = -1;
 }
 
 }

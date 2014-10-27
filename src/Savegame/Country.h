@@ -110,6 +110,8 @@ private:
 		bool recentActivityXCOM( // kL
 				bool activity = true,
 				bool graphs = false);
+		/// kL. Resets activity.
+		void resetActivity(); // kL
 };
 
 }

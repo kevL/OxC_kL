@@ -2948,7 +2948,7 @@ void GeoscapeState::time1Month()
 
 	determineAlienMissions(); // determine alien mission for this month.
 
-	int monthsPassed = _game->getSavedGame()->getMonthsPassed();
+	const int monthsPassed = _game->getSavedGame()->getMonthsPassed();
 //kL	if (monthsPassed > 5)
 	if (RNG::percent(monthsPassed * 2)) // kL
 		determineAlienMissions(); // kL_note: determine another one, I guess.
@@ -2956,12 +2956,12 @@ void GeoscapeState::time1Month()
 	setupTerrorMission();
 
 	// kL_note: Used for determining % retaliation & % agents discovering aLienBases.
-	int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()); // kL
+	const int diff = static_cast<int>(_game->getSavedGame()->getDifficulty()); // kL
 
 	bool newRetaliation = false;
 //kL	if (monthsPassed > 13 - static_cast<int>(_game->getSavedGame()->getDifficulty())
 	if (RNG::percent(monthsPassed * diff + 3) // kL, Beginner == %0
-		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION"))
+		|| _game->getSavedGame()->isResearched("STR_THE_MARTIAN_SOLUTION") == true)
 	{
 		newRetaliation = true;
 	}
@@ -2969,30 +2969,30 @@ void GeoscapeState::time1Month()
 	bool psi = false;
 
 	for (std::vector<Base*>::const_iterator // handle Psi-Training and initiate a new retaliation mission, if applicable
-			b = _game->getSavedGame()->getBases()->begin();
-			b != _game->getSavedGame()->getBases()->end();
-			++b)
+			i = _game->getSavedGame()->getBases()->begin();
+			i != _game->getSavedGame()->getBases()->end();
+			++i)
 	{
-		if (newRetaliation)
+		if (newRetaliation == true)
 		{
 			for (std::vector<Region*>::iterator
-					i = _game->getSavedGame()->getRegions()->begin();
-					i != _game->getSavedGame()->getRegions()->end();
-					++i)
+					j = _game->getSavedGame()->getRegions()->begin();
+					j != _game->getSavedGame()->getRegions()->end();
+					++j)
 			{
-				if ((*i)->getRules()->insideRegion(
-												(*b)->getLongitude(),
-												(*b)->getLatitude()))
+				if ((*j)->getRules()->insideRegion(
+												(*i)->getLongitude(),
+												(*i)->getLatitude()))
 				{
-					if (!_game->getSavedGame()->getAlienMission(
-															(*i)->getRules()->getType(),
-															"STR_ALIEN_RETALIATION"))
+					if (_game->getSavedGame()->getAlienMission(
+															(*j)->getRules()->getType(),
+															"STR_ALIEN_RETALIATION") == NULL)
 					{
 						const RuleAlienMission& rule = *_game->getRuleset()->getAlienMission("STR_ALIEN_RETALIATION");
 						AlienMission* mission = new AlienMission(rule);
 						mission->setId(_game->getSavedGame()->getId("ALIEN_MISSIONS"));
 						mission->setRegion(
-										(*i)->getRules()->getType(),
+										(*j)->getRules()->getType(),
 										*_game->getRuleset());
 
 /*						int race = RNG::generate(
@@ -3004,14 +3004,14 @@ void GeoscapeState::time1Month()
 						// get races for retaliation missions
 						std::vector<std::string> races = _game->getRuleset()->getAlienRacesList();
 						for (std::vector<std::string>::iterator
-								i = races.begin();
-								i != races.end();
+								k = races.begin();
+								k != races.end();
 								)
 						{
-							if (_game->getRuleset()->getAlienRace(*i)->canRetaliate())
-								i++;
+							if (_game->getRuleset()->getAlienRace(*k)->canRetaliate())
+								++k;
 							else
-								i = races.erase(i);
+								k = races.erase(k);
 						}
 
 						size_t race = static_cast<size_t>(RNG::generate(
@@ -3030,19 +3030,19 @@ void GeoscapeState::time1Month()
 		}
 
 		if (!Options::anytimePsiTraining
-			&& (*b)->getAvailablePsiLabs() > 0)
+			&& (*i)->getAvailablePsiLabs() > 0)
 		{
 			psi = true;
 
 			for (std::vector<Soldier*>::const_iterator
-					s = (*b)->getSoldiers()->begin();
-					s != (*b)->getSoldiers()->end();
-					++s)
+					j = (*i)->getSoldiers()->begin();
+					j != (*i)->getSoldiers()->end();
+					++j)
 			{
-				if ((*s)->isInPsiTraining())
+				if ((*j)->isInPsiTraining())
 				{
-					(*s)->trainPsi();
-//					(*s)->calcStatString(
+					(*j)->trainPsi();
+//					(*j)->calcStatString(
 //									_game->getRuleset()->getStatStrings(),
 //									(Options::psiStrengthEval
 //									&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())));
@@ -3058,26 +3058,27 @@ void GeoscapeState::time1Month()
 
 
 	// kL_note: Might want to change this to time1day() ...
-	int rDiff = 20 - (diff * 5); // kL, Superhuman == 0%
-	if (RNG::percent(rDiff + 50) // kL
+	const int rDiff = 20 - (diff * 5); // kL, Superhuman == 0%
+
 //kL	if (RNG::percent(20)
-		&& !_game->getSavedGame()->getAlienBases()->empty())
+	if (RNG::percent(rDiff + 50) // kL
+		&& _game->getSavedGame()->getAlienBases()->empty() == false)
 	{
 		for (std::vector<AlienBase*>::const_iterator // handle Xcom Operatives discovering bases
-				b = _game->getSavedGame()->getAlienBases()->begin();
-				b != _game->getSavedGame()->getAlienBases()->end();
-				++b)
+				i = _game->getSavedGame()->getAlienBases()->begin();
+				i != _game->getSavedGame()->getAlienBases()->end();
+				++i)
 		{
-			if (!(*b)->isDiscovered()
+			if ((*i)->isDiscovered() == false
 //				&& RNG::percent(5)) // kL
 				&& RNG::percent(rDiff + 5)) // kL
 			{
-				(*b)->setDiscovered(true);
+				(*i)->setDiscovered(true);
 
 				// kL_note: hopefully this doesn't hang on multiple popups.
 				popup(new AlienBaseState(
-										*b,
-										this));
+									*i,
+									this));
 
 //kL			break;
 			}
@@ -3142,7 +3143,7 @@ void GeoscapeState::globeClick(Action* action)
 														mouseX,
 														mouseY,
 														false);
-		if (!targets.empty())
+		if (targets.empty() == false)
 		{
 			_game->pushState(new MultipleTargetsState(
 													targets,
@@ -3197,7 +3198,7 @@ void GeoscapeState::btnBasesClick(Action*)
 
 	timerReset();
 
-	if (!_game->getSavedGame()->getBases()->empty())
+	if (_game->getSavedGame()->getBases()->empty() == false)
 	{
 		//Log(LOG_INFO) << "GeoscapeState::btnBasesClick() getBases !empty";
 
@@ -3219,11 +3220,9 @@ void GeoscapeState::btnBasesClick(Action*)
 		}
 	}
 	else
-	{
 		_game->pushState(new BasescapeState(
 										NULL,
 										_globe));
-	}
 	//Log(LOG_INFO) << ". . exit btnBasesClick()";
 }
 
@@ -3236,7 +3235,6 @@ void GeoscapeState::btnGraphsClick(Action*)
 	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
 	timerReset(); // kL
-
 	_game->pushState(new GraphsState(_game->getSavedGame()->getCurrentGraph()));
 }
 
@@ -3247,7 +3245,6 @@ void GeoscapeState::btnGraphsClick(Action*)
 void GeoscapeState::btnUfopaediaClick(Action*)
 {
 	timerReset(); // kL
-
 	Ufopaedia::open(_game);
 }
 
@@ -3258,7 +3255,6 @@ void GeoscapeState::btnUfopaediaClick(Action*)
 void GeoscapeState::btnOptionsClick(Action*)
 {
 	timerReset(); // kL
-
 	_game->pushState(new PauseState(OPT_GEOSCAPE));
 }
 
@@ -3269,7 +3265,6 @@ void GeoscapeState::btnOptionsClick(Action*)
 void GeoscapeState::btnFundingClick(Action*)
 {
 	timerReset(); // kL
-
 	_game->pushState(new FundingState());
 }
 

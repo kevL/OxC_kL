@@ -38,10 +38,10 @@ Sound* TextButton::soundPress = 0;
 /**
  * Sets up a text button with the specified size and position.
  * The text is centered on the button.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 TextButton::TextButton(
 		int width,
@@ -59,7 +59,11 @@ TextButton::TextButton(
 		_contrast(false),
 		_comboBox(NULL)
 {
-	_text = new Text(width, height, 0, 0);
+	_text = new Text(
+					width,
+					height,
+					0,
+					0);
 	_text->setSmall();
 	_text->setAlign(ALIGN_CENTER);
 	_text->setVerticalAlign(ALIGN_MIDDLE);
@@ -74,6 +78,9 @@ TextButton::~TextButton()
 	delete _text;
 }
 
+/**
+ *
+ */
 bool TextButton::isButtonHandled(Uint8 button)
 {
 	if (_comboBox != NULL)
@@ -84,19 +91,18 @@ bool TextButton::isButtonHandled(Uint8 button)
 
 /**
  * Changes the color for the button and text.
- * @param color Color value.
+ * @param color - color value
  */
 void TextButton::setColor(Uint8 color)
 {
 	_color = color;
 	_text->setColor(color);
-
 	_redraw = true;
 }
 
 /**
  * Returns the color for the button and text.
- * @return Color value.
+ * @return, color value
  */
 Uint8 TextButton::getColor() const
 {
@@ -105,12 +111,11 @@ Uint8 TextButton::getColor() const
 
 /**
 * Changes the color for the text only.
-* @param color Color value.
+* @param color - color value
 */
 void TextButton::setTextColor(Uint8 color)
 {
 	_text->setColor(color);
-
 	_redraw = true;
 }
 
@@ -120,7 +125,6 @@ void TextButton::setTextColor(Uint8 color)
 void TextButton::setBig()
 {
 	_text->setBig();
-
 	_redraw = true;
 }
 
@@ -130,13 +134,12 @@ void TextButton::setBig()
 void TextButton::setSmall()
 {
 	_text->setSmall();
-
 	_redraw = true;
 }
 
 /**
 * Returns the font currently used by the text.
-* @return Pointer to font.
+* @return, pointer to Font
 */
 Font* TextButton::getFont() const
 {
@@ -148,9 +151,9 @@ Font* TextButton::getFont() const
  * The different fonts need to be passed in advance since the
  * text size can change mid-text, and the language affects
  * how the text is rendered.
- * @param big, Pointer to large-size font.
- * @param small, Pointer to small-size font.
- * @param lang, Pointer to current language.
+ * @param big	- pointer to large-size Font
+ * @param small	- pointer to small-size Font
+ * @param lang	- pointer to current Language
  */
 void TextButton::initText(
 		Font* big,
@@ -158,25 +161,23 @@ void TextButton::initText(
 		Language* lang)
 {
 	_text->initText(big, small, lang);
-
 	_redraw = true;
 }
 
 /**
  * Enables/disables high contrast color. Mostly used for Battlescape UI.
- * @param contrast High contrast setting.
+ * @param contrast - high contrast setting (default true)
  */
 void TextButton::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
 	_text->setHighContrast(contrast);
-
 	_redraw = true;
 }
 
 /**
  * Changes the text of the button label.
- * @param text Text string.
+ * @param text - reference to a text string
  */
 void TextButton::setText(const std::wstring& text)
 {
@@ -187,7 +188,7 @@ void TextButton::setText(const std::wstring& text)
 
 /**
  * Returns the text of the button label.
- * @return Text string.
+ * @return, text string
  */
 std::wstring TextButton::getText() const
 {
@@ -196,21 +197,20 @@ std::wstring TextButton::getText() const
 
 /**
  * Changes the button group this button belongs to.
- * @param group Pointer to the pressed button pointer in the group.
+ * @param group - pointer to a pointer to the pressed button in the group.
  * Null makes it a regular button.
  */
 void TextButton::setGroup(TextButton** group)
 {
 	_group = group;
-
 	_redraw = true;
 }
 
 /**
  * Replaces a certain amount of colors in the surface's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void TextButton::setPalette(
 		SDL_Color* colors,
@@ -291,8 +291,8 @@ void TextButton::draw()
 
 /**
  * Sets the button as the pressed button if it's part of a group.
- * @param action - pointer to an action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an action
+ * @param state		- state that the action handlers belong to
  */
 void TextButton::mousePress(Action* action, State* state)
 {
@@ -329,8 +329,8 @@ void TextButton::mousePress(Action* action, State* state)
 
 /**
  * Sets the button as the released button.
- * @param action - pointer to an action
- * @param state - state that the action handlers belong to
+ * @param action	- pointer to an action
+ * @param state		- state that the action handlers belong to
  */
 void TextButton::mouseRelease(Action* action, State* state)
 {
@@ -345,7 +345,7 @@ void TextButton::mouseRelease(Action* action, State* state)
  * toggling its state when it's pressed.
  * @param comboBox - pointer to ComboBox
  */
-void TextButton::setComboBox(ComboBox *comboBox)
+void TextButton::setComboBox(ComboBox* comboBox)
 {
 	_comboBox = comboBox;
 
@@ -356,7 +356,7 @@ void TextButton::setComboBox(ComboBox *comboBox)
 }
 
 /**
- *
+ * Sets the width of this TextButton.
  */
 void TextButton::setWidth(int width)
 {
@@ -365,7 +365,7 @@ void TextButton::setWidth(int width)
 }
 
 /**
- *
+ * Sets the height of this TextButton.
  */
 void TextButton::setHeight(int height)
 {

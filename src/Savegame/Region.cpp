@@ -136,9 +136,10 @@ void Region::newMonth()
 }
 
 /**
- * kL. Handles recent alien activity in this region for GraphsState blink.
+ * kL. Handles recent aLien activity in this region for GraphsState blink.
  * @param activity	- true to reset the startcounter (default true)
  * @param graphs	- not sure lol (default false)
+ * @return, true if there is activity
  */
 bool Region::recentActivity( // kL
 		bool activity,
@@ -169,6 +170,7 @@ bool Region::recentActivity( // kL
  * kL. Handles recent XCOM activity in this region for GraphsState blink.
  * @param activity	- true to reset the startcounter (default true)
  * @param graphs	- not sure lol (default false)
+ * @return, true if there is activity
  */
 bool Region::recentActivityXCOM( // kL
 		bool activity,
@@ -193,6 +195,15 @@ bool Region::recentActivityXCOM( // kL
 		return false;
 
 	return true;
+}
+
+/**
+ * kL. Resets activity.
+ */
+void Region::resetActivity() // kL
+{
+	_activityRecent = -1;
+	_activityRecentXCOM = -1;
 }
 
 }
