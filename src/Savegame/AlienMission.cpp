@@ -315,12 +315,12 @@ void AlienMission::think(
  * This function will spawn a UFO according the the mission rules.
  * Some code is duplicated between cases, that's ok for now. It's on different
  * code paths and the function is MUCH easier to read written this way.
- * @param game			- reference to the saved game information
- * @param ruleset		- reference to the ruleset
- * @param globe			- reference to the globe, for land checks
- * @param ufoRule		- reference to the rule for the desired UFO
- * @param trajectory	- reference to the rule for the desired trajectory
- * @return, pointer to the spawned UFO; if the mission does not desire to spawn a UFO, NULL is returned
+ * @param game			- reference the saved game information
+ * @param ruleset		- reference the ruleset
+ * @param globe			- reference the globe, for land checks
+ * @param ufoRule		- reference the rule for the desired UFO
+ * @param trajectory	- reference the rule for the desired trajectory
+ * @return, pointer to the spawned UFO; if the mission does not spawn a UFO return NULL
  */
 Ufo* AlienMission::spawnUfo(
 		const SavedGame& game,
@@ -364,9 +364,7 @@ Ufo* AlienMission::spawnUfo(
 			ufo->setAltitude(trajAssault.getAltitude(0));
 			ufo->setSpeed(static_cast<int>(ceil(
 							static_cast<double>(trajAssault.getSpeedPercentage(0))
-							* static_cast<double>(battleshipRule.getMaxSpeed()))));
-//			ufo->setAltitude("STR_VERY_LOW");				// kL. heh -> changed in Xcom1Ruleset.rul
-//			ufo->setSpeed(battleshipRule.getMaxSpeed());	// kL. heh -> fixed above.
+						  * static_cast<double>(battleshipRule.getMaxSpeed()))));
 			ufo->setLongitude(pos.first);
 			ufo->setLatitude(pos.second);
 
