@@ -65,7 +65,6 @@ BaseInfoState::BaseInfoState(
 {
 	_bg					= new Surface(320, 200, 0, 0);
 	_mini				= new MiniBaseView(128, 16, 182, 8);
-//	_mini				= new MiniBaseView(128, 22, 182, 5);
 
 	_btnMonthlyCosts	= new TextButton(72, 14, 10, 179);
 	_btnTransfers		= new TextButton(72, 14, 86, 179);
@@ -298,7 +297,8 @@ BaseInfoState::BaseInfoState(
 	_txtDefense->setText(tr("STR_DEFENSE_STRENGTH"));
 	_numDefense->setColor(Palette::blockOffset(13));
 	_barDefense->setColor(Palette::blockOffset(2));
-	_barDefense->setScale(0.125);
+//	_barDefense->setScale(0.125);
+	_barDefense->setScale(0.018); // kL
 
 	_txtShortRange->setColor(Palette::blockOffset(13)+5);
 	_txtShortRange->setText(tr("STR_SHORT_RANGE_DETECTION"));
