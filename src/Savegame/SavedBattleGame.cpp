@@ -1957,6 +1957,7 @@ void SavedBattleGame::reviveUnconsciousUnits()
 
 /**
  * Removes the body item (corpse) that corresponds to a unit.
+ * @param bu - pointer to a BattleUnit
  */
 void SavedBattleGame::removeUnconsciousBodyItem(BattleUnit* bu)
 {

@@ -969,8 +969,8 @@ int Tile::getSmoke() const
 
 /**
  * Add an item on the tile.
- * @param item
- * @param ground
+ * @param item		- pointer to a BattleItem
+ * @param ground	- pointer to RuleInventory ground-slot
  */
 void Tile::addItem(
 		BattleItem* item,
@@ -987,7 +987,7 @@ void Tile::addItem(
 
 /**
  * Remove an item from the tile.
- * @param item
+ * @param item - pointer to a BattleItem
  */
 void Tile::removeItem(BattleItem* item)
 {
@@ -996,7 +996,7 @@ void Tile::removeItem(BattleItem* item)
 			i != _inventory.end();
 			++i)
 	{
-		if ((*i) == item)
+		if (*i == item)
 		{
 			_inventory.erase(i);
 			break;

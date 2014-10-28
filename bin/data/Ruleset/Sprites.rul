@@ -110,6 +110,12 @@ extraSprites:
   - type: BASEBITS.PCK
     files:
       0: Resources/Sprites/geograph/basebits/
+  - type: GRAPHS.SPK
+    width: 320
+    height: 200
+    singleImage: true
+    files:
+      0: Resources/Sprites/geograph/graphs/graphs.png
   - type: INTICON.PCK
     files:
       0: Resources/Sprites/geograph/inticon/

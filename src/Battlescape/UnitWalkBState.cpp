@@ -840,13 +840,13 @@ bool UnitWalkBState::doStatusStand_end()
 		BattlescapeState* battleState = _parent->getSave()->getBattleState();
 
 		double stat = static_cast<double>(_unit->getStats()->tu);
-		int tu = _unit->getTimeUnits();
+		const int tu = _unit->getTimeUnits();
 		battleState->getTimeUnitsField()->setValue(static_cast<unsigned>(tu));
 		battleState->getTimeUnitsBar()->setValue(ceil(
 											static_cast<double>(tu) / stat * 100.0));
 
 		stat = static_cast<double>(_unit->getStats()->stamina);
-		int energy = _unit->getEnergy();
+		const int energy = _unit->getEnergy();
 		battleState->getEnergyField()->setValue(static_cast<unsigned>(energy));
 		battleState->getEnergyBar()->setValue(ceil(
 											static_cast<double>(energy) / stat * 100.0));
@@ -858,15 +858,15 @@ bool UnitWalkBState::doStatusStand_end()
 		_unit->getTile()->ignite(1);
 
 		Position pos = _unit->getPosition() * Position(16, 16, 24)
-						+ Position(
-								8,
-								8,
-								-(_unit->getTile()->getTerrainLevel()));
+					 + Position(
+							8,
+							8,
+							-(_unit->getTile()->getTerrainLevel()));
 		_parent->getTileEngine()->hit(
-									pos,
-									_unit->getStats()->strength, // * _unit->getAccuracyModifier(),
-									DT_IN,
-									_unit);
+								pos,
+								_unit->getStats()->strength, // * _unit->getAccuracyModifier(),
+								DT_IN,
+								_unit);
 	}
 
 	_terrain->calculateUnitLighting(); // move our personal lighting with us
@@ -877,13 +877,12 @@ bool UnitWalkBState::doStatusStand_end()
 	bool newVis = visForUnits();
 
 	// This calculates or 'refreshes' the Field of View
-	// of all units within maximum distance (20 tiles) of this unit.
+	// of all units within maximum distance (20 tiles) of current unit.
 	_terrain->calculateFOV(_unit->getPosition());
 
 	if (_parent->checkForProximityGrenades(_unit)) // kL_add: Put checkForSilacoid() here!
 	{
 		_parent->popState();
-
 		return false;
 	}
 	else if (newVis)
@@ -896,7 +895,6 @@ bool UnitWalkBState::doStatusStand_end()
 
 		_pf->abortPath();
 		_parent->popState();
-
 		return false;
 	}
 	else if (_falling == false) // check for reaction fire
@@ -911,7 +909,6 @@ bool UnitWalkBState::doStatusStand_end()
 
 			_pf->abortPath();
 			_parent->popState();
-
 			return false;
 		}
 		//else Log(LOG_INFO) << ". . WalkBState: checkReactionFire() FALSE... no caching";
@@ -974,16 +971,16 @@ void UnitWalkBState::postPathProcedures()
 
 	if (_unit->getFaction() != FACTION_PLAYER)
 	{
-		int dir = _action.finalFacing;
+		int dirFinal = _action.finalFacing;
 
 		if (_action.finalAction)
 			_unit->dontReselect();
 
 		if (_unit->getCharging() != NULL)
 		{
-			dir = _parent->getTileEngine()->getDirectionTo(
-														_unit->getPosition(),
-														_unit->getCharging()->getPosition());
+			dirFinal = _parent->getTileEngine()->getDirectionTo(
+															_unit->getPosition(),
+															_unit->getCharging()->getPosition());
 			// kL_notes (pre-above):
 			// put an appropriate facing direction here
 			// don't stare at a wall. Get if aggro, face closest xCom op <- might be done somewhere already.
@@ -995,17 +992,35 @@ void UnitWalkBState::postPathProcedures()
 			if (_parent->getTileEngine()->validMeleeRange(
 														_unit,
 														_action.actor->getCharging(),
-														dir))
+														dirFinal))
 			{
 				BattleAction action;
-				action.actor		= _unit;
-				action.target		= _unit->getCharging()->getPosition();
-				action.weapon		= _unit->getMainHandWeapon();
-				action.type			= BA_HIT;
-				action.TU			= _unit->getActionTUs(
-														action.type,
-														action.weapon);
-				action.targeting	= true;
+				action.actor = _unit;
+				action.target = _unit->getCharging()->getPosition();
+				action.targeting = true;
+				action.type = BA_HIT;
+				action.TU = _unit->getActionTUs(
+											action.type,
+											action.weapon);
+				action.weapon = NULL; //_unit->getMainHandWeapon();
+
+				const std::string str = _unit->getMeleeWeapon();
+				if (str == "STR_FIST")
+					action.weapon = _parent->getFist();
+				else
+				{
+					for (std::vector<BattleItem*>::const_iterator
+							i = _unit->getInventory()->begin();
+							i != _unit->getInventory()->end();
+							++i)
+					{
+						if ((*i)->getRules()->getType() == str)
+						{
+							action.weapon = *i;
+							break;
+						}
+					}
+				}
 
 				_unit->setCharging(NULL);
 				_parent->statePushBack(new ProjectileFlyBState(
@@ -1015,15 +1030,15 @@ void UnitWalkBState::postPathProcedures()
 		}
 		else if (_unit->_hidingForTurn)
 		{
-			dir = _unit->getDirection() + 4;
+			dirFinal = _unit->getDirection() + 4;
 
 			_unit->_hidingForTurn = false;
 			_unit->dontReselect();
 		}
 
-		if (dir != -1)
+		if (dirFinal != -1)
 		{
-			_unit->lookAt(dir %8);
+			_unit->lookAt(dirFinal %8);
 
 			while (_unit->getStatus() == STATUS_TURNING)
 			{
@@ -1067,10 +1082,10 @@ bool UnitWalkBState::visForUnits()
 	else
 	{
 		newVis = _terrain->calculateFOV(_unit)
-				&& _unit->getUnitsSpottedThisTurn().size() > _unitsSpotted
-				&& _action.desperate == false
-				&& _unit->getCharging() == NULL
-				&& _parent->getPanicHandled();
+			  && _unit->getUnitsSpottedThisTurn().size() > _unitsSpotted
+			  && _action.desperate == false
+			  && _unit->getCharging() == NULL
+			  && _parent->getPanicHandled();
 		//Log(LOG_INFO) << "UnitWalkBState::visForUnits() : Faction_!Player, vis = " << newVis;
 	}
 

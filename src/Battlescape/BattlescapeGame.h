@@ -157,7 +157,9 @@ private:
 
 	BattleAction _currentAction;
 
-	BattleItem* _universalFist;
+	BattleItem
+		* _alienPsi,
+		* _universalFist;
 	BattlescapeState* _parentState;
 	SavedBattleGame* _save;
 
@@ -342,6 +344,8 @@ private:
 
 		/// kL. Gets the universal fist.
 		BattleItem* getFist() const; // kL
+		/// kL. Gets the alienPsi weapon.
+		BattleItem* getAlienPsi() const; // kL
 };
 
 }

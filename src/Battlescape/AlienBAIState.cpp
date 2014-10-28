@@ -2425,7 +2425,6 @@ bool AlienBAIState::psiAction()
 		return false;
 	}
 
-//	RuleItem* psiWeaponRules = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
 	RuleItem* itemRule = _save->getBattleGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON");
 
 	int tuCost = itemRule->getTUUse();

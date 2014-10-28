@@ -2359,7 +2359,7 @@ std::list<std::vector<BaseFacility*>::iterator> Base::getDisconnectedFacilities(
 
 /**
  * Removes a base module, and deals with the ramifications thereof.
- * @param facility, An iterator reference to the facility to destroy and remove.
+ * @param facility - an iterator reference to the facility to destroy and remove
  */
 void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 {
@@ -2537,7 +2537,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 	{
 		// we won't destroy the items physically AT the base,
 		// but any items in transit will end up at the dead letter office.
-		if (!_transfers.empty()
+		if (_transfers.empty() == false
 			&& storesOverfull((*facility)->getRules()->getStorage()))
 		{
 			for (std::vector<Transfer*>::iterator
@@ -2558,7 +2558,7 @@ void Base::destroyFacility(std::vector<BaseFacility*>::iterator facility)
 	else if ((*facility)->getRules()->getPersonnel())
 	{
 		// as above, we won't actually fire people, but we'll block any new ones coming in.
-		if (!_transfers.empty()
+		if (_transfers.empty() == false
 			&& getAvailableQuarters() - getUsedQuarters() - (*facility)->getRules()->getPersonnel() < 0)
 		{
 			for (std::vector<Transfer*>::iterator

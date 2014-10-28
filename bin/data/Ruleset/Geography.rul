@@ -4619,7 +4619,7 @@ extraStrings: #improved nations: all.
       STR_KHARTOUM: "Khartoum"
       STR_LAGOS: "Lagos"
       STR_MOGADISHU: "Mogadishu"
-      STR_TRIPOLI: "Tripolo"
+      STR_TRIPOLI: "Tripoli"
 #STR_NORTH_AMERICA
       STR_ANCHORAGE: "Anchorage"
       STR_ATLANTA: "Atlanta"

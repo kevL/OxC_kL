@@ -109,6 +109,9 @@ BattlescapeGame::BattlescapeGame(
 	_universalFist = new BattleItem(
 								getRuleset()->getItem("STR_FIST"),
 								save->getCurrentItemId());
+	_alienPsi = new BattleItem(
+							getRuleset()->getItem("ALIEN_PSI_WEAPON"),
+							save->getCurrentItemId());
 
 	for (std::vector<BattleUnit*>::iterator // kL
 			i = _save->getUnits()->begin();
@@ -133,6 +136,7 @@ BattlescapeGame::~BattlescapeGame()
 	}
 
 	delete _universalFist;
+	delete _alienPsi;
 }
 
 /**
@@ -388,9 +392,10 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		if (action.type == BA_MINDCONTROL
 			|| action.type == BA_PANIC)
 		{
-			action.weapon = new BattleItem(
-									_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
-									_save->getCurrentItemId());
+//			action.weapon = new BattleItem(
+//									_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
+//									_save->getCurrentItemId());
+			action.weapon = _alienPsi; // kL
 			action.TU = unit->getActionTUs(
 										action.type,
 										action.weapon);
@@ -461,8 +466,8 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 											action));
 		//Log(LOG_INFO) << ". . ProjectileFlyBState DONE";
 
-		if (action.type == BA_MINDCONTROL
-			|| action.type == BA_PANIC)
+		if (action.type == BA_PANIC
+			|| action.type == BA_MINDCONTROL)
 		{
 			//Log(LOG_INFO) << ". . . in action.type Psi";
 			bool success = _save->getTileEngine()->psiAttack(&action);
@@ -480,7 +485,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			}
 			//Log(LOG_INFO) << ". . . success MC Done";
 
-			_save->removeItem(action.weapon);
+//kL		_save->removeItem(action.weapon); // note: now using perpetual alien-psi-weapon, created in cTor.
 			//Log(LOG_INFO) << ". . . Psi weapon removed.";
 		}
 	}
@@ -2220,9 +2225,10 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 				bool aLienPsi = (_currentAction.weapon == NULL);
 				if (aLienPsi)
 				{
-					_currentAction.weapon = new BattleItem(
-														_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
-														_save->getCurrentItemId());
+					_currentAction.weapon = _alienPsi; // kL
+//					_currentAction.weapon = new BattleItem(
+//														_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
+//														_save->getCurrentItemId());
 				}
 
 				_currentAction.target = posTarget;
@@ -2317,7 +2323,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 
 				if (aLienPsi)
 				{
-					_save->removeItem(_currentAction.weapon);
+//kL				_save->removeItem(_currentAction.weapon); // now using perpetual alien-psi-weapon, created in cTor.
 					_currentAction.weapon = NULL;
 				}
 			}
@@ -3394,7 +3400,7 @@ void BattlescapeGame::cleanupDeleted()
 
 /**
  * Gets the depth of the battlescape.
- * @return the depth of the battlescape.
+ * @return, the depth of the battlescape
  */
 const int BattlescapeGame::getDepth() const
 {
@@ -3404,6 +3410,7 @@ const int BattlescapeGame::getDepth() const
 /**
  * kL. Gets the BattlescapeState.
  * For turning on/off the visUnits indicators from UnitWalk/TurnBStates
+ * @return, pointer to BattlescapeState
  */
 BattlescapeState* BattlescapeGame::getBattlescapeState() const
 {
@@ -3417,6 +3424,15 @@ BattlescapeState* BattlescapeGame::getBattlescapeState() const
 BattleItem* BattlescapeGame::getFist() const // kL
 {
 	return _universalFist;
+}
+
+/**
+ * kL. Gets the universal alienPsi weapon.
+ * @return, the alienPsi BattleItem
+ */
+BattleItem* BattlescapeGame::getAlienPsi() const // kL
+{
+	return _alienPsi;
 }
 
 }

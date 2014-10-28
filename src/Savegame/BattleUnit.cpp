@@ -2288,7 +2288,7 @@ void BattleUnit::allowReselect()
 
 /**
  * Checks whether reselecting this unit is allowed.
- * @return bool
+ * @return, reselect allowed
  */
 bool BattleUnit::reselectAllowed() const
 {
@@ -2296,8 +2296,8 @@ bool BattleUnit::reselectAllowed() const
 }
 
 /**
- * Sets the amount of turns this unit is on fire. 0 = no fire.
- * @param fire : amount of turns this tile is on fire.
+ * Sets the amount of turns this unit is on fire.
+ * @param fire - amount of turns this unit will be on fire (0 - no fire)
  */
 void BattleUnit::setFire(int fire)
 {
@@ -2306,8 +2306,8 @@ void BattleUnit::setFire(int fire)
 }
 
 /**
- * Gets the amount of turns this unit is on fire. 0 = no fire.
- * @return fire : amount of turns this tile is on fire.
+ * Gets the amount of turns this unit is on fire.
+ * @return, amount of turns this unit will be on fire (0 - no fire)
  */
 int BattleUnit::getFire() const
 {
@@ -2316,7 +2316,7 @@ int BattleUnit::getFire() const
 
 /**
  * Gets the pointer to the vector of inventory items.
- * @return pointer to vector.
+ * @return, pointer to a vector of pointers to this BattleUnit's BattleItems
  */
 std::vector<BattleItem*>* BattleUnit::getInventory()
 {
@@ -2324,8 +2324,8 @@ std::vector<BattleItem*>* BattleUnit::getInventory()
 }
 
 /**
- * Lets AI do its thing.
- * @param action AI action.
+ * Lets the AI do its thing.
+ * @param action - current AI action
  */
 void BattleUnit::think(BattleAction* action)
 {
@@ -2338,8 +2338,8 @@ void BattleUnit::think(BattleAction* action)
 }
 
 /**
- * Changes the current AI state.
- * @param aiState Pointer to AI state.
+ * Sets this BattleUnit's current AI state.
+ * @param aiState - pointer to AI state
  */
 void BattleUnit::setAIState(BattleAIState* aiState)
 {
@@ -2356,7 +2356,7 @@ void BattleUnit::setAIState(BattleAIState* aiState)
 
 /**
  * Returns the current AI state.
- * @return Pointer to AI state.
+ * @return, pointer to this BattleUnit's AI state
  */
 BattleAIState* BattleUnit::getCurrentAIState() const
 {
@@ -2365,8 +2365,8 @@ BattleAIState* BattleUnit::getCurrentAIState() const
 
 /**
  * Sets the tile that a unit is standing on.
- * @param tile		- pointer to a tile
- * @param tileBelow	- pointer to the tile below
+ * @param tile		- pointer to a Tile
+ * @param tileBelow	- pointer to the Tile below
  */
 void BattleUnit::setTile(
 		Tile* tile,
@@ -2414,8 +2414,8 @@ void BattleUnit::setTile(
 }
 
 /**
- * Gets the unit's tile.
- * @return Tile
+ * Gets this BattleUnit's current tile.
+ * @return, pointer to Tile
  */
 Tile* BattleUnit::getTile() const
 {
@@ -2424,10 +2424,10 @@ Tile* BattleUnit::getTile() const
 
 /**
  * Checks if there's an inventory item in the specified inventory position.
- * @param slot, Inventory slot.
- * @param x, X position in slot.
- * @param y, Y position in slot.
- * @return BattleItem, Pointer to item in the slot, or NULL if none.
+ * @param slot	- pointer to RuleInventory slot
+ * @param x		- X position in slot
+ * @param y		- Y position in slot
+ * @return, pointer to BattleItem in slot or NULL if none
  */
 BattleItem* BattleUnit::getItem(
 		RuleInventory* slot,
@@ -2467,10 +2467,10 @@ BattleItem* BattleUnit::getItem(
 
 /**
  * Checks if there's an inventory item in the specified inventory position.
- * @param slot, Inventory slot.
- * @param x, X position in slot.
- * @param y, Y position in slot.
- * @return BattleItem, Pointer to item in the slot, or NULL if none.
+ * @param slot	- reference an inventory slot
+ * @param x		- X position in slot
+ * @param y		- Y position in slot
+ * @return, pointer to BattleItem in slot or NULL if none
  */
 BattleItem* BattleUnit::getItem(
 		const std::string& slot,
@@ -2514,7 +2514,7 @@ BattleItem* BattleUnit::getItem(
  * Get the 'main hand weapon' of a BattleUnit.
  * Ought alter AI so this Returns firearms only.
  * @param quickest - true to choose the quickest weapon (default true)
- * @return, pointer to a BattleItem
+ * @return, pointer to BattleItem
  */
 BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
@@ -2635,7 +2635,7 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 
 /**
  * Get a grenade from hand or belt (used for AI).
- * @return, pointer to grenade, or NULL
+ * @return, pointer to grenade or NULL
  */
 BattleItem* BattleUnit::getGrenade() const
 {

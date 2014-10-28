@@ -4776,7 +4776,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1413825610 f:\git\openxcom\src\battlescape\battlescapegame.h
+1414538170 f:\git\openxcom\src\battlescape\battlescapegame.h
 	<list>
 	<string>
 	<vector>
@@ -5825,7 +5825,7 @@
 1413140555 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1414306557 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1414532791 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6929,7 +6929,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1414342293 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1414537665 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -7937,7 +7937,7 @@
 	<string>
 	<vector>
 
-1413140558 source:f:\git\openxcom\src\geoscape\globe.cpp
+1414529248 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -7991,7 +7991,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1414471389 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1414536866 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"
@@ -9573,7 +9573,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1414297375 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1414532594 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
