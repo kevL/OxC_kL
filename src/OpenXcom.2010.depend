@@ -6899,10 +6899,10 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/Soldier.h"
 
-1413140557 f:\git\openxcom\src\engine\shaderdraw.h
+1414526855 f:\git\openxcom\src\engine\shaderdraw.h
 	"ShaderDrawHelper.h"
 
-1413140557 f:\git\openxcom\src\engine\shaderdrawhelper.h
+1414525708 f:\git\openxcom\src\engine\shaderdrawhelper.h
 	<vector>
 	"GraphSubset.h"
 	"Surface.h"

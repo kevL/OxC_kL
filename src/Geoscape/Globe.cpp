@@ -1499,7 +1499,7 @@ void Globe::XuLine(
 		double x2,
 		double y2,
 		int shade,
-		Uint8 color) // kL_add. (default -1)
+		Uint8 color) // kL_add. (default 0)
 {
 	if (_clipper->LineClip(
 						&x1,
@@ -1557,38 +1557,38 @@ void Globe::XuLine(
 
 	while (len > 0.0)
 	{
-//		if (x0>0 && y0>0 && x0<surface->getWidth() && y0<surface->getHeight())
-//		{
-//			tcol=src->getPixelColor((int)x0,(int)y0);
+//		if (x0 > 0 && y0 > 0 && x0 < surface->getWidth() && y0 < surface->getHeight())
 		tcol = src->getPixelColor(
 							static_cast<int>(x0),
 							static_cast<int>(y0));
 		if (tcol != 0)
 		{
 			if (color != 0)
-				tcol = color; // flight paths: Palette::blockOffset(10)+6;
+				tcol = color; // flight path or craft radar
 			else
 			{
-				const Uint8 d = (tcol & helper::ColorGroup);
-				if (d == oceanColor1		// Palette::blockOffset(12)
-					|| d == oceanColor2)	// Palette::blockOffset(13)
+				const Uint8 colorBlock = (tcol & helper::ColorGroup);
+
+				if (colorBlock == oceanColor1		// Palette::blockOffset(12)
+					|| colorBlock == oceanColor2)	// Palette::blockOffset(13)
 				{
-					tcol = oceanColor1 + static_cast<Uint8>(shade) + 8; // this pixel is ocean, Palette::blockOffset(12)
+					tcol = oceanColor1 + static_cast<Uint8>(shade) + 8; // this pixel is ocean
 				}
-				else
+				else // this pixel is land
 				{
-					const Uint8 e = tcol + static_cast<Uint8>(shade);
-					if (e > d + helper::ColorShade)
-						tcol = d + helper::ColorShade;
+					const Uint8 colorShaded = tcol + static_cast<Uint8>(shade);
+
+					if (colorShaded > colorBlock + helper::ColorShade)
+						tcol = colorBlock + helper::ColorShade;
 					else
-						tcol = e;
+						tcol = colorShaded;
 				}
 			}
 
 			surface->setPixelColor(
-							static_cast<int>(x0),
-							static_cast<int>(y0),
-							tcol);
+								static_cast<int>(x0),
+								static_cast<int>(y0),
+								tcol);
 		}
 
 		x0 += SX;
