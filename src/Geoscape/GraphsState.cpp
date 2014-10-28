@@ -878,6 +878,7 @@ void GraphsState::btnUfoRegionClick(Action*)
 	_country = false;
 	_finance = false;
 
+	_btnReset->setVisible();
 	resetScreen();
 	drawLines();
 
@@ -920,6 +921,7 @@ void GraphsState::btnXcomRegionClick(Action*)
 	_country = false;
 	_finance = false;
 
+	_btnReset->setVisible();
 	resetScreen();
 	drawLines();
 
@@ -962,6 +964,7 @@ void GraphsState::btnUfoCountryClick(Action*)
 	_country = true;
 	_finance = false;
 
+	_btnReset->setVisible();
 	resetScreen();
 	drawLines();
 
@@ -1004,6 +1007,7 @@ void GraphsState::btnXcomCountryClick(Action*)
 	_country = true;
 	_finance = false;
 
+	_btnReset->setVisible();
 	resetScreen();
 	drawLines();
 
@@ -1046,6 +1050,7 @@ void GraphsState::btnIncomeClick(Action*)
 	_country = true;
 	_finance = false;
 
+	_btnReset->setVisible(false);
 	resetScreen();
 	drawLines();
 
@@ -1083,6 +1088,7 @@ void GraphsState::btnFinanceClick(Action*)
 	_country = false;
 	_finance = true;
 
+	_btnReset->setVisible(false);
 	resetScreen();
 	drawLines();
 

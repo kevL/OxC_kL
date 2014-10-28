@@ -696,7 +696,7 @@ void Globe::rotateLeft()
 {
 	_rotLon = -ROTATE_LONGITUDE;
 
-	if (!_rotTimer->isRunning())
+	if (_rotTimer->isRunning() == false)
 		_rotTimer->start();
 }
 
@@ -707,7 +707,7 @@ void Globe::rotateRight()
 {
 	_rotLon = ROTATE_LONGITUDE;
 
-	if (!_rotTimer->isRunning())
+	if (_rotTimer->isRunning() == false)
 		_rotTimer->start();
 }
 
@@ -718,7 +718,7 @@ void Globe::rotateUp()
 {
 	_rotLat = -ROTATE_LATITUDE;
 
-	if (!_rotTimer->isRunning())
+	if (_rotTimer->isRunning() == false)
 		_rotTimer->start();
 }
 
@@ -729,7 +729,7 @@ void Globe::rotateDown()
 {
 	_rotLat = ROTATE_LATITUDE;
 
-	if (!_rotTimer->isRunning())
+	if (_rotTimer->isRunning() == false)
 		_rotTimer->start();
 }
 
@@ -768,7 +768,7 @@ void Globe::rotateStopLat()
 
 /**
  * Changes the current globe zoom factor.
- * @param zoom New zoom.
+ * @param zoom - new zoom
  */
 void Globe::setZoom(size_t zoom)
 {
@@ -915,8 +915,8 @@ bool Globe::zoomDogfightOut()
 
 /**
  * Rotates the globe to center on a certain polar point on the world map.
- * @param lon, Longitude of the point.
- * @param lat, Latitude of the point.
+ * @param lon - longitude of the point
+ * @param lat - latitude of the point
  */
 void Globe::center(
 		double lon,
@@ -932,9 +932,9 @@ void Globe::center(
 
 /**
  * Checks if a polar point is inside the globe's landmass.
- * @param lon, Longitude of the point.
- * @param lat, Latitude of the point.
- * @return, True if it's inside, False if it's outside.
+ * @param lon - longitude of the point
+ * @param lat - latitude of the point
+ * @return, true if point is over land
  */
 bool Globe::insideLand(
 		double lon,
@@ -954,7 +954,7 @@ bool Globe::insideLand(
 	for (std::list<Polygon*>::iterator
 			i = _rules->getPolygons()->begin();
 			i != _rules->getPolygons()->end()
-				&& !inside;
+				&& inside == false;
 			++i)
 	{
 		inside = insidePolygon(lon, lat, *i);
@@ -973,7 +973,6 @@ bool Globe::insideLand(
 void Globe::toggleDetail()
 {
 	Options::globeDetail = !Options::globeDetail;
-
 	drawDetail();
 }
 
@@ -1104,7 +1103,7 @@ std::vector<Target*> Globe::getTargets(
 			i != _game->getSavedGame()->getAlienBases()->end();
 			++i)
 	{
-		if (!(*i)->isDiscovered())
+		if ((*i)->isDiscovered() == false)
 			continue;
 
 		if (targetNear(*i, x, y))
@@ -1500,7 +1499,7 @@ void Globe::XuLine(
 		double x2,
 		double y2,
 		int shade,
-		bool flight) // kL_add.
+		Uint8 color) // kL_add. (default -1)
 {
 	if (_clipper->LineClip(
 						&x1,
@@ -1513,7 +1512,7 @@ void Globe::XuLine(
 	}
 
 	bool inv;
-	Sint16 tcol;
+	Uint8 tcol;
 	double
 		delta_x = x2 - x1,
 		delta_y = y2 - y1,
@@ -1564,24 +1563,21 @@ void Globe::XuLine(
 		tcol = src->getPixelColor(
 							static_cast<int>(x0),
 							static_cast<int>(y0));
-		if (tcol)
+		if (tcol != 0)
 		{
-			if (flight)								// kL
-				tcol = Palette::blockOffset(10)+6;	// kL
+			if (color != 0)
+				tcol = color; // flight paths: Palette::blockOffset(10)+6;
 			else
 			{
-				const int d = tcol & helper::ColorGroup;
-				if (d == oceanColor1
-					|| d == oceanColor2)
-//				if (d == Palette::blockOffset(12)
-//					|| d == Palette::blockOffset(13))
+				const Uint8 d = (tcol & helper::ColorGroup);
+				if (d == oceanColor1		// Palette::blockOffset(12)
+					|| d == oceanColor2)	// Palette::blockOffset(13)
 				{
-					tcol = oceanColor1 + shade + 8; // this pixel is ocean
-//					tcol = Palette::blockOffset(12) + shade + 8;
+					tcol = oceanColor1 + static_cast<Uint8>(shade) + 8; // this pixel is ocean, Palette::blockOffset(12)
 				}
 				else
 				{
-					const int e = tcol + shade;
+					const Uint8 e = tcol + static_cast<Uint8>(shade);
 					if (e > d + helper::ColorShade)
 						tcol = d + helper::ColorShade;
 					else
@@ -1592,7 +1588,7 @@ void Globe::XuLine(
 			surface->setPixelColor(
 							static_cast<int>(x0),
 							static_cast<int>(y0),
-							static_cast<Uint8>(tcol));
+							tcol);
 		}
 
 		x0 += SX;
@@ -1639,7 +1635,7 @@ void Globe::drawRadars()
 						_hoverLon,
 						&x,
 						&y);
-				drawGlobeCircle(
+				drawGlobeCircle( // placing new Base.
 							_hoverLat,
 							_hoverLon,
 							range,
@@ -1656,7 +1652,8 @@ void Globe::drawRadars()
 		lat = (*i)->getLatitude();
 		lon = (*i)->getLongitude();
 
-		if (!(AreSame(lon, 0.0) && AreSame(lat, 0.0)))
+		if (!
+			(AreSame(lon, 0.0) && AreSame(lat, 0.0)))
 		{
 			polarToCart(
 					lon,
@@ -1675,7 +1672,7 @@ void Globe::drawRadars()
 					if (range > 0.0)
 					{
 						range = range * (1.0 / 60.0) * (M_PI / 180.0);
-						drawGlobeCircle(
+						drawGlobeCircle( // Base radars.
 									lat,
 									lon,
 									range,
@@ -1706,11 +1703,12 @@ void Globe::drawRadars()
 						&y);
 
 				range *= ((1.0 / 60.0) * (M_PI / 180.0));
-				drawGlobeCircle(
+				drawGlobeCircle( // Craft radars.
 							lat,
 							lon,
 							range,
-							24);
+							24,
+							Palette::blockOffset(9)+6); // brown
 			}
 		}
 	}
@@ -1724,7 +1722,8 @@ void Globe::drawGlobeCircle(
 		double lat,
 		double lon,
 		double radius,
-		int segments)
+		int segments,
+		Uint8 color)
 {
 	double
 		x,
@@ -1758,7 +1757,7 @@ void Globe::drawGlobeCircle(
 			continue;
 		}
 
-		if (!pointBack(lon1, lat1))
+		if (pointBack(lon1, lat1) == false)
 			XuLine(
 				_radars,
 				this,
@@ -1766,7 +1765,8 @@ void Globe::drawGlobeCircle(
 				y,
 				x2,
 				y2,
-				4);
+				4,
+				color);
 
 		x2 = x;
 		y2 = y;
@@ -2224,15 +2224,19 @@ void Globe::drawDetail()
 }
 
 /**
- *
+ * Draws flight paths.
+ * @param surface	- pointer to a Surface
+ * @param lon1		-
+ * @param lat1		-
+ * @param lon2		-
+ * @param lat2		-
  */
 void Globe::drawPath(
 		Surface* surface,
 		double lon1,
 		double lat1,
 		double lon2,
-		double lat2,
-		bool flight) // kL_add.
+		double lat2)
 {
 	double
 		length,
@@ -2279,8 +2283,8 @@ void Globe::drawPath(
 					&x2,
 					&y2);
 
-		if (!pointBack(p1.lon, p1.lat)
-			&& !pointBack(p2.lon, p2.lat))
+		if (pointBack(p1.lon, p1.lat) == false
+			&& pointBack(p2.lon, p2.lat) == false)
 		{
 			XuLine(
 				surface,
@@ -2290,7 +2294,7 @@ void Globe::drawPath(
 				x2,
 				y2,
 				8,
-				flight); // kL_add.
+				Palette::blockOffset(10)+6); // steel gray
 		}
 
 		p1 = p2;
@@ -2337,8 +2341,7 @@ void Globe::drawFlights()
 					lon1,
 					lat1,
 					lon2,
-					lat2,
-					true);
+					lat2);
 		}
 	}
 	_radars->unlock();
@@ -2351,9 +2354,9 @@ void Globe::drawFlights()
 void Globe::drawTarget(Target* target)
 {
 	if (target->getMarker() != -1
-		&& !pointBack(
+		&& pointBack(
 					target->getLongitude(),
-					target->getLatitude()))
+					target->getLatitude()) == false)
 	{
 		Sint16
 			x,

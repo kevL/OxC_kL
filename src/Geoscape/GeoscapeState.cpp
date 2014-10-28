@@ -3104,10 +3104,9 @@ void GeoscapeState::timerReset()
 }
 
 /**
- * Adds a new popup window to the queue
- * (this prevents popups from overlapping)
+ * Adds a new popup window to the queue - this prevents popups from overlapping -
  * and pauses the game timer respectively.
- * @param state Pointer to popup state.
+ * @param state - pointer to popup state
  */
 void GeoscapeState::popup(State* state)
 {
@@ -3116,9 +3115,8 @@ void GeoscapeState::popup(State* state)
 }
 
 /**
- * Returns a pointer to the Geoscape globe for
- * access by other substates.
- * @return Pointer to globe.
+ * Returns a pointer to the Geoscape globe for access by other substates.
+ * @return, pointer to Globe
  */
 Globe* GeoscapeState::getGlobe() const
 {
@@ -3126,8 +3124,7 @@ Globe* GeoscapeState::getGlobe() const
 }
 
 /**
- * Processes any left-clicks on globe markers,
- * or right-clicks to scroll the globe.
+ * Processes any left-clicks on globe markers or right-clicks to scroll the globe.
  * @param action - pointer to an action
  */
 void GeoscapeState::globeClick(Action* action)
@@ -3144,12 +3141,10 @@ void GeoscapeState::globeClick(Action* action)
 														mouseY,
 														false);
 		if (targets.empty() == false)
-		{
 			_game->pushState(new MultipleTargetsState(
 													targets,
 													NULL,
 													this));
-		}
 	}
 
 	if (_game->getSavedGame()->getDebugMode())
@@ -3488,7 +3483,7 @@ void GeoscapeState::startDogfight()
 
 	if (_globe->getZoom() < _globe->getZoomLevels() - 1)
 	{
-		if (!_zoomInEffectTimer->isRunning())
+		if (_zoomInEffectTimer->isRunning() == false)
 		{
 //			_globe->rotateStop();
 			_zoomInEffectTimer->start();

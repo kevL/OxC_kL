@@ -4881,7 +4881,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1413140558 f:\git\openxcom\src\geoscape\globe.h
+1414476158 f:\git\openxcom\src\geoscape\globe.h
 	<list>
 	<vector>
 	"Cord.h"
@@ -5635,7 +5635,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Transfer.h"
 
-1413140555 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
+1414469869 source:f:\git\openxcom\src\battlescape\abortmissionstate.cpp
 	"AbortMissionState.h"
 	<sstream>
 	<vector>
@@ -6176,7 +6176,7 @@
 	<string>
 	"SavedGameState.h"
 
-1413140555 source:f:\git\openxcom\src\battlescape\battlestate.cpp
+1414470040 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
 1413472150 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
@@ -6809,7 +6809,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1413140556 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1414470198 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -7776,7 +7776,7 @@
 1413140558 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1414439832 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1414471106 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7991,7 +7991,7 @@
 	<vector>
 	"ShaderDraw.h"
 
-1414448222 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
+1414471389 source:f:\git\openxcom\src\geoscape\graphsstate.cpp
 	"GraphsState.h"
 	<sstream>
 	"../Engine/Action.h"

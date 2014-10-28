@@ -164,7 +164,8 @@ private:
 			double lat,
 			double lon,
 			double radius,
-			int segments);
+			int segments,
+			Uint8 color = 0); // kL_add.
 	/// Special "transparent" line.
 	void XuLine(
 			Surface* surface,
@@ -174,7 +175,7 @@ private:
 			double x2,
 			double y2,
 			int shade,
-			bool flight = false); // kL_add.
+			Uint8 color = 0); // kL_add.
 	void drawVHLine(
 			Surface* surface,
 			double lon1,
@@ -188,8 +189,7 @@ private:
 			double lon1,
 			double lat1,
 			double lon2,
-			double lat2,
-			bool flight = false); // kL_add.
+			double lat2);
 	/// Draw target marker.
 	void drawTarget(Target* target);
 

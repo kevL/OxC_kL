@@ -316,7 +316,7 @@ en-US:
   STR_NAME_UC: "NAME"
   STR_AMMO_: "AMMO> {ALT}{0}"
   STR_CREW: "Crew"
-  STR_EQUIPMENT_UC: "Equipt"
+  STR_EQUIPMENT_UC: "Equip"
   STR_ARMOR: "Armor"
   STR_MAX: "FULL> {ALT}{0}"
   STR_ROOKIE: "Rookie"
