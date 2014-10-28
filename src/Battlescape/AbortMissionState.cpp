@@ -97,7 +97,7 @@ AbortMissionState::AbortMissionState(
 			++i)
 	{
 		if ((*i)->getOriginalFaction() == FACTION_PLAYER
-			&& !(*i)->isOut())
+			&& (*i)->isOut() == false)
 		{
 			if ((nextStage.empty() == false
 					&& (*i)->isInExitArea(END_POINT))

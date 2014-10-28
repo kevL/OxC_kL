@@ -126,6 +126,7 @@ UnitDieBState::UnitDieBState(
  */
 UnitDieBState::~UnitDieBState()
 {
+	_parent->getMap()->setUnitDying(false);
 	//Log(LOG_INFO) << "Delete UnitDieBState";
 }
 
@@ -149,7 +150,6 @@ void UnitDieBState::think()
 		&& _doneScream == false)
 	{
 		_doneScream = true;
-
 		playDeathSound();
 	}
 
@@ -183,7 +183,7 @@ void UnitDieBState::think()
 	if (_unit->isOut()) // and this ought be Status_Dead OR _Unconscious.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
-		_parent->getMap()->setUnitDying(false);
+//		_parent->getMap()->setUnitDying(false);
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
 			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
@@ -311,7 +311,7 @@ void UnitDieBState::convertUnitToCorpse()
 	int size = _unit->getArmor()->getSize();
 
 	// move inventory from unit to the ground for non-large units
-	bool drop = size == 1
+	bool drop = (size == 1)
 				&& carried == false // kL, i don't think this ever happens (ie, items have already been dropped). So let's bypass this section anyway!
 				&& (Options::weaponSelfDestruction == false
 					|| _unit->getOriginalFaction() != FACTION_HOSTILE
@@ -342,7 +342,7 @@ void UnitDieBState::convertUnitToCorpse()
 	_unit->setTile(NULL); // remove unit-tile link
 
 
-	if (carried) // unconscious unit is being carried when it dies
+	if (carried == true) // unconscious unit is being carried when it dies
 	{
 		// replace the unconscious body item with a corpse in the carrying unit's inventory
 		for (std::vector<BattleItem*>::iterator
@@ -369,12 +369,12 @@ void UnitDieBState::convertUnitToCorpse()
 		for (int
 				y = 0;
 				y < size;
-				y++)
+				++y)
 		{
 			for (int
 					x = 0;
 					x < size;
-					x++)
+					++x)
 			{
 				BattleItem* corpse = new BattleItem(
 												_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]),
@@ -383,7 +383,7 @@ void UnitDieBState::convertUnitToCorpse()
 
 				// check in case unit was displaced by another unit
 				tile = _parent->getSave()->getTile(pos + Position(x, y, 0));
-				if (tile // kL, safety. ( had a CTD when ethereal dies on water )
+				if (tile != NULL // kL, safety. ( had a CTD when ethereal dies on water )
 					&& tile->getUnit() == _unit)
 				{
 					tile->setUnit(NULL);

@@ -5891,7 +5891,7 @@
 1413140556 f:\git\openxcom\src\battlescape\nextturnstate.h
 	"../Engine/State.h"
 
-1413140556 f:\git\openxcom\src\battlescape\unitdiebstate.h
+1414470086 f:\git\openxcom\src\battlescape\unitdiebstate.h
 	"BattleState.h"
 	"../Ruleset/RuleItem.h"
 
@@ -9492,7 +9492,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1413242030 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1414448982 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>

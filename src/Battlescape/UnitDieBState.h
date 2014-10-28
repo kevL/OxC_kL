@@ -69,7 +69,6 @@ private:
 
 		/// Converts a unit to a corpse.
 		void convertUnitToCorpse();
-
 		/// Plays the death sound.
 		void playDeathSound();
 };

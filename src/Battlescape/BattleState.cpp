@@ -25,8 +25,8 @@ namespace OpenXcom
 
 /**
  * Sets up a BattleState.
- * @param parent Pointer to the parent state.
- * @param action Struct containing info about the action.
+ * @param parent - pointer to the parent state
+ * @param action - struct containing info about current action
  */
 BattleState::BattleState(
 		BattlescapeGame* parent,
@@ -72,16 +72,16 @@ void BattleState::cancel()
 }
 
 /**
- * Runs any code the state needs to keep updating every
- * game cycle.
+ * Runs any code the state needs to keep updating every game cycle.
  */
 void BattleState::think()
 {
 }
 
 /**
- * Gets the action result. Returns error messages or an empty string when everything went fine.
- * @return Error or empty string when everything is fine.
+ * Gets the action result.
+ * Returns error messages or an empty string when everything went fine.
+ * @return, a BattleAction struct (BattlescapeGame.h)
  */
 BattleAction BattleState::getAction() const
 {
