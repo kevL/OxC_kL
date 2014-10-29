@@ -461,9 +461,9 @@ void Map::draw()
 
 /**
  * Replaces a certain amount of colors in the surface's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void Map::setPalette(
 		SDL_Color* colors,

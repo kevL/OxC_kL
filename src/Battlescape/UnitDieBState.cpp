@@ -126,7 +126,6 @@ UnitDieBState::UnitDieBState(
  */
 UnitDieBState::~UnitDieBState()
 {
-	_parent->getMap()->setUnitDying(false);
 	//Log(LOG_INFO) << "Delete UnitDieBState";
 }
 
@@ -281,6 +280,7 @@ void UnitDieBState::think()
 	}
 
 	_parent->getMap()->cacheUnit(_unit);
+	_parent->getMap()->setUnitDying(false);
 	//Log(LOG_INFO) << "UnitDieBState::think() EXIT";
 }
 

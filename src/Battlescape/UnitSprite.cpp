@@ -25,6 +25,7 @@
 
 #include "../Battlescape/Position.h"
 
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/ShaderDraw.h"
 #include "../Engine/ShaderMove.h"
@@ -89,9 +90,9 @@ UnitSprite::~UnitSprite()
 
 /**
  * Changes the surface sets for the UnitSprite to get resources for rendering.
- * @param unitSurface	- pointer to an unit surface set
- * @param itemSurfaceA	- pointer to an item surface set
- * @param itemSurfaceB	- pointer to an item surface set
+ * @param unitSurface	- pointer to a unit's SurfaceSet
+ * @param itemSurfaceA	- pointer to an item's SurfaceSet
+ * @param itemSurfaceB	- pointer to an item's SurfaceSet
  */
 void UnitSprite::setSurfaces(
 		SurfaceSet* unitSurface,
@@ -411,13 +412,9 @@ void UnitSprite::drawRoutine0()
 	else
 	{
 		if (_unit->getGender() == GENDER_FEMALE)
-		{
 			torso = _unitSurface->getFrame(femaleTorso + unitDir);
-		}
 		else
-		{
 			torso = _unitSurface->getFrame(maleTorso + unitDir);
-		}
 	}
 
 	const bool

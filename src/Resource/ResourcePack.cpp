@@ -143,8 +143,8 @@ ResourcePack::~ResourcePack()
 
 /**
  * Returns a specific font from the resource set.
- * @param name Name of the font.
- * @return, Pointer to the font.
+ * @param name - reference the name of a Font
+ * @return, pointer to the Font
  */
 Font* ResourcePack::getFont(const std::string& name) const
 {
@@ -158,8 +158,8 @@ Font* ResourcePack::getFont(const std::string& name) const
 
 /**
  * Returns a specific surface from the resource set.
- * @param name - reference to name of the surface
- * @return, pointer to the surface
+ * @param name - reference to name of a Surface
+ * @return, pointer to the Surface
  */
 Surface* ResourcePack::getSurface(const std::string& name) const
 {
@@ -173,8 +173,8 @@ Surface* ResourcePack::getSurface(const std::string& name) const
 
 /**
  * Returns a specific surface set from the resource set.
- * @param name Name of the surface set.
- * @return, Pointer to the surface set.
+ * @param name - reference name of a SurfaceSet
+ * @return, pointer to the SurfaceSet
  */
 SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 {
@@ -192,8 +192,8 @@ SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 
 /**
  * Returns a specific music from the resource set.
- * @param name - reference to the name of the music
- * @return, pointer to Music
+ * @param name - reference the name of a Music
+ * @return, pointer to the Music
  */
 Music* ResourcePack::getMusic(const std::string& name) const
 {
@@ -213,14 +213,14 @@ Music* ResourcePack::getMusic(const std::string& name) const
 
 /**
  * Plays the specified track if it's not already playing.
- * @param name		- reference to the name of the music
+ * @param name		- reference the name of a Music
  * @param random	- true to pick a random track
+ * @param terrain	- reference the RuleTerrain
  */
-void ResourcePack::playMusic(	// kL_note: Should put 'terrain' string input here, for sza_MusicRules
-								// and then change the BattlescapeState ->play() call to a regular playMusic() call.
+void ResourcePack::playMusic(
 		const std::string& name,
 		bool random,
-		const std::string& terrain) // kL, sza_MusicRules
+		const std::string& terrain) // kL: sza_MusicRules
 {
 	if (!Options::mute
 		&& _playingMusic != name)
@@ -248,13 +248,13 @@ void ResourcePack::playMusic(	// kL_note: Should put 'terrain' string input here
 
 /**
  * Returns a random music from the resource set.
- * @param name, Name of the music to pick from.
- * @return, Pointer to the music.
+ * @param name		- reference the name of a Music to pick from
+ * @param terrain	- reference the RuleTerrain
+ * @return, pointer to the Music
  */
-// Music* ResourcePack::getRandomMusic(const std::string& name) const
-Music* ResourcePack::getRandomMusic( // sza_MusicRules
+Music* ResourcePack::getRandomMusic(
 		const std::string& name,
-		const std::string& terrain) const
+		const std::string& terrain) const // kL: sza_MusicRules
 {
 	if (Options::mute)
 		return _muteMusic;
@@ -309,6 +309,8 @@ Music* ResourcePack::getRandomMusic( // sza_MusicRules
 
 /**
  * Clear a music assignment.
+ * @param name		-
+ * @param terrain	-
  */
 void ResourcePack::ClearMusicAssignment( // sza_MusicRules
 		const std::string& name,
@@ -325,6 +327,10 @@ void ResourcePack::ClearMusicAssignment( // sza_MusicRules
 
 /**
  * Make a music assignment.
+ * @param name			-
+ * @param terrain		-
+ * @param filenames		-
+ * @param midiIndexes	-
  */
 void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 		const std::string& name,
@@ -341,7 +347,7 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 	for (size_t
 			i = 0;
 			i < filenames.size();
-			i++)
+			++i)
 	{
 		std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(
 																		filenames.at(i),
@@ -352,9 +358,9 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 
 /**
  * Returns a specific sound from the resource set.
- * @param set, Name of the sound set.
- * @param sound, ID of the sound.
- * @return, Pointer to the sound.
+ * @param set	- reference the name of a Sound set
+ * @param sound	- ID of the Sound
+ * @return, pointer to the Sound
  */
 Sound* ResourcePack::getSound(
 		const std::string& set,
@@ -375,8 +381,8 @@ Sound* ResourcePack::getSound(
 
 /**
  * Returns a specific palette from the resource set.
- * @param name Name of the palette.
- * @return, Pointer to the palette.
+ * @param name - reference the name of a Palette
+ * @return, pointer to the Palette
  */
 Palette* ResourcePack::getPalette(const std::string& name) const
 {
@@ -427,7 +433,7 @@ void ResourcePack::setPalette(
 
 /**
  * Returns the list of voxeldata in the resource set.
- * @return, Pointer to the list of voxeldata.
+ * @return, pointer to a vector containing the voxeldata
  */
 std::vector<Uint16>* ResourcePack::getVoxelData()
 {
@@ -451,7 +457,8 @@ Sound* ResourcePack::getSoundByDepth(
 }
 
 /**
- *
+ * Gets lookup tables.
+ * @return, address of lookup tables
  */
 const std::vector<std::vector<Uint8> >* ResourcePack::getLUTs() const
 {

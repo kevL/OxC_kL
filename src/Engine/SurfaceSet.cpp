@@ -33,9 +33,9 @@ namespace OpenXcom
 {
 
 /**
- * Sets up a new empty surface set for frames of the specified size.
- * @param width Frame width in pixels.
- * @param height Frame height in pixels.
+ * Sets up a new empty SurfaceSet for frames of the specified size.
+ * @param width		- frame width in pixels
+ * @param height	- frame height in pixels
  */
 SurfaceSet::SurfaceSet(
 		int width,
@@ -276,8 +276,8 @@ void SurfaceSet::loadDat(const std::string& filename)
 
 /**
  * Returns a particular frame from the surface set.
- * @param i Frame number in the set.
- * @return Pointer to the respective surface.
+ * @param i - frame number in the set
+ * @return, pointer to the respective Surface
  */
 Surface* SurfaceSet::getFrame(int i)
 {

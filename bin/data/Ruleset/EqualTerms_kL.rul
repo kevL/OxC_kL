@@ -849,7 +849,8 @@ items:
 armors:
 #------------------------------------------------------------------------------
   - type: STR_STREET_ARCTIC_UC
-    spriteSheet: XCOM_0a.PCK
+#    spriteSheet: XCOM_0a.PCK
+    spriteSheet: XCOM_1a.PCK #temp, use kevlar
     spriteInv: MAN_0a
     corpseItem: STR_CORPSE_STREET_ARCTIC
 #    storeItem: STR_STREET_ARCTIC
@@ -873,7 +874,8 @@ armors:
     loftempsSet: [ 3 ]
 #------------------------------------------------------------------------------
   - type: STR_STREET_JUNGLE_UC
-    spriteSheet: XCOM_0j.PCK
+#    spriteSheet: XCOM_0j.PCK
+    spriteSheet: XCOM_1j.PCK #temp, use kevlar
     spriteInv: MAN_0j
     corpseItem: STR_CORPSE_STREET_JUNGLE
 #    storeItem: STR_STREET_JUNGLE
@@ -897,7 +899,8 @@ armors:
     loftempsSet: [ 3 ]
 #------------------------------------------------------------------------------
   - type: STR_STREET_URBAN_UC
-    spriteSheet: XCOM_0u.PCK
+#    spriteSheet: XCOM_0u.PCK
+    spriteSheet: XCOM_1u.PCK #temp, use kevlar
     spriteInv: MAN_0u
     corpseItem: STR_CORPSE_STREET_URBAN
 #    storeItem: STR_STREET_URBAN
@@ -925,7 +928,6 @@ armors:
     spriteInv: MAN_1a
     corpseItem: STR_CORPSE_KEVLAR_ARCTIC
     storeItem: STR_KEVLAR_ARCTIC
-    loftemps: 3
     weight: 5
     frontArmor: 16
     sideArmor: 9
@@ -948,13 +950,13 @@ armors:
       - 0.95
       - 1.0
       - 1.0
+    loftempsSet: [ 3 ]
 #------------------------------------------------------------------------------
   - type: STR_KEVLAR_JUNGLE_UC
     spriteSheet: XCOM_1j.PCK
     spriteInv: MAN_1j
     corpseItem: STR_CORPSE
     storeItem: STR_KEVLAR_JUNGLE
-    loftemps: 3
     weight: 5
     frontArmor: 16
     sideArmor: 9
@@ -977,13 +979,13 @@ armors:
       - 0.95
       - 1.0
       - 1.0
+    loftempsSet: [ 3 ]
 #------------------------------------------------------------------------------
   - type: STR_KEVLAR_URBAN_UC
     spriteSheet: XCOM_1u.PCK
     spriteInv: MAN_1u
     corpseItem: STR_CORPSE_KEVLAR_URBAN
     storeItem: STR_KEVLAR_URBAN
-    loftemps: 3
     weight: 5
     frontArmor: 16
     sideArmor: 9
@@ -1006,13 +1008,13 @@ armors:
       - 0.95
       - 1.0
       - 1.0
+    loftempsSet: [ 3 ]
 #------------------------------------------------------------------------------
   - type: STR_TACTICAL_ARCTIC_UC
     spriteSheet: XCOM_1DSa.PCK
     spriteInv: MAN_1DSa
     corpseItem: STR_CORPSE_TACTICAL_ARCTIC
     storeItem: STR_TACTICAL_ARCTIC
-    loftemps: 3
     weight: 7
     frontArmor: 22
     sideArmor: 16
@@ -1035,13 +1037,13 @@ armors:
       - 0.92
       - 1.0
       - 1.0
+    loftempsSet: [ 3 ]
 #------------------------------------------------------------------------------
   - type: STR_TACTICAL_JUNGLE_UC
     spriteSheet: XCOM_1DSj.PCK
     spriteInv: MAN_1DSj
     corpseItem: STR_CORPSE_TACTICAL_JUNGLE
     storeItem: STR_TACTICAL_JUNGLE
-    loftemps: 3
     weight: 7
     frontArmor: 22
     sideArmor: 16
@@ -1064,13 +1066,13 @@ armors:
       - 0.92
       - 1.0
       - 1.0
+    loftempsSet: [ 3 ]
 #------------------------------------------------------------------------------
   - type: STR_TACTICAL_URBAN_UC
     spriteSheet: XCOM_1DSu.PCK
     spriteInv: MAN_1DSu
     corpseItem: STR_CORPSE_TACTICAL_URBAN
     storeItem: STR_TACTICAL_URBAN
-    loftemps: 3
     weight: 7
     frontArmor: 22
     sideArmor: 16
@@ -1093,6 +1095,7 @@ armors:
       - 0.92
       - 1.0
       - 1.0
+    loftempsSet: [ 3 ]
 #------------------------------------------------------------------------------
 #------------------------------------------------------------------------------
 ufopaedia:
@@ -1437,14 +1440,12 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Arctic/man_0m3.png
 #  - type: XCOM_0a.PCK
-  - type: XCOM_1a.PCK
-    width: 512
-    height: 720
-    subX: 32
-    subY: 40
-    files:
-#      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Street/
-      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Kevlar/xcom1a.png
+#    width: 512
+#    height: 720
+#    subX: 32
+#    subY: 40
+#    files:
+#      0: Resources/EqualTerms1/Armor/Arctic/BScapeView/Street/xcom0a.png
 #------------------------------------------------------------------------------
   - type: MAN_0jF0.SPK #STREET JUNGLE
     singleImage: true
@@ -1479,14 +1480,12 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Jungle/man_0m3.png
 #  - type: XCOM_0j.PCK
-  - type: XCOM_1j.PCK
-    width: 512
-    height: 720
-    subX: 32
-    subY: 40
-    files:
-#      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Street/
-      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Kevlar/xcom1j.png
+#    width: 512
+#    height: 720
+#    subX: 32
+#    subY: 40
+#    files:
+#      0: Resources/EqualTerms1/Armor/Jungle/BScapeView/Street/xcom0j.png
 #------------------------------------------------------------------------------
   - type: MAN_0uF0.SPK #STREET URBAN
     singleImage: true
@@ -1521,14 +1520,12 @@ extraSprites:
     files:
       0: Resources/EqualTerms1/Armor/Urban/man_0m3.png
 #  - type: XCOM_0u.PCK
-  - type: XCOM_1u.PCK
-    width: 512
-    height: 720
-    subX: 32
-    subY: 40
-    files:
-#      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Street/
-      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Kevlar/xcom1u.png
+#    width: 512
+#    height: 720
+#    subX: 32
+#    subY: 40
+#    files:
+#      0: Resources/EqualTerms1/Armor/Urban/BScapeView/Street/xcom0u.png
 #------------------------------------------------------------------------------
   - type: MAN_1aF0.SPK #KEVLAR ARCTIC
     singleImage: true

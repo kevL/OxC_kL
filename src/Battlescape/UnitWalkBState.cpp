@@ -696,12 +696,12 @@ bool UnitWalkBState::doStatusWalk()
 		|| _parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit)
 	{
 		//Log(LOG_INFO) << ". WalkBState, keepWalking()";
+		playMovementSound();
+
 		tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
 		_unit->keepWalking( // advances _walkPhase
 						tileBelow,
 						_onScreen);
-
-		playMovementSound();
 	}
 	else if (_falling == false)
 	{
@@ -1117,7 +1117,7 @@ void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
 }
 
 /**
- * Handles the stepping sounds.
+ * Handles walking/ flying/ other movement sounds.
  */
 void UnitWalkBState::playMovementSound()
 {
@@ -1133,7 +1133,7 @@ void UnitWalkBState::playMovementSound()
 
 	if (_unit->getMoveSound() != -1)
 	{
-		if (_unit->getWalkingPhase() == 0)
+		if (_unit->getWalkingPhase() == 1)
 			sound = _unit->getMoveSound();
 	}
 	else
