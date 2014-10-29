@@ -535,7 +535,6 @@ bool UnitWalkBState::doStatusStand()
 
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
-
 			return false;
 		}
 		else if (dir < _pf->DIR_UP) // now open doors (if any)
@@ -583,7 +582,6 @@ bool UnitWalkBState::doStatusStand()
 		{
 			_parent->popState();
 //			postPathProcedures(); // .. one or the other i suppose.
-
 			return false;
 		}
 
@@ -629,7 +627,6 @@ bool UnitWalkBState::doStatusStand()
 					_parent->getMap()->cacheUnit(_unit);
 
 					_parent->popState();
-
 					return false;
 				}
 			}
@@ -658,6 +655,9 @@ bool UnitWalkBState::doStatusStand()
 							tileBelow,
 							_onScreen);
 
+			if (_unit->getMoveSound() != -1)
+				playMovementSound();
+
 			_preStepTurn = false;
 		}
 
@@ -672,7 +672,6 @@ bool UnitWalkBState::doStatusStand()
 		//Log(LOG_INFO) << ". unit direction = " << _unit->getDirection();
 		//Log(LOG_INFO) << ". . postPathProcedures()";
 		postPathProcedures();
-
 		return false;
 	}
 
@@ -696,7 +695,8 @@ bool UnitWalkBState::doStatusWalk()
 		|| _parent->getSave()->getTile(_unit->getDestination())->getUnit() == _unit)
 	{
 		//Log(LOG_INFO) << ". WalkBState, keepWalking()";
-		playMovementSound();
+		if (_unit->getMoveSound() == -1)
+			playMovementSound();
 
 		tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
 		_unit->keepWalking( // advances _walkPhase
@@ -707,8 +707,8 @@ bool UnitWalkBState::doStatusWalk()
 	{
 		//Log(LOG_INFO) << ". WalkBState, !falling Abort path";
 		_unit->lookAt( // turn to blocking unit
-					_unit->getDestination(),
-					_unit->getTurretType() != -1);
+				_unit->getDestination(),
+				_unit->getTurretType() != -1);
 
 		_pf->abortPath();
 		_unit->setStatus(STATUS_STANDING);
@@ -811,7 +811,6 @@ bool UnitWalkBState::doStatusWalk()
 
 						//Log(LOG_INFO) << "UnitWalkBState::think(), addFallingUnit() ID " << _unit->getId();
 						_parent->statePushFront(new UnitFallBState(_parent));
-
 						return false;
 					}
 					//else Log(LOG_INFO) << ". . otherTileBelow Does NOT contain other unit";
