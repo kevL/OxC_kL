@@ -2210,7 +2210,6 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 				else
 					_parentState->warning("STR_NO_LINE_OF_FIRE");
 
-
 				cancelCurrentAction(); // kL
 			}
 		}

@@ -4769,11 +4769,12 @@ int TileEngine::calculateParabola(
 		const Position delta)
 {
 	//Log(LOG_INFO) << "TileEngine::calculateParabola()";
-	double
+	const double
 		ro = sqrt(static_cast<double>(
 				  (target.x - origin.x) * (target.x - origin.x)
 				+ (target.y - origin.y) * (target.y - origin.y)
-				+ (target.z - origin.z) * (target.z - origin.z))),
+				+ (target.z - origin.z) * (target.z - origin.z)));
+	double
 		fi = acos(static_cast<double>(target.z - origin.z) / ro),
 		te = atan2(
 				static_cast<double>(target.y - origin.y),
@@ -4787,7 +4788,7 @@ int TileEngine::calculateParabola(
 	te += (delta.x / ro) / 2.0 * M_PI;						// horizontal magic value
 	fi += ((delta.z + delta.y) / ro) / 14.0 * M_PI * arc;	// another magic value (vertical), to make it in line with fire spread
 
-	double
+	const double
 		zA = sqrt(ro) * arc,
 		zK = (4.0 * zA) / (ro * ro);
 
@@ -4871,7 +4872,7 @@ bool TileEngine::validateThrow(
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()"; //, cf Projectile::calculateThrow()";
 	Position posTarget = targetVoxel / Position(16, 16, 24);
 
-	double arc = 0.0;
+	double arc = 0.1;
 
 	if (originVoxel / Position(16, 16, 24) != posTarget)
 	{
@@ -4879,7 +4880,7 @@ bool TileEngine::validateThrow(
 		// objects at their own feet. ( needs starting arc ~0.8, less if kneeled )
 		if (action.type == BA_THROW)
 		{
-			arc = std::max(
+			arc += std::max(
 						0.48,
 						1.73 / sqrt(
 									sqrt(
@@ -4892,11 +4893,11 @@ bool TileEngine::validateThrow(
 			// arcing projectile weapons assume a fixed strength and weight.(70 and 10 respectively)
 			// curvature should be approximately 1.06358350461 at this point.
 //			arc = 1.73 / sqrt(sqrt(70.0 / 10.0)) + kneel; // OR ...
-			arc = 1.0635835046056873518242669985672;
+			arc += 1.0635835046056873518242669985672;
 		}
 
 		if (action.actor->isKneeled())
-			arc += 0.15; // stock: 0.1 (higher value lets kneeled throws go farther w/out hitting ceiling...)
+			arc += 0.13; // stock: 0.1 (higher value lets kneeled throws go farther w/out hitting ceiling...)
 	}
 	//Log(LOG_INFO) << ". starting arc = " << arc;
 

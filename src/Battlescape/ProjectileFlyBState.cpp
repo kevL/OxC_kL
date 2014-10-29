@@ -584,7 +584,8 @@ bool ProjectileFlyBState::createNewProjectile()
 			|| _projectileImpact == VOXEL_OBJECT)
 		{
 			if (_unit->getFaction() != FACTION_PLAYER
-				&& _projectileItem->getRules()->getBattleType() == BT_GRENADE)
+				&& (_projectileItem->getRules()->getBattleType() == BT_GRENADE
+					|| _projectileItem->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 			{
 				_projectileItem->setFuseTimer(0);
 			}
@@ -1196,16 +1197,17 @@ bool ProjectileFlyBState::validThrowRange(
 		weight += action->weapon->getAmmoItem()->getRules()->getWeight();
 	}
 
-	int offset_z = 2; // kL_note: this is prob +1 (.. +2) to get things up off the lowest voxel of a targetTile.
+	const int
+		offset_z = 2, // kL_note: this is prob +1 (.. +2) to get things up off the lowest voxel of a targetTile.
 //	int delta_z = origin.z
 //					- (((action->target.z * 24)
 //						+ offset_z)
 //						- target->getTerrainLevel());
-	int delta_z = origin.z // voxelspace
+		delta_z = origin.z // voxelspace
 				- action->target.z * 24
 				- offset_z
 				+ target->getTerrainLevel();
-	double maxDist = static_cast<double>(
+	const double maxDist = static_cast<double>(
 							getMaxThrowDistance( // tilespace
 											weight,
 											static_cast<int>(Round(
@@ -1216,10 +1218,10 @@ bool ProjectileFlyBState::validThrowRange(
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
 //	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 
-	int
+	const int
 		delta_x = action->actor->getPosition().x - action->target.x,
 		delta_y = action->actor->getPosition().y - action->target.y;
-	double throwDist = sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
+	const double throwDist = sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
 	// throwing up the roof of this building lets your throw 2 tiles less further

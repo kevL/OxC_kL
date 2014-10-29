@@ -96,11 +96,14 @@ Projectile::Projectile(
 		{
 			//Log(LOG_INFO) << "Create Projectile -> BA_THROW";
 			_sprite =_res->getSurfaceSet("FLOOROB.PCK")->getFrame(getItem()->getRules()->getFloorSprite());
-			_speed = _speed * 4 / 7;
+			_speed = _speed * 3 / 7;
 		}
 		else // ba_SHOOT!! or hit, or spit.... probly Psi-attack also.
 		{
 			//Log(LOG_INFO) << "Create Projectile -> not BA_THROW";
+			if (_action.weapon->getRules()->getArcingShot())
+				_speed = _speed * 5 / 7;
+
 			if (ammo != NULL) // try to get all the required info from the ammo, if present
 			{
 				_bulletSprite		= ammo->getRules()->getBulletSprite();
@@ -380,7 +383,8 @@ int Projectile::calculateThrow(double accuracy)
 
 
 	int ret = VOXEL_OUTOFBOUNDS;
-	double arc = 0.0;
+
+	double arc;
 	if (_save->getTileEngine()->validateThrow(
 										_action,
 										originVoxel,
@@ -940,7 +944,7 @@ void Projectile::addVaporCloud()
 
 /**
  * kL. Gets a pointer to the BattleAction actor directly.
- * @return, pointer to the acting BattleUnit
+ * @return, pointer to the currently acting BattleUnit
  */
 BattleUnit* Projectile::getActor() const // kL
 {

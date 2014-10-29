@@ -8709,7 +8709,7 @@ extraSprites:
     subY: 40
   - type: Projectiles
     width: 105
-    height: 33
+    height: 48
     subX: 3
     subY: 3
     files:
