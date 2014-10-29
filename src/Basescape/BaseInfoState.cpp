@@ -79,48 +79,43 @@ BaseInfoState::BaseInfoState(
 	_txtSoldiers		= new Text(114, 9, 8, 41);
 	_numSoldiers		= new Text(40, 9, 126, 42);
 	_barSoldiers		= new Bar(218, 5, 166, 43);
-	_txtEngineers		= new Text(114, 9, 8, 51);
-	_numEngineers		= new Text(40, 9, 126, 52);
-	_barEngineers		= new Bar(218, 5, 166, 53);
-	_txtScientists		= new Text(114, 9, 8, 61);
-	_numScientists		= new Text(40, 9, 126, 62);
-	_barScientists		= new Bar(218, 5, 166, 63);
+	_txtScientists		= new Text(114, 9, 8, 51);
+	_numScientists		= new Text(40, 9, 126, 52);
+	_barScientists		= new Bar(218, 5, 166, 53);
+	_txtEngineers		= new Text(114, 9, 8, 61);
+	_numEngineers		= new Text(40, 9, 126, 62);
+	_barEngineers		= new Bar(218, 5, 166, 63);
 
 	_txtSpace			= new Text(300, 9, 8, 72);
 
 	_txtQuarters		= new Text(114, 9, 8, 83);
 	_numQuarters		= new Text(40, 9, 126, 84);
 	_barQuarters		= new Bar(218, 5, 166, 85);
-	_txtStores			= new Text(114, 9, 8, 93);
-	_numStores			= new Text(40, 9, 126, 94);
-	_barStores			= new Bar(218, 5, 166, 95);
-	_txtLaboratories	= new Text(114, 9, 8, 103);
-	_numLaboratories	= new Text(40, 9, 126, 104);
-	_barLaboratories	= new Bar(218, 5, 166, 105);
-	_txtWorkshops		= new Text(114, 9, 8, 113);
-	_numWorkshops		= new Text(40, 9, 126, 114);
-	_barWorkshops		= new Bar(218, 5, 166, 115);
+	_txtLaboratories	= new Text(114, 9, 8, 93);
+	_numLaboratories	= new Text(40, 9, 126, 94);
+	_barLaboratories	= new Bar(218, 5, 166, 95);
+	_txtWorkshops		= new Text(114, 9, 8, 103);
+	_numWorkshops		= new Text(40, 9, 126, 104);
+	_barWorkshops		= new Bar(218, 5, 166, 105);
+	_txtContainment		= new Text(114, 9, 8, 113);
+	_numContainment		= new Text(40, 9, 126, 114);
+	_barContainment		= new Bar(218, 5, 166, 115);
+	_txtStores			= new Text(114, 9, 8, 123);
+	_numStores			= new Text(40, 9, 126, 124);
+	_barStores			= new Bar(218, 5, 166, 125);
+	_txtHangars			= new Text(114, 9, 8, 133);
+	_numHangars			= new Text(40, 9, 126, 134);
+	_barHangars			= new Bar(218, 5, 166, 135);
 
-	if (Options::storageLimitsEnforced)
-	{
-		_txtContainment = new Text(114, 9, 8, 123);
-		_numContainment = new Text(40, 9, 126, 124);
-		_barContainment = new Bar(218, 5, 166, 125);
-	}
-
-	_txtHangars			= new Text(114, 9, 8, Options::storageLimitsEnforced? 133: 123);
-	_numHangars			= new Text(40, 9, 126, Options::storageLimitsEnforced? 134: 124);
-	_barHangars			= new Bar(218, 5, 166, Options::storageLimitsEnforced? 135: 125);
-
-	_txtDefense			= new Text(114, 9, 8, Options::storageLimitsEnforced? 147: 138);
-	_numDefense			= new Text(40, 9, 126, Options::storageLimitsEnforced? 148: 139);
-	_barDefense			= new Bar(218, 5, 166, Options::storageLimitsEnforced? 149: 140);
-	_txtShortRange		= new Text(114, 9, 8, Options::storageLimitsEnforced? 157: 153);
-	_numShortRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 158: 154);
-	_barShortRange		= new Bar(218, 5, 166, Options::storageLimitsEnforced? 159: 155);
-	_txtLongRange		= new Text(114, 9, 8, Options::storageLimitsEnforced? 167: 163);
-	_numLongRange		= new Text(40, 9, 126, Options::storageLimitsEnforced? 168: 164);
-	_barLongRange		= new Bar(218, 5, 166, Options::storageLimitsEnforced? 169: 165);
+	_txtLongRange		= new Text(114, 9, 8, 147);
+	_numLongRange		= new Text(40, 9, 126, 148);
+	_barLongRange		= new Bar(218, 5, 166, 149);
+	_txtShortRange		= new Text(114, 9, 8, 157);
+	_numShortRange		= new Text(40, 9, 126, 158);
+	_barShortRange		= new Bar(218, 5, 166, 159);
+	_txtDefense			= new Text(114, 9, 8, 167);
+	_numDefense			= new Text(40, 9, 126, 168);
+	_barDefense			= new Bar(218, 5, 166, 169);
 
 	setPalette("PAL_BASESCAPE");
 
@@ -264,7 +259,7 @@ BaseInfoState::BaseInfoState(
 	_txtStores->setText(tr("STR_STORES"));
 	_numStores->setColor(Palette::blockOffset(13));
 	_barStores->setColor(Palette::blockOffset(3));
-	_barStores->setScale(0.5);
+	_barStores->setScale(0.25); //0.5
 
 	_txtLaboratories->setColor(Palette::blockOffset(13)+5);
 	_txtLaboratories->setText(tr("STR_LABORATORIES"));
@@ -284,7 +279,7 @@ BaseInfoState::BaseInfoState(
 		_txtContainment->setText(tr("STR_ALIEN_CONTAINMENT"));
 		_numContainment->setColor(Palette::blockOffset(13));
 		_barContainment->setColor(Palette::blockOffset(3));
-		_barContainment->setScale(0.5);
+		_barContainment->setScale(1.0); //0.5
 	}
 
 	_txtHangars->setColor(Palette::blockOffset(13)+5);

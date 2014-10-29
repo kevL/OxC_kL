@@ -45,7 +45,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Monthly Costs screen.
- * @param base - pointer to the base to get info from
+ * @param base - pointer to the Base to get info from
  */
 MonthlyCostsState::MonthlyCostsState(Base* base)
 	:
@@ -53,22 +53,22 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 
-	_txtTitle		= new Text(300, 17, 11, 10);
+	_txtTitle		= new Text(300, 17, 10, 8);
 
-	_txtCost		= new Text(62, 9, 140, 31);
-	_txtQuantity	= new Text(43, 9, 202, 31);
-	_txtTotal		= new Text(56, 9, 245, 31);
+	_txtCost		= new Text(62, 9, 140, 26);
+	_txtQuantity	= new Text(43, 9, 202, 26);
+	_txtTotal		= new Text(56, 9, 245, 26);
 
-	_txtRental		= new Text(150, 9, 16, 46);
-	_lstCrafts		= new TextList(285, 41, 16, 57);
+	_txtRental		= new Text(150, 9, 16, 26);
+	_lstCrafts		= new TextList(285, 73, 16, 36);
 
-	_txtSalaries	= new Text(150, 9, 16, 100);
-	_lstSalaries	= new TextList(285, 25, 16, 111);
+	_txtSalaries	= new Text(150, 9, 16, 115);
+	_lstSalaries	= new TextList(285, 25, 16, 125);
 
-	_lstMaintenance	= new TextList(285, 9, 16, 142);
+	_lstMaintenance	= new TextList(285, 9, 16, 152);
 
-	_txtIncome		= new Text(150, 9, 16, 159);
-	_lstTotal		= new TextList(101, 9, 200, 159);
+	_txtIncome		= new Text(150, 9, 16, 162);
+	_lstTotal		= new TextList(101, 9, 200, 164);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -89,7 +89,6 @@ MonthlyCostsState::MonthlyCostsState(Base* base)
 	add(_btnOk);
 
 	centerAllSurfaces();
-
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
