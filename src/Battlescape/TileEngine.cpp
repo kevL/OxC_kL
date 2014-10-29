@@ -4077,7 +4077,6 @@ bool TileEngine::detonate(Tile* tile)
 
 /**
  * Checks for chained explosions.
- *
  * Chained explosions are explosions which occur after an explosive map object is destroyed.
  * May be due a direct hit, other explosion or fire.
  * @return, tile on which an explosion occurred
@@ -4116,13 +4115,11 @@ int TileEngine::unitOpensDoor(
 	//Log(LOG_INFO) << "unitOpensDoor()";
 	int
 		door = -1,
-		size = unit->getArmor()->getSize();
+		unitSize = unit->getArmor()->getSize();
 
-	if (unit->getUnitRules() != NULL
-		&& (unit->getUnitRules()->getMechanical()
-				&& size == 1)
-			|| (rightClick
-				&& size == 2))
+	if (rightClick
+		&& unit->getUnitRules() != NULL
+		&& unit->getUnitRules()->getMechanical())
 	{
 		return door;
 	}
@@ -4137,13 +4134,13 @@ int TileEngine::unitOpensDoor(
 
 	for (int
 			x = 0;
-			x < size
+			x < unitSize
 				&& door == -1;
 			++x)
 	{
 		for (int
 				y = 0;
-				y < size
+				y < unitSize
 					&& door == -1;
 				++y)
 		{
@@ -4155,7 +4152,7 @@ int TileEngine::unitOpensDoor(
 			if (tile == NULL)
 				continue;
 
-			Position posUnit = unit->getPosition(); // kL
+			Position posUnit = unit->getPosition();
 
 			switch (dir)
 			{
@@ -4185,9 +4182,9 @@ int TileEngine::unitOpensDoor(
 						checkPositions.push_back(std::make_pair(Position(1, 0, 0), MapData::O_WESTWALL));	// one tile east
 				break;
 				case 3: // south-east
-					if (!y)
+					if (y == 0)
 						checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_WESTWALL));	// one tile south-east
-					if (!x)
+					if (x == 0)
 						checkPositions.push_back(std::make_pair(Position(1, 1, 0), MapData::O_NORTHWALL));	// one tile south-east
 					if (rightClick)
 					{
@@ -4231,9 +4228,9 @@ int TileEngine::unitOpensDoor(
 				case 7: // north-west
 						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_WESTWALL));	// origin
 						checkPositions.push_back(std::make_pair(Position( 0, 0, 0), MapData::O_NORTHWALL));	// origin
-					if (x)
+					if (x != 0)
 						checkPositions.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_WESTWALL));	// one tile north
-					if (y)
+					if (y != 0)
 						checkPositions.push_back(std::make_pair(Position(-1,-1, 0), MapData::O_NORTHWALL));	// one tile north
 					if (rightClick)
 					{
@@ -4467,16 +4464,17 @@ int TileEngine::closeUfoDoors()
 		{
 			BattleUnit* bu = _battleSave->getTiles()[i]->getUnit();
 
-			Tile* tile = _battleSave->getTiles()[i];
-			Tile* tileNorth = _battleSave->getTile(tile->getPosition() + Position(0,-1, 0));
-			Tile* tileWest = _battleSave->getTile(tile->getPosition() + Position(-1, 0, 0));
+			Tile
+				* tile = _battleSave->getTiles()[i],
+				* tileNorth = _battleSave->getTile(tile->getPosition() + Position(0,-1, 0)),
+				* tileWest = _battleSave->getTile(tile->getPosition() + Position(-1, 0, 0));
 			if ((tile->isUfoDoorOpen(MapData::O_NORTHWALL)
 					&& tileNorth
-					&& tileNorth->getUnit()
+					&& tileNorth->getUnit() // probly not needed.
 					&& tileNorth->getUnit() == bu)
 				|| (tile->isUfoDoorOpen(MapData::O_WESTWALL)
 					&& tileWest
-					&& tileWest->getUnit()
+					&& tileWest->getUnit() // probly not needed.
 					&& tileWest->getUnit() == bu))
 			{
 				continue;

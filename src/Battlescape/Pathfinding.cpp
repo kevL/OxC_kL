@@ -626,17 +626,16 @@ bool Pathfinding::aStarPath(
 		}
 
 		for (int // try all reachable neighbours.
-				direction = 0;
-				direction < 10; // dir 0 thro 7, up/down
-				direction++)
+				dir = 0;
+				dir < 10; // dir 0 thro 7, up/down
+				++dir)
 		{
-			//Log(LOG_INFO) << ". try direction ... " << direction;
-
+			//Log(LOG_INFO) << ". try dir ... " << dir;
 			Position nextPos;
 
 			int tuCost = getTUCost(
 								currentPos,
-								direction,
+								dir,
 								&nextPos,
 								_unit,
 								missileTarget,
@@ -653,8 +652,10 @@ bool Pathfinding::aStarPath(
 
 			PathfindingNode* nextNode = getNode(nextPos);
 			if (nextNode->isChecked()) // algorithm means this node is already at minimum cost
+			{
 				//Log(LOG_INFO) << ". node already Checked ... cont.";
 				continue;
+			}
 
 			_totalTUCost = currentNode->getTUCost(missile) + tuCost;
 
@@ -663,11 +664,11 @@ bool Pathfinding::aStarPath(
 					|| nextNode->getTUCost(missile) > _totalTUCost)
 				&& _totalTUCost <= maxTUCost)
 			{
-				//Log(LOG_INFO) << ". nodeChecked(dir) = " << direction << " totalCost = " << _totalTUCost;
+				//Log(LOG_INFO) << ". nodeChecked(dir) = " << dir << " totalCost = " << _totalTUCost;
 				nextNode->connect(
 								_totalTUCost,
 								currentNode,
-								direction,
+								dir,
 								endPosition);
 
 				openList.push(nextNode);
@@ -1193,11 +1194,12 @@ int Pathfinding::getTUCost(
 	// for bigger sized units, check the path between part 1,1 and part 0,0 at end position
 	if (size > 0)
 	{
-		double tCost = ceil(static_cast<double>(totalCost) / static_cast<double>((size + 1) * (size + 1))); // kL
+		const double tCost = ceil(static_cast<double>(totalCost) / static_cast<double>((size + 1) * (size + 1))); // kL
 		totalCost = static_cast<int>(Round(tCost)); // kL: round those tanks up!
 
-		Tile* startTile = _save->getTile(*endPos + Position(1, 1, 0));
-		Tile* destTile = _save->getTile(*endPos);
+		Tile
+			* startTile = _save->getTile(*endPos + Position(1, 1, 0)),
+			* destTile = _save->getTile(*endPos);
 
 		int dirTest = 7;
 		if (isBlocked(
@@ -1219,7 +1221,7 @@ int Pathfinding::getTUCost(
 			return 255;
 	}
 
-	if (missile)
+	if (missile == true)
 		return 0;
 	else
 	{
@@ -1538,13 +1540,14 @@ bool Pathfinding::isBlocked( // public
 
 	const Position pos = startTile->getPosition();
 
-	static const Position tileNorth	= Position( 0,-1, 0);
-	static const Position tileEast	= Position( 1, 0, 0);
-	static const Position tileSouth	= Position( 0, 1, 0);
-	static const Position tileWest	= Position(-1, 0, 0);
+	static const Position
+		tileNorth	= Position( 0,-1, 0),
+		tileEast	= Position( 1, 0, 0),
+		tileSouth	= Position( 0, 1, 0),
+		tileWest	= Position(-1, 0, 0);
 
-	// kL_begin:
-	switch (dir)
+
+	switch (dir) // kL_begin:
 	{
 		case 0:	// north
 			//Log(LOG_INFO) << ". try North";

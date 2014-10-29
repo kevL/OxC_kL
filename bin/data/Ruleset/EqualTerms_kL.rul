@@ -656,8 +656,8 @@ items:
   - type: STR_CORPSE_STREET_ARCTIC
     name: STR_CORPSE
     weight: 20
-    bigSprite: 64
-    floorSprite: 77
+    bigSprite: 45
+    floorSprite: 39
     invWidth: 2
     invHeight: 3
     armor: 30
@@ -672,8 +672,8 @@ items:
   - type: STR_CORPSE_STREET_JUNGLE
     name: STR_CORPSE
     weight: 20
-    bigSprite: 64
-    floorSprite: 77
+    bigSprite: 45
+    floorSprite: 39
     invWidth: 2
     invHeight: 3
     armor: 30
@@ -688,8 +688,8 @@ items:
   - type: STR_CORPSE_STREET_URBAN
     name: STR_CORPSE
     weight: 20
-    bigSprite: 64
-    floorSprite: 77
+    bigSprite: 45
+    floorSprite: 39
     invWidth: 2
     invHeight: 3
     armor: 30
@@ -706,8 +706,8 @@ items:
   - type: STR_CORPSE_KEVLAR_ARCTIC
     name: STR_CORPSE
     weight: 24
-    bigSprite: 64
-    floorSprite: 77
+    bigSprite: 45
+    floorSprite: 39
     invWidth: 2
     invHeight: 3
     armor: 30
@@ -723,8 +723,8 @@ items:
   - type: STR_CORPSE_KEVLAR_JUNGLE
     name: STR_CORPSE
     weight: 24
-    bigSprite: 64
-    floorSprite: 77
+    bigSprite: 45
+    floorSprite: 39
     invWidth: 2
     invHeight: 3
     armor: 30
@@ -740,8 +740,8 @@ items:
   - type: STR_CORPSE_KEVLAR_URBAN
     name: STR_CORPSE
     weight: 24
-    bigSprite: 64
-    floorSprite: 77
+    bigSprite: 45
+    floorSprite: 39
     invWidth: 2
     invHeight: 3
     armor: 30
@@ -758,8 +758,8 @@ items:
   - type: STR_CORPSE_TACTICAL_ARCTIC
     name: STR_CORPSE
     weight: 28
-    bigSprite: 64
-    floorSprite: 77
+    bigSprite: 45
+    floorSprite: 39
     invWidth: 2
     invHeight: 3
     armor: 30
@@ -775,8 +775,8 @@ items:
   - type: STR_CORPSE_TACTICAL_JUNGLE
     name: STR_CORPSE
     weight: 28
-    bigSprite: 64
-    floorSprite: 77
+    bigSprite: 45
+    floorSprite: 39
     invWidth: 2
     invHeight: 3
     armor: 30
@@ -792,8 +792,8 @@ items:
   - type: STR_CORPSE_TACTICAL_URBAN
     name: STR_CORPSE
     weight: 28
-    bigSprite: 64
-    floorSprite: 77
+    bigSprite: 45
+    floorSprite: 39
     invWidth: 2
     invHeight: 3
     armor: 30
@@ -852,7 +852,8 @@ armors:
 #    spriteSheet: XCOM_0a.PCK
     spriteSheet: XCOM_1a.PCK #temp, use kevlar
     spriteInv: MAN_0a
-    corpseItem: STR_CORPSE_STREET_ARCTIC
+    corpseBattle:
+      - STR_CORPSE_STREET_ARCTIC
 #    storeItem: STR_STREET_ARCTIC
     storeItem: STR_NONE
     isBasic: true
@@ -877,7 +878,8 @@ armors:
 #    spriteSheet: XCOM_0j.PCK
     spriteSheet: XCOM_1j.PCK #temp, use kevlar
     spriteInv: MAN_0j
-    corpseItem: STR_CORPSE_STREET_JUNGLE
+    corpseBattle:
+      - STR_CORPSE_STREET_JUNGLE
 #    storeItem: STR_STREET_JUNGLE
     storeItem: STR_NONE
     isBasic: true
@@ -902,7 +904,8 @@ armors:
 #    spriteSheet: XCOM_0u.PCK
     spriteSheet: XCOM_1u.PCK #temp, use kevlar
     spriteInv: MAN_0u
-    corpseItem: STR_CORPSE_STREET_URBAN
+    corpseBattle:
+      - STR_CORPSE_STREET_URBAN
 #    storeItem: STR_STREET_URBAN
     storeItem: STR_NONE
     isBasic: true
@@ -926,7 +929,8 @@ armors:
   - type: STR_KEVLAR_ARCTIC_UC
     spriteSheet: XCOM_1a.PCK
     spriteInv: MAN_1a
-    corpseItem: STR_CORPSE_KEVLAR_ARCTIC
+    corpseBattle:
+      - STR_CORPSE_KEVLAR_ARCTIC
     storeItem: STR_KEVLAR_ARCTIC
     weight: 5
     frontArmor: 16
@@ -955,7 +959,8 @@ armors:
   - type: STR_KEVLAR_JUNGLE_UC
     spriteSheet: XCOM_1j.PCK
     spriteInv: MAN_1j
-    corpseItem: STR_CORPSE
+    corpseBattle:
+      - STR_CORPSE_KEVLAR_JUNGLE
     storeItem: STR_KEVLAR_JUNGLE
     weight: 5
     frontArmor: 16
@@ -984,7 +989,8 @@ armors:
   - type: STR_KEVLAR_URBAN_UC
     spriteSheet: XCOM_1u.PCK
     spriteInv: MAN_1u
-    corpseItem: STR_CORPSE_KEVLAR_URBAN
+    corpseBattle:
+      - STR_CORPSE_KEVLAR_URBAN
     storeItem: STR_KEVLAR_URBAN
     weight: 5
     frontArmor: 16
@@ -1013,7 +1019,8 @@ armors:
   - type: STR_TACTICAL_ARCTIC_UC
     spriteSheet: XCOM_1DSa.PCK
     spriteInv: MAN_1DSa
-    corpseItem: STR_CORPSE_TACTICAL_ARCTIC
+    corpseBattle:
+      - STR_CORPSE_TACTICAL_ARCTIC
     storeItem: STR_TACTICAL_ARCTIC
     weight: 7
     frontArmor: 22
@@ -1042,7 +1049,8 @@ armors:
   - type: STR_TACTICAL_JUNGLE_UC
     spriteSheet: XCOM_1DSj.PCK
     spriteInv: MAN_1DSj
-    corpseItem: STR_CORPSE_TACTICAL_JUNGLE
+    corpseBattle:
+      - STR_CORPSE_TACTICAL_JUNGLE
     storeItem: STR_TACTICAL_JUNGLE
     weight: 7
     frontArmor: 22
@@ -1071,7 +1079,8 @@ armors:
   - type: STR_TACTICAL_URBAN_UC
     spriteSheet: XCOM_1DSu.PCK
     spriteInv: MAN_1DSu
-    corpseItem: STR_CORPSE_TACTICAL_URBAN
+    corpseBattle:
+      - STR_CORPSE_TACTICAL_URBAN
     storeItem: STR_TACTICAL_URBAN
     weight: 7
     frontArmor: 22
@@ -1336,7 +1345,6 @@ extraSprites:
 #------------------------------------------------------------------------------
   - type: BIGOBS.PCK
     files:
-#      64: Resources/EqualTerms1/Armor/BIGOBS.png
       500: Resources/EqualTerms1/MachinePistol/MachinePistol.png
       502: Resources/EqualTerms1/Magnum/Magnum.png
       503: Resources/EqualTerms1/Magnum/MagnumAmmo.png
@@ -1362,7 +1370,6 @@ extraSprites:
 #------------------------------------------------------------------------------
   - type: FLOOROB.PCK
     files:
-#      77: Resources/EqualTerms1/Armor/FLOOROB.png
       500: Resources/EqualTerms1/MachinePistol/MachinePistol_f.png
       502: Resources/EqualTerms1/Magnum/Magnum_f.png
       503: Resources/EqualTerms1/Magnum/MagnumAmmo_f.png
