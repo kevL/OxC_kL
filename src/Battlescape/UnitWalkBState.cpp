@@ -1133,7 +1133,7 @@ void UnitWalkBState::playMovementSound()
 
 	if (_unit->getMoveSound() != -1)
 	{
-		if (_unit->getWalkingPhase() == 1)
+		if (_unit->getWalkingPhase() == 0)
 			sound = _unit->getMoveSound();
 	}
 	else
