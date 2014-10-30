@@ -1760,7 +1760,7 @@ BattleActionType TileEngine::selectFireMethod( // kL
  * @param targetPos_voxel	- reference the center of hit in voxelspace
  * @param power				- power of the hit/explosion
  * @param type				- damage type of the hit (RuleItem.h)
- * @param attacker			- pointer to unit that caused the hit
+ * @param attacker			- pointer to BattleUnit that caused the hit
  * @param melee				- true if no projectile, trajectory, etc. is needed. kL
  * @return, pointer to the BattleUnit that got hit
  */
@@ -1771,18 +1771,16 @@ BattleUnit* TileEngine::hit(
 		BattleUnit* attacker,
 		bool melee) // kL add.
 {
-	//Log(LOG_INFO) << "TileEngine::hit() by ID " << attacker->getId()
-	//			<< " @ " << attacker->getPosition()
-	//			<< " : power = " << power
-	//			<< " : type = " << (int)type;
+	//Log(LOG_INFO) << "TileEngine::hit() power = " << power << " type = " << (int)type;
+	//if (attacker != NULL) Log(LOG_INFO) << ". by ID " << attacker->getId() << " @ " << attacker->getPosition();
 
 	if (type != DT_NONE) // bypass Psi-attacks. Psi-attacks don't get this far anymore .... But leave it in for safety.
 	{
 		//Log(LOG_INFO) << "DT_ type = " << static_cast<int>(type);
 		Position targetPos_tile = Position(
-									targetPos_voxel.x / 16,
-									targetPos_voxel.y / 16,
-									targetPos_voxel.z / 24);
+										targetPos_voxel.x / 16,
+										targetPos_voxel.y / 16,
+										targetPos_voxel.z / 24);
 		Tile* tile = _battleSave->getTile(targetPos_tile);
 		//Log(LOG_INFO) << ". targetTile " << tile->getPosition() << " targetVoxel " << targetPos_voxel;
 		if (tile == NULL)
@@ -1896,7 +1894,8 @@ BattleUnit* TileEngine::hit(
 										vertOffset);
 
 				// kL_begin: TileEngine::hit(), Silacoids can set targets on fire!!
-				if (attacker->getSpecialAbility() == SPECAB_BURNFLOOR)
+				if (attacker != NULL
+					&& attacker->getSpecialAbility() == SPECAB_BURNFLOOR)
 				{
 					const float vulnerable = targetUnit->getArmor()->getDamageModifier(DT_IN);
 					if (vulnerable > 0.f)
@@ -2018,11 +2017,12 @@ BattleUnit* TileEngine::hit(
 
 				if (melee == false
 					&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
-					&& attacker
+					&& attacker != NULL
 					&& attacker->getGeoscapeSoldier() != NULL
 					&& attacker->getFaction() == attacker->getOriginalFaction())
 				{
-					attacker->addFiringExp();
+					attacker->addFiringExp();	// shotguns don't give XP 'cause attacker==NULL. See ProjectileFlyBState::think()
+												// kL_note: I put it in, but watch for too much XP ...
 				}
 			}
 		}
@@ -5036,7 +5036,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
 /**
  * Checks if we hit a posTarget in voxel space.
  * @param posTarget			- reference the voxel to check
- * @param excludeUnit		- pointer to unit NOT to do checks for
+ * @param excludeUnit		- pointer to unit NOT to do checks for (default NULL)
  * @param excludeAllUnits	- true to NOT do checks on any unit (default false)
  * @param onlyVisible		- true to consider only visible units (default false)
  * @param excludeAllBut		- pointer to an only unit to be considered (default NULL)
@@ -5142,7 +5142,7 @@ int TileEngine::voxelCheck(
 				buTarget = tileTarget->getUnit();
 		}
 
-		if (buTarget
+		if (buTarget != NULL
 			&& buTarget != excludeUnit
 			&& (excludeAllBut == NULL
 				|| buTarget == excludeAllBut)
@@ -5185,9 +5185,9 @@ int TileEngine::voxelCheck(
 
 /**
  * Calculates the distance between 2 points. Rounded down to first INT.
- * @param pos1, Position of first square.
- * @param pos2, Position of second square.
- * @return, Distance.
+ * @param pos1 - reference the Position of first square
+ * @param pos2 - reference the Position of second square
+ * @return, distance
  */
 int TileEngine::distance(
 		const Position& pos1,
@@ -5197,18 +5197,17 @@ int TileEngine::distance(
 	int y = pos1.y - pos2.y;
 	int z = pos1.z - pos2.z; // kL
 
-	return static_cast<int>(
-						Round(
-							sqrt(static_cast<double>(x * x + y * y + z * z)))); // kL: 3-d
+	return static_cast<int>(Round(
+			sqrt(static_cast<double>(x * x + y * y + z * z)))); // kL: 3-d
 }
 
 /**
  * Calculates the distance squared between 2 points.
  * No sqrt(), not floating point math, and sometimes it's all you need.
- * @param pos1, Position of first square.
- * @param pos2, Position of second square.
- * @param considerZ, Whether to consider the z coordinate.
- * @return, Distance.
+ * @param pos1		- reference the Position of first square
+ * @param pos2		- reference the Position of second square
+ * @param considerZ	- true to consider the z coordinate
+ * @return, distance
  */
 int TileEngine::distanceSq(
 		const Position& pos1,

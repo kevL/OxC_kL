@@ -985,13 +985,13 @@ void ProjectileFlyBState::think()
 					// and add bullet hits at their termination points.
 					if (_ammo != NULL)
 					{
-						int shot = _ammo->getRules()->getShotgunPellets();
+						const int shot = _ammo->getRules()->getShotgunPellets();
 						if (shot != 0)
 						{
 							int i = 0;
 							while (i != shot)
 							{
-								Projectile* proj = new Projectile( // create a projectile
+								Projectile* proj = new Projectile(
 															_parent->getResourcePack(),
 															_parent->getSave(),
 															_action,
@@ -999,7 +999,7 @@ void ProjectileFlyBState::think()
 															_targetVoxel,
 															_ammo);
 
-								_projectileImpact = proj->calculateTrajectory( // let it trace to the point where it hits
+								_projectileImpact = proj->calculateTrajectory(
 																		std::max(
 																				0.0,
 																				_unit->getFiringAccuracy(
@@ -1014,15 +1014,16 @@ void ProjectileFlyBState::think()
 									if (_projectileImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
 									{
 										Explosion* explosion = new Explosion(
-																			proj->getPosition(1),
-																			_ammo->getRules()->getHitAnimation());
+																		proj->getPosition(1),
+																		_ammo->getRules()->getHitAnimation());
 
 										_parent->getMap()->getExplosions()->push_back(explosion);
 										_parent->getSave()->getTileEngine()->hit(
 																				proj->getPosition(1),
 																				_ammo->getRules()->getPower(),
 																				_ammo->getRules()->getDamageType(),
-																				NULL);
+																				_unit); // kL
+//																				NULL); // shotguns don't give XP 'cause attacker==NULL.
 									}
 
 									i++;

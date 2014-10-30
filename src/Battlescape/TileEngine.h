@@ -276,7 +276,7 @@ private:
 		/// Checks what type of voxel occupies posTarget in voxel space.
 		int voxelCheck(
 				const Position& posTarget,
-				BattleUnit* excludeUnit,
+				BattleUnit* excludeUnit = NULL,
 				bool excludeAllUnits = false,
 				bool onlyVisible = false,
 				BattleUnit* excludeAllBut = NULL);

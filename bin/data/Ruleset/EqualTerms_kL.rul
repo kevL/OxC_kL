@@ -415,7 +415,7 @@ items:
     bigSprite: 518
     floorSprite: 518
     bulletSprite: 2
-    hitAnimation: 46
+    hitAnimation: 26
     hitSound: 22
     power: 35
     damageType: 1
@@ -450,7 +450,7 @@ items:
     handSprite: 568
     bulletSprite: 0
     fireSound: 167
-    hitSound: 64
+    hitSound: 5
     power: 89
     accuracySnap: 55
     accuracyAimed: 100
