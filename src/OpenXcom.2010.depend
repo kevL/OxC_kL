@@ -1,5 +1,5 @@
 # depslib dependency file v1.0
-1414437851 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
+1414605960 source:f:\git\openxcom\src\basescape\baseinfostate.cpp
 	"BaseInfoState.h"
 	<sstream>
 	"BasescapeState.h"
@@ -4568,7 +4568,7 @@
 1413140561 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1413140561 f:\git\openxcom\src\savegame\craft.h
+1414615555 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
 	"CraftId.h"
@@ -4700,7 +4700,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/BattlescapeGame.h"
 
-1413140553 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1414617866 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -4710,6 +4710,7 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Engine/Screen.h"
@@ -4786,7 +4787,7 @@
 1413140556 f:\git\openxcom\src\battlescape\position.h
 	<yaml-cpp/yaml.h>
 
-1413140562 f:\git\openxcom\src\savegame\vehicle.h
+1414610463 f:\git\openxcom\src\savegame\vehicle.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -7777,7 +7778,7 @@
 1413140558 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1414471106 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1414614342 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8024,7 +8025,7 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1413140558 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1414614380 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -8248,7 +8249,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1413140558 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1414608224 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	<cmath>
 	"ConfirmCydoniaState.h"
@@ -9605,7 +9606,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1413427279 source:f:\git\openxcom\src\savegame\craft.cpp
+1414617642 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9623,10 +9624,12 @@
 	"../Engine/Logger.h"
 	"../Engine/RNG.h"
 	"../Geoscape/GeoscapeState.h"
+	"../Ruleset/Armor.h"
 	"../Ruleset/RuleCraft.h"
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
+	"../Ruleset/Unit.h"
 	"../Savegame/SavedGame.h"
 
 1413140561 source:f:\git\openxcom\src\savegame\craftweapon.cpp
@@ -9844,7 +9847,7 @@
 	"../Ruleset/RuleUfo.h"
 	"../Ruleset/UfoTrajectory.h"
 
-1413140562 source:f:\git\openxcom\src\savegame\vehicle.cpp
+1414610567 source:f:\git\openxcom\src\savegame\vehicle.cpp
 	"Vehicle.h"
 	"../Ruleset/RuleItem.h"
 

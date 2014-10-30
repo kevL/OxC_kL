@@ -42,10 +42,12 @@
 
 #include "../Geoscape/GeoscapeState.h"
 
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCraft.h"
 #include "../Ruleset/RuleCraftWeapon.h"
 #include "../Ruleset/RuleItem.h"
 #include "../Ruleset/Ruleset.h"
+#include "../Ruleset/Unit.h"
 
 #include "../Savegame/SavedGame.h"
 
@@ -55,9 +57,9 @@ namespace OpenXcom
 
 /**
  * Creates a craft of the specified type and assigns it the latest craft ID available.
- * @param rules	- pointer to ruleset
- * @param base	- pointer to base of origin
- * @param id	- ID to assign to the craft ( NULL for no id ).
+ * @param rules	- pointer to RuleCraft
+ * @param base	- pointer to Base of origin
+ * @param id	- ID to assign to the craft; NULL for no id
  */
 Craft::Craft(
 		RuleCraft* rules,
@@ -78,7 +80,7 @@ Craft::Craft(
 		_inBattlescape(false),
 		_inDogfight(false),
 		_loadCur(0),
-		_stopWarning(false) // do not save-to-file. Ie, warn player after loading
+		_stopWarning(false) // do not save-to-file. Ie, warn player after re-loading
 {
 	_items = new ItemContainer();
 
@@ -124,19 +126,19 @@ Craft::~Craft()
 
 /**
  * Loads a craft from a YAML file.
- * @param node - reference to a YAML node
- * @param rule - pointer to ruleset for the saved game
- * @param save - pointer to the saved game
+ * @param node	- reference to a YAML node
+ * @param rules	- pointer to Ruleset
+ * @param save	- pointer to the SavedGame
  */
 void Craft::load(
 		const YAML::Node& node,
-		const Ruleset* rule,
+		const Ruleset* rules,
 		SavedGame* save)
 {
 	MovingTarget::load(node);
 
-	_id		= node["id"].as<int>(_id);
-	_fuel	= node["fuel"].as<int>(_fuel);
+	_id		= node["id"]	.as<int>(_id);
+	_fuel	= node["fuel"]	.as<int>(_fuel);
 	_damage	= node["damage"].as<int>(_damage);
 
 	size_t j = 0;
@@ -149,10 +151,10 @@ void Craft::load(
 		{
 			std::string type = (*i)["type"].as<std::string>();
 			if (type != "0"
-				&& rule->getCraftWeapon(type))
+				&& rules->getCraftWeapon(type))
 			{
 				CraftWeapon* w = new CraftWeapon(
-											rule->getCraftWeapon(type),
+											rules->getCraftWeapon(type),
 											0);
 				w->load(*i);
 				_weapons[j] = w;
@@ -165,16 +167,16 @@ void Craft::load(
 	}
 
 	_items->load(node["items"]);
-	for (std::map<std::string, int>::iterator
+	for (std::map<std::string, int>::const_iterator
 			i = _items->getContents()->begin();
 			i != _items->getContents()->end();
 			)
 	{
 		if (std::find(
-					rule->getItemsList().begin(),
-					rule->getItemsList().end(),
+					rules->getItemsList().begin(),
+					rules->getItemsList().end(),
 					i->first)
-				== rule->getItemsList().end())
+				== rules->getItemsList().end())
 		{
 			_items->getContents()->erase(i++);
 		}
@@ -188,21 +190,22 @@ void Craft::load(
 			++i)
 	{
 		std::string type = (*i)["type"].as<std::string>();
-		if (rule->getItem(type))
+		if (rules->getItem(type))
 		{
+			int unitSize = rules->getArmor(rules->getUnit(type)->getArmor())->getSize();
 			Vehicle* v = new Vehicle(
-									rule->getItem(type),
+									rules->getItem(type),
 									0,
-									4);
+									unitSize * unitSize);
 			v->load(*i);
 			_vehicles.push_back(v);
 		}
 	}
 
-	_status				= node["status"].as<std::string>(_status);
-	_lowFuel			= node["lowFuel"].as<bool>(_lowFuel);
-	_mission			= node["mission"].as<bool>(_mission);
-	_interceptionOrder	= node["interceptionOrder"].as<int>(_interceptionOrder);
+	_status				= node["status"]			.as<std::string>(_status);
+	_lowFuel			= node["lowFuel"]			.as<bool>(_lowFuel);
+	_mission			= node["mission"]			.as<bool>(_mission);
+	_interceptionOrder	= node["interceptionOrder"]	.as<int>(_interceptionOrder);
 
 	if (const YAML::Node name = node["name"])
 		_name = Language::utf8ToWstr(name.as<std::string>());
@@ -217,7 +220,7 @@ void Craft::load(
 			returnToBase();
 		else if (type == "STR_UFO")
 		{
-			for (std::vector<Ufo*>::iterator
+			for (std::vector<Ufo*>::const_iterator
 					i = save->getUfos()->begin();
 					i != save->getUfos()->end();
 					++i)
@@ -225,14 +228,13 @@ void Craft::load(
 				if ((*i)->getId() == id)
 				{
 					setDestination(*i);
-
 					break;
 				}
 			}
 		}
 		else if (type == "STR_WAYPOINT")
 		{
-			for (std::vector<Waypoint*>::iterator
+			for (std::vector<Waypoint*>::const_iterator
 					i = save->getWaypoints()->begin();
 					i != save->getWaypoints()->end();
 					++i)
@@ -240,14 +242,13 @@ void Craft::load(
 				if ((*i)->getId() == id)
 				{
 					setDestination(*i);
-
 					break;
 				}
 			}
 		}
 		else if (type == "STR_TERROR_SITE")
 		{
-			for (std::vector<TerrorSite*>::iterator
+			for (std::vector<TerrorSite*>::const_iterator
 					i = save->getTerrorSites()->begin();
 					i != save->getTerrorSites()->end();
 					++i)
@@ -255,14 +256,13 @@ void Craft::load(
 				if ((*i)->getId() == id)
 				{
 					setDestination(*i);
-
 					break;
 				}
 			}
 		}
 		else if (type == "STR_ALIEN_BASE")
 		{
-			for (std::vector<AlienBase*>::iterator
+			for (std::vector<AlienBase*>::const_iterator
 					i = save->getAlienBases()->begin();
 					i != save->getAlienBases()->end();
 					++i)
@@ -270,7 +270,6 @@ void Craft::load(
 				if ((*i)->getId() == id)
 				{
 					setDestination(*i);
-
 					break;
 				}
 			}
@@ -283,12 +282,12 @@ void Craft::load(
 	if (_inBattlescape)
 		setSpeed(0);
 
-	_loadCur = getNumEquipment() + getNumSoldiers() * 10 + getNumVehicles() * 40;
+	_loadCur = getNumEquipment() + (getNumSoldiers() + getNumVehicles(true) * 10); // note: 10 is the 'load' that a single 'space' uses.
 }
 
 /**
  * Saves the craft to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Craft::save() const
 {
@@ -341,7 +340,7 @@ YAML::Node Craft::save() const
 	if (_takeoff != 0)
 		node["takeoff"] = _takeoff;
 
-	if (!_name.empty())
+	if (_name.empty() == false)
 		node["name"] = Language::wstrToUtf8(_name);
 
 	return node;
@@ -349,7 +348,7 @@ YAML::Node Craft::save() const
 
 /**
  * Loads a craft unique identifier from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  * @return, unique craft id
  */
 CraftId Craft::loadId(const YAML::Node& node)
@@ -376,8 +375,8 @@ YAML::Node Craft::saveId() const
 }
 
 /**
- * Returns the ruleset for the craft's type.
- * @return Pointer to ruleset.
+ * Gets the ruleset for the craft's type.
+ * @return, pointer to RuleCraft
  */
 RuleCraft* Craft::getRules() const
 {
@@ -385,8 +384,8 @@ RuleCraft* Craft::getRules() const
 }
 
 /**
- * Changes the ruleset for a craft's type.
- * @param rules - pointer to a different ruleset
+ * Sets the ruleset for a craft's type.
+ * @param rules - pointer to a different RuleCraft
  * @warning ONLY FOR NEW BATTLE USE!
  */
 void Craft::changeRules(RuleCraft* rules)
@@ -405,7 +404,7 @@ void Craft::changeRules(RuleCraft* rules)
 
 /**
  * Gets a craft's unique ID. Each craft can be identified by its type and ID.
- * @return, Unique ID
+ * @return, unique ID
  */
 int Craft::getId() const
 {
@@ -415,7 +414,7 @@ int Craft::getId() const
 /**
  * Gets a craft's unique identifying name.
  * If there's no custom name, the language default is used.
- * @param lang - pointer to a language to get strings from
+ * @param lang - pointer to a Language to get strings from
  * @return, full name of craft
  */
 std::wstring Craft::getName(Language* lang) const
@@ -428,7 +427,7 @@ std::wstring Craft::getName(Language* lang) const
 
 /**
  * Sets a craft's custom name.
- * @param newName - new custom name; if blank, the language default is used
+ * @param newName -  reference a new custom name; if blank, the language default is used
  */
 void Craft::setName(const std::wstring& newName)
 {
@@ -436,8 +435,8 @@ void Craft::setName(const std::wstring& newName)
 }
 
 /**
- * Returns the globe marker for the craft.
- * @return Marker sprite, -1 if none.
+ * Gets the globe marker for the craft.
+ * @return, marker sprite, -1 if none
  */
 int Craft::getMarker() const
 {
@@ -448,8 +447,8 @@ int Craft::getMarker() const
 }
 
 /**
- * Returns the base the craft belongs to.
- * @return Pointer to base.
+ * Gets the base the craft belongs to.
+ * @return, pointer to the Base
  */
 Base* Craft::getBase() const
 {
@@ -457,9 +456,9 @@ Base* Craft::getBase() const
 }
 
 /**
- * Changes the base the craft belongs to.
- * @param base		- pointer to base
- * @param transfer	- move the craft to the base coordinates
+ * Sets the base the craft belongs to.
+ * @param base		- pointer to Base
+ * @param transfer	- true to move the craft to the Base coordinates
  */
 void Craft::setBase(
 		Base* base,
@@ -475,8 +474,8 @@ void Craft::setBase(
 }
 
 /**
- * Returns the current status of the craft.
- * @return Status string.
+ * Gets the current status of the craft.
+ * @return, status string
  */
 std::string Craft::getStatus() const
 {
@@ -484,8 +483,8 @@ std::string Craft::getStatus() const
 }
 
 /**
- * Changes the current status of the craft.
- * @param status Status string.
+ * Sets the current status of the craft.
+ * @param status - reference a status string
  */
 void Craft::setStatus(const std::string& status)
 {
@@ -493,15 +492,15 @@ void Craft::setStatus(const std::string& status)
 }
 
 /**
- * Returns the current altitude of the craft.
- * @return, Altitude.
+ * Gets the current altitude of the craft.
+ * @return, altitude
  */
 std::string Craft::getAltitude() const
 {
 	Ufo* ufo = dynamic_cast<Ufo*>(_dest);
 
 	// kL_begin:
-	if (ufo)
+	if (ufo != NULL)
 	{
 		if (ufo->getAltitude() != "STR_GROUND")
 			return ufo->getAltitude();
@@ -548,8 +547,8 @@ std::string Craft::getAltitude() const
 	} */ // kL_end.
 
 /**
- * Changes the destination the craft is heading to.
- * @param dest Pointer to new destination.
+ * Sets the destination the craft is heading to.
+ * @param dest - pointer to Target destination
  */
 void Craft::setDestination(Target* dest)
 {
@@ -565,8 +564,8 @@ void Craft::setDestination(Target* dest)
 }
 
 /**
- * Returns the amount of weapons currently equipped on this craft.
- * @return Number of weapons.
+ * Gets the amount of weapons currently equipped on this craft.
+ * @return, number of weapons
  */
 int Craft::getNumWeapons() const
 {
@@ -587,8 +586,8 @@ int Craft::getNumWeapons() const
 }
 
 /**
- * Returns the amount of soldiers from a list that are currently attached to this craft.
- * @return Number of soldiers.
+ * Gets the amount of soldiers from a list that are currently attached to this craft.
+ * @return, number of soldiers
  */
 int Craft::getNumSoldiers() const
 {
@@ -609,8 +608,8 @@ int Craft::getNumSoldiers() const
 }
 
 /**
- * Returns the amount of equipment currently equipped on this craft.
- * @return Number of items.
+ * Gets the amount of equipment currently equipped on this craft.
+ * @return, number of items
  */
 int Craft::getNumEquipment() const
 {
@@ -618,17 +617,32 @@ int Craft::getNumEquipment() const
 }
 
 /**
- * Returns the amount of vehicles currently contained in this craft.
- * @return Number of vehicles.
+ * Gets the amount of vehicles currently contained in this craft.
+ * @param space - true to return tile-spaces used in a transport
+ * @return, either number of vehicles or tile-space used
  */
-int Craft::getNumVehicles() const
+int Craft::getNumVehicles(bool space) const
 {
+	if (space == true)
+	{
+		int tankSpace = 0;
+		for (std::vector<Vehicle*>::const_iterator
+				i = _vehicles.begin();
+				i != _vehicles.end();
+				++i)
+		{
+			tankSpace += (*i)->getSize();
+		}
+
+		return tankSpace;
+	}
+
 	return _vehicles.size();
 }
 
 /**
- * Returns the list of weapons currently equipped in the craft.
- * @return Pointer to weapon list.
+ * Gets the list of weapons currently equipped in the craft.
+ * @return, pointer to a vector of pointers to CraftWeapon(s)
  */
 std::vector<CraftWeapon*>* Craft::getWeapons()
 {
@@ -636,8 +650,8 @@ std::vector<CraftWeapon*>* Craft::getWeapons()
 }
 
 /**
- * Returns the list of items in the craft.
- * @return, Pointer to the item list.
+ * Gets the list of items in the craft.
+ * @return, pointer to the ItemContainer list
  */
 ItemContainer* Craft::getItems()
 {
@@ -645,8 +659,8 @@ ItemContainer* Craft::getItems()
 }
 
 /**
- * Returns the list of vehicles currently equipped in the craft.
- * @return Pointer to vehicle list.
+ * Gets the list of vehicles currently equipped in the craft.
+ * @return, pointer to a vector of pointers to Vehicle(s)
  */
 std::vector<Vehicle*>* Craft::getVehicles()
 {
@@ -654,8 +668,8 @@ std::vector<Vehicle*>* Craft::getVehicles()
 }
 
 /**
- * Returns the amount of fuel currently contained in this craft.
- * @return Amount of fuel.
+ * Gets the amount of fuel currently contained in this craft.
+ * @return, amount of fuel
  */
 int Craft::getFuel() const
 {
@@ -663,8 +677,8 @@ int Craft::getFuel() const
 }
 
 /**
- * Changes the amount of fuel currently contained in this craft.
- * @param fuel Amount of fuel.
+ * Sets the amount of fuel currently contained in this craft.
+ * @param fuel - amount of fuel
  */
 void Craft::setFuel(const int fuel)
 {
@@ -677,9 +691,9 @@ void Craft::setFuel(const int fuel)
 }
 
 /**
- * Returns the ratio between the amount of fuel currently
+ * Gets the ratio between the amount of fuel currently
  * contained in this craft and the total it can carry.
- * @return Percentage of fuel.
+ * @return, fuel remaining as percent
  */
 int Craft::getFuelPercentage() const
 {
@@ -689,8 +703,8 @@ int Craft::getFuelPercentage() const
 }
 
 /**
- * Returns the amount of damage this craft has taken.
- * @return Amount of damage.
+ * Gets the amount of damage this craft has taken.
+ * @return, amount of damage
  */
 int Craft::getDamage() const
 {
@@ -698,7 +712,7 @@ int Craft::getDamage() const
 }
 
 /**
- * Changes the amount of damage this craft has taken.
+ * Sets the amount of damage this craft has taken.
  * @param damage - amount of damage
  */
 void Craft::setDamage(const int damage)
@@ -710,9 +724,9 @@ void Craft::setDamage(const int damage)
 }
 
 /**
- * Returns the ratio between the amount of damage this craft
+ * Gets the ratio between the amount of damage this craft
  * has taken and the total it can take before it's destroyed.
- * @return, percentage of damage
+ * @return, damage taken as percent
  */
 int Craft::getDamagePercent() const
 {
@@ -722,9 +736,9 @@ int Craft::getDamagePercent() const
 }
 
 /**
- * Returns whether the craft is currently low on fuel
- * (only has enough to head back to base).
- * @return True if it's low, false otherwise.
+ * Gets whether the craft is currently low on fuel -
+ * only has enough to get back to base.
+ * @return, true if fuel is low
  */
 bool Craft::getLowFuel() const
 {
@@ -732,9 +746,9 @@ bool Craft::getLowFuel() const
 }
 
 /**
- * Changes whether the craft is currently low on fuel
- * (only has enough to head back to base).
- * @param low True if it's low, false otherwise.
+ * Sets whether the craft is currently low on fuel -
+ * only has enough to get back to base.
+ * @param low - true if fuel is low
  */
 void Craft::setLowFuel(const bool low)
 {
@@ -742,9 +756,9 @@ void Craft::setLowFuel(const bool low)
 }
 
 /**
- * Returns whether the craft has just done a ground mission,
+ * Gets whether the craft has just done a ground mission
  * and is forced to return to base.
- * @return True if it's returning, false otherwise.
+ * @return, true if this craft needs to return to base
  */
 bool Craft::getMissionComplete() const
 {
@@ -752,9 +766,9 @@ bool Craft::getMissionComplete() const
 }
 
 /**
- * Changes whether the craft has just done a ground mission,
+ * Sets whether the craft has just done a ground mission
  * and is forced to return to base.
- * @param mission True if it's returning, false otherwise.
+ * @param mission - true if this craft needs to return to base
  */
 void Craft::setMissionComplete(const bool mission)
 {
@@ -762,8 +776,8 @@ void Craft::setMissionComplete(const bool mission)
 }
 
 /**
- * Returns the current distance between the craft and the base it belongs to.
- * @return Distance in radian.
+ * Gets the current distance between this craft and the base it belongs to.
+ * @return, distance in radian
  */
 double Craft::getDistanceFromBase() const
 {
@@ -771,21 +785,21 @@ double Craft::getDistanceFromBase() const
 }
 
 /**
- * Returns the amount of fuel the craft uses while it's in the air, based on speed.
- * @return Fuel amount.
+ * Gets the amount of fuel the craft uses while it's in the air based on speed.
+ * @return, fuel amount
  */
 int Craft::getFuelConsumption() const
 {
 	if (_rules->getRefuelItem().empty() == false) // Firestorm, Lightning, Avenger, etc.
 		return 1;
 
-	return static_cast<int>(
-			floor(static_cast<double>(_speed) / 100.0)); // Skyranger, Interceptor.
+	return static_cast<int>(floor(
+			static_cast<double>(_speed) / 100.0)); // Skyranger, Interceptor.
 }
 
 /**
- * Returns the minimum required fuel for the craft to make it back to base.
- * @return Fuel amount.
+ * Gets the minimum required fuel for the craft to make it back to base.
+ * @return, fuel amount
  */
 int Craft::getFuelLimit() const
 {
@@ -793,16 +807,16 @@ int Craft::getFuelLimit() const
 }
 
 /**
- * Returns the minimum required fuel for the craft to go to a base.
- * @param base - pointer to a target base
+ * Gets the minimum required fuel for the craft to go to a base.
+ * @param base - pointer to a target Base
  * @return, fuel amount
  */
 int Craft::getFuelLimit(Base* base) const
 {
-	double speedRadian = static_cast<double>(_rules->getMaxSpeed()) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0;
+	const double speedRadian = static_cast<double>(_rules->getMaxSpeed()) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0;
 
-	return static_cast<int>(
-			ceil((static_cast<double>(getFuelConsumption()) * getDistance(base)) / (speedRadian * 120.0)));
+	return static_cast<int>(ceil(
+			(static_cast<double>(getFuelConsumption()) * getDistance(base)) / (speedRadian * 120.0)));
 }
 
 /**
@@ -878,7 +892,7 @@ void Craft::checkup()
 }
 
 /**
- * Returns if a UFO is detected by the craft's radar.
+ * Gets if a UFO is detected by the craft's radar.
  * @param target - pointer to target
  * @return, true if detected, false otherwise
  */
@@ -1015,7 +1029,7 @@ void Craft::refuel()
 }
 
 /**
- * Returns the craft's battlescape status.
+ * Gets the craft's battlescape status.
  * @return, true if the craft is on the battlescape
  */
 bool Craft::isInBattlescape() const
@@ -1024,7 +1038,7 @@ bool Craft::isInBattlescape() const
 }
 
 /**
- * Changes the craft's battlescape status.
+ * Sets the craft's battlescape status.
  * @param inbattle - true if it's in battle
  */
 void Craft::setInBattlescape(const bool battle)
@@ -1036,7 +1050,7 @@ void Craft::setInBattlescape(const bool battle)
 }
 
 /**
- * Returns the craft destroyed status.
+ * Gets the craft destroyed status.
  * If the amount of damage the craft take is more than its health it will be destroyed.
  * @return, true if the craft is destroyed
  */
@@ -1046,7 +1060,7 @@ bool Craft::isDestroyed() const
 }
 
 /**
- * Returns the amount of space available for soldiers and vehicles.
+ * Gets the amount of space available for soldiers and vehicles.
  * @return, space available
  */
 int Craft::getSpaceAvailable() const
@@ -1055,7 +1069,7 @@ int Craft::getSpaceAvailable() const
 }
 
 /**
- * Returns the amount of space in use by soldiers and vehicles.
+ * Gets the amount of space in use by soldiers and vehicles.
  * @return, space used
  */
 int Craft::getSpaceUsed() const
@@ -1074,8 +1088,8 @@ int Craft::getSpaceUsed() const
 }
 
 /**
- * Returns the total amount of vehicles of a certain type stored in the craft.
- * @param vehicle - vehicle type
+ * Gets the total amount of vehicles of a certain type stored in the craft.
+ * @param vehicle - reference a vehicle type
  * @return, number of vehicles
  */
 int Craft::getVehicleCount(const std::string& vehicle) const
@@ -1095,7 +1109,7 @@ int Craft::getVehicleCount(const std::string& vehicle) const
 }
 
 /**
- * Returns the craft's dogfight status.
+ * Gets the craft's dogfight status.
  * @return, true if the craft is in a dogfight
  */
 bool Craft::isInDogfight() const
@@ -1104,7 +1118,7 @@ bool Craft::isInDogfight() const
 }
 
 /**
- * Changes the craft's dogfight status.
+ * Sets the craft's dogfight status.
  * @param inDogfight - true if it's in dogfight
  */
 void Craft::setInDogfight(bool inDogfight)

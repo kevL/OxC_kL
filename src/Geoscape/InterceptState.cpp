@@ -185,13 +185,13 @@ InterceptState::InterceptState(
 			else
 				ss << 0;
 
-			ss << "/";
+			ss << "|";
 			if ((*j)->getNumSoldiers() > 0)
 				ss << L'\x01' << (*j)->getNumSoldiers() << L'\x01';
 			else
 				ss << 0;
 
-			ss << "/";
+			ss << "|";
 			if ((*j)->getNumVehicles() > 0)
 				ss << L'\x01' << (*j)->getNumVehicles() << L'\x01';
 			else

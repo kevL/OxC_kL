@@ -1172,7 +1172,6 @@ void GeoscapeState::time5Seconds()
 	if (_game->getSavedGame()->getBases()->empty())
 	{
 		popup(new DefeatState());
-
 		return;
 	}
 
@@ -1413,8 +1412,8 @@ void GeoscapeState::time5Seconds()
 				if (ufo != NULL
 					&& (ufo->getStatus() == Ufo::DESTROYED
 						|| (ufo->getStatus() == Ufo::CRASHED	// kL, http://openxcom.org/forum/index.php?topic=2406.0
-							&& (*j)->getNumSoldiers() == 0		// kL, Actually should set this on the UFO-crash event
-							&& (*j)->getNumVehicles() == 0)))	// kL, so that crashed-ufos can still be targeted for Patrols
+							&& (*j)->getNumSoldiers() == 0)))	// kL, Actually should set this on the UFO-crash event
+//							&& (*j)->getNumVehicles() == 0)))	// kL, so that crashed-ufos can still be targeted for Patrols
 				{
 					(*j)->returnToBase();
 				}
@@ -1478,8 +1477,8 @@ void GeoscapeState::time5Seconds()
 						case Ufo::CRASHED:
 							// setSpeed 1/2 (need to speed back up when setting a new destination)
 						case Ufo::DESTROYED: // Just before expiration
-							if ((*j)->getNumSoldiers() > 0
-								|| (*j)->getNumVehicles() > 0)
+							if ((*j)->getNumSoldiers() > 0)
+//								|| (*j)->getNumVehicles() > 0)
 							{
 								if ((*j)->isInDogfight() == false)
 								{

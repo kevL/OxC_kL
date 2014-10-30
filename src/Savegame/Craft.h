@@ -89,7 +89,7 @@ private:
 		/// Loads the craft from YAML.
 		void load(
 				const YAML::Node& node,
-				const Ruleset* rule,
+				const Ruleset* rules,
 				SavedGame* save);
 		/// Saves the craft to YAML.
 		YAML::Node save() const;
@@ -138,7 +138,7 @@ private:
 		/// Gets the craft's amount of equipment.
 		int getNumEquipment() const;
 		/// Gets the craft's amount of vehicles.
-		int getNumVehicles() const;
+		int getNumVehicles(bool space = false) const;
 
 		/// Gets the craft's weapons.
 		std::vector<CraftWeapon*>* getWeapons();

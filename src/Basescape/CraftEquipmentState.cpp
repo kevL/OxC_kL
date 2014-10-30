@@ -29,7 +29,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -348,7 +348,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowPress(Action* action)
 	_sel = _lstEquipment->getSelectedRow();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
-		&& !_timerLeft->isRunning())
+		&& _timerLeft->isRunning() == false)
 	{
 		_timerLeft->start();
 	}
@@ -391,7 +391,7 @@ void CraftEquipmentState::lstEquipmentRightArrowPress(Action* action)
 	_sel = _lstEquipment->getSelectedRow();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
-		&& !_timerRight->isRunning())
+		&& _timerRight->isRunning() == false)
 	{
 		_timerRight->start();
 	}
@@ -664,33 +664,25 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 	if (itemRule->isFixed()) // load vehicle, convert item to a vehicle
 	{
-		int size = 4;
 		Unit* tankRule = _game->getRuleset()->getUnit(itemRule->getType());
-		if (tankRule)
-		{
-			size = _game->getRuleset()->getArmor(tankRule->getArmor())->getSize();
-			size *= size;
-		}
 
-		int space = 0; // check if there's enough room
-		if (size == 4) // large 2x2 units
-		{
-			space = std::min(
-						craft->getRules()->getVehicles() - craft->getNumVehicles(),
-						craft->getSpaceAvailable() / size);
-		}
-		else // small 1x1 units
-			space = craft->getSpaceAvailable() / size;
+		int unitSize = _game->getRuleset()->getArmor(tankRule->getArmor())->getSize();
+		unitSize *= unitSize;
 
-		if (space > 0
-			&& craft->getLoadCapacity() - craft->getLoadCurrent() >= size * 10)
+		int spaceAvailable = std::min(
+									craft->getRules()->getVehicles() - craft->getNumVehicles(true),
+									craft->getSpaceAvailable());
+		spaceAvailable /= unitSize;
+
+		if (spaceAvailable > 0
+			&& craft->getLoadCapacity() - craft->getLoadCurrent() >= unitSize * 10) // note: 10 is the 'load' that a single 'space' uses.
 		{
 			change = std::min(
 							change,
-							space);
+							spaceAvailable);
 			change = std::min(
 							change,
-							(craft->getLoadCapacity() - craft->getLoadCurrent()) / (size * 10));
+							(craft->getLoadCapacity() - craft->getLoadCurrent()) / (unitSize * 10));
 
 			if (itemRule->getCompatibleAmmo()->empty() == false)
 			{
@@ -723,7 +715,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 						craft->getVehicles()->push_back(new Vehicle(
 																itemRule,
 																rounds,
-																size));
+																unitSize));
 					}
 				}
 				else // not enough Ammo
@@ -749,7 +741,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 					craft->getVehicles()->push_back(new Vehicle(
 															itemRule,
 															itemRule->getClipSize(),
-															size));
+															unitSize));
 
 					if (_game->getSavedGame()->getMonthsPassed() != -1)
 						_base->getItems()->removeItem(_items[_sel]);

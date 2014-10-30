@@ -28,18 +28,18 @@ namespace OpenXcom
 /**
  * Initializes a vehicle of the specified type.
  * kL_note: This describes a vehicle that has been loaded onto a Craft only.
- * @param rules, Pointer to ruleset.
- * @param ammo, Initial ammo.
- * @param size, Size in tiles.
+ * @param rules		- pointer to RuleItem
+ * @param ammo		- initial ammo
+ * @param unitSize	- size in tiles
  */
 Vehicle::Vehicle(
 		RuleItem* rules,
 		int ammo,
-		int size)
+		int unitSize)
 	:
 		_rules(rules),
 		_ammo(ammo),
-		_size(size)
+		_size(unitSize)
 {
 }
 
@@ -52,7 +52,7 @@ Vehicle::~Vehicle()
 
 /**
  * Loads the vehicle from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void Vehicle::load(const YAML::Node& node)
 {
@@ -62,7 +62,7 @@ void Vehicle::load(const YAML::Node& node)
 
 /**
  * Saves the vehicle to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Vehicle::save() const
 {
@@ -77,7 +77,7 @@ YAML::Node Vehicle::save() const
 
 /**
  * Returns the ruleset for the vehicle's type.
- * @return Pointer to ruleset.
+ * @return, pointer to RuleItem
  */
 RuleItem* Vehicle::getRules() const
 {
@@ -86,7 +86,7 @@ RuleItem* Vehicle::getRules() const
 
 /**
  * Returns the ammo contained in this vehicle.
- * @return Weapon ammo.
+ * @return, quantity of weapon ammo
  */
 int Vehicle::getAmmo() const
 {
@@ -98,7 +98,7 @@ int Vehicle::getAmmo() const
 
 /**
  * Changes the ammo contained in this vehicle.
- * @param ammo, Weapon ammo.
+ * @param ammo - quantity of weapon ammo
  */
 void Vehicle::setAmmo(int ammo)
 {
@@ -108,7 +108,7 @@ void Vehicle::setAmmo(int ammo)
 
 /**
  * Returns the size occupied by this vehicle in a transport craft.
- * @return Size in tiles.
+ * @return, size in tiles
  */
 int Vehicle::getSize() const
 {

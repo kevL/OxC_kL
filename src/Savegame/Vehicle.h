@@ -53,7 +53,7 @@ private:
 		Vehicle(
 				RuleItem* rules,
 				int ammo,
-				int size);
+				int unitSize);
 		/// Cleans up the vehicle.
 		~Vehicle();
 

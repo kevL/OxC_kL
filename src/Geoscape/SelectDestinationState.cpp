@@ -412,8 +412,8 @@ void SelectDestinationState::btnCydoniaClick(Action*)
 {
 //	if (_error == NULL)
 //	{
-	if (_craft->getNumSoldiers() > 0
-		|| _craft->getNumVehicles() > 0)
+	if (_craft->getNumSoldiers() > 0)
+//kL	|| _craft->getNumVehicles() > 0)
 	{
 		_game->pushState(new ConfirmCydoniaState(_craft));
 	}

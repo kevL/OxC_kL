@@ -182,7 +182,7 @@ crafts:
     speedMax: 783
     accel: 2
     soldiers: 14
-    vehicles: 2
+    vehicles: 8
     maxItems: 84 # 6 x soldier cap.
     costBuy: 450000
     costRent: 300000
@@ -278,7 +278,7 @@ crafts:
     costRent: 150000
     costSell: 10200000
     soldiers: 26
-    vehicles: 3
+    vehicles: 12
     maxItems: 156 # 6 x soldier cap.
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
