@@ -2022,7 +2022,7 @@ BattleUnit* TileEngine::hit(
 					&& attacker->getFaction() == attacker->getOriginalFaction())
 				{
 					attacker->addFiringExp();	// shotguns don't give XP 'cause attacker==NULL. See ProjectileFlyBState::think()
-												// kL_note: I put it in, but watch for too much XP ...
+												// kL_note: I put it in, but watch for too much XP ... so, i took it back out.
 				}
 			}
 		}

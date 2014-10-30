@@ -4767,7 +4767,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1413164219 f:\git\openxcom\src\savegame\battleunit.h
+1414704231 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -4777,7 +4777,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Unit.h"
 
-1414538170 f:\git\openxcom\src\battlescape\battlescapegame.h
+1414668169 f:\git\openxcom\src\battlescape\battlescapegame.h
 	<list>
 	<string>
 	<vector>
@@ -5826,7 +5826,7 @@
 1413140555 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1414557279 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1414668232 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5910,7 +5910,7 @@
 	<string>
 	"BattleState.h"
 
-1413599634 f:\git\openxcom\src\battlescape\unitwalkbstate.h
+1414704972 f:\git\openxcom\src\battlescape\unitwalkbstate.h
 	<climits>
 	"BattlescapeGame.h"
 	"BattleState.h"
@@ -6697,7 +6697,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1414557212 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1414668874 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6776,7 +6776,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1414639322 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1414668895 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6931,7 +6931,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1414552775 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1414704296 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -9575,7 +9575,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1414532594 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1414704242 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

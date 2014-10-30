@@ -1022,8 +1022,8 @@ void ProjectileFlyBState::think()
 																				proj->getPosition(1),
 																				_ammo->getRules()->getPower(),
 																				_ammo->getRules()->getDamageType(),
-																				_unit); // kL
-//																				NULL); // shotguns don't give XP 'cause attacker==NULL.
+																				NULL); // shotguns don't give XP 'cause attacker==NULL.
+//																				_unit); // kL, but too much XP ...
 									}
 
 									i++;

@@ -556,6 +556,8 @@ private:
 		int getWalkingPhase() const;
 		/// Gets the walking phase for diagonal walking
 		int getDiagonalWalkingPhase() const;
+		/// Gets the walking phase unadjusted.
+		int getTrueWalkingPhase() const;
 
 		/// Gets the unit's destination when walking
 		const Position& getDestination() const;

@@ -748,45 +748,45 @@ void BattleUnit::keepWalking(
 
 	//Log(LOG_INFO) << "BattleUnit::keepWalking() ID = " << getId() << " _walkPhase = " << _walkPhase;
 	int
-		middle,
-		end;
+		midPhase,
+		endPhase;
 
 	if (_verticalDirection)
 	{
-		middle = 4;
-		end = 8;
+		midPhase = 4;
+		endPhase = 8;
 	}
 	else // diagonal walking takes double the steps
 	{
-		middle	= 4 + 4 * (_direction %2);
-		end		= 8 + 8 * (_direction %2);
+		midPhase = 4 + 4 * (_direction %2);
+		endPhase = 8 + 8 * (_direction %2);
 
 		if (_armor->getSize() > 1)
 		{
 			if (_direction < 1 || 5 < _direction) // dir = 0,7,6,5 (up x3 or left)
-				middle = end;
+				midPhase = endPhase;
 			else if (_direction == 5)
-				middle = 12;
+				midPhase = 12;
 			else if (_direction == 1)
-				middle = 5;
+				midPhase = 5;
 			else
-				middle = 1;
+				midPhase = 1;
 		}
 	}
 
 	if (cache == false) // ie. not onScreen
 	{
-		middle = 1; // kL: Mc'd units offscreen won't move without this (tho they turn, as if to start walking)
-		end = 2;
+		midPhase = 1; // kL: Mc'd units offscreen won't move without this (tho they turn, as if to start walking)
+		endPhase = 2;
 	}
 
-	if (_walkPhase == middle)
+	if (_walkPhase == midPhase)
 		// we assume we reached our destination tile
 		// this is actually a drawing hack, so soldiers are not overlapped by floortiles
 		// kL_note: which they (large units) are half the time anyway...
 		_pos = _destination;
 
-	if (_walkPhase >= end) // officially reached the destination tile
+	if (_walkPhase >= endPhase) // officially reached the destination tile
 	{
 		//Log(LOG_INFO) << ". end -> STATUS_STANDING";
 		_status = STATUS_STANDING;
@@ -825,7 +825,7 @@ void BattleUnit::keepWalking(
 
 /**
  * Gets the walking phase for animation and sound.
- * @return phase will always go from 0-7
+ * @return, phase will always go from 0-7
  */
 int BattleUnit::getWalkingPhase() const
 {
@@ -834,11 +834,20 @@ int BattleUnit::getWalkingPhase() const
 
 /**
  * Gets the walking phase for diagonal walking.
- * @return phase, This will be 0 or 8, due to rounding ints down
+ * @return, phase will be 0 or 8 due to rounding ints down
  */
 int BattleUnit::getDiagonalWalkingPhase() const
 {
 	return (_walkPhase / 8) * 8;
+}
+
+/**
+ * Gets the walking phase unadjusted.
+ * @return, phase
+ */
+int BattleUnit::getTrueWalkingPhase() const
+{
+	return _walkPhase;
 }
 
 /**

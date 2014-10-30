@@ -133,7 +133,6 @@ void UnitWalkBState::think()
 	if (_unit->isOut(true, true))
 	{
 		//Log(LOG_INFO) << ". . isOut() abort.";
-
 		_pf->abortPath();
 		_parent->popState();
 
@@ -175,7 +174,7 @@ void UnitWalkBState::think()
 		// kL_note: walkPhase reset as the unit completes its transition to the next tile
 		if (_unit->getStatus() == STATUS_STANDING)
 		{
-			//Log(LOG_INFO) << "Hey we got to STATUS_STANDING in UnitWalkBState _WALKING or _FLYING !!!" ;
+			//Log(LOG_INFO) << "STATUS_STANDING_end in UnitWalkBState _WALKING or _FLYING !!!" ;
 //			if (_unit->getVisible())
 			if (_onScreen)
 			{
@@ -244,7 +243,6 @@ void UnitWalkBState::think()
 		|| _unit->getStatus() == STATUS_PANICKING)
 	{
 		//Log(LOG_INFO) << "STATUS_STANDING or PANICKING : " << _unit->getId();
-
 		if (!doStatusStand())
 			return;
 		else // Destination is not valid until *after* doStatusStand() runs.
@@ -586,14 +584,14 @@ bool UnitWalkBState::doStatusStand()
 		}
 
 		//Log(LOG_INFO) << ". check size for obstacles";
-		int size = _unit->getArmor()->getSize() - 1;
+		int unitSize = _unit->getArmor()->getSize() - 1;
 		for (int
-				x = size;
+				x = unitSize;
 				x > -1;
 				--x)
 		{
 			for (int
-					y = size;
+					y = unitSize;
 					y > -1;
 					--y)
 			{
@@ -730,14 +728,14 @@ bool UnitWalkBState::doStatusWalk()
 
 		bool fallCheck = true;
 
-		int size = _unit->getArmor()->getSize() - 1;
+		int unitSize = _unit->getArmor()->getSize() - 1;
 		for (int
-				x = size;
+				x = unitSize;
 				x > -1;
 				--x)
 		{
 			for (int
-					y = size;
+					y = unitSize;
 					y > -1;
 					--y)
 			{
@@ -761,12 +759,12 @@ bool UnitWalkBState::doStatusWalk()
 		} // -> might move to doStatusStand_end()
 
 		for (int
-				x = size;
+				x = unitSize;
 				x > -1;
 				--x)
 		{
 			for (int
-					y = size;
+					y = unitSize;
 					y > -1;
 					--y)
 			{
@@ -788,12 +786,12 @@ bool UnitWalkBState::doStatusWalk()
 		{
 			//Log(LOG_INFO) << ". falling";
 			for (int
-					x = size;
+					x = unitSize;
 					x > -1;
 					--x)
 			{
 				for (int
-						y = size;
+						y = unitSize;
 						y > -1;
 						--y)
 				{
@@ -1160,8 +1158,11 @@ void UnitWalkBState::playMovementSound()
 			{
 				if (_falling)
 				{
-					if (groundCheck(1))
+					if (_unit->getTrueWalkingPhase() == 1
+						&& groundCheck(1))
+					{
 						sound = ResourcePack::ITEM_DROP;	// thunk.
+					}
 				}
 				else if (_unit->isFloating() == false)
 					sound = 40;								// GravLift
@@ -1208,22 +1209,21 @@ void UnitWalkBState::doFallCheck() // kL
 bool UnitWalkBState::groundCheck(int descent) // kL
 {
 	Tile* tBelow = NULL;
-	int size = _unit->getArmor()->getSize() - 1;
+	int unitSize = _unit->getArmor()->getSize() - 1;
 	for (int
-			x = size;
+			x = unitSize;
 			x > -1;
 			--x)
 	{
 		for (int
-				y = size;
+				y = unitSize;
 				y > -1;
 				--y)
 		{
 			tBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(x, y, -descent - 1));
 			if (_parent->getSave()->getTile(
 										_unit->getPosition() + Position(x, y, -descent))
-									->hasNoFloor(tBelow)
-								== false)
+									->hasNoFloor(tBelow) == false)
 			{
 				return true;
 			}
