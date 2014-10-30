@@ -5229,27 +5229,22 @@ int TileEngine::distanceSq(
  */
 bool TileEngine::psiAttack(BattleAction* action)
 {
-	//Log(LOG_INFO) << "TileEngine::psiAttack()";
-	//Log(LOG_INFO) << ". attackerID " << action->actor->getId();
+	//Log(LOG_INFO) << "TileEngine::psiAttack() attackerID " << action->actor->getId();
 	const Tile* const tile = _battleSave->getTile(action->target);
 	if (tile == NULL)
 		return false;
+	//Log(LOG_INFO) << ". . target(pos) " << action->target;
 
 	BattleUnit* const victim = tile->getUnit();
 	if (victim == NULL)
 		return false;
 	//Log(LOG_INFO) << "psiAttack: vs ID " << victim->getId();
 
-
 	const bool psiImmune = victim->getUnitRules()
 						&& victim->getUnitRules()->getPsiImmune();
 
 	if (psiImmune == false)
 	{
-		//Log(LOG_INFO) << ". . tile EXISTS, so does Unit";
-		//Log(LOG_INFO) << ". . defenderID " << victim->getId();
-		//Log(LOG_INFO) << ". . target(pos) " << action->target;
-
 		UnitStats
 			* statsActor = action->actor->getStats(),
 			* statsVictim = victim->getStats();
@@ -5262,15 +5257,13 @@ bool TileEngine::psiAttack(BattleAction* action)
 											action->target));
 		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
 		//Log(LOG_INFO) << ". . . attack = " << (int)attack;
-		//Log(LOG_INFO) << ". . . dist = " << dist;
+		//Log(LOG_INFO) << ". . . dist = " << (int)dist;
 
-//kL	attack -= dist;
-		attack -= dist * 2.0; // kL
+		attack -= dist * 2.0;
 
 		attack -= defense;
 		if (action->type == BA_MINDCONTROL)
-//kL		attack += 25.0;
-			attack += 15.0; // kL
+			attack += 15.0;
 		else
 			attack += 45.0;
 
@@ -5285,9 +5278,9 @@ bool TileEngine::psiAttack(BattleAction* action)
 			victim->addPsiStrengthExp();
 		}
 
-		int success = static_cast<int>(attack);
+		const int success = static_cast<int>(attack);
 
-		std::string info = "";
+		std::string info;
 		if (action->type == BA_PANIC)
 			info = "STR_PANIC";
 		else
@@ -5311,16 +5304,23 @@ bool TileEngine::psiAttack(BattleAction* action)
 			if (action->type == BA_PANIC)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
-				int moraleLoss = 110
-								- statsVictim->bravery * 3 / 2
-								+ statsActor->psiStrength / 2;
+				const int moraleLoss = 110
+									 - statsVictim->bravery * 3 / 2
+									 + statsActor->psiStrength / 2;
 				if (moraleLoss > 0)
 					victim->moraleChange(-moraleLoss);
 			}
 			else // BA_MINDCONTROL
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
-				if (victim->getFaction() != FACTION_HOSTILE) // kL_begin: Morale loss for getting Mc'd.
+				if (action->actor->getFaction() == FACTION_PLAYER
+					&& victim->getMorale() > 50)
+				{
+					_battleSave->getBattleState()->warning("STR_PSI_RESIST");
+					return false;
+				}
+
+				if (victim->getFaction() != FACTION_HOSTILE) // Morale loss for getting Mc'd.
 				{
 					victim->moraleChange(
 									_battleSave->getMoraleModifier(NULL, true) / 10 + statsVictim->bravery / 2 - 110);
@@ -5332,11 +5332,9 @@ bool TileEngine::psiAttack(BattleAction* action)
 										_battleSave->getMoraleModifier(NULL, false) / 10 + statsVictim->bravery - 110);
 					else
 						victim->moraleChange(statsVictim->bravery / 2);
-				} // kL_end.
+				}
 
 				victim->convertToFaction(action->actor->getFaction());
-//				victim->setTimeUnits(statsVictim->tu);
-//				victim->setEnergy(statsVictim->stamina); // kL
 
 				// kL_begin: taken from BattleUnit::prepareUnitTurn()
 				int prepTU = statsVictim->tu;
@@ -5358,9 +5356,6 @@ bool TileEngine::psiAttack(BattleAction* action)
 					stamina = statsVictim->stamina,
 					enron = stamina;
 
-//				if (victim->getTurretType() == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
-//				{
-//				if (victim->getOriginalFaction() == FACTION_PLAYER)
 				if (victim->getGeoscapeSoldier() != NULL)
 				{
 					if (victim->isKneeled())
@@ -5370,9 +5365,6 @@ bool TileEngine::psiAttack(BattleAction* action)
 				}
 				else // aLiens.
 					enron = enron * victim->getUnitRules()->getEnergyRecovery() / 100;
-//				}
-//				else // xCom tank. ( can't get Mc'd )
-//					enron = enron * 4 / 5; // value in Ruleset is 100%
 
 				enron = static_cast<int>(Round(static_cast<double>(enron) * victim->getAccuracyModifier()));
 
@@ -5387,7 +5379,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 					enron = 12;
 
 				victim->setEnergy(enron);
-				// kL_end.
+
 
 				victim->allowReselect();
 				victim->setStatus(STATUS_STANDING);
@@ -5396,13 +5388,14 @@ bool TileEngine::psiAttack(BattleAction* action)
 				calculateFOV(victim->getPosition());
 
 				// if all units from either faction are mind controlled - auto-end the mission.
-				if (_battleSave->getSide() == FACTION_PLAYER
+				if (Options::allowPsionicCapture
 					&& Options::battleAutoEnd
-					&& Options::allowPsionicCapture)
+					&& _battleSave->getSide() == FACTION_PLAYER)
 				{
 					//Log(LOG_INFO) << ". . . . inside tallyUnits";
-					int liveAliens = 0;
-					int liveSoldiers = 0;
+					int
+						liveAliens = 0,
+						liveSoldiers = 0;
 
 					_battleSave->getBattleGame()->tallyUnits(
 														liveAliens,
@@ -5422,8 +5415,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 			//Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
 			return true;
 		}
-		else if (victim->getOriginalFaction() == FACTION_PLAYER
-			&& Options::allowPsiStrengthImprovement)
+		else if (Options::allowPsiStrengthImprovement
+			&& victim->getOriginalFaction() == FACTION_PLAYER)
 		{
 			victim->addPsiStrengthExp(2);
 		}

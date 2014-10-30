@@ -9076,6 +9076,7 @@ extraStrings:
       STR_SOLDIER_NOT_AT_BASE: "Soldier Out on Mission"
       STR_TRANSIT_LC: "transit"
       STR_RESET_UC: "reset"
+      STR_PSI_RESIST: "> RESIST <"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK
