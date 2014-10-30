@@ -5717,7 +5717,7 @@
 1413140555 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1413235002 f:\git\openxcom\src\battlescape\pathfinding.h
+1414642109 f:\git\openxcom\src\battlescape\pathfinding.h
 	<vector>
 	"PathfindingNode.h"
 	"Position.h"
@@ -6616,15 +6616,15 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1414563962 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1414654619 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
-	<list>
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/BattlescapeState.h"
 	"../Battlescape/TileEngine.h"
 	"../Engine/Game.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/Ruleset.h"
@@ -6776,7 +6776,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1414638083 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1414639322 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>

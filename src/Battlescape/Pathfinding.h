@@ -44,7 +44,6 @@ class Pathfinding
 
 private:
 	bool
-//		_kneelCheck, // kL
 		_modALT,
 		_modCTRL,
 		_pathPreviewed,
@@ -93,7 +92,7 @@ private:
 	/// Determines whether a unit can fall down from this tile.
 	bool canFallDown(
 			Tile* tile,
-			int size);
+			int unitSize);
 	/// Determines the additional TU cost of going one step from
 	/// start to destination if going through a closed UFO door.
 //	int getOpeningUfoDoorCost(int direction, Position start, Position destination);
@@ -133,7 +132,7 @@ private:
 		/// Calculates the shortest path.
 		void calculate(
 				BattleUnit* unit,
-				Position endPos,
+				Position destPos,
 				BattleUnit* missileTarget = NULL,
 				int maxTUCost = 1000,
 				bool strafeRejected = false); // kL_add.
@@ -150,11 +149,11 @@ private:
 
 		/// Converts direction to a vector.
 		static void directionToVector(
-				int const direction,
-				Position* vector);
+				int const dir,
+				Position* vectPos);
 		/// Converts a vector to a direction.
 		static void vectorToDirection(
-				const Position& vector,
+				const Position& vectPos,
 				int& dir);
 
 		/// Checks whether a path is ready and returns the direction.
@@ -166,7 +165,7 @@ private:
 		int getTUCost(
 				const Position& startPos,
 				const int dir,
-				Position* endPos,
+				Position* destPos,
 				BattleUnit* unit,
 				BattleUnit* missileTarget,
 				bool missile);
