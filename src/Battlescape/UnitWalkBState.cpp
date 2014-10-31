@@ -421,7 +421,7 @@ bool UnitWalkBState::doStatusStand()
 		Tile* tileDest = _parent->getSave()->getTile(destination);
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
 		if (_unit->getFaction() == FACTION_HOSTILE
-			&& tileDest
+			&& tileDest != NULL
 			&& tileDest->getFire() > 0)
 		{
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
@@ -437,58 +437,61 @@ bool UnitWalkBState::doStatusStand()
 			tu = 0;
 		}
 
-		int
-			energy = tu,
-			tuTest = tu;
+		const int tuTest = tu;
+		int energy = tu;
 
-		if (gravLift == false)
+		if (_falling == false)
 		{
-			if (_action.dash // allow dash when moving vertically 1 tile (or more).
-				|| (_action.strafe
-					&& dir >= _pf->DIR_UP))
+			if (gravLift == false)
 			{
-				tu -= _pf->getOpenDoor();
-				tu = (tu * 3 / 4) + _pf->getOpenDoor();
+				if (_action.dash // allow dash when moving vertically 1 tile (or more).
+					|| (_action.strafe
+						&& dir >= _pf->DIR_UP))
+				{
+					tu -= _pf->getOpenDoor();
+					tu = (tu * 3 / 4) + _pf->getOpenDoor();
 
-				energy -= _pf->getOpenDoor();
-				energy = energy * 3 / 2;
+					energy -= _pf->getOpenDoor();
+					energy = energy * 3 / 2;
+				}
+
+				std::string armorType = _unit->getArmor()->getType();
+
+				if (_unit->hasFlightSuit()
+					&& _pf->getMovementType() == MT_FLY)
+				{
+					energy -= 2; // zippy.
+				}
+				else if (_unit->hasPowerSuit()
+					|| (_unit->hasFlightSuit()
+						&& _pf->getMovementType() == MT_WALK))
+				{
+					energy -= 1; // good stuff
+				}
+				// else if (coveralls){} // normal energy expenditure
+				else if (armorType == "STR_PERSONAL_ARMOR_UC")
+					energy += 1; // *clunk*clunk*
+			}
+			else // gravLift
+			{
+				//Log(LOG_INFO) << ". . using GravLift";
+				energy = 0;
 			}
 
-			std::string armorType = _unit->getArmor()->getType();
-
-			if (_unit->hasFlightSuit()
-				&& _pf->getMovementType() == MT_FLY)
-			{
-				energy -= 2; // zippy.
-			}
-			else if (_unit->hasPowerSuit()
-				|| (_unit->hasFlightSuit()
-					&& _pf->getMovementType() == MT_WALK))
-			{
-				energy -= 1; // good stuff
-			}
-			// else if (coveralls){} // normal energy expenditure
-			else if (armorType == "STR_PERSONAL_ARMOR_UC")
-				energy += 1; // *clunk*clunk*
+			if (energy < 0)
+				energy = 0;
 		}
-		else // gravLift
-		{
-			//Log(LOG_INFO) << ". . using GravLift";
-			energy = 0;
-		}
-
-		if (energy < 0)
-			energy = 0;
 
 		//Log(LOG_INFO) << ". check tu + stamina, etc. TU = " << tu;
 		//Log(LOG_INFO) << ". unit->TU = " << _unit->getTimeUnits();
-		if (tu > _unit->getTimeUnits())
+//		if (tu > _unit->getTimeUnits())
+		if (tu - _pf->getOpenDoor() > _unit->getTimeUnits())
 		{
 			//Log(LOG_INFO) << ". . tu > _unit->TU()";
 			if (_parent->getPanicHandled()
 				&& tuTest < 255)
 			{
-				//Log(LOG_INFO) << ". send warning: not enough TU";
+				Log(LOG_INFO) << ". send warning: not enough TU";
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
 
