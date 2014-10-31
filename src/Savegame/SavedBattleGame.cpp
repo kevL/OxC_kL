@@ -1365,10 +1365,10 @@ void SavedBattleGame::randomizeItemLocations(Tile* tile)
  */
 void SavedBattleGame::removeItem(BattleItem* item)
 {
-	Tile* tile = item->getTile();
+	Tile* const tile = item->getTile();
 	if (tile != NULL)
 	{
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = tile->getInventory()->begin();
 				i != tile->getInventory()->end();
 				++i)
@@ -1384,7 +1384,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 	BattleUnit* bu = item->getOwner();
 	if (bu != NULL)
 	{
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = bu->getInventory()->begin();
 				i != bu->getInventory()->end();
 				++i)
@@ -1397,7 +1397,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 		}
 	}
 
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = _items.begin();
 			i != _items.end();
 			++i)
@@ -1413,7 +1413,7 @@ void SavedBattleGame::removeItem(BattleItem* item)
 
 /*	for (int i = 0; i < _mapsize_x * _mapsize_y * _mapsize_z; ++i)
 	{
-		for (std::vector<BattleItem*>::iterator it = _tiles[i]->getInventory()->begin(); it != _tiles[i]->getInventory()->end(); )
+		for (std::vector<BattleItem*>::const_iterator it = _tiles[i]->getInventory()->begin(); it != _tiles[i]->getInventory()->end(); )
 		{
 			if ((*it) == item)
 			{

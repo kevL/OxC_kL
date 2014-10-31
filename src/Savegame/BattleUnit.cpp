@@ -1159,7 +1159,7 @@ bool BattleUnit::isFloating() const
 
 /**
  * Shows the righthand sprite with weapon aiming.
- * @param aim - true to aim, false to stand there like an idiot
+ * @param aim - true to aim, false to stand there like an idiot (default true)
  */
 void BattleUnit::aim(bool aim)
 {

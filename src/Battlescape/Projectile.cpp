@@ -197,7 +197,7 @@ int Projectile::calculateTrajectory(
 		double accuracy,
 		Position originVoxel)
 {
-	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
+	Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 	//Log(LOG_INFO) << ". originVoxel = " << originVoxel;
 
 	Tile* targetTile = _save->getTile(_action.target);
@@ -689,7 +689,7 @@ void Projectile::applyAccuracy(
 		toss = soldier->getRules()->getStatCaps().throwing;
 	//Log(LOG_INFO) << ". . toss = " << toss;
 
-	accuracy = accuracy * 50.0 + 45.0; // arbitrary adjustment.
+	accuracy = accuracy * 50.0 + 50.0; // arbitrary adjustment.
 	//Log(LOG_INFO) << ". . accuracy = " << accuracy;
 	//Log(LOG_INFO) << ". . targetDist = " << targetDist;
 	double deviation = static_cast<double>(toss) - accuracy;

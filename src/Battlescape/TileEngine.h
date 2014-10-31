@@ -176,7 +176,8 @@ private:
 				int power,
 				ItemDamageType type,
 				int maxRadius,
-				BattleUnit* attacker = NULL);
+				BattleUnit* attacker = NULL,
+				bool grenade = false);
 		/// Checks the horizontal blockage of a tile.
 		int horizontalBlockage(
 				Tile* startTile,

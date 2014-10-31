@@ -1266,8 +1266,8 @@ void BattlescapeGame::setupCursor()
 			getMap()->setCursorType(
 								CT_NORMAL,
 								_currentAction.actor->getArmor()->getSize());
-		else // kL
-			getMap()->setCursorType( // kL
+		else
+			getMap()->setCursorType(
 								CT_NORMAL);
 	}
 }
@@ -1281,8 +1281,8 @@ void BattlescapeGame::setupCursor()
 bool BattlescapeGame::playableUnitSelected()
 {
 	return _save->getSelectedUnit() != NULL
-			&& (_save->getSide() == FACTION_PLAYER
-				|| _save->getDebugMode());
+		&& (_save->getSide() == FACTION_PLAYER
+			|| _save->getDebugMode());
 }
 
 /**
@@ -1297,7 +1297,6 @@ void BattlescapeGame::handleState()
 			_states.pop_front();
 
 			endGameTurn();
-
 			return;
 		}
 		else
@@ -1310,7 +1309,7 @@ void BattlescapeGame::handleState()
 
 /**
  * Pushes a state to the front of the queue and starts it.
- * @param bs Battlestate.
+ * @param bs - pointer to BattleState
  */
 void BattlescapeGame::statePushFront(BattleState* bs)
 {
@@ -1320,7 +1319,7 @@ void BattlescapeGame::statePushFront(BattleState* bs)
 
 /**
  * Pushes a state as the next state after the current one.
- * @param bs Battlestate.
+ * @param bs - pointer to BattleState
  */
 void BattlescapeGame::statePushNext(BattleState* bs)
 {
@@ -1335,7 +1334,7 @@ void BattlescapeGame::statePushNext(BattleState* bs)
 
 /**
  * Pushes a state to the back.
- * @param bs Battlestate.
+ * @param bs - pointer to BattleState
  */
 void BattlescapeGame::statePushBack(BattleState* bs)
 {
@@ -1346,8 +1345,8 @@ void BattlescapeGame::statePushBack(BattleState* bs)
 		if (_states.front() == 0) // end turn request
 		{
 			_states.pop_front();
-			endGameTurn();
 
+			endGameTurn();
 			return;
 		}
 		else
@@ -1359,7 +1358,6 @@ void BattlescapeGame::statePushBack(BattleState* bs)
 
 /**
  * Removes the current state.
- *
  * This is a very important function. It is called by a BattleState (walking, projectile
  * is flying, explosions,...) at the moment this state has finished its action.
  * Here we check the result of that action and do all the aftermath.
@@ -1594,7 +1592,7 @@ void BattlescapeGame::popState()
 
 	//Log(LOG_INFO) << ". uhm yeah";
 
-	if (!_states.empty())
+	if (_states.empty() == false)
 	{
 		//Log(LOG_INFO) << ". NOT states.Empty";
 		if (_states.front() == 0) // end turn request?
@@ -1609,11 +1607,10 @@ void BattlescapeGame::popState()
 					break;
 			}
 
-			if (_states.empty())
+			if (_states.empty() == true)
 			{
 				//Log(LOG_INFO) << ". endGameTurn()";
 				endGameTurn();
-
 				//Log(LOG_INFO) << ". endGameTurn() DONE return";
 				return;
 			}

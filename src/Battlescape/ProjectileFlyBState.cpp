@@ -78,7 +78,7 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_targetFloor(false),
 		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
 {
-	//Log(LOG_INFO) << "Create ProjectileFlyBState[0]: origin = " << origin;
+	Log(LOG_INFO) << "Create ProjectileFlyBState[0]: origin = " << origin;
 }
 
 /**
@@ -103,7 +103,7 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_targetFloor(false),
 		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
 {
-	//Log(LOG_INFO) << "Create ProjectileFlyBState[1]: origin = " << _origin;
+	Log(LOG_INFO) << "Create ProjectileFlyBState[1]: origin = " << _origin;
 }
 
 /**
@@ -120,10 +120,10 @@ ProjectileFlyBState::~ProjectileFlyBState()
  */
 void ProjectileFlyBState::init()
 {
-	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
+	Log(LOG_INFO) << "ProjectileFlyBState::init()";
 	if (_initialized)
 	{
-		//Log(LOG_INFO) << ". already initialized, EXIT";
+		Log(LOG_INFO) << ". already initialized, EXIT";
 		return;
 	}
 	_initialized = true;
@@ -144,7 +144,20 @@ void ProjectileFlyBState::init()
 //kL	BattleItem* weapon = _action.weapon; // < was a pointer!! kL_note.
 //kL	_projectileItem = 0; // already initialized.
 
+//	Log(LOG_INFO) << ". PRE parent->takenXP = " << _parent->getCurrentAction()->takenXP;
+//	Log(LOG_INFO) << ". PRE takenXP = " << _action.takenXP;
+
+	_parent->getCurrentAction()->takenXP = false; // HOW MANY CURRENT_ACTIONS ARE GOING ON HERE !!!!!
+// 	_action.takenXP = false;	// this is valid but meaningless .....
+								// so '_action'  must be a copy ... not the original that's needed,
+								// as things go to TileEngine, when 'takenXP' is really useful!!!
+
+//	Log(LOG_INFO) << ". POST parent->takenXP = " << _parent->getCurrentAction()->takenXP;
+//	Log(LOG_INFO) << ". POST takenXP = " << _action.takenXP;
+
+
 	_unit = _action.actor;
+
 	//Log(LOG_INFO) << "projFlyB unitPos = " << _unit->getPosition();
 	if (_action.weapon != NULL) // kL
 		_ammo = _action.weapon->getAmmoItem(); // _ammo is the weapon itself, if self-powered or BT_MELEE.
@@ -316,8 +329,7 @@ void ProjectileFlyBState::init()
 			if (validThrowRange(
 							&_action,
 							originVoxel,
-							_parent->getSave()->getTile(_action.target))
-						== false)
+							_parent->getSave()->getTile(_action.target)) == false)
 			{
 				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
@@ -343,8 +355,7 @@ void ProjectileFlyBState::init()
 													_unit->getDirection(),
 													_unit,
 													NULL,
-													&_action.target)
-												== false)
+													&_action.target) == false)
 			{
 				//Log(LOG_INFO) << ". . . out of hit range, EXIT";
 				_action.result = "STR_THERE_IS_NO_ONE_THERE";
@@ -986,10 +997,10 @@ void ProjectileFlyBState::think()
 					if (_ammo != NULL)
 					{
 						const int shot = _ammo->getRules()->getShotgunPellets();
-						if (shot != 0)
+						if (shot > 1) // first pellet is done above.
 						{
 							int i = 0;
-							while (i != shot)
+							while (i != shot - 1)
 							{
 								Projectile* proj = new Projectile(
 															_parent->getResourcePack(),
@@ -1006,7 +1017,6 @@ void ProjectileFlyBState::think()
 																									_action.type,
 																									_action.weapon)
 																								- i * 0.05)); // pellet spread.
-
 								if (_projectileImpact != VOXEL_EMPTY)
 								{
 									proj->skipTrajectory(); // as above: skip the shot to the end of its path
@@ -1018,12 +1028,13 @@ void ProjectileFlyBState::think()
 																		_ammo->getRules()->getHitAnimation());
 
 										_parent->getMap()->getExplosions()->push_back(explosion);
+										Log(LOG_INFO) << "ProjectileFlyBState::think() shotHIT = " << (i + 1);
 										_parent->getSave()->getTileEngine()->hit(
 																				proj->getPosition(1),
 																				_ammo->getRules()->getPower(),
 																				_ammo->getRules()->getDamageType(),
-																				NULL); // shotguns don't give XP 'cause attacker==NULL.
-//																				_unit); // kL, but too much XP ...
+																				_unit);
+//																				NULL);
 									}
 
 									i++;
@@ -1040,9 +1051,9 @@ void ProjectileFlyBState::think()
 					if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL_add. This section is only for SoldierDiary mod.
 						&& _projectileImpact == VOXEL_UNIT)				// but see below also; was also for setting aggroState
 					{
-						BattleUnit* victim = _parent->getSave()->getTile(
-																	_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
-																->getUnit();
+						BattleUnit* const victim = _parent->getSave()->getTile(
+																			_parent->getMap()->getProjectile()->getPosition(offset) / Position(16, 16, 24))
+																	->getUnit();
 						if (victim != NULL)
 //kL						&& victim->isOut() == false)
 						{
@@ -1076,9 +1087,9 @@ void ProjectileFlyBState::think()
 								{
 									statsUnit->shotsLandedCounter++;
 
-									int dist = _parent->getTileEngine()->distance(
-																				victim->getPosition(),
-																				_unit->getPosition());
+									const int dist = _parent->getTileEngine()->distance(
+																					victim->getPosition(),
+																					_unit->getPosition());
 
 									if (dist > 30)
 										statsUnit->longDistanceHitCounter++;
@@ -1232,7 +1243,7 @@ bool ProjectileFlyBState::validThrowRange(
 
 	// since getMaxThrowDistance seems to return 1 less than maxDist, use "< throwDist" for this determination:
 //	bool ret = static_cast<int>(throwDist) < static_cast<int>(maxDist);
-	bool ret = throwDist < maxDist;
+	const bool ret = throwDist < maxDist;
 	//Log(LOG_INFO) << ". throwDist " << (int)throwDist
 	//				<< " < maxDist " << (int)maxDist
 	//				<< " : return " << ret;
@@ -1288,7 +1299,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
 
 /**
  * Set the origin voxel, used for the blaster launcher.
- * @param pos the origin voxel.
+ * @param pos - the origin voxel
  */
 void ProjectileFlyBState::setOriginVoxel(Position pos)
 {

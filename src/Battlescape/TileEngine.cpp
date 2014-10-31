@@ -1771,8 +1771,8 @@ BattleUnit* TileEngine::hit(
 		BattleUnit* attacker,
 		bool melee) // kL add.
 {
-	//Log(LOG_INFO) << "TileEngine::hit() power = " << power << " type = " << (int)type;
-	//if (attacker != NULL) Log(LOG_INFO) << ". by ID " << attacker->getId() << " @ " << attacker->getPosition();
+	Log(LOG_INFO) << "TileEngine::hit() power = " << power << " type = " << (int)type;
+	if (attacker != NULL) Log(LOG_INFO) << ". by ID " << attacker->getId() << " @ " << attacker->getPosition();
 
 	if (type != DT_NONE) // bypass Psi-attacks. Psi-attacks don't get this far anymore .... But leave it in for safety.
 	{
@@ -1832,7 +1832,7 @@ BattleUnit* TileEngine::hit(
 				_battleSave->setObjectiveDestroyed(true);
 			}
 		}
-		else if (part == VOXEL_UNIT) // battleunit part
+		else if (part == VOXEL_UNIT) // battleunit part HIT SUCCESS.
 		{
 			//Log(LOG_INFO) << ". . battleunit hit";
 			// power 0 - 200% -> 1 - 200%
@@ -2015,14 +2015,19 @@ BattleUnit* TileEngine::hit(
 					}
 				}
 
+				bool takenXP = _battleSave->getBattleGame()->getCurrentAction()->takenXP;
+				Log(LOG_INFO) << "TileEngine::hit() takenXP = " << takenXP;
+
 				if (melee == false
+					&& takenXP == false
 					&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
 					&& attacker != NULL
 					&& attacker->getGeoscapeSoldier() != NULL
 					&& attacker->getFaction() == attacker->getOriginalFaction())
 				{
-					attacker->addFiringExp();	// shotguns don't give XP 'cause attacker==NULL. See ProjectileFlyBState::think()
-												// kL_note: I put it in, but watch for too much XP ... so, i took it back out.
+					_battleSave->getBattleGame()->getCurrentAction()->takenXP = true;
+					Log(LOG_INFO) << ". hit_for_XP! takenXP = " << _battleSave->getBattleGame()->getCurrentAction()->takenXP;
+					attacker->addFiringExp();
 				}
 			}
 		}
@@ -2061,14 +2066,16 @@ BattleUnit* TileEngine::hit(
  * @param power			- power of explosion
  * @param type			- damage type of explosion (enum ItemDamageType)
  * @param maxRadius		- maximum radius of explosion
- * @param attacker		- pointer to a unit that caused explosion
+ * @param attacker		- pointer to a unit that caused explosion (default NULL)
+ * @param grenade		- true if explosion is caused by a grenade for throwing XP (default false)
  */
 void TileEngine::explode(
 			const Position& voxelTarget,
 			int power,
 			ItemDamageType type,
 			int maxRadius,
-			BattleUnit* attacker)
+			BattleUnit* attacker,
+			bool grenade)
 {
 /*	int iFalse = 0;
 	for (int
@@ -2141,6 +2148,8 @@ void TileEngine::explode(
 		cos_te,
 		sin_fi,
 		cos_fi;
+
+	bool takenXP = false;
 
 //	int testIter = 0; // TEST.
 	//Log(LOG_INFO) << ". r_Max = " << r_Max;
@@ -2719,12 +2728,18 @@ void TileEngine::explode(
 								targetUnit->killedBy(attacker->getFaction());
 							}
 
-							if (attacker->getGeoscapeSoldier() != NULL
+							if (takenXP == false
+								&& attacker->getGeoscapeSoldier() != NULL
 								&& attacker->getFaction() == attacker->getOriginalFaction()
 								&& targetUnit->getOriginalFaction() == FACTION_HOSTILE
 								&& type != DT_SMOKE)
 							{
-								attacker->addFiringExp();
+								takenXP = true;
+
+								if (grenade == false)
+									attacker->addFiringExp();
+								else
+									attacker->addThrowingExp();
 							}
 						}
 					}
@@ -2736,7 +2751,6 @@ void TileEngine::explode(
 			}
 		}
 	}
-
 
 	_powerE = _powerT = -1;
 
@@ -4740,7 +4754,7 @@ int TileEngine::calculateLine(
  * @param origin			- reference the origin in voxelspace
  * @param target			- reference the target in voxelspace
  * @param storeTrajectory	- true will store the whole trajectory - otherwise it stores the last position only
- * @param trajectory		- poniter to a vector of positions in which the trajectory will be stored
+ * @param trajectory		- pointer to a vector of positions in which the trajectory will be stored
  * @param excludeUnit		- pointer to a unit to exclude - makes sure the trajectory does not hit the shooter itself
  * @param arc				- how high the parabola goes: 1.0 is almost straight throw, 3.0 is a very high throw, to throw over a fence for example
  * @param acu				- the deviation of the angles that should be taken into account. 1.0 is perfection. // now superceded by @param delta...
@@ -4858,7 +4872,7 @@ int TileEngine::calculateParabola(
  * @param targetVoxel	- the target point of the action
  * @param curve			- pointer to a curvature of the throw (default NULL)
  * @param voxelType		- pointer to a type of voxel at which this parabola terminates (default NULL)
- * @return, true if action is valid
+ * @return, true if throw is valid
  */
 bool TileEngine::validateThrow(
 						BattleAction& action,
@@ -4868,34 +4882,37 @@ bool TileEngine::validateThrow(
 						int* voxelType)
 {
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()"; //, cf Projectile::calculateThrow()";
-	Position posTarget = targetVoxel / Position(16, 16, 24);
+	double arc = 0.0; // higher arc means lower arc IG.
 
-	double arc = 0.1;
-
-	if (originVoxel / Position(16, 16, 24) != posTarget)
+	Position targetPos = targetVoxel / Position(16, 16, 24);
+	if (targetPos != originVoxel / Position(16, 16, 24))
 	{
+		arc = 0.78;
+
 		// kL_note: Unfortunately, this prevents weak units from throwing heavy
 		// objects at their own feet. ( needs starting arc ~0.8, less if kneeled )
-		if (action.type == BA_THROW)
+/*		if (action.type == BA_THROW)
 		{
-			arc += std::max(
-						0.48,
-						1.73 / sqrt(
-									sqrt(
-										static_cast<double>(action.actor->getStats()->strength) * (action.actor->getAccuracyModifier() / 2.0 + 0.5)
-										/ static_cast<double>(action.weapon->getRules()->getWeight()))));
+			arc += 0.8;
+//			arc += std::max(
+//						0.48,
+//						1.73 / sqrt(
+//									sqrt(
+//										static_cast<double>(action.actor->getStats()->strength) * (action.actor->getAccuracyModifier() / 2.0 + 0.5)
+//										/ static_cast<double>(action.weapon->getRules()->getWeight()))));
 		}
-		// kL_note: And arcing shots from targetting their origin tile. ( needs starting arc ~0.1 )
+		// kL_note: And arcing shots from targeting their origin tile. ( needs starting arc ~0.1 )
 		else // spit, etc
 		{
 			// arcing projectile weapons assume a fixed strength and weight.(70 and 10 respectively)
 			// curvature should be approximately 1.06358350461 at this point.
 //			arc = 1.73 / sqrt(sqrt(70.0 / 10.0)) + kneel; // OR ...
-			arc += 1.0635835046056873518242669985672;
+//			arc += 1.0635835046056873518242669985672;
+			arc += 1.0;
 		}
 
-		if (action.actor->isKneeled())
-			arc += 0.13; // stock: 0.1 (higher value lets kneeled throws go farther w/out hitting ceiling...)
+		if (action.actor->isKneeled() == true)
+			arc -= 0.5; // stock: 0.1 */
 	}
 	//Log(LOG_INFO) << ". starting arc = " << arc;
 
@@ -4907,8 +4924,7 @@ bool TileEngine::validateThrow(
 		ProjectileFlyBState::validThrowRange(
 											&action,
 											originVoxel,
-											tileTarget)
-										== false)
+											tileTarget) == false)
 	{
 		//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid"; // OR tileTarget is nonwalkable.";
 		return false; // object blocking - can't throw here
@@ -4925,17 +4941,17 @@ bool TileEngine::validateThrow(
 		std::vector<Position> trajectory;
 
 		test = calculateParabola(
-							originVoxel,
-							targetVoxel,
-							false,
-							&trajectory,
-							action.actor,
-							arc,
-							Position(0, 0, 0));
+								originVoxel,
+								targetVoxel,
+								false,
+								&trajectory,
+								action.actor,
+								arc,
+								Position(0, 0, 0));
 		//Log(LOG_INFO) << ". . calculateParabola() = " << test;
 
 		if (test != VOXEL_OUTOFBOUNDS
-			&& (trajectory.at(0) / Position(16, 16, 24)) == posTarget)
+			&& (trajectory.at(0) / Position(16, 16, 24)) == targetPos)
 		{
 			//Log(LOG_INFO) << ". . . found TRUE";
 			found = true;
@@ -4961,37 +4977,37 @@ bool TileEngine::validateThrow(
 }
 
 /**
- * Calculates z "grounded" value for a particular voxel (used for projectile shadow).
- * @param voxel The voxel to trace down.
- * @return z coord of "ground".
+ * Calculates 'ground' z-value for a particular voxel - used for projectile shadow.
+ * @param voxel - reference the voxel to trace down
+ * @return, z-coord of 'ground'
  */
 int TileEngine::castedShade(const Position& voxel)
 {
-	int zstart = voxel.z;
-	Position tmpCoord = voxel / Position(16, 16, 24);
+	int start_z = voxel.z;
+	Position testCoord = voxel / Position(16, 16, 24);
 
-	Tile* t = _battleSave->getTile(tmpCoord);
-	while (t
-		&& t->isVoid()
-		&& !t->getUnit())
+	Tile* tile = _battleSave->getTile(testCoord);
+	while (tile
+		&& tile->isVoid()
+		&& tile->getUnit() != NULL)
 	{
-		zstart = tmpCoord.z * 24;
-		--tmpCoord.z;
+		start_z = testCoord.z * 24;
+		--testCoord.z;
 
-		t = _battleSave->getTile(tmpCoord);
+		tile = _battleSave->getTile(testCoord);
 	}
 
-	Position tmpVoxel = voxel;
+	Position testVoxel = voxel;
 
 	int z;
 	for (
-			z = zstart;
+			z = start_z;
 			z > 0;
-			z--)
+			--z)
 	{
-		tmpVoxel.z = z;
+		testVoxel.z = z;
 
-		if (voxelCheck(tmpVoxel, NULL) != VOXEL_EMPTY)
+		if (voxelCheck(testVoxel, NULL) != VOXEL_EMPTY)
 			break;
 	}
 
@@ -5000,33 +5016,33 @@ int TileEngine::castedShade(const Position& voxel)
 
 /**
  * Traces voxel visibility.
- * @param voxel, Voxel coordinates.
- * @return, True if visible.
+ * @param voxel - reference the voxel coordinates
+ * @return, true if visible
  */
 bool TileEngine::isVoxelVisible(const Position& voxel)
 {
-	int zstart = voxel.z + 3; // slight Z adjust
-	if (zstart / 24 != voxel.z / 24)
+	int start_z = voxel.z + 3; // slight Z adjust
+	if (start_z / 24 != voxel.z / 24)
 		return true; // visible!
 
-	Position tmpVoxel = voxel;
+	Position testVoxel = voxel;
 
-	int zend = (zstart/24) * 24 + 24;
+	int end_z = (start_z / 24) * 24 + 24;
 	for (int // only OBJECT can cause additional occlusion (because of any shape)
-			z = zstart;
-			z < zend;
-			z++)
+			z = start_z;
+			z < end_z;
+			++z)
 	{
-		tmpVoxel.z = z;
-		if (voxelCheck(tmpVoxel, NULL) == VOXEL_OBJECT)
+		testVoxel.z = z;
+		if (voxelCheck(testVoxel, NULL) == VOXEL_OBJECT)
 			return false;
 
-		++tmpVoxel.x;
-		if (voxelCheck(tmpVoxel, NULL) == VOXEL_OBJECT)
+		++testVoxel.x;
+		if (voxelCheck(testVoxel, NULL) == VOXEL_OBJECT)
 			return false;
 
-		++tmpVoxel.y;
-		if (voxelCheck(tmpVoxel, NULL) == VOXEL_OBJECT)
+		++testVoxel.y;
+		if (voxelCheck(testVoxel, NULL) == VOXEL_OBJECT)
 			return false;
 	}
 

@@ -141,7 +141,6 @@ void ExplosionBState::init()
 	{
 		_power = _tile->getExplosive();
 		//Log(LOG_INFO) << ". _power(_tile) = " << _power;
-
 		_areaOfEffect = true;
 	}
 	else if (_unit // cyberdiscs!!! And ... ZOMBIES.
@@ -496,7 +495,9 @@ void ExplosionBState::explode()
 							_power,
 							_item->getRules()->getDamageType(),
 							_item->getRules()->getExplosionRadius(),
-							_unit);
+							_unit,
+							_item->getRules()->getBattleType() == BT_GRENADE
+								|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE);
 		}
 		else
 		{
