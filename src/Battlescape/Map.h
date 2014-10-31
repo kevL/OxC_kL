@@ -77,6 +77,7 @@ private:
 	bool
 		_launch,
 		_explosionInFOV,
+		_noDraw,
 		_projectileInFOV,
 		_smoothingEngaged,
 		_unitDying;
@@ -234,6 +235,9 @@ private:
 
 		/// Resets the camera smoothing bool.
 		void resetCameraSmoothing();
+
+		/// kL. Sets whether to draw or not.
+		void Map::setNoDraw(bool noDraw); // kL
 };
 
 }

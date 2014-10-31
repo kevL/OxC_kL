@@ -25,6 +25,9 @@
 #include "Camera.h"
 #include "MiniMapView.h"
 
+#include "../Battlescape/BattlescapeState.h"
+#include "../Battlescape/Map.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
@@ -141,6 +144,7 @@ MiniMapState::MiniMapState(
 	_timerAnimate->onTimer((StateHandler)& MiniMapState::animate);
 	_timerAnimate->start();
 
+	_game->getSavedGame()->getSavedBattle()->getBattleState()->getMap()->setNoDraw(true);
 	_miniView->draw();
 }
 
@@ -186,6 +190,8 @@ void MiniMapState::btnOkClick(Action*)
 						true);
 		_game->getScreen()->resetDisplay(false);
 	} */
+
+	_game->getSavedGame()->getSavedBattle()->getBattleState()->getMap()->setNoDraw(false);
 
 	_game->popState();
 }

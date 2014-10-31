@@ -122,7 +122,8 @@ Map::Map(
 		_visibleMapHeight(visibleMapHeight),
 		_unitDying(false),
 		_reveal(0),
-		_smoothingEngaged(false)
+		_smoothingEngaged(false),
+		_noDraw(false)
 {
 	//Log(LOG_INFO) << "Create Map";
 	_iconWidth = _game->getRuleset()->getInterface("battlescape")->getElement("icons")->w;
@@ -139,7 +140,7 @@ Map::Map(
 
 	_save = _game->getSavedGame()->getSavedBattle();
 
-	size_t depth = _save->getDepth();
+	const size_t depth = _save->getDepth();
 	if (_res->getLUTs()->size() > depth)
 		_transparencies = &_res->getLUTs()->at(depth);
 
@@ -205,9 +206,11 @@ Map::~Map()
 void Map::init()
 {
 	// load the unit-selected bobbing-arrow into a surface
-	int f = Palette::blockOffset(1);	// Fill,	yellow
-	int b = 14;							// Border,	black
-	int pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
+	const int
+		f = Palette::blockOffset(1),	// Fill, yellow
+		b = 14,							// Border, black
+
+		pixels[81] = { 0, 0, b, b, b, b, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
 					   0, 0, b, f, f, f, b, 0, 0,
 					   b, b, b, f, f, f, b, b, b,
@@ -323,7 +326,7 @@ void Map::think()
 }
 
 /**
- * Draws the whole map, part by part.
+ * Draws the whole map, bit by bit.
  */
 void Map::draw()
 {
@@ -350,10 +353,10 @@ void Map::draw()
 	{
 		//Log(LOG_INFO) << "Map::draw() _projectile = true";
 		tile = _save->getTile(Position(
-								_projectile->getPosition(0).x / 16,
-								_projectile->getPosition(0).y / 16,
-								_projectile->getPosition(0).z / 24));
-		if (tile
+									_projectile->getPosition(0).x / 16,
+									_projectile->getPosition(0).y / 16,
+									_projectile->getPosition(0).z / 24));
+		if (tile != NULL
 			&& (tile->getVisible()
 				|| _save->getSide() != FACTION_PLAYER))	// kL: shows projectile during aLien berserk
 		{
@@ -373,10 +376,10 @@ void Map::draw()
 				++i)
 		{
 			tile = _save->getTile(Position(
-									(*i)->getPosition().x / 16,
-									(*i)->getPosition().y / 16,
-									(*i)->getPosition().z / 24));
-			if (tile
+										(*i)->getPosition().x / 16,
+										(*i)->getPosition().y / 16,
+										(*i)->getPosition().z / 24));
+			if (tile != NULL
 				&& (tile->getVisible()
 					|| (*i)->isBig()
 					|| _save->getSide() != FACTION_PLAYER))	// kL: shows hit-explosion during aLien berserk
@@ -398,64 +401,33 @@ void Map::draw()
 	//Log(LOG_INFO) << ". explosion = " << _explosionInFOV;
 	//Log(LOG_INFO) << ". reveal & !preReveal = " << (_reveal > 0 && !kL_noReveal);
 	//Log(LOG_INFO) << ". kL_noReveal = " << kL_noReveal;
-	if (_save->getSelectedUnit() == NULL
-		|| (_save->getSelectedUnit()
-			&& _save->getSelectedUnit()->getVisible())
-		|| _unitDying
-		|| _save->getDebugMode()
-		|| _projectileInFOV
-		|| _explosionInFOV)
-/*		|| (_reveal > 0
-			&& kL_noReveal == false)) */
+
+	if (_noDraw == false) // don't draw if MiniMap is open.
 	{
-		//Log(LOG_INFO) << ". . drawTerrain()";
-/*		if (_reveal > 0
-			&& kL_noReveal == false)
+		if (_save->getSelectedUnit() == NULL
+			|| (_save->getSelectedUnit()
+				&& _save->getSelectedUnit()->getVisible())
+			|| _unitDying
+			|| _save->getDebugMode()
+			|| _projectileInFOV
+			|| _explosionInFOV)
 		{
-			_reveal--;
-			//Log(LOG_INFO) << ". . . . . . drawTerrain() _reveal = " << _reveal;
-		}
-		else
-		{
-			_reveal = 120;
-			//Log(LOG_INFO) << ". . . . . . drawTerrain() Set _reveal = " << _reveal;
-		} */
-
-//		if (_save->getSide() == FACTION_PLAYER)
-//			_save->getBattleState()->toggleIcons(true);
-
-		//Log(LOG_INFO) << ". . drawTerrain()";
-		kL_noReveal = false;
-
-		drawTerrain(this);
-
-//		if (_reveal > 0
-//			&& kL_noReveal == false)
-//		{
-//			SDL_Delay(450); // test this out ......
-//		}
-	}
-	else // "Hidden Movement ..."
-	{
-		//Log(LOG_INFO) << ". . blit( Hidden Movement ... )";
-/*		if (kL_noReveal == true)
-//			&& _save->getSelectedUnit()
-//			&& _save->getSelectedUnit()->getVisible())
-		{
+			//Log(LOG_INFO) << ". . drawTerrain()";
 			kL_noReveal = false;
-			_reveal = 0;
-			//Log(LOG_INFO) << ". . . . . . kL_noReveal, set " << kL_noReveal;
-			//Log(LOG_INFO) << ". . . . . . _reveal, set " << _reveal;
-		} */
 
-//		_save->getBattleState()->toggleIcons(false);
-		if (kL_noReveal == false)
-		{
-			SDL_Delay(372); // test this out ......
-			kL_noReveal = true;
+			drawTerrain(this);
 		}
+		else // "Hidden Movement ..."
+		{
+			//Log(LOG_INFO) << ". . blit( Hidden Movement ... )";
+			if (kL_noReveal == false)
+			{
+				SDL_Delay(372);
+				kL_noReveal = true;
+			}
 
-		_hidden->blit(this);
+			_hidden->blit(this);
+		}
 	}
 }
 
@@ -3064,6 +3036,15 @@ const int Map::getSoundAngle(Position pos)
 void Map::resetCameraSmoothing()
 {
 	_smoothingEngaged = false;
+}
+
+/**
+ * kL. Sets whether to draw or not.
+ * @param noDraw - true to stop this Map from drawing
+ */
+void Map::setNoDraw(bool noDraw) // kL
+{
+	_noDraw = noDraw;
 }
 
 }

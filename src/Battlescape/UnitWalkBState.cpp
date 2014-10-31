@@ -491,7 +491,7 @@ bool UnitWalkBState::doStatusStand()
 			if (_parent->getPanicHandled()
 				&& tuTest < 255)
 			{
-				Log(LOG_INFO) << ". send warning: not enough TU";
+				//Log(LOG_INFO) << ". send warning: not enough TU";
 				_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 			}
 

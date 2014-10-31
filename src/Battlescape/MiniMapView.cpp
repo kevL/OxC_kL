@@ -99,9 +99,9 @@ MiniMapView::MiniMapView(
  */
 void MiniMapView::draw()
 {
-	int
-		_startX = _camera->getCenterPosition().x - (getWidth() / 2 / CELL_WIDTH),
-		_startY = _camera->getCenterPosition().y - (getHeight() / 2 / CELL_HEIGHT);
+	const int
+		startX = _camera->getCenterPosition().x - (getWidth() / 2 / CELL_WIDTH),
+		startY = _camera->getCenterPosition().y - (getHeight() / 2 / CELL_HEIGHT);
 
 	InteractiveSurface::draw();
 
@@ -122,25 +122,25 @@ void MiniMapView::draw()
 			lvl <= _camera->getCenterPosition().z;
 			++lvl)
 	{
-		int py = _startY;
+		int py = startY;
 
 		for (int
 				y = Surface::getY();
 				y < getHeight() + Surface::getY();
 				y += CELL_HEIGHT)
 		{
-			int px = _startX;
+			int px = startX;
 
 			for (int
 					x = Surface::getX();
 					x < getWidth() + Surface::getX();
 					x += CELL_WIDTH)
 			{
-				Position p (px, py, lvl); // <- initialization. kL_note
-//				Position p = Position(px, py, lvl); // kL (supposedly not as efficient)
+				const Position pos (px, py, lvl); // <- initialization. kL_note
+//				Position pos = Position(px, py, lvl); // kL (supposedly not as efficient)
 
 				MapData* data = NULL;
-				Tile* tile = _battleGame->getTile(p);
+				Tile* tile = _battleGame->getTile(pos);
 
 				if (tile == NULL)
 				{
@@ -160,8 +160,8 @@ void MiniMapView::draw()
 					Surface* srf = NULL;
 					data = tile->getMapData(i);
 
-					if (data
-						&& data->getMiniMapIndex())
+					if (data != NULL
+						&& data->getMiniMapIndex() != 0)
 					{
 						srf = _set->getFrame(data->getMiniMapIndex() + 35);
 					}
@@ -195,15 +195,15 @@ void MiniMapView::draw()
 				}
 
 				BattleUnit* unit = tile->getUnit();
-				if (unit
+				if (unit != NULL
 					&& unit->getVisible()) // visible, alive units
 				{
-					int
-						size = tile->getUnit()->getArmor()->getSize(),
+					const int
+						unitSize = tile->getUnit()->getArmor()->getSize(),
 						frame = tile->getUnit()->getMiniMapSpriteIndex()
-								+ tile->getPosition().x - tile->getUnit()->getPosition().x
-								+ ((tile->getPosition().y - tile->getUnit()->getPosition().y) * size)
-								+ (_frame * size * size);
+							  + tile->getPosition().x - tile->getUnit()->getPosition().x
+							  + (tile->getPosition().y - tile->getUnit()->getPosition().y) * unitSize
+							  + _frame * unitSize * unitSize;
 
 					Surface* srf = _set->getFrame(frame);
 
@@ -235,7 +235,7 @@ void MiniMapView::draw()
 				if (tile->isDiscovered(2)
 					&& tile->getInventory()->empty() == false) // at least one item on this tile
 				{
-					int frame = 9 + _frame;
+					const int frame = 9 + _frame;
 
 					Surface* srf = _set->getFrame(frame);
 					srf->blitNShade(
@@ -255,12 +255,13 @@ void MiniMapView::draw()
 
 
 	// kL_note: looks like the crosshairs for the MiniMap
-	Sint16 centerX = static_cast<Sint16>(getWidth() / 2) - 1;
-	Sint16 centerY = static_cast<Sint16>(getHeight() / 2) - 1;
-	Sint16 xOffset = static_cast<Sint16>(CELL_WIDTH / 2);
-	Sint16 yOffset = static_cast<Sint16>(CELL_HEIGHT / 2);
+	const Sint16
+		centerX = static_cast<Sint16>(getWidth() / 2) - 1,
+		centerY = static_cast<Sint16>(getHeight() / 2) - 1,
+		xOffset = static_cast<Sint16>(CELL_WIDTH / 2),
+		yOffset = static_cast<Sint16>(CELL_HEIGHT / 2);
 
-	Uint8 color = static_cast<Uint8>(_frame) * 3 + 1;
+	const Uint8 color = static_cast<Uint8>(_frame) * 3 + 1;
 
 	drawLine( // top left
 			centerX - static_cast<Sint16>(CELL_WIDTH),

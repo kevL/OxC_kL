@@ -5790,7 +5790,7 @@
 	<string>
 	"BattlescapeGame.h"
 
-1413727582 f:\git\openxcom\src\battlescape\map.h
+1414798470 f:\git\openxcom\src\battlescape\map.h
 	<set>
 	<vector>
 	"Position.h"
@@ -6450,7 +6450,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1414545168 source:f:\git\openxcom\src\battlescape\map.cpp
+1414798450 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6565,7 +6565,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1413560087 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1414797572 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<cmath>
 	<sstream>
