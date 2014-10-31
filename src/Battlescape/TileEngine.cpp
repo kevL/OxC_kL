@@ -1771,8 +1771,8 @@ BattleUnit* TileEngine::hit(
 		BattleUnit* attacker,
 		bool melee) // kL add.
 {
-	Log(LOG_INFO) << "TileEngine::hit() power = " << power << " type = " << (int)type;
-	if (attacker != NULL) Log(LOG_INFO) << ". by ID " << attacker->getId() << " @ " << attacker->getPosition();
+	//Log(LOG_INFO) << "TileEngine::hit() power = " << power << " type = " << (int)type;
+	//if (attacker != NULL) Log(LOG_INFO) << ". by ID " << attacker->getId() << " @ " << attacker->getPosition();
 
 	if (type != DT_NONE) // bypass Psi-attacks. Psi-attacks don't get this far anymore .... But leave it in for safety.
 	{
@@ -2016,7 +2016,7 @@ BattleUnit* TileEngine::hit(
 				}
 
 				bool takenXP = _battleSave->getBattleGame()->getCurrentAction()->takenXP;
-				Log(LOG_INFO) << "TileEngine::hit() takenXP = " << takenXP;
+				//Log(LOG_INFO) << "TileEngine::hit() takenXP = " << takenXP;
 
 				if (melee == false
 					&& takenXP == false
@@ -2026,7 +2026,7 @@ BattleUnit* TileEngine::hit(
 					&& attacker->getFaction() == attacker->getOriginalFaction())
 				{
 					_battleSave->getBattleGame()->getCurrentAction()->takenXP = true;
-					Log(LOG_INFO) << ". hit_for_XP! takenXP = " << _battleSave->getBattleGame()->getCurrentAction()->takenXP;
+					//Log(LOG_INFO) << ". hit_for_XP! takenXP = " << _battleSave->getBattleGame()->getCurrentAction()->takenXP;
 					attacker->addFiringExp();
 				}
 			}

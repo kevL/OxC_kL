@@ -78,7 +78,7 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_targetFloor(false),
 		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
 {
-	Log(LOG_INFO) << "Create ProjectileFlyBState[0]: origin = " << origin;
+	//Log(LOG_INFO) << "Create ProjectileFlyBState[0]: origin = " << origin;
 }
 
 /**
@@ -103,7 +103,7 @@ ProjectileFlyBState::ProjectileFlyBState(
 		_targetFloor(false),
 		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
 {
-	Log(LOG_INFO) << "Create ProjectileFlyBState[1]: origin = " << _origin;
+	//Log(LOG_INFO) << "Create ProjectileFlyBState[1]: origin = " << _origin;
 }
 
 /**
@@ -120,10 +120,10 @@ ProjectileFlyBState::~ProjectileFlyBState()
  */
 void ProjectileFlyBState::init()
 {
-	Log(LOG_INFO) << "ProjectileFlyBState::init()";
+	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
 	if (_initialized)
 	{
-		Log(LOG_INFO) << ". already initialized, EXIT";
+		//Log(LOG_INFO) << ". already initialized, EXIT";
 		return;
 	}
 	_initialized = true;
@@ -1028,7 +1028,7 @@ void ProjectileFlyBState::think()
 																		_ammo->getRules()->getHitAnimation());
 
 										_parent->getMap()->getExplosions()->push_back(explosion);
-										Log(LOG_INFO) << "ProjectileFlyBState::think() shotHIT = " << (i + 1);
+										//Log(LOG_INFO) << "ProjectileFlyBState::think() shotHIT = " << (i + 1);
 										_parent->getSave()->getTileEngine()->hit(
 																				proj->getPosition(1),
 																				_ammo->getRules()->getPower(),
