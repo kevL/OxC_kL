@@ -1162,14 +1162,14 @@ MOVED TO Ruleset !
 			i != extraSprites.end();
 			++i)
 	{
-		std::string sheetName = i->first;
+		const std::string sheetName = i->first;
 		Log(LOG_INFO) << ". sheetName = " << i->first;
 
 		ExtraSprites* spritePack = i->second;
-		bool subdivision = spritePack->getSubX() != 0
-						&& spritePack->getSubY() != 0;
+		const bool subdivision = spritePack->getSubX() != 0
+							  && spritePack->getSubY() != 0;
 
-		if (spritePack->getSingleImage())
+		if (spritePack->getSingleImage() == true)
 		{
 			if (_surfaces.find(sheetName) == _surfaces.end())
 			{
@@ -1217,12 +1217,14 @@ MOVED TO Ruleset !
 													spritePack->getHeight());
 			}
 			else
+			{
 				Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
 				Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
+			}
 
-			if (subdivision)
+			if (subdivision == true)
 			{
-				int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
+				const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
 
 				Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
 				Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
@@ -1234,7 +1236,7 @@ MOVED TO Ruleset !
 					++j)
 			{
 				s.str("");
-				int startFrame = j->first;
+				const int startFrame = j->first;
 
 				std::string fileName = j->second;
 				if (fileName.substr(fileName.length() - 1, 1) == "/")
@@ -1252,7 +1254,7 @@ MOVED TO Ruleset !
 							k != contents.end();
 							++k)
 					{
-						if (!isImageFile((*k).substr((*k).length() - 4, (*k).length())))
+						if (isImageFile((*k).substr((*k).length() - 4, (*k).length())) == false)
 							continue;
 
 						try
@@ -1318,9 +1320,11 @@ MOVED TO Ruleset !
 						s.str("");
 						s << CrossPlatform::getDataFile(spritePack->getSprites()->operator[](startFrame));
 						temp->loadImage(s.str());
-						int xDivision = spritePack->getWidth() / spritePack->getSubX();
-						int yDivision = spritePack->getHeight() / spritePack->getSubY();
-						int offset = startFrame;
+						const int
+							xDivision = spritePack->getWidth() / spritePack->getSubX(),
+							yDivision = spritePack->getHeight() / spritePack->getSubY();
+						int
+							offset = startFrame;
 
 						for (int
 								y = 0;
@@ -1348,7 +1352,7 @@ MOVED TO Ruleset !
 								}
 								else
 								{
-									if (adding)
+									if (adding == true)
 									{
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
 										temp->blitNShade(
@@ -1437,8 +1441,9 @@ MOVED TO Ruleset !
 			i != handob->end();
 			++i)
 	{
-		Surface* surface1 = _sets["HANDOB2.PCK"]->addFrame(i->first);
-		Surface* surface2 = i->second;
+		Surface
+			* surface1 = _sets["HANDOB2.PCK"]->addFrame(i->first),
+			* surface2 = i->second;
 		surface1->setPalette(surface2->getPalette());
 		surface2->blit(surface1);
 	}
@@ -1451,7 +1456,7 @@ MOVED TO Ruleset !
 			i != extraSounds.end();
 			++i)
 	{
-		std::string setName = i->first;
+		const std::string setName = i->first;
 		ExtraSounds* soundPack = i->second;
 
 		if (_sounds.find(setName) == _sounds.end())
@@ -1468,7 +1473,7 @@ MOVED TO Ruleset !
 				j != soundPack->getSounds()->end();
 				++j)
 		{
-			int startSound = j->first;
+			const int startSound = j->first;
 			std::string fileName = j->second;
 			s.str("");
 

@@ -93,8 +93,8 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 
 	_lstDiary		= new TextList(285, 129, 16, 44);
 
-	_btnKills		= new TextButton(70, 16, 8, 177);
-	_btnMissions	= new TextButton(70, 16, 86, 177);
+	_btnMissions	= new TextButton(70, 16, 8, 177);
+	_btnKills		= new TextButton(70, 16, 86, 177);
 	_btnAwards		= new TextButton(70, 16, 164, 177);
 	_btnOk			= new TextButton(70, 16, 242, 177);
 
@@ -113,8 +113,8 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 
 	add(_lstDiary);
 
-	add(_btnKills);
 	add(_btnMissions);
+	add(_btnKills);
 	add(_btnAwards);
 	add(_btnOk);
 
@@ -187,13 +187,14 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	_lstDiary->setMargin();
 	_lstDiary->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::lstDiaryInfoClick);
 
-	_btnKills->setColor(Palette::blockOffset(13)+10);
-	_btnKills->setText(tr("STR_KILLS_UC"));
-	_btnKills->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnKillsClick);
 
 	_btnMissions->setColor(Palette::blockOffset(13)+10);
 	_btnMissions->setText(tr("STR_MISSIONS_UC"));
 	_btnMissions->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnMissionsClick);
+
+	_btnKills->setColor(Palette::blockOffset(13)+10);
+	_btnKills->setText(tr("STR_KILLS_UC"));
+	_btnKills->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnKillsClick);
 
 	_btnAwards->setColor(Palette::blockOffset(13)+10);
 	_btnAwards->setText(tr("STR_AWARDS_UC"));

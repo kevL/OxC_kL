@@ -7,7 +7,7 @@ music: # sza_MusicRules: http://openxcom.org/forum/index.php?topic=1853.0
   - type: GMGEO1
     midipack: 0
   - type: GMGEO
-    files: [ GMGEO1, GMGEO2, GMGEO3 ]
+    files: [ GMGEO1, GMGEO2 ]
     indexes: [ 0, 18 ]
   - type: GMINTER
     midipack: 2

@@ -103,9 +103,8 @@ SoldierInfoState::SoldierInfoState(
 	_txtRecovDay	= new Text(30, 9, 237, 57);
 
 
-	int
-		step = 11,
-		yPos = 80;
+	const int step = 11;
+	int yPos = 80;
 
 	_txtTimeUnits	= new Text(120, 9, 6, yPos);
 	_numTimeUnits	= new Text(18, 9, 131, yPos);
@@ -300,7 +299,7 @@ SoldierInfoState::SoldierInfoState(
 
 	_txtRecovDay->setHighContrast();
 
-	_txtPsionic->setColor(Palette::blockOffset(1));
+	_txtPsionic->setColor(Palette::blockOffset(10));
 	_txtPsionic->setText(tr("STR_IN_PSIONIC_TRAINING"));
 	_txtPsionic->setHighContrast();
 
@@ -467,8 +466,9 @@ void SoldierInfoState::init()
 		gender->blit(_gender);
 
 
-	UnitStats* initial = _soldier->getInitStats();
-	UnitStats* current = _soldier->getCurrentStats();
+	UnitStats
+		* initial = _soldier->getInitStats(),
+		* current = _soldier->getCurrentStats();
 
 	UnitStats armored (*current); // init.
 	armored += *(_soldier->getArmor()->getStats());
@@ -668,7 +668,7 @@ void SoldierInfoState::init()
 	if (woundRec > 0)
 	{
 		Uint8 color = Palette::blockOffset(3); // green
-		int woundPct = _soldier->getWoundPercent();
+		const int woundPct = _soldier->getWoundPercent();
 		if (woundPct > 50)
 			color = Palette::blockOffset(6); // orange
 		else if (woundPct > 10)
@@ -696,7 +696,7 @@ void SoldierInfoState::init()
 
 	_txtPsionic->setVisible(_soldier->isInPsiTraining());
 
-	int minPsi = _soldier->getRules()->getMinStats().psiSkill;
+	const int minPsi = _soldier->getRules()->getMinStats().psiSkill;
 
 	if (current->psiSkill >= minPsi
 		|| (Options::psiStrengthEval
@@ -810,7 +810,7 @@ void SoldierInfoState::btnAutoStat(Action*)
 		case 5: stat << "x";
 		break;
 
-		default: stat << "";
+		default: stat << "z";
 		break;
 	}
 
@@ -848,10 +848,11 @@ void SoldierInfoState::btnAutoStat(Action*)
 
 	if (current->psiSkill >= _soldier->getRules()->getMinStats().psiSkill)
 	{
-		int
+		const int
 			psiStr = current->psiStrength,
-			psiSkl = current->psiSkill,
+			psiSkl = current->psiSkill;
 
+		int
 			psiDefense = psiStr + psiSkl / 5,
 			psiAttack = psiStr * psiSkl / 100;
 

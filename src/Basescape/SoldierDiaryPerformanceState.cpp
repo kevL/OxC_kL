@@ -108,8 +108,8 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_btnPrev			= new TextButton(28, 14, 8, 8);
 	_btnNext			= new TextButton(28, 14, 284, 8);
 
-	_btnKills			= new TextButton(70, 16, 8, 177);
-	_btnMissions		= new TextButton(70, 16, 86, 177);
+	_btnMissions		= new TextButton(70, 16, 8, 177);
+	_btnKills			= new TextButton(70, 16, 86, 177);
 	_btnAwards			= new TextButton(70, 16, 164, 177);
 	_btnOk				= new TextButton(70, 16, 242, 177);
 
@@ -158,8 +158,8 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	add(_btnPrev);
 	add(_btnNext);
 
-	add(_btnKills);
 	add(_btnMissions);
+	add(_btnKills);
 	add(_btnAwards);
 
 	add(_btnOk);
@@ -250,13 +250,14 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 						Options::keyBattleNextUnit);
 	}
 
-	_btnKills->setColor(Palette::blockOffset(13)+10);
-	_btnKills->setText(tr("STR_KILLS_UC"));
-	_btnKills->onMouseClick((ActionHandler)& SoldierDiaryPerformanceState::btnKillsToggle);
 
 	_btnMissions->setColor(Palette::blockOffset(13)+10);
 	_btnMissions->setText(tr("STR_MISSIONS_UC"));
 	_btnMissions->onMouseClick((ActionHandler)& SoldierDiaryPerformanceState::btnMissionsToggle);
+
+	_btnKills->setColor(Palette::blockOffset(13)+10);
+	_btnKills->setText(tr("STR_KILLS_UC"));
+	_btnKills->onMouseClick((ActionHandler)& SoldierDiaryPerformanceState::btnKillsToggle);
 
 	_btnAwards->setColor(Palette::blockOffset(13)+10);
 	_btnAwards->setText(tr("STR_AWARDS_UC"));
@@ -268,6 +269,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SoldierDiaryPerformanceState::btnOkClick,
 					Options::keyCancel);
+
 
 	// Kill stats
 	_txtRace->setColor(Palette::blockOffset(15)+1);
@@ -441,18 +443,18 @@ void SoldierDiaryPerformanceState::init()
 //	_btnKills->setVisible(!_displayKills); // set visibility for buttons
 //	_btnMissions->setVisible(!_displayMissions);
 
-	if (_game->getRuleset()->getCommendation().empty())
-		_btnAwards->setVisible(false);
+//	if (_game->getRuleset()->getCommendation().empty())
+//		_btnAwards->setVisible(false);
+//	else
+//	{
+	// kL_begin:
+	if (_displayAwards)
+		_btnAwards->setColor(Palette::blockOffset(13)+5);
 	else
-	{
-		// kL_begin:
-		if (_displayAwards)
-			_btnAwards->setColor(Palette::blockOffset(13)+5);
-		else
-			_btnAwards->setColor(Palette::blockOffset(13)+10);
-		// kL_end.
+		_btnAwards->setColor(Palette::blockOffset(13)+10);
+	// kL_end.
 //		_btnAwards->setVisible(!_displayAwards);
-	}
+//	}
 
 
 	_commendationsListEntry.clear();
