@@ -99,6 +99,7 @@ private:
 		_manageContainment,
 		_noContainment;
 	int
+		_alienMCs,
 		_alienStuns,
 		_limitsEnforced;
 

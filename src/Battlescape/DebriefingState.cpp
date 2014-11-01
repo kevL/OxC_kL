@@ -97,7 +97,8 @@ DebriefingState::DebriefingState()
 		_manageContainment(false),
 		_destroyXCOMBase(false),
 		_limitsEnforced(0),
-		_alienStuns(0)
+		_alienStuns(0),
+		_alienMCs(0)
 {
 	//Log(LOG_INFO) << "Create DebriefingState";
 	_rules = _game->getRuleset();
@@ -405,7 +406,9 @@ DebriefingState::DebriefingState()
 			// NOTE re. Nike Cross:
 			// This can be exploited by MC'ing a bunch of aLiens
 			// while having Option "psi-control ends battle" TRUE.
-			if (aliensKilled + _alienStuns > 0
+			// ... Patched
+			if (_alienMCs == 0
+				&& aliensKilled + _alienStuns > 0
 				&& aliensKilled + _alienStuns == soldierAlienKills
 				&& _missionStatistics->success == true)
 			{
@@ -1244,6 +1247,8 @@ void DebriefingState::prepareDebriefing()
 				// does not matter.
 			{
 				// ADD ALIENS MC'D COUNTER HERE_kL
+				_alienMCs++;
+
 				for (std::vector<BattleItem*>::iterator
 						j = (*i)->getInventory()->begin();
 						j != (*i)->getInventory()->end();

@@ -380,18 +380,26 @@ void CraftInfoState::init()
 }
 
 /**
- * Turns an amount of time into a day/hour string.
- * @param total -
+ * Turns an amount of time in hours into a day/hour string.
+ * @param total - time in hours
+ * @return, day/hour string
  */
 std::wstring CraftInfoState::formatTime(int total)
 {
 	std::wostringstream ss;
-	int days = total / 24;
-	int hours = total %24;
+	int
+		days = total / 24,
+		hours = total %24;
+
 	ss << L"\n(";
 
 	if (days > 0)
-		ss << tr("STR_DAY", days) << L" ";
+	{
+		ss << tr("STR_DAY", days);
+
+		if (hours > 0)
+			ss << L" ";
+	}
 
 	if (hours > 0)
 		ss << tr("STR_HOUR", hours);

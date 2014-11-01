@@ -5816,7 +5816,7 @@
 1413140555 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1414833622 f:\git\openxcom\src\battlescape\debriefingstate.h
+1414871222 f:\git\openxcom\src\battlescape\debriefingstate.h
 	<map>
 	<string>
 	<vector>
@@ -6249,7 +6249,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1414834514 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1414871212 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -8395,7 +8395,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1413140559 source:f:\git\openxcom\src\interface\text.cpp
+1414832287 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -12054,7 +12054,7 @@
 1413140555 f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.h
 	"../Engine/State.h"
 
-1413165051 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
+1414832913 source:f:\git\openxcom\src\basescape\soldierdiarymissionstate.cpp
 	"SoldierDiaryMissionState.h"
 	<sstream>
 	"../Engine/Game.h"
@@ -12076,7 +12076,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1413778989 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
+1414833208 source:f:\git\openxcom\src\basescape\soldierdiaryoverviewstate.cpp
 	"SoldierDiaryOverviewState.h"
 	<string>
 	"SoldierDiaryMissionState.h"
@@ -12155,7 +12155,7 @@
 	"../Savegame/SoldierDead.h"
 	"../Savegame/SoldierDiary.h"
 
-1413648732 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
+1414831026 source:f:\git\openxcom\src\savegame\soldierdiary.cpp
 	"SoldierDiary.h"
 	"GameTime.h"
 	"../Ruleset/RuleCommendations.h"
