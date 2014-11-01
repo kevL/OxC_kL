@@ -5658,7 +5658,7 @@
 1413140555 f:\git\openxcom\src\battlescape\abortmissionstate.h
 	"../Engine/State.h"
 
-1414211754 f:\git\openxcom\src\battlescape\battlescapestate.h
+1414807137 f:\git\openxcom\src\battlescape\battlescapestate.h
 	<string>
 	<vector>
 	"Position.h"
@@ -5826,7 +5826,7 @@
 1413140555 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1414729240 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1414806586 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6045,7 +6045,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1414430589 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1414805780 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6539,12 +6539,14 @@
 	"../Ruleset/RuleInterface.h"
 	"../Savegame/BattleUnit.h"
 
-1413140556 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
+1414798813 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
 	"MiniMapState.h"
 	<iostream>
 	<sstream>
 	"Camera.h"
 	"MiniMapView.h"
+	"../Battlescape/BattlescapeState.h"
+	"../Battlescape/Map.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
@@ -6931,7 +6933,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1414704972 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1414798497 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -9693,7 +9695,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1414729500 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1414806501 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

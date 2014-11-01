@@ -175,7 +175,8 @@ BattlescapeState::BattlescapeState()
 	_weight		= new Surface( 2,  2, x + 108, y + 34);
 
 	_btnWounds	= new InteractiveSurface(14, 14, x + 5, y - 17);
-	_numWounds	= new NumberText(9, 9, x, y - 12); // X gets adjusted in updateSoldierInfo()
+//	_numWounds	= new NumberText(9, 9, x, y - 12); // X gets adjusted in updateSoldierInfo()
+	_numWounds	= new NumberText(9, 9, x, y - 20); // X gets adjusted in updateSoldierInfo()
 
 	_btnUnitUp			= new BattlescapeButton(32,  16, x +  48, y);
 	_btnUnitDown		= new BattlescapeButton(32,  16, x +  48, y + 16);
@@ -506,7 +507,9 @@ BattlescapeState::BattlescapeState()
 	_btnWounds->setVisible(false);
 	_btnWounds->onMouseClick((ActionHandler)& BattlescapeState::btnWoundedClick);
 
-	_numWounds->setColor(Palette::blockOffset(0)+3); // light gray
+//	_numWounds->setColor(Palette::blockOffset(0)+3); // light gray
+//	_numWounds->setColor(Palette::blockOffset(0)+1); // white
+	_numWounds->setColor(Palette::blockOffset(9)); // yellow
 	_numWounds->setValue(0);
 	_numWounds->setVisible(false);
 
@@ -746,7 +749,7 @@ BattlescapeState::BattlescapeState()
 		Options::keyBattleCenterEnemy10
 	};
 
-	Uint8 color = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->color;
+	const Uint8 color = _game->getRuleset()->getInterface("battlescape")->getElement("visibleUnits")->color;
 
 	for (int
 			i = 0;
@@ -2485,21 +2488,24 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	else
 		_numWounds->setX(_icons->getX() + 10); */
 
-	int wounds = selectedUnit->getFatalWounds();
+	const int wounds = selectedUnit->getFatalWounds();
 	if (wounds > 0)
 	{
-		SurfaceSet* srtStatus = _game->getResourcePack()->getSurfaceSet("StatusIcons");
+//		SurfaceSet* srtStatus = _game->getResourcePack()->getSurfaceSet("StatusIcons");
+		Surface* srtStatus = _game->getResourcePack()->getSurface("RANK_ROOKIE");
 		if (srtStatus != NULL)
 		{
 			//Log(LOG_INFO) << ". srtStatus is VALID";
-			srtStatus->getFrame(4)->blit(_btnWounds); // red heart icon
+//			srtStatus->getFrame(4)->blit(_btnWounds); // red heart icon
+			srtStatus->blit(_btnWounds); // red heart icon
 			_btnWounds->setVisible();
 		}
 
-		if (wounds > 9)
-			_numWounds->setX(_btnWounds->getX() + 4);
-		else
-			_numWounds->setX(_btnWounds->getX() + 6);
+//		if (wounds > 9)
+//			_numWounds->setX(_btnWounds->getX() + 4);
+//		else
+//			_numWounds->setX(_btnWounds->getX() + 6);
+		_numWounds->setX(_btnWounds->getX() + 7);
 
 		_numWounds->setValue(static_cast<unsigned>(wounds));
 		_numWounds->setVisible();
@@ -2730,6 +2736,7 @@ void BattlescapeState::animate()
 
 	blinkVisibleUnitButtons();
 	drawFuse();
+	flashMedic();
 }
 
 /**
@@ -3522,8 +3529,8 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 
 /**
  * Updates the scale.
- * @param dX delta of X;
- * @param dY delta of Y;
+ * @param dX - reference the delta of X
+ * @param dY - referenne the delta of Y
  */
 void BattlescapeState::resize(
 		int& dX,
@@ -3690,10 +3697,10 @@ void BattlescapeState::refreshVisUnits() // kL
  */
 void BattlescapeState::drawFuse() // kL
 {
-	if (_save->getSelectedUnit() == NULL)
+	BattleUnit* selectedUnit = _save->getSelectedUnit();
+	if (selectedUnit == NULL)
 		return;
 
-	BattleUnit* selectedUnit = _save->getSelectedUnit();
 
 	const int pulse[22] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3};
 
@@ -3742,6 +3749,7 @@ void BattlescapeState::drawFuse() // kL
 /**
  * kL. Gets the TimeUnits field from icons.
  * Note: these are for use in UnitWalkBState to update info when soldier walks.
+ * @return, pointer to time units NumberText
  */
 NumberText* BattlescapeState::getTimeUnitsField() const // kL
 {
@@ -3750,6 +3758,7 @@ NumberText* BattlescapeState::getTimeUnitsField() const // kL
 
 /**
  * kL. Gets the TimeUnits bar from icons.
+ * @return, pointer to time units Bar
  */
 Bar* BattlescapeState::getTimeUnitsBar() const // kL
 {
@@ -3758,6 +3767,7 @@ Bar* BattlescapeState::getTimeUnitsBar() const // kL
 
 /**
  * kL. Gets the Energy field from icons.
+ * @return, pointer to stamina NumberText
  */
 NumberText* BattlescapeState::getEnergyField() const // kL
 {
@@ -3766,6 +3776,7 @@ NumberText* BattlescapeState::getEnergyField() const // kL
 
 /**
  * kL. Gets the Energy bar from icons.
+ * @return, pointer to stamina Bar
  */
 Bar* BattlescapeState::getEnergyBar() const // kL
 {
@@ -3825,6 +3836,38 @@ void BattlescapeState::updateExpData() // kL
 			_lstExp->setCellColor(i, 1, Palette::blockOffset(1));	// orange
 		else if (xp[i] > 0)
 			_lstExp->setCellColor(i, 1, Palette::blockOffset(3));	// green
+	}
+}
+
+/**
+ * kL. Animates a red cross icon when an injured soldier is selected.
+ */
+void BattlescapeState::flashMedic() // kL
+{
+	BattleUnit* selectedUnit = _save->getSelectedUnit();
+	if (selectedUnit != NULL
+		&& selectedUnit->getFatalWounds() > 0)
+	{
+		static int phase; // init's only once, to 0
+
+		Surface* srfCross = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(11); // gray cross
+
+		_btnWounds->lock();
+		srfCross->blitNShade(
+						_btnWounds,
+						_btnWounds->getX() + 2,
+						_btnWounds->getY() + 1,
+						phase,
+						false,
+						3); // red
+		_btnWounds->unlock();
+
+		_numWounds->setColor(Palette::blockOffset(9) + phase); // yellow
+
+
+		phase += 2;
+		if (phase == 16)
+			phase = 0;
 	}
 }
 

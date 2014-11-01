@@ -1033,7 +1033,7 @@ int SavedBattleGame::getTurn() const
 }
 
 /**
- * Ends the current turn and progresses to the next one.
+ * Ends the current faction-turn and progresses to the next one.
  */
 void SavedBattleGame::endBattleTurn()
 {

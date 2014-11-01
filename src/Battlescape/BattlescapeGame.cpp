@@ -760,8 +760,8 @@ void BattlescapeGame::endGameTurn()
 		}
 	}
 
-	bool battleComplete = liveAliens == 0
-					   || liveSoldiers == 0;
+	const bool battleComplete = liveAliens == 0
+							 || liveSoldiers == 0;
 
 	if (_endTurnRequested == true
 		&& (_save->getSide() != FACTION_NEUTRAL

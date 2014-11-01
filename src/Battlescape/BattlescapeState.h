@@ -385,6 +385,9 @@ private:
 
 		/// kL. Updates experience data for the currently selected soldier.
 		void updateExpData(); // kL
+
+		/// kL. Animates a red cross icon when an injured soldier is selected.
+		void flashMedic(); // kL
 };
 
 }

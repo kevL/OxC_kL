@@ -197,7 +197,7 @@ int Projectile::calculateTrajectory(
 		double accuracy,
 		Position originVoxel)
 {
-	Log(LOG_INFO) << "Projectile::calculateTrajectory()";
+	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 	//Log(LOG_INFO) << ". originVoxel = " << originVoxel;
 
 	Tile* targetTile = _save->getTile(_action.target);
