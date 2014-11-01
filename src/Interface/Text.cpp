@@ -34,10 +34,10 @@ namespace OpenXcom
 {
 /**
  * Sets up a blank text with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 Text::Text(
 		int width,
@@ -50,10 +50,10 @@ Text::Text(
 			height,
 			x,
 			y),
-		_big(0),
-		_small(0),
-		_font(0),
-		_lang(0),
+		_big(NULL),
+		_small(NULL),
+		_font(NULL),
+		_lang(NULL),
 		_wrap(false),
 		_invert(false),
 		_contrast(false),

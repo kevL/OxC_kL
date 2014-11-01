@@ -113,7 +113,6 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		if (_listDead->empty())
 		{
 			_game->popState();
-
 			return;
 		}
 
@@ -134,7 +133,6 @@ SoldierDiaryMissionState::SoldierDiaryMissionState(
 		if (_list->empty())
 		{
 			_game->popState();
-
 			return;
 		}
 

@@ -2732,11 +2732,9 @@ BattleUnit* BattlescapeGame::convertUnit(
 	convertedUnit->setPosition(unit->getPosition());
 	convertedUnit->setTimeUnits(0);
 //kL	convertedUnit->setDirection(3);
-	// kL_begin:
-	if (convertType == "STR_ZOMBIE")
-		dirFace = RNG::generate(0, 7);
-	convertedUnit->setDirection(dirFace);
-	// kL_end.
+	if (convertType == "STR_ZOMBIE")		// kL
+		dirFace = RNG::generate(0, 7);		// kL
+	convertedUnit->setDirection(dirFace);	// kL
 
 	convertedUnit->setCache(NULL);
 
@@ -2824,6 +2822,7 @@ const Ruleset* BattlescapeGame::getRuleset() const
 
 /**
  * Tries to find an item and pick it up if possible.
+ * @param action - pointer to the current BattleAction struct
  */
 void BattlescapeGame::findItem(BattleAction* action)
 {
@@ -2856,8 +2855,8 @@ void BattlescapeGame::findItem(BattleAction* action)
 /**
  * Searches through items on the map that were dropped
  * on an alien turn, then picks the most "attractive" one.
- * @param action A pointer to the action being performed.
- * @return The item to attempt to take.
+ * @param action - pointer to the current BattleAction struct
+ * @return, the BattleItem to go for
  */
 BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 {
@@ -2885,8 +2884,10 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 		}
 	}
 
-	BattleItem* targetItem = NULL;
-	int maxWorth = 0;
+	BattleItem* item = NULL;
+	int
+		worth = 0,
+		test;
 
 	// now select the most suitable candidate depending on attractiveness and distance
 	for (std::vector<BattleItem*>::iterator
@@ -2894,21 +2895,18 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 			i != droppedItems.end();
 			++i)
 	{
-		int currentWorth =
-				(*i)->getRules()->getAttraction() /
-					((_save->getTileEngine()->distance(
-													action->actor->getPosition(),
-													(*i)->getTile()->getPosition())
-												* 2)
-											+ 1);
-		if (currentWorth > maxWorth)
+		test = (*i)->getRules()->getAttraction()
+				/ ((_save->getTileEngine()->distance(
+												action->actor->getPosition(),
+												(*i)->getTile()->getPosition()) * 2) + 1);
+		if (test > worth)
 		{
-			maxWorth = currentWorth;
-			targetItem = *i;
+			worth = test;
+			item = *i;
 		}
 	}
 
-	return targetItem;
+	return item;
 }
 
 /**
@@ -2917,9 +2915,9 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
  * ammo FOR it, or if it's ammo, checks if we have the weapon to go with it;
  * assesses the attraction value of the item and compares it with the distance
  * to the object, then returns false anyway.
- * @param item, The item to attempt to take.
- * @param action, A pointer to the action being performed.
- * @return, FALSE. (unless mods have been made to ruleset/code)
+ * @param item		- pointer to a BattleItem to go for
+ * @param action	- pointer to the current BattleAction struct
+ * @return, true if the item is worth going for
  */
 bool BattlescapeGame::worthTaking(
 		BattleItem* item,
@@ -2944,14 +2942,14 @@ bool BattlescapeGame::worthTaking(
 	{
 		// we only want weapons that HAVE ammo, or weapons that we have ammo for
 		bool ammoFound = true;
-		if (!item->getAmmoItem())
+		if (item->getAmmoItem() == NULL)
 		{
 			ammoFound = false;
 
 			for (std::vector<BattleItem*>::iterator
 					i = action->actor->getInventory()->begin();
 					i != action->actor->getInventory()->end()
-						&& !ammoFound;
+						&& ammoFound == false;
 					++i)
 			{
 				if ((*i)->getRules()->getBattleType() == BT_AMMO)
@@ -2959,7 +2957,7 @@ bool BattlescapeGame::worthTaking(
 					for (std::vector<std::string>::iterator
 							j = item->getRules()->getCompatibleAmmo()->begin();
 							j != item->getRules()->getCompatibleAmmo()->end()
-								&& !ammoFound;
+								&& ammoFound == false;
 							++j)
 					{
 						if ((*i)->getRules()->getName() == *j)
@@ -2980,10 +2978,11 @@ bool BattlescapeGame::worthTaking(
 	{
 		// similar to the above, but this time we're checking if the ammo is suitable for a weapon we have.
 		bool weaponFound = false;
+
 		for (std::vector<BattleItem*>::iterator
 				i = action->actor->getInventory()->begin();
 				i != action->actor->getInventory()->end()
-					&& !weaponFound;
+					&& weaponFound == false;
 				++i)
 		{
 			if ((*i)->getRules()->getBattleType() == BT_FIREARM)
@@ -2991,7 +2990,7 @@ bool BattlescapeGame::worthTaking(
 				for (std::vector<std::string>::iterator
 						j = (*i)->getRules()->getCompatibleAmmo()->begin();
 						j != (*i)->getRules()->getCompatibleAmmo()->end()
-							&& !weaponFound;
+							&& weaponFound == false;
 						++j)
 				{
 					if ((*i)->getRules()->getName() == *j)
@@ -3021,8 +3020,7 @@ bool BattlescapeGame::worthTaking(
 		freeSlots -= (*i)->getRules()->getInventoryHeight() * (*i)->getRules()->getInventoryWidth();
 	}
 
-	int size = item->getRules()->getInventoryHeight() * item->getRules()->getInventoryWidth();
-	if (freeSlots < size)
+	if (freeSlots < item->getRules()->getInventoryHeight() * item->getRules()->getInventoryWidth())
 		return false;
 //	}
 
@@ -3034,20 +3032,22 @@ bool BattlescapeGame::worthTaking(
 			(_save->getTileEngine()->distance(
 											action->actor->getPosition(),
 											item->getTile()->getPosition()) * 2))
-//			> 5;
-			> 0;
+			> 0; // was 5
 }
 
 /**
  * Picks the item up from the ground.
- *
- * At this point we've decided it's worth our while to grab this item, so we
- * try to do just that. First we check to make sure we have time units, then
- * that we have space (using horrifying logic!) then we attempt to actually
- * recover the item.
- * @param item, The item to attempt to take.
- * @param action, A pointer to the action being performed.
- * @return, 0 if successful, 1 for no-TUs, 2 for not-enough-room, 3 for won't-fit and -1 for something-went-horribly-wrong.
+ * At this point we've decided it's worthwhile to grab this item, so
+ * try to do just that. First check to make sure actor has time units,
+ * then that there is space (using horrifying logic!) attempt to
+ * actually recover the item.
+ * @param item		- pointer to a BattleItem to go for
+ * @param action	- pointer to the current BattleAction struct
+ * @return,	 0 - successful
+ *			 1 - no-TUs
+ *			 2 - not-enough-room
+ *			 3 - won't-fit
+ *			-1 - something-went-horribly-wrong
  */
 int BattlescapeGame::takeItemFromGround(
 		BattleItem* item,
@@ -3064,7 +3064,7 @@ int BattlescapeGame::takeItemFromGround(
 	int freeSlots = 25;
 
 	// make sure we have time units
-	if (action->actor->getTimeUnits() < 6)
+	if (action->actor->getTimeUnits() < 6) // should replace that w/ Ground-to-Hand TU rule.
 		return TAKEITEM_NOTU;
 	else
 	{
@@ -3100,9 +3100,9 @@ int BattlescapeGame::takeItemFromGround(
 
 /**
  * Tries to fit an item into the unit's inventory, return false if you can't.
- * @param item, The item to attempt to take.
- * @param action, A pointer to the action being performed.
- * @return, Whether or not the item was successfully retrieved.
+ * @param item		- pointer to a BattleItem to go for
+ * @param action	- pointer to the current BattleAction struct
+ * @return, true if the item was successfully retrieved
  */
 bool BattlescapeGame::takeItem(
 		BattleItem* item,
@@ -3118,7 +3118,7 @@ bool BattlescapeGame::takeItem(
 			if (action->actor->getItem("STR_RIGHT_HAND")
 				&& action->actor->getItem("STR_RIGHT_HAND")->getAmmoItem() == NULL)
 			{
-				if (action->actor->getItem("STR_RIGHT_HAND")->setAmmoItem(item) == NULL)
+				if (action->actor->getItem("STR_RIGHT_HAND")->setAmmoItem(item) == 0)
 					placed = true;
 			}
 			else
@@ -3128,7 +3128,7 @@ bool BattlescapeGame::takeItem(
 						i < 4;
 						++i)
 				{
-					if (!action->actor->getItem("STR_BELT", i))
+					if (action->actor->getItem("STR_BELT", i) == NULL)
 					{
 						item->moveToOwner(action->actor);
 						item->setSlot(rules->getInventory("STR_BELT"));
@@ -3147,7 +3147,7 @@ bool BattlescapeGame::takeItem(
 					i < 4;
 					++i)
 			{
-				if (!action->actor->getItem("STR_BELT", i))
+				if (action->actor->getItem("STR_BELT", i) == NULL)
 				{
 					item->moveToOwner(action->actor);
 					item->setSlot(rules->getInventory("STR_BELT"));
@@ -3160,7 +3160,7 @@ bool BattlescapeGame::takeItem(
 		break;
 		case BT_FIREARM:
 		case BT_MELEE:
-			if (!action->actor->getItem("STR_RIGHT_HAND"))
+			if (action->actor->getItem("STR_RIGHT_HAND") == NULL)
 			{
 				item->moveToOwner(action->actor);
 				item->setSlot(rules->getInventory("STR_RIGHT_HAND"));
@@ -3170,7 +3170,7 @@ bool BattlescapeGame::takeItem(
 		break;
 		case BT_MEDIKIT:
 		case BT_SCANNER:
-			if (!action->actor->getItem("STR_BACK_PACK"))
+			if (action->actor->getItem("STR_BACK_PACK") == NULL)
 			{
 				item->moveToOwner(action->actor);
 				item->setSlot(rules->getInventory("STR_BACK_PACK"));
@@ -3179,15 +3179,13 @@ bool BattlescapeGame::takeItem(
 			}
 		break;
 		case BT_MINDPROBE:
-			if (!action->actor->getItem("STR_LEFT_HAND"))
+			if (action->actor->getItem("STR_LEFT_HAND") == NULL)
 			{
 				item->moveToOwner(action->actor);
 				item->setSlot(rules->getInventory("STR_LEFT_HAND"));
 
 				placed = true;
 			}
-		break;
-		default:
 		break;
 	}
 
@@ -3196,7 +3194,7 @@ bool BattlescapeGame::takeItem(
 
 /**
  * Returns the action type that is reserved.
- * @return, the type of action that is reserved
+ * @return, the BattleActionType that is reserved
  */
 BattleActionType BattlescapeGame::getReservedAction()
 {
@@ -3270,7 +3268,7 @@ void BattlescapeGame::tallyUnits(
 
 /**
  * Sets the kneel reservation setting.
- * @param reserved Should we reserve an extra 4 TUs to kneel?
+ * @param reserved - true to reserve an extra 4 TUs to kneel
  */
 void BattlescapeGame::setKneelReserved(bool reserved)
 {
@@ -3280,7 +3278,7 @@ void BattlescapeGame::setKneelReserved(bool reserved)
 
 /**
  * Gets the kneel reservation setting.
- * @return Kneel reservation setting.
+ * @return, kneel reservation setting
  */
 bool BattlescapeGame::getKneelReserved()
 {
@@ -3299,19 +3297,19 @@ bool BattlescapeGame::getKneelReserved()
  * Checks if a unit has moved next to a proximity grenade.
  * Checks one tile around the unit in every direction.
  * For a large unit we check every tile it occupies.
- * @param unit - pointer to a unit
+ * @param unit - pointer to a BattleUnit
  * @return, true if a proximity grenade was triggered
  */
 bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 {
-	int size = unit->getArmor()->getSize() - 1;
+	int unitSize = unit->getArmor()->getSize() - 1;
 	for (int
-			x = size;
+			x = unitSize;
 			x > -1;
 			--x)
 	{
 		for (int
-				y = size;
+				y = unitSize;
 				y > -1;
 				--y)
 		{

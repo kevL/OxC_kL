@@ -32,7 +32,7 @@ namespace OpenXcom
  * Initializes a new diary entry from YAML.
  * @param node - YAML node
  */
-SoldierDiary::SoldierDiary(const YAML::Node &node)
+SoldierDiary::SoldierDiary(const YAML::Node& node)
 {
 	load(node);
 }
@@ -999,6 +999,8 @@ SoldierCommendations::SoldierCommendations(const YAML::Node& node)
 
 /**
  * cTor. Initializes a soldier commendation.
+ * @param commendationName	-
+ * @param noun				-
  */
 SoldierCommendations::SoldierCommendations(
 		std::string commendationName,

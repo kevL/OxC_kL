@@ -21,6 +21,7 @@
 
 #include <sstream>
 
+#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -32,6 +33,7 @@
 #include "../Interface/Window.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h" // sza_MusicRules
 
 #include "../Ruleset/RuleCommendations.h"
 
@@ -56,6 +58,8 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 	setPalette("PAL_GEOSCAPE", 0);
+
+	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGRAVES); // kL, sza_MusicRules
 
 	add(_window);
 	add(_btnOk);
@@ -217,7 +221,26 @@ CommendationState::~CommendationState()
  */
 void CommendationState::btnOkClick(Action*)
 {
+#ifndef __NO_MUSIC
+	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
+	{
+		_game->setInputActive(false);
+
+		Mix_FadeOutMusic(900);
+		func_fade();
+
+		while (Mix_PlayingMusic() == 1)
+		{
+		}
+	}
+	else
+		Mix_HaltMusic();
+#endif
+
 	_game->popState();
+
+//	_game->getResourcePack()->playMusic("GMGEO", true);
+	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, true); // kL, sza_MusicRules
 }
 
 }

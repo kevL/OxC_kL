@@ -37,15 +37,12 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Soldier Died window.
- * @param game, Pointer to the core game.
- * @param name, Name of the Soldier.
+ * @param name - reference the name of the Soldier
+ * @param base - reference the title of the Soldier's base
  */
 SoldierDiedState::SoldierDiedState(
-		std::wstring name,
-		std::wstring base)
-	:
-		_name(name),
-		_base(base)
+		const std::wstring& name,
+		const std::wstring& base)
 {
 	//Log(LOG_INFO) << "create SoldierDiedState";
 	_screen = false;
@@ -81,7 +78,7 @@ SoldierDiedState::SoldierDiedState(
 	_txtTitle->setBig();
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
-	std::wstring msg = _name;
+	std::wstring msg = name;
 	msg += L'\n';
 	msg += tr("STR_SOLDIER_DIED");
 	_txtTitle->setText(msg);
@@ -89,12 +86,12 @@ SoldierDiedState::SoldierDiedState(
 	_txtBase->setColor(Palette::blockOffset(8)+5);
 	_txtBase->setSmall();
 	_txtBase->setAlign(ALIGN_CENTER);
-	_txtBase->setText(_base);
+	_txtBase->setText(base);
 	//Log(LOG_INFO) << "create SoldierDiedState EXIT";
 }
 
 /**
- *
+ * dTor.
  */
 SoldierDiedState::~SoldierDiedState()
 {
@@ -102,7 +99,7 @@ SoldierDiedState::~SoldierDiedState()
 
 /**
  * Returns to the previous screen.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void SoldierDiedState::btnOkClick(Action*)
 {

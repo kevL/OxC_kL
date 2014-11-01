@@ -96,7 +96,8 @@ DebriefingState::DebriefingState()
 		_noContainment(false),
 		_manageContainment(false),
 		_destroyXCOMBase(false),
-		_limitsEnforced(0)
+		_limitsEnforced(0),
+		_alienStuns(0)
 {
 	//Log(LOG_INFO) << "Create DebriefingState";
 	_rules = _game->getRuleset();
@@ -208,7 +209,7 @@ DebriefingState::DebriefingState()
 	_lstTotal->setDot();
 
 
-	prepareDebriefing();
+	prepareDebriefing(); // GATHER ALL DATA HERE <-
 
 	_txtBaseLabel->setColor(Palette::blockOffset(8)+5);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
@@ -370,11 +371,12 @@ DebriefingState::DebriefingState()
 	_txtRating->setText(tr("STR_RATING").arg(rating));
 	_missionStatistics->score = total;
 
-	SavedGame* save = _game->getSavedGame();
+
+	SavedGame* save = _game->getSavedGame(); // Soldier Diary ->
 	SavedBattleGame* battle = save->getSavedBattle();
 
-	_missionStatistics->shade = save->getSavedBattle()->getGlobalShade(); // Soldier Diary ->
-	_missionStatistics->id = _game->getSavedGame()->getMissionStatistics()->size();
+	_missionStatistics->id = save->getMissionStatistics()->size();
+	_missionStatistics->shade = battle->getGlobalShade();
 
 //	BattleUnitStatistics* statistics = NULL; // BattleUnit::getStatistics()
 //	Soldier* soldier = NULL; // BattleUnit::getGeoscapeSoldier() const
@@ -400,8 +402,11 @@ DebriefingState::DebriefingState()
 					soldierAlienKills++;
 			}
 
-			if (aliensKilled > 0 // add: && (aliensStunned && allAliensStunnedBy == soldier)
-				&& aliensKilled == soldierAlienKills
+			// NOTE re. Nike Cross:
+			// This can be exploited by MC'ing a bunch of aLiens
+			// while having Option "psi-control ends battle" TRUE.
+			if (aliensKilled + _alienStuns > 0
+				&& aliensKilled + _alienStuns == soldierAlienKills
 				&& _missionStatistics->success == true)
 			{
 				statistics->nikeCross = true;
@@ -1228,16 +1233,17 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 			}
-			else if (origFact == FACTION_HOSTILE	// Mc'd unit,
-				&& faction == FACTION_PLAYER		// counts as unconscious
+			else if (origFact == FACTION_HOSTILE // MC'd aLiens count as unconscious
+				&& faction == FACTION_PLAYER
+				&& (*i)->isOut() == false
 				&& (aborted == false
-					|| (*i)->isInExitArea())
-				&& (*i)->isOut() == false) // not Unconscious ... dead handled above.
+					|| (*i)->isInExitArea()))
 				// kL_note: so, this never actually runs unless early psi-exit
 				// when all aliens are dead or mind-controlled is turned on ....
 				// Except the two-stage Cydonia mission, in which case all this
 				// does not matter.
 			{
+				// ADD ALIENS MC'D COUNTER HERE_kL
 				for (std::vector<BattleItem*>::iterator
 						j = (*i)->getInventory()->begin();
 						j != (*i)->getInventory()->end();
@@ -1252,9 +1258,8 @@ void DebriefingState::prepareDebriefing()
 				std::string corpseItem = (*i)->getArmor()->getCorpseGeoscape();
 				if ((*i)->getSpawnUnit().empty() == false)
 				{
-					Ruleset* rule = _rules;
-					corpseItem = rule->getArmor(rule->getUnit((*i)->getSpawnUnit())->getArmor())
-									 ->getCorpseGeoscape();
+					corpseItem = _rules->getArmor(_rules->getUnit((*i)->getSpawnUnit())->getArmor())
+								 ->getCorpseGeoscape();
 				}
 
 				if (base->getAvailableContainment() > 0)
@@ -1850,7 +1855,7 @@ void DebriefingState::recoverItems(
 		else
 		{
 			if ((*item)->getRules()->getRecoveryPoints()
-				&& !(*item)->getXCOMProperty())
+				&& (*item)->getXCOMProperty() == false)
 			{
 				if ((*item)->getRules()->getBattleType() == BT_CORPSE
 					&& (*item)->getUnit()->getStatus() == STATUS_DEAD)
@@ -1866,6 +1871,9 @@ void DebriefingState::recoverItems(
 				{
 					if ((*item)->getUnit()->getOriginalFaction() == FACTION_HOSTILE)
 					{
+						// ADD STUNNED ALIEN COUNTING HERE_kL
+						_alienStuns++; // kL: for Nike Cross determination.
+
 						if (base->getAvailableContainment() > 0)
 							addStat(
 									"STR_LIVE_ALIENS_RECOVERED",

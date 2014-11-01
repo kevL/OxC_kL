@@ -5816,7 +5816,7 @@
 1413140555 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1413140555 f:\git\openxcom\src\battlescape\debriefingstate.h
+1414833622 f:\git\openxcom\src\battlescape\debriefingstate.h
 	<map>
 	<string>
 	<vector>
@@ -5826,7 +5826,7 @@
 1413140555 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1414806586 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1414822811 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6045,7 +6045,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1414805780 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1414817025 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6249,7 +6249,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1414430589 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1414834514 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6672,7 +6672,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1414731002 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1414818278 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"Map.h"
@@ -11585,11 +11585,11 @@
 	"./Savegame/EquipmentLayoutItem.h"
 	"./Menu/OptionsAdvancedState.h"
 
-1413140558 f:\git\openxcom\src\geoscape\soldierdiedstate.h
+1414832448 f:\git\openxcom\src\geoscape\soldierdiedstate.h
 	<string>
 	"../Engine/State.h"
 
-1413140558 source:f:\git\openxcom\src\geoscape\soldierdiedstate.cpp
+1414832448 source:f:\git\openxcom\src\geoscape\soldierdiedstate.cpp
 	"SoldierDiedState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
@@ -12107,9 +12107,10 @@
 1413643659 f:\git\openxcom\src\ruleset\rulecommendations.h
 	<yaml-cpp/yaml.h>
 
-1413646014 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
+1414827370 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
 	"CommendationState.h"
 	<sstream>
+	"../Engine/Adlib/adlplayer.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -12119,6 +12120,7 @@
 	"../Interface/TextList.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
+	"../Resource/XcomResourcePack.h"
 	"../Ruleset/RuleCommendations.h"
 	"../Savegame/Base.h"
 	"../Savegame/SavedGame.h"

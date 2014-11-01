@@ -197,13 +197,13 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 
 	_btnAwards->setColor(Palette::blockOffset(13)+10);
 	_btnAwards->setText(tr("STR_AWARDS_UC"));
-	if (_game->getRuleset()->getCommendation().empty() == false)
-	{
-		_btnAwards->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnCommendationsClick);
-		_btnAwards->setVisible();
-	}
-	else
-		_btnAwards->setVisible(false);
+//	if (_game->getRuleset()->getCommendation().empty() == false)
+//	{
+	_btnAwards->onMouseClick((ActionHandler)& SoldierDiaryOverviewState::btnCommendationsClick);
+//		_btnAwards->setVisible();
+//	}
+//	else
+//		_btnAwards->setVisible(false);
 
 	_btnOk->setColor(Palette::blockOffset(13)+10);
 	_btnOk->setText(tr("STR_OK"));
@@ -360,13 +360,14 @@ void SoldierDiaryOverviewState::init()
 		row++;
 	}
 
-	if (row > 0
+	_lstDiary->scrollTo(_curRow);
+/*	if (row > 0 // all taken care of in TextList
 		&& _lstDiary->getScroll() >= row)
 	{
 		_lstDiary->scrollTo(0);
 	}
 	else if (_curRow > 0)
-		_lstDiary->scrollTo(_curRow);
+		_lstDiary->scrollTo(_curRow); */
 }
 
 /**

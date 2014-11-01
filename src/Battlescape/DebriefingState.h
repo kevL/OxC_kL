@@ -99,6 +99,7 @@ private:
 		_manageContainment,
 		_noContainment;
 	int
+		_alienStuns,
 		_limitsEnforced;
 
 	std::wstring _baseLabel;
