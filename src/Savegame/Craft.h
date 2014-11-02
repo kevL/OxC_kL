@@ -243,9 +243,9 @@ private:
 		int getLoadCurrent();
 
 		/// Sets the stopWarning flag.
-		void setStopWarning(const bool stop = true);
+		void setDontWarn(const bool stop = true);
 		/// Gets the stopWarning flag.
-		bool getStopWarning() const;
+		bool getDontWarn() const;
 };
 
 }

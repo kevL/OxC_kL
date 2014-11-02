@@ -139,8 +139,8 @@ namespace OpenXcom
 size_t kL_currentBase = 0;
 
 const double
-	earthRadius					= 3440.0,
-	greatCircleConversionFactor	= (1.0 / 60.0) * (M_PI / 180.0 ) * earthRadius;
+	earthRadius					= 3440.0, //.0647948164, // nautical miles.
+	greatCircleConversionFactor	= (1.0 / 60.0) * (M_PI / 180.0) * earthRadius; // converts 'flat' distance to greatCircle distance.
 
 Sound* GeoscapeState::soundPop = 0;
 
@@ -1667,8 +1667,9 @@ bool DetectXCOMBase::operator()(const Ufo* ufo) const
 	}
 	else
 	{
-		const double ufoRange = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor;
-		const double targetDist = _base.getDistance(ufo) * earthRadius;
+		const double
+			ufoRange = static_cast<double>(ufo->getRules()->getSightRange()) * greatCircleConversionFactor,
+			targetDist = _base.getDistance(ufo) * earthRadius;
 		//Log(LOG_INFO) << ". . ufoRange = " << (int)ufoRange;
 		//Log(LOG_INFO) << ". . targetDist = " << (int)targetDist;
 
@@ -1762,10 +1763,10 @@ void GeoscapeState::time10Minutes()
 						if ((*ab)->isDiscovered())
 							continue;
 
-						const double craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor;
+						const double
+							craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor,
+							targetDistance = (*c)->getDistance(*ab) * earthRadius;
 						//Log(LOG_INFO) << ". . craftRadar = " << (int)craftRadar;
-
-						const double targetDistance = (*c)->getDistance(*ab) * earthRadius;
 						//Log(LOG_INFO) << ". . targetDistance = " << (int)targetDistance;
 
 						if (targetDistance < craftRadar)
@@ -2133,16 +2134,16 @@ void GeoscapeState::time30Minutes()
 				(*j)->repair();
 			else if ((*j)->getStatus() == "STR_REARMING")
 			{
-				std::string str = (*j)->rearm(_game->getRuleset());
+				const std::string str = (*j)->rearm(_game->getRuleset());
 				if (str.empty() == false
-					&& (*j)->getStopWarning() == false)
+					&& (*j)->getDontWarn() == false)
 				{
-					(*j)->setStopWarning();
+					(*j)->setDontWarn();
 
-					std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
-									   .arg(tr(str))
-									   .arg((*j)->getName(_game->getLanguage()))
-									   .arg((*i)->getName());
+					const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
+											.arg(tr(str))
+											.arg((*j)->getName(_game->getLanguage()))
+											.arg((*i)->getName());
 					popup(new CraftErrorState(
 											this,
 											msg));
@@ -2150,7 +2151,7 @@ void GeoscapeState::time30Minutes()
 			} // kL_end.
 			else if ((*j)->getStatus() == "STR_REFUELLING")
 			{
-				std::string item = (*j)->getRules()->getRefuelItem();
+				const std::string item = (*j)->getRules()->getRefuelItem();
 				if (item.empty())
 					(*j)->refuel();
 				else
@@ -2161,14 +2162,14 @@ void GeoscapeState::time30Minutes()
 						(*j)->refuel();
 //						(*j)->setLowFuel(false);
 					}
-					else if ((*j)->getStopWarning() == false) //if ((*j)->getLowFuel() == false)
+					else if ((*j)->getDontWarn() == false) //if ((*j)->getLowFuel() == false)
 					{
-						(*j)->setStopWarning();
+						(*j)->setDontWarn();
 
-						std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
-										   .arg(tr(item))
-										   .arg((*j)->getName(_game->getLanguage()))
-										   .arg((*i)->getName());
+						const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
+												.arg(tr(item))
+												.arg((*j)->getName(_game->getLanguage()))
+												.arg((*i)->getName());
 						popup(new CraftErrorState(
 												this,
 												msg));

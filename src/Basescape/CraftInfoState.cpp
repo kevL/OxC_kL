@@ -404,7 +404,7 @@ std::wstring CraftInfoState::formatTime(int total)
 	if (hours > 0)
 		ss << tr("STR_HOUR", hours);
 
-	if (_craft->getStopWarning())
+	if (_craft->getDontWarn() == true)
 		ss << L" +";
 
 	ss << L")";

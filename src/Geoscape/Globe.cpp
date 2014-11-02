@@ -1671,7 +1671,7 @@ void Globe::drawRadars()
 					range = static_cast<double>((*j)->getRules()->getRadarRange());
 					if (range > 0.0)
 					{
-						range = range * (1.0 / 60.0) * (M_PI / 180.0);
+						range *= (1.0 / 60.0) * (M_PI / 180.0);
 						drawGlobeCircle( // Base radars.
 									lat,
 									lon,
@@ -1702,7 +1702,7 @@ void Globe::drawRadars()
 						&x,
 						&y);
 
-				range *= ((1.0 / 60.0) * (M_PI / 180.0));
+				range *= (1.0 / 60.0) * (M_PI / 180.0);
 				drawGlobeCircle( // Craft radars.
 							lat,
 							lon,
@@ -1716,7 +1716,12 @@ void Globe::drawRadars()
 }
 
 /**
- * Draw globe range circle
+ * Draws globe range circle.
+ * @param lat		-
+ * @param lon		-
+ * @param radius	-
+ * @param segments	-
+ * @param color		-
  */
 void Globe::drawGlobeCircle(
 		double lat,
@@ -1731,17 +1736,18 @@ void Globe::drawGlobeCircle(
 		x2 = 0.0,
 		y2 = 0.0,
 		lat1,
-		lon1,
-		seg = M_PI / (static_cast<double>(segments) / 2.0);
+		lon1;
 
 	for (double // 48 circle segments
 			az = 0.0;
 			az <= M_PI * 2.0 + 0.01;
-			az += seg)
+			az += M_PI * 2.0 / static_cast<double>(segments))
 	{
 		// calculating sphere-projected circle
 		lat1 = asin(sin(lat) * cos(radius) + cos(lat) * sin(radius) * cos(az));
-		lon1 = lon + atan2(sin(az) * sin(radius) * cos(lat), cos(radius) - sin(lat) * sin(lat1));
+		lon1 = lon + atan2(
+						sin(az) * sin(radius) * cos(lat),
+						cos(radius) - sin(lat) * sin(lat1));
 
 		polarToCart(
 				lon1,
@@ -1799,6 +1805,8 @@ bool Globe::getNewBaseHover(void)
 
 /**
  *
+ * @param lon -
+ * @param lat -
  */
 void Globe::setNewBaseHoverPos(
 		double lon,
@@ -1810,6 +1818,12 @@ void Globe::setNewBaseHoverPos(
 
 /**
  *
+ * @param surface	- pointer to a Surface
+ * @param lon1		-
+ * @param lat1		-
+ * @param lon2		-
+ * @param lat2		-
+ * @param color		-
  */
 void Globe::drawVHLine(
 		Surface* surface,

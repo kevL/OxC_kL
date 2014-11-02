@@ -49,7 +49,7 @@ MovingTarget::MovingTarget()
 MovingTarget::~MovingTarget()
 {
 	if (_dest != NULL
-		&& !_dest->getFollowers()->empty())
+		&& _dest->getFollowers()->empty() == false)
 	{
 		for (std::vector<Target*>::iterator
 				i = _dest->getFollowers()->begin();
@@ -67,7 +67,7 @@ MovingTarget::~MovingTarget()
 
 /**
  * Loads the moving target from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void MovingTarget::load(const YAML::Node& node)
 {
@@ -81,7 +81,7 @@ void MovingTarget::load(const YAML::Node& node)
 
 /**
  * Saves the moving target to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node MovingTarget::save() const
 {
@@ -100,7 +100,7 @@ YAML::Node MovingTarget::save() const
 
 /**
  * Returns the destination the moving target is heading to.
- * @return Pointer to destination.
+ * @return, pointer to Target destination
  */
 Target* MovingTarget::getDestination() const
 {
@@ -109,11 +109,11 @@ Target* MovingTarget::getDestination() const
 
 /**
  * Changes the destination the moving target is heading to.
- * @param dest Pointer to destination.
+ * @param dest - pointer to Target destination
  */
 void MovingTarget::setDestination(Target* dest)
 {
-	if (_dest != NULL) // Remove moving target from old destination's followers
+	if (_dest != NULL) // remove moving target from old destination's followers
 	{
 		for (std::vector<Target*>::iterator
 				i = _dest->getFollowers()->begin();
@@ -130,7 +130,7 @@ void MovingTarget::setDestination(Target* dest)
 
 	_dest = dest;
 
-	if (_dest != NULL) // Add moving target to new destination's followers
+	if (_dest != NULL) // add moving target to new destination's followers
 		_dest->getFollowers()->push_back(this);
 
 	calculateSpeed();
@@ -169,20 +169,14 @@ void MovingTarget::calculateSpeed()
 {
 	if (_dest != NULL)
 	{
-		double
-			dLon,
-			dLat,
-			length;
-
-		dLon = sin(_dest->getLongitude() - _lon)
-				* cos(_dest->getLatitude());
-
-		dLat = cos(_lat)
-				* sin(_dest->getLatitude()) - sin(_lat)
-				* cos(_dest->getLatitude())
-				* cos(_dest->getLongitude() - _lon);
-
-		length = sqrt((dLon * dLon) + (dLat * dLat));
+		const double
+			dLon = sin(_dest->getLongitude() - _lon)
+				 * cos(_dest->getLatitude()),
+			dLat = cos(_lat)
+				 * sin(_dest->getLatitude()) - sin(_lat)
+				 * cos(_dest->getLatitude())
+				 * cos(_dest->getLongitude() - _lon),
+			length = sqrt((dLon * dLon) + (dLat * dLat));
 
 		_speedLat = dLat / length * _speedRadian;
 		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
@@ -191,20 +185,20 @@ void MovingTarget::calculateSpeed()
 		if (_speedLon != _speedLon
 			|| _speedLat != _speedLat)
 		{
-			_speedLon = 0;
-			_speedLat = 0;
+			_speedLon = 0.0;
+			_speedLat = 0.0;
 		}
 	}
 	else
 	{
-		_speedLon = 0;
-		_speedLat = 0;
+		_speedLon = 0.0;
+		_speedLat = 0.0;
 	}
 }
 
 /**
  * Checks if the moving target has reached its destination.
- * @return True if it has, False otherwise.
+ * @return, true if it has
  */
 bool MovingTarget::reachedDestination() const
 {

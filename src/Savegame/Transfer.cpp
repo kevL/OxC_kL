@@ -34,7 +34,7 @@ namespace OpenXcom
 
 /**
  * Initializes a transfer.
- * @param hours Hours in-transit.
+ * @param hours - hours in-transit
  */
 Transfer::Transfer(int hours)
 	:
@@ -53,7 +53,7 @@ Transfer::Transfer(int hours)
  */
 Transfer::~Transfer()
 {
-	if (!_delivered)
+	if (_delivered == false)
 	{
 		delete _soldier;
 		delete _craft;
@@ -62,11 +62,11 @@ Transfer::~Transfer()
 
 /**
  * Loads the transfer from a YAML file.
- * @param node YAML node.
- * @param base Destination base.
- * @param rule Game ruleset.
- * @param save Pointer to savegame.
- * @return Was the transfer content valid?
+ * @param node - reference a YAML node
+ * @param base - pointer to a destination Base
+ * @param rule - pointer to the game's Ruleset
+ * @param save - pointer to the SavedGame
+ * @return, true if the transfer content is valid
  */
 bool Transfer::load(
 		const YAML::Node& node,
@@ -103,7 +103,6 @@ bool Transfer::load(
 		else
 		{
 			delete this;
-
 			return false;
 		}
 	}
@@ -114,23 +113,21 @@ bool Transfer::load(
 		if (rule->getItem(_itemId) == NULL)
 		{
 			delete this;
-
 			return false;
 		}
 	}
 
-
-	_itemQty	= node["itemQty"].as<int>(_itemQty);
+	_itemQty	= node["itemQty"]	.as<int>(_itemQty);
 	_scientists	= node["scientists"].as<int>(_scientists);
-	_engineers	= node["engineers"].as<int>(_engineers);
-	_delivered	= node["delivered"].as<bool>(_delivered);
+	_engineers	= node["engineers"]	.as<int>(_engineers);
+	_delivered	= node["delivered"]	.as<bool>(_delivered);
 
 	return true;
 }
 
 /**
  * Saves the transfer to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Transfer::save() const
 {
@@ -159,7 +156,7 @@ YAML::Node Transfer::save() const
 
 /**
  * Changes the soldier being transferred.
- * @param soldier Pointer to soldier.
+ * @param soldier - pointer to a Soldier
  */
 void Transfer::setSoldier(Soldier* soldier)
 {
@@ -168,7 +165,7 @@ void Transfer::setSoldier(Soldier* soldier)
 
 /**
  * Changes the scientists being transferred.
- * @param scientists Amount of scientists.
+ * @param scientists - amount of scientists
  */
 void Transfer::setScientists(int scientists)
 {
@@ -177,7 +174,7 @@ void Transfer::setScientists(int scientists)
 
 /**
  * Changes the engineers being transferred.
- * @param engineers Amount of engineers.
+ * @param engineers - amount of engineers
  */
 void Transfer::setEngineers(int engineers)
 {
@@ -186,7 +183,7 @@ void Transfer::setEngineers(int engineers)
 
 /**
  * Changes the craft being transferred.
- * @param craft Pointer to craft.
+ * @param craft - pointer to craft
  */
 void Transfer::setCraft(Craft* craft)
 {
@@ -195,7 +192,7 @@ void Transfer::setCraft(Craft* craft)
 
 /**
  * Gets the craft being transferred.
- * @return a Pointer to craft.
+ * @return, pointer to a Craft
  */
 Craft* Transfer::getCraft()
 {
@@ -204,7 +201,7 @@ Craft* Transfer::getCraft()
 
 /**
  * Returns the items being transferred.
- * @return Item ID.
+ * @return, item ID
  */
 std::string Transfer::getItems() const
 {
@@ -213,8 +210,8 @@ std::string Transfer::getItems() const
 
 /**
  * Changes the items being transferred.
- * @param id Item identifier.
- * @param qty Item quantity.
+ * @param id	- reference the item ID
+ * @param qty	- item quantity
  */
 void Transfer::setItems(
 		const std::string& id,
@@ -226,8 +223,8 @@ void Transfer::setItems(
 
 /**
  * Returns the name of the contents of the transfer.
- * @param lang Language to get strings from.
- * @return Name string.
+ * @param lang - pointer to a Language to get strings from
+ * @return, name string
  */
 std::wstring Transfer::getName(Language* lang) const
 {
@@ -245,7 +242,7 @@ std::wstring Transfer::getName(Language* lang) const
 
 /**
  * Returns the time remaining until the transfer arrives at its destination.
- * @return Amount of hours.
+ * @return, amount of hours
  */
 int Transfer::getHours() const
 {
@@ -254,7 +251,7 @@ int Transfer::getHours() const
 
 /**
  * Returns the quantity of items in the transfer.
- * @return Amount of items.
+ * @return, amount of items
  */
 int Transfer::getQuantity() const
 {
@@ -270,7 +267,7 @@ int Transfer::getQuantity() const
 
 /**
  * Returns the type of the contents of the transfer.
- * @return TransferType.
+ * @return, TransferType enum (Transfer.h)
  */
 TransferType Transfer::getType() const
 {
@@ -288,7 +285,7 @@ TransferType Transfer::getType() const
 
 /**
  * Advances the transfer and takes care of the delivery once it's arrived.
- * @param base Pointer to destination base.
+ * @param base - pointer to destination Base
  */
 void Transfer::advance(Base* base)
 {
@@ -317,7 +314,7 @@ void Transfer::advance(Base* base)
 
 /**
  * Get a pointer to the soldier being transferred.
- * @return, Pointer to the soldier being transferred.
+ * @return, pointer to the Soldier being transferred
  */
 Soldier* Transfer::getSoldier()
 {

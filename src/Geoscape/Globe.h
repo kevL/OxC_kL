@@ -362,7 +362,7 @@ private:
 		bool getNewBaseHover(void);
 
 		/// Gets _detail variable
-		bool getShowRadar(void);
+//		bool getShowRadar(void);
 		/// set the _radarLines variable
 		void toggleRadarLines();
 

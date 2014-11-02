@@ -175,7 +175,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 							if ((*c)->getRules()->getRefuelItem() == item->getType())
 //								&& (*c)->getFuelPercentage() < 100)
 							{
-								(*c)->setStopWarning(false);
+								(*c)->setDontWarn(false);
 							}
 						}
 						else if ((*c)->getStatus() == "STR_REARMING")
@@ -189,7 +189,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 									&& (*cw)->getRules()->getClipItem() == item->getType())
 //									&& (*cw)->getAmmo() < (*cw)->getRules()->getAmmoMax())
 								{
-									(*c)->setStopWarning(false);
+									(*c)->setDontWarn(false);
 								}
 							}
 						}

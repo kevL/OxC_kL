@@ -178,7 +178,7 @@ CraftWeaponsState::~CraftWeaponsState()
 
 /**
  * Returns to the previous screen.
- * @param action, Pointer to an action
+ * @param action - pointer to an action
  */
 void CraftWeaponsState::btnCancelClick(Action*)
 {
@@ -187,7 +187,7 @@ void CraftWeaponsState::btnCancelClick(Action*)
 
 /**
  * Equips the weapon on the craft and returns to the previous screen.
- * @param action, Pointer to an action
+ * @param action - pointer to an action
  */
 void CraftWeaponsState::lstWeaponsClick(Action*)
 {

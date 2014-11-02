@@ -221,14 +221,14 @@ ProductProgress Production::step(
 								c != b->getCrafts()->end();
 								++c)
 						{
-							if ((*c)->getStopWarning())
+							if ((*c)->getDontWarn())
 							{
 								if ((*c)->getStatus() == "STR_REFUELING")
 								{
 									if ((*c)->getRules()->getRefuelItem() == i->first)
 //										&& (*c)->getFuelPercentage() < 100)
 									{
-										(*c)->setStopWarning(false);
+										(*c)->setDontWarn(false);
 									}
 								}
 								else if ((*c)->getStatus() == "STR_REARMING")
@@ -242,7 +242,7 @@ ProductProgress Production::step(
 											&& (*cw)->getRules()->getClipItem() == i->first)
 //											&& (*cw)->getAmmo() < (*cw)->getRules()->getAmmoMax())
 										{
-											(*c)->setStopWarning(false);
+											(*c)->setDontWarn(false);
 										}
 									}
 								}

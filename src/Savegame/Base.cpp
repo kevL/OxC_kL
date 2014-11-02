@@ -567,7 +567,7 @@ int Base::detect(Target* target) const
 	{
 		if ((*fac)->getBuildTime() == 0)
 		{
-			double range = static_cast<double>((*fac)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+			const double range = static_cast<double>((*fac)->getRules()->getRadarRange()) * greatCircleConversionFactor;
 			if (range > dist)
 				chance += (*fac)->getRules()->getRadarChance();
 		}
@@ -609,7 +609,7 @@ double Base::insideRadarRange(Target* target) const
 	{
 		if ((*f)->getBuildTime() == 0)
 		{
-			double radarRange = static_cast<double>((*f)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+			const double radarRange = static_cast<double>((*f)->getRules()->getRadarRange()) * greatCircleConversionFactor;
 			if (targetDistance < radarRange)
 			{
 				ret = targetDistance;

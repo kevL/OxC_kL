@@ -746,8 +746,8 @@ bool Craft::getLowFuel() const
 }
 
 /**
- * Sets whether the craft is currently low on fuel -
- * only has enough to get back to base.
+ * Sets whether this craft is currently low on fuel -
+ * only has enough to get back to its Base.
  * @param low - true if fuel is low
  */
 void Craft::setLowFuel(const bool low)
@@ -756,8 +756,8 @@ void Craft::setLowFuel(const bool low)
 }
 
 /**
- * Gets whether the craft has just done a ground mission
- * and is forced to return to base.
+ * Gets whether this craft has just done a ground mission
+ * and is forced to return to its Base.
  * @return, true if this craft needs to return to base
  */
 bool Craft::getMissionComplete() const
@@ -766,8 +766,8 @@ bool Craft::getMissionComplete() const
 }
 
 /**
- * Sets whether the craft has just done a ground mission
- * and is forced to return to base.
+ * Sets whether this craft has just done a ground mission
+ * and is forced to return to its Base.
  * @param mission - true if this craft needs to return to base
  */
 void Craft::setMissionComplete(const bool mission)
@@ -776,7 +776,7 @@ void Craft::setMissionComplete(const bool mission)
 }
 
 /**
- * Gets the current distance between this craft and the base it belongs to.
+ * Gets the current distance between this craft and the Base it belongs to.
  * @return, distance in radian
  */
 double Craft::getDistanceFromBase() const
@@ -785,7 +785,7 @@ double Craft::getDistanceFromBase() const
 }
 
 /**
- * Gets the amount of fuel the craft uses while it's in the air based on speed.
+ * Gets the amount of fuel this craft uses while it's in the air.
  * @return, fuel amount
  */
 int Craft::getFuelConsumption() const
@@ -798,7 +798,7 @@ int Craft::getFuelConsumption() const
 }
 
 /**
- * Gets the minimum required fuel for the craft to make it back to base.
+ * Gets the minimum required fuel for this craft to get back to Base.
  * @return, fuel amount
  */
 int Craft::getFuelLimit() const
@@ -807,7 +807,7 @@ int Craft::getFuelLimit() const
 }
 
 /**
- * Gets the minimum required fuel for the craft to go to a base.
+ * Gets the minimum required fuel for this craft to get back to Base.
  * @param base - pointer to a target Base
  * @return, fuel amount
  */
@@ -820,7 +820,7 @@ int Craft::getFuelLimit(Base* base) const
 }
 
 /**
- * Sends the craft back to its origin base.
+ * Sends the craft back to its origin Base.
  */
 void Craft::returnToBase()
 {
@@ -927,39 +927,37 @@ void Craft::repair()
 	setDamage(_damage - _rules->getRepairRate());
 
 	if (_damage == 0)
-		checkup(); // kL
-//		_status = "STR_REARMING";
+		checkup();
 }
 
 /**
  * Rearms the craft's weapons by adding ammo every hour
  * while it's docked at the base. kL_note: now every half-hour!
- * @param rules - pointer to a ruleset
+ * @param rules - pointer to Ruleset
  * @return, the ammo ID missing for rearming, or "" if fully rearmed
  */
 std::string Craft::rearm(const Ruleset* rules)
 {
 	std::string ret;
 
-	for (std::vector<CraftWeapon*>::iterator
+	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
 			;
 			++i)
 	{
 		if (i == _weapons.end())
 		{
-			checkup(); // kL
-//			_status = "STR_REFUELLING";
+			checkup();
 			break;
 		}
 
 		if (*i != NULL
 			&& (*i)->isRearming())
 		{
-			std::string clip = (*i)->getRules()->getClipItem();
-			int baseClips = _base->getItems()->getItem(clip);
+			const std::string clip = (*i)->getRules()->getClipItem();
+			const int baseClips = _base->getItems()->getItem(clip);
 
-			if (clip.empty())
+			if (clip.empty() == true)
 				(*i)->rearm(0, 0);
 			else if (baseClips > 0)
 			{
@@ -989,10 +987,10 @@ std::string Craft::rearm(const Ruleset* rules)
 		}
 	}
 
-	if (ret.empty())
+	if (ret.empty() == true)
 	{
 		_stopWarning = false; // reset warnings.
-		checkup(); // kL
+		checkup();
 	}
 
 	return ret;
@@ -1008,24 +1006,7 @@ void Craft::refuel()
 	setFuel(_fuel + _rules->getRefuelRate());
 
 	if (_fuel == _rules->getMaxFuel())
-	{
-		checkup(); // kL
-
-/*		_status = "STR_READY";
-
-		for (std::vector<CraftWeapon*>::iterator
-				i = _weapons.begin();
-				i != _weapons.end();
-				++i)
-		{
-			if (*i
-				&& (*i)->isRearming())
-			{
-				_status = "STR_REARMING";
-				break;
-			}
-		} */
-	}
+		checkup();
 }
 
 /**
@@ -1199,7 +1180,7 @@ int Craft::getLoadCurrent()
  * So player don't get spammed with no-fuel and/or no-ammo messages.
  * @param stop - true to inhibit warnings
  */
-void Craft::setStopWarning(const bool stop)
+void Craft::setDontWarn(const bool stop)
 {
 	_stopWarning = stop;
 }
@@ -1208,7 +1189,7 @@ void Craft::setStopWarning(const bool stop)
  * Gets the stopWarning flag.
  * @return, stopWarning
  */
-bool Craft::getStopWarning() const
+bool Craft::getDontWarn() const
 {
 	return _stopWarning;
 }

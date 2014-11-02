@@ -108,7 +108,6 @@ bool CraftWeapon::setAmmo(int ammo)
 	if (_ammo < 0)
 	{
 		_ammo = 0;
-
 		return false;
 	}
 
@@ -128,8 +127,7 @@ bool CraftWeapon::isRearming() const
 }
 
 /**
- * Sets whether this craft weapon needs rearming
- * (for example, in case there's no more ammo).
+ * Sets whether this craft weapon needs rearming - in case there's no more ammo.
  * @param rearming - rearming status
  */
 void CraftWeapon::setRearming(bool rearming)
@@ -189,24 +187,24 @@ int CraftWeapon::rearm(
 
 /**
  * Fires a projectile from this CraftWeapon.
- * @return, pointer to the new projectile
+ * @return, pointer to the fired CraftWeaponProjectile
  */
 CraftWeaponProjectile* CraftWeapon::fire() const
 {
-	CraftWeaponProjectile* p = new CraftWeaponProjectile();
+	CraftWeaponProjectile* const proj = new CraftWeaponProjectile();
 
-	p->setType(this->getRules()->getProjectileType());
-	p->setSpeed(this->getRules()->getProjectileSpeed());
-	p->setAccuracy(this->getRules()->getAccuracy());
-	p->setDamage(this->getRules()->getDamage());
-	p->setRange(this->getRules()->getRange());
+	proj->setType(this->getRules()->getProjectileType());
+	proj->setSpeed(this->getRules()->getProjectileSpeed());
+	proj->setAccuracy(this->getRules()->getAccuracy());
+	proj->setDamage(this->getRules()->getDamage());
+	proj->setRange(this->getRules()->getRange());
 
-	return p;
+	return proj;
 }
 
 /**
  * Get how many clips are loaded in this CraftWeapon.
- * @param ruleset - pointer to the core ruleset
+ * @param ruleset - pointer to the core Ruleset
  * @return, the number of clips loaded
  */
 int CraftWeapon::getClipsLoaded(Ruleset* ruleset)
