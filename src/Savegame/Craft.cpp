@@ -80,7 +80,8 @@ Craft::Craft(
 		_inBattlescape(false),
 		_inDogfight(false),
 		_loadCur(0),
-		_warning(CW_NONE) // do not save-to-file. Ie, warn player after re-loading
+		_warning(CW_NONE),
+		_warned(false) // do not save-to-file; ie, warn player after reloading
 {
 	_items = new ItemContainer();
 
@@ -137,9 +138,10 @@ void Craft::load(
 {
 	MovingTarget::load(node);
 
-	_id		= node["id"]	.as<int>(_id);
-	_fuel	= node["fuel"]	.as<int>(_fuel);
-	_damage	= node["damage"].as<int>(_damage);
+	_id			= node["id"]					.as<int>(_id);
+	_fuel		= node["fuel"]					.as<int>(_fuel);
+	_damage		= node["damage"]				.as<int>(_damage);
+	_warning	= (CraftWarning)node["warning"]	.as<int>(_warning);
 
 	size_t j = 0;
 	for (YAML::const_iterator
@@ -297,6 +299,7 @@ YAML::Node Craft::save() const
 	node["id"]		= _id;
 	node["fuel"]	= _fuel;
 	node["damage"]	= _damage;
+	node["warning"]	= (int)_warning;
 
 	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
@@ -866,6 +869,7 @@ void Craft::think()
 void Craft::checkup()
 {
 	_warning = CW_NONE;
+	_warned = false;
 
 	int
 		cw = 0,
@@ -975,8 +979,7 @@ std::string Craft::rearm(const Ruleset* rules)
 						clipsUsed = -clipsUsed;
 						test = clip;
 
-						if (_warning != CW_STOP)
-							_warning = CW_CANTREARM;
+						_warning = CW_CANTREARM;
 					}
 
 					_base->getItems()->removeItem(
@@ -988,8 +991,8 @@ std::string Craft::rearm(const Ruleset* rules)
 			{
 				test = clip;
 
-				if (_warning != CW_STOP)
-					_warning = CW_CANTREARM;
+				_warning = CW_CANTREARM;
+				(*i)->setCantLoad();
 			}
 
 			if (test.empty() == false) // warning
@@ -1178,30 +1181,10 @@ void Craft::setLoadCurrent(int load)
  */
 int Craft::getLoadCurrent()
 {
-//	_loadCur = getNumEquipment() + getNumSoldiers() * 10 + getNumVehicles() * 40;
 	_loadCur = getNumEquipment() + getSpaceUsed() * 10;
 
 	return _loadCur;
 }
-
-/**
- * Sets the stopWarning flag.
- * So player don't get spammed with no-fuel and/or no-ammo messages.
- * @param stop - true to inhibit warnings
- */
-/* void Craft::setDontWarn(const bool stop)
-{
-	_stopWarning = stop;
-} */
-
-/**
- * Gets the stopWarning flag.
- * @return, stopWarning
- */
-/* bool Craft::getDontWarn() const
-{
-	return _stopWarning;
-} */
 
 /**
  * Gets this craft's current CraftWarning status.
@@ -1219,6 +1202,24 @@ CraftWarning Craft::getWarning() const
 void Craft::setWarning(const CraftWarning warning)
 {
 	_warning = warning;
+}
+
+/**
+ * Gets whether a warning has been issued for this Craft.
+ * @return, true if player has been warned about low resources
+ */
+bool Craft::getWarned() const
+{
+	return _warned;
+}
+
+/**
+ * Sets whether a warning has been issued for this Craft.
+ * @param warn - true if player has been warned about low resources
+ */
+void Craft::setWarned(const bool warn)
+{
+	_warned = warn;
 }
 
 }

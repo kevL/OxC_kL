@@ -73,13 +73,15 @@ private:
 		/// Gets the craft weapon's rearming status.
 		bool getRearming() const;
 		/// Sets the craft weapon's rearming status
-		void setRearming(bool rearming = true);
+		void setRearming(const bool rearming = true);
 		/// Rearms the craft weapon.
 		int rearm(
 				const int baseClips,
 				const int clipSize);
 		/// Gets this CraftWeapon's cantLoad status - no stock in Base Stores.
-		bool CraftWeapon::getCantLoad() const;
+		bool getCantLoad() const;
+		/// Sets this CraftWeapon's cantLoad status - no stock in Base Stores.
+		void setCantLoad(const bool cantLoad = true);
 
 		/// Fires the craft weapon - used during dogfights.
 		CraftWeaponProjectile* fire() const;

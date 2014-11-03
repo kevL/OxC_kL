@@ -60,6 +60,7 @@ void CraftWeapon::load(const YAML::Node& node)
 {
 	_ammo		= node["ammo"]		.as<int>(_ammo);
 	_rearming	= node["rearming"]	.as<bool>(_rearming);
+	_cantLoad	= node["cantLoad"]	.as<bool>(_cantLoad);
 }
 
 /**
@@ -74,6 +75,8 @@ YAML::Node CraftWeapon::save() const
 	node["ammo"]			= _ammo;
 	if (_rearming)
 		node["rearming"]	= _rearming;
+	if (_cantLoad)
+		node["cantLoad"]	= _cantLoad;
 
 	return node;
 }
@@ -131,10 +134,9 @@ bool CraftWeapon::getRearming() const
  * Sets whether this craft weapon needs rearming - in case there's no more ammo.
  * @param rearming - rearming status (default true)
  */
-void CraftWeapon::setRearming(bool rearming)
+void CraftWeapon::setRearming(const bool rearming)
 {
 	_rearming = rearming;
-//	_dontWarn = false;
 }
 
 /**
@@ -192,10 +194,20 @@ int CraftWeapon::rearm(
 
 /**
  * Gets this CraftWeapon's cantLoad status - no stock in Base Stores.
+ * @return, true if weapon ammo is low in stock
  */
 bool CraftWeapon::getCantLoad() const
 {
 	return _cantLoad;
+}
+
+/**
+ * Sets this CraftWeapon's cantLoad status - no stock in Base Stores.
+ * @param cantLoad - true if weapon ammo is low in stock
+ */
+void CraftWeapon::setCantLoad(const bool cantLoad)
+{
+	_cantLoad = cantLoad;
 }
 
 /**

@@ -170,12 +170,12 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 						if ((*c)->getStatus() == "STR_OUT")
 							continue;
 
-						if ((*c)->getWarning() == CW_STOP)
+						if ((*c)->getWarned() == true)
 						{
 							if ((*c)->getStatus() == "STR_REFUELING")
 							{
 								if ((*c)->getRules()->getRefuelItem() == item->getType())
-									(*c)->setWarning(CW_NONE);
+									(*c)->setWarned(false);
 							}
 							else if ((*c)->getStatus() == "STR_REARMING")
 							{
@@ -187,7 +187,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 									if (*cw != NULL
 										&& (*cw)->getRules()->getClipItem() == item->getType())
 									{
-										(*c)->setWarning(CW_NONE);
+										(*c)->setWarned(false);
 									}
 								}
 							}

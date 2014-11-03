@@ -42,7 +42,7 @@ class Vehicle;
 
 enum CraftWarning
 {
-	CW_STOP = -1,	// -1
+//	CW_STOP = -1,	// -1
 	CW_NONE,		//  0
 	CW_CANTREPAIR,	//  1
 	CW_CANTREARM,	//  2
@@ -65,7 +65,8 @@ private:
 		_inBattlescape,
 		_inDogfight,
 		_lowFuel,
-		_mission;
+		_mission,
+		_warned;
 	int
 		_loadCap,
 		_loadCur,
@@ -257,6 +258,10 @@ private:
 		CraftWarning getWarning() const;
 		/// Sets this craft's CraftWarning status.
 		void setWarning(const CraftWarning warning);
+		/// Gets whether a warning has been issued for this Craft.
+		bool getWarned() const;
+		/// Sets whether a warning has been issued for this Craft.
+		void setWarned(const bool warn = true);
 };
 
 }

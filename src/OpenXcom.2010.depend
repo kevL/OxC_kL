@@ -4568,7 +4568,7 @@
 1413136961 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1415007421 f:\git\openxcom\src\savegame\craft.h
+1415044072 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
 	"CraftId.h"
@@ -4832,7 +4832,7 @@
 1413136961 f:\git\openxcom\src\savegame\craftweaponprojectile.h
 	<string>
 
-1414975860 f:\git\openxcom\src\savegame\craftweapon.h
+1415047582 f:\git\openxcom\src\savegame\craftweapon.h
 	<string>
 	<yaml-cpp/yaml.h>
 
@@ -5084,7 +5084,7 @@
 	<windows.h>
 	<stddef.h>
 
-1413136953 source:f:\git\openxcom\src\basescape\minibaseview.cpp
+1415045551 source:f:\git\openxcom\src\basescape\minibaseview.cpp
 	"MiniBaseView.h"
 	<cmath>
 	"../Engine/Action.h"
@@ -7780,7 +7780,7 @@
 1413136958 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1415008566 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1415044115 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8051,7 +8051,7 @@
 	"../Savegame/Target.h"
 	"../Savegame/Ufo.h"
 
-1415007176 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
+1415044286 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
 	"ItemsArrivingState.h"
 	"GeoscapeState.h"
 	"../Basescape/BasescapeState.h"
@@ -8182,7 +8182,7 @@
 1404096023 source:f:\git\openxcom\src\geoscape\polyline.cpp
 	"Polyline.h"
 
-1413136958 source:f:\git\openxcom\src\geoscape\productioncompletestate.cpp
+1415044425 source:f:\git\openxcom\src\geoscape\productioncompletestate.cpp
 	"ProductionCompleteState.h"
 	<assert.h>
 	"GeoscapeState.h"
@@ -9608,7 +9608,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1415036446 source:f:\git\openxcom\src\savegame\craft.cpp
+1415047686 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
@@ -9634,7 +9634,7 @@
 	"../Ruleset/Unit.h"
 	"../Savegame/SavedGame.h"
 
-1415007401 source:f:\git\openxcom\src\savegame\craftweapon.cpp
+1415047634 source:f:\git\openxcom\src\savegame\craftweapon.cpp
 	"CraftWeapon.h"
 	"CraftWeaponProjectile.h"
 	"../Ruleset/RuleCraftWeapon.h"
@@ -9669,7 +9669,7 @@
 1413601158 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
-1415007006 source:f:\git\openxcom\src\savegame\production.cpp
+1415044479 source:f:\git\openxcom\src\savegame\production.cpp
 	"Production.h"
 	<limits>
 	"Base.h"
@@ -9822,7 +9822,7 @@
 	"../Ruleset/MapDataSet.h"
 	"../Ruleset/RuleItem.h"
 
-1414965817 source:f:\git\openxcom\src\savegame\transfer.cpp
+1415044191 source:f:\git\openxcom\src\savegame\transfer.cpp
 	"Transfer.h"
 	"Base.h"
 	"Craft.h"

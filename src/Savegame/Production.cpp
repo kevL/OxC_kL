@@ -221,13 +221,12 @@ ProductProgress Production::step(
 								c != b->getCrafts()->end();
 								++c)
 						{
-//							if ((*c)->getDontWarn())
-							if ((*c)->getWarning() == CW_STOP)
+							if ((*c)->getWarned() == true)
 							{
 								if ((*c)->getStatus() == "STR_REFUELING")
 								{
 									if ((*c)->getRules()->getRefuelItem() == i->first)
-										(*c)->setWarning(CW_NONE);
+										(*c)->setWarned(false);
 								}
 								else if ((*c)->getStatus() == "STR_REARMING")
 								{
@@ -239,7 +238,7 @@ ProductProgress Production::step(
 										if (*cw != NULL
 											&& (*cw)->getRules()->getClipItem() == i->first)
 										{
-											(*c)->setWarning(CW_NONE);
+											(*c)->setWarned(false);
 										}
 									}
 								}

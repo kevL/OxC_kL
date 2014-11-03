@@ -2141,9 +2141,9 @@ void GeoscapeState::time30Minutes()
 				const std::string str = (*j)->rearm(_game->getRuleset());
 
 				if (str.empty() == false
-					&& (*j)->getWarning() == CW_CANTREARM)
+					&& (*j)->getWarned() == false)
 				{
-					(*j)->setWarning(CW_STOP);
+					(*j)->setWarned();
 
 					const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
 											.arg(tr(str))
@@ -2167,9 +2167,9 @@ void GeoscapeState::time30Minutes()
 						(*i)->getItems()->removeItem(item);
 						(*j)->refuel();
 					}
-					else if ((*j)->getWarning() == CW_CANTREFUEL)
+					else if ((*j)->getWarned() == false)
 					{
-						(*j)->setWarning(CW_STOP);
+						(*j)->setWarned();
 
 						const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
 												.arg(tr(item))
