@@ -56,7 +56,7 @@ namespace OpenXcom
 {
 
 /**
- * Creates a craft of the specified type and assigns it the latest craft ID available.
+ * Creates a Craft of the specified type and assigns it the latest craft ID available.
  * @param rules	- pointer to RuleCraft
  * @param base	- pointer to Base of origin
  * @param id	- ID to assign to the craft; NULL for no id
@@ -80,8 +80,7 @@ Craft::Craft(
 		_inBattlescape(false),
 		_inDogfight(false),
 		_loadCur(0),
-//		_stopWarning(false), // do not save-to-file. Ie, warn player after re-loading
-		_warning(CW_NONE)
+		_warning(CW_NONE) // do not save-to-file. Ie, warn player after re-loading
 {
 	_items = new ItemContainer();
 
@@ -96,13 +95,13 @@ Craft::Craft(
 		_weapons.push_back(0);
 	}
 
-//	setBase(base);
+	setBase(base);
 
 	_loadCap = _rules->getMaxItems() + _rules->getSoldiers() * 10;
 }
 
 /**
- * Delete the contents of the craft from memory.
+ * Delete the contents of this Craft from memory.
  */
 Craft::~Craft()
 {
@@ -126,8 +125,8 @@ Craft::~Craft()
 }
 
 /**
- * Loads a craft from a YAML file.
- * @param node	- reference to a YAML node
+ * Loads this Craft from a YAML file.
+ * @param node	- reference a YAML node
  * @param rules	- pointer to Ruleset
  * @param save	- pointer to the SavedGame
  */
@@ -287,7 +286,7 @@ void Craft::load(
 }
 
 /**
- * Saves the craft to a YAML file.
+ * Saves this Craft to a YAML file.
  * @return, YAML node
  */
 YAML::Node Craft::save() const
@@ -348,7 +347,7 @@ YAML::Node Craft::save() const
 }
 
 /**
- * Loads a craft unique identifier from a YAML file.
+ * Loads this Craft's unique identifier from a YAML file.
  * @param node - reference a YAML node
  * @return, unique craft id
  */
@@ -360,7 +359,7 @@ CraftId Craft::loadId(const YAML::Node& node)
 }
 
 /**
- * Saves the craft's unique identifiers to a YAML file.
+ * Saves this Craft's unique identifiers to a YAML file.
  * @return, YAML node
  */
 YAML::Node Craft::saveId() const
@@ -376,7 +375,7 @@ YAML::Node Craft::saveId() const
 }
 
 /**
- * Gets the ruleset for the craft's type.
+ * Gets the ruleset for this Craft's type.
  * @return, pointer to RuleCraft
  */
 RuleCraft* Craft::getRules() const
@@ -385,7 +384,7 @@ RuleCraft* Craft::getRules() const
 }
 
 /**
- * Sets the ruleset for a craft's type.
+ * Sets the ruleset for this Craft's type.
  * @param rules - pointer to a different RuleCraft
  * @warning ONLY FOR NEW BATTLE USE!
  */
@@ -404,7 +403,7 @@ void Craft::changeRules(RuleCraft* rules)
 }
 
 /**
- * Gets a craft's unique ID. Each craft can be identified by its type and ID.
+ * Gets this Craft's unique ID. Each craft can be identified by its type and ID.
  * @return, unique ID
  */
 int Craft::getId() const
@@ -413,7 +412,7 @@ int Craft::getId() const
 }
 
 /**
- * Gets a craft's unique identifying name.
+ * Gets this Craft's unique identifying name.
  * If there's no custom name, the language default is used.
  * @param lang - pointer to a Language to get strings from
  * @return, full name of craft
@@ -427,7 +426,7 @@ std::wstring Craft::getName(Language* lang) const
 }
 
 /**
- * Sets a craft's custom name.
+ * Sets this Craft's custom name.
  * @param newName -  reference a new custom name; if blank, the language default is used
  */
 void Craft::setName(const std::wstring& newName)
@@ -436,7 +435,7 @@ void Craft::setName(const std::wstring& newName)
 }
 
 /**
- * Gets the globe marker for the craft.
+ * Gets the globe marker for this Craft.
  * @return, marker sprite, -1 if none
  */
 int Craft::getMarker() const
@@ -448,7 +447,7 @@ int Craft::getMarker() const
 }
 
 /**
- * Gets the base the craft belongs to.
+ * Gets the base this Craft belongs to.
  * @return, pointer to the Base
  */
 Base* Craft::getBase() const
@@ -457,9 +456,9 @@ Base* Craft::getBase() const
 }
 
 /**
- * Sets the base the craft belongs to.
+ * Sets the base this Craft belongs to.
  * @param base		- pointer to Base
- * @param transfer	- true to move the craft to the Base coordinates
+ * @param transfer	- true to move the craft to the Base coordinates (true)
  */
 void Craft::setBase(
 		Base* base,
@@ -467,7 +466,7 @@ void Craft::setBase(
 {
 	_base = base;
 
-	if (transfer)
+	if (transfer == true)
 	{
 		_lon = base->getLongitude();
 		_lat = base->getLatitude();
@@ -475,7 +474,7 @@ void Craft::setBase(
 }
 
 /**
- * Gets the current status of the craft.
+ * Gets the current status of this Craft.
  * @return, status string
  */
 std::string Craft::getStatus() const
@@ -484,7 +483,7 @@ std::string Craft::getStatus() const
 }
 
 /**
- * Sets the current status of the craft.
+ * Sets the current status of this Craft.
  * @param status - reference a status string
  */
 void Craft::setStatus(const std::string& status)
@@ -493,7 +492,7 @@ void Craft::setStatus(const std::string& status)
 }
 
 /**
- * Gets the current altitude of the craft.
+ * Gets the current altitude of this Craft.
  * @return, altitude string
  */
 std::string Craft::getAltitude() const
@@ -548,7 +547,7 @@ std::string Craft::getAltitude() const
 	} */ // kL_end.
 
 /**
- * Sets the destination the craft is heading to.
+ * Sets the destination this Craft is heading to.
  * @param dest - pointer to Target destination
  */
 void Craft::setDestination(Target* dest)
@@ -954,7 +953,8 @@ std::string Craft::rearm(const Ruleset* rules)
 			i != _weapons.end();
 			++i)
 	{
-		if ((*i)->getRearming() == true)
+		if (*i != NULL
+			&& (*i)->getRearming() == true)
 		{
 			test = "";
 
@@ -1002,15 +1002,7 @@ std::string Craft::rearm(const Ruleset* rules)
 			else // armok
 				break;
 		}
-	} // ... epicycle syndrome ... This handles only 2 craft weapons.
-
-/*	if (ret.empty() == true)
-	{
-		if (test.empty() == true)
-			checkup();
-		else
-			ret = test;
-	} */
+	} // That handles only 2 craft weapons.
 
 	return ret;
 }
@@ -1020,8 +1012,6 @@ std::string Craft::rearm(const Ruleset* rules)
  */
 void Craft::refuel()
 {
-//	_stopWarning = false; // reset warnings.
-
 	setFuel(_fuel + _rules->getRefuelRate());
 
 	if (_fuel == _rules->getMaxFuel())

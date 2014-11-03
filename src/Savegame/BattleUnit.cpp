@@ -354,7 +354,7 @@ BattleUnit::~BattleUnit()
 			delete _cache[i];
 	}
 
-/*kL: Soldier Diary, not needed for nonSoldiers.
+/*kL: Soldier Diary, not needed for nonSoldiers. Or soldiers for that matter ....
 	if (getGeoscapeSoldier() == NULL)
 	{
 		for (std::vector<BattleUnitKills*>::const_iterator

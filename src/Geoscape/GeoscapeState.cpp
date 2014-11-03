@@ -2134,20 +2134,15 @@ void GeoscapeState::time30Minutes()
 			if ((*j)->getStatus() == "STR_OUT")
 				continue;
 
-			// kL_begin: moved up from time1Hour()
 			if ((*j)->getStatus() == "STR_REPAIRS")
 				(*j)->repair();
 			else if ((*j)->getStatus() == "STR_REARMING")
 			{
-				// NOTE: rearm() cycles through all craft weapons on the Craft
-				// but returns only 1 string, for the last cantLoad weapon;
-				// so these popup messages might get a bit misleading ....
 				const std::string str = (*j)->rearm(_game->getRuleset());
+
 				if (str.empty() == false
-//					&& (*j)->getDontWarn() == false)
 					&& (*j)->getWarning() == CW_CANTREARM)
 				{
-//					(*j)->setDontWarn();
 					(*j)->setWarning(CW_STOP);
 
 					const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
@@ -2158,10 +2153,11 @@ void GeoscapeState::time30Minutes()
 											this,
 											msg));
 				}
-			} // kL_end.
+			}
 			else if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				const std::string item = (*j)->getRules()->getRefuelItem();
+
 				if (item.empty() == true)
 					(*j)->refuel();
 				else
@@ -2170,13 +2166,10 @@ void GeoscapeState::time30Minutes()
 					{
 						(*i)->getItems()->removeItem(item);
 						(*j)->refuel();
-//						(*j)->setLowFuel(false);
 					}
-//					else if ((*j)->getDontWarn() == false) //if ((*j)->getLowFuel() == false)
 					else if ((*j)->getWarning() == CW_CANTREFUEL)
 					{
 						(*j)->setWarning(CW_STOP);
-//						(*j)->setDontWarn();
 
 						const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
 												.arg(tr(item))
@@ -2185,12 +2178,6 @@ void GeoscapeState::time30Minutes()
 						popup(new CraftErrorState(
 												this,
 												msg));
-
-//						if ((*j)->getFuel() > 0)
-//							(*j)->setStatus("STR_READY");
-//						else
-//							(*j)->setLowFuel(true);	// kL_note: This is probably used to ground the Craft.
-													// And to NOT give repeated 'Not Enough Fuel' warnings.
 					}
 				}
 			}

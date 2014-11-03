@@ -1525,7 +1525,7 @@ void DogfightState::ufoFireWeapon()
  */
 void DogfightState::minimumDistance()
 {
-	int max = 0;
+	int dist = 0;
 
 	for (std::vector<CraftWeapon*>::iterator
 			i = _craft->getWeapons()->begin();
@@ -1535,17 +1535,17 @@ void DogfightState::minimumDistance()
 		if (*i == NULL)
 			continue;
 
-		if ((*i)->getRules()->getRange() > max
+		if ((*i)->getRules()->getRange() > dist
 			&& (*i)->getAmmo() > 0)
 		{
-			max = (*i)->getRules()->getRange();
+			dist = (*i)->getRules()->getRange();
 		}
 	}
 
-	if (max == 0)
+	if (dist == 0)
 		_targetDist = STANDOFF_DIST;
 	else
-		_targetDist = max * 8;
+		_targetDist = dist * 8;
 }
 
 /**
@@ -1553,7 +1553,7 @@ void DogfightState::minimumDistance()
  */
 void DogfightState::maximumDistance()
 {
-	int min = 1000;
+	int dist = 1000;
 
 	for (std::vector<CraftWeapon*>::iterator
 			i = _craft->getWeapons()->begin();
@@ -1563,17 +1563,17 @@ void DogfightState::maximumDistance()
 		if (*i == NULL)
 			continue;
 
-		if ((*i)->getRules()->getRange() < min
+		if ((*i)->getRules()->getRange() < dist
 			&& (*i)->getAmmo() > 0)
 		{
-			min = (*i)->getRules()->getRange();
+			dist = (*i)->getRules()->getRange();
 		}
 	}
 
-	if (min == 1000)
+	if (dist == 1000)
 		_targetDist = STANDOFF_DIST;
 	else
-		_targetDist = min * 8;
+		_targetDist = dist * 8;
 }
 
 /**

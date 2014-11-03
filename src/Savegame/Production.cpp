@@ -227,11 +227,7 @@ ProductProgress Production::step(
 								if ((*c)->getStatus() == "STR_REFUELING")
 								{
 									if ((*c)->getRules()->getRefuelItem() == i->first)
-//										&& (*c)->getFuelPercentage() < 100)
-									{
-//										(*c)->setDontWarn(false);
 										(*c)->setWarning(CW_NONE);
-									}
 								}
 								else if ((*c)->getStatus() == "STR_REARMING")
 								{
@@ -242,9 +238,7 @@ ProductProgress Production::step(
 									{
 										if (*cw != NULL
 											&& (*cw)->getRules()->getClipItem() == i->first)
-//											&& (*cw)->getAmmo() < (*cw)->getRules()->getAmmoMax())
 										{
-//											(*c)->setDontWarn(false);
 											(*c)->setWarning(CW_NONE);
 										}
 									}

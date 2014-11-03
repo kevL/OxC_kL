@@ -66,7 +66,6 @@ private:
 		_inDogfight,
 		_lowFuel,
 		_mission;
-//		_stopWarning;
 	int
 		_loadCap,
 		_loadCur,
@@ -254,10 +253,6 @@ private:
 		/// Gets current load.
 		int getLoadCurrent();
 
-		/// Sets the stopWarning flag.
-//		void setDontWarn(const bool stop = true);
-		/// Gets the stopWarning flag.
-//		bool getDontWarn() const;
 		/// Gets this craft's current CraftWarning status.
 		CraftWarning getWarning() const;
 		/// Sets this craft's CraftWarning status.

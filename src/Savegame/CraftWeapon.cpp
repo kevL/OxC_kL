@@ -172,19 +172,19 @@ int CraftWeapon::rearm(
 			loadQty = clipsRequested * clipSize; // Falko-note
 	}
 	else // baseClips < clipsRequested
+	{
 		_cantLoad = true;
+
+		loadQty = baseClips * clipSize;
+	}
 
 	setAmmo(_ammo + loadQty);
 	_rearming = (_ammo < fullQty); // stops 'rearming' if TRUE.
-//	_dontWarn = ();
 
 	if (clipSize < 1)
 		return 0;
 
 	int ret = (loadQty + clipSize - 1) / clipSize; // kL_mod, round up.
-
-	if (ret < 1) // kL, safety.
-		ret = 1;
 
 	if (clipsRequested > baseClips)
 		ret = -ret; // trick to tell Craft that there isn't enough clips at Base.

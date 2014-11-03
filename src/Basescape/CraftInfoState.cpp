@@ -54,7 +54,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Craft Info screen.
+ * Initializes all the elements in the CraftInfo screen.
  * @param base		- pointer to the Base to get info from
  * @param craftId	- ID of the selected craft
  */
@@ -199,9 +199,8 @@ void CraftInfoState::init()
 	_craft = _base->getCrafts()->at(_craftId);
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
 
-	std::string stat = _craft->getStatus();
-	_txtStatus->setText(tr(stat));
-//	base->getCrafts()->at(craftId)->getName(_game->getLanguage()));
+//	std::string stat = _craft->getStatus();
+	_txtStatus->setText(tr(_craft->getStatus()));
 
 	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
@@ -215,14 +214,13 @@ void CraftInfoState::init()
 		ss2; // fuel
 
 	ss1 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent()));
-//	if (_craft->getStatus() == "STR_REPAIRS" &&
+//	if (stat == "STR_REPAIRS" &&
 	if (_craft->getDamage() > 0)
 	{
-		hours = static_cast<int>(
-					ceil(static_cast<double>(_craft->getDamage())
-						/ static_cast<double>(_craft->getRules()->getRepairRate())
-						/ 2.0)); // repair every half-hour.
-//		ss1 << L"\n" << tr("STR_HOUR", hours);
+		hours = static_cast<int>(ceil(
+				static_cast<double>(_craft->getDamage())
+					/ static_cast<double>(_craft->getRules()->getRepairRate())
+				/ 2.0)); // repair every half-hour.
 		ss1 << formatTime(
 						hours,
 						false); // ... unless item is required to repair Craft.
@@ -230,14 +228,13 @@ void CraftInfoState::init()
 	_txtDamage->setText(ss1.str());
 
 	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
-//	if (_craft->getStatus() == "STR_REFUELLING" &&
+//	if (stat == "STR_REFUELLING" &&
 	if (_craft->getRules()->getMaxFuel() - _craft->getFuel() > 0)
 	{
 		hours = static_cast<int>(ceil(
 				static_cast<double>(_craft->getRules()->getMaxFuel() - _craft->getFuel())
 					/ static_cast<double>(_craft->getRules()->getRefuelRate())
 				/ 2.0)); // refuel every half-hour.
-//		ss2 << L"\n" << tr("STR_HOUR", hours);
 		ss2 << formatTime(
 						hours,
 						_craft->getWarning() == CW_CANTREFUEL);
@@ -311,7 +308,7 @@ void CraftInfoState::init()
 			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(cw1->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(cw1->getRules()->getAmmoMax());
-//			if (_craft->getStatus() == "STR_REARMING" &&
+//			if (stat == "STR_REARMING" &&
 			if (cw1->getAmmo() < cw1->getRules()->getAmmoMax())
 			{
 				hours = static_cast<int>(ceil(
@@ -354,7 +351,7 @@ void CraftInfoState::init()
 			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(cw2->getAmmo()) << L"\n\x01";
 			ss << tr("STR_MAX").arg(cw2->getRules()->getAmmoMax());
-//			if (_craft->getStatus() == "STR_REARMING" &&
+//			if (stat == "STR_REARMING" &&
 			if (cw2->getAmmo() < cw2->getRules()->getAmmoMax())
 			{
 				hours = static_cast<int>(ceil(
@@ -381,10 +378,6 @@ void CraftInfoState::init()
 		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);
 	}
-
-//	_defaultName = tr("STR_CRAFTNAME")
-//								.arg(tr(_craft->getRules()->getType()))
-//								.arg(_craft->getId());
 }
 
 /**
@@ -415,7 +408,6 @@ std::wstring CraftInfoState::formatTime(
 	if (hours > 0)
 		ss << tr("STR_HOUR", hours);
 
-//	if (_craft->getDontWarn() == true)
 	if (delayed == true)
 		ss << L" +";
 
@@ -497,9 +489,6 @@ void CraftInfoState::btnArmorClick(Action*)
 void CraftInfoState::edtCraftChange(Action* action)
 {
 	_craft->setName(_edtCraft->getText());
-
-//	if (_craft->getName(_game->getLanguage()) == _defaultName)
-//		_craft->setName(L"");
 
 	if (action->getDetails()->key.keysym.sym == SDLK_RETURN
 		|| action->getDetails()->key.keysym.sym == SDLK_KP_ENTER)

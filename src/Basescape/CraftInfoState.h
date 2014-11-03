@@ -63,10 +63,8 @@ private:
 		* _txtFuel,
 		* _txtStatus,
 		* _txtW1Ammo,
-//		* _txtW1Max,
 		* _txtW1Name,
 		* _txtW2Ammo,
-//		* _txtW1Max,
 		* _txtW2Name;
 	Surface
 		* _sprite,

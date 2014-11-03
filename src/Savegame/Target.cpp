@@ -52,7 +52,7 @@ Target::~Target()
 			++i)
 	{
 		Craft* craft = dynamic_cast<Craft*>(_followers[i]);
-		if (craft)
+		if (craft != NULL)
 			craft->returnToBase();
 	}
 }
@@ -151,7 +151,7 @@ void Target::setLatitude(double lat)
 
 /**
  * Returns the list of crafts currently following this target.
- * @return, pointer to a list of pointers to crafts
+ * @return, pointer to a vector of pointers to crafts
  */
 std::vector<Target*>* Target::getFollowers()
 {
