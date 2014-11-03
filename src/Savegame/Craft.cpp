@@ -940,7 +940,7 @@ void Craft::repair()
  * Rearms the craft's weapons by adding ammo every hour
  * while it's docked at the base. kL_note: now every half-hour!
  * @param rules - pointer to Ruleset
- * @return, blank string if ArmOk or a string for cantLoad
+ * @return, blank string if ArmOk else a string for cantLoad
  */
 std::string Craft::rearm(const Ruleset* rules)
 {
@@ -968,28 +968,28 @@ std::string Craft::rearm(const Ruleset* rules)
 				int clipsUsed = (*i)->rearm(
 										baseClips,
 										rules->getItem(clip)->getClipSize());
-
-				if ((*i)->getRearming() == true
-					&& clipsUsed < 0) // trick. See CraftWeapon::rearm() - not enough clips at Base
+				if (clipsUsed != 0)
 				{
-					clipsUsed = -clipsUsed;
+					if (clipsUsed < 0) // trick. See CraftWeapon::rearm() - not enough clips at Base
+					{
+						clipsUsed = -clipsUsed;
+						test = clip;
 
-					if (_warning != CW_STOP)
-						_warning = CW_CANTREARM;
+						if (_warning != CW_STOP)
+							_warning = CW_CANTREARM;
+					}
 
-					test = clip;
+					_base->getItems()->removeItem(
+												clip,
+												clipsUsed);
 				}
-
-				_base->getItems()->removeItem(
-											clip,
-											clipsUsed);
 			}
 			else // no ammo at base
 			{
+				test = clip;
+
 				if (_warning != CW_STOP)
 					_warning = CW_CANTREARM;
-
-				test = clip;
 			}
 
 			if (test.empty() == false) // warning

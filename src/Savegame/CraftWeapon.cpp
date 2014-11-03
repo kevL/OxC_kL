@@ -150,28 +150,27 @@ int CraftWeapon::rearm(
 	const int
 		fullQty = _rules->getAmmoMax(),
 		rateQty = _rules->getRearmRate();
-	int
-		clipsRequested = 0,
-		loadQty = 0;
 
+	int clipsRequest = 0;
 	if (clipSize > 0)
 	{
-		clipsRequested = std::min( // round up. ie, + clipSize - 1
-								rateQty + clipSize - 1,
-								fullQty - _ammo + clipSize - 1)
-							/ clipSize;
+		clipsRequest = std::min( // (+clipSize-1) <- round up int
+							rateQty + clipSize - 1,
+							fullQty - _ammo + clipSize - 1)
+						/ clipSize;
 	}
 
-	if (baseClips >= clipsRequested)
+	int loadQty = 0;
+	if (baseClips >= clipsRequest)
 	{
 		_cantLoad = false;
 
 		if (clipSize == 0)
 			loadQty = rateQty;
 		else
-			loadQty = clipsRequested * clipSize; // Falko-note
+			loadQty = clipsRequest * clipSize;
 	}
-	else // baseClips < clipsRequested
+	else // baseClips < clipsRequest
 	{
 		_cantLoad = true;
 
@@ -179,15 +178,14 @@ int CraftWeapon::rearm(
 	}
 
 	setAmmo(_ammo + loadQty);
-	_rearming = (_ammo < fullQty); // stops 'rearming' if TRUE.
+	_rearming = (_ammo < fullQty);
 
-	if (clipSize < 1)
+	if (clipSize == 0)
 		return 0;
 
-	int ret = (loadQty + clipSize - 1) / clipSize; // kL_mod, round up.
-
-	if (clipsRequested > baseClips)
-		ret = -ret; // trick to tell Craft that there isn't enough clips at Base.
+	int ret = (loadQty + clipSize - 1) / clipSize;
+	if (clipsRequest > baseClips)
+		ret = -ret; // trick to tell Craft there isn't enough clips at Base.
 
 	return ret;
 }

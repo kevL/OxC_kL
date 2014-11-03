@@ -4791,7 +4791,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1415001912 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1415009039 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	<sstream>
 	"CraftArmorState.h"
@@ -9608,7 +9608,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1415008375 source:f:\git\openxcom\src\savegame\craft.cpp
+1415036446 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
