@@ -77,7 +77,9 @@ private:
 	Window* _window;
 
 	/// Formats an amount of time.
-	std::wstring formatTime(int time);
+	std::wstring formatTime(
+			int time,
+			bool delayed);
 
 
 	public:

@@ -59,8 +59,8 @@ namespace OpenXcom
 /**
  * Sets up an AlienBAIState w/ BattleAIState.
  * @param save - pointer to SavedBattleGame
- * @param unit - pointer to the unit
- * @param node - pointer to the node the unit originates from
+ * @param unit - pointer to the BattleUnit
+ * @param node - pointer to the Node the unit originates from
  */
 AlienBAIState::AlienBAIState(
 		SavedBattleGame* save,
@@ -116,7 +116,7 @@ AlienBAIState::~AlienBAIState()
 
 /**
  * Loads the AI state from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void AlienBAIState::load(const YAML::Node& node)
 {
@@ -124,9 +124,9 @@ void AlienBAIState::load(const YAML::Node& node)
 		fromNodeID,
 		toNodeID;
 
-	fromNodeID	= node["fromNode"].as<int>(-1);
-	toNodeID	= node["toNode"].as<int>(-1);
-	_AIMode		= node["AIMode"].as<int>(0);
+	fromNodeID	= node["fromNode"]	.as<int>(-1);
+	toNodeID	= node["toNode"]	.as<int>(-1);
+	_AIMode		= node["AIMode"]	.as<int>(0);
 //	_wasHitBy	= node["wasHitBy"].as<std::vector<int> >(_wasHitBy);
 
 	if (fromNodeID != -1)
@@ -138,7 +138,7 @@ void AlienBAIState::load(const YAML::Node& node)
 
 /**
  * Saves the AI state to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node AlienBAIState::save() const
 {
@@ -181,7 +181,7 @@ void AlienBAIState::exit()
 
 /**
  * Runs any code the state needs to keep updating every AI cycle.
- * @param action (possible) AI action to execute after thinking is done.
+ * @param action - (possible) AI BattleAction to execute after thinking is done
  */
 void AlienBAIState::think(BattleAction* action)
 {

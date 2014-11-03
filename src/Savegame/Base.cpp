@@ -780,9 +780,8 @@ int Base::getAvailableQuarters() const
 }
 
 /**
- * Returns the amount of stores used up
- * by equipment in the base
- * and equipment about to arrive.
+ * Returns the amount of stores used up by equipment in this Base
+ * including equipment on Craft and about to arrive in Transfers.
  * @return, storage space
  */
 double Base::getUsedStores()
@@ -801,7 +800,6 @@ double Base::getUsedStores()
 				j != (*i)->getVehicles()->end();
 				++j)
 		{
-//			total += static_cast<double>((*j)->getRules()->getSize());
 			total += (*j)->getRules()->getSize();
 		}
 	}
@@ -813,19 +811,25 @@ double Base::getUsedStores()
 	{
 		if ((*i)->getType() == TRANSFER_ITEM)
 		{
-//			total += static_cast<double>(_rule->getItem((*i)->getItems())->getSize())
-//				* static_cast<double>((*i)->getQuantity()); //(float * int)
 			total += _rule->getItem((*i)->getItems())->getSize()
-				* static_cast<double>((*i)->getQuantity());
+				   * static_cast<double>((*i)->getQuantity());
 		}
 		else if ((*i)->getType() == TRANSFER_CRAFT)
 		{
 			Craft* craft = (*i)->getCraft();
 			total += craft->getItems()->getTotalSize(_rule);
+
+			for (std::vector<Vehicle*>::const_iterator
+					j = craft->getVehicles()->begin();
+					j != craft->getVehicles()->end();
+					++j)
+			{
+				total += (*j)->getRules()->getSize();
+			}
 		}
 	}
 
-	total -= getIgnoredStores();
+//	total -= getIgnoredStores();
 
 	return total;
 }
@@ -836,12 +840,13 @@ double Base::getUsedStores()
  * A positive offset simulates adding items to the stores, whereas a negative offset can be
  * used to check whether sufficient items have been removed to stop stores from overflowing.
  * @param offset - adjusts used capacity
- * @return, true if a base's stores are over their limit.
+ * @return, true if this Base's stores are over their limit.
  */
 bool Base::storesOverfull(double offset)
 {
-	double capacity = static_cast<double>(getAvailableStores());
-	double used = getUsedStores();
+	const double
+		capacity = static_cast<double>(getAvailableStores()),
+		used = getUsedStores();
 
 	return (used + offset > capacity + 0.05);
 }
@@ -868,39 +873,39 @@ int Base::getAvailableStores() const
 
 /**
  * Determines space taken up by ammo clips about to rearm craft.
- * @return, Ignored storage space.
+ * @return, ignored storage space
  */
-double Base::getIgnoredStores()
+/* double Base::getIgnoredStores()
 {
 	double space = 0.0;
 
-	for (std::vector<Craft*>::iterator
+	for (std::vector<Craft*>::const_iterator
 			c = getCrafts()->begin();
 			c != getCrafts()->end();
 			++c)
 	{
 		if ((*c)->getStatus() == "STR_REARMING")
 		{
-			for (std::vector<CraftWeapon*>::iterator
+			for (std::vector<CraftWeapon*>::const_iterator
 					w = (*c)->getWeapons()->begin();
 					w != (*c)->getWeapons()->end();
 					++w)
 			{
 				if (*w != NULL
-					&& (*w)->isRearming())
+					&& (*w)->getRearming() == true)
 				{
-					std::string clip = (*w)->getRules()->getClipItem();
+					const std::string clip = (*w)->getRules()->getClipItem();
 					if (clip.empty() == false)
 					{
-						int baseQty = getItems()->getItem(clip);
+						const int baseQty = getItems()->getItem(clip);
 						if (baseQty > 0)
 						{
-							int clipSize = _rule->getItem(clip)->getClipSize();
+							const int clipSize = _rule->getItem(clip)->getClipSize();
 							if (clipSize > 0)
 							{
-								int toLoad = static_cast<int>(ceil(
-												static_cast<double>((*w)->getRules()->getAmmoMax() - (*w)->getAmmo())
-													/ static_cast<double>(clipSize)));
+								const int toLoad = static_cast<int>(ceil(
+												   static_cast<double>((*w)->getRules()->getAmmoMax() - (*w)->getAmmo())
+														/ static_cast<double>(clipSize)));
 
 								space += static_cast<double>(std::min(
 																	baseQty,
@@ -915,7 +920,7 @@ double Base::getIgnoredStores()
 	}
 
 	return space;
-}
+} */
 
 /**
  * Returns the amount of laboratories used up by research projects in the base.

@@ -215,28 +215,32 @@ void CraftInfoState::init()
 		ss2; // fuel
 
 	ss1 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent()));
-	if (_craft->getStatus() == "STR_REPAIRS"
-		&& _craft->getDamage() > 0)
+//	if (_craft->getStatus() == "STR_REPAIRS" &&
+	if (_craft->getDamage() > 0)
 	{
 		hours = static_cast<int>(
 					ceil(static_cast<double>(_craft->getDamage())
 						/ static_cast<double>(_craft->getRules()->getRepairRate())
 						/ 2.0)); // repair every half-hour.
 //		ss1 << L"\n" << tr("STR_HOUR", hours);
-		ss1 << formatTime(hours);
+		ss1 << formatTime(
+						hours,
+						false); // ... unless item is required to repair Craft.
 	}
 	_txtDamage->setText(ss1.str());
 
 	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
-	if (_craft->getStatus() == "STR_REFUELLING"
-		&& _craft->getRules()->getMaxFuel() - _craft->getFuel() > 0)
+//	if (_craft->getStatus() == "STR_REFUELLING" &&
+	if (_craft->getRules()->getMaxFuel() - _craft->getFuel() > 0)
 	{
-		hours = static_cast<int>(
-					ceil(static_cast<double>(_craft->getRules()->getMaxFuel() - _craft->getFuel())
-						/ static_cast<double>(_craft->getRules()->getRefuelRate())
-						/ 2.0)); // refuel every half-hour.
+		hours = static_cast<int>(ceil(
+				static_cast<double>(_craft->getRules()->getMaxFuel() - _craft->getFuel())
+					/ static_cast<double>(_craft->getRules()->getRefuelRate())
+				/ 2.0)); // refuel every half-hour.
 //		ss2 << L"\n" << tr("STR_HOUR", hours);
-		ss2 << formatTime(hours);
+		ss2 << formatTime(
+						hours,
+						_craft->getWarning() == CW_CANTREFUEL);
 	}
 	_txtFuel->setText(ss2.str());
 
@@ -294,27 +298,29 @@ void CraftInfoState::init()
 
 	if (_craft->getRules()->getWeapons() > 0)
 	{
-		CraftWeapon* w1 = _craft->getWeapons()->at(0);
-		if (w1 != NULL)
+		CraftWeapon* cw1 = _craft->getWeapons()->at(0);
+		if (cw1 != NULL)
 		{
-			Surface* frame = texture->getFrame(w1->getRules()->getSprite() + 48);
+			Surface* frame = texture->getFrame(cw1->getRules()->getSprite() + 48);
 			frame->setX(0);
 			frame->setY(0);
 			frame->blit(_weapon1);
 
-			_txtW1Name->setText(tr(w1->getRules()->getType()));
+			_txtW1Name->setText(tr(cw1->getRules()->getType()));
 
 			std::wostringstream ss;
-			ss << tr("STR_AMMO_").arg(w1->getAmmo()) << L"\n\x01";
-			ss << tr("STR_MAX").arg(w1->getRules()->getAmmoMax());
-			if (_craft->getStatus() == "STR_REARMING"
-				&& w1->getAmmo() < w1->getRules()->getAmmoMax())
+			ss << tr("STR_AMMO_").arg(cw1->getAmmo()) << L"\n\x01";
+			ss << tr("STR_MAX").arg(cw1->getRules()->getAmmoMax());
+//			if (_craft->getStatus() == "STR_REARMING" &&
+			if (cw1->getAmmo() < cw1->getRules()->getAmmoMax())
 			{
-				hours = static_cast<int>(
-							ceil(static_cast<double>(w1->getRules()->getAmmoMax() - w1->getAmmo())
-								/ static_cast<double>(w1->getRules()->getRearmRate())
-								/ 2.0)); // rearm every half-hour.
-				ss << formatTime(hours);
+				hours = static_cast<int>(ceil(
+						static_cast<double>(cw1->getRules()->getAmmoMax() - cw1->getAmmo())
+							/ static_cast<double>(cw1->getRules()->getRearmRate())
+						/ 2.0)); // rearm every half-hour.
+				ss << formatTime(
+								hours,
+								cw1->getCantLoad());
 			}
 			_txtW1Ammo->setText(ss.str());
 		}
@@ -335,27 +341,29 @@ void CraftInfoState::init()
 
 	if (_craft->getRules()->getWeapons() > 1)
 	{
-		CraftWeapon* w2 = _craft->getWeapons()->at(1);
-		if (w2 != NULL)
+		CraftWeapon* cw2 = _craft->getWeapons()->at(1);
+		if (cw2 != NULL)
 		{
-			Surface* frame = texture->getFrame(w2->getRules()->getSprite() + 48);
+			Surface* frame = texture->getFrame(cw2->getRules()->getSprite() + 48);
 			frame->setX(0);
 			frame->setY(0);
 			frame->blit(_weapon2);
 
-			_txtW2Name->setText(tr(w2->getRules()->getType()));
+			_txtW2Name->setText(tr(cw2->getRules()->getType()));
 
 			std::wostringstream ss;
-			ss << tr("STR_AMMO_").arg(w2->getAmmo()) << L"\n\x01";
-			ss << tr("STR_MAX").arg(w2->getRules()->getAmmoMax());
-			if (_craft->getStatus() == "STR_REARMING"
-				&& w2->getAmmo() < w2->getRules()->getAmmoMax())
+			ss << tr("STR_AMMO_").arg(cw2->getAmmo()) << L"\n\x01";
+			ss << tr("STR_MAX").arg(cw2->getRules()->getAmmoMax());
+//			if (_craft->getStatus() == "STR_REARMING" &&
+			if (cw2->getAmmo() < cw2->getRules()->getAmmoMax())
 			{
-				hours = static_cast<int>(
-							ceil(static_cast<double>(w2->getRules()->getAmmoMax() - w2->getAmmo())
-								/ static_cast<double>(w2->getRules()->getRearmRate())
-								/ 2.0)); // rearm every half-hour.
-				ss << formatTime(hours);
+				hours = static_cast<int>(ceil(
+						static_cast<double>(cw2->getRules()->getAmmoMax() - cw2->getAmmo())
+							/ static_cast<double>(cw2->getRules()->getRearmRate())
+						/ 2.0)); // rearm every half-hour.
+				ss << formatTime(
+								hours,
+								cw2->getCantLoad());
 			}
 			_txtW2Ammo->setText(ss.str());
 		}
@@ -381,10 +389,13 @@ void CraftInfoState::init()
 
 /**
  * Turns an amount of time in hours into a day/hour string.
- * @param total - time in hours
+ * @param total		- time in hours
+ * @param delayed	- true to add '+' (unable to rearm due to lack of materiel)
  * @return, day/hour string
  */
-std::wstring CraftInfoState::formatTime(int total)
+std::wstring CraftInfoState::formatTime(
+		int total,
+		bool delayed)
 {
 	std::wostringstream ss;
 	int
@@ -404,7 +415,8 @@ std::wstring CraftInfoState::formatTime(int total)
 	if (hours > 0)
 		ss << tr("STR_HOUR", hours);
 
-	if (_craft->getDontWarn() == true)
+//	if (_craft->getDontWarn() == true)
+	if (delayed == true)
 		ss << L" +";
 
 	ss << L")";

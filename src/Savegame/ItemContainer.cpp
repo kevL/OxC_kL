@@ -27,7 +27,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes an item container with no contents.
+ * Initializes an ItemContainer with no contents.
  */
 ItemContainer::ItemContainer()
 {
@@ -41,8 +41,8 @@ ItemContainer::~ItemContainer()
 }
 
 /**
- * Loads the item container from a YAML file.
- * @param node YAML node.
+ * Loads the ItemContainer from a YAML file.
+ * @param node - reference a YAML node
  */
 void ItemContainer::load(const YAML::Node& node)
 {
@@ -51,7 +51,7 @@ void ItemContainer::load(const YAML::Node& node)
 
 /**
  * Saves the item container to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node ItemContainer::save() const
 {
@@ -63,8 +63,8 @@ YAML::Node ItemContainer::save() const
 
 /**
  * Adds an item amount to the container.
- * @param id Item ID.
- * @param qty Item quantity.
+ * @param id	- reference an item ID
+ * @param qty	- item quantity
  */
 void ItemContainer::addItem(
 		const std::string& id,
@@ -81,8 +81,8 @@ void ItemContainer::addItem(
 
 /**
  * Removes an item amount from the container.
- * @param id Item ID.
- * @param qty Item quantity.
+ * @param id	- reference an item ID
+ * @param qty	- item quantity
  */
 void ItemContainer::removeItem(
 		const std::string& id,
@@ -102,8 +102,8 @@ void ItemContainer::removeItem(
 
 /**
  * Returns the quantity of an item in the container.
- * @param id Item ID.
- * @return Item quantity.
+ * @param id - reference an item ID
+ * @return, item quantity
  */
 int ItemContainer::getItem(const std::string& id) const
 {
@@ -119,7 +119,7 @@ int ItemContainer::getItem(const std::string& id) const
 
 /**
  * Returns the total quantity of the items in the container.
- * @return Total item quantity.
+ * @return, total item quantity
  */
 int ItemContainer::getTotalQuantity() const
 {
@@ -138,8 +138,8 @@ int ItemContainer::getTotalQuantity() const
 
 /**
  * Returns the total size of the items in the container.
- * @param rule Pointer to ruleset.
- * @return Total item size.
+ * @param rule - pointer to Ruleset
+ * @return, total item size
  */
 double ItemContainer::getTotalSize(const Ruleset* rule) const
 {
@@ -158,7 +158,7 @@ double ItemContainer::getTotalSize(const Ruleset* rule) const
 
 /**
  * Returns all the items currently contained within.
- * @return, List of contents.
+ * @return, pointer to the map of contents
  */
 std::map<std::string, int>* ItemContainer::getContents()
 {

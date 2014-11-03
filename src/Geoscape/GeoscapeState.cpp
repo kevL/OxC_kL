@@ -1427,10 +1427,10 @@ void GeoscapeState::time5Seconds()
 
 			if ((*j)->reachedDestination())
 			{
-				Ufo* ufo		= dynamic_cast<Ufo*>((*j)->getDestination());
-				Waypoint* wp	= dynamic_cast<Waypoint*>((*j)->getDestination());
-				TerrorSite* ts	= dynamic_cast<TerrorSite*>((*j)->getDestination());
-				AlienBase* ab	= dynamic_cast<AlienBase*>((*j)->getDestination());
+				Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestination());
+				Waypoint* wp = dynamic_cast<Waypoint*>((*j)->getDestination());
+				TerrorSite* ts = dynamic_cast<TerrorSite*>((*j)->getDestination());
+				AlienBase* ab = dynamic_cast<AlienBase*>((*j)->getDestination());
 
 				if (ufo != NULL)
 				{
@@ -1452,7 +1452,7 @@ void GeoscapeState::time5Seconds()
 																				*j,
 																				ufo));
 
-								if (!_dogfightStartTimer->isRunning())
+								if (_dogfightStartTimer->isRunning() == false)
 								{
 									_pause = true;
 									timerReset();
@@ -1620,7 +1620,7 @@ class DetectXCOMBase
 
 private:
 	const int _diffLevel;
-	const Base& _base; // !< The target base.
+	const Base& _base; // !< The target Base.
 
 	public:
 		/// Create a detector for the given base.
@@ -1741,6 +1741,7 @@ void GeoscapeState::time10Minutes()
 			if ((*c)->getStatus() == "STR_OUT")
 			{
 				(*c)->consumeFuel();
+
 				if ((*c)->getLowFuel() == false
 					&& (*c)->getFuel() <= (*c)->getFuelLimit())
 				{
@@ -1970,7 +1971,8 @@ void GeoscapeState::time10Minutes()
 	}
 }
 
-/** @brief Call AlienMission::think() with proper parameters.
+/**
+ * @brief Call AlienMission::think() with proper parameters.
  * This function object calls AlienMission::think() with the proper parameters.
  */
 class callThink
@@ -1985,8 +1987,8 @@ private:
 	public:
 		/// Store the parameters.
 		/**
-		 * @param game	- reference to the game engine
-		 * @param globe	- reference to the globe object
+		 * @param game	- reference to the Game engine
+		 * @param globe	- reference to the Globe object
 		 */
 		callThink(
 				Game& game,
@@ -2007,7 +2009,8 @@ private:
 		}
 };
 
-/** @brief Process a TerrorSite.
+/**
+ * @brief Process a TerrorSite.
  * This function object will count down towards expiring a TerrorSite
  * and handle expired TerrorSites.
  * @param ts - pointer to a TerrorSite
@@ -2016,6 +2019,7 @@ private:
 bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 {
 	bool expired = true;
+
 	const int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
 	int aLienPts = (_game->getRuleset()->getAlienMission("STR_ALIEN_TERROR")->getPoints() * 50) + (diff * 250);
 
@@ -2049,7 +2053,7 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 		}
 	}
 
-	if (expired)
+	if (expired == true)
 	{
 		delete ts;
 		return true;
@@ -2058,7 +2062,8 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 	return false;
 }
 
-/** @brief Advance time for crashed UFOs.
+/**
+ * @brief Advance time for crashed UFOs.
  * This function object will decrease the expiration timer for crashed UFOs.
  */
 struct expireCrashedUfo: public std::unary_function<Ufo*, void>
@@ -2099,7 +2104,7 @@ void GeoscapeState::time30Minutes()
 			am != _game->getSavedGame()->getAlienMissions().end();
 			)
 	{
-		if ((*am)->isOver())
+		if ((*am)->isOver() == true)
 		{
 			//Log(LOG_INFO) << ". aLienMission isOver() : " << (*am)->getType();
 			delete *am;
@@ -2134,11 +2139,16 @@ void GeoscapeState::time30Minutes()
 				(*j)->repair();
 			else if ((*j)->getStatus() == "STR_REARMING")
 			{
+				// NOTE: rearm() cycles through all craft weapons on the Craft
+				// but returns only 1 string, for the last cantLoad weapon;
+				// so these popup messages might get a bit misleading ....
 				const std::string str = (*j)->rearm(_game->getRuleset());
 				if (str.empty() == false
-					&& (*j)->getDontWarn() == false)
+//					&& (*j)->getDontWarn() == false)
+					&& (*j)->getWarning() == CW_CANTREARM)
 				{
-					(*j)->setDontWarn();
+//					(*j)->setDontWarn();
+					(*j)->setWarning(CW_STOP);
 
 					const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
 											.arg(tr(str))
@@ -2152,7 +2162,7 @@ void GeoscapeState::time30Minutes()
 			else if ((*j)->getStatus() == "STR_REFUELLING")
 			{
 				const std::string item = (*j)->getRules()->getRefuelItem();
-				if (item.empty())
+				if (item.empty() == true)
 					(*j)->refuel();
 				else
 				{
@@ -2162,9 +2172,11 @@ void GeoscapeState::time30Minutes()
 						(*j)->refuel();
 //						(*j)->setLowFuel(false);
 					}
-					else if ((*j)->getDontWarn() == false) //if ((*j)->getLowFuel() == false)
+//					else if ((*j)->getDontWarn() == false) //if ((*j)->getLowFuel() == false)
+					else if ((*j)->getWarning() == CW_CANTREFUEL)
 					{
-						(*j)->setDontWarn();
+						(*j)->setWarning(CW_STOP);
+//						(*j)->setDontWarn();
 
 						const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
 												.arg(tr(item))

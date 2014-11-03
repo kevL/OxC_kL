@@ -40,9 +40,19 @@ class Soldier;
 class Vehicle;
 
 
+enum CraftWarning
+{
+	CW_STOP = -1,	// -1
+	CW_NONE,		//  0
+	CW_CANTREPAIR,	//  1
+	CW_CANTREARM,	//  2
+	CW_CANTREFUEL	//  3
+};
+
+
 /**
- * Represents a craft stored in a base.
- * Contains variable info about a craft like position, fuel, damage, etc.
+ * Represents a Craft stored in a Base.
+ * Contains variable info about a Craft like position, fuel, damage, etc.
  * @sa RuleCraft
  */
 class Craft
@@ -55,8 +65,8 @@ private:
 		_inBattlescape,
 		_inDogfight,
 		_lowFuel,
-		_mission,
-		_stopWarning;
+		_mission;
+//		_stopWarning;
 	int
 		_loadCap,
 		_loadCur,
@@ -68,6 +78,8 @@ private:
 
 	std::string _status;
 	std::wstring _name;
+
+	CraftWarning _warning;
 
 	Base* _base;
 	ItemContainer* _items;
@@ -138,7 +150,7 @@ private:
 		/// Gets the craft's amount of equipment.
 		int getNumEquipment() const;
 		/// Gets the craft's amount of vehicles.
-		int getNumVehicles(bool space = false) const;
+		int getNumVehicles(bool tileSpace = false) const;
 
 		/// Gets the craft's weapons.
 		std::vector<CraftWeapon*>* getWeapons();
@@ -243,9 +255,13 @@ private:
 		int getLoadCurrent();
 
 		/// Sets the stopWarning flag.
-		void setDontWarn(const bool stop = true);
+//		void setDontWarn(const bool stop = true);
 		/// Gets the stopWarning flag.
-		bool getDontWarn() const;
+//		bool getDontWarn() const;
+		/// Gets this craft's current CraftWarning status.
+		CraftWarning getWarning() const;
+		/// Sets this craft's CraftWarning status.
+		void setWarning(const CraftWarning warning);
 };
 
 }

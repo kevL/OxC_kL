@@ -1094,10 +1094,9 @@ void TransferItemsState::increaseByValue(int change)
 		|| selType == TRANSFER_SCIENTIST
 		|| selType == TRANSFER_ENGINEER)
 	{
-		int freeQuarters = _baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters() - _pQty;
 		change = std::min(
 						std::min(
-								freeQuarters,
+								_baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters() - _pQty,
 								getQuantity() - _transferQty[_sel]),
 						change);
 		_pQty += change;
@@ -1109,6 +1108,7 @@ void TransferItemsState::increaseByValue(int change)
 	else if (selType == TRANSFER_CRAFT) // Craft count
 	{
 		Craft* craft = _crafts[_sel - _soldiers.size()];
+
 		_cQty++;
 		_pQty += craft->getNumSoldiers();
 		_iQty += craft->getItems()->getTotalSize(_game->getRuleset());
@@ -1125,14 +1125,15 @@ void TransferItemsState::increaseByValue(int change)
 	}
 	else if (selType == TRANSFER_ITEM)
 	{
-		if (!selItem->getAlien()) // Item count
+		if (selItem->getAlien() == false) // Item count
 		{
-			double
+			const double
 				storesPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize(),
-				availStores = static_cast<double>(_baseTo->getAvailableStores()) - _baseTo->getUsedStores() - _iQty,
+				availStores = static_cast<double>(_baseTo->getAvailableStores()) - _baseTo->getUsedStores() - _iQty;
+			double
 				qtyItemsCanGo = DBL_MAX;
 
-			if (!AreSame(storesPerItem, 0.0))
+			if (AreSame(storesPerItem, 0.0) == false)
 				qtyItemsCanGo = (availStores + 0.05) / storesPerItem;
 
 			change = std::min(
@@ -1146,7 +1147,7 @@ void TransferItemsState::increaseByValue(int change)
 			_transferQty[_sel] += change;
 			_total += getCost() * change;
 		}
-		else if (selItem->getAlien()) // Live Alien count
+		else // if (selItem->getAlien()) // Live Alien count
 		{
 			int freeContainment = INT_MAX;
 			if (Options::storageLimitsEnforced)
@@ -1213,7 +1214,7 @@ void TransferItemsState::decreaseByValue(int change)
 	else if (selType == TRANSFER_ITEM) // Item count
 	{
 		const RuleItem* selItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-		if (!selItem->getAlien())
+		if (selItem->getAlien() == false)
 			_iQty -= selItem->getSize() * static_cast<double>(change);
 		else
 			_aQty -= change;

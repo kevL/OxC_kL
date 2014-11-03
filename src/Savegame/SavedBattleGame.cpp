@@ -279,8 +279,9 @@ void SavedBattleGame::load(
 								static_cast<int>(savedGame->getDifficulty())); // kL_add: For VictoryPts value per death.
 		else
 		{
-			std::string type = (*i)["genUnitType"].as<std::string>();
-			std::string armor = (*i)["genUnitArmor"].as<std::string>();
+			const std::string
+				type = (*i)["genUnitType"].as<std::string>(),
+				armor = (*i)["genUnitArmor"].as<std::string>();
 
 			unit = new BattleUnit( // create a new Unit, not-soldier but Vehicle, Civie, or aLien.
 								rule->getUnit(type),

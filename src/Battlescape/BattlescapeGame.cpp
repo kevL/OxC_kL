@@ -1704,7 +1704,7 @@ bool BattlescapeGame::checkReservedTU(
 	if (_save->getSide() == FACTION_HOSTILE)
 	{
 		AlienBAIState* ai = dynamic_cast<AlienBAIState*>(bu->getCurrentAIState());
-		if (ai)
+		if (ai != NULL)
 			actionReserved = ai->getReserveMode();
 
 		int rand = RNG::generate(0, 10); // kL, added in below ->

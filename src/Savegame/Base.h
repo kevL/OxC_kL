@@ -84,7 +84,7 @@ private:
 	std::vector<Vehicle*>			_vehicles;
 
 	/// Determines space taken up by ammo clips about to rearm craft.
-	double getIgnoredStores();
+//	double getIgnoredStores();
 
 
 	public:

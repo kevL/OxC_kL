@@ -31,8 +31,8 @@ namespace OpenXcom
 
 /**
  * Initializes a craft weapon of the specified type.
- * @param rules Pointer to ruleset.
- * @param ammo Initial ammo.
+ * @param rules	- pointer to RuleCraftWeapon
+ * @param ammo	- initial ammo quantity
  */
 CraftWeapon::CraftWeapon(
 		RuleCraftWeapon* rules,
@@ -40,7 +40,8 @@ CraftWeapon::CraftWeapon(
 	:
 		_rules(rules),
 		_ammo(ammo),
-		_rearming(false)
+		_rearming(false),
+		_cantLoad(false)
 {
 }
 
@@ -53,17 +54,17 @@ CraftWeapon::~CraftWeapon()
 
 /**
  * Loads the craft weapon from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void CraftWeapon::load(const YAML::Node& node)
 {
-	_ammo		= node["ammo"].as<int>(_ammo);
-	_rearming	= node["rearming"].as<bool>(_rearming);
+	_ammo		= node["ammo"]		.as<int>(_ammo);
+	_rearming	= node["rearming"]	.as<bool>(_rearming);
 }
 
 /**
  * Saves the base to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node CraftWeapon::save() const
 {
@@ -79,7 +80,7 @@ YAML::Node CraftWeapon::save() const
 
 /**
  * Gets the ruleset for a craft weapon's type.
- * @return, pointer to the ruleset
+ * @return, pointer to RuleCraftWeapon
  */
 RuleCraftWeapon* CraftWeapon::getRules() const
 {
@@ -121,18 +122,19 @@ bool CraftWeapon::setAmmo(int ammo)
  * Gets whether this craft weapon needs rearming.
  * @return, rearming status
  */
-bool CraftWeapon::isRearming() const
+bool CraftWeapon::getRearming() const
 {
 	return _rearming;
 }
 
 /**
  * Sets whether this craft weapon needs rearming - in case there's no more ammo.
- * @param rearming - rearming status
+ * @param rearming - rearming status (default true)
  */
 void CraftWeapon::setRearming(bool rearming)
 {
 	_rearming = rearming;
+//	_dontWarn = false;
 }
 
 /**
@@ -162,14 +164,19 @@ int CraftWeapon::rearm(
 
 	if (baseClips >= clipsRequested)
 	{
+		_cantLoad = false;
+
 		if (clipSize == 0)
 			loadQty = rateQty;
 		else
 			loadQty = clipsRequested * clipSize; // Falko-note
 	}
+	else // baseClips < clipsRequested
+		_cantLoad = true;
 
 	setAmmo(_ammo + loadQty);
-	_rearming = (_ammo < fullQty);
+	_rearming = (_ammo < fullQty); // stops 'rearming' if TRUE.
+//	_dontWarn = ();
 
 	if (clipSize < 1)
 		return 0;
@@ -183,6 +190,14 @@ int CraftWeapon::rearm(
 		ret = -ret; // trick to tell Craft that there isn't enough clips at Base.
 
 	return ret;
+}
+
+/**
+ * Gets this CraftWeapon's cantLoad status - no stock in Base Stores.
+ */
+bool CraftWeapon::getCantLoad() const
+{
+	return _cantLoad;
 }
 
 /**
@@ -203,7 +218,7 @@ CraftWeaponProjectile* CraftWeapon::fire() const
 }
 
 /**
- * Get how many clips are loaded in this CraftWeapon.
+ * Gets how many clips are loaded in this CraftWeapon.
  * @param ruleset - pointer to the core Ruleset
  * @return, the number of clips loaded
  */

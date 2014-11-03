@@ -42,7 +42,9 @@ class CraftWeapon
 {
 
 private:
-	bool _rearming;
+	bool
+		_cantLoad,
+		_rearming;
 	int _ammo;
 
 	RuleCraftWeapon* _rules;
@@ -69,18 +71,20 @@ private:
 		/// Sets the craft weapon's ammo.
 		bool setAmmo(int ammo);
 		/// Gets the craft weapon's rearming status.
-		bool isRearming() const;
+		bool getRearming() const;
 		/// Sets the craft weapon's rearming status
-		void setRearming(bool rearming);
+		void setRearming(bool rearming = true);
 		/// Rearms the craft weapon.
 		int rearm(
 				const int baseClips,
 				const int clipSize);
+		/// Gets this CraftWeapon's cantLoad status - no stock in Base Stores.
+		bool CraftWeapon::getCantLoad() const;
 
-		/// Fires the craft weapon. Used during dogfights.
+		/// Fires the craft weapon - used during dogfights.
 		CraftWeaponProjectile* fire() const;
 
-		/// get how many clips are loaded into this weapon.
+		/// Gets how many clips are loaded into this weapon.
 		int getClipsLoaded(Ruleset* ruleset);
 };
 

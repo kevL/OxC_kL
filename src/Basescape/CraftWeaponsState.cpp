@@ -51,7 +51,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Craft Weapons window.
- * @param base		- pointer to the base to get info from
+ * @param base		- pointer to the Base to get info from
  * @param craft		- ID of the selected craft
  * @param weapon	- ID of the selected weapon
  */
@@ -139,7 +139,7 @@ CraftWeaponsState::CraftWeaponsState(
 
 //kL	if (_base->getItems()->getItem(w->getLauncherItem()) > 0)
 		if (_game->getSavedGame()->isResearched(launcherRule->getRequirements()) == true	// requirements have been researched
-			|| launcherRule->getRequirements().empty())										// or, does not need to be researched
+			|| launcherRule->getRequirements().empty() == true)								// or, does not need to be researched
 		{
 			//Log(LOG_INFO) << ". . add craft weapon";
 			_weaponRules.push_back(w);

@@ -147,7 +147,7 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		for (std::vector<Transfer*>::iterator
+		for (std::vector<Transfer*>::const_iterator
 				j = (*i)->getTransfers()->begin();
 				j != (*i)->getTransfers()->end();
 				)
@@ -160,9 +160,9 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 
 				if ((*j)->getType() == TRANSFER_ITEM) // check if there's an automated use for item
 				{
-					RuleItem* item = _game->getRuleset()->getItem((*j)->getItems());
+					const RuleItem* const item = _game->getRuleset()->getItem((*j)->getItems());
 
-					for (std::vector<Craft*>::iterator
+					for (std::vector<Craft*>::const_iterator
 							c = (*i)->getCrafts()->begin();
 							c != (*i)->getCrafts()->end();
 							++c)
@@ -170,46 +170,51 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 						if ((*c)->getStatus() == "STR_OUT")
 							continue;
 
-						if ((*c)->getStatus() == "STR_REFUELING")
+						if ((*c)->getWarning() == CW_STOP)
 						{
-							if ((*c)->getRules()->getRefuelItem() == item->getType())
-//								&& (*c)->getFuelPercentage() < 100)
+							if ((*c)->getStatus() == "STR_REFUELING")
 							{
-								(*c)->setDontWarn(false);
-							}
-						}
-						else if ((*c)->getStatus() == "STR_REARMING")
-						{
-							for (std::vector<CraftWeapon*>::iterator
-									cw = (*c)->getWeapons()->begin();
-									cw != (*c)->getWeapons()->end();
-									++cw)
-							{
-								if (*cw != NULL
-									&& (*cw)->getRules()->getClipItem() == item->getType())
-//									&& (*cw)->getAmmo() < (*cw)->getRules()->getAmmoMax())
+								if ((*c)->getRules()->getRefuelItem() == item->getType())
+//									&& (*c)->getFuelPercentage() < 100)
 								{
-									(*c)->setDontWarn(false);
+//									(*c)->setDontWarn(false);
+									(*c)->setWarning(CW_NONE);
+								}
+							}
+							else if ((*c)->getStatus() == "STR_REARMING")
+							{
+								for (std::vector<CraftWeapon*>::const_iterator
+										cw = (*c)->getWeapons()->begin();
+										cw != (*c)->getWeapons()->end();
+										++cw)
+								{
+									if (*cw != NULL
+										&& (*cw)->getRules()->getClipItem() == item->getType())
+//										&& (*cw)->getAmmo() < (*cw)->getRules()->getAmmoMax())
+									{
+//										(*c)->setDontWarn(false);
+										(*c)->setWarning(CW_NONE);
+									}
 								}
 							}
 						}
 
 
-						for (std::vector<Vehicle*>::iterator // check if it's ammo to reload a vehicle
+						for (std::vector<Vehicle*>::const_iterator // check if it's ammo to reload a vehicle
 								v = (*c)->getVehicles()->begin();
 								v != (*c)->getVehicles()->end();
 								++v)
 						{
-							std::vector<std::string>::iterator ammo = std::find(
-																			(*v)->getRules()->getCompatibleAmmo()->begin(),
-																			(*v)->getRules()->getCompatibleAmmo()->end(),
-																			item->getType());
+							std::vector<std::string>::const_iterator ammo = std::find(
+																				(*v)->getRules()->getCompatibleAmmo()->begin(),
+																				(*v)->getRules()->getCompatibleAmmo()->end(),
+																				item->getType());
 							if (ammo != (*v)->getRules()->getCompatibleAmmo()->end()
 								&& (*v)->getAmmo() < item->getClipSize())
 							{
-								int used = std::min(
-												(*j)->getQuantity(),
-												item->getClipSize() - (*v)->getAmmo());
+								const int used = std::min(
+														(*j)->getQuantity(),
+														item->getClipSize() - (*v)->getAmmo());
 								(*v)->setAmmo((*v)->getAmmo() + used);
 
 								// Note that the items have already been delivered --

@@ -80,7 +80,8 @@ Craft::Craft(
 		_inBattlescape(false),
 		_inDogfight(false),
 		_loadCur(0),
-		_stopWarning(false) // do not save-to-file. Ie, warn player after re-loading
+//		_stopWarning(false), // do not save-to-file. Ie, warn player after re-loading
+		_warning(CW_NONE)
 {
 	_items = new ItemContainer();
 
@@ -493,7 +494,7 @@ void Craft::setStatus(const std::string& status)
 
 /**
  * Gets the current altitude of the craft.
- * @return, altitude
+ * @return, altitude string
  */
 std::string Craft::getAltitude() const
 {
@@ -572,17 +573,18 @@ int Craft::getNumWeapons() const
 	if (_rules->getWeapons() == 0)
 		return 0;
 
-	int total = 0;
+	int ret = 0;
+
 	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
 			i != _weapons.end();
 			++i)
 	{
 		if (*i != NULL)
-			total++;
+			ret++;
 	}
 
-	return total;
+	return ret;
 }
 
 /**
@@ -594,17 +596,18 @@ int Craft::getNumSoldiers() const
 	if (_rules->getSoldiers() == 0)
 		return 0;
 
-	int total = 0;
+	int ret = 0;
+
 	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i)
 	{
 		if ((*i)->getCraft() == this)
-			total++;
+			ret++;
 	}
 
-	return total;
+	return ret;
 }
 
 /**
@@ -618,23 +621,24 @@ int Craft::getNumEquipment() const
 
 /**
  * Gets the amount of vehicles currently contained in this craft.
- * @param space - true to return tile-spaces used in a transport
+ * @param tileSpace - true to return tile-spaces used in a transport
  * @return, either number of vehicles or tile-space used
  */
-int Craft::getNumVehicles(bool space) const
+int Craft::getNumVehicles(bool tileSpace) const
 {
-	if (space == true)
+	if (tileSpace == true)
 	{
-		int tankSpace = 0;
+		int ret = 0;
+
 		for (std::vector<Vehicle*>::const_iterator
 				i = _vehicles.begin();
 				i != _vehicles.end();
 				++i)
 		{
-			tankSpace += (*i)->getSize();
+			ret += (*i)->getSize();
 		}
 
-		return tankSpace;
+		return ret;
 	}
 
 	return _vehicles.size();
@@ -846,7 +850,8 @@ void Craft::think()
 
 		_lowFuel = false;
 		_mission = false;
-		_stopWarning = false;
+//		_stopWarning = false;
+		_warning = CW_NONE;
 		_takeoff = 0;
 
 		checkup();
@@ -861,6 +866,8 @@ void Craft::think()
  */
 void Craft::checkup()
 {
+	_warning = CW_NONE;
+
 	int
 		cw = 0,
 		loaded = 0;
@@ -878,7 +885,7 @@ void Craft::checkup()
 		if ((*i)->getAmmo() >= (*i)->getRules()->getAmmoMax())
 			loaded++;
 		else
-			(*i)->setRearming(true);
+			(*i)->setRearming();
 	}
 
 	if (_damage > 0)
@@ -934,26 +941,23 @@ void Craft::repair()
  * Rearms the craft's weapons by adding ammo every hour
  * while it's docked at the base. kL_note: now every half-hour!
  * @param rules - pointer to Ruleset
- * @return, the ammo ID missing for rearming, or "" if fully rearmed
+ * @return, blank string if ArmOk or a string for cantLoad
  */
 std::string Craft::rearm(const Ruleset* rules)
 {
-	std::string ret;
+	std::string
+		ret,
+		test;
 
 	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
-			;
+			i != _weapons.end();
 			++i)
 	{
-		if (i == _weapons.end())
+		if ((*i)->getRearming() == true)
 		{
-			checkup();
-			break;
-		}
+			test = "";
 
-		if (*i != NULL
-			&& (*i)->isRearming())
-		{
 			const std::string clip = (*i)->getRules()->getClipItem();
 			const int baseClips = _base->getItems()->getItem(clip);
 
@@ -965,43 +969,58 @@ std::string Craft::rearm(const Ruleset* rules)
 										baseClips,
 										rules->getItem(clip)->getClipSize());
 
-				if ((*i)->isRearming()
-					&& clipsUsed < 0) // trick. See CraftWeapon::rearm()
+				if ((*i)->getRearming() == true
+					&& clipsUsed < 0) // trick. See CraftWeapon::rearm() - not enough clips at Base
 				{
 					clipsUsed = -clipsUsed;
-					ret = clip;
-//					(*i)->setRearming(false);
+
+					if (_warning != CW_STOP)
+						_warning = CW_CANTREARM;
+
+					test = clip;
 				}
 
 				_base->getItems()->removeItem(
 											clip,
 											clipsUsed);
 			}
-			else
+			else // no ammo at base
 			{
-				ret = clip;
-//				(*i)->setRearming(false);
+				if (_warning != CW_STOP)
+					_warning = CW_CANTREARM;
+
+				test = clip;
 			}
 
-			break; // only 1 cw rearms per call.
+			if (test.empty() == false) // warning
+			{
+				if (ret.empty() == false) // double warning
+					ret = "STR_ORDNANCE_LC";
+				else // check next weapon
+					ret = test;
+			}
+			else // armok
+				break;
 		}
-	}
+	} // ... epicycle syndrome ... This handles only 2 craft weapons.
 
-	if (ret.empty() == true)
+/*	if (ret.empty() == true)
 	{
-		_stopWarning = false; // reset warnings.
-		checkup();
-	}
+		if (test.empty() == true)
+			checkup();
+		else
+			ret = test;
+	} */
 
 	return ret;
 }
 
 /**
- * Refuels the craft every 30 minutes while it's docked at the base.
+ * Refuels the craft every 30 minutes while docked at its Base.
  */
 void Craft::refuel()
 {
-	_stopWarning = false; // reset warnings.
+//	_stopWarning = false; // reset warnings.
 
 	setFuel(_fuel + _rules->getRefuelRate());
 
@@ -1180,18 +1199,36 @@ int Craft::getLoadCurrent()
  * So player don't get spammed with no-fuel and/or no-ammo messages.
  * @param stop - true to inhibit warnings
  */
-void Craft::setDontWarn(const bool stop)
+/* void Craft::setDontWarn(const bool stop)
 {
 	_stopWarning = stop;
-}
+} */
 
 /**
  * Gets the stopWarning flag.
  * @return, stopWarning
  */
-bool Craft::getDontWarn() const
+/* bool Craft::getDontWarn() const
 {
 	return _stopWarning;
+} */
+
+/**
+ * Gets this craft's current CraftWarning status.
+ * @return, CraftWarning enum
+ */
+CraftWarning Craft::getWarning() const
+{
+	return _warning;
+}
+
+/**
+ * Sets this craft's CraftWarning status.
+ * @param warning - a CraftWarning enum
+ */
+void Craft::setWarning(const CraftWarning warning)
+{
+	_warning = warning;
 }
 
 }

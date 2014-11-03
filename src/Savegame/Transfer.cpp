@@ -183,7 +183,7 @@ void Transfer::setEngineers(int engineers)
 
 /**
  * Changes the craft being transferred.
- * @param craft - pointer to craft
+ * @param craft - pointer to a Craft
  */
 void Transfer::setCraft(Craft* craft)
 {
@@ -192,7 +192,7 @@ void Transfer::setCraft(Craft* craft)
 
 /**
  * Gets the craft being transferred.
- * @return, pointer to a Craft
+ * @return, pointer to the Craft
  */
 Craft* Transfer::getCraft()
 {
