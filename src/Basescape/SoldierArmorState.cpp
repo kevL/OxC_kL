@@ -59,17 +59,17 @@ SoldierArmorState::SoldierArmorState(
 {
 	_screen = false;
 
-	_window			= new Window(this, 192, 123, 64, 39, POPUP_BOTH);
+	_window			= new Window(this, 192, 147, 64, 27, POPUP_BOTH);
 
 //kL	_txtTitle		= new Text(182, 9, 69, 48);
-	_txtSoldier		= new Text(182, 9, 69, 50);
+	_txtSoldier		= new Text(182, 9, 69, 38);
 
-	_txtType		= new Text(102, 9, 84, 65);
-	_txtQuantity	= new Text(42, 9, 194, 65);
+	_txtType		= new Text(102, 9, 84, 53);
+	_txtQuantity	= new Text(42, 9, 194, 53);
 
-	_lstArmor		= new TextList(160, 57, 76, 76);
+	_lstArmor		= new TextList(160, 81, 76, 64);
 
-	_btnCancel		= new TextButton(152, 16, 84, 138);
+	_btnCancel		= new TextButton(152, 16, 84, 150);
 
 	setPalette("PAL_BASESCAPE", 4);
 
@@ -183,8 +183,7 @@ void SoldierArmorState::lstArmorClick(Action*)
 	}
 
 	soldier->setArmor(_armors[_lstArmor->getSelectedRow()]);
-//	SavedGame* save;
-//	save = _game->getSavedGame();
+//	SavedGame* save = _game->getSavedGame();
 //	save->setLastSelectedArmor(_armors[_lstArmor->getSelectedRow()]->getType());
 
 	_game->popState();
