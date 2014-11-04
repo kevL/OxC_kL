@@ -28,10 +28,10 @@ namespace OpenXcom
 
 /**
  * Sets up a blank number text.
- * @param width, Width in pixels.
- * @param height, Height in pixels.
- * @param x, X position in pixels.
- * @param y, Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
  */
 NumberText::NumberText(
 		int width,
@@ -199,11 +199,9 @@ NumberText::NumberText(
 			i < 10;
 			++i)
 	{
-		// give it a border
-		_borderedChars[i] = new Surface(5, 7);
+		_borderedChars[i] = new Surface(5, 7); // give it a border
 
-		// this is the "darker" shade that goes in the corners.
-		for (int
+		for (int // this is the "darker" shade that goes in the corners
 				x = 0;
 				x <= 2;
 				x += 2)
@@ -221,8 +219,7 @@ NumberText::NumberText(
 			}
 		}
 
-		// this is the "slightly darker" version that goes in four cardinals.
-		for (int
+		for (int // this is the "slightly darker" version that goes in four cardinals
 				z = 0;
 				z <= 2;
 				z += 2)
@@ -239,8 +236,7 @@ NumberText::NumberText(
 							8);
 		}
 
-		// and finally the number itself
-		_chars[i]->blitNShade(
+		_chars[i]->blitNShade( // and finally the number itself
 						_borderedChars[i],
 						1,
 						1,
@@ -265,18 +261,17 @@ NumberText::~NumberText()
 
 /**
  * Changes the value used to render the number.
- * @param value, Number value.
+ * @param value - number value
  */
 void NumberText::setValue(unsigned value)
 {
 	_value = value;
-
 	_redraw = true;
 }
 
 /**
  * Returns the value used to render the number.
- * @return, Number value.
+ * @return, number value
  */
 unsigned NumberText::getValue() const
 {
@@ -285,7 +280,7 @@ unsigned NumberText::getValue() const
 
 /**
  * Changes the color used to render the number.
- * @param color, Color value.
+ * @param color - color value
  */
 void NumberText::setColor(Uint8 color)
 {
@@ -296,7 +291,7 @@ void NumberText::setColor(Uint8 color)
 
 /**
  * Returns the color used to render the number.
- * @return, Color value.
+ * @return, color value
  */
 Uint8 NumberText::getColor() const
 {
@@ -305,9 +300,9 @@ Uint8 NumberText::getColor() const
 
 /**
  * Replaces a certain amount of colors in the number text palette.
- * @param colors, Pointer to the set of colors.
- * @param firstcolor, Offset of the first color to replace.
- * @param ncolors, Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void NumberText::setPalette(
 		SDL_Color* colors,
@@ -342,17 +337,17 @@ void NumberText::draw()
 {
 	Surface::draw();
 
-	std::ostringstream ss;
-	ss << _value;
-	std::string s = ss.str();
+	std::ostringstream oss;
+	oss << _value;
+	std::string str = oss.str();
 
 	int x = 0;
 
-	if (!_bordered)
+	if (_bordered == false)
 	{
 		for (std::string::iterator
-				i = s.begin();
-				i != s.end();
+				i = str.begin();
+				i != str.end();
 				++i)
 		{
 			_chars[*i - '0']->setX(x);
@@ -365,15 +360,14 @@ void NumberText::draw()
 	else
 	{
 		for (std::string::iterator
-				i = s.begin();
-				i != s.end();
+				i = str.begin();
+				i != str.end();
 				++i)
 		{
 			_borderedChars[*i - '0']->setX(x);
 			_borderedChars[*i - '0']->setY(0);
 			_borderedChars[*i - '0']->blit(this);
 
-			// no this isn't a typo, i want to use the same spacing regardless.
 			x += _chars[*i - '0']->getWidth() + 1;
 		}
 	}
@@ -383,6 +377,7 @@ void NumberText::draw()
 
 /**
  * Sets whether or not to draw a border around the number.
+ * @param bordered - true to border
  */
 void NumberText::setBordered(bool bordered)
 {

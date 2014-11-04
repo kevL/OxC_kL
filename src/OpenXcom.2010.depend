@@ -4414,7 +4414,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1413136960 f:\git\openxcom\src\resource\resourcepack.h
+1415135392 f:\git\openxcom\src\resource\resourcepack.h
 	<map>
 	<string>
 	<vector>
@@ -5381,7 +5381,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Transfer.h"
 
-1413478223 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
+1415106099 source:f:\git\openxcom\src\basescape\soldierarmorstate.cpp
 	"SoldierArmorState.h"
 	<sstream>
 	"../Engine/Game.h"

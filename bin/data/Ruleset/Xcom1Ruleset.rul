@@ -185,7 +185,7 @@ crafts:
     vehicles: 8
     maxItems: 84 # 6 x soldier cap.
     costBuy: 450000
-    costRent: 300000
+    costRent: 295000
     refuelRate: 50
     repairRate: 1
     transferTime: 72
@@ -207,7 +207,7 @@ crafts:
     accel: 3
     weapons: 2
     costBuy: 750000
-    costRent: 500000
+    costRent: 520000
     refuelRate: 50
     repairRate: 1
     transferTime: 96
@@ -8843,6 +8843,7 @@ extraSounds:
       52: Resources/Sounds/52_rocketshot.WAV
       53: Resources/Sounds/53_blasterlaunch.WAV
       54: Resources/Sounds/54_stunrod.WAV
+      70: Resources/Sounds/extra/hover_move.ogg
       101: Resources/Sounds/Tactical/sFx_voice/death/f/vs_fx0huskf_hit2.wav
       102: Resources/Sounds/Tactical/sFx_voice/death/f/vs_nnwgrdf2_hit1.wav
       103: Resources/Sounds/Tactical/sFx_voice/death/f/vs_nprostf2_hit2.wav
@@ -9228,11 +9229,11 @@ interfaces:
         color2: 16
       # required
       - id: textSlots
-        color: 63
+        color: 64
       - id: grid
         color: 8
       - id: numStack
-        color: 66
+        color: 67
   - type: stats
     elements:
       - id: textName

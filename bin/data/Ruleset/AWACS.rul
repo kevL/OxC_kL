@@ -8,7 +8,7 @@ crafts:
     speedMax: 410
     accel: 1
     costBuy: 500000
-    costRent: 350000
+    costRent: 335000
     refuelRate: 75
     radarRange: 1200
 #    radarChance: 40
@@ -22,7 +22,7 @@ crafts:
     speedMax: 723
     accel: 1
     costBuy: 650000
-    costRent: 475000
+    costRent: 465000
     refuelRate: 75
     radarRange: 1650
 #    radarChance: 40
@@ -36,6 +36,7 @@ crafts:
     speedMax: 380
     accel: 1
     costSell: 650000
+    costRent: 20000
     refuelRate: 100
     radarRange: 1850
 #    radarChance: 60

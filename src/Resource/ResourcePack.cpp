@@ -46,6 +46,7 @@ int
 	ResourcePack::DOOR_OPEN					= 3,
 	ResourcePack::LARGE_EXPLOSION			= 5,
 	ResourcePack::FLYING_SOUND				= 15,
+	ResourcePack::FLYING_SOUND_HQ			= 70, // kL
 	ResourcePack::ITEM_RELOAD				= 17,
 	ResourcePack::SLIDING_DOOR_OPEN			= 20,
 	ResourcePack::SLIDING_DOOR_CLOSE		= 21,

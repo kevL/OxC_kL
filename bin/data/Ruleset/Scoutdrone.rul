@@ -107,6 +107,7 @@ extraStrings:
 extraSounds:
   - type: BATTLE.CAT
     files:
+      87: Resources/Scoutdrone/move_tank.ogg
       88: Resources/Scoutdrone/Fire.wav
 extraSprites:
   - type: BIGOBS.PCK

@@ -1164,13 +1164,21 @@ void UnitWalkBState::playMovementSound()
 					if (_unit->getTrueWalkingPhase() == 1
 						&& groundCheck(1))
 					{
-						sound = ResourcePack::ITEM_DROP;	// thunk.
+						sound = ResourcePack::ITEM_DROP;		// thunk.
 					}
 				}
 				else if (_unit->isFloating() == false)
-					sound = 40;								// GravLift
+					sound = 40;									// GravLift
 				else // !_falling
-					sound = ResourcePack::FLYING_SOUND;		// hoverSound
+				{
+					if (_unit->getUnitRules() != NULL
+						&& _unit->getUnitRules()->getMechanical() == true)
+					{
+						sound = ResourcePack::FLYING_SOUND;		// hoverSound flutter
+					}
+					else
+						sound = ResourcePack::FLYING_SOUND_HQ;	// HQ hoverSound
+				}
 			}
 		}
 	}
