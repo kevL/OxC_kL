@@ -868,8 +868,8 @@ void Craft::think()
  */
 void Craft::checkup()
 {
-	_warning = CW_NONE;
-	_warned = false;
+//	_warning = CW_NONE;
+//	_warned = false;
 
 	int
 		cw = 0,
@@ -1011,6 +1011,9 @@ std::string Craft::rearm(const Ruleset* rules)
 				break;
 		}
 	} // That handles only 2 craft weapons.
+
+	if (ret.empty() == true)
+		checkup();
 
 	return ret;
 }

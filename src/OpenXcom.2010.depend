@@ -9607,7 +9607,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1415049584 source:f:\git\openxcom\src\savegame\craft.cpp
+1415102084 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>
