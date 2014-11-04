@@ -85,7 +85,8 @@ InterceptState::InterceptState(
 
 	_txtCraft		= new Text(86, 9, 16, 64);
 	_txtStatus		= new Text(53, 9, 117, 64);
-	_txtWeapons		= new Text(67, 17, 243, 56);
+//	_txtWeapons		= new Text(67, 17, 243, 56);
+	_txtWeapons		= new Text(85, 9, 213, 64);
 
 	_lstCrafts		= new TextList(285, 73, 16, 74);
 
@@ -105,6 +106,7 @@ InterceptState::InterceptState(
 	add(_btnCancel);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
@@ -144,7 +146,8 @@ InterceptState::InterceptState(
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCrafts->setColumns(3, 93, 126, 50);
+//	_lstCrafts->setColumns(3, 93, 126, 50);
+	_lstCrafts->setColumns(5, 93, 126, 25, 15, 15);
 	_lstCrafts->setSelectable();
 	_lstCrafts->setMargin();
 	_lstCrafts->setBackground(_window);
@@ -155,8 +158,10 @@ InterceptState::InterceptState(
 	_lstCrafts->onMouseOver((ActionHandler)& InterceptState::lstCraftsMouseOver);
 	_lstCrafts->onMouseOut((ActionHandler)& InterceptState::lstCraftsMouseOut);
 
-	int r = 0;
 
+	RuleCraft* rule;
+
+	size_t row = 0;
 	for (std::vector<Base*>::iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
@@ -173,49 +178,65 @@ InterceptState::InterceptState(
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
+			_bases.push_back((*i)->getName().c_str());
 			_crafts.push_back(*j);
 
-			std::wstring wsBase = (*i)->getName().c_str();
-			_bases.push_back(wsBase);
-
-			std::wostringstream ss;
-
+/*			std::wostringstream wss;
 			if ((*j)->getNumWeapons() > 0)
-				ss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
+				wss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
 			else
-				ss << 0;
+				wss << 0;
 
-			ss << "|";
+			wss << L"|";
 			if ((*j)->getNumSoldiers() > 0)
-				ss << L'\x01' << (*j)->getNumSoldiers() << L'\x01';
+				wss << L'\x01' << (*j)->getNumSoldiers() << L'\x01';
 			else
-				ss << 0;
+				wss << 0;
 
-			ss << "|";
+			wss << L"|";
 			if ((*j)->getNumVehicles() > 0)
-				ss << L'\x01' << (*j)->getNumVehicles() << L'\x01';
+				wss << L'\x01' << (*j)->getNumVehicles() << L'\x01';
 			else
-				ss << 0;
+				wss << 0; */
 
+			std::wostringstream
+				ss1,
+				ss2,
+				ss3;
 
-			std::wstring status = getAltStatus(*j); // kL
+			rule = (*j)->getRules();
+
+			if (rule->getWeapons() > 0)
+				ss1 << (*j)->getNumWeapons() << L"/" << rule->getWeapons();
+			else
+				ss1 << L"-";
+
+			if (rule->getSoldiers() > 0)
+				ss2 << (*j)->getNumSoldiers();
+			else
+				ss2 << L"-";
+
+			if (rule->getVehicles() > 0)
+				ss3 << (*j)->getNumVehicles();
+			else
+				ss3 << L"-";
+
+			std::wstring status = getAltStatus(*j);
 			_lstCrafts->addRow(
-							3,
+							5,
 							(*j)->getName(_game->getLanguage()).c_str(),
 							status.c_str(),
-							ss.str().c_str());
+							ss1.str().c_str(),
+							ss2.str().c_str(),
+							ss3.str().c_str());
 
-			_lstCrafts->setCellColor(r, 1, _cellColor);
-//			if ((*j)->getStatus() == "STR_READY")
-//				_lstCrafts->setCellColor(row, 1, Palette::blockOffset(8)+10);
-//			colorStatusCell();
+			_lstCrafts->setCellHighContrast(row, 1);
+			_lstCrafts->setCellColor(
+									row,
+									1,
+									_cellColor);
 
-//			_lstCrafts->setCellHighContrast(
-//										r,
-//										1,
-//										true);
-
-			r++;
+			row++;
 		}
 	}
 
@@ -231,7 +252,9 @@ InterceptState::~InterceptState()
 }
 
 /**
- * kL. A more descriptive state of the Craft.
+ * A more descriptive state of the Craft.
+ * @param craft - pointer to Craft in question
+ * @return, status string
  */
 std::wstring InterceptState::getAltStatus(Craft* craft)
 {
@@ -239,7 +262,7 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 	if (stat != "STR_OUT")
 	{
 		if (stat == "STR_READY")
-			_cellColor = Palette::blockOffset(7)-2;
+			_cellColor = Palette::blockOffset(7); // -2
 		else if (stat == "STR_REFUELLING")
 			_cellColor = Palette::blockOffset(10)+2;
 		else if (stat == "STR_REARMING")
@@ -256,6 +279,7 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 	if (wayPt != NULL)
 		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
 	else */
+
 	if (craft->getLowFuel())
 	{
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
@@ -324,10 +348,9 @@ void InterceptState::btnCancelClick(Action*)
  */
 void InterceptState::btnGotoBaseClick(Action*)
 {
-	_geo->timerReset(); // kL ( called from 5 states, but don't need NULL check )
+	_geo->timerReset();
 
 	_game->popState();
-
 	_game->pushState(new BasescapeState(
 									_base,
 									_globe));
@@ -339,15 +362,13 @@ void InterceptState::btnGotoBaseClick(Action*)
  */
 void InterceptState::lstCraftsLeftClick(Action*)
 {
-//	_game->popState();
-
-	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
+	Craft* craft = _crafts[_lstCrafts->getSelectedRow()];
 	_game->pushState(new GeoscapeCraftState(
-										c,
+										craft,
 										_globe,
 										NULL,
 										_geo,
-										true)); // kL_add.
+										true));
 }
 
 /**
@@ -358,15 +379,15 @@ void InterceptState::lstCraftsRightClick(Action*)
 {
 	_game->popState();
 
-	Craft* c = _crafts[_lstCrafts->getSelectedRow()];
+	Craft* craft = _crafts[_lstCrafts->getSelectedRow()];
 	_globe->center(
-				c->getLongitude(),
-				c->getLatitude());
+				craft->getLongitude(),
+				craft->getLatitude());
 }
 
-// kL_begin: These two are from SavedGameState:
 /**
  * Shows Base label.
+ * @param action - pointer to an action
  */
 void InterceptState::lstCraftsMouseOver(Action*)
 {
@@ -386,6 +407,7 @@ void InterceptState::lstCraftsMouseOver(Action*)
 
 /**
  * Hides Base label.
+ * @param action - pointer to an action
  */
 void InterceptState::lstCraftsMouseOut(Action*)
 {
@@ -393,6 +415,6 @@ void InterceptState::lstCraftsMouseOut(Action*)
 		return;
 
 	_txtBase->setText(tr("STR_INTERCEPT"));
-} // kL_end.
+}
 
 }

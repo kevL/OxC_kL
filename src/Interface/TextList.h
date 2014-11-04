@@ -305,7 +305,7 @@ private:
 
 		/// Attaches this button to a combobox.
 		void setComboBox(ComboBox* comboBox);
-		/// Check for a combobox.
+		/// Checks for a combobox.
 		ComboBox* getComboBox() const;
 };
 

@@ -75,8 +75,8 @@ Text::~Text()
 /**
  * Takes an integer value and formats it as number with separators (spacing the thousands).
  * @param value		- a value
- * @param currency	- currency symbol
- * @param space		- true to insert a space every 3 digits, kL
+ * @param currency	- reference a currency symbol (default L"")
+ * @param space		- true to insert a space every 3 digits (default true)
  * @return, formatted string
  */
 std::wstring Text::formatNumber(
@@ -99,7 +99,7 @@ std::wstring Text::formatNumber(
 
 	std::wstring ret = ss.str();
 
-	if (space)
+	if (space == true)
 	{
 		std::wstring thousands = L"\xA0"; // Language::cpToWstr(lc->mon_thousands_sep);
 
@@ -115,12 +115,12 @@ std::wstring Text::formatNumber(
 		}
 	}
 
-	if (!currency.empty())
+	if (currency.empty() == false)
 		ret.insert(
 				0,
 				currency);
 
-	if (negative)
+	if (negative == true)
 		ret.insert(
 				0,
 				L"-");
@@ -129,10 +129,10 @@ std::wstring Text::formatNumber(
 }
 
 /**
- * Takes an integer value and formats it as currency,
+ * Takes an integer value and formats it as currency by
  * spacing the thousands and adding a $ sign to the front.
- * @param funds The funding value.
- * @return The formatted string.
+ * @param funds - the funding value
+ * @return, the formatted string
  */
 std::wstring Text::formatFunding(int64_t funds)
 {
@@ -141,8 +141,8 @@ std::wstring Text::formatFunding(int64_t funds)
 
 /**
  * Takes an integer value and formats it as percentage by adding a % sign.
- * @param value The percentage value.
- * @return The formatted string.
+ * @param value - the percentage value
+ * @return, the formatted string
  */
 std::wstring Text::formatPercentage(int value)
 {
@@ -158,7 +158,6 @@ std::wstring Text::formatPercentage(int value)
 void Text::setBig()
 {
 	_font = _big;
-
 	processText();
 }
 
@@ -168,13 +167,12 @@ void Text::setBig()
 void Text::setSmall()
 {
 	_font = _small;
-
 	processText();
 }
 
 /**
  * Returns the font currently used by the text.
- * @return Pointer to font.
+ * @return, pointer to Font
  */
 Font* Text::getFont() const
 {
@@ -183,12 +181,11 @@ Font* Text::getFont() const
 
 /**
  * Changes the various resources needed for text rendering.
- * The different fonts need to be passed in advance since the
- * text size can change mid-text, and the language affects
- * how the text is rendered.
- * @param big, Pointer to large-size font.
- * @param small, Pointer to small-size font.
- * @param lang, Pointer to current language.
+ * The different fonts need to be passed in advance since the text size can
+ * change mid-text, and the language affects how the text is rendered.
+ * @param big	- pointer to large-size Font
+ * @param small	- pointer to small-size Font
+ * @param lang	- pointer to current Language
  */
 void Text::initText(
 		Font* big,
@@ -205,7 +202,7 @@ void Text::initText(
 
 /**
  * Changes the string displayed on screen.
- * @param text Text string.
+ * @param text - reference a text string
  */
 void Text::setText(const std::wstring& text)
 {
@@ -224,7 +221,7 @@ void Text::setText(const std::wstring& text)
 
 /**
  * Returns the string displayed on screen.
- * @return Text string.
+ * @return, text string
  */
 std::wstring Text::getText() const
 {
@@ -232,11 +229,11 @@ std::wstring Text::getText() const
 }
 
 /**
- * Enables/disables text wordwrapping. When enabled, lines of
- * text are automatically split to ensure they stay within the
- * drawing area, otherwise they simply go off the edge.
- * @param wrap Wordwrapping setting.
- * @param indent Indent wrapped text.
+ * Enables/disables text wordwrapping.
+ * When enabled, lines of text are automatically split to ensure they
+ * stay within the drawing area, otherwise they simply go off the edge.
+ * @param wrap		- true to wrap text (default true)
+ * @param indent	- true to indent wrapped text (default false)
  */
 void Text::setWordWrap(
 		bool wrap,
@@ -253,9 +250,9 @@ void Text::setWordWrap(
 }
 
 /**
- * Enables/disables color inverting. Mostly used to make
- * button text look pressed along with the button.
- * @param invert Invert setting.
+ * Enables/disables color inverting.
+ * Mostly used to make button text look pressed along with the button.
+ * @param invert - true to invert text (default true)
  */
 void Text::setInvert(bool invert)
 {
@@ -264,8 +261,9 @@ void Text::setInvert(bool invert)
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for Battlescape UI.
- * @param contrast, High contrast setting.
+ * Enables/disables high contrast color.
+ * Mostly used for Battlescape UI.
+ * @param contrast - true to set high contrast (default true)
  */
 void Text::setHighContrast(bool contrast)
 {
@@ -274,9 +272,8 @@ void Text::setHighContrast(bool contrast)
 }
 
 /**
- * Changes the way the text is aligned horizontally
- * relative to the drawing area.
- * @param align Horizontal alignment.
+ * Changes the way the text is aligned horizontally relative to the drawing area.
+ * @param align - horizontal alignment (enum Text.h)
  */
 void Text::setAlign(TextHAlign align)
 {
@@ -285,9 +282,8 @@ void Text::setAlign(TextHAlign align)
 }
 
 /**
- * Returns the way the text is aligned horizontally
- * relative to the drawing area.
- * @return Horizontal alignment.
+ * Returns the way the text is aligned horizontally relative to the drawing area.
+ * @return, horizontal alignment (enum Text.h)
  */
 TextHAlign Text::getAlign() const
 {
@@ -295,9 +291,8 @@ TextHAlign Text::getAlign() const
 }
 
 /**
- * Changes the way the text is aligned vertically
- * relative to the drawing area.
- * @param valign Vertical alignment.
+ * Changes the way the text is aligned vertically relative to the drawing area.
+ * @param valign - vertical alignment (enum Text.h)
  */
 void Text::setVerticalAlign(TextVAlign valign)
 {
@@ -306,10 +301,10 @@ void Text::setVerticalAlign(TextVAlign valign)
 }
 
 /**
- * Changes the color used to render the text. Unlike regular graphics,
- * fonts are greyscale so they need to be assigned a specific position
- * in the palette to be displayed.
- * @param color Color value.
+ * Changes the color used to render the text.
+ * Unlike regular graphics fonts are greyscale so they need to be
+ * assigned a specific position in the palette to be displayed.
+ * @param color - color value
  */
 void Text::setColor(Uint8 color)
 {
@@ -320,7 +315,7 @@ void Text::setColor(Uint8 color)
 
 /**
  * Returns the color used to render the text.
- * @return Color value.
+ * @return, color value
  */
 Uint8 Text::getColor() const
 {
@@ -328,10 +323,10 @@ Uint8 Text::getColor() const
 }
 
 /**
- * Changes the secondary color used to render the text. The text
- * switches between the primary and secondary color whenever there's
- * a 0x01 in the string.
- * @param color Color value.
+ * Changes the secondary color used to render the text.
+ * The text switches between the primary and secondary
+ * color whenever there's a 0x01 in the string.
+ * @param color - color value
  */
 void Text::setSecondaryColor(Uint8 color)
 {
@@ -341,7 +336,7 @@ void Text::setSecondaryColor(Uint8 color)
 
 /**
  * Returns the secondary color used to render the text.
- * @return Color value.
+ * @return, color value
  */
 Uint8 Text::getSecondaryColor() const
 {
@@ -350,7 +345,7 @@ Uint8 Text::getSecondaryColor() const
 
 /**
  * Returns the rendered text's width.
- * @param line - line to get the width of, or -1 to get whole text width
+ * @param line - line to get the width of or -1 to get whole text width (default -1)
  * @return, width in pixels
  */
 int Text::getTextWidth(int line) const
@@ -375,7 +370,7 @@ int Text::getTextWidth(int line) const
 
 /**
  * Returns the rendered text's height. Useful to check if wordwrap applies.
- * @param line - line to get the height of, or -1 to get whole text height
+ * @param line - line to get the height of, or -1 to get whole text height (default -1)
  * @return, height in pixels
  */
 int Text::getTextHeight(int line) const
@@ -398,15 +393,14 @@ int Text::getTextHeight(int line) const
 }
 
 /**
- * kL. Adds to the text's height.
- * @param pixels - pixels to add to height of a textline
+ * Adds to the text's height.
+ * @param pixels - pixels to add to height of a textline (default 1)
  */
-void Text::addTextHeight(int pixels) // kL
+void Text::addTextHeight(int pixels)
 {
 	if (_lineHeight.empty() == false)
 	{
 		size_t line = _lineHeight.size() - 1;
-
 		_lineHeight[line] += pixels;
 	}
 }
@@ -417,16 +411,18 @@ void Text::addTextHeight(int pixels) // kL
  */
 void Text::processText()
 {
-	if (_font == 0
-		|| _lang == 0)
+	if (_font == NULL
+		|| _lang == NULL)
+	{
 		return;
+	}
 
-	std::wstring* str = &_text;
+	std::wstring* ws = &_text;
 
-	if (_wrap) // Use a separate string for wordwrapping text
+	if (_wrap) // use a separate string for wordwrapping text
 	{
 		_wrappedText = _text;
-		str = &_wrappedText;
+		ws = &_wrappedText;
 	}
 
 	_lineWidth.clear();
@@ -440,15 +436,16 @@ void Text::processText()
 
 	Font* font = _font;
 
-	for (size_t // Go through the text character by character
-		c = 0;
-		c <= str->size();
-		++c)
+
+	for (size_t // go through the text character by character
+		i = 0;
+		i <= ws->size();
+		++i)
 	{
-		if (c == str->size() // End of the line
-			|| Font::isLinebreak((*str)[c]))
+		if (i == ws->size() // end of the line
+			|| Font::isLinebreak((*ws)[i]))
 		{
-			// Add line measurements for alignment later
+			// add line measurements for alignment later
 			_lineWidth.push_back(width);
 			_lineHeight.push_back(font->getCharSize(L'\n').h);
 
@@ -456,59 +453,59 @@ void Text::processText()
 			word = 0;
 			start = true;
 
-			if (c == str->size())
+			if (i == ws->size())
 				break;
 
-			else if ((*str)[c] == 2) // \x02 marks start of small text
+			else if ((*ws)[i] == 2) // \x02 marks start of small text
 				font = _small;
 		}
-		else if (Font::isSpace((*str)[c]) // Keep track of spaces for wordwrapping
-			|| Font::isSeparator((*str)[c]))
+		else if (Font::isSpace((*ws)[i]) // keep track of spaces for word-wrapping
+			|| Font::isSeparator((*ws)[i]))
 		{
-			space = c;
-			width += font->getCharSize((*str)[c]).w;
+			space = i;
+			width += font->getCharSize((*ws)[i]).w;
 			word = 0;
 			start = false;
 		}
-		else if ((*str)[c] != 1) // Keep track of the width of the last line and word
+		else if ((*ws)[i] != 1) // keep track of the width of the last line and word
 		{
-			if (font->getChar((*str)[c]) == 0)
-				(*str)[c] = L'?';
+			if (font->getChar((*ws)[i]) == 0)
+				(*ws)[i] = L'?';
 
-			int charWidth = font->getCharSize((*str)[c]).w;
+			int charWidth = font->getCharSize((*ws)[i]).w;
 			width += charWidth;
 			word += charWidth;
 
-			if (_wrap // Wordwrap if the last word doesn't fit the line
+			if (_wrap // word-wrap if the last word doesn't fit the line
 				&& width >= getWidth()
-				&& !start)
+				&& start == false)
 			{
 				if (_lang->getTextWrapping() == WRAP_WORDS
-					|| Font::isSpace((*str)[c]))
+					|| Font::isSpace((*ws)[i]))
 				{
-					width -= word; // Go back to the last space and put a linebreak there
+					width -= word; // go back to the last space and put a linebreak there
 
 					size_t indent = space;
-					if (Font::isSpace((*str)[space]))
+					if (Font::isSpace((*ws)[space]))
 					{
-						width -= font->getCharSize((*str)[space]).w;
-						(*str)[space] = L'\n';
+						width -= font->getCharSize((*ws)[space]).w;
+						(*ws)[space] = L'\n';
 					}
 					else
 					{
-						str->insert(space + 1, L"\n");
+						ws->insert(space + 1, L"\n");
 						indent++;
 					}
 
 					if (_indent)
 					{
-						str->insert(indent + 1, L" \xA0");
+						ws->insert(indent + 1, L" \xA0");
 						width += font->getCharSize(L' ').w + font->getCharSize(L'\xA0').w;
 					}
 				}
-				else if (_lang->getTextWrapping() == WRAP_LETTERS) // Go back to the last letter and put a linebreak there
+				else if (_lang->getTextWrapping() == WRAP_LETTERS) // go back to the last letter and put a linebreak there
 				{
-					str->insert(c, L"\n");
+					ws->insert(i, L"\n");
 					width -= charWidth;
 				}
 
@@ -530,8 +527,8 @@ void Text::processText()
 
 /**
  * Calculates the starting X position for a line of text.
- * @param line, The line number (0 = first, etc).
- * @return, The X position in pixels.
+ * @param line - the line number (0 = first, etc)
+ * @return, the X position in pixels
  */
 int Text::getLineX(int line) const
 {
@@ -605,35 +602,41 @@ void Text::draw()
 {
 	Surface::draw();
 
-	if (_text.empty() || _font == 0)
-		return;
-
-	// Show text borders for debugging
-	if (Options::debugUi)
+	if (_text.empty() == true
+		|| _font == NULL)
 	{
-		SDL_Rect r;
-		r.w = getWidth();
-		r.h = getHeight();
-		r.x = 0;
-		r.y = 0;
-		this->drawRect(&r, 5);
+		return;
+	}
 
-		r.w -= 2;
-		r.h -= 2;
-		r.x++;
-		r.y++;
-		this->drawRect(&r, 0);
+	if (Options::debugUi) // show text borders for debugUI
+	{
+		SDL_Rect rect;
+		rect.w = getWidth();
+		rect.h = getHeight();
+		rect.x = 0;
+		rect.y = 0;
+		this->drawRect(&rect, 5);
+
+		rect.w -= 2;
+		rect.h -= 2;
+		rect.x++;
+		rect.y++;
+		this->drawRect(&rect, 0);
 	}
 
 	int
-		x = 0,
-		y = 0,
 		line = 0,
+		x = getLineX(line),
+		y = 0,
 		height = 0,
-		color = _color;
+		color = _color,
+		mult = 1,
+		dir = 1,
+		mid = 0;
 
-	Font* font = _font;
-	std::wstring* s = &_text;
+	std::wstring* ws = &_text;
+	if (_wrap)
+		ws = &_wrappedText;
 
 	for (std::vector<int>::iterator
 			i = _lineHeight.begin();
@@ -650,70 +653,77 @@ void Text::draw()
 		break;
 		case ALIGN_MIDDLE:
 			y = static_cast<int>(ceil(
-					static_cast<double>(getHeight() - height) / 2.0));
+				static_cast<double>(getHeight() - height) / 2.0));
 		break;
 		case ALIGN_BOTTOM:
 			y = getHeight() - height;
 		break;
 	}
 
-	x = getLineX(line);
+//	if (_contrast) // set up text color
+//		mult = 3;
 
-	if (_wrap)
-		s = &_wrappedText;
-
-	// Set up text color
-	int mult = 1;
-	if (_contrast)
-		mult = 3;
-
-	// Set up text direction
-	int dir = 1;
-	if (_lang->getTextDirection() == DIRECTION_RTL)
+	if (_lang->getTextDirection() == DIRECTION_RTL) // set up text direction
 		dir = -1;
 
-	// Invert text by inverting the font palette on index 3 (font palettes use indices 1-5)
-	int mid = _invert? 3: 0;
+	if (_invert == true) // invert text by inverting the font palette on index 3 (font palettes use indices 1..5)
+		mid = 3;
 
-	// Draw each letter one by one
-	for (std::wstring::iterator
-			c = s->begin();
-			c != s->end();
-			++c)
+	Font* font = _font;
+
+
+	for (std::wstring::iterator // draw each letter one by one
+			i = ws->begin();
+			i != ws->end();
+			++i)
 	{
-		if (Font::isSpace(*c))
-			x += dir * font->getCharSize(*c).w;
-		else if (Font::isLinebreak(*c))
+		if (Font::isSpace(*i) == true)
+			x += dir * font->getCharSize(*i).w;
+		else if (Font::isLinebreak(*i) == true)
 		{
 			line++;
 
-			y += font->getCharSize(*c).h;
+			y += font->getCharSize(*i).h;
 			x = getLineX(line);
 
-			if (*c == L'\x02')
-			{
+			if (*i == L'\x02')
 				font = _small;
-			}
 		}
-		else if (*c == L'\x01')
-			color = (color == _color? _color2: _color);
+		else if (*i == L'\x01')
+		{
+			if (color == _color)
+				color = _color2;
+			else
+				color = _color;
+		}
 		else
 		{
-			if (dir < 0)
-				x += dir * font->getCharSize(*c).w;
+			if (_contrast)
+			{
+				if (color %16 < 2)
+					mult = 3;
+				else if (color %16 < 6)
+					mult = 2;
+				else
+					mult = 1;
+			}
 
-			Surface* chr = font->getChar(*c);
-			chr->setX(x);
-			chr->setY(y);
+
+			if (dir < 0)
+				x += dir * font->getCharSize(*i).w;
+
+			Surface* srfChar = font->getChar(*i);
+			srfChar->setX(x);
+			srfChar->setY(y);
 			ShaderDraw<PaletteShift>(
 								ShaderSurface(this, 0, 0),
-								ShaderCrop(chr),
+								ShaderCrop(srfChar),
 								ShaderScalar(color),
 								ShaderScalar(mult),
 								ShaderScalar(mid));
 
 			if (dir > 0)
-				x += dir * font->getCharSize(*c).w;
+				x += dir * font->getCharSize(*i).w;
 		}
 	}
 }

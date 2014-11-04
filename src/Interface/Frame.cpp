@@ -26,7 +26,7 @@ namespace OpenXcom
 {
 
 /**
- * Sets up a blank frame with the specified size and position.
+ * Sets up a blank Frame with the specified size and position.
  * @param width		- width in pixels
  * @param height	- height in pixels
  * @param x			- X position in pixels

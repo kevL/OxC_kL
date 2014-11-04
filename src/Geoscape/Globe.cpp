@@ -1489,7 +1489,15 @@ void Globe::drawShadow()
 }
 
 /**
- *
+ * Draws a XuLine!
+ * @param surface	-
+ * @param src		-
+ * @param x1		-
+ * @param y1		-
+ * @param x2		-
+ * @param y2		-
+ * @param shade		-
+ * @param color		-
  */
 void Globe::XuLine(
 		Surface* surface,
@@ -1817,7 +1825,7 @@ void Globe::setNewBaseHoverPos(
 }
 
 /**
- *
+ * Draws a VHLine!
  * @param surface	- pointer to a Surface
  * @param lon1		-
  * @param lat1		-
@@ -1877,8 +1885,8 @@ void Globe::drawVHLine(
 		ln2 = lon1 + sx * (i + 1);
 		lt2 = lat1 + sy * (i + 1);
 
-		if (!pointBack(ln2, lt2)
-			&& !pointBack(ln1, lt1))
+		if (pointBack(ln2, lt2) == false
+			&& pointBack(ln1, lt1) == false)
 		{
 			polarToCart(ln1, lt1, &x1, &y1);
 			polarToCart(ln2, lt2, &x2, &y2);

@@ -4633,7 +4633,7 @@
 1413136954 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1413136959 f:\git\openxcom\src\interface\textlist.h
+1415066156 f:\git\openxcom\src\interface\textlist.h
 	<map>
 	<vector>
 	"Text.h"
@@ -4858,7 +4858,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1413136953 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1415072127 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -4866,7 +4866,6 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Geoscape/Globe.h"
@@ -7941,7 +7940,7 @@
 	<string>
 	<vector>
 
-1414960618 source:f:\git\openxcom\src\geoscape\globe.cpp
+1415068001 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -8027,7 +8026,7 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1414610780 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1415074823 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -8373,7 +8372,7 @@
 	"../Engine/Palette.h"
 	"../Engine/Timer.h"
 
-1413136958 source:f:\git\openxcom\src\interface\frame.cpp
+1415066671 source:f:\git\openxcom\src\interface\frame.cpp
 	"Frame.h"
 	"../Engine/Palette.h"
 
@@ -8395,7 +8394,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1414828687 source:f:\git\openxcom\src\interface\text.cpp
+1415074458 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>
@@ -8423,7 +8422,7 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1413136959 source:f:\git\openxcom\src\interface\textlist.cpp
+1415073483 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
 	<algorithm>
 	<cmath>

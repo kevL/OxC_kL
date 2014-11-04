@@ -687,7 +687,7 @@ Uint8 TextList::getSecondaryColor() const
 
 /**
  * Enables/disables high contrast color. Mostly used for Battlescape text.
- * @param contrast - high contrast setting
+ * @param contrast - high contrast setting (default true)
  */
 void TextList::setHighContrast(bool contrast)
 {
@@ -714,7 +714,7 @@ void TextList::setHighContrast(bool contrast)
  * kL. Changes the contrast of a specific Text object in the list.
  * @param row		- row number
  * @param column	- column number
- * @param contrast	- contrast setting
+ * @param contrast	- contrast setting (default true)
  */
 void TextList::setCellHighContrast( // kL
 		int row,
@@ -727,9 +727,10 @@ void TextList::setCellHighContrast( // kL
 }
 
 /**
- * Enables/disables text wordwrapping. When enabled, rows can take up multiple
- * lines of the list, otherwise every row is restricted to one line.
- * @param wrap - wordwrapping setting
+ * Enables/disables text wordwrapping.
+ * When enabled, rows can take up multiple lines of the list
+ * otherwise every row is restricted to one line.
+ * @param wrap - wordwrap setting
  */
 void TextList::setWordWrap(bool wrap)
 {
@@ -738,8 +739,9 @@ void TextList::setWordWrap(bool wrap)
 }
 
 /**
- * Changes the horizontal alignment of the text in the list. This doesn't change
- * the alignment of existing text, just the alignment of text added from then on.
+ * Changes the horizontal alignment of the text in the list.
+ * This doesn't change the alignment of existing text
+ * just the alignment of text added from then on.
  * @param align	- horizontal alignment
  * @param col	- the column to set the alignment for (defaults to -1, meaning "all")
  */

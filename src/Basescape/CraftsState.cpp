@@ -27,7 +27,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
@@ -54,9 +54,8 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Equip Craft screen.
- * @param game Pointer to the core game.
- * @param base Pointer to the base to get info from.
+ * Initializes all the elements in the Crafts screen.
+ * @param base - pointer to the Base to get info from
  */
 CraftsState::CraftsState(
 		Base* base)
@@ -92,6 +91,7 @@ CraftsState::CraftsState(
 	add(_btnOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
@@ -131,14 +131,14 @@ CraftsState::CraftsState(
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
-	_lstCrafts->setArrowColumn(265, ARROW_VERTICAL); // kL
+	_lstCrafts->setArrowColumn(265, ARROW_VERTICAL);
 	_lstCrafts->setColumns(5, 94, 76, 36, 27, 47);
 	_lstCrafts->setSelectable();
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin();
 	_lstCrafts->onMousePress((ActionHandler)& CraftsState::lstCraftsPress);
-	_lstCrafts->onLeftArrowClick((ActionHandler)& CraftsState::lstLeftArrowClick); // kL
-	_lstCrafts->onRightArrowClick((ActionHandler)& CraftsState::lstRightArrowClick); // kL
+	_lstCrafts->onLeftArrowClick((ActionHandler)& CraftsState::lstLeftArrowClick);
+	_lstCrafts->onRightArrowClick((ActionHandler)& CraftsState::lstRightArrowClick);
 }
 
 /**
@@ -153,16 +153,14 @@ CraftsState::~CraftsState()
  */
 void CraftsState::init()
 {
-	//Log(LOG_INFO) << ". CraftsState::init()";
 	State::init();
+
 	_lstCrafts->clearList();
 
-
-	RuleCraft* rule = NULL;
-	std::wstring status;
+	RuleCraft* rule;
 
 	size_t row = 0;
-	for (std::vector<Craft*>::iterator
+	for (std::vector<Craft*>::const_iterator
 			i = _base->getCrafts()->begin();
 			i != _base->getCrafts()->end();
 			++i,
@@ -190,9 +188,7 @@ void CraftsState::init()
 		else
 			ss3 << L"-";
 
-
-		status = getAltStatus(*i);
-
+		std::wstring status = getAltStatus(*i);
 		_lstCrafts->addRow(
 						5,
 						(*i)->getName(_game->getLanguage()).c_str(),
@@ -201,16 +197,22 @@ void CraftsState::init()
 						ss2.str().c_str(),
 						ss3.str().c_str());
 
-		_lstCrafts->setCellColor(row, 1, _cellColor);
+		_lstCrafts->setCellHighContrast(row, 1);
+		_lstCrafts->setCellColor(
+								row,
+								1,
+								_cellColor);
 	}
 
-	_lstCrafts->draw(); // kL..
+	_lstCrafts->draw();
 }
 
 /**
- * kL. A more descriptive state of the Craft.
+ * A more descriptive state of these Crafts.
+ * @param craft - pointer to Craft in question
+ * @return, status string
  */
-std::wstring CraftsState::getAltStatus(Craft* craft) // kL
+std::wstring CraftsState::getAltStatus(Craft* craft)
 {
 	std::string stat = craft->getStatus();
 	if (stat != "STR_OUT")
@@ -233,6 +235,7 @@ std::wstring CraftsState::getAltStatus(Craft* craft) // kL
 	if (wayPt != NULL)
 		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
 	else */
+
 	if (craft->getLowFuel())
 	{
 		status = tr("STR_LOW_FUEL"); // "STR_LOW_FUEL_RETURNING_TO_BASE"
@@ -270,16 +273,14 @@ std::wstring CraftsState::getAltStatus(Craft* craft) // kL
 			}
 			else // landed
 			{
-//				status = tr("STR_DESTINATION_UC_")
-//							.arg(ufo->getName(_game->getLanguage()));
+//				status = tr("STR_DESTINATION_UC_").arg(ufo->getName(_game->getLanguage()));
 				status = ufo->getName(_game->getLanguage());
 				_cellColor = Palette::blockOffset(2)+6;
 			}
 		}
 		else // crashed,terrorSite,alienBase
 		{
-//			status = tr("STR_DESTINATION_UC_")
-//						.arg(craft->getDestination()->getName(_game->getLanguage()));
+//			status = tr("STR_DESTINATION_UC_").arg(craft->getDestination()->getName(_game->getLanguage()));
 			status = craft->getDestination()->getName(_game->getLanguage());
 			_cellColor = Palette::blockOffset(2)+8;
 		}
@@ -290,7 +291,7 @@ std::wstring CraftsState::getAltStatus(Craft* craft) // kL
 
 /**
  * Returns to the previous screen.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftsState::btnOkClick(Action*)
 {
@@ -314,11 +315,10 @@ void CraftsState::btnOkClick(Action*)
 /**
  * LMB shows the selected craft's info.
  * RMB pops out of Basescape and centers craft on Geoscape.
- * @param action, Pointer to an action.
+ * @param action - pointer to an action
  */
 void CraftsState::lstCraftsPress(Action* action)
 {
-	//Log(LOG_INFO) << ". CraftsState::lstCraftsPress()";
 	double mx = action->getAbsoluteXMouse();
 	if (mx >= _lstCrafts->getArrowsLeftEdge()
 		&& mx < _lstCrafts->getArrowsRightEdge())
@@ -328,20 +328,16 @@ void CraftsState::lstCraftsPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		//Log(LOG_INFO) << ". . LMB row = " << _lstCrafts->getSelectedRow();
 		if (_base->getCrafts()->at(_lstCrafts->getSelectedRow())->getStatus() != "STR_OUT")
-		{
 			_game->pushState(new CraftInfoState(
 											_base,
 											_lstCrafts->getSelectedRow()));
-		}
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		//Log(LOG_INFO) << ". . RMB row = " << _lstCrafts->getSelectedRow();
-		Craft* c = _base->getCrafts()->at(_lstCrafts->getSelectedRow());
-		_game->getSavedGame()->setGlobeLongitude(c->getLongitude());
-		_game->getSavedGame()->setGlobeLatitude(c->getLatitude());
+		Craft* craft = _base->getCrafts()->at(_lstCrafts->getSelectedRow());
+		_game->getSavedGame()->setGlobeLongitude(craft->getLongitude());
+		_game->getSavedGame()->setGlobeLatitude(craft->getLatitude());
 
 		kL_reCenter = true;
 
@@ -351,10 +347,10 @@ void CraftsState::lstCraftsPress(Action* action)
 }
 
 /**
- * kL. Reorders a craft. Moves craft slot up.
+ * Reorders a craft - moves craft-slot up.
  * @param action - pointer to an action
  */
-void CraftsState::lstLeftArrowClick(Action* action) // kL
+void CraftsState::lstLeftArrowClick(Action* action)
 {
 	int row = _lstCrafts->getSelectedRow();
 	if (row > 0)
@@ -388,10 +384,10 @@ void CraftsState::lstLeftArrowClick(Action* action) // kL
 }
 
 /**
- * kL. Reorders a craft. Moves craft slot down.
+ * Reorders a craft - moves craft-slot down.
  * @param action - pointer to an action
  */
-void CraftsState::lstRightArrowClick(Action* action) // kL
+void CraftsState::lstRightArrowClick(Action* action)
 {
 	int row = _lstCrafts->getSelectedRow();
 	size_t numCrafts = _base->getCrafts()->size();
