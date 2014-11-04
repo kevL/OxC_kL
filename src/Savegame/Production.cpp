@@ -226,7 +226,10 @@ ProductProgress Production::step(
 								if ((*c)->getStatus() == "STR_REFUELING")
 								{
 									if ((*c)->getRules()->getRefuelItem() == i->first)
+									{
 										(*c)->setWarned(false);
+										(*c)->setWarning(CW_NONE);
+									}
 								}
 								else if ((*c)->getStatus() == "STR_REARMING")
 								{
@@ -238,7 +241,10 @@ ProductProgress Production::step(
 										if (*cw != NULL
 											&& (*cw)->getRules()->getClipItem() == i->first)
 										{
+											(*cw)->setCantLoad(false);
+
 											(*c)->setWarned(false);
+											(*c)->setWarning(CW_NONE);
 										}
 									}
 								}

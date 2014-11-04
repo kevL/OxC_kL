@@ -2164,8 +2164,8 @@ void GeoscapeState::time30Minutes()
 				{
 					if ((*i)->getItems()->getItem(item) > 0)
 					{
-						(*i)->getItems()->removeItem(item);
 						(*j)->refuel();
+						(*i)->getItems()->removeItem(item);
 					}
 					else if ((*j)->getWarned() == false)
 					{

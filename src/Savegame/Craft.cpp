@@ -934,6 +934,9 @@ void Craft::consumeFuel()
  */
 void Craft::repair()
 {
+	_warning = CW_NONE;
+	_warned = false;
+
 	setDamage(_damage - _rules->getRepairRate());
 
 	if (_damage == 0)
@@ -952,6 +955,8 @@ std::string Craft::rearm(const Ruleset* rules)
 		ret,
 		test;
 
+	_warning = CW_NONE;
+
 	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
 			i != _weapons.end();
@@ -966,7 +971,7 @@ std::string Craft::rearm(const Ruleset* rules)
 			const int baseClips = _base->getItems()->getItem(clip);
 
 			if (clip.empty() == true)
-				(*i)->rearm(0, 0);
+				(*i)->rearm();
 			else if (baseClips > 0)
 			{
 				int clipsUsed = (*i)->rearm(
@@ -1015,6 +1020,9 @@ std::string Craft::rearm(const Ruleset* rules)
  */
 void Craft::refuel()
 {
+	_warning = CW_NONE;
+	_warned = false;
+
 	setFuel(_fuel + _rules->getRefuelRate());
 
 	if (_fuel == _rules->getMaxFuel())

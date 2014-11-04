@@ -141,8 +141,8 @@ void CraftWeapon::setRearming(const bool rearming)
 
 /**
  * Rearms this craft weapon's ammo.
- * @param baseClips	- the amount of clips available at the Base
- * @param clipSize	- the amount of rounds in a clip
+ * @param baseClips	- the amount of clips available at the Base (default 0)
+ * @param clipSize	- the amount of rounds in a clip (default 0)
  * @return, the amount of clips used (negative if not enough clips at Base)
  */
 int CraftWeapon::rearm(
@@ -203,7 +203,7 @@ bool CraftWeapon::getCantLoad() const
 
 /**
  * Sets this CraftWeapon's cantLoad status - no stock in Base Stores.
- * @param cantLoad - true if weapon ammo is low in stock
+ * @param cantLoad - true if weapon ammo is low in stock (default true)
  */
 void CraftWeapon::setCantLoad(const bool cantLoad)
 {

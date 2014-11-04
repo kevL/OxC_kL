@@ -76,8 +76,8 @@ private:
 		void setRearming(const bool rearming = true);
 		/// Rearms the craft weapon.
 		int rearm(
-				const int baseClips,
-				const int clipSize);
+				const int baseClips = 0,
+				const int clipSize = 0);
 		/// Gets this CraftWeapon's cantLoad status - no stock in Base Stores.
 		bool getCantLoad() const;
 		/// Sets this CraftWeapon's cantLoad status - no stock in Base Stores.
