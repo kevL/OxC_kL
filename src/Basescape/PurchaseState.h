@@ -48,13 +48,13 @@ class PurchaseState
 
 private:
 	int
-		_cQty,
-		_pQty,
-		_total;
+		_craftQty,
+		_persQty,
+		_totalCost;
 	size_t
 		_itemOffset,
 		_sel;
-	double _iQty;
+	double _storeSize;
 
 	Base* _base;
 	Text
@@ -75,7 +75,7 @@ private:
 		* _timerInc;
 	Window* _window;
 
-	std::vector<int> _qtys;
+	std::vector<int> _quantities;
 	std::vector<std::string>
 		_crafts,
 		_items;

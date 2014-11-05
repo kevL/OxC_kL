@@ -38,8 +38,7 @@ class Window;
 
 
 /**
- * Equipment screen that lets the player
- * pick the equipment to carry on a craft.
+ * Equipment screen that lets the player pick the equipment to carry on a craft.
  */
 class CraftEquipmentState
 	:
@@ -47,21 +46,17 @@ class CraftEquipmentState
 {
 
 private:
-//	int _tQty;
 	size_t
 		_craftID,
 		_sel;
 
 	Base* _base;
 	Text
-//		* _txtAvailable,
 		* _txtBaseLabel,
-//kL	* _txtCrew,
 		* _txtItem,
 		* _txtStores,
 		* _txtCraft,
 		* _txtTitle,
-//		* _txtUsed,
 		* _txtSpace,
 		* _txtLoad;
 	TextButton

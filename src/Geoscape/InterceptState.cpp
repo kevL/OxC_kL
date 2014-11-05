@@ -22,10 +22,9 @@
 #include <sstream>
 
 #include "ConfirmDestinationState.h"
-#include "GeoscapeCraftState.h" // kL
-#include "GeoscapeState.h" // kL
+#include "GeoscapeCraftState.h"
+#include "GeoscapeState.h"
 #include "Globe.h"
-//kL #include "SelectDestinationState.h"
 
 #include "../Basescape/BasescapeState.h"
 
@@ -46,7 +45,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/SavedGame.h"
-#include "../Savegame/Target.h" // kL, why not
+#include "../Savegame/Target.h"
 #include "../Savegame/Ufo.h"
 
 
@@ -55,21 +54,21 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Intercept window.
- * @param globe		- pointer to the Geoscape globe
- * @param base		- pointer to base to show contained crafts (NULL to show all crafts)
- * @param target	- pointer to target to intercept (NULL to ask user for target)
- * @param geo		- pointer to GeoscapeState
+ * @param globe		- pointer to the geoscape Globe
+ * @param base		- pointer to Base to show contained crafts (default NULL to show all crafts)
+ * @param target	- pointer to Target to intercept (default NULL to ask user for target)
+ * @param geo		- pointer to GeoscapeState (default NULL)
  */
 InterceptState::InterceptState(
 		Globe* globe,
 		Base* base,
 		Target* target,
-		GeoscapeState* geo) // kL_add.
+		GeoscapeState* geo)
 	:
 		_globe(globe),
 		_base(base),
 		_target(target),
-		_geo(geo) // kL_add.
+		_geo(geo)
 {
 	_screen = false;
 
@@ -80,15 +79,13 @@ InterceptState::InterceptState(
 							0,
 							30,
 							POPUP_HORIZONTAL);
-//	_txtTitle		= new Text(240, 17, 70, 40);
 	_txtBase		= new Text(288, 17, 16, 41); // might do getRegion in here also.
 
-	_txtCraft		= new Text(86, 9, 16, 64);
-	_txtStatus		= new Text(53, 9, 117, 64);
-//	_txtWeapons		= new Text(67, 17, 243, 56);
-	_txtWeapons		= new Text(85, 9, 213, 64);
+	_txtCraft		= new Text(86, 9, 16, 56);
+	_txtStatus		= new Text(53, 9, 115, 56);
+	_txtWeapons		= new Text(85, 9, 213, 56);
 
-	_lstCrafts		= new TextList(285, 73, 16, 74);
+	_lstCrafts		= new TextList(285, 81, 16, 66);
 
 	_btnGotoBase	= new TextButton(142, 16, 16, 151);
 	_btnCancel		= new TextButton(142, 16, 162, 151);
@@ -96,7 +93,6 @@ InterceptState::InterceptState(
 	setPalette("PAL_GEOSCAPE", 4);
 
 	add(_window);
-//	add(_txtTitle);
 	add(_txtBase);
 	add(_txtCraft);
 	add(_txtStatus);
@@ -126,11 +122,6 @@ InterceptState::InterceptState(
 						(ActionHandler)& InterceptState::btnCancelClick,
 						Options::keyGeoIntercept);
 
-//	_txtTitle->setColor(Palette::blockOffset(15)-1);
-//	_txtTitle->setAlign(ALIGN_CENTER);
-//	_txtTitle->setBig();
-//	_txtTitle->setText(tr("STR_LAUNCH_INTERCEPTION"));
-
 	_txtCraft->setColor(Palette::blockOffset(8)+5);
 	_txtCraft->setText(tr("STR_CRAFT"));
 
@@ -146,8 +137,7 @@ InterceptState::InterceptState(
 
 	_lstCrafts->setColor(Palette::blockOffset(15)-1);
 	_lstCrafts->setSecondaryColor(Palette::blockOffset(8)+10);
-//	_lstCrafts->setColumns(3, 93, 126, 50);
-	_lstCrafts->setColumns(5, 93, 126, 25, 15, 15);
+	_lstCrafts->setColumns(5, 91, 126, 25, 15, 15);
 	_lstCrafts->setSelectable();
 	_lstCrafts->setMargin();
 	_lstCrafts->setBackground(_window);
@@ -180,24 +170,6 @@ InterceptState::InterceptState(
 		{
 			_bases.push_back((*i)->getName().c_str());
 			_crafts.push_back(*j);
-
-/*			std::wostringstream wss;
-			if ((*j)->getNumWeapons() > 0)
-				wss << L'\x01' << (*j)->getNumWeapons() << L'\x01';
-			else
-				wss << 0;
-
-			wss << L"|";
-			if ((*j)->getNumSoldiers() > 0)
-				wss << L'\x01' << (*j)->getNumSoldiers() << L'\x01';
-			else
-				wss << 0;
-
-			wss << L"|";
-			if ((*j)->getNumVehicles() > 0)
-				wss << L'\x01' << (*j)->getNumVehicles() << L'\x01';
-			else
-				wss << 0; */
 
 			std::wostringstream
 				ss1,
@@ -252,25 +224,44 @@ InterceptState::~InterceptState()
 }
 
 /**
- * A more descriptive state of the Craft.
+ * A more descriptive state of the Crafts.
  * @param craft - pointer to Craft in question
  * @return, status string
  */
-std::wstring InterceptState::getAltStatus(Craft* craft)
+std::wstring InterceptState::getAltStatus(Craft* const craft)
 {
 	std::string stat = craft->getStatus();
 	if (stat != "STR_OUT")
 	{
 		if (stat == "STR_READY")
-			_cellColor = Palette::blockOffset(7); // -2
-		else if (stat == "STR_REFUELLING")
-			_cellColor = Palette::blockOffset(10)+2;
-		else if (stat == "STR_REARMING")
-			_cellColor = Palette::blockOffset(10)+4;
-		else if (stat == "STR_REPAIRS")
-			_cellColor = Palette::blockOffset(10)+6;
+		{
+			_cellColor = Palette::blockOffset(2); // green (7)-2
 
-		return tr(stat);
+			return tr(stat);
+		}
+		else if (stat == "STR_REFUELLING")
+		{
+			stat = "STR_REFUELLING_";
+			_cellColor = Palette::blockOffset(10)+2; // slate gray
+		}
+		else if (stat == "STR_REARMING")
+		{
+			stat = "STR_REARMING_";
+			_cellColor = Palette::blockOffset(10)+4; // slate gray
+		}
+		else if (stat == "STR_REPAIRS")
+		{
+			stat = "STR_REPAIRS_";
+			_cellColor = Palette::blockOffset(10)+6; // slate gray
+		}
+
+		bool delayed;
+		const int hours = craft->getDowntime(delayed);
+		std::wstring wstr = formatTime(
+									hours,
+									delayed);
+
+		return tr(stat).arg(wstr);
 	}
 
 	std::wstring status;
@@ -280,57 +271,89 @@ std::wstring InterceptState::getAltStatus(Craft* craft)
 		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
 	else */
 
-	if (craft->getLowFuel())
+	if (craft->getLowFuel() == true)
 	{
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(9)+4;
+		_cellColor = Palette::blockOffset(9)+4; // brown
 	}
-	else if (craft->getMissionComplete())
+	else if (craft->getMissionComplete() == true)
 	{
 		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(9)+6;
-	}
-	else if (craft->getDestination() == NULL)
-	{
-		status = tr("STR_PATROLLING");
-		_cellColor = Palette::blockOffset(5)+3;
+		_cellColor = Palette::blockOffset(9)+6; // brown
 	}
 	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
 	{
 		status = tr("STR_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(9)+2;
+		_cellColor = Palette::blockOffset(9)+2; // brown
+	}
+	else if (craft->getDestination() == NULL)
+	{
+		status = tr("STR_PATROLLING");
+		_cellColor = Palette::blockOffset(4); // olive green // blue(5)+3
 	}
 	else
 	{
 		Ufo* ufo = dynamic_cast<Ufo*>(craft->getDestination());
 		if (ufo != NULL)
 		{
-			if (craft->isInDogfight()) // chase
+			if (craft->isInDogfight() == true) // chase UFO
 			{
-				status = tr("STR_TAILING_UFO");
-				_cellColor = Palette::blockOffset(11);
+				status = tr("STR_TAILING_UFO").arg(ufo->getId());
+				_cellColor = Palette::blockOffset(11); // purple
 			}
-			else if (ufo->getStatus() == Ufo::FLYING) // intercept
+			else if (ufo->getStatus() == Ufo::FLYING) // intercept UFO
 			{
 				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
-				_cellColor = Palette::blockOffset(11)+1;
+				_cellColor = Palette::blockOffset(11)+1; // purple
 			}
-			else // landed
+			else // landed UFO
 			{
 				status = tr("STR_DESTINATION_UC_")
 							.arg(ufo->getName(_game->getLanguage()));
-				_cellColor = Palette::blockOffset(11)+2;
+				_cellColor = Palette::blockOffset(11)+2; // purple
 			}
 		}
-		else // crashed,terrorSite,alienBase
+		else // crashed UFO, terrorSite, alienBase, or wayPoint
 		{
 			status = tr("STR_DESTINATION_UC_")
 						.arg(craft->getDestination()->getName(_game->getLanguage()));
-			_cellColor = Palette::blockOffset(11)+3;
+			_cellColor = Palette::blockOffset(9); // brown //(11)+3; purple
 		}
 	}
 
 	return status;
+}
+
+/**
+ * Formats a duration in hours into a day & hour string.
+ * @param total		- time in hours
+ * @param delayed	- true to add '+' for lack of materiel
+ * @return, day & hour
+ */
+std::wstring InterceptState::formatTime(
+		const int total,
+		const bool delayed)
+{
+	std::wostringstream ss;
+	const int
+		days = total / 24,
+		hours = total %24;
+
+	if (days > 0)
+	{
+		ss << tr("STR_DAY", days);
+
+		if (hours > 0)
+			ss << L" ";
+	}
+
+	if (hours > 0)
+		ss << tr("STR_HOUR", hours);
+
+	if (delayed == true)
+		ss << L" +";
+
+	return ss.str();
 }
 
 /**

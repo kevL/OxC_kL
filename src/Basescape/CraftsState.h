@@ -58,8 +58,13 @@ private:
 	TextList* _lstCrafts;
 	Window* _window;
 
-	/// A more descriptive state of the Craft.
-	std::wstring getAltStatus(Craft* craft);
+	/// A more descriptive status of a Craft.
+	std::wstring getAltStatus(Craft* const craft);
+
+	/// Formats a duration in hours into a day & hour string.
+	std::wstring formatTime(
+			const int total,
+			const bool delayed);
 
 
 	public:

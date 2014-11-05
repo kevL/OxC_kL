@@ -267,14 +267,14 @@ private:
 
 		/// Gets the base's vehicles.
 		std::vector<Vehicle*>* getVehicles();
+
 		/// Destroys all disconnected facilities in the base.
 		void destroyDisconnectedFacilities();
 		/// Gets a sorted list of the facilities(=iterators) NOT connected to the Access Lift.
-		std::list<std::vector<BaseFacility*>::iterator> getDisconnectedFacilities(BaseFacility* remove);
+		std::list<std::vector<BaseFacility*>::const_iterator> getDisconnectedFacilities(BaseFacility* remFac);
 		/// Destroys a facility and deals with the side effects.
-		void destroyFacility(std::vector<BaseFacility*>::iterator facility);
+		void destroyFacility(std::vector<BaseFacility*>::const_iterator fac);
 
-// kL_begin: Base, for GraphsState monthly expenditures etc.
 		/// Increases (or decreases) the base's total income amount.
 		void setCashIncome(int cash);
 		/// Gets the base's total income amount.
@@ -293,7 +293,6 @@ private:
 		void setCurrentSoldier(const size_t row);
 		/// Gets the current row of Soldiers list.
 		size_t getCurrentSoldier() const;
-// kL_end.
 };
 
 }

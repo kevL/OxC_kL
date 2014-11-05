@@ -208,11 +208,11 @@ void CraftsState::init()
 }
 
 /**
- * A more descriptive state of these Crafts.
+ * A more descriptive status of these Crafts.
  * @param craft - pointer to Craft in question
  * @return, status string
  */
-std::wstring CraftsState::getAltStatus(Craft* craft)
+std::wstring CraftsState::getAltStatus(Craft* const craft)
 {
 	std::string stat = craft->getStatus();
 	if (stat != "STR_OUT")
@@ -226,7 +226,13 @@ std::wstring CraftsState::getAltStatus(Craft* craft)
 		else if (stat == "STR_REPAIRS")
 			_cellColor = Palette::blockOffset(4)+6;
 
-		return tr(stat);
+		bool delayed;
+		const int hours = craft->getDowntime(delayed);
+		std::wstring wstr = formatTime(
+									hours,
+									delayed);
+
+		return tr(stat).arg(wstr);
 	}
 
 	std::wstring status;
@@ -236,49 +242,49 @@ std::wstring CraftsState::getAltStatus(Craft* craft)
 		status = tr("STR_INTERCEPTING_UFO").arg(wayPt->getId());
 	else */
 
-	if (craft->getLowFuel())
+	if (craft->getLowFuel() == true)
 	{
 		status = tr("STR_LOW_FUEL"); // "STR_LOW_FUEL_RETURNING_TO_BASE"
 		_cellColor = Palette::blockOffset(1)+4;
 	}
-	else if (craft->getMissionComplete())
+	else if (craft->getMissionComplete() == true)
 	{
 		status = tr("STR_MISSION_COMPLETE"); // "STR_MISSION_COMPLETE_RETURNING_TO_BASE"
 		_cellColor = Palette::blockOffset(1)+6;
-	}
-	else if (craft->getDestination() == NULL)
-	{
-		status = tr("STR_PATROLLING");
-		_cellColor = Palette::blockOffset(8)+4;
 	}
 	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
 	{
 		status = tr("STR_BASE"); // "STR_RETURNING_TO_BASE"
 		_cellColor = Palette::blockOffset(5)+4;
 	}
+	else if (craft->getDestination() == NULL)
+	{
+		status = tr("STR_PATROLLING");
+		_cellColor = Palette::blockOffset(8)+4;
+	}
 	else
 	{
 		Ufo* ufo = dynamic_cast<Ufo*>(craft->getDestination());
 		if (ufo != NULL)
 		{
-			if (craft->isInDogfight()) // chase
+			if (craft->isInDogfight() == true) // chase UFO
 			{
 				status = tr("STR_UFO_").arg(ufo->getId()); // "STR_TAILING_UFO"
 				_cellColor = Palette::blockOffset(2)+2;
 			}
-			else if (ufo->getStatus() == Ufo::FLYING) // intercept
+			else if (ufo->getStatus() == Ufo::FLYING) // intercept UFO
 			{
 				status = tr("STR_UFO_").arg(ufo->getId()); // "STR_INTERCEPTING_UFO"
 				_cellColor = Palette::blockOffset(2)+4;
 			}
-			else // landed
+			else // landed UFO
 			{
 //				status = tr("STR_DESTINATION_UC_").arg(ufo->getName(_game->getLanguage()));
 				status = ufo->getName(_game->getLanguage());
 				_cellColor = Palette::blockOffset(2)+6;
 			}
 		}
-		else // crashed,terrorSite,alienBase
+		else // crashed UFO, terrorSite, alienBase, or wayPoint
 		{
 //			status = tr("STR_DESTINATION_UC_").arg(craft->getDestination()->getName(_game->getLanguage()));
 			status = craft->getDestination()->getName(_game->getLanguage());
@@ -287,6 +293,38 @@ std::wstring CraftsState::getAltStatus(Craft* craft)
 	}
 
 	return status;
+}
+
+/**
+ * Formats a duration in hours into a day & hour string.
+ * @param total		- time in hours
+ * @param delayed	- true to add '+' for lack of materiel
+ * @return, day & hour
+ */
+std::wstring CraftsState::formatTime(
+		const int total,
+		const bool delayed)
+{
+	std::wostringstream ss;
+	const int
+		days = total / 24,
+		hours = total %24;
+
+	if (days > 0)
+	{
+		ss << tr("STR_DAY", days);
+
+		if (hours > 0)
+			ss << L" ";
+	}
+
+	if (hours > 0)
+		ss << tr("STR_HOUR", hours);
+
+	if (delayed == true)
+		ss << L" +";
+
+	return ss.str();
 }
 
 /**

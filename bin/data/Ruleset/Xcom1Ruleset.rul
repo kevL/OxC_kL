@@ -8843,7 +8843,7 @@ extraSounds:
       52: Resources/Sounds/52_rocketshot.WAV
       53: Resources/Sounds/53_blasterlaunch.WAV
       54: Resources/Sounds/54_stunrod.WAV
-      70: Resources/Sounds/extra/hover_move.ogg
+      70: Resources/Sounds/extra/move_hover.ogg
       101: Resources/Sounds/Tactical/sFx_voice/death/f/vs_fx0huskf_hit2.wav
       102: Resources/Sounds/Tactical/sFx_voice/death/f/vs_nnwgrdf2_hit1.wav
       103: Resources/Sounds/Tactical/sFx_voice/death/f/vs_nprostf2_hit2.wav
@@ -9040,6 +9040,9 @@ extraStrings:
       STR_TRANSIT_LC: "transit"
       STR_RESET_UC: "reset"
       STR_PSI_RESIST: "> RESIST <"
+      STR_REPAIRS_: "> rePAIR > {0}"
+      STR_REFUELLING_: "> reFUEL > {0}"
+      STR_REARMING_: "> reARM > {0}"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

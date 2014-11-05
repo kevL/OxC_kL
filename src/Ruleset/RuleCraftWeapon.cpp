@@ -24,8 +24,8 @@ namespace OpenXcom
 {
 
 /**
- * Creates a blank ruleset for a certain type of craft weapon.
- * @param type String defining the type.
+ * Creates a blank ruleset for a certain type of CraftWeapon.
+ * @param type - string defining type
  */
 RuleCraftWeapon::RuleCraftWeapon(const std::string& type)
 	:
@@ -53,9 +53,9 @@ RuleCraftWeapon::~RuleCraftWeapon()
 }
 
 /**
- * Loads the craft weapon from a YAML file.
- * @param node YAML node.
- * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
+ * Loads the CraftWeapon from a YAML file.
+ * @param node		- reference a YAML node
+ * @param modIndex	- a value that offsets the sounds and sprite values to avoid conflicts
  */
 void RuleCraftWeapon::load(
 		const YAML::Node& node,
@@ -92,9 +92,9 @@ void RuleCraftWeapon::load(
 }
 
 /**
- * Gets the language string that names this craft weapon. Each craft weapon type
- * has a unique name.
- * @return The craft weapon's name.
+ * Gets the language string that names the CraftWeapon.
+ * Each craft weapon type has a unique name.
+ * @return, the CraftWeapon's name
  */
 std::string RuleCraftWeapon::getType() const
 {
@@ -102,9 +102,9 @@ std::string RuleCraftWeapon::getType() const
 }
 
 /**
- * Gets the ID of the sprite used to draw the craft weapon in the Equip Craft
- * and Interception screens.
- * @return The sprite ID.
+ * Gets the ID of the sprite used to draw the CraftWeapon in the
+ * CraftInfoState (BASEBITS) and DogfightState (INTICON) screens.
+ * @return, the sprite ID
  */
 int RuleCraftWeapon::getSprite() const
 {
@@ -112,8 +112,8 @@ int RuleCraftWeapon::getSprite() const
 }
 
 /**
- * Gets the ID of the sound used when firing the weapon in the Dogfight screen.
- * @return The sound ID.
+ * Gets the ID of the sound used when firing the CraftWeapon in the Dogfight screen.
+ * @return, the sound ID
  */
 int RuleCraftWeapon::getSound() const
 {
@@ -122,7 +122,7 @@ int RuleCraftWeapon::getSound() const
 
 /**
  * Gets the amount of damage this craft weapon inflicts on enemy crafts.
- * @return The damage amount.
+ * @return, the damage amount
  */
 int RuleCraftWeapon::getDamage() const
 {
@@ -130,8 +130,8 @@ int RuleCraftWeapon::getDamage() const
 }
 
 /**
- * Gets the maximum range of this craft weapon.
- * @return The range in km.
+ * Gets the maximum range of the CraftWeapon.
+ * @return, the range in km
  */
 int RuleCraftWeapon::getRange() const
 {
@@ -139,9 +139,8 @@ int RuleCraftWeapon::getRange() const
 }
 
 /**
- * Gets the percentage chance of each shot of this craft weapon hitting an
- * enemy craft.
- * @return The accuracy as a percentage.
+ * Gets the percentage chance of each shot of the CraftWeapon hitting an enemy craft.
+ * @return, the accuracy as a percentage
  */
 int RuleCraftWeapon::getAccuracy() const
 {
@@ -149,8 +148,8 @@ int RuleCraftWeapon::getAccuracy() const
 }
 
 /**
- * Gets the amount of time the craft weapon takes to reload in cautious mode.
- * @return The time in game seconds.
+ * Gets the amount of time the CraftWeapon takes to reload in cautious mode.
+ * @return, the time in game seconds
  */
 int RuleCraftWeapon::getCautiousReload() const
 {
@@ -158,8 +157,8 @@ int RuleCraftWeapon::getCautiousReload() const
 }
 
 /**
- * Gets the amount of time the craft weapon takes to reload in standard mode.
- * @return The time in game seconds.
+ * Gets the amount of time the CraftWeapon takes to reload in standard mode.
+ * @return, the time in game seconds
  */
 int RuleCraftWeapon::getStandardReload() const
 {
@@ -167,8 +166,8 @@ int RuleCraftWeapon::getStandardReload() const
 }
 
 /**
- * Gets the amount of time the craft weapon takes to reload in aggressive mode.
- * @return The time in game seconds.
+ * Gets the amount of time the CraftWeapon takes to reload in aggressive mode.
+ * @return, the time in game seconds
  */
 int RuleCraftWeapon::getAggressiveReload() const
 {
@@ -176,8 +175,8 @@ int RuleCraftWeapon::getAggressiveReload() const
 }
 
 /**
- * Gets the maximum amount of ammo the craft weapon can carry.
- * @return The amount of ammo.
+ * Gets the maximum amount of ammo the CraftWeapon can carry.
+ * @return, the amount of ammo
  */
 int RuleCraftWeapon::getAmmoMax() const
 {
@@ -185,9 +184,8 @@ int RuleCraftWeapon::getAmmoMax() const
 }
 
 /**
- * Gets how much ammo is added to the craft weapon while rearming (the amount of
- * ammo in each clip item).
- * @return The amount of ammo.
+ * Gets how much ammo is added to the CraftWeapon while rearming.
+ * @return, the amount of ammo
  */
 int RuleCraftWeapon::getRearmRate() const
 {
@@ -195,8 +193,8 @@ int RuleCraftWeapon::getRearmRate() const
 }
 
 /**
- * Gets the language string of the item that is this craft weapon.
- * @return The item name.
+ * Gets the language string of the item that is the CraftWeapon.
+ * @return, the item name
  */
 std::string RuleCraftWeapon::getLauncherItem() const
 {
@@ -204,8 +202,8 @@ std::string RuleCraftWeapon::getLauncherItem() const
 }
 
 /**
- * Gets the language string of the item used to load this craft weapon with ammo.
- * @return The item name.
+ * Gets the language string of the item used to load the CraftWeapon with ammo.
+ * @return, the item name
  */
 std::string RuleCraftWeapon::getClipItem() const
 {
@@ -213,8 +211,8 @@ std::string RuleCraftWeapon::getClipItem() const
 }
 
 /**
- * Gets the Projectile Type this weapon will fire.
- * @return The projectile type.
+ * Gets the CraftWeaponProjectileType the CraftWeapon will fire.
+ * @return, the projectile type
  */
 CraftWeaponProjectileType RuleCraftWeapon::getProjectileType() const
 {
@@ -222,8 +220,8 @@ CraftWeaponProjectileType RuleCraftWeapon::getProjectileType() const
 }
 
 /**
- * Gets the speed of the projectile fired by this weapon.
- * @return The projectile speed.
+ * Gets the speed of the projectile fired by the CraftWeapon.
+ * @return, the projectile speed
  */
 int RuleCraftWeapon::getProjectileSpeed() const
 {

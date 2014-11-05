@@ -26,7 +26,7 @@ namespace OpenXcom
 
 /**
  * Creates a blank ruleset for a certain type of craft.
- * @param type String defining the type.
+ * @param type - reference a string defining the type
  */
 RuleCraft::RuleCraft(const std::string& type)
 	:
@@ -65,10 +65,10 @@ RuleCraft::~RuleCraft()
 
 /**
  * Loads the craft from a YAML file.
- * @param node YAML node.
- * @param ruleset Ruleset for the craft.
- * @param modIndex A value that offsets the sounds and sprite values to avoid conflicts.
- * @param listOrder The list weight for this craft.
+ * @param node		- reference a YAML node
+ * @param ruleset	- pointer to Ruleset
+ * @param modIndex	- a value that offsets the sounds and sprite values to avoid conflicts
+ * @param listOrder	- the list weight for this craft
  */
 void RuleCraft::load(
 		const YAML::Node& node,
@@ -125,9 +125,9 @@ void RuleCraft::load(
 }
 
 /**
- * Gets the language string that names this craft.
+ * Gets the language string that names the craft.
  * Each craft type has a unique name.
- * @return The craft's name.
+ * @return, the craft's name
  */
 std::string RuleCraft::getType() const
 {
@@ -135,8 +135,8 @@ std::string RuleCraft::getType() const
 }
 
 /**
- * Gets the list of research required to acquire this craft.
- * @return The list of research IDs.
+ * Gets the list of research required to acquire the craft.
+ * @return, reference to a vector of strings that lists the needed research IDs
  */
 const std::vector<std::string>& RuleCraft::getRequirements() const
 {
@@ -144,9 +144,9 @@ const std::vector<std::string>& RuleCraft::getRequirements() const
 }
 
 /**
- * Gets the ID of the sprite used to draw the craft
- * in the Basescape and Equip Craft screens.
- * @return The Sprite ID.
+ * Gets the ID of the sprite used to draw the craft in the
+ * CraftInfoState (BASEBITS) and DogfightState (INTICON) screens.
+ * @return, the sprite ID
  */
 int RuleCraft::getSprite() const
 {
@@ -155,7 +155,7 @@ int RuleCraft::getSprite() const
 
 /**
  * Gets the maximum fuel the craft can contain.
- * @return The fuel amount.
+ * @return, the fuel amount
  */
 int RuleCraft::getMaxFuel() const
 {
@@ -163,8 +163,8 @@ int RuleCraft::getMaxFuel() const
 }
 
 /**
- * Gets the maximum damage (damage the craft can take) of the craft.
- * @return The maximum damage.
+ * Gets the maximum damage the craft can take before it's destroyed.
+ * @return, the maximum damage
  */
 int RuleCraft::getMaxDamage() const
 {
@@ -173,7 +173,7 @@ int RuleCraft::getMaxDamage() const
 
 /**
  * Gets the maximum speed of the craft flying around the Geoscape.
- * @return The speed in knots.
+ * @return, the speed in knots
  */
 int RuleCraft::getMaxSpeed() const
 {
@@ -182,7 +182,7 @@ int RuleCraft::getMaxSpeed() const
 
 /**
  * Gets the acceleration of the craft for taking off / stopping.
- * @return The acceleration.
+ * @return, the acceleration
  */
 int RuleCraft::getAcceleration() const
 {
@@ -191,7 +191,7 @@ int RuleCraft::getAcceleration() const
 
 /**
  * Gets the maximum number of weapons that can be equipped onto the craft.
- * @return The weapon capacity.
+ * @return, the weapon capacity
  */
 int RuleCraft::getWeapons() const
 {
@@ -200,7 +200,7 @@ int RuleCraft::getWeapons() const
 
 /**
  * Gets the maximum number of soldiers that the craft can carry.
- * @return The soldier capacity.
+ * @return, the soldier capacity
  */
 int RuleCraft::getSoldiers() const
 {
@@ -209,7 +209,7 @@ int RuleCraft::getSoldiers() const
 
 /**
  * Gets the maximum number of vehicles that the craft can carry.
- * @return The vehicle capacity.
+ * @return, the vehicle capacity
  */
 int RuleCraft::getVehicles() const
 {
@@ -218,7 +218,7 @@ int RuleCraft::getVehicles() const
 
 /**
  * Gets the cost of this craft for purchase/rent (0 if not purchasable).
- * @return The cost.
+ * @return, the cost
  */
 int RuleCraft::getBuyCost() const
 {
@@ -227,7 +227,7 @@ int RuleCraft::getBuyCost() const
 
 /**
  * Gets the cost of rent for a month.
- * @return The cost.
+ * @return, the cost
  */
 int RuleCraft::getRentCost() const
 {
@@ -235,9 +235,8 @@ int RuleCraft::getRentCost() const
 }
 
 /**
- * Gets the sell value of this craft
- * Rented craft should use 0.
- * @return The sell value.
+ * Gets the sell value of this craft - rented craft should use 0.
+ * @return, the sell value
  */
 int RuleCraft::getSellCost() const
 {
@@ -245,8 +244,8 @@ int RuleCraft::getSellCost() const
 }
 
 /**
- * Gets what item is required while the craft is refuelling.
- * @return The item ID or "" if none.
+ * Gets what item is required to refuel the craft.
+ * @return, the item ID string or "" if none
  */
 std::string RuleCraft::getRefuelItem() const
 {
@@ -255,7 +254,7 @@ std::string RuleCraft::getRefuelItem() const
 
 /**
  * Gets how much damage is removed from the craft while repairing.
- * @return, The amount of damage.
+ * @return, the amount of damage
  */
 int RuleCraft::getRepairRate() const
 {
@@ -264,7 +263,7 @@ int RuleCraft::getRepairRate() const
 
 /**
  * Gets how much fuel is added to the craft while refuelling.
- * @return, The amount of fuel.
+ * @return, the amount of fuel
  */
 int RuleCraft::getRefuelRate() const
 {
@@ -273,7 +272,7 @@ int RuleCraft::getRefuelRate() const
 
 /**
  * Gets the craft's radar range for detecting UFOs.
- * @return, The range in nautical miles.
+ * @return, the range in nautical miles
  */
 int RuleCraft::getRadarRange() const
 {
@@ -282,7 +281,7 @@ int RuleCraft::getRadarRange() const
 
 /**
  * Gets the craft's sight range for detecting bases.
- * @return, The range in nautical miles.
+ * @return, the range in nautical miles
  */
 int RuleCraft::getSightRange() const
 {
@@ -290,8 +289,8 @@ int RuleCraft::getSightRange() const
 }
 
 /**
- * Gets the amount of time this item takes to arrive at a base.
- * @return, The time in hours.
+ * Gets the amount of time a new craft takes to arrive at Base.
+ * @return, the time in hours
  */
 int RuleCraft::getTransferTime() const
 {
@@ -300,7 +299,7 @@ int RuleCraft::getTransferTime() const
 
 /**
  * Gets the number of points you lose when this craft is destroyed.
- * @return, The score in points.
+ * @return, the score in points
  */
 int RuleCraft::getScore() const
 {
@@ -309,7 +308,7 @@ int RuleCraft::getScore() const
 
 /**
  * Gets the terrain data needed to draw the Craft in the battlescape.
- * @return, The terrain data.
+ * @return, pointer to RuleTerrain data
  */
 RuleTerrain* RuleCraft::getBattlescapeTerrainData()
 {
@@ -318,7 +317,7 @@ RuleTerrain* RuleCraft::getBattlescapeTerrainData()
 
 /**
  * Checks if this ship is capable of going to mars.
- * @return, True if this ship is capable of going to mars.
+ * @return, true if this ship is capable of going to Mars
  */
 bool RuleCraft::getSpacecraft() const
 {
@@ -326,8 +325,8 @@ bool RuleCraft::getSpacecraft() const
 }
 
 /**
- * Gets the list weight for this research item.
- * @return, The list weight.
+ * Gets the list weight for the craft as a research item.
+ * @return, the list weight
  */
 int RuleCraft::getListOrder() const
 {
@@ -335,8 +334,8 @@ int RuleCraft::getListOrder() const
 }
 
 /**
- * Gets the deployment layout for this craft.
- * @return, The deployment layout.
+ * Gets the deployment layout for the craft.
+ * @return, reference to a vector of vectors representing the deployment layout
  */
 std::vector<std::vector<int> >& RuleCraft::getDeployment()
 {
@@ -344,8 +343,8 @@ std::vector<std::vector<int> >& RuleCraft::getDeployment()
 }
 
 /**
- * Gets the item limit for this craft.
- * @return, the item limit.
+ * Gets the item limit for the craft.
+ * @return, the item limit
  */
 int const RuleCraft::getMaxItems() const
 {

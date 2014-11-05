@@ -54,13 +54,13 @@ private:
 	std::wstring _text;	// the actual localized text.
 
 	LocalizedText(
-			const std::wstring &,
+			const std::wstring&,
 			unsigned);
 
 
 	public:
 		/// Create from existing unicode string.
-		LocalizedText(const std::wstring &);
+		LocalizedText(const std::wstring&);
 		/// Create the empty string.
 		LocalizedText()
 			:
@@ -81,9 +81,9 @@ private:
 
 		// Argument substitution.
 		/// Replace next argument.
-		LocalizedText arg(const std::wstring &) const OX_REQUIRED_RESULT;
+		LocalizedText arg(const std::wstring&) const OX_REQUIRED_RESULT;
 		/// Replace next argument.
-		LocalizedText& arg(const std::wstring &) OX_REQUIRED_RESULT;
+		LocalizedText& arg(const std::wstring&) OX_REQUIRED_RESULT;
 		/// Replace next argument.
 		template <typename T> LocalizedText arg(T) const OX_REQUIRED_RESULT;
 		/// Replace next argument.

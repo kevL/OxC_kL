@@ -120,70 +120,70 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	_txtItem->setText(tr("STR_ITEM"));
 
 
-	SavedGame* savedGame = _game->getSavedGame();
+	SavedGame* save = _game->getSavedGame();
 	std::wstring wstr;
 
-	if (savedGame->getBases()->at(0)) // always true, but hey.
+	if (save->getBases()->at(0)) // always true, but hey.
 	{
 		_txtBase_0->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(0)->getName().substr(0, 4);
+		wstr = save->getBases()->at(0)->getName().substr(0, 4);
 		_txtBase_0->setText(wstr);
 	}
 
-	if (savedGame->getBases()->at(1))
+	if (save->getBases()->at(1))
 	{
 		_txtBase_1->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(1)->getName().substr(0, 4);
+		wstr = save->getBases()->at(1)->getName().substr(0, 4);
 		_txtBase_1->setText(wstr);
 	}
 
-	if (savedGame->getBases()->at(2))
+	if (save->getBases()->at(2))
 	{
 		_txtBase_2->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(2)->getName().substr(0, 4);
+		wstr = save->getBases()->at(2)->getName().substr(0, 4);
 		_txtBase_2->setText(wstr);
 	}
 
-	if (savedGame->getBases()->at(3))
+	if (save->getBases()->at(3))
 	{
 		_txtBase_3->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(3)->getName().substr(0, 4);
+		wstr = save->getBases()->at(3)->getName().substr(0, 4);
 		_txtBase_3->setText(wstr);
 	}
 
-	if (savedGame->getBases()->at(4))
+	if (save->getBases()->at(4))
 	{
 		_txtBase_4->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(4)->getName().substr(0, 4);
+		wstr = save->getBases()->at(4)->getName().substr(0, 4);
 		_txtBase_4->setText(wstr);
 	}
 
-	if (savedGame->getBases()->at(5))
+	if (save->getBases()->at(5))
 	{
 		_txtBase_5->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(5)->getName().substr(0, 4);
+		wstr = save->getBases()->at(5)->getName().substr(0, 4);
 		_txtBase_5->setText(wstr);
 	}
 
-	if (savedGame->getBases()->at(6))
+	if (save->getBases()->at(6))
 	{
 		_txtBase_6->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(6)->getName().substr(0, 4);
+		wstr = save->getBases()->at(6)->getName().substr(0, 4);
 		_txtBase_6->setText(wstr);
 	}
 
-	if (savedGame->getBases()->at(7))
+	if (save->getBases()->at(7))
 	{
 		_txtBase_7->setColor(Palette::blockOffset(13)+10);
 
-		wstr = savedGame->getBases()->at(7)->getName().substr(0, 4);
+		wstr = save->getBases()->at(7)->getName().substr(0, 4);
 		_txtBase_7->setText(wstr);
 	}
 
@@ -193,11 +193,10 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	_lstMatrix->setBackground(_window);
 
 
-	int
-		iter	= 0,
-		qty[8]	= {0, 0, 0, 0, 0, 0, 0, 0};
-	size_t row = 0;
-	Uint8 color = Palette::blockOffset(13)+10; // blue
+	int qty[8] = {0, 0, 0, 0, 0, 0, 0, 0};
+	size_t
+		ent = 0,
+		row = 0;
 
 	std::wostringstream
 		ss0,
@@ -210,10 +209,9 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		ss7;
 
 	Ruleset* rules = _game->getRuleset();
-	RuleItem
-		* itemRule,
-		* launcher,
-		* clip;
+	RuleItem* rule;
+//		* launchRule,
+//		* clipRule;
 	RuleCraftWeapon* cwRule;
 
 	const std::vector<std::string>& items = rules->getItemsList();
@@ -222,24 +220,8 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			i != items.end();
 			++i)
 	{
-		itemRule = rules->getItem(*i);
-
-		std::wstring item = tr(*i);
-		if (itemRule->getBattleType() == BT_AMMO
-			 || (itemRule->getBattleType() == BT_NONE
-				&& itemRule->getClipSize() > 0))
-		{
-/*			if (itemRule->getBattleType() == BT_AMMO
-				&& itemRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
-			{
-				int clipSize = itemRule->getClipSize();
-				if (clipSize > 1)
-					item = item + L" (" + Text::formatNumber(clipSize) + L")";
-			} */
-
-			item.insert(0, L"  ");
-			color = Palette::blockOffset(15)+6; // purple
-		}
+		rule = rules->getItem(*i);
+		std::string test = rule->getType();
 
 		ss0.str(L"");
 		ss1.str(L"");
@@ -250,72 +232,65 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		ss6.str(L"");
 		ss7.str(L"");
 
-		iter = 0;
+		ent = 0;
 
 		for (std::vector<Base*>::const_iterator
-				b = savedGame->getBases()->begin();
-				b != savedGame->getBases()->end();
-				++b)
+				j = save->getBases()->begin();
+				j != save->getBases()->end();
+				++j)
 		{
-			qty[iter] = (*b)->getItems()->getItem(*i);
+			qty[ent] = (*j)->getItems()->getItem(*i);
 
-			// Add qty of items in transit to theMatrix.
-			std::wstring item = tr(*i);
-
-			for (std::vector<Transfer*>::const_iterator
-					t = (*b)->getTransfers()->begin();
-					t != (*b)->getTransfers()->end();
-					++t)
+			for (std::vector<Transfer*>::const_iterator // Add qty of items in transit to theMatrix.
+					k = (*j)->getTransfers()->begin();
+					k != (*j)->getTransfers()->end();
+					++k)
 			{
-				std::wstring trItem = (*t)->getName(_game->getLanguage());
-				if (trItem == item)
-					qty[iter] += (*t)->getQuantity();
+				if ((*k)->getItems() == test)
+					qty[ent] += (*k)->getQuantity();
 			}
 
-			// Add qty of items & vehicles on transport craft to da-Matrix.
-			for (std::vector<Craft*>::const_iterator
-					c = (*b)->getCrafts()->begin();
-					c != (*b)->getCrafts()->end();
-					++c)
+			for (std::vector<Craft*>::const_iterator // Add qty of items & vehicles on transport craft to da-Matrix.
+					k = (*j)->getCrafts()->begin();
+					k != (*j)->getCrafts()->end();
+					++k)
 			{
-				if ((*c)->getRules()->getSoldiers() > 0) // is transport craft
+				if ((*k)->getRules()->getSoldiers() > 0) // is transport craft
 				{
 					for (std::map<std::string, int>::iterator
-							e = (*c)->getItems()->getContents()->begin();
-							e != (*c)->getItems()->getContents()->end();
-							++e)
+							l = (*k)->getItems()->getContents()->begin();
+							l != (*k)->getItems()->getContents()->end();
+							++l)
 					{
-						std::wstring crItem = tr(e->first);
-						if (crItem == item)
-							qty[iter] += e->second;
+						if (l->first == test)
+							qty[ent] += l->second;
 					}
 				}
 
-				if ((*c)->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
+				if ((*k)->getRules()->getVehicles() > 0) // is transport craft capable of vehicles
 				{
 					for (std::vector<Vehicle*>::const_iterator
-							v = (*c)->getVehicles()->begin();
-							v != (*c)->getVehicles()->end();
-							++v)
+							l = (*k)->getVehicles()->begin();
+							l != (*k)->getVehicles()->end();
+							++l)
 					{
-						std::wstring crVehic = tr((*v)->getRules()->getType());
-						if (crVehic == item)
-							++qty[iter];
+						if ((*l)->getRules()->getType() == test)
+							qty[ent]++;
 
-						if ((*v)->getAmmo() != 255)
+						if ((*l)->getAmmo() != 255)
 						{
-							RuleItem* tankRule = rules->getItem((*v)->getRules()->getType());
-							RuleItem* ammoRule = rules->getItem(tankRule->getCompatibleAmmo()->front());
+							RuleItem
+								* tankRule = rules->getItem((*l)->getRules()->getType()),
+								* ammoRule = rules->getItem(tankRule->getCompatibleAmmo()->front());
 
-							std::wstring crVehic_a = tr(ammoRule->getType());
-							if (crVehic_a == item)
-								qty[iter] += (*v)->getAmmo();
+							if (ammoRule->getType() == test)
+								qty[ent] += (*l)->getAmmo();
 						}
 					}
 				}
 			}
 
-			++iter;
+			ent++;
 		}
 
 		if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
@@ -329,53 +304,77 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			if (qty[6] > 0) ss6 << qty[6];
 			if (qty[7] > 0) ss7 << qty[7];
 
+
 			bool craftOrdnance = false;
-			const std::vector<std::string>& craftWeaps = rules->getCraftWeaponsList();
+			const std::vector<std::string>& cwList = rules->getCraftWeaponsList();
 			for (std::vector<std::string>::const_iterator
-					j = craftWeaps.begin();
-					j != craftWeaps.end()
+					j = cwList.begin();
+					j != cwList.end()
 						&& craftOrdnance == false;
 					++j)
 			{
 				// Special handling for treating craft weapons as items
 				cwRule = rules->getCraftWeapon(*j);
 
-				launcher = rules->getItem(cwRule->getLauncherItem());
-				clip = rules->getItem(cwRule->getClipItem());
-
-				if (launcher == itemRule)
+				if (rule == rules->getItem(cwRule->getLauncherItem())
+					|| rule == rules->getItem(cwRule->getClipItem()))
 				{
 					craftOrdnance = true;
-/*					int clipSize = cwRule->getAmmoMax(); // Launcher
-					if (clipSize > 0)
-						item = item + L" (" + Text::formatNumber(clipSize) + L")"; */
-				}
-				else if (clip == itemRule)
-				{
-					craftOrdnance = true;
-/*					int clipSize = clip->getClipSize(); // launcher Ammo
-					if (clipSize > 1)
-						item = item + L"s (" + Text::formatNumber(clipSize) + L")"; */
 				}
 			}
 
-/*			if (itemRule->isFixed() // tank w/ Ordnance.
-				&& !itemRule->getCompatibleAmmo()->empty())
+/*				launchRule = rules->getItem(cwRule->getLauncherItem());
+				clipRule = rules->getItem(cwRule->getClipItem());
+				if (launchRule == rule)
+				{
+					craftOrdnance = true;
+					int clipSize = cwRule->getAmmoMax(); // Launcher
+					if (clipSize > 0)
+						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+				}
+				else if (clipRule == rule)
+				{
+					craftOrdnance = true;
+					int clipSize = clipRule->getClipSize(); // launcher Ammo
+					if (clipSize > 1)
+						item = item + L"s (" + Text::formatNumber(clipSize) + L")";
+				} */
+/*			if (rule->getBattleType() == BT_AMMO
+				&& rule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
 			{
-				clip = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
-				int clipSize = clip->getClipSize();
+				int clipSize = rule->getClipSize();
+				if (clipSize > 1)
+					item = item + L" (" + Text::formatNumber(clipSize) + L")";
+			} */
+/*			if (rule->isFixed() // tank w/ Ordnance.
+				&& !rule->getCompatibleAmmo()->empty())
+			{
+				clipRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
+				int clipSize = clipRule->getClipSize();
 				if (clipSize > 0)
 					item = item + L" (" + Text::formatNumber(clipSize) + L")";
 			} */
 
+			std::wstring item = tr(*i);
+
 			Uint8 color = Palette::blockOffset(13)+10; // blue
-			if (!savedGame->isResearched(itemRule->getType())				// not researched
-				&& (!savedGame->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
-					|| rules->getItem(*i)->getAlien()							// or is an alien
-					|| itemRule->getBattleType() == BT_CORPSE					// or is a corpse
-					|| itemRule->getBattleType() == BT_NONE)					// or is not a battlefield item
+
+			if ((rule->getBattleType() == BT_AMMO
+					|| (rule->getBattleType() == BT_NONE
+						&& rule->getClipSize() > 0))
+				&& rule->getType() != "STR_ELERIUM_115")
+			{
+				item.insert(0, L"  ");
+				color = Palette::blockOffset(15)+6; // purple
+			}
+
+			if (save->isResearched(rule->getType()) == false				// not researched
+				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
+					|| rules->getItem(*i)->getAlien() == true					// or is an alien
+					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
+					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
 				&& craftOrdnance == false									// and is not craft ordnance
-				&& !itemRule->isResearchExempt())
+				&& rule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = Palette::blockOffset(13)+5; // yellow
@@ -395,18 +394,18 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 			_lstMatrix->setRowColor(row, color);
 
-			++row;
+			row++;
 		}
 	}
 
-	_lstMatrix->scrollTo(savedGame->getCurrentRowMatrix());
+	_lstMatrix->scrollTo(save->getCurrentRowMatrix());
 /*	if (row > 0 // all taken care of in TextList
-		&& savedGame->getCurrentRowMatrix() >= row)
+		&& save->getCurrentRowMatrix() >= row)
 	{
 		_lstMatrix->scrollTo(0);
 	}
-	else if (savedGame->getCurrentRowMatrix() > 0)
-		_lstMatrix->scrollTo(savedGame->getCurrentRowMatrix()); */
+	else if (save->getCurrentRowMatrix() > 0)
+		_lstMatrix->scrollTo(save->getCurrentRowMatrix()); */
 
 //	_lstMatrix->draw(); // only needed when list changes while state is active. Eg, on re-inits
 }

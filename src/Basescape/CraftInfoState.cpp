@@ -29,7 +29,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
@@ -65,7 +65,6 @@ CraftInfoState::CraftInfoState(
 		_base(base),
 		_craftId(craftId)
 {
-	//Log(LOG_INFO) << "Create CraftInfoState";
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 		_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	else
@@ -186,7 +185,6 @@ CraftInfoState::CraftInfoState(
  */
 CraftInfoState::~CraftInfoState()
 {
-	//Log(LOG_INFO) << "Delete CraftInfoState";
 }
 
 /**
@@ -391,7 +389,7 @@ std::wstring CraftInfoState::formatTime(
 		bool delayed)
 {
 	std::wostringstream ss;
-	int
+	const int
 		days = total / 24,
 		hours = total %24;
 

@@ -60,7 +60,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Sell/Sack screen.
- * @param base		- pointer to the base to get info from
+ * @param base		- pointer to the Base to get info from
  * @param origin	- game section that originated this state
  */
 SellState::SellState(
@@ -68,10 +68,10 @@ SellState::SellState(
 		OptionsOrigin origin)
 	:
 		_base(base),
-		_qtys(),
-		_soldiers(),
-		_crafts(),
-		_items(),
+//		_qtys(),
+//		_soldiers(),
+//		_crafts(),
+//		_items(),
 		_sel(0),
 		_itemOffset(0),
 		_total(0),
@@ -81,7 +81,7 @@ SellState::SellState(
 		_origin(origin)
 {
 	bool overfull = Options::storageLimitsEnforced
-					&& _base->storesOverfull();
+				 && _base->storesOverfull();
 
 /*	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(overfull? 288:148, 16, overfull? 16:8, 176);
@@ -151,6 +151,7 @@ SellState::SellState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(_color);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -160,7 +161,7 @@ SellState::SellState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& SellState::btnOkClick,
 					Options::keyOk);
-	_btnOk->setVisible(false); // kL
+	_btnOk->setVisible(false);
 
 	_btnCancel->setColor(_color);
 	_btnCancel->setText(tr("STR_CANCEL"));
@@ -168,11 +169,8 @@ SellState::SellState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& SellState::btnCancelClick,
 					Options::keyCancel);
-	if (overfull)
-	{
+	if (overfull == true)
 		_btnCancel->setVisible(false);
-//kL	_btnOk->setVisible(false);
-	}
 
 	_txtTitle->setColor(_color);
 	_txtTitle->setBig();
@@ -199,9 +197,10 @@ SellState::SellState(
 //	_txtSpaceUsed->setSecondaryColor(_color2);
 	_txtSpaceUsed->setVisible(Options::storageLimitsEnforced);
 	_txtSpaceUsed->setAlign(ALIGN_RIGHT);
-//kL	std::wostringstream ss1;
-//kL	ss1 << static_cast<int>(_base->getUsedStores()) << ":" << _base->getAvailableStores();
-//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
+	std::wostringstream ss1;
+	ss1 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
+//	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss1.str()));
+	_txtSpaceUsed->setText(ss1.str());
 
 	_txtQuantity->setColor(_color);
 	_txtQuantity->setText(tr("STR_QUANTITY_UC"));
@@ -236,14 +235,14 @@ SellState::SellState(
 		{
 			_qtys.push_back(0);
 			_soldiers.push_back(*i);
+
 			_lstItems->addRow(
 							4,
 							(*i)->getName(true).c_str(),
 							L"1",
 							L"0",
 							Text::formatFunding(0).c_str());
-
-			++_itemOffset;
+			_itemOffset++;
 		}
 	}
 
@@ -256,60 +255,56 @@ SellState::SellState(
 		{
 			_qtys.push_back(0);
 			_crafts.push_back(*i);
+
 			_lstItems->addRow(
 							4,
 							(*i)->getName(_game->getLanguage()).c_str(),
 							L"1",
 							L"0",
 							Text::formatFunding((*i)->getRules()->getSellCost()).c_str());
-
-			++_itemOffset;
+			_itemOffset++;
 		}
 	}
 
-//kL	if (_base->getAvailableScientists() > 0)
-	if (_base->getScientists() > 0) // kL
+	if (_base->getScientists() > 0)
 	{
-		_qtys.push_back(0);
 		_hasSci = 1;
+		_qtys.push_back(0);
+
 		std::wostringstream ss;
-//kL		ss << _base->getAvailableScientists();
-		ss << _base->getScientists(); // kL
+		ss << _base->getScientists();
 		_lstItems->addRow(
 						4,
 						tr("STR_SCIENTIST").c_str(),
 						ss.str().c_str(),
 						L"0",
 						Text::formatFunding(0).c_str());
-
-		++_itemOffset;
+		_itemOffset++;
 	}
 
-//kL	if (_base->getAvailableEngineers() > 0)
-	if (_base->getEngineers() > 0) // kL
+	if (_base->getEngineers() > 0)
 	{
-		_qtys.push_back(0);
 		_hasEng = 1;
+		_qtys.push_back(0);
+
 		std::wostringstream ss;
-//kL		ss << _base->getAvailableEngineers();
-		ss << _base->getEngineers(); // kL
+		ss << _base->getEngineers();
 		_lstItems->addRow(
 						4,
 						tr("STR_ENGINEER").c_str(),
 						ss.str().c_str(),
 						L"0",
 						Text::formatFunding(0).c_str());
-
-		++_itemOffset;
+		_itemOffset++;
 	}
 
 
-	Ruleset* rules = _game->getRuleset();
 	SavedGame* save = _game->getSavedGame();
+	Ruleset* rules = _game->getRuleset();
 	RuleItem
-		* itemRule,
-		* launcher,
-		* clip;
+		* rule,
+		* launchRule,
+		* clipRule;
 	RuleCraftWeapon* cwRule;
 
 	const std::vector<std::string>& items = rules->getItemsList();
@@ -343,113 +338,104 @@ SellState::SellState(
 
 		if (qty > 0
 			&& (Options::canSellLiveAliens
-				|| !rules->getItem(*i)->getAlien()))
+				|| rules->getItem(*i)->getAlien() == false))
 		{
 			_qtys.push_back(0);
 			_items.push_back(*i);
 
 			std::wstring item = tr(*i);
 
-			std::wostringstream ss;
-			ss << qty;
-
-			itemRule = rules->getItem(*i);
+			rule = rules->getItem(*i);
+			//Log(LOG_INFO) << (*i) << " list# " << rule->getListOrder(); // Prints listOrder to LOG.
 
 			bool craftOrdnance = false;
-			const std::vector<std::string>& craftWeaps = rules->getCraftWeaponsList();
+			const std::vector<std::string>& cwList = rules->getCraftWeaponsList();
 			for (std::vector<std::string>::const_iterator
-					j = craftWeaps.begin();
-					j != craftWeaps.end()
+					j = cwList.begin();
+					j != cwList.end()
 						&& craftOrdnance == false;
 					++j)
 			{
 				// Special handling for treating craft weapons as items
 				cwRule = rules->getCraftWeapon(*j);
 
-				launcher = rules->getItem(cwRule->getLauncherItem());
-				clip = rules->getItem(cwRule->getClipItem());
+				launchRule = rules->getItem(cwRule->getLauncherItem());
+				clipRule = rules->getItem(cwRule->getClipItem());
 
-				if (launcher == itemRule)
+				if (launchRule == rule)
 				{
 					craftOrdnance = true;
 
-					int clipSize = cwRule->getAmmoMax(); // Launcher
+					const int clipSize = cwRule->getAmmoMax(); // Launcher
 					if (clipSize > 0)
-						item = item + L" (" + Text::formatNumber(clipSize) + L")";
+						item += (L" (" + Text::formatNumber(clipSize) + L")");
 				}
-				else if (clip == itemRule)
+				else if (clipRule == rule)
 				{
 					craftOrdnance = true;
 
-					int clipSize = clip->getClipSize(); // launcher Ammo
+					const int clipSize = clipRule->getClipSize(); // launcher Ammo
 					if (clipSize > 1)
-						item = item + L"s (" + Text::formatNumber(clipSize) + L")";
+						item += (L"s (" + Text::formatNumber(clipSize) + L")");
 				}
 			}
 
 			Uint8 color = _color;
-			if (!save->isResearched(itemRule->getType())				// not researched
-				&& (!save->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
-					|| rules->getItem(*i)->getAlien()						// or is an alien
-					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
-					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
-				&& craftOrdnance == false								// and is not craft ordnance
-				&& !itemRule->isResearchExempt())
+
+			if ((rule->getBattleType() == BT_AMMO			// #2 - weapon clips & HWP rounds
+					|| (rule->getBattleType() == BT_NONE	// #0 - craft weapon rounds
+						&& rule->getClipSize() > 0))
+				&& rule->getType() != "STR_ELERIUM_115")
+			{
+				if (rule->getBattleType() == BT_AMMO
+					&& rule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
+				{
+					const int clipSize = rule->getClipSize();
+					if (clipSize > 1)
+						item += (L" (" + Text::formatNumber(clipSize) + L")");
+				}
+				item.insert(0, L"  ");
+
+				color = _colorAmmo;
+			}
+			else
+			{
+                if (rule->isFixed() == true // tank w/ Ordnance.
+					&& rule->getCompatibleAmmo()->empty() == false)
+                {
+					RuleItem* ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
+					const int clipSize = ammoRule->getClipSize();
+					if (clipSize > 0)
+						item += (L" (" + Text::formatNumber(clipSize) + L")");
+                }
+			}
+
+			if (save->isResearched(rule->getType()) == false				// not researched
+				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
+					|| rules->getItem(*i)->getAlien() == true					// or is an alien
+					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
+					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
+				&& craftOrdnance == false										// and is not craft ordnance
+				&& rule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				color = _color3;
 			}
 
-			if (itemRule->getBattleType() == BT_AMMO		// #2, weapon clips & HWP rounds
-				|| (itemRule->getBattleType() == BT_NONE	// #0, craft weapon rounds
-					&& itemRule->getClipSize() > 0))
-			{
-				if (itemRule->getBattleType() == BT_AMMO
-					&& itemRule->getType().substr(0, 8) != "STR_HWP_") // *cuckoo** weapon clips
-				{
-					int clipSize = itemRule->getClipSize();
-					if (clipSize > 1)
-						item = item + L" (" + Text::formatNumber(clipSize) + L")";
-				}
+			std::wostringstream ss;
+			ss << qty;
 
-				item.insert(0, L"  ");
-
-				_lstItems->addRow(
-								4,
-								item.c_str(),
-								ss.str().c_str(),
-								L"0",
-								Text::formatFunding(itemRule->getSellCost()).c_str());
-
-				if (color != _color3)
-					color = _colorAmmo;
-			}
-			else
-			{
-                if (itemRule->isFixed() // tank w/ Ordnance.
-					&& !itemRule->getCompatibleAmmo()->empty())
-                {
-					RuleItem* ammoRule = _game->getRuleset()->getItem(itemRule->getCompatibleAmmo()->front());
-					int clipSize = ammoRule->getClipSize();
-					if (clipSize > 0)
-						item = item + L" (" + Text::formatNumber(clipSize) + L")";
-                }
-
-				_lstItems->addRow(
-								4,
-								item.c_str(),
-								ss.str().c_str(),
-								L"0",
-								Text::formatFunding(itemRule->getSellCost()).c_str());
-			}
+			_lstItems->addRow(
+							4,
+							item.c_str(),
+							ss.str().c_str(),
+							L"0",
+							Text::formatFunding(rule->getSellCost()).c_str());
 
 			_lstItems->setRowColor(_qtys.size() - 1, color);
 		}
 	}
 
-	std::wostringstream ss1;
-	ss1 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores(); // kL
-	_txtSpaceUsed->setText(ss1.str());
 
 	_timerInc = new Timer(250);
 	_timerInc->onTimer((StateHandler)& SellState::increase);
@@ -480,8 +466,8 @@ void SellState::think()
 
 /**
  * Gets the index of selected craft.
- * @param selected Selected craft.
- * @return Index of the selected craft.
+ * @param selected - selected craft
+ * @return, index of the selected craft
  */
 size_t SellState::getCraftIndex(size_t selected) const
 {
@@ -495,7 +481,7 @@ size_t SellState::getCraftIndex(size_t selected) const
 void SellState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setFunds(_game->getSavedGame()->getFunds() + _total);
-	_base->setCashIncome(_total); // kL
+	_base->setCashIncome(_total);
 
 	for (size_t
 			i = 0;
@@ -508,16 +494,16 @@ void SellState::btnOkClick(Action*)
 			{
 				case SELL_SOLDIER:
 					for (std::vector<Soldier*>::const_iterator
-							s = _base->getSoldiers()->begin();
-							s != _base->getSoldiers()->end();
-							++s)
+							j = _base->getSoldiers()->begin();
+							j != _base->getSoldiers()->end();
+							++j)
 					{
-						if (*s == _soldiers[i])
+						if (*j == _soldiers[i])
 						{
-							if ((*s)->getArmor()->getStoreItem() != "STR_NONE")
-								_base->getItems()->addItem((*s)->getArmor()->getStoreItem());
+							if ((*j)->getArmor()->getStoreItem() != "STR_NONE")
+								_base->getItems()->addItem((*j)->getArmor()->getStoreItem());
 
-							_base->getSoldiers()->erase(s);
+							_base->getSoldiers()->erase(j);
 
 							break;
 						}
@@ -529,68 +515,60 @@ void SellState::btnOkClick(Action*)
 				{
 					Craft* craft = _crafts[getCraftIndex(i)];
 
-					// Remove weapons from craft
-					for (std::vector<CraftWeapon*>::const_iterator
-							w = craft->getWeapons()->begin();
-							w != craft->getWeapons()->end();
-							++w)
+					for (std::vector<CraftWeapon*>::const_iterator // remove weapons from craft
+							j = craft->getWeapons()->begin();
+							j != craft->getWeapons()->end();
+							++j)
 					{
-						if (*w != NULL)
+						if (*j != NULL)
 						{
-							_base->getItems()->addItem((*w)->getRules()->getLauncherItem());
+							_base->getItems()->addItem((*j)->getRules()->getLauncherItem());
 							_base->getItems()->addItem(
-													(*w)->getRules()->getClipItem(),
-													(*w)->getClipsLoaded(_game->getRuleset()));
+													(*j)->getRules()->getClipItem(),
+													(*j)->getClipsLoaded(_game->getRuleset()));
 						}
 					}
 
-					// Remove items from craft
-					for (std::map<std::string, int>::const_iterator
-							it = craft->getItems()->getContents()->begin();
-							it != craft->getItems()->getContents()->end();
-							++it)
+					for (std::map<std::string, int>::const_iterator // remove items from craft
+							j = craft->getItems()->getContents()->begin();
+							j != craft->getItems()->getContents()->end();
+							++j)
 					{
-						_base->getItems()->addItem(it->first, it->second);
+						_base->getItems()->addItem(j->first, j->second);
 					}
 
-					// Remove soldiers from craft
-					for (std::vector<Soldier*>::const_iterator
-							s = _base->getSoldiers()->begin();
-							s != _base->getSoldiers()->end();
-							++s)
+					for (std::vector<Soldier*>::const_iterator // remove soldiers from craft
+							j = _base->getSoldiers()->begin();
+							j != _base->getSoldiers()->end();
+							++j)
 					{
-						if ((*s)->getCraft() == craft)
-							(*s)->setCraft(NULL);
+						if ((*j)->getCraft() == craft)
+							(*j)->setCraft(NULL);
 					}
 
-					// Clear Hangar
-					for (std::vector<BaseFacility*>::const_iterator
-							f = _base->getFacilities()->begin();
-							f != _base->getFacilities()->end();
-							++f)
+					for (std::vector<BaseFacility*>::const_iterator // clear craft from hangar
+							j = _base->getFacilities()->begin();
+							j != _base->getFacilities()->end();
+							++j)
 					{
-						if ((*f)->getCraft() == craft)
+						if ((*j)->getCraft() == craft)
 						{
-							(*f)->setCraft(NULL);
-
+							(*j)->setCraft(NULL);
 							break;
 						}
 					}
 
-					// Remove craft
-					for (std::vector<Craft*>::const_iterator
-							c = _base->getCrafts()->begin();
-							c != _base->getCrafts()->end();
-							++c)
+					for (std::vector<Craft*>::const_iterator // remove craft
+							j = _base->getCrafts()->begin();
+							j != _base->getCrafts()->end();
+							++j)
 					{
-						if (*c == craft)
+						if (*j == craft)
 						{
-							_base->getCrafts()->erase(c);
-
+							_base->getCrafts()->erase(j);
 							break;
 						}
 					}
-
 					delete craft;
 				}
 				break;
@@ -603,11 +581,11 @@ void SellState::btnOkClick(Action*)
 				case SELL_ITEM:
 					if (_base->getItems()->getItem(_items[getItemIndex(i)]) < _qtys[i])
 					{
-						const std::string itemName = _items[getItemIndex(i)];
-						int toRemove = _qtys[i] - _base->getItems()->getItem(itemName);
+						const std::string item = _items[getItemIndex(i)];
+						int toRemove = _qtys[i] - _base->getItems()->getItem(item);
 
 						_base->getItems()->removeItem( // remove all of said items from base
-													itemName,
+													item,
 													INT_MAX);
 
 						// if we still need to remove any, remove them from the crafts first, and keep a running tally
@@ -617,20 +595,19 @@ void SellState::btnOkClick(Action*)
 									&& toRemove;
 								++j)
 						{
-							if ((*j)->getItems()->getItem(itemName) < toRemove)
+							if ((*j)->getItems()->getItem(item) < toRemove)
 							{
-								toRemove -= (*j)->getItems()->getItem(itemName);
+								toRemove -= (*j)->getItems()->getItem(item);
 
 								(*j)->getItems()->removeItem(
-														itemName,
+														item,
 														INT_MAX);
 							}
 							else
 							{
 								(*j)->getItems()->removeItem(
-														itemName,
+														item,
 														toRemove);
-
 								toRemove = 0;
 							}
 						}
@@ -642,7 +619,7 @@ void SellState::btnOkClick(Action*)
 									&& toRemove;
 								)
 						{
-							if ((*j)->getItems() == itemName)
+							if ((*j)->getItems() == item)
 							{
 								if ((*j)->getQuantity() <= toRemove)
 								{
@@ -656,7 +633,6 @@ void SellState::btnOkClick(Action*)
 									(*j)->setItems(
 												(*j)->getItems(),
 												(*j)->getQuantity() - toRemove);
-
 									toRemove = 0;
 								}
 							}
@@ -694,7 +670,7 @@ void SellState::lstItemsLeftArrowPress(Action* action)
 	_sel = _lstItems->getSelectedRow();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
-		&& !_timerInc->isRunning())
+		&& _timerInc->isRunning() == false)
 	{
 		_timerInc->start();
 	}
@@ -707,9 +683,7 @@ void SellState::lstItemsLeftArrowPress(Action* action)
 void SellState::lstItemsLeftArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
 		_timerInc->stop();
-	}
 }
 
 /**
@@ -739,7 +713,7 @@ void SellState::lstItemsRightArrowPress(Action* action)
 	_sel = _lstItems->getSelectedRow();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
-		&& !_timerDec->isRunning())
+		&& _timerDec->isRunning() == false)
 	{
 		_timerDec->start();
 	}
@@ -752,9 +726,7 @@ void SellState::lstItemsRightArrowPress(Action* action)
 void SellState::lstItemsRightArrowRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
-	{
 		_timerDec->stop();
-	}
 }
 
 /**
@@ -781,8 +753,8 @@ void SellState::lstItemsRightArrowClick(Action* action)
  */
 void SellState::lstItemsMousePress(Action* action)
 {
-	if (Options::changeValueByMouseWheel < 1)	// kL
-		return;									// kL
+	if (Options::changeValueByMouseWheel < 1)
+		return;
 
 	_sel = _lstItems->getSelectedRow();
 
@@ -845,17 +817,15 @@ int SellState::getQuantity()
 
 	switch (getType(_sel))
 	{
-		case SELL_SOLDIER: // Soldiers/crafts are sold singly.
+		case SELL_SOLDIER: // soldiers/crafts are sacked/sold singly.
 		case SELL_CRAFT:
 			return 1;
 
 		case SELL_SCIENTIST:
-//kL			return _base->getAvailableScientists();
-			return _base->getScientists(); // kL
+			return _base->getScientists();
 
 		case SELL_ENGINEER:
-//kL			return _base->getAvailableEngineers();
-			return _base->getEngineers(); // kL
+			return _base->getEngineers();
 
 		case SELL_ITEM:
 			qty = _base->getItems()->getItem(_items[getItemIndex(_sel)]);
@@ -912,13 +882,12 @@ void SellState::decrease()
 /**
  * Increases or decreases the quantity of the selected item to sell.
  * @param change	- how much to add or remove
- * @param dir		- direction to change, +1 to increase or -1 to decrease
+ * @param dir		- direction to change; +1 to increase or -1 to decrease
  */
 void SellState::changeByValue(
 		int change,
 		int dir)
 {
-	//Log(LOG_INFO) << "changeByValue()";
 	if (change < 1)
 		return;
 
@@ -944,12 +913,8 @@ void SellState::changeByValue(
 	_qtys[_sel] += change * dir;
 	_total += getPrice() * change * dir;
 
+	RuleItem* rule;
 	Craft* craft;
-	RuleItem
-		* armorRule,
-		* itemRule,
-		* weapRule,
-		* ammoRule;
 	double space = 0.0;
 
 	switch (getType(_sel)) // Calculate the change in storage space.
@@ -957,53 +922,41 @@ void SellState::changeByValue(
 		case SELL_SOLDIER:
 			if (_soldiers[_sel]->getArmor()->getStoreItem() != "STR_NONE")
 			{
-				armorRule = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
-				_spaceChange += static_cast<double>(dir) * armorRule->getSize();
+				rule = _game->getRuleset()->getItem(_soldiers[_sel]->getArmor()->getStoreItem());
+				_spaceChange += static_cast<double>(dir) * rule->getSize();
 			}
 		break;
 		case SELL_CRAFT:
-			//Log(LOG_INFO) << ". SELL_CRAFT";
 			craft = _crafts[getCraftIndex(_sel)];
-			//Log(LOG_INFO) << ". craft = " << getCraftIndex(_sel);
 			for (std::vector<CraftWeapon*>::const_iterator
-					w = craft->getWeapons()->begin();
-					w != craft->getWeapons()->end();
-					++w)
+					i = craft->getWeapons()->begin();
+					i != craft->getWeapons()->end();
+					++i)
 			{
-				//Log(LOG_INFO) << ". . iter";
-				if (*w != NULL) // kL, Cheers
+				if (*i != NULL) // kL, Cheers
 				{
-					weapRule = _game->getRuleset()->getItem((*w)->getRules()->getLauncherItem());
-					//Log(LOG_INFO) << ". . weapRule done";
-//					if (weapRule) // kL, but shouldn't beneeded.
-					space += weapRule->getSize();
-					//Log(LOG_INFO) << ". . space[1] = " << space;
+					rule = _game->getRuleset()->getItem((*i)->getRules()->getLauncherItem());
+					space += rule->getSize();
 
-					ammoRule = _game->getRuleset()->getItem((*w)->getRules()->getClipItem());
-					//Log(LOG_INFO) << ". . ammoRule done";
-					if (ammoRule)
-						space += static_cast<double>((*w)->getClipsLoaded(_game->getRuleset())) * ammoRule->getSize();
-					//Log(LOG_INFO) << ". . space[2] = " << space;
+					rule = _game->getRuleset()->getItem((*i)->getRules()->getClipItem());
+					if (rule)
+						space += static_cast<double>((*i)->getClipsLoaded(_game->getRuleset())) * rule->getSize();
 				}
 			}
-			//Log(LOG_INFO) << ". iter done";
-
 			_spaceChange += static_cast<double>(dir) * space;
-			//Log(LOG_INFO) << ". SELL_CRAFT done";
 		break;
 		case SELL_ITEM:
-			itemRule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
-			_spaceChange -= static_cast<double>(dir * change) * itemRule->getSize();
+			rule = _game->getRuleset()->getItem(_items[getItemIndex(_sel)]);
+			_spaceChange -= static_cast<double>(dir * change) * rule->getSize();
 		break;
 
 //		case SELL_ENGINEER:
 //		case SELL_SCIENTIST:
-		default:
-		break;
+//		default:
+//		break;
 	}
 
 	updateItemStrings();
-	//Log(LOG_INFO) << "changeByValue() EXIT";
 }
 
 /**
@@ -1011,14 +964,13 @@ void SellState::changeByValue(
  */
 void SellState::updateItemStrings()
 {
-	//Log(LOG_INFO) << "updateItemStrings()";
 	std::wostringstream
-		ss,
+		ss1,
 		ss2,
 		ss3;
 
-	ss << getQuantity() - _qtys[_sel];
-	_lstItems->setCellText(_sel, 1, ss.str());
+	ss1 << getQuantity() - _qtys[_sel];
+	_lstItems->setCellText(_sel, 1, ss1.str());
 
 	ss2 << _qtys[_sel];
 	_lstItems->setCellText(_sel, 2, ss2.str());
@@ -1032,48 +984,42 @@ void SellState::updateItemStrings()
 		if (_sel > _itemOffset)
 		{
 			Ruleset* rules = _game->getRuleset();
-			SavedGame* save = _game->getSavedGame();
-
-			RuleItem* itemRule = rules->getItem(_items[_sel - _itemOffset]);
+			RuleItem* rule = rules->getItem(_items[_sel - _itemOffset]);
 
 			bool craftOrdnance = false;
-			const std::vector<std::string>& craftWeaps = rules->getCraftWeaponsList();
+			const std::vector<std::string>& cwList = rules->getCraftWeaponsList();
 			for (std::vector<std::string>::const_iterator
-					j = craftWeaps.begin();
-					j != craftWeaps.end()
+					i = cwList.begin();
+					i != cwList.end()
 						&& craftOrdnance == false;
-					++j)
+					++i)
 			{
 				// Special handling for treating craft weapons as items
-				RuleCraftWeapon* cwRule = rules->getCraftWeapon(*j);
-
-				RuleItem
-					* launcher = rules->getItem(cwRule->getLauncherItem()),
-					* clip = rules->getItem(cwRule->getClipItem());
-
-				if (launcher == itemRule
-					|| clip == itemRule)
+				RuleCraftWeapon* cwRule = rules->getCraftWeapon(*i);
+				if (rule == rules->getItem(cwRule->getLauncherItem())
+					|| rule == rules->getItem(cwRule->getClipItem()))
 				{
 					craftOrdnance = true;
 				}
 			}
 
-			if (!save->isResearched(itemRule->getType())				// not researched
-				&& (!save->isResearched(itemRule->getRequirements())	// and has requirements to use but not been researched
-					|| rules->getItem(itemRule->getType())->getAlien()		// or is an alien
-					|| itemRule->getBattleType() == BT_CORPSE				// or is a corpse
-					|| itemRule->getBattleType() == BT_NONE)				// or is not a battlefield item
-				&& craftOrdnance == false								// and is not craft ordnance
-				&& !itemRule->isResearchExempt())
+			SavedGame* save = _game->getSavedGame();
+			if (save->isResearched(rule->getType()) == false				// not researched
+				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
+					|| rules->getItem(rule->getType())->getAlien() == true		// or is an alien
+					|| rule->getBattleType() == BT_CORPSE						// or is a corpse
+					|| rule->getBattleType() == BT_NONE)						// or is not a battlefield item
+				&& craftOrdnance == false										// and is not craft ordnance
+				&& rule->isResearchExempt() == false)						// and is not research exempt
 			{
 				// well, that was !NOT! easy.
 				_lstItems->setRowColor(_sel, _color3);
 			}
 			else
 			{
-				if (itemRule->getBattleType() == BT_AMMO
-					|| (itemRule->getBattleType() == BT_NONE
-						&& itemRule->getClipSize() > 0))
+				if (rule->getBattleType() == BT_AMMO
+					|| (rule->getBattleType() == BT_NONE
+						&& rule->getClipSize() > 0))
 				{
 					_lstItems->setRowColor(_sel, _colorAmmo);
 				}
@@ -1085,17 +1031,17 @@ void SellState::updateItemStrings()
 			_lstItems->setRowColor(_sel, _color);
 	}
 
-	// kL_begin:
-	bool okVis = false;
+
+	bool okBtn = false;
 
 	if (_total > 0)
-		okVis = true;
+		okBtn = true;
 	else // or craft, soldier, scientist, engineer.
 	{
 		for (size_t
 				i = 0;
 				i < _qtys.size()
-					&& !okVis;
+					&& okBtn == false;
 				++i)
 		{
 			if (_qtys[i] > 0)
@@ -1106,30 +1052,27 @@ void SellState::updateItemStrings()
 					case SELL_SOLDIER:
 					case SELL_SCIENTIST:
 					case SELL_ENGINEER:
-						okVis = true;
+						okBtn = true;
 				}
 			}
 		}
-	} // kL_end.
+	}
 
 	ss3 << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
 	if (std::abs(_spaceChange) > 0.05)
 	{
 		ss3 << "(";
-//kL		if (_spaceChange > 0.05) ss3 << "+";
-		if (_spaceChange > 0.0) ss3 << "+"; // kL, >.05 already established; that just re-introduced a rounding error
+		if (_spaceChange > 0.0) ss3 << "+";
 		ss3 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}
-//kL	ss3 << ":" << _base->getAvailableStores();
-//kL	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss3.str()));
-	_txtSpaceUsed->setText(ss3.str()); // kL
+	_txtSpaceUsed->setText(ss3.str());
+//	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss3.str()));
 
 	if (Options::storageLimitsEnforced)
-		okVis = okVis // kL
+		okBtn = okBtn
 			&& !_base->storesOverfull(_spaceChange);
 
-	_btnOk->setVisible(okVis); // kL
-	//Log(LOG_INFO) << "updateItemStrings() EXIT";
+	_btnOk->setVisible(okBtn);
 }
 
 /**

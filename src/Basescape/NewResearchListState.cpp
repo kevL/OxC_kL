@@ -41,7 +41,7 @@
 
 #include "../Savegame/Base.h"
 #include "../Savegame/ItemContainer.h"
-#include "../Savegame/ResearchProject.h" // kL
+#include "../Savegame/ResearchProject.h"
 #include "../Savegame/SavedGame.h"
 
 
@@ -55,16 +55,16 @@ NewResearchListState::NewResearchListState(
 		Base* base)
 	:
 		_base(base),
-		_offlines(), // kL
-		_projects(), // kL
-		_cutoff(-1) // kL
+//		_offlines(), // kL
+//		_projects(), // kL
+		_cutoff(-1)
 {
 	_screen = false;
 
-	_window			= new Window(this, 230, 136, 45, 32, POPUP_BOTH);
-	_txtTitle		= new Text(214, 16, 53, 40);
-	_lstResearch	= new TextList(190, 89, 61, 52);
-	_btnCancel		= new TextButton(214, 16, 53, 144);
+	_window			= new Window(this, 230, 148, 45, 20, POPUP_BOTH);
+	_txtTitle		= new Text(214, 16, 53, 28);
+	_lstResearch	= new TextList(190, 89, 61, 40);
+	_btnCancel		= new TextButton(214, 16, 53, 156);
 
 	setPalette("PAL_BASESCAPE", 1);
 
@@ -74,6 +74,7 @@ NewResearchListState::NewResearchListState(
 	add(_btnCancel);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
@@ -105,7 +106,6 @@ NewResearchListState::NewResearchListState(
 void NewResearchListState::init()
 {
 	State::init();
-
 	fillProjectList();
 }
 
@@ -116,22 +116,16 @@ void NewResearchListState::init()
  */
 void NewResearchListState::onSelectProject(Action*)
 {
-	if (static_cast<int>(_lstResearch->getSelectedRow()) > _cutoff) // kL
-	{
-		//Log(LOG_INFO) << ". new project";
+	if (static_cast<int>(_lstResearch->getSelectedRow()) > _cutoff)
 		_game->pushState(new ResearchInfoState( // brand new project
 											_base,
 											_projects[static_cast<size_t>(static_cast<int>(_lstResearch->getSelectedRow()) - (_cutoff + 1))]));
-	}
 	else
-	{
-		//Log(LOG_INFO) << ". reactivate";
 		_game->pushState(new ResearchInfoState( // kL, offline project reactivation.
 											_base,
 											_offlines[_lstResearch->getSelectedRow()]));
-	}
 
-//	_game->popState(); // kL
+//	_game->popState();
 }
 
 /**
@@ -149,13 +143,12 @@ void NewResearchListState::btnCancelClick(Action*)
 void NewResearchListState::fillProjectList()
 {
 	//Log(LOG_INFO) << "NewResearchListState::fillProjectList()";
-	_cutoff = -1; // kL
-	_offlines.clear(); // kL
+	_cutoff = -1;
+	_offlines.clear();
 
 	_projects.clear();
 	_lstResearch->clearList();
 
-	// kL_begin:
 	size_t row = 0;
 
 	const std::vector<ResearchProject*>& baseProjects(_base->getResearch());
@@ -179,7 +172,7 @@ void NewResearchListState::fillProjectList()
 			_cutoff++;
 		}
 		//else Log(LOG_INFO) << ". already online: " << (*i)->getRules()->getName();
-	} // kL_end.
+	}
 
 
 	_game->getSavedGame()->getAvailableResearchProjects(
@@ -198,9 +191,9 @@ void NewResearchListState::fillProjectList()
 								1,
 								tr((*i)->getName()).c_str());
 
-			_lstResearch->setRowColor(row, Palette::blockOffset(13)); // kL
+			_lstResearch->setRowColor(row, Palette::blockOffset(13));
 
-			row++; // kL
+			row++;
 
 			++i;
 		}

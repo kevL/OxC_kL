@@ -50,6 +50,7 @@
 #include "../Ruleset/Unit.h"
 
 #include "../Savegame/SavedGame.h"
+#include "../Savegame/Transfer.h"
 
 
 namespace OpenXcom
@@ -1231,6 +1232,116 @@ bool Craft::getWarned() const
 void Craft::setWarned(const bool warn)
 {
 	_warned = warn;
+}
+
+/**
+ * Gets the amount of time this Craft will be repairing/rearming/refueling.
+ * @param delayed - reference set true if this Craft's Base will run out of materiel
+ * @return, hours
+ */
+int Craft::getDowntime(bool& delayed)
+{
+	int hours = 0;
+	delayed = false;
+
+	if (_damage > 0)
+	{
+		hours += static_cast<int>(ceil(
+				 static_cast<double>(_damage)
+					/ static_cast<double>(_rules->getRepairRate())
+				 / 2.0)); // repair every half-hour.
+	}
+
+	if (_fuel < _rules->getMaxFuel())
+	{
+		int reqQty = _rules->getMaxFuel() - _fuel;
+
+		hours += static_cast<int>(ceil(
+				 static_cast<double>(reqQty)
+					/ static_cast<double>(_rules->getRefuelRate())
+				 / 2.0)); // refuel every half-hour.
+
+//		if (delayed == false) // Not needed unless or until repairs require materiels.
+//		{
+		const std::string fuel = _rules->getRefuelItem();
+		if (fuel.empty() == false)
+		{
+			int baseQty = _base->getItems()->getItem(fuel);
+			if (baseQty < reqQty) // check Transfers
+			{
+				for (std::vector<Transfer*>::iterator
+						j = _base->getTransfers()->begin();
+						j != _base->getTransfers()->end();
+						++j)
+				{
+					if ((*j)->getType() == TRANSFER_ITEM)
+					{
+						if ((*j)->getItems() == fuel)
+						{
+							baseQty += (*j)->getQuantity();
+
+							if (baseQty >= reqQty)
+								break;
+						}
+					}
+				}
+			}
+
+			if (baseQty < reqQty)
+				delayed = true;
+		}
+//		}
+	}
+
+	for (std::vector<CraftWeapon*>::const_iterator
+			i = _weapons.begin();
+			i != _weapons.end();
+			++i)
+	{
+		if (*i != NULL
+			&& (*i)->getRearming() == true)
+		{
+			const int reqQty = (*i)->getRules()->getAmmoMax() - (*i)->getAmmo();
+
+			hours += static_cast<int>(ceil(
+					 static_cast<double>(reqQty)
+						/ static_cast<double>((*i)->getRules()->getRearmRate())
+					 / 2.0)); // rearm every half-hour.
+
+			if (delayed == false)
+			{
+				const std::string clip = (*i)->getRules()->getClipItem();
+				if (clip.empty() == false)
+				{
+					int baseQty = _base->getItems()->getItem(clip);
+					if (baseQty < reqQty) // check Transfers
+					{
+						for (std::vector<Transfer*>::iterator
+								j = _base->getTransfers()->begin();
+								j != _base->getTransfers()->end();
+								++j)
+						{
+							if ((*j)->getType() == TRANSFER_ITEM)
+							{
+								if ((*j)->getItems() == clip)
+								{
+									baseQty += (*j)->getQuantity();
+
+									if (baseQty >= reqQty)
+										break;
+								}
+							}
+						}
+					}
+
+					if (baseQty < reqQty)
+						delayed = true;
+				}
+			}
+		}
+	}
+
+	return hours;
 }
 
 }

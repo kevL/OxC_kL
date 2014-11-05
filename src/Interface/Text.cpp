@@ -36,8 +36,8 @@ namespace OpenXcom
  * Sets up a blank text with the specified size and position.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 Text::Text(
 		int width,
@@ -147,7 +147,7 @@ std::wstring Text::formatFunding(int64_t funds)
 std::wstring Text::formatPercentage(int value)
 {
 	std::wostringstream ss;
-	ss << value << "%";
+	ss << value << L"%";
 
 	return ss.str();
 }

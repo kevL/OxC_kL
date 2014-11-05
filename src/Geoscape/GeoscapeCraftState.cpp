@@ -170,9 +170,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtStatus->setSecondaryColor(Palette::blockOffset(8)+10);
 //	_txtStatus->setWordWrap();
 
-	std::string stat = _craft->getStatus();
+	const std::string stat = _craft->getStatus();
 	std::wstring status;
-	bool
+	const bool
 		lowFuel = _craft->getLowFuel(),
 		missionComplete = _craft->getMissionComplete();
 	int speed = _craft->getSpeed();
@@ -197,7 +197,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 			{
 				speed = ufo->getSpeed();	// THIS DOES NOT CHANGE THE SPEED of the xCom CRAFT
 											// for Fuel usage. ( ie. it should )
-				status = tr("STR_TAILING_UFO");
+				status = tr("STR_TAILING_UFO").arg(ufo->getId());
 			}
 			else if (ufo->getStatus() == Ufo::FLYING)
 				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());

@@ -52,10 +52,10 @@ class TransferItemsState
 private:
 	bool _reset; // kL
 	int
-		_aQty,
-		_cQty,
-		_pQty,
-		_total,
+		_alienQty,
+		_craftQty,
+		_persQty,
+		_totalCost,
 		_hasEng,
 		_hasSci;
 	size_t
@@ -64,7 +64,7 @@ private:
 		_sel;
 	double
 		_distance,
-		_iQty;
+		_storeSize;
 
 	Base
 		* _baseFrom,
@@ -116,8 +116,8 @@ private:
 		/// Cleans up the Transfer Items state.
 		~TransferItemsState();
 
-		/// kL. Initializes the Transfer menu, when cancelling TransferConfirmState.
-		void init(); // kL
+		/// Initializes the Transfer menu, when cancelling TransferConfirmState.
+		void init();
 
 		/// Runs the timers.
 		void think();
@@ -157,11 +157,8 @@ private:
 		/// Updates the quantity-strings of the selected item.
 		void updateItemStrings();
 
-		/// Gets the total of the transfer.
-		int getTotal() const;
-
-		/// kL. For handling transfer confirmation Ok / Cancel btns.
-//		void resetTransfer(bool reset); // kL
+		/// Gets the total cost of the transfer.
+		int getTotalCost() const;
 };
 
 }

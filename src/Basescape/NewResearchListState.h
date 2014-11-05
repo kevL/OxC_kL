@@ -29,7 +29,7 @@ namespace OpenXcom
 {
 
 class Base;
-class ResearchProject; // kL
+class ResearchProject;
 class RuleResearch;
 class Text;
 class TextButton;
@@ -46,7 +46,7 @@ class NewResearchListState
 {
 
 private:
-	int _cutoff; // kL
+	int _cutoff;
 
 	Base* _base;
 	Text* _txtTitle;
@@ -54,7 +54,7 @@ private:
 	TextList* _lstResearch;
 	Window* _window;
 
-	std::vector<ResearchProject*> _offlines; // kL
+	std::vector<ResearchProject*> _offlines;
 	std::vector<RuleResearch*> _projects;
 
 	///

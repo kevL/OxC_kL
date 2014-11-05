@@ -30,7 +30,7 @@ namespace OpenXcom
 
 class Base;
 class Craft;
-class GeoscapeState; // kL_add.
+class GeoscapeState;
 class Globe;
 class Target;
 class Text;
@@ -40,8 +40,7 @@ class Window;
 
 
 /**
- * Intercept window that lets the player launch
- * crafts into missions from the Geoscape.
+ * Intercept window that lets the player launch crafts into missions from the Geoscape.
  */
 class InterceptState
 	:
@@ -52,14 +51,13 @@ private:
 	Uint8 _cellColor;
 
 	Base* _base;
-	GeoscapeState* _geo; // kL
+	GeoscapeState* _geo;
 	Globe* _globe;
-	Target* _target; // kL_note: Doesn't seem to be used... really.
+	Target* _target;
 	Text
 		* _txtBase,
 		* _txtCraft,
 		* _txtStatus,
-//		* _txtTitle,
 		* _txtWeapons;
 	TextButton
 		* _btnCancel,
@@ -71,8 +69,13 @@ private:
 
 	std::vector<Craft*> _crafts;
 
-	/// kL. A more descriptive state of the Craft.
-	std::wstring getAltStatus(Craft* craft);
+	/// A more descriptive status of a Craft.
+	std::wstring getAltStatus(Craft* const craft);
+
+	/// Formats a duration in hours into a day & hour string.
+	std::wstring formatTime(
+			const int total,
+			const bool delayed);
 
 
 	public:
@@ -81,7 +84,7 @@ private:
 				Globe* globe,
 				Base* base = NULL,
 				Target* target = NULL,
-				GeoscapeState* geo = NULL); // kL_add.
+				GeoscapeState* geo = NULL);
 		/// Cleans up the Intercept state.
 		~InterceptState();
 
@@ -95,11 +98,10 @@ private:
 		/// Handler for right clicking the Crafts list.
 		void lstCraftsRightClick(Action* action);
 
-		// kL. These two are from SavedGameState:
 		/// Handler for moving the mouse over a list item.
-		void lstCraftsMouseOver(Action* action); // kL
+		void lstCraftsMouseOver(Action* action);
 		/// Handler for moving the mouse outside the list borders.
-		void lstCraftsMouseOut(Action* action); // kL
+		void lstCraftsMouseOut(Action* action);
 };
 
 }

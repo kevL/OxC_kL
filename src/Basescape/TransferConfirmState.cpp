@@ -100,7 +100,7 @@ TransferConfirmState::TransferConfirmState(
 
 	_txtTotal->setColor(Palette::blockOffset(15)+1);
 	_txtTotal->setBig();
-	_txtTotal->setText(Text::formatFunding(_state->getTotal()));
+	_txtTotal->setText(Text::formatFunding(_state->getTotalCost()));
 }
 
 /**

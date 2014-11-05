@@ -262,6 +262,9 @@ private:
 		bool getWarned() const;
 		/// Sets whether a warning has been issued for this Craft.
 		void setWarned(const bool warn = true);
+
+		/// Gets the amount of time this Craft will be repairing/rearming/refueling.
+		int getDowntime(bool& delayed);
 };
 
 }

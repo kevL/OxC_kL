@@ -309,8 +309,7 @@ void State::showAll()
 }
 
 /**
- * Resets the status of all the Surface child elements,
- * like unpressing buttons.
+ * Resets the status of all the Surface child elements like unpressing buttons.
  */
 void State::resetAll()
 {
@@ -329,10 +328,10 @@ void State::resetAll()
 }
 
 /**
- * Get the localized text for dictionary key @a id.
- * This function forwards the call to Language::getString(const std::string &).
- * @param id The dictionary key to search for.
- * @return A reference to the localized text.
+ * Gets the LocalizedText for dictionary key @a id.
+ * This function forwards the call to Language::getString(const std::string&).
+ * @param id - reference the dictionary key to search for
+ * @return, a reference to the LocalizedText
  */
 const LocalizedText& State::tr(const std::string& id) const
 {
@@ -340,11 +339,11 @@ const LocalizedText& State::tr(const std::string& id) const
 }
 
 /**
- * Get a modifiable copy of the localized text for dictionary key @a id.
- * This function forwards the call to Language::getString(const std::string &, unsigned).
- * @param id The dictionary key to search for.
- * @param n The number to use for the proper version.
- * @return A copy of the localized text.
+ * Gets a modifiable copy of the LocalizedText for dictionary key @a id.
+ * This function forwards the call to Language::getString(const std::string&, unsigned).
+ * @param id	- reference the dictionary key to search for
+ * @param n		- the number to use for the proper version
+ * @return, a copy of the LocalizedLext
  */
 LocalizedText State::tr(
 		const std::string& id,
@@ -354,7 +353,7 @@ LocalizedText State::tr(
 }
 
 /**
- * centers all the surfaces on the screen.
+ * Centers all the surfaces on the screen.
  */
 void State::centerAllSurfaces()
 {
@@ -369,7 +368,7 @@ void State::centerAllSurfaces()
 }
 
 /**
- * drop all the surfaces by half the screen height
+ * Drops all the surfaces by half the screen height.
  */
 void State::lowerAllSurfaces()
 {
@@ -383,7 +382,7 @@ void State::lowerAllSurfaces()
 }
 
 /**
- * switch all the colours to something a little more battlescape appropriate.
+ * Switches all the colors to something a little more battlescape appropriate.
  */
 void State::applyBattlescapeTheme()
 {
@@ -454,7 +453,7 @@ void State::applyBattlescapeTheme()
 }
 
 /**
- * redraw all the text-type surfaces.
+ * Redraws all the text-type surfaces.
  */
 void State::redrawText()
 {
