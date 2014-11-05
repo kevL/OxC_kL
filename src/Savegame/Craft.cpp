@@ -1236,8 +1236,9 @@ void Craft::setWarned(const bool warn)
 
 /**
  * Gets the amount of time this Craft will be repairing/rearming/refueling.
+ * Note: Those are checked & try to happen every half hour.
  * @param delayed - reference set true if this Craft's Base will run out of materiel
- * @return, hours
+ * @return, hours before Craft can fly
  */
 int Craft::getDowntime(bool& delayed)
 {
@@ -1249,48 +1250,7 @@ int Craft::getDowntime(bool& delayed)
 		hours += static_cast<int>(ceil(
 				 static_cast<double>(_damage)
 					/ static_cast<double>(_rules->getRepairRate())
-				 / 2.0)); // repair every half-hour.
-	}
-
-	if (_fuel < _rules->getMaxFuel())
-	{
-		int reqQty = _rules->getMaxFuel() - _fuel;
-
-		hours += static_cast<int>(ceil(
-				 static_cast<double>(reqQty)
-					/ static_cast<double>(_rules->getRefuelRate())
-				 / 2.0)); // refuel every half-hour.
-
-//		if (delayed == false) // Not needed unless or until repairs require materiels.
-//		{
-		const std::string fuel = _rules->getRefuelItem();
-		if (fuel.empty() == false)
-		{
-			int baseQty = _base->getItems()->getItem(fuel);
-			if (baseQty < reqQty) // check Transfers
-			{
-				for (std::vector<Transfer*>::iterator
-						j = _base->getTransfers()->begin();
-						j != _base->getTransfers()->end();
-						++j)
-				{
-					if ((*j)->getType() == TRANSFER_ITEM)
-					{
-						if ((*j)->getItems() == fuel)
-						{
-							baseQty += (*j)->getQuantity();
-
-							if (baseQty >= reqQty)
-								break;
-						}
-					}
-				}
-			}
-
-			if (baseQty < reqQty)
-				delayed = true;
-		}
-//		}
+				 / 2.0));
 	}
 
 	for (std::vector<CraftWeapon*>::const_iterator
@@ -1306,7 +1266,7 @@ int Craft::getDowntime(bool& delayed)
 			hours += static_cast<int>(ceil(
 					 static_cast<double>(reqQty)
 						/ static_cast<double>((*i)->getRules()->getRearmRate())
-					 / 2.0)); // rearm every half-hour.
+					 / 2.0));
 
 			if (delayed == false)
 			{
@@ -1314,22 +1274,20 @@ int Craft::getDowntime(bool& delayed)
 				if (clip.empty() == false)
 				{
 					int baseQty = _base->getItems()->getItem(clip);
-					if (baseQty < reqQty) // check Transfers
+					if (baseQty < reqQty)
 					{
-						for (std::vector<Transfer*>::iterator
+						for (std::vector<Transfer*>::iterator // check Transfers
 								j = _base->getTransfers()->begin();
 								j != _base->getTransfers()->end();
 								++j)
 						{
-							if ((*j)->getType() == TRANSFER_ITEM)
+							if ((*j)->getType() == TRANSFER_ITEM
+								&& (*j)->getItems() == clip)
 							{
-								if ((*j)->getItems() == clip)
-								{
-									baseQty += (*j)->getQuantity();
+								baseQty += (*j)->getQuantity();
 
-									if (baseQty >= reqQty)
-										break;
-								}
+								if (baseQty >= reqQty)
+									break;
 							}
 						}
 					}
@@ -1337,6 +1295,45 @@ int Craft::getDowntime(bool& delayed)
 					if (baseQty < reqQty)
 						delayed = true;
 				}
+			}
+		}
+	}
+
+	if (_fuel < _rules->getMaxFuel())
+	{
+		const int reqQty = _rules->getMaxFuel() - _fuel;
+
+		hours += static_cast<int>(ceil(
+				 static_cast<double>(reqQty)
+					/ static_cast<double>(_rules->getRefuelRate())
+				 / 2.0));
+
+		if (delayed == false)
+		{
+			const std::string fuel = _rules->getRefuelItem();
+			if (fuel.empty() == false)
+			{
+				int baseQty = _base->getItems()->getItem(fuel);
+				if (baseQty < reqQty) // check Transfers
+				{
+					for (std::vector<Transfer*>::iterator
+							i = _base->getTransfers()->begin();
+							i != _base->getTransfers()->end();
+							++i)
+					{
+						if ((*i)->getType() == TRANSFER_ITEM
+							&& (*i)->getItems() == fuel)
+						{
+							baseQty += (*i)->getQuantity();
+
+							if (baseQty >= reqQty)
+								break;
+						}
+					}
+				}
+
+				if (baseQty < reqQty)
+					delayed = true;
 			}
 		}
 	}
