@@ -218,13 +218,26 @@ std::wstring CraftsState::getAltStatus(Craft* const craft)
 	if (stat != "STR_OUT")
 	{
 		if (stat == "STR_READY")
+		{
 			_cellColor = Palette::blockOffset(3)+2;
+
+			return tr(stat);
+		}
 		else if (stat == "STR_REFUELLING")
+		{
+			stat = "STR_REFUELLING_";
 			_cellColor = Palette::blockOffset(4)+2;
+		}
 		else if (stat == "STR_REARMING")
+		{
+			stat = "STR_REARMING_";
 			_cellColor = Palette::blockOffset(4)+4;
+		}
 		else if (stat == "STR_REPAIRS")
+		{
+			stat = "STR_REPAIRS_";
 			_cellColor = Palette::blockOffset(4)+6;
+		}
 
 		bool delayed;
 		const int hours = craft->getDowntime(delayed);
