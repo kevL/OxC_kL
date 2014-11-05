@@ -4856,7 +4856,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1415225244 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1415227554 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -5133,7 +5133,7 @@
 	"../Savegame/Production.h"
 	"../Savegame/SavedGame.h"
 
-1415224435 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
+1415227427 source:f:\git\openxcom\src\basescape\newresearchliststate.cpp
 	"NewResearchListState.h"
 	<algorithm>
 	"ResearchInfoState.h"
@@ -7641,7 +7641,7 @@
 	<string>
 	"../Engine/State.h"
 
-1413136957 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1415229704 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
 	<string>
 	"GeoscapeCraftState.h"
@@ -7659,10 +7659,10 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Target.h"
 
-1413136957 f:\git\openxcom\src\geoscape\craftpatrolstate.h
+1415229689 f:\git\openxcom\src\geoscape\craftpatrolstate.h
 	"../Engine/State.h"
 
-1413136958 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
+1415229916 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
 	"../Engine/State.h"
 
 1413136957 source:f:\git\openxcom\src\geoscape\defeatstate.cpp
@@ -7748,7 +7748,7 @@
 1413136957 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1415168809 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1415230179 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -7776,7 +7776,7 @@
 1413136958 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1415048959 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1415230258 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -8023,7 +8023,7 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1415168566 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1415227548 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -9604,7 +9604,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1415166080 source:f:\git\openxcom\src\savegame\craft.cpp
+1415230472 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	<cmath>
 	<sstream>

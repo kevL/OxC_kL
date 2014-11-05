@@ -1382,40 +1382,40 @@ void GeoscapeState::time5Seconds()
 			if ((*j)->getDestination() != NULL)
 			{
 				Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestination());
-				if (ufo != NULL
-					&& ufo->getDetected() == false)
+				if (ufo != NULL)
 				{
-					if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
-						&& (ufo->getStatus() == Ufo::LANDED
-							|| ufo->getStatus() == Ufo::DESTROYED))
+					if (ufo->getDetected() == false) // lost radar contact
+					{
+						if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
+							&& (ufo->getStatus() == Ufo::LANDED
+								|| ufo->getStatus() == Ufo::DESTROYED))
+						{
+							(*j)->returnToBase();
+						}
+						else
+						{
+							(*j)->setDestination(NULL);
+
+							Waypoint* wp = new Waypoint();
+							wp->setLongitude(ufo->getLongitude());
+							wp->setLatitude(ufo->getLatitude());
+							wp->setId(ufo->getId());
+
+							timerReset();
+							popup(new GeoscapeCraftState(
+														*j,
+														_globe,
+														wp,
+														this));
+						}
+					}
+					else if (ufo->getStatus() == Ufo::DESTROYED
+						|| (ufo->getStatus() == Ufo::CRASHED	// kL, http://openxcom.org/forum/index.php?topic=2406.0
+							&& (*j)->getNumSoldiers() == 0))	// kL, Actually should set this on the UFO-crash event
+//							&& (*j)->getNumVehicles() == 0))	// kL, so that crashed-ufos can still be targeted for Patrols
 					{
 						(*j)->returnToBase();
 					}
-					else
-					{
-						(*j)->setDestination(NULL);
-
-						Waypoint* wp = new Waypoint();
-						wp->setLongitude(ufo->getLongitude());
-						wp->setLatitude(ufo->getLatitude());
-						wp->setId(ufo->getId());
-
-						timerReset(); // kL
-						popup(new GeoscapeCraftState(
-													*j,
-													_globe,
-													wp,
-													this));
-					}
-				}
-
-				if (ufo != NULL
-					&& (ufo->getStatus() == Ufo::DESTROYED
-						|| (ufo->getStatus() == Ufo::CRASHED	// kL, http://openxcom.org/forum/index.php?topic=2406.0
-							&& (*j)->getNumSoldiers() == 0)))	// kL, Actually should set this on the UFO-crash event
-//							&& (*j)->getNumVehicles() == 0)))	// kL, so that crashed-ufos can still be targeted for Patrols
-				{
-					(*j)->returnToBase();
 				}
 			}
 
@@ -1445,7 +1445,7 @@ void GeoscapeState::time5Seconds()
 							}
 
 							if ((*j)->isInDogfight() == false
-								&& AreSame((*j)->getDistance(ufo), 0.0)) // we ran into a UFO
+								&& AreSame((*j)->getDistance(ufo), 0.0)) // craft ran into a UFO
 							{
 								_dogfightsToBeStarted.push_back(new DogfightState(
 																				_globe,
@@ -1457,9 +1457,9 @@ void GeoscapeState::time5Seconds()
 									_pause = true;
 									timerReset();
 
-									// store the current Globe co-ords. Globe will reset to this after dogfight ends.
-									_dfLon = _game->getSavedGame()->getGlobeLongitude(),	// kL
-									_dfLat = _game->getSavedGame()->getGlobeLatitude();		// kL
+									// store the current Globe co-ords. Globe will reset to these after dogfight ends.
+									_dfLon = _game->getSavedGame()->getGlobeLongitude(),
+									_dfLat = _game->getSavedGame()->getGlobeLatitude();
 
 									_globe->center(
 												(*j)->getLongitude(),
@@ -1504,7 +1504,7 @@ void GeoscapeState::time5Seconds()
 				}
 				else if (wp != NULL)
 				{
-					timerReset(); // kL
+					timerReset();
 					popup(new CraftPatrolState(
 											*j,
 											_globe,
@@ -1531,7 +1531,8 @@ void GeoscapeState::time5Seconds()
 													shade));
 					}
 					else
-						(*j)->returnToBase();
+						(*j)->setDestination(NULL);
+//						(*j)->returnToBase();
 				}
 				else if (ab != NULL)
 				{
@@ -1555,7 +1556,8 @@ void GeoscapeState::time5Seconds()
 														shade));
 						}
 						else
-							(*j)->returnToBase();
+							(*j)->setDestination(NULL);
+//							(*j)->returnToBase();
 					}
 				}
 			}

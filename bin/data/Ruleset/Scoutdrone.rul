@@ -85,7 +85,7 @@ units:
     kneelHeight: 10
     value: 22
     deathSound: 23
-    moveSound: 14
+    moveSound: 87
     energyRecovery: 100
     isMechanical: true
     isPsiImmune: true

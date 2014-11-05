@@ -853,7 +853,6 @@ void Craft::think()
 
 		_lowFuel = false;
 		_mission = false;
-//		_stopWarning = false;
 		_warning = CW_NONE;
 		_takeoff = 0;
 
@@ -1276,7 +1275,7 @@ int Craft::getDowntime(bool& delayed)
 					int baseQty = _base->getItems()->getItem(clip);
 					if (baseQty < reqQty)
 					{
-						for (std::vector<Transfer*>::iterator // check Transfers
+						for (std::vector<Transfer*>::const_iterator // check Transfers
 								j = _base->getTransfers()->begin();
 								j != _base->getTransfers()->end();
 								++j)
@@ -1316,7 +1315,7 @@ int Craft::getDowntime(bool& delayed)
 				int baseQty = _base->getItems()->getItem(fuel);
 				if (baseQty < reqQty) // check Transfers
 				{
-					for (std::vector<Transfer*>::iterator
+					for (std::vector<Transfer*>::const_iterator // check Transfers
 							i = _base->getTransfers()->begin();
 							i != _base->getTransfers()->end();
 							++i)

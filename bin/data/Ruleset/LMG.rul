@@ -75,7 +75,7 @@ extraSounds:
 extraStrings:
   - type: en-US
     strings:
-      STR_LMG: "LMG"
+      STR_LMG: "MachineGun light"
       STR_LMG_CLIP: "clip-LMG"
       STR_LMG_UFOPEDIA: "A heavier variant of the custom-designed X-Com rifle. The extra weight comes from a heavier barrel and integral bipod system, capable of facilitating heavy fire on medium-to-short range targets. Powerful recoil and obtuse handling make it unsuitable for longe-range shooting."
   - type: en

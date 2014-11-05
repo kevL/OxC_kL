@@ -220,7 +220,6 @@ std::wstring CraftsState::getAltStatus(Craft* const craft)
 		if (stat == "STR_READY")
 		{
 			_cellColor = Palette::blockOffset(3)+2;
-
 			return tr(stat);
 		}
 		else if (stat == "STR_REFUELLING")

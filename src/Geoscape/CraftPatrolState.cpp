@@ -92,8 +92,7 @@ CraftPatrolState::CraftPatrolState(
 								 .arg(_craft->getName(_game->getLanguage()))
 								 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
-//kL	_txtPatrolling->setColor(Palette::blockOffset(15)-1);
-	_txtPatrolling->setColor(Palette::blockOffset(15)+11); // kL
+	_txtPatrolling->setColor(Palette::blockOffset(15)+11); // (15)-1
 	_txtPatrolling->setBig();
 	_txtPatrolling->setAlign(ALIGN_CENTER);
 	_txtPatrolling->setText(tr("STR_NOW_PATROLLING"));
@@ -105,11 +104,9 @@ CraftPatrolState::CraftPatrolState(
 					(ActionHandler)& CraftPatrolState::btnOkClick,
 					Options::keyCancel);
 
-	// kL_begin:
 	_btnCenter->setColor(Palette::blockOffset(8)+5);
 	_btnCenter->setText(tr("STR_CENTER"));
 	_btnCenter->onMouseClick((ActionHandler)& CraftPatrolState::btnCenterClick);
-	// kL_end.
 
 	_btnRedirect->setColor(Palette::blockOffset(8)+5);
 	_btnRedirect->setText(tr("STR_REDIRECT_CRAFT"));
@@ -136,10 +133,10 @@ void CraftPatrolState::btnOkClick(Action*)
 }
 
 /**
- * kL. Centers the craft on the globe.
+ * Centers the craft on the globe.
  * @param action - pointer to an action
  */
-void CraftPatrolState::btnCenterClick(Action*) // kL
+void CraftPatrolState::btnCenterClick(Action*)
 {
 	_game->popState();
 

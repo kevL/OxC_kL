@@ -36,8 +36,7 @@ class Window;
 
 
 /**
- * Craft window that displays info about
- * a specific craft out on the Geoscape.
+ * Craft window that displays info about a specific craft out on the Geoscape.
  */
 class GeoscapeCraftState
 	:
@@ -45,12 +44,12 @@ class GeoscapeCraftState
 {
 
 private:
-	bool _doublePop; // kL
+	bool _doublePop;
 
 	Craft* _craft;
 	GeoscapeState* _geo;
 	Globe* _globe;
-	Surface* _sprite; // kL
+	Surface* _sprite;
 	Text
 		* _txtAltitude,
 		* _txtBase,
@@ -84,7 +83,7 @@ private:
 				Globe* globe,
 				Waypoint* waypoint,
 				GeoscapeState* geo,
-				bool doublePop = false); // kL_add.
+				bool doublePop = false);
 		/// Cleans up the Geoscape Craft state.
 		~GeoscapeCraftState();
 

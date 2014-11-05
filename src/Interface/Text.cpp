@@ -638,7 +638,7 @@ void Text::draw()
 	if (_wrap)
 		ws = &_wrappedText;
 
-	for (std::vector<int>::iterator
+	for (std::vector<int>::const_iterator
 			i = _lineHeight.begin();
 			i != _lineHeight.end();
 			++i)
@@ -660,8 +660,8 @@ void Text::draw()
 		break;
 	}
 
-//	if (_contrast) // set up text color
-//		mult = 3;
+	if (_contrast) // set up text color
+		mult = 3;
 
 	if (_lang->getTextDirection() == DIRECTION_RTL) // set up text direction
 		dir = -1;
@@ -672,7 +672,7 @@ void Text::draw()
 	Font* font = _font;
 
 
-	for (std::wstring::iterator // draw each letter one by one
+	for (std::wstring::const_iterator // draw each letter one by one
 			i = ws->begin();
 			i != ws->end();
 			++i)
@@ -698,7 +698,7 @@ void Text::draw()
 		}
 		else
 		{
-			if (_contrast)
+/*			if (_contrast)
 			{
 				if (color %16 < 2)
 					mult = 3;
@@ -706,7 +706,7 @@ void Text::draw()
 					mult = 2;
 				else
 					mult = 1;
-			}
+			} */
 
 
 			if (dir < 0)

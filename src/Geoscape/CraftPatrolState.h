@@ -35,8 +35,7 @@ class Window;
 
 
 /**
- * Window displayed when a craft
- * starts patrolling a waypoint.
+ * Window displayed when a craft starts patrolling at a waypoint.
  */
 class CraftPatrolState
 	:
@@ -52,7 +51,7 @@ private:
 		* _txtPatrolling;
 	TextButton
 		* _btnOk,
-		* _btnCenter, // kL
+		* _btnCenter,
 		* _btnRedirect;
 	Window* _window;
 
@@ -67,11 +66,11 @@ private:
 		~CraftPatrolState();
 
 		/// Handler for clicking the OK button.
-		void btnOkClick(Action*);
-		/// kL. Handler for clicking the Center button.
-		void btnCenterClick(Action*); // kL
+		void btnOkClick(Action* action);
+		/// Handler for clicking the Center button.
+		void btnCenterClick(Action* action);
 		/// Handler for clicking the Redirect Craft button.
-		void btnRedirectClick(Action*);
+		void btnRedirectClick(Action* action);
 };
 
 }

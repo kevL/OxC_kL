@@ -235,8 +235,7 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 	{
 		if (stat == "STR_READY")
 		{
-			_cellColor = Palette::blockOffset(2); // green (7)-2
-
+			_cellColor = Palette::blockOffset(7); // green (7)-2
 			return tr(stat);
 		}
 		else if (stat == "STR_REFUELLING")
