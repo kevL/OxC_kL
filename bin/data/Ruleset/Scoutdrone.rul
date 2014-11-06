@@ -103,7 +103,7 @@ extraStrings:
     strings:
       STR_SCOUT_DRONE: "Tank-scout"
       STR_SMALL_TANK_CORPSE: "Scout Tank corpse"
-      STR_HWP_SCOUT_SMOKE: "HWP Smoke can"
+      STR_HWP_SCOUT_SMOKE: "HWP Smoke shell"
       STR_SCOUT_DRONE_UFOPEDIA: "This small but rugged drone is designed for reconnaissance. Although lacking in offensive weaponry and the armor of larger HWPs it is fast and able to quickly scout enemy positions by acting as a spotter without risk to xCom personnel. It features a built-in smoke dispenser to conceal itself and xCom operatives in the field from incoming hostile fire."
 extraSounds:
   - type: BATTLE.CAT
