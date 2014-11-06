@@ -462,7 +462,6 @@ items:
     invWidth: 2
     invHeight: 3
     turretType: 0
-    value: 35
   - type: STR_HWP_CANNON_SHELLS
     size: 0.5
     costBuy: 7250
@@ -501,7 +500,6 @@ items:
     invWidth: 2
     invHeight: 3
     turretType: 1
-    value: 40
   - type: STR_HWP_ROCKETS
     size: 0.7
     costBuy: 13000
@@ -542,7 +540,6 @@ items:
     invWidth: 2
     invHeight: 3
     turretType: 2
-    value: 45
   - type: STR_HOVERTANK_PLASMA
     size: 6
     costSell: 849330 # 2831100
@@ -567,7 +564,6 @@ items:
     invWidth: 2
     invHeight: 3
     turretType: 3
-    value: 50
   - type: STR_HOVERTANK_LAUNCHER
     size: 6
     costSell: 705540 # 2351800
@@ -590,7 +586,6 @@ items:
     invWidth: 2
     invHeight: 3
     turretType: 4
-    value: 55
   - type: STR_HWP_FUSION_BOMB
     size: 0.6
     costSell: 216240 # 720800
@@ -3658,7 +3653,7 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    value: 25
+    value: 35
     deathSound: 23
     moveSound: 14
     energyRecovery: 100
@@ -3681,7 +3676,7 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    value: 30
+    value: 40
     deathSound: 23
     moveSound: 14
     energyRecovery: 100
@@ -3704,7 +3699,7 @@ units:
     armor: TANK_ARMOR
     standHeight: 16
     kneelHeight: 16
-    value: 35
+    value: 45
     deathSound: 23
     moveSound: 14
     energyRecovery: 100
@@ -3728,7 +3723,7 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    value: 40
+    value: 50
     deathSound: 23
     moveSound: 40
     energyRecovery: 100
@@ -3752,7 +3747,7 @@ units:
     standHeight: 12
     kneelHeight: 12
     floatHeight: 6
-    value: 50
+    value: 55
     deathSound: 23
     moveSound: 40
     energyRecovery: 100

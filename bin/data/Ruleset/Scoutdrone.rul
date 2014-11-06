@@ -8,7 +8,7 @@ items:
     bulletSprite: 3
     fireSound: 88
     compatibleAmmo:
-      - STR_SCOUT_SMOKE
+      - STR_HWP_SCOUT_SMOKE
     accuracySnap: 100
     tuSnap: 23
     battleType: 1
@@ -18,8 +18,9 @@ items:
     noReaction: true
     invWidth: 1
     invHeight: 2
+    value: 25
     listOrder: 1098
-  - type: STR_SCOUT_SMOKE
+  - type: STR_HWP_SCOUT_SMOKE
     size: 0.1
     costBuy: 125
     costSell: 40
@@ -30,7 +31,7 @@ items:
     power: 42
     damageType: 9
     battleType: 2
-    clipSize: 6
+    clipSize: 8
     blastRadius: 3
     listOrder: 1099
   - type: STR_SMALL_TANK_CORPSE
@@ -95,14 +96,14 @@ ufopaedia:
     section: STR_HEAVY_WEAPONS_PLATFORMS
     image_id: STR_SCOUT_DRONE_UFOPEDIA_IMAGE #not actually used
     text: STR_SCOUT_DRONE_UFOPEDIA
-    weapon: STR_SCOUT_SMOKE
+    weapon: STR_HWP_SCOUT_SMOKE
     listOrder: 1199
 extraStrings:
   - type: en-US
     strings:
       STR_SCOUT_DRONE: "Tank-scout"
       STR_SMALL_TANK_CORPSE: "Scout Tank corpse"
-      STR_SCOUT_SMOKE: "HWP Smoke can"
+      STR_HWP_SCOUT_SMOKE: "HWP Smoke can"
       STR_SCOUT_DRONE_UFOPEDIA: "This small but rugged drone is designed for reconnaissance. Although lacking in offensive weaponry and the armor of larger HWPs it is fast and able to quickly scout enemy positions by acting as a spotter without risk to xCom personnel. It features a built-in smoke dispenser to conceal itself and xCom operatives in the field from incoming hostile fire."
 extraSounds:
   - type: BATTLE.CAT

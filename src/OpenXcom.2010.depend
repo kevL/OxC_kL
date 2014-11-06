@@ -4700,7 +4700,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/BattlescapeGame.h"
 
-1415198311 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
+1415259268 source:f:\git\openxcom\src\basescape\craftequipmentstate.cpp
 	"CraftEquipmentState.h"
 	<algorithm>
 	<climits>
@@ -7641,7 +7641,7 @@
 	<string>
 	"../Engine/State.h"
 
-1415244932 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1415245879 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
 	<string>
 	"GeoscapeCraftState.h"
