@@ -9040,9 +9040,9 @@ extraStrings:
       STR_TRANSIT_LC: "transit"
       STR_RESET_UC: "reset"
       STR_PSI_RESIST: "> RESIST <"
-      STR_REPAIRS_: "> rePAIR > {0}"
-      STR_REFUELLING_: "> reFUEL > {0}"
-      STR_REARMING_: "> reARM > {0}"
+      STR_REPAIRS_: "> rePAIR {0}"
+      STR_REFUELLING_: "> reFUEL {0}"
+      STR_REARMING_: "> reARM {0}"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

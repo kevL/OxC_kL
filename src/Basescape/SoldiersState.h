@@ -46,10 +46,8 @@ private:
 	Text
 		* _txtBaseLabel,
 		* _txtCraft,
-//		* _txtLost,
 		* _txtName,
 		* _txtRank,
-//		* _txtRecruited,
 		* _txtSoldiers,
 		* _txtTitle;
 	TextButton
@@ -75,20 +73,20 @@ private:
 		void btnOkClick(Action* action);
 		/// Handler for clicking the PsiTraining button.
 		void btnPsiTrainingClick(Action* action);
-		/// kL. Handler for clicking the Armor button.
-		void btnArmorClick(Action* action); // kL
+		/// Handler for clicking the Armor button.
+		void btnArmorClick(Action* action);
 		/// Handler for clicking the Memorial button.
 		void btnMemorialClick(Action* action);
 		/// Handler for clicking the Soldiers list.
 		void lstSoldiersPress(Action* action);
 
-		/// kL. Handler for clicking the Soldiers reordering button.
-		void lstLeftArrowClick(Action* action); // kL
-		/// kL. Handler for clicking the Soldiers reordering button.
-		void lstRightArrowClick(Action* action); // kL
+		/// Handler for clicking the Soldiers reordering button.
+		void lstLeftArrowClick(Action* action);
+		/// Handler for clicking the Soldiers reordering button.
+		void lstRightArrowClick(Action* action);
 
-		/// kL. Handler for clicking the Inventory button.
-		void btnEquipClick(Action* action); // kL
+		/// Handler for clicking the Inventory button.
+		void btnEquipClick(Action* action);
 };
 
 }

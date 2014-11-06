@@ -64,7 +64,7 @@ namespace OpenXcom
 {
 
 /**
- * Initializes all the elements in the Soldiers screen.
+ * Initializes all the elements in the SoldiersState screen.
  * @param base - pointer to the Base to get info from
  */
 SoldiersState::SoldiersState(Base* base)
@@ -105,6 +105,7 @@ SoldiersState::SoldiersState(Base* base)
 	add(_btnOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
@@ -189,6 +190,7 @@ void SoldiersState::init()
 	// return from Inventory Equipment Layout screen (pre-battle equip)
 	_game->getSavedGame()->setBattleGame(NULL);
 	_base->setInBattlescape(false);
+
 	// Restore system colors
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
@@ -198,8 +200,7 @@ void SoldiersState::init()
 	_lstSoldiers->clearList();
 
 	size_t row = 0;
-
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::const_iterator
 			i = _base->getSoldiers()->begin();
 			i != _base->getSoldiers()->end();
 			++i,
@@ -217,12 +218,12 @@ void SoldiersState::init()
 
 			if ((*i)->getWoundRecovery() > 0)
 			{
-				Uint8 color = Palette::blockOffset(3); // green
-				int woundPct = (*i)->getWoundPercent();
+				Uint8 color = Palette::blockOffset(3);	// green
+				const int woundPct = (*i)->getWoundPercent();
 				if (woundPct > 50)
-					color = Palette::blockOffset(6); // orange
+					color = Palette::blockOffset(6);	// orange
 				else if (woundPct > 10)
-					color = Palette::blockOffset(9); // yellow
+					color = Palette::blockOffset(9);	// yellow
 
 				_lstSoldiers->setCellColor(
 										row,
@@ -273,7 +274,6 @@ void SoldiersState::btnPsiTrainingClick(Action*)
 
 /**
  * Goes to the Select Armor screen.
- * kL. Taken from CraftInfoState.
  * @param action - pointer to an action
  */
 void SoldiersState::btnArmorClick(Action*)
@@ -334,10 +334,10 @@ void SoldiersState::lstSoldiersPress(Action* action)
 }
 
 /**
- * kL. Reorders a soldier up.
+ * Reorders a soldier up.
  * @param action - pointer to an action
  */
-void SoldiersState::lstLeftArrowClick(Action* action) // kL
+void SoldiersState::lstLeftArrowClick(Action* action)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
@@ -378,15 +378,15 @@ void SoldiersState::lstLeftArrowClick(Action* action) // kL
 }
 
 /**
- * kL. Reorders a soldier down.
+ * Reorders a soldier down.
  * @param action - pointer to an action
  */
-void SoldiersState::lstRightArrowClick(Action* action) // kL
+void SoldiersState::lstRightArrowClick(Action* action)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	size_t row = _lstSoldiers->getSelectedRow();
-	size_t numSoldiers = _base->getSoldiers()->size();
+	const size_t numSoldiers = _base->getSoldiers()->size();
 
 	if (numSoldiers > 0
 		&& numSoldiers <= INT_MAX
@@ -424,10 +424,10 @@ void SoldiersState::lstRightArrowClick(Action* action) // kL
 }
 
 /**
-* kL. Displays the inventory screen for the soldiers at base.
+* Displays the inventory screen for the soldiers at Base.
 * @param action - pointer to an action
 */
-void SoldiersState::btnEquipClick(Action*) // kL
+void SoldiersState::btnEquipClick(Action*)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 

@@ -75,20 +75,20 @@ InterceptState::InterceptState(
 	_window		= new Window(
 							this,
 							320,
-							144,
+							176,
 							0,
-							30,
+							14,
 							POPUP_HORIZONTAL);
-	_txtBase		= new Text(288, 17, 16, 41); // might do getRegion in here also.
+	_txtBase		= new Text(288, 17, 16, 24); // might do getRegion in here also.
 
-	_txtCraft		= new Text(86, 9, 16, 56);
-	_txtStatus		= new Text(53, 9, 115, 56);
-	_txtWeapons		= new Text(85, 9, 213, 56);
+	_txtCraft		= new Text(86, 9, 16, 40);
+	_txtStatus		= new Text(53, 9, 115, 40);
+	_txtWeapons		= new Text(50, 27, 241, 24);
 
-	_lstCrafts		= new TextList(285, 81, 16, 66);
+	_lstCrafts		= new TextList(285, 113, 16, 50);
 
-	_btnGotoBase	= new TextButton(142, 16, 16, 151);
-	_btnCancel		= new TextButton(142, 16, 162, 151);
+	_btnGotoBase	= new TextButton(142, 16, 16, 167);
+	_btnCancel		= new TextButton(142, 16, 162, 167);
 
 	setPalette("PAL_GEOSCAPE", 4);
 
@@ -235,23 +235,23 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 	{
 		if (stat == "STR_READY")
 		{
-			_cellColor = Palette::blockOffset(7); // green (7)-2
+			_cellColor = Palette::blockOffset(7); // green
 			return tr(stat);
 		}
 		else if (stat == "STR_REFUELLING")
 		{
 			stat = "STR_REFUELLING_";
-			_cellColor = Palette::blockOffset(10)+2; // slate gray
+			_cellColor = Palette::blockOffset(10); // slate gray
 		}
 		else if (stat == "STR_REARMING")
 		{
 			stat = "STR_REARMING_";
-			_cellColor = Palette::blockOffset(10)+4; // slate gray
+			_cellColor = Palette::blockOffset(10); // slate gray
 		}
 		else if (stat == "STR_REPAIRS")
 		{
 			stat = "STR_REPAIRS_";
-			_cellColor = Palette::blockOffset(10)+6; // slate gray
+			_cellColor = Palette::blockOffset(10); // slate gray
 		}
 
 		bool delayed;
@@ -273,22 +273,22 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 	if (craft->getLowFuel() == true)
 	{
 		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(9)+4; // brown
+		_cellColor = Palette::blockOffset(9); // brown
 	}
 	else if (craft->getMissionComplete() == true)
 	{
 		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(9)+6; // brown
+		_cellColor = Palette::blockOffset(9); // brown
 	}
 	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
 	{
 		status = tr("STR_RETURNING_TO_BASE");
-		_cellColor = Palette::blockOffset(9)+2; // brown
+		_cellColor = Palette::blockOffset(9); // brown
 	}
 	else if (craft->getDestination() == NULL)
 	{
 		status = tr("STR_PATROLLING");
-		_cellColor = Palette::blockOffset(4); // olive green // blue(5)+3
+		_cellColor = Palette::blockOffset(3); // olive green
 	}
 	else
 	{
@@ -303,20 +303,20 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 			else if (ufo->getStatus() == Ufo::FLYING) // intercept UFO
 			{
 				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId());
-				_cellColor = Palette::blockOffset(11)+1; // purple
+				_cellColor = Palette::blockOffset(11); // purple
 			}
 			else // landed UFO
 			{
 				status = tr("STR_DESTINATION_UC_")
 							.arg(ufo->getName(_game->getLanguage()));
-				_cellColor = Palette::blockOffset(11)+2; // purple
+				_cellColor = Palette::blockOffset(11); // purple
 			}
 		}
 		else // crashed UFO, terrorSite, alienBase, or wayPoint
 		{
 			status = tr("STR_DESTINATION_UC_")
 						.arg(craft->getDestination()->getName(_game->getLanguage()));
-			_cellColor = Palette::blockOffset(9); // brown //(11)+3; purple
+			_cellColor = Palette::blockOffset(11); // purple
 		}
 	}
 
@@ -333,26 +333,30 @@ std::wstring InterceptState::formatTime(
 		const int total,
 		const bool delayed)
 {
-	std::wostringstream ss;
+	std::wostringstream wss;
+	wss << L"(";
+
 	const int
 		days = total / 24,
 		hours = total %24;
 
 	if (days > 0)
 	{
-		ss << tr("STR_DAY", days);
+		wss << tr("STR_DAY", days);
 
 		if (hours > 0)
-			ss << L" ";
+			wss << L" ";
 	}
 
 	if (hours > 0)
-		ss << tr("STR_HOUR", hours);
+		wss << tr("STR_HOUR", hours);
 
 	if (delayed == true)
-		ss << L" +";
+		wss << L" +";
 
-	return ss.str();
+	wss << L")";
+
+	return wss.str();
 }
 
 /**
@@ -379,7 +383,7 @@ void InterceptState::btnGotoBaseClick(Action*)
 }
 
 /**
- * Pick a target for the selected craft.
+ * Opens the craft info window.
  * @param action - pointer to an action
  */
 void InterceptState::lstCraftsLeftClick(Action*)

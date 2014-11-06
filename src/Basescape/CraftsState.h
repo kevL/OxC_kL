@@ -48,12 +48,13 @@ private:
 	Base* _base;
 	Text
 		* _txtBase,
-		* _txtCrew,
-		* _txtHwp,
+//		* _txtCrew,
+//		* _txtHwp,
 		* _txtName,
 		* _txtStatus,
 		* _txtTitle,
-		* _txtWeapon;
+		* _txtWeapons;
+//		* _txtWeapon;
 	TextButton* _btnOk;
 	TextList* _lstCrafts;
 	Window* _window;

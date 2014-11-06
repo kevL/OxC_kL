@@ -4494,7 +4494,7 @@
 1415009039 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
-1415168623 f:\git\openxcom\src\basescape\craftsstate.h
+1415236124 f:\git\openxcom\src\basescape\craftsstate.h
 	"../Engine/State.h"
 
 1413136953 f:\git\openxcom\src\basescape\dismantlefacilitystate.h
@@ -4527,7 +4527,7 @@
 	"../Engine/State.h"
 	"../Menu/OptionsBaseState.h"
 
-1413136955 f:\git\openxcom\src\basescape\soldiersstate.h
+1415236921 f:\git\openxcom\src\basescape\soldiersstate.h
 	"../Engine/State.h"
 
 1413136955 f:\git\openxcom\src\basescape\transferbasestate.h
@@ -4856,7 +4856,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Soldier.h"
 
-1415227554 source:f:\git\openxcom\src\basescape\craftsstate.cpp
+1415243579 source:f:\git\openxcom\src\basescape\craftsstate.cpp
 	"CraftsState.h"
 	<sstream>
 	"CraftInfoState.h"
@@ -5490,7 +5490,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1414426989 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1415237578 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	<sstream>
 	<string>
@@ -7641,7 +7641,7 @@
 	<string>
 	"../Engine/State.h"
 
-1415229704 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1415244932 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
 	<string>
 	"GeoscapeCraftState.h"
@@ -7659,7 +7659,7 @@
 	"../Savegame/Craft.h"
 	"../Savegame/Target.h"
 
-1415229689 f:\git\openxcom\src\geoscape\craftpatrolstate.h
+1415245893 f:\git\openxcom\src\geoscape\craftpatrolstate.h
 	"../Engine/State.h"
 
 1415229916 f:\git\openxcom\src\geoscape\geoscapecraftstate.h
@@ -8023,7 +8023,7 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1415227548 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1415244818 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
 	<sstream>
 	"ConfirmDestinationState.h"
@@ -8391,7 +8391,7 @@
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 
-1415166032 source:f:\git\openxcom\src\interface\text.cpp
+1415234617 source:f:\git\openxcom\src\interface\text.cpp
 	"Text.h"
 	<cctype>
 	<cmath>

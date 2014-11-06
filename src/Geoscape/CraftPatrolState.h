@@ -50,8 +50,10 @@ private:
 		* _txtDestination,
 		* _txtPatrolling;
 	TextButton
-		* _btnOk,
+		* _btnBase,
 		* _btnCenter,
+		* _btnInfo,
+		* _btnOk,
 		* _btnRedirect;
 	Window* _window;
 
@@ -67,6 +69,10 @@ private:
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+		/// Handler for clicking the Craft Info button.
+		void btnInfoClick(Action* action);
+		/// Handler for clicking the Return To Base button.
+		void btnBaseClick(Action* action);
 		/// Handler for clicking the Center button.
 		void btnCenterClick(Action* action);
 		/// Handler for clicking the Redirect Craft button.

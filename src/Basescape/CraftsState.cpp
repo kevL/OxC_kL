@@ -57,8 +57,7 @@ namespace OpenXcom
  * Initializes all the elements in the Crafts screen.
  * @param base - pointer to the Base to get info from
  */
-CraftsState::CraftsState(
-		Base* base)
+CraftsState::CraftsState(Base* base)
 	:
 		_base(base)
 {
@@ -69,11 +68,14 @@ CraftsState::CraftsState(
 
 	_txtName	= new Text(102, 9, 16, 49);
 	_txtStatus	= new Text(76, 9, 118, 49);
-	_txtWeapon	= new Text(44, 17, 194, 49);
-	_txtCrew	= new Text(27, 9, 230, 49);
-	_txtHwp		= new Text(24, 9, 257, 49);
 
-	_lstCrafts	= new TextList(288, 113, 16, 59);
+	_txtWeapons	= new Text(50, 27, 241, 33);
+//	_txtWeapon	= new Text(44, 17, 194, 49);
+//	_txtCrew	= new Text(27, 9, 230, 49);
+//	_txtHwp		= new Text(24, 9, 257, 49);
+
+	_lstCrafts	= new TextList(298, 113, 16, 59);
+//	_lstCrafts	= new TextList(285, 81, 16, 66);
 
 	_btnOk		= new TextButton(288, 16, 16, 177);
 
@@ -84,9 +86,10 @@ CraftsState::CraftsState(
 	add(_txtBase);
 	add(_txtName);
 	add(_txtStatus);
-	add(_txtWeapon);
-	add(_txtCrew);
-	add(_txtHwp);
+	add(_txtWeapons);
+//	add(_txtWeapon);
+//	add(_txtCrew);
+//	add(_txtHwp);
 	add(_lstCrafts);
 	add(_btnOk);
 
@@ -119,20 +122,22 @@ CraftsState::CraftsState(
 	_txtStatus->setColor(Palette::blockOffset(15)+1);
 	_txtStatus->setText(tr("STR_STATUS"));
 
-	_txtWeapon->setColor(Palette::blockOffset(15)+1);
+	_txtWeapons->setColor(Palette::blockOffset(15)+1);
+	_txtWeapons->setText(tr("STR_WEAPONS_CREW_HWPS"));
+
+/*	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(tr("STR_WEAPON_SYSTEMS"));
-	_txtWeapon->setWordWrap();
 
 	_txtCrew->setColor(Palette::blockOffset(15)+1);
 	_txtCrew->setText(tr("STR_CREW"));
 
 	_txtHwp->setColor(Palette::blockOffset(15)+1);
-	_txtHwp->setText(tr("STR_HWPS"));
+	_txtHwp->setText(tr("STR_HWPS")); */
 
 	_lstCrafts->setColor(Palette::blockOffset(13)+10);
 	_lstCrafts->setArrowColor(Palette::blockOffset(15)+1);
-	_lstCrafts->setArrowColumn(265, ARROW_VERTICAL);
-	_lstCrafts->setColumns(5, 94, 76, 36, 27, 47);
+	_lstCrafts->setArrowColumn(275, ARROW_VERTICAL);
+	_lstCrafts->setColumns(5, 91, 126, 25, 15, 15);
 	_lstCrafts->setSelectable();
 	_lstCrafts->setBackground(_window);
 	_lstCrafts->setMargin();
@@ -219,23 +224,23 @@ std::wstring CraftsState::getAltStatus(Craft* const craft)
 	{
 		if (stat == "STR_READY")
 		{
-			_cellColor = Palette::blockOffset(3)+2;
+			_cellColor = Palette::blockOffset(3); // green
 			return tr(stat);
 		}
 		else if (stat == "STR_REFUELLING")
 		{
 			stat = "STR_REFUELLING_";
-			_cellColor = Palette::blockOffset(4)+2;
+			_cellColor = Palette::blockOffset(4); // lavender
 		}
 		else if (stat == "STR_REARMING")
 		{
 			stat = "STR_REARMING_";
-			_cellColor = Palette::blockOffset(4)+4;
+			_cellColor = Palette::blockOffset(4); // lavender
 		}
 		else if (stat == "STR_REPAIRS")
 		{
 			stat = "STR_REPAIRS_";
-			_cellColor = Palette::blockOffset(4)+6;
+			_cellColor = Palette::blockOffset(4); // lavender
 		}
 
 		bool delayed;
@@ -256,23 +261,23 @@ std::wstring CraftsState::getAltStatus(Craft* const craft)
 
 	if (craft->getLowFuel() == true)
 	{
-		status = tr("STR_LOW_FUEL"); // "STR_LOW_FUEL_RETURNING_TO_BASE"
-		_cellColor = Palette::blockOffset(1)+4;
+		status = tr("STR_LOW_FUEL_RETURNING_TO_BASE"); // "STR_LOW_FUEL"
+		_cellColor = Palette::blockOffset(7); // brown
 	}
 	else if (craft->getMissionComplete() == true)
 	{
-		status = tr("STR_MISSION_COMPLETE"); // "STR_MISSION_COMPLETE_RETURNING_TO_BASE"
-		_cellColor = Palette::blockOffset(1)+6;
+		status = tr("STR_MISSION_COMPLETE_RETURNING_TO_BASE"); // "STR_MISSION_COMPLETE"
+		_cellColor = Palette::blockOffset(7); // brown
 	}
 	else if (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()))
 	{
-		status = tr("STR_BASE"); // "STR_RETURNING_TO_BASE"
-		_cellColor = Palette::blockOffset(5)+4;
+		status = tr("STR_RETURNING_TO_BASE"); // "STR_BASE"
+		_cellColor = Palette::blockOffset(7); // brown
 	}
 	else if (craft->getDestination() == NULL)
 	{
 		status = tr("STR_PATROLLING");
-		_cellColor = Palette::blockOffset(8)+4;
+		_cellColor = Palette::blockOffset(8); // blue
 	}
 	else
 	{
@@ -281,26 +286,28 @@ std::wstring CraftsState::getAltStatus(Craft* const craft)
 		{
 			if (craft->isInDogfight() == true) // chase UFO
 			{
-				status = tr("STR_UFO_").arg(ufo->getId()); // "STR_TAILING_UFO"
-				_cellColor = Palette::blockOffset(2)+2;
+				status = tr("STR_TAILING_UFO").arg(ufo->getId()); // "STR_UFO_"
+				_cellColor = Palette::blockOffset(6); // yellow
 			}
 			else if (ufo->getStatus() == Ufo::FLYING) // intercept UFO
 			{
-				status = tr("STR_UFO_").arg(ufo->getId()); // "STR_INTERCEPTING_UFO"
-				_cellColor = Palette::blockOffset(2)+4;
+				status = tr("STR_INTERCEPTING_UFO").arg(ufo->getId()); // "STR_UFO_"
+				_cellColor = Palette::blockOffset(6); // yellow
 			}
 			else // landed UFO
 			{
-//				status = tr("STR_DESTINATION_UC_").arg(ufo->getName(_game->getLanguage()));
-				status = ufo->getName(_game->getLanguage());
-				_cellColor = Palette::blockOffset(2)+6;
+//				status = ufo->getName(_game->getLanguage());
+				status = tr("STR_DESTINATION_UC_")
+							.arg(ufo->getName(_game->getLanguage()));
+				_cellColor = Palette::blockOffset(6); // yellow
 			}
 		}
 		else // crashed UFO, terrorSite, alienBase, or wayPoint
 		{
-//			status = tr("STR_DESTINATION_UC_").arg(craft->getDestination()->getName(_game->getLanguage()));
-			status = craft->getDestination()->getName(_game->getLanguage());
-			_cellColor = Palette::blockOffset(2)+8;
+//			status = craft->getDestination()->getName(_game->getLanguage());
+			status = tr("STR_DESTINATION_UC_")
+						.arg(craft->getDestination()->getName(_game->getLanguage()));
+			_cellColor = Palette::blockOffset(6); // yellow
 		}
 	}
 
@@ -317,26 +324,30 @@ std::wstring CraftsState::formatTime(
 		const int total,
 		const bool delayed)
 {
-	std::wostringstream ss;
+	std::wostringstream wss;
+	wss << L"(";
+
 	const int
 		days = total / 24,
 		hours = total %24;
 
 	if (days > 0)
 	{
-		ss << tr("STR_DAY", days);
+		wss << tr("STR_DAY", days);
 
 		if (hours > 0)
-			ss << L" ";
+			wss << L" ";
 	}
 
 	if (hours > 0)
-		ss << tr("STR_HOUR", hours);
+		wss << tr("STR_HOUR", hours);
 
 	if (delayed == true)
-		ss << L" +";
+		wss << L" +";
 
-	return ss.str();
+	wss << L")";
+
+	return wss.str();
 }
 
 /**
@@ -439,12 +450,12 @@ void CraftsState::lstLeftArrowClick(Action* action)
  */
 void CraftsState::lstRightArrowClick(Action* action)
 {
-	int row = _lstCrafts->getSelectedRow();
-	size_t numCrafts = _base->getCrafts()->size();
+	size_t row = _lstCrafts->getSelectedRow();
+	const size_t numCrafts = _base->getCrafts()->size();
 
 	if (numCrafts > 0
 		&& numCrafts <= INT_MAX
-		&& row < static_cast<int>(numCrafts) - 1)
+		&& row < numCrafts - 1)
 	{
 		Craft* craft = _base->getCrafts()->at(row);
 
@@ -453,7 +464,7 @@ void CraftsState::lstRightArrowClick(Action* action)
 			_base->getCrafts()->at(row) = _base->getCrafts()->at(row + 1);
 			_base->getCrafts()->at(row + 1) = craft;
 
-			if (row != static_cast<int>(_lstCrafts->getVisibleRows() - 1 + _lstCrafts->getScroll()))
+			if (row != _lstCrafts->getVisibleRows() - 1 + _lstCrafts->getScroll())
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),

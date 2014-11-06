@@ -66,9 +66,12 @@ CraftPatrolState::CraftPatrolState(
 	_txtDestination	= new Text(224, 78, 16, 32);
 	_txtPatrolling	= new Text(224, 17, 16, 100);
 
-	_btnOk			= new TextButton(144, 16, 58, 121);
-	_btnCenter		= new TextButton(144, 16, 58, 140);
-	_btnRedirect	= new TextButton(144, 16, 58, 159);
+	_btnOk			= new TextButton(192, 16, 32, 121);
+	_btnInfo		= new TextButton(192, 16, 32, 140);
+
+	_btnBase		= new TextButton(62, 16, 32, 159);
+	_btnCenter		= new TextButton(62, 16, 97, 159);
+	_btnRedirect	= new TextButton(62, 16, 162, 159);
 
 	setPalette("PAL_GEOSCAPE", 4);
 
@@ -76,10 +79,13 @@ CraftPatrolState::CraftPatrolState(
 	add(_txtDestination);
 	add(_txtPatrolling);
 	add(_btnOk);
+	add(_btnInfo);
+	add(_btnBase);
 	add(_btnCenter);
 	add(_btnRedirect);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
@@ -92,7 +98,7 @@ CraftPatrolState::CraftPatrolState(
 								 .arg(_craft->getName(_game->getLanguage()))
 								 .arg(_craft->getDestination()->getName(_game->getLanguage())));
 
-	_txtPatrolling->setColor(Palette::blockOffset(15)+11); // (15)-1
+	_txtPatrolling->setColor(Palette::blockOffset(15)+11);
 	_txtPatrolling->setBig();
 	_txtPatrolling->setAlign(ALIGN_CENTER);
 	_txtPatrolling->setText(tr("STR_NOW_PATROLLING"));
@@ -103,6 +109,14 @@ CraftPatrolState::CraftPatrolState(
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& CraftPatrolState::btnOkClick,
 					Options::keyCancel);
+
+	_btnInfo->setColor(Palette::blockOffset(8)+5);
+	_btnInfo->setText(tr("STR_EQUIP_CRAFT"));
+	_btnInfo->onMouseClick((ActionHandler)& CraftPatrolState::btnInfoClick);
+
+	_btnBase->setColor(Palette::blockOffset(8)+5);
+	_btnBase->setText(tr("STR_RETURN_TO_BASE"));
+	_btnBase->onMouseClick((ActionHandler)& CraftPatrolState::btnBaseClick);
 
 	_btnCenter->setColor(Palette::blockOffset(8)+5);
 	_btnCenter->setText(tr("STR_CENTER"));
@@ -133,6 +147,33 @@ void CraftPatrolState::btnOkClick(Action*)
 }
 
 /**
+ * Opens the craft info window.
+ * @param action - pointer to an action
+ */
+void CraftPatrolState::btnInfoClick(Action*)
+{
+	_game->popState();
+
+	_game->pushState(new GeoscapeCraftState(
+										_craft,
+										_globe,
+										NULL,
+										_geo,
+										true));
+}
+
+/**
+ * Returns the craft back to its base.
+ * @param action - pointer to an action
+ */
+void CraftPatrolState::btnBaseClick(Action*)
+{
+	_game->popState();
+
+	_craft->returnToBase();
+}
+
+/**
  * Centers the craft on the globe.
  * @param action - pointer to an action
  */
@@ -146,7 +187,7 @@ void CraftPatrolState::btnCenterClick(Action*)
 }
 
 /**
- * Opens up the Craft window.
+ * Opens the SelectDestination window.
  * @param action - pointer to an action
  */
 void CraftPatrolState::btnRedirectClick(Action*)
@@ -157,11 +198,6 @@ void CraftPatrolState::btnRedirectClick(Action*)
 											_craft,
 											_globe,
 											_geo));
-//	_game->pushState(new GeoscapeCraftState(
-//										_craft,
-//										_globe,
-//										NULL,
-//										_geo));
 }
 
 }

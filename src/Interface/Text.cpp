@@ -708,7 +708,6 @@ void Text::draw()
 					mult = 1;
 			} */
 
-
 			if (dir < 0)
 				x += dir * font->getCharSize(*i).w;
 
