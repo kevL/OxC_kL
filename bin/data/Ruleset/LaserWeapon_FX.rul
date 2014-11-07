@@ -1,0 +1,148 @@
+# Aldorn's Laser sprites & sounds.
+# -------- ITEMS -------- #
+items:
+# Laser Pistol
+  - type: STR_LASER_PISTOL
+    bigSprite: 650
+    floorSprite: 650
+    handSprite: 650 #IncOf8
+    fireSound: 655
+  - type: STR_LASER_PISTOL_CLIP
+    bigSprite: 651
+    floorSprite: 651
+    hitSound: 654
+    hitAnimation: 36
+# Laser Rifle
+  - type: STR_LASER_RIFLE
+    bigSprite: 652
+    floorSprite: 652
+    handSprite: 658 #IncOf8
+    fireSound: 655
+  - type: STR_LASER_RIFLE_CLIP
+    bigSprite: 653
+    floorSprite: 653
+    hitSound: 654
+    hitAnimation: 36
+# Laser Sniper Rifle
+  - type: STR_LASER_SNIPER_RIFLE
+    bigSprite: 654
+    floorSprite: 654
+    handSprite: 664 #IncOf8
+    fireSound: 655
+  - type: STR_LASER_SNIPER_RIFLE_CLIP
+    bigSprite: 655
+    floorSprite: 655
+    hitSound: 654
+    hitAnimation: 36
+# Heavy Laser
+  - type: STR_HEAVY_LASER
+    bigSprite: 656
+    floorSprite: 656
+    handSprite: 672 #IncOf8
+    fireSound: 656
+  - type: STR_HEAVY_LASER_CLIP
+    bigSprite: 657
+    floorSprite: 657
+    hitSound: 654
+    hitAnimation: 36
+# Scatter Laser
+  - type: STR_SCATTER_LASER
+    bigSprite: 658
+    floorSprite: 658
+    handSprite: 680 #IncOf8
+    bulletSprite: 6
+    fireSound: 655
+  - type: STR_SCATTER_LASER_CLIP
+    bigSprite: 659
+    floorSprite: 659
+    hitSound: 654
+    hitAnimation: 36
+# -------- EXTRASPRITES -------- #
+extraSprites:
+# Laser Pistol
+  - type: BIGOBS.PCK
+    files:
+      650: Resources/LaserWeapon_FX/LaserPistol_BIGOBS.PNG
+      651: Resources/LaserWeapon_FX/LaserPistolClip_BIGOBS.PNG
+  - type: FLOOROB.PCK
+    files:
+      650: Resources/LaserWeapon_FX/LaserPistol_FLOOROB.PNG
+      651: Resources/LaserWeapon_FX/LaserPistolClip_FLOOROB.PNG
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      650: Resources/LaserWeapon_FX/LaserPistol_HANDOB.PNG #IncOf8
+# Laser Rifle
+  - type: BIGOBS.PCK
+    files:
+      652: Resources/LaserWeapon_FX/LaserRifle_BIGOBS.PNG
+      653: Resources/LaserWeapon_FX/LaserRifleClip_BIGOBS.PNG
+  - type: FLOOROB.PCK
+    files:
+      652: Resources/LaserWeapon_FX/LaserRifle_FLOOROB.PNG
+      653: Resources/LaserWeapon_FX/LaserRifleClip_FLOOROB.PNG
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      658: Resources/LaserWeapon_FX/LaserRifle_HANDOB.PNG #IncOf8
+# Laser Sniper Rifle
+  - type: BIGOBS.PCK
+    files:
+      654: Resources/LaserWeapon_FX/LaserSniperRifle_BIGOBS.PNG
+      655: Resources/LaserWeapon_FX/LaserSniperRifleClip_BIGOBS.PNG
+  - type: FLOOROB.PCK
+    files:
+      654: Resources/LaserWeapon_FX/LaserSniperRifle_FLOOROB.PNG
+      655: Resources/LaserWeapon_FX/LaserSniperRifleClip_FLOOROB.PNG
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      664: Resources/LaserWeapon_FX/LaserSniperRifle_HANDOB.PNG #IncOf8
+# Heavy Laser
+  - type: BIGOBS.PCK
+    files:
+      656: Resources/LaserWeapon_FX/HeavyLaser_BIGOBS.PNG
+      657: Resources/LaserWeapon_FX/HeavyLaserClip_BIGOBS.PNG
+  - type: FLOOROB.PCK
+    files:
+      656: Resources/LaserWeapon_FX/HeavyLaser_FLOOROB.PNG
+      657: Resources/LaserWeapon_FX/HeavyLaserClip_FLOOROB.PNG
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      672: Resources/LaserWeapon_FX/HeavyLaser_HANDOB.PNG #IncOf8
+# Laser Scatter
+  - type: BIGOBS.PCK
+    files:
+      658: Resources/LaserWeapon_FX/LaserScatter_BIGOBS.PNG
+      659: Resources/LaserWeapon_FX/LaserScatterClip_BIGOBS.PNG
+  - type: FLOOROB.PCK
+    files:
+      658: Resources/LaserWeapon_FX/LaserScatter_FLOOROB.PNG
+      659: Resources/LaserWeapon_FX/LaserScatterClip_FLOOROB.PNG
+  - type: HANDOB.PCK
+    width: 256
+    height: 40
+    subX: 32
+    subY: 40
+    files:
+      680: Resources/LaserWeapon_FX/LaserScatter_HANDOB.PNG #IncOf8
+# -------- EXTRASOUNDS -------- #
+extraSounds:
+  - type: BATTLE.CAT
+    files:
+      654: Resources/Sounds/extra/b_laser_hit.ogg
+      655: Resources/Sounds/extra/b_laser_fire.ogg
+      656: Resources/LaserWeapon_FX/Sounds/laser_shot_big.WAV

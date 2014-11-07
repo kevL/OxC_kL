@@ -1356,8 +1356,10 @@ extraSprites:
       509: Resources/EqualTerms1/EMRifle/EMRifleAmmo.png
       510: Resources/EqualTerms1/SniperRifle/SniperRifle.png
       511: Resources/EqualTerms1/SniperRifle/SniperRifleAmmo.png
-      512: Resources/EqualTerms1/SAW/Saw.png
-      513: Resources/EqualTerms1/SAW/SawAmmo.png
+#      512: Resources/EqualTerms1/SAW/Saw.png
+#      513: Resources/EqualTerms1/SAW/SawAmmo.png
+      512: Resources/EqualTerms1/SAW/Aldorn_Railgun_BIGOBS.png
+      513: Resources/EqualTerms1/SAW/Aldorn_Railgun_Ammo_B.png
       514: Resources/EqualTerms1/Shotgun/Shotgun.png
       515: Resources/EqualTerms1/Shotgun/ReinforcedShotgun.png
       516: Resources/EqualTerms1/Shotgun/ShotgunAmmo.png
@@ -1381,8 +1383,10 @@ extraSprites:
       509: Resources/EqualTerms1/EMRifle/EMRifleAmmo_f.png
       510: Resources/EqualTerms1/SniperRifle/SniperRifle_f.png
       511: Resources/EqualTerms1/SniperRifle/SniperRifleAmmo_f.png
-      512: Resources/EqualTerms1/SAW/Saw_f.png
-      513: Resources/EqualTerms1/SAW/SawAmmo_f.png
+#      512: Resources/EqualTerms1/SAW/Saw_f.png
+#      513: Resources/EqualTerms1/SAW/SawAmmo_f.png
+      512: Resources/EqualTerms1/SAW/Aldorn_Railgun_FLOOROBS.png
+      513: Resources/EqualTerms1/SAW/Aldorn_Railgun_Ammo_F.png
       514: Resources/EqualTerms1/Shotgun/Shotgun_f.png
       515: Resources/EqualTerms1/Shotgun/ReinforcedShotgun_f.png
       516: Resources/EqualTerms1/Shotgun/ShotgunAmmo_f.png
@@ -1408,7 +1412,8 @@ extraSprites:
     files:
       528: Resources/EqualTerms1/EMRifle/EMRifle_h.png
       536: Resources/EqualTerms1/SniperRifle/SniperRifle_h.png
-      544: Resources/EqualTerms1/SAW/Saw_h.png
+#      544: Resources/EqualTerms1/SAW/Saw_h.png
+      544: Resources/EqualTerms1/SAW/Aldorn_Railgun_HANDOB.png
       552: Resources/EqualTerms1/Shotgun/Shotgun_h.png
       560: Resources/EqualTerms1/Shotgun/ReinforcedShotgun_h.png
       568: Resources/EqualTerms1/SSRL/SSRL_h.png
