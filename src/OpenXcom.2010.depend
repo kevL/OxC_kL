@@ -6041,7 +6041,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1415329342 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1415340011 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -7747,7 +7747,7 @@
 1413136957 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1415326975 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1415336934 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
 	"GeoscapeState.h"

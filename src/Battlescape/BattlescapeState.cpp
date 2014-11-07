@@ -2430,7 +2430,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 		_save->getTileEngine()->calculateFOV(selectedUnit);
 
 	int j = 0;
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = selectedUnit->getVisibleUnits()->begin();
 			i != selectedUnit->getVisibleUnits()->end()
 				&& j < VISIBLE_MAX;
@@ -2454,7 +2454,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	{
 /*		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 		texture->getFrame(soldier->getRankSprite())->blit(_rank); */
-		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
 		texture->getFrame(20 + soldier->getRank())->blit(_rank);
 
 		if (selectedUnit->isKneeled() == true)
@@ -2488,7 +2488,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	else
 		_numWounds->setX(_icons->getX() + 10); */
 
-	const unsigned wounds = static_cast<unsigned>(selectedUnit->getFatalWounds());
+	const int wounds = selectedUnit->getFatalWounds();
 	if (wounds > 0)
 	{
 //		SurfaceSet* srtStatus = _game->getResourcePack()->getSurfaceSet("StatusIcons");
@@ -2507,7 +2507,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 //			_numWounds->setX(_btnWounds->getX() + 6);
 		_numWounds->setX(_btnWounds->getX() + 7);
 
-		_numWounds->setValue(wounds);
+		_numWounds->setValue(static_cast<unsigned>(wounds));
 		_numWounds->setVisible();
 	}
 
