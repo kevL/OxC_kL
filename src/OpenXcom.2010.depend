@@ -6041,7 +6041,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1414813425 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1415329342 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6200,7 +6200,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1414131402 source:f:\git\openxcom\src\battlescape\camera.cpp
+1415335704 source:f:\git\openxcom\src\battlescape\camera.cpp
 	"Camera.h"
 	<cmath>
 	<fstream>
@@ -6327,16 +6327,15 @@
 1413726104 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1414726393 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1415335454 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
-	"Camera.h"
 	"BattlescapeState.h"
+	"Camera.h"
 	"Explosion.h"
 	"Map.h"
 	"TileEngine.h"
 	"UnitDieBState.h"
 	"../Engine/Game.h"
-	"../Engine/Logger.h"
 	"../Engine/RNG.h"
 	"../Engine/Sound.h"
 	"../Resource/ResourcePack.h"
@@ -6446,7 +6445,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1414794850 source:f:\git\openxcom\src\battlescape\map.cpp
+1415329310 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6535,7 +6534,7 @@
 	"../Ruleset/RuleInterface.h"
 	"../Savegame/BattleUnit.h"
 
-1414795213 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
+1415333440 source:f:\git\openxcom\src\battlescape\minimapstate.cpp
 	"MiniMapState.h"
 	<iostream>
 	<sstream>
@@ -6563,7 +6562,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1414793972 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1415333583 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	<cmath>
 	<sstream>
@@ -6695,7 +6694,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1414789450 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1415335350 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -7748,7 +7747,7 @@
 1413136957 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1415230179 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1415326975 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
 	"GeoscapeState.h"

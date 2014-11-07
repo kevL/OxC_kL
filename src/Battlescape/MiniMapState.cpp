@@ -96,6 +96,7 @@ MiniMapState::MiniMapState(
 
 	centerAllSurfaces();
 
+
 //	_screen = false;												// kL
 //	_bg->drawRect(48, 16, 221, 148, Palette::blockOffset(15)+15);	// kL
 
@@ -170,6 +171,11 @@ void MiniMapState::handle(Action* action)
 			btnLevelDownClick(action);
 		else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN)
 			btnLevelUpClick(action);
+//		else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // kL->
+//		{
+//			_game->getSavedGame()->getSavedBattle()->getBattleState()->getMap()->setNoDraw(false);
+//			_game->popState();
+//		}
 	}
 }
 
@@ -192,7 +198,6 @@ void MiniMapState::btnOkClick(Action*)
 	} */
 
 	_game->getSavedGame()->getSavedBattle()->getBattleState()->getMap()->setNoDraw(false);
-
 	_game->popState();
 }
 

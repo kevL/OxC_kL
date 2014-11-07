@@ -782,11 +782,11 @@ void ProjectileFlyBState::think()
 	if (_parent->getMap()->getProjectile() == NULL)
 	{
 		Tile
-			* tile = _parent->getSave()->getTile(_unit->getPosition()),
-			* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
+			* const tile = _parent->getSave()->getTile(_unit->getPosition()),
+			* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
 
-		bool
-			hasFloor = tile
+		const bool
+			hasFloor = tile != NULL
 					&& tile->hasNoFloor(tileBelow) == false,
 			unitCanFly = _unit->getMovementType() == MT_FLY;
 

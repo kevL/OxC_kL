@@ -387,10 +387,10 @@ DebriefingState::DebriefingState()
 			i != battle->getUnits()->end();
 			++i)
 	{
-		Soldier* soldier = (*i)->getGeoscapeSoldier();
+		Soldier* const soldier = (*i)->getGeoscapeSoldier();
 		if (soldier != NULL)
 		{
-			BattleUnitStatistics* statistics = (*i)->getStatistics();
+			BattleUnitStatistics* const statistics = (*i)->getStatistics();
 
 			int soldierAlienKills = 0;
 
@@ -407,8 +407,10 @@ DebriefingState::DebriefingState()
 			// This can be exploited by MC'ing a bunch of aLiens
 			// while having Option "psi-control ends battle" TRUE.
 			// ... Patched
+			// NOTE: This can still be exploited by MC'ing and
+			// executing a bunch of aLiens with a single Soldier.
 			if (_alienMCs == 0
-				&& aliensKilled + _alienStuns > 0
+				&& aliensKilled + _alienStuns > 8 // was 0
 				&& aliensKilled + _alienStuns == soldierAlienKills
 				&& _missionStatistics->success == true)
 			{

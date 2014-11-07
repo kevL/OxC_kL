@@ -172,7 +172,7 @@ BattlescapeState::BattlescapeState()
 
 	_kneel		= new Surface( 2,  2, x + 115, y + 19);
 	_rank		= new Surface(26, 23, x + 107, y + 33);
-	_weight		= new Surface( 2,  2, x + 108, y + 34);
+	_weight		= new Surface( 2,  2, x + 130, y + 34);
 
 	_btnWounds	= new InteractiveSurface(14, 14, x + 5, y - 17);
 //	_numWounds	= new NumberText(9, 9, x, y - 12); // X gets adjusted in updateSoldierInfo()
@@ -501,7 +501,7 @@ BattlescapeState::BattlescapeState()
 	srfOverload->setX(-1);
 	srfOverload->setY(-1);
 	srfOverload->blit(_weight); */
-	_weight->drawRect(0, 0, 2, 2, Palette::blockOffset(1)+6); // yellow-red
+	_weight->drawRect(0, 0, 2, 2, Palette::blockOffset(6)+10); // brown
 	_weight->setVisible(false);
 
 	_btnWounds->setVisible(false);
@@ -2420,7 +2420,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	BattleUnit* selectedUnit = _save->getSelectedUnit();
+	BattleUnit* const selectedUnit = _save->getSelectedUnit();
 
 	if (selectedUnit == NULL)
 		return;
@@ -2449,7 +2449,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 										false));
 
 //	Soldier* soldier = _game->getSavedGame()->getSoldier(selectedUnit->getId());
-	Soldier* soldier = selectedUnit->getGeoscapeSoldier();
+	const Soldier* const soldier = selectedUnit->getGeoscapeSoldier();
 	if (soldier != NULL)
 	{
 /*		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
@@ -2473,7 +2473,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	_numDir->setValue(selectedUnit->getDirection());
 	_numDir->setVisible();
 
-	if (selectedUnit->getTurretType() > -1)
+	if (selectedUnit->getTurretType() != -1)
 	{
 		_numDirTur->setValue(selectedUnit->getTurretDirection());
 		_numDirTur->setVisible();
@@ -2488,7 +2488,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	else
 		_numWounds->setX(_icons->getX() + 10); */
 
-	const int wounds = selectedUnit->getFatalWounds();
+	const unsigned wounds = static_cast<unsigned>(selectedUnit->getFatalWounds());
 	if (wounds > 0)
 	{
 //		SurfaceSet* srtStatus = _game->getResourcePack()->getSurfaceSet("StatusIcons");
@@ -2507,46 +2507,48 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 //			_numWounds->setX(_btnWounds->getX() + 6);
 		_numWounds->setX(_btnWounds->getX() + 7);
 
-		_numWounds->setValue(static_cast<unsigned>(wounds));
+		_numWounds->setValue(wounds);
 		_numWounds->setVisible();
 	}
 
 
 	double stat = static_cast<double>(selectedUnit->getStats()->tu);
-	int tu = selectedUnit->getTimeUnits();
+	const int tu = selectedUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setValue(ceil(
 							static_cast<double>(tu) / stat * 100.0));
 
 	stat = static_cast<double>(selectedUnit->getStats()->stamina);
-	int energy = selectedUnit->getEnergy();
+	const int energy = selectedUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
 	_barEnergy->setValue(ceil(
 							static_cast<double>(energy) / stat * 100.0));
 
 	stat = static_cast<double>(selectedUnit->getStats()->health);
-	int health = selectedUnit->getHealth();
+	const int health = selectedUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
 	_barHealth->setValue(ceil(
 							static_cast<double>(health) / stat * 100.0));
 	_barHealth->setValue2(ceil(
 							static_cast<double>(selectedUnit->getStun()) / stat * 100.0));
 
-	int morale = selectedUnit->getMorale();
+	const int morale = selectedUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
 	_barMorale->setValue(morale);
 
 
-	BattleItem* rtItem = selectedUnit->getItem("STR_RIGHT_HAND");
-	BattleItem* ltItem = selectedUnit->getItem("STR_LEFT_HAND");
+	BattleItem
+		* const rtItem = selectedUnit->getItem("STR_RIGHT_HAND"),
+		* const ltItem = selectedUnit->getItem("STR_LEFT_HAND");
 
 	std::string activeHand = selectedUnit->getActiveHand();
 	if (activeHand != "")
 	{
-		int tuLaunch = 0;
-		int tuAim = 0;
-		int tuAuto = 0;
-		int tuSnap = 0;
+		int
+			tuLaunch = 0,
+			tuAim = 0,
+			tuAuto = 0,
+			tuSnap = 0;
 
 		if (activeHand == "STR_RIGHT_HAND"
 			&& (rtItem->getRules()->getBattleType() == BT_FIREARM

@@ -75,39 +75,32 @@ GeoscapeCraftState::GeoscapeCraftState(
 {
 	_screen = false;
 
-	_window			= new Window(this, 224, 174, 16, 8, POPUP_BOTH);
-	_txtTitle		= new Text(192, 17, 32, 16);
+	_window			= new Window(this, 224, 176, 16, 8, POPUP_BOTH);
+	_txtTitle		= new Text(192, 17, 32, 15);
 
-	_sprite			= new Surface(32, 38, 224, -1);
+	_sprite			= new Surface(32, 38, 224, -3);
 
 	_txtStatus		= new Text(192, 17, 32, 31);
-
 	_txtBase		= new Text(192, 9, 32, 43);
-
 	_txtRedirect	= new Text(120, 17, 120, 46);
-
 	_txtSpeed		= new Text(192, 9, 32, 55);
-
 	_txtMaxSpeed	= new Text(120, 9, 32, 64);
 	_txtSoldier		= new Text(80, 9, 160, 64);
-
 	_txtAltitude	= new Text(120, 9, 32, 73);
 	_txtHWP			= new Text(80, 9, 160, 73);
-
 	_txtFuel		= new Text(120, 9, 32, 82);
 	_txtDamage		= new Text(80, 9, 160, 82);
 
 	_txtW1Name		= new Text(120, 9, 32, 91);
 	_txtW1Ammo		= new Text(80, 9, 160, 91);
-
 	_txtW2Name		= new Text(120, 9, 32, 100);
 	_txtW2Ammo		= new Text(80, 9, 160, 100);
 
-	_btnTarget		= new TextButton(90, 16, 32, 113);
-	_btnPatrol		= new TextButton(90, 16, 134, 113);
-	_btnCenter		= new TextButton(192, 16, 32, 135);
-	_btnBase		= new TextButton(90, 16, 32, 157);
-	_btnCancel		= new TextButton(90, 16, 134, 157);
+	_btnTarget		= new TextButton(90, 16, 32, 114);
+	_btnPatrol		= new TextButton(90, 16, 134, 114);
+	_btnCenter		= new TextButton(192, 16, 32, 136);
+	_btnBase		= new TextButton(90, 16, 32, 158);
+	_btnCancel		= new TextButton(90, 16, 134, 158);
 
 	setPalette("PAL_GEOSCAPE", 4);
 

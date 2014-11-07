@@ -822,11 +822,11 @@ void Map::drawTerrain(Surface* surface)
 											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
 											tmpSurface->blitNShade(
 													surface,
-													screenPosition.x + offset.x + 3 + 16,
+													screenPosition.x + offset.x + 9 + 16,
 													screenPosition.y + offset.y + 4 + 32,
 													6,
 													false,
-													2); // 1=white, 2=yellow-red, 3=red
+													10); // 1=white, 2=yellow-red, 3=red, 6=lt.brown
 										}
 									}
 								}
@@ -1376,11 +1376,11 @@ void Map::drawTerrain(Surface* surface)
 											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
 											tmpSurface->blitNShade(
 													surface,
-													screenPosition.x + offset.x + 3,
+													screenPosition.x + offset.x + 9,
 													screenPosition.y + offset.y + 4 + 24,
 													6,
 													false,
-													2); // 1=white, 2=yellow-red, 3=red
+													10); // 1=white, 2=yellow-red, 3=red, 6=lt.brown
 										}
 									}
 								}
@@ -1647,11 +1647,11 @@ void Map::drawTerrain(Surface* surface)
 												tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
 												tmpSurface->blitNShade(
 														surface,
-														screenPosition.x + offset.x + 3,
+														screenPosition.x + offset.x + 9,
 														screenPosition.y + offset.y + 4,
 														6,
 														false,
-														2); // 1=white, 2=yellow-red, 3=red
+														10); // 1=white, 2=yellow-red, 3=red, 6=lt.brown
 											}
 										}
 									}

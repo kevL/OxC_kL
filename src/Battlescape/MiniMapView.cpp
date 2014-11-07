@@ -430,7 +430,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 		_redraw = true;
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		((MiniMapState*)(state))->btnOkClick(action); // kL_note: Close the state.
+		dynamic_cast<MiniMapState*>(state)->btnOkClick(action); // kL_note: Close the state.
 //		_game->popState(); // Closes the window on right-click. // kL
 }
 
