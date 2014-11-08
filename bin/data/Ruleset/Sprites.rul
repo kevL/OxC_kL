@@ -1,3 +1,4 @@
+# -------- GEODATA -------- #
 extraSprites:
   - type: INTERWIN #interception window
     width: 160
@@ -101,6 +102,7 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/geodata/interwin/textures/tex_urban.png
+# -------- GEOGRAPH -------- #
   - type: BACK07.SCR #-> ALTBACK07.SCR (see XcomResourcePack.cpp)
     width: 320
     height: 200
@@ -119,12 +121,7 @@ extraSprites:
   - type: INTICON.PCK
     files:
       0: Resources/Sprites/geograph/inticon/
-  - type: CURSOR.PCK
-    files:
-      0: Resources/Sprites/ufograph/cursor/
-  - type: HIT.PCK
-    files:
-      0: Resources/Sprites/ufograph/hit/
+# -------- UFOGRAPH -------- #
   - type: ICONS.PCK
     width: 320
     height: 200
@@ -137,6 +134,18 @@ extraSprites:
     singleImage: true
     files:
       0: Resources/Sprites/ufograph/scanbord.png
+  - type: TAC00.SCR
+    width: 320
+    height: 200
+    singleImage: true
+    files:
+      0: Resources/Sprites/ufograph/tac00.png
+  - type: CURSOR.PCK
+    files:
+      0: Resources/Sprites/ufograph/cursor/
+  - type: HIT.PCK
+    files:
+      0: Resources/Sprites/ufograph/hit/
   - type: SMOKE.PCK
     width: 256
     height: 280
@@ -187,6 +196,7 @@ extraSprites:
     subY: 64
     files:
       0: Resources/Sprites/ufograph/x1/x1.png
+# -------- GENDER -------- #
   - type: DIGITS
     width: 30
     height: 5
