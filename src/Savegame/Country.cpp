@@ -30,8 +30,8 @@ namespace OpenXcom
 
 /**
  * Initializes a country of the specified type.
- * @param rules Pointer to ruleset.
- * @param gen Generate new funding.
+ * @param rules	- rointer to RuleCountry
+ * @param gen	- true to generate new funding
  */
 Country::Country(
 		RuleCountry* rules,
@@ -45,7 +45,7 @@ Country::Country(
 		_activityRecent(-1),
 		_activityRecentXCOM(-1)
 {
-	if (gen)
+	if (gen == true)
 		_funding.push_back(_rules->generateFunding());
 
 	_activityXcom.push_back(0);
@@ -61,14 +61,14 @@ Country::~Country()
 
 /**
  * Loads the country from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void Country::load(const YAML::Node& node)
 {
-	_funding			= node["funding"].as<std::vector<int> >(_funding);
-	_activityXcom		= node["activityXcom"].as<std::vector<int> >(_activityXcom);
-	_activityAlien		= node["activityAlien"].as<std::vector<int> >(_activityAlien);
-	_activityRecent		= node["activityRecent"].as<int>(_activityRecent);
+	_funding			= node["funding"]			.as<std::vector<int> >(_funding);
+	_activityXcom		= node["activityXcom"]		.as<std::vector<int> >(_activityXcom);
+	_activityAlien		= node["activityAlien"]		.as<std::vector<int> >(_activityAlien);
+	_activityRecent		= node["activityRecent"]	.as<int>(_activityRecent);
 	_activityRecentXCOM	= node["activityRecentXCOM"].as<int>(_activityRecentXCOM);
 
 	_pact		= node["pact"].as<bool>(_pact);
@@ -77,7 +77,7 @@ void Country::load(const YAML::Node& node)
 
 /**
  * Saves the country to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Country::save() const
 {
@@ -100,7 +100,7 @@ YAML::Node Country::save() const
 
 /**
  * Returns the ruleset for the country's type.
- * @return Pointer to ruleset.
+ * @return, pointer to RuleCountry
  */
 RuleCountry* Country::getRules() const
 {
@@ -108,16 +108,17 @@ RuleCountry* Country::getRules() const
 }
 
 /**
- * kL. Get the country's name.
+ * Get the country's name.
+ * @return, country name
  */
-std::string Country::getType() const // kL
+std::string Country::getType() const
 {
 	return _rules->getType();
 }
 
 /**
  * Returns the country's current monthly funding.
- * @return Monthly funding.
+ * @return, reference to a vector of monthly funds
  */
 const std::vector<int>& Country::getFunding() const
 {
@@ -126,7 +127,7 @@ const std::vector<int>& Country::getFunding() const
 
 /**
  * Changes the country's current monthly funding.
- * @param funding, Monthly funding.
+ * @param funding - monthly funds
  */
 void Country::setFunding(int funding)
 {
@@ -134,8 +135,12 @@ void Country::setFunding(int funding)
 }
 
 /**
- * Keith Richards would be so proud
- * @return satisfaction level, 0 = alien pact, 1 = unhappy, 2 = satisfied, 3 = happy.
+ * Keith Richards would be so proud.
+ * @return, satisfaction level
+ *			0 = alien pact
+ *			1 = unhappy
+ *			2 = satisfied
+ *			3 = happy
  */
 int Country::getSatisfaction() const
 {
@@ -147,7 +152,7 @@ int Country::getSatisfaction() const
 
 /**
  * Adds to the country's xcom activity level.
- * @param activity how many points to add.
+ * @param activity - how many points to add
  */
 void Country::addActivityXcom(int activity)
 {
@@ -156,7 +161,7 @@ void Country::addActivityXcom(int activity)
 
 /**
  * Adds to the country's alien activity level.
- * @param activity how many points to add.
+ * @param activity - how many points to add
  */
 void Country::addActivityAlien(int activity)
 {
@@ -165,7 +170,7 @@ void Country::addActivityAlien(int activity)
 
 /**
  * Gets the country's xcom activity level.
- * @return activity level.
+ * @return, reference to a vector of activity levels
  */
 const std::vector<int>& Country::getActivityXcom() const
 {
@@ -174,7 +179,7 @@ const std::vector<int>& Country::getActivityXcom() const
 
 /**
  * Gets the country's alien activity level.
- * @return activity level.
+ * @return, reference to a vector of activity levels
  */
 const std::vector<int>& Country::getActivityAlien() const
 {
@@ -303,12 +308,12 @@ bool Country::getPact() const
 }
 
 /**
- * kL. Handles recent aLien activity in this country for GraphsState blink.
+ * Handles recent aLien activity in this country for GraphsState blink.
  * @param activity	- true to reset the startcounter (default true)
  * @param graphs	- not sure lol (default false)
  * @return, true if there is activity
  */
-bool Country::recentActivity( // kL
+bool Country::recentActivity(
 		bool activity,
 		bool graphs)
 {
@@ -334,12 +339,12 @@ bool Country::recentActivity( // kL
 }
 
 /**
- * kL. Handles recent XCOM activity in this country for GraphsState blink.
+ * Handles recent XCOM activity in this country for GraphsState blink.
  * @param activity	- true to reset the startcounter (default true)
  * @param graphs	- not sure lol (default false)
  * @return, true if there is activity
  */
-bool Country::recentActivityXCOM( // kL
+bool Country::recentActivityXCOM(
 		bool activity,
 		bool graphs)
 {
@@ -365,9 +370,9 @@ bool Country::recentActivityXCOM( // kL
 }
 
 /**
- * kL. Resets activity.
+ * Resets activity.
  */
-void Country::resetActivity() // kL
+void Country::resetActivity()
 {
 	_activityRecent = -1;
 	_activityRecentXCOM = -1;

@@ -1157,13 +1157,12 @@ void UnitWalkBState::playMovementSound()
 		}
 		else if (_unit->getStatus() == STATUS_FLYING)
 		{
-//			if (_unit->getWalkingPhase() == 1)
-			if (_unit->getTrueWalkingPhase() == 1)
+			if (_unit->getWalkingPhase() == 1)
 			{
 				if (_falling == true)
 				{
-//					if (_unit->getTrueWalkingPhase() == 1
-					if (groundCheck(1))
+					if (_unit->getTrueWalkingPhase() == 1
+						&& groundCheck(1))
 					{
 						sound = ResourcePack::ITEM_DROP;		// thunk.
 					}

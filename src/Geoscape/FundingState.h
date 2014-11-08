@@ -31,6 +31,7 @@ class TextButton;
 class TextList;
 class Window;
 
+
 /**
  * Funding screen accessible from the Geoscape
  * that shows all the countries' funding.
@@ -45,6 +46,7 @@ private:
 		* _txtChange,
 		* _txtCountry,
 		* _txtFunding,
+		* _txtScore,
 		* _txtTitle;
 	TextButton* _btnOk;
 	TextList

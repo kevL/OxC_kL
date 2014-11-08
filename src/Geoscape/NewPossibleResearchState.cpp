@@ -61,7 +61,7 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_window				= new Window(this, 288, 180, 16, 10);
 	_txtTitle			= new Text(288, 40, 16, 20);
 
-	_lstPossibilities	= new TextList(288, 81, 16, 56);
+	_lstPossibilities	= new TextList(253, 81, 24, 56);
 
 	_btnOk				= new TextButton(160, 14, 80, 149);
 	_btnResearch		= new TextButton(160, 14, 80, 165);
@@ -75,6 +75,7 @@ NewPossibleResearchState::NewPossibleResearchState(
 	add(_btnResearch);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK05.SCR"));
@@ -104,23 +105,21 @@ NewPossibleResearchState::NewPossibleResearchState(
 	_lstPossibilities->setBig();
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 
-	size_t tally(0);
+	size_t tally (0); // init.
 
 	for (std::vector<RuleResearch *>::const_iterator
-			iter = possibilities.begin();
-			iter != possibilities.end();
-			++iter)
+			i = possibilities.begin();
+			i != possibilities.end();
+			++i)
 	{
-		bool liveAlien = _game->getRuleset()->getUnit((*iter)->getName()) != NULL;
-
-		if (!_game->getSavedGame()->wasResearchPopped(*iter)
-			&& (*iter)->getRequirements().empty()
-			&& liveAlien == false)
+		if (_game->getSavedGame()->wasResearchPopped(*i) == false
+			&& (*i)->getRequirements().empty() == true
+			&& _game->getRuleset()->getUnit((*i)->getName()) == NULL)
 		{
-			_game->getSavedGame()->addPoppedResearch((*iter));
+			_game->getSavedGame()->addPoppedResearch((*i));
 			_lstPossibilities->addRow(
 									1,
-									tr((*iter)->getName ()).c_str());
+									tr((*i)->getName ()).c_str());
 		}
 		else
 			++tally;

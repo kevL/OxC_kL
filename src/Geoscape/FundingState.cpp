@@ -53,12 +53,13 @@ FundingState::FundingState()
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
 	_txtTitle		= new Text(300, 17, 10, 9);
 
-	_txtCountry		= new Text(100, 9, 16, 25);
-	_txtFunding		= new Text(100, 9, 138, 25);
-	_txtChange		= new Text(72, 9, 238, 25);
+	_txtCountry		= new Text(102, 9, 16, 25);
+	_txtFunding		= new Text(60, 9, 118, 25);
+	_txtChange		= new Text(60, 9, 178, 25);
+	_txtScore		= new Text(60, 9, 238, 25);
 
 	_lstCountries	= new TextList(277, 129, 24, 34);
-	_lstTotal		= new TextList(277, 9, 16, 165);
+	_lstTotal		= new TextList(285, 9, 16, 165);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -69,11 +70,13 @@ FundingState::FundingState()
 	add(_txtCountry);
 	add(_txtFunding);
 	add(_txtChange);
+	add(_txtScore);
 	add(_lstCountries);
 	add(_lstTotal);
 	add(_btnOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -105,24 +108,34 @@ FundingState::FundingState()
 	_txtChange->setColor(Palette::blockOffset(8)+5);
 	_txtChange->setText(tr("STR_CHANGE"));
 
+	_txtScore->setColor(Palette::blockOffset(8)+5);
+	_txtScore->setText(tr("STR_SCORE"));
+
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCountries->setColumns(3, 114, 100, 63);
+	_lstCountries->setColumns(4, 94, 60, 60, 60);
 	_lstCountries->setDot();
-	for (std::vector<Country*>::iterator
+	for (std::vector<Country*>::const_iterator
 			i = _game->getSavedGame()->getCountries()->begin();
 			i != _game->getSavedGame()->getCountries()->end();
 			++i)
 	{
 		std::wostringstream
-			ss,
-			ss2;
+			ss1,
+			ss2,
+			ss3;
 
-		ss << L'\x01' << Text::formatFunding((*i)->getFunding().at((*i)->getFunding().size() - 1)) << L'\x01';
-		if ((*i)->getFunding().size() > 1)
+		const std::vector<int>
+			funds = (*i)->getFunding(),
+			actX = (*i)->getActivityXcom(),
+			actA = (*i)->getActivityAlien();
+
+		ss1 << L'\x01' << Text::formatFunding(funds.at(funds.size() - 1)) << L'\x01';
+
+		if (funds.size() > 1)
 		{
 			ss2 << L'\x01';
-			int change = (*i)->getFunding().back() - (*i)->getFunding().at((*i)->getFunding().size() - 2);
+			const int change = funds.back() - funds.at(funds.size() - 2);
 			if (change > 0)
 				ss2 << L'+';
 			ss2 << Text::formatFunding(change);
@@ -131,31 +144,30 @@ FundingState::FundingState()
 		else
 			ss2 << Text::formatFunding(0);
 
-		_lstCountries->addRow(
-							3,
-							tr((*i)->getRules()->getType()).c_str(),
-							ss.str().c_str(),
-							ss2.str().c_str());
-	}
-//kL	_lstCountries->addRow(2, tr("STR_TOTAL_UC").c_str(), Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
-//kL	_lstCountries->setRowColor(_game->getSavedGame()->getCountries()->size(), Palette::blockOffset(8)+5);
+		ss3 << actX.at(actX.size() - 1) - actA.at(actA.size() -1);
 
-	// kL_begin: FundingState, list Total.
+		_lstCountries->addRow(
+							4,
+							tr((*i)->getRules()->getType()).c_str(),
+							ss1.str().c_str(),
+							ss2.str().c_str(),
+							ss3.str().c_str());
+	}
+
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
-	_lstTotal->setColumns(3, 122, 100, 55);
+	_lstTotal->setColumns(3, 122, 92, 60);
+	_lstTotal->setMargin();
 	_lstTotal->setDot();
 	_lstTotal->addRow(
 					3,
 					"",
 					tr("STR_TOTAL_UC").c_str(),
 					Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
-	// kL_end.
-
 	//Log(LOG_INFO) << "Create FundingState DONE";
 }
 
 /**
- *
+ * dTor.
  */
 FundingState::~FundingState()
 {

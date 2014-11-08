@@ -58,7 +58,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_window				= new Window(this, 288, 180, 16, 10);
 	_txtTitle			= new Text(288, 40, 16, 20);
 
-	_lstPossibilities	= new TextList(288, 81, 16, 56);
+	_lstPossibilities	= new TextList(253, 81, 24, 56);
 
 	_btnOk				= new TextButton(160, 14, 80, 149);
 	_btnManufacture		= new TextButton(160, 14, 80, 165);
@@ -72,6 +72,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	add(_lstPossibilities);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
@@ -104,13 +105,13 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 	_lstPossibilities->setAlign(ALIGN_CENTER);
 
 	for (std::vector<RuleManufacture*>::const_iterator
-			iter = possibilities.begin();
-			iter != possibilities.end();
-			++iter)
+			i = possibilities.begin();
+			i != possibilities.end();
+			++i)
 	{
 		_lstPossibilities->addRow(
 								1,
-								tr((*iter)->getName()).c_str());
+								tr((*i)->getName()).c_str());
 	}
 }
 
