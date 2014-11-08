@@ -521,7 +521,7 @@ private:
 		/// Sets this unit's direction 0-7.
 		void setDirection(
 				int dir,
-				bool turret = true); // kL
+				bool turret = true);
 		/// Gets this unit's direction.
 		int getDirection() const;
 		/// Sets this unit's face direction - only used by strafing moves.
@@ -530,8 +530,8 @@ private:
 		int getFaceDirection() const;
 		/// Gets this unit's turret direction.
 		int getTurretDirection() const;
-		/// kL. Sets this unit's turret direction.
-		void setTurretDirection(int dir); // kL
+		/// Sets this unit's turret direction.
+		void setTurretDirection(int dir);
 		/// Gets this unit's turret To direction.
 		int getTurretToDirection() const;
 		/// Gets this unit's vertical direction.
@@ -539,8 +539,8 @@ private:
 
 		/// Gets this unit's status.
 		UnitStatus getStatus() const;
-		/// kL. Sets this unit's status.
-		void setStatus(int status); // kL
+		/// Sets this unit's status.
+		void setStatus(int status);
 
 		/// Starts the walkingPhase.
 		void startWalking(
@@ -619,8 +619,8 @@ private:
 				ItemDamageType type,
 				bool ignoreArmor = false);
 
-		/// kL. Plays a grunt sFx when hit/damaged.
-		void playHitSound(); // kL
+		/// Plays a grunt sFx when hit/damaged.
+		void playHitSound();
 
 		/// Heals stun level of this unit.
 		void healStun(int power);
@@ -776,7 +776,6 @@ private:
 		/// Gets this unit's floating elevation.
 		int getFloatHeight() const;
 
-		// kL_begin:
 		/// Gets a soldier's Firing experience.
 		int getExpFiring() const;
 		/// Gets a soldier's Throwing experience.
@@ -791,7 +790,6 @@ private:
 		int getExpPsiSkill() const;
 		/// Gets a soldier's PsiStrength experience.
 		int getExpPsiStrength() const;
-		// kL_end.
 
 		/// Adds one to the reaction exp counter.
 		void addReactionExp();
@@ -881,7 +879,7 @@ private:
 		/// Gets this unit's rank string.
 		std::string getRankString() const;
 		/// Gets this unit's race string.
-		std::string getRaceString() const; // kL
+		std::string getRaceString() const;
 
 		/// Gets this unit's geoscape Soldier object.
 		Soldier* getGeoscapeSoldier() const;
@@ -953,7 +951,7 @@ private:
 		/// Adjusts this unit's stats according to difficulty.
 		void adjustStats(
 				const int diff,
-				const int month); // kL_add.
+				const int month);
 		/// Halves this unit's armor values for Beginner difficulty.
 		void halveArmor();
 /*kL
@@ -968,7 +966,6 @@ private:
 		/// Gets this unit's cover-reserve TU.
 		int getCoverReserve() const;
 
-		// kL_begin:
 		/// Initializes a death spin.
 		void initDeathSpin();
 		/// Continues a death spin.
@@ -999,12 +996,6 @@ private:
 		/// Gets if this unit has aleady been damaged in a single explosion.
 		bool getTakenExpl() const;
 
-		/// Sets this unit has having died by fire damage.
-//		void setDiedByFire();
-		/// Gets if this unit died by fire damage.
-//		bool getDiedByFire() const;
-		// kL_end.
-
 		/// Returns true if this unit is selectable.
 		bool isSelectable(
 				UnitFaction faction,
@@ -1034,16 +1025,16 @@ private:
 		/// Gets this unit murderer's id.
 		int getMurdererId() const;
 
-		/// kL. Sets this unit's order in battle.
-		void setBattleOrder(size_t order); // kL
-		/// kL. Gets this unit's order in battle.
-		size_t getBattleOrder() const; // kL
+		/// Sets this unit's order in battle.
+		void setBattleOrder(size_t order);
+		/// Gets this unit's order in battle.
+		size_t getBattleOrder() const;
 
-		/// kL. Sets the BattleGame for this unit.
-		void setBattleGame(BattlescapeGame* battleGame); // kL
+		/// Sets the BattleGame for this unit.
+		void setBattleGame(BattlescapeGame* battleGame);
 
-		/// kL. Sets this unit's parameters as down (collapsed / unconscious / dead).
-		void setDown(); // kL
+		/// Sets this unit's parameters as down (collapsed / unconscious / dead).
+		void setDown();
 };
 
 }

@@ -3403,7 +3403,7 @@ int BattleUnit::getSpecialAbility() const
 
 /**
  * Sets a unit's special ability. ( See SPECAB_* enum )
- * @param specab - special ability
+ * @param specab - SpecialAbility
  */
 void BattleUnit::setSpecialAbility(SpecialAbility specab)
 {
@@ -3412,7 +3412,7 @@ void BattleUnit::setSpecialAbility(SpecialAbility specab)
 
 /**
  * Gets a unit that is spawned when this one dies.
- * @return, special spawn unit ( ie. ZOMBIES!!! )
+ * @return, special spawn unit type ( ie. ZOMBIES!!! )
  */
 std::string BattleUnit::getSpawnUnit() const
 {
@@ -3421,7 +3421,7 @@ std::string BattleUnit::getSpawnUnit() const
 
 /**
  * Sets a unit that is spawned when this one dies.
- * @param spawnUnit - special unit
+ * @param spawnUnit - reference the special unit type
  */
 void BattleUnit::setSpawnUnit(const std::string& spawnUnit)
 {
@@ -3438,16 +3438,17 @@ std::string BattleUnit::getRankString() const
 }
 
 /**
- * kL. Gets the unit's race string.
+ * Gets the unit's race string.
+ * @return, race
  */
-std::string BattleUnit::getRaceString() const // kL
+std::string BattleUnit::getRaceString() const
 {
 	return _race;
 }
 
 /**
  * Gets the geoscape-soldier object.
- * @return, soldier
+ * @return, pointer to Soldier
  */
 Soldier* BattleUnit::getGeoscapeSoldier() const
 {
@@ -3473,7 +3474,7 @@ std::string BattleUnit::getType() const
 
 /**
  * Sets unit's active hand.
- * @param slot - pointer to a handslot
+ * @param slot - reference a handslot
  */
 void BattleUnit::setActiveHand(const std::string& slot)
 {
@@ -3503,8 +3504,8 @@ std::string BattleUnit::getActiveHand() const
 }
 
 /**
- * Converts unit to another faction (original faction is still stored).
- * @param f - faction
+ * Converts unit to another faction - original faction is still stored.
+ * @param faction - UnitFaction
  */
 void BattleUnit::convertToFaction(UnitFaction faction)
 {
@@ -3530,7 +3531,7 @@ int BattleUnit::getAggroSound() const
 }
 
 /**
- * Halves this unit's armor values (for beginner mode)
+ * Halves this unit's armor values for beginner mode.
  */
 void BattleUnit::halveArmor()
 {
@@ -3543,7 +3544,7 @@ void BattleUnit::halveArmor()
 
 /**
  * Gets the faction the unit was killed by.
- * @return faction
+ * @return UnitFaction
  */
 UnitFaction BattleUnit::killedBy() const
 {
@@ -3552,7 +3553,7 @@ UnitFaction BattleUnit::killedBy() const
 
 /**
  * Sets the faction the unit was killed by.
- * @param f faction
+ * @param faction - UnitFaction
  */
 void BattleUnit::killedBy(UnitFaction faction)
 {
@@ -3569,8 +3570,8 @@ void BattleUnit::setCharging(BattleUnit* chargeTarget)
 }
 
 /**
- * Gets the units we are charging towards.
- * @return, pointer to the charged target
+ * Gets the unit this BattleUnit is charging towards.
+ * @return, pointer to the charged BattleUnit
  */
 BattleUnit* BattleUnit::getCharging()
 {
@@ -3627,7 +3628,7 @@ void BattleUnit::setTurnsExposed(int turns)
 
 /**
  * Gets how long since this unit was exposed.
- * @return, # turns this unit has been exposed
+ * @return, turns this unit has been exposed
  */
 int BattleUnit::getTurnsExposed() const
 {
@@ -3636,7 +3637,7 @@ int BattleUnit::getTurnsExposed() const
 
 /**
  * Gets this unit's original Faction.
- * @return, original faction
+ * @return, original UnitFaction
  */
 UnitFaction BattleUnit::getOriginalFaction() const
 {
@@ -3662,7 +3663,7 @@ void BattleUnit::invalidateCache()
 /**
  * Gets the other units spotted this turn by this unit.
  * kL_Update: now has relevance only for aLien units.
- * @return, reference to a vector of pointers to units
+ * @return, reference to a vector of pointers to BattleUnits
  */
 std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()
 {
@@ -3705,7 +3706,7 @@ void BattleUnit::deriveRank()
 
 /**
  * Checks if a tile is in a unit's facing-quadrant. Using maths!
- * @param pos - the position to check against
+ * @param pos - the Position to check against
  * @return, whatever the maths decide
  */
 bool BattleUnit::checkViewSector(Position pos) const
@@ -3764,7 +3765,7 @@ bool BattleUnit::checkViewSector(Position pos) const
  */
 void BattleUnit::adjustStats(
 		const int diff,
-		const int month) // kL_add.
+		const int month)
 {
 	// adjust the unit's stats according to the difficulty level. Note, Throwing is not affected.
 	_stats.tu			+= 4 * diff * _stats.tu / 100;
@@ -3810,25 +3811,6 @@ void BattleUnit::adjustStats(
 }
 
 /**
- * Gets if a unit already took fire damage this turn
- * (used to avoid damaging large units multiple times).
- * @return, ow it burns. It burrnsssss me!! cya.
- */
-/*kL bool BattleUnit::getTookFire() const
-{
-	return _hitByFire;
-} */
-
-/**
- * Toggles the state of the fire-damage-tracking boolean.
- */
-/*kL void BattleUnit::setTookFire()
-{
-	_hitByFire = !_hitByFire;
-} */
-
-/**
- *
  * Sets the amount of TUs reserved for cover.
  * @param reserve - reserved time units
  */
@@ -3838,7 +3820,6 @@ void BattleUnit::setCoverReserve(int reserve)
 }
 
 /**
-
  * Gets the amount of TUs reserved for cover.
  * @return, reserved time units
  */
@@ -3847,10 +3828,8 @@ int BattleUnit::getCoverReserve() const
 	return _coverReserve;
 }
 
-// kL_begin:
 /**
  * Initializes a death spin.
- * see Battlescape/UnitDieBState.cpp, cTor
  */
 void BattleUnit::initDeathSpin()
 {
@@ -3862,7 +3841,6 @@ void BattleUnit::initDeathSpin()
 
 /**
  * Continues a death spin.
- * see Battlescape/UnitDieBState.cpp, think()
  * _spinPhases:
 				-1 = no spin
 				 0 = start spin
@@ -3949,7 +3927,7 @@ void BattleUnit::contDeathSpin()
 
 /**
  * Regulates init, direction & duration of the death spin-cycle.
- * @ return int, Tracks deathspin rotation
+ * @return, deathspin rotation phase
  */
 int BattleUnit::getSpinPhase() const
 {
@@ -3957,8 +3935,8 @@ int BattleUnit::getSpinPhase() const
 }
 
 /**
- * Sets the spinPhase of a unit.
- * @ param spinphase, The spinPhase to set
+ * Sets the spinphase of this unit.
+ * @param spinphase - the spinphase to set
  */
 void BattleUnit::setSpinPhase(int spinphase)
 {
@@ -3966,8 +3944,7 @@ void BattleUnit::setSpinPhase(int spinphase)
 }
 
 /**
- * Set a unit to STATUS_UNCONSCIOUS.
- * @ param status,
+ * Sets this unit to STATUS_UNCONSCIOUS.
  */
 void BattleUnit::knockOut()
 {
@@ -3975,7 +3952,8 @@ void BattleUnit::knockOut()
 }
 
 /**
- * Sets a unit's health level.
+ * Sets this unit's health level.
+ * @param health - the health to set
  */
 void BattleUnit::setHealth(int health)
 {
@@ -3983,7 +3961,8 @@ void BattleUnit::setHealth(int health)
 }
 
 /**
- * Stops a unit from firing/throwing if it spots a new opponent during turning.
+ * Stops a unit from shooting/throwing if it spots a new opponent while turning.
+ * @param stop - true to stop everything and refund TU
  */
 void BattleUnit::setStopShot(bool stop)
 {
@@ -3991,7 +3970,8 @@ void BattleUnit::setStopShot(bool stop)
 }
 
 /**
- * Stops a unit from firing/throwing if it spots a new opponent during turning.
+ * Gets if this unit spotted a new opponent while turning + shooting/thowing.
+ * @return, true if a new hostile has been seen
  */
 bool BattleUnit::getStopShot() const
 {
@@ -3999,9 +3979,8 @@ bool BattleUnit::getStopShot() const
 }
 
 /**
- * Set a unit as dashing. ** Delete these and use BattleAction.dash ***
- * ... although, that might not work so good; due to the unit 'dashing'
- * might not be the currentActor's currentBattleAction status.... Cf. Projectile
+ * Sets this unit as dashing - reduces chance of getting hit.
+ * @param dash - true to dash
  */
 void BattleUnit::setDashing(bool dash)
 {
@@ -4009,7 +3988,8 @@ void BattleUnit::setDashing(bool dash)
 }
 
 /**
- * Get if a unit is dashing.
+ * Gets if this unit is dashing.
+ * @return, true if dashing
  */
 bool BattleUnit::getDashing() const
 {
@@ -4017,7 +3997,8 @@ bool BattleUnit::getDashing() const
 }
 
 /**
- * Set a unit as having been damaged in a single explosion.
+ * Sets this unit as having been damaged in a single explosion.
+ * @param beenhit - true to not deliver any more damage from a single explosion
  */
 void BattleUnit::setTakenExpl(bool beenhit)
 {
@@ -4025,28 +4006,13 @@ void BattleUnit::setTakenExpl(bool beenhit)
 }
 
 /**
- * Get if a unit was aleady damaged in a single explosion.
+ * Gets if this unit was aleady damaged in a single explosion.
+ * @return, true if this unit has already taken damage
  */
 bool BattleUnit::getTakenExpl() const
 {
 	return _takenExpl;
 }
-
-/**
- * Sets the unit has having died by fire damage.
- */
-/* void BattleUnit::setDiedByFire()
-{
-	_diedByFire = true;
-} */
-
-/**
- * Gets if the unit died by fire damage.
- */
-/* bool BattleUnit::getDiedByFire() const
-{
-	return _diedByFire;
-} */ // kL_end.
 
 /**
  * Checks if this unit can be selected.
@@ -4062,11 +4028,11 @@ bool BattleUnit::isSelectable(
 		bool checkInventory) const
 {
 	return _faction == faction
-			&& isOut() == false
-			&& (checkReselect == false
-				|| reselectAllowed())
-			&& (checkInventory == false
-				|| hasInventory());
+		&& isOut() == false
+		&& (checkReselect == false
+			|| reselectAllowed())
+		&& (checkInventory == false
+			|| hasInventory());
 }
 
 /**
@@ -4076,10 +4042,8 @@ bool BattleUnit::isSelectable(
  */
 bool BattleUnit::hasInventory() const
 {
-//	return _armor->getSize() == 1
 	return _geoscapeSoldier != NULL
-		|| ( //_unitRules &&
-			_unitRules->getMechanical() == false
+		|| (_unitRules->getMechanical() == false
 			&& _rank != "STR_LIVE_TERRORIST");
 }
 

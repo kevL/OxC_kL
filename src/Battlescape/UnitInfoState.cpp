@@ -262,7 +262,7 @@ UnitInfoState::UnitInfoState(
 	add(_numUnderArmor);
 	add(_barUnderArmor, "barUnderArmor", "stats", 0);
 
-	if (!_mindProbe)
+	if (_mindProbe == false)
 	{
 		add(_btnPrev);
 		add(_btnNext);
@@ -270,10 +270,11 @@ UnitInfoState::UnitInfoState(
 
 	centerAllSurfaces();
 
+
 	_game->getResourcePack()->getSurface("UNIBORD.PCK")->blit(_bg);
 
 	_exit->onMouseClick((ActionHandler)& UnitInfoState::exitClick,
-					SDL_BUTTON_RIGHT); // kL
+					SDL_BUTTON_RIGHT);
 	_exit->onKeyboardPress(
 					(ActionHandler)& UnitInfoState::exitClick,
 					Options::keyCancel);
@@ -281,8 +282,9 @@ UnitInfoState::UnitInfoState(
 					(ActionHandler)& UnitInfoState::exitClick,
 					Options::keyBattleStats);
 
-	Uint8 color = _game->getRuleset()->getInterface("stats")->getElement("text")->color;
-	Uint8 color2 = _game->getRuleset()->getInterface("stats")->getElement("text")->color2;
+	Uint8
+		color = _game->getRuleset()->getInterface("stats")->getElement("text")->color,
+		color2 = _game->getRuleset()->getInterface("stats")->getElement("text")->color2;
 
 	_txtName->setAlign(ALIGN_CENTER);
 	_txtName->setBig();
@@ -525,7 +527,7 @@ UnitInfoState::UnitInfoState(
 	_barUnderArmor->setScale();
 
 
-	if (!_mindProbe)
+	if (_mindProbe == false)
 	{
 		_btnPrev->setText(L"<");
 		_btnPrev->setColor(Palette::blockOffset(4)+4);
@@ -593,12 +595,22 @@ void UnitInfoState::init()
 	_barHealth->setValue(static_cast<double>(stat));
 	_barHealth->setValue2(static_cast<double>(_unit->getStun()));
 
-	stat = _unit->getFatalWounds();
 	ss.str(L"");
-	ss << stat;
+	if (_unit->isWoundable() == true)
+	{
+		stat = _unit->getFatalWounds();
+		ss << stat;
+
+		_barFatalWounds->setMax(static_cast<double>(stat));
+		_barFatalWounds->setValue(static_cast<double>(stat));
+		_barFatalWounds->setVisible();
+	}
+	else
+	{
+		ss << L"-";
+		_barFatalWounds->setVisible(false);
+	}
 	_numFatalWounds->setText(ss.str());
-	_barFatalWounds->setMax(static_cast<double>(stat));
-	_barFatalWounds->setValue(static_cast<double>(stat));
 
 	stat = _unit->getStats()->bravery;
 	ss.str(L"");
@@ -662,25 +674,33 @@ void UnitInfoState::init()
 	_numStrength->setText(ss.str());
 
 
-	if (_unit->getGeoscapeSoldier() == NULL
-		|| _unit->getStats()->psiSkill > minPsi
+	if (_unit->getStats()->psiSkill > minPsi
+		|| _unit->getGeoscapeSoldier() == NULL
 		|| (Options::psiStrengthEval
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 	{
-		stat = _unit->getStats()->psiStrength;
 		ss.str(L"");
-		ss << stat;
-		_numPsiStrength->setText(ss.str());
-		_barPsiStrength->setMax(static_cast<double>(stat));
-		_barPsiStrength->setValue(static_cast<double>(stat));
 
-//		_txtPsiStrength->setVisible();
+		if (_unit->isFearable() == true)
+		{
+			stat = _unit->getStats()->psiStrength;
+			ss << stat;
+
+			_barPsiStrength->setMax(static_cast<double>(stat));
+			_barPsiStrength->setValue(static_cast<double>(stat));
+			_barPsiStrength->setVisible();
+		}
+		else
+		{
+			ss << L"oo";
+			_barPsiStrength->setVisible(false);
+		}
+
+		_numPsiStrength->setText(ss.str());
 		_numPsiStrength->setVisible();
-		_barPsiStrength->setVisible();
 	}
 	else
 	{
-//		_txtPsiStrength->setVisible(false);
 		_numPsiStrength->setVisible(false);
 		_barPsiStrength->setVisible(false);
 	}
@@ -694,13 +714,11 @@ void UnitInfoState::init()
 		_barPsiSkill->setMax(static_cast<double>(stat));
 		_barPsiSkill->setValue(static_cast<double>(stat));
 
-//		_txtPsiSkill->setVisible();
 		_numPsiSkill->setVisible();
 		_barPsiSkill->setVisible();
 	}
 	else
 	{
-//		_txtPsiSkill->setVisible(false);
 		_numPsiSkill->setVisible(false);
 		_barPsiSkill->setVisible(false);
 	}
@@ -796,12 +814,12 @@ void UnitInfoState::btnPrevClick(Action* action)
  */
 void UnitInfoState::btnNextClick(Action* action)
 {
-	if (_parent) // so we are here from a Battlescape Game
+	if (_parent != NULL) // this is from a Battlescape Game
 		_parent->selectNextFactionUnit(
 									false,
 									false);
-//kL									_fromInventory);
-	else // so we are here from the Craft Equipment screen
+//kL								_fromInventory);
+	else // this is from the Craft Equipment screen
 		_battleGame->selectNextFactionUnit(
 										false,
 										false,
@@ -821,9 +839,9 @@ void UnitInfoState::btnNextClick(Action* action)
  */
 void UnitInfoState::exitClick(Action*)
 {
-	if (!_fromInventory)
-	{
 /*kL
+	if (_fromInventory == false)
+	{
 		if (Options::maximizeInfoScreens)
 		{
 			Screen::updateScale(
@@ -833,10 +851,13 @@ void UnitInfoState::exitClick(Action*)
 							Options::baseYBattlescape,
 							true);
 			_game->getScreen()->resetDisplay(false);
-		} */
+		}
+	} else */
+	if (_fromInventory == true
+		&& _unit->hasInventory() == false)
+	{
+		_game->popState(); // tanks require double pop if from Inventory.
 	}
-	else if (!_unit->hasInventory())	// kL
-		_game->popState();				// kL, tanks require double pop here.
 
 	_game->popState();
 }
