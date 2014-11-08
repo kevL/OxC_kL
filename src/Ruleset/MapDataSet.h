@@ -38,8 +38,7 @@ class SurfaceSet;
 
 
 /**
- * Represents a Terrain Map Datafile.
- * Which corresponds to an XCom MCD & PCK file.
+ * Represents a Terrain Map Datafile that corresponds to an XCom MCD & PCK file.
  * The list of map datafiles is stored in RuleSet, but referenced in RuleTerrain.
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
@@ -62,11 +61,11 @@ private:
 
 
 	public:
-		///
+		/// Constructs a MapDataSet.
 		MapDataSet(
 				const std::string& name,
 				Game* game = NULL);
-		///
+		/// Destructs a MapDataSet.
 		~MapDataSet();
 
 		/// Loads the map data set from YAML.

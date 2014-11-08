@@ -660,7 +660,7 @@ void SavedBattleGame::initMap(
 
 /**
  * Initializes the map utilities.
- * @param res Pointer to resource pack.
+ * @param res - pointer to ResourcePack
  */
 void SavedBattleGame::initUtilities(ResourcePack* res)
 {
@@ -690,7 +690,7 @@ std::string SavedBattleGame::getMissionType() const
 
 /**
  * Sets the global shade.
- * @param shade The global shade.
+ * @param shade - the global shade
  */
 void SavedBattleGame::setGlobalShade(int shade)
 {
@@ -699,7 +699,7 @@ void SavedBattleGame::setGlobalShade(int shade)
 
 /**
  * Gets the global shade.
- * @return The global shade.
+ * @return, the global shade
  */
 int SavedBattleGame::getGlobalShade() const
 {
@@ -708,7 +708,7 @@ int SavedBattleGame::getGlobalShade() const
 
 /**
  * Gets the map width.
- * @return The map width (Size X) in tiles.
+ * @return, the map width (Size X) in tiles
  */
 int SavedBattleGame::getMapSizeX() const
 {
@@ -717,7 +717,7 @@ int SavedBattleGame::getMapSizeX() const
 
 /**
  * Gets the map length.
- * @return The map length (Size Y) in tiles.
+ * @return, the map length (Size Y) in tiles
  */
 int SavedBattleGame::getMapSizeY() const
 {
@@ -726,7 +726,7 @@ int SavedBattleGame::getMapSizeY() const
 
 /**
  * Gets the map height.
- * @return The map height (Size Z) in layers.
+ * @return, the map height (Size Z) in layers
  */
 int SavedBattleGame::getMapSizeZ() const
 {
@@ -735,7 +735,7 @@ int SavedBattleGame::getMapSizeZ() const
 
 /**
  * Gets the map size in tiles.
- * @return The map size.
+ * @return, the map size
  */
 int SavedBattleGame::getMapSizeXYZ() const
 {
@@ -744,6 +744,7 @@ int SavedBattleGame::getMapSizeXYZ() const
 
 /**
  * Sets the terrainType string.
+ * @param terrain - the terrain
  */
 void SavedBattleGame::setTerrain(std::string terrain) // sza_MusicRules
 {
@@ -752,6 +753,7 @@ void SavedBattleGame::setTerrain(std::string terrain) // sza_MusicRules
 
 /**
  * Gets the terrainType string.
+ * @return, the terrain
  */
 std::string SavedBattleGame::getTerrain() const // sza_MusicRules
 {
@@ -760,10 +762,10 @@ std::string SavedBattleGame::getTerrain() const // sza_MusicRules
 
 /**
  * Converts a tile index to coordinates.
- * @param index The (unique) tileindex.
- * @param x Pointer to the X coordinate.
- * @param y Pointer to the Y coordinate.
- * @param z Pointer to the Z coordinate.
+ * @param index	- the (unique) tileindex
+ * @param x		- pointer to the X coordinate
+ * @param y		- pointer to the Y coordinate
+ * @param z		- pointer to the Z coordinate
  */
 void SavedBattleGame::getTileCoords(
 		int index,
@@ -778,7 +780,7 @@ void SavedBattleGame::getTileCoords(
 
 /**
  * Gets the currently selected unit.
- * @return, pointer to BattleUnit
+ * @return, pointer to the BattleUnit
  */
 BattleUnit* SavedBattleGame::getSelectedUnit() const
 {
@@ -787,7 +789,7 @@ BattleUnit* SavedBattleGame::getSelectedUnit() const
 
 /**
  * Sets the currently selected unit.
- * @param unit - pointer to BattleUnit
+ * @param unit - pointer to a BattleUnit
  */
 void SavedBattleGame::setSelectedUnit(BattleUnit* unit)
 {
@@ -796,10 +798,10 @@ void SavedBattleGame::setSelectedUnit(BattleUnit* unit)
 
 /**
 * Selects the previous player unit.
-* @param checkReselect Whether to check if we should reselect a unit.
-* @param setDontReselect Don't reselect a unit.
-* @param checkInventory Whether to check if the unit has an inventory.
-* @return Pointer to new selected BattleUnit, NULL if none can be selected.
+ * @param checkReselect		- true to check the reselectable flag (default false)
+ * @param setDontReselect	- true to set the reselectable flag FALSE (default false)
+ * @param checkInventory	- true to check if the unit has an inventory (default false)
+ * @return, pointer to newly selected BattleUnit or NULL if none can be selected
 * @sa selectFactionUnit
 */
 BattleUnit* SavedBattleGame::selectPreviousFactionUnit(
@@ -816,10 +818,10 @@ BattleUnit* SavedBattleGame::selectPreviousFactionUnit(
 
 /**
  * Selects the next player unit.
- * @param checkReselect Whether to check if we should reselect a unit.
- * @param setDontReselect Don't reselect a unit.
- * @param checkInventory Whether to check if the unit has an inventory.
- * @return Pointer to new selected BattleUnit, NULL if none can be selected.
+ * @param checkReselect		- true to check the reselectable flag (default false)
+ * @param setDontReselect	- true to set the reselectable flag FALSE (default false)
+ * @param checkInventory	- true to check if the unit has an inventory (default false)
+ * @return, pointer to newly selected BattleUnit or NULL if none can be selected
  * @sa selectFactionUnit
  */
 BattleUnit* SavedBattleGame::selectNextFactionUnit(
@@ -836,11 +838,11 @@ BattleUnit* SavedBattleGame::selectNextFactionUnit(
 
 /**
  * Selects the next player unit in a certain direction.
- * @param dir Direction to select, eg. -1 for previous and 1 for next.
- * @param checkReselect Whether to check if we should reselect a unit.
- * @param setDontReselect Don't reselect a unit.
- * @param checkInventory Whether to check if the unit has an inventory.
- * @return, Pointer to new selected BattleUnit, NULL if none can be selected.
+ * @param dir				- direction to select, eg. -1 for previous and 1 for next
+ * @param checkReselect		- true to check the reselectable flag
+ * @param setDontReselect	- true to set the reselectable flag FALSE
+ * @param checkInventory	- true to check if the unit has an inventory
+ * @return, pointer to newly selected BattleUnit or NULL if none can be selected
  */
 BattleUnit* SavedBattleGame::selectFactionUnit(
 		int dir,
@@ -962,7 +964,7 @@ BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
 
 /**
  * Gets the list of nodes.
- * @return Pointer to the list of nodes.
+ * @return, pointer to a vector of pointers to the Nodes
  */
 std::vector<Node*>* SavedBattleGame::getNodes()
 {
@@ -971,7 +973,7 @@ std::vector<Node*>* SavedBattleGame::getNodes()
 
 /**
  * Gets the list of units.
- * @return Pointer to the list of units.
+ * @return, pointer to a vector of pointers to the BattleUnits
  */
 std::vector<BattleUnit*>* SavedBattleGame::getUnits()
 {
@@ -980,7 +982,7 @@ std::vector<BattleUnit*>* SavedBattleGame::getUnits()
 
 /**
  * Gets the list of items.
- * @return Pointer to the list of items.
+ * @return, pointer to a vector of pointers to the BattleItems
  */
 std::vector<BattleItem*>* SavedBattleGame::getItems()
 {
@@ -989,7 +991,7 @@ std::vector<BattleItem*>* SavedBattleGame::getItems()
 
 /**
  * Gets the pathfinding object.
- * @return Pointer to the pathfinding object.
+ * @return, pointer to Pathfinding
  */
 Pathfinding* SavedBattleGame::getPathfinding() const
 {
@@ -998,7 +1000,7 @@ Pathfinding* SavedBattleGame::getPathfinding() const
 
 /**
  * Gets the terrain modifier object.
- * @return Pointer to the terrain modifier object.
+ * @return, pointer to the TileEngine
  */
 TileEngine* SavedBattleGame::getTileEngine() const
 {
@@ -1007,7 +1009,7 @@ TileEngine* SavedBattleGame::getTileEngine() const
 
 /**
 * Gets the array of mapblocks.
-* @return Pointer to the array of mapblocks.
+* @return, pointer to a vector of pointers to the MapDataSet
 */
 std::vector<MapDataSet*>* SavedBattleGame::getMapDataSets()
 {
@@ -1016,7 +1018,7 @@ std::vector<MapDataSet*>* SavedBattleGame::getMapDataSets()
 
 /**
  * Gets the side currently playing.
- * @return The unit faction currently playing.
+ * @return, the unit faction currently playing
  */
 UnitFaction SavedBattleGame::getSide() const
 {
@@ -1025,7 +1027,7 @@ UnitFaction SavedBattleGame::getSide() const
 
 /**
  * Gets the current turn number.
- * @return, The current turn.
+ * @return, the current turn
  */
 int SavedBattleGame::getTurn() const
 {
@@ -2223,20 +2225,24 @@ bool SavedBattleGame::getUnitsFalling() const
 
 /**
  * Gets the highest ranked, living, non Mc'd unit of faction.
- * @param isXCOM - true if examining Faction_Player, false for Faction_Hostile (default true)
+ * @param qtyAllies	- reference the number of allied units that are conscious and not MC'd
+ * @param isXCOM	- true if examining Faction_Player, false for Faction_Hostile (default true)
  * @return, pointer to highest ranked BattleUnit of faction
  */
-BattleUnit* SavedBattleGame::getHighestRanked(bool isXCOM)
+BattleUnit* SavedBattleGame::getHighestRanked(
+		int& qtyAllies,
+		bool isXCOM)
 {
 	//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked() xcom = " << xcom;
 	BattleUnit* leader = NULL;
+	qtyAllies = 0;
 
 	for (std::vector<BattleUnit*>::iterator
 			i = _units.begin();
 			i != _units.end();
 			++i)
 	{
-		if (*i
+		if (*i != NULL
 			&& (*i)->isOut(true, true) == false)
 		{
 			if (isXCOM == true)
@@ -2245,6 +2251,8 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool isXCOM)
 				if ((*i)->getOriginalFaction() == FACTION_PLAYER
 					&& (*i)->getFaction() == FACTION_PLAYER)
 				{
+					qtyAllies++;
+
 					if (leader == NULL
 						|| (*i)->getRankInt() > leader->getRankInt())
 					{
@@ -2256,6 +2264,8 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool isXCOM)
 				&& (*i)->getFaction() == FACTION_HOSTILE)
 			{
 				//Log(LOG_INFO) << "SavedBattleGame::getHighestRanked(), side is aLien";
+				qtyAllies++;
+
 				if (leader == NULL
 					|| (*i)->getRankInt() < leader->getRankInt())
 				{
@@ -2272,8 +2282,8 @@ BattleUnit* SavedBattleGame::getHighestRanked(bool isXCOM)
 
 /**
  * Gets a morale modifier.
- * Either a bonus/penalty for faction based on the highest ranked living unit of the faction
- * or a penalty for a single deceased BattleUnit.
+ * Either a bonus/penalty for faction based on the highest ranked living unit
+ * of the faction or a penalty for a single deceased BattleUnit.
  * @param unit		- pointer to BattleUnit deceased; higher rank is higher penalty (default NULL)
  * @param isXCOM	- if no unit is passed in this determines whether penalty applies to xCom or aLiens (default true)
  * @return, morale modifier
@@ -2339,10 +2349,12 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 	{
 		//Log(LOG_INFO) << "SavedBattleGame::getMoraleModifier(), leadership Bonus";
 		BattleUnit* leader = NULL;
+		int qtyAllies;
 
 		if (isXCOM == true)
 		{
-			leader = getHighestRanked();
+			leader = getHighestRanked(qtyAllies);
+
 			if (leader != NULL)
 			{
 				switch (leader->getRankInt())
@@ -2365,7 +2377,9 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 		}
 		else // aLien
 		{
-			leader = getHighestRanked(false);
+			leader = getHighestRanked(
+									qtyAllies,
+									false);
 			if (leader != NULL)
 			{
 				switch (leader->getRankInt()) // terrorists are ranks #6 and #7
@@ -2398,6 +2412,8 @@ int SavedBattleGame::getMoraleModifier( // note: Add bonus to aLiens for Cydonia
 			}
 			//Log(LOG_INFO) << ". . aLien leaderModifi = " << ret;
 		}
+
+		ret += qtyAllies - 9; // use 9 allies as Unity.
 	}
 
 	//Log(LOG_INFO) << ". totalModifier = " << ret;

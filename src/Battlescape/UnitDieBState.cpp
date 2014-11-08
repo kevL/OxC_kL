@@ -52,7 +52,7 @@ namespace OpenXcom
 /**
  * Creates a UnitDieBState.
  * @param parent		- pointer to BattlescapeGame
- * @param unit			- pointer to a dying unit
+ * @param unit			- pointer to a dying BattleUnit
  * @param damageType	- type of damage that caused the death (RuleItem.h)
  * @param noSound		- true to disable the death sound (for pre-battle powersource explosions)
  */
@@ -72,9 +72,11 @@ UnitDieBState::UnitDieBState(
 	_unit->clearVisibleTiles();
 	_unit->clearVisibleUnits();
 
-	if (_unit->getVisible())
+	_unit->setVisible(); // TEST.
+
+	if (_unit->getVisible() == true)
 	{
-		Camera* deathCam = _parent->getMap()->getCamera();
+		Camera* const deathCam = _parent->getMap()->getCamera();
 		if (deathCam->isOnScreen(_unit->getPosition()) == false)
 			deathCam->centerOnPosition(_unit->getPosition());
 
@@ -100,7 +102,7 @@ UnitDieBState::UnitDieBState(
 	if (_unit->getFaction() == FACTION_HOSTILE)
 	{
 		//Log(LOG_INFO) << ". . unit is Faction_Hostile";
-		std::vector<Node*>* nodes = _parent->getSave()->getNodes();
+		std::vector<Node*>* const nodes = _parent->getSave()->getNodes();
 		if (nodes == NULL)
 			return; // this better not happen.
 
@@ -130,7 +132,7 @@ UnitDieBState::~UnitDieBState()
 }
 
 /**
- *
+ * Initializes this state.
  */
 void UnitDieBState::init()
 {

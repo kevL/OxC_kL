@@ -1844,7 +1844,7 @@ void BattleUnit::setEnergy(int energy)
 
 /**
  * Sets whether this unit is visible.
- * @param flag - true if visible
+ * @param flag - true if visible (default true)
  */
 void BattleUnit::setVisible(bool flag)
 {

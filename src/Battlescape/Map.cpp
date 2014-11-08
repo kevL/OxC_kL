@@ -348,8 +348,8 @@ void Map::draw()
 
 	Tile* tile = NULL;
 
-	if (_projectile)
-//kL		&& _save->getSide() == FACTION_PLAYER)
+	if (_projectile != NULL)
+//kL	&& _save->getSide() == FACTION_PLAYER)
 	{
 		//Log(LOG_INFO) << "Map::draw() _projectile = true";
 		tile = _save->getTile(Position(
@@ -417,9 +417,9 @@ void Map::draw()
 
 			drawTerrain(this);
 		}
-		else // "Hidden Movement ..."
+		else
 		{
-			//Log(LOG_INFO) << ". . blit( Hidden Movement ... )";
+			//Log(LOG_INFO) << ". . blit( Hidden Movement )";
 			if (kL_noReveal == false)
 			{
 				SDL_Delay(372);
@@ -469,17 +469,18 @@ void Map::setPalette(
 void Map::drawTerrain(Surface* surface)
 {
 	//Log(LOG_INFO) << "Map::drawTerrain()";
-	BattleUnit* unit	= NULL;
-	NumberText* wpID	= NULL;
-	Surface* tmpSurface	= NULL;
-	Tile* tile			= NULL;
+	BattleUnit* unit = NULL;
+	NumberText* wpID = NULL;
+	Surface* tmpSurface = NULL;
+	Tile* tile = NULL;
+
 	Position
 		mapPosition,
 		screenPosition,
 		bulletScreen;
 
-//kL	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
-//kL	static const int arrowBob[10] = {0,2,3,3,2,0,-2,-3,-3,-2}; // DarkDefender
+//	static const int arrowBob[8] = {0,1,2,1,0,1,2,1};
+//	static const int arrowBob[10] = {0,2,3,3,2,0,-2,-3,-3,-2}; // DarkDefender
 
 	bool invalid = false;
 	int
@@ -508,11 +509,11 @@ void Map::drawTerrain(Surface* surface)
 		endZ = _save->getMapSizeZ() - 1;
 
 
-	if (_projectile // if we got bullet, get the highest x and y tiles to draw it on
+	if (_projectile != NULL // if we got bullet, get the highest x and y tiles to draw it on
 		&& _explosions.empty())
 	{
 		int part = BULLET_SPRITES - 1;
-		if (_projectile->getItem())
+		if (_projectile->getItem() != NULL)
 			part = 0;
 
 		for (int
@@ -553,15 +554,15 @@ void Map::drawTerrain(Surface* surface)
 								_projectile->getPosition(),
 								&bulletScreen);
 
-		if (_projectileInFOV)
+		if (_projectileInFOV == true)
 		{
 			if (Options::battleSmoothCamera)
 			{
-				if (_launch)
+				if (_launch == true)
 				{
 					_launch = false;
 
-					if (bulletScreen.x < 1
+					if (   bulletScreen.x < 1
 						|| bulletScreen.x > surface->getWidth() - 1
 						|| bulletScreen.y < 1
 						|| bulletScreen.y > _visibleMapHeight - 1)
@@ -580,8 +581,8 @@ void Map::drawTerrain(Surface* surface)
 
 				if (_smoothingEngaged == false)
 				{
-					Position target = _projectile->getFinalTarget();	// kL
-					if (_camera->isOnScreen(target) == false			// kL
+					Position target = _projectile->getFinalTarget();
+					if (_camera->isOnScreen(target) == false
 						|| bulletScreen.x < 1
 						|| bulletScreen.x > surface->getWidth() - 1
 						|| bulletScreen.y < 1
@@ -640,7 +641,7 @@ void Map::drawTerrain(Surface* surface)
 											_projectile->getPosition(),
 											&bulletScreen);
 				}
-				while (!enough);
+				while (enough == false);
 			}
 		}
 	}
@@ -676,14 +677,14 @@ void Map::drawTerrain(Surface* surface)
 	if (beginY < 0)
 		beginY = 0;
 
+	const bool
+		pathPreview = _save->getPathfinding()->isPathPreviewed();
 	bool
-		pathPreview = _save->getPathfinding()->isPathPreviewed(),
-//		drawRankIcon;
 		floor,
 		object;
 
 	if (_waypoints.empty() == false
-		|| (pathPreview
+		|| (pathPreview == true
 			&& (_previewSetting & PATH_TU_COST)))
 	{
 		// note: WpID is used for both pathPreview and BL waypoints.
@@ -745,7 +746,6 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					tileColor = tile->getMarkerColor();
-//					drawRankIcon = true;
 					floor = false;
 					object = false;
 
@@ -1241,9 +1241,9 @@ void Map::drawTerrain(Surface* surface)
 						tmpSurface = tile->getSprite(MapData::O_WESTWALL);
 						if (tmpSurface)
 						{
-							if ((tile->getMapData(MapData::O_WESTWALL)->isDoor()
-									|| tile->getMapData(MapData::O_WESTWALL)->isUFODoor())
-								&& tile->isDiscovered(0))
+							if (tile->isDiscovered(0)
+								&& (tile->getMapData(MapData::O_WESTWALL)->isDoor()
+									|| tile->getMapData(MapData::O_WESTWALL)->isUFODoor()))
 							{
 								wallShade = tile->getShade();
 							}
@@ -1261,9 +1261,9 @@ void Map::drawTerrain(Surface* surface)
 						tmpSurface = tile->getSprite(MapData::O_NORTHWALL);
 						if (tmpSurface)
 						{
-							if ((tile->getMapData(MapData::O_NORTHWALL)->isDoor()
-									|| tile->getMapData(MapData::O_NORTHWALL)->isUFODoor())
-								&& tile->isDiscovered(1))
+							if (tile->isDiscovered(1)
+								&& (tile->getMapData(MapData::O_NORTHWALL)->isDoor()
+									|| tile->getMapData(MapData::O_NORTHWALL)->isUFODoor()))
 							{
 								wallShade = tile->getShade();
 							}
@@ -1289,7 +1289,7 @@ void Map::drawTerrain(Surface* surface)
 						if (tile->getMapData(MapData::O_OBJECT)
 							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < 6)
 						{
-							object = true; // kL
+							object = true;
 
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)
@@ -1304,8 +1304,6 @@ void Map::drawTerrain(Surface* surface)
 						int sprite = tile->getTopItemSprite();
 						if (sprite != -1)
 						{
-//							object = true; // kL
-
 							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
 							tmpSurface->blitNShade(
 									surface,
@@ -1324,14 +1322,13 @@ void Map::drawTerrain(Surface* surface)
 								// make sure the rankIcon isn't half-hidden by a westwall directly above the soldier.
 								BattleUnit* buBelow = tileBelow->getUnit();
 								if (buBelow != NULL
-									&& buBelow != _save->getSelectedUnit()
-									&& buBelow->getGeoscapeSoldier() != NULL)
-//									&& buBelow->getUnitRules() == NULL)
-//									&& buBelow->getFaction() == FACTION_PLAYER
-//									&& buBelow->getTurretType() == -1) // no tanks, pls
+									&& buBelow->getGeoscapeSoldier() != NULL
+									&& buBelow != _save->getSelectedUnit())
 								{
 									Position offset;
-									calculateWalkingOffset(buBelow, &offset);
+									calculateWalkingOffset(
+														buBelow,
+														&offset);
 
 									if (buBelow->getFatalWounds() > 0)
 									{
@@ -1389,7 +1386,7 @@ void Map::drawTerrain(Surface* surface)
 					}
 
 					// check if we got bullet && it is in Field Of View
-					if (_projectile)
+					if (_projectile != NULL)
 //kL					&& _projectileInFOV)
 					{
 						tmpSurface = 0;
@@ -1449,19 +1446,21 @@ void Map::drawTerrain(Surface* surface)
 //										i = 0;
 //										i < BULLET_SPRITES;
 //										++i)
-								int begin = 0;
-								int end = BULLET_SPRITES;
-								int direction = 1;
-								if (_projectile->isReversed())
+								int
+									bulletSprite_start = 0,
+									bulletSprite_end = BULLET_SPRITES,
+									direction = 1;
+
+								if (_projectile->isReversed() == true)
 								{
-									begin = BULLET_SPRITES - 1;
-									end = -1;
+									bulletSprite_start = BULLET_SPRITES - 1;
+									bulletSprite_end = -1;
 									direction = -1;
 								}
 
 								for (int
-										i = begin;
-										i != end;
+										i = bulletSprite_start;
+										i != bulletSprite_end;
 										i += direction)
 								{
 									tmpSurface = _projectileSet->getFrame(_projectile->getParticle(i));
@@ -1515,8 +1514,8 @@ void Map::drawTerrain(Surface* surface)
 
 					// Draw soldier
 					unit = tile->getUnit();
-					if (unit
-						&& (unit->getVisible()
+					if (unit != NULL
+						&& (unit->getVisible() == true
 							|| _save->getDebugMode()))
 					{
 						//Log(LOG_INFO) << "draw Soldier ID = " << unit->getId();

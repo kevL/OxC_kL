@@ -4757,7 +4757,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413740606 f:\git\openxcom\src\savegame\savedbattlegame.h
+1415423220 f:\git\openxcom\src\savegame\savedbattlegame.h
 	<algorithm>
 	<iostream>
 	<string>
@@ -5996,7 +5996,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1413874881 f:\git\openxcom\src\ruleset\mapdataset.h
+1415426569 f:\git\openxcom\src\ruleset\mapdataset.h
 	<string>
 	<vector>
 	<SDL.h>
@@ -6444,7 +6444,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1415339895 source:f:\git\openxcom\src\battlescape\map.cpp
+1415420840 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6772,7 +6772,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1414789573 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1415424319 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6806,7 +6806,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1414543494 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
+1415421684 source:f:\git\openxcom\src\battlescape\unitdiebstate.cpp
 	"UnitDieBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6848,7 +6848,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1413136956 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1415410302 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
 	<sstream>
 	"BattlescapeGame.h"
@@ -9571,7 +9571,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1415408280 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1415421631 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>
@@ -9690,7 +9690,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1414971836 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1415423649 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

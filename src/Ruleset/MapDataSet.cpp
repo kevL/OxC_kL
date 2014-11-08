@@ -29,7 +29,7 @@
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Resource/ResourcePack.h"
@@ -70,7 +70,7 @@ MapDataSet::~MapDataSet()
 
 /**
  * Loads the map data set from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void MapDataSet::load(const YAML::Node& node)
 {
@@ -84,8 +84,8 @@ void MapDataSet::load(const YAML::Node& node)
 }
 
 /**
- * Gets the MapDataSet name (string).
- * @return, The MapDataSet name.
+ * Gets the MapDataSet name string.
+ * @return, the MapDataSet name
  */
 std::string MapDataSet::getName() const
 {
@@ -94,7 +94,7 @@ std::string MapDataSet::getName() const
 
 /**
  * Gets the MapDataSet size.
- * @return, The size in number of records.
+ * @return, the size in number of records
  */
 size_t MapDataSet::getSize() const
 {
@@ -103,7 +103,7 @@ size_t MapDataSet::getSize() const
 
 /**
  * Gets the objects in this dataset.
- * @return, Pointer to the objects.
+ * @return, pointer to a vector of pointers to MapData objects
  */
 std::vector<MapData*>* MapDataSet::getObjects()
 {
@@ -112,7 +112,7 @@ std::vector<MapData*>* MapDataSet::getObjects()
 
 /**
  * Gets the surfaces in this dataset.
- * @return, Pointer to the surfaceset.
+ * @return, pointer to the SurfaceSet graphics
  */
 SurfaceSet* MapDataSet::getSurfaceset() const
 {
@@ -120,13 +120,13 @@ SurfaceSet* MapDataSet::getSurfaceset() const
 }
 
 /**
- * Loads terrain data in XCom format (MCD & PCK files).
+ * Loads terrain data in XCom format - MCD & PCK files.
  * @sa http://www.ufopaedia.org/index.php?title=MCD
  */
 void MapDataSet::loadData()
 {
 	//Log(LOG_INFO) << "MapDataSet::loadData()";
-	if (_loaded) // prevents loading twice
+	if (_loaded == true) // prevents loading twice
 		return;
 
 	_loaded = true;
@@ -281,8 +281,8 @@ void MapDataSet::loadData()
 
 	mapFile.close();
 
-	// process the mapdataset to put block values on floortiles (as we don't have em in UFO)
-	for (std::vector<MapData*>::iterator
+	// process the MapDataSet to put 'block' values on floortiles (as they don't exist in UFO::Orig)
+	for (std::vector<MapData*>::const_iterator
 			i = _objects.begin();
 			i != _objects.end();
 			++i)
@@ -290,7 +290,7 @@ void MapDataSet::loadData()
 		if ((*i)->getObjectType() == MapData::O_FLOOR
 			&& (*i)->getBlock(DT_HE) == 0)
 		{
-			int armor = (*i)->getArmor();
+			const int armor = (*i)->getArmor();
 			(*i)->setBlock(
 						1,		// light
 						1,		// LoS
@@ -315,17 +315,16 @@ void MapDataSet::loadData()
 		}
 	}
 
-	// Load terrain sprites/surfaces/PCK files into a surfaceset
+	// Load terrain sprites/surfaces/PCK files into a SurfaceSet.
 	// kL_begin: Let extraSprites override terrain sprites.
 	//Log(LOG_INFO) << ". terrain_PCK = " << _name;
 	std::ostringstream test;
 	test << _name << ".PCK";
-	SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(test.str());
-
-	if (srfSet != NULL)
+	SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet(test.str());
+	if (srt != NULL)
 	{
 		//Log(LOG_INFO) << ". . Overriding terrain SurfaceSet:" << _name << ".PCK";
-		_surfaceSet = srfSet;
+		_surfaceSet = srt;
 	}
 	else // kL_end.
 	{
@@ -349,7 +348,7 @@ void MapDataSet::loadData()
 void MapDataSet::unloadData()
 {
 	//Log(LOG_INFO) << "MapDataSet::unloadData()";
-	if (_loaded)
+	if (_loaded == true)
 	{
 		for (std::vector<MapData*>::iterator
 				i = _objects.begin();
@@ -362,21 +361,23 @@ void MapDataSet::unloadData()
 
 		// kL_begin: but don't delete the extraSprites for terrain!!!
 		// hm what about deleting only the Pointer?? ie, leave the ResourcePack's surfaceSet intact?
-		// Conclusion, seems to work
+		// Conclusion, seems to work ... but gives an assertion failure in VC++ when exiting game after debugging.
 		std::ostringstream test;
 		test << _name << ".PCK";
-		SurfaceSet* srfSet = _game->getResourcePack()->getSurfaceSet(test.str());
+		SurfaceSet* srt = _game->getResourcePack()->getSurfaceSet(test.str());
+		if (srt == NULL)
+			delete _surfaceSet;
 
-		if (srfSet)
+/*		if (srt != NULL)
 		{
 			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet POINTER:" << _name << ".PCK";
-			delete &_surfaceSet;
+			delete &_surfaceSet; // Asserion Failure!
 		}
 		else // kL_end.
 		{
 			//Log(LOG_INFO) << ". Deleting terrain SurfaceSet:" << _name << ".PCK";
 			delete _surfaceSet;
-		}
+		} */
 
 		_loaded = false;
 	}
@@ -420,7 +421,7 @@ void MapDataSet::loadLOFTEMPS(
 
 /**
  * Gets a blank floor tile.
- * @return Pointer to a blank tile.
+ * @return, pointer to blank tile MapData
  */
 MapData* MapDataSet::getBlankFloorTile()
 {
@@ -429,7 +430,7 @@ MapData* MapDataSet::getBlankFloorTile()
 
 /**
  * Gets a scorched earth tile.
- * @return Pointer to a scorched earth tile.
+ * @return, pointer to scorched earth tile MapData
  */
 MapData* MapDataSet::getScorchedEarthTile()
 {

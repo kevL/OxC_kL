@@ -338,7 +338,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 
 	bool ret = false;
 
-	size_t preVisUnits = unit->getUnitsSpottedThisTurn().size();
+	const size_t preVisUnits = unit->getUnitsSpottedThisTurn().size();
 
 	int dir;
 	if (Options::strafe
@@ -349,9 +349,9 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 	else
 		dir = unit->getDirection();
 
-	bool swap = (dir == 0 || dir == 4);
+	const bool swap = (dir == 0 || dir == 4);
 
-	int
+	const int
 		sign_x[8] = { 1, 1, 1, 1,-1,-1,-1,-1},
 		sign_y[8] = {-1,-1, 1, 1, 1, 1,-1,-1};
 
@@ -377,8 +377,8 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 				- _battleSave->getTile(unitPos)->getTerrainLevel()
 			>= 28)
 	{
-		Tile* aboveTile = _battleSave->getTile(unitPos + Position(0, 0, 1));
-		if (aboveTile
+		Tile* const aboveTile = _battleSave->getTile(unitPos + Position(0, 0, 1));
+		if (aboveTile != NULL
 			&& aboveTile->hasNoFloor(NULL))
 		{
 			unitPos.z++;
@@ -411,21 +411,21 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 				const int distSqr = x * x + y * y + z * z;
 				if (distSqr <= MAX_VIEW_DISTANCE * MAX_VIEW_DISTANCE)
 				{
-					int
+					const int
 						deltaPos_x = (sign_x[dir] * (swap? y: x)),
 						deltaPos_y = (sign_y[dir] * (swap? x: y));
 
 					testPos.x = unitPos.x + deltaPos_x;
 					testPos.y = unitPos.y + deltaPos_y;
 
-					if (_battleSave->getTile(testPos))
+					if (_battleSave->getTile(testPos) != NULL)
 					{
-						BattleUnit* seenUnit = _battleSave->getTile(testPos)->getUnit();
-						if (seenUnit
+						BattleUnit* const seenUnit = _battleSave->getTile(testPos)->getUnit();
+						if (seenUnit != NULL
 							&& seenUnit->isOut(true, true) == false
 							&& visible(
 									unit,
-									_battleSave->getTile(testPos)))
+									_battleSave->getTile(testPos)) == true)
 						{
 							if (seenUnit->getVisible() == false)
 								ret = true;
@@ -438,18 +438,18 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 									seenUnit->setVisible();
 							}
 
-							if ((seenUnit->getFaction() == FACTION_HOSTILE
-									&& unit->getFaction() == FACTION_PLAYER)
-								|| (seenUnit->getFaction() != FACTION_HOSTILE
-									&& unit->getFaction() == FACTION_HOSTILE))
+							if ((unit->getFaction() == FACTION_PLAYER
+									&& seenUnit->getFaction() == FACTION_HOSTILE)
+								|| (unit->getFaction() == FACTION_HOSTILE
+									&& seenUnit->getFaction() != FACTION_HOSTILE))
 							{
 								// adds seenUnit to _visibleUnits *and* to _unitsSpottedThisTurn:
 								unit->addToVisibleUnits(seenUnit);
 								unit->addToVisibleTiles(seenUnit->getTile());
 
-								if (unit->getFaction() == FACTION_HOSTILE
-									&& seenUnit->getFaction() != FACTION_HOSTILE
-									&& _battleSave->getSide() == FACTION_HOSTILE)
+								if (_battleSave->getSide() == FACTION_HOSTILE
+									&& unit->getFaction() == FACTION_HOSTILE
+									&& seenUnit->getFaction() != FACTION_HOSTILE)
 								{
 									seenUnit->setTurnsExposed(0);	// note that xCom agents can be seen by enemies but *not* become Exposed.
 																	// Only reactionFire should set them Exposed during xCom's turn.
@@ -462,7 +462,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 							// this sets tiles to discovered if they are in LOS -
 							// tile visibility is not calculated in voxelspace but in tilespace;
 							// large units have "4 pair of eyes"
-							int unitSize = unit->getArmor()->getSize();
+							const int unitSize = unit->getArmor()->getSize();
 							for (int
 									size_x = 0;
 									size_x < unitSize;
@@ -475,17 +475,17 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 								{
 									_trajectory.clear();
 
-									Position sizedPos = unitPos + Position(
-																		size_x,
-																		size_y,
-																		0);
-									int test = calculateLine(
-															sizedPos,
-															testPos,
-															true,
-															&_trajectory,
-															unit,
-															false);
+									const Position sizedPos = unitPos + Position(
+																			size_x,
+																			size_y,
+																			0);
+									const int test = calculateLine(
+																sizedPos,
+																testPos,
+																true,
+																&_trajectory,
+																unit,
+																false);
 
 									size_t trajSize = _trajectory.size();
 
@@ -503,7 +503,7 @@ bool TileEngine::calculateFOV(BattleUnit* unit)
 										Position trajPos = _trajectory.at(i);
 
 										// mark every tile of line as visible (this is needed because of bresenham narrow stroke).
-										Tile* visTile = _battleSave->getTile(trajPos);
+										Tile* const visTile = _battleSave->getTile(trajPos);
 										visTile->setVisible();
 										visTile->setDiscovered(true, 2); // sprite caching for floor+content, ergo + west & north walls.
 
@@ -664,9 +664,9 @@ void TileEngine::calculateFOV(const Position& position)
 			i != _battleSave->getUnits()->end();
 			++i)
 	{
-		int dist = distance(
-						position,
-						(*i)->getPosition());
+		const int dist = distance(
+								position,
+								(*i)->getPosition());
 		if (dist <= MAX_VIEW_DISTANCE)
 			calculateFOV(*i);
 	}
