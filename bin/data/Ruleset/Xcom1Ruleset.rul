@@ -4526,7 +4526,7 @@ units:
     standHeight: 18
     kneelHeight: 18
     value: 15
-    deathSound: 48
+    deathSound: 71 #was 48
     intelligence: 1
     aggression: 2
     energyRecovery: 40
@@ -8839,6 +8839,7 @@ extraSounds:
       53: Resources/Sounds/53_blasterlaunch.WAV
       54: Resources/Sounds/54_stunrod.WAV
       70: Resources/Sounds/extra/move_hover.ogg
+      71: Resources/Sounds/extra/death_sectoid.ogg
       101: Resources/Sounds/Tactical/sFx_voice/death/f/vs_fx0huskf_hit2.wav
       102: Resources/Sounds/Tactical/sFx_voice/death/f/vs_nnwgrdf2_hit1.wav
       103: Resources/Sounds/Tactical/sFx_voice/death/f/vs_nprostf2_hit2.wav
