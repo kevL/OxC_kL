@@ -2746,7 +2746,7 @@ bool BattleUnit::checkAmmo()
 			break;
 	}
 
-	if (wrongAmmo)
+	if (wrongAmmo == true)
 		return false; // didn't find any compatible ammo in inventory
 
 	spendTimeUnits(15);
@@ -2786,7 +2786,6 @@ int BattleUnit::getHeight() const
 	return ret;
 }
 
-// kL_begin:
 /**
  * Gets a soldier's Firing experience.
  * @return, firing xp
@@ -2849,7 +2848,6 @@ int BattleUnit::getExpPsiStrength() const
 {
 	return _expPsiStrength;
 }
-// kL_end.
 
 /**
  * Adds one to the reaction exp counter.

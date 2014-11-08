@@ -27,7 +27,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
@@ -60,7 +60,6 @@ AbortMissionState::AbortMissionState(
 		_inExitArea(0),
 		_outExitArea(0)
 {
-	//Log(LOG_INFO) << "Create AbortMissionState";
 	_screen = false;
 
 	_window			= new Window(this, 320, 144, 0, 0);
@@ -84,6 +83,7 @@ AbortMissionState::AbortMissionState(
 
 	centerAllSurfaces();
 
+
 	std::string nextStage;
 	if (_battleGame->getMissionType() != "STR_UFO_GROUND_ASSAULT"
 		&& _battleGame->getMissionType() != "STR_UFO_CRASH_RECOVERY")
@@ -91,7 +91,7 @@ AbortMissionState::AbortMissionState(
 		nextStage = _game->getRuleset()->getDeployment(_battleGame->getMissionType())->getNextStage();
 	}
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleGame->getUnits()->begin();
 			i != _battleGame->getUnits()->end();
 			++i)
@@ -165,7 +165,6 @@ AbortMissionState::AbortMissionState(
  */
 AbortMissionState::~AbortMissionState()
 {
-	//Log(LOG_INFO) << "Delete AbortMissionState";
 }
 
 /**
@@ -174,14 +173,12 @@ AbortMissionState::~AbortMissionState()
  */
 void AbortMissionState::btnOkClick(Action*)
 {
-	//Log(LOG_INFO) << "AbortMissionState::btnOkClick()";
 	_game->popState();
 
 	_battleGame->setAborted(true);
 	_state->finishBattle(
 					true,
 					_inExitArea);
-	//Log(LOG_INFO) << "AbortMissionState::btnOkClick() EXIT";
 }
 
 /**
