@@ -6444,7 +6444,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1415420840 source:f:\git\openxcom\src\battlescape\map.cpp
+1415425850 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -9338,7 +9338,7 @@
 	"MapData.h"
 	"../Engine/Logger.h"
 
-1413874894 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
+1415427630 source:f:\git\openxcom\src\ruleset\mapdataset.cpp
 	"MapDataSet.h"
 	<fstream>
 	<sstream>
@@ -9347,7 +9347,6 @@
 	"../Engine/CrossPlatform.h"
 	"../Engine/Exception.h"
 	"../Engine/Game.h"
-	"../Engine/Logger.h"
 	"../Engine/SurfaceSet.h"
 	"../Resource/ResourcePack.h"
 
@@ -9690,7 +9689,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1415423649 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1415425850 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

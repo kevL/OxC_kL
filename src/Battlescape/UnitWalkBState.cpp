@@ -1141,8 +1141,8 @@ void UnitWalkBState::playMovementSound()
 		if (_unit->getStatus() == STATUS_WALKING)
 		{
 			Tile
-				* tile = _unit->getTile(),
-				* belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0,-1));
+				* const tile = _unit->getTile(),
+				* const belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0,-1));
 
 			if (_unit->getWalkingPhase() == 3) // play footstep sound 1
 			{
@@ -1157,12 +1157,13 @@ void UnitWalkBState::playMovementSound()
 		}
 		else if (_unit->getStatus() == STATUS_FLYING)
 		{
-			if (_unit->getWalkingPhase() == 1)
+//			if (_unit->getWalkingPhase() == 1)
+			if (_unit->getTrueWalkingPhase() == 1)
 			{
-				if (_falling)
+				if (_falling == true)
 				{
-					if (_unit->getTrueWalkingPhase() == 1
-						&& groundCheck(1))
+//					if (_unit->getTrueWalkingPhase() == 1
+					if (groundCheck(1))
 					{
 						sound = ResourcePack::ITEM_DROP;		// thunk.
 					}
