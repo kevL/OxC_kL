@@ -379,7 +379,7 @@ void ExplosionBState::think()
 			++i;
 	}
 
-	if (_parent->getMap()->getExplosions()->empty())
+	if (_parent->getMap()->getExplosions()->empty() == true)
 		_extend--; // not working as intended; needs to go to Explosion class, so that explosions-vector doesn't 'empty' so fast.
 
 	if (_extend < 1)
@@ -435,10 +435,10 @@ void ExplosionBState::explode()
 
 	// kL_note: melee Hit success/failure, and hit/miss sound-FX, are determined in ProjectileFlyBState.
 
-	SavedBattleGame* save = _parent->getSave();
-	TileEngine* tileEngine = save->getTileEngine();
+	SavedBattleGame* const save = _parent->getSave();
+	TileEngine* const tileEngine = save->getTileEngine();
 
-	if (_hit)
+	if (_hit == true)
 	{
 		// kL_note: Try moving this to TileEngine::hit()
 		// so I can tell whether Firing XP is to be awarded or not, there.
@@ -458,7 +458,7 @@ void ExplosionBState::explode()
 		{
 			_unit->addMeleeExp(); // 1xp for swinging
 
-			if (_hitSuccess)
+			if (_hitSuccess == true)
 			{
 				BattleUnit* targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
 				if (targetUnit
@@ -478,16 +478,16 @@ void ExplosionBState::explode()
 		}
 	}
 
-	if (_item)
+	if (_item != NULL)
 	{
 		//Log(LOG_INFO) << ". _item is VALID";
 		if (_unit == NULL
-			&& _item->getPreviousOwner())
+			&& _item->getPreviousOwner() != NULL)
 		{
 			_unit = _item->getPreviousOwner();
 		}
 
-		if (_areaOfEffect)
+		if (_areaOfEffect == true)
 		{
 			//Log(LOG_INFO) << ". . AoE, TileEngine::explode()";
 			tileEngine->explode(

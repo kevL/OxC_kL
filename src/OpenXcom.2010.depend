@@ -5821,7 +5821,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1415506554 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1415511811 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6326,7 +6326,7 @@
 1413726104 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1415335454 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1415514680 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6485,7 +6485,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1413136956 f:\git\openxcom\src\battlescape\projectile.h
+1415516485 f:\git\openxcom\src\battlescape\projectile.h
 	<vector>
 	"BattlescapeGame.h"
 	"Position.h"
@@ -6666,7 +6666,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1414814678 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1415516485 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"Map.h"
@@ -6693,7 +6693,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1415507165 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1415516506 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6772,7 +6772,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1415424319 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1415514389 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6912,7 +6912,7 @@
 1413136957 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1415505591 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1415512277 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -9570,7 +9570,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1415507893 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1415515300 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

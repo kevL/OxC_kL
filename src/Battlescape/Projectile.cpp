@@ -106,13 +106,13 @@ Projectile::Projectile(
 
 			if (ammo != NULL) // try to get all the required info from the ammo, if present
 			{
-				_bulletSprite		= ammo->getRules()->getBulletSprite();
-				_vaporColor			= ammo->getRules()->getVaporColor();
-				_vaporDensity		= ammo->getRules()->getVaporDensity();
-				_vaporProbability	= ammo->getRules()->getVaporProbability();
-				_speed				= std::max(
-											1,
-											_speed + ammo->getRules()->getBulletSpeed());
+				_bulletSprite = ammo->getRules()->getBulletSprite();
+				_vaporColor = ammo->getRules()->getVaporColor();
+				_vaporDensity = ammo->getRules()->getVaporDensity();
+				_vaporProbability = ammo->getRules()->getVaporProbability();
+				_speed = std::max(
+								1,
+								_speed + ammo->getRules()->getBulletSpeed());
 			}
 
 			// no ammo, or the ammo didn't contain the info we wanted, see what the weapon has on offer.
@@ -200,17 +200,16 @@ int Projectile::calculateTrajectory(
 	//Log(LOG_INFO) << "Projectile::calculateTrajectory()";
 	//Log(LOG_INFO) << ". originVoxel = " << originVoxel;
 
-	Tile* targetTile = _save->getTile(_action.target);
-	BattleUnit* targetUnit = targetTile->getUnit();
+	const Tile* const targetTile = _save->getTile(_action.target);
+	const BattleUnit* const targetUnit = targetTile->getUnit();
 
-	BattleUnit* actor = _action.actor;
-
-	int test = _save->getTileEngine()->calculateLine(
-												originVoxel,
-												_targetVoxel,
-												false,
-												&_trajectory,
-												actor);
+	BattleUnit* const actor = _action.actor;
+	const int test = _save->getTileEngine()->calculateLine(
+														originVoxel,
+														_targetVoxel,
+														false,
+														&_trajectory,
+														actor);
 	if (test != VOXEL_EMPTY
 		&& _trajectory.empty() == false
 		&& _action.actor->getFaction() == FACTION_PLAYER // kL_note: so aLiens don't even get in here!
@@ -227,7 +226,7 @@ int Projectile::calculateTrajectory(
 		//Log(LOG_INFO) << ". hitPos = " << hitPos;
 
 		if (test == VOXEL_UNIT
-			&& _save->getTile(hitPos)
+			&& _save->getTile(hitPos) != NULL
 			&& _save->getTile(hitPos)->getUnit() == NULL)
 		{
 			hitPos = Position( // must be poking head up from belowTile
@@ -237,7 +236,7 @@ int Projectile::calculateTrajectory(
 		}
 
 		if (hitPos != _action.target
-			&& _action.result.empty())
+			&& _action.result.empty() == true)
 		{
 			if (test == VOXEL_NORTHWALL)
 			{
@@ -257,9 +256,9 @@ int Projectile::calculateTrajectory(
 			}
 			else if (test == VOXEL_UNIT)
 			{
-				BattleUnit* hitUnit = _save->getTile(hitPos)->getUnit();
+				const BattleUnit* const hitUnit = _save->getTile(hitPos)->getUnit();
 				if (hitUnit != targetUnit
-					&& hitUnit->getVisible())
+					&& hitUnit->getVisible() == true)
 				{
 					_trajectory.clear();
 					return VOXEL_EMPTY;
@@ -289,10 +288,10 @@ int Projectile::calculateTrajectory(
 	} */
 
 	// apply some accuracy modifiers. This will result in a new target voxel:
-	if (targetUnit
-		&& targetUnit->getDashing())
+	if (targetUnit != NULL
+		&& targetUnit->getDashing() == true)
 	{
-		accuracy -= 0.17;
+		accuracy -= 0.18;
 		//Log(LOG_INFO) << ". . . . targetUnit " << targetUnit->getId() << " is Dashing!!! accuracy = " << accuracy;
 	}
 
@@ -767,7 +766,7 @@ void Projectile::applyAccuracy(
  * Moves further along the trajectory-path.
  * @return, true while trajectory is pathing; false when finished - no new position exists in the trajectory vector
  */
-bool Projectile::move()
+bool Projectile::traceProjectile()
 {
 	for (int
 			i = 0;
@@ -862,7 +861,7 @@ Surface* Projectile::getSprite() const
 void Projectile::skipTrajectory()
 {
 //	_position = _trajectory.size() - 1; // kL, old
-	while (move()); // new
+	while (traceProjectile()); // new
 }
 
 /**
@@ -911,8 +910,8 @@ bool Projectile::isReversed() const
  */
 void Projectile::addVaporCloud()
 {
-	Tile* tile = _save->getTile(_trajectory.at(_position) / Position(16, 16, 24));
-	if (tile)
+	Tile* const tile = _save->getTile(_trajectory.at(_position) / Position(16, 16, 24));
+	if (tile != NULL)
 	{
 		Position
 			tilePos,
@@ -931,12 +930,12 @@ void Projectile::addVaporCloud()
 				i != _vaporDensity;
 				++i)
 		{
-			Particle* particle = new Particle(
-											static_cast<float>(voxelPos.x - tilePos.x + RNG::generate(0, 6) - 3),
-											static_cast<float>(voxelPos.y - tilePos.y + RNG::generate(0, 6) - 3),
-											static_cast<float>(RNG::generate(64, 214)),
-											_vaporColor,
-											19);
+			Particle* const particle = new Particle(
+												static_cast<float>(voxelPos.x - tilePos.x + RNG::generate(0, 6) - 3),
+												static_cast<float>(voxelPos.y - tilePos.y + RNG::generate(0, 6) - 3),
+												static_cast<float>(RNG::generate(64, 214)),
+												static_cast<Uint8>(_vaporColor),
+												19);
 			tile->addParticle(particle);
 		}
 	}

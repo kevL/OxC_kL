@@ -37,8 +37,10 @@ class Tile;
 
 
 /**
- * A class that represents a projectile. Map is the owner of an instance of this class during its short life.
- * It calculates its own trajectory and then moves along this precalculated trajectory in voxel space.
+ * A class that represents a projectile.
+ * Map is the owner of an instance of this class during its short life. It
+ * calculates its own trajectory and then moves along this precalculated
+ * trajectory in voxel space.
  */
 class Projectile
 {
@@ -94,7 +96,7 @@ private:
 		int calculateThrow(double accuracy);
 
 		/// Moves the projectile one step in its trajectory.
-		bool move();
+		bool traceProjectile();
 
 		/// Gets the current position in voxel space.
 		Position getPosition(int offset = 0) const;

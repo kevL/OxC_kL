@@ -1873,7 +1873,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
 	bool addUnit = true;
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _unitsSpottedThisTurn.begin();
 			i != _unitsSpottedThisTurn.end();
 			++i)
@@ -1890,7 +1890,7 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 		_unitsSpottedThisTurn.push_back(unit);
 
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _visibleUnits.begin();
 			i != _visibleUnits.end();
 			++i)

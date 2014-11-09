@@ -165,7 +165,7 @@ void ProjectileFlyBState::init()
 	// **** The first 4 of these SHOULD NEVER happen ****
 	// the 4th is wtf: tu ought be spent for this already.
 	// They should be coded with a tuRefund() function regardless.
-	if (_unit->isOut(true, true) == true
+	if (_unit->isOut(true, true) == true)
 //		|| _unit->getStatus() == STATUS_DISABLED)
 //		|| _unit->getHealth() == 0
 //		|| _unit->getHealth() < _unit->getStun())
@@ -533,7 +533,7 @@ void ProjectileFlyBState::init()
 		}
 	}
 
-	if (createNewProjectile())
+	if (createNewProjectile() == true)
 	{
 		_parent->getMap()->setCursorType(CT_NONE);
 		_parent->getMap()->getCamera()->stopMouseScrolling();
@@ -864,7 +864,7 @@ void ProjectileFlyBState::think()
 			_parent->getMap()->getProjectile()->skipTrajectory();
 		}
 
-		if (_parent->getMap()->getProjectile()->move() == false)
+		if (_parent->getMap()->getProjectile()->traceProjectile() == false)
 		{
 			if (_action.type == BA_THROW)
 			{
@@ -924,7 +924,7 @@ void ProjectileFlyBState::think()
 				_action.target = _action.waypoints.front();
 
 				// launch the next projectile in the waypoint cascade
-				ProjectileFlyBState* nextWaypoint = new ProjectileFlyBState(
+				ProjectileFlyBState* const nextWaypoint = new ProjectileFlyBState(
 																		_parent,
 																		_action,
 																		_origin);
@@ -1015,11 +1015,11 @@ void ProjectileFlyBState::think()
 
 									if (_projectileImpact != VOXEL_OUTOFBOUNDS) // insert an explosion and hit
 									{
-										Explosion* explosion = new Explosion(
-																		proj->getPosition(1),
-																		_ammo->getRules()->getHitAnimation());
+										Explosion* const expl = new Explosion(
+																			proj->getPosition(1),
+																			_ammo->getRules()->getHitAnimation());
 
-										_parent->getMap()->getExplosions()->push_back(explosion);
+										_parent->getMap()->getExplosions()->push_back(expl);
 										//Log(LOG_INFO) << "ProjectileFlyBState::think() shotHIT = " << (i + 1);
 										_parent->getSave()->getTileEngine()->hit(
 																				proj->getPosition(1),
@@ -1148,29 +1148,19 @@ void ProjectileFlyBState::think()
 }
 
 /**
- * Flying projectiles cannot be cancelled, but they can be "skipped".
+ * Flying projectiles cannot be cancelled, but they can be skipped.
  */
 void ProjectileFlyBState::cancel()
 {
-	Projectile* projectile = _parent->getMap()->getProjectile();
-	if (projectile)
+	Projectile* const projectile = _parent->getMap()->getProjectile();
+	if (projectile != NULL)
 	{
 		projectile->skipTrajectory();
 
-		Position pos = projectile->getPosition();
-		Camera* camera = _parent->getMap()->getCamera();
-		if (camera->isOnScreen(Position(
-										pos.x / 16,
-										pos.y / 16,
-										pos.z / 24))
-//kL									false))
-									== false)
-		{
-			camera->centerOnPosition(Position(
-											pos.x / 16,
-											pos.y / 16,
-											pos.z / 24));
-		}
+		Camera* const camera = _parent->getMap()->getCamera();
+		const Position projPos = projectile->getPosition() / Position(16, 16, 24);
+		if (camera->isOnScreen(projPos) == false)
+			camera->centerOnPosition(projPos);
 	}
 }
 
