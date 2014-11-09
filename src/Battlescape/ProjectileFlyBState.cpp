@@ -150,7 +150,7 @@ void ProjectileFlyBState::init()
 	_parent->getCurrentAction()->takenXP = false; // HOW MANY CURRENT_ACTIONS ARE GOING ON HERE !!!!!
 // 	_action.takenXP = false;	// this is valid but meaningless .....
 								// so '_action'  must be a copy ... not the original that's needed,
-								// as things go to TileEngine, when 'takenXP' is really useful!!!
+								// as things go to TileEngine, where 'takenXP' is really useful!!!
 
 //	Log(LOG_INFO) << ". POST parent->takenXP = " << _parent->getCurrentAction()->takenXP;
 //	Log(LOG_INFO) << ". POST takenXP = " << _action.takenXP;
@@ -159,17 +159,18 @@ void ProjectileFlyBState::init()
 	_unit = _action.actor;
 
 	//Log(LOG_INFO) << "projFlyB unitPos = " << _unit->getPosition();
-	if (_action.weapon != NULL) // kL
+	if (_action.weapon != NULL)
 		_ammo = _action.weapon->getAmmoItem(); // _ammo is the weapon itself, if self-powered or BT_MELEE.
 
 	// **** The first 4 of these SHOULD NEVER happen ****
 	// the 4th is wtf: tu ought be spent for this already.
 	// They should be coded with a tuRefund() function regardless.
-	if (_unit->isOut(true, true) == true)
+	if (_unit->isOut(true, true) == true
+//		|| _unit->getStatus() == STATUS_DISABLED)
 //		|| _unit->getHealth() == 0
 //		|| _unit->getHealth() < _unit->getStun())
 	{
-		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
+		// Something went wrong - can't shoot when dead or unconscious, or about to fall over.
 		//Log(LOG_INFO) << ". actor is Out, EXIT";
 		_unit->setStopShot(false);
 
@@ -206,26 +207,20 @@ void ProjectileFlyBState::init()
 		_parent->popState();
 		return;
 	}
-	// kL_begin: ProjectileFlyBState::init() Give back time units; pre-end Reaction Fire. +stopShot!!
 	else if (_unit->getStopShot() == true)
 	{
-		// do I have to refund TU's for this??? YES. done
-		// when are TU subtracted for a primaryAction firing/throwing action?
+		// TU are subtracted for a primaryAction firing/throwing
+		// BattleAction in BattlescapeGame::popState();
+		// that is, these refunds tend to increase a unit's TU past
+		// their maximum, then subtract it again in popState().
 		_unit->setStopShot(false);
 
-		//Log(LOG_INFO) << " Actor currentTU = " << _action.actor->getTimeUnits();
-		//Log(LOG_INFO) << " Unit currentTU = " << _unit->getTimeUnits();
+		//Log(LOG_INFO) << ". current_TU = " << _unit->getTimeUnits();
 		//Log(LOG_INFO) << ". action.TU = " << _action.TU;
-		//Log(LOG_INFO) << ". actionTU = " << _unit->getActionTUs(_action.type, _action.weapon);
 		_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-//		_unit->setTimeUnits(_unit->getTimeUnits()
-//									+ _unit->getActionTUs(
-//													_action.type,
-//													_action.weapon));
-		//Log(LOG_INFO) << ". current.TU = " << _unit->getTimeUnits();
 
-		_parent->popState();
 		//Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs. EXIT";
+		_parent->popState();
 		return;
 	}
 	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
@@ -238,32 +233,25 @@ void ProjectileFlyBState::init()
 				|| targetUnit != _parent->getSave()->getSelectedUnit())
 			{
 				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-//				_unit->setTimeUnits(_unit->getTimeUnits()
-//											+ _unit->getActionTUs(
-//															_action.type,
-//															_action.weapon));
-				_parent->popState();
+
 				//Log(LOG_INFO) << ". . . reactionFire refund (targetUnit exists) EXIT";
+				_parent->popState();
 				return;
 			}
 		}
 		else
 		{
 			_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-//			_unit->setTimeUnits(_unit->getTimeUnits()
-//										+ _unit->getActionTUs(
-//														_action.type,
-//														_action.weapon));
-			_parent->popState();
+
 			//Log(LOG_INFO) << ". . reactionFire refund (no targetUnit) EXIT";
+			_parent->popState();
 			return;
-		} // kL_end.
+		}
 	}
 
 
 	// autoshot will default back to snapshot if it's not possible
-	// kL_note: should this be done *before* tu expenditure?!! Ok it is,
-	// popState() does tu costs
+	// kL_note: This shouldn't happen w/ selectFireMethod() properly in place.
 	if (_action.type == BA_AUTOSHOT
 		&& _action.weapon->getRules()->getAccuracyAuto() == 0)
 	{
@@ -313,8 +301,7 @@ void ProjectileFlyBState::init()
 																			// But this is just stupid. RuleItem defaults _maxRange @ 200
 				_parent->getTileEngine()->distance(
 												_unit->getPosition(),
-												_action.target)
-											> _action.weapon->getRules()->getMaxRange())
+												_action.target) > _action.weapon->getRules()->getMaxRange())
 /*			else // kL_begin:
 			{
 				int dist = _parent->getTileEngine()->distance(
