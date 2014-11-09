@@ -1823,8 +1823,8 @@ void BattleUnit::setTimeUnits(int tu)
 	else
 		_tu = tu;
 
-	if (_tu > getStats()->tu) // this might screw up ArmorBonus +tu
-		_tu = getStats()->tu;
+//	if (_tu > getStats()->tu) // this might screw up ArmorBonus +tu
+//		_tu = getStats()->tu; // it definitely screws up stopShot.
 }
 
 /**
@@ -2127,11 +2127,7 @@ void BattleUnit::prepareUnitTurn()
 {
 	//Log(LOG_INFO) << "BattleUnit::prepareUnitTurn() ID " << getId();
 	_faction = _originalFaction;
-	//Log(LOG_INFO) << ". _stopShot is " << _stopShot << " setFALSE";
-	//_stopShot = false;
-
 	_unitsSpottedThisTurn.clear();
-
 
 	int prepTU = getStats()->tu;
 
@@ -2156,7 +2152,6 @@ void BattleUnit::prepareUnitTurn()
 			stamina = getStats()->stamina,
 			enron = stamina;
 
-//		if (_turretType == -1) // is NOT xCom Tank (which get 4/5ths energy-recovery below_).
 		if (_faction == FACTION_PLAYER)
 		{
 			if (_geoscapeSoldier != NULL)

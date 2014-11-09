@@ -5821,7 +5821,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1414971424 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1415506554 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6693,7 +6693,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1415335350 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1415507165 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6912,7 +6912,7 @@
 1413136957 f:\git\openxcom\src\engine\shadermove.h
 	"ShaderDraw.h"
 
-1413136956 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
+1415505591 source:f:\git\openxcom\src\battlescape\unitturnbstate.cpp
 	"UnitTurnBState.h"
 	"BattlescapeState.h"
 	"Map.h"
@@ -6927,7 +6927,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1415471321 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1415483283 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -8138,7 +8138,7 @@
 1413136958 f:\git\openxcom\src\geoscape\targetinfostate.h
 	"../Engine/State.h"
 
-1413136958 source:f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.cpp
+1415474789 source:f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.cpp
 	"NewPossibleManufactureState.h"
 	"../Basescape/ManufactureState.h"
 	"../Engine/Game.h"
@@ -8153,7 +8153,7 @@
 	"../Ruleset/RuleManufacture.h"
 	"../Savegame/Base.h"
 
-1413136958 source:f:\git\openxcom\src\geoscape\newpossibleresearchstate.cpp
+1415474789 source:f:\git\openxcom\src\geoscape\newpossibleresearchstate.cpp
 	"NewPossibleResearchState.h"
 	<algorithm>
 	"../Basescape/ResearchState.h"
@@ -9570,7 +9570,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1415421631 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1415507893 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

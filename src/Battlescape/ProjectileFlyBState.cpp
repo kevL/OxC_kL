@@ -165,13 +165,13 @@ void ProjectileFlyBState::init()
 	// **** The first 4 of these SHOULD NEVER happen ****
 	// the 4th is wtf: tu ought be spent for this already.
 	// They should be coded with a tuRefund() function regardless.
-	if (_unit->isOut(true, true))
+	if (_unit->isOut(true, true) == true)
 //		|| _unit->getHealth() == 0
 //		|| _unit->getHealth() < _unit->getStun())
 	{
 		// something went wrong - we can't shoot when dead or unconscious, or if we're about to fall over.
 		//Log(LOG_INFO) << ". actor is Out, EXIT";
-		_unit->setStopShot(false); // kL
+		_unit->setStopShot(false);
 
 		_parent->popState();
 		return;
@@ -181,7 +181,7 @@ void ProjectileFlyBState::init()
 										// relax i fixed it.
 	{
 		//Log(LOG_INFO) << ". no weapon, EXIT";
-		_unit->setStopShot(false); // kL
+		_unit->setStopShot(false);
 
 		_parent->popState();
 		return;
@@ -189,7 +189,7 @@ void ProjectileFlyBState::init()
 	else if (_parent->getSave()->getTile(_action.target) == NULL) // invalid target position
 	{
 		//Log(LOG_INFO) << ". no targetPos, EXIT";
-		_unit->setStopShot(false); // kL
+		_unit->setStopShot(false);
 
 		_parent->popState();
 		return;
@@ -201,39 +201,47 @@ void ProjectileFlyBState::init()
 	{
 		//Log(LOG_INFO) << ". not enough time units, EXIT";
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-		_unit->setStopShot(false); // kL
+		_unit->setStopShot(false);
 
 		_parent->popState();
 		return;
 	}
 	// kL_begin: ProjectileFlyBState::init() Give back time units; pre-end Reaction Fire. +stopShot!!
-	else if (_unit->getStopShot())
+	else if (_unit->getStopShot() == true)
 	{
 		// do I have to refund TU's for this??? YES. done
 		// when are TU subtracted for a primaryAction firing/throwing action?
 		_unit->setStopShot(false);
 
-		_unit->setTimeUnits(_unit->getTimeUnits()
-									+ _unit->getActionTUs(
-													_action.type,
-													_action.weapon));
+		//Log(LOG_INFO) << " Actor currentTU = " << _action.actor->getTimeUnits();
+		//Log(LOG_INFO) << " Unit currentTU = " << _unit->getTimeUnits();
+		//Log(LOG_INFO) << ". action.TU = " << _action.TU;
+		//Log(LOG_INFO) << ". actionTU = " << _unit->getActionTUs(_action.type, _action.weapon);
+		_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
+//		_unit->setTimeUnits(_unit->getTimeUnits()
+//									+ _unit->getActionTUs(
+//													_action.type,
+//													_action.weapon));
+		//Log(LOG_INFO) << ". current.TU = " << _unit->getTimeUnits();
+
 		_parent->popState();
 		//Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs. EXIT";
 		return;
 	}
 	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
 	{
-		BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
-		if (targetUnit)
+		const BattleUnit* const targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
+		if (targetUnit != NULL)
 		{
 			if (_ammo == NULL
-				|| targetUnit->isOut(true, true)
+				|| targetUnit->isOut(true, true) == true
 				|| targetUnit != _parent->getSave()->getSelectedUnit())
 			{
-				_unit->setTimeUnits(_unit->getTimeUnits()
-											+ _unit->getActionTUs(
-															_action.type,
-															_action.weapon));
+				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
+//				_unit->setTimeUnits(_unit->getTimeUnits()
+//											+ _unit->getActionTUs(
+//															_action.type,
+//															_action.weapon));
 				_parent->popState();
 				//Log(LOG_INFO) << ". . . reactionFire refund (targetUnit exists) EXIT";
 				return;
@@ -241,15 +249,17 @@ void ProjectileFlyBState::init()
 		}
 		else
 		{
-			_unit->setTimeUnits(_unit->getTimeUnits()
-										+ _unit->getActionTUs(
-														_action.type,
-														_action.weapon));
+			_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
+//			_unit->setTimeUnits(_unit->getTimeUnits()
+//										+ _unit->getActionTUs(
+//														_action.type,
+//														_action.weapon));
 			_parent->popState();
 			//Log(LOG_INFO) << ". . reactionFire refund (no targetUnit) EXIT";
 			return;
 		} // kL_end.
 	}
+
 
 	// autoshot will default back to snapshot if it's not possible
 	// kL_note: should this be done *before* tu expenditure?!! Ok it is,
@@ -273,7 +283,8 @@ void ProjectileFlyBState::init()
 		_action.type = BA_HIT;
 	}
 
-	Tile* endTile = _parent->getSave()->getTile(_action.target);
+
+	const Tile* const endTile = _parent->getSave()->getTile(_action.target);
 
 	switch (_action.type)
 	{
@@ -338,7 +349,7 @@ void ProjectileFlyBState::init()
 				return;
 			}
 
-			if (endTile
+			if (endTile != NULL
 				&& endTile->getTerrainLevel() == -24
 				&& endTile->getPosition().z + 1 < _parent->getSave()->getMapSizeZ())
 			{
@@ -469,8 +480,7 @@ void ProjectileFlyBState::init()
 													targetTile,
 													MapData::O_OBJECT,
 													&_targetVoxel,
-													_unit)
-												== false)
+													_unit) == false)
 			{
 				_targetVoxel = Position(
 									_action.target.x * 16 + 8,
@@ -486,8 +496,7 @@ void ProjectileFlyBState::init()
 													targetTile,
 													MapData::O_NORTHWALL,
 													&_targetVoxel,
-													_unit)
-												== false)
+													_unit) == false)
 			{
 				_targetVoxel = Position(
 									_action.target.x * 16 + 8,
@@ -503,8 +512,7 @@ void ProjectileFlyBState::init()
 													targetTile,
 													MapData::O_WESTWALL,
 													&_targetVoxel,
-													_unit)
-												== false)
+													_unit) == false)
 			{
 				_targetVoxel = Position(
 									_action.target.x * 16,
@@ -520,8 +528,7 @@ void ProjectileFlyBState::init()
 													targetTile,
 													MapData::O_FLOOR,
 													&_targetVoxel,
-													_unit)
-												== false)
+													_unit) == false)
 			{
 				_targetVoxel = Position(
 									_action.target.x * 16 + 8,
@@ -548,9 +555,9 @@ void ProjectileFlyBState::init()
 }
 
 /**
- * Tries to create a projectile sprite and add it to the map,
- * calculating its trajectory.
- * @return, True if the projectile was successfully created.
+ * Tries to create a projectile sprite and add it to the map
+ * - calculate its trajectory.
+ * @return, true if the projectile was successfully created
  */
 bool ProjectileFlyBState::createNewProjectile()
 {
@@ -565,21 +572,19 @@ bool ProjectileFlyBState::createNewProjectile()
 		_unit->getStatistics()->shotsFiredCounter++;
 	}
 
-	Projectile* projectile = new Projectile(
-										_parent->getResourcePack(),
-										_parent->getSave(),
-										_action,
-										_origin,
-										_targetVoxel,
-										_ammo);
+	Projectile* const projectile = new Projectile(
+											_parent->getResourcePack(),
+											_parent->getSave(),
+											_action,
+											_origin,
+											_targetVoxel,
+											_ammo);
 
 	_parent->getMap()->setProjectile(projectile); // add the projectile on the map
 
 	// set the speed of the state think cycle to 16 ms (roughly one think-cycle per frame)
-//kL	_parent->setStateInterval(1000/60);
-//	Uint32 interval = static_cast<Uint32>(16);	// kL
-//	_parent->setStateInterval(interval);		// kL
-	_parent->setStateInterval(16);				// kL
+//	_parent->setStateInterval(1000/60);
+	_parent->setStateInterval(16); // kL
 
 	int sound = -1;
 

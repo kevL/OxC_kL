@@ -657,7 +657,13 @@ bool UnitWalkBState::doStatusStand()
 							_onScreen);
 
 			if (_unit->getMoveSound() != -1)
+			{
+				//Log(LOG_INFO) << "doStatusStand() playSound";
+				//Log(LOG_INFO) << ". walkPhase = " << _unit->getWalkingPhase();
+				//Log(LOG_INFO) << ". True walkPhase = " << _unit->getTrueWalkingPhase();
+				//Log(LOG_INFO) << ". pos " << _unit->getPosition();
 				playMovementSound();
+			}
 
 			_preStepTurn = false;
 		}

@@ -1358,10 +1358,10 @@ void BattlescapeGame::statePushBack(BattleState* bs)
 
 /**
  * Removes the current state.
- * This is a very important function. It is called by a BattleState (walking, projectile
- * is flying, explosions,...) at the moment this state has finished its action.
- * Here we check the result of that action and do all the aftermath.
- * The state is popped off the list.
+ * This is a very important function. It is called by a BattleState (walking,
+ * projectile is flying, explosions, etc.) at the moment that state has
+ * finished the current BattleAction. Here we check the result of that
+ * BattleAction and do all the aftermath. The state is popped off the list.
  */
 void BattlescapeGame::popState()
 {
@@ -1372,7 +1372,7 @@ void BattlescapeGame::popState()
 			<< (_save->getSelectedUnit()? _save->getSelectedUnit()->getTimeUnits(): -9999) << " TU";
 	}
 
-	if (_states.empty())
+	if (_states.empty() == true)
 	{
 		//Log(LOG_INFO) << ". states.Empty -> return";
 		return;
@@ -1380,7 +1380,7 @@ void BattlescapeGame::popState()
 
 	bool actionFailed = false;
 
-	BattleAction action = _states.front()->getAction();
+	const BattleAction action = _states.front()->getAction();
 	if (action.actor
 		&& action.actor->getFaction() == FACTION_PLAYER
 		&& action.result.length() > 0 // kL_note: This queries the warning string message.
@@ -1425,8 +1425,8 @@ void BattlescapeGame::popState()
 
 
 	// handle the end of this unit's actions
-	if (action.actor
-		&& noActionsPending(action.actor))
+	if (action.actor != NULL
+		&& noActionsPending(action.actor) == true)
 	{
 		//Log(LOG_INFO) << ". noActionsPending";
 		if (action.actor->getFaction() == FACTION_PLAYER)
@@ -1446,18 +1446,17 @@ void BattlescapeGame::popState()
 			// didn't even Care about TU there until I put it in there, and took
 			// it out here in order to get Reactions vs. shooting to work correctly
 			// (throwing already did work to trigger reactions, somehow).
-			if (action.targeting
+			if (action.targeting == true
 				&& _save->getSelectedUnit()
 				&& actionFailed == false)
 			{
+				//Log(LOG_INFO) << ". . ID " << action.actor->getId() << " currentTU = " << action.actor->getTimeUnits();
 				action.actor->spendTimeUnits(action.TU);
 					// kL_query: Does this happen **before** ReactionFire/getReactor()?
 					// no. not for shooting, but for throwing it does; actually no it doesn't.
 					//
 					// wtf, now RF works fine. NO IT DOES NOT.
-				//Log(LOG_INFO) << ". . ID " << action.actor->getId()
-				//	<< " spendTU = " << action.TU
-				//	<< ", currentTU = " << action.actor->getTimeUnits();
+				//Log(LOG_INFO) << ". . ID " << action.actor->getId() << " currentTU = " << action.actor->getTimeUnits() << " spent TU = " << action.TU;
 			}
 
 			if (_save->getSide() == FACTION_PLAYER)
@@ -1470,7 +1469,7 @@ void BattlescapeGame::popState()
 
 				if (actionFailed == false) // kL_begin:
 				{
-					int curTU = action.actor->getTimeUnits();
+					const int curTU = action.actor->getTimeUnits();
 
 					switch (action.type)
 					{
@@ -1484,8 +1483,7 @@ void BattlescapeGame::popState()
 							if (curTU < action.actor->getActionTUs(
 																BA_SNAPSHOT,
 																action.weapon)
-								|| ( //action.weapon->needsAmmo() == true &&
-									action.weapon->getAmmoItem() != NULL
+								|| (action.weapon->getAmmoItem() != NULL
 									&& action.weapon->getAmmoItem()->getAmmoQuantity() == 0))
 							{
 								cancelCurrentAction(true);
@@ -1496,8 +1494,7 @@ void BattlescapeGame::popState()
 							if (curTU < action.actor->getActionTUs(
 																BA_AUTOSHOT,
 																action.weapon)
-								|| ( //action.weapon->needsAmmo() == true &&
-									action.weapon->getAmmoItem() != NULL
+								|| (action.weapon->getAmmoItem() != NULL
 									&& action.weapon->getAmmoItem()->getAmmoQuantity() == 0))
 							{
 								cancelCurrentAction(true);
@@ -1508,8 +1505,7 @@ void BattlescapeGame::popState()
 							if (curTU < action.actor->getActionTUs(
 																BA_AIMEDSHOT,
 																action.weapon)
-								|| ( //action.weapon->needsAmmo() == true &&
-									action.weapon->getAmmoItem() != NULL
+								|| (action.weapon->getAmmoItem() != NULL
 									&& action.weapon->getAmmoItem()->getAmmoQuantity() == 0))
 							{
 								cancelCurrentAction(true);
@@ -1548,14 +1544,14 @@ void BattlescapeGame::popState()
 			action.actor->spendTimeUnits(action.TU); // spend TUs
 
 			if (_save->getSide() != FACTION_PLAYER
-				&& !_debugPlay)
+				&& _debugPlay == false)
 			{
 				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
 				if (_AIActionCounter > 2
 					|| _save->getSelectedUnit() == NULL
 					|| _save->getSelectedUnit()->isOut(true, true))
 				{
-					if (_save->getSelectedUnit())
+					if (_save->getSelectedUnit() != NULL)
 					{
 						_save->getSelectedUnit()->setCache(NULL);
 						getMap()->cacheUnit(_save->getSelectedUnit());
@@ -1563,10 +1559,10 @@ void BattlescapeGame::popState()
 
 					_AIActionCounter = 0;
 
-					if (_states.empty()
+					if (_states.empty() == true
 						&& _save->selectNextFactionUnit(true) == NULL)
 					{
-						if (!_save->getDebugMode())
+						if (_save->getDebugMode() == false)
 						{
 							_endTurnRequested = true;
 							statePushBack(NULL); // end AI turn
@@ -1578,11 +1574,11 @@ void BattlescapeGame::popState()
 						}
 					}
 
-					if (_save->getSelectedUnit())
+					if (_save->getSelectedUnit() != NULL)
 						getMap()->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
 				}
 			}
-			else if (_debugPlay)
+			else if (_debugPlay == true)
 			{
 				setupCursor();
 				_parentState->getGame()->getCursor()->setVisible();
@@ -1595,13 +1591,13 @@ void BattlescapeGame::popState()
 	if (_states.empty() == false)
 	{
 		//Log(LOG_INFO) << ". NOT states.Empty";
-		if (_states.front() == 0) // end turn request?
+		if (_states.front() == NULL) // end turn request?
 		{
 			//Log(LOG_INFO) << ". states.front() == 0";
-			while (!_states.empty())
+			while (_states.empty() == false)
 			{
 				//Log(LOG_INFO) << ". while (!_states.empty()";
-				if (_states.front() == 0)
+				if (_states.front() == NULL)
 					_states.pop_front();
 				else
 					break;
@@ -1617,7 +1613,7 @@ void BattlescapeGame::popState()
 			else
 			{
 				//Log(LOG_INFO) << ". states.front() != 0";
-				_states.push_back(0);
+				_states.push_back(NULL);
 			}
 		}
 
@@ -1627,7 +1623,7 @@ void BattlescapeGame::popState()
 
 	// the currently selected unit died or became unconscious or disappeared inexplicably
 	if (_save->getSelectedUnit() == NULL
-		|| _save->getSelectedUnit()->isOut(true, true))
+		|| _save->getSelectedUnit()->isOut(true, true) == true)
 	{
 		//Log(LOG_INFO) << ". unit incapacitated: cancelAction & deSelect)";
 		cancelCurrentAction();
@@ -1653,10 +1649,10 @@ void BattlescapeGame::popState()
  */
 bool BattlescapeGame::noActionsPending(BattleUnit* bu)
 {
-	if (_states.empty())
+	if (_states.empty() == true)
 		return true;
 
-	for (std::list<BattleState*>::iterator
+	for (std::list<BattleState*>::const_iterator
 			i = _states.begin();
 			i != _states.end();
 			++i)

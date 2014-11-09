@@ -172,14 +172,13 @@ void UnitTurnBState::think()
 		tu = 1;
 	}
 
-	if (_chargeTUs
-		&& onSide
-		&& _parent->getPanicHandled()
+	if (_chargeTUs == true
+		&& onSide == true
+		&& _parent->getPanicHandled() == true
 		&& _action.targeting == false
 		&& _parent->checkReservedTU(
 									_unit,
-									tu)
-								== false)
+									tu) == false)
 	{
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
 		_unit->setStatus(STATUS_STANDING);
@@ -187,21 +186,21 @@ void UnitTurnBState::think()
 	}
 	else if (_unit->spendTimeUnits(tu))
 	{
-		size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
+		const size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
 		_unit->turn(_turret); // -> STATUS_STANDING
-		bool newVis = _parent->getTileEngine()->calculateFOV(_unit);
+		const bool newVis = _parent->getTileEngine()->calculateFOV(_unit);
 
 		_unit->setCache(NULL);
 		_parent->getMap()->cacheUnit(_unit);
 
-		if ((newVis
-				&& playerTurn)
-			|| (_chargeTUs
-				&& onSide
+		if ((newVis == true
+				&& playerTurn == true)
+			|| (_chargeTUs == true
+				&& onSide == true
 				&& playerTurn == false
 				&& _action.type == BA_NONE
-				&& _parent->getPanicHandled()
+				&& _parent->getPanicHandled() == true
 				&& _unit->getUnitsSpottedThisTurn().size() > unitsSpotted))
 		{
 			//if (_unit->getFaction() == FACTION_PLAYER) Log(LOG_INFO) << ". . newVis = TRUE, Abort turn";
@@ -211,9 +210,9 @@ void UnitTurnBState::think()
 			_unit->setStatus(STATUS_STANDING);
 
 			// keep this for Faction_Player only, till I figure out the AI better:
-			if (playerTurn
-				&& onSide
-				&& _action.targeting)
+			if (playerTurn == true
+				&& onSide == true
+				&& _action.targeting == true)
 			{
 				//Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();
 				_unit->setStopShot(true);
@@ -231,7 +230,7 @@ void UnitTurnBState::think()
 		else
 			_parent->getBattlescapeState()->refreshVisUnits();
 	}
-	else if (_parent->getPanicHandled())
+	else if (_parent->getPanicHandled() == true)
 	{
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 
