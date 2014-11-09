@@ -26,6 +26,7 @@
 #include "Map.h"
 #include "Camera.h"
 #include "Particle.h"
+#include "Pathfinding.h"
 #include "TileEngine.h"
 
 #include "../fmath.h"
@@ -141,6 +142,24 @@ Projectile::Projectile(
 
 	if ((targetVoxel.x - origin.x) + (targetVoxel.y - origin.y) > -1)
 		_reversed = true;
+	/*
+	NE	 0	reversed
+	ENE		reversed
+	E	 1	reversed
+	ESE		reversed
+	SE	 2	reversed
+	SSE		reversed
+	S	 1	reversed
+	SSW		reversed
+	SW	 0	reversed
+	WSW		not reversed
+	W	-1	not reversed
+	WNW		not reversed
+	NW	-2	not reversed
+	NNW		not reversed
+	N	-1	not reversed
+	NNE		not reversed
+	*/
 }
 
 /**
@@ -171,7 +190,6 @@ int Projectile::calculateTrajectory(double accuracy)
 	Position originVoxel = _save->getTileEngine()->getOriginVoxel(
 															_action,
 															_save->getTile(_origin));
-
 	return calculateTrajectory(
 							accuracy,
 							originVoxel);
@@ -345,16 +363,16 @@ int Projectile::calculateThrow(double accuracy)
 								_origin.z - 1))->getUnit();
 	} */
 
-	Position originVoxel = _save->getTileEngine()->getOriginVoxel(
-																_action,
-																NULL);
+	const Position originVoxel = _save->getTileEngine()->getOriginVoxel(
+																	_action,
+																	NULL);
 	Position targetVoxel = Position( // determine the target voxel, aim at the center of the floor
 								_action.target.x * 16 + 8,
 								_action.target.y * 16 + 8,
 								_action.target.z * 24 + 2);
 	targetVoxel.z -= _save->getTile(_action.target)->getTerrainLevel();
 
-	BattleUnit* targetUnit = NULL;
+	const BattleUnit* targetUnit = NULL;
 	if (_action.type != BA_THROW) // celatid acid-spit
 	{
 		targetUnit = _save->getTile(_action.target)->getUnit();
@@ -368,15 +386,15 @@ int Projectile::calculateThrow(double accuracy)
 											_action.target.z - 1))->getUnit();
 		}
 
-		if (targetUnit)
+		if (targetUnit != NULL)
 		{
 			targetVoxel.z += targetUnit->getHeight() / 2
-						+ targetUnit->getFloatHeight()
-//kL					- 2;
-						+ 2; // kL: midriff +2 voxels
+						   + targetUnit->getFloatHeight()
+//kL					   - 2;
+						   + 2; // kL: midriff +2 voxels
 
-			if (targetUnit->getDashing())
-				accuracy -= 0.16;
+			if (targetUnit->getDashing() == true)
+				accuracy -= 0.18; // acid-spit, arcing shot.
 		}
 	}
 
@@ -683,7 +701,7 @@ void Projectile::applyAccuracy(
 
 	int toss = 100;
 
-	Soldier* soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
+	const Soldier* const soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
 	if (soldier != NULL)
 		toss = soldier->getRules()->getStatCaps().throwing;
 	//Log(LOG_INFO) << ". . toss = " << toss;
@@ -795,19 +813,19 @@ bool Projectile::traceProjectile()
 
 /**
  * Gets the current position in voxel space.
- * @param offset - offset
+ * @param offset - offset (default 0)
  * @return, position in voxel space
  */
 Position Projectile::getPosition(int offset) const
 {
 	Position ret;
 
-	int posOffset = static_cast<int>(_position) + offset;
+	const int posOffset = static_cast<int>(_position) + offset;
 
 	if (posOffset > -1
 		&& posOffset < static_cast<int>(_trajectory.size()))
 	{
-		ret = _trajectory.at(posOffset);
+		ret = _trajectory.at(static_cast<size_t>(posOffset));
 		//Log(LOG_INFO) << "projPos[0] " << ret;
 //		return _trajectory.at(posOffset);
 	}
@@ -860,14 +878,14 @@ Surface* Projectile::getSprite() const
  */
 void Projectile::skipTrajectory()
 {
-//	_position = _trajectory.size() - 1; // kL, old
-	while (traceProjectile()); // new
+//	_position = _trajectory.size() - 1; // old code
+	while (traceProjectile() == true);
 }
 
 /**
  * Gets the Position of origin for the projectile.
- * Instead of using the actor's position use the voxel origin translated to a tile position;
- * this is a workaround for large units.
+ * Instead of using the actor's position use the voxel origin
+ * translated to a tile position; this is a workaround for large units.
  * @return, origin as a tile position
  */
 Position Projectile::getOrigin()
@@ -879,7 +897,7 @@ Position Projectile::getOrigin()
  * Gets the INTENDED target for this projectile.
  * It is important to note that we do not use the final position
  * of the projectile here, but rather the targeted tile.
- * @return, target as a tile position
+ * @return, intended target as a tile position
  */
 Position Projectile::getTarget() const
 {
@@ -887,17 +905,65 @@ Position Projectile::getTarget() const
 }
 
 /**
- * kL. Gets the ACTUAL target for this projectile.
+ * Gets the ACTUAL target for this projectile.
  * It is important to note that we use the final position of the projectile here.
  * @return, trajectory finish as a tile position
  */
-Position Projectile::getFinalTarget() const // kL
+Position Projectile::getFinalTarget() const
 {
 	return _trajectory.back() / Position(16, 16, 24);
 }
 
 /**
- * Gets if this projectile is drawn back to front or front to back.
+ * Stores the final direction of a missile or thrown-object
+ * for use by TileEngine blast propagation - against diagonal BigWalls.
+ */
+void Projectile::storeProjectileDirection() const
+{
+	int dir = -1;
+
+	const size_t trajSize = _trajectory.size();
+	Log(LOG_INFO) << "Proj:storeDir, size = " << trajSize;
+
+	if (trajSize > 1)
+	{
+		Log(LOG_INFO) << ". pos.back " << _trajectory.back();
+		Log(LOG_INFO) << ". pos.back -2 " << _trajectory.at(trajSize - 3);
+		const Position
+			finalPos = _trajectory.back(),
+			prePos = _trajectory.at(trajSize - 3); // lastPos & pre-lastPos seem to be the same. So subtract 2 from lastPos
+
+		int
+			x = 0,
+			y = 0;
+
+		if (finalPos.x - prePos.x != 0)
+		{
+			if (finalPos.x - prePos.x > 0)
+				x = 1;
+			else
+				x = -1;
+		}
+
+		if (finalPos.y - prePos.y != 0)
+		{
+			if (finalPos.y - prePos.y > 0)
+				y = 1;
+			else
+				y = -1;
+		}
+
+		const Position relPos = Position(x, y, 0);
+		Log(LOG_INFO) << ". relPos " << relPos;
+		Pathfinding::vectorToDirection(relPos, dir);
+	}
+
+	Log(LOG_INFO) << ". . dir = " << dir;
+	_save->getTileEngine()->setProjectileDirection(dir);
+}
+
+/**
+ * Gets if this projectile is to be drawn left to right or right to left.
  * @return, true if this is to be drawn in reverse order
  */
 bool Projectile::isReversed() const

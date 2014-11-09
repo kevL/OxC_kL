@@ -498,24 +498,26 @@ void ExplosionBState::explode()
 							_unit,
 							_item->getRules()->getBattleType() == BT_GRENADE
 								|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE);
+
+			tileEngine->setProjectileDirection(-1); // kL
 		}
 		else
 		{
 			//Log(LOG_INFO) << ". . not AoE, -> TileEngine::hit()";
 			ItemDamageType type = _item->getRules()->getDamageType();
-			if (_pistolWhip)
+			if (_pistolWhip == true)
 				type = DT_STUN;
 
 			//Log(LOG_INFO) << ". . ExplosionB::explode() center = " << _center;
-			BattleUnit* victim = tileEngine->hit(
-												_center,
-												_power,
-												type,
-												_unit,
-												_hit);
+			BattleUnit* const victim = tileEngine->hit(
+													_center,
+													_power,
+													type,
+													_unit,
+													_hit);
 
 			if (_item->getRules()->getZombieUnit().empty() == false // check if this unit turns others into zombies
-				&& victim
+				&& victim != NULL
 				&& victim->getArmor()->getSize() == 1
 				&& (victim->getGeoscapeSoldier() != NULL
 //					|| (victim->getUnitRules() &&
@@ -580,7 +582,7 @@ void ExplosionBState::explode()
 	_parent->popState();
 
 
-	Tile* tile = tileEngine->checkForTerrainExplosions();
+	Tile* const tile = tileEngine->checkForTerrainExplosions();
 	if (tile != NULL) // check for terrain explosions
 	{
 		Position pVoxel = Position(

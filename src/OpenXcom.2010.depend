@@ -5712,7 +5712,7 @@
 1413136955 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1414638509 f:\git\openxcom\src\battlescape\pathfinding.h
+1415568275 f:\git\openxcom\src\battlescape\pathfinding.h
 	<vector>
 	"PathfindingNode.h"
 	"Position.h"
@@ -5724,7 +5724,7 @@
 1413136956 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1414726393 f:\git\openxcom\src\battlescape\tileengine.h
+1415533383 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -6326,7 +6326,7 @@
 1413726104 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1415514680 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1415533356 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -6485,7 +6485,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1415516485 f:\git\openxcom\src\battlescape\projectile.h
+1415533504 f:\git\openxcom\src\battlescape\projectile.h
 	<vector>
 	"BattlescapeGame.h"
 	"Position.h"
@@ -6612,7 +6612,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1414651019 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1415569997 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6666,12 +6666,13 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1415516485 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1415570556 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"Map.h"
 	"Camera.h"
 	"Particle.h"
+	"Pathfinding.h"
 	"TileEngine.h"
 	"../fmath.h"
 	"../Engine/Game.h"
@@ -6693,7 +6694,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1415516506 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1415544160 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"
@@ -6772,7 +6773,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1415514389 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1415543415 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6788,6 +6789,7 @@
 	"InfoBoxOKState.h"
 	"Map.h"
 	"Pathfinding.h"
+	"Projectile.h"
 	"ProjectileFlyBState.h"
 	"UnitTurnBState.h"
 	"../fmath.h"

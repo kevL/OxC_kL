@@ -667,22 +667,6 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-/* superceded by performMeleeAttack() below_
-	else if (_action.type == BA_HIT) // kL. Let's not calculate anything we don't have to for meleeHits!
-	{
-		//Log(LOG_INFO) << ". melee attack!";
-		_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
-																				_action.type,
-																				_action.weapon));
-		//Log(LOG_INFO) << ". part = " << _projectileImpact;
-
-		_unit->aim();
-		_unit->setCache(NULL);
-		_parent->getMap()->cacheUnit(_unit);
-
-		if (_action.weapon->getRules()->getMeleeSound() != -1)
-			sound = _action.weapon->getRules()->getMeleeSound();
-	} */
 	else // shoot weapon
 	{
 		if (_originVoxel != Position(-1,-1,-1)) // ... BL waypoints
@@ -693,12 +677,15 @@ bool ProjectileFlyBState::createNewProjectile()
 																				_action.weapon),
 															_originVoxel);
 		}
-		else // this is normal weapon shooting
+		else // this is non-BL weapon shooting
 			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																					_action.type,
 																					_action.weapon));
 		//Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 		//Log(LOG_INFO) << ". finalTarget = " << projectile->getFinalTarget();
+
+		_parent->getMap()->getProjectile()->storeProjectileDirection(); // kL
+
 
 		if (_projectileImpact == VOXEL_UNIT)
 			_action.autoShotKill = true;
@@ -717,7 +704,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			else if (_action.weapon->getRules()->getFireSound() != -1)
 				sound = _action.weapon->getRules()->getFireSound();
 
-			if (!_parent->getSave()->getDebugMode()
+			if (_parent->getSave()->getDebugMode() == false
 				&& _action.type != BA_LAUNCH
 				&& _ammo->spendBullet() == false)
 			{
@@ -917,7 +904,7 @@ void ProjectileFlyBState::think()
 			}
 			else if (_action.type == BA_LAUNCH
 				&& _action.waypoints.size() > 1
-				&& _projectileImpact == -1)
+				&& _projectileImpact == VOXEL_EMPTY)
 			{
 				_origin = _action.waypoints.front();
 				_action.waypoints.pop_front();
@@ -1072,7 +1059,7 @@ void ProjectileFlyBState::think()
 									statsUnit->shotFriendlyCounter++;
 							}
 
-							BattleUnit* target = _parent->getSave()->getTile(_action.target)->getUnit(); // target (not necessarily who was hit)
+							const BattleUnit* const target = _parent->getSave()->getTile(_action.target)->getUnit(); // target (not necessarily who was hit)
 							if (target == victim) // hit the target
 							{
 								if (statsUnit != NULL)

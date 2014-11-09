@@ -114,8 +114,10 @@ private:
 		Position getOrigin();
 		/// Gets the targetted tile for the projectile.
 		Position getTarget() const;
-		/// kL. Gets the ACTUAL target for this projectile.
-		Position getFinalTarget() const; // kL
+		/// Gets the ACTUAL target for this projectile.
+		Position getFinalTarget() const;
+		/// Stores the final direction of a missile or thrown-object.
+		void storeProjectileDirection() const;
 
 		/// Gets if this this projectile is being drawn back-to-front or front-to-back.
 		bool isReversed() const;
@@ -123,8 +125,8 @@ private:
 		/// Adds a cloud of particles at the projectile's location.
 		void addVaporCloud();
 
-		/// kL. Gets a pointer to the BattleAction actor directly.
-		BattleUnit* getActor() const; // kL
+		/// Gets a pointer to the BattleAction actor directly.
+		BattleUnit* getActor() const;
 };
 
 }

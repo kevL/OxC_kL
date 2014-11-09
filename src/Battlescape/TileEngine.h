@@ -59,6 +59,7 @@ private:
 
 	bool _unitLighting;
 	int
+		_missileDirection,
 		_powerE, // kL, effective power that actually explodes on a tile that's hit by HE.
 		_powerT; // kL, test power that checks if _powerE actually makes it to the next tile.
 
@@ -71,7 +72,7 @@ private:
 			const Position& pos,
 			int power,
 			int layer);
-	///
+	/// Calculates blockage of various persuasions.
 	int blockage(
 			Tile* tile,
 			const int part,
@@ -188,6 +189,8 @@ private:
 				Tile* startTile,
 				Tile* endTile,
 				ItemDamageType type);
+		/// Sets the final direction from which a missile or thrown-object came.
+		void setProjectileDirection(const int dir);
 		/// Blows this tile up.
 		bool detonate(Tile* tile);
 		/// Checks if a destroyed tile starts an explosion.

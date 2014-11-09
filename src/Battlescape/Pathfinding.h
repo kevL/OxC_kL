@@ -135,7 +135,7 @@ private:
 				Position destPos,
 				BattleUnit* missileTarget = NULL,
 				int maxTUCost = 1000,
-				bool strafeRejected = false); // kL_add.
+				bool strafeRejected = false);
 
 		/// Determines whether or not movement between starttile and endtile is possible in the direction.
 		bool isBlocked(
@@ -147,13 +147,13 @@ private:
 		/// Aborts the current path.
 		void abortPath();
 
-		/// Converts direction to a vector.
+		/// Converts direction to a unit-vector.
 		static void directionToVector(
 				int const dir,
-				Position* vectPos);
-		/// Converts a vector to a direction.
+				Position* relPos);
+		/// Converts a unit-vector to a direction.
 		static void vectorToDirection(
-				const Position& vectPos,
+				const Position& relPos,
 				int& dir);
 
 		/// Checks whether a path is ready and returns the direction.
@@ -180,8 +180,6 @@ private:
 				BattleUnit* bu,
 				Position startPos,
 				int const dir);
-		/// kL. Sets pathfinding to check whether a unit is kneeled.
-//		void setKneelCheck(bool checkKneel = true); // kL
 
 		/// Gets all reachable tiles, based on cost.
 		std::vector<int> findReachable(
@@ -202,18 +200,18 @@ private:
 		void setUnit(BattleUnit* unit);
 
 		/// Determines whether the unit is going up a stairs.
-//kL	bool isOnStairs(const Position& startPosition, const Position& endPosition);
+//		bool isOnStairs(const Position& startPosition, const Position& endPosition);
 
 		/// Gets the CTRL modifier setting.
 		bool isModCTRL() const;
 		/// Gets the ALT modifier setting.
 		bool isModALT() const;
 
-		/// kL. Gets the current movementType.
-		MovementType getMovementType() const; // kL
+		/// Gets the current movementType.
+		MovementType getMovementType() const;
 
-		/// kL. Gets TU cost for opening a door.
-		int getOpenDoor() const; // kL
+		/// Gets TU cost for opening a door.
+		int getOpenDoor() const;
 
 		/// Gets a reference to the path.
 		const std::vector<int>& getPath();
