@@ -34,17 +34,16 @@
 #include "BattlescapeState.h"
 #include "Camera.h"
 #include "ExplosionBState.h"
-#include "InfoBoxOKState.h"	// kL, for message when unconscious unit explodes.
+#include "InfoBoxOKState.h"
 #include "Map.h"
 #include "Pathfinding.h"
-#include "Projectile.h"
 #include "ProjectileFlyBState.h"
 #include "UnitTurnBState.h"
 
 #include "../fmath.h"
 
-#include "../Engine/Game.h"		// kL, for message when unconscious unit explodes.
-#include "../Engine/Language.h"	// kL, for message when unconscious unit explodes.
+#include "../Engine/Game.h"
+#include "../Engine/Language.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
@@ -54,15 +53,11 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/MapData.h"
 #include "../Ruleset/MapDataSet.h"
-//#include "../Ruleset/Ruleset.h"
-//#include "../Ruleset/RuleSoldier.h"
-//#include "../Ruleset/Unit.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
-//#include "../Savegame/Soldier.h"
 #include "../Savegame/Tile.h"
 
 
@@ -3610,7 +3605,7 @@ int TileEngine::blockage(
 		ItemDamageType type,
 		int dir,
 		bool originTest,
-		bool trueDir) // kL_add
+		bool trueDir)
 {
 	//Log(LOG_INFO) << "TileEngine::blockage() dir " << dir;
 	const bool visLike = type == DT_NONE
@@ -3634,19 +3629,14 @@ int TileEngine::blockage(
 			{
 				if ((tile->getMapData(part)->stopLOS() == true
 							|| (type == DT_SMOKE
-								&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1) // some tiles do not stopLOS yet should block smoke (eg. Skyranger cockpit)
+								&& tile->getMapData(part)->getBlock(DT_SMOKE) == 1)
 							|| (type == DT_IN
 								&& tile->getMapData(part)->blockFire() == true))
 						&& (tile->getMapData(part)->getObjectType() == MapData::O_OBJECT // this one is for verticalBlockage() only.
 							|| tile->getMapData(part)->getObjectType() == MapData::O_NORTHWALL
 							|| tile->getMapData(part)->getObjectType() == MapData::O_WESTWALL)
-					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR)	// all floors that block LoS should have their stopLOS flag set true.
-																					// because they aren't. But stock OxC code sets them stopLOS=true anyway ...
-																					// HA, maybe not ...... I put it in, if not gravLift floor. So this may conflict ...
+					|| tile->getMapData(part)->getObjectType() == MapData::O_FLOOR)	// all floors that block LoS should have their stopLOS flag set true, if not gravLift floor.
 				{
-//					if (type == DT_NONE)
-//						return 1;// hardblock.
-//					else
 					//Log(LOG_INFO) << ". . . . Ret 1000[0] part = " << part << " " << tile->getPosition();
 					return 1000;
 				}
@@ -3665,8 +3655,7 @@ int TileEngine::blockage(
 			//Log(LOG_INFO) << ". bigWall = " << bigWall;
 
 
-			if (originTest == true)	// kL (the ContentOBJECT already got hit as the previous endTile...
-									// but can still block LoS when looking down ...)
+			if (originTest == true)	// the ContentOBJECT already got hit as the previous endTile... but can still block LoS when looking down ...
 			{
 				bool diagStop = true;
 				if (type == DT_HE
@@ -3676,8 +3665,8 @@ int TileEngine::blockage(
 					diagStop = (delta < 2 || delta == 7);
 				}
 
-				// this needs to check which side the *missile* is coming from first,
-				// but grenades that land on a diagonal bigWall would be exempt regardless!!!
+				// this needs to check which side the *missile* is coming from,
+				// although grenades that land on a diagonal bigWall are exempt regardless!!!
 				if (bigWall == Pathfinding::BIGWALL_NONE // !visLike, if (only Content-part == true) -> all DamageTypes ok here (because, origin).
 					|| (diagStop == false
 						&& (bigWall == Pathfinding::BIGWALL_NESW
@@ -3713,9 +3702,6 @@ int TileEngine::blockage(
 					|| (type == DT_IN
 						&& tile->getMapData(MapData::O_OBJECT)->blockFire() == true)))
 			{
-//				if (type == DT_NONE)
-//					return -1;
-//				else
 				//Log(LOG_INFO) << ". . . . Ret 1000[3] part = " << part << " " << tile->getPosition();
 				return 1000;
 			}
@@ -3859,7 +3845,6 @@ int TileEngine::blockage(
 
 		if (visLike == false) // only non-visLike can get partly blocked; other damage-types are either completely blocked or get a pass here
 		{
-//			int ret = tile->getMapData(part)->getBlock(type);
 			//Log(LOG_INFO) << "TileEngine::blockage() EXIT, ret = " << tile->getMapData(part)->getBlock(type);
 			return tile->getMapData(part)->getBlock(type);
 		}

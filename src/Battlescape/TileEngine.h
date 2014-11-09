@@ -79,7 +79,7 @@ private:
 			ItemDamageType type,
 			int dir = -1,
 			bool originTest = false,
-			bool trueDir = false); // kL_add
+			bool trueDir = false);
 
 
 	public:

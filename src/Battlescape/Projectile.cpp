@@ -23,13 +23,13 @@
 
 #include <cmath>
 
+#include "../fmath.h"
+
 #include "Map.h"
 #include "Camera.h"
 #include "Particle.h"
 #include "Pathfinding.h"
 #include "TileEngine.h"
-
-#include "../fmath.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Logger.h"
@@ -925,7 +925,7 @@ void Projectile::storeProjectileDirection() const
 	const size_t trajSize = _trajectory.size();
 	Log(LOG_INFO) << "Proj:storeDir, size = " << trajSize;
 
-	if (trajSize > 1)
+	if (trajSize > 2)
 	{
 		Log(LOG_INFO) << ". pos.back " << _trajectory.back();
 		Log(LOG_INFO) << ". pos.back -2 " << _trajectory.at(trajSize - 3);
