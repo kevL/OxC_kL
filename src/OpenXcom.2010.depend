@@ -5724,7 +5724,7 @@
 1413136956 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1415533383 f:\git\openxcom\src\battlescape\tileengine.h
+1415574580 f:\git\openxcom\src\battlescape\tileengine.h
 	<vector>
 	<SDL.h>
 	"BattlescapeGame.h"
@@ -6666,15 +6666,15 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1415570556 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1415574875 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
+	"../fmath.h"
 	"Map.h"
 	"Camera.h"
 	"Particle.h"
 	"Pathfinding.h"
 	"TileEngine.h"
-	"../fmath.h"
 	"../Engine/Game.h"
 	"../Engine/Logger.h"
 	"../Engine/Options.h"
@@ -6694,7 +6694,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1415544160 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1415579750 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	<cmath>
 	"AlienBAIState.h"

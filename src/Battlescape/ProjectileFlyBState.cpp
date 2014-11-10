@@ -684,7 +684,7 @@ bool ProjectileFlyBState::createNewProjectile()
 		//Log(LOG_INFO) << ". shoot weapon, part = " << _projectileImpact;
 		//Log(LOG_INFO) << ". finalTarget = " << projectile->getFinalTarget();
 
-		_parent->getMap()->getProjectile()->storeProjectileDirection(); // kL
+		projectile->storeProjectileDirection(); // kL
 
 
 		if (_projectileImpact == VOXEL_UNIT)
@@ -981,7 +981,7 @@ void ProjectileFlyBState::think()
 							int i = 0;
 							while (i != shot - 1)
 							{
-								Projectile* proj = new Projectile(
+								Projectile* const proj = new Projectile(
 															_parent->getResourcePack(),
 															_parent->getSave(),
 															_action,

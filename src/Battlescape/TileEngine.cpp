@@ -4929,18 +4929,27 @@ bool TileEngine::validateThrow(
 	}
 	//Log(LOG_INFO) << ". starting arc = " << arc;
 
-	Tile* tileTarget = _battleSave->getTile(action.target);
-	if ( /*kL (action.type == BA_THROW
-			&& tileTarget
-			&& tileTarget->getMapData(MapData::O_OBJECT)
-			&& tileTarget->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255) || */
-		ProjectileFlyBState::validThrowRange(
-											&action,
-											originVoxel,
-											tileTarget) == false)
+	Tile* const tileTarget = _battleSave->getTile(action.target);
+
+	if (ProjectileFlyBState::validThrowRange(
+										&action,
+										originVoxel,
+										tileTarget) == false)
 	{
 		//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid"; // OR tileTarget is nonwalkable.";
 		return false; // object blocking - can't throw here
+	}
+
+	if (action.type == BA_THROW // prevent Grenades from landing on diagonal BigWalls.
+		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
+			|| action.weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+		&& tileTarget != NULL
+		&& tileTarget->getMapData(MapData::O_OBJECT) != NULL
+		&& (tileTarget->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
+			|| tileTarget->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
+//		&& tileTarget->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+	{
+		return false;
 	}
 
 
@@ -4950,17 +4959,16 @@ bool TileEngine::validateThrow(
 	{
 		//Log(LOG_INFO) << ". . arc = " << arc;
 
-		int test = VOXEL_OUTOFBOUNDS;
+//		int test = VOXEL_OUTOFBOUNDS;
 		std::vector<Position> trajectory;
-
-		test = calculateParabola(
-								originVoxel,
-								targetVoxel,
-								false,
-								&trajectory,
-								action.actor,
-								arc,
-								Position(0, 0, 0));
+		const int test = calculateParabola(
+										originVoxel,
+										targetVoxel,
+										false,
+										&trajectory,
+										action.actor,
+										arc,
+										Position(0, 0, 0));
 		//Log(LOG_INFO) << ". . calculateParabola() = " << test;
 
 		if (test != VOXEL_OUTOFBOUNDS
