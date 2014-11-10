@@ -181,7 +181,7 @@ void AlienBAIState::exit()
 
 /**
  * Runs any code the state needs to keep updating every AI cycle.
- * @param action - (possible) AI BattleAction to execute after thinking is done
+ * @param action - pointer to AI BattleAction to execute after thinking is done
  */
 void AlienBAIState::think(BattleAction* action)
 {
@@ -194,6 +194,7 @@ void AlienBAIState::think(BattleAction* action)
 														// It needs to be refined to account TU usage, also.
 
 	if (action->weapon == NULL // kL ->
+		&& _unit->getUnitRules() != NULL
 		&& _unit->getUnitRules()->getMeleeWeapon() == "STR_FIST")
 	{
 		action->weapon = _save->getBattleGame()->getFist();

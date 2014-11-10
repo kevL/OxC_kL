@@ -6772,7 +6772,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1415582869 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1415612657 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9570,7 +9570,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1415515300 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1415609823 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

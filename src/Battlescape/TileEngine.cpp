@@ -5276,7 +5276,6 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 	const bool psiImmune = victim->getUnitRules() != NULL
 						&& victim->getUnitRules()->getPsiImmune() == true;
-
 	if (psiImmune == false)
 	{
 		const UnitStats
@@ -5288,8 +5287,16 @@ bool TileEngine::psiAttack(BattleAction* action)
 			dist = static_cast<double>(distance(
 											action->actor->getPosition(),
 											action->target));
+
+		int bonusSkill = 0; // add to psiSkill when using aLien to Panic another aLien ....
+		if (action->actor->getFaction() == FACTION_PLAYER
+			&& action->actor->getOriginalFaction() == FACTION_HOSTILE)
+		{
+			bonusSkill = 25; // ... arbitrary kL
+		}
+
 		double
-			attack = static_cast<double>(statsActor->psiStrength * statsActor->psiSkill) / 50.0;
+			attack = static_cast<double>(statsActor->psiStrength * (statsActor->psiSkill + bonusSkill)) / 50.0;
 		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
 		//Log(LOG_INFO) << ". . . attack = " << (int)attack;
 		//Log(LOG_INFO) << ". . . dist = " << (int)dist;
@@ -5304,6 +5311,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 		attack *= 100.0;
 		attack /= 56.0;
+
 
 		if (action->actor->getOriginalFaction() == FACTION_PLAYER)
 			action->actor->addPsiSkillExp();

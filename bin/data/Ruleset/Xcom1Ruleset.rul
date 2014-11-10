@@ -1030,7 +1030,7 @@ items:
       - STR_PSI_AMP
     size: 0.3
     costSell: 86310 # 287700
-    weight: 10
+    weight: 9
     bigSprite: 33
     floorSprite: 32
     handSprite: 88
