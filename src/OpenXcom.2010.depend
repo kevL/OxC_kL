@@ -6666,7 +6666,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1415574875 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1415584487 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"../fmath.h"
@@ -6676,7 +6676,6 @@
 	"Pathfinding.h"
 	"TileEngine.h"
 	"../Engine/Game.h"
-	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/RNG.h"
 	"../Engine/Surface.h"
@@ -6773,7 +6772,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1415543415 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1415582869 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -6789,7 +6788,6 @@
 	"InfoBoxOKState.h"
 	"Map.h"
 	"Pathfinding.h"
-	"Projectile.h"
 	"ProjectileFlyBState.h"
 	"UnitTurnBState.h"
 	"../fmath.h"

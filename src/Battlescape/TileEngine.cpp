@@ -1657,24 +1657,23 @@ bool TileEngine::reactionShot(
 }
 
 /**
- * kL. Selects a fire method based on range & time units.
- * Lifted from AlienBAIState::selectFireMethod().
+ * Selects a fire method based on range & time units.
  * @param action	- a BattleAction struct
  * @param tu		- reference TUs to be required
- * @return, The calculated BattleAction type
+ * @return, the calculated BattleAction type
  */
-BattleActionType TileEngine::selectFireMethod( // kL
+BattleActionType TileEngine::selectFireMethod(
 		BattleAction action,
 		int& tu)
 {
 	//Log(LOG_INFO) << "TileEngine::selectFireMethod()";
 	action.type = BA_NONE;
 
-	RuleItem* rule = action.weapon->getRules();
+	const RuleItem* const rule = action.weapon->getRules();
 
-	int dist = _battleSave->getTileEngine()->distance(
-													action.actor->getPosition(),
-													action.target);
+	const int dist = _battleSave->getTileEngine()->distance(
+														action.actor->getPosition(),
+														action.target);
 	if (dist > rule->getMaxRange()
 		|| dist < rule->getMinRange())
 	{
@@ -2087,7 +2086,7 @@ void TileEngine::explode(
 	Log(LOG_INFO) << "RNG:TEST = " << iFalse; */
 
 	//Log(LOG_INFO) << "TileEngine::explode() power = " << power << ", type = " << (int)type << ", maxRadius = " << maxRadius;
-	Log(LOG_INFO) << "missileDir = " << _missileDirection;
+	//Log(LOG_INFO) << "missileDir = " << _missileDirection;
 	if (type == DT_IN)
 	{
 		power /= 2;
@@ -2215,8 +2214,6 @@ void TileEngine::explode(
 				if (r > 0.5					// don't block epicentrum.
 					&& origin != destTile)	// don't double blockage from the same tiles (when diagonal this happens).
 				{
-//					_missileDirection = -1;
-
 					if (type == DT_IN)
 					{
 						int dir;
@@ -3623,7 +3620,7 @@ int TileEngine::blockage(
 	if (tile->getMapData(part) != NULL)
 	{
 		//Log(LOG_INFO) << ". getMapData(part) stopLOS() = " << tile->getMapData(part)->stopLOS();
-		if (dir == -1) // regular north/west wall (not BigWall), or it's a floor, or a Content-object vs upward-diagonal.
+		if (dir == -1) // regular north/west wall (not BigWall), or it's a floor, or a Content-object (incl. BigWall) vs upward-diagonal.
 		{
 			if (visLike == true)
 			{
@@ -3951,16 +3948,17 @@ bool TileEngine::detonate(Tile* tile)
 		{
 			continue; // skip out of map and emptiness
 		}
-
-// BIGWALL_NONE,	// 0
-// BIGWALL_BLOCK,	// 1
-// BIGWALL_NESW,	// 2
-// BIGWALL_NWSE,	// 3
-// BIGWALL_WEST,	// 4
-// BIGWALL_NORTH,	// 5
-// BIGWALL_EAST,	// 6
-// BIGWALL_SOUTH,	// 7
-// BIGWALL_E_S		// 8
+/*
+		BIGWALL_NONE,	// 0
+		BIGWALL_BLOCK,	// 1
+		BIGWALL_NESW,	// 2
+		BIGWALL_NWSE,	// 3
+		BIGWALL_WEST,	// 4
+		BIGWALL_NORTH,	// 5
+		BIGWALL_EAST,	// 6
+		BIGWALL_SOUTH,	// 7
+		BIGWALL_E_S		// 8
+*/
 		const int bigWall = tiles[i]->getMapData(parts[i])->getBigWall();
 		if (i > 6
 				&& !(
@@ -4382,13 +4380,13 @@ int TileEngine::unitOpensDoor(
 }
 
 /**
- * kL. Checks for a door connected to a wall at this position,
+ * Checks for a door connected to a wall at this position,
  * so that units can open double doors diagonally.
  * @param pos	- the starting position
  * @param part	- the wall to test
  * @param dir	- the direction to check out
  */
-bool TileEngine::testAdjacentDoor( // kL
+bool TileEngine::testAdjacentDoor(
 		Position pos,
 		int part,
 		int dir)
@@ -4414,10 +4412,10 @@ bool TileEngine::testAdjacentDoor( // kL
 		break;
 	}
 
-	Tile* tile = _battleSave->getTile(pos + offset);
-	if (tile
-		&& tile->getMapData(part)
-		&& tile->getMapData(part)->isUFODoor())
+	const Tile* const tile = _battleSave->getTile(pos + offset);
+	if (tile != NULL
+		&& tile->getMapData(part) != NULL
+		&& tile->getMapData(part)->isUFODoor() == true)
 	{
 		return true;
 	}
@@ -4436,7 +4434,7 @@ void TileEngine::openAdjacentDoors(
 		int part)
 {
 	Position offset;
-	bool westSide = (part == 1);
+	const bool westSide = (part == 1);
 
 	for (int
 			i = 1;
@@ -4444,10 +4442,10 @@ void TileEngine::openAdjacentDoors(
 			++i)
 	{
 		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
-		Tile* tile = _battleSave->getTile(pos + offset);
-		if (tile
-			&& tile->getMapData(part)
-			&& tile->getMapData(part)->isUFODoor())
+		Tile* const tile = _battleSave->getTile(pos + offset);
+		if (tile != NULL
+			&& tile->getMapData(part) != NULL
+			&& tile->getMapData(part)->isUFODoor() == true)
 		{
 			tile->openDoor(part);
 		}
@@ -4461,10 +4459,10 @@ void TileEngine::openAdjacentDoors(
 			--i)
 	{
 		offset = westSide? Position(0, i, 0): Position(i, 0, 0);
-		Tile* tile = _battleSave->getTile(pos + offset);
-		if (tile
-			&& tile->getMapData(part)
-			&& tile->getMapData(part)->isUFODoor())
+		Tile* const tile = _battleSave->getTile(pos + offset);
+		if (tile != NULL
+			&& tile->getMapData(part) != NULL
+			&& tile->getMapData(part)->isUFODoor() == true)
 		{
 			tile->openDoor(part);
 		}
@@ -4489,19 +4487,19 @@ int TileEngine::closeUfoDoors()
 		if (_battleSave->getTiles()[i]->getUnit()
 			&& _battleSave->getTiles()[i]->getUnit()->getArmor()->getSize() > 1)
 		{
-			BattleUnit* bu = _battleSave->getTiles()[i]->getUnit();
+			const BattleUnit* const bu = _battleSave->getTiles()[i]->getUnit();
 
-			Tile
-				* tile = _battleSave->getTiles()[i],
-				* tileNorth = _battleSave->getTile(tile->getPosition() + Position(0,-1, 0)),
-				* tileWest = _battleSave->getTile(tile->getPosition() + Position(-1, 0, 0));
+			const Tile
+				* const tile = _battleSave->getTiles()[i],
+				* const tileNorth = _battleSave->getTile(tile->getPosition() + Position(0,-1, 0)),
+				* const tileWest = _battleSave->getTile(tile->getPosition() + Position(-1, 0, 0));
 			if ((tile->isUfoDoorOpen(MapData::O_NORTHWALL)
-					&& tileNorth
-					&& tileNorth->getUnit() // probly not needed.
+					&& tileNorth != NULL
+					&& tileNorth->getUnit() != NULL // probly not needed.
 					&& tileNorth->getUnit() == bu)
 				|| (tile->isUfoDoorOpen(MapData::O_WESTWALL)
-					&& tileWest
-					&& tileWest->getUnit() // probly not needed.
+					&& tileWest != NULL
+					&& tileWest->getUnit() != NULL // probly not needed.
 					&& tileWest->getUnit() == bu))
 			{
 				continue;
@@ -4936,11 +4934,11 @@ bool TileEngine::validateThrow(
 										originVoxel,
 										tileTarget) == false)
 	{
-		//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid"; // OR tileTarget is nonwalkable.";
-		return false; // object blocking - can't throw here
+		//Log(LOG_INFO) << ". vT() ret FALSE, ThrowRange not valid";
+		return false;
 	}
 
-	if (action.type == BA_THROW // prevent Grenades from landing on diagonal BigWalls.
+	if (action.type == BA_THROW
 		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
 			|| action.weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 		&& tileTarget != NULL
@@ -4949,7 +4947,7 @@ bool TileEngine::validateThrow(
 			|| tileTarget->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
 //		&& tileTarget->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
-		return false;
+		return false; // prevent Grenades from landing on diagonal BigWalls.
 	}
 
 
@@ -5259,7 +5257,7 @@ int TileEngine::distanceSq(
 }
 
 /**
- * Attempts a panic or mind-control action.
+ * Attempts a panic or mind-control BattleAction.
  * @param action - pointer to a BattleAction (BattlescapeGame.h)
  * @return, true if attack succeeds
  */
@@ -5276,21 +5274,22 @@ bool TileEngine::psiAttack(BattleAction* action)
 		return false;
 	//Log(LOG_INFO) << "psiAttack: vs ID " << victim->getId();
 
-	const bool psiImmune = victim->getUnitRules()
-						&& victim->getUnitRules()->getPsiImmune();
+	const bool psiImmune = victim->getUnitRules() != NULL
+						&& victim->getUnitRules()->getPsiImmune() == true;
 
 	if (psiImmune == false)
 	{
-		UnitStats
-			* statsActor = action->actor->getStats(),
-			* statsVictim = victim->getStats();
+		const UnitStats
+			* const statsActor = action->actor->getStats(),
+			* const statsVictim = victim->getStats();
 
-		double
-			attack = static_cast<double>(statsActor->psiStrength * statsActor->psiSkill) / 50.0,
+		const double
 			defense = static_cast<double>(statsVictim->psiStrength) + (static_cast<double>(statsVictim->psiSkill) / 5.0),
 			dist = static_cast<double>(distance(
 											action->actor->getPosition(),
 											action->target));
+		double
+			attack = static_cast<double>(statsActor->psiStrength * statsActor->psiSkill) / 50.0;
 		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
 		//Log(LOG_INFO) << ". . . attack = " << (int)attack;
 		//Log(LOG_INFO) << ". . . dist = " << (int)dist;
@@ -5349,24 +5348,23 @@ bool TileEngine::psiAttack(BattleAction* action)
 			else // BA_MINDCONTROL
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_MINDCONTROL";
-				if (action->actor->getFaction() == FACTION_PLAYER
+//				if (action->actor->getFaction() == FACTION_PLAYER
+				if (victim->getOriginalFaction() == FACTION_HOSTILE // aLiens must be reduced to 50- Morale before MC.
 					&& victim->getMorale() > 50)
 				{
 					_battleSave->getBattleState()->warning("STR_PSI_RESIST");
 					return false;
 				}
 
-				if (victim->getFaction() != FACTION_HOSTILE) // Morale loss for getting Mc'd.
-				{
+				if (victim->getFaction() != FACTION_HOSTILE) // sideXCOM Morale loss for getting Mc'd.
 					victim->moraleChange(
 									_battleSave->getMoraleModifier(NULL, true) / 10 + statsVictim->bravery / 2 - 110);
-				}
 				else if (action->actor->getFaction() == FACTION_PLAYER)
 				{
-					if (victim->getOriginalFaction() == FACTION_HOSTILE)
+					if (victim->getOriginalFaction() == FACTION_HOSTILE) // aLien Morale loss for getting Mc'd.
 						victim->moraleChange(
 										_battleSave->getMoraleModifier(NULL, false) / 10 + statsVictim->bravery - 110);
-					else
+					else // XCOM Morale gain for getting Mc'd back to xCom.
 						victim->moraleChange(statsVictim->bravery / 2);
 				}
 

@@ -32,7 +32,7 @@
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
@@ -923,12 +923,12 @@ void Projectile::storeProjectileDirection() const
 	int dir = -1;
 
 	const size_t trajSize = _trajectory.size();
-	Log(LOG_INFO) << "Proj:storeDir, size = " << trajSize;
+	//Log(LOG_INFO) << "Proj:storeDir, size = " << trajSize;
 
 	if (trajSize > 2)
 	{
-		Log(LOG_INFO) << ". pos.back " << _trajectory.back();
-		Log(LOG_INFO) << ". pos.back -2 " << _trajectory.at(trajSize - 3);
+		//Log(LOG_INFO) << ". pos.back " << _trajectory.back();
+		//Log(LOG_INFO) << ". pos.back -2 " << _trajectory.at(trajSize - 3);
 		const Position
 			finalPos = _trajectory.back(),
 			prePos = _trajectory.at(trajSize - 3); // lastPos & pre-lastPos seem to be the same. So subtract 2 from lastPos
@@ -954,11 +954,11 @@ void Projectile::storeProjectileDirection() const
 		}
 
 		const Position relPos = Position(x, y, 0);
-		Log(LOG_INFO) << ". relPos " << relPos;
+		//Log(LOG_INFO) << ". relPos " << relPos;
 		Pathfinding::vectorToDirection(relPos, dir);
 	}
 
-	Log(LOG_INFO) << ". . dir = " << dir;
+	//Log(LOG_INFO) << ". . dir = " << dir;
 	_save->getTileEngine()->setProjectileDirection(dir);
 }
 
