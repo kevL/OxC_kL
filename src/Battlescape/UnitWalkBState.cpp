@@ -130,7 +130,7 @@ void UnitWalkBState::init()
 void UnitWalkBState::think()
 {
 	//Log(LOG_INFO) << "\n***** UnitWalkBState::think() : " << _unit->getId();
-	if (_unit->isOut(true, true))
+	if (_unit->isOut(true, true) == true)
 	{
 		//Log(LOG_INFO) << ". . isOut() abort.";
 		_pf->abortPath();
@@ -151,14 +151,11 @@ void UnitWalkBState::think()
 	{
 		//Log(LOG_INFO) << "STATUS_WALKING or FLYING : " << _unit->getId();
 //		if (_unit->getVisible())
-		if (_onScreen)
+		if (_onScreen == true)
 		{
 			//Log(LOG_INFO) << ". onScreen";
-			int dest_z = _unit->getDestination().z;
-
-			if (_walkCam->isOnScreen(
-								_unit->getPosition())
-//								true))
+			const int dest_z = _unit->getDestination().z;
+			if (_walkCam->isOnScreen(_unit->getPosition()) == true
 				&& _walkCam->getViewLevel() < dest_z)
 			{
 				//Log(LOG_INFO) << ". . setViewLevel(dest_z)";
@@ -176,23 +173,17 @@ void UnitWalkBState::think()
 		{
 			//Log(LOG_INFO) << "STATUS_STANDING_end in UnitWalkBState _WALKING or _FLYING !!!" ;
 //			if (_unit->getVisible())
-			if (_onScreen)
+			if (_onScreen == true)
 			{
 				if (_unit->getFaction() != FACTION_PLAYER
-					&& _walkCam->isOnScreen(
-										_unit->getPosition())
-//										true))
-									== false)
+					&& _walkCam->isOnScreen(_unit->getPosition()) == false)
 				{
 					_walkCam->centerOnPosition(_unit->getPosition());
 				}
-				else if (_walkCam->isOnScreen(
-										_unit->getPosition()))
-//										true))
+				else if (_walkCam->isOnScreen(_unit->getPosition()) == true)
 				{
 					//Log(LOG_INFO) << ". onScreen";
-					int dest_z = _unit->getDestination().z;
-
+					const int dest_z = _unit->getDestination().z;
 					if (_walkCam->getViewLevel() > dest_z
 						&& (_pf->getPath().size() == 0
 							|| _pf->getPath().back() != _pf->DIR_UP))
@@ -208,22 +199,20 @@ void UnitWalkBState::think()
 			else
 				_parent->getBattlescapeState()->refreshVisUnits();
 		}
-		else if (_onScreen) // still walking ... make sure the unit sprites are up to date
+		else if (_onScreen == true) // still walking ... make sure the unit sprites are up to date
 		{
 			//Log(LOG_INFO) << ". _onScreen : still walking ...";
-			if (_pf->getStrafeMove()) // NOTE: This could be trimmed, because I had to make tanks use getFaceDirection() in UnitSprite::drawRoutine2() anyway ...
+			if (_pf->getStrafeMove() == true) // NOTE: This could be trimmed, because I had to make tanks use getFaceDirection() in UnitSprite::drawRoutine2() anyway ...
 			{
 				//Log(LOG_INFO) << ". WALKING strafe, unitDir = " << _unit->getDirection();
 				//Log(LOG_INFO) << ". WALKING strafe, faceDir = " << _unit->getFaceDirection();
-				int dirMove = _unit->getDirection(); // direction of travel
-
+				const int dirMove = _unit->getDirection(); // direction of travel
 				_unit->setDirection(
 								_unit->getFaceDirection(),
 								false);
 
 //				_unit->setCache(NULL); // kL, might play around with Strafe anim's ......
 				_parent->getMap()->cacheUnit(_unit);
-
 				_unit->setDirection(
 								dirMove,
 								false);
@@ -248,26 +237,20 @@ void UnitWalkBState::think()
 		else // Destination is not valid until *after* doStatusStand() runs.
 		{
 //			if (_unit->getVisible())
-			if (_onScreen)
+			if (_onScreen == true)
 			{
 				//Log(LOG_INFO) << ". onScreen";
-				int pos_z = _unit->getPosition().z;
+				const int pos_z = _unit->getPosition().z;
 
 				if (_unit->getFaction() != FACTION_PLAYER
-					&& _walkCam->isOnScreen(
-										_unit->getPosition())
-//										true))
-									== false)
+					&& _walkCam->isOnScreen(_unit->getPosition()) == false)
 				{
 					_walkCam->centerOnPosition(_unit->getPosition());
 				}
-				else if (_walkCam->isOnScreen(
-											_unit->getPosition()))
-//											true))
+				else if (_walkCam->isOnScreen(_unit->getPosition()) == true)
 				{
 					//Log(LOG_INFO) << ". cam->onScreen";
 					int dest_z = _unit->getDestination().z;
-
 					//Log(LOG_INFO) << ". dest_z == pos_z : " << (dest_z == pos_z);
 					//Log(LOG_INFO) << ". dest_z > pos_z : " << (dest_z > pos_z);
 					//Log(LOG_INFO) << ". _walkCam->getViewLevel() < pos_z : " << (_walkCam->getViewLevel() < pos_z);
@@ -299,7 +282,7 @@ void UnitWalkBState::think()
 void UnitWalkBState::cancel()
 {
 	if (_parent->getSave()->getSide() == FACTION_PLAYER
-		&& _parent->getPanicHandled())
+		&& _parent->getPanicHandled() == true)
 	{
 		_pf->abortPath();
 	}
@@ -316,9 +299,9 @@ bool UnitWalkBState::doStatusStand()
 	int dir = _pf->getStartDirection();
 	//Log(LOG_INFO) << ". StartDirection = " << dir;
 
-	Tile* tile = _parent->getSave()->getTile(_unit->getPosition());
+	const Tile* const tile = _parent->getSave()->getTile(_unit->getPosition());
 	bool gravLift = dir >= _pf->DIR_UP // Assumes tops & bottoms of gravLifts always have floors/ceilings.
-				 && tile->getMapData(MapData::O_FLOOR)
+				 && tile->getMapData(MapData::O_FLOOR) != NULL
 				 && tile->getMapData(MapData::O_FLOOR)->isGravLift();
 
 	setNormalWalkSpeed(gravLift);
@@ -332,13 +315,13 @@ bool UnitWalkBState::doStatusStand()
 		//Log(LOG_INFO) << ". kneeled, and path Valid";
 		_kneelCheck = false;
 
-		if (_parent->kneel(_unit))
+		if (_parent->kneel(_unit) == true)
 		{
 			//Log(LOG_INFO) << ". . Stand up";
 			_unit->setCache(NULL);
 			_parent->getMap()->cacheUnit(_unit);
 
-			if (_terrain->checkReactionFire(_unit)) // unit got fired upon - stop.
+			if (_terrain->checkReactionFire(_unit) == true) // unit got fired upon - stop.
 			{
 				_pf->abortPath();
 				_parent->popState();
@@ -358,7 +341,7 @@ bool UnitWalkBState::doStatusStand()
 
 	_tileSwitchDone = false;
 
-	if (visForUnits())
+	if (visForUnits() == true)
 	{
 		//if (Options::traceAI) { Log(LOG_INFO) << "Uh-oh! Company!"; }
 		//Log(LOG_INFO) << "Uh-oh! STATUS_STANDING or PANICKING Company!";
@@ -377,7 +360,7 @@ bool UnitWalkBState::doStatusStand()
 
 	//Log(LOG_INFO) << ". getStartDirection() dir = " << dir;
 
-	if (_falling)
+	if (_falling == true)
 	{
 		dir = _pf->DIR_DOWN;
 		//Log(LOG_INFO) << ". . _falling, dir = " << dir;
@@ -418,7 +401,7 @@ bool UnitWalkBState::doStatusStand()
 							false);
 		//Log(LOG_INFO) << ". tu = " << tu;
 
-		Tile* tileDest = _parent->getSave()->getTile(destination);
+		const Tile* const tileDest = _parent->getSave()->getTile(destination);
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
 		if (_unit->getFaction() == FACTION_HOSTILE
 			&& tileDest != NULL
@@ -431,7 +414,7 @@ bool UnitWalkBState::doStatusStand()
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}
 
-		if (_falling)
+		if (_falling == true)
 		{
 			//Log(LOG_INFO) << ". . falling, set tu 0";
 			tu = 0;
@@ -515,7 +498,7 @@ bool UnitWalkBState::doStatusStand()
 			_parent->popState();
 			return false;
 		}
-		else if (_parent->getPanicHandled()
+		else if (_parent->getPanicHandled() == true
 			&& _parent->checkReservedTU(_unit, tu) == false)
 		{
 			//Log(LOG_INFO) << ". . checkReservedTU(_unit, tu) == false";
@@ -579,7 +562,7 @@ bool UnitWalkBState::doStatusStand()
 		}
 
 		// proxy blows up in face after door opens - copied doStatusStand_end()
-		if (_parent->checkForProximityGrenades(_unit)) // kL_add: Put checkForSilacoid() here!
+		if (_parent->checkForProximityGrenades(_unit) == true) // kL_add: Put checkForSilacoid() here!
 		{
 			_parent->popState();
 //			postPathProcedures(); // .. one or the other i suppose.
@@ -587,7 +570,7 @@ bool UnitWalkBState::doStatusStand()
 		}
 
 		//Log(LOG_INFO) << ". check size for obstacles";
-		int unitSize = _unit->getArmor()->getSize() - 1;
+		const int unitSize = _unit->getArmor()->getSize() - 1;
 		for (int
 				x = unitSize;
 				x > -1;
@@ -599,19 +582,20 @@ bool UnitWalkBState::doStatusStand()
 					--y)
 			{
 				//Log(LOG_INFO) << ". . check obstacle(unit)";
-				BattleUnit* unitInMyWay = _parent->getSave()->getTile(destination + Position(x, y, 0))->getUnit();
-				BattleUnit* unitBelowMyWay = NULL;
+				const BattleUnit
+					* const unitInMyWay = _parent->getSave()->getTile(destination + Position(x, y, 0))->getUnit(),
+					* unitBelowMyWay = NULL;
 
-				Tile* belowDest = _parent->getSave()->getTile(destination + Position(x, y,-1));
-				if (belowDest)
+				const Tile* const belowDest = _parent->getSave()->getTile(destination + Position(x, y,-1));
+				if (belowDest != NULL)
 					unitBelowMyWay = belowDest->getUnit();
 
 				// can't walk into units in this tile, or on top of other units sticking their head into this tile
 				if (_falling == false
-					&& ((unitInMyWay
+					&& ((unitInMyWay != NULL
 							&& unitInMyWay != _unit)
-						|| (belowDest
-							&& unitBelowMyWay
+						|| (belowDest != NULL
+							&& unitBelowMyWay != NULL
 							&& unitBelowMyWay != _unit
 							&& unitBelowMyWay->getFloatHeight()
 										+ unitBelowMyWay->getHeight()
@@ -636,19 +620,18 @@ bool UnitWalkBState::doStatusStand()
 		//Log(LOG_INFO) << ". dequeuePath()";
 		dir = _pf->dequeuePath(); // now start moving
 
-		if (_falling)
+		if (_falling == true)
 		{
 			//Log(LOG_INFO) << ". . falling, _pf->DIR_DOWN";
 			dir = _pf->DIR_DOWN;
 		}
 		//Log(LOG_INFO) << ". dequeuePath() dir = " << dir;
 
-		if (_unit->spendTimeUnits(tu)		// These were checked above and don't really need to
-			&& _unit->spendEnergy(energy))	// be checked again here. Only subtract required.
+		if (_unit->spendTimeUnits(tu) == true		// These were checked above and don't really need to
+			&& _unit->spendEnergy(energy) == true)	// be checked again here. Only subtract required.
 		{
 			//Log(LOG_INFO) << ". . WalkBState: spend TU & Energy";
-			Tile* tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
-
+			Tile* const tileBelow = _parent->getSave()->getTile(_unit->getPosition() + Position(0, 0,-1));
 			//Log(LOG_INFO) << ". . WalkBState: startWalking()";
 			_unit->startWalking(
 							dir,
@@ -1108,7 +1091,7 @@ void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
 
 	if (_unit->getFaction() == FACTION_PLAYER)
 	{
-		if (_action.dash)
+		if (_action.dash == true)
 			interval = Options::battleXcomSpeed * 2 / 3;
 		else
 			interval = Options::battleXcomSpeed;
@@ -1116,7 +1099,7 @@ void UnitWalkBState::setNormalWalkSpeed(bool gravLift)
 	else
 		interval = Options::battleAlienSpeed;
 
-	if (gravLift)
+	if (gravLift == true)
 		interval = interval * 3 / 2;
 
 	_parent->setStateInterval(static_cast<Uint32>(interval));
