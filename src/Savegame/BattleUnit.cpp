@@ -2256,12 +2256,8 @@ void BattleUnit::prepareUnitTurn()
 void BattleUnit::moraleChange(int change)
 {
 	if (isFearable() == false)
-//		&& change < 1) // kL
-	{
 		return;
-	}
 
-	//Log(LOG_INFO) << "BattleUnit::moraleChange() unitID = " << getId() << " delta = " << change ;
 	_morale += change;
 
 	if (_morale > 100)

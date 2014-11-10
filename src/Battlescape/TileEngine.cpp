@@ -5339,11 +5339,11 @@ bool TileEngine::psiAttack(BattleAction* action)
 			if (action->type == BA_PANIC)
 			{
 				//Log(LOG_INFO) << ". . . action->type == BA_PANIC";
-				const int moraleLoss = 110
-									 - statsVictim->bravery * 3 / 2
-									 + statsActor->psiStrength / 2;
-				if (moraleLoss > 0)
-					victim->moraleChange(-moraleLoss);
+				const int morale = 110
+								 - statsVictim->bravery * 3 / 2
+								 + statsActor->psiStrength / 2;
+				if (morale > 0)
+					victim->moraleChange(-morale);
 			}
 			else // BA_MINDCONTROL
 			{
@@ -5356,17 +5356,23 @@ bool TileEngine::psiAttack(BattleAction* action)
 					return false;
 				}
 
-				if (victim->getFaction() != FACTION_HOSTILE) // sideXCOM Morale loss for getting Mc'd.
-					victim->moraleChange(
-									_battleSave->getMoraleModifier(NULL, true) / 10 + statsVictim->bravery / 2 - 110);
-				else if (action->actor->getFaction() == FACTION_PLAYER)
+				int morale = statsVictim->bravery;
+				if (action->actor->getFaction() == FACTION_HOSTILE)
 				{
-					if (victim->getOriginalFaction() == FACTION_HOSTILE) // aLien Morale loss for getting Mc'd.
-						victim->moraleChange(
-										_battleSave->getMoraleModifier(NULL, false) / 10 + statsVictim->bravery - 110);
-					else // XCOM Morale gain for getting Mc'd back to xCom.
-						victim->moraleChange(statsVictim->bravery / 2);
+					morale = std::min( // xCom Morale loss for getting Mc'd.
+									0,
+									_battleSave->getMoraleModifier(NULL, true) / 10 + morale / 2 - 110);
 				}
+				else //if (action->actor->getFaction() == FACTION_PLAYER)
+				{
+					if (victim->getOriginalFaction() == FACTION_HOSTILE)
+						morale = std::min( // aLien Morale loss for getting Mc'd.
+										0,
+										_battleSave->getMoraleModifier(NULL, false) / 10 + morale - 110);
+					else
+						morale /= 2; // xCom Morale gain for getting Mc'd back to xCom.
+				}
+				victim->moraleChange(morale);
 
 				victim->convertToFaction(action->actor->getFaction());
 
