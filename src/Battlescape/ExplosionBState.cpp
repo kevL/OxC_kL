@@ -445,26 +445,27 @@ void ExplosionBState::explode()
 		// dang, screws up multiple shot per turn.
 		save->getBattleGame()->getCurrentAction()->type = BA_NONE;
 
-		if (_unit != NULL
-			&& _unit->isOut() == false)
+		if (_unit != NULL)
 		{
-			_unit->aim(false);
-			_unit->setCache(NULL);
-		}
-
-		if (_unit != NULL
-			&& _unit->getOriginalFaction() == FACTION_PLAYER
-			&& _unit->getFaction() == FACTION_PLAYER)
-		{
-			_unit->addMeleeExp(); // 1xp for swinging
-
-			if (_hitSuccess == true)
+			if (_unit->isOut() == false)
 			{
-				BattleUnit* targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
-				if (targetUnit
-					&& targetUnit->getFaction() == FACTION_HOSTILE)
+				_unit->aim(false);
+				_unit->setCache(NULL);
+			}
+
+			if (_unit->getGeoscapeSoldier() != NULL
+				&& _unit->getFaction() == _unit->getOriginalFaction())
+			{
+				_unit->addMeleeExp(); // 1xp for swinging
+
+				if (_hitSuccess == true)
 				{
-					_unit->addMeleeExp(); // +1xp for hitting an aLien OR Mc'd xCom agent
+					const BattleUnit* const targetUnit = save->getTile(_center / Position(16, 16, 24))->getUnit();
+					if (targetUnit != NULL
+						&& targetUnit->getFaction() == FACTION_HOSTILE)
+					{
+						_unit->addMeleeExp(); // +1xp for hitting an aLien OR Mc'd xCom agent
+					}
 				}
 			}
 		}

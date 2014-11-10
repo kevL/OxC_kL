@@ -5338,10 +5338,12 @@ bool TileEngine::psiAttack(BattleAction* action)
 		if (RNG::percent(success))
 		{
 			//Log(LOG_INFO) << ". . Success";
-			if (action->actor->getOriginalFaction() == FACTION_PLAYER
-				&& victim->getOriginalFaction() == FACTION_HOSTILE) // no extra-XP for re-controlling Soldiers.
+			if (action->actor->getOriginalFaction() == FACTION_PLAYER)
 			{
-				action->actor->addPsiSkillExp(2);
+				if (victim->getOriginalFaction() == FACTION_HOSTILE) // no extra-XP for re-controlling Soldiers.
+					action->actor->addPsiSkillExp(2);
+				else if (victim->getOriginalFaction() == FACTION_NEUTRAL) // only 1 extra-XP for controlling Civies.
+					action->actor->addPsiSkillExp();
 			}
 
 			if (action->type == BA_PANIC)
@@ -5463,10 +5465,13 @@ bool TileEngine::psiAttack(BattleAction* action)
 			//Log(LOG_INFO) << "TileEngine::psiAttack() ret TRUE";
 			return true;
 		}
-		else if (Options::allowPsiStrengthImprovement
-			&& victim->getOriginalFaction() == FACTION_PLAYER)
+		else if (victim->getOriginalFaction() == FACTION_PLAYER
+			&& Options::allowPsiStrengthImprovement)
 		{
-			victim->addPsiStrengthExp(2);
+			if (action->actor->getFaction() == FACTION_HOSTILE)
+				victim->addPsiStrengthExp(2); // xCom resisted aLien
+			else
+				victim->addPsiStrengthExp(); // xCom resisted xCom
 		}
 	}
 	else if (action->actor->getFaction() == FACTION_PLAYER)
