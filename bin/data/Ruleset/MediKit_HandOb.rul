@@ -10,4 +10,4 @@ extraSprites:
     subX: 32
     subY: 40
     files:
-      208: Resources/MediKit/HandOb_MediKit.gif
+      208: Resources/MediKit/HandOb_MediKit.png

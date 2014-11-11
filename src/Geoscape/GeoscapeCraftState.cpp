@@ -130,6 +130,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
@@ -183,10 +184,10 @@ GeoscapeCraftState::GeoscapeCraftState(
 		status = tr("STR_PATROLLING");
 	else
 	{
-		Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+		const Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
 		if (ufo != NULL)
 		{
-			if (_craft->isInDogfight())
+			if (_craft->isInDogfight() == true)
 			{
 				speed = ufo->getSpeed();	// THIS DOES NOT CHANGE THE SPEED of the xCom CRAFT
 											// for Fuel usage. ( ie. it should )
@@ -208,10 +209,13 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtBase->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtBase->setText(tr("STR_BASE_UC").arg(_craft->getBase()->getName()));
 
+
 	std::wostringstream
 		ss1,
 		ss2,
-		ss3;
+		ss3,
+		ss4,
+		ss5;
 
 	_txtSpeed->setColor(Palette::blockOffset(15)-1);
 	_txtSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
@@ -222,11 +226,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtMaxSpeed->setSecondaryColor(Palette::blockOffset(8)+5);
 	_txtMaxSpeed->setText(tr("STR_MAXIMUM_SPEED_UC")
 							.arg(Text::formatNumber(_craft->getRules()->getMaxSpeed())));
-
-	_txtSoldier->setColor(Palette::blockOffset(15)-1);
-	_txtSoldier->setSecondaryColor(Palette::blockOffset(8)+5);
-	ss2 << tr("STR_SOLDIERS") << " " << L'\x01' << _craft->getNumSoldiers();
-	_txtSoldier->setText(ss2.str());
 
 	_txtAltitude->setColor(Palette::blockOffset(15)-1);
 	_txtAltitude->setSecondaryColor(Palette::blockOffset(8)+5);
@@ -241,10 +240,6 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 	_txtAltitude->setText(tr("STR_ALTITUDE_").arg(tr(alt)));
 
-	_txtHWP->setColor(Palette::blockOffset(15)-1);
-	_txtHWP->setSecondaryColor(Palette::blockOffset(8)+5);
-	ss3 << tr("STR_HWPS") << " " << L'\x01' << _craft->getNumVehicles();
-	_txtHWP->setText(ss3.str());
 
 	_txtFuel->setColor(Palette::blockOffset(15)-1);
 	_txtFuel->setSecondaryColor(Palette::blockOffset(8)+5);
@@ -255,6 +250,31 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtDamage->setText(tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent())));
 
 
+	if (_craft->getRules()->getSoldiers() > 0)
+	{
+		_txtSoldier->setColor(Palette::blockOffset(15)-1);
+		_txtSoldier->setSecondaryColor(Palette::blockOffset(8)+5);
+//		ss2 << tr("STR_SOLDIERS") << " " << L'\x01' << _craft->getNumSoldiers();
+		ss2 << tr("STR_SOLDIERS") << L" " << L'\x01' << _craft->getNumSoldiers();
+		ss2 << L" (" << _craft->getRules()->getSoldiers() << L")";
+		_txtSoldier->setText(ss2.str());
+	}
+	else
+		_txtSoldier->setVisible(false);
+
+	if (_craft->getRules()->getVehicles() > 0)
+	{
+		_txtHWP->setColor(Palette::blockOffset(15)-1);
+		_txtHWP->setSecondaryColor(Palette::blockOffset(8)+5);
+//		ss3 << tr("STR_HWPS") << " " << L'\x01' << _craft->getNumVehicles();
+		ss3 << tr("STR_HWPS") << L" " << L'\x01' << _craft->getNumVehicles();
+		ss3 << L" (" << _craft->getRules()->getVehicles() << L")";
+		_txtHWP->setText(ss3.str());
+	}
+	else
+		_txtHWP->setVisible(false);
+
+
 	_txtW1Name->setColor(Palette::blockOffset(15)-1);
 	_txtW1Name->setSecondaryColor(Palette::blockOffset(8)+5);
 
@@ -262,11 +282,15 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(8)+5);
 
 	if (_craft->getRules()->getWeapons() > 0
-		&& _craft->getWeapons()->at(0) != 0)
+		&& _craft->getWeapons()->at(0) != NULL)
 	{
 		CraftWeapon* w1 = _craft->getWeapons()->at(0);
 		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr(w1->getRules()->getType())));
-		_txtW1Ammo->setText(tr("STR_ROUNDS_").arg(w1->getAmmo()));
+
+//		_txtW1Ammo->setText(tr("STR_ROUNDS_").arg(w1->getAmmo()));
+		ss4 << tr("STR_ROUNDS_").arg(w1->getAmmo());
+		ss4 << L" (" << w1->getRules()->getAmmoMax() << L")";
+		_txtW1Ammo->setText(ss4.str());
 	}
 	else
 	{
@@ -281,17 +305,22 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(8)+5);
 
 	if (_craft->getRules()->getWeapons() > 1
-		&& _craft->getWeapons()->at(1) != 0)
+		&& _craft->getWeapons()->at(1) != NULL)
 	{
 		CraftWeapon* w2 = _craft->getWeapons()->at(1);
 		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr(w2->getRules()->getType())));
-		_txtW2Ammo->setText(tr("STR_ROUNDS_").arg(w2->getAmmo()));
+
+//		_txtW2Ammo->setText(tr("STR_ROUNDS_").arg(w2->getAmmo()));
+		ss5 << tr("STR_ROUNDS_").arg(w2->getAmmo());
+		ss5 << L" (" << w2->getRules()->getAmmoMax() << L")";
+		_txtW2Ammo->setText(ss5.str());
 	}
 	else
 	{
 		_txtW2Name->setVisible(false);
 		_txtW2Ammo->setVisible(false);
 	}
+
 
 	_txtRedirect->setColor(Palette::blockOffset(15)-1);
 	_txtRedirect->setBig();
@@ -330,13 +359,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 			_btnPatrol->setVisible(false);
 	}
 
-	if (_craft->getRules()->getSoldiers() == 0)
-		_txtSoldier->setVisible(false);
-	if (_craft->getRules()->getVehicles() == 0)
-		_txtHWP->setVisible(false);
 
 	const int craftSprite = _craft->getRules()->getSprite();
-	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
+	SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("INTICON.PCK");
 	texture->getFrame(craftSprite + 11)->blit(_sprite);
 }
 
@@ -353,7 +378,7 @@ GeoscapeCraftState::~GeoscapeCraftState()
  */
 void GeoscapeCraftState::btnCenterClick(Action*)
 {
-	if (_doublePop)
+	if (_doublePop == true)
 		_game->popState();
 
 	_game->popState();
@@ -368,7 +393,7 @@ void GeoscapeCraftState::btnCenterClick(Action*)
  */
 void GeoscapeCraftState::btnBaseClick(Action*)
 {
-	if (_doublePop)
+	if (_doublePop == true)
 		_game->popState();
 
 	_game->popState();
@@ -383,7 +408,7 @@ void GeoscapeCraftState::btnBaseClick(Action*)
  */
 void GeoscapeCraftState::btnTargetClick(Action*)
 {
-	if (_doublePop)
+	if (_doublePop == true)
 		_game->popState();
 
 	_game->popState();
@@ -400,7 +425,7 @@ void GeoscapeCraftState::btnTargetClick(Action*)
  */
 void GeoscapeCraftState::btnPatrolClick(Action*)
 {
-	if (_doublePop)
+	if (_doublePop == true)
 		_game->popState();
 
 	_game->popState();
