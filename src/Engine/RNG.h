@@ -23,6 +23,7 @@
 #include <algorithm>
 
 #define __STDC_LIMIT_MACROS
+
 //#include <stdint.h>
 #include <cstdint>
 
@@ -41,39 +42,40 @@ namespace RNG
 	/// Gets the seed in use.
 	uint64_t getSeed();
 	/// Sets the seed in use.
-	void setSeed(uint64_t n);
+	void setSeed(uint64_t seed);
 
 	/// Generates a random integer number, inclusive.
 	int generate(
-			int min,
-			int max);
+			int minRand,
+			int maxRand);
 	/// Generates a random floating-point number.
 	double generate(
-			double min,
-			double max);
+			double minRand,
+			double maxRand);
 
 	/// Get normally distributed value.
 	double boxMuller(
 			double mean = 0,
-			double standardDeviation = 1);
+			double deviation = 1);
 
 	/// Generates a percentage chance.
 	bool percent(int value);
 
 	/// Generates a random integer number, exclusive.
-	int generateEx(int max);
+	int generateEx(int maxRand);
+
 
 	/// Shuffles a list randomly.
 	/**
 	 * Randomly changes the orders of the elements in a list.
-	 * @param list The container to randomize.
+	 * @param container - the container to randomize
 	 */
-	template <typename T> // Ss. Take 2!
-	void shuffle(T& list)
+	template <typename T>
+	void shuffle(T& container)
 	{
 		std::random_shuffle(
-						list.begin(),
-						list.end(),
+						container.begin(),
+						container.end(),
 						generateEx);
 	}
 }

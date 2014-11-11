@@ -5282,7 +5282,7 @@
 	"../Savegame/ItemContainer.h"
 	"../Savegame/ResearchProject.h"
 
-1413136956 f:\git\openxcom\src\engine\rng.h
+1415668320 f:\git\openxcom\src\engine\rng.h
 	<algorithm>
 	<cstdint>
 
@@ -6612,7 +6612,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1415569997 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1415631429 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -6666,7 +6666,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1415584487 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1415670339 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"../fmath.h"
@@ -6676,6 +6676,7 @@
 	"Pathfinding.h"
 	"TileEngine.h"
 	"../Engine/Game.h"
+	"../Engine/Logger.h"
 	"../Engine/Options.h"
 	"../Engine/RNG.h"
 	"../Engine/Surface.h"
@@ -6772,7 +6773,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1415620507 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1415634869 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -7181,7 +7182,7 @@
 	<fstream>
 	"Exception.h"
 
-1413751955 source:f:\git\openxcom\src\engine\rng.cpp
+1415672573 source:f:\git\openxcom\src\engine\rng.cpp
 	"RNG.h"
 	<math.h>
 	<time.h>

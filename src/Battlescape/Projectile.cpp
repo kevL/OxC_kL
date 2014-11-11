@@ -32,7 +32,7 @@
 #include "TileEngine.h"
 
 #include "../Engine/Game.h"
-//#include "../Engine/Logger.h"
+#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Surface.h"
@@ -171,7 +171,7 @@ Projectile::~Projectile()
 
 /**
  * Calculates the trajectory for a straight path.
- * This is simply a wrapper for calculateTrajectory() below; it calculates and passes along an originVoxel.
+ * This is a wrapper for calculateTrajectory() below; it calculates and passes on an originVoxel.
  * @param accuracy - accuracy of the projectile's trajectory (a battleunit's accuracy)
  * @return,  -1 nothing to hit / no line of fire
  *			0-3 tile-part (floor / westwall / northwall / content)
@@ -356,12 +356,11 @@ int Projectile::calculateThrow(double accuracy)
 	//Log(LOG_INFO) << "Projectile::calculateThrow()"; //, cf TileEngine::validateThrow()";
 /*	BattleUnit* bu = _save->getTile(_origin)->getUnit();
 	if (bu == NULL)
-	{
 		bu = _save->getTile(Position(
 								_origin.x,
 								_origin.y,
 								_origin.z - 1))->getUnit();
-	} */
+*/
 
 	const Position originVoxel = _save->getTileEngine()->getOriginVoxel(
 																	_action,
@@ -410,20 +409,20 @@ int Projectile::calculateThrow(double accuracy)
 										&ret))
 	{
 		//Log(LOG_INFO) << ". validateThrow() TRUE";
-		// finally do a line calculation and store this trajectory, & make sure it's valid.
+		// Finally do a parabola calculation and store that trajectory - make sure it's valid.
 		int test = VOXEL_OUTOFBOUNDS;
 		while (test == VOXEL_OUTOFBOUNDS)
 		{
-			Position delta = targetVoxel;	// will apply some accuracy modifiers
-			applyAccuracy(					// ... calling for best flavor ...
+			Position targetDelta = targetVoxel; // apply some accuracy modifiers
+			applyAccuracy(
 						originVoxel,
-						&delta,
+						&targetDelta,
 						accuracy,
 						true,
 						_save->getTile(_action.target),
 						false);
 
-			delta -= targetVoxel;
+			targetDelta -= targetVoxel;
 
 			_trajectory.clear();
 
@@ -434,8 +433,31 @@ int Projectile::calculateThrow(double accuracy)
 														&_trajectory,
 														_action.actor,
 														arc,
-														delta);
+														targetDelta);
 			//Log(LOG_INFO) << ". . calculateParabola() = " << test;
+
+			// kL_begin: See also TileEngine::validateThrow()
+			if (_action.type == BA_THROW)
+			{
+				const Tile* const targetTile = _save->getTile(_trajectory.back() / Position(16, 16, 24));
+				if (targetTile != NULL
+					&& targetTile->getMapData(MapData::O_OBJECT) != NULL
+					&& (targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
+						|| targetTile->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
+//					&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
+//						|| action.weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+//					&& _action.target->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
+				{
+					test = VOXEL_OUTOFBOUNDS; // prevent Grenades from landing on diagonal BigWalls.
+				}
+			} // kL_end.
+		}
+
+		return ret;
+	}
+	//Log(LOG_INFO) << ". validateThrow() FALSE";
+	return VOXEL_OUTOFBOUNDS;
+}
 /*	static const double maxDeviation = 0.125;
 	static const double minDeviation = 0.0;
 	double baseDeviation = std::max(
@@ -488,14 +510,6 @@ int Projectile::calculateThrow(double accuracy)
 					bu,
 					arc,
 					1.0); */
-		}
-
-		return ret;
-	}
-	//Log(LOG_INFO) << ". validateThrow() FALSE";
-
-	return VOXEL_OUTOFBOUNDS;
-}
 
 /**
  * Calculates the new target in voxel space, based on a given accuracy modifier.
@@ -518,6 +532,7 @@ void Projectile::applyAccuracy(
 	if (_action.type == BA_HIT)
 		return;
 
+
 	const int
 		delta_x = origin.x - target->x,
 		delta_y = origin.y - target->y,
@@ -529,14 +544,12 @@ void Projectile::applyAccuracy(
 								+ static_cast<double>(delta_z * delta_z)); // kL_add.
 	//Log(LOG_INFO) << ". targetDist = " << targetDist;
 
-
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
 	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
-
 	// kL_note: This is that hypothetically infinite point in space to aim for;
 	// the closer it's set, the more accurate shots become. I suspect ....
 //	double maxRange = 3200.0; // kL. vSpace == 200 tiles in tSpace.
-	if (keepRange)
+	if (keepRange == true)
 		maxRange = targetDist;
 	//Log(LOG_INFO) << ". maxRange = " << maxRange;
 
@@ -589,16 +602,16 @@ void Projectile::applyAccuracy(
 				if (smoke > 0)
 					acuPenalty += smoke * 0.01;
 
-				if (targetTile->getUnit())
+				if (targetTile->getUnit() != NULL)
 				{
-					BattleUnit* targetUnit = targetTile->getUnit();
+					const BattleUnit* const targetUnit = targetTile->getUnit();
 
 					if (_action.actor->getOriginalFaction() != FACTION_HOSTILE)
 						acuPenalty += 0.01 * static_cast<double>(targetTile->getShade());
 
 					// If targetUnit is kneeled, then accuracy reduced by ~6%.
 					// This is a compromise, because vertical deviation is ~2 times less.
-					if (targetUnit->isKneeled())
+					if (targetUnit->isKneeled() == true)
 						acuPenalty += 0.076;
 				}
 			}
@@ -638,97 +651,50 @@ void Projectile::applyAccuracy(
 				//Log(LOG_INFO) << ". . dH = " << dH;
 				//Log(LOG_INFO) << ". . dV = " << dV;
 
-			if (extendLine) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
+			if (extendLine == true) // kL_note: This is for aimed projectiles; always true in my RangedBased here.
 			{
 				//Log(LOG_INFO) << "Projectile::applyAccuracy() extendLine";
 				// It is a simple task - to hit a target width of 5-7 voxels. Good luck!
 				target->x = static_cast<int>(Round(static_cast<double>(origin.x) + maxRange * cos(te) * cos_fi));
 				target->y = static_cast<int>(Round(static_cast<double>(origin.y) + maxRange * sin(te) * cos_fi));
 				target->z = static_cast<int>(Round(static_cast<double>(origin.z) + maxRange * sin(fi)));
-//				target->x = static_cast<int>(static_cast<double>(origin.x) + maxRange * cos(te) * cos_fi);
-//				target->y = static_cast<int>(static_cast<double>(origin.y) + maxRange * sin(te) * cos_fi);
-//				target->z = static_cast<int>(static_cast<double>(origin.z) + maxRange * sin(fi));
 			}
-
 			//Log(LOG_INFO) << "Projectile::applyAccuracy() x = " << target->x;
 			//Log(LOG_INFO) << "Projectile::applyAccuracy() y = " << target->y;
 			//Log(LOG_INFO) << "Projectile::applyAccuracy() z = " << target->z;
 
 			//Log(LOG_INFO) << "Projectile::applyAccuracy() rangeBased EXIT";
-			return;
 		}
+
+		return;
 	}
 
 
-	// kL_note: *** This should now be for Throwing and AcidSpitting only ***
-	//Log(LOG_INFO) << ". standard accuracy, Throw & AcidSpit";
-	// nonRangeBased target formula.
-	// beware of 'extendLine' below for BLs though... comes from calculateTrajectory() above....
+	// kL_note: *** This is for Throwing and AcidSpitt only ***
+	accuracy = accuracy * 50. + 50.; // arbitrary adjustment.
 
-/*kL okay, so this is all just garbage:
-	int
-		xDist = abs(origin.x - target->x),
-		yDist = abs(origin.y - target->y),
-		zDist = abs(origin.z - target->z),
-
-		xyShift,
-		zShift;
-
-	if (xDist / 2 <= yDist)				// yes, we need to add some x/y non-uniformity
-		xyShift = xDist / 4 + yDist;	// and don't ask why, please. it's The Commandment
-	else
-		xyShift = (xDist + yDist) / 2;	// that's uniform part of spreading
-
-	if (xyShift <= zDist)				// slight z deviation
-		zShift = xyShift / 2 + zDist;
-	else
-		zShift = xyShift + zDist / 2;
-
-//kL	int deviation = RNG::generate(0, 100) - (static_cast<int>(accuracy * 100.0));
-
-	if (deviation > -1)
-		deviation += 50;				// add extra spread to "miss" cloud
-	else
-		deviation += 10;				// accuracy of 109 or greater will become 1 (tightest spread)
-
-	deviation = std::max( // range ratio
-						1,
-						zShift * deviation / 200);
-
-	target->x += RNG::generate(0, deviation) - deviation / 2;
-	target->y += RNG::generate(0, deviation) - deviation / 2;
-	target->z += RNG::generate(0, deviation / 4) - deviation / 8; */
-
-	int toss = 100;
-
+	double perfectToss = 100.;
 	const Soldier* const soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());
 	if (soldier != NULL)
-		toss = soldier->getRules()->getStatCaps().throwing;
-	//Log(LOG_INFO) << ". . toss = " << toss;
+		perfectToss = static_cast<double>(soldier->getRules()->getStatCaps().throwing);
 
-	accuracy = accuracy * 50.0 + 50.0; // arbitrary adjustment.
-	//Log(LOG_INFO) << ". . accuracy = " << accuracy;
-	//Log(LOG_INFO) << ". . targetDist = " << targetDist;
-	double deviation = static_cast<double>(toss) - accuracy;
+	double deviation = perfectToss - accuracy;
 	deviation = std::max(
-						0.0,
-						deviation * targetDist / 100.0);
-
-	//Log(LOG_INFO) << ". . deviation = " << deviation;
+						0.,
+						deviation * targetDist / 100.);
 
 	const double
-		dx = RNG::boxMuller(0.0, deviation),
-		dy = RNG::boxMuller(0.0, deviation),
-		dz = RNG::boxMuller(0.0, deviation);
+		dx = RNG::boxMuller(0., deviation) / 4.,
+		dy = RNG::boxMuller(0., deviation) / 4.,
+		dz = RNG::boxMuller(0., deviation) / 6.;
 
-	target->x += static_cast<int>(Round(RNG::generate(0.0, dx) - dx / 2.0));
-	target->y += static_cast<int>(Round(RNG::generate(0.0, dy) - dy / 2.0));
-	target->z += static_cast<int>(Round(RNG::generate(0.0, dz / 4.0) - dz / 8.0));
-	// kL_end.
+	target->x += static_cast<int>(Round(dx));
+	target->y += static_cast<int>(Round(dy));
+	target->z += static_cast<int>(Round(dz));
 
 
-	if (extendLine) // kL_note: This is for aimed projectiles; always false outside my RangedBased above.
-					// That is, this ought never run in my Build.
+	if (extendLine == true)	// note: This is for aimed projectiles; always false outside RangedBased above
+							// - that is, this ought never run in this Build.
 	{
 		//Log(LOG_INFO) << ". Projectile::applyAccuracy() ERROR : extendLine";
 /*		double maxDeviation = 2.5; // maxDeviation is the max angle deviation for accuracy 0% in degrees
@@ -753,16 +719,14 @@ void Projectile::applyAccuracy(
 
 		const double
 			rotation = atan2(
-						static_cast<double>(target->y - origin.y),
-						static_cast<double>(target->x - origin.x))
+							static_cast<double>(target->y - origin.y),
+							static_cast<double>(target->x - origin.x))
 						* 180.0 / M_PI,
 			tilt = atan2(
 						static_cast<double>(target->z - origin.z),
 						sqrt(
-							static_cast<double>(target->x - origin.x)
-									* static_cast<double>(target->x - origin.x)
-								+ static_cast<double>(target->y - origin.y)
-									* static_cast<double>(target->y - origin.y)))
+							  static_cast<double>(target->x - origin.x) * static_cast<double>(target->x - origin.x)
+							+ static_cast<double>(target->y - origin.y) * static_cast<double>(target->y - origin.y)))
 						* 180.0 / M_PI;
 
 		// calculate new target

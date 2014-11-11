@@ -26,6 +26,7 @@
 	#define UINT64_MAX 0xffffffffffffffffULL
 #endif */
 // Or:
+
 #include <cmath>
 #include <ctime>
 
@@ -44,13 +45,12 @@ worldwide. This software is distributed without any warranty.
 
 See <http://creativecommons.org/publicdomain/zero/1.0/>. */
 
-/*	This is a good generator if you're short on memory, but otherwise we
-	rather suggest to use a xorshift128+ (for maximum speed) or
+/*	This is a good generator if you're short on memory, but otherwise
+	we rather suggest to use a xorshift128+ (for maximum speed) or
 	xorshift1024* (for speed and very long period) generator. */
 
 
-
-uint64_t x = time(0); /* The state must be seeded with a nonzero value. */
+uint64_t x = time(0); // The state must be seeded with a nonzero value.
 
 
 uint64_t next()
@@ -73,74 +73,82 @@ uint64_t getSeed()
 
 /**
 * Changes the current seed in use by the generator.
-* @param n - new seed
+* @param seed - new seed
 */
-void setSeed(uint64_t n)
+void setSeed(uint64_t seed)
 {
-	x = n;
+	x = seed;
 }
 
 /**
  * Generates a random integer number within a certain range.
- * @param min - minimum number, inclusive
- * @param max - maximum number, inclusive
+ * @param minRand - minimum number, inclusive
+ * @param maxRand - maximum number, inclusive
  * @return, generated number
  */
 int generate(
-		int min,
-		int max)
+		int minRand,
+		int maxRand)
 {
 	uint64_t rand = next();
 
-	if (max < min)	// CyberAngel
-		max = min;	// http://openxcom.org/bugs/openxcom/issues/736
+	if (maxRand < minRand)	// CyberAngel
+		maxRand = minRand;	// http://openxcom.org/bugs/openxcom/issues/736
 
-	return (static_cast<int>(rand %(max - min + 1)) + min);
+	return (static_cast<int>(rand %(maxRand - minRand + 1)) + minRand);
 }
 
 /**
  * Generates a random decimal number within a certain range.
- * @param min - minimum number
- * @param max - maximum number
+ * @param minRand - minimum number
+ * @param maxRand - maximum number
  * @return, generated number
  */
 double generate(
-		double min,
-		double max)
+		double minRand,
+		double maxRand)
 {
 //kL	double rand = static_cast<double>(next());
 
 	// kL_begin:
-	double diff = max - min;
+	double diff = maxRand - minRand;
 	if (AreSame(diff, 0.0))	// kL
-		return min;			// kL
+		return minRand;		// kL
 
 //	diff = (static_cast<double>(UINT64_MAX) / diff);
 	diff = (static_cast<double>(std::numeric_limits<uint64_t>::max()) / diff);
 	if (AreSame(diff, 0.0))	// kL
-		return min;			// kL
+		return minRand;			// kL
 
 	double rand = static_cast<double>(next());
 
-	return ((rand / diff) + min);
+	return ((rand / diff) + minRand);
 	// kL_end.
 
 
-//kL	return static_cast<double>(rand / (static_cast<double>(UINT64_MAX) / (max - min)) + min);
-//		return (double)(rand / ((double)std::numeric_limits<uint64_t>::max() / (max - min)) + min); // AMDmi3 note.
+//kL	return static_cast<double>(rand / (static_cast<double>(UINT64_MAX) / (maxRand - minRand)) + minRand);
+//		return (double)(rand / ((double)std::numeric_limits<uint64_t>::maxRand() / (maxRand - minRand)) + minRand); // AMDmi3 note.
 
-//	return (rand / (static_cast<double>(UINT64_MAX) / (max - min)) + min); // kL
+//	return (rand / (static_cast<double>(UINT64_MAX) / (maxRand - minRand)) + minRand); // kL
 }
 
+/*
+ftp://ftp.taygeta.com/pub/c/boxmuller.c
+
+Implements the Polar form of the Box-Muller Transformation
+(c) Copyright 1994, Everett F. Carter Jr.
+	Permission is granted by the author to use this software for
+	any application provided this copyright notice is preserved.
+*/
 /**
- * Normal random variate generator.
- * @param mean				- mean
- * @param standardDeviation	- standard deviation
+ * Normal Standard (Gaussian) random generator.
+ * @param mean		- offset of the center value (default 0.0)
+ * @param deviation	- standard deviation (default 1.0)
  * @return, normally distributed value
  */
 double boxMuller(
 		double mean,
-		double standardDeviation)
+		double deviation)
 {
 	static bool use_last = false;
 
@@ -149,11 +157,13 @@ double boxMuller(
 
 	if (use_last) // use value from previous call
 	{
-		y1 = y2;
 		use_last = false;
+		y1 = y2;
 	}
 	else
 	{
+		use_last = true;
+
 		double
 			x1,
 			x2,
@@ -161,20 +171,18 @@ double boxMuller(
 
 		do
 		{
-			x1 = 2.0 * generate(0.0, 1.0) - 1.0;
-			x2 = 2.0 * generate(0.0, 1.0) - 1.0;
+			x1 = (generate(0., 1.) * 2.) - 1.;
+			x2 = (generate(0., 1.) * 2.) - 1.;
 			w = (x1 * x1) + (x2 * x2);
 		}
-		while (w >= 1.0);
+		while (w >= 1.);
 
-		w = sqrt((-2.0 * log(w)) / w);
+		w = sqrt((-2. * log(w)) / w);
 		y1 = x1 * w;
 		y2 = x2 * w;
-
-		use_last = true;
 	}
 
-	return (mean + (y1 * standardDeviation));
+	return (mean + (y1 * deviation));
 }
 
 /**
@@ -185,26 +193,26 @@ double boxMuller(
 bool percent(int value)
 {
 	if (value < 1)
-		return false; // kL
+		return false;
 	else if (value > 99)
-		return true; // kL
+		return true;
 
 	return (generate(0, 99) < value);
 }
 
 /**
  * Generates a random positive integer up to a number.
- * @param max - maximum number, exclusive
+ * @param maxRand - maximum number, exclusive
  * @return, generated number
  */
-int generateEx(int max)
+int generateEx(int maxRand)
 {
-	if (max < 2)	// kL
+	if (maxRand < 2)	// kL
 		return 0;	// kL
 
 	uint64_t rand = next();
 
-	return static_cast<int>(rand %max);
+	return static_cast<int>(rand %maxRand);
 }
 
 }

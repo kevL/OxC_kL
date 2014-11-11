@@ -1200,8 +1200,8 @@ int Pathfinding::getTUCost(
 		}
 	}
 
-	// For large units:
-	if (unitSize > 0)
+
+	if (unitSize > 0) // for Large units ->
 	{
 		//Log(LOG_INFO) << "getTUCost() unitSize > 0";
 		// - check the path between part 0,0 and part 1,1 at destination position

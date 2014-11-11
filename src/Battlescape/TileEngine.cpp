@@ -4939,12 +4939,12 @@ bool TileEngine::validateThrow(
 	}
 
 	if (action.type == BA_THROW
-		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
-			|| action.weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 		&& tileTarget != NULL
 		&& tileTarget->getMapData(MapData::O_OBJECT) != NULL
 		&& (tileTarget->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NESW
 			|| tileTarget->getMapData(MapData::O_OBJECT)->getBigWall() == Pathfinding::BIGWALL_NWSE))
+//		&& (action.weapon->getRules()->getBattleType() == BT_GRENADE
+//			|| action.weapon->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 //		&& tileTarget->getMapData(MapData::O_OBJECT)->getTUCost(MT_WALK) == 255)
 	{
 		return false; // prevent Grenades from landing on diagonal BigWalls.
