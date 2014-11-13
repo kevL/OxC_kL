@@ -319,7 +319,7 @@ void StartState::think()
 
 /**
  * The game quits if the player presses any key when an error message is on display.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void StartState::handle(Action* action)
 {

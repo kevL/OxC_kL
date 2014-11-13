@@ -200,7 +200,7 @@ void BuildNewBaseState::think()
 
 /**
  * Handles the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BuildNewBaseState::handle(Action* action)
 {
@@ -210,7 +210,7 @@ void BuildNewBaseState::handle(Action* action)
 
 /**
  * Processes mouse-hover event for base placement,
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BuildNewBaseState::globeHover(Action* action)
 {
@@ -260,7 +260,7 @@ void BuildNewBaseState::hoverRedraw(void)
 /**
  * Processes any left-clicks for base placement,
  * or right-clicks to scroll the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BuildNewBaseState::globeClick(Action* action)
 {
@@ -317,7 +317,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe to the left.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnRotateLeftPress(Action*)
 {
@@ -326,7 +326,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe to the left.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnRotateLeftRelease(Action*)
 {
@@ -335,7 +335,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe to the right.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnRotateRightPress(Action*)
 {
@@ -344,7 +344,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe to the right.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnRotateRightRelease(Action*)
 {
@@ -353,7 +353,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe upwards.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnRotateUpPress(Action*)
 {
@@ -362,7 +362,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe upwards.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnRotateUpRelease(Action*)
 {
@@ -371,7 +371,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe downwards.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnRotateDownPress(Action*)
 {
@@ -380,7 +380,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe downwards.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnRotateDownRelease(Action*)
 {
@@ -389,7 +389,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Zooms into the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnZoomInLeftClick(Action*)
 {
@@ -398,7 +398,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Zooms the globe maximum.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnZoomInRightClick(Action*)
 {
@@ -407,7 +407,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Zooms out of the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnZoomOutLeftClick(Action*)
 {
@@ -416,7 +416,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Zooms the globe minimum.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BuildNewBaseState::btnZoomOutRightClick(Action*)
 {
@@ -425,7 +425,7 @@ void BuildNewBaseState::globeClick(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BuildNewBaseState::btnCancelClick(Action*)
 {

@@ -103,9 +103,9 @@ private:
 	/// Gets distance between bases.
 	double getDistance() const;
 	/// Gets type of selected item.
-	enum TransferType getType(size_t selected) const;
+	enum TransferType getType(const size_t selected) const;
 	/// Gets item Index.
-	size_t getItemIndex(size_t selected) const;
+	size_t getItemIndex(const size_t selected) const;
 
 
 	public:

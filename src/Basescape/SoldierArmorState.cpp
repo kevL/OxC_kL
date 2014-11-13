@@ -159,7 +159,7 @@ SoldierArmorState::~SoldierArmorState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierArmorState::btnCancelClick(Action*)
 {
@@ -168,7 +168,7 @@ void SoldierArmorState::btnCancelClick(Action*)
 
 /**
  * Equips the armor on the soldier and returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierArmorState::lstArmorClick(Action*)
 {

@@ -810,7 +810,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryPerformanceState::btnOkClick(Action*)
 {
@@ -821,7 +821,7 @@ void SoldierDiaryPerformanceState::btnOkClick(Action*)
 
 /**
  * Goes to the previous soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryPerformanceState::btnPrevClick(Action*)
 {
@@ -841,7 +841,7 @@ void SoldierDiaryPerformanceState::btnPrevClick(Action*)
 
 /**
  * Goes to the next soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryPerformanceState::btnNextClick(Action*)
 {

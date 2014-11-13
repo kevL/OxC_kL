@@ -412,7 +412,7 @@ void BasescapeState::setBase(Base* base)
 
 /**
  * Goes to the Build New Base screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BasescapeState::btnNewBaseClick(Action*)
 {
@@ -427,7 +427,7 @@ void BasescapeState::setBase(Base* base)
 
 /**
  * Goes to the Base Info screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnBaseInfoClick(Action*)
 {
@@ -438,7 +438,7 @@ void BasescapeState::btnBaseInfoClick(Action*)
 
 /**
  * Goes to the Soldiers screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnSoldiersClick(Action*)
 {
@@ -447,7 +447,7 @@ void BasescapeState::btnSoldiersClick(Action*)
 
 /**
  * Goes to the Crafts screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnCraftsClick(Action*)
 {
@@ -456,7 +456,7 @@ void BasescapeState::btnCraftsClick(Action*)
 
 /**
  * Goes to the Manage Alien Containment screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnAliens(Action*)
 {
@@ -467,7 +467,7 @@ void BasescapeState::btnAliens(Action*)
 
 /**
  * Goes to the Research screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnResearchClick(Action*)
 {
@@ -476,7 +476,7 @@ void BasescapeState::btnResearchClick(Action*)
 
 /**
  * Goes to the Manufacture screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnManufactureClick(Action*)
 {
@@ -487,7 +487,7 @@ void BasescapeState::btnManufactureClick(Action*)
 
 /**
  * Goes to the Purchase screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnPurchaseClick(Action*)
 {
@@ -496,7 +496,7 @@ void BasescapeState::btnPurchaseClick(Action*)
 
 /**
  * Goes to the Sell screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnSellClick(Action*)
 {
@@ -505,7 +505,7 @@ void BasescapeState::btnSellClick(Action*)
 
 /**
  * Goes to the Select Destination Base window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnTransferClick(Action*)
 {
@@ -514,7 +514,7 @@ void BasescapeState::btnTransferClick(Action*)
 
 /**
  * Goes to the incoming Transfers window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnIncTransClick(Action*)
 {
@@ -523,7 +523,7 @@ void BasescapeState::btnIncTransClick(Action*)
 
 /**
  * Opens the Build Facilities window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnFacilitiesClick(Action*)
 {
@@ -534,7 +534,7 @@ void BasescapeState::btnFacilitiesClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::btnGeoscapeClick(Action*)
 {
@@ -543,7 +543,7 @@ void BasescapeState::btnGeoscapeClick(Action*)
 
 /**
  * Processes left clicking on facilities.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::viewLeftClick(Action*)
 {
@@ -670,7 +670,7 @@ void BasescapeState::viewLeftClick(Action*)
 
 /**
  * Processes right clicking on facilities.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::viewRightClick(Action*)
 {
@@ -701,7 +701,7 @@ void BasescapeState::viewRightClick(Action*)
 
 /**
  * Displays the name of the facility the mouse is over.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::viewMouseOver(Action*)
 {
@@ -741,7 +741,7 @@ void BasescapeState::viewMouseOver(Action*)
 
 /**
  * Clears the facility name.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::viewMouseOut(Action*)
 {
@@ -750,7 +750,7 @@ void BasescapeState::viewMouseOut(Action*)
 
 /**
  * Selects a new base to display.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::miniLeftClick(Action*)
 {
@@ -780,7 +780,7 @@ void BasescapeState::miniLeftClick(Action*)
 
 /**
  * Pops to globe with selected base centered.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::miniRightClick(Action*)
 {
@@ -802,7 +802,7 @@ void BasescapeState::miniRightClick(Action*)
 
 /**
  * Selects a new base to display.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::handleKeyPress(Action* action)
 {
@@ -840,7 +840,7 @@ void BasescapeState::handleKeyPress(Action* action)
 
 /**
  * Changes the Base name.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BasescapeState::edtBaseChange(Action* action)
 {

@@ -99,7 +99,7 @@ void ListSaveState::updateList()
 
 /**
  * Names the selected save.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ListSaveState::lstSavesPress(Action* action)
 {
@@ -173,7 +173,7 @@ void ListSaveState::edtSaveKeyPress(Action* action)
 
 /**
  * Saves the selected save.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ListSaveState::btnSaveGameClick(Action*)
 {

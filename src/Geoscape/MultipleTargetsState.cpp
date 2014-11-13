@@ -217,7 +217,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MultipleTargetsState::btnCancelClick(Action*)
 {
@@ -226,7 +226,7 @@ void MultipleTargetsState::btnCancelClick(Action*)
 
 /**
  * Pick a target to display.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MultipleTargetsState::btnTargetClick(Action* action)
 {

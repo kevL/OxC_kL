@@ -295,7 +295,7 @@ MedikitState::MedikitState(
 
 /**
  * Closes the window on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MedikitState::handle(Action* action)
 {
@@ -310,7 +310,7 @@ void MedikitState::handle(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MedikitState::onEndClick(Action*)
 {
@@ -330,7 +330,7 @@ void MedikitState::onEndClick(Action*)
 
 /**
  * Handler for clicking on the heal button.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MedikitState::onHealClick(Action*)
 {
@@ -362,7 +362,7 @@ void MedikitState::onHealClick(Action*)
 
 /**
  * Handler for clicking on the stimulant button.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MedikitState::onStimulantClick(Action*)
 {
@@ -396,7 +396,7 @@ void MedikitState::onStimulantClick(Action*)
 
 /**
  * Handler for clicking on the pain killer button.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MedikitState::onPainKillerClick(Action*)
 {

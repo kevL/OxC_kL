@@ -763,7 +763,7 @@ void UnitInfoState::init()
 
 /**
  * Closes the window on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UnitInfoState::handle(Action* action)
 {
@@ -810,7 +810,7 @@ void UnitInfoState::btnPrevClick(Action* action)
 
 /**
  * Selects the next unit.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UnitInfoState::btnNextClick(Action* action)
 {
@@ -835,7 +835,7 @@ void UnitInfoState::btnNextClick(Action* action)
 
 /**
  * Exits the screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UnitInfoState::exitClick(Action*)
 {

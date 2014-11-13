@@ -117,7 +117,7 @@ NewPossibleManufactureState::NewPossibleManufactureState(
 
 /**
  * return to the previous screen
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewPossibleManufactureState::btnOkClick(Action*)
 {
@@ -126,7 +126,7 @@ void NewPossibleManufactureState::btnOkClick(Action*)
 
 /**
  * Open the ManufactureState so the player can dispatch available engineers.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewPossibleManufactureState::btnManufactureClick(Action*)
 {

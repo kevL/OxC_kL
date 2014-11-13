@@ -253,7 +253,7 @@ ItemsArrivingState::~ItemsArrivingState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ItemsArrivingState::btnOkClick(Action*)
 {
@@ -262,7 +262,7 @@ void ItemsArrivingState::btnOkClick(Action*)
 
 /**
  * Reduces the speed to 5 Secs and returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ItemsArrivingState::btnOk5SecsClick(Action*)
 {
@@ -272,7 +272,7 @@ void ItemsArrivingState::btnOk5SecsClick(Action*)
 
 /**
  * Goes to the base for the respective transfer.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void ItemsArrivingState::btnGotoBaseClick(Action*)
 {
@@ -287,7 +287,7 @@ void ItemsArrivingState::btnOk5SecsClick(Action*)
 /**
  * kL. LMB or RMB opens the Basescape for the pressed row.
  * Do not pop the state here.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ItemsArrivingState::lstGoToBasePress(Action* action) // kL
 {

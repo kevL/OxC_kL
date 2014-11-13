@@ -135,7 +135,7 @@ void DefeatState::screenTimer()
 
 /**
  * Shows the next screen in the slideshow or goes back to the Main Menu.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void DefeatState::screenClick(Action*)
 {

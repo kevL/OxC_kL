@@ -19,11 +19,11 @@
 
 #include "PurchaseState.h"
 
-#include <cfloat>
-#include <climits>
-#include <cmath>
-#include <iomanip>
-#include <sstream>
+//#include <cfloat>
+//#include <climits>
+//#include <cmath>
+//#include <iomanip>
+//#include <sstream>
 
 #include "../fmath.h"
 
@@ -279,9 +279,9 @@ PurchaseState::PurchaseState(Base* base)
 		ss6.str(L"");
 
 		// Special handling for treating craft weapons as items
-		RuleCraftWeapon* cwRule = _game->getRuleset()->getCraftWeapon(*i);
-		RuleItem* launchRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
-		std::string launcher = launchRule->getType();
+		const RuleCraftWeapon* const cwRule = _game->getRuleset()->getCraftWeapon(*i);
+		const RuleItem* const launchRule = _game->getRuleset()->getItem(cwRule->getLauncherItem());
+		const std::string launcher = launchRule->getType();
 
 		if (launchRule->getBuyCost() > 0
 			&& isExcluded(launcher) == false)
@@ -330,8 +330,8 @@ PurchaseState::PurchaseState(Base* base)
 		}
 
 		// Handle craft weapon ammo.
-		RuleItem* clipRule = _game->getRuleset()->getItem(cwRule->getClipItem());
-		std::string clip = clipRule->getType();
+		const RuleItem* const clipRule = _game->getRuleset()->getItem(cwRule->getClipItem());
+		const std::string clip = clipRule->getType();
 
 		if (clipRule != NULL
 			&& clipRule->getBuyCost() > 0
@@ -389,7 +389,7 @@ PurchaseState::PurchaseState(Base* base)
 			i != items.end();
 			++i)
 	{
-		RuleItem* rule = _game->getRuleset()->getItem(*i);
+		RuleItem* const rule = _game->getRuleset()->getItem(*i);
 		//Log(LOG_INFO) << (*i) << " list# " << rule->getListOrder(); // Prints listOrder to LOG.
 
 		if (rule->getBuyCost() != 0
@@ -397,7 +397,7 @@ PurchaseState::PurchaseState(Base* base)
 			&& isExcluded(*i) == false)
 		{
 			ss7.str(L"");
-			std::string test = rule->getType();
+			const std::string test = rule->getType();
 
 			_quantities.push_back(0);
 			_items.push_back(*i);
@@ -442,9 +442,9 @@ PurchaseState::PurchaseState(Base* base)
 
 						if ((*k)->getAmmo() != 255)
 						{
-							RuleItem
-								* tankRule = _game->getRuleset()->getItem((*k)->getRules()->getType()),
-								* ammoRule = _game->getRuleset()->getItem(tankRule->getCompatibleAmmo()->front());
+							const RuleItem* const ammoRule = _game->getRuleset()->getItem(
+																_game->getRuleset()->getItem((*k)->getRules()->getType())
+															->getCompatibleAmmo()->front());
 
 							if (ammoRule->getType() == test)
 								totalQty += (*k)->getAmmo();
@@ -482,7 +482,7 @@ PurchaseState::PurchaseState(Base* base)
                 if (rule->isFixed() == true // tank w/ Ordnance.
 					&& rule->getCompatibleAmmo()->empty() == false)
                 {
-					RuleItem* ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
+					const RuleItem* const ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
 					const int clipSize = ammoRule->getClipSize();
 					if (clipSize > 0)
 						item += (L" (" + Text::formatNumber(clipSize) + L")");
@@ -547,7 +547,7 @@ bool PurchaseState::isExcluded(const std::string& item)
 
 /**
  * Purchases the selected items.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PurchaseState::btnOkClick(Action*)
 {
@@ -566,9 +566,9 @@ void PurchaseState::btnOkClick(Action*)
 				for (int
 						j = 0;
 						j < _quantities[i];
-						j++)
+						++j)
 				{
-					Transfer* transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
+					Transfer* const transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
 					transfer->setSoldier(_game->getRuleset()->genSoldier(_game->getSavedGame()));
 
 					_base->getTransfers()->push_back(transfer);
@@ -576,14 +576,14 @@ void PurchaseState::btnOkClick(Action*)
 			}
 			else if (i == 1) // Buy scientists
 			{
-				Transfer* transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
+				Transfer* const transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
 				transfer->setScientists(_quantities[i]);
 
 				_base->getTransfers()->push_back(transfer);
 			}
 			else if (i == 2) // Buy engineers
 			{
-				Transfer* transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
+				Transfer* const transfer = new Transfer(_game->getRuleset()->getPersonnelTime());
 				transfer->setEngineers(_quantities[i]);
 
 				_base->getTransfers()->push_back(transfer);
@@ -596,9 +596,9 @@ void PurchaseState::btnOkClick(Action*)
 						j < _quantities[i];
 						j++)
 				{
-					RuleCraft* craftRule = _game->getRuleset()->getCraft(_crafts[i - 3]);
-					Transfer* transfer = new Transfer(craftRule->getTransferTime());
-					Craft* craft = new Craft(
+					RuleCraft* const craftRule = _game->getRuleset()->getCraft(_crafts[i - 3]);
+					Transfer* const transfer = new Transfer(craftRule->getTransferTime());
+					Craft* const craft = new Craft(
 											craftRule,
 											_base,
 											_game->getSavedGame()->getId(_crafts[i - 3]));
@@ -610,8 +610,8 @@ void PurchaseState::btnOkClick(Action*)
 			}
 			else // Buy items
 			{
-				RuleItem* itemRule = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
-				Transfer* transfer = new Transfer(itemRule->getTransferTime());
+				RuleItem* const itemRule = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
+				Transfer* const transfer = new Transfer(itemRule->getTransferTime());
 				transfer->setItems(
 								_items[i - 3 - _crafts.size()],
 								_quantities[i]);
@@ -626,7 +626,7 @@ void PurchaseState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PurchaseState::btnCancelClick(Action*)
 {
@@ -635,7 +635,7 @@ void PurchaseState::btnCancelClick(Action*)
 
 /**
  * Starts increasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PurchaseState::lstItemsLeftArrowPress(Action* action)
 {
@@ -650,7 +650,7 @@ void PurchaseState::lstItemsLeftArrowPress(Action* action)
 
 /**
  * Stops increasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PurchaseState::lstItemsLeftArrowRelease(Action* action)
 {
@@ -660,12 +660,12 @@ void PurchaseState::lstItemsLeftArrowRelease(Action* action)
 
 /**
  * Increases the item by one on left-click - to max on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PurchaseState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		increaseByValue(INT_MAX);
+		increaseByValue(std::numeric_limits<int>::max());
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -678,7 +678,7 @@ void PurchaseState::lstItemsLeftArrowClick(Action* action)
 
 /**
  * Starts decreasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PurchaseState::lstItemsRightArrowPress(Action* action)
 {
@@ -693,7 +693,7 @@ void PurchaseState::lstItemsRightArrowPress(Action* action)
 
 /**
  * Stops decreasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PurchaseState::lstItemsRightArrowRelease(Action* action)
 {
@@ -703,12 +703,12 @@ void PurchaseState::lstItemsRightArrowRelease(Action* action)
 
 /**
  * Decreases the item by one on left-click - to 0 on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PurchaseState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		decreaseByValue(INT_MAX);
+		decreaseByValue(std::numeric_limits<int>::max());
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -721,7 +721,7 @@ void PurchaseState::lstItemsRightArrowClick(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PurchaseState::lstItemsMousePress(Action* action)
 {
@@ -760,18 +760,18 @@ void PurchaseState::lstItemsMousePress(Action* action)
  */
 int PurchaseState::getPrice()
 {
-	if (_sel == 0) // Soldier cost
+	if (_sel == 0)											// Soldier cost
 		return _game->getRuleset()->getSoldierCost() * 2;
-	else if (_sel == 1) // Scientist cost
+	else if (_sel == 1)										// Scientist cost
 		return _game->getRuleset()->getScientistCost() * 2;
-	else if (_sel == 2) // Engineer cost
+	else if (_sel == 2)										// Engineer cost
 		return _game->getRuleset()->getEngineerCost() * 2;
-	else if (_sel > 2 // Craft cost
+	else if (_sel > 2										// Craft cost
 		&& _sel < 3 + _crafts.size())
 	{
 		return _game->getRuleset()->getCraft(_crafts[_sel - 3])->getBuyCost();
 	}
-	else // Item cost
+	else													// Item cost
 		return _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()])->getBuyCost();
 }
 
@@ -844,15 +844,15 @@ void PurchaseState::increaseByValue(int change)
 	{
 		const int maxByMoney = (static_cast<int>(_game->getSavedGame()->getFunds()) - _totalCost) / getPrice(); // note: (int)cast renders int64_t useless.
 		change = std::min(
-						maxByMoney,
-						change);
+						change,
+						maxByMoney);
 
 		if (_sel < 3) // Personnel count
 		{
 			const int maxByQuarters = _base->getAvailableQuarters() - _base->getUsedQuarters() - _persQty;
 			change = std::min(
-							maxByQuarters,
-							change);
+							change,
+							maxByQuarters);
 			_persQty += change;
 		}
 		else if (_sel > 2
@@ -860,25 +860,25 @@ void PurchaseState::increaseByValue(int change)
 		{
 			const int maxByHangars = _base->getAvailableHangars() - _base->getUsedHangars() - _craftQty;
 			change = std::min(
-							maxByHangars,
-							change);
+							change,
+							maxByHangars);
 			_craftQty += change;
 		}
 		else //if (_sel >= 3 + _crafts.size()) // Item count
 		{
-			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()]);
+			const RuleItem* const rule = _game->getRuleset()->getItem(_items[_sel - 3 - _crafts.size()]);
 
 			const double
 				storesPerItem = rule->getSize(),
 				availStores = static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores() - _storeSize;
-			double qtyItemsCanBuy = DBL_MAX;
+			double qtyItemsCanBuy = std::numeric_limits<double>::max();
 
 			if (AreSame(storesPerItem, 0.0) == false)
 				qtyItemsCanBuy = (availStores + 0.05) / storesPerItem;
 
 			change = std::min(
-							static_cast<int>(qtyItemsCanBuy),
-							change);
+							change,
+							static_cast<int>(qtyItemsCanBuy));
 			_storeSize += static_cast<double>(change) * storesPerItem;
 		}
 
@@ -912,7 +912,9 @@ void PurchaseState::decreaseByValue(int change)
 		return;
 	}
 
-	change = std::min(_quantities[_sel], change);
+	change = std::min(
+					change,
+					_quantities[_sel]);
 
 	if (_sel < 3) // Personnel count
 		_persQty -= change;
@@ -957,7 +959,7 @@ void PurchaseState::updateItemStrings()
 
 		if (_sel > _itemOffset)
 		{
-			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
+			const RuleItem* const rule = _game->getRuleset()->getItem(_items[_sel - _itemOffset]);
 			if (rule->getBattleType() == BT_AMMO
 				|| (rule->getBattleType() == BT_NONE
 					&& rule->getClipSize() > 0))

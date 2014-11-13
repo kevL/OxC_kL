@@ -21,8 +21,8 @@
 
 #include "Craft.h"
 
-#include <cmath>
-#include <sstream>
+//#include <cmath>
+//#include <sstream>
 
 #include "../fmath.h"
 
@@ -1033,8 +1033,8 @@ void Craft::refuel()
 }
 
 /**
- * Gets the craft's battlescape status.
- * @return, true if the craft is on the battlescape
+ * Gets this Craft's battlescape status.
+ * @return, true if Craft is on the battlescape
  */
 bool Craft::isInBattlescape() const
 {
@@ -1042,12 +1042,12 @@ bool Craft::isInBattlescape() const
 }
 
 /**
- * Sets the craft's battlescape status.
- * @param inbattle - true if it's in battle
+ * Sets this Craft's battlescape status.
+ * @param inbattle - true if Craft is on the battlescape
  */
 void Craft::setInBattlescape(const bool battle)
 {
-	if (battle)
+	if (battle == true)
 		setSpeed(0);
 
 	_inBattlescape = battle;
@@ -1125,7 +1125,7 @@ bool Craft::isInDogfight() const
  * Sets the craft's dogfight status.
  * @param inDogfight - true if it's in dogfight
  */
-void Craft::setInDogfight(bool inDogfight)
+void Craft::setInDogfight(const bool inDogfight)
 {
 	_inDogfight = inDogfight;
 }
@@ -1163,7 +1163,7 @@ CraftId Craft::getUniqueId() const
  * Sets capacity load.
  * @param load - capacity load
  */
-void Craft::setLoadCapacity(int load)
+void Craft::setLoadCapacity(const int load)
 {
 	_loadCap = load;
 }
@@ -1181,7 +1181,7 @@ int Craft::getLoadCapacity() const
  * Sets current load.
  * @param load - current load
  */
-void Craft::setLoadCurrent(int load)
+void Craft::setLoadCurrent(const int load)
 {
 	_loadCur = load;
 }

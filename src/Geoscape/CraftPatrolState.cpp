@@ -139,7 +139,7 @@ CraftPatrolState::~CraftPatrolState()
 
 /**
  * Closes the window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftPatrolState::btnOkClick(Action*)
 {
@@ -148,7 +148,7 @@ void CraftPatrolState::btnOkClick(Action*)
 
 /**
  * Opens the craft info window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftPatrolState::btnInfoClick(Action*)
 {
@@ -164,7 +164,7 @@ void CraftPatrolState::btnInfoClick(Action*)
 
 /**
  * Returns the craft back to its base.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftPatrolState::btnBaseClick(Action*)
 {
@@ -175,7 +175,7 @@ void CraftPatrolState::btnBaseClick(Action*)
 
 /**
  * Centers the craft on the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftPatrolState::btnCenterClick(Action*)
 {
@@ -188,7 +188,7 @@ void CraftPatrolState::btnCenterClick(Action*)
 
 /**
  * Opens the SelectDestination window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftPatrolState::btnRedirectClick(Action*)
 {

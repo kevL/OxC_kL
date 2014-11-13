@@ -103,7 +103,7 @@ ConfirmLoadState::~ConfirmLoadState()
 
 /**
  * Proceed to load the save.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ConfirmLoadState::btnYesClick(Action*)
 {
@@ -117,7 +117,7 @@ void ConfirmLoadState::btnYesClick(Action*)
 
 /**
  * Abort loading and return to save list.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ConfirmLoadState::btnNoClick(Action*)
 {

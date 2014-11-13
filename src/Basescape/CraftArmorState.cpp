@@ -19,8 +19,8 @@
 
 #include "CraftArmorState.h"
 
-#include <climits>
-#include <string>
+//#include <climits>
+//#include <string>
 
 #include "SoldierArmorState.h"
 #include "SoldierInfoState.h"
@@ -211,7 +211,7 @@ void CraftArmorState::init()
 
 /**
  * Returns to the previous screen.
- * @param action Pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftArmorState::btnOkClick(Action*)
 {
@@ -222,11 +222,11 @@ void CraftArmorState::btnOkClick(Action*)
 /**
  * LMB shows the Select Armor window.
  * RMB shows soldier info.
- * @param action Pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftArmorState::lstSoldiersPress(Action* action)
 {
-	double mx = action->getAbsoluteXMouse();
+	const double mx = action->getAbsoluteXMouse();
 	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
@@ -235,7 +235,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	Soldier* soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
+	const Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		if (!
@@ -290,14 +290,14 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 }
 
 /**
- * kL. Reorders a soldier up.
- * @param action - pointer to an action
+ * Reorders a soldier up.
+ * @param action - pointer to an Action
  */
-void CraftArmorState::lstLeftArrowClick(Action* action) // kL
+void CraftArmorState::lstLeftArrowClick(Action* action)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	size_t row = _lstSoldiers->getSelectedRow();
+	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
 		Soldier* soldier = _base->getSoldiers()->at(row);
@@ -334,18 +334,19 @@ void CraftArmorState::lstLeftArrowClick(Action* action) // kL
 }
 
 /**
- * kL. Reorders a soldier down.
- * @param action - pointer to an action
+ * Reorders a soldier down.
+ * @param action - pointer to an Action
  */
-void CraftArmorState::lstRightArrowClick(Action* action) // kL
+void CraftArmorState::lstRightArrowClick(Action* action)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	size_t row = _lstSoldiers->getSelectedRow();
-	size_t numSoldiers = _base->getSoldiers()->size();
+	const size_t
+		numSoldiers = _base->getSoldiers()->size(),
+		row = _lstSoldiers->getSelectedRow();
 
 	if (numSoldiers > 0
-		&& numSoldiers <= INT_MAX
+		&& numSoldiers <= std::numeric_limits<size_t>::max()
 		&& row < numSoldiers - 1)
 	{
 		Soldier* soldier = _base->getSoldiers()->at(row);

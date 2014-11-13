@@ -571,7 +571,7 @@ void SoldierInfoDeadState::init()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoDeadState::btnOkClick(Action*)
 {
@@ -581,7 +581,7 @@ void SoldierInfoDeadState::btnOkClick(Action*)
 /**
  * Goes to the previous soldier.
  * kL: reversed these because SoldierMemorialState uses a reversed vector.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoDeadState::btnNextClick(Action*)
 {
@@ -596,7 +596,7 @@ void SoldierInfoDeadState::btnNextClick(Action*)
 /**
  * Goes to the next soldier.
  * kL: reversed these because SoldierMemorialState uses a reversed vector.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoDeadState::btnPrevClick(Action*)
 {
@@ -618,7 +618,7 @@ void SoldierInfoDeadState::setSoldierID(size_t soldierID)
 
 /**
  * Shows the Diary Soldier window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoDeadState::btnDiaryClick(Action*)
 {

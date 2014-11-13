@@ -117,7 +117,7 @@ PsiTrainingState::~PsiTrainingState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PsiTrainingState::btnOkClick(Action*)
 {
@@ -126,7 +126,7 @@ void PsiTrainingState::btnOkClick(Action*)
 
 /**
  * Goes to the allocation screen for the corresponding base.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PsiTrainingState::btnBaseXClick(Action* action)
 {

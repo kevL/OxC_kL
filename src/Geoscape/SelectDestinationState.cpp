@@ -204,7 +204,7 @@ void SelectDestinationState::think()
 
 /**
  * Handles the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SelectDestinationState::handle(Action* action)
 {
@@ -214,7 +214,7 @@ void SelectDestinationState::handle(Action* action)
 
 /**
  * Processes any left-clicks for picking a target, or right-clicks to scroll the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SelectDestinationState::globeClick(Action* action)
 {
@@ -289,7 +289,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe to the left.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnRotateLeftPress(Action*)
 {
@@ -298,7 +298,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe to the left.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnRotateLeftRelease(Action*)
 {
@@ -307,7 +307,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe to the right.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnRotateRightPress(Action*)
 {
@@ -316,7 +316,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe to the right.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnRotateRightRelease(Action*)
 {
@@ -325,7 +325,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe upwards.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnRotateUpPress(Action*)
 {
@@ -334,7 +334,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe upwards.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnRotateUpRelease(Action*)
 {
@@ -343,7 +343,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Starts rotating the globe downwards.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnRotateDownPress(Action*)
 {
@@ -352,7 +352,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Stops rotating the globe downwards.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnRotateDownRelease(Action*)
 {
@@ -361,7 +361,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Zooms into the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnZoomInLeftClick(Action*)
 {
@@ -370,7 +370,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Zooms the globe maximum.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnZoomInRightClick(Action*)
 {
@@ -379,7 +379,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Zooms out of the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnZoomOutLeftClick(Action*)
 {
@@ -388,7 +388,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Zooms the globe minimum.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SelectDestinationState::btnZoomOutRightClick(Action*)
 {
@@ -397,7 +397,7 @@ void SelectDestinationState::globeClick(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SelectDestinationState::btnCancelClick(Action*)
 {

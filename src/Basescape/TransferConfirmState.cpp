@@ -112,7 +112,7 @@ TransferConfirmState::~TransferConfirmState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferConfirmState::btnCancelClick(Action*)
 {
@@ -121,7 +121,7 @@ void TransferConfirmState::btnCancelClick(Action*)
 
 /**
  * Completes the transfer.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferConfirmState::btnOkClick(Action*)
 {

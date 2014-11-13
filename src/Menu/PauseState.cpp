@@ -146,7 +146,7 @@ PauseState::~PauseState()
 
 /**
  * Opens the Load Game screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PauseState::btnLoadClick(Action*)
 {
@@ -155,7 +155,7 @@ void PauseState::btnLoadClick(Action*)
 
 /**
  * Opens the Save Game screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PauseState::btnSaveClick(Action*)
 {
@@ -180,7 +180,7 @@ void PauseState::btnOptionsClick(Action*)
 
 /**
  * Opens the Abandon Game window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PauseState::btnAbandonClick(Action*)
 {
@@ -189,7 +189,7 @@ void PauseState::btnAbandonClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PauseState::btnCancelClick(Action*)
 {

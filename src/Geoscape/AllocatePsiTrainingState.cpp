@@ -19,8 +19,8 @@
 
 #include "AllocatePsiTrainingState.h"
 
-#include <climits>
-#include <sstream>
+//#include <climits>
+//#include <sstream>
 
 #include "GeoscapeState.h"
 #include "PsiTrainingState.h"
@@ -89,6 +89,7 @@ AllocatePsiTrainingState::AllocatePsiTrainingState(Base* base)
 	add(_btnOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -228,22 +229,21 @@ void AllocatePsiTrainingState::init()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void AllocatePsiTrainingState::btnOkClick(Action*)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
-
 	_game->popState();
 }
 
 /**
  * LMB assigns & removes a soldier from Psi Training. RMB shows soldier info.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 {
-	double mx = action->getAbsoluteXMouse();
+	const double mx = action->getAbsoluteXMouse();
 	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
@@ -254,7 +254,7 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (!_base->getSoldiers()->at(_sel)->isInPsiTraining())
+		if (_base->getSoldiers()->at(_sel)->isInPsiTraining() == false)
 		{
 			if (_base->getUsedPsiLabs() < _base->getAvailablePsiLabs())
 			{
@@ -287,17 +287,17 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 }
 
 /**
- * kL. Reorders a soldier up.
- * @param action - pointer to an action
+ * Reorders a soldier up.
+ * @param action - pointer to an Action
  */
-void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
+void AllocatePsiTrainingState::lstLeftArrowClick(Action* action)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	size_t row = _lstSoldiers->getSelectedRow();
+	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
-		Soldier* soldier = _base->getSoldiers()->at(row);
+		Soldier* const soldier = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
@@ -331,21 +331,22 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action) // kL
 }
 
 /**
- * kL. Reorders a soldier down.
- * @param action - pointer to an action
+ * Reorders a soldier down.
+ * @param action - pointer to an Action
  */
-void AllocatePsiTrainingState::lstRightArrowClick(Action* action) // kL
+void AllocatePsiTrainingState::lstRightArrowClick(Action* action)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	size_t row = _lstSoldiers->getSelectedRow();
-	size_t numSoldiers = _base->getSoldiers()->size();
+	const size_t
+		numSoldiers = _base->getSoldiers()->size(),
+		row = _lstSoldiers->getSelectedRow();
 
 	if (numSoldiers > 0
-		&& numSoldiers <= INT_MAX
+		&& numSoldiers <= std::numeric_limits<size_t>::max()
 		&& row < numSoldiers - 1)
 	{
-		Soldier* soldier = _base->getSoldiers()->at(row);
+		Soldier* const soldier = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{

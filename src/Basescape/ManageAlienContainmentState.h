@@ -50,11 +50,11 @@ class ManageAlienContainmentState
 
 private:
 	bool
-		_allowHelp, // kL
+		_allowHelp,
 		_overCrowded;
 	int
 		_aliensSold;
-//kL	_researchAliens;
+//		_researchAliens;
 	size_t _sel;
 	Uint8
 		_color,
@@ -92,7 +92,7 @@ private:
 		ManageAlienContainmentState(
 				Base* base,
 				OptionsOrigin origin,
-				bool allowHelp = true); // kL_add.
+				bool allowHelp = true);
 		/// Cleans up the ManageAlienContainment state.
 		~ManageAlienContainmentState();
 

@@ -134,7 +134,7 @@ PromotionsState::~PromotionsState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PromotionsState::btnOkClick(Action*)
 {

@@ -128,7 +128,7 @@ ConfirmNewBaseState::~ConfirmNewBaseState()
 
 /**
  * Go to the Place Access Lift screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ConfirmNewBaseState::btnOkClick(Action*)
 {
@@ -156,7 +156,7 @@ void ConfirmNewBaseState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ConfirmNewBaseState::btnCancelClick(Action*)
 {

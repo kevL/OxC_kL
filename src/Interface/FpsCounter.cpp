@@ -97,7 +97,7 @@ void FpsCounter::setColor(Uint8 color)
 
 /**
  * Shows / hides the FPS counter.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void FpsCounter::handle(Action* action)
 {

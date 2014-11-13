@@ -259,7 +259,7 @@ void ActionMenuState::addItem(
 
 /**
  * Closes the window on click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ActionMenuState::handle(Action* action)
 {
@@ -277,7 +277,7 @@ void ActionMenuState::handle(Action* action)
 
 /**
  * Executes the action corresponding to this action menu item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ActionMenuState::btnActionMenuItemClick(Action* action)
 {

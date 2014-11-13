@@ -104,7 +104,7 @@ private:
 		void btnSellClick(Action* action);
 		/// Handler for clicking the Transfer button.
 		void btnTransferClick(Action* action);
-		/// Handler for clicking the Transfers button.
+		/// Handler for clicking the in-Transit button.
 		void btnIncTransClick(Action* action);
 		/// Handler for clicking the Build Facilities button.
 		void btnFacilitiesClick(Action* action);

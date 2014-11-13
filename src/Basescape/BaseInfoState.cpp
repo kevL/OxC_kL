@@ -460,7 +460,7 @@ void BaseInfoState::init()
 
 /**
  * Changes the base name.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseInfoState::edtBaseChange(Action* action)
 {
@@ -469,7 +469,7 @@ void BaseInfoState::edtBaseChange(Action* action)
 
 /**
  * Selects a new base to display.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseInfoState::miniClick(Action*)
 {
@@ -489,7 +489,7 @@ void BaseInfoState::miniClick(Action*)
 
 /**
  * Selects a new base to display.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseInfoState::handleKeyPress(Action* action)
 {
@@ -529,7 +529,7 @@ void BaseInfoState::handleKeyPress(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseInfoState::btnOkClick(Action*)
 {
@@ -538,7 +538,7 @@ void BaseInfoState::btnOkClick(Action*)
 
 /**
  * Goes to the Transfers window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseInfoState::btnTransfersClick(Action*)
 {
@@ -547,7 +547,7 @@ void BaseInfoState::btnTransfersClick(Action*)
 
 /**
  * Goes to the Stores screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseInfoState::btnStoresClick(Action*)
 {
@@ -556,7 +556,7 @@ void BaseInfoState::btnStoresClick(Action*)
 
 /**
  * Goes to the Monthly Costs screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseInfoState::btnMonthlyCostsClick(Action*)
 {

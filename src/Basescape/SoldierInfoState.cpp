@@ -897,7 +897,7 @@ void SoldierInfoState::btnAutoStatAll(Action*)
 
 /**
  * Disables the soldier input.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void SoldierInfoState::edtSoldierPress(Action* action)
 {
@@ -915,7 +915,7 @@ void SoldierInfoState::setSoldierID(size_t soldierID)
 
 /**
  * Changes the soldier's name.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoState::edtSoldierChange(Action* action)
 {
@@ -924,7 +924,7 @@ void SoldierInfoState::edtSoldierChange(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoState::btnOkClick(Action*)
 {
@@ -953,7 +953,7 @@ void SoldierInfoState::btnOkClick(Action*)
 
 /**
  * Goes to the previous soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoState::btnPrevClick(Action*)
 {
@@ -972,7 +972,7 @@ void SoldierInfoState::btnPrevClick(Action*)
 
 /**
  * Goes to the next soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoState::btnNextClick(Action*)
 {
@@ -991,7 +991,7 @@ void SoldierInfoState::btnNextClick(Action*)
 
 /**
  * Shows the Select Armor window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoState::btnArmorClick(Action*)
 {
@@ -1007,7 +1007,7 @@ void SoldierInfoState::btnArmorClick(Action*)
 
 /**
  * Shows the Sack Soldier window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoState::btnSackClick(Action*)
 {
@@ -1018,7 +1018,7 @@ void SoldierInfoState::btnSackClick(Action*)
 
 /**
  * Shows the Diary Soldier window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierInfoState::btnDiaryClick(Action*)
 {

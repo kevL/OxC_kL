@@ -159,7 +159,7 @@ MiniMapState::~MiniMapState()
 
 /**
  * Handles mouse-wheeling.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MiniMapState::handle(Action* action)
 {
@@ -181,7 +181,7 @@ void MiniMapState::handle(Action* action)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MiniMapState::btnOkClick(Action*)
 {
@@ -203,7 +203,7 @@ void MiniMapState::btnOkClick(Action*)
 
 /**
  * Changes the currently displayed minimap level.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MiniMapState::btnLevelUpClick(Action*)
 {
@@ -216,7 +216,7 @@ void MiniMapState::btnLevelUpClick(Action*)
 
 /**
  * Changes the currently displayed minimap level.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MiniMapState::btnLevelDownClick(Action*)
 {

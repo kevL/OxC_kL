@@ -19,7 +19,7 @@
 
 #include "ManufactureInfoState.h"
 
-#include <limits>
+//#include <limits>
 
 #include "../Interface/ArrowButton.h"
 #include "../Interface/Text.h"
@@ -50,8 +50,8 @@ namespace OpenXcom
 
 /**
  * Initializes all elements in the Production settings screen (new Production).
- * @param base Pointer to the base to get info from.
- * @param item The RuleManufacture to produce.
+ * @param base - pointer to the Base to get info from
+ * @param item - pointer to the RuleManufacture to produce
  */
 ManufactureInfoState::ManufactureInfoState(
 		Base* base,
@@ -66,8 +66,8 @@ ManufactureInfoState::ManufactureInfoState(
 
 /**
  * Initializes all elements in the Production settings screen (modifying Production).
- * @param base Pointer to the base to get info from.
- * @param production The Production to modify.
+ * @param base			- pointer to the Base to get info from
+ * @param production	- pointer to the Production to modify
  */
 ManufactureInfoState::ManufactureInfoState(
 		Base* base,
@@ -162,6 +162,7 @@ void ManufactureInfoState::buildUi()
 //	add(_surfaceUnits);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
@@ -279,28 +280,26 @@ void ManufactureInfoState::buildUi()
 
 /**
  * Stops this Production. Returns to the previous screen.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::btnStopClick(Action*)
 {
 	_base->removeProduction(_production);
-
 	exitState();
 }
 
 /**
  * Starts this Production (if new). Returns to the previous screen.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::btnOkClick(Action*)
 {
-	if (_item)
+	if (_item != NULL)
 		_production->startItem(
 							_base,
 							_game->getSavedGame());
 
 //	_production->setSellItems(_btnSell->getPressed());
-
 	exitState();
 }
 
@@ -311,7 +310,7 @@ void ManufactureInfoState::exitState()
 {
 	_game->popState();
 
-	if (_item)
+	if (_item != NULL)
 		_game->popState();
 }
 
@@ -320,8 +319,7 @@ void ManufactureInfoState::exitState()
  */
 void ManufactureInfoState::setAssignedEngineer()
 {
-//kL	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getAvailableEngineers()));
-	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getEngineers())); // kL
+	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getEngineers()));
 	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
 
 	std::wostringstream s1;
@@ -331,8 +329,8 @@ void ManufactureInfoState::setAssignedEngineer()
 	std::wostringstream s2;
 	s2 << L"> \x01";
 	if (_production->getInfiniteAmount())
-//kL	s2 << Language::utf8ToWstr("∞");
-		s2 << "oo"; // kL
+//		s2 << Language::utf8ToWstr("∞");
+		s2 << "oo";
 	else
 		s2 << _production->getAmountTotal();
 
@@ -340,13 +338,13 @@ void ManufactureInfoState::setAssignedEngineer()
 
 	_btnOk->setVisible(_production->getAmountTotal() > 0);
 
-	updateTimeTotal(); // kL
+	updateTimeTotal();
 }
 
 /**
- * kL. Updates the total time to complete the project.
+ * Updates the total time to complete the project.
  */
-void ManufactureInfoState::updateTimeTotal() // kL
+void ManufactureInfoState::updateTimeTotal()
 {
 	std::wostringstream woStr;
 
@@ -361,19 +359,15 @@ void ManufactureInfoState::updateTimeTotal() // kL
 						- _production->getTimeSpent();
 		}
 		else
-		{
 			hoursLeft = _production->getAmountTotal() * _production->getRules()->getManufactureTime()
 						- _production->getTimeSpent();
-		}
 
 
 		int engs = _production->getAssignedEngineers();
 		if (!Options::canManufactureMoreItemsPerHour)
-		{
 			engs = std::min(
 							engs,
 							_production->getRules()->getManufactureTime());
-		}
 
 //		hoursLeft = static_cast<int>(
 //						ceil(static_cast<double>(hoursLeft) / static_cast<double>(_production->getAssignedEngineers())));
@@ -391,9 +385,10 @@ void ManufactureInfoState::updateTimeTotal() // kL
 }
 
 /**
- * kL. Handler for releasing the Sell button.
+ * Handler for releasing the Sell button.
+ * @param action - pointer to an Action
  */
-void ManufactureInfoState::btnSellRelease(Action* action) // kL
+void ManufactureInfoState::btnSellRelease(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
@@ -406,16 +401,16 @@ void ManufactureInfoState::btnSellRelease(Action* action) // kL
 
 /**
  * Adds given number of engineers to the project if possible.
- * @param change How much we want to add.
+ * @param change - how much to add
  */
 void ManufactureInfoState::moreEngineer(int change)
 {
 	if (change < 1)
 		return;
 
-//kL	int availableEngineer = _base->getAvailableEngineers();
-	int availableEngineer = _base->getEngineers(); // kL
-	int availableWorkSpace = _base->getFreeWorkshops();
+	const int
+		availableEngineer = _base->getEngineers(),
+		availableWorkSpace = _base->getFreeWorkshops();
 
 	if (availableEngineer > 0
 		&& availableWorkSpace > 0)
@@ -434,7 +429,7 @@ void ManufactureInfoState::moreEngineer(int change)
 
 /**
  * Starts the timerMoreEngineer.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::moreEngineerPress(Action* action)
 {
@@ -444,7 +439,7 @@ void ManufactureInfoState::moreEngineerPress(Action* action)
 
 /**
  * Stops the timerMoreEngineer.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::moreEngineerRelease(Action* action)
 {
@@ -457,7 +452,7 @@ void ManufactureInfoState::moreEngineerRelease(Action* action)
 
 /**
  * Allocates all engineers.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::moreEngineerClick(Action* action)
 {
@@ -469,19 +464,19 @@ void ManufactureInfoState::moreEngineerClick(Action* action)
 
 /**
  * Removes the given number of engineers from the project if possible.
- * @param change How much we want to subtract.
+ * @param change - how much to subtract
  */
 void ManufactureInfoState::lessEngineer(int change)
 {
 	if (change < 1)
 		return;
 
-	int assigned = _production->getAssignedEngineers();
+	const int assigned = _production->getAssignedEngineers();
 	if (assigned > 0)
 	{
 		change = std::min(assigned, change);
 		_production->setAssignedEngineers(assigned-change);
-		_base->setEngineers(_base->getEngineers()+change);
+		_base->setEngineers(_base->getEngineers() + change);
 
 		setAssignedEngineer();
 	}
@@ -489,7 +484,7 @@ void ManufactureInfoState::lessEngineer(int change)
 
 /**
  * Starts the timerLessEngineer.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::lessEngineerPress(Action* action)
 {
@@ -499,7 +494,7 @@ void ManufactureInfoState::lessEngineerPress(Action* action)
 
 /**
  * Stops the timerLessEngineer.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::lessEngineerRelease(Action* action)
 {
@@ -512,7 +507,7 @@ void ManufactureInfoState::lessEngineerRelease(Action* action)
 
 /**
  * Removes engineers from the production.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::lessEngineerClick(Action* action)
 {
@@ -524,7 +519,7 @@ void ManufactureInfoState::lessEngineerClick(Action* action)
 
 /**
  * Adds given number of units to produce to the project if possible.
- * @param change How much we want to add.
+ * @param change - how much to add
  */
 void ManufactureInfoState::moreUnit(int change)
 {
@@ -544,17 +539,15 @@ void ManufactureInfoState::moreUnit(int change)
 	}
 	else
 	{
-		int units = _production->getAmountTotal();
-
+		const int units = _production->getAmountTotal();
 		change = std::min(
-						std::numeric_limits<int>::max() - units,
-						change);
+						change,
+						std::numeric_limits<int>::max() - units);
 
 		if (_production->getRules()->getCategory() == "STR_CRAFT")
 			change = std::min(
-							_base->getAvailableHangars() - _base->getUsedHangars(),
-							change);
-
+							change,
+							_base->getAvailableHangars() - _base->getUsedHangars());
 		_production->setAmountTotal(units + change);
 
 		setAssignedEngineer();
@@ -563,7 +556,7 @@ void ManufactureInfoState::moreUnit(int change)
 
 /**
  * Starts the timerMoreUnit.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::moreUnitPress(Action* action)
 {
@@ -576,7 +569,7 @@ void ManufactureInfoState::moreUnitPress(Action* action)
 
 /**
  * Stops the timerMoreUnit.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::moreUnitRelease(Action* action)
 {
@@ -589,7 +582,7 @@ void ManufactureInfoState::moreUnitRelease(Action* action)
 
 /**
  * Increases the units to produce, in the case of a right-click, to infinite, and 1 on left-click.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::moreUnitClick(Action* action)
 {
@@ -628,7 +621,7 @@ void ManufactureInfoState::lessUnit(int change)
 	if (change < 1)
 		return;
 
-	int units = _production->getAmountTotal();
+	const int units = _production->getAmountTotal();
 	change = std::min(
 					units - (_production->getAmountProduced() + 1),
 					change);
@@ -639,7 +632,7 @@ void ManufactureInfoState::lessUnit(int change)
 
 /**
  * Starts the timerLessUnit.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::lessUnitPress(Action* action)
 {
@@ -649,7 +642,7 @@ void ManufactureInfoState::lessUnitPress(Action* action)
 
 /**
  * Stops the timerLessUnit.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::lessUnitRelease(Action* action)
 {
@@ -662,7 +655,7 @@ void ManufactureInfoState::lessUnitRelease(Action* action)
 
 /**
  * Decreases the units to produce.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 void ManufactureInfoState::lessUnitClick(Action* action)
 {
@@ -675,7 +668,6 @@ void ManufactureInfoState::lessUnitClick(Action* action)
 			|| _production->getAmountTotal() <= _production->getAmountProduced())
 		{
 			_production->setAmountTotal(_production->getAmountProduced() + 1);
-
 			setAssignedEngineer();
 		}
 
@@ -704,7 +696,7 @@ void ManufactureInfoState::onLessEngineer()
 
 /**
  * Increases or decreases the Engineers according the mouse-wheel used.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 /* void ManufactureInfoState::handleWheelEngineer(Action* action)
 {
@@ -734,7 +726,7 @@ void ManufactureInfoState::onLessUnit()
 
 /**
  * Increases or decreases the Units to produce according the mouse-wheel used.
- * @param action A pointer to an Action.
+ * @param action - pointer to an Action
  */
 /* void ManufactureInfoState::handleWheelUnit(Action* action)
 {

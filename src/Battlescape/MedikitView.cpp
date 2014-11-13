@@ -149,7 +149,7 @@ void MedikitView::draw()
 
 /**
  * Handles clicks on the medikit view.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void MedikitView::mouseClick(Action* action, State*)

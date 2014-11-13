@@ -139,7 +139,7 @@ PlaceFacilityState::~PlaceFacilityState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PlaceFacilityState::btnCancelClick(Action*)
 {
@@ -148,7 +148,7 @@ void PlaceFacilityState::btnCancelClick(Action*)
 
 /**
  * Processes clicking on facilities.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PlaceFacilityState::viewClick(Action*)
 {

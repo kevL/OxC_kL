@@ -118,7 +118,7 @@ AlienTerrorState::~AlienTerrorState()
 
 /**
  * Picks a craft to intercept the UFO.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void AlienTerrorState::btnInterceptClick(Action*)
 {
@@ -138,7 +138,7 @@ void AlienTerrorState::btnInterceptClick(Action*)
 
 /**
  * Centers on the UFO and returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void AlienTerrorState::btnCentreClick(Action*)
 {
@@ -153,7 +153,7 @@ void AlienTerrorState::btnCentreClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void AlienTerrorState::btnCancelClick(Action*)
 {

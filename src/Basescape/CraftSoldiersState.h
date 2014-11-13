@@ -77,8 +77,8 @@ private:
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
-		/// kL. Handler for clicking the Unload button.
-		void btnUnloadClick(Action* action); // kL
+		/// Handler for clicking the Unload button.
+		void btnUnloadClick(Action* action);
 
 		/// Updates the soldiers list.
 		void init();

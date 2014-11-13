@@ -59,7 +59,7 @@ ListLoadState::~ListLoadState()
 
 /**
  * Loads the selected save.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ListLoadState::lstSavesPress(Action* action)
 {

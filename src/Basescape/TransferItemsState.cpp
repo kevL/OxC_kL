@@ -19,10 +19,10 @@
 
 #include "TransferItemsState.h"
 
-#include <cfloat>
-#include <climits>
-#include <cmath>
-#include <sstream>
+//#include <cfloat>
+//#include <climits>
+//#include <cmath>
+//#include <sstream>
 
 #include "../fmath.h"
 
@@ -126,6 +126,7 @@ TransferItemsState::TransferItemsState(
 	add(_btnOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -370,13 +371,13 @@ void TransferItemsState::init()
 	}
 
 
-	SavedGame* save = _game->getSavedGame();
-	Ruleset* rules = _game->getRuleset();
+	const SavedGame* const save = _game->getSavedGame();
+	const Ruleset* const rules = _game->getRuleset();
 	RuleItem
-		* rule,
-		* launchRule,
-		* clipRule;
-	RuleCraftWeapon* cwRule;
+		* rule = NULL,
+		* launchRule = NULL,
+		* clipRule = NULL;
+	RuleCraftWeapon* cwRule = NULL;
 
 	const std::vector<std::string>& items = _game->getRuleset()->getItemsList();
 	for (std::vector<std::string>::const_iterator
@@ -586,7 +587,7 @@ void TransferItemsState::think()
 
 /**
  * Transfers the selected items.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferItemsState::btnOkClick(Action*)
 {
@@ -600,7 +601,7 @@ void TransferItemsState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferItemsState::btnCancelClick(Action*)
 {
@@ -635,10 +636,10 @@ void TransferItemsState::completeTransfer()
 				{
 					if (*j == _soldiers[i])
 					{
-						if ((*j)->isInPsiTraining())
+						if ((*j)->isInPsiTraining() == true)
 							(*j)->setPsiTraining();
 
-						Transfer* transfer = new Transfer(time);
+						Transfer* const transfer = new Transfer(time);
 						transfer->setSoldier(*j);
 						_baseTo->getTransfers()->push_back(transfer);
 						_baseFrom->getSoldiers()->erase(j);
@@ -650,7 +651,7 @@ void TransferItemsState::completeTransfer()
 			else if (i >= _soldiers.size()
 				&& i < _soldiers.size() + _crafts.size()) // transfer crafts w/ soldiers inside (but not items)
 			{
-				Craft* craft = _crafts[i - _soldiers.size()];
+				Craft* const craft = _crafts[i - _soldiers.size()];
 
 				for (std::vector<Soldier*>::const_iterator // transfer soldiers inside craft
 						j = _baseFrom->getSoldiers()->begin();
@@ -659,14 +660,14 @@ void TransferItemsState::completeTransfer()
 				{
 					if ((*j)->getCraft() == craft)
 					{
-						if ((*j)->isInPsiTraining())
+						if ((*j)->isInPsiTraining() == true)
 							(*j)->setPsiTraining();
 
 						if (craft->getStatus() == "STR_OUT")
 							_baseTo->getSoldiers()->push_back(*j);
 						else
 						{
-							Transfer* transfer = new Transfer(time);
+							Transfer* const transfer = new Transfer(time);
 							transfer->setSoldier(*j);
 							_baseTo->getTransfers()->push_back(transfer);
 						}
@@ -691,7 +692,7 @@ void TransferItemsState::completeTransfer()
 										_baseTo,
 										false);
 
-							bool returning = (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()));
+							const bool returning = (craft->getDestination() == dynamic_cast<Target*>(craft->getBase()));
 
 							if (craft->getFuel() <= craft->getFuelLimit(_baseTo))
 							{
@@ -706,7 +707,7 @@ void TransferItemsState::completeTransfer()
 						}
 						else
 						{
-							Transfer* transfer = new Transfer(time);
+							Transfer* const transfer = new Transfer(time);
 							transfer->setCraft(*j);
 							_baseTo->getTransfers()->push_back(transfer);
 						}
@@ -732,7 +733,7 @@ void TransferItemsState::completeTransfer()
 				&& i == _soldiers.size() + _crafts.size()) // transfer scientists
 			{
 				_baseFrom->setScientists(_baseFrom->getScientists() - _transferQty[i]);
-				Transfer* transfer = new Transfer(time);
+				Transfer* const transfer = new Transfer(time);
 				transfer->setScientists(_transferQty[i]);
 
 				_baseTo->getTransfers()->push_back(transfer);
@@ -741,7 +742,7 @@ void TransferItemsState::completeTransfer()
 				&& i == _soldiers.size() + _crafts.size() + _hasSci) // transfer engineers
 			{
 				_baseFrom->setEngineers(_baseFrom->getEngineers() - _transferQty[i]);
-				Transfer* transfer = new Transfer(time);
+				Transfer* const transfer = new Transfer(time);
 				transfer->setEngineers(_transferQty[i]);
 
 				_baseTo->getTransfers()->push_back(transfer);
@@ -749,7 +750,7 @@ void TransferItemsState::completeTransfer()
 			else // transfer items
 			{
 				_baseFrom->getItems()->removeItem(_items[getItemIndex(i)], _transferQty[i]);
-				Transfer* transfer = new Transfer(time);
+				Transfer* const transfer = new Transfer(time);
 				transfer->setItems(_items[getItemIndex(i)], _transferQty[i]);
 
 				_baseTo->getTransfers()->push_back(transfer);
@@ -760,7 +761,7 @@ void TransferItemsState::completeTransfer()
 
 /**
  * Starts increasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferItemsState::lstItemsLeftArrowPress(Action* action)
 {
@@ -775,7 +776,7 @@ void TransferItemsState::lstItemsLeftArrowPress(Action* action)
 
 /**
  * Stops increasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferItemsState::lstItemsLeftArrowRelease(Action* action)
 {
@@ -785,12 +786,12 @@ void TransferItemsState::lstItemsLeftArrowRelease(Action* action)
 
 /**
  * Increases the selected item; by one on left-click; to max on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		increaseByValue(INT_MAX);
+		increaseByValue(std::numeric_limits<int>::max());
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -803,14 +804,14 @@ void TransferItemsState::lstItemsLeftArrowClick(Action* action)
 
 /**
  * Starts decreasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferItemsState::lstItemsRightArrowPress(Action* action)
 {
 	_sel = _lstItems->getSelectedRow();
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
-		&& !_timerDec->isRunning())
+		&& _timerDec->isRunning() == false)
 	{
 		_timerDec->start();
 	}
@@ -818,7 +819,7 @@ void TransferItemsState::lstItemsRightArrowPress(Action* action)
 
 /**
  * Stops decreasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferItemsState::lstItemsRightArrowRelease(Action* action)
 {
@@ -828,12 +829,12 @@ void TransferItemsState::lstItemsRightArrowRelease(Action* action)
 
 /**
  * Decreases the selected item; by one on left-click; to 0 on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferItemsState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		decreaseByValue(INT_MAX);
+		decreaseByValue(std::numeric_limits<int>::max());
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -846,7 +847,7 @@ void TransferItemsState::lstItemsRightArrowClick(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferItemsState::lstItemsMousePress(Action* action)
 {
@@ -890,7 +891,7 @@ int TransferItemsState::getCost() const
 
 	if (TRANSFER_ITEM == getType(_sel))			// item cost
 	{
-		RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _offset]);
+		const RuleItem* const rule = _game->getRuleset()->getItem(_items[_sel - _offset]);
 		if (rule->getType() == "STR_ALIEN_ALLOYS")
 			cost = 0.1;
 		else if (rule->getType() == "STR_ELERIUM_115")
@@ -969,7 +970,7 @@ void TransferItemsState::increaseByValue(int change)
 	}
 	else if (selType == TRANSFER_CRAFT)
 	{
-		Craft* craft = _crafts[_sel - _soldiers.size()];
+		Craft* const craft = _crafts[_sel - _soldiers.size()];
 
 		if (_craftQty + 1 > _baseTo->getAvailableHangars() - _baseTo->getUsedHangars())
 		{
@@ -1023,7 +1024,7 @@ void TransferItemsState::increaseByValue(int change)
 
 	if (selType == TRANSFER_ITEM)
 	{
-		if (!selItem->getAlien()
+		if (selItem->getAlien() == false
 			&& _baseTo->storesOverfull(selItem->getSize() + _storeSize - 0.05))
 		{
 			_reset = false;
@@ -1037,7 +1038,7 @@ void TransferItemsState::increaseByValue(int change)
 												0));
 			return;
 		}
-		else if (selItem->getAlien()
+		else if (selItem->getAlien() == true
 			&& (Options::storageLimitsEnforced * _alienQty) + 1
 					> _baseTo->getAvailableContainment() - (Options::storageLimitsEnforced * _baseTo->getUsedContainment()))
 		{
@@ -1061,10 +1062,10 @@ void TransferItemsState::increaseByValue(int change)
 		|| selType == TRANSFER_ENGINEER)
 	{
 		change = std::min(
+						change,
 						std::min(
 								_baseTo->getAvailableQuarters() - _baseTo->getUsedQuarters() - _persQty,
-								getQuantity() - _transferQty[_sel]),
-						change);
+								getQuantity() - _transferQty[_sel]));
 		_persQty += change;
 		_baseQty[_sel] -= change;
 		_destQty[_sel] += change;
@@ -1073,7 +1074,7 @@ void TransferItemsState::increaseByValue(int change)
 	}
 	else if (selType == TRANSFER_CRAFT) // craft count
 	{
-		Craft* craft = _crafts[_sel - _soldiers.size()];
+		Craft* const craft = _crafts[_sel - _soldiers.size()];
 
 		_craftQty++;
 		_persQty += craft->getNumSoldiers();
@@ -1097,16 +1098,16 @@ void TransferItemsState::increaseByValue(int change)
 				storesPerItem = _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSize(),
 				availStores = static_cast<double>(_baseTo->getAvailableStores()) - _baseTo->getUsedStores() - _storeSize;
 			double
-				qtyItemsCanGo = DBL_MAX;
+				qtyItemsCanGo = std::numeric_limits<double>::max();
 
 			if (AreSame(storesPerItem, 0.0) == false)
 				qtyItemsCanGo = (availStores + 0.05) / storesPerItem;
 
 			change = std::min(
+							change,
 							std::min(
 									static_cast<int>(qtyItemsCanGo),
-									getQuantity() - _transferQty[_sel]),
-							change);
+									getQuantity() - _transferQty[_sel]));
 			_storeSize += static_cast<double>(change) * storesPerItem;
 			_baseQty[_sel] -= change;
 			_destQty[_sel] += change;
@@ -1115,15 +1116,15 @@ void TransferItemsState::increaseByValue(int change)
 		}
 		else // if (selItem->getAlien()) // live alien count
 		{
-			int freeContainment = INT_MAX;
+			int freeContainment = std::numeric_limits<int>::max();
 			if (Options::storageLimitsEnforced)
 				freeContainment = _baseTo->getAvailableContainment() - _baseTo->getUsedContainment() - _alienQty;
 
 			change = std::min(
+							change,
 							std::min(
 									freeContainment,
-									getQuantity() - _transferQty[_sel]),
-							change);
+									getQuantity() - _transferQty[_sel]));
 			_alienQty += change;
 			_baseQty[_sel] -= change;
 			_destQty[_sel] += change;
@@ -1156,8 +1157,8 @@ void TransferItemsState::decreaseByValue(int change)
 		return;
 
 	change = std::min(
-					_transferQty[_sel],
-					change);
+					change,
+					_transferQty[_sel]);
 
 	Craft* craft = NULL;
 
@@ -1229,7 +1230,7 @@ void TransferItemsState::updateItemStrings()
 
 		if (_sel > _offset)
 		{
-			RuleItem* rule = _game->getRuleset()->getItem(_items[_sel - _offset]);
+			const RuleItem* const rule = _game->getRuleset()->getItem(_items[_sel - _offset]);
 			if (rule->getBattleType() == BT_AMMO
 				|| (rule->getBattleType() == BT_NONE
 					&& rule->getClipSize() > 0))
@@ -1275,13 +1276,13 @@ int TransferItemsState::getTotalCost() const
  */
 double TransferItemsState::getDistance() const
 {
+	const double r = 51.2; // kL_note: what's this? conversion factor??? is it right??
 	double
 		x[3],
 		y[3],
-		z[3],
-		r = 51.2; // kL_note: what's this? conversion factor??? is it right??
+		z[3];
 
-	Base* base = _baseFrom;
+	const Base* base = _baseFrom;
 
 	for (int
 			i = 0;
@@ -1307,7 +1308,7 @@ double TransferItemsState::getDistance() const
  * @param selected - the selected item
  * @return, the type of the selected item
  */
-enum TransferType TransferItemsState::getType(size_t selected) const
+enum TransferType TransferItemsState::getType(const size_t selected) const
 {
 	size_t max = _soldiers.size();
 
@@ -1331,9 +1332,9 @@ enum TransferType TransferItemsState::getType(size_t selected) const
  * @param selected - currently selected item
  * @return, index of the selected item
  */
-size_t TransferItemsState::getItemIndex(size_t selected) const
+size_t TransferItemsState::getItemIndex(const size_t selected) const
 {
-	return selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng;
+	return (selected - _soldiers.size() - _crafts.size() - _hasSci - _hasEng);
 }
 
 }

@@ -416,7 +416,7 @@ std::wstring CraftInfoState::formatTime(
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftInfoState::btnOkClick(Action*)
 {
@@ -425,7 +425,7 @@ void CraftInfoState::btnOkClick(Action*)
 
 /**
  * Goes to the Select Armament window for the first weapon.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftInfoState::btnW1Click(Action*)
 {
@@ -437,7 +437,7 @@ void CraftInfoState::btnW1Click(Action*)
 
 /**
  * Goes to the Select Armament window for the second weapon.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftInfoState::btnW2Click(Action*)
 {
@@ -449,7 +449,7 @@ void CraftInfoState::btnW2Click(Action*)
 
 /**
  * Goes to the Select Squad screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftInfoState::btnCrewClick(Action*)
 {
@@ -460,7 +460,7 @@ void CraftInfoState::btnCrewClick(Action*)
 
 /**
  * Goes to the Select Equipment screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftInfoState::btnEquipClick(Action*)
 {
@@ -471,7 +471,7 @@ void CraftInfoState::btnEquipClick(Action*)
 
 /**
  * Goes to the Select Armor screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftInfoState::btnArmorClick(Action*)
 {
@@ -482,7 +482,7 @@ void CraftInfoState::btnArmorClick(Action*)
 
 /**
  * Changes the Craft name.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftInfoState::edtCraftChange(Action* action)
 {

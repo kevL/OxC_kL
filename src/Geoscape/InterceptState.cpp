@@ -361,7 +361,7 @@ std::wstring InterceptState::formatTime(
 
 /**
  * Closes the window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InterceptState::btnCancelClick(Action*)
 {
@@ -370,7 +370,7 @@ void InterceptState::btnCancelClick(Action*)
 
 /**
  * Goes to the base for the respective craft.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InterceptState::btnGotoBaseClick(Action*)
 {
@@ -384,7 +384,7 @@ void InterceptState::btnGotoBaseClick(Action*)
 
 /**
  * Opens the craft info window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InterceptState::lstCraftsLeftClick(Action*)
 {
@@ -399,7 +399,7 @@ void InterceptState::lstCraftsLeftClick(Action*)
 
 /**
  * Centers on the selected craft.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InterceptState::lstCraftsRightClick(Action*)
 {
@@ -413,7 +413,7 @@ void InterceptState::lstCraftsRightClick(Action*)
 
 /**
  * Shows Base label.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InterceptState::lstCraftsMouseOver(Action*)
 {
@@ -433,7 +433,7 @@ void InterceptState::lstCraftsMouseOver(Action*)
 
 /**
  * Hides Base label.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InterceptState::lstCraftsMouseOut(Action*)
 {

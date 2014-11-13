@@ -76,6 +76,7 @@ TransfersState::TransfersState(Base* base)
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -113,7 +114,7 @@ TransfersState::TransfersState(Base* base)
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin();
 
-	for (std::vector<Transfer*>::iterator
+	for (std::vector<Transfer*>::const_iterator
 			i = _base->getTransfers()->begin();
 			i != _base->getTransfers()->end();
 			++i)
@@ -141,7 +142,7 @@ TransfersState::~TransfersState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransfersState::btnOkClick(Action*)
 {

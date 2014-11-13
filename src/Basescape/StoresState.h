@@ -34,8 +34,7 @@ class Window;
 
 
 /**
- * Stores window that displays all
- * the items currently stored in a base.
+ * Stores window that displays all the items currently stored at a base.
  */
 class StoresState
 	:
@@ -48,9 +47,12 @@ private:
 		* _txtBaseLabel,
 		* _txtItem,
 		* _txtQuantity,
+		* _txtTotal,
 		* _txtSpaceUsed,
 		* _txtTitle;
-	TextButton* _btnOk;
+	TextButton
+		* _btnOk,
+		* _btnTransfers;
 	TextList* _lstStores;
 	Window* _window;
 
@@ -63,6 +65,8 @@ private:
 
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
+		/// Handler for clicking the in-Transit button.
+		void btnIncTransClick(Action* action);
 };
 
 }

@@ -291,7 +291,7 @@ void TextButton::draw()
 
 /**
  * Sets the button as the pressed button if it's part of a group.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void TextButton::mousePress(Action* action, State* state)
@@ -329,7 +329,7 @@ void TextButton::mousePress(Action* action, State* state)
 
 /**
  * Sets the button as the released button.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void TextButton::mouseRelease(Action* action, State* state)

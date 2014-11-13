@@ -135,7 +135,7 @@ NewPossibleResearchState::NewPossibleResearchState(
 
 /**
  * return to the previous screen
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewPossibleResearchState::btnOkClick(Action*)
 {
@@ -144,7 +144,7 @@ void NewPossibleResearchState::btnOkClick(Action*)
 
 /**
  * Open the ResearchState so the player can dispatch available scientist.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewPossibleResearchState::btnResearchClick(Action*)
 {

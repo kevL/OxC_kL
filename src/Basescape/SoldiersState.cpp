@@ -19,9 +19,9 @@
 
 #include "SoldiersState.h"
 
-#include <sstream>
-#include <string>
-#include <climits>
+//#include <sstream>
+//#include <string>
+//#include <climits>
 
 #include "CraftArmorState.h"
 #include "SoldierInfoState.h"
@@ -254,7 +254,7 @@ void SoldiersState::init()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldiersState::btnOkClick(Action*)
 {
@@ -264,7 +264,7 @@ void SoldiersState::btnOkClick(Action*)
 
 /**
  * Opens the Psionic Training screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldiersState::btnPsiTrainingClick(Action*)
 {
@@ -274,7 +274,7 @@ void SoldiersState::btnPsiTrainingClick(Action*)
 
 /**
  * Goes to the Select Armor screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldiersState::btnArmorClick(Action*)
 {
@@ -286,7 +286,7 @@ void SoldiersState::btnArmorClick(Action*)
 
 /**
  * Opens the Memorial screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldiersState::btnMemorialClick(Action*)
 {
@@ -312,11 +312,11 @@ void SoldiersState::btnMemorialClick(Action*)
 
 /**
  * Shows the selected soldier's info.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldiersState::lstSoldiersPress(Action* action)
 {
-	double mx = action->getAbsoluteXMouse();
+	const double mx = action->getAbsoluteXMouse();
 	if (mx >= _lstSoldiers->getArrowsLeftEdge()
 		&& mx < _lstSoldiers->getArrowsRightEdge())
 	{
@@ -335,13 +335,13 @@ void SoldiersState::lstSoldiersPress(Action* action)
 
 /**
  * Reorders a soldier up.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldiersState::lstLeftArrowClick(Action* action)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	size_t row = _lstSoldiers->getSelectedRow();
+	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
 		Soldier* soldier = _base->getSoldiers()->at(row);
@@ -379,20 +379,21 @@ void SoldiersState::lstLeftArrowClick(Action* action)
 
 /**
  * Reorders a soldier down.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldiersState::lstRightArrowClick(Action* action)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	size_t row = _lstSoldiers->getSelectedRow();
-	const size_t numSoldiers = _base->getSoldiers()->size();
+	const size_t
+		numSoldiers = _base->getSoldiers()->size(),
+		row = _lstSoldiers->getSelectedRow();
 
 	if (numSoldiers > 0
-		&& numSoldiers <= INT_MAX
+		&& numSoldiers <= std::numeric_limits<size_t>::max()
 		&& row < numSoldiers - 1)
 	{
-		Soldier* soldier = _base->getSoldiers()->at(row);
+		Soldier* const soldier = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
@@ -425,7 +426,7 @@ void SoldiersState::lstRightArrowClick(Action* action)
 
 /**
 * Displays the inventory screen for the soldiers at Base.
-* @param action - pointer to an action
+* @param action - pointer to an Action
 */
 void SoldiersState::btnEquipClick(Action*)
 {

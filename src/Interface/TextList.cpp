@@ -1237,7 +1237,7 @@ void TextList::blit(Surface* surface)
 
 /**
  * Passes events to arrow buttons.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void TextList::handle(Action* action, State* state)
@@ -1295,7 +1295,7 @@ void TextList::think()
 
 /**
  * Ignores any mouse clicks that aren't on a row.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void TextList::mousePress(Action* action, State* state)
@@ -1327,7 +1327,7 @@ void TextList::mousePress(Action* action, State* state)
 
 /**
  * Ignores any mouse clicks that aren't on a row.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void TextList::mouseRelease(Action* action, State* state)
@@ -1343,7 +1343,7 @@ void TextList::mouseRelease(Action* action, State* state)
 
 /**
  * Ignores any mouse clicks that aren't on a row.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void TextList::mouseClick(Action* action, State* state)
@@ -1367,7 +1367,7 @@ void TextList::mouseClick(Action* action, State* state)
 
 /**
  * Selects the row the mouse is over.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void TextList::mouseOver(Action* action, State* state)
@@ -1431,7 +1431,7 @@ void TextList::mouseOver(Action* action, State* state)
 
 /**
  * Deselects the row.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void TextList::mouseOut(Action* action, State* state)

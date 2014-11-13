@@ -219,7 +219,7 @@ void Slider::setPalette(
 
 /**
  * Automatically updates the slider when the mouse moves.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Slider::handle(Action* action, State* state)
@@ -316,7 +316,7 @@ void Slider::blit(Surface* surface)
 
 /**
  * The slider only moves while the button is pressed.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Slider::mousePress(Action* action, State* state)
@@ -340,7 +340,7 @@ void Slider::mousePress(Action* action, State* state)
 
 /**
  * The slider stops moving when the button is released.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Slider::mouseRelease(Action* action, State* state)

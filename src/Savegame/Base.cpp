@@ -21,8 +21,8 @@
 
 #include "Base.h"
 
-#include <algorithm>
-#include <cmath>
+//#include <algorithm>
+//#include <cmath>
 #include <stack>
 
 #include "../fmath.h"
@@ -830,7 +830,6 @@ double Base::getUsedStores()
 	}
 
 //	total -= getIgnoredStores();
-
 	return total;
 }
 
@@ -839,8 +838,8 @@ double Base::getUsedStores()
  * Supplying an offset will add/subtract to the used capacity before performing the check.
  * A positive offset simulates adding items to the stores, whereas a negative offset can be
  * used to check whether sufficient items have been removed to stop stores from overflowing.
- * @param offset - adjusts used capacity
- * @return, true if this Base's stores are over their limit.
+ * @param offset - adjusts used capacity (default 0.)
+ * @return, true if this Base's stores are over their limit
  */
 bool Base::storesOverfull(double offset)
 {
@@ -853,7 +852,7 @@ bool Base::storesOverfull(double offset)
 
 /**
  * Returns the total amount of stores available in the base.
- * @return, Storage space.
+ * @return, storage space
  */
 int Base::getAvailableStores() const
 {
@@ -924,7 +923,7 @@ int Base::getAvailableStores() const
 
 /**
  * Returns the amount of laboratories used up by research projects in the base.
- * @return, Laboratory space.
+ * @return, laboratory space
  */
 int Base::getUsedLaboratories() const
 {
@@ -944,7 +943,7 @@ int Base::getUsedLaboratories() const
 
 /**
  * Returns the total amount of laboratories available in the base.
- * @return, Laboratory space.
+ * @return, laboratory space
  */
 int Base::getAvailableLaboratories() const
 {
@@ -964,7 +963,7 @@ int Base::getAvailableLaboratories() const
 
 /**
  * Returns the amount of workshops used up by manufacturing projects in the base.
- * @return, Storage space.
+ * @return, storage space
  */
 int Base::getUsedWorkshops() const
 {
@@ -983,7 +982,7 @@ int Base::getUsedWorkshops() const
 
 /**
  * Returns the total amount of workshops available in the base.
- * @return, Workshop space.
+ * @return, workshop space
  */
 int Base::getAvailableWorkshops() const
 {
@@ -1003,7 +1002,7 @@ int Base::getAvailableWorkshops() const
 
 /**
  * Returns the amount of hangars used up by crafts in the base.
- * @return, Storage space.
+ * @return, storage space
  */
 int Base::getUsedHangars() const
 {
@@ -1033,7 +1032,7 @@ int Base::getUsedHangars() const
 
 /**
  * Returns the total amount of hangars available in the base.
- * @return, Number of hangars.
+ * @return, number of hangars
  */
 int Base::getAvailableHangars() const
 {

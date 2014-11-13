@@ -214,7 +214,7 @@ OptionInfo* OptionsControlsState::getControl(size_t sel)
 
 /**
  * Select a control for changing.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsControlsState::lstControlsClick(Action* action)
 {
@@ -263,7 +263,7 @@ void OptionsControlsState::lstControlsClick(Action* action)
 
 /**
  * Change selected control.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsControlsState::lstControlsKeyPress(Action* action)
 {

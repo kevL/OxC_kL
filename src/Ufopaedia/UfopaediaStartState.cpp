@@ -131,7 +131,7 @@ UfopaediaStartState::~UfopaediaStartState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UfopaediaStartState::btnOkClick(Action*)
 {
@@ -140,7 +140,7 @@ void UfopaediaStartState::btnOkClick(Action*)
 
 /**
  * Displays the list of articles for this section.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UfopaediaStartState::btnSectionClick(Action* action)
 {

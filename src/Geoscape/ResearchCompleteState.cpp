@@ -108,7 +108,7 @@ ResearchCompleteState::ResearchCompleteState(
 
 /**
  * Returns to the previous screen
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchCompleteState::btnOkClick(Action*)
 {
@@ -117,7 +117,7 @@ void ResearchCompleteState::btnOkClick(Action*)
 
 /**
  * Opens the Ufopaedia to the entry about the Research.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchCompleteState::btnReportClick(Action*)
 {

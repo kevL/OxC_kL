@@ -102,7 +102,7 @@ ConfirmCydoniaState::~ConfirmCydoniaState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ConfirmCydoniaState::btnYesClick(Action*)
 {
@@ -124,7 +124,7 @@ void ConfirmCydoniaState::btnYesClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ConfirmCydoniaState::btnNoClick(Action*)
 {

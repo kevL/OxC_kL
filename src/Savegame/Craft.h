@@ -246,11 +246,11 @@ private:
 		CraftId getUniqueId() const;
 
 		/// Sets capacity load.
-		void setLoadCapacity(int load);
+		void setLoadCapacity(const int load);
 		/// Gets capacity load.
 		int getLoadCapacity() const;
 		/// Sets current load.
-		void setLoadCurrent(int load);
+		void setLoadCurrent(const int load);
 		/// Gets current load.
 		int getLoadCurrent();
 

@@ -19,9 +19,9 @@
 
 #include "CraftEquipmentState.h"
 
-#include <algorithm>
-#include <climits>
-#include <sstream>
+//#include <algorithm>
+//#include <climits>
+//#include <sstream>
 
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/InventoryState.h"
@@ -76,7 +76,7 @@ CraftEquipmentState::CraftEquipmentState(
 		_craftID(craftID),
 		_base(base)
 {
-	Craft* craft = _base->getCrafts()->at(_craftID);
+	Craft* const craft = _base->getCrafts()->at(_craftID);
 
 	const bool
 		hasCrew = craft->getNumSoldiers() > 0,
@@ -194,7 +194,7 @@ CraftEquipmentState::CraftEquipmentState(
 			i != items.end();
 			++i)
 	{
-		RuleItem* rule = _game->getRuleset()->getItem(*i);
+		RuleItem* const rule = _game->getRuleset()->getItem(*i);
 
 		int craftQty = 0;
 		if (rule->isFixed() == true)
@@ -234,7 +234,7 @@ CraftEquipmentState::CraftEquipmentState(
 			else if (rule->isFixed() // tank w/ Ordnance.
 				&& rule->getCompatibleAmmo()->empty() == false)
 			{
-				RuleItem* ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
+				const RuleItem* const ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
 				const int clipSize = ammoRule->getClipSize();
 				if (clipSize > 0)
 					item += (L" (" + Text::formatNumber(clipSize) + L")");
@@ -288,7 +288,7 @@ void CraftEquipmentState::init()
 
 	_game->getSavedGame()->setBattleGame(NULL);
 
-	Craft* craft = _base->getCrafts()->at(_craftID);
+	Craft* const craft = _base->getCrafts()->at(_craftID);
 	craft->setInBattlescape(false);
 
 	// Restore system colors
@@ -310,7 +310,7 @@ void CraftEquipmentState::think()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftEquipmentState::btnOkClick(Action*)
 {
@@ -319,7 +319,7 @@ void CraftEquipmentState::btnOkClick(Action*)
 
 /**
  * Starts moving the item to the base.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftEquipmentState::lstEquipmentLeftArrowPress(Action* action)
 {
@@ -334,7 +334,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowPress(Action* action)
 
 /**
  * Stops moving the item to the base.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action* action)
 {
@@ -344,12 +344,12 @@ void CraftEquipmentState::lstEquipmentLeftArrowRelease(Action* action)
 
 /**
  * Moves all the items to the base on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftEquipmentState::lstEquipmentLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		moveLeftByValue(INT_MAX);
+		moveLeftByValue(std::numeric_limits<int>::max());
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -362,7 +362,7 @@ void CraftEquipmentState::lstEquipmentLeftArrowClick(Action* action)
 
 /**
  * Starts moving the item to the craft.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftEquipmentState::lstEquipmentRightArrowPress(Action* action)
 {
@@ -377,7 +377,7 @@ void CraftEquipmentState::lstEquipmentRightArrowPress(Action* action)
 
 /**
  * Stops moving the item to the craft.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftEquipmentState::lstEquipmentRightArrowRelease(Action* action)
 {
@@ -387,12 +387,12 @@ void CraftEquipmentState::lstEquipmentRightArrowRelease(Action* action)
 
 /**
  * Moves all the items (as much as possible) to the craft on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftEquipmentState::lstEquipmentRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		moveRightByValue(INT_MAX);
+		moveRightByValue(std::numeric_limits<int>::max());
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -440,11 +440,11 @@ void CraftEquipmentState::lstEquipmentMousePress(Action* action)
  */
 void CraftEquipmentState::updateQuantity()
 {
-	Craft* craft = _base->getCrafts()->at(_craftID);
-	RuleItem* itemRule = _game->getRuleset()->getItem(_items[_sel]);
+	const RuleItem* const itemRule = _game->getRuleset()->getItem(_items[_sel]);
+	Craft* const craft = _base->getCrafts()->at(_craftID);
 
 	int cQty = 0;
-	if (itemRule->isFixed())
+	if (itemRule->isFixed() == true)
 		cQty = craft->getVehicleCount(_items[_sel]);
 	else
 		cQty = craft->getItems()->getItem(_items[_sel]);
@@ -615,7 +615,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 	int baseQty = _base->getItems()->getItem(_items[_sel]);
 	if (_game->getSavedGame()->getMonthsPassed() == -1)
 	{
-		if (change == INT_MAX)
+		if (change == std::numeric_limits<int>::max())
 			change = 10;
 
 		baseQty = change;
@@ -634,8 +634,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 	if (rule->isFixed() == true) // load vehicle, convert item to a vehicle
 	{
-		Unit* tankRule = _game->getRuleset()->getUnit(rule->getType());
-
+		const Unit* const tankRule = _game->getRuleset()->getUnit(rule->getType());
 		const int
 			unitSize = _game->getRuleset()->getArmor(tankRule->getArmor())->getSize()
 					 * _game->getRuleset()->getArmor(tankRule->getArmor())->getSize(),
@@ -760,7 +759,7 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 /**
  * Empties the contents of the craft, moving all of the items back to the base.
-* @param action - pointer to an action
+* @param action - pointer to an Action
  */
 void CraftEquipmentState::btnClearClick(Action*)
 {
@@ -769,13 +768,13 @@ void CraftEquipmentState::btnClearClick(Action*)
 			_sel != _items.size();
 			++_sel)
 	{
-		moveLeftByValue(INT_MAX);
+		moveLeftByValue(std::numeric_limits<int>::max());
 	}
 }
 
 /**
 * Displays the inventory screen for the soldiers inside the craft.
-* @param action - pointer to an action
+* @param action - pointer to an Action
 */
 void CraftEquipmentState::btnInventoryClick(Action*)
 {

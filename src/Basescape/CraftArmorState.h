@@ -67,16 +67,15 @@ private:
 
 		/// Updates the soldier armors.
 		void init();
+
 		/// Handler for clicking the OK button.
 		void btnOkClick(Action* action);
-
 		/// Handler for clicking the Soldiers list.
 		void lstSoldiersPress(Action* action);
-
-		/// kL. Handler for clicking the Soldiers reordering button.
-		void lstLeftArrowClick(Action* action); // kL
-		/// kL. Handler for clicking the Soldiers reordering button.
-		void lstRightArrowClick(Action* action); // kL
+		/// Handler for clicking the Soldiers reordering button.
+		void lstLeftArrowClick(Action* action);
+		/// Handler for clicking the Soldiers reordering button.
+		void lstRightArrowClick(Action* action);
 };
 
 }

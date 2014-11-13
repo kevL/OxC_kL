@@ -159,7 +159,7 @@ Surface* Screen::getSurface()
 
 /**
  * Handles screen key shortcuts.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void Screen::handle(Action* action)
 {

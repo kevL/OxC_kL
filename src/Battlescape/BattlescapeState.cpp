@@ -946,7 +946,7 @@ void BattlescapeState::think()
 
 /**
  * Processes any mouse moving over the map.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::mapOver(Action* action)
 {
@@ -1273,7 +1273,7 @@ void BattlescapeState::mapOver(Action* action)
 
 /**
  * Processes any presses on the map.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::mapPress(Action* action)
 {
@@ -1311,7 +1311,7 @@ void BattlescapeState::mapPress(Action* action)
 
 /**
  * Processes any clicks.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::mapClick(Action* action)
 {
@@ -1408,7 +1408,7 @@ void BattlescapeState::mapClick(Action* action)
 
 /**
  * Handles mouse entering the map surface.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::mapIn(Action*)
 {
@@ -1418,7 +1418,7 @@ void BattlescapeState::mapIn(Action*)
 
 /**
  * Move the mouse back to where it started after we finish drag scrolling.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::stopScrolling(Action* action)
 {
@@ -1560,7 +1560,7 @@ inline void BattlescapeState::handle(Action* action)
 
 /**
  * Moves the selected unit up.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnUnitUpClick(Action*)
 {
@@ -1590,7 +1590,7 @@ void BattlescapeState::btnUnitUpClick(Action*)
 
 /**
  * Moves the selected unit down.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnUnitDownClick(Action*)
 {
@@ -1615,7 +1615,7 @@ void BattlescapeState::btnUnitDownClick(Action*)
 
 /**
  * Shows the next map layer.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnMapUpClick(Action*)
 {
@@ -1628,7 +1628,7 @@ void BattlescapeState::btnMapUpClick(Action*)
 
 /**
  * Shows the previous map layer.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnMapDownClick(Action*)
 {
@@ -1641,7 +1641,7 @@ void BattlescapeState::btnMapDownClick(Action*)
 
 /**
  * Shows the minimap.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnShowMapClick(Action*)
 {
@@ -1696,7 +1696,7 @@ void BattlescapeState::btnKneelClick(Action*)
 /**
  * Goes to the inventory screen.
  * Additionally resets TUs for current side in debug mode.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnInventoryClick(Action*)
 {
@@ -1749,7 +1749,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 
 /**
  * Centers on the currently selected soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnCenterClick(Action*)
 {
@@ -1762,7 +1762,7 @@ void BattlescapeState::btnCenterClick(Action*)
 
 /**
  * Selects the next soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnNextSoldierClick(Action*)
 {
@@ -1775,7 +1775,7 @@ void BattlescapeState::btnNextSoldierClick(Action*)
 
 /**
  * Disables reselection of the current soldier and selects the next soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnNextStopClick(Action*)
 {
@@ -1785,7 +1785,7 @@ void BattlescapeState::btnNextStopClick(Action*)
 
 /**
  * Selects next soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnPrevSoldierClick(Action*)
 {
@@ -1795,7 +1795,7 @@ void BattlescapeState::btnPrevSoldierClick(Action*)
 
 /**
  * Disables reselection of the current soldier and selects the next soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnPrevStopClick(Action*)
 {
@@ -1869,7 +1869,7 @@ void BattlescapeState::selectPreviousFactionUnit(
 }
 /**
  * Shows/hides all map layers.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnShowLayersClick(Action*)
 {
@@ -1878,7 +1878,7 @@ void BattlescapeState::btnShowLayersClick(Action*)
 
 /**
  * Shows options.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnHelpClick(Action*)
 {
@@ -1889,7 +1889,7 @@ void BattlescapeState::btnHelpClick(Action*)
 /**
  * Requests the end of turn. This will add a 0 to the end of the state queue,
  * so all ongoing actions, like explosions are finished first before really switching turn.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnEndTurnClick(Action*)
 {
@@ -1904,7 +1904,7 @@ void BattlescapeState::btnEndTurnClick(Action*)
 
 /**
  * Aborts the mission.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnAbortClick(Action*)
 {
@@ -1920,7 +1920,7 @@ void BattlescapeState::btnAbortClick(Action*)
 
 /**
  * Shows the selected soldier's info.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnStatsClick(Action* action)
 {
@@ -1969,7 +1969,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 
 /**
  * Shows an action popup menu. When clicked, creates the action.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnLeftHandLeftClick(Action*)
 {
@@ -1997,7 +1997,7 @@ void BattlescapeState::btnLeftHandLeftClick(Action*)
 
 /**
  * Sets left hand as Active Hand.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnLeftHandRightClick(Action*)
 {
@@ -2015,7 +2015,7 @@ void BattlescapeState::btnLeftHandRightClick(Action*)
 
 /**
  * Shows an action popup menu. When clicked, creates the action.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnRightHandLeftClick(Action*)
 {
@@ -2043,7 +2043,7 @@ void BattlescapeState::btnRightHandLeftClick(Action*)
 
 /**
  * Sets right hand as Active Hand.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnRightHandRightClick(Action*)
 {
@@ -2061,7 +2061,7 @@ void BattlescapeState::btnRightHandRightClick(Action*)
 
 /**
  * Centers on the unit corresponding to this button.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnVisibleUnitClick(Action* action)
 {
@@ -2085,7 +2085,7 @@ void BattlescapeState::btnVisibleUnitClick(Action* action)
 
 /**
  * Centers on the currently wounded soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnWoundedClick(Action* action)
 {
@@ -2097,7 +2097,7 @@ void BattlescapeState::btnWoundedClick(Action* action)
 
 /**
  * Launches the blaster bomb.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnLaunchClick(Action* action)
 {
@@ -2107,7 +2107,7 @@ void BattlescapeState::btnLaunchClick(Action* action)
 
 /**
  * Uses psionics.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnPsiClick(Action* action)
 {
@@ -2117,7 +2117,7 @@ void BattlescapeState::btnPsiClick(Action* action)
 
 /**
  * Reserves time units.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BattlescapeState::btnReserveClick(Action* action)
 {
@@ -2145,7 +2145,7 @@ void BattlescapeState::btnPsiClick(Action* action)
 
 /**
  * Reserves time units for kneeling.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void BattlescapeState::btnReserveKneelClick(Action* action)
 {
@@ -2172,7 +2172,7 @@ void BattlescapeState::btnPsiClick(Action* action)
 
 /**
  * Reloads the weapon in hand.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnReloadClick(Action*)
 {
@@ -2192,7 +2192,7 @@ void BattlescapeState::btnReloadClick(Action*)
 
 /**
  * Removes all time units.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnZeroTUsClick(Action* action)
 {
@@ -2215,7 +2215,7 @@ void BattlescapeState::btnZeroTUsClick(Action* action)
 
 /**
  * Toggles soldier's personal lighting (purely cosmetic).
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnPersonalLightingClick(Action*)
 {
@@ -2225,7 +2225,7 @@ void BattlescapeState::btnPersonalLightingClick(Action*)
 
 /**
  * kL. Handler for toggling the console.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::btnConsoleToggle(Action*) // kL
 {
@@ -2293,7 +2293,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 
 /**
 * Shows a tooltip for the appropriate button.
-* @param action - pointer to an action
+* @param action - pointer to an Action
 */
 /* void BattlescapeState::txtTooltipIn(Action* action)
 {
@@ -2306,7 +2306,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 
 /**
 * Clears the tooltip text.
-* @param action - pointer to an action
+* @param action - pointer to an Action
 */
 /* void BattlescapeState::txtTooltipOut(Action* action)
 {
@@ -3474,7 +3474,7 @@ BattlescapeGame* BattlescapeState::getBattleGame()
 
 /**
  * Handler for the mouse moving over the icons, disabling the tile selection cube.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::mouseInIcons(Action*)
 {
@@ -3493,7 +3493,7 @@ void BattlescapeState::mouseInIcons(Action*)
 
 /**
  * Handler for the mouse going out of the icons, enabling the tile selection cube.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BattlescapeState::mouseOutIcons(Action*)
 {

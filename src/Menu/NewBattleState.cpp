@@ -576,7 +576,7 @@ void NewBattleState::initSave()
 
 /**
  * Starts the battle.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewBattleState::btnOkClick(Action*)
 {
@@ -677,7 +677,7 @@ void NewBattleState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewBattleState::btnCancelClick(Action*)
 {
@@ -689,7 +689,7 @@ void NewBattleState::btnCancelClick(Action*)
 
 /**
  * Randomize the state
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewBattleState::btnRandomClick(Action*)
 {
@@ -724,7 +724,7 @@ void NewBattleState::btnRandomClick(Action*)
 
 /**
  * Shows the Craft Info screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewBattleState::btnEquipClick(Action*)
 {
@@ -735,7 +735,7 @@ void NewBattleState::btnEquipClick(Action*)
 
 /**
  * Updates Map Options based on the current Mission type.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewBattleState::cbxMissionChange(Action*)
 {
@@ -750,7 +750,7 @@ void NewBattleState::cbxMissionChange(Action*)
 
 /**
  * Updates craft accordingly.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewBattleState::cbxCraftChange(Action*)
 {
@@ -778,7 +778,7 @@ void NewBattleState::cbxCraftChange(Action*)
 
 /**
  * Updates the depth slider accordingly when terrain selection changes.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewBattleState::cbxTerrainChange(Action*)
 {

@@ -106,7 +106,7 @@ LowFuelState::~LowFuelState()
 
 /**
  * Closes the window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void LowFuelState::btnOkClick(Action*)
 {
@@ -115,7 +115,7 @@ void LowFuelState::btnOkClick(Action*)
 
 /**
  * Closes the window and sets the timer to 5 Secs.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void LowFuelState::btnOk5SecsClick(Action*)
 {

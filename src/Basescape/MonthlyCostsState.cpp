@@ -219,7 +219,7 @@ MonthlyCostsState::~MonthlyCostsState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void MonthlyCostsState::btnOkClick(Action*)
 {

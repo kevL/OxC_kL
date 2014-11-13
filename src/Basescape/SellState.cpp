@@ -19,10 +19,10 @@
 
 #include "SellState.h"
 
-#include <climits>
-#include <cmath>
-#include <iomanip>
-#include <sstream>
+//#include <climits>
+//#include <cmath>
+//#include <iomanip>
+//#include <sstream>
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -476,7 +476,7 @@ size_t SellState::getCraftIndex(size_t selected) const
 
 /**
  * Sells the selected items.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SellState::btnOkClick(Action*)
 {
@@ -504,7 +504,6 @@ void SellState::btnOkClick(Action*)
 								_base->getItems()->addItem((*j)->getArmor()->getStoreItem());
 
 							_base->getSoldiers()->erase(j);
-
 							break;
 						}
 					}
@@ -586,13 +585,13 @@ void SellState::btnOkClick(Action*)
 
 						_base->getItems()->removeItem( // remove all of said items from base
 													item,
-													INT_MAX);
+													std::numeric_limits<int>::max());
 
 						// if we still need to remove any, remove them from the crafts first, and keep a running tally
 						for (std::vector<Craft*>::const_iterator
 								j = _base->getCrafts()->begin();
 								j != _base->getCrafts()->end()
-									&& toRemove;
+									&& toRemove != 0;
 								++j)
 						{
 							if ((*j)->getItems()->getItem(item) < toRemove)
@@ -601,7 +600,7 @@ void SellState::btnOkClick(Action*)
 
 								(*j)->getItems()->removeItem(
 														item,
-														INT_MAX);
+														std::numeric_limits<int>::max());
 							}
 							else
 							{
@@ -616,7 +615,7 @@ void SellState::btnOkClick(Action*)
 						for (std::vector<Transfer*>::const_iterator
 								j = _base->getTransfers()->begin();
 								j != _base->getTransfers()->end()
-									&& toRemove;
+									&& toRemove != 0;
 								)
 						{
 							if ((*j)->getItems() == item)
@@ -654,7 +653,7 @@ void SellState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SellState::btnCancelClick(Action*)
 {
@@ -663,7 +662,7 @@ void SellState::btnCancelClick(Action*)
 
 /**
  * Starts increasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SellState::lstItemsLeftArrowPress(Action* action)
 {
@@ -678,7 +677,7 @@ void SellState::lstItemsLeftArrowPress(Action* action)
 
 /**
  * Stops increasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SellState::lstItemsLeftArrowRelease(Action* action)
 {
@@ -688,12 +687,12 @@ void SellState::lstItemsLeftArrowRelease(Action* action)
 
 /**
  * Increases the selected item; by one on left-click, to max on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SellState::lstItemsLeftArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		changeByValue(INT_MAX, 1);
+		changeByValue(std::numeric_limits<int>::max(), 1);
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -706,7 +705,7 @@ void SellState::lstItemsLeftArrowClick(Action* action)
 
 /**
  * Starts decreasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SellState::lstItemsRightArrowPress(Action* action)
 {
@@ -721,7 +720,7 @@ void SellState::lstItemsRightArrowPress(Action* action)
 
 /**
  * Stops decreasing the item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SellState::lstItemsRightArrowRelease(Action* action)
 {
@@ -731,12 +730,12 @@ void SellState::lstItemsRightArrowRelease(Action* action)
 
 /**
  * Decreases the selected item; by one on left-click, to 0 on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SellState::lstItemsRightArrowClick(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
-		changeByValue(INT_MAX, -1);
+		changeByValue(std::numeric_limits<int>::max(), -1);
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
@@ -749,7 +748,7 @@ void SellState::lstItemsRightArrowClick(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SellState::lstItemsMousePress(Action* action)
 {
@@ -1070,7 +1069,7 @@ void SellState::updateItemStrings()
 
 	if (Options::storageLimitsEnforced)
 		okBtn = okBtn
-			&& !_base->storesOverfull(_spaceChange);
+			&& _base->storesOverfull(_spaceChange) == false;
 
 	_btnOk->setVisible(okBtn);
 }
@@ -1082,18 +1081,18 @@ void SellState::updateItemStrings()
  */
 enum SellType SellState::getType(size_t selected) const
 {
-	size_t max = _soldiers.size();
+	size_t cutoff = _soldiers.size();
 
-	if (selected < max)
+	if (selected < cutoff)
 		return SELL_SOLDIER;
 
-	if (selected < (max += _crafts.size()))
+	if (selected < (cutoff += _crafts.size()))
 		return SELL_CRAFT;
 
-	if (selected < (max += _hasSci))
+	if (selected < (cutoff += _hasSci))
 		return SELL_SCIENTIST;
 
-	if (selected < (max += _hasEng))
+	if (selected < (cutoff += _hasEng))
 		return SELL_ENGINEER;
 
 	return SELL_ITEM;

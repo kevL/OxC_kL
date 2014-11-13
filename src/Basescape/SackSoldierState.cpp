@@ -107,7 +107,7 @@ SackSoldierState::~SackSoldierState()
 /**
  * Sacks the soldier and returns
  * to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SackSoldierState::btnOkClick(Action*)
 {
@@ -123,7 +123,7 @@ void SackSoldierState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SackSoldierState::btnCancelClick(Action*)
 {

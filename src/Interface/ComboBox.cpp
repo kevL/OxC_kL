@@ -374,7 +374,7 @@ void ComboBox::blit(Surface* surface)
 
 /**
  * Passes events to internal components.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void ComboBox::handle(Action* action, State* state)

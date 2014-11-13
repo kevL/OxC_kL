@@ -156,7 +156,7 @@ void BuildFacilitiesState::init()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BuildFacilitiesState::btnOkClick(Action*)
 {
@@ -165,7 +165,7 @@ void BuildFacilitiesState::btnOkClick(Action*)
 
 /**
  * Places the selected facility.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BuildFacilitiesState::lstFacilitiesClick(Action*)
 {

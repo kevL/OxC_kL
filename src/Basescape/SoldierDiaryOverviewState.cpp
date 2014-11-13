@@ -381,7 +381,7 @@ void SoldierDiaryOverviewState::setSoldierID(size_t soldierID)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryOverviewState::btnOkClick(Action*)
 {
@@ -395,7 +395,7 @@ void SoldierDiaryOverviewState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryOverviewState::btnKillsClick(Action*)
 {
@@ -411,7 +411,7 @@ void SoldierDiaryOverviewState::btnKillsClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryOverviewState::btnMissionsClick(Action*)
 {
@@ -427,7 +427,7 @@ void SoldierDiaryOverviewState::btnMissionsClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryOverviewState::btnCommendationsClick(Action*)
 {
@@ -443,7 +443,7 @@ void SoldierDiaryOverviewState::btnCommendationsClick(Action*)
 
 /**
  * Goes to the previous soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryOverviewState::btnPrevClick(Action*)
 {
@@ -465,7 +465,7 @@ void SoldierDiaryOverviewState::btnPrevClick(Action*)
 
 /**
  * Goes to the next soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryOverviewState::btnNextClick(Action*)
 {
@@ -486,7 +486,7 @@ void SoldierDiaryOverviewState::btnNextClick(Action*)
 
 /**
  * Shows the selected soldier's info.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierDiaryOverviewState::lstDiaryInfoClick(Action*)
 {

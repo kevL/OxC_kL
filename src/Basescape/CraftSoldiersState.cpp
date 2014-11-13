@@ -19,9 +19,9 @@
 
 #include "CraftSoldiersState.h"
 
-#include <climits>
-#include <sstream>
-#include <string>
+//#include <climits>
+//#include <sstream>
+//#include <string>
 
 #include "SoldierInfoState.h"
 
@@ -99,6 +99,7 @@ CraftSoldiersState::CraftSoldiersState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(15)+6);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
 
@@ -120,7 +121,7 @@ CraftSoldiersState::CraftSoldiersState(
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
 
-	Craft* craft = _base->getCrafts()->at(_craftID);
+	const Craft* const craft = _base->getCrafts()->at(_craftID);
 	_txtTitle->setText(tr("STR_SELECT_SQUAD_FOR_CRAFT").arg(craft->getName(_game->getLanguage())));
 
 	_txtName->setColor(Palette::blockOffset(15)+6);
@@ -166,22 +167,21 @@ CraftSoldiersState::~CraftSoldiersState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftSoldiersState::btnOkClick(Action*)
 {
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
-
 	_game->popState();
 }
 
 /**
- * kL. Unloads all soldiers from current transport craft.
- * @param action - pointer to an action
+ * Unloads all soldiers from current transport craft.
+ * @param action - pointer to an Action
  */
-void CraftSoldiersState::btnUnloadClick(Action*) // kL
+void CraftSoldiersState::btnUnloadClick(Action*)
 {
-	Craft* craft = _base->getCrafts()->at(_craftID);
+	const Craft* const craft = _base->getCrafts()->at(_craftID);
 
 	for (std::vector<Soldier*>::iterator // iterate over all soldiers at Base
 			i = _base->getSoldiers()->begin();
@@ -251,7 +251,7 @@ void CraftSoldiersState::init()
 
 	_lstSoldiers->clearList();
 
-	Craft* craft = _base->getCrafts()->at(_craftID);
+	Craft* const craft = _base->getCrafts()->at(_craftID);
 
 	size_t row = 0;
 
@@ -281,7 +281,7 @@ void CraftSoldiersState::init()
 		if ((*i)->getWoundRecovery() > 0)
 		{
 			Uint8 color = Palette::blockOffset(3); // green
-			int woundPct = (*i)->getWoundPercent();
+			const int woundPct = (*i)->getWoundPercent();
 			if (woundPct > 50)
 				color = Palette::blockOffset(6); // orange
 			else if (woundPct > 10)
@@ -324,7 +324,7 @@ void CraftSoldiersState::init()
 
 /**
  * Reorders a soldier up.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftSoldiersState::lstLeftArrowClick(Action* action)
 {
@@ -338,7 +338,7 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 	} */
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	size_t row = _lstSoldiers->getSelectedRow();
+	const size_t row = _lstSoldiers->getSelectedRow();
 
 /*	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		_lstSoldiers->scrollUp(false, true);
@@ -347,7 +347,7 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 	else */
 	if (row > 0)
 	{
-		Soldier* soldier = _base->getSoldiers()->at(row);
+		Soldier* const soldier = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
@@ -382,7 +382,7 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 
 /**
  * Moves a soldier up on the list.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param row Selected soldier row.
  * @param max Move the soldier to the top?
  */
@@ -415,13 +415,13 @@ void CraftSoldiersState::lstLeftArrowClick(Action* action)
 
 /**
  * Reorders a soldier down.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftSoldiersState::lstRightArrowClick(Action* action)
 {
 /*	size_t row = _lstSoldiers->getSelectedRow();
 	size_t numSoldiers = _base->getSoldiers()->size();
-	if (0 < numSoldiers && INT_MAX >= numSoldiers && row < (int)numSoldiers - 1)
+	if (0 < numSoldiers && std::numeric_limits<int>::max() >= numSoldiers && row < (int)numSoldiers - 1)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 			moveSoldierDown(action, row);
@@ -430,8 +430,9 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 	} */
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
-	size_t row = _lstSoldiers->getSelectedRow();
-	size_t numSoldiers = _base->getSoldiers()->size();
+	const size_t
+		numSoldiers = _base->getSoldiers()->size(),
+		row = _lstSoldiers->getSelectedRow();
 
 /*	if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 		_lstSoldiers->scrollUp(false, true);
@@ -439,10 +440,10 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 		_lstSoldiers->scrollDown(false, true);
 	else */
 	if (numSoldiers > 0
-		&& numSoldiers <= INT_MAX
+		&& numSoldiers <= std::numeric_limits<size_t>::max()
 		&& row < numSoldiers - 1)
 	{
-		Soldier* soldier = _base->getSoldiers()->at(row);
+		Soldier* const soldier = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
@@ -475,7 +476,7 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 
 /**
  * Moves a soldier down on the list.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param row		- selected soldier row
  * @param max		- true to move the soldier to the bottom
  */
@@ -508,28 +509,28 @@ void CraftSoldiersState::lstRightArrowClick(Action* action)
 
 /**
  * LMB assigns and de-assigns soldiers from a craft. RMB shows soldier info.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftSoldiersState::lstSoldiersPress(Action* action)
 {
-	double mx = action->getAbsoluteXMouse();
+	const double mx = action->getAbsoluteXMouse();
 	if (mx >= static_cast<double>(_lstSoldiers->getArrowsLeftEdge())
 		&& mx < static_cast<double>(_lstSoldiers->getArrowsRightEdge()))
 	{
 		return;
 	}
 
-	size_t row = _lstSoldiers->getSelectedRow();
+	const size_t row = _lstSoldiers->getSelectedRow();
 	//Log(LOG_INFO) << ". CraftSoldiersState::lstSoldiersClick() row = " << row;
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		Soldier* soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
+		Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 
 		if (soldier->getWoundRecovery() > 0)
 			return;
 
-		Craft* craft = _base->getCrafts()->at(_craftID);
+		Craft* const craft = _base->getCrafts()->at(_craftID);
 		Uint8 color = Palette::blockOffset(13)+10;
 
 		if (soldier->getCraft() == craft
@@ -571,7 +572,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 
 /**
  * Handles the mouse-wheels on the arrow-buttons.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /*kL void CraftSoldiersState::lstSoldiersMousePress(Action* action)
 {
@@ -591,7 +592,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_WHEELDOWN
 		&& 0 < numSoldiers
-		&& INT_MAX >= numSoldiers
+		&& std::numeric_limits<int>::max() >= numSoldiers
 		&& row < (int)numSoldiers - 1)
 	{
 		if (action->getAbsoluteXMouse() >= _lstSoldiers->getArrowsLeftEdge()

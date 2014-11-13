@@ -102,7 +102,7 @@ OptionsDefaultsState::~OptionsDefaultsState()
 
 /**
  * Restores the default options.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsDefaultsState::btnYesClick(Action* action)
 {
@@ -121,7 +121,7 @@ void OptionsDefaultsState::btnYesClick(Action* action)
 
 /**
  * Closes the window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsDefaultsState::btnNoClick(Action*)
 {

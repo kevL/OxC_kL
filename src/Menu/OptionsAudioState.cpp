@@ -259,7 +259,7 @@ OptionsAudioState::~OptionsAudioState()
 
 /**
  * Updates the music volume.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsAudioState::slrMusicVolumeChange(Action*)
 {
@@ -272,7 +272,7 @@ void OptionsAudioState::slrMusicVolumeChange(Action*)
 
 /**
  * Updates the sound volume with the slider.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsAudioState::slrSoundVolumeChange(Action*)
 {
@@ -285,7 +285,7 @@ void OptionsAudioState::slrSoundVolumeChange(Action*)
 
 /**
  * Plays a game sound for volume preview.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsAudioState::slrSoundVolumeRelease(Action*)
 {
@@ -294,7 +294,7 @@ void OptionsAudioState::slrSoundVolumeRelease(Action*)
 
 /**
  * Updates the UI volume with the slider.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsAudioState::slrUiVolumeChange(Action*)
 {
@@ -307,7 +307,7 @@ void OptionsAudioState::slrUiVolumeChange(Action*)
 
 /**
  * Plays a UI sound for volume preview.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsAudioState::slrUiVolumeRelease(Action*)
 {
@@ -317,7 +317,7 @@ void OptionsAudioState::slrUiVolumeRelease(Action*)
 
 /**
  * Changes the Audio Sample Rate option.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsAudioState::cbxSampleRateChange(Action*)
 {
@@ -327,7 +327,7 @@ void OptionsAudioState::cbxSampleRateChange(Action*)
 
 /**
  * Changes the Music Format option.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsAudioState::cbxMusicFormatChange(Action*)
 {
@@ -337,7 +337,7 @@ void OptionsAudioState::cbxMusicFormatChange(Action*)
 
 /**
  * Changes the Sound Format option.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsAudioState::cbxSoundFormatChange(Action*)
 {

@@ -224,7 +224,7 @@ void OptionsBaseState::setCategory(TextButton* button)
 
 /**
  * Saves the new options and returns to the proper origin screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBaseState::btnOkClick(Action*)
 {
@@ -285,7 +285,7 @@ void OptionsBaseState::btnOkClick(Action*)
 
 /**
  * Loads previous options and returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBaseState::btnCancelClick(Action*)
 {
@@ -317,7 +317,7 @@ void OptionsBaseState::btnCancelClick(Action*)
 
 /**
  * Restores the Options to default settings.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBaseState::btnDefaultClick(Action* action)
 {

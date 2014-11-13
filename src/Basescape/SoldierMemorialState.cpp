@@ -181,7 +181,7 @@ SoldierMemorialState::~SoldierMemorialState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierMemorialState::btnOkClick(Action*)
 {
@@ -209,7 +209,7 @@ void SoldierMemorialState::btnOkClick(Action*)
 
 /**
  * Shows the selected soldier's info.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SoldierMemorialState::lstSoldiersPress(Action* action)
 {

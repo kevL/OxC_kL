@@ -19,7 +19,7 @@
 
 #include "CraftsState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "CraftInfoState.h"
 #include "SellState.h"
@@ -352,7 +352,7 @@ std::wstring CraftsState::formatTime(
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftsState::btnOkClick(Action*)
 {
@@ -376,11 +376,11 @@ void CraftsState::btnOkClick(Action*)
 /**
  * LMB shows the selected craft's info.
  * RMB pops out of Basescape and centers craft on Geoscape.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftsState::lstCraftsPress(Action* action)
 {
-	double mx = action->getAbsoluteXMouse();
+	const double mx = action->getAbsoluteXMouse();
 	if (mx >= _lstCrafts->getArrowsLeftEdge()
 		&& mx < _lstCrafts->getArrowsRightEdge())
 	{
@@ -396,7 +396,7 @@ void CraftsState::lstCraftsPress(Action* action)
 	}
 	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		Craft* craft = _base->getCrafts()->at(_lstCrafts->getSelectedRow());
+		const Craft* const craft = _base->getCrafts()->at(_lstCrafts->getSelectedRow());
 		_game->getSavedGame()->setGlobeLongitude(craft->getLongitude());
 		_game->getSavedGame()->setGlobeLatitude(craft->getLatitude());
 
@@ -409,14 +409,14 @@ void CraftsState::lstCraftsPress(Action* action)
 
 /**
  * Reorders a craft - moves craft-slot up.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftsState::lstLeftArrowClick(Action* action)
 {
-	int row = _lstCrafts->getSelectedRow();
+	const int row = _lstCrafts->getSelectedRow();
 	if (row > 0)
 	{
-		Craft* craft = _base->getCrafts()->at(row);
+		Craft* const craft = _base->getCrafts()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
@@ -446,18 +446,19 @@ void CraftsState::lstLeftArrowClick(Action* action)
 
 /**
  * Reorders a craft - moves craft-slot down.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftsState::lstRightArrowClick(Action* action)
 {
-	size_t row = _lstCrafts->getSelectedRow();
-	const size_t numCrafts = _base->getCrafts()->size();
+	const size_t
+		numCrafts = _base->getCrafts()->size(),
+		row = _lstCrafts->getSelectedRow();
 
 	if (numCrafts > 0
-		&& numCrafts <= INT_MAX
+		&& numCrafts <= std::numeric_limits<size_t>::max()
 		&& row < numCrafts - 1)
 	{
-		Craft* craft = _base->getCrafts()->at(row);
+		Craft* const craft = _base->getCrafts()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{

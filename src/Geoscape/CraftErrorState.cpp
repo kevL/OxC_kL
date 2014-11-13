@@ -97,7 +97,7 @@ CraftErrorState::~CraftErrorState()
 
 /**
  * Closes the window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftErrorState::btnOkClick(Action*)
 {
@@ -106,7 +106,7 @@ void CraftErrorState::btnOkClick(Action*)
 
 /**
  * Closes the window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void CraftErrorState::btnOk5SecsClick(Action*)
 {

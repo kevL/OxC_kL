@@ -231,7 +231,7 @@ OptionsBattlescapeState::~OptionsBattlescapeState()
 
 /**
  * Changes the Edge Scroll option.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBattlescapeState::cbxEdgeScrollChange(Action*)
 {
@@ -240,7 +240,7 @@ void OptionsBattlescapeState::cbxEdgeScrollChange(Action*)
 
 /**
  * Changes the Drag Scroll option.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBattlescapeState::cbxDragScrollChange(Action*)
 {
@@ -249,7 +249,7 @@ void OptionsBattlescapeState::cbxDragScrollChange(Action*)
 
 /**
  * Updates the scroll speed.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBattlescapeState::slrScrollSpeedChange(Action*)
 {
@@ -258,7 +258,7 @@ void OptionsBattlescapeState::slrScrollSpeedChange(Action*)
 
 /**
  * Updates the fire speed.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBattlescapeState::slrFireSpeedChange(Action*)
 {
@@ -267,7 +267,7 @@ void OptionsBattlescapeState::slrFireSpeedChange(Action*)
 
 /**
  * Updates the X-COM movement speed.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBattlescapeState::slrXcomSpeedChange(Action*)
 {
@@ -276,7 +276,7 @@ void OptionsBattlescapeState::slrXcomSpeedChange(Action*)
 
 /**
  * Updates the alien movement speed.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBattlescapeState::slrAlienSpeedChange(Action*)
 {
@@ -285,7 +285,7 @@ void OptionsBattlescapeState::slrAlienSpeedChange(Action*)
 
 /**
  * Updates the path preview options.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBattlescapeState::btnPathPreviewClick(Action*)
 {
@@ -302,7 +302,7 @@ void OptionsBattlescapeState::btnPathPreviewClick(Action*)
 
 /**
  * Updates the Tooltips option.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBattlescapeState::btnTooltipsClick(Action*)
 {
@@ -311,7 +311,7 @@ void OptionsBattlescapeState::btnTooltipsClick(Action*)
 
 /**
  * Updates the Death Notifications option.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsBattlescapeState::btnDeathsClick(Action*)
 {

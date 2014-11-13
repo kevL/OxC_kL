@@ -1939,7 +1939,7 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 
 /**
  * Toggles usage of weapon number 1.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void DogfightState::weapon1Click(Action*)
 {
@@ -1950,7 +1950,7 @@ void DogfightState::weapon1Click(Action*)
 
 /**
  * Toggles usage of weapon number 2.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void DogfightState::weapon2Click(Action*)
 {
@@ -2025,7 +2025,7 @@ void DogfightState::setMinimized(const bool minimized)
 
 /**
  * Maximizes the interception window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void DogfightState::btnMinimizedIconClick(Action*)
 {

@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_PURCHASESTATE_H
 #define OPENXCOM_PURCHASESTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "../Engine/State.h"
 

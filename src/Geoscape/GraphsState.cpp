@@ -850,7 +850,7 @@ void GraphsState::blink()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnGeoscapeClick(Action*)
 {
@@ -861,7 +861,7 @@ void GraphsState::btnGeoscapeClick(Action*)
 
 /**
  * Switches to the UFO Regional Activity screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnUfoRegionClick(Action*)
 {
@@ -904,7 +904,7 @@ void GraphsState::btnUfoRegionClick(Action*)
 
 /**
  * Switches to the xCom Regional Activity screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnXcomRegionClick(Action*)
 {
@@ -947,7 +947,7 @@ void GraphsState::btnXcomRegionClick(Action*)
 
 /**
  * Switches to the UFO Country Activity screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnUfoCountryClick(Action*)
 {
@@ -990,7 +990,7 @@ void GraphsState::btnUfoCountryClick(Action*)
 
 /**
  * Switches to the xCom Country Activity screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnXcomCountryClick(Action*)
 {
@@ -1033,7 +1033,7 @@ void GraphsState::btnXcomCountryClick(Action*)
 
 /**
  * Switches to the Income screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnIncomeClick(Action*)
 {
@@ -1071,7 +1071,7 @@ void GraphsState::btnIncomeClick(Action*)
 
 /**
  * Switches to the Finances screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnFinanceClick(Action*)
 {
@@ -1108,7 +1108,7 @@ void GraphsState::btnFinanceClick(Action*)
 
 /**
  * Handles a click on a region button.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnRegionListClick(Action* action)
 {
@@ -1138,7 +1138,7 @@ void GraphsState::btnRegionListClick(Action* action)
 
 /**
  * Handles a click on a country button.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnCountryListClick(Action* action)
 {
@@ -1168,7 +1168,7 @@ void GraphsState::btnCountryListClick(Action* action)
 
 /**
  * Handles a click on a finance button.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void GraphsState::btnFinanceListClick(Action* action)
 {

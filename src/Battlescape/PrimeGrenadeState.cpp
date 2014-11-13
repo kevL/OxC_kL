@@ -191,7 +191,7 @@ PrimeGrenadeState::~PrimeGrenadeState()
 
 /**
  * Closes the window on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PrimeGrenadeState::handle(Action* action)
 {
@@ -209,7 +209,7 @@ void PrimeGrenadeState::handle(Action* action)
 
 /**
  * Executes the action corresponding to this action menu item.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PrimeGrenadeState::btnClick(Action* action)
 {

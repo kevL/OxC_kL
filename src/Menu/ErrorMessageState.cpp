@@ -159,7 +159,7 @@ void ErrorMessageState::create(
 
 /**
  * Closes the window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ErrorMessageState::btnOkClick(Action*)
 {

@@ -71,7 +71,7 @@ PlaceStartFacilityState::~PlaceStartFacilityState()
 
 /**
  * Processes clicking on facilities.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void PlaceStartFacilityState::viewClick(Action*)
 {

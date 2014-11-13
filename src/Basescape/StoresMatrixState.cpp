@@ -19,7 +19,7 @@
 
 #include "StoresMatrixState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -95,6 +95,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
 
@@ -120,7 +121,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 	_txtItem->setText(tr("STR_ITEM"));
 
 
-	SavedGame* save = _game->getSavedGame();
+	const SavedGame* const save = _game->getSavedGame();
 	std::wstring wstr;
 
 	if (save->getBases()->at(0)) // always true, but hey.
@@ -208,11 +209,11 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		ss6,
 		ss7;
 
-	Ruleset* rules = _game->getRuleset();
-	RuleItem* rule;
+	const Ruleset* const rules = _game->getRuleset();
+	RuleItem* rule = NULL;
 //		* launchRule,
 //		* clipRule;
-	RuleCraftWeapon* cwRule;
+	RuleCraftWeapon* cwRule = NULL;
 
 	const std::vector<std::string>& items = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
@@ -221,7 +222,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 			++i)
 	{
 		rule = rules->getItem(*i);
-		std::string test = rule->getType();
+		const std::string test = rule->getType();
 
 		ss0.str(L"");
 		ss1.str(L"");
@@ -279,9 +280,9 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 						if ((*l)->getAmmo() != 255)
 						{
-							RuleItem
-								* tankRule = rules->getItem((*l)->getRules()->getType()),
-								* ammoRule = rules->getItem(tankRule->getCompatibleAmmo()->front());
+							const RuleItem* const ammoRule = rules->getItem(
+																rules->getItem((*l)->getRules()->getType())
+															->getCompatibleAmmo()->front());
 
 							if (ammoRule->getType() == test)
 								qty[ent] += (*l)->getAmmo();
@@ -419,12 +420,11 @@ StoresMatrixState::~StoresMatrixState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void StoresMatrixState::btnOkClick(Action*)
 {
 	_game->getSavedGame()->setCurrentRowMatrix(_lstMatrix->getScroll());
-
 	_game->popState();
 }
 

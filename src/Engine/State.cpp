@@ -19,7 +19,7 @@
 
 #include "State.h"
 
-#include <climits>
+//#include <climits>
 
 #include "Font.h"
 #include "Game.h"
@@ -98,8 +98,8 @@ void State::add(Surface* surface)
 {
 	surface->setPalette(_palette);
 
-	if (_game->getLanguage()
-		&& _game->getResourcePack())
+	if (_game->getLanguage() != NULL
+		&& _game->getResourcePack() != NULL)
 	{
 		surface->initText(
 					_game->getResourcePack()->getFont("FONT_BIG"),
@@ -114,10 +114,10 @@ void State::add(Surface* surface)
  * As above, except this adds a surface based on an interface element defined in the ruleset.
  * @note that this function REQUIRES the ruleset to have been loaded prior to use.
  * @note if no parent is defined the element will not be moved.
- * @param surface	- child surface
+ * @param surface	- pointer to child surface
  * @param id		- the ID of the element defined in the ruleset, if any
  * @param category	- the category of elements this interface is associated with
- * @param parent	- the surface to base the coordinates of this element off
+ * @param parent	- pointer to the surface to base the coordinates of this element off (default NULL)
  */
 void State::add(
 		Surface* surface,
@@ -130,31 +130,32 @@ void State::add(
 	// this only works if we're dealing with a battlescape button
 	BattlescapeButton* bsbtn = dynamic_cast<BattlescapeButton*>(surface);
 
-	if (_game->getRuleset()->getInterface(category)
-		&& _game->getRuleset()->getInterface(category)->getElement(id))
+	if (_game->getRuleset()->getInterface(category) != NULL
+		&& _game->getRuleset()->getInterface(category)->getElement(id) != NULL)
 	{
-		Element* element = _game->getRuleset()->getInterface(category)->getElement(id);
+		const Element* const element = _game->getRuleset()->getInterface(category)->getElement(id);
 
-		if (parent
-			&& element->w != INT_MAX
-			&& element->h != INT_MAX)
+		if (parent != NULL)
 		{
-			surface->setWidth(element->w);
-			surface->setHeight(element->h);
+			if (   element->w != std::numeric_limits<int>::max()
+				&& element->h != std::numeric_limits<int>::max())
+			{
+				surface->setWidth(element->w);
+				surface->setHeight(element->h);
+			}
+
+			if (   element->x != std::numeric_limits<int>::max()
+				&& element->y != std::numeric_limits<int>::max())
+			{
+				surface->setX(parent->getX() + element->x);
+				surface->setY(parent->getY() + element->y);
+			}
 		}
 
-		if (parent
-			&& element->x != INT_MAX
-			&& element->y != INT_MAX)
-		{
-			surface->setX(parent->getX() + element->x);
-			surface->setY(parent->getY() + element->y);
-		}
-
-		if (bsbtn)
+		if (bsbtn != NULL)
 			bsbtn->setTftdMode(element->TFTDMode);
 
-		if (element->color)
+		if (element->color != 0)
 		{
 			surface->setColor(element->color);
 			surface->setSecondaryColor(element->color2);
@@ -164,15 +165,15 @@ void State::add(
 		surface->invalidate(false);
 	}
 
-	if (bsbtn)
+	if (bsbtn != NULL)
 	{
 		// this will initialize the graphics and settings of the battlescape button.
 		bsbtn->copy(parent);
 		bsbtn->initSurfaces();
 	}
 
-	if (_game->getLanguage() // set default text resources
-		&& _game->getResourcePack())
+	if (_game->getLanguage() != NULL // set default text resources
+		&& _game->getResourcePack() != NULL)
 	{
 		surface->initText(
 						_game->getResourcePack()->getFont("FONT_BIG"),
@@ -245,7 +246,7 @@ void State::think()
 /**
  * Takes care of any events from the core game engine,
  * and passes them on to its InteractiveSurface child elements.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void State::handle(Action* action)
 {

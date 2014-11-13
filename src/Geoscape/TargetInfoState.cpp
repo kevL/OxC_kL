@@ -167,7 +167,7 @@ TargetInfoState::~TargetInfoState()
 
 /**
  * Changes the base name.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TargetInfoState::edtTargetChange(Action* action)
 {
@@ -186,14 +186,14 @@ void TargetInfoState::edtTargetChange(Action* action)
 }
 /*
  * Changes the soldier's name.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
 void SoldierInfoState::edtSoldierChange(Action* action)
 {
 	_soldier->setName(_edtSoldier->getText());
 }
 
  * Changes the Craft name.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
 void CraftInfoState::edtCraftChange(Action* action)
 {
 	_craft->setName(_edtCraft->getText());
@@ -209,7 +209,7 @@ void CraftInfoState::edtCraftChange(Action* action)
 }
 
  * Updates the base name and disables the OK button if no name is entered.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
 void BaseNameState::edtNameChange(Action* action)
 {
 	_base->setName(_edtName->getText());
@@ -248,7 +248,7 @@ void TargetInfoState::btnInterceptClick(Action*)
 
 /**
  * Closes the window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TargetInfoState::btnOkClick(Action*)
 {

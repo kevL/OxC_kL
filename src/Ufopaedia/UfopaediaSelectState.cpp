@@ -101,7 +101,7 @@ UfopaediaSelectState::~UfopaediaSelectState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UfopaediaSelectState::btnOkClick(Action*)
 {
@@ -110,7 +110,7 @@ void UfopaediaSelectState::btnOkClick(Action*)
 
 /**
  *
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UfopaediaSelectState::lstSelectionClick(Action*)
 {

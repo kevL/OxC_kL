@@ -84,7 +84,7 @@ TextEdit::~TextEdit()
 
 /**
  * Passes events to internal components.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void TextEdit::handle(Action* action, State* state)
@@ -431,7 +431,7 @@ bool TextEdit::exceedsMaxWidth(wchar_t c)
 
 /**
  * Focuses the text edit when it's pressed on.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void TextEdit::mousePress(Action* action, State* state)
@@ -474,7 +474,7 @@ void TextEdit::mousePress(Action* action, State* state)
 /**
  * Changes the text edit according to keyboard input,
  * and unfocuses the text if Enter is pressed.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void TextEdit::keyboardPress(Action* action, State* state)

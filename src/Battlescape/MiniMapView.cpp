@@ -315,7 +315,7 @@ int MiniMapView::down()
 
 /**
  * Handles mouse presses on the minimap. Enters mouse-moving mode when the drag-scroll button is used.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void MiniMapView::mousePress(Action* action, State* state)
@@ -355,7 +355,7 @@ void MiniMapView::mousePress(Action* action, State* state)
 
 /**
  * Handles mouse clicks on the minimap. Will change the camera center to the clicked point.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void MiniMapView::mouseClick(Action* action, State* state)
@@ -437,7 +437,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 /**
  * Handles moving over the minimap.
  * Will change the camera center when the mouse is moved in mouse-moving mode.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void MiniMapView::mouseOver(Action* action, State* state)
@@ -618,7 +618,7 @@ void MiniMapView::mouseOver(Action* action, State* state)
 /**
  * Handles moving into the minimap.
  * Stops the mouse-scrolling mode, if it's left on.
- * @param action	- pointer to an action
+ * @param action	- pointer to an Action
  * @param state		- state that the action handlers belong to
  */
 void MiniMapView::mouseIn(Action* action, State* state)

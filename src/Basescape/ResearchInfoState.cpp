@@ -222,7 +222,7 @@ void ResearchInfoState::buildUi()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchInfoState::btnOkClick(Action*)
 {
@@ -234,7 +234,7 @@ void ResearchInfoState::btnOkClick(Action*)
 /**
  * Returns to the previous screen, removing the current project from the active
  * research list.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchInfoState::btnCancelClick(Action*)
 {
@@ -274,7 +274,7 @@ void ResearchInfoState::setAssignedScientist()
 
 /**
  * Increases or decreases the scientists according the mouse-wheel used.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 /* void ResearchInfoState::handleWheel(Action* action)
 {
@@ -286,7 +286,7 @@ void ResearchInfoState::setAssignedScientist()
 
 /**
  * Starts the timeMore timer.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchInfoState::morePress(Action* action)
 {
@@ -296,7 +296,7 @@ void ResearchInfoState::morePress(Action* action)
 
 /**
  * Stops the timeMore timer.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchInfoState::moreRelease(Action* action)
 {
@@ -310,7 +310,7 @@ void ResearchInfoState::moreRelease(Action* action)
 /**
  * Allocates scientists to the current project;
  * one scientist on left-click, all scientists on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchInfoState::moreClick(Action* action)
 {
@@ -322,7 +322,7 @@ void ResearchInfoState::moreClick(Action* action)
 
 /**
  * Starts the timeLess timer.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchInfoState::lessPress(Action* action)
 {
@@ -332,7 +332,7 @@ void ResearchInfoState::lessPress(Action* action)
 
 /**
  * Stops the timeLess timer.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchInfoState::lessRelease(Action* action)
 {
@@ -346,7 +346,7 @@ void ResearchInfoState::lessRelease(Action* action)
 /**
  * Removes scientists from the current project;
  * one scientist on left-click, all scientists on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchInfoState::lessClick(Action* action)
 {

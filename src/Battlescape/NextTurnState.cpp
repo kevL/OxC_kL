@@ -160,7 +160,7 @@ NextTurnState::~NextTurnState()
 
 /**
  * Closes the window.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NextTurnState::handle(Action* action)
 {

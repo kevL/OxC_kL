@@ -687,7 +687,7 @@ void InventoryState::saveEquipmentLayout()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InventoryState::btnOkClick(Action*)
 {
@@ -764,7 +764,7 @@ void InventoryState::btnOkClick(Action*)
 
 /**
  * Selects the previous soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InventoryState::btnPrevClick(Action*)
 {
@@ -786,7 +786,7 @@ void InventoryState::btnPrevClick(Action*)
 
 /**
  * Selects the next soldier.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InventoryState::btnNextClick(Action*)
 {
@@ -808,7 +808,7 @@ void InventoryState::btnNextClick(Action*)
 
 /**
  * Unloads the selected weapon.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InventoryState::btnUnloadClick(Action*)
 {
@@ -826,7 +826,7 @@ void InventoryState::btnUnloadClick(Action*)
 
 /**
  * Shows more ground items / rearranges them.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InventoryState::btnGroundClick(Action*)
 {
@@ -835,7 +835,7 @@ void InventoryState::btnGroundClick(Action*)
 
 /**
  * Shows the unit info screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InventoryState::btnRankClick(Action*)
 {
@@ -1227,7 +1227,7 @@ void InventoryState::invClick(Action*)
 
 /**
  * Shows item info.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InventoryState::invMouseOver(Action* action)
 {
@@ -1369,7 +1369,7 @@ void InventoryState::invMouseOver(Action* action)
 
 /**
  * Hides item info.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void InventoryState::invMouseOut(Action*)
 {

@@ -168,7 +168,7 @@ ResearchState::~ResearchState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchState::btnOkClick(Action*)
 {
@@ -177,7 +177,7 @@ void ResearchState::btnOkClick(Action*)
 
 /**
  * Pops up the NewResearchListState screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchState::btnNewClick(Action*)
 {
@@ -186,7 +186,7 @@ void ResearchState::btnNewClick(Action*)
 
 /**
  * Goes to the Manage Alien Containment screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchState::btnAliens(Action*)
 {
@@ -197,7 +197,7 @@ void ResearchState::btnAliens(Action*)
 
 /**
  * Selects a ResearchProject to begin research.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ResearchState::onSelectProject(Action*)
 {

@@ -147,7 +147,7 @@ NewGameState::~NewGameState()
 
 /**
  * Sets up a new saved game and jumps to the Geoscape.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewGameState::btnOkClick(Action*)
 {
@@ -191,7 +191,7 @@ void NewGameState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewGameState::btnCancelClick(Action*)
 {

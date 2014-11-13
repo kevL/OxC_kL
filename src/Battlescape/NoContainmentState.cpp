@@ -81,7 +81,7 @@ NoContainmentState::~NoContainmentState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NoContainmentState::btnOkClick(Action*)
 {

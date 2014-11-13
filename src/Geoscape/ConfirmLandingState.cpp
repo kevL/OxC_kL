@@ -336,7 +336,7 @@ void ConfirmLandingState::init()
 
 /**
  * Enters the mission.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ConfirmLandingState::btnYesClick(Action*)
 {
@@ -392,7 +392,7 @@ void ConfirmLandingState::btnYesClick(Action*)
 /**
  * Returns the craft to base and closes the window.
  * kL: CHANGE the craft goes into Patrol mode.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ConfirmLandingState::btnNoClick(Action*)
 {

@@ -223,7 +223,7 @@ void ManufactureState::init()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ManufactureState::btnOkClick(Action*)
 {
@@ -232,7 +232,7 @@ void ManufactureState::btnOkClick(Action*)
 
 /**
  * Opens the screen with the list of possible productions.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ManufactureState::btnNewProductionClick(Action*)
 {
@@ -336,7 +336,7 @@ void ManufactureState::fillProductionList()
 
 /**
  * Opens the screen displaying production settings.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ManufactureState::lstManufactureClick(Action*)
 {
@@ -348,7 +348,7 @@ void ManufactureState::lstManufactureClick(Action*)
 
 /**
  * Selects a new base to display.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ManufactureState::miniClick(Action*)
 {

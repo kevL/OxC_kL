@@ -218,7 +218,7 @@ void BaseDestroyedState::finish()
 
 /**
  * Deletes the base and scores aLien victory points.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseDestroyedState::btnOkClick(Action*)
 {
@@ -227,7 +227,7 @@ void BaseDestroyedState::btnOkClick(Action*)
 
 /**
  * Deletes the base and scores aLien victory points, and centers the Globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseDestroyedState::btnCenterClick(Action*)
 {

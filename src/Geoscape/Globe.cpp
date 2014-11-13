@@ -2658,7 +2658,7 @@ void Globe::blit(Surface* surface)
 
 /**
  * Ignores any mouse hovers that are outside the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Globe::mouseOver(Action* action, State* state)
@@ -2777,7 +2777,7 @@ void Globe::mouseOver(Action* action, State* state)
 
 /**
  * Ignores any mouse clicks that are outside the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Globe::mousePress(Action* action, State* state)
@@ -2820,7 +2820,7 @@ void Globe::mousePress(Action* action, State* state)
 
 /**
  * Ignores any mouse clicks that are outside the globe.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Globe::mouseRelease(Action* action, State* state)
@@ -2848,7 +2848,7 @@ void Globe::mouseRelease(Action* action, State* state)
 /**
  * Ignores any mouse clicks that are outside the globe
  * and handles globe rotation and zooming.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Globe::mouseClick(Action* action, State* state)
@@ -2945,7 +2945,7 @@ void Globe::keyboardPress(Action* action, State* state)
 
 /**
  * Move the mouse back to where it started after we finish drag scrolling.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void Globe::stopScrolling(Action* action)
 {

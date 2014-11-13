@@ -181,7 +181,7 @@ void ActionMenuItem::draw()
 
 /**
  * Processes a mouse hover in event.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - pointer to a state
  */
 void ActionMenuItem::mouseIn(Action* action, State* state)
@@ -196,7 +196,7 @@ void ActionMenuItem::mouseIn(Action* action, State* state)
 
 /**
  * Processes a mouse hover out event.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - pointer to a state
  */
 void ActionMenuItem::mouseOut(Action* action, State* state)

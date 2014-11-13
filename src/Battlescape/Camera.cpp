@@ -113,7 +113,7 @@ void Camera::minMaxInt(
 
 /**
  * Handles camera mouse shortcuts.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Camera::mousePress(Action* action, State*)
@@ -136,7 +136,7 @@ void Camera::mousePress(Action* action, State*)
 
 /**
  * Handles camera mouse shortcuts.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Camera::mouseRelease(Action* action, State*)
@@ -167,7 +167,7 @@ void Camera::mouseRelease(Action* action, State*)
 
 /**
  * Handles mouse over events.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Camera::mouseOver(Action* action, State*)
@@ -272,7 +272,7 @@ void Camera::mouseOver(Action* action, State*)
 
 /**
  * Handles camera keyboard shortcuts.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Camera::keyboardPress(Action* action, State*)
@@ -309,7 +309,7 @@ void Camera::keyboardPress(Action* action, State*)
 
 /**
  * Handles camera keyboard shortcuts.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Camera::keyboardRelease(Action* action, State*)

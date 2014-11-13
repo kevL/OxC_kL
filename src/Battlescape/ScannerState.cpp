@@ -51,7 +51,7 @@ namespace OpenXcom
 
 /**
  * Initializes the Scanner State.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 ScannerState::ScannerState(BattleAction* action)
 	:
@@ -113,7 +113,7 @@ ScannerState::~ScannerState()
 
 /**
  * Closes the window on right-click.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ScannerState::handle(Action* action)
 {
@@ -153,7 +153,7 @@ void ScannerState::think()
 
 /**
  * Exits the screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ScannerState::exitClick(Action*)
 {

@@ -327,7 +327,7 @@ void ListGamesState::updateList()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ListGamesState::btnCancelClick(Action*)
 {
@@ -336,7 +336,7 @@ void ListGamesState::btnCancelClick(Action*)
 
 /**
  * Shows the details of the currently hovered save.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ListGamesState::lstSavesMouseOver(Action*)
 {
@@ -372,7 +372,7 @@ void ListGamesState::lstSavesMouseOut(Action*)
 
 /**
  * Deletes the selected save.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ListGamesState::lstSavesPress(Action* action)
 {
@@ -387,7 +387,7 @@ void ListGamesState::lstSavesPress(Action* action)
 
 /**
  * Sorts the saves by name.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ListGamesState::sortNameClick(Action*)
 {
@@ -407,7 +407,7 @@ void ListGamesState::sortNameClick(Action*)
 
 /**
  * Sorts the saves by date.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void ListGamesState::sortDateClick(Action*)
 {

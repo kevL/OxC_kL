@@ -106,7 +106,7 @@ BaseNameState::~BaseNameState()
 
 /**
  * Updates the base name and disables the OK button if no name is entered.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseNameState::edtNameChange(Action* action)
 {
@@ -124,7 +124,7 @@ void BaseNameState::edtNameChange(Action* action)
 
 /**
  * Returns to the previous screen
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void BaseNameState::btnOkClick(Action*)
 {

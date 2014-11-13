@@ -642,7 +642,7 @@ void Inventory::blit(Surface* surface)
 
 /**
  * kL. Handles the cursor out.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 /* void Inventory::mouseOut(Action* action, State* state) // kL
@@ -652,7 +652,7 @@ void Inventory::blit(Surface* surface)
 
 /**
  * Handles the cursor over.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  * @param state - state that the action handlers belong to
  */
 void Inventory::mouseOver(Action* action, State* state)

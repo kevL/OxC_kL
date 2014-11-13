@@ -196,7 +196,7 @@ OptionInfo* OptionsAdvancedState::getSetting(size_t sel)
 
 /**
  * Changes the clicked setting.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsAdvancedState::lstOptionsClick(Action* action)
 {

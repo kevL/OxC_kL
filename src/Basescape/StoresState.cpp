@@ -19,7 +19,9 @@
 
 #include "StoresState.h"
 
-#include <sstream>
+//#include <sstream>
+
+#include "TransfersState.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -57,23 +59,28 @@ StoresState::StoresState(Base* base)
 	_txtTitle		= new Text(300, 17, 10, 8);
 	_txtBaseLabel	= new Text(80, 9, 224, 8);
 
+	_txtTotal		= new Text(50, 9, 200, 18);
+
 	_txtItem		= new Text(162, 9, 16, 25);
 	_txtQuantity	= new Text(84, 9, 178, 25);
 	_txtSpaceUsed	= new Text(26, 9, 262, 25);
 
 	_lstStores		= new TextList(285, 137, 16, 36);
 
-	_btnOk			= new TextButton(288, 16, 16, 177);
+	_btnTransfers	= new TextButton(142, 16, 16, 177);
+	_btnOk			= new TextButton(142, 16, 162, 177);
 
 	setPalette("PAL_BASESCAPE", 0);
 
 	add(_window);
 	add(_txtTitle);
 	add(_txtBaseLabel);
+	add(_txtTotal);
 	add(_txtItem);
 	add(_txtQuantity);
 	add(_txtSpaceUsed);
 	add(_lstStores);
+	add(_btnTransfers);
 	add(_btnOk);
 
 	centerAllSurfaces();
@@ -87,10 +94,14 @@ StoresState::StoresState(Base* base)
 	_btnOk->onMouseClick((ActionHandler)& StoresState::btnOkClick);
 	_btnOk->onKeyboardPress(
 					(ActionHandler)& StoresState::btnOkClick,
-					Options::keyOk);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& StoresState::btnOkClick,
 					Options::keyCancel);
+
+	_btnTransfers->setColor(Palette::blockOffset(13)+10);
+	_btnTransfers->setText(tr("STR_TRANSIT_LC"));
+	_btnTransfers->onMouseClick((ActionHandler)& StoresState::btnIncTransClick);
+	_btnTransfers->onKeyboardPress(
+					(ActionHandler)& StoresState::btnIncTransClick,
+					Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(13)+10);
 	_txtTitle->setBig();
@@ -99,6 +110,10 @@ StoresState::StoresState(Base* base)
 	_txtBaseLabel->setColor(Palette::blockOffset(13)+10);
 	_txtBaseLabel->setAlign(ALIGN_RIGHT);
 	_txtBaseLabel->setText(_base->getName(_game->getLanguage()));
+
+	_txtTotal->setColor(Palette::blockOffset(13)+10);
+	_txtTotal->setText(tr("STR_QUANTITY_UC"));
+	_txtTotal->setAlign(ALIGN_RIGHT);
 
 	_txtItem->setColor(Palette::blockOffset(13)+10);
 	_txtItem->setText(tr("STR_ITEM"));
@@ -117,13 +132,13 @@ StoresState::StoresState(Base* base)
 	_lstStores->setMargin();
 
 
-	SavedGame* sg = _game->getSavedGame();
-	Ruleset* rules = _game->getRuleset();
+	const SavedGame* const sg = _game->getSavedGame();
+	const Ruleset* const rules = _game->getRuleset();
 	RuleItem
-		* itRule,
-		* laRule,
-		* clRule;
-	RuleCraftWeapon* cwRule;
+		* itRule = NULL,
+		* laRule = NULL,
+		* clRule = NULL;
+	RuleCraftWeapon* cwRule = NULL;
 
 	int
 		row = 0,
@@ -237,6 +252,10 @@ StoresState::StoresState(Base* base)
 			row++;
 		}
 	}
+
+	std::wostringstream ss;
+	ss << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
+	_txtTotal->setText(ss.str().c_str());
 }
 
 /**
@@ -248,11 +267,20 @@ StoresState::~StoresState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void StoresState::btnOkClick(Action*)
 {
 	_game->popState();
+}
+
+/**
+ * Goes to the incoming Transfers window.
+ * @param action - pointer to an Action
+ */
+void StoresState::btnIncTransClick(Action*)
+{
+	_game->pushState(new TransfersState(_base));
 }
 
 }

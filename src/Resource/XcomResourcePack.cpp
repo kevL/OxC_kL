@@ -19,8 +19,8 @@
 
 #include "XcomResourcePack.h"
 
-#include <climits>
-#include <sstream>
+//#include <climits>
+//#include <sstream>
 
 #include "../fmath.h"
 
@@ -2026,7 +2026,7 @@ void XcomResourcePack::createTransparencyLUT(Palette* pal)
 								static_cast<int>(pal->getColors(color)->b) + (tint->b * opacity));
 
 				Uint8 closest = 0;
-				int low = INT_MAX;
+				int low = std::numeric_limits<int>::max();
 
 				// compare each color in the palette to find the closest match to the desired one
 				for (int

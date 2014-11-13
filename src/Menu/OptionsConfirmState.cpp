@@ -134,7 +134,7 @@ void OptionsConfirmState::countdown()
 
 /**
  * Goes back to the Main Menu.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsConfirmState::btnYesClick(Action*)
 {
@@ -144,7 +144,7 @@ void OptionsConfirmState::btnYesClick(Action*)
 
 /**
  * Restores the original display options.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void OptionsConfirmState::btnNoClick(Action*)
 {

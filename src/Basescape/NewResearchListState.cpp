@@ -112,7 +112,7 @@ void NewResearchListState::init()
 /**
  * Selects the RuleResearch to work on.
  * kL: Or restarts an old ResearchProject; spent & cost values are preserved.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewResearchListState::onSelectProject(Action*)
 {
@@ -130,7 +130,7 @@ void NewResearchListState::onSelectProject(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void NewResearchListState::btnCancelClick(Action*)
 {

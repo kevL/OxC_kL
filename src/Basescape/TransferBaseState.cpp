@@ -174,7 +174,7 @@ TransferBaseState::~TransferBaseState()
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferBaseState::btnCancelClick(Action*)
 {
@@ -183,7 +183,7 @@ void TransferBaseState::btnCancelClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferBaseState::btnMatrixClick(Action*)
 {
@@ -192,7 +192,7 @@ void TransferBaseState::btnMatrixClick(Action*)
 
 /**
  * Shows the Transfer screen for the selected base.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void TransferBaseState::lstBasesClick(Action*)
 {

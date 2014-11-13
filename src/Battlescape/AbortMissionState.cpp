@@ -169,7 +169,7 @@ AbortMissionState::~AbortMissionState()
 
 /**
  * Confirms mission abort.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void AbortMissionState::btnOkClick(Action*)
 {
@@ -183,7 +183,7 @@ void AbortMissionState::btnOkClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void AbortMissionState::btnCancelClick(Action*)
 {

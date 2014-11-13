@@ -97,7 +97,7 @@ void SelectStartFacilityState::populateBuildList()
 
 /**
  * Resets the base building.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SelectStartFacilityState::btnOkClick(Action*)
 {
@@ -122,7 +122,7 @@ void SelectStartFacilityState::btnOkClick(Action*)
 
 /**
  * Places the selected facility.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void SelectStartFacilityState::lstFacilitiesClick(Action*)
 {

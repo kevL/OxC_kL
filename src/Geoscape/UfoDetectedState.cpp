@@ -415,7 +415,7 @@ UfoDetectedState::~UfoDetectedState()
 
 /**
  * Pick a craft to intercept the UFO.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UfoDetectedState::btnInterceptClick(Action*)
 {
@@ -432,7 +432,7 @@ void UfoDetectedState::btnInterceptClick(Action*)
 
 /**
  * Centers the globe on the UFO and returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UfoDetectedState::btnCentreClick(Action*)
 {
@@ -447,7 +447,7 @@ void UfoDetectedState::btnCentreClick(Action*)
 
 /**
  * Returns to the previous screen.
- * @param action - pointer to an action
+ * @param action - pointer to an Action
  */
 void UfoDetectedState::btnCancelClick(Action*)
 {
