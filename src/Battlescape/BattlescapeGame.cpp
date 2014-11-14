@@ -1728,7 +1728,7 @@ bool BattlescapeGame::checkReservedTU(
 	// ( which i don't care about )
 
 	// check TUs against slowest weapon if we have two weapons
-	BattleItem* slowWeapon = bu->getMainHandWeapon(false);
+	const BattleItem* const slowWeapon = bu->getMainHandWeapon(false);
 	// kL_note: Use getActiveHand() instead, if xCom wants to reserve TU.
 	// kL_note: make sure this doesn't work on aLiens, because getMainHandWeapon()
 	// returns grenades and that can easily cause problems. Probably could cause
@@ -1739,8 +1739,7 @@ bool BattlescapeGame::checkReservedTU(
 	// if the weapon has no autoshot, reserve TUs for snapshot
 	if (bu->getActionTUs(
 					actionReserved,
-					slowWeapon)
-				== 0
+					slowWeapon) == 0
 		&& actionReserved == BA_AUTOSHOT)
 	{
 		actionReserved = BA_SNAPSHOT;
@@ -1749,8 +1748,7 @@ bool BattlescapeGame::checkReservedTU(
 	// likewise, if we don't have a snap shot available, try aimed.
 	if (bu->getActionTUs(
 					actionReserved,
-					slowWeapon)
-				== 0
+					slowWeapon) == 0
 		&& actionReserved == BA_SNAPSHOT)
 	{
 		actionReserved = BA_AIMEDSHOT;
@@ -1777,18 +1775,16 @@ bool BattlescapeGame::checkReservedTU(
 			+ tuKneel
 			+ bu->getActionTUs(
 							actionReserved,
-							slowWeapon)
-						> bu->getTimeUnits()
+							slowWeapon) > bu->getTimeUnits()
 		&& (tuKneel
 				+ bu->getActionTUs(
 								actionReserved,
-								slowWeapon)
-							<= bu->getTimeUnits()
+								slowWeapon) <= bu->getTimeUnits()
 			|| test))
 	{
-		if (!test)
+		if (test == false)
 		{
-			if (tuKneel)
+			if (tuKneel != 0)
 			{
 				switch (actionReserved)
 				{
@@ -1829,18 +1825,18 @@ bool BattlescapeGame::checkReservedTU(
 
 /**
  * Picks the first soldier that is panicking.
- * @return True when all panicking is over.
+ * @return, true when all panicking is over
  */
 bool BattlescapeGame::handlePanickingPlayer()
 {
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			j = _save->getUnits()->begin();
 			j != _save->getUnits()->end();
 			++j)
 	{
 		if ((*j)->getFaction() == FACTION_PLAYER
 			&& (*j)->getOriginalFaction() == FACTION_PLAYER
-			&& handlePanickingUnit(*j))
+			&& handlePanickingUnit(*j) == true)
 		{
 			return false;
 		}
@@ -1851,7 +1847,7 @@ bool BattlescapeGame::handlePanickingPlayer()
 
 /**
  * Common function for handling panicking units.
- * @return, False when unit not in panicking mode.
+ * @return, false when unit not in panicking mode
  */
 bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 {
@@ -1870,12 +1866,12 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 	_parentState->getMap()->setCursorType(CT_NONE);
 
 	// show a little infobox with the name of the unit and "... is panicking"
-	if (unit->getVisible()
+	if (unit->getVisible() == true
 		|| !Options::noAlienPanicMessages)
 	{
 		getMap()->getCamera()->centerOnPosition(unit->getPosition());
 
-		Game* game = _parentState->getGame();
+		Game* const game = _parentState->getGame();
 		if (status == STATUS_PANICKING)
 			game->pushState(new InfoboxState(game->getLanguage()->getString("STR_HAS_PANICKED", unit->getGender())
 																			.arg(unit->getName(game->getLanguage()))));
@@ -1896,7 +1892,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 			if (RNG::percent(50)) // 50:50 freeze or flee.
 			{
 				BattleItem* item = unit->getItem("STR_RIGHT_HAND");
-				if (item)
+				if (item != NULL)
 					dropItem(
 							unit->getPosition(),
 							item,
@@ -1904,7 +1900,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 							true);
 
 				item = unit->getItem("STR_LEFT_HAND");
-				if (item)
+				if (item != NULL)
 					dropItem(
 							unit->getPosition(),
 							item,
@@ -1958,7 +1954,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 			for (int
 					i = 0;
 					i < 4;
-					i++)
+					++i)
 			{
 				ba.target = Position(
 								unit->getPosition().x + RNG::generate(-5, 5),
@@ -1985,13 +1981,13 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 			if (_save->getTile(ba.target) != NULL)
 			{
 				ba.weapon = unit->getMainHandWeapon();
-				if (ba.weapon == NULL)				// kL
-					ba.weapon = unit->getGrenade();	// kL
+				if (ba.weapon == NULL)											// kL
+					ba.weapon = const_cast<BattleItem*>(unit->getGrenade());	// kL
 
 				// TODO: run up to another unit and slug it with the Universal Fist.
 				// Or w/ an already-equipped melee weapon
 
-				if (ba.weapon
+				if (ba.weapon != NULL
 					&& (_save->getDepth() != 0
 						|| ba.weapon->getRules()->isWaterOnly() == false))
 				{
@@ -2005,7 +2001,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 						for (int // fire shots until unit runs out of TUs
 								i = 0;
 								i < 10;
-								i++)
+								++i)
 						{
 							if (ba.actor->spendTimeUnits(tu) == false)
 								break;
@@ -2054,18 +2050,18 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 bool BattlescapeGame::cancelCurrentAction(bool bForce)
 {
 	//Log(LOG_INFO) << "BattlescapeGame::cancelCurrentAction()";
-	bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
+	const bool bPreviewed = (Options::battleNewPreviewPath != PATH_NONE);
 
 	if (_save->getPathfinding()->removePreview()
-		&& bPreviewed)
+		&& bPreviewed == true)
 	{
 		return true;
 	}
 
-	if (_states.empty()
-		|| bForce)
+	if (_states.empty() == true
+		|| bForce == true)
 	{
-		if (_currentAction.targeting)
+		if (_currentAction.targeting == true)
 		{
 			if (_currentAction.type == BA_LAUNCH
 				&& _currentAction.waypoints.empty() == false)
@@ -2075,7 +2071,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 				if (getMap()->getWaypoints()->empty() == false)
 					getMap()->getWaypoints()->pop_back();
 
-				if (_currentAction.waypoints.empty())
+				if (_currentAction.waypoints.empty() == true)
 					_parentState->showLaunchButton(false);
 
 				return true;
@@ -2104,7 +2100,7 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 		}
 	}
 	else if (_states.empty() == false
-		&& _states.front() != 0)
+		&& _states.front() != NULL)
 	{
 		_states.front()->cancel();
 

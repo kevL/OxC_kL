@@ -1678,12 +1678,12 @@ bool BattleUnit::isOut(
 /**
  * Gets the number of time units a certain action takes.
  * @param actionType	- type of battle action (BattlescapeGame.h)
- * @param item			- pointer to an item for TU-cost
+ * @param item			- pointer to BattleItem for TU-cost
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
-		BattleActionType actionType,
-		BattleItem* item)
+		const BattleActionType actionType,
+		const BattleItem* item) const
 {
 	if (item == NULL)
 		return 0;
@@ -1696,12 +1696,12 @@ int BattleUnit::getActionTUs(
 /**
  * Gets the number of time units a certain action takes.
  * @param actionType	- type of battle action (BattlescapeGame.h)
- * @param item			- pointer to an item for TU-cost
+ * @param item			- pointer to RuleItem for TU-cost
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
-		BattleActionType actionType,
-		RuleItem* rule)
+		const BattleActionType actionType,
+		const RuleItem* rule) const
 {
 //	if (rule == NULL)
 //		return 0;
@@ -2634,17 +2634,17 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
  * Get a grenade from hand or belt (used for AI).
  * @return, pointer to grenade or NULL
  */
-BattleItem* BattleUnit::getGrenade() const
+const BattleItem* const BattleUnit::getGrenade() const // holy fuck const.
 {
 	// kL_begin: BattleUnit::getGrenadeFromBelt(), or hand.
-	BattleItem* grenade = getItem("STR_RIGHT_HAND");
+	const BattleItem* grenade = getItem("STR_RIGHT_HAND");
 	if (grenade == NULL
 		|| grenade->getRules()->getBattleType() != BT_GRENADE)
 	{
 		grenade = getItem("STR_LEFT_HAND");
 	}
 
-	if (grenade
+	if (grenade != NULL
 		&& grenade->getRules()->getBattleType() == BT_GRENADE)
 	{
 		return grenade;
@@ -3270,7 +3270,7 @@ std::wstring BattleUnit::getName(
  * Gets a pointer to the unit's stats.
  * @return, pointer to this unit's stats if it's not an XCOM Soldier else NULL
  */
-UnitStats* BattleUnit::getStats()
+const UnitStats* BattleUnit::getStats() const
 {
 	return &_stats;
 }

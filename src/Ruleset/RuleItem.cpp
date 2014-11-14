@@ -518,10 +518,10 @@ int RuleItem::getTUAimed() const
 }
 
 /**
- * kL. Gets the item's time unit percentage for launch shots.
+ * Gets the item's time unit percentage for launch shots.
  * @return, the launch shot TU percentage
  */
-int RuleItem::getTULaunch() const // kL
+int RuleItem::getTULaunch() const
 {
 	return _tuLaunch;
 }

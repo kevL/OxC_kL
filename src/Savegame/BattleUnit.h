@@ -651,11 +651,11 @@ private:
 
 		/// Gets the number of time units a certain action takes.
 		int getActionTUs(
-				BattleActionType actionType,
-				BattleItem* item);
+				const BattleActionType actionType,
+				const BattleItem* item) const;
 		int getActionTUs(
-				BattleActionType actionType,
-				RuleItem* item = NULL);
+				const BattleActionType actionType,
+				const RuleItem* item = NULL) const;
 
 		/// Spends time units if possible.
 		bool spendTimeUnits(int tu);
@@ -761,7 +761,7 @@ private:
 		/// Gets the item in this unit's main hand.
 		BattleItem* getMainHandWeapon(bool quickest = true) const;
 		/// Gets a grenade from this unit's belt if possible.
-		BattleItem* getGrenade() const;
+		const BattleItem* const getGrenade() const;
 		/// Gets the name of a melee weapon this unit may be carrying or that's innate.
 		std::string getMeleeWeapon() const;
 
@@ -841,7 +841,7 @@ private:
 				bool debugAppendId = false) const;
 
 		/// Gets this unit's stats.
-		UnitStats* getStats();
+		const UnitStats* getStats() const;
 
 		/// Gets this unit's stand height.
 		int getStandHeight() const;

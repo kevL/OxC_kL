@@ -2348,12 +2348,12 @@ void AlienBAIState::grenadeAction()
 	// do we have a grenade on our belt?
 	// kL_note: this is already checked in setupAttack()
 	// Could use it to determine if grenade is already inHand though! ( see _grenade var.)
-	BattleItem* grenade = _unit->getGrenade();
+	const BattleItem* const grenade = _unit->getGrenade();
 
 	if (grenade == NULL)
 		return;
 
-	// distance must be more than X tiles, otherwise it's too dangerous to play with explosives
+	// distance must be more than X tiles, otherwise it's too dangerous to explode
 	if (explosiveEfficacy(
 						_aggroTarget->getPosition(),
 						_unit,
@@ -2375,13 +2375,13 @@ void AlienBAIState::grenadeAction()
 									BA_THROW,
 									grenade);
 
-		if (costTU <= _unit->getStats()->tu)
+		if (costTU <= _unit->getTimeUnits()) // _unit->getStats()->tu)
 		{
 			BattleAction action;
-			action.actor	= _unit;
-			action.target	= _aggroTarget->getPosition();
-			action.weapon	= grenade;
-			action.type		= BA_THROW;
+			action.actor = _unit;
+			action.target = _aggroTarget->getPosition();
+			action.weapon = const_cast<BattleItem*>(grenade);
+			action.type = BA_THROW;
 
 			Position originVoxel = _save->getTileEngine()->getOriginVoxel(
 																		action,
@@ -2397,9 +2397,9 @@ void AlienBAIState::grenadeAction()
 													originVoxel,
 													targetVoxel))
 			{
-				_attackAction->target	= action.target;
-				_attackAction->weapon	= grenade;
-				_attackAction->type		= BA_THROW;
+				_attackAction->target = action.target;
+				_attackAction->weapon = const_cast<BattleItem*>(grenade);
+				_attackAction->type = BA_THROW;
 
 				_rifle = false;
 				_melee = false;
