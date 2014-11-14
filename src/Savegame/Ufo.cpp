@@ -21,13 +21,13 @@
 
 #include "Ufo.h"
 
-#include <sstream>
-#include <algorithm>
+//#include <sstream>
+//#include <algorithm>
 
-#include <assert.h>
-#include <math.h>
+//#include <assert.h>
+//#include <math.h>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "AlienMission.h"
 #include "Craft.h"
@@ -48,7 +48,7 @@ namespace OpenXcom
 
 /**
  * Initializes a UFO of the specified type.
- * @param rules Pointer to ruleset.
+ * @param rules - pointer to RuleUfo
  */
 Ufo::Ufo(RuleUfo* rules)
 	:
@@ -81,13 +81,13 @@ Ufo::Ufo(RuleUfo* rules)
  */
 Ufo::~Ufo()
 {
-	for (std::vector<Target*>::iterator
+	for (std::vector<Target*>::const_iterator
 			i = _followers.begin();
 			i != _followers.end();
 			)
 	{
-		Craft* c = dynamic_cast<Craft*>(*i);
-		if (c)
+		Craft* const c = dynamic_cast<Craft*>(*i);
+		if (c != NULL)
 		{
 			c->returnToBase();
 			i = _followers.begin();
@@ -96,12 +96,12 @@ Ufo::~Ufo()
 			 ++i;
 	}
 
-	if (_mission)
+	if (_mission != NULL)
 		_mission->decreaseLiveUfos();
 
-	if (_dest)
+	if (_dest != NULL)
 	{
-		Waypoint* wp = dynamic_cast<Waypoint*>(_dest);
+		const Waypoint* const wp = dynamic_cast<Waypoint*>(_dest);
 		if (wp != NULL)
 		{
 			delete _dest;
@@ -142,9 +142,9 @@ private:
 
 /**
  * Loads the UFO from a YAML file.
- * @param node YAML node.
- * @param ruleset The game rules. Use to access the trajectory rules.
- * @param game The game data. Used to find the UFO's mission.
+ * @param node		- reference a YAML node
+ * @param ruleset	- reference the Ruleset (used to access trajectory data)
+ * @param game		- reference the SavedGame (used to get the UFO's mission)
  */
 void Ufo::load(
 		const YAML::Node& node,
@@ -153,18 +153,18 @@ void Ufo::load(
 {
 	MovingTarget::load(node);
 
-	_id					= node["id"].as<int>(_id);
-	_crashId			= node["crashId"].as<int>(_crashId);
-	_crashPower			= node["crashPower"].as<int>(_crashPower);
-	_landId				= node["landId"].as<int>(_landId);
-	_damage				= node["damage"].as<int>(_damage);
-	_altitude			= node["altitude"].as<std::string>(_altitude);
-	_direction			= node["direction"].as<std::string>(_direction);
-	_detected			= node["detected"].as<bool>(_detected);
-	_hyperDetected		= node["hyperDetected"].as<bool>(_hyperDetected);
-	_secondsRemaining	= node["secondsRemaining"].as<size_t>(_secondsRemaining);
-	_inBattlescape		= node["inBattlescape"].as<bool>(_inBattlescape);
-	_terrain			= node["terrain"].as<std::string>(_terrain); // kL
+	_id					= node["id"]				.as<int>(_id);
+	_crashId			= node["crashId"]			.as<int>(_crashId);
+	_crashPower			= node["crashPower"]		.as<int>(_crashPower);
+	_landId				= node["landId"]			.as<int>(_landId);
+	_damage				= node["damage"]			.as<int>(_damage);
+	_altitude			= node["altitude"]			.as<std::string>(_altitude);
+	_direction			= node["direction"]			.as<std::string>(_direction);
+	_detected			= node["detected"]			.as<bool>(_detected);
+	_hyperDetected		= node["hyperDetected"]		.as<bool>(_hyperDetected);
+	_secondsRemaining	= node["secondsRemaining"]	.as<size_t>(_secondsRemaining);
+	_inBattlescape		= node["inBattlescape"]		.as<bool>(_inBattlescape);
+	_terrain			= node["terrain"]			.as<std::string>(_terrain); // kL
 
 	double
 		lon = _lon,
@@ -195,8 +195,7 @@ void Ufo::load(
 
 	if (game.getMonthsPassed() != -1)
 	{
-		int missionID = node["mission"].as<int>();
-
+		const int missionID = node["mission"].as<int>();
 		std::vector<AlienMission*>::const_iterator found = std::find_if(
 																	game.getAlienMissions().begin(),
 																	game.getAlienMissions().end(),
@@ -209,18 +208,18 @@ void Ufo::load(
 
 		_mission = *found;
 
-		std::string tid		= node["trajectory"].as<std::string>();
-		_trajectory			= ruleset.getUfoTrajectory(tid);
-		_trajectoryPoint	= node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
+		const std::string tid	= node["trajectory"].as<std::string>();
+		_trajectory				= ruleset.getUfoTrajectory(tid);
+		_trajectoryPoint		= node["trajectoryPoint"].as<size_t>(_trajectoryPoint);
 	}
 
-	if (_inBattlescape)
+	if (_inBattlescape == true)
 		setSpeed(0);
 }
 
 /**
  * Saves the UFO to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Ufo::save(bool newBattle) const
 {
@@ -232,12 +231,12 @@ YAML::Node Ufo::save(bool newBattle) const
 	if (_terrain != "")
 		node["terrain"]	= _terrain; // kL
 
-	if (_crashId)
+	if (_crashId != 0)
 	{
 		node["crashId"]		= _crashId;
 		node["crashPower"]	= _crashPower;
 	}
-	else if (_landId)
+	else if (_landId != 0)
 		node["landId"]	= _landId;
 
 	node["damage"]		= _damage;
@@ -245,16 +244,16 @@ YAML::Node Ufo::save(bool newBattle) const
 	node["direction"]	= _direction;
 	node["status"]		= (int)_status;
 
-	if (_detected)
+	if (_detected == true)
 		node["detected"]			= _detected;
-	if (_hyperDetected)
+	if (_hyperDetected == true)
 		node["hyperDetected"]		= _hyperDetected;
-	if (_secondsRemaining)
+	if (_secondsRemaining != 0)
 		node["secondsRemaining"]	= _secondsRemaining;
-	if (_inBattlescape)
+	if (_inBattlescape == true)
 		node["inBattlescape"]		= _inBattlescape;
 
-	if (!newBattle)
+	if (newBattle == false)
 	{
 		node["mission"]			= _mission->getId();
 		node["trajectory"]		= _trajectory->getID();
@@ -266,7 +265,7 @@ YAML::Node Ufo::save(bool newBattle) const
 
 /**
  * Saves the UFO's unique identifiers to a YAML file.
- * @return YAML node.
+ * @return, YAML node.
  */
 YAML::Node Ufo::saveId() const
 {
@@ -493,8 +492,9 @@ void Ufo::calculateSpeed()
 	//Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLon = " << _speedLon;
 	//Log(LOG_INFO) << "Ufo::calculateSpeed(), _speedLat = " << _speedLat;
 
-	double x = _speedLon;
-	double y = -_speedLat;
+	const double
+		x = _speedLon,
+		y = -_speedLat;
 
 	// This section guards vs. divide-by-zero.
 	if (AreSame(x, 0.0) || AreSame(y, 0.0))
@@ -557,7 +557,7 @@ void Ufo::think()
 	switch (_status)
 	{
 		case FLYING:
-			move();
+			moveTarget();
 
 			if (reachedDestination()) // Prevent further movement.
 				setSpeed(0);
@@ -569,9 +569,7 @@ void Ufo::think()
 		break;
 
 		case CRASHED:
-			// This gets handled in GeoscapeState::time30Minutes()
-			// Because the original game processes it every 30 minutes!
-			if (!_detected)
+			if (_detected == false)
 				_detected = true;
 
 		case DESTROYED:
@@ -591,11 +589,11 @@ bool Ufo::isInBattlescape() const
 
 /**
  * Sets the UFO's battlescape status.
- * @param inbattle
+ * @param inbattle - true if this Ufo is in the battlescape
  */
-void Ufo::setInBattlescape(bool inbattle)
+void Ufo::setInBattlescape(const bool inbattle)
 {
-	if (inbattle)
+	if (inbattle == true)
 		setSpeed(0);
 
 	_inBattlescape = inbattle;
@@ -634,31 +632,31 @@ CraftId Ufo::getShotDownByCraftId() const
  */
 int Ufo::getVisibility() const
 {
-	int vis = 0;
+	int ret = 0;
 
 	if (_rules->getSize() == "STR_VERY_SMALL")
-		vis -= 30;
+		ret -= 30;
 	else if (_rules->getSize() == "STR_SMALL")
-		vis -= 15;
+		ret -= 15;
 //	else if (_rules->getSize() == "STR_MEDIUM_UC")
 	else if (_rules->getSize() == "STR_LARGE")
-		vis -= 15;
+		ret -= 15;
 	else if (_rules->getSize() == "STR_VERY_LARGE")
-		vis -= 30;
+		ret -= 30;
 
 	if (_altitude == "STR_GROUND")
-//kL	vis = -30;
-		vis -= 50; // kL
+//kL	ret = -30;
+		ret -= 50; // kL
 	else if (_altitude == "STR_VERY_LOW")
-		vis -= 20;
+		ret -= 20;
 	else if (_altitude == "STR_LOW_UC")
-		vis -= 10;
+		ret -= 10;
 //	else if (_altitude == "STR_HIGH_UC")
 	else if (_altitude == "STR_VERY_HIGH")
-		vis -= 10;
+		ret -= 10;
 
-	//Log(LOG_INFO) << "Ufo::getVisibility() = " << vis;
-	return vis;
+	//Log(LOG_INFO) << "Ufo::getVisibility() = " << ret;
+	return ret;
 }
 
 /**
@@ -667,35 +665,35 @@ int Ufo::getVisibility() const
  */
 int Ufo::getDetectors() const // kL
 {
-	int det = 0;
+	int ret = 0;
 
 	if (_rules->getSize() == "STR_VERY_SMALL")
-		det = -12;
+		ret = -12;
 	else if (_rules->getSize() == "STR_SMALL")
-		det = -8;
+		ret = -8;
 	else if (_rules->getSize() == "STR_MEDIUM_UC")
-		det = -5;
+		ret = -5;
 	else if (_rules->getSize() == "STR_LARGE")
-		det = -2;
+		ret = -2;
 //	else if (_rules->getSize() == "STR_VERY_LARGE")
 
 	if (_altitude == "STR_GROUND")
-		det -= 30;
+		ret -= 30;
 	else if (_altitude == "STR_VERY_LOW")
-		det += 17;
+		ret += 17;
 //	else if (_altitude == "STR_LOW_UC")
 	else if (_altitude == "STR_HIGH_UC")
-		det -= 8;
+		ret -= 8;
 	else if (_altitude == "STR_VERY_HIGH")
-		det -= 15;
+		ret -= 15;
 
-	//Log(LOG_INFO) << "Ufo::getVisibility() = " << det;
-	return det;
+	//Log(LOG_INFO) << "Ufo::getVisibility() = " << ret;
+	return ret;
 }
 
 /**
  * Returns the Mission type of the UFO.
- * @return Mission.
+ * @return, reference to the mission type
  */
 const std::string& Ufo::getMissionType() const
 {

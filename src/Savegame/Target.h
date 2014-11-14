@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_TARGET_H
 #define OPENXCOM_TARGET_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -33,8 +33,7 @@ class Language;
 
 
 /**
- * Base class for targets on the globe
- * with a set of radian coordinates.
+ * Base class for targets on the globe with a set of radian coordinates.
  */
 class Target
 {
@@ -53,6 +52,7 @@ protected:
 	public:
 		/// Cleans up the target.
 		virtual ~Target();
+
 		/// Loads the moving target from YAML.
 		void load(const YAML::Node& node);
 		/// Saves the target to YAML.

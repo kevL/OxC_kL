@@ -75,7 +75,7 @@ private:
 	/// Formats a duration in hours into a day & hour string.
 	std::wstring formatTime(
 			const int total,
-			const bool delayed);
+			const bool delayed) const;
 
 
 	public:

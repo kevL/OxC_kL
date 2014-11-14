@@ -156,11 +156,11 @@ void Craft::load(
 			if (type != "0"
 				&& rules->getCraftWeapon(type))
 			{
-				CraftWeapon* w = new CraftWeapon(
+				CraftWeapon* cw = new CraftWeapon(
 											rules->getCraftWeapon(type),
 											0);
-				w->load(*i);
-				_weapons[j] = w;
+				cw->load(*i);
+				_weapons[j] = cw;
 			}
 			else
 				_weapons[j] = 0;
@@ -178,8 +178,7 @@ void Craft::load(
 		if (std::find(
 					rules->getItemsList().begin(),
 					rules->getItemsList().end(),
-					i->first)
-				== rules->getItemsList().end())
+					i->first) == rules->getItemsList().end())
 		{
 			_items->getContents()->erase(i++);
 		}
@@ -192,16 +191,16 @@ void Craft::load(
 			i != node["vehicles"].end();
 			++i)
 	{
-		std::string type = (*i)["type"].as<std::string>();
-		if (rules->getItem(type))
+		const std::string type = (*i)["type"].as<std::string>();
+		if (rules->getItem(type) != NULL)
 		{
-			int unitSize = rules->getArmor(rules->getUnit(type)->getArmor())->getSize();
-			Vehicle* v = new Vehicle(
-									rules->getItem(type),
-									0,
-									unitSize * unitSize);
-			v->load(*i);
-			_vehicles.push_back(v);
+			const int unitSize = rules->getArmor(rules->getUnit(type)->getArmor())->getSize();
+			Vehicle* const vhcl = new Vehicle(
+											rules->getItem(type),
+											0,
+											unitSize * unitSize);
+			vhcl->load(*i);
+			_vehicles.push_back(vhcl);
 		}
 	}
 
@@ -215,7 +214,7 @@ void Craft::load(
 
 	if (const YAML::Node& dest = node["dest"])
 	{
-		std::string type = dest["type"].as<std::string>();
+		const std::string type = dest["type"].as<std::string>();
 
 		int id = dest["id"].as<int>();
 
@@ -282,7 +281,7 @@ void Craft::load(
 	_takeoff = node["takeoff"].as<int>(_takeoff);
 
 	_inBattlescape = node["inBattlescape"].as<bool>(_inBattlescape);
-	if (_inBattlescape)
+	if (_inBattlescape == true)
 		setSpeed(0);
 
 	_loadCur = getNumEquipment() + (getNumSoldiers() + getNumVehicles(true) * 10); // note: 10 is the 'load' that a single 'space' uses.
@@ -329,13 +328,13 @@ YAML::Node Craft::save() const
 
 	node["status"] = _status;
 
-	if (_lowFuel)
+	if (_lowFuel == true)
 		node["lowFuel"] = _lowFuel;
 
-	if (_mission)
+	if (_mission == true)
 		node["mission"] = _mission;
 
-	if (_inBattlescape)
+	if (_inBattlescape == true)
 		node["inBattlescape"] = _inBattlescape;
 
 	if (_interceptionOrder != 0)
@@ -370,7 +369,7 @@ YAML::Node Craft::saveId() const
 {
 	YAML::Node node = MovingTarget::saveId();
 
-	CraftId uniqueId = getUniqueId();
+	const CraftId uniqueId = getUniqueId();
 
 	node["type"]	= uniqueId.first;
 	node["id"]		= uniqueId.second;
@@ -501,7 +500,7 @@ void Craft::setStatus(const std::string& status)
  */
 std::string Craft::getAltitude() const
 {
-	Ufo* ufo = dynamic_cast<Ufo*>(_dest);
+	const Ufo* const ufo = dynamic_cast<Ufo*>(_dest);
 
 	// kL_begin:
 	if (ufo != NULL)
@@ -660,7 +659,7 @@ std::vector<CraftWeapon*>* Craft::getWeapons()
  * Gets the list of items in the craft.
  * @return, pointer to the ItemContainer list
  */
-ItemContainer* Craft::getItems()
+ItemContainer* Craft::getItems() const
 {
 	return _items;
 }
@@ -840,7 +839,7 @@ void Craft::returnToBase()
 void Craft::think()
 {
 	if (_takeoff == 0)
-		move();
+		moveTarget();
 	else
 		_takeoff--;
 

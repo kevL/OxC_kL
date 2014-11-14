@@ -70,12 +70,12 @@ protected:
 		/// Gets the moving target's speed.
 		int getSpeed() const;
 		/// Sets the moving target's speed.
-		void setSpeed(int speed);
+		void setSpeed(const int speed);
 
 		/// Has the moving target reached its destination?
 		bool reachedDestination() const;
 		/// Move towards the destination.
-		void move();
+		void moveTarget();
 };
 
 }

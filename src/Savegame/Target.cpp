@@ -21,11 +21,11 @@
 
 #include "Target.h"
 
-#include <cmath>
+//#include <cmath>
 
 #include "Craft.h"
 
-#include "../Engine/Language.h"
+//#include "../Engine/Language.h"
 
 
 namespace OpenXcom
@@ -51,7 +51,7 @@ Target::~Target()
 			i < _followers.size();
 			++i)
 	{
-		Craft* craft = dynamic_cast<Craft*>(_followers[i]);
+		Craft* const craft = dynamic_cast<Craft*>(_followers[i]);
 		if (craft != NULL)
 			craft->returnToBase();
 	}

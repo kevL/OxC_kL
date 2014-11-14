@@ -104,7 +104,7 @@ private:
 		int getDirection() const;
 
 		/// Moves projectile in _direction with _speed.
-		void move();
+		void moveProjectile();
 
 		/// Gets projectile position.
 		int getPosition() const;
@@ -116,7 +116,7 @@ private:
 		int getHorizontalPosition() const;
 
 		/// Marks projectile to be removed.
-		void remove();
+		void removeProjectile();
 		/// Returns true if the projectile should be removed.
 		bool toBeRemoved() const;
 

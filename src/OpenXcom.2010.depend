@@ -4427,10 +4427,7 @@
 	<yaml-cpp/yaml.h>
 	"Target.h"
 
-1413136962 f:\git\openxcom\src\savegame\target.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1415929980 f:\git\openxcom\src\savegame\target.h
 
 1413154698 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
@@ -4566,13 +4563,13 @@
 1413136961 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1415847200 f:\git\openxcom\src\savegame\craft.h
+1415930646 f:\git\openxcom\src\savegame\craft.h
 	<string>
 	<vector>
 	"CraftId.h"
 	"MovingTarget.h"
 
-1413136961 f:\git\openxcom\src\savegame\movingtarget.h
+1415931862 f:\git\openxcom\src\savegame\movingtarget.h
 	"Target.h"
 
 1414438813 f:\git\openxcom\src\savegame\region.h
@@ -4820,7 +4817,7 @@
 	<yaml-cpp/yaml.h>
 	"../Savegame/CraftWeaponProjectile.h"
 
-1413136961 f:\git\openxcom\src\savegame\craftweaponprojectile.h
+1415932647 f:\git\openxcom\src\savegame\craftweaponprojectile.h
 	<string>
 
 1415049551 f:\git\openxcom\src\savegame\craftweapon.h
@@ -4881,7 +4878,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1413136962 f:\git\openxcom\src\savegame\ufo.h
+1415932000 f:\git\openxcom\src\savegame\ufo.h
 	<string>
 	<yaml-cpp/yaml.h>
 	"CraftId.h"
@@ -7361,7 +7358,7 @@
 1413136957 f:\git\openxcom\src\geoscape\alienterrorstate.h
 	"../Engine/State.h"
 
-1415168566 f:\git\openxcom\src\geoscape\interceptstate.h
+1415929674 f:\git\openxcom\src\geoscape\interceptstate.h
 	<vector>
 	"../Engine/State.h"
 
@@ -7646,7 +7643,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1415853534 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1415932683 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7685,7 +7682,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1413136957 f:\git\openxcom\src\geoscape\dogfightstate.h
+1415930887 f:\git\openxcom\src\geoscape\dogfightstate.h
 	<vector>
 	<string>
 	"../Engine/State.h"
@@ -7988,9 +7985,8 @@
 	"../Engine/Action.h"
 	"../Engine/State.h"
 
-1415853536 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
+1415929755 source:f:\git\openxcom\src\geoscape\interceptstate.cpp
 	"InterceptState.h"
-	<sstream>
 	"ConfirmDestinationState.h"
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
@@ -8012,7 +8008,7 @@
 	"../Savegame/Target.h"
 	"../Savegame/Ufo.h"
 
-1415853533 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
+1415925608 source:f:\git\openxcom\src\geoscape\itemsarrivingstate.cpp
 	"ItemsArrivingState.h"
 	"GeoscapeState.h"
 	"../Basescape/BasescapeState.h"
@@ -9564,7 +9560,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1415850090 source:f:\git\openxcom\src\savegame\craft.cpp
+1415932216 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"../fmath.h"
 	"AlienBase.h"
@@ -9596,7 +9592,7 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1413136961 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
+1415932650 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
 	"CraftWeaponProjectile.h"
 	<iostream>
 	"../Engine/Palette.h"
@@ -9616,10 +9612,8 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1414961078 source:f:\git\openxcom\src\savegame\movingtarget.cpp
+1415931862 source:f:\git\openxcom\src\savegame\movingtarget.cpp
 	"MovingTarget.h"
-	<cmath>
-	"../fmath.h"
 
 1413601158 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
@@ -9749,11 +9743,9 @@
 1413136962 source:f:\git\openxcom\src\savegame\soldierdeath.cpp
 	"SoldierDeath.h"
 
-1415008281 source:f:\git\openxcom\src\savegame\target.cpp
+1415929886 source:f:\git\openxcom\src\savegame\target.cpp
 	"Target.h"
-	<cmath>
 	"Craft.h"
-	"../Engine/Language.h"
 
 1413136962 source:f:\git\openxcom\src\savegame\terrorsite.cpp
 	"TerrorSite.h"
@@ -9786,13 +9778,8 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1413136962 source:f:\git\openxcom\src\savegame\ufo.cpp
+1415932155 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
-	<sstream>
-	<algorithm>
-	<assert.h>
-	<math.h>
-	"../fmath.h"
 	"AlienMission.h"
 	"Craft.h"
 	"SavedGame.h"

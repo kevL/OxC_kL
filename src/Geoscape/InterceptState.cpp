@@ -19,7 +19,7 @@
 
 #include "InterceptState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "ConfirmDestinationState.h"
 #include "GeoscapeCraftState.h"
@@ -149,10 +149,10 @@ InterceptState::InterceptState(
 	_lstCrafts->onMouseOut((ActionHandler)& InterceptState::lstCraftsMouseOut);
 
 
-	RuleCraft* rule;
+	RuleCraft* rule = NULL;
 
 	size_t row = 0;
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -163,7 +163,7 @@ InterceptState::InterceptState(
 			continue;
 		}
 
-		for (std::vector<Craft*>::iterator
+		for (std::vector<Craft*>::const_iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end();
 				++j)
@@ -193,7 +193,7 @@ InterceptState::InterceptState(
 			else
 				ss3 << L"-";
 
-			std::wstring status = getAltStatus(*j);
+			const std::wstring status = getAltStatus(*j);
 			_lstCrafts->addRow(
 							5,
 							(*j)->getName(_game->getLanguage()).c_str(),
@@ -212,7 +212,7 @@ InterceptState::InterceptState(
 		}
 	}
 
-	if (_base)
+	if (_base != NULL)
 		_txtBase->setText(_base->getName());
 }
 
@@ -256,9 +256,9 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 
 		bool delayed;
 		const int hours = craft->getDowntime(delayed);
-		std::wstring wstr = formatTime(
-									hours,
-									delayed);
+		const std::wstring wstr = formatTime(
+											hours,
+											delayed);
 
 		return tr(stat).arg(wstr);
 	}
@@ -292,7 +292,7 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
 	}
 	else
 	{
-		Ufo* ufo = dynamic_cast<Ufo*>(craft->getDestination());
+		const Ufo* const ufo = dynamic_cast<Ufo*>(craft->getDestination());
 		if (ufo != NULL)
 		{
 			if (craft->isInDogfight() == true) // chase UFO
@@ -331,7 +331,7 @@ std::wstring InterceptState::getAltStatus(Craft* const craft)
  */
 std::wstring InterceptState::formatTime(
 		const int total,
-		const bool delayed)
+		const bool delayed) const
 {
 	std::wostringstream wss;
 	wss << L"(";
@@ -388,7 +388,7 @@ void InterceptState::btnGotoBaseClick(Action*)
  */
 void InterceptState::lstCraftsLeftClick(Action*)
 {
-	Craft* craft = _crafts[_lstCrafts->getSelectedRow()];
+	Craft* const craft = _crafts[_lstCrafts->getSelectedRow()];
 	_game->pushState(new GeoscapeCraftState(
 										craft,
 										_globe,
@@ -405,7 +405,7 @@ void InterceptState::lstCraftsRightClick(Action*)
 {
 	_game->popState();
 
-	Craft* craft = _crafts[_lstCrafts->getSelectedRow()];
+	const Craft* const craft = _crafts[_lstCrafts->getSelectedRow()];
 	_globe->center(
 				craft->getLongitude(),
 				craft->getLatitude());

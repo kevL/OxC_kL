@@ -114,7 +114,7 @@ int CraftWeaponProjectile::getDirection() const
  * Moves the projectile according to it's speed
  * or changes the phase of beam animation.
  */
-void CraftWeaponProjectile::move()
+void CraftWeaponProjectile::moveProjectile()
 {
 	if (_globalType == CWPGT_MISSILE)
 	{
@@ -183,7 +183,7 @@ int CraftWeaponProjectile::getHorizontalPosition() const
 /**
  * Marks the projectile to be removed.
  */
-void CraftWeaponProjectile::remove()
+void CraftWeaponProjectile::removeProjectile()
 {
 	_toBeRemoved = true;
 }

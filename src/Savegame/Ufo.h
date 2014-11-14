@@ -167,7 +167,7 @@ private:
 		bool isDestroyed() const;
 
 		/// Sets the UFO's battlescape status.
-		void setInBattlescape(bool inbattle);
+		void setInBattlescape(const bool inbattle);
 		/// Gets if the UFO is in battlescape.
 		bool isInBattlescape() const;
 

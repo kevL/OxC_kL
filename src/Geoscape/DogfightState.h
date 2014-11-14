@@ -152,7 +152,7 @@ private:
 		/// Animates the window.
 		void animate();
 		/// Moves the craft.
-		void move();
+		void moveCraft();
 
 		// Fires the first weapon.
 		void fireWeapon1();

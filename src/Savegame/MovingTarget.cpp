@@ -21,9 +21,9 @@
 
 #include "MovingTarget.h"
 
-#include <cmath>
+//#include <cmath>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 
 namespace OpenXcom
@@ -51,7 +51,7 @@ MovingTarget::~MovingTarget()
 	if (_dest != NULL
 		&& _dest->getFollowers()->empty() == false)
 	{
-		for (std::vector<Target*>::iterator
+		for (std::vector<Target*>::const_iterator
 				i = _dest->getFollowers()->begin();
 				i != _dest->getFollowers()->end();
 				++i)
@@ -73,10 +73,10 @@ void MovingTarget::load(const YAML::Node& node)
 {
 	Target::load(node);
 
-	_speedLon		= node["speedLon"].as<double>(_speedLon);
-	_speedLat		= node["speedLat"].as<double>(_speedLat);
-	_speedRadian	= node["speedRadian"].as<double>(_speedRadian);
-	_speed			= node["speed"].as<int>(_speed);
+	_speedLon		= node["speedLon"]		.as<double>(_speedLon);
+	_speedLat		= node["speedLat"]		.as<double>(_speedLat);
+	_speedRadian	= node["speedRadian"]	.as<double>(_speedRadian);
+	_speed			= node["speed"]			.as<int>(_speed);
 }
 
 /**
@@ -150,7 +150,7 @@ int MovingTarget::getSpeed() const
  * knots (nautical miles per hour) into radians per 5 in-game seconds.
  * @param speed - speed in knots
  */
-void MovingTarget::setSpeed(int speed)
+void MovingTarget::setSpeed(const int speed)
 {
 	_speed = speed;
 
@@ -212,7 +212,7 @@ bool MovingTarget::reachedDestination() const
 /**
  * Executes a movement cycle for the moving target.
  */
-void MovingTarget::move()
+void MovingTarget::moveTarget()
 {
 	calculateSpeed();
 
