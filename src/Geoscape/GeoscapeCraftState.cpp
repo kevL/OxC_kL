@@ -156,6 +156,9 @@ GeoscapeCraftState::GeoscapeCraftState(
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& GeoscapeCraftState::btnCancelClick,
 					Options::keyCancel);
+	_btnCancel->onKeyboardPress(
+					(ActionHandler)& GeoscapeCraftState::btnCancelClick,
+					Options::keyOk);
 
 	_txtTitle->setColor(Palette::blockOffset(15)-1);
 	_txtTitle->setBig();
@@ -284,7 +287,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	if (_craft->getRules()->getWeapons() > 0
 		&& _craft->getWeapons()->at(0) != NULL)
 	{
-		CraftWeapon* w1 = _craft->getWeapons()->at(0);
+		const CraftWeapon* const w1 = _craft->getWeapons()->at(0);
 		_txtW1Name->setText(tr("STR_WEAPON_ONE").arg(tr(w1->getRules()->getType())));
 
 //		_txtW1Ammo->setText(tr("STR_ROUNDS_").arg(w1->getAmmo()));
@@ -307,7 +310,7 @@ GeoscapeCraftState::GeoscapeCraftState(
 	if (_craft->getRules()->getWeapons() > 1
 		&& _craft->getWeapons()->at(1) != NULL)
 	{
-		CraftWeapon* w2 = _craft->getWeapons()->at(1);
+		const CraftWeapon* const w2 = _craft->getWeapons()->at(1);
 		_txtW2Name->setText(tr("STR_WEAPON_TWO").arg(tr(w2->getRules()->getType())));
 
 //		_txtW2Ammo->setText(tr("STR_ROUNDS_").arg(w2->getAmmo()));
@@ -322,21 +325,23 @@ GeoscapeCraftState::GeoscapeCraftState(
 	}
 
 
-	_txtRedirect->setColor(Palette::blockOffset(15)-1);
-	_txtRedirect->setBig();
-	_txtRedirect->setAlign(ALIGN_CENTER);
-	_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
-
 	if (_waypoint == NULL)
 		_txtRedirect->setVisible(false);
 	else
+	{
+		_txtRedirect->setColor(Palette::blockOffset(15)-1);
+		_txtRedirect->setBig();
+		_txtRedirect->setAlign(ALIGN_CENTER);
+		_txtRedirect->setText(tr("STR_REDIRECT_CRAFT"));
+
 		_btnCancel->setText(tr("STR_GO_TO_LAST_KNOWN_UFO_POSITION"));
+	}
 
 	// set Base button visibility FALSE for already-Based crafts.
 	// note these could be set up there where status was set.....
 	if (stat != "STR_OUT"
-		|| lowFuel
-		|| missionComplete)
+		|| lowFuel == true
+		|| missionComplete == true)
 	{
 		_btnBase->setVisible(false);
 		_btnPatrol->setVisible(false);
@@ -344,8 +349,8 @@ GeoscapeCraftState::GeoscapeCraftState(
 		if (stat == "STR_REPAIRS"
 			|| stat == "STR_REFUELLING"
 			|| stat == "STR_REARMING"
-			|| lowFuel
-			|| missionComplete)
+			|| lowFuel == true
+			|| missionComplete == true)
 		{
 			_btnTarget->setVisible(false);
 		}
@@ -354,9 +359,11 @@ GeoscapeCraftState::GeoscapeCraftState(
 	{
 		if (_craft->getDestination() == dynamic_cast<Target*>(_craft->getBase()))
 			_btnBase->setVisible(false);
-
-		if (_craft->getDestination() == NULL)
+		else if (_craft->getDestination() == NULL
+			&& waypoint == NULL)
+		{
 			_btnPatrol->setVisible(false);
+		}
 	}
 
 
@@ -385,6 +392,8 @@ void GeoscapeCraftState::btnCenterClick(Action*)
 	_globe->center(
 				_craft->getLongitude(),
 				_craft->getLatitude());
+
+	delete _waypoint;
 }
 
 /**

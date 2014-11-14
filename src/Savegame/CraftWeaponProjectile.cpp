@@ -1,4 +1,4 @@
-/**
+/*
  * Copyright 2010 OpenXcom Developers.
  *
  * This file is part of OpenXcom.
@@ -19,7 +19,7 @@
 
 #include "CraftWeaponProjectile.h"
 
-#include <iostream>
+//#include <iostream>
 
 #include "../Engine/Palette.h"
 #include "../Ruleset/RuleCraftWeapon.h"
@@ -61,6 +61,7 @@ CraftWeaponProjectile::~CraftWeaponProjectile(void)
 /**
  * Sets the type of projectile according to the type of weapon it was shot from.
  * This is used for drawing the projectiles.
+ * @param type - CraftWeaponProjectileType (CraftWeaponProjectile.h)
  */
 void CraftWeaponProjectile::setType(CraftWeaponProjectileType type)
 {
@@ -75,7 +76,7 @@ void CraftWeaponProjectile::setType(CraftWeaponProjectileType type)
 
 /**
  * Returns the type of projectile.
- * @return Projectile type as an integer value.
+ * @return, projectile type as an integer value (CraftWeaponProjectile.h)
  */
 CraftWeaponProjectileType CraftWeaponProjectile::getType() const
 {
@@ -84,7 +85,7 @@ CraftWeaponProjectileType CraftWeaponProjectile::getType() const
 
 /**
  * Returns the global type of projectile.
- * @return 0 - if it's a missile, 1 if beam.
+ * @return, 0 - if it's a missile, 1 if beam (CraftWeaponProjectile.h)
  */
 CraftWeaponProjectileGlobalType CraftWeaponProjectile::getGlobalType() const
 {
@@ -93,6 +94,7 @@ CraftWeaponProjectileGlobalType CraftWeaponProjectile::getGlobalType() const
 
 /**
  * Sets the direction of the projectile.
+ * @param direction - reference the direction
  */
 void CraftWeaponProjectile::setDirection(const int& directon)
 {
@@ -104,6 +106,7 @@ void CraftWeaponProjectile::setDirection(const int& directon)
 
 /**
  * Gets the direction of the projectile.
+ * @return, the direction
  */
 int CraftWeaponProjectile::getDirection() const
 {
@@ -111,8 +114,7 @@ int CraftWeaponProjectile::getDirection() const
 }
 
 /**
- * Moves the projectile according to it's speed
- * or changes the phase of beam animation.
+ * Moves the projectile according to its speed or changes the phase of beam animation.
  */
 void CraftWeaponProjectile::moveProjectile()
 {
@@ -149,6 +151,7 @@ void CraftWeaponProjectile::moveProjectile()
 
 /**
  * Sets the y position of the projectile on the radar.
+ * @param position - reference the position
  */
 void CraftWeaponProjectile::setPosition(const int& position)
 {
@@ -157,6 +160,7 @@ void CraftWeaponProjectile::setPosition(const int& position)
 
 /**
  * Gets the y position of the projectile on the radar.
+ * @return, the position
  */
 int CraftWeaponProjectile::getPosition() const
 {
@@ -166,6 +170,7 @@ int CraftWeaponProjectile::getPosition() const
 /**
  * Sets the x position of the projectile on the radar.
  * It's used only once for each projectile during firing.
+ * @param position - the x position
  */
 void CraftWeaponProjectile::setHorizontalPosition(int position)
 {
@@ -174,6 +179,7 @@ void CraftWeaponProjectile::setHorizontalPosition(int position)
 
 /**
  * Gets the x position of the projectile.
+ * @return, the x position
  */
 int CraftWeaponProjectile::getHorizontalPosition() const
 {
@@ -190,6 +196,7 @@ void CraftWeaponProjectile::removeProjectile()
 
 /**
  * Returns if a projectile should be removed.
+ * @return, true to remove
  */
 bool CraftWeaponProjectile::toBeRemoved() const
 {
@@ -198,6 +205,7 @@ bool CraftWeaponProjectile::toBeRemoved() const
 
 /**
  * Returns animation state of a beam.
+ * @return, the state of the beam
  */
 int CraftWeaponProjectile::getState() const
 {
@@ -205,8 +213,8 @@ int CraftWeaponProjectile::getState() const
 }
 
 /**
- * Sets the amount of damage the projectile can do
- * when hitting it's target.
+ * Sets the amount of damage the projectile can do when hitting its target.
+ * @param damage - reference the damage
  */
 void CraftWeaponProjectile::setDamage(const int& damage)
 {
@@ -214,8 +222,8 @@ void CraftWeaponProjectile::setDamage(const int& damage)
 }
 
 /**
- * Gets the amount of damage the projectile can do
- * when hitting it's target.
+ * Gets the amount of damage the projectile can do when hitting its target.
+ * @return, the damage
  */
 int CraftWeaponProjectile::getDamage() const
 {
@@ -224,6 +232,7 @@ int CraftWeaponProjectile::getDamage() const
 
 /**
  * Sets the accuracy of the projectile.
+ * @param accuracy - reference the accuracy
  */
 void CraftWeaponProjectile::setAccuracy(const int& accuracy)
 {
@@ -232,6 +241,7 @@ void CraftWeaponProjectile::setAccuracy(const int& accuracy)
 
 /**
  * Gets the accuracy of the projectile.
+ * @return, the accuracy
  */
 int CraftWeaponProjectile::getAccuracy() const
 {
@@ -239,7 +249,8 @@ int CraftWeaponProjectile::getAccuracy() const
 }
 
 /**
- * Marks the projectile as a one which missed it's target.
+ * Marks the projectile as a one which missed its target.
+ * @param missed - reference true for missed
  */
 void CraftWeaponProjectile::setMissed(const bool& missed)
 {
@@ -247,8 +258,8 @@ void CraftWeaponProjectile::setMissed(const bool& missed)
 }
 
 /**
- * Returns true if the projectile missed it's target.
- * Otherwise returns false.
+ * Returns true if the projectile missed its target.
+ * @return, true if missed
  */
 bool CraftWeaponProjectile::getMissed() const
 {
@@ -257,6 +268,7 @@ bool CraftWeaponProjectile::getMissed() const
 
 /**
  * Sets maximum range of projectile.
+ * @param range - reference the range
  */
 void CraftWeaponProjectile::setRange(const int& range)
 {
@@ -265,6 +277,7 @@ void CraftWeaponProjectile::setRange(const int& range)
 
 /**
  * Returns maximum range of projectile.
+ * @return, the range
  */
 int CraftWeaponProjectile::getRange() const
 {
@@ -273,6 +286,7 @@ int CraftWeaponProjectile::getRange() const
 
 /**
  * Sets the speed of the projectile.
+ * @param speed - the speed
  */
 void CraftWeaponProjectile::setSpeed(int speed)
 {

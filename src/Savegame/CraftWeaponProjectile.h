@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_WEAPONPROJECTILE_H
 #define OPENXCOM_WEAPONPROJECTILE_H
 
-#include <string>
+//#include <string>
 
 
 namespace OpenXcom
@@ -53,9 +53,10 @@ enum Directions
 	D_DOWN	// 2
 };
 
-const int HP_LEFT	= -1;
-const int HP_CENTER	= 0;
-const int HP_RIGHT	= 1;
+const int
+	HP_LEFT		= -1,
+	HP_CENTER	=  0,
+	HP_RIGHT	=  1;
 
 
 class CraftWeaponProjectile

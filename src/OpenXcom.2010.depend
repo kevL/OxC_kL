@@ -4817,8 +4817,7 @@
 	<yaml-cpp/yaml.h>
 	"../Savegame/CraftWeaponProjectile.h"
 
-1415932647 f:\git\openxcom\src\savegame\craftweaponprojectile.h
-	<string>
+1415937248 f:\git\openxcom\src\savegame\craftweaponprojectile.h
 
 1415049551 f:\git\openxcom\src\savegame\craftweapon.h
 	<string>
@@ -7643,7 +7642,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1415932683 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1415936259 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>
@@ -7710,7 +7709,7 @@
 1415473965 f:\git\openxcom\src\geoscape\fundingstate.h
 	"../Engine/State.h"
 
-1415853533 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
+1415938305 source:f:\git\openxcom\src\geoscape\geoscapecraftstate.cpp
 	"GeoscapeCraftState.h"
 	<sstream>
 	"GeoscapeState.h"
@@ -9592,9 +9591,8 @@
 	"../Ruleset/RuleItem.h"
 	"../Ruleset/Ruleset.h"
 
-1415932650 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
+1415937200 source:f:\git\openxcom\src\savegame\craftweaponprojectile.cpp
 	"CraftWeaponProjectile.h"
-	<iostream>
 	"../Engine/Palette.h"
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Engine/Surface.h"
