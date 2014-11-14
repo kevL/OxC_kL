@@ -111,6 +111,9 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	_btnOk5Secs->onKeyboardPress(
 					(ActionHandler)& ItemsArrivingState::btnOk5SecsClick,
 					Options::keyGeoSpeed1);
+	_btnOk5Secs->onKeyboardPress(
+					(ActionHandler)& ItemsArrivingState::btnOk5SecsClick,
+					Options::keyOk);
 
 	_btnOk->setColor(Palette::blockOffset(8)+5);
 	_btnOk->setText(tr("STR_OK"));
@@ -139,10 +142,10 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 	_lstTransfers->setSelectable();
 	_lstTransfers->setBackground(_window);
 	_lstTransfers->setMargin();
-	_lstTransfers->onMousePress((ActionHandler)& ItemsArrivingState::lstGoToBasePress); // kL
+	_lstTransfers->onMousePress((ActionHandler)& ItemsArrivingState::lstGoToBasePress);
 
 	Base* base = NULL;
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -201,21 +204,21 @@ ItemsArrivingState::ItemsArrivingState(GeoscapeState* state)
 
 
 						for (std::vector<Vehicle*>::const_iterator // check if it's ammo to reload a vehicle
-								v = (*c)->getVehicles()->begin();
-								v != (*c)->getVehicles()->end();
-								++v)
+								veh = (*c)->getVehicles()->begin();
+								veh != (*c)->getVehicles()->end();
+								++veh)
 						{
 							std::vector<std::string>::const_iterator ammo = std::find(
-																				(*v)->getRules()->getCompatibleAmmo()->begin(),
-																				(*v)->getRules()->getCompatibleAmmo()->end(),
+																				(*veh)->getRules()->getCompatibleAmmo()->begin(),
+																				(*veh)->getRules()->getCompatibleAmmo()->end(),
 																				item->getType());
-							if (ammo != (*v)->getRules()->getCompatibleAmmo()->end()
-								&& (*v)->getAmmo() < item->getClipSize())
+							if (ammo != (*veh)->getRules()->getCompatibleAmmo()->end()
+								&& (*veh)->getAmmo() < item->getClipSize())
 							{
 								const int used = std::min(
 														(*j)->getQuantity(),
-														item->getClipSize() - (*v)->getAmmo());
-								(*v)->setAmmo((*v)->getAmmo() + used);
+														item->getClipSize() - (*veh)->getAmmo());
+								(*veh)->setAmmo((*veh)->getAmmo() + used);
 
 								// Note that the items have already been delivered --
 								// so they are removed from the base, not the transfer.
@@ -285,17 +288,17 @@ void ItemsArrivingState::btnOk5SecsClick(Action*)
 } */
 
 /**
- * kL. LMB or RMB opens the Basescape for the pressed row.
+ * LMB or RMB opens the Basescape for the pressed row.
  * Do not pop the state here.
  * @param action - pointer to an Action
  */
-void ItemsArrivingState::lstGoToBasePress(Action* action) // kL
+void ItemsArrivingState::lstGoToBasePress(Action* action)
 {
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		Base* base = _bases.at(_lstTransfers->getSelectedRow());
-		if (base) // make sure player hasn't deconstructed a base, when jumping back & forth between bases and the list.
+		if (base != NULL) // make sure player hasn't deconstructed a base, when jumping back & forth between bases and the list.
 			_game->pushState(new BasescapeState(
 											base,
 											_state->getGlobe()));

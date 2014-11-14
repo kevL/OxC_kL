@@ -136,6 +136,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(_color);
 	if (origin == OPT_BATTLESCAPE)
 		_window->setBackground(_game->getResourcePack()->getSurface("BACK04.SCR"));
@@ -219,7 +220,7 @@ ManageAlienContainmentState::ManageAlienContainmentState(
 			i != items.end();
 			++i)
 	{
-		int qty = _base->getItems()->getItem(*i);				// get Qty of each item at this base
+		const int qty = _base->getItems()->getItem(*i);			// get Qty of each item at this base
 		if (qty > 0												// if item exists at this base
 			&& _game->getRuleset()->getItem(*i)->getAlien())	// and it's a live alien...
 		{
@@ -491,7 +492,9 @@ void ManageAlienContainmentState::increaseByValue(int change)
 	if (change <= 0 || qty <= 0)
 		return;
 
-	change = std::min(qty, change);
+	change = std::min(
+					change,
+					qty);
 	_qtys[_sel] += change;
 	_aliensSold += change;
 
@@ -534,7 +537,7 @@ void ManageAlienContainmentState::updateStrings()
 		ss,
 		ss2;
 
-	int qty = getQuantity() - _qtys[_sel];
+	const int qty = getQuantity() - _qtys[_sel];
 	ss << qty;
 	ss2 << _qtys[_sel];
 
@@ -543,8 +546,9 @@ void ManageAlienContainmentState::updateStrings()
 	_lstAliens->setCellText(_sel, 2, ss2.str());	// # to torture
 
 
-	int aliens = _base->getUsedContainment() - _aliensSold; //kL - _researchAliens;
-	int spaces = _base->getAvailableContainment() - _base->getUsedContainment() + _aliensSold;
+	const int
+		aliens = _base->getUsedContainment() - _aliensSold, //kL - _researchAliens,
+		spaces = _base->getAvailableContainment() - _base->getUsedContainment() + _aliensSold;
 
 	_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(spaces));
 	_txtUsed->setText(tr("STR_SPACE_USED").arg(aliens));
@@ -553,7 +557,7 @@ void ManageAlienContainmentState::updateStrings()
 //	bool enoughSpaceToExit = Options::storageLimitsEnforced? spaces > -1: true;
 
 //	_btnOk->setVisible(enoughSpaceToExit);
-	_btnCancel->setVisible(!_overCrowded);
+	_btnCancel->setVisible(_overCrowded == false);
 	_btnOk->setVisible(_aliensSold > 0
 					&& spaces > -1);
 }

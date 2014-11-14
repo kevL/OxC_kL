@@ -322,15 +322,19 @@ void ManufactureInfoState::setAssignedEngineer()
 	_txtAvailableEngineer->setText(tr("STR_ENGINEERS_AVAILABLE_UC").arg(_base->getEngineers()));
 	_txtAvailableSpace->setText(tr("STR_WORKSHOP_SPACE_AVAILABLE_UC").arg(_base->getFreeWorkshops()));
 
-	std::wostringstream s1;
+	std::wostringstream
+		s1,
+		s2;
+
 	s1 << L"> \x01" << _production->getAssignedEngineers();
 	_txtAllocated->setText(s1.str());
 
-	std::wostringstream s2;
 	s2 << L"> \x01";
-	if (_production->getInfiniteAmount())
+	if (_production->getInfiniteAmount() == true)
+	{
 //		s2 << Language::utf8ToWstr("∞");
 		s2 << "oo";
+	}
 	else
 		s2 << _production->getAmountTotal();
 
@@ -374,7 +378,7 @@ void ManufactureInfoState::updateTimeTotal()
 		// ensure we round up since it takes an entire hour to manufacture any part of that hour's capacity
 		hoursLeft = (hoursLeft + engs - 1) / engs;
 
-		int daysLeft = hoursLeft / 24;
+		const int daysLeft = hoursLeft / 24;
 		hoursLeft %= 24;
 		woStr << daysLeft << "\n" << hoursLeft;
 	}
@@ -416,10 +420,10 @@ void ManufactureInfoState::moreEngineer(int change)
 		&& availableWorkSpace > 0)
 	{
 		change = std::min(
+						change,
 						std::min(
 								availableEngineer,
-								availableWorkSpace),
-						change);
+								availableWorkSpace));
 		_production->setAssignedEngineers(_production->getAssignedEngineers() + change);
 		_base->setEngineers(_base->getEngineers() - change);
 
@@ -474,7 +478,9 @@ void ManufactureInfoState::lessEngineer(int change)
 	const int assigned = _production->getAssignedEngineers();
 	if (assigned > 0)
 	{
-		change = std::min(assigned, change);
+		change = std::min(
+						change,
+						assigned);
 		_production->setAssignedEngineers(assigned-change);
 		_base->setEngineers(_base->getEngineers() + change);
 
@@ -623,8 +629,8 @@ void ManufactureInfoState::lessUnit(int change)
 
 	const int units = _production->getAmountTotal();
 	change = std::min(
-					units - (_production->getAmountProduced() + 1),
-					change);
+					change,
+					units - (_production->getAmountProduced() + 1));
 	_production->setAmountTotal(units - change);
 
 	setAssignedEngineer();

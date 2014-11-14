@@ -255,7 +255,7 @@ StoresState::StoresState(Base* base)
 
 	std::wostringstream ss;
 	ss << _base->getAvailableStores() << ":" << std::fixed << std::setprecision(1) << _base->getUsedStores();
-	_txtTotal->setText(ss.str().c_str());
+	_txtTotal->setText(ss.str());
 }
 
 /**

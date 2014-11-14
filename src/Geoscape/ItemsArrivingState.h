@@ -60,7 +60,7 @@ private:
 	TextList* _lstTransfers;
 	Window* _window;
 
-	std::vector<Base*> _bases; // kL
+	std::vector<Base*> _bases;
 
 
 	public:
@@ -76,7 +76,7 @@ private:
 		/// Handler for clicking the Go To Base button.
 //		void btnGotoBaseClick(Action* action);
 		/// kL. Handler for pressing the ItemsArriving list.
-		void lstGoToBasePress(Action* action); // kL
+		void lstGoToBasePress(Action* action);
 };
 
 }
