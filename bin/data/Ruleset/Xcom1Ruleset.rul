@@ -8606,8 +8606,6 @@ MCDPatches:
         bigWall: 2
   - type: AVENGER
     data:
-      - MCDIndex: 11
-        bigWall: 4
       - MCDIndex: 12
         bigWall: 2
       - MCDIndex: 14
