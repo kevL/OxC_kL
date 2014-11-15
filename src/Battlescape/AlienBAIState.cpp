@@ -2363,7 +2363,7 @@ void AlienBAIState::grenadeAction()
 	{
 //		if (_unit->getFaction() == FACTION_HOSTILE)
 //		{
-		RuleInventory* rule = grenade->getSlot();
+		const RuleInventory* const rule = grenade->getSlot();
 		int costTU = rule->getCost(_save->getBattleState()->getGame()->getRuleset()->getInventory("STR_RIGHT_HAND"));
 
 		if (grenade->getFuseTimer() == -1)

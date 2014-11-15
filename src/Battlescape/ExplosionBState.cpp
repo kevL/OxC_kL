@@ -602,7 +602,7 @@ void ExplosionBState::explode()
 		&& (_item->getRules()->getBattleType() == BT_GRENADE
 			|| _item->getRules()->getBattleType() == BT_PROXIMITYGRENADE))
 	{
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				j = _parent->getSave()->getItems()->begin();
 				j != _parent->getSave()->getItems()->end();
 				++j)

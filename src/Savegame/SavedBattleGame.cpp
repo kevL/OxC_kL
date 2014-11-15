@@ -838,7 +838,7 @@ BattleUnit* SavedBattleGame::selectNextFactionUnit(
 
 /**
  * Selects the next player unit in a certain direction.
- * @param dir				- direction to select, eg. -1 for previous and 1 for next
+ * @param dir				- direction to select (1 for next and -1 for previous)
  * @param checkReselect		- true to check the reselectable flag
  * @param setDontReselect	- true to set the reselectable flag FALSE
  * @param checkInventory	- true to check if the unit has an inventory
@@ -850,95 +850,77 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 		bool setDontReselect,
 		bool checkInventory)
 {
-	//Log(LOG_INFO) << "SavedBattleGame::selectFactionUnit()";
-	if (_selectedUnit != NULL
-		&& setDontReselect)
+	if (_units.empty() == true)
 	{
-		//Log(LOG_INFO) << ". dontReselect";
-		_selectedUnit->dontReselect();
-	}
-
-	if (_units.empty())
-	{
-		//Log(LOG_INFO) << ". units.Empty, ret NULL";
-		_selectedUnit = NULL;		// kL
-		_lastSelectedUnit = NULL;	// kL
+		_selectedUnit = NULL;
+		_lastSelectedUnit = NULL;
 
 		return NULL;
 	}
 
-	std::vector<BattleUnit*>::iterator
-		begin,
-		end;
+	if (setDontReselect == true
+		&& _selectedUnit != NULL)
+	{
+		_selectedUnit->dontReselect();
+	}
+
+
+	std::vector<BattleUnit*>::const_iterator
+		unitFirst,
+		unitLast;
 
 	if (dir > 0)
 	{
-		begin = _units.begin();
-		end = _units.end() - 1;
+		unitFirst = _units.begin();
+		unitLast = _units.end() - 1;
 	}
-	else //if (dir < 1)
+	else
 	{
-		begin = _units.end() - 1;
-		end = _units.begin();
+		unitFirst = _units.end() - 1;
+		unitLast = _units.begin();
 	}
 
 
-	std::vector<BattleUnit*>::iterator i = std::find(
-			_units.begin(),
-			_units.end(),
-			_selectedUnit);
+	std::vector<BattleUnit*>::const_iterator i = std::find(
+														_units.begin(),
+														_units.end(),
+														_selectedUnit);
 
 	do
 	{
-		//Log(LOG_INFO) << ". do";
 		if (i == _units.end()) // no unit selected
 		{
-			//Log(LOG_INFO) << ". . i = begin, continue";
-			i = begin;
-
+			i = unitFirst;
 			continue;
 		}
 
-		if (i != end)
-		{
-			//Log(LOG_INFO) << ". . i += dir";
+		if (i != unitLast)
 			i += dir;
-		}
 		else // reached the end, wrap-around
-		{
-			//Log(LOG_INFO) << ". . i = begin";
-			i = begin;
-		}
+			i = unitFirst;
 
-		// back to where we started... no more units found
-		if (*i == _selectedUnit)
+		if (*i == _selectedUnit) // back to start ... no more units found
 		{
-			//Log(LOG_INFO) << ". . *i == _selectedUnit, found one, test";
-			if (checkReselect
-				&& !_selectedUnit->reselectAllowed())
+			if (checkReselect == true
+				&& _selectedUnit->reselectAllowed() == false)
 			{
-				//Log(LOG_INFO) << ". . . negative, ret NULL";
 				_selectedUnit = NULL;
 			}
 
-			//Log(LOG_INFO) << ". . ret selectedUnit";
 			return _selectedUnit;
 		}
 		else if (_selectedUnit == NULL
-			&& i == begin)
+			&& i == unitFirst)
 		{
-			//Log(LOG_INFO) << ". . finish do, ret selectedUnit = NULL";
-//kL			return _selectedUnit;
-			return NULL; // kL
+			return NULL;
 		}
 	}
-	while (!(*i)->isSelectable(
+	while ((*i)->isSelectable(
 							_side,
 							checkReselect,
-							checkInventory));
+							checkInventory) == false);
 
 
-	//Log(LOG_INFO) << ". fallthrough, ret selectedUnit = *i";
 	_selectedUnit = *i;
 
 	return _selectedUnit;
@@ -947,14 +929,14 @@ BattleUnit* SavedBattleGame::selectFactionUnit(
 /**
  * Selects the unit at the given position on the map.
  * @param pos - reference a Position
- * @return, pointer to the BattleUnit, or NULL if none found
+ * @return, pointer to the BattleUnit or NULL
  */
 BattleUnit* SavedBattleGame::selectUnit(const Position& pos)
 {
-	BattleUnit* bu = getTile(pos)->getUnit();
+	BattleUnit* const bu = getTile(pos)->getUnit();
 
-	if (bu
-		&& bu->isOut())
+	if (bu != NULL
+		&& bu->isOut(true, true) == true)
 	{
 		return NULL;
 	}
@@ -1045,7 +1027,7 @@ void SavedBattleGame::endBattleTurn()
 	{
 		//Log(LOG_INFO) << ". end Faction_Player";
 
-		if (_selectedUnit
+		if (_selectedUnit != NULL
 			&& _selectedUnit->getOriginalFaction() == FACTION_PLAYER)
 		{
 			_lastSelectedUnit = _selectedUnit;
@@ -1055,7 +1037,7 @@ void SavedBattleGame::endBattleTurn()
 		_selectedUnit = NULL;
 
 		// kL_begin: sbg::endBattleTurn() no Reselect xCom units at endTurn!!!
-		for (std::vector<BattleUnit*>::iterator
+		for (std::vector<BattleUnit*>::const_iterator
 				i = getUnits()->begin();
 				i != getUnits()->end();
 				++i)
@@ -1070,7 +1052,6 @@ void SavedBattleGame::endBattleTurn()
 	else if (_side == FACTION_HOSTILE) // end of Alien turn.
 	{
 		//Log(LOG_INFO) << ". end Faction_Hostile";
-
 		_side = FACTION_NEUTRAL;
 
 		// if there is no neutral team, we skip this section
@@ -1080,29 +1061,29 @@ void SavedBattleGame::endBattleTurn()
 			// see selectFactionUnit() -> isSelectable()
 		{
 			//Log(LOG_INFO) << ". . nextFactionUnit == 0";
-
 			prepareBattleTurn();
 			//Log(LOG_INFO) << ". . prepareBattleTurn DONE";
 			_turn++;
 
 			_side = FACTION_PLAYER;
 
-			if (_lastSelectedUnit
+			if (_lastSelectedUnit != NULL
 				&& _lastSelectedUnit->isSelectable(FACTION_PLAYER))
 			{
 				//Log(LOG_INFO) << ". . . lastSelectedUnit is aLive";
 				_selectedUnit = _lastSelectedUnit;
 			}
 			else
+			{
 				//Log(LOG_INFO) << ". . . select nextFactionUnit";
 				selectNextFactionUnit();
+			}
 
-			while (_selectedUnit
+			while (_selectedUnit != NULL
 				&& _selectedUnit->getFaction() != FACTION_PLAYER)
 			{
 				//Log(LOG_INFO) << ". . . finding a Unit to select";
-//kL				selectNextFactionUnit();
-				selectNextFactionUnit(true); // kL
+				selectNextFactionUnit(true);
 			}
 		}
 	}
@@ -1115,22 +1096,23 @@ void SavedBattleGame::endBattleTurn()
 
 		_side = FACTION_PLAYER;
 
-		if (_lastSelectedUnit
+		if (_lastSelectedUnit != NULL
 			&& _lastSelectedUnit->isSelectable(FACTION_PLAYER))
 		{
 			//Log(LOG_INFO) << ". . . lastSelectedUnit is aLive";
 			_selectedUnit = _lastSelectedUnit;
 		}
 		else
+		{
 			//Log(LOG_INFO) << ". . . select nextFactionUnit";
 			selectNextFactionUnit();
+		}
 
-		while (_selectedUnit
+		while (_selectedUnit != NULL
 			&& _selectedUnit->getFaction() != FACTION_PLAYER)
 		{
 			//Log(LOG_INFO) << ". . . finding a Unit to select";
-//kL		selectNextFactionUnit();
-			selectNextFactionUnit(true); // kL
+			selectNextFactionUnit(true);
 		}
 	}
 	//Log(LOG_INFO) << "done Factions";
@@ -1151,7 +1133,7 @@ void SavedBattleGame::endBattleTurn()
 	// kL_begin: pseudo the Turn20 reveal and the less than 3 aliens left rule.
 	if (_side == FACTION_HOSTILE)
 	{
-		int rand = RNG::generate(0, 5);
+		const int rand = RNG::generate(0, 5);
 		if (_turn > 17 + rand
 			|| liveAliens < rand - 1)
 		{
@@ -1160,7 +1142,7 @@ void SavedBattleGame::endBattleTurn()
 		//Log(LOG_INFO) << "done custom cheating";
 	}
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _units.begin();
 			i != _units.end();
 			++i)
@@ -1177,7 +1159,7 @@ void SavedBattleGame::endBattleTurn()
 
 			if ((*i)->isOut(true, true))
 				(*i)->setTurnsExposed(255);
-			else if (_cheating
+			else if (_cheating == true
 				&& _side == FACTION_HOSTILE)
 			{
 				(*i)->setTurnsExposed(0); // they see you.
@@ -1270,25 +1252,25 @@ void SavedBattleGame::setBattleState(BattlescapeState* bs)
  */
 void SavedBattleGame::resetUnitTiles()
 {
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _units.begin();
 			i != _units.end();
 			++i)
 	{
 		if ((*i)->isOut() == false)
 		{
-			int size = (*i)->getArmor()->getSize() - 1;
+			const int unitSize = (*i)->getArmor()->getSize() - 1;
 
-			if ((*i)->getTile()
+			if ((*i)->getTile() != NULL
 				&& (*i)->getTile()->getUnit() == *i)
 			{
 				for (int // remove Unit from its current tile
-						x = size;
+						x = unitSize;
 						x > -1;
 						--x)
 				{
 					for (int
-							y = size;
+							y = unitSize;
 							y > -1;
 							--y)
 					{
@@ -1298,19 +1280,19 @@ void SavedBattleGame::resetUnitTiles()
 			}
 
 			for (int // set Unit onto its proper tile
-					x = size;
+					x = unitSize;
 					x > -1;
 					--x)
 			{
 				for (int
-						y = size;
+						y = unitSize;
 						y > -1;
 						--y)
 				{
-					Tile* tile = getTile((*i)->getPosition() + Position(x, y, 0));
+					Tile* const tile = getTile((*i)->getPosition() + Position(x, y, 0));
 					tile->setUnit(
-							*i,
-							getTile(tile->getPosition() + Position(0, 0,-1)));
+								*i,
+								getTile(tile->getPosition() + Position(0, 0,-1)));
 				}
 			}
 		}
@@ -1339,7 +1321,7 @@ void SavedBattleGame::randomizeItemLocations(Tile* tile)
 {
 	if (_storageSpace.empty() == false)
 	{
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = tile->getInventory()->begin();
 				i != tile->getInventory()->end();
 				)

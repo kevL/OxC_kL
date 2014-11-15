@@ -5708,7 +5708,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1415982930 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1416017746 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5786,7 +5786,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1415983880 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1416018003 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6291,7 +6291,7 @@
 1413726104 f:\git\openxcom\src\battlescape\explosion.h
 	"Position.h"
 
-1415620536 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
+1416017825 source:f:\git\openxcom\src\battlescape\explosionbstate.cpp
 	"ExplosionBState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -9642,7 +9642,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1415425850 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1416019790 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>

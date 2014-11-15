@@ -1011,7 +1011,7 @@ void BattlescapeGame::checkForCasualties(
 				bTeam = _save->getMoraleModifier();
 			}
 
-			for (std::vector<BattleUnit*>::iterator // do bystander FACTION changes:
+			for (std::vector<BattleUnit*>::const_iterator // do bystander FACTION changes:
 					j = _save->getUnits()->begin();
 					j != _save->getUnits()->end();
 					++j)
@@ -1102,7 +1102,7 @@ void BattlescapeGame::checkForCasualties(
 			&& victim->getStatus() != STATUS_DISABLED)	// kL
 		{
 			//Log(LOG_INFO) << ". STUNNED victim = " << victim->getId();
-			if (slayer
+			if (slayer != NULL
 				&& slayer->getGeoscapeSoldier() != NULL)
 //kL			&& slayer->getOriginalFaction() == FACTION_PLAYER)
 			{
@@ -1117,7 +1117,7 @@ void BattlescapeGame::checkForCasualties(
 																		killStatTurn));
 			}
 
-			if (victim
+			if (victim != NULL
 				&& victim->getGeoscapeSoldier() != NULL)
 			{
 				victim->getStatistics()->wasUnconscious = true;
@@ -1136,7 +1136,7 @@ void BattlescapeGame::checkForCasualties(
 	if (hidden == false // showPsiButton() ought already be false at mission start.
 		&& _save->getSide() == FACTION_PLAYER)
 	{
-		BattleUnit* unit = _save->getSelectedUnit();
+		const BattleUnit* const unit = _save->getSelectedUnit();
 		if (unit != NULL)
 			_parentState->showPsiButton(
 									unit->getOriginalFaction() == FACTION_HOSTILE
@@ -1151,7 +1151,7 @@ void BattlescapeGame::checkForCasualties(
  */
 void BattlescapeGame::showInfoBoxQueue()
 {
-	for (std::vector<InfoboxOKState*>::iterator
+	for (std::vector<InfoboxOKState*>::const_iterator
 			i = _infoboxQueue.begin();
 			i != _infoboxQueue.end();
 			++i)
