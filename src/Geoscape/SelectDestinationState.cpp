@@ -163,14 +163,13 @@ SelectDestinationState::SelectDestinationState(
 //kL	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 //kL	_txtTitle->setWordWrap();
 
-	if (_craft->getRules()->getSpacecraft() == false
-		|| _game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST") == false)
+
+	bool goCydonia = true; // if all Soldiers have Power or Flight suits .......
+
+	if (_craft->getRules()->getSpacecraft() == true
+		&& _craft->getNumSoldiers() > 0
+		&& _game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST") == true)
 	{
-		_btnCydonia->setVisible(false);
-	}
-	else // if all Soldiers have Power or Flight suits .......
-	{
-		bool goCydonia = true;
 		for (std::vector<Soldier*>::const_iterator
 			i = _craft->getBase()->getSoldiers()->begin();
 			i != _craft->getBase()->getSoldiers()->end()
@@ -178,19 +177,23 @@ SelectDestinationState::SelectDestinationState(
 			++i)
 		{
 			if ((*i)->getCraft() == _craft
-				&& (*i)->getArmor()->isPowered() == false)
+				&& (*i)->getArmor()->isSpacesuit() == false)
 			{
 				goCydonia = false;
 			}
 		}
-
-		if (goCydonia == true)
-		{
-			_btnCydonia->setColor(Palette::blockOffset(8)+5);
-			_btnCydonia->setText(tr("STR_CYDONIA"));
-			_btnCydonia->onMouseClick((ActionHandler)& SelectDestinationState::btnCydoniaClick);
-		}
 	}
+	else
+		goCydonia = false;
+
+	if (goCydonia == true)
+	{
+		_btnCydonia->setColor(Palette::blockOffset(8)+5);
+		_btnCydonia->setText(tr("STR_CYDONIA"));
+		_btnCydonia->onMouseClick((ActionHandler)& SelectDestinationState::btnCydoniaClick);
+	}
+	else
+		_btnCydonia->setVisible(false);
 }
 
 /**

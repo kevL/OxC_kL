@@ -2927,7 +2927,7 @@ armors:
     spriteInv: MAN_2
     corpseBattle:
       - STR_CORPSE_SUIT
-    isPowered: true
+    isSpacesuit: true
     storeItem: STR_POWER_SUIT
     frontArmor: 96
     sideArmor: 82
@@ -2951,7 +2951,7 @@ armors:
     spriteInv: MAN_3
     corpseBattle:
       - STR_CORPSE_SUIT
-    isPowered: true
+    isSpacesuit: true
     storeItem: STR_FLYING_SUIT
     frontArmor: 116
     sideArmor: 96

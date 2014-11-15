@@ -4673,7 +4673,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1416062780 f:\git\openxcom\src\ruleset\armor.h
+1416071378 f:\git\openxcom\src\ruleset\armor.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5700,7 +5700,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1416034400 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1416064922 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5778,7 +5778,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1416034562 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1416040551 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5997,7 +5997,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1415853532 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1416040551 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6132,7 +6132,7 @@
 1414466440 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1415853531 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1416066650 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	<sstream>
 	"AliensCrashState.h"
@@ -7092,7 +7092,7 @@
 	"LocalizedText.h"
 	"Language.h"
 
-1413136956 source:f:\git\openxcom\src\engine\music.cpp
+1416065445 source:f:\git\openxcom\src\engine\music.cpp
 	"Music.h"
 	"Exception.h"
 	"Language.h"
@@ -7194,7 +7194,7 @@
 	<assert.h>
 	<stdlib.h>
 
-1416034681 source:f:\git\openxcom\src\engine\screen.cpp
+1416059667 source:f:\git\openxcom\src\engine\screen.cpp
 	"Screen.h"
 	"Action.h"
 	"CrossPlatform.h"
@@ -7469,7 +7469,7 @@
 1413136957 f:\git\openxcom\src\geoscape\confirmnewbasestate.h
 	"../Engine/State.h"
 
-1415853534 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
+1416037867 source:f:\git\openxcom\src\geoscape\confirmcydoniastate.cpp
 	"ConfirmCydoniaState.h"
 	"../Battlescape/BattlescapeGenerator.h"
 	"../Battlescape/BattlescapeState.h"
@@ -9204,7 +9204,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1416028533 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1416067213 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../fmath.h"
 	"../Basescape/BasescapeState.h"
@@ -9254,7 +9254,7 @@
 1413136960 source:f:\git\openxcom\src\ruleset\alienrace.cpp
 	"AlienRace.h"
 
-1416062908 source:f:\git\openxcom\src\ruleset\armor.cpp
+1416071380 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 
 1413136960 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
@@ -9511,7 +9511,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1415983326 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1416070378 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	<cmath>
 	<sstream>

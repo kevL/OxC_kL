@@ -44,7 +44,7 @@ Armor::Armor(const std::string& type)
 		_canHoldWeapon(false),
 		_forcedTorso(TORSO_USE_GENDER),
 		_isBasic(false),
-		_isPowered(false)
+		_isSpacesuit(false)
 {
 	_stats.tu			= 0;
 	_stats.stamina		= 0;
@@ -107,7 +107,7 @@ void Armor::load(const YAML::Node& node)
 	_size			= node["size"]						.as<int>(_size);
 	_weight			= node["weight"]					.as<int>(_weight);
 	_isBasic		= node["isBasic"]					.as<bool>(_isBasic);
-	_isPowered		= node["isPowered"]					.as<bool>(_isPowered);
+	_isSpacesuit	= node["isSpacesuit"]				.as<bool>(_isSpacesuit);
 
 	_stats.merge(node["stats"].as<UnitStats>(_stats));
 
@@ -367,9 +367,9 @@ bool Armor::isBasic() const
  * Gets if this Armor is powered and suitable for Mars.
  * @return, true if life-supporting
  */
-bool Armor::isPowered() const
+bool Armor::isSpacesuit() const
 {
-	return _isPowered;
+	return _isSpacesuit;
 }
 
 }

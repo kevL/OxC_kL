@@ -64,7 +64,7 @@ private:
 		_canHoldWeapon,
 		_constantAnimation,
 		_isBasic,
-		_isPowered;
+		_isSpacesuit;
 	int
 		_deathFrames,
 		_shootFrames,
@@ -162,7 +162,7 @@ private:
 		/// Gets if this Armor is basic (lowest rank, standard issue wear).
 		bool isBasic() const;
 		/// Gets if this Armor is powered and suitable for Mars.
-		bool isPowered() const;
+		bool isSpacesuit() const;
 };
 
 }
