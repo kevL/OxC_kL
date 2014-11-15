@@ -2341,7 +2341,7 @@ void AlienBAIState::selectFireMethod()
 }
 
 /**
- * Evaluates whether to throw a grenade at an enemy (or group of enemies) we can see.
+ * Evaluates whether to throw a grenade at a seen enemy or group of enemies.
  */
 void AlienBAIState::grenadeAction()
 {

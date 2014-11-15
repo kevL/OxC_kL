@@ -123,7 +123,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			i < sizeof(pal) / sizeof(pal[0]);
 			++i)
 	{
-		std::string s = "GEODATA/PALETTES.DAT";
+		const std::string s = "GEODATA/PALETTES.DAT";
 		_palettes[pal[i]] = new Palette();
 		_palettes[pal[i]]->loadDat(
 								CrossPlatform::getDataFile(s),
@@ -132,8 +132,9 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	}
 
 	{
-		std::string s1 = "GEODATA/BACKPALS.DAT";
-		std::string s2 = "BACKPALS.DAT";
+		const std::string
+			s1 = "GEODATA/BACKPALS.DAT",
+			s2 = "BACKPALS.DAT";
 		_palettes[s2] = new Palette();
 		_palettes[s2]->loadDat(
 							CrossPlatform::getDataFile(s1),
@@ -142,8 +143,9 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 	{
 		// Correct Battlescape palette
-		std::string s1 = "GEODATA/PALETTES.DAT";
-		std::string s2 = "PAL_BATTLESCAPE";
+		const std::string
+			s1 = "GEODATA/PALETTES.DAT",
+			s2 = "PAL_BATTLESCAPE";
 		_palettes[s2] = new Palette();
 		_palettes[s2]->loadDat(
 							CrossPlatform::getDataFile(s1),
@@ -175,7 +177,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 				i < sizeof(gradient) / sizeof(gradient[0]);
 				++i)
 		{
-			SDL_Color* color = _palettes[s2]->getColors(Palette::backPos + 16 + i);
+			SDL_Color* const color = _palettes[s2]->getColors(Palette::backPos + 16 + i);
 			*color = gradient[i];
 		}
 	}
@@ -190,7 +192,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			i != doc["fonts"].end();
 			++i)
 	{
-		std::string id = (*i)["id"].as<std::string>();
+		const std::string id = (*i)["id"].as<std::string>();
 		Font *font = new Font();
 		font->load(*i);
 		_fonts[id] = font;
@@ -641,7 +643,7 @@ MOVED TO Ruleset !
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicGM)))
 			gmcat = new GMCatFile(CrossPlatform::getDataFile(musicGM).c_str());
 
-		// We have the assignments, we only need to load the required files now.
+		// We have the assignments, only need to load the required files now.
 		for (std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, int> > > >::const_iterator
 				i = _musicAssignment.begin();
 				i != _musicAssignment.end();
@@ -965,28 +967,29 @@ MOVED TO Ruleset !
 
 
 		/* SOUNDS fx */
-		if (rules->getSoundDefinitions()->empty())
+		if (rules->getSoundDefinitions()->empty() == true) // Load sounds
 		{
-			std::string catsId[] = // Load sounds
-			{
-				"GEO.CAT",
-				"BATTLE.CAT"
-			};
-			std::string catsDos[] =
-			{
-				"SOUND2.CAT",
-				"SOUND1.CAT"
-			};
-			std::string catsWin[] =
-			{
-				"SAMPLE.CAT",
-				"SAMPLE2.CAT"
-			};
+			std::string
+				catsId[] =
+				{
+					"GEO.CAT",
+					"BATTLE.CAT"
+				},
+				catsWin[] =
+				{
+					"SAMPLE.CAT",
+					"SAMPLE2.CAT"
+				},
+				catsDos[] =
+				{
+					"SOUND2.CAT",
+					"SOUND1.CAT"
+				};
 
 			// Try the preferred format first, otherwise use the default priority
 			std::string* cats[] =
 			{
-				0,
+				NULL,
 				catsWin,
 				catsDos
 			};
@@ -1123,8 +1126,8 @@ MOVED TO Ruleset !
 												y,
 												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79? 2: 1))); */
 
-	// now, let's adjust the battlescape info screen.
-	// erase the old lines, no need to worry about dithering on this one.
+	// Adjust the battlescape unit-info screen:
+	// erase the old lines, no need to worry about dithering on this one
 	for (int y = 39; y < 199; y += 10)
 		for (int x = 0; x < 169; ++x)
 			_surfaces["UNIBORD.PCK"]->setPixelColor(
@@ -1138,7 +1141,7 @@ MOVED TO Ruleset !
 												x,
 												y,
 												_surfaces["UNIBORD.PCK"]->getPixelColor(x, 199));
-	// move the top of the graph down by eight pixels to erase the row we don't need (we actually created ~1.8 extra rows earlier)
+	// move the top of the graph down by eight pixels to erase the row they don't need (we actually created ~1.8 extra rows earlier)
 	for (int y = 37; y > 29; --y)
 		for (int x = 0; x < 320; ++x)
 		{

@@ -174,7 +174,6 @@ void NextTurnState::handle(Action* action)
 //		_turnCounter->update();
 
 		_state->updateTurn(); // kL
-
 		close();
 	}
 }
@@ -184,7 +183,7 @@ void NextTurnState::handle(Action* action)
  */
 void NextTurnState::think()
 {
-	if (_timer)
+	if (_timer != NULL)
 		_timer->think(this, NULL);
 }
 
@@ -198,8 +197,9 @@ void NextTurnState::close()
 
 	_game->popState();
 
-	int liveAliens = 0;
-	int liveSoldiers = 0;
+	int
+		liveAliens = 0,
+		liveSoldiers = 0;
 
 	_state->getBattleGame()->tallyUnits(
 									liveAliens,
@@ -223,7 +223,7 @@ void NextTurnState::close()
 			if (_battleGame->getTurn() == 1
 				|| _battleGame->getTurn() %Options::autosaveFrequency == 0)
 			{
-				if (_game->getSavedGame()->isIronman())
+				if (_game->getSavedGame()->isIronman() == true)
 					_game->pushState(new SaveGameState(
 													OPT_BATTLESCAPE,
 													SAVE_IRONMAN,

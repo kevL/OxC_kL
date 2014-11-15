@@ -69,6 +69,7 @@ ConfirmCydoniaState::ConfirmCydoniaState(Craft* craft)
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 

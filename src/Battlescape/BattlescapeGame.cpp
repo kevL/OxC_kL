@@ -612,7 +612,7 @@ void BattlescapeGame::endGameTurn()
 			i < _save->getMapSizeXYZ();
 			++i) // check for hot grenades on the ground
 	{
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				j = _save->getTiles()[i]->getInventory()->begin();
 				j != _save->getTiles()[i]->getInventory()->end();
 				)
@@ -674,7 +674,7 @@ void BattlescapeGame::endGameTurn()
 
 	if (_save->getSide() != FACTION_NEUTRAL) // tick down grenade timers
 	{
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = _save->getItems()->begin();
 				i != _save->getItems()->end();
 				++i)
@@ -689,7 +689,7 @@ void BattlescapeGame::endGameTurn()
 	}
 
 	// kL_begin: battleUnit is burning...
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
@@ -738,7 +738,7 @@ void BattlescapeGame::endGameTurn()
 	// turn off MCed alien lighting.
 	_save->getTileEngine()->calculateUnitLighting();
 
-	if (_save->isObjectiveDestroyed())
+	if (_save->isObjectiveDestroyed() == true)
 	{
 		_parentState->finishBattle(
 								false,
@@ -1966,7 +1966,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 												false));
 			}
 
-			for (std::vector<BattleUnit*>::iterator
+			for (std::vector<BattleUnit*>::const_iterator
 					j = unit->getVisibleUnits()->begin();
 					j != unit->getVisibleUnits()->end();
 					++j)

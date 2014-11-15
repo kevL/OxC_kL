@@ -19,7 +19,7 @@
 
 #include "ResourcePack.h"
 
-#include <SDL_mixer.h>
+//#include <SDL_mixer.h>
 
 #include "../Engine/Font.h"
 #include "../Engine/Logger.h"
@@ -85,7 +85,7 @@ ResourcePack::~ResourcePack()
 	delete _muteMusic;
 	delete _muteSound;
 
-	for (std::map<std::string, Font*>::iterator
+	for (std::map<std::string, Font*>::const_iterator
 			i = _fonts.begin();
 			i != _fonts.end();
 			++i)
@@ -93,7 +93,7 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 
-	for (std::map<std::string, Surface*>::iterator
+	for (std::map<std::string, Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
@@ -101,7 +101,7 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 
-	for (std::map<std::string, SurfaceSet*>::iterator
+	for (std::map<std::string, SurfaceSet*>::const_iterator
 			i = _sets.begin();
 			i != _sets.end();
 			++i)
@@ -109,7 +109,7 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 
-	for (std::map<std::string, Palette*>::iterator
+	for (std::map<std::string, Palette*>::const_iterator
 			i = _palettes.begin();
 			i != _palettes.end();
 			++i)
@@ -117,7 +117,7 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 
-	for (std::map<std::string, Music*>::iterator
+	for (std::map<std::string, Music*>::const_iterator
 			i = _musics.begin();
 			i != _musics.end();
 			++i)
@@ -125,15 +125,15 @@ ResourcePack::~ResourcePack()
 		delete i->second;
 	}
 
-	for (std::map<std::string, Music*>::iterator
-			i = _musicFile.begin(); // sza_MusicRules
-			i != _musicFile.end(); // sza_MusicRules
+	for (std::map<std::string, Music*>::const_iterator // sza_MusicRules
+			i = _musicFile.begin();
+			i != _musicFile.end();
 			++i)
 	{
 		delete i->second;
 	}
 
-	for (std::map<std::string, SoundSet*>::iterator
+	for (std::map<std::string, SoundSet*>::const_iterator
 			i = _sounds.begin();
 			i != _sounds.end();
 			++i)
@@ -149,7 +149,7 @@ ResourcePack::~ResourcePack()
  */
 Font* ResourcePack::getFont(const std::string& name) const
 {
-	std::map<std::string, Font*>::const_iterator i = _fonts.find(name);
+	const std::map<std::string, Font*>::const_iterator i = _fonts.find(name);
 
 	if (i != _fonts.end())
 		return i->second;
@@ -164,7 +164,7 @@ Font* ResourcePack::getFont(const std::string& name) const
  */
 Surface* ResourcePack::getSurface(const std::string& name) const
 {
-	std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
+	const std::map<std::string, Surface*>::const_iterator i = _surfaces.find(name);
 
 	if (i != _surfaces.end())
 		return i->second;
@@ -180,7 +180,7 @@ Surface* ResourcePack::getSurface(const std::string& name) const
 SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 {
 	//Log(LOG_INFO) << "ResourcePack::getSurfaceSet()";
-	std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
+	const std::map<std::string, SurfaceSet*>::const_iterator i = _sets.find(name);
 
 	if (i != _sets.end())
 	{
@@ -200,31 +200,31 @@ Music* ResourcePack::getMusic(const std::string& name) const
 {
 	if (Options::mute)
 		return _muteMusic;
-	else
-	{
-		return getRandomMusic(name, ""); // sza_MusicRules
-/*		std::map<std::string, Music*>::const_iterator i = _musics.find(name);
 
-		if (_musics.end() != i)
-			return i->second;
-		else
-			return 0; */
-	}
+	return getRandomMusic(name, ""); // sza_MusicRules
+/*	std::map<std::string, Music*>::const_iterator i = _musics.find(name);
+
+	if (_musics.end() != i)
+		return i->second;
+	else
+		return 0; */
 }
 
 /**
  * Plays the specified track if it's not already playing.
  * @param name		- reference the name of a Music
- * @param random	- true to pick a random track
- * @param terrain	- reference the RuleTerrain
+ * @param random	- true to pick a random track (default false)
+ * @param terrain	- reference the RuleTerrain type (default "")
  */
 void ResourcePack::playMusic(
 		const std::string& name,
 		bool random,
 		const std::string& terrain) // kL: sza_MusicRules
 {
-	if (!Options::mute
-		&& _playingMusic != name)
+	if (Options::mute)
+		return;
+
+	if (_playingMusic != name)
 	{
 		int loop = -1;
 		_playingMusic = name;
@@ -239,9 +239,9 @@ void ResourcePack::playMusic(
 			loop = 0;
 		}
 
-		if (random)
-//kL		getRandomMusic(name)->play(loop);
+		if (random == true)
 			getRandomMusic(name, terrain)->play(loop); // kL: sza_MusicRules
+//			getRandomMusic(name)->play(loop);
 		else
 			getMusic(name)->play(loop);
 	}
@@ -250,7 +250,7 @@ void ResourcePack::playMusic(
 /**
  * Returns a random music from the resource set.
  * @param name		- reference the name of a Music to pick from
- * @param terrain	- reference the RuleTerrain
+ * @param terrain	- reference the RuleTerrain type
  * @return, pointer to the Music
  */
 Music* ResourcePack::getRandomMusic(
@@ -259,79 +259,77 @@ Music* ResourcePack::getRandomMusic(
 {
 	if (Options::mute)
 		return _muteMusic;
-	else // sza_MusicRules
+
+	// sza_MusicRules
+	if (terrain == "")
+		Log(LOG_DEBUG) << "MUSIC : Request " << name;
+	else
+		Log(LOG_DEBUG) << "MUSIC : Request " << name << " for terrainType " << terrain;
+
+	if (_musicAssignment.find(name) == _musicAssignment.end())
 	{
-		if (terrain == "")
-			Log(LOG_DEBUG) << "MUSIC : Request " << name;
-		else
-			Log(LOG_DEBUG) << "MUSIC : Request " << name << " for terrainType " << terrain;
-
-		if (_musicAssignment.find(name) == _musicAssignment.end())
-		{
-			Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music assignment: return MUTE [0]";
-			return _muteMusic;
-		}
-
-		std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
-		if (assignment.find(terrain) == assignment.end())
-		{
-			Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music for terrain: return MUTE [1]";
-			return _muteMusic;
-		}
-
-		std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
-		int musicRand = SDL_GetTicks() %musicCodes.size();				// kL
-		std::pair<std::string, int> randMusic = musicCodes[musicRand];	// kL
-//		std::pair<std::string, int> randMusic = musicCodes[RNG::generate(0, musicCodes.size() - 1)];
-		Log(LOG_DEBUG) << "MUSIC : " << randMusic.first;
-		Log(LOG_INFO) << "MUSIC : " << randMusic.first;
-
-		Music* music = _musicFile.at(randMusic.first);
-
-		return music;
+		Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music assignment: return MUTE [0]";
+		return _muteMusic;
 	}
-}
-/*		std::vector<Music*> music;
-		for (std::map<std::string, Music*>::const_iterator
-				i = _musics.begin();
-				i != _musics.end();
-				++i)
-		{
-			if (i->first.find(name) != std::string::npos)
-				music.push_back(i->second);
-		}
 
-		if (_musics.empty())
-			return _muteMusic;
-		else
-			return music[SDL_GetTicks() %music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
-//			return music[RNG::generate(0, static_cast<int>(music.size()) - 1)]; // Old
-	} */
+	const std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
+	if (assignment.find(terrain) == assignment.end())
+	{
+		Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music for terrain: return MUTE [1]";
+		return _muteMusic;
+	}
+
+	const std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
+	const int musicRand = SDL_GetTicks() %musicCodes.size();		// kL
+	std::pair<std::string, int> randMusic = musicCodes[musicRand];	// kL
+//	std::pair<std::string, int> randMusic = musicCodes[RNG::generate(0, musicCodes.size() - 1)];
+	Log(LOG_DEBUG) << "MUSIC : " << randMusic.first;
+	Log(LOG_INFO) << "MUSIC : " << randMusic.first;
+
+	Music* const music = _musicFile.at(randMusic.first);
+
+	return music;
+}
+/*	std::vector<Music*> music;
+	for (std::map<std::string, Music*>::const_iterator
+			i = _musics.begin();
+			i != _musics.end();
+			++i)
+	{
+		if (i->first.find(name) != std::string::npos)
+			music.push_back(i->second);
+	}
+
+	if (_musics.empty())
+		return _muteMusic;
+	else
+		return music[SDL_GetTicks() %music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
+//		return music[RNG::generate(0, static_cast<int>(music.size()) - 1)]; */
 
 /**
  * Clear a music assignment.
- * @param name		-
- * @param terrain	-
+ * @param name		- reference the name of a Music
+ * @param terrain	- reference the RuleTerrain type
  */
 void ResourcePack::ClearMusicAssignment( // sza_MusicRules
 		const std::string& name,
 		const std::string& terrain)
 {
-	if (_musicAssignment.find(name) == _musicAssignment.end())
+	if (_musicAssignment.find(name) == _musicAssignment.end()
+		|| _musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
+	{
 		return;
-
-	if (_musicAssignment.at(name).find(terrain) == _musicAssignment.at(name).end())
-		return;
+	}
 
 	_musicAssignment.at(name).at(terrain).clear();
 }
 
 /**
  * Make a music assignment.
- * @param name			-
- * @param terrain		-
- * @param filenames		-
- * @param midiIndexes	-
+ * @param name			- reference the name of a Music
+ * @param terrain		- reference the RuleTerrain type
+ * @param filenames		- reference a vector of filenames
+ * @param midiIndexes	- reference a vector of indices
  */
 void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 		const std::string& name,
@@ -406,7 +404,7 @@ void ResourcePack::setPalette(
 		int firstcolor,
 		int ncolors)
 {
-	for (std::map<std::string, Font*>::iterator
+	for (std::map<std::string, Font*>::const_iterator
 			i = _fonts.begin();
 			i != _fonts.end();
 			++i)
@@ -414,7 +412,7 @@ void ResourcePack::setPalette(
 		i->second->getSurface()->setPalette(colors, firstcolor, ncolors);
 	}
 
-	for (std::map<std::string, Surface*>::iterator
+	for (std::map<std::string, Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
@@ -423,7 +421,7 @@ void ResourcePack::setPalette(
 			i->second->setPalette(colors, firstcolor, ncolors);
 	}
 
-	for (std::map<std::string, SurfaceSet*>::iterator
+	for (std::map<std::string, SurfaceSet*>::const_iterator
 			i = _sets.begin();
 			i != _sets.end();
 			++i)
@@ -458,8 +456,8 @@ Sound* ResourcePack::getSoundByDepth(
 }
 
 /**
- * Gets lookup tables.
- * @return, address of lookup tables
+ * Gets transparency lookup tables.
+ * @return, pointer to a vector of vectors of colors
  */
 const std::vector<std::vector<Uint8> >* ResourcePack::getLUTs() const
 {

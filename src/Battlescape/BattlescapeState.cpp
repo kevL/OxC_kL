@@ -3404,9 +3404,10 @@ void BattlescapeState::finishBattle(
 		_gameTimer->stop();
 		_game->popState();
 
-		if (abort
-			|| (abort == false
-				&& inExitArea == 0))
+		if (abort == true
+			|| inExitArea == 0)
+//			|| (abort == false
+//				&& inExitArea == 0))
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission

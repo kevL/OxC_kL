@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_SCREEN_H
 #define OPENXCOM_SCREEN_H
 
-#include <SDL.h>
-#include <string>
+//#include <SDL.h>
+//#include <string>
 
 #include "OpenGL.h"
 
@@ -82,8 +82,9 @@ private:
 
 
 	public:
-		static const int ORIGINAL_WIDTH;
-		static const int ORIGINAL_HEIGHT;
+		static const int
+			ORIGINAL_WIDTH,
+			ORIGINAL_HEIGHT;
 
 		/// Creates a new display screen.
 		Screen();

@@ -616,7 +616,7 @@ double Globe::lastVisibleLat(double lon) const
  * Checks if a polar point is inside a certain polygon.
  * @param lon	- longitude of the point
  * @param lat	- latitude of the point
- * @param poly	- pointer to the polygon
+ * @param poly	- pointer to the Polygon
  * @return, true if it's inside
  */
 bool Globe::insidePolygon(
@@ -940,30 +940,32 @@ bool Globe::insideLand(
 		double lon,
 		double lat) const
 {
-	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
-	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE < read: normal c++ practice.
-
-	bool inside = false;
+	// This only temporarily changes cenLon/cenLat so the "const" is actually preserved.
+/*	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE < read: normal c++ practice!
 
 	double
 		oldLon = _cenLon,
 		oldLat = _cenLat;
 	globe->_cenLon = lon;
-	globe->_cenLat = lat;
+	globe->_cenLat = lat; */
 
-	for (std::list<Polygon*>::iterator
+	bool ret = false;
+	for (std::list<Polygon*>::const_iterator
 			i = _rules->getPolygons()->begin();
 			i != _rules->getPolygons()->end()
-				&& inside == false;
+				&& ret == false;
 			++i)
 	{
-		inside = insidePolygon(lon, lat, *i);
+		ret = insidePolygon(
+						lon,
+						lat,
+						*i);
 	}
 
-	globe->_cenLon = oldLon;
-	globe->_cenLat = oldLat;
+/*	globe->_cenLon = oldLon;
+	globe->_cenLat = oldLat; */
 
-	return inside;
+	return ret;
 }
 
 /**
@@ -3003,31 +3005,32 @@ void Globe::getPolygonTextureAndShade(
 													getSunDirection(lon, lat),
 													0)];
 
-	// We're only temporarily changing cenLon/cenLat so the "const" is actually preserved
-	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
+	// This only temporarily changes cenLon/cenLat so the "const" is actually preserved.
+/*	Globe* const globe = const_cast<Globe* const>(this); // WARNING: BAD CODING PRACTICE
 
 	double
 		oldLon = _cenLon,
 		oldLat = _cenLat;
-
 	globe->_cenLon = lon;
-	globe->_cenLat = lat;
+	globe->_cenLat = lat; */
 
-	for (std::list<Polygon*>::iterator
+	for (std::list<Polygon*>::const_iterator
 			i = _rules->getPolygons()->begin();
 			i != _rules->getPolygons()->end();
 			++i)
 	{
-		if (insidePolygon(lon, lat, *i))
+		if (insidePolygon(
+						lon,
+						lat,
+						*i))
 		{
 			*texture = (*i)->getTexture();
-
 			break;
 		}
 	}
 
-	globe->_cenLon = oldLon;
-	globe->_cenLat = oldLat;
+/*	globe->_cenLon = oldLon;
+	globe->_cenLat = oldLat; */
 }
 
 /**

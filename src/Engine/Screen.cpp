@@ -19,14 +19,14 @@
 
 #include "Screen.h"
 
-#include <cmath>
-#include <iomanip>
-#include <sstream>
+//#include <cmath>
+//#include <iomanip>
+//#include <sstream>
 
-#include <limits.h>
-#include <SDL.h>
+//#include <limits.h>
+//#include <SDL.h>
 
-#include "../lodepng.h"
+//#include "../lodepng.h"
 
 #include "Action.h"
 #include "CrossPlatform.h"
@@ -41,8 +41,9 @@
 namespace OpenXcom
 {
 
-const int Screen::ORIGINAL_WIDTH	= 320;
-const int Screen::ORIGINAL_HEIGHT	= 200;
+const int
+	Screen::ORIGINAL_WIDTH	= 320,
+	Screen::ORIGINAL_HEIGHT	= 200;
 
 
 /**
@@ -57,7 +58,7 @@ void Screen::makeVideoFlags()
 		_flags |= SDL_ASYNCBLIT;
 	}
 
-	if (isOpenGLEnabled())
+	if (isOpenGLEnabled() == true)
 	{
 		_flags = SDL_OPENGL;
 
@@ -127,7 +128,7 @@ Screen::Screen()
 		_numColors(0),
 		_firstColor(0),
 		_pushPalette(false),
-		_surface(0)
+		_surface(NULL)
 {
 	resetDisplay();
 	memset(
@@ -224,7 +225,7 @@ void Screen::flip()
 {
 	if (getWidth() != _baseWidth
 		|| getHeight() != _baseHeight
-		|| isOpenGLEnabled())
+		|| isOpenGLEnabled() == true)
 	{
 		Zoom::flipWithZoom(
 					_surface->getSurface(),
@@ -245,8 +246,8 @@ void Screen::flip()
 	}
 
 	// perform any requested palette update
-	if (_pushPalette
-		&& _numColors
+	if (_pushPalette == true
+		&& _numColors != 0
 		&& _screen->format->BitsPerPixel == 8)
 	{
 		if (_screen->format->BitsPerPixel == 8
@@ -254,8 +255,7 @@ void Screen::flip()
 						_screen,
 						&(deferredPalette[_firstColor]),
 						_firstColor,
-						_numColors)
-					== 0)
+						_numColors) == 0)
 		{
 			Log(LOG_INFO) << "Display palette doesn't match requested palette";
 		}
@@ -302,7 +302,7 @@ void Screen::setPalette(
 		int ncolors,
 		bool immediately)
 {
-	if (_numColors
+	if (_numColors != 0
 		&& _numColors != ncolors
 		&& _firstColor != firstcolor)
 	{
@@ -326,14 +326,18 @@ void Screen::setPalette(
 	}
 
 	_surface->setPalette(
-					colors,
-					firstcolor,
-					ncolors);
+						colors,
+						firstcolor,
+						ncolors);
 
 	// defer actual update of screen until SDL_Flip()
-	if (immediately
+	if (immediately == true
 		&& _screen->format->BitsPerPixel == 8
-		&& SDL_SetColors(_screen, colors, firstcolor, ncolors) == 0)
+		&& SDL_SetColors(
+					_screen,
+					colors,
+					firstcolor,
+					ncolors) == 0)
 	{
 		Log(LOG_DEBUG) << "Display palette doesn't match requested palette";
 	}
@@ -388,8 +392,9 @@ int Screen::getHeight() const
  */
 void Screen::resetDisplay(bool resetVideo)
 {
-	int width	= Options::displayWidth;
-	int height	= Options::displayHeight;
+	int
+		width = Options::displayWidth,
+		height = Options::displayHeight;
 
 #ifdef __linux__
 	Uint32 oldFlags = _flags;
@@ -397,13 +402,17 @@ void Screen::resetDisplay(bool resetVideo)
 
 	makeVideoFlags();
 
-	if (!_surface
-		|| (_surface // don't reallocate _surface if not necessary, it's a waste of CPU cycles
+/*	if (_surface == NULL
+		|| (_surface != NULL // don't reallocate _surface if not necessary, it's a waste of CPU cycles
 			&& (_surface->getSurface()->format->BitsPerPixel != static_cast<Uint8>(_bpp)
 				|| _surface->getSurface()->w != _baseWidth
-				|| _surface->getSurface()->h != _baseHeight)))
+				|| _surface->getSurface()->h != _baseHeight))) */
+	if (_surface == NULL // don't reallocate _surface if not necessary, it's a waste of CPU cycles
+		|| _surface->getSurface()->format->BitsPerPixel != static_cast<Uint8>(_bpp)
+		|| _surface->getSurface()->w != _baseWidth
+		|| _surface->getSurface()->h != _baseHeight)
 	{
-		if (_surface)
+		if (_surface != NULL)
 			delete _surface;
 
 		_surface = new Surface( // only HQX needs 32bpp for this surface; the OpenGL class has its own 32bpp buffer
@@ -422,7 +431,8 @@ void Screen::resetDisplay(bool resetVideo)
 				0,
 				0);
 
-	if (resetVideo || _screen->format->BitsPerPixel != _bpp)
+	if (resetVideo == true
+		|| _screen->format->BitsPerPixel != _bpp)
 	{
 #ifdef __linux__
 		// Workaround for segfault when switching to opengl
@@ -466,8 +476,8 @@ void Screen::resetDisplay(bool resetVideo)
 	else
 		clear();
 
-	Options::displayWidth	= getWidth();
-	Options::displayHeight	= getHeight();
+	Options::displayWidth = getWidth();
+	Options::displayHeight = getHeight();
 
 	_scaleX = static_cast<double>(getWidth()) / static_cast<double>(_baseWidth);
 	_scaleY = static_cast<double>(getHeight()) / static_cast<double>(_baseHeight);
@@ -542,7 +552,7 @@ void Screen::resetDisplay(bool resetVideo)
 	else
 		_topBlackBand = _bottomBlackBand = _leftBlackBand = _rightBlackBand = _cursorTopBlackBand = _cursorLeftBlackBand = 0;
 
-	if (isOpenGLEnabled())
+	if (isOpenGLEnabled() == true)
 	{
 #ifndef __NO_OPENGL
 		glOutput.init(_baseWidth, _baseHeight);
@@ -610,7 +620,7 @@ void Screen::screenshot(const std::string& filename) const
 											0xff0000,
 											0);
 
-	if (isOpenGLEnabled())
+	if (isOpenGLEnabled() == true)
 	{
 #ifndef __NO_OPENGL
 		GLenum format = GL_RGB;
@@ -663,10 +673,11 @@ void Screen::screenshot(const std::string& filename) const
  */
 bool Screen::is32bitEnabled()
 {
-	int w = Options::displayWidth;
-	int h = Options::displayHeight;
-	int baseW = Options::baseXResolution;
-	int baseH = Options::baseYResolution;
+	int
+		w = Options::displayWidth,
+		h = Options::displayHeight,
+		baseW = Options::baseXResolution,
+		baseH = Options::baseYResolution;
 
 	return ((Options::useHQXFilter || Options::useXBRZFilter)
 			&& ((w == baseW * 2
@@ -761,14 +772,14 @@ void Screen::updateScale(
 		break;
 	}
 
-	width	= std::max(
+	width = std::max(
 					width,
 					Screen::ORIGINAL_WIDTH);
-	height	= std::max(
+	height = std::max(
 					height,
 					Screen::ORIGINAL_HEIGHT);
 
-	if (change
+	if (change == true
 		&& (Options::baseXResolution != width
 			|| Options::baseYResolution != height))
 	{

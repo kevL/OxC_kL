@@ -162,12 +162,12 @@ SelectDestinationState::SelectDestinationState(
 //kL	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 //kL	_txtTitle->setWordWrap();
 
-	if (!_craft->getRules()->getSpacecraft()
-		|| !_game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST"))
+	if (_craft->getRules()->getSpacecraft() == false
+		|| _game->getSavedGame()->isResearched("STR_CYDONIA_OR_BUST") == false)
 	{
 		_btnCydonia->setVisible(false);
 	}
-	else
+	else // if all Soldiers have Power or Flight suits .......
 	{
 		_btnCydonia->setColor(Palette::blockOffset(8)+5);
 		_btnCydonia->setText(tr("STR_CYDONIA"));

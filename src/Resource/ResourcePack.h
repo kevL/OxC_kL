@@ -20,11 +20,11 @@
 #ifndef OPENXCOM_RESOURCEPACK_H
 #define OPENXCOM_RESOURCEPACK_H
 
-#include <map>
-#include <string>
-#include <vector>
+//#include <map>
+//#include <string>
+//#include <vector>
 
-#include <SDL.h>
+//#include <SDL.h>
 
 
 namespace OpenXcom
@@ -57,12 +57,12 @@ private:
 
 
 	protected:
-		std::map<std::string, Font*>		_fonts;
-		std::map<std::string, Music*>		_musics;
-		std::map<std::string, Palette*>		_palettes;
-		std::map<std::string, Surface*>		_surfaces;
-		std::map<std::string, SurfaceSet*>	_sets;
-		std::map<std::string, SoundSet*>	_sounds;
+		std::map<std::string, Font*> _fonts;
+		std::map<std::string, Music*> _musics;
+		std::map<std::string, Palette*> _palettes;
+		std::map<std::string, Surface*> _surfaces;
+		std::map<std::string, SurfaceSet*> _sets;
+		std::map<std::string, SoundSet*> _sounds;
 
 		std::map<std::string, Music*> _musicFile; // sza_MusicRules
 		std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, int> > > > _musicAssignment; // sza_MusicRules
