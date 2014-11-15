@@ -46,8 +46,8 @@ namespace OpenXcom
  * Initializes a new soldier, either blank or randomly generated.
  * @param rules	- pointer to RuleSoldier
  * @param armor	- pointer to Armor
- * @param names	- pointer to a vector of pointers to SoldierNamePool
- * @param id	- unique soldier ID for soldier generation
+ * @param names	- pointer to a vector of pointers to SoldierNamePool (default NULL)
+ * @param id	- unique soldier ID for soldier generation (default 0)
  */
 Soldier::Soldier(
 		RuleSoldier* rules,
@@ -55,20 +55,20 @@ Soldier::Soldier(
 		const std::vector<SoldierNamePool*>* names,
 		int id)
 	:
-		_id(id),
-		_gainPsiSkl(0),
-		_gainPsiStr(0),
 		_rules(rules),
+		_armor(armor),
+		_id(id),
 		_rank(RANK_ROOKIE),
-		_craft(NULL),
 		_gender(GENDER_MALE),
 		_look(LOOK_BLONDE),
+		_craft(NULL),
 		_missions(0),
 		_kills(0),
 		_recovery(0),
-		_recentlyPromoted(false),
+		_gainPsiSkl(0),
+		_gainPsiStr(0),
 		_psiTraining(false),
-		_armor(armor)
+		_recentlyPromoted(false)
 {
 	_diary = new SoldierDiary();
 
@@ -139,7 +139,7 @@ Soldier::Soldier(
  */
 Soldier::~Soldier()
 {
-	for (std::vector<EquipmentLayoutItem*>::iterator
+	for (std::vector<EquipmentLayoutItem*>::const_iterator
 			i = _equipmentLayout.begin();
 			i != _equipmentLayout.end();
 			++i)
@@ -175,7 +175,7 @@ void Soldier::load(
 	_gainPsiSkl		= node["gainPsiSkl"]				.as<int>(_gainPsiSkl);
 	_gainPsiStr		= node["gainPsiStr"]				.as<int>(_gainPsiStr);
 
-	Armor* armor = rule->getArmor(node["armor"].as<std::string>());
+	Armor* armor = rule->getArmor(node["armor"]			.as<std::string>());
 	if (armor == NULL)
 		armor = rule->getArmor("STR_ARMOR_NONE_UC");
 
@@ -188,7 +188,7 @@ void Soldier::load(
 				i != layout.end();
 				++i)
 		{
-			EquipmentLayoutItem* layoutItem = new EquipmentLayoutItem(*i);
+			EquipmentLayoutItem* const layoutItem = new EquipmentLayoutItem(*i);
 			if (rule->getInventory(layoutItem->getSlot()))
 				_equipmentLayout.push_back(layoutItem);
 			else
@@ -256,8 +256,8 @@ YAML::Node Soldier::save() const
 }
 
 /**
- * Returns the soldier's rules.
- * @return, rulesoldier
+ * Gets this Soldier's rules.
+ * @return, pointer to RuleSoldier
  */
 RuleSoldier* Soldier::getRules() const
 {
@@ -265,10 +265,8 @@ RuleSoldier* Soldier::getRules() const
 }
 
 /**
- * Add a mission to the counter.
- */
-/**
- * Get pointer to initial stats.
+ * Gets this Soldier's initial stats.
+ * @return, pointer to UnitStats
  */
 UnitStats* Soldier::getInitStats()
 {
@@ -276,7 +274,8 @@ UnitStats* Soldier::getInitStats()
 }
 
 /**
- * Get pointer to current stats.
+ * Gets this Soldier's current stats.
+ * @return, pointer to UnitStats
  */
 UnitStats* Soldier::getCurrentStats()
 {
@@ -284,9 +283,9 @@ UnitStats* Soldier::getCurrentStats()
 }
 
 /**
- * Returns the soldier's unique ID. Each soldier
- * can be identified by its ID. (not its name)
- * @return, Unique ID.
+ * Gets this Soldier's unique ID.
+ * Each soldier can be identified by its ID (not its name).
+ * @return, unique ID
  */
 int Soldier::getId() const
 {
@@ -294,7 +293,7 @@ int Soldier::getId() const
 }
 
 /**
- * Gets the soldier's full name (and, optionally, statString).
+ * Gets this Soldier's full name and optionally statString.
  * @param statstring	- true to add stat string
  * @param maxLength		- restrict length to this value
  * @return, soldier name
@@ -303,7 +302,7 @@ std::wstring Soldier::getName(
 		bool statstring,
 		size_t maxLength) const
 {
-	if (statstring
+	if (statstring == true
 		&& _statString.empty() == false)
 	{
 		if (_name.length() + _statString.length() > maxLength)
@@ -326,8 +325,8 @@ std::wstring Soldier::getName(
 }
 
 /**
- * Changes the soldier's full name.
- * @param name, Soldier name.
+ * Changes this Soldier's full name.
+ * @param name - reference the soldier name
  */
 void Soldier::setName(const std::wstring& name)
 {
@@ -335,8 +334,8 @@ void Soldier::setName(const std::wstring& name)
 }
 
 /**
- * Returns the craft the soldier is assigned to.
- * @return, Pointer to craft.
+ * Gets the craft this Soldier is assigned to.
+ * @return, pointer to Craft
  */
 Craft* Soldier::getCraft() const
 {
@@ -344,8 +343,8 @@ Craft* Soldier::getCraft() const
 }
 
 /**
- * Assigns the soldier to a craft.
- * @param, craft Pointer to craft.
+ * Assigns this Soldier to a craft.
+ * @param craft - pointer to Craft
  */
 void Soldier::setCraft(Craft* craft)
 {
@@ -353,10 +352,10 @@ void Soldier::setCraft(Craft* craft)
 }
 
 /**
- * Returns the soldier's craft string, which is either the
+ * Gets this Soldier's craft string, which is either the
  * soldier's wounded status, the assigned craft name, or none.
- * @param lang, Language to get strings from.
- * @return, Full name.
+ * @param lang - pointer to Language to get strings from
+ * @return, full name
  */
 std::wstring Soldier::getCraftString(Language* lang) const
 {
@@ -373,9 +372,8 @@ std::wstring Soldier::getCraftString(Language* lang) const
 }
 
 /**
- * Returns a localizable-string representation of
- * the soldier's military rank.
- * @return, String ID for rank.
+ * Gets a localizable-string representation of this Soldier's military rank.
+ * @return, string ID for rank
  */
 std::string Soldier::getRankString() const
 {
@@ -396,9 +394,9 @@ std::string Soldier::getRankString() const
 }
 
 /**
- * Returns a graphic representation of the soldier's military rank.
+ * Gets a graphic representation of this Soldier's military rank.
  * @note THE MEANING OF LIFE
- * @return, Sprite ID for rank
+ * @return, sprite ID for rank
  */
 int Soldier::getRankSprite() const
 {
@@ -406,8 +404,8 @@ int Soldier::getRankSprite() const
 }
 
 /**
- * Returns the soldier's military rank.
- * @return, Rank enum.
+ * Gets this Soldier's military rank.
+ * @return, rank enum
  */
 SoldierRank Soldier::getRank() const
 {
@@ -415,7 +413,7 @@ SoldierRank Soldier::getRank() const
 }
 
 /**
- * Increase the soldier's military rank.
+ * Increases this Soldier's military rank.
  */
 void Soldier::promoteRank()
 {
@@ -425,14 +423,17 @@ void Soldier::promoteRank()
 		_recentlyPromoted = true;
 }
 
+/**
+ * Adds a mission to this Soldier's mission counter.
+ */
 void Soldier::addMissionCount()
 {
 	_missions++;
 }
 
 /**
- * Returns the soldier's amount of missions.
- * @return, Missions.
+ * Gets this Soldier's quantity of missions.
+ * @return, missions
  */
 int Soldier::getMissions() const
 {
@@ -440,7 +441,8 @@ int Soldier::getMissions() const
 }
 
 /**
- * Add a kill to the counter.
+ * Adds a kill to this Soldier's kill counter.
+ * @param count - quantity of kills to add
  */
 void Soldier::addKillCount(int count)
 {
@@ -448,8 +450,8 @@ void Soldier::addKillCount(int count)
 }
 
 /**
- * Returns the soldier's amount of kills.
- * @return, Kills.
+ * Gets this Soldier's quantity of kills.
+ * @return, kills
  */
 int Soldier::getKills() const
 {
@@ -457,8 +459,8 @@ int Soldier::getKills() const
 }
 
 /**
- * Returns the soldier's gender.
- * @return, Gender.
+ * Gets this Soldier's gender.
+ * @return, gender enum
  */
 SoldierGender Soldier::getGender() const
 {
@@ -466,8 +468,8 @@ SoldierGender Soldier::getGender() const
 }
 
 /**
- * Returns the soldier's look.
- * @return, Look.
+ * Gets this Soldier's look.
+ * @return, look enum
  */
 SoldierLook Soldier::getLook() const
 {
@@ -475,20 +477,20 @@ SoldierLook Soldier::getLook() const
 }
 
 /**
- * Returns the unit's promotion status and resets it.
- * @return, True if recently promoted, False otherwise.
+ * Returns this Soldier's promotion status and resets it.
+ * @return, true if recently promoted
  */
 bool Soldier::isPromoted()
 {
-	bool promoted = _recentlyPromoted;
+	const bool promoted = _recentlyPromoted;
 	_recentlyPromoted = false;
 
 	return promoted;
 }
 
 /**
- * Returns the unit's current armor.
- * @return, pointer to Armor data
+ * Gets this Soldier's current armor.
+ * @return, pointer to Armor rule
  */
 Armor* Soldier::getArmor() const
 {
@@ -496,8 +498,8 @@ Armor* Soldier::getArmor() const
 }
 
 /**
- * Changes the unit's current armor.
- * @param armor - pointer to Armor data
+ * Sets this Soldier's current armor.
+ * @param armor - pointer to Armor rule
  */
 void Soldier::setArmor(Armor* armor)
 {
@@ -505,8 +507,8 @@ void Soldier::setArmor(Armor* armor)
 }
 
 /**
- * Returns the amount of time until the soldier is healed.
- * @return, Number of days.
+ * Gets the amount of time until this Soldier is fully healed.
+ * @return, quantity of days
  */
 int Soldier::getWoundRecovery() const
 {
@@ -514,8 +516,8 @@ int Soldier::getWoundRecovery() const
 }
 
 /**
- * Changes the amount of time until the soldier is healed.
- * @param recovery Number of days.
+ * Sets the amount of time until this Soldier is fully healed.
+ * @param recovery - quantity of days
  */
 void Soldier::setWoundRecovery(int recovery)
 {
@@ -526,29 +528,29 @@ void Soldier::setWoundRecovery(int recovery)
 }
 
 /**
- * Heals soldier wounds.
+ * Heals this Soldier's wounds a single day.
  */
 void Soldier::heal()
 {
 	_recovery--;
 
-	if (_recovery < 0) // kL
-		_recovery = 0; // kL
+	if (_recovery < 0)
+		_recovery = 0;
 }
 
 /**
- * kL. Gets a soldier's wounds as a percent.
+ * Gets this Soldier's wounds as a percent.
  */
-int Soldier::getWoundPercent() const // kL
+int Soldier::getWoundPercent() const
 {
-	return static_cast<int>(
-				floor(static_cast<float>(_recovery) / static_cast<float>(_currentStats.health)
-					* 100.f));
+	return static_cast<int>(floor(
+				static_cast<float>(_recovery) / static_cast<float>(_currentStats.health)
+			* 100.f));
 }
 
 /**
- * Returns the list of EquipmentLayoutItems of a soldier.
- * @return, Pointer to the EquipmentLayoutItem list.
+ * Gets the list of EquipmentLayoutItems of this Soldier.
+ * @return, pointer to a vector of pointers to EquipmentLayoutItem
  */
 std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
 {
@@ -556,7 +558,7 @@ std::vector<EquipmentLayoutItem*>* Soldier::getEquipmentLayout()
 }
 
 /**
- * Trains a soldier's Psychic abilities after 1 month.
+ * Trains this Soldier's psychic abilities after 1 month.
  * kL_note: called from GeoscapeState, per 1month
  * kL_note: I don't use this, btw.
  */
@@ -642,7 +644,7 @@ void Soldier::trainPsi()
 }
 
 /**
- * Trains a soldier's Psychic abilities ('anytimePsiTraining' option) after 1 day.
+ * Trains this Soldier's psychic abilities ('anytimePsiTraining' option) after 1 day.
  * kL_note: called from GeoscapeState, per 1day. Re-write done.
  */
 void Soldier::trainPsi1Day()
@@ -652,8 +654,9 @@ void Soldier::trainPsi1Day()
 	if (_psiTraining == false)
 		return;
 
-	int const psiSkill = _currentStats.psiSkill;
-	int const rulesMin = _rules->getMinStats().psiSkill;
+	const int
+		psiSkill = _currentStats.psiSkill,
+		rulesMin = _rules->getMinStats().psiSkill;
 
 	if (psiSkill >= _rules->getStatCaps().psiSkill) // hard cap. Note this auto-caps psiStrength also
 		return;
@@ -664,7 +667,7 @@ void Soldier::trainPsi1Day()
 							std::min(
 									100,
 									500 / psiSkill));
-		if (RNG::percent(chance))
+		if (RNG::percent(chance) == true)
 		{
 			_gainPsiSkl++;
 			_currentStats.psiSkill++;
@@ -672,7 +675,7 @@ void Soldier::trainPsi1Day()
 
 		if (Options::allowPsiStrengthImprovement)
 		{
-			int const psiStrength = _currentStats.psiStrength;
+			const int psiStrength = _currentStats.psiStrength;
 			if (psiStrength < _rules->getStatCaps().psiStrength)
 			{
 				chance = std::max(
@@ -680,7 +683,7 @@ void Soldier::trainPsi1Day()
 								std::min(
 										100,
 										500 / psiStrength));
-				if (RNG::percent(chance))
+				if (RNG::percent(chance) == true)
 				{
 					_gainPsiStr++;
 					_currentStats.psiStrength++;
@@ -690,7 +693,7 @@ void Soldier::trainPsi1Day()
 	}
 	else // start here.
 	{
-		if (RNG::percent(5)) // 5% per day per soldier (to become psionic-active)
+		if (RNG::percent(5) == true) // 5% per day per soldier (to become psionic-active)
 		{
 			_gainPsiSkl = RNG::generate(
 									rulesMin,
@@ -702,7 +705,7 @@ void Soldier::trainPsi1Day()
 }
 
 /**
- * Gets whether or not a soldier is in psi training.
+ * Gets whether or not this Soldier is in psi training.
  * @return, true if training
  */
 bool Soldier::isInPsiTraining()
@@ -711,7 +714,7 @@ bool Soldier::isInPsiTraining()
 }
 
 /**
- * Toggles whether or not a soldier is in psi training.
+ * Toggles whether or not this Soldier is in psi training.
  */
 void Soldier::setPsiTraining()
 {
@@ -719,7 +722,7 @@ void Soldier::setPsiTraining()
 }
 
 /**
- * Gets this soldier's psiSkill improvement during the current month.
+ * Gets this Soldier's psiSkill improvement during the current month.
  * @return, psi-skill improvement
  */
 int Soldier::getImprovement()
@@ -728,7 +731,7 @@ int Soldier::getImprovement()
 }
 
 /**
- * Gets this soldier's psiStrength improvement during the current month.
+ * Gets this Soldier's psiStrength improvement during the current month.
  * @return, psi-strength improvement
  */
 int Soldier::getPsiStrImprovement()
@@ -737,8 +740,8 @@ int Soldier::getPsiStrImprovement()
 }
 
 /**
- * Returns the soldier's death time.
- * @return, Pointer to death data. NULL if no death has occured.
+ * Returns this Soldier's death time.
+ * @return, pointer to death data, NULL if no death has occured
  */
 /*kL SoldierDeath* Soldier::getDeath() const
 {
@@ -746,7 +749,7 @@ int Soldier::getPsiStrImprovement()
 } */
 
 /**
- * Kills the soldier in the Geoscape.
+ * Kills this Soldier in the Geoscape.
  * @param death - pointer to SoldierDeath time-data
  * @return, pointer to SoldierDead
  */
@@ -770,7 +773,7 @@ SoldierDead* Soldier::die(SoldierDeath* death)
 }
 
 /**
- * Gets the soldier's diary.
+ * Gets this Soldier's diary.
  * @return, pointer to SoldierDiary
  */
 SoldierDiary* Soldier::getDiary()
@@ -779,7 +782,7 @@ SoldierDiary* Soldier::getDiary()
 }
 
 /**
- * Calculates a soldier's statString.
+ * Calculates this Soldier's statString.
  * @param statStrings		- reference to a vector of pointers to statString rules
  * @param psiStrengthEval	- true if psi stats are available
  */

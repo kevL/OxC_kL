@@ -107,10 +107,10 @@ BriefingState::BriefingState(
 
 	add(_window);
 	add(_txtTitle);
-	add(_btnOk);
 	add(_txtTarget);
 	add(_txtCraft);
 	add(_txtBriefing);
+	add(_btnOk);
 
 	centerAllSurfaces();
 

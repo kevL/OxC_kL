@@ -503,7 +503,7 @@ Globe::~Globe()
 	delete _radars;
 	delete _clipper;
 
-	for (std::list<Polygon*>::iterator
+	for (std::list<Polygon*>::const_iterator
 			i = _cacheLand.begin();
 			i != _cacheLand.end();
 			++i)
@@ -560,8 +560,10 @@ void Globe::cartToPolar( // Orthographic Projection
 	x -= _cenX;
 	y -= _cenY;
 
-	double rho = sqrt(static_cast<double>(x * x + y * y));
-	double c = asin(rho / static_cast<double>(_radius));
+	double
+		rho = sqrt(static_cast<double>(x * x + y * y)),
+		c = asin(rho / static_cast<double>(_radius));
+
 	if (AreSame(rho, 0.0))
 	{
 		*lat = _cenLat;
@@ -592,10 +594,10 @@ bool Globe::pointBack(
 		double lon,
 		double lat) const
 {
-	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon)
-			+ sin(_cenLat) * sin(lat);
+	const double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon)
+				   + sin(_cenLat) * sin(lat);
 
-	return c < 0.0;
+	return (c < 0.0);
 }
 
 

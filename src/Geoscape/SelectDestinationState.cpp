@@ -19,7 +19,7 @@
 
 #include "SelectDestinationState.h"
 
-#include <cmath>
+//#include <cmath>
 
 #include "ConfirmCydoniaState.h"
 #include "CraftErrorState.h"
@@ -42,6 +42,7 @@
 
 #include "../Resource/ResourcePack.h"
 
+#include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCraft.h"
 
 #include "../Savegame/Base.h"
@@ -70,7 +71,7 @@ SelectDestinationState::SelectDestinationState(
 {
 	_screen = false;
 
-	int
+	const int
 		dx = _game->getScreen()->getDX();
 //kL	dy = _game->getScreen()->getDY();
 
@@ -107,7 +108,7 @@ SelectDestinationState::SelectDestinationState(
 //kL	add(_txtTitle);
 	add(_txtError);
 
-	_txtError->setColor(Palette::blockOffset(5));//(8)+5);
+	_txtError->setColor(Palette::blockOffset(5)); // (8)+5);
 	_txtError->setText(tr("STR_OUTSIDE_CRAFT_RANGE"));
 	_txtError->setVisible(false);
 
@@ -169,9 +170,26 @@ SelectDestinationState::SelectDestinationState(
 	}
 	else // if all Soldiers have Power or Flight suits .......
 	{
-		_btnCydonia->setColor(Palette::blockOffset(8)+5);
-		_btnCydonia->setText(tr("STR_CYDONIA"));
-		_btnCydonia->onMouseClick((ActionHandler)& SelectDestinationState::btnCydoniaClick);
+		bool goCydonia = true;
+		for (std::vector<Soldier*>::const_iterator
+			i = _craft->getBase()->getSoldiers()->begin();
+			i != _craft->getBase()->getSoldiers()->end()
+				&& goCydonia == true;
+			++i)
+		{
+			if ((*i)->getCraft() == _craft
+				&& (*i)->getArmor()->isPowered() == false)
+			{
+				goCydonia = false;
+			}
+		}
+
+		if (goCydonia == true)
+		{
+			_btnCydonia->setColor(Palette::blockOffset(8)+5);
+			_btnCydonia->setText(tr("STR_CYDONIA"));
+			_btnCydonia->onMouseClick((ActionHandler)& SelectDestinationState::btnCydoniaClick);
+		}
 	}
 }
 
@@ -198,8 +216,8 @@ void SelectDestinationState::init()
  */
 void SelectDestinationState::think()
 {
-//kL	State::think();
-//kL	_globe->think();
+//	State::think();
+//	_globe->think();
 }
 
 /**
@@ -221,13 +239,13 @@ void SelectDestinationState::globeClick(Action* action)
 	double
 		lon,
 		lat;
-	int
+	const int
 		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
 		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
 
 	_globe->cartToPolar(
-					mouseX,
-					mouseY,
+					static_cast<Sint16>(mouseX),
+					static_cast<Sint16>(mouseY),
 					&lon,
 					&lat);
 
@@ -239,25 +257,25 @@ void SelectDestinationState::globeClick(Action* action)
 		int range = 0;
 //		_error = NULL;
 
-		RuleCraft* craftRule = _craft->getRules();
+		const RuleCraft* const craftRule = _craft->getRules();
 		if (craftRule->getRefuelItem() == "")
 			range = _craft->getFuel() * 100 / 6; // <- gasoline-powered (speed factored into consumption)
 		else
 			range = craftRule->getMaxSpeed() * _craft->getFuel() / 6; // six doses per hour on Geoscape.
 		//Log(LOG_INFO) << ". range = " << range;
 
-		Waypoint* w = new Waypoint();
-		w->setLongitude(lon);
-		w->setLatitude(lat);
+		Waypoint* const wp = new Waypoint();
+		wp->setLongitude(lon);
+		wp->setLatitude(lat);
 
-		//Log(LOG_INFO) << ". dist = " << (int)(_craft->getDistance(w) * 3440.0) << " + " << (int)(_craft->getBase()->getDistance(w) * 3440.0);
+		//Log(LOG_INFO) << ". dist = " << (int)(_craft->getDistance(wp) * 3440.0) << " + " << (int)(_craft->getBase()->getDistance(wp) * 3440.0);
 
-		if (static_cast<double>(range) < (_craft->getDistance(w) + _craft->getBase()->getDistance(w)) * earthRadius)
+		if (static_cast<double>(range) < (_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)
 		{
 			//Log(LOG_INFO) << ". . outside Range";
 			_txtError->setVisible();
 
-			delete w;
+			delete wp;
 
 //			std::wstring msg = tr("STR_OUTSIDE_CRAFT_RANGE");
 //			_geo->popup(new CraftErrorState(
@@ -274,10 +292,10 @@ void SelectDestinationState::globeClick(Action* action)
 															mouseX,
 															mouseY,
 															true);
-			if (!targets.empty())
-				delete w;
+			if (targets.empty() == false)
+				delete wp;
 			else
-				targets.push_back(w);
+				targets.push_back(wp);
 
 			_game->pushState(new MultipleTargetsState(
 													targets,
@@ -422,8 +440,8 @@ void SelectDestinationState::btnCydoniaClick(Action*)
 
 /**
  * Updates the scale.
- * @param dX delta of X;
- * @param dY delta of Y;
+ * @param dX - delta of X
+ * @param dY - delta of Y
  */
 void SelectDestinationState::resize(
 		int& dX,

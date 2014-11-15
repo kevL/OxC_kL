@@ -19,7 +19,7 @@
 
 #include "Waypoint.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Language.h"
 
@@ -46,7 +46,7 @@ Waypoint::~Waypoint()
 
 /**
  * Loads the waypoint from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void Waypoint::load(const YAML::Node& node)
 {
@@ -56,32 +56,33 @@ void Waypoint::load(const YAML::Node& node)
 
 /**
  * Saves the waypoint to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Waypoint::save() const
 {
-	YAML::Node node = Target::save();
-	node["id"] = _id;
+	YAML::Node node	= Target::save();
+	node["id"]		= _id;
 
 	return node;
 }
 
 /**
  * Saves the waypoint's unique identifiers to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Waypoint::saveId() const
 {
 	YAML::Node node = Target::saveId();
-	node["type"] = "STR_WAYPOINT";
-	node["id"] = _id;
+
+	node["type"]	= "STR_WAYPOINT";
+	node["id"]		= _id;
 
 	return node;
 }
 
 /**
  * Returns the waypoint's unique ID.
- * @return Unique ID.
+ * @return, unique ID
  */
 int Waypoint::getId() const
 {
@@ -90,7 +91,7 @@ int Waypoint::getId() const
 
 /**
  * Changes the waypoint's unique ID.
- * @param id Unique ID.
+ * @param id - unique ID
  */
 void Waypoint::setId(int id)
 {
@@ -99,8 +100,8 @@ void Waypoint::setId(int id)
 
 /**
  * Returns the waypoint's unique identifying name.
- * @param lang Language to get strings from.
- * @return Full name.
+ * @param lang - pointer to Language to get strings from
+ * @return, full name
  */
 std::wstring Waypoint::getName(Language* lang) const
 {
@@ -109,7 +110,7 @@ std::wstring Waypoint::getName(Language* lang) const
 
 /**
  * Returns the globe marker for the waypoint.
- * @return Marker sprite, -1 if none.
+ * @return, marker sprite #6
  */
 int Waypoint::getMarker() const
 {

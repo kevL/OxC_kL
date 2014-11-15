@@ -39,11 +39,12 @@ Armor::Armor(const std::string& type)
 		_size(1),
 		_weight(0),
 		_deathFrames(3),
-		_shootFrames(0), // kL
+		_shootFrames(0),
 		_constantAnimation(false),
 		_canHoldWeapon(false),
 		_forcedTorso(TORSO_USE_GENDER),
-		_isBasic(false) // kL
+		_isBasic(false),
+		_isPowered(false)
 {
 	_stats.tu			= 0;
 	_stats.stamina		= 0;
@@ -79,33 +80,34 @@ Armor::~Armor()
  */
 void Armor::load(const YAML::Node& node)
 {
-	_type			= node["type"].as<std::string>(_type);
-	_spriteSheet	= node["spriteSheet"].as<std::string>(_spriteSheet);
-	_spriteInv		= node["spriteInv"].as<std::string>(_spriteInv);
+	_type			= node["type"]						.as<std::string>(_type);
+	_spriteSheet	= node["spriteSheet"]				.as<std::string>(_spriteSheet);
+	_spriteInv		= node["spriteInv"]					.as<std::string>(_spriteInv);
 
 	if (node["corpseItem"])
 	{
 		_corpseBattle.clear();
-		_corpseBattle.push_back(node["corpseItem"].as<std::string>());
+		_corpseBattle.push_back(node["corpseItem"]		.as<std::string>());
 		_corpseGeo		= _corpseBattle[0];
 	}
 	else if (node["corpseBattle"])
 	{
-		_corpseBattle	= node["corpseBattle"].as<std::vector<std::string> >();
+		_corpseBattle	= node["corpseBattle"]			.as<std::vector<std::string> >();
 		_corpseGeo		= _corpseBattle[0];
 	}
-	_corpseGeo		= node["corpseGeo"].as<std::string>(_corpseGeo);
+	_corpseGeo		= node["corpseGeo"]					.as<std::string>(_corpseGeo);
 
-	_storeItem		= node["storeItem"].as<std::string>(_storeItem);
-	_frontArmor		= node["frontArmor"].as<int>(_frontArmor);
-	_sideArmor		= node["sideArmor"].as<int>(_sideArmor);
-	_rearArmor		= node["rearArmor"].as<int>(_rearArmor);
-	_underArmor		= node["underArmor"].as<int>(_underArmor);
-	_drawingRoutine	= node["drawingRoutine"].as<int>(_drawingRoutine);
+	_storeItem		= node["storeItem"]					.as<std::string>(_storeItem);
+	_frontArmor		= node["frontArmor"]				.as<int>(_frontArmor);
+	_sideArmor		= node["sideArmor"]					.as<int>(_sideArmor);
+	_rearArmor		= node["rearArmor"]					.as<int>(_rearArmor);
+	_underArmor		= node["underArmor"]				.as<int>(_underArmor);
+	_drawingRoutine	= node["drawingRoutine"]			.as<int>(_drawingRoutine);
 	_movementType	= (MovementType)node["movementType"].as<int>(_movementType);
-	_size			= node["size"].as<int>(_size);
-	_weight			= node["weight"].as<int>(_weight);
-	_isBasic		= node["isBasic"].as<bool>(_isBasic); // kL
+	_size			= node["size"]						.as<int>(_size);
+	_weight			= node["weight"]					.as<int>(_weight);
+	_isBasic		= node["isBasic"]					.as<bool>(_isBasic);
+	_isPowered		= node["isPowered"]					.as<bool>(_isPowered);
 
 	_stats.merge(node["stats"].as<UnitStats>(_stats));
 
@@ -117,19 +119,19 @@ void Armor::load(const YAML::Node& node)
 					&& i < DAMAGE_TYPES;
 				++i)
 		{
-			_damageModifier[i] = dmg[i].as<float>();
+			_damageModifier[i] = dmg[i]					.as<float>();
 		}
 	}
 
-	_loftempsSet = node["loftempsSet"].as<std::vector<int> >(_loftempsSet);
+	_loftempsSet = node["loftempsSet"]					.as<std::vector<int> >(_loftempsSet);
 	if (node["loftemps"])
-		_loftempsSet.push_back(node["loftemps"].as<int>());
+		_loftempsSet.push_back(node["loftemps"]			.as<int>());
 
-	_deathFrames = node["deathFrames"].as<int>(_deathFrames);
-	_shootFrames = node["shootFrames"].as<int>(_shootFrames);
-	_constantAnimation = node["constantAnimation"].as<bool>(_constantAnimation);
+	_deathFrames = node["deathFrames"]					.as<int>(_deathFrames);
+	_shootFrames = node["shootFrames"]					.as<int>(_shootFrames);
+	_constantAnimation = node["constantAnimation"]		.as<bool>(_constantAnimation);
 
-	_forcedTorso = (ForcedTorso)node["forcedTorso"].as<int>(_forcedTorso);
+	_forcedTorso = (ForcedTorso)node["forcedTorso"]		.as<int>(_forcedTorso);
 
 	if (_drawingRoutine == 0
 		|| _drawingRoutine == 1
@@ -317,10 +319,10 @@ int Armor::getDeathFrames() const
 }
 
 /**
- * kL. Gets number of shoot frames.
+ * Gets number of shoot frames.
  * @return, number of shoot frames
  */
-int Armor::getShootFrames() const // kL
+int Armor::getShootFrames() const
 {
 	return _shootFrames;
 }
@@ -353,12 +355,21 @@ ForcedTorso Armor::getForcedTorso() const
 }
 
 /**
- * kL. Gets if this Armor is basic (lowest rank, standard issue wear).
+ * Gets if this Armor is basic (lowest rank, standard issue wear).
  * @return, true if basic
  */
-bool Armor::getIsBasic() const // kL
+bool Armor::isBasic() const
 {
 	return _isBasic;
+}
+
+/**
+ * Gets if this Armor is powered and suitable for Mars.
+ * @return, true if life-supporting
+ */
+bool Armor::isPowered() const
+{
+	return _isPowered;
 }
 
 }

@@ -649,7 +649,7 @@ MOVED TO Ruleset !
 				i != _musicAssignment.end();
 				++i)
 		{
-			std::string type = i->first;
+//			std::string type = i->first;
 			std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = i->second;
 			for (std::map<std::string, std::vector<std::pair<std::string, int> > >::const_iterator
 					j = assignment.begin();

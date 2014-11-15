@@ -63,10 +63,11 @@ private:
 	bool
 		_canHoldWeapon,
 		_constantAnimation,
-		_isBasic;
+		_isBasic,
+		_isPowered;
 	int
 		_deathFrames,
-		_shootFrames, // kL
+		_shootFrames,
 
 		_frontArmor,
 		_sideArmor,
@@ -146,8 +147,8 @@ private:
 
 		/// Gets number of death frames.
 		int getDeathFrames() const;
-		/// kL. Gets number of shoot frames.
-		int getShootFrames() const; // kL
+		/// Gets number of shoot frames.
+		int getShootFrames() const;
 
 		/// Gets if armor uses constant animation.
 		bool getConstantAnimation() const;
@@ -158,8 +159,10 @@ private:
 		/// Checks if this armor ignores gender (power suit/flying suit).
 		ForcedTorso getForcedTorso() const;
 
-		/// kL. Gets if this Armor is basic (lowest rank, standard issue wear).
-		bool getIsBasic() const; // kL
+		/// Gets if this Armor is basic (lowest rank, standard issue wear).
+		bool isBasic() const;
+		/// Gets if this Armor is powered and suitable for Mars.
+		bool isPowered() const;
 };
 
 }

@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_MUSIC_H
 #define OPENXCOM_MUSIC_H
 
-#include <string>
+//#include <string>
 
-#include <SDL_mixer.h>
+//#include <SDL_mixer.h>
 
 
 namespace OpenXcom
@@ -50,7 +50,7 @@ private:
 		/// Loads music from a chunk of memory.
 		virtual void load(
 				const void* data,
-				int size);
+				int byteSize);
 
 		/// Plays the music.
 		virtual void play(int loop = -1) const;

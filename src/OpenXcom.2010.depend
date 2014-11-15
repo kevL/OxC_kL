@@ -4673,7 +4673,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1413658814 f:\git\openxcom\src\ruleset\armor.h
+1416062780 f:\git\openxcom\src\ruleset\armor.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5430,9 +5430,7 @@
 1413136955 f:\git\openxcom\src\basescape\soldiermemorialstate.h
 	"../Engine/State.h"
 
-1413136956 f:\git\openxcom\src\engine\music.h
-	<string>
-	<SDL_mixer.h>
+1416065267 f:\git\openxcom\src\engine\music.h
 
 1325792940 f:\git\openxcom\deps\include\sdl\sdl_mixer.h
 	"SDL_types.h"
@@ -5702,7 +5700,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1416017746 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1416034400 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5878,7 +5876,7 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1414009456 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1416062263 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -5941,7 +5939,7 @@
 	<exception>
 	<string>
 
-1416027363 f:\git\openxcom\src\resource\xcomresourcepack.h
+1416066770 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
 	"../Engine/Options.h"
 
@@ -6539,7 +6537,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1415853534 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
+1416040551 source:f:\git\openxcom\src\battlescape\nextturnstate.cpp
 	"NextTurnState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -7514,10 +7512,8 @@
 1413136957 f:\git\openxcom\src\geoscape\confirmdestinationstate.h
 	"../Engine/State.h"
 
-1413136962 f:\git\openxcom\src\savegame\waypoint.h
+1416060399 f:\git\openxcom\src\savegame\waypoint.h
 	"Target.h"
-	<string>
-	<yaml-cpp/yaml.h>
 
 1415853534 source:f:\git\openxcom\src\geoscape\confirmlandingstate.cpp
 	"ConfirmLandingState.h"
@@ -7886,7 +7882,7 @@
 	<string>
 	<vector>
 
-1415853532 source:f:\git\openxcom\src\geoscape\globe.cpp
+1416060929 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -8195,9 +8191,8 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1415853534 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1416063161 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
-	<cmath>
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
 	"GeoscapeState.h"
@@ -8215,6 +8210,7 @@
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
+	"../Ruleset/Armor.h"
 	"../Ruleset/RuleCraft.h"
 	"../Savegame/Base.h"
 	"../Savegame/Craft.h"
@@ -9196,9 +9192,8 @@
 1413136962 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1416027232 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1416027492 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
-	<SDL_mixer.h>
 	"../Engine/Font.h"
 	"../Engine/Logger.h"
 	"../Engine/Music.h"
@@ -9259,7 +9254,7 @@
 1413136960 source:f:\git\openxcom\src\ruleset\alienrace.cpp
 	"AlienRace.h"
 
-1413433744 source:f:\git\openxcom\src\ruleset\armor.cpp
+1416062908 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 
 1413136960 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
@@ -9701,7 +9696,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1413655876 source:f:\git\openxcom\src\savegame\soldier.cpp
+1416064506 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -9781,9 +9776,8 @@
 	"Vehicle.h"
 	"../Ruleset/RuleItem.h"
 
-1413136962 source:f:\git\openxcom\src\savegame\waypoint.cpp
+1416060544 source:f:\git\openxcom\src\savegame\waypoint.cpp
 	"Waypoint.h"
-	<sstream>
 	"../Engine/Language.h"
 
 1413136962 source:f:\git\openxcom\src\savegame\weightedoptions.cpp

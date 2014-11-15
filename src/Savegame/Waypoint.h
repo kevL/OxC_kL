@@ -22,9 +22,9 @@
 
 #include "Target.h"
 
-#include <string>
+//#include <string>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -52,9 +52,9 @@ private:
 		void load(const YAML::Node& node);
 		/// Saves the waypoint to YAML.
 		YAML::Node save() const;
-
 		/// Saves the waypoint's ID to YAML.
 		YAML::Node saveId() const;
+
 		/// Gets the waypoint's ID.
 		int getId() const;
 		/// Sets the waypoint's ID.

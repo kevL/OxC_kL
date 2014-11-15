@@ -2383,14 +2383,15 @@ void AlienBAIState::grenadeAction()
 			action.weapon = const_cast<BattleItem*>(grenade);
 			action.type = BA_THROW;
 
-			Position originVoxel = _save->getTileEngine()->getOriginVoxel(
-																		action,
-																		NULL);
-			Position targetVoxel = action.target * Position(16, 16, 24)
-								 + Position(
-										8,
-										8,
-										2 - _save->getTile(action.target)->getTerrainLevel());
+			const Position
+				originVoxel = _save->getTileEngine()->getOriginVoxel(
+																action,
+																NULL),
+				targetVoxel = action.target * Position(16, 16, 24)
+							+ Position(
+									8,
+									8,
+									2 - _save->getTile(action.target)->getTerrainLevel());
 
 			if (_save->getTileEngine()->validateThrow(
 													action,

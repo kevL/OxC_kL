@@ -3417,7 +3417,7 @@ void BattlescapeGenerator::setTacticalSprites() // kL
 	}
 
 
-	Armor* armorRule = _game->getRuleset()->getArmor(strArmor);
+	Armor* const armorRule = _game->getRuleset()->getArmor(strArmor);
 
 	Base* base = _base; // just don't muck w/ _base here ... heh.
 	if (_craft != NULL)
@@ -3430,7 +3430,7 @@ void BattlescapeGenerator::setTacticalSprites() // kL
 	{
 		if ((_craft == NULL
 				|| (*i)->getCraft() == _craft)
-			&& (*i)->getArmor()->getIsBasic())
+			&& (*i)->getArmor()->isBasic() == true)
 		{
 			(*i)->setArmor(armorRule);
 		}

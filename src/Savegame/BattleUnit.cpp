@@ -2750,7 +2750,7 @@ bool BattleUnit::checkAmmo()
 
 /**
  * Check if this unit is in the exit area.
- * @param stt - type of exit tile to check for
+ * @param stt - type of exit tile to check for (default START_POINT)
  * @return, true if unit is in a special exit area
  */
 bool BattleUnit::isInExitArea(SpecialTileType stt) const

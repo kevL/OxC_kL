@@ -36,7 +36,7 @@ namespace OpenXcom
  */
 Music::Music()
 	:
-		_music(0)
+		_music(NULL)
 {
 }
 
@@ -53,17 +53,17 @@ Music::~Music()
 
 /**
  * Loads a music file from a specified filename.
- * @param filename Filename of the music file.
+ * @param filename - reference the filename of the music file
  */
 void Music::load(const std::string& filename)
 {
 #ifndef __NO_MUSIC
 	// SDL only takes UTF-8 filenames
 	// so here's an ugly hack to match this ugly reasoning
-	std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
+	const std::string utf8 = Language::wstrToUtf8(Language::fsToWstr(filename));
 
 	_music = Mix_LoadMUS(utf8.c_str());
-	if (_music == 0)
+	if (_music == NULL)
 	{
 		throw Exception(Mix_GetError());
 	}
@@ -72,19 +72,19 @@ void Music::load(const std::string& filename)
 
 /**
  * Loads a music file from a specified memory chunk.
- * @param data Pointer to the music file in memory
- * @param size Size of the music file in bytes.
+ * @param data		- pointer to the music file in memory
+ * @param byteSize	- size of the music file in bytes
  */
 void Music::load(
 		const void* data,
-		int size)
+		int byteSize)
 {
 #ifndef __NO_MUSIC
-	SDL_RWops* rwops = SDL_RWFromConstMem(data, size);
+	SDL_RWops* const rwops = SDL_RWFromConstMem(data, byteSize);
 	_music = Mix_LoadMUS_RW(rwops);
 	SDL_FreeRW(rwops);
 
-	if (_music == 0)
+	if (_music == NULL)
 	{
 		throw Exception(Mix_GetError());
 	}
@@ -93,7 +93,7 @@ void Music::load(
 
 /**
  * Plays the contained music track.
- * @param loop Amount of times to loop the track. -1 = infinite
+ * @param loop - number of times to loop the track (default -1 infinite)
  */
 void Music::play(int loop) const
 {
@@ -102,7 +102,7 @@ void Music::play(int loop) const
 	{
 		stop();
 
-		if (_music != 0
+		if (_music != NULL
 			&& Mix_PlayMusic(_music, loop) == -1)
 		{
 			Log(LOG_WARNING) << Mix_GetError();
@@ -135,7 +135,7 @@ void Music::pause()
 	if (!Options::mute)
 	{
 		Mix_PauseMusic();
-		if (Mix_GetMusicType(0) == MUS_NONE)
+		if (Mix_GetMusicType(NULL) == MUS_NONE)
 			Mix_HookMusic(NULL, NULL);
 	}
 #endif
@@ -150,7 +150,7 @@ void Music::resume()
 	if (!Options::mute)
 	{
 		Mix_ResumeMusic();
-		if (Mix_GetMusicType(0) == MUS_NONE)
+		if (Mix_GetMusicType(NULL) == MUS_NONE)
 			Mix_HookMusic(AdlibMusic::player, NULL);
 	}
 #endif
