@@ -88,8 +88,8 @@ Soldier::Soldier(
 		_initialStats.psiStrength	= RNG::generate(minStats.psiStrength, maxStats.psiStrength);
 		_initialStats.melee			= RNG::generate(minStats.melee, maxStats.melee);
 
-//kL	_initialStats.psiSkill = minStats.psiSkill;
-		_initialStats.psiSkill = 0; // kL
+//		_initialStats.psiSkill = minStats.psiSkill;
+		_initialStats.psiSkill = 0;
 
 		_currentStats = _initialStats;
 

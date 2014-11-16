@@ -5292,7 +5292,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 		if (action->actor->getFaction() == FACTION_PLAYER
 			&& action->actor->getOriginalFaction() == FACTION_HOSTILE)
 		{
-			bonusSkill = 25; // ... arbitrary kL
+			bonusSkill = 21; // ... arbitrary kL
 		}
 
 		double

@@ -4752,7 +4752,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1415983311 f:\git\openxcom\src\savegame\battleunit.h
+1416108484 f:\git\openxcom\src\savegame\battleunit.h
 	<string>
 	<vector>
 	"Soldier.h"
@@ -5939,7 +5939,7 @@
 	<exception>
 	<string>
 
-1416066770 f:\git\openxcom\src\resource\xcomresourcepack.h
+1416102309 f:\git\openxcom\src\resource\xcomresourcepack.h
 	"ResourcePack.h"
 	"../Engine/Options.h"
 
@@ -6132,7 +6132,7 @@
 1414466440 source:f:\git\openxcom\src\battlescape\battlestate.cpp
 	"BattleState.h"
 
-1416066650 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
+1416072812 source:f:\git\openxcom\src\battlescape\briefingstate.cpp
 	"BriefingState.h"
 	<sstream>
 	"AliensCrashState.h"
@@ -6730,7 +6730,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1415634869 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1416072329 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -8191,7 +8191,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1416063161 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1416071950 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
@@ -8485,7 +8485,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1415853532 source:f:\git\openxcom\src\menu\mainmenustate.cpp
+1416075675 source:f:\git\openxcom\src\menu\mainmenustate.cpp
 	"MainMenuState.h"
 	<sstream>
 	"ListLoadState.h"
@@ -9204,7 +9204,7 @@
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
 
-1416067213 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1416075607 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../fmath.h"
 	"../Basescape/BasescapeState.h"

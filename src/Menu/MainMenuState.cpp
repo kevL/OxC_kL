@@ -93,6 +93,7 @@ MainMenuState::MainMenuState()
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -130,7 +131,8 @@ MainMenuState::MainMenuState()
 
 //	_game->getResourcePack()->playMusic("GMSTORY");
 //	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY)->play(); // sza_MusicRules
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY); // kL, sza_MusicRules
+//	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY); // kL, sza_MusicRules
+	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_LRC_UFOPED); // kL, sza_MusicRules
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

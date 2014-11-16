@@ -599,7 +599,7 @@ MOVED TO Ruleset !
 			}
 		}
 
-		std::string mus[] =
+		std::string mus[] = // these are the filenames in /SOUND directory.
 		{
 			"GMDEFEND",
 			"GMENBASE",
@@ -614,7 +614,8 @@ MOVED TO Ruleset !
 			"GMNEWMAR",
 			"GMSTORY",
 			"GMTACTIC",
-			"GMWIN"
+			"GMWIN",
+			"LCUFOPED"
 		};
 
 /*		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
@@ -623,14 +624,14 @@ MOVED TO Ruleset !
 		// Check which music version is available
 		// Check if GM.CAT data is available // sza_MusicRules
 		CatFile
-			* adlibcat = 0,
-			* aintrocat = 0;
-		GMCatFile* gmcat = 0;
+			* adlibcat = NULL,
+			* aintrocat = NULL;
+		GMCatFile* gmcat = NULL;
 
-		std::string
-			musicAdlib	= "SOUND/ADLIB.CAT",
-			musicIntro	= "SOUND/AINTRO.CAT",
-			musicGM		= "SOUND/GM.CAT";
+		const std::string
+			musicAdlib = "SOUND/ADLIB.CAT",
+			musicIntro = "SOUND/AINTRO.CAT",
+			musicGM = "SOUND/GM.CAT";
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicAdlib)))
 		{
@@ -746,13 +747,12 @@ MOVED TO Ruleset !
 								std::ostringstream s;
 								s << "SOUND/" << filename << exts[exti];
 
-								if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+								if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
 								{
 									_musicFile[filename] = new Music();
 									_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
 
 									loaded = true;
-
 									break;
 								}
 							}
@@ -761,7 +761,7 @@ MOVED TO Ruleset !
 
 					if (loaded == false)
 					{
-						if (adlibcat // Try Adlib music
+						if (adlibcat != NULL // Try Adlib music
 							&& Options::audioBitDepth == 16)
 						{
 							_musicFile[filename] = new AdlibMusic();
@@ -771,7 +771,6 @@ MOVED TO Ruleset !
 							_musicFile[filename]->load(
 													adlibcat->load(midiIndex, true),
 													adlibcat->getObjectSize(midiIndex));
-
 							loaded = true;
 //							}
 //							else if (aintrocat) // separate intro music
@@ -782,7 +781,7 @@ MOVED TO Ruleset !
 //								loaded = true;
 //							}
 						}
-						else if (gmcat) // Try GM music
+						else if (gmcat != NULL) // Try GM music
 						{
 							_musicFile[filename] = gmcat->loadMIDI(midiIndex);
 
@@ -793,7 +792,7 @@ MOVED TO Ruleset !
 							std::ostringstream s;
 							s << "SOUND/" << filename << ".mid";
 
-							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
 							{
 								_musicFile[filename] = new Music();
 								_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));

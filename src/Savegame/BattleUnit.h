@@ -358,17 +358,16 @@ class BattleUnit
 private:
 	bool
 		_cacheInvalid,
-		_dashing, // kL
+		_dashing,
 		_diedByFire,
 		_dontReselect,
 		_floating,
-//kL	_hitByFire,
 		_kneeled,
-		_stopShot, // kL, to stop a unit from firing/throwing if it spots a new opponent during turning
-		_takenExpl, // kL, used to stop large units from taking damage for each part.
+		_stopShot, // to stop a unit from firing/throwing if it spots a new opponent during turning
+		_takenExpl, // used to stop large units from taking damage for each part.
 		_visible;
 	int
-		_aimPhase, // kL
+		_aimPhase,
 		_coverReserve,
 		_currentArmor[5],
 		_direction,
@@ -399,10 +398,10 @@ private:
 		_turnsExposed,
 		_verticalDirection,
 		_walkPhase;
-	size_t _battleOrder; // kL
+	size_t _battleOrder;
 
 	BattleAIState* _currentAIState;
-	BattlescapeGame* _battleGame; // kL.
+	BattlescapeGame* _battleGame;
 		// Note: don't even declare the class, what's with SavedGame* then; postMissionProcedures()
 	BattleUnit* _charging;
 	Surface* _cache[5];
@@ -486,8 +485,8 @@ private:
 		BattleUnit( // xCom operatives
 				Soldier* soldier,
 				int depth,
-				int diff, // kL_add: For VictoryPts value per death.
-				BattlescapeGame* battleGame = NULL); // kL_add: for playing sound when hit.
+				int diff, // for VictoryPts value per death.
+				BattlescapeGame* battleGame = NULL); // for playing sound when hit.
 		/// Creates a BattleUnit.
 		BattleUnit( // aLiens, civies, & Tanks
 				Unit* unit,
@@ -496,8 +495,8 @@ private:
 				Armor* armor,
 				int diff,
 				int depth,
-				int month = 0, // kL_add: For upping aLien stats as time progresses.
-				BattlescapeGame* battleGame = NULL); // kL_add: for playing sound when hit (only civies).
+				int month = 0, // for upping aLien stats as time progresses.
+				BattlescapeGame* battleGame = NULL); // for playing sound when hit (only civies).
 		/// Cleans up the BattleUnit.
 		~BattleUnit();
 
@@ -573,7 +572,7 @@ private:
 		/// Turns to the destination direction.
 		void turn(bool turret = false);
 		/// Aborts turning.
-//kL	void abortTurn();
+//		void abortTurn();
 
 		/// Gets the soldier's gender.
 		SoldierGender getGender() const;
@@ -637,12 +636,12 @@ private:
 		/// Gets the falling sequence phase.
 		int getFallingPhase() const;
 
-		/// kL. Starts the aiming sequence. This is only for celatids.
-		void startAiming(); // kL
-		/// kL. Advances the aiming sequence.
-		void keepAiming(); // kL
+		/// Starts the aiming sequence. This is only for celatids.
+		void startAiming();
+		/// Advances the aiming sequence.
+		void keepAiming();
 		/// Gets aiming sequence phase.
-		int getAimingPhase() const; // kL
+		int getAimingPhase() const;
 
 		/// Gets if this unit is out - either dead or unconscious.
 		bool isOut(
@@ -701,10 +700,10 @@ private:
 		Armor* getArmor() const;
 		/// Gets this unit's armor value on a particular side.
 		int getArmor(UnitSide side) const;
-		/// kL. Checks if this unit is wearing a PowerSuit.
-		bool hasPowerSuit() const; // kL
-		/// kL. Checks if this unit is wearing a FlightSuit.
-		bool hasFlightSuit() const; // kL
+		/// Checks if this unit is wearing a PowerSuit.
+		bool hasPowerSuit() const;
+		/// Checks if this unit is wearing a FlightSuit.
+		bool hasFlightSuit() const;
 
 		/// Gets this unit's total number of fatal wounds.
 		int getFatalWounds() const;
@@ -954,13 +953,7 @@ private:
 				const int month);
 		/// Halves this unit's armor values for Beginner difficulty.
 		void halveArmor();
-/*kL
-		/// did this unit already take fire damage this turn? (used to avoid damaging large units multiple times.)
-		// kL_note: wtf? If a tank et al. sits in an inferno, BLAST IT!!!!!
-		bool getTookFire() const;
-		/// switch the state of the fire damage tracker.
-		void setTookFire();
-*/
+
 		/// Sets this unit's cover-reserve TU.
 		void setCoverReserve(int reserve);
 		/// Gets this unit's cover-reserve TU.

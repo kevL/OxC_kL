@@ -21,9 +21,9 @@
 
 #include "BattleUnit.h"
 
-#include <cmath>
-#include <sstream>
-#include <typeinfo>
+//#include <cmath>
+//#include <sstream>
+//#include <typeinfo>
 
 #include "BattleItem.h"
 #include "SavedGame.h"
@@ -39,11 +39,11 @@
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
-#include "../Engine/Sound.h" // kL
+#include "../Engine/Sound.h"
 
 #include "../Engine/Surface.h"
 
-#include "../Resource/ResourcePack.h" // kL
+#include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleInventory.h"
@@ -64,8 +64,8 @@ namespace OpenXcom
 BattleUnit::BattleUnit(
 		Soldier* soldier,
 		int depth,
-		int diff, // kL_add.
-		BattlescapeGame* battleGame) // kL_add
+		int diff,
+		BattlescapeGame* battleGame)
 	:
 		_geoscapeSoldier(soldier),
 		_unitRules(NULL),
@@ -73,8 +73,7 @@ BattleUnit::BattleUnit(
 		_originalFaction(FACTION_PLAYER),
 		_killedBy(FACTION_PLAYER),
 		_murdererId(0),
-		_battleGame(battleGame), // kL_add
-//		_id(0),
+		_battleGame(battleGame),
 		_rankInt(-1),
 		_turretType(-1),
 		_tile(NULL),
@@ -90,7 +89,7 @@ BattleUnit::BattleUnit(
 		_walkPhase(0),
 		_fallPhase(0),
 		_spinPhase(-1),
-		_aimPhase(0), // kL
+		_aimPhase(0),
 		_kneeled(false),
 		_floating(false),
 		_dontReselect(false),
@@ -107,20 +106,19 @@ BattleUnit::BattleUnit(
 		_expMelee(0),
 		_kills(0),
 		_motionPoints(0),
-//kL	_hitByFire(false),
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(NULL),
 		_turnsExposed(255),
 		_hidingForTurn(false),
-		_battleOrder(0), // kL
-		_stopShot(false), // kL
-		_dashing(false), // kL
-		_takenExpl(false), // kL
+		_battleOrder(0),
+		_stopShot(false),
+		_dashing(false),
+		_takenExpl(false),
 		_diedByFire(false),
-//		_race(""), // kL
+//		_race(""),
 
-		_deathSound(0), // kL, moved these here from def'ns below.
+		_deathSound(0),
 		_aggroSound(-1),
 		_moveSound(-1),
 		_intelligence(2),
@@ -138,12 +136,14 @@ BattleUnit::BattleUnit(
 	_name			= soldier->getName(true);
 	_id				= soldier->getId();
 	_rank			= soldier->getRankString();
-	_stats			= *soldier->getCurrentStats();
 
+	_stats			= *soldier->getCurrentStats();
 	_armor			= soldier->getArmor();
 	_stats			+= *_armor->getStats();	// armors may modify effective stats
+
 	_loftempsSet	= _armor->getLoftempsSet();
 	_movementType	= _armor->getMovementType();
+
 	if (_movementType == MT_FLOAT)
 	{
 		if (depth > 0)
@@ -161,19 +161,15 @@ BattleUnit::BattleUnit(
 	int rankbonus = 0;
 	switch (soldier->getRank())
 	{
-//		case RANK_SERGEANT:		rankbonus =	1;	break;
-//		case RANK_CAPTAIN:		rankbonus =	3;	break;
-//		case RANK_COLONEL:		rankbonus =	6;	break;
-//		case RANK_COMMANDER:	rankbonus =	10;	break;
-		case RANK_SERGEANT:		rankbonus =	5;	break;
-		case RANK_CAPTAIN:		rankbonus =	15;	break;
-		case RANK_COLONEL:		rankbonus =	30;	break;
-		case RANK_COMMANDER:	rankbonus =	50;	break;
+		case RANK_SERGEANT:		rankbonus =	5;	break; // was 1
+		case RANK_CAPTAIN:		rankbonus =	15;	break; // was 3
+		case RANK_COLONEL:		rankbonus =	30;	break; // was 6
+		case RANK_COMMANDER:	rankbonus =	50;	break; // was 10
 
 		default:				rankbonus =	0;	break;
 	}
 
-//kL	_value		= 20 + soldier->getMissions() + rankbonus;
+//	_value		= 20 + soldier->getMissions() + rankbonus;
 	_value		= 20 + (soldier->getMissions() * (diff + 1)) + (rankbonus * (diff + 1)); // kL, heheheh
 
 	_tu			= _stats.tu;
@@ -198,7 +194,7 @@ BattleUnit::BattleUnit(
 }
 
 /**
- * Creates this BattleUnit from a (non-Soldier) unit object.
+ * Creates this BattleUnit from a (non-Soldier) Unit-rule object.
  * @param unit			- pointer to a unit object
  * @param faction		- faction the unit belongs to
  * @param id			- the unit's unique ID
@@ -215,8 +211,8 @@ BattleUnit::BattleUnit(
 		Armor* armor,
 		int diff,
 		int depth,
-		int month, // kL_add.
-		BattlescapeGame* battleGame) // kL_add. May be NULL
+		int month,
+		BattlescapeGame* battleGame) // May be NULL
 	:
 		_unitRules(unit),
 		_geoscapeSoldier(NULL),
@@ -226,7 +222,7 @@ BattleUnit::BattleUnit(
 		_killedBy(faction),
 		_murdererId(0),
 		_armor(armor),
-		_battleGame(battleGame), // kL_add
+		_battleGame(battleGame),
 		_rankInt(-1),
 		_turretType(-1),
 		_pos(Position()),
@@ -242,7 +238,7 @@ BattleUnit::BattleUnit(
 		_walkPhase(0),
 		_fallPhase(0),
 		_spinPhase(-1),
-		_aimPhase(0), // kL
+		_aimPhase(0),
 		_kneeled(false),
 		_floating(false),
 		_dontReselect(false),
@@ -259,18 +255,17 @@ BattleUnit::BattleUnit(
 		_expMelee(0),
 		_kills(0),
 		_motionPoints(0),
-//kL	_hitByFire(false),
 		_moraleRestored(0),
 		_coverReserve(0),
 		_charging(NULL),
 		_turnsExposed(255),
 		_hidingForTurn(false),
-		_stopShot(false), // kL
-		_dashing(false), // kL
-		_takenExpl(false), // kL
-		_battleOrder(0), // kL
+		_stopShot(false),
+		_dashing(false),
+		_takenExpl(false),
+		_battleOrder(0),
 
-		_morale(100), // kL, moved these here from def'ns below.
+		_morale(100),
 		_stunLevel(0),
 		_activeHand("STR_RIGHT_HAND"),
 		_breathFrame(-1),
@@ -279,7 +274,7 @@ BattleUnit::BattleUnit(
 		_gender(GENDER_MALE),
 		_diedByFire(false),
 
-		_statistics(NULL) // kL, Soldier Diary
+		_statistics(NULL) // Soldier Diary
 {
 	//Log(LOG_INFO) << "Create BattleUnit 2 : alien ID = " << getId();
 	_type	= unit->getType();
@@ -287,12 +282,13 @@ BattleUnit::BattleUnit(
 	_rank	= unit->getRank();
 
 	_stats	= *unit->getStats();
-	_stats	+= *_armor->getStats();	// armors may modify effective stats
 
 	if (faction == FACTION_HOSTILE)
 		adjustStats(
 				diff,
-				month); // kL_add
+				month);
+
+	_stats		+= *_armor->getStats();	// armors may modify effective stats (but not further modified by game difficulty or monthly progress)
 
 	_tu			= _stats.tu;
 	_energy		= _stats.stamina;
@@ -310,6 +306,7 @@ BattleUnit::BattleUnit(
 	_specab			= (SpecialAbility)unit->getSpecialAbility();
 	_spawnUnit		= unit->getSpawnUnit();
 	_value			= unit->getValue();
+
 	_movementType	= _armor->getMovementType();
 	if (_movementType == MT_FLOAT)
 	{
@@ -335,7 +332,7 @@ BattleUnit::BattleUnit(
 
 	lastCover = Position(-1,-1,-1);
 
-//kL	_statistics = new BattleUnitStatistics(); // not needed by nonSoldiers, for Soldier Diary.
+//	_statistics = new BattleUnitStatistics(); // not needed by nonSoldiers, Soldier Diary.
 	//Log(LOG_INFO) << "Create BattleUnit 2, DONE";
 }
 
@@ -372,8 +369,8 @@ BattleUnit::~BattleUnit()
 }
 
 /**
- * Loads the unit from a YAML file.
- * @param node YAML node.
+ * Loads this BattleUnit from a YAML file.
+ * @param node - reference a YAML node
  */
 void BattleUnit::load(const YAML::Node& node)
 {
@@ -403,18 +400,18 @@ void BattleUnit::load(const YAML::Node& node)
 	_specab				= (SpecialAbility)node["specab"]					.as<int>(_specab);
 	_spawnUnit			= node["spawnUnit"]									.as<std::string>(_spawnUnit);
 	_motionPoints		= node["motionPoints"]								.as<int>(0);
-	_activeHand			= node["activeHand"]								.as<std::string>(_activeHand); // kL
+	_activeHand			= node["activeHand"]								.as<std::string>(_activeHand);
 
 	for (int i = 0; i < 5; i++)
 		_currentArmor[i]	= node["armor"][i]								.as<int>(_currentArmor[i]);
 	for (int i = 0; i < 6; i++)
 		_fatalWounds[i]		= node["fatalWounds"][i]						.as<int>(_fatalWounds[i]);
 
-	if (_geoscapeSoldier != NULL) // kL_add.
+	if (_geoscapeSoldier != NULL)
 	{
 		_statistics->load(node["tempUnitStatistics"]);
 
-		_battleOrder	= node["battleOrder"]								.as<size_t>(_battleOrder); // kL
+		_battleOrder	= node["battleOrder"]								.as<size_t>(_battleOrder);
 		_kneeled		= node["kneeled"]									.as<bool>(_kneeled);
 
 		_expBravery		= node["expBravery"]								.as<int>(_expBravery);
@@ -428,8 +425,8 @@ void BattleUnit::load(const YAML::Node& node)
 }
 
 /**
- * Saves the soldier to a YAML file.
- * @return YAML node.
+ * Saves this BattleUnit to a YAML file.
+ * @return, YAML node
  */
 YAML::Node BattleUnit::save() const
 {
@@ -461,7 +458,7 @@ YAML::Node BattleUnit::save() const
 	node["specab"]			= (int)_specab;
 	node["motionPoints"]	= _motionPoints;
 	// could put (if not tank) here:
-	node["activeHand"]		= _activeHand; // kL
+	node["activeHand"]		= _activeHand;
 
 	for (int i = 0; i < 5; i++)
 		node["armor"].push_back(_currentArmor[i]);
@@ -482,11 +479,11 @@ YAML::Node BattleUnit::save() const
 	if (_spawnUnit.empty() == false)
 		node["spawnUnit"]		= _spawnUnit;
 
-	if (_geoscapeSoldier != NULL) // kL_add.
+	if (_geoscapeSoldier != NULL)
 	{
 		node["tempUnitStatistics"]	= _statistics->save();
 
-		node["battleOrder"]			= _battleOrder; // kL
+		node["battleOrder"]			= _battleOrder;
 		node["kneeled"]				= _kneeled;
 
 		node["expBravery"]			= _expBravery;
@@ -505,7 +502,7 @@ YAML::Node BattleUnit::save() const
 }
 
 /**
- * Gets a BattleUnit's unique ID.
+ * Gets this BattleUnit's unique ID.
  * @return, the unique ID
  */
 int BattleUnit::getId() const
@@ -514,7 +511,7 @@ int BattleUnit::getId() const
 }
 
 /**
- * Changes a BattleUnit's position.
+ * Changes this BattleUnit's position.
  * @param pos			- new position
  * @param updateLastPos	- true to update old position
  */
@@ -529,7 +526,7 @@ void BattleUnit::setPosition(
 }
 
 /**
- * Gets a BattleUnit's position.
+ * Gets this BattleUnit's position.
  * @return, reference to the position
  */
 const Position& BattleUnit::getPosition() const
@@ -538,7 +535,7 @@ const Position& BattleUnit::getPosition() const
 }
 
 /**
- * Gets a BattleUnit's last position.
+ * Gets this BattleUnit's last position.
  * @return, reference to the position
  */
 const Position& BattleUnit::getLastPosition() const
@@ -547,7 +544,7 @@ const Position& BattleUnit::getLastPosition() const
 }
 
 /**
- * Gets a BattleUnit's destination.
+ * Gets this BattleUnit's destination.
  * @return, reference to the destination
  */
 const Position& BattleUnit::getDestination() const
@@ -556,7 +553,7 @@ const Position& BattleUnit::getDestination() const
 }
 
 /**
- * Sets a BattleUnit's horizontal direction.
+ * Sets this BattleUnit's horizontal direction.
  * Only used for initial unit placement.
  * kL_note: and positioning soldier when revived from unconscious status: reviveUnconsciousUnits().
  * @param dir		- new horizontal direction
@@ -564,21 +561,20 @@ const Position& BattleUnit::getDestination() const
  */
 void BattleUnit::setDirection(
 		int dir,
-		bool turret) // kL
+		bool turret)
 {
 	_direction			= dir;
 	_toDirection		= dir;
 
-	// kL_begin:
 	if (_turretType == -1
 		|| turret == true)
 	{
 		_directionTurret = dir;
-	} // kL_end.
+	}
 }
 
 /**
- * Gets a BattleUnit's horizontal direction.
+ * Gets this BattleUnit's horizontal direction.
  * @return, horizontal direction
  */
 int BattleUnit::getDirection() const
@@ -587,7 +583,7 @@ int BattleUnit::getDirection() const
 }
 
 /**
- * Sets a BattleUnit's horizontal direction (facing).
+ * Sets this BattleUnit's horizontal direction (facing).
  * Only used for strafing moves.
  * @param dir - new horizontal direction (facing)
  */
@@ -597,7 +593,7 @@ void BattleUnit::setFaceDirection(int dir)
 }
 
 /**
- * Gets a BattleUnit's horizontal direction (facing).
+ * Gets this BattleUnit's horizontal direction (facing).
  * Used only during strafing moves.
  * @return, horizontal direction (facing)
  */
@@ -607,7 +603,7 @@ int BattleUnit::getFaceDirection() const
 }
 
 /**
- * Gets a BattleUnit's turret direction.
+ * Gets this BattleUnit's turret direction.
  * @return, turret direction
  */
 int BattleUnit::getTurretDirection() const
@@ -616,16 +612,16 @@ int BattleUnit::getTurretDirection() const
 }
 
 /**
- * kL. Sets a BattleUnit's turret direction.
+ * Sets this BattleUnit's turret direction.
  * @param dir - turret direction
  */
-void BattleUnit::setTurretDirection(int dir) // kL
+void BattleUnit::setTurretDirection(int dir)
 {
 	_directionTurret = dir;
 }
 
 /**
- * Gets a BattleUnit's turret To direction.
+ * Gets this BattleUnit's turret To direction.
  * @return, toDirectionTurret
  */
 int BattleUnit::getTurretToDirection() const
@@ -634,7 +630,7 @@ int BattleUnit::getTurretToDirection() const
 }
 
 /**
- * Gets a BattleUnit's vertical direction.
+ * Gets this BattleUnit's vertical direction.
  * This is when going up or down, doh!
  * @return, vertical direction
  */
@@ -644,8 +640,8 @@ int BattleUnit::getVerticalDirection() const
 }
 
 /**
- * Gets a BattleUnit's status.
- * @return, status ( See UnitStatus enum. )
+ * Gets this BattleUnit's status.
+ * @return, UnitStatus enum (BattleUnit.h)
  */
 UnitStatus BattleUnit::getStatus() const
 {
@@ -653,10 +649,10 @@ UnitStatus BattleUnit::getStatus() const
 }
 
 /**
- * kL. Sets a unit's status.
- * @ param status, See UnitStatus enum.
+ * Sets a unit's status.
+ * @param status - UnitStatus enum (BattleUnit.h)
  */
-void BattleUnit::setStatus(int status) // kL
+void BattleUnit::setStatus(int status)
 {
 	switch (status)
 	{
@@ -670,7 +666,7 @@ void BattleUnit::setStatus(int status) // kL
 		case 7:		_status = STATUS_UNCONSCIOUS;	return;
 		case 8:		_status = STATUS_PANICKING;		return;
 		case 9:		_status = STATUS_BERSERK;		return;
-		case 10:	_status = STATUS_DISABLED;		return; // kL
+		case 10:	_status = STATUS_DISABLED;		return;
 
 		default:
 			_status = STATUS_STANDING;
@@ -696,7 +692,7 @@ void BattleUnit::startWalking(
 	_walkPhase = 0;
 	_destination = destination;
 	_lastPos = _pos;
-//kL	_cacheInvalid = cache; // there's no movement here, This not needed.
+//	_cacheInvalid = cache; // there's no movement here, This not needed.
 
 	if (direction >= Pathfinding::DIR_UP)
 	{
@@ -939,8 +935,8 @@ void BattleUnit::turn(bool turret)
 		if (_directionTurret == _toDirectionTurret)
 		{
 			//Log(LOG_INFO) << ". . _d = _tD, abort";
-//kL			abortTurn();
-			_status = STATUS_STANDING; // kL
+//			abortTurn();
+			_status = STATUS_STANDING;
 
 			return;
 		}
@@ -953,8 +949,8 @@ void BattleUnit::turn(bool turret)
 		if (_direction == _toDirection)
 		{
 			//Log(LOG_INFO) << ". . _d = _tD, abort";
-//kL			abortTurn();
-			_status = STATUS_STANDING; // kL
+//			abortTurn();
+			_status = STATUS_STANDING;
 
 			return;
 		}
@@ -1045,8 +1041,10 @@ void BattleUnit::turn(bool turret)
 	if (turret)
 	{
 		 if (_toDirectionTurret == _directionTurret)
+		 {
 			//Log(LOG_INFO) << "BattleUnit::turn() " << getId() << "Turret - STATUS_STANDING (turn has ended)";
 			_status = STATUS_STANDING; // we officially reached our destination
+		}
 	}
 	else if (_toDirection == _direction
 		|| _status == STATUS_UNCONSCIOUS)	// kL_note: I didn't know Unconscious could turn...
@@ -1071,6 +1069,7 @@ void BattleUnit::abortTurn()
 
 /**
  * Gets the soldier's gender.
+ * @return, SoldierGender enum
  */
 SoldierGender BattleUnit::getGender() const
 {
@@ -1079,7 +1078,7 @@ SoldierGender BattleUnit::getGender() const
 
 /**
  * Returns the unit's faction.
- * @return Faction. (player, hostile or neutral)
+ * @return, UnitFaction enum (player, hostile or neutral)
  */
 UnitFaction BattleUnit::getFaction() const
 {
@@ -2508,10 +2507,10 @@ BattleItem* BattleUnit::getItem(
 }
 
 /**
- * Get the 'main hand weapon' of a BattleUnit.
+ * Gets the 'main hand weapon' of this BattleUnit.
  * Ought alter AI so this Returns firearms only.
  * @param quickest - true to choose the quickest weapon (default true)
- * @return, pointer to BattleItem
+ * @return, pointer to a BattleItem or NULL
  */
 BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 {
@@ -2632,9 +2631,9 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 
 /**
  * Get a grenade from hand or belt (used for AI).
- * @return, pointer to grenade or NULL
+ * @return, pointer to a grenade or NULL
  */
-const BattleItem* const BattleUnit::getGrenade() const // holy fuck const.
+const BattleItem* const BattleUnit::getGrenade() const // holy crap const.
 {
 	// kL_begin: BattleUnit::getGrenadeFromBelt(), or hand.
 	const BattleItem* grenade = getItem("STR_RIGHT_HAND");
@@ -3267,8 +3266,8 @@ std::wstring BattleUnit::getName(
 }
 
 /**
- * Gets a pointer to the unit's stats.
- * @return, pointer to this unit's stats if it's not an XCOM Soldier else NULL
+ * Gets a pointer to this BattleUnit's stats.
+ * @return, pointer to UnitStats
  */
 const UnitStats* BattleUnit::getStats() const
 {
@@ -3762,7 +3761,8 @@ void BattleUnit::adjustStats(
 	_stats.tu			+= 4 * diff * _stats.tu / 100;
 	_stats.stamina		+= 4 * diff * _stats.stamina / 100;
 	_stats.reactions	+= 6 * diff * _stats.reactions / 100;
-	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0? 1: 2);
+//	_stats.firing		= (_stats.firing + 6 * diff * _stats.firing / 100) / (diff > 0? 1: 2);
+	_stats.firing		+= 6 * diff * _stats.firing / 100; // see below_
 	_stats.throwing		+= 4 * diff * _stats.throwing / 100; // kL
 	_stats.melee		+= 4 * diff * _stats.melee / 100;
 	_stats.strength		+= 2 * diff * _stats.strength / 100;
@@ -3770,7 +3770,13 @@ void BattleUnit::adjustStats(
 	_stats.psiSkill		+= 4 * diff * _stats.psiSkill / 100;
 
 	// kL_begin:
-	if (month > 0)
+	if (diff == 0)
+	{
+		halveArmor(); // moved here from BattlescapeGenerator::addAlien() & BattlescapeGame::convertUnit()
+		_stats.firing /= 2; // from above^
+	}
+
+	if (month > 0) // aLiens get tuffer as game progresses:
 	{
 //		_stats.tu += month;
 //		_stats.stamina += month;
@@ -3796,8 +3802,6 @@ void BattleUnit::adjustStats(
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiSkill = " << _stats.psiSkill;
 	//Log(LOG_INFO) << "BattleUnit::adjustStats(), _stats.psiStrength = " << _stats.psiStrength;
 
-	if (diff == 0)		// kL, moved here from BattlescapeGenerator::addAlien() & BattlescapeGame::convertUnit()
-		halveArmor();	// kL
 	// kL_end.
 }
 

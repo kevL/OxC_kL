@@ -73,7 +73,7 @@ BriefingState::BriefingState(
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
 
-	std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
+	const std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
 
 	if (mission == "STR_TERROR_MISSION"
 		|| mission == "STR_BASE_DEFENSE")
@@ -131,24 +131,33 @@ BriefingState::BriefingState(
 	_txtTitle->setColor(Palette::blockOffset(8)+5);
 	_txtTitle->setBig();
 
-	_txtTarget->setColor(Palette::blockOffset(8)+5);
-	_txtTarget->setBig();
-
-	_txtCraft->setColor(Palette::blockOffset(8)+5);
-	_txtCraft->setBig();
-
 	std::wstring ws;
 	if (craft != NULL)
 	{
 		if (craft->getDestination() != NULL)
+		{
+			_txtTarget->setColor(Palette::blockOffset(8)+5);
+			_txtTarget->setBig();
 			_txtTarget->setText(craft->getDestination()->getName(_game->getLanguage()));
+		}
+		else
+			_txtTarget->setVisible(false);
 
 		ws = tr("STR_CRAFT_").arg(craft->getName(_game->getLanguage()));
 	}
 	else if (base != NULL)
 		ws = tr("STR_BASE_UC_").arg(base->getName());
+	else
+		ws = L"";
 
-	_txtCraft->setText(ws);
+	if (ws != L"")
+	{
+		_txtCraft->setColor(Palette::blockOffset(8)+5);
+		_txtCraft->setBig();
+		_txtCraft->setText(ws);
+	}
+	else
+		_txtCraft->setVisible(false);
 
 	_txtBriefing->setColor(Palette::blockOffset(8)+5);
 	_txtBriefing->setWordWrap();

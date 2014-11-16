@@ -33,7 +33,9 @@ music: # sza_MusicRules: http://openxcom.org/forum/index.php?topic=1853.0
     midipack: 11
   - type: GMGRAVES
     files: [ GMWIN ] #[ GMLOSE ]
-    midipack: 10
+    midipack: 11 #10
+  - type: LCUFOPED
+    files: [ LCUFOPED ]
 #extraMusic: # sza_ExtraMusic: http://openxcom.org/forum/index.php?topic=1853.0
 #  - media: musicpack/captainheavy.ogg
 #    overrides: GMSTORY
