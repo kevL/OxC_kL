@@ -429,7 +429,7 @@ void MedikitState::update()
 	_healTxt->setText(toString(_item->getHealQuantity()));
 
 	// kL_begin:
-	double stat = static_cast<double>(_targetUnit->getStats()->health);
+	double stat = static_cast<double>(_targetUnit->getBaseStats()->health);
 	int health = _targetUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
 	_numStun->setValue(static_cast<unsigned>(_targetUnit->getStun()));
@@ -439,7 +439,7 @@ void MedikitState::update()
 	_barHealth->setValue2(ceil(
 							static_cast<double>(_targetUnit->getStun()) / stat * 100.0));
 
-	stat = static_cast<double>(_targetUnit->getStats()->stamina); // stats of the recipient
+	stat = static_cast<double>(_targetUnit->getBaseStats()->stamina); // stats of the recipient
 	int energy = _targetUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
 	_barEnergy->setMax(100.0);
@@ -451,7 +451,7 @@ void MedikitState::update()
 	_barMorale->setMax(100.0);
 	_barMorale->setValue(morale);
 
-	stat = static_cast<double>(_unit->getStats()->tu); // TU of the MedKit user
+	stat = static_cast<double>(_unit->getBaseStats()->tu); // TU of the MedKit user
 	int tu = _unit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setMax(100.0);

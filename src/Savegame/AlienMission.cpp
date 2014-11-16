@@ -450,7 +450,7 @@ Ufo* AlienMission::spawnUfo(
 
 	ufo->setAltitude(trajectory.getAltitude(0));
 	if (trajectory.getAltitude(0) == "STR_GROUND")
-		ufo->setSecondsRemaining(trajectory.groundTimer());
+		ufo->setSecondsRemaining(trajectory.groundTimer() * 5);
 
 	ufo->setSpeed(static_cast<int>(ceil(
 					static_cast<double>(trajectory.getSpeedPercentage(0))
@@ -711,7 +711,7 @@ void AlienMission::ufoReachedWaypoint(
 		}
 		else // Set timer for UFO on the ground.
 		{
-			ufo.setSecondsRemaining(trajectory.groundTimer());
+			ufo.setSecondsRemaining(trajectory.groundTimer() * 5);
 
 			if (ufo.getDetected()
 				&& ufo.getLandId() == 0)

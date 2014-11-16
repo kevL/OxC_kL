@@ -140,7 +140,7 @@ Map::Map(
 
 	_save = _game->getSavedGame()->getSavedBattle();
 
-	const size_t depth = _save->getDepth();
+	const size_t depth = static_cast<size_t>(_save->getDepth());
 	if (_res->getLUTs()->size() > depth)
 		_transparencies = &_res->getLUTs()->at(depth);
 
@@ -816,7 +816,7 @@ void Map::drawTerrain(Surface* surface)
 										}
 
 										const int strength = static_cast<int>(Round(
-																static_cast<double>(bu->getStats()->strength) * (bu->getAccuracyModifier() / 2.0 + 0.5)));
+																static_cast<double>(bu->getBaseStats()->strength) * (bu->getAccuracyModifier() / 2.0 + 0.5)));
 										if (bu->getCarriedWeight() > strength)
 										{
 											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
@@ -1367,7 +1367,7 @@ void Map::drawTerrain(Surface* surface)
 										}
 
 										const int strength = static_cast<int>(Round(
-																static_cast<double>(buBelow->getStats()->strength) * (buBelow->getAccuracyModifier() / 2.0 + 0.5)));
+																static_cast<double>(buBelow->getBaseStats()->strength) * (buBelow->getAccuracyModifier() / 2.0 + 0.5)));
 										if (buBelow->getCarriedWeight() > strength)
 										{
 											tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
@@ -1640,7 +1640,7 @@ void Map::drawTerrain(Surface* surface)
 											}
 
 											const int strength = static_cast<int>(Round(
-																	static_cast<double>(unit->getStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
+																	static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
 											if (unit->getCarriedWeight() > strength)
 											{
 												tmpSurface = _res->getSurfaceSet("SCANG.DAT")->getFrame(96); // 96, dot
@@ -2809,20 +2809,29 @@ void Map::cacheUnit(BattleUnit* unit)
 			unitSprite->setBattleUnit(unit, i);
 
 			//Log(LOG_INFO) << ". . getItem()";
-			BattleItem* rhandItem = unit->getItem("STR_RIGHT_HAND");
-			BattleItem* lhandItem = unit->getItem("STR_LEFT_HAND");
-			if (lhandItem == NULL
-				&& rhandItem == NULL)
+			BattleItem
+				* rhandItem = unit->getItem("STR_RIGHT_HAND"),
+				* lhandItem = unit->getItem("STR_LEFT_HAND");
+			if ((rhandItem == NULL
+					|| rhandItem->getRules()->isFixed() == true)
+				&& (lhandItem == NULL
+					|| lhandItem->getRules()->isFixed() == true))
 			{
 				unitSprite->setBattleItem(NULL);
 			}
 			else
 			{
 				if (rhandItem)
+//					&& rhandItem->getRules()->isFixed() == false)
+				{
 					unitSprite->setBattleItem(rhandItem);
+				}
 
 				if (lhandItem)
+//					&& lhandItem->getRules()->isFixed() == false)
+				{
 					unitSprite->setBattleItem(lhandItem);
+				}
 			}
 
 

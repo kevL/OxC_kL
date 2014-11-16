@@ -432,7 +432,9 @@ private:
 
 	bool
 		_breathing,
-		_floorAbove;
+		_floorAbove,
+		_hidingForTurn,
+		_respawn;
 	int
 		_aggression,
 		_aggroSound,
@@ -477,7 +479,6 @@ private:
 
 		// scratch value for AI's left hand to tell its right hand what's up...
 		// don't zone out and start patrolling again
-		bool _hidingForTurn;
 		Position lastCover;
 
 
@@ -840,7 +841,7 @@ private:
 				bool debugAppendId = false) const;
 
 		/// Gets this unit's stats.
-		const UnitStats* getStats() const;
+		const UnitStats* getBaseStats() const;
 
 		/// Gets this unit's stand height.
 		int getStandHeight() const;
@@ -873,7 +874,12 @@ private:
 		/// Gets this unit's special ability.
 		int getSpecialAbility() const;
 		/// Sets this unit's special ability.
-		void setSpecialAbility(SpecialAbility specab);
+		void setSpecialAbility(const SpecialAbility specab);
+
+		/// Sets this unit's respawn flag.
+		void setRespawn(const bool respawn);
+		/// Gets this unit's respawn flag.
+		bool getRespawn() const;
 
 		/// Gets this unit's rank string.
 		std::string getRankString() const;
@@ -1011,6 +1017,17 @@ private:
 		/// Gets this unit's movement type.
 		MovementType getMovementType() const;
 
+		/// Gets if this unit is hiding.
+		bool isHiding() const
+		{
+			return _hidingForTurn;
+		};
+		/// Sets this unit hiding.
+		void setHiding(const bool hiding)
+		{
+			_hidingForTurn = hiding;
+		};
+
 		/// Gets this unit's mission statistics.
 		BattleUnitStatistics* getStatistics();
 		/// Sets this unit murderer's id.
@@ -1026,7 +1043,7 @@ private:
 		/// Sets the BattleGame for this unit.
 		void setBattleGame(BattlescapeGame* battleGame);
 
-		/// Sets this unit's parameters as down (collapsed / unconscious / dead).
+		/// Sets this unit's parameters as down (collapsed/ unconscious/ dead).
 		void setDown();
 };
 

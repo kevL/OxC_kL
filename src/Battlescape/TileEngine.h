@@ -170,7 +170,7 @@ private:
 				int power,
 				ItemDamageType type,
 				BattleUnit* attacker,
-				bool melee = false); // kL add.
+				const bool melee = false);
 		/// Handles explosions.
 		void explode(
 				const Position& voxelTarget,

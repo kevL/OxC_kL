@@ -30,10 +30,11 @@ namespace OpenXcom
 
 enum SpecialAbility
 {
-	SPECAB_NONE,			// 0
-	SPECAB_EXPLODEONDEATH,	// 1
-	SPECAB_BURNFLOOR,		// 2
-	SPECAB_RESPAWN			// 3
+	SPECAB_NONE,				// 0
+	SPECAB_EXPLODEONDEATH,		// 1
+	SPECAB_BURNFLOOR,			// 2
+	SPECAB_BURN_AND_EXPLODE,	// 3
+	SPECAB_RESPAWN				// 4, obsolete
 };
 
 
@@ -198,7 +199,7 @@ struct UnitStats
 						-melee);
 		}
 
-		void merge(const UnitStats& stats)
+		void mergeStats(const UnitStats& stats)
 		{
 			tu			= (stats.tu? stats.tu: tu);
 			stamina		= (stats.stamina? stats.stamina: stamina);
@@ -225,6 +226,7 @@ class Unit
 
 private:
 	bool
+		_female,
 		_isMechanical,
 		_isPsiImmune,
 		_livingWeapon;
@@ -315,10 +317,13 @@ private:
 		/// Gets a vector of integrated items this unit has available.
 		const std::vector<std::string>& getBuiltInWeapons() const;
 
-		/// kL. Gets if this Unit is a mechanical apparatus.
-		bool getMechanical() const; // kL
-		/// kL. Gets if this Unit is immune to psionic attacks.
-		bool getPsiImmune() const; // kL
+		/// Gets if this Unit is female.
+		const bool isFemale() const;
+
+		/// Gets if this Unit is a mechanical apparatus.
+		const bool getMechanical() const;
+		/// Gets if this Unit is immune to psionic attacks.
+		const bool getPsiImmune() const;
 };
 
 }
@@ -355,7 +360,7 @@ struct convert<OpenXcom::UnitStats>
 			const Node& node,
 			OpenXcom::UnitStats& rhs)
 	{
-		if (!node.IsMap()) return false;
+		if (node.IsMap() == false) return false;
 
 		rhs.tu			= node["tu"].as<int>(rhs.tu);
 		rhs.stamina		= node["stamina"].as<int>(rhs.stamina);

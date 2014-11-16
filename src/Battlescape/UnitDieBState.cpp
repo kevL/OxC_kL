@@ -187,7 +187,8 @@ void UnitDieBState::think()
 //		_parent->getMap()->setUnitDying(false);
 
 		if (_unit->getStatus() == STATUS_UNCONSCIOUS
-			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+			&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
+				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			_unit->instaKill();
 		}
@@ -205,8 +206,8 @@ void UnitDieBState::think()
 		{
 			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
 			BattleUnit* convertedUnit = _parent->convertUnit(
-															_unit,
-															_unit->getSpawnUnit());
+														_unit,
+														_unit->getSpawnUnit());
 
 //			convertedUnit->lookAt(_originalDir); // kL_note: This seems to need a state to initiate turn() ...
 //TEST		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(_battleSave->getBattleGame(), action));
@@ -409,25 +410,21 @@ void UnitDieBState::convertUnitToCorpse()
  */
 void UnitDieBState::playDeathSound()
 {
-	//Log(LOG_INFO) << "UnitDieBState::playDeathSound()";
 	int sound = -1;
 
-	if (_unit->getType() == "MALE_CIVILIAN")
-		sound = ResourcePack::MALE_SCREAM[RNG::generate(0, 2)];
-	else if (_unit->getType() == "FEMALE_CIVILIAN")
-		sound = ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)];
-	else if (_unit->getType() == "SOLDIER")
+	if (_unit->getType() == "SOLDIER")
 	{
 		if (_unit->getGender() == GENDER_MALE)
-		{
 			sound = RNG::generate(111, 116);
-			//Log(LOG_INFO) << "death Male, sound = " << sound;
-		}
-		else if (_unit->getGender() == GENDER_FEMALE)
-		{
+		else
 			sound = RNG::generate(101, 103);
-			//Log(LOG_INFO) << "death Female, sound = " << sound;
-		}
+	}
+	else if (_unit->getUnitRules()->getRace() == "STR_CIVILIAN")
+	{
+		if (_unit->getGender() == GENDER_MALE)
+			sound = ResourcePack::MALE_SCREAM[RNG::generate(0, 2)];
+		else
+			sound = ResourcePack::FEMALE_SCREAM[RNG::generate(0, 2)];
 	}
 	else
 		sound = _unit->getDeathSound();

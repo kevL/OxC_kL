@@ -110,7 +110,7 @@ RuleItem::RuleItem(const std::string& type)
 		_specialType(-1),
 		_vaporColor(-1),
 		_vaporDensity(0),
-		_vaporProbability(5)
+		_vaporProbability(15)
 {
 }
 

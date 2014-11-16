@@ -296,7 +296,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	if (_AIActionCounter == 1)
 	{
 		_playedAggroSound = false;
-		unit->_hidingForTurn = false;
+		unit->setHiding(false);
 
 		if (Options::traceAI) Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType();
 	}
@@ -1028,7 +1028,7 @@ void BattlescapeGame::checkForCasualties(
 					{
 						// losing team(s) all get a morale loss
 						// based on their individual Bravery & rank of unit that was killed
-						int moraleLoss = (110 - (*j)->getStats()->bravery) / 10;
+						int moraleLoss = (110 - (*j)->getBaseStats()->bravery) / 10;
 						if (moraleLoss > 0)
 						{
 							moraleLoss = -(moraleLoss * loss * 2 / bTeam);
@@ -1140,7 +1140,7 @@ void BattlescapeGame::checkForCasualties(
 		if (unit != NULL)
 			_parentState->showPsiButton(
 									unit->getOriginalFaction() == FACTION_HOSTILE
-									&& unit->getStats()->psiSkill > 0
+									&& unit->getBaseStats()->psiSkill > 0
 									&& unit->isOut(true, true) == false);
 	}
 	//Log(LOG_INFO) << "BattlescapeGame::checkForCasualties() EXIT";
@@ -1709,13 +1709,13 @@ bool BattlescapeGame::checkReservedTU(
 		switch (actionReserved)
 		{
 			case BA_SNAPSHOT:
-				return (tu + rand + (bu->getStats()->tu / 3) <= bu->getTimeUnits());		// 33%
+				return (tu + rand + (bu->getBaseStats()->tu / 3) <= bu->getTimeUnits());		// 33%
 			break;
 			case BA_AUTOSHOT:
-				return (tu + rand + (bu->getStats()->tu * 2 / 5) <= bu->getTimeUnits());	// 40%
+				return (tu + rand + (bu->getBaseStats()->tu * 2 / 5) <= bu->getTimeUnits());	// 40%
 			break;
 			case BA_AIMEDSHOT:
-				return (tu + rand + (bu->getStats()->tu / 2) <= bu->getTimeUnits());		// 50%
+				return (tu + rand + (bu->getBaseStats()->tu / 2) <= bu->getTimeUnits());		// 50%
 			break;
 
 			default:
@@ -2024,7 +2024,7 @@ bool BattlescapeGame::handlePanickingUnit(BattleUnit* unit)
 				}
 			}
 
-			unit->setTimeUnits(unit->getStats()->tu); // replace the TUs from shooting
+			unit->setTimeUnits(unit->getBaseStats()->tu); // replace the TUs from shooting
 			ba.type = BA_NONE;
 		break;
 
@@ -2667,19 +2667,20 @@ BattleUnit* BattlescapeGame::convertUnit(
 
 	unit->instaKill();
 	unit->setSpecialAbility(SPECAB_NONE); // kL.
+	unit->setRespawn(false); // kL
 
 	if (Options::battleNotifyDeath
 		&& unit->getFaction() == FACTION_PLAYER
 		&& unit->getOriginalFaction() == FACTION_PLAYER)
 	{
-		Language* lang = _parentState->getGame()->getLanguage();
+		Language* const lang = _parentState->getGame()->getLanguage();
 		_parentState->getGame()->pushState(new InfoboxState(lang->getString(
 																		"STR_HAS_BEEN_KILLED",
 																		unit->getGender())
 																	.arg(unit->getName(lang))));
 	}
 
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = unit->getInventory()->begin();
 			i != unit->getInventory()->end();
 			++i)
@@ -2704,19 +2705,19 @@ BattleUnit* BattlescapeGame::convertUnit(
 		difficulty = static_cast<int>(_parentState->getGame()->getSavedGame()->getDifficulty()),
 		month = _parentState->getGame()->getSavedGame()->getMonthsPassed();
 
-	BattleUnit* convertedUnit = new BattleUnit(
-											getRuleset()->getUnit(convertType),
-											FACTION_HOSTILE,
-											_save->getUnits()->back()->getId() + 1,
-											getRuleset()->getArmor(newArmor.str()),
-											difficulty,
-											getDepth(),
-											month, // kL_add.
-											this); // kL_add
-	// kL_note: what about setting _zombieUnit=true ? It's not generic but it's the only case, afaict
+	BattleUnit* const convertedUnit = new BattleUnit(
+												getRuleset()->getUnit(convertType),
+												FACTION_HOSTILE,
+												_save->getUnits()->back()->getId() + 1,
+												getRuleset()->getArmor(newArmor.str()),
+												difficulty,
+												getDepth(),
+												month,
+												this);
+	// note: what about setting _zombieUnit=true? It's not generic but it's the only case, afaict
 
-//kL	if (!difficulty) // kL_note: moved to BattleUnit::adjustStats()
-//kL		convertedUnit->halveArmor();
+//	if (!difficulty) // kL_note: moved to BattleUnit::adjustStats()
+//		convertedUnit->halveArmor();
 
 	getSave()->getTile(unit->getPosition())->setUnit(
 													convertedUnit,
@@ -3208,29 +3209,29 @@ void BattlescapeGame::tallyUnits(
 	liveSoldiers = 0;
 	liveAliens = 0;
 
-	if (convert)
+	if (convert == true)
 	{
-		for (std::vector<BattleUnit*>::iterator
+		for (std::vector<BattleUnit*>::const_iterator
 				j = _save->getUnits()->begin();
 				j != _save->getUnits()->end();
 				++j)
 		{
 			if ((*j)->getHealth() > 0							// this converts infected but still living victims at endTurn().
-				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)	// Chryssalids inflict SPECAB_RESPAWN, in ExplosionBState (melee hits)
+//				&& (*j)->getSpecialAbility() == SPECAB_RESPAWN)	// Chryssalids inflict SPECAB_RESPAWN, in ExplosionBState (melee hits)
+				&& (*j)->getRespawn() == true)
 			{
 				//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() " << (*j)->getId() << " : health > 0, SPECAB_RESPAWN -> converting unit!";
-
 //kL			(*j)->setSpecialAbility(SPECAB_NONE); // do this in convertUnit()
 				convertUnit(
-							*j,
-							(*j)->getSpawnUnit());
+						*j,
+						(*j)->getSpawnUnit());
 
 				j = _save->getUnits()->begin();
 			}
 		}
 	}
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			j = _save->getUnits()->begin();
 			j != _save->getUnits()->end();
 			++j)
@@ -3254,7 +3255,6 @@ void BattlescapeGame::tallyUnits(
 			}
 		}
 	}
-
 	//Log(LOG_INFO) << "BattlescapeGame::tallyUnits() EXIT";
 }
 

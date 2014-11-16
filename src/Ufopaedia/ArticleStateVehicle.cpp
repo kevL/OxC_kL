@@ -19,7 +19,7 @@
 
 #include "ArticleStateVehicle.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "Ufopaedia.h"
 
@@ -45,15 +45,16 @@ namespace OpenXcom
 {
 
 /**
- * cTor.
+ * ArticleStateVehicle has a caption, text, and a stats block.
+ * @param defs - pointer to ArticleDefinitionVehicle
  */
 ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 	:
 		ArticleState(defs->id)
 {
-	Unit* unit = _game->getRuleset()->getUnit(defs->id);
-	Armor* armor = _game->getRuleset()->getArmor(unit->getArmor());
-	RuleItem* item = _game->getRuleset()->getItem(defs->id);
+	Unit* const unit = _game->getRuleset()->getUnit(defs->id);
+	const Armor* const armor = _game->getRuleset()->getArmor(unit->getArmor());
+	RuleItem* const item = _game->getRuleset()->getItem(defs->id);
 
 	_txtTitle	= new Text(310, 17, 5, 23);
 	_txtInfo	= new Text(300, 150, 10, 122);
@@ -136,15 +137,14 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 					tr("STR_UNDER_ARMOR").c_str(),
 					ss7.str().c_str());
 
-//kL	_lstStats->addRow(2, tr("STR_WEAPON").c_str(), tr(defs->weapon).c_str());
 	_lstStats->addRow(
 					2,
-					tr("STR_WEAPON_LC").c_str(),
-					tr(defs->weapon).c_str()); // kL
+					tr("STR_WEAPON_LC").c_str(), // was "STR_WEAPON"
+					tr(defs->weapon).c_str());
 
-	if (!item->getCompatibleAmmo()->empty())
+	if (item->getCompatibleAmmo()->empty() == false)
 	{
-		RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
+		const RuleItem* const ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 
 		ss8 << ammo->getPower();
 		_lstStats->addRow(
@@ -152,11 +152,10 @@ ArticleStateVehicle::ArticleStateVehicle(ArticleDefinitionVehicle* defs)
 						tr("STR_WEAPON_POWER").c_str(),
 						ss8.str().c_str());
 
-//kL		_lstStats->addRow(2, tr("STR_AMMUNITION").c_str(), tr(ammo->getName()).c_str());
 		_lstStats->addRow(
 						2,
-						tr("STR_ORDNANCE_LC").c_str(),
-						tr(ammo->getName()).c_str()); // kL
+						tr("STR_ORDNANCE_LC").c_str(), // was "STR_AMMUNITION"
+						tr(ammo->getName()).c_str());
 
 		std::wostringstream ss9;
 		ss9 << ammo->getClipSize();

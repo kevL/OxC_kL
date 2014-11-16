@@ -109,7 +109,7 @@ void Armor::load(const YAML::Node& node)
 	_isBasic		= node["isBasic"]					.as<bool>(_isBasic);
 	_isSpacesuit	= node["isSpacesuit"]				.as<bool>(_isSpacesuit);
 
-	_stats.merge(node["stats"].as<UnitStats>(_stats));
+	_stats			.mergeStats(node["stats"]			.as<UnitStats>(_stats));
 
 	if (const YAML::Node& dmg = node["damageModifier"])
 	{

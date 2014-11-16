@@ -1024,8 +1024,11 @@ void ProjectileFlyBState::think()
 						}
 					}
 
-					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR)
+					if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR
+						|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
+					{
 						_parent->getSave()->getTile(_action.target)->ignite(15);
+					}
 
 					if (_unit->getOriginalFaction() == FACTION_PLAYER	// kL_add. This section is only for SoldierDiary mod.
 						&& _projectileImpact == VOXEL_UNIT)				// but see below also; was also for setting aggroState
@@ -1192,12 +1195,12 @@ bool ProjectileFlyBState::validThrowRange(
 							getMaxThrowDistance( // tilespace
 											weight,
 											static_cast<int>(Round(
-												static_cast<double>(action->actor->getStats()->strength) * (action->actor->getAccuracyModifier() / 2.0 + 0.5))),
+												static_cast<double>(action->actor->getBaseStats()->strength) * (action->actor->getAccuracyModifier() / 2.0 + 0.5))),
 											delta_z)
 										+ 8)
 									/ 16.0;
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
-//	double range = 2.63 * static_cast<double>(action->actor->getStats()->strength / action->weapon->getRules()->getWeight()); // old code.
+//	double range = 2.63 * static_cast<double>(action->actor->getBaseStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 
 	const int
 		delta_x = action->actor->getPosition().x - action->target.x,

@@ -192,7 +192,7 @@ private:
 		/// Sets a special tile type and object type.
 		void setSpecialType(
 				int value,
-				int otype);
+				int type);
 
 		/// Gets the TU cost to move over the object.
 		int getTUCost(MovementType movementType) const;

@@ -429,7 +429,8 @@ void UnitFallBState::think()
 			else
 			{
 				//Log(LOG_INFO) << ". . burnFloors, checkProxies, Erase.unit";
-				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR) // if the unit burns floortiles, burn floortiles
+				if ((*unit)->getSpecialAbility() == SPECAB_BURNFLOOR // if the unit burns floortiles, burn floortiles
+					|| (*unit)->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 				{
 					// kL_add: Put burnedBySilacoid() here! etc
 					(*unit)->getTile()->ignite(1);
@@ -440,7 +441,7 @@ void UnitFallBState::think()
 											-(*unit)->getTile()->getTerrainLevel());
 					_parent->getTileEngine()->hit(
 												pos,
-												(*unit)->getStats()->strength, // * (*unit)->getAccuracyModifier(),
+												(*unit)->getBaseStats()->strength, // * (*unit)->getAccuracyModifier(),
 												DT_IN,
 												*unit);
 				}

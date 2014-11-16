@@ -208,7 +208,9 @@ void NextTurnState::close()
 	if (liveAliens == 0
 		|| liveSoldiers == 0)
 	{
-		_state->finishBattle(false, liveSoldiers);
+		_state->finishBattle(
+						false,
+						liveSoldiers);
 	}
 	else
 	{

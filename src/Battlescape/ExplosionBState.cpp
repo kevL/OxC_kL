@@ -120,7 +120,7 @@ void ExplosionBState::init()
 				&& _item->getRules()->isStrengthApplied())
 			{
 				int str = static_cast<int>(Round(
-							static_cast<double>(_unit->getStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5)));
+							static_cast<double>(_unit->getBaseStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5)));
 
 				if (_pistolWhip)
 					str /= 2; // pistolwhipping adds only 1/2 str.
@@ -143,8 +143,9 @@ void ExplosionBState::init()
 		//Log(LOG_INFO) << ". _power(_tile) = " << _power;
 		_areaOfEffect = true;
 	}
-	else if (_unit // cyberdiscs!!! And ... ZOMBIES.
-		&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+	else if (_unit != NULL // cyberdiscs!!! And ... ZOMBIES.
+		&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
+			|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 	{
 		_power = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getPower();
 		_power = (RNG::generate(
@@ -521,6 +522,7 @@ void ExplosionBState::explode()
 				&& victim != NULL
 				&& victim->getArmor()->getSize() == 1
 				&& (victim->getGeoscapeSoldier() != NULL
+//					|| victim->getUnitRules()->getRace() == "STR_CIVILIAN"
 //					|| (victim->getUnitRules() &&
 					|| victim->getUnitRules()->getMechanical() == false)
 //				&& victim->getTurretType() == -1
@@ -530,7 +532,8 @@ void ExplosionBState::explode()
 			{
 				//Log(LOG_INFO) << victim->getId() << ": murderer is *zombieUnit*; !spawnUnit -> specab->RESPAWN, ->zombieUnit!";
 				victim->setSpawnUnit(_item->getRules()->getZombieUnit());
-				victim->setSpecialAbility(SPECAB_RESPAWN);
+				victim->setRespawn(true);
+//				victim->setSpecialAbility(SPECAB_RESPAWN);
 			}
 		}
 	}
@@ -551,7 +554,8 @@ void ExplosionBState::explode()
 	{
 		int radius = 6;
 		if (_unit != NULL
-			&& _unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH)
+			&& (_unit->getSpecialAbility() == SPECAB_EXPLODEONDEATH
+				|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 		{
 			radius = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseGeoscape())->getExplosionRadius();
 		}

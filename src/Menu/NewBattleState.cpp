@@ -596,17 +596,7 @@ void NewBattleState::btnOkClick(Action*)
 
 	bgen.setWorldTexture(_textures[_cbxTerrain->getSelected()]);
 
-	if (_missionTypes[_cbxMission->getSelected()] == "STR_TERROR_MISSION")
-	{
-		TerrorSite* t = new TerrorSite();
-		t->setId(1);
-		_craft->setDestination(t);
-		bgen.setTerrorSite(t);
-		bgen.setCraft(_craft);
-
-		_game->getSavedGame()->getTerrorSites()->push_back(t);
-	}
-	else if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
+	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
 	{
 		bgen.setBase(_craft->getBase());
 	}
@@ -625,7 +615,8 @@ void NewBattleState::btnOkClick(Action*)
 	{
 		bgen.setCraft(_craft);
 	}
-	else if (_craft)
+	else if (_craft
+		&& _game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]))
 	{
 		Ufo* u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]));
 		u->setId(1);
@@ -643,6 +634,16 @@ void NewBattleState::btnOkClick(Action*)
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 
 		_game->getSavedGame()->getUfos()->push_back(u);
+	}
+	else //if (_missionTypes[_cbxMission->getSelected()] == "STR_TERROR_MISSION")
+	{
+		TerrorSite* t = new TerrorSite();
+		t->setId(1);
+		_craft->setDestination(t);
+		bgen.setTerrorSite(t);
+		bgen.setCraft(_craft);
+
+		_game->getSavedGame()->getTerrorSites()->push_back(t);
 	}
 
 	if (_craft)

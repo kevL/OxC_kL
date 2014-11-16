@@ -144,7 +144,7 @@ ActionMenuState::ActionMenuState(
 				"STR_USE_SCANNER",
 				&id);
 	else if (weapon->getBattleType() == BT_PSIAMP
-		&& _action->actor->getStats()->psiSkill > 0)
+		&& _action->actor->getBaseStats()->psiSkill > 0)
 	{
 		addItem(
 				BA_MINDCONTROL,

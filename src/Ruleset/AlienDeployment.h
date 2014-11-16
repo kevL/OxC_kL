@@ -76,7 +76,8 @@ private:
 	std::string
 		_type,
 		_terrain,
-		_nextStage;
+		_nextStage,
+		_nextStageRace;
 
 	std::vector<std::string> _terrains;
 	std::vector<DeploymentData> _data;
@@ -113,6 +114,8 @@ private:
 		int getShade() const;
 		/// Gets the next stage of the mission.
 		std::string getNextStage() const;
+		/// Gets the next stage's alien race.
+		std::string getNextStageRace() const;
 };
 
 }

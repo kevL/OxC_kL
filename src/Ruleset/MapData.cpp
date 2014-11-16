@@ -348,38 +348,29 @@ SpecialTileType MapData::getSpecialType() const
 
 /**
  * Sets a special tile type and object type.
- * @param value - special tile type (MapData.h)
- * @param otype - object type
+ * @param value	- special tile type (MapData.h)
+ * @param type	- object type
  */
 void MapData::setSpecialType(
 		int value,
-		int otype)
+		int type)
 {
 	_specialType = static_cast<SpecialTileType>(value);
-	_objectType = otype;
+	_objectType = type;
 }
 
 /**
- * Gets the TU cost to move over the object.
+ * Gets the TU cost to move over the object/wall/floor.
  * @param movementType - the movement type
  * @return, the TU cost
  */
 int MapData::getTUCost(MovementType movementType) const
 {
-	//Log(LOG_INFO) << "MapData::getTUCost()";
 	switch (movementType)
 	{
-		case MT_WALK:
-			//Log(LOG_INFO) << ". MT_WALK ret = " << _TUWalk;
-		return _TUWalk;
-
-		case MT_FLY:
-			//Log(LOG_INFO) << ". MT_FLY ret = " << _TUFly;
-		return _TUFly;
-
-		case MT_SLIDE:
-			//Log(LOG_INFO) << ". MT_SLIDE ret = " << _TUSlide;
-		return _TUSlide;
+		case MT_WALK:	return _TUWalk;
+		case MT_FLY:	return _TUFly;
+		case MT_SLIDE:	return _TUSlide;
 
 		default:
 		break;

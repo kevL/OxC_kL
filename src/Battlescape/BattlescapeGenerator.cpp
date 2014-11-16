@@ -1533,7 +1533,7 @@ bool BattlescapeGenerator::addItem(
 					|| _allowAutoLoadout))
 			{
 				if (!rhWeapon
-					&& unit->getStats()->strength * 0.66 >= weight)
+					&& unit->getBaseStats()->strength * 0.66 >= weight)
 				{
 					item->moveToOwner(unit);
 					item->setSlot(rightHand);
@@ -1604,7 +1604,7 @@ bool BattlescapeGenerator::addItem(
 		default:
 		if ((unit->getGeoscapeSoldier() == 0 || _allowAutoLoadout))
 		{
-			if (unit->getStats()->strength >= weight) // weight is always considered 0 for aliens
+			if (unit->getBaseStats()->strength >= weight) // weight is always considered 0 for aliens
 			{
 				for (std::vector<std::string>::const_iterator
 						i = _rules->getInvsList().begin();

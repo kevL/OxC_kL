@@ -19,6 +19,8 @@
 
 #include "Unit.h"
 
+#include "../Engine/Exception.h"
+
 
 namespace OpenXcom
 {
@@ -43,6 +45,7 @@ Unit::Unit(const std::string& type)
 		_energyRecovery(30),
 		_specab(SPECAB_NONE),
 		_livingWeapon(false),
+		_female(false),
 		_isMechanical(false), // kL: these two should perhaps go to Armor class.
 		_isPsiImmune(false)
 {
@@ -66,25 +69,30 @@ void Unit::load(
 		int modIndex)
 {
 	//Log(LOG_INFO) << "Unit::load()";
-	_type			= node["type"].as<std::string>(_type);
-	_race			= node["race"].as<std::string>(_race);
-	_rank			= node["rank"].as<std::string>(_rank);
-	_stats.merge(node["stats"].as<UnitStats>(_stats));
-	_armor			= node["armor"].as<std::string>(_armor);
-	_standHeight	= node["standHeight"].as<int>(_standHeight);
-	_kneelHeight	= node["kneelHeight"].as<int>(_kneelHeight);
-	_floatHeight	= node["floatHeight"].as<int>(_floatHeight);
-	_value			= node["value"].as<int>(_value);
-	_intelligence	= node["intelligence"].as<int>(_intelligence);
-	_aggression		= node["aggression"].as<int>(_aggression);
-	_energyRecovery	= node["energyRecovery"].as<int>(_energyRecovery);
+	_type			= node["type"]					.as<std::string>(_type);
+	_race			= node["race"]					.as<std::string>(_race);
+	_rank			= node["rank"]					.as<std::string>(_rank);
+	_stats			.mergeStats(node["stats"]		.as<UnitStats>(_stats));
+	_armor			= node["armor"]					.as<std::string>(_armor);
+	_standHeight	= node["standHeight"]			.as<int>(_standHeight);
+	_kneelHeight	= node["kneelHeight"]			.as<int>(_kneelHeight);
+	_floatHeight	= node["floatHeight"]			.as<int>(_floatHeight);
+	if (_floatHeight + _standHeight > 25)
+	{
+		throw Exception("Error with unit " + _type + ": Unit height may not exceed 25");
+	}
+	_value			= node["value"]					.as<int>(_value);
+	_intelligence	= node["intelligence"]			.as<int>(_intelligence);
+	_aggression		= node["aggression"]			.as<int>(_aggression);
+	_energyRecovery	= node["energyRecovery"]		.as<int>(_energyRecovery);
 	_specab			= (SpecialAbility)node["specab"].as<int>(_specab);
-	_spawnUnit		= node["spawnUnit"].as<std::string>(_spawnUnit);
-	_livingWeapon	= node["livingWeapon"].as<bool>(_livingWeapon);
-	_meleeWeapon	= node["meleeWeapon"].as<std::string>(_meleeWeapon);
-	_builtInWeapons	= node["builtInWeapons"].as<std::vector<std::string> >(_builtInWeapons);
-	_isMechanical	= node["isMechanical"].as<bool>(_isMechanical);
-	_isPsiImmune	= node["isPsiImmune"].as<bool>(_isPsiImmune);
+	_spawnUnit		= node["spawnUnit"]				.as<std::string>(_spawnUnit);
+	_livingWeapon	= node["livingWeapon"]			.as<bool>(_livingWeapon);
+	_meleeWeapon	= node["meleeWeapon"]			.as<std::string>(_meleeWeapon);
+	_builtInWeapons	= node["builtInWeapons"]		.as<std::vector<std::string> >(_builtInWeapons);
+	_female			= node["female"]				.as<bool>(_female);
+	_isMechanical	= node["isMechanical"]			.as<bool>(_isMechanical);
+	_isPsiImmune	= node["isPsiImmune"]			.as<bool>(_isPsiImmune);
 
 	if (node["deathSound"])
 	{
@@ -119,7 +127,7 @@ std::string Unit::getType() const
 
 /**
  * Returns the unit's stats data object.
- * @return, the unit's stats
+ * @return, pointer to the unit's stats
  */
 UnitStats* Unit::getStats()
 {
@@ -295,7 +303,16 @@ const std::vector<std::string>& Unit::getBuiltInWeapons() const
 }
 
 /**
- * kL. Gets if this Unit is a mechanical apparatus.
+ * Gets if this Unit is female.
+ * @return, true if female
+ */
+const bool Unit::isFemale() const
+{
+	return _female;
+}
+
+/**
+ * Gets if this Unit is a mechanical apparatus.
  * NOTE about _isMechanical:
  * This var subsumes several more detailed ideas:
  * - isTrackedVehicle
@@ -308,16 +325,16 @@ const std::vector<std::string>& Unit::getBuiltInWeapons() const
  * etc.
  * @return, true if this is a non-organic, purely mechanical unit on the battlefield
  */
-bool Unit::getMechanical() const // kL
+const bool Unit::getMechanical() const
 {
 	return _isMechanical;
 }
 
 /**
- * kL. Gets if this Unit is immune to psionic attacks.
+ * Gets if this Unit is immune to psionic attacks.
  * @return, true if unit is immune to Psi
  */
-bool Unit::getPsiImmune() const // kL
+const bool Unit::getPsiImmune() const
 {
 	return _isPsiImmune;
 }

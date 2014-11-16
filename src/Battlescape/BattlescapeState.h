@@ -324,8 +324,8 @@ private:
 
 		/// Finishes a tactical battle.
 		void finishBattle(
-				bool abort,
-				int inExitArea);
+				const bool abort,
+				const int inExitArea);
 
 		/// Shows the launch button.
 		void showLaunchButton(bool show);

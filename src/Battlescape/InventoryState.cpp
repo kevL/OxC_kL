@@ -399,10 +399,10 @@ InventoryState::~InventoryState()
 //	_clearInventoryTemplate(_curInventoryTemplate);
 
 	// kL_begin:
-	if (_parent)
+	if (_parent != NULL)
 	{
-		TileEngine* tileEngine = _battleGame->getTileEngine();
-		Tile* tile = _battleGame->getSelectedUnit()->getTile();
+		TileEngine* const tileEngine = _battleGame->getTileEngine();
+		Tile* const tile = _battleGame->getSelectedUnit()->getTile();
 
 		tileEngine->applyGravity(tile);
 		tileEngine->calculateTerrainLighting();
@@ -504,14 +504,15 @@ void InventoryState::init()
 	_inv->setSelectedUnit(unit);
 
 //	Soldier* soldier = _game->getSavedGame()->getSoldier(unit->getId());
-	Soldier* soldier = unit->getGeoscapeSoldier();
+	const Soldier* const soldier = unit->getGeoscapeSoldier();
 	if (soldier != NULL)
 	{
-		Surface* gender;
+		Surface* gender = NULL;
 		if (soldier->getGender() == GENDER_MALE)
 			gender = _game->getResourcePack()->getSurface("GENDER_M");
 		else
 			gender = _game->getResourcePack()->getSurface("GENDER_F");
+
 		if (gender != NULL)
 			gender->blit(_gender);
 
@@ -519,7 +520,7 @@ void InventoryState::init()
 		texture->getFrame(soldier->getRankSprite())->setX(0);
 		texture->getFrame(soldier->getRankSprite())->setY(0);
 		texture->getFrame(soldier->getRankSprite())->blit(_btnRank); */
-		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
 		texture->getFrame(20 + soldier->getRank())->setX(0);
 		texture->getFrame(20 + soldier->getRank())->setY(0);
 		texture->getFrame(20 + soldier->getRank())->blit(_btnRank);
@@ -537,8 +538,8 @@ void InventoryState::init()
 
 		look += ".SPK";
 
-		if (!CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look))
-			&& !_game->getResourcePack()->getSurface(look))
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("UFOGRAPH/" + look)) == false
+			&& _game->getResourcePack()->getSurface(look) == NULL)
 		{
 			look = soldier->getArmor()->getSpriteInventory() + ".SPK";
 		}
@@ -547,13 +548,13 @@ void InventoryState::init()
 	}
 	else
 	{
-		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
+		SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("SMOKE.PCK");
 		texture->getFrame(26)->setX(0);
 		texture->getFrame(26)->setY(0);
 		texture->getFrame(26)->blit(_btnRank); // kL
 
-		Surface* armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
-		if (armorSurface)
+		Surface* const armorSurface = _game->getResourcePack()->getSurface(unit->getArmor()->getSpriteInventory());
+		if (armorSurface != NULL)
 			armorSurface->blit(_soldier);
 	}
 
@@ -569,12 +570,12 @@ void InventoryState::init()
 void InventoryState::updateStats()
 {
 	//Log(LOG_INFO) << "InventoryState::updateStats()";
-	BattleUnit* unit = _battleGame->getSelectedUnit();
+	BattleUnit* const unit = _battleGame->getSelectedUnit();
 
 	_numOrder->setValue(unit->getBattleOrder());
 	_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
 
-	if (_tu)
+	if (_tu == true)
 		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
 
 	if (Options::showMoreStatsInInventoryView)
@@ -582,7 +583,7 @@ void InventoryState::updateStats()
 		const int
 			weight = unit->getCarriedWeight(_inv->getSelectedItem()),
 			strength = static_cast<int>(Round(
-								static_cast<double>(unit->getStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
+								static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
 
 		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(strength));
 		if (weight > strength)
@@ -590,18 +591,18 @@ void InventoryState::updateStats()
 		else
 			_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 
-		if (_tu)
+		if (_tu == true)
 		{
-//			int stat = static_cast<int>(floor(static_cast<float>(unit->getStats()->tu * 23) / 100.f));
+//			int stat = static_cast<int>(floor(static_cast<float>(unit->getBaseStats()->tu * 23) / 100.f));
 			int stat = unit->getActionTUs(BA_THROW);
 			_txtThrowTU->setText(tr("STR_THROW_").arg(stat));
 		}
 		else
 		{
-			_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg(unit->getStats()->firing));
-			_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getStats()->reactions));
-			_txtThrow->setText(tr("STR_THROWACC_SHORT").arg(unit->getStats()->throwing));
-			_txtMelee->setText(tr("STR_MELEEACC_SHORT").arg(unit->getStats()->melee));
+			_txtFAcc->setText(tr("STR_ACCURACY_SHORT").arg(unit->getBaseStats()->firing));
+			_txtReact->setText(tr("STR_REACTIONS_SHORT").arg(unit->getBaseStats()->reactions));
+			_txtThrow->setText(tr("STR_THROWACC_SHORT").arg(unit->getBaseStats()->throwing));
+			_txtMelee->setText(tr("STR_MELEEACC_SHORT").arg(unit->getBaseStats()->melee));
 
 			int minPsi = 0;
 			if (unit->getGeoscapeSoldier() != NULL)
@@ -609,7 +610,7 @@ void InventoryState::updateStats()
 //			if (unit->getType() == "SOLDIER")
 //				minPsi = _game->getSavedGame()->getSoldier(unit->getId())->getRules()->getMinStats().psiSkill - 1;
 
-			int psiSkill = unit->getStats()->psiSkill;
+			int psiSkill = unit->getBaseStats()->psiSkill;
 			if (psiSkill > minPsi)
 				_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(psiSkill));
 			else
@@ -619,7 +620,7 @@ void InventoryState::updateStats()
 				|| (Options::psiStrengthEval
 					&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
 			{
-				_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getStats()->psiStrength));
+				_txtPStr->setText(tr("STR_PSIONIC_STRENGTH_SHORT").arg(unit->getBaseStats()->psiStrength));
 			}
 			else
 				_txtPStr->setText(L"");
@@ -634,7 +635,7 @@ void InventoryState::updateStats()
 void InventoryState::saveEquipmentLayout()
 {
 	//Log(LOG_INFO) << "InventoryState::saveEquipmentLayout()";
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _battleGame->getUnits()->begin();
 			i != _battleGame->getUnits()->end();
 			++i)
@@ -643,9 +644,9 @@ void InventoryState::saveEquipmentLayout()
 			continue;
 
 		std::vector<EquipmentLayoutItem*>* layoutItems = (*i)->getGeoscapeSoldier()->getEquipmentLayout();
-		if (!layoutItems->empty()) // clear the previous save
+		if (layoutItems->empty() == false) // clear the previous save
 		{
-			for (std::vector<EquipmentLayoutItem*>::iterator
+			for (std::vector<EquipmentLayoutItem*>::const_iterator
 					j = layoutItems->begin();
 					j != layoutItems->end();
 					++j)
@@ -659,7 +660,7 @@ void InventoryState::saveEquipmentLayout()
 		// save the soldier's items
 		// note: with using getInventory() we are skipping the ammos loaded,
 		// (they're not owned) because we handle the loaded-ammos separately (inside)
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				j = (*i)->getInventory()->begin();
 				j != (*i)->getInventory()->end();
 				++j)
@@ -730,7 +731,7 @@ void InventoryState::btnOkClick(Action*)
 		} */
 
 		// kL_begin:
-		for (std::vector<BattleUnit*>::iterator
+		for (std::vector<BattleUnit*>::const_iterator
 				i = _battleGame->getUnits()->begin();
 				i != _battleGame->getUnits()->end();
 				++i)
@@ -738,10 +739,10 @@ void InventoryState::btnOkClick(Action*)
 			if ((*i)->getFaction() == FACTION_PLAYER)
 			{
 				//Log(LOG_INFO) << "\n. bu ID = " << (*i)->getId();
-				int prepTU = (*i)->getStats()->tu;
+				int prepTU = (*i)->getBaseStats()->tu;
 				//Log(LOG_INFO) << ". tu = " << prepTU;
 
-				double underLoad = static_cast<double>((*i)->getStats()->strength) / static_cast<double>((*i)->getCarriedWeight());
+				double underLoad = static_cast<double>((*i)->getBaseStats()->strength) / static_cast<double>((*i)->getCarriedWeight());
 				underLoad *= (*i)->getAccuracyModifier() / 2.0 + 0.5; // This *could* affect 2nd part of a Multi-Stage mission.
 				//Log(LOG_INFO) << ". strength = " << (*i)->getStats()->strength;
 				//Log(LOG_INFO) << ". underLoad = " << underLoad;

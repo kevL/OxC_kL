@@ -1757,7 +1757,7 @@ BattleActionType TileEngine::selectFireMethod(
  * @param power				- power of the hit/explosion
  * @param type				- damage type of the hit (RuleItem.h)
  * @param attacker			- pointer to BattleUnit that caused the hit
- * @param melee				- true if no projectile, trajectory, etc. is needed. kL
+ * @param melee				- true if no projectile, trajectory, etc. is needed
  * @return, pointer to the BattleUnit that got hit
  */
 BattleUnit* TileEngine::hit(
@@ -1765,7 +1765,7 @@ BattleUnit* TileEngine::hit(
 		int power,
 		ItemDamageType type,
 		BattleUnit* attacker,
-		bool melee) // kL add.
+		const bool melee)
 {
 	//Log(LOG_INFO) << "TileEngine::hit() power = " << power << " type = " << (int)type;
 	//if (attacker != NULL) Log(LOG_INFO) << ". by ID " << attacker->getId() << " @ " << attacker->getPosition();
@@ -1777,7 +1777,7 @@ BattleUnit* TileEngine::hit(
 										targetPos_voxel.x / 16,
 										targetPos_voxel.y / 16,
 										targetPos_voxel.z / 24);
-		Tile* tile = _battleSave->getTile(targetPos_tile);
+		Tile* const tile = _battleSave->getTile(targetPos_tile);
 		//Log(LOG_INFO) << ". targetTile " << tile->getPosition() << " targetVoxel " << targetPos_voxel;
 		if (tile == NULL)
 		{
@@ -1858,40 +1858,12 @@ BattleUnit* TileEngine::hit(
 			if (targetUnit != NULL)
 			{
 				//Log(LOG_INFO) << ". . . targetUnit Valid ID = " << targetUnit->getId();
-
-				// kL_note: This section needs adjusting ...!
-//kL			const int wounds = targetUnit->getFatalWounds();
-
-				// "adjustedDamage = targetUnit->damage(relative, rndPower, type);" -> GOES HERE
-
-				// if targetUnit is going to bleed to death and is not a player, give credit for the kill.
-				// kL_note: not just if not a player; Give Credit!!!
-				// NOTE: Move this code-chunk below(s).
-//kL				if (unit
-//kL				&& targetUnit->getFaction() != FACTION_PLAYER
-//					&& targetUnit->getOriginalFaction() != FACTION_PLAYER // kL
-//kL				&& wounds < targetUnit->getFatalWounds())
-//				{
-//kL				targetUnit->killedBy(unit->getFaction());
-//				} // kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
-
-				const int unitSize = targetUnit->getArmor()->getSize() * 8;
-				const Position
-					targetPos = targetUnit->getPosition() * Position(16, 16, 24) // convert tilespace to voxelspace
-							  + Position(
-										unitSize,
-										unitSize,
-										targetUnit->getFloatHeight() - tile->getTerrainLevel()),
-					relativePos = targetPos_voxel
-								- targetPos
-								- Position(
-										0,
-										0,
-										vertOffset);
+				const int wounds = targetUnit->getFatalWounds();
 
 				// kL_begin: TileEngine::hit(), Silacoids can set targets on fire!!
 				if (attacker != NULL
-					&& attacker->getSpecialAbility() == SPECAB_BURNFLOOR)
+					&& (attacker->getSpecialAbility() == SPECAB_BURNFLOOR
+						|| attacker->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE))
 				{
 					const float vulnerable = targetUnit->getArmor()->getDamageModifier(DT_IN);
 					if (vulnerable > 0.f)
@@ -1917,6 +1889,20 @@ BattleUnit* TileEngine::hit(
 					}
 				} // kL_end.
 
+				const int unitSize = targetUnit->getArmor()->getSize() * 8;
+				const Position
+					targetPos = targetUnit->getPosition() * Position(16, 16, 24) // convert tilespace to voxelspace
+							  + Position(
+										unitSize,
+										unitSize,
+										targetUnit->getFloatHeight() - tile->getTerrainLevel()),
+					relativePos = targetPos_voxel
+								- targetPos
+								- Position(
+										0,
+										0,
+										vertOffset);
+
 				double delta = 100.0;
 				if (type == DT_HE
 					|| Options::TFTDDamage)
@@ -1931,38 +1917,34 @@ BattleUnit* TileEngine::hit(
 				power = RNG::generate(low, high) // bell curve
 					  + RNG::generate(low, high);
 				power /= 2;
-
-/*				if (type == DT_HE || Options::TFTDDamage) power = RNG::generate(power / 2, power * 3 / 2);
-				else power = RNG::generate(1, power * 2); */
 				//Log(LOG_INFO) << ". . . RNG::generate(power) = " << power;
 
 				const bool ignoreArmor = type == DT_STUN	// kL. stun ignores armor... does now! UHM....
 									  || type == DT_SMOKE;	// note it still gets Vuln.modifier, but not armorReduction.
-				const int
-					wounds = targetUnit->getFatalWounds(),
-					damage = targetUnit->damage(
-											relativePos,
-											power,
-											type,
-											ignoreArmor);
-				//Log(LOG_INFO) << ". . . damage = " << damage;
 
-				if (damage > 0)
-//					&& !targetUnit->isOut()
+				power = targetUnit->damage(
+										relativePos,
+										power,
+										type,
+										ignoreArmor);
+				//Log(LOG_INFO) << ". . . power = " << power;
+
+				if (power > 0)
+//					&& !targetUnit->isOut() // target will be neither STATUS_DEAD nor STATUS_UNCONSCIOUS here!
 				{
-					if (attacker != NULL // kL_begin:
+					if (attacker != NULL
 						&& (wounds < targetUnit->getFatalWounds()
-							|| targetUnit->getHealth() == 0)) // kL .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
+							|| targetUnit->getHealth() == 0)) // .. just do this here and bDone with it. Regularly done in BattlescapeGame::checkForCasualties()
 					{
 						targetUnit->killedBy(attacker->getFaction());
-					} // kL_end.
+					}
 					// kL_note: Not so sure that's been setup right (cf. other kill-credit code as well as DebriefingState)
 					// I mean, shouldn't that be checking that the thing actually DIES?
-					// And, prob don't have to state if killed by aLiens: probly assumed in DebriefingState.
+					// And, probly don't have to state if killed by aLiens: probly assumed in DebriefingState.
 
 					if (targetUnit->getHealth() > 0)
 					{
-						const int loss = (110 - targetUnit->getStats()->bravery) / 10;
+						const int loss = (110 - targetUnit->getBaseStats()->bravery) / 10;
 						if (loss > 0)
 						{
 							int leadership = 100;
@@ -1971,7 +1953,7 @@ BattleUnit* TileEngine::hit(
 							else if (targetUnit->getOriginalFaction() == FACTION_HOSTILE)
 								leadership = _battleSave->getMoraleModifier(NULL, false);
 
-							const int moraleLoss = -(damage * loss * 10 / leadership);
+							const int moraleLoss = -(power * loss * 10 / leadership);
 							//Log(LOG_INFO) << ". . . . moraleLoss = " << moraleLoss;
 							targetUnit->moraleChange(moraleLoss);
 						}
@@ -1980,11 +1962,12 @@ BattleUnit* TileEngine::hit(
 					//Log(LOG_INFO) << ". . check for Cyberdisc expl.";
 					//Log(LOG_INFO) << ". . health = " << targetUnit->getHealth();
 					//Log(LOG_INFO) << ". . stunLevel = " << targetUnit->getStun();
-					if (targetUnit->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
+					if ((targetUnit->getSpecialAbility() == SPECAB_EXPLODEONDEATH // cyberdiscs
+							|| targetUnit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 						&& (targetUnit->getHealth() == 0
 							|| targetUnit->getStun() >= targetUnit->getHealth()))
-//						&& !targetUnit->isOut(false, true))	// kL. don't explode if stunned. Maybe... wrong!!!
-															// Cannot be STATUS_DEAD OR STATUS_UNCONSCIOUS!
+//						&& !targetUnit->isOut(false, true))	// don't explode if stunned. Maybe... wrong!!!
+
 					{
 						//Log(LOG_INFO) << ". . . Cyberdisc down!!";
 						if (type != DT_STUN		// don't explode if stunned. Maybe... see above.
@@ -2849,6 +2832,7 @@ int TileEngine::horizontalBlockage(
 		tileWest	= Position(-1, 0, 0);
 
 	int block = 0;
+//	Tile *tmpTile; // new.
 
 	switch (dir)
 	{
@@ -2889,6 +2873,11 @@ int TileEngine::horizontalBlockage(
 								type,
 								3); // checks Content/bigWalls
 
+				// instead of last blockage() above, check this:
+/*				tmpTile = _save->getTile(startTile->getPosition() + oneTileNorth);
+				if (tmpTile && tmpTile->getMapData(MapData::O_OBJECT) && tmpTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALLNESW)
+					block += blockage(tmpTile, MapData::O_OBJECT, type, 3); */
+
 				if (block == 0) break; // this way is opened
 
 				block = blockage( // right+up
@@ -2905,6 +2894,13 @@ int TileEngine::horizontalBlockage(
 								MapData::O_OBJECT,
 								type,
 								7); // checks Content/bigWalls
+
+				// instead of last blockage() above, check this:
+/*				tmpTile = _save->getTile(startTile->getPosition() + oneTileEast);
+				if (tmpTile && tmpTile->getMapData(MapData::O_OBJECT) && tmpTile->getMapData(MapData::O_OBJECT)->getBigWall() != Pathfinding::BIGWALLNESW)
+					block += blockage(tmpTile, MapData::O_OBJECT, type, 7); */
+				// etc. on down through non-cardinal dir's; see 'wayboys' source for details (or not)
+
 			}
 			else // dt_NE
 			{
@@ -4909,7 +4905,7 @@ bool TileEngine::validateThrow(
 //						0.48,
 //						1.73 / sqrt(
 //									sqrt(
-//										static_cast<double>(action.actor->getStats()->strength) * (action.actor->getAccuracyModifier() / 2.0 + 0.5)
+//										static_cast<double>(action.actor->getBaseStats()->strength) * (action.actor->getAccuracyModifier() / 2.0 + 0.5)
 //										/ static_cast<double>(action.weapon->getRules()->getWeight()))));
 		}
 		// kL_note: And arcing shots from targeting their origin tile. ( needs starting arc ~0.1 )
@@ -5279,8 +5275,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 	if (psiImmune == false)
 	{
 		const UnitStats
-			* const statsActor = action->actor->getStats(),
-			* const statsVictim = victim->getStats();
+			* const statsActor = action->actor->getBaseStats(),
+			* const statsVictim = victim->getBaseStats();
 
 		const double
 			defense = static_cast<double>(statsVictim->psiStrength) + (static_cast<double>(statsVictim->psiSkill) / 5.0),
@@ -5335,7 +5331,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 											success);
 
 		//Log(LOG_INFO) << ". . . attack Success @ " << success;
-		if (RNG::percent(success))
+		if (RNG::percent(success) == true)
 		{
 			//Log(LOG_INFO) << ". . Success";
 			if (action->actor->getOriginalFaction() == FACTION_PLAYER)
@@ -5468,10 +5464,11 @@ bool TileEngine::psiAttack(BattleAction* action)
 		else if (victim->getOriginalFaction() == FACTION_PLAYER
 			&& Options::allowPsiStrengthImprovement)
 		{
+			int resistXP = 1; // xCom resisted xCom
 			if (action->actor->getFaction() == FACTION_HOSTILE)
-				victim->addPsiStrengthExp(2); // xCom resisted aLien
-			else
-				victim->addPsiStrengthExp(); // xCom resisted xCom
+				resistXP++; // xCom resisted aLien
+
+			victim->addPsiStrengthExp(resistXP);
 		}
 	}
 	else if (action->actor->getFaction() == FACTION_PLAYER)

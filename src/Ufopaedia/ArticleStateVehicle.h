@@ -47,9 +47,9 @@ protected:
 
 
 	public:
-		///
+		/// cTor.
 		ArticleStateVehicle(ArticleDefinitionVehicle* article_defs);
-		///
+		/// dTor.
 		virtual ~ArticleStateVehicle();
 };
 

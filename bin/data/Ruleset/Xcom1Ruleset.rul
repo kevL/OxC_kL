@@ -5841,6 +5841,7 @@ alienDeployments:
       - MARS
     shade: 15
     nextStage: STR_MARS_THE_FINAL_ASSAULT
+    nextStageRace: STR_MIXED
   - type: STR_MARS_THE_FINAL_ASSAULT
     data:
       - alienRank: 6 #terrorist1
@@ -8230,7 +8231,7 @@ ufoTrajectories:
       - [2, 1, 56]
       - [5, 4, 100]
   - id: P9
-    groundTimer: 4000 #was 2000
+    groundTimer: 2000
     waypoints:
       - [5, 4, 80]
       - [5, 0, 100]

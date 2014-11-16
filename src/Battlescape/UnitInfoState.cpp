@@ -577,21 +577,21 @@ void UnitInfoState::init()
 	ss.str(L"");
 	ss << stat;
 	_numTimeUnits->setText(ss.str());
-	_barTimeUnits->setMax(static_cast<double>(_unit->getStats()->tu));
+	_barTimeUnits->setMax(static_cast<double>(_unit->getBaseStats()->tu));
 	_barTimeUnits->setValue(static_cast<double>(stat));
 
 	stat = _unit->getEnergy();
 	ss.str(L"");
 	ss << stat;
 	_numEnergy->setText(ss.str());
-	_barEnergy->setMax(static_cast<double>(_unit->getStats()->stamina));
+	_barEnergy->setMax(static_cast<double>(_unit->getBaseStats()->stamina));
 	_barEnergy->setValue(static_cast<double>(stat));
 
 	stat = _unit->getHealth();
 	ss.str(L"");
 	ss << stat;
 	_numHealth->setText(ss.str());
-	_barHealth->setMax(static_cast<double>(_unit->getStats()->health));
+	_barHealth->setMax(static_cast<double>(_unit->getBaseStats()->health));
 	_barHealth->setValue(static_cast<double>(stat));
 	_barHealth->setValue2(static_cast<double>(_unit->getStun()));
 
@@ -612,7 +612,7 @@ void UnitInfoState::init()
 	}
 	_numFatalWounds->setText(ss.str());
 
-	stat = _unit->getStats()->bravery;
+	stat = _unit->getBaseStats()->bravery;
 	ss.str(L"");
 	ss << stat;
 	_numBravery->setText(ss.str());
@@ -628,7 +628,7 @@ void UnitInfoState::init()
 
 	double acuModi = _unit->getAccuracyModifier();
 
-	double arbitraryVariable = static_cast<double>(_unit->getStats()->reactions);
+	double arbitraryVariable = static_cast<double>(_unit->getBaseStats()->reactions);
 	_barReactions->setMax(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barReactions->setValue(arbitraryVariable);
@@ -637,7 +637,7 @@ void UnitInfoState::init()
 	ss << stat;
 	_numReactions->setText(ss.str());
 
-	arbitraryVariable = static_cast<double>(_unit->getStats()->firing);
+	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->firing);
 	_barFiring->setMax(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barFiring->setValue(arbitraryVariable);
@@ -646,7 +646,7 @@ void UnitInfoState::init()
 	ss << stat;
 	_numFiring->setText(ss.str());
 
-	arbitraryVariable = static_cast<double>(_unit->getStats()->throwing);
+	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->throwing);
 	_barThrowing->setMax(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barThrowing->setValue(arbitraryVariable);
@@ -655,7 +655,7 @@ void UnitInfoState::init()
 	ss << stat;
 	_numThrowing->setText(ss.str());
 
-	arbitraryVariable = static_cast<double>(_unit->getStats()->melee);
+	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->melee);
 	_barMelee->setMax(arbitraryVariable);
 	arbitraryVariable *= acuModi;
 	_barMelee->setValue(arbitraryVariable);
@@ -664,7 +664,7 @@ void UnitInfoState::init()
 	ss << stat;
 	_numMelee->setText(ss.str());
 
-	arbitraryVariable = static_cast<double>(_unit->getStats()->strength);
+	arbitraryVariable = static_cast<double>(_unit->getBaseStats()->strength);
 	_barStrength->setMax(arbitraryVariable);
 	arbitraryVariable *= acuModi / 2.0 + 0.5;
 	_barStrength->setValue(arbitraryVariable);
@@ -674,7 +674,7 @@ void UnitInfoState::init()
 	_numStrength->setText(ss.str());
 
 
-	if (_unit->getStats()->psiSkill > minPsi
+	if (_unit->getBaseStats()->psiSkill > minPsi
 		|| _unit->getGeoscapeSoldier() == NULL
 		|| (Options::psiStrengthEval
 			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
@@ -683,7 +683,7 @@ void UnitInfoState::init()
 
 		if (_unit->isFearable() == true)
 		{
-			stat = _unit->getStats()->psiStrength;
+			stat = _unit->getBaseStats()->psiStrength;
 			ss << stat;
 
 			_barPsiStrength->setMax(static_cast<double>(stat));
@@ -705,9 +705,9 @@ void UnitInfoState::init()
 		_barPsiStrength->setVisible(false);
 	}
 
-	if (_unit->getStats()->psiSkill > minPsi)
+	if (_unit->getBaseStats()->psiSkill > minPsi)
 	{
-		stat = _unit->getStats()->psiSkill;
+		stat = _unit->getBaseStats()->psiSkill;
 		ss.str(L"");
 		ss << stat;
 		_numPsiSkill->setText(ss.str());

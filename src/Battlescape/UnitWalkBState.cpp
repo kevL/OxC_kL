@@ -349,7 +349,7 @@ bool UnitWalkBState::doStatusStand()
 		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, postPathProcedures";
 
 		if (_unit->getFaction() != FACTION_PLAYER)	// kL, Can civies hideForTurn ?
-			_unit->_hidingForTurn = false;			// 'cause, clearly we're not hidden now!!1
+			_unit->setHiding(false);				// 'cause, clearly we're not hidden now!!1
 
 		_unit->setCache(NULL);					// kL. Calls to cacheUnit() are bogus without setCache(NULL) first...!
 		_parent->getMap()->cacheUnit(_unit);	// although _cacheInvalid might be set elsewhere but i doubt it.
@@ -828,20 +828,21 @@ bool UnitWalkBState::doStatusStand_end()
 	{
 		BattlescapeState* battleState = _parent->getSave()->getBattleState();
 
-		double stat = static_cast<double>(_unit->getStats()->tu);
+		double stat = static_cast<double>(_unit->getBaseStats()->tu);
 		const int tu = _unit->getTimeUnits();
 		battleState->getTimeUnitsField()->setValue(static_cast<unsigned>(tu));
 		battleState->getTimeUnitsBar()->setValue(ceil(
 											static_cast<double>(tu) / stat * 100.0));
 
-		stat = static_cast<double>(_unit->getStats()->stamina);
+		stat = static_cast<double>(_unit->getBaseStats()->stamina);
 		const int energy = _unit->getEnergy();
 		battleState->getEnergyField()->setValue(static_cast<unsigned>(energy));
 		battleState->getEnergyBar()->setValue(ceil(
 											static_cast<double>(energy) / stat * 100.0));
 	}
 
-	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR) // if the unit burns floortiles, burn floortiles
+	if (_unit->getSpecialAbility() == SPECAB_BURNFLOOR // if the unit burns floortiles, burn floortiles
+		|| _unit->getSpecialAbility() == SPECAB_BURN_AND_EXPLODE)
 	{
 		// kL_add: Put burnedBySilacoid() here! etc
 		_unit->getTile()->ignite(1);
@@ -852,10 +853,10 @@ bool UnitWalkBState::doStatusStand_end()
 							8,
 							-(_unit->getTile()->getTerrainLevel()));
 		_parent->getTileEngine()->hit(
-								pos,
-								_unit->getStats()->strength, // * _unit->getAccuracyModifier(),
-								DT_IN,
-								_unit);
+									pos,
+									_unit->getBaseStats()->strength, // * _unit->getAccuracyModifier(),
+									DT_IN,
+									_unit);
 	}
 
 	_terrain->calculateUnitLighting(); // move our personal lighting with us
@@ -935,7 +936,7 @@ void UnitWalkBState::doStatusTurn()
 		//else if (_unit->getFaction() != FACTION_PLAYER) Log(LOG_INFO) << ". . _newUnitSpotted = TRUE, Abort path, popState";
 
 		if (_unit->getFaction() != FACTION_PLAYER)
-			_unit->_hidingForTurn = false;
+			_unit->setHiding(false);
 
 		_pf->abortPath();
 		_unit->setStatus(STATUS_STANDING);
@@ -1017,11 +1018,11 @@ void UnitWalkBState::postPathProcedures()
 															action));
 			}
 		}
-		else if (_unit->_hidingForTurn)
+		else if (_unit->isHiding() == true)
 		{
 			dirFinal = _unit->getDirection() + 4;
 
-			_unit->_hidingForTurn = false;
+			_unit->setHiding(false);
 			_unit->dontReselect();
 		}
 
@@ -1112,8 +1113,8 @@ void UnitWalkBState::playMovementSound()
 {
 	if (_unit->getVisible() == false
 		&& _parent->getSave()->getDebugMode() == false)
-//kL	|| (!_walkCam->isOnScreen(_unit->getPosition(), true)
-//kL		&& !_walkCam->isOnScreen(_unit->getDestination(), true)))
+//		|| (!_walkCam->isOnScreen(_unit->getPosition(), true)
+//			&& !_walkCam->isOnScreen(_unit->getDestination(), true)))
 	{
 		return;
 	}
@@ -1133,15 +1134,14 @@ void UnitWalkBState::playMovementSound()
 				* const tile = _unit->getTile(),
 				* const belowTile = _parent->getSave()->getTile(tile->getPosition() + Position(0, 0,-1));
 
-			if (_unit->getWalkingPhase() == 3) // play footstep sound 1
+			const int stepSound = tile->getFootstepSound(belowTile);
+			if (stepSound > -1)
 			{
-				if (tile->getFootstepSound(belowTile))
-					sound = ResourcePack::WALK_OFFSET + 1 + (tile->getFootstepSound(belowTile) * 2);
-			}
-			else if (_unit->getWalkingPhase() == 7) // play footstep sound 2
-			{
-				if (tile->getFootstepSound(belowTile))
-					sound = ResourcePack::WALK_OFFSET + (tile->getFootstepSound(belowTile) * 2);
+				const int walkPhase = _unit->getWalkingPhase();
+				if (walkPhase == 3)
+					sound = stepSound * 2 + ResourcePack::WALK_OFFSET + 1;
+				else if (walkPhase == 7)
+					sound = stepSound * 2 + ResourcePack::WALK_OFFSET;
 			}
 		}
 		else if (_unit->getStatus() == STATUS_FLYING)

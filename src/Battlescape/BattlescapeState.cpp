@@ -98,6 +98,7 @@
 #include "../Ruleset/RuleInterface.h"
 #include "../Ruleset/Ruleset.h"
 
+#include "../Savegame/AlienBase.h"
 #include "../Savegame/Base.h"
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -105,6 +106,7 @@
 #include "../Savegame/SavedGame.h"
 #include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/Soldier.h"
+#include "../Savegame/TerrorSite.h"
 #include "../Savegame/Tile.h"
 
 
@@ -2466,7 +2468,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 	const int strength = static_cast<int>(Round(
-							static_cast<double>(selectedUnit->getStats()->strength) * (selectedUnit->getAccuracyModifier() / 2.0 + 0.5)));
+							static_cast<double>(selectedUnit->getBaseStats()->strength) * (selectedUnit->getAccuracyModifier() / 2.0 + 0.5)));
 	if (selectedUnit->getCarriedWeight() > strength)
 		_weight->setVisible();
 
@@ -2512,19 +2514,19 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	double stat = static_cast<double>(selectedUnit->getStats()->tu);
+	double stat = static_cast<double>(selectedUnit->getBaseStats()->tu);
 	const int tu = selectedUnit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setValue(ceil(
 							static_cast<double>(tu) / stat * 100.0));
 
-	stat = static_cast<double>(selectedUnit->getStats()->stamina);
+	stat = static_cast<double>(selectedUnit->getBaseStats()->stamina);
 	const int energy = selectedUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
 	_barEnergy->setValue(ceil(
 							static_cast<double>(energy) / stat * 100.0));
 
-	stat = static_cast<double>(selectedUnit->getStats()->health);
+	stat = static_cast<double>(selectedUnit->getBaseStats()->health);
 	const int health = selectedUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
 	_barHealth->setValue(ceil(
@@ -2648,7 +2650,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 
 	showPsiButton(
 				selectedUnit->getOriginalFaction() == FACTION_HOSTILE
-				&& selectedUnit->getStats()->psiSkill > 0);
+				&& selectedUnit->getBaseStats()->psiSkill > 0);
 
 	//Log(LOG_INFO) << "BattlescapeState::updateSoldierInfo() EXIT";
 }
@@ -3345,8 +3347,8 @@ void BattlescapeState::popup(State* state)
  *							aliens or objective being destroyed
  */
 void BattlescapeState::finishBattle(
-		bool abort,
-		int inExitArea)
+		const bool abort,
+		const int inExitArea)
 {
 	while (_game->isState(this) == false)
 		_game->popState();
@@ -3375,23 +3377,48 @@ void BattlescapeState::finishBattle(
 		Mix_HaltMusic();
 #endif
 
-	std::string nextStage;
+//	std::string nextStage;
+//	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT"
+//		&& _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+//	{
+	std::string nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
+//	}
 
-	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT"
-		&& _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
+	if (nextStage.empty() == false	// if there is a next mission stage, and
+		&& inExitArea > 0)			// there are soldiers in Exit_Area OR all aLiens are dead, Load the Next Stage!!!
 	{
-		nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
-	}
+		std::string nextStageRace = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStageRace();
 
-	if (nextStage.empty() == false	// if there is a next mission stage
-		&& inExitArea > 0)			// there are people in exit area OR all aliens are dead, load the next stage
-	{
+		for (std::vector<TerrorSite*>::const_iterator
+				ts = _game->getSavedGame()->getTerrorSites()->begin();
+				ts != _game->getSavedGame()->getTerrorSites()->end()
+					&& nextStageRace.empty() == true;
+				++ts)
+		{
+			if ((*ts)->isInBattlescape() == true)
+				nextStageRace = (*ts)->getAlienRace();
+		}
+
+		for (std::vector<AlienBase*>::const_iterator
+				ab = _game->getSavedGame()->getAlienBases()->begin();
+				ab != _game->getSavedGame()->getAlienBases()->end()
+					&& nextStageRace.empty() == true;
+				++ab)
+		{
+			if ((*ab)->isInBattlescape() == true)
+				nextStageRace = (*ab)->getAlienRace();
+		}
+
+		if (nextStageRace.empty() == true)
+			nextStageRace = "STR_MIXED";
+
 		_popups.clear();
 		_save->setMissionType(nextStage);
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-		bgen.setAlienRace("STR_MIXED");
+//		bgen.setAlienRace("STR_MIXED");
+		bgen.setAlienRace(nextStageRace);
 		bgen.nextStage();
 
 		_game->popState();
@@ -3406,8 +3433,6 @@ void BattlescapeState::finishBattle(
 
 		if (abort == true
 			|| inExitArea == 0)
-//			|| (abort == false
-//				&& inExitArea == 0))
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission

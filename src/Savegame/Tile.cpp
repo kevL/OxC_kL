@@ -74,7 +74,7 @@ Tile::Tile(const Position& pos)
 		_tuMarker(-1),
 		_overlaps(0),
 		_danger(false)
-//		_inventory() // kL
+//		_inventory()
 {
 	for (int
 			i = 0;
@@ -132,7 +132,7 @@ void Tile::load(const YAML::Node& node)
 	for (int
 			i = 0;
 			i < 4;
-			i++)
+			++i)
 	{
 		_mapDataID[i]		= node["mapDataID"][i].as<int>(_mapDataID[i]);
 		_mapDataSetID[i]	= node["mapDataSetID"][i].as<int>(_mapDataSetID[i]);
@@ -145,7 +145,7 @@ void Tile::load(const YAML::Node& node)
 	for (int
 			i = 0;
 			i < 3;
-			i++)
+			++i)
 	{
 		_discovered[i] = node["discovered"][i].as<bool>();
 	}
@@ -155,12 +155,15 @@ void Tile::load(const YAML::Node& node)
 
 	if (node["openDoorNorth"])
 		_curFrame[2] = 7;
+
+//	if (_fire || _smoke)
+//		_animationOffset = std::rand() %4;
 }
 
 /**
  * Load the tile from binary.
  * @param buffer - pointer to buffer
- * @param serKey - serialization key
+ * @param serKey - reference the serialization key
  */
 void Tile::loadBinary(
 		Uint8* buffer,
@@ -182,17 +185,20 @@ void Tile::loadBinary(
 
 	Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields));
 
-	_discovered[0] = (boolFields & 1)? true: false;
-	_discovered[1] = (boolFields & 2)? true: false;
-	_discovered[2] = (boolFields & 4)? true: false;
+	_discovered[0] = (boolFields &1)? true: false;
+	_discovered[1] = (boolFields &2)? true: false;
+	_discovered[2] = (boolFields &4)? true: false;
 
-	_curFrame[1] = (boolFields & 8)? 7: 0;
-	_curFrame[2] = (boolFields & 0x10)? 7: 0;
+	_curFrame[1] = (boolFields &8)? 7: 0;
+	_curFrame[2] = (boolFields &0x10)? 7: 0;
+
+//	if (_fire || _smoke)
+//		_animationOffset = std::rand() %4;
 }
 
 /**
  * Saves the tile to a YAML node.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node Tile::save() const
 {
@@ -409,7 +415,7 @@ int Tile::getTerrainLevel() const
  */
 int Tile::getFootstepSound(Tile* tileBelow) const
 {
-	int sound = 0;
+	int sound = -1;
 
 	if (_objects[MapData::O_OBJECT]
 		&& _objects[MapData::O_OBJECT]->getBigWall() == 0

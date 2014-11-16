@@ -48,7 +48,7 @@ struct convert<OpenXcom::DeploymentData>
 			const Node& node,
 			OpenXcom::DeploymentData& rhs)
 	{
-		if (!node.IsMap())
+		if (node.IsMap() == false)
 			return false;
 
 		rhs.alienRank				= node["alienRank"]				.as<int>(rhs.alienRank);
@@ -96,15 +96,16 @@ AlienDeployment::~AlienDeployment()
  */
 void AlienDeployment::load(const YAML::Node& node)
 {
-	_type			= node["type"]		.as<std::string>(_type);
-	_data			= node["data"]		.as< std::vector<DeploymentData> >(_data);
-	_width			= node["width"]		.as<int>(_width);
-	_length			= node["length"]	.as<int>(_length);
-	_height			= node["height"]	.as<int>(_height);
-	_civilians		= node["civilians"]	.as<int>(_civilians);
-	_terrains		= node["terrains"]	.as<std::vector<std::string> >(_terrains);
-	_shade			= node["shade"]		.as<int>(_shade);
-	_nextStage		= node["nextStage"]	.as<std::string>(_nextStage);
+	_type			= node["type"]			.as<std::string>(_type);
+	_data			= node["data"]			.as< std::vector<DeploymentData> >(_data);
+	_width			= node["width"]			.as<int>(_width);
+	_length			= node["length"]		.as<int>(_length);
+	_height			= node["height"]		.as<int>(_height);
+	_civilians		= node["civilians"]		.as<int>(_civilians);
+	_terrains		= node["terrains"]		.as<std::vector<std::string> >(_terrains);
+	_shade			= node["shade"]			.as<int>(_shade);
+	_nextStage		= node["nextStage"]		.as<std::string>(_nextStage);
+	_nextStageRace	= node["nextStageRace"]	.as<std::string>(_nextStageRace);
 }
 
 /**
@@ -193,6 +194,15 @@ int AlienDeployment::getShade() const
 std::string AlienDeployment::getNextStage() const
 {
 	return _nextStage;
+}
+
+/**
+ * Gets the next stage's aLien race.
+ * @return, the next stage's alien race
+ */
+std::string AlienDeployment::getNextStageRace() const
+{
+	return _nextStageRace;
 }
 
 }

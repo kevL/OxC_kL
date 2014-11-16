@@ -111,6 +111,7 @@ BattleUnit::BattleUnit(
 		_charging(NULL),
 		_turnsExposed(255),
 		_hidingForTurn(false),
+		_respawn(false),
 		_battleOrder(0),
 		_stopShot(false),
 		_dashing(false),
@@ -260,6 +261,7 @@ BattleUnit::BattleUnit(
 		_charging(NULL),
 		_turnsExposed(255),
 		_hidingForTurn(false),
+		_respawn(false),
 		_stopShot(false),
 		_dashing(false),
 		_takenExpl(false),
@@ -271,7 +273,7 @@ BattleUnit::BattleUnit(
 		_breathFrame(-1),
 		_breathing(false),
 		_floorAbove(false),
-		_gender(GENDER_MALE),
+//		_gender(GENDER_MALE),
 		_diedByFire(false),
 
 		_statistics(NULL) // Soldier Diary
@@ -307,7 +309,12 @@ BattleUnit::BattleUnit(
 	_spawnUnit		= unit->getSpawnUnit();
 	_value			= unit->getValue();
 
-	_movementType	= _armor->getMovementType();
+	if (unit->isFemale() == true)
+		_gender = GENDER_FEMALE;
+	else
+		_gender = GENDER_MALE;
+
+	_movementType = _armor->getMovementType();
 	if (_movementType == MT_FLOAT)
 	{
 		if (depth > 0)
@@ -400,6 +407,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_specab				= (SpecialAbility)node["specab"]					.as<int>(_specab);
 	_spawnUnit			= node["spawnUnit"]									.as<std::string>(_spawnUnit);
 	_motionPoints		= node["motionPoints"]								.as<int>(0);
+	_respawn			= node["respawn"]									.as<bool>(_respawn);
 	_activeHand			= node["activeHand"]								.as<std::string>(_activeHand);
 
 	for (int i = 0; i < 5; i++)
@@ -457,6 +465,7 @@ YAML::Node BattleUnit::save() const
 	node["killedBy"]		= (int)_killedBy;
 	node["specab"]			= (int)_specab;
 	node["motionPoints"]	= _motionPoints;
+	node["respawn"]			= _respawn;
 	// could put (if not tank) here:
 	node["activeHand"]		= _activeHand;
 
@@ -1773,7 +1782,7 @@ int BattleUnit::getActionTUs(
 	{
 		cost = std::max(
 					1,
-					static_cast<int>(floor(static_cast<double>(getStats()->tu * cost) / 100.0)));
+					static_cast<int>(floor(static_cast<double>(getBaseStats()->tu * cost) / 100.0)));
 	}
 
 	return cost;
@@ -1822,8 +1831,8 @@ void BattleUnit::setTimeUnits(int tu)
 	else
 		_tu = tu;
 
-//	if (_tu > getStats()->tu) // this might screw up ArmorBonus +tu
-//		_tu = getStats()->tu; // it definitely screws up stopShot.
+//	if (_tu > getBaseStats()->tu) // this might screw up ArmorBonus +tu
+//		_tu = getBaseStats()->tu; // it definitely screws up stopShot.
 }
 
 /**
@@ -1837,8 +1846,8 @@ void BattleUnit::setEnergy(int energy)
 	else
 		_energy = energy;
 
-	if (_energy > getStats()->stamina) // this might screw up ArmorBonus +stamina
-		_energy = getStats()->stamina;
+	if (_energy > getBaseStats()->stamina) // this might screw up ArmorBonus +stamina
+		_energy = getBaseStats()->stamina;
 }
 
 /**
@@ -1982,8 +1991,8 @@ double BattleUnit::getFiringAccuracy(
 
 		if (item->getRules()->isSkillApplied())
 		{
-			ret = ret * static_cast<double>(getStats()->melee) / 100.0;
-			//Log(LOG_INFO) << ". meleeStat = " << getStats()->melee << " ret[2] = " << ret;
+			ret = ret * static_cast<double>(getBaseStats()->melee) / 100.0;
+			//Log(LOG_INFO) << ". meleeStat = " << getBaseStats()->melee << " ret[2] = " << ret;
 		}
 	}
 	else
@@ -1995,7 +2004,7 @@ double BattleUnit::getFiringAccuracy(
 		else if (actionType == BA_AUTOSHOT)
 			acu = item->getRules()->getAccuracyAuto();
 
-		ret = static_cast<double>(acu * getStats()->firing) / 10000.0;
+		ret = static_cast<double>(acu * getBaseStats()->firing) / 10000.0;
 
 		if (_kneeled)
 			ret *= 1.16;
@@ -2020,7 +2029,7 @@ double BattleUnit::getFiringAccuracy(
  */
 double BattleUnit::getThrowingAccuracy()
 {
-	return static_cast<double>(getStats()->throwing) * getAccuracyModifier() / 100.0;
+	return static_cast<double>(getBaseStats()->throwing) * getAccuracyModifier() / 100.0;
 }
 
 /**
@@ -2032,7 +2041,7 @@ double BattleUnit::getThrowingAccuracy()
 double BattleUnit::getAccuracyModifier(BattleItem* item)
 {
 	//Log(LOG_INFO) << "BattleUnit::getAccuracyModifier()";
-	double ret = static_cast<double>(_health) / static_cast<double>(getStats()->health);
+	double ret = static_cast<double>(_health) / static_cast<double>(getBaseStats()->health);
 
 	int wounds = _fatalWounds[BODYPART_HEAD];
 
@@ -2111,8 +2120,8 @@ int BattleUnit::getFatalWounds() const
 double BattleUnit::getInitiative(int tuSpent)
 {
 	double ret = static_cast<double>(
-						getStats()->reactions * (getTimeUnits() - tuSpent))
-						/ static_cast<double>(getStats()->tu);
+						getBaseStats()->reactions * (getTimeUnits() - tuSpent))
+						/ static_cast<double>(getBaseStats()->tu);
 
 	ret *= getAccuracyModifier();
 
@@ -2128,9 +2137,9 @@ void BattleUnit::prepareUnitTurn()
 	_faction = _originalFaction;
 	_unitsSpottedThisTurn.clear();
 
-	int prepTU = getStats()->tu;
+	int prepTU = getBaseStats()->tu;
 
-	double underLoad = static_cast<double>(getStats()->strength) / static_cast<double>(getCarriedWeight());
+	double underLoad = static_cast<double>(getBaseStats()->strength) / static_cast<double>(getCarriedWeight());
 	underLoad *= getAccuracyModifier() / 2.0 + 0.5;
 	if (underLoad < 1.0)
 		prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
@@ -2148,7 +2157,7 @@ void BattleUnit::prepareUnitTurn()
 	{
 		// kL_begin: advanced Energy recovery
 		int
-			stamina = getStats()->stamina,
+			stamina = getBaseStats()->stamina,
 			enron = stamina;
 
 		if (_faction == FACTION_PLAYER)
@@ -2185,19 +2194,9 @@ void BattleUnit::prepareUnitTurn()
 
 	_health -= getFatalWounds(); // suffer from fatal wounds
 
-	// Fire damage is also in Battlescape/BattlescapeGame::endGameTurn(), stand on fire tile
-	// see also, Savegame/Tile::prepareTileTurn(), catch fire on fire tile
-	// fire damage by hit is caused by TileEngine::explode()
-/*kL	if (//kL !_hitByFire &&
-		_fire > 0) // suffer from fire
-	{
-		int fireDam = static_cast<int>(_armor->getDamageModifier(DT_IN) * RNG::generate(2, 6));
-		//Log(LOG_INFO) << ". fireDam = " << fireDam;
-		_health -= fireDam;
-
-		_fire--;
-	} */
-
+	// Fire damage is in Battlescape/BattlescapeGame::endGameTurn(), standing on fire tile;
+	// see also, Savegame/Tile::prepareTileTurn(), catch fire on fire tile;
+	// fire damage by hit is caused by TileEngine::explode().
 	if (_fire > 0)
 		_fire--;
 
@@ -2208,9 +2207,7 @@ void BattleUnit::prepareUnitTurn()
 		&& _currentAIState != NULL)
 	{
 		_currentAIState->exit();
-
 		delete _currentAIState;
-
 		_currentAIState = NULL;
 	}
 
@@ -2234,14 +2231,13 @@ void BattleUnit::prepareUnitTurn()
 			if (RNG::percent(30))
 				_status = STATUS_BERSERK;	// or shoot stuff.
 		}
-		else if (panic > 0			// successfully avoided Panic
+		else if (panic > 0					// successfully avoided Panic
 			&& _geoscapeSoldier != NULL)
 		{
 			_expBravery++;
 		}
 	}
 
-//kL	_hitByFire = false;
 	_dontReselect = false;
 	_motionPoints = 0;
 
@@ -2293,12 +2289,17 @@ bool BattleUnit::reselectAllowed() const
 
 /**
  * Sets the amount of turns this unit is on fire.
- * @param fire - amount of turns this unit will be on fire (0 - no fire)
+ * @param fire - amount of turns this unit will be on fire (no fire 0)
  */
 void BattleUnit::setFire(int fire)
 {
-	if (_specab != SPECAB_BURNFLOOR)
+//	if (_specab == SPECAB_BURNFLOOR
+//		|| _specab == SPECAB_BURN_AND_EXPLODE)
+	if (_specab != SPECAB_BURNFLOOR
+		&& _specab != SPECAB_BURN_AND_EXPLODE)
+	{
 		_fire = fire;
+	}
 }
 
 /**
@@ -2760,24 +2761,26 @@ bool BattleUnit::isInExitArea(SpecialTileType stt) const
 }
 
 /**
- * Gets the unit height taking into account kneeling/standing.
+ * Gets this unit's height whether standing or kneeling.
  * @return, unit's height
  */
 int BattleUnit::getHeight() const
 {
-	int ret = getStandHeight();;
+	int ret;
 
-	if (isKneeled())
-		ret = getKneelHeight();
+	if (isKneeled() == true)
+		ret = _kneelHeight; //getKneelHeight();
+	else
+		ret = _standHeight; // getStandHeight();
 
-	if (ret > 24)
-		ret = 24;
+//	if (ret > 24)
+//		ret = 24;
 
 	return ret;
 }
 
 /**
- * Gets a soldier's Firing experience.
+ * Gets this unit's Firing experience.
  * @return, firing xp
  */
 int BattleUnit::getExpFiring() const
@@ -3129,8 +3132,8 @@ void BattleUnit::heal(
 	_fatalWounds[part] -= wounds;
 
 	_health += health;
-	if (_health > getStats()->health)
-		_health = getStats()->health;
+	if (_health > getBaseStats()->health)
+		_health = getBaseStats()->health;
 
 	moraleChange(health);
 }
@@ -3140,7 +3143,7 @@ void BattleUnit::heal(
  */
 void BattleUnit::painKillers()
 {
-	int lostHealth = getStats()->health - _health;
+	int lostHealth = getBaseStats()->health - _health;
 	if (lostHealth > _moraleRestored)
 	{
 		_morale = std::min(
@@ -3160,8 +3163,8 @@ void BattleUnit::stimulant(
 		int stun)
 {
 	_energy += energy;
-	if (_energy > getStats()->stamina)
-		_energy = getStats()->stamina;
+	if (_energy > getBaseStats()->stamina)
+		_energy = getBaseStats()->stamina;
 
 	healStun(stun);
 }
@@ -3267,9 +3270,10 @@ std::wstring BattleUnit::getName(
 
 /**
  * Gets a pointer to this BattleUnit's stats.
+ * NOTE: xCom Soldiers return their current statistics; aLiens & Units return rule statistics.
  * @return, pointer to UnitStats
  */
-const UnitStats* BattleUnit::getStats() const
+const UnitStats* BattleUnit::getBaseStats() const
 {
 	return &_stats;
 }
@@ -3314,7 +3318,7 @@ int BattleUnit::getLoftemps(int entry) const
 }
 
 /**
- * Gets the unit's value. Used for score at debriefing.
+ * Gets this unit's value. Used for score at debriefing.
  * @return, value score
  */
 int BattleUnit::getValue() const
@@ -3323,7 +3327,7 @@ int BattleUnit::getValue() const
 }
 
 /**
- * Gets the unit's death sound.
+ * Gets this unit's death sound.
  * @return, death sound ID
  */
 int BattleUnit::getDeathSound() const
@@ -3332,7 +3336,7 @@ int BattleUnit::getDeathSound() const
 }
 
 /**
- * Gets the unit's move sound.
+ * Gets this unit's move sound.
  * @return, move sound ID
  */
 int BattleUnit::getMoveSound() const
@@ -3347,27 +3351,40 @@ int BattleUnit::getMoveSound() const
  */
 bool BattleUnit::isWoundable() const
 {
-	return _geoscapeSoldier != NULL
-		|| (Options::alienBleeding
-			&& _unitRules->getMechanical() == false
-			&& _race != "STR_ZOMBIE");
+	if (_geoscapeSoldier != NULL)
+		return true;
+
+	if (Options::alienBleeding
+		&& _unitRules->getMechanical() == false
+		&& _race != "STR_ZOMBIE")
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /**
- * Gets whether the unit is affected by morale loss.
- * Normally only small units are affected by morale loss.
+ * Gets whether this unit is affected by morale loss.
  * @return, true if unit can be affected by morale changes
  */
 bool BattleUnit::isFearable() const
 {
-	return _geoscapeSoldier != NULL
-		|| (_unitRules->getMechanical() == false
-			&& _race != "STR_ZOMBIE");
+	if (_geoscapeSoldier != NULL)
+		return true;
+
+	if (_unitRules->getMechanical() == false
+		&& _race != "STR_ZOMBIE")
+	{
+		return true;
+	}
+
+	return false;
 }
 
 /**
- * Get the number of turns an AI unit remembers a soldier's position.
- * @return, intelligence ( # of turns )
+ * Gets the number of turns an AI unit remembers a soldier's position.
+ * @return, intelligence
  */
 int BattleUnit::getIntelligence() const
 {
@@ -3375,7 +3392,7 @@ int BattleUnit::getIntelligence() const
 }
 
 /**
- * Get the unit's aggression rating for use by the AI.
+ * Gets this unit's aggression rating for use by the AI.
  * @return, aggression
  */
 int BattleUnit::getAggression() const
@@ -3384,7 +3401,8 @@ int BattleUnit::getAggression() const
 }
 
 /**
- * Gets a unit's special ability. ( See SPECAB_* enum )
+ * Gets this unit's special ability (SpecialAbility enum).
+ * @return, SpecialAbility
  */
 int BattleUnit::getSpecialAbility() const
 {
@@ -3392,17 +3410,35 @@ int BattleUnit::getSpecialAbility() const
 }
 
 /**
- * Sets a unit's special ability. ( See SPECAB_* enum )
+ * Sets this unit's special ability (SpecialAbility enum).
  * @param specab - SpecialAbility
  */
-void BattleUnit::setSpecialAbility(SpecialAbility specab)
+void BattleUnit::setSpecialAbility(const SpecialAbility specab)
 {
 	_specab = specab;
 }
 
 /**
- * Gets a unit that is spawned when this one dies.
- * @return, special spawn unit type ( ie. ZOMBIES!!! )
+ * Sets this unit to respawn or not.
+ * @param respawn - true to respawn
+ */
+void BattleUnit::setRespawn(const bool respawn)
+{
+	_respawn = respawn;
+}
+
+/**
+ * Gets this unit's respawn flag.
+ * @return, true for respawn
+ */
+bool BattleUnit::getRespawn() const
+{
+	return _respawn;
+}
+
+/**
+ * Gets unit-type that is spawned when this one dies.
+ * @return, special spawn unit type (ie. ZOMBIES!!!)
  */
 std::string BattleUnit::getSpawnUnit() const
 {
@@ -3410,7 +3446,7 @@ std::string BattleUnit::getSpawnUnit() const
 }
 
 /**
- * Sets a unit that is spawned when this one dies.
+ * Sets a unit-type that is spawned when this one dies.
  * @param spawnUnit - reference the special unit type
  */
 void BattleUnit::setSpawnUnit(const std::string& spawnUnit)
@@ -3419,7 +3455,7 @@ void BattleUnit::setSpawnUnit(const std::string& spawnUnit)
 }
 
 /**
- * Gets the unit's rank string.
+ * Gets this unit's rank string.
  * @return, rank
  */
 std::string BattleUnit::getRankString() const
@@ -3428,7 +3464,7 @@ std::string BattleUnit::getRankString() const
 }
 
 /**
- * Gets the unit's race string.
+ * Gets this unit's race string.
  * @return, race
  */
 std::string BattleUnit::getRaceString() const
