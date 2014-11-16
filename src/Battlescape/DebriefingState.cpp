@@ -226,7 +226,7 @@ DebriefingState::DebriefingState()
 		aliensKilled	= 0;
 
 	//Log(LOG_INFO) << ". iterate _stats";
-	for (std::vector<DebriefingStat*>::iterator
+	for (std::vector<DebriefingStat*>::const_iterator
 			i = _stats.begin();
 			i != _stats.end();
 			++i)
@@ -382,7 +382,7 @@ DebriefingState::DebriefingState()
 //	BattleUnitStatistics* statistics = NULL; // BattleUnit::getStatistics()
 //	Soldier* soldier = NULL; // BattleUnit::getGeoscapeSoldier() const
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = battle->getUnits()->begin();
 			i != battle->getUnits()->end();
 			++i)
@@ -458,7 +458,7 @@ DebriefingState::~DebriefingState()
 	if (_game->isQuitting())
 		_game->getSavedGame()->setBattleGame(NULL);
 
-	for (std::vector<DebriefingStat*>::iterator
+	for (std::vector<DebriefingStat*>::const_iterator
 			i = _stats.begin();
 			i != _stats.end();
 			++i)
@@ -466,7 +466,7 @@ DebriefingState::~DebriefingState()
 		delete *i;
 	}
 
-	for (std::map<int, SpecialType*>::iterator
+	for (std::map<int, SpecialType*>::const_iterator
 			i = _specialTypes.begin();
 			i != _specialTypes.end();
 			++i)
@@ -591,7 +591,7 @@ void DebriefingState::addStat(
 		int quantity)
 {
 	//Log(LOG_INFO) << "DebriefingState::addStat()";
-	for (std::vector<DebriefingStat*>::iterator
+	for (std::vector<DebriefingStat*>::const_iterator
 			i = _stats.begin();
 			i != _stats.end();
 			++i)
@@ -710,8 +710,8 @@ void DebriefingState::prepareDebriefing()
 									_rules->getAlienFuel(),
 									true));
 
-	SavedGame* save = _game->getSavedGame();
-	SavedBattleGame* battle = save->getSavedBattle();
+	SavedGame* const save = _game->getSavedGame();
+	SavedBattleGame* const battle = save->getSavedBattle();
 
 	bool
 		aborted = battle->isAborted(),
@@ -720,7 +720,7 @@ void DebriefingState::prepareDebriefing()
 	Base* base = NULL;
 	Craft* craft = NULL;
 
-	std::vector<Craft*>::iterator craftIterator;
+	std::vector<Craft*>::const_iterator craftIterator;
 
 
 	_missionStatistics->time = *save->getTime();
@@ -732,24 +732,23 @@ void DebriefingState::prepareDebriefing()
 		soldierDead	= 0, // Soldier Diary.
 		soldierOut	= 0;
 
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::const_iterator
 			i = save->getBases()->begin();
 			i != save->getBases()->end();
 			++i)
 	{
-		// in case we have a craft - check which craft it is about
-		for (std::vector<Craft*>::iterator
+		for (std::vector<Craft*>::const_iterator // in case there is a craft - check which craft it is about
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end();
 				++j)
 		{
-			if ((*j)->isInBattlescape())
+			if ((*j)->isInBattlescape() == true)
 			{
-				double
+				const double
 					craftLon = (*j)->getLongitude(),
 					craftLat = (*j)->getLatitude();
 
-				for (std::vector<Region*>::iterator
+				for (std::vector<Region*>::const_iterator
 						k = save->getRegions()->begin();
 						k != save->getRegions()->end();
 						++k)
@@ -764,7 +763,7 @@ void DebriefingState::prepareDebriefing()
 					}
 				}
 
-				for (std::vector<Country*>::iterator
+				for (std::vector<Country*>::const_iterator
 						k = save->getCountries()->begin();
 						k != save->getCountries()->end();
 						++k)
@@ -788,25 +787,26 @@ void DebriefingState::prepareDebriefing()
 			}
 			else if ((*j)->getDestination() != NULL)
 			{
-				Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestination());
+				const Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (ufo != NULL
-					&& ufo->isInBattlescape())
+					&& ufo->isInBattlescape() == true)
 				{
 					(*j)->returnToBase();
 				}
 			}
 		}
 
-		if ((*i)->isInBattlescape()) // in case we DON'T have a craft (base defense)
+		if ((*i)->isInBattlescape() == true) // in case we DON'T have a craft (base defense)
 		{
 			base = *i;
 			base->setInBattlescape(false);
+			base->cleanupDefenses(false);
 
-			double
+			const double
 				baseLon = base->getLongitude(),
 				baseLat = base->getLatitude();
 
-			for (std::vector<Region*>::iterator
+			for (std::vector<Region*>::const_iterator
 					k = save->getRegions()->begin();
 					k != save->getRegions()->end();
 					++k)
@@ -821,7 +821,7 @@ void DebriefingState::prepareDebriefing()
 				}
 			}
 
-			for (std::vector<Country*>::iterator
+			for (std::vector<Country*>::const_iterator
 					k = save->getCountries()->begin();
 					k != save->getCountries()->end();
 					++k)
@@ -836,11 +836,11 @@ void DebriefingState::prepareDebriefing()
 				}
 			}
 
-			if (aborted)
+			if (aborted == true)
 				_destroyXCOMBase = true;
 
 			bool facDestroyed = false;
-			for (std::vector<BaseFacility*>::iterator
+			for (std::vector<BaseFacility*>::const_iterator
 					k = base->getFacilities()->begin();
 					k != base->getFacilities()->end();
 					)
@@ -877,7 +877,7 @@ void DebriefingState::prepareDebriefing()
 	} // kL_end.
 
 	// UFO crash/landing site disappears
-	for (std::vector<Ufo*>::iterator
+	for (std::vector<Ufo*>::const_iterator
 			i = save->getUfos()->begin();
 			i != save->getUfos()->end();
 			++i)
@@ -907,7 +907,7 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	// terror site disappears (even when you abort)
-	for (std::vector<TerrorSite*>::iterator
+	for (std::vector<TerrorSite*>::const_iterator
 			i = save->getTerrorSites()->begin();
 			i != save->getTerrorSites()->end();
 			++i)
@@ -927,7 +927,7 @@ void DebriefingState::prepareDebriefing()
 	// we evaluate how many surviving XCom units there are,
 	// and if they are unconscious
 	// and how many have died (to use for commendations)
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = battle->getUnits()->begin();
 			i != battle->getUnits()->end();
 			++i)
@@ -955,7 +955,7 @@ void DebriefingState::prepareDebriefing()
 	{
 		soldierLive = 0;
 
-		for (std::vector<BattleUnit*>::iterator
+		for (std::vector<BattleUnit*>::const_iterator
 				i = battle->getUnits()->begin();
 				i != battle->getUnits()->end();
 				++i)
@@ -970,7 +970,7 @@ void DebriefingState::prepareDebriefing()
 
 	if (soldierLive == 1)
 	{
-		for (std::vector<BattleUnit*>::iterator
+		for (std::vector<BattleUnit*>::const_iterator
 				i = battle->getUnits()->begin();
 				i != battle->getUnits()->end();
 				++i)
@@ -1022,7 +1022,7 @@ void DebriefingState::prepareDebriefing()
 
 		success = destroyAlienBase;
 
-		for (std::vector<AlienBase*>::iterator
+		for (std::vector<AlienBase*>::const_iterator
 				i = save->getAlienBases()->begin();
 				i != save->getAlienBases()->end();
 				++i)
@@ -1058,7 +1058,7 @@ void DebriefingState::prepareDebriefing()
 	}
 
 	// time to care about units.
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = battle->getUnits()->begin();
 			i != battle->getUnits()->end();
 			++i)
@@ -1068,7 +1068,7 @@ void DebriefingState::prepareDebriefing()
 			Position pos = (*i)->getPosition();
 			if (pos == Position(-1,-1,-1)) // in fact, this Unit is in limbo...
 			{
-				for (std::vector<BattleItem*>::iterator // so look for its corpse...
+				for (std::vector<BattleItem*>::const_iterator // so look for its corpse...
 						j = battle->getItems()->begin();
 						j != battle->getItems()->end();
 						++j)
@@ -1111,7 +1111,7 @@ void DebriefingState::prepareDebriefing()
 							"STR_XCOM_OPERATIVES_KILLED",
 							-value);
 
-					for (std::vector<Soldier*>::iterator
+					for (std::vector<Soldier*>::const_iterator
 							j = base->getSoldiers()->begin();
 							j != base->getSoldiers()->end();
 							++j)
@@ -1212,7 +1212,7 @@ void DebriefingState::prepareDebriefing()
 
 					if (soldier != NULL)
 					{
-						for (std::vector<Soldier*>::iterator
+						for (std::vector<Soldier*>::const_iterator
 								j = base->getSoldiers()->begin();
 								j != base->getSoldiers()->end();
 								++j)
@@ -1251,7 +1251,7 @@ void DebriefingState::prepareDebriefing()
 				// ADD ALIENS MC'D COUNTER HERE_kL
 				_alienMCs++;
 
-				for (std::vector<BattleItem*>::iterator
+				for (std::vector<BattleItem*>::const_iterator
 						j = (*i)->getInventory()->begin();
 						j != (*i)->getInventory()->end();
 						++j)
@@ -1338,7 +1338,7 @@ void DebriefingState::prepareDebriefing()
 				"STR_XCOM_CRAFT_LOST",
 				-craft->getRules()->getScore());
 
-		for (std::vector<Soldier*>::iterator
+		for (std::vector<Soldier*>::const_iterator
 				i = base->getSoldiers()->begin();
 				i != base->getSoldiers()->end();
 				)
@@ -1369,7 +1369,7 @@ void DebriefingState::prepareDebriefing()
 		&& base->getCrafts()->empty() == false)
 	{
 		//Log(LOG_INFO) << ". aborted BASE_DEFENSE";
-		for (std::vector<Craft*>::iterator
+		for (std::vector<Craft*>::const_iterator
 				i = base->getCrafts()->begin();
 				i != base->getCrafts()->end();
 				++i)
@@ -1499,7 +1499,7 @@ void DebriefingState::prepareDebriefing()
 
 	if (soldierLive > 0) // recover all our goodies
 	{
-		for (std::vector<DebriefingStat*>::iterator
+		for (std::vector<DebriefingStat*>::const_iterator
 				i = _stats.begin();
 				i != _stats.end();
 				++i)
@@ -1539,7 +1539,7 @@ void DebriefingState::prepareDebriefing()
 		if (_destroyXCOMBase == false)
 		{
 			// reequip crafts (only those on the base) after a base defense mission;
-			for (std::vector<Craft*>::iterator
+			for (std::vector<Craft*>::const_iterator
 					c = base->getCrafts()->begin();
 					c != base->getCrafts()->end();
 					++c)
@@ -1552,7 +1552,7 @@ void DebriefingState::prepareDebriefing()
 			}
 
 			// clear base->getVehicles() objects, they not needed anymore.
-			for (std::vector<Vehicle*>::iterator
+			for (std::vector<Vehicle*>::const_iterator
 					i = base->getVehicles()->begin();
 					i != base->getVehicles()->end();
 					++i)
@@ -1564,7 +1564,7 @@ void DebriefingState::prepareDebriefing()
 		}
 		else if (save->getMonthsPassed() != -1)
 		{
-			for (std::vector<Base*>::iterator
+			for (std::vector<Base*>::const_iterator
 					i = save->getBases()->begin();
 					i != save->getBases()->end();
 					++i)
@@ -1584,7 +1584,7 @@ void DebriefingState::prepareDebriefing()
 			AlienMission* am = save->getAlienMission(
 												_region->getRules()->getType(),
 												"STR_ALIEN_RETALIATION");
-			for (std::vector<Ufo*>::iterator
+			for (std::vector<Ufo*>::const_iterator
 					i = save->getUfos()->begin();
 					i != save->getUfos()->end();
 					)
@@ -1598,7 +1598,7 @@ void DebriefingState::prepareDebriefing()
 					++i;
 			}
 
-			for (std::vector<AlienMission*>::iterator
+			for (std::vector<AlienMission*>::const_iterator
 					i = save->getAlienMissions().begin();
 					i != save->getAlienMissions().end();
 					++i)
@@ -1636,7 +1636,7 @@ void DebriefingState::reequipCraft(
 //	int used; // kL
 
 	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
-	for (std::map<std::string, int>::iterator
+	for (std::map<std::string, int>::const_iterator
 			i = craftItems.begin();
 			i != craftItems.end();
 			++i)
@@ -1699,7 +1699,7 @@ void DebriefingState::reequipCraft(
 
 	// Now let's see the vehicles
 	ItemContainer craftVehicles;
-	for (std::vector<Vehicle*>::iterator
+	for (std::vector<Vehicle*>::const_iterator
 			i = craft->getVehicles()->begin();
 			i != craft->getVehicles()->end();
 			++i)
@@ -1713,7 +1713,7 @@ void DebriefingState::reequipCraft(
 	// kL_note: and generally weave our way through this spaghetti ....
 	if (vehicleDestruction)
 	{
-		for (std::vector<Vehicle*>::iterator
+		for (std::vector<Vehicle*>::const_iterator
 				i = craft->getVehicles()->begin();
 				i != craft->getVehicles()->end();
 				++i)
@@ -1726,7 +1726,7 @@ void DebriefingState::reequipCraft(
 
 	int canBeAdded;
 
-	for (std::map<std::string, int>::iterator // Ok, now read those vehicles
+	for (std::map<std::string, int>::const_iterator // Ok, now read those vehicles
 			i = craftVehicles.getContents()->begin();
 			i != craftVehicles.getContents()->end();
 			++i)
@@ -1849,7 +1849,7 @@ void DebriefingState::recoverItems(
 		Base* base)
 {
 	//Log(LOG_INFO) << "DebriefingState::recoverItems()";
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			item = battleItems->begin();
 			item != battleItems->end();
 			++item)

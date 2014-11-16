@@ -19,7 +19,7 @@
 
 #include "BaseDefenseState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "BaseDestroyedState.h"
 #include "GeoscapeState.h"
@@ -66,14 +66,15 @@ BaseDefenseState::BaseDefenseState(
 		Ufo* ufo,
 		GeoscapeState* state)
 	:
-		_state(state),
 		_base(base),
-		_action(),
+		_ufo(ufo),
+		_state(state),
+		_action(BDA_NONE),
 		_row(-1),
 		_passes(0),
 		_attacks(0),
 		_thinkcycles(0),
-		_ufo(ufo)
+		_explosionCount(0)
 {
 	_window			= new Window(this, 320, 200, 0, 0);
 	_txtTitle		= new Text(300, 17, 16, 6);
@@ -153,7 +154,6 @@ void BaseDefenseState::nextStep()
 	if (_thinkcycles == 1)
 	{
 		_txtInit->setVisible();
-
 		return;
 	}
 
@@ -162,42 +162,30 @@ void BaseDefenseState::nextStep()
 		switch (_action)
 		{
 			case BDA_DESTROY:
-				_action = BDA_EXPLODING1;
-				_timer->setInterval(100);
+				if (_explosionCount == 0)
+				{
+					_lstDefenses->addRow(
+									3,
+									tr("STR_UFO_DESTROYED").c_str(),
+									L" ",
+									L" ");
+
+					++_row;
+					if (_row > 14)
+						_lstDefenses->scrollDown(true);
+				}
 
 				_game->getResourcePack()->getSound(
 												"GEO.CAT",
 												ResourcePack::UFO_EXPLODE)
 											->play();
 
-				_lstDefenses->addRow(
-								3,
-								tr("STR_UFO_DESTROYED").c_str(),
-								L" ",
-								L" ");
-			return;
-
-			case BDA_EXPLODING1:
-				_action = BDA_EXPLODING2;
-
-				_game->getResourcePack()->getSound(
-												"GEO.CAT",
-												ResourcePack::UFO_EXPLODE)
-											->play();
-			return;
-			case BDA_EXPLODING2:
-				_action = BDA_END;
-				_timer->setInterval(250);
-
-				_game->getResourcePack()->getSound(
-												"GEO.CAT",
-												ResourcePack::UFO_EXPLODE)
-											->play();
+				if (++_explosionCount == 3)
+					_action = BDA_END;
 			return;
 
 			case BDA_END:
 				_thinkcycles = -1;
-
 				_btnOk->setVisible();
 			return;
 
@@ -207,27 +195,31 @@ void BaseDefenseState::nextStep()
 
 		if (_attacks == _defenses)
 		{
-			if (_passes < _gravShields)
+			if (_passes == _gravShields)
 			{
-				_attacks = 0;
-				_passes++;
-
+				_action = BDA_END;
+				return;
+			}
+			else if (_passes < _gravShields)
+			{
 				_lstDefenses->addRow(
 								3,
 								tr("STR_GRAV_SHIELD_REPELS_UFO").c_str(),
 								L" ",
 								L" ");
-				_row++;
-				return;
-			}
-			else if (_passes == _gravShields)
-			{
-				_action = BDA_END;
+
+				if (_row > 14)
+					_lstDefenses->scrollDown(true);
+
+				++_row;
+				++_passes;
+				_attacks = 0;
+
 				return;
 			}
 		}
 
-		BaseFacility* def = _base->getDefenses()->at(_attacks);
+		const BaseFacility* const def = _base->getDefenses()->at(_attacks);
 
 		switch (_action)
 		{
@@ -240,33 +232,40 @@ void BaseDefenseState::nextStep()
 								L" ",
 								L" ");
 				++_row;
-				return;
+				if (_row > 14)
+					_lstDefenses->scrollDown(true);
+
+			return;
 
 			case BDA_FIRE:
-				_action = BDA_RESOLVE;
+				_lstDefenses->setCellText(
+										_row,
+										1,
+										tr("STR_FIRING").c_str());
 
 				_game->getResourcePack()->getSound(
 												"GEO.CAT",
 												def->getRules()->getFireSound())
 											->play();
 
-				_lstDefenses->setCellText(
-									_row,
-									1,
-									tr("STR_FIRING").c_str());
-				return;
+				_timer->setInterval(333);
+				_action = BDA_RESOLVE;
+
+			return;
 
 			case BDA_RESOLVE:
-				if (RNG::percent(def->getRules()->getHitRatio()))
+				if (RNG::percent(def->getRules()->getHitRatio()) == true)
 				{
-					_game->getResourcePack()->getSound("GEO.CAT", def->getRules()->getHitSound())->play();
+					_game->getResourcePack()->getSound(
+													"GEO.CAT",
+													def->getRules()->getHitSound())
+												->play();
 
-					int damage = def->getRules()->getDefenseValue();
-//					_ufo->setDamage(_ufo->getDamage() + (dmg / 2 + RNG::generate(0, dmg)));
-					damage = RNG::generate( // kL: vary damage between 75% and 133% ( stock is 50..150% )
-										damage * 3 / 4,
-										damage * 4 / 3);
-					_ufo->setDamage(_ufo->getDamage() + damage);
+					int power = def->getRules()->getDefenseValue();
+					power = RNG::generate( // kL: vary power between 75% and 133% ( stock is 50..150% )
+										power * 3 / 4,
+										power * 4 / 3);
+					_ufo->setDamage(_ufo->getDamage() + power);
 
 					_lstDefenses->setCellText(
 										_row,
@@ -285,7 +284,9 @@ void BaseDefenseState::nextStep()
 					_action = BDA_NONE;
 
 				++_attacks;
-				return;
+				_timer->setInterval(250);
+
+			return;
 
 			default:
 			break;
@@ -300,18 +301,17 @@ void BaseDefenseState::nextStep()
 void BaseDefenseState::btnOkClick(Action*)
 {
 	_timer->stop();
-
 	_game->popState();
 
 	if (_ufo->getStatus() != Ufo::DESTROYED)
 	{
-//		_ufo->setStatus(Ufo::DESTROYED);
-
 		_base->setDefenseResult(_ufo->getDamagePercent());
 		_state->handleBaseDefense(
 								_base,
 								_ufo);
 	}
+	else
+		_base->cleanupDefenses(true);
 }
 
 }

@@ -4416,7 +4416,7 @@
 
 1416027432 f:\git\openxcom\src\resource\resourcepack.h
 
-1415847353 f:\git\openxcom\src\savegame\base.h
+1416147025 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
 	<string>
 	<vector>
@@ -7007,7 +7007,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1414443957 source:f:\git\openxcom\src\engine\game.cpp
+1416148484 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7373,9 +7373,8 @@
 1413136958 f:\git\openxcom\src\geoscape\psitrainingstate.h
 	"../Engine/State.h"
 
-1415853535 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
+1416151968 source:f:\git\openxcom\src\geoscape\basedefensestate.cpp
 	"BaseDefenseState.h"
-	<sstream>
 	"BaseDestroyedState.h"
 	"GeoscapeState.h"
 	"../Battlescape/BattlescapeGenerator.h"
@@ -7400,7 +7399,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1413136957 f:\git\openxcom\src\geoscape\basedefensestate.h
+1416146283 f:\git\openxcom\src\geoscape\basedefensestate.h
 	"../Engine/State.h"
 
 1413136957 f:\git\openxcom\src\geoscape\basedestroyedstate.h
@@ -9514,7 +9513,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1416141022 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1416145565 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

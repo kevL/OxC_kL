@@ -42,8 +42,6 @@ enum BaseDefenseActionType
 	BDA_FIRE,
 	BDA_RESOLVE,
 	BDA_DESTROY,
-	BDA_EXPLODING1,
-	BDA_EXPLODING2,
 	BDA_END
 };
 
@@ -58,12 +56,13 @@ class BaseDefenseState
 
 private:
 	int
-		_thinkcycles,
-		_row,
-		_passes,
-		_gravShields,
+		_attacks,
 		_defenses,
-		_attacks;
+		_explosionCount,
+		_gravShields,
+		_passes,
+		_row,
+		_thinkcycles;
 
 	BaseDefenseActionType _action;
 

@@ -153,7 +153,7 @@ Game::~Game()
 	Sound::stop();
 	Music::stop();
 
-	for (std::list<State*>::iterator
+	for (std::list<State*>::const_iterator
 			i = _states.begin();
 			i != _states.end();
 			++i)
@@ -253,7 +253,7 @@ void Game::run()
 				continue;
 			}
 
-			if (CrossPlatform::isQuitShortcut(_event))
+			if (CrossPlatform::isQuitShortcut(_event) == true)
 				_event.type = SDL_QUIT;
 
 			switch (_event.type)
@@ -304,7 +304,7 @@ void Game::run()
 											Options::baseYGeoscape,
 											false);
 
-							for (std::list<State*>::iterator
+							for (std::list<State*>::const_iterator
 									i = _states.begin();
 									i != _states.end();
 									++i)
@@ -398,7 +398,7 @@ void Game::run()
 
 				_screen->clear();
 
-				std::list<State*>::iterator i = _states.end();
+				std::list<State*>::const_iterator i = _states.end();
 				do
 				{
 					--i;
