@@ -169,8 +169,8 @@ protected:
 		/// Checks to make sure a target is valid, given the parameters.
 		bool validTarget(
 				BattleUnit* unit,
-				bool assessDanger,
-				bool includeCivs) const;
+				bool assessDanger = false,
+				bool includeCivs = false) const;
 
 		/// Checks the alien's TU reservation setting.
 		BattleActionType getReserveMode();

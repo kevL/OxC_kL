@@ -2421,7 +2421,7 @@ void AlienBAIState::grenadeAction()
 bool AlienBAIState::psiAction()
 {
 	//Log(LOG_INFO) << "AlienBAIState::psiAction()";
-	if (_didPsi												// didn't already do a psi action this round
+	if (_didPsi == true										// didn't already do a psi action this round
 		|| _unit->getOriginalFaction() != FACTION_HOSTILE)	// don't let any faction but HOSTILE mind-control others.
 	{
 		return false;
@@ -2439,16 +2439,16 @@ bool AlienBAIState::psiAction()
 		//Log(LOG_INFO) << ". not enough Tu, EXIT";
 		return false;
 	}
-	else // do it.
+	else // do it -> further evaluation req'd.
 	{
 		const bool LOSRequired = itemRule->isLOSRequired();
 		const int
-			LoS_mult = 50, // increase chance of attack against a unit that is currently in LoS.
+			LoS_factor = 50, // increase chance of attack against a unit that is currently in LoS.
 			attackStr = static_cast<int>(floor(
 							static_cast<double>(_unit->getBaseStats()->psiStrength * _unit->getBaseStats()->psiSkill) / 50.0));
 		//Log(LOG_INFO) << ". . attackStr = " << attackStr << " ID = " << _unit->getId();
 
-		bool bLoS = false;
+		bool hasLoS = false;
 		int
 			chance = 0,
 			chance2 = 0;
@@ -2460,10 +2460,13 @@ bool AlienBAIState::psiAction()
 				i != _save->getUnits()->end();
 				++i)
 		{
-			if ((*i)->getUnitRules() != NULL)
-				continue;
+//			if ((*i)->getUnitRules() != NULL)
+			// NOTE: Should use isFearable() for doggies ....
+//			if ((*i)->getGeoscapeSoldier() == NULL)
+//				continue;
 
-			if (validTarget( // will check for Mc, Exposed, etc.
+			if ((*i)->getGeoscapeSoldier() != NULL // what about doggies ....
+				&& validTarget( // will check for Mc, Exposed, etc.
 						*i,
 						true,
 						false)
@@ -2473,7 +2476,7 @@ bool AlienBAIState::psiAction()
 							_unit->getVisibleUnits()->end(),
 							*i) != _unit->getVisibleUnits()->end()))
 			{
-				bLoS = false;
+				hasLoS = false;
 
 				// is this gonna crash..................
 				Position
@@ -2485,7 +2488,7 @@ bool AlienBAIState::psiAction()
 																			(*i)->getTile(),
 																			&target,
 																			_unit))
-																		* LoS_mult,
+																		* LoS_factor,
 					// stupid aLiens don't know soldier's psiSkill tho..
 					// psiSkill would typically factor in at only a fifth of psiStrength.
 					defense = (*i)->getBaseStats()->psiStrength,
@@ -2510,28 +2513,28 @@ bool AlienBAIState::psiAction()
 				//Log(LOG_INFO) << ". . . chance2 = " << chance2;
 
 				if (chance2 == chance
-					&& (RNG::percent(50)
+					&& (RNG::percent(50) == true
 						|| _aggroTarget == NULL))
 				{
-					bLoS = (LoS > 0);
+					hasLoS = (LoS > 0);
 					_aggroTarget = *i;
 				}
 				else if (chance2 > chance)
 				{
 					chance = chance2;
 
-					bLoS = (LoS > 0);
+					hasLoS = (LoS > 0);
 					_aggroTarget = *i;
 				}
 			}
 		}
 
-		if (bLoS)
-			chance -= LoS_mult;
+		if (hasLoS == true)
+			chance -= LoS_factor;
 
-		if (_aggroTarget == NULL	// if not target
-			|| chance < 25			// or chance of success is too low
-			|| RNG::percent(15))	// or aLien just don't feel like it... do FALSE.
+		if (_aggroTarget == NULL			// if no target
+			|| chance < 26					// or chance of success too low
+			|| RNG::percent(13) == true)	// or aLien just don't feel like it... do FALSE.
 		{
 			//Log(LOG_INFO) << "AlienBAIState::psiAction() EXIT, False : not good.";
 			return false;
@@ -2621,25 +2624,25 @@ void AlienBAIState::meleeAttack()
 /**
  * Validates a target.
  * @param unit			- pointer to a target to validate
- * @param assessDanger	- true to care if target has already been grenaded
- * @param includeCivs	- true to include civilians in the threat assessment
- * @return, true if the target is something we would like to kill
+ * @param assessDanger	- true to care if target has already been grenaded (default false)
+ * @param includeCivs	- true to include civilians in the threat assessment (default false)
+ * @return, true if the target is something to be killed
  */
 bool AlienBAIState::validTarget(
 		BattleUnit* unit,
 		bool assessDanger,
 		bool includeCivs) const
 {
-	if (unit->isOut(true, true)						// ignore units that are dead/unconscious
+	if (unit->getFaction() == FACTION_HOSTILE		// they mustn't be on our side
+		|| unit->isOut(true, true)					// ignore units that are dead/unconscious
 		|| _intelligence < unit->getTurnsExposed()	// they must be units that we "know" about
-		|| (assessDanger
-			&& unit->getTile()->getDangerous())		// they haven't been grenaded
-		|| unit->getFaction() == FACTION_HOSTILE)	// and they mustn't be on our side
+		|| (assessDanger == true
+			&& unit->getTile()->getDangerous()))	// they haven't been grenaded
 	{
 		return false;
 	}
 
-	if (includeCivs)
+	if (includeCivs == true)
 		return true;
 
 	return (unit->getFaction() == FACTION_PLAYER);

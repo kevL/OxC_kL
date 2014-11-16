@@ -2277,7 +2277,6 @@ void BattleUnit::allowReselect()
 	_dontReselect = false;
 }
 
-
 /**
  * Checks whether reselecting this unit is allowed.
  * @return, reselect allowed
@@ -3351,7 +3350,12 @@ int BattleUnit::getMoveSound() const
  */
 bool BattleUnit::isWoundable() const
 {
-	if (_geoscapeSoldier != NULL)
+	return _geoscapeSoldier != NULL
+	   || (Options::alienBleeding
+			&& _unitRules->getMechanical() == false
+			&& _race != "STR_ZOMBIE");
+
+/*	if (_geoscapeSoldier != NULL)
 		return true;
 
 	if (Options::alienBleeding
@@ -3361,7 +3365,7 @@ bool BattleUnit::isWoundable() const
 		return true;
 	}
 
-	return false;
+	return false; */
 }
 
 /**
@@ -3370,7 +3374,11 @@ bool BattleUnit::isWoundable() const
  */
 bool BattleUnit::isFearable() const
 {
-	if (_geoscapeSoldier != NULL)
+	return _geoscapeSoldier != NULL
+	   || (_unitRules->getMechanical() == false
+			&& _race != "STR_ZOMBIE");
+
+/*	if (_geoscapeSoldier != NULL)
 		return true;
 
 	if (_unitRules->getMechanical() == false
@@ -3379,7 +3387,7 @@ bool BattleUnit::isFearable() const
 		return true;
 	}
 
-	return false;
+	return false; */
 }
 
 /**
@@ -4061,9 +4069,9 @@ bool BattleUnit::isSelectable(
 	return _faction == faction
 		&& isOut() == false
 		&& (checkReselect == false
-			|| reselectAllowed())
+			|| reselectAllowed() == true)
 		&& (checkInventory == false
-			|| hasInventory());
+			|| hasInventory() == true);
 }
 
 /**
@@ -4073,6 +4081,16 @@ bool BattleUnit::isSelectable(
  */
 bool BattleUnit::hasInventory() const
 {
+/*	if (_geoscapeSoldier != NULL)
+		return true;
+
+	if (_unitRules->getMechanical() == false
+		&& _rank != "STR_LIVE_TERRORIST")
+	{
+		return true;
+	}
+
+	return false; */
 	return _geoscapeSoldier != NULL
 		|| (_unitRules->getMechanical() == false
 			&& _rank != "STR_LIVE_TERRORIST");
@@ -4097,10 +4115,9 @@ void BattleUnit::breathe()
 {
 	// _breathFrame of -1 means this unit doesn't produce bubbles
 	if (_breathFrame < 0
-		|| isOut())
+		|| isOut() == true)
 	{
 		_breathing = false;
-
 		return;
 	}
 
@@ -4115,7 +4132,7 @@ void BattleUnit::breathe()
 		_breathFrame = 0;
 	}
 
-	if (_breathing)
+	if (_breathing == true)
 	{
 		// advance the bubble frame
 		_breathFrame++;

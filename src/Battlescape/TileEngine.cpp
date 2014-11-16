@@ -5404,7 +5404,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 
 				if (victim->getGeoscapeSoldier() != NULL)
 				{
-					if (victim->isKneeled())
+					if (victim->isKneeled() == true)
 						enron /= 2;
 					else
 						enron /= 3;

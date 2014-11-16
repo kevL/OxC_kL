@@ -5700,7 +5700,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1416134990 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1416144564 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5725,7 +5725,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1413136955 f:\git\openxcom\src\battlescape\alienbaistate.h
+1416143531 f:\git\openxcom\src\battlescape\alienbaistate.h
 	<vector>
 	"BattleAIState.h"
 	"Position.h"
@@ -6732,7 +6732,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1416138818 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1416142737 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	<climits>
 	<cmath>
@@ -9256,7 +9256,7 @@
 1413136960 source:f:\git\openxcom\src\ruleset\alienrace.cpp
 	"AlienRace.h"
 
-1416141894 source:f:\git\openxcom\src\ruleset\armor.cpp
+1416141940 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 
 1413136960 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
@@ -9435,7 +9435,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1414445382 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1416132707 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
 	<algorithm>
 	<functional>
@@ -9733,7 +9733,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1414534975 source:f:\git\openxcom\src\savegame\tile.cpp
+1416133040 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
@@ -9922,9 +9922,8 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/RuleUfo.h"
 
-1413136962 source:f:\git\openxcom\src\ufopaedia\articlestatevehicle.cpp
+1416133935 source:f:\git\openxcom\src\ufopaedia\articlestatevehicle.cpp
 	"ArticleStateVehicle.h"
-	<sstream>
 	"Ufopaedia.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
