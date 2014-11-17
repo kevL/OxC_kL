@@ -122,10 +122,8 @@ private:
 			/// Plays a particular music.
 			void playMusic(
 					const std::string& name,
-					bool random = false,
 					const std::string& terrain = ""); // kL, sza_MusicRules
 			/// Gets a random music.
-//			Music* getRandomMusic(const std::string& name) const;
 			Music* getRandomMusic( // sza_MusicRules
 					const std::string& name,
 					const std::string& terrain) const;

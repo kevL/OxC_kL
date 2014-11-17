@@ -239,7 +239,7 @@ void CommendationState::btnOkClick(Action*)
 #endif
 
 	_game->popState();
-	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE, true);
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 }
 
 }

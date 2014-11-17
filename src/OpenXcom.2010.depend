@@ -4411,7 +4411,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1416027432 f:\git\openxcom\src\resource\resourcepack.h
+1416258592 f:\git\openxcom\src\resource\resourcepack.h
 
 1416256249 f:\git\openxcom\src\savegame\base.h
 	<cstdint>
@@ -6363,7 +6363,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1416141689 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1416256498 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -7087,7 +7087,7 @@
 	"LocalizedText.h"
 	"Language.h"
 
-1416065445 source:f:\git\openxcom\src\engine\music.cpp
+1416258592 source:f:\git\openxcom\src\engine\music.cpp
 	"Music.h"
 	"Exception.h"
 	"Language.h"
@@ -9186,17 +9186,18 @@
 1413136962 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1416208443 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1416259023 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Font.h"
 	"../Engine/Logger.h"
 	"../Engine/Music.h"
-	"../Engine/Palette.h"
-	"../Engine/Surface.h"
-	"../Engine/SurfaceSet.h"
 	"../Engine/Options.h"
+	"../Engine/Palette.h"
 	"../Engine/Sound.h"
 	"../Engine/SoundSet.h"
+	"../Engine/Surface.h"
+	"../Engine/SurfaceSet.h"
+	"../Resource/XcomResourcePack.h"
 
 1416254577 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
@@ -9241,7 +9242,7 @@
 1413136960 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1416140552 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1416256122 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 	"../Engine/RNG.h"
 
@@ -9418,7 +9419,7 @@
 1413648342 source:f:\git\openxcom\src\ruleset\ufotrajectory.cpp
 	"UfoTrajectory.h"
 
-1416136553 source:f:\git\openxcom\src\ruleset\unit.cpp
+1416256173 source:f:\git\openxcom\src\ruleset\unit.cpp
 	"Unit.h"
 	"../Engine/Exception.h"
 
@@ -9465,7 +9466,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1416152287 source:f:\git\openxcom\src\savegame\base.cpp
+1416256330 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<stack>
 	"../fmath.h"

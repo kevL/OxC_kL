@@ -934,7 +934,7 @@ void GeoscapeState::init()
 /*		if (_game->getSavedGame()->getMonthsPassed() == -1)
 			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1);
 		else */
-		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE, true);
+		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 	}
 	// kL_note: else play DogFight music ... for loading from Saves, i guess
 

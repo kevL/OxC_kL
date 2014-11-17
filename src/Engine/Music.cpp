@@ -52,8 +52,8 @@ Music::~Music()
 }
 
 /**
- * Loads a music file from a specified filename.
- * @param filename - reference the filename of the music file
+ * Loads this Music track from a specified filename.
+ * @param filename - reference the filename to load
  */
 void Music::load(const std::string& filename)
 {
@@ -71,7 +71,7 @@ void Music::load(const std::string& filename)
 }
 
 /**
- * Loads a music file from a specified memory chunk.
+ * Loads this Music track from a specified memory chunk.
  * @param data		- pointer to the music file in memory
  * @param byteSize	- size of the music file in bytes
  */
@@ -92,8 +92,8 @@ void Music::load(
 }
 
 /**
- * Plays the contained music track.
- * @param loop - number of times to loop the track (default -1 infinite)
+ * Plays this Music track.
+ * @param loop - number of times to loop (default -1 infinite)
  */
 void Music::play(int loop) const
 {

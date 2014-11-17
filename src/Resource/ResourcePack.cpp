@@ -24,13 +24,14 @@
 #include "../Engine/Font.h"
 #include "../Engine/Logger.h"
 #include "../Engine/Music.h"
+#include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Sound.h"
+#include "../Engine/SoundSet.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
-#include "../Engine/Options.h"
-#include "../Engine/Sound.h"
-#include "../Engine/SoundSet.h"
+#include "../Resource/XcomResourcePack.h"
 
 
 namespace OpenXcom
@@ -193,6 +194,7 @@ SurfaceSet* ResourcePack::getSurfaceSet(const std::string& name) const
 
 /**
  * Returns a specific music from the resource set.
+ * kL_NOTE: This has become redundant w/ getRandomMusic() below.
  * @param name - reference the name of a Music
  * @return, pointer to the Music
  */
@@ -202,23 +204,15 @@ Music* ResourcePack::getMusic(const std::string& name) const
 		return _muteMusic;
 
 	return getRandomMusic(name, ""); // sza_MusicRules
-/*	std::map<std::string, Music*>::const_iterator i = _musics.find(name);
-
-	if (_musics.end() != i)
-		return i->second;
-	else
-		return 0; */
 }
 
 /**
  * Plays the specified track if it's not already playing.
  * @param name		- reference the name of a Music
- * @param random	- true to pick a random track (default false)
  * @param terrain	- reference the RuleTerrain type (default "")
  */
 void ResourcePack::playMusic(
 		const std::string& name,
-		bool random,
 		const std::string& terrain) // kL: sza_MusicRules
 {
 	if (Options::mute)
@@ -229,21 +223,14 @@ void ResourcePack::playMusic(
 		int loop = -1;
 		_playingMusic = name;
 
-		if (name == "GMGEO1")
-			_playingMusic = "GMGEO"; // hack (kL_note: for non-campaign Battles i guess)
-		else if (Options::musicAlwaysLoop == false // another hack
-			&& (name == "GMSTORY"
-				|| name == "GMWIN"
-				|| name == "GMLOSE"))
+		if (Options::musicAlwaysLoop == false
+			&& (name == OpenXcom::res_MUSIC_WIN
+				|| name == OpenXcom::res_MUSIC_LOSE))
 		{
-			loop = 0;
+			loop = 1;
 		}
 
-		if (random == true)
-			getRandomMusic(name, terrain)->play(loop); // kL: sza_MusicRules
-//			getRandomMusic(name)->play(loop);
-		else
-			getMusic(name)->play(loop);
+		getRandomMusic(name, terrain)->play(loop);
 	}
 }
 
@@ -260,8 +247,7 @@ Music* ResourcePack::getRandomMusic(
 	if (Options::mute)
 		return _muteMusic;
 
-	// sza_MusicRules
-	if (terrain == "")
+	if (terrain.empty() == true)
 		Log(LOG_DEBUG) << "MUSIC : Request " << name;
 	else
 		Log(LOG_DEBUG) << "MUSIC : Request " << name << " for terrainType " << terrain;
@@ -280,31 +266,16 @@ Music* ResourcePack::getRandomMusic(
 	}
 
 	const std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
-	const int musicRand = SDL_GetTicks() %musicCodes.size();				// kL
-	const std::pair<std::string, int> randMusic = musicCodes[musicRand];	// kL
-//	std::pair<std::string, int> randMusic = musicCodes[RNG::generate(0, musicCodes.size() - 1)];
-	Log(LOG_DEBUG) << "MUSIC : " << randMusic.first;
+	const int musicRand = SDL_GetTicks() %musicCodes.size();
+	const std::pair<std::string, int> randMusic = musicCodes[musicRand];
+
+	//Log(LOG_DEBUG) << "MUSIC : " << randMusic.first;
 	Log(LOG_INFO) << "MUSIC : " << randMusic.first;
 
 	Music* const music = _musicFile.at(randMusic.first);
 
 	return music;
 }
-/*	std::vector<Music*> music;
-	for (std::map<std::string, Music*>::const_iterator
-			i = _musics.begin();
-			i != _musics.end();
-			++i)
-	{
-		if (i->first.find(name) != std::string::npos)
-			music.push_back(i->second);
-	}
-
-	if (_musics.empty())
-		return _muteMusic;
-	else
-		return music[SDL_GetTicks() %music.size()]; // this is a hack to avoid calling RNG::generate(0, music.size()-1) and skewing our seed.
-//		return music[RNG::generate(0, static_cast<int>(music.size()) - 1)]; */
 
 /**
  * Clear a music assignment.
@@ -348,9 +319,9 @@ void ResourcePack::MakeMusicAssignment( // sza_MusicRules
 			i < filenames.size();
 			++i)
 	{
-		std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(
-																		filenames.at(i),
-																		midiIndexes.at(i));
+		const std::pair<std::string, int> toAdd = std::make_pair<std::string, int>(
+																				filenames.at(i),
+																				midiIndexes.at(i));
 		_musicAssignment[name][terrain].push_back(toAdd);
 	}
 }
@@ -369,7 +340,7 @@ Sound* ResourcePack::getSound(
 		return _muteSound;
 	else
 	{
-		std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);
+		const std::map<std::string, SoundSet*>::const_iterator i = _sounds.find(set);
 
 		if (_sounds.end() != i)
 			return i->second->getSound(sound);
@@ -385,7 +356,7 @@ Sound* ResourcePack::getSound(
  */
 Palette* ResourcePack::getPalette(const std::string& name) const
 {
-	std::map<std::string, Palette*>::const_iterator i = _palettes.find(name);
+	const std::map<std::string, Palette*>::const_iterator i = _palettes.find(name);
 
 	if (_palettes.end() != i)
 		return i->second;

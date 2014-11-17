@@ -829,7 +829,9 @@ BattlescapeState::BattlescapeState()
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
 
 	const std::string terrain = _game->getSavedGame()->getSavedBattle()->getTerrain();
-	_game->getResourcePack()->playMusic(music, true, terrain);
+	_game->getResourcePack()->playMusic(
+									music,
+									terrain);
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
