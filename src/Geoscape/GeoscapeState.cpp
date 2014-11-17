@@ -965,12 +965,12 @@ void GeoscapeState::think()
 										- _game->getSavedGame()->getBases()->front()->getPersonnelMaintenance());
 	}
 
-	if (_popups.empty()
-		&& _dogfights.empty()
-		&& (!_zoomInEffectTimer->isRunning()
-			|| _zoomInEffectDone)
-		&& (!_zoomOutEffectTimer->isRunning()
-			|| _zoomOutEffectDone))
+	if (_popups.empty() == true
+		&& _dogfights.empty() == true
+		&& (_zoomInEffectTimer->isRunning() == false
+			|| _zoomInEffectDone == true)
+		&& (_zoomOutEffectTimer->isRunning() == false
+			|| _zoomOutEffectDone == true))
 	{
 		_gameTimer->think(this, NULL); // Handle timers
 	}
@@ -992,24 +992,16 @@ void GeoscapeState::think()
 }
 
 /**
- * Updates the Geoscape clock with the latest
- * game time and date in human-readable format. (+Funds)
+ * Updates the Geoscape clock.
  */
 void GeoscapeState::timeDisplay()
 {
-	//Log(LOG_INFO) << "GeoscapeState::timeDisplay()";
-//	if (Options::showFundsOnGeoscape)
 	_txtFunds->setText(Text::formatFunding(_game->getSavedGame()->getFunds()));
 
 	std::wostringstream
-//		ss1, // sec
-		ss2, // min
-		ss3, // hr
-//		ss4, // dy
-		ss5; // yr.
+		ss2,
+		ss3;
 
-//	ss1 << std::setfill(L'0') << std::setw(2) << _game->getSavedGame()->getTime()->getSecond();
-//	_txtSec->setText(ss1.str());
 	if (_timeSpeed != _btn5Secs)
 		_txtSec->setVisible();
 	else
@@ -1021,43 +1013,29 @@ void GeoscapeState::timeDisplay()
 	ss3 << _game->getSavedGame()->getTime()->getHour();
 	_txtHour->setText(ss3.str());
 
-/*	std::wstring month = _game->getLanguage()->getString(_game->getSavedGame()->getTime()->getMonthString());
-
-	ss5 << _game->getSavedGame()->getTime()->getDay();
-	ss5 << L" ";
-	ss5 << month; //_game->getSavedGame()->getTime()->getMonthString().c_str();
-	ss5 << L" ";
-	ss5 << _game->getSavedGame()->getTime()->getYear();
-	_txtDate->setText(ss5.str()); */
-
 	int date = _game->getSavedGame()->getTime()->getDay();
 	if (_day != date)
 	{
-		//Log(LOG_INFO) << ". day NOT Date";
 		_srfDay1->clear();
 		_srfDay2->clear();
 
 		_day = date;
 
-		SurfaceSet* digitSet = _game->getResourcePack()->getSurfaceSet("DIGITS");
+		SurfaceSet* const digitSet = _game->getResourcePack()->getSurfaceSet("DIGITS");
 
-		//Log(LOG_INFO) << ". blit day1";
 		Surface* srfDate = digitSet->getFrame(date / 10);
 		srfDate->blit(_srfDay1);
 
-		//Log(LOG_INFO) << ". blit day2";
 		srfDate = digitSet->getFrame(date %10);
 		srfDate->blit(_srfDay2);
 
 		_srfDay1->offset(Palette::blockOffset(15)+3);
 		_srfDay2->offset(Palette::blockOffset(15)+3);
 
-		//Log(LOG_INFO) << ". done day";
 
 		date = _game->getSavedGame()->getTime()->getMonth();
 		if (_month != date)
 		{
-			//Log(LOG_INFO) << ". month NOT Date";
 			_srfMonth1->clear();
 			_srfMonth2->clear();
 
@@ -1076,7 +1054,6 @@ void GeoscapeState::timeDisplay()
 			date = _game->getSavedGame()->getTime()->getYear() %100;
 			if (_year != date)
 			{
-				//Log(LOG_INFO) << ". year NOT Date";
 				_srfYear1->clear();
 				_srfYear2->clear();
 
@@ -1093,28 +1070,6 @@ void GeoscapeState::timeDisplay()
 			}
 		}
 	}
-
-/*	if (tmpSurface != NULL)
-	{
-		tmpSurface->blitNShade(
-				surface,
-				screenPosition.x + offset.x + 7,
-				screenPosition.y + offset.y + 4,
-				0,
-				false,
-				3); // 1=white, 3=red.
-	} */
-//	_txtWeekday->setText(tr(_game->getSavedGame()->getTime()->getWeekdayString()));
-
-//	ss4 << _game->getSavedGame()->getTime()->getDayString(_game->getLanguage());
-//	_txtDay->setText(ss4.str());
-/*	ss4 << _game->getSavedGame()->getTime()->getDay();
-	_txtDay->setText(ss4.str());
-
-	_txtMonth->setText(tr(_game->getSavedGame()->getTime()->getMonthString()));
-
-	ss5 << _game->getSavedGame()->getTime()->getYear();
-	_txtYear->setText(ss5.str()); */
 }
 
 /**
@@ -1165,14 +1120,14 @@ void GeoscapeState::time5Seconds()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time5Seconds()";
 	// Game over if there are no more bases.
-	if (_game->getSavedGame()->getBases()->empty())
+	if (_game->getSavedGame()->getBases()->empty() == true)
 	{
 		popup(new DefeatState());
 		return;
 	}
 
 	// Handle UFO logic
-	for (std::vector<Ufo*>::iterator
+	for (std::vector<Ufo*>::const_iterator
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();
 			++i)
@@ -1181,16 +1136,16 @@ void GeoscapeState::time5Seconds()
 		{
 			case Ufo::FLYING:
 				//Log(LOG_INFO) << "GeoscapeState::time5Seconds(), Ufo::FLYING";
-				if (!_zoomInEffectTimer->isRunning()
-					&& !_zoomOutEffectTimer->isRunning())
+				if (_zoomInEffectTimer->isRunning() == false
+					&& _zoomOutEffectTimer->isRunning() == false)
 				{
 					(*i)->think();
 
 					if ((*i)->reachedDestination())
 					{
-						size_t tsCount = _game->getSavedGame()->getTerrorSites()->size();
+						const size_t tsCount = _game->getSavedGame()->getTerrorSites()->size();
 						AlienMission* mission = (*i)->getMission();
-						bool detected = (*i)->getDetected();
+						const bool detected = (*i)->getDetected();
 						mission->ufoReachedWaypoint(
 												**i,
 												*_game,
@@ -3011,9 +2966,9 @@ void GeoscapeState::time1Month()
 								k = races.erase(k);
 						}
 
-						size_t race = static_cast<size_t>(RNG::generate(
-																	0,
-																	static_cast<int>(races.size()) - 1));
+						const size_t race = static_cast<size_t>(RNG::generate(
+																			0,
+																			static_cast<int>(races.size()) - 1));
 						mission->setRace(races[race]);
 						mission->start(150);
 						_game->getSavedGame()->getAlienMissions().push_back(mission);
@@ -3057,8 +3012,8 @@ void GeoscapeState::time1Month()
 	// kL_note: Might want to change this to time1day() ...
 	const int rDiff = 20 - (diff * 5); // kL, Superhuman == 0%
 
-//kL	if (RNG::percent(20)
-	if (RNG::percent(rDiff + 50) // kL
+//	if (RNG::percent(20)
+	if (RNG::percent(rDiff + 50) == true // kL
 		&& _game->getSavedGame()->getAlienBases()->empty() == false)
 	{
 		for (std::vector<AlienBase*>::const_iterator // handle Xcom Operatives discovering bases
@@ -3067,12 +3022,10 @@ void GeoscapeState::time1Month()
 				++i)
 		{
 			if ((*i)->isDiscovered() == false
-//				&& RNG::percent(5)) // kL
-				&& RNG::percent(rDiff + 5)) // kL
+				&& RNG::percent(rDiff + 5) == true) // kL
 			{
 				(*i)->setDiscovered(true);
 
-				// kL_note: hopefully this doesn't hang on multiple popups.
 				popup(new AlienBaseState(
 									*i,
 									this));
@@ -3126,17 +3079,16 @@ Globe* GeoscapeState::getGlobe() const
  */
 void GeoscapeState::globeClick(Action* action)
 {
-	int
+	const int
 		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
 		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
 
-	// Clicking markers on the globe
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		std::vector<Target*> targets = _globe->getTargets(
-														mouseX,
-														mouseY,
-														false);
+		const std::vector<Target*> targets = _globe->getTargets(
+															mouseX,
+															mouseY,
+															false);
 		if (targets.empty() == false)
 			_game->pushState(new MultipleTargetsState(
 													targets,
@@ -3144,7 +3096,7 @@ void GeoscapeState::globeClick(Action* action)
 													this));
 	}
 
-	if (_game->getSavedGame()->getDebugMode())
+	if (_game->getSavedGame()->getDebugMode() == true)
 	{
 		double
 			lon,
@@ -3155,7 +3107,7 @@ void GeoscapeState::globeClick(Action* action)
 						&lon,
 						&lat);
 
-		double
+		const double
 			lonDeg = lon / M_PI * 180.0,
 			latDeg = lat / M_PI * 180.0;
 
@@ -3177,7 +3129,7 @@ void GeoscapeState::btnInterceptClick(Action*)
 									_globe,
 									NULL,
 									NULL,
-									this)); // kL_add.
+									this));
 }
 
 /**
@@ -3194,7 +3146,7 @@ void GeoscapeState::btnBasesClick(Action*)
 	{
 		//Log(LOG_INFO) << "GeoscapeState::btnBasesClick() getBases !empty";
 
-		size_t totalBases = _game->getSavedGame()->getBases()->size();
+		const size_t totalBases = _game->getSavedGame()->getBases()->size();
 		//Log(LOG_INFO) << ". . totalBases = " << totalBases;
 		if (kL_currentBase == 0
 			|| kL_currentBase >= totalBases)
@@ -3226,7 +3178,7 @@ void GeoscapeState::btnGraphsClick(Action*)
 {
 	soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 
-	timerReset(); // kL
+	timerReset();
 	_game->pushState(new GraphsState(_game->getSavedGame()->getCurrentGraph()));
 }
 
@@ -3236,7 +3188,7 @@ void GeoscapeState::btnGraphsClick(Action*)
  */
 void GeoscapeState::btnUfopaediaClick(Action*)
 {
-	timerReset(); // kL
+	timerReset();
 	Ufopaedia::open(_game);
 }
 
@@ -3246,7 +3198,7 @@ void GeoscapeState::btnUfopaediaClick(Action*)
  */
 void GeoscapeState::btnOptionsClick(Action*)
 {
-	timerReset(); // kL
+	timerReset();
 	_game->pushState(new PauseState(OPT_GEOSCAPE));
 }
 
@@ -3256,7 +3208,7 @@ void GeoscapeState::btnOptionsClick(Action*)
  */
 void GeoscapeState::btnFundingClick(Action*)
 {
-	timerReset(); // kL
+	timerReset();
 	_game->pushState(new FundingState());
 }
 
@@ -3446,7 +3398,7 @@ void GeoscapeState::handleDogfights()
 			++i;
 	}
 
-	if (_dogfights.empty())
+	if (_dogfights.empty() == true)
 		_zoomOutEffectTimer->start();
 }
 

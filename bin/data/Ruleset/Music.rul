@@ -1,41 +1,122 @@
-# files are pathed to the data/Sound folder.
-music: # sza_MusicRules: http://openxcom.org/forum/index.php?topic=1853.0
-  - type: GMDEFEND
-    midipack: 3
-  - type: GMENBASE
-    midipack: 6
-  - type: GMGEO1
-    midipack: 0
-  - type: GMGEO
-    files: [ GMGEO1, GMGEO2 ]
-    indexes: [ 0, 18 ]
-  - type: GMINTER
-    midipack: 2
-  - type: GMINTRO1
-    midipack: 19
-  - type: GMINTRO2
-    midipack: 20
-  - type: GMINTRO3
-    midipack: 21
-  - type: GMLOSE
-    midipack: 10
-  - type: GMMARS
-    midipack: 9
-  - type: GMNEWMAR
-    midipack: 8
-  - type: GMSTORY
-    midipack: 12
-  - type: GMTACTIC
-    terrain: [ ATLANTDESERT, COMRCURBAN, CULTA, CULTAFARMA, CULTAFARMB, DAWNURBANA, DAWNURBANB, DESERT, DESERTMOUNT, FOREST, FORESTMOUNT, INDUSTRIALURBAN, JUNGLE, MADURBAN, MARS, MOUNT, MUJUNGLE, NATIVEURBAN, POLAR, POLARMOUNT, PORTURBAN, RAILYARDURBAN, UBASE, URBAN, XBASE ]
-    files: [ GMTACTIC ]
-    indexes: [ 17 ]
-  - type: GMWIN
-    midipack: 11
-  - type: GMGRAVES
-    files: [ GMWIN ] #[ GMLOSE ]
-    midipack: 11 #10
-  - type: LCUFOPED
+# sza_MusicRules: http://openxcom.org/forum/index.php?topic=1853.0
+# 'type' is defined in ResourcePack.cpp
+# 'files' are pathed to the data/Sound folder
+# 'terrain' is found in rulesets under 'terrains' & 'alienDeployments'
+music:
+  - type: START_INTRO1
+    files: [ GMINTRO1 ]
+  - type: START_INTRO2
+    files: [ GMINTRO2 ]
+  - type: START_INTRO3
+    files: [ GMINTRO3 ]
+  - type: START_MAINMENU
     files: [ LCUFOPED ]
+
+  - type: GEO_GLOBE
+    files: [ GMGEO1, GMGEO2, PSGEO1, PSGEO2, PSGEO3, LCGEO1, LCGEO2 ]
+  - type: GEO_INTERCEPT
+    files: [ GMINTER, PSINTER, LCINTER ]
+  - type: GEO_MONTHLYREPORT
+    files: [ 12GEO2 ]
+  - type: GEO_BRIEFING
+    files: [ GMDEFEND, PSDEFEND, LCDEFEND ]
+  - type: GEO_BRIEF_MARS1
+    files: [ GMNEWMAR, PSNEWMAR ]
+  - type: GEO_BRIEF_MARS2
+    files: [ GMNEWMAR, PSNEWMAR ]
+  - type: GEO_BRIEF_BASEDEFENSE
+    files: [ GMENBASE, PSENBASE ]
+  - type: GEO_BRIEF_BASEASSAULT
+    files: [ GMENBASE, PSENBASE ]
+  - type: GEO_BRIEF_TERRORSITE
+    files: [ LCMARS ]
+  - type: GEO_BRIEF_UFOCRASHED
+    files: [ GMDEFEND, PSDEFEND, LCDEFEND ]
+  - type: GEO_BRIEF_UFOLANDED
+    files: [ GMDEFEND, PSDEFEND, LCDEFEND ]
+
+  - type: TAC_BATTLE
+    files: [ GMTACTIC, PSTACTIC, PSTACTIC2, LCTACTIC, 12TACTIC ]
+    terrain: [ ATLANTDESERT, COMRCURBAN, CULTA, CULTAFARMA, CULTAFARMB, DAWNURBANA, DAWNURBANB, DESERT, DESERTMOUNT, FOREST, FORESTMOUNT, INDUSTRIALURBAN, JUNGLE, MADURBAN, MARS, MOUNT, MUJUNGLE, NATIVEURBAN, POLAR, POLARMOUNT, PORTURBAN, RAILYARDURBAN, UBASE, URBAN, XBASE ]
+  - type: TAC_BATTLE_MARS1
+    files: [ PSTACTIC ]
+  - type: TAC_BATTLE_MARS2
+    files: [ PSTACTIC2 ]
+  - type: TAC_BATTLE_BASEDEFENSE
+    files: [ LCTACTIC ]
+  - type: TAC_BATTLE_BASEASSAULT
+    files: [ LCTACTIC ]
+  - type: TAC_BATTLE_TERRORSITE
+    files: [ LCTACTIC ]
+  - type: TAC_BATTLE_UFOCRASHED
+    files: [ GMTACTIC, 12TACTIC ]
+    terrain: [ ATLANTDESERT, COMRCURBAN, CULTA, CULTAFARMA, CULTAFARMB, DAWNURBANA, DAWNURBANB, DESERT, DESERTMOUNT, FOREST, FORESTMOUNT, INDUSTRIALURBAN, JUNGLE, MADURBAN, MARS, MOUNT, MUJUNGLE, NATIVEURBAN, POLAR, POLARMOUNT, PORTURBAN, RAILYARDURBAN, UBASE, URBAN, XBASE ]
+  - type: TAC_BATTLE_UFOLANDED
+    files: [ GMTACTIC, 12TACTIC ]
+    terrain: [ ATLANTDESERT, COMRCURBAN, CULTA, CULTAFARMA, CULTAFARMB, DAWNURBANA, DAWNURBANB, DESERT, DESERTMOUNT, FOREST, FORESTMOUNT, INDUSTRIALURBAN, JUNGLE, MADURBAN, MARS, MOUNT, MUJUNGLE, NATIVEURBAN, POLAR, POLARMOUNT, PORTURBAN, RAILYARDURBAN, UBASE, URBAN, XBASE ]
+
+  - type: TAC_DEBRIEFING
+    files: [ GMMARS, PSMARS, LCDEBRIEF ]
+  - type: TAC_AWARDS
+    files: [ 12MARS ]
+
+  - type: BASE_AWARDS
+    files: [ 12MARS ]
+  - type: BASE_MEMORIAL
+    files: [ PSGEO4 ]
+  - type: UFOPAEDIA
+    files: [ LCNIGHT ]
+  - type: WIN
+    files: [ LCWIN ]
+  - type: LOSE
+    files: [ PSSTORY ]
+
+#  - type: GMDEFEND
+#    midipack: 3
+#  - type: GMENBASE
+#    midipack: 6
+#  - type: GMGEO1
+#    midipack: 0
+#  - type: GMGEO
+#    files: [ GMGEO1, GMGEO2 ]
+#    indexes: [ 0, 18 ]
+#  - type: GMINTER
+#    midipack: 2
+#  - type: GMINTRO1
+#    files: [ LCINTRO1 ]
+#    midipack: 19
+#  - type: GMINTRO2
+#    files: [ LCINTRO2 ]
+#    midipack: 20
+#  - type: GMINTRO3
+#    files: [ LCINTRO3 ]
+#    midipack: 21
+#  - type: GMLOSE
+#    midipack: 10
+#  - type: GMMARS
+#    midipack: 9
+#  - type: GMNEWMAR
+#    midipack: 8
+#  - type: GMSTORY
+#    midipack: 12
+#  - type: GMTACTIC
+#    terrain: [ ATLANTDESERT, COMRCURBAN, CULTA, CULTAFARMA, CULTAFARMB, DAWNURBANA, DAWNURBANB, DESERT, DESERTMOUNT, FOREST, FORESTMOUNT, INDUSTRIALURBAN, JUNGLE, MADURBAN, MARS, MOUNT, MUJUNGLE, NATIVEURBAN, POLAR, POLARMOUNT, PORTURBAN, RAILYARDURBAN, UBASE, URBAN, XBASE ]
+#    files: [ GMTACTIC ]
+#    indexes: [ 17 ]
+#  - type: GMWIN
+#    midipack: 11
+#  - type: GMGRAVES
+#    files: [ GMWIN ] #[ GMLOSE ]
+#    midipack: 11 #10
+#  - type: LCUFOPED
+#    files: [ LCUFOPED ]
+#
+#  - type: INT1
+#    files: [ LCINTRO1 ]
+#  - type: INT2
+#    files: [ LCINTRO2 ]
+#  - type: INT1
+#    files: [ LCINTRO3 ]
 #extraMusic: # sza_ExtraMusic: http://openxcom.org/forum/index.php?topic=1853.0
 #  - media: musicpack/captainheavy.ogg
 #    overrides: GMSTORY

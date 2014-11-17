@@ -67,9 +67,9 @@ private:
 		void loadDat(const std::string& filename);
 
 		/// Gets a particular frame from the set.
-		Surface* getFrame(int i);
+		Surface* getFrame(const int i);
 		/// Creates a new surface and returns a pointer to it.
-		Surface* addFrame(int i);
+		Surface* addFrame(const int i);
 
 		/// Gets the width of all frames.
 		int getWidth() const;

@@ -279,7 +279,7 @@ void SurfaceSet::loadDat(const std::string& filename)
  * @param i - frame number in the set
  * @return, pointer to the respective Surface
  */
-Surface* SurfaceSet::getFrame(int i)
+Surface* SurfaceSet::getFrame(const int i)
 {
 	if (_frames.find(i) != _frames.end())
 		return _frames[i];
@@ -292,7 +292,7 @@ Surface* SurfaceSet::getFrame(int i)
  * @param i Frame number in the set.
  * @return Pointer to the respective surface.
  */
-Surface* SurfaceSet::addFrame(int i)
+Surface* SurfaceSet::addFrame(const int i)
 {
 	_frames[i] = new Surface(
 						_width,
