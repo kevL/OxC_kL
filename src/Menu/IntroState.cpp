@@ -19,7 +19,7 @@
 
 #include "IntroState.h"
 
-#include <SDL_mixer.h>
+//#include <SDL_mixer.h>
 
 #include "MainMenuState.h"
 
@@ -42,7 +42,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Intro screen.
- * @param wasLetterBoxed Was the game letterboxed?
+ * @param wasLetterBoxed - true if the game was letterboxed
  */
 IntroState::IntroState(bool wasLetterBoxed)
 	:
@@ -197,7 +197,7 @@ static introSoundEffect introSoundTrack[] =
 {
 	{0, 0x200}, // inserting this to keep the code simple
 	{149, 0x11}, // searchlight *whoosh*
-	{149, 0x11}, // kL, doubling
+	{150, 0x11}, // kL, doubling
 	{173, 0x0C},
 	{183, 0x0E},
 	{205, 0x15},
@@ -354,8 +354,8 @@ Sound* s;
 AudioSequence(ResourcePack* resources)
 	:
 		rp(resources),
-		m(0),
-		s(0),
+		m(NULL),
+		s(NULL),
 		trackPosition(0)
 {
 }
@@ -364,11 +364,11 @@ void operator()()
 {
 	while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 	{
-		int command = introSoundTrack[trackPosition].sound;
-		if (command & 0x200)
+		const int command = introSoundTrack[trackPosition].sound;
+		if (command &0x200)
 		{
 #ifndef __NO_MUSIC
-			switch(command)
+			switch (command)
 			{
 				case 0x200:
 					Log(LOG_DEBUG) << "Playing gmintro1";
@@ -389,9 +389,9 @@ void operator()()
 			}
 #endif
 		}
-		else if (command & 0x400)
+		else if (command &0x400)
 		{
-			Flc::flc.HeaderSpeed = (1000.0 / 70.0) * (command & 0xff);
+			Flc::flc.HeaderSpeed = (1000.0 / 70.0) * (command &0xff);
 			Log(LOG_DEBUG) << "Frame delay now: " << Flc::flc.HeaderSpeed;
 		}
 		else if (command <= 0x19)
@@ -407,13 +407,13 @@ void operator()()
 				s = rp->getSound(
 								sf->catFile,
 								sf->sound);
-				if (s)
+				if (s != NULL)
 				{
-//kL					int channel = trackPosition %4; // use at most four channels to play sound effects
-//kL					s->play(channel);
+//kL				int channel = trackPosition %4; // use at most four channels to play sound effects
+//kL				s->play(channel);
 					s->play(-1); // kL
-//kL					double ratio = static_cast<double>(Options::soundVolume) / static_cast<double>(MIX_MAX_VOLUME);
-//kL					Mix_Volume(channel, static_cast<int>(static_cast<double>(sf->volume) * ratio));
+//kL				double ratio = static_cast<double>(Options::soundVolume) / static_cast<double>(MIX_MAX_VOLUME);
+//kL				Mix_Volume(channel, static_cast<int>(static_cast<double>(sf->volume) * ratio));
 
 					break;
 				}
@@ -443,9 +443,9 @@ void IntroState::init()
 
 	Options::keepAspectRatio = _wasLetterBoxed;
 
-	if (CrossPlatform::fileExists(_introFile)
-		&& (CrossPlatform::fileExists(_introSoundFileDOS)
-			|| CrossPlatform::fileExists(_introSoundFileWin)))
+	if (CrossPlatform::fileExists(_introFile) == true
+		&& (CrossPlatform::fileExists(_introSoundFileDOS) == true
+			|| CrossPlatform::fileExists(_introSoundFileWin)) == true)
 	{
 		audioSequence = new AudioSequence(_game->getResourcePack());
 		Flc::flc.realscreen = _game->getScreen();
@@ -472,13 +472,14 @@ void IntroState::init()
 			Mix_HaltMusic();
 #endif
 
-		SDL_Color pal[256];
-		SDL_Color pal2[256];
+		SDL_Color
+			pal[256],
+			pal2[256];
 
 		memcpy(
 			pal,
 			_game->getScreen()->getPalette(),
-			sizeof(SDL_Color)* 256);
+			sizeof(SDL_Color) * 256);
 
 		for (Uint8
 				i = 20;

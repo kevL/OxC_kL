@@ -1534,14 +1534,14 @@ void Globe::XuLine(
 		SX,
 		SY;
 
-	if (abs(static_cast<int>(y2) - static_cast<int>(y1)) > abs(static_cast<int>(x2) - static_cast<int>(x1)))
+	if (std::abs(static_cast<int>(y2) - static_cast<int>(y1)) > std::abs(static_cast<int>(x2) - static_cast<int>(x1)))
 	{
-		len = abs(static_cast<int>(y2) - static_cast<int>(y1));
+		len = std::abs(static_cast<int>(y2) - static_cast<int>(y1));
 		inv = false;
 	}
 	else
 	{
-		len = abs(static_cast<int>(x2) - static_cast<int>(x1));
+		len = std::abs(static_cast<int>(x2) - static_cast<int>(x1));
 		inv = true;
 	}
 
@@ -1863,15 +1863,15 @@ void Globe::drawVHLine(
 	if (sx < 0)
 		sx += 2.0 * M_PI;
 
-	if (fabs(sx) < 0.01)
+	if (std::fabs(sx) < 0.01)
 	{
-		seg = static_cast<int>(abs(sy / (2.0 * M_PI) * 48.0));
+		seg = static_cast<int>(std::abs(sy / (2.0 * M_PI) * 48.0));
 		if (seg == 0)
 			++seg;
 	}
 	else
 	{
-		seg = static_cast<int>(abs(sx / (2.0 * M_PI) * 96.0));
+		seg = static_cast<int>(std::abs(sx / (2.0 * M_PI) * 96.0));
 		if (seg == 0)
 			++seg;
 	}

@@ -290,8 +290,8 @@ void Pathfinding::calculate(
 						&& isTank == true)) // should create Ruleset param 'trackedVehicle' <- DONE.
 //						&& unit->getTurretType() > -1))
 			   && startPos.z == destPos.z
-			   && abs(startPos.x - destPos.x) < 2
-			   && abs(startPos.y - destPos.y) < 2;
+			   && std::abs(startPos.x - destPos.x) < 2
+			   && std::abs(startPos.y - destPos.y) < 2;
 	//if (_strafeMove) Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove VALID";
 	//else Log(LOG_INFO) << "Pathfinding::calculate() _strafeMove INVALID";
 
@@ -428,7 +428,7 @@ bool Pathfinding::bresenhamPath(
 	z0 = origin.z; z1 = target.z;
 
 	// 'steep' xy Line, make longest delta x plane
-	swap_xy = abs(y1 - y0) > abs(x1 - x0);
+	swap_xy = std::abs(y1 - y0) > std::abs(x1 - x0);
 	if (swap_xy)
 	{
 		std::swap(x0, y0);
@@ -436,7 +436,7 @@ bool Pathfinding::bresenhamPath(
 	}
 
 	// do same for xz
-	swap_xz = abs(z1 - z0) > abs(x1 - x0);
+	swap_xz = std::abs(z1 - z0) > std::abs(x1 - x0);
 	if (swap_xz)
 	{
 		std::swap(x0, z0);
@@ -444,9 +444,9 @@ bool Pathfinding::bresenhamPath(
 	}
 
 	// delta is Length in each plane
-	delta_x = abs(x1 - x0);
-	delta_y = abs(y1 - y0);
-	delta_z = abs(z1 - z0);
+	delta_x = std::abs(x1 - x0);
+	delta_y = std::abs(y1 - y0);
+	delta_z = std::abs(z1 - z0);
 
 	// drift controls when to step in 'shallow' planes
 	// starting value keeps Line centred
@@ -1173,7 +1173,7 @@ int Pathfinding::getTUCost(
 				// kL_begin: extra TU for strafe-moves ->	1 0 1
 				//											2 ^ 2
 				//											3 2 3
-				int delta = abs((dir + 4) %8 - _unit->getDirection());
+				int delta = std::abs((dir + 4) %8 - _unit->getDirection());
 
 				if (_unit->getUnitRules()
 					&& _unit->getUnitRules()->getMechanical()
@@ -1184,10 +1184,10 @@ int Pathfinding::getTUCost(
 				else if (_unit->getDirection() != dir)
 				{
 					delta = std::min(
-									abs(8 + dir - _unit->getDirection()),
+									std::abs(8 + dir - _unit->getDirection()),
 									std::min(
-											abs(_unit->getDirection() - dir),
-											abs(8 + _unit->getDirection() - dir)));
+											std::abs(_unit->getDirection() - dir),
+											std::abs(8 + _unit->getDirection() - dir)));
 					if (delta == 4)
 						delta = 2;
 
@@ -1244,7 +1244,7 @@ int Pathfinding::getTUCost(
 				minLevel = *std::min_element(levels, levels + 4),
 				maxLevel = *std::max_element(levels, levels + 4);
 
-			if (abs(maxLevel - minLevel) > 8)
+			if (std::abs(maxLevel - minLevel) > 8)
 				return 255;
 		}
 

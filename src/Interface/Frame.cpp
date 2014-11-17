@@ -162,7 +162,7 @@ void Frame::draw()
 			color = darkest;
 		}
 		else
-			color = _color + abs(i - _thickness / 2) * mult;
+			color = _color + std::abs(i - _thickness / 2) * mult;
 
 		drawRect(
 				&square,

@@ -1254,7 +1254,7 @@ int ProjectileFlyBState::getMaxThrowDistance(
 			&& delta_z < 0.0) // roll back
 		{
 			delta_z = std::max(delta_z, -1.0);
-			if (abs(delta_z) > 1e-10) // rollback horizontal
+			if (std::abs(delta_z) > 1e-10) // rollback horizontal
 				dist -= static_cast<int>(curZ / delta_z);
 
 			break;

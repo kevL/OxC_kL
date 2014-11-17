@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_GAME_H
 #define OPENXCOM_GAME_H
 
-#include <list>
-#include <string>
+//#include <list>
+//#include <string>
 
-#include <SDL.h>
+//#include <SDL.h>
 
 
 namespace OpenXcom

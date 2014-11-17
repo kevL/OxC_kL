@@ -27,11 +27,11 @@
 #endif */ // kL_end.
 
 
-#include <cmath>
-#include <sstream>
-#include <SDL_mixer.h>
+//#include <cmath>
+//#include <sstream>
+//#include <SDL_mixer.h>
 
-#include "Adlib/adlplayer.h"
+//#include "Adlib/adlplayer.h"
 
 #include "Action.h"
 #include "CrossPlatform.h"
@@ -263,6 +263,7 @@ void Game::run()
 				case SDL_QUIT:
 					quit();
 				break;
+
 				case SDL_ACTIVEEVENT:
 					switch (reinterpret_cast<SDL_ActiveEvent*>(&_event)->state)
 					{
@@ -276,6 +277,7 @@ void Game::run()
 						break;
 					}
 				break;
+
 				case SDL_VIDEORESIZE:
 					if (Options::allowResize)
 					{
@@ -318,6 +320,7 @@ void Game::run()
 							startupEvent = false;
 					}
 				break;
+
 				case SDL_MOUSEMOTION:
 				case SDL_MOUSEBUTTONDOWN:
 				case SDL_MOUSEBUTTONUP:
@@ -341,7 +344,7 @@ void Game::run()
 					if (action.getDetails()->type == SDL_KEYDOWN)
 					{
 						if (action.getDetails()->key.keysym.sym == SDLK_g // "ctrl-g" grab input
-							&& (SDL_GetModState() & KMOD_CTRL) != 0)
+							&& (SDL_GetModState() &KMOD_CTRL) != 0)
 						{
 							Options::captureMouse = (SDL_GrabMode)(!Options::captureMouse);
 							SDL_WM_GrabInput(Options::captureMouse);
@@ -349,12 +352,12 @@ void Game::run()
 						else if (Options::debug)
 						{
 							if (action.getDetails()->key.keysym.sym == SDLK_t
-								&& (SDL_GetModState() & KMOD_CTRL) != 0)
+								&& (SDL_GetModState() &KMOD_CTRL) != 0)
 							{
 								setState(new TestState());
 							}
 							else if (action.getDetails()->key.keysym.sym == SDLK_u // "ctrl-u" debug UI
-								&& (SDL_GetModState() & KMOD_CTRL) != 0)
+								&& (SDL_GetModState() &KMOD_CTRL) != 0)
 							{
 								Options::debugUi = !Options::debugUi;
 								_states.back()->redrawText();
@@ -379,7 +382,7 @@ void Game::run()
 					Options::useOpenGL && Options::vSyncForOpenGL))
 			{
 				// Update our FPS delay time based on the time of the last draw.
-				int fps = SDL_GetAppState() & SDL_APPINPUTFOCUS? Options::FPS: Options::FPSInactive;
+				int fps = SDL_GetAppState() &SDL_APPINPUTFOCUS? Options::FPS: Options::FPSInactive;
 				if (fps < 1)
 					fps = 1;
 				_timeUntilNextFrame = static_cast<int>(
@@ -671,7 +674,7 @@ void Game::loadRuleset()
 	if (Options::rulesets.empty())
 		Options::rulesets.push_back("Xcom1Ruleset");
 
-	for (std::vector<std::string>::iterator
+	for (std::vector<std::string>::const_iterator
 			i = Options::rulesets.begin();
 			i != Options::rulesets.end();
 			)

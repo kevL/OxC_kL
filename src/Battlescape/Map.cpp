@@ -2480,7 +2480,7 @@ void Map::animate(bool redraw)
 	}
 
 	// animate certain units (large flying units have a propulsion animation)
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
@@ -2504,14 +2504,14 @@ void Map::animate(bool redraw)
 
 /**
  * Sets the rectangular selector to a certain tile.
- * @param mx Mouse x position.
- * @param my Mouse y position.
+ * @param mx - mouse x position
+ * @param my - mouse y position
  */
 void Map::setSelectorPosition(
 		int mx,
 		int my)
 {
-	int
+	const int
 		oldX = _selectorX,
 		oldY = _selectorY;
 
@@ -2530,7 +2530,7 @@ void Map::setSelectorPosition(
 
 /**
  * Gets the position of the rectangular selector.
- * @param pos Pointer to a position.
+ * @param pos - pointer to a Position
  */
 void Map::getSelectorPosition(Position* pos) const
 {
@@ -2548,20 +2548,20 @@ void Map::calculateWalkingOffset(
 		BattleUnit* unit,
 		Position* offset)
 {
-	int
+	const int
 		offsetX[8] = {1, 1, 1, 0,-1,-1,-1, 0},
 		offsetY[8] = {1, 0,-1,-1,-1, 0, 1, 1},
 
 		phase = unit->getWalkingPhase() + unit->getDiagonalWalkingPhase(),
 
 		dir = unit->getDirection(),
-
+		unitSize = unit->getArmor()->getSize();
+	int
 		midphase = 4 + 4 * (dir %2),
-		endphase = 8 + 8 * (dir %2),
+		endphase = 8 + 8 * (dir %2);
 
-		size = unit->getArmor()->getSize();
 
-	if (size > 1)
+	if (unitSize > 1)
 	{
 		if (dir < 1 || dir > 5)
 			midphase = endphase;
@@ -2584,12 +2584,12 @@ void Map::calculateWalkingOffset(
 		if (phase < midphase)
 		{
 			offset->x = phase * 2 * offsetX[dir];
-			offset->y = - phase * offsetY[dir];
+			offset->y = -phase * offsetY[dir];
 		}
 		else
 		{
 			offset->x = (phase - endphase) * 2 * offsetX[dir];
-			offset->y = - (phase - endphase) * offsetY[dir];
+			offset->y = -(phase - endphase) * offsetY[dir];
 		}
 	}
 
@@ -2602,17 +2602,17 @@ void Map::calculateWalkingOffset(
 			int
 				fromLevel = getTerrainLevel(
 										unit->getPosition(),
-										size),
+										unitSize),
 				toLevel = getTerrainLevel(
 										unit->getDestination(),
-										size);
+										unitSize);
 
 			if (unit->getPosition().z > unit->getDestination().z)
 				// going down a level, so toLevel 0 becomes +24, -8 becomes  16
-				toLevel += 24*(unit->getPosition().z - unit->getDestination().z);
+				toLevel += 24 * (unit->getPosition().z - unit->getDestination().z);
 			else if (unit->getPosition().z < unit->getDestination().z)
 				// going up a level, so toLevel 0 becomes -24, -8 becomes -16
-				toLevel = -24*(unit->getDestination().z - unit->getPosition().z) + abs(toLevel);
+				toLevel = -24 * (unit->getDestination().z - unit->getPosition().z) + std::abs(toLevel);
 
 			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * phase) / endphase);
 		}
@@ -2623,17 +2623,17 @@ void Map::calculateWalkingOffset(
 			int
 				fromLevel = getTerrainLevel(
 										unit->getLastPosition(),
-										size),
+										unitSize),
 				toLevel = getTerrainLevel(
 										unit->getDestination(),
-										size);
+										unitSize);
 
 			if (unit->getLastPosition().z > unit->getDestination().z)
 				// going down a level, so fromLevel 0 becomes -24, -8 becomes -32
-				fromLevel -= 24*(unit->getLastPosition().z - unit->getDestination().z);
+				fromLevel -= 24 * (unit->getLastPosition().z - unit->getDestination().z);
 			else if (unit->getLastPosition().z < unit->getDestination().z)
 				// going up a level, so fromLevel 0 becomes +24, -8 becomes 16
-				fromLevel = 24*(unit->getDestination().z - unit->getLastPosition().z) - abs(fromLevel);
+				fromLevel = 24 * (unit->getDestination().z - unit->getLastPosition().z) - std::abs(fromLevel);
 
 			offset->y += ((fromLevel * (endphase - phase)) / endphase) + ((toLevel * phase) / endphase);
 		}
@@ -2642,7 +2642,7 @@ void Map::calculateWalkingOffset(
 	{
 		offset->y += getTerrainLevel(
 								unit->getPosition(),
-								size);
+								unitSize);
 
 /*		if (unit->getArmor()->getDrawingRoutine() == 0
 			|| unit->getArmor()->getDrawingRoutine() == 1
@@ -2688,12 +2688,12 @@ void Map::calculateWalkingOffset(
   * Terrainlevel goes from 0 to -24 (bottom to top).
   * For a large sized unit, pick the highest terrain level, which is the lowest number...
   * @param pos	- Position
-  * @param size	- size of the unit to get the level from
+  * @param unitSize	- size of the unit to get the level from
   * @return, terrain height
   */
 int Map::getTerrainLevel(
 		Position pos,
-		int size)
+		int unitSize)
 {
 	int
 		lowLevel = 0,
@@ -2701,12 +2701,12 @@ int Map::getTerrainLevel(
 
 	for (int
 			x = 0;
-			x < size;
+			x < unitSize;
 			++x)
 	{
 		for (int
 				y = 0;
-				y < size;
+				y < unitSize;
 				++y)
 		{
 			lowTest = _save->getTile(pos + Position(x, y, 0))->getTerrainLevel();
@@ -2721,16 +2721,16 @@ int Map::getTerrainLevel(
 /**
  * Sets the 3D cursor to selection/aim mode.
  * @param type - CursorType
- * @param size - size of cursor
+ * @param cursorSize - size of cursor
  */
 void Map::setCursorType(
 		CursorType type,
-		int size)
+		int cursorSize)
 {
 	_cursorType = type;
 
 	if (_cursorType == CT_NORMAL)
-		_cursorSize = size;
+		_cursorSize = cursorSize;
 	else
 		_cursorSize = 1;
 }
@@ -2749,7 +2749,7 @@ CursorType Map::getCursorType() const
  */
 void Map::cacheUnits()
 {
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
@@ -2765,22 +2765,22 @@ void Map::cacheUnits()
 void Map::cacheUnit(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "cacheUnit() : " << unit->getId();
-	UnitSprite* unitSprite = new UnitSprite(
-										unit->getStatus() == STATUS_AIMING? _spriteWidth * 2: _spriteWidth,
-										_spriteHeight,
-										0,
-										0,
-										_save->getDepth() != 0);
+	UnitSprite* const unitSprite = new UnitSprite(
+											unit->getStatus() == STATUS_AIMING? _spriteWidth * 2: _spriteWidth,
+											_spriteHeight,
+											0,
+											0,
+											_save->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
 
-	int parts = unit->getArmor()->getSize() * unit->getArmor()->getSize();
+	const int parts = unit->getArmor()->getSize() * unit->getArmor()->getSize();
 
 	bool
 		d = false,
 		invalid = false;
 
 	unit->getCache(&invalid);
-	if (invalid)
+	if (invalid == true)
 	{
 		//Log(LOG_INFO) << ". (invalid)";
 
@@ -2788,7 +2788,7 @@ void Map::cacheUnit(BattleUnit* unit)
 		for (int
 				i = 0;
 				i < parts;
-				i++)
+				++i)
 		{
 			//Log(LOG_INFO) << ". . i = " << i;
 

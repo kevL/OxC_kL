@@ -123,7 +123,7 @@ private:
 	///
 	int getTerrainLevel(
 			Position pos,
-			int size);
+			int unitSize);
 
 
 	public:
@@ -180,7 +180,7 @@ private:
 		/// Sets the 3D cursor type.
 		void setCursorType(
 				CursorType type,
-				int size = 1);
+				int cursorSize = 1);
 		/// Gets the 3D cursor type.
 		CursorType getCursorType() const;
 

@@ -599,8 +599,12 @@ MOVED TO Ruleset !
 			}
 		}
 
-		std::string mus[] = // these are the filenames in /SOUND directory.
-		{
+		std::string mus[] =	// these are the filenames in /SOUND directory.
+		{					// Loads only those files that are found in the Music Rule .RUL-file.
+			"12GEO2",
+			"12GEO3",
+			"12MARS",
+			"12TACTIC",
 			"GMDEFEND",
 			"GMENBASE",
 			"GMGEO1",
@@ -615,7 +619,32 @@ MOVED TO Ruleset !
 			"GMSTORY",
 			"GMTACTIC",
 			"GMWIN",
-			"LCUFOPED"
+			"LCDEBRIEF",
+			"LCDEFEND",
+			"LCGEO1",
+			"LCGEO2",
+			"LCINTER",
+			"LCINTRO1",
+			"LCINTRO2",
+			"LCINTRO3",
+			"LCLOSE",
+			"LCMARS",
+			"LCNIGHT",
+			"LCTACTIC",
+			"LCUFOPED",
+			"LCWIN",
+			"PSDEFEND",
+			"PSENBASE",
+			"PSGEO1",
+			"PSGEO2",
+			"PSGEO3",
+			"PSGEO4",
+			"PSINTER",
+			"PSMARS",
+			"PSNEWMAR",
+			"PSSTORY",
+			"PSTACTIC",
+			"PSTACTIC2"
 		};
 
 /*		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
@@ -719,7 +748,6 @@ MOVED TO Ruleset !
 										_musics[mus[l]]->load(CrossPlatform::getDataFile(mediaFilename.str()));
 
 										loaded = true;
-
 										break;
 									}
 								}
@@ -749,6 +777,7 @@ MOVED TO Ruleset !
 
 								if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
 								{
+									Log(LOG_INFO) << "Music: load file " << filename << exts[exti];
 									_musicFile[filename] = new Music();
 									_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
 

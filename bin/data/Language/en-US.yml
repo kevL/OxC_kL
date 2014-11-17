@@ -1047,7 +1047,7 @@ en-US:
   STR_ABORT_MISSION_QUESTION: "Abort Mission"
   STR_CORPSE: "Corpse"
   STR_UNLOAD_CRAFT: "UNLOAD CRAFT"
-  STR_NEW_BATTLE: "insta Battle"
+  STR_NEW_BATTLE: "Tactical"
   STR_OPTIONS: "opTions"
   STR_RIGHT_CLICK_TO_DELETE: "RMB to delete"
   STR_HAS_BEEN_KILLED_MALE: "{0}{NEWLINE}bites Dust. fatal"

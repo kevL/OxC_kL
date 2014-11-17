@@ -551,10 +551,12 @@ void FlcMain(void (*frameCallBack)())
 	{
 		while (SDL_PollEvent(&event)) {
 		  switch(event.type) {
-			case SDL_MOUSEBUTTONDOWN:
+//kL		case SDL_MOUSEBUTTONDOWN:
 			case SDL_KEYDOWN:
-			  return;
+				if (event.key.keysym.sym == SDLK_ESCAPE) // kL_add.
+					return;
 			break;
+
 			case SDL_VIDEORESIZE:
 				if (Options::allowResize)
 				{

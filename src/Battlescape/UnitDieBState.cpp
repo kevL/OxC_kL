@@ -181,7 +181,7 @@ void UnitDieBState::think()
 	}
 
 // #4
-	if (_unit->isOut()) // and this ought be Status_Dead OR _Unconscious.
+	if (_unit->isOut() == true) // and this ought be Status_Dead OR _Unconscious.
 	{
 		//Log(LOG_INFO) << ". . unit isOut";
 //		_parent->getMap()->setUnitDying(false);
@@ -205,9 +205,9 @@ void UnitDieBState::think()
 //			&& _unit->getDiedByFire() == false) // kL <- could screw with death animations, etc.
 		{
 			//Log(LOG_INFO) << ". . unit is _spawnUnit -> converting !";
-			BattleUnit* convertedUnit = _parent->convertUnit(
-														_unit,
-														_unit->getSpawnUnit());
+			BattleUnit* const convertedUnit = _parent->convertUnit(
+																_unit,
+																_unit->getSpawnUnit());
 
 //			convertedUnit->lookAt(_originalDir); // kL_note: This seems to need a state to initiate turn() ...
 //TEST		_battleSave->getBattleGame()->statePushBack(new UnitTurnBState(_battleSave->getBattleGame(), action));
@@ -235,9 +235,9 @@ void UnitDieBState::think()
 
 
 		if (_unit->getOriginalFaction() == FACTION_PLAYER
-			&& _unit->getSpawnUnit().empty())
+			&& _unit->getSpawnUnit().empty() == true)
 		{
-			Game* game = _parent->getSave()->getBattleState()->getGame();
+			Game* const game = _parent->getSave()->getBattleState()->getGame();
 
 			if (_unit->getGeoscapeSoldier() != NULL)
 			{
@@ -253,7 +253,7 @@ void UnitDieBState::think()
 				else
 					message = "STR_HAS_BECOME_UNCONSCIOUS";
 
-				if (message != "")
+				if (message.empty() == false)
 					game->pushState(new InfoboxOKState(game->getLanguage()->getString(
 																					message,
 																					_unit->getGender())
@@ -265,8 +265,9 @@ void UnitDieBState::think()
 		if (_parent->getSave()->getSide() == FACTION_PLAYER
 			&& Options::battleAutoEnd)
 		{
-			int liveAliens = 0;
-			int liveSoldiers = 0;
+			int
+				liveAliens = 0,
+				liveSoldiers = 0;
 			_parent->tallyUnits(
 							liveAliens,
 							liveSoldiers);
@@ -302,26 +303,26 @@ void UnitDieBState::convertUnitToCorpse()
 	//Log(LOG_INFO) << "UnitDieBState::convertUnitToCorpse() ID = " << _unit->getId() << " pos " << _unit->getPosition();
 	_parent->getSave()->getBattleState()->showPsiButton(false);
 
-	Position pos = _unit->getPosition();
+	const Position pos = _unit->getPosition();
 
 	// remove the unconscious body item corresponding to this unit,
 	// and if it was being carried, keep track of what slot it was in
-	bool carried = (pos == Position(-1,-1,-1));
+	const bool carried = (pos == Position(-1,-1,-1));
 	if (carried == false)
 		_parent->getSave()->removeUnconsciousBodyItem(_unit);
 
 	BattleItem* itemToKeep = NULL;
-	int size = _unit->getArmor()->getSize();
+	const int unitSize = _unit->getArmor()->getSize();
 
 	// move inventory from unit to the ground for non-large units
-	bool drop = (size == 1)
-				&& carried == false // kL, i don't think this ever happens (ie, items have already been dropped). So let's bypass this section anyway!
-				&& (Options::weaponSelfDestruction == false
-					|| _unit->getOriginalFaction() != FACTION_HOSTILE
-					|| _unit->getStatus() == STATUS_UNCONSCIOUS);
-	if (drop)
+	const bool drop = (unitSize == 1)
+					&& carried == false // kL, i don't think this ever happens (ie, items have already been dropped). So let's bypass this section anyway!
+					&& (Options::weaponSelfDestruction == false
+						|| _unit->getOriginalFaction() != FACTION_HOSTILE
+						|| _unit->getStatus() == STATUS_UNCONSCIOUS);
+	if (drop == true)
 	{
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = _unit->getInventory()->begin();
 				i != _unit->getInventory()->end();
 				++i)
@@ -348,14 +349,14 @@ void UnitDieBState::convertUnitToCorpse()
 	if (carried == true) // unconscious unit is being carried when it dies
 	{
 		// replace the unconscious body item with a corpse in the carrying unit's inventory
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = _parent->getSave()->getItems()->begin();
 				i != _parent->getSave()->getItems()->end();
 				)
 		{
 			if ((*i)->getUnit() == _unit) // unit is in an inventory, so unit must be a 1x1 unit
 			{
-				RuleItem* corpseRule = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]);
+				const RuleItem* const corpseRule = _parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[0]);
 				(*i)->convertToCorpse(corpseRule);
 
 				break;
@@ -371,17 +372,17 @@ void UnitDieBState::convertUnitToCorpse()
 
 		for (int
 				y = 0;
-				y < size;
+				y < unitSize;
 				++y)
 		{
 			for (int
 					x = 0;
-					x < size;
+					x < unitSize;
 					++x)
 			{
-				BattleItem* corpse = new BattleItem(
-												_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]),
-												_parent->getSave()->getCurrentItemId());
+				BattleItem* const corpse = new BattleItem(
+													_parent->getRuleset()->getItem(_unit->getArmor()->getCorpseBattlescape()[i]),
+													_parent->getSave()->getCurrentItemId());
 				corpse->setUnit(_unit);
 
 				// check in case unit was displaced by another unit

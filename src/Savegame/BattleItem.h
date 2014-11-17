@@ -155,7 +155,7 @@ private:
 		/// Sets the flag representing "not dropped on player turn"
 //		void setTurnFlag(bool flag);
 		/// Sets the item's ruleset.
-		void convertToCorpse(RuleItem* rules);
+		void convertToCorpse(const RuleItem* rules);
 };
 
 }

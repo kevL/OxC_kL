@@ -3654,7 +3654,7 @@ int TileEngine::blockage(
 				if (type == DT_HE
 					&& _missileDirection != -1)
 				{
-					const int delta = abs(8 + _missileDirection - dir) %8;
+					const int delta = std::abs(8 + _missileDirection - dir) %8;
 					diagStop = (delta < 2 || delta == 7);
 				}
 
@@ -4569,23 +4569,23 @@ int TileEngine::calculateLine(
 	z0 = origin.z;
 	z1 = target.z;
 
-	swap_xy = abs(y1 - y0) > abs(x1 - x0); // 'steep' xy Line, make longest delta x plane
+	swap_xy = std::abs(y1 - y0) > std::abs(x1 - x0); // 'steep' xy Line, make longest delta x plane
 	if (swap_xy == true)
 	{
 		std::swap(x0, y0);
 		std::swap(x1, y1);
 	}
 
-	swap_xz = abs(z1 - z0) > abs(x1 - x0); // do same for xz
+	swap_xz = std::abs(z1 - z0) > std::abs(x1 - x0); // do same for xz
 	if (swap_xz == true)
 	{
 		std::swap(x0, z0);
 		std::swap(x1, z1);
 	}
 
-	delta_x = abs(x1 - x0); // delta is Length in each plane
-	delta_y = abs(y1 - y0);
-	delta_z = abs(z1 - z0);
+	delta_x = std::abs(x1 - x0); // delta is Length in each plane
+	delta_y = std::abs(y1 - y0);
+	delta_z = std::abs(z1 - z0);
 
 	drift_xy = drift_xz = delta_x / 2;	// drift controls when to step in 'shallow' planes;
 //	drift_xz = delta_x / 2;				// starting value keeps Line centered
@@ -4634,8 +4634,8 @@ int TileEngine::calculateLine(
 		else // for Terrain visibility, ie. FoV / Fog of War.
 		{
 			Tile
-				* startTile = _battleSave->getTile(lastPoint),
-				* endTile = _battleSave->getTile(Position(cx, cy, cz));
+				* const startTile = _battleSave->getTile(lastPoint),
+				* const endTile = _battleSave->getTile(Position(cx, cy, cz));
 
 //			if (_battleSave->getSelectedUnit()->getId() == 389)
 //			{
@@ -4662,9 +4662,9 @@ int TileEngine::calculateLine(
 			{
 //				Position posUnit = selUnit->getPosition();
 //				if ( //(posUnit.x == cx))
-//						&& abs(posUnit.y - cy) > 4) ||
+//						&& std::abs(posUnit.y - cy) > 4) ||
 //					(posUnit.y == cy))
-//						&& abs(posUnit.x - cx) > 4))
+//						&& std::abs(posUnit.x - cx) > 4))
 				{
 					//kL_debug = true;
 

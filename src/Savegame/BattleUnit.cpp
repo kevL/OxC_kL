@@ -1307,8 +1307,8 @@ int BattleUnit::damage(
 			int relativeDir;
 
 			const int
-				abs_x = abs(relative.x),
-				abs_y = abs(relative.y);
+				abs_x = std::abs(relative.x),
+				abs_y = std::abs(relative.y);
 
 			if (abs_y > abs_x * 2)
 				relativeDir = 8 + 4 * (relative.y > 0);

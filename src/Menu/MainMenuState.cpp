@@ -212,8 +212,8 @@ void MainMenuState::btnQuitClick(Action*)
 
 /**
  * Updates the scale.
- * @param dX delta of X;
- * @param dY delta of Y;
+ * @param dX - reference the delta of X
+ * @param dY - reference the delta of Y
  */
 void MainMenuState::resize(
 		int& dX,

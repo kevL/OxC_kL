@@ -1936,7 +1936,7 @@ bool AlienBAIState::explosiveEfficacy(
 //		effect -= 35;
 		effect -= (radius - distance + 1) * 5;
 
-		if (abs(attacker->getPosition().z - targetPos.z) <= Options::battleExplosionHeight)
+		if (std::abs(attacker->getPosition().z - targetPos.z) <= Options::battleExplosionHeight)
 			effect -= 15;
 	}
 
@@ -1952,16 +1952,16 @@ bool AlienBAIState::explosiveEfficacy(
 	effect += diff;
 
 	// account for the targeted unit -> excludeUnit when calculatingLine below.
-	BattleUnit* target = _save->getTile(targetPos)->getUnit();
+	BattleUnit* const target = _save->getTile(targetPos)->getUnit();
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
 	{
 		if ((*i)->isOut(true) == false
 			&& *i != attacker
-			&& abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight
+			&& std::abs((*i)->getPosition().z - targetPos.z) <= Options::battleExplosionHeight
 			&& _save->getTileEngine()->distance(
 											targetPos,
 											(*i)->getPosition()) <= radius)

@@ -74,24 +74,28 @@ BriefingState::BriefingState(
 
 
 	const std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
+	std::string music;
 
 	if (mission == "STR_TERROR_MISSION"
 		|| mission == "STR_BASE_DEFENSE")
 	{
 		setPalette("PAL_GEOSCAPE", 2);
-		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE); // kL, sza_MusicRules
+		music = OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE;
 	}
 	else if (mission == "STR_MARS_CYDONIA_LANDING"
 		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		setPalette("PAL_GEOSCAPE", 6);
-		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR); // kL, sza_MusicRules
+		music = OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR;
 	}
 	else
 	{
 		setPalette("PAL_GEOSCAPE", 0);
-		_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND); // kL, sza_MusicRules
+		music = OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND;
 	}
+
+	_game->getResourcePack()->playMusic(music);
+
 
 	if (mission == "STR_ALIEN_BASE_ASSAULT"
 		|| mission == "STR_MARS_CYDONIA_LANDING")
@@ -201,7 +205,7 @@ void BriefingState::btnOkClick(Action*)
 	Options::baseYResolution = Options::baseYBattlescape;
 	_game->getScreen()->resetDisplay(false);
 
-	BattlescapeState* bs = new BattlescapeState(); // <- ah there it is! kL_note
+	BattlescapeState* const bs = new BattlescapeState(); // <- ah there it is! kL_note
 	int
 		liveAliens = 0,
 		liveSoldiers = 0;
