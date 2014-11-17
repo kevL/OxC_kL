@@ -213,14 +213,14 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 //	_surfaces["INTERWIN"] = new Surface(160, 96);
 	// kL_end.
 
-	std::string geograph = CrossPlatform::getDataFolder("GEOGRAPH/");
+	const std::string geograph = CrossPlatform::getDataFolder("GEOGRAPH/");
 	std::vector<std::string> scrs = CrossPlatform::getFolderContents(geograph, "SCR");
 	for (std::vector<std::string>::iterator
 			i = scrs.begin();
 			i != scrs.end();
 			++i)
 	{
-		std::string path = geograph + *i;
+		const std::string path = geograph + *i;
 		std::transform(
 					i->begin(),
 					i->end(),
@@ -236,7 +236,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			i != bdys.end();
 			++i)
 	{
-		std::string path = geograph + *i;
+		const std::string path = geograph + *i;
 		std::transform(
 					i->begin(),
 					i->end(),
@@ -347,36 +347,13 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	}
 	_surfaces["ALTGEOBORD.SCR"] = newGeo; */
 
-	// here we create an "alternate" background surface for the base info screen.
-	// kL_note: Move this after_ loading extraSprites, so a modified BACK07.SCR gets stretched
-/*	_surfaces["ALTBACK07.SCR"] = new Surface(320, 200);
-	_surfaces["ALTBACK07.SCR"]->loadScr(CrossPlatform::getDataFile("GEOGRAPH/BACK07.SCR"));
-	for (int y = 172; y >= 152; --y)
-		for (int x = 5; x <= 314; ++x)
-			_surfaces["ALTBACK07.SCR"]->setPixelColor(
-												x,
-												y + 4,
-												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y));
-	for (int y = 147; y >= 134; --y)
-		for (int x = 5; x <= 314; ++x)
-			_surfaces["ALTBACK07.SCR"]->setPixelColor(
-												x,
-												y + 9,
-												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y));
-	for (int y = 132; y >= 109; --y)
-		for (int x = 5; x <= 314; ++x)
-			_surfaces["ALTBACK07.SCR"]->setPixelColor(
-												x,
-												y + 10,
-												_surfaces["ALTBACK07.SCR"]->getPixelColor(x, y)); */
-
 	std::vector<std::string> spks = CrossPlatform::getFolderContents(geograph, "SPK");
 	for (std::vector<std::string>::iterator
 			i = spks.begin();
 			i != spks.end();
 			++i)
 	{
-		std::string path = geograph + *i;
+		const std::string path = geograph + *i;
 		std::transform(
 					i->begin(),
 					i->end(),
@@ -386,14 +363,14 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 		_surfaces[*i]->loadSpk(path);
 	}
 
-	std::string ufointro = CrossPlatform::getDataFolder("UFOINTRO/"); // Load intro
+	const std::string ufointro = CrossPlatform::getDataFolder("UFOINTRO/"); // Load intro
 	std::vector<std::string> lbms = CrossPlatform::getFolderContents(ufointro, "LBM");
 	for (std::vector<std::string>::iterator
 			i = lbms.begin();
 			i != lbms.end();
 			++i)
 	{
-		std::string path = ufointro + *i;
+		const std::string path = ufointro + *i;
 		std::transform(
 					i->begin(),
 					i->end(),
@@ -403,7 +380,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 		_surfaces[*i]->loadImage(path);
 	}
 
-	std::string sets[] = // Load surface sets
+	const std::string sets[] = // Load surface sets
 	{
 		"BASEBITS.PCK",
 		"INTICON.PCK",
@@ -418,10 +395,10 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 		std::ostringstream s;
 		s << "GEOGRAPH/" << sets[i];
 
-		std::string ext = sets[i].substr(sets[i].find_last_of('.') + 1, sets[i].length());
+		const std::string ext = sets[i].substr(sets[i].find_last_of('.') + 1, sets[i].length());
 		if (ext == "PCK")
 		{
-			std::string tab = CrossPlatform::noExt(sets[i]) + ".TAB";
+			const std::string tab = CrossPlatform::noExt(sets[i]) + ".TAB";
 			std::ostringstream s2;
 			s2 << "GEOGRAPH/" << tab;
 			_sets[sets[i]] = new SurfaceSet(32, 40);
@@ -440,119 +417,6 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 	std::ostringstream scang;
 	scang << "GEODATA/" << "SCANG.DAT";
 	_sets["SCANG.DAT"]->loadDat(CrossPlatform::getDataFile(scang.str()));
-
-/*
-MOVED TO Ruleset !
-
-	std::ostringstream s; // Load polygons
-	s << "GEODATA/" << "WORLD.DAT";
-	Globe::loadDat(
-				CrossPlatform::getDataFile(s.str()),
-				&_polygons);
-
-	// LINES /
-	// Load polylines (extracted from game)
-	// -10 = Start of line
-	// -20 = End of data
-	double lines[] =
-	{
-		-10,
-			1.18901, -0.412334, 1.23918, -0.425424, 1.213, -0.471239, 1.22828, -0.490874, 1.23482, -0.482147, 1.30245, -0.541052, 1.29373,
-			-0.608684, 1.35918, -0.61741, 1.38099, -0.53887, 1.41154, -0.530144, 1.39626, -0.503964, 1.53153, -0.460331, 1.54025, -0.488692,
-			1.55116, -0.490874, 1.55334, -0.466876, 1.60352, -0.469057, 1.59916, -0.488692, 1.67552, -0.517054, 1.69515, -0.475602, 1.61661,
-			-0.386154, 1.61225, -0.436332, 1.56861, -0.440696, 1.56425, -0.460331, 1.54243, -0.462512, 1.53589, -0.449422, 1.55552, -0.373064,
-		-10,
-			6.13047, -0.726493, 6.17628, -0.726493, 6.1501, -0.645772, -10, 6.25264, -0.759218, 0.0109083, -0.73522, 0.0567232, -0.741765,
-		-10,
-			0.128718, -0.7614, 0.122173, -0.80067, 0.102538, -0.807215, 0.1309, -0.829031, 0.14399, -0.85303, 0.111265, -0.863938, 0.0719948,
-			-0.870483, 0.0501782, -0.885755, -10, 0.122173, -0.80067, 0.148353, -0.811578, 0.159261, -0.80067, 0.211621, -0.820305, 0.239983,
-			-0.811578, 0.239983, -0.794125, -10, 0.111265, -0.863938, 0.102538, -0.907571, 0.11781, -0.90539, 0.122173, -0.938114, -10, 0.139626,
-			-0.959931, 0.181078, -0.953386, -10, 0.248709, -0.942478, 0.261799, -0.887936, 0.213803, -0.877028, 0.242164, -0.85303, 0.229074,
-			-0.829031, 0.1309, -0.829031, -10, 0.0458149, -0.109083, 0.0479966, -0.148353, 0.0654498, -0.185441, 0.0698132, -0.237801, 0.0981748,
-			-0.244346, 0.122173, -0.224711, 0.17017, -0.222529, 0.231256, -0.235619, 0.257436, -0.211621, 0.19635, -0.113446, 0.176715, -0.126536,
-			0.148353, -0.0763582,
-		-10,
-			0.438514, -0.554142, 0.436332, -0.383972, 0.595594, -0.383972, 0.628319, -0.410152,
-		-10,
-			0.59123, -0.547597, 0.619592, -0.493056, -10, 0.283616, 0.4996, 0.349066, 0.495237, 0.349066, 0.434151, 0.362156, 0.469057, 0.407971,
-			0.440696, 0.447241, 0.449422, 0.510509, 0.386154, 0.545415, 0.390517, 0.558505, 0.469057, 0.575959, 0.464694,
-		-10,
-			5.36252, 0.580322, 5.27962, 0.523599, 5.34071, 0.449422, 5.27089, 0.386154, 5.26653, 0.283616, 5.14436, 0.174533, 5.05491, 0.194168,
-			4.996, 0.14399, 5.01564, 0.0872665, 5.06364, 0.0763582, 5.06582, -0.0305433, 5.18145, -0.0370882, 5.15527, -0.0698132, 5.2229, -0.0938114,
-			5.2578, -0.019635, 5.35816, -0.0327249, 5.38652, -0.0741765, -10, 4.10152, -0.85303, 4.45059, -0.85303, 4.62512, -0.855211, 4.71893,
-			-0.837758,
-		-10,
-			5.116, -0.776672, 5.08545, -0.824668, 5.03309, -0.785398, 4.97419, -0.785398, 4.95019, -0.770127,
-		-10,
-			3.82227, -1.21519, 3.82227, -1.05374, 4.01426, -0.977384, 3.95972, -0.949023,
-		-10,
-			4.23897, -0.569414, 4.42659, -0.554142, 4.48113, -0.503964, 4.51386, -0.519235, 4.55531, -0.460331, 4.59022, -0.455967,
-		-10,
-			4.82584, -0.728675, 4.84983, -0.750492,
-		-10,
-			4.8062, -0.81376, 4.82802, -0.80067,
-		-10,
-			0.545415, -1.21955, 0.549779, -1.09738, 0.490874, -1.05156,
-		-10,
-			0.488692, -1.04283, 0.490874, -0.981748, 0.569414, -0.933751, 0.554142, -0.909753, 0.698132, -0.863938, 0.665407, -0.818123,
-		-10,
-			0.693768, -0.763582, 0.857393, -0.730857,
-		-10,
-			0.861756, -0.805033, 0.831213, -0.87921, 1.0472, -0.885755, 1.0712, -0.944659, 1.2021, -0.966476, 1.34172, -0.951204, 1.39626, -0.885755,
-			1.53589, -0.857393, 1.71042, -0.872665, 1.72569, -0.909753, 1.91986, -0.859575, 2.03767, -0.870483, 2.08131, -0.872665, 2.09658, -0.922843,
-			2.19693, -0.925025, 2.23184, -0.86612, 2.34747, -0.842121, 2.32129, -0.785398, 2.28638, -0.783217, 2.27984, -0.73522, 2.16857, -0.698132,
-		-10,
-			1.88277, -0.375246, 1.8435, -0.407971, 1.77587, -0.370882, 1.73006, -0.386154, 1.72569, -0.423242, 1.7017, -0.418879, 1.72569, -0.477784,
-			1.69515, -0.475602,
-		-10,
-			1.59916, -0.488692, 1.55116, -0.490874,
-		-10,
-			1.54025, -0.488692, 1.41154, -0.530144,
-		-10,
-			1.35918, -0.61741, 1.28064, -0.687223, 1.40499, -0.737402, 1.39626, -0.785398, 1.4399, -0.78758, 1.44644, -0.824668, 1.49662, -0.822486,
-			1.50753, -0.857393, 1.53589, -0.857393, 1.5817, -0.789761, 1.67988, -0.746128, 1.8326, -0.724312, 1.95477, -0.7614, 1.95695, -0.785398,
-			2.09221, -0.815941, 2.02022, -0.833395, 2.03767, -0.870483,
-		-20
-	};
-
-	Polyline* line = 0;
-
-	int start = 0;
-	for (size_t
-			i = 0;
-			lines[i] > -19.999;
-			++i)
-	{
-		if (lines[i] < -9.999
-			&& lines[i] > -10.001)
-		{
-			if (line != 0)
-				_polylines.push_back(line);
-
-			int points = 0;
-			for (int
-					j = i + 1;
-					lines[j] > -9.999;
-					++j)
-			{
-				points++;
-			}
-
-			points /= 2;
-			line = new Polyline(points);
-
-			start = i + 1;
-		}
-		else
-		{
-			if ((i - start) %2 == 0)
-				line->setLongitude((i - start) / 2, lines[i]);
-			else
-				line->setLatitude((i - start) / 2, lines[i]);
-		}
-	}
-
-	_polylines.push_back(line); */
 
 
 	/* MUSICS */
@@ -598,7 +462,7 @@ MOVED TO Ruleset !
 			}
 		}
 
-		const std::string mus[] =	// these are the filenames in /SOUND directory. THIS ARRAY IS USED ONLY FOR EXTRAMUSIC !!!!
+/*		const std::string mus[] =	// these are the filenames in /SOUND directory. THIS ARRAY IS USED ONLY FOR EXTRAMUSIC !!!!
 		{							// Loads only those files that are found in the Music Rule .RUL-file as 'files'.
 			"12GEO2",
 			"12GEO3",
@@ -644,7 +508,7 @@ MOVED TO Ruleset !
 			"PSSTORY",
 			"PSTACTIC",
 			"PSTACTIC2"
-		};
+		}; */
 
 /*		int tracks[] = {3, 6, 0, 18, 2, 19, 20, 21, 10, 9, 8, 12, 17, 11};
 		float tracks_normalize[] = {0.76f, 0.83f, 1.19f, 1.0f, 0.74f, 0.8f, 0.8f, 0.8f, 1.0f, 0.92f, 0.81f, 1.0f, 1.14f, 0.84f}; */
@@ -703,13 +567,11 @@ MOVED TO Ruleset !
 
 					if (loaded == false) // Try digital tracks.
 					{
-
-
 						// sza_ExtraMusic_BEGIN:
 
 						// kL_note: This section may well be redundant w/ sza_MusicRules!!
 						// Load alternative digital track if there is an override.
-						for (size_t
+/*						for (size_t
 								l = 0;
 								l < sizeof(mus) / sizeof(mus[0]);
 								++l)
@@ -741,38 +603,38 @@ MOVED TO Ruleset !
 									}
 								}
 							}
-						}
+						} */
 
-						if (loaded == false) // sza_End.
+//						if (loaded == false) // sza_End.
+//						{
+						const std::string exts[] =
 						{
-							const std::string exts[] =
+							".ogg",
+//							".flac",
+//							".mp3",
+//							".mod",
+//							".wav" // kL_add ( also add "." and remove them below )
+						};
+
+						for (size_t
+								ext = 0;
+								ext < sizeof(exts) / sizeof(exts[0]);
+								++ext)
+						{
+							std::ostringstream s;
+							s << "SOUND/" << filename << exts[ext];
+
+							if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
 							{
-								".ogg",
-//								".flac",
-//								".mp3",
-//								".mod",
-//								".wav" // kL_add ( also add "." and remove them below )
-							};
+								Log(LOG_INFO) << "Music: load file " << filename << exts[ext];
+								_musicFile[filename] = new Music();
+								_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
 
-							for (size_t
-									ext = 0;
-									ext < sizeof(exts) / sizeof(exts[0]);
-									++ext)
-							{
-								std::ostringstream s;
-								s << "SOUND/" << filename << exts[ext];
-
-								if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
-								{
-									Log(LOG_INFO) << "Music: load file " << filename << exts[ext];
-									_musicFile[filename] = new Music();
-									_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
-
-									loaded = true;
-									break;
-								}
+								loaded = true;
+								break;
 							}
 						}
+//						}
 					}
 
 /*kL: forget about adlib, aintro, gmcat, midi.
@@ -983,7 +845,7 @@ MOVED TO Ruleset !
 
 
 		/* SOUNDS fx */
-		if (rules->getSoundDefinitions()->empty() == true) // Load sounds
+		if (rules->getSoundDefinitions()->empty() == true) // Load sounds.
 		{
 			const std::string
 				catsId[] =
@@ -1000,15 +862,13 @@ MOVED TO Ruleset !
 				{
 					"SOUND2.CAT",
 					"SOUND1.CAT"
+				},
+				* cats[] = // Try the preferred format first, otherwise use the default priority.
+				{
+					NULL,
+					catsWin,
+					catsDos
 				};
-
-			// Try the preferred format first, otherwise use the default priority
-			const std::string* cats[] =
-			{
-				NULL,
-				catsWin,
-				catsDos
-			};
 
 			if (Options::preferredSound == SOUND_14)
 				cats[0] = catsWin;
@@ -1027,7 +887,7 @@ MOVED TO Ruleset !
 				for (size_t
 						j = 0;
 						j < sizeof(cats) / sizeof(cats[0])
-							&& sound == 0;
+							&& sound == NULL;
 						++j)
 				{
 					bool wav = true;
@@ -1091,14 +951,14 @@ MOVED TO Ruleset !
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/INTRO.CAT")) == true)
 		{
-			SoundSet* const s = _sounds["INTRO.CAT"] = new SoundSet();
-			s->loadCat(CrossPlatform::getDataFile("SOUND/INTRO.CAT"), false);
+			SoundSet* const soundSet = _sounds["INTRO.CAT"] = new SoundSet();
+			soundSet->loadCat(CrossPlatform::getDataFile("SOUND/INTRO.CAT"), false);
 		}
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT")) == true)
 		{
-			SoundSet* const s = _sounds["SAMPLE3.CAT"] = new SoundSet();
-			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
+			SoundSet* const soundSet = _sounds["SAMPLE3.CAT"] = new SoundSet();
+			soundSet->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
 		}
 	}
 
@@ -1110,6 +970,7 @@ MOVED TO Ruleset !
 	GeoscapeState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Geo->Base & Geo->Graphs
 	BasescapeState::soundPop	= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for Basescape RMB.
 	GraphsState::soundPop		= getSound("GEO.CAT", ResourcePack::WINDOW_POPUP[0]);	// wahahahah // kL, used for switching Graphs screens. Or just returning to Geoscape.
+
 
 	/* BATTLESCAPE RESOURCES */
 	loadBattlescapeResources(); // TODO load this at battlescape start, unload at battlescape end
@@ -1169,7 +1030,7 @@ MOVED TO Ruleset !
 		}
 
 
-	Log(LOG_DEBUG) << "Loading extra resources from ruleset...";
+	//Log(LOG_DEBUG) << "Loading extra resources from ruleset...";
 	Log(LOG_INFO) << "Loading extra resources from ruleset...";
 
 	/* EXTRA SPRITES */
@@ -1192,7 +1053,7 @@ MOVED TO Ruleset !
 		{
 			if (_surfaces.find(sheetName) == _surfaces.end())
 			{
-				Log(LOG_DEBUG) << "Creating new single image: " << sheetName;
+				//Log(LOG_DEBUG) << "Creating new single image: " << sheetName;
 				Log(LOG_INFO) << "Creating new single image: " << sheetName;
 
 				_surfaces[sheetName] = new Surface(
@@ -1201,7 +1062,7 @@ MOVED TO Ruleset !
 			}
 			else
 			{
-				Log(LOG_DEBUG) << "Adding/Replacing single image: " << sheetName;
+				//Log(LOG_DEBUG) << "Adding/Replacing single image: " << sheetName;
 				Log(LOG_INFO) << "Adding/Replacing single image: " << sheetName;
 
 				delete _surfaces[sheetName];
@@ -1221,7 +1082,7 @@ MOVED TO Ruleset !
 
 			if (_sets.find(sheetName) == _sets.end())
 			{
-				Log(LOG_DEBUG) << "Creating new surface set: " << sheetName;
+				//Log(LOG_DEBUG) << "Creating new surface set: " << sheetName;
 				Log(LOG_INFO) << "Creating new surface set: " << sheetName;
 
 				adding = true;
@@ -1237,7 +1098,7 @@ MOVED TO Ruleset !
 			}
 			else
 			{
-				Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
+				//Log(LOG_DEBUG) << "Adding/Replacing items in surface set: " << sheetName;
 				Log(LOG_INFO) << "Adding/Replacing items in surface set: " << sheetName;
 			}
 
@@ -1245,7 +1106,7 @@ MOVED TO Ruleset !
 			{
 				const int frames = (spritePack->getWidth() / spritePack->getSubX()) * (spritePack->getHeight() / spritePack->getSubY());
 
-				Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
+				//Log(LOG_DEBUG) << "Subdividing into " << frames << " frames.";
 				Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
 			}
 
@@ -1260,7 +1121,7 @@ MOVED TO Ruleset !
 				const std::string fileName = j->second;
 				if (fileName.substr(fileName.length() - 1, 1) == "/")
 				{
-					Log(LOG_DEBUG) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
+					//Log(LOG_DEBUG) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
 					Log(LOG_INFO) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
 
 					int offset = startFrame;
@@ -1283,7 +1144,7 @@ MOVED TO Ruleset !
 
 							if (_sets[sheetName]->getFrame(offset))
 							{
-								Log(LOG_DEBUG) << "Replacing frame: " << offset;
+								//Log(LOG_DEBUG) << "Replacing frame: " << offset;
 								Log(LOG_INFO) << "Replacing frame: " << offset;
 
 								_sets[sheetName]->getFrame(offset)->loadImage(s.str());
@@ -1294,7 +1155,7 @@ MOVED TO Ruleset !
 									_sets[sheetName]->addFrame(offset)->loadImage(s.str());
 								else
 								{
-									Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
+									//Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
 									Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 
 									_sets[sheetName]->addFrame(offset + spritePack->getModIndex())->loadImage(s.str());
@@ -1318,14 +1179,14 @@ MOVED TO Ruleset !
 
 						if (_sets[sheetName]->getFrame(startFrame))
 						{
-							Log(LOG_DEBUG) << "Replacing frame: " << startFrame;
+							//Log(LOG_DEBUG) << "Replacing frame: " << startFrame;
 							Log(LOG_INFO) << "Replacing frame: " << startFrame;
 
 							_sets[sheetName]->getFrame(startFrame)->loadImage(s.str());
 						}
 						else
 						{
-							Log(LOG_DEBUG) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
+							//Log(LOG_DEBUG) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
 							Log(LOG_INFO) << "Adding frame: " << startFrame << ", using index: " << startFrame + spritePack->getModIndex();
 
 							_sets[sheetName]->addFrame(startFrame + spritePack->getModIndex())->loadImage(s.str());
@@ -1333,9 +1194,9 @@ MOVED TO Ruleset !
 					}
 					else
 					{
-						Surface* temp = new Surface(
-												spritePack->getWidth(),
-												spritePack->getHeight());
+						Surface* const temp = new Surface(
+														spritePack->getWidth(),
+														spritePack->getHeight());
 						s.str("");
 						s << CrossPlatform::getDataFile(spritePack->getSprites()->operator[](startFrame));
 						temp->loadImage(s.str());
@@ -1357,7 +1218,7 @@ MOVED TO Ruleset !
 							{
 								if (_sets[sheetName]->getFrame(offset))
 								{
-									Log(LOG_DEBUG) << "Replacing frame: " << offset;
+									//Log(LOG_DEBUG) << "Replacing frame: " << offset;
 									Log(LOG_INFO) << "Replacing frame: " << offset;
 
 									_sets[sheetName]->getFrame(offset)->clear();
@@ -1382,7 +1243,7 @@ MOVED TO Ruleset !
 									}
 									else
 									{
-										Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
+										//Log(LOG_DEBUG) << "Adding frame: " << offset + spritePack->getModIndex();
 										Log(LOG_INFO) << "Adding frame: " << offset + spritePack->getModIndex();
 
 										// for some reason regular blit() doesn't work here how i want it, so i use this function instead.
@@ -1559,13 +1420,15 @@ void XcomResourcePack::loadBattlescapeResources()
 	//Log(LOG_INFO) << "XcomResourcePack::loadBattlescapeResources()";
 
 	// Load Battlescape ICONS
-	std::ostringstream s;
+	std::ostringstream
+		s,
+		s2;
+
 	s << "UFOGRAPH/" << "SPICONS.DAT";
 	_sets["SPICONS.DAT"] = new SurfaceSet(32, 24);
 	_sets["SPICONS.DAT"]->loadDat(CrossPlatform::getDataFile(s.str()));
 
 	s.str("");
-	std::ostringstream s2;
 	s << "UFOGRAPH/" << "CURSOR.PCK";
 	s2 << "UFOGRAPH/" << "CURSOR.TAB";
 	_sets["CURSOR.PCK"] = new SurfaceSet(32, 40);

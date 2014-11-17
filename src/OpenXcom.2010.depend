@@ -5399,7 +5399,7 @@
 	<string>
 	"../Ruleset/Unit.h"
 
-1416208834 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1416258824 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	<iomanip>
 	<sstream>
@@ -5994,7 +5994,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1416210405 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1416258874 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	<cmath>
 	<sstream>
@@ -6029,6 +6029,7 @@
 	"../Engine/Action.h"
 	"../Engine/Adlib/adlplayer.h"
 	"../Engine/CrossPlatform.h"
+	"../Engine/Exception.h"
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
 	"../Engine/Language.h"
@@ -7715,7 +7716,7 @@
 1413136958 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1416209109 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1416258948 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -9199,7 +9200,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1416254577 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1416263425 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../fmath.h"
 	"../Basescape/BasescapeState.h"
@@ -12020,7 +12021,7 @@
 1413640059 f:\git\openxcom\src\ruleset\rulecommendations.h
 	<yaml-cpp/yaml.h>
 
-1416209048 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
+1416258933 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
 	"CommendationState.h"
 	<sstream>
 	"../Engine/Adlib/adlplayer.h"
