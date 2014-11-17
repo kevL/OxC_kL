@@ -37,6 +37,7 @@ class Palette;
 class Ruleset;
 
 
+/*
 static const std::string // = 'type' in Music Rules file
 	XCOM_RESOURCE_MUSIC_GMDEFEND	= "GMDEFEND",
 	XCOM_RESOURCE_MUSIC_GMENBASE	= "GMENBASE",
@@ -53,24 +54,46 @@ static const std::string // = 'type' in Music Rules file
 	XCOM_RESOURCE_MUSIC_GMSTORY		= "GMSTORY",
 	XCOM_RESOURCE_MUSIC_GMTACTIC	= "GMTACTIC",
 	XCOM_RESOURCE_MUSIC_GMWIN		= "GMWIN",
-	XCOM_RESOURCE_MUSIC_LRC_UFOPED	= "LCUFOPED";
+	XCOM_RESOURCE_MUSIC_LRC_UFOPED	= "LCUFOPED"; */
+
+
 static const std::string // = 'type' in Music Rules file
-	SZ_MUSIC_INT1	= "INT1",
-	SZ_MUSIC_INT2	= "INT2",
-	SZ_MUSIC_INT3	= "INT3",
-	SZ_MUSIC_START	= "START",
-	SZ_MUSIC_GEO	= "GEO",
-	SZ_MUSIC_TAC	= "TAC",
-	SZ_MUSIC_BRIEF	= "BRIEF",
-	SZ_MUSIC_DBRIEF	= "DBRIEF",
-	SZ_MUSIC_MEMOR	= "MEMOR",
-	SZ_MUSIC_INTER	= "INTER",
-	SZ_MUSIC_WIN	= "WIN",
-	SZ_MUSIC_LOSE	= "LOSE",
-	SZ_MUSIC_MARS	= "MARS",
-	SZ_MUSIC_PED	= "PED",
-	SZ_MUSIC_DEFEND	= "DEFEND",
-	SZ_MUSIC_ASAULT	= "ASAULT";
+	res_MUSIC_START_INTRO1				= "START_INTRO1",
+	res_MUSIC_START_INTRO2				= "START_INTRO2",
+	res_MUSIC_START_INTRO3				= "START_INTRO3",
+	res_MUSIC_START_MAINMENU			= "START_MAINMENU",
+
+	res_MUSIC_GEO_GLOBE					= "GEO_GLOBE",
+	res_MUSIC_GEO_INTERCEPT				= "GEO_INTERCEPT", // verySmall,small,medium,large,veryLarge
+	res_MUSIC_GEO_MONTHLYREPORT			= "GEO_MONTHLYREPORT",
+
+	res_MUSIC_GEO_BRIEFING				= "GEO_BRIEFING",
+	res_MUSIC_GEO_BRIEF_MARS1			= "GEO_BRIEF_MARS1",
+	res_MUSIC_GEO_BRIEF_MARS2			= "GEO_BRIEF_MARS2",
+	res_MUSIC_GEO_BRIEF_BASEDEFENSE		= "GEO_BRIEF_BASEDEFENSE",
+	res_MUSIC_GEO_BRIEF_BASEASSAULT		= "GEO_BRIEF_BASEASSAULT",
+	res_MUSIC_GEO_BRIEF_TERRORSITE		= "GEO_BRIEF_TERRORSITE",
+	res_MUSIC_GEO_BRIEF_UFOCRASHED		= "GEO_BRIEF_UFOCRASHED",
+	res_MUSIC_GEO_BRIEF_UFOLANDED		= "GEO_BRIEF_UFOLANDED",
+
+	res_MUSIC_TAC_BATTLE				= "TAC_BATTLE",
+	res_MUSIC_TAC_BATTLE_MARS1			= "TAC_BATTLE_MARS1",
+	res_MUSIC_TAC_BATTLE_MARS2			= "TAC_BATTLE_MARS2",
+	res_MUSIC_TAC_BATTLE_BASEDEFENSE	= "TAC_BATTLE_BASEDEFENSE",
+	res_MUSIC_TAC_BATTLE_BASEASSAULT	= "TAC_BATTLE_BASEASSAULT",
+	res_MUSIC_TAC_BATTLE_TERRORSITE		= "TAC_BATTLE_TERRORSITE",
+	res_MUSIC_TAC_BATTLE_UFOCRASHED		= "TAC_BATTLE_UFOCRASHED",
+	res_MUSIC_TAC_BATTLE_UFOLANDED		= "TAC_BATTLE_UFOLANDED",
+
+	res_MUSIC_TAC_DEBRIEFING			= "TAC_DEBRIEFING",
+	res_MUSIC_TAC_AWARDS				= "TAC_AWARDS",
+
+	res_MUSIC_BASE_AWARDS				= "BASE_AWARDS",
+	res_MUSIC_BASE_MEMORIAL				= "BASE_MEMORIAL",
+	res_MUSIC_UFOPAEDIA					= "UFOPAEDIA",
+
+	res_MUSIC_WIN						= "WIN",
+	res_MUSIC_LOSE						= "LOSE";
 
 
 /**
@@ -98,14 +121,14 @@ private:
 		bool isImageFile(std::string extension);
 
 		/// Loads a specified music file.
-		Music* loadMusic(
+/*		Music* loadMusic(
 				MusicFormat fmt,
 				const std::string& file,
 				int track,
 				float volume,
 				CatFile* adlibcat,
 				CatFile* aintrocat,
-				GMCatFile* gmcat);
+				GMCatFile* gmcat); */
 
 		/// Creates a transparency lookup table for a given palette.
 		void createTransparencyLUT(Palette* pal);

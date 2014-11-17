@@ -98,19 +98,19 @@ VictoryState::VictoryState()
 		_text[i]->setVisible(false);
 	}
 
-//	_game->getResourcePack()->playMusic("GMWIN");
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMWIN); // kL, sza_MusicRules
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_WIN);
 
 	centerAllSurfaces();
+
 
 //	_timer->onTimer((StateHandler)& VictoryState::screenTimer);
 //	_timer->start();
 
 	screenClick(NULL);
 
-	if (_game->getSavedGame()->isIronman()) // Ironman is over
+	if (_game->getSavedGame()->isIronman() == true) // Ironman is over
 	{
-		std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
+		const std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_game->getSavedGame()->getName())) + ".sav";
 		CrossPlatform::deleteFile(Options::getUserFolder() + filename);
 	}
 }

@@ -129,10 +129,7 @@ MainMenuState::MainMenuState()
 	_txtTitle->setText(title.str());
 
 
-//	_game->getResourcePack()->playMusic("GMSTORY");
-//	_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY)->play(); // sza_MusicRules
-//	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMSTORY); // kL, sza_MusicRules
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_LRC_UFOPED); // kL, sza_MusicRules
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_START_MAINMENU);
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);

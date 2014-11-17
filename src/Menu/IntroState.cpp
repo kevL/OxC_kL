@@ -35,6 +35,7 @@
 #include "../Engine/Adlib/adlplayer.h"
 
 #include "../Resource/ResourcePack.h"
+#include "../Resource/XcomResourcePack.h"
 
 
 namespace OpenXcom
@@ -372,17 +373,17 @@ void operator()()
 			{
 				case 0x200:
 					Log(LOG_DEBUG) << "Playing gmintro1";
-					m = rp->getMusic("GMINTRO1");
+					m = rp->getMusic(OpenXcom::res_MUSIC_START_INTRO1);
 					m->play(1);
 				break;
 				case 0x201:
 					Log(LOG_DEBUG) << "Playing gmintro2";
-					m = rp->getMusic("GMINTRO2");
+					m = rp->getMusic(OpenXcom::res_MUSIC_START_INTRO2);
 					m->play(1);
 				break;
 				case 0x202:
 					Log(LOG_DEBUG) << "Playing gmintro3";
-					m = rp->getMusic("GMINTRO3");
+					m = rp->getMusic(OpenXcom::res_MUSIC_START_INTRO3);
 					m->play(1);
 					Mix_HookMusicFinished(musicDone);
 				break;

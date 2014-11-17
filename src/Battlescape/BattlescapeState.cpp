@@ -419,25 +419,25 @@ BattlescapeState::BattlescapeState()
 
 	std::wstring baseLabel;
 
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end()
-				&& baseLabel.empty();
+				&& baseLabel.empty() == true;
 			++i)
 	{
-		if ((*i)->isInBattlescape())
+		if ((*i)->isInBattlescape() == true)
 		{
 			baseLabel = (*i)->getName(_game->getLanguage());
 			break;
 		}
 
-		for (std::vector<Craft*>::iterator
+		for (std::vector<Craft*>::const_iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end()
-					&& baseLabel.empty();
+					&& baseLabel.empty() == true;
 				++j)
 		{
-			if ((*j)->isInBattlescape())
+			if ((*j)->isInBattlescape() == true)
 				baseLabel = (*i)->getName(_game->getLanguage());
 		}
 	}
@@ -810,12 +810,25 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAimed->setGroup(&_reserve);
 	_btnReserveAuto->setGroup(&_reserve); */
 
-//	_game->getResourcePack()->playMusic("GMTACTIC");
-	std::string terrain = _game->getSavedGame()->getSavedBattle()->getTerrain(); // sza_MusicRules
-//	_game->getResourcePack()->getRandomMusic( // sza_MusicRules
-//										OpenXcom::XCOM_RESOURCE_MUSIC_GMTACTIC,
-//										terrain)->play();
-	_game->getResourcePack()->playMusic("GMTACTIC", true, terrain); // kL, sza_MusicRules
+	std::string music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
+	const std::string mission = _save->getMissionType();
+	if (mission == "STR_UFO_CRASH_RECOVERY")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
+	else if (mission == "STR_UFO_GROUND_ASSAULT")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOLANDED;
+	else if (mission == "STR_ALIEN_BASE_ASSAULT")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEASSAULT;
+	else if (mission == "STR_BASE_DEFENSE")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_BASEDEFENSE;
+	else if (mission == "STR_TERROR_MISSION")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_TERRORSITE;
+	else if (mission == "STR_MARS_CYDONIA_LANDING")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS1;
+	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
+		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
+
+	const std::string terrain = _game->getSavedGame()->getSavedBattle()->getTerrain();
+	_game->getResourcePack()->playMusic(music, true, terrain);
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
@@ -916,9 +929,9 @@ void BattlescapeState::think()
 	//Log(LOG_INFO) << "BattlescapeState::think()";
 	static bool popped = false;
 
-	if (_gameTimer->isRunning())
+	if (_gameTimer->isRunning() == true)
 	{
-		if (_popups.empty())
+		if (_popups.empty() == true)
 		{
 			State::think();
 
@@ -930,7 +943,7 @@ void BattlescapeState::think()
 			_gameTimer->think(this, NULL);
 			//Log(LOG_INFO) << "BattlescapeState::think() -> back from think";
 
-			if (popped)
+			if (popped == true)
 			{
 				_battleGame->handleNonTargetAction();
 				popped = false;
@@ -3381,7 +3394,7 @@ void BattlescapeState::finishBattle(
 //	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT"
 //		&& _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
 //	{
-	std::string nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
+	const std::string nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
 //	}
 
 	if (nextStage.empty() == false	// if there is a next mission stage, and

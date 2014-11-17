@@ -440,8 +440,7 @@ DebriefingState::DebriefingState()
 
 	_game->getSavedGame()->getMissionStatistics()->push_back(_missionStatistics); // Soldier Diary_end.
 
-//	_game->getResourcePack()->playMusic("GMMARS");
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMMARS); // kL, sza_MusicRules
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_DEBRIEFING);
 
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
@@ -1635,7 +1634,7 @@ void DebriefingState::reequipCraft(
 		lost;
 //	int used; // kL
 
-	std::map<std::string, int> craftItems = *craft->getItems()->getContents();
+	const std::map<std::string, int> craftItems = *craft->getItems()->getContents();
 	for (std::map<std::string, int>::const_iterator
 			i = craftItems.begin();
 			i != craftItems.end();
@@ -1663,7 +1662,7 @@ void DebriefingState::reequipCraft(
 //										i->second - qty); // kL
 //			used = lost; // kL
 
-			ReequipStat stat =
+			const ReequipStat stat =
 			{
 				i->first,
 				lost,
@@ -1711,7 +1710,7 @@ void DebriefingState::reequipCraft(
 	// Erase the current vehicles, because we have to
 	// reAdd them ('cause we want to redistribute their ammo)
 	// kL_note: and generally weave our way through this spaghetti ....
-	if (vehicleDestruction)
+	if (vehicleDestruction == true)
 	{
 		for (std::vector<Vehicle*>::const_iterator
 				i = craft->getVehicles()->begin();
@@ -1724,7 +1723,7 @@ void DebriefingState::reequipCraft(
 
 	craft->getVehicles()->clear();
 
-	int canBeAdded;
+	int canBeAdded = 0;
 
 	for (std::map<std::string, int>::const_iterator // Ok, now read those vehicles
 			i = craftVehicles.getContents()->begin();
@@ -1739,7 +1738,7 @@ void DebriefingState::reequipCraft(
 		if (qty < i->second)
 		{
 			lost = i->second - qty; // missing tanks
-			ReequipStat stat =
+			const ReequipStat stat =
 			{
 				i->first,
 				lost,
@@ -1750,14 +1749,14 @@ void DebriefingState::reequipCraft(
 		}
 
 
-		RuleItem* tankRule = _rules->getItem(i->first);
-		Unit* tankUnit = _rules->getUnit(tankRule->getType());
+		RuleItem* const tankRule = _rules->getItem(i->first);
+		const Unit* const tankUnit = _rules->getUnit(tankRule->getType());
 
-		int size = 4;
+		int tankSize = 4;
 		if (tankUnit != NULL)
 		{
-			size = _rules->getArmor(tankUnit->getArmor())->getSize();
-			size *= size;
+			tankSize = _rules->getArmor(tankUnit->getArmor())->getSize();
+			tankSize *= tankSize;
 		}
 
 		if (tankRule->getCompatibleAmmo()->empty() == true) // so this tank does NOT require ammo
@@ -1770,7 +1769,7 @@ void DebriefingState::reequipCraft(
 				craft->getVehicles()->push_back(new Vehicle(
 														tankRule,
 														tankRule->getClipSize(),
-														size));
+														tankSize));
 			}
 
 			base->getItems()->removeItem(
@@ -1779,15 +1778,15 @@ void DebriefingState::reequipCraft(
 		}
 		else // so this tank requires ammo
 		{
-			RuleItem* ammoRule = _rules->getItem(tankRule->getCompatibleAmmo()->front());
-			int ammoPerVehicle = ammoRule->getClipSize();
+			const RuleItem* const ammoRule = _rules->getItem(tankRule->getCompatibleAmmo()->front());
+			const int ammoPerVehicle = ammoRule->getClipSize();
 
-			int baseQty = base->getItems()->getItem(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
+			const int baseQty = base->getItems()->getItem(ammoRule->getType()); // Ammo Quantity for this vehicle-type on the base
 
 			if (baseQty < i->second * ammoPerVehicle)
 			{
 				lost = (i->second * ammoPerVehicle) - baseQty; // missing ammo
-				ReequipStat stat =
+				const ReequipStat stat =
 				{
 					ammoRule->getType(),
 					lost,
@@ -1811,7 +1810,7 @@ void DebriefingState::reequipCraft(
 					craft->getVehicles()->push_back(new Vehicle(
 															tankRule,
 															ammoPerVehicle,
-															size));
+															tankSize));
 
 					base->getItems()->removeItem(
 												ammoRule->getType(),

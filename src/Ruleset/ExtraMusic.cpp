@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "ExtraMusic.h"
@@ -28,11 +28,11 @@ namespace OpenXcom
  */
 ExtraMusic::ExtraMusic()
 	:
-		_media(""),
-		_overrides(""),
-		_extends(""),
-		_modIndex(0),
-		_terrains() // kL
+//		_media(""),
+//		_overrides(""),
+//		_extends(""),
+		_modIndex(0)
+//		_terrains()
 {
 }
 
@@ -68,7 +68,7 @@ void ExtraMusic::load(
  * Gets the mod index for this external music set.
  * @return, The mod index for this external music set.
  */
-int ExtraMusic::getModIndex()
+int ExtraMusic::getModIndex() const
 {
 	return _modIndex;
 }
@@ -76,7 +76,7 @@ int ExtraMusic::getModIndex()
 /**
  *
  */
-std::string ExtraMusic::getOverridden()
+std::string ExtraMusic::getOverridden() const
 {
 	return _overrides;
 }
@@ -84,7 +84,7 @@ std::string ExtraMusic::getOverridden()
 /**
  *
  */
-std::string ExtraMusic::getExtended()
+std::string ExtraMusic::getExtended() const
 {
 	return _extends;
 }
@@ -92,15 +92,15 @@ std::string ExtraMusic::getExtended()
 /**
  *
  */
-bool ExtraMusic::hasTerrainSpecification()
+bool ExtraMusic::hasTerrainSpecification() const
 {
-	return !_terrains.empty();
+	return (_terrains.empty() == false);
 }
 
 /**
  *
  */
-std::vector<std::string> ExtraMusic::getTerrains()
+std::vector<std::string> ExtraMusic::getTerrains() const
 {
 	return _terrains;
 }

@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef OPENXCOM_EXTRAMUSIC_H
@@ -55,15 +55,15 @@ private:
 				int modIndex);
 
 		/// get the mod index for this external music set.
-		int getModIndex();
+		int getModIndex() const;
 		///
-		std::string getOverridden();
+		std::string getOverridden() const;
 		///
-		std::string getExtended();
+		std::string getExtended() const;
 		///
-		bool hasTerrainSpecification();
+		bool hasTerrainSpecification() const;
 		///
-		std::vector<std::string> getTerrains();
+		std::vector<std::string> getTerrains() const;
 };
 
 }

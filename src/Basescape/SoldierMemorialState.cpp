@@ -74,9 +74,7 @@ SoldierMemorialState::SoldierMemorialState()
 
 	setPalette("PAL_BASESCAPE", 7);
 
-//kL	_game->getResourcePack()->playMusic("GMLOSE");
-//	_game->getResourcePack()->playMusic("GMWIN"); // kL
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGRAVES); // kL, sza_MusicRules
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_BASE_MEMORIAL);
 
 	add(_window);
 	add(_txtTitle);
@@ -89,6 +87,7 @@ SoldierMemorialState::SoldierMemorialState()
 	add(_btnOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
@@ -202,9 +201,7 @@ void SoldierMemorialState::btnOkClick(Action*)
 #endif
 
 	_game->popState();
-
-//	_game->getResourcePack()->playMusic("GMGEO", true);
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, true); // kL, sza_MusicRules
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE, true);
 }
 
 /**

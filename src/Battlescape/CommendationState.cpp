@@ -59,7 +59,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 
 	setPalette("PAL_GEOSCAPE", 0);
 
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGRAVES); // kL, sza_MusicRules
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_TAC_AWARDS);
 
 	add(_window);
 	add(_btnOk);
@@ -67,6 +67,7 @@ CommendationState::CommendationState(std::vector<Soldier*> soldiersMedalled)
 	add(_lstSoldiers);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -238,9 +239,7 @@ void CommendationState::btnOkClick(Action*)
 #endif
 
 	_game->popState();
-
-//	_game->getResourcePack()->playMusic("GMGEO", true);
-	_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, true); // kL, sza_MusicRules
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE, true);
 }
 
 }

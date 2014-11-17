@@ -74,26 +74,54 @@ BriefingState::BriefingState(
 
 
 	const std::string mission = _game->getSavedGame()->getSavedBattle()->getMissionType();
-	std::string music;
+	std::string music = OpenXcom::res_MUSIC_GEO_BRIEFING; // default, safety.
+	int backpal = 0; // default.
 
-	if (mission == "STR_TERROR_MISSION"
+	if (mission == "STR_UFO_CRASH_RECOVERY")
+		music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOCRASHED;
+	else if (mission == "STR_UFO_GROUND_ASSAULT")
+		music = OpenXcom::res_MUSIC_GEO_BRIEF_UFOLANDED;
+	else if (mission == "STR_ALIEN_BASE_ASSAULT")
+		music = OpenXcom::res_MUSIC_GEO_BRIEF_BASEASSAULT;
+	else if (mission == "STR_BASE_DEFENSE")
+	{
+		backpal = 2;
+		music = OpenXcom::res_MUSIC_GEO_BRIEF_BASEDEFENSE;
+	}
+	else if (mission == "STR_TERROR_MISSION")
+	{
+		backpal = 2;
+		music = OpenXcom::res_MUSIC_GEO_BRIEF_TERRORSITE;
+	}
+	else if (mission == "STR_MARS_CYDONIA_LANDING")
+	{
+		backpal = 6;
+		music = OpenXcom::res_MUSIC_GEO_BRIEF_MARS1;
+	}
+	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
+	{
+		backpal = 6;
+		music = OpenXcom::res_MUSIC_GEO_BRIEF_MARS2;
+	}
+/*	if (mission == "STR_TERROR_MISSION"
 		|| mission == "STR_BASE_DEFENSE")
 	{
-		setPalette("PAL_GEOSCAPE", 2);
+		backpal = 2;
 		music = OpenXcom::XCOM_RESOURCE_MUSIC_GMENBASE;
 	}
 	else if (mission == "STR_MARS_CYDONIA_LANDING"
 		|| mission == "STR_MARS_THE_FINAL_ASSAULT")
 	{
-		setPalette("PAL_GEOSCAPE", 6);
+		backpal = 6;
 		music = OpenXcom::XCOM_RESOURCE_MUSIC_GMNEWMAR;
 	}
 	else
 	{
-		setPalette("PAL_GEOSCAPE", 0);
+		backpal = 0;
 		music = OpenXcom::XCOM_RESOURCE_MUSIC_GMDEFEND;
-	}
+	} */
 
+	setPalette("PAL_GEOSCAPE", backpal);
 	_game->getResourcePack()->playMusic(music);
 
 

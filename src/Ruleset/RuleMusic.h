@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #ifndef OPENXCOM_RULEMUSIC_H
@@ -52,17 +52,17 @@ private:
 		void load(const YAML::Node& node);
 
 		///
-		std::string getType();
+		std::string getType() const;
 		///
-		std::string getMode();
+		std::string getMode() const;
 		///
-		std::vector<std::string> getTerrains();
+		std::vector<std::string> getTerrains() const;
 		///
-		int getMidiIndex();
+		int getMidiIndex() const;
 		///
-		std::vector<std::string> getFiles();
+		std::vector<std::string> getFiles() const;
 		///
-		std::vector<int> getIndexes();
+		std::vector<int> getIndexes() const;
 };
 
 }

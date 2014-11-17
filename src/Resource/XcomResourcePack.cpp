@@ -450,7 +450,6 @@ MOVED TO Ruleset !
 				CrossPlatform::getDataFile(s.str()),
 				&_polygons);
 
-
 	// LINES /
 	// Load polylines (extracted from game)
 	// -10 = Start of line
@@ -557,22 +556,22 @@ MOVED TO Ruleset !
 
 
 	/* MUSICS */
-	if (!Options::mute)
+	if (Options::mute == false)
 	{
 #ifndef __NO_MUSIC // sza_MusicRules
 		// Load musics
 		// gather the assignments first.
-		std::vector<std::pair<std::string, RuleMusic*> > musicRules = rules->getMusic();
+		const std::vector<std::pair<std::string, RuleMusic*> > musicRules = rules->getMusic();
 		for (std::vector<std::pair<std::string, RuleMusic*> >::const_iterator
 				i = musicRules.begin();
 				i != musicRules.end();
 				++i)
 		{
-			std::string type = i->first;
-			RuleMusic* musicRule = i->second;
+			const std::string type = i->first;
+			const RuleMusic* const musicRule = i->second;
 
-			std::vector<std::string> terrains = musicRule->getTerrains();
-			std::string mode = musicRule->getMode();
+			const std::vector<std::string> terrains = musicRule->getTerrains();
+			const std::string mode = musicRule->getMode();
 			if (mode == "replace")
 			{
 				for (std::vector<std::string>::const_iterator
@@ -599,8 +598,8 @@ MOVED TO Ruleset !
 			}
 		}
 
-		std::string mus[] =	// these are the filenames in /SOUND directory.
-		{					// Loads only those files that are found in the Music Rule .RUL-file.
+		const std::string mus[] =	// these are the filenames in /SOUND directory. THIS ARRAY IS USED ONLY FOR EXTRAMUSIC !!!!
+		{							// Loads only those files that are found in the Music Rule .RUL-file as 'files'.
 			"12GEO2",
 			"12GEO3",
 			"12MARS",
@@ -652,17 +651,16 @@ MOVED TO Ruleset !
 
 		// Check which music version is available
 		// Check if GM.CAT data is available // sza_MusicRules
-		CatFile
-			* adlibcat = NULL,
-			* aintrocat = NULL;
-		GMCatFile* gmcat = NULL;
+//		CatFile
+//			* adlibcat = NULL,
+//			* aintrocat = NULL;
+//		GMCatFile* gmcat = NULL;
 
-		const std::string
-			musicAdlib = "SOUND/ADLIB.CAT",
-			musicIntro = "SOUND/AINTRO.CAT",
-			musicGM = "SOUND/GM.CAT";
-
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicAdlib)))
+//		const std::string
+//			musicAdlib = "SOUND/ADLIB.CAT",
+//			musicIntro = "SOUND/AINTRO.CAT",
+//			musicGM = "SOUND/GM.CAT";
+/*		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicAdlib)))
 		{
 			adlibcat = new CatFile(CrossPlatform::getDataFile(musicAdlib).c_str());
 
@@ -671,7 +669,7 @@ MOVED TO Ruleset !
 		}
 
 		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(musicGM)))
-			gmcat = new GMCatFile(CrossPlatform::getDataFile(musicGM).c_str());
+			gmcat = new GMCatFile(CrossPlatform::getDataFile(musicGM).c_str()); */
 
 		// We have the assignments, only need to load the required files now.
 		for (std::map<std::string, std::map<std::string, std::vector<std::pair<std::string, int> > > >::const_iterator
@@ -680,46 +678,37 @@ MOVED TO Ruleset !
 				++i)
 		{
 //			std::string type = i->first;
-			std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = i->second;
+			const std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = i->second;
 			for (std::map<std::string, std::vector<std::pair<std::string, int> > >::const_iterator
 					j = assignment.begin();
 					j != assignment.end();
 					++j)
 			{
-				std::vector<std::pair<std::string, int> > filenames = j->second;
+				const std::vector<std::pair<std::string, int> > filenames = j->second;
 				for (std::vector<std::pair<std::string, int> >::const_iterator
 						k = filenames.begin();
 						k != filenames.end();
 						++k)
 				{
-					std::string filename = k->first;
-					int midiIndex = k->second;
+					const std::string filename = k->first;
+					const int midiIndex = k->second;
 
 //					LoadMusic(filename, midiIndex):
-/*kL, moved below...
-					std::string exts[] =
-					{
-						".flac",
-						".ogg",
-						".mp3",
-						".mod",
-						".wav" // kL_add ( also add "." and remove them below )
-					}; */
 
 					bool loaded = false;
 
-					// The file may have already been loaded because of an other assignment
+					// The file may have already been loaded because of an other assignment.
 					if (_musicFile.find(filename) != _musicFile.end())
 						loaded = true;
 
-					if (loaded == false) // Try digital tracks
+					if (loaded == false) // Try digital tracks.
 					{
 
 
 						// sza_ExtraMusic_BEGIN:
 
 						// kL_note: This section may well be redundant w/ sza_MusicRules!!
-						// Load alternative digital track if there is an override
+						// Load alternative digital track if there is an override.
 						for (size_t
 								l = 0;
 								l < sizeof(mus) / sizeof(mus[0]);
@@ -727,17 +716,17 @@ MOVED TO Ruleset !
 						{
 							bool loaded = false;
 
-							std::vector<std::pair<std::string, ExtraMusic*> > extraMusic = rules->getExtraMusic();
+							const std::vector<std::pair<std::string, ExtraMusic*> > extraMusic = rules->getExtraMusic();
 							for (std::vector<std::pair<std::string, ExtraMusic*> >::const_iterator
 									m = extraMusic.begin();
 									m != extraMusic.end();
 									++m)
 							{
-								ExtraMusic* musicRule = m->second;
+								const ExtraMusic* const musicRule = m->second;
 								// check if there is an entry which overrides something but does not specify the terrain
 								if (musicRule->hasTerrainSpecification() == false)
 								{
-									std::string overridden = musicRule->getOverridden();
+									const std::string overridden = musicRule->getOverridden();
 									if (overridden.empty() == false
 										&& overridden.compare(mus[l]) == 0)
 									{
@@ -755,29 +744,27 @@ MOVED TO Ruleset !
 						}
 
 						if (loaded == false) // sza_End.
-						{ // sza_Add.
-
-							// kL_begin: moved here from above.
-							std::string exts[] =
+						{
+							const std::string exts[] =
 							{
-								".flac",
 								".ogg",
-								".mp3",
-								".mod",
-								".wav" // kL_add ( also add "." and remove them below )
-							}; // kL_end.
+//								".flac",
+//								".mp3",
+//								".mod",
+//								".wav" // kL_add ( also add "." and remove them below )
+							};
 
 							for (size_t
-									exti = 0;
-									exti < 3;
-									++exti)
+									ext = 0;
+									ext < sizeof(exts) / sizeof(exts[0]);
+									++ext)
 							{
 								std::ostringstream s;
-								s << "SOUND/" << filename << exts[exti];
+								s << "SOUND/" << filename << exts[ext];
 
 								if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
 								{
-									Log(LOG_INFO) << "Music: load file " << filename << exts[exti];
+									Log(LOG_INFO) << "Music: load file " << filename << exts[ext];
 									_musicFile[filename] = new Music();
 									_musicFile[filename]->load(CrossPlatform::getDataFile(s.str()));
 
@@ -785,9 +772,10 @@ MOVED TO Ruleset !
 									break;
 								}
 							}
-						} // sza_Add.
+						}
 					}
 
+/*kL: forget about adlib, aintro, gmcat, midi.
 					if (loaded == false)
 					{
 						if (adlibcat != NULL // Try Adlib music
@@ -829,7 +817,7 @@ MOVED TO Ruleset !
 								loaded = true;
 							}
 						}
-					}
+					} */
 
 					if (loaded == false)
 					{
@@ -950,9 +938,9 @@ MOVED TO Ruleset !
 			}
 		} */
 
-		delete adlibcat;
-		delete aintrocat;
-		delete gmcat;
+//		delete adlibcat;
+//		delete aintrocat;
+//		delete gmcat;
 
 /*		std::string musOptional[] = {"GMGEO3",
 									 "GMGEO4",
@@ -997,7 +985,7 @@ MOVED TO Ruleset !
 		/* SOUNDS fx */
 		if (rules->getSoundDefinitions()->empty() == true) // Load sounds
 		{
-			std::string
+			const std::string
 				catsId[] =
 				{
 					"GEO.CAT",
@@ -1015,7 +1003,7 @@ MOVED TO Ruleset !
 				};
 
 			// Try the preferred format first, otherwise use the default priority
-			std::string* cats[] =
+			const std::string* cats[] =
 			{
 				NULL,
 				catsWin,
@@ -1034,7 +1022,7 @@ MOVED TO Ruleset !
 					i < sizeof(catsId) / sizeof(catsId[0]);
 					++i)
 			{
-				SoundSet* sound = 0;
+				SoundSet* sound = NULL;
 
 				for (size_t
 						j = 0;
@@ -1051,8 +1039,8 @@ MOVED TO Ruleset !
 
 					std::ostringstream s;
 					s << "SOUND/" << cats[j][i];
-					std::string file = CrossPlatform::getDataFile(s.str());
-					if (CrossPlatform::fileExists(file))
+					const std::string file = CrossPlatform::getDataFile(s.str());
+					if (CrossPlatform::fileExists(file) == true)
 					{
 						sound = new SoundSet();
 						sound->loadCat(file, wav);
@@ -1078,9 +1066,9 @@ MOVED TO Ruleset !
 			{
 				std::ostringstream s;
 				s << "SOUND/" << (*i).second->getCATFile();
-				std::string file = CrossPlatform::getDataFile(s.str());
+				const std::string file = CrossPlatform::getDataFile(s.str());
 
-				if (CrossPlatform::fileExists(file))
+				if (CrossPlatform::fileExists(file) == true)
 				{
 					if (_sounds.find((*i).first) == _sounds.end())
 						_sounds[(*i).first] = new SoundSet();
@@ -1101,15 +1089,15 @@ MOVED TO Ruleset !
 			}
 		}
 
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/INTRO.CAT")))
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/INTRO.CAT")) == true)
 		{
-			SoundSet* s = _sounds["INTRO.CAT"] = new SoundSet();
+			SoundSet* const s = _sounds["INTRO.CAT"] = new SoundSet();
 			s->loadCat(CrossPlatform::getDataFile("SOUND/INTRO.CAT"), false);
 		}
 
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT")))
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT")) == true)
 		{
-			SoundSet* s = _sounds["SAMPLE3.CAT"] = new SoundSet();
+			SoundSet* const s = _sounds["SAMPLE3.CAT"] = new SoundSet();
 			s->loadCat(CrossPlatform::getDataFile("SOUND/SAMPLE3.CAT"), true);
 		}
 	}
@@ -1187,7 +1175,7 @@ MOVED TO Ruleset !
 	/* EXTRA SPRITES */
 	std::ostringstream s;
 
-	std::vector<std::pair<std::string, ExtraSprites*> > extraSprites = rules->getExtraSprites();
+	const std::vector<std::pair<std::string, ExtraSprites*> > extraSprites = rules->getExtraSprites();
 	for (std::vector<std::pair<std::string, ExtraSprites*> >::const_iterator
 			i = extraSprites.begin();
 			i != extraSprites.end();
@@ -1196,7 +1184,7 @@ MOVED TO Ruleset !
 		const std::string sheetName = i->first;
 		Log(LOG_INFO) << ". sheetName = " << i->first;
 
-		ExtraSprites* spritePack = i->second;
+		ExtraSprites* const spritePack = i->second;
 		const bool subdivision = spritePack->getSubX() != 0
 							  && spritePack->getSubY() != 0;
 
@@ -1261,7 +1249,7 @@ MOVED TO Ruleset !
 				Log(LOG_INFO) << "Subdividing into " << frames << " frames.";
 			}
 
-			for (std::map<int, std::string>::iterator
+			for (std::map<int, std::string>::const_iterator
 					j = spritePack->getSprites()->begin();
 					j != spritePack->getSprites()->end();
 					++j)
@@ -1269,7 +1257,7 @@ MOVED TO Ruleset !
 				s.str("");
 				const int startFrame = j->first;
 
-				std::string fileName = j->second;
+				const std::string fileName = j->second;
 				if (fileName.substr(fileName.length() - 1, 1) == "/")
 				{
 					Log(LOG_DEBUG) << "Loading surface set from folder: " << fileName << " starting at frame: " << startFrame;
@@ -1279,8 +1267,8 @@ MOVED TO Ruleset !
 
 					std::ostringstream folder;
 					folder << CrossPlatform::getDataFolder(fileName);
-					std::vector<std::string> contents = CrossPlatform::getFolderContents(folder.str());
-					for (std::vector<std::string>::iterator
+					const std::vector<std::string> contents = CrossPlatform::getFolderContents(folder.str());
+					for (std::vector<std::string>::const_iterator
 							k = contents.begin();
 							k != contents.end();
 							++k)
@@ -1437,7 +1425,7 @@ MOVED TO Ruleset !
 												y,
 												_surfaces["BACK06.SCR"]->getPixelColor(x, y + (y == 79? 2: 1)));
 
-	Surface* altBack07 = new Surface(320, 200);
+	Surface* const altBack07 = new Surface(320, 200);
 	altBack07->copy(_surfaces["BACK07.SCR"]);
 	for (int y = 172; y >= 152; --y)
 		for (int x = 5; x <= 314; ++x)
@@ -1465,41 +1453,40 @@ MOVED TO Ruleset !
 	_sets["HANDOB2.PCK"] = new SurfaceSet(
 									_sets["HANDOB.PCK"]->getWidth(),
 									_sets["HANDOB.PCK"]->getHeight());
-	std::map<int, Surface*>* handob = _sets["HANDOB.PCK"]->getFrames();
 
+	const std::map<int, Surface*>* handob = _sets["HANDOB.PCK"]->getFrames();
 	for (std::map<int, Surface*>::const_iterator
 			i = handob->begin();
 			i != handob->end();
 			++i)
 	{
 		Surface
-			* surface1 = _sets["HANDOB2.PCK"]->addFrame(i->first),
-			* surface2 = i->second;
+			* const surface1 = _sets["HANDOB2.PCK"]->addFrame(i->first),
+			* const surface2 = i->second;
 		surface1->setPalette(surface2->getPalette());
 		surface2->blit(surface1);
 	}
 
 
 	/* EXTRA SOUNDS */
-	std::vector<std::pair<std::string, ExtraSounds*> > extraSounds = rules->getExtraSounds();
+	const std::vector<std::pair<std::string, ExtraSounds*> > extraSounds = rules->getExtraSounds();
 	for (std::vector<std::pair<std::string, ExtraSounds*> >::const_iterator
 			i = extraSounds.begin();
 			i != extraSounds.end();
 			++i)
 	{
 		const std::string setName = i->first;
-		ExtraSounds* soundPack = i->second;
+		ExtraSounds* const soundPack = i->second;
 
 		if (_sounds.find(setName) == _sounds.end())
 		{
 			Log(LOG_DEBUG) << "Creating new sound set: " << setName << ", this will likely have no in-game use.";
-
 			_sounds[setName] = new SoundSet();
 		}
 		else
 			Log(LOG_DEBUG) << "Adding/Replacing items in sound set: " << setName;
 
-		for (std::map<int, std::string>::iterator
+		for (std::map<int, std::string>::const_iterator
 				j = soundPack->getSounds()->begin();
 				j != soundPack->getSounds()->end();
 				++j)
@@ -1545,13 +1532,11 @@ MOVED TO Ruleset !
 				if (_sounds[setName]->getSound(startSound))
 				{
 					Log(LOG_DEBUG) << "Replacing index: " << startSound;
-
 					_sounds[setName]->getSound(startSound)->load(s.str());
 				}
 				else
 				{
 					Log(LOG_DEBUG) << "Adding index: " << startSound;
-
 					_sounds[setName]->addSound(startSound + soundPack->getModIndex())->load(s.str());
 				}
 			}
@@ -1627,7 +1612,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 
 	// Load Battlescape Terrain (only blanks are loaded, others are loaded just in time)
-	std::string bsets[] =
+	const std::string bsets[] =
 	{
 		"BLANKS.PCK"
 	};
@@ -1643,7 +1628,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 		s << "TERRAIN/" << bsets[i];
 
-		std::string tab = CrossPlatform::noExt(bsets[i]) + ".TAB";
+		const std::string tab = CrossPlatform::noExt(bsets[i]) + ".TAB";
 		s2 << "TERRAIN/" << tab;
 
 		//Log(LOG_INFO) << ". bset = " << s;
@@ -1655,7 +1640,7 @@ void XcomResourcePack::loadBattlescapeResources()
 
 
 	// Load Battlescape units
-	std::string units = CrossPlatform::getDataFolder("UNITS/");
+	const std::string units = CrossPlatform::getDataFolder("UNITS/");
 	std::vector<std::string> usets = CrossPlatform::getFolderContents(units, "PCK");
 	for (std::vector<std::string>::iterator
 			i = usets.begin();
@@ -1664,8 +1649,8 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		Log(LOG_INFO) << "XcomResourcePack::loadBattlescapeResources() units/ " << *i;
 
-		std::string path = units + *i;
-		std::string tab = CrossPlatform::getDataFile("UNITS/" + CrossPlatform::noExt(*i) + ".TAB");
+		const std::string path = units + *i;
+		const std::string tab = CrossPlatform::getDataFile("UNITS/" + CrossPlatform::noExt(*i) + ".TAB");
 		std::transform(
 					i->begin(),
 					i->end(),
@@ -1699,7 +1684,7 @@ void XcomResourcePack::loadBattlescapeResources()
 						CrossPlatform::getDataFile(s.str()),
 						&_voxelData);
 
-	std::string scrs[] =
+	const std::string scrs[] =
 	{
 		"TAC00.SCR"
 	};
@@ -1716,7 +1701,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		_surfaces[scrs[i]]->loadScr(CrossPlatform::getDataFile(s.str()));
 	}
 
-	std::string lbms[] =
+	const std::string lbms[] =
 	{
 		"D0.LBM",
 		"D1.LBM",
@@ -1724,7 +1709,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		"D2.LBM"
 	};
 
-	std::string pals[] =
+	const std::string pals[] =
 	{
 		"PAL_BATTLESCAPE",
 		"PAL_BATTLESCAPE_1",
@@ -1732,7 +1717,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		"PAL_BATTLESCAPE_3"
 	};
 
-	SDL_Color backPal[] =
+	const SDL_Color backPal[] =
 	{
 		{0,	 5,  4, 255},
 		{0, 10, 34, 255},
@@ -1747,9 +1732,9 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << lbms[i];
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
 		{
-			if (!i)
+			if (i == 0)
 				delete _palettes["PAL_BATTLESCAPE"];
 
 			Surface* tempSurface = new Surface(1, 1);
@@ -1766,7 +1751,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		}
 	}
 
-	std::string spks[] =
+	const std::string spks[] =
 	{
 		"TAC01.SCR",
 		"DETBORD.PCK",
@@ -1784,7 +1769,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	{
 		std::ostringstream s;
 		s << "UFOGRAPH/" << spks[i];
-		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())))
+		if (CrossPlatform::fileExists(CrossPlatform::getDataFile(s.str())) == true)
 		{
 			_surfaces[spks[i]] = new Surface(320, 200);
 			_surfaces[spks[i]]->loadSpk(CrossPlatform::getDataFile(s.str()));
@@ -1792,7 +1777,7 @@ void XcomResourcePack::loadBattlescapeResources()
 	}
 
 
-	std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
+	const std::string ufograph = CrossPlatform::getDataFolder("UFOGRAPH/");
 
 	std::vector<std::string> bdys = CrossPlatform::getFolderContents(ufograph, "BDY");
 	for (std::vector<std::string>::iterator
@@ -1931,6 +1916,7 @@ bool XcomResourcePack::isImageFile(std::string extension)
  * @param gmcat		- pointer to GM.CAT if available
  * @return, pointer to the music file, or NULL if it couldn't be loaded
  */
+/*
 Music* XcomResourcePack::loadMusic(
 		MusicFormat fmt,
 		const std::string& file,
@@ -1940,7 +1926,7 @@ Music* XcomResourcePack::loadMusic(
 		CatFile* aintrocat,
 		GMCatFile* gmcat)
 {
-/* MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI */
+	// MUSIC_AUTO, MUSIC_FLAC, MUSIC_OGG, MUSIC_MP3, MUSIC_MOD, MUSIC_WAV, MUSIC_ADLIB, MUSIC_MIDI
 	static const std::string exts[] =
 	{
 		"",
@@ -2011,7 +1997,7 @@ Music* XcomResourcePack::loadMusic(
 	}
 
 	return music;
-}
+} */
 
 /**
  * Preamble:

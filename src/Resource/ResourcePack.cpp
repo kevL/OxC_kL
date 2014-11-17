@@ -231,7 +231,7 @@ void ResourcePack::playMusic(
 
 		if (name == "GMGEO1")
 			_playingMusic = "GMGEO"; // hack (kL_note: for non-campaign Battles i guess)
-		else if (!Options::musicAlwaysLoop // another hack
+		else if (Options::musicAlwaysLoop == false // another hack
 			&& (name == "GMSTORY"
 				|| name == "GMWIN"
 				|| name == "GMLOSE"))
@@ -272,7 +272,7 @@ Music* ResourcePack::getRandomMusic(
 		return _muteMusic;
 	}
 
-	const std::map<std::string,std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
+	const std::map<std::string, std::vector<std::pair<std::string, int> > > assignment = _musicAssignment.at(name);
 	if (assignment.find(terrain) == assignment.end())
 	{
 		Log(LOG_INFO) << "ResourcePack::getRandomMusic(), no music for terrain: return MUTE [1]";
@@ -280,8 +280,8 @@ Music* ResourcePack::getRandomMusic(
 	}
 
 	const std::vector<std::pair<std::string, int> > musicCodes = assignment.at(terrain);
-	const int musicRand = SDL_GetTicks() %musicCodes.size();		// kL
-	std::pair<std::string, int> randMusic = musicCodes[musicRand];	// kL
+	const int musicRand = SDL_GetTicks() %musicCodes.size();				// kL
+	const std::pair<std::string, int> randMusic = musicCodes[musicRand];	// kL
 //	std::pair<std::string, int> randMusic = musicCodes[RNG::generate(0, musicCodes.size() - 1)];
 	Log(LOG_DEBUG) << "MUSIC : " << randMusic.first;
 	Log(LOG_INFO) << "MUSIC : " << randMusic.first;

@@ -922,23 +922,19 @@ void GeoscapeState::init()
 	_globe->draw();
 
 	// Pop up save screen if it's a new ironman game
-	if (_game->getSavedGame()->isIronman()
-		&& _game->getSavedGame()->getName().empty())
+	if (_game->getSavedGame()->isIronman() == true
+		&& _game->getSavedGame()->getName().empty() == false)
 	{
 		popup(new ListSaveState(OPT_GEOSCAPE));
 	}
 
-	if (_dogfights.empty() // set music if not already playing
-		&& !_dogfightStartTimer->isRunning())
+	if (_dogfights.empty() == true // set music if not already playing
+		&& _dogfightStartTimer->isRunning() == false)
 	{
-		if (_game->getSavedGame()->getMonthsPassed() == -1)
-//			_game->getResourcePack()->playMusic("GMGEO1");
-//			_game->getResourcePack()->getMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1)->play(); // sza_MusicRules
-			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1); // kL, sza_MusicRules
-		else
-//			_game->getResourcePack()->playMusic("GMGEO", true);
-//			_game->getResourcePack()->getRandomMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, "")->play(); // sza_MusicRules
-			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO, true); // kL, sza_MusicRules
+/*		if (_game->getSavedGame()->getMonthsPassed() == -1)
+			_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMGEO1);
+		else */
+		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE, true);
 	}
 	// kL_note: else play DogFight music ... for loading from Saves, i guess
 
@@ -1469,7 +1465,7 @@ void GeoscapeState::time5Seconds()
 									_dogfightStartTimer->start();
 								}
 
-								_game->getResourcePack()->playMusic(OpenXcom::XCOM_RESOURCE_MUSIC_GMINTER); // kL, sza_MusicRules
+								_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_INTERCEPT);
 							}
 						break;
 						case Ufo::LANDED:

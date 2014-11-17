@@ -2599,11 +2599,10 @@ void Map::calculateWalkingOffset(
 	{
 		if (phase < midphase)
 		{
-			int
-				fromLevel = getTerrainLevel(
+			const int fromLevel = getTerrainLevel(
 										unit->getPosition(),
-										unitSize),
-				toLevel = getTerrainLevel(
+										unitSize);
+			int toLevel = getTerrainLevel(
 										unit->getDestination(),
 										unitSize);
 
@@ -2620,11 +2619,10 @@ void Map::calculateWalkingOffset(
 		{
 			// from phase 4 onwards the unit behind the scenes already is on the destination tile
 			// we have to get its last position to calculate the correct offset
-			int
-				fromLevel = getTerrainLevel(
+			int fromLevel = getTerrainLevel(
 										unit->getLastPosition(),
-										unitSize),
-				toLevel = getTerrainLevel(
+										unitSize);
+			const int toLevel = getTerrainLevel(
 										unit->getDestination(),
 										unitSize);
 

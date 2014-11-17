@@ -10,11 +10,11 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
 #include "RuleMusic.h"
@@ -28,12 +28,12 @@ namespace OpenXcom
  */
 RuleMusic::RuleMusic()
 	:
-		_type(""),
-		_mode(""),
-		_midiIndex(-1),
-		_indexes(), // kL
-		_files(), // kL
-		_terrains() // kL
+//		_type(""),
+//		_mode(""),
+		_midiIndex(-1)
+//		_indexes(),
+//		_files(),
+//		_terrains()
 {
 }
 
@@ -61,17 +61,17 @@ void RuleMusic::load(const YAML::Node& node)
 	else
 		_midiIndex = -1;
 
-	_terrains	= node["terrain"].as<std::vector<std::string> >(_terrains);
-	_files		= node["files"].as<std::vector<std::string> >(_files);
-	_indexes	= node["indexes"].as<std::vector<int> >(_indexes);
+	_terrains	= node["terrain"]	.as<std::vector<std::string> >(_terrains);
+	_files		= node["files"]		.as<std::vector<std::string> >(_files);
+	_indexes	= node["indexes"]	.as<std::vector<int> >(_indexes);
 
-	if (_terrains.empty())
+	if (_terrains.empty() == true)
 		_terrains.push_back("");
 
-	if (_files.empty())
+	if (_files.empty() == true)
 		_files.push_back(_type);
 
-	if (_indexes.empty())
+	if (_indexes.empty() == true)
 		_indexes.push_back(_midiIndex);
 
 	while (_indexes.size() < _files.size())
@@ -81,7 +81,7 @@ void RuleMusic::load(const YAML::Node& node)
 /**
  *
  */
-std::string RuleMusic::getMode()
+std::string RuleMusic::getMode() const
 {
 	return _mode;
 }
@@ -89,7 +89,7 @@ std::string RuleMusic::getMode()
 /**
  *
  */
-int RuleMusic::getMidiIndex()
+int RuleMusic::getMidiIndex() const
 {
 	return _midiIndex;
 }
@@ -97,7 +97,7 @@ int RuleMusic::getMidiIndex()
 /**
  *
  */
-std::vector<std::string> RuleMusic::getTerrains()
+std::vector<std::string> RuleMusic::getTerrains() const
 {
 	return _terrains;
 }
@@ -105,7 +105,7 @@ std::vector<std::string> RuleMusic::getTerrains()
 /**
  *
  */
-std::vector<std::string> RuleMusic::getFiles()
+std::vector<std::string> RuleMusic::getFiles() const
 {
 	return _files;
 }
@@ -113,7 +113,7 @@ std::vector<std::string> RuleMusic::getFiles()
 /**
  *
  */
-std::vector<int> RuleMusic::getIndexes()
+std::vector<int> RuleMusic::getIndexes() const
 {
 	return _indexes;
 }
