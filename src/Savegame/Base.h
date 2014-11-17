@@ -275,7 +275,7 @@ private:
 		/// Destroys a facility and deals with the side effects.
 		void destroyFacility(std::vector<BaseFacility*>::const_iterator fac);
 
-		/// Cleans up base defenses after a Ufo attack.
+		/// Cleans up base defenses vector after a Ufo attack and optionally reclaims the tanks and their ammo.
 		void cleanupDefenses(bool reclaimItems);
 
 		/// Increases (or decreases) the base's total income amount.

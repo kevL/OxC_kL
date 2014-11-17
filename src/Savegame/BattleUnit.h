@@ -1017,12 +1017,12 @@ private:
 		/// Gets this unit's movement type.
 		MovementType getMovementType() const;
 
-		/// Gets if this unit is hiding.
+		/// Gets if this unit is hiding or not.
 		bool isHiding() const
 		{
 			return _hidingForTurn;
 		};
-		/// Sets this unit hiding.
+		/// Sets this unit hiding or not.
 		void setHiding(const bool hiding)
 		{
 			_hidingForTurn = hiding;

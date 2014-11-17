@@ -822,6 +822,10 @@ void InventoryState::btnUnloadClick(Action*)
 		_selAmmo->clear();
 
 		updateStats();
+		_game->getResourcePack()->getSoundByDepth(
+												0,
+												ResourcePack::ITEM_DROP)
+											->play();
 	}
 }
 

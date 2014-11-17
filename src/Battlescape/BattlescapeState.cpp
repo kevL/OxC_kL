@@ -58,6 +58,7 @@
 #include "../Engine/Action.h"
 #include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/CrossPlatform.h"
+#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
@@ -3424,6 +3425,10 @@ void BattlescapeState::finishBattle(
 
 		if (nextStageRace.empty() == true)
 			nextStageRace = "STR_MIXED";
+		else if (_game->getRuleset()->getAlienRace(nextStageRace) == NULL)
+		{
+			throw Exception(nextStageRace + " race not found.");
+		}
 
 		_popups.clear();
 		_save->setMissionType(nextStage);

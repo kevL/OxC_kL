@@ -2638,8 +2638,9 @@ void Base::destroyFacility(std::vector<BaseFacility*>::const_iterator fac)
 }
 
 /**
- * Cleans up base defenses after a Ufo attack.
- * @param reclaimItems - true to reclaim items
+ * Cleans up base defenses vector after a Ufo attack
+ * and optionally reclaims the tanks and their ammo.
+ * @param reclaimItems - true to return the HWPs to storage
  */
 void Base::cleanupDefenses(bool reclaimItems)
 {
