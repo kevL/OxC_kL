@@ -369,23 +369,27 @@ bool UnitWalkBState::doStatusStand()
 	if (dir != -1)
 	{
 		//Log(LOG_INFO) << "enter (dir!=-1) : " << _unit->getId();
-		if (_pf->getStrafeMove()
+		if (_pf->getStrafeMove() == true
 			&& _pf->getPath().empty() == false) // <- don't bother with this if it's the end of movement/ State.
 		{
-			if (_unit->getTurretType() > -1)
-			{
-				int dirFace = (_dirStart + 4) %8;
-				_unit->setFaceDirection(dirFace);
-				//Log(LOG_INFO) << ". STANDING strafeTank, setFaceDirection() -> " << dirFace;
-
-				int turretOffset = _unit->getTurretDirection() - _unit->getDirection();
-				_unit->setTurretDirection((turretOffset + dirFace) %8); // might not need modulo there ... not sure. Occuppied w/ other things atm.
-				//Log(LOG_INFO) << ". STANDING strafeTank, setTurretDirection() -> " << (turretOffset + dirFace);
-			}
-			else
+			if (_unit->getGeoscapeSoldier() != NULL
+				|| _unit->getUnitRules()->getMechanical() == false)
 			{
 				//Log(LOG_INFO) << ". STANDING strafeMove, setFaceDirection() -> " << _unit->getDirection();
 				_unit->setFaceDirection(_unit->getDirection());
+			}
+			else
+			{
+				const int dirFace = (_dirStart + 4) %8;
+				_unit->setFaceDirection(dirFace);
+				//Log(LOG_INFO) << ". STANDING strafeTank, setFaceDirection() -> " << dirFace;
+
+				if (_unit->getTurretType() != -1)
+				{
+					const int turretOffset = _unit->getTurretDirection() - _unit->getDirection();
+					_unit->setTurretDirection((turretOffset + dirFace) %8); // might not need modulo there ... not sure. Occuppied w/ other things atm.
+					//Log(LOG_INFO) << ". STANDING strafeTank, setTurretDirection() -> " << (turretOffset + dirFace);
+				}
 			}
 		}
 		//else Log(LOG_INFO) << ". STANDING no strafe.";
@@ -403,13 +407,14 @@ bool UnitWalkBState::doStatusStand()
 
 		const Tile* const tileDest = _parent->getSave()->getTile(destination);
 		// kL_note: should this include neutrals? (ie != FACTION_PLAYER; see also 32tu inflation...)
-		if (_unit->getFaction() == FACTION_HOSTILE
+		if (_unit->getFaction() != FACTION_PLAYER
 			&& tileDest != NULL
 			&& tileDest->getFire() > 0)
 		{
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile";
 			// we artificially inflate the TU cost by 32 points in getTUCost
 			// under these conditions, so we have to deflate it here.
+			// See: Pathfinding::getTUCost(), where this was inflated.
 			tu -= 32;
 			//Log(LOG_INFO) << ". . subtract tu inflation for a fireTile DONE";
 		}
@@ -599,8 +604,7 @@ bool UnitWalkBState::doStatusStand()
 							&& unitBelowMyWay != _unit
 							&& unitBelowMyWay->getFloatHeight()
 										+ unitBelowMyWay->getHeight()
-										- belowDest->getTerrainLevel()
-									>= 24 + 4)))
+										- belowDest->getTerrainLevel() >= 24 + 4)))
 							// 4+ voxels poking into the tile above, we don't kick people in the head here at XCom.
 							// kL_note: this appears to be only +2 in Pathfinding....
 				{

@@ -149,7 +149,7 @@ private:
 
 		/// Converts direction to a unit-vector.
 		static void directionToVector(
-				int const dir,
+				const int dir,
 				Position* relPos);
 		/// Converts a unit-vector to a direction.
 		static void vectorToDirection(

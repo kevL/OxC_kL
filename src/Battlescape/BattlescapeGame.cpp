@@ -2164,13 +2164,11 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 					|| std::find(
 							_currentAction.actor->getVisibleUnits()->begin(),
 							_currentAction.actor->getVisibleUnits()->end(),
-							_save->selectUnit(posTarget))
-						!= _currentAction.actor->getVisibleUnits()->end())
+							_save->selectUnit(posTarget)) != _currentAction.actor->getVisibleUnits()->end())
 				{
 					if (getTileEngine()->distance( // in Range
-												_currentAction.actor->getPosition(),
-												_currentAction.target)
-											<= _currentAction.weapon->getRules()->getMaxRange())
+											_currentAction.actor->getPosition(),
+											_currentAction.target) <= _currentAction.weapon->getRules()->getMaxRange())
 					{
 						if (_currentAction.actor->spendTimeUnits(_currentAction.TU))
 						{
@@ -2228,13 +2226,11 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 					|| std::find(
 							_currentAction.actor->getVisibleUnits()->begin(),
 							_currentAction.actor->getVisibleUnits()->end(),
-							_save->selectUnit(posTarget))
-						!= _currentAction.actor->getVisibleUnits()->end())
+							_save->selectUnit(posTarget)) != _currentAction.actor->getVisibleUnits()->end())
 				{
 					if (getTileEngine()->distance( // in Range
-												_currentAction.actor->getPosition(),
-												_currentAction.target)
-											<= _currentAction.weapon->getRules()->getMaxRange())
+											_currentAction.actor->getPosition(),
+											_currentAction.target) <= _currentAction.weapon->getRules()->getMaxRange())
 					{
 						// get the sound/animation started
 //kL					getMap()->setCursorType(CT_NONE);
@@ -2279,6 +2275,8 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 								// BUT -> primaryAction() here is never called by the AI; only by Faction_Player ...
 								// BUT <- it has to be, because this is how aLiens do their 'builtInPsi'
 								//
+								// ... it's for player using aLien to do Psi ...
+								//
 								// I could do a test Lol
 
 //								if (_save->getSelectedUnit()->getFaction() != FACTION_PLAYER)
@@ -2309,15 +2307,15 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 					_parentState->warning("STR_NO_LINE_OF_FIRE");
 
 
-				if (aLienPsi)
+				if (aLienPsi == true)
 				{
 //kL				_save->removeItem(_currentAction.weapon); // now using perpetual alien-psi-weapon, created in cTor.
 					_currentAction.weapon = NULL;
 				}
 			}
 		}
-		else if (Options::battleConfirmFireMode
-			&& (_currentAction.waypoints.empty()
+		else if (Options::battleConfirmFireMode == true
+			&& (_currentAction.waypoints.empty() == true
 				|| posTarget != _currentAction.waypoints.front()))
 		{
 			_currentAction.waypoints.clear();
@@ -2331,7 +2329,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			//Log(LOG_INFO) << ". . . . FIRING or THROWING";
 			getMap()->setCursorType(CT_NONE);
 
-			if (Options::battleConfirmFireMode)
+			if (Options::battleConfirmFireMode == true)
 			{
 				_currentAction.waypoints.clear();
 				getMap()->getWaypoints()->clear();
@@ -2360,10 +2358,11 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 		//Log(LOG_INFO) << ". . NOT _currentAction.targeting";
 		_currentAction.actor = _save->getSelectedUnit();
 
-		BattleUnit* unit = _save->selectUnit(posTarget);
-		if (unit
+		BattleUnit* const unit = _save->selectUnit(posTarget);
+		if (unit != NULL
 			&& unit != _save->getSelectedUnit()
-			&& (unit->getVisible() || _debugPlay))
+			&& (unit->getVisible() == true
+				|| _debugPlay == true))
 		{
 			if (unit->getFaction() == _save->getSide()) // -= select unit =- //
 			{
@@ -2376,16 +2375,16 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 				_currentAction.actor = unit;
 			}
 		}
-		else if (playableUnitSelected())
+		else if (playableUnitSelected() == true)
 		{
-			Pathfinding* pf = _save->getPathfinding();
+			Pathfinding* const pf = _save->getPathfinding();
 			const bool
-				mod_CTRL = (SDL_GetModState() & KMOD_CTRL) != 0,
-				mod_ALT = (SDL_GetModState() & KMOD_ALT) != 0,
-				isTank = _currentAction.actor->getUnitRules()
+				mod_CTRL = (SDL_GetModState() &KMOD_CTRL) != 0,
+				mod_ALT = (SDL_GetModState() &KMOD_ALT) != 0,
+				isTank = _currentAction.actor->getUnitRules() != NULL
 					  && _currentAction.actor->getUnitRules()->getMechanical();
 
-			if (bPreviewed
+			if (bPreviewed == true
 				&& (_currentAction.target != posTarget
 					|| pf->isModCTRL() != mod_CTRL
 					|| pf->isModALT() != mod_ALT))
@@ -2393,33 +2392,32 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 				pf->removePreview();
 			}
 
-			_currentAction.strafe = Options::strafe
+			_currentAction.strafe = (Options::strafe == true)
 								&& ((mod_CTRL
 										&& isTank == false)
 									|| (mod_ALT // tank, reverse gear 1 tile only.
-										&& isTank));
+										&& isTank == true));
 			_currentAction.dash = false;
 			_currentAction.actor->setDashing(false);
 
 			//Log(LOG_INFO) << ". primary action: Strafe";
 
-			Position
+			const Position
 				posUnit = _currentAction.actor->getPosition(),
 				pos = Position(
 							posTarget.x - posUnit.x,
 							posTarget.y - posUnit.y,
 							0);
-			int
+			const int
 				dist = _save->getTileEngine()->distance(
 													posUnit,
 													posTarget),
-				dirUnit = _currentAction.actor->getDirection(),
-				dir;
+				dirUnit = _currentAction.actor->getDirection();
+			int dir;
 			pf->vectorToDirection(pos, dir);
 
-			if (_currentAction.strafe
+			if (_currentAction.strafe == true
 				&& _currentAction.actor->getGeoscapeSoldier() != NULL
-//				&& isTank == false
 				&& (posUnit.z != posTarget.z
 					|| dist > 1
 					|| (posUnit.z == posTarget.z
@@ -2439,7 +2437,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			// assumes both previewPath() & removePreview() don't change StartDirection
 			if (pf->getStartDirection() != -1)
 			{
-				if (bPreviewed
+				if (bPreviewed == true
 					&& pf->previewPath() == false)
 //kL				&& pf->getStartDirection() != -1)
 				{
@@ -2666,7 +2664,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 	getSave()->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
 
 	unit->instaKill();
-	unit->setSpecialAbility(SPECAB_NONE); // kL.
+	unit->setSpecialAbility(SPECAB_NONE); // kL
 	unit->setRespawn(false); // kL
 
 	if (Options::battleNotifyDeath
@@ -2724,10 +2722,9 @@ BattleUnit* BattlescapeGame::convertUnit(
 													_save->getTile(unit->getPosition() + Position(0, 0,-1)));
 	convertedUnit->setPosition(unit->getPosition());
 	convertedUnit->setTimeUnits(0);
-//kL	convertedUnit->setDirection(3);
-	if (convertType == "STR_ZOMBIE")		// kL
-		dirFace = RNG::generate(0, 7);		// kL
-	convertedUnit->setDirection(dirFace);	// kL
+	if (convertType == "STR_ZOMBIE")
+		dirFace = RNG::generate(0, 7);
+	convertedUnit->setDirection(dirFace);
 
 	convertedUnit->setCache(NULL);
 
