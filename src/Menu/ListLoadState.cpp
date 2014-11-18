@@ -68,9 +68,15 @@ void ListLoadState::lstSavesPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		if (_origin == OPT_MENU)
-			// or (switching from Geo-to-Tac or vice versa)
+		if (_origin == OPT_MENU
+			|| (_origin == OPT_GEOSCAPE
+				&& _saves[_lstSaves->getSelectedRow()].mode == MODE_BATTLESCAPE)
+			|| (_origin == OPT_BATTLESCAPE
+				&& _saves[_lstSaves->getSelectedRow()].mode == MODE_GEOSCAPE))
+		{
 			_game->getResourcePack()->fadeMusic(_game, 1750);
+		}
+
 
 		bool confirm = false;
 		for (std::vector<std::string>::const_iterator

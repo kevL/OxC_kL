@@ -157,7 +157,7 @@ SavedGame::~SavedGame()
 {
 	delete _time;
 
-	for (std::vector<Country*>::iterator
+	for (std::vector<Country*>::const_iterator
 			i = _countries.begin();
 			i != _countries.end();
 			++i)
@@ -165,7 +165,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	for (std::vector<Region*>::iterator
+	for (std::vector<Region*>::const_iterator
 			i = _regions.begin();
 			i != _regions.end();
 			++i)
@@ -173,7 +173,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::const_iterator
 			i = _bases.begin();
 			i != _bases.end();
 			++i)
@@ -181,7 +181,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	for (std::vector<Ufo*>::iterator
+	for (std::vector<Ufo*>::const_iterator
 			i = _ufos.begin();
 			i != _ufos.end();
 			++i)
@@ -189,7 +189,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	for (std::vector<Waypoint*>::iterator
+	for (std::vector<Waypoint*>::const_iterator
 			i = _waypoints.begin();
 			i != _waypoints.end();
 			++i)
@@ -197,7 +197,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	for (std::vector<TerrorSite*>::iterator
+	for (std::vector<TerrorSite*>::const_iterator
 			i = _terrorSites.begin();
 			i != _terrorSites.end();
 			++i)
@@ -205,7 +205,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	for (std::vector<AlienBase*>::iterator
+	for (std::vector<AlienBase*>::const_iterator
 			i = _alienBases.begin();
 			i != _alienBases.end();
 			++i)
@@ -215,7 +215,7 @@ SavedGame::~SavedGame()
 
 	delete _alienStrategy;
 
-	for (std::vector<AlienMission*>::iterator
+	for (std::vector<AlienMission*>::const_iterator
 			i = _activeMissions.begin();
 			i != _activeMissions.end();
 			++i)
@@ -223,7 +223,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::const_iterator
 			i = _soldiers.begin();
 			i != _soldiers.end();
 			++i)
@@ -231,7 +231,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	}
 
-	for (std::vector<SoldierDead*>::iterator // kL_begin:
+	for (std::vector<SoldierDead*>::const_iterator // kL_begin:
 			i = _deadSoldiers.begin();
 			i != _deadSoldiers.end();
 			++i)
@@ -239,7 +239,7 @@ SavedGame::~SavedGame()
 		delete *i;
 	} // kL_end.
 
-	for (std::vector<MissionStatistics*>::iterator
+	for (std::vector<MissionStatistics*>::const_iterator
 			i = _missionStatistics.begin();
 			i != _missionStatistics.end();
 			++i)
@@ -252,9 +252,9 @@ SavedGame::~SavedGame()
 
 /**
  * Gets all the info of the saves found in the user folder.
- * @param lang		- pointer to a loaded language
+ * @param lang		- pointer to the loaded Language
  * @param autoquick	- true to include autosaves and quicksaves
- * @return, vector of saves info
+ * @return, vector of SavesInfo structs (SavedGame.h)
  */
 std::vector<SaveInfo> SavedGame::getList(
 		Language* lang,
@@ -262,12 +262,12 @@ std::vector<SaveInfo> SavedGame::getList(
 {
 	std::vector<SaveInfo> info;
 
-	if (autoquick)
+	if (autoquick == true)
 	{
-		std::vector<std::string> saves = CrossPlatform::getFolderContents(
-																		Options::getUserFolder(),
-																		"asav");
-		for (std::vector<std::string>::iterator
+		const std::vector<std::string> saves = CrossPlatform::getFolderContents(
+																			Options::getUserFolder(),
+																			"asav");
+		for (std::vector<std::string>::const_iterator
 				i = saves.begin();
 				i != saves.end();
 				++i)
@@ -291,10 +291,10 @@ std::vector<SaveInfo> SavedGame::getList(
 		}
 	}
 
-	std::vector<std::string> saves = CrossPlatform::getFolderContents(
-																	Options::getUserFolder(),
-																	"sav");
-	for (std::vector<std::string>::iterator
+	const std::vector<std::string> saves = CrossPlatform::getFolderContents(
+																		Options::getUserFolder(),
+																		"sav");
+	for (std::vector<std::string>::const_iterator
 			i = saves.begin();
 			i != saves.end();
 			++i)
@@ -322,15 +322,16 @@ std::vector<SaveInfo> SavedGame::getList(
 
 /**
  * Gets the info of a specific save file.
- * @param file Save filename.
- * @param lang Loaded language.
+ * @param file - reference the filename of a save
+ * @param lang - pointer to the loaded Language
+ * @return, SaveInfo struct (SavedGame.h)
  */
 SaveInfo SavedGame::getSaveInfo(
 		const std::string& file,
 		Language* lang)
 {
-	std::string fullname = Options::getUserFolder() + file;
-	YAML::Node doc = YAML::LoadFile(fullname);
+	const std::string fullname = Options::getUserFolder() + file;
+	const YAML::Node doc = YAML::LoadFile(fullname);
 	SaveInfo save;
 
 	save.fileName = file;
@@ -361,9 +362,9 @@ SaveInfo SavedGame::getSaveInfo(
 	}
 
 	save.timestamp = CrossPlatform::getDateModified(fullname);
-	std::pair<std::wstring, std::wstring> str = CrossPlatform::timeToString(save.timestamp);
-	save.isoDate = str.first;
-	save.isoTime = str.second;
+	const std::pair<std::wstring, std::wstring> strTime = CrossPlatform::timeToString(save.timestamp);
+	save.isoDate = strTime.first;
+	save.isoTime = strTime.second;
 
 	std::wostringstream details;
 /*kL	if (doc["turn"])
@@ -406,14 +407,16 @@ SaveInfo SavedGame::getSaveInfo(
 	if (doc["rulesets"])
 		save.rulesets = doc["rulesets"].as<std::vector<std::string> >();
 
+	save.mode = (GameMode)doc["mode"].as<int>();
+
 	return save;
 }
 
 /**
  * Loads a saved game's contents from a YAML file.
  * @note Assumes the saved game is blank.
- * @param filename YAML filename.
- * @param rule Ruleset for the saved game.
+ * @param filename	- reference a YAML filename
+ * @param rule		- pointer to Ruleset for the saved game
  */
 void SavedGame::load(
 		const std::string& filename,
@@ -683,7 +686,10 @@ void SavedGame::save(const std::string& filename) const
 	{
 		brief["mission"]	= _battleGame->getMissionType();
 		brief["turn"]		= _battleGame->getTurn();
+		brief["mode"]		= static_cast<int>(MODE_BATTLESCAPE);	// kL
 	}
+	else
+		brief["mode"]		= static_cast<int>(MODE_GEOSCAPE);		// kL
 
 	brief["rulesets"] = Options::rulesets;
 

@@ -4422,7 +4422,7 @@
 
 1415929980 f:\git\openxcom\src\savegame\target.h
 
-1413154698 f:\git\openxcom\src\savegame\savedgame.h
+1416335519 f:\git\openxcom\src\savegame\savedgame.h
 	<map>
 	<string>
 	<vector>
@@ -5399,7 +5399,7 @@
 	<string>
 	"../Ruleset/Unit.h"
 
-1416329172 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
+1416332831 source:f:\git\openxcom\src\basescape\soldiermemorialstate.cpp
 	"SoldierMemorialState.h"
 	"SoldierInfoDeadState.h"
 	"../Engine/Action.h"
@@ -5447,7 +5447,7 @@
 	<yaml-cpp/yaml.h>
 	"GameTime.h"
 
-1416328982 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
+1416332842 source:f:\git\openxcom\src\basescape\soldiersstate.cpp
 	"SoldiersState.h"
 	"CraftArmorState.h"
 	"SoldierInfoState.h"
@@ -6186,7 +6186,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1416209583 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1416332907 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	<sstream>
 	"CannotReequipState.h"
@@ -6195,7 +6195,6 @@
 	"PromotionsState.h"
 	"../Basescape/ManageAlienContainmentState.h"
 	"../Basescape/SellState.h"
-	"../Engine/Adlib/adlplayer.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Music.h"
@@ -6212,7 +6211,6 @@
 	"../Menu/ErrorMessageState.h"
 	"../Menu/MainMenuState.h"
 	"../Menu/SaveGameState.h"
-	"../Resource/ResourcePack.h"
 	"../Resource/XcomResourcePack.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/RuleCountry.h"
@@ -8392,11 +8390,10 @@
 	<sstream>
 	"../Engine/State.h"
 
-1415853531 source:f:\git\openxcom\src\menu\abandongamestate.cpp
+1416332925 source:f:\git\openxcom\src\menu\abandongamestate.cpp
 	"AbandonGameState.h"
 	"MainMenuState.h"
 	"SaveGameState.h"
-	"../Engine/Adlib/adlplayer.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -8744,7 +8741,7 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1416321121 source:f:\git\openxcom\src\menu\startstate.cpp
+1416333405 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
 	"../version.h"
 	"ErrorMessageState.h"
@@ -9168,7 +9165,7 @@
 1413136962 f:\git\openxcom\src\savegame\serializationhelper.h
 	<SDL_types.h>
 
-1416322687 source:f:\git\openxcom\src\resource\resourcepack.cpp
+1416333024 source:f:\git\openxcom\src\resource\resourcepack.cpp
 	"ResourcePack.h"
 	"../Engine/Adlib/adlplayer.h"
 	"../Engine/Font.h"
@@ -9632,7 +9629,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1414384611 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1416336653 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -11564,7 +11561,7 @@
 	"../Engine/Options.h"
 	"../Engine/State.h"
 
-1416328406 source:f:\git\openxcom\src\menu\introstate.cpp
+1416333092 source:f:\git\openxcom\src\menu\introstate.cpp
 	"IntroState.h"
 	"MainMenuState.h"
 	"../Engine/CrossPlatform.h"
@@ -11756,7 +11753,7 @@
 	<string>
 	"ListGamesState.h"
 
-1416324040 source:f:\git\openxcom\src\menu\listgamesstate.cpp
+1416334801 source:f:\git\openxcom\src\menu\listgamesstate.cpp
 	"ListGamesState.h"
 	<utility>
 	"DeleteGameState.h"
@@ -11777,7 +11774,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1416324711 source:f:\git\openxcom\src\menu\listloadstate.cpp
+1416337015 source:f:\git\openxcom\src\menu\listloadstate.cpp
 	"ListLoadState.h"
 	"ConfirmLoadState.h"
 	"LoadGameState.h"
@@ -12003,7 +12000,7 @@
 1413640059 f:\git\openxcom\src\ruleset\rulecommendations.h
 	<yaml-cpp/yaml.h>
 
-1416328893 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
+1416332853 source:f:\git\openxcom\src\battlescape\commendationstate.cpp
 	"CommendationState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"

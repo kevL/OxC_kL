@@ -340,10 +340,8 @@ void ListGamesState::btnCancelClick(Action*)
  */
 void ListGamesState::lstSavesMouseOver(Action*)
 {
-	//Log(LOG_INFO) << "ListGamesState::lstSavesMouseOver()";
 	if (_inEditMode == false) // kL
 	{
-		//Log(LOG_INFO) << ". NOT inEditMode";
 		std::wstring wstr;
 
 		const int sel = _lstSaves->getSelectedRow() - _firstValidRow;
@@ -362,12 +360,8 @@ void ListGamesState::lstSavesMouseOver(Action*)
  */
 void ListGamesState::lstSavesMouseOut(Action*)
 {
-	//Log(LOG_INFO) << "ListGamesState::lstSavesMouseOut()";
 	if (_inEditMode == false) // kL
-	{
-		//Log(LOG_INFO) << ". NOT inEditMode";
 		_txtDetails->setText(tr("STR_DETAILS").arg(L""));
-	}
 }
 
 /**

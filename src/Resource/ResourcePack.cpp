@@ -238,7 +238,8 @@ void ResourcePack::playMusic(
 
 /**
  * Fades the currently playing music.
- * @param game - pointer to the Game object
+ * @param game		- pointer to the Game object
+ * @param fadeDur	- duration of the fade in milliseconds
  */
 void ResourcePack::fadeMusic(
 		Game* const game,

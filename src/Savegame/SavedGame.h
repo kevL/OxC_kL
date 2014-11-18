@@ -82,6 +82,15 @@ enum SaveType
 	SAVE_IRONMAN_END		// 5
 };
 
+/**
+ * Enumerator for the game mode.
+ */
+enum GameMode
+{
+	MODE_GEOSCAPE,		// 0
+	MODE_BATTLESCAPE	// 1
+};
+
 
 /**
  * Container for mission statistics.
@@ -126,18 +135,18 @@ struct MissionStatistics
 	{
 		time.load(node["time"]);
 
-		id			= node["id"].as<int>(id);
-		region		= node["region"].as<std::string>(region);
-		country		= node["country"].as<std::string>(country);
-		type		= node["type"].as<std::string>(type);
-		ufo			= node["ufo"].as<std::string>(ufo);
-		success		= node["success"].as<bool>(success);
-		score		= node["score"].as<int>(score);
-		rating		= node["rating"].as<std::string>(rating);
-		alienRace	= node["alienRace"].as<std::string>(alienRace);
-		shade		= node["shade"].as<int>(shade);
-		injuryList	= node["injuryList"].as<std::map<int, int> >(injuryList);
-		valiantCrux	= node["valiantCrux"].as<bool>(valiantCrux);
+		id			= node["id"]			.as<int>(id);
+		region		= node["region"]		.as<std::string>(region);
+		country		= node["country"]		.as<std::string>(country);
+		type		= node["type"]			.as<std::string>(type);
+		ufo			= node["ufo"]			.as<std::string>(ufo);
+		success		= node["success"]		.as<bool>(success);
+		score		= node["score"]			.as<int>(score);
+		rating		= node["rating"]		.as<std::string>(rating);
+		alienRace	= node["alienRace"]		.as<std::string>(alienRace);
+		shade		= node["shade"]			.as<int>(shade);
+		injuryList	= node["injuryList"]	.as<std::map<int, int> >(injuryList);
+		valiantCrux	= node["valiantCrux"]	.as<bool>(valiantCrux);
 	}
 
 	///
@@ -203,6 +212,7 @@ struct MissionStatistics
  */
 struct SaveInfo
 {
+	int mode;
 	bool reserved;
 	time_t timestamp;
 	std::string fileName;
