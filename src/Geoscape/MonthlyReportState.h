@@ -30,6 +30,7 @@ namespace OpenXcom
 
 class Base;
 class Globe;
+class SavedGame;
 class Soldier;
 class Text;
 class TextButton;
@@ -56,6 +57,7 @@ private:
 
 	Base* _base;
 	Globe* _globe;
+	SavedGame* _savedGame;
 	Text
 		* _txtChange,
 		* _txtDesc,

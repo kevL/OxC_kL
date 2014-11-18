@@ -19,14 +19,12 @@
 
 #include "SoldierMemorialState.h"
 
-#include <iomanip>
-#include <sstream>
+//#include <iomanip>
+//#include <sstream>
 
-//kL #include "SoldierInfoState.h"
-#include "SoldierInfoDeadState.h" // kL
+#include "SoldierInfoDeadState.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
@@ -39,13 +37,11 @@
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
-#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Savegame/Base.h"
 #include "../Savegame/GameTime.h"
 #include "../Savegame/SavedGame.h"
-//#include "../Savegame/Soldier.h"
 #include "../Savegame/SoldierDead.h"
 #include "../Savegame/SoldierDeath.h"
 
@@ -113,9 +109,9 @@ SoldierMemorialState::SoldierMemorialState()
 	_txtDate->setColor(Palette::blockOffset(13)+10);
 	_txtDate->setText(tr("STR_DATE_UC"));
 
-	size_t lost = _game->getSavedGame()->getDeadSoldiers()->size();
+	const size_t lost = _game->getSavedGame()->getDeadSoldiers()->size();
 	size_t recruited = lost;
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -140,17 +136,17 @@ SoldierMemorialState::SoldierMemorialState()
 	_lstSoldiers->onMousePress((ActionHandler)& SoldierMemorialState::lstSoldiersPress);
 
 	//Log(LOG_INFO) << "SoldierMemorialState::SoldierMemorialState() -> getDeadSoldiers";
-	for (std::vector<SoldierDead*>::reverse_iterator // kL
+	for (std::vector<SoldierDead*>::const_reverse_iterator
 			i = _game->getSavedGame()->getDeadSoldiers()->rbegin();
 			i != _game->getSavedGame()->getDeadSoldiers()->rend();
 			++i)
-/*	for (std::vector<SoldierDead*>::const_iterator // kL
+/*	for (std::vector<SoldierDead*>::const_iterator
 			i = _game->getSavedGame()->getDeadSoldiers()->begin();
 			i != _game->getSavedGame()->getDeadSoldiers()->end();
 			++i) */
 	{
 		//Log(LOG_INFO) << ". dead soldier, getSoldierDeath & addRow etc";
-		SoldierDeath* death = (*i)->getDeath();
+		const SoldierDeath* const death = (*i)->getDeath();
 
 		std::wostringstream
 			saveDay,
@@ -184,7 +180,7 @@ SoldierMemorialState::~SoldierMemorialState()
  */
 void SoldierMemorialState::btnOkClick(Action*)
 {
-#ifndef __NO_MUSIC
+/* #ifndef __NO_MUSIC
 	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
 	{
 		_game->setInputActive(false);
@@ -198,7 +194,8 @@ void SoldierMemorialState::btnOkClick(Action*)
 	}
 	else
 		Mix_HaltMusic();
-#endif
+#endif */
+	_game->getResourcePack()->fadeMusic(_game, 900);
 
 	_game->popState();
 	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);

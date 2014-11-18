@@ -112,12 +112,8 @@ StartState::StartState()
 	_game->getFpsCounter()->setVisible(false); */
 	// kL_end.
 
-// load CTD_begin:
 	_font	= new Font();
-	_font->loadTerminal();
-
 	_lang	= new Language();
-
 	_text	= new Text(
 //kL				Options::baseXResolution,
 //kL				Options::baseYResolution,
@@ -133,9 +129,10 @@ StartState::StartState()
 					0,
 					0);
 
-//	_timer	= new Timer(9);
 	_timer	= new Timer(1); // for HQ graphic filters
+//	_timer	= new Timer(9);
 
+	_font->loadTerminal();
 	setPalette(_font->getSurface()->getPalette(), 0, 2);
 
 	add(_text);
@@ -156,7 +153,7 @@ StartState::StartState()
 	_game->getCursor()->setVisible(false);
 	_game->getFpsCounter()->setVisible(false);
 
-	if (Options::reload)
+	if (Options::reload == true)
 	{
 		addLine(L"Restarting...");
 		addLine(L"");
@@ -179,7 +176,6 @@ StartState::StartState()
 
 //		addLine(L"");
 	}
-// load CTD_end.
 }
 
 /**
@@ -207,8 +203,8 @@ void StartState::init()
 	Music::stop();
 
 	_game->setResourcePack(NULL);
-	if (!Options::mute
-		&& Options::reload)
+	if (Options::mute == false
+		&& Options::reload == true)
 	{
 		Mix_CloseAudio();
 		_game->initAudio();
@@ -257,7 +253,7 @@ void StartState::think()
 			if (Options::reload == false
 				&& Options::playIntro)
 			{
-				bool letterbox = Options::keepAspectRatio;
+				const bool letterbox = Options::keepAspectRatio;
 				Options::keepAspectRatio = true;
 
 				Options::baseXResolution = Screen::ORIGINAL_WIDTH;
@@ -280,14 +276,14 @@ void StartState::think()
 								true); */
 //				_game->getScreen()->resetDisplay(false);
 
-				State* state = new MainMenuState();
+				State* const state = new MainMenuState();
 				_game->setState(state);
 
 				if (Options::badMods.empty() == false) // Check for mod loading errors
 				{
 					std::wostringstream error;
 					error << tr("STR_MOD_UNSUCCESSFUL") << L'\x02';
-					for (std::vector<std::string>::iterator
+					for (std::vector<std::string>::const_iterator
 							i = Options::badMods.begin();
 							i != Options::badMods.end();
 							++i)
@@ -335,7 +331,6 @@ void StartState::handle(Action* action)
 /**
  * Blinks the cursor and spreads out terminal output.
  */
-// load CTD_begin:
 void StartState::animate()
 {
 	_anim++;
@@ -347,8 +342,8 @@ void StartState::animate()
 	{
 		std::wostringstream ss;
 		ss << L"Loading " << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "..."; // kL
-//kL		ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
-		if (Options::reload)
+//kL	ss << L"Loading OpenXcom " << Language::utf8ToWstr(OPENXCOM_VERSION_SHORT) << Language::utf8ToWstr(OPENXCOM_VERSION_GIT) << "...";
+		if (Options::reload == true)
 		{
 			if (_anim == 2)
 				addLine(ss.str());
@@ -475,7 +470,7 @@ void StartState::animate()
 			{
 				addCursor_kL();
 
-				if (kL_ready)
+				if (kL_ready == true)
 				{
 					kL_ready = false;
 					loading = LOADING_SUCCESSFUL;
@@ -486,19 +481,17 @@ void StartState::animate()
 		}
 	}
 }
-// load CTD_end.
 
 /**
  * Adds a line of text to the terminal and moves the cursor appropriately.
- * @param line - text line to add
+ * @param line - reference a line of text to add
  */
-// load CTD_begin:
 void StartState::addLine(const std::wstring& line)
 {
 	_output << L"\n" << line;
 	_text->setText(_output.str());
 
-	int
+	const int
 //kL	y = _text->getTextHeight() - _font->getHeight(),
 //kL	x = _text->getTextWidth(y / _font->getHeight());
 		x = _text->getTextWidth((_text->getTextHeight() - _font->getHeight()) / _font->getHeight()) + 20,	// kL
@@ -506,9 +499,7 @@ void StartState::addLine(const std::wstring& line)
 	_cursor->setX(x);
 	_cursor->setY(y);
 }
-// load CTD_end.
 
-// kL_begin:
 /**
  * kL.
  */
@@ -543,7 +534,7 @@ void StartState::addCursor_kL() // kL
 
 	_cursor->setX(x);
 	_cursor->setY(y);
-} // kL_end.
+}
 
 /**
  * Loads game data and updates status accordingly.
@@ -552,7 +543,7 @@ void StartState::addCursor_kL() // kL
  */
 int StartState::load(void* game_ptr)
 {
-	Game* game = (Game*)game_ptr;
+	Game* const game = (Game*)game_ptr;
 	try
 	{
 		Log(LOG_INFO) << "Loading ruleset...";
@@ -567,7 +558,7 @@ int StartState::load(void* game_ptr)
 		game->defaultLanguage();
 		Log(LOG_INFO) << "Language loaded.";
 
-		if (kL_ready)						// kL
+		if (kL_ready == true)				// kL
 		{
 			kL_ready = false;				// kL
 			loading = LOADING_SUCCESSFUL;

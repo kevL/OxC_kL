@@ -40,6 +40,7 @@ class DogfightState;
 class Globe;
 class ImageButton;
 //class InteractiveSurface;
+class SavedGame;
 class Sound;
 class Surface;
 class TerrorSite;
@@ -92,6 +93,7 @@ private:
 		* _btnDetail,
 		* _timeSpeed;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
+	SavedGame* _savedGame;
 	Surface
 //		* _sidebar,
 		* _sideLine,

@@ -127,15 +127,14 @@ ListGamesState::ListGamesState(
 
 	_txtName	= new Text(176, 9, 16, 33);
 	_txtDate	= new Text(84, 9, 204, 33);
-
-	_sortName = new ArrowButton(ARROW_NONE, 11, 8, 16, 33);
-	_sortDate = new ArrowButton(ARROW_NONE, 11, 8, 204, 33);
+	_sortName	= new ArrowButton(ARROW_NONE, 11, 8, 16, 33);
+	_sortDate	= new ArrowButton(ARROW_NONE, 11, 8, 204, 33);
 
 	_lstSaves	= new TextList(285, 121, 16, 42);
-
 	_txtDetails = new Text(288, 9, 16, 165);
 
 	_btnCancel	= new TextButton(134, 16, 16, 177);
+
 
 	if (_origin == OPT_BATTLESCAPE)
 		setPalette("PAL_BATTLESCAPE");
@@ -154,6 +153,7 @@ ListGamesState::ListGamesState(
 	add(_btnCancel);
 
 //	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -263,11 +263,11 @@ void ListGamesState::updateArrows()
 
 /**
  * Sorts the save game list.
- * @param sort - order to sort the games in
+ * @param order - order to sort the games in
  */
-void ListGamesState::sortList(SaveSort sort)
+void ListGamesState::sortList(SaveSort order)
 {
-	switch (sort)
+	switch (order)
 	{
 		case SORT_NAME_ASC:
 			std::sort(
@@ -346,7 +346,7 @@ void ListGamesState::lstSavesMouseOver(Action*)
 		//Log(LOG_INFO) << ". NOT inEditMode";
 		std::wstring wstr;
 
-		int sel = _lstSaves->getSelectedRow() - _firstValidRow;
+		const int sel = _lstSaves->getSelectedRow() - _firstValidRow;
 		if (sel > -1
 			&& sel < static_cast<int>(_saves.size()))
 		{
@@ -391,7 +391,7 @@ void ListGamesState::lstSavesPress(Action* action)
  */
 void ListGamesState::sortNameClick(Action*)
 {
-	if (_sortable)
+	if (_sortable == true)
 	{
 		if (Options::saveOrder == SORT_NAME_ASC)
 			Options::saveOrder = SORT_NAME_DESC;
@@ -411,7 +411,7 @@ void ListGamesState::sortNameClick(Action*)
  */
 void ListGamesState::sortDateClick(Action*)
 {
-	if (_sortable)
+	if (_sortable == true)
 	{
 		if (Options::saveOrder == SORT_DATE_ASC)
 			Options::saveOrder = SORT_DATE_DESC;
@@ -426,7 +426,7 @@ void ListGamesState::sortDateClick(Action*)
 }
 
 /**
- *
+ * Disables sorting.
  */
 void ListGamesState::disableSort()
 {

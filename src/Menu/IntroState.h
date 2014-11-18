@@ -46,7 +46,7 @@ private:
 
 	public:
 		/// Creates the Intro state.
-		IntroState(bool wasLetterBoxed);
+		IntroState(const bool wasLetterBoxed);
 		/// Cleans up the Intro state.
 		~IntroState();
 

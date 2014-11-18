@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_BATTLESCAPESTATE_H
 #define OPENXCOM_BATTLESCAPESTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "Position.h"
 
@@ -41,6 +41,7 @@ class InteractiveSurface;
 class Map;
 class NumberText;
 class SavedBattleGame;
+class SavedGame;
 class Surface;
 class Text;
 class TextList;
@@ -143,7 +144,8 @@ private:
 	Position
 		_cursorPosition,
 		_mapOffsetBeforeDragScroll;
-	SavedBattleGame* _save;
+	SavedBattleGame* _savedBattle;
+	SavedGame* _savedGame;
 	Surface
 		* _weight,
 		* _kneel,

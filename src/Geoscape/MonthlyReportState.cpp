@@ -32,7 +32,6 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Music.h" // kL: sza_MusicRules
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 
@@ -42,8 +41,7 @@
 #include "../Interface/TextButton.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
-#include "../Resource/XcomResourcePack.h" // kL: sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/RuleCountry.h"
 
@@ -61,7 +59,7 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Monthly Report screen.
- * @param psi	- true to how psi training afterwards
+ * @param psi	- true to show psi training afterwards
  * @param globe	- pointer to Globe
  */
 MonthlyReportState::MonthlyReportState(
@@ -78,6 +76,7 @@ MonthlyReportState::MonthlyReportState(
 //		_pactList(0)
 {
 	_globe = globe;
+	_savedGame = _game->getSavedGame();
 
 	_window		= new Window(this, 320, 200, 0, 0);
 	_txtTitle	= new Text(300, 17, 10, 8);
@@ -106,6 +105,7 @@ MonthlyReportState::MonthlyReportState(
 	add(_btnBigOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK13.SCR"));
@@ -148,8 +148,8 @@ MonthlyReportState::MonthlyReportState(
 	calculateChanges(); // <- sets Rating.
 
 	int
-		month = _game->getSavedGame()->getTime()->getMonth() - 1,
-		year = _game->getSavedGame()->getTime()->getYear();
+		month = _savedGame->getTime()->getMonth() - 1,
+		year = _savedGame->getTime()->getYear();
 
 	if (month == 0)
 	{
@@ -181,7 +181,7 @@ MonthlyReportState::MonthlyReportState(
 	_txtMonth->setText(tr("STR_MONTH").arg(tr(m)).arg(year));
 
 	const int
-		diff = static_cast<int>(_game->getSavedGame()->getDifficulty()),
+		diff = static_cast<int>(_savedGame->getDifficulty()),
 		difficulty_threshold = 250 * (diff - 4);
 		// 0 -> -1000
 		// 1 -> -750
@@ -192,25 +192,15 @@ MonthlyReportState::MonthlyReportState(
 	// do rating:
 	std::wstring rating = tr("STR_RATING_TERRIBLE");
 	if (_ratingTotal > 10000)
-	{
 		rating = tr("STR_RATING_STUPENDOUS");
-	}
 	else if (_ratingTotal > 5000)
-	{
 		rating = tr("STR_RATING_EXCELLENT");
-	}
 	else if (_ratingTotal > 2500)
-	{
 		rating = tr("STR_RATING_GOOD");
-	}
 	else if (_ratingTotal > 1000)
-	{
 		rating = tr("STR_RATING_OK");
-	}
 	else if (_ratingTotal > difficulty_threshold)
-	{
 		rating = tr("STR_RATING_POOR");
-	}
 	_txtRating->setColor(Palette::blockOffset(15)-1);
 	_txtRating->setSecondaryColor(Palette::blockOffset(8)+10);
 	_txtRating->setText(tr("STR_MONTHLY_RATING").arg(_ratingTotal).arg(rating));
@@ -229,13 +219,9 @@ MonthlyReportState::MonthlyReportState(
 	std::wostringstream ss4;
 	std::wstring satisFactionString = tr("STR_COUNCIL_IS_DISSATISFIED");
 	if (_ratingTotal > 1000 + 2000 * diff) // was 1500 flat.
-	{
 		satisFactionString = tr("STR_COUNCIL_IS_VERY_PLEASED");
-	}
 	else if (_ratingTotal > difficulty_threshold)
-	{
 		satisFactionString = tr("STR_COUNCIL_IS_GENERALLY_SATISFIED");
-	}
 
 	if (_ratingLastMonth <= difficulty_threshold
 		&& _ratingTotal <= difficulty_threshold)
@@ -259,9 +245,9 @@ MonthlyReportState::MonthlyReportState(
 	bool resetWarning = true;
 	if (_gameOver == false)
 	{
-		if (_game->getSavedGame()->getFunds() <= -1000000)
+		if (_savedGame->getFunds() <= -1000000)
 		{
-			if (_game->getSavedGame()->getWarned())
+			if (_savedGame->getWarned())
 			{
 				ss4.str(L"");
 				ss4 << tr("STR_YOU_HAVE_NOT_SUCCEEDED");
@@ -283,16 +269,16 @@ MonthlyReportState::MonthlyReportState(
 			{
 				ss4 << "\n\n" << tr("STR_COUNCIL_REDUCE_DEBTS");
 
-				_game->getSavedGame()->setWarned(true);
+				_savedGame->setWarned(true);
 				resetWarning = false;
 			}
 		}
 	}
 
-	if (resetWarning
-		&& _game->getSavedGame()->getWarned())
+	if (resetWarning == true
+		&& _savedGame->getWarned() == true)
 	{
-		_game->getSavedGame()->setWarned(false);
+		_savedGame->setWarned(false);
 	}
 
 	ss4 << countryList(
@@ -309,6 +295,9 @@ MonthlyReportState::MonthlyReportState(
 					"STR_COUNTRIES_HAVE_SIGNED_A_SECRET_PACT");
 
 	_txtDesc->setText(ss4.str());
+
+
+	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_MONTHLYREPORT);
 }
 
 /**
@@ -333,74 +322,74 @@ void MonthlyReportState::calculateChanges()
 		xComTotal		= 0,
 		aLienTotal		= 0,
 
-		monthOffset		= _game->getSavedGame()->getFundsList().size() - 2,
-		lastMonthOffset	= _game->getSavedGame()->getFundsList().size() - 3;
+		monthOffset		= _savedGame->getFundsList().size() - 2,
+		lastMonthOffset	= _savedGame->getFundsList().size() - 3;
 
 	if (lastMonthOffset < 0)
 		lastMonthOffset += 2;
 
 	// update activity meters, calculate a total score based
 	// on regional activity and gather last month's score
-	for (std::vector<Region*>::iterator
-			k = _game->getSavedGame()->getRegions()->begin();
-			k != _game->getSavedGame()->getRegions()->end();
-			++k)
+	for (std::vector<Region*>::const_iterator
+			i = _savedGame->getRegions()->begin();
+			i != _savedGame->getRegions()->end();
+			++i)
 	{
-		(*k)->newMonth();
+		(*i)->newMonth();
 
-		if ((*k)->getActivityXcom().size() > 2)
-			_ratingLastMonth += (*k)->getActivityXcom().at(lastMonthOffset)
-							  - (*k)->getActivityAlien().at(lastMonthOffset);
+		if ((*i)->getActivityXcom().size() > 2)
+			_ratingLastMonth += (*i)->getActivityXcom().at(lastMonthOffset)
+							  - (*i)->getActivityAlien().at(lastMonthOffset);
 
-		xComSubTotal += (*k)->getActivityXcom().at(monthOffset);
-		aLienTotal += (*k)->getActivityAlien().at(monthOffset);
+		xComSubTotal += (*i)->getActivityXcom().at(monthOffset);
+		aLienTotal += (*i)->getActivityAlien().at(monthOffset);
 	}
 
 	// apply research bonus AFTER calculating our total, because this bonus applies
 	// to the council ONLY, and shouldn't influence each country's decision.
 	// kL_note: And yet you _do_ add it in to country->newMonth() decisions...!
 	// So, hey, I'll take it out for you.. just a sec.
-	xComTotal = _game->getSavedGame()->getResearchScores().at(monthOffset) + xComSubTotal;
+	xComTotal = _savedGame->getResearchScores().at(monthOffset) + xComSubTotal;
 
 	// the council is more lenient after the first month
-//	if (_game->getSavedGame()->getMonthsPassed() > 1)
-//		_game->getSavedGame()->getResearchScores().at(monthOffset) += 400;
+//	if (_savedGame->getMonthsPassed() > 1)
+//		_savedGame->getResearchScores().at(monthOffset) += 400;
 
-	if (_game->getSavedGame()->getResearchScores().size() > 2)
-		_ratingLastMonth += _game->getSavedGame()->getResearchScores().at(lastMonthOffset);
+	if (_savedGame->getResearchScores().size() > 2)
+		_ratingLastMonth += _savedGame->getResearchScores().at(lastMonthOffset);
 
 
 	// now that we have our totals we can send the relevant info to the countries
 	// and have them make their decisions weighted on the council's perspective.
-	for (std::vector<Country*>::iterator
-			k = _game->getSavedGame()->getCountries()->begin();
-			k != _game->getSavedGame()->getCountries()->end();
-			++k)
+	for (std::vector<Country*>::const_iterator
+			i = _savedGame->getCountries()->begin();
+			i != _savedGame->getCountries()->end();
+			++i)
 	{
 		// add them to the list of new pact members; this is done BEFORE initiating
 		// a new month because the _newPact flag will be reset in the process <-
-		if ((*k)->getNewPact())
-			_pactList.push_back((*k)->getRules()->getType());
+		if ((*i)->getNewPact())
+			_pactList.push_back((*i)->getRules()->getType());
 
 		// determine satisfaction level, sign pacts, adjust funding, and update activity meters
-		const int diff = static_cast<int>(_game->getSavedGame()->getDifficulty());
-		(*k)->newMonth(
+		const int diff = static_cast<int>(_savedGame->getDifficulty());
+		(*i)->newMonth(
 					xComSubTotal, // There. done
 					aLienTotal,
 					diff);
 
 		// and after they've made their decisions, calculate the difference,
 		// and add them to the appropriate lists.
-		_fundingDiff += (*k)->getFunding().back()
-					  - (*k)->getFunding().at((*k)->getFunding().size() - 2);
+		_fundingDiff += (*i)->getFunding().back()
+					  - (*i)->getFunding().at((*i)->getFunding().size() - 2);
 
-		switch ((*k)->getSatisfaction())
+		switch ((*i)->getSatisfaction())
 		{
 			case 1:
-				_sadList.push_back((*k)->getRules()->getType());
+				_sadList.push_back((*i)->getRules()->getType());
 			break;
 			case 3:
-				_happyList.push_back((*k)->getRules()->getType());
+				_happyList.push_back((*i)->getRules()->getType());
 			break;
 
 			default:
@@ -408,7 +397,7 @@ void MonthlyReportState::calculateChanges()
 		}
 	}
 
-	_ratingTotal = xComTotal - aLienTotal; // calculate total.
+	_ratingTotal = xComTotal - aLienTotal; // total RATING
 }
 
 /**
@@ -421,20 +410,20 @@ void MonthlyReportState::btnOkClick(Action*)
 	{
 		_game->popState();
 
-		for (std::vector<Base*>::iterator // Award medals for service time
-				b = _game->getSavedGame()->getBases()->begin();
-				b != _game->getSavedGame()->getBases()->end();
-				++b)
+		for (std::vector<Base*>::const_iterator // Award medals for service time
+				i = _savedGame->getBases()->begin();
+				i != _savedGame->getBases()->end();
+				++i)
 		{
-			for (std::vector<Soldier*>::iterator
-					s = (*b)->getSoldiers()->begin();
-					s != (*b)->getSoldiers()->end();
-					++s)
+			for (std::vector<Soldier*>::const_iterator
+					j = (*i)->getSoldiers()->begin();
+					j != (*i)->getSoldiers()->end();
+					++j)
 			{
-				Soldier* soldier = _game->getSavedGame()->getSoldier((*s)->getId());
+				Soldier* const soldier = _savedGame->getSoldier((*j)->getId());
 				soldier->getDiary()->addMonthlyService();
 
-				if (soldier->getDiary()->manageCommendations(_game->getRuleset()))
+				if (soldier->getDiary()->manageCommendations(_game->getRuleset()) == true)
 					_soldiersMedalled.push_back(soldier);
 			}
 		}
@@ -442,17 +431,17 @@ void MonthlyReportState::btnOkClick(Action*)
 		if (_soldiersMedalled.empty() == false)
 			_game->pushState(new CommendationState(_soldiersMedalled));
 
-		if (_psi)
+		if (_psi == true)
 			_game->pushState(new PsiTrainingState());
 
-		if (_game->getSavedGame()->isIronman())
+		if (_savedGame->isIronman() == true)
 		{
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
 											SAVE_IRONMAN,
 											_palette));
 		}
-		else if (Options::autosave)
+		else if (Options::autosave == true)
 		{
 			_game->pushState(new SaveGameState(
 											OPT_GEOSCAPE,
@@ -462,7 +451,7 @@ void MonthlyReportState::btnOkClick(Action*)
 	}
 	else
 	{
-		if (_txtFailure->getVisible())
+		if (_txtFailure->getVisible() == true)
 		{
 			_game->popState();
 			_game->pushState(new DefeatState());
@@ -481,7 +470,9 @@ void MonthlyReportState::btnOkClick(Action*)
 			_txtFailure->setVisible();
 			_btnBigOk->setVisible();
 
-			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_MONTHLYREPORT);
+
+			_game->getResourcePack()->fadeMusic(_game, 1200);
+			_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_LOSE);
 		}
 	}
 }
@@ -489,9 +480,9 @@ void MonthlyReportState::btnOkClick(Action*)
 /**
  * Builds a sentence from a list of countries, adding the appropriate
  * separators and pluralization.
- * @param countries	- list of country string IDs
- * @param singular	- string ID to append at the end if the list is singular
- * @param plural	- string ID to append at the end if the list is plural
+ * @param countries	- reference a vector of strings that is the list of countries
+ * @param singular	- reference a string to append if the returned string is singular
+ * @param plural	- reference a string to append if the returned string is plural
  */
 std::wstring MonthlyReportState::countryList(
 		const std::vector<std::string>& countries,
@@ -507,19 +498,19 @@ std::wstring MonthlyReportState::countryList(
 			ss << tr(singular).arg(tr(countries.front()));
 		else
 		{
-			LocalizedText list = tr(countries.front());
+			LocalizedText countryList = tr(countries.front());
 
 			std::vector<std::string>::const_iterator i;
 			for (
 					i = countries.begin() + 1;
-					i < countries.end() - 1;
+					i != countries.end() - 1;
 					++i)
 			{
-				list = tr("STR_COUNTRIES_COMMA").arg(list).arg(tr(*i));
+				countryList = tr("STR_COUNTRIES_COMMA").arg(countryList).arg(tr(*i));
 			}
-			list = tr("STR_COUNTRIES_AND").arg(list).arg(tr(*i));
+			countryList = tr("STR_COUNTRIES_AND").arg(countryList).arg(tr(*i));
 
-			ss << tr(plural).arg(list);
+			ss << tr(plural).arg(countryList);
 		}
 	}
 

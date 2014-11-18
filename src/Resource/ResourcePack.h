@@ -31,6 +31,7 @@ namespace OpenXcom
 {
 
 class Font;
+class Game;
 class Music;
 class Palette;
 class Sound;
@@ -123,6 +124,10 @@ private:
 			void playMusic(
 					const std::string& name,
 					const std::string& terrain = ""); // kL, sza_MusicRules
+			/// Fades the currently playing music.
+			void fadeMusic(
+					Game* const game,
+					const int fadeDur);
 			/// Gets a random music.
 			Music* getRandomMusic( // sza_MusicRules
 					const std::string& name,

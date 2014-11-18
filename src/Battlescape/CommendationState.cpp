@@ -19,9 +19,8 @@
 
 #include "CommendationState.h"
 
-#include <sstream>
+//#include <sstream>
 
-#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -32,8 +31,7 @@
 #include "../Interface/TextList.h"
 #include "../Interface/Window.h"
 
-#include "../Resource/ResourcePack.h"
-#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/RuleCommendations.h"
 
@@ -222,7 +220,7 @@ CommendationState::~CommendationState()
  */
 void CommendationState::btnOkClick(Action*)
 {
-#ifndef __NO_MUSIC
+/* #ifndef __NO_MUSIC
 	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
 	{
 		_game->setInputActive(false);
@@ -236,7 +234,8 @@ void CommendationState::btnOkClick(Action*)
 	}
 	else
 		Mix_HaltMusic();
-#endif
+#endif */
+	_game->getResourcePack()->fadeMusic(_game, 900);
 
 	_game->popState();
 	_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);

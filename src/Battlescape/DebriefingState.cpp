@@ -29,10 +29,8 @@
 #include "../Basescape/ManageAlienContainmentState.h"
 #include "../Basescape/SellState.h"
 
-#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
@@ -50,8 +48,7 @@
 #include "../Menu/MainMenuState.h"
 #include "../Menu/SaveGameState.h"
 
-#include "../Resource/ResourcePack.h"
-#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleCountry.h"
@@ -485,7 +482,7 @@ DebriefingState::~DebriefingState()
 void DebriefingState::btnOkClick(Action*)
 {
 	//Log(LOG_INFO) << "DebriefingState::btnOkClick()";
-#ifndef __NO_MUSIC
+/* #ifndef __NO_MUSIC
 	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
 	{
 		_game->setInputActive(false);
@@ -499,7 +496,9 @@ void DebriefingState::btnOkClick(Action*)
 	}
 	else
 		Mix_HaltMusic();
-#endif
+#endif */
+	_game->getResourcePack()->fadeMusic(_game, 900);
+
 
 	std::vector<Soldier*> participants;
 	for (std::vector<BattleUnit*>::const_iterator

@@ -21,7 +21,9 @@
 
 //#include <SDL_mixer.h>
 
+#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Font.h"
+#include "../Engine/Game.h" // fadeMusic()
 #include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
@@ -232,6 +234,31 @@ void ResourcePack::playMusic(
 
 		getRandomMusic(name, terrain)->play(loop);
 	}
+}
+
+/**
+ * Fades the currently playing music.
+ * @param game - pointer to the Game object
+ */
+void ResourcePack::fadeMusic(
+		Game* const game,
+		const int fadeDur)
+{
+#ifndef __NO_MUSIC
+	if (Mix_GetMusicType(NULL) != MUS_MID)
+	{
+		game->setInputActive(false);
+
+		Mix_FadeOutMusic(fadeDur); // fade out!
+		func_fade();
+
+		while (Mix_PlayingMusic() == 1)
+		{
+		}
+	}
+	else
+		Mix_HaltMusic();
+#endif
 }
 
 /**

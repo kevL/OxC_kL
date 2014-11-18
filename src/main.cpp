@@ -47,13 +47,13 @@
 
 using namespace OpenXcom;
 
-Game* game = 0;
+Game* game = NULL;
 
 // If you can't tell what the main() is for you
 // should have your programming license revoked ...
 int main(
 		int argc,
-		char *argv[])
+		char* argv[])
 {
 	// To check memory leaks in VS
 //	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
@@ -65,17 +65,16 @@ int main(
 #else
 		Logger::reportingLevel() = LOG_DEBUG;
 #endif
-		if (!Options::init(argc, argv))
+		if (Options::init(argc, argv) == false)
 			return EXIT_SUCCESS;
 
-//kL		Options::baseXResolution = Options::displayWidth;
-//kL		Options::baseYResolution = Options::displayHeight;
+//kL	Options::baseXResolution = Options::displayWidth;
+//kL	Options::baseYResolution = Options::displayHeight;
 		Options::baseXResolution = Screen::ORIGINAL_WIDTH;	// kL
 		Options::baseYResolution = Screen::ORIGINAL_HEIGHT;	// kL
 
 		std::ostringstream title;
-//kL	title << "OpenXcom " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
-		title << "0xC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT; // kL
+		title << "0xC " << OPENXCOM_VERSION_SHORT << OPENXCOM_VERSION_GIT;
 
 		game = new Game(title.str());
 

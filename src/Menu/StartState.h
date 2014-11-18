@@ -32,7 +32,6 @@ class Font;
 class Language;
 class Text;
 class Timer;
-//class Surface; // kL
 
 
 enum LoadingPhase
@@ -53,8 +52,7 @@ class StartState
 {
 
 private:
-//kL	int _anim;
-	size_t _anim; // kL
+	size_t _anim;
 
 	Font* _font;
 	Language* _lang;
@@ -64,7 +62,6 @@ private:
 	Timer* _timer;
 
 	SDL_Thread* _thread;
-//	Surface* _surface; // kL
 
 	std::wostringstream _output;
 	std::wstring _dosart; // kL

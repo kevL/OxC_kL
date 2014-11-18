@@ -124,8 +124,8 @@ void Pathfinding::calculate(
 	_totalTUCost = 0;
 	_path.clear();
 
-	_modCTRL = (SDL_GetModState() &KMOD_CTRL) != 0;
-	_modALT = (SDL_GetModState() &KMOD_ALT) != 0;
+	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
+	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;
 
 	Position destPos2 = destPos; // kL: for keeping things straight if strafeRejected happens.
 
@@ -1340,8 +1340,8 @@ int Pathfinding::dequeuePath()
  */
 void Pathfinding::abortPath()
 {
-	_modCTRL = (SDL_GetModState() &KMOD_CTRL) != 0;
-	_modALT = (SDL_GetModState() &KMOD_ALT) != 0;
+	_modCTRL = (SDL_GetModState() & KMOD_CTRL) != 0;
+	_modALT = (SDL_GetModState() & KMOD_ALT) != 0;
 
 	_totalTUCost = 0;
 	_path.clear();
@@ -1480,8 +1480,7 @@ BIGWALL_E_S		// 8
 				&& std::find(
 						_unit->getUnitsSpottedThisTurn().begin(),
 						_unit->getUnitsSpottedThisTurn().end(),
-						tileUnit)
-					!= _unit->getUnitsSpottedThisTurn().end())
+						tileUnit) != _unit->getUnitsSpottedThisTurn().end())
 			{
 				return true; // AI knows only spotted xCom units.
 			}

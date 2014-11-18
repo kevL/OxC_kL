@@ -28,7 +28,6 @@
 
 #include "../version.h"
 
-#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Logger.h"
@@ -188,22 +187,7 @@ void MainMenuState::btnOptionsClick(Action*)
  */
 void MainMenuState::btnQuitClick(Action*)
 {
-#ifndef __NO_MUSIC
-		if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
-		{
-			_game->setInputActive(false);
-
-			Mix_FadeOutMusic(900);
-			func_fade();
-
-			while (Mix_PlayingMusic() == 1)
-			{
-			}
-		}
-		else
-			Mix_HaltMusic();
-#endif
-
+	_game->getResourcePack()->fadeMusic(_game, 800);
 	_game->quit();
 }
 

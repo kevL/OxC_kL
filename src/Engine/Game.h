@@ -116,12 +116,12 @@ private:
 		/// Gets the currently loaded resource pack.
 		ResourcePack* getResourcePack() const;
 		/// Sets a new resource pack for the game.
-		void setResourcePack(ResourcePack* res);
+		void setResourcePack(ResourcePack* const res);
 
 		/// Gets the currently loaded saved game.
 		SavedGame* getSavedGame() const;
 		/// Sets a new saved game for the game.
-		void setSavedGame(SavedGame* save);
+		void setSavedGame(SavedGame* const save);
 
 		/// Gets the currently loaded ruleset.
 		Ruleset* getRuleset() const;

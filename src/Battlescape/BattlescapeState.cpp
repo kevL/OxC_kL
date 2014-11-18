@@ -21,14 +21,14 @@
 
 #include "BattlescapeState.h"
 
-#include <cmath>
-#include <sstream>
-#include <iomanip>
+//#include <cmath>
+//#include <sstream>
+//#include <iomanip>
 
-#include <SDL_gfxPrimitives.h>
+//#include <SDL_gfxPrimitives.h>
 
-#include "../fmath.h"
-#include "../lodepng.h"
+//#include "../fmath.h"
+//#include "../lodepng.h"
 
 #include "AbortMissionState.h"
 #include "ActionMenuState.h"
@@ -56,7 +56,6 @@
 #include "WarningMessage.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Exception.h"
 #include "../Engine/Game.h"
@@ -90,8 +89,7 @@
 #include "../Menu/PauseState.h"
 #include "../Menu/SaveGameState.h"
 
-#include "../Resource/ResourcePack.h"
-#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Ruleset/AlienDeployment.h"
 #include "../Ruleset/Armor.h"
@@ -134,7 +132,8 @@ BattlescapeState::BattlescapeState()
 		_showConsole(1)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
-	_save = _game->getSavedGame()->getSavedBattle();
+	_savedGame = _game->getSavedGame();
+	_savedBattle = _savedGame->getSavedBattle();
 
 	std::fill_n(
 			_visibleUnit,
@@ -178,7 +177,6 @@ BattlescapeState::BattlescapeState()
 	_weight		= new Surface( 2,  2, x + 130, y + 34);
 
 	_btnWounds	= new InteractiveSurface(14, 14, x + 5, y - 17);
-//	_numWounds	= new NumberText(9, 9, x, y - 12); // X gets adjusted in updateSoldierInfo()
 	_numWounds	= new NumberText(9, 9, x, y - 20); // X gets adjusted in updateSoldierInfo()
 
 	_btnUnitUp			= new BattlescapeButton(32,  16, x +  48, y);
@@ -293,7 +291,7 @@ BattlescapeState::BattlescapeState()
 //	_txtConsole3	= new Text(screenWidth / 2, y, 0, 0);
 //	_txtConsole4	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
 
-	_game->getSavedGame()->getSavedBattle()->setPaletteByDepth(this);
+	_savedBattle->setPaletteByDepth(this);
 
 	// Fix system colors
 	_game->getCursor()->setColor(Palette::blockOffset(9));
@@ -421,8 +419,8 @@ BattlescapeState::BattlescapeState()
 	std::wstring baseLabel;
 
 	for (std::vector<Base*>::const_iterator
-			i = _game->getSavedGame()->getBases()->begin();
-			i != _game->getSavedGame()->getBases()->end()
+			i = _savedGame->getBases()->begin();
+			i != _savedGame->getBases()->end()
 				&& baseLabel.empty() == true;
 			++i)
 	{
@@ -472,15 +470,15 @@ BattlescapeState::BattlescapeState()
 
 	_txtTerrain->setColor(Palette::blockOffset(9)); // yellow
 	_txtTerrain->setHighContrast();
-	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_save->getTerrain())));
+	_txtTerrain->setText(tr("STR_TEXTURE_").arg(tr(_savedBattle->getTerrain())));
 
 	_txtShade->setColor(Palette::blockOffset(9));
 	_txtShade->setHighContrast();
-	_txtShade->setText(tr("STR_SHADE_").arg(_save->getGlobalShade()));
+	_txtShade->setText(tr("STR_SHADE_").arg(_savedBattle->getGlobalShade()));
 
 	_txtTurn->setColor(Palette::blockOffset(9));
 	_txtTurn->setHighContrast();
-	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
+	_txtTurn->setText(tr("STR_TURN").arg(_savedBattle->getTurn()));
 
 	_lstExp->setColor(Palette::blockOffset(8)); // blue
 	_lstExp->setHighContrast();
@@ -812,7 +810,7 @@ BattlescapeState::BattlescapeState()
 	_btnReserveAuto->setGroup(&_reserve); */
 
 	std::string music = OpenXcom::res_MUSIC_TAC_BATTLE; // default/ safety.
-	const std::string mission = _save->getMissionType();
+	const std::string mission = _savedBattle->getMissionType();
 	if (mission == "STR_UFO_CRASH_RECOVERY")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_UFOCRASHED;
 	else if (mission == "STR_UFO_GROUND_ASSAULT")
@@ -828,7 +826,7 @@ BattlescapeState::BattlescapeState()
 	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
 
-	const std::string terrain = _game->getSavedGame()->getSavedBattle()->getTerrain();
+	const std::string terrain = _savedBattle->getTerrain();
 	_game->getResourcePack()->playMusic(
 									music,
 									terrain);
@@ -840,7 +838,7 @@ BattlescapeState::BattlescapeState()
 	_gameTimer->onTimer((StateHandler)& BattlescapeState::handleState);
 
 	_battleGame = new BattlescapeGame(
-									_save,
+									_savedBattle,
 									this);
 }
 
@@ -861,10 +859,10 @@ BattlescapeState::~BattlescapeState()
 void BattlescapeState::init()
 {
 	//Log(LOG_INFO) << "BattlescapeState::init()";
-	if (_save->getAmbientSound() != -1)
+	if (_savedBattle->getAmbientSound() != -1)
 		_game->getResourcePack()->getSoundByDepth(
 												0,
-												_save->getAmbientSound())
+												_savedBattle->getAmbientSound())
 											->loop();
 
 	State::init();
@@ -877,13 +875,13 @@ void BattlescapeState::init()
 	_map->draw();
 	_battleGame->init();
 
-//	kL_TurnCount = _save->getTurn();	// kL
-//	_turnCounter->update();				// kL
-//	_turnCounter->draw();				// kL
+//	kL_TurnCount = _savedBattle->getTurn();	// kL
+//	_turnCounter->update();					// kL
+//	_turnCounter->draw();					// kL
 
 	updateSoldierInfo();
 
-/*	switch (_save->getTUReserved())
+/*	switch (_savedBattle->getTUReserved())
 	{
 		case BA_SNAPSHOT:
 			_reserve = _btnReserveSnap;
@@ -906,7 +904,7 @@ void BattlescapeState::init()
 		_firstInit = false;
 
 		_battleGame->setupCursor();
-		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		_map->getCamera()->centerOnPosition(_savedBattle->getSelectedUnit()->getPosition());
 
 /*		_btnReserveNone->setGroup(&_reserve);
 		_btnReserveSnap->setGroup(&_reserve);
@@ -916,11 +914,11 @@ void BattlescapeState::init()
 
 //	_txtTooltip->setText(L"");
 
-/*	if (_save->getKneelReserved())
+/*	if (_savedBattle->getKneelReserved())
 		_btnReserveKneel->invert(_btnReserveKneel->getColor()+3);
 
-	_btnReserveKneel->toggle(_save->getKneelReserved());
-	_battleGame->setKneelReserved(_save->getKneelReserved()); */
+	_btnReserveKneel->toggle(_savedBattle->getKneelReserved());
+	_battleGame->setKneelReserved(_savedBattle->getKneelReserved()); */
 	//Log(LOG_INFO) << "BattlescapeState::init() EXIT";
 }
 
@@ -1111,7 +1109,7 @@ void BattlescapeState::mapOver(Action* action)
 
 		Position pos;
 		_map->getSelectorPosition(&pos);
-		Tile* tile = _save->getTile(pos);
+		Tile* tile = _savedBattle->getTile(pos);
 
 		if (tile != NULL
 			&& tile->isDiscovered(2)
@@ -1400,7 +1398,7 @@ void BattlescapeState::mapClick(Action* action)
 	Position pos;
 	_map->getSelectorPosition(&pos);
 
-	if (_save->getDebugMode())
+	if (_savedBattle->getDebugMode())
 	{
 		std::wostringstream ss;
 		ss << L"Clicked " << pos;
@@ -1408,7 +1406,7 @@ void BattlescapeState::mapClick(Action* action)
 	}
 
 	// don't allow to click into void
-	if (_save->getTile(pos) != NULL)
+	if (_savedBattle->getTile(pos) != NULL)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
 				// kL_ Taking this out so that Alt can be used for forced walking by flying soldiers.
@@ -1515,24 +1513,24 @@ inline void BattlescapeState::handle(Action* action)
 				if (action->getDetails()->key.keysym.sym == SDLK_d		// "ctrl-d" - enable debug mode
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
-					_save->setDebugMode();
+					_savedBattle->setDebugMode();
 					debug(L"Debug Mode");
 				}
-				else if (_save->getDebugMode()							// "ctrl-v" - reset tile visibility
+				else if (_savedBattle->getDebugMode()							// "ctrl-v" - reset tile visibility
 					&& action->getDetails()->key.keysym.sym == SDLK_v
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					debug(L"Resetting tile visibility");
-					_save->resetTiles();
+					_savedBattle->resetTiles();
 				}
-				else if (_save->getDebugMode()							// "ctrl-k" - kill all aliens
+				else if (_savedBattle->getDebugMode()							// "ctrl-k" - kill all aliens
 					&& action->getDetails()->key.keysym.sym == SDLK_k
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					debug(L"Influenza bacterium dispersed");
 					for (std::vector<BattleUnit*>::iterator
-							i = _save->getUnits()->begin();
-							i !=_save->getUnits()->end();
+							i = _savedBattle->getUnits()->begin();
+							i !=_savedBattle->getUnits()->end();
 							++i)
 					{
 						if ((*i)->getOriginalFaction() == FACTION_HOSTILE)
@@ -1551,7 +1549,7 @@ inline void BattlescapeState::handle(Action* action)
 					saveAIMap();
 				}
 			}
-			else if (!_game->getSavedGame()->isIronman())					// quick save and quick load
+			else if (!_savedGame->isIronman())					// quick save and quick load
 			{
 				// not works in debug mode to prevent conflict in hotkeys by default
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
@@ -1585,17 +1583,17 @@ void BattlescapeState::btnUnitUpClick(Action*)
 	if (!playableUnitSelected())
 		return;
 
-//	_save->getPathfinding()->setKneelCheck();
-	int valid = _save->getPathfinding()->validateUpDown(
-												_save->getSelectedUnit(),
-												_save->getSelectedUnit()->getPosition(),
+//	_savedBattle->getPathfinding()->setKneelCheck();
+	int valid = _savedBattle->getPathfinding()->validateUpDown(
+												_savedBattle->getSelectedUnit(),
+												_savedBattle->getSelectedUnit()->getPosition(),
 												Pathfinding::DIR_UP);
 
 	if (valid > 0) // gravLift or flying
 	{
 		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(
-							_save->getSelectedUnit(),
+							_savedBattle->getSelectedUnit(),
 							Pathfinding::DIR_UP);
 	}
 	else if (valid == -2)	// no flight suit
@@ -1615,16 +1613,16 @@ void BattlescapeState::btnUnitDownClick(Action*)
 	if (!playableUnitSelected())
 		return;
 
-	int valid = _save->getPathfinding()->validateUpDown(
-												_save->getSelectedUnit(),
-												_save->getSelectedUnit()->getPosition(),
+	int valid = _savedBattle->getPathfinding()->validateUpDown(
+												_savedBattle->getSelectedUnit(),
+												_savedBattle->getSelectedUnit()->getPosition(),
 												Pathfinding::DIR_DOWN);
 
 	if (valid > 0) // gravLift or flying
 	{
 		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(
-							_save->getSelectedUnit(),
+							_savedBattle->getSelectedUnit(),
 							Pathfinding::DIR_DOWN);
 	}
 	else // blocked, floor
@@ -1637,8 +1635,8 @@ void BattlescapeState::btnUnitDownClick(Action*)
  */
 void BattlescapeState::btnMapUpClick(Action*)
 {
-	if (_save->getSide() == FACTION_PLAYER
-		|| _save->getDebugMode())
+	if (_savedBattle->getSide() == FACTION_PLAYER
+		|| _savedBattle->getDebugMode())
 	{
 		_map->getCamera()->up();
 	}
@@ -1650,8 +1648,8 @@ void BattlescapeState::btnMapUpClick(Action*)
  */
 void BattlescapeState::btnMapDownClick(Action*)
 {
-	if (_save->getSide() == FACTION_PLAYER
-		|| _save->getDebugMode())
+	if (_savedBattle->getSide() == FACTION_PLAYER
+		|| _savedBattle->getDebugMode())
 	{
 		_map->getCamera()->down();
 	}
@@ -1666,7 +1664,7 @@ void BattlescapeState::btnShowMapClick(Action*)
 	if (allowButtons())
 		_game->pushState(new MiniMapState(
 										_map->getCamera(),
-										_save));
+										_savedBattle));
 }
 
 /**
@@ -1677,7 +1675,7 @@ void BattlescapeState::btnKneelClick(Action*)
 {
 	if (allowButtons() == true)
 	{
-		BattleUnit* bu = _save->getSelectedUnit();
+		BattleUnit* bu = _savedBattle->getSelectedUnit();
 		if (bu != NULL)
 		{
 			//Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
@@ -1718,14 +1716,14 @@ void BattlescapeState::btnKneelClick(Action*)
  */
 void BattlescapeState::btnInventoryClick(Action*)
 {
-	if (_save->getDebugMode())
+	if (_savedBattle->getDebugMode())
 	{
 		for (std::vector<BattleUnit*>::iterator
-				i = _save->getUnits()->begin();
-				i != _save->getUnits()->end();
+				i = _savedBattle->getUnits()->begin();
+				i != _savedBattle->getUnits()->end();
 				++i)
 		{
-			if ((*i)->getFaction() == _save->getSide())
+			if ((*i)->getFaction() == _savedBattle->getSide())
 				(*i)->prepareUnitTurn();
 
 			updateSoldierInfo();
@@ -1733,15 +1731,15 @@ void BattlescapeState::btnInventoryClick(Action*)
 	}
 
 //		&& (unit->getArmor()->getSize() == 1
-//			|| _save->getDebugMode())
+//			|| _savedBattle->getDebugMode())
 //		&& (unit->getOriginalFaction() == FACTION_PLAYER
 //			|| unit->getRankString() != "STR_LIVE_TERRORIST"))
 
 	if (playableUnitSelected() == true)
 	{
-		const BattleUnit* const unit = _save->getSelectedUnit();
+		const BattleUnit* const unit = _savedBattle->getSelectedUnit();
 
-		if (_save->getDebugMode()
+		if (_savedBattle->getDebugMode()
 			|| (unit->getGeoscapeSoldier() != NULL
 //				|| (unit->getUnitRules() &&
 				|| (unit->getUnitRules()->getMechanical() == false
@@ -1759,7 +1757,7 @@ void BattlescapeState::btnInventoryClick(Action*)
 			_battleGame->cancelCurrentAction(true);
 
 			_game->pushState(new InventoryState(
-											!_save->getDebugMode(),
+											!_savedBattle->getDebugMode(),
 											this));
 		}
 	}
@@ -1773,7 +1771,7 @@ void BattlescapeState::btnCenterClick(Action*)
 {
 	if (playableUnitSelected())
 	{
-		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		_map->getCamera()->centerOnPosition(_savedBattle->getSelectedUnit()->getPosition());
 		_map->refreshSelectorPosition();
 	}
 }
@@ -1840,7 +1838,7 @@ void BattlescapeState::selectNextFactionUnit(
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
 
-		BattleUnit* unit = _save->selectNextFactionUnit(
+		BattleUnit* unit = _savedBattle->selectNextFactionUnit(
 												checkReselect,
 												setDontReselect,
 												checkInventory);
@@ -1871,7 +1869,7 @@ void BattlescapeState::selectPreviousFactionUnit(
 		if (_battleGame->getCurrentAction()->type != BA_NONE)
 			return;
 
-		BattleUnit* unit = _save->selectPreviousFactionUnit(
+		BattleUnit* unit = _savedBattle->selectPreviousFactionUnit(
 													checkReselect,
 													setDontReselect,
 													checkInventory);
@@ -1930,7 +1928,7 @@ void BattlescapeState::btnAbortClick(Action*)
 	{
 		//Log(LOG_INFO) << "BattlescapeState::btnAbortClick()";
 		_game->pushState(new AbortMissionState(
-											_save,
+											_savedBattle,
 											this));
 	}
 	//Log(LOG_INFO) << "BattlescapeState::btnAbortClick() EXIT";
@@ -1978,7 +1976,7 @@ void BattlescapeState::btnStatsClick(Action* action)
 
 		if (edge == false)
 			popup(new UnitInfoState(
-								_save->getSelectedUnit(),
+								_savedBattle->getSelectedUnit(),
 								this,
 								false,
 								false));
@@ -2003,12 +2001,12 @@ void BattlescapeState::btnLeftHandLeftClick(Action*)
 //kL		}
 
 		_battleGame->cancelCurrentAction();
-		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
+		_savedBattle->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
 
 		_map->cacheUnits();
 		_map->draw();
 
-		BattleItem* leftHandItem = _save->getSelectedUnit()->getItem("STR_LEFT_HAND");
+		BattleItem* leftHandItem = _savedBattle->getSelectedUnit()->getItem("STR_LEFT_HAND");
 		handleItemClick(leftHandItem);
 	}
 }
@@ -2023,7 +2021,7 @@ void BattlescapeState::btnLeftHandRightClick(Action*)
 	{
 		_battleGame->cancelCurrentAction(true);
 
-		_save->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
+		_savedBattle->getSelectedUnit()->setActiveHand("STR_LEFT_HAND");
 		updateSoldierInfo(false);
 
 		_map->cacheUnits();
@@ -2049,12 +2047,12 @@ void BattlescapeState::btnRightHandLeftClick(Action*)
 //kL		}
 
 		_battleGame->cancelCurrentAction();
-		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
+		_savedBattle->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
 
 		_map->cacheUnits();
 		_map->draw();
 
-		BattleItem* rightHandItem = _save->getSelectedUnit()->getItem("STR_RIGHT_HAND");
+		BattleItem* rightHandItem = _savedBattle->getSelectedUnit()->getItem("STR_RIGHT_HAND");
 		handleItemClick(rightHandItem);
 	}
 }
@@ -2069,7 +2067,7 @@ void BattlescapeState::btnRightHandRightClick(Action*)
 	{
 		_battleGame->cancelCurrentAction(true);
 
-		_save->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
+		_savedBattle->getSelectedUnit()->setActiveHand("STR_RIGHT_HAND");
 		updateSoldierInfo(false);
 
 		_map->cacheUnits();
@@ -2108,7 +2106,7 @@ void BattlescapeState::btnVisibleUnitClick(Action* action)
 void BattlescapeState::btnWoundedClick(Action* action)
 {
 	if (playableUnitSelected() == true)
-		_map->getCamera()->centerOnPosition(_save->getSelectedUnit()->getPosition());
+		_map->getCamera()->centerOnPosition(_savedBattle->getSelectedUnit()->getPosition());
 
 	action->getDetails()->type = SDL_NOEVENT; // consume the event
 }
@@ -2195,14 +2193,14 @@ void BattlescapeState::btnPsiClick(Action* action)
 void BattlescapeState::btnReloadClick(Action*)
 {
 	if (playableUnitSelected() == true
-		&& _save->getSelectedUnit()->checkAmmo() == true)
+		&& _savedBattle->getSelectedUnit()->checkAmmo() == true)
 	{
 		_game->getResourcePack()->getSoundByDepth(
-												_save->getDepth(),
+												_savedBattle->getDepth(),
 												ResourcePack::ITEM_RELOAD)
 											->play(
 												-1,
-												getMap()->getSoundAngle(_save->getSelectedUnit()->getPosition()));
+												getMap()->getSoundAngle(_savedBattle->getSelectedUnit()->getPosition()));
 
 		updateSoldierInfo();
 	}
@@ -2238,7 +2236,7 @@ void BattlescapeState::btnZeroTUsClick(Action* action)
 void BattlescapeState::btnPersonalLightingClick(Action*)
 {
 	if (allowButtons() == true)
-		_save->getTileEngine()->togglePersonalLighting();
+		_savedBattle->getTileEngine()->togglePersonalLighting();
 }
 
 /**
@@ -2345,7 +2343,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
  */
 bool BattlescapeState::playableUnitSelected()
 {
-	return _save->getSelectedUnit() != NULL
+	return _savedBattle->getSelectedUnit() != NULL
 		&& allowButtons();
 }
 
@@ -2438,14 +2436,14 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 	}
 
 
-	BattleUnit* const selectedUnit = _save->getSelectedUnit();
+	BattleUnit* const selectedUnit = _savedBattle->getSelectedUnit();
 
 	if (selectedUnit == NULL)
 		return;
 
 
 	if (calcFoV)
-		_save->getTileEngine()->calculateFOV(selectedUnit);
+		_savedBattle->getTileEngine()->calculateFOV(selectedUnit);
 
 	int j = 0;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -2466,7 +2464,7 @@ void BattlescapeState::updateSoldierInfo(bool calcFoV)
 										_game->getLanguage(),
 										false));
 
-//	Soldier* soldier = _game->getSavedGame()->getSoldier(selectedUnit->getId());
+//	Soldier* soldier = _savedGame->getSoldier(selectedUnit->getId());
 	const Soldier* const soldier = selectedUnit->getGeoscapeSoldier();
 	if (soldier != NULL)
 	{
@@ -2769,8 +2767,8 @@ void BattlescapeState::handleItemClick(BattleItem* item)
 	if (item != NULL						// make sure there is an item
 		&& _battleGame->isBusy() == false)	// and the battlescape is in an idle state
 	{
-//kL	if (_game->getSavedGame()->isResearched(item->getRules()->getRequirements())
-//kL		|| _save->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
+//kL	if (_savedGame->isResearched(item->getRules()->getRequirements())
+//kL		|| _savedBattle->getSelectedUnit()->getOriginalFaction() == FACTION_HOSTILE)
 //kL_note: do that in ActionMenu, to allow throwing artefacts.
 //		{
 		_battleGame->getCurrentAction()->weapon = item;
@@ -2824,7 +2822,7 @@ Map* BattlescapeState::getMap() const
  */
 void BattlescapeState::debug(const std::wstring& message)
 {
-	if (_save->getDebugMode())
+	if (_savedBattle->getDebugMode())
 		_txtDebug->setText(message);
 }
 
@@ -2852,13 +2850,13 @@ void BattlescapeState::saveAIMap()
 {
 //kL	Uint32 start = SDL_GetTicks(); // kL_note: Not used.
 
-	BattleUnit* unit = _save->getSelectedUnit();
+	BattleUnit* unit = _savedBattle->getSelectedUnit();
 	if (unit == NULL)
 		return;
 
 	int
-		w = _save->getMapSizeX(),
-		h = _save->getMapSizeY();
+		w = _savedBattle->getMapSizeX(),
+		h = _savedBattle->getMapSizeY();
 	Position pos(unit->getPosition());
 
 	int expMax = 0;
@@ -2895,7 +2893,7 @@ void BattlescapeState::saveAIMap()
 				++x)
 		{
 			tilePos.x = x;
-			Tile* t = _save->getTile(tilePos);
+			Tile* t = _savedBattle->getTile(tilePos);
 
 			if (!t)
 				continue;
@@ -2919,7 +2917,7 @@ void BattlescapeState::saveAIMap()
 				++x)
 		{
 			tilePos.x = x;
-			Tile* t = _save->getTile(tilePos);
+			Tile* t = _savedBattle->getTile(tilePos);
 
 			if (!t)
 				continue;
@@ -2951,7 +2949,7 @@ void BattlescapeState::saveAIMap()
 							tilePos.y,
 							z);
 
-				t = _save->getTile(pos);
+				t = _savedBattle->getTile(pos);
 				BattleUnit* wat = t->getUnit();
 				if (wat)
 				{
@@ -2998,7 +2996,7 @@ void BattlescapeState::saveAIMap()
 
 				pos.z--;
 				if (z > 0
-					&& !t->hasNoFloor(_save->getTile(pos)))
+					&& !t->hasNoFloor(_savedBattle->getTile(pos)))
 				{
 					break; // no seeing through floors
 				}
@@ -3094,12 +3092,12 @@ void BattlescapeState::saveVoxelView()
 		255,  64, 128	// neutral unit
 	};
 
-	BattleUnit* bu = _save->getSelectedUnit();
+	BattleUnit* bu = _savedBattle->getSelectedUnit();
 	if (bu == NULL) // no unit selected
 		return;
 
 	bool
-		_debug = _save->getDebugMode(),
+		_debug = _savedBattle->getDebugMode(),
 		black = false;
 	int test;
 	double
@@ -3138,7 +3136,7 @@ void BattlescapeState::saveVoxelView()
 			targetVoxel.z = originVoxel.z + (int)(cos(ang_y) * 1024);
 
 			_trajectory.clear();
-			test = _save->getTileEngine()->calculateLine(
+			test = _savedBattle->getTileEngine()->calculateLine(
 													originVoxel,
 													targetVoxel,
 													false,
@@ -3150,7 +3148,7 @@ void BattlescapeState::saveVoxelView()
 			black = true;
 			if (test != 0 && test != 6)
 			{
-				tile = _save->getTile(Position(
+				tile = _savedBattle->getTile(Position(
 											_trajectory.at(0).x / 16,
 											_trajectory.at(0).y / 16,
 											_trajectory.at(0).z / 24));
@@ -3171,7 +3169,7 @@ void BattlescapeState::saveVoxelView()
 						}
 						else
 						{
-							tile = _save->getTile(Position(
+							tile = _savedBattle->getTile(Position(
 														_trajectory.at(0).x / 16,
 														_trajectory.at(0).y / 16,
 														_trajectory.at(0).z / 24 - 1));
@@ -3277,15 +3275,15 @@ void BattlescapeState::saveVoxelMap()
 
 	Tile* tile;
 
-	for (int z = 0; z < _save->getMapSizeZ() * 12; ++z)
+	for (int z = 0; z < _savedBattle->getMapSizeZ() * 12; ++z)
 	{
 		image.clear();
 
-		for (int y = 0; y < _save->getMapSizeY() * 16; ++y)
+		for (int y = 0; y < _savedBattle->getMapSizeY() * 16; ++y)
 		{
-			for (int x = 0; x < _save->getMapSizeX() * 16; ++x)
+			for (int x = 0; x < _savedBattle->getMapSizeX() * 16; ++x)
 			{
-				int test = _save->getTileEngine()->voxelCheck(Position(x, y, z * 2), 0, 0) + 1;
+				int test = _savedBattle->getTileEngine()->voxelCheck(Position(x, y, z * 2), 0, 0) + 1;
 				float dist = 1;
 
 				if (x %16 == 15)
@@ -3300,7 +3298,7 @@ void BattlescapeState::saveVoxelMap()
 
 				if (test == VOXEL_OUTOFBOUNDS)
 				{
-					tile = _save->getTile(Position(x / 16, y / 16, z / 12));
+					tile = _savedBattle->getTile(Position(x / 16, y / 16, z / 12));
 					if (tile->getUnit())
 					{
 						if (tile->getUnit()->getFaction() == FACTION_NEUTRAL)
@@ -3310,7 +3308,7 @@ void BattlescapeState::saveVoxelMap()
 					}
 					else
 					{
-						tile = _save->getTile(Position(x / 16, y / 16, z / 12 - 1));
+						tile = _savedBattle->getTile(Position(x / 16, y / 16, z / 12 - 1));
 						if (tile
 							&& tile->getUnit())
 						{
@@ -3334,8 +3332,8 @@ void BattlescapeState::saveVoxelMap()
 		unsigned error = lodepng::encode(
 				ss.str(),
 				image,
-				_save->getMapSizeX() * 16,
-				_save->getMapSizeY() * 16,
+				_savedBattle->getMapSizeX() * 16,
+				_savedBattle->getMapSizeY() * 16,
 				LCT_RGB);
 
 		if (error)
@@ -3371,30 +3369,16 @@ void BattlescapeState::finishBattle(
 
 	_game->getCursor()->setVisible();
 
-	if (_save->getAmbientSound() != -1)
+	if (_savedBattle->getAmbientSound() != -1)
 		_game->getResourcePack()->getSoundByDepth(
 												0,
-												_save->getAmbientSound())
+												_savedBattle->getAmbientSound())
 											->stopLoop();
 
-#ifndef __NO_MUSIC
-	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
-	{
-		_game->setInputActive(false);
-
-		Mix_FadeOutMusic(900);
-		func_fade();
-
-		while (Mix_PlayingMusic() == 1)
-		{
-		}
-	}
-	else
-		Mix_HaltMusic();
-#endif
+	_game->getResourcePack()->fadeMusic(_game, 975);
 
 
-	const std::string mission = _save->getMissionType();
+	const std::string mission = _savedBattle->getMissionType();
 
 	std::string nextStage;
 	if (mission != "STR_UFO_GROUND_ASSAULT"
@@ -3409,8 +3393,8 @@ void BattlescapeState::finishBattle(
 		std::string nextStageRace = _game->getRuleset()->getDeployment(mission)->getNextStageRace();
 
 		for (std::vector<TerrorSite*>::const_iterator
-				ts = _game->getSavedGame()->getTerrorSites()->begin();
-				ts != _game->getSavedGame()->getTerrorSites()->end()
+				ts = _savedGame->getTerrorSites()->begin();
+				ts != _savedGame->getTerrorSites()->end()
 					&& nextStageRace.empty() == true;
 				++ts)
 		{
@@ -3419,8 +3403,8 @@ void BattlescapeState::finishBattle(
 		}
 
 		for (std::vector<AlienBase*>::const_iterator
-				ab = _game->getSavedGame()->getAlienBases()->begin();
-				ab != _game->getSavedGame()->getAlienBases()->end()
+				ab = _savedGame->getAlienBases()->begin();
+				ab != _savedGame->getAlienBases()->end()
 					&& nextStageRace.empty() == true;
 				++ab)
 		{
@@ -3436,7 +3420,7 @@ void BattlescapeState::finishBattle(
 		}
 
 		_popups.clear();
-		_save->setMissionType(nextStage);
+		_savedBattle->setMissionType(nextStage);
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
@@ -3461,7 +3445,7 @@ void BattlescapeState::finishBattle(
 			// this concludes to defeat when in mars or mars landing mission
 			if ((mission == "STR_MARS_THE_FINAL_ASSAULT"
 					|| mission == "STR_MARS_CYDONIA_LANDING")
-				&& _game->getSavedGame()->getMonthsPassed() > -1)
+				&& _savedGame->getMonthsPassed() > -1)
 			{
 				_game->pushState(new DefeatState());
 			}
@@ -3473,7 +3457,7 @@ void BattlescapeState::finishBattle(
 			// no abort was done and at least a player is still alive
 			// this concludes to victory when in mars mission
 			if (mission == "STR_MARS_THE_FINAL_ASSAULT"
-				&& _game->getSavedGame()->getMonthsPassed() > -1)
+				&& _savedGame->getMonthsPassed() > -1)
 			{
 				_game->pushState(new VictoryState());
 			}
@@ -3571,8 +3555,8 @@ bool BattlescapeState::allowButtons(bool allowSaving) const
 {
 	return (
 			(allowSaving
-					|| _save->getSide() == FACTION_PLAYER
-					|| _save->getDebugMode())
+					|| _savedBattle->getSide() == FACTION_PLAYER
+					|| _savedBattle->getDebugMode())
 				&& (_battleGame->getPanicHandled()
 					|| _firstInit)
 				&& _map->getProjectile() == NULL);
@@ -3665,11 +3649,11 @@ void BattlescapeState::resize(
  */
 void BattlescapeState::updateTurn() // kL
 {
-	_txtTurn->setText(tr("STR_TURN").arg(_save->getTurn()));
+	_txtTurn->setText(tr("STR_TURN").arg(_savedBattle->getTurn()));
 
 /*	std::wostringstream woStr;
 	woStr << L"turn ";
-	woStr << _save->getTurn();
+	woStr << _savedBattle->getTurn();
 	_txtTurn->setText(woStr.str()); */
 }
 
@@ -3721,9 +3705,9 @@ void BattlescapeState::refreshVisUnits() // kL
 	}
 
 	BattleUnit* selectedUnit = NULL;
-	if (_save->getSelectedUnit())
+	if (_savedBattle->getSelectedUnit())
 	{
-		selectedUnit = _save->getSelectedUnit();
+		selectedUnit = _savedBattle->getSelectedUnit();
 		//Log(LOG_INFO) << ". selUnit ID " << selectedUnit->getId();
 	}
 
@@ -3748,7 +3732,7 @@ void BattlescapeState::refreshVisUnits() // kL
  */
 void BattlescapeState::drawFuse() // kL
 {
-	BattleUnit* selectedUnit = _save->getSelectedUnit();
+	BattleUnit* selectedUnit = _savedBattle->getSelectedUnit();
 	if (selectedUnit == NULL)
 		return;
 
@@ -3841,7 +3825,7 @@ void BattlescapeState::updateExpData() // kL
 {
 	_lstExp->clearList();
 
-	BattleUnit* unit = _save->getSelectedUnit();
+	BattleUnit* unit = _savedBattle->getSelectedUnit();
 
 	if (unit == NULL
 		|| unit->getGeoscapeSoldier() == NULL)
@@ -3895,13 +3879,13 @@ void BattlescapeState::updateExpData() // kL
  */
 void BattlescapeState::flashMedic() // kL
 {
-	BattleUnit* selectedUnit = _save->getSelectedUnit();
+	const BattleUnit* const selectedUnit = _savedBattle->getSelectedUnit();
 	if (selectedUnit != NULL
 		&& selectedUnit->getFatalWounds() > 0)
 	{
 		static int phase; // init's only once, to 0
 
-		Surface* srfCross = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(11); // gray cross
+		Surface* const srfCross = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(11); // gray cross
 
 		_btnWounds->lock();
 		srfCross->blitNShade(

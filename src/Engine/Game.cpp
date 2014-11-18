@@ -344,7 +344,7 @@ void Game::run()
 					if (action.getDetails()->type == SDL_KEYDOWN)
 					{
 						if (action.getDetails()->key.keysym.sym == SDLK_g // "ctrl-g" grab input
-							&& (SDL_GetModState() &KMOD_CTRL) != 0)
+							&& (SDL_GetModState() & KMOD_CTRL) != 0)
 						{
 							Options::captureMouse = (SDL_GrabMode)(!Options::captureMouse);
 							SDL_WM_GrabInput(Options::captureMouse);
@@ -352,12 +352,12 @@ void Game::run()
 						else if (Options::debug)
 						{
 							if (action.getDetails()->key.keysym.sym == SDLK_t
-								&& (SDL_GetModState() &KMOD_CTRL) != 0)
+								&& (SDL_GetModState() & KMOD_CTRL) != 0)
 							{
 								setState(new TestState());
 							}
 							else if (action.getDetails()->key.keysym.sym == SDLK_u // "ctrl-u" debug UI
-								&& (SDL_GetModState() &KMOD_CTRL) != 0)
+								&& (SDL_GetModState() & KMOD_CTRL) != 0)
 							{
 								Options::debugUi = !Options::debugUi;
 								_states.back()->redrawText();
@@ -382,7 +382,7 @@ void Game::run()
 					Options::useOpenGL && Options::vSyncForOpenGL))
 			{
 				// Update our FPS delay time based on the time of the last draw.
-				int fps = SDL_GetAppState() &SDL_APPINPUTFOCUS? Options::FPS: Options::FPSInactive;
+				int fps = SDL_GetAppState() & SDL_APPINPUTFOCUS? Options::FPS: Options::FPSInactive;
 				if (fps < 1)
 					fps = 1;
 				_timeUntilNextFrame = static_cast<int>(
@@ -596,8 +596,8 @@ void Game::loadLanguage(const std::string& filename)
 	std::ostringstream ss;
 	ss << "Language/" << filename << ".yml";
 
-	ExtraStrings* strings = 0;
-	std::map<std::string, ExtraStrings *> extraStrings = _rules->getExtraStrings();
+	ExtraStrings* strings = NULL;
+	std::map<std::string, ExtraStrings*> extraStrings = _rules->getExtraStrings();
 	if (extraStrings.empty() == false)
 	{
 		if (extraStrings.find(filename) != extraStrings.end())
@@ -628,7 +628,7 @@ ResourcePack* Game::getResourcePack() const
  * Sets a new resource pack for the game to use.
  * @param res - pointer to the ResourcePack
  */
-void Game::setResourcePack(ResourcePack* res)
+void Game::setResourcePack(ResourcePack* const res)
 {
 	delete _res;
 	_res = res;
@@ -647,7 +647,7 @@ SavedGame* Game::getSavedGame() const
  * Sets a new saved game for the game to use.
  * @param save - pointer to the SavedGame
  */
-void Game::setSavedGame(SavedGame* save)
+void Game::setSavedGame(SavedGame* const save)
 {
 	delete _save;
 	_save = save;
@@ -671,7 +671,7 @@ void Game::loadRuleset()
 
 	_rules = new Ruleset(this);
 
-	if (Options::rulesets.empty())
+	if (Options::rulesets.empty() == true)
 		Options::rulesets.push_back("Xcom1Ruleset");
 
 	for (std::vector<std::string>::const_iterator
@@ -695,7 +695,7 @@ void Game::loadRuleset()
 		}
 	}
 
-	if (Options::rulesets.empty())
+	if (Options::rulesets.empty() == true)
 	{
 		throw Exception("Failed to load ruleset");
 	}

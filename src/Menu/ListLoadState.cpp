@@ -23,12 +23,13 @@
 #include "LoadGameState.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextList.h"
+
+#include "../Resource/ResourcePack.h"
 
 
 namespace OpenXcom
@@ -67,23 +68,11 @@ void ListLoadState::lstSavesPress(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-#ifndef __NO_MUSIC
 		if (_origin == OPT_MENU)
-		{
-			_game->setInputActive(false);
-
-			if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
-			{
-				Mix_FadeOutMusic(1200);
-				func_fade();
-			}
-			else
-				Mix_HaltMusic();
-		}
-#endif
+			// or (switching from Geo-to-Tac or vice versa)
+			_game->getResourcePack()->fadeMusic(_game, 1750);
 
 		bool confirm = false;
-
 		for (std::vector<std::string>::const_iterator
 				i = _saves[_lstSaves->getSelectedRow()].rulesets.begin();
 				i != _saves[_lstSaves->getSelectedRow()].rulesets.end();
@@ -92,15 +81,14 @@ void ListLoadState::lstSavesPress(Action* action)
 			if (std::find(
 						Options::rulesets.begin(),
 						Options::rulesets.end(),
-						*i)
-					== Options::rulesets.end())
+						*i) == Options::rulesets.end())
 			{
 				confirm = true;
 				break;
 			}
 		}
 
-		if (confirm)
+		if (confirm == true)
 				_game->pushState(new ConfirmLoadState(
 													_origin,
 													_saves[_lstSaves->getSelectedRow()].fileName));

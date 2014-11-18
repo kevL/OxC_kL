@@ -22,7 +22,6 @@
 #include "MainMenuState.h"
 #include "SaveGameState.h"
 
-#include "../Engine/Adlib/adlplayer.h" // kL_fade
 #include "../Engine/Game.h"
 
 #include "../Engine/Language.h"
@@ -114,7 +113,7 @@ AbandonGameState::~AbandonGameState()
  */
 void AbandonGameState::btnYesClick(Action*)
 {
-#ifndef __NO_MUSIC
+/* #ifndef __NO_MUSIC
 	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
 	{
 		_game->setInputActive(false);
@@ -128,7 +127,9 @@ void AbandonGameState::btnYesClick(Action*)
 	}
 	else
 		Mix_HaltMusic();
-#endif
+#endif */
+	_game->getResourcePack()->fadeMusic(_game, 900);
+
 
 	if (_game->getSavedGame()->isIronman() == false)
 	{

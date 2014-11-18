@@ -93,7 +93,7 @@ protected:
 		void init();
 
 		/// Sorts the savegame list.
-		void sortList(SaveSort sort);
+		void sortList(SaveSort order);
 
 		/// Updates the savegame list.
 		virtual void updateList();

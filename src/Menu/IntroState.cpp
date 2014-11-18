@@ -34,7 +34,7 @@
 
 #include "../Engine/Adlib/adlplayer.h"
 
-#include "../Resource/ResourcePack.h"
+//#include "../Resource/ResourcePack.h"
 #include "../Resource/XcomResourcePack.h"
 
 
@@ -45,7 +45,7 @@ namespace OpenXcom
  * Initializes all the elements in the Intro screen.
  * @param wasLetterBoxed - true if the game was letterboxed
  */
-IntroState::IntroState(bool wasLetterBoxed)
+IntroState::IntroState(const bool wasLetterBoxed)
 	:
 		_wasLetterBoxed(wasLetterBoxed)
 {
@@ -55,7 +55,7 @@ IntroState::IntroState(bool wasLetterBoxed)
 
 	_game->setVolume(
 				Options::soundVolume,
-//kL			Options::musicVolume / 2,
+//				Options::musicVolume / 2,
 				Options::musicVolume, // kL
 				-1);
 
@@ -366,7 +366,7 @@ void operator()()
 	while (Flc::flc.FrameCount >= introSoundTrack[trackPosition].frameNumber)
 	{
 		const int command = introSoundTrack[trackPosition].sound;
-		if (command &0x200)
+		if (command & 0x200)
 		{
 #ifndef __NO_MUSIC
 			switch (command)
@@ -390,19 +390,19 @@ void operator()()
 			}
 #endif
 		}
-		else if (command &0x400)
+		else if (command & 0x400)
 		{
-			Flc::flc.HeaderSpeed = (1000.0 / 70.0) * (command &0xff);
+			Flc::flc.HeaderSpeed = (1000.0 / 70.0) * (command & 0xff);
 			Log(LOG_DEBUG) << "Frame delay now: " << Flc::flc.HeaderSpeed;
 		}
 		else if (command <= 0x19)
 		{
-			for (soundInFile**
-					sounds = introSounds;
-					*sounds;
+			for (soundInFile
+					**sounds = introSounds;
+					*sounds != NULL;
 					++sounds) // try hybrid sound set, then intro.cat or sample3.cat alone
 			{
-				soundInFile* sf = (*sounds) + command;
+				const soundInFile* const sf = (*sounds) + command;
 				Log(LOG_DEBUG) << "playing: " << sf->catFile << ":" << sf->sound << " for index " << command;
 
 				s = rp->getSound(
@@ -410,9 +410,9 @@ void operator()()
 								sf->sound);
 				if (s != NULL)
 				{
+					s->play(-1); // kL
 //kL				int channel = trackPosition %4; // use at most four channels to play sound effects
 //kL				s->play(channel);
-					s->play(-1); // kL
 //kL				double ratio = static_cast<double>(Options::soundVolume) / static_cast<double>(MIX_MAX_VOLUME);
 //kL				Mix_Volume(channel, static_cast<int>(static_cast<double>(sf->volume) * ratio));
 
@@ -458,7 +458,9 @@ void IntroState::init()
 		Flc::FlcDeInit();
 		delete audioSequence;
 
-
+		Mix_FadeOutChannel(-1, 900);						// kL
+		_game->getResourcePack()->fadeMusic(_game, 900);	// kL
+/*kL
 #ifndef __NO_MUSIC
 		// fade out!
 		Mix_FadeOutChannel(-1, 45 * 20);
@@ -471,7 +473,7 @@ void IntroState::init()
 		}
 		else // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
 			Mix_HaltMusic();
-#endif
+#endif */
 
 		SDL_Color
 			pal[256],
