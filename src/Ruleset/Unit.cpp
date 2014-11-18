@@ -27,7 +27,7 @@ namespace OpenXcom
 
 /**
  * Creates a certain type of unit.
- * @param type - string defining the Unit's type
+ * @param type - reference a string defining the Unit's type
  */
 Unit::Unit(const std::string& type)
 	:
@@ -77,7 +77,7 @@ void Unit::load(
 	_standHeight	= node["standHeight"]			.as<int>(_standHeight);
 	_kneelHeight	= node["kneelHeight"]			.as<int>(_kneelHeight);
 	_floatHeight	= node["floatHeight"]			.as<int>(_floatHeight);
-	if (_floatHeight + _standHeight > 25)
+	if (_floatHeight + _standHeight > 24)
 	{
 		throw Exception("Error with unit " + _type + ": Unit height may not exceed 25");
 	}

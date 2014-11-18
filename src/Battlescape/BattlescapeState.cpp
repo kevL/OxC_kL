@@ -3393,17 +3393,20 @@ void BattlescapeState::finishBattle(
 		Mix_HaltMusic();
 #endif
 
-//	std::string nextStage;
-//	if (_save->getMissionType() != "STR_UFO_GROUND_ASSAULT"
-//		&& _save->getMissionType() != "STR_UFO_CRASH_RECOVERY")
-//	{
-	const std::string nextStage = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStage();
-//	}
+
+	const std::string mission = _save->getMissionType();
+
+	std::string nextStage;
+	if (mission != "STR_UFO_GROUND_ASSAULT"
+		&& mission != "STR_UFO_CRASH_RECOVERY")
+	{
+		nextStage = _game->getRuleset()->getDeployment(mission)->getNextStage();
+	}
 
 	if (nextStage.empty() == false	// if there is a next mission stage, and
 		&& inExitArea > 0)			// there are soldiers in Exit_Area OR all aLiens are dead, Load the Next Stage!!!
 	{
-		std::string nextStageRace = _game->getRuleset()->getDeployment(_save->getMissionType())->getNextStageRace();
+		std::string nextStageRace = _game->getRuleset()->getDeployment(mission)->getNextStageRace();
 
 		for (std::vector<TerrorSite*>::const_iterator
 				ts = _game->getSavedGame()->getTerrorSites()->begin();
@@ -3456,8 +3459,8 @@ void BattlescapeState::finishBattle(
 		{
 			// abort was done or no player is still alive
 			// this concludes to defeat when in mars or mars landing mission
-			if ((_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT"
-					|| _save->getMissionType() == "STR_MARS_CYDONIA_LANDING")
+			if ((mission == "STR_MARS_THE_FINAL_ASSAULT"
+					|| mission == "STR_MARS_CYDONIA_LANDING")
 				&& _game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState(new DefeatState());
@@ -3469,7 +3472,7 @@ void BattlescapeState::finishBattle(
 		{
 			// no abort was done and at least a player is still alive
 			// this concludes to victory when in mars mission
-			if (_save->getMissionType() == "STR_MARS_THE_FINAL_ASSAULT"
+			if (mission == "STR_MARS_THE_FINAL_ASSAULT"
 				&& _game->getSavedGame()->getMonthsPassed() > -1)
 			{
 				_game->pushState(new VictoryState());
