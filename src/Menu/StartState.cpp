@@ -79,7 +79,7 @@ StartState::StartState()
 	Options::baseYResolution = 400;	// kL
 	_game->getScreen()->resetDisplay(false);
 
-	int
+	const int
 //		dx = (Options::baseXResolution - 320) / 2,	// kL
 //		dy = (Options::baseYResolution - 200) / 2;	// kL
 		dx = 10,	// kL
@@ -113,6 +113,8 @@ StartState::StartState()
 	// kL_end.
 
 	_font	= new Font();
+	_font->loadTerminal();
+
 	_lang	= new Language();
 	_text	= new Text(
 //kL				Options::baseXResolution,
@@ -132,7 +134,6 @@ StartState::StartState()
 	_timer	= new Timer(1); // for HQ graphic filters
 //	_timer	= new Timer(9);
 
-	_font->loadTerminal();
 	setPalette(_font->getSurface()->getPalette(), 0, 2);
 
 	add(_text);
@@ -528,7 +529,7 @@ void StartState::addChar_kL(const size_t nextChar) // kL
  */
 void StartState::addCursor_kL() // kL
 {
-	int
+	const int
 		x = _text->getTextWidth((_text->getTextHeight() - _font->getHeight()) / _font->getHeight()) + 20,
 		y = _text->getTextHeight() - _font->getHeight() + 20;
 

@@ -481,24 +481,7 @@ DebriefingState::~DebriefingState()
  */
 void DebriefingState::btnOkClick(Action*)
 {
-	//Log(LOG_INFO) << "DebriefingState::btnOkClick()";
-/* #ifndef __NO_MUSIC
-	if (Mix_GetMusicType(NULL) != MUS_MID) // fade out!
-	{
-		_game->setInputActive(false);
-
-		Mix_FadeOutMusic(900);
-		func_fade();
-
-		while (Mix_PlayingMusic() == 1)
-		{
-		}
-	}
-	else
-		Mix_HaltMusic();
-#endif */
 	_game->getResourcePack()->fadeMusic(_game, 900);
-
 
 	std::vector<Soldier*> participants;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -574,7 +557,6 @@ void DebriefingState::btnOkClick(Action*)
 											SAVE_AUTO_GEOSCAPE,
 											_palette));
 	}
-	//Log(LOG_INFO) << "DebriefingState::btnOkClick() EXIT";
 }
 
 /**

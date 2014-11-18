@@ -458,22 +458,11 @@ void IntroState::init()
 		Flc::FlcDeInit();
 		delete audioSequence;
 
-		Mix_FadeOutChannel(-1, 900);						// kL
-		_game->getResourcePack()->fadeMusic(_game, 900);	// kL
-/*kL
-#ifndef __NO_MUSIC
-		// fade out!
-		Mix_FadeOutChannel(-1, 45 * 20);
-		if (Mix_GetMusicType(NULL) != MUS_MID)
-		{
-			_game->setInputActive(false);
+//#ifndef __NO_MUSIC
+		Mix_FadeOutChannel(-1, 900); // note: This ain't music, technically.
+//#endif
+		_game->getResourcePack()->fadeMusic(_game, 900);
 
-			Mix_FadeOutMusic(45 * 20);
-			func_fade();
-		}
-		else // SDL_Mixer has trouble with native midi and volume on windows, which is the most likely use case, so f@%# it.
-			Mix_HaltMusic();
-#endif */
 
 		SDL_Color
 			pal[256],
