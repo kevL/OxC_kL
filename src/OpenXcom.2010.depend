@@ -4528,7 +4528,7 @@
 1413136957 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1416325015 f:\git\openxcom\src\geoscape\geoscapestate.h
+1416522508 f:\git\openxcom\src\geoscape\geoscapestate.h
 	<list>
 	"../Engine/State.h"
 
@@ -7606,7 +7606,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1415936259 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1416520761 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	<cstdlib>
 	<sstream>

@@ -1825,8 +1825,9 @@ void DogfightState::drawUfo()
 		return;
 	}
 
-	int currentUfoXposition = _battle->getWidth() / 2 - 6;
-	int currentUfoYposition = _battle->getHeight() - (_currentDist / 8) - 6;
+	const int
+		currentUfoXposition = _battle->getWidth() / 2 - 6,
+		currentUfoYposition = _battle->getHeight() - (_currentDist / 8) - 6;
 
 	for (int
 			y = 0;
@@ -1843,15 +1844,15 @@ void DogfightState::drawUfo()
 				continue;
 			else
 			{
-				if (_ufo->isCrashed()
+				if (_ufo->isCrashed() == true
 					|| _ufo->getHitFrame() > 0)
 				{
 					pixelOffset *= 2;
 				}
 
-				Uint8 radarPixelColor = _window->getPixelColor(
-													currentUfoXposition + x + 3,
-													currentUfoYposition + y + 3); // + 3 'cause of the window frame
+				const Uint8 radarPixelColor = _window->getPixelColor(
+																currentUfoXposition + x + 3,
+																currentUfoYposition + y + 3); // + 3 'cause of the window frame
 				Uint8 color = radarPixelColor - pixelOffset;
 				if (color < 108)
 					color = 108;
@@ -1873,14 +1874,14 @@ void DogfightState::drawUfo()
  */
 void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 {
-	if (_minimized)
+	if (_minimized == true)
 		return;
 
 	int xPos = _battle->getWidth() / 2 + p->getHorizontalPosition();
 	if (p->getGlobalType() == CWPGT_MISSILE) // Draw missiles.
 	{
 		xPos -= 1;
-		int yPos = _battle->getHeight() - p->getPosition() / 8;
+		const int yPos = _battle->getHeight() - p->getPosition() / 8;
 		for (int
 				x = 0;
 				x < 3;
@@ -1891,14 +1892,14 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 					y < 6;
 					++y)
 			{
-				int pixelOffset = _projectileBlobs[p->getType()][y][x];
+				const int pixelOffset = _projectileBlobs[p->getType()][y][x];
 				if (pixelOffset == 0)
 					continue;
 				else
 				{
-					Uint8 radarPixelColor = _window->getPixelColor(
-																xPos + x + 3,
-																yPos + y + 3); // + 3 cause of the window frame
+					const Uint8 radarPixelColor = _window->getPixelColor(
+																	xPos + x + 3,
+																	yPos + y + 3); // + 3 cause of the window frame
 					Uint8 color = radarPixelColor - pixelOffset;
 					if (color < 108)
 						color = 108;
@@ -1913,16 +1914,17 @@ void DogfightState::drawProjectile(const CraftWeaponProjectile* p)
 	}
 	else if (p->getGlobalType() == CWPGT_BEAM) // Draw beams.
 	{
-		int yStart = _battle->getHeight() - 2;
-		int yEnd = _battle->getHeight() - (_currentDist / 8);
-		Uint8 pixelOffset = p->getState();
+		const int
+			yStart = _battle->getHeight() - 2,
+			yEnd = _battle->getHeight() - (_currentDist / 8);
+		const Uint8 pixelOffset = p->getState();
 
 		for (int
 				y = yStart;
 				y > yEnd;
 				--y)
 		{
-			Uint8 radarPixelColor = _window->getPixelColor(xPos + 3, y + 3);
+			const Uint8 radarPixelColor = _window->getPixelColor(xPos + 3, y + 3);
 			Uint8 color = radarPixelColor - pixelOffset;
 			if (color < 108)
 				color = 108;
@@ -1964,7 +1966,7 @@ void DogfightState::recolor(
 		const int weaponPod,
 		const bool enabled)
 {
-	int
+	const int
 		offset1 = 25,	//kL 24
 		offset2 = 8;	//kL 7
 	InteractiveSurface* weapon = NULL;
@@ -1986,7 +1988,7 @@ void DogfightState::recolor(
 	else
 		return;
 
-	if (enabled)
+	if (enabled == true)
 	{
 		weapon->offset(-offset1);
 		ammo->offset(-offset1);
@@ -2266,7 +2268,7 @@ Ufo* DogfightState::getUfo() const
  */
 void DogfightState::endDogfight()
 {
-	if (_craft)
+	if (_craft != NULL)
 		_craft->setInDogfight(false);
 
 	_endDogfight = true;
@@ -2291,7 +2293,7 @@ int DogfightState::getInterceptionNumber() const
 const std::string DogfightState::getTextureIcon() // kL
 {
 	//Log(LOG_INFO) << "DogfightState::getTextureIcon()";
-	std::string str = "";
+	std::string ret = "";
 
 	int // look up polygon's texture
 		texture,
@@ -2308,7 +2310,7 @@ const std::string DogfightState::getTextureIcon() // kL
 	for (std::vector<std::string>::const_iterator
 			i = terrains.begin();
 			i != terrains.end()
-				&& str == "";
+				&& ret == "";
 			++i)
 	{
 		//Log(LOG_INFO) << ". cycle terrains";
@@ -2316,7 +2318,7 @@ const std::string DogfightState::getTextureIcon() // kL
 		for (std::vector<int>::iterator
 				j = terrain->getTextures()->begin();
 				j != terrain->getTextures()->end()
-					&& str == "";
+					&& ret == "";
 				++j)
 		{
 			//Log(LOG_INFO) << ". . cycle textures";
@@ -2328,46 +2330,46 @@ const std::string DogfightState::getTextureIcon() // kL
 						&& _ufo->getLatitude() >= 0.0)))
 			{
 				//Log(LOG_INFO) << ". . . terrain-texture MATCH found!";
-				str = terrain->getName();
+				ret = terrain->getName();
 			}
 		}
 	}
-	//Log(LOG_INFO) << ". str = " << str;
+	//Log(LOG_INFO) << ". ret = " << ret;
 
-	if (str == "")
-		str = "WATER";
-	else if (str == "JUNGLE"
-		|| str == "FORESTMOUNT"
-		|| str == "MUJUNGLE")
+	if (ret == "")
+		ret = "WATER";
+	else if (ret == "JUNGLE"
+		|| ret == "FORESTMOUNT"
+		|| ret == "MUJUNGLE")
 	{
-		str = "FOREST";
+		ret = "FOREST";
 	}
-	else if (str == "CULTAFARMA"
-		|| str == "CULTAFARMB")
+	else if (ret == "CULTAFARMA"
+		|| ret == "CULTAFARMB")
 	{
-		str = "CULTA";
+		ret = "CULTA";
 	}
-	else if (str == "DESERTMOUNT"
-		|| str == "ATLANTDESERT")
+	else if (ret == "DESERTMOUNT"
+		|| ret == "ATLANTDESERT")
 	{
-		str = "DESERT";
+		ret = "DESERT";
 	}
-	else if (str == "POLARMOUNT")
-		str = "POLAR";
-//	else if (str == "COMRCURBAN"	// these are Terror sites only:
-//		|| str == "DAWNURBANA"		// ie. not referenced by any of the Globe's polygon textures.
-//		|| str == "DAWNURBANB"
-//		|| str == "INDUSTRIALURBAN"
-//		|| str == "MADURBAN"
-//		|| str == "NATIVEURBAN"
-//		|| str == "PORTURBAN"
-//		|| str == "RAILYARDURBAN")
+	else if (ret == "POLARMOUNT")
+		ret = "POLAR";
+//	else if (ret == "COMRCURBAN"	// these are Terror sites only:
+//		|| ret == "DAWNURBANA"		// ie. not referenced by any of the Globe's polygon textures.
+//		|| ret == "DAWNURBANB"
+//		|| ret == "INDUSTRIALURBAN"
+//		|| ret == "MADURBAN"
+//		|| ret == "NATIVEURBAN"
+//		|| ret == "PORTURBAN"
+//		|| ret == "RAILYARDURBAN")
 //	{
-//		str = "URBAN";
+//		ret = "URBAN";
 //	}
 
-	//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT : " << str;
-	return str;
+	//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT : " << ret;
+	return ret;
 }
 
 /**
@@ -2384,7 +2386,7 @@ void DogfightState::playSoundFX( // kL
 
 	if (randAngle)
 		dir += (RNG::generate(-var, var)
-				+ RNG::generate(-var, var))
+			  + RNG::generate(-var, var))
 			/ 2;
 
 	_game->getResourcePack()->getSound(

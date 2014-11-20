@@ -149,4 +149,4 @@ extraStrings:
       STR_FUSION_TORCH: "Soplete de Fusión"
       STR_FUSION_TORCH_POWER_CELL: "Célula Energética Soplete de Fusión"
       STR_FUSION_TORCH_UFOPEDIA: "El Soplete de Fusión utiliza una reacción de Materia-Antimateria para crear un enorme haz potente de plasma.{NEWLINE}Estando suficientemente cerca, su chorro de plasma puede penetrar profundamente en el objetivo, derritiéndolo en segundos. Incluso las armaduras o el casco de un OVNI no serían capaz de resistirlo.{NEWLINE}No obstante, sólo es efectivo a muy corta distancia y necesita una célula de energía independiente."
-      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "Esta potente célula de energía es necesaria para que funcione el Solplete de Fusión. Proveé suficiente energía para 5 chorros de plasma.     "
+      STR_FUSION_TORCH_POWER_CELL_UFOPEDIA: "Esta potente célula de energía es necesaria para que funcione el Solplete de Fusión. Proveé suficiente energía para 5 chorros de plasma."

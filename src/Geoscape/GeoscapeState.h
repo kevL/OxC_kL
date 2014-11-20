@@ -62,7 +62,9 @@ class GeoscapeState
 private:
 
 	bool
+		_dogfightEnded,
 		_pause,
+		_startMusic,
 		_zoomInEffectDone,
 		_zoomOutEffectDone;
 	int
