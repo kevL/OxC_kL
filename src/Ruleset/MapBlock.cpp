@@ -64,7 +64,7 @@ void MapBlock::load(const YAML::Node& node)
 	_size_y	= node["length"]	.as<int>(_size_y);
 	_size_z	= node["height"]	.as<int>(_size_z);
 
-	if ((_size_x &10) != 0
+	if (_size_x %10 != 0
 		|| _size_y %10 != 0)
 	{
 		std::stringstream ss;

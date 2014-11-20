@@ -56,7 +56,7 @@ BattleItem::BattleItem(
 		_XCOMProperty(false)
 //		_droppedOnAlienTurn(false)
 {
-	if (_rules)
+	if (_rules != NULL)
 	{
 		if (_rules->getBattleType() == BT_AMMO)
 			setAmmoQuantity(_rules->getClipSize());

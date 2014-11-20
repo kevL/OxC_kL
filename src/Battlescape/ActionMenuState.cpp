@@ -254,7 +254,7 @@ void ActionMenuState::addItem(
 							tu);
 	_actionMenu[*id]->setVisible();
 
-	(*id)++; // kL_note: huh. oh yeah: &reference
+	(*id)++;
 }
 
 /**
@@ -338,10 +338,10 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 						&& targetUnit == NULL;
 					++i)
 			{
-				if (*i != _action->actor
-					&& (*i)->getPosition() == _action->actor->getPosition()
-					&& (*i)->getStatus() == STATUS_UNCONSCIOUS
-					&& (*i)->isWoundable() == true)
+				if ((*i)->getStatus() == STATUS_UNCONSCIOUS
+					&& (*i)->isWoundable() == true
+					&& (*i)->getPosition() == _action->actor->getPosition())
+//					&& *i != _action->actor // note: if unconscious, won't be actor.
 				{
 					targetUnit = *i;
 				}

@@ -537,10 +537,12 @@ void BattlescapeGenerator::run()
 	if (_generateFuel == true)
 		fuelPowerSources();
 
+//	if (_mission == "STR_UFO_CRASH_RECOVERY")
 	if (_ufo != NULL
 		&& _ufo->getStatus() == Ufo::CRASHED)
-//	if (_mission == "STR_UFO_CRASH_RECOVERY")
+	{
 		explodePowerSources();
+	}
 
 /*	if (_mission == "STR_BASE_DEFENSE")
 	{
@@ -581,7 +583,7 @@ void BattlescapeGenerator::run()
 				i < _battleSave->getMapSizeXYZ();
 				++i)
 		{
-			if (_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)
+			if (_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
 				&& _battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
 //					|| (_battleSave->getTiles()[i]->getPosition().z == _mapsize_z - 1
 //						&& _battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift()
@@ -609,7 +611,7 @@ void BattlescapeGenerator::run()
 void BattlescapeGenerator::deployXCOM()
 {
 	//Log(LOG_INFO) << "BattlescapeGenerator::deployXCOM()";
-	RuleInventory* ground = _rules->getInventory("STR_GROUND");
+	RuleInventory* const ground = _rules->getInventory("STR_GROUND");
 
 	if (_craft != NULL)
 	{
@@ -628,8 +630,8 @@ void BattlescapeGenerator::deployXCOM()
 					++i)
 			{
 				//Log(LOG_INFO) << ". . isCraft: addXCOMVehicle " << (int)*i;
-				BattleUnit* unit = addXCOMVehicle(*i);
-				if (unit
+				BattleUnit* const unit = addXCOMVehicle(*i);
+				if (unit != NULL
 					&& _battleSave->getSelectedUnit() == NULL)
 				{
 					_battleSave->setSelectedUnit(unit);
@@ -647,8 +649,8 @@ void BattlescapeGenerator::deployXCOM()
 				++i)
 		{
 			//Log(LOG_INFO) << ". . isBase: addXCOMVehicle " << (int)*i;
-			BattleUnit* unit = addXCOMVehicle(*i);
-			if (unit
+			BattleUnit* const unit = addXCOMVehicle(*i);
+			if (unit != NULL
 				&& _battleSave->getSelectedUnit() == NULL)
 			{
 				_battleSave->setSelectedUnit(unit);
@@ -671,7 +673,7 @@ void BattlescapeGenerator::deployXCOM()
 					j != (*i)->getVehicles()->end();
 					++j)
 				{
-					BattleUnit* unit = addXCOMVehicle(*j);
+					BattleUnit* const unit = addXCOMVehicle(*j);
 					if (unit != NULL
 						&& _battleSave->getSelectedUnit() == NULL)
 					{
@@ -696,10 +698,10 @@ void BattlescapeGenerator::deployXCOM()
 					|| (*i)->getCraft()->getStatus() != "STR_OUT")))
 		{
 			//Log(LOG_INFO) << ". . addXCOMUnit " << (*i)->getId();
-			BattleUnit* unit = addXCOMUnit(new BattleUnit(
-														*i,
-														_battleSave->getDepth(),
-														static_cast<int>(_game->getSavedGame()->getDifficulty()))); // kL_add: For VictoryPts value per death.
+			BattleUnit* const unit = addXCOMUnit(new BattleUnit(
+															*i,
+															_battleSave->getDepth(),
+															static_cast<int>(_game->getSavedGame()->getDifficulty()))); // kL_add: For VictoryPts value per death.
 
 			if (unit != NULL)
 			{
@@ -741,17 +743,17 @@ void BattlescapeGenerator::deployXCOM()
 		{
 			//Log(LOG_INFO) << ". . . *i = _craft->getItems()->getContents()";
 			for (int
-					count = 0;
-					count < i->second;
-					count++)
+					j = 0;
+					j < i->second;
+					++j)
 			{
-				//Log(LOG_INFO) << ". . . count+";
+				//Log(LOG_INFO) << ". . . j+";
 				_tileCraft->addItem(
-									new BattleItem(
-												_rules->getItem(i->first),
-												_battleSave->getCurrentItemId()),
-									ground);
-				//Log(LOG_INFO) << ". . . count cycle";
+								new BattleItem(
+											_rules->getItem(i->first),
+											_battleSave->getCurrentItemId()),
+								ground);
+				//Log(LOG_INFO) << ". . . j cycle";
 			}
 		}
 		//Log(LOG_INFO) << ". . addCraftItems DONE";
@@ -770,26 +772,26 @@ void BattlescapeGenerator::deployXCOM()
 			{
 				// add only items in the battlescape that make sense
 				// (when the item has a sprite, it's probably ok)
-				RuleItem* rule = _rules->getItem(i->first);
+				const RuleItem* const rule = _rules->getItem(i->first);
 				if (rule->getBigSprite() > -1
 					&& rule->getBattleType() != BT_NONE
 					&& rule->getBattleType() != BT_CORPSE
 					&& rule->isFixed() == false
-					&& _game->getSavedGame()->isResearched(rule->getRequirements()))
+					&& _game->getSavedGame()->isResearched(rule->getRequirements()) == true)
 				{
 					for (int
-							count = 0;
-							count < i->second;
-							count++)
+							j = 0;
+							j < i->second;
+							++j)
 					{
 						_tileCraft->addItem(
-											new BattleItem(
-														_rules->getItem(i->first),
-														_battleSave->getCurrentItemId()),
-											ground);
+										new BattleItem(
+													_rules->getItem(i->first),
+													_battleSave->getCurrentItemId()),
+										ground);
 					}
 
-					std::map<std::string, int>::iterator mark = i;
+					const std::map<std::string, int>::iterator mark = i;
 					++i;
 
 					if (_baseEquipScreen == false)
@@ -817,15 +819,15 @@ void BattlescapeGenerator::deployXCOM()
 					++j)
 			{
 				for (int
-						count = 0;
-						count < j->second;
-						++count)
+						k = 0;
+						k < j->second;
+						++k)
 				{
 					_tileCraft->addItem(
-										new BattleItem(
-													_rules->getItem(j->first),
-													_battleSave->getCurrentItemId()),
-										ground);
+									new BattleItem(
+												_rules->getItem(j->first),
+												_battleSave->getCurrentItemId()),
+									ground);
 				}
 			}
 		}
@@ -960,7 +962,7 @@ void BattlescapeGenerator::deployXCOM()
 			&& (*i)->getAmmoItem() == NULL
 			&& ((*i)->getRules()->getBattleType() == BT_FIREARM
 				|| (*i)->getRules()->getBattleType() == BT_MELEE)) */
-		if ((*i)->needsAmmo()) // or do it My way.
+		if ((*i)->needsAmmo() == true) // or do it My way.
 			loadGroundWeapon(*i);
 	}
 	//Log(LOG_INFO) << ". loading DONE";
@@ -974,7 +976,6 @@ void BattlescapeGenerator::deployXCOM()
 		if ((*i)->getSlot() == ground)
 		{
 			(*i)->setXCOMProperty();
-
 			_battleSave->getItems()->push_back(*i);
 
 			++i;
@@ -993,26 +994,26 @@ void BattlescapeGenerator::deployXCOM()
  */
 BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 {
-	std::string vehicle = tank->getRules()->getType();
-	Unit* unitRule = _rules->getUnit(vehicle);
+	const std::string vehicle = tank->getRules()->getType();
+	Unit* const unitRule = _rules->getUnit(vehicle);
 
-	BattleUnit* tankUnit = addXCOMUnit(new BattleUnit( // add Vehicle as a unit.
-													unitRule,
-													FACTION_PLAYER,
-													_unitSequence++,
-													_rules->getArmor(unitRule->getArmor()),
-													0,
-													_battleSave->getDepth()));
-	if (tankUnit)
+	BattleUnit* const tankUnit = addXCOMUnit(new BattleUnit( // add Vehicle as a unit.
+														unitRule,
+														FACTION_PLAYER,
+														_unitSequence++,
+														_rules->getArmor(unitRule->getArmor()),
+														0,
+														_battleSave->getDepth()));
+	if (tankUnit != NULL)
 	{
 		tankUnit->setTurretType(tank->getRules()->getTurretType());
 
-		BattleItem* item = new BattleItem( // add Vehicle as an item and assign the unit as its owner.
-									_rules->getItem(vehicle),
-									_battleSave->getCurrentItemId());
-		if (!addItem(
-					item,
-					tankUnit))
+		BattleItem* const item = new BattleItem( // add Vehicle as an item and assign the unit as its owner.
+											_rules->getItem(vehicle),
+											_battleSave->getCurrentItemId());
+		if (addItem(
+				item,
+				tankUnit) == false)
 		{
 			delete item;
 			delete tankUnit;
@@ -1022,13 +1023,13 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 
 		if (tank->getRules()->getCompatibleAmmo()->empty() == false)
 		{
-			std::string ammo = tank->getRules()->getCompatibleAmmo()->front();
-			BattleItem* ammoItem = new BattleItem( // add item(ammo) and assign the Vehicle-ITEM as its owner.
+			const std::string ammo = tank->getRules()->getCompatibleAmmo()->front();
+			BattleItem* const ammoItem = new BattleItem( // add item(ammo) and assign the Vehicle-ITEM as its owner.
 											_rules->getItem(ammo),
 											_battleSave->getCurrentItemId());
-			if (!addItem(
-						ammoItem,
-						tankUnit))
+			if (addItem(
+					ammoItem,
+					tankUnit) == false)
 			{
 				delete ammoItem;
 				delete item;
@@ -1048,16 +1049,16 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 					i != unitRule->getBuiltInWeapons().end();
 					++i)
 			{
-				RuleItem* itemRule = _rules->getItem(*i);
-				if (itemRule)
+				RuleItem* const itemRule = _rules->getItem(*i);
+				if (itemRule != NULL)
 				{
-					BattleItem* item = new BattleItem(
+					BattleItem* const item = new BattleItem(
 													itemRule,
 													_battleSave->getCurrentItemId());
 
-					if (!addItem(
-								item,
-								tankUnit))
+					if (addItem(
+							item,
+							tankUnit) == false)
 					{
 						delete item;
 					}

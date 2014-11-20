@@ -394,7 +394,7 @@ const int MapScript::getBlockNumber()
 
 /**
  * Gets a random map block from a given terrain using either the groups or the blocks defined.
- * @param terrain - the terrain to pick a block from
+ * @param terrain - pointer to the terrain rule to pick a block from
  * @return, pointer to a randomly chosen map block given the options available
  */
 MapBlock* MapScript::getNextBlock(RuleTerrain* terrain)

@@ -1684,7 +1684,7 @@ bool BattleUnit::isOut(
 }
 
 /**
- * Gets the number of time units a certain action takes.
+ * Gets the number of time units a certain action takes for this BattleUnit.
  * @param actionType	- type of battle action (BattlescapeGame.h)
  * @param item			- pointer to BattleItem for TU-cost
  * @return, TUs to perform action
@@ -1702,7 +1702,7 @@ int BattleUnit::getActionTUs(
 }
 
 /**
- * Gets the number of time units a certain action takes.
+ * Gets the number of time units a certain action takes for this BattleUnit.
  * @param actionType	- type of battle action (BattlescapeGame.h)
  * @param item			- pointer to RuleItem for TU-cost
  * @return, TUs to perform action
@@ -1711,9 +1711,7 @@ int BattleUnit::getActionTUs(
 		const BattleActionType actionType,
 		const RuleItem* rule) const
 {
-//	if (rule == NULL)
-//		return 0;
-
+//	if (rule == NULL) return 0;
 	int cost = 0;
 
 	switch (actionType)
