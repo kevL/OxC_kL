@@ -2306,20 +2306,21 @@ void BattlescapeGenerator::loadRMP(
 		throw Exception(filename.str() + " not found");
 	}
 
+	const int nodeOffset = static_cast<int>(_battleSave->getNodes()->size());
 	int
-		nodeOffset = static_cast<int>(_battleSave->getNodes()->size()),
-
 		pos_x,
 		pos_y,
 		pos_z,
 
 		type,
-		rank,
+		nodeRank,
 		flags,
 		reserved,
 		priority;
 
-	while (mapFile.read((char*)& value, sizeof(value)))
+	while (mapFile.read(
+					(char*)& value,
+					sizeof(value)))
 	{
 		pos_x = static_cast<int>(value[1]);
 		pos_y = static_cast<int>(value[0]);
@@ -2329,26 +2330,26 @@ void BattlescapeGenerator::loadRMP(
 			&& pos_y < mapblock->getSizeY()
 			&& pos_z < _mapsize_z)
 		{
-			Position pos = Position(
-								xoff + pos_x,
-								yoff + pos_y,
-								mapblock->getSizeZ() - pos_z - 1);
+			const Position pos = Position(
+										xoff + pos_x,
+										yoff + pos_y,
+										mapblock->getSizeZ() - pos_z - 1);
 
 			type		= static_cast<int>(value[19]);
-			rank		= static_cast<int>(value[20]);
+			nodeRank	= static_cast<int>(value[20]);
 			flags		= static_cast<int>(value[21]);
 			reserved	= static_cast<int>(value[22]);
 			priority	= static_cast<int>(value[23]);
 
-			Node* node = new Node(
-								_battleSave->getNodes()->size(),
-								pos,
-								segment,
-								type,
-								rank,
-								flags,
-								reserved,
-								priority);
+			Node* const node = new Node(
+									_battleSave->getNodes()->size(),
+									pos,
+									segment,
+									type,
+									nodeRank,
+									flags,
+									reserved,
+									priority);
 
 			for (int
 					j = 0;
@@ -2390,9 +2391,9 @@ void BattlescapeGenerator::fuelPowerSources()
 		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)
 			&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE)
 		{
-			BattleItem* alienFuel = new BattleItem(
-												_rules->getItem(_rules->getAlienFuel()),
-												_battleSave->getCurrentItemId());
+			BattleItem* const alienFuel = new BattleItem(
+													_rules->getItem(_rules->getAlienFuel()),
+													_battleSave->getCurrentItemId());
 
 			_battleSave->getItems()->push_back(alienFuel);
 			_battleSave->getTiles()[i]->addItem(
@@ -2407,52 +2408,43 @@ void BattlescapeGenerator::fuelPowerSources()
  */
 void BattlescapeGenerator::explodePowerSources()
 {
-	//Log(LOG_INFO) << "BattlescapeGenerator::explodePowerSources()";
 	for (int
 			i = 0;
 			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
-		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)
+		if (_battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT) != NULL
 			&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)->getSpecialType() == UFO_POWER_SOURCE
 			&& RNG::percent(80) == true)
 		{
-			Position pos;
-			pos.x = _battleSave->getTiles()[i]->getPosition().x * 16;
-			pos.y = _battleSave->getTiles()[i]->getPosition().y * 16;
-			pos.z = _battleSave->getTiles()[i]->getPosition().z * 24 + 12;
+			const Position pos = Position(
+									_battleSave->getTiles()[i]->getPosition().x * 16,
+									_battleSave->getTiles()[i]->getPosition().y * 16,
+									_battleSave->getTiles()[i]->getPosition().z * 24 + 12);
 
-			int crashPower = _ufo->getCrashPower(); // ( range: 50+ to 100- )
-			//Log(LOG_INFO) << ". crashPower = " << crashPower;
-			if (RNG::percent(crashPower / 2)) // chance for full range Explosion (even if crash took low damage)
-			{
-				crashPower = RNG::generate(1, 100);
-				//Log(LOG_INFO) << ". . Alt crashPower = " << crashPower;
-			}
+			double power = static_cast<double>(_ufo->getCrashPower());	// range: ~50+ to ~100-
+			if (RNG::percent(static_cast<int>(power) / 2) == true)		// chance for full range Explosion (even if crash took low damage)
+				power = RNG::generate(1., 100.);
 
-			const double explForce = RNG::generate(0.1, 2.0) * static_cast<double>(crashPower);
-			//Log(LOG_INFO) << ". explForce = " << (int)explForce;
+			power *= RNG::generate(0.1, 2.);
+			power += std::pow(power, 2) / 160.0;
 
-//			int power = static_cast<int>(((pow(explForce, 3)) / 32000.0) + (static_cast<double>(crashPower) - 50.0));
-			const int power = static_cast<int>(((pow(explForce, 2)) / 160.0) + (static_cast<double>(crashPower)));
-			//Log(LOG_INFO) << ". power = " << power;
-
-			_battleSave->getTileEngine()->explode(
-												pos,
-												power,
-												DT_HE,
-												21);
+			if (power > 0.5)
+				_battleSave->getTileEngine()->explode(
+													pos,
+													static_cast<int>(power),
+													DT_HE,
+													21);
 		}
 	}
 
-	Tile* tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
+	const Tile* tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
 	while (tile != NULL)
 	{
-		Position pos = Position(
-							tile->getPosition().x * 16,
-							tile->getPosition().y * 16,
-							tile->getPosition().z * 24);
-		pos += Position(8, 8, 0);
+		const Position pos = Position(
+									tile->getPosition().x * 16 + 8,
+									tile->getPosition().y * 16 + 8,
+									tile->getPosition().z * 24);
 		_battleSave->getTileEngine()->explode(
 											pos,
 											tile->getExplosive(),
@@ -2515,7 +2507,6 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 		int tex,
 		double lat)
 {
-//	RuleTerrain* ret = NULL; // test
 	RuleTerrain* terrain = NULL;
 
 	const std::vector<std::string>& terrains = _rules->getTerrainList();
@@ -2524,15 +2515,13 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 			i != terrains.end();
 			++i)
 	{
-		//Log(LOG_INFO) << "Gen:getTerrain() terrain = " << (*i);
 		terrain = _rules->getTerrain(*i);
 
-		for (std::vector<int>::iterator
+		for (std::vector<int>::const_iterator
 				j = terrain->getTextures()->begin();
 				j != terrain->getTextures()->end();
 				++j)
 		{
-			//Log(LOG_INFO) << "Gen:getTerrain() texture = " << (*j);
 			if (*j == tex
 				&& (terrain->getHemisphere() == 0
 					|| (terrain->getHemisphere() < 0
@@ -2540,10 +2529,7 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 					|| (terrain->getHemisphere() > 0
 						&& lat >= 0.0)))
 			{
-				//Log(LOG_INFO) << "Gen:getTerrain() return = " << (*i);
 				return terrain;
-//				ret = terrain;	// test
-//				break;			// test
 			}
 		}
 	}
@@ -2551,7 +2537,6 @@ RuleTerrain* BattlescapeGenerator::getTerrain(
 	assert(0 && "No matching terrain for globe texture");
 
 	return NULL;
-//	return ret; // test
 }
 
 /**
@@ -2860,7 +2845,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 			throw Exception("Map generator encountered an error: multiple commands are sharing the same label.");
 		}
 
-		bool &success = conditionals[command->getLabel()] = false;
+		bool& success = conditionals[command->getLabel()] = false;
 
 
 		// if this command runs conditionally on the failures or successes of previous commands
@@ -2909,17 +2894,17 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 					j < command->getExecutions();
 					++j)
 			{
+				MapBlock* block = NULL;
 				int
 					x,
 					y;
-				MapBlock* block = NULL;
 
 				switch (command->getType())
 				{
 					case MSC_ADDBLOCK:
 						block = command->getNextBlock(_terrain);
 						// select an X and Y position from within the rects, using an even distribution
-						if (block
+						if (block != NULL
 							&& selectPosition(
 											command->getRects(),
 											x,
@@ -2927,15 +2912,15 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 											block->getSizeX(),
 											block->getSizeY()) == true)
 						{
-							success = addBlock(x, y, block)
-								   || success;
+							success = (addBlock(x, y, block) == true)
+									|| success;
 						}
 					break;
 
 					case MSC_ADDLINE:
-						success = addLine(
+						success = (addLine(
 										(MapDirection)(command->getDirection()),
-										command->getRects());
+										command->getRects()) == true);
 					break;
 
 					case MSC_ADDCRAFT:
@@ -2964,7 +2949,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 										y < _craftPos.y + _craftPos.h;
 										++y)
 								{
-									if (_blocks[x][y])
+									if (_blocks[x][y] != NULL)
 										loadMAP(
 												_blocks[x][y],
 												x * 10,
@@ -3011,6 +2996,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 												0);
 								}
 							}
+
 							success = true;
 						}
 					break;
@@ -3032,11 +3018,11 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 											x,
 											y,
 											block->getSizeX(),
-											block->getSizeY()))
+											block->getSizeY()) == true)
 							{
 								// fill area will succeed if even one block is added
-								success = addBlock(x, y, block)
-									   || success;
+								success = (addBlock(x, y, block) == true)
+										|| success;
 							}
 							else
 								break;
@@ -3247,10 +3233,10 @@ void BattlescapeGenerator::generateBaseMap()
 	{
 		if ((*i)->getBuildTime() == 0)
 		{
-			int
-				num = 0,
+			const int
 				xLimit = (*i)->getX() + (*i)->getRules()->getSize() - 1,
 				yLimit = (*i)->getY() + (*i)->getRules()->getSize() - 1;
+			int num = 0;
 
 			for (int
 					y = (*i)->getY();
@@ -3319,18 +3305,18 @@ void BattlescapeGenerator::generateBaseMap()
 								if ((k + l) %2 == 0)
 								{
 									Tile
-										*t = _battleSave->getTile(Position(
-																		k,
-																		l,
-																		groundLevel)),
-										*tEast = _battleSave->getTile(Position(
-																		k + 1,
-																		l,
-																		groundLevel)),
-										*tSouth = _battleSave->getTile(Position(
-																		k,
-																		l + 1,
-																		groundLevel));
+										* const t = _battleSave->getTile(Position(
+																				k,
+																				l,
+																				groundLevel)),
+										* const tEast = _battleSave->getTile(Position(
+																				k + 1,
+																				l,
+																				groundLevel)),
+										* const tSouth = _battleSave->getTile(Position(
+																				k,
+																				l + 1,
+																				groundLevel));
 
 									if (t != NULL
 										&& t->getMapData(MapData::O_FLOOR)
@@ -3443,8 +3429,8 @@ void BattlescapeGenerator::loadNodes()
 				&& _blocks[itX][itY] != _dummy)
 			{
 				if (!(
-					_blocks[itX][itY]->isInGroup(MT_LANDINGZONE)
-						&& _landingzone[itX][itY]))
+						_blocks[itX][itY]->isInGroup(MT_LANDINGZONE)
+							&& _landingzone[itX][itY]))
 				{
 					loadRMP(
 							_blocks[itX][itY],
@@ -3467,14 +3453,14 @@ void BattlescapeGenerator::attachNodeLinks()
 			i != _battleSave->getNodes()->end();
 			++i)
 	{
-		Node* node = (*i);
+		Node* const node = *i;
 
-		int
+		const int
 			segmentX = node->getPosition().x / 10,
 			segmentY = node->getPosition().y / 10,
-			neighbourSegments[4],
 			neighbourDirections[4]			= {-2, -3, -4, -5},
 			neighbourDirectionsInverted[4]	= {-4, -5, -2, -3};
+		int neighbourSegments[4];
 
 		if (segmentX == (_mapsize_x / 10) - 1)
 			neighbourSegments[0] = -1;
@@ -3808,7 +3794,7 @@ bool BattlescapeGenerator::addBlock(
 		int y,
 		MapBlock* block)
 {
-	int
+	const int
 		xSize = (block->getSizeX() - 1) / 10,
 		ySize = (block->getSizeY() - 1) / 10;
 
@@ -3901,7 +3887,10 @@ void BattlescapeGenerator::drillModules(
 		* floor = tunnelInfo->getMCDReplacement("floor");
 
 	SDL_Rect rect;
-	rect.x = rect.y = rect.w = rect.h = 3;
+	rect.x =
+	rect.y =
+	rect.w =
+	rect.h = 3;
 
 	if (rects->empty() == false)
 		rect = *rects->front();
@@ -4027,7 +4016,7 @@ void BattlescapeGenerator::drillModules(
 					{
 						Tile* tile = _battleSave->getTile(Position(
 																i * 10 + k,
-																j * 10 +9,
+																j * 10 + 9,
 																tunnelInfo->level));
 						if (tile != NULL)
 						{
@@ -4199,7 +4188,7 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 			z != deleted.end();
 			++z)
 	{
-		int
+		const int
 			x = (*z).first,
 			y = (*z).second;
 

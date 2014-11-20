@@ -205,8 +205,8 @@ GeoscapeState::GeoscapeState()
 		_zoomInEffectDone(false),
 		_zoomOutEffectDone(false),
 		_minimizedDogfights(0),
-		_dfLon(0.0),
-		_dfLat(0.0),
+		_dfLon(0.),
+		_dfLat(0.),
 		_day(-1),
 		_month(-1),
 		_year(-1)
@@ -473,8 +473,12 @@ GeoscapeState::GeoscapeState()
 	_sidebar->copy(geobord);
 	_game->getResourcePack()->getSurface("ALTGEOBORD.SCR")->blit(_bg); */
 
-	_sideLine->drawRect(0, 0, _sideLine->getWidth(), _sideLine->getHeight(), 15);
-
+	_sideLine->drawRect(
+					0,
+					0,
+					_sideLine->getWidth(),
+					_sideLine->getHeight(),
+					15);
 /*kL
 	_btnIntercept->initText(_game->getResourcePack()->getFont("FONT_GEO_BIG"), _game->getResourcePack()->getFont("FONT_GEO_SMALL"), _game->getLanguage());
 	_btnIntercept->setColor(Palette::blockOffset(15)+6);
@@ -664,21 +668,40 @@ GeoscapeState::GeoscapeState()
 	_btnDetail->onMousePress((ActionHandler)& GeoscapeState::btnDetailPress);
 //	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnDetailPress, keyGeoToggleDetail);
 
-	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnRotateLeftPress, Options::keyGeoLeft);
-	_btnDetail->onKeyboardRelease((ActionHandler)& GeoscapeState::btnRotateLeftRelease, Options::keyGeoLeft);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateLeftPress,
+					Options::keyGeoLeft);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateLeftRelease,
+					Options::keyGeoLeft);
 
-	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnRotateRightPress, Options::keyGeoRight);
-	_btnDetail->onKeyboardRelease((ActionHandler)& GeoscapeState::btnRotateRightRelease, Options::keyGeoRight);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateRightPress,
+					Options::keyGeoRight);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateRightRelease,
+					Options::keyGeoRight);
 
-	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnRotateUpPress, Options::keyGeoUp);
-	_btnDetail->onKeyboardRelease((ActionHandler)& GeoscapeState::btnRotateUpRelease, Options::keyGeoUp);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateUpPress,
+					Options::keyGeoUp);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateUpRelease,
+					Options::keyGeoUp);
 
-	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnRotateDownPress, Options::keyGeoDown);
-	_btnDetail->onKeyboardRelease((ActionHandler)& GeoscapeState::btnRotateDownRelease, Options::keyGeoDown);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnRotateDownPress,
+					Options::keyGeoDown);
+	_btnDetail->onKeyboardRelease(
+					(ActionHandler)& GeoscapeState::btnRotateDownRelease,
+					Options::keyGeoDown);
 
-	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnZoomInLeftClick, Options::keyGeoZoomIn);
-	_btnDetail->onKeyboardPress((ActionHandler)& GeoscapeState::btnZoomOutLeftClick, Options::keyGeoZoomOut);
-
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnZoomInLeftClick,
+					Options::keyGeoZoomIn);
+	_btnDetail->onKeyboardPress(
+					(ActionHandler)& GeoscapeState::btnZoomOutLeftClick,
+					Options::keyGeoZoomOut);
 	// kL_end.
 /*kL
 	_btnRotateLeft->onMousePress((ActionHandler)& GeoscapeState::btnRotateLeftPress);
@@ -723,14 +746,14 @@ GeoscapeState::GeoscapeState()
 		_txtHour->setSmall();
 		_txtHourSep->setSmall();
 		_txtMin->setSmall();
-//kL		_txtMinSep->setSmall();
+//kL	_txtMinSep->setSmall();
 	}
 	else						// kL
 	{
 		_txtHour->setBig();		// kL
 		_txtHourSep->setBig();	// kL
 		_txtMin->setBig();		// kL
-//kL		_txtMinSep->setBig();	// kL
+//kL	_txtMinSep->setBig();	// kL
 	}
 
 //kL	if (Options::showFundsOnGeoscape) _txtHour->setSmall(); else _txtHour->setBig();
@@ -926,8 +949,8 @@ void GeoscapeState::init()
 		popup(new ListSaveState(OPT_GEOSCAPE));
 	}
 
-	if (_dogfights.empty() == true
-		&& _dogfightStartTimer->isRunning() == false)
+	if (_dogfights.empty() == true)
+//		&& _dogfightStartTimer->isRunning() == false)
 	{
 		_game->getResourcePack()->playMusic(OpenXcom::res_MUSIC_GEO_GLOBE);
 	}
@@ -1089,7 +1112,7 @@ void GeoscapeState::timeAdvance()
 				&& _pause == false;
 			++i)
 	{
-		TimeTrigger trigger = _savedGame->getTime()->advance();
+		const TimeTrigger trigger = _savedGame->getTime()->advance();
 		switch (trigger)
 		{
 			case TIME_1MONTH:	time1Month();
@@ -1135,7 +1158,7 @@ void GeoscapeState::time5Seconds()
 				{
 					(*i)->think();
 
-					if ((*i)->reachedDestination())
+					if ((*i)->reachedDestination() == true)
 					{
 						const size_t tsCount = _savedGame->getTerrorSites()->size();
 						AlienMission* mission = (*i)->getMission();
@@ -3370,19 +3393,19 @@ void GeoscapeState::handleDogfights()
 
 	_minimizedDogfights = 0; // handle dogfights logic.
 
-	std::list<DogfightState*>::iterator i = _dogfights.begin();
+	std::list<DogfightState*>::const_iterator i = _dogfights.begin();
 	while (i != _dogfights.end())
 	{
-		if ((*i)->isMinimized())
+		if ((*i)->isMinimized() == true)
 			_minimizedDogfights++;
 //kL	else
 //kL		_globe->rotateStop();
 
 		(*i)->think();
 
-		if ((*i)->dogfightEnded())
+		if ((*i)->dogfightEnded() == true)
 		{
-			if ((*i)->isMinimized())
+			if ((*i)->isMinimized() == true)
 				_minimizedDogfights--;
 
 			delete *i;
@@ -3404,12 +3427,12 @@ int GeoscapeState::minimizedDogfightsCount()
 {
 	int minimizedDogfights = 0;
 
-	for (std::list<DogfightState*>::iterator
+	for (std::list<DogfightState*>::const_iterator
 			i = _dogfights.begin();
 			i != _dogfights.end();
 			++i)
 	{
-		if ((*i)->isMinimized())
+		if ((*i)->isMinimized() == true)
 			minimizedDogfights++;
 	}
 

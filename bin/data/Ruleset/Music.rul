@@ -15,7 +15,7 @@ music:
   - type: GEO_GLOBE
     files: [ GMGEO1, GMGEO2, PSGEO1, PSGEO2, PSGEO3, LCGEO1, LCGEO2 ]
   - type: GEO_INTERCEPT
-    files: [ GMINTER, PSINTER, LCINTER ]
+    files: [ GMINTER, PSINTER ]
   - type: GEO_MONTHLYREPORT
     files: [ 12GEO2 ]
   - type: GEO_BRIEFING
