@@ -225,7 +225,7 @@ void BattlescapeGenerator::setAlienRace(const std::string& alienRace)
 {
 	//Log(LOG_INFO) << "gen, race = " << alienRace;
 	_alienRace = alienRace;
-	_game->getSavedGame()->getSavedBattle()->setAlienRace(alienRace);
+	_battleSave->setAlienRace(alienRace);
 }
 
 /**
@@ -252,7 +252,7 @@ void BattlescapeGenerator::nextStage()
 			j != _battleSave->getUnits()->end();
 			++j)
 	{
-		if ((_game->getSavedGame()->getSavedBattle()->isAborted()
+		if ((_battleSave->isAborted()
 				&& !(*j)->isInExitArea(END_POINT))
 			|| (*j)->getOriginalFaction() == FACTION_HOSTILE)
 		{
@@ -266,9 +266,9 @@ void BattlescapeGenerator::nextStage()
 		(*j)->setPosition(Position(-1,-1,-1), false);
 	}
 
-	while (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
+	while (_battleSave->getSide() != FACTION_PLAYER)
 	{
-		_game->getSavedGame()->getSavedBattle()->endBattleTurn();
+		_battleSave->endBattleTurn();
 	}
 
 	_battleSave->resetTurnCounter();
@@ -291,9 +291,9 @@ void BattlescapeGenerator::nextStage()
 				_mapsize_y,
 				_mapsize_z);
 
-	const std::vector<MapScript*>* script = _game->getRuleset()->getMapScript(_terrain->getScript());
-	if (_game->getRuleset()->getMapScript(ruleDeploy->getScript()))
-		script = _game->getRuleset()->getMapScript(ruleDeploy->getScript());
+	const std::vector<MapScript*>* script = _rules->getMapScript(_terrain->getScript());
+	if (_rules->getMapScript(ruleDeploy->getScript()))
+		script = _rules->getMapScript(ruleDeploy->getScript());
 	else if (ruleDeploy->getScript() != "")
 	{
 		throw Exception("Map generator encountered an error: " + ruleDeploy->getScript() + " script not found.");
@@ -501,9 +501,9 @@ void BattlescapeGenerator::run()
 			ruleDeploy); */
 
 
-	const std::vector<MapScript*>* script = _game->getRuleset()->getMapScript(_terrain->getScript());
-	if (_game->getRuleset()->getMapScript(ruleDeploy->getScript()))
-		script = _game->getRuleset()->getMapScript(ruleDeploy->getScript());
+	const std::vector<MapScript*>* script = _rules->getMapScript(_terrain->getScript());
+	if (_rules->getMapScript(ruleDeploy->getScript()))
+		script = _rules->getMapScript(ruleDeploy->getScript());
 	else if (ruleDeploy->getScript() != "")
 	{
 		throw Exception("Map generator encountered an error: " + ruleDeploy->getScript() + " script not found.");
@@ -519,10 +519,10 @@ void BattlescapeGenerator::run()
 	setTacticalSprites(); // kL
 	deployXCOM(); // <-- XCOM DEPLOYMENT.
 
-	size_t unitCount = _battleSave->getUnits()->size();
+	const size_t unitCount = _battleSave->getUnits()->size();
 
 	deployAliens( // <-- ALIEN DEPLOYMENT.
-			_game->getRuleset()->getAlienRace(_alienRace),
+			_rules->getAlienRace(_alienRace),
 			ruleDeploy);
 
 	if (unitCount == _battleSave->getUnits()->size())
@@ -534,7 +534,7 @@ void BattlescapeGenerator::run()
 
 	deployCivilians(ruleDeploy->getCivilians());
 
-	if (_generateFuel)
+	if (_generateFuel == true)
 		fuelPowerSources();
 
 	if (_ufo != NULL
@@ -1966,14 +1966,14 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		|| placeUnitNearFriend(unit))
 	{
 		unit->setAIState(new AlienBAIState(
-										_game->getSavedGame()->getSavedBattle(),
+										_battleSave,
 										unit,
 										node));
 		unit->setRankInt(alienRank);
 
 		int dir = -1;
 
-		Position craft = _game->getSavedGame()->getSavedBattle()->getUnits()->at(0)->getPosition();
+		Position craft = _battleSave->getUnits()->at(0)->getPosition();
 		if (RNG::percent(difficulty * 20
 			&& _battleSave->getTileEngine()->distance(
 													node->getPosition(),
@@ -2055,7 +2055,7 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 		|| placeUnitNearFriend(unit))
 	{
 		unit->setAIState(new CivilianBAIState(
-										_game->getSavedGame()->getSavedBattle(),
+										_battleSave,
 										unit,
 										node));
 
@@ -2602,7 +2602,7 @@ void BattlescapeGenerator::setTacticalSprites()
 	}
 
 
-	Armor* const armorRule = _game->getRuleset()->getArmor(strArmor);
+	Armor* const armorRule = _rules->getArmor(strArmor);
 
 	Base* base = _base; // just don't muck w/ _base here ... heh.
 	if (_craft != NULL)
@@ -2831,8 +2831,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 	{
 		(*i)->loadData();
 
-		if (_game->getRuleset()->getMCDPatch((*i)->getName()))
-			_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
+		if (_rules->getMCDPatch((*i)->getName()))
+			_rules->getMCDPatch((*i)->getName())->modifyData(*i);
 
 		_battleSave->getMapDataSets()->push_back(*i);
 		mapDataSetIDOffset++;
@@ -3125,8 +3125,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 		{
 			(*i)->loadData();
 
-			if (_game->getRuleset()->getMCDPatch((*i)->getName()))
-				_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
+			if (_rules->getMCDPatch((*i)->getName()))
+				_rules->getMCDPatch((*i)->getName())->modifyData(*i);
 
 			_battleSave->getMapDataSets()->push_back(*i);
 			craftDataSetIDOffset++;
@@ -3170,8 +3170,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 		{
 			(*i)->loadData();
 
-			if (_game->getRuleset()->getMCDPatch((*i)->getName()))
-				_game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
+			if (_rules->getMCDPatch((*i)->getName()))
+				_rules->getMCDPatch((*i)->getName())->modifyData(*i);
 
 			_battleSave->getMapDataSets()->push_back(*i);
 		}

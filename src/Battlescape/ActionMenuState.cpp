@@ -85,7 +85,7 @@ ActionMenuState::ActionMenuState(
 	}
 
 	// Build the popup menu
-	RuleItem* weapon = _action->weapon->getRules();
+	const RuleItem* const weapon = _action->weapon->getRules();
 	int id = 0;
 
 	if (weapon->isFixed() == false) // throwing (if not a fixed weapon)
@@ -95,7 +95,7 @@ ActionMenuState::ActionMenuState(
 				&id);
 
 	// kL_begin:
-	SavedGame* save = _game->getSavedGame();
+	SavedGame* const save = _game->getSavedGame();
 	if (save->getSavedBattle()->getSelectedUnit()->getOriginalFaction() != FACTION_HOSTILE
 		&& save->isResearched(_action->weapon->getRules()->getRequirements()) == false)
 	{
@@ -117,7 +117,7 @@ ActionMenuState::ActionMenuState(
 					&id);
 	}
 
-	if (weapon->getTUMelee())
+	if (weapon->getTUMelee() > 0)
 	{
 		if (weapon->getBattleType() == BT_MELEE
 			&& weapon->getDamageType() == DT_STUN)
@@ -163,9 +163,9 @@ ActionMenuState::ActionMenuState(
 
 	if (weapon->getBattleType() == BT_FIREARM)
 	{
-		if (weapon->isWaypoint()
-			|| (_action->weapon->getAmmoItem()
-				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint()))
+		if (weapon->isWaypoint() == true
+			|| (_action->weapon->getAmmoItem() != NULL
+				&& _action->weapon->getAmmoItem()->getRules()->isWaypoint() == true))
 		{
 			addItem(
 					BA_LAUNCH,
@@ -173,7 +173,7 @@ ActionMenuState::ActionMenuState(
 					&id);
 		}
 
-		if (_action->weapon->getAmmoItem()) // kL
+		if (_action->weapon->getAmmoItem() != NULL) // kL
 		{
 			if (weapon->getAccuracySnap() != 0)
 				addItem(
@@ -239,9 +239,9 @@ void ActionMenuState::addItem(
 		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acu); // kL
 	}
 
-	int tu = _action->actor->getActionTUs(
-										baType,
-										_action->weapon);
+	const int tu = _action->actor->getActionTUs(
+											baType,
+											_action->weapon);
 	s2 = tr("STR_TIME_UNITS_SHORT").arg(tu);
 
 
@@ -283,7 +283,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 {
 	_game->getSavedGame()->getSavedBattle()->getPathfinding()->removePreview();
 
-	RuleItem* weapon = _action->weapon->getRules();
+	const RuleItem* const weapon = _action->weapon->getRules();
 	int btnID = -1;
 
 	for (size_t // got to find out which button was pressed
@@ -298,12 +298,12 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 
 	if (btnID != -1)
 	{
-		_action->TU		= _actionMenu[btnID]->getTUs();
-		_action->type	= _actionMenu[btnID]->getAction();
+		_action->TU = _actionMenu[btnID]->getTUs();
+		_action->type = _actionMenu[btnID]->getAction();
 
 		if (_action->type != BA_THROW
 			&& _game->getSavedGame()->getSavedBattle()->getDepth() == 0
-			&& weapon->isWaterOnly())
+			&& weapon->isWaterOnly() == true)
 		{
 			_action->result = "STR_THIS_EQUIPMENT_WILL_NOT_FUNCTION_ABOVE_WATER";
 			_game->popState();
@@ -338,9 +338,8 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 						&& targetUnit == NULL;
 					++i)
 			{
-				// we can heal a unit that is at the same position, unconscious and healable(=woundable)
-				if ((*i)->getPosition() == _action->actor->getPosition()
-					&& *i != _action->actor
+				if (*i != _action->actor
+					&& (*i)->getPosition() == _action->actor->getPosition()
 					&& (*i)->getStatus() == STATUS_UNCONSCIOUS
 					&& (*i)->isWoundable() == true)
 				{
@@ -356,7 +355,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 																						NULL,
 																						&_action->target))
 			{
-				Tile* tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
+				const Tile* const tile = _game->getSavedGame()->getSavedBattle()->getTile(_action->target);
 				if (tile != NULL
 					&& tile->getUnit() != NULL
 					&& tile->getUnit()->isWoundable() == true)
@@ -365,7 +364,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 				}
 			}
 
-			if (targetUnit)
+			if (targetUnit != NULL)
 			{
 				_game->popState();
 				_game->pushState(new MedikitState(
@@ -381,7 +380,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 		else if (_action->type == BA_USE
 			&& weapon->getBattleType() == BT_SCANNER)
 		{
-			if (_action->actor->spendTimeUnits(_action->TU)) // spend TUs first, then show the scanner
+			if (_action->actor->spendTimeUnits(_action->TU) == true)
 			{
 				_game->popState();
 				_game->pushState(new ScannerState(_action));
@@ -415,8 +414,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 																					_action->actor->getDirection(),
 																					_action->actor,
 																					NULL,
-																					&_action->target)
-																				== false)
+																					&_action->target) == false)
 			{
 				_action->result = "STR_THERE_IS_NO_ONE_THERE";
 			}
