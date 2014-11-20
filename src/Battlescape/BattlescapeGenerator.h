@@ -20,6 +20,11 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
+#include <vector>
+
+#include "../Ruleset/MapScript.h"
+#include "../Ruleset/RuleTerrain.h"
+
 
 namespace OpenXcom
 {
@@ -33,6 +38,7 @@ class BattleUnit;
 class Craft;
 class Game;
 class MapBlock;
+class MapScript;
 class ResourcePack;
 class RuleItem;
 class Ruleset;
@@ -56,12 +62,12 @@ private:
 	bool
 		_allowAutoLoadout,
 		_baseEquipScreen,
-		_isCity,
-		_generateFuel;
+		_craftDeployed,
+		_generateFuel,
+		_isCity;
 	int
 		_alienItemLevel,
-		_craftX,
-		_craftY,
+		_blocksToDo,
 		_craftZ,
 		_mapsize_x,
 		_mapsize_y,
@@ -71,10 +77,21 @@ private:
 		_worldShade;
 	size_t _battleOrder;
 
+	SDL_Rect
+		_craftPos,
+		_ufoPos;
+
+	std::vector<std::vector<bool> > _landingzone;
+	std::vector<std::vector<int> >
+		_drillMap,
+		_segments;
+	std::vector<std::vector<MapBlock*> > _blocks;
+
 	AlienBase		* _alienBase;
 	Base			* _base;
 	Craft			* _craft;
 	Game			* _game;
+	MapBlock		* _dummy;
 	ResourcePack	* _res;
 	Ruleset			* _rules;
 	RuleTerrain
@@ -91,7 +108,7 @@ private:
 
 
 	/// Generates a new battlescape map.
-	void generateMap();
+	void generateMap(const std::vector<MapScript*>* script);
 
 	/// Loads an XCom MAP file.
 	int loadMAP(
@@ -153,8 +170,61 @@ private:
 			int tex,
 			double lat);
 
-	/// kL. Sets xCom soldiers' combat clothing style - spritesheets & paperdolls.
-	void setTacticalSprites(); // kL
+	/// Finds a spot near a friend to spawn at.
+	bool placeUnitNearFriend(BattleUnit* unit);
+
+	/// Load all Xcom weapons.
+//	void loadWeapons();
+
+	/// Adds a craft (either a ufo or an xcom craft) somewhere on the map.
+	bool addCraft(
+			MapBlock* craftMap,
+			MapScript* command,
+			SDL_Rect& craftPos);
+	/// Adds a line (generally a road) to the map.
+	bool addLine(
+			MapDirection lineType,
+			const std::vector<SDL_Rect*>* rects);
+	/// Adds a single block at a given position.
+	bool addBlock(
+			int x,
+			int y,
+			MapBlock* block);
+
+	/// Load the nodes from the associated map blocks.
+	void loadNodes();
+	/// Connects all the nodes together.
+	void attachNodeLinks();
+
+	/// Selects an unused position on the map of a given size.
+	bool selectPosition(
+			const std::vector<SDL_Rect*>* rects,
+			int& X,
+			int& Y,
+			int sizeX,
+			int sizeY);
+
+	/// Generates a map from base modules.
+	void generateBaseMap();
+
+	/// Clears a module from the map.
+	void clearModule(
+			int x,
+			int y,
+			int sizeX,
+			int sizeY);
+
+	/// Drills some tunnels between map blocks.
+	void drillModules(
+			TunnelData* tunnelInfo,
+			const std::vector<SDL_Rect*>* rects,
+			MapDirection dir);
+
+	/// Clears all modules in a rect from a command.
+	bool removeBlocks(MapScript* command);
+
+	/// Sets xCom soldiers' combat clothing style - spritesheets & paperdolls.
+	void setTacticalSprites();
 
 
 	public:
@@ -163,10 +233,10 @@ private:
 		/// Cleans up the BattlescapeGenerator.
 		~BattlescapeGenerator();
 
-		/// kL. Sets if Ufo has landed/crashed at a city.
-		void setIsCity(const bool isCity = true); // kL
-		/// kL. Sets the terrainRule of where a ufo crashed or landed.
-		void setWorldTerrain(RuleTerrain* terrain); // kL
+		/// Sets if Ufo has landed/crashed at a city.
+		void setIsCity(const bool isCity = true);
+		/// Sets the terrainRule of where a ufo crashed or landed.
+		void setWorldTerrain(RuleTerrain* terrain);
 		/// Sets the polygon texture.
 		void setWorldTexture(int texture);
 		/// Sets the polygon shade.
@@ -193,16 +263,10 @@ private:
 		/// Sets the alien item level.
 		void setAlienItemlevel(int alienItemLevel);
 
-		/// Finds a spot near a friend to spawn at.
-		bool placeUnitNearFriend(BattleUnit* unit);
-
 		/// Generates a fake battlescape for Craft & Base soldier-inventory.
 		void runInventory(
 				Craft* craft,
 				Base* base = NULL);
-
-		/// Load all Xcom weapons.
-//		void loadWeapons();
 };
 
 }

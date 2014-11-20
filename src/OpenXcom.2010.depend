@@ -4630,7 +4630,7 @@
 1413136959 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1413136961 f:\git\openxcom\src\ruleset\ruleset.h
+1416458296 f:\git\openxcom\src\ruleset\ruleset.h
 	<map>
 	<string>
 	<vector>
@@ -4722,7 +4722,10 @@
 	<vector>
 	"../Engine/State.h"
 
-1414009052 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1416477006 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+	<vector>
+	"../Ruleset/MapScript.h"
+	"../Ruleset/RuleTerrain.h"
 
 1413136955 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
@@ -5606,7 +5609,7 @@
 	"Position.h"
 	"../Engine/State.h"
 
-1416256091 f:\git\openxcom\src\ruleset\aliendeployment.h
+1416476163 f:\git\openxcom\src\ruleset\aliendeployment.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5938,7 +5941,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1413136960 f:\git\openxcom\src\ruleset\mapblock.h
+1416460110 f:\git\openxcom\src\ruleset\mapblock.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5953,7 +5956,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413136961 f:\git\openxcom\src\ruleset\ruleterrain.h
+1416459073 f:\git\openxcom\src\ruleset\ruleterrain.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -6384,7 +6387,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1416197939 source:f:\git\openxcom\src\battlescape\map.cpp
+1416461007 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -9223,7 +9226,7 @@
 1413136960 f:\git\openxcom\src\ruleset\extrasounds.h
 	<yaml-cpp/yaml.h>
 
-1416256122 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
+1416476157 source:f:\git\openxcom\src\ruleset\aliendeployment.cpp
 	"AlienDeployment.h"
 	"../Engine/RNG.h"
 
@@ -9249,9 +9252,11 @@
 1413136960 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
 	"ExtraStrings.h"
 
-1413828342 source:f:\git\openxcom\src\ruleset\mapblock.cpp
+1416477039 source:f:\git\openxcom\src\ruleset\mapblock.cpp
 	"MapBlock.h"
+	<sstream>
 	"../Battlescape/Position.h"
+	"../Engine/Exception.h"
 
 1416134606 source:f:\git\openxcom\src\ruleset\mapdata.cpp
 	"MapData.h"
@@ -9318,7 +9323,7 @@
 1413136961 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1414006371 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1416458796 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9333,6 +9338,7 @@
 	"ExtraSprites.h"
 	"ExtraStrings.h"
 	"MapDataSet.h"
+	"MapScript.h"
 	"MCDPatch.h"
 	"RuleAlienMission.h"
 	"RuleBaseFacility.h"
@@ -9375,7 +9381,7 @@
 1416141940 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
-1413831020 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
+1416459820 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
 	"MapBlock.h"
 	"MapDataSet.h"
 	"Ruleset.h"
@@ -9570,7 +9576,7 @@
 1415931862 source:f:\git\openxcom\src\savegame\movingtarget.cpp
 	"MovingTarget.h"
 
-1413601158 source:f:\git\openxcom\src\savegame\node.cpp
+1416458036 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
 1415050286 source:f:\git\openxcom\src\savegame\production.cpp
@@ -9599,7 +9605,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1416210801 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1416457727 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -12189,4 +12195,19 @@
 
 1413136956 f:\git\openxcom\src\battlescape\particle.h
 	<SDL_types.h>
+
+1416477006 f:\git\openxcom\src\ruleset\mapscript.h
+	<vector>
+	<string>
+	<SDL_video.h>
+	<yaml-cpp/yaml.h>
+	"MapBlock.h"
+	"RuleTerrain.h"
+
+1416475859 source:f:\git\openxcom\src\ruleset\mapscript.cpp
+	"MapScript.h"
+	<sstream>
+	<yaml-cpp/yaml.h>
+	"../Engine/Exception.h"
+	"../Engine/RNG.h"
 

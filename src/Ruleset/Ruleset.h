@@ -46,6 +46,7 @@ class ExtraSprites;
 class ExtraStrings;
 class Game; // kL
 class MapDataSet;
+class MapScript;
 class MCDPatch;
 class ResourcePack;
 class RuleAlienMission;
@@ -140,6 +141,7 @@ protected:
 	std::vector<std::vector<int> > _alienItemLevels;
 
 	std::vector<SoldierNamePool*> _names;
+	std::vector<StatString*> _statStrings;
 
 	std::map<std::string, AlienDeployment*>		_alienDeployments;
 	std::map<std::string, AlienRace*>			_alienRaces;
@@ -165,10 +167,9 @@ protected:
 	std::map<std::string, RuleUfo*>				_ufos;
 	std::map<std::string, SoundDefinition*>		_soundDefs;
 	std::map<std::string, UfoTrajectory*>		_ufoTrajectories;
-
-	std::vector<StatString*> _statStrings;
-
 	std::map<std::string, Unit*> _units;
+
+	std::map<std::string, std::vector<MapScript*> > _mapScripts;
 
 	std::vector<std::pair<std::string, ExtraMusic*> >	_extraMusic; // sza_ExtraMusic
 	std::vector<std::pair<std::string, ExtraSounds*> >	_extraSounds;
@@ -356,14 +357,17 @@ protected:
 		/// Gets information on an interface element.
 		RuleInterface* getInterface(const std::string id) const;
 
-		/// Gets the ruleset for the globe
+		/// Gets the ruleset for the globe.
 		RuleGlobe* getGlobe() const;
 
 		/// Gets the list of selective files for insertion into internal Cat files.
 		const std::map<std::string, SoundDefinition*>* getSoundDefinitions() const;
 
-		/// Gets the list of transparency colors,
+		/// Gets the list of transparency colors.
 		const std::vector<SDL_Color>* getTransparencies() const;
+
+		/// Gets the list of MapScripts.
+		const std::vector<MapScript*>* getMapScript(std::string id) const;
 };
 
 }

@@ -19,7 +19,11 @@
 
 #include "MapBlock.h"
 
+#include <sstream>
+
 #include "../Battlescape/Position.h"
+
+#include "../Engine/Exception.h"
 
 
 namespace OpenXcom
@@ -32,26 +36,18 @@ namespace OpenXcom
  * @param size_y	- size Y
  * @param type		- MapBlockType enum (MapBlock.h)
  */
-MapBlock::MapBlock(
-		const std::string& name,
-		int size_x,
-		int size_y,
-		MapBlockType type)
+MapBlock::MapBlock(const std::string& name)
 	:
 		_name(name),
-		_size_x(size_x),
-		_size_y(size_y),
-		_size_z(0),
-		_type(type),
-		_subType(MT_UNDEFINED),
-		_frequency(1),
-		_timesUsed(0),
-		_maxCount(-1)
+		_size_x(10),
+		_size_y(10),
+		_size_z(4)
 {
+	_groups.push_back(0);
 }
 
 /**
- * MapBlock desctruction.
+ * MapBlock destruction.
  */
 MapBlock::~MapBlock()
 {
@@ -63,25 +59,35 @@ MapBlock::~MapBlock()
  */
 void MapBlock::load(const YAML::Node& node)
 {
-	_name	= node["name"].as<std::string>(_name);
-	_size_x	= node["width"].as<int>(_size_x);
-	_size_y	= node["length"].as<int>(_size_y);
-	_size_z	= node["height"].as<int>(_size_z);
+	_name	= node["name"]		.as<std::string>(_name);
+	_size_x	= node["width"]		.as<int>(_size_x);
+	_size_y	= node["length"]	.as<int>(_size_y);
+	_size_z	= node["height"]	.as<int>(_size_z);
 
-	_type = (MapBlockType)node["type"].as<int>(_type);
+	if ((_size_x &10) != 0
+		|| _size_y %10 != 0)
+	{
+		std::stringstream ss;
+		ss << "MapBlock " << _name << ": Size must be divisible by ten";
+		throw Exception(ss.str());
+	}
 
-	if (_subType == MT_UNDEFINED) // kL_note: huh, this seems odd
-		_subType = (MapBlockType)node["type"].as<int>(_type);
-	_subType = (MapBlockType)node["subType"].as<int>(_subType);
+	if (const YAML::Node& map = node["groups"])
+	{
+		_groups.clear();
 
-	_frequency	= node["frequency"].as<int>(_frequency);
-	_maxCount	= node["maxCount"].as<int>(_maxCount);
-	_items		= node["items"].as<std::map<std::string, std::vector<Position> > >(_items);
+		if (map.Type() == YAML::NodeType::Sequence)
+			_groups = map.as<std::vector<int> >(_groups);
+		else
+			_groups.push_back(map.as<int>(0));
+	}
+
+	_items = node["items"].as<std::map<std::string, std::vector<Position> > >(_items);
 }
 
 /**
- * Gets the MapBlock name (string).
- * @return The name.
+ * Gets the MapBlock name as a string.
+ * @return, the type of this block
  */
 std::string MapBlock::getName() const
 {
@@ -90,7 +96,7 @@ std::string MapBlock::getName() const
 
 /**
  * Gets the MapBlock size x.
- * @return The size x in tiles.
+ * @return, x in tiles
  */
 int MapBlock::getSizeX() const
 {
@@ -99,7 +105,7 @@ int MapBlock::getSizeX() const
 
 /**
  * Gets the MapBlock size y.
- * @return The size y in tiles.
+ * @return, y in tiles
  */
 int MapBlock::getSizeY() const
 {
@@ -108,7 +114,7 @@ int MapBlock::getSizeY() const
 
 /**
  * Sets the MapBlock size z.
- * @param size_z The size z.
+ * @param size_z - z in tiles
  */
 void MapBlock::setSizeZ(int size_z)
 {
@@ -117,7 +123,7 @@ void MapBlock::setSizeZ(int size_z)
 
 /**
  * Gets the MapBlock size z.
- * @return The size z.
+ * @return, z in tiles
  */
 int MapBlock::getSizeZ() const
 {
@@ -125,60 +131,20 @@ int MapBlock::getSizeZ() const
 }
 
 /**
- * Gets the type of mapblock.
- * @return The mapblock's type.
+ * Gets whether this MapBlock is from a particular group.
+ * @return, true if block is defined in the specified group
  */
-MapBlockType MapBlock::getType() const
+bool MapBlock::isInGroup(int group)
 {
-	return _type;
+	return std::find(
+					_groups.begin(),
+					_groups.end(),
+					group) != _groups.end();
 }
 
 /**
- * Gets the secondary type of the mapblock, if the primary type is occupied.
- * @return The mapblock's secondary type.
- */
-MapBlockType MapBlock::getSubType() const
-{
-	return _subType;
-}
-
-/**
- * Gets either the remaining uses of the mapblock OR THE FREQUENCY!
- * Remaining limits the number of times a mapblock occurs.
- * Frequency increases the odds of a mapblock occuring.
- * @return int
- */
-int MapBlock::getRemainingUses()
-{
-	if (_maxCount == -1)
-		return _frequency;
-
-	return _maxCount - _timesUsed;
-}
-
-/**
- * Decreases the remaining uses of a mapblock for this session.
- */
-void MapBlock::markUsed()
-{
-	if (_maxCount == -1)
-		return;
-
-	_timesUsed++;
-	if (_timesUsed >= _maxCount)
-		_timesUsed = _maxCount;
-}
-
-/**
- * Resets the remaining uses of a mapblock for this session.
- */
-void MapBlock::reset()
-{
-	_timesUsed = 0;
-}
-
-/**
- *
+ * Gets any items associated with this block and their Positions.
+ * @return, the items and their positions
  */
 std::map<std::string, std::vector<Position> >* MapBlock::getItems()
 {

@@ -70,14 +70,14 @@ private:
 		_civilians,
 		_height,
 		_length,
-		_width,
-		_shade;
+		_shade,
+		_width;
 
 	std::string
-		_type,
-		_terrain,
 		_nextStage,
-		_nextStageRace;
+		_nextStageRace,
+		_script,
+		_type;
 
 	std::vector<std::string> _terrains;
 	std::vector<DeploymentData> _data;
@@ -97,25 +97,33 @@ private:
 		std::string getType() const;
 		/// Gets a pointer to the data.
 		std::vector<DeploymentData>* getDeploymentData();
+
 		/// Gets dimensions.
 		void getDimensions(
 				int* width,
 				int* length,
 				int* height);
+
 		/// Gets civilians.
 		int getCivilians() const;
+
 		/// Gets the terrain for battlescape generation.
 //		std::string getTerrain() const;	// kL_note: This may still be needed for things like
 										// sza_musicRules & alternate pathPreview colors.
 										// (but unlikely, since this is AlienDeployment)
 		/// Gets the terrains for battlescape generation.
 		std::vector<std::string> getTerrains() const;
+
 		/// Gets the shade level for battlescape generation.
 		int getShade() const;
+
 		/// Gets the next stage of the mission.
 		std::string getNextStage() const;
 		/// Gets the next stage's alien race.
 		std::string getNextStageRace() const;
+
+		/// Gets the script to use for this deployment.
+		std::string getScript() const;
 };
 
 }

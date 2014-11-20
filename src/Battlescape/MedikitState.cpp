@@ -147,8 +147,8 @@ MedikitButton::MedikitButton(int y)
 
 /**
  * Initializes the Medikit State.
- * @param targetUnit	- the wounded BattleUnit
- * @param action		- the healing BattleAction (BattlescapeGame.h)
+ * @param targetUnit	- pointer to a wounded BattleUnit
+ * @param action		- pointer to BattleAction (BattlescapeGame.h)
  */
 MedikitState::MedikitState(
 		BattleUnit* targetUnit,
@@ -270,6 +270,7 @@ MedikitState::MedikitState(
 
 	centerAllSurfaces();
 
+
 	_game->getResourcePack()->getSurface("MEDIBORD.PCK")->blit(_bg);
 
 	_painText->setBig();
@@ -334,13 +335,12 @@ void MedikitState::onEndClick(Action*)
  */
 void MedikitState::onHealClick(Action*)
 {
-	RuleItem* rule = _item->getRules();
-
 	int heal = _item->getHealQuantity();
 	if (heal == 0)
 		return;
 
-	if (_unit->spendTimeUnits(rule->getTUUse()))
+	const RuleItem* const rule = _item->getRules();
+	if (_unit->spendTimeUnits(rule->getTUUse()) == true)
 	{
 		_targetUnit->heal(
 					_mediView->getSelectedPart(),
@@ -370,8 +370,8 @@ void MedikitState::onStimulantClick(Action*)
 	if (stimulant == 0)
 		return;
 
-	RuleItem* rule = _item->getRules();
-	if (_unit->spendTimeUnits(rule->getTUUse()))
+	const RuleItem* const rule = _item->getRules();
+	if (_unit->spendTimeUnits(rule->getTUUse()) == true)
 	{
 		_targetUnit->stimulant(
 							rule->getEnergyRecovery(),
@@ -404,8 +404,8 @@ void MedikitState::onPainKillerClick(Action*)
 	if (pain == 0)
 		return;
 
-	RuleItem* rule = _item->getRules();
-	if (_unit->spendTimeUnits(rule->getTUUse()))
+	const RuleItem* const rule = _item->getRules();
+	if (_unit->spendTimeUnits(rule->getTUUse()) == true)
 	{
 		_targetUnit->painKillers();
 		_item->setPainKillerQuantity(--pain);
@@ -430,7 +430,7 @@ void MedikitState::update()
 
 	// kL_begin:
 	double stat = static_cast<double>(_targetUnit->getBaseStats()->health);
-	int health = _targetUnit->getHealth();
+	const int health = _targetUnit->getHealth();
 	_numHealth->setValue(static_cast<unsigned>(health));
 	_numStun->setValue(static_cast<unsigned>(_targetUnit->getStun()));
 	_barHealth->setMax(100.0);
@@ -440,19 +440,19 @@ void MedikitState::update()
 							static_cast<double>(_targetUnit->getStun()) / stat * 100.0));
 
 	stat = static_cast<double>(_targetUnit->getBaseStats()->stamina); // stats of the recipient
-	int energy = _targetUnit->getEnergy();
+	const int energy = _targetUnit->getEnergy();
 	_numEnergy->setValue(static_cast<unsigned>(energy));
 	_barEnergy->setMax(100.0);
 	_barEnergy->setValue(ceil(
 							static_cast<double>(energy) / stat * 100.0));
 
-	int morale = _targetUnit->getMorale();
+	const int morale = _targetUnit->getMorale();
 	_numMorale->setValue(static_cast<unsigned>(morale));
 	_barMorale->setMax(100.0);
 	_barMorale->setValue(morale);
 
 	stat = static_cast<double>(_unit->getBaseStats()->tu); // TU of the MedKit user
-	int tu = _unit->getTimeUnits();
+	const int tu = _unit->getTimeUnits();
 	_numTimeUnits->setValue(static_cast<unsigned>(tu));
 	_barTimeUnits->setMax(100.0);
 	_barTimeUnits->setValue(ceil(

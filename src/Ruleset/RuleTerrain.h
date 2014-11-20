@@ -37,16 +37,6 @@ class MapDataSet;
 class Ruleset;
 
 
-struct LandingSite
-{
-	int
-		x,
-		y,
-		sizeX,
-		sizeY;
-};
-
-
 /**
  * Represents a specific type of Battlescape Terrain.
  * - the names of the objectsets needed in this specific terrain.
@@ -64,22 +54,21 @@ private:
 		_minDepth,
 		_maxDepth;
 
-	std::string _name;
+	std::string
+		_name,
+		_script;
 
-	std::vector<int>
-		_roadTypeOdds,
-		_textures;
+	std::vector<int> _textures;
 	std::vector<std::string> _civilianTypes;
 
-	std::vector<LandingSite*>
-		_craftPositions,
-		_ufoPositions;
 	std::vector<MapBlock*> _mapBlocks;
 	std::vector<MapDataSet*> _mapDataSets;
 
 
 	public:
+		/// Constructs a RuleTerrain object.
 		RuleTerrain(const std::string& name);
+		/// Destructs this RuleTerrain object.
 		~RuleTerrain();
 
 		/// Loads the terrain from YAML.
@@ -97,9 +86,10 @@ private:
 
 		/// Gets a random mapblock.
 		MapBlock* getRandomMapBlock(
-				int maxsize,
-				MapBlockType type,
-				bool force = false);
+				int maxSizeX,
+				int maxSizeY,
+				int group,
+				bool force = true);
 		/// Gets a mapblock given its name.
 		MapBlock* getMapBlock(const std::string& name);
 		/// Gets the mapdata object.
@@ -107,23 +97,14 @@ private:
 				unsigned int* id,
 				int* mapDataSetID) const;
 
-		/// Gets the maximum amount of large blocks in this terrain.
-		int getLargeBlockLimit() const;
-
 		///
-		void resetMapBlocks();
-
-		///
-		std::vector<int> *getTextures();
+		std::vector<int>* getTextures();
 
 		///
 		int getHemisphere() const;
 
 		/// Gets the civilian types to use.
 		std::vector<std::string> getCivilianTypes() const;
-
-		/// Gets road type odds.
-		std::vector<int> getRoadTypeOdds() const;
 
 		/// Gets the minimum depth.
 		const int getMinDepth() const;
@@ -133,10 +114,8 @@ private:
 		/// Gets the ambient sound effect.
 		const int getAmbience() const;
 
-		/// Gets a list of potential UFO landing zones for this map.
-		const std::vector<LandingSite*>* getUfoPositions();
-		/// Gets a list of potential xcom craft landing zones for this map.
-		const std::vector<LandingSite*>* getCraftPositions();
+		/// Gets the generation script name.
+		const std::string getScript();
 };
 
 }

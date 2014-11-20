@@ -23,6 +23,8 @@
 namespace OpenXcom
 {
 
+// The following data is the order in which certain alien ranks spawn on certain node ranks.
+// NOTE: they all can fall back to rank 0 nodes - which is scout (outside ufo).
 /* const int Node::nodeRank[8][7] =
 {
 	{4, 3, 5, 8, 7, 2, 0},	// commander
@@ -107,7 +109,7 @@ Node::Node(
 }
 
 /**
- * clean up node.
+ * Cleans up the node.
  */
 Node::~Node()
 {
@@ -154,8 +156,8 @@ YAML::Node Node::save() const
 }
 
 /**
- * Get the node's id
- * @return unique id
+ * Gets this Node's ID.
+ * @return, unique ID
  */
 int Node::getID() const
 {
@@ -163,8 +165,8 @@ int Node::getID() const
 }
 
 /**
- * Get the rank of units that can spawn on this node.
- * @return noderank
+ * Gets the rank of units that can spawn on this Node.
+ * @return, noderank
  */
 NodeRank Node::getRank() const
 {
@@ -172,8 +174,8 @@ NodeRank Node::getRank() const
 }
 
 /**
- * Get the priority of this spawnpoint.
- * @return priority
+ * Gets the priority of this Node as a spawnpoint.
+ * @return, priority
  */
 int Node::getPriority() const
 {
@@ -181,8 +183,8 @@ int Node::getPriority() const
 }
 
 /**
- * Gets the Node's position.
- * @return position
+ * Gets this Node's position.
+ * @return, reference to Position
  */
 const Position& Node::getPosition() const
 {
@@ -190,8 +192,8 @@ const Position& Node::getPosition() const
 }
 
 /**
- * Gets the Node's segment.
- * @return segment
+ * Gets this Node's segment.
+ * @return, segment
  */
 int Node::getSegment() const
 {
@@ -199,7 +201,8 @@ int Node::getSegment() const
 }
 
 /**
- * get the node's paths
+ * Gets this Node's paths.
+ * @return, pointer to a vector of node-links
  */
 std::vector<int>* Node::getNodeLinks()
 {
@@ -207,8 +210,8 @@ std::vector<int>* Node::getNodeLinks()
 }
 
 /**
- * Gets the Node's type.
- * @return type
+ * Gets this Node's type.
+ * @return, type
  */
 int Node::getType() const
 {

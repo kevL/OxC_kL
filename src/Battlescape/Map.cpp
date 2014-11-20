@@ -2663,7 +2663,7 @@ void Map::calculateWalkingOffset(
 				for (int
 						z = std::min(
 								_camera->getViewLevel(),
-								_save->getMapSizeZ());
+								_save->getMapSizeZ() - 1);
 						z != unit->getPosition().z;
 						--z)
 				{
