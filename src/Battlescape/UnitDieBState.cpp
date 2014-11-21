@@ -106,7 +106,7 @@ UnitDieBState::UnitDieBState(
 		if (nodes == NULL)
 			return; // this better not happen.
 
-		for (std::vector<Node*>::iterator
+		for (std::vector<Node*>::const_iterator
 				node = nodes->begin();
 				node != nodes->end();
 				++node)

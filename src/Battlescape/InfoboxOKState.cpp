@@ -19,6 +19,8 @@
 
 #include "InfoboxOKState.h"
 
+#include "Map.h"
+
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
@@ -55,6 +57,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 	add(_btnOk, "infoBoxOK", "battlescape");
 
 	centerAllSurfaces();
+
 
 //	_frame->setColor(Palette::blockOffset(6)+3);
 //	_frame->setBackground(Palette::blockOffset(6)+12);
@@ -96,6 +99,9 @@ InfoboxOKState::~InfoboxOKState()
  */
 void InfoboxOKState::btnOkClick(Action*)
 {
+	if (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
+		_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()->setCursorType(CT_NONE);
+
 	_game->popState();
 }
 

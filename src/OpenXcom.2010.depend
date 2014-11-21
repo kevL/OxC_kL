@@ -5827,7 +5827,7 @@
 	"BattleState.h"
 	"Position.h"
 
-1413136955 f:\git\openxcom\src\battlescape\infoboxokstate.h
+1416613782 f:\git\openxcom\src\battlescape\infoboxokstate.h
 	<string>
 	"../Engine/State.h"
 
@@ -6289,8 +6289,9 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1415853535 source:f:\git\openxcom\src\battlescape\infoboxokstate.cpp
+1416614024 source:f:\git\openxcom\src\battlescape\infoboxokstate.cpp
 	"InfoboxOKState.h"
+	"Map.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -8499,7 +8500,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1416609354 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1416612653 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	<algorithm>
 	<cmath>
