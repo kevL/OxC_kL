@@ -422,6 +422,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 												_parentState->getGame()->getRuleset()->getItem(unit->getMeleeWeapon()),
 												_save->getCurrentItemId());
 
+					action.weapon->setOwner(unit);
 					action.TU = unit->getActionTUs(
 												action.type,
 												action.weapon);

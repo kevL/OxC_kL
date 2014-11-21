@@ -43,7 +43,8 @@ MapScript::MapScript()
 		_executions(1),
 		_cumulativeFrequency(0),
 		_label(0),
-		_direction(MD_NONE)
+		_direction(MD_NONE),
+		_tunnelData(NULL)
 {
 }
 
@@ -52,6 +53,17 @@ MapScript::MapScript()
  */
 MapScript::~MapScript()
 {
+	for (std::vector<SDL_Rect*>::iterator
+			i = _rects.begin();
+			i != _rects.end();
+			)
+	{
+		delete *i;
+		i = _rects.erase(i);
+	}
+
+	if (_tunnelData != NULL)
+		delete _tunnelData;
 }
 
 /**
@@ -121,9 +133,9 @@ void MapScript::load(const YAML::Node& node)
 
 	if (const YAML::Node& mapNode = node["tunnelData"])
 	{
-		_tunnelData.level = mapNode["level"].as<int>(0);
+		_tunnelData = new TunnelData;
+		_tunnelData->level = mapNode["level"].as<int>(0);
 
-		MCDReplacement replacement;
 		if (const YAML::Node& data = mapNode["MCDReplacements"])
 		{
 			for (YAML::Node::const_iterator
@@ -131,10 +143,12 @@ void MapScript::load(const YAML::Node& node)
 					i != data.end();
 					++i)
 			{
-				const std::string type = (*i)["type"].as<std::string>("");
+				MCDReplacement replacement;
 				replacement.entry = (*i)["entry"].as<int>(-1);
 				replacement.dataSet = (*i)["set"].as<int>(-1);
-				_tunnelData.replacements[type] = replacement;
+
+				const std::string type = (*i)["type"].as<std::string>("");
+				_tunnelData->replacements[type] = replacement;
 			}
 		}
 	}

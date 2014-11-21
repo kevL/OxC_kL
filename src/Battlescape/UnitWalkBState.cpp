@@ -40,6 +40,7 @@
 #include "../Resource/ResourcePack.h"
 
 #include "../Ruleset/Armor.h"
+#include "../Ruleset/Ruleset.h"
 
 #include "../Savegame/BattleItem.h"
 #include "../Savegame/BattleUnit.h"
@@ -993,33 +994,65 @@ void UnitWalkBState::postPathProcedures()
 				action.target = _unit->getCharging()->getPosition();
 				action.targeting = true;
 				action.type = BA_HIT;
-				action.TU = _unit->getActionTUs(
-											action.type,
-											action.weapon);
-				action.weapon = NULL; //_unit->getMainHandWeapon();
+				action.weapon = _unit->getMainHandWeapon();
 
-				const std::string str = _unit->getMeleeWeapon();
-				if (str == "STR_FIST")
+				const std::string meleeWeapon = _unit->getMeleeWeapon();
+				bool instaWeapon = false;
+
+				if (meleeWeapon == "STR_FIST")
 					action.weapon = _parent->getFist();
-				else
+				else if (meleeWeapon.empty() == false)
 				{
+					bool found = false;
+
 					for (std::vector<BattleItem*>::const_iterator
 							i = _unit->getInventory()->begin();
-							i != _unit->getInventory()->end();
+							i != _unit->getInventory()->end()
+								&& found == false;
 							++i)
 					{
-						if ((*i)->getRules()->getType() == str)
+						if ((*i)->getRules()->getType() == meleeWeapon)
 						{
+							// note this ought be conformed w/ bgen.addAlien equipped items to
+							// ensure radical (or standard) BT_MELEE weapons get equipped in hand;
+							// but for now just grab the meleeItem wherever it was equipped ...
+							found = true;
 							action.weapon = *i;
-							break;
 						}
 					}
+
+					if (found == false)
+					{
+						instaWeapon = true;
+						action.weapon = new BattleItem(
+													_parent->getRuleset()->getItem(meleeWeapon),
+													_parent->getSave()->getCurrentItemId());
+						action.weapon->setOwner(_unit);
+					}
+				}
+				else if (action.weapon != NULL
+					&& action.weapon->getRules()->getBattleType() != BT_MELEE
+					&& action.weapon->getRules()->getBattleType() != BT_FIREARM)
+				{
+					action.weapon = NULL;
 				}
 
+
 				_unit->setCharging(NULL);
-				_parent->statePushBack(new ProjectileFlyBState(
-															_parent,
-															action));
+
+				if (action.weapon != NULL) // also checked in getActionTUs() & ProjectileFlyBState::init()
+				{
+					action.TU = _unit->getActionTUs(
+												action.type,
+												action.weapon);
+
+					_parent->statePushBack(new ProjectileFlyBState(
+																_parent,
+																action));
+
+					if (instaWeapon == true)
+						_parent->getSave()->removeItem(action.weapon);
+				}
 			}
 		}
 		else if (_unit->isHiding() == true)

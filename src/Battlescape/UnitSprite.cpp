@@ -1763,76 +1763,38 @@ void UnitSprite::drawRoutine9()
 
 // kL_note: TFTD down to sortRifles()
 /**
-* Drawing routine for terror tanks.
+* Drawing routine for tftd tanks.
 */
 void UnitSprite::drawRoutine11()
 {
 	if (_unit->isOut())
 		return; // unit is drawn as an item
 
-	int hoverTank = 0;
+	const int offTurretX[8] = { -2,  -6,  -5,   0,   5,   6,   2,   0}; // turret offsets
+	const int offTurretY[8] = {-12, -13, -16, -16, -16, -13, -12, -12}; // turret offsets
+
+	int body = 0;
+	int animFrame = _unit->getWalkingPhase() %4;
 	if (_unit->getMovementType() == MT_FLY)
 	{
-		hoverTank = 128;
+		body = 128;
+		animFrame = _animationFrame %4;
 	}
-	const int
-		offY[8]			= { 6, 1, 4, 1, 4, 1, 6, 1 }, // coelacanth offset
-		offTurretX[8]	= {-3,-2, 0, 0, 0, 2, 3, 0 }, // turret offsets
-		offTurretY[8]	= {-3,-5,-4,-2,-4,-5,-3,-3 }; // turret offsets
 
-	Surface* srf = NULL;
+	Surface* s = _unitSurface->getFrame(body + (_part * 4) + 16 * _unit->getDirection() + animFrame);
+	s->setY(4);
+	s->blit(this);
+
 	int turret = _unit->getTurretType();
-
-	if (hoverTank != 0)
-	{
-		// draw the displacer
-		srf = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + _animationFrame / 2);
-		srf->blit(this);
-	}
-	else
-	{
-		// draw the coelacanth
-		if (_unit->getStatus() == STATUS_WALKING)
-		{
-			srf = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection() + (_unit->getWalkingPhase() %4));
-		}
-		else
-		{
-			srf = _unitSurface->getFrame(hoverTank + (_part * 4) + 16 * _unit->getDirection());
-		}
-		srf->setY(offY[_unit->getDirection()]);
-		srf->blit(this);
-	}
-
-	int
-		turretOffsetX = 0,
-		turretOffsetY = 0;
-	switch (_part)
-	{
-		case 1:
-			turretOffsetX = -16;
-			turretOffsetY = -8;
-		break;
-		case 2:
-			turretOffsetX = 16;
-			turretOffsetY = -8;
-		break;
-		case 3:
-			turretOffsetX = 0;
-			turretOffsetY = -16;
-		break;
-	}
-
 	// draw the turret, overlapping all 4 parts
-	if (turret != -1)
+	if (_part == 3
+		&& turret != -1
+		&& !_unit->getFloorAbove())
 	{
-		srf = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
-		turretOffsetX += offTurretX[_unit->getDirection()];
-		turretOffsetY += offTurretY[_unit->getDirection()];
-		turretOffsetY += offY[_unit->getDirection()];
-		srf->setX(turretOffsetX);
-		srf->setY(turretOffsetY);
-		srf->blit(this);
+		s = _unitSurface->getFrame(256 + (turret * 8) + _unit->getTurretDirection());
+		s->setX(offTurretX[_unit->getDirection()]);
+		s->setY(offTurretY[_unit->getDirection()]);
+		s->blit(this);
 	}
 }
 

@@ -121,7 +121,7 @@ ProjectileFlyBState::~ProjectileFlyBState()
 void ProjectileFlyBState::init()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
-	if (_initialized)
+	if (_initialized == true)
 	{
 		//Log(LOG_INFO) << ". already initialized, EXIT";
 		return;
@@ -165,7 +165,7 @@ void ProjectileFlyBState::init()
 	// **** The first 4 of these SHOULD NEVER happen ****
 	// the 4th is wtf: tu ought be spent for this already.
 	// They should be coded with a tuRefund() function regardless.
-	if (_unit->isOut(true, true) == true)
+/*	if (_unit->isOut(true, true) == true)
 //		|| _unit->getStatus() == STATUS_DISABLED)
 //		|| _unit->getHealth() == 0
 //		|| _unit->getHealth() < _unit->getStun())
@@ -194,18 +194,24 @@ void ProjectileFlyBState::init()
 
 		_parent->popState();
 		return;
+	} */
+
+	bool popThis = false;
+
+	if (_unit->isOut(true, true) == true // this condition-check is condensed from those above^
+		|| _action.weapon == NULL
+		|| _parent->getSave()->getTile(_action.target) == NULL)
+	{
+		popThis = true;
 	}
-	else if (_parent->getPanicHandled()
+	else if (_parent->getPanicHandled() == true
 		&& _action.type != BA_HIT
 		&& _action.type != BA_STUN
 		&& _unit->getTimeUnits() < _action.TU)
 	{
 		//Log(LOG_INFO) << ". not enough time units, EXIT";
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
-		_unit->setStopShot(false);
-
-		_parent->popState();
-		return;
+		popThis = true;
 	}
 	else if (_unit->getStopShot() == true)
 	{
@@ -213,15 +219,12 @@ void ProjectileFlyBState::init()
 		// BattleAction in BattlescapeGame::popState();
 		// that is, these refunds tend to increase a unit's TU past
 		// their maximum, then subtract it again in popState().
-		_unit->setStopShot(false);
 
 		//Log(LOG_INFO) << ". current_TU = " << _unit->getTimeUnits();
 		//Log(LOG_INFO) << ". action.TU = " << _action.TU;
-		_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-
 		//Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs. EXIT";
-		_parent->popState();
-		return;
+		_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
+		popThis = true;
 	}
 	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
 	{
@@ -232,21 +235,25 @@ void ProjectileFlyBState::init()
 				|| targetUnit->isOut(true, true) == true
 				|| targetUnit != _parent->getSave()->getSelectedUnit())
 			{
-				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-
 				//Log(LOG_INFO) << ". . . reactionFire refund (targetUnit exists) EXIT";
-				_parent->popState();
-				return;
+				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
+				popThis = true;
 			}
 		}
 		else
 		{
-			_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-
 			//Log(LOG_INFO) << ". . reactionFire refund (no targetUnit) EXIT";
-			_parent->popState();
-			return;
+			_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
+			popThis = true;
 		}
+	}
+
+	if (popThis == true)
+	{
+		_unit->setStopShot(false);
+		_parent->popState();
+
+		return;
 	}
 
 

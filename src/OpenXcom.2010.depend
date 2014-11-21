@@ -5771,7 +5771,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1416529283 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1416584779 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6820,7 +6820,7 @@
 	"UnitPanicBState.h"
 	"../Savegame/BattleUnit.h"
 
-1414541848 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
+1416584976 source:f:\git\openxcom\src\battlescape\unitsprite.cpp
 	"UnitSprite.h"
 	<cmath>
 	"../Battlescape/Position.h"
@@ -6870,7 +6870,7 @@
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
 
-1416295897 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
+1416590441 source:f:\git\openxcom\src\battlescape\unitwalkbstate.cpp
 	"UnitWalkBState.h"
 	"BattleAIState.h"
 	"BattlescapeState.h"
@@ -6889,6 +6889,7 @@
 	"../Interface/NumberText.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/Armor.h"
+	"../Ruleset/Ruleset.h"
 	"../Savegame/BattleItem.h"
 	"../Savegame/BattleUnit.h"
 	"../Savegame/SavedBattleGame.h"
@@ -9493,7 +9494,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1416493486 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1416585929 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -12195,7 +12196,7 @@
 1413136956 f:\git\openxcom\src\battlescape\particle.h
 	<SDL_types.h>
 
-1416550103 f:\git\openxcom\src\ruleset\mapscript.h
+1416584190 f:\git\openxcom\src\ruleset\mapscript.h
 	<vector>
 	<string>
 	<SDL_video.h>
@@ -12203,7 +12204,7 @@
 	"MapBlock.h"
 	"RuleTerrain.h"
 
-1416550969 source:f:\git\openxcom\src\ruleset\mapscript.cpp
+1416584494 source:f:\git\openxcom\src\ruleset\mapscript.cpp
 	"MapScript.h"
 	<sstream>
 	<yaml-cpp/yaml.h>

@@ -96,7 +96,7 @@ private:
 
 	MapDirection _direction;
 	MapScriptCommand _type;
-	TunnelData _tunnelData;
+	TunnelData* _tunnelData;
 
 	std::vector<SDL_Rect*> _rects;
 	std::vector<int>
@@ -201,7 +201,7 @@ private:
 		/// Gets the mcd replacement data for tunnel replacements.
 		TunnelData* getTunnelData()
 		{
-			return &_tunnelData;
+			return _tunnelData;
 		};
 
 		/// Randomly generate a block from within either the array of groups or blocks.

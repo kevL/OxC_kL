@@ -2517,10 +2517,10 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 
 	//Log(LOG_INFO) << "BattleUnit::getMainHandWeapon()";
 	BattleItem
-		* rhtWeapon = getItem("STR_RIGHT_HAND"),
-		* lftWeapon = getItem("STR_LEFT_HAND");
+		* const rhtWeapon = getItem("STR_RIGHT_HAND"),
+		* const lftWeapon = getItem("STR_LEFT_HAND");
 
-	bool
+	const bool
 		isRht = rhtWeapon
 				&& (rhtWeapon->getRules()->getBattleType() == BT_MELEE
 					|| (rhtWeapon->getRules()->getBattleType() == BT_FIREARM
@@ -2545,7 +2545,7 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 
 	//Log(LOG_INFO) << ". . isRht & isLft VALID";
 
-	RuleItem* rule = rhtWeapon->getRules();
+	const RuleItem* rule = rhtWeapon->getRules();
 	int rhtTU = rule->getTUSnap();
 	if (rhtTU == 0)
 		if (rhtTU = rule->getTUAuto() == 0)
@@ -2574,7 +2574,7 @@ BattleItem* BattleUnit::getMainHandWeapon(bool quickest) const
 	if (!rhtTU && lftTU)
 		return lftWeapon;
 
-	if (quickest) // rhtTU && lftTU
+	if (quickest == true) // rhtTU && lftTU
 	{
 		if (rhtTU <= lftTU)
 			return rhtWeapon;
