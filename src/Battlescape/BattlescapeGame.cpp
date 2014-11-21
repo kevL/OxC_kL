@@ -680,7 +680,7 @@ void BattlescapeGame::endGameTurn()
 										NULL,
 										tile));
 
-		tile = _save->getTileEngine()->checkForTerrainExplosions();
+//		tile = _save->getTileEngine()->checkForTerrainExplosions();
 
 		statePushBack(NULL);
 		return;
@@ -2263,7 +2263,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 							if (getTileEngine()->psiAttack(&_currentAction))
 							{
 								//Log(LOG_INFO) << ". . . . . . Psi successful";
-								Game* game = _parentState->getGame(); // show a little infobox if it's successful
+								Game* const game = _parentState->getGame(); // show a little infobox if it's successful
 								if (_currentAction.type == BA_PANIC)
 								{
 									//Log(LOG_INFO) << ". . . . . . . . BA_Panic";

@@ -95,6 +95,7 @@ private:
 		_block[6],
 		_dieMCD,
 		_explosive,
+		_explosiveType,
 		_flammable,
 		_footstepSound,
 		_fuel,
@@ -251,6 +252,10 @@ private:
 		int getExplosive() const;
 		/// Sets the amount of explosive.
 		void setExplosive(int value);
+		/// Gets the type of explosive.
+		int getExplosiveType() const;
+		/// Sets the type of explosive.
+		void setExplosiveType(int value);
 
 		/// Sets the MiniMap index
 		void setMiniMapIndex(unsigned short i);

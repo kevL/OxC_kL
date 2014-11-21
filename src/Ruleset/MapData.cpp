@@ -55,6 +55,7 @@ MapData::MapData(MapDataSet* dataset)
 		_flammable(0),
 		_fuel(0),
 		_explosive(0),
+		_explosiveType(0),
 		_bigWall(0),
 		_miniMapIndex(0)
 {
@@ -580,6 +581,24 @@ int MapData::getExplosive() const
 void MapData::setExplosive(int value)
 {
 	_explosive = value;
+}
+
+/**
+ * Gets the type of explosive.
+ * @return, the amount of explosive
+ */
+int MapData::getExplosiveType() const
+{
+	return _explosiveType;
+}
+
+/**
+ * Sets the type of explosive.
+ * @param value - the type of explosive
+ */
+void MapData::setExplosiveType(int value)
+{
+	_explosiveType = value;
 }
 
 /**

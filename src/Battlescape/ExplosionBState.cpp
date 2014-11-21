@@ -110,22 +110,22 @@ void ExplosionBState::init()
 					   && _item->getRules()->getBattleType() != BT_MELEE
 					   && _parent->getCurrentAction()->type == BA_HIT;
 
-			if (_pistolWhip)
+			if (_pistolWhip == true)
 				_power = _item->getRules()->getMeleePower();
 
 			// since melee aliens don't use a conventional weapon type, use their strength instead.
 			if (_unit != NULL
-				&& (_pistolWhip
+				&& (_pistolWhip == true
 					|| _item->getRules()->getBattleType() == BT_MELEE)
-				&& _item->getRules()->isStrengthApplied())
+				&& _item->getRules()->isStrengthApplied() == true)
 			{
-				int str = static_cast<int>(Round(
+				int extraPower = static_cast<int>(Round(
 							static_cast<double>(_unit->getBaseStats()->strength) * (_unit->getAccuracyModifier() / 2.0 + 0.5)));
 
-				if (_pistolWhip)
-					str /= 2; // pistolwhipping adds only 1/2 str.
+				if (_pistolWhip == true)
+					extraPower /= 2; // pistolwhipping adds only 1/2 extraPower.
 
-				_power += str;
+				_power += extraPower;
 			}
 			//Log(LOG_INFO) << ". _power(_item) = " << _power;
 
@@ -169,12 +169,12 @@ void ExplosionBState::init()
 	}
 
 
-	Position centerPos = Position(
-								_center.x / 16,
-								_center.y / 16,
-								_center.z / 24);
+	const Position centerPos = Position(
+									_center.x / 16,
+									_center.y / 16,
+									_center.z / 24);
 
-	if (_areaOfEffect)
+	if (_areaOfEffect == true)
 	{
 		//Log(LOG_INFO) << ". . new Explosion(AoE)";
 		if (_power > 0)
@@ -235,15 +235,15 @@ void ExplosionBState::init()
 					pos.x = _center.x + RNG::generate(-offset, offset);
 					pos.y = _center.y + RNG::generate(-offset, offset);
 
-					if (RNG::generate(0, 1))
+					if (RNG::percent(50) == true)
 						frameDelay++;
 				}
 
-				Explosion* explosion = new Explosion( // animation
-												pos + Position(12, 12, 0), // jogg the anim down a few pixels. Tks.
-												frameStart,
-												frameDelay,
-												true);
+				Explosion* const explosion = new Explosion( // animation
+														pos + Position(12, 12, 0), // jogg the anim down a few pixels. Tks.
+														frameStart,
+														frameDelay,
+														true);
 
 				_parent->getMap()->getExplosions()->push_back(explosion);
 			}
@@ -270,7 +270,7 @@ void ExplosionBState::init()
 														-1,
 														_parent->getMap()->getSoundAngle(centerPos));
 
-			Camera* exploCam = _parent->getMap()->getCamera();
+			Camera* const exploCam = _parent->getMap()->getCamera();
 			if (exploCam->isOnScreen(centerPos) == false)
 			{
 				exploCam->centerOnPosition(
@@ -295,7 +295,7 @@ void ExplosionBState::init()
 			anim = _item->getRules()->getHitAnimation(),
 			sound = _item->getRules()->getHitSound();
 
-		if (_hit)
+		if (_hit == true)
 		{
 			anim = _item->getRules()->getMeleeAnimation();
 
@@ -331,12 +331,12 @@ void ExplosionBState::init()
 		}
 
 		//Log(LOG_INFO) << ". . ExplosionB::init() center = " << _center;
-		Explosion* explosion = new Explosion( // animation. Don't turn the tile
-										_center,
-										anim,
-										0,
-										false,
-										hitResult);
+		Explosion* const explosion = new Explosion( // animation. Don't turn the tile
+												_center,
+												anim,
+												0,
+												false,
+												hitResult);
 		_parent->getMap()->getExplosions()->push_back(explosion);
 
 		_parent->setStateInterval(std::max(
@@ -344,7 +344,7 @@ void ExplosionBState::init()
 										((BattlescapeState::DEFAULT_ANIM_SPEED * 5 / 7) - (10 * _item->getRules()->getExplosionSpeed()))));
 //		}
 
-		Camera* exploCam = _parent->getMap()->getCamera();
+		Camera* const exploCam = _parent->getMap()->getCamera();
 		if (exploCam->isOnScreen(centerPos) == false
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
@@ -543,10 +543,32 @@ void ExplosionBState::explode()
 
 	if (_tile != NULL)
 	{
+		ItemDamageType DT;
+
+		switch (_tile->getExplosiveType())
+		{
+			case 0:
+				DT = DT_HE;
+			break;
+			case 5:
+				DT = DT_IN;
+			break;
+			case 6:
+				DT = DT_STUN;
+			break;
+
+			default:
+				DT = DT_SMOKE;
+			break;
+		}
+
+		if (DT != DT_HE)
+			_tile->setExplosive(0, 0, true);
+
 		tileEngine->explode(
 						_center,
 						_power,
-						DT_HE,
+						DT,
 						_power / 10);
 		terrain = true;
 	}

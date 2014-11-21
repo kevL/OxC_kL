@@ -2286,7 +2286,7 @@ void TileEngine::explode(
 				if (type == DT_HE) // explosions do 50% damage to terrain and 50% to 150% damage to units
 				{
 					//Log(LOG_INFO) << ". setExplosive() _powerE = " << _powerE;
-					destTile->setExplosive(_powerE);
+					destTile->setExplosive(_powerE, 0);
 				}
 
 				_powerE = _powerT; // note: These two are becoming increasingly redundant !!!
@@ -3872,7 +3872,7 @@ bool TileEngine::detonate(Tile* tile)
 		return false;
 
 	//Log(LOG_INFO) << "TileEngine::detonate() " << tile->getPosition();
-	tile->setExplosive(0, true);
+	tile->setExplosive(0, 0, true);
 
 
 	static const int parts[9] =

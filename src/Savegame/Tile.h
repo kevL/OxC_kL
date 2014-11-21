@@ -60,6 +60,7 @@ protected:
 		_animOffset,
 		_curFrame[4],
 		_explosive,
+		_explosiveType,
 		_fire,
 		_lastLight[LIGHTLAYERS],
 		_light[LIGHTLAYERS],
@@ -213,9 +214,12 @@ protected:
 		/// Sets a "virtual" explosive on this tile, to detonate later.
 		void setExplosive(
 				int power,
+				int damageType,
 				bool force = false);
 		/// Gets explosive power of this tile.
 		int getExplosive() const;
+		/// Gets explosive type of this tile.
+		int getExplosiveType() const;
 
 		/// Animates the tile parts.
 		void animate();

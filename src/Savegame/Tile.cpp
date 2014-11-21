@@ -65,6 +65,7 @@ Tile::Tile(const Position& pos)
 		_smoke(0),
 		_fire(0),
 		_explosive(0),
+		_explosiveType(0),
 		_pos(pos),
 		_unit(NULL),
 		_animOffset(0),
@@ -656,7 +657,9 @@ bool Tile::destroy(int part)
 		}
 
 		if (origPart->getExplosive())
-			setExplosive(origPart->getExplosive());
+			setExplosive(
+						origPart->getExplosive(),
+						origPart->getExplosiveType());
 	}
 
 	if (part == MapData::O_FLOOR // check if the floor on the lowest level is gone
@@ -696,16 +699,20 @@ bool Tile::damage(
  * detonate it later, because the same tile can be visited multiple times
  * by "explosion rays". The explosive power that gets set on a tile is
  * that of the most powerful ray that passes through it -- see TileEngine::explode().
- * @param power - how big the BOOM will be / how much tile-destruction
+ * @param power			- how big the BOOM will be / how much tile-destruction
+ * @param damageType	-
+ * @param force			- forces value even if lower (default false)
  */
 void Tile::setExplosive(
 		int power,
+		int damageType,
 		bool force)
 {
 	if (force
 		|| _explosive < power)
 	{
 		_explosive = power;
+		_explosiveType = damageType;
 	}
 }
 
@@ -718,6 +725,15 @@ void Tile::setExplosive(
 int Tile::getExplosive() const
 {
 	return _explosive;
+}
+
+/**
+ * Gets explosive type of this tile.
+ * @return, explosive type
+ */
+int Tile::getExplosiveType() const
+{
+	return _explosiveType;
 }
 
 /**

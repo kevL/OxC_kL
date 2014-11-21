@@ -247,6 +247,7 @@ void MapDataSet::loadData()
 		to->setArmor((int)mcd.Armor);
 		to->setFlammable((int)mcd.Flammable);
 		to->setFuel((int)mcd.Fuel);
+		to->setExplosiveType((int)mcd.HE_Type);
 		to->setExplosive((int)mcd.HE_Strength);
 
 		mcd.ScanG = SDL_SwapLE16(mcd.ScanG);
@@ -350,7 +351,7 @@ void MapDataSet::unloadData()
 	//Log(LOG_INFO) << "MapDataSet::unloadData()";
 	if (_loaded == true)
 	{
-		for (std::vector<MapData*>::iterator
+		for (std::vector<MapData*>::const_iterator
 				i = _objects.begin();
 				i != _objects.end();
 				)
@@ -364,7 +365,7 @@ void MapDataSet::unloadData()
 		// Conclusion, seems to work ... but gives an assertion failure in VC++ when exiting game after debugging.
 		std::ostringstream test;
 		test << _name << ".PCK";
-		SurfaceSet* srt = _game->getResourcePack()->getSurfaceSet(test.str());
+		const SurfaceSet* const srt = _game->getResourcePack()->getSurfaceSet(test.str());
 		if (srt == NULL)
 			delete _surfaceSet;
 
