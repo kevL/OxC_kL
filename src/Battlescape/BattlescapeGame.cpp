@@ -541,18 +541,18 @@ bool BattlescapeGame::kneel(BattleUnit* bu)
 		if (bu->isFloating() == false) // kL_note: This prevents flying soldiers from 'kneeling' .....
 		{
 			int tu = 3;
-			if (bu->isKneeled())
+			if (bu->isKneeled() == true)
 				tu = 10;
 
-			if (checkReservedTU(bu, tu)
+			if (checkReservedTU(bu, tu) == true
 				|| (tu == 3
-					&& _save->getKneelReserved()))
+					&& _save->getKneelReserved() == true))
 			{
 				if (bu->getTimeUnits() >= tu)
 				{
 					if (tu == 3
 						|| (tu == 10
-							&& bu->spendEnergy(tu / 2)))
+							&& bu->spendEnergy(tu / 2) == true))
 					{
 						bu->spendTimeUnits(tu);
 						bu->kneel(bu->isKneeled() == false);

@@ -6349,7 +6349,7 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1416256498 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1416528249 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
 	<sstream>
 	"BattlescapeState.h"
@@ -7701,7 +7701,7 @@
 1413136958 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1416511830 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1416524688 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	<assert.h>
 	<algorithm>
@@ -7744,6 +7744,7 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
+	"../Engine/Logger.h"
 	"../Engine/Music.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
@@ -7763,7 +7764,6 @@
 	"../Menu/LoadGameState.h"
 	"../Menu/PauseState.h"
 	"../Menu/SaveGameState.h"
-	"../Resource/ResourcePack.h"
 	"../Resource/XcomResourcePack.h"
 	"../Ruleset/AlienRace.h"
 	"../Ruleset/Armor.h"

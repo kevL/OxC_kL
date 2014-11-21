@@ -1787,7 +1787,9 @@ void SavedBattleGame::prepareBattleTurn()
 	{
 		if ((*i)->getFire() == 0) // smoke and fire follow slightly different rules.
 		{
-			(*i)->setSmoke((*i)->getSmoke() - 1); // reduce the smoke counter
+			(*i)->setSmoke(std::max(
+								0,
+								(*i)->getSmoke() - RNG::generate(0, 3))); // reduce the smoke counter
 
 			if ((*i)->getSmoke() > 0) // if we're still smoking
 			{
