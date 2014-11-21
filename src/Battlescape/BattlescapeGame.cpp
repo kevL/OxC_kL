@@ -1395,16 +1395,16 @@ void BattlescapeGame::popState()
 	bool actionFailed = false;
 
 	const BattleAction action = _states.front()->getAction();
-	if (action.actor
+	if (action.actor != NULL
 		&& action.actor->getFaction() == FACTION_PLAYER
 		&& action.result.length() > 0 // kL_note: This queries the warning string message.
-		&& _playerPanicHandled
-		&& (_save->getSide() == FACTION_PLAYER || _debugPlay))
+		&& _playerPanicHandled == true
+		&& (_save->getSide() == FACTION_PLAYER
+			|| _debugPlay == true))
 	{
 		//Log(LOG_INFO) << ". actionFailed";
-		_parentState->warning(action.result);
-
 		actionFailed = true;
+		_parentState->warning(action.result);
 
 		// kL_begin: BattlescapeGame::popState(), remove action.Cursor if not enough tu's (ie, error.Message)
 		if (action.result.compare("STR_NOT_ENOUGH_TIME_UNITS") == 0
@@ -1461,7 +1461,7 @@ void BattlescapeGame::popState()
 			// it out here in order to get Reactions vs. shooting to work correctly
 			// (throwing already did work to trigger reactions, somehow).
 			if (action.targeting == true
-				&& _save->getSelectedUnit()
+				&& _save->getSelectedUnit() != NULL
 				&& actionFailed == false)
 			{
 				//Log(LOG_INFO) << ". . ID " << action.actor->getId() << " currentTU = " << action.actor->getTimeUnits();
@@ -1483,6 +1483,16 @@ void BattlescapeGame::popState()
 
 				if (actionFailed == false) // kL_begin:
 				{
+					//Log(LOG_INFO) << ". popState -> Faction_Player | action.type = " << action.type;
+					//if (action.weapon != NULL)
+					//{
+						//Log(LOG_INFO) << ". popState -> Faction_Player | action.weapon = " << action.weapon->getRules()->getType();
+						//if (action.weapon->getAmmoItem() != NULL)
+						//{
+							//Log(LOG_INFO) << ". popState -> Faction_Player | ammo = " << action.weapon->getAmmoItem()->getRules()->getType();
+							//Log(LOG_INFO) << ". popState -> Faction_Player | ammoQty = " << action.weapon->getAmmoItem()->getAmmoQuantity();
+						//}
+					//}
 					const int curTU = action.actor->getTimeUnits();
 
 					switch (action.type)
@@ -1497,8 +1507,9 @@ void BattlescapeGame::popState()
 							if (curTU < action.actor->getActionTUs(
 																BA_SNAPSHOT,
 																action.weapon)
-								|| (action.weapon->getAmmoItem() != NULL
-									&& action.weapon->getAmmoItem()->getAmmoQuantity() == 0))
+								|| (action.weapon->needsAmmo() == true
+									&& (action.weapon->getAmmoItem() == NULL
+										|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1508,8 +1519,9 @@ void BattlescapeGame::popState()
 							if (curTU < action.actor->getActionTUs(
 																BA_AUTOSHOT,
 																action.weapon)
-								|| (action.weapon->getAmmoItem() != NULL
-									&& action.weapon->getAmmoItem()->getAmmoQuantity() == 0))
+								|| (action.weapon->needsAmmo() == true
+									&& (action.weapon->getAmmoItem() == NULL
+										|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
 							{
 								cancelCurrentAction(true);
 							}
@@ -1519,8 +1531,9 @@ void BattlescapeGame::popState()
 							if (curTU < action.actor->getActionTUs(
 																BA_AIMEDSHOT,
 																action.weapon)
-								|| (action.weapon->getAmmoItem() != NULL
-									&& action.weapon->getAmmoItem()->getAmmoQuantity() == 0))
+								|| (action.weapon->needsAmmo() == true
+									&& (action.weapon->getAmmoItem() == NULL
+										|| action.weapon->getAmmoItem()->getAmmoQuantity() == 0)))
 							{
 								cancelCurrentAction(true);
 							}

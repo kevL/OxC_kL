@@ -395,7 +395,7 @@ BattleItem* BattleItem::getAmmoItem()
  */
 bool BattleItem::needsAmmo() const
 {
-	return _ammoItem != this;
+	return (_ammoItem != this);
 }
 
 /**
@@ -418,7 +418,7 @@ int BattleItem::setAmmoItem(BattleItem* item)
 		if (_ammoItem != NULL)
 			return -1;
 
-		for (std::vector<std::string>::iterator
+		for (std::vector<std::string>::const_iterator
 				i = _rules->getCompatibleAmmo()->begin();
 				i != _rules->getCompatibleAmmo()->end();
 				++i)

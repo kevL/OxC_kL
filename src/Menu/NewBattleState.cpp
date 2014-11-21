@@ -149,6 +149,7 @@ NewBattleState::NewBattleState()
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
 
@@ -202,7 +203,7 @@ NewBattleState::NewBattleState()
 			i != terrainTypes.end();
 			++i)
 	{
-		if (!_game->getRuleset()->getTerrain(*i)->getTextures()->empty())
+		if (_game->getRuleset()->getTerrain(*i)->getTextures()->empty() == false)
 		{
 			_terrainTypes.push_back(*i);
 			terrainStrings.push_back("STR_" + *i);
@@ -211,7 +212,7 @@ NewBattleState::NewBattleState()
 	}
 
 	_alienRaces = _game->getRuleset()->getAlienRacesList();
-	for (std::vector<std::string>::iterator
+	for (std::vector<std::string>::const_iterator
 			i = _alienRaces.begin();
 			i != _alienRaces.end();
 			)
@@ -235,7 +236,7 @@ NewBattleState::NewBattleState()
 			i != crafts.end();
 			++i)
 	{
-		RuleCraft* rule = _game->getRuleset()->getCraft(*i);
+		const RuleCraft* const rule = _game->getRuleset()->getCraft(*i);
 		if (rule->getSoldiers() > 0)
 			_crafts.push_back(*i);
 	}
@@ -300,8 +301,7 @@ NewBattleState::~NewBattleState()
 }
 
 /**
- * Resets the menu music and savegame
- * when coming back from the battlescape.
+ * Resets the menu music and savegame when coming back from the battlescape.
  */
 void NewBattleState::init()
 {
@@ -313,12 +313,12 @@ void NewBattleState::init()
 
 /**
  * Loads new battle data from a YAML file.
- * @param filename YAML filename.
+ * @param filename - reference a YAML filename
  */
 void NewBattleState::load(const std::string& filename)
 {
-	std::string s = Options::getConfigFolder() + filename + ".cfg";
-	if (!CrossPlatform::fileExists(s))
+	const std::string s = Options::getConfigFolder() + filename + ".cfg";
+	if (CrossPlatform::fileExists(s) == false)
 		initSave();
 	else
 	{
@@ -327,18 +327,18 @@ void NewBattleState::load(const std::string& filename)
 			YAML::Node doc = YAML::LoadFile(s);
 
 			_cbxMission->setSelected(std::min(
-								doc["mission"].as<size_t>(0),
-								_missionTypes.size() - 1));
+									doc["mission"].as<size_t>(0),
+									_missionTypes.size() - 1));
 			_cbxCraft->setSelected(std::min(
-								doc["craft"].as<size_t>(0),
-								_crafts.size() - 1));
+									doc["craft"].as<size_t>(0),
+									_crafts.size() - 1));
 			_slrDarkness->setValue(doc["darkness"].as<size_t>(0));
 			_cbxTerrain->setSelected(
-								std::min(doc["terrain"].as<size_t>(0),
-								_terrainTypes.size() - 1));
+									std::min(doc["terrain"].as<size_t>(0),
+									_terrainTypes.size() - 1));
 			_cbxAlienRace->setSelected(std::min(
-								doc["alienRace"].as<size_t>(0),
-								_alienRaces.size() - 1));
+									doc["alienRace"].as<size_t>(0),
+									_alienRaces.size() - 1));
 			_cbxDifficulty->setSelected(doc["difficulty"].as<size_t>(0));
 			_slrAlienTech->setValue(doc["alienTech"].as<size_t>(0));
 
@@ -346,10 +346,10 @@ void NewBattleState::load(const std::string& filename)
 
 			if (doc["base"])
 			{
-				const Ruleset* rule = _game->getRuleset();
-				SavedGame* save = new SavedGame();
+				const Ruleset* const rule = _game->getRuleset();
+				SavedGame* const save = new SavedGame();
 
-				Base* base = new Base(rule);
+				Base* const base = new Base(rule);
 				base->load(
 						doc["base"],
 						save,
@@ -374,18 +374,18 @@ void NewBattleState::load(const std::string& filename)
 						i != items.end();
 						++i)
 				{
-					RuleItem* rule = _game->getRuleset()->getItem(*i);
+					const RuleItem* const rule = _game->getRuleset()->getItem(*i);
 					if (rule->getBattleType() != BT_CORPSE
-						&& rule->isRecoverable())
+						&& rule->isRecoverable() == true)
 					{
 						base->getItems()->addItem(*i, 1);
 					}
 				}
 
 				// Fix invalid contents
-				if (base->getCrafts()->empty())
+				if (base->getCrafts()->empty() == true)
 				{
-					std::string craftType = _crafts[_cbxCraft->getSelected()];
+					const std::string craftType = _crafts[_cbxCraft->getSelected()];
 					_craft = new Craft(
 									_game->getRuleset()->getCraft(craftType),
 									base,
@@ -400,8 +400,8 @@ void NewBattleState::load(const std::string& filename)
 							i != _craft->getItems()->getContents()->end();
 							++i)
 					{
-						RuleItem* rule = _game->getRuleset()->getItem(i->first);
-						if (!rule)
+						const RuleItem* const rule = _game->getRuleset()->getItem(i->first);
+						if (rule == NULL)
 							i->second = 0;
 					}
 				}
@@ -421,16 +421,15 @@ void NewBattleState::load(const std::string& filename)
 
 /**
  * Saves new battle data to a YAML file.
- * @param filename YAML filename.
+ * @param filename - reference a YAML filename
  */
 void NewBattleState::save(const std::string& filename)
 {
-	std::string s = Options::getConfigFolder() + filename + ".cfg";
+	const std::string s = Options::getConfigFolder() + filename + ".cfg";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
 		Log(LOG_WARNING) << "Failed to save " << filename << ".cfg";
-
 		return;
 	}
 
@@ -456,9 +455,9 @@ void NewBattleState::save(const std::string& filename)
  */
 void NewBattleState::initSave()
 {
-	const Ruleset* rule = _game->getRuleset();
-	SavedGame* save = new SavedGame();
-	Base* base = new Base(rule);
+	const Ruleset* const rule = _game->getRuleset();
+	SavedGame* const save = new SavedGame();
+	Base* const base = new Base(rule);
 	const YAML::Node& starter = _game->getRuleset()->getStartingBase();
 	base->load(
 			starter,
@@ -468,7 +467,7 @@ void NewBattleState::initSave()
 	save->getBases()->push_back(base);
 
 	// kill everything we don't want in this base
-	for (std::vector<Soldier*>::iterator
+	for (std::vector<Soldier*>::const_iterator
 			i = base->getSoldiers()->begin();
 			i != base->getSoldiers()->end();
 			++i)
@@ -477,7 +476,7 @@ void NewBattleState::initSave()
 	}
 	base->getSoldiers()->clear();
 
-	for (std::vector<Craft*>::iterator
+	for (std::vector<Craft*>::const_iterator
 			i = base->getCrafts()->begin();
 			i != base->getCrafts()->end();
 			++i)
@@ -500,7 +499,7 @@ void NewBattleState::initSave()
 			i < 30;
 			++i)
 	{
-		Soldier* soldier = rule->genSoldier(save);
+		Soldier* const soldier = rule->genSoldier(save);
 //		Soldier* soldier = new Soldier(
 //									rule->getSoldier("XCOM"),
 //									rule->getArmor("STR_ARMOR_NONE_UC"),
@@ -512,12 +511,12 @@ void NewBattleState::initSave()
 				n < 5;
 				++n)
 		{
-			if (RNG::percent(70))
+			if (RNG::percent(70) == true)
 				continue;
 
 			soldier->promoteRank();
 
-			UnitStats* stats = soldier->getCurrentStats();
+			UnitStats* const stats = soldier->getCurrentStats();
 			stats->tu			+= RNG::generate(0, 5);
 			stats->stamina		+= RNG::generate(0, 5);
 			stats->health		+= RNG::generate(0, 5);
@@ -531,7 +530,7 @@ void NewBattleState::initSave()
 			stats->psiSkill		+= RNG::generate(0, 20);
 		}
 
-		UnitStats* stats = soldier->getCurrentStats();
+		UnitStats* const stats = soldier->getCurrentStats();
 //kL	stats->bravery = (int)ceil(stats->bravery / 10.0) * 10; // keep it a multiple of 10
 		stats->bravery = static_cast<int>(floor((static_cast<double>(stats->bravery) / 10.0) + 0.5)) * 10; // kL, lulzor
 
@@ -547,11 +546,12 @@ void NewBattleState::initSave()
 			i != items.end();
 			++i)
 	{
-		RuleItem* rule = _game->getRuleset()->getItem(*i);
+		const RuleItem* const rule = _game->getRuleset()->getItem(*i);
 		if (rule->getBattleType() != BT_CORPSE
-			&& rule->isRecoverable())
+			&& rule->isRecoverable() == true)
 		{
 			base->getItems()->addItem(*i, 1);
+
 			if (rule->getBattleType() != BT_NONE
 				&& rule->isFixed() == false
 				&& rule->getBigSprite() > -1)
@@ -589,7 +589,7 @@ void NewBattleState::btnOkClick(Action*)
 		return;
 	}
 
-	SavedBattleGame* bgame = new SavedBattleGame();
+	SavedBattleGame* const bgame = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(bgame);
 	bgame->setMissionType(_missionTypes[_cbxMission->getSelected()]);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
@@ -597,56 +597,57 @@ void NewBattleState::btnOkClick(Action*)
 	bgen.setWorldTexture(_textures[_cbxTerrain->getSelected()]);
 
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
-	{
 		bgen.setBase(_craft->getBase());
-	}
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_ALIEN_BASE_ASSAULT")
 	{
-		AlienBase* b = new AlienBase();
-		b->setId(1);
-		_craft->setDestination(b);
-		bgen.setAlienBase(b);
+		AlienBase* const ab = new AlienBase();
+		ab->setId(1);
+		_craft->setDestination(ab);
+		bgen.setAlienBase(ab);
 		bgen.setCraft(_craft);
 
-		_game->getSavedGame()->getAlienBases()->push_back(b);
+		_game->getSavedGame()->getAlienBases()->push_back(ab);
 	}
 	else if (_missionTypes[_cbxMission->getSelected()] == "STR_MARS_CYDONIA_LANDING"
 		|| _missionTypes[_cbxMission->getSelected()] == "STR_MARS_THE_FINAL_ASSAULT")
 	{
 		bgen.setCraft(_craft);
 	}
-	else if (_craft
-		&& _game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]))
+	else if (_craft != NULL
+		&& _game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]) != NULL)
 	{
-		Ufo* u = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]));
-		u->setId(1);
-		_craft->setDestination(u);
-		bgen.setUfo(u);
+		Ufo* const ufo = new Ufo(_game->getRuleset()->getUfo(_missionTypes[_cbxMission->getSelected()]));
+		ufo->setId(1);
+		_craft->setDestination(ufo);
+		bgen.setUfo(ufo);
 		bgen.setCraft(_craft);
 
-		if (_terrainTypes[_cbxTerrain->getSelected()] == "FOREST")
-			u->setLatitude(-0.5);
+//		if (_terrainTypes[_cbxTerrain->getSelected()] == "FOREST")
+		if (RNG::percent(50) == true)
+			ufo->setLatitude(0.5);
+		else
+			ufo->setLatitude(-0.5);
 
 		// either ground assault or ufo crash
-		if (RNG::generate(0, 1) == 1)
+		if (RNG::percent(50) == true)
 			bgame->setMissionType("STR_UFO_GROUND_ASSAULT");
 		else
 			bgame->setMissionType("STR_UFO_CRASH_RECOVERY");
 
-		_game->getSavedGame()->getUfos()->push_back(u);
+		_game->getSavedGame()->getUfos()->push_back(ufo);
 	}
 	else //if (_missionTypes[_cbxMission->getSelected()] == "STR_TERROR_MISSION")
 	{
-		TerrorSite* t = new TerrorSite();
-		t->setId(1);
-		_craft->setDestination(t);
-		bgen.setTerrorSite(t);
+		TerrorSite* const ts = new TerrorSite();
+		ts->setId(1);
+		_craft->setDestination(ts);
+		bgen.setTerrorSite(ts);
 		bgen.setCraft(_craft);
 
-		_game->getSavedGame()->getTerrorSites()->push_back(t);
+		_game->getSavedGame()->getTerrorSites()->push_back(ts);
 	}
 
-	if (_craft)
+	if (_craft != NULL)
 		_craft->setSpeed(0);
 
 	_game->getSavedGame()->setDifficulty((GameDifficulty)_cbxDifficulty->getSelected());
@@ -658,8 +659,8 @@ void NewBattleState::btnOkClick(Action*)
 
 	bgen.run();
 //	_game->pushState(new BattlescapeState());
-	Base* base = NULL;
 
+	Base* base = NULL;
 	if (_missionTypes[_cbxMission->getSelected()] == "STR_BASE_DEFENSE")
 	{
 		base = _craft->getBase();
@@ -740,7 +741,7 @@ void NewBattleState::btnEquipClick(Action*)
  */
 void NewBattleState::cbxMissionChange(Action*)
 {
-	AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
+	const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 
 	_txtDarkness->setVisible(ruleDeploy->getShade() == -1);
 	_slrDarkness->setVisible(ruleDeploy->getShade() == -1);
@@ -757,21 +758,20 @@ void NewBattleState::cbxCraftChange(Action*)
 {
 	_craft->changeRules(_game->getRuleset()->getCraft(_crafts[_cbxCraft->getSelected()]));
 
-	int current = _craft->getNumSoldiers();
-	int max = _craft->getRules()->getSoldiers();
-	if (current > max)
+	const int maxSoldiers = _craft->getRules()->getSoldiers();
+	int curSoldiers = _craft->getNumSoldiers();
+	if (curSoldiers > maxSoldiers)
 	{
-		for (std::vector<Soldier*>::reverse_iterator
+		for (std::vector<Soldier*>::const_reverse_iterator
 				i = _craft->getBase()->getSoldiers()->rbegin();
 				i != _craft->getBase()->getSoldiers()->rend()
-					&& current > max;
+					&& curSoldiers > maxSoldiers;
 				++i)
 		{
 			if ((*i)->getCraft() == _craft)
 			{
 				(*i)->setCraft(NULL);
-
-				current--;
+				curSoldiers--;
 			}
 		}
 	}
@@ -783,12 +783,13 @@ void NewBattleState::cbxCraftChange(Action*)
  */
 void NewBattleState::cbxTerrainChange(Action*)
 {
-	AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
+	const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment(_missionTypes[_cbxMission->getSelected()]);
 
-	int minDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMinDepth();
-	int maxDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth();
+	int
+		minDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMinDepth(),
+		maxDepth = _game->getRuleset()->getTerrain(_terrainTypes.at(_cbxTerrain->getSelected()))->getMaxDepth();
 
-	if (!ruleDeploy->getTerrains().empty())
+	if (ruleDeploy->getTerrains().empty() == false)
 	{
 		minDepth = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().front())->getMinDepth();
 		maxDepth = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().front())->getMaxDepth();

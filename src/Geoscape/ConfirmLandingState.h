@@ -67,9 +67,9 @@ private:
 	public:
 		/// Creates the Confirm Landing state.
 		ConfirmLandingState(
-				Craft* craft,
-				int texture,
-				int shade);
+				Craft* const craft,
+				const int texture,
+				const int shade);
 		/// Cleans up the Confirm Landing state.
 		~ConfirmLandingState();
 

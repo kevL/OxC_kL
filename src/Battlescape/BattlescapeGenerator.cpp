@@ -467,14 +467,14 @@ void BattlescapeGenerator::run()
 
 	_unitSequence = BattleUnit::MAX_SOLDIER_ID; // geoscape soldier IDs should stay below this number
 
-	if (ruleDeploy->getTerrains().empty()) // UFO crashed/landed
+	if (ruleDeploy->getTerrains().empty() == true) // UFO crashed/landed
 	{
 		//Log(LOG_INFO) << "Generator run() terrains NOT available: worldTexture = " << _worldTexture;
 		//Log(LOG_INFO) << "Generator run() terrains NOT available: worldTerrain = " << _worldTerrain->getName();
 		if (_worldTerrain == NULL) // kL
 		{
 			double lat = 0.0;
-			if (_ufo)
+			if (_ufo != NULL)
 				lat = _ufo->getLatitude();
 
 			_terrain = getTerrain(
@@ -487,9 +487,9 @@ void BattlescapeGenerator::run()
 	else // set-piece battle like Cydonia or Terror site or Base assault/defense
 	{
 		//Log(LOG_INFO) << "Generator run() terrains available = " << ruleDeploy->getTerrains().size();
-		size_t pick = RNG::generate(
-								0,
-								ruleDeploy->getTerrains().size() - 1);
+		const size_t pick = RNG::generate(
+										0,
+										ruleDeploy->getTerrains().size() - 1);
 		_terrain = _rules->getTerrain(ruleDeploy->getTerrains().at(pick));
 	}
 
@@ -548,6 +548,7 @@ void BattlescapeGenerator::run()
 
 	generateMap(script);
 
+	_battleSave->setTerrain(_terrain->getName()); // sza_MusicRules
 	setTacticalSprites(); // kL
 	deployXCOM(); // <-- XCOM DEPLOYMENT.
 

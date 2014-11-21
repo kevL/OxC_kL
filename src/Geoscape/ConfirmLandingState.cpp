@@ -69,9 +69,9 @@ namespace OpenXcom
  * @param shade		- shade of the landing site
  */
 ConfirmLandingState::ConfirmLandingState(
-		Craft* craft,
-		int texture,
-		int shade)
+		Craft* const craft,
+		const int texture,
+		const int shade)
 	:
 		_craft(craft),
 		_texture(texture),
@@ -112,6 +112,7 @@ ConfirmLandingState::ConfirmLandingState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
@@ -132,11 +133,11 @@ ConfirmLandingState::ConfirmLandingState(
 //		texture = 0; -> _texture, too.
 
 //	TerrorSite* ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
-	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
 
 	if (ufo != NULL) // NOTE: all this terrain stuff can and may fall through to BattlescapeGenerator.
 	{
-		std::string terrain = ufo->getTerrain(); // Ufo-object stores the terrain value.
+		const std::string terrain = ufo->getTerrain(); // Ufo-object stores the terrain value.
 		//Log(LOG_INFO) << ". ufo VALID tex " << texture << ", terrain = " << terrain;
 
 		if (terrain == "")
@@ -171,14 +172,14 @@ ConfirmLandingState::ConfirmLandingState(
 				}
 			}
 
-			if (_city) // use these terrains for _city missions.
+			if (_city == true) // use these terrains for _city missions.
 			{
 				//Log(LOG_INFO) << ". . . city VALID";
 
-				AlienDeployment* ruleDeploy = _game->getRuleset()->getDeployment("STR_TERROR_MISSION");
-				size_t pick = RNG::generate(
-										0,
-										ruleDeploy->getTerrains().size() - 1);
+				const AlienDeployment* const ruleDeploy = _game->getRuleset()->getDeployment("STR_TERROR_MISSION");
+				const size_t pick = RNG::generate(
+												0,
+												ruleDeploy->getTerrains().size() - 1);
 				_terrain = _game->getRuleset()->getTerrain(ruleDeploy->getTerrains().at(pick));
 
 				if (lat < 0.0 // northern hemisphere
@@ -283,11 +284,11 @@ ConfirmLandingState::ConfirmLandingState(
 	ss << L""; // blank if no UFO.
 	if (ufo != NULL)
 	{
-		RuleUfo* ufoRule = ufo->getRules();
+		const RuleUfo* const ufoRule = ufo->getRules();
 		if (ufoRule != NULL)
 			ss << tr(ufoRule->getType()); // only ufoType shows if not hyperdetected.
 
-		if (ufo->getHyperDetected())
+		if (ufo->getHyperDetected() == true)
 			ss << L" : " << tr(ufo->getAlienRace());
 	}
 	_txtMessage2->setText(tr("STR_CRAFT_DESTINATION")
@@ -342,9 +343,9 @@ void ConfirmLandingState::btnYesClick(Action*)
 {
 	_game->popState();
 
-	Ufo* ufo = dynamic_cast<Ufo*>(_craft->getDestination());
-	TerrorSite* ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
-	AlienBase* ab = dynamic_cast<AlienBase*>(_craft->getDestination());
+	Ufo* const ufo = dynamic_cast<Ufo*>(_craft->getDestination());
+	TerrorSite* const ts = dynamic_cast<TerrorSite*>(_craft->getDestination());
+	AlienBase* const ab = dynamic_cast<AlienBase*>(_craft->getDestination());
 
 	SavedBattleGame* battle = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(battle);
@@ -396,7 +397,7 @@ void ConfirmLandingState::btnYesClick(Action*)
  */
 void ConfirmLandingState::btnNoClick(Action*)
 {
-//kL	_craft->returnToBase();
+//	_craft->returnToBase();
 	_craft->setDestination(NULL); // kL
 	_game->popState();
 }
