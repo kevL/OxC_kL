@@ -9604,7 +9604,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1416560670 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1416561108 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
