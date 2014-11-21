@@ -265,7 +265,7 @@ private:
 		Node* getPatrolNode(
 				bool scout,
 				BattleUnit* unit,
-				Node* fromNode);
+				Node* curNode);
 		/// Carries out new turn preparations.
 		void prepareBattleTurn();
 		/// Revives unconscious units (healthcheck).

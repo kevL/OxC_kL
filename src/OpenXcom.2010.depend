@@ -4743,7 +4743,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1415423220 f:\git\openxcom\src\savegame\savedbattlegame.h
+1416554622 f:\git\openxcom\src\savegame\savedbattlegame.h
 	<algorithm>
 	<iostream>
 	<string>
@@ -5693,7 +5693,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1416195354 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1416556640 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5742,7 +5742,7 @@
 	"../Engine/Options.h"
 	"../Engine/InteractiveSurface.h"
 
-1413601131 f:\git\openxcom\src\savegame\node.h
+1416558479 f:\git\openxcom\src\savegame\node.h
 	<yaml-cpp/yaml.h>
 	"../Battlescape/Position.h"
 
@@ -9575,7 +9575,7 @@
 1415931862 source:f:\git\openxcom\src\savegame\movingtarget.cpp
 	"MovingTarget.h"
 
-1416458036 source:f:\git\openxcom\src\savegame\node.cpp
+1416560913 source:f:\git\openxcom\src\savegame\node.cpp
 	"Node.h"
 
 1415050286 source:f:\git\openxcom\src\savegame\production.cpp
@@ -9604,7 +9604,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1416529793 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1416560670 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -12203,7 +12203,7 @@
 	"MapBlock.h"
 	"RuleTerrain.h"
 
-1416498261 source:f:\git\openxcom\src\ruleset\mapscript.cpp
+1416550969 source:f:\git\openxcom\src\ruleset\mapscript.cpp
 	"MapScript.h"
 	<sstream>
 	<yaml-cpp/yaml.h>

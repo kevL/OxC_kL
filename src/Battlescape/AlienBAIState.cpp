@@ -562,7 +562,7 @@ void AlienBAIState::setupPatrol()
 	if (_toNode != NULL
 		&& _unit->getPosition() == _toNode->getPosition())
 	{
-		if (_traceAI) Log(LOG_INFO) << "Patrol destination reached!";
+		//if (_traceAI) Log(LOG_INFO) << "Patrol destination reached!";
 
 		// destination reached; head off to next patrol node
 		_fromNode = _toNode;
@@ -587,15 +587,15 @@ void AlienBAIState::setupPatrol()
 		// on same level to avoid strange things, and the node has to match unit size or it will freeze
 		int closest = 1000000;
 
-		for (std::vector<Node*>::iterator
+		for (std::vector<Node*>::const_iterator
 				i = _save->getNodes()->begin();
 				i != _save->getNodes()->end();
 				++i)
 		{
 			node = *i;
-			int dist = _save->getTileEngine()->distanceSq(
-													_unit->getPosition(),
-													node->getPosition());
+			const int dist = _save->getTileEngine()->distanceSq(
+															_unit->getPosition(),
+															node->getPosition());
 
 			if (_unit->getPosition().z == node->getPosition().z
 				&& dist < closest
@@ -610,7 +610,7 @@ void AlienBAIState::setupPatrol()
 
 	int triesLeft = 5;
 	while (_toNode == NULL
-		&& triesLeft)
+		&& triesLeft != 0)
 	{
 		triesLeft--;
 
@@ -625,11 +625,11 @@ void AlienBAIState::setupPatrol()
 			// determines whether aliens come out of UFO to scout/search.
 
 			// also anyone standing in fire should also probably move
-			if (_save->isCheating()
+			if (_save->isCheating() == true
 				|| _fromNode == NULL
 				|| _fromNode->getRank() == 0
-				||  (_save->getTile(_unit->getPosition())
-					&& _save->getTile(_unit->getPosition())->getFire()))
+				|| (_save->getTile(_unit->getPosition()) != NULL
+					&& _save->getTile(_unit->getPosition())->getFire() != 0))
 			{
 				scout = true;
 			}
@@ -637,18 +637,17 @@ void AlienBAIState::setupPatrol()
 				scout = false;
 		}
 
-		// in base defense missions, the non-large aliens walk towards
-		// target nodes - or once there, shoot objects thereabouts
+		// In base defense missions the non-large aliens walk towards
+		// target nodes -- or once there shoot objects thereabouts.
 		else if (_unit->getArmor()->getSize() == 1)
 		{
-			// can i shoot an object?
-			if (_fromNode->isTarget()
-				&& _unit->getMainHandWeapon()
+			// scan this room for objects to destroy
+			if (_fromNode->isTarget() == true
+				&& _unit->getMainHandWeapon() != NULL
 				&& _unit->getMainHandWeapon()->getAmmoItem()->getRules()->getDamageType() != DT_HE
 				&& _save->getModuleMap()[_fromNode->getPosition().x / 10][_fromNode->getPosition().y / 10].second > 0)
 			{
-				// scan this room for objects to destroy
-				int
+				const int
 					x = (_unit->getPosition().x / 10) * 10,
 					y = (_unit->getPosition().y / 10) * 10;
 
@@ -662,19 +661,19 @@ void AlienBAIState::setupPatrol()
 							j < y + 9;
 							j++)
 					{
-						MapData* md = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
-						if (md
-							&& md->isBaseModule())
-//							&& md->getDieMCD()
-//							&& md->getArmor() < 60)
+						MapData* const data = _save->getTile(Position(i, j, 1))->getMapData(MapData::O_OBJECT);
+						if (data != NULL
+							&& data->isBaseModule() == true)
+//							&& data->getDieMCD()
+//							&& data->getArmor() < 60)
 						{
-							_patrolAction->actor	= _unit;
-							_patrolAction->target	= Position(i, j, 1);
-							_patrolAction->weapon	= _patrolAction->actor->getMainHandWeapon();
-							_patrolAction->type		= BA_SNAPSHOT;
-							_patrolAction->TU		= _patrolAction->actor->getActionTUs(
-																					_patrolAction->type,
-																					_patrolAction->weapon);
+							_patrolAction->actor = _unit;
+							_patrolAction->target = Position(i, j, 1);
+							_patrolAction->weapon = _patrolAction->actor->getMainHandWeapon();
+							_patrolAction->type = BA_SNAPSHOT;
+							_patrolAction->TU = _patrolAction->actor->getActionTUs(
+																				_patrolAction->type,
+																				_patrolAction->weapon);
 
 							return;
 						}
@@ -686,18 +685,18 @@ void AlienBAIState::setupPatrol()
 				// find closest high value target which is not already allocated
 				int closest = 1000000;
 
-				for (std::vector<Node*>::iterator
+				for (std::vector<Node*>::const_iterator
 						i = _save->getNodes()->begin();
 						i != _save->getNodes()->end();
 						++i)
 				{
-					if ((*i)->isTarget()
+					if ((*i)->isTarget() == true
 						&& (*i)->isAllocated() == false)
 					{
 						node = *i;
-						int dist = _save->getTileEngine()->distanceSq(
-																_unit->getPosition(),
-																node->getPosition());
+						const int dist = _save->getTileEngine()->distanceSq(
+																		_unit->getPosition(),
+																		node->getPosition());
 						if (_toNode == NULL
 							|| (dist < closest
 								&& node != _fromNode))
@@ -728,7 +727,7 @@ void AlienBAIState::setupPatrol()
 			}
 		}
 
-		if (_toNode)
+		if (_toNode != NULL)
 		{
 			_save->getPathfinding()->calculate(
 											_unit,
@@ -737,8 +736,7 @@ void AlienBAIState::setupPatrol()
 //			if (std::find(
 //						_reachable.begin(),
 //						_reachable.end(),
-//						_save->getTileIndex(_toNode->getPosition()))
-//					== _reachable.end()) // kL
+//						_save->getTileIndex(_toNode->getPosition())) == _reachable.end()) // kL
 			if (_save->getPathfinding()->getStartDirection() == -1)
 				_toNode = NULL;
 
@@ -746,17 +744,16 @@ void AlienBAIState::setupPatrol()
 		}
 	}
 
-	if (_toNode)
+	if (_toNode != NULL)
 	{
 		_toNode->allocateNode();
 
-		_patrolAction->actor	= _unit;
-		_patrolAction->target	= _toNode->getPosition();
-		_patrolAction->type		= BA_WALK;
+		_patrolAction->actor = _unit;
+		_patrolAction->target = _toNode->getPosition();
+		_patrolAction->type = BA_WALK;
 	}
 	else
 		_patrolAction->type = BA_RETHINK;
-
 	//Log(LOG_INFO) << "AlienBAIState::setupPatrol() EXIT";
 }
 

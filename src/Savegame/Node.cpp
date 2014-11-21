@@ -23,7 +23,9 @@
 namespace OpenXcom
 {
 
-// The following data is the order in which certain alien ranks spawn on certain node ranks.
+// The following data is the order in which certain alien ranks
+// spawn on (node's Priority, or 'Spawn' in mapView) or path to (node's Flags)
+// variously Ranked nodes.
 // NOTE: they all can fall back to rank 0 nodes - which is scout (outside ufo).
 /* const int Node::nodeRank[8][7] =
 {
@@ -47,7 +49,7 @@ const int Node::nodeRank[8][8] = // kL_begin:
 	{6, 8, 2, 5, 3, 4, 7, 0},	// terrorist1
 	{8, 6, 2, 5, 3, 4, 7, 0}	// terrorist2
 }; // kL_end.
-// kL_note: The 2nd dimension holds fallbacks for spawning:
+// note: The 2nd dimension holds fallbacks:
 
 	// 0:Civ-Scout
 	// 1:XCom
@@ -62,36 +64,40 @@ const int Node::nodeRank[8][8] = // kL_begin:
 // see Node.h, enum NodeRank ->
 
 
+/**
+ * Quick constructor for SavedBattleGame::load().
+ */
 Node::Node()
 	:
 		_id(0),
 		_segment(0),
 		_type(0),
-		_rank(0),
+		_nodeRank(0),
 		_flags(0),
 		_reserved(0),
 		_priority(0),
-		_allocated(false)
+		_allocated(false),
+		_pos(Position(-1,-1,-1)) // kL
 {
 }
 
 /**
- * Initializes a Node.
- * @param id
- * @param pos
- * @param segment
- * @param type
- * @param rank
- * @param flags
- * @param reserved
- * @param priority
+ * Initializes a Node on the battlescape.
+ * @param id		- node's ID
+ * @param pos		- node's Position
+ * @param segment	- for linking nodes
+ * @param type		- size and movement type of allowable units
+ * @param nodeRank	- rank of allowable units
+ * @param flags		- preferability of the node
+ * @param reserved	- for BaseDefense objectives
+ * @param priority	- preferability for spawns
  */
 Node::Node(
 		size_t id,
 		Position pos,
 		int segment,
 		int type,
-		int rank,
+		int nodeRank,
 		int flags,
 		int reserved,
 		int priority)
@@ -100,7 +106,7 @@ Node::Node(
 		_pos(pos),
 		_segment(segment),
 		_type(type),
-		_rank(rank),
+		_nodeRank(nodeRank),
 		_flags(flags),
 		_reserved(reserved),
 		_priority(priority),
@@ -109,7 +115,7 @@ Node::Node(
 }
 
 /**
- * Cleans up the node.
+ * Cleans up this Node.
  */
 Node::~Node()
 {
@@ -121,16 +127,16 @@ Node::~Node()
  */
 void Node::load(const YAML::Node& node)
 {
-	_id			= node["id"].as<int>(_id);
-	_pos		= node["position"].as<Position>(_pos);
-//	_segment	= node["segment"].as<int>(_segment);
-	_type		= node["type"].as<int>(_type);
-	_rank		= node["rank"].as<int>(_rank);
-	_flags		= node["flags"].as<int>(_flags);
-	_reserved	= node["reserved"].as<int>(_reserved);
-	_priority	= node["priority"].as<int>(_priority);
-	_allocated	= node["allocated"].as<bool>(_allocated);
-	_nodeLinks	= node["links"].as<std::vector<int> >(_nodeLinks);
+	_id			= node["id"]		.as<int>(_id);
+	_pos		= node["position"]	.as<Position>(_pos);
+//	_segment	= node["segment"]	.as<int>(_segment);
+	_type		= node["type"]		.as<int>(_type);
+	_nodeRank	= node["nodeRank"]	.as<int>(_nodeRank);
+	_flags		= node["flags"]		.as<int>(_flags);
+	_reserved	= node["reserved"]	.as<int>(_reserved);
+	_priority	= node["priority"]	.as<int>(_priority);
+	_allocated	= node["allocated"]	.as<bool>(_allocated);
+	_nodeLinks	= node["links"]		.as<std::vector<int> >(_nodeLinks);
 }
 
 /**
@@ -145,7 +151,7 @@ YAML::Node Node::save() const
 	node["position"]	= _pos;
 //	node["segment"]		= _segment;
 	node["type"]		= _type;
-	node["rank"]		= _rank;
+	node["nodeRank"]	= _nodeRank;
 	node["flags"]		= _flags;
 	node["reserved"]	= _reserved;
 	node["priority"]	= _priority;
@@ -166,11 +172,11 @@ int Node::getID() const
 
 /**
  * Gets the rank of units that can spawn on this Node.
- * @return, noderank
+ * @return, NodeRank enum
  */
 NodeRank Node::getRank() const
 {
-	return (NodeRank)_rank;
+	return static_cast<NodeRank>(_nodeRank);
 }
 
 /**

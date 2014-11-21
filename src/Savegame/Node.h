@@ -54,10 +54,10 @@ private:
 	int
 		_flags,		// desirability of patrolling to.
 		_id,		// unique identifier
-		_priority,	// "spawn" in .Mcd
-		_rank,		// aLien rank that can spawn here
-		_reserved,	//
-		_segment,	//
+		_priority,	// 'Spawn' in .RMP
+		_nodeRank,	// aLien rank that can spawn or path here
+		_reserved,	// something to do with shooting objectives in BaseDefense missions
+		_segment,	// something to do with nodeLinks; see BattlescapeGenerator::attachNodeLinks()
 		_type;		// usable by small/large/flying units.
 
 	Position _pos;
@@ -74,8 +74,7 @@ private:
 			TYPE_SMALL		= 0x02,	// large unit cannot spawn here when this bit is set
 			TYPE_DANGEROUS	= 0x04,	// an alien was shot here, stop patrolling to it like an idiot with a death wish
 
-//kL		static const int nodeRank[8][7]; // maps alien ranks to node (.RMP) ranks
-			nodeRank[8][8]; // kL
+			nodeRank[8][8]; // maps node-ranks (.RMP) to aliens' ranks
 
 		/// Creates a Node.
 		Node();
@@ -85,7 +84,7 @@ private:
 				Position pos,
 				int segment,
 				int type,
-				int rank,
+				int nodeRank,
 				int flags,
 				int reserved,
 				int priority);
@@ -97,10 +96,10 @@ private:
 		/// Saves the node to YAML.
 		YAML::Node save() const;
 
-		/// get the node's id
+		/// Gets the node's id.
 		int getID() const;
 
-		/// get the node's paths
+		/// Gets the node's paths.
 		std::vector<int>* getNodeLinks();
 
 		/// Gets node's rank.
@@ -117,26 +116,27 @@ private:
 
 		/// Gets the node's type.
 		int getType() const;
-		/// Sets the node's type, surprisingly
+		/// Sets the node's type. SURPRISE!! (not)
 		void setType(int type);
 
-		/// gets "flags" variable, which is really the patrolling desirability value
+		/// Gets the 'flags' variable which is really the patrol-desirability value.
 		int getFlags()
 		{
 			return _flags;
 		}
-		/// compares the _flags variables of the nodes (for the purpose of patrol decisions!)
-		bool operator<(Node& b)
-		{
-			return _flags < b.getFlags();
-		};
-			// kL_note: In SavedBattleGame::getPatrolNodes() I changed "<" to ">"
-			// wonder if that matters here. So:
-		/// compares the _flags variables of the nodes (for the purpose of patrol decisions!)
-		bool operator>(Node& b)
-		{
-			return _flags > b.getFlags();
-		};
+		/// Compares the 'flags' variables of the nodes for the purpose of patrol decisions.
+//		bool operator<(Node& b)
+//		{
+//			return _flags < b.getFlags();
+//		};
+		// kL_note: In SavedBattleGame::getPatrolNodes() I changed less-than to greater-than ...
+		// wonder if that matters here. So: REVERTED.
+		// correction: REMOVED. Just use getFlags() directly. Tks, anyway
+		/// Compares the 'flags' variables of the nodes for the purpose of patrol decisions.
+//		bool operator>(Node& b)
+//		{
+//			return _flags > b.getFlags();
+//		};
 
 		///
 		bool isAllocated() const;
