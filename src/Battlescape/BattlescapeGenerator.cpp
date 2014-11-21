@@ -121,6 +121,38 @@ BattlescapeGenerator::~BattlescapeGenerator()
 }
 
 /**
+ * Sets up the various arrays and whatnot according to the size of the map.
+ */
+void BattlescapeGenerator::init()
+{
+	_blocks.clear();
+	_landingzone.clear();
+	_segments.clear();
+	_drillMap.clear();
+
+	_blocks.resize(
+				_mapsize_x / 10,
+				std::vector<MapBlock*>(_mapsize_y / 10));
+	_landingzone.resize(
+				_mapsize_x / 10,
+				std::vector<bool>(
+							_mapsize_y / 10,
+							false));
+	_segments.resize(
+				_mapsize_x / 10,
+				std::vector<int>(
+				_mapsize_y / 10,
+				0));
+	_drillMap.resize(
+				_mapsize_x / 10,
+				std::vector<int>(
+							_mapsize_y / 10,
+							MD_NONE));
+
+	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
+}
+
+/**
  * Sets the XCom craft involved in the battle.
  * @param craft - pointer to Craft
  */
@@ -279,9 +311,9 @@ void BattlescapeGenerator::nextStage()
 							&_mapsize_x,
 							&_mapsize_y,
 							&_mapsize_z);
-	size_t pick = RNG::generate(
-							0,
-							ruleDeploy->getTerrains().size() - 1);
+	const size_t pick = RNG::generate(
+									0,
+									ruleDeploy->getTerrains().size() - 1);
 	_terrain = _rules->getTerrain(ruleDeploy->getTerrains().at(pick));
 
 	_worldShade = ruleDeploy->getShade();
@@ -2773,26 +2805,8 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 
 	// set up map generation vars
 	_dummy = new MapBlock("dummy");
-	_blocks.resize(
-				_mapsize_x / 10,
-				std::vector<MapBlock*>(_mapsize_y / 10));
-	_landingzone.resize(
-				_mapsize_x / 10,
-				std::vector<bool>(
-							_mapsize_y / 10,
-							false));
-	_segments.resize(
-				_mapsize_x / 10,
-				std::vector<int>(
-							_mapsize_y / 10,
-							0));
-	_drillMap.resize(
-				_mapsize_x / 10,
-				std::vector<int>(
-							_mapsize_y / 10,
-							MD_NONE));
 
-	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
+	init();
 
 	bool placed = false;
 	int
@@ -3087,6 +3101,38 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 
 					case MSC_REMOVE:
 						success = removeBlocks(command);
+					break;
+
+					case MSC_RESIZE:
+						if (_battleSave->getMissionType() == "STR_BASE_DEFENSE")
+						{
+							throw Exception("Map Generator encountered an error: Base defense map cannot be resized.");
+						}
+
+						if (_blocksToDo < (_mapsize_x / 10) * (_mapsize_y / 10))
+						{
+							throw Exception("Map Generator encountered an error: The map cannot be resized after adding blocks.");
+						}
+
+						if (command->getSizeX() > 0
+							&& command->getSizeX() != _mapsize_x / 10)
+						{
+							_mapsize_x = command->getSizeX() * 10;
+						}
+
+						if (command->getSizeY() > 0
+							&& command->getSizeY() != _mapsize_y / 10)
+						{
+							_mapsize_y = command->getSizeY() * 10;
+						}
+
+						if (command->getSizeZ() > 0
+							&& command->getSizeZ() != _mapsize_z)
+						{
+							_mapsize_z = command->getSizeZ();
+						}
+
+						init();
 					break;
 
 					default:

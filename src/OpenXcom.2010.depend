@@ -4722,7 +4722,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1416477006 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1416550713 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	<vector>
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
@@ -5771,7 +5771,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1416292834 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1416529283 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5869,7 +5869,7 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1416510080 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1416550850 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	<fstream>
 	<sstream>
@@ -9604,7 +9604,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1416457727 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1416529793 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -12195,7 +12195,7 @@
 1413136956 f:\git\openxcom\src\battlescape\particle.h
 	<SDL_types.h>
 
-1416477006 f:\git\openxcom\src\ruleset\mapscript.h
+1416550103 f:\git\openxcom\src\ruleset\mapscript.h
 	<vector>
 	<string>
 	<SDL_video.h>

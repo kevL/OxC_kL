@@ -73,7 +73,8 @@ enum MapScriptCommand
 	MSC_DIGTUNNEL,		//  4
 	MSC_FILLAREA,		//  5
 	MSC_CHECKBLOCK,		//  6
-	MSC_REMOVE			//  7
+	MSC_REMOVE,			//  7
+	MSC_RESIZE			//  8
 };
 
 
@@ -87,6 +88,7 @@ private:
 	int
 		_sizeX,
 		_sizeY,
+		_sizeZ,
 		_executionChances,
 		_executions,
 		_cumulativeFrequency,
@@ -149,8 +151,13 @@ private:
 		{
 			return _sizeY;
 		};
+		/// Gets the Y size for this command.
+		const int getSizeZ() const
+		{
+			return _sizeZ;
+		};
 
-		/// Get the chances of this command executing.
+			/// Get the chances of this command executing.
 		const int getChancesOfExecution() const
 		{
 			return _executionChances;

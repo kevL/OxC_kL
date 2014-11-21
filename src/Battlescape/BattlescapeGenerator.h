@@ -107,6 +107,8 @@ private:
 		_mission;
 
 
+	/// Sets the map size and associated vars.
+	void init();
 	/// Generates a new battlescape map.
 	void generateMap(const std::vector<MapScript*>* script);
 

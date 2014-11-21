@@ -38,6 +38,7 @@ MapScript::MapScript()
 		_type(MSC_UNDEFINED),
 		_sizeX(1),
 		_sizeY(1),
+		_sizeZ(0),
 		_executionChances(100),
 		_executions(1),
 		_cumulativeFrequency(0),
@@ -85,6 +86,12 @@ void MapScript::load(const YAML::Node& node)
 			_type = MSC_CHECKBLOCK;
 		else if (command == "removeBlock")
 			_type = MSC_REMOVE;
+		else if (command == "resize")
+		{
+			_type = MSC_RESIZE;
+			_sizeX =
+			_sizeY = 0; // defaults: don't resize anything unless specified.
+		}
 		else
 		{
 			throw Exception("Unknown command: " + command);
@@ -144,8 +151,26 @@ void MapScript::load(const YAML::Node& node)
 	{
 		if (mapNode.Type() == YAML::NodeType::Sequence)
 		{
-			_sizeX = mapNode.as<std::pair<int, int> >().first;
-			_sizeY = mapNode.as<std::pair<int, int> >().second;
+			int
+				entry = 0,
+				*sizes[3] =
+				{
+					&_sizeX,
+					&_sizeY,
+					&_sizeZ
+				};
+
+			for (YAML::const_iterator
+					i = mapNode.begin();
+					i != mapNode.end();
+					++i)
+			{
+				*sizes[entry] = (*i).as<int>(1);
+
+				entry++;
+				if (entry == 3)
+					break;
+			}
 		}
 		else
 		{
