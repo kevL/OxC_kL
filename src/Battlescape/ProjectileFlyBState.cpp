@@ -198,9 +198,21 @@ void ProjectileFlyBState::init()
 
 	bool popThis = false;
 
+	const bool targetTileValid = _parent->getSave()->getTile(_action.target) != NULL;
+
+	bool targetUnitValid = false;
+	if (targetTileValid == true)
+	{
+		const BattleUnit* const targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
+		targetUnitValid = targetUnit != NULL
+					   && targetUnit->isOut(true, true) == false
+					   && targetUnit == _parent->getSave()->getSelectedUnit()
+					   && _ammo != NULL;
+	}
+
 	if (_unit->isOut(true, true) == true // this condition-check is condensed from those above^
 		|| _action.weapon == NULL
-		|| _parent->getSave()->getTile(_action.target) == NULL)
+		|| targetTileValid == false)
 	{
 		popThis = true;
 	}
@@ -213,7 +225,14 @@ void ProjectileFlyBState::init()
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		popThis = true;
 	}
-	else if (_unit->getStopShot() == true)
+	else if (_unit->getStopShot() == true // this condition-check is condensed from those below_
+		|| (_unit->getFaction() != _parent->getSave()->getSide()
+			&& targetUnitValid == false))
+	{
+		_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
+		popThis = true;
+	}
+/*	else if (_unit->getStopShot() == true)
 	{
 		// TU are subtracted for a primaryAction firing/throwing
 		// BattleAction in BattlescapeGame::popState();
@@ -246,7 +265,7 @@ void ProjectileFlyBState::init()
 			_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
 			popThis = true;
 		}
-	}
+	} */
 
 	if (popThis == true)
 	{
@@ -279,7 +298,7 @@ void ProjectileFlyBState::init()
 	}
 
 
-	const Tile* const endTile = _parent->getSave()->getTile(_action.target);
+	const Tile* const destTile = _parent->getSave()->getTile(_action.target);
 
 	switch (_action.type)
 	{
@@ -334,7 +353,7 @@ void ProjectileFlyBState::init()
 			if (validThrowRange(
 							&_action,
 							originVoxel,
-							_parent->getSave()->getTile(_action.target)) == false)
+							destTile) == false)
 			{
 				//Log(LOG_INFO) << ". . . not valid throw range, EXIT";
 				_action.result = "STR_OUT_OF_RANGE";
@@ -343,9 +362,9 @@ void ProjectileFlyBState::init()
 				return;
 			}
 
-			if (endTile != NULL
-				&& endTile->getTerrainLevel() == -24
-				&& endTile->getPosition().z + 1 < _parent->getSave()->getMapSizeZ())
+			if (destTile != NULL
+				&& destTile->getTerrainLevel() == -24
+				&& destTile->getPosition().z + 1 < _parent->getSave()->getMapSizeZ())
 			{
 				_action.target.z += 1;
 			}
@@ -1169,9 +1188,9 @@ void ProjectileFlyBState::cancel()
  * @return, true if the range is valid
  */
 bool ProjectileFlyBState::validThrowRange(
-		BattleAction* action,
-		Position origin,
-		Tile* target)
+		const BattleAction* action,
+		const Position origin,
+		const Tile* target)
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::validThrowRange()";
 	if (action->type != BA_THROW) // this is a celatid spit.

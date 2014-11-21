@@ -230,10 +230,9 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	{
 		if (_save->selectNextFactionUnit(
 									true,
-									_AISecondMove)
-								== NULL)
+									_AISecondMove) == NULL)
 		{
-			if (!_save->getDebugMode())
+			if (_save->getDebugMode() == false)
 			{
 				_endTurnRequested = true;
 				//Log(LOG_INFO) << "BattlescapeGame::handleAI() statePushBack(end AI turn)";
@@ -246,7 +245,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			}
 		}
 
-		if (_save->getSelectedUnit())
+		if (_save->getSelectedUnit() != NULL)
 		{
 			_parentState->updateSoldierInfo();
 
@@ -297,8 +296,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	{
 		_playedAggroSound = false;
 		unit->setHiding(false);
-
-		if (Options::traceAI) Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType();
+		//if (Options::traceAI) Log(LOG_INFO) << "#" << unit->getId() << "--" << unit->getType();
 	}
 	//Log(LOG_INFO) << ". _AIActionCounter DONE";
 
@@ -358,14 +356,14 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	//Log(LOG_INFO) << ". getCharging DONE";
 
 
-	std::wostringstream ss; // debug.
+//	std::wostringstream ss; // debug.
 
 	if (action.type == BA_WALK)
 	{
-		ss << L"Walking to " << action.target;
-		_parentState->debug(ss.str());
+//		ss << L"Walking to " << action.target;
+//		_parentState->debug(ss.str());
 
-		if (_save->getTile(action.target))
+		if (_save->getTile(action.target) != NULL)
 			_save->getPathfinding()->calculate(
 											action.actor,
 											action.target);
@@ -395,6 +393,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 //			action.weapon = new BattleItem(
 //									_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
 //									_save->getCurrentItemId());
+			//Log(LOG_INFO) << ". . create Psi weapon DONE";
 			action.weapon = _alienPsi; // kL
 			action.TU = unit->getActionTUs(
 										action.type,
@@ -406,23 +405,49 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 											this,
 											action));
 
-			// specially fucked behaviour here: add and remove the item all at once.
-			// kL_note: The universalFist ought make this block redundant ...
-/*			if (action.type == BA_HIT)	// kL_note: I don't think the code ever gets here from the AI .....
-										// that is, if it does then action.weapon has been defined already and this conflicts ...
-//				&& action.weapon == NULL)
+			if (action.type == BA_HIT)
 			{
-				if (action.weapon->getRules()->getType() != unit->getMeleeWeapon()) // wait ... does this stop aLiens from using hand-held melee weapons. NO.
+				const std::string meleeWeapon = unit->getMeleeWeapon();
+				bool instaWeapon = false;
+
+				if (action.weapon != _universalFist
+					&& unit->getMeleeWeapon().empty() == false)
 				{
-					ss.clear();
-					ss << L"Attack type=" << action.type << " target="<< action.target << " weapon=" << action.weapon->getRules()->getName().c_str();
-					_parentState->debug(ss.str());
+					bool found = false;
+					for (std::vector<BattleItem*>::const_iterator
+							i = unit->getInventory()->begin();
+							i != unit->getInventory()->end()
+								&& found == false;
+							++i)
+					{
+						if ((*i)->getRules()->getType() == meleeWeapon)
+						{
+							// note this ought be conformed w/ bgen.addAlien equipped items to
+							// ensure radical (or standard) BT_MELEE weapons get equipped in hand;
+							// but for now just grab the meleeItem wherever it was equipped ...
+							found = true;
+							action.weapon = *i;
+						}
+					}
 
-					action.weapon = new BattleItem(
-												_parentState->getGame()->getRuleset()->getItem(unit->getMeleeWeapon()),
-												_save->getCurrentItemId());
+					if (found == false)
+					{
+						instaWeapon = true;
+						action.weapon = new BattleItem(
+													getRuleset()->getItem(meleeWeapon),
+													_save->getCurrentItemId());
+						action.weapon->setOwner(unit);
+					}
+				}
+				else if (action.weapon != NULL
+					&& action.weapon->getRules()->getBattleType() != BT_MELEE
+					&& action.weapon->getRules()->getBattleType() != BT_FIREARM)
+				{
+					action.weapon = NULL;
+				}
 
-					action.weapon->setOwner(unit);
+				if (action.weapon != NULL) // also checked in getActionTUs() & ProjectileFlyBState::init()
+				{
 					action.TU = unit->getActionTUs(
 												action.type,
 												action.weapon);
@@ -430,31 +455,20 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 					statePushBack(new ProjectileFlyBState(
 														this,
 														action));
-					_save->removeItem(action.weapon);
-					return;
-				}
-				else if (action.weapon->getRules()->getType() == unit->getMeleeWeapon())	// Fist already created:
-																							// This could prob be let fallthrough to a normal HIT attack ... if there even is one!!!
-				{
-					action.TU = unit->getActionTUs(
-												action.type,
-												action.weapon);
 
-					statePushBack(new ProjectileFlyBState(
-														this,
-														action));
-					return;
+					if (instaWeapon == true)
+						_save->removeItem(action.weapon);
 				}
-			} */
+
+				return;
+			}
 		}
-		//Log(LOG_INFO) << ". . create Psi weapon DONE";
 
-
-		ss.clear();
-		ss << L"Attack type=" << action.type
-				<< " target=" << action.target
-				<< " weapon=" << action.weapon->getRules()->getName().c_str();
-		_parentState->debug(ss.str());
+//		ss.clear();
+//		ss << L"Attack type = " << action.type
+//				<< ", target = " << action.target
+//				<< ", weapon = " << action.weapon->getRules()->getName().c_str();
+//		_parentState->debug(ss.str());
 
 		//Log(LOG_INFO) << ". attack action.Type = " << action.type
 		//		<< ", action.Target = " << action.target
@@ -471,14 +485,14 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			|| action.type == BA_MINDCONTROL)
 		{
 			//Log(LOG_INFO) << ". . . in action.type Psi";
-			bool success = _save->getTileEngine()->psiAttack(&action);
+			const bool success = _save->getTileEngine()->psiAttack(&action);
 			//Log(LOG_INFO) << ". . . success = " << success;
-			if (success
+			if (success == true
 				&& action.type == BA_MINDCONTROL)
 			{
 				//Log(LOG_INFO) << ". . . inside success MC";
-				BattleUnit* unit = _save->getTile(action.target)->getUnit();
-				Game* game = _parentState->getGame();
+				const BattleUnit* const unit = _save->getTile(action.target)->getUnit();
+				Game* const game = _parentState->getGame();
 				game->pushState(new InfoboxState(game->getLanguage()->getString(
 																		"STR_IS_UNDER_ALIEN_CONTROL",
 																		unit->getGender())
@@ -495,15 +509,14 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 	if (action.type == BA_NONE)
 	{
 		//Log(LOG_INFO) << ". . in action.type None";
-		_parentState->debug(L"Idle");
+//		_parentState->debug(L"Idle");
 		_AIActionCounter = 0;
 
 		if (_save->selectNextFactionUnit(
 									true,
-									_AISecondMove)
-								== NULL)
+									_AISecondMove) == NULL)
 		{
-			if (!_save->getDebugMode())
+			if (_save->getDebugMode() == false)
 			{
 				_endTurnRequested = true;
 				//Log(LOG_INFO) << "BattlescapeGame::handleAI() statePushBack(end AI turn) 2";
@@ -516,7 +529,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			}
 		}
 
-		if (_save->getSelectedUnit())
+		if (_save->getSelectedUnit() != NULL)
 		{
 			_parentState->updateSoldierInfo();
 

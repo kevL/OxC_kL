@@ -85,6 +85,7 @@ UnitWalkBState::UnitWalkBState(
 UnitWalkBState::~UnitWalkBState()
 {
 	//Log(LOG_INFO) << "Delete UnitWalkBState";
+	// note I wonder if setDashing(false) would work here
 }
 
 /**
@@ -973,9 +974,11 @@ void UnitWalkBState::postPathProcedures()
 
 		if (_unit->getCharging() != NULL)
 		{
+			const Position targetPos = _unit->getCharging()->getPosition();
+
 			dirFinal = _parent->getTileEngine()->getDirectionTo(
 															_unit->getPosition(),
-															_unit->getCharging()->getPosition());
+															targetPos);
 			// kL_notes (pre-above):
 			// put an appropriate facing direction here
 			// don't stare at a wall. Get if aggro, face closest xCom op <- might be done somewhere already.
@@ -991,7 +994,7 @@ void UnitWalkBState::postPathProcedures()
 			{
 				BattleAction action;
 				action.actor = _unit;
-				action.target = _unit->getCharging()->getPosition();
+				action.target = targetPos;
 				action.targeting = true;
 				action.type = BA_HIT;
 				action.weapon = _unit->getMainHandWeapon();
