@@ -2808,10 +2808,11 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 
 	init();
 
-	bool placed = false;
-	int
-		x = 0,
-		y = 0;
+//	bool placed = false;
+//	int
+//		x = 0,
+//		y = 0;
+
 
 	MapBlock
 		* craftMap = NULL,
@@ -2831,7 +2832,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 	{
 		(*i)->loadData();
 
-		if (_rules->getMCDPatch((*i)->getName()))
+		if (_rules->getMCDPatch((*i)->getName()) != NULL)
 			_rules->getMCDPatch((*i)->getName())->modifyData(*i);
 
 		_battleSave->getMapDataSets()->push_back(*i);
@@ -3639,7 +3640,7 @@ bool BattlescapeGenerator::selectPosition(
 								yCheck != y + sizeY;
 								++yCheck)
 						{
-							if (_blocks[xCheck][yCheck])
+							if (_blocks[xCheck][yCheck] != NULL)
 								add = false;
 						}
 					}
@@ -3677,19 +3678,17 @@ bool BattlescapeGenerator::addCraft(
 {
 	craftPos.w = craftMap->getSizeX();
 	craftPos.h = craftMap->getSizeY();
-	bool placed = false;
+
 	int
 		x,
 		y;
+	bool placed = selectPosition(
+							command->getRects(),
+							x,
+							y,
+							craftPos.w,
+							craftPos.h);
 
-	placed = selectPosition(
-						command->getRects(),
-						x,
-						y,
-						craftPos.w,
-						craftPos.h);
-
-	// if ok, allocate it
 	if (placed == true)
 	{
 		craftPos.x = x;
@@ -3709,7 +3708,7 @@ bool BattlescapeGenerator::addCraft(
 			{
 				_landingzone[craftPos.x + x][craftPos.y + y] = true;
 
-				MapBlock* block = command->getNextBlock(_terrain);
+				MapBlock* const block = command->getNextBlock(_terrain);
 				if (block != NULL
 					&& _blocks[craftPos.x + x][craftPos.y + y] == NULL)
 				{
@@ -3745,7 +3744,6 @@ bool BattlescapeGenerator::addLine(
 		return false;
 	}
 
-	bool placed = false;
 	int tries = 0,
 		roadX,
 		roadY,
@@ -3765,15 +3763,16 @@ bool BattlescapeGenerator::addLine(
 		limit = _mapsize_y / 10;
 	}
 
+	bool placed = false;
 	while (placed == false)
 	{
+		placed = true;
 		selectPosition(
 					rects,
 					roadX,
 					roadY,
 					10,
 					10);
-		placed = true;
 
 		for (
 				*iteratorValue = 0;
@@ -3859,7 +3858,7 @@ bool BattlescapeGenerator::addBlock(
 		}
 	}
 
-	int drillType = 0;
+//	int drillType = 0;
 	for (int
 			xd = 0;
 			xd <= xSize;
