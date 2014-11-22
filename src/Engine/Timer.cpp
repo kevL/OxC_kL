@@ -59,15 +59,15 @@ Uint32 slowTick()
 }
 
 
-Uint32 Timer::gameSlowSpeed	= 1;
+Uint32 Timer::gameSlowSpeed = 1;
 
-int Timer::maxFrameSkip		= 8; // this is a pretty good default at 60FPS.
+int Timer::maxFrameSkip = 8; // this is a pretty good default at 60FPS.
 
 
 /**
  * Initializes a new timer with a set interval.
  * @param interval		- time interval in milliseconds
- * @param frameSkipping - true to use frameskipping
+ * @param frameSkipping - true to use frameskipping (default false)
  */
 Timer::Timer(
 		Uint32 interval,
@@ -95,7 +95,8 @@ Timer::~Timer()
  */
 void Timer::start()
 {
-	_frameSkipStart = _start = slowTick();
+	_frameSkipStart =
+	_start = slowTick();
 	_running = true;
 }
 
@@ -114,7 +115,7 @@ void Timer::stop()
  */
 Uint32 Timer::getTime() const
 {
-	if (_running)
+	if (_running == true)
 		return slowTick() - _start;
 
 	return 0;
@@ -143,17 +144,20 @@ void Timer::think(
 	Sint64 now = slowTick();
 	// this is used to make sure we stop calling *_state on *state
 	// in the loop once *state has been popped and deallocated:
-	Game* game = state? state->_game: NULL;
+	const Game* game = NULL;
+	if (state != NULL)
+		game = state->_game;
 //	assert(!game || game->isState(state));
 
-	if (_running)
+	if (_running == true)
 	{
 		if (now - _frameSkipStart >= _interval)
 		{
 			for (int
 					i = 0;
 					i <= maxFrameSkip
-						&& isRunning()
+//						&& isRunning()
+						&& _running == true
 						&& now - _frameSkipStart >= _interval;
 					++i)
 			{
@@ -174,7 +178,7 @@ void Timer::think(
 				}
 			}
 
-			if (_running
+			if (_running == true
 				&& surface != NULL
 				&& _surface != 0)
 			{

@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_STATE_H
 #define OPENXCOM_STATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <SDL.h>
+//#include <SDL.h>
 
 
 namespace OpenXcom

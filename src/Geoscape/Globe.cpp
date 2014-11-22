@@ -21,10 +21,10 @@
 
 #include "Globe.h"
 
-#include "../fmath.h"
+//#include <algorithm>
+//#include <cmath>
 
-#include <algorithm>
-#include <cmath>
+//#include "../fmath.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/FastLineClip.h"

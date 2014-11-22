@@ -71,8 +71,7 @@ SelectDestinationState::SelectDestinationState(
 {
 	_screen = false;
 
-	const int
-		dx = _game->getScreen()->getDX();
+	const int dx = _game->getScreen()->getDX();
 //kL	dy = _game->getScreen()->getDY();
 
 /*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
@@ -86,12 +85,12 @@ SelectDestinationState::SelectDestinationState(
 	_window->setX(dx);
 	_window->setDY(0);
 
-//kL	_txtTitle	= new Text(100, 9, 16 + dx, 10);
+//	_txtTitle	= new Text(100, 9, 16 + dx, 10);
 
 	_btnCancel	= new TextButton(60, 14, 120 + dx, 8);
 	_btnCydonia	= new TextButton(60, 14, 180 + dx, 8);
 
-	_txtError = new Text(100, 9, 12 + dx, 11);
+	_txtError	= new Text(100, 9, 12 + dx, 11);
 
 	setPalette("PAL_GEOSCAPE", 0);
 
@@ -105,7 +104,7 @@ SelectDestinationState::SelectDestinationState(
 	add(_window);
 	add(_btnCancel);
 	add(_btnCydonia);
-//kL	add(_txtTitle);
+//	add(_txtTitle);
 	add(_txtError);
 
 	_txtError->setColor(Palette::blockOffset(5)); // (8)+5);
@@ -217,11 +216,11 @@ void SelectDestinationState::init()
 /**
  * Runs the globe rotation timer.
  */
-void SelectDestinationState::think()
+/* void SelectDestinationState::think()
 {
 //	State::think();
 //	_globe->think();
-}
+} */
 
 /**
  * Handles the globe.
@@ -239,12 +238,12 @@ void SelectDestinationState::handle(Action* action)
  */
 void SelectDestinationState::globeClick(Action* action)
 {
-	double
-		lon,
-		lat;
 	const int
 		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
 		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
+	double
+		lon,
+		lat;
 
 	_globe->cartToPolar(
 					static_cast<Sint16>(mouseX),

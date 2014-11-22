@@ -19,7 +19,7 @@
 
 #include "DefeatState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
@@ -35,8 +35,7 @@
 
 #include "../Menu/MainMenuState.h"
 
-#include "../Resource/ResourcePack.h"
-#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Savegame/SavedGame.h"
 
@@ -61,7 +60,7 @@ DefeatState::DefeatState()
 		"PICT5.LBM"
 	};
 
-	_timer = new Timer(30000);
+//	_timer = new Timer(30000);
 
 	_text[0] = new Text(190, 104, 0, 0);
 	_text[1] = new Text(200, 34, 32, 0);
@@ -71,7 +70,7 @@ DefeatState::DefeatState()
 			i < SCREENS;
 			++i)
 	{
-		Surface* screen = _game->getResourcePack()->getSurface(files[i]);
+		Surface* const screen = _game->getResourcePack()->getSurface(files[i]);
 
 		_bg[i] = new InteractiveSurface(320, 200, 0, 0);
 
@@ -97,8 +96,8 @@ DefeatState::DefeatState()
 	centerAllSurfaces();
 
 
-	_timer->onTimer((StateHandler)& DefeatState::screenTimer);
-	_timer->start();
+//	_timer->onTimer((StateHandler)& DefeatState::screenTimer);
+//	_timer->start();
 
 	screenClick(NULL);
 
@@ -114,24 +113,24 @@ DefeatState::DefeatState()
  */
 DefeatState::~DefeatState()
 {
-	delete _timer;
+//	delete _timer;
 }
 
 /**
  * Handle timers.
  */
-void DefeatState::think()
+/* void DefeatState::think()
 {
 	_timer->think(this, NULL);
-}
+} */
 
 /**
  * Shows the next screen on a timed basis.
  */
-void DefeatState::screenTimer()
+/* void DefeatState::screenTimer()
 {
 	screenClick(NULL);
-}
+} */
 
 /**
  * Shows the next screen in the slideshow or goes back to the Main Menu.
@@ -139,7 +138,7 @@ void DefeatState::screenTimer()
  */
 void DefeatState::screenClick(Action*)
 {
-	_timer->start();
+//	_timer->start();
 
 	if (_screen > -1)
 	{

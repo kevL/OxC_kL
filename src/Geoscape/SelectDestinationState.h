@@ -33,7 +33,6 @@ class Globe;
 //class InteractiveSurface;
 class Text;
 class TextButton;
-class Timer;
 class Window;
 
 
@@ -48,11 +47,11 @@ class SelectDestinationState
 private:
 	Craft* _craft;
 //	CraftErrorState* _error;
-	GeoscapeState* _geo; // kL
+	GeoscapeState* _geo;
 	Globe* _globe;
 //	InteractiveSurface* _btnRotateLeft, * _btnRotateRight, * _btnRotateUp, * _btnRotateDown, * _btnZoomIn, * _btnZoomOut;
 	Window* _window;
-//kL	Text* _txtTitle;
+//	Text* _txtTitle;
 	Text* _txtError;
 	TextButton
 		* _btnCancel,
@@ -71,7 +70,7 @@ private:
 		/// Resets globe.
 		void init();
 		/// Runs the timer.
-		void think();
+//		void think();
 
 		/// Handles actions.
 		void handle(Action* action);

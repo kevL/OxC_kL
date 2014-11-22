@@ -35,9 +35,9 @@ AlienBase::AlienBase()
 		Target(),
 		_id(0),
 		_inBattlescape(false),
-		_discovered(false),
-		_race(""), // kL
-		_edit("") // kL
+		_discovered(false)
+//		_race(""), // kL
+//		_edit("") // kL
 {
 }
 
@@ -50,22 +50,22 @@ AlienBase::~AlienBase()
 
 /**
  * Loads the alien base from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void AlienBase::load(const YAML::Node& node)
 {
 	Target::load(node);
 
-	_id				= node["id"].as<int>(_id);
-	_race			= node["race"].as<std::string>(_race);
-	_edit			= node["edit"].as<std::string>(_edit); // kL
-	_inBattlescape	= node["inBattlescape"].as<bool>(_inBattlescape);
-	_discovered		= node["discovered"].as<bool>(_discovered);
+	_id				= node["id"]			.as<int>(_id);
+	_race			= node["race"]			.as<std::string>(_race);
+	_edit			= node["edit"]			.as<std::string>(_edit); // kL
+	_inBattlescape	= node["inBattlescape"]	.as<bool>(_inBattlescape);
+	_discovered		= node["discovered"]	.as<bool>(_discovered);
 }
 
 /**
  * Saves the alien base to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node AlienBase::save() const
 {
@@ -86,7 +86,7 @@ YAML::Node AlienBase::save() const
 
 /**
  * Saves the alien base's unique identifiers to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node AlienBase::saveId() const
 {
@@ -100,7 +100,7 @@ YAML::Node AlienBase::saveId() const
 
 /**
  * Returns the alien base's unique ID.
- * @return Unique ID.
+ * @return, unique ID
  */
 int AlienBase::getId() const
 {
@@ -109,7 +109,7 @@ int AlienBase::getId() const
 
 /**
  * Changes the alien base's unique ID.
- * @param id Unique ID.
+ * @param id - unique ID
  */
 void AlienBase::setId(int id)
 {
@@ -118,8 +118,8 @@ void AlienBase::setId(int id)
 
 /**
  * Returns the alien base's unique identifying name.
- * @param lang Language to get strings from.
- * @return Full name.
+ * @param lang - pointer to Language to get strings from
+ * @return, full name
  */
 std::wstring AlienBase::getName(Language* lang) const
 {
@@ -128,7 +128,7 @@ std::wstring AlienBase::getName(Language* lang) const
 
 /**
  * Returns the globe marker for the alien base.
- * @return Marker sprite, -1 if none.
+ * @return, marker sprite (-1 if none)
  */
 int AlienBase::getMarker() const
 {
@@ -140,7 +140,7 @@ int AlienBase::getMarker() const
 
 /**
  * Returns the alien race currently residing in the alien base.
- * @return Alien race.
+ * @return, alien race string
  */
 std::string AlienBase::getAlienRace() const
 {
@@ -149,7 +149,7 @@ std::string AlienBase::getAlienRace() const
 
 /**
  * Changes the alien race currently residing in the alien base.
- * @param race Alien race.
+ * @param race - reference to alien race string
  */
 void AlienBase::setAlienRace(const std::string& race)
 {
@@ -158,7 +158,7 @@ void AlienBase::setAlienRace(const std::string& race)
 
 /**
  * kL. Returns textedit that the player has entered.
- * @return, Text.
+ * @return, user text
  */
 std::string AlienBase::getLabel() const // kL
 {
@@ -167,7 +167,7 @@ std::string AlienBase::getLabel() const // kL
 
 /**
  * kL. Changes textedit that the player has entered.
- * @param edit, User textedit.
+ * @param edit - user text
  */
 void AlienBase::setLabel(const std::string& edit) // kL
 {

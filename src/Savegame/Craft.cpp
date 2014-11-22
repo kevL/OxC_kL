@@ -903,7 +903,7 @@ void Craft::checkup()
 /**
  * Gets if a UFO is detected by the craft's radar.
  * @param target - pointer to target
- * @return, true if detected, false otherwise
+ * @return, true if detected
  */
 bool Craft::detect(Target* target) const
 {

@@ -19,7 +19,7 @@
 
 #include "GraphsState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -625,7 +625,7 @@ GraphsState::GraphsState(int curGraph)
 		++month;
 	}
 
-	for (std::vector<Text*>::iterator // set up the vertical measurement units
+	for (std::vector<Text*>::const_iterator // set up the vertical measurement units
 			i = _txtScale.begin();
 			i != _txtScale.end();
 			++i)
@@ -713,9 +713,10 @@ GraphsState::~GraphsState()
 {
 	delete _blinkTimer;
 
-	std::string graphRegionToggles;
-	std::string graphCountryToggles;
-	std::string graphFinanceToggles;
+	std::string
+		graphRegionToggles,
+		graphCountryToggles,
+		graphFinanceToggles;
 
 	for (size_t
 			i = 0;
@@ -749,7 +750,7 @@ GraphsState::~GraphsState()
 }
 
 /**
- * Blinks current aLien activity.
+ * Blinks current activity.
  */
 void GraphsState::think()
 {
@@ -775,7 +776,7 @@ void GraphsState::blink()
 		&& _finance == false)
 	{
 		//Log(LOG_INFO) << ". blink aLien Region act.";
-		for (std::vector<bool>::iterator
+		for (std::vector<bool>::const_iterator
 				i = _blinkRegion.begin();
 				i != _blinkRegion.end();
 				++i)
@@ -794,7 +795,7 @@ void GraphsState::blink()
 		&& _finance == false)
 	{
 		//Log(LOG_INFO) << ". blink aLien Country act.";
-		for (std::vector<bool>::iterator
+		for (std::vector<bool>::const_iterator
 				i = _blinkCountry.begin();
 				i != _blinkCountry.end();
 				++i)
@@ -813,7 +814,7 @@ void GraphsState::blink()
 		&& _finance == false)
 	{
 		//Log(LOG_INFO) << ". blink xCom Region act.";
-		for (std::vector<bool>::iterator
+		for (std::vector<bool>::const_iterator
 				i = _blinkRegionXCOM.begin();
 				i != _blinkRegionXCOM.end();
 				++i)
@@ -832,7 +833,7 @@ void GraphsState::blink()
 		&& _finance == false)
 	{
 		//Log(LOG_INFO) << ". blink xCom Country act.";
-		for (std::vector<bool>::iterator
+		for (std::vector<bool>::const_iterator
 				i = _blinkCountryXCOM.begin();
 				i != _blinkCountryXCOM.end();
 				++i)

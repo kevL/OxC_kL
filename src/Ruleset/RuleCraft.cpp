@@ -76,37 +76,37 @@ void RuleCraft::load(
 		int modIndex,
 		int listOrder)
 {
-	_type		= node["type"].as<std::string>(_type);
-	_requires	= node["requires"].as< std::vector<std::string> >(_requires);
+	_type		= node["type"]		.as<std::string>(_type);
+	_requires	= node["requires"]	.as< std::vector<std::string> >(_requires);
 
 	if (node["sprite"])
 	{
-		_sprite		= node["sprite"].as<int>(_sprite);
+		_sprite = node["sprite"].as<int>(_sprite);
 		if (_sprite > 4) // this is an offset in BASEBITS.PCK, and two in INTICONS.PCK
 			_sprite += modIndex;
 	}
 
-	_fuelMax		= node["fuelMax"].as<int>(_fuelMax);
-	_damageMax		= node["damageMax"].as<int>(_damageMax);
-	_speedMax		= node["speedMax"].as<int>(_speedMax);
-	_accel			= node["accel"].as<int>(_accel);
-	_weapons		= node["weapons"].as<int>(_weapons);
-	_soldiers		= node["soldiers"].as<int>(_soldiers);
-	_vehicles		= node["vehicles"].as<int>(_vehicles);
-	_costBuy		= node["costBuy"].as<int>(_costBuy);
-	_costRent		= node["costRent"].as<int>(_costRent);
-	_costSell		= node["costSell"].as<int>(_costSell);
-	_refuelItem		= node["refuelItem"].as<std::string>(_refuelItem);
-	_repairRate		= node["repairRate"].as<int>(_repairRate);
-	_refuelRate		= node["refuelRate"].as<int>(_refuelRate);
-	_radarRange		= node["radarRange"].as<int>(_radarRange);
-	_sightRange		= node["sightRange"].as<int>(_sightRange);
-	_transferTime	= node["transferTime"].as<int>(_transferTime);
-	_score			= node["score"].as<int>(_score);
+	_fuelMax		= node["fuelMax"]		.as<int>(_fuelMax);
+	_damageMax		= node["damageMax"]		.as<int>(_damageMax);
+	_speedMax		= node["speedMax"]		.as<int>(_speedMax);
+	_accel			= node["accel"]			.as<int>(_accel);
+	_weapons		= node["weapons"]		.as<int>(_weapons);
+	_soldiers		= node["soldiers"]		.as<int>(_soldiers);
+	_vehicles		= node["vehicles"]		.as<int>(_vehicles);
+	_costBuy		= node["costBuy"]		.as<int>(_costBuy);
+	_costRent		= node["costRent"]		.as<int>(_costRent);
+	_costSell		= node["costSell"]		.as<int>(_costSell);
+	_refuelItem		= node["refuelItem"]	.as<std::string>(_refuelItem);
+	_repairRate		= node["repairRate"]	.as<int>(_repairRate);
+	_refuelRate		= node["refuelRate"]	.as<int>(_refuelRate);
+	_radarRange		= node["radarRange"]	.as<int>(_radarRange);
+	_sightRange		= node["sightRange"]	.as<int>(_sightRange);
+	_transferTime	= node["transferTime"]	.as<int>(_transferTime);
+	_score			= node["score"]			.as<int>(_score);
 
 	if (const YAML::Node& terrain = node["battlescapeTerrainData"])
 	{
-		RuleTerrain* rule = new RuleTerrain(terrain["name"].as<std::string>());
+		RuleTerrain* const rule = new RuleTerrain(terrain["name"].as<std::string>());
 
 		rule->load(terrain, ruleset);
 		_battlescapeTerrainData = rule;
@@ -116,9 +116,9 @@ void RuleCraft::load(
 	}
 
 	_spacecraft	= node["spacecraft"].as<bool>(_spacecraft);
-	_listOrder	= node["listOrder"].as<int>(_listOrder);
+	_listOrder	= node["listOrder"]	.as<int>(_listOrder);
 
-	if (!_listOrder)
+	if (_listOrder == 0)
 		_listOrder = listOrder;
 
 	_maxItems = node["maxItems"].as<int>(_maxItems);

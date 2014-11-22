@@ -88,23 +88,26 @@ protected:
 		/// Loads a general image file.
 		void loadImage(const std::string& filename);
 
+		/// Clears the surface's contents with a specified colour.
+		void clear(Uint32 color = 0);
 		/// Offsets the surface's colors by a set amount.
 		void offset(
-				int off,
-				int min = -1,
-				int max = -1,
+				int delta,
+				int minColor = -1,
+				int maxColor = -1,
 				int mult = 1);
 		/// Inverts the surface's colors.
 		void invert(Uint8 mid);
+
 		/// Runs surface functionality every cycle
 		virtual void think();
-
-		/// Clears the surface's contents with a specified colour.
-		void clear(Uint32 color = 0);
 		/// Draws the surface's graphic.
 		virtual void draw();
 		/// Blits this surface onto another one.
 		virtual void blit(Surface* surface);
+		/// Copies a portion of another surface into this one.
+		void copy(Surface* surface);
+
 		/// Initializes the surface's various text resources.
 		virtual void initText(
 				Font*,
@@ -113,8 +116,6 @@ protected:
 		{
 		};
 
-		/// Copies a portion of another surface into this one.
-		void copy(Surface* surface);
 		/// Draws a filled rectangle on the surface.
 		void drawRect(
 				SDL_Rect* rect,

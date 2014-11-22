@@ -28,7 +28,7 @@ namespace OpenXcom
 
 class InteractiveSurface;
 class Text;
-class Timer;
+//class Timer;
 
 
 /**
@@ -42,12 +42,10 @@ class VictoryState
 private:
 	static const int SCREENS = 5;
 
+	int _screen;
 
 	InteractiveSurface* _bg[SCREENS];
 	Text* _text[SCREENS];
-
-	int _screen;
-
 //	Timer* _timer;
 
 

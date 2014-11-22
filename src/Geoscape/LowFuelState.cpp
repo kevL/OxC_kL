@@ -19,7 +19,7 @@
 
 #include "LowFuelState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "GeoscapeState.h"
 
@@ -27,6 +27,7 @@
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
+#include "../Engine/Timer.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -43,7 +44,7 @@ namespace OpenXcom
 /**
  * Initializes all the elements in the Low Fuel window.
  * @param craft - pointer to the Craft to display
- * @param state - pointer to the GeoscapeState
+ * @param state - pointer to GeoscapeState
  */
 LowFuelState::LowFuelState(
 		Craft* craft,
@@ -54,11 +55,20 @@ LowFuelState::LowFuelState(
 {
 	_screen = false;
 
-	_window		= new Window(this, 224, 120, 16, 40, POPUP_BOTH);
-	_txtTitle	= new Text(214, 17, 21, 60);
-	_txtMessage	= new Text(214, 17, 21, 90);
-	_btnOk5Secs	= new TextButton(90, 18, 30, 120);
-	_btnOk		= new TextButton(90, 18, 136, 120);
+	_window		= new Window(this, 224, 120, 16, 40); //, POPUP_BOTH);
+//	_window		= new Window(this, 320, 200); // works.
+//	_window->setX(0);
+//	_window->setDY(0);
+
+	_txtTitle	= new Text(214, 17, 21, 51);
+	_txtMessage	= new Text(214, 50, 21, 68);
+	_btnOk5Secs	= new TextButton(90, 18, 30, 134);
+	_btnOk		= new TextButton(90, 18, 136, 134);
+
+	_blinkTimer = new Timer(325);
+	_blinkTimer->onTimer((StateHandler)& LowFuelState::blink);
+	_blinkTimer->start();
+
 
 	setPalette("PAL_GEOSCAPE", 4);
 
@@ -70,6 +80,7 @@ LowFuelState::LowFuelState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(15)-1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
 
@@ -78,8 +89,10 @@ LowFuelState::LowFuelState(
 	_txtTitle->setBig();
 	_txtTitle->setText(_craft->getName(_game->getLanguage()));
 
-	_txtMessage->setColor(Palette::blockOffset(8)+10);
+	_txtMessage->setColor(Palette::blockOffset(3)+4); //(8)+10);
 	_txtMessage->setAlign(ALIGN_CENTER);
+	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
+	_txtMessage->setBig();
 	_txtMessage->setText(tr("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
@@ -102,6 +115,34 @@ LowFuelState::LowFuelState(
  */
 LowFuelState::~LowFuelState()
 {
+	delete _blinkTimer;
+}
+
+/**
+ * Init.
+ */
+/* void LowFuelState::init()
+{
+	State::init();
+
+	_window->setColor(Palette::blockOffset(15)-1);
+	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
+} */
+
+/**
+ * Runs the blink timer.
+ */
+void LowFuelState::think()
+{
+	_blinkTimer->think(this, NULL);
+}
+
+/**
+ * Blinks the message text.
+ */
+void LowFuelState::blink()
+{
+	_txtMessage->setVisible(_txtMessage->getVisible() == false);
 }
 
 /**

@@ -133,16 +133,16 @@ inline void DeleteAligned(void* buffer)
 
 
 /**
- * Sets up a blank 8bpp surface with the specified size and position,
+ * Sets up a blank 8bpp surface with the specified size and position
  * with pure black as the transparent color.
  * @note Surfaces don't have to fill the whole size since their
  * background is transparent, specially subclasses with their own
  * drawing logic, so it just covers the maximum drawing area.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
- * @param bpp Bits-per-pixel depth.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
+ * @param bpp		- bits-per-pixel depth (default 8)
  */
 Surface::Surface(
 		int width,
@@ -496,18 +496,18 @@ void Surface::clear(Uint32 color)
 /**
  * Shifts all the colors in the surface by a set amount.
  * This is a common method in 8bpp games to simulate color effects for cheap.
- * @param off, Amount to shift.
- * @param min, Minimum color to shift to.
- * @param max, Maximum color to shift to.
- * @param mult, Shift multiplier.
+ * @param delta		- amount to shift
+ * @param minColor	- minimum color to shift to (default -1)
+ * @param maxColor	- maximum color to shift to (default -1)
+ * @param mult		- shift multiplier (default 1)
  */
 void Surface::offset(
-		int off,
-		int min,
-		int max,
+		int delta,
+		int minColor,
+		int maxColor,
 		int mult)
 {
-	if (off == 0)
+	if (delta == 0)
 		return;
 
 	lock(); // Lock the surface
@@ -518,23 +518,23 @@ void Surface::offset(
 				&& y < getHeight();
 			)
 	{
-		Uint8 pixel = getPixelColor(x, y);	// getPixelColor
-		int p;								// the new color
+		const Uint8 pixel = getPixelColor(x, y);	// getPixelColor
+		int p;										// the new color
 
-		if (off > 0)
-			p = (pixel * mult) + off;
+		if (delta > 0)
+			p = (pixel * mult) + delta;
 		else
-			p = (pixel + off) / mult;
+			p = (pixel + delta) / mult;
 
-		if (min != -1
-			&& p < min)
+		if (minColor != -1
+			&& p < minColor)
 		{
-			p = min;
+			p = minColor;
 		}
-		else if (max != -1
-			&& p > max)
+		else if (maxColor != -1
+			&& p > maxColor)
 		{
-			p = max;
+			p = maxColor;
 		}
 
 		if (pixel > 0)
@@ -590,7 +590,6 @@ void Surface::think()
 void Surface::draw()
 {
 	_redraw = false;
-
 	clear();
 }
 
@@ -604,10 +603,10 @@ void Surface::draw()
 void Surface::blit(Surface* surface)
 {
 	//Log(LOG_INFO) << "blit()";
-	if (_visible
-		&& !_hidden)
+	if (_visible == true
+		&& _hidden == false)
 	{
-		if (_redraw)
+		if (_redraw == true)
 			draw();
 
 		SDL_Rect* cropper;

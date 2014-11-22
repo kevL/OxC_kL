@@ -19,7 +19,7 @@
 
 #include "ConfirmLandingState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Battlescape/BattlescapeGenerator.h"
 #include "../Battlescape/BriefingState.h"
@@ -330,7 +330,7 @@ void ConfirmLandingState::init()
 {
 	State::init();
 
-	Base* base = dynamic_cast<Base*>(_craft->getDestination());
+	const Base* const base = dynamic_cast<Base*>(_craft->getDestination());
 	if (base == _craft->getBase())
 		_game->popState();
 }

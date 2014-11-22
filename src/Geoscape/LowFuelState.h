@@ -30,6 +30,7 @@ class Craft;
 class GeoscapeState;
 class Text;
 class TextButton;
+class Timer;
 class Window;
 
 
@@ -49,6 +50,7 @@ private:
 	TextButton
 		* _btnOk,
 		* _btnOk5Secs;
+	Timer* _blinkTimer;
 	Window* _window;
 	Text
 		* _txtTitle,
@@ -62,6 +64,13 @@ private:
 				GeoscapeState* state);
 		/// Cleans up the Low Fuel state.
 		~LowFuelState();
+
+		/// Init.
+//		void init();
+		/// Runs the blink timer.
+		void think();
+		/// Blinks the message text.
+		void blink();
 
 		/// Handler for clicking the Ok button.
 		void btnOkClick(Action* action);

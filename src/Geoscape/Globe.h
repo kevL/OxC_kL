@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_GLOBE_H
 #define OPENXCOM_GLOBE_H
 
-#include <list>
-#include <vector>
+//#include <list>
+//#include <vector>
 
 #include "Cord.h"
 

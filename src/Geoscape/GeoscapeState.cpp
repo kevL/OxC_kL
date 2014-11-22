@@ -21,16 +21,16 @@
 
 #include "GeoscapeState.h"
 
-#include <assert.h>
+//#include <assert.h>
 
-#include <algorithm>
-#include <cmath>
-#include <ctime>
-#include <functional>
-#include <iomanip>
-#include <sstream>
+//#include <algorithm>
+//#include <cmath>
+//#include <ctime>
+//#include <functional>
+//#include <iomanip>
+//#include <sstream>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "AlienBaseState.h"
 #include "AlienTerrorState.h"
@@ -1719,7 +1719,7 @@ struct SetRetaliationStatus
 void GeoscapeState::time10Minutes()
 {
 	//Log(LOG_INFO) << "GeoscapeState::time10Minutes()";
-	int diff = static_cast<int>(_savedGame->getDifficulty());
+	const int diff = static_cast<int>(_savedGame->getDifficulty());
 
 	for (std::vector<Base*>::const_iterator
 			b = _savedGame->getBases()->begin();
@@ -1754,7 +1754,7 @@ void GeoscapeState::time10Minutes()
 							ab != _savedGame->getAlienBases()->end();
 							ab++)
 					{
-						if ((*ab)->isDiscovered())
+						if ((*ab)->isDiscovered() == true)
 							continue;
 
 						const double
@@ -1768,7 +1768,7 @@ void GeoscapeState::time10Minutes()
 							const int chance = 100 - (diff * 10) - static_cast<int>(targetDistance * 50.0 / craftRadar);
 							//Log(LOG_INFO) << ". . . craft in Range, chance = " << chance;
 
-							if (RNG::percent(chance))
+							if (RNG::percent(chance) == true)
 							{
 								//Log(LOG_INFO) << ". . . . aLienBase discovered";
 								(*ab)->setDiscovered(true);
@@ -1780,7 +1780,7 @@ void GeoscapeState::time10Minutes()
 		}
 	}
 
-	if (Options::aggressiveRetaliation)
+	if (Options::aggressiveRetaliation == true)
 	{
 		for (std::vector<Base*>::const_iterator // detect as many bases as possible.
 				b = _savedGame->getBases()->begin();
@@ -1794,9 +1794,9 @@ void GeoscapeState::time10Minutes()
 			} // kL_end.
 
 			std::vector<Ufo*>::const_iterator u = std::find_if( // find a UFO that detected this base, if any.
-					_savedGame->getUfos()->begin(),
-					_savedGame->getUfos()->end(),
-					DetectXCOMBase(**b, diff));
+															_savedGame->getUfos()->begin(),
+															_savedGame->getUfos()->end(),
+															DetectXCOMBase(**b, diff));
 
 			if (u != _savedGame->getUfos()->end())
 			{
@@ -1844,7 +1844,7 @@ void GeoscapeState::time10Minutes()
 					hyperDet = false,
 					hyperDet_pre = (*u)->getHyperDetected();
 
-				std::vector<Base*> hyperBases = std::vector<Base*>();
+				std::vector<Base*> hyperBases; // = std::vector<Base*>();
 
 				for (std::vector<Base*>::const_iterator
 						b = _savedGame->getBases()->begin();
@@ -1855,7 +1855,6 @@ void GeoscapeState::time10Minutes()
 					{
 						case 3:
 							(*u)->setDetected();
-
 							contact = true;
 						case 1:
 							(*u)->setHyperDetected();
@@ -1865,7 +1864,6 @@ void GeoscapeState::time10Minutes()
 						break;
 						case 2:
 							(*u)->setDetected();
-
 							contact = true;
 						break;
 					}
@@ -1880,15 +1878,15 @@ void GeoscapeState::time10Minutes()
 							&& (*c)->detect(*u))
 						{
 							(*u)->setDetected();
-
 							contact = true;
+
 							break;
 						}
 					}
 				}
 
-				if (contact
-					|| (hyperDet
+				if (contact == true
+					|| (hyperDet == true
 						&& hyperDet_pre == false))
 				{
 					popup(new UfoDetectedState(
@@ -1902,8 +1900,9 @@ void GeoscapeState::time10Minutes()
 			}
 			else // ufo is already detected
 			{
-				bool hyperDet = false;
-				bool contact = false;
+				bool
+					hyperDet = false,
+					contact = false;
 
 				for (std::vector<Base*>::const_iterator
 						b = _savedGame->getBases()->begin();
@@ -1925,8 +1924,11 @@ void GeoscapeState::time10Minutes()
 						break;
 					}
 
-					if (contact && hyperDet)
+					if (contact == true
+						&& hyperDet == true)
+					{
 						break;
+					}
 
 					for (std::vector<Craft*>::const_iterator
 							c = (*b)->getCrafts()->begin();
@@ -1955,7 +1957,6 @@ void GeoscapeState::time10Minutes()
 					if ((*u)->getFollowers()->empty() == false)
 					{
 						timerReset();
-
 						popup(new UfoLostState((*u)->getName(_game->getLanguage())));
 					}
 				}
@@ -2025,23 +2026,23 @@ bool GeoscapeState::processTerrorSite(TerrorSite* ts) const
 	}
 
 	Region* const region = _savedGame->locateRegion(*ts);
-	if (region)
+	if (region != NULL)
 	{
 		region->addActivityAlien(aLienPts);
 		region->recentActivity();
 	}
 
 	for (std::vector<Country*>::const_iterator
-			k = _savedGame->getCountries()->begin();
-			k != _savedGame->getCountries()->end();
-			++k)
+			i = _savedGame->getCountries()->begin();
+			i != _savedGame->getCountries()->end();
+			++i)
 	{
-		if ((*k)->getRules()->insideCountry(
+		if ((*i)->getRules()->insideCountry(
 										ts->getLongitude(),
 										ts->getLatitude()))
 		{
-			(*k)->addActivityAlien(aLienPts);
-			(*k)->recentActivity();
+			(*i)->addActivityAlien(aLienPts);
+			(*i)->recentActivity();
 			break;
 		}
 	}
@@ -2069,7 +2070,6 @@ struct expireCrashedUfo: public std::unary_function<Ufo*, void>
 			if (ufo->getSecondsRemaining() >= 30 * 60)
 			{
 				ufo->setSecondsRemaining(ufo->getSecondsRemaining() - 30 * 60);
-
 				return;
 			}
 
@@ -2131,15 +2131,15 @@ void GeoscapeState::time30Minutes()
 				(*j)->repair();
 			else if ((*j)->getStatus() == "STR_REARMING")
 			{
-				const std::string str = (*j)->rearm(_game->getRuleset());
+				const std::string rearmClip = (*j)->rearm(_game->getRuleset());
 
-				if (str.empty() == false
+				if (rearmClip.empty() == false
 					&& (*j)->getWarned() == false)
 				{
 					(*j)->setWarned();
 
 					const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REARM_CRAFT_AT_BASE")
-											.arg(tr(str))
+											.arg(tr(rearmClip))
 											.arg((*j)->getName(_game->getLanguage()))
 											.arg((*i)->getName());
 					popup(new CraftErrorState(
@@ -2149,23 +2149,23 @@ void GeoscapeState::time30Minutes()
 			}
 			else if ((*j)->getStatus() == "STR_REFUELLING")
 			{
-				const std::string item = (*j)->getRules()->getRefuelItem();
+				const std::string refuelItem = (*j)->getRules()->getRefuelItem();
 
-				if (item.empty() == true)
+				if (refuelItem.empty() == true)
 					(*j)->refuel();
 				else
 				{
-					if ((*i)->getItems()->getItem(item) > 0)
+					if ((*i)->getItems()->getItem(refuelItem) > 0)
 					{
 						(*j)->refuel();
-						(*i)->getItems()->removeItem(item);
+						(*i)->getItems()->removeItem(refuelItem);
 					}
 					else if ((*j)->getWarned() == false)
 					{
 						(*j)->setWarned();
 
 						const std::wstring msg = tr("STR_NOT_ENOUGH_ITEM_TO_REFUEL_CRAFT_AT_BASE")
-												.arg(tr(item))
+												.arg(tr(refuelItem))
 												.arg((*j)->getName(_game->getLanguage()))
 												.arg((*i)->getName());
 						popup(new CraftErrorState(

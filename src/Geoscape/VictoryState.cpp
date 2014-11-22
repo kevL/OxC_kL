@@ -19,7 +19,7 @@
 
 #include "VictoryState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/CrossPlatform.h"
 #include "../Engine/Game.h"
@@ -35,8 +35,7 @@
 
 #include "../Menu/MainMenuState.h"
 
-#include "../Resource/ResourcePack.h"
-#include "../Resource/XcomResourcePack.h" // sza_MusicRules
+#include "../Resource/XcomResourcePack.h"
 
 #include "../Savegame/SavedGame.h"
 
@@ -77,7 +76,7 @@ VictoryState::VictoryState()
 			i < SCREENS;
 			++i)
 	{
-		Surface* screen = _game->getResourcePack()->getSurface(files[i]);
+		Surface* const screen = _game->getResourcePack()->getSurface(files[i]);
 
 		_bg[i] = new InteractiveSurface(320, 200, 0, 0);
 

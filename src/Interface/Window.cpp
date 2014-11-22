@@ -19,12 +19,11 @@
 
 #include "Window.h"
 
-#include <SDL.h>
-#include <SDL_mixer.h>
+//#include <SDL.h>
+//#include <SDL_mixer.h>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
-//#include "../Engine/RNG.h" // Old, for window popups
 #include "../Engine/Sound.h"
 #include "../Engine/Timer.h"
 
@@ -40,12 +39,12 @@ Sound* Window::soundPopup[3] = {0, 0, 0};
 
 /**
  * Sets up a blank window with the specified size and position.
- * @param state Pointer to state the window belongs to.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
- * @param popup Popup animation.
+ * @param state		- pointer to State the window belongs to
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels
+ * @param y			- Y position in pixels
+ * @param popup		- popup animation
  */
 Window::Window(
 		State* state,
@@ -60,13 +59,13 @@ Window::Window(
 			height,
 			x,
 			y),
+		_state(state),
+		_popup(popup),
+		_bg(NULL),
 		_dx(-x),
 		_dy(-y),
-		_bg(NULL),
 		_color(0),
-		_popup(popup),
-		_popupStep(0.0),
-		_state(state),
+		_popupStep(0.),
 		_contrast(false),
 		_screen(false),
 		_thinBorder(false),
@@ -77,7 +76,7 @@ Window::Window(
 	_timer->onTimer((SurfaceHandler)& Window::popup);
 
 	if (_popup == POPUP_NONE)
-		_popupStep = 1.0;
+		_popupStep = 1.;
 	else
 	{
 		setHidden(true);
@@ -87,7 +86,7 @@ Window::Window(
 		{
 			_screen = state->isScreen();
 
-			if (_screen)
+			if (_screen == true)
 				_state->toggleScreen();
 		}
 	}
@@ -102,8 +101,10 @@ Window::~Window()
 }
 
 /**
- * Changes the surface used to draw the background of the window.
- * @param bg New background.
+ * Sets the surface used to draw the background of the window.
+ * @param bg - background
+ * @param dx - x offset (default 0)
+ * @param dy - y offset (default 0)
  */
 void Window::setBackground(
 		Surface* bg,
@@ -138,9 +139,8 @@ Uint8 Window::getColor() const
 }
 
 /**
- * Enables/disables high contrast color. Mostly used for
- * Battlescape UI.
- * @param contrast High contrast setting.
+ * Enables/disables high contrast color. Mostly used for Battlescape UI.
+ * @param contrast - high contrast setting (default true)
  */
 void Window::setHighContrast(bool contrast)
 {
@@ -153,8 +153,8 @@ void Window::setHighContrast(bool contrast)
  */
 void Window::think()
 {
-	if (_hidden
-		&& _popupStep < 1.0)
+	if (_hidden == true
+		&& _popupStep < 1.)
 	{
 		_state->hideAll();
 		setHidden(false);
@@ -168,26 +168,24 @@ void Window::think()
  */
 void Window::popup()
 {
-	if (AreSame(_popupStep, 0.0))
+	if (AreSame(_popupStep, 0.) == true)
 	{
 //kL	int sound = SDL_GetTicks() %3; // this is a hack to avoid calling RNG::generate(0, 2) and skewing our seed.
-		int sound = (SDL_GetTicks() %2) + 1; // kL
-//kL	int sound = RNG::generate(0, 2);
-//		int sound = RNG::generate(1, 2); // kL, Old
+		const int sound = (SDL_GetTicks() %2) + 1; // kL
 
 //kL	if (soundPopup[sound] != 0)
 		soundPopup[sound]->play(Mix_GroupAvailable(0)); // UI Fx channels #0 & #1 & #2
 	}
 
-	if (_popupStep < 1.0)
+	if (_popupStep < 1.)
 		_popupStep += POPUP_SPEED;
 	else
 	{
-		if (_screen)
+		if (_screen == true)
 			_state->toggleScreen();
 
 		_state->showAll();
-		_popupStep = 1.0;
+		_popupStep = 1.;
 
 		_timer->stop();
 	}
@@ -234,12 +232,12 @@ void Window::draw()
 	}
 
 	Uint8 mult = 1;
-	if (_contrast)
+	if (_contrast == true)
 		mult = 2;
 
 	Uint8 color = _color + 3 * mult;
 
-	if (_thinBorder)
+	if (_thinBorder == true)
 	{
 		color = _color + 1 * mult;
 		for (int
@@ -323,7 +321,7 @@ void Window::draw()
 
 /**
  * Changes the horizontal offset of the surface in the X axis.
- * @param dx X position in pixels.
+ * @param dx - X position in pixels
  */
 void Window::setDX(int dx)
 {
@@ -332,7 +330,7 @@ void Window::setDX(int dx)
 
 /**
  * Changes the vertical offset of the surface in the Y axis.
- * @param dy Y position in pixels.
+ * @param dy - Y position in pixels
  */
 void Window::setDY(int dy)
 {

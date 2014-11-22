@@ -28,7 +28,7 @@ namespace OpenXcom
 
 class InteractiveSurface;
 class Text;
-class Timer;
+//class Timer;
 
 
 /**
@@ -42,13 +42,12 @@ class DefeatState
 private:
 	static const int SCREENS = 2;
 
+	int _screen;
+
 
 	InteractiveSurface* _bg[SCREENS];
 	Text* _text[SCREENS];
-
-	int _screen;
-
-	Timer* _timer;
+//	Timer* _timer;
 
 
 	public:
@@ -58,10 +57,10 @@ private:
 		~DefeatState();
 
 		/// Handle timers.
-		void think();
+//		void think();
 
 		/// Handler for waiting the screen.
-		void screenTimer();
+//		void screenTimer();
 		/// Handler for clicking the screen.
 		void screenClick(Action* action);
 };

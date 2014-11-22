@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_GRAPHSSTATE_H
 #define OPENXCOM_GRAPHSSTATE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/State.h"
 
@@ -134,8 +134,8 @@ private:
 			ToggleTextButton* btn,
 			Text* aliens,
 			Text* xcom);
-	/// kL. Shifts buttons to their pre-Graph cTor row.
-	void initButtons(); // kL
+	/// Shifts buttons to their pre-Graph cTor row.
+	void initButtons();
 
 
 	public:
@@ -146,9 +146,9 @@ private:
 		/// Cleans up the Graphs state.
 		~GraphsState();
 
-		/// kL. Handles the blink timer.
+		/// Handles the blink timer.
 		void think();
-		/// kL. Blinks recent aLien activity.
+		/// Blinks recent activity.
 		void blink();
 
 		/// Handler for clicking the Geoscape icon.

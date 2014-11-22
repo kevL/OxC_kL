@@ -77,7 +77,7 @@ State::State()
 State::~State()
 {
 	//Log(LOG_INFO) << "Delete State";
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i < _surfaces.end();
 			++i)
@@ -234,7 +234,7 @@ void State::init()
  */
 void State::think()
 {
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
@@ -252,14 +252,14 @@ void State::handle(Action* action)
 {
 	if (_modal == NULL)
 	{
-		for (std::vector<Surface*>::reverse_iterator
+		for (std::vector<Surface*>::const_reverse_iterator
 				i = _surfaces.rbegin();
 				i != _surfaces.rend();
 				++i)
 		{
-			InteractiveSurface* j = dynamic_cast<InteractiveSurface*>(*i);
-			if (j != NULL)
-				j->handle(action, this);
+			InteractiveSurface* const srf = dynamic_cast<InteractiveSurface*>(*i);
+			if (srf != NULL)
+				srf->handle(action, this);
 		}
 	}
 	else
@@ -272,7 +272,7 @@ void State::handle(Action* action)
  */
 void State::blit()
 {
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
@@ -286,7 +286,7 @@ void State::blit()
  */
 void State::hideAll()
 {
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
@@ -300,7 +300,7 @@ void State::hideAll()
  */
 void State::showAll()
 {
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
@@ -314,16 +314,16 @@ void State::showAll()
  */
 void State::resetAll()
 {
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
 	{
-		InteractiveSurface* s = dynamic_cast<InteractiveSurface*>(*i);
-		if (s != NULL)
+		InteractiveSurface* const srf = dynamic_cast<InteractiveSurface*>(*i);
+		if (srf != NULL)
 		{
-			s->unpress(this);
-//			s->setFocus(false);
+			srf->unpress(this);
+//			srf->setFocus(false);
 		}
 	}
 }
@@ -358,7 +358,7 @@ LocalizedText State::tr(
  */
 void State::centerAllSurfaces()
 {
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
@@ -373,7 +373,7 @@ void State::centerAllSurfaces()
  */
 void State::lowerAllSurfaces()
 {
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
@@ -387,64 +387,63 @@ void State::lowerAllSurfaces()
  */
 void State::applyBattlescapeTheme()
 {
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
 	{
-		// kL_note: Could these be written as else/if's ?
-		Window* window = dynamic_cast<Window*>(*i);
-		if (window)
+		Window* const window = dynamic_cast<Window*>(*i);
+		if (window != NULL)
 		{
 			window->setColor(Palette::blockOffset(0)-1);
 			window->setHighContrast();
 			window->setBackground(_game->getResourcePack()->getSurface("TAC00.SCR"));
 		}
 
-		Text* text = dynamic_cast<Text*>(*i);
-		if (text)
+		Text* const text = dynamic_cast<Text*>(*i);
+		if (text != NULL)
 		{
 			text->setColor(Palette::blockOffset(0)-1);
 			text->setHighContrast();
 		}
 
-		TextButton* button = dynamic_cast<TextButton*>(*i);
-		if (button)
+		TextButton* const button = dynamic_cast<TextButton*>(*i);
+		if (button != NULL)
 		{
 			button->setColor(Palette::blockOffset(0)-1);
 			button->setHighContrast();
 		}
 
-		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
-		if (edit)
+		TextEdit* const edit = dynamic_cast<TextEdit*>(*i);
+		if (edit != NULL)
 		{
 			edit->setColor(Palette::blockOffset(0)-1);
 			edit->setHighContrast();
 		}
 
-		TextList* list = dynamic_cast<TextList*>(*i);
-		if (list)
+		TextList* const textList = dynamic_cast<TextList*>(*i);
+		if (textList != NULL)
 		{
-			list->setColor(Palette::blockOffset(0)-1);
-			list->setArrowColor(Palette::blockOffset(0));
-			list->setHighContrast();
+			textList->setColor(Palette::blockOffset(0)-1);
+			textList->setArrowColor(Palette::blockOffset(0));
+			textList->setHighContrast();
 		}
 
-		ArrowButton* arrow = dynamic_cast<ArrowButton*>(*i);
-		if (arrow)
+		ArrowButton* const arrow = dynamic_cast<ArrowButton*>(*i);
+		if (arrow != NULL)
 		{
 			arrow->setColor(Palette::blockOffset(0));
 		}
 
-		Slider* slider = dynamic_cast<Slider*>(*i);
-		if (slider)
+		Slider* const slider = dynamic_cast<Slider*>(*i);
+		if (slider != NULL)
 		{
 			slider->setColor(Palette::blockOffset(0)-1);
 			slider->setHighContrast();
 		}
 
-		ComboBox* combo = dynamic_cast<ComboBox*>(*i);
-		if (combo)
+		ComboBox* const combo = dynamic_cast<ComboBox*>(*i);
+		if (combo != NULL)
 		{
 			combo->setColor(Palette::blockOffset(0)-1);
 			combo->setArrowColor(Palette::blockOffset(0));
@@ -458,20 +457,20 @@ void State::applyBattlescapeTheme()
  */
 void State::redrawText()
 {
-	for (std::vector<Surface*>::iterator
+	for (std::vector<Surface*>::const_iterator
 			i = _surfaces.begin();
 			i != _surfaces.end();
 			++i)
 	{
-		Text* text = dynamic_cast<Text*>(*i);
-		TextButton* button = dynamic_cast<TextButton*>(*i);
-		TextEdit* edit = dynamic_cast<TextEdit*>(*i);
-		TextList* list = dynamic_cast<TextList*>(*i);
+		const Text* const text = dynamic_cast<Text*>(*i);
+		const TextButton* const button = dynamic_cast<TextButton*>(*i);
+		const TextEdit* const edit = dynamic_cast<TextEdit*>(*i);
+		const TextList* const textList = dynamic_cast<TextList*>(*i);
 
-		if (text
-			|| button
-			|| edit
-			|| list)
+		if (text != NULL
+			|| button != NULL
+			|| edit != NULL
+			|| textList != NULL)
 		{
 			(*i)->draw();
 		}
@@ -492,10 +491,10 @@ void State::setModal(InteractiveSurface* surface)
 
 /**
  * Replaces a certain amount of colors in the state's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
- * @param immediately Apply changes immediately, otherwise wait in case of multiple setPalettes.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
+ * @param immediately	- apply changes immediately, otherwise wait in case of multiple setPalettes (default true)
  */
 void State::setPalette(
 		SDL_Color* colors,
@@ -503,13 +502,13 @@ void State::setPalette(
 		int ncolors,
 		bool immediately)
 {
-	if (colors)
+	if (colors != NULL)
 		memcpy(
 				_palette + firstcolor,
 				colors,
 				ncolors * sizeof(SDL_Color));
 
-	if (immediately)
+	if (immediately == true)
 	{
 		_game->getCursor()->setPalette(_palette);
 		_game->getCursor()->draw();
@@ -524,8 +523,8 @@ void State::setPalette(
 
 /**
  * Loads palettes from the game resources into the state.
- * @param palette String ID of the palette to load.
- * @param backpals BACKPALS.DAT offset to use.
+ * @param palette	- reference the string ID of the palette to load
+ * @param backpals	- BACKPALS.DAT offset to use
  */
 void State::setPalette(
 		const std::string& palette,
@@ -549,7 +548,7 @@ void State::setPalette(
 
 /**
  * Returns the state's 8bpp palette.
- * @return, Pointer to the palette's colors.
+ * @return, pointer to the palette's colors
  */
 SDL_Color* const State::getPalette()
 {

@@ -45,7 +45,7 @@ class BuildNewBaseState
 
 private:
 	bool
-		_first,
+		_firstBase,
 		_oldshowradar;
 	int
 		_mousex,
@@ -68,7 +68,7 @@ private:
 		BuildNewBaseState(
 				Base* base,
 				Globe* globe,
-				bool first);
+				bool firstBase);
 		/// Cleans up the Build New Base state.
 		~BuildNewBaseState();
 

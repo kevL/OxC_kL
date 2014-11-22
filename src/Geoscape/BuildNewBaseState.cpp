@@ -19,9 +19,9 @@
 
 #include "BuildNewBaseState.h"
 
-#include <cmath>
+//#include <cmath>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "BaseNameState.h"
 #include "ConfirmNewBaseState.h"
@@ -52,20 +52,20 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Build New Base window.
- * @param base	- pointer to the Base to place
- * @param globe	- pointer to the geoscape Globe
- * @param first	- true if this the first base in the game
+ * @param base		- pointer to the Base to place
+ * @param globe		- pointer to the geoscape Globe
+ * @param firstBase	- true if this the first base in the game
  */
 BuildNewBaseState::BuildNewBaseState(
 		Base* base,
 		Globe* globe,
-		bool first)
+		bool firstBase)
 	:
 		_base(base),
 		_globe(globe),
-		_first(first),
-		_oldlat(0.0),
-		_oldlon(0.0),
+		_firstBase(firstBase),
+		_oldlat(0.),
+		_oldlon(0.),
 		_mousex(0),
 		_mousey(0)
 {
@@ -75,7 +75,7 @@ BuildNewBaseState::BuildNewBaseState(
 	if (_oldshowradar == false)
 		Options::globeRadarLines = true;
 
-	int dx = _game->getScreen()->getDX();
+	const int dx = _game->getScreen()->getDX();
 //kL	int dy = _game->getScreen()->getDY();
 
 /*	_btnRotateLeft	= new InteractiveSurface(12, 10, 259 + dx * 2, 176 + dy);
@@ -92,7 +92,7 @@ BuildNewBaseState::BuildNewBaseState(
 	_txtTitle		= new Text(180, 9, 8 + dx, 11);
 	_btnCancel		= new TextButton(54, 14, 194 + dx, 8);
 
-	_hoverTimer		= new Timer(80);
+	_hoverTimer		= new Timer(60);
 	_hoverTimer->onTimer((StateHandler)&BuildNewBaseState::hoverRedraw);
 	_hoverTimer->start();
 
@@ -161,7 +161,7 @@ BuildNewBaseState::BuildNewBaseState(
 //	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 //	_txtTitle->setWordWrap();
 
-	if (_first)
+	if (_firstBase == true)
 		_btnCancel->setVisible(false);
 }
 
@@ -222,7 +222,7 @@ void BuildNewBaseState::globeHover(Action* action)
 }
 
 /**
- *
+ * Redraws stuff as the cursor is moved over the Globe.
  */
 void BuildNewBaseState::hoverRedraw(void)
 {
@@ -258,18 +258,17 @@ void BuildNewBaseState::hoverRedraw(void)
 }
 
 /**
- * Processes any left-clicks for base placement,
- * or right-clicks to scroll the globe.
+ * Processes any left-clicks for base placement or right-clicks to scroll the globe.
  * @param action - pointer to an Action
  */
 void BuildNewBaseState::globeClick(Action* action)
 {
+	const int
+		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
+		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
 	double
 		lon,
 		lat;
-	int
-		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
-		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
 
 	_globe->cartToPolar(
 					mouseX,
@@ -289,7 +288,7 @@ void BuildNewBaseState::globeClick(Action* action)
 			_base->setLongitude(lon);
 			_base->setLatitude(lat);
 
-			for (std::vector<Craft*>::iterator
+			for (std::vector<Craft*>::const_iterator
 					i = _base->getCrafts()->begin();
 					i != _base->getCrafts()->end();
 					++i)
@@ -298,19 +297,15 @@ void BuildNewBaseState::globeClick(Action* action)
 				(*i)->setLatitude(lat);
 			}
 
-			if (_first)
-			{
+			if (_firstBase == true)
 				_game->pushState(new BaseNameState(
 												_base,
 												_globe,
 												true));
-			}
 			else
-			{
 				_game->pushState(new ConfirmNewBaseState(
 													_base,
 													_globe));
-			}
 		}
 	}
 }
@@ -430,7 +425,6 @@ void BuildNewBaseState::globeClick(Action* action)
 void BuildNewBaseState::btnCancelClick(Action*)
 {
 	delete _base;
-
 	_game->popState();
 }
 
