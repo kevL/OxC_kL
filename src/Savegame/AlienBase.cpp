@@ -36,8 +36,8 @@ AlienBase::AlienBase()
 		_id(0),
 		_inBattlescape(false),
 		_discovered(false)
-//		_race(""), // kL
-//		_edit("") // kL
+//		_race(""),
+//		_edit("")
 {
 }
 

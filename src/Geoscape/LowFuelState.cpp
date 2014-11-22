@@ -56,9 +56,6 @@ LowFuelState::LowFuelState(
 	_screen = false;
 
 	_window		= new Window(this, 224, 120, 16, 40); //, POPUP_BOTH);
-//	_window		= new Window(this, 320, 200); // works.
-//	_window->setX(0);
-//	_window->setDY(0);
 
 	_txtTitle	= new Text(214, 17, 21, 51);
 	_txtMessage	= new Text(214, 50, 21, 68);
@@ -117,17 +114,6 @@ LowFuelState::~LowFuelState()
 {
 	delete _blinkTimer;
 }
-
-/**
- * Init.
- */
-/* void LowFuelState::init()
-{
-	State::init();
-
-	_window->setColor(Palette::blockOffset(15)-1);
-	_window->setBackground(_game->getResourcePack()->getSurface("BACK12.SCR"));
-} */
 
 /**
  * Runs the blink timer.
