@@ -56,14 +56,12 @@ MapScript::~MapScript()
 	for (std::vector<SDL_Rect*>::iterator
 			i = _rects.begin();
 			i != _rects.end();
-			)
+			++i)
 	{
 		delete *i;
-		i = _rects.erase(i);
 	}
 
-	if (_tunnelData != NULL)
-		delete _tunnelData;
+	delete _tunnelData;
 }
 
 /**

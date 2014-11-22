@@ -487,7 +487,7 @@ void SavedBattleGame::loadMapResources(Game* game)
 
 /**
  * Saves the saved battle game to a YAML file.
- * @return YAML node.
+ * @return, YAML node
  */
 YAML::Node SavedBattleGame::save() const
 {
@@ -636,7 +636,7 @@ void SavedBattleGame::initMap(
 		_mapDataSets.clear();
 	}
 
-	/* create tile objects */
+	// create tile objects
 	_mapsize_x = mapsize_x;
 	_mapsize_y = mapsize_y;
 	_mapsize_z = mapsize_z;
@@ -664,6 +664,9 @@ void SavedBattleGame::initMap(
  */
 void SavedBattleGame::initUtilities(ResourcePack* res)
 {
+	delete _pathfinding;
+	delete _tileEngine;
+
 	_pathfinding = new Pathfinding(this);
 	_tileEngine = new TileEngine(
 							this,

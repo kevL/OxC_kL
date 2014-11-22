@@ -150,6 +150,13 @@ void BattlescapeGenerator::init()
 							MD_NONE));
 
 	_blocksToDo = (_mapsize_x / 10) * (_mapsize_y / 10);
+
+	// creates the tile objects
+	_battleSave->initMap(
+					_mapsize_x,
+					_mapsize_y,
+					_mapsize_z);
+	_battleSave->initUtilities(_res);
 }
 
 /**
@@ -318,10 +325,6 @@ void BattlescapeGenerator::nextStage()
 
 	_worldShade = ruleDeploy->getShade();
 
-	_battleSave->initMap(
-				_mapsize_x,
-				_mapsize_y,
-				_mapsize_z);
 
 	const std::vector<MapScript*>* script = _rules->getMapScript(_terrain->getScript());
 	if (_rules->getMapScript(ruleDeploy->getScript()))
@@ -496,13 +499,6 @@ void BattlescapeGenerator::run()
 
 	if (ruleDeploy->getShade() != -1)
 		_worldShade = ruleDeploy->getShade();
-
-	// creates the tile objects
-	_battleSave->initMap(
-						_mapsize_x,
-						_mapsize_y,
-						_mapsize_z);
-	_battleSave->initUtilities(_res);
 
 
 /*	// generate the map now and store it inside the tile objects
