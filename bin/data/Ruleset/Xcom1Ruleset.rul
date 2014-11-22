@@ -187,7 +187,8 @@ crafts:
     costBuy: 450000
     costRent: 295000
     refuelRate: 50
-    repairRate: 1
+    radarRange: 400
+    sightRange: 600
     transferTime: 72
     score: 250
     battlescapeTerrainData:
@@ -209,7 +210,8 @@ crafts:
     costBuy: 750000
     costRent: 520000
     refuelRate: 50
-    repairRate: 1
+    radarRange: 600
+    sightRange: 1000
     transferTime: 96
     score: 300
   - type: STR_FIRESTORM
@@ -225,7 +227,8 @@ crafts:
     costSell: 4200000
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
-    repairRate: 1
+    radarRange: 800
+    sightRange: 1200
     score: 350
   - type: STR_LIGHTNING
     requires:
@@ -242,7 +245,8 @@ crafts:
     maxItems: 72 # 6 x soldier cap.
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
-    repairRate: 1
+    radarRange: 800
+    sightRange: 1200
     score: 355
     battlescapeTerrainData:
       name: LIGHTNIN
@@ -282,7 +286,8 @@ crafts:
     maxItems: 156 # 6 x soldier cap.
     refuelItem: STR_ELERIUM_115
     refuelRate: 5
-    repairRate: 1
+    radarRange: 1000
+    sightRange: 1500
     score: 475
     spacecraft: true
     battlescapeTerrainData:

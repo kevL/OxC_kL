@@ -10,7 +10,8 @@ crafts:
     costBuy: 500000
     costRent: 335000
     refuelRate: 75
-    radarRange: 1200
+    radarRange: 1000
+    sightRange: 1500
 #    radarChance: 40
     transferTime: 96
     score: 200
@@ -24,7 +25,8 @@ crafts:
     costBuy: 650000
     costRent: 465000
     refuelRate: 75
-    radarRange: 1650
+    radarRange: 1200
+    sightRange: 1800
 #    radarChance: 40
     transferTime: 96
     score: 225
@@ -38,7 +40,8 @@ crafts:
     costSell: 650000
     costRent: 20000
     refuelRate: 100
-    radarRange: 1850
+    radarRange: 1400
+    sightRange: 2100
 #    radarChance: 60
     transferTime: 96
     score: 150
