@@ -8953,6 +8953,8 @@ extraSounds:
       54: Resources/Sounds/54_stunrod.WAV
       70: Resources/Sounds/extra/move_hover.ogg
       71: Resources/Sounds/extra/death_sectoid.ogg
+      72: Resources/Sounds/extra/death_snakeman.ogg
+      73: Resources/Sounds/extra/b_cannon_hit.ogg
       101: Resources/Sounds/Tactical/sFx_voice/death/f/vs_fx0huskf_hit2.wav
       102: Resources/Sounds/Tactical/sFx_voice/death/f/vs_nnwgrdf2_hit1.wav
       103: Resources/Sounds/Tactical/sFx_voice/death/f/vs_nprostf2_hit2.wav
