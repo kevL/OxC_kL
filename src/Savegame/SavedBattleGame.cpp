@@ -363,6 +363,7 @@ void SavedBattleGame::load(
 
 			const int
 				owner = (*i)["owner"].as<int>(),
+				prevOwner = (*i)["previousOwner"].as<int>(-1),
 				unit = (*i)["unit"].as<int>();
 
 			// match up items and units
@@ -376,6 +377,15 @@ void SavedBattleGame::load(
 
 				if ((*bu)->getId() == unit)
 					item->setUnit(*bu);
+			}
+
+			for (std::vector<BattleUnit*>::iterator
+					bu = _units.begin();
+					bu != _units.end();
+					++bu)
+			{
+				if ((*bu)->getId() == prevOwner)
+					item->setPreviousOwner(*bu);
 			}
 
 			// match up items and tiles

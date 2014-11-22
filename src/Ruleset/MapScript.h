@@ -151,7 +151,7 @@ private:
 		{
 			return _sizeY;
 		};
-		/// Gets the Y size for this command.
+		/// Gets the Z size for this command.
 		const int getSizeZ() const
 		{
 			return _sizeZ;

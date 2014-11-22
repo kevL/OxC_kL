@@ -989,7 +989,7 @@ static inline void func(
 /**
  * helper class used for Surface::blitNShade
  */
-struct StandartShade
+struct StandardShade
 {
 
 /**
@@ -1060,7 +1060,7 @@ void Surface::blitNShade(
 							ShaderScalar(newBaseColor));
 	}
 	else
-		ShaderDraw<StandartShade>(
+		ShaderDraw<StandardShade>(
 							ShaderSurface(surface),
 							src,
 							ShaderScalar(off));

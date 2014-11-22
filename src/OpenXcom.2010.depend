@@ -4718,8 +4718,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1416550713 f:\git\openxcom\src\battlescape\battlescapegenerator.h
-	<vector>
+1416691210 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
 
@@ -5675,7 +5674,7 @@
 	"Position.h"
 	"../Ruleset/RuleItem.h"
 
-1416498979 f:\git\openxcom\src\savegame\battleitem.h
+1416690879 f:\git\openxcom\src\savegame\battleitem.h
 	<yaml-cpp/yaml.h>
 	"../Battlescape/Position.h"
 
@@ -5863,11 +5862,8 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1416658321 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1416691220 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
-	<fstream>
-	<sstream>
-	<assert.h>
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
 	"Inventory.h"
@@ -7973,7 +7969,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1416689199 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
+1416689697 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
 	"LowFuelState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -9381,7 +9377,7 @@
 	"Unit.h"
 	"../Engine/Exception.h"
 
-1416669901 source:f:\git\openxcom\src\savegame\alienbase.cpp
+1416689869 source:f:\git\openxcom\src\savegame\alienbase.cpp
 	"AlienBase.h"
 	<sstream>
 	"../Engine/Language.h"
@@ -12167,7 +12163,7 @@
 1413136956 f:\git\openxcom\src\battlescape\particle.h
 	<SDL_types.h>
 
-1416584190 f:\git\openxcom\src\ruleset\mapscript.h
+1416690849 f:\git\openxcom\src\ruleset\mapscript.h
 	<vector>
 	<string>
 	<SDL_video.h>

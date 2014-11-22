@@ -19,10 +19,10 @@
 
 #include "BattlescapeGenerator.h"
 
-#include <fstream>
-#include <sstream>
+//#include <fstream>
+//#include <sstream>
 
-#include <assert.h>
+//#include <assert.h>
 
 #include "AlienBAIState.h"
 #include "CivilianBAIState.h"
@@ -2805,12 +2805,6 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 
 	init();
 
-//	bool placed = false;
-//	int
-//		x = 0,
-//		y = 0;
-
-
 	MapBlock
 		* craftMap = NULL,
 		* ufoMap = NULL;
@@ -3855,7 +3849,6 @@ bool BattlescapeGenerator::addBlock(
 		}
 	}
 
-//	int drillType = 0;
 	for (int
 			xd = 0;
 			xd <= xSize;

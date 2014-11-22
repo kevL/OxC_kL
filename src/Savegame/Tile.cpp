@@ -701,7 +701,7 @@ bool Tile::damage(
  * by "explosion rays". The explosive power that gets set on a tile is
  * that of the most powerful ray that passes through it -- see TileEngine::explode().
  * @param power			- how big the BOOM will be / how much tile-destruction
- * @param damageType	-
+ * @param damageType	- the damage type of the explosion (not the same as item damage types)
  * @param force			- forces value even if lower (default false)
  */
 void Tile::setExplosive(

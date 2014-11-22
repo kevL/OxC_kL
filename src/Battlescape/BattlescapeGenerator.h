@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_BATTLESCAPEGENERATOR_H
 #define OPENXCOM_BATTLESCAPEGENERATOR_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Ruleset/MapScript.h"
 #include "../Ruleset/RuleTerrain.h"
