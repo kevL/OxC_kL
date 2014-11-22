@@ -100,7 +100,8 @@ InfoboxOKState::~InfoboxOKState()
 void InfoboxOKState::btnOkClick(Action*)
 {
 	if (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
-		_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()->setCursorType(CT_NONE);
+		_game->getCursor()->setVisible(false);
+//		_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()->setCursorType(CT_NONE);
 
 	_game->popState();
 }
