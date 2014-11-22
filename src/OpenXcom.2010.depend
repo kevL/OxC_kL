@@ -6289,7 +6289,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1416614024 source:f:\git\openxcom\src\battlescape\infoboxokstate.cpp
+1416640678 source:f:\git\openxcom\src\battlescape\infoboxokstate.cpp
 	"InfoboxOKState.h"
 	"Map.h"
 	"../Engine/Game.h"
@@ -6637,9 +6637,8 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1416597252 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1416642069 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
-	<cmath>
 	"AlienBAIState.h"
 	"BattlescapeState.h"
 	"Camera.h"
@@ -7863,7 +7862,7 @@
 	<string>
 	<vector>
 
-1416194937 source:f:\git\openxcom\src\geoscape\globe.cpp
+1416641047 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"../fmath.h"
 	<algorithm>
@@ -9253,7 +9252,7 @@
 1413136960 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
 	"ExtraStrings.h"
 
-1416496315 source:f:\git\openxcom\src\ruleset\mapblock.cpp
+1416641153 source:f:\git\openxcom\src\ruleset\mapblock.cpp
 	"MapBlock.h"
 	<sstream>
 	"../Battlescape/Position.h"

@@ -21,7 +21,7 @@
 
 #include "ProjectileFlyBState.h"
 
-#include <cmath>
+//#include <cmath>
 
 #include "AlienBAIState.h"
 #include "BattlescapeState.h"
@@ -69,14 +69,14 @@ ProjectileFlyBState::ProjectileFlyBState(
 			parent,
 			action),
 		_origin(origin),
-		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
+		_originVoxel(-1,-1,-1), // for BL waypoints
 		_unit(NULL),
 		_ammo(NULL),
 		_projectileItem(NULL),
 		_projectileImpact(0),
 		_initialized(false),
 		_targetFloor(false),
-		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
+		_targetVoxel(-1,-1,-1)
 {
 	//Log(LOG_INFO) << "Create ProjectileFlyBState[0]: origin = " << origin;
 }
@@ -94,14 +94,14 @@ ProjectileFlyBState::ProjectileFlyBState(
 			parent,
 			action),
 		_origin(action.actor->getPosition()),
-		_originVoxel(-1,-1,-1), // kL_note: for BL waypoints
+		_originVoxel(-1,-1,-1), // for BL waypoints
 		_unit(NULL),
 		_ammo(NULL),
 		_projectileItem(NULL),
 		_projectileImpact(0),
 		_initialized(false),
 		_targetFloor(false),
-		_targetVoxel(-1,-1,-1) // kL. Why is this not initialized in the stock oXc code?
+		_targetVoxel(-1,-1,-1)
 {
 	//Log(LOG_INFO) << "Create ProjectileFlyBState[1]: origin = " << _origin;
 }
@@ -122,95 +122,32 @@ void ProjectileFlyBState::init()
 {
 	//Log(LOG_INFO) << "ProjectileFlyBState::init()";
 	if (_initialized == true)
-	{
-		//Log(LOG_INFO) << ". already initialized, EXIT";
 		return;
-	}
+
 	_initialized = true;
-	//Log(LOG_INFO) << ". getStopShot() = " << _action.actor->getStopShot();
 
 
-	// kL_begin:
-/*	BattleUnit* targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
-	if (targetUnit
-		&& targetUnit->getFaction() != _parent->getSave()->getSide()
-		&& targetUnit->getDashing()) // this really doesn't have to be left here <-
-	{
-		//Log(LOG_INFO) << ". targetUnit was dashing -> now set FALSE";
-		targetUnit->setDashing(false);
-	} */ // kL_end. -> I moved this to SavedBattleGame::prepareBattleTurn()
-
-
-//kL	BattleItem* weapon = _action.weapon; // < was a pointer!! kL_note.
-//kL	_projectileItem = 0; // already initialized.
-
-//	Log(LOG_INFO) << ". PRE parent->takenXP = " << _parent->getCurrentAction()->takenXP;
-//	Log(LOG_INFO) << ". PRE takenXP = " << _action.takenXP;
-
-	_parent->getCurrentAction()->takenXP = false; // HOW MANY CURRENT_ACTIONS ARE GOING ON HERE !!!!!
-// 	_action.takenXP = false;	// this is valid but meaningless .....
-								// so '_action'  must be a copy ... not the original that's needed,
-								// as things go to TileEngine, where 'takenXP' is really useful!!!
-
-//	Log(LOG_INFO) << ". POST parent->takenXP = " << _parent->getCurrentAction()->takenXP;
-//	Log(LOG_INFO) << ". POST takenXP = " << _action.takenXP;
-
+	_parent->getCurrentAction()->takenXP = false;
 
 	_unit = _action.actor;
 
-	//Log(LOG_INFO) << "projFlyB unitPos = " << _unit->getPosition();
 	if (_action.weapon != NULL)
-		_ammo = _action.weapon->getAmmoItem(); // _ammo is the weapon itself, if self-powered or BT_MELEE.
-
-	// **** The first 4 of these SHOULD NEVER happen ****
-	// the 4th is wtf: tu ought be spent for this already.
-	// They should be coded with a tuRefund() function regardless.
-/*	if (_unit->isOut(true, true) == true)
-//		|| _unit->getStatus() == STATUS_DISABLED)
-//		|| _unit->getHealth() == 0
-//		|| _unit->getHealth() < _unit->getStun())
-	{
-		// Something went wrong - can't shoot when dead or unconscious, or about to fall over.
-		//Log(LOG_INFO) << ". actor is Out, EXIT";
-		_unit->setStopShot(false);
-
-		_parent->popState();
-		return;
-	}
-	else if (_action.weapon == NULL)	// can't shoot without weapon.
-										// NOTE: def'n of _ammo above^ would CTD if this were ever true. Lol
-										// relax i fixed it.
-	{
-		//Log(LOG_INFO) << ". no weapon, EXIT";
-		_unit->setStopShot(false);
-
-		_parent->popState();
-		return;
-	}
-	else if (_parent->getSave()->getTile(_action.target) == NULL) // invalid target position
-	{
-		//Log(LOG_INFO) << ". no targetPos, EXIT";
-		_unit->setStopShot(false);
-
-		_parent->popState();
-		return;
-	} */
+		_ammo = _action.weapon->getAmmoItem(); // the weapon itself if self-powered or melee
 
 	bool popThis = false;
 
 	const bool targetTileValid = _parent->getSave()->getTile(_action.target) != NULL;
-
-	bool targetUnitValid = false;
+	bool reactionValid = false;
 	if (targetTileValid == true)
 	{
 		const BattleUnit* const targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
-		targetUnitValid = targetUnit != NULL
-					   && targetUnit->isOut(true, true) == false
-					   && targetUnit == _parent->getSave()->getSelectedUnit()
-					   && _ammo != NULL;
+		reactionValid = targetUnit != NULL
+					 && targetUnit->isOut(true, true) == false
+					 && targetUnit == _parent->getSave()->getSelectedUnit()
+					 && _ammo != NULL;
 	}
 
-	if (_unit->isOut(true, true) == true // this condition-check is condensed from those above^
+	if (_unit->isOut(true, true) == true
 		|| _action.weapon == NULL
 		|| targetTileValid == false)
 	{
@@ -221,51 +158,16 @@ void ProjectileFlyBState::init()
 		&& _action.type != BA_STUN
 		&& _unit->getTimeUnits() < _action.TU)
 	{
-		//Log(LOG_INFO) << ". not enough time units, EXIT";
 		_action.result = "STR_NOT_ENOUGH_TIME_UNITS";
 		popThis = true;
 	}
-	else if (_unit->getStopShot() == true // this condition-check is condensed from those below_
+	else if (_unit->getStopShot() == true
 		|| (_unit->getFaction() != _parent->getSave()->getSide()
-			&& targetUnitValid == false))
+			&& reactionValid == false))
 	{
 		_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
 		popThis = true;
 	}
-/*	else if (_unit->getStopShot() == true)
-	{
-		// TU are subtracted for a primaryAction firing/throwing
-		// BattleAction in BattlescapeGame::popState();
-		// that is, these refunds tend to increase a unit's TU past
-		// their maximum, then subtract it again in popState().
-
-		//Log(LOG_INFO) << ". current_TU = " << _unit->getTimeUnits();
-		//Log(LOG_INFO) << ". action.TU = " << _action.TU;
-		//Log(LOG_INFO) << ". stopShot ID = " << _unit->getId() << ", refund TUs. EXIT";
-		_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-		popThis = true;
-	}
-	else if (_unit->getFaction() != _parent->getSave()->getSide()) // reaction fire
-	{
-		const BattleUnit* const targetUnit = _parent->getSave()->getTile(_action.target)->getUnit();
-		if (targetUnit != NULL)
-		{
-			if (_ammo == NULL
-				|| targetUnit->isOut(true, true) == true
-				|| targetUnit != _parent->getSave()->getSelectedUnit())
-			{
-				//Log(LOG_INFO) << ". . . reactionFire refund (targetUnit exists) EXIT";
-				_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-				popThis = true;
-			}
-		}
-		else
-		{
-			//Log(LOG_INFO) << ". . reactionFire refund (no targetUnit) EXIT";
-			_unit->setTimeUnits(_unit->getTimeUnits() + _action.TU);
-			popThis = true;
-		}
-	} */
 
 	if (popThis == true)
 	{
