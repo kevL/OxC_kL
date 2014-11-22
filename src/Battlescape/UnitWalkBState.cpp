@@ -531,12 +531,11 @@ bool UnitWalkBState::doStatusStand()
 		else if (dir < _pf->DIR_UP) // now open doors (if any)
 		{
 			//Log(LOG_INFO) << ". . check for doors";
-			int
-				sound = -1,
-				door = _terrain->unitOpensDoor(
-											_unit,
-											false,
-											dir);
+			int sound = -1;
+			const int door = _terrain->unitOpensDoor(
+													_unit,
+													false,
+													dir);
 
 			if (door == 3) // ufo door still opening ...
 			{

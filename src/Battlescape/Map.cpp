@@ -1301,7 +1301,7 @@ void Map::drawTerrain(Surface* surface)
 						}
 
 						// draw an item on top of the floor (if any)
-						int sprite = tile->getTopItemSprite();
+						const int sprite = tile->getTopItemSprite();
 						if (sprite != -1)
 						{
 							tmpSurface = _res->getSurfaceSet("FLOOROB.PCK")->getFrame(sprite);
@@ -2443,7 +2443,7 @@ void Map::mouseOver(Action* action, State* state)
 }
 
 /**
- * Handles animating tiles. 8 Frames per animation.
+ * Handles animating tiles - 8 Frames per animation [0..7].
  * @param redraw - true to redraw the battlescape map
  */
 void Map::animate(bool redraw)
@@ -2486,19 +2486,19 @@ void Map::animate(bool redraw)
 			++i)
 	{
 		if (_save->getDepth() > 0
-			&& !(*i)->getFloorAbove())
+			&& (*i)->getFloorAbove() == false)
 		{
 			(*i)->breathe();
 		}
 
-		if ((*i)->getArmor()->getConstantAnimation())
+		if ((*i)->getArmor()->getConstantAnimation() == true)
 		{
 			(*i)->setCache(NULL);
 			cacheUnit(*i);
 		}
 	}
 
-	if (redraw)
+	if (redraw == true)
 		_redraw = true;
 }
 

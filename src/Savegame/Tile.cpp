@@ -441,11 +441,11 @@ int Tile::getFootstepSound(Tile* tileBelow) const
  * @param part		- a tile part
  * @param unit		- pointer to a BattleUnit
  * @param reserve	- see BA_* enum for TU reserves
- * @return, Value: -1 no door opened
- *					0 normal door
- *					1 ufo door
- *					3 ufo door is still opening (animated)
- *					4 not enough TUs
+ * @return, -1 no door opened
+ *			 0 normal door
+ *			 1 ufo door
+ *			 3 ufo door is still opening (animated)
+ *			 4 not enough TUs
  */
 int Tile::openDoor(
 		int part,
@@ -454,9 +454,9 @@ int Tile::openDoor(
 {
 	if (_objects[part] != NULL)
 	{
-		if (_objects[part]->isDoor())
+		if (_objects[part]->isDoor() == true)
 		{
-			if (_unit
+			if (_unit != NULL
 				&& _unit != unit
 				&& _unit->getPosition() != getPosition())
 			{
@@ -465,9 +465,9 @@ int Tile::openDoor(
 
 			if (unit != NULL
 				&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType())
-										+ unit->getActionTUs(
-														reserve,
-														unit->getMainHandWeapon(false)))
+											+ unit->getActionTUs(
+															reserve,
+															unit->getMainHandWeapon(false)))
 			{
 				return 4;
 			}
@@ -482,15 +482,15 @@ int Tile::openDoor(
 
 			return 0;
 		}
-		else if (_objects[part]->isUFODoor())
+		else if (_objects[part]->isUFODoor() == true)
 		{
 			if (_curFrame[part] == 0) // ufo door part 0 - door is closed
 			{
 				if (unit != NULL
 					&& unit->getTimeUnits() < _objects[part]->getTUCost(unit->getMovementType())
-											+ unit->getActionTUs(
-															reserve,
-															unit->getMainHandWeapon(false)))
+												+ unit->getActionTUs(
+																reserve,
+																unit->getMainHandWeapon(false)))
 				{
 					return 4;
 				}
@@ -507,7 +507,8 @@ int Tile::openDoor(
 }
 
 /**
- *
+ * Closes a ufoDoor on this Tile.
+ * @return, 1 if a door got closed
  */
 int Tile::closeUfoDoor()
 {
@@ -518,7 +519,7 @@ int Tile::closeUfoDoor()
 			part < 4;
 			++part)
 	{
-		if (isUfoDoorOpen(part))
+		if (isUfoDoorOpen(part) == true)
 		{
 			_curFrame[part] = 0;
 			ret = 1;
@@ -835,8 +836,8 @@ void Tile::ignite(int power)
 }
 
 /**
- * Animate the tile. This means to advance the current frame for every object.
- * Ufo doors are a bit special, they animate only when triggered.
+ * Animate the tile - this means to advance the current frame for every part.
+ * Ufo doors are a bit special; they animate only when triggered.
  * When ufo doors are on frame 0(closed) or frame 7(open) they are not animated further.
  */
 void Tile::animate()
@@ -848,9 +849,9 @@ void Tile::animate()
 			i < 4;
 			++i)
 	{
-		if (_objects[i])
+		if (_objects[i] != NULL)
 		{
-			if (_objects[i]->isUFODoor() // ufo door is static
+			if (_objects[i]->isUFODoor() == true // ufo door is static
 				&& (_curFrame[i] == 0
 					|| _curFrame[i] == 7))
 			{
@@ -859,7 +860,7 @@ void Tile::animate()
 
 			nextFrame = _curFrame[i] + 1;
 
-			if (_objects[i]->isUFODoor()
+			if (_objects[i]->isUFODoor() == true // special handling for Avenger & Lightning doors
 				&& _objects[i]->getSpecialType() == START_POINT
 				&& nextFrame == 3)
 			{
@@ -873,7 +874,7 @@ void Tile::animate()
 		}
 	}
 
-	for (std::list<Particle*>::iterator
+	for (std::list<Particle*>::const_iterator
 			i = _particles.begin();
 			i != _particles.end();
 			)
@@ -1038,7 +1039,7 @@ int Tile::getTopItemSprite()
 		weight = -1,
 		sprite = -1;
 
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)

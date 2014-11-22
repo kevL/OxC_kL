@@ -1077,6 +1077,7 @@ items:
     floorSprite: 39
     invWidth: 2
     invHeight: 3
+    battleType: 11
     recover: false
   - type: STR_CORPSE_ARMOR
     name: STR_CORPSE
@@ -1085,6 +1086,7 @@ items:
     floorSprite: 40
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 30
     recover: false
   - type: STR_CORPSE_SUIT
@@ -1094,6 +1096,7 @@ items:
     floorSprite: 41
     invWidth: 2
     invHeight: 3
+    battleType: 11
     armor: 40
     recover: false
   - type: STR_HEAVY_PLASMA

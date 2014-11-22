@@ -181,8 +181,8 @@ protected:
 		 */
 		bool isUfoDoorOpen(int part) const
 		{
-			return _objects[part]
-				&& _objects[part]->isUFODoor()
+			return _objects[part] != NULL
+				&& _objects[part]->isUFODoor() == true
 				&& _curFrame[part] != 0;
 		}
 		/// Closes ufo door.

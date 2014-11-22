@@ -4119,8 +4119,8 @@ Tile* TileEngine::checkForTerrainExplosions()
 /**
  * Opens a door (if any) by rightclick, or by walking through it. The unit has to face in the right direction.
  * @param unit			- pointer to a BattleUnit trying the door
- * @param rightClick	- true if the player right-clicked
- * @param dir			- direction to check for a door
+ * @param rightClick	- true if the player right-clicked (default false)
+ * @param dir			- direction to check for a door (default -1)
  * @return, -1 there is no door, you can walk through; or you're a tank and can't do sweet shit with a door except blast the fuck out of it.
  *			 0 normal door opened, make a squeaky sound and you can walk through;
  *			 1 ufo door is starting to open, make a whoosh sound, don't walk through;
@@ -4134,9 +4134,7 @@ int TileEngine::unitOpensDoor(
 		int dir)
 {
 	//Log(LOG_INFO) << "unitOpensDoor()";
-	int
-		door = -1,
-		unitSize = unit->getArmor()->getSize();
+	int door = -1;
 
 	if (rightClick
 		&& unit->getUnitRules() != NULL
@@ -4150,9 +4148,13 @@ int TileEngine::unitOpensDoor(
 
 	Tile* tile = NULL;
 	int
-		z = unit->getTile()->getTerrainLevel() < -12? 1: 0, // if we're standing on stairs, check the tile above instead.
-		TUCost = 0;
+		TUCost = 0,
+		z = 0;
 
+	if (unit->getTile()->getTerrainLevel() < -12)
+		z = 1; // if standing on stairs, check the tile above instead
+
+	const int unitSize = unit->getArmor()->getSize();
 	for (int
 			x = 0;
 			x < unitSize
@@ -4173,7 +4175,7 @@ int TileEngine::unitOpensDoor(
 			if (tile == NULL)
 				continue;
 
-			Position posUnit = unit->getPosition();
+			const Position posUnit = unit->getPosition();
 
 			switch (dir)
 			{
@@ -4286,7 +4288,7 @@ int TileEngine::unitOpensDoor(
 									posUnit
 										+ Position(x, y, z)
 										+ i->first);
-				if (tile)
+				if (tile != NULL)
 				{
 					door = tile->openDoor(
 										i->second,
@@ -4309,7 +4311,7 @@ int TileEngine::unitOpensDoor(
 			}
 
 			if (door == 0
-				&& rightClick)
+				&& rightClick == true)
 			{
 				if (part == MapData::O_WESTWALL)
 					part = MapData::O_NORTHWALL;
@@ -4334,13 +4336,13 @@ int TileEngine::unitOpensDoor(
 
 	if (TUCost != 0)
 	{
-		if (_battleSave->getBattleGame()->checkReservedTU(unit, TUCost))
+		if (_battleSave->getBattleGame()->checkReservedTU(unit, TUCost) == true)
 		{
-			if (unit->spendTimeUnits(TUCost))
+			if (unit->spendTimeUnits(TUCost) == true)
 			{
 //				tile->animate(); // ensures frame advances for ufo doors to update TU cost
 
-				if (rightClick) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
+				if (rightClick == true) // kL: try this one ...... <--- let UnitWalkBState handle FoV & new unit visibility, when walking (ie, not RMB).
 				{
 					_battleSave->getBattleGame()->checkForProximityGrenades(unit); // kL
 
@@ -4348,13 +4350,13 @@ int TileEngine::unitOpensDoor(
 
 					// look from the other side (may need check reaction fire)
 					// kL_note: This seems redundant, but hey maybe it removes now-unseen units from a unit's visible-units vector ....
-					std::vector<BattleUnit*>* visUnits = unit->getVisibleUnits();
+					const std::vector<BattleUnit*>* visibleUnits = unit->getVisibleUnits();
 					for (size_t
 							i = 0;
-							i < visUnits->size();
+							i < visibleUnits->size();
 							++i)
 					{
-						calculateFOV(visUnits->at(i)); // calculate FoV for all units that are visible to this unit.
+						calculateFOV(visibleUnits->at(i)); // calculate FoV for all units that are visible to this unit.
 					}
 				}
 			}
