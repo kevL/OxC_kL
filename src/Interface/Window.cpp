@@ -31,7 +31,7 @@
 namespace OpenXcom
 {
 
-// const double Window::POPUP_SPEED = 0.076; // higher is faster
+//const double Window::POPUP_SPEED = 0.076; // higher is faster
 const double Window::POPUP_SPEED = 0.135; // for high-quality filters & shaders, like 4xHQX
 
 Sound* Window::soundPopup[3] = {0, 0, 0};
@@ -71,16 +71,12 @@ Window::Window(
 		_thinBorder(false),
 		_bgX(0),
 		_bgY(0)
-//		_popupDone(false)
 {
 	_timer = new Timer(12);
 	_timer->onTimer((SurfaceHandler)& Window::popup);
 
 	if (_popup == POPUP_NONE)
-	{
 		_popupStep = 1.;
-//		_popupDone = true;
-	}
 	else
 	{
 		_hidden = true;
@@ -183,7 +179,6 @@ void Window::popup()
 			_state->toggleScreen();
 
 		_popupStep = 1.;
-//		_popupDone = true;
 
 		_state->showAll();
 		_timer->stop();
@@ -194,10 +189,10 @@ void Window::popup()
 
 /**
  * Gets if this window has finished popping up.
+ * @return, true if popup is finished
  */
 bool Window::isPopupDone() const
 {
-//	return (_popupDone == true);
 	return (AreSame(_popupStep, 1.) == true);
 }
 

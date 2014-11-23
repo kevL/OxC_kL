@@ -434,6 +434,7 @@ void SavedBattleGame::load(
 	_objectiveDestroyed	= node["objectiveDestroyed"]			.as<bool>(_objectiveDestroyed);
 	_tuReserved			= (BattleActionType)node["tuReserved"]	.as<int>(_tuReserved);
 	_kneelReserved		= node["kneelReserved"]					.as<bool>(_kneelReserved);
+	_ambience			= node["ambience"]						.as<int>(_ambience);
 	_alienRace			= node["alienRace"]						.as<std::string>(_alienRace);
 }
 
@@ -597,6 +598,7 @@ YAML::Node SavedBattleGame::save() const
 	node["tuReserved"]		= static_cast<int>(_tuReserved);
 	node["kneelReserved"]	= _kneelReserved;
 	node["depth"]			= _depth;
+	node["ambience"]		= _ambience;
 	node["alienRace"]		= _alienRace;
 
 	return node;

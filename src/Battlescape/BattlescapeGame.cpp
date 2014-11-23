@@ -405,13 +405,14 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 											this,
 											action));
 
+			if (action.type == BA_HIT && (!action.weapon || action.weapon->getRules()->getType() != unit->getMeleeWeapon()))
 			if (action.type == BA_HIT)
 			{
 				const std::string meleeWeapon = unit->getMeleeWeapon();
 				bool instaWeapon = false;
 
 				if (action.weapon != _universalFist
-					&& unit->getMeleeWeapon().empty() == false)
+					&& meleeWeapon.empty() == false)
 				{
 					bool found = false;
 					for (std::vector<BattleItem*>::const_iterator

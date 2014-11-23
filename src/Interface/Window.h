@@ -59,7 +59,6 @@ private:
 
 	bool
 		_contrast,
-//		_popupDone,
 		_screen,
 		_thinBorder;
 	int

@@ -995,7 +995,8 @@ void Map::drawTerrain(Surface* surface)
 
 							// Phase IV: render any south or east wall type objects in the tile to the north
 							if (tileNorth->getMapData(MapData::O_OBJECT)
-								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() > 5
+								&& tileNorth->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
 							{
 								tmpSurface = tileNorth->getSprite(MapData::O_OBJECT);
 								if (tmpSurface)
@@ -1087,7 +1088,8 @@ void Map::drawTerrain(Surface* surface)
 
 								tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
 								if (tmpSurface
-									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6
+									&& (tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6
+										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
 									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 3)
 								{
 									tmpSurface->blitNShade(
@@ -1127,7 +1129,8 @@ void Map::drawTerrain(Surface* surface)
 								if (buWest
 									&& buWest->getStatus() != STATUS_WALKING
 									&& (!tileWest->getMapData(MapData::O_OBJECT)
-										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6)
+										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() < 6
+										|| tileWest->getMapData(MapData::O_OBJECT)->getBigWall() == 9)
 									&& (buWest->getVisible()
 										|| _save->getDebugMode()))
 								{
@@ -1198,7 +1201,8 @@ void Map::drawTerrain(Surface* surface)
 
 								// Draw object
 								if (tileWest->getMapData(MapData::O_OBJECT)
-									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() > 5)
+									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() > 5
+									&& tileWest->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
 								{
 									tmpSurface = tileWest->getSprite(MapData::O_OBJECT);
 									tmpSurface->blitNShade(
@@ -1287,7 +1291,8 @@ void Map::drawTerrain(Surface* surface)
 
 						// Draw object
 						if (tile->getMapData(MapData::O_OBJECT)
-							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() < 6)
+							&& (tile->getMapData(MapData::O_OBJECT)->getBigWall() < 6
+								|| tile->getMapData(MapData::O_OBJECT)->getBigWall() == 9))
 						{
 							object = true;
 
@@ -1855,7 +1860,8 @@ void Map::drawTerrain(Surface* surface)
 					{
 						// Draw object
 						if (tile->getMapData(MapData::O_OBJECT)
-							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() >= 6)
+							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() > 5
+							&& tile->getMapData(MapData::O_OBJECT)->getBigWall() != 9)
 						{
 							tmpSurface = tile->getSprite(MapData::O_OBJECT);
 							if (tmpSurface)

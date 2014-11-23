@@ -1569,7 +1569,7 @@ void XcomResourcePack::loadBattlescapeResources()
 		"D0.LBM",
 		"D1.LBM",
 		"D2.LBM",
-		"D2.LBM"
+		"D3.LBM"
 	};
 
 	const std::string pals[] =

@@ -4617,7 +4617,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1416762900 f:\git\openxcom\src\interface\window.h
+1416773868 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1416458296 f:\git\openxcom\src\ruleset\ruleset.h
@@ -5756,7 +5756,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1416612300 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1416772655 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5971,7 +5971,7 @@
 	<string>
 	"../Engine/Surface.h"
 
-1416326874 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1416772861 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -6369,7 +6369,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1416690720 source:f:\git\openxcom\src\battlescape\map.cpp
+1416773230 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -8318,7 +8318,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1416746637 source:f:\git\openxcom\src\interface\window.cpp
+1416762900 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
@@ -9134,7 +9134,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1416263425 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1416773258 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../fmath.h"
 	"../Basescape/BasescapeState.h"
@@ -9556,7 +9556,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1416691079 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1416773316 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
