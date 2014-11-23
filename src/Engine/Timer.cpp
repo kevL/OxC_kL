@@ -19,7 +19,7 @@
 
 #include "Timer.h"
 
-#include <assert.h>
+//#include <assert.h>
 
 #include "Game.h"
 #include "Options.h"
@@ -33,7 +33,6 @@ namespace
 
 const Uint32 accurate = 4;
 
-
 Uint32 slowTick()
 {
 /*kL
@@ -45,14 +44,17 @@ Uint32 slowTick()
 
 	return false_time >> accurate; */
 
-	// kL_begin: slowTick() casts.
-	static Uint32 old_time		= SDL_GetTicks();
-	static Uint32 false_time	= old_time << accurate;
-	Uint32 new_time				= SDL_GetTicks() << accurate;
-	false_time				   += (new_time - old_time) / Timer::gameSlowSpeed;
-	old_time					= new_time;
+	// kL_begin: slowTick() counts.
+	static Uint32
+		old_time = SDL_GetTicks(),
+		false_time = old_time << accurate;
 
-	return false_time >> accurate;
+	Uint32 new_time = SDL_GetTicks() << accurate;
+
+	false_time += (new_time - old_time) / Timer::gameSlowSpeed;
+	old_time = new_time;
+
+	return (false_time >> accurate);
 	// kL_end.
 }
 
@@ -95,8 +97,7 @@ Timer::~Timer()
  */
 void Timer::start()
 {
-	_frameSkipStart =
-	_start = slowTick();
+	_frameSkipStart = _start = slowTick();
 	_running = true;
 }
 
@@ -141,7 +142,8 @@ void Timer::think(
 		Surface* surface)
 {
 	// must be signed to permit negative numbers
-	Sint64 now = slowTick();
+//	Sint64 current = slowTick();
+	Sint64 current = static_cast<Sint64>(slowTick());
 	// this is used to make sure we stop calling *_state on *state
 	// in the loop once *state has been popped and deallocated:
 	const Game* game = NULL;
@@ -151,20 +153,20 @@ void Timer::think(
 
 	if (_running == true)
 	{
-		if (now - _frameSkipStart >= _interval)
+		if (current - static_cast<Sint64>(_frameSkipStart) >= static_cast<Sint64>(_interval))
 		{
 			for (int
 					i = 0;
 					i <= maxFrameSkip
 //						&& isRunning()
 						&& _running == true
-						&& now - _frameSkipStart >= _interval;
+						&& current - static_cast<Sint64>(_frameSkipStart) >= static_cast<Sint64>(_interval);
 					++i)
 			{
 				if (state != NULL
 					&& _state != 0)
 				{
-					(state->*_state)();
+					(state->*_state) ();
 				}
 
 				_frameSkipStart += _interval;
@@ -182,7 +184,7 @@ void Timer::think(
 				&& surface != NULL
 				&& _surface != 0)
 			{
-				(surface->*_surface)();
+				(surface->*_surface) ();
 			}
 
 			_start = slowTick();

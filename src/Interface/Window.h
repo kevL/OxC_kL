@@ -59,20 +59,21 @@ private:
 
 	bool
 		_contrast,
+		_popupDone,
 		_screen,
 		_thinBorder;
 	int
 		_dx,
 		_dy,
-		_bgX, // kL
-		_bgY; // kL
+		_bgX,
+		_bgY;
 	double _popupStep;
 
-	State*		_state;
-	Surface*	_bg;
-	Timer*		_timer;
-	Uint8		_color;
-	WindowPopup	_popup;
+	State* _state;
+	Surface* _bg;
+	Timer* _timer;
+	Uint8 _color;
+	WindowPopup _popup;
 
 
 	public:
@@ -91,8 +92,8 @@ private:
 		/// Sets the background surface.
 		void setBackground(
 				Surface* bg,
-				int dx = 0,  // kL_add
-				int dy = 0); // kL_add
+				int dx = 0,
+				int dy = 0);
 
 		/// Sets the border color.
 		void setColor(Uint8 color);
@@ -106,6 +107,9 @@ private:
 		void think();
 		/// Popups the window.
 		void popup();
+		/// Gets if this window has finished popping up.
+		bool isPopupDone() const;
+
 		/// Draws the window.
 		void draw();
 

@@ -451,7 +451,7 @@ void Game::quit()
 		&& _save->isIronman() == true
 		&& _save->getName().empty() == false)
 	{
-		std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_save->getName())) + ".sav";
+		const std::string filename = CrossPlatform::sanitizeFilename(Language::wstrToFs(_save->getName())) + ".sav";
 		_save->save(filename);
 	}
 
@@ -469,7 +469,7 @@ void Game::setVolume(
 		int music,
 		int ui)
 {
-	if (!Options::mute)
+	if (Options::mute == false)
 	{
 		if (music > -1)
 		{
@@ -610,7 +610,9 @@ void Game::loadLanguage(const std::string& filename)
 			strings = extraStrings.begin()->second;
 	}
 
-	_lang->load(CrossPlatform::getDataFile(ss.str()), strings);
+	_lang->load(
+			CrossPlatform::getDataFile(ss.str()),
+			strings);
 
 	Options::language = filename;
 }

@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_PALETTE_H
 #define OPENXCOM_PALETTE_H
 
-#include <string>
+//#include <string>
 
-#include <SDL.h>
+//#include <SDL.h>
 
 
 namespace OpenXcom
@@ -72,8 +72,8 @@ private:
 		/**
 		 * Returns the position of a palette inside an X-Com palette file (each is a 768-byte chunks).
 		 * Handy for loading the palettes from the game files.
-		 * @param palette Requested palette.
-		 * @return, Palette position in bytes.
+		 * @param palette - requested palette
+		 * @return, palette position in bytes
 		 */
 		static inline int palOffset(int palette)
 		{
@@ -84,8 +84,8 @@ private:
 		/**
 		 * Returns the position of a certain color block in an X-Com palette (they're usually split in 16-color gradients).
 		 * Makes setting element colors a lot easier than determining the exact color position.
-		 * @param block Requested block.
-		 * @return, Color position.
+		 * @param block - requested block
+		 * @return, color position
 		 */
 		static inline Uint8 blockOffset(Uint8 block)
 		{

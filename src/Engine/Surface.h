@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_SURFACE_H
 #define OPENXCOM_SURFACE_H
 
-#include <string>
+//#include <string>
 
-#include <SDL.h>
-#include <SDL_image.h>
+//#include <SDL.h>
+//#include <SDL_image.h>
 
 
 namespace OpenXcom
@@ -42,7 +42,6 @@ class Language;
  */
 class Surface
 {
-
 protected:
 	bool
 		_hidden,
@@ -169,7 +168,7 @@ protected:
 
 		/**
 		 * Returns the surface's 8bpp palette.
-		 * @return Pointer to the palette's colors.
+		 * @return, pointer to the palette's colors
 		 */
 		SDL_Color* getPalette() const
 		{
@@ -180,7 +179,7 @@ protected:
 		virtual void setX(int x);
 		/**
 		 * Returns the position of the surface in the X axis.
-		 * @return X position in pixels.
+		 * @return, X position in pixels
 		 */
 		int getX() const
 		{
@@ -191,7 +190,7 @@ protected:
 		virtual void setY(int y);
 		/**
 		 * Returns the position of the surface in the Y axis.
-		 * @return Y position in pixels.
+		 * @return, Y position in pixels
 		 */
 		int getY() const
 		{
@@ -209,11 +208,11 @@ protected:
 		SDL_Rect* getCrop();
 
 		/**
-		 * Changes the color of a pixel in the surface,
+		 * Changes the color of a pixel in the surface
 		 * relative to the top-left corner of the surface.
-		 * @param x, X position of the pixel.
-		 * @param y, Y position of the pixel.
-		 * @param pixel, New color for the pixel.
+		 * @param x		- X position of the pixel
+		 * @param y		- Y position of the pixel
+		 * @param pixel	- color for the pixel
 		 */
 		void setPixelColor( // setPixelColor
 				int x,
@@ -237,9 +236,9 @@ protected:
 		/**
 		 * Changes the color of a pixel in the surface and returns the next pixel position.
 		 * Useful when changing a lot of pixels in a row, eg. loading images.
-		 * @param x, Pointer to the X position of the pixel. Changed to the next X position in the sequence.
-		 * @param y, Pointer to the Y position of the pixel. Changed to the next Y position in the sequence.
-		 * @param pixel, New color for the pixel.
+		 * @param x		- pointer to the X position of the pixel; changed to the next X position in the sequence
+		 * @param y		- pointer to the Y position of the pixel; changed to the next Y position in the sequence
+		 * @param pixel	- color for the pixel
 		 */
 		void setPixelIterative( // setPixelColorIterative
 				int* x,
@@ -258,9 +257,9 @@ protected:
 
 		/**
 		 * Returns the color of a specified pixel in the surface.
-		 * @param x X position of the pixel.
-		 * @param y Y position of the pixel.
-		 * @return Color of the pixel.
+		 * @param x - X position of the pixel
+		 * @param y - Y position of the pixel
+		 * @return, color of the pixel
 		 */
 		Uint8 getPixelColor( // getPixelColor
 				int x,
@@ -276,12 +275,12 @@ protected:
 
 			return static_cast<Uint8*>(_surface->pixels)
 						[(y * static_cast<int>(_surface->pitch))
-						+ (x * static_cast<int>(_surface->format->BytesPerPixel))];
+					   + (x * static_cast<int>(_surface->format->BytesPerPixel))];
 		}
 
 		/**
 		 * Returns the internal SDL_Surface for SDL calls.
-		 * @return Pointer to the surface.
+		 * @return, pointer to the surface
 		 */
 		SDL_Surface* getSurface() const
 		{
@@ -290,7 +289,7 @@ protected:
 
 		/**
 		 * Returns the width of the surface.
-		 * @return Width in pixels.
+		 * @return, width in pixels
 		 */
 		int getWidth() const
 		{
@@ -301,7 +300,7 @@ protected:
 
 		/**
 		 * Returns the height of the surface.
-		 * @return Height in pixels
+		 * @return, height in pixels
 		 */
 		int getHeight() const
 		{

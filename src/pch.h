@@ -101,6 +101,7 @@
 #include "./lodepng.h"
 #include "./dirent.h"
 
+#include "./Engine/Logger.h"
 
 // To check memory leaks in VS
 ////#ifdef _DEBUG
@@ -116,7 +117,6 @@
 #include "./Engine/ShaderMove.h"
 #include "./Engine/AdlibMusic.h" // kL, Adlib subdir also
 #include "./Engine/Flc.h"
-#include "./Engine/Logger.h"
 #include "./Engine/Surface.h"
 #include "./Engine/Exception.h"
 #include "./Engine/Sound.h"

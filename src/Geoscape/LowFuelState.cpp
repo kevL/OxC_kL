@@ -55,7 +55,7 @@ LowFuelState::LowFuelState(
 {
 	_screen = false;
 
-	_window		= new Window(this, 224, 120, 16, 40); //, POPUP_BOTH);
+	_window		= new Window(this, 224, 120, 16, 40, POPUP_BOTH);
 
 	_txtTitle	= new Text(214, 17, 21, 51);
 	_txtMessage	= new Text(214, 50, 21, 68);
@@ -90,6 +90,7 @@ LowFuelState::LowFuelState(
 	_txtMessage->setAlign(ALIGN_CENTER);
 	_txtMessage->setVerticalAlign(ALIGN_MIDDLE);
 	_txtMessage->setBig();
+	_txtMessage->setVisible(false);
 	_txtMessage->setText(tr("STR_IS_LOW_ON_FUEL_RETURNING_TO_BASE"));
 
 	_btnOk5Secs->setColor(Palette::blockOffset(8)+5);
@@ -120,7 +121,10 @@ LowFuelState::~LowFuelState()
  */
 void LowFuelState::think()
 {
-	_blinkTimer->think(this, NULL);
+	if (_window->isPopupDone() == false)
+		_window->think();
+	else
+		_blinkTimer->think(this, NULL);
 }
 
 /**

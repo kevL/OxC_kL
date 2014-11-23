@@ -556,10 +556,10 @@ SDL_Color* const State::getPalette()
 }
 
 /**
- * Each state will probably need its own resize handling,
- * so this space intentionally left blank
- * @param dX delta of X;
- * @param dY delta of Y;
+ * Each state will probably need its own resize handling
+ * so this space intentionally left blank.
+ * @param dX - reference the delta of X
+ * @param dY - reference the delta of Y
  */
 void State::resize(
 		int& dX,
@@ -570,8 +570,8 @@ void State::resize(
 
 /**
  * Re-orients all the surfaces in the state.
- * @param dX delta of X;
- * @param dY delta of Y;
+ * @param dX - delta of X
+ * @param dY - delta of Y
  */
 void State::recenter(
 		int dX,
@@ -589,7 +589,7 @@ void State::recenter(
 
 /**
  * Sets a pointer to the Game object.
- * This pointer can be used universally by all subStates.
+ * This pointer can be used universally by all child-States.
  * @param game - THE pointer to Game
  */
 void State::setGamePtr(Game* game)

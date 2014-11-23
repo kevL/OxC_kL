@@ -19,13 +19,13 @@
 
 #include "Surface.h"
 
-#include <fstream>
-#include <vector>
+//#include <fstream>
+//#include <vector>
 
-#include <SDL_endian.h>
-#include <SDL_gfxPrimitives.h>
-#include <SDL_image.h>
-#include <stdlib.h>
+//#include <SDL_endian.h>
+//#include <SDL_gfxPrimitives.h>
+//#include <SDL_image.h>
+//#include <stdlib.h>
 
 #include "Exception.h"
 #include "Language.h"
@@ -160,17 +160,17 @@ Surface::Surface(
 {
 	_alignedBuffer = NewAligned(bpp, width, height);
 	_surface = SDL_CreateRGBSurfaceFrom(
-								_alignedBuffer,
-								width,
-								height,
-								bpp,
-								GetPitch(
+									_alignedBuffer,
+									width,
+									height,
 									bpp,
-									width),
-								0,
-								0,
-								0,
-								0);
+									GetPitch(
+										bpp,
+										width),
+									0,
+									0,
+									0,
+									0);
 
 	if (_surface == NULL)
 	{
@@ -192,17 +192,18 @@ Surface::Surface(
 
 /**
  * Performs a deep copy of an existing surface.
- * @param other Surface to copy from.
+ * @param other - reference to a Surface to copy from
  */
 Surface::Surface(const Surface& other)
 {
 	//Log(LOG_INFO) << "Create Surface 2";
 	if (other._alignedBuffer) // if native OpenXcom aligned surface
 	{
-		Uint8 bpp = other._surface->format->BitsPerPixel;
-		int width = other.getWidth();
-		int height = other.getHeight();
-		int pitch = GetPitch(bpp, width);
+		const Uint8 bpp = other._surface->format->BitsPerPixel;
+		const int
+			width = other.getWidth(),
+			height = other.getHeight(),
+			pitch = GetPitch(bpp, width);
 
 		_alignedBuffer = NewAligned(bpp, width, height);
 		_surface = SDL_CreateRGBSurfaceFrom(
@@ -582,10 +583,9 @@ void Surface::think()
 }
 
 /**
- * Draws the graphic that the surface contains before it
- * gets blitted onto other surfaces. The surface is only
- * redrawn if the flag is set by a property change, to
- * avoid unecessary drawing.
+ * Draws the graphic that the surface contains before it gets blitted onto
+ * other surfaces. The surface is only redrawn if the flag is set by a
+ * property change to avoid unecessary drawing.
  */
 void Surface::draw()
 {
@@ -594,15 +594,13 @@ void Surface::draw()
 }
 
 /**
- * Blits this surface onto another one, with its position
- * relative to the top-left corner of the target surface.
- * The cropping rectangle controls the portion of the surface
- * that is blitted.
- * @param surface Pointer to surface to blit onto.
+ * Blits this surface onto another one, with its position relative to the
+ * top-left corner of the target surface. The cropping rectangle controls
+ * the portion of the surface that is blitted.
+ * @param surface - pointer to surface to blit onto
  */
 void Surface::blit(Surface* surface)
 {
-	//Log(LOG_INFO) << "blit()";
 	if (_visible == true
 		&& _hidden == false)
 	{
@@ -640,11 +638,9 @@ void Surface::blit(Surface* surface)
  */
 void Surface::copy(Surface* surface)
 {
-	/*
-	SDL_BlitSurface uses colour matching,
-	and is therefor unreliable as a means
-	to copy the contents of one surface to another
-	instead we have to do this manually
+/*	SDL_BlitSurface uses colour matching, and is therefore unreliable
+	as a means to copy the contents of one surface to another instead
+	we have to do this manually.
 
 	SDL_Rect from;
 	from.w = getWidth();
@@ -842,7 +838,7 @@ void Surface::drawString(
 
 /**
  * Changes the position of the surface in the X axis.
- * @param x X position in pixels.
+ * @param x - X position in pixels
  */
 void Surface::setX(int x)
 {
@@ -851,7 +847,7 @@ void Surface::setX(int x)
 
 /**
  * Changes the position of the surface in the Y axis.
- * @param y Y position in pixels.
+ * @param y - Y position in pixels
  */
 void Surface::setY(int y)
 {
@@ -859,9 +855,9 @@ void Surface::setY(int y)
 }
 
 /**
- * Changes the visibility of the surface. A hidden surface
- * isn't blitted nor receives events.
- * @param visible New visibility.
+ * Changes the visibility of the surface.
+ * A hidden surface isn't blitted nor receives events.
+ * @param visible - visibility (default true)
  */
 void Surface::setVisible(bool visible)
 {
@@ -870,7 +866,7 @@ void Surface::setVisible(bool visible)
 
 /**
  * Returns the visible state of the surface.
- * @return Current visibility.
+ * @return, current visibility
  */
 bool Surface::getVisible() const
 {
@@ -878,7 +874,7 @@ bool Surface::getVisible() const
 }
 
 /**
- * Resets the cropping rectangle set for this surface,
+ * Resets the cropping rectangle set for this surface
  * so the whole surface is blitted.
  */
 void Surface::resetCrop()
@@ -891,7 +887,7 @@ void Surface::resetCrop()
 
 /**
  * Returns the cropping rectangle for this surface.
- * @return Pointer to the cropping rectangle.
+ * @return, pointer to the cropping rectangle
  */
 SDL_Rect* Surface::getCrop()
 {
@@ -901,8 +897,8 @@ SDL_Rect* Surface::getCrop()
 /**
  * Replaces a certain amount of colors in the surface's palette.
  * @param colors		- pointer to the set of colors
- * @param firstcolor	- offset of the first color to replace
- * @param ncolors		- amount of colors to replace
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void Surface::setPalette(
 		SDL_Color* colors,

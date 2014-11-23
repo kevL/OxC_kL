@@ -19,7 +19,7 @@
 
 #include "Palette.h"
 
-#include <fstream>
+//#include <fstream>
 
 #include "Exception.h"
 
@@ -49,9 +49,9 @@ Palette::~Palette()
  * Loads an X-Com palette from a file. X-Com palettes are just a set
  * of RGB colors in a row, on a 0-63 scale, which have to be adjusted
  * for modern computers (0-255 scale).
- * @param filename Filename of the palette.
- * @param ncolors Number of colors in the palette.
- * @param offset Position of the palette in the file (in bytes).
+ * @param filename	- reference the filename of the palette
+ * @param ncolors	- number of colors in the palette
+ * @param offset	- position of the palette in the file (in bytes).
  * @sa http://www.ufopaedia.org/index.php?title=PALETTES.DAT
  */
 void Palette::loadDat(
@@ -102,8 +102,8 @@ void Palette::loadDat(
 
 /**
  * Provides access to colors contained in the palette.
- * @param offset Offset to a specific color.
- * @return Pointer to the requested SDL_Color.
+ * @param offset - offset to a specific color (default 0)
+ * @return, pointer to the requested SDL_Color
  */
 SDL_Color* Palette::getColors(int offset) const
 {
@@ -113,71 +113,76 @@ SDL_Color* Palette::getColors(int offset) const
 /**
  * Converts an SDL_Color struct into an hexadecimal RGBA color value.
  * Mostly used for operations with SDL_gfx that require colors in this format.
- * @param pal Requested palette.
- * @param color Requested color in the palette.
- * @return Hexadecimal RGBA value.
+ * @param pal	- pointer to requested palette
+ * @param color	- requested color in the palette
+ * @return, hexadecimal RGBA value
  */
-Uint32 Palette::getRGBA(SDL_Color* pal, Uint8 color)
+Uint32 Palette::getRGBA(
+		SDL_Color* pal,
+		Uint8 color)
 {
 	return ((Uint32)pal[color].r << 24) | ((Uint32)pal[color].g << 16) | ((Uint32)pal[color].b << 8) | (Uint32)0xFF;
 }
 
 /**
  *
+ * @param file - reference the file
  */
 void Palette::savePal(const std::string& file) const
 {
-	std::ofstream out(file.c_str(), std::ios::out | std::ios::binary);
-	short count = _count;
+	std::ofstream ofstr (file.c_str(), std::ios::out | std::ios::binary);
+	short colorQty = _count;
 
-	out << "RIFF"; // RIFF header
-	int length = 4 + 4 + 4 + 4 + 2 + 2 + count * 4;
-	out.write(
+	ofstr << "RIFF"; // RIFF header
+	const int length = 4 + 4 + 4 + 4 + 2 + 2 + (colorQty * 4);
+	ofstr.write(
 			(char*)& length,
 			sizeof(length));
-	out << "PAL ";
+	ofstr << "PAL ";
 
-	out << "data"; // Data chunk
-	int data = count * 4 + 4;
-	out.write(
+	ofstr << "data"; // Data chunk
+	const int data = (colorQty * 4) + 4;
+	ofstr.write(
 			(char*)& data,
 			sizeof(data));
-	short version = 0x0300;
-	out.write(
+	const short version = 0x0300;
+	ofstr.write(
 			(char*)& version,
 			sizeof(version));
-	out.write(
-			(char*)& count,
-			sizeof(count));
+	ofstr.write(
+			(char*)& colorQty,
+			sizeof(colorQty));
 
 	SDL_Color* color = getColors(); // Colors
 	for (short
 			i = 0;
-			i < count;
+			i < colorQty;
 			++i)
 	{
 		char c = 0;
-		out.write(
+		ofstr.write(
 				(char*)& color->r,
 				1);
-		out.write(
+		ofstr.write(
 				(char*)& color->g,
 				1);
-		out.write(
+		ofstr.write(
 				(char*)& color->b,
 				1);
-		out.write(
+		ofstr.write(
 				&c,
 				1);
 
 		color++;
 	}
 
-	out.close();
+	ofstr.close();
 }
 
 /**
  *
+ * @param pal		- pointer to SDL_Color
+ * @param ncolors	-
  */
 void Palette::setColors(
 		SDL_Color* pal,

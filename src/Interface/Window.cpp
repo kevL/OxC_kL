@@ -42,9 +42,9 @@ Sound* Window::soundPopup[3] = {0, 0, 0};
  * @param state		- pointer to State the window belongs to
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
- * @param popup		- popup animation
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
+ * @param popup		- popup animation (default POPUP_NONE)
  */
 Window::Window(
 		State* state,
@@ -69,23 +69,26 @@ Window::Window(
 		_contrast(false),
 		_screen(false),
 		_thinBorder(false),
-		_bgX(0),	// kL
-		_bgY(0)		// kL
+		_bgX(0),
+		_bgY(0),
+		_popupDone(false)
 {
-	_timer = new Timer(10);
+	_timer = new Timer(12);
 	_timer->onTimer((SurfaceHandler)& Window::popup);
 
 	if (_popup == POPUP_NONE)
+	{
 		_popupStep = 1.;
+		_popupDone = true;
+	}
 	else
 	{
-		setHidden(true);
+		_hidden = true;
 		_timer->start();
 
 		if (_state != NULL)
 		{
-			_screen = state->isScreen();
-
+			_screen = _state->isScreen();
 			if (_screen == true)
 				_state->toggleScreen();
 		}
@@ -108,13 +111,13 @@ Window::~Window()
  */
 void Window::setBackground(
 		Surface* bg,
-		int dx,	// kL
-		int dy)	// kL
+		int dx,
+		int dy)
 {
 	_bg = bg;
 
-	_bgX = dx; // kL
-	_bgY = dy; // kL
+	_bgX = dx;
+	_bgY = dy;
 
 	_redraw = true;
 }
@@ -157,7 +160,7 @@ void Window::think()
 		&& _popupStep < 1.)
 	{
 		_state->hideAll();
-		setHidden(false);
+		_hidden = false;
 	}
 
 	_timer->think(NULL, this);
@@ -168,14 +171,9 @@ void Window::think()
  */
 void Window::popup()
 {
-	if (AreSame(_popupStep, 0.) == true)
-	{
-//kL	int sound = SDL_GetTicks() %3; // this is a hack to avoid calling RNG::generate(0, 2) and skewing our seed.
-		const int sound = (SDL_GetTicks() %2) + 1; // kL
 
-//kL	if (soundPopup[sound] != 0)
-		soundPopup[sound]->play(Mix_GroupAvailable(0)); // UI Fx channels #0 & #1 & #2
-	}
+	if (AreSame(_popupStep, 0.) == true)
+		soundPopup[(SDL_GetTicks() %2) + 1]->play(Mix_GroupAvailable(0));
 
 	if (_popupStep < 1.)
 		_popupStep += POPUP_SPEED;
@@ -184,9 +182,10 @@ void Window::popup()
 		if (_screen == true)
 			_state->toggleScreen();
 
-		_state->showAll();
 		_popupStep = 1.;
+		_popupDone = true;
 
+		_state->showAll();
 		_timer->stop();
 	}
 
@@ -194,23 +193,32 @@ void Window::popup()
 }
 
 /**
+ * Gets if this window has finished popping up.
+ */
+bool Window::isPopupDone() const
+{
+	return (_popupDone == true);
+}
+
+/**
  * Draws the bordered window with a graphic background.
- * The background never moves with the window, it's
- * always aligned to the top-left corner of the screen
- * and cropped to fit the inside area.
+ * The background never moves with the window, it's always aligned to the
+ * top-left corner of the screen and cropped to fit the inside area.
  */
 void Window::draw()
 {
 	Surface::draw();
 
+
 	SDL_Rect square;
 
-	if (_popup == POPUP_HORIZONTAL || _popup == POPUP_BOTH)
+	if (_popup == POPUP_HORIZONTAL
+		|| _popup == POPUP_BOTH)
 	{
 		square.x = static_cast<Sint16>(
-				(static_cast<double>(getWidth()) - (static_cast<double>(getWidth()) * _popupStep)) / 2);
+					(static_cast<double>(getWidth()) - (static_cast<double>(getWidth()) * _popupStep)) / 2);
 		square.w = static_cast<Uint16>(
-				static_cast<double>(getWidth()) * _popupStep);
+					static_cast<double>(getWidth()) * _popupStep);
 	}
 	else
 	{
@@ -218,12 +226,13 @@ void Window::draw()
 		square.w = static_cast<Uint16>(getWidth());
 	}
 
-	if (_popup == POPUP_VERTICAL || _popup == POPUP_BOTH)
+	if (_popup == POPUP_VERTICAL
+		|| _popup == POPUP_BOTH)
 	{
 		square.y = static_cast<Sint16>(
-				(static_cast<double>(getHeight()) - (static_cast<double>(getHeight()) * _popupStep)) / 2.0);
+					(static_cast<double>(getHeight()) - (static_cast<double>(getHeight()) * _popupStep)) / 2);
 		square.h = static_cast<Uint16>(
-				static_cast<double>(getHeight()) * _popupStep);
+					static_cast<double>(getHeight()) * _popupStep);
 	}
 	else
 	{
@@ -231,21 +240,23 @@ void Window::draw()
 		square.h = static_cast<Uint16>(getHeight());
 	}
 
-	Uint8 mult = 1;
+	Uint8 gradient = 1;
 	if (_contrast == true)
-		mult = 2;
+		gradient = 2;
 
-	Uint8 color = _color + 3 * mult;
+	Uint8 color = _color + (gradient * 3);
 
 	if (_thinBorder == true)
 	{
-		color = _color + 1 * mult;
+		color = _color + gradient;
 		for (int
 				i = 0;
 				i < 5;
 				++i)
 		{
-			drawRect(&square, color);
+			drawRect(
+					&square,
+					color);
 
 			if (i %2 == 0)
 			{
@@ -258,18 +269,18 @@ void Window::draw()
 			switch (i)
 			{
 				case 0:
-					color = _color + 5 * mult;
+					color = _color + (gradient * 5);
 					setPixelColor(square.w, 0, color);
 				break;
 				case 1:
-					color = _color + 2 * mult;
+					color = _color + (gradient * 2);
 				break;
 				case 2:
-					color = _color + 4 * mult;
+					color = _color + (gradient * 4);
 					setPixelColor(square.w + 1, 1, color);
 				break;
 				case 3:
-					color = _color + 3 * mult;
+					color = _color + (gradient * 3);
 				break;
 			}
 		}
@@ -281,12 +292,14 @@ void Window::draw()
 				i < 5;
 				++i)
 		{
-			drawRect(&square, color);
+			drawRect(
+					&square,
+					color);
 
 			if (i < 2)
-				color -= 1 * mult;
+				color -= gradient;
 			else
-				color += 1 * mult;
+				color += gradient;
 
 			square.x++;
 			square.y++;
@@ -305,10 +318,8 @@ void Window::draw()
 
 	if (_bg != NULL)
 	{
-//		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(square.x) - _dx);
-//		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(square.y) - _dy);
-		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(square.x) - _dx - _bgX); // kL
-		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(square.y) - _dy - _bgY); // kL
+		_bg->getCrop()->x = static_cast<Sint16>(static_cast<int>(square.x) - _dx - _bgX);
+		_bg->getCrop()->y = static_cast<Sint16>(static_cast<int>(square.y) - _dy - _bgY);
 		_bg->getCrop()->w = square.w;
 		_bg->getCrop()->h = square.h;
 

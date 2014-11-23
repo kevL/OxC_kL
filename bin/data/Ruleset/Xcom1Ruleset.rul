@@ -211,7 +211,7 @@ crafts:
     costRent: 520000
     refuelRate: 50
     radarRange: 600
-    sightRange: 1000
+    sightRange: 900
     transferTime: 96
     score: 300
   - type: STR_FIRESTORM

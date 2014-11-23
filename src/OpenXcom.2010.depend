@@ -254,10 +254,7 @@
 	"State.h"
 	"Surface.h"
 
-1416687501 f:\git\openxcom\src\engine\surface.h
-	<string>
-	<SDL.h>
-	<SDL_image.h>
+1416738760 f:\git\openxcom\src\engine\surface.h
 
 1325792434 f:\git\openxcom\deps\include\sdl\sdl_image.h
 	"SDL.h"
@@ -4388,9 +4385,7 @@
 	"OptionInfo.h"
 	"Options.inc.h"
 
-1413136956 f:\git\openxcom\src\engine\palette.h
-	<string>
-	<SDL.h>
+1416732641 f:\git\openxcom\src\engine\palette.h
 
 1413136958 f:\git\openxcom\src\interface\bar.h
 	"../Engine/Surface.h"
@@ -4582,8 +4577,7 @@
 	"../Savegame/BaseFacility.h"
 	"../Savegame/Craft.h"
 
-1413136957 f:\git\openxcom\src\engine\timer.h
-	<SDL.h>
+1416739029 f:\git\openxcom\src\engine\timer.h
 	"State.h"
 	"Surface.h"
 
@@ -4623,7 +4617,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1413136959 f:\git\openxcom\src\interface\window.h
+1416743593 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1416458296 f:\git\openxcom\src\ruleset\ruleset.h
@@ -4726,7 +4720,7 @@
 	"../Engine/State.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
-1413136956 f:\git\openxcom\src\engine\logger.h
+1416747920 f:\git\openxcom\src\engine\logger.h
 	<sstream>
 	<string>
 	<stdio.h>
@@ -6377,7 +6371,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1416616145 source:f:\git\openxcom\src\battlescape\map.cpp
+1416690720 source:f:\git\openxcom\src\battlescape\map.cpp
 	"Map.h"
 	<cmath>
 	<fstream>
@@ -6981,7 +6975,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1416321627 source:f:\git\openxcom\src\engine\game.cpp
+1416746716 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7106,9 +7100,8 @@
 
 1413136962 f:\git\openxcom\src\version.h
 
-1413136956 source:f:\git\openxcom\src\engine\palette.cpp
+1416747168 source:f:\git\openxcom\src\engine\palette.cpp
 	"Palette.h"
-	<fstream>
 	"Exception.h"
 
 1415672573 source:f:\git\openxcom\src\engine\rng.cpp
@@ -7196,7 +7189,7 @@
 	<map>
 	<string>
 
-1416686836 source:f:\git\openxcom\src\engine\state.cpp
+1416736122 source:f:\git\openxcom\src\engine\state.cpp
 	"State.h"
 	"Font.h"
 	"Game.h"
@@ -7223,14 +7216,8 @@
 1413136959 f:\git\openxcom\src\interface\slider.h
 	"../Engine/InteractiveSurface.h"
 
-1416687386 source:f:\git\openxcom\src\engine\surface.cpp
+1416738775 source:f:\git\openxcom\src\engine\surface.cpp
 	"Surface.h"
-	<fstream>
-	<vector>
-	<SDL_endian.h>
-	<SDL_gfxPrimitives.h>
-	<SDL_image.h>
-	<stdlib.h>
 	"Exception.h"
 	"Language.h"
 	"Palette.h"
@@ -7248,9 +7235,8 @@
 	"Exception.h"
 	"Logger.h"
 
-1416682636 source:f:\git\openxcom\src\engine\timer.cpp
+1416741576 source:f:\git\openxcom\src\engine\timer.cpp
 	"Timer.h"
-	<assert.h>
 	"Game.h"
 	"Options.h"
 
@@ -7785,7 +7771,7 @@
 1415925359 f:\git\openxcom\src\geoscape\itemsarrivingstate.h
 	"../Engine/State.h"
 
-1416689708 f:\git\openxcom\src\geoscape\lowfuelstate.h
+1416746409 f:\git\openxcom\src\geoscape\lowfuelstate.h
 	"../Engine/State.h"
 
 1416322342 f:\git\openxcom\src\geoscape\monthlyreportstate.h
@@ -7969,7 +7955,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1416689697 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
+1416739562 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
 	"LowFuelState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -8334,7 +8320,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1416688238 source:f:\git\openxcom\src\interface\window.cpp
+1416746637 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
@@ -9454,7 +9440,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1416611752 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1416690977 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
@@ -9572,7 +9558,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1416658494 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1416691079 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	<vector>
 	<deque>
@@ -9680,7 +9666,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1416641257 source:f:\git\openxcom\src\savegame\tile.cpp
+1416691137 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"
