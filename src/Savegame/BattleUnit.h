@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_BATTLEUNIT_H
 #define OPENXCOM_BATTLEUNIT_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "Soldier.h"
 

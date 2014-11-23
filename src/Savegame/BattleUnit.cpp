@@ -404,7 +404,7 @@ void BattleUnit::load(const YAML::Node& node)
 	_kills				= node["kills"]										.as<int>(_kills);
 	_dontReselect		= node["dontReselect"]								.as<bool>(_dontReselect);
 	_charging			= NULL;
-	_specab				= (SpecialAbility)node["specab"]					.as<int>(_specab);
+//	_specab				= (SpecialAbility)node["specab"]					.as<int>(_specab);
 	_spawnUnit			= node["spawnUnit"]									.as<std::string>(_spawnUnit);
 	_motionPoints		= node["motionPoints"]								.as<int>(0);
 	_respawn			= node["respawn"]									.as<bool>(_respawn);
@@ -463,7 +463,7 @@ YAML::Node BattleUnit::save() const
 	node["rankInt"]			= _rankInt;
 	node["moraleRestored"]	= _moraleRestored;
 	node["killedBy"]		= (int)_killedBy;
-	node["specab"]			= (int)_specab;
+//	node["specab"]			= (int)_specab;
 	node["motionPoints"]	= _motionPoints;
 	node["respawn"]			= _respawn;
 	// could put (if not tank) here:

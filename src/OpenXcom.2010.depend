@@ -4617,7 +4617,7 @@
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
-1416743593 f:\git\openxcom\src\interface\window.h
+1416762900 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
 1416458296 f:\git\openxcom\src\ruleset\ruleset.h
@@ -4741,9 +4741,7 @@
 	<yaml-cpp/yaml.h>
 	"BattleUnit.h"
 
-1416256421 f:\git\openxcom\src\savegame\battleunit.h
-	<string>
-	<vector>
+1416750726 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"
@@ -7955,7 +7953,7 @@
 	"../Savegame/Transfer.h"
 	"../Savegame/Vehicle.h"
 
-1416739562 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
+1416749339 source:f:\git\openxcom\src\geoscape\lowfuelstate.cpp
 	"LowFuelState.h"
 	"GeoscapeState.h"
 	"../Engine/Game.h"
@@ -8020,7 +8018,7 @@
 1413136958 f:\git\openxcom\src\geoscape\targetinfostate.h
 	"../Engine/State.h"
 
-1415853533 source:f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.cpp
+1416749738 source:f:\git\openxcom\src\geoscape\newpossiblemanufacturestate.cpp
 	"NewPossibleManufactureState.h"
 	"../Basescape/ManufactureState.h"
 	"../Engine/Game.h"
@@ -8452,7 +8450,7 @@
 	"OptionsBaseState.h"
 	"../Engine/State.h"
 
-1416612653 source:f:\git\openxcom\src\menu\newbattlestate.cpp
+1416749817 source:f:\git\openxcom\src\menu\newbattlestate.cpp
 	"NewBattleState.h"
 	<algorithm>
 	<cmath>
@@ -9447,7 +9445,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1416585929 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1416749938 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

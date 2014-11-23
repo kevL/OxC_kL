@@ -70,8 +70,8 @@ Window::Window(
 		_screen(false),
 		_thinBorder(false),
 		_bgX(0),
-		_bgY(0),
-		_popupDone(false)
+		_bgY(0)
+//		_popupDone(false)
 {
 	_timer = new Timer(12);
 	_timer->onTimer((SurfaceHandler)& Window::popup);
@@ -79,7 +79,7 @@ Window::Window(
 	if (_popup == POPUP_NONE)
 	{
 		_popupStep = 1.;
-		_popupDone = true;
+//		_popupDone = true;
 	}
 	else
 	{
@@ -183,7 +183,7 @@ void Window::popup()
 			_state->toggleScreen();
 
 		_popupStep = 1.;
-		_popupDone = true;
+//		_popupDone = true;
 
 		_state->showAll();
 		_timer->stop();
@@ -197,7 +197,8 @@ void Window::popup()
  */
 bool Window::isPopupDone() const
 {
-	return (_popupDone == true);
+//	return (_popupDone == true);
+	return (AreSame(_popupStep, 1.) == true);
 }
 
 /**

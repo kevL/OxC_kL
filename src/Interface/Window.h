@@ -59,7 +59,7 @@ private:
 
 	bool
 		_contrast,
-		_popupDone,
+//		_popupDone,
 		_screen,
 		_thinBorder;
 	int
