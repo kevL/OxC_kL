@@ -2131,7 +2131,7 @@ double BattleUnit::getInitiative(int tuSpent)
 void BattleUnit::prepareUnitTurn()
 {
 	//Log(LOG_INFO) << "BattleUnit::prepareUnitTurn() ID " << getId();
-	if (_status == STATUS_TIMEOUT)
+	if (_status == STATUS_TIME_OUT)
 		return;
 
 	_faction = _originalFaction;
