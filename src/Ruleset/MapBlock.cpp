@@ -19,7 +19,7 @@
 
 #include "MapBlock.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Battlescape/Position.h"
 
@@ -30,11 +30,8 @@ namespace OpenXcom
 {
 
 /**
- * MapBlock construction.
- * @param name		- reference the name of this MapBlock
- * @param size_x	- size X
- * @param size_y	- size Y
- * @param type		- MapBlockType enum (MapBlock.h)
+ * This is MapBlock construction.
+ * @param name - reference the name of the MapBlock
  */
 MapBlock::MapBlock(const std::string& name)
 	:
@@ -55,7 +52,7 @@ MapBlock::~MapBlock()
 
 /**
  * Loads the map block from a YAML file.
- * @param node YAML node.
+ * @param node - reference a YAML node
  */
 void MapBlock::load(const YAML::Node& node)
 {
@@ -68,7 +65,7 @@ void MapBlock::load(const YAML::Node& node)
 		|| _size_y %10 != 0)
 	{
 		std::stringstream ss;
-		ss << "MapBlock " << _name << ": Size must be divisible by ten";
+		ss << "Error: MapBlock " << _name << ": Size must be divisible by ten";
 		throw Exception(ss.str());
 	}
 
@@ -80,6 +77,16 @@ void MapBlock::load(const YAML::Node& node)
 			_groups = map.as<std::vector<int> >(_groups);
 		else
 			_groups.push_back(map.as<int>(0));
+	}
+
+	if (const YAML::Node& map = node["revealedFloors"])
+	{
+		_revealedFloors.clear();
+
+		if (map.Type() == YAML::NodeType::Sequence)
+			_revealedFloors = map.as<std::vector<int> >(_revealedFloors);
+		else
+			_revealedFloors.push_back(map.as<int>(0));
 	}
 
 	_items = node["items"].as<std::map<std::string, std::vector<Position> > >(_items);
@@ -134,17 +141,29 @@ int MapBlock::getSizeZ() const
  * Gets whether this MapBlock is from a particular group.
  * @return, true if block is defined in the specified group
  */
-bool MapBlock::isInGroup(int group)
+bool MapBlock::isInGroup(int group) const
 {
 	return std::find(
-					_groups.begin(),
-					_groups.end(),
-					group) != _groups.end();
+				_groups.begin(),
+				_groups.end(),
+				group) != _groups.end();
+}
+
+/**
+ * Gets if this floor should be revealed or not.
+ * @return, true if floor will be revealed
+ */
+bool MapBlock::isFloorRevealed(int floor) const
+{
+	return std::find(
+				_revealedFloors.begin(),
+				_revealedFloors.end(),
+				floor) != _revealedFloors.end();
 }
 
 /**
  * Gets any items associated with this block and their Positions.
- * @return, the items and their positions
+ * @return, pointer to a map of items and their positions
  */
 std::map<std::string, std::vector<Position> >* MapBlock::getItems()
 {

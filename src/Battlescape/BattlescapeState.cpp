@@ -3390,7 +3390,7 @@ void BattlescapeState::finishBattle(
 	if (nextStage.empty() == false	// if there is a next mission stage, and
 		&& inExitArea > 0)			// there are soldiers in Exit_Area OR all aLiens are dead, Load the Next Stage!!!
 	{
-		std::string nextStageRace = _game->getRuleset()->getDeployment(mission)->getNextStageRace();
+/*		std::string nextStageRace = _game->getRuleset()->getDeployment(mission)->getNextStageRace();
 
 		for (std::vector<TerrorSite*>::const_iterator
 				ts = _savedGame->getTerrorSites()->begin();
@@ -3417,15 +3417,14 @@ void BattlescapeState::finishBattle(
 		else if (_game->getRuleset()->getAlienRace(nextStageRace) == NULL)
 		{
 			throw Exception(nextStageRace + " race not found.");
-		}
+		} */
 
 		_popups.clear();
 		_savedBattle->setMissionType(nextStage);
 
 		BattlescapeGenerator bgen = BattlescapeGenerator(_game);
-
 //		bgen.setAlienRace("STR_MIXED");
-		bgen.setAlienRace(nextStageRace);
+//		bgen.setAlienRace(nextStageRace);
 		bgen.nextStage();
 
 		_game->popState();

@@ -44,6 +44,7 @@ class RuleItem;
 class Ruleset;
 class RuleTerrain;
 class SavedBattleGame;
+class SavedGame;
 class TerrorSite;
 class Tile;
 class Ufo;
@@ -87,20 +88,21 @@ private:
 		_segments;
 	std::vector<std::vector<MapBlock*> > _blocks;
 
-	AlienBase		* _alienBase;
-	Base			* _base;
-	Craft			* _craft;
-	Game			* _game;
-	MapBlock		* _dummy;
-	ResourcePack	* _res;
-	Ruleset			* _rules;
+	AlienBase* _alienBase;
+	Base* _base;
+	Craft* _craft;
+	Game* _game;
+	MapBlock* _dummy;
+	ResourcePack* _res;
+	Ruleset* _rules;
 	RuleTerrain
 		* _terrain,
 		* _worldTerrain;
-	SavedBattleGame	* _battleSave;
-	TerrorSite		* _terror;
-	Tile			* _tileCraft;
-	Ufo				* _ufo;
+	SavedBattleGame* _battleSave;
+	SavedGame* _savedGame;
+	TerrorSite* _terror;
+	Tile* _tileCraft;
+	Ufo* _ufo;
 
 	std::string
 		_alienRace,

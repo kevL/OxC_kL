@@ -63,8 +63,8 @@ namespace OpenXcom
  */
 BattleUnit::BattleUnit(
 		Soldier* soldier,
-		int depth,
-		int diff,
+		const int depth,
+		const int diff,
 		BattlescapeGame* battleGame)
 	:
 		_geoscapeSoldier(soldier),
@@ -210,9 +210,9 @@ BattleUnit::BattleUnit(
 		UnitFaction faction,
 		int id,
 		Armor* armor,
-		int diff,
-		int depth,
-		int month,
+		const int diff,
+		const int depth,
+		const int month,
 		BattlescapeGame* battleGame) // May be NULL
 	:
 		_unitRules(unit),
@@ -282,7 +282,6 @@ BattleUnit::BattleUnit(
 	_type	= unit->getType();
 	_race	= unit->getRace();
 	_rank	= unit->getRank();
-
 	_stats	= *unit->getStats();
 
 	if (faction == FACTION_HOSTILE)

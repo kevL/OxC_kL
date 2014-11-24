@@ -753,7 +753,7 @@ void BattlescapeGame::endGameTurn()
 	// turn off MCed alien lighting.
 	_save->getTileEngine()->calculateUnitLighting();
 
-	if (_save->isObjectiveDestroyed() == true)
+	if (_save->allObjectivesDestroyed() == true)
 	{
 		_parentState->finishBattle(
 								false,
@@ -2688,6 +2688,8 @@ BattleUnit* BattlescapeGame::convertUnit(
 		int dirFace) // kL_add.
 {
 	//Log(LOG_INFO) << "BattlescapeGame::convertUnit() " << convertType;
+	const bool visible = unit->getVisible();
+
 	getSave()->getBattleState()->showPsiButton(false);
 	getSave()->removeUnconsciousBodyItem(unit); // in case the unit was unconscious
 
@@ -2776,8 +2778,7 @@ BattleUnit* BattlescapeGame::convertUnit(
 	getTileEngine()->applyGravity(convertedUnit->getTile());
 	getTileEngine()->calculateFOV(convertedUnit->getPosition());
 
-	if (unit->getFaction() == FACTION_PLAYER)
-		convertedUnit->setVisible();
+	convertedUnit->setVisible(visible);
 
 //	convertedUnit->getCurrentAIState()->think();
 

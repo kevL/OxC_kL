@@ -485,8 +485,8 @@ private:
 		/// Creates a BattleUnit.
 		BattleUnit( // xCom operatives
 				Soldier* soldier,
-				int depth,
-				int diff, // for VictoryPts value per death.
+				const int depth,
+				const int diff, // for VictoryPts value per death.
 				BattlescapeGame* battleGame = NULL); // for playing sound when hit.
 		/// Creates a BattleUnit.
 		BattleUnit( // aLiens, civies, & Tanks
@@ -494,9 +494,9 @@ private:
 				UnitFaction faction,
 				int id,
 				Armor* armor,
-				int diff,
-				int depth,
-				int month = 0, // for upping aLien stats as time progresses.
+				const int diff,
+				const int depth,
+				const int month = 0, // for upping aLien stats as time progresses.
 				BattlescapeGame* battleGame = NULL); // for playing sound when hit (only civies).
 		/// Cleans up the BattleUnit.
 		~BattleUnit();

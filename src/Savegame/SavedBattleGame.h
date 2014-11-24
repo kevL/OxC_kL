@@ -20,14 +20,14 @@
 #ifndef OPENXCOM_SAVEDBATTLEGAME_H
 #define OPENXCOM_SAVEDBATTLEGAME_H
 
-#include <algorithm>
-#include <iostream>
-#include <string>
-#include <vector>
+//#include <algorithm>
+//#include <iostream>
+//#include <string>
+//#include <vector>
 
-#include <SDL.h>
+//#include <SDL.h>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "BattleUnit.h"
 
@@ -51,7 +51,7 @@ class TileEngine;
 
 /**
  * The battlescape data that gets written to disk when the game is saved.
- * A saved game holds all the variable info in a game like mapdata, soldiers, items, etc.
+ * This holds all the variable info in a battlegame like mapdata, soldiers, items, etc.
  */
 class SavedBattleGame
 {
@@ -62,7 +62,6 @@ private:
 		_debugMode,
 		_cheating,
 		_kneelReserved,
-		_objectiveDestroyed,
 		_unitsFalling;
 	int
 		_ambience,
@@ -72,6 +71,8 @@ private:
 		_mapsize_x,
 		_mapsize_y,
 		_mapsize_z,
+		_objectivesDestroyed,
+		_objectivesNeeded,
 		_turn;
 
 	BattleActionType _tuReserved;
@@ -136,9 +137,9 @@ private:
 
 		/// Sets the dimensions of the map and initializes it.
 		void initMap(
-				int mapsize_x,
-				int mapsize_y,
-				int mapsize_z);
+				const int mapsize_x,
+				const int mapsize_y,
+				const int mapsize_z);
 		/// Initialises the pathfinding and tileengine.
 		void initUtilities(ResourcePack* res);
 		/// Gets the game's mapdatafiles.
@@ -251,10 +252,14 @@ private:
 		void setAborted(bool flag);
 		/// Checks if the mission was aborted.
 		bool isAborted() const;
-		/// Sets whether the objective is destroyed.
-		void setObjectiveDestroyed(bool flag);
-		/// Checks if the objective is detroyed.
-		bool isObjectiveDestroyed();
+
+		/// Sets how many objectives need to be destroyed.
+		void addToObjectiveCount();
+		/// Increments the objectives-destroyed counter.
+		void addDestroyedObjective();
+		/// Checks if all the objectives are destroyed.
+		bool allObjectivesDestroyed() const;
+
 		/// Gets the current item ID.
 		int* getCurrentItemId();
 		/// Gets a spawn node.

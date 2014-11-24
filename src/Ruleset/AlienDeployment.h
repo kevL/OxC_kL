@@ -45,7 +45,8 @@ struct DeploymentData
 	int
 		lowQty,
 		highQty,
-		dQty;
+		dQty,
+		extraQty;
 	int percentageOutsideUfo;
 	std::vector<ItemSet> itemSets;
 };
@@ -75,7 +76,7 @@ private:
 
 	std::string
 		_nextStage,
-		_nextStageRace,
+		_race,
 		_script,
 		_type;
 
@@ -120,7 +121,7 @@ private:
 		/// Gets the next stage of the mission.
 		std::string getNextStage() const;
 		/// Gets the next stage's alien race.
-		std::string getNextStageRace() const;
+		std::string getRace() const;
 
 		/// Gets the script to use for this deployment.
 		std::string getScript() const;

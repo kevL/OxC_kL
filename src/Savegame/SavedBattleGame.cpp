@@ -19,11 +19,11 @@
 
 #include "SavedBattleGame.h"
 
-#include <vector>
-#include <deque>
-#include <queue>
+//#include <vector>
+//#include <deque>
+//#include <queue>
 
-#include <assert.h>
+//#include <assert.h>
 
 #include "BattleItem.h"
 #include "Node.h"
@@ -76,7 +76,8 @@ SavedBattleGame::SavedBattleGame()
 		_debugMode(false),
 		_aborted(false),
 		_itemId(0),
-		_objectiveDestroyed(false),
+		_objectivesDestroyed(0),
+		_objectivesNeeded(0),
 		_unitsFalling(false),
 		_cheating(false),
 		_tuReserved(BA_NONE),
@@ -431,11 +432,12 @@ void SavedBattleGame::load(
 		}
 	}
 
-	_objectiveDestroyed	= node["objectiveDestroyed"]			.as<bool>(_objectiveDestroyed);
-	_tuReserved			= (BattleActionType)node["tuReserved"]	.as<int>(_tuReserved);
-	_kneelReserved		= node["kneelReserved"]					.as<bool>(_kneelReserved);
-	_ambience			= node["ambience"]						.as<int>(_ambience);
-	_alienRace			= node["alienRace"]						.as<std::string>(_alienRace);
+	_objectivesDestroyed	= node["objectivesDestroyed"]			.as<int>(_objectivesDestroyed);
+	_objectivesNeeded		= node["objectivesNeeded"]				.as<int>(_objectivesNeeded);
+	_tuReserved				= (BattleActionType)node["tuReserved"]	.as<int>(_tuReserved);
+	_kneelReserved			= node["kneelReserved"]					.as<bool>(_kneelReserved);
+	_ambience				= node["ambience"]						.as<int>(_ambience);
+	_alienRace				= node["alienRace"]						.as<std::string>(_alienRace);
 }
 
 /**
@@ -504,8 +506,11 @@ YAML::Node SavedBattleGame::save() const
 {
 	YAML::Node node;
 
-	if (_objectiveDestroyed)
-		node["objectiveDestroyed"] = _objectiveDestroyed;
+	if (_objectivesNeeded > 0)
+	{
+		node["objectivesDestroyed"]	= _objectivesDestroyed;
+		node["objectivesNeeded"]	= _objectivesNeeded;
+	}
 
 	node["width"]			= _mapsize_x;
 	node["length"]			= _mapsize_y;
@@ -620,9 +625,9 @@ Tile** SavedBattleGame::getTiles() const
  * @param mapsize_z -
  */
 void SavedBattleGame::initMap(
-		int mapsize_x,
-		int mapsize_y,
-		int mapsize_z)
+		const int mapsize_x,
+		const int mapsize_y,
+		const int mapsize_z)
 {
 	if (_nodes.empty() == false)
 	{
@@ -1444,15 +1449,22 @@ bool SavedBattleGame::isAborted() const
 }
 
 /**
- * Sets whether the objective is destroyed.
- * @param flag - true if the objective is destroyed
+ * Increments the objectives-needed counter.
  */
-void SavedBattleGame::setObjectiveDestroyed(bool flag)
+void SavedBattleGame::addToObjectiveCount()
 {
-	_objectiveDestroyed = flag;
+	++_objectivesNeeded;
+}
 
-	if (flag
-		&& Options::battleAutoEnd)
+/**
+ * Increments the objectives-destroyed counter.
+ */
+void SavedBattleGame::addDestroyedObjective()
+{
+	++_objectivesDestroyed;
+
+	if (Options::battleAutoEnd == true
+		&& allObjectivesDestroyed() == true)
 	{
 		setSelectedUnit(NULL);
 		_battleState->getBattleGame()->cancelCurrentAction(true);
@@ -1461,12 +1473,13 @@ void SavedBattleGame::setObjectiveDestroyed(bool flag)
 }
 
 /**
- * Returns whether the objective is destroyed.
- * @return, true if the objective is destroyed
+ * Returns whether the objectives are detroyed.
+ * @return, true if the objectives are destroyed
  */
-bool SavedBattleGame::isObjectiveDestroyed()
+bool SavedBattleGame::allObjectivesDestroyed() const
 {
-	return _objectiveDestroyed;
+	return _objectivesNeeded > 0
+		&& _objectivesNeeded == _objectivesDestroyed;
 }
 
 /**
@@ -1758,10 +1771,10 @@ void SavedBattleGame::prepareBattleTurn()
 						&& (*i)->getMapData(MapData::O_OBJECT)->getArmor() != 255)
 					{
 						if ((*i)->destroy(MapData::O_OBJECT) == true)
-							_objectiveDestroyed = true;
+							addDestroyedObjective();
 
 						if ((*i)->destroy(MapData::O_FLOOR) == true)
-							_objectiveDestroyed = true;
+							addDestroyedObjective();
 					}
 				}
 				else if ((*i)->getMapData(MapData::O_FLOOR) != NULL)
@@ -1770,7 +1783,7 @@ void SavedBattleGame::prepareBattleTurn()
 						&& (*i)->getMapData(MapData::O_FLOOR)->getArmor() != 255)
 					{
 						if ((*i)->destroy(MapData::O_FLOOR) == true)
-							_objectiveDestroyed = true;
+							addDestroyedObjective();
 					}
 				}
 

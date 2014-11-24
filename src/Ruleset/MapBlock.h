@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_MAPBLOCK_H
 #define OPENXCOM_MAPBLOCK_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -60,7 +60,9 @@ private:
 		_size_y,
 		_size_z;
 
-	std::vector<int> _groups;
+	std::vector<int>
+		_groups,
+		_revealedFloors;
 
 	std::map<std::string, std::vector<Position> > _items;
 
@@ -87,7 +89,10 @@ private:
 		void setSizeZ(int size_z);
 
 		/// Gets if this mapblock is from the group specified.
-		bool isInGroup(int group);
+		bool isInGroup(int group) const;
+
+		/// Gets if this floor should be revealed or not.
+		bool isFloorRevealed(int floor) const;
 
 		/// Gets the layout for any items that belong in this map block.
 		std::map<std::string, std::vector<Position> >* getItems();

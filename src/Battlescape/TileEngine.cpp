@@ -21,13 +21,15 @@
 
 #include "TileEngine.h"
 
-#include <climits>
-#include <cmath>
-#include <functional>
-#include <set>
+//#include <climits>
+//#include <cmath>
+//#include <functional>
+//#include <set>
 
-#include <assert.h>
-#include <SDL.h>
+//#include <assert.h>
+//#include <SDL.h>
+
+//#include "../fmath.h"
 
 #include "AlienBAIState.h"
 #include "BattleAIState.h"
@@ -39,8 +41,6 @@
 #include "Pathfinding.h"
 #include "ProjectileFlyBState.h"
 #include "UnitTurnBState.h"
-
-#include "../fmath.h"
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -1825,7 +1825,7 @@ BattleUnit* TileEngine::hit(
 							part,
 							power))
 			{
-				_battleSave->setObjectiveDestroyed(true);
+				_battleSave->addDestroyedObjective();
 			}
 		}
 		else if (part == VOXEL_UNIT) // battleunit part HIT SUCCESS.
@@ -2756,7 +2756,7 @@ void TileEngine::explode(
 				++i)
 		{
 			if (detonate(*i))
-				_battleSave->setObjectiveDestroyed(true);
+				_battleSave->addDestroyedObjective();
 
 			applyGravity(*i);
 

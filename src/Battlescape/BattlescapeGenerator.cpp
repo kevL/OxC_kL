@@ -83,6 +83,7 @@ namespace OpenXcom
 BattlescapeGenerator::BattlescapeGenerator(Game* game)
 	:
 		_game(game),
+		_savedGame(game->getSavedGame()),
 		_battleSave(game->getSavedGame()->getSavedBattle()),
 		_rules(game->getRuleset()),
 		_res(game->getResourcePack()),
@@ -368,10 +369,10 @@ void BattlescapeGenerator::nextStage()
 				Node* node = _battleSave->getSpawnNode(
 												NR_XCOM,
 												*j);
-				if (node
-					|| placeUnitNearFriend(*j))
+				if (node != NULL
+					|| placeUnitNearFriend(*j) == true)
 				{
-					if (node)
+					if (node != NULL)
 						_battleSave->setUnitPosition(
 													*j,
 													node->getPosition());
@@ -408,7 +409,27 @@ void BattlescapeGenerator::nextStage()
 	}
 
 	_unitSequence = _battleSave->getUnits()->back()->getId() + 1;
-	size_t unitCount = _battleSave->getUnits()->size();
+	const size_t unitCount = _battleSave->getUnits()->size();
+
+	for (std::vector<TerrorSite*>::const_iterator
+			i = _savedGame->getTerrorSites()->begin();
+			i != _savedGame->getTerrorSites()->end()
+				&& _alienRace.empty() == true;
+			++i)
+	{
+		if ((*i)->isInBattlescape() == true)
+			_alienRace = (*i)->getAlienRace();
+	}
+
+	for (std::vector<AlienBase*>::const_iterator
+			i = _savedGame->getAlienBases()->begin();
+			i != _savedGame->getAlienBases()->end()
+				&& _alienRace.empty() == true;
+			++i)
+	{
+		if ((*i)->isInBattlescape())
+			_alienRace = (*i)->getAlienRace();
+	}
 
 	deployAliens(
 			_rules->getAlienRace(_alienRace),
@@ -546,6 +567,7 @@ void BattlescapeGenerator::run()
 
 	_battleSave->setTerrain(_terrain->getName()); // sza_MusicRules
 	setTacticalSprites(); // kL
+
 	deployXCOM(); // <-- XCOM DEPLOYMENT.
 
 	const size_t unitCount = _battleSave->getUnits()->size();
@@ -558,8 +580,6 @@ void BattlescapeGenerator::run()
 	{
 		throw Exception("Map generator encountered an error: no alien units could be placed on the map.");
 	}
-
-
 
 	deployCivilians(ruleDeploy->getCivilians());
 
@@ -605,6 +625,7 @@ void BattlescapeGenerator::run()
 		}
 	} */
 
+/*
 	if (_craftDeployed == false)
 	{
 		for (int
@@ -621,8 +642,7 @@ void BattlescapeGenerator::run()
 				_battleSave->getTiles()[i]->setDiscovered(true, 2);
 			}
 		}
-	}
-
+	} */
 
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
@@ -689,7 +709,7 @@ void BattlescapeGenerator::deployXCOM()
 		// Only add vehicles from the craft in new battle mode
 		// otherwise the base's vehicle vector will already contain these
 		// due to the geoscape calling base->setupDefenses().
-		if (_game->getSavedGame()->getMonthsPassed() == -1)
+		if (_savedGame->getMonthsPassed() == -1)
 		{
 			// add vehicles from Crafts at Base.
 			for (std::vector<Craft*>::const_iterator
@@ -730,7 +750,7 @@ void BattlescapeGenerator::deployXCOM()
 			BattleUnit* const unit = addXCOMUnit(new BattleUnit(
 															*i,
 															_battleSave->getDepth(),
-															static_cast<int>(_game->getSavedGame()->getDifficulty()))); // kL_add: For VictoryPts value per death.
+															static_cast<int>(_savedGame->getDifficulty()))); // kL_add: For VictoryPts value per death.
 
 			if (unit != NULL)
 			{
@@ -791,7 +811,7 @@ void BattlescapeGenerator::deployXCOM()
 	{
 		// add only items in Craft for skirmish mode;
 		// ie. Do NOT add items from Base in skirmish mode:
-		if (_game->getSavedGame()->getMonthsPassed() != -1)
+		if (_savedGame->getMonthsPassed() != -1)
 		{
 			//Log(LOG_INFO) << ". . addBaseItems";
 			for (std::map<std::string, int>::iterator // add items from stores in base
@@ -806,7 +826,7 @@ void BattlescapeGenerator::deployXCOM()
 					&& rule->getBattleType() != BT_NONE
 					&& rule->getBattleType() != BT_CORPSE
 					&& rule->isFixed() == false
-					&& _game->getSavedGame()->isResearched(rule->getRequirements()) == true)
+					&& _savedGame->isResearched(rule->getRequirements()) == true)
 				{
 					for (int
 							j = 0;
@@ -1122,7 +1142,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 		Node* node = _battleSave->getSpawnNode(
 									NR_XCOM,
 									unit);
-		if (node)
+		if (node != NULL)
 		{
 			_battleSave->getUnits()->push_back(unit);
 
@@ -1140,7 +1160,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 		}
 		else if (_mission != "STR_BASE_DEFENSE")
 		{
-			if (placeUnitNearFriend(unit))
+			if (placeUnitNearFriend(unit) == true)
 			{
 				_battleSave->getUnits()->push_back(unit);
 
@@ -1780,6 +1800,18 @@ void BattlescapeGenerator::deployAliens(
 		AlienRace* race,
 		AlienDeployment* deployment)
 {
+	int month = _savedGame->getMonthsPassed();
+
+	if (month != -1
+		&& deployment->getRace().empty() == false)
+	{
+		_alienRace = deployment->getRace();
+		if (_rules->getAlienRace(_alienRace) == NULL)
+		{
+			throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployment: " + deployment->getType());
+		}
+	}
+
 	if (_battleSave->getDepth() > 0
 		&& _alienRace.find("_UNDERWATER") == std::string::npos)
 	{
@@ -1790,10 +1822,9 @@ void BattlescapeGenerator::deployAliens(
 			race = _rules->getAlienRace(ss.str());
 	}
 
-	int month = _game->getSavedGame()->getMonthsPassed();
 	if (month != -1)
 	{
-		int aiLevel_maximum = static_cast<int>(_rules->getAlienItemLevels().size()) - 1;
+		const int aiLevel_maximum = static_cast<int>(_rules->getAlienItemLevels().size()) - 1;
 		if (month > aiLevel_maximum)
 			month = aiLevel_maximum;
 	}
@@ -1818,11 +1849,11 @@ void BattlescapeGenerator::deployAliens(
 	{
 		alienName = race->getMember((*data).alienRank);
 
-		if (_game->getSavedGame()->getDifficulty() < DIFF_VETERAN)
+		if (_savedGame->getDifficulty() < DIFF_VETERAN)
 			qty = (*data).lowQty + RNG::generate( // beginner/experienced
 											0,
 											(*data).dQty);
-		else if (_game->getSavedGame()->getDifficulty() < DIFF_SUPERHUMAN)
+		else if (_savedGame->getDifficulty() < DIFF_SUPERHUMAN)
 			qty = (*data).lowQty + (((*data).highQty - (*data).lowQty) / 2) + RNG::generate( // veteran/genius
 																						0,
 																						(*data).dQty);
@@ -1830,6 +1861,10 @@ void BattlescapeGenerator::deployAliens(
 			qty = (*data).highQty + RNG::generate( // super (and beyond)
 												0,
 												(*data).dQty);
+
+		qty += RNG::generate(
+						0,
+						(*data).extraQty);
 
 		if (_base != NULL
 			&& _base->getDefenseResult() > 0)
@@ -1851,7 +1886,7 @@ void BattlescapeGenerator::deployAliens(
 				++i)
 		{
 			outside = false;
-			if (_ufo)
+			if (_ufo != NULL)
 				outside = RNG::percent((*data).percentageOutsideUfo);
 
 			unitRule = _rules->getUnit(alienName);
@@ -1890,7 +1925,7 @@ void BattlescapeGenerator::deployAliens(
 
 				// terrorist aliens' equipment is a special case - they are fitted
 				// with a weapon which is the alien's name with suffix _WEAPON
-				if (unitRule->isLivingWeapon())
+				if (unitRule->isLivingWeapon() == true)
 				{
 					std::string terroristWeapon = unitRule->getRace().substr(4);
 					terroristWeapon += "_WEAPON";
@@ -1952,9 +1987,9 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		int alienRank,
 		bool outside)
 {
-	int
-		difficulty = static_cast<int>(_game->getSavedGame()->getDifficulty()),
-		month = _game->getSavedGame()->getMonthsPassed();
+	const int
+		difficulty = static_cast<int>(_savedGame->getDifficulty()),
+		month = _savedGame->getMonthsPassed();
 
 	BattleUnit* unit = new BattleUnit(
 									rules,
@@ -1963,14 +1998,14 @@ BattleUnit* BattlescapeGenerator::addAlien(
 									_rules->getArmor(rules->getArmor()),
 									difficulty,
 									_battleSave->getDepth(),
-									month); // kL_add.
+									month);
 
 	// following data is the order in which certain alien ranks spawn on certain node ranks;
 	// note that they all can fall back to rank 0 nodes - which is scout (outside ufo)
 
 	Node* node = NULL;
 
-	if (outside)
+	if (outside == true)
 		node = _battleSave->getSpawnNode( // Civ-Scout spawnpoints <- 'outside'
 									0,
 									unit);
@@ -1989,11 +2024,11 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		}
 	}
 
-	if ((node
+	if ((node != NULL
 			&& _battleSave->setUnitPosition(
 										unit,
-										node->getPosition()))
-		|| placeUnitNearFriend(unit))
+										node->getPosition()) == true)
+		|| placeUnitNearFriend(unit) == true)
 	{
 		unit->setAIState(new AlienBAIState(
 										_battleSave,
@@ -2004,11 +2039,11 @@ BattleUnit* BattlescapeGenerator::addAlien(
 		int dir = -1;
 
 		Position craft = _battleSave->getUnits()->at(0)->getPosition();
-		if (RNG::percent(difficulty * 20
+		if (RNG::percent(difficulty * 20) == true
 			&& _battleSave->getTileEngine()->distance(
 													node->getPosition(),
 													craft)
-												< 25))
+												< 25)
 		{
 			dir = unit->directionTo(craft);
 		}
@@ -2081,8 +2116,8 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
 	if ((node != NULL
 			&& _battleSave->setUnitPosition(
 									unit,
-									node->getPosition()))
-		|| placeUnitNearFriend(unit))
+									node->getPosition()) == true)
+		|| placeUnitNearFriend(unit) == true)
 	{
 		unit->setAIState(new CivilianBAIState(
 										_battleSave,
@@ -2258,6 +2293,10 @@ int BattlescapeGenerator::loadMAP(
 		} */
 
 //		_battleSave->getTile(Position(x, y, z))->setDiscovered(discovered, 2);
+//		_battleSave->getTile(Position(x, y, z))->setDiscovered(
+//															discovered
+//															|| mapblock->isFloorRevealed(z), 2);
+		_battleSave->getTile(Position(x, y, z))->setDiscovered(mapblock->isFloorRevealed(z), 2);
 
 		x++;
 
@@ -3250,6 +3289,24 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 				}
 			}
 		} */
+	}
+
+	for (int
+			i = 0;
+			i < _battleSave->getMapSizeXYZ();
+			++i)
+	{
+		for (int
+				j = 0;
+				j != 4;
+				++j)
+		{
+			if (_battleSave->getTiles()[i]->getMapData(j) != NULL
+				&& _battleSave->getTiles()[i]->getMapData(j)->getSpecialType() == MUST_DESTROY)
+			{
+				_battleSave->addToObjectiveCount();
+			}
+		}
 	}
 
 	delete _dummy;
