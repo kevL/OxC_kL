@@ -2668,6 +2668,7 @@ terrains:
         width: 10
         length: 10
         groups: 2
+        revealedFloors: 1
       - name: UBASE_05
         width: 10
         length: 10
@@ -5957,7 +5958,6 @@ alienDeployments:
       - MARS
     shade: 15
     nextStage: STR_MARS_THE_FINAL_ASSAULT
-    nextStageRace: STR_MIXED
   - type: STR_MARS_THE_FINAL_ASSAULT
     script: BOSSBATTLE
     data:
@@ -6125,6 +6125,7 @@ alienDeployments:
     terrains:
       - UBASE
     shade: 5
+    race: STR_MIXED
 research:
   - name: STR_LASER_WEAPONS
     cost: 50
@@ -9159,6 +9160,8 @@ extraStrings:
       STR_REPAIRS_: "> rePAIR {0}"
       STR_REFUELLING_: "> reFUEL {0}"
       STR_REARMING_: "> reARM {0}"
+      STR_TOTAL_GROSS_UC: "TOTAL gross"
+      STR_TOTAL_NET_UC: "TOTAL net"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

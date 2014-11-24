@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_TEXTLIST_H
 #define OPENXCOM_TEXTLIST_H
 
-#include <map>
-#include <vector>
+//#include <map>
+//#include <vector>
 
 #include "Text.h"
 
@@ -202,8 +202,8 @@ private:
 
 		/// Sets the text list's high contrast color setting.
 		void setHighContrast(bool contrast = true);
-		/// kL. Sets the contrast of a certain cell.
-		void setCellHighContrast( // kL
+		/// Sets the contrast of a certain cell.
+		void setCellHighContrast(
 				int row,
 				int column,
 				bool contrast = true);

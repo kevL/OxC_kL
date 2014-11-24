@@ -19,9 +19,9 @@
 
 #include "TextList.h"
 
-#include <algorithm>
-#include <cmath>
-#include <cstdarg>
+//#include <algorithm>
+//#include <cmath>
+//#include <cstdarg>
 
 #include "ArrowButton.h"
 #include "ComboBox.h"
@@ -40,8 +40,8 @@ namespace OpenXcom
  * Sets up a blank list with the specified size and position.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 TextList::TextList(
 		int width,
@@ -101,9 +101,9 @@ TextList::TextList(
 	_down->setVisible(false);
 	_down->setTextList(this);
 
-	int h = std::max(
-					_down->getY() - _up->getY() - _up->getHeight(),
-					1);
+	const int h = std::max(
+						1,
+						_down->getY() - _up->getY() - _up->getHeight());
 	_scrollbar = new ScrollBar(
 							_up->getWidth(),
 							h,
@@ -118,12 +118,12 @@ TextList::TextList(
  */
 TextList::~TextList()
 {
-	for (std::vector<std::vector<Text*> >::iterator
+	for (std::vector<std::vector<Text*> >::const_iterator
 			i = _texts.begin();
 			i < _texts.end();
 			++i)
 	{
-		for (std::vector<Text*>::iterator
+		for (std::vector<Text*>::const_iterator
 				j = (*i).begin();
 				j < (*i).end();
 				++j)
@@ -132,7 +132,7 @@ TextList::~TextList()
 		}
 	}
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
 			i < _arrowLeft.end();
 			++i)
@@ -140,7 +140,7 @@ TextList::~TextList()
 		delete *i;
 	}
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
 			i < _arrowRight.end();
 			++i)
@@ -212,7 +212,7 @@ void TextList::unpress(State* state)
 {
 	InteractiveSurface::unpress(state);
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
 			i < _arrowLeft.end();
 			++i)
@@ -220,7 +220,7 @@ void TextList::unpress(State* state)
 		(*i)->unpress(state);
 	}
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
 			i < _arrowRight.end();
 			++i)
@@ -254,7 +254,7 @@ void TextList::setRowColor(
 		size_t row,
 		Uint8 color)
 {
-	for (std::vector<Text*>::iterator
+	for (std::vector<Text*>::const_iterator
 			i = _texts[row].begin();
 			i < _texts[row].end();
 			++i)
@@ -364,7 +364,7 @@ void TextList::addRow(
 			i < cols;
 			++i)
 	{
-		Text* txt = new Text( // Place text
+		Text* const txt = new Text( // Place text
 							_columns[i],
 							_font->getHeight(),
 							_margin + rowX,
@@ -387,7 +387,7 @@ void TextList::addRow(
 
 		txt->setText(va_arg(args, wchar_t*));
 
-		if (_wrap // Wordwrap text if necessary
+		if (_wrap == true // Wordwrap text if necessary
 			&& txt->getTextWidth() > txt->getWidth())
 		{
 			txt->setHeight(_font->getHeight() * 2 + _font->getSpacing());
@@ -412,7 +412,7 @@ void TextList::addRow(
 
 		temp.push_back(txt);
 
-		if (_condensed)
+		if (_condensed == true)
 			rowX += txt->getTextWidth();
 		else
 			rowX += _columns[i];
@@ -508,8 +508,8 @@ void TextList::setColumns(
  * Replaces a certain amount of colors in the palette of all
  * the text contained in the list.
  * @param colors		- pointer to the set of colors
- * @param firstcolor	- offset of the first color to replace
- * @param ncolors		- amount of colors to replace
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void TextList::setPalette(
 		SDL_Color* colors,
@@ -521,12 +521,12 @@ void TextList::setPalette(
 					firstcolor,
 					ncolors);
 
-	for (std::vector<std::vector<Text*> >::iterator
+	for (std::vector<std::vector<Text*> >::const_iterator
 			i = _texts.begin();
 			i < _texts.end();
 			++i)
 	{
-		for (std::vector<Text*>::iterator
+		for (std::vector<Text*>::const_iterator
 				j = i->begin();
 				j < i->end();
 				++j)
@@ -538,7 +538,7 @@ void TextList::setPalette(
 		}
 	}
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
 			i < _arrowLeft.end();
 			++i)
@@ -549,7 +549,7 @@ void TextList::setPalette(
 					ncolors);
 	}
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
 			i < _arrowRight.end();
 			++i)
@@ -622,9 +622,9 @@ void TextList::setHeight(int height)
 
 	setY(getY());
 
-	int h = std::max(
-					_down->getY() - _up->getY() - _up->getHeight(),
-					1);
+	const int h = std::max(
+						1,
+						_down->getY() - _up->getY() - _up->getHeight());
 	_scrollbar->setHeight(h);
 
 	updateVisible();
@@ -643,12 +643,12 @@ void TextList::setColor(Uint8 color)
 	_down->setColor(color);
 	_scrollbar->setColor(color);
 
-	for (std::vector<std::vector<Text*> >::iterator
+	for (std::vector<std::vector<Text*> >::const_iterator
 			i = _texts.begin();
 			i < _texts.end();
 			++i)
 	{
-		for (std::vector<Text*>::iterator
+		for (std::vector<Text*>::const_iterator
 				j = i->begin();
 				j < i->end();
 				++j)
@@ -693,12 +693,12 @@ void TextList::setHighContrast(bool contrast)
 {
 	_contrast = contrast;
 
-	for (std::vector<std::vector<Text*> >::iterator
+	for (std::vector<std::vector<Text*> >::const_iterator
 			i = _texts.begin();
 			i < _texts.end();
 			++i)
 	{
-		for (std::vector<Text*>::iterator
+		for (std::vector<Text*>::const_iterator
 				j = i->begin();
 				j < i->end();
 				++j)
@@ -711,12 +711,12 @@ void TextList::setHighContrast(bool contrast)
 }
 
 /**
- * kL. Changes the contrast of a specific Text object in the list.
+ * Changes the contrast of a specific Text object in the list.
  * @param row		- row number
  * @param column	- column number
  * @param contrast	- contrast setting (default true)
  */
-void TextList::setCellHighContrast( // kL
+void TextList::setCellHighContrast(
 		int row,
 		int column,
 		bool contrast)
@@ -730,7 +730,7 @@ void TextList::setCellHighContrast( // kL
  * Enables/disables text wordwrapping.
  * When enabled, rows can take up multiple lines of the list
  * otherwise every row is restricted to one line.
- * @param wrap - wordwrap setting
+ * @param wrap - wordwrap setting (default true)
  */
 void TextList::setWordWrap(bool wrap)
 {
@@ -743,7 +743,7 @@ void TextList::setWordWrap(bool wrap)
  * This doesn't change the alignment of existing text
  * just the alignment of text added from then on.
  * @param align	- horizontal alignment
- * @param col	- the column to set the alignment for (defaults to -1, meaning "all")
+ * @param col	- the column to set the alignment for (defaults to -1 meaning "all")
  */
 void TextList::setAlign(
 		TextHAlign align,
@@ -766,7 +766,7 @@ void TextList::setAlign(
 /**
  * If enabled, the text in different columns will be separated by dots.
  * Otherwise, it will only be separated by blank space.
- * @param dot - true for dots
+ * @param dot - true for dots (default true)
  */
 void TextList::setDot(bool dot)
 {
@@ -776,7 +776,7 @@ void TextList::setDot(bool dot)
 /**
  * If enabled, the list will respond to player input,
  * highlighting selected rows and receiving clicks.
- * @param selectable - selectable setting
+ * @param selectable - selectable setting (default true)
  */
 void TextList::setSelectable(bool selectable)
 {
@@ -835,11 +835,11 @@ void TextList::setCondensed(bool condensed)
 
 /**
  * Returns the currently selected row if the text list is selectable.
- * @return, selected row, -1 if none
+ * @return, selected row (-1 if none)
  */
 size_t TextList::getSelectedRow() const
 {
-	if (_rows.empty()
+	if (_rows.empty() == true
 		|| _selRow >= _rows.size())
 	{
 		return -1; // so what is this, shouldn't it throw() or something instead.
@@ -860,7 +860,7 @@ void TextList::setBackground(Surface* bg)
 
 /**
  * Changes the horizontal margin placed around the text.
- * @param margin - margin in pixels
+ * @param margin - margin in pixels (default 8)
  */
 void TextList::setMargin(int margin)
 {
@@ -910,7 +910,7 @@ void TextList::onLeftArrowClick(ActionHandler handler)
 {
 	_leftClick = handler;
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
 			i < _arrowLeft.end();
 			++i)
@@ -927,7 +927,7 @@ void TextList::onLeftArrowPress(ActionHandler handler)
 {
 	_leftPress = handler;
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
 			i < _arrowLeft.end();
 			++i)
@@ -944,7 +944,7 @@ void TextList::onLeftArrowRelease(ActionHandler handler)
 {
 	_leftRelease = handler;
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
 			i < _arrowLeft.end();
 			++i)
@@ -961,7 +961,7 @@ void TextList::onRightArrowClick(ActionHandler handler)
 {
 	_rightClick = handler;
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
 			i < _arrowRight.end();
 			++i)
@@ -978,7 +978,7 @@ void TextList::onRightArrowPress(ActionHandler handler)
 {
 	_rightPress = handler;
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
 			i < _arrowRight.end();
 			++i)
@@ -995,7 +995,7 @@ void TextList::onRightArrowRelease(ActionHandler handler)
 {
 	_rightRelease = handler;
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
 			i < _arrowRight.end();
 			++i)
@@ -1014,7 +1014,7 @@ void TextList::clearList()
 			i < _texts.end();
 			++i)
 	{
-		for (std::vector<Text*>::iterator
+		for (std::vector<Text*>::const_iterator
 				j = i->begin();
 				j < i->end();
 				++j)
@@ -1042,17 +1042,17 @@ void TextList::scrollUp(
 		bool toMax,
 		bool scrollByWheel)
 {
-	if (!_scrollable)
+	if (_scrollable == false)
 		return;
 
 	if (_rows.size() > _visibleRows
 		&& _scroll > 0)
 	{
-		if (toMax)
+		if (toMax == true)
 			scrollTo(0);
 		else
 		{
-			if (scrollByWheel)
+			if (scrollByWheel == true)
 				scrollTo(_scroll - std::min(
 										static_cast<size_t>(Options::mousewheelSpeed),
 										_scroll));
@@ -1071,17 +1071,17 @@ void TextList::scrollDown(
 		bool toMax,
 		bool scrollByWheel)
 {
-	if (!_scrollable)
+	if (_scrollable == false)
 		return;
 
 	if (_rows.size() > _visibleRows
 		&& _scroll < _rows.size() - _visibleRows)
 	{
-		if (toMax)
+		if (toMax == true)
 			scrollTo(_rows.size() - _visibleRows);
 		else
 		{
-			if (scrollByWheel)
+			if (scrollByWheel == true)
 				scrollTo(_scroll + Options::mousewheelSpeed);
 			else
 				scrollTo(_scroll + 1);
@@ -1094,8 +1094,8 @@ void TextList::scrollDown(
  */
 void TextList::updateArrows()
 {
-	_up->setVisible(_rows.size() > _visibleRows /*&& _scroll > 0*/);
-	_down->setVisible(_rows.size() > _visibleRows /*&& _scroll < _rows.size() - _visibleRows*/);
+	_up->setVisible(_rows.size() > _visibleRows); //&& _scroll > 0);
+	_down->setVisible(_rows.size() > _visibleRows); //&& _scroll < _rows.size() - _visibleRows);
 
 	_scrollbar->setVisible(_rows.size() > _visibleRows);
 	_scrollbar->invalidate();
@@ -1127,7 +1127,7 @@ void TextList::updateVisible()
 /**
  * Changes whether the list can be scrolled.
  * @param scrolling - true allows scrolling
- * @param scrollPos - custom +/- x_offset for the scroll buttons
+ * @param scrollPos - custom +/- x_offset for the scroll buttons (default 0)
  */
 void TextList::setScrollable(
 		bool scrollable,
@@ -1175,12 +1175,12 @@ void TextList::draw()
 				addPx = true; // add px_Y under last row
 			}
 
-			for (std::vector<Text*>::iterator
+			for (std::vector<Text*>::const_iterator
 					j = _texts[i].begin();
 					j < _texts[i].end();
 					++j)
 			{
-				if (addPx)
+				if (addPx == true)
 					(*j)->addTextHeight();
 
 				(*j)->setY(y);
@@ -1201,19 +1201,19 @@ void TextList::draw()
  */
 void TextList::blit(Surface* surface)
 {
-	if (_visible
-		&& !_hidden)
+	if (_visible == true
+		&& _hidden == false)
 	{
 		_selector->blit(surface);
 	}
 
 	Surface::blit(surface);
 
-	if (_visible
-		&& !_hidden)
+	if (_visible == true
+		&& _hidden == false)
 	{
 		if (_arrowPos != -1
-			&& !_rows.empty())
+			&& _rows.empty() == false)
 		{
 			for (size_t
 					i = _rows[_scroll];
@@ -1276,7 +1276,7 @@ void TextList::think()
 	_down->think();
 	_scrollbar->think();
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowLeft.begin();
 			i < _arrowLeft.end();
 			++i)
@@ -1284,7 +1284,7 @@ void TextList::think()
 		(*i)->think();
 	}
 
-	for (std::vector<ArrowButton*>::iterator
+	for (std::vector<ArrowButton*>::const_iterator
 			i = _arrowRight.begin();
 			i < _arrowRight.end();
 			++i)
@@ -1308,7 +1308,7 @@ void TextList::mousePress(Action* action, State* state)
 					|| action->getAbsoluteXMouse() > _arrowsRightEdge);
 	}
 
-	if (allowScroll)
+	if (allowScroll == true)
 	{
 		if (action->getDetails()->button.button == SDL_BUTTON_WHEELUP)
 			scrollUp(false, true);
@@ -1316,7 +1316,7 @@ void TextList::mousePress(Action* action, State* state)
 			scrollDown(false, true);
 	}
 
-	if (_selectable)
+	if (_selectable == true)
 	{
 		if (_selRow < _rows.size())
 			InteractiveSurface::mousePress(action, state);
@@ -1332,7 +1332,7 @@ void TextList::mousePress(Action* action, State* state)
  */
 void TextList::mouseRelease(Action* action, State* state)
 {
-	if (_selectable)
+	if (_selectable == true)
 	{
 		if (_selRow < _rows.size())
 			InteractiveSurface::mouseRelease(action, state);
@@ -1348,12 +1348,12 @@ void TextList::mouseRelease(Action* action, State* state)
  */
 void TextList::mouseClick(Action* action, State* state)
 {
-	if (_selectable)
+	if (_selectable == true)
 	{
 		if (_selRow < _rows.size())
 		{
 			InteractiveSurface::mouseClick(action, state);
-			if (_comboBox
+			if (_comboBox != NULL
 				&& action->getDetails()->button.button == SDL_BUTTON_LEFT)
 			{
 				_comboBox->setSelected(_selRow);
@@ -1372,7 +1372,7 @@ void TextList::mouseClick(Action* action, State* state)
  */
 void TextList::mouseOver(Action* action, State* state)
 {
-	if (_selectable)
+	if (_selectable == true)
 	{
 		int h = _font->getHeight() + _font->getSpacing();
 		_selRow = std::max(
@@ -1385,7 +1385,7 @@ void TextList::mouseOver(Action* action, State* state)
 		if (_selRow < _texts.size()
 			&& _selRow < _scroll + _visibleRows)
 		{
-			Text* selText = _texts[_rows[_selRow]].front();
+			const Text* const selText = _texts[_rows[_selRow]].front();
 			int
 				y = getY() + selText->getY(),
 				h = selText->getHeight() + _font->getSpacing();
@@ -1413,9 +1413,9 @@ void TextList::mouseOver(Action* action, State* state)
 			_selector->setY(y);
 			_selector->copy(_bg);
 
-			if (_contrast)
+			if (_contrast == true)
 				_selector->offset(-10, 1);
-			else if (_comboBox)
+			else if (_comboBox != NULL)
 				_selector->offset(1, Palette::backPos);
 			else
 				_selector->offset(-10, Palette::backPos);

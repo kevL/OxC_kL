@@ -19,7 +19,7 @@
 
 #include "FundingState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -35,6 +35,7 @@
 
 #include "../Ruleset/RuleCountry.h"
 
+#include "../Savegame/Base.h"
 #include "../Savegame/Country.h"
 #include "../Savegame/SavedGame.h"
 
@@ -47,7 +48,6 @@ namespace OpenXcom
  */
 FundingState::FundingState()
 {
-	//Log(LOG_INFO) << "Create FundingState";
 	_screen = false;
 
 	_window			= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -58,8 +58,8 @@ FundingState::FundingState()
 	_txtChange		= new Text(60, 9, 178, 25);
 	_txtScore		= new Text(60, 9, 238, 25);
 
-	_lstCountries	= new TextList(277, 129, 24, 34);
-	_lstTotal		= new TextList(285, 9, 16, 165);
+	_lstCountries	= new TextList(277, 121, 24, 34);
+	_lstTotal		= new TextList(285, 17, 16, 157);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -113,7 +113,8 @@ FundingState::FundingState()
 
 	_lstCountries->setColor(Palette::blockOffset(15)-1);
 	_lstCountries->setSecondaryColor(Palette::blockOffset(8)+10);
-	_lstCountries->setColumns(4, 94, 60, 60, 60);
+//	_lstCountries->setSelectable();
+	_lstCountries->setColumns(6, 94, 60, 6, 54, 6, 54);
 	_lstCountries->setDot();
 	for (std::vector<Country*>::const_iterator
 			i = _game->getSavedGame()->getCountries()->begin();
@@ -123,7 +124,9 @@ FundingState::FundingState()
 		std::wostringstream
 			ss1,
 			ss2,
-			ss3;
+			ss3,
+			ss4,
+			ss5;
 
 		const std::vector<int>
 			funds = (*i)->getFunding(),
@@ -134,36 +137,88 @@ FundingState::FundingState()
 
 		if (funds.size() > 1)
 		{
-			ss2 << L'\x01';
-			const int change = funds.back() - funds.at(funds.size() - 2);
+			int change = funds.back() - funds.at(funds.size() - 2);
 			if (change > 0)
-				ss2 << L'+';
-			ss2 << Text::formatFunding(change);
-			ss2 << L'\x01';
+				ss2 << L'\x01' << L'+' << L'\x01';
+			else if (change < 0)
+			{
+				ss2 << L'\x01' << L'-' << L'\x01';
+				change = -change;
+			}
+			else
+				ss2 << L' ' << L' ';
+
+			ss3 << L'\x01' << Text::formatFunding(change) << L'\x01';
 		}
 		else
-			ss2 << Text::formatFunding(0);
+		{
+			ss2 << L' ' << L' ';
+			ss3 << Text::formatFunding(0);
+		}
 
-		ss3 << actX.at(actX.size() - 1) - actA.at(actA.size() -1);
+		int score = actX.at(actX.size() - 1) - actA.at(actA.size() - 1);
+		if (score > -1)
+			ss4 << L' ' << L' ';
+		else
+		{
+			ss4 << L'\x01' << L'-' << L'\x01';
+			score = -score;
+		}
+
+		ss5 << L'\x01' << score << L'\x01';
 
 		_lstCountries->addRow(
-							4,
+							6,
 							tr((*i)->getRules()->getType()).c_str(),
 							ss1.str().c_str(),
 							ss2.str().c_str(),
-							ss3.str().c_str());
+							ss3.str().c_str(),
+							ss4.str().c_str(),
+							ss5.str().c_str());
+	}
+
+
+	const int gross = _game->getSavedGame()->getCountryFunding();
+	int net = gross;
+
+	for (std::vector<Base*>::const_iterator
+		i = _game->getSavedGame()->getBases()->begin();
+		i != _game->getSavedGame()->getBases()->end();
+		++i)
+	{
+		net -= (*i)->getMonthlyMaintenace();
+	}
+
+	std::wostringstream
+		wostr1,
+		wostr2;
+
+	wostr1 << L' ' << L' ';
+
+	if (net > -1)
+		wostr2 << L' ' << L' ';
+	else
+	{
+		wostr2 << L'-';
+		net = -net;
 	}
 
 	_lstTotal->setColor(Palette::blockOffset(8)+5);
-	_lstTotal->setColumns(3, 122, 92, 60);
+	_lstTotal->setColumns(4, 122, 92, 6, 54);
 	_lstTotal->setMargin();
 	_lstTotal->setDot();
 	_lstTotal->addRow(
-					3,
+					4,
 					"",
-					tr("STR_TOTAL_UC").c_str(),
-					Text::formatFunding(_game->getSavedGame()->getCountryFunding()).c_str());
-	//Log(LOG_INFO) << "Create FundingState DONE";
+					tr("STR_TOTAL_GROSS_UC").c_str(),
+					wostr1.str().c_str(),
+					Text::formatFunding(gross).c_str());
+	_lstTotal->addRow(
+					4,
+					"",
+					tr("STR_TOTAL_NET_UC").c_str(),
+					wostr2.str().c_str(),
+					Text::formatFunding(net).c_str());
 }
 
 /**

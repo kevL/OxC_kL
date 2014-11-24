@@ -4611,9 +4611,7 @@
 1413136954 f:\git\openxcom\src\basescape\placefacilitystate.h
 	"../Engine/State.h"
 
-1415066156 f:\git\openxcom\src\interface\textlist.h
-	<map>
-	<vector>
+1416821115 f:\git\openxcom\src\interface\textlist.h
 	"Text.h"
 	"../Engine/InteractiveSurface.h"
 
@@ -7624,9 +7622,8 @@
 	<yaml-cpp/yaml.h>
 	"WeightedOptions.h"
 
-1415853536 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
+1416816370 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
 	"FundingState.h"
-	<sstream>
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
@@ -7637,6 +7634,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/RuleCountry.h"
+	"../Savegame/Base.h"
 	"../Savegame/Country.h"
 	"../Savegame/SavedGame.h"
 
@@ -8295,11 +8293,8 @@
 	"../Engine/Options.h"
 	"../Engine/Timer.h"
 
-1415853533 source:f:\git\openxcom\src\interface\textlist.cpp
+1416821309 source:f:\git\openxcom\src\interface\textlist.cpp
 	"TextList.h"
-	<algorithm>
-	<cmath>
-	<cstdarg>
 	"ArrowButton.h"
 	"ComboBox.h"
 	"ScrollBar.h"
@@ -8318,7 +8313,7 @@
 	"NumberText.h"
 	"../Engine/Palette.h"
 
-1416762900 source:f:\git\openxcom\src\interface\window.cpp
+1416773868 source:f:\git\openxcom\src\interface\window.cpp
 	"Window.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
@@ -11731,7 +11726,7 @@
 	"../Resource/ResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1416337015 source:f:\git\openxcom\src\menu\listloadstate.cpp
+1416813034 source:f:\git\openxcom\src\menu\listloadstate.cpp
 	"ListLoadState.h"
 	"ConfirmLoadState.h"
 	"LoadGameState.h"
