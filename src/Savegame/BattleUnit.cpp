@@ -674,7 +674,8 @@ void BattleUnit::setStatus(int status)
 		case 7:		_status = STATUS_UNCONSCIOUS;	return;
 		case 8:		_status = STATUS_PANICKING;		return;
 		case 9:		_status = STATUS_BERSERK;		return;
-		case 10:	_status = STATUS_DISABLED;		return;
+		case 10:	_status = STATUS_TIME_OUT;		return;
+		case 11:	_status = STATUS_DISABLED;		return;
 
 		default:
 			_status = STATUS_STANDING;
@@ -707,8 +708,8 @@ void BattleUnit::startWalking(
 		_status = STATUS_FLYING; // controls walking sound in UnitWalkBState, what else
 		_verticalDirection = direction;
 
-		if (_tile->getMapData(MapData::O_FLOOR)
-			&& _tile->getMapData(MapData::O_FLOOR)->isGravLift())
+		if (_tile->getMapData(MapData::O_FLOOR) != NULL
+			&& _tile->getMapData(MapData::O_FLOOR)->isGravLift() == true)
 		{
 			//Log(LOG_INFO) << ". STATUS_FLYING, using GravLift";
 			_floating = false;
@@ -717,7 +718,7 @@ void BattleUnit::startWalking(
 			//Log(LOG_INFO) << ". STATUS_FLYING, up.down";
 			_floating = true;
 	}
-	else if (_tile->hasNoFloor(tileBelow))
+	else if (_tile->hasNoFloor(tileBelow) == true)
 	{
 		//Log(LOG_INFO) << ". STATUS_FLYING, no Floor";
 		_status = STATUS_FLYING;
@@ -752,7 +753,7 @@ void BattleUnit::keepWalking(
 		midPhase,
 		endPhase;
 
-	if (_verticalDirection)
+	if (_verticalDirection != 0)
 	{
 		midPhase = 4;
 		endPhase = 8;
@@ -794,7 +795,7 @@ void BattleUnit::keepWalking(
 		_walkPhase = 0;
 		_verticalDirection = 0;
 
-		if (_floating
+		if (_floating == true
 			&& _tile->hasNoFloor(tileBelow) == false)
 		{
 			_floating = false;
@@ -869,7 +870,7 @@ void BattleUnit::lookAt(
 	int dir = directionTo(point);
 	//Log(LOG_INFO) << ". . lookAt() -> dir = " << dir;
 
-	if (turret)
+	if (turret == true)
 	{
 		//Log(LOG_INFO) << ". . . . has turret.";
 		_toDirectionTurret = dir;
@@ -906,7 +907,7 @@ void BattleUnit::lookAt(
 		bool force)
 {
 	//Log(LOG_INFO) << "BattleUnit::lookAt() #2";
-	if (force)
+	if (force == true)
 	{
 		_toDirection = direction;
 		_direction = direction;
@@ -938,14 +939,13 @@ void BattleUnit::turn(bool turret)
 
 	int delta = 0;
 
-	if (turret)
+	if (turret == true)
 	{
 		if (_directionTurret == _toDirectionTurret)
 		{
 			//Log(LOG_INFO) << ". . _d = _tD, abort";
 //			abortTurn();
 			_status = STATUS_STANDING;
-
 			return;
 		}
 
@@ -959,7 +959,6 @@ void BattleUnit::turn(bool turret)
 			//Log(LOG_INFO) << ". . _d = _tD, abort";
 //			abortTurn();
 			_status = STATUS_STANDING;
-
 			return;
 		}
 
@@ -973,7 +972,7 @@ void BattleUnit::turn(bool turret)
 		{
 			if (delta <= 4)
 			{
-				if (!turret)
+				if (turret == false)
 				{
 					if (_turretType > -1)
 						_directionTurret++;
@@ -985,7 +984,7 @@ void BattleUnit::turn(bool turret)
 			}
 			else
 			{
-				if (!turret)
+				if (turret == false)
 				{
 					if (_turretType > -1)
 						_directionTurret--;
@@ -1000,7 +999,7 @@ void BattleUnit::turn(bool turret)
 		{
 			if (delta > -4)
 			{
-				if (!turret)
+				if (turret == false)
 				{
 					if (_turretType > -1)
 						_directionTurret--;
@@ -1012,7 +1011,7 @@ void BattleUnit::turn(bool turret)
 			}
 			else
 			{
-				if (!turret)
+				if (turret == false)
 				{
 					if (_turretType > -1)
 						_directionTurret++;
@@ -1039,14 +1038,14 @@ void BattleUnit::turn(bool turret)
 		//Log(LOG_INFO) << ". . _directionTurret = " << _directionTurret;
 		//Log(LOG_INFO) << ". . _toDirectionTurret = " << _toDirectionTurret;
 
-		if (_visible
+		if (_visible == true
 			|| _faction == FACTION_PLAYER) // kL_note: Faction_player should *always* be _visible...
 		{
 			_cacheInvalid = true;
 		}
 	}
 
-	if (turret)
+	if (turret == true)
 	{
 		 if (_toDirectionTurret == _directionTurret)
 		 {
@@ -1653,7 +1652,8 @@ bool BattleUnit::isOut(
 			return true;
 	}
 	else if (_status == STATUS_DEAD
-		|| _status == STATUS_UNCONSCIOUS)
+		|| _status == STATUS_UNCONSCIOUS
+		|| _status == STATUS_TIME_OUT)
 	{
 		return true;
 	}
@@ -2131,6 +2131,9 @@ double BattleUnit::getInitiative(int tuSpent)
 void BattleUnit::prepareUnitTurn()
 {
 	//Log(LOG_INFO) << "BattleUnit::prepareUnitTurn() ID " << getId();
+	if (_status == STATUS_TIMEOUT)
+		return;
+
 	_faction = _originalFaction;
 	_unitsSpottedThisTurn.clear();
 
@@ -4169,6 +4172,15 @@ bool BattleUnit::getFloorAbove()
 MovementType BattleUnit::getMovementType() const
 {
 	return _movementType;
+}
+
+/**
+ * Sets this unit to "time-out" status,
+ * meaning they will NOT take part in the current battle.
+ */
+void BattleUnit::goToTimeOut()
+{
+	_status = STATUS_TIME_OUT;
 }
 
 /**

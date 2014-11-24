@@ -288,22 +288,31 @@ void BattlescapeGenerator::nextStage()
 {
 	// kill all enemy units, or those not in endpoint area (if aborted)
 	for (std::vector<BattleUnit*>::const_iterator
-			j = _battleSave->getUnits()->begin();
-			j != _battleSave->getUnits()->end();
-			++j)
+			i = _battleSave->getUnits()->begin();
+			i != _battleSave->getUnits()->end();
+			++i)
 	{
-		if ((_battleSave->isAborted()
-				&& !(*j)->isInExitArea(END_POINT))
-			|| (*j)->getOriginalFaction() == FACTION_HOSTILE)
+/*		if ((_battleSave->isAborted()
+				&& (*i)->isInExitArea(END_POINT) == false)
+			|| (*i)->getOriginalFaction() == FACTION_HOSTILE)
 		{
-			(*j)->instaKill();
+			(*i)->instaKill();
+		} */
+
+		if ((*i)->getStatus() != STATUS_DEAD					// If they're not dead
+			&& ((_battleSave->isAborted() == true						// and if mission aborted
+					&& (*i)->getOriginalFaction() == FACTION_PLAYER		// and they're xCom
+					&& (*i)->isInExitArea(END_POINT) == false)			// but they're not on the exit,
+				|| (*i)->getOriginalFaction() != FACTION_PLAYER))	// Or they're not xCom at all.
+		{
+			(*i)->goToTimeOut();
 		}
 
-		if ((*j)->getTile())
-			(*j)->getTile()->setUnit(NULL);
+		if ((*i)->getTile() != NULL)
+			(*i)->getTile()->setUnit(NULL);
 
-		(*j)->setTile(NULL);
-		(*j)->setPosition(Position(-1,-1,-1), false);
+		(*i)->setTile(NULL);
+		(*i)->setPosition(Position(-1,-1,-1), false);
 	}
 
 	while (_battleSave->getSide() != FACTION_PLAYER)

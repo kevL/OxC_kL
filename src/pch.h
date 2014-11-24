@@ -27,8 +27,8 @@
 #include <climits>
 
 #define _USE_MATH_DEFINES
-
 #include <cmath>
+
 #include <cstdarg>
 #include <cstring>
 #include <cstdio>
@@ -50,6 +50,8 @@
 
 #include <map>
 #include <queue>
+
+#include <yaml-cpp/yaml.h>
 
 #include <SDL_endian.h>
 #include <SDL_gfxPrimitives.h>
@@ -94,14 +96,42 @@
 	#undef Insert
 #endif
 
-#include <yaml-cpp/yaml.h>
-
-#include "./fmath.h"
-#include "./version.h"
-#include "./lodepng.h"
 #include "./dirent.h"
+#include "./fmath.h"
+#include "./lodepng.h"
+#include "./version.h"
 
+#include "./Engine/AdlibMusic.h"
+#include "./Engine/Adlib/adlplayer.h"
+#include "./Engine/Adlib/fmopl.h"
+#include "./Engine/CatFile.h"
+#include "./Engine/CrossPlatform.h"
+#include "./Engine/Exception.h"
+#include "./Engine/FastLineClip.h"
+#include "./Engine/Flc.h"
+#include "./Engine/Font.h"
+#include "./Engine/GMCat.h"
+#include "./Engine/GraphSubset.h"
+#include "./Engine/Language.h"
+#include "./Engine/LanguagePlurality.h"
+#include "./Engine/LocalizedText.h"
 #include "./Engine/Logger.h"
+#include "./Engine/OpenGL.h"
+#include "./Engine/Palette.h"
+#include "./Engine/RNG.h"
+#include "./Engine/Scalers/common.h"
+#include "./Engine/Scalers/config.h"
+#include "./Engine/Scalers/hqx.h"
+#include "./Engine/Scalers/scale2x.h"
+#include "./Engine/Scalers/scale3x.h"
+#include "./Engine/Scalers/scalebit.h"
+#include "./Engine/Scalers/xbrz.h"
+#include "./Engine/Screen.h"
+#include "./Engine/ShaderDraw.h"
+#include "./Engine/ShaderDrawHelper.h"
+#include "./Engine/ShaderMove.h"
+#include "./Engine/ShaderRepeat.h"
+#include "./Engine/Zoom.h"
 
 // To check memory leaks in VS
 ////#ifdef _DEBUG
@@ -112,48 +142,20 @@
 ////#endif
 
 /*
-#include "./Engine/State.h"
-
-#include "./Engine/ShaderMove.h"
-#include "./Engine/AdlibMusic.h" // kL, Adlib subdir also
-#include "./Engine/Flc.h"
-#include "./Engine/Surface.h"
-#include "./Engine/Exception.h"
-#include "./Engine/Sound.h"
-#include "./Engine/GMCat.h"
-#include "./Engine/GraphSubset.h"
-#include "./Engine/CrossPlatform.h"
-#include "./Engine/CatFile.h"
-#include "./Engine/Screen.h"
-#include "./Engine/Game.h"
-#include "./Engine/SurfaceSet.h"
-#include "./Engine/LocalizedText.h"
-#include "./Engine/FastLineClip.h"
-#include "./Engine/Scalers/scalebit.h"
-#include "./Engine/Scalers/hqx.h"
-#include "./Engine/Scalers/common.h"
-#include "./Engine/Scalers/scale2x.h"
-#include "./Engine/Scalers/scale3x.h"
-#include "./Engine/Scalers/xbrz.h"
-#include "./Engine/ShaderRepeat.h"
-#include "./Engine/SoundSet.h"
 #include "./Engine/Action.h"
-#include "./Engine/OpenGL.h"
+#include "./Engine/Game.h"
 #include "./Engine/InteractiveSurface.h"
-#include "./Engine/ShaderDraw.h"
-#include "./Engine/Options.h"
-#include "./Engine/Timer.h"
-#include "./Engine/Zoom.h"
-#include "./Engine/Font.h"
-#include "./Engine/RNG.h"
-#include "./Engine/Palette.h"
 #include "./Engine/Music.h"
-#include "./Engine/Language.h"
-#include "./Engine/LanguagePlurality.h" // kL
-#include "./Engine/ShaderDrawHelper.h"
-#include "./Engine/DosFont.h" // kL
+#include "./Engine/OptionInfo.h"
+#include "./Engine/Options.h"
+#include "./Engine/Options.inc.h"
+#include "./Engine/Sound.h"
+#include "./Engine/SoundSet.h"
+#include "./Engine/State.h"
+#include "./Engine/Surface.h"
+#include "./Engine/SurfaceSet.h"
+#include "./Engine/Timer.h"
 
-//kL #include "./dirent.h"
 
 #include "./Battlescape/PathfindingNode.h"
 #include "./Battlescape/PrimeGrenadeState.h"
@@ -338,8 +340,6 @@
 #include "./Interface/Slider.h"
 #include "./Interface/Frame.h"
 
-//kL #include "./lodepng.h"
-
 #include "./Menu/ListSaveState.h"
 #include "./Menu/DeleteGameState.h"
 #include "./Menu/ErrorMessageState.h"
@@ -401,6 +401,6 @@
 */
 // kL_note: Also, MatrixState, SoldierDead, SoldierDiedState, &tc. TurnCounter ...
 // + sza_Ruleset/ExtraMusic & sza_Ruleset/RuleMusic
-// ... many more. eg, Engine/Shaders *
+// ... many more.
 
 #endif

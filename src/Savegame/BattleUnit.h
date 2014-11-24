@@ -53,17 +53,18 @@ class Unit;
 
 enum UnitStatus
 {
-	STATUS_STANDING,	// 0
-	STATUS_WALKING,		// 1
-	STATUS_FLYING,		// 2
-	STATUS_TURNING,		// 3
-	STATUS_AIMING,		// 4
-	STATUS_COLLAPSING,	// 5
-	STATUS_DEAD,		// 6
-	STATUS_UNCONSCIOUS,	// 7
-	STATUS_PANICKING,	// 8
-	STATUS_BERSERK,		// 9
-	STATUS_DISABLED		// 10 kL, dead or stunned but doesn't know it yet.
+	STATUS_STANDING,	//  0
+	STATUS_WALKING,		//  1
+	STATUS_FLYING,		//  2
+	STATUS_TURNING,		//  3
+	STATUS_AIMING,		//  4
+	STATUS_COLLAPSING,	//  5
+	STATUS_DEAD,		//  6
+	STATUS_UNCONSCIOUS,	//  7
+	STATUS_PANICKING,	//  8
+	STATUS_BERSERK,		//  9
+	STATUS_TIME_OUT,	// 10
+	STATUS_DISABLED		// 11 kL, dead or stunned but doesn't know it yet.
 };
 
 enum UnitFaction
@@ -1027,6 +1028,9 @@ private:
 		{
 			_hidingForTurn = hiding;
 		};
+
+		/// Puts the unit in the corner to think about what he's done.
+		void goToTimeOut();
 
 		/// Gets this unit's mission statistics.
 		BattleUnitStatistics* getStatistics();
