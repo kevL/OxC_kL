@@ -3,13 +3,13 @@ crafts:
   - type: STR_HAWKEYE
     listOrder: 207
     sprite: 26
-    fuelMax: 1350
+    fuelMax: 135000
     damageMax: 125
     speedMax: 410
     accel: 1
     costBuy: 500000
     costRent: 335000
-    refuelRate: 75
+    refuelRate: 7500
     radarRange: 1000
     sightRange: 1500
 #    radarChance: 40
@@ -18,13 +18,13 @@ crafts:
   - type: STR_AWACS
     listOrder: 208
     sprite: 27
-    fuelMax: 1750
+    fuelMax: 175000
     damageMax: 140
     speedMax: 723
     accel: 1
     costBuy: 650000
     costRent: 465000
-    refuelRate: 75
+    refuelRate: 7500
     radarRange: 1200
     sightRange: 1800
 #    radarChance: 40
@@ -33,13 +33,13 @@ crafts:
   - type: STR_DARKSTAR
     listOrder: 209
     sprite: 28
-    fuelMax: 2250
+    fuelMax: 225000
     damageMax: 75
     speedMax: 380
     accel: 1
     costSell: 650000
     costRent: 20000
-    refuelRate: 100
+    refuelRate: 10000
     radarRange: 1400
     sightRange: 2100
 #    radarChance: 60

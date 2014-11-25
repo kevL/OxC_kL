@@ -177,7 +177,7 @@ facilities:
 crafts:
   - type: STR_SKYRANGER
     sprite: 0
-    fuelMax: 1225
+    fuelMax: 122500
     damageMax: 175
     speedMax: 783
     accel: 2
@@ -186,7 +186,7 @@ crafts:
     maxItems: 84 # 6 x soldier cap.
     costBuy: 450000
     costRent: 295000
-    refuelRate: 50
+    refuelRate: 5000
     radarRange: 400
     sightRange: 600
     transferTime: 72
@@ -202,14 +202,14 @@ crafts:
           length: 20
   - type: STR_INTERCEPTOR
     sprite: 3
-    fuelMax: 930
+    fuelMax: 93000
     damageMax: 138
     speedMax: 2052
     accel: 3
     weapons: 2
     costBuy: 750000
     costRent: 520000
-    refuelRate: 50
+    refuelRate: 5000
     radarRange: 600
     sightRange: 900
     transferTime: 96
