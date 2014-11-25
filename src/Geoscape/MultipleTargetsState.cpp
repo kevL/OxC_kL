@@ -163,9 +163,9 @@ void MultipleTargetsState::popupTarget(Target* target)
 	if (_craft == NULL)
 	{
 		//Log(LOG_INFO) << ". _craft == 0";
-		Craft* c = dynamic_cast<Craft*>(target);
-		Ufo* u = dynamic_cast<Ufo*>(target);
-		Base* b = dynamic_cast<Base*>(target);
+		Craft* const c = dynamic_cast<Craft*>(target);
+		Ufo* const u = dynamic_cast<Ufo*>(target);
+		Base* const b = dynamic_cast<Base*>(target);
 		//Log(LOG_INFO) << ". dynamic_cast's examined";
 
 		if (b != NULL)
@@ -174,7 +174,7 @@ void MultipleTargetsState::popupTarget(Target* target)
 			_game->pushState(new InterceptState(
 											_state->getGlobe(),
 											b,
-											NULL,
+//											NULL,
 											_state)); // kL_add.
 		}
 		else if (c != NULL)

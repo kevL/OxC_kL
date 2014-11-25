@@ -83,7 +83,7 @@ private:
 		InterceptState(
 				Globe* globe,
 				Base* base = NULL,
-				Target* target = NULL,
+//				Target* target = NULL,
 				GeoscapeState* geo = NULL);
 		/// Cleans up the Intercept state.
 		~InterceptState();

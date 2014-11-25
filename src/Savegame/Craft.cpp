@@ -705,7 +705,7 @@ int Craft::getFuelPercentage() const
 {
 	return static_cast<int>(
 			floor((static_cast<double>(_fuel) / static_cast<double>(_rules->getMaxFuel()))
-			* 100.0));
+			* 100.));
 }
 
 /**
@@ -738,7 +738,7 @@ int Craft::getDamagePercent() const
 {
 	return static_cast<int>(
 			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()))
-			* 100.0));
+			* 100.));
 }
 
 /**
@@ -799,8 +799,9 @@ int Craft::getFuelConsumption() const
 	if (_rules->getRefuelItem().empty() == false) // Firestorm, Lightning, Avenger, etc.
 		return 1;
 
-	return static_cast<int>(floor(
-			static_cast<double>(_speed) / 100.0)); // Skyranger, Interceptor.
+//	return static_cast<int>(floor(
+//			static_cast<double>(_speed) / 100.)); // Skyranger, Interceptor.
+	return _speed; // Skyranger, Interceptor.
 }
 
 /**
@@ -819,10 +820,16 @@ int Craft::getFuelLimit() const
  */
 int Craft::getFuelLimit(Base* base) const
 {
-	const double speedRadian = static_cast<double>(_rules->getMaxSpeed()) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0;
+	Log(LOG_INFO) << "dist = " << static_cast<int>(getDistance(base) * earthRadius);
+
+	const double speedRads = static_cast<double>(_rules->getMaxSpeed()) * unitToRads / 6.; // per 10-min.
+
+	double arbitrary_factor = 1.;
+	if (_rules->getRefuelItem().empty() == true)
+		arbitrary_factor = 2.;
 
 	return static_cast<int>(ceil(
-			(static_cast<double>(getFuelConsumption()) * getDistance(base)) / (speedRadian * 120.0)));
+		   static_cast<double>(getFuelConsumption()) * getDistance(base) * arbitrary_factor / speedRads));
 }
 
 /**
@@ -843,7 +850,7 @@ void Craft::think()
 	else
 		_takeoff--;
 
-	if (reachedDestination()
+	if (reachedDestination() == true
 		&& _dest == dynamic_cast<Target*>(_base))
 	{
 		setInterceptionOrder(0);
@@ -874,7 +881,7 @@ void Craft::checkup()
 		cw = 0,
 		loaded = 0;
 
-	for (std::vector<CraftWeapon*>::iterator
+	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
 			i != _weapons.end();
 			++i)

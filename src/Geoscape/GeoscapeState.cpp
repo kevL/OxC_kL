@@ -138,8 +138,9 @@ namespace OpenXcom
 size_t kL_currentBase = 0;
 
 const double
-	earthRadius					= 3440.0, //.0647948164, // nautical miles.
-	greatCircleConversionFactor	= (1.0 / 60.0) * (M_PI / 180.0) * earthRadius; // converts 'flat' distance to greatCircle distance.
+	earthRadius					= 3440., //.0647948164,			// nautical miles.
+	unitToRads					= (1. / 60.) * (M_PI / 180.),	// converts a minute of arc to rads
+	greatCircleConversionFactor	= earthRadius * unitToRads;		// converts 'flat' distance to greatCircle distance.
 
 Sound* GeoscapeState::soundPop = 0;
 
@@ -147,11 +148,12 @@ Sound* GeoscapeState::soundPop = 0;
 // myk002_begin: struct definitions used when enqueuing notification events
 struct ProductionCompleteInfo
 {
-	std::wstring item;
 	bool showGotoBaseButton;
+	std::wstring item;
 
 	ProductProgress endType;
 
+	/// cTor.
 	ProductionCompleteInfo(
 			const std::wstring& a_item,
 			bool a_showGotoBaseButton,
@@ -166,9 +168,10 @@ struct ProductionCompleteInfo
 
 struct NewPossibleResearchInfo
 {
-	std::vector<RuleResearch*> newPossibleResearch;
 	bool showResearchButton;
+	std::vector<RuleResearch*> newPossibleResearch;
 
+	/// cTor.
 	NewPossibleResearchInfo(
 			const std::vector<RuleResearch*>& a_newPossibleResearch,
 			bool a_showResearchButton)
@@ -181,9 +184,10 @@ struct NewPossibleResearchInfo
 
 struct NewPossibleManufactureInfo
 {
-	std::vector<RuleManufacture*> newPossibleManufacture;
 	bool showManufactureButton;
+	std::vector<RuleManufacture*> newPossibleManufacture;
 
+	/// cTor.
 	NewPossibleManufactureInfo(
 			const std::vector<RuleManufacture*>& a_newPossibleManufacture,
 			bool a_showManufactureButton)
@@ -1285,7 +1289,7 @@ void GeoscapeState::time5Seconds()
 				j != (*i)->getCrafts()->end();
 				)
 		{
-			if ((*j)->isDestroyed())
+			if ((*j)->isDestroyed() == true)
 			{
 				const double
 					lon = (*j)->getLongitude(),
@@ -1298,7 +1302,7 @@ void GeoscapeState::time5Seconds()
 				{
 					if ((*country)->getRules()->insideCountry(
 															lon,
-															lat))
+															lat) == true)
 					{
 						(*country)->addActivityAlien((*j)->getRules()->getScore());
 						(*country)->recentActivity();
@@ -1313,7 +1317,7 @@ void GeoscapeState::time5Seconds()
 				{
 					if ((*region)->getRules()->insideRegion(
 														lon,
-														lat))
+														lat) == true)
 					{
 						(*region)->addActivityAlien((*j)->getRules()->getScore());
 						(*region)->recentActivity();
@@ -1357,7 +1361,7 @@ void GeoscapeState::time5Seconds()
 
 			if ((*j)->getDestination() != NULL)
 			{
-				Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestination());
+				const Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (ufo != NULL)
 				{
 					if (ufo->getDetected() == false) // lost radar contact
@@ -1372,7 +1376,7 @@ void GeoscapeState::time5Seconds()
 						{
 							(*j)->setDestination(NULL);
 
-							Waypoint* wp = new Waypoint();
+							Waypoint* const wp = new Waypoint();
 							wp->setLongitude(ufo->getLongitude());
 							wp->setLatitude(ufo->getLatitude());
 							wp->setId(ufo->getId());
@@ -1403,10 +1407,10 @@ void GeoscapeState::time5Seconds()
 
 			if ((*j)->reachedDestination() == true)
 			{
-				Ufo* ufo = dynamic_cast<Ufo*>((*j)->getDestination());
-				Waypoint* wp = dynamic_cast<Waypoint*>((*j)->getDestination());
-				TerrorSite* ts = dynamic_cast<TerrorSite*>((*j)->getDestination());
-				AlienBase* ab = dynamic_cast<AlienBase*>((*j)->getDestination());
+				Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
+				const Waypoint* const wp = dynamic_cast<Waypoint*>((*j)->getDestination());
+				const TerrorSite* const ts = dynamic_cast<TerrorSite*>((*j)->getDestination());
+				const AlienBase* const ab = dynamic_cast<AlienBase*>((*j)->getDestination());
 
 				if (ufo != NULL)
 				{
@@ -2446,12 +2450,12 @@ private:
  */
 void GenerateSupplyMission::operator()(const AlienBase* base) const
 {
-	if (RNG::percent(4))
+	if (RNG::percent(4) == true)
 	{
 		// Spawn supply mission for this base.
 		const RuleAlienMission& rule = *_ruleset.getAlienMission("STR_ALIEN_SUPPLY");
 
-		AlienMission* mission = new AlienMission(rule);
+		AlienMission* const mission = new AlienMission(rule);
 		mission->setRegion(
 					_save.locateRegion(*base)->getRules()->getType(),
 					_ruleset);
@@ -2586,13 +2590,13 @@ void GeoscapeState::time1Day()
 					bonus = _game->getRuleset()->getResearch(free);
 
 					_savedGame->addFinishedResearch(
-															bonus,
-															_game->getRuleset());
+												bonus,
+												_game->getRuleset());
 
 					if (bonus->getLookup().empty() == false)
 						_savedGame->addFinishedResearch(
-																_game->getRuleset()->getResearch(bonus->getLookup()),
-																_game->getRuleset());
+													_game->getRuleset()->getResearch(bonus->getLookup()),
+													_game->getRuleset());
 				}
 			}
 
@@ -2613,13 +2617,13 @@ void GeoscapeState::time1Day()
 			}
 
 			_savedGame->addFinishedResearch( // this adds the actual research project to _discovered vector.
-													research,
-													_game->getRuleset());
+										research,
+										_game->getRuleset());
 
 			if (research->getLookup().empty() == false)
 				_savedGame->addFinishedResearch(
-														_game->getRuleset()->getResearch(research->getLookup()),
-														_game->getRuleset());
+											_game->getRuleset()->getResearch(research->getLookup()),
+											_game->getRuleset());
 
 			researchCompleteEvents.push_back(new ResearchCompleteState( // myk002
 																	newResearch,
@@ -2631,17 +2635,17 @@ void GeoscapeState::time1Day()
 
 			std::vector<RuleResearch*> newPossibleResearch;
 			_savedGame->getDependableResearch(
-													newPossibleResearch,
-													(*rp)->getRules(),
-													_game->getRuleset(),
-													*b);
+										newPossibleResearch,
+										(*rp)->getRules(),
+										_game->getRuleset(),
+										*b);
 
 			std::vector<RuleManufacture*> newPossibleManufacture;
 			_savedGame->getDependableManufacture(
-														newPossibleManufacture,
-														(*rp)->getRules(),
-														_game->getRuleset(),
-														*b);
+											newPossibleManufacture,
+											(*rp)->getRules(),
+											_game->getRuleset(),
+											*b);
 
 			if (newResearch) // check for possible researching weapon before clip
 			{
@@ -2734,8 +2738,8 @@ void GeoscapeState::time1Day()
 			// kL_begin:
 			//Log(LOG_INFO) << ". Soldier = " << (*s)->getId();
 			//Log(LOG_INFO) << ". woundPercent = " << (*s)->getWoundPercent();
-			if ((*s)->getWoundPercent() > 10					// more than 10% wounded
-				&& RNG::percent((*s)->getWoundPercent() / 5))	// %chance to die today
+			if ((*s)->getWoundPercent() > 10							// more than 10% wounded
+				&& RNG::percent((*s)->getWoundPercent() / 5) == true)	// %chance to die today
 			{
 				//Log(LOG_INFO) << ". . he's dead, Jim!!";
 				timerReset();
@@ -2875,7 +2879,7 @@ void GeoscapeState::time1Day()
 			{
 				if ((*r)->getRules()->insideRegion(
 												lon,
-												lat))
+												lat) == true)
 				{
 					(*r)->addActivityAlien(aLienPts);
 					(*r)->recentActivity();
@@ -2891,7 +2895,7 @@ void GeoscapeState::time1Day()
 			{
 				if ((*c)->getRules()->insideCountry(
 												lon,
-												lat))
+												lat) == true)
 				{
 					(*c)->addActivityAlien(aLienPts);
 					(*c)->recentActivity();
@@ -2914,12 +2918,12 @@ void GeoscapeState::time1Day()
 //kL	int day = _savedGame->getTime()->getDay();
 //kL	if (day == 10 || day == 20)
 //	{
-	if (_savedGame->isIronman())
+	if (_savedGame->isIronman() == true)
 		popup(new SaveGameState(
 							OPT_GEOSCAPE,
 							SAVE_IRONMAN,
 							_palette));
-	else if (Options::autosave)
+	else if (Options::autosave == true)
 		popup(new SaveGameState(
 							OPT_GEOSCAPE,
 							SAVE_AUTO_GEOSCAPE,
@@ -2973,7 +2977,7 @@ void GeoscapeState::time1Month()
 			{
 				if ((*j)->getRules()->insideRegion(
 												(*i)->getLongitude(),
-												(*i)->getLatitude()))
+												(*i)->getLatitude()) == true)
 				{
 					if (_savedGame->getAlienMission(
 															(*j)->getRules()->getType(),
@@ -3020,7 +3024,7 @@ void GeoscapeState::time1Month()
 			}
 		}
 
-		if (!Options::anytimePsiTraining
+		if (Options::anytimePsiTraining == false
 			&& (*i)->getAvailablePsiLabs() > 0)
 		{
 			psi = true;
@@ -3030,7 +3034,7 @@ void GeoscapeState::time1Month()
 					j != (*i)->getSoldiers()->end();
 					++j)
 			{
-				if ((*j)->isInPsiTraining())
+				if ((*j)->isInPsiTraining() == true)
 				{
 					(*j)->trainPsi();
 //					(*j)->calcStatString(
@@ -3147,8 +3151,8 @@ void GeoscapeState::globeClick(Action* action)
 						&lat);
 
 		const double
-			lonDeg = lon / M_PI * 180.0,
-			latDeg = lat / M_PI * 180.0;
+			lonDeg = lon / M_PI * 180.,
+			latDeg = lat / M_PI * 180.;
 
 		std::wostringstream ss;
 		ss << "rad: " << lon << " , " << lat << std::endl;
@@ -3167,7 +3171,7 @@ void GeoscapeState::btnInterceptClick(Action*)
 	_game->pushState(new InterceptState(
 									_globe,
 									NULL,
-									NULL,
+//									NULL,
 									this));
 }
 

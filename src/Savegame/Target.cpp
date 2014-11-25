@@ -36,8 +36,8 @@ namespace OpenXcom
  */
 Target::Target()
 	:
-		_lon(0.0),
-		_lat(0.0)
+		_lon(0.),
+		_lat(0.)
 {
 }
 
@@ -113,11 +113,11 @@ void Target::setLongitude(double lon)
 	_lon = lon;
 
 	// Keep between 0 and 2xPI
-	while (_lon < 0.0)
-		_lon += 2.0 * M_PI;
+	while (_lon < 0.)
+		_lon += M_PI * 2.;
 
-	while (_lon >= 2.0 * M_PI)
-		_lon -= 2.0 * M_PI;
+	while (_lon >= M_PI * 2.)
+		_lon -= M_PI * 2.;
 }
 
 /**
@@ -137,12 +137,12 @@ void Target::setLatitude(double lat)
 {
 	_lat = lat;
 
-	if (_lat < -(M_PI / 2.0)) // keep it between -pi/2 and pi/2
+	if (_lat < -(M_PI_2)) // keep it between -pi/2 and pi/2
 	{
 		_lat = -M_PI - _lat; // kL
 		setLongitude(_lon + M_PI);
 	}
-	else if (_lat > (M_PI / 2.0))
+	else if (_lat > (M_PI_2))
 	{
 		_lat = M_PI - _lat; // Doug. right!
 		setLongitude(_lon - M_PI);
@@ -165,12 +165,12 @@ std::vector<Target*>* Target::getFollowers()
  */
 double Target::getDistance(const Target* target) const
 {
-	return acos(
-			cos(_lat)
-				* cos(target->getLatitude())
-				* cos(target->getLongitude() - _lon)
-			+ sin(_lat)
-				* sin(target->getLatitude()));
+	return std::acos(
+			std::cos(_lat)
+				* std::cos(target->getLatitude())
+				* std::cos(target->getLongitude() - _lon)
+			+ std::sin(_lat)
+				* std::sin(target->getLatitude()));
 }
 
 }

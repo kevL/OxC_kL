@@ -242,7 +242,7 @@ void TargetInfoState::btnInterceptClick(Action*)
 	_game->pushState(new InterceptState(
 									_globe,
 									NULL,
-									_target,
+//									_target,
 									_state)); // kL_add.
 }
 

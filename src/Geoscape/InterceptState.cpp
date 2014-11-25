@@ -56,29 +56,29 @@ namespace OpenXcom
  * Initializes all the elements in the Intercept window.
  * @param globe		- pointer to the geoscape Globe
  * @param base		- pointer to Base to show contained crafts (default NULL to show all crafts)
- * @param target	- pointer to Target to intercept (default NULL to ask user for target)
+// * @param target	- pointer to Target to intercept (default NULL to ask user for target)
  * @param geo		- pointer to GeoscapeState (default NULL)
  */
 InterceptState::InterceptState(
 		Globe* globe,
 		Base* base,
-		Target* target,
+//		Target* target,
 		GeoscapeState* geo)
 	:
 		_globe(globe),
 		_base(base),
-		_target(target),
+//		_target(target),
 		_geo(geo)
 {
 	_screen = false;
 
-	_window		= new Window(
-							this,
-							320,
-							176,
-							0,
-							14,
-							POPUP_HORIZONTAL);
+	_window			= new Window(
+								this,
+								320,
+								176,
+								0,
+								14,
+								POPUP_HORIZONTAL);
 	_txtBase		= new Text(288, 17, 16, 24); // might do getRegion in here also.
 
 	_txtCraft		= new Text(86, 9, 16, 40);
@@ -149,7 +149,7 @@ InterceptState::InterceptState(
 	_lstCrafts->onMouseOut((ActionHandler)& InterceptState::lstCraftsMouseOut);
 
 
-	RuleCraft* rule = NULL;
+	const RuleCraft* rule = NULL;
 
 	size_t row = 0;
 	for (std::vector<Base*>::const_iterator
@@ -417,12 +417,12 @@ void InterceptState::lstCraftsRightClick(Action*)
  */
 void InterceptState::lstCraftsMouseOver(Action*)
 {
-	if (_base)
+	if (_base != NULL)
 		return;
 
 	std::wstring wsBase;
 
-	int sel = _lstCrafts->getSelectedRow();
+	const int sel = _lstCrafts->getSelectedRow();
 	if (static_cast<size_t>(sel) < _bases.size())
 		wsBase = _bases[sel];
 	else
@@ -437,7 +437,7 @@ void InterceptState::lstCraftsMouseOver(Action*)
  */
 void InterceptState::lstCraftsMouseOut(Action*)
 {
-	if (_base)
+	if (_base != NULL)
 		return;
 
 	_txtBase->setText(tr("STR_INTERCEPT"));

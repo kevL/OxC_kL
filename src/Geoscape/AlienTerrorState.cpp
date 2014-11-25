@@ -19,7 +19,7 @@
 
 #include "AlienTerrorState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "GeoscapeState.h"
 #include "Globe.h"
@@ -123,7 +123,6 @@ AlienTerrorState::~AlienTerrorState()
 void AlienTerrorState::btnInterceptClick(Action*)
 {
 	_state->timerReset();
-
 //	_state->getGlobe()->center(
 //							_terror->getLongitude(),
 //							_terror->getLatitude());
@@ -132,7 +131,7 @@ void AlienTerrorState::btnInterceptClick(Action*)
 	_game->pushState(new InterceptState(
 									_state->getGlobe(),
 									NULL,
-									_terror,
+//									_terror,
 									_state)); // kL_add.
 }
 

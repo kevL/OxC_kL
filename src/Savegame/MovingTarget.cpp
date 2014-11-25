@@ -25,6 +25,8 @@
 
 //#include "../fmath.h"
 
+#include "../Geoscape/GeoscapeState.h"
+
 
 namespace OpenXcom
 {
@@ -36,9 +38,9 @@ MovingTarget::MovingTarget()
 	:
 		Target(),
 		_dest(NULL),
-		_speedLon(0.0),
-		_speedLat(0.0),
-		_speedRadian(0.0),
+		_speedLon(0.),
+		_speedLat(0.),
+		_speedRadian(0.),
 		_speed(0)
 {
 }
@@ -115,7 +117,7 @@ void MovingTarget::setDestination(Target* dest)
 {
 	if (_dest != NULL) // remove moving target from old destination's followers
 	{
-		for (std::vector<Target*>::iterator
+		for (std::vector<Target*>::const_iterator
 				i = _dest->getFollowers()->begin();
 				i != _dest->getFollowers()->end();
 				++i)
@@ -154,9 +156,9 @@ void MovingTarget::setSpeed(const int speed)
 {
 	_speed = speed;
 
-	// Each nautical mile is 1/60th of a degree.
-	// Each hour contains 720 5-seconds.
-	_speedRadian = static_cast<double>(_speed) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0;
+	// each nautical mile is 1/60th of a degree; each hour contains 720 5-seconds
+//	_speedRadian = ceil(static_cast<double>(_speed) * (1.0 / 60.0) * (M_PI / 180.0) / 720.0);
+	_speedRadian = static_cast<double>(_speed) * unitToRads / 720.;
 
 	calculateSpeed();
 }
@@ -170,29 +172,29 @@ void MovingTarget::calculateSpeed()
 	if (_dest != NULL)
 	{
 		const double
-			dLon = sin(_dest->getLongitude() - _lon)
-				 * cos(_dest->getLatitude()),
-			dLat = cos(_lat)
-				 * sin(_dest->getLatitude()) - sin(_lat)
-				 * cos(_dest->getLatitude())
-				 * cos(_dest->getLongitude() - _lon),
-			length = sqrt((dLon * dLon) + (dLat * dLat));
+			dLon = std::sin(_dest->getLongitude() - _lon)
+				 * std::cos(_dest->getLatitude()),
+			dLat = std::cos(_lat)
+				 * std::sin(_dest->getLatitude()) - std::sin(_lat)
+				 * std::cos(_dest->getLatitude())
+				 * std::cos(_dest->getLongitude() - _lon),
+			length = std::sqrt((dLon * dLon) + (dLat * dLat));
 
 		_speedLat = dLat / length * _speedRadian;
-		_speedLon = dLon / length * _speedRadian / cos(_lat + _speedLat);
+		_speedLon = dLon / length * _speedRadian / std::cos(_lat + _speedLat);
 
 		// Check for invalid speeds when a division by zero occurs due to near-zero values
 		if (_speedLon != _speedLon
 			|| _speedLat != _speedLat)
 		{
-			_speedLon = 0.0;
-			_speedLat = 0.0;
+			_speedLon = 0.;
+			_speedLat = 0.;
 		}
 	}
 	else
 	{
-		_speedLon = 0.0;
-		_speedLat = 0.0;
+		_speedLon = 0.;
+		_speedLat = 0.;
 	}
 }
 

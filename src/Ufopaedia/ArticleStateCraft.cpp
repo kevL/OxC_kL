@@ -19,7 +19,7 @@
 
 #include "ArticleStateCraft.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "Ufopaedia.h"
 
@@ -48,8 +48,6 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	:
 		ArticleState(defs->id)
 {
-	RuleCraft* craftRule = _game->getRuleset()->getCraft(defs->id);
-
 	_txtTitle = new Text(210, 32, 5, 24);
 
 	setPalette("PAL_UFOPAEDIA");
@@ -89,15 +87,18 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	_txtStats->setColor(Palette::blockOffset(14)+15);
 	_txtStats->setSecondaryColor(Palette::blockOffset(15)+4);
 
-	// kL_begin:
-	int range = craftRule->getMaxSpeed() * craftRule->getMaxFuel() / 6; // six doses per hour on Geoscape.
-	if (craftRule->getRefuelItem() == "") // <- gasoline-powered (speed is already factored into consumption)
-		range = craftRule->getMaxFuel() * 100 / 6; // kL_end.
+	const RuleCraft* const craftRule = _game->getRuleset()->getCraft(defs->id);
+	int range = craftRule->getMaxFuel();
+	if (craftRule->getRefuelItem().empty() == false)
+		range *= craftRule->getMaxSpeed();
+	else
+		range *= 100;
+
+	range /= 6; // six doses per hour on Geoscape.
 
 	std::wostringstream ss;
 	ss << tr("STR_MAXIMUM_SPEED_UC").arg(Text::formatNumber(craftRule->getMaxSpeed(), L"", false)) << L'\n';
 	ss << tr("STR_ACCELERATION").arg(craftRule->getAcceleration()) << L'\n';
-//kL	ss << tr("STR_FUEL_CAPACITY").arg(Text::formatNumber(craftRule->getMaxFuel(), L"", false)) << L'\n';
 	ss << tr("STR_FUEL_CAPACITY").arg(Text::formatNumber(range, L"", false)) << L'\n';
 	ss << tr("STR_WEAPON_PODS").arg(craftRule->getWeapons()) << L'\n';
 	ss << tr("STR_DAMAGE_CAPACITY_UC").arg(Text::formatNumber(craftRule->getMaxDamage(), L"", false)) << L'\n';

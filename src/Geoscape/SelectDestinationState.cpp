@@ -256,14 +256,15 @@ void SelectDestinationState::globeClick(Action* action)
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // Clicking on a valid target
 	{
-		int range = 0;
-//		_error = NULL;
-
 		const RuleCraft* const craftRule = _craft->getRules();
-		if (craftRule->getRefuelItem() == "")
-			range = _craft->getFuel() * 100 / 6; // <- gasoline-powered (speed factored into consumption)
+		int range = craftRule->getMaxFuel();
+		if (craftRule->getRefuelItem().empty() == false)
+			range *= craftRule->getMaxSpeed();
 		else
-			range = craftRule->getMaxSpeed() * _craft->getFuel() / 6; // six doses per hour on Geoscape.
+			range *= 100;
+
+		range /= 6; // six doses per hour on Geoscape.
+
 		//Log(LOG_INFO) << ". range = " << range;
 
 		Waypoint* const wp = new Waypoint();
