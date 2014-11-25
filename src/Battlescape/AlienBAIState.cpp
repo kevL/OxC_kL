@@ -1385,7 +1385,7 @@ bool AlienBAIState::selectClosestKnownEnemy()
 	_aggroTarget = NULL;
 	int minDist = 255;
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)

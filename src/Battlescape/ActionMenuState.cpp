@@ -331,7 +331,7 @@ void ActionMenuState::btnActionMenuItemClick(Action* action)
 		{
 			BattleUnit* targetUnit = NULL;
 
-			std::vector<BattleUnit*>* const units = _game->getSavedGame()->getSavedBattle()->getUnits();
+			const std::vector<BattleUnit*>* const units = _game->getSavedGame()->getSavedBattle()->getUnits();
 			for (std::vector<BattleUnit*>::const_iterator
 					i = units->begin();
 					i != units->end()

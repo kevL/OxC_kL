@@ -156,10 +156,10 @@ private:
 		Tile** getTiles() const;
 		/// Gets a pointer to the list of nodes.
 		std::vector<Node*>* getNodes();
-		/// Gets a pointer to the list of items.
-		std::vector<BattleItem*>* getItems();
 		/// Gets a pointer to the list of units.
 		std::vector<BattleUnit*>* getUnits();
+		/// Gets a pointer to the list of items.
+		std::vector<BattleItem*>* getItems();
 		/// Gets terrain size x.
 		int getMapSizeX() const;
 		/// Gets terrain size y.

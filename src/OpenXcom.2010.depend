@@ -4730,7 +4730,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1416827271 f:\git\openxcom\src\savegame\savedbattlegame.h
+1416931385 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
 1416830495 f:\git\openxcom\src\savegame\battleunit.h
@@ -5608,7 +5608,7 @@
 1413136958 f:\git\openxcom\src\interface\frame.h
 	"../Engine/Surface.h"
 
-1416493486 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
+1416930729 source:f:\git\openxcom\src\battlescape\actionmenustate.cpp
 	"ActionMenuState.h"
 	<cmath>
 	<sstream>
@@ -5670,7 +5670,7 @@
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
 
-1416556640 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
+1416930763 source:f:\git\openxcom\src\battlescape\alienbaistate.cpp
 	"AlienBAIState.h"
 	<algorithm>
 	<climits>
@@ -5738,14 +5738,14 @@
 1413136955 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1416920474 f:\git\openxcom\src\battlescape\debriefingstate.h
+1416930052 f:\git\openxcom\src\battlescape\debriefingstate.h
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1416923875 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1416930875 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -6154,7 +6154,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1416923735 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1416931231 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -9528,7 +9528,7 @@
 	"../Ruleset/RuleResearch.h"
 	"../Ruleset/Ruleset.h"
 
-1416827389 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
+1416931385 source:f:\git\openxcom\src\savegame\savedbattlegame.cpp
 	"SavedBattleGame.h"
 	"BattleItem.h"
 	"Node.h"
@@ -12137,7 +12137,7 @@
 	"../Engine/Exception.h"
 	"../Engine/RNG.h"
 
-1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftdarmor.cpp
+1416928202 source:f:\git\openxcom\src\ufopaedia\articlestatetftdarmor.cpp
 	<sstream>
 	"../fmath.h"
 	"ArticleStateTFTD.h"
@@ -12224,7 +12224,7 @@
 1416892630 f:\git\openxcom\src\ufopaedia\articlestatetftduso.h
 	"ArticleStateTFTD.h"
 
-1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftdvehicle.cpp
+1416928202 source:f:\git\openxcom\src\ufopaedia\articlestatetftdvehicle.cpp
 	"../Ruleset/ArticleDefinition.h"
 	"ArticleStateTFTDVehicle.h"
 	<sstream>

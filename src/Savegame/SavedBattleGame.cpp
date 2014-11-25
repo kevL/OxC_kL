@@ -2094,12 +2094,12 @@ bool SavedBattleGame::placeUnitNearPosition(
 
 	if (setUnitPosition(
 					unit,
-					pos))
+					pos) == true)
 	{
 		return true;
 	}
 
-	int dirRand = RNG::generate(0, 7);
+	const int dirRand = RNG::generate(0, 7);
 	for (int
 			dir = dirRand;
 			dir < dirRand + 8;
@@ -2111,14 +2111,14 @@ bool SavedBattleGame::placeUnitNearPosition(
 										&offset);
 
 		Tile* tile = getTile(pos + offset);
-		if (tile
+		if (tile != NULL
 			&& getPathfinding()->isBlocked(
 										getTile(pos),
 										tile,
 										dir) == false
 			&& setUnitPosition(
 							unit,
-							pos + offset))
+							pos + offset) == true)
 		{
 			return true;
 		}

@@ -2645,20 +2645,20 @@ void BattlescapeGame::dropItem(
 		return;
 
 	// don't ever drop fixed items
-	if (item->getRules()->isFixed())
+	if (item->getRules()->isFixed() == true)
 		return;
 
 	_save->getTile(pos)->addItem(item, getRuleset()->getInventory("STR_GROUND"));
 
-	if (item->getUnit())
+	if (item->getUnit() != NULL)
 		item->getUnit()->setPosition(pos);
 
-	if (newItem)
+	if (newItem == true)
 		_save->getItems()->push_back(item);
 //	else if (_save->getSide() != FACTION_PLAYER)
 //		item->setTurnFlag(true);
 
-	if (removeItem)
+	if (removeItem == true)
 		item->moveToOwner(NULL);
 	else if (item->getRules()->getBattleType() != BT_GRENADE
 		&& item->getRules()->getBattleType() != BT_PROXIMITYGRENADE)

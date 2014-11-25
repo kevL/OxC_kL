@@ -39,6 +39,7 @@ class Craft;
 class Region;
 class RuleItem;
 class Ruleset;
+class SavedGame;
 class Soldier;
 class Text;
 class TextButton;
@@ -109,6 +110,7 @@ private:
 	Country* _country;
 	Region* _region;
 	Ruleset* _rules;
+	SavedGame* _savedGame;
 	Text
 		* _txtBaseLabel,
 		* _txtItem,
