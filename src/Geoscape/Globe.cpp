@@ -26,6 +26,8 @@
 
 //#include "../fmath.h"
 
+#include "GeoscapeState.h"
+
 #include "../Engine/Action.h"
 #include "../Engine/FastLineClip.h"
 #include "../Engine/Font.h"
@@ -313,10 +315,10 @@ Globe::Globe(
 			height,
 			x,
 			y),
-		_rotLon(0.0),
-		_rotLat(0.0),
-		_hoverLon(0.0),
-		_hoverLat(0.0),
+		_rotLon(0.),
+		_rotLat(0.),
+		_hoverLon(0.),
+		_hoverLat(0.),
 		_cenX(cenX),
 		_cenY(cenY),
 		_game(game),
@@ -331,10 +333,10 @@ Globe::Globe(
 		_yBeforeMouseScrolling(0),
 		_totalMouseMoveX(0),
 		_totalMouseMoveY(0),
-		_lonBeforeMouseScrolling(0.0),
-		_latBeforeMouseScrolling(0.0),
-		_radius(0.0),
-		_radiusStep(0.0)
+		_lonBeforeMouseScrolling(0.),
+		_latBeforeMouseScrolling(0.),
+		_radius(0.),
+		_radiusStep(0.)
 {
 	_rules = game->getRuleset()->getGlobe();
 
@@ -491,15 +493,6 @@ Globe::~Globe()
 	delete _rotTimer;
 	delete _countries;
 	delete _markers;
-/*	delete _mkXcomBase;
-	delete _mkAlienBase;
-	delete _mkCraft;
-	delete _mkWaypoint;
-	delete _mkCity;
-	delete _mkFlyingUfo;
-	delete _mkLandedUfo;
-	delete _mkCrashedUfo;
-	delete _mkAlienSite; */
 	delete _radars;
 	delete _clipper;
 
@@ -515,10 +508,10 @@ Globe::~Globe()
 /**
  * Converts a polar point into a cartesian point for
  * mapping a polygon onto the 3D-looking globe.
- * @param lon, Longitude of the polar point.
- * @param lat, Latitude of the polar point.
- * @param x, Pointer to the output X position.
- * @param y, Pointer to the output Y position.
+ * @param lon	- longitude of the polar point
+ * @param lat	- latitude of the polar point
+ * @param x		- pointer to the output X position
+ * @param y		- pointer to the output Y position
  */
 void Globe::polarToCart( // Orthographic projection
 		double lon,
@@ -526,8 +519,9 @@ void Globe::polarToCart( // Orthographic projection
 		Sint16* x,
 		Sint16* y) const
 {
-	*x = _cenX + static_cast<Sint16>(floor(_radius * cos(lat) * sin(lon - _cenLon)));
-	*y = _cenY + static_cast<Sint16>(floor(_radius * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon))));
+	*x = _cenX + static_cast<Sint16>(floor(_radius * std::cos(lat) * std::sin(lon - _cenLon)));
+	*y = _cenY + static_cast<Sint16>(floor(_radius * (std::cos(_cenLat) * std::sin(lat)
+													- std::sin(_cenLat) * std::cos(lat) * std::cos(lon - _cenLon))));
 }
 
 /**
@@ -539,17 +533,18 @@ void Globe::polarToCart( // Orthographic projection
 		double* x,
 		double* y) const
 {
-	*x = _cenX + static_cast<Sint16>(_radius * cos(lat) * sin(lon - _cenLon));
-	*y = _cenY + static_cast<Sint16>(_radius * (cos(_cenLat) * sin(lat) - sin(_cenLat) * cos(lat) * cos(lon - _cenLon)));
+	*x = _cenX + static_cast<Sint16>(_radius * std::cos(lat) * std::sin(lon - _cenLon));
+	*y = _cenY + static_cast<Sint16>(_radius * (std::cos(_cenLat) * std::sin(lat)
+											  - std::sin(_cenLat) * std::cos(lat) * std::cos(lon - _cenLon)));
 }
 
 /**
  * Converts a cartesian point into a polar point for
  * mapping a globe click onto the flat world map.
- * @param x, X position of the cartesian point.
- * @param y, Y position of the cartesian point.
- * @param lon, Pointer to the output longitude.
- * @param lat, Pointer to the output latitude.
+ * @param x		- X position of the cartesian point
+ * @param y		- Y position of the cartesian point
+ * @param lon	- pointer to the output longitude
+ * @param lat	- pointer to the output latitude
  */
 void Globe::cartToPolar( // Orthographic Projection
 		Sint16 x,
@@ -560,28 +555,28 @@ void Globe::cartToPolar( // Orthographic Projection
 	x -= _cenX;
 	y -= _cenY;
 
-	double
-		rho = sqrt(static_cast<double>(x * x + y * y)),
-		c = asin(rho / static_cast<double>(_radius));
+	const double
+		rho = std::sqrt(static_cast<double>(x * x + y * y)),
+		c = std::asin(rho / static_cast<double>(_radius));
 
-	if (AreSame(rho, 0.0))
+	if (AreSame(rho, 0.))
 	{
 		*lat = _cenLat;
 		*lon = _cenLon;
 	}
 	else
 	{
-		*lat = asin((y * sin(c) * cos(_cenLat)) / rho + cos(c) * sin(_cenLat));
-		*lon = atan2(
-					x * sin(c),
-					(rho * cos(_cenLat) * cos(c) - y * sin(_cenLat) * sin(c)))
-				+ _cenLon;
+		*lat = std::asin((y * std::sin(c) * std::cos(_cenLat)) / rho + std::cos(c) * std::sin(_cenLat));
+		*lon = std::atan2(
+						x * std::sin(c),
+						(rho * std::cos(_cenLat) * std::cos(c) - y * std::sin(_cenLat) * std::sin(c)))
+					+ _cenLon;
 	}
 
-	while (*lon < 0.0) // keep between 0 and 2xPI
-		*lon += 2.0 * M_PI;
-	while (*lon > 2.0 * M_PI)
-		*lon -= 2.0 * M_PI;
+	while (*lon < 0.) // keep between 0 and 2xPI
+		*lon += 2. * M_PI;
+	while (*lon > 2. * M_PI)
+		*lon -= 2. * M_PI;
 }
 
 /**
@@ -594,8 +589,8 @@ bool Globe::pointBack(
 		double lon,
 		double lat) const
 {
-	const double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon)
-				   + sin(_cenLat) * sin(lat);
+	const double c = std::cos(_cenLat) * std::cos(lat) * std::cos(lon - _cenLon)
+				   + std::sin(_cenLat) * std::sin(lat);
 
 	return (c < 0.0);
 }
@@ -611,7 +606,7 @@ double Globe::lastVisibleLat(double lon) const
 //	double c = cos(_cenLat) * cos(lat) * cos(lon - _cenLon) + sin(_cenLat) * sin(lat);
 //	tan(lat) = -cos(_cenLat) * cos(lon - _cenLon)/sin(_cenLat);
 
-	return atan(-cos(_cenLat) * cos(lon - _cenLon) / sin(_cenLat));
+	return atan(-std::cos(_cenLat) * std::cos(lon - _cenLon) / std::sin(_cenLat));
 }
 
 /**
@@ -633,10 +628,10 @@ bool Globe::insidePolygon(
 			i < poly->getPoints();
 			++i)
 	{
-		backFace = backFace
+		backFace = backFace == true
 				&& pointBack(
 							poly->getLongitude(i),
-							poly->getLatitude(i));
+							poly->getLatitude(i)) == true;
 	}
 
 	if (backFace != pointBack(lon, lat))
@@ -650,7 +645,7 @@ bool Globe::insidePolygon(
 			i < poly->getPoints();
 			++i)
 	{
-		int j = (i + 1) %poly->getPoints();
+		const int j = (i + 1) %poly->getPoints();
 
 //		double x = lon, y = lat, x_i = poly->getLongitude(i), y_i = poly->getLatitude(i), x_j = poly->getLongitude(j), y_j = poly->getLatitude(j);
 		double
@@ -740,8 +735,8 @@ void Globe::rotateDown()
  */
 void Globe::rotateStop()
 {
-	_rotLon = 0.0;
-	_rotLat = 0.0;
+	_rotLon = 0.;
+	_rotLat = 0.;
 
 	_rotTimer->stop();
 }
@@ -751,9 +746,9 @@ void Globe::rotateStop()
  */
 void Globe::rotateStopLon()
 {
-	_rotLon = 0.0;
+	_rotLon = 0.;
 
-	if (AreSame(_rotLat, 0.0))
+	if (AreSame(_rotLat, 0.))
 		_rotTimer->stop();
 }
 
@@ -762,9 +757,9 @@ void Globe::rotateStopLon()
  */
 void Globe::rotateStopLat()
 {
-	_rotLat = 0.0;
+	_rotLat = 0.;
 
-	if (AreSame(_rotLon, 0.0))
+	if (AreSame(_rotLon, 0.))
 		_rotTimer->stop();
 }
 
@@ -785,7 +780,7 @@ void Globe::setZoom(size_t zoom)
 	_radius = _zoomRadii[_zoom];
 	_game->getSavedGame()->setGlobeZoom(_zoom);
 
-	if (_isMouseScrolling)
+	if (_isMouseScrolling == true)
 	{
 		_lonBeforeMouseScrolling = _cenLon;
 		_latBeforeMouseScrolling = _cenLat;
@@ -858,24 +853,20 @@ size_t Globe::getPreDogfightZoom() const
  */
 bool Globe::zoomDogfightIn()
 {
-	size_t dfZoomLevel = _zoomRadii.size() - 1; // kL
+	const size_t dfZoomLevel = _zoomRadii.size() - 1;
 
-//kL	if (_zoom < DOGFIGHT_ZOOM)
-	if (_zoom < dfZoomLevel) // kL
+	if (_zoom < dfZoomLevel)
 	{
-		double radius = _radius;
+		const double radius = _radius;
 
-//kL	if (radius + _radiusStep >= _zoomRadii[DOGFIGHT_ZOOM])
-		if (radius + _radiusStep >= _zoomRadii[dfZoomLevel]) // kL
-//kL		setZoom(DOGFIGHT_ZOOM);
-			setZoom(dfZoomLevel); // kL
+		if (radius + _radiusStep >= _zoomRadii[dfZoomLevel])
+			setZoom(dfZoomLevel);
 		else
 		{
 			if (radius + _radiusStep >= _zoomRadii[_zoom + 1])
 				_zoom++;
 
 			setZoom(_zoom);
-
 			_radius = radius + _radiusStep;
 		}
 
@@ -893,7 +884,7 @@ bool Globe::zoomDogfightOut()
 {
 	if (_zoom > _dfPreZoom)
 	{
-		double radius = _radius;
+		const double radius = _radius;
 
 		if (radius - _radiusStep <= _zoomRadii[_dfPreZoom])
 			setZoom(_dfPreZoom);
@@ -903,7 +894,6 @@ bool Globe::zoomDogfightOut()
 				_zoom--;
 
 			setZoom(_zoom);
-
 			_radius = radius - _radiusStep;
 		}
 
@@ -1019,10 +1009,10 @@ bool Globe::targetNear(
 
 /**
  * Returns a list of all the targets currently near a certain cartesian point over the globe.
- * @param x, X coordinate of point
- * @param y, Y coordinate of point
- * @param craft, Only get craft targets -> kL_note: should mean 'get ufo targets as well as possible xCom-craft targets'
- * @return, Vector of pointers to targets
+ * @param x		- X coordinate of point
+ * @param y		- Y coordinate of point
+ * @param craft	- true to only get craft targets -> kL_note: should mean 'get ufo targets as well as possible xCom-craft targets'
+ * @return, vector of pointers to Targets
  */
 std::vector<Target*> Globe::getTargets(
 		int x,
@@ -1033,13 +1023,13 @@ std::vector<Target*> Globe::getTargets(
 
 	if (craftOnly == false)
 	{
-		for (std::vector<Base*>::iterator
+		for (std::vector<Base*>::const_iterator
 				i = _game->getSavedGame()->getBases()->begin();
 				i != _game->getSavedGame()->getBases()->end();
 				++i)
 		{
-			if (AreSame((*i)->getLongitude(), 0.0)
-				&& AreSame((*i)->getLatitude(), 0.0))
+			if (AreSame((*i)->getLongitude(), 0.)
+				&& AreSame((*i)->getLatitude(), 0.))
 			{
 				continue;
 			}
@@ -1047,7 +1037,7 @@ std::vector<Target*> Globe::getTargets(
 			if (targetNear(*i, x, y))
 				targets.push_back(*i);
 
-			for (std::vector<Craft*>::iterator
+			for (std::vector<Craft*>::const_iterator
 					j = (*i)->getCrafts()->begin();
 					j != (*i)->getCrafts()->end();
 					++j)
@@ -1065,7 +1055,7 @@ std::vector<Target*> Globe::getTargets(
 		}
 	}
 
-	for (std::vector<Ufo*>::iterator // get UFOs
+	for (std::vector<Ufo*>::const_iterator // get UFOs
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();
 			++i)
@@ -1084,7 +1074,7 @@ std::vector<Target*> Globe::getTargets(
 			targets.push_back(*i);
 	}
 
-	for (std::vector<Waypoint*>::iterator // get Waypoints
+	for (std::vector<Waypoint*>::const_iterator // get Waypoints
 			i = _game->getSavedGame()->getWaypoints()->begin();
 			i != _game->getSavedGame()->getWaypoints()->end();
 			++i)
@@ -1093,7 +1083,7 @@ std::vector<Target*> Globe::getTargets(
 			targets.push_back(*i);
 	}
 
-	for (std::vector<TerrorSite*>::iterator // get terrorSites
+	for (std::vector<TerrorSite*>::const_iterator // get terrorSites
 			i = _game->getSavedGame()->getTerrorSites()->begin();
 			i != _game->getSavedGame()->getTerrorSites()->end();
 			++i)
@@ -1102,7 +1092,7 @@ std::vector<Target*> Globe::getTargets(
 			targets.push_back(*i);
 	}
 
-	for (std::vector<AlienBase*>::iterator // get aLienBases
+	for (std::vector<AlienBase*>::const_iterator // get aLienBases
 			i = _game->getSavedGame()->getAlienBases()->begin();
 			i != _game->getSavedGame()->getAlienBases()->end();
 			++i)
@@ -1131,14 +1121,14 @@ void Globe::cachePolygons()
 
 /**
  * Caches a set of polygons.
- * @param polygons Pointer to list of polygons.
- * @param cache Pointer to cache.
+ * @param polygons	- pointer to list of polygons
+ * @param cache		- pointer to cache list
  */
 void Globe::cache(
 		std::list<Polygon*>* polygons,
 		std::list<Polygon*>* cache)
 {
-	for (std::list<Polygon*>::iterator // Clear existing cache
+	for (std::list<Polygon*>::const_iterator // Clear existing cache
 			i = cache->begin();
 			i != cache->end();
 			++i)
@@ -1148,21 +1138,23 @@ void Globe::cache(
 
 	cache->clear();
 
-	for (std::list<Polygon*>::iterator // Pre-calculate values to cache
+	for (std::list<Polygon*>::const_iterator // Pre-calculate values to cache
 			i = polygons->begin();
 			i != polygons->end();
 			++i)
 	{
-		double closest = 0.0; // Is quad on the back face?
-		double furthest = 0.0;
-		double z;
+		double
+			closest = 0., // Is quad on the back face?
+			furthest = 0.,
+			z;
 
 		for (int
 				j = 0;
 				j < (*i)->getPoints();
 				++j)
 		{
-			z = cos(_cenLat) * cos((*i)->getLatitude(j)) * cos((*i)->getLongitude(j) - _cenLon) + sin(_cenLat) * sin((*i)->getLatitude(j));
+			z = std::cos(_cenLat) * std::cos((*i)->getLatitude(j)) * std::cos((*i)->getLongitude(j) - _cenLon)
+			  + std::sin(_cenLat) * std::sin((*i)->getLatitude(j));
 			if (z > closest)
 				closest = z;
 			else if (z < furthest)
@@ -1172,34 +1164,34 @@ void Globe::cache(
 		if (-furthest > closest)
 			continue;
 
-		Polygon* p = new Polygon(**i);
+		Polygon* const poly = new Polygon(**i);
 
 		for (int // Convert coordinates
 				j = 0;
-				j < p->getPoints();
+				j < poly->getPoints();
 				++j)
 		{
 			Sint16
 				x,
 				y;
 			polarToCart(
-					p->getLongitude(j),
-					p->getLatitude(j),
+					poly->getLongitude(j),
+					poly->getLatitude(j),
 					&x,
 					&y);
-			p->setX(j, x);
-			p->setY(j, y);
+			poly->setX(j, x);
+			poly->setY(j, y);
 		}
 
-		cache->push_back(p);
+		cache->push_back(poly);
 	}
 }
 
 /**
  * Replaces a certain amount of colors in the palette of the globe.
- * @param colors, Pointer to the set of colors.
- * @param firstcolor, Offset of the first color to replace.
- * @param ncolors, Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace
+ * @param ncolors		- amount of colors to replace
  */
 void Globe::setPalette(
 		SDL_Color* colors,
@@ -1213,17 +1205,6 @@ void Globe::setPalette(
 
 	_countries->setPalette(colors, firstcolor, ncolors);
 	_markers->setPalette(colors, firstcolor, ncolors);
-//kL_begin:
-/*	_mkXcomBase->setPalette(colors, firstcolor, ncolors);
-	_mkAlienBase->setPalette(colors, firstcolor, ncolors);
-	_mkCraft->setPalette(colors, firstcolor, ncolors);
-	_mkWaypoint->setPalette(colors, firstcolor, ncolors);
-	_mkCity->setPalette(colors, firstcolor, ncolors);
-	_mkFlyingUfo->setPalette(colors, firstcolor, ncolors);
-	_mkLandedUfo->setPalette(colors, firstcolor, ncolors);
-	_mkCrashedUfo->setPalette(colors, firstcolor, ncolors);
-	_mkAlienSite->setPalette(colors, firstcolor, ncolors); */
-//kL_end.
 	_radars->setPalette(colors, firstcolor, ncolors);
 }
 
@@ -1232,7 +1213,7 @@ void Globe::setPalette(
  */
 void Globe::think()
 {
-	if (kL_reCenter)
+	if (kL_reCenter == true)
 	{
 		kL_reCenter = false;
 
@@ -1250,46 +1231,6 @@ void Globe::think()
  */
 void Globe::blink()
 {
-/*	int colorOffset = 0; // kL_begin:
-
-	if (_blink)
-	{
-		colorOffset = 1;
-
-		_blinkVal++;
-
-		if (_blinkVal == 2)
-			_blink = false;
-	}
-	else
-	{
-		colorOffset = -1;
-
-		_blinkVal--;
-
-		if (_blinkVal == 0)
-			_blink = true;
-	} */
-
-
-/*	_blink = !_blink;
-
-	int colorOffset = 0;
-	if (_blink)
-		colorOffset = -1;
-	else
-		colorOffset = 1;
-
-	_mkXcomBase->offset(colorOffset);
-	_mkAlienBase->offset(colorOffset);
-	_mkCraft->offset(colorOffset);
-	_mkWaypoint->offset(colorOffset);
-	_mkFlyingUfo->offset(colorOffset);
-	_mkLandedUfo->offset(colorOffset);
-	_mkCrashedUfo->offset(colorOffset);
-	_mkAlienSite->offset(colorOffset); */ // kL_end.
-
-	// code for using a SurfaceSet for markers:
 	_blink = -_blink;
 
 	for (size_t
@@ -1310,8 +1251,8 @@ void Globe::blink()
  */
 void Globe::rotate()
 {
-	_cenLon += _rotLon * (static_cast<double>(110 - Options::geoScrollSpeed) / 100.0) / static_cast<double>(_zoom + 1);
-	_cenLat += _rotLat * (static_cast<double>(110 - Options::geoScrollSpeed) / 100.0) / static_cast<double>(_zoom + 1);
+	_cenLon += _rotLon * (static_cast<double>(110 - Options::geoScrollSpeed) / 100.) / static_cast<double>(_zoom + 1);
+	_cenLat += _rotLat * (static_cast<double>(110 - Options::geoScrollSpeed) / 100.) / static_cast<double>(_zoom + 1);
 
 	_game->getSavedGame()->setGlobeLongitude(_cenLon);
 	_game->getSavedGame()->setGlobeLatitude(_cenLat);
@@ -1324,7 +1265,7 @@ void Globe::rotate()
  */
 void Globe::draw()
 {
-	if (_redraw)
+	if (_redraw == true)
 		cachePolygons();
 
 	Surface::draw();
@@ -1364,7 +1305,7 @@ void Globe::drawLand()
 		x[4],
 		y[4];
 
-	for (std::list<Polygon*>::iterator
+	for (std::list<Polygon*>::const_iterator
 			i = _cacheLand.begin();
 			i != _cacheLand.end();
 			++i)
@@ -1379,12 +1320,12 @@ void Globe::drawLand()
 		}
 
 		drawTexturedPolygon( // Apply textures according to zoom and shade
-							x,
-							y,
-							(*i)->getPoints(),
-							_texture->getFrame((*i)->getTexture() + _zoomTexture),
-							0,
-							0);
+						x,
+						y,
+						(*i)->getPoints(),
+						_texture->getFrame((*i)->getTexture() + _zoomTexture),
+						0,
+						0);
 	}
 }
 
@@ -1400,64 +1341,64 @@ Cord Globe::getSunDirection(
 {
 	const double
 		curTime = _game->getSavedGame()->getTime()->getDaylight(),
-		rot = curTime * 2.0 * M_PI;
+		rot = curTime * 2. * M_PI;
 	double sun;
 
-	if (Options::globeSeasons)
+	if (Options::globeSeasons == true)
 	{
 		const int
 			MonthDays1[] = {0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365},
-			MonthDays2[] = {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366};
+			MonthDays2[] = {0, 31, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335, 366},
 
-		int
 			year	= _game->getSavedGame()->getTime()->getYear(),
 			month	= _game->getSavedGame()->getTime()->getMonth() - 1,
 			day		= _game->getSavedGame()->getTime()->getDay() - 1;
 
-		double
+		const double
 			tm = static_cast<double>( // day fraction is also taken into account
 						(((_game->getSavedGame()->getTime()->getHour() * 60)
-								+ _game->getSavedGame()->getTime()->getMinute()) * 60)
+							+ _game->getSavedGame()->getTime()->getMinute()) * 60)
 							+ _game->getSavedGame()->getTime()->getSecond())
-						/ 86400.0,
-			CurDay;
+						/ 86400.;
+
+		double CurDay;
 		if (year %4 == 0 // spring equinox (start of astronomic year)
 			&& !
 				(year %100 == 0
 					&& year %400 != 0))
 		{
-			CurDay = (static_cast<double>(MonthDays2[month] + day) + tm) / 366.0 - 0.219;
+			CurDay = (static_cast<double>(MonthDays2[month] + day) + tm) / 366. - 0.219;
 		}
 		else
-			CurDay = (static_cast<double>(MonthDays1[month] + day) + tm) / 365.0 - 0.219;
+			CurDay = (static_cast<double>(MonthDays1[month] + day) + tm) / 365. - 0.219;
 
-		if (CurDay < 0.0)
-			CurDay += 1.0;
+		if (CurDay < 0.)
+			CurDay += 1.;
 
-		sun = -0.261 * sin(CurDay * 2.0 * M_PI);
+		sun = -0.261 * std::sin(CurDay * 2. * M_PI);
 	}
 	else
 		sun = 0;
 
 	Cord sun_direction(
-					cos(rot + lon),
-					sin(rot + lon) * -sin(lat),
-					sin(rot + lon) * cos(lat));
+					std::cos(rot + lon),
+					std::sin(rot + lon) * -std::sin(lat),
+					std::sin(rot + lon) * std::cos(lat));
 
 	Cord pole(
 			0,
-			cos(lat),
-			sin(lat));
+			std::cos(lat),
+			std::sin(lat));
 
 	if (sun > 0)
-		 sun_direction *= 1.0 - sun;
+		 sun_direction *= 1. - sun;
 	else
-		 sun_direction *= 1.0 + sun;
+		 sun_direction *= 1. + sun;
 
 	pole *= sun;
 	sun_direction += pole;
 	double norm = sun_direction.norm();
-	norm = 1.0 / norm; // norm should always be greater than 0
+	norm = 1. / norm; // norm should always be greater than 0
 	sun_direction *= norm;
 
 	return sun_direction;
@@ -1517,8 +1458,7 @@ void Globe::XuLine(
 						&x1,
 						&y1,
 						&x2,
-						&y2)
-					!= 1) // empty line
+						&y2) != 1) // empty line
 	{
 		return;
 	}
@@ -1617,7 +1557,7 @@ void Globe::drawRadars()
 {
 	_radars->clear();
 
-	if (!Options::globeRadarLines)
+	if (Options::globeRadarLines == false)
 		return;
 
 	double
@@ -1628,8 +1568,8 @@ void Globe::drawRadars()
 		lon;
 
 	_radars->lock();
-	if (_hover
-		&& Options::globeAllRadarsOnBaseBuild)
+	if (_hover == true
+		&& Options::globeAllRadarsOnBaseBuild == true)
 	{
 		const std::vector<std::string>& facilities = _game->getRuleset()->getBaseFacilitiesList();
 		for (std::vector<std::string>::const_iterator
@@ -1640,7 +1580,8 @@ void Globe::drawRadars()
 			range = static_cast<double>(_game->getRuleset()->getBaseFacility(*i)->getRadarRange());
 			if (range > 0.0)
 			{
-				range *= (1.0 / 60.0) * (M_PI / 180.0);
+//				range *= (1.0 / 60.0) * (M_PI / 180.0);
+				range *= unitToRads;
 
 				polarToCart(
 						_hoverLat,
@@ -1656,7 +1597,7 @@ void Globe::drawRadars()
 		}
 	}
 
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -1673,7 +1614,7 @@ void Globe::drawRadars()
 					&x,
 					&y);
 
-			for (std::vector<BaseFacility*>::iterator
+			for (std::vector<BaseFacility*>::const_iterator
 					j = (*i)->getFacilities()->begin();
 					j != (*i)->getFacilities()->end();
 					++j)
@@ -1683,7 +1624,8 @@ void Globe::drawRadars()
 					range = static_cast<double>((*j)->getRules()->getRadarRange());
 					if (range > 0.0)
 					{
-						range *= (1.0 / 60.0) * (M_PI / 180.0);
+//						range *= (1.0 / 60.0) * (M_PI / 180.0);
+						range *= unitToRads;
 						drawGlobeCircle( // Base radars.
 									lat,
 									lon,
@@ -1694,7 +1636,7 @@ void Globe::drawRadars()
 			}
 		}
 
-		for (std::vector<Craft*>::iterator
+		for (std::vector<Craft*>::const_iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end();
 				++j)
@@ -1714,7 +1656,8 @@ void Globe::drawRadars()
 						&x,
 						&y);
 
-				range *= (1.0 / 60.0) * (M_PI / 180.0);
+//				range *= (1.0 / 60.0) * (M_PI / 180.0);
+				range *= unitToRads;
 				drawGlobeCircle( // Craft radars.
 							lat,
 							lon,
@@ -1756,10 +1699,10 @@ void Globe::drawGlobeCircle(
 			az += M_PI * 2.0 / static_cast<double>(segments))
 	{
 		// calculating sphere-projected circle
-		lat1 = asin(sin(lat) * cos(radius) + cos(lat) * sin(radius) * cos(az));
-		lon1 = lon + atan2(
-						sin(az) * sin(radius) * cos(lat),
-						cos(radius) - sin(lat) * sin(lat1));
+		lat1 = asin(std::sin(lat) * std::cos(radius) + std::cos(lat) * std::sin(radius) * std::cos(az));
+		lon1 = lon + std::atan2(
+						std::sin(az) * std::sin(radius) * std::cos(lat),
+						std::cos(radius) - std::sin(lat) * std::sin(lat1));
 
 		polarToCart(
 				lon1,
@@ -1911,10 +1854,10 @@ void Globe::drawDetail()
 //	if (!Options::globeDetail) return;
 
 	if (_zoom > 0 // draw the country borders
-		&& Options::globeDetail)
+		&& Options::globeDetail == true)
 	{
 		_countries->lock(); // lock the surface
-		for (std::list<Polyline*>::iterator
+		for (std::list<Polyline*>::const_iterator
 				i = _rules->getPolylines()->begin();
 				i != _rules->getPolylines()->end();
 				++i)
@@ -1929,11 +1872,11 @@ void Globe::drawDetail()
 					++j)
 			{
 				if (pointBack( // don't draw if polyline is facing back
-							(*i)->getLongitude(j),
-							(*i)->getLatitude(j))
+						(*i)->getLongitude(j),
+						(*i)->getLatitude(j)) == true
 					|| pointBack(
 							(*i)->getLongitude(j + 1),
-							(*i)->getLatitude(j + 1)))
+							(*i)->getLatitude(j + 1)) == true)
 				{
 					continue;
 				}
@@ -1966,19 +1909,19 @@ void Globe::drawDetail()
 			x,
 			y;
 
-		for (std::vector<Region*>::iterator
+		for (std::vector<Region*>::const_iterator
 				i = _game->getSavedGame()->getRegions()->begin();
 				i != _game->getSavedGame()->getRegions()->end();
 				++i)
 		{
-			for (std::vector<City*>::iterator
+			for (std::vector<City*>::const_iterator
 					j = (*i)->getRules()->getCities()->begin();
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
 				if (pointBack( // don't draw if city is facing back
-							(*j)->getLongitude(),
-							(*j)->getLatitude()))
+						(*j)->getLongitude(),
+						(*j)->getLatitude()))
 				{
 					continue;
 				}
@@ -1990,7 +1933,7 @@ void Globe::drawDetail()
 						&y);
 
 				// code for using SurfaceSet for markers:
-				Surface* marker = _markerSet->getFrame(CITY_MARKER);
+				Surface* const marker = _markerSet->getFrame(CITY_MARKER);
 				marker->setX(x - 1);
 				marker->setY(y - 1);
 				marker->blit(_countries); // end.
@@ -2003,10 +1946,10 @@ void Globe::drawDetail()
 		}
 	}
 
-	Text* label = new Text(100, 9, 0, 0);
+	Text* const label = new Text(100, 9, 0, 0);
 
 	if (_zoom > 2 // draw the country labels
-		&& Options::globeDetail)
+		&& Options::globeDetail == true)
 	{
 		label->setPalette(getPalette());
 		label->initText(
@@ -2020,14 +1963,14 @@ void Globe::drawDetail()
 			x,
 			y;
 
-		for (std::vector<Country*>::iterator
+		for (std::vector<Country*>::const_iterator
 				i = _game->getSavedGame()->getCountries()->begin();
 				i != _game->getSavedGame()->getCountries()->end();
 				++i)
 		{
 			if (pointBack( // don't draw if label is facing back
-						(*i)->getRules()->getLabelLongitude(),
-						(*i)->getRules()->getLabelLatitude()))
+					(*i)->getRules()->getLabelLongitude(),
+					(*i)->getRules()->getLabelLatitude()))
 			{
 				continue;
 			}
@@ -2047,7 +1990,7 @@ void Globe::drawDetail()
 	}
 
 	if (_zoom > 3 // draw the city labels
-		&& Options::globeDetail)
+		&& Options::globeDetail == true)
 	{
 		label->setPalette(getPalette());
 		label->initText(
@@ -2061,19 +2004,19 @@ void Globe::drawDetail()
 			x,
 			y;
 
-		for (std::vector<Region*>::iterator
+		for (std::vector<Region*>::const_iterator
 				i = _game->getSavedGame()->getRegions()->begin();
 				i != _game->getSavedGame()->getRegions()->end();
 				++i)
 		{
-			for (std::vector<City*>::iterator
+			for (std::vector<City*>::const_iterator
 					j = (*i)->getRules()->getCities()->begin();
 					j != (*i)->getRules()->getCities()->end();
 					++j)
 			{
 				if (pointBack( // don't draw if label is facing back
-							(*j)->getLongitude(),
-							(*j)->getLatitude()))
+						(*j)->getLongitude(),
+						(*j)->getLatitude()) == true)
 				{
 					continue;
 				}
@@ -2093,7 +2036,7 @@ void Globe::drawDetail()
 		}
 	}
 
-	if (Options::globeDetail) // draw xCom base labels
+	if (Options::globeDetail == true) // draw xCom base labels
 	{
 		label->setPalette(getPalette());
 		label->initText(
@@ -2109,17 +2052,17 @@ void Globe::drawDetail()
 			x,
 			y;
 
-		for (std::vector<Base*>::iterator
+		for (std::vector<Base*>::const_iterator
 				i = _game->getSavedGame()->getBases()->begin();
 				i != _game->getSavedGame()->getBases()->end();
 				++i)
 		{
 			// cheap hack to hide a base when it hasn't been placed yet
-			if (((*i)->getLongitude() != 0.0
-					|| (*i)->getLatitude() != 0.0)
-				&& !pointBack( // don't draw if city is facing back
-							(*i)->getLongitude(),
-							(*i)->getLatitude()))
+			if ((AreSame((*i)->getLongitude(), 0.) == false
+					|| AreSame((*i)->getLatitude(), 0.) == false)
+				&& pointBack( // don't draw if city is facing back
+						(*i)->getLongitude(),
+						(*i)->getLatitude()) == false)
 			{
 				polarToCart( // convert coordinates
 						(*i)->getLongitude(),
@@ -2143,14 +2086,14 @@ void Globe::drawDetail()
 	static int debugType = 0;
 	static bool canSwitchDebugType = false;
 
-	if (_game->getSavedGame()->getDebugMode())
+	if (_game->getSavedGame()->getDebugMode() == true)
 	{
 		canSwitchDebugType = true;
 		int color = 0;
 
 		if (debugType == 0)
 		{
-			for (std::vector<Country*>::iterator
+			for (std::vector<Country*>::const_iterator
 					i = _game->getSavedGame()->getCountries()->begin();
 					i != _game->getSavedGame()->getCountries()->end();
 					++i)
@@ -2176,7 +2119,7 @@ void Globe::drawDetail()
 		}
 		else if (debugType == 1)
 		{
-			for (std::vector<Region*>::iterator
+			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
 					i != _game->getSavedGame()->getRegions()->end();
 					++i)
@@ -2202,7 +2145,7 @@ void Globe::drawDetail()
 		}
 		else if (debugType == 2)
 		{
-			for (std::vector<Region*>::iterator
+			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
 					i != _game->getSavedGame()->getRegions()->end();
 					++i)
@@ -2221,10 +2164,11 @@ void Globe::drawDetail()
 							k != (*j).areas.end();
 							++k)
 					{
-						double lon2 = (*k).lonMax * M_PI / 180.0;
-						double lon1 = (*k).lonMin * M_PI / 180.0;
-						double lat2 = (*k).latMax * M_PI / 180.0;
-						double lat1 = (*k).latMin * M_PI / 180.0;
+						const double
+							lon2 = (*k).lonMax * M_PI / 180.,
+							lon1 = (*k).lonMin * M_PI / 180.,
+							lat2 = (*k).latMax * M_PI / 180.,
+							lat1 = (*k).latMin * M_PI / 180.;
 
 						drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
 						drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
@@ -2237,7 +2181,7 @@ void Globe::drawDetail()
 	}
 	else
 	{
-		if (canSwitchDebugType)
+		if (canSwitchDebugType == true)
 		{
 			++debugType;
 			if (debugType > 2)
@@ -2270,7 +2214,7 @@ void Globe::drawPath(
 		y1,
 		x2,
 		y2;
-	Sint16 count;
+	Sint16 qty;
 	CordPolar
 		p1,
 		p2;
@@ -2283,12 +2227,12 @@ void Globe::drawPath(
 
 	b -= a;
 
-	// longer path have more parts
+	// longer paths have more parts
 	length = b.norm();
 	length *= length * 15;
 
-	count = static_cast<Sint16>(length) + 1;
-	b /= count;
+	qty = static_cast<Sint16>(length) + 1;
+	b /= qty;
 
 	p1 = CordPolar(a);
 	polarToCart(
@@ -2298,7 +2242,7 @@ void Globe::drawPath(
 				&y1);
 	for (int
 			i = 0;
-			i < count;
+			i < qty;
 			++i)
 	{
 		a += b;
@@ -2335,16 +2279,16 @@ void Globe::drawPath(
 void Globe::drawFlights()
 {
 //	_radars->clear();
-	if (!Options::globeFlightPaths)
+	if (Options::globeFlightPaths == false)
 		return;
 
 	_radars->lock();
-	for (std::vector<Base*>::iterator // Draw the craft flight paths
+	for (std::vector<Base*>::const_iterator // Draw the craft flight paths
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		for (std::vector<Craft*>::iterator
+		for (std::vector<Craft*>::const_iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end();
 				++j)
@@ -2356,7 +2300,7 @@ void Globe::drawFlights()
 				continue;
 			}
 
-			double
+			const double
 				lon1 = (*j)->getLongitude(),
 				lon2 = (*j)->getDestination()->getLongitude(),
 				lat1 = (*j)->getLatitude(),
@@ -2409,7 +2353,7 @@ void Globe::drawMarkers()
 	// code for using SurfaceSet for markers:
 	_markers->clear();
 
-	for (std::vector<Base*>::iterator // Draw the base markers
+	for (std::vector<Base*>::const_iterator // Draw the base markers
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -2417,7 +2361,7 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	for (std::vector<Waypoint*>::iterator // Draw the waypoint markers
+	for (std::vector<Waypoint*>::const_iterator // Draw the waypoint markers
 			i = _game->getSavedGame()->getWaypoints()->begin();
 			i != _game->getSavedGame()->getWaypoints()->end();
 			++i)
@@ -2425,7 +2369,7 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	for (std::vector<TerrorSite*>::iterator // Draw the terror site markers
+	for (std::vector<TerrorSite*>::const_iterator // Draw the terror site markers
 			i = _game->getSavedGame()->getTerrorSites()->begin();
 			i != _game->getSavedGame()->getTerrorSites()->end();
 			++i)
@@ -2433,7 +2377,7 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	for (std::vector<AlienBase*>::iterator // Draw the Alien Base markers
+	for (std::vector<AlienBase*>::const_iterator // Draw the Alien Base markers
 			i = _game->getSavedGame()->getAlienBases()->begin();
 			i != _game->getSavedGame()->getAlienBases()->end();
 			++i)
@@ -2441,7 +2385,7 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	for (std::vector<Ufo*>::iterator // Draw the UFO markers
+	for (std::vector<Ufo*>::const_iterator // Draw the UFO markers
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();
 			++i)
@@ -2449,12 +2393,12 @@ void Globe::drawMarkers()
 		drawTarget(*i);
 	}
 
-	for (std::vector<Base*>::iterator // Draw the craft markers
+	for (std::vector<Base*>::const_iterator // Draw the craft markers
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		for (std::vector<Craft*>::iterator
+		for (std::vector<Craft*>::const_iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end();
 				++j)
@@ -2469,7 +2413,7 @@ void Globe::drawMarkers()
 		x,
 		y;
 
-	for (std::vector<Base*>::iterator // Draw the base markers
+	for (std::vector<Base*>::const_iterator // Draw the base markers
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
@@ -2494,7 +2438,7 @@ void Globe::drawMarkers()
 		}
 	}
 
-	for (std::vector<Waypoint*>::iterator // Draw the waypoint markers
+	for (std::vector<Waypoint*>::const_iterator // Draw the waypoint markers
 			i = _game->getSavedGame()->getWaypoints()->begin();
 			i != _game->getSavedGame()->getWaypoints()->end();
 			++i)
@@ -2518,7 +2462,7 @@ void Globe::drawMarkers()
 		_mkWaypoint->blit(_markers);
 	}
 
-	for (std::vector<TerrorSite*>::iterator // Draw the terror site markers
+	for (std::vector<TerrorSite*>::const_iterator // Draw the terror site markers
 			i = _game->getSavedGame()->getTerrorSites()->begin();
 			i != _game->getSavedGame()->getTerrorSites()->end();
 			++i)
@@ -2542,7 +2486,7 @@ void Globe::drawMarkers()
 		_mkAlienSite->blit(_markers);
 	}
 
-	for (std::vector<AlienBase*>::iterator // Draw the Alien Base markers
+	for (std::vector<AlienBase*>::const_iterator // Draw the Alien Base markers
 			i = _game->getSavedGame()->getAlienBases()->begin();
 			i != _game->getSavedGame()->getAlienBases()->end();
 			++i)
@@ -2569,7 +2513,7 @@ void Globe::drawMarkers()
 		}
 	}
 
-	for (std::vector<Ufo*>::iterator // Draw the UFO markers
+	for (std::vector<Ufo*>::const_iterator // Draw the UFO markers
 			i = _game->getSavedGame()->getUfos()->begin();
 			i != _game->getSavedGame()->getUfos()->end();
 			++i)
@@ -2616,12 +2560,12 @@ void Globe::drawMarkers()
 		marker->blit(_markers);
 	}
 
-	for (std::vector<Base*>::iterator // Draw the craft markers
+	for (std::vector<Base*>::const_iterator // Draw the craft markers
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end();
 			++i)
 	{
-		for (std::vector<Craft*>::iterator
+		for (std::vector<Craft*>::const_iterator
 				j = (*i)->getCrafts()->begin();
 				j != (*i)->getCrafts()->end();
 				++j)

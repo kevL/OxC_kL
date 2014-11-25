@@ -254,10 +254,10 @@ void SelectDestinationState::globeClick(Action* action)
 	if (mouseY < 30) // Ignore window clicks
 		return;
 
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // Clicking on a valid target
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT) // set Waypoint
 	{
 		const RuleCraft* const craftRule = _craft->getRules();
-		int range = _craft->getFuel();
+		int range = _craft->getFuel(); // - _craft->getFuelConsumption();
 		if (craftRule->getRefuelItem().empty() == false)
 			range *= craftRule->getMaxSpeed();
 //		else
@@ -273,7 +273,8 @@ void SelectDestinationState::globeClick(Action* action)
 
 		//Log(LOG_INFO) << ". dist = " << (int)(_craft->getDistance(wp) * 3440.0) << " + " << (int)(_craft->getBase()->getDistance(wp) * 3440.0);
 
-		if (static_cast<double>(range) < (_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)
+//		if (static_cast<double>(range) < (_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)
+		if (range < static_cast<int>(floor((_craft->getDistance(wp) + _craft->getBase()->getDistance(wp)) * earthRadius)))
 		{
 			//Log(LOG_INFO) << ". . outside Range";
 			_txtError->setVisible();

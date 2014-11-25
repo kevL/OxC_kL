@@ -7803,8 +7803,9 @@
 	<string>
 	<vector>
 
-1416685623 source:f:\git\openxcom\src\geoscape\globe.cpp
+1416903200 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
+	"GeoscapeState.h"
 	"../Engine/Action.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/Font.h"
@@ -8106,7 +8107,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1416898847 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1416905097 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
@@ -9450,7 +9451,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1416865138 source:f:\git\openxcom\src\savegame\craft.cpp
+1416906071 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"../fmath.h"
 	"AlienBase.h"

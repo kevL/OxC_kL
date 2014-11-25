@@ -107,7 +107,7 @@ Craft::Craft(
  */
 Craft::~Craft()
 {
-	for (std::vector<CraftWeapon*>::iterator
+	for (std::vector<CraftWeapon*>::const_iterator
 			i = _weapons.begin();
 			i != _weapons.end();
 			++i)
@@ -117,7 +117,7 @@ Craft::~Craft()
 
 	delete _items;
 
-	for (std::vector<Vehicle*>::iterator
+	for (std::vector<Vehicle*>::const_iterator
 			i = _vehicles.begin();
 			i != _vehicles.end();
 			++i)
@@ -822,14 +822,21 @@ int Craft::getFuelLimit(Base* base) const
 {
 	Log(LOG_INFO) << "dist = " << static_cast<int>(getDistance(base) * earthRadius);
 
+	double
+		distRads = getDistance(base),
+		patrol_factor = 1.;
+
+	if (_dest != NULL)
+		distRads = getDistance(_dest) + _base->getDistance(_dest);
+	else if (_rules->getRefuelItem().empty() == true)
+		patrol_factor = 2.;	// Elerium-powered Craft do not suffer this;
+							// they use 1 fuel per 10-min regardless of patrol speed:
+							// see getFuelConsumption() above^
+
 	const double speedRads = static_cast<double>(_rules->getMaxSpeed()) * unitToRads / 6.; // per 10-min.
 
-	double arbitrary_factor = 1.;
-	if (_rules->getRefuelItem().empty() == true)
-		arbitrary_factor = 2.;
-
 	return static_cast<int>(ceil(
-		   static_cast<double>(getFuelConsumption()) * getDistance(base) * arbitrary_factor / speedRads));
+		   static_cast<double>(getFuelConsumption()) * distRads * patrol_factor / speedRads));
 }
 
 /**
@@ -1255,7 +1262,7 @@ int Craft::getDowntime(bool& delayed)
 		hours += static_cast<int>(ceil(
 				 static_cast<double>(_damage)
 					/ static_cast<double>(_rules->getRepairRate())
-				 / 2.0));
+				 / 2.));
 	}
 
 	for (std::vector<CraftWeapon*>::const_iterator
@@ -1271,7 +1278,7 @@ int Craft::getDowntime(bool& delayed)
 			hours += static_cast<int>(ceil(
 					 static_cast<double>(reqQty)
 						/ static_cast<double>((*i)->getRules()->getRearmRate())
-					 / 2.0));
+					 / 2.));
 
 			if (delayed == false)
 			{
@@ -1311,7 +1318,7 @@ int Craft::getDowntime(bool& delayed)
 		hours += static_cast<int>(ceil(
 				 static_cast<double>(reqQty)
 					/ static_cast<double>(_rules->getRefuelRate())
-				 / 2.0));
+				 / 2.));
 
 		if (delayed == false)
 		{
