@@ -19,7 +19,7 @@
 
 #include "Inventory.h"
 
-#include <cmath>
+//#include <cmath>
 
 #include "PrimeGrenadeState.h"
 #include "TileEngine.h"
@@ -202,7 +202,7 @@ void Inventory::drawGrid()
 	Uint8 color = rule->getElement("grid")->color; // Palette::blockOffset(0)+8
 	bool doLabel;
 
-	for (std::map<std::string, RuleInventory*>::iterator
+	for (std::map<std::string, RuleInventory*>::const_iterator
 			i = _game->getRuleset()->getInventories()->begin();
 			i != _game->getRuleset()->getInventories()->end();
 			++i)
@@ -211,7 +211,7 @@ void Inventory::drawGrid()
 
 		if (i->second->getType() == INV_SLOT) // draw grid
 		{
-			for (std::vector<RuleSlot>::iterator
+			for (std::vector<RuleSlot>::const_iterator
 					j = i->second->getSlots()->begin();
 					j != i->second->getSlots()->end();
 					++j)
@@ -305,7 +305,7 @@ void Inventory::drawItems()
 	{
 		SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BIGOBS.PCK");
 
-		for (std::vector<BattleItem*>::iterator // Soldier items
+		for (std::vector<BattleItem*>::const_iterator // Soldier items
 				i = _selUnit->getInventory()->begin();
 				i != _selUnit->getInventory()->end();
 				++i)
@@ -528,7 +528,7 @@ RuleInventory* Inventory::getSlotInPosition(
 		int* x,
 		int* y) const
 {
-	for (std::map<std::string, RuleInventory*>::iterator
+	for (std::map<std::string, RuleInventory*>::const_iterator
 			i = _game->getRuleset()->getInventories()->begin();
 			i != _game->getRuleset()->getInventories()->end();
 			++i)
@@ -672,7 +672,7 @@ void Inventory::mouseOver(Action* action, State* state)
 	RuleInventory* slot = getSlotInPosition(&x, &y);
 	if (slot != NULL)
 	{
-		std::string warning = ""; // kL_begin:
+		std::string warning; // kL_begin:
 		if (_tu
 			&& _selItem != NULL
 			&& fitItem(
@@ -742,7 +742,7 @@ void Inventory::mouseClick(Action* action, State* state)
 					{
 						bool placed = false;
 						bool toGround = true;
-						std::string warning = "";
+						std::string warning;
 
 						RuleInventory* newSlot = NULL;
 
@@ -927,10 +927,10 @@ void Inventory::mouseClick(Action* action, State* state)
 						}
 					}
 				}
-				else if (!item->getRules()->getCompatibleAmmo()->empty()) // Put item in weapon
+				else if (item->getRules()->getCompatibleAmmo()->empty() == false) // Put item in weapon
 				{
 					bool wrong = true;
-					for (std::vector<std::string>::iterator
+					for (std::vector<std::string>::const_iterator
 							i = item->getRules()->getCompatibleAmmo()->begin();
 							i != item->getRules()->getCompatibleAmmo()->end();
 							++i)
@@ -1078,7 +1078,7 @@ void Inventory::mouseClick(Action* action, State* state)
 //										activated += _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 //										activated += L" " + Text::formatNumber(0);
 
-										std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
+										const std::wstring activated = _game->getLanguage()->getString("STR_GRENADE_IS_ACTIVATED");
 										_warning->showMessage(activated);
 									}
 									else
@@ -1168,7 +1168,7 @@ bool Inventory::unload()
 		return false;
 	}
 
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = _selUnit->getInventory()->begin();
 			i != _selUnit->getInventory()->end();
 			++i)
@@ -1231,7 +1231,7 @@ void Inventory::arrangeGround(bool alterOffset)
 	if (_selUnit != NULL) // kL_note: That should never happen.
 	{
 		// first move all items out of the way - a big number in X direction
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = _selUnit->getTile()->getInventory()->begin();
 				i != _selUnit->getTile()->getInventory()->end();
 				++i)
@@ -1242,7 +1242,7 @@ void Inventory::arrangeGround(bool alterOffset)
 		}
 
 		// now for each item, find the most topleft position that is not occupied and will fit
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = _selUnit->getTile()->getInventory()->begin();
 				i != _selUnit->getTile()->getInventory()->end();
 				++i)
@@ -1396,9 +1396,9 @@ bool Inventory::fitItem(
 
 /**
  * Checks if two items can be stacked on one another.
- * @param itemA First item.
- * @param itemB Second item.
- * @return True, if the items can be stacked on one another.
+ * @param itemA - first item
+ * @param itemB - second item
+ * @return, true if the items can be stacked on one another
  */
 bool Inventory::canBeStacked(
 		BattleItem* itemA,

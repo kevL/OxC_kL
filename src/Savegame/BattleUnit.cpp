@@ -1952,7 +1952,7 @@ std::vector<Tile*>* BattleUnit::getVisibleTiles()
  */
 void BattleUnit::clearVisibleTiles()
 {
-	for (std::vector<Tile*>::iterator
+	for (std::vector<Tile*>::const_iterator
 			j = _visibleTiles.begin();
 			j != _visibleTiles.end();
 			++j)
@@ -2714,13 +2714,13 @@ bool BattleUnit::checkAmmo()
 
 	BattleItem* ammo = NULL;
 
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = getInventory()->begin();
 			i != getInventory()->end();
 			++i)
 	{
 		ammo = *i;
-		for (std::vector<std::string>::iterator
+		for (std::vector<std::string>::const_iterator
 				j = weapon->getRules()->getCompatibleAmmo()->begin();
 				j != weapon->getRules()->getCompatibleAmmo()->end();
 				++j)

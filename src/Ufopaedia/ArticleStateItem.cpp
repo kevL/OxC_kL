@@ -77,7 +77,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 
 	item->drawHandSprite(_game->getResourcePack()->getSurfaceSet("BIGOBS.PCK"), _image);
 
-	std::vector<std::string>* ammo_data = item->getCompatibleAmmo();
+	const std::vector<std::string>* const ammo_data = item->getCompatibleAmmo();
 
 	// SHOT STATS TABLE (for firearms only)
 	if (item->getBattleType() == BT_FIREARM)
@@ -111,9 +111,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		{
 			std::wstring tu = Text::formatPercentage(item->getTUAuto());
 			if (item->getFlatRate())
-			{
 				tu.erase(tu.end() - 1);
-			}
 
 			std::wstring shotauto = Text::formatPercentage(item->getAccuracyAuto());	// kL
 			shotauto.erase(shotauto.end() - 1);											// kL
@@ -133,9 +131,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		{
 			std::wstring tu = Text::formatPercentage(item->getTUSnap());
 			if (item->getFlatRate())
-			{
 				tu.erase(tu.end() - 1);
-			}
 
 			std::wstring shotsnap = Text::formatPercentage(item->getAccuracySnap());	// kL
 			shotsnap.erase(shotsnap.end() - 1);											// kL
@@ -155,9 +151,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		{
 			std::wstring tu = Text::formatPercentage(item->getTUAimed());
 			if (item->getFlatRate())
-			{
 				tu.erase(tu.end() - 1);
-			}
 
 			std::wstring shotaimed = Text::formatPercentage(item->getAccuracyAimed());	// kL
 			shotaimed.erase(shotaimed.end() - 1);										// kL
@@ -177,9 +171,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 		{
 			std::wstring tu = Text::formatPercentage(item->getTULaunch());
 			if (item->getFlatRate())
-			{
 				tu.erase(tu.end() - 1);
-			}
 
 //			std::wstring shotlaunch = Text::formatPercentage(item->getAccuracyAimed());	// kL
 //			shotlaunch.erase(shotlaunch.end() - 1);										// kL
@@ -250,7 +242,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 			_txtAmmo->setAlign(ALIGN_CENTER);
 			_txtAmmo->setText(tr("STR_AMMO"));
 
-			if (ammo_data->empty())
+			if (ammo_data->empty() == true)
 			{
 				_txtAmmoType[0]->setText(tr(getDamageTypeText(item->getDamageType())));
 
@@ -283,7 +275,7 @@ ArticleStateItem::ArticleStateItem(ArticleDefinitionItem* defs)
 						ss.clear();
 						ss << ammo_rule->getPower();
 						if (ammo_rule->getShotgunPellets())
-						ss << L"x" << ammo_rule->getShotgunPellets();
+							ss << L"x" << ammo_rule->getShotgunPellets();
 
 						_txtAmmoDamage[i]->setText(ss.str());
 

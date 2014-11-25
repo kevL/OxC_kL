@@ -252,7 +252,7 @@ private:
 		int getTUMelee() const;
 
 		/// Gets list of compatible ammo.
-		std::vector<std::string>* getCompatibleAmmo();
+		const std::vector<std::string>* getCompatibleAmmo() const;
 
 		/// Gets the item's damage type.
 		ItemDamageType getDamageType() const;

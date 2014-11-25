@@ -35,7 +35,7 @@ namespace OpenXcom
 	{
 		RuleItem *item = _game->getRuleset()->getItem(defs->id);
 
-		std::vector<std::string> *ammo_data = item->getCompatibleAmmo();
+		const std::vector<std::string>* const ammo_data = item->getCompatibleAmmo();
 
 		// SHOT STATS TABLE (for firearms only)
 		if (item->getBattleType() == BT_FIREARM)
@@ -120,7 +120,7 @@ namespace OpenXcom
 			add(_txtAmmoType[i]);
 			_txtAmmoType[i]->setColor(Palette::blockOffset(0)+2);
 			_txtAmmoType[i]->setWordWrap(true);
-			
+
 			_txtAmmoDamage[i] = new Text(82, 16, 300, 144 + i*10);
 			add(_txtAmmoDamage[i]);
 			_txtAmmoDamage[i]->setColor(Palette::blockOffset(3)+6);

@@ -4668,7 +4668,7 @@
 1416602247 f:\git\openxcom\src\ruleset\mapdata.h
 	"RuleItem.h"
 
-1415983039 f:\git\openxcom\src\ruleset\ruleitem.h
+1416921658 f:\git\openxcom\src\ruleset\ruleitem.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -5738,17 +5738,14 @@
 1413136955 f:\git\openxcom\src\battlescape\alienscrashstate.h
 	"../Engine/State.h"
 
-1414867622 f:\git\openxcom\src\battlescape\debriefingstate.h
-	<map>
-	<string>
-	<vector>
+1416920474 f:\git\openxcom\src\battlescape\debriefingstate.h
 	"../Engine/State.h"
 	"../Savegame/SavedGame.h"
 
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1416823303 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1416923875 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	<cmath>
 	<sstream>
@@ -5890,9 +5887,7 @@
 	"../Savegame/Ufo.h"
 	"../Savegame/Vehicle.h"
 
-1414211030 f:\git\openxcom\src\battlescape\inventory.h
-	<map>
-	<string>
+1416923963 f:\git\openxcom\src\battlescape\inventory.h
 	"../Engine/InteractiveSurface.h"
 
 1413136956 f:\git\openxcom\src\engine\crossplatform.h
@@ -6159,9 +6154,8 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1416332907 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1416923735 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
-	<sstream>
 	"CannotReequipState.h"
 	"CommendationState.h"
 	"NoContainmentState.h"
@@ -6286,9 +6280,8 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1415853534 source:f:\git\openxcom\src\battlescape\inventory.cpp
+1416924063 source:f:\git\openxcom\src\battlescape\inventory.cpp
 	"Inventory.h"
-	<cmath>
 	"PrimeGrenadeState.h"
 	"TileEngine.h"
 	"WarningMessage.h"
@@ -8151,7 +8144,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1416857987 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1416919812 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -9231,7 +9224,7 @@
 	"RuleInventory.h"
 	"RuleItem.h"
 
-1416132101 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
+1416921658 source:f:\git\openxcom\src\ruleset\ruleitem.cpp
 	"RuleItem.h"
 	"RuleInventory.h"
 	"../Engine/Logger.h"
@@ -9423,7 +9416,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1416846050 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1416924147 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
@@ -9451,7 +9444,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1416906071 source:f:\git\openxcom\src\savegame\craft.cpp
+1416906382 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"../fmath.h"
 	"AlienBase.h"
@@ -9561,7 +9554,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/Ruleset.h"
 
-1416336653 source:f:\git\openxcom\src\savegame\savedgame.cpp
+1416922676 source:f:\git\openxcom\src\savegame\savedgame.cpp
 	"SavedGame.h"
 	<algorithm>
 	<fstream>
@@ -9769,7 +9762,7 @@
 	"../Ruleset/RuleCraftWeapon.h"
 	"../Ruleset/Ruleset.h"
 
-1413136962 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
+1416924321 source:f:\git\openxcom\src\ufopaedia\articlestateitem.cpp
 	"ArticleStateItem.h"
 	<algorithm>
 	<sstream>
@@ -12202,7 +12195,7 @@
 1416892630 f:\git\openxcom\src\ufopaedia\articlestatetftdfacility.h
 	"ArticleStateTFTD.h"
 
-1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftditem.cpp
+1416924347 source:f:\git\openxcom\src\ufopaedia\articlestatetftditem.cpp
 	<sstream>
 	"Ufopaedia.h"
 	"ArticleStateTFTDItem.h"

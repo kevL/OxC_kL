@@ -1153,6 +1153,7 @@ const std::vector<Base*>* SavedGame::getBases() const
 int SavedGame::getBaseMaintenance() const
 {
 	int total = 0;
+
 	for (std::vector<Base*>::const_iterator
 			i = _bases.begin();
 			i != _bases.end();
@@ -1238,7 +1239,7 @@ void SavedGame::addFinishedResearch(
 		addResearchScore(resRule->getPoints());
 	}
 
-	if (rules)
+	if (rules != NULL)
 	{
 		std::vector<RuleResearch*> availableResearch;
 		for (std::vector<Base*>::const_iterator
@@ -1267,19 +1268,19 @@ void SavedGame::addFinishedResearch(
 			}
 			else if ((*i)->getCost() == 0)
 			{
-				size_t entry (0); // init.
+				size_t entry (0);
 
 				for (std::vector<std::string>::const_iterator
-						iReq = (*i)->getRequirements().begin();
-						iReq != (*i)->getRequirements().end();
-						++iReq)
+						j = (*i)->getRequirements().begin();
+						j != (*i)->getRequirements().end();
+						++j)
 				{
-					if ((*i)->getRequirements().at(entry) == *iReq)
+					if ((*i)->getRequirements().at(entry) == *j)
 						addFinishedResearch(
 										*i,
 										rules);
 
-					entry++;
+					++entry;
 				}
 			}
 		}
@@ -1312,41 +1313,40 @@ void SavedGame::getAvailableResearchProjects(
 	std::vector<const RuleResearch*> unlocked;
 
 	for (std::vector<const RuleResearch*>::const_iterator
-			it = discovered.begin();
-			it != discovered.end();
-			++it)
+			i = discovered.begin();
+			i != discovered.end();
+			++i)
 	{
 		for (std::vector<std::string>::const_iterator
-				itUnlocked = (*it)->getUnlocked().begin();
-				itUnlocked != (*it)->getUnlocked().end();
-				++itUnlocked)
+				j = (*i)->getUnlocked().begin();
+				j != (*i)->getUnlocked().end();
+				++j)
 		{
-			unlocked.push_back(ruleset->getResearch(*itUnlocked));
+			unlocked.push_back(ruleset->getResearch(*j));
 		}
 	}
 
 	for (std::vector<std::string>::const_iterator
-			iter = researchProjects.begin();
-			iter != researchProjects.end();
-			++iter)
+			i = researchProjects.begin();
+			i != researchProjects.end();
+			++i)
 	{
-		RuleResearch* research = ruleset->getResearch(*iter);
-		if (!isResearchAvailable(
+		RuleResearch* research = ruleset->getResearch(*i);
+		if (isResearchAvailable(
 							research,
 							unlocked,
-							ruleset))
+							ruleset) == false)
 		{
 			continue;
 		}
 
-		std::vector<const RuleResearch*>::const_iterator itDiscovered = std::find(
+		std::vector<const RuleResearch*>::const_iterator iterDisc = std::find(
 																				discovered.begin(),
 																				discovered.end(),
 																				research);
-
 		bool liveAlien = (ruleset->getUnit(research->getName()) != NULL);
 
-		if (itDiscovered != discovered.end())
+		if (iterDisc != discovered.end())
 		{
 			bool cull = true;
 			if (research->getGetOneFree().empty() == false)
@@ -1363,14 +1363,13 @@ void SavedGame::getAvailableResearchProjects(
 					if (more_iteration == discovered.end())
 					{
 						cull = false;
-
 						break;
 					}
 				}
 			}
 
-			if (!liveAlien
-				&& cull)
+			if (liveAlien == false
+				&& cull == true)
 			{
 				continue;
 			}
@@ -1388,7 +1387,7 @@ void SavedGame::getAvailableResearchProjects(
 				bool leader = (leaderCheck != research->getUnlocked().end());
 				bool cmnder = (cmnderCheck != research->getUnlocked().end());
 
-				if (leader)
+				if (leader == true)
 				{
 					std::vector<const RuleResearch*>::const_iterator found = std::find(
 																					discovered.begin(),
@@ -1398,7 +1397,7 @@ void SavedGame::getAvailableResearchProjects(
 						cull = false;
 				}
 
-				if (cmnder)
+				if (cmnder == true)
 				{
 					std::vector<const RuleResearch*>::const_iterator found = std::find(
 																					discovered.begin(),
@@ -1408,7 +1407,7 @@ void SavedGame::getAvailableResearchProjects(
 						cull = false;
 				}
 
-				if (cull)
+				if (cull == true)
 					continue;
 			}
 		}
@@ -1416,8 +1415,7 @@ void SavedGame::getAvailableResearchProjects(
 		if (std::find_if(
 					baseResearchProjects.begin(),
 					baseResearchProjects.end(),
-					findRuleResearch(research))
-				!= baseResearchProjects.end())
+					findRuleResearch(research)) != baseResearchProjects.end())
 		{
 			continue;
 		}
@@ -1428,20 +1426,20 @@ void SavedGame::getAvailableResearchProjects(
 			continue;
 		}
 
-		if (research->getRequirements().empty())
+		if (research->getRequirements().empty() == true)
 		{
-			size_t tally(0);
+			size_t tally (0);
 			for (size_t
-					itreq = 0;
-					itreq != research->getRequirements().size();
-					++itreq)
+					j = 0;
+					j != research->getRequirements().size();
+					++j)
 			{
-				itDiscovered = std::find(
+				iterDisc = std::find(
 									discovered.begin(),
 									discovered.end(),
-									ruleset->getResearch(research->getRequirements().at(itreq)));
-				if (itDiscovered != discovered.end())
-					tally++;
+									ruleset->getResearch(research->getRequirements().at(j)));
+				if (iterDisc != discovered.end())
+					++tally;
 			}
 
 			if (tally != research->getRequirements().size())
@@ -1467,12 +1465,12 @@ void SavedGame::getAvailableProductions(
 	const std::vector<Production*> baseProductions (base->getProductions()); // init.
 
 	for (std::vector<std::string>::const_iterator
-			iter = items.begin();
-			iter != items.end();
-			++iter)
+			i = items.begin();
+			i != items.end();
+			++i)
 	{
-		RuleManufacture* m = ruleset->getManufacture(*iter);
-		if (!isResearched(m->getRequirements()))
+		RuleManufacture* m = ruleset->getManufacture(*i);
+		if (isResearched(m->getRequirements()) == false)
 			continue;
 
 		if (std::find_if(

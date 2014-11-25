@@ -20,11 +20,10 @@
 #ifndef OPENXCOM_DEBRIEFINGSTATE_H
 #define OPENXCOM_DEBRIEFINGSTATE_H
 
-#include <map>
-#include <string>
-#include <vector>
+//#include <map>
+//#include <string>
+//#include <vector>
 
-//#include "../Engine/Logger.h"
 #include "../Engine/State.h"
 
 #include "../Savegame/SavedGame.h"
@@ -49,7 +48,7 @@ class Window;
 
 struct DebriefingStat
 {
-	bool recovery;
+	bool recover;
 	int
 		qty,
 		score;
@@ -58,12 +57,12 @@ struct DebriefingStat
 	/// cTor.
 	DebriefingStat(
 			const std::string& _item,
-			bool recovery = false)
+			bool recover = false)
 		:
 			item(_item),
 			score(0),
 			qty(0),
-			recovery(recovery)
+			recover(recover)
 	{
 		//Log(LOG_INFO) << "create DebriefingStat";
 	};
@@ -99,8 +98,9 @@ private:
 		_manageContainment,
 		_noContainment;
 	int
-		_alienMCs,
-		_alienStuns,
+		_aliensControlled,
+		_aliensKilled,
+		_aliensStunned,
 		_limitsEnforced;
 
 	std::wstring _baseLabel;

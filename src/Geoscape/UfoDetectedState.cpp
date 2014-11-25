@@ -85,7 +85,7 @@ UfoDetectedState::UfoDetectedState(
 
 	_screen = false;
 
-	if (hyper)
+	if (hyper == true)
 	{
 		_window			= new Window(this, 224, 170, 16, 10, POPUP_BOTH);
 
@@ -107,7 +107,7 @@ UfoDetectedState::UfoDetectedState(
 	_txtTexture		= new Text(114, 9, 116, 66);
 //	_txtShade		= new Text(60, 9, 170, 76);
 
-	if (hyper)
+	if (hyper == true)
 	{
 		_txtUfo->setY(19);
 		_txtDetected->setY(36);
@@ -137,7 +137,7 @@ UfoDetectedState::UfoDetectedState(
 	add(_txtTexture);
 //	add(_txtShade);
 
-	if (hyper)
+	if (hyper == true)
 	{
 		add(_txtHyperwave);
 		add(_lstInfo2);
@@ -146,6 +146,7 @@ UfoDetectedState::UfoDetectedState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK15.SCR"));
 
@@ -153,7 +154,7 @@ UfoDetectedState::UfoDetectedState(
 	_txtUfo->setBig();
 	_txtUfo->setText(_ufo->getName(_game->getLanguage()));
 
-	if (detected)
+	if (detected == true)
 	{
 		_txtDetected->setColor(Palette::blockOffset(8)+5);
 		_txtDetected->setText(tr("STR_DETECTED"));
@@ -165,32 +166,32 @@ UfoDetectedState::UfoDetectedState(
 	_txtRegion->setColor(Palette::blockOffset(8)+10);
 	_txtRegion->setAlign(ALIGN_RIGHT);
 	std::wostringstream ss;
-	double
+	const double
 		lon = _ufo->getLongitude(),
 		lat = _ufo->getLatitude();
 
-	for (std::vector<Region*>::iterator
+	for (std::vector<Region*>::const_iterator
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)
 	{
 		if ((*i)->getRules()->insideRegion(
 										lon,
-										lat))
+										lat) == true)
 		{
 			ss << tr((*i)->getRules()->getType());
 			break;
 		}
 	}
 
-	for (std::vector<Country*>::iterator
+	for (std::vector<Country*>::const_iterator
 			i = _game->getSavedGame()->getCountries()->begin();
 			i != _game->getSavedGame()->getCountries()->end();
 			++i)
 	{
 		if ((*i)->getRules()->insideCountry(
 										lon,
-										lat))
+										lat) == true)
 		{
 			ss << L"> " << tr((*i)->getRules()->getType());
 			break;
@@ -257,7 +258,7 @@ UfoDetectedState::UfoDetectedState(
 		// IMPORTANT: This does not return the actual battleField terrain; that is done
 		// in ConfirmLandingState. This is merely an indicator .... cf. DogfightState
 		// IE, the first terrain found for proper Globe-texture is chosen
-		std::string str = "";
+		std::string terrain;
 
 		int // look up polygon's texture
 			texture,
@@ -267,68 +268,68 @@ UfoDetectedState::UfoDetectedState(
 												_ufo->getLatitude(),
 												&texture,
 												&shade);
-		RuleTerrain* terrain = NULL;
+		RuleTerrain* terrainRule = NULL;
 
 		const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
 		for (std::vector<std::string>::const_iterator
 				i = terrains.begin();
 				i != terrains.end()
-					&& str == "";
+					&& terrain.empty() == true;
 				++i)
 		{
 			//Log(LOG_INFO) << ". cycle terrains";
-			terrain = _game->getRuleset()->getTerrain(*i);
-			for (std::vector<int>::iterator
-					j = terrain->getTextures()->begin();
-					j != terrain->getTextures()->end()
-						&& str == "";
+			terrainRule = _game->getRuleset()->getTerrain(*i);
+			for (std::vector<int>::const_iterator
+					j = terrainRule->getTextures()->begin();
+					j != terrainRule->getTextures()->end()
+						&& terrain.empty() == true;
 					++j)
 			{
 				//Log(LOG_INFO) << ". . cycle textures";
 				if (*j == texture
-					&& (terrain->getHemisphere() == 0
-						|| (terrain->getHemisphere() < 0
-							&& _ufo->getLatitude() < 0.0)
-						|| (terrain->getHemisphere() > 0
-							&& _ufo->getLatitude() >= 0.0)))
+					&& (terrainRule->getHemisphere() == 0
+						|| (terrainRule->getHemisphere() < 0
+							&& _ufo->getLatitude() < 0.)
+						|| (terrainRule->getHemisphere() > 0
+							&& _ufo->getLatitude() >= 0.)))
 				{
-					//Log(LOG_INFO) << ". . . terrain-texture MATCH found!";
-					str = terrain->getName();
+					//Log(LOG_INFO) << ". . . terrainRule-texture MATCH found!";
+					terrain = terrainRule->getName();
 				}
 			}
 		}
-		//Log(LOG_INFO) << ". str = " << str;
+		//Log(LOG_INFO) << ". terrain = " << terrain;
 
-		if (str == "")
-			str = "WATER";
-		else if (str == "JUNGLE"
-			|| str == "FORESTMOUNT"
-			|| str == "MUJUNGLE")
+		if (terrain.empty() == true)
+			terrain = "WATER";
+		else if (terrain == "JUNGLE"
+			|| terrain == "FORESTMOUNT"
+			|| terrain == "MUJUNGLE")
 		{
-			str = "FOREST";
+			terrain = "FOREST";
 		}
-		else if (str == "CULTAFARMA"
-			|| str == "CULTAFARMB")
+		else if (terrain == "CULTAFARMA"
+			|| terrain == "CULTAFARMB")
 		{
-			str = "CULTA";
+			terrain = "CULTA";
 		}
-		else if (str == "DESERTMOUNT"
-			|| str == "ATLANTDESERT")
+		else if (terrain == "DESERTMOUNT"
+			|| terrain == "ATLANTDESERT")
 		{
-			str = "DESERT";
+			terrain = "DESERT";
 		}
-		else if (str == "POLARMOUNT")
-			str = "POLAR";
-//		else if (str == "COMRCURBAN"	// these are Terror sites only:
-//			|| str == "DAWNURBANA"		// ie. not referenced by any of the Globe's polygon textures.
-//			|| str == "DAWNURBANB"		// but NOTE: if UFO lands directly on a city,
-//			|| str == "INDUSTRIALURBAN"	// one of these should pop via ConfirmLandingState
-//			|| str == "MADURBAN"
-//			|| str == "NATIVEURBAN"
-//			|| str == "PORTURBAN"
-//			|| str == "RAILYARDURBAN")
+		else if (terrain == "POLARMOUNT")
+			terrain = "POLAR";
+//		else if (terrain == "COMRCURBAN"	// these are Terror sites only:
+//			|| terrain == "DAWNURBANA"		// ie. not referenced by any of the Globe's polygon textures.
+//			|| terrain == "DAWNURBANB"		// but NOTE: if UFO lands directly on a city,
+//			|| terrain == "INDUSTRIALURBAN"	// one of these should pop via ConfirmLandingState
+//			|| terrain == "MADURBAN"
+//			|| terrain == "NATIVEURBAN"
+//			|| terrain == "PORTURBAN"
+//			|| terrain == "RAILYARDURBAN")
 //		{
-//			str = "URBAN";
+//			terrain = "URBAN";
 //		}
 
 //		_txtShade->setColor(Palette::blockOffset(8)+10);
@@ -337,7 +338,7 @@ UfoDetectedState::UfoDetectedState(
 //		_txtShade->setText(tr("STR_SHADE_").arg(shade));
 
 		std::wostringstream ss;
-		ss << tr(str);
+		ss << tr(terrain);
 //		ss << L"> sun " << (15 - shade);
 		ss << L"> shade " << shade;
 
@@ -345,7 +346,7 @@ UfoDetectedState::UfoDetectedState(
 		_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
 		_txtTexture->setAlign(ALIGN_RIGHT);
 
-//		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(str))); // tr(terrain)
+//		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(str))); // tr(terrainRule)
 //		_txtTexture->setText(tr("STR_TEXTURE_").arg(ss.str()));
 		_txtTexture->setText(ss.str());
 	}
@@ -450,6 +451,7 @@ void UfoDetectedState::btnCentreClick(Action*)
  */
 void UfoDetectedState::btnCancelClick(Action*)
 {
+	_state->timerReset();
 	_game->popState();
 }
 

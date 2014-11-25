@@ -113,7 +113,7 @@ BattlescapeGame::BattlescapeGame(
 							getRuleset()->getItem("ALIEN_PSI_WEAPON"),
 							save->getCurrentItemId());
 
-	for (std::vector<BattleUnit*>::iterator // kL
+	for (std::vector<BattleUnit*>::const_iterator // kL
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
@@ -127,7 +127,7 @@ BattlescapeGame::BattlescapeGame(
  */
 BattlescapeGame::~BattlescapeGame()
 {
-	for (std::list<BattleState*>::iterator
+	for (std::list<BattleState*>::const_iterator
 			i = _states.begin();
 			i != _states.end();
 			++i)
@@ -853,7 +853,7 @@ void BattlescapeGame::checkForCasualties(
 		BattleItem* ammo = slayer->getItem("STR_RIGHT_HAND");
 		if (ammo != NULL)
 		{
-			for (std::vector<std::string>::iterator
+			for (std::vector<std::string>::const_iterator
 					i = ammo->getRules()->getCompatibleAmmo()->begin();
 					i != ammo->getRules()->getCompatibleAmmo()->end();
 					++i)
@@ -866,7 +866,7 @@ void BattlescapeGame::checkForCasualties(
 		ammo = slayer->getItem("STR_LEFT_HAND");
 		if (ammo != NULL)
 		{
-			for (std::vector<std::string>::iterator
+			for (std::vector<std::string>::const_iterator
 					i = ammo->getRules()->getCompatibleAmmo()->begin();
 					i != ammo->getRules()->getCompatibleAmmo()->end();
 					++i)
@@ -877,7 +877,7 @@ void BattlescapeGame::checkForCasualties(
 		}
 	}
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = _save->getUnits()->begin();
 			i != _save->getUnits()->end();
 			++i)
@@ -2886,7 +2886,7 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 	// that were dropped on the alien turn [not]
 	// and have an attraction value.
 	// kL_note: And no one else is standing on it.
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = _save->getItems()->begin();
 			i != _save->getItems()->end();
 			++i)
@@ -2909,7 +2909,7 @@ BattleItem* BattlescapeGame::surveyItems(BattleAction* action)
 		test;
 
 	// now select the most suitable candidate depending on attractiveness and distance
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = droppedItems.begin();
 			i != droppedItems.end();
 			++i)
@@ -2965,7 +2965,7 @@ bool BattlescapeGame::worthTaking(
 		{
 			ammoFound = false;
 
-			for (std::vector<BattleItem*>::iterator
+			for (std::vector<BattleItem*>::const_iterator
 					i = action->actor->getInventory()->begin();
 					i != action->actor->getInventory()->end()
 						&& ammoFound == false;
@@ -2973,7 +2973,7 @@ bool BattlescapeGame::worthTaking(
 			{
 				if ((*i)->getRules()->getBattleType() == BT_AMMO)
 				{
-					for (std::vector<std::string>::iterator
+					for (std::vector<std::string>::const_iterator
 							j = item->getRules()->getCompatibleAmmo()->begin();
 							j != item->getRules()->getCompatibleAmmo()->end()
 								&& ammoFound == false;
@@ -2998,7 +2998,7 @@ bool BattlescapeGame::worthTaking(
 		// similar to the above, but this time we're checking if the ammo is suitable for a weapon we have.
 		bool weaponFound = false;
 
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = action->actor->getInventory()->begin();
 				i != action->actor->getInventory()->end()
 					&& weaponFound == false;
@@ -3006,7 +3006,7 @@ bool BattlescapeGame::worthTaking(
 		{
 			if ((*i)->getRules()->getBattleType() == BT_FIREARM)
 			{
-				for (std::vector<std::string>::iterator
+				for (std::vector<std::string>::const_iterator
 						j = (*i)->getRules()->getCompatibleAmmo()->begin();
 						j != (*i)->getRules()->getCompatibleAmmo()->end()
 							&& weaponFound == false;
@@ -3031,7 +3031,7 @@ bool BattlescapeGame::worthTaking(
 	// use bad logic to determine if we'll have room for the item
 	int freeSlots = 25;
 
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = action->actor->getInventory()->begin();
 			i != action->actor->getInventory()->end();
 			++i)
@@ -3088,7 +3088,7 @@ int BattlescapeGame::takeItemFromGround(
 	else
 	{
 		// check to make sure we have enough space by checking all the sizes of items in our inventory
-		for (std::vector<BattleItem*>::iterator
+		for (std::vector<BattleItem*>::const_iterator
 				i = action->actor->getInventory()->begin();
 				i != action->actor->getInventory()->end();
 				++i)
@@ -3344,7 +3344,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 					Tile* tile = _save->getTile(unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
 					if (tile != NULL)
 					{
-						for (std::vector<BattleItem*>::iterator
+						for (std::vector<BattleItem*>::const_iterator
 								i = tile->getInventory()->begin();
 								i != tile->getInventory()->end();
 								++i)
@@ -3399,7 +3399,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
  */
 void BattlescapeGame::cleanupDeleted()
 {
-	for (std::list<BattleState*>::iterator
+	for (std::list<BattleState*>::const_iterator
 			i = _deleted.begin();
 			i != _deleted.end();
 			++i)

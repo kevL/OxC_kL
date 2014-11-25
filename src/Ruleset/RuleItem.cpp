@@ -539,7 +539,7 @@ int RuleItem::getTUMelee() const
  * Gets a list of compatible ammo.
  * @return, pointer to a vector of compatible ammo strings
  */
-std::vector<std::string>* RuleItem::getCompatibleAmmo()
+const std::vector<std::string>* RuleItem::getCompatibleAmmo() const
 {
 	return &_compatibleAmmo;
 }
