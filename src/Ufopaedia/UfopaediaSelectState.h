@@ -44,7 +44,6 @@ class UfopaediaSelectState
 	:
 		public State
 {
-
 protected:
 	std::string _section;
 
@@ -71,6 +70,8 @@ protected:
 		///
 		virtual ~UfopaediaSelectState();
 
+		///
+		void init();
 };
 
 }

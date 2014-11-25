@@ -17,8 +17,6 @@
  * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "Ufopaedia.h"
-
 #include "ArticleStateTFTD.h"
 
 #include "../Engine/Game.h"
@@ -26,6 +24,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
+#include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 
@@ -44,10 +43,8 @@ ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD* defs)
 	:
 		ArticleState(defs->id)
 {
-	_txtTitle = new Text(284, 16, 36, 14);
-	_btnTitle = new TextButton(288, 27, 34, 6);
-
 	setPalette("PAL_BASESCAPE");
+	_game->getCursor()->setColor(Palette::blockOffset(2)+9);
 
 	_btnOk->setX(227);
 	_btnOk->setY(179);
@@ -69,14 +66,14 @@ ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD* defs)
 
 	ArticleState::initLayout();
 
-	_btnTitle->setColor(Palette::blockOffset(9)+4);
-	_btnTitle->setHighContrast();
-
-	add(_btnTitle);
-	add(_txtTitle);
-
-	_game->getResourcePack()->getSurface("UP030.BDY")->blit(_bg);
+	_game->getResourcePack()->getSurface("BACK08.SCR")->blit(_bg);
 	_game->getResourcePack()->getSurface(defs->image_id)->blit(_bg);
+
+	_txtInfo	= new Text(defs->text_width, 150, 318 - defs->text_width, 36);
+	_txtTitle	= new Text(284, 16, 36, 14);
+
+	add(_txtTitle);
+	add(_txtInfo);
 
 	_txtTitle->setColor(Palette::blockOffset(0)+2);
 	_txtTitle->setBig();
@@ -84,14 +81,20 @@ ArticleStateTFTD::ArticleStateTFTD(ArticleDefinitionTFTD* defs)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setText(tr(defs->title));
 
-	_txtInfo = new Text(152, 64, 168, 40);
-	add(_txtInfo);
-
 	_txtInfo->setColor(Palette::blockOffset(0)+2);
 	_txtInfo->setWordWrap();
 	_txtInfo->setText(tr(defs->text));
 
-	centerAllSurfaces();
+	// all of the above are common to the TFTD articles.
+
+	if (defs->getType() == UFOPAEDIA_TYPE_TFTD)
+	{
+		// this command is contained in all the subtypes of this article,
+		// and probably shouldn't run until all surfaces are added.
+		// in the case of a simple image/title/text article,
+		// we're done adding surfaces for now.
+		centerAllSurfaces();
+	}
 }
 
 /**

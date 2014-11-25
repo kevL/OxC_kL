@@ -10,46 +10,36 @@
  *
  * OpenXcom is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with OpenXcom. If not, see <http://www.gnu.org/licenses/>.
+ * along with OpenXcom.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#ifndef OPENXCOM_ARTICLESTATETFTD_H
-#define OPENXCOM_ARTICLESTATETFTD_H
+#ifndef OPENXCOM_ARTICLESTATETFTDARMOR_H
+#define OPENXCOM_ARTICLESTATETFTDARMOR_H
 
-#include "ArticleState.h"
+#include "ArticleStateTFTD.h"
 
 namespace OpenXcom
 {
+	class TextList;
+	class ArticleDefinitionTFTD;
 
-class ArticleDefinitionTFTD;
-class Text;
-
-
-/**
- * Every TFTD article has a title, text block and a background image, with little to no variation.
- */
-class ArticleStateTFTD
-	:
-		public ArticleState
-{
-
-protected:
-	Text
-		* _txtTitle,
-		* _txtInfo;
-
-
+	class ArticleStateTFTDArmor : public ArticleStateTFTD
+	{
 	public:
-		///
-		ArticleStateTFTD(ArticleDefinitionTFTD* defs);
-		///
-		virtual ~ArticleStateTFTD();
-};
+		ArticleStateTFTDArmor(ArticleDefinitionTFTD *defs);
+		virtual ~ArticleStateTFTDArmor();
 
+	protected:
+		void addStat(const std::string &label, int stat, bool plus = false);
+		void addStat(const std::string &label, const std::wstring &stat);
+
+		int _row;
+		TextList *_lstInfo;
+	};
 }
 
 #endif

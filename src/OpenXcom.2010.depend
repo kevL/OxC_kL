@@ -5846,7 +5846,7 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1416831456 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1416892926 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -8087,7 +8087,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ufopaedia/Ufopaedia.h"
 
-1413136960 f:\git\openxcom\src\ruleset\articledefinition.h
+1416893159 f:\git\openxcom\src\ruleset\articledefinition.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -8106,7 +8106,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1416864596 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1416898847 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
@@ -9077,7 +9077,7 @@
 1413136962 f:\git\openxcom\src\ufopaedia\articlestatecraft.h
 	"ArticleState.h"
 
-1413136962 f:\git\openxcom\src\ufopaedia\ufopaediaselectstate.h
+1416893804 f:\git\openxcom\src\ufopaedia\ufopaediaselectstate.h
 	<string>
 	"Ufopaedia.h"
 	"../Engine/State.h"
@@ -9165,7 +9165,7 @@
 1416141940 source:f:\git\openxcom\src\ruleset\armor.cpp
 	"Armor.h"
 
-1413136960 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
+1416893323 source:f:\git\openxcom\src\ruleset\articledefinition.cpp
 	"ArticleDefinition.h"
 
 1413136960 source:f:\git\openxcom\src\ruleset\city.cpp
@@ -9251,7 +9251,7 @@
 1413136961 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1416458796 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1416893048 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
 	<algorithm>
 	<fstream>
@@ -9738,7 +9738,7 @@
 	"../Ruleset/RuleBaseFacility.h"
 	"../Ruleset/Ruleset.h"
 
-1416864596 source:f:\git\openxcom\src\ufopaedia\articlestatecraft.cpp
+1416897508 source:f:\git\openxcom\src\ufopaedia\articlestatecraft.cpp
 	"ArticleStateCraft.h"
 	"Ufopaedia.h"
 	"../Engine/Game.h"
@@ -9843,7 +9843,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Ruleset/Unit.h"
 
-1413136962 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
+1416894090 source:f:\git\openxcom\src\ufopaedia\ufopaedia.cpp
 	"Ufopaedia.h"
 	"ArticleState.h"
 	"ArticleStateArmor.h"
@@ -9854,6 +9854,13 @@
 	"ArticleStateText.h"
 	"ArticleStateTextImage.h"
 	"ArticleStateTFTD.h"
+	"ArticleStateTFTDArmor.h"
+	"ArticleStateTFTDVehicle.h"
+	"ArticleStateTFTDItem.h"
+	"ArticleStateTFTDFacility.h"
+	"ArticleStateTFTDCraft.h"
+	"ArticleStateTFTDCraftWeapon.h"
+	"ArticleStateTFTDUso.h"
 	"ArticleStateUfo.h"
 	"ArticleStateVehicle.h"
 	"UfopaediaStartState.h"
@@ -9862,7 +9869,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1415853531 source:f:\git\openxcom\src\ufopaedia\ufopaediaselectstate.cpp
+1416893906 source:f:\git\openxcom\src\ufopaedia\ufopaediaselectstate.cpp
 	"UfopaediaSelectState.h"
 	"ArticleState.h"
 	"Ufopaedia.h"
@@ -9871,6 +9878,7 @@
 	"../Engine/Options.h"
 	"../Engine/Palette.h"
 	"../Engine/Surface.h"
+	"../Interface/Cursor.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"
@@ -11981,19 +11989,19 @@
 	"../Ruleset/RuleCommendations.h"
 	"../Ruleset/Ruleset.h"
 
-1413136962 source:f:\git\openxcom\src\ufopaedia\articlestatetftd.cpp
-	"Ufopaedia.h"
+1416893740 source:f:\git\openxcom\src\ufopaedia\articlestatetftd.cpp
 	"ArticleStateTFTD.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Palette.h"
 	"../Engine/Surface.h"
+	"../Interface/Cursor.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Resource/ResourcePack.h"
 	"../Ruleset/ArticleDefinition.h"
 
-1413136962 f:\git\openxcom\src\ufopaedia\articlestatetftd.h
+1416893453 f:\git\openxcom\src\ufopaedia\articlestatetftd.h
 	"ArticleState.h"
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinterface.h
@@ -12134,4 +12142,107 @@
 	<yaml-cpp/yaml.h>
 	"../Engine/Exception.h"
 	"../Engine/RNG.h"
+
+1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftdarmor.cpp
+	<sstream>
+	"../fmath.h"
+	"ArticleStateTFTD.h"
+	"ArticleStateTFTDArmor.h"
+	"../Ruleset/ArticleDefinition.h"
+	"../Ruleset/Ruleset.h"
+	"../Ruleset/Armor.h"
+	"../Engine/Game.h"
+	"../Engine/Palette.h"
+	"../Engine/Language.h"
+	"../Interface/TextList.h"
+
+1416892630 f:\git\openxcom\src\ufopaedia\articlestatetftdarmor.h
+	"ArticleStateTFTD.h"
+
+1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftdcraft.cpp
+	"../Ruleset/ArticleDefinition.h"
+	"../Ruleset/Ruleset.h"
+	"../Ruleset/RuleCraft.h"
+	"ArticleStateTFTD.h"
+	"ArticleStateTFTDCraft.h"
+	"../Engine/Game.h"
+	"../Engine/Palette.h"
+	"../Engine/Language.h"
+	"../Interface/Text.h"
+
+1416892630 f:\git\openxcom\src\ufopaedia\articlestatetftdcraft.h
+	"ArticleStateTFTD.h"
+
+1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftdcraftweapon.cpp
+	"ArticleStateTFTD.h"
+	"ArticleStateTFTDCraftWeapon.h"
+	"../Ruleset/ArticleDefinition.h"
+	"../Ruleset/Ruleset.h"
+	"../Ruleset/RuleCraftWeapon.h"
+	"../Engine/Game.h"
+	"../Engine/Palette.h"
+	"../Engine/Language.h"
+	"../Interface/TextList.h"
+
+1416892630 f:\git\openxcom\src\ufopaedia\articlestatetftdcraftweapon.h
+	"ArticleStateTFTD.h"
+
+1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftdfacility.cpp
+	"../Ruleset/ArticleDefinition.h"
+	"../Ruleset/Ruleset.h"
+	"../Ruleset/RuleBaseFacility.h"
+	"ArticleStateTFTD.h"
+	"ArticleStateTFTDFacility.h"
+	"../Engine/Game.h"
+	"../Engine/Palette.h"
+	"../Engine/Language.h"
+	"../Interface/TextList.h"
+
+1416892630 f:\git\openxcom\src\ufopaedia\articlestatetftdfacility.h
+	"ArticleStateTFTD.h"
+
+1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftditem.cpp
+	<sstream>
+	"Ufopaedia.h"
+	"ArticleStateTFTDItem.h"
+	"../Ruleset/Ruleset.h"
+	"../Ruleset/ArticleDefinition.h"
+	"../Ruleset/RuleItem.h"
+	"../Engine/Game.h"
+	"../Engine/Palette.h"
+	"../Engine/Language.h"
+	"../Interface/TextList.h"
+
+1416892630 f:\git\openxcom\src\ufopaedia\articlestatetftditem.h
+	"ArticleStateTFTD.h"
+
+1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftduso.cpp
+	"../Ruleset/ArticleDefinition.h"
+	"../Ruleset/Ruleset.h"
+	"../Ruleset/RuleUfo.h"
+	"ArticleStateTFTD.h"
+	"ArticleStateTFTDUso.h"
+	"../Engine/Game.h"
+	"../Engine/Palette.h"
+	"../Engine/Language.h"
+	"../Interface/TextList.h"
+
+1416892630 f:\git\openxcom\src\ufopaedia\articlestatetftduso.h
+	"ArticleStateTFTD.h"
+
+1416892630 source:f:\git\openxcom\src\ufopaedia\articlestatetftdvehicle.cpp
+	"../Ruleset/ArticleDefinition.h"
+	"ArticleStateTFTDVehicle.h"
+	<sstream>
+	"../Engine/Game.h"
+	"../Engine/Language.h"
+	"../Engine/Palette.h"
+	"../Interface/TextList.h"
+	"../Ruleset/Ruleset.h"
+	"../Ruleset/Unit.h"
+	"../Ruleset/Armor.h"
+	"../Ruleset/RuleItem.h"
+
+1416892630 f:\git\openxcom\src\ufopaedia\articlestatetftdvehicle.h
+	"ArticleStateTFTD.h"
 

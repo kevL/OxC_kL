@@ -273,8 +273,8 @@ ArticleDefinitionTFTD::ArticleDefinitionTFTD()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionTFTD::load(
 		const YAML::Node& node,
@@ -284,9 +284,11 @@ void ArticleDefinitionTFTD::load(
 			node,
 			listOrder);
 
+	_type_id	= (UfopaediaTypeId)(node["type_id"].as<int>(_type_id));
 	image_id	= node["image_id"].as<std::string>(image_id);
 	text		= node["text"].as<std::string>(text);
-	text_width	= node["text_width"].as<int>(text_width);
+	text_width	= node["text_width"].as<int>(150); // 95% of these won't need to be defined, so give it a default
+	weapon		= node["weapon"].as<std::string>(weapon);
 }
 
 /**

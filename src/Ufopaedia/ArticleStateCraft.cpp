@@ -91,8 +91,8 @@ ArticleStateCraft::ArticleStateCraft(ArticleDefinitionCraft* defs)
 	int range = craftRule->getMaxFuel();
 	if (craftRule->getRefuelItem().empty() == false)
 		range *= craftRule->getMaxSpeed();
-	else
-		range *= 100;
+//	else
+//		range *= 100;
 
 	range /= 6; // six doses per hour on Geoscape.
 

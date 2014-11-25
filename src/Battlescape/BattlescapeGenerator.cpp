@@ -4225,6 +4225,8 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 				if (_blocks[x][y] != NULL
 					&& _blocks[x][y] != _dummy)
 				{
+					std::pair<int, int> pos(x, y);
+
 					if (command->getGroups()->empty() == false)
 					{
 						for (std::vector<int>::const_iterator
@@ -4235,13 +4237,12 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 							if (_blocks[x][y]->isInGroup(*z) == true)
 							{
 								// the deleted vector should only contain unique entries
-								const std::pair<int, int> pos = std::make_pair<int, int>(x, y);
 								if (std::find(
 											deleted.begin(),
 											deleted.end(),
 											pos) == deleted.end())
 								{
-									deleted.push_back(std::make_pair<int, int>(x, y));
+									deleted.push_back(pos);
 								}
 							}
 						}
@@ -4256,13 +4257,12 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 							if (*z < static_cast<int>(_terrain->getMapBlocks()->size()))
 							{
 								// the deleted vector should only contain unique entries
-								const std::pair<int, int> pos = std::make_pair<int, int>(x, y);
 								if (std::find(
 											deleted.begin(),
 											deleted.end(),
 											pos) == deleted.end())
 								{
-									deleted.push_back(std::make_pair<int, int>(x, y));
+									deleted.push_back(pos);
 								}
 							}
 						}
@@ -4270,13 +4270,12 @@ bool BattlescapeGenerator::removeBlocks(MapScript* command)
 					else
 					{
 						// the deleted vector should only contain unique entries
-						const std::pair<int, int> pos = std::make_pair<int, int>(x, y);
 						if (std::find(
 									deleted.begin(),
 									deleted.end(),
 									pos) == deleted.end())
 						{
-							deleted.push_back(std::make_pair<int, int>(x, y));
+							deleted.push_back(pos);
 						}
 					}
 				}

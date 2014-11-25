@@ -28,6 +28,7 @@
 #include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 
+#include "../Interface/Cursor.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextList.h"
@@ -97,6 +98,17 @@ UfopaediaSelectState::UfopaediaSelectState(const std::string& section)
  */
 UfopaediaSelectState::~UfopaediaSelectState()
 {
+}
+
+/**
+ * Initializes the state.
+ */
+void UfopaediaSelectState::init()
+{
+	State::init();
+
+	// this is to undo whatever the ufopaedia may have done to the colors.
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 }
 
 /**
