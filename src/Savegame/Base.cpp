@@ -547,12 +547,12 @@ int Base::detect(Target* target) const
 {
 	double dist = insideRadarRange(target);
 
-	if (AreSame(dist, 0.0))
+	if (AreSame(dist, 0.))
 		return 0;
 
 	int ret = 0;
 
-	if (dist < 0.0)
+	if (dist < 0.)
 	{
 		ret++;
 		dist = -dist;
@@ -561,25 +561,25 @@ int Base::detect(Target* target) const
 	int chance = 0;
 
 	for (std::vector<BaseFacility*>::const_iterator
-			fac = _facilities.begin();
-			fac != _facilities.end();
-			++fac)
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
 	{
-		if ((*fac)->getBuildTime() == 0)
+		if ((*i)->getBuildTime() == 0)
 		{
-			const double range = static_cast<double>((*fac)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+			const double range = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
 			if (range > dist)
-				chance += (*fac)->getRules()->getRadarChance();
+				chance += (*i)->getRules()->getRadarChance();
 		}
 	}
 
-	Ufo* ufo = dynamic_cast<Ufo*>(target);
+	const Ufo* const ufo = dynamic_cast<Ufo*>(target);
 	if (ufo != NULL)
 	{
 		chance += ufo->getVisibility();
-		chance = static_cast<int>(Round(static_cast<double>(chance) / 3.0)); // per 10 min.
+		chance = static_cast<int>(Round(static_cast<double>(chance) / 3.)); // per 10 min.
 
-		if (RNG::percent(chance))
+		if (RNG::percent(chance) == true)
 			ret += 2;
 	}
 
@@ -595,7 +595,7 @@ int Base::detect(Target* target) const
 double Base::insideRadarRange(Target* target) const
 {
 	//Log(LOG_INFO) << "Base::insideRadarRange()";
-	double ret = 0.0; // lets hope UFO is not *right on top of Base* Lol
+	double ret = 0.; // lets hope UFO is not *right on top of Base* Lol
 
 	const double targetDistance = getDistance(target) * earthRadius; // great circle distance
 	//Log(LOG_INFO) << ". targetDistance = " << (int)targetDistance;
@@ -603,18 +603,18 @@ double Base::insideRadarRange(Target* target) const
 		return ret;
 
 	for (std::vector<BaseFacility*>::const_iterator
-			f = _facilities.begin();
-			f != _facilities.end();
-			++f)
+			i = _facilities.begin();
+			i != _facilities.end();
+			++i)
 	{
-		if ((*f)->getBuildTime() == 0)
+		if ((*i)->getBuildTime() == 0)
 		{
-			const double radarRange = static_cast<double>((*f)->getRules()->getRadarRange()) * greatCircleConversionFactor;
+			const double radarRange = static_cast<double>((*i)->getRules()->getRadarRange()) * greatCircleConversionFactor;
 			if (targetDistance < radarRange)
 			{
 				ret = targetDistance;
 
-				if ((*f)->getRules()->isHyperwave())
+				if ((*i)->getRules()->isHyperwave() == true)
 					ret = -ret;
 			}
 		}

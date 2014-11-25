@@ -820,8 +820,6 @@ int Craft::getFuelLimit() const
  */
 int Craft::getFuelLimit(Base* base) const
 {
-	Log(LOG_INFO) << "dist = " << static_cast<int>(getDistance(base) * earthRadius);
-
 	double
 		distRads = getDistance(base),
 		patrol_factor = 1.;
@@ -923,7 +921,7 @@ bool Craft::detect(Target* target) const
 {
 	const double range = static_cast<double>(_rules->getRadarRange()) * greatCircleConversionFactor;
 
-	if (AreSame(range, 0.0))
+	if (AreSame(range, 0.))
 		return false;
 
 	const double dist = getDistance(target) * earthRadius;

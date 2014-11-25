@@ -9154,7 +9154,7 @@ extraStrings:
       STR_SHOT_TYPE_LAUNCH: "launch"
       STR_CONSOLE: "toggle battlescape console"
       STR_SOLDIER_NOT_AT_BASE: "Soldier Out on Mission"
-      STR_TRANSIT_LC: "in Transit"
+      STR_TRANSIT_LC: "Transfers"
       STR_RESET_UC: "reset"
       STR_PSI_RESIST: "> RESIST <"
       STR_REPAIRS_: "> rePAIR {0}"

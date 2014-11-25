@@ -59,7 +59,7 @@ namespace OpenXcom
  * @param detected		- true if the UFO has just been detected
  * @param hyper			- true if the UFO has been hyperdetected
  * @param contact		- true if radar contact is established (default true)
- * @param hyperBases	- vector of pointers to Bases that hyperdetected UFO (default empty)
+ * @param hyperBases	- pointer to a vector of pointers to Bases that hyperdetected UFO (default NULL)
  */
 UfoDetectedState::UfoDetectedState(
 		Ufo* ufo,
@@ -356,7 +356,7 @@ UfoDetectedState::UfoDetectedState(
 		_txtTexture->setVisible(false);
 	}
 
-	if (hyper)
+	if (hyper == true)
 	{
 		_txtHyperwave->setColor(Palette::blockOffset(8)+5);
 		_txtHyperwave->setAlign(ALIGN_CENTER);

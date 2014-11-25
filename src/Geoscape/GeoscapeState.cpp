@@ -1197,10 +1197,10 @@ void GeoscapeState::time5Seconds()
 						{
 							//Log(LOG_INFO) << ". create terrorSite";
 
-							TerrorSite* ts = _savedGame->getTerrorSites()->back();
-							const City* city = _game->getRuleset()->locateCity(
-																			ts->getLongitude(),
-																			ts->getLatitude());
+							TerrorSite* const ts = _savedGame->getTerrorSites()->back();
+							const City* const city = _game->getRuleset()->locateCity(
+																				ts->getLongitude(),
+																				ts->getLatitude());
 							assert(city);
 							// kL_note: need to delete the UFO here, before attempting to target w/ Craft.
 							// see: Globe::getTargets() for the workaround...
@@ -1750,36 +1750,36 @@ void GeoscapeState::time10Minutes()
 										this));
 				}
 
-				if ((*c)->getDestination() == NULL)
+//				if ((*c)->getDestination() == NULL)
+//				{
+				//Log(LOG_INFO) << ". Patrol for alienBases";
+				for (std::vector<AlienBase*>::const_iterator // patrol for aLien bases.
+						ab = _savedGame->getAlienBases()->begin();
+						ab != _savedGame->getAlienBases()->end();
+						ab++)
 				{
-					//Log(LOG_INFO) << ". Patrol for alienBases";
-					for (std::vector<AlienBase*>::const_iterator // patrol for aLien bases.
-							ab = _savedGame->getAlienBases()->begin();
-							ab != _savedGame->getAlienBases()->end();
-							ab++)
+					if ((*ab)->isDiscovered() == true)
+						continue;
+
+					const double
+						craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor,
+						targetDistance = (*c)->getDistance(*ab) * earthRadius;
+					//Log(LOG_INFO) << ". . craftRadar = " << (int)craftRadar;
+					//Log(LOG_INFO) << ". . targetDistance = " << (int)targetDistance;
+
+					if (targetDistance < craftRadar)
 					{
-						if ((*ab)->isDiscovered() == true)
-							continue;
+						const int chance = 100 - (diff * 10) - static_cast<int>(targetDistance * 50.0 / craftRadar);
+						//Log(LOG_INFO) << ". . . craft in Range, chance = " << chance;
 
-						const double
-							craftRadar = static_cast<double>((*c)->getRules()->getSightRange()) * greatCircleConversionFactor,
-							targetDistance = (*c)->getDistance(*ab) * earthRadius;
-						//Log(LOG_INFO) << ". . craftRadar = " << (int)craftRadar;
-						//Log(LOG_INFO) << ". . targetDistance = " << (int)targetDistance;
-
-						if (targetDistance < craftRadar)
+						if (RNG::percent(chance) == true)
 						{
-							const int chance = 100 - (diff * 10) - static_cast<int>(targetDistance * 50.0 / craftRadar);
-							//Log(LOG_INFO) << ". . . craft in Range, chance = " << chance;
-
-							if (RNG::percent(chance) == true)
-							{
-								//Log(LOG_INFO) << ". . . . aLienBase discovered";
-								(*ab)->setDiscovered(true);
-							}
+							//Log(LOG_INFO) << ". . . . aLienBase discovered";
+							(*ab)->setDiscovered(true);
 						}
 					}
 				}
+//				}
 			}
 		}
 	}
@@ -1791,7 +1791,7 @@ void GeoscapeState::time10Minutes()
 				b != _savedGame->getBases()->end();
 				++b)
 		{
-			if ((*b)->getIsRetaliationTarget()) // kL_begin:
+			if ((*b)->getIsRetaliationTarget() == true) // kL_begin:
 			{
 				//Log(LOG_INFO) << "base is already marked as RetaliationTarget";
 				continue;
@@ -1833,22 +1833,21 @@ void GeoscapeState::time10Minutes()
 	}
 
 
-	// kL_begin:
-	for (std::vector<Ufo*>::const_iterator // handle UFO detection, moved up from time30Minutes()
+	for (std::vector<Ufo*>::const_iterator // handle UFO detection
 			u = _savedGame->getUfos()->begin();
 			u != _savedGame->getUfos()->end();
 			++u)
 	{
 		if ((*u)->getStatus() == Ufo::FLYING)
 		{
+			std::vector<Base*> hyperBases; // = std::vector<Base*>();
+
 			if ((*u)->getDetected() == false)
 			{
 				bool
 					contact = false,
 					hyperDet = false,
 					hyperDet_pre = (*u)->getHyperDetected();
-
-				std::vector<Base*> hyperBases; // = std::vector<Base*>();
 
 				for (std::vector<Base*>::const_iterator
 						b = _savedGame->getBases()->begin();
@@ -1858,17 +1857,16 @@ void GeoscapeState::time10Minutes()
 					switch ((*b)->detect(*u))
 					{
 						case 3:
-							(*u)->setDetected();
 							contact = true;
+							(*u)->setDetected();
 						case 1:
+							hyperDet = true;
 							(*u)->setHyperDetected();
 							hyperBases.push_back(*b);
-
-							hyperDet = true;
 						break;
 						case 2:
-							(*u)->setDetected();
 							contact = true;
+							(*u)->setDetected();
 						break;
 					}
 
@@ -1879,11 +1877,10 @@ void GeoscapeState::time10Minutes()
 							++c)
 					{
 						if ((*c)->getStatus() == "STR_OUT"
-							&& (*c)->detect(*u))
+							&& (*c)->detect(*u) == true)
 						{
 							(*u)->setDetected();
 							contact = true;
-
 							break;
 						}
 					}
@@ -1905,32 +1902,26 @@ void GeoscapeState::time10Minutes()
 			else // ufo is already detected
 			{
 				bool
+					contact = false,
 					hyperDet = false,
-					contact = false;
+					hyperDet_pre = (*u)->getHyperDetected();
 
 				for (std::vector<Base*>::const_iterator
 						b = _savedGame->getBases()->begin();
 						b != _savedGame->getBases()->end();
 						++b)
 				{
-					switch ((*b)->detect(*u)) // note: this lets a UFO blip off radar scope
+					switch ((*b)->detect(*u)) // base attempts redetection; this lets a UFO blip off radar scope
 					{
 						case 3:
 							contact = true;
-//							(*u)->setDetected();
 						case 1:
 							hyperDet = true;
-//							(*u)->setHyperDetected();
+							(*u)->setHyperDetected();
+							hyperBases.push_back(*b);
 						break;
 						case 2:
 							contact = true;
-//							(*u)->setDetected();
-						break;
-					}
-
-					if (contact == true
-						&& hyperDet == true)
-					{
 						break;
 					}
 
@@ -1941,7 +1932,7 @@ void GeoscapeState::time10Minutes()
 							++c)
 					{
 						if ((*c)->getStatus() == "STR_OUT"
-							&& (*c)->detect(*u))
+							&& (*c)->detect(*u) == true)
 						{
 							contact = true;
 							break;
@@ -1949,20 +1940,27 @@ void GeoscapeState::time10Minutes()
 					}
 				}
 
-				if (hyperDet == false)
-					(*u)->setHyperDetected(false);
-				else
-					(*u)->setHyperDetected();
-
 				if (contact == false)
 				{
-					(*u)->setDetected(false);
+					(*u)->setDetected(contact);
 
 					if ((*u)->getFollowers()->empty() == false)
 					{
 						timerReset();
 						popup(new UfoLostState((*u)->getName(_game->getLanguage())));
 					}
+				}
+
+				if (hyperDet == true
+					&& hyperDet_pre == false)
+				{
+					popup(new UfoDetectedState(
+											*u,
+											this,
+											false,
+											hyperDet,
+											contact,
+											&hyperBases));
 				}
 			}
 		}
