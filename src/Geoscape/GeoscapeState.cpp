@@ -1941,13 +1941,6 @@ void GeoscapeState::time10Minutes()
 				(*u)->setDetected(contact);
 				(*u)->setHyperDetected(hyperDet);
 
-				if (contact == false
-					&& (*u)->getFollowers()->empty() == false)
-				{
-					timerReset();
-					popup(new UfoLostState((*u)->getName(_game->getLanguage())));
-				}
-
 				if (hyperDet == true
 					&& hyperDet_pre == false)
 				{
@@ -1958,6 +1951,13 @@ void GeoscapeState::time10Minutes()
 											hyperDet,
 											contact,
 											&hyperBases));
+				}
+
+				if (contact == false
+					&& (*u)->getFollowers()->empty() == false)
+				{
+					timerReset();
+					popup(new UfoLostState((*u)->getName(_game->getLanguage())));
 				}
 			}
 		}
