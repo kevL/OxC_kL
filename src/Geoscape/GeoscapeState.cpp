@@ -1858,15 +1858,12 @@ void GeoscapeState::time10Minutes()
 					{
 						case 3:
 							contact = true;
-							(*u)->setDetected();
 						case 1:
 							hyperDet = true;
-							(*u)->setHyperDetected();
 							hyperBases.push_back(*b);
 						break;
 						case 2:
 							contact = true;
-							(*u)->setDetected();
 						break;
 					}
 
@@ -1880,11 +1877,13 @@ void GeoscapeState::time10Minutes()
 							&& (*c)->detect(*u) == true)
 						{
 							contact = true;
-							(*u)->setDetected();
 							break;
 						}
 					}
 				}
+
+				(*u)->setDetected(contact);
+				(*u)->setHyperDetected(hyperDet);
 
 				if (contact == true
 					|| (hyperDet == true
@@ -1917,7 +1916,6 @@ void GeoscapeState::time10Minutes()
 							contact = true;
 						case 1:
 							hyperDet = true;
-							(*u)->setHyperDetected();
 							hyperBases.push_back(*b);
 						break;
 						case 2:
@@ -1940,15 +1938,14 @@ void GeoscapeState::time10Minutes()
 					}
 				}
 
-				if (contact == false)
-				{
-					(*u)->setDetected(contact);
+				(*u)->setDetected(contact);
+				(*u)->setHyperDetected(hyperDet);
 
-					if ((*u)->getFollowers()->empty() == false)
-					{
-						timerReset();
-						popup(new UfoLostState((*u)->getName(_game->getLanguage())));
-					}
+				if (contact == false
+					&& (*u)->getFollowers()->empty() == false)
+				{
+					timerReset();
+					popup(new UfoLostState((*u)->getName(_game->getLanguage())));
 				}
 
 				if (hyperDet == true
