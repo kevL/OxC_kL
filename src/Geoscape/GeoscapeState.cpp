@@ -1879,8 +1879,8 @@ void GeoscapeState::time10Minutes()
 						if ((*c)->getStatus() == "STR_OUT"
 							&& (*c)->detect(*u) == true)
 						{
-							(*u)->setDetected();
 							contact = true;
+							(*u)->setDetected();
 							break;
 						}
 					}

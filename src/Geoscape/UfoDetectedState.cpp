@@ -387,7 +387,8 @@ UfoDetectedState::UfoDetectedState(
 						tr(_ufo->getMission()->getRegion()).c_str());
 		_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
 
-		if (contact == false)
+		if (contact == false
+			&& hyperBases != NULL) // safety.
 		{
 			_btnCentre->setX(216);
 			_btnCentre->setWidth(88);

@@ -536,7 +536,7 @@ void Base::setEngineers(int engineers)
 
 /**
  * Returns if a certain target is covered by the base's
- * radar range, taking in account the range and chance.
+ * radar range taking in account the range and chance.
  * @param target - pointer to a UFO to attempt detection against
  * @return,	0 undetected
  *			1 hyperdetected only

@@ -7645,7 +7645,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1416955136 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1416955926 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -8144,7 +8144,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1416954333 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1416956282 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
