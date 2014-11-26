@@ -4630,7 +4630,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1415853534 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
+1417023170 source:f:\git\openxcom\src\basescape\craftarmorstate.cpp
 	"CraftArmorState.h"
 	"SoldierArmorState.h"
 	"SoldierInfoState.h"
@@ -7553,15 +7553,12 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1417008475 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1417020024 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
-	<cstdlib>
-	<sstream>
 	"Globe.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Music.h"
 	"../Engine/Options.h"
 	"../Engine/Palette.h"

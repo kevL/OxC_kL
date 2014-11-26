@@ -144,7 +144,7 @@ void CraftArmorState::init()
 	_lstSoldiers->clearList();
 
 	// in case this is invoked from SoldiersState at a base without any Craft:
-	Craft* craft = NULL;
+	const Craft* craft = NULL;
 	if (_base->getCrafts()->empty() == false)
 		craft = _base->getCrafts()->at(_craftID);
 
@@ -236,7 +236,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 	_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
 	const Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // NOTE: left & right swappped.
 	{
 		if (!
 			(soldier->getCraft()
@@ -256,7 +256,7 @@ void CraftArmorState::lstSoldiersPress(Action* action)
 												6));
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_base->setCurrentSoldier(_lstSoldiers->getScroll());
 
@@ -300,7 +300,7 @@ void CraftArmorState::lstLeftArrowClick(Action* action)
 	const size_t row = _lstSoldiers->getSelectedRow();
 	if (row > 0)
 	{
-		Soldier* soldier = _base->getSoldiers()->at(row);
+		Soldier* const soldier = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
@@ -349,7 +349,7 @@ void CraftArmorState::lstRightArrowClick(Action* action)
 		&& numSoldiers <= std::numeric_limits<size_t>::max()
 		&& row < numSoldiers - 1)
 	{
-		Soldier* soldier = _base->getSoldiers()->at(row);
+		Soldier* const soldier = _base->getSoldiers()->at(row);
 
 		if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 		{
