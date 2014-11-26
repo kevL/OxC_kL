@@ -1192,10 +1192,10 @@ int Craft::getLoadCapacity() const
  * Sets current load.
  * @param load - current load
  */
-void Craft::setLoadCurrent(const int load)
+/* void Craft::setLoadCurrent(const int load)
 {
 	_loadCur = load;
-}
+} */
 
 /**
  * Gets current load.

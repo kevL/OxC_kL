@@ -127,7 +127,7 @@ CraftEquipmentState::CraftEquipmentState(
 //	_btnClear->setVisible(newBattle);
 
 	_btnInventory->setColor(Palette::blockOffset(15)+1);
-	_btnInventory->setText(tr("STR_INVENTORY"));
+	_btnInventory->setText(tr("STR_LOADOUT"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftEquipmentState::btnInventoryClick);
 	_btnInventory->setVisible(hasCrew && newBattle == false);
 //	_btnInventory->setVisible(hasCrew || newBattle); // kL
@@ -280,18 +280,16 @@ CraftEquipmentState::~CraftEquipmentState()
 }
 
 /**
-* Resets the savegame when coming back from the inventory.
-*/
+ * Resets the stuff when coming back from soldier-inventory.
+ */
 void CraftEquipmentState::init()
 {
 	State::init();
 
 	_game->getSavedGame()->setBattleGame(NULL);
+	_base->getCrafts()->at(_craftID)->setInBattlescape(false);
 
-	Craft* const craft = _base->getCrafts()->at(_craftID);
-	craft->setInBattlescape(false);
-
-	// Restore system colors
+	// restore system colors
 	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
 	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
 }
@@ -778,11 +776,11 @@ void CraftEquipmentState::btnClearClick(Action*)
 */
 void CraftEquipmentState::btnInventoryClick(Action*)
 {
-	SavedBattleGame* battle = new SavedBattleGame();
+	SavedBattleGame* const battle = new SavedBattleGame();
 	_game->getSavedGame()->setBattleGame(battle);
 	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
 
-	Craft* craft = _base->getCrafts()->at(_craftID);
+	Craft* const craft = _base->getCrafts()->at(_craftID);
 	bgen.runInventory(craft);
 
 	// Set system colors

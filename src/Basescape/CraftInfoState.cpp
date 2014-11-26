@@ -19,12 +19,15 @@
 
 #include "CraftInfoState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "CraftArmorState.h"
 #include "CraftEquipmentState.h"
 #include "CraftSoldiersState.h"
 #include "CraftWeaponsState.h"
+
+#include "../Battlescape/BattlescapeGenerator.h"
+#include "../Battlescape/InventoryState.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -34,6 +37,8 @@
 #include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
 
+#include "../Interface/Cursor.h"
+#include "../Interface/FpsCounter.h"
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
 #include "../Interface/TextEdit.h"
@@ -47,6 +52,7 @@
 #include "../Savegame/Base.h"
 #include "../Savegame/Craft.h"
 #include "../Savegame/CraftWeapon.h"
+#include "../Savegame/SavedBattleGame.h"
 #include "../Savegame/SavedGame.h"
 
 
@@ -60,10 +66,10 @@ namespace OpenXcom
  */
 CraftInfoState::CraftInfoState(
 		Base* base,
-		size_t craftId)
+		size_t craftID)
 	:
 		_base(base),
-		_craftId(craftId)
+		_craftID(craftID)
 {
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 		_window		= new Window(this, 320, 200, 0, 0, POPUP_BOTH);
@@ -87,12 +93,13 @@ CraftInfoState::CraftInfoState(
 	_btnCrew		= new TextButton(64, 16, 16, 96);
 	_btnEquip		= new TextButton(64, 16, 16, 120);
 	_btnArmor		= new TextButton(64, 16, 16, 144);
+	_btnInventory	= new TextButton(64, 16, 84, 144);
 
 	_sprite			= new Surface(32, 38, 144, 50);
 	_weapon1		= new Surface(15, 17, 121, 63);
 	_weapon2		= new Surface(15, 17, 184, 63);
-	_crew			= new Surface(220, 18, 85, 96);
-	_equip			= new Surface(220, 18, 85, 121);
+	_crew			= new Surface(220, 18, 85, 95);
+	_equip			= new Surface(220, 18, 85, 119);
 
 	_btnOk			= new TextButton(288, 16, 16, 177);
 
@@ -113,6 +120,7 @@ CraftInfoState::CraftInfoState(
 	add(_btnCrew);
 	add(_btnEquip);
 	add(_btnArmor);
+	add(_btnInventory);
 	add(_sprite);
 	add(_weapon1);
 	add(_weapon2);
@@ -121,6 +129,7 @@ CraftInfoState::CraftInfoState(
 	add(_btnOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
@@ -163,6 +172,16 @@ CraftInfoState::CraftInfoState(
 	_btnArmor->setText(tr("STR_ARMOR"));
 	_btnArmor->onMouseClick((ActionHandler)& CraftInfoState::btnArmorClick);
 
+	_btnInventory->setColor(Palette::blockOffset(13)+10);
+	_btnInventory->setText(tr("STR_LOADOUT"));
+	_btnInventory->onMouseClick((ActionHandler)& CraftInfoState::btnInventoryClick);
+	const Craft* const craft = _base->getCrafts()->at(_craftID);
+	const bool
+		hasCrew = craft->getNumSoldiers() > 0,
+		newBattle = _game->getSavedGame()->getMonthsPassed() == -1;
+	_btnInventory->setVisible(hasCrew && newBattle == false);
+//	_btnInventory->setVisible(hasCrew || newBattle); // kL
+
 	_txtDamage->setColor(Palette::blockOffset(13)+10);
 	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
 
@@ -194,13 +213,23 @@ void CraftInfoState::init()
 {
 	State::init();
 
-	_craft = _base->getCrafts()->at(_craftId);
+	_craft = _base->getCrafts()->at(_craftID);
+
+	// Reset stuff when coming back from soldier-inventory.
+	_game->getSavedGame()->setBattleGame(NULL);
+	_craft->setInBattlescape(false);
+
+	_game->getCursor()->setColor(Palette::blockOffset(15)+12);
+	_game->getFpsCounter()->setColor(Palette::blockOffset(15)+12);
+	// Reset_end.
+
+
 	_edtCraft->setText(_craft->getName(_game->getLanguage()));
 
 //	std::string stat = _craft->getStatus();
 	_txtStatus->setText(tr(_craft->getStatus()));
 
-	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
 	texture->getFrame(_craft->getRules()->getSprite() + 33)->setY(0);
 	texture->getFrame(_craft->getRules()->getSprite() + 33)->blit(_sprite);
@@ -245,7 +274,7 @@ void CraftInfoState::init()
 		_crew->clear();
 		_equip->clear();
 
-		Surface* frame1 = texture->getFrame(38);
+		Surface* const frame1 = texture->getFrame(38);
 		frame1->setY(0);
 		for (int
 				i = 0,
@@ -258,7 +287,7 @@ void CraftInfoState::init()
 			frame1->blit(_crew);
 		}
 
-		Surface* frame2 = texture->getFrame(40);
+		Surface* const frame2 = texture->getFrame(40);
 		frame2->setY(0);
 		int x = 0;
 		for (int
@@ -271,7 +300,7 @@ void CraftInfoState::init()
 			frame2->blit(_equip);
 		}
 
-		Surface* frame3 = texture->getFrame(39);
+		Surface* const frame3 = texture->getFrame(39);
 		for (int
 				i = 0;
 				i < _craft->getNumEquipment();
@@ -293,7 +322,7 @@ void CraftInfoState::init()
 
 	if (_craft->getRules()->getWeapons() > 0)
 	{
-		CraftWeapon* cw1 = _craft->getWeapons()->at(0);
+		const CraftWeapon* const cw1 = _craft->getWeapons()->at(0);
 		if (cw1 != NULL)
 		{
 			Surface* frame = texture->getFrame(cw1->getRules()->getSprite() + 48);
@@ -336,7 +365,7 @@ void CraftInfoState::init()
 
 	if (_craft->getRules()->getWeapons() > 1)
 	{
-		CraftWeapon* cw2 = _craft->getWeapons()->at(1);
+		const CraftWeapon* const cw2 = _craft->getWeapons()->at(1);
 		if (cw2 != NULL)
 		{
 			Surface* frame = texture->getFrame(cw2->getRules()->getSprite() + 48);
@@ -385,8 +414,8 @@ void CraftInfoState::init()
  * @return, day/hour string
  */
 std::wstring CraftInfoState::formatTime(
-		int total,
-		bool delayed)
+		const int total,
+		const bool delayed) const
 {
 	std::wostringstream ss;
 	const int
@@ -431,7 +460,7 @@ void CraftInfoState::btnW1Click(Action*)
 {
 	_game->pushState(new CraftWeaponsState(
 										_base,
-										_craftId,
+										_craftID,
 										0));
 }
 
@@ -443,7 +472,7 @@ void CraftInfoState::btnW2Click(Action*)
 {
 	_game->pushState(new CraftWeaponsState(
 										_base,
-										_craftId,
+										_craftID,
 										1));
 }
 
@@ -455,7 +484,7 @@ void CraftInfoState::btnCrewClick(Action*)
 {
 	_game->pushState(new CraftSoldiersState(
 										_base,
-										_craftId));
+										_craftID));
 }
 
 /**
@@ -466,7 +495,7 @@ void CraftInfoState::btnEquipClick(Action*)
 {
 	_game->pushState(new CraftEquipmentState(
 										_base,
-										_craftId));
+										_craftID));
 }
 
 /**
@@ -477,7 +506,31 @@ void CraftInfoState::btnArmorClick(Action*)
 {
 	_game->pushState(new CraftArmorState(
 									_base,
-									_craftId));
+									_craftID));
+}
+
+/**
+ * Goes to the soldier-inventory screen.
+ * @param action - pointer to an Action
+ */
+void CraftInfoState::btnInventoryClick(Action*)
+{
+	SavedBattleGame* const battle = new SavedBattleGame();
+	_game->getSavedGame()->setBattleGame(battle);
+	BattlescapeGenerator bgen = BattlescapeGenerator(_game);
+
+	Craft* const craft = _base->getCrafts()->at(_craftID);
+	bgen.runInventory(craft);
+
+	// Set system colors
+	_game->getCursor()->setColor(Palette::blockOffset(9));
+	_game->getFpsCounter()->setColor(Palette::blockOffset(9));
+
+	_game->getScreen()->clear();
+
+	_game->pushState(new InventoryState(
+									false,
+									NULL));
 }
 
 /**

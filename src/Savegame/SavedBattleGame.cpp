@@ -179,7 +179,7 @@ void SavedBattleGame::load(
 	_depth				= node["depth"]			.as<int>(_depth);
 	_terrain			= node["terrain"]		.as<std::string>(_terrain); // sza_MusicRules
 
-	int selectedUnit	= node["selectedUnit"].as<int>();
+	const int selectedUnit = node["selectedUnit"].as<int>();
 
 	for (YAML::const_iterator
 			i = node["mapdatasets"].begin();
@@ -187,7 +187,7 @@ void SavedBattleGame::load(
 			++i)
 	{
 		const std::string name = i->as<std::string>();
-		MapDataSet* mds = rule->getMapDataSet(name);
+		MapDataSet* const mds = rule->getMapDataSet(name);
 		_mapDataSets.push_back(mds);
 	}
 
@@ -215,9 +215,9 @@ void SavedBattleGame::load(
 		const size_t totalTiles = node["totalTiles"].as<size_t>();
 
 		memset(
-				&serKey,
-				0,
-				sizeof(Tile::SerializationKey));
+			&serKey,
+			0,
+			sizeof(Tile::SerializationKey));
 
 		serKey.index			= node["tileIndexSize"]		.as<Uint8>(serKey.index);
 		serKey.totalBytes		= node["tileTotalBytesPer"]	.as<Uint32>(serKey.totalBytes);
@@ -446,7 +446,7 @@ void SavedBattleGame::load(
  */
 void SavedBattleGame::loadMapResources(Game* game)
 {
-	ResourcePack* res = game->getResourcePack();
+	ResourcePack* const res = game->getResourcePack();
 
 	for (std::vector<MapDataSet*>::const_iterator
 			i = _mapDataSets.begin();
@@ -455,7 +455,7 @@ void SavedBattleGame::loadMapResources(Game* game)
 	{
 		(*i)->loadData();
 
-		if (game->getRuleset()->getMCDPatch((*i)->getName()))
+		if (game->getRuleset()->getMCDPatch((*i)->getName()) != NULL)
 			game->getRuleset()->getMCDPatch((*i)->getName())->modifyData(*i);
 	}
 
@@ -2555,7 +2555,7 @@ void SavedBattleGame::calculateModuleMap()
  * Gets a pointer to the geoscape save.
  * @return, pointer to the geoscape save
  */
-SavedGame* SavedBattleGame::getGeoscapeSave()
+SavedGame* SavedBattleGame::getGeoscapeSave() const
 {
 	return _battleState->getGame()->getSavedGame();
 }

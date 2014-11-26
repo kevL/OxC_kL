@@ -423,10 +423,9 @@ void SavedGame::load(
 		Ruleset* rule)
 {
 	//Log(LOG_INFO) << "SavedGame::load()";
-	std::string s = Options::getUserFolder() + filename;
-
-	std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
-	if (file.empty())
+	const std::string s = Options::getUserFolder() + filename;
+	const std::vector<YAML::Node> file = YAML::LoadAllFromFile(s);
+	if (file.empty() == true)
 	{
 		throw Exception(filename + " is not a valid save file");
 	}
@@ -640,7 +639,7 @@ void SavedGame::load(
 			i != doc["missionStatistics"].end();
 			++i)
 	{
-		MissionStatistics* ms = new MissionStatistics();
+		MissionStatistics* const ms = new MissionStatistics();
 		ms->load(*i);
 
 		_missionStatistics.push_back(ms);
@@ -662,7 +661,7 @@ void SavedGame::load(
  */
 void SavedGame::save(const std::string& filename) const
 {
-	std::string s = Options::getUserFolder() + filename;
+	const std::string s = Options::getUserFolder() + filename;
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{

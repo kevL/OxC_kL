@@ -293,7 +293,7 @@ UfoDetectedState::UfoDetectedState(
 						|| (terrainRule->getHemisphere() > 0
 							&& _ufo->getLatitude() >= 0.)))
 				{
-					//Log(LOG_INFO) << ". . . terrainRule-texture MATCH found!";
+					//Log(LOG_INFO) << ". . . terrainRule-texture MATCH found: tex = " << texture";
 					terrain = terrainRule->getName();
 				}
 			}

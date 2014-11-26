@@ -347,7 +347,7 @@ private:
 		void calculateModuleMap();
 
 		/// Gets a pointer to the Geoscape save.
-		SavedGame* getGeoscapeSave();
+		SavedGame* getGeoscapeSave() const;
 
 		/// Gets the depth of the battlescape game.
 		int const getDepth() const;

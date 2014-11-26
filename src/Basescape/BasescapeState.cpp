@@ -136,6 +136,7 @@ BasescapeState::BasescapeState(
 
 	centerAllSurfaces();
 
+
 	_view->setTexture(_game->getResourcePack()->getSurfaceSet("BASEBITS.PCK"));
 	_view->onMouseClick(
 					(ActionHandler)& BasescapeState::viewLeftClick,
@@ -233,10 +234,10 @@ BasescapeState::~BasescapeState()
 {
 	bool exists = false; // Clean up any temporary bases
 
-	for (std::vector<Base*>::iterator
+	for (std::vector<Base*>::const_iterator
 			i = _game->getSavedGame()->getBases()->begin();
 			i != _game->getSavedGame()->getBases()->end()
-				&& !exists;
+				&& exists == false;
 			++i)
 	{
 		if (*i == _base)
@@ -263,14 +264,14 @@ void BasescapeState::init()
 	_mini->draw();
 	_edtBase->setText(_base->getName());
 
-	for (std::vector<Region*>::iterator
+	for (std::vector<Region*>::const_iterator
 			i = _game->getSavedGame()->getRegions()->begin();
 			i != _game->getSavedGame()->getRegions()->end();
 			++i)
 	{
 		if ((*i)->getRules()->insideRegion(
 										_base->getLongitude(),
-										_base->getLatitude()))
+										_base->getLatitude()) == true)
 		{
 			_txtRegion->setText(tr((*i)->getRules()->getType()));
 			break;
@@ -283,20 +284,21 @@ void BasescapeState::init()
 //	_btnNewBase->setVisible(_game->getSavedGame()->getBases()->size() < MiniBaseView::MAX_BASES);
 
 	// kL_begin:
-	bool hasFunds		= (_game->getSavedGame()->getFunds() > 0);
-	bool hasQuarters	= false;
-	bool hasSoldiers	= false;
-	bool hasScientists	= false;
-	bool hasEngineers	= false;
-	bool hasHangar		= false;
-	bool hasCraft		= false;
-	bool hasAlienCont	= false;
-	bool hasAliens		= false;
-	bool hasLabs		= false;
-	bool hasProd		= false;
-	bool hasStores		= false;
+	bool
+		hasFunds		= (_game->getSavedGame()->getFunds() > 0),
+		hasQuarters		= false,
+		hasSoldiers		= false,
+		hasScientists	= false,
+		hasEngineers	= false,
+		hasHangar		= false,
+		hasCraft		= false,
+		hasAlienCont	= false,
+		hasAliens		= false,
+		hasLabs			= false,
+		hasProd			= false,
+		hasStores		= false;
 
-	for (std::vector<BaseFacility*>::iterator
+	for (std::vector<BaseFacility*>::const_iterator
 			i = _base->getFacilities()->begin();
 			i != _base->getFacilities()->end();
 			++i)
@@ -549,7 +551,7 @@ void BasescapeState::viewLeftClick(Action*)
 {
 	bool bPop = false; // play "wha-wha" sound
 
-	BaseFacility* fac = _view->getSelectedFacility();
+	const BaseFacility* const fac = _view->getSelectedFacility();
 	if (fac == NULL)
 	{
 		bPop = true;
@@ -575,15 +577,13 @@ void BasescapeState::viewLeftClick(Action*)
 				i < _base->getCrafts()->size();
 				++i)
 		{
-			Craft* craft = _base->getCrafts()->at(i);
+			const Craft* const craft = _base->getCrafts()->at(i);
 
 			if (fac->getCraft() == NULL							// empty hangar
 				|| fac->getCraft()->getStatus() == "STR_OUT")	// or Craft currently out
 			{
 				bPop = true;
-
 				_game->pushState(new CraftsState(_base));
-
 				break;
 /*				if (craft->getStatus() == "STR_OUT")
 				{
@@ -599,7 +599,6 @@ void BasescapeState::viewLeftClick(Action*)
 				_game->pushState(new CraftInfoState(
 												_base,
 												i));
-
 				break;
 			}
 		} // kL_end.
@@ -618,7 +617,7 @@ void BasescapeState::viewLeftClick(Action*)
 		_game->pushState(new SoldiersState(_base));
 	}
 	else if (fac->getRules()->getPsiLaboratories() > 0
-			&& Options::anytimePsiTraining)
+			&& Options::anytimePsiTraining == true)
 //			&& _base->getAvailablePsiLabs() > 0)
 	{
 		bPop = true;
@@ -643,7 +642,7 @@ void BasescapeState::viewLeftClick(Action*)
 														_base,
 														OPT_GEOSCAPE));
 	}
-	else if (fac->getRules()->isLift()) // my Lift has a radar range ... (see next)
+	else if (fac->getRules()->isLift() == true) // my Lift has a radar range ... (see next)
 	{
 //		bPop = true; // plays window-'swish' instead.
 		_game->pushState(new BaseDetectionState(_base));
@@ -664,7 +663,7 @@ void BasescapeState::viewLeftClick(Action*)
 	} */
 
 
-	if (bPop)
+	if (bPop == true)
 		soundPop->play(Mix_GroupAvailable(0)); // kL: UI Fx channels #0 & #1 & #2, see Game.cpp
 }
 
@@ -674,17 +673,17 @@ void BasescapeState::viewLeftClick(Action*)
  */
 void BasescapeState::viewRightClick(Action*)
 {
-	BaseFacility* fac = _view->getSelectedFacility();
+	BaseFacility* const fac = _view->getSelectedFacility();
 	if (fac != NULL)
 	{
-		if (fac->inUse())
+		if (fac->inUse() == true)
 			_game->pushState(new ErrorMessageState(
 												tr("STR_FACILITY_IN_USE"),
 												_palette,
 												Palette::blockOffset(15)+1,
 												"BACK13.SCR",
 												6));
-		else if (!_base->getDisconnectedFacilities(fac).empty()) // would base become disconnected...
+		else if (_base->getDisconnectedFacilities(fac).empty() == false) // would base become disconnected...
 			_game->pushState(new ErrorMessageState(
 												tr("STR_CANNOT_DISMANTLE_FACILITY"),
 												_palette,
@@ -707,8 +706,8 @@ void BasescapeState::viewMouseOver(Action*)
 {
 	std::wostringstream ss;
 
-	BaseFacility* fac = _view->getSelectedFacility();
-	size_t base = _mini->getHoveredBase();
+	const BaseFacility* const fac = _view->getSelectedFacility();
+	const size_t base = _mini->getHoveredBase();
 
 	if (fac != NULL)
 	{
@@ -754,7 +753,7 @@ void BasescapeState::viewMouseOut(Action*)
  */
 void BasescapeState::miniLeftClick(Action*)
 {
-	size_t base = _mini->getHoveredBase();
+	const size_t base = _mini->getHoveredBase();
 
 	if (base < _game->getSavedGame()->getBases()->size()
 		&& _base != _game->getSavedGame()->getBases()->at(base))
@@ -784,7 +783,7 @@ void BasescapeState::miniLeftClick(Action*)
  */
 void BasescapeState::miniRightClick(Action*)
 {
-	size_t base = _mini->getHoveredBase();
+	const size_t base = _mini->getHoveredBase();
 
 	if (base < _game->getSavedGame()->getBases()->size())
 	{
@@ -820,7 +819,7 @@ void BasescapeState::handleKeyPress(Action* action)
 			Options::keyBaseSelect8
 		};
 
-		int key = action->getDetails()->key.keysym.sym;
+		const int key = action->getDetails()->key.keysym.sym;
 
 		for (size_t
 				i = 0;

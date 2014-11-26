@@ -44,7 +44,7 @@ class CraftInfoState
 {
 
 private:
-	size_t _craftId;
+	size_t _craftID;
 	std::wstring _defaultName;
 
 	Base* _base;
@@ -53,6 +53,7 @@ private:
 		* _btnArmor,
 		* _btnCrew,
 		* _btnEquip,
+		* _btnInventory,
 		* _btnOk,
 		* _btnW1,
 		* _btnW2;
@@ -76,15 +77,15 @@ private:
 
 	/// Formats an amount of time.
 	std::wstring formatTime(
-			int time,
-			bool delayed);
+			const int time,
+			const bool delayed) const;
 
 
 	public:
 		/// Creates the Craft Info state.
 		CraftInfoState(
 				Base* base,
-				size_t craftId);
+				size_t craftID);
 		/// Cleans up the Craft Info state.
 		~CraftInfoState();
 
@@ -103,6 +104,8 @@ private:
 		void btnEquipClick(Action* action);
 		/// Handler for clicking the Armor button.
 		void btnArmorClick(Action* action);
+		/// Handler for clicking the Inventory button.
+		void btnInventoryClick(Action* action);
 		/// Handler for changing the text on the Name edit.
 		void edtCraftChange(Action* action);
 };

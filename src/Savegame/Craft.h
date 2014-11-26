@@ -250,7 +250,7 @@ private:
 		/// Gets capacity load.
 		int getLoadCapacity() const;
 		/// Sets current load.
-		void setLoadCurrent(const int load);
+//		void setLoadCurrent(const int load);
 		/// Gets current load.
 		int getLoadCurrent();
 

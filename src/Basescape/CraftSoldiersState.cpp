@@ -523,7 +523,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 	const size_t row = _lstSoldiers->getSelectedRow();
 	//Log(LOG_INFO) << ". CraftSoldiersState::lstSoldiersClick() row = " << row;
 
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // NOTE: left & right swapped !
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 
@@ -560,7 +560,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 						.arg(craft->getLoadCapacity())
 						.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_base->setCurrentSoldier(_lstSoldiers->getScroll());
 

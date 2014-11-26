@@ -9162,6 +9162,7 @@ extraStrings:
       STR_REARMING_: "> reARM {0}"
       STR_TOTAL_GROSS_UC: "TOTAL gross"
       STR_TOTAL_NET_UC: "TOTAL net"
+      STR_LOADOUT: "Loadout"
 #      STR_PLASMA_BEAM_H: PB
 #New spritesheet Example:
 #  - type: GIANTBUNNY.PCK

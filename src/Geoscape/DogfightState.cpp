@@ -19,15 +19,14 @@
 
 #include "DogfightState.h"
 
-#include <cstdlib>
-#include <sstream>
+//#include <cstdlib>
+//#include <sstream>
 
 #include "Globe.h"
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
@@ -2293,7 +2292,7 @@ int DogfightState::getInterceptionNumber() const
 const std::string DogfightState::getTextureIcon() // kL
 {
 	//Log(LOG_INFO) << "DogfightState::getTextureIcon()";
-	std::string ret = "";
+	std::string ret;
 
 	int // look up polygon's texture
 		texture,
@@ -2304,39 +2303,39 @@ const std::string DogfightState::getTextureIcon() // kL
 									&texture,
 									&shade);
 
-	RuleTerrain* terrain = NULL;
+	RuleTerrain* terrainRule = NULL;
 
 	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
 	for (std::vector<std::string>::const_iterator
 			i = terrains.begin();
 			i != terrains.end()
-				&& ret == "";
+				&& ret.empty() == true;
 			++i)
 	{
 		//Log(LOG_INFO) << ". cycle terrains";
-		terrain = _game->getRuleset()->getTerrain(*i);
-		for (std::vector<int>::iterator
-				j = terrain->getTextures()->begin();
-				j != terrain->getTextures()->end()
-					&& ret == "";
+		terrainRule = _game->getRuleset()->getTerrain(*i);
+		for (std::vector<int>::const_iterator
+				j = terrainRule->getTextures()->begin();
+				j != terrainRule->getTextures()->end()
+					&& ret.empty() == true;
 				++j)
 		{
 			//Log(LOG_INFO) << ". . cycle textures";
 			if (*j == texture
-				&& (terrain->getHemisphere() == 0
-					|| (terrain->getHemisphere() < 0
-						&& _ufo->getLatitude() < 0.0)
-					|| (terrain->getHemisphere() > 0
-						&& _ufo->getLatitude() >= 0.0)))
+				&& (terrainRule->getHemisphere() == 0
+					|| (terrainRule->getHemisphere() < 0
+						&& _ufo->getLatitude() < 0.)
+					|| (terrainRule->getHemisphere() > 0
+						&& _ufo->getLatitude() >= 0.)))
 			{
-				//Log(LOG_INFO) << ". . . terrain-texture MATCH found!";
-				ret = terrain->getName();
+				//Log(LOG_INFO) << ". . . terrainRule-texture MATCH found: tex = " << texture;
+				ret = terrainRule->getName();
 			}
 		}
 	}
 	//Log(LOG_INFO) << ". ret = " << ret;
 
-	if (ret == "")
+	if (ret.empty() == true)
 		ret = "WATER";
 	else if (ret == "JUNGLE"
 		|| ret == "FORESTMOUNT"
@@ -2384,7 +2383,7 @@ void DogfightState::playSoundFX( // kL
 	const int var = 67;	// maximum deflection left or right
 	int dir = 360;		// stereo center
 
-	if (randAngle)
+	if (randAngle == true)
 		dir += (RNG::generate(-var, var)
 			  + RNG::generate(-var, var))
 			/ 2;
