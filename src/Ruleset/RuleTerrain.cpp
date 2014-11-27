@@ -95,8 +95,8 @@ void RuleTerrain::load(
 		}
 	}
 
-	_name				= node["name"].as<std::string>(_name);
-	_textures			= node["textures"].as< std::vector<int> >(_textures);
+	_name				= node["name"]		.as<std::string>(_name);
+	_textures			= node["textures"]	.as< std::vector<int> >(_textures);
 	_hemisphere			= node["hemisphere"].as<int>(_hemisphere);
 
 	if (const YAML::Node& civs = node["civilianTypes"])
@@ -115,7 +115,7 @@ void RuleTerrain::load(
 
 /**
  * Gets the array of mapblocks.
- * @return, Pointer to the array of mapblocks.
+ * @return, pointer to a vector of pointers as an array of MapBlocks
  */
 std::vector<MapBlock*>* RuleTerrain::getMapBlocks()
 {
@@ -124,7 +124,7 @@ std::vector<MapBlock*>* RuleTerrain::getMapBlocks()
 
 /**
  * Gets the array of mapdatafiles.
- * @return, Pointer to the array of mapdatafiles.
+ * @return, pointer to a vector of pointers as an array of MapDataSets
  */
 std::vector<MapDataSet*>* RuleTerrain::getMapDataSets()
 {
@@ -133,7 +133,7 @@ std::vector<MapDataSet*>* RuleTerrain::getMapDataSets()
 
 /**
  * Gets the terrain name.
- * @return, The terrain name.
+ * @return, the terrain name
  */
 std::string RuleTerrain::getName() const
 {

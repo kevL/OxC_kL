@@ -5841,7 +5841,7 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1417089116 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1417092458 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -6152,7 +6152,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1416932313 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
+1417131298 source:f:\git\openxcom\src\battlescape\debriefingstate.cpp
 	"DebriefingState.h"
 	"CannotReequipState.h"
 	"CommendationState.h"
@@ -7198,7 +7198,7 @@
 	<malloc.h>
 	<ppcinline/exec.h>
 
-1416266001 source:f:\git\openxcom\src\engine\surfaceset.cpp
+1417118719 source:f:\git\openxcom\src\engine\surfaceset.cpp
 	"SurfaceSet.h"
 	<fstream>
 	<SDL_endian.h>
@@ -7789,7 +7789,7 @@
 	<string>
 	<vector>
 
-1416903200 source:f:\git\openxcom\src\geoscape\globe.cpp
+1417129913 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -9099,7 +9099,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1417085840 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1417122009 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../fmath.h"
 	"../Basescape/BasescapeState.h"
@@ -9291,7 +9291,7 @@
 1416141940 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
-1417088673 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
+1417129881 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
 	"MapBlock.h"
 	"MapDataSet.h"
 	"Ruleset.h"
@@ -9404,7 +9404,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1416924147 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1417129561 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

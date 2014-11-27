@@ -206,11 +206,11 @@ void SurfaceSet::loadPck(
 }
 
 /**
- * Loads the contents of an X-Com DAT image file into the
- * surface. Unlike the PCK, a DAT file is an uncompressed
- * image with no offsets so these have to be figured out
- * manually, usually by splitting the image into equal portions.
- * @param filename Filename of the DAT image.
+ * Loads the contents of an X-Com DAT image file into the surface.
+ * Unlike the PCK, a DAT file is an uncompressed image with no
+ * offsets so these have to be figured out manually, usually
+ * by splitting the image into equal portions.
+ * @param filename - reference the filename of the DAT image
  * @sa http://www.ufopaedia.org/index.php?title=Image_Formats#SCR_.26_DAT
  */
 void SurfaceSet::loadDat(const std::string& filename)

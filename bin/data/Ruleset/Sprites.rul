@@ -121,6 +121,13 @@ extraSprites:
   - type: INTICON.PCK
     files:
       0: Resources/Sprites/geograph/inticon/
+  - type: TEXTURE.DAT
+    width: 416
+    height: 96
+    subX: 32
+    subY: 32
+    files:
+      0: Resources/Sprites/geograph/textures/textures.png
 # -------- UFOGRAPH -------- #
   - type: ICONS.PCK
     width: 320

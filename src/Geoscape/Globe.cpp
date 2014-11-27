@@ -770,12 +770,13 @@ void Globe::rotateStopLat()
 void Globe::setZoom(size_t zoom)
 {
 	_zoom = std::min(
+					_zoomRadii.size() - 1,
 					std::max(
 							zoom,
-							static_cast<size_t>(0)),
-					_zoomRadii.size() - 1);
+							static_cast<size_t>(0)));
 
-	_zoomTexture = (2 - static_cast<size_t>(floor(static_cast<double>(_zoom) / 2.0))) * (_texture->getTotalFrames() / 3);
+	_zoomTexture = (2 - static_cast<size_t>(floor(static_cast<double>(_zoom) / 2.)))
+				 * (_texture->getTotalFrames() / 3);
 
 	_radius = _zoomRadii[_zoom];
 	_game->getSavedGame()->setGlobeZoom(_zoom);

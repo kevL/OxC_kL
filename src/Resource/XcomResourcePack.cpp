@@ -1043,7 +1043,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			++i)
 	{
 		const std::string sheetName = i->first;
-		Log(LOG_INFO) << ". sheetName = " << i->first;
+		Log(LOG_INFO) << "\n. sheetName = " << i->first;
 
 		ExtraSprites* const spritePack = i->second;
 		const bool subdivision = spritePack->getSubX() != 0
@@ -1076,7 +1076,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 			s << CrossPlatform::getDataFile(spritePack->getSprites()->operator[](0));
 			_surfaces[sheetName]->loadImage(s.str());
 		}
-		else
+		else // not SingleImage
 		{
 			bool adding = false;
 
@@ -1087,7 +1087,7 @@ XcomResourcePack::XcomResourcePack(Ruleset* rules)
 
 				adding = true;
 
-				if (subdivision)
+				if (subdivision == true)
 					_sets[sheetName] = new SurfaceSet(
 													spritePack->getSubX(),
 													spritePack->getSubY());
