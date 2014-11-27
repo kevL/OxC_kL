@@ -4618,12 +4618,7 @@
 1416773868 f:\git\openxcom\src\interface\window.h
 	"../Engine/Surface.h"
 
-1416458296 f:\git\openxcom\src\ruleset\ruleset.h
-	<map>
-	<string>
-	<vector>
-	<SDL.h>
-	<yaml-cpp/yaml.h>
+1417089102 f:\git\openxcom\src\ruleset\ruleset.h
 	"../Savegame/GameTime.h"
 
 1413136961 f:\git\openxcom\src\savegame\gametime.h
@@ -5846,7 +5841,7 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1416892926 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1417089116 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -5924,7 +5919,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1416459073 f:\git\openxcom\src\ruleset\ruleterrain.h
+1417088490 f:\git\openxcom\src\ruleset\ruleterrain.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -9104,7 +9099,7 @@
 	"../Engine/SurfaceSet.h"
 	"../Resource/XcomResourcePack.h"
 
-1416773258 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
+1417085840 source:f:\git\openxcom\src\resource\xcomresourcepack.cpp
 	"XcomResourcePack.h"
 	"../fmath.h"
 	"../Basescape/BasescapeState.h"
@@ -9130,7 +9125,6 @@
 	"../Geoscape/GraphsState.h"
 	"../Interface/TextButton.h"
 	"../Interface/Window.h"
-	"../Ruleset/ExtraMusic.h"
 	"../Ruleset/ExtraSounds.h"
 	"../Ruleset/ExtraSprites.h"
 	"../Ruleset/MapDataSet.h"
@@ -9243,17 +9237,13 @@
 1413136961 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
 
-1416893048 source:f:\git\openxcom\src\ruleset\ruleset.cpp
+1417089102 source:f:\git\openxcom\src\ruleset\ruleset.cpp
 	"Ruleset.h"
-	<algorithm>
-	<fstream>
-	"../fmath.h"
 	"AlienRace.h"
 	"AlienDeployment.h"
 	"Armor.h"
 	"ArticleDefinition.h"
 	"City.h"
-	"ExtraMusic.h"
 	"ExtraSounds.h"
 	"ExtraSprites.h"
 	"ExtraStrings.h"
@@ -9301,7 +9291,7 @@
 1416141940 source:f:\git\openxcom\src\ruleset\rulesoldier.cpp
 	"RuleSoldier.h"
 
-1416459820 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
+1417088673 source:f:\git\openxcom\src\ruleset\ruleterrain.cpp
 	"MapBlock.h"
 	"MapDataSet.h"
 	"Ruleset.h"

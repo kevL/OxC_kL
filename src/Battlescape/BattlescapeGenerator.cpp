@@ -339,7 +339,7 @@ void BattlescapeGenerator::nextStage()
 	const std::vector<MapScript*>* script = _rules->getMapScript(_terrain->getScript());
 	if (_rules->getMapScript(ruleDeploy->getScript()))
 		script = _rules->getMapScript(ruleDeploy->getScript());
-	else if (ruleDeploy->getScript() != "")
+	else if (ruleDeploy->getScript().empty() == false)
 	{
 		throw Exception("Map generator encountered an error: " + ruleDeploy->getScript() + " script not found.");
 	}
@@ -562,7 +562,7 @@ void BattlescapeGenerator::run()
 	const std::vector<MapScript*>* script = _rules->getMapScript(_terrain->getScript());
 	if (_rules->getMapScript(ruleDeploy->getScript()))
 		script = _rules->getMapScript(ruleDeploy->getScript());
-	else if (ruleDeploy->getScript() != "")
+	else if (ruleDeploy->getScript().empty() == false)
 	{
 		throw Exception("Map generator encountered an error: " + ruleDeploy->getScript() + " script not found.");
 	}
@@ -2504,12 +2504,12 @@ void BattlescapeGenerator::explodePowerSources()
 				power = RNG::generate(1., 100.);
 
 			power *= RNG::generate(0.1, 2.);
-			power += std::pow(power, 2) / 160.0;
+			power += std::pow(power, 2) / 160.;
 
 			if (power > 0.5)
 				_battleSave->getTileEngine()->explode(
 													pos,
-													static_cast<int>(power),
+													static_cast<int>(std::ceil(power)),
 													DT_HE,
 													21);
 		}
@@ -2527,6 +2527,7 @@ void BattlescapeGenerator::explodePowerSources()
 											tile->getExplosive(),
 											DT_HE,
 											tile->getExplosive() / 10);
+
 		tile = _battleSave->getTileEngine()->checkForTerrainExplosions();
 	}
 }

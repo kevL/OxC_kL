@@ -19,17 +19,17 @@
 
 #include "Ruleset.h"
 
-#include <algorithm>
-#include <fstream>
+//#include <algorithm>
+//#include <fstream>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "AlienRace.h"
 #include "AlienDeployment.h"
 #include "Armor.h"
 #include "ArticleDefinition.h"
 #include "City.h"
-#include "ExtraMusic.h" // sza_ExtraMusic
+//#include "ExtraMusic.h" // sza_ExtraMusic
 #include "ExtraSounds.h"
 #include "ExtraSprites.h"
 #include "ExtraStrings.h"
@@ -84,6 +84,7 @@ namespace OpenXcom
 
 /**
  * Creates a ruleset with blank sets of rules.
+ * @param game - pointer to the core Game
  */
 Ruleset::Ruleset(Game* game) // kL
 	:
@@ -337,13 +338,13 @@ Ruleset::~Ruleset()
 		delete i->second;
 	}
 
-	for (std::vector<std::pair<std::string, ExtraMusic*> >::const_iterator // sza_ExtraMusic
+/*	for (std::vector<std::pair<std::string, ExtraMusic*> >::const_iterator // sza_ExtraMusic
 			i = _extraMusic.begin();
 			i != _extraMusic.end();
 			++i)
 	{
 		delete i->second;
-	}
+	} */
 
 	for (std::map<std::string, ExtraStrings*>::const_iterator
 			i = _extraStrings.begin();
@@ -372,12 +373,12 @@ Ruleset::~Ruleset()
 
 /**
  * Loads a ruleset's contents from the given source.
- * @param source The source to use.
+ * @param source - reference the source to use
  */
 void Ruleset::load(const std::string& source)
 {
 	std::string dirname = CrossPlatform::getDataFolder("Ruleset/" + source + '/');
-	if (!CrossPlatform::folderExists(dirname))
+	if (CrossPlatform::folderExists(dirname) == false)
 		loadFile(CrossPlatform::getDataFile("Ruleset/" + source + ".rul"));
 	else
 		loadFiles(dirname);
@@ -386,7 +387,7 @@ void Ruleset::load(const std::string& source)
 /**
  * Loads a ruleset's contents from a YAML file.
  * Rules that match pre-existing rules overwrite them.
- * @param filename YAML filename.
+ * @param filename - reference a YAML filename
  */
 void Ruleset::loadFile(const std::string& filename)
 {
@@ -730,7 +731,7 @@ void Ruleset::loadFile(const std::string& filename)
 
 	// Bases can't be copied, so for savegame purposes we store the node instead
 	YAML::Node base = doc["startingBase"];
-	if (base)
+	if (base != 0)
 	{
 		for (YAML::const_iterator
 				i = base.begin();
@@ -837,7 +838,7 @@ void Ruleset::loadFile(const std::string& filename)
 		_extraSoundsIndex.push_back(type);
 	}
 
-	for (YAML::const_iterator // sza_ExtraMusic
+/*	for (YAML::const_iterator // sza_ExtraMusic
 			i = doc["extraMusic"].begin();
 			i != doc["extraMusic"].end();
 			++i)
@@ -851,7 +852,7 @@ void Ruleset::loadFile(const std::string& filename)
 		_extraMusic.push_back(std::make_pair(media, extraMusic.release()));
 
 		_extraMusicIndex.push_back(media);
-	}
+	} */
 
 	for (YAML::const_iterator
 			i = doc["extraStrings"].begin();
@@ -1060,7 +1061,7 @@ void Ruleset::loadFile(const std::string& filename)
 
 /**
  * Loads the contents of all the rule files in the given directory.
- * @param dirname The name of an existing directory containing rule files.
+ * @param dirname - reference the name of an existing directory containing rule files
  */
 void Ruleset::loadFiles(const std::string& dirname)
 {
@@ -1129,7 +1130,7 @@ T* Ruleset::loadRule(
 
 /**
  * Generates a brand new saved game with starting data.
- * @return A new saved game.
+ * @return, a new SavedGame
  */
 SavedGame* Ruleset::newSave() const
 {
@@ -1518,7 +1519,7 @@ Armor* Ruleset::getArmor(const std::string& name) const
 
 /**
  * Returns the list of all armors provided by the ruleset.
- * @return reference to the vector of Armors
+ * @return, reference to the vector of Armors
  */
 const std::vector<std::string>& Ruleset::getArmorsList() const
 {
@@ -1563,8 +1564,8 @@ int Ruleset::getPersonnelTime() const
 
 /**
  * Returns the article definition for a given name.
- * @param name Article name.
- * @return Article definition.
+ * @param name - article name
+ * @return, pointer to ArticleDefinition
  */
 ArticleDefinition* Ruleset::getUfopaediaArticle(const std::string& name) const
 {
@@ -1577,7 +1578,7 @@ ArticleDefinition* Ruleset::getUfopaediaArticle(const std::string& name) const
 
 /**
  * Returns the list of all articles provided by the ruleset.
- * @return List of articles.
+ * @return, reference to a vector of strings as the list of articles
  */
 const std::vector<std::string>& Ruleset::getUfopaediaList() const
 {
@@ -1586,7 +1587,7 @@ const std::vector<std::string>& Ruleset::getUfopaediaList() const
 
 /**
  * Returns the list of inventories.
- * @return Pointer to inventory list.
+ * @return, pointer to a vector of maps of strings and pointers to RuleInventory
  */
 std::map<std::string, RuleInventory*>* Ruleset::getInventories()
 {
@@ -1595,8 +1596,8 @@ std::map<std::string, RuleInventory*>* Ruleset::getInventories()
 
 /**
  * Returns the rules for a specific inventory.
- * @param id, Inventory type.
- * @return, Inventory ruleset.
+ * @param id - reference the inventory type
+ * @return, pointer to RuleInventory
  */
 RuleInventory* Ruleset::getInventory(const std::string& id) const
 {
@@ -1609,7 +1610,7 @@ RuleInventory* Ruleset::getInventory(const std::string& id) const
 
 /**
  * Returns the list of inventories.
- * @return, The list of inventories.
+ * @return, reference to a vector of strings as the list of inventories
  */
 const std::vector<std::string>& Ruleset::getInvsList() const
 {
@@ -1618,8 +1619,8 @@ const std::vector<std::string>& Ruleset::getInvsList() const
 
 /**
  * Returns the rules for the specified research project.
- * @param id Research project type.
- * @return Rules for the research project.
+ * @param id - reference a research project type
+ * @return, pointer to RuleResearch
  */
 RuleResearch* Ruleset::getResearch(const std::string& id) const
 {
@@ -1632,7 +1633,7 @@ RuleResearch* Ruleset::getResearch(const std::string& id) const
 
 /**
  * Returns the list of research projects.
- * @return The list of research projects.
+ * @return, reference to a vector of strings as the list of research projects
  */
 const std::vector<std::string>& Ruleset::getResearchList() const
 {
@@ -1641,8 +1642,8 @@ const std::vector<std::string>& Ruleset::getResearchList() const
 
 /**
  * Returns the rules for the specified manufacture project.
- * @param id Manufacture project type.
- * @return Rules for the manufacture project.
+ * @param id - reference the manufacture project type
+ * @return, pointer to RuleManufacture
  */
 RuleManufacture* Ruleset::getManufacture(const std::string& id) const
 {
@@ -1655,7 +1656,7 @@ RuleManufacture* Ruleset::getManufacture(const std::string& id) const
 
 /**
  * Returns the list of manufacture projects.
- * @return The list of manufacture projects.
+ * @return, reference to a vector of strings as the list of manufacture projects
  */
 const std::vector<std::string>& Ruleset::getManufactureList() const
 {
@@ -1666,7 +1667,7 @@ const std::vector<std::string>& Ruleset::getManufactureList() const
  * Generates and returns a list of facilities for custom bases.
  * The list contains all the facilities that are listed in the 'startingBase'
  * part of the ruleset.
- * @return The list of facilities for custom bases.
+ * @return, vector of pointers to RuleBaseFacility as the list of facilities for custom bases
  */
 std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() const
 {
@@ -1687,8 +1688,8 @@ std::vector<OpenXcom::RuleBaseFacility*> Ruleset::getCustomBaseFacilities() cons
 
 /**
  * Returns the data for the specified ufo trajectory.
- * @param id Ufo trajectory id.
- * @return A pointer to the data for the specified ufo trajectory.
+ * @param id - reference the UfoTrajectory id
+ * @return, a pointer to the data in specified UfoTrajectory
  */
 const UfoTrajectory* Ruleset::getUfoTrajectory(const std::string& id) const
 {
@@ -1702,8 +1703,8 @@ const UfoTrajectory* Ruleset::getUfoTrajectory(const std::string& id) const
 
 /**
  * Returns the rules for the specified alien mission.
- * @param id, Alien mission type.
- * @return, Rules for the alien mission.
+ * @param id - alien mission type
+ * @return, pointer to Rules for the AlienMission
  */
 const RuleAlienMission* Ruleset::getAlienMission(const std::string& id) const
 {
@@ -1716,12 +1717,13 @@ const RuleAlienMission* Ruleset::getAlienMission(const std::string& id) const
 
 /**
  * Returns the list of alien mission types.
- * @return The list of alien mission types.
+ * @return, reference to a vector of strings as the list of AlienMissions
  */
 const std::vector<std::string>& Ruleset::getAlienMissionList() const
 {
 	return _alienMissionsIndex;
 }
+
 
 #define CITY_EPSILON 0.00000000000001 // compensate for slight coordinate change
 
@@ -1733,7 +1735,6 @@ class EqualCoordinates
 	:
 		std::unary_function<const City*, bool>
 {
-
 private:
 	double
 		_lon,
@@ -1759,17 +1760,17 @@ private:
 		} */
 		bool operator()(const City* city) const
 		{
-			return (fabs(city->getLongitude() - _lon) < CITY_EPSILON)
-				&& (fabs(city->getLatitude() - _lat) < CITY_EPSILON);
+			return (std::fabs(city->getLongitude() - _lon) < CITY_EPSILON)
+				&& (std::fabs(city->getLatitude() - _lat) < CITY_EPSILON);
 		}
 };
 
 
 /**
  * Finds the city at coordinates @a lon, @a lat. The search will only match exact coordinates.
- * @param lon, The longtitude.
- * @param lat, The latitude.
- * @return A pointer to the city information, or 0 if no city was found.
+ * @param lon - the longitude
+ * @param lat - the latitude
+ * @return, a pointer to the City information, or NULL if no city was found
  */
 const City* Ruleset::locateCity(
 		double lon,
@@ -1795,8 +1796,8 @@ const City* Ruleset::locateCity(
 }
 
 /**
- * Gets the alien item level table.
- * @return, A deep array containing the alien item levels.
+ * Gets the alien item level table - a two dimensional array.
+ * @return, reference to a vector of vectors containing the alien item levels
  */
 const std::vector<std::vector<int> >& Ruleset::getAlienItemLevels() const
 {
@@ -1805,7 +1806,7 @@ const std::vector<std::vector<int> >& Ruleset::getAlienItemLevels() const
 
 /**
  * Gets the Defined starting base.
- * @return, The starting base definition.
+ * @return, reference to the starting base definition
  */
 const YAML::Node& Ruleset::getStartingBase()
 {
@@ -1814,8 +1815,8 @@ const YAML::Node& Ruleset::getStartingBase()
 
 /**
  * Gets an MCDPatch.
- * @param id, The ID of the MCDPatch we want.
- * @return, The MCDPatch based on ID, or 0 if none defined.
+ * @param id - the ID of the MCDPatch
+ * @return, pointer to the MCDPatch based on ID, or NULL if none defined
  */
 MCDPatch* Ruleset::getMCDPatch(const std::string id) const
 {
@@ -1828,7 +1829,7 @@ MCDPatch* Ruleset::getMCDPatch(const std::string id) const
 
 /**
  * Gets the list of external music rules.
- * @return, The list of external music rules.
+ * @return, vector of pairs of strings & pointers to RuleMusic
  */
 std::vector<std::pair<std::string, RuleMusic*> > Ruleset::getMusic() const // sza_MusicRules
 {
@@ -1837,7 +1838,7 @@ std::vector<std::pair<std::string, RuleMusic*> > Ruleset::getMusic() const // sz
 
 /**
  * Gets the list of external sprites.
- * @return, The list of external sprites.
+ * @return, vector of pairs of strings & pointers to ExtraSprites
  */
 std::vector<std::pair<std::string, ExtraSprites*> > Ruleset::getExtraSprites() const
 {
@@ -1846,7 +1847,7 @@ std::vector<std::pair<std::string, ExtraSprites*> > Ruleset::getExtraSprites() c
 
 /**
  * Gets the list of external sounds.
- * @return, The list of external sounds.
+ * @return, vector of pairs of strings & pointers to ExtraSounds
  */
 std::vector<std::pair<std::string, ExtraSounds*> > Ruleset::getExtraSounds() const
 {
@@ -1854,16 +1855,16 @@ std::vector<std::pair<std::string, ExtraSounds*> > Ruleset::getExtraSounds() con
 }
 /**
  * Gets the list of external music.
- * @return, The list of external music.
+ * @return, vector of pairs of strings & pointers to ExtraMusic
  */
-std::vector<std::pair<std::string, ExtraMusic*> > Ruleset::getExtraMusic() const // sza_ExtraMusic
+/* std::vector<std::pair<std::string, ExtraMusic*> > Ruleset::getExtraMusic() const // sza_ExtraMusic
 {
 	return _extraMusic;
-}
+} */
 
 /**
  * Gets the list of external strings.
- * @return, The list of external strings.
+ * @return, map of strings & pointers to ExtraStrings
  */
 std::map<std::string, ExtraStrings*> Ruleset::getExtraStrings() const
 {
@@ -1872,7 +1873,7 @@ std::map<std::string, ExtraStrings*> Ruleset::getExtraStrings() const
 
 /**
  * Gets the list of StatStrings.
- * @return, The list of StatStrings.
+ * @return, vector of pointers to StatStrings
  */
 std::vector<StatString*> Ruleset::getStatStrings() const
 {
@@ -2078,6 +2079,7 @@ void Ruleset::sortLists()
 
 /**
  * Gets the research-requirements for Psi-Lab (it's a cache for psiStrengthEval)
+ * @return, vector of strings that are psi requirements
  */
 std::vector<std::string> Ruleset::getPsiRequirements() const
 {
@@ -2087,7 +2089,7 @@ std::vector<std::string> Ruleset::getPsiRequirements() const
 /**
  * Creates a new randomly-generated soldier.
  * @param save - pointer to SavedGame
- * @return, pointer to the newly generated soldier
+ * @return, pointer to the newly generated Soldier
  */
 Soldier* Ruleset::genSoldier(SavedGame* save) const
 {
@@ -2229,10 +2231,10 @@ int Ruleset::getRadarCutoffRange() const // kL
 
 /**
  * Gets information on an interface.
- * @param id - the interface we want info on
- * @return, the interface
+ * @param id - reference the interface for info
+ * @return, pointer to RuleInterface
  */
-RuleInterface* Ruleset::getInterface(const std::string id) const
+RuleInterface* Ruleset::getInterface(const std::string& id) const
 {
 	std::map<std::string, RuleInterface*>::const_iterator i = _interfaces.find(id);
 	if (i != _interfaces.end())
@@ -2243,7 +2245,7 @@ RuleInterface* Ruleset::getInterface(const std::string id) const
 
 /**
  * Gets the rules for the Geoscape globe.
- * @return Pointer to globe rules.
+ * @return, pointer to RuleGlobe
  */
 RuleGlobe* Ruleset::getGlobe() const
 {
@@ -2251,7 +2253,8 @@ RuleGlobe* Ruleset::getGlobe() const
 }
 
 /**
- *
+ * Gets the sound definition rules.
+ * @return, map of strings & pointers to SoundDefinition
  */
 const std::map<std::string, SoundDefinition*>* Ruleset::getSoundDefinitions() const
 {
@@ -2259,7 +2262,8 @@ const std::map<std::string, SoundDefinition*>* Ruleset::getSoundDefinitions() co
 }
 
 /**
- *
+ * Gets the transparency look-up table.
+ * @return, vector of pointers to SDL_Color
  */
 const std::vector<SDL_Color>* Ruleset::getTransparencies() const
 {
@@ -2268,6 +2272,8 @@ const std::vector<SDL_Color>* Ruleset::getTransparencies() const
 
 /**
  * Gets the list of MapScripts.
+ * @param id - reference the script type
+ * @return, pointer to a vector of pointers to MapScript
  */
 const std::vector<MapScript*>* Ruleset::getMapScript(std::string id) const
 {

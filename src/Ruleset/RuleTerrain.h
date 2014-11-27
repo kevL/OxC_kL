@@ -115,7 +115,7 @@ private:
 		const int getAmbience() const;
 
 		/// Gets the generation script name.
-		const std::string getScript();
+		const std::string getScript() const;
 };
 
 }

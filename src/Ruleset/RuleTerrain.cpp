@@ -240,9 +240,11 @@ std::vector<int>* RuleTerrain::getTextures()
 }
 
 /**
- * Gets the hemishpere this terrain occurs on.
- * -1 = northern, 0 = either, 1 = southern.
- * @return, the hemisphere
+ * Gets the hemishpere this terrain occurs on:
+ *	-1 = northern
+ *	 0 = either
+ *	 1 = southern.
+ * @return, hemisphere
  */
 int RuleTerrain::getHemisphere() const
 {
@@ -250,8 +252,8 @@ int RuleTerrain::getHemisphere() const
 }
 
 /**
- * Gets the list of civilian types to use on this terrain (default MALE_CIVILIAN and FEMALE_CIVILIAN)
- * @return, list of civilian types to use
+ * Gets the list of civilian types to use on this terrain.
+ * @return, list of civilian types to use (default MALE_CIVILIAN and FEMALE_CIVILIAN)
  */
 std::vector<std::string> RuleTerrain::getCivilianTypes() const
 {
@@ -289,7 +291,7 @@ const int RuleTerrain::getAmbience() const
  * Gets the generation script name.
  * @return, the name of the script to use
  */
-const std::string RuleTerrain::getScript()
+const std::string RuleTerrain::getScript() const
 {
 	return _script;
 }
