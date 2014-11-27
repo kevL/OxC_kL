@@ -2266,6 +2266,9 @@ int BattlescapeGenerator::loadMAP(
 				MapData* data = terrain->getMapData(
 												&dataID,
 												&dataSetID);
+//				if (dataSetOffset > 0) // ie: ufo or craft.
+//					_battleSave->getTile(Position(x, y, z))->setMapData(NULL,-1,-1, 3); // erase content-object
+
 				_battleSave->getTile(Position(x, y, z))->setMapData(
 																data,
 																static_cast<int>(dataID),
@@ -2556,7 +2559,7 @@ bool BattlescapeGenerator::placeUnitNearFriend(BattleUnit* unit)
 																			static_cast<int>(_battleSave->getUnits()->size()) - 1));
 		if (bu->getFaction() == unit->getFaction()
 			&& bu->getPosition() != Position(-1,-1,-1)
-			&& bu->getArmor()->getSize() == 1)
+			&& bu->getArmor()->getSize() >= unit->getArmor()->getSize())
 		{
 			posEntry = bu->getPosition();
 		}
