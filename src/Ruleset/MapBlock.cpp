@@ -56,10 +56,10 @@ MapBlock::~MapBlock()
  */
 void MapBlock::load(const YAML::Node& node)
 {
-	_name	= node["name"]		.as<std::string>(_name);
-	_size_x	= node["width"]		.as<int>(_size_x);
-	_size_y	= node["length"]	.as<int>(_size_y);
-	_size_z	= node["height"]	.as<int>(_size_z);
+	_name	= node["name"]	.as<std::string>(_name);
+	_size_x	= node["width"]	.as<int>(_size_x);
+	_size_y	= node["length"].as<int>(_size_y);
+	_size_z	= node["height"].as<int>(_size_z);
 
 	if (_size_x %10 != 0
 		|| _size_y %10 != 0)
@@ -69,24 +69,24 @@ void MapBlock::load(const YAML::Node& node)
 		throw Exception(ss.str());
 	}
 
-	if (const YAML::Node& map = node["groups"])
+	if (const YAML::Node& block = node["groups"])
 	{
 		_groups.clear();
 
-		if (map.Type() == YAML::NodeType::Sequence)
-			_groups = map.as<std::vector<int> >(_groups);
+		if (block.Type() == YAML::NodeType::Sequence)
+			_groups = block.as<std::vector<int> >(_groups);
 		else
-			_groups.push_back(map.as<int>(0));
+			_groups.push_back(block.as<int>(0));
 	}
 
-	if (const YAML::Node& map = node["revealedFloors"])
+	if (const YAML::Node& block = node["revealedFloors"])
 	{
 		_revealedFloors.clear();
 
-		if (map.Type() == YAML::NodeType::Sequence)
-			_revealedFloors = map.as<std::vector<int> >(_revealedFloors);
+		if (block.Type() == YAML::NodeType::Sequence)
+			_revealedFloors = block.as<std::vector<int> >(_revealedFloors);
 		else
-			_revealedFloors.push_back(map.as<int>(0));
+			_revealedFloors.push_back(block.as<int>(0));
 	}
 
 	_items = node["items"].as<std::map<std::string, std::vector<Position> > >(_items);
@@ -139,7 +139,7 @@ int MapBlock::getSizeZ() const
 
 /**
  * Gets whether this MapBlock is from a particular group.
- * @return, true if block is defined in the specified group
+ * @return, 1 if block is defined in the specified group
  */
 bool MapBlock::isInGroup(int group) const
 {
@@ -151,14 +151,14 @@ bool MapBlock::isInGroup(int group) const
 
 /**
  * Gets if this floor should be revealed or not.
- * @return, true if floor will be revealed
+ * @return, 1 if floor will be revealed
  */
-bool MapBlock::isFloorRevealed(int floor) const
+bool MapBlock::isFloorRevealed(int reveal) const
 {
 	return std::find(
 				_revealedFloors.begin(),
 				_revealedFloors.end(),
-				floor) != _revealedFloors.end();
+				reveal) != _revealedFloors.end();
 }
 
 /**

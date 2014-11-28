@@ -92,7 +92,7 @@ private:
 	Base* _base;
 	Craft* _craft;
 	Game* _game;
-	MapBlock* _dummy;
+	MapBlock* _dumby;
 	ResourcePack* _res;
 	Ruleset* _rules;
 	RuleTerrain

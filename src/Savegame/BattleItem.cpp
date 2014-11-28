@@ -35,7 +35,7 @@ namespace OpenXcom
  * @param id	- the IG id of this item
  */
 BattleItem::BattleItem(
-		RuleItem* rules,
+		RuleItem* const rules,
 		int* id)
 	:
 		_rules(rules),

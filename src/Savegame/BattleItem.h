@@ -70,7 +70,7 @@ private:
 	public:
 		/// Creates a item of the specified type.
 		BattleItem(
-				RuleItem* rules,
+				RuleItem* const rules,
 				int* id);
 		/// Cleans up the item.
 		~BattleItem();

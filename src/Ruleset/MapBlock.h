@@ -92,7 +92,7 @@ private:
 		bool isInGroup(int group) const;
 
 		/// Gets if this floor should be revealed or not.
-		bool isFloorRevealed(int floor) const;
+		bool isFloorRevealed(int reveal) const;
 
 		/// Gets the layout for any items that belong in this map block.
 		std::map<std::string, std::vector<Position> >* getItems();
