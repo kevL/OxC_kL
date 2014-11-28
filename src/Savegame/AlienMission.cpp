@@ -566,10 +566,6 @@ void AlienMission::ufoReachedWaypoint(
 
 	// screw it, we're not taking any chances, use the city's lon/lat info instead of the region's
 	// TODO: find out why there is a discrepancy between generated city mission zones and the cities that generated them.
-	// honolulu: 3.6141230952747376, -0.37332941766009109 (kL_note: not anymore.)
-	// UFO: lon: 3.61412, lat: -0.373329
-	// Zone: Longitudes: 3.61412 to 3.61412, Latitudes: -0.373329 to -0.373329
-	// http://openxcom.org/bugs/openxcom/issues/615#comment_3292
 	if (ufo.getRules()->getType() == "STR_TERROR_SHIP"
 		&& _rule.getType() == "STR_ALIEN_TERROR"
 		&& trajectory.getZone(nextWaypoint) == RuleRegion::CITY_MISSION_ZONE)

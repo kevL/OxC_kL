@@ -2084,7 +2084,6 @@ void Globe::drawDetail()
 
 
 	// debug stuff follows...
-	static int debugType = 0;
 	static bool canSwitchDebugType = false;
 
 	if (_game->getSavedGame()->getDebugMode() == true)
@@ -2092,7 +2091,7 @@ void Globe::drawDetail()
 		canSwitchDebugType = true;
 		int color = 0;
 
-		if (debugType == 0) // Country rects.
+		if (_debugType == 0) // Country rects.
 		{
 			for (std::vector<Country*>::const_iterator
 					i = _game->getSavedGame()->getCountries()->begin();
@@ -2119,7 +2118,7 @@ void Globe::drawDetail()
 				}
 			}
 		}
-		else if (debugType == 1) // Region rects.
+		else if (_debugType == 1) // Region rects.
 		{
 			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
@@ -2146,7 +2145,7 @@ void Globe::drawDetail()
 				}
 			}
 		}
-		else if (debugType == 2) // MissionZone rects.
+		else if (_debugType == 2) // MissionZone rects.
 		{
 			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
@@ -2189,10 +2188,6 @@ void Globe::drawDetail()
 			++_debugType;
 			if (_debugType > 2)
 				_debugType = 0;
-
-			++debugType;
-			if (debugType > 2)
-				debugType = 0;
 
 			canSwitchDebugType = false;
 		}
