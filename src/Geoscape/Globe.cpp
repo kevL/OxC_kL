@@ -773,9 +773,9 @@ void Globe::setZoom(size_t zoom)
 					_zoomRadii.size() - 1,
 					std::max(
 							zoom,
-							static_cast<size_t>(0)));
+							static_cast<size_t>(0))); // go f*cking figure.
 
-	_zoomTexture = (2 - static_cast<size_t>(floor(static_cast<double>(_zoom) / 2.)))
+	_zoomTexture = (2 - static_cast<size_t>(std::floor(static_cast<double>(_zoom) / 2.)))
 				 * (_texture->getTotalFrames() / 3);
 
 	_radius = _zoomRadii[_zoom];
