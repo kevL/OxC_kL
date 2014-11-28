@@ -76,6 +76,7 @@ private:
 	int
 		_blink,
 //		_blinkVal,
+		_debugType,
 		_totalMouseMoveX,
 		_totalMouseMoveY,
 		_xBeforeMouseScrolling,
@@ -372,6 +373,9 @@ private:
 		void setupRadii(
 				int width,
 				int height);
+
+		/// Gets the current debugType for Geoscape message.
+		int getDebugType() const;
 };
 
 }

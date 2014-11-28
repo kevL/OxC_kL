@@ -28,6 +28,7 @@ namespace YAML
 template<>
 struct convert<OpenXcom::MissionWave>
 {
+	///
 	static Node encode(const OpenXcom::MissionWave& rhs)
 	{
 		Node node;
@@ -40,6 +41,7 @@ struct convert<OpenXcom::MissionWave>
 		return node;
 	}
 
+	///
 	static bool decode(
 			const Node& node,
 			OpenXcom::MissionWave& rhs)
@@ -62,6 +64,10 @@ struct convert<OpenXcom::MissionWave>
 namespace OpenXcom
 {
 
+/**
+ * Creates an AlienMission rule.
+ * @param type - reference the mission type
+ */
 RuleAlienMission::RuleAlienMission(const std::string& type)
 	:
 		_type(type),
@@ -70,14 +76,28 @@ RuleAlienMission::RuleAlienMission(const std::string& type)
 }
 
 /**
+ * Ensures the allocated memory is released.
+ */
+RuleAlienMission::~RuleAlienMission()
+{
+	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator
+			i = _raceDistribution.begin();
+			i != _raceDistribution.end();
+			++i)
+	{
+		delete i->second;
+	}
+}
+
+/**
  * Loads the mission data from a YAML node.
- * @param node YAML node.
+ * @param node - YAML node
  */
 void RuleAlienMission::load(const YAML::Node& node)
 {
-	_type	= node["type"].as<std::string>(_type);
+	_type	= node["type"]	.as<std::string>(_type);
 	_points	= node["points"].as<int>(_points);
-	_waves	= node["waves"].as< std::vector<MissionWave> >(_waves);
+	_waves	= node["waves"]	.as< std::vector<MissionWave> >(_waves);
 
 	// Only allow full replacement of mission racial distribution.
 	if (const YAML::Node& weights = node["raceWeights"])
@@ -87,94 +107,79 @@ void RuleAlienMission::load(const YAML::Node& node)
 
 		Associative assoc;
 		// Place in the associative container so we can index by month and keep entries sorted.
-		for (Linear::iterator
-				ii = _raceDistribution.begin();
-				ii != _raceDistribution.end();
-				++ii)
+		for (Linear::const_iterator
+				i = _raceDistribution.begin();
+				i != _raceDistribution.end();
+				++i)
 		{
-			assoc.insert(*ii);
+			assoc.insert(*i);
 		}
 
 		// Now go through the node contents and merge with existing data.
 		for (YAML::const_iterator
-				nn = weights.begin();
-				nn != weights.end();
-				++nn)
+				i = weights.begin();
+				i != weights.end();
+				++i)
 		{
-			size_t month = nn->first.as<size_t>();
+			const size_t month = i->first.as<size_t>();
 
-			Associative::iterator
-					existing = assoc.find(month);
+			Associative::const_iterator existing = assoc.find(month);
 			if (assoc.end() == existing) // New entry, load and add it.
 			{
-				std::auto_ptr<WeightedOptions>
-						nw(new WeightedOptions);
-				nw->load(nn->second);
+				std::auto_ptr<WeightedOptions> weight (new WeightedOptions);
+				weight->load(i->second);
 
-				assoc.insert(std::make_pair(month, nw.release()));
+				assoc.insert(std::make_pair(month, weight.release()));
 			}
-			else // Existing entry, update it.
-				existing->second->load(nn->second);
+			else
+				existing->second->load(i->second); // Existing entry, update it.
 		}
 
 		// Now replace values in our actual member variable!
 		_raceDistribution.clear();
 		_raceDistribution.reserve(assoc.size());
 
-		for (Associative::iterator
-				ii = assoc.begin();
-				ii != assoc.end();
-				++ii)
+		for (Associative::const_iterator
+				i = assoc.begin();
+				i != assoc.end();
+				++i)
 		{
-			if (ii->second->empty()) // Don't keep empty lists.
-				delete ii->second;
-			else // Place it
-				_raceDistribution.push_back(*ii);
+			if (i->second->hasNoWeight()) // Don't keep empty lists.
+				delete i->second;
+			else
+				_raceDistribution.push_back(*i); // Place it
 		}
 	}
 }
 
 /**
  * Chooses one of the available races for this mission.
- * The racial distribution may vary based on the current game date.
- * @param monthsPassed, The number of months that have passed in the game world.
- * @return, The string id of the race.
+ * @note The racial distribution may vary based on the current game date.
+ * @param monthsPassed - the number of months that have passed in the game world
+ * @return, the string id of the race
  */
 const std::string RuleAlienMission::generateRace(size_t const monthsPassed) const
 {
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator
-			race = _raceDistribution.rbegin();
-
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_reverse_iterator race = _raceDistribution.rbegin();
 	while (monthsPassed < race->first)
 		++race;
 
 	return race->second->choose();
 }
 
-
+/**
+ * Chooses the best candidate.
+ * @param monthsPassed - the number of months that have passed in the game world
+ */
 const std::string RuleAlienMission::getTopRace(const size_t monthsPassed) const
 {
-	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();	
-	return rc->second->top();
-}
-
-/**
- * Ensures the allocated memory is released.
- */
-RuleAlienMission::~RuleAlienMission()
-{
-	for (std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator
-			ii = _raceDistribution.begin();
-			ii != _raceDistribution.end();
-			++ii)
-	{
-		delete ii->second;
-	}
+	std::vector<std::pair<size_t, WeightedOptions*> >::const_iterator rc = _raceDistribution.begin();
+	return rc->second->topChoice();
 }
 
 /**
  * Returns the Alien score for this mission.
- * @return Amount of points.
+ * @return, amount of points
  */
 int RuleAlienMission::getPoints() const
 {

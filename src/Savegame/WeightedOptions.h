@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_WEIGHTEDOPTIONS_H
 #define OPENXCOM_WEIGHTEDOPTIONS_H
 
-#include <string>
-#include <map>
+//#include <string>
+//#include <map>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -40,7 +40,7 @@ private:
 	size_t _totalWeight; //!< The total weight of all options.
 
 	public:
-		/// Create an empty set.
+		/// Creates an empty set.
 		WeightedOptions()
 			:
 				_totalWeight(0)
@@ -48,28 +48,32 @@ private:
 			/* Empty by design. */
 		}
 
-		/// Select from among the items.
+		/// Selects from among the items.
 		const std::string choose() const;
-		/// Select the top item.
-		const std::string top() const;
-		/// Set an option's weight.
-		void set(const std::string& id, size_t weight);
-		/// Is this empty, or not
-		bool empty() const
+		/// Selects the top item.
+		const std::string topChoice() const;
+
+		/// Sets an option's weight.
+		void setWeight(
+				const std::string& id,
+				size_t weight);
+
+		/// Gets if this choice is empty.
+		bool hasNoWeight() const
 		{
-			return (0 == _totalWeight);
+			return (_totalWeight == 0);
 		}
 
-		/// Remove all entries.
-		void clear()
+		/// Removes all entries and weights.
+		void clearWeights()
 		{
 			_totalWeight = 0;
 			_choices.clear();
 		}
 
-		/// Update our list with data from YAML.
+		/// Updates the list with data from YAML.
 		void load(const YAML::Node& node);
-		/// Store our list in YAML.
+		/// Stores the list in YAML.
 		YAML::Node save() const;
 };
 

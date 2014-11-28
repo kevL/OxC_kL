@@ -4532,17 +4532,10 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1413136961 f:\git\openxcom\src\ruleset\ruleregion.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
-	"../fmath.h"
+1417183177 f:\git\openxcom\src\ruleset\ruleregion.h
 	"../Savegame/WeightedOptions.h"
 
-1413136962 f:\git\openxcom\src\savegame\weightedoptions.h
-	<string>
-	<map>
-	<yaml-cpp/yaml.h>
+1417179335 f:\git\openxcom\src\savegame\weightedoptions.h
 
 1413136961 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
@@ -4838,7 +4831,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1416685671 f:\git\openxcom\src\geoscape\globe.h
+1417184480 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -6218,9 +6211,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413136961 f:\git\openxcom\src\savegame\alienmission.h
-	<string>
-	<yaml-cpp/yaml.h>
+1417181013 f:\git\openxcom\src\savegame\alienmission.h
 
 1414438829 f:\git\openxcom\src\savegame\country.h
 	<yaml-cpp/yaml.h>
@@ -7587,8 +7578,7 @@
 1417009125 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
-1413136961 f:\git\openxcom\src\savegame\alienstrategy.h
-	<yaml-cpp/yaml.h>
+1417180619 f:\git\openxcom\src\savegame\alienstrategy.h
 	"WeightedOptions.h"
 
 1416822508 source:f:\git\openxcom\src\geoscape\fundingstate.cpp
@@ -7638,7 +7628,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1416995473 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1417185834 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -7775,10 +7765,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413136960 f:\git\openxcom\src\ruleset\rulealienmission.h
-	<string>
-	<vector>
-	<yaml-cpp/yaml.h>
+1417180581 f:\git\openxcom\src\ruleset\rulealienmission.h
 
 1413136961 f:\git\openxcom\src\ruleset\ufotrajectory.h
 	<vector>
@@ -7789,7 +7776,7 @@
 	<string>
 	<vector>
 
-1417129913 source:f:\git\openxcom\src\geoscape\globe.cpp
+1417186132 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -7819,14 +7806,14 @@
 	"../Ruleset/RuleInterface.h"
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
-	"../Savegame/Base.h"
-	"../Savegame/Country.h"
-	"../Savegame/GameTime.h"
-	"../Savegame/SavedGame.h"
 	"../Savegame/AlienBase.h"
+	"../Savegame/Base.h"
 	"../Savegame/BaseFacility.h"
+	"../Savegame/Country.h"
 	"../Savegame/Craft.h"
+	"../Savegame/GameTime.h"
 	"../Savegame/Region.h"
+	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 	"../Savegame/TerrorSite.h"
 	"../Savegame/Ufo.h"
@@ -9167,7 +9154,7 @@
 1413136960 source:f:\git\openxcom\src\ruleset\extrastrings.cpp
 	"ExtraStrings.h"
 
-1416827540 source:f:\git\openxcom\src\ruleset\mapblock.cpp
+1417171502 source:f:\git\openxcom\src\ruleset\mapblock.cpp
 	"MapBlock.h"
 	"../Battlescape/Position.h"
 	"../Engine/Exception.h"
@@ -9193,7 +9180,7 @@
 	"MapData.h"
 	"MapDataSet.h"
 
-1413136960 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
+1417180525 source:f:\git\openxcom\src\ruleset\rulealienmission.cpp
 	"RuleAlienMission.h"
 	"../Savegame/WeightedOptions.h"
 
@@ -9226,13 +9213,9 @@
 1413136961 source:f:\git\openxcom\src\ruleset\rulemanufacture.cpp
 	"RuleManufacture.h"
 
-1413136961 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
+1417188561 source:f:\git\openxcom\src\ruleset\ruleregion.cpp
 	"RuleRegion.h"
-	<assert.h>
-	<math.h>
-	"../fmath.h"
 	"City.h"
-	"../Engine/RNG.h"
 
 1413136961 source:f:\git\openxcom\src\ruleset\ruleresearch.cpp
 	"RuleResearch.h"
@@ -9325,13 +9308,8 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1416132707 source:f:\git\openxcom\src\savegame\alienmission.cpp
+1417187699 source:f:\git\openxcom\src\savegame\alienmission.cpp
 	"AlienMission.h"
-	<algorithm>
-	<functional>
-	<assert.h>
-	<math.h>
-	"../fmath.h"
 	"AlienBase.h"
 	"Base.h"
 	"Country.h"
@@ -9354,9 +9332,8 @@
 	"../Ruleset/RuleUfo.h"
 	"../Ruleset/UfoTrajectory.h"
 
-1413136961 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
+1417180887 source:f:\git\openxcom\src\savegame\alienstrategy.cpp
 	"AlienStrategy.h"
-	<assert.h>
 	"SavedGame.h"
 	"WeightedOptions.h"
 	"../Engine/RNG.h"
@@ -9667,10 +9644,8 @@
 	"Waypoint.h"
 	"../Engine/Language.h"
 
-1413136962 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
+1417180774 source:f:\git\openxcom\src\savegame\weightedoptions.cpp
 	"WeightedOptions.h"
-	<assert.h>
-	"../Engine/RNG.h"
 
 1413136962 source:f:\git\openxcom\src\ufopaedia\articlestate.cpp
 	"ArticleState.h"

@@ -59,15 +59,14 @@
 #include "../Ruleset/RuleRegion.h"
 #include "../Ruleset/Ruleset.h"
 
-#include "../Savegame/Base.h"
-#include "../Savegame/Country.h"
-#include "../Savegame/GameTime.h"
-#include "../Savegame/SavedGame.h"
-
 #include "../Savegame/AlienBase.h"
+#include "../Savegame/Base.h"
 #include "../Savegame/BaseFacility.h"
+#include "../Savegame/Country.h"
 #include "../Savegame/Craft.h"
+#include "../Savegame/GameTime.h"
 #include "../Savegame/Region.h"
+#include "../Savegame/SavedGame.h"
 #include "../Savegame/Target.h"
 #include "../Savegame/TerrorSite.h"
 #include "../Savegame/Ufo.h"
@@ -336,7 +335,8 @@ Globe::Globe(
 		_lonBeforeMouseScrolling(0.),
 		_latBeforeMouseScrolling(0.),
 		_radius(0.),
-		_radiusStep(0.)
+		_radiusStep(0.),
+		_debugType(0)
 {
 	_rules = game->getRuleset()->getGlobe();
 
@@ -2092,7 +2092,7 @@ void Globe::drawDetail()
 		canSwitchDebugType = true;
 		int color = 0;
 
-		if (debugType == 0)
+		if (debugType == 0) // Country rects.
 		{
 			for (std::vector<Country*>::const_iterator
 					i = _game->getSavedGame()->getCountries()->begin();
@@ -2106,10 +2106,11 @@ void Globe::drawDetail()
 						k != (*i)->getRules()->getLatMax().size();
 						++k)
 				{
-					double lon2 = (*i)->getRules()->getLonMax().at(k);
-					double lon1 = (*i)->getRules()->getLonMin().at(k);
-					double lat2 = (*i)->getRules()->getLatMax().at(k);
-					double lat1 = (*i)->getRules()->getLatMin().at(k);
+					const double
+						lon2 = (*i)->getRules()->getLonMax().at(k),
+						lon1 = (*i)->getRules()->getLonMin().at(k),
+						lat2 = (*i)->getRules()->getLatMax().at(k),
+						lat1 = (*i)->getRules()->getLatMin().at(k);
 
 					drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
 					drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
@@ -2118,7 +2119,7 @@ void Globe::drawDetail()
 				}
 			}
 		}
-		else if (debugType == 1)
+		else if (debugType == 1) // Region rects.
 		{
 			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
@@ -2132,10 +2133,11 @@ void Globe::drawDetail()
 						k != (*i)->getRules()->getLatMax().size();
 						++k)
 				{
-					double lon2 = (*i)->getRules()->getLonMax().at(k);
-					double lon1 = (*i)->getRules()->getLonMin().at(k);
-					double lat2 = (*i)->getRules()->getLatMax().at(k);
-					double lat1 = (*i)->getRules()->getLatMin().at(k);
+					const double
+						lon2 = (*i)->getRules()->getLonMax().at(k),
+						lon1 = (*i)->getRules()->getLonMin().at(k),
+						lat2 = (*i)->getRules()->getLatMax().at(k),
+						lat1 = (*i)->getRules()->getLatMin().at(k);
 
 					drawVHLine(_countries, lon1, lat1, lon2, lat1, color);
 					drawVHLine(_countries, lon1, lat2, lon2, lat2, color);
@@ -2144,7 +2146,7 @@ void Globe::drawDetail()
 				}
 			}
 		}
-		else if (debugType == 2)
+		else if (debugType == 2) // MissionZone rects.
 		{
 			for (std::vector<Region*>::const_iterator
 					i = _game->getSavedGame()->getRegions()->begin();
@@ -2180,10 +2182,14 @@ void Globe::drawDetail()
 			}
 		}
 	}
-	else
+	else // toggles debugMode.
 	{
 		if (canSwitchDebugType == true)
 		{
+			++_debugType;
+			if (_debugType > 2)
+				_debugType = 0;
+
 			++debugType;
 			if (debugType > 2)
 				debugType = 0;
@@ -2930,7 +2936,7 @@ void Globe::getPolygonTextureAndShade(
 		 7,  7,  8,  8,  9,  9, 10, 11,
 		11, 12, 12, 13, 13, 14, 15, 15
 	}; */
-	int worldshades[32] =
+	const int worldshades[32] =
 	{
 		0, 1, 1, 1, 2, 2, 2, 3,
 		3, 3, 4, 4, 4, 5, 5, 5,
@@ -2948,7 +2954,7 @@ void Globe::getPolygonTextureAndShade(
 	*texture = -1;
 	*shade = worldshades[CreateShadow::getShadowValue(
 													0,
-													Cord(0.0, 0.0, 1.0),
+													Cord(0., 0., 1.),
 													getSunDirection(lon, lat),
 													0)];
 
@@ -2969,7 +2975,7 @@ void Globe::getPolygonTextureAndShade(
 		if (insidePolygon(
 						lon,
 						lat,
-						*i))
+						*i) == true)
 		{
 			*texture = (*i)->getTexture();
 			break;
@@ -3103,6 +3109,14 @@ void Globe::setupRadii(
 			}
 		}
 	}
+}
+
+/**
+ * Gets the current debugType for Geoscape message.
+ */
+int Globe::getDebugType() const
+{
+	return _debugType;
 }
 
 }

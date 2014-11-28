@@ -20,12 +20,12 @@
 #ifndef OPENXCOM_RULEREGION_H
 #define OPENXCOM_RULEREGION_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "../Savegame/WeightedOptions.h"
 
@@ -45,30 +45,29 @@ struct MissionArea
 		latMin,
 		latMax;
 
-	bool operator ==(const MissionArea& ma) const
+	///
+	bool operator ==(const MissionArea& area) const
 	{
-		return AreSame(lonMax, ma.lonMax)
-				&& AreSame(lonMin, ma.lonMin)
-				&& AreSame(latMax, ma.latMax)
-				&& AreSame(latMin, ma.latMin);
+		return AreSame(lonMax, area.lonMax)
+			&& AreSame(lonMin, area.lonMin)
+			&& AreSame(latMax, area.latMax)
+			&& AreSame(latMin, area.latMin);
 	}
 };
 
 
 /**
- * A zone (set of areas) on the globe.
+ * A zone (set of MissionAreas) on the globe.
  */
 struct MissionZone
 {
+	std::vector<MissionArea> areas;
 
-std::vector<MissionArea> areas;
-
-///
-void swap(MissionZone& other)
-{
-	areas.swap(other.areas);
-}
-
+	///
+	void swap(MissionZone& other)
+	{
+		areas.swap(other.areas);
+	}
 };
 
 
@@ -77,8 +76,7 @@ class City;
 
 /**
  * Represents a specific region of the world.
- * Contains constant info about a region like area
- * covered and base construction costs.
+ * Contains constant info about a region like area covered and base construction costs.
  */
 class RuleRegion
 {
@@ -182,6 +180,7 @@ namespace YAML
 template<>
 struct convert<OpenXcom::MissionArea>
 {
+	///
 	static Node encode(const OpenXcom::MissionArea& rhs)
 	{
 		Node node;
@@ -193,6 +192,7 @@ struct convert<OpenXcom::MissionArea>
 		return node;
 	}
 
+	///
 	static bool decode(const Node& node, OpenXcom::MissionArea& rhs)
 	{
 		if (!node.IsSequence() || node.size() != 4)
@@ -210,6 +210,7 @@ struct convert<OpenXcom::MissionArea>
 template<>
 struct convert<OpenXcom::MissionZone>
 {
+	///
 	static Node encode(const OpenXcom::MissionZone& rhs)
 	{
 		Node node;
@@ -218,6 +219,7 @@ struct convert<OpenXcom::MissionZone>
 		return node;
 	}
 
+	///
 	static bool decode(const Node& node, OpenXcom::MissionZone& rhs)
 	{
 		if (!node.IsSequence())

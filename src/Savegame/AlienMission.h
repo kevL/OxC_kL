@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_ALIEN_MISSION_H
 #define OPENXCOM_ALIEN_MISSION_H
 
-#include <string>
+//#include <string>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -71,14 +71,13 @@ private:
 			const Globe& globe,
 			const RuleUfo& ufoRule,
 			const UfoTrajectory& trajectory);
-	/// Spawn an alien base
+	/// Spawns an alien base
 	void spawnAlienBase(
 			const Globe& globe,
 			Game& engine);
 
 
 	public:
-		// Data
 		/// Creates a mission of the specified type.
 		AlienMission(const RuleAlienMission& rule);
 		/// Cleans up the mission info.
@@ -131,57 +130,56 @@ private:
 		/// Sets the alien base for this mission.
 		void setAlienBase(const AlienBase* base);
 
-		// Behaviour
-		/// Is this mission over?
+		/// Gets if this mission over.
 		bool isOver() const;
 
-		/// Handle UFO spawning for the mission.
+		/// Handles UFO spawning for the mission.
 		void think(
 				Game& engine,
 				const Globe& globe);
-		/// Initialize with values from rules.
+		/// Initializes with values from rules.
 		void start(size_t initialCount = 0);
 
-		/// Increase number of live UFOs.
+		/// Increases number of live UFOs.
 		void increaseLiveUfos()
 		{
 			++_liveUfos;
 		}
-		/// Decrease number of live UFOs.
+		/// Decreases number of live UFOs.
 		void decreaseLiveUfos()
 		{
 			--_liveUfos;
 		}
 
-		/// Handle UFO reaching a waypoint.
+		/// Handles UFO reaching a waypoint.
 		void ufoReachedWaypoint(
 				Ufo& ufo,
 				Game& engine,
 				const Globe& globe);
-		/// Handle UFO lifting from the ground.
+		/// Handles UFO lifting from the ground.
 		void ufoLifting(
 				Ufo& ufo,
 				Game& engine,
 				const Globe& globe);
-		/// Handle UFO shot down.
+		/// Handles UFO shot down.
 		void ufoShotDown(
 				Ufo& ufo,
 				Game& engine,
 				const Globe& globe);
 
-		/// Handle Points for mission successes.
+		/// Handles Points for mission successes.
 		void addScore(
 				const double lon,
 				const double lat,
 				Game& engine);
 
-		/// Select a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
+		/// Selects a destination (lon/lat) based on the criteria of our trajectory and desired waypoint.
 		std::pair<double, double> getWaypoint(
 				const UfoTrajectory& trajectory,
 				const size_t nextWaypoint,
 				const Globe& globe,
 				const RuleRegion& region);
-		/// Get a random landing point inside the given region zone.
+		/// Gets a random landing point inside the given region zone.
 		std::pair<double, double> getLandPoint(
 				const Globe& globe,
 				const RuleRegion& region,

@@ -2362,7 +2362,7 @@ terrains:
       - BLANKS
       - DESERT
     largeBlockLimit: 3
-    textures: [7, 8]
+    textures: [7]
     script: DESERT
     mapBlocks:
       - name: DESERT00
@@ -2409,7 +2409,7 @@ terrains:
       - BLANKS
       - FOREST
     largeBlockLimit: 2
-    textures: [0, 6, 10, 11]
+    textures: [0, 6, 11]
     hemisphere: -1
     mapBlocks:
       - name: FOREST00
@@ -2454,7 +2454,7 @@ terrains:
     mapDataSets:
       - BLANKS
       - JUNGLE
-    textures: [0, 6, 10, 11]
+    textures: [0, 6, 11]
     hemisphere: 1
     mapBlocks:
       - name: JUNGLE00
@@ -2711,6 +2711,7 @@ terrains:
         length: 20
         groups: 4
   - name: URBAN
+    textures: [10]
     script: URBAN
     mapDataSets:
       - BLANKS
@@ -2843,7 +2844,7 @@ terrains:
         width: 10
         length: 10
 mapScripts:
-  - type: DEFAULT # forest, mountain
+  - type: DEFAULT #forest, mountain
     commands:
     - type: addUFO
     - type: addCraft
@@ -6124,7 +6125,7 @@ alienDeployments:
     height: 2
     terrains:
       - UBASE
-    shade: 5
+    shade: 15
     race: STR_MIXED
 research:
   - name: STR_LASER_WEAPONS

@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_ALIENSTRATEGY_H
 #define OPENXCOM_ALIENSTRATEGY_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "WeightedOptions.h"
 
@@ -43,32 +43,33 @@ private:
 	/// The chances of each mission type for each region.
 	std::map<std::string, WeightedOptions*> _regionMissions;
 
-	// Disable copy and assignments.
+	/// Disable copy and assignments.
 	AlienStrategy(const AlienStrategy&);
-	AlienStrategy &operator=(const AlienStrategy&);
+	AlienStrategy& operator=(const AlienStrategy&);
 
 
 	public:
-		/// Create an AlienStrategy with no data.
+		/// Creates an AlienStrategy with no data.
 		AlienStrategy();
-		/// Free resources used by the AlienStrategy.
+		/// Frees resources used by the AlienStrategy.
 		~AlienStrategy();
 
 		/// Saves the data to YAML.
 		YAML::Node save() const;
 
-		/// Initialize values according to the rules.
+		/// Initializes values according to the rules.
 		void init(const Ruleset* rules);
 		/// Loads the data from YAML.
 		void load(
 				const Ruleset* rules,
 				const YAML::Node& node);
 
-		/// Choose a random region for a regular mission.
+		/// Chooses a random region for a regular mission.
 		const std::string chooseRandomRegion(const Ruleset* rules);
-		/// Choose a random mission for a region.
+		/// Chooses a random mission for a region.
 		const std::string chooseRandomMission(const std::string& region) const;
-		/// Remove a region and mission from the list of posibilities.
+
+		/// Removes a region and mission from the list of possibilities.
 		bool removeMission(
 				const std::string& region,
 				const std::string& mission);

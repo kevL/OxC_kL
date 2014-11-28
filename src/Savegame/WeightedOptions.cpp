@@ -19,90 +19,86 @@
 
 #include "WeightedOptions.h"
 
-#include <assert.h>
+//#include <assert.h>
 
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 
 
 namespace OpenXcom
 {
 
 /**
- * Select a random choice from among the contents.
- * This MUST be called on non-empty objects.
- * Each time this is called, the returned value can be different.
- * @return, The key of the selected choice.
+ * Selects a random choice from among the contents.
+ * @note This MUST be called on non-empty objects.
+ * @note Each time this is called, the returned value can be different.
+ * @return, the key of the selected choice
  */
 const std::string WeightedOptions::choose() const
 {
 	if (_totalWeight == 0)
-	{
 		return "";
-	}
 
-	size_t var = RNG::generate(0, _totalWeight);
+	size_t var = RNG::generate(
+							0,
+							_totalWeight);
 
-	std::map<std::string, size_t>::const_iterator ii = _choices.begin();
+	std::map<std::string, size_t>::const_iterator i = _choices.begin();
 	for (
 			;
-			ii != _choices.end();
-			++ii)
+			i != _choices.end();
+			++i)
 	{
-		if (var <= ii->second)
+		if (var <= i->second)
 			break;
 
-		var -= ii->second;
+		var -= i->second;
 	}
 
-	// We always have a valid iterator here.
-	return ii->first;
+	// This is always a valid iterator here.
+	return i->first;
 }
 
 /**
- * Select the most likely option.
- * This MUST be called on non-empty objects.
- * @return, The key of the selected choice.
+ * Selects the most likely option.
+ * @note This MUST be called on non-empty objects.
+ * @return, the key of the selected choice
  */
-const std::string WeightedOptions::top() const
+const std::string WeightedOptions::topChoice() const
 {
 	if (_totalWeight == 0)
-	{
 		return "";
-	}
 
-	size_t max = 0;
+	size_t choice = 0;
 
 	std::map<std::string, size_t>::const_iterator i = _choices.begin();
 	for (std::map<std::string, size_t>::const_iterator
-			ii = _choices.begin();
-			ii != _choices.end();
-			++ii)
+			j = _choices.begin();
+			j != _choices.end();
+			++j)
 	{
-		if (ii->second >= max)
+		if (j->second >= choice)
 		{
-			max = ii->second;
-			i = ii;
+			choice = j->second;
+			i = j;
 		}
 	}
 
-	return i->first; // We always have a valid iterator here.
+	return i->first; // This is always a valid iterator here.
 }
 
 /**
- * Set an option's weight.
- * If @a weight is set to 0, the option is removed from the list of choices.
- * If @a id already exists, the new weight replaces the old one, otherwise
- * @a id is added to the list of choices, with @a weight as the weight.
- * @param id, The option name.
- * @param weight, The option's new weight.
+ * Sets an option's weight.
+ * @note If @a weight is set to 0, the option is removed from the list of choices.
+ * @note If @a id already exists, the new weight replaces the old one, otherwise
+ *		@a id is added to the list of choices, with @a weight as the weight.
+ * @param id		- reference the option name
+ * @param weight	- the option's new weight
  */
-void WeightedOptions::set(
+void WeightedOptions::setWeight(
 		const std::string& id,
 		size_t weight)
 {
-	std::map<std::string, size_t>::iterator
-			option = _choices.find(id);
-
+	std::map<std::string, size_t>::iterator option = _choices.find(id);
 	if (option != _choices.end())
 	{
 		_totalWeight -= option->second;
@@ -110,38 +106,34 @@ void WeightedOptions::set(
 		if (weight != 0)
 		{
 			option->second = weight;
-
 			_totalWeight += weight;
 		}
 		else
-		{
 			_choices.erase(option);
-		}
 	}
 	else if (weight != 0)
 	{
 		_choices.insert(std::make_pair(id, weight));
-
 		_totalWeight += weight;
 	}
 }
 
 /**
  * Adds the weighted options from a YAML::Node to a WeightedOptions.
- * The weight option list is not replaced, only values in @a nd will be added / changed.
- * @param nd - a YAML node (containing a map) with the new values
+ * @note The weight option list is not replaced; only values in @a node will be added / changed.
+ * @param node - a YAML node (containing a map) with the new values
  */
-void WeightedOptions::load(const YAML::Node& nd)
+void WeightedOptions::load(const YAML::Node& node)
 {
 	for (YAML::const_iterator
-			val = nd.begin();
-			val != nd.end();
+			val = node.begin();
+			val != node.end();
 			++val)
 	{
-		std::string id = val->first.as<std::string>();
-		size_t weight = val->second.as<size_t>();
+		const std::string id = val->first.as<std::string>();
+		const size_t weight = val->second.as<size_t>();
 
-		set(id, weight);
+		setWeight(id, weight);
 	}
 }
 
@@ -154,11 +146,11 @@ YAML::Node WeightedOptions::save() const
 	YAML::Node node;
 
 	for (std::map<std::string, size_t>::const_iterator
-			ii = _choices.begin();
-			ii != _choices.end();
-			++ii)
+			i = _choices.begin();
+			i != _choices.end();
+			++i)
 	{
-		node[ii->first] = ii->second;
+		node[i->first] = i->second;
 	}
 
 	return node;

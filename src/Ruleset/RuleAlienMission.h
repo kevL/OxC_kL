@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_RULEALIENMISSION_H
 #define OPENXCOM_RULEALIENMISSION_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
@@ -43,21 +43,15 @@ struct MissionWave
 std::string ufoType;
 
 /// The number of UFOs that will be generated.
-/**
- * The UFOs are generated sequentially, one every @a spawnTimer minutes.
- */
+/// The UFOs are generated sequentially, one every @a spawnTimer minutes.
 size_t ufoCount;
 
 /// The trajectory ID for this wave's UFOs.
-/**
- * Trajectories control the way UFOs fly around the Geoscape.
- */
+/// Trajectories control the way UFOs fly around the Geoscape.
 std::string trajectory;
 
 /// Number of minutes between UFOs in the wave.
-/**
- * The actual value used is spawnTimer*1/4 or spawnTimer*3/4.
- */
+/// The actual value used is spawnTimer*1/4 or spawnTimer*3/4.
 size_t spawnTimer;
 
 };
@@ -79,12 +73,11 @@ private:
 	std::vector<std::pair<size_t, WeightedOptions*> > _raceDistribution;
 	/// The mission's waves.
 	std::vector<MissionWave> _waves;
-	/// The mission's points
+	/// The mission's points.
 	int _points;
 
 
 	public:
-
 		/// Creates an Alien Mission rule.
 		RuleAlienMission(const std::string& type);
 		/// Releases all resources held by the mission.
@@ -97,6 +90,7 @@ private:
 		const std::string generateRace(const size_t monthsPassed) const;
 		/// Gets the most likely race based on the game time and the racial distribution.
 		const std::string getTopRace(const size_t monthsPassed) const;
+
 		/// Gets the mission's type.
 		const std::string& getType() const
 		{
@@ -112,9 +106,11 @@ private:
 		{
 			return _waves[index];
 		}
+
 		/// Gets the score for this mission.
 		int getPoints() const;
 };
 
 }
+
 #endif

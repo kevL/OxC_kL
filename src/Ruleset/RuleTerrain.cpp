@@ -89,14 +89,14 @@ void RuleTerrain::load(
 				i != map.end();
 				++i)
 		{
-			MapBlock* mapBlock = new MapBlock((*i)["name"].as<std::string>());
+			MapBlock* const mapBlock = new MapBlock((*i)["name"].as<std::string>());
 			mapBlock->load(*i);
 			_mapBlocks.push_back(mapBlock);
 		}
 	}
 
 	_name				= node["name"]		.as<std::string>(_name);
-	_textures			= node["textures"]	.as< std::vector<int> >(_textures);
+	_textures			= node["textures"]	.as<std::vector<int> >(_textures);
 	_hemisphere			= node["hemisphere"].as<int>(_hemisphere);
 
 	if (const YAML::Node& civs = node["civilianTypes"])

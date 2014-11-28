@@ -19,7 +19,7 @@
 
 #include "AlienStrategy.h"
 
-#include <assert.h>
+//#include <assert.h>
 
 #include "SavedGame.h"
 #include "WeightedOptions.h"
@@ -37,48 +37,47 @@ typedef std::map<std::string, WeightedOptions*> MissionsByRegion;
 
 
 /**
- * Create an AlienStrategy with no values.
- * Running a game like this will most likely crash.
+ * Creates an AlienStrategy with no values.
+ * @note Running a game like this will most likely crash.
  */
 AlienStrategy::AlienStrategy()
 {
 }
 
 /**
- * Free all resources used by this AlienStrategy.
+ * Frees all resources used by this AlienStrategy.
  */
 AlienStrategy::~AlienStrategy()
 {
 	for (MissionsByRegion::iterator
-			ii = _regionMissions.begin();
-			ii != _regionMissions.end();
-			++ii)
+			i = _regionMissions.begin();
+			i != _regionMissions.end();
+			++i)
 	{
-		delete ii->second;
+		delete i->second;
 	}
 }
 
 /**
- * Get starting values from the rules.
- * @param rules Pointer to the game ruleset.
+ * Gets starting values from the rules.
+ * @param rules - pointer to the game Ruleset
  */
 void AlienStrategy::init(const Ruleset* rules)
 {
-	std::vector<std::string> regions = rules->getRegionsList();
-
+	const std::vector<std::string> regions = rules->getRegionsList();
 	for (std::vector<std::string>::const_iterator
-			rr = regions.begin();
-			rr != regions.end();
-			++rr)
+			i = regions.begin();
+			i != regions.end();
+			++i)
 	{
-		RuleRegion* region = rules->getRegion(*rr);
-		_regionChances.set(
-						*rr,
-						region->getWeight());
+		const RuleRegion* const region = rules->getRegion(*i);
+		_regionChances.setWeight(
+							*i,
+							region->getWeight());
 
 		WeightedOptions* missions = new WeightedOptions(region->getAvailableMissions());
 		_regionMissions.insert(std::make_pair(
-											*rr,
+											*i,
 											missions));
 	}
 }
@@ -93,26 +92,26 @@ void AlienStrategy::load(
 		const YAML::Node& node)
 {
 	for (MissionsByRegion::iterator
-			ii = _regionMissions.begin();
-			ii != _regionMissions.end();
-			++ii)
+			i = _regionMissions.begin();
+			i != _regionMissions.end();
+			++i)
 	{
-		delete ii->second;
+		delete i->second;
 	}
 
 	_regionMissions.clear();
-	_regionChances.clear();
+	_regionChances.clearWeights();
 	_regionChances.load(node["regions"]);
 
 	const YAML::Node& strat = node["possibleMissions"];
 
 	for (YAML::const_iterator
-			nn = strat.begin();
-			nn != strat.end();
-			++nn)
+			i = strat.begin();
+			i != strat.end();
+			++i)
 	{
-		std::string region = (*nn)["region"].as<std::string>();
-		const YAML::Node& missions = (*nn)["missions"];
+		const std::string region = (*i)["region"].as<std::string>();
+		const YAML::Node& missions = (*i)["missions"];
 
 		std::auto_ptr<WeightedOptions> options(new WeightedOptions());
 		options->load(missions);
@@ -133,14 +132,14 @@ YAML::Node AlienStrategy::save() const
 	node["regions"] = _regionChances.save();
 
 	for (MissionsByRegion::const_iterator
-			ii = _regionMissions.begin();
-			ii != _regionMissions.end();
-			++ii)
+			i = _regionMissions.begin();
+			i != _regionMissions.end();
+			++i)
 	{
 		YAML::Node subnode;
 
-		subnode["region"]	= ii->first;
-		subnode["missions"]	= ii->second->save();
+		subnode["region"]	= i->first;
+		subnode["missions"]	= i->second->save();
 
 		node["possibleMissions"].push_back(subnode);
 	}
@@ -149,27 +148,27 @@ YAML::Node AlienStrategy::save() const
 }
 
 /**
- * Choose one of the regions for a mission.
- * @param rules Pointer to the ruleset.
- * @return The region id.
+ * Chooses one of the regions for a mission.
+ * @param rules - pointer to the Ruleset
+ * @return, the region id
  */
 const std::string AlienStrategy::chooseRandomRegion(const Ruleset* rules)
 {
 	std::string chosen = _regionChances.choose();
-	if (chosen.empty())
+	if (chosen.empty() == true)
 	{
 		init(rules);
 		chosen = _regionChances.choose();
 	}
-	assert ("" != chosen);
+	assert(chosen != "");
 
 	return chosen;
 }
 
 /**
- * Choose one missions available for @a region.
- * @param region The region id.
- * @return The mission id.
+ * Chooses one of the missions available for @a region.
+ * @param region - reference the region id
+ * @return, the mission id
  */
 const std::string AlienStrategy::chooseRandomMission(const std::string& region) const
 {
@@ -180,23 +179,23 @@ const std::string AlienStrategy::chooseRandomMission(const std::string& region) 
 }
 
 /**
- * Remove @a mission from the list of possible missions for @a region.
- * @param region The region id.
- * @param mission The mission id.
- * @return If there are no more regions with missions available.
+ * Removes @a mission from the list of possible missions for @a region.
+ * @param region	- the region id
+ * @param mission	- the mission id
+ * @return, true if there are no more regions with missions available
  */
 bool AlienStrategy::removeMission(
 		const std::string& region,
 		const std::string& mission)
 {
-	MissionsByRegion::iterator found = _regionMissions.find(region);
+	MissionsByRegion::const_iterator found = _regionMissions.find(region);
 	assert(found != _regionMissions.end());
-	found->second->set(mission, 0);
+	found->second->setWeight(mission, 0);
 
-	if (found->second->empty())
+	if (found->second->hasNoWeight())
 	{
 		_regionMissions.erase(found);
-		_regionChances.set(region, 0);
+		_regionChances.setWeight(region, 0);
 	}
 
 	return _regionMissions.empty();

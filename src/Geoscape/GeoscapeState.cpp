@@ -889,33 +889,37 @@ void GeoscapeState::handle(Action* action)
 
 	if (action->getDetails()->type == SDL_KEYDOWN)
 	{
-		if (Options::debug // "ctrl-d" - enable debug mode
+		if (Options::debug == true // "ctrl-d" - enable debug mode
 			&& action->getDetails()->key.keysym.sym == SDLK_d
 			&& (SDL_GetModState() & KMOD_CTRL) != 0)
 		{
 			_savedGame->setDebugMode();
 
 			if (_savedGame->getDebugMode() == true)
-				_txtDebug->setText(L"DEBUG MODE");
+			{
+//				_txtDebug->setText(L"DEBUG MODE");
+				if (_globe->getDebugType() == 0)
+					_txtDebug->setText(L"DEBUG MODE : countries");
+				else if (_globe->getDebugType() == 1)
+					_txtDebug->setText(L"DEBUG MODE : regions");
+				else if (_globe->getDebugType() == 2)
+					_txtDebug->setText(L"DEBUG MODE : missionZones");
+			}
 			else
 				_txtDebug->setText(L"");
 		}
 		else if (_savedGame->isIronman() == false) // quick save and quick load
 		{
 			if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
-			{
 				popup(new SaveGameState(
 									OPT_GEOSCAPE,
 									SAVE_QUICK,
 									_palette));
-			}
 			else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
-			{
 				popup(new LoadGameState(
 									OPT_GEOSCAPE,
 									SAVE_QUICK,
 									_palette));
-			}
 		}
 	}
 

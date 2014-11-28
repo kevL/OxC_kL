@@ -8,7 +8,7 @@ terrains:
       - DESERT
     textures: [7]
     hemisphere: 1
-    largeBlockLimit: 3
+    largeBlockLimit: 2 #was 3
     mapBlocks:
       - name: ATLANTDESERT00
         width: 10
@@ -59,7 +59,7 @@ terrains:
       - COMMERCE
       - COMFRN
       - COMDECOR
-    largeBlockLimit: 4
+    largeBlockLimit: 3 #was 4
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
@@ -455,7 +455,7 @@ terrains:
       - DAWNURBAN
       - DAWNFRNITURE
       - DAWNDECOR
-    largeBlockLimit: 5
+    largeBlockLimit: 4 #was 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
@@ -629,7 +629,7 @@ terrains:
       - DAWNURBAN
       - DAWNFRNITURE
       - DAWNDECOR
-    largeBlockLimit: 5
+    largeBlockLimit: 4 #was 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
@@ -755,7 +755,7 @@ terrains:
         maxCount: 1
   - name: DESERT
     largeBlockLimit: 3
-    textures: [7, 8]
+    textures: [7]
 #    hemisphere: -1
   - name: DESERTMOUNT
     mapDataSets:
@@ -763,7 +763,7 @@ terrains:
       - MOUNT
       - DESERT
     textures: [8]
-    largeBlockLimit: 3
+    largeBlockLimit: 2 #was 3
     mapBlocks:
       - name: DESERTMOUNT00
         width: 10
@@ -823,7 +823,7 @@ terrains:
         width: 10
         length: 10
   - name: FOREST
-    textures: [0, 6, 10, 11]
+    textures: [0, 6, 11]
     hemisphere: -1
   - name: FORESTMOUNT
     mapDataSets:
@@ -831,9 +831,9 @@ terrains:
       - MOUNT
       - FOREST
       - FORESTMOUNT
-    textures: [0, 5, 10, 11]
+    textures: [0, 5, 11]
     hemisphere: -1
-    largeBlockLimit: 3
+    largeBlockLimit: 2 #was 3
     mapBlocks:
       - name: FORESTMOUNT00
         width: 10
@@ -926,7 +926,7 @@ terrains:
       - ROADS
       - URBITS
 #    textures: [1]
-    largeBlockLimit: 5
+    largeBlockLimit: 4 #was 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
@@ -1017,7 +1017,7 @@ terrains:
         type: 1
         frequency: 3
   - name: JUNGLE
-    textures: [0, 6, 10, 11]
+    textures: [0, 6, 11]
     hemisphere: 1
   - name: MADURBAN
     mapDataSets:
@@ -1029,7 +1029,7 @@ terrains:
       - MADDECOR
 #    textures: [2]
 #    hemisphere: 1
-    largeBlockLimit: 5
+    largeBlockLimit: 4 #was 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
@@ -1520,7 +1520,7 @@ terrains:
       - BLANKS
       - PORTROADS
       - PORTURBITS
-    largeBlockLimit: 5
+    largeBlockLimit: 4 #was 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
@@ -1623,7 +1623,7 @@ terrains:
       - ROADS
       - URBITS
       - FRNITURE
-    largeBlockLimit: 5
+    largeBlockLimit: 4 #was 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
