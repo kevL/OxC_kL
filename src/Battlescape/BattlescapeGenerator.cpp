@@ -323,7 +323,7 @@ void BattlescapeGenerator::nextStage()
 	_battleSave->resetTurnCounter();
 
 	_mission = _battleSave->getMissionType();
-	AlienDeployment* ruleDeploy = _rules->getDeployment(_mission);
+	AlienDeployment* const ruleDeploy = _rules->getDeployment(_mission);
 	ruleDeploy->getDimensions(
 							&_mapsize_x,
 							&_mapsize_y,
@@ -337,7 +337,7 @@ void BattlescapeGenerator::nextStage()
 
 
 	const std::vector<MapScript*>* script = _rules->getMapScript(_terrain->getScript());
-	if (_rules->getMapScript(ruleDeploy->getScript()))
+	if (_rules->getMapScript(ruleDeploy->getScript()) != NULL)
 		script = _rules->getMapScript(ruleDeploy->getScript());
 	else if (ruleDeploy->getScript().empty() == false)
 	{
@@ -375,9 +375,9 @@ void BattlescapeGenerator::nextStage()
 					selectedFirstSoldier = true;
 				}
 
-				Node* node = _battleSave->getSpawnNode(
-												NR_XCOM,
-												*j);
+				const Node* const node = _battleSave->getSpawnNode(
+																NR_XCOM,
+																*j);
 				if (node != NULL
 					|| placeUnitNearFriend(*j) == true)
 				{
@@ -404,7 +404,7 @@ void BattlescapeGenerator::nextStage()
 		}
 	}
 
-	// remove all items not belonging to our soldiers from the map.
+	// remove all items not belonging to the soldiers from the map
 	for (std::vector<BattleItem*>::const_iterator
 			j = _battleSave->getItems()->begin();
 			j != _battleSave->getItems()->end();
@@ -436,7 +436,7 @@ void BattlescapeGenerator::nextStage()
 				&& _alienRace.empty() == true;
 			++i)
 	{
-		if ((*i)->isInBattlescape())
+		if ((*i)->isInBattlescape() == true)
 			_alienRace = (*i)->getAlienRace();
 	}
 
@@ -449,7 +449,7 @@ void BattlescapeGenerator::nextStage()
 
 	deployCivilians(ruleDeploy->getCivilians());
 
-/* kL: Prob. don't need this anymore; see map generation function.
+/* kL: Prob. don't need this anymore; it's done via "revealedFloors" in MapScripting ....
 	for (int
 			i = 0;
 			i < _battleSave->getMapSizeXYZ();
@@ -567,7 +567,7 @@ void BattlescapeGenerator::run()
 		throw Exception("Map generator encountered an error: " + _terrain->getScript() + " script not found.");
 	}
 
-	generateMap(script);
+	generateMap(script); // <-- BATTLE MAP GENERATION.
 
 	_battleSave->setTerrain(_terrain->getName()); // sza_MusicRules
 	setTacticalSprites(); // kL
@@ -3374,8 +3374,7 @@ void BattlescapeGenerator::generateBaseMap()
 							if (_battleSave->getTile(Position(
 															x * 10,
 															y * 10,
-															groundLevel))
-														->hasNoFloor(NULL) == false)
+															groundLevel))->hasNoFloor(NULL) == false)
 
 								break;
 						}
@@ -3395,26 +3394,26 @@ void BattlescapeGenerator::generateBaseMap()
 								if ((k + l) %2 == 0)
 								{
 									Tile
-										* const t = _battleSave->getTile(Position(
+										* const tile = _battleSave->getTile(Position(
 																				k,
 																				l,
 																				groundLevel)),
-										* const tEast = _battleSave->getTile(Position(
+										* const tileEast = _battleSave->getTile(Position(
 																				k + 1,
 																				l,
 																				groundLevel)),
-										* const tSouth = _battleSave->getTile(Position(
+										* const tileSouth = _battleSave->getTile(Position(
 																				k,
 																				l + 1,
 																				groundLevel));
 
-									if (t != NULL
-										&& t->getMapData(MapData::O_FLOOR)
-										&& t->getMapData(MapData::O_OBJECT) == NULL
-										&& tEast != NULL
-										&& tEast->getMapData(MapData::O_WESTWALL) == NULL
-										&& tSouth != NULL
-										&& tSouth->getMapData(MapData::O_NORTHWALL) == NULL)
+									if (tile != NULL
+										&& tile->getMapData(MapData::O_FLOOR) != NULL
+										&& tile->getMapData(MapData::O_OBJECT) == NULL
+										&& tileEast != NULL
+										&& tileEast->getMapData(MapData::O_WESTWALL) == NULL
+										&& tileSouth != NULL
+										&& tileSouth->getMapData(MapData::O_NORTHWALL) == NULL)
 									{
 										_battleSave->getStorageSpace().push_back(Position(k, l, groundLevel));
 									}

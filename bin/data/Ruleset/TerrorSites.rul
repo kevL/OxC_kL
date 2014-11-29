@@ -14,7 +14,7 @@ terrains:
       - URBITS
       - URBAN
       - FRNL83
-    largeBlockLimit: 5
+    largeBlockLimit: 4 #was 5
     civilianTypes:
       - MALE_CIVILIAN
       - FEMALE_CIVILIAN
@@ -35,6 +35,7 @@ terrains:
       - name: CF03
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: CF04
         width: 10
@@ -84,10 +85,12 @@ terrains:
       - name: CF103
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: CF104
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: CF105
         width: 20
