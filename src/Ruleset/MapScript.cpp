@@ -19,12 +19,12 @@
 
 #include "MapScript.h"
 
-#include <sstream>
+//#include <sstream>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
-#include "../Engine/Exception.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Exception.h"
+//#include "../Engine/RNG.h"
 
 
 namespace OpenXcom
@@ -53,7 +53,7 @@ MapScript::MapScript()
  */
 MapScript::~MapScript()
 {
-	for (std::vector<SDL_Rect*>::iterator
+	for (std::vector<SDL_Rect*>::const_iterator
 			i = _rects.begin();
 			i != _rects.end();
 			++i)
@@ -284,13 +284,13 @@ void MapScript::load(const YAML::Node& node)
 						dir.begin(),
 						dir.end(),
 						dir.begin(),
-					::toupper);
+						::toupper);
 
-			if (dir.substr(0,1) == "V")
+			if (dir.substr(0, 1) == "V")
 				_direction = MD_VERTICAL;
-			else if (dir.substr(0,1) == "H")
+			else if (dir.substr(0, 1) == "H")
 				_direction = MD_HORIZONTAL;
-			else if (dir.substr(0,1) == "B")
+			else if (dir.substr(0, 1) == "B")
 				_direction = MD_BOTH;
 			else
 			{
@@ -365,7 +365,8 @@ const int MapScript::getGroupNumber()
 		{
 			if (pick < _frequenciesTemp.at(i))
 			{
-				int ret = _groupsTemp.at(i);
+				const int ret = _groupsTemp.at(i);
+
 				if (_maxUsesTemp.at(i) > 0)
 				{
 					if (--_maxUsesTemp.at(i) == 0)
@@ -407,7 +408,8 @@ const int MapScript::getBlockNumber()
 		{
 			if (pick < _frequenciesTemp.at(i))
 			{
-				int ret = _blocksTemp.at(i);
+				const int ret = _blocksTemp.at(i);
+
 				if (_maxUsesTemp.at(i) > 0)
 				{
 					if (--_maxUsesTemp.at(i) == 0)
@@ -437,7 +439,10 @@ const int MapScript::getBlockNumber()
 MapBlock* MapScript::getNextBlock(RuleTerrain* terrain)
 {
 	if (_blocks.empty() == true)
-		return terrain->getRandomMapBlock(_sizeX * 10, _sizeY * 10, getGroupNumber());
+		return terrain->getRandomMapBlock(
+									_sizeX * 10,
+									_sizeY * 10,
+									getGroupNumber());
 
 	const size_t result = getBlockNumber();
 	if (result < terrain->getMapBlocks()->size()

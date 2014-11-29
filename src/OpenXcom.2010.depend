@@ -4698,7 +4698,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1417168614 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1417219816 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
 
@@ -4743,7 +4743,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1417004827 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1417206943 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -5900,7 +5900,7 @@
 	<vector>
 	<yaml-cpp/yaml.h>
 
-1417168946 f:\git\openxcom\src\ruleset\mapblock.h
+1417227905 f:\git\openxcom\src\ruleset\mapblock.h
 
 1415426569 f:\git\openxcom\src\ruleset\mapdataset.h
 	<string>
@@ -12085,20 +12085,12 @@
 1413136956 f:\git\openxcom\src\battlescape\particle.h
 	<SDL_types.h>
 
-1416690849 f:\git\openxcom\src\ruleset\mapscript.h
-	<vector>
-	<string>
-	<SDL_video.h>
-	<yaml-cpp/yaml.h>
+1417222646 f:\git\openxcom\src\ruleset\mapscript.h
 	"MapBlock.h"
 	"RuleTerrain.h"
 
-1416657981 source:f:\git\openxcom\src\ruleset\mapscript.cpp
+1417223167 source:f:\git\openxcom\src\ruleset\mapscript.cpp
 	"MapScript.h"
-	<sstream>
-	<yaml-cpp/yaml.h>
-	"../Engine/Exception.h"
-	"../Engine/RNG.h"
 
 1416928202 source:f:\git\openxcom\src\ufopaedia\articlestatetftdarmor.cpp
 	<sstream>

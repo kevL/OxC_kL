@@ -119,7 +119,7 @@ private:
 			MapBlock* mapblock,
 			int offset_x,
 			int offset_y,
-			RuleTerrain* terrain,
+			RuleTerrain* terrainRule,
 			int dataSetOffset,
 			bool discovered = false,
 			bool craft = false);

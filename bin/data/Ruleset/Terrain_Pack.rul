@@ -6,17 +6,19 @@ terrains:
       - SANDS
       - ATLANTDESERT
       - DESERT
-    textures: [7]
+    textures: [7,8]
     hemisphere: 1
     largeBlockLimit: 2 #was 3
     mapBlocks:
       - name: ATLANTDESERT00
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: ATLANTDESERT01
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: ATLANTDESERT02
         width: 10
@@ -68,12 +70,14 @@ terrains:
       - name: COMRCURBAN00
         width: 10
         length: 10
+        groups: 1
         type: 2
         subType: 0
         frequency: 2
       - name: COMRCURBAN01
         width: 10
         length: 10
+        groups: 1
         type: 3
         subType: 0
         frequency: 2
@@ -167,20 +171,21 @@ terrains:
         type: 4
         frequency: 2
   - name: CULTA
-    textures: [1, 2, 3, 4]
+    textures: [1,2,6,10]
 #    hemisphere: -1
   - name: CULTAFARMA
     mapDataSets:
       - BLANKS
       - CULTIVAT
       - BARN
-    textures: [2]
+    textures: [1,2,6,10]
     hemisphere: -1
     largeBlockLimit: 2
     mapBlocks:
       - name: CULTA00
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
         maxCount: 2
@@ -211,6 +216,7 @@ terrains:
       - name: CULTA07
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
         maxCount: 2
@@ -229,6 +235,7 @@ terrains:
       - name: CULTA11
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
         maxCount: 2
@@ -348,21 +355,24 @@ terrains:
       - BLANKS
       - CULTIVAT
       - BARN
-    textures: [3]
+    textures: [1,2,6,10]
     hemisphere: 1
     largeBlockLimit: 2
     mapBlocks:
       - name: CULTA00
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: CULTA07
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: CULTA11
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: CULTAFARM00
         width: 20
@@ -576,10 +586,12 @@ terrains:
       - name: DAWNURBAN28
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: DAWNURBAN29
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: DAWNURBAN30
         width: 10
@@ -678,18 +690,21 @@ terrains:
       - name: DAWNURBAN50
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
         maxCount: 1
       - name: DAWNURBAN51
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
         maxCount: 1
       - name: DAWNURBAN52
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
         maxCount: 1
@@ -768,14 +783,17 @@ terrains:
       - name: DESERTMOUNT00
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: DESERTMOUNT01
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: DESERTMOUNT02
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: DESERTMOUNT03
         width: 10
@@ -823,25 +841,27 @@ terrains:
         width: 10
         length: 10
   - name: FOREST
-    textures: [0, 6, 11]
-    hemisphere: -1
+    textures: [0,3]
+#    hemisphere: -1
   - name: FORESTMOUNT
     mapDataSets:
       - BLANKS
       - MOUNT
       - FOREST
       - FORESTMOUNT
-    textures: [0, 5, 11]
+    textures: [3,5]
     hemisphere: -1
     largeBlockLimit: 2 #was 3
     mapBlocks:
       - name: FORESTMOUNT00
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: FORESTMOUNT01
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: FORESTMOUNT02
         width: 10
@@ -1009,16 +1029,19 @@ terrains:
       - name: INDUSTRIALURBAN16
         width: 10
         length: 10
+        groups: 1
+        groups: 1
         type: 1
         frequency: 3
       - name: INDUSTRIALURBAN17
         width: 10
         length: 10
+        groups: 1
         type: 1
         frequency: 3
   - name: JUNGLE
-    textures: [0, 6, 11]
-    hemisphere: 1
+    textures: [6]
+#    hemisphere: 1
   - name: MADURBAN
     mapDataSets:
       - BLANKS
@@ -1050,12 +1073,14 @@ terrains:
       - name: URBAN03
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
         frequency: 2
       - name: URBAN04
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
         frequency: 2
@@ -1197,17 +1222,19 @@ terrains:
       - SANDS
       - MUJUNGLE
       - JUNGLEBITS
-    textures: [0, 6]
-    hemisphere: 1
+    textures: [6]
+#    hemisphere: 1
     largeBlockLimit: 2 #was 3
     mapBlocks:
       - name: MUJUNGLE00
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: MUJUNGLE01
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: MUJUNGLE02
         width: 10
@@ -1457,32 +1484,36 @@ terrains:
       - name: NATIVEURBAN46
         width: 10
         length: 10
+        groups: 1
         type: 1
   - name: POLAR
-    textures: [9, 12]
+    textures: [4,9,12]
   - name: POLARMOUNT
     mapDataSets:
       - BLANKS
       - MOUNT
       - POLAR
       - POLARMOUNT
-    textures: [9]
-    hemisphere: 1
+    textures: [11]
+#    hemisphere: 1
     largeBlockLimit: 2
     mapBlocks:
       - name: MOUNTPOLAR00
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
       - name: MOUNTPOLAR01
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
       - name: MOUNTPOLAR02
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
       - name: MOUNTPOLAR03
@@ -1570,12 +1601,14 @@ terrains:
       - name: PORTURBAN12
         width: 10
         length: 10
+        groups: 1
         type: 1
         subType: 0
         frequency: 3
       - name: PORTURBAN13
         width: 10
         length: 20
+        groups: 1
         type: 1
         subType: 0
         frequency: 3
@@ -1632,6 +1665,7 @@ terrains:
       - name: RAILYARDURBAN00
         width: 10
         length: 10
+        groups: 1
         type: 1
       - name: RAILYARDURBAN01
         width: 10

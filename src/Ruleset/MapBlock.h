@@ -29,7 +29,7 @@
 namespace OpenXcom
 {
 
-enum MapBlockType
+enum MapBlockType // These define 'groups'
 {
 	MT_UNDEFINED = -1,	// -1
 	MT_DEFAULT,			//  0
@@ -90,7 +90,6 @@ private:
 
 		/// Gets if this mapblock is from the group specified.
 		bool isInGroup(int group) const;
-
 		/// Gets if this floor should be revealed or not.
 		bool isFloorRevealed(int reveal) const;
 

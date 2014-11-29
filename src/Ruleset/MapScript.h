@@ -20,11 +20,11 @@
 #ifndef OPENXCOM_MAPSCRIPT_H
 #define OPENXCOM_MAPSCRIPT_H
 
-#include <vector>
-#include <string>
+//#include <vector>
+//#include <string>
 
-#include <SDL_video.h>
-#include <yaml-cpp/yaml.h>
+//#include <SDL_video.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "MapBlock.h"
 #include "RuleTerrain.h"
@@ -157,7 +157,7 @@ private:
 			return _sizeZ;
 		};
 
-			/// Get the chances of this command executing.
+		/// Get the chances of this command executing.
 		const int getChancesOfExecution() const
 		{
 			return _executionChances;
@@ -198,7 +198,7 @@ private:
 			return _direction;
 		};
 
-		/// Gets the mcd replacement data for tunnel replacements.
+		/// Gets the MCD replacement data for tunnel replacements.
 		TunnelData* getTunnelData()
 		{
 			return _tunnelData;

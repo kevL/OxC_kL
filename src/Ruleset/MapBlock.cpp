@@ -139,7 +139,8 @@ int MapBlock::getSizeZ() const
 
 /**
  * Gets whether this MapBlock is from a particular group.
- * @return, 1 if block is defined in the specified group
+ * @param group - the group to check for
+ * @return, true if block is defined in the specified group
  */
 bool MapBlock::isInGroup(int group) const
 {
@@ -151,7 +152,8 @@ bool MapBlock::isInGroup(int group) const
 
 /**
  * Gets if this floor should be revealed or not.
- * @return, 1 if floor will be revealed
+ * @param reveal - the floor to check reveal value of
+ * @return, true if floor will be revealed
  */
 bool MapBlock::isFloorRevealed(int reveal) const
 {

@@ -456,13 +456,7 @@ void BattlescapeGenerator::nextStage()
 			i < _battleSave->getMapSizeXYZ();
 			++i)
 	{
-/*		if (_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)
-			&& (_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT
-				|| (_battleSave->getTiles()[i]->getPosition().z == 1
-					&& _battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift()
-					&& _battleSave->getTiles()[i]->getMapData(MapData::O_OBJECT)))) */
-
-		if (_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)
+		if (_battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR) != NULL
 			&& _battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->getSpecialType() == START_POINT)
 //				|| (_battleSave->getTiles()[i]->getPosition().z == 1
 //					&& _battleSave->getTiles()[i]->getMapData(MapData::O_FLOOR)->isGravLift()
@@ -2149,7 +2143,7 @@ BattleUnit* BattlescapeGenerator::addCivilian(Unit* rules)
  * @param mapblock		- pointer to MapBlock
  * @param offset_x		- Mapblock offset in X direction
  * @param offset_y		- Mapblock offset in Y direction
- * @param terrain		- pointer to RuleTerrain
+ * @param terrainRule	- pointer to RuleTerrain
  * @param dataSetOffset	-
  * @param discovered	- true if this MapBlock is discovered (eg. landingsite of the Skyranger)
  * @param craft			- true if xCom Craft has landed on the MAP
@@ -2161,7 +2155,7 @@ int BattlescapeGenerator::loadMAP(
 		MapBlock* mapblock,
 		int offset_x,
 		int offset_y,
-		RuleTerrain* terrain,
+		RuleTerrain* terrainRule,
 		int dataSetOffset,
 		bool discovered,
 		bool craft)
@@ -2213,8 +2207,8 @@ int BattlescapeGenerator::loadMAP(
 			--i)
 	{
 		// check if there is already a layer - if so, we have to move Z up
-		const MapData* const dataFloor = _battleSave->getTile(Position(x, y, i))->getMapData(MapData::O_FLOOR);
-		if (dataFloor != NULL)
+		const MapData* const floorData = _battleSave->getTile(Position(x, y, i))->getMapData(MapData::O_FLOOR);
+		if (floorData != NULL)
 		{
 			z += i;
 
@@ -2258,7 +2252,7 @@ int BattlescapeGenerator::loadMAP(
 				unsigned int dataID = objectID;
 				int dataSetID = dataSetOffset;
 
-				MapData* const data = terrain->getMapData(
+				MapData* const data = terrainRule->getMapData(
 														&dataID,
 														&dataSetID);
 //				if (dataSetOffset > 0) // ie: ufo or craft.
@@ -2303,7 +2297,7 @@ int BattlescapeGenerator::loadMAP(
 //		_battleSave->getTile(Position(x, y, z))->setDiscovered(
 //															discovered
 //															|| mapblock->isFloorRevealed(z), 2);
-		_battleSave->getTile(Position(x, y, z))->setDiscovered(mapblock->isFloorRevealed(z), 2);
+//		_battleSave->getTile(Position(x, y, z))->setDiscovered(mapblock->isFloorRevealed(z), 2);
 
 		x++;
 
@@ -3130,7 +3124,7 @@ void BattlescapeGenerator::generateMap(const std::vector<MapScript*>* script)
 									}
 									else
 									{
-										// wildcard, we don't care what block it is, we just wanna know if there's a block here
+										// wildcard, you don't care what block it is, you just wanna know if there's a block here
 										success = (_blocks[x][y] != NULL);
 									}
 								}
