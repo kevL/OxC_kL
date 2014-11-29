@@ -44,6 +44,9 @@ extraSprites:
   - type: POLAR.PCK
     files:
       0: Resources/Sprites/Terrain/polar/
+  - type: POLARMOUNT.PCK
+    files:
+      0: Resources/Sprites/Terrain/polarmount/
   - type: ROADS.PCK
     files:
       0: Resources/Sprites/Terrain/roads/
