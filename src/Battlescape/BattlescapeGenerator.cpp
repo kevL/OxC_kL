@@ -440,9 +440,7 @@ void BattlescapeGenerator::nextStage()
 			_alienRace = (*i)->getAlienRace();
 	}
 
-	deployAliens(
-			_rules->getAlienRace(_alienRace),
-			ruleDeploy);
+	deployAliens(ruleDeploy);
 
 	if (unitCount == _battleSave->getUnits()->size())
 	{
@@ -451,6 +449,7 @@ void BattlescapeGenerator::nextStage()
 
 	deployCivilians(ruleDeploy->getCivilians());
 
+/* kL: Prob. don't need this anymore; see map generation function.
 	for (int
 			i = 0;
 			i < _battleSave->getMapSizeXYZ();
@@ -464,7 +463,9 @@ void BattlescapeGenerator::nextStage()
 		{
 			_battleSave->getTiles()[i]->setDiscovered(true, 2);
 		}
-	}
+	} */
+
+	_battleSave->setAborted(false);
 
 	// set shade (alien bases are a little darker, sites depend on worldshade)
 	_battleSave->setGlobalShade(_worldShade);
@@ -575,9 +576,7 @@ void BattlescapeGenerator::run()
 
 	const size_t unitCount = _battleSave->getUnits()->size();
 
-	deployAliens( // <-- ALIEN DEPLOYMENT.
-			_rules->getAlienRace(_alienRace),
-			ruleDeploy);
+	deployAliens(ruleDeploy); // <-- ALIEN DEPLOYMENT.
 
 	if (unitCount == _battleSave->getUnits()->size())
 	{
@@ -1794,34 +1793,28 @@ bool BattlescapeGenerator::addItem(
 
 /**
  * Deploys the aLiens according to the AlienDeployment rules.
- * @param race 			- pointer to the alien race
- * @param deployment 	- pointer to the deployment rules
+ * @param deployment - pointer to the AlienDeployment rule
  */
-void BattlescapeGenerator::deployAliens(
-		AlienRace* race,
-		AlienDeployment* deployment)
+void BattlescapeGenerator::deployAliens(AlienDeployment* deployment)
 {
 	if (deployment->getRace().empty() == false
 		&& _alienRace.empty() == true) //&& month != -1
 	{
 		_alienRace = deployment->getRace();
-		if (_rules->getAlienRace(_alienRace) == NULL)
-		{
-			throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployment: " + deployment->getType());
-		}
-
-		race = _rules->getAlienRace(_alienRace);
 	}
 
 	if (_battleSave->getDepth() > 0
 		&& _alienRace.find("_UNDERWATER") == std::string::npos)
 	{
-		std::stringstream ss;
-		ss << _alienRace << "_UNDERWATER";
-
-		if (_rules->getAlienRace(ss.str()) != NULL)
-			race = _rules->getAlienRace(ss.str());
+		_alienRace += "_UNDERWATER";
 	}
+
+	if (_game->getRuleset()->getAlienRace(_alienRace) == NULL)
+	{
+		throw Exception("Map generator encountered an error: Unknown race: " + _alienRace + " defined in deployment: " + deployment->getType());
+	}
+
+	const AlienRace* const race = _game->getRuleset()->getAlienRace(_alienRace);
 
 	int month = _savedGame->getMonthsPassed();
 	if (month != -1)

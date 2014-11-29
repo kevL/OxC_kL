@@ -4698,7 +4698,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1417219816 f:\git\openxcom\src\battlescape\battlescapegenerator.h
+1417234034 f:\git\openxcom\src\battlescape\battlescapegenerator.h
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
 
@@ -5834,7 +5834,7 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1417223565 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1417234764 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
