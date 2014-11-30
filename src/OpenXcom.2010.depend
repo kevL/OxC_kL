@@ -4378,10 +4378,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1413136956 f:\git\openxcom\src\engine\options.h
-	<string>
-	<vector>
-	<SDL.h>
+1417312055 f:\git\openxcom\src\engine\options.h
 	"OptionInfo.h"
 	"Options.inc.h"
 
@@ -5630,8 +5627,7 @@
 1413136955 f:\git\openxcom\src\battlescape\medikitstate.h
 	"../Engine/State.h"
 
-1416295569 f:\git\openxcom\src\battlescape\pathfinding.h
-	<vector>
+1417312382 f:\git\openxcom\src\battlescape\pathfinding.h
 	"PathfindingNode.h"
 	"Position.h"
 	"../Ruleset/MapData.h"
@@ -5642,9 +5638,7 @@
 1413136956 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1417299623 f:\git\openxcom\src\battlescape\tileengine.h
-	<vector>
-	<SDL.h>
+1417312451 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/RuleItem.h"
@@ -5653,10 +5647,7 @@
 	<yaml-cpp/yaml.h>
 	"../Battlescape/Position.h"
 
-1417299260 f:\git\openxcom\src\savegame\tile.h
-	<string>
-	<vector>
-	<SDL_types.h>
+1417312451 f:\git\openxcom\src\savegame\tile.h
 	"BattleUnit.h"
 	"../Battlescape/Position.h"
 	"../Ruleset/MapData.h"
@@ -6505,7 +6496,7 @@
 	"../Interface/Window.h"
 	"../Resource/ResourcePack.h"
 
-1417306281 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
+1417311005 source:f:\git\openxcom\src\battlescape\pathfinding.cpp
 	"Pathfinding.h"
 	"PathfindingNode.h"
 	"PathfindingOpenSet.h"
@@ -7037,23 +7028,8 @@
 	"Logger.h"
 	"Surface.h"
 
-1413136956 source:f:\git\openxcom\src\engine\options.cpp
+1417312163 source:f:\git\openxcom\src\engine\options.cpp
 	"Options.h"
-	<algorithm>
-	<fstream>
-	<iostream>
-	<map>
-	<sstream>
-	<SDL.h>
-	<SDL_keysym.h>
-	<SDL_mixer.h>
-	<stdio.h>
-	<yaml-cpp/yaml.h>
-	"../version.h"
-	"CrossPlatform.h"
-	"Exception.h"
-	"Logger.h"
-	"Screen.h"
 	"Options.inc.h"
 	"TargetConditionals.h"
 
@@ -9337,7 +9313,7 @@
 	"../Ruleset/RuleRegion.h"
 	"../Ruleset/Ruleset.h"
 
-1416991731 source:f:\git\openxcom\src\savegame\base.cpp
+1417311128 source:f:\git\openxcom\src\savegame\base.cpp
 	"Base.h"
 	<stack>
 	"../fmath.h"
@@ -9593,7 +9569,7 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1417299865 source:f:\git\openxcom\src\savegame\tile.cpp
+1417312326 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
 	<algorithm>
 	"BattleItem.h"

@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_TILE_H
 #define OPENXCOM_TILE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <SDL_types.h> // for Uint8
+//#include <SDL_types.h> // for Uint8
 
 #include "BattleUnit.h"
 
@@ -166,7 +166,7 @@ protected:
 		}
 
 		/// Gets the floor object footstep sound.
-		int getFootstepSound(Tile* tileBelow) const;
+		int getFootstepSound(const Tile* const tileBelow) const;
 
 		/// Opens a door, returns the ID, 0(normal), 1(ufo) or -1 if no door opened.
 		int openDoor(

@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_TILEENGINE_H
 #define OPENXCOM_TILEENGINE_H
 
-#include <vector>
+//#include <vector>
 
-#include <SDL.h>
+//#include <SDL.h>
 
 #include "BattlescapeGame.h"
 #include "Position.h"

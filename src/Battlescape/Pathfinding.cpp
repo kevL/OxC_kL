@@ -991,7 +991,7 @@ int Pathfinding::getTUCost(
 					}
 				}
 
-				if (dir == 1
+				if (dir == 1 // && !fellDown
 					|| dir == 2
 					|| dir == 3)
 				{
@@ -1043,7 +1043,7 @@ int Pathfinding::getTUCost(
 					}
 				}
 
-				if (dir == 3
+				if (dir == 3 // && !fellDown
 					|| dir == 4
 					|| dir == 5)
 				{

@@ -19,25 +19,25 @@
 
 #include "Options.h"
 
-#include <algorithm>
-#include <fstream>
-#include <iostream>
-#include <map>
-#include <sstream>
+//#include <algorithm>
+//#include <fstream>
+//#include <iostream>
+//#include <map>
+//#include <sstream>
 
-#include <SDL.h>
-#include <SDL_keysym.h>
-#include <SDL_mixer.h>
-#include <stdio.h>
+//#include <SDL.h>
+//#include <SDL_keysym.h>
+//#include <SDL_mixer.h>
+//#include <stdio.h>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
-#include "../version.h"
+//#include "../version.h"
 
-#include "CrossPlatform.h"
-#include "Exception.h"
-#include "Logger.h"
-#include "Screen.h"
+//#include "CrossPlatform.h"
+//#include "Exception.h"
+//#include "Logger.h"
+//#include "Screen.h"
 
 
 namespace OpenXcom
@@ -300,7 +300,7 @@ void create()
  */
 void resetDefault()
 {
-	for (std::vector<OptionInfo>::iterator
+	for (std::vector<OptionInfo>::const_iterator
 			i = _info.begin();
 			i != _info.end();
 			++i)
@@ -317,10 +317,9 @@ void resetDefault()
 }
 
 /**
- * Loads options from a set of command line arguments,
- * in the format "-option value".
- * @param argc Number of arguments.
- * @param argv Array of argument strings.
+ * Loads options from a set of command line arguments in the format "-option value".
+ * @param argc - number of arguments
+ * @param argv - array of argument strings
  */
 void loadArgs(
 		int argc,
@@ -331,7 +330,7 @@ void loadArgs(
 			i < argc;
 			++i)
 	{
-		std::string arg = argv[i];
+		const std::string arg = argv[i];
 		if ((arg[0] == '-'
 				|| arg[0] == '/')
 			&& arg.length() > 1)
@@ -371,8 +370,9 @@ void loadArgs(
 
 /**
  * Displays command-line help when appropriate.
- * @param argc Number of arguments.
- * @param argv Array of argument strings.
+ * @param argc - number of arguments
+ * @param argv - array of argument strings
+ * @return, true if help shown
  */
 bool showHelp(
 		int argc,
@@ -399,7 +399,7 @@ bool showHelp(
 			i < argc;
 			++i)
 	{
-		std::string arg = argv[i];
+		const std::string arg = argv[i];
 		if ((arg[0] == '-'
 				|| arg[0] == '/')
 			&& arg.length() > 1)
@@ -423,7 +423,6 @@ bool showHelp(
 				|| argname == "?")
 			{
 				std::cout << help.str();
-
 				return true;
 			}
 		}
@@ -435,15 +434,15 @@ bool showHelp(
 /**
  * Handles the initialization of setting up default options and finding and
  * loading any existing ones.
- * @param argc Number of arguments.
- * @param argv Array of argument strings.
- * @return, Was initialized.
+ * @param argc - number of arguments
+ * @param argv - array of argument strings
+ * @return, true if initialized happened
  */
 bool init(
 		int argc,
 		char* argv[])
 {
-	if (showHelp(argc, argv))
+	if (showHelp(argc, argv) == true)
 		return false;
 
 	create();
@@ -455,7 +454,7 @@ bool init(
 	std::string s = getUserFolder();
 	s += "openxcom.log";
 	Logger::logFile() = s;
-	FILE *file = fopen(Logger::logFile().c_str(), "w");
+	FILE* const file = fopen(Logger::logFile().c_str(), "w");
 	if (!file)
 	{
 		throw Exception(s + " not found");
@@ -466,7 +465,7 @@ bool init(
 	Log(LOG_INFO) << "Data folder : " << _dataFolder;
 	Log(LOG_INFO) << "Data search : ";
 
-	for (std::vector<std::string>::iterator
+	for (std::vector<std::string>::const_iterator
 			i = _dataList.begin();
 			i != _dataList.end();
 			++i)
@@ -489,33 +488,35 @@ void setFolders()
 {
 	_dataList = CrossPlatform::findDataFolders();
 	if (_dataFolder.empty() == false)
-		_dataList.insert(_dataList.begin(), _dataFolder);
+		_dataList.insert(
+					_dataList.begin(),
+					_dataFolder);
 
-	if (_userFolder.empty())
+	if (_userFolder.empty() == true)
 	{
-		std::vector<std::string> user = CrossPlatform::findUserFolders();
+		const std::vector<std::string> user = CrossPlatform::findUserFolders();
 		_configFolder = CrossPlatform::findConfigFolder();
 
-		for (std::vector<std::string>::iterator // Look for an existing user folder
-				i = user.begin();
-				i != user.end();
+		for (std::vector<std::string>::const_reverse_iterator // Look for an existing user folder
+				i = user.rbegin();
+				i != user.rend();
 				++i)
 		{
-			if (CrossPlatform::folderExists(*i))
+			if (CrossPlatform::folderExists(*i) == true)
 			{
 				_userFolder = *i;
 				break;
 			}
 		}
 
-		if (_userFolder.empty()) // Set up folders
+		if (_userFolder.empty() == true) // Set up folders
 		{
-			for (std::vector<std::string>::iterator
+			for (std::vector<std::string>::const_iterator
 					i = user.begin();
 					i != user.end();
 					++i)
 			{
-				if (CrossPlatform::createFolder(*i))
+				if (CrossPlatform::createFolder(*i) == true)
 				{
 					_userFolder = *i;
 					break;
@@ -524,7 +525,7 @@ void setFolders()
 		}
 	}
 
-	if (_configFolder.empty())
+	if (_configFolder.empty() == true)
 		_configFolder = _userFolder;
 }
 
@@ -550,7 +551,7 @@ void updateOptions()
 
 	// now apply options set on the command line, overriding defaults and those loaded from config file
 //	if (!_commandLine.empty())
-	for (std::vector<OptionInfo>::iterator
+	for (std::vector<OptionInfo>::const_iterator
 			i = _info.begin();
 			i != _info.end();
 			++i)
@@ -561,11 +562,11 @@ void updateOptions()
 
 /**
  * Loads options from a YAML file.
- * @param filename YAML filename.
+ * @param filename - reference a YAML filename
  */
 void load(const std::string& filename)
 {
-	std::string s = _configFolder + filename + ".cfg";
+	const std::string s = _configFolder + filename + ".cfg";
 	try
 	{
 		YAML::Node doc = YAML::LoadFile(s);
@@ -573,7 +574,7 @@ void load(const std::string& filename)
 		if (doc["options"]["NewBattleMission"]) // Ignore old options files
 			return;
 
-		for (std::vector<OptionInfo>::iterator
+		for (std::vector<OptionInfo>::const_iterator
 				i = _info.begin();
 				i != _info.end();
 				++i)
@@ -592,11 +593,11 @@ void load(const std::string& filename)
 
 /**
  * Saves options to a YAML file.
- * @param filename YAML filename.
+ * @param filename - reference a YAML filename
  */
 void save(const std::string& filename)
 {
-	std::string s = _configFolder + filename + ".cfg";
+	const std::string s = _configFolder + filename + ".cfg";
 	std::ofstream sav(s.c_str());
 	if (!sav)
 	{
@@ -614,7 +615,7 @@ void save(const std::string& filename)
 			doc,
 			node;
 
-		for (std::vector<OptionInfo>::iterator
+		for (std::vector<OptionInfo>::const_iterator
 				i = _info.begin();
 				i != _info.end();
 				++i)
@@ -638,9 +639,9 @@ void save(const std::string& filename)
 }
 
 /**
- * Returns the game's current Data folder where resources and X-Com files are
- * loaded from.
- * @return, Full path to Data folder.
+ * Returns the game's current Data folder where resources
+ * and X-Com files are loaded from.
+ * @return, full path to Data folder
  */
 std::string getDataFolder()
 {
@@ -648,9 +649,9 @@ std::string getDataFolder()
 }
 
 /**
- * Changes the game's current Data folder where resources and X-Com files are
- * loaded from.
- * @param folder Full path to Data folder.
+ * Changes the game's current Data folder where resources
+ * and X-Com files are loaded from.
+ * @param folder - reference full path to Data folder
  */
 void setDataFolder(const std::string& folder)
 {
@@ -659,7 +660,7 @@ void setDataFolder(const std::string& folder)
 
 /**
  * Returns the game's list of possible Data folders.
- * @return, List of Data paths.
+ * @return, reference to a vector of a list of Data paths
  */
 const std::vector<std::string>& getDataList()
 {
@@ -668,7 +669,7 @@ const std::vector<std::string>& getDataList()
 
 /**
  * Returns the game's User folder where saves are stored in.
- * @return, Full path to User folder.
+ * @return, full path to User folder
  */
 std::string getUserFolder()
 {
@@ -676,9 +677,9 @@ std::string getUserFolder()
 }
 
 /**
- * Returns the game's Config folder where settings are stored in. Normally the
- * same as the User folder.
- * @return, Full path to Config folder.
+ * Returns the game's Config folder where settings are stored in.
+ * Normally the same as the User folder.
+ * @return, full path to Config folder
  */
 std::string getConfigFolder()
 {
@@ -687,7 +688,7 @@ std::string getConfigFolder()
 
 /**
  * Returns the game's list of all available option information.
- * @return, List of OptionInfo's.
+ * @return, reference to a vector of OptionInfo's
  */
 const std::vector<OptionInfo>& getOptionInfo()
 {

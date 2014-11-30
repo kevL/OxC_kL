@@ -414,17 +414,17 @@ int Tile::getTerrainLevel() const
  *			5 - sand
  *			6 - snow (mars)
  */
-int Tile::getFootstepSound(Tile* tileBelow) const
+int Tile::getFootstepSound(const Tile* const tileBelow) const
 {
 	int sound = -1;
 
-	if (_objects[MapData::O_OBJECT]
-		&& _objects[MapData::O_OBJECT]->getBigWall() == 0
-		&& _objects[MapData::O_OBJECT]->getFootstepSound() > 0)
+	if (_objects[MapData::O_OBJECT] != NULL
+		&& _objects[MapData::O_OBJECT]->getBigWall() < 2
+		&& _objects[MapData::O_OBJECT]->getFootstepSound() > 0) // > -1
 	{
 		sound = _objects[MapData::O_OBJECT]->getFootstepSound();
 	}
-	else if (_objects[MapData::O_FLOOR])
+	else if (_objects[MapData::O_FLOOR] != NULL)
 		sound = _objects[MapData::O_FLOOR]->getFootstepSound();
 	else if (_objects[MapData::O_OBJECT] == NULL
 		&& tileBelow != NULL
