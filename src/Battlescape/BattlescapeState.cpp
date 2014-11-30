@@ -57,15 +57,14 @@
 
 #include "../Engine/Action.h"
 #include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
+//#include "../Engine/Exception.h"
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 #include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Surface.h"
@@ -285,6 +284,7 @@ BattlescapeState::BattlescapeState()
 	_txtShade		= new Text(50, 9, 1, 10);
 	_txtTurn		= new Text(50, 9, 1, 20);
 	_lstExp			= new TextList(25, 57, 1, 37);
+	_txtHasKill		= new Text(10, 9, 1, 95);
 
 	_txtConsole1	= new Text(screenWidth / 2, y, 0, 0);
 	_txtConsole2	= new Text(screenWidth / 2, y, screenWidth / 2, 0);
@@ -314,12 +314,12 @@ BattlescapeState::BattlescapeState()
 	_map->onMouseIn((ActionHandler)& BattlescapeState::mapIn);
 
 	add(_icons);
-	Surface* icons = _game->getResourcePack()->getSurface("ICONS.PCK");
+	Surface* const icons = _game->getResourcePack()->getSurface("ICONS.PCK");
 
 	// Add in custom reserve buttons
 	if (_game->getResourcePack()->getSurface("TFTDReserve"))
 	{
-		Surface* tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve"); // 'Resources/UI/reserve.png'
+		Surface* const tftdIcons = _game->getResourcePack()->getSurface("TFTDReserve"); // 'Resources/UI/reserve.png'
 		tftdIcons->setX(48);
 		tftdIcons->setY(176);
 		tftdIcons->blit(icons);
@@ -327,7 +327,7 @@ BattlescapeState::BattlescapeState()
 
 	// there is some cropping going on here, because the icons
 	// image is 320x200 while we only need the bottom of it.
-	SDL_Rect* r = icons->getCrop();
+	SDL_Rect* const r = icons->getCrop();
 	r->x = 0;
 	r->y = 200 - iconsHeight;
 	r->w = iconsWidth;
@@ -467,6 +467,7 @@ BattlescapeState::BattlescapeState()
 	add(_txtShade);
 	add(_txtTurn);
 	add(_lstExp);
+	add(_txtHasKill);
 
 	_txtTerrain->setColor(Palette::blockOffset(9)); // yellow
 	_txtTerrain->setHighContrast();
@@ -483,6 +484,9 @@ BattlescapeState::BattlescapeState()
 	_lstExp->setColor(Palette::blockOffset(8)); // blue
 	_lstExp->setHighContrast();
 	_lstExp->setColumns(2, 10, 15);
+
+	_txtHasKill->setColor(Palette::blockOffset(9)); // yellow
+	_txtHasKill->setHighContrast();
 
 //	_numLayers->setColor(Palette::blockOffset(5)+12);
 	_numLayers->setValue(1);
@@ -736,7 +740,7 @@ BattlescapeState::BattlescapeState()
 					Options::keyBattleConsole);
 
 
-	SDLKey buttons[] =
+	const SDLKey buttons[] =
 	{
 		Options::keyBattleCenterEnemy1,
 		Options::keyBattleCenterEnemy2,
@@ -826,10 +830,9 @@ BattlescapeState::BattlescapeState()
 	else if (mission == "STR_MARS_THE_FINAL_ASSAULT")
 		music = OpenXcom::res_MUSIC_TAC_BATTLE_MARS2;
 
-	const std::string terrain = _savedBattle->getTerrain();
 	_game->getResourcePack()->playMusic(
 									music,
-									terrain);
+									_savedBattle->getTerrain());
 
 	_animTimer = new Timer(DEFAULT_ANIM_SPEED);
 	_animTimer->onTimer((StateHandler)& BattlescapeState::animate);
@@ -3824,7 +3827,7 @@ void BattlescapeState::updateExpData() // kL
 {
 	_lstExp->clearList();
 
-	BattleUnit* unit = _savedBattle->getSelectedUnit();
+	const BattleUnit* const unit = _savedBattle->getSelectedUnit();
 
 	if (unit == NULL
 		|| unit->getGeoscapeSoldier() == NULL)
@@ -3871,6 +3874,11 @@ void BattlescapeState::updateExpData() // kL
 		else if (xp[i] > 0)
 			_lstExp->setCellColor(i, 1, Palette::blockOffset(3));	// green
 	}
+
+	if (unit->hasFirstKill() == true)
+		_txtHasKill->setText(L"+");
+	else
+		_txtHasKill->setText(L"");
 }
 
 /**

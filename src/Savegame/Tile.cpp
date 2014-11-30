@@ -331,9 +331,9 @@ int Tile::getTUCost(
 		int part,
 		MovementType movementType) const
 {
-	if (_objects[part])
+	if (_objects[part] != NULL)
 	{
-		if (_objects[part]->isUFODoor()
+		if (_objects[part]->isUFODoor() == true
 			&& _curFrame[part] > 1)
 		{
 			return 0;
@@ -356,7 +356,7 @@ int Tile::getTUCost(
  * @param tileBelow - the tile below this tile
  * @return, true if tile has no floor
  */
-bool Tile::hasNoFloor(Tile* tileBelow) const
+bool Tile::hasNoFloor(const Tile* const tileBelow) const
 {
 	if (tileBelow != NULL
 		&& tileBelow->getTerrainLevel() == -24)
@@ -364,7 +364,7 @@ bool Tile::hasNoFloor(Tile* tileBelow) const
 		return false;
 	}
 
-	if (_objects[MapData::O_FLOOR])
+	if (_objects[MapData::O_FLOOR] != NULL)
 		return _objects[MapData::O_FLOOR]->isNoFloor();
 
 	return true;
@@ -376,7 +376,7 @@ bool Tile::hasNoFloor(Tile* tileBelow) const
  */
 bool Tile::isBigWall() const
 {
-	if (_objects[MapData::O_OBJECT])
+	if (_objects[MapData::O_OBJECT] != NULL)
 		return (_objects[MapData::O_OBJECT]->getBigWall() != 0);
 
 	return false;
@@ -391,10 +391,10 @@ int Tile::getTerrainLevel() const
 {
 	int level = 0;
 
-	if (_objects[MapData::O_FLOOR])
+	if (_objects[MapData::O_FLOOR] != NULL)
 		level = _objects[MapData::O_FLOOR]->getTerrainLevel();
 
-	if (_objects[MapData::O_OBJECT])
+	if (_objects[MapData::O_OBJECT] != NULL)
 		level = std::min(
 						level,
 						_objects[MapData::O_OBJECT]->getTerrainLevel());
@@ -1014,7 +1014,7 @@ void Tile::addItem(
  */
 void Tile::removeItem(BattleItem* item)
 {
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
@@ -1033,7 +1033,7 @@ void Tile::removeItem(BattleItem* item)
  * Get the topmost item sprite to draw on the battlescape.
  * @return, sprite ID in floorob, or -1 when no item
  */
-int Tile::getTopItemSprite()
+int Tile::getTopItemSprite() const
 {
 	int
 		weight = -1,
@@ -1063,16 +1063,16 @@ int Tile::getTopItemSprite()
  *			1 - stunned Soldier
  *			2 - stunned and wounded Soldier
  */
-int Tile::getHasUnconsciousSoldier() // kL
+int Tile::getHasUnconsciousSoldier() const // kL
 {
 	int ret = 0;
 
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = _inventory.begin();
 			i != _inventory.end();
 			++i)
 	{
-		BattleUnit* bu = (*i)->getUnit();
+		const BattleUnit* const bu = (*i)->getUnit();
 
 		if (bu != NULL
 			&& bu->getOriginalFaction() == FACTION_PLAYER

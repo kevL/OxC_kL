@@ -346,7 +346,7 @@ Craft* Soldier::getCraft() const
  * Assigns this Soldier to a craft.
  * @param craft - pointer to Craft
  */
-void Soldier::setCraft(Craft* craft)
+void Soldier::setCraft(Craft* const craft)
 {
 	_craft = craft;
 }
@@ -385,9 +385,6 @@ std::string Soldier::getRankString() const
 		case RANK_CAPTAIN:		return "STR_CAPTAIN";
 		case RANK_COLONEL:		return "STR_COLONEL";
 		case RANK_COMMANDER:	return "STR_COMMANDER";
-
-		default:
-			return "";
 	}
 
 	return "";
@@ -428,7 +425,7 @@ void Soldier::promoteRank()
  */
 void Soldier::addMissionCount()
 {
-	_missions++;
+	++_missions;
 }
 
 /**
@@ -442,11 +439,11 @@ int Soldier::getMissions() const
 
 /**
  * Adds a kill to this Soldier's kill counter.
- * @param count - quantity of kills to add
+ * @param kills - quantity of kills to add
  */
-void Soldier::addKillCount(int count)
+void Soldier::addKillCount(const int kills)
 {
-	_kills += count;
+	_kills += kills;
 }
 
 /**

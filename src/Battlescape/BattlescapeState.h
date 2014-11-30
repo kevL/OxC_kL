@@ -158,10 +158,11 @@ private:
 //		* _txtConsole3,
 //		* _txtConsole4,
 		* _txtDebug,
-//		* _txtTooltip;
+		* _txtHasKill,
 		* _txtName,
 		* _txtShade,
 		* _txtTerrain,
+//		* _txtTooltip;
 		* _txtTurn;
 //	TextList* _lstConsole;
 	TextList* _lstExp;

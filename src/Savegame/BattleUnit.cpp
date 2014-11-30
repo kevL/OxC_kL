@@ -35,7 +35,6 @@
 #include "../Battlescape/Pathfinding.h"
 
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/RNG.h"
@@ -1263,21 +1262,21 @@ int BattleUnit::getMorale() const
 
 /**
  * Do an amount of damage.
- * @param relative		- reference to a position (voxel) that defines which part of armor and/or bodypart is hit
+ * @param relPos		- reference a position in voxelspace that defines which part of armor and/or body gets hit
  * @param power			- the amount of damage to inflict
- * @param type			- the type of damage being inflicted (RuleItem.h)
- * @param ignoreArmor	- true for stun & smoke damage; no armor reduction, although vulnerability is still factored
+ * @param type			- the ItemDamageType being inflicted (RuleItem.h)
+ * @param ignoreArmor	- true for stun & smoke damage; no armor reduction, although vulnerability is still factored in
  * @return, damage done to this BattleUnit after adjustments
  */
 int BattleUnit::damage(
-		const Position& relative,
+		const Position& relPos,
 		int power,
 		ItemDamageType type,
-		bool ignoreArmor)
+		const bool ignoreArmor)
 {
 	//Log(LOG_INFO) << "BattleUnit::damage(), ID " << getId();
 	power = static_cast<int>(Round(
-					static_cast<double>(power) * static_cast<double>(_armor->getDamageModifier(type))));
+			static_cast<float>(power) * _armor->getDamageModifier(type)));
 	//Log(LOG_INFO) << "BattleUnit::damage(), type = " << (int)type << " ModifiedPower " << power;
 
 //	if (power < 1) // kL_note: this early-out messes with got-hit sFx below_
@@ -1288,49 +1287,51 @@ int BattleUnit::damage(
 
 	if (type == DT_STUN)
 	{
-		if (power < 0)
+		if (power < 1)
 			return 0;
 	}
 
 	UnitBodyPart bodypart = BODYPART_TORSO;
 
-	if (ignoreArmor == false)
+	if (power > 0
+		&& ignoreArmor == false)
 	{
 		UnitSide side = SIDE_FRONT;
 
-		if (relative == Position(0, 0, 0))
+		if (relPos == Position(0, 0, 0))
 			side = SIDE_UNDER;
 		else
 		{
-			int relativeDir;
-
+			int relDir;
 			const int
-				abs_x = std::abs(relative.x),
-				abs_y = std::abs(relative.y);
+				abs_x = std::abs(relPos.x),
+				abs_y = std::abs(relPos.y);
 
 			if (abs_y > abs_x * 2)
-				relativeDir = 8 + 4 * (relative.y > 0);
+//				relDir = 8 + 4 * static_cast<int>(relPos.y > 0);
+				relDir = 8 + 4 * static_cast<int>(relPos.y < 0);	// hit from South (y-pos) or North (y-neg)
 			else if (abs_x > abs_y * 2)
-				relativeDir = 10 + 4 * (relative.x < 0);
+				relDir = 10 + 4 * static_cast<int>(relPos.x < 0);	// hit from East (x-pos) or West (x-neg)
 			else
 			{
-				if (relative.x < 0)
+				if (relPos.x < 0)		// hit from West (x-neg)
 				{
-					if (relative.y > 0)
-						relativeDir = 13;
+					if (relPos.y > 0)
+						relDir = 13;	// hit from SouthWest (y-pos)
 					else
-						relativeDir = 15;
+						relDir = 15;	// hit from NorthWest (y-neg)
 				}
-				else
+				else					// hit from East (x-pos)
 				{
-					if (relative.y > 0)
-						relativeDir = 11;
+					if (relPos.y > 0)
+						relDir = 11;	// hit from SouthEast (y-pos)
 					else
-						relativeDir = 9;
+						relDir = 9;		// hit from NorthEast (y-neg)
 				}
 			}
 
-			switch ((relativeDir - _direction) %8)
+			Log(LOG_INFO) << "BattleUnit::damage() Target was hit from DIR = " << ((relDir - _direction) %8);
+			switch ((relDir - _direction) %8)
 			{
 				case 0:	side = SIDE_FRONT;									break;
 				case 1:	side = RNG::percent(50)? SIDE_FRONT: SIDE_RIGHT;	break;
@@ -1342,9 +1343,9 @@ int BattleUnit::damage(
 				case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
 			}
 
-			if (relative.z > getHeight() - 4)
+			if (relPos.z > getHeight() - 4)
 				bodypart = BODYPART_HEAD;
-			else if (relative.z > 5)
+			else if (relPos.z > 5)
 			{
 				switch (side)
 				{
@@ -1362,9 +1363,9 @@ int BattleUnit::damage(
 					case SIDE_RIGHT:	bodypart = BODYPART_RIGHTLEG; 	break;
 
 					default:
-						bodypart = (UnitBodyPart)RNG::generate(
-															BODYPART_RIGHTLEG,
-															BODYPART_LEFTLEG);
+						bodypart = static_cast<UnitBodyPart>(RNG::generate(
+																		BODYPART_RIGHTLEG,
+																		BODYPART_LEFTLEG));
 				}
 			}
 		}
@@ -1373,7 +1374,7 @@ int BattleUnit::damage(
 		setArmor( // armor damage
 				std::max(
 						0,
-						armor - (power / 10) - 1),
+						armor - (power + 9) / 10), // round up.
 				side);
 
 		power -= armor; // subtract armor-before-damage from power.
@@ -1399,7 +1400,7 @@ int BattleUnit::damage(
 				if (type == DT_IN)
 				{
 					_diedByFire = true;
-					_spawnUnit = "";
+					_spawnUnit.clear();
 
 					if (_type == "STR_ZOMBIE")
 						_specab = SPECAB_EXPLODEONDEATH;
@@ -1409,18 +1410,16 @@ int BattleUnit::damage(
 			}
 			else
 			{
-				if ( //_armor->getSize() == 1 &&					// add some stun to not-large units
-					_geoscapeSoldier != NULL						// add some stun to xCom agents
-						|| (_unitRules
-							&& _unitRules->getMechanical() == false	// or to non-mechanical units
-							&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
+				if (_geoscapeSoldier != NULL					// add some stun to xCom agents
+					|| (_unitRules->getMechanical() == false	// or to non-mechanical units
+						&& _race != "STR_ZOMBIE"))				// unless it's a freakin Zombie.
 				{
-					_stunLevel += RNG::generate(0, power / 3); // kL_note: was, 4
+					_stunLevel += RNG::generate(0, power / 3);
 				}
 
 				if (ignoreArmor == false)// Only wearers of armors-that-are-resistant-to-damage-type can take fatal wounds.
 				{
-					if (isWoundable()) // fatal wounds
+					if (isWoundable() == true) // fatal wounds
 					{
 						if (RNG::generate(0, 10) < power) // kL: refactor this.
 						{
@@ -1441,12 +1440,11 @@ int BattleUnit::damage(
 //	if (!isOut(true, true)) // no sound if Stunned; deathscream handled by uh, UnitDieBState.
 //		playHitSound(); // kL
 	if (_health > 0
-		&& _visible
+		&& _visible == true
 		&& _status != STATUS_UNCONSCIOUS
 		&& type != DT_STUN
 		&& (_geoscapeSoldier != NULL
-			|| (_unitRules
-				&& _unitRules->getMechanical() == false)))
+			|| _unitRules->getMechanical() == false))
 	{
 		playHitSound(); // kL
 	}
@@ -2909,17 +2907,17 @@ void BattleUnit::updateGeoscapeStats(Soldier* soldier)
  */
 bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 {
-	Soldier* soldier = geoscape->getSoldier(_id);
+	Soldier* const soldier = geoscape->getSoldier(_id);
 	if (soldier == NULL)
 		return false;
 
 
 	updateGeoscapeStats(soldier); // missions & kills
 
-	UnitStats* stats = soldier->getCurrentStats();
+	UnitStats* const stats = soldier->getCurrentStats();
 	const UnitStats caps = soldier->getRules()->getStatCaps();
 
-	int healthLoss = stats->health - _health;
+	const int healthLoss = stats->health - _health;
 	soldier->setWoundRecovery(RNG::generate(
 							static_cast<int>((static_cast<double>(healthLoss) * 0.5)),
 							static_cast<int>((static_cast<double>(healthLoss) * 1.5))));
@@ -2977,16 +2975,17 @@ bool BattleUnit::postMissionProcedures(SavedGame* geoscape)
 	}
 
 
-	bool expPri = _expBravery
-				|| _expReactions
-				|| _expFiring
-				|| _expMelee;
+	const bool expPri = _expBravery
+					 || _expReactions
+					 || _expFiring
+					 || _expMelee;
 
 	if (expPri
 		|| _expPsiSkill
 		|| _expPsiStrength)
 	{
-		if (soldier->getRank() == RANK_ROOKIE)
+//		if (soldier->getRank() == RANK_ROOKIE)
+		if (hasFirstKill() == true)
 			soldier->promoteRank();
 
 		if (expPri)
@@ -3056,7 +3055,7 @@ int BattleUnit::getMiniMapSpriteIndex() const
 	// * 9-11  : Item
 	// * 12-23 : Xcom HWP
 	// * 24-35 : Alien big terror unit(cyberdisk, ...)
-	if (isOut(true, true))
+	if (isOut(true, true) == true)
 		return 9;
 
 	switch (getFaction())
@@ -3498,6 +3497,15 @@ void BattleUnit::addKillCount()
 }
 
 /**
+ * Gets if this is a Rookie and has made his/her first kill.
+ */
+bool BattleUnit::hasFirstKill() const
+{
+	return _rankInt == 0
+		&& _kills > 0;
+}
+
+/**
  * Gets unit type.
  * @return, unit type
  */
@@ -3706,11 +3714,11 @@ std::vector<BattleUnit*>& BattleUnit::getUnitsSpottedThisTurn()
 
 /**
  * Sets the numeric version of a unit's rank.
- * @param rank - unit rank ( 0 = lowest ) kL_note: uh doesn't aLien & xCom go opposite ways
+ * @param ranks - unit rank ( 0 = lowest ) kL_note: uh doesn't aLien & xCom go opposite ways
  */
-void BattleUnit::setRankInt(int rank)
+void BattleUnit::setRankInt(int ranks)
 {
-	_rankInt = rank;
+	_rankInt = ranks;
 }
 
 /**

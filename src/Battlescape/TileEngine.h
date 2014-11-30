@@ -119,7 +119,7 @@ private:
 		/// Checks validity for targetting a unit.
 		bool canTargetUnit(
 				Position* originVoxel,
-				Tile* tile,
+				const Tile* const tile,
 				Position* scanVoxel,
 				BattleUnit* excludeUnit,
 				BattleUnit* potentialUnit = NULL);

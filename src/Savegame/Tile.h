@@ -148,7 +148,7 @@ protected:
 				MovementType movementType) const;
 
 		/// Checks if this tile has a floor.
-		bool hasNoFloor(Tile* tileBelow) const;
+		bool hasNoFloor(const Tile* const tileBelow) const;
 
 		/// Checks if this tile is a big wall.
 		bool isBigWall() const;
@@ -273,9 +273,9 @@ protected:
 		void removeItem(BattleItem* item);
 
 		/// Gets top-most item-sprite
-		int getTopItemSprite();
+		int getTopItemSprite() const;
 		/// kL. Gets if the tile has an unconscious xCom unit in its inventory.
-		int getHasUnconsciousSoldier(); // kL
+		int getHasUnconsciousSoldier() const; // kL
 
 		/// New turn preparations.
 		void prepareTileTurn();

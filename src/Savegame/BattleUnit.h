@@ -615,10 +615,10 @@ private:
 
 		/// Do damage to this unit.
 		int damage(
-				const Position& relative,
+				const Position& relPos,
 				int power,
 				ItemDamageType type,
-				bool ignoreArmor = false);
+				const bool ignoreArmor = false);
 
 		/// Plays a grunt sFx when hit/damaged.
 		void playHitSound();
@@ -892,6 +892,8 @@ private:
 
 		/// Adds a kill to this unit's kill-counter.
 		void addKillCount();
+		/// Gets if this is a Rookie and has made his/her first kill.
+		bool hasFirstKill() const;
 
 		/// Gets this unit's type as a string.
 		std::string getType() const;
@@ -945,7 +947,7 @@ private:
 		std::vector<BattleUnit*>& getUnitsSpottedThisTurn();
 
 		/// Sets this unit's rank integer.
-		void setRankInt(int rank);
+		void setRankInt(int ranks);
 		/// Gets this unit's rank integer.
 		int getRankInt() const;
 		/// Derives a rank integer based on rank string (for xcom soldiers ONLY)

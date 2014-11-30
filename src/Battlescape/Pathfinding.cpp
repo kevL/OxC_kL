@@ -1171,9 +1171,9 @@ int Pathfinding::getTUCost(
 					&& _unit->getUnitRules()->getMechanical() == true
 					&& 1 < delta && delta < 7)
 				{
-					_strafeMove = false;
+					_strafeMove = false; // illegal direction for tank-strafe.
 				}
-				else if (_unit->getDirection() != dir)
+				else if (_unit->getDirection() != dir) // if not dashing straight ahead 1 tile.
 				{
 					delta = std::min(
 									std::abs(8 + dir - _unit->getDirection()),

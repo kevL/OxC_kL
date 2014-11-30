@@ -146,7 +146,7 @@ private:
 		/// Gets the soldier's craft.
 		Craft* getCraft() const;
 		/// Sets the soldier's craft.
-		void setCraft(Craft* craft);
+		void setCraft(Craft* const craft);
 		/// Gets the soldier's craft string.
 		std::wstring getCraftString(Language* lang) const;
 
@@ -164,7 +164,7 @@ private:
 		/// Gets the soldier's missions.
 		int getMissions() const;
 		/// Add a kill to the counter.
-		void addKillCount(int count);
+		void addKillCount(const int kills);
 		/// Gets the soldier's kills.
 		int getKills() const;
 
