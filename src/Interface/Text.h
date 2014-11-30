@@ -106,7 +106,7 @@ private:
 		static std::wstring formatNumber(
 				int64_t value,
 				const std::wstring& currency = L"",
-				bool space = true);
+				const bool space = true);
 		/// Formats an integer value as currency.
 		static std::wstring formatFunding(int64_t funds);
 		/// Formats an integer value as percentage.
@@ -133,13 +133,13 @@ private:
 
 		/// Sets the text's wordwrap setting.
 		void setWordWrap(
-				bool wrap = true,
-				bool indent = false);
+				const bool wrap = true,
+				const bool indent = false);
 
 		/// Sets the text's color invert setting.
-		void setInvert(bool invert = true);
+		void setInvert(const bool invert = true);
 		/// Sets the text's high contrast color setting.
-		void setHighContrast(bool contrast = true);
+		void setHighContrast(const bool contrast = true);
 
 		/// Sets the text's horizontal alignment.
 		void setAlign(TextHAlign align);

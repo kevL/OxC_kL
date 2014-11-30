@@ -21,9 +21,9 @@
 
 #include "BattlescapeGame.h"
 
-#include <cmath>
-#include <sstream>
-#include <typeinfo>
+//#include <cmath>
+//#include <sstream>
+//#include <typeinfo>
 
 #include "AbortMissionState.h"
 #include "AlienBAIState.h"
@@ -2501,6 +2501,7 @@ void BattlescapeGame::secondaryAction(const Position& posTarget)
 	if (_currentAction.actor->getPosition() == posTarget)	// kL
 	{
 		// could put just about anything in here Orelly.
+		_parentState->btnKneelClick(NULL);					// kL
 		_currentAction.actor = NULL;						// kL
 		return;												// kL
 	}

@@ -110,10 +110,10 @@ private:
 
 		/// Checks visibility of a unit on this tile.
 		bool visible(
-				BattleUnit* currentUnit,
+				const BattleUnit* const unit,
 				Tile* tile);
 		/// Gets the origin voxel of a unit's eyesight.
-		Position getSightOriginVoxel(BattleUnit* currentUnit);
+		Position getSightOriginVoxel(const BattleUnit* const unit);
 		/// Checks a unit's % exposure on a tile.
 //kL	int checkVoxelExposure(Position* originVoxel, Tile* tile, BattleUnit* excludeUnit, BattleUnit* excludeAllBut);
 		/// Checks validity for targetting a unit.
@@ -121,7 +121,7 @@ private:
 				Position* originVoxel,
 				const Tile* const tile,
 				Position* scanVoxel,
-				BattleUnit* excludeUnit,
+				const BattleUnit* const excludeUnit,
 				BattleUnit* potentialUnit = NULL);
 		/// Check validity for targetting a tile.
 		bool canTargetTile(Position* originVoxel,
@@ -219,7 +219,7 @@ private:
 				const Position& target,
 				bool storeTrajectory,
 				std::vector<Position>* trajectory,
-				BattleUnit* excludeUnit,
+				const BattleUnit* const excludeUnit,
 				bool doVoxelCheck = true,
 				bool onlyVisible = false,
 				BattleUnit* excludeAllBut = NULL);
@@ -229,7 +229,7 @@ private:
 				const Position& target,
 				bool storeTrajectory,
 				std::vector<Position>* trajectory,
-				BattleUnit* excludeUnit,
+				const BattleUnit* const excludeUnit,
 				double arc,
 				const Position delta);
 		/// Validates a throwing action.
@@ -280,7 +280,7 @@ private:
 		/// Checks what type of voxel occupies posTarget in voxel space.
 		int voxelCheck(
 				const Position& posTarget,
-				BattleUnit* excludeUnit = NULL,
+				const BattleUnit* const excludeUnit = NULL,
 				bool excludeAllUnits = false,
 				bool onlyVisible = false,
 				BattleUnit* excludeAllBut = NULL);

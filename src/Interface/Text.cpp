@@ -82,7 +82,7 @@ Text::~Text()
 std::wstring Text::formatNumber(
 		int64_t value,
 		const std::wstring& currency,
-		bool space)
+		const bool space)
 {
 	// In the future, the whole setlocale thing should be removed from here.
 	// It is inconsistent with the in-game language selection: locale-specific
@@ -94,14 +94,14 @@ std::wstring Text::formatNumber(
 
 	std::wostringstream ss;
 
-	bool negative = (value < 0);
+	const bool negative = (value < 0);
 	ss << (negative? -value: value);
 
 	std::wstring ret = ss.str();
 
 	if (space == true)
 	{
-		std::wstring thousands = L"\xA0"; // Language::cpToWstr(lc->mon_thousands_sep);
+		const std::wstring thousands = L"\xA0"; // Language::cpToWstr(lc->mon_thousands_sep);
 
 		size_t spacer = ret.size() - 3;
 		while (spacer > 0
@@ -236,8 +236,8 @@ std::wstring Text::getText() const
  * @param indent	- true to indent wrapped text (default false)
  */
 void Text::setWordWrap(
-		bool wrap,
-		bool indent)
+		const bool wrap,
+		const bool indent)
 {
 	if (_wrap != wrap
 		|| indent != _indent)
@@ -254,7 +254,7 @@ void Text::setWordWrap(
  * Mostly used to make button text look pressed along with the button.
  * @param invert - true to invert text (default true)
  */
-void Text::setInvert(bool invert)
+void Text::setInvert(const bool invert)
 {
 	_invert = invert;
 	_redraw = true;
@@ -265,7 +265,7 @@ void Text::setInvert(bool invert)
  * Mostly used for Battlescape UI.
  * @param contrast - true to set high contrast (default true)
  */
-void Text::setHighContrast(bool contrast)
+void Text::setHighContrast(const bool contrast)
 {
 	_contrast = contrast;
 	_redraw = true;

@@ -20,11 +20,11 @@
 #ifndef OPENXCOM_BATTLESCAPEGAME_H
 #define OPENXCOM_BATTLESCAPEGAME_H
 
-#include <list>
-#include <string>
-#include <vector>
+//#include <list>
+//#include <string>
+//#include <vector>
 
-#include <SDL.h>
+//#include <SDL.h>
 
 #include "Position.h"
 

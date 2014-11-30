@@ -158,6 +158,7 @@ private:
 //		* _txtConsole3,
 //		* _txtConsole4,
 		* _txtDebug,
+		* _txtFloor,
 		* _txtHasKill,
 		* _txtName,
 		* _txtShade,

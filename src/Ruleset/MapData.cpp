@@ -132,7 +132,7 @@ bool MapData::stopLOS() const // kL
 
 /**
  * Gets whether this is a floor.
- * @return, true if this is a floor
+ * @return, true if this is not a floor
  */
 bool MapData::isNoFloor() const
 {

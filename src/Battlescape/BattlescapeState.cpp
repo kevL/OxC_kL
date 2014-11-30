@@ -148,7 +148,8 @@ BattlescapeState::BattlescapeState()
 		x					= screenWidth / 2 - iconsWidth / 2,
 		y					= screenHeight - iconsHeight;
 
-	_txtBaseLabel = new Text(80, 9, screenWidth - 81, 0);
+	_txtBaseLabel	= new Text(80, 9, screenWidth - 81, 0);
+	_txtFloor		= new Text(25, 9, screenWidth - 26, 10);
 
 	// Create buttonbar - this should be on the centerbottom of the screen
 	_icons = new InteractiveSurface(
@@ -441,6 +442,13 @@ BattlescapeState::BattlescapeState()
 		}
 	}
 	_txtBaseLabel->setText(baseLabel); // there'd better be a baseLabel ... or else. Pow! To the moon!!!
+
+	add(_txtFloor);
+	_txtFloor->setColor(Palette::blockOffset(8)); // blue
+	_txtFloor->setHighContrast();
+	_txtFloor->setAlign(ALIGN_RIGHT);
+	_txtFloor->setText(L"floor");
+	_txtFloor->setVisible(false);
 
 //	add(_turnCounter);
 //	_turnCounter->setColor(Palette::blockOffset(8));
@@ -1103,190 +1111,193 @@ void BattlescapeState::mapOver(Action* action)
 	}
 	else if (_showConsole > 0 // kL_begin:
 		&& _mouseOverIcons == false
-		&& allowButtons())
+		&& allowButtons() == true)
 	{
 		_txtConsole1->setText(L"");
 		_txtConsole2->setText(L"");
 //		_txtConsole3->setText(L"");
 //		_txtConsole4->setText(L"");
 
+		bool showInfo = true;
+		_txtFloor->setVisible(false);
+
 		Position pos;
 		_map->getSelectorPosition(&pos);
-		Tile* tile = _savedBattle->getTile(pos);
 
+		Tile* const tile = _savedBattle->getTile(pos);
 		if (tile != NULL
-			&& tile->isDiscovered(2)
-			&& tile->getInventory()->empty() == false)
+			&& tile->isDiscovered(2))
 		{
-			_txtTerrain->setVisible(false);
-			_txtShade->setVisible(false);
-			_txtTurn->setVisible(false);
-			_lstExp->setVisible(false);
-
-			size_t row = 0;
-			std::wostringstream
-				ss,
-				ss1, // Console #1
-				ss2; // Console #2
-//				ss3, // Console #3
-//				ss4; // Console #4
-			std::wstring
-				ws,
-				ws2,
-				ws3;
-			int qty = 1;
-
-			for (size_t
-					invSize = 0;
-					invSize != tile->getInventory()->size() + 1;
-					++invSize)
+			if (tile->getInventory()->empty() == false)
 			{
-				ws = L"> ";
+				showInfo = false;
 
-				if (invSize < tile->getInventory()->size())
+				size_t row = 0;
+				std::wostringstream
+					ss,
+					ss1, // Console #1
+					ss2; // Console #2
+//					ss3, // Console #3
+//					ss4; // Console #4
+				std::wstring
+					ws,
+					ws2,
+					ws3;
+				int qty = 1;
+
+				for (size_t
+						invSize = 0;
+						invSize != tile->getInventory()->size() + 1;
+						++invSize)
 				{
-					BattleItem* item = tile->getInventory()->at(invSize);
+					ws = L"> ";
 
-					if (item->getUnit() != NULL)
+					if (invSize < tile->getInventory()->size())
 					{
-						if (item->getUnit()->getType().compare(0, 11, "STR_FLOATER") == 0)
-							ws += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
-						else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
-						{
-							ws += item->getUnit()->getName(_game->getLanguage());
+						BattleItem* const item = tile->getInventory()->at(invSize);
 
-							if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
-								ws += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun()) + L")";
+						if (item->getUnit() != NULL)
+						{
+							if (item->getUnit()->getType().compare(0, 11, "STR_FLOATER") == 0)
+								ws += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
+							else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
+							{
+								ws += item->getUnit()->getName(_game->getLanguage());
+
+								if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
+									ws += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun()) + L")";
+							}
+							else
+								ws += tr(item->getRules()->getType());
 						}
 						else
+						{
 							ws += tr(item->getRules()->getType());
+
+							if (item->getRules()->getBattleType() == BT_AMMO)
+								ws += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
+							else if (item->getRules()->getBattleType() == BT_FIREARM
+								&& item->getAmmoItem()
+								&& item->getAmmoItem() != item)
+							{
+								std::wstring s = tr(item->getAmmoItem()->getRules()->getType());
+								ws += L" | " + s + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
+							}
+							else if ((item->getRules()->getBattleType() == BT_GRENADE
+									|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+								&& item->getFuseTimer() > -1)
+							{
+								ws += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
+							}
+						}
+					}
+
+					if (invSize == 0)
+					{
+						ws3 = ws2 = ws;
+						continue;
+					}
+
+					if (ws == ws3)
+					{
+						qty++;
+						continue;
 					}
 					else
+						ws3 = ws;
+
+					if (qty > 1)
 					{
-						ws += tr(item->getRules()->getType());
-
-						if (item->getRules()->getBattleType() == BT_AMMO)
-							ws += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
-						else if (item->getRules()->getBattleType() == BT_FIREARM
-							&& item->getAmmoItem()
-							&& item->getAmmoItem() != item)
-						{
-							std::wstring s = tr(item->getAmmoItem()->getRules()->getType());
-							ws += L" | " + s + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
-						}
-						else if ((item->getRules()->getBattleType() == BT_GRENADE
-								|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-							&& item->getFuseTimer() > -1)
-						{
-							ws += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
-						}
+						ws2 += L" * " + Text::formatNumber(qty);
+						qty = 1;
 					}
-				}
 
-				if (invSize == 0)
-				{
+					ws2 += L"\n";
+					ss << ws2;
 					ws3 = ws2 = ws;
-					continue;
-				}
-
-				if (ws == ws3)
-				{
-					qty++;
-					continue;
-				}
-				else
-					ws3 = ws;
-
-				if (qty > 1)
-				{
-					ws2 += L" * " + Text::formatNumber(qty);
-					qty = 1;
-				}
-
-				ws2 += L"\n";
-				ss << ws2;
-				ws3 = ws2 = ws;
 
 
-				if (row == 24) // Console #1
-				{
-					ss << L"> more >";
-					row++;
-				}
-				if (row < 26)
-				{
-					ss1.str(L"");
-					ss1 << ss.str();
-				}
-				if (row == 25)
-				{
-					if (_showConsole == 1)
+					if (row == 24) // Console #1
+					{
+						ss << L"> more >";
+						row++;
+					}
+					if (row < 26)
+					{
+						ss1.str(L"");
+						ss1 << ss.str();
+					}
+					if (row == 25)
+					{
+						if (_showConsole == 1)
+							break;
+
+						ss.str(L"");
+					}
+
+					if (row == 50) // Console #2
+					{
+						ss << L"> more >";
+//						row++;
+					}
+					if (26 < row && row < 52)
+					{
+						ss2.str(L"");
+						ss2 << ss.str();
+					}
+					if (row == 51)
+					{
+//						if (_showConsole == 2)
 						break;
 
-					ss.str(L"");
+//						ss.str(L"");
+					}
+
+/*					if (row == 76) // Console #3
+					{
+						ss << L"> more >";
+						row++;
+					}
+					if (52 < row && row < 78)
+					{
+						ss3.str(L"");
+						ss3 << ss.str();
+					}
+					if (row == 77)
+					{
+						if (_showConsole == 3)
+							break;
+
+						ss.str(L"");
+					}
+
+					if (row == 102) // Console #4
+						ss << L"> more >";
+					if (78 < row && row < 104)
+					{
+						ss4.str(L"");
+						ss4 << ss.str();
+					}
+					if (row == 102)
+						break; */
+
+					++row;
 				}
 
-				if (row == 50) // Console #2
-				{
-					ss << L"> more >";
-//					row++;
-				}
-				if (26 < row && row < 52)
-				{
-					ss2.str(L"");
-					ss2 << ss.str();
-				}
-				if (row == 51)
-				{
-//					if (_showConsole == 2)
-					break;
-
-//					ss.str(L"");
-				}
-
-/*				if (row == 76) // Console #3
-				{
-					ss << L"> more >";
-					row++;
-				}
-				if (52 < row && row < 78)
-				{
-					ss3.str(L"");
-					ss3 << ss.str();
-				}
-				if (row == 77)
-				{
-					if (_showConsole == 3)
-						break;
-
-					ss.str(L"");
-				}
-
-				if (row == 102) // Console #4
-					ss << L"> more >";
-				if (78 < row && row < 104)
-				{
-					ss4.str(L"");
-					ss4 << ss.str();
-				}
-				if (row == 102)
-					break; */
-
-				row++;
+				_txtConsole1->setText(ss1.str());
+				_txtConsole2->setText(ss2.str());
+//				_txtConsole3->setText(ss3.str());
+//				_txtConsole4->setText(ss4.str());
 			}
+			else if (tile->hasNoFloor(_savedBattle->getTile(pos + Position(0, 0,-1))) == false)
+				_txtFloor->setVisible();
+		}
 
-			_txtConsole1->setText(ss1.str());
-			_txtConsole2->setText(ss2.str());
-//			_txtConsole3->setText(ss3.str());
-//			_txtConsole4->setText(ss4.str());
-		}
-		else
-		{
-			_txtTerrain->setVisible();
-			_txtShade->setVisible();
-			_txtTurn->setVisible();
-			_lstExp->setVisible();
-		}
+		_txtTerrain->setVisible(showInfo);
+		_txtShade->setVisible(showInfo);
+		_txtTurn->setVisible(showInfo);
+		_lstExp->setVisible(showInfo);
+		_txtHasKill->setVisible(showInfo);
 	} // kL_end.
 }
 
@@ -1678,11 +1689,11 @@ void BattlescapeState::btnKneelClick(Action*)
 {
 	if (allowButtons() == true)
 	{
-		BattleUnit* bu = _savedBattle->getSelectedUnit();
+		BattleUnit* const bu = _savedBattle->getSelectedUnit();
 		if (bu != NULL)
 		{
 			//Log(LOG_INFO) << "BattlescapeState::btnKneelClick()";
-			if (_battleGame->kneel(bu))
+			if (_battleGame->kneel(bu) == true)
 			{
 				updateSoldierInfo(false); // kL
 
@@ -1699,7 +1710,7 @@ void BattlescapeState::btnKneelClick(Action*)
 					// no, no it won't.
 				_battleGame->getTileEngine()->checkReactionFire(bu); // kL
 
-				if (_battleGame->getPathfinding()->isPathPreviewed())
+				if (_battleGame->getPathfinding()->isPathPreviewed() == true)
 				{
 					_battleGame->getPathfinding()->calculate(
 														_battleGame->getCurrentAction()->actor,
@@ -2278,6 +2289,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
 			_lstExp->setVisible();
+			_txtHasKill->setVisible();
 		}
 /*		else if (_showConsole == 3)
 		{
@@ -2299,6 +2311,7 @@ void BattlescapeState::btnConsoleToggle(Action*) // kL
 			_txtShade->setVisible();
 			_txtTurn->setVisible();
 			_lstExp->setVisible();
+			_txtHasKill->setVisible();
 		} */
 
 		_txtConsole1->setVisible(_showConsole > 0);
@@ -3524,6 +3537,9 @@ void BattlescapeState::mouseInIcons(Action*)
 	_txtShade->setVisible();
 	_txtTurn->setVisible();
 	_lstExp->setVisible();
+	_txtHasKill->setVisible();
+
+	_txtFloor->setVisible(false);
 }
 
 /**
@@ -3684,6 +3700,10 @@ void BattlescapeState::toggleIcons(bool vis)
 	_btnAbort->setVisible(vis);
 
 	_lstExp->setVisible(vis);
+	_txtHasKill->setVisible(vis);
+
+	if (vis == false)
+		_txtFloor->setVisible(vis);
 }
 
 /**
@@ -3714,7 +3734,7 @@ void BattlescapeState::refreshVisUnits() // kL
 	}
 
 	int j = 0;
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = selectedUnit->getVisibleUnits()->begin();
 			i != selectedUnit->getVisibleUnits()->end()
 				&& j < VISIBLE_MAX;
@@ -3730,11 +3750,10 @@ void BattlescapeState::refreshVisUnits() // kL
 
 /**
  * Shows primer warnings on all live grenades.
- * kL. Adapted from Inventory.
  */
-void BattlescapeState::drawFuse() // kL
+void BattlescapeState::drawFuse()
 {
-	BattleUnit* selectedUnit = _savedBattle->getSelectedUnit();
+	const BattleUnit* const selectedUnit = _savedBattle->getSelectedUnit();
 	if (selectedUnit == NULL)
 		return;
 
@@ -3744,13 +3763,13 @@ void BattlescapeState::drawFuse() // kL
 	if (_fuseFrame == 22)
 		_fuseFrame = 0;
 
-	Surface* srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
+	Surface* const srf = _game->getResourcePack()->getSurfaceSet("SCANG.DAT")->getFrame(9);
 
-	BattleItem* ltItem = selectedUnit->getItem("STR_LEFT_HAND");
-	if (ltItem
-		&& ((ltItem->getRules()->getBattleType() == BT_GRENADE
-				|| ltItem->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-			&& ltItem->getFuseTimer() > -1))
+	const BattleItem* item = selectedUnit->getItem("STR_LEFT_HAND");
+	if (item != NULL
+		&& ((item->getRules()->getBattleType() == BT_GRENADE
+				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+			&& item->getFuseTimer() > -1))
 	{
 		_btnLeftHandItem->lock();
 		srf->blitNShade(
@@ -3763,11 +3782,11 @@ void BattlescapeState::drawFuse() // kL
 		_btnLeftHandItem->unlock();
 	}
 
-	BattleItem* rtItem = selectedUnit->getItem("STR_RIGHT_HAND");
-	if (rtItem
-		&& ((rtItem->getRules()->getBattleType() == BT_GRENADE
-				|| rtItem->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
-			&& rtItem->getFuseTimer() > -1))
+	item = selectedUnit->getItem("STR_RIGHT_HAND");
+	if (item != NULL
+		&& ((item->getRules()->getBattleType() == BT_GRENADE
+				|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
+			&& item->getFuseTimer() > -1))
 	{
 		_btnRightHandItem->lock();
 		srf->blitNShade(
@@ -3826,14 +3845,18 @@ Bar* BattlescapeState::getEnergyBar() const // kL
 void BattlescapeState::updateExpData() // kL
 {
 	_lstExp->clearList();
+	_txtHasKill->setText(L"");
 
 	const BattleUnit* const unit = _savedBattle->getSelectedUnit();
-
 	if (unit == NULL
 		|| unit->getGeoscapeSoldier() == NULL)
 	{
 		return;
 	}
+
+	if (unit->hasFirstKill() == true)
+		_txtHasKill->setText(L"+");
+
 
 	std::vector<std::wstring> xpType;
 	xpType.push_back(L"f ");
@@ -3844,7 +3867,7 @@ void BattlescapeState::updateExpData() // kL
 	xpType.push_back(L"p ");
 	xpType.push_back(L"p ");
 
-	int xp[] =
+	const int xp[] =
 	{
 		unit->getExpFiring(),
 		unit->getExpThrowing(),
@@ -3874,11 +3897,6 @@ void BattlescapeState::updateExpData() // kL
 		else if (xp[i] > 0)
 			_lstExp->setCellColor(i, 1, Palette::blockOffset(3));	// green
 	}
-
-	if (unit->hasFirstKill() == true)
-		_txtHasKill->setText(L"+");
-	else
-		_txtHasKill->setText(L"");
 }
 
 /**

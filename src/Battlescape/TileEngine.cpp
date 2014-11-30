@@ -691,7 +691,7 @@ void TileEngine::recalculateFOV()
  * @return, true if a unit is on that tile and is seen
  */
 bool TileEngine::visible(
-		BattleUnit* unit,
+		const BattleUnit* const unit,
 		Tile* tile)
 {
 	if (tile == NULL
@@ -700,17 +700,17 @@ bool TileEngine::visible(
 		return false;
 	}
 
-	BattleUnit* targetUnit = tile->getUnit();
-	if (targetUnit->isOut(true, true))
+	const BattleUnit* const targetUnit = tile->getUnit();
+	if (targetUnit->isOut(true, true) == true)
 		return false;
 
 	if (unit->getFaction() == targetUnit->getFaction())
 		return true;
 
 
-	int dist = distance(
-					unit->getPosition(),
-					targetUnit->getPosition());
+	const int dist = distance(
+							unit->getPosition(),
+							targetUnit->getPosition());
 	if (dist > MAX_VIEW_DISTANCE)
 		return false;
 
@@ -755,11 +755,10 @@ bool TileEngine::visible(
 					&_trajectory,
 					unit);
 
-		double
-			distEffective = static_cast<double>(_trajectory.size()),
-			distReal = static_cast<double>(dist) * 16.0 / distEffective;
+		double distEffective = static_cast<double>(_trajectory.size());
+		const double distReal = static_cast<double>(dist) * 16. / distEffective;
 
-		Tile* testTile = _battleSave->getTile(unit->getPosition());
+		const Tile* testTile = _battleSave->getTile(unit->getPosition());
 
 		for (size_t
 				i = 0;
@@ -779,8 +778,8 @@ bool TileEngine::visible(
 
 			// the 'origin tile' now steps along through voxel/tile-space, picking up extra
 			// weight (subtracting distance for both distance and obscuration) as it goes
-			distEffective += static_cast<double>(testTile->getSmoke()) * distReal / 3.0;
-			distEffective += static_cast<double>(testTile->getFire()) * distReal / 2.0;
+			distEffective += static_cast<double>(testTile->getSmoke()) * distReal / 3.;
+			distEffective += static_cast<double>(testTile->getFire()) * distReal / 2.;
 
 			if (distEffective > static_cast<double>(MAX_VOXEL_VIEW_DISTANCE))
 			{
@@ -790,14 +789,14 @@ bool TileEngine::visible(
 		}
 
 		// Check if unitSeen is really targetUnit.
-		if (isSeen)
+		if (isSeen == true)
 		{
 			// have to check if targetUnit is poking its head up from tileBelow
-			Tile* belowTile = _battleSave->getTile(testTile->getPosition() + Position(0, 0,-1));
+			const Tile* const belowTile = _battleSave->getTile(testTile->getPosition() + Position(0, 0,-1));
 			if (!
 				(testTile->getUnit() == targetUnit
-					|| (belowTile // could add a check for && testTile->hasNoFloor() around here.
-						&& belowTile->getUnit()
+					|| (belowTile != NULL // could add a check for && testTile->hasNoFloor() around here.
+						&& belowTile->getUnit() != NULL
 						&& belowTile->getUnit() == targetUnit)))
 			{
 				isSeen = false;
@@ -810,10 +809,10 @@ bool TileEngine::visible(
 
 /**
  * Gets the origin voxel of a unit's LoS.
- * @param unit, The watcher.
- * @return, Approximately an eyeball voxel.
+ * @param unit - the watcher
+ * @return, approximately an eyeball voxel
  */
-Position TileEngine::getSightOriginVoxel(BattleUnit* unit)
+Position TileEngine::getSightOriginVoxel(const BattleUnit* const unit)
 {
 	// determine the origin (and target) voxels for calculations
 	Position originVoxel = Position(
@@ -822,13 +821,13 @@ Position TileEngine::getSightOriginVoxel(BattleUnit* unit)
 								unit->getPosition().z * 24);
 
 	originVoxel.z += unit->getHeight()
-					+ unit->getFloatHeight()
-					- _battleSave->getTile(unit->getPosition())->getTerrainLevel()
-					- 2; // two voxels lower (nose level)
+				   + unit->getFloatHeight()
+				   - _battleSave->getTile(unit->getPosition())->getTerrainLevel()
+				   - 2; // two voxels lower (nose level)
 		// kL_note: Can make this equivalent to LoF origin, perhaps.....
 		// hey, here's an idea: make Snaps & Auto shoot from hip, Aimed from shoulders or eyes.
 
-	Tile* tileAbove = _battleSave->getTile(unit->getPosition() + Position(0, 0, 1));
+	const Tile* const tileAbove = _battleSave->getTile(unit->getPosition() + Position(0, 0, 1));
 
 	// kL_note: let's stop this. Tanks appear to make their FoV etc. Checks from all four quadrants anyway.
 /*	if (unit->getArmor()->getSize() > 1)
@@ -971,7 +970,7 @@ bool TileEngine::canTargetUnit(
 		Position* originVoxel,
 		const Tile* const tile,
 		Position* scanVoxel,
-		BattleUnit* excludeUnit,
+		const BattleUnit* const excludeUnit,
 		BattleUnit* potentialUnit)
 {
 	Position targetVoxel = Position(
@@ -1333,7 +1332,7 @@ bool TileEngine::checkReactionFire(
 	// currently playing side, and is still on the map, alive
 	if (unit->getFaction() != _battleSave->getSide()
 		|| unit->getTile() == NULL
-		|| unit->isOut(true, true))
+		|| unit->isOut(true, true) == true)
 	{
 		return false;
 	}
@@ -1360,7 +1359,7 @@ bool TileEngine::checkReactionFire(
 			{
 				//Log(LOG_INFO) << ". . no Snap by : " << reactor->getId();
 				// can't make a reaction snapshot for whatever reason, boot this guy from the vector.
-				for (std::vector<BattleUnit*>::iterator
+				for (std::vector<BattleUnit*>::const_iterator
 						i = spotters.begin();
 						i != spotters.end();
 						++i)
@@ -1374,6 +1373,12 @@ bool TileEngine::checkReactionFire(
 			}
 			else
 			{
+				if (reactor->getGeoscapeSoldier() != NULL
+					&& reactor->getFaction() == reactor->getOriginalFaction())
+				{
+					reactor->addReactionExp();
+				}
+
 				//Log(LOG_INFO) << ". . Snap by : " << reactor->getId();
 				ret = true;
 			}
@@ -1399,7 +1404,7 @@ bool TileEngine::checkReactionFire(
 std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 {
 	//Log(LOG_INFO) << "TileEngine::getSpottingUnits() vs. ID " << unit->getId();
-	Tile* tile = unit->getTile();
+	Tile* const tile = unit->getTile();
 
 	std::vector<BattleUnit*> spotters;
 	for (std::vector<BattleUnit*>::const_iterator
@@ -1451,7 +1456,7 @@ BattleUnit* TileEngine::getReactor(
 	BattleUnit* nextReactor = NULL;
 	int highestIniti = -1;
 
-	for (std::vector<BattleUnit*>::iterator
+	for (std::vector<BattleUnit*>::const_iterator
 			i = spotters.begin();
 			i != spotters.end();
 			++i)
@@ -1472,6 +1477,7 @@ BattleUnit* TileEngine::getReactor(
 	// nextReactor has to *best* defender.Initi to get initiative
 	// Analysis: It appears that defender's tu for firing/throwing
 	// are not subtracted before getInitiative() is called.
+/* kL: Apply xp only *after* the shot -> moved up into checkReactionFire()
 	if (nextReactor != NULL
 		&& highestIniti > static_cast<int>(defender->getInitiative(tuSpent)))
 	{
@@ -1484,6 +1490,11 @@ BattleUnit* TileEngine::getReactor(
 	else
 	{
 		//Log(LOG_INFO) << ". . initi returns to ID " << defender->getId();
+		nextReactor = defender;
+	} */
+	if (nextReactor == NULL
+		|| highestIniti <= static_cast<int>(defender->getInitiative(tuSpent)))
+	{
 		nextReactor = defender;
 	}
 
@@ -4537,7 +4548,7 @@ int TileEngine::calculateLine(
 		const Position& target,
 		bool storeTrajectory,
 		std::vector<Position>* trajectory,
-		BattleUnit* excludeUnit,
+		const BattleUnit* const excludeUnit,
 		bool doVoxelCheck, // false is used only for calculateFOV()
 		bool onlyVisible,
 		BattleUnit* excludeAllBut)
@@ -4784,7 +4795,7 @@ int TileEngine::calculateParabola(
 		const Position& target,
 		bool storeTrajectory,
 		std::vector<Position>* trajectory,
-		BattleUnit* excludeUnit,
+		const BattleUnit* const excludeUnit,
 		double arc,
 		const Position delta)
 {
@@ -4800,17 +4811,17 @@ int TileEngine::calculateParabola(
 				static_cast<double>(target.y - origin.y),
 				static_cast<double>(target.x - origin.x));
 
-	if (AreSame(ro, 0.0)) // just in case.
+	if (AreSame(ro, 0.)) // just in case.
 		return VOXEL_EMPTY;
 
 //	te *= acu;
 //	fi *= acu;
-	te += (delta.x / ro) / 2.0 * M_PI;						// horizontal magic value
-	fi += ((delta.z + delta.y) / ro) / 14.0 * M_PI * arc;	// another magic value (vertical), to make it in line with fire spread
+	te += (delta.x / ro) / 2. * M_PI;						// horizontal magic value
+	fi += ((delta.z + delta.y) / ro) / 14. * M_PI * arc;	// another magic value (vertical), to make it in line with fire spread
 
 	const double
 		zA = sqrt(ro) * arc,
-		zK = (4.0 * zA) / (ro * ro);
+		zK = (4. * zA) / (ro * ro);
 
 	int
 		x = origin.x,
@@ -4825,7 +4836,7 @@ int TileEngine::calculateParabola(
 		x = static_cast<int>(static_cast<double>(origin.x) + static_cast<double>(i) * cos(te) * sin(fi));
 		y = static_cast<int>(static_cast<double>(origin.y) + static_cast<double>(i) * sin(te) * sin(fi));
 		z = static_cast<int>(static_cast<double>(origin.z) + static_cast<double>(i) * cos(fi)
-				- zK * (static_cast<double>(i) - ro / 2.0) * (static_cast<double>(i) - ro / 2.0)
+				- zK * (static_cast<double>(i) - ro / 2.) * (static_cast<double>(i) - ro / 2.)
 				+ zA);
 
 		if (storeTrajectory
@@ -4834,7 +4845,7 @@ int TileEngine::calculateParabola(
 			trajectory->push_back(Position(x, y, z));
 		}
 
-		Position nextPosition = Position(x, y, z);
+		const Position nextPosition = Position(x, y, z);
 		int test = calculateLine(
 							lastPosition,
 							nextPosition,
@@ -4950,7 +4961,7 @@ bool TileEngine::validateThrow(
 
 	bool found = false;
 	while (found == false // try several different curvatures
-		&& arc < 5.0)
+		&& arc < 5.)
 	{
 		//Log(LOG_INFO) << ". . arc = " << arc;
 
@@ -4979,7 +4990,7 @@ bool TileEngine::validateThrow(
 			arc += 0.5;
 	}
 
-	if (arc > 5.0)
+	if (arc > 5.)
 	{
 		//Log(LOG_INFO) << ". vT() ret FALSE, arc > 5";
 		return false;
@@ -5086,7 +5097,7 @@ bool TileEngine::isVoxelVisible(const Position& voxel)
  */
 int TileEngine::voxelCheck(
 		const Position& posTarget,
-		BattleUnit* excludeUnit,
+		const BattleUnit* const excludeUnit,
 		bool excludeAllUnits,
 		bool onlyVisible,
 		BattleUnit* excludeAllBut)
