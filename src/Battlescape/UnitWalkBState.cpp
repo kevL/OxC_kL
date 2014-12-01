@@ -931,9 +931,9 @@ void UnitWalkBState::doStatusTurn()
 	// as it can be called from various other places in the code, ie:
 	// doors opening (& explosions/terrain destruction?), and that messes up the result.
 	// kL_note: But let's do it anyway!
-	if (visForUnits())
+	if (visForUnits() == true)
 	{
-		if (_preStepTurn)
+		if (_preStepTurn == true)
 			_unit->spendTimeUnits(_preStepCost);
 
 		//Log(LOG_INFO) << "Egads! STATUS_TURNING reveals new units!!! I must pause!";
@@ -968,13 +968,12 @@ void UnitWalkBState::postPathProcedures()
 	{
 		int dirFinal = _action.finalFacing;
 
-		if (_action.finalAction)
+		if (_action.finalAction == true)
 			_unit->dontReselect();
 
 		if (_unit->getCharging() != NULL)
 		{
 			const Position targetPos = _unit->getCharging()->getPosition();
-
 			dirFinal = _parent->getTileEngine()->getDirectionTo(
 															_unit->getPosition(),
 															targetPos);
@@ -1059,7 +1058,7 @@ void UnitWalkBState::postPathProcedures()
 		}
 		else if (_unit->isHiding() == true)
 		{
-			dirFinal = _unit->getDirection() + 4;
+//			dirFinal = _unit->getDirection() + 4; // just remove this so I don't have to look at Sectopod arses.
 
 			_unit->setHiding(false);
 			_unit->dontReselect();
@@ -1082,7 +1081,7 @@ void UnitWalkBState::postPathProcedures()
 
 
 	_terrain->calculateUnitLighting();
-//kL	_terrain->calculateFOV(_unit);
+//	_terrain->calculateFOV(_unit);
 	_terrain->calculateFOV(_unit->getPosition()); // kL, in case unit opened a door and stopped without doing Status_WALKING
 
 	_unit->setCache(NULL);

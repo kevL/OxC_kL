@@ -19,10 +19,10 @@
 
 #include "MiniMapView.h"
 
-#include <cmath>
-#include <sstream>
+//#include <cmath>
+//#include <sstream>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "Camera.h"
 #include "Map.h"
@@ -99,48 +99,42 @@ MiniMapView::MiniMapView(
  */
 void MiniMapView::draw()
 {
-	const int
-		startX = _camera->getCenterPosition().x - (getWidth() / 2 / CELL_WIDTH),
-		startY = _camera->getCenterPosition().y - (getHeight() / 2 / CELL_HEIGHT);
-
 	InteractiveSurface::draw();
 
 	if (_set == NULL)
 		return;
 
-/*	SDL_Rect current;
-	current.x = 0;
-	current.y = 0;
-	current.w = getWidth();
-	current.h = getHeight();
-	drawRect(&current, 0); */
-	drawRect(0, 0, getWidth(), getHeight(), 0);
+	const int
+		width = getWidth(),
+		height = getHeight(),
+		startX = _camera->getCenterPosition().x - (width / 2 / CELL_WIDTH),
+		startY = _camera->getCenterPosition().y - (height / 2 / CELL_HEIGHT),
+		camera_Z = _camera->getCenterPosition().z;
+
+	drawRect(0, 0, width, height, 0);
 
 	this->lock();
 	for (int
 			lvl = 0;
-			lvl <= _camera->getCenterPosition().z;
+			lvl <= camera_Z;
 			++lvl)
 	{
 		int py = startY;
 
 		for (int
 				y = Surface::getY();
-				y < getHeight() + Surface::getY();
+				y < height + Surface::getY();
 				y += CELL_HEIGHT)
 		{
 			int px = startX;
 
 			for (int
 					x = Surface::getX();
-					x < getWidth() + Surface::getX();
+					x < width + Surface::getX();
 					x += CELL_WIDTH)
 			{
-				const Position pos (px, py, lvl); // <- initialization. kL_note
-//				Position pos = Position(px, py, lvl); // kL (supposedly not as efficient)
-
-				MapData* data = NULL;
-				Tile* tile = _battleGame->getTile(pos);
+				const Position pos (px, py, lvl); // init.
+				Tile* const tile = _battleGame->getTile(pos);
 
 				if (tile == NULL)
 				{
@@ -148,66 +142,75 @@ void MiniMapView::draw()
 					continue;
 				}
 
-				int tileShade = 16; // paint it ... black !
-				if (tile->isDiscovered(2))
-					tileShade = tile->getShade();
 
-				for (int
-						i = 0;
-						i < 4;
-						++i)
+				int
+					baseColor = 0,
+					tileShade;
+
+				if (px == 0
+					|| px == _battleGame->getMapSizeX() - 1
+					|| py == 0
+					|| py == _battleGame->getMapSizeY() - 1)
 				{
-					Surface* srf = NULL;
-					data = tile->getMapData(i);
+					baseColor = 1; // greyscale
+					tileShade = 5;
+				}
+				else if (tile->isDiscovered(2) == true)
+					tileShade = tile->getShade();
+				else
+					tileShade = 16; // paint it ... black !
 
-					if (data != NULL
-						&& data->getMiniMapIndex() != 0)
+				Surface* srf = NULL;
+				if (baseColor == 1					// is along the edge
+					&& lvl == 0						// is ground level
+					&& tile->getMapData(3) == NULL)	// but has no content-object
+				{
+					srf = _set->getFrame(377);
+					srf->blitNShade(
+								this,
+								x,
+								y,
+								tileShade,
+								false,
+								baseColor);
+				}
+				else // draw tile parts
+				{
+					const MapData* data = NULL;
+					for (int
+							i = 0;
+							i < 4;
+							++i)
 					{
-						srf = _set->getFrame(data->getMiniMapIndex() + 35);
-					}
-
-					if (srf)
-					{
-						// kL_begin:
-						int baseColor = 0;
-						if (px == 0
-							|| px == _battleGame->getMapSizeX() - 1
-							|| py == 0
-							|| py == _battleGame->getMapSizeY() - 1)
+						data = tile->getMapData(i);
+						if (data != NULL
+							&& data->getMiniMapIndex() != 0)
 						{
-							baseColor = 1; // greyscale
-
-							if (tileShade == 16)
-							{
-								tileShade = 5;
-								srf = _set->getFrame(377);
-							}
-						} // kL_end.
-
-						srf->blitNShade(
-									this,
-									x,
-									y,
-									tileShade,
-									false,
-									baseColor); // kL_add.
+							srf = _set->getFrame(data->getMiniMapIndex() + 35);
+							srf->blitNShade(
+										this,
+										x,
+										y,
+										tileShade,
+										false,
+										baseColor);
+						}
 					}
 				}
 
-				BattleUnit* unit = tile->getUnit();
+				const BattleUnit* const unit = tile->getUnit();
 				if (unit != NULL
-					&& unit->getVisible()) // visible, alive units
+					&& unit->getVisible() == true) // visible, alive units
 				{
 					const int
-						unitSize = tile->getUnit()->getArmor()->getSize(),
-						frame = tile->getUnit()->getMiniMapSpriteIndex()
-							  + tile->getPosition().x - tile->getUnit()->getPosition().x
-							  + (tile->getPosition().y - tile->getUnit()->getPosition().y) * unitSize
+						unitSize = unit->getArmor()->getSize(),
+						frame = unit->getMiniMapSpriteIndex()
+							  + tile->getPosition().x - unit->getPosition().x
+							  + (tile->getPosition().y - unit->getPosition().y) * unitSize
 							  + _frame * unitSize * unitSize;
 
-					Surface* srf = _set->getFrame(frame);
+					Surface* const srf = _set->getFrame(frame);
 
-					// kL_begin:
 					int baseColor = 0;
 
 					if (unit == _battleGame->getSelectedUnit())				// selected unit
@@ -221,7 +224,7 @@ void MiniMapView::draw()
 						&& unit->getOriginalFaction() == FACTION_PLAYER)
 					{
 						baseColor = 8; // steel blue
-					} // kL_end.
+					}
 
 					srf->blitNShade(
 								this,
@@ -229,15 +232,15 @@ void MiniMapView::draw()
 								y,
 								0,
 								false,
-								baseColor); // kL_add.
+								baseColor);
 				}
 
-				if (tile->isDiscovered(2)
+				if (tile->isDiscovered(2) == true
 					&& tile->getInventory()->empty() == false) // at least one item on this tile
 				{
 					const int frame = 9 + _frame;
 
-					Surface* srf = _set->getFrame(frame);
+					Surface* const srf = _set->getFrame(frame);
 					srf->blitNShade(
 								this,
 								x,
@@ -245,10 +248,10 @@ void MiniMapView::draw()
 								0);
 				}
 
-				px++;
+				++px;
 			}
 
-			py++;
+			++py;
 		}
 	}
 	this->unlock();
@@ -256,8 +259,8 @@ void MiniMapView::draw()
 
 	// kL_note: looks like the crosshairs for the MiniMap
 	const Sint16
-		centerX = static_cast<Sint16>(getWidth() / 2) - 1,
-		centerY = static_cast<Sint16>(getHeight() / 2) - 1,
+		centerX = static_cast<Sint16>(width / 2) - 1,
+		centerY = static_cast<Sint16>(height / 2) - 1,
 		xOffset = static_cast<Sint16>(CELL_WIDTH / 2),
 		yOffset = static_cast<Sint16>(CELL_HEIGHT / 2);
 
@@ -316,7 +319,7 @@ int MiniMapView::down()
 /**
  * Handles mouse presses on the minimap. Enters mouse-moving mode when the drag-scroll button is used.
  * @param action	- pointer to an Action
- * @param state		- state that the action handlers belong to
+ * @param state		- State that the action handlers belong to
  */
 void MiniMapView::mousePress(Action* action, State* state)
 {
@@ -366,7 +369,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
 	// (this part handles the release if it is missed and now an other button is used)
-	if (_isMouseScrolling)
+	if (_isMouseScrolling == true)
 	{
 		if (action->getDetails()->button.button != Options::battleDragScrollButton
 			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
@@ -385,7 +388,7 @@ void MiniMapView::mouseClick(Action* action, State* state)
 		}
 	}
 
-	if (_isMouseScrolling) // Drag-Scroll release: release mouse-scroll-mode
+	if (_isMouseScrolling == true) // Drag-Scroll release: release mouse-scroll-mode
 	{
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == Options::battleDragScrollButton)
@@ -407,22 +410,22 @@ void MiniMapView::mouseClick(Action* action, State* state)
 			_redraw = true;
 		}
 
-		if (_isMouseScrolled)
+		if (_isMouseScrolled == true)
 			return;
 	}
 
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
-		int origX = static_cast<int>(action->getRelativeXMouse() / action->getXScale());
-		int origY = static_cast<int>(action->getRelativeYMouse() / action->getYScale());
-
+		const int
+			origX = static_cast<int>(action->getRelativeXMouse() / action->getXScale()),
+			origY = static_cast<int>(action->getRelativeYMouse() / action->getYScale()),
 		// get offset (in cells) of the click relative to center of screen
-		int xOff = (origX / CELL_WIDTH) - (getWidth() / 2 / CELL_WIDTH);
-		int yOff = (origY / CELL_HEIGHT) - (getHeight() / 2 / CELL_HEIGHT);
-
+			xOff = (origX / CELL_WIDTH) - (getWidth() / 2 / CELL_WIDTH),
+			yOff = (origY / CELL_HEIGHT) - (getHeight() / 2 / CELL_HEIGHT),
 		// center the camera on this new position
-		int newX = _camera->getCenterPosition().x + xOff;
-		int newY = _camera->getCenterPosition().y + yOff;
+			newX = _camera->getCenterPosition().x + xOff,
+			newY = _camera->getCenterPosition().y + yOff;
+
 		_camera->centerOnPosition(Position(
 										newX,
 										newY,
@@ -444,7 +447,7 @@ void MiniMapView::mouseOver(Action* action, State* state)
 {
 	InteractiveSurface::mouseOver(action, state);
 
-	if (_isMouseScrolling
+	if (_isMouseScrolling == true
 		&& action->getDetails()->type == SDL_MOUSEMOTION)
 	{
 		// The following is the workaround for a rare problem where sometimes

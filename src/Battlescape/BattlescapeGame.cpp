@@ -147,15 +147,15 @@ void BattlescapeGame::think()
 	//Log(LOG_INFO) << "BattlescapeGame::think()";
 
 	// nothing is happening - see if we need some alien AI or units panicking or what have you
-	if (_states.empty())
+	if (_states.empty() == true)
 	{
 		if (_save->getSide() != FACTION_PLAYER) // it's a non player side (ALIENS or CIVILIANS)
 		{
-			if (!_debugPlay)
+			if (_debugPlay == false)
 			{
-				if (_save->getSelectedUnit())
+				if (_save->getSelectedUnit() != NULL)
 				{
-					if (!handlePanickingUnit(_save->getSelectedUnit()))
+					if (handlePanickingUnit(_save->getSelectedUnit()) == false)
 					{
 						//Log(LOG_INFO) << "BattlescapeGame::think() call handleAI() ID " << _save->getSelectedUnit()->getId();
 						handleAI(_save->getSelectedUnit());
@@ -167,7 +167,7 @@ void BattlescapeGame::think()
 												true,
 												_AISecondMove) == NULL)
 					{
-						if (!_save->getDebugMode())
+						if (_save->getDebugMode() == false)
 						{
 							_endTurnRequested = true;
 							statePushBack(NULL); // end AI turn
@@ -192,7 +192,7 @@ void BattlescapeGame::think()
 			_parentState->updateExpData(); // kL
 		}
 
-		if (_save->getUnitsFalling())
+		if (_save->getUnitsFalling() == true)
 		{
 			//Log(LOG_INFO) << "BattlescapeGame::think(), get/setUnitsFalling() ID " << _save->getSelectedUnit()->getId();
 			statePushFront(new UnitFallBState(this));
@@ -2372,6 +2372,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 
 			_currentAction.target = posTarget;
 			_currentAction.cameraPosition = getMap()->getCamera()->getMapOffset();
+			//Log(LOG_INFO) << "BattlescapeGame::primaryAction() setting cameraPosition to mapOffset";
 
 			_states.push_back(new ProjectileFlyBState(
 													this,

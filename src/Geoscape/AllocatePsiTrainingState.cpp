@@ -252,7 +252,7 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 
 	_sel = _lstSoldiers->getSelectedRow();
 
-	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // note: Swap LMB & RMB
 	{
 		if (_base->getSoldiers()->at(_sel)->isInPsiTraining() == false)
 		{
@@ -261,7 +261,7 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 				_lstSoldiers->setCellText(_sel, 3, tr("STR_YES").c_str());
 				_lstSoldiers->setRowColor(_sel, Palette::blockOffset(13)+5);
 
-				_labSpace--;
+				--_labSpace;
 				_txtRemaining->setText(tr("STR_REMAINING_PSI_LAB_CAPACITY").arg(_labSpace));
 
 				_base->getSoldiers()->at(_sel)->setPsiTraining();
@@ -276,10 +276,9 @@ void AllocatePsiTrainingState::lstSoldiersPress(Action* action)
 			_base->getSoldiers()->at(_sel)->setPsiTraining();
 		}
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		_base->setCurrentSoldier(_lstSoldiers->getScroll());
-
 		_game->pushState(new SoldierInfoState(
 											_base,
 											_sel));
@@ -308,7 +307,7 @@ void AllocatePsiTrainingState::lstLeftArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8.0 * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() - static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{
@@ -357,7 +356,7 @@ void AllocatePsiTrainingState::lstRightArrowClick(Action* action)
 			{
 				SDL_WarpMouse(
 						static_cast<Uint16>(action->getLeftBlackBand() + action->getXMouse()),
-						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8.0 * action->getYScale())));
+						static_cast<Uint16>(action->getTopBlackBand() + action->getYMouse() + static_cast<int>(8. * action->getYScale())));
 			}
 			else
 			{

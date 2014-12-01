@@ -1913,7 +1913,7 @@ BattleUnit* TileEngine::hit(
 										0,
 										0,
 										vertOffset);
-				Log(LOG_INFO) << "TileEngine::hit() relPos " << relativePos;
+				//Log(LOG_INFO) << "TileEngine::hit() relPos " << relativePos;
 
 				double delta = 100.;
 				if (type == DT_HE
@@ -5804,33 +5804,33 @@ int TileEngine::faceWindow(const Position& position)
 		tileEast = Position(1, 0, 0),
 		tileSouth = Position(0, 1, 0);
 
-	Tile* tile = _battleSave->getTile(position);
-	if (tile
-		&& tile->getMapData(MapData::O_NORTHWALL)
+	const Tile* tile = _battleSave->getTile(position);
+	if (tile != NULL
+		&& tile->getMapData(MapData::O_NORTHWALL) != NULL
 		&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)
 	{
 		return 0;
 	}
 
 	tile = _battleSave->getTile(position + tileEast);
-	if (tile
-		&& tile->getMapData(MapData::O_WESTWALL)
+	if (tile != NULL
+		&& tile->getMapData(MapData::O_WESTWALL) != NULL
 		&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
 	{
 		return 2;
 	}
 
 	tile = _battleSave->getTile(position + tileSouth);
-	if (tile
-		&& tile->getMapData(MapData::O_NORTHWALL)
+	if (tile != NULL
+		&& tile->getMapData(MapData::O_NORTHWALL) != NULL
 		&& tile->getMapData(MapData::O_NORTHWALL)->stopLOS() == false)
 	{
 		return 4;
 	}
 
 	tile = _battleSave->getTile(position);
-	if (tile
-		&& tile->getMapData(MapData::O_WESTWALL)
+	if (tile != NULL
+		&& tile->getMapData(MapData::O_WESTWALL) != NULL
 		&& tile->getMapData(MapData::O_WESTWALL)->stopLOS() == false)
 	{
 		return 6;
@@ -5860,19 +5860,19 @@ int TileEngine::getDirectionTo(
 
 	// kL_note: atan2() usually takes the y-value first;
 	// and that's why things may seem so fucked up.
-		theta = atan2( // radians: + = y > 0; - = y < 0;
-					-offset_y,
-					offset_x),
+		theta = std::atan2( // radians: + = y > 0; - = y < 0;
+						-offset_y,
+						offset_x),
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
-		m_pi_8 = M_PI / 8.0,				// a circle divided into 16 sections (rads) -> 22.5 deg
-		d = 0.1,							// kL, a bias toward cardinal directions. (0.1..0.12)
+		m_pi_8 = M_PI / 8.,	// a circle divided into 16 sections (rads) -> 22.5 deg
+		d = 0.1,			// kL, a bias toward cardinal directions. (0.1..0.12)
 		pie[4] =
 		{
-			M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg
-			(M_PI * 3.0 / 4.0) - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
-			M_PI_2 - m_pi_8 - d,				// 1.1780972450961724644234912687298	-> 67.5 deg
-			m_pi_8 + d							// 0.39269908169872415480783042290994	-> 22.5 deg
+			M_PI - m_pi_8 - d,				// 2.7488935718910690836548129603696	-> 157.5 deg
+			M_PI * 3. / 4. - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
+			M_PI_2 - m_pi_8 - d,			// 1.1780972450961724644234912687298	-> 67.5 deg
+			m_pi_8 + d						// 0.39269908169872415480783042290994	-> 22.5 deg
 		};
 
 	int dir = 2;

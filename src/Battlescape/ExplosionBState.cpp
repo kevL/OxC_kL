@@ -27,7 +27,6 @@
 #include "UnitDieBState.h"
 
 #include "../Engine/Game.h"
-//#include "../Engine/Logger.h"
 #include "../Engine/RNG.h"
 #include "../Engine/Sound.h"
 
@@ -169,7 +168,7 @@ void ExplosionBState::init()
 	}
 
 
-	const Position centerPos = Position(
+	const Position targetPos = Position(
 									_center.x / 16,
 									_center.y / 16,
 									_center.z / 24);
@@ -236,7 +235,7 @@ void ExplosionBState::init()
 					pos.y = _center.y + RNG::generate(-offset, offset);
 
 					if (RNG::percent(50) == true)
-						frameDelay++;
+						++frameDelay;
 				}
 
 				Explosion* const explosion = new Explosion( // animation
@@ -268,17 +267,17 @@ void ExplosionBState::init()
 														sound)
 													->play(
 														-1,
-														_parent->getMap()->getSoundAngle(centerPos));
+														_parent->getMap()->getSoundAngle(targetPos));
 
 			Camera* const exploCam = _parent->getMap()->getCamera();
-			if (exploCam->isOnScreen(centerPos) == false)
+			if (exploCam->isOnScreen(targetPos) == false)
 			{
 				exploCam->centerOnPosition(
-										centerPos,
+										targetPos,
 										false);
 			}
-			else if (exploCam->getViewLevel() != centerPos.z)
-				exploCam->setViewLevel(centerPos.z);
+			else if (exploCam->getViewLevel() != targetPos.z)
+				exploCam->setViewLevel(targetPos.z);
 		}
 		else
 			_parent->popState();
@@ -311,7 +310,7 @@ void ExplosionBState::init()
 													sound)
 												->play(
 													-1,
-													_parent->getMap()->getSoundAngle(centerPos));
+													_parent->getMap()->getSoundAngle(targetPos));
 
 //		if (_hitSuccess
 //			|| _hit == false)	// note: This would prevent map-reveal on aLien melee attacks.
@@ -319,9 +318,9 @@ void ExplosionBState::init()
 //		{
 
 		int hitResult = 0;
-		if (_hit)
+		if (_hit == true)
 		{
-			if (_hitSuccess
+			if (_hitSuccess == true
 				|| _item->getRules()->getBattleType() == BT_PSIAMP)
 			{
 				hitResult = 1;
@@ -345,16 +344,17 @@ void ExplosionBState::init()
 //		}
 
 		Camera* const exploCam = _parent->getMap()->getCamera();
-		if (exploCam->isOnScreen(centerPos) == false
+		if (exploCam->isOnScreen(targetPos) == false
 			|| (_parent->getSave()->getSide() != FACTION_PLAYER
 				&& _item->getRules()->getBattleType() == BT_PSIAMP))
 		{
+			//Log(LOG_INFO) << "ExplosionBState::init() hitExpl is NOT onScreen";
 			exploCam->centerOnPosition(
-									centerPos,
+									targetPos,
 									false);
 		}
-		else if (exploCam->getViewLevel() != centerPos.z)
-			exploCam->setViewLevel(centerPos.z);
+		else if (exploCam->getViewLevel() != targetPos.z)
+			exploCam->setViewLevel(targetPos.z);
 	}
 	//Log(LOG_INFO) << "ExplosionBState::init() EXIT";
 }
@@ -547,19 +547,12 @@ void ExplosionBState::explode()
 
 		switch (_tile->getExplosiveType())
 		{
-			case 0:
-				DT = DT_HE;
-			break;
-			case 5:
-				DT = DT_IN;
-			break;
-			case 6:
-				DT = DT_STUN;
-			break;
+			case 0: DT = DT_HE;		break;
+			case 5: DT = DT_IN;		break;
+			case 6: DT = DT_STUN;	break;
 
 			default:
 				DT = DT_SMOKE;
-			break;
 		}
 
 		if (DT != DT_HE)

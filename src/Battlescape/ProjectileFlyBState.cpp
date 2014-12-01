@@ -70,13 +70,13 @@ ProjectileFlyBState::ProjectileFlyBState(
 			action),
 		_origin(origin),
 		_originVoxel(-1,-1,-1), // for BL waypoints
+		_targetVoxel(-1,-1,-1),
 		_unit(NULL),
 		_ammo(NULL),
 		_projectileItem(NULL),
 		_projectileImpact(0),
 		_initialized(false),
-		_targetFloor(false),
-		_targetVoxel(-1,-1,-1)
+		_targetFloor(false)
 {
 	//Log(LOG_INFO) << "Create ProjectileFlyBState[0]: origin = " << origin;
 }
@@ -289,8 +289,8 @@ void ProjectileFlyBState::init()
 			}
 			else
 				performMeleeAttack();
-			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 
+			//Log(LOG_INFO) << ". . BA_HIT performMeleeAttack() DONE";
 			return;
 		break;
 		case BA_PANIC:
@@ -548,7 +548,7 @@ bool ProjectileFlyBState::createNewProjectile()
 			return false;
 		}
 	}
-	else if (_action.weapon->getRules()->getArcingShot()) // special code for the "spit" trajectory
+	else if (_action.weapon->getRules()->getArcingShot() == true) // special code for the "spit" trajectory
 	{
 		_projectileImpact = projectile->calculateThrow(_unit->getFiringAccuracy(
 																			_action.type,
@@ -598,13 +598,11 @@ bool ProjectileFlyBState::createNewProjectile()
 	else // shoot weapon
 	{
 		if (_originVoxel != Position(-1,-1,-1)) // ... BL waypoints
-		{
 			_projectileImpact = projectile->calculateTrajectory(
 															_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon),
 															_originVoxel);
-		}
 		else // this is non-BL weapon shooting
 			_projectileImpact = projectile->calculateTrajectory(_unit->getFiringAccuracy(
 																					_action.type,
@@ -702,8 +700,8 @@ void ProjectileFlyBState::think()
 			&& _unit->isOut() == false
 			&& _ammo != NULL // kL
 			&& _ammo->getAmmoQuantity() != 0
-			&& (hasFloor
-				|| unitCanFly))
+			&& (hasFloor == true
+				|| unitCanFly == true))
 		{
 			createNewProjectile();
 
@@ -719,6 +717,7 @@ void ProjectileFlyBState::think()
 			if (_action.cameraPosition.z != -1)
 //				&& _action.waypoints.size() < 2)
 			{
+				//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: cameraPosition was Set";
 /*				if (_action.type == BA_STUN // kL, don't jump screen after these.
 					|| _action.type == BA_HIT
 					|| _action.type == BA_USE
@@ -733,7 +732,13 @@ void ProjectileFlyBState::think()
 					|| _action.type == BA_AUTOSHOT
 					|| _action.type == BA_SNAPSHOT
 					|| _action.type == BA_AIMEDSHOT)
+/*				if (_action.type == BA_THROW // kL, jump screen back to pre-shot position
+					|| (_parent->getMap()->getCamera()->isOnScreen(_action.cameraPosition) == )
+						&& (_action.type == BA_AUTOSHOT
+							|| _action.type == BA_SNAPSHOT
+							|| _action.type == BA_AIMEDSHOT)) */
 				{
+					//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: resetting Camera to original pos";
 					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition); // jumps camera back to stored position when shot was taken.
 //kL				_parent->getMap()->invalidate();
 					_parent->getMap()->draw(); // kL

@@ -40,6 +40,7 @@ class AlienBAIState;
 class Armor;
 class BattleAIState;
 class BattleItem;
+class BattlescapeGame;
 class CivilianBAIState;
 class Language;
 class Node;
@@ -403,7 +404,6 @@ private:
 
 	BattleAIState* _currentAIState;
 	BattlescapeGame* _battleGame;
-		// Note: don't even declare the class, what's with SavedGame* then; postMissionProcedures()
 	BattleUnit* _charging;
 	Surface* _cache[5];
 	Tile* _tile;
@@ -1013,9 +1013,9 @@ private:
 		void breathe();
 
 		/// Sets the flag for "floor above me" meaning stop rendering bubbles.
-		void setFloorAbove(bool floor);
+		void setFloorAbove(bool floorAbove);
 		/// Gets the flag for "floor above me".
-		bool getFloorAbove();
+		bool getFloorAbove() const;
 
 		/// Gets this unit's movement type.
 		MovementType getMovementType() const;
@@ -1035,7 +1035,7 @@ private:
 		void goToTimeOut();
 
 		/// Gets this unit's mission statistics.
-		BattleUnitStatistics* getStatistics();
+		BattleUnitStatistics* getStatistics() const;
 		/// Sets this unit murderer's id.
 		void setMurdererId(int id);
 		/// Gets this unit murderer's id.

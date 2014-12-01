@@ -19,8 +19,8 @@
 
 #include "MiniMapState.h"
 
-#include <iostream>
-#include <sstream>
+//#include <iostream>
+//#include <sstream>
 
 #include "Camera.h"
 #include "MiniMapView.h"

@@ -28,7 +28,6 @@ namespace OpenXcom
 
 class BattlescapeButton;
 class Camera;
-//class InteractiveSurface;
 class MiniMapView;
 class SavedBattleGame;
 class Text;

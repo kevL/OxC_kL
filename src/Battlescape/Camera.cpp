@@ -21,8 +21,8 @@
 
 #include "Camera.h"
 
-#include <cmath>
-#include <fstream>
+//#include <cmath>
+//#include <fstream>
 
 #include "Map.h"
 
@@ -41,7 +41,7 @@ namespace OpenXcom
  * @param mapsize_x			- current map size in X axis
  * @param mapsize_y			- current map size in Y axis
  * @param mapsize_z			- current map size in Z axis
- * @param map				- pointer to Map surface
+ * @param battleMap			- pointer to Map
  * @param visibleMapHeight	- current height the view is at
  */
 Camera::Camera(
@@ -50,7 +50,7 @@ Camera::Camera(
 		int mapsize_x,
 		int mapsize_y,
 		int mapsize_z,
-		Map* map,
+		Map* battleMap,
 		int visibleMapHeight)
 	:
 		_scrollMouseTimer(0),
@@ -60,8 +60,8 @@ Camera::Camera(
 		_mapsize_x(mapsize_x),
 		_mapsize_y(mapsize_y),
 		_mapsize_z(mapsize_z),
-		_screenWidth(map->getWidth()),
-		_screenHeight(map->getHeight()),
+		_screenWidth(battleMap->getWidth()),
+		_screenHeight(battleMap->getHeight()),
 		_mapOffset(-250, 250, 0),
 		_scrollMouseX(0),
 		_scrollMouseY(0),
@@ -70,7 +70,7 @@ Camera::Camera(
 		_scrollTrigger(false),
 		_visibleMapHeight(visibleMapHeight),
 		_showAllLayers(false),
-		_map(map)
+		_map(battleMap)
 {
 }
 
@@ -83,8 +83,8 @@ Camera::~Camera()
 
 /**
  * Sets the camera's scrolling timer.
- * @param mouse Pointer to mouse timer.
- * @param key Pointer to key timer.
+ * @param mouse	- pointer to mouse Timer
+ * @param key	- pointer to key Timer
  */
 void Camera::setScrollTimer(
 		Timer* mouse,
@@ -96,9 +96,9 @@ void Camera::setScrollTimer(
 
 /**
  * Sets the value to min if it is below min and to max if it is above max.
- * @param value, Pointer to the value.
- * @param minValue, The minimum value.
- * @param maxValue, The maximum value.
+ * @param value		- pointer to the value
+ * @param minValue	- the minimum value
+ * @param maxValue	- the maximum value
  */
 void Camera::minMaxInt(
 		int* value,
@@ -114,7 +114,7 @@ void Camera::minMaxInt(
 /**
  * Handles camera mouse shortcuts.
  * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param state - State that the action handlers belong to
  */
 void Camera::mousePress(Action* action, State*)
 {
@@ -137,7 +137,7 @@ void Camera::mousePress(Action* action, State*)
 /**
  * Handles camera mouse shortcuts.
  * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param state - State that the action handlers belong to
  */
 void Camera::mouseRelease(Action* action, State*)
 {
@@ -168,7 +168,7 @@ void Camera::mouseRelease(Action* action, State*)
 /**
  * Handles mouse over events.
  * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param state - State that the action handlers belong to
  */
 void Camera::mouseOver(Action* action, State*)
 {
@@ -273,11 +273,12 @@ void Camera::mouseOver(Action* action, State*)
 /**
  * Handles camera keyboard shortcuts.
  * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param state - State that the action handlers belong to
  */
 void Camera::keyboardPress(Action* action, State*)
 {
-	if (_map->getCursorType() == CT_NONE) return;
+	if (_map->getCursorType() == CT_NONE)
+		return;
 
 	int scrollSpeed = Options::battleScrollSpeed;
 
@@ -310,11 +311,12 @@ void Camera::keyboardPress(Action* action, State*)
 /**
  * Handles camera keyboard shortcuts.
  * @param action - pointer to an Action
- * @param state - state that the action handlers belong to
+ * @param state - State that the action handlers belong to
  */
 void Camera::keyboardRelease(Action* action, State*)
 {
-	if (_map->getCursorType() == CT_NONE) return;
+	if (_map->getCursorType() == CT_NONE)
+		return;
 
 	int key = action->getDetails()->key.keysym.sym;
 	if (key == Options::keyBattleLeft)
@@ -366,9 +368,9 @@ void Camera::scrollKey()
 
 /**
  * Handles scrolling with given deviation.
- * @param x, X deviation.
- * @param y, Y deviation.
- * @param redraw, Redraw map or not.
+ * @param x			- X deviation
+ * @param y			- Y deviation
+ * @param redraw	- true to redraw map
  */
 void Camera::scrollXY(
 		int x,
@@ -435,8 +437,8 @@ void Camera::scrollXY(
 
 /**
  * Handles jumping with given deviation.
- * @param x, X deviation.
- * @param y, Y deviation.
+ * @param x - X deviation
+ * @param y - Y deviation
  */
 void Camera::jumpXY(
 		int x,
@@ -485,7 +487,7 @@ void Camera::down()
 
 /**
  * Gets the displayed level.
- * @return, The displayed layer.
+ * @return, the displayed layer
  */
 int Camera::getViewLevel() const
 {
@@ -494,7 +496,7 @@ int Camera::getViewLevel() const
 
 /**
  * Sets the view level.
- * @param viewLevel, New view level.
+ * @param viewLevel - new view level
  */
 void Camera::setViewLevel(int viewLevel)
 {
@@ -510,8 +512,8 @@ void Camera::setViewLevel(int viewLevel)
 
 /**
  * Centers map on a certain position.
- * @param mapPos, Position to center on.
- * @param redraw, Redraw map or not.
+ * @param mapPos - reference the Position to center on
+ * @param redraw - true to redraw map (default true)
  */
 void Camera::centerOnPosition(
 		const Position& mapPos,
@@ -538,13 +540,13 @@ void Camera::centerOnPosition(
 	_mapOffset.y = -(screenPos.y - (_visibleMapHeight / 2) + 16);
 	_mapOffset.z = _center.z;
 
-	if (redraw)
+	if (redraw == true)
 		_map->draw();
 }
 
 /**
  * Gets map's center position.
- * @return, Map's center position.
+ * @return, center Position
  */
 Position Camera::getCenterPosition()
 {
@@ -555,10 +557,10 @@ Position Camera::getCenterPosition()
 
 /**
  * Converts screen coordinates to map coordinates.
- * @param screenX, Screen x position.
- * @param screenY, Screen y position.
- * @param mapX, Map x position.
- * @param mapY, Map y position.
+ * @param screenX	- screen x position
+ * @param screenY	- screen y position
+ * @param mapX		- pointer to the map x position
+ * @param mapY		- pointer to the map y position
  */
 void Camera::convertScreenToMap(
 		int screenX,
@@ -590,8 +592,8 @@ void Camera::convertScreenToMap(
 
 /**
  * Converts map coordinates X,Y,Z to screen positions X, Y.
- * @param mapPos, X,Y,Z coordinates on the map.
- * @param screenPos, Screen position.
+ * @param mapPos	- reference the X,Y,Z coordinates on the map
+ * @param screenPos	- pointer to the screen Position
  */
 void Camera::convertMapToScreen(
 		const Position& mapPos,
@@ -604,8 +606,8 @@ void Camera::convertMapToScreen(
 
 /**
  * Converts voxel coordinates X,Y,Z to screen positions X, Y.
- * @param voxelPos, X,Y,Z coordinates of the voxel.
- * @param screenPos, Screen position.
+ * @param voxelPos	- reference the X,Y,Z coordinates of the voxel
+ * @param screenPos	- pointer to the screen Position
  */
 void Camera::convertVoxelToScreen(
 		const Position& voxelPos,
@@ -632,7 +634,7 @@ void Camera::convertVoxelToScreen(
 
 /**
  * Gets the map size x.
- * @return, The map size x.
+ * @return, the map size x
  */
 int Camera::getMapSizeX() const
 {
@@ -641,7 +643,7 @@ int Camera::getMapSizeX() const
 
 /**
  * Gets the map size y.
- * @return, The map size y.
+ * @return, the map size y
  */
 int Camera::getMapSizeY() const
 {
@@ -650,7 +652,7 @@ int Camera::getMapSizeY() const
 
 /**
  * Gets the map offset.
- * @return, The map offset.
+ * @return, the map offset Position
  */
 Position Camera::getMapOffset()
 {
@@ -659,7 +661,7 @@ Position Camera::getMapOffset()
 
 /**
  * Sets the map offset.
- * @param pos, The map offset.
+ * @param pos - the map offset Position
  */
 void Camera::setMapOffset(Position pos)
 {
@@ -668,7 +670,7 @@ void Camera::setMapOffset(Position pos)
 
 /**
  * Toggles showing all map layers.
- * @return, new layer setting
+ * @return, new layers setting
  */
 unsigned Camera::toggleShowAllLayers()
 {
@@ -679,7 +681,7 @@ unsigned Camera::toggleShowAllLayers()
 
 /**
  * Checks if the camera is showing all map layers.
- * @return, current layer setting
+ * @return, true if all layers are currently showing
  */
 bool Camera::getShowAllLayers() const
 {

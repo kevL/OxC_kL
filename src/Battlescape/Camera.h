@@ -75,8 +75,9 @@ private:
 
 
 	public:
-		static const int SCROLL_BORDER			= 5;
-		static const int SCROLL_DIAGONAL_EDGE	= 60;
+		static const int
+			SCROLL_BORDER			= 5,
+			SCROLL_DIAGONAL_EDGE	= 60;
 
 		/// Creates a new camera.
 		Camera(
@@ -85,7 +86,7 @@ private:
 				int mapsize_x,
 				int mapsize_y,
 				int mapsize_z,
-				Map* map,
+				Map* battleMap,
 				int visibleMapHeight);
 		/// Cleans up the camera.
 		~Camera();
@@ -142,18 +143,19 @@ private:
 				int screenY,
 				int* mapX,
 				int* mapY) const;
-		/// Center map on a position.
+
+		/// Centers map on a position.
 		void centerOnPosition(
 				const Position& pos,
 				bool redraw = true);
-
 		/// Gets map's center position.
 		Position getCenterPosition();
+
 		/// Gets the map size x.
 		int getMapSizeX() const;
 		/// Gets the map size y.
 		int getMapSizeY() const;
-		/// Get the map x/y screen offset.
+		/// Gets the map x/y screen offset.
 		Position getMapOffset();
 		/// Sets the map x/y screen offset.
 		void setMapOffset(Position pos);
@@ -168,10 +170,10 @@ private:
 				const Position& mapPos) const;
 //kL			const bool unitWalking) const;
 
-		/// Resize the viewable area.
+		/// Resizes the viewable area.
 		void resize();
 
-		/// stop mouse scrolling.
+		/// Stops mouse scrolling.
 		void stopMouseScrolling();
 };
 

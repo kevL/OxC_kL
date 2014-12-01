@@ -308,7 +308,7 @@ void Tile::getMapData(
 
 /**
  * Gets whether this tile has no objects.
- * Note that we CAN have a unit (but not smoke) on this tile.
+ * Note that we CAN have a unit (but not smoke or inventory) on this tile.
  * @return, true if there is nothing but air on this tile
  */
 bool Tile::isVoid() const
@@ -318,7 +318,7 @@ bool Tile::isVoid() const
 		&& _objects[2] == NULL	// northwall
 		&& _objects[3] == NULL	// content
 		&& _smoke == 0
-		&& _inventory.empty();
+		&& _inventory.empty() == true;
 }
 
 /**

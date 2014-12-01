@@ -923,6 +923,21 @@ void BattlescapeState::init()
 		_btnReserveAuto->setGroup(&_reserve); */
 	}
 
+	// kL_begin:
+/*	_txtFloor->setVisible(false);
+
+	Position pos;
+	_map->getSelectorPosition(&pos);
+
+	Tile* const tile = _savedBattle->getTile(pos);
+	if (tile != NULL
+		&& tile->isDiscovered(2)
+		&& tile->getInventory()->empty() == true)
+	{
+		if (tile->hasNoFloor(_savedBattle->getTile(pos + Position(0, 0,-1))) == false)
+			_txtFloor->setVisible();
+	} */ // kL_end. Didn't work.
+
 //	_txtTooltip->setText(L"");
 
 /*	if (_savedBattle->getKneelReserved())
@@ -977,7 +992,7 @@ void BattlescapeState::think()
  */
 void BattlescapeState::mapOver(Action* action)
 {
-	if (_isMouseScrolling
+	if (_isMouseScrolling == true
 		&& action->getDetails()->type == SDL_MOUSEMOTION)
 	{
 		// The following is the workaround for a rare problem where sometimes
@@ -988,7 +1003,7 @@ void BattlescapeState::mapOver(Action* action)
 		{
 			// so we missed again the mouse-release :(
 			// Check if we have to revoke the scrolling, because it was too short in time, so it was a click
-			if (!_mouseOverThreshold
+			if (_mouseOverThreshold == false
 				&& SDL_GetTicks() - _mouseScrollingStartTime <= static_cast<Uint32>(Options::dragScrollTimeTolerance))
 			{
 				_map->getCamera()->setMapOffset(_mapOffsetBeforeDragScroll);
@@ -1021,12 +1036,12 @@ void BattlescapeState::mapOver(Action* action)
 		_totalMouseMoveX += static_cast<int>(action->getDetails()->motion.xrel);
 		_totalMouseMoveY += static_cast<int>(action->getDetails()->motion.yrel);
 
-		if (!_mouseOverThreshold) // check threshold
+		if (_mouseOverThreshold == false) // check threshold
 			_mouseOverThreshold = std::abs(_totalMouseMoveX) > Options::dragScrollPixelTolerance
 							   || std::abs(_totalMouseMoveY) > Options::dragScrollPixelTolerance;
 
 
-		if (Options::battleDragScrollInvert) // scroll
+		if (Options::battleDragScrollInvert == true) // scroll
 		{
 /*fenyo1
 			_map->getCamera()->setMapOffset(_mapOffsetBeforeMouseScrolling);
@@ -1082,8 +1097,8 @@ void BattlescapeState::mapOver(Action* action)
 								static_cast<int>(static_cast<double>(action->getDetails()->motion.yrel) * 3.62 / action->getYScale()),
 								false);
 
-			Position delta	= _map->getCamera()->getMapOffset();
-			delta			= _map->getCamera()->getMapOffset() - delta;
+			Position delta = _map->getCamera()->getMapOffset();
+			delta = _map->getCamera()->getMapOffset() - delta;
 			_cursorPosition.x = std::min(
 									_game->getScreen()->getWidth() - static_cast<int>(Round(action->getXScale())),
 									std::max(

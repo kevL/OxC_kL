@@ -1330,7 +1330,7 @@ int BattleUnit::damage(
 				}
 			}
 
-			Log(LOG_INFO) << "BattleUnit::damage() Target was hit from DIR = " << ((relDir - _direction) %8);
+			//Log(LOG_INFO) << "BattleUnit::damage() Target was hit from DIR = " << ((relDir - _direction) %8);
 			switch ((relDir - _direction) %8)
 			{
 				case 0:	side = SIDE_FRONT;									break;
@@ -1342,7 +1342,7 @@ int BattleUnit::damage(
 				case 6:	side = SIDE_LEFT;									break;
 				case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
 			}
-			Log(LOG_INFO) << ". side = " << (int)side;
+			//Log(LOG_INFO) << ". side = " << (int)side;
 
 			if (relPos.z > getHeight() - 4)
 				bodypart = BODYPART_HEAD;
@@ -1369,7 +1369,7 @@ int BattleUnit::damage(
 																		BODYPART_LEFTLEG));
 				}
 			}
-			Log(LOG_INFO) << ". bodypart = " << (int)bodypart;
+			//Log(LOG_INFO) << ". bodypart = " << (int)bodypart;
 		}
 
 		const int armor = getArmor(side);
@@ -1828,8 +1828,8 @@ void BattleUnit::setTimeUnits(int tu)
 	else
 		_tu = tu;
 
-//	if (_tu > getBaseStats()->tu) // this might screw up ArmorBonus +tu
-//		_tu = getBaseStats()->tu; // it definitely screws up stopShot.
+//	if (_tu > getBaseStats()->tu) // This definitely screws up TU refunds.
+//		_tu = getBaseStats()->tu;
 }
 
 /**
@@ -1843,7 +1843,7 @@ void BattleUnit::setEnergy(int energy)
 	else
 		_energy = energy;
 
-	if (_energy > getBaseStats()->stamina) // this might screw up ArmorBonus +stamina
+	if (_energy > getBaseStats()->stamina)
 		_energy = getBaseStats()->stamina;
 }
 
@@ -1870,9 +1870,10 @@ bool BattleUnit::getVisible() const
 
 /**
  * Adds a unit to a vector of spotted and/or visible units (they're different).
- * xCom soldiers are always considered 'visible'; only aLiens go vis/unVis.
- * @param unit - pointer to a seen unit
- * @return, true if the seen unit was NOT previously flagged as visible
+ * Visible units are currently seen; unitsSpottedThisTurn are just that.
+ * @note Don't confuse either of those with the 'visible-to-XCOM' flag.
+ * @param unit - pointer to a seen BattleUnit
+ * @return, true if the seen unit was NOT previously flagged as a 'visibleUnit'
  */
 bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 {
@@ -1883,15 +1884,15 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 			i != _unitsSpottedThisTurn.end();
 			++i)
 	{
-		if (dynamic_cast<BattleUnit*>(*i) == unit)
+//		if (dynamic_cast<BattleUnit*>(*i) == unit)
+		if (*i == unit)
 		{
 			addUnit = false;
-
 			break;
 		}
 	}
 
-	if (addUnit)
+	if (addUnit == true)
 		_unitsSpottedThisTurn.push_back(unit);
 
 
@@ -1900,7 +1901,8 @@ bool BattleUnit::addToVisibleUnits(BattleUnit* unit)
 			i != _visibleUnits.end();
 			++i)
 	{
-		if (dynamic_cast<BattleUnit*>(*i) == unit)
+//		if (dynamic_cast<BattleUnit*>(*i) == unit)
+		if (*i == unit)
 			return false;
 	}
 
@@ -4158,18 +4160,18 @@ void BattleUnit::breathe()
 
 /**
  * Sets the flag for "this unit is under cover" meaning don't draw bubbles.
- * @param floor - true if there is a floor
+ * @param floorAbove - true if there is a floor
  */
-void BattleUnit::setFloorAbove(bool floor)
+void BattleUnit::setFloorAbove(bool floorAbove)
 {
-	_floorAbove = floor;
+	_floorAbove = floorAbove;
 }
 
 /**
  * Checks if the floorAbove flag has been set.
  * @return, true if this unit is under cover
  */
-bool BattleUnit::getFloorAbove()
+bool BattleUnit::getFloorAbove() const
 {
 	return _floorAbove;
 }
@@ -4197,7 +4199,7 @@ void BattleUnit::goToTimeOut()
  * Get the unit's statistics.
  * @return, BattleUnitStatistics statistics
  */
-BattleUnitStatistics* BattleUnit::getStatistics()
+BattleUnitStatistics* BattleUnit::getStatistics() const
 {
 	return _statistics;
 }
