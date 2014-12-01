@@ -69,7 +69,7 @@ InfoboxOKState::InfoboxOKState(const std::wstring& msg)
 	_txtTitle->setAlign(ALIGN_CENTER);
 	_txtTitle->setVerticalAlign(ALIGN_MIDDLE);
 	_txtTitle->setHighContrast();
-//kL	_txtTitle->setWordWrap();
+//	_txtTitle->setWordWrap();
 	_txtTitle->setText(msg);
 
 //	_btnOk->setColor(Palette::blockOffset(1)-1);
@@ -101,7 +101,6 @@ void InfoboxOKState::btnOkClick(Action*)
 {
 	if (_game->getSavedGame()->getSavedBattle()->getSide() != FACTION_PLAYER)
 		_game->getCursor()->setVisible(false);
-//		_game->getSavedGame()->getSavedBattle()->getBattleGame()->getMap()->setCursorType(CT_NONE);
 
 	_game->popState();
 }

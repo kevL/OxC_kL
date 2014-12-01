@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_INFOBOXOKSTATE_H
 #define OPENXCOM_INFOBOXOKSTATE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/State.h"
 

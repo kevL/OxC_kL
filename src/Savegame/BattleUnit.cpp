@@ -1342,6 +1342,7 @@ int BattleUnit::damage(
 				case 6:	side = SIDE_LEFT;									break;
 				case 7:	side = RNG::percent(50)? SIDE_FRONT: SIDE_LEFT;		break;
 			}
+			Log(LOG_INFO) << ". side = " << (int)side;
 
 			if (relPos.z > getHeight() - 4)
 				bodypart = BODYPART_HEAD;
@@ -1368,6 +1369,7 @@ int BattleUnit::damage(
 																		BODYPART_LEFTLEG));
 				}
 			}
+			Log(LOG_INFO) << ". bodypart = " << (int)bodypart;
 		}
 
 		const int armor = getArmor(side);

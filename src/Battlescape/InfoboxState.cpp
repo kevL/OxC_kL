@@ -19,7 +19,7 @@
 
 #include "InfoboxState.h"
 
-#include <string>
+//#include <string>
 
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
@@ -53,6 +53,7 @@ InfoboxState::InfoboxState(const std::wstring& msg)
 	add(_text, "infoBox", "battlescape");
 
 	centerAllSurfaces();
+
 
 //	_frame->setColor(Palette::blockOffset(0)+7);
 //	_frame->setBackground(Palette::blockOffset(0)+14);

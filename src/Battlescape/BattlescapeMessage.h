@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_BATTLESCAPEMESSAGE_H
 #define OPENXCOM_BATTLESCAPEMESSAGE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/Surface.h"
 

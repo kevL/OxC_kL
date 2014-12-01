@@ -35,8 +35,8 @@ namespace OpenXcom
  * it's a 9x13 shape, they're just there for inheritance.
  * @param width		- width in pixels
  * @param height	- height in pixels
- * @param x			- X position in pixels
- * @param y			- Y position in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 Cursor::Cursor(
 		int width,
@@ -79,7 +79,7 @@ void Cursor::handle(Action* action)
 
 /**
  * Changes the cursor's base color.
- * @param color Color value.
+ * @param color - color value
  */
 void Cursor::setColor(Uint8 color)
 {
@@ -89,7 +89,7 @@ void Cursor::setColor(Uint8 color)
 
 /**
  * Returns the cursor's base color.
- * @return Color value.
+ * @return, color value
  */
 Uint8 Cursor::getColor() const
 {

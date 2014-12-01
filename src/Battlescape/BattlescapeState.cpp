@@ -300,7 +300,7 @@ BattlescapeState::BattlescapeState()
 
 	if (_game->getRuleset()->getInterface("battlescape")->getElement("pathfinding"))
 	{
-		Element* pathing = _game->getRuleset()->getInterface("battlescape")->getElement("pathfinding");
+		const Element* const pathing = _game->getRuleset()->getInterface("battlescape")->getElement("pathfinding");
 
 		Pathfinding::green = pathing->color;
 		Pathfinding::yellow = pathing->color2;
@@ -909,8 +909,8 @@ void BattlescapeState::init()
 		break;
 	} */
 
-	if (_firstInit
-		&& playableUnitSelected())
+	if (_firstInit == true
+		&& playableUnitSelected() == true)
 	{
 		_firstInit = false;
 
@@ -1488,14 +1488,14 @@ void BattlescapeState::stopScrolling(Action* action)
 
 /**
  * Takes care of any events from the core game engine.
- * @param action, Pointer to an action.
+ * @param action - pointer to an Action
  */
 inline void BattlescapeState::handle(Action* action)
 {
-	if (_game->getCursor()->getVisible()
-		|| ((action->getDetails()->type == SDL_MOUSEBUTTONDOWN
-				|| action->getDetails()->type == SDL_MOUSEBUTTONUP)
-			&& action->getDetails()->button.button == SDL_BUTTON_RIGHT))
+	if (_game->getCursor()->getVisible() == true
+		|| (action->getDetails()->button.button == SDL_BUTTON_RIGHT
+			&& (action->getDetails()->type == SDL_MOUSEBUTTONDOWN
+				|| action->getDetails()->type == SDL_MOUSEBUTTONUP)))
 	{
 		State::handle(action);
 

@@ -258,7 +258,6 @@ UfoDetectedState::UfoDetectedState(
 		// IMPORTANT: This does not return the actual battleField terrain; that is done
 		// in ConfirmLandingState. This is merely an indicator .... cf. DogfightState
 		// IE, the first terrain found for proper Globe-texture is chosen
-		std::string terrain;
 
 		int // look up polygon's texture
 			texture,
@@ -268,7 +267,25 @@ UfoDetectedState::UfoDetectedState(
 												_ufo->getLatitude(),
 												&texture,
 												&shade);
-		RuleTerrain* terrainRule = NULL;
+		std::string terrain;
+
+		if		(texture == 0)	terrain = "FOREST"; // these could get expanded/redef'd. in future
+		else if (texture == 1)	terrain = "CULTA";
+		else if (texture == 2)	terrain = "CULTA";
+		else if (texture == 3)	terrain = "FOREST";
+		else if (texture == 4)	terrain = "POLAR";
+		else if (texture == 5)	terrain = "MOUNT";
+		else if (texture == 6)	terrain = "JUNGLE";
+		else if (texture == 7)	terrain = "DESERT";
+		else if (texture == 8)	terrain = "DESERT";
+		else if (texture == 9)	terrain = "POLAR";
+		else if (texture == 10)	terrain = "URBAN";
+		else if (texture == 11)	terrain = "POLAR";
+		else if (texture == 12)	terrain = "POLAR";
+		else
+			terrain = "WATER"; // tex = -1
+
+/*		RuleTerrain* terrainRule = NULL;
 
 		const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
 		for (std::vector<std::string>::const_iterator
@@ -330,12 +347,7 @@ UfoDetectedState::UfoDetectedState(
 //			|| terrain == "RAILYARDURBAN")
 //		{
 //			terrain = "URBAN";
-//		}
-
-//		_txtShade->setColor(Palette::blockOffset(8)+10);
-//		_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
-//		_txtShade->setAlign(ALIGN_RIGHT);
-//		_txtShade->setText(tr("STR_SHADE_").arg(shade));
+//		} */
 
 		std::wostringstream ss;
 		ss << tr(terrain);
@@ -349,6 +361,11 @@ UfoDetectedState::UfoDetectedState(
 //		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(str))); // tr(terrainRule)
 //		_txtTexture->setText(tr("STR_TEXTURE_").arg(ss.str()));
 		_txtTexture->setText(ss.str());
+
+//		_txtShade->setColor(Palette::blockOffset(8)+10);
+//		_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
+//		_txtShade->setAlign(ALIGN_RIGHT);
+//		_txtShade->setText(tr("STR_SHADE_").arg(shade));
 	}
 	else
 	{

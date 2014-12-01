@@ -2291,9 +2291,6 @@ int DogfightState::getInterceptionNumber() const
  */
 const std::string DogfightState::getTextureIcon() // kL
 {
-	//Log(LOG_INFO) << "DogfightState::getTextureIcon()";
-	std::string ret;
-
 	int // look up polygon's texture
 		texture,
 		shade;
@@ -2303,7 +2300,24 @@ const std::string DogfightState::getTextureIcon() // kL
 									&texture,
 									&shade);
 
-	RuleTerrain* terrainRule = NULL;
+	if (texture == 0)	return "FOREST"; // these could get expanded/redef'd. in future
+	if (texture == 1)	return "CULTA";
+	if (texture == 2)	return "CULTA";
+	if (texture == 3)	return "FOREST";
+	if (texture == 4)	return "POLAR";
+	if (texture == 5)	return "MOUNT";
+	if (texture == 6)	return "JUNGLE";
+	if (texture == 7)	return "DESERT";
+	if (texture == 8)	return "DESERT";
+	if (texture == 9)	return "POLAR";
+	if (texture == 10)	return "URBAN";
+	if (texture == 11)	return "POLAR";
+	if (texture == 12)	return "POLAR";
+
+	return "WATER"; // tex = -1
+}
+/*	RuleTerrain* terrainRule = NULL;
+	std::string ret;
 
 	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
 	for (std::vector<std::string>::const_iterator
@@ -2367,9 +2381,11 @@ const std::string DogfightState::getTextureIcon() // kL
 //		ret = "URBAN";
 //	}
 
+	// + MOUNT
+
+
 	//Log(LOG_INFO) << "DogfightState::getTextureIcon() EXIT : " << ret;
-	return ret;
-}
+	return ret; */
 
 /**
  * kL. Plays a sound effect in stereo.
@@ -2380,13 +2396,15 @@ void DogfightState::playSoundFX( // kL
 		const int sound,
 		const bool randAngle)
 {
-	const int var = 67;	// maximum deflection left or right
-	int dir = 360;		// stereo center
+	int dir = 360; // stereo center
 
 	if (randAngle == true)
+	{
+		const int var = 67; // maximum deflection left or right
 		dir += (RNG::generate(-var, var)
 			  + RNG::generate(-var, var))
 			/ 2;
+	}
 
 	_game->getResourcePack()->getSound(
 									"GEO.CAT",

@@ -32,7 +32,8 @@ class Timer;
 
 
 /**
- * Frame that briefly shows some info like : Yasuaki Okamoto Has Panicked. It disappears after 2 seconds.
+ * Frame that briefly shows some info like : Yasuaki Okamoto Has Panicked.
+ * It disappears after 2-1/2 seconds.
  */
 class InfoboxState
 	:
@@ -46,7 +47,7 @@ private:
 
 
 	public:
-		static const int INFOBOX_DELAY = 2000;
+		static const int INFOBOX_DELAY = 2500;
 
 		/// Creates the Infobox state.
 		InfoboxState(const std::wstring& msg);

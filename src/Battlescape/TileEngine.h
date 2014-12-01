@@ -140,7 +140,7 @@ private:
 		BattleUnit* getReactor(
 				std::vector<BattleUnit*> spotters,
 				BattleUnit* defender,
-				int tuSpent = 0);
+				int tuSpent = 0) const;
 		/// Fires off a reaction shot.
 		bool reactionShot(
 				BattleUnit* unit,

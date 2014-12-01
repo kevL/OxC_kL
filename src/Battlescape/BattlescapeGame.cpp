@@ -1566,7 +1566,7 @@ void BattlescapeGame::popState()
 				//Log(LOG_INFO) << ". end NOT actionFailed";
 			}
 		}
-		else // not FACTION_PLAYER
+		else // action.actor is not FACTION_PLAYER
 		{
 			//Log(LOG_INFO) << ". action -> NOT Faction_Player";
 			action.actor->spendTimeUnits(action.TU); // spend TUs
@@ -1577,7 +1577,7 @@ void BattlescapeGame::popState()
 				 // AI does three things per unit, before switching to the next, or it got killed before doing the second thing
 				if (_AIActionCounter > 2
 					|| _save->getSelectedUnit() == NULL
-					|| _save->getSelectedUnit()->isOut(true, true))
+					|| _save->getSelectedUnit()->isOut(true, true) == true)
 				{
 					if (_save->getSelectedUnit() != NULL)
 					{
@@ -1658,8 +1658,11 @@ void BattlescapeGame::popState()
 
 		_save->setSelectedUnit(NULL);
 
-		getMap()->setCursorType(CT_NORMAL);
-		_parentState->getGame()->getCursor()->setVisible();
+		if (_save->getSide() == FACTION_PLAYER) // kL
+		{
+			getMap()->setCursorType(CT_NORMAL);
+			_parentState->getGame()->getCursor()->setVisible();
+		}
 	}
 
 	if (_save->getSide() == FACTION_PLAYER) // kL
@@ -2120,8 +2123,11 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 				_currentAction.type = BA_NONE;
 //				_currentAction.TU = 0; // kL
 
-				setupCursor();
-				_parentState->getGame()->getCursor()->setVisible();
+				if (_save->getSide() == FACTION_PLAYER) // kL
+				{
+					setupCursor();
+					_parentState->getGame()->getCursor()->setVisible();
+				}
 
 				return true;
 			}
@@ -2131,7 +2137,6 @@ bool BattlescapeGame::cancelCurrentAction(bool bForce)
 		&& _states.front() != NULL)
 	{
 		_states.front()->cancel();
-
 		return true;
 	}
 

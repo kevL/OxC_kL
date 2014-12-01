@@ -1376,6 +1376,7 @@ bool TileEngine::checkReactionFire(
 				if (reactor->getGeoscapeSoldier() != NULL
 					&& reactor->getFaction() == reactor->getOriginalFaction())
 				{
+					Log(LOG_INFO) << ". . reactionXP to " << reactor->getId();
 					reactor->addReactionExp();
 				}
 
@@ -1449,12 +1450,12 @@ std::vector<BattleUnit*> TileEngine::getSpottingUnits(BattleUnit* unit)
 BattleUnit* TileEngine::getReactor(
 		std::vector<BattleUnit*> spotters,
 		BattleUnit* defender,
-		int tuSpent)
+		int tuSpent) const
 {
 	//Log(LOG_INFO) << "TileEngine::getReactor() vs ID " << defender->getId();
 	//Log(LOG_INFO) << ". tuSpent = " << tuSpent;
 	BattleUnit* nextReactor = NULL;
-	int highestIniti = -1;
+	int highestInit = -1;
 
 	for (std::vector<BattleUnit*>::const_iterator
 			i = spotters.begin();
@@ -1465,9 +1466,9 @@ BattleUnit* TileEngine::getReactor(
 		if ((*i)->isOut(true, true) == true)
 			continue;
 
-		if ((*i)->getInitiative() > highestIniti)
+		if ((*i)->getInitiative() > highestInit)
 		{
-			highestIniti = static_cast<int>((*i)->getInitiative());
+			highestInit = static_cast<int>((*i)->getInitiative());
 			nextReactor = *i;
 		}
 	}
@@ -1479,7 +1480,7 @@ BattleUnit* TileEngine::getReactor(
 	// are not subtracted before getInitiative() is called.
 /* kL: Apply xp only *after* the shot -> moved up into checkReactionFire()
 	if (nextReactor != NULL
-		&& highestIniti > static_cast<int>(defender->getInitiative(tuSpent)))
+		&& highestInit > static_cast<int>(defender->getInitiative(tuSpent)))
 	{
 		if (nextReactor->getGeoscapeSoldier() != NULL
 			&& nextReactor->getFaction() == nextReactor->getOriginalFaction())
@@ -1493,12 +1494,12 @@ BattleUnit* TileEngine::getReactor(
 		nextReactor = defender;
 	} */
 	if (nextReactor == NULL
-		|| highestIniti <= static_cast<int>(defender->getInitiative(tuSpent)))
+		|| highestInit <= static_cast<int>(defender->getInitiative(tuSpent)))
 	{
 		nextReactor = defender;
 	}
 
-	//Log(LOG_INFO) << ". highestIniti = " << highestIniti;
+	//Log(LOG_INFO) << ". highestInit = " << highestInit;
 	return nextReactor;
 }
 
@@ -1912,6 +1913,7 @@ BattleUnit* TileEngine::hit(
 										0,
 										0,
 										vertOffset);
+				Log(LOG_INFO) << "TileEngine::hit() relPos " << relativePos;
 
 				double delta = 100.;
 				if (type == DT_HE

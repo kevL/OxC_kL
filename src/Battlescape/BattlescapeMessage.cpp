@@ -30,10 +30,10 @@ namespace OpenXcom
 
 /**
  * Sets up a blank Battlescape message with the specified size and position.
- * @param width Width in pixels.
- * @param height Height in pixels.
- * @param x X position in pixels.
- * @param y Y position in pixels.
+ * @param width		- width in pixels
+ * @param height	- height in pixels
+ * @param x			- X position in pixels (default 0)
+ * @param y			- Y position in pixels (default 0)
  */
 BattlescapeMessage::BattlescapeMessage(
 		int width,
@@ -80,7 +80,7 @@ BattlescapeMessage::~BattlescapeMessage()
 
 /**
 * Changes the position of the surface in the X axis.
-* @param x X position in pixels.
+* @param x - X position in pixels
 */
 void BattlescapeMessage::setX(int x)
 {
@@ -91,7 +91,7 @@ void BattlescapeMessage::setX(int x)
 
 /**
 * Changes the position of the surface in the Y axis.
-* @param y Y position in pixels.
+* @param y - Y position in pixels
 */
 void BattlescapeMessage::setY(int y)
 {
@@ -102,7 +102,7 @@ void BattlescapeMessage::setY(int y)
 
 /**
  * Changes the message background.
- * @param background Pointer to background surface.
+ * @param background - pointer to background surface
  */
 void BattlescapeMessage::setBackground(Surface* background)
 {
@@ -111,7 +111,7 @@ void BattlescapeMessage::setBackground(Surface* background)
 
 /**
  * Changes the message text.
- * @param message Message string.
+ * @param message - reference the Message string
  */
 void BattlescapeMessage::setText(const std::wstring& message)
 {
@@ -123,9 +123,9 @@ void BattlescapeMessage::setText(const std::wstring& message)
  * The different fonts need to be passed in advance since the
  * text size can change mid-text, and the language affects
  * how the text is rendered.
- * @param big, Pointer to large-size font.
- * @param small, Pointer to small-size font.
- * @param lang, Pointer to current language.
+ * @param big	- pointer to large-size Font
+ * @param small	- pointer to small-size Font
+ * @param lang	- pointer to current Language
  */
 void BattlescapeMessage::initText(
 		Font* big,
@@ -138,9 +138,9 @@ void BattlescapeMessage::initText(
 
 /**
  * Replaces a certain amount of colors in the surface's palette.
- * @param colors Pointer to the set of colors.
- * @param firstcolor Offset of the first color to replace.
- * @param ncolors Amount of colors to replace.
+ * @param colors		- pointer to the set of colors
+ * @param firstcolor	- offset of the first color to replace (default 0)
+ * @param ncolors		- amount of colors to replace (default 256)
  */
 void BattlescapeMessage::setPalette(
 		SDL_Color* colors,
@@ -154,6 +154,7 @@ void BattlescapeMessage::setPalette(
 
 /**
  * Blits the battlescape message.
+ * @param surface - pointer to a Surface
  */
 void BattlescapeMessage::blit(Surface* surface)
 {
@@ -164,7 +165,7 @@ void BattlescapeMessage::blit(Surface* surface)
 
 /**
  * Special handling for setting the height of the battlescape message.
- * @param height the new height.
+ * @param height - the new height
  */
 void BattlescapeMessage::setHeight(int height)
 {
@@ -175,7 +176,7 @@ void BattlescapeMessage::setHeight(int height)
 
 /**
  * Sets the text color of the battlescape message.
- * @param color the new color.
+ * @param color - the new color
  */
 void BattlescapeMessage::setTextColor(Uint8 color)
 {

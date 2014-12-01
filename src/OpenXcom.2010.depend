@@ -5634,7 +5634,7 @@
 1413136956 f:\git\openxcom\src\battlescape\scannerstate.h
 	"../Engine/State.h"
 
-1417325678 f:\git\openxcom\src\battlescape\tileengine.h
+1417358503 f:\git\openxcom\src\battlescape\tileengine.h
 	"BattlescapeGame.h"
 	"Position.h"
 	"../Ruleset/RuleItem.h"
@@ -5723,7 +5723,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1417321383 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1417392084 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5776,11 +5776,10 @@
 	"BattleState.h"
 	"Position.h"
 
-1416613782 f:\git\openxcom\src\battlescape\infoboxokstate.h
-	<string>
+1417390342 f:\git\openxcom\src\battlescape\infoboxokstate.h
 	"../Engine/State.h"
 
-1413136955 f:\git\openxcom\src\battlescape\infoboxstate.h
+1417390461 f:\git\openxcom\src\battlescape\infoboxstate.h
 	"../Engine/State.h"
 
 1413136956 f:\git\openxcom\src\battlescape\nextturnstate.h
@@ -5926,8 +5925,7 @@
 	"../Interface/Text.h"
 	"../Interface/Window.h"
 
-1413136955 f:\git\openxcom\src\battlescape\battlescapemessage.h
-	<string>
+1417390090 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
 1417321178 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
@@ -6224,7 +6222,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1416640678 source:f:\git\openxcom\src\battlescape\infoboxokstate.cpp
+1417390371 source:f:\git\openxcom\src\battlescape\infoboxokstate.cpp
 	"InfoboxOKState.h"
 	"Map.h"
 	"../Engine/Game.h"
@@ -6649,7 +6647,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Tile.h"
 
-1417299993 source:f:\git\openxcom\src\battlescape\tileengine.cpp
+1417375305 source:f:\git\openxcom\src\battlescape\tileengine.cpp
 	"TileEngine.h"
 	"AlienBAIState.h"
 	"BattleAIState.h"
@@ -7505,7 +7503,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1417020024 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1417361479 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"Globe.h"
 	"../Engine/Action.h"
@@ -8090,7 +8088,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1417009502 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1417361504 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -9347,7 +9345,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1417309889 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1417377117 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"
