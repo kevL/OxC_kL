@@ -31,7 +31,6 @@ namespace OpenXcom
 class BattlescapeButton;
 class BattlescapeState;
 class BattleUnit;
-//class InteractiveSurface;
 class Inventory;
 class NumberText;
 class SavedBattleGame;
@@ -48,7 +47,7 @@ class InventoryState
 {
 
 private:
-	const bool _tu;
+	const bool _tuMode;
 
 //	std::string _currentTooltip;
 
@@ -86,7 +85,8 @@ private:
 		* _txtPSkill,
 		* _txtPStr,
 		* _txtUseTU,
-		* _txtThrowTU;
+		* _txtThrowTU,
+		* _txtPsiTU;
 
 //	std::vector<EquipmentLayoutItem*> _curInventoryTemplate;
 
@@ -99,7 +99,7 @@ private:
 	public:
 		/// Creates the Inventory state.
 		InventoryState(
-				bool tu,
+				bool tuMode,
 				BattlescapeState* parent);
 		/// Cleans up the Inventory state.
 		~InventoryState();

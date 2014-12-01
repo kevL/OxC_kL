@@ -23,6 +23,7 @@
 
 #include "../Engine/State.h"
 
+
 namespace OpenXcom
 {
 

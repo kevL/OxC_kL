@@ -9145,6 +9145,7 @@ extraStrings:
       STR_OUTSIDE_CRAFT_RANGE: "Outside craft's Range"
       STR_USE_: "use {ALT}{0}"
       STR_THROW_: "throw {ALT}{0}"
+      STR_PSI_: "psi {ALT}{0}"
       STR_ARMOR_NONE_UC: "xCom Pyjamas"
       STR_BASEDETECTION: "Base Detection"
       STR_FACILITIES: "Facilities"

@@ -728,18 +728,13 @@ void ProjectileFlyBState::think()
 //					_parent->getMap()->getCamera()->setMapOffset(_parent->getMap()->getCamera()->getMapOffset());
 				}
 				else */
-				if (_action.type == BA_THROW // kL, jump screen back to pre-shot position
+				if (_action.type == BA_THROW // jump screen back to pre-shot position
 					|| _action.type == BA_AUTOSHOT
 					|| _action.type == BA_SNAPSHOT
 					|| _action.type == BA_AIMEDSHOT)
-/*				if (_action.type == BA_THROW // kL, jump screen back to pre-shot position
-					|| (_parent->getMap()->getCamera()->isOnScreen(_action.cameraPosition) == )
-						&& (_action.type == BA_AUTOSHOT
-							|| _action.type == BA_SNAPSHOT
-							|| _action.type == BA_AIMEDSHOT)) */
 				{
 					//Log(LOG_INFO) << "ProjectileFlyBState::think() FINISH: resetting Camera to original pos";
-					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition); // jumps camera back to stored position when shot was taken.
+					_parent->getMap()->getCamera()->setMapOffset(_action.cameraPosition);
 //kL				_parent->getMap()->invalidate();
 					_parent->getMap()->draw(); // kL
 				}

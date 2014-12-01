@@ -1703,7 +1703,7 @@ int BattleUnit::getActionTUs(
 /**
  * Gets the number of time units a certain action takes for this BattleUnit.
  * @param actionType	- type of battle action (BattlescapeGame.h)
- * @param item			- pointer to RuleItem for TU-cost
+ * @param item			- pointer to RuleItem for TU-cost (default NULL)
  * @return, TUs to perform action
  */
 int BattleUnit::getActionTUs(
@@ -1779,7 +1779,7 @@ int BattleUnit::getActionTUs(
 	{
 		cost = std::max(
 					1,
-					static_cast<int>(floor(static_cast<double>(getBaseStats()->tu * cost) / 100.0)));
+					static_cast<int>(std::floor(static_cast<double>(getBaseStats()->tu * cost) / 100.)));
 	}
 
 	return cost;

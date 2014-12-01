@@ -4699,7 +4699,7 @@
 	"../Ruleset/MapScript.h"
 	"../Ruleset/RuleTerrain.h"
 
-1413136955 f:\git\openxcom\src\battlescape\inventorystate.h
+1417472392 f:\git\openxcom\src\battlescape\inventorystate.h
 	"../Engine/State.h"
 	"../Savegame/EquipmentLayoutItem.h"
 
@@ -5792,7 +5792,7 @@
 1413136956 f:\git\openxcom\src\battlescape\unitfallbstate.h
 	"BattleState.h"
 
-1413136956 f:\git\openxcom\src\battlescape\unitinfostate.h
+1417471165 f:\git\openxcom\src\battlescape\unitinfostate.h
 	"../Engine/State.h"
 
 1413136956 f:\git\openxcom\src\battlescape\unitpanicbstate.h
@@ -6279,9 +6279,8 @@
 	<SDL.h>
 	<yaml-cpp/yaml.h>
 
-1416528249 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
+1417473497 source:f:\git\openxcom\src\battlescape\inventorystate.cpp
 	"InventoryState.h"
-	<sstream>
 	"BattlescapeState.h"
 	"Camera.h"
 	"Inventory.h"
@@ -6294,7 +6293,6 @@
 	"../Engine/Game.h"
 	"../Engine/InteractiveSurface.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Palette.h"
 	"../Engine/Sound.h"
 	"../Engine/Surface.h"
@@ -6431,7 +6429,7 @@
 	"Position.h"
 	"../Engine/InteractiveSurface.h"
 
-1417443599 source:f:\git\openxcom\src\battlescape\minimapview.cpp
+1417466508 source:f:\git\openxcom\src\battlescape\minimapview.cpp
 	"MiniMapView.h"
 	"Camera.h"
 	"Map.h"
@@ -6561,7 +6559,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/Tile.h"
 
-1417462778 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
+1417466624 source:f:\git\openxcom\src\battlescape\projectileflybstate.cpp
 	"ProjectileFlyBState.h"
 	"AlienBAIState.h"
 	"BattlescapeState.h"
@@ -6708,9 +6706,8 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/Tile.h"
 
-1416130628 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
+1417471220 source:f:\git\openxcom\src\battlescape\unitinfostate.cpp
 	"UnitInfoState.h"
-	<sstream>
 	"BattlescapeGame.h"
 	"BattlescapeState.h"
 	"../Engine/Action.h"
@@ -9337,7 +9334,7 @@
 	"../Ruleset/RuleInventory.h"
 	"../Ruleset/RuleItem.h"
 
-1417462778 source:f:\git\openxcom\src\savegame\battleunit.cpp
+1417473209 source:f:\git\openxcom\src\savegame\battleunit.cpp
 	"BattleUnit.h"
 	"BattleItem.h"
 	"SavedGame.h"

@@ -19,7 +19,7 @@
 
 #include "InventoryState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "BattlescapeState.h"
 #include "Camera.h"
@@ -34,7 +34,6 @@
 #include "../Engine/Game.h"
 #include "../Engine/InteractiveSurface.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
 //kL #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 //kL #include "../Engine/Screen.h"
@@ -44,7 +43,7 @@
 
 #include "../Interface/BattlescapeButton.h"
 #include "../Interface/Text.h"
-#include "../Interface/NumberText.h" // kL
+#include "../Interface/NumberText.h"
 
 #include "../Resource/ResourcePack.h"
 
@@ -74,14 +73,14 @@ namespace OpenXcom
 
 /**
  * Initializes all the elements in the Inventory screen.
- * @param tu		- true if in battle when inventory use costs time units
- * @param parent	- pointer to parent BattlescapeState
+ * @param tuMode - true if in battle and inventory usage costs time units
+ * @param parent - pointer to parent BattlescapeState
  */
 InventoryState::InventoryState(
-		bool tu,
+		bool tuMode,
 		BattlescapeState* parent)
 	:
-		_tu(tu),
+		_tuMode(tuMode),
 		_parent(parent)
 {
 	//Log(LOG_INFO) << "Create InventoryState";
@@ -115,16 +114,17 @@ InventoryState::InventoryState(
 	_txtTus		= new Text(40, 9, 237, 24);
 	_txtFAcc	= new Text(40, 9, 237, 32);
 	_txtReact	= new Text(40, 9, 237, 40);
-	_txtThrow	= new Text(40, 9, 237, 48); // kL
-	_txtMelee	= new Text(40, 9, 237, 56); // kL
+	_txtThrow	= new Text(40, 9, 237, 48);
+	_txtMelee	= new Text(40, 9, 237, 56);
 	_txtPStr	= new Text(40, 9, 237, 64);
 	_txtPSkill	= new Text(40, 9, 237, 72);
 
-	_txtUseTU	= new Text(40, 9, 245, 132);
-	_txtThrowTU	= new Text(40, 9, 245, 141);
+	_txtUseTU	= new Text(40, 9, 245, 123);
+	_txtThrowTU	= new Text(40, 9, 245, 132);
+	_txtPsiTU	= new Text(40, 9, 245, 141);
 
-	_numOrder	= new NumberText(7, 5, 228, 4); // kL
-	_tuCost		= new NumberText(7, 5, 310, 60); // kL
+	_numOrder	= new NumberText(7, 5, 228, 4);
+	_tuCost		= new NumberText(7, 5, 310, 60);
 
 	_txtItem	= new Text(160, 9, 128, 140);
 
@@ -157,8 +157,7 @@ InventoryState::InventoryState(
 	_selAmmo	= new Surface(
 						RuleInventory::HAND_W * RuleInventory::SLOT_W,
 						RuleInventory::HAND_H * RuleInventory::SLOT_H,
-//						272,
-						288,
+						288, // 272,
 						88);
 
 	_inv		= new Inventory(
@@ -182,13 +181,13 @@ InventoryState::InventoryState(
 	add(_txtTus, "textTUs", "inventory", _bg);
 	add(_txtFAcc, "textFiring", "inventory", _bg);
 	add(_txtReact, "textReaction", "inventory", _bg);
-	add(_txtThrow); // kL
-	add(_txtMelee); // kL
+	add(_txtThrow);
+	add(_txtMelee);
 	add(_txtPStr, "textPsiStrength", "inventory", _bg);
 	add(_txtPSkill, "textPsiSkill", "inventory", _bg);
 
-	add(_numOrder); // kL
-	add(_tuCost); // kL
+	add(_numOrder);
+	add(_tuCost);
 	add(_txtItem, "textItem", "inventory", _bg);
 	add(_txtAmmo, "textAmmo", "inventory", _bg);
 	add(_btnOk, "buttonOK", "inventory", _bg);
@@ -204,12 +203,14 @@ InventoryState::InventoryState(
 	add(_inv);
 	add(_txtUseTU);
 	add(_txtThrowTU);
+	add(_txtPsiTU);
 
 	// move the TU display down to make room for the weight display
-	if (Options::showMoreStatsInInventoryView)
+	if (Options::showMoreStatsInInventoryView == true)
 		_txtTus->setY(_txtTus->getY() + 8);
 
 	centerAllSurfaces();
+
 
 //	_txtName->setColor(Palette::blockOffset(4));
 	_txtName->setBig();
@@ -231,13 +232,13 @@ InventoryState::InventoryState(
 //	_txtReact->setSecondaryColor(Palette::blockOffset(1));
 	_txtReact->setHighContrast();
 
-	_txtThrow->setColor(Palette::blockOffset(4));			// kL
-	_txtThrow->setSecondaryColor(Palette::blockOffset(1));	// kL
-	_txtThrow->setHighContrast();							// kL
+	_txtThrow->setColor(Palette::blockOffset(4));
+	_txtThrow->setSecondaryColor(Palette::blockOffset(1));
+	_txtThrow->setHighContrast();
 
-	_txtMelee->setColor(Palette::blockOffset(4));			// kL
-	_txtMelee->setSecondaryColor(Palette::blockOffset(1));	// kL
-	_txtMelee->setHighContrast();							// kL
+	_txtMelee->setColor(Palette::blockOffset(4));
+	_txtMelee->setSecondaryColor(Palette::blockOffset(1));
+	_txtMelee->setHighContrast();
 
 //	_txtPStr->setColor(Palette::blockOffset(4));
 //	_txtPStr->setSecondaryColor(Palette::blockOffset(1));
@@ -255,12 +256,16 @@ InventoryState::InventoryState(
 	_txtThrowTU->setSecondaryColor(Palette::blockOffset(1));
 	_txtThrowTU->setHighContrast();
 
-	_numOrder->setColor(1);	// kL
-	_numOrder->setValue(0);	// kL
+	_txtPsiTU->setColor(Palette::blockOffset(4));
+	_txtPsiTU->setSecondaryColor(Palette::blockOffset(1));
+	_txtPsiTU->setHighContrast();
 
-	_tuCost->setColor(1);		// kL
-	_tuCost->setValue(0);		// kL
-	_tuCost->setVisible(false);	// kL
+	_numOrder->setColor(1);
+	_numOrder->setValue(0);
+
+	_tuCost->setColor(1);
+	_tuCost->setValue(0);
+	_tuCost->setVisible(false);
 
 //	_txtItem->setColor(Palette::blockOffset(3));
 	_txtItem->setHighContrast();
@@ -345,7 +350,7 @@ InventoryState::InventoryState(
 
 
 	// only use copy/paste layout-template buttons in setup (i.e. non-tu) mode
-/*	if (_tu)
+/*	if (_tuMode)
 	{
 		_btnCreateTemplate->setVisible(false);
 		_btnApplyTemplate->setVisible(false);
@@ -355,18 +360,18 @@ InventoryState::InventoryState(
 		_updateTemplateButtons(true); */
 
 	_inv->draw();
-	_inv->setTuMode(_tu);
+	_inv->setTuMode(_tuMode);
 	_inv->setSelectedUnit(_game->getSavedGame()->getSavedBattle()->getSelectedUnit());
 	_inv->onMouseClick((ActionHandler)& InventoryState::invClick, 0);
 	_inv->onMouseOver((ActionHandler)& InventoryState::invMouseOver);
 	_inv->onMouseOut((ActionHandler)& InventoryState::invMouseOut);
 
 	_txtWeight->setVisible(Options::showMoreStatsInInventoryView);
-	_txtTus->setVisible(_tu);
-	_txtUseTU->setVisible(_tu);
+	_txtTus->setVisible(_tuMode);
+	_txtUseTU->setVisible(_tuMode);
 
-	bool vis = _tu == false
-			&& Options::showMoreStatsInInventoryView;
+	bool vis = _tuMode == false
+			&& Options::showMoreStatsInInventoryView == true;
 	_txtFAcc->setVisible(vis);
 	_txtReact->setVisible(vis);
 	_txtThrow->setVisible(vis); // kL
@@ -458,7 +463,7 @@ void InventoryState::init()
 	else if (unit->hasInventory() == false) // skip to the first unit with inventory
 	{
 		//Log(LOG_INFO) << ". . unit doesn't have Inventory";
-		if (_parent)
+		if (_parent != NULL)
 		{
 			//Log(LOG_INFO) << ". . . _parent: select next unit";
 			_parent->selectNextFactionUnit(
@@ -490,8 +495,8 @@ void InventoryState::init()
 		}
 	}
 
-//kL	if (_parent)
-//kL		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
+//	if (_parent)
+//		_parent->getMap()->getCamera()->centerOnPosition(unit->getPosition(), false);
 
 	unit->setCache(NULL);
 
@@ -565,7 +570,7 @@ void InventoryState::init()
 }
 
 /**
- * Updates the soldier stats (Weight, TU).
+ * Updates the soldier stats & TU usages.
  */
 void InventoryState::updateStats()
 {
@@ -575,15 +580,15 @@ void InventoryState::updateStats()
 	_numOrder->setValue(unit->getBattleOrder());
 	_numOrder->setVisible(unit->getOriginalFaction() == FACTION_PLAYER);
 
-	if (_tu == true)
+	if (_tuMode == true)
 		_txtTus->setText(tr("STR_TIME_UNITS_SHORT").arg(unit->getTimeUnits()));
 
-	if (Options::showMoreStatsInInventoryView)
+	if (Options::showMoreStatsInInventoryView == true)
 	{
 		const int
 			weight = unit->getCarriedWeight(_inv->getSelectedItem()),
 			strength = static_cast<int>(Round(
-								static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2.0 + 0.5)));
+								static_cast<double>(unit->getBaseStats()->strength) * (unit->getAccuracyModifier() / 2. + 0.5)));
 
 		_txtWeight->setText(tr("STR_WEIGHT").arg(weight).arg(strength));
 		if (weight > strength)
@@ -591,11 +596,24 @@ void InventoryState::updateStats()
 		else
 			_txtWeight->setSecondaryColor(Palette::blockOffset(3));
 
-		if (_tu == true)
+
+		const int psiSkill = unit->getBaseStats()->psiSkill;
+
+		if (_tuMode == true)
 		{
 //			int stat = static_cast<int>(floor(static_cast<float>(unit->getBaseStats()->tu * 23) / 100.f));
-			int stat = unit->getActionTUs(BA_THROW);
-			_txtThrowTU->setText(tr("STR_THROW_").arg(stat));
+			_txtThrowTU->setText(tr("STR_THROW_").arg(unit->getActionTUs(BA_THROW)));
+
+			if (unit->getOriginalFaction() == FACTION_HOSTILE
+				&& psiSkill > 0)
+			{
+				_txtPsiTU->setVisible();
+				_txtPsiTU->setText(tr("STR_PSI_").arg(unit->getActionTUs(
+																	BA_PANIC,
+																	_parent->getBattleGame()->getAlienPsi())));
+			}
+			else
+				_txtPsiTU->setVisible(false);
 		}
 		else
 		{
@@ -610,7 +628,6 @@ void InventoryState::updateStats()
 //			if (unit->getType() == "SOLDIER")
 //				minPsi = _game->getSavedGame()->getSoldier(unit->getId())->getRules()->getMinStats().psiSkill - 1;
 
-			int psiSkill = unit->getBaseStats()->psiSkill;
 			if (psiSkill > minPsi)
 				_txtPSkill->setText(tr("STR_PSIONIC_SKILL_SHORT").arg(psiSkill));
 			else
@@ -698,7 +715,7 @@ void InventoryState::btnOkClick(Action*)
 
 	_game->popState();
 
-	if (_tu == false) // pre-Battle inventory equip.
+	if (_tuMode == false) // pre-Battle inventory equip.
 	{
 		//Log(LOG_INFO) << ". tu = FALSE";
 		saveEquipmentLayout();
@@ -716,7 +733,7 @@ void InventoryState::btnOkClick(Action*)
 //		Tile* invTile = _battleGame->getSelectedUnit()->getTile();
 		Tile* invTile = _battleGame->getBattleInventory(); // kL
 		_battleGame->randomizeItemLocations(invTile);	// This doesn't seem to happen on second stage of Multi-State MISSIONS.
-														// In fact, none of this !_tu InventoryState appears to run for 2nd staged missions.
+														// In fact, none of this !_tuMode InventoryState appears to run for 2nd staged missions.
 														// and BattlescapeGenerator::nextStage() has its own bu->prepareUnitTurn() call ....
 /*kL
 		if (_battleGame->getTurn() == 1) // Leaving this out could be troublesome for Multi-Stage MISSIONS.
@@ -772,7 +789,7 @@ void InventoryState::btnPrevClick(Action*)
 	if (_inv->getSelectedItem() != NULL)
 		return;
 
-	if (_parent)
+	if (_parent != NULL)
 		_parent->selectPreviousFactionUnit(
 										false,
 										false,
@@ -794,7 +811,7 @@ void InventoryState::btnNextClick(Action*)
 	if (_inv->getSelectedItem() != NULL)
 		return;
 
-	if (_parent)
+	if (_parent != NULL)
 		_parent->selectNextFactionUnit(
 									false,
 									false,
@@ -1239,7 +1256,7 @@ void InventoryState::invMouseOver(Action* action)
 	if (_inv->getSelectedItem() != NULL)
 	{
 		_tuCost->setValue(_inv->getTUCost());	// kL
-		_tuCost->setVisible(_tu					// kL
+		_tuCost->setVisible(_tuMode					// kL
 							&& _inv->getTUCost() > 0);
 
 //		_updateTemplateButtons(false); // kL
@@ -1341,7 +1358,7 @@ void InventoryState::invMouseOver(Action* action)
 		{
 			_selAmmo->clear();
 
-//kL		_updateTemplateButtons(!_tu);
+//kL		_updateTemplateButtons(!_tuMode);
 		}
 
 		if (item->getAmmoQuantity() != 0
@@ -1368,7 +1385,7 @@ void InventoryState::invMouseOver(Action* action)
 
 		_selAmmo->clear();
 
-//		_updateTemplateButtons(!_tu);
+//		_updateTemplateButtons(!_tuMode);
 	}
 }
 
@@ -1384,7 +1401,7 @@ void InventoryState::invMouseOut(Action*)
 
 	_selAmmo->clear();
 
-//	_updateTemplateButtons(!_tu);
+//	_updateTemplateButtons(!_tuMode);
 	_tuCost->setVisible(false); // kL
 }
 
