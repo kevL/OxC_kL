@@ -112,13 +112,13 @@ double generate(
 
 	// kL_begin:
 	double diff = maxRand - minRand;
-	if (AreSame(diff, 0.0))	// kL
+	if (AreSame(diff, 0.))	// kL
 		return minRand;		// kL
 
 //	diff = (static_cast<double>(UINT64_MAX) / diff);
 	diff = (static_cast<double>(std::numeric_limits<uint64_t>::max()) / diff);
-	if (AreSame(diff, 0.0))	// kL
-		return minRand;			// kL
+	if (AreSame(diff, 0.))	// kL
+		return minRand;		// kL
 
 	double rand = static_cast<double>(next());
 
@@ -141,7 +141,7 @@ Implements the Polar form of the Box-Muller Transformation
 	any application provided this copyright notice is preserved.
 */
 /**
- * Normal Standard (Gaussian) random generator.
+ * Gaussian generator.
  * @param mean		- offset of the center value (default 0.0)
  * @param deviation	- standard deviation (default 1.0)
  * @return, normally distributed value
@@ -177,7 +177,7 @@ double boxMuller(
 		}
 		while (w >= 1.);
 
-		w = sqrt((-2. * log(w)) / w);
+		w = std::sqrt((-2. * log(w)) / w);
 		y1 = x1 * w;
 		y2 = x2 * w;
 	}
