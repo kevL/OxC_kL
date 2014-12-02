@@ -213,8 +213,9 @@ MapData* RuleTerrain::getMapData(
 {
 	MapDataSet* dataSet = NULL;
 
-	for (std::vector<MapDataSet*>::const_iterator
-			i = _mapDataSets.begin();
+	std::vector<MapDataSet*>::const_iterator i = _mapDataSets.begin();
+	for (
+			;
 			i != _mapDataSets.end();
 			++i)
 	{
@@ -225,6 +226,15 @@ MapData* RuleTerrain::getMapData(
 
 		*id -= dataSet->getSize();
 		(*mapDataSetID)++;
+	}
+
+	if (i == _mapDataSets.end())
+	{
+		// oops! someone at microprose made an error in the map!
+		// set this broken tile reference to BLANKS 0.
+		dataSet = _mapDataSets.front();
+		*id = 0;
+		*mapDataSetID = 0;
 	}
 
 	return dataSet->getObjects()->at(*id);
