@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_CRAFTEQUIPMENTSTATE_H
 #define OPENXCOM_CRAFTEQUIPMENTSTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "../Engine/State.h"
 
@@ -63,11 +63,11 @@ private:
 		* _btnClear,
 		* _btnInventory,
 		* _btnOk;
-	TextList * _lstEquipment;
+	TextList* _lstEquipment;
 	Timer
 		* _timerLeft,
 		* _timerRight;
-	Window * _window;
+	Window* _window;
 
 	std::vector<std::string> _items;
 

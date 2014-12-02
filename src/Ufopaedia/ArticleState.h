@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_ARTICLESTATE_H
 #define OPENXCOM_ARTICLESTATE_H
 
-#include <string>
+//#include <string>
 
 #include "../Engine/State.h"
 

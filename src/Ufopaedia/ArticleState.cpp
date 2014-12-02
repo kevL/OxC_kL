@@ -19,7 +19,7 @@
 
 #include "ArticleState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "Ufopaedia.h"
 
@@ -40,9 +40,8 @@ namespace OpenXcom
 {
 
 /**
- * Constructor
- * @param game, Pointer to current game.
- * @param article_id, The article id of this state instance.
+ * Constructs an ArticleState.
+ * @param article_id - reference the article id of this instance
  */
 ArticleState::ArticleState(const std::string& article_id)
 	:
@@ -55,7 +54,7 @@ ArticleState::ArticleState(const std::string& article_id)
 }
 
 /**
- * Destructor
+ * Destructor.
  */
 ArticleState::~ArticleState()
 {
@@ -134,7 +133,7 @@ void ArticleState::initLayout()
 
 /**
  * Returns to the previous screen.
- * @param action, Pointer to an action.
+ * @param action - Pointer to an Action
  */
 void ArticleState::btnOkClick(Action*)
 {
@@ -143,7 +142,7 @@ void ArticleState::btnOkClick(Action*)
 
 /**
  * Shows the previous available article. Loops to the last.
- * @param action, Pointer to an action.
+ * @param action - Pointer to an Action
  */
 void ArticleState::btnPrevClick(Action*)
 {
@@ -152,7 +151,7 @@ void ArticleState::btnPrevClick(Action*)
 
 /**
  * Shows the next available article. Loops to the first.
- * @param action, Pointer to an action.
+ * @param action - Pointer to an Action
  */
 void ArticleState::btnNextClick(Action*)
 {

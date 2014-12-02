@@ -235,14 +235,14 @@ PurchaseState::PurchaseState(Base* base)
 	{
 		ss4.str(L"");
 
-		RuleCraft* craftRule = _game->getRuleset()->getCraft(*i);
+		const RuleCraft* const craftRule = _game->getRuleset()->getCraft(*i);
 		if (craftRule->getBuyCost() != 0
 			&& _game->getSavedGame()->isResearched(craftRule->getRequirements()) == true)
 		{
 			_quantities.push_back(0);
 			_crafts.push_back(*i);
 
-			_itemOffset++;
+			++_itemOffset;
 
 			int crafts = 0;
 			for (std::vector<Craft*>::const_iterator
@@ -251,7 +251,7 @@ PurchaseState::PurchaseState(Base* base)
 					++j)
 			{
 				if ((*j)->getRules()->getType() == *i)
-					crafts++;
+					++crafts;
 			}
 
 			ss4 << crafts;
@@ -316,7 +316,7 @@ PurchaseState::PurchaseState(Base* base)
 							ss5.str().c_str(),
 							L"0");
 
-			for (std::vector<std::string>::iterator
+			for (std::vector<std::string>::const_iterator
 					j = items.begin();
 					j != items.end();
 					++j)
@@ -389,7 +389,7 @@ PurchaseState::PurchaseState(Base* base)
 			i != items.end();
 			++i)
 	{
-		RuleItem* const rule = _game->getRuleset()->getItem(*i);
+		const RuleItem* const rule = _game->getRuleset()->getItem(*i);
 		//Log(LOG_INFO) << (*i) << " list# " << rule->getListOrder(); // Prints listOrder to LOG.
 
 		if (rule->getBuyCost() != 0
@@ -610,7 +610,7 @@ void PurchaseState::btnOkClick(Action*)
 			}
 			else // Buy items
 			{
-				RuleItem* const itemRule = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
+				const RuleItem* const itemRule = _game->getRuleset()->getItem(_items[i - 3 - _crafts.size()]);
 				Transfer* const transfer = new Transfer(itemRule->getTransferTime());
 				transfer->setItems(
 								_items[i - 3 - _crafts.size()],
@@ -873,7 +873,7 @@ void PurchaseState::increaseByValue(int change)
 				availStores = static_cast<double>(_base->getAvailableStores()) - _base->getUsedStores() - _storeSize;
 			double qtyItemsCanBuy = std::numeric_limits<double>::max();
 
-			if (AreSame(storesPerItem, 0.0) == false)
+			if (AreSame(storesPerItem, 0.) == false)
 				qtyItemsCanBuy = (availStores + 0.05) / storesPerItem;
 
 			change = std::min(
@@ -973,7 +973,7 @@ void PurchaseState::updateItemStrings()
 	if (std::abs(_storeSize) > 0.05)
 	{
 		ss2 << "(";
-		if (_storeSize > 0.0) ss2 << "+";
+		if (_storeSize > 0.) ss2 << "+";
 		ss2 << std::fixed << std::setprecision(1) << _storeSize << ")";
 	}
 	_txtSpaceUsed->setText(ss2.str());

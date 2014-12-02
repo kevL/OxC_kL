@@ -26,9 +26,7 @@ namespace YAML
 template<>
 struct convert<OpenXcom::ArticleDefinitionRect>
 {
-	/**
-	 *
-	 */
+	///
 	static Node encode(const OpenXcom::ArticleDefinitionRect& rhs)
 	{
 		Node node;
@@ -40,9 +38,7 @@ struct convert<OpenXcom::ArticleDefinitionRect>
 		return node;
 	}
 
-	/**
-	 *
-	 */
+	///
 	static bool decode(
 			const Node& node,
 			OpenXcom::ArticleDefinitionRect& rhs)
@@ -50,9 +46,9 @@ struct convert<OpenXcom::ArticleDefinitionRect>
 		if (!node.IsMap())
 			return false;
 
-		rhs.x		= node["x"].as<int>(rhs.x);
-		rhs.y		= node["y"].as<int>(rhs.y);
-		rhs.width	= node["width"].as<int>(rhs.width);
+		rhs.x		= node["x"]		.as<int>(rhs.x);
+		rhs.y		= node["y"]		.as<int>(rhs.y);
+		rhs.width	= node["width"]	.as<int>(rhs.width);
 		rhs.height	= node["height"].as<int>(rhs.height);
 
 		return true;
@@ -67,7 +63,7 @@ namespace OpenXcom
 
 /**
  * Constructor.
- * @param type_id Article type of this instance.
+ * @param type_id - article type of this instance
  */
 ArticleDefinition::ArticleDefinition(UfopaediaTypeId type_id)
 	:
@@ -85,7 +81,7 @@ ArticleDefinition::~ArticleDefinition()
 
 /**
  * Gets the article definition type. (Text, TextImage, Craft, ...)
- * @return The type of article definition of this instance.
+ * @return, the type of article definition of this instance
  */
 UfopaediaTypeId ArticleDefinition::getType() const
 {
@@ -94,28 +90,28 @@ UfopaediaTypeId ArticleDefinition::getType() const
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinition::load(
 		const YAML::Node& node,
 		int listOrder)
 {
-	id = title	= node["id"].as<std::string>(id);
-	section		= node["section"].as<std::string>(section);
-	requires	= node["requires"].as< std::vector<std::string> >(requires);
-	title		= node["title"].as<std::string>(title);
+	id = title	= node["id"]		.as<std::string>(id);
+	section		= node["section"]	.as<std::string>(section);
+	requires	= node["requires"]	.as<std::vector<std::string> >(requires);
+	title		= node["title"]		.as<std::string>(title);
 
 //	_type_id	= (UfopaediaTypeId)node["type_id"].as<int>(_type_id);
 
-	_listOrder	= node["listOrder"].as<int>(_listOrder);
-	if (!_listOrder)
+	_listOrder = node["listOrder"].as<int>(_listOrder);
+	if (_listOrder == 0)
 		_listOrder = listOrder;
 }
 
 /**
  * Gets the list weight of the article.
- * @return The list weight of the article.
+ * @return, the list weight of the article
  */
 int ArticleDefinition::getListOrder() const
 {
@@ -136,10 +132,10 @@ ArticleDefinitionRect::ArticleDefinitionRect()
 
 /**
  * Sets the rectangle parameters in a function.
- * @param set_x X.
- * @param set_y Y.
- * @param set_width Width.
- * @param set_height Height.
+ * @param set_x			- X
+ * @param set_y			- Y
+ * @param set_width		- width
+ * @param set_height	- height
  */
 void ArticleDefinitionRect::set(
 		int set_x,
@@ -164,8 +160,8 @@ ArticleDefinitionCraft::ArticleDefinitionCraft()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionCraft::load(
 		const YAML::Node& node,
@@ -175,10 +171,10 @@ void ArticleDefinitionCraft::load(
 							node,
 							listOrder);
 
-	image_id	= node["image_id"].as<std::string>(image_id);
+	image_id	= node["image_id"]	.as<std::string>(image_id);
 	rect_stats	= node["rect_stats"].as<ArticleDefinitionRect>(rect_stats);
-	rect_text	= node["rect_text"].as<ArticleDefinitionRect>(rect_text);
-	text		= node["text"].as<std::string>(text);
+	rect_text	= node["rect_text"]	.as<ArticleDefinitionRect>(rect_text);
+	text		= node["text"]		.as<std::string>(text);
 }
 
 /**
@@ -192,8 +188,8 @@ ArticleDefinitionCraftWeapon::ArticleDefinitionCraftWeapon()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionCraftWeapon::load(
 		const YAML::Node& node,
@@ -203,8 +199,8 @@ void ArticleDefinitionCraftWeapon::load(
 							node,
 							listOrder);
 
-	image_id	= node["image_id"].as<std::string>(image_id);
-	text		= node["text"].as<std::string>(text);
+	image_id	= node["image_id"]	.as<std::string>(image_id);
+	text		= node["text"]		.as<std::string>(text);
 }
 
 /**
@@ -218,8 +214,8 @@ ArticleDefinitionText::ArticleDefinitionText()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionText::load(
 		const YAML::Node& node,
@@ -244,8 +240,8 @@ ArticleDefinitionTextImage::ArticleDefinitionTextImage()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionTextImage::load(
 		const YAML::Node& node,
@@ -255,8 +251,8 @@ void ArticleDefinitionTextImage::load(
 							node,
 							listOrder);
 
-	image_id	= node["image_id"].as<std::string>(image_id);
-	text		= node["text"].as<std::string>(text);
+	image_id	= node["image_id"]	.as<std::string>(image_id);
+	text		= node["text"]		.as<std::string>(text);
 	text_width	= node["text_width"].as<int>(text_width);
 }
 
@@ -284,11 +280,11 @@ void ArticleDefinitionTFTD::load(
 			node,
 			listOrder);
 
-	_type_id	= (UfopaediaTypeId)(node["type_id"].as<int>(_type_id));
-	image_id	= node["image_id"].as<std::string>(image_id);
-	text		= node["text"].as<std::string>(text);
-	text_width	= node["text_width"].as<int>(150); // 95% of these won't need to be defined, so give it a default
-	weapon		= node["weapon"].as<std::string>(weapon);
+	_type_id	= (UfopaediaTypeId)(node["type_id"]	.as<int>(_type_id));
+	image_id	= node["image_id"]					.as<std::string>(image_id);
+	text		= node["text"]						.as<std::string>(text);
+	text_width	= node["text_width"]				.as<int>(150); // 95% of these won't need to be defined, so give it a default
+	weapon		= node["weapon"]					.as<std::string>(weapon);
 }
 
 /**
@@ -302,8 +298,8 @@ ArticleDefinitionBaseFacility::ArticleDefinitionBaseFacility()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionBaseFacility::load(
 		const YAML::Node& node,
@@ -327,8 +323,8 @@ ArticleDefinitionItem::ArticleDefinitionItem()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionItem::load(
 		const YAML::Node& node,
@@ -352,8 +348,8 @@ ArticleDefinitionUfo::ArticleDefinitionUfo()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionUfo::load(
 		const YAML::Node& node,
@@ -377,8 +373,8 @@ ArticleDefinitionArmor::ArticleDefinitionArmor()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionArmor::load(
 		const YAML::Node& node,
@@ -402,8 +398,8 @@ ArticleDefinitionVehicle::ArticleDefinitionVehicle()
 
 /**
  * Loads the article definition from a YAML file.
- * @param node YAML node.
- * @param listOrder The list weight for this article.
+ * @param node		- reference a YAML node
+ * @param listOrder	- the list weight for this article
  */
 void ArticleDefinitionVehicle::load(
 		const YAML::Node& node,
@@ -414,7 +410,7 @@ void ArticleDefinitionVehicle::load(
 							listOrder);
 
 	weapon	= node["weapon"].as<std::string>(weapon);
-	text	= node["text"].as<std::string>(text);
+	text	= node["text"]	.as<std::string>(text);
 }
 
 }

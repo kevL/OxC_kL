@@ -20,28 +20,28 @@
 #ifndef OPENXCOM_ARTICLEDEFINITION_H
 #define OPENXCOM_ARTICLEDEFINITION_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom
 {
 
-/// define article types
+/// Defines article types.
 enum UfopaediaTypeId
 {
-	UFOPAEDIA_TYPE_UNKNOWN				= 0,
-	UFOPAEDIA_TYPE_CRAFT				= 1,
-	UFOPAEDIA_TYPE_CRAFT_WEAPON			= 2,
-	UFOPAEDIA_TYPE_VEHICLE				= 3,
-	UFOPAEDIA_TYPE_ITEM					= 4,
-	UFOPAEDIA_TYPE_ARMOR				= 5,
-	UFOPAEDIA_TYPE_BASE_FACILITY		= 6,
-	UFOPAEDIA_TYPE_TEXTIMAGE			= 7,
-	UFOPAEDIA_TYPE_TEXT					= 8,
-	UFOPAEDIA_TYPE_UFO					= 9,
+	UFOPAEDIA_TYPE_UNKNOWN				=  0,
+	UFOPAEDIA_TYPE_CRAFT				=  1,
+	UFOPAEDIA_TYPE_CRAFT_WEAPON			=  2,
+	UFOPAEDIA_TYPE_VEHICLE				=  3,
+	UFOPAEDIA_TYPE_ITEM					=  4,
+	UFOPAEDIA_TYPE_ARMOR				=  5,
+	UFOPAEDIA_TYPE_BASE_FACILITY		=  6,
+	UFOPAEDIA_TYPE_TEXTIMAGE			=  7,
+	UFOPAEDIA_TYPE_TEXT					=  8,
+	UFOPAEDIA_TYPE_UFO					=  9,
 	UFOPAEDIA_TYPE_TFTD					= 10,
 	UFOPAEDIA_TYPE_TFTD_CRAFT			= 11,
 	UFOPAEDIA_TYPE_TFTD_CRAFT_WEAPON	= 12,
@@ -61,31 +61,35 @@ enum UfopaediaTypeId
 class ArticleDefinition
 {
 
-protected:
-	/// Constructor (protected, so this class cannot be instantiated directly).
-	ArticleDefinition(UfopaediaTypeId type_id);
-
-	public:
-		/// Destructor.
-		virtual ~ArticleDefinition();
-		/// Gets the type of article definition.
-		UfopaediaTypeId getType() const;
-		/// Loads the article from YAML.
-		virtual void load(
-				const YAML::Node& node,
-				int listOrder);
-		/// Gets the article's list weight.
-		int getListOrder() const;
-
-		std::string id;
-		std::string title;
-		std::string section;
-		std::vector<std::string> requires;
-
-protected:
-	UfopaediaTypeId _type_id;
 private:
 	int _listOrder;
+
+	protected:
+		UfopaediaTypeId _type_id;
+
+		/// Constructor (protected, so this class cannot be instantiated directly).
+		ArticleDefinition(UfopaediaTypeId type_id);
+
+		public:
+			std::string
+				id,
+				title,
+				section;
+			std::vector<std::string> requires;
+
+			/// Destructor.
+			virtual ~ArticleDefinition();
+
+			/// Gets the type of article definition.
+			UfopaediaTypeId getType() const;
+
+			/// Loads the article from YAML.
+			virtual void load(
+					const YAML::Node& node,
+					int listOrder);
+
+			/// Gets the article's list weight.
+			int getListOrder() const;
 };
 
 
@@ -94,8 +98,13 @@ private:
  */
 class ArticleDefinitionRect
 {
-
 	public:
+		int
+			x,
+			y,
+			width,
+			height;
+
 		ArticleDefinitionRect();
 
 		void set(
@@ -103,11 +112,6 @@ class ArticleDefinitionRect
 				int set_y,
 				int set_width,
 				int set_height);
-
-		int x;
-		int y;
-		int width;
-		int height;
 };
 
 
@@ -119,8 +123,14 @@ class ArticleDefinitionCraft
 	:
 		public ArticleDefinition
 {
-
 	public:
+		std::string
+			image_id,
+			text;
+		ArticleDefinitionRect
+			rect_stats,
+			rect_text;
+
 		/// Constructor.
 		ArticleDefinitionCraft();
 		/// Loads the article from YAML.
@@ -128,10 +138,6 @@ class ArticleDefinitionCraft
 				const YAML::Node& node,
 				int listOrder);
 
-		std::string image_id;
-		ArticleDefinitionRect rect_stats;
-		ArticleDefinitionRect rect_text;
-		std::string text;
 };
 
 
@@ -143,17 +149,17 @@ class ArticleDefinitionCraftWeapon
 	:
 		public ArticleDefinition
 {
-
 	public:
+		std::string
+			image_id,
+			text;
+
 		/// Constructor.
 		ArticleDefinitionCraftWeapon();
 		/// Loads the article from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-
-		std::string image_id;
-		std::string text;
 };
 
 
@@ -164,16 +170,15 @@ class ArticleDefinitionText
 	:
 		public ArticleDefinition
 {
-
 	public:
+		std::string text;
+
 		/// Constructor.
 		ArticleDefinitionText();
 		/// Loads the article from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-
-		std::string text;
 };
 
 
@@ -185,18 +190,18 @@ class ArticleDefinitionTextImage
 	:
 		public ArticleDefinition
 {
-
 	public:
+		int text_width;
+		std::string
+			image_id,
+			text;
+
 		/// Constructor.
 		ArticleDefinitionTextImage();
 		/// Loads the article from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-
-		std::string image_id;
-		std::string text;
-		int text_width;
 };
 
 
@@ -208,19 +213,19 @@ class ArticleDefinitionTFTD
 	:
 		public ArticleDefinition
 {
-
 	public:
+		int text_width;
+		std::string
+			image_id,
+			text,
+			weapon;
+
 		/// Constructor.
 		ArticleDefinitionTFTD();
 		/// Loads the article from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-
-		std::string image_id;
-		std::string text;
-		int text_width;
-		std::string weapon;
 };
 
 /**
@@ -231,16 +236,15 @@ class ArticleDefinitionBaseFacility
 	:
 		public ArticleDefinition
 {
-
 	public:
+		std::string text;
+
 		/// Constructor.
 		ArticleDefinitionBaseFacility();
 		/// Loads the article from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-
-		std::string text;
 };
 
 
@@ -252,16 +256,15 @@ class ArticleDefinitionItem
 	:
 		public ArticleDefinition
 {
-
 	public:
+		std::string text;
+
 		/// Constructor.
 		ArticleDefinitionItem();
 		/// Loads the article from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-
-		std::string text;
 };
 
 
@@ -273,16 +276,15 @@ class ArticleDefinitionUfo
 	:
 		public ArticleDefinition
 {
-
 	public:
+		std::string text;
+
 		/// Constructor.
 		ArticleDefinitionUfo();
 		/// Loads the article from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-
-		std::string text;
 };
 
 
@@ -294,16 +296,15 @@ class ArticleDefinitionArmor
 	:
 		public ArticleDefinition
 {
-
 	public:
+		std::string text;
+
 		/// Constructor.
 		ArticleDefinitionArmor();
 		/// Loads the article from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-
-		std::string text;
 };
 
 
@@ -315,17 +316,17 @@ class ArticleDefinitionVehicle
 	:
 		public ArticleDefinition
 {
-
 	public:
+		std::string
+			text,
+			weapon;
+
 		/// Constructor.
 		ArticleDefinitionVehicle();
 		/// Loads the article from YAML.
 		void load(
 				const YAML::Node& node,
 				int listOrder);
-
-		std::string text;
-		std::string weapon;
 };
 
 }

@@ -19,7 +19,7 @@
 
 #include "SoldierArmorState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
@@ -52,16 +52,16 @@ namespace OpenXcom
  */
 SoldierArmorState::SoldierArmorState(
 		Base* base,
-		size_t soldier)
+		size_t soldierID)
 	:
 		_base(base),
-		_soldier(soldier)
+		_soldierID(soldierID)
 {
 	_screen = false;
 
 	_window			= new Window(this, 192, 147, 64, 27, POPUP_BOTH);
 
-//kL	_txtTitle		= new Text(182, 9, 69, 48);
+//	_txtTitle		= new Text(182, 9, 69, 48);
 	_txtSoldier		= new Text(182, 9, 69, 38);
 
 	_txtType		= new Text(102, 9, 84, 53);
@@ -74,7 +74,7 @@ SoldierArmorState::SoldierArmorState(
 	setPalette("PAL_BASESCAPE", 4);
 
 	add(_window);
-//kL	add(_txtTitle);
+//	add(_txtTitle);
 	add(_txtSoldier);
 	add(_txtType);
 	add(_txtQuantity);
@@ -93,15 +93,15 @@ SoldierArmorState::SoldierArmorState(
 					(ActionHandler)& SoldierArmorState::btnCancelClick,
 					Options::keyCancel);
 
-	Soldier* s = _base->getSoldiers()->at(_soldier);
-/*kL
+	const Soldier* const soldier = _base->getSoldiers()->at(_soldierID);
+/*
 	_txtTitle->setColor(Palette::blockOffset(13)+5);
 	_txtTitle->setAlign(ALIGN_CENTER);
-	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(s->getName())); */
+	_txtTitle->setText(tr("STR_SELECT_ARMOR_FOR_SOLDIER").arg(soldier->getName())); */
 
 	_txtSoldier->setColor(Palette::blockOffset(13)+5);
 	_txtSoldier->setAlign(ALIGN_CENTER);
-	_txtSoldier->setText(s->getName(true));
+	_txtSoldier->setText(soldier->getName(true));
 
 	_txtType->setColor(Palette::blockOffset(13)+5);
 	_txtType->setText(tr("STR_TYPE"));
@@ -122,7 +122,7 @@ SoldierArmorState::SoldierArmorState(
 			i != armors.end();
 			++i)
 	{
-		Armor* armor = _game->getRuleset()->getArmor(*i);
+		Armor* const armor = _game->getRuleset()->getArmor(*i);
 		if (_base->getItems()->getItem(armor->getStoreItem()) > 0)
 		{
 			_armors.push_back(armor);
@@ -172,7 +172,7 @@ void SoldierArmorState::btnCancelClick(Action*)
  */
 void SoldierArmorState::lstArmorClick(Action*)
 {
-	Soldier* soldier = _base->getSoldiers()->at(_soldier);
+	Soldier* const soldier = _base->getSoldiers()->at(_soldierID);
 	if (_game->getSavedGame()->getMonthsPassed() != -1)
 	{
 		if (soldier->getArmor()->getStoreItem() != "STR_NONE")

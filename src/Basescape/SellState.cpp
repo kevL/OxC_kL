@@ -80,8 +80,8 @@ SellState::SellState(
 		_spaceChange(0.0),
 		_origin(origin)
 {
-	bool overfull = Options::storageLimitsEnforced
-				 && _base->storesOverfull();
+	bool overfull = Options::storageLimitsEnforced == true
+				 && _base->storesOverfull() == true;
 
 /*	_window = new Window(this, 320, 200, 0, 0);
 	_btnOk = new TextButton(overfull? 288:148, 16, overfull? 16:8, 176);
@@ -242,7 +242,7 @@ SellState::SellState(
 							L"1",
 							L"0",
 							Text::formatFunding(0).c_str());
-			_itemOffset++;
+			++_itemOffset;
 		}
 	}
 
@@ -262,7 +262,7 @@ SellState::SellState(
 							L"1",
 							L"0",
 							Text::formatFunding((*i)->getRules()->getSellCost()).c_str());
-			_itemOffset++;
+			++_itemOffset;
 		}
 	}
 
@@ -279,7 +279,7 @@ SellState::SellState(
 						ss.str().c_str(),
 						L"0",
 						Text::formatFunding(0).c_str());
-		_itemOffset++;
+		++_itemOffset;
 	}
 
 	if (_base->getEngineers() > 0)
@@ -295,17 +295,17 @@ SellState::SellState(
 						ss.str().c_str(),
 						L"0",
 						Text::formatFunding(0).c_str());
-		_itemOffset++;
+		++_itemOffset;
 	}
 
 
-	SavedGame* save = _game->getSavedGame();
-	Ruleset* rules = _game->getRuleset();
-	RuleItem
+	const SavedGame* const save = _game->getSavedGame();
+	const Ruleset* const rules = _game->getRuleset();
+	const RuleItem
 		* rule,
 		* launchRule,
 		* clipRule;
-	RuleCraftWeapon* cwRule;
+	const RuleCraftWeapon* cwRule;
 
 	const std::vector<std::string>& items = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
@@ -403,7 +403,7 @@ SellState::SellState(
                 if (rule->isFixed() == true // tank w/ Ordnance.
 					&& rule->getCompatibleAmmo()->empty() == false)
                 {
-					RuleItem* ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
+					const RuleItem* const ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
 					const int clipSize = ammoRule->getClipSize();
 					if (clipSize > 0)
 						item += (L" (" + Text::formatNumber(clipSize) + L")");
@@ -798,9 +798,7 @@ int SellState::getPrice()
 			return _game->getRuleset()->getItem(_items[getItemIndex(_sel)])->getSellCost();
 
 		case SELL_CRAFT:
-			Craft* craft = _crafts[getCraftIndex(_sel)];
-
-			return craft->getRules()->getSellCost();
+			return _crafts[getCraftIndex(_sel)]->getRules()->getSellCost();
 	}
 
 	return 0;
@@ -829,7 +827,7 @@ int SellState::getQuantity()
 		case SELL_ITEM:
 			qty = _base->getItems()->getItem(_items[getItemIndex(_sel)]);
 
-			if (Options::storageLimitsEnforced
+			if (Options::storageLimitsEnforced == true
 				&& _origin == OPT_BATTLESCAPE)
 			{
 				for (std::vector<Transfer*>::const_iterator
@@ -912,9 +910,9 @@ void SellState::changeByValue(
 	_qtys[_sel] += change * dir;
 	_total += getPrice() * change * dir;
 
-	RuleItem* rule;
+	const RuleItem* rule;
 	Craft* craft;
-	double space = 0.0;
+	double space = 0.;
 
 	switch (getType(_sel)) // Calculate the change in storage space.
 	{
@@ -938,7 +936,7 @@ void SellState::changeByValue(
 					space += rule->getSize();
 
 					rule = _game->getRuleset()->getItem((*i)->getRules()->getClipItem());
-					if (rule)
+					if (rule != NULL)
 						space += static_cast<double>((*i)->getClipsLoaded(_game->getRuleset())) * rule->getSize();
 				}
 			}
@@ -982,8 +980,8 @@ void SellState::updateItemStrings()
 	{
 		if (_sel > _itemOffset)
 		{
-			Ruleset* rules = _game->getRuleset();
-			RuleItem* rule = rules->getItem(_items[_sel - _itemOffset]);
+			const Ruleset* const rules = _game->getRuleset();
+			const RuleItem* const rule = rules->getItem(_items[_sel - _itemOffset]);
 
 			bool craftOrdnance = false;
 			const std::vector<std::string>& cwList = rules->getCraftWeaponsList();
@@ -994,7 +992,7 @@ void SellState::updateItemStrings()
 					++i)
 			{
 				// Special handling for treating craft weapons as items
-				RuleCraftWeapon* cwRule = rules->getCraftWeapon(*i);
+				const RuleCraftWeapon* const cwRule = rules->getCraftWeapon(*i);
 				if (rule == rules->getItem(cwRule->getLauncherItem())
 					|| rule == rules->getItem(cwRule->getClipItem()))
 				{
@@ -1002,7 +1000,7 @@ void SellState::updateItemStrings()
 				}
 			}
 
-			SavedGame* save = _game->getSavedGame();
+			const SavedGame* const save = _game->getSavedGame();
 			if (save->isResearched(rule->getType()) == false				// not researched
 				&& (save->isResearched(rule->getRequirements()) == false	// and has requirements to use but not been researched
 					|| rules->getItem(rule->getType())->getAlien() == true		// or is an alien
@@ -1061,13 +1059,13 @@ void SellState::updateItemStrings()
 	if (std::abs(_spaceChange) > 0.05)
 	{
 		ss3 << "(";
-		if (_spaceChange > 0.0) ss3 << "+";
+		if (_spaceChange > 0.) ss3 << "+";
 		ss3 << std::fixed << std::setprecision(1) << _spaceChange << ")";
 	}
 	_txtSpaceUsed->setText(ss3.str());
 //	_txtSpaceUsed->setText(tr("STR_SPACE_USED").arg(ss3.str()));
 
-	if (Options::storageLimitsEnforced)
+	if (Options::storageLimitsEnforced == true)
 		okBtn = okBtn
 			&& _base->storesOverfull(_spaceChange) == false;
 
@@ -1105,11 +1103,11 @@ enum SellType SellState::getType(size_t selected) const
  */
 size_t SellState::getItemIndex(size_t selected) const
 {
-	return static_cast<int>(selected)
-		 - static_cast<int>(_soldiers.size())
-		 - static_cast<int>(_crafts.size())
-		 - _hasSci
-		 - _hasEng;
+	return selected
+		 - _soldiers.size()
+		 - _crafts.size()
+		 - static_cast<size_t>(_hasSci)
+		 - static_cast<size_t>(_hasEng);
 }
 
 }

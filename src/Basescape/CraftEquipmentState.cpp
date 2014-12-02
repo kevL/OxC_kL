@@ -29,7 +29,6 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
 #include "../Engine/Options.h"
 #include "../Engine/Palette.h"
 #include "../Engine/Screen.h"
@@ -194,7 +193,7 @@ CraftEquipmentState::CraftEquipmentState(
 			i != items.end();
 			++i)
 	{
-		RuleItem* const rule = _game->getRuleset()->getItem(*i);
+		const RuleItem* const rule = _game->getRuleset()->getItem(*i);
 
 		int craftQty = 0;
 		if (rule->isFixed() == true)
@@ -231,7 +230,7 @@ CraftEquipmentState::CraftEquipmentState(
 
 				item.insert(0, L"  ");
 			}
-			else if (rule->isFixed() // tank w/ Ordnance.
+			else if (rule->isFixed() == true // tank w/ Ordnance.
 				&& rule->getCompatibleAmmo()->empty() == false)
 			{
 				const RuleItem* const ammoRule = _game->getRuleset()->getItem(rule->getCompatibleAmmo()->front());
@@ -259,9 +258,10 @@ CraftEquipmentState::CraftEquipmentState(
 
 			_lstEquipment->setRowColor(row, color);
 
-			row++;
+			++row;
 		}
 	}
+
 
 	_timerLeft = new Timer(250);
 	_timerLeft->onTimer((StateHandler)& CraftEquipmentState::moveLeft);
@@ -501,7 +501,7 @@ void CraftEquipmentState::moveLeftByValue(int change)
 	if (change < 1)
 		return;
 
-	RuleItem* const rule = _game->getRuleset()->getItem(_items[_sel]);
+	const RuleItem* const rule = _game->getRuleset()->getItem(_items[_sel]);
 	Craft* const craft = _base->getCrafts()->at(_craftID);
 
 	int craftQty = 0;
@@ -632,14 +632,13 @@ void CraftEquipmentState::moveRightByValue(int change)
 
 	if (rule->isFixed() == true) // load vehicle, convert item to a vehicle
 	{
-		const Unit* const tankRule = _game->getRuleset()->getUnit(rule->getType());
-		const int
-			unitSize = _game->getRuleset()->getArmor(tankRule->getArmor())->getSize()
-					 * _game->getRuleset()->getArmor(tankRule->getArmor())->getSize(),
-			spaceAvailable = std::min(
-									craft->getRules()->getVehicles() - craft->getNumVehicles(true),
-									craft->getSpaceAvailable())
-								/ unitSize;
+		int unitSize = _game->getRuleset()->getArmor(_game->getRuleset()->getUnit(rule->getType())->getArmor())->getSize();
+		unitSize *= unitSize;
+
+		const int spaceAvailable = std::min(
+										craft->getRules()->getVehicles() - craft->getNumVehicles(true),
+										craft->getSpaceAvailable())
+									/ unitSize;
 
 		if (spaceAvailable > 0
 			&& craft->getLoadCapacity() - craft->getLoadCurrent() >= unitSize * 10) // note: 10 is the 'load' that a single 'space' uses.

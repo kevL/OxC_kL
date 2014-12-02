@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_SELLSTATE_H
 #define OPENXCOM_SELLSTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "../Engine/State.h"
 

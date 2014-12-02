@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_TRANSFERITEMSSTATE_H
 #define OPENXCOM_TRANSFERITEMSSTATE_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "../Engine/State.h"
 #include "../Savegame/Transfer.h"
@@ -41,8 +41,7 @@ class Window;
 
 
 /**
- * Transfer screen that lets the player pick
- * what items to transfer between bases.
+ * Transfer screen that lets the player pick what items to transfer between bases.
  */
 class TransferItemsState
 	:
@@ -50,7 +49,7 @@ class TransferItemsState
 {
 
 private:
-	bool _reset; // kL
+	bool _reset;
 	int
 		_alienQty,
 		_craftQty,

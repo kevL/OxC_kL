@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_SOLDIERARMORSTATE_H
 #define OPENXCOM_SOLDIERARMORSTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/State.h"
 
@@ -45,7 +45,7 @@ class SoldierArmorState
 {
 
 private:
-	size_t _soldier;
+	size_t _soldierID;
 
 	Base* _base;
 	Text
@@ -64,7 +64,7 @@ private:
 		/// Creates the Soldier Armor state.
 		SoldierArmorState(
 				Base* base,
-				size_t soldier);
+				size_t soldierID);
 		/// Cleans up the Soldier Armor state.
 		~SoldierArmorState();
 

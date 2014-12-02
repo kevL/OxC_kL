@@ -134,11 +134,11 @@ StoresState::StoresState(Base* base)
 
 	const SavedGame* const sg = _game->getSavedGame();
 	const Ruleset* const rules = _game->getRuleset();
-	RuleItem
+	const RuleItem
 		* itRule = NULL,
 		* laRule = NULL,
 		* clRule = NULL;
-	RuleCraftWeapon* cwRule = NULL;
+	const RuleCraftWeapon* cwRule = NULL;
 
 	int
 		row = 0,
@@ -188,7 +188,7 @@ StoresState::StoresState(Base* base)
 				}
 			}
 
-			if (itRule->isFixed() // tank w/ Ordnance.
+			if (itRule->isFixed() == true // tank w/ Ordnance.
 				&& itRule->getCompatibleAmmo()->empty() == false)
 			{
 				clRule = rules->getItem(itRule->getCompatibleAmmo()->front());
@@ -249,7 +249,7 @@ StoresState::StoresState(Base* base)
 			}
 			_lstStores->setRowColor(row, color);
 
-			row++;
+			++row;
 		}
 	}
 

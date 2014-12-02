@@ -19,7 +19,7 @@
 
 #include "SoldierDiaryOverviewState.h"
 
-#include <string>
+//#include <string>
 
 #include "SoldierDiaryMissionState.h"
 #include "SoldierDiaryPerformanceState.h"
@@ -119,6 +119,7 @@ SoldierDiaryOverviewState::SoldierDiaryOverviewState(
 	add(_btnOk);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));

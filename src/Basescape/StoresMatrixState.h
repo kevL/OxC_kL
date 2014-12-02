@@ -34,8 +34,7 @@ class Window;
 
 
 /**
- * Stores window that displays all
- * the items currently stored in a base.
+ * Stores window that displays all the items currently stored in a base.
  */
 class StoresMatrixState
 	:

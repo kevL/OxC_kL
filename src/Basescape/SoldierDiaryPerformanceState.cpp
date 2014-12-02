@@ -19,7 +19,7 @@
 
 #include "SoldierDiaryPerformanceState.h"
 
-#include <string>
+//#include <string>
 
 #include "SoldierDiaryOverviewState.h"
 #include "SoldierInfoState.h"
@@ -133,9 +133,11 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 
 	// Award stats
 	_txtMedalName		= new Text(90, 9, 16, 36);
-	_txtMedalLevel		= new Text(90, 9, 206, 36);
+	_txtMedalLevel		= new Text(52, 9, 196, 36);
+	_txtMedalClass		= new Text(40, 9, 248, 36);
 	_lstAwards			= new TextList(240, 97, 48, 49);
 	_txtMedalInfo		= new Text(280, 25, 20, 150);
+
 
 	// Award sprites
 	_sstSprite = _game->getResourcePack()->getSurfaceSet("Commendations");
@@ -185,6 +187,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	// Award stats
 	add(_txtMedalName);
 	add(_txtMedalLevel);
+	add(_txtMedalClass);
 	add(_lstAwards);
 	add(_txtMedalInfo);
 
@@ -199,6 +202,7 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	}
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(15)+1);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK02.SCR"));
@@ -274,11 +278,11 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 	// Kill stats
 	_txtRace->setColor(Palette::blockOffset(15)+1);
 	_txtRace->setText(tr("STR_KILLS_BY_RACE"));
-	_txtRace->setWordWrap();
+//	_txtRace->setWordWrap();
 
 	_txtRank->setColor(Palette::blockOffset(15)+1);
 	_txtRank->setText(tr("STR_KILLS_BY_RANK"));
-	_txtRank->setWordWrap();
+//	_txtRank->setWordWrap();
 
 	_txtWeapon->setColor(Palette::blockOffset(15)+1);
 	_txtWeapon->setText(tr("STR_KILLS_BY_WEAPON"));
@@ -308,18 +312,19 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 //	_lstKillTotals->setMargin(); // TODO: need to fix this.
 	_lstKillTotals->setBackground(_window);
 
+
 	// Mission stats
 	_txtLocation->setColor(Palette::blockOffset(15)+1);
 	_txtLocation->setText(tr("STR_MISSIONS_BY_LOCATION"));
-	_txtLocation->setWordWrap();
+//	_txtLocation->setWordWrap();
 
 	_txtType->setColor(Palette::blockOffset(15)+1);
 	_txtType->setText(tr("STR_MISSIONS_BY_TYPE"));
-	_txtType->setWordWrap();
+//	_txtType->setWordWrap();
 
 	_txtUFO->setColor(Palette::blockOffset(15)+1);
 	_txtUFO->setText(tr("STR_MISSIONS_BY_UFO"));
-	_txtUFO->setWordWrap();
+//	_txtUFO->setWordWrap();
 
 	_lstLocation->setColor(Palette::blockOffset(13));
 	_lstLocation->setArrowColor(Palette::blockOffset(15)+1);
@@ -345,18 +350,24 @@ SoldierDiaryPerformanceState::SoldierDiaryPerformanceState(
 //	_lstMissionTotals->setMargin(); // TODO: need to fix this.
 	_lstMissionTotals->setBackground(_window);
 
+
 	// Award stats
 	_txtMedalName->setColor(Palette::blockOffset(15)+1);
 	_txtMedalName->setText(tr("STR_MEDAL_NAME"));
-	_txtMedalName->setWordWrap();
+//	_txtMedalName->setWordWrap();
 
 	_txtMedalLevel->setColor(Palette::blockOffset(15)+1);
 	_txtMedalLevel->setText(tr("STR_MEDAL_DECOR_LEVEL"));
-	_txtMedalLevel->setWordWrap();
+//	_txtMedalLevel->setWordWrap();
+
+	_txtMedalClass->setColor(Palette::blockOffset(15)+1);
+	_txtMedalClass->setText(tr("STR_MEDAL_DECOR_CLASS"));
+//	_txtMedalClass->setWordWrap();
 
 	_lstAwards->setColor(Palette::blockOffset(13));
 	_lstAwards->setArrowColor(Palette::blockOffset(15)+1);
-	_lstAwards->setColumns(2, 158, 80);
+//	_lstAwards->setColumns(2, 158, 80);
+	_lstAwards->setColumns(3, 148, 52, 40);
 	_lstAwards->setSelectable();
 	_lstAwards->setBackground(_window);
 	_lstAwards->onMouseOver((ActionHandler)& SoldierDiaryPerformanceState::lstInfoMouseOver);
@@ -421,40 +432,29 @@ void SoldierDiaryPerformanceState::init()
 	_lstUFO->setVisible(_displayMissions);
 	_lstMissionTotals->setVisible(_displayMissions);
 
-	if (_game->getRuleset()->getCommendation().empty()) // set visibility for awards
+	if (_game->getRuleset()->getCommendation().empty() == true) // set visibility for awards
 		_displayAwards = false;
 
 	_txtMedalName->setVisible(_displayAwards);
 	_txtMedalLevel->setVisible(_displayAwards);
+	_txtMedalClass->setVisible(_displayAwards);
 	_txtMedalInfo->setVisible(_displayAwards);
 	_lstAwards->setVisible(_displayAwards);
 
-	// kL_begin:
-	if (_displayKills)
+	if (_displayKills == true)
 		_btnKills->setColor(Palette::blockOffset(13)+5);
 	else
 		_btnKills->setColor(Palette::blockOffset(13)+10);
 
-	if (_displayMissions)
+	if (_displayMissions == true)
 		_btnMissions->setColor(Palette::blockOffset(13)+5);
 	else
 		_btnMissions->setColor(Palette::blockOffset(13)+10);
-	// kL_end.
-//	_btnKills->setVisible(!_displayKills); // set visibility for buttons
-//	_btnMissions->setVisible(!_displayMissions);
 
-//	if (_game->getRuleset()->getCommendation().empty())
-//		_btnAwards->setVisible(false);
-//	else
-//	{
-	// kL_begin:
-	if (_displayAwards)
+	if (_displayAwards == true)
 		_btnAwards->setColor(Palette::blockOffset(13)+5);
 	else
 		_btnAwards->setColor(Palette::blockOffset(13)+10);
-	// kL_end.
-//		_btnAwards->setVisible(!_displayAwards);
-//	}
 
 
 	_commendationsListEntry.clear();
@@ -471,7 +471,7 @@ void SoldierDiaryPerformanceState::init()
 
 	if (_base == NULL) // kL
 	{
-		if (_listDead->empty())
+		if (_listDead->empty() == true)
 		{
 			_game->popState();
 			return;
@@ -500,7 +500,7 @@ void SoldierDiaryPerformanceState::init()
 	}
 	else
 	{
-		if (_list->empty())
+		if (_list->empty() == true)
 		{
 			_game->popState();
 			return;
@@ -525,7 +525,7 @@ void SoldierDiaryPerformanceState::init()
 		_txtTitle->setText(_soldier->getName());
 	}
 
-	TextList* lstArray[6] =
+	TextList* const lstArray[6] =
 	{
 		_lstRace,
 		_lstRank,
@@ -580,7 +580,7 @@ void SoldierDiaryPerformanceState::init()
 
 					lstArray[i]->setCellColor(row, 0, Palette::blockOffset(13)+5);
 
-					row++;
+					++row;
 				}
 			}
 		}
@@ -626,7 +626,7 @@ void SoldierDiaryPerformanceState::init()
 
 				lstArray[i]->setCellColor(row, 0, Palette::blockOffset(13)+5);
 
-				row++;
+				++row;
 			}
 		}
 	}
@@ -640,35 +640,38 @@ void SoldierDiaryPerformanceState::init()
 					i != _soldierDead->getDiary()->getSoldierCommendations()->end();
 					++i)
 			{
-				if (_game->getRuleset()->getCommendation().empty())
+				if (_game->getRuleset()->getCommendation().empty() == true)
 					break;
 
-				RuleCommendations* rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
+				const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
 
 				std::wstringstream
 					ss1,
 					ss2,
-					ss3;
+					ss3,
+					ss4;
 
 				if ((*i)->getNoun() != "noNoun")
 				{
 					ss1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
-					ss3 << tr(rule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
+					ss4 << tr(rule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
 				}
 				else
 				{
 					ss1 << tr((*i)->getType().c_str());
-					ss3 << tr(rule->getDescription().c_str());
+					ss4 << tr(rule->getDescription().c_str());
 				}
 
 				ss2 << tr((*i)->getDecorationDescription().c_str());
+				ss3 << tr((*i)->getDecorationClass().c_str());
 
 				_lstAwards->addRow(
-								2,
+								3,
 								ss1.str().c_str(),
-								ss2.str().c_str());
+								ss2.str().c_str(),
+								ss3.str().c_str());
 
-				_commendationsListEntry.push_back(ss3.str().c_str());
+				_commendationsListEntry.push_back(ss4.str().c_str());
 
 				drawSprites();
 			}
@@ -681,35 +684,38 @@ void SoldierDiaryPerformanceState::init()
 				i != _soldier->getDiary()->getSoldierCommendations()->end();
 				++i)
 		{
-			if (_game->getRuleset()->getCommendation().empty())
+			if (_game->getRuleset()->getCommendation().empty() == true)
 				break;
 
-			RuleCommendations* rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
+			const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
 
 			std::wstringstream
 				ss1,
 				ss2,
-				ss3;
+				ss3,
+				ss4;
 
 			if ((*i)->getNoun() != "noNoun")
 			{
 				ss1 << tr((*i)->getType().c_str()).arg(tr((*i)->getNoun()).c_str());
-				ss3 << tr(rule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
+				ss4 << tr(rule->getDescription().c_str()).arg(tr((*i)->getNoun()).c_str());
 			}
 			else
 			{
 				ss1 << tr((*i)->getType().c_str());
-				ss3 << tr(rule->getDescription().c_str());
+				ss4 << tr(rule->getDescription().c_str());
 			}
 
 			ss2 << tr((*i)->getDecorationDescription().c_str());
+			ss3 << tr((*i)->getDecorationClass().c_str());
 
 			_lstAwards->addRow(
-							2,
+							3,
 							ss1.str().c_str(),
-							ss2.str().c_str());
+							ss2.str().c_str(),
+							ss3.str().c_str());
 
-			_commendationsListEntry.push_back(ss3.str().c_str());
+			_commendationsListEntry.push_back(ss4.str().c_str());
 
 			drawSprites();
 		}
@@ -734,8 +740,8 @@ void SoldierDiaryPerformanceState::drawSprites()
 		_srfDecor[i]->clear();
 	}
 
+	const int scroll = _lstAwards->getScroll(); // start here
 	int j = 0; // current location in the vector
-	int scroll = _lstAwards->getScroll(); // start here
 
 	if (_base == NULL) // kL
 	{
@@ -746,22 +752,22 @@ void SoldierDiaryPerformanceState::drawSprites()
 					i != _listDead->at(_soldierID)->getDiary()->getSoldierCommendations()->end();
 					++i)
 			{
-				RuleCommendations* rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
+				const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
 
 				if (j < scroll // skip awards that are not visible in the textlist
 					|| j - scroll >= static_cast<int>(_srfSprite.size()))
 				{
-					j++;
+					++j;
 
 					continue;
 				}
 
-				int sprite = rule->getSprite();
+				const int sprite = rule->getSprite();
 				_sstSprite->getFrame(sprite)->setX(0); // handle award sprites
 				_sstSprite->getFrame(sprite)->setY(0);
 				_sstSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
 
-				int decor = (*i)->getDecorationLevelInt();
+				const int decor = (*i)->getDecorationLevelInt();
 				if (decor != 0) // handle award decoration sprites
 				{
 					_sstDecor->getFrame(decor)->setX(0);
@@ -769,7 +775,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 					_sstDecor->getFrame(decor)->blit(_srfDecor[j - scroll]);
 				}
 
-				j++;
+				++j;
 			}
 		}
 	}
@@ -780,22 +786,21 @@ void SoldierDiaryPerformanceState::drawSprites()
 				i != _list->at(_soldierID)->getDiary()->getSoldierCommendations()->end();
 				++i)
 		{
-			RuleCommendations* rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
+			const RuleCommendations* const rule = _game->getRuleset()->getCommendation()[(*i)->getType()];
 
 			if (j < scroll // skip awards that are not visible in the textlist
 				|| j - scroll >= static_cast<int>(_srfSprite.size()))
 			{
-				j++;
-
+				++j;
 				continue;
 			}
 
-			int sprite = rule->getSprite();
+			const int sprite = rule->getSprite();
 			_sstSprite->getFrame(sprite)->setX(0); // handle award sprites
 			_sstSprite->getFrame(sprite)->setY(0);
 			_sstSprite->getFrame(sprite)->blit(_srfSprite[j - scroll]);
 
-			int decor = (*i)->getDecorationLevelInt();
+			const int decor = (*i)->getDecorationLevelInt();
 			if (decor != 0) // handle award decoration sprites
 			{
 				_sstDecor->getFrame(decor)->setX(0);
@@ -803,7 +808,7 @@ void SoldierDiaryPerformanceState::drawSprites()
 				_sstDecor->getFrame(decor)->blit(_srfDecor[j - scroll]);
 			}
 
-			j++;
+			++j;
 		}
 	}
 }
@@ -815,7 +820,6 @@ void SoldierDiaryPerformanceState::drawSprites()
 void SoldierDiaryPerformanceState::btnOkClick(Action*)
 {
 	_soldierDiaryOverviewState->setSoldierID(_soldierID);
-
 	_game->popState();
 }
 
@@ -834,7 +838,7 @@ void SoldierDiaryPerformanceState::btnPrevClick(Action*)
 	if (_soldierID == 0)
 		_soldierID = rows - 1;
 	else
-		_soldierID--;
+		--_soldierID;
 
 	init();
 }
@@ -851,7 +855,7 @@ void SoldierDiaryPerformanceState::btnNextClick(Action*)
 	else
 		rows = _list->size();
 
-	_soldierID++;
+	++_soldierID;
 	if (_soldierID >= rows)
 		_soldierID = 0;
 
@@ -899,15 +903,15 @@ void SoldierDiaryPerformanceState::btnCommendationsToggle(Action*)
  */
 void SoldierDiaryPerformanceState::lstInfoMouseOver(Action*)
 {
-	size_t _sel = _lstAwards->getSelectedRow();
+	const size_t row = _lstAwards->getSelectedRow();
 
-	if (_commendationsListEntry.empty()
-		|| _sel > _commendationsListEntry.size() - 1)
+	if (_commendationsListEntry.empty() == true
+		|| row > _commendationsListEntry.size() - 1)
 	{
 		_txtMedalInfo->setText(L"");
 	}
 	else
-		_txtMedalInfo->setText(_commendationsListEntry[_sel]);
+		_txtMedalInfo->setText(_commendationsListEntry[row]);
 }
 
 /**
@@ -929,7 +933,6 @@ void SoldierDiaryPerformanceState::think()
 	if (_lastScrollPos != _lstAwards->getScroll())
 	{
 		_lastScrollPos = _lstAwards->getScroll();
-
 		drawSprites();
 	}
 }

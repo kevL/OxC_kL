@@ -88,6 +88,7 @@ CraftArmorState::CraftArmorState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK14.SCR"));
 
@@ -176,20 +177,20 @@ void CraftArmorState::init()
 
 		if ((*i)->getWoundRecovery() > 0)
 		{
-			Uint8 color = Palette::blockOffset(3); // green
-			int woundPerct = (*i)->getWoundPercent();
+			color = Palette::blockOffset(3);		// green
+			const int woundPerct = (*i)->getWoundPercent();
 			if (woundPerct > 10)
-				color = Palette::blockOffset(9); // yellow
+				color = Palette::blockOffset(9);	// yellow
 			if (woundPerct > 50)
-				color = Palette::blockOffset(6); // orange
+				color = Palette::blockOffset(6);	// orange
 
 			_lstSoldiers->setCellColor(
 									row,
 									2,
 									color);
 			_lstSoldiers->setCellHighContrast(
-									row,
-									2);
+											row,
+											2);
 		}
 	}
 

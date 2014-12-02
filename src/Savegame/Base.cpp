@@ -1791,8 +1791,8 @@ bool Base::getHyperDetection() const
 }
 
 /**
- * Returns the total amount of Psi Lab Space available in the base.
- * @return, Psi Lab space.
+ * Returns the total amount of PsiLab Space available in the base.
+ * @return, PsiLab space
  */
 int Base::getAvailablePsiLabs() const
 {
@@ -1811,8 +1811,8 @@ int Base::getAvailablePsiLabs() const
 }
 
 /**
- * Returns the total amount of used Psi Lab Space in the base.
- * @return, used Psi Lab space.
+ * Returns the total amount of used PsiLab Space in the base.
+ * @return, used PsiLab space
  */
 int Base::getUsedPsiLabs() const
 {
@@ -1831,20 +1831,20 @@ int Base::getUsedPsiLabs() const
 }
 
 /**
- * Returns the total amount of used Containment Space in the base.
- * @return, Containment Lab space.
+ * Returns the total amount of used containment space in this Base.
+ * @return, containment space
  */
 int Base::getUsedContainment() const
 {
 	int total = 0;
 
-	for (std::map<std::string, int>::iterator
+	for (std::map<std::string, int>::const_iterator
 			i = _items->getContents()->begin();
 			i != _items->getContents()->end();
 			++i)
 	{
-		if (_rule->getItem((i)->first)->getAlien())
-			total += (i)->second;
+		if (_rule->getItem(i->first)->getAlien() != NULL)
+			total += i->second;
 	}
 
 	for (std::vector<Transfer*>::const_iterator
@@ -1853,22 +1853,22 @@ int Base::getUsedContainment() const
 			++i)
 	{
 		if ((*i)->getType() == TRANSFER_ITEM
-			&& _rule->getItem((*i)->getItems())->getAlien())
+			&& _rule->getItem((*i)->getItems())->getAlien() != NULL)
 		{
 			total += (*i)->getQuantity();
 		}
 	}
 
-	if (Options::storageLimitsEnforced)
+	if (Options::storageLimitsEnforced == true)
 	{
 		for (std::vector<ResearchProject*>::const_iterator
 				i = _research.begin();
 				i != _research.end();
 				++i)
 		{
-			const RuleResearch* projRules = (*i)->getRules();
-			if (projRules->needItem()
-				&& _rule->getUnit(projRules->getName()))
+			const RuleResearch* const rpRule = (*i)->getRules();
+			if (rpRule->needItem() == true
+				&& _rule->getUnit(rpRule->getName()) != NULL)
 			{
 				++total;
 			}
@@ -1879,8 +1879,8 @@ int Base::getUsedContainment() const
 }
 
 /**
- * Returns the total amount of Containment Space available in the base.
- * @return, Containment Lab space.
+ * Returns the total amount of containment space available in this Base.
+ * @return, containment space
  */
 int Base::getAvailableContainment() const
 {
@@ -1899,8 +1899,8 @@ int Base::getAvailableContainment() const
 }
 
 /**
- * Returns the base's battlescape status.
- * @return, Is the craft on the battlescape?
+ * Returns this Base's battlescape status.
+ * @return, true if Base is the battlescape
  */
 bool Base::isInBattlescape() const
 {
@@ -1908,8 +1908,8 @@ bool Base::isInBattlescape() const
 }
 
 /**
- * Changes the base's battlescape status.
- * @param inbattle True if it's in battle, False otherwise.
+ * Changes this Base's battlescape status.
+ * @param inbattle - true if Base is the battlescape
  */
 void Base::setInBattlescape(bool inBattle)
 {
@@ -1917,8 +1917,8 @@ void Base::setInBattlescape(bool inBattle)
 }
 
 /**
- * Mark the base as a valid alien retaliation target.
- * @param mark Mark (if @c true) or unmark (if @c false) the base.
+ * Marks this Base as a valid alien retaliation target.
+ * @param mark - Mark (if @c true) or unmark (if @c false) the base
  */
 void Base::setIsRetaliationTarget(bool mark)
 {
@@ -1926,8 +1926,8 @@ void Base::setIsRetaliationTarget(bool mark)
 }
 
 /**
- * Get the base's retaliation status.
- * @return, If the base is a valid target for alien retaliation.
+ * Gets this Base's retaliation status.
+ * @return, true if Base is a valid target for alien retaliation
  */
 bool Base::getIsRetaliationTarget() const
 {

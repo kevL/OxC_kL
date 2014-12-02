@@ -91,6 +91,7 @@ private:
 
 		* _txtMedalName,
 		* _txtMedalLevel,
+		* _txtMedalClass, // kL
 		* _txtMedalInfo;
 	TextButton
 		* _btnOk,

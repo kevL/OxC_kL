@@ -210,10 +210,10 @@ StoresMatrixState::StoresMatrixState(Base* base)
 		ss7;
 
 	const Ruleset* const rules = _game->getRuleset();
-	RuleItem* rule = NULL;
+	const RuleItem* rule = NULL;
 //		* launchRule,
 //		* clipRule;
-	RuleCraftWeapon* cwRule = NULL;
+	const RuleCraftWeapon* cwRule = NULL;
 
 	const std::vector<std::string>& items = rules->getItemsList();
 	for (std::vector<std::string>::const_iterator
@@ -291,7 +291,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 				}
 			}
 
-			ent++;
+			++ent;
 		}
 
 		if (qty[0] + qty[1] + qty[2] + qty[3] + qty[4] + qty[5] + qty[6] + qty[7] > 0)
@@ -395,7 +395,7 @@ StoresMatrixState::StoresMatrixState(Base* base)
 
 			_lstMatrix->setRowColor(row, color);
 
-			row++;
+			++row;
 		}
 	}
 

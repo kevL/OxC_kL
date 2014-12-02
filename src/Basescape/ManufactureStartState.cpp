@@ -19,7 +19,7 @@
 
 #include "ManufactureStartState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "ManufactureInfoState.h"
 
@@ -98,6 +98,7 @@ ManufactureStartState::ManufactureStartState(
 
 	centerAllSurfaces();
 
+
 	_window->setColor(Palette::blockOffset(13)+10);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK17.SCR"));
 
@@ -128,7 +129,7 @@ ManufactureStartState::ManufactureStartState(
 							Options::keyCancel);
 
 	const std::map<std::string, int>& requiredItems (_item->getRequiredItems());
-	int availableWorkSpace = _base->getFreeWorkshops();
+	const int availableWorkSpace = _base->getFreeWorkshops();
 	bool productionPossible (_game->getSavedGame()->getFunds() > _item->getManufactureCost());	// init
 	productionPossible &= (availableWorkSpace > 0);												// nifty.
 
@@ -153,7 +154,7 @@ ManufactureStartState::ManufactureStartState(
 	_lstRequiredItems->setColor(Palette::blockOffset(13));
 	_lstRequiredItems->setArrowColor(Palette::blockOffset(15)+1);
 
-	ItemContainer* itemContainer (base->getItems()); // init.
+	const ItemContainer* const itemContainer (base->getItems()); // init.
 	int row = 0;
 	for (std::map<std::string, int>::const_iterator
 			iter = requiredItems.begin();
@@ -173,15 +174,14 @@ ManufactureStartState::ManufactureStartState(
 								s2.str().c_str());
 		_lstRequiredItems->setCellColor(row, 0, Palette::blockOffset(13)+10);
 
-		row++;
+		++row;
 	}
 
-	_txtRequiredItemsTitle->setVisible(!requiredItems.empty());
-	_txtItemNameColumn->setVisible(!requiredItems.empty());
-	_txtUnitRequiredColumn->setVisible(!requiredItems.empty());
-	_txtUnitAvailableColumn->setVisible(!requiredItems.empty());
-
-	_lstRequiredItems->setVisible(!requiredItems.empty());
+	_txtRequiredItemsTitle->setVisible(requiredItems.empty() == false);
+	_txtItemNameColumn->setVisible(requiredItems.empty() == false);
+	_txtUnitRequiredColumn->setVisible(requiredItems.empty() == false);
+	_txtUnitAvailableColumn->setVisible(requiredItems.empty() == false);
+	_lstRequiredItems->setVisible(requiredItems.empty() == false);
 
 	_btnStart->setColor(Palette::blockOffset(13)+10);
 	_btnStart->setText(tr("STR_START_PRODUCTION"));
