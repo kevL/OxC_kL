@@ -19,7 +19,7 @@
 
 #include "SoldierInfoState.h"
 
-#include <sstream>
+//#include <sstream>
 
 #include "SoldierDiaryOverviewState.h"
 #include "SackSoldierState.h"
@@ -230,6 +230,7 @@ SoldierInfoState::SoldierInfoState(
 
 	centerAllSurfaces();
 
+
 	_game->getResourcePack()->getSurface("BACK06.SCR")->blit(_bg);
 
 	_btnOk->setColor(Palette::blockOffset(15)+6);
@@ -439,7 +440,7 @@ void SoldierInfoState::init()
 {
 	State::init();
 
-	if (_list->empty())
+	if (_list->empty() == true)
 	{
 		_game->popState();
 		return;
@@ -451,7 +452,7 @@ void SoldierInfoState::init()
 	_soldier = _list->at(_soldierID);
 	_edtSoldier->setText(_soldier->getName());
 
-	SurfaceSet* texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
 	texture->getFrame(_soldier->getRankSprite())->setX(0);
 	texture->getFrame(_soldier->getRankSprite())->setY(0);
 	texture->getFrame(_soldier->getRankSprite())->blit(_rank);
@@ -466,7 +467,7 @@ void SoldierInfoState::init()
 		gender->blit(_gender);
 
 
-	UnitStats
+	const UnitStats
 		* initial = _soldier->getInitStats(),
 		* current = _soldier->getCurrentStats();
 
@@ -664,7 +665,7 @@ void SoldierInfoState::init()
 	_txtCraft->setText(tr("STR_CRAFT_").arg(craft));
 
 
-	int woundRec = _soldier->getWoundRecovery();
+	const int woundRec = _soldier->getWoundRecovery();
 	if (woundRec > 0)
 	{
 		Uint8 color = Palette::blockOffset(3); // green
@@ -699,8 +700,8 @@ void SoldierInfoState::init()
 	const int minPsi = _soldier->getRules()->getMinStats().psiSkill;
 
 	if (current->psiSkill >= minPsi
-		|| (Options::psiStrengthEval
-			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements())))
+		|| (Options::psiStrengthEval == true
+			&& _game->getSavedGame()->isResearched(_game->getRuleset()->getPsiRequirements()) == true))
 	{
 		ss.str(L"");
 		ss << armored.psiStrength;
@@ -765,9 +766,9 @@ void SoldierInfoState::init()
 	}
 
 	_btnSack->setVisible(!
-						(_soldier->getCraft()
-							&& _soldier->getCraft()->getStatus() == "STR_OUT")
-						&& _game->getSavedGame()->getMonthsPassed() > -1);
+							(_soldier->getCraft() != NULL
+								&& _soldier->getCraft()->getStatus() == "STR_OUT")
+						&& _game->getSavedGame()->getMonthsPassed() != -1);
 
 /*kL
 	if (_base == 0) // dead don't talk
@@ -881,7 +882,7 @@ void SoldierInfoState::btnAutoStat(Action*)
  */
 void SoldierInfoState::btnAutoStatAll(Action*)
 {
-	Soldier* soldier = _soldier;
+	Soldier* const soldier = _soldier;
 
 	for (size_t
 			i = 0;
@@ -932,16 +933,14 @@ void SoldierInfoState::btnOkClick(Action*)
 //	_base->getSoldiers()->at(_soldierID)->setName(_edtSoldier->getText());
 
 //	_edtSoldier->setFocus(false); // kL
-
 	_game->popState();
 
-	if (_game->getSavedGame()->getMonthsPassed() > -1
-		&& Options::storageLimitsEnforced
+	if (_game->getSavedGame()->getMonthsPassed() != -1
+		&& Options::storageLimitsEnforced == true
 //		&& _base != NULL
-		&& _base->storesOverfull())
+		&& _base->storesOverfull() == true)
 	{
 		_game->pushState(new SellState(_base));
-
 		_game->pushState(new ErrorMessageState(
 											tr("STR_STORAGE_EXCEEDED").arg(_base->getName()).c_str(),
 											_palette,
@@ -980,8 +979,7 @@ void SoldierInfoState::btnNextClick(Action*)
 //	_base->getSoldiers()->at(_soldierID)->setName(_edtSoldier->getText());
 
 //	_edtSoldier->setFocus(false); // kL
-
-	_soldierID++;
+	++_soldierID;
 
 	if (_soldierID >= _list->size())
 		_soldierID = 0;
@@ -996,7 +994,7 @@ void SoldierInfoState::btnNextClick(Action*)
 void SoldierInfoState::btnArmorClick(Action*)
 {
 	if (_soldier->getCraft() == NULL
-		|| (_soldier->getCraft()
+		|| (_soldier->getCraft() != NULL
 			&& _soldier->getCraft()->getStatus() != "STR_OUT"))
 	{
 		_game->pushState(new SoldierArmorState(

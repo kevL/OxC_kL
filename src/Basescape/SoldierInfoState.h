@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_SOLDIERINFOSTATE_H
 #define OPENXCOM_SOLDIERINFOSTATE_H
 
-#include <vector>
+//#include <vector>
 
 #include "../Engine/State.h"
 

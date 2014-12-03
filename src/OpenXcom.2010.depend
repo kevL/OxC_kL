@@ -276,7 +276,7 @@
 
 1416321627 f:\git\openxcom\src\engine\game.h
 
-1413136956 f:\git\openxcom\src\engine\language.h
+1417628804 f:\git\openxcom\src\engine\language.h
 	<map>
 	<string>
 	<vector>
@@ -4368,9 +4368,7 @@
 	<sstream>
 	<string>
 
-1417309044 f:\git\openxcom\src\savegame\soldier.h
-	<string>
-	<yaml-cpp/yaml.h>
+1417628954 f:\git\openxcom\src\savegame\soldier.h
 	"../Ruleset/StatString.h"
 	"../Ruleset/Unit.h"
 
@@ -4378,7 +4376,10 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1417312055 f:\git\openxcom\src\engine\options.h
+1417628586 f:\git\openxcom\src\engine\options.h
+	<string>
+	<vector>
+	<SDL.h>
 	"OptionInfo.h"
 	"Options.inc.h"
 
@@ -5317,9 +5318,8 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Soldier.h"
 
-1415853533 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
+1417621387 source:f:\git\openxcom\src\basescape\soldierinfostate.cpp
 	"SoldierInfoState.h"
-	<sstream>
 	"SoldierDiaryOverviewState.h"
 	"SackSoldierState.h"
 	"SellState.h"
@@ -5348,8 +5348,7 @@
 	"../Savegame/Soldier.h"
 	"../Savegame/SoldierDiary.h"
 
-1413136955 f:\git\openxcom\src\basescape\soldierinfostate.h
-	<vector>
+1417621013 f:\git\openxcom\src\basescape\soldierinfostate.h
 	"../Engine/State.h"
 
 1413408732 f:\git\openxcom\src\ruleset\rulesoldier.h
@@ -5712,7 +5711,7 @@
 1414970883 source:f:\git\openxcom\src\battlescape\battleaistate.cpp
 	"BattleAIState.h"
 
-1417462778 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
+1417584390 source:f:\git\openxcom\src\battlescape\battlescapegame.cpp
 	"BattlescapeGame.h"
 	"AbortMissionState.h"
 	"AlienBAIState.h"
@@ -5806,7 +5805,7 @@
 
 1413136961 f:\git\openxcom\src\ruleset\ruleinventory.h
 
-1417563689 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
+1417585046 source:f:\git\openxcom\src\battlescape\battlescapegenerator.cpp
 	"BattlescapeGenerator.h"
 	"AlienBAIState.h"
 	"CivilianBAIState.h"
@@ -6520,7 +6519,7 @@
 	"../Savegame/SavedBattleGame.h"
 	"../Savegame/SavedGame.h"
 
-1417565206 source:f:\git\openxcom\src\battlescape\projectile.cpp
+1417584412 source:f:\git\openxcom\src\battlescape\projectile.cpp
 	"Projectile.h"
 	<cmath>
 	"../fmath.h"
@@ -6946,7 +6945,7 @@
 	"Action.h"
 	"Options.h"
 
-1413136956 source:f:\git\openxcom\src\engine\language.cpp
+1417628378 source:f:\git\openxcom\src\engine\language.cpp
 	"Language.h"
 	<locale>
 	<fstream>
@@ -7570,7 +7569,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1417185834 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1417620958 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -9497,7 +9496,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1417309044 source:f:\git\openxcom\src\savegame\soldier.cpp
+1417624761 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -9507,7 +9506,6 @@
 	"SoldierDiary.h"
 	"../Engine/Language.h"
 	"../Engine/Options.h"
-	"../Engine/RNG.h"
 	"../Interface/Text.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/Ruleset.h"

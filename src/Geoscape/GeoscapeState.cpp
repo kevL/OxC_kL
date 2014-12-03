@@ -2772,14 +2772,14 @@ void GeoscapeState::time1Day()
 		//Log(LOG_INFO) << ". iterate Soldiers DONE";
 
 		if ((*b)->getAvailablePsiLabs() > 0 // handle psionic training
-			&& Options::anytimePsiTraining)
+			&& Options::anytimePsiTraining == true)
 		{
 			for (std::vector<Soldier*>::const_iterator
 					s = (*b)->getSoldiers()->begin();
 					s != (*b)->getSoldiers()->end();
 					++s)
 			{
-				(*s)->trainPsi1Day();
+				(*s)->trainPsiDay();
 //				(*s)->calcStatString(
 //								_game->getRuleset()->getStatStrings(),
 //								(Options::psiStrengthEval
@@ -2791,7 +2791,7 @@ void GeoscapeState::time1Day()
 		// events are triggered, show an empty NewPossibleResearchState so
 		// players have a chance to allocate the now-free scientists
 		if (researchCompleteEvents.empty() == false
-			&& newPossibleResearchEvents.empty())
+			&& newPossibleResearchEvents.empty() == true)
 		{
 			newPossibleResearchEvents.push_back(NewPossibleResearchInfo(
 																	std::vector<RuleResearch*>(),

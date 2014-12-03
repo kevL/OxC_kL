@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_SOLDIER_H
 #define OPENXCOM_SOLDIER_H
 
-#include <string>
+//#include <string>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "../Ruleset/StatString.h"
 #include "../Ruleset/Unit.h"
@@ -193,10 +193,10 @@ private:
 		/// Gets the soldier's equipment-layout.
 		std::vector<EquipmentLayoutItem*>* getEquipmentLayout();
 
-		/// Trains a soldier's psychic stats
+		/// Trains a soldier's psychic stats.
 		void trainPsi();
 		/// Trains a soldier's psionic abilities (anytimePsiTraining option).
-		void trainPsi1Day();
+		bool trainPsiDay();
 		/// Returns whether the unit is in psi training or not
 		bool isInPsiTraining();
 		/// Sets the psi training status

@@ -1232,42 +1232,35 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 		//Log(LOG_INFO) << "addXCOMUnit() - NO Deployment rule";
 		int tankPos = 0;
 
-		for (int // iterate through *all* tiles
+		for (int
 				i = 0;
 				i < _mapsize_x * _mapsize_y * _mapsize_z;
 				++i)
 		{
 			if (canPlaceXCOMUnit(_battleSave->getTiles()[i]) == true)
 			{
-				// kL_begin: BattlescapeGenerator, set tankPosition
-				const int tankSize = unit->getArmor()->getSize();
-
-				if (unit->getGeoscapeSoldier() == NULL) // is a tank
+				if (unit->getGeoscapeSoldier() == NULL)
 				{
-					if (_battleSave->getTiles()[i]->getPosition().x == _tileCraft->getPosition().x // and the ground-inventory-tile is on this[i] tile's x-axis|
-						|| tankSize == 1)
+					if ((_battleSave->getTiles()[i]->getPosition().x == _tileCraft->getPosition().x
+							|| unit->getArmor()->getSize() == 1)
+						&& ++tankPos == 3
+						&& _battleSave->setUnitPosition(
+													unit,
+													_battleSave->getTiles()[i]->getPosition()) == true)
 					{
-						if (++tankPos == 3)
-						{
-							if (_battleSave->setUnitPosition( // set unit position SUCCESS
-															unit,
-															_battleSave->getTiles()[i]->getPosition()) == true)
-							{
-								_battleSave->getUnits()->push_back(unit); // add unit to vector of Units.
-								return unit;
-							}
-						}
+						_battleSave->getUnits()->push_back(unit); // add unit to vector of Units.
+						return unit;
 					}
 				}
-				else if (_battleSave->setUnitPosition( // set unit position SUCCESS
+				else if (_battleSave->setUnitPosition(
 													unit,
 													_battleSave->getTiles()[i]->getPosition()) == true)
 				{
-					_battleSave->getUnits()->push_back(unit); // add unit to vector of Units.
+					_battleSave->getUnits()->push_back(unit);
 					unit->deriveRank();
 
 					return unit;
-				} // kL_end.
+				}
 			}
 		}
 	}

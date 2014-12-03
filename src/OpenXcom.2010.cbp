@@ -3248,6 +3248,20 @@
 		</Unit>
 		<Unit filename="Ufopaedia/ArticleStateTFTD.cpp" />
 		<Unit filename="Ufopaedia/ArticleStateTFTD.h" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDArmor.cpp" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDArmor.h" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDCraft.cpp" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDCraft.h" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDCraftWeapon.cpp" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDCraftWeapon.h" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDFacility.cpp" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDFacility.h" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDItem.cpp" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDItem.h" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDUso.cpp" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDUso.h" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDVehicle.cpp" />
+		<Unit filename="Ufopaedia/ArticleStateTFTDVehicle.h" />
 		<Unit filename="Ufopaedia/ArticleStateText.cpp">
 			<Option target="Debug Win32" />
 			<Option target="Debug x64" />

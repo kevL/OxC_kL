@@ -28,7 +28,7 @@
 
 #include "../Engine/Language.h"
 #include "../Engine/Options.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/RNG.h"
 
 #include "../Interface/Text.h"
 
@@ -102,19 +102,17 @@ Soldier::Soldier(
 			male = static_cast<double>(gRatio.male),
 			total = static_cast<double>(male + gRatio.female);
 
-		if (AreSame(total, 0.0)
-			|| RNG::percent(static_cast<int>(Round(male / total * 100.0))))
+		if (AreSame(total, 0.)
+			|| RNG::percent(static_cast<int>(Round(male / total * 100.))))
 		{
 			_gender = GENDER_MALE;
+			_name = L"pfc.Fritz";
 		}
 		else
+		{
 			_gender = GENDER_FEMALE;
-
-		if (_gender == GENDER_MALE)
-			_name = L"pfc.Fritz";
-		else
 			_name = L"pfc.Frita";
-		// kL_end.
+		} // kL_end.
 /*kL
 		if (names->empty() == false)
 		{
@@ -540,9 +538,9 @@ void Soldier::heal()
  */
 int Soldier::getWoundPercent() const
 {
-	return static_cast<int>(floor(
-				static_cast<float>(_recovery) / static_cast<float>(_currentStats.health)
-			* 100.f));
+	return static_cast<int>(std::floor(
+				static_cast<double>(_recovery) / static_cast<double>(_currentStats.health)
+			* 100.));
 }
 
 /**
@@ -589,6 +587,7 @@ void Soldier::trainPsi()
 	_currentStats.psiStrength += _gainPsiStr;
 	if (_currentStats.psiSkill > psiSkillCap) _currentStats.psiSkill = psiSkillCap;
 	if (_currentStats.psiStrength > psiStrengthCap) _currentStats.psiStrength = psiStrengthCap;
+}
 /* kL_begin:
 // http://www.ufopaedia.org/index.php?title=Psi_Skill
 // -End of Month PsiLab Increase-
@@ -638,26 +637,29 @@ void Soldier::trainPsi()
 //kL	if (_currentStats.psiSkill > 100)
 //kL		_currentStats.psiSkill = 100;
 */ // kL_end.
-}
 
 /**
  * Trains this Soldier's psychic abilities ('anytimePsiTraining' option) after 1 day.
- * kL_note: called from GeoscapeState, per 1day. Re-write done.
+ * Called from GeoscapeState per 1-day.
+ * @return, true if Soldier's stat(s) increased
  */
-void Soldier::trainPsi1Day()
+bool Soldier::trainPsiDay()
 {
 	_gainPsiSkl = 0; // was used in AllocatePsiTrainingState.
 
 	if (_psiTraining == false)
-		return;
+		return false;
 
 	const int
 		psiSkill = _currentStats.psiSkill,
 		rulesMin = _rules->getMinStats().psiSkill;
 
 	if (psiSkill >= _rules->getStatCaps().psiSkill) // hard cap. Note this auto-caps psiStrength also
-		return;
-	else if (psiSkill >= rulesMin) // Psi unlocked.
+		return false;
+
+	bool ret = false;
+
+	if (psiSkill >= rulesMin) // Psi unlocked.
 	{
 		int chance = std::max(
 							1,
@@ -666,11 +668,12 @@ void Soldier::trainPsi1Day()
 									500 / psiSkill));
 		if (RNG::percent(chance) == true)
 		{
-			_gainPsiSkl++;
-			_currentStats.psiSkill++;
+			ret = true;
+			++_gainPsiSkl;
+			++_currentStats.psiSkill;
 		}
 
-		if (Options::allowPsiStrengthImprovement)
+		if (Options::allowPsiStrengthImprovement == true)
 		{
 			const int psiStrength = _currentStats.psiStrength;
 			if (psiStrength < _rules->getStatCaps().psiStrength)
@@ -682,8 +685,9 @@ void Soldier::trainPsi1Day()
 										500 / psiStrength));
 				if (RNG::percent(chance) == true)
 				{
-					_gainPsiStr++;
-					_currentStats.psiStrength++;
+					ret = true;
+					++_gainPsiStr;
+					++_currentStats.psiStrength;
 				}
 			}
 		}
@@ -692,6 +696,7 @@ void Soldier::trainPsi1Day()
 	{
 		if (RNG::percent(5) == true) // 5% per day per soldier (to become psionic-active)
 		{
+			ret = true;
 			_gainPsiSkl = RNG::generate(
 									rulesMin,
 									_rules->getMaxStats().psiSkill);
@@ -699,6 +704,8 @@ void Soldier::trainPsi1Day()
 			_currentStats.psiSkill =_initialStats.psiSkill = _gainPsiSkl;
 		}
 	}
+
+	return ret;
 }
 
 /**

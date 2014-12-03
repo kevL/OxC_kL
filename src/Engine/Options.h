@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_OPTIONS_H
 #define OPENXCOM_OPTIONS_H
 
-//#include <string>
-//#include <vector>
+#include <string>
+#include <vector>
 
-//#include <SDL.h>
+#include <SDL.h>
 
 #include "OptionInfo.h"
 

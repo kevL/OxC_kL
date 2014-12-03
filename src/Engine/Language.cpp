@@ -36,12 +36,12 @@
 #include "../Ruleset/ExtraStrings.h"
 
 #ifdef _WIN32
-#ifndef NOMINMAX
-#define NOMINMAX
-#endif
+	#ifndef NOMINMAX
+		#define NOMINMAX
+	#endif
 
-#define WIN32_LEAN_AND_MEAN
-#include <windows.h>
+	#define WIN32_LEAN_AND_MEAN
+	#include <windows.h>
 #endif
 
 
