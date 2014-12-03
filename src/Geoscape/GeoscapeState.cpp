@@ -2779,7 +2779,9 @@ void GeoscapeState::time1Day()
 					s != (*b)->getSoldiers()->end();
 					++s)
 			{
-				(*s)->trainPsiDay();
+				if ((*s)->trainPsiDay() == true)
+					(*s)->autoStat();
+
 //				(*s)->calcStatString(
 //								_game->getRuleset()->getStatStrings(),
 //								(Options::psiStrengthEval

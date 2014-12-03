@@ -111,9 +111,9 @@ private:
 		* _btnDiary;
 	TextEdit* _edtSoldier;
 
-	/// kL. Automatically renames a soldier according to its statistics.
+	/// kL. Handles autoStat click.
 	void btnAutoStat(Action*);
-	/// kL. Automatically renames all soldiers according to their statistics.
+	/// kL. Handles autoStatAll click.
 	void btnAutoStatAll(Action*);
 
 

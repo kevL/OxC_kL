@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_RULESOLDIER_H
 #define OPENXCOM_RULESOLDIER_H
 
-#include <string>
+//#include <string>
 
 #include "../Ruleset/Unit.h"
 

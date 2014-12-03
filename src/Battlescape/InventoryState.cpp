@@ -920,10 +920,10 @@ static void _clearInventory(
 		std::vector<BattleItem*>* unitInv,
 		Tile* groundTile)
 {
-	RuleInventory* groundRuleInv = game->getRuleset()->getInventory("STR_GROUND");
+	RuleInventory* const groundRuleInv = game->getRuleset()->getInventory("STR_GROUND");
 
 	// clear unit's inventory (i.e. move everything to the ground)
-	for (std::vector<BattleItem*>::iterator
+	for (std::vector<BattleItem*>::const_iterator
 			i = unitInv->begin();
 			i != unitInv->end();
 			)

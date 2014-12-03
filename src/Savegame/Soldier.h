@@ -24,7 +24,7 @@
 
 //#include <yaml-cpp/yaml.h>
 
-#include "../Ruleset/StatString.h"
+//#include "../Ruleset/StatString.h"
 #include "../Ruleset/Unit.h"
 
 
@@ -216,6 +216,9 @@ private:
 //		void calcStatString(
 //				const std::vector<StatString*>& statStrings,
 //				bool psiStrengthEval);
+
+		/// Automatically renames the soldier according to his/her current statistics.
+		void autoStat();
 };
 
 }

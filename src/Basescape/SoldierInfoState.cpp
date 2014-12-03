@@ -29,8 +29,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
 
@@ -782,118 +782,38 @@ void SoldierInfoState::init()
 }
 
 /**
- * kL. Automatically renames a soldier according to its statistics.
+ * kL. Handles autoStat click.
  * Left-click on the Auto-stat button.
  */
 void SoldierInfoState::btnAutoStat(Action*)
 {
-	//Log(LOG_INFO) << "SoldierInfoState::btnAutoStat()";
-//	Soldier* _soldier = _base->getSoldiers()->at(_soldierID);
-
-//	_edtSoldier->deFocus();
-//	_edtSoldier->setFocus(false);
 	_soldier->setName(_edtSoldier->getText());
+	_soldier->autoStat();
 
-	std::wostringstream stat;
-
-	switch (_soldier->getRank())
-	{
-		case 0: stat << "r";
-		break;
-		case 1: stat << "q";
-		break;
-		case 2: stat << "t";
-		break;
-		case 3: stat << "p";
-		break;
-		case 4: stat << "n";
-		break;
-		case 5: stat << "x";
-		break;
-
-		default: stat << "z";
-		break;
-	}
-
-	UnitStats* current = _soldier->getCurrentStats();
-	stat << current->firing << ".";
-	stat << current->reactions << ".";
-	stat << current->strength;
-
-	switch (current->bravery)
-	{
-		case 10: stat << "a";
-		break;
-		case 20: stat << "b";
-		break;
-		case 30: stat << "c";
-		break;
-		case 40: stat << "d";
-		break;
-		case 50: stat << "e";
-		break;
-		case 60: stat << "f";
-		break;
-		case 70: stat << "g";
-		break;
-		case 80: stat << "h";
-		break;
-		case 90: stat << "i";
-		break;
-		case 100: stat << "j";
-		break;
-
-		default: stat << "z";
-		break;
-	}
-
-	if (current->psiSkill >= _soldier->getRules()->getMinStats().psiSkill)
-	{
-		const int
-			psiStr = current->psiStrength,
-			psiSkl = current->psiSkill;
-
-		int
-			psiDefense = psiStr + psiSkl / 5,
-			psiAttack = psiStr * psiSkl / 100;
-
-		stat << psiDefense;
-
-		if (psiSkl >= _soldier->getRules()->getStatCaps().psiSkill)
-			stat << ":";
-		else
-			stat << ".";
-
-		stat << psiAttack;
-	}
-
-	//Log(LOG_INFO) << ". set Soldier name : " << stat;
-//	_base->getSoldiers()->at(_soldierID)->setName(stat.str());
-	_soldier->setName(stat.str());
-
-	//Log(LOG_INFO) << ". re-init";
 	init();
-	//Log(LOG_INFO) << "SoldierInfoState::btnAutoStat() EXIT";
 }
 
 /**
- * kL. Automatically renames all soldiers according to their statistics.
+ * kL. Handles autoStatAll click.
  * Right-click on the Auto-stat button.
  */
 void SoldierInfoState::btnAutoStatAll(Action*)
 {
-	Soldier* const soldier = _soldier;
-
 	for (size_t
 			i = 0;
-			i < _list->size();
+			i != _list->size();
 			++i)
 	{
-		_soldier = _list->at(i);
-		btnAutoStat(NULL);
-	}
+		Soldier* const soldier = _list->at(i);
 
-	_soldier = soldier;
+		if (soldier == _soldier)
+			soldier->setName(_edtSoldier->getText());
+
+		soldier->autoStat();
+
+		if (soldier == _soldier)
+			init();
+	}
 }
 
 /**

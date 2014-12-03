@@ -27,7 +27,7 @@
 #include "SoldierDiary.h"
 
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
+//#include "../Engine/Options.h"
 //#include "../Engine/RNG.h"
 
 #include "../Interface/Text.h"
@@ -35,8 +35,8 @@
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
-#include "../Ruleset/SoldierNamePool.h"
-#include "../Ruleset/StatString.h"
+//#include "../Ruleset/SoldierNamePool.h"
+//#include "../Ruleset/StatString.h"
 
 
 namespace OpenXcom
@@ -74,8 +74,9 @@ Soldier::Soldier(
 
 	if (names != NULL)
 	{
-		UnitStats minStats = rules->getMinStats();
-		UnitStats maxStats = rules->getMaxStats();
+		UnitStats
+			minStats = rules->getMinStats(),
+			maxStats = rules->getMaxStats();
 
 		_initialStats.tu			= RNG::generate(minStats.tu, maxStats.tu);
 		_initialStats.stamina		= RNG::generate(minStats.stamina, maxStats.stamina);
@@ -799,5 +800,77 @@ SoldierDiary* Soldier::getDiary()
 										statStrings,
 										psiStrengthEval);
 } */
+
+/**
+ * Automatically renames this Soldier according to his/her current statistics.
+ */
+void Soldier::autoStat()
+{
+	std::wostringstream stat;
+
+	switch (_rank)
+	{
+		case 0: stat << "r";
+		break;
+		case 1: stat << "q";
+		break;
+		case 2: stat << "t";
+		break;
+		case 3: stat << "p";
+		break;
+		case 4: stat << "n";
+		break;
+		case 5: stat << "x";
+		break;
+
+		default: stat << "z";
+		break;
+	}
+
+	stat << _currentStats.firing << ".";
+	stat << _currentStats.reactions << ".";
+	stat << _currentStats.strength;
+
+	switch (_currentStats.bravery)
+	{
+		case 10: stat << "a";
+		break;
+		case 20: stat << "b";
+		break;
+		case 30: stat << "c";
+		break;
+		case 40: stat << "d";
+		break;
+		case 50: stat << "e";
+		break;
+		case 60: stat << "f";
+		break;
+		case 70: stat << "g";
+		break;
+		case 80: stat << "h";
+		break;
+		case 90: stat << "i";
+		break;
+		case 100: stat << "j";
+		break;
+
+		default: stat << "z";
+		break;
+	}
+
+	if (_currentStats.psiSkill >= _rules->getMinStats().psiSkill)
+	{
+		stat << (_currentStats.psiStrength + _currentStats.psiSkill / 5);
+
+		if (_currentStats.psiSkill >= _rules->getStatCaps().psiSkill)
+			stat << ":";
+		else
+			stat << ".";
+
+		stat << (_currentStats.psiStrength * _currentStats.psiSkill / 100);
+	}
+
+	_name = stat.str();
+}
 
 }
