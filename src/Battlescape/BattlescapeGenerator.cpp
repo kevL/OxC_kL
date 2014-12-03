@@ -501,7 +501,7 @@ void BattlescapeGenerator::run()
 		//Log(LOG_INFO) << "Generator run() terrains NOT available: worldTerrain = " << _worldTerrain->getName();
 		if (_worldTerrain == NULL) // kL
 		{
-			double lat = 0.0;
+			double lat = 0.;
 			if (_ufo != NULL)
 				lat = _ufo->getLatitude();
 
@@ -816,7 +816,7 @@ void BattlescapeGenerator::deployXCOM()
 		if (_savedGame->getMonthsPassed() != -1)
 		{
 			//Log(LOG_INFO) << ". . addBaseItems";
-			for (std::map<std::string, int>::iterator // add items from stores in base
+			for (std::map<std::string, int>::const_iterator // add items from stores in base
 					i = _base->getItems()->getContents()->begin();
 					i != _base->getItems()->getContents()->end();
 					)
@@ -842,7 +842,7 @@ void BattlescapeGenerator::deployXCOM()
 										ground);
 					}
 
-					const std::map<std::string, int>::iterator mark = i;
+					const std::map<std::string, int>::const_iterator mark = i;
 					++i;
 
 					if (_baseEquipScreen == false)
@@ -1104,8 +1104,8 @@ BattleUnit* BattlescapeGenerator::addXCOMVehicle(Vehicle* tank)
 				if (itemRule != NULL)
 				{
 					BattleItem* const item = new BattleItem(
-													itemRule,
-													_battleSave->getCurrentItemId());
+														itemRule,
+														_battleSave->getCurrentItemId());
 
 					if (addItem(
 							item,
@@ -1141,9 +1141,9 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 			|| _mission == "STR_MARS_THE_FINAL_ASSAULT")
 		&& _baseEquipScreen == false) */
 	{
-		Node* node = _battleSave->getSpawnNode(
-									NR_XCOM,
-									unit);
+		const Node* const node = _battleSave->getSpawnNode(
+														NR_XCOM,
+														unit);
 		if (node != NULL)
 		{
 			_battleSave->getUnits()->push_back(unit);
@@ -1214,7 +1214,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 				//Log(LOG_INFO) << ". canPlaceXCOMUnit()";
 				if (_battleSave->setUnitPosition(
 												unit,
-												pos))
+												pos) == true)
 				{
 					//Log(LOG_INFO) << ". setUnitPosition()";
 					_battleSave->getUnits()->push_back(unit);
@@ -1237,21 +1237,23 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 				i < _mapsize_x * _mapsize_y * _mapsize_z;
 				++i)
 		{
-			if (canPlaceXCOMUnit(_battleSave->getTiles()[i]))
+			if (canPlaceXCOMUnit(_battleSave->getTiles()[i]) == true)
 			{
 				// kL_begin: BattlescapeGenerator, set tankPosition
-				if (unit->getArmor()->getSize() > 1) // is a tank
+				const int tankSize = unit->getArmor()->getSize();
+
+				if (unit->getGeoscapeSoldier() == NULL) // is a tank
 				{
-					if (_battleSave->getTiles()[i]->getPosition().x == _tileCraft->getPosition().x) // and the ground-inventory-tile is on this[i] tile's x-axis|
+					if (_battleSave->getTiles()[i]->getPosition().x == _tileCraft->getPosition().x // and the ground-inventory-tile is on this[i] tile's x-axis|
+						|| tankSize == 1)
 					{
 						if (++tankPos == 3)
 						{
 							if (_battleSave->setUnitPosition( // set unit position SUCCESS
 															unit,
-															_battleSave->getTiles()[i]->getPosition()))
+															_battleSave->getTiles()[i]->getPosition()) == true)
 							{
 								_battleSave->getUnits()->push_back(unit); // add unit to vector of Units.
-
 								return unit;
 							}
 						}
@@ -1259,7 +1261,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 				}
 				else if (_battleSave->setUnitPosition( // set unit position SUCCESS
 													unit,
-													_battleSave->getTiles()[i]->getPosition()))
+													_battleSave->getTiles()[i]->getPosition()) == true)
 				{
 					_battleSave->getUnits()->push_back(unit); // add unit to vector of Units.
 					unit->deriveRank();
@@ -1278,7 +1280,7 @@ BattleUnit* BattlescapeGenerator::addXCOMUnit(BattleUnit* unit)
 /**
  * Checks if a soldier/tank can be placed on a given tile.
  * @param tile - the given tile
- * @return, true if a unit can be placed there
+ * @return, true if unit can be placed on Tile
  */
 bool BattlescapeGenerator::canPlaceXCOMUnit(Tile* tile)
 {

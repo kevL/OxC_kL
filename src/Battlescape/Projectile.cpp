@@ -406,7 +406,7 @@ int Projectile::calculateThrow(double accuracy)
 										originVoxel,
 										targetVoxel,
 										&arc,
-										&ret))
+										&ret) == true)
 	{
 		//Log(LOG_INFO) << ". validateThrow() TRUE";
 		// Finally do a parabola calculation and store that trajectory - make sure it's valid.
@@ -545,7 +545,7 @@ void Projectile::applyAccuracy(
 	//Log(LOG_INFO) << ". targetDist = " << targetDist;
 
 	// maxRange is the maximum range a projectile shall ever travel in voxel space
-	double maxRange = 16000.0; // vSpace == 1000 tiles in tSpace.
+	double maxRange = 16000.; // vSpace == 1000 tiles in tSpace.
 	// kL_note: This is that hypothetically infinite point in space to aim for;
 	// the closer it's set, the more accurate shots become. I suspect ....
 //	double maxRange = 3200.0; // kL. vSpace == 200 tiles in tSpace.
@@ -578,23 +578,23 @@ void Projectile::applyAccuracy(
 			else if (_action.type == BA_AUTOSHOT)
 				longLimit = rule->getAutoRange();
 
-			double modifier = 0.0;
+			double modifier = 0.;
 
-			const int targetDist_tSpace = static_cast<int>(targetDist / 16.0);
+			const int targetDist_tSpace = static_cast<int>(targetDist / 16.);
 			if (targetDist_tSpace < shortLimit)
 				modifier = static_cast<double>((rule->getDropoff() * (shortLimit - targetDist_tSpace)) / 100);
 			else if (longLimit < targetDist_tSpace)
 				modifier = static_cast<double>((rule->getDropoff() * (targetDist_tSpace - longLimit)) / 100);
 
 			accuracy = std::max(
-								0.0,
+								0.,
 								accuracy - modifier);
 		}
 
 		if (Options::battleRangeBasedAccuracy)
 		{
 			//Log(LOG_INFO) << ". battleRangeBasedAccuracy";
-			double acuPenalty = 0.0;
+			double acuPenalty = 0.;
 
 			if (targetTile)
 			{
@@ -636,8 +636,8 @@ void Projectile::applyAccuracy(
 
 			// The angle deviations are spread using a normal distribution:
 			const double
-				dH = RNG::boxMuller(0.0, deviation / 6.0),			// horizontal miss in radians
-				dV = RNG::boxMuller(0.0, deviation / (6.0 * 1.77)),	// vertical miss in radians
+				dH = RNG::boxMuller(0., deviation / 6.),			// horizontal miss in radians
+				dV = RNG::boxMuller(0., deviation / (6. * 1.77)),	// vertical miss in radians
 
 				te = atan2(
 						static_cast<double>(target->y - origin.y),
@@ -671,7 +671,7 @@ void Projectile::applyAccuracy(
 
 
 	// kL_note: *** This is for Throwing and AcidSpitt only ***
-	accuracy = accuracy * 50. + 50.; // arbitrary adjustment.
+	accuracy = accuracy * 50. + 65.; // arbitrary adjustment.
 
 	double perfectToss = 100.;
 	const Soldier* const soldier = _save->getGeoscapeSave()->getSoldier(_action.actor->getId());

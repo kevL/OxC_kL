@@ -225,15 +225,14 @@ void ActionMenuState::addItem(
 //kL	|| baType == BA_LAUNCH
 		|| baType == BA_HIT)
 	{
-		int acu = 0;
-
+		int acu;
 		if (baType == BA_THROW)
-			acu = static_cast<int>(Round(_action->actor->getThrowingAccuracy() * 100.0));
+			acu = static_cast<int>(Round(_action->actor->getThrowingAccuracy() * 100.));
 		else
 			acu = static_cast<int>(Round(_action->actor->getFiringAccuracy(
 																		baType,
 																		_action->weapon)
-																	* 100.0));
+																	* 100.));
 
 //kL	s1 = tr("STR_ACCURACY_SHORT").arg(Text::formatPercentage(acu));
 		s1 = tr("STR_ACCURACY_SHORT_KL").arg(acu); // kL

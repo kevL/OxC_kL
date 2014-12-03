@@ -599,7 +599,7 @@ void RuleItem::drawHandSprite(
 		SurfaceSet* texture,
 		Surface* surface) const
 {
-	Surface* frame = texture->getFrame(_bigSprite); //this->getBigSprite());
+	Surface* const frame = texture->getFrame(_bigSprite); //this->getBigSprite());
 	if (frame != NULL) // kL_safety.
 	{
 		frame->setX(

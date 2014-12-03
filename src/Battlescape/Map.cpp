@@ -1934,7 +1934,7 @@ void Map::drawTerrain(Surface* surface)
 															action->actor->getFiringAccuracy(
 																						action->type,
 																						action->weapon)
-																					* 100.0));
+																					* 100.));
 
 									RuleItem* weapon = action->weapon->getRules();
 
@@ -2027,7 +2027,7 @@ void Map::drawTerrain(Surface* surface)
 									//Log(LOG_INFO) << ". canThrow = " << canThrow;
 									if (canThrow == true)
 									{
-										accuracy = static_cast<unsigned>(Round(_save->getSelectedUnit()->getThrowingAccuracy() * 100.0));
+										accuracy = static_cast<unsigned>(Round(_save->getSelectedUnit()->getThrowingAccuracy() * 100.));
 										color = Palette::blockOffset(3)+3; // green
 									}
 

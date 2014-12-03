@@ -40,8 +40,8 @@ class ActionMenuState
 {
 
 private:
-	ActionMenuItem	* _actionMenu[6];
-	BattleAction	* _action;
+	ActionMenuItem* _actionMenu[6];
+	BattleAction* _action;
 
 
 	/// Adds a new menu item for an action.

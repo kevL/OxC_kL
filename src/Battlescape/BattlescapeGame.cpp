@@ -2504,12 +2504,11 @@ void BattlescapeGame::secondaryAction(const Position& posTarget)
 	//Log(LOG_INFO) << "BattlescapeGame::secondaryAction()";
 	_currentAction.actor = _save->getSelectedUnit();
 
-	if (_currentAction.actor->getPosition() == posTarget)	// kL
+	if (_currentAction.actor->getPosition() == posTarget)
 	{
 		// could put just about anything in here Orelly.
-		_parentState->btnKneelClick(NULL);					// kL
-		_currentAction.actor = NULL;						// kL
-		return;												// kL
+		_parentState->btnKneelClick(NULL);
+		return;
 	}
 
 	// -= turn to or open door =-
@@ -3348,7 +3347,7 @@ bool BattlescapeGame::checkForProximityGrenades(BattleUnit* unit)
 						ty < 2;
 						++ty)
 				{
-					Tile* tile = _save->getTile(unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
+					Tile* const tile = _save->getTile(unit->getPosition() + Position(x, y, 0) + Position(tx, ty, 0));
 					if (tile != NULL)
 					{
 						for (std::vector<BattleItem*>::const_iterator

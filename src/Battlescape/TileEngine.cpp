@@ -4803,13 +4803,13 @@ int TileEngine::calculateParabola(
 {
 	//Log(LOG_INFO) << "TileEngine::calculateParabola()";
 	const double
-		ro = sqrt(static_cast<double>(
+		ro = std::sqrt(static_cast<double>(
 				  (target.x - origin.x) * (target.x - origin.x)
 				+ (target.y - origin.y) * (target.y - origin.y)
 				+ (target.z - origin.z) * (target.z - origin.z)));
 	double
-		fi = acos(static_cast<double>(target.z - origin.z) / ro),
-		te = atan2(
+		fi = std::acos(static_cast<double>(target.z - origin.z) / ro),
+		te = std::atan2(
 				static_cast<double>(target.y - origin.y),
 				static_cast<double>(target.x - origin.x));
 
@@ -4822,7 +4822,7 @@ int TileEngine::calculateParabola(
 	fi += ((delta.z + delta.y) / ro) / 14. * M_PI * arc;	// another magic value (vertical), to make it in line with fire spread
 
 	const double
-		zA = sqrt(ro) * arc,
+		zA = std::sqrt(ro) * arc,
 		zK = (4. * zA) / (ro * ro);
 
 	int
@@ -4835,9 +4835,9 @@ int TileEngine::calculateParabola(
 
 	while (z > 0)
 	{
-		x = static_cast<int>(static_cast<double>(origin.x) + static_cast<double>(i) * cos(te) * sin(fi));
-		y = static_cast<int>(static_cast<double>(origin.y) + static_cast<double>(i) * sin(te) * sin(fi));
-		z = static_cast<int>(static_cast<double>(origin.z) + static_cast<double>(i) * cos(fi)
+		x = static_cast<int>(static_cast<double>(origin.x) + static_cast<double>(i) * std::cos(te) * std::sin(fi));
+		y = static_cast<int>(static_cast<double>(origin.y) + static_cast<double>(i) * std::sin(te) * std::sin(fi));
+		z = static_cast<int>(static_cast<double>(origin.z) + static_cast<double>(i) * std::cos(fi)
 				- zK * (static_cast<double>(i) - ro / 2.) * (static_cast<double>(i) - ro / 2.)
 				+ zA);
 
@@ -4873,7 +4873,7 @@ int TileEngine::calculateParabola(
 		}
 
 		lastPosition = Position(x, y, z);
-		i++;
+		++i;
 	}
 
 	if (storeTrajectory == false // store only the position of impact
@@ -4903,7 +4903,7 @@ bool TileEngine::validateThrow(
 						int* voxelType)
 {
 	//Log(LOG_INFO) << "\nTileEngine::validateThrow()"; //, cf Projectile::calculateThrow()";
-	double arc = 0.0; // higher arc means lower arc IG.
+	double arc = 0.; // higher arc means lower arc IG.
 
 	Position targetPos = targetVoxel / Position(16, 16, 24);
 	if (targetPos != originVoxel / Position(16, 16, 24))
@@ -5293,7 +5293,7 @@ bool TileEngine::psiAttack(BattleAction* action)
 			* const statsVictim = victim->getBaseStats();
 
 		const double
-			defense = static_cast<double>(statsVictim->psiStrength) + (static_cast<double>(statsVictim->psiSkill) / 5.0),
+			defense = static_cast<double>(statsVictim->psiStrength) + (static_cast<double>(statsVictim->psiSkill) / 5.),
 			dist = static_cast<double>(distance(
 											action->actor->getPosition(),
 											action->target));
@@ -5306,21 +5306,21 @@ bool TileEngine::psiAttack(BattleAction* action)
 		}
 
 		double
-			attack = static_cast<double>(statsActor->psiStrength * (statsActor->psiSkill + bonusSkill)) / 50.0;
+			attack = static_cast<double>(statsActor->psiStrength * (statsActor->psiSkill + bonusSkill)) / 50.;
 		//Log(LOG_INFO) << ". . . defense = " << (int)defense;
 		//Log(LOG_INFO) << ". . . attack = " << (int)attack;
 		//Log(LOG_INFO) << ". . . dist = " << (int)dist;
 
-		attack -= dist * 2.0;
+		attack -= dist * 2.;
 
 		attack -= defense;
 		if (action->type == BA_MINDCONTROL)
-			attack += 15.0;
+			attack += 15.;
 		else
-			attack += 45.0;
+			attack += 45.;
 
-		attack *= 100.0;
-		attack /= 56.0;
+		attack *= 100.;
+		attack /= 56.;
 
 
 		if (action->actor->getOriginalFaction() == FACTION_PLAYER)
@@ -5399,8 +5399,8 @@ bool TileEngine::psiAttack(BattleAction* action)
 				// kL_begin: taken from BattleUnit::prepareUnitTurn()
 				int prepTU = statsVictim->tu;
 				double underLoad = static_cast<double>(statsVictim->strength) / static_cast<double>(victim->getCarriedWeight());
-				underLoad *= victim->getAccuracyModifier() / 2.0 + 0.5;
-				if (underLoad < 1.0)
+				underLoad *= victim->getAccuracyModifier() / 2. + 0.5;
+				if (underLoad < 1.)
 					prepTU = static_cast<int>(Round(static_cast<double>(prepTU) * underLoad));
 
 				// Each fatal wound to the left or right leg reduces the soldier's TUs by 10%.

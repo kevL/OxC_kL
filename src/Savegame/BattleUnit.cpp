@@ -2023,19 +2023,19 @@ double BattleUnit::getFiringAccuracy(
 }
 
 /**
- * Calculates throwing accuracy.
- * @return throwing Accuracy
+ * Calculates this BattleUnit's throwing accuracy.
+ * @return, throwing accuracy
  */
 double BattleUnit::getThrowingAccuracy()
 {
-	return static_cast<double>(getBaseStats()->throwing) * getAccuracyModifier() / 100.0;
+	return static_cast<double>(getBaseStats()->throwing) * getAccuracyModifier() / 100.;
 }
 
 /**
  * Calculates accuracy modifier. Takes health and fatal wounds into account.
  * Formula = accuracyStat * woundsPenalty(% health) * critWoundsPenalty (-10%/wound)
- * @param item the item we are shooting right now.
- * @return modifier
+ * @param item - pointer to a BattleItem (default NULL)
+ * @return, modifier
  */
 double BattleUnit::getAccuracyModifier(BattleItem* item)
 {
@@ -2044,20 +2044,20 @@ double BattleUnit::getAccuracyModifier(BattleItem* item)
 
 	int wounds = _fatalWounds[BODYPART_HEAD];
 
-	if (item)
+	if (item != NULL)
 	{
-		if (item->getRules()->isTwoHanded())
+		if (item->getRules()->isTwoHanded() == true)
 			wounds += _fatalWounds[BODYPART_RIGHTARM] + _fatalWounds[BODYPART_LEFTARM];
 		else
 		{
-			if (getItem("STR_RIGHT_HAND") == item)
+			if (item == getItem("STR_RIGHT_HAND"))
 				wounds += _fatalWounds[BODYPART_RIGHTARM];
 			else
 				wounds += _fatalWounds[BODYPART_LEFTARM];
 		}
 	}
 
-	ret *= 1.0 - 0.1 * static_cast<double>(wounds);
+	ret *= 1. - 0.1 * static_cast<double>(wounds);
 
 	if (ret < 0.1) // limit low @ 10%
 		ret = 0.1;
@@ -2068,8 +2068,8 @@ double BattleUnit::getAccuracyModifier(BattleItem* item)
 
 /**
  * Sets the armor value of a certain armor side.
- * @param armor Amount of armor.
- * @param side The side of the armor.
+ * @param armor	- amount of armor
+ * @param side	- the side of the armor
  */
 void BattleUnit::setArmor(
 		int armor,
@@ -2082,9 +2082,9 @@ void BattleUnit::setArmor(
 }
 
 /**
- * Get the armor value of a certain armor side.
- * @param side The side of the armor.
- * @return Amount of armor.
+ * Gets the armor value of a certain armor side.
+ * @param side - the side of the armor
+ * @return, amount of armor
  */
 int BattleUnit::getArmor(UnitSide side) const
 {
@@ -2092,8 +2092,8 @@ int BattleUnit::getArmor(UnitSide side) const
 }
 
 /**
- * Gets total amount of fatal wounds this unit has.
- * @return Number of fatal wounds.
+ * Gets total amount of fatal wounds this BattleUnit has.
+ * @return, number of fatal wounds
  */
 int BattleUnit::getFatalWounds() const
 {
