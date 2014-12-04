@@ -32,9 +32,8 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-//#include "../Engine/Logger.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 #include "../Engine/SurfaceSet.h"
 
 #include "../Interface/Cursor.h"
@@ -81,6 +80,7 @@ CraftInfoState::CraftInfoState(
 	_txtStatus		= new Text(80, 9, 224, 10);
 
 	_txtFuel		= new Text(82, 17, 16, 28);
+	_txtRadar		= new Text(80, 9, 120, 28);
 	_txtDamage		= new Text(82, 17, 228, 28);
 
 	_btnW1			= new TextButton(24, 32, 16, 48);
@@ -93,7 +93,7 @@ CraftInfoState::CraftInfoState(
 	_btnCrew		= new TextButton(64, 16, 16, 96);
 	_btnEquip		= new TextButton(64, 16, 16, 120);
 	_btnArmor		= new TextButton(64, 16, 16, 144);
-	_btnInventory	= new TextButton(64, 16, 84, 144);
+	_btnInventory	= new TextButton(220, 16, 84, 153);
 
 	_sprite			= new Surface(32, 38, 144, 50);
 	_weapon1		= new Surface(15, 17, 121, 63);
@@ -110,6 +110,7 @@ CraftInfoState::CraftInfoState(
 	add(_txtBaseLabel);
 	add(_txtStatus);
 	add(_txtFuel);
+	add(_txtRadar);
 	add(_txtDamage);
 	add(_btnW1);
 	add(_btnW2);
@@ -145,12 +146,17 @@ CraftInfoState::CraftInfoState(
 	_txtStatus->setColor(Palette::blockOffset(13)+10);
 	_txtStatus->setAlign(ALIGN_RIGHT);
 
-	_btnOk->setColor(Palette::blockOffset(13)+10);
-	_btnOk->setText(tr("STR_OK"));
-	_btnOk->onMouseClick((ActionHandler)& CraftInfoState::btnOkClick);
-	_btnOk->onKeyboardPress(
-					(ActionHandler)& CraftInfoState::btnOkClick,
-					Options::keyCancel);
+
+	_txtFuel->setColor(Palette::blockOffset(13)+10);
+	_txtFuel->setSecondaryColor(Palette::blockOffset(13));
+
+	_txtRadar->setColor(Palette::blockOffset(13)+10);
+	_txtRadar->setSecondaryColor(Palette::blockOffset(13));
+	_txtRadar->setAlign(ALIGN_CENTER);
+
+	_txtDamage->setColor(Palette::blockOffset(13)+10);
+	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
+
 
 	_btnW1->setColor(Palette::blockOffset(13)+10);
 	_btnW1->setText(L"1");
@@ -159,6 +165,15 @@ CraftInfoState::CraftInfoState(
 	_btnW2->setColor(Palette::blockOffset(13)+10);
 	_btnW2->setText(L"2");
 	_btnW2->onMouseClick((ActionHandler)& CraftInfoState::btnW2Click);
+
+	_txtW1Name->setColor(Palette::blockOffset(13)+5);
+	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
+	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
+
+	_txtW2Name->setColor(Palette::blockOffset(13)+5);
+	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
+	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
+
 
 	_btnCrew->setColor(Palette::blockOffset(13)+10);
 	_btnCrew->setText(tr("STR_CREW"));
@@ -176,21 +191,13 @@ CraftInfoState::CraftInfoState(
 	_btnInventory->setText(tr("STR_LOADOUT"));
 	_btnInventory->onMouseClick((ActionHandler)& CraftInfoState::btnInventoryClick);
 
-	_txtDamage->setColor(Palette::blockOffset(13)+10);
-	_txtDamage->setSecondaryColor(Palette::blockOffset(13));
 
-	_txtFuel->setColor(Palette::blockOffset(13)+10);
-	_txtFuel->setSecondaryColor(Palette::blockOffset(13));
-
-	_txtW1Name->setColor(Palette::blockOffset(13)+5);
-
-	_txtW1Ammo->setColor(Palette::blockOffset(13)+10);
-	_txtW1Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
-
-	_txtW2Name->setColor(Palette::blockOffset(13)+5);
-
-	_txtW2Ammo->setColor(Palette::blockOffset(13)+10);
-	_txtW2Ammo->setSecondaryColor(Palette::blockOffset(13)+5);
+	_btnOk->setColor(Palette::blockOffset(13)+10);
+	_btnOk->setText(tr("STR_OK"));
+	_btnOk->onMouseClick((ActionHandler)& CraftInfoState::btnOkClick);
+	_btnOk->onKeyboardPress(
+					(ActionHandler)& CraftInfoState::btnOkClick,
+					Options::keyCancel);
 }
 
 /**
@@ -228,86 +235,98 @@ void CraftInfoState::init()
 //	std::string stat = _craft->getStatus();
 	_txtStatus->setText(tr(_craft->getStatus()));
 
-	SurfaceSet* const texture = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
-	texture->getFrame(_craft->getRules()->getSprite() + 33)->setX(0);
-	texture->getFrame(_craft->getRules()->getSprite() + 33)->setY(0);
-	texture->getFrame(_craft->getRules()->getSprite() + 33)->blit(_sprite);
+	const RuleCraft* const craftRule = _craft->getRules();
+
+	SurfaceSet* const baseBits = _game->getResourcePack()->getSurfaceSet("BASEBITS.PCK");
+	const int graphic = craftRule->getSprite() + 33;
+	baseBits->getFrame(graphic)->setX(0);
+	baseBits->getFrame(graphic)->setY(0);
+	baseBits->getFrame(graphic)->blit(_sprite);
 
 
 	int hours = 0;
 	std::wostringstream
-		ss1, // hull
-		ss2; // fuel
+		ss1, // fuel
+		ss2; // hull
 
-	ss1 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent()));
+	ss1 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
+//	if (stat == "STR_REFUELLING" &&
+	if (craftRule->getMaxFuel() - _craft->getFuel() > 0)
+	{
+		hours = static_cast<int>(std::ceil(
+				static_cast<double>(craftRule->getMaxFuel() - _craft->getFuel())
+					/ static_cast<double>(craftRule->getRefuelRate())
+				/ 2.)); // refuel every half-hour.
+		ss1 << formatTime(
+						hours,
+						_craft->getWarning() == CW_CANTREFUEL);
+	}
+	_txtFuel->setText(ss1.str());
+
+	_txtRadar->setText(tr("STR_RADAR_RANGE")
+						.arg(Text::formatNumber(
+											craftRule->getRadarRange(),
+											L"",
+											false)));
+
+	ss2 << tr("STR_HULL_").arg(Text::formatPercentage(100 - _craft->getDamagePercent()));
 //	if (stat == "STR_REPAIRS" &&
 	if (_craft->getDamage() > 0)
 	{
 		hours = static_cast<int>(std::ceil(
 				static_cast<double>(_craft->getDamage())
-					/ static_cast<double>(_craft->getRules()->getRepairRate())
-				/ 2.0)); // repair every half-hour.
-		ss1 << formatTime(
+					/ static_cast<double>(craftRule->getRepairRate())
+				/ 2.)); // repair every half-hour.
+		ss2 << formatTime(
 						hours,
 						false); // ... unless item is required to repair Craft.
 	}
-	_txtDamage->setText(ss1.str());
-
-	ss2 << tr("STR_FUEL").arg(Text::formatPercentage(_craft->getFuelPercentage()));
-//	if (stat == "STR_REFUELLING" &&
-	if (_craft->getRules()->getMaxFuel() - _craft->getFuel() > 0)
-	{
-		hours = static_cast<int>(std::ceil(
-				static_cast<double>(_craft->getRules()->getMaxFuel() - _craft->getFuel())
-					/ static_cast<double>(_craft->getRules()->getRefuelRate())
-				/ 2.0)); // refuel every half-hour.
-		ss2 << formatTime(
-						hours,
-						_craft->getWarning() == CW_CANTREFUEL);
-	}
-	_txtFuel->setText(ss2.str());
+	_txtDamage->setText(ss2.str());
 
 
-	if (_craft->getRules()->getSoldiers() > 0)
+	Surface* bit = NULL;
+
+	if (craftRule->getSoldiers() > 0)
 	{
 		_crew->clear();
 		_equip->clear();
 
-		Surface* const frame1 = texture->getFrame(38);
-		frame1->setY(0);
+		int x = 0;
+
+		bit = baseBits->getFrame(38);
+//		bit->setY(0);
 		for (int
-				i = 0,
-					x = 0;
+				i = 0;
 				i < _craft->getNumSoldiers();
 				++i,
 					x += 10)
 		{
-			frame1->setX(x);
-			frame1->blit(_crew);
+			bit->setX(x);
+			bit->blit(_crew);
 		}
 
-		Surface* const frame2 = texture->getFrame(40);
-		frame2->setY(0);
-		int x = 0;
+		bit = baseBits->getFrame(40);
+//		bit->setY(0);
+		x = 0;
 		for (int
 				i = 0;
 				i < _craft->getNumVehicles();
 				++i,
 					x += 10)
 		{
-			frame2->setX(x);
-			frame2->blit(_equip);
+			bit->setX(x);
+			bit->blit(_equip);
 		}
 
-		Surface* const frame3 = texture->getFrame(39);
+		bit = baseBits->getFrame(39);
 		for (int
 				i = 0;
 				i < _craft->getNumEquipment();
 				i += 4,
 					x += 10)
 		{
-			frame3->setX(x);
-			frame3->blit(_equip);
+			bit->setX(x);
+			bit->blit(_equip);
 		}
 	}
 	else
@@ -319,28 +338,33 @@ void CraftInfoState::init()
 		_btnArmor->setVisible(false);
 	}
 
-	if (_craft->getRules()->getWeapons() > 0)
+
+	const RuleCraftWeapon* cwRule = NULL;
+
+	if (craftRule->getWeapons() > 0)
 	{
 		const CraftWeapon* const cw1 = _craft->getWeapons()->at(0);
 		if (cw1 != NULL)
 		{
-			Surface* frame = texture->getFrame(cw1->getRules()->getSprite() + 48);
-			frame->setX(0);
-			frame->setY(0);
-			frame->blit(_weapon1);
+			cwRule = cw1->getRules();
 
-			_txtW1Name->setText(tr(cw1->getRules()->getType()));
+			bit = baseBits->getFrame(cwRule->getSprite() + 48);
+			bit->setX(0);
+//			bit->setY(0);
+			bit->blit(_weapon1);
+
+			_txtW1Name->setText(tr(cwRule->getType()));
 
 			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(cw1->getAmmo()) << L"\n\x01";
-			ss << tr("STR_MAX").arg(cw1->getRules()->getAmmoMax());
+			ss << tr("STR_MAX").arg(cwRule->getAmmoMax());
 //			if (stat == "STR_REARMING" &&
-			if (cw1->getAmmo() < cw1->getRules()->getAmmoMax())
+			if (cw1->getAmmo() < cwRule->getAmmoMax())
 			{
 				hours = static_cast<int>(std::ceil(
-						static_cast<double>(cw1->getRules()->getAmmoMax() - cw1->getAmmo())
-							/ static_cast<double>(cw1->getRules()->getRearmRate())
-						/ 2.0)); // rearm every half-hour.
+						static_cast<double>(cwRule->getAmmoMax() - cw1->getAmmo())
+							/ static_cast<double>(cwRule->getRearmRate())
+						/ 2.)); // rearm every half-hour.
 				ss << formatTime(
 								hours,
 								cw1->getCantLoad());
@@ -362,28 +386,30 @@ void CraftInfoState::init()
 		_txtW1Ammo->setVisible(false);
 	}
 
-	if (_craft->getRules()->getWeapons() > 1)
+	if (craftRule->getWeapons() > 1)
 	{
 		const CraftWeapon* const cw2 = _craft->getWeapons()->at(1);
 		if (cw2 != NULL)
 		{
-			Surface* frame = texture->getFrame(cw2->getRules()->getSprite() + 48);
-			frame->setX(0);
-			frame->setY(0);
-			frame->blit(_weapon2);
+			cwRule = cw2->getRules();
 
-			_txtW2Name->setText(tr(cw2->getRules()->getType()));
+			bit = baseBits->getFrame(cwRule->getSprite() + 48);
+			bit->setX(0);
+//			bit->setY(0);
+			bit->blit(_weapon2);
+
+			_txtW2Name->setText(tr(cwRule->getType()));
 
 			std::wostringstream ss;
 			ss << tr("STR_AMMO_").arg(cw2->getAmmo()) << L"\n\x01";
-			ss << tr("STR_MAX").arg(cw2->getRules()->getAmmoMax());
+			ss << tr("STR_MAX").arg(cwRule->getAmmoMax());
 //			if (stat == "STR_REARMING" &&
-			if (cw2->getAmmo() < cw2->getRules()->getAmmoMax())
+			if (cw2->getAmmo() < cwRule->getAmmoMax())
 			{
 				hours = static_cast<int>(std::ceil(
-						static_cast<double>(cw2->getRules()->getAmmoMax() - cw2->getAmmo())
-							/ static_cast<double>(cw2->getRules()->getRearmRate())
-						/ 2.0)); // rearm every half-hour.
+						static_cast<double>(cwRule->getAmmoMax() - cw2->getAmmo())
+							/ static_cast<double>(cwRule->getRearmRate())
+						/ 2.)); // rearm every half-hour.
 				ss << formatTime(
 								hours,
 								cw2->getCantLoad());

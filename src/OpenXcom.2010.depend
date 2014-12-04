@@ -4470,7 +4470,7 @@
 	<vector>
 	"../Engine/State.h"
 
-1417002594 f:\git\openxcom\src\basescape\craftinfostate.h
+1417725134 f:\git\openxcom\src\basescape\craftinfostate.h
 	"../Engine/State.h"
 
 1415236124 f:\git\openxcom\src\basescape\craftsstate.h
@@ -4729,7 +4729,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1417206943 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1417727856 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -4740,8 +4740,6 @@
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Engine/SurfaceSet.h"
 	"../Interface/Cursor.h"
 	"../Interface/FpsCounter.h"
@@ -7434,9 +7432,8 @@
 	<string>
 	"../Engine/State.h"
 
-1415853534 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
+1417704781 source:f:\git\openxcom\src\geoscape\craftpatrolstate.cpp
 	"CraftPatrolState.h"
-	<string>
 	"GeoscapeCraftState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -8001,7 +7998,7 @@
 	"../Ruleset/Ruleset.h"
 	"../Savegame/SavedGame.h"
 
-1416905097 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
+1417704434 source:f:\git\openxcom\src\geoscape\selectdestinationstate.cpp
 	"SelectDestinationState.h"
 	"ConfirmCydoniaState.h"
 	"CraftErrorState.h"
@@ -8045,15 +8042,13 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1417672081 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1417725883 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
 	"InterceptState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/TextList.h"

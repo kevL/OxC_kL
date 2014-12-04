@@ -25,8 +25,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -109,6 +109,8 @@ UfoDetectedState::UfoDetectedState(
 
 	if (hyper == true)
 	{
+		setPalette("PAL_GEOSCAPE", 2);
+
 		_txtUfo->setY(19);
 		_txtDetected->setY(36);
 		_lstInfo->setY(60);
@@ -120,7 +122,15 @@ UfoDetectedState::UfoDetectedState(
 		_txtTexture->setY(29);
 //		_txtShade->setY(39);
 
-		setPalette("PAL_GEOSCAPE", 2);
+		if (contact == false)
+		{
+			_btnCentre->setX(136);
+			_btnCentre->setWidth(88);
+		}
+
+		add(_txtHyperwave);
+		add(_lstInfo2);
+		add(_txtBases);
 	}
 	else
 		setPalette("PAL_GEOSCAPE", 7);
@@ -136,13 +146,6 @@ UfoDetectedState::UfoDetectedState(
 	add(_txtRegion);
 	add(_txtTexture);
 //	add(_txtShade);
-
-	if (hyper == true)
-	{
-		add(_txtHyperwave);
-		add(_lstInfo2);
-		add(_txtBases);
-	}
 
 	centerAllSurfaces();
 
@@ -427,9 +430,6 @@ UfoDetectedState::UfoDetectedState(
 		if (contact == false
 			&& hyperBases != NULL) // safety.
 		{
-			_btnCentre->setX(216);
-			_btnCentre->setWidth(88);
-
 			_txtBases->setColor(Palette::blockOffset(8)+5);
 
 			std::wostringstream bases;

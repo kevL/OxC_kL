@@ -62,6 +62,7 @@ private:
 		* _txtBaseLabel,
 		* _txtDamage,
 		* _txtFuel,
+		* _txtRadar,
 		* _txtStatus,
 		* _txtW1Ammo,
 		* _txtW1Name,
