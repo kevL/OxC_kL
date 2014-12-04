@@ -70,9 +70,9 @@ Ufo::Ufo(RuleUfo* rules)
 		_detected(false),
 		_hyperDetected(false),
 		_shootingAt(0),
-		_hitFrame(0),
-		_terrain(""),
-		_shotDownByCraftId() // kL
+		_hitFrame(0)
+//		_terrain("")
+//		_shotDownByCraftId() // kL
 {
 }
 
@@ -265,7 +265,7 @@ YAML::Node Ufo::save(bool newBattle) const
 
 /**
  * Saves the UFO's unique identifiers to a YAML file.
- * @return, YAML node.
+ * @return, YAML node
  */
 YAML::Node Ufo::saveId() const
 {
@@ -279,7 +279,7 @@ YAML::Node Ufo::saveId() const
 
 /**
  * Returns the ruleset for the UFO's type.
- * @return Pointer to ruleset.
+ * @return, pointer to RuleUfo
  */
 RuleUfo* Ufo::getRules() const
 {
@@ -287,9 +287,9 @@ RuleUfo* Ufo::getRules() const
 }
 
 /**
- * Returns the UFO's unique ID. If it's 0,
- * this UFO has never been detected.
- * @return Unique ID.
+ * Returns the UFO's unique ID.
+ * If it's 0 this UFO has never been detected.
+ * @return, unique ID
  */
 int Ufo::getId() const
 {
@@ -298,7 +298,7 @@ int Ufo::getId() const
 
 /**
  * Changes the UFO's unique ID.
- * @param id Unique ID.
+ * @param id - unique ID
  */
 void Ufo::setId(int id)
 {
@@ -307,8 +307,8 @@ void Ufo::setId(int id)
 
 /**
  * Returns the UFO's unique identifying name.
- * @param lang Language to get strings from.
- * @return Full name.
+ * @param lang - pointer to Language to get strings from
+ * @return, full name
  */
 std::wstring Ufo::getName(Language* lang) const
 {
@@ -317,23 +317,19 @@ std::wstring Ufo::getName(Language* lang) const
 		case FLYING:
 		case DESTROYED: // Destroyed also means leaving Earth.
 			return lang->getString("STR_UFO_").arg(_id);
-		break;
 		case LANDED:
 			return lang->getString("STR_LANDING_SITE_").arg(_landId);
-		break;
 		case CRASHED:
 			return lang->getString("STR_CRASH_SITE_").arg(_crashId);
-		break;
 
 		default:
 			return L"";
-		break;
 	}
 }
 
 /**
  * Returns the globe marker for the UFO.
- * @return Marker sprite, -1 if none or not detected
+ * @return, marker sprite (-1 if none or not detected)
  */
 int Ufo::getMarker() const
 {
@@ -346,13 +342,14 @@ int Ufo::getMarker() const
 		case Ufo::LANDED:	return 3;
 		case Ufo::CRASHED:	return 4;
 
-		default:			return -1;
+		default:
+			return -1;
 	}
 }
 
 /**
  * Returns the amount of damage this UFO has taken.
- * @return Amount of damage.
+ * @return, amount of damage
  */
 int Ufo::getDamage() const
 {
@@ -361,7 +358,7 @@ int Ufo::getDamage() const
 
 /**
  * Changes the amount of damage this UFO has taken.
- * @param damage Amount of damage.
+ * @param damage - amount of damage
  */
 void Ufo::setDamage(int damage)
 {
@@ -377,20 +374,21 @@ void Ufo::setDamage(int damage)
 }
 
 /**
- * kL. Returns the ratio between the amount of damage this uFo
+ * Returns the ratio between the amount of damage this uFo
  * has taken and the total it can take before it's destroyed.
- * @return, Percentage of damage.
+ * @return, damage percent
  */
 int Ufo::getDamagePercent() const
 {
 	return static_cast<int>(
-			floor((static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage()))
-			* 100.0));
+			std::floor(
+				static_cast<double>(_damage) / static_cast<double>(_rules->getMaxDamage())
+				* 100.));
 }
 
 /**
  * Returns whether this UFO has been detected by radars.
- * @return Detection status.
+ * @return, true if detected
  */
 bool Ufo::getDetected() const
 {
@@ -399,7 +397,7 @@ bool Ufo::getDetected() const
 
 /**
  * Changes whether this UFO has been detected by radars.
- * @param detected Detection status.
+ * @param detected - true if detected
  */
 void Ufo::setDetected(bool detected)
 {
@@ -408,9 +406,8 @@ void Ufo::setDetected(bool detected)
 
 /**
  * Returns the amount of remaining seconds the UFO has left on the ground.
- * After this many seconds thet UFO will take off, if landed, or disappear, if
- * crashed.
- * @return Amount of seconds.
+ * After this many seconds this Ufo will take off if landed, or disappear if crashed.
+ * @return, amount of seconds
  */
 size_t Ufo::getSecondsRemaining() const
 {
@@ -419,9 +416,8 @@ size_t Ufo::getSecondsRemaining() const
 
 /**
  * Changes the amount of remaining seconds the UFO has left on the ground.
- * After this many seconds thet UFO will take off, if landed, or disappear, if
- * crashed.
- * @param seconds Amount of seconds.
+ * After this many seconds this Ufo will take off if landed, or disappear if crashed.
+ * @param seconds - amount of seconds
  */
 void Ufo::setSecondsRemaining(size_t seconds)
 {
@@ -429,8 +425,8 @@ void Ufo::setSecondsRemaining(size_t seconds)
 }
 
 /**
- * Returns the current direction the UFO is heading in.
- * @return Direction.
+ * Returns the current direction the UFO is headed.
+ * @return, direction
  */
 std::string Ufo::getDirection() const
 {
@@ -439,7 +435,7 @@ std::string Ufo::getDirection() const
 
 /**
  * Returns the current altitude of the UFO.
- * @return Altitude.
+ * @return, altitude
  */
 std::string Ufo::getAltitude() const
 {
@@ -448,7 +444,7 @@ std::string Ufo::getAltitude() const
 
 /**
  * Changes the current altitude of the UFO.
- * @param altitude Altitude.
+ * @param altitude - altitude
  */
 void Ufo::setAltitude(const std::string& altitude)
 {
@@ -458,7 +454,7 @@ void Ufo::setAltitude(const std::string& altitude)
 		_status = FLYING;
 	else
 	{
-		if (isCrashed())
+		if (isCrashed() == true)
 			_status = CRASHED;
 		else
 			_status = LANDED;
@@ -466,8 +462,8 @@ void Ufo::setAltitude(const std::string& altitude)
 }
 
 /**
- * Returns if this UFO took enough damage to cause it to crash.
- * @return, crashed status
+ * Returns if this Ufo took enough damage to cause it to crash.
+ * @return, true if crashed
  */
 bool Ufo::isCrashed() const
 {
@@ -475,8 +471,8 @@ bool Ufo::isCrashed() const
 }
 
 /**
- * Returns if this UFO took enough damage to destroy it.
- * @return, destroyed status
+ * Returns if this Ufo took enough damage to destroy it.
+ * @return, true if destroyed
  */
 bool Ufo::isDestroyed() const
 {
@@ -484,7 +480,7 @@ bool Ufo::isDestroyed() const
 }
 
 /**
- * Calculates the direction for the UFO based on the current raw speed and destination.
+ * Calculates the direction for this Ufo based on the current raw speed and destination.
  */
 void Ufo::calculateSpeed()
 {
@@ -497,22 +493,22 @@ void Ufo::calculateSpeed()
 		y = -_speedLat;
 
 	// This section guards vs. divide-by-zero.
-	if (AreSame(x, 0.0) || AreSame(y, 0.0))
+	if (AreSame(x, 0.) || AreSame(y, 0.))
 	{
-		if (AreSame(x, 0.0) && AreSame(y, 0.0))
+		if (AreSame(x, 0.) && AreSame(y, 0.))
 			_direction = "STR_NONE_UC";
-		else if (AreSame(x, 0.0))
+		else if (AreSame(x, 0.))
 		{
-			if (y > 0.0)
+			if (y > 0.)
 				_direction = "STR_NORTH";
-			else if (y < 0.0)
+			else //if (y < 0.)
 				_direction = "STR_SOUTH";
 		}
-		else if (AreSame(y, 0.0))
+		else if (AreSame(y, 0.))
 		{
-			if (x > 0.0)
+			if (x > 0.)
 				_direction = "STR_EAST";
-			else if (x < 0.0)
+			else //if (x < 0.)
 				_direction = "STR_WEST";
 		}
 
@@ -526,7 +522,7 @@ void Ufo::calculateSpeed()
 	// Convert radians to degrees so i don't go bonkers;
 	// ie. KILL IT WITH FIRE!!1@!
 	// note that this is between +/- 180 deg.
-	theta = theta * 180.0 / M_PI;
+	theta = theta * 180. / M_PI;
 	//Log(LOG_INFO) << ". . theta(deg) = " << theta;
 
 	if (157.5 < theta || theta < -157.5)
@@ -550,7 +546,7 @@ void Ufo::calculateSpeed()
 }
 
 /**
- * Moves the UFO to its destination.
+ * Moves this Ufo to its destination.
  */
 void Ufo::think()
 {
@@ -559,7 +555,7 @@ void Ufo::think()
 		case FLYING:
 			moveTarget();
 
-			if (reachedDestination()) // Prevent further movement.
+			if (reachedDestination() == true) // Prevent further movement.
 				setSpeed(0);
 		break;
 
@@ -572,15 +568,14 @@ void Ufo::think()
 			if (_detected == false)
 				_detected = true;
 
-		case DESTROYED:
-		default: // Do nothing
+		case DESTROYED: // Do nothing
 		break;
 	}
 }
 
 /**
- * Gets the UFO's battlescape status.
- * @return bool
+ * Gets this Ufo's battlescape status.
+ * @return, true if in battlescape
  */
 bool Ufo::isInBattlescape() const
 {
@@ -588,8 +583,8 @@ bool Ufo::isInBattlescape() const
 }
 
 /**
- * Sets the UFO's battlescape status.
- * @param inbattle - true if this Ufo is in the battlescape
+ * Sets this Ufo's battlescape status.
+ * @param inbattle - true if in battlescape
  */
 void Ufo::setInBattlescape(const bool inbattle)
 {
@@ -601,7 +596,7 @@ void Ufo::setInBattlescape(const bool inbattle)
 
 /**
  * Returns the alien race currently residing in the UFO.
- * @return, Alien race.
+ * @return, address of aLien race
  */
 const std::string& Ufo::getAlienRace() const
 {
@@ -609,8 +604,8 @@ const std::string& Ufo::getAlienRace() const
 }
 
 /**
- * Sets a pointer to a craft that shot down this UFO.
- * @param craft - pointer to Craft
+ * Sets a pointer to a craft that shot down this Ufo.
+ * @param craft - address of CraftID (CraftId.h)
  */
 void Ufo::setShotDownByCraftId(const CraftId& craft)
 {
@@ -618,7 +613,8 @@ void Ufo::setShotDownByCraftId(const CraftId& craft)
 }
 
 /**
- * Gets the pointer to the craft that shot down this UFO.
+ * Gets the pointer to the craft that shot down this Ufo.
+ * @return, CraftId (CraftId.h)
  */
 CraftId Ufo::getShotDownByCraftId() const
 {
@@ -626,9 +622,9 @@ CraftId Ufo::getShotDownByCraftId() const
 }
 
 /**
- * Gets a UFO's visibility to radar detection. The UFO's size and
+ * Gets this Ufo's visibility to radar detection. The UFO's size and
  * altitude affect the chances of it being detected by radars.
- * @return, visibility modifier
+ * @return, detection modifier
  */
 int Ufo::getVisibility() const
 {
@@ -645,8 +641,7 @@ int Ufo::getVisibility() const
 		ret -= 30;
 
 	if (_altitude == "STR_GROUND")
-//kL	ret = -30;
-		ret -= 50; // kL
+		ret -= 50;
 	else if (_altitude == "STR_VERY_LOW")
 		ret -= 20;
 	else if (_altitude == "STR_LOW_UC")
@@ -655,15 +650,14 @@ int Ufo::getVisibility() const
 	else if (_altitude == "STR_VERY_HIGH")
 		ret -= 10;
 
-	//Log(LOG_INFO) << "Ufo::getVisibility() = " << ret;
 	return ret;
 }
 
 /**
- * kL. Gets a UFO's detect-xCom-base ability.
+ * Gets this Ufo's detect-xCom-base ability.
  * @return, detect-a-base modifier
  */
-int Ufo::getDetectors() const // kL
+int Ufo::getDetectors() const
 {
 	int ret = 0;
 
@@ -687,13 +681,12 @@ int Ufo::getDetectors() const // kL
 	else if (_altitude == "STR_VERY_HIGH")
 		ret -= 15;
 
-	//Log(LOG_INFO) << "Ufo::getVisibility() = " << ret;
 	return ret;
 }
 
 /**
- * Returns the Mission type of the UFO.
- * @return, reference to the mission type
+ * Returns the mission type of this Ufo.
+ * @return, address of the mission type
  */
 const std::string& Ufo::getMissionType() const
 {
@@ -701,7 +694,7 @@ const std::string& Ufo::getMissionType() const
 }
 
 /**
- * Sets the mission information of the UFO.
+ * Sets the mission information of this Ufo.
  * The UFO will start at the first point of the trajectory. The actual UFO information
  * is not changed here, this only sets the information kept on behalf of the mission.
  * @param mission		- pointer to the actual mission object
@@ -720,8 +713,8 @@ void Ufo::setMissionInfo(
 }
 
 /**
- * Returns whether this UFO has been detected by hyper-wave.
- * @return Detection status.
+ * Returns whether this Ufo has been detected by hyper-wave.
+ * @return, true if hyperwave-detected
  */
 bool Ufo::getHyperDetected() const
 {
@@ -729,8 +722,8 @@ bool Ufo::getHyperDetected() const
 }
 
 /**
- * Changes whether this UFO has been detected by hyper-wave.
- * @param hyperdetected Detection status.
+ * Changes whether this Ufo has been detected by hyper-wave.
+ * @param hyperdetected - true if hyperwave-detected
  */
 void Ufo::setHyperDetected(bool hyperdetected)
 {
@@ -739,11 +732,11 @@ void Ufo::setHyperDetected(bool hyperdetected)
 
 /**
  * Handle destination changes, making sure to delete old waypoint destinations.
- * @param dest Pointer to the new destination.
+ * @param dest - pointer to a new destination
  */
 void Ufo::setDestination(Target* dest)
 {
-	Waypoint* old = dynamic_cast<Waypoint*>(_dest);
+	const Waypoint* const old = dynamic_cast<Waypoint*>(_dest);
 	MovingTarget::setDestination(dest);
 
 	delete old;
@@ -751,6 +744,7 @@ void Ufo::setDestination(Target* dest)
 
 /**
  *
+ * @return,
  */
 int Ufo::getShootingAt() const
 {
@@ -759,6 +753,7 @@ int Ufo::getShootingAt() const
 
 /**
  *
+ * @param target -
  */
 void Ufo::setShootingAt(int target)
 {
@@ -766,7 +761,8 @@ void Ufo::setShootingAt(int target)
 }
 
 /**
- * Gets the UFO's landing site ID.
+ * Gets this Ufo's landing site ID.
+ * @return, landing ID
  */
 int Ufo::getLandId() const
 {
@@ -774,7 +770,8 @@ int Ufo::getLandId() const
 }
 
 /**
- * Sets the UFO's landing site ID.
+ * Sets this Ufo's landing site ID.
+ * @param id - landing ID
  */
 void Ufo::setLandId(int id)
 {
@@ -782,7 +779,8 @@ void Ufo::setLandId(int id)
 }
 
 /**
- * Gets the UFO's crash site ID.
+ * Gets this Ufo's crash site ID.
+ * @return, crash ID
  */
 int Ufo::getCrashId() const
 {
@@ -790,53 +788,64 @@ int Ufo::getCrashId() const
 }
 
 /**
- * Sets the UFO's crash site ID.
+ * Sets this Ufo's crash site ID.
+ * @param id - crash ID
  */
 void Ufo::setCrashId(int id)
 {
 	_crashId = id;
 }
 
-/// Gets the UFO's hit frame.
+/**
+ * Gets this Ufo's hit frame.
+ * @return, the frame
+ */
 int Ufo::getHitFrame() const
 {
 	return _hitFrame;
 }
 
-/// Sets the UFO's hit frame.
+/**
+ * Sets this Ufo's hit frame.
+ * @param frame - the frame
+ */
 void Ufo::setHitFrame(int frame)
 {
 	_hitFrame = frame;
 }
 
 /**
- * kL. Gets the UFO's powerSource explosive power factor.
+ * Gets this Ufo's powerSource explosive power factor.
+ * @return, the power percent
  */
-int Ufo::getCrashPower() const // kL
+int Ufo::getCrashPower() const
 {
 	return _crashPower;
 }
 
 /**
- * kL. Sets the UFO's powerSource explosive power factor.
+ * Sets this Ufo's powerSource explosive power factor.
+ * @param percent - the power percent
  */
-void Ufo::setCrashPower(int percent) // kL
+void Ufo::setCrashPower(int percent)
 {
 	_crashPower = percent;
 }
 
 /**
- * kL. Gets a crashed or landed UFO's terrainType.
+ * Gets this Ufo's terrain type once it's crashed or landed.
+ * @return, the terrain type
  */
-std::string Ufo::getTerrain() const // kL
+std::string Ufo::getTerrain() const
 {
 	return _terrain;
 }
 
 /**
- * kL. Sets a crashed or landed UFO's terrainType.
+ * Sets this Ufo's terrain type when it crashes or lands.
+ * @param terrain - the terrain type
  */
-void Ufo::setTerrain(std::string terrain) // kL
+void Ufo::setTerrain(std::string terrain)
 {
 	_terrain = terrain;
 }

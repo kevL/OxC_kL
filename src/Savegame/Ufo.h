@@ -20,9 +20,9 @@
 #ifndef OPENXCOM_UFO_H
 #define OPENXCOM_UFO_H
 
-#include <string>
+//#include <string>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "CraftId.h"
 #include "MovingTarget.h"
@@ -40,8 +40,7 @@ class UfoTrajectory;
 
 /**
  * Represents an alien UFO on the map.
- * Contains variable info about a UFO like
- * position, damage, speed, etc.
+ * Contains variable info about a UFO like position, damage, speed, etc.
  * @sa RuleUfo
  */
 class Ufo
@@ -71,7 +70,7 @@ private:
 		_landId,
 		_shootingAt,
 		_hitFrame,
-		_crashPower; // kL
+		_crashPower;
 	size_t
 		_secondsRemaining,
 		_trajectoryPoint;
@@ -130,8 +129,8 @@ private:
 		int getDamage() const;
 		/// Sets the UFO's amount of damage.
 		void setDamage(int damage);
-		/// kL. Gets the UFO's percentage of damage.
-		int getDamagePercent() const; // kL
+		/// Gets the UFO's percentage of damage.
+		int getDamagePercent() const;
 
 		/// Gets the UFO's detection status.
 		bool getDetected() const;
@@ -181,8 +180,8 @@ private:
 
 		/// Gets the UFO's visibility.
 		int getVisibility() const;
-		/// kL. Gets a UFO's detect-xCom-base ability.
-		int getDetectors() const; // kL
+		/// Gets a UFO's detect-xCom-base ability.
+		int getDetectors() const;
 
 		/// Gets the UFO's Mission type.
 		const std::string& getMissionType() const;

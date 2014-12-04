@@ -24,7 +24,7 @@
 //#include <cmath>
 //#include <sstream>
 
-#include "../fmath.h"
+//#include "../fmath.h"
 
 #include "AlienBase.h"
 #include "Base.h"
@@ -37,8 +37,8 @@
 #include "Waypoint.h"
 
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
-#include "../Engine/RNG.h"
+//#include "../Engine/Logger.h"
+//#include "../Engine/RNG.h"
 
 #include "../Geoscape/GeoscapeState.h"
 

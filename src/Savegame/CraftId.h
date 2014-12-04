@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_CRAFTID_H
 #define OPENXCOM_CRAFTID_H
 
-#include <string>
-#include <utility>
+//#include <string>
+//#include <utility>
 
 
 namespace OpenXcom

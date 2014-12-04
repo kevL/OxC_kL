@@ -68,12 +68,11 @@
 #include "../Engine/Action.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/RNG.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h" // in PCH.
+//#include "../Engine/Palette.h"
+//#include "../Engine/RNG.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 #include "../Engine/Surface.h"
 #include "../Engine/SurfaceSet.h"
@@ -1159,6 +1158,8 @@ void GeoscapeState::time5Seconds()
 		return;
 	}
 
+	Ufo* ufoExpired = NULL;
+
 	// Handle UFO logic
 	for (std::vector<Ufo*>::const_iterator
 			i = _savedGame->getUfos()->begin();
@@ -1177,7 +1178,7 @@ void GeoscapeState::time5Seconds()
 					if ((*i)->reachedDestination() == true)
 					{
 						const size_t tsCount = _savedGame->getTerrorSites()->size();
-						AlienMission* mission = (*i)->getMission();
+						AlienMission* const mission = (*i)->getMission();
 						const bool detected = (*i)->getDetected();
 						mission->ufoReachedWaypoint(
 												**i,
@@ -1225,7 +1226,7 @@ void GeoscapeState::time5Seconds()
 						if ((*i)->getStatus() == Ufo::DESTROYED)
 							return;
 
-						if (Base* base = dynamic_cast<Base*>((*i)->getDestination()))
+						if (Base* const base = dynamic_cast<Base*>((*i)->getDestination()))
 						{
 							mission->setWaveCountdown(30 * (RNG::generate(0, 48) + 400));
 							(*i)->setDestination(NULL);
@@ -1272,6 +1273,7 @@ void GeoscapeState::time5Seconds()
 
 				if ((*i)->getSecondsRemaining() == 0)
 				{
+					ufoExpired = *i;
 					(*i)->setDetected(false);
 					(*i)->setStatus(Ufo::DESTROYED);
 				}
@@ -1368,7 +1370,8 @@ void GeoscapeState::time5Seconds()
 				const Ufo* const ufo = dynamic_cast<Ufo*>((*j)->getDestination());
 				if (ufo != NULL)
 				{
-					if (ufo->getDetected() == false) // lost radar contact
+					if (ufo->getDetected() == false // lost radar contact
+						&& ufo != ufoExpired) // ie. not just shot down while trying to outrun interceptor but it crashed into the sea instead Lol
 					{
 						if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
 							&& (ufo->getStatus() == Ufo::LANDED
@@ -1523,7 +1526,7 @@ void GeoscapeState::time5Seconds()
 				}
 				else if (ab != NULL)
 				{
-					if (ab->isDiscovered())
+					if (ab->isDiscovered() == true)
 					{
 						if ((*j)->getNumSoldiers() > 0)
 						{
@@ -1599,9 +1602,9 @@ void GeoscapeState::time5Seconds()
 	}
 
 
-	// This is ONLY for allowing _dogfights to fill or not
+	// This is ONLY for allowing _dogfights to fill (or not)
 	// before deciding whether to startMusic in init() --
-	// and ONLY for Loading when a dogfight is in progress:
+	// and ONLY for Loading with a dogfight in progress:
 	if (_startMusic == false
 		&& _dogfights.empty() == true
 		&& _dogfightStartTimer->isRunning() == false)
@@ -3407,7 +3410,7 @@ void GeoscapeState::zoomOutEffect()
 }
 
 /**
- * Dogfight logic. Moved here to have the code clean.
+ * Dogfight logic.
  */
 void GeoscapeState::handleDogfights()
 {
@@ -3424,7 +3427,7 @@ void GeoscapeState::handleDogfights()
 	while (i != _dogfights.end())
 	{
 		if ((*i)->isMinimized() == true)
-			_minimizedDogfights++;
+			++_minimizedDogfights;
 //kL	else
 //kL		_globe->rotateStop();
 
@@ -3433,7 +3436,7 @@ void GeoscapeState::handleDogfights()
 		if ((*i)->dogfightEnded() == true)
 		{
 			if ((*i)->isMinimized() == true)
-				_minimizedDogfights--;
+				--_minimizedDogfights;
 
 			delete *i;
 			i = _dogfights.erase(i);
@@ -3463,7 +3466,7 @@ int GeoscapeState::minimizedDogfightsCount()
 			++i)
 	{
 		if ((*i)->isMinimized() == true)
-			minimizedDogfights++;
+			++minimizedDogfights;
 	}
 
 	return minimizedDogfights;
@@ -3526,7 +3529,7 @@ int GeoscapeState::getFirstFreeDogfightSlot()
 			++i)
 	{
 		if ((*i)->getInterceptionNumber() == slot)
-			slot++;
+			++slot;
 	}
 
 	return slot;
@@ -3667,21 +3670,21 @@ void GeoscapeState::setupTerrorMission()
 
 /**
  * Handler for clicking on a timer button.
- * @param action pointer to the mouse action.
+ * @param action - pointer to the mouse Action
  */
 void GeoscapeState::btnTimerClick(Action* action)
 {
 	SDL_Event ev;
 	ev.type = SDL_MOUSEBUTTONDOWN;
 	ev.button.button = SDL_BUTTON_LEFT;
-	Action a = Action(&ev, 0.0, 0.0, 0, 0);
+	Action a = Action(&ev, 0., 0., 0, 0);
 	action->getSender()->mousePress(&a, this);
 }
 
 /**
  * Updates the scale.
- * @param dX delta of X;
- * @param dY delta of Y;
+ * @param dX - delta of X
+ * @param dY - delta of Y
  */
 void GeoscapeState::resize(
 		int& dX,

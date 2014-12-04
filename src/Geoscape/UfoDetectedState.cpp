@@ -269,7 +269,27 @@ UfoDetectedState::UfoDetectedState(
 												&shade);
 		std::string terrain;
 
-		if		(texture == 0)	terrain = "FOREST"; // these could get expanded/redef'd. in future
+		switch (texture)
+		{
+			case 0:		terrain = "FOREST";
+			case 1:		terrain = "CULTA";
+			case 2:		terrain = "CULTA";
+			case 3:		terrain = "FOREST";
+			case 4:		terrain = "POLAR";
+			case 5:		terrain = "MOUNT";
+			case 6:		terrain = "JUNGLE";
+			case 7:		terrain = "DESERT";
+			case 8:		terrain = "DESERT";
+			case 9:		terrain = "POLAR";
+			case 10:	terrain = "URBAN";
+			case 11:	terrain = "POLAR";
+			case 12:	terrain = "POLAR";
+
+			default:
+				terrain = "WATER"; // tex = -1
+		}
+
+/*		if		(texture == 0)	terrain = "FOREST"; // these could get expanded/redef'd. in future
 		else if (texture == 1)	terrain = "CULTA";
 		else if (texture == 2)	terrain = "CULTA";
 		else if (texture == 3)	terrain = "FOREST";
@@ -283,7 +303,7 @@ UfoDetectedState::UfoDetectedState(
 		else if (texture == 11)	terrain = "POLAR";
 		else if (texture == 12)	terrain = "POLAR";
 		else
-			terrain = "WATER"; // tex = -1
+			terrain = "WATER"; // tex = -1 */
 
 /*		RuleTerrain* terrainRule = NULL;
 

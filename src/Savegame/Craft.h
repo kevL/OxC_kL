@@ -20,8 +20,8 @@
 #ifndef OPENXCOM_CRAFT_H
 #define OPENXCOM_CRAFT_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
 #include "CraftId.h"
 #include "MovingTarget.h"

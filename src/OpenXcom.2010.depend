@@ -4535,9 +4535,7 @@
 1413136961 f:\git\openxcom\src\savegame\basefacility.h
 	<yaml-cpp/yaml.h>
 
-1417000789 f:\git\openxcom\src\savegame\craft.h
-	<string>
-	<vector>
+1417665696 f:\git\openxcom\src\savegame\craft.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -4830,9 +4828,7 @@
 
 1413136956 f:\git\openxcom\src\engine\fastlineclip.h
 
-1415932000 f:\git\openxcom\src\savegame\ufo.h
-	<string>
-	<yaml-cpp/yaml.h>
+1417667012 f:\git\openxcom\src\savegame\ufo.h
 	"CraftId.h"
 	"MovingTarget.h"
 
@@ -7476,17 +7472,13 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1417361479 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1417668973 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"Globe.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
 	"../Engine/Music.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/RNG.h"
-	"../Engine/Screen.h"
 	"../Engine/Sound.h"
 	"../Engine/Surface.h"
 	"../Engine/SurfaceSet.h"
@@ -8058,7 +8050,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1417361504 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1417669137 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -9341,9 +9333,8 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1417000789 source:f:\git\openxcom\src\savegame\craft.cpp
+1417665695 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
-	"../fmath.h"
 	"AlienBase.h"
 	"Base.h"
 	"CraftWeapon.h"
@@ -9354,8 +9345,6 @@
 	"Vehicle.h"
 	"Waypoint.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
-	"../Engine/RNG.h"
 	"../Geoscape/GeoscapeState.h"
 	"../Ruleset/Armor.h"
 	"../Ruleset/RuleCraft.h"
@@ -9492,7 +9481,7 @@
 	"SerializationHelper.h"
 	<assert.h>
 
-1417633059 source:f:\git\openxcom\src\savegame\soldier.cpp
+1417657260 source:f:\git\openxcom\src\savegame\soldier.cpp
 	"Soldier.h"
 	"Craft.h"
 	"EquipmentLayoutItem.h"
@@ -9551,7 +9540,7 @@
 	"../Engine/Language.h"
 	"../Ruleset/Ruleset.h"
 
-1415932155 source:f:\git\openxcom\src\savegame\ufo.cpp
+1417666949 source:f:\git\openxcom\src\savegame\ufo.cpp
 	"Ufo.h"
 	"AlienMission.h"
 	"Craft.h"
@@ -11999,9 +11988,7 @@
 	<cmath>
 	<algorithm>
 
-1413136961 f:\git\openxcom\src\savegame\craftid.h
-	<string>
-	<utility>
+1417665723 f:\git\openxcom\src\savegame\craftid.h
 
 1413136956 source:f:\git\openxcom\src\battlescape\particle.cpp
 	"Particle.h"
