@@ -19,7 +19,7 @@
 
 #include "CraftPatrolState.h"
 
-#include <string>
+//#include <string>
 
 #include "GeoscapeCraftState.h"
 #include "GeoscapeState.h"
@@ -153,13 +153,11 @@ void CraftPatrolState::btnOkClick(Action*)
 void CraftPatrolState::btnInfoClick(Action*)
 {
 	_game->popState();
-
 	_game->pushState(new GeoscapeCraftState(
 										_craft,
 										_globe,
 										NULL,
-										_geo,
-										true));
+										_geo));
 }
 
 /**
@@ -169,7 +167,6 @@ void CraftPatrolState::btnInfoClick(Action*)
 void CraftPatrolState::btnBaseClick(Action*)
 {
 	_game->popState();
-
 	_craft->returnToBase();
 }
 
@@ -180,7 +177,6 @@ void CraftPatrolState::btnBaseClick(Action*)
 void CraftPatrolState::btnCenterClick(Action*)
 {
 	_game->popState();
-
 	_globe->center(
 				_craft->getLongitude(),
 				_craft->getLatitude());
@@ -193,7 +189,6 @@ void CraftPatrolState::btnCenterClick(Action*)
 void CraftPatrolState::btnRedirectClick(Action*)
 {
 	_game->popState();
-
 	_game->pushState(new SelectDestinationState(
 											_craft,
 											_globe,

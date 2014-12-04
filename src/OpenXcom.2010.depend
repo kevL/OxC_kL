@@ -6885,7 +6885,7 @@
 	"Logger.h"
 	"Surface.h"
 
-1416746716 source:f:\git\openxcom\src\engine\game.cpp
+1417704045 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
@@ -7557,7 +7557,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1417699645 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1417701029 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"

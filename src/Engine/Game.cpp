@@ -504,9 +504,9 @@ void Game::setVolume(
 double Game::volumeExponent(int volume)
 {
 	return (exp(
-				log(Game::VOLUME_GRADIENT + 1.0) * static_cast<double>(volume) / static_cast<double>(SDL_MIX_MAXVOLUME))
-					-1.0)
-				/ Game::VOLUME_GRADIENT;
+				std::log(Game::VOLUME_GRADIENT + 1.) * static_cast<double>(volume) / static_cast<double>(SDL_MIX_MAXVOLUME))
+				- 1.)
+			/ Game::VOLUME_GRADIENT;
 }
 
 /**
@@ -538,7 +538,7 @@ FpsCounter* Game::getFpsCounter() const
 
 /**
  * Pops all the states currently in stack and pushes in the new state.
- * A shortcut for cleaning up all the old states when they're not necessary,
+ * A shortcut for cleaning up all the old states when they're not necessary
  * like in one-way transitions.
  * @param state - pointer to the new State.
  */
@@ -548,7 +548,6 @@ void Game::setState(State* state)
 		popState();
 
 	pushState(state);
-
 	_init = false;
 }
 
@@ -560,15 +559,13 @@ void Game::setState(State* state)
 void Game::pushState(State* state)
 {
 	_states.push_back(state);
-
 	_init = false;
 }
 
 /**
- * Pops the last state from the top of the stack. Since states
- * can't actually be deleted mid-cycle, it's moved into a separate queue
- * which is cleared at the start of every cycle, so the transition
- * is seamless.
+ * Pops the last state from the top of the stack.
+ * Since states can't actually be deleted mid-cycle it's moved into a separate queue
+ * which is cleared at the start of every cycle so the transition is seamless.
  */
 void Game::popState()
 {

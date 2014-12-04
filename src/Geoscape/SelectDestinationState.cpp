@@ -239,12 +239,11 @@ void SelectDestinationState::handle(Action* action)
 void SelectDestinationState::globeClick(Action* action)
 {
 	const int
-		mouseX = static_cast<int>(floor(action->getAbsoluteXMouse())),
-		mouseY = static_cast<int>(floor(action->getAbsoluteYMouse()));
+		mouseX = static_cast<int>(std::floor(action->getAbsoluteXMouse())),
+		mouseY = static_cast<int>(std::floor(action->getAbsoluteYMouse()));
 	double
 		lon,
 		lat;
-
 	_globe->cartToPolar(
 					static_cast<Sint16>(mouseX),
 					static_cast<Sint16>(mouseY),
