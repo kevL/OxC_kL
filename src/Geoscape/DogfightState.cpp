@@ -2407,11 +2407,11 @@ const std::string DogfightState::getTextureIcon() // kL
 /**
  * Plays a sound effect in stereo.
  * @param sound		- sound to play
- * @param randAngle	- true to randomize the sound angle, default false to center it
+ * @param randAngle	- true to randomize the sound angle (default false to center it)
  */
 void DogfightState::playSoundFX(
 		const int sound,
-		const bool randAngle)
+		const bool randAngle) const
 {
 	int dir = 360; // stereo center
 

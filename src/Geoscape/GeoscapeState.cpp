@@ -1158,7 +1158,7 @@ void GeoscapeState::time5Seconds()
 		return;
 	}
 
-	Ufo* ufoExpired = NULL;
+	const Ufo* ufoExpired = NULL; // kL
 
 	// Handle UFO logic
 	for (std::vector<Ufo*>::const_iterator
@@ -1253,7 +1253,7 @@ void GeoscapeState::time5Seconds()
 
 				if ((*i)->getSecondsRemaining() == 0)
 				{
-					AlienMission* mission = (*i)->getMission();
+					AlienMission* const mission = (*i)->getMission();
 					bool detected = (*i)->getDetected();
 					mission->ufoLifting(
 									**i,
@@ -1273,7 +1273,7 @@ void GeoscapeState::time5Seconds()
 
 				if ((*i)->getSecondsRemaining() == 0)
 				{
-					ufoExpired = *i;
+					ufoExpired = *i; // shot down while trying to outrun interceptor
 					(*i)->setDetected(false);
 					(*i)->setStatus(Ufo::DESTROYED);
 				}
@@ -1341,14 +1341,13 @@ void GeoscapeState::time5Seconds()
 					{
 						if ((*soldier)->getCraft() == *j)
 						{
-							SoldierDeath* death = new SoldierDeath();
+							SoldierDeath* const death = new SoldierDeath();
 							death->setTime(*_savedGame->getTime());
 
-							SoldierDead* dead = (*soldier)->die(death); // converts Soldier to SoldierDead class instance.
+							SoldierDead* const dead = (*soldier)->die(death); // converts Soldier to SoldierDead class instance.
 							_savedGame->getDeadSoldiers()->push_back(dead);
 
-							int iD = (*soldier)->getId();
-
+							const int iD = (*soldier)->getId();
 							soldier = (*i)->getSoldiers()->erase(soldier); // erase Soldier from Base_soldiers vector.
 
 							delete _savedGame->getSoldier(iD); // delete Soldier instance.
@@ -1373,7 +1372,7 @@ void GeoscapeState::time5Seconds()
 					if (ufo->getDetected() == false // lost radar contact
 						&& ufo != ufoExpired) // ie. not just shot down while trying to outrun interceptor but it crashed into the sea instead Lol
 					{
-						if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN"
+						if (ufo->getTrajectory().getID() == "__RETALIATION_ASSAULT_RUN" // note: this is where that targeting-terrorUfo/Site glitch should also be taken care of.
 							&& (ufo->getStatus() == Ufo::LANDED
 								|| ufo->getStatus() == Ufo::DESTROYED))
 						{
@@ -1552,7 +1551,7 @@ void GeoscapeState::time5Seconds()
 				}
 			}
 
-			 ++j;
+			++j;
 		}
 	}
 
@@ -2586,8 +2585,8 @@ void GeoscapeState::time1Day()
 				if (possibilities.empty() == false)
 				{
 					size_t randFree = static_cast<size_t>(RNG::generate(
-																0,
-																static_cast<int>(possibilities.size() - 1)));
+																	0,
+																	static_cast<int>(possibilities.size() - 1)));
 					std::string free = possibilities.at(randFree);
 					bonus = _game->getRuleset()->getResearch(free);
 
@@ -2660,7 +2659,7 @@ void GeoscapeState::time1Day()
 					if (manufRule
 						&& manufRule->getRequirements().empty() == false)
 					{
-						const std::vector<std::string> &req = manufRule->getRequirements();
+						const std::vector<std::string>& req = manufRule->getRequirements();
 						RuleItem* ammo = _game->getRuleset()->getItem(item->getCompatibleAmmo()->front());
 						if (ammo
 							&& std::find(
@@ -2733,32 +2732,32 @@ void GeoscapeState::time1Day()
 		//Log(LOG_INFO) << "Base " << *(*b)->getName().c_str(); // this is weird.
 		//Log(LOG_INFO) << ". Soldiers";
 		for (std::vector<Soldier*>::const_iterator // handle soldier wounds
-				s = (*b)->getSoldiers()->begin();
-				s != (*b)->getSoldiers()->end();
+				soldier = (*b)->getSoldiers()->begin();
+				soldier != (*b)->getSoldiers()->end();
 				)
 		{
 			// kL_begin:
-			//Log(LOG_INFO) << ". Soldier = " << (*s)->getId();
-			//Log(LOG_INFO) << ". woundPercent = " << (*s)->getWoundPercent();
-			if ((*s)->getWoundPercent() > 10							// more than 10% wounded
-				&& RNG::percent((*s)->getWoundPercent() / 5) == true)	// %chance to die today
+			//Log(LOG_INFO) << ". Soldier = " << (*soldier)->getId();
+			//Log(LOG_INFO) << ". woundPercent = " << (*soldier)->getWoundPercent();
+			if ((*soldier)->getWoundPercent() > 10							// more than 10% wounded
+				&& RNG::percent((*soldier)->getWoundPercent() / 5) == true)	// %chance to die today
 			{
 				//Log(LOG_INFO) << ". . he's dead, Jim!!";
 				timerReset();
 
 				popup(new SoldierDiedState(
-										(*s)->getName(),
+										(*soldier)->getName(),
 										(*b)->getName()));
 
 				// kill soldier. (lifted from Battlescape/DebriefingState::prepareDebriefing()
-				SoldierDeath* death = new SoldierDeath();
+				SoldierDeath* const death = new SoldierDeath();
 				death->setTime(*_savedGame->getTime());
 
-				SoldierDead* dead = (*s)->die(death); // converts Soldier to SoldierDead class instance.
+				SoldierDead* const dead = (*soldier)->die(death); // converts Soldier to SoldierDead class instance.
 				_savedGame->getDeadSoldiers()->push_back(dead);
 
-				int iD = (*s)->getId();
-				s = (*b)->getSoldiers()->erase(s); // erase Soldier from Base_soldiers vector.
+				const int iD = (*soldier)->getId();
+				soldier = (*b)->getSoldiers()->erase(soldier); // erase Soldier from Base_soldiers vector.
 
 				delete _savedGame->getSoldier(iD); // delete Soldier instance.
 				// note: Could return any armor the soldier was wearing to Stores.
@@ -2766,10 +2765,10 @@ void GeoscapeState::time1Day()
 			else
 			{
 				//Log(LOG_INFO) << ". . heal up.";
-				if ((*s)->getWoundRecovery() > 0)
-					(*s)->heal();
+				if ((*soldier)->getWoundRecovery() > 0)
+					(*soldier)->heal();
 
-				++s;
+				++soldier;
 			} // kL_end.
 		}
 		//Log(LOG_INFO) << ". iterate Soldiers DONE";
@@ -2778,14 +2777,14 @@ void GeoscapeState::time1Day()
 			&& Options::anytimePsiTraining == true)
 		{
 			for (std::vector<Soldier*>::const_iterator
-					s = (*b)->getSoldiers()->begin();
-					s != (*b)->getSoldiers()->end();
-					++s)
+					soldier = (*b)->getSoldiers()->begin();
+					soldier != (*b)->getSoldiers()->end();
+					++soldier)
 			{
-				if ((*s)->trainPsiDay() == true)
-					(*s)->autoStat();
+				if ((*soldier)->trainPsiDay() == true)
+					(*soldier)->autoStat();
 
-//				(*s)->calcStatString(
+//				(*soldier)->calcStatString(
 //								_game->getRuleset()->getStatStrings(),
 //								(Options::psiStrengthEval
 //									&& _savedGame->isResearched(_game->getRuleset()->getPsiRequirements())));
