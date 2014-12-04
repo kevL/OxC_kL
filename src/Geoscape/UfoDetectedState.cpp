@@ -271,19 +271,19 @@ UfoDetectedState::UfoDetectedState(
 
 		switch (texture)
 		{
-			case 0:		terrain = "FOREST";
-			case 1:		terrain = "CULTA";
-			case 2:		terrain = "CULTA";
-			case 3:		terrain = "FOREST";
-			case 4:		terrain = "POLAR";
-			case 5:		terrain = "MOUNT";
-			case 6:		terrain = "JUNGLE";
-			case 7:		terrain = "DESERT";
-			case 8:		terrain = "DESERT";
-			case 9:		terrain = "POLAR";
-			case 10:	terrain = "URBAN";
-			case 11:	terrain = "POLAR";
-			case 12:	terrain = "POLAR";
+			case 0:		terrain = "FOREST";	break;
+			case 1:		terrain = "CULTA";	break;
+			case 2:		terrain = "CULTA";	break;
+			case 3:		terrain = "FOREST";	break;
+			case 4:		terrain = "POLAR";	break;
+			case 5:		terrain = "MOUNT";	break;
+			case 6:		terrain = "JUNGLE";	break;
+			case 7:		terrain = "DESERT";	break;
+			case 8:		terrain = "DESERT";	break;
+			case 9:		terrain = "POLAR";	break;
+			case 10:	terrain = "URBAN";	break;
+			case 11:	terrain = "POLAR";	break;
+			case 12:	terrain = "POLAR";	break;
 
 			default:
 				terrain = "WATER"; // tex = -1
