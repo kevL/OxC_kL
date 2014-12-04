@@ -651,22 +651,17 @@ bool Soldier::trainPsiDay()
 	if (_psiTraining == false)
 		return false;
 
-	const int
-		psiSkill = _currentStats.psiSkill,
-		rulesMin = _rules->getMinStats().psiSkill;
-
-	if (psiSkill >= _rules->getStatCaps().psiSkill) // hard cap. Note this auto-caps psiStrength also
-		return false;
+//	if (_currentStats.psiSkill >= _rules->getStatCaps().psiSkill) // hard cap. Note this auto-caps psiStrength also
+//		return false; // REMOVED: Allow psi to train past cap in the PsiLabs.
 
 	bool ret = false;
 
-	if (psiSkill >= rulesMin) // Psi unlocked.
+	const int rulesMin = _rules->getMinStats().psiSkill;
+	if (_currentStats.psiSkill >= rulesMin) // Psi unlocked.
 	{
 		int chance = std::max(
 							1,
-							std::min(
-									100,
-									500 / psiSkill));
+							500 / _currentStats.psiSkill);
 		if (RNG::percent(chance) == true)
 		{
 			ret = true;
@@ -676,14 +671,11 @@ bool Soldier::trainPsiDay()
 
 		if (Options::allowPsiStrengthImprovement == true)
 		{
-			const int psiStrength = _currentStats.psiStrength;
-			if (psiStrength < _rules->getStatCaps().psiStrength)
+			if (_currentStats.psiStrength < _rules->getStatCaps().psiStrength)
 			{
 				chance = std::max(
 								1,
-								std::min(
-										100,
-										500 / psiStrength));
+								500 / _currentStats.psiStrength);
 				if (RNG::percent(chance) == true)
 				{
 					ret = true;
@@ -810,21 +802,14 @@ void Soldier::autoStat()
 
 	switch (_rank)
 	{
-		case 0: stat << "r";
-		break;
-		case 1: stat << "q";
-		break;
-		case 2: stat << "t";
-		break;
-		case 3: stat << "p";
-		break;
-		case 4: stat << "n";
-		break;
-		case 5: stat << "x";
-		break;
+		case 0: stat << "r"; break;
+		case 1: stat << "q"; break;
+		case 2: stat << "t"; break;
+		case 3: stat << "p"; break;
+		case 4: stat << "n"; break;
+		case 5: stat << "x"; break;
 
 		default: stat << "z";
-		break;
 	}
 
 	stat << _currentStats.firing << ".";
@@ -833,29 +818,18 @@ void Soldier::autoStat()
 
 	switch (_currentStats.bravery)
 	{
-		case 10: stat << "a";
-		break;
-		case 20: stat << "b";
-		break;
-		case 30: stat << "c";
-		break;
-		case 40: stat << "d";
-		break;
-		case 50: stat << "e";
-		break;
-		case 60: stat << "f";
-		break;
-		case 70: stat << "g";
-		break;
-		case 80: stat << "h";
-		break;
-		case 90: stat << "i";
-		break;
-		case 100: stat << "j";
-		break;
+		case 10: stat << "a";	break;
+		case 20: stat << "b";	break;
+		case 30: stat << "c";	break;
+		case 40: stat << "d";	break;
+		case 50: stat << "e";	break;
+		case 60: stat << "f";	break;
+		case 70: stat << "g";	break;
+		case 80: stat << "h";	break;
+		case 90: stat << "i";	break;
+		case 100: stat << "j";	break;
 
 		default: stat << "z";
-		break;
 	}
 
 	if (_currentStats.psiSkill >= _rules->getMinStats().psiSkill)
