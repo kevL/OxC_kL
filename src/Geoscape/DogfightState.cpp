@@ -2283,16 +2283,15 @@ int DogfightState::getInterceptionNumber() const
 /**
  * kL. Gets the globe texture icon to display for the interception.
  * IMPORTANT: This does not return the actual battleField terrain; that is done
- * in ConfirmLandingState. This is merely an indicator .... cf. UfoDetectedState
- * IE, the first terrain found for proper Globe-texture is chosen
+ * in ConfirmLandingState. This is merely an indicator .... cf. UfoDetectedState.
  * @return, string for the icon of the texture of the globe's surface under the dogfight ha!
  */
 const std::string DogfightState::getTextureIcon() // kL
 {
-	int // look up polygon's texture
+	int
 		texture,
 		shade;
-	_globe->getPolygonTextureAndShade(
+	_globe->getPolygonTextureAndShade( // look up polygon's texture
 									_ufo->getLongitude(),
 									_ufo->getLatitude(),
 									&texture,
@@ -2331,9 +2330,10 @@ const std::string DogfightState::getTextureIcon() // kL
 	if (texture == 10)	return "URBAN";
 	if (texture == 11)	return "POLAR";
 	if (texture == 12)	return "POLAR";
-
 	return "WATER"; */
-/*	RuleTerrain* terrainRule = NULL;
+
+/*	the first terrain found for proper Globe-texture is chosen
+	RuleTerrain* terrainRule = NULL;
 	std::string ret;
 
 	const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();

@@ -105,12 +105,9 @@ UfoDetectedState::UfoDetectedState(
 
 	_txtRegion		= new Text(114, 9, 116, 56);
 	_txtTexture		= new Text(114, 9, 116, 66);
-//	_txtShade		= new Text(60, 9, 170, 76);
 
 	if (hyper == true)
 	{
-		setPalette("PAL_GEOSCAPE", 2);
-
 		_txtUfo->setY(19);
 		_txtDetected->setY(36);
 		_lstInfo->setY(60);
@@ -120,7 +117,6 @@ UfoDetectedState::UfoDetectedState(
 
 		_txtRegion->setY(19);
 		_txtTexture->setY(29);
-//		_txtShade->setY(39);
 
 		if (contact == false)
 		{
@@ -128,9 +124,7 @@ UfoDetectedState::UfoDetectedState(
 			_btnCentre->setWidth(88);
 		}
 
-		add(_txtHyperwave);
-		add(_lstInfo2);
-		add(_txtBases);
+		setPalette("PAL_GEOSCAPE", 2);
 	}
 	else
 		setPalette("PAL_GEOSCAPE", 7);
@@ -145,7 +139,13 @@ UfoDetectedState::UfoDetectedState(
 
 	add(_txtRegion);
 	add(_txtTexture);
-//	add(_txtShade);
+
+	if (hyper == true)
+	{
+		add(_txtHyperwave);
+		add(_lstInfo2);
+		add(_txtBases);
+	}
 
 	centerAllSurfaces();
 
@@ -260,12 +260,10 @@ UfoDetectedState::UfoDetectedState(
 	{
 		// IMPORTANT: This does not return the actual battleField terrain; that is done
 		// in ConfirmLandingState. This is merely an indicator .... cf. DogfightState
-		// IE, the first terrain found for proper Globe-texture is chosen
-
-		int // look up polygon's texture
+		int
 			texture,
 			shade;
-		state->getGlobe()->getPolygonTextureAndShade(
+		state->getGlobe()->getPolygonTextureAndShade( // look up polygon's texture
 												_ufo->getLongitude(),
 												_ufo->getLatitude(),
 												&texture,
@@ -292,6 +290,66 @@ UfoDetectedState::UfoDetectedState(
 				terrain = "WATER"; // tex = -1
 		}
 
+		std::wostringstream ss;
+		ss << tr(terrain);
+		ss << L"> shade " << shade;
+
+		_txtTexture->setColor(Palette::blockOffset(8)+10);
+		_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
+		_txtTexture->setAlign(ALIGN_RIGHT);
+		_txtTexture->setText(ss.str());
+	}
+	else
+		_txtTexture->setVisible(false);
+
+	if (hyper == true)
+	{
+		_txtHyperwave->setColor(Palette::blockOffset(8)+5);
+		_txtHyperwave->setAlign(ALIGN_CENTER);
+		_txtHyperwave->setWordWrap();
+		_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
+
+		_lstInfo2->setColor(Palette::blockOffset(8)+5);
+		_lstInfo2->setColumns(2, 80, 112);
+		_lstInfo2->setDot();
+		_lstInfo2->addRow(
+						2,
+						tr("STR_CRAFT_TYPE").c_str(),
+						tr(_ufo->getRules()->getType()).c_str());
+		_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->addRow(
+						2,
+						tr("STR_RACE").c_str(),
+						tr(_ufo->getAlienRace()).c_str());
+		_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->addRow(
+						2,
+						tr("STR_MISSION").c_str(),
+						tr(_ufo->getMissionType()).c_str());
+		_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
+		_lstInfo2->addRow(
+						2,
+						tr("STR_ZONE").c_str(),
+						tr(_ufo->getMission()->getRegion()).c_str());
+		_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
+
+		if (contact == false
+			&& hyperBases != NULL) // safety.
+		{
+			_txtBases->setColor(Palette::blockOffset(8)+5);
+
+			std::wostringstream bases;
+			for (std::vector<Base*>::const_iterator
+					i = hyperBases->begin();
+					i != hyperBases->end();
+					++i)
+			{
+				bases << (*i)->getName(_game->getLanguage()) << L"\n";
+			}
+			_txtBases->setText(bases.str());
+		}
+	}
+}
 /*		if		(texture == 0)	terrain = "FOREST"; // these could get expanded/redef'd. in future
 		else if (texture == 1)	terrain = "CULTA";
 		else if (texture == 2)	terrain = "CULTA";
@@ -308,7 +366,10 @@ UfoDetectedState::UfoDetectedState(
 		else
 			terrain = "WATER"; // tex = -1 */
 
-/*		RuleTerrain* terrainRule = NULL;
+/*
+		// the first terrain found for proper Globe-texture is chosen
+
+		RuleTerrain* terrainRule = NULL;
 
 		const std::vector<std::string>& terrains = _game->getRuleset()->getTerrainList();
 		for (std::vector<std::string>::const_iterator
@@ -371,79 +432,6 @@ UfoDetectedState::UfoDetectedState(
 //		{
 //			terrain = "URBAN";
 //		} */
-
-		std::wostringstream ss;
-		ss << tr(terrain);
-//		ss << L"> sun " << (15 - shade);
-		ss << L"> shade " << shade;
-
-		_txtTexture->setColor(Palette::blockOffset(8)+10);
-		_txtTexture->setSecondaryColor(Palette::blockOffset(8)+5);
-		_txtTexture->setAlign(ALIGN_RIGHT);
-
-//		_txtTexture->setText(tr("STR_TEXTURE_").arg(tr(str))); // tr(terrainRule)
-//		_txtTexture->setText(tr("STR_TEXTURE_").arg(ss.str()));
-		_txtTexture->setText(ss.str());
-
-//		_txtShade->setColor(Palette::blockOffset(8)+10);
-//		_txtShade->setSecondaryColor(Palette::blockOffset(8)+5);
-//		_txtShade->setAlign(ALIGN_RIGHT);
-//		_txtShade->setText(tr("STR_SHADE_").arg(shade));
-	}
-	else
-	{
-//		_txtShade->setVisible(false);
-		_txtTexture->setVisible(false);
-	}
-
-	if (hyper == true)
-	{
-		_txtHyperwave->setColor(Palette::blockOffset(8)+5);
-		_txtHyperwave->setAlign(ALIGN_CENTER);
-		_txtHyperwave->setWordWrap();
-		_txtHyperwave->setText(tr("STR_HYPER_WAVE_TRANSMISSIONS_ARE_DECODED"));
-
-		_lstInfo2->setColor(Palette::blockOffset(8)+5);
-		_lstInfo2->setColumns(2, 80, 112);
-		_lstInfo2->setDot();
-		_lstInfo2->addRow(
-						2,
-						tr("STR_CRAFT_TYPE").c_str(),
-						tr(_ufo->getRules()->getType()).c_str());
-		_lstInfo2->setCellColor(0, 1, Palette::blockOffset(8)+10);
-		_lstInfo2->addRow(
-						2,
-						tr("STR_RACE").c_str(),
-						tr(_ufo->getAlienRace()).c_str());
-		_lstInfo2->setCellColor(1, 1, Palette::blockOffset(8)+10);
-		_lstInfo2->addRow(
-						2,
-						tr("STR_MISSION").c_str(),
-						tr(_ufo->getMissionType()).c_str());
-		_lstInfo2->setCellColor(2, 1, Palette::blockOffset(8)+10);
-		_lstInfo2->addRow(
-						2,
-						tr("STR_ZONE").c_str(),
-						tr(_ufo->getMission()->getRegion()).c_str());
-		_lstInfo2->setCellColor(3, 1, Palette::blockOffset(8)+10);
-
-		if (contact == false
-			&& hyperBases != NULL) // safety.
-		{
-			_txtBases->setColor(Palette::blockOffset(8)+5);
-
-			std::wostringstream bases;
-			for (std::vector<Base*>::const_iterator
-					i = hyperBases->begin();
-					i != hyperBases->end();
-					++i)
-			{
-				bases << (*i)->getName(_game->getLanguage()) << L"\n";
-			}
-			_txtBases->setText(bases.str());
-		}
-	}
-}
 
 /**
  * dTor.

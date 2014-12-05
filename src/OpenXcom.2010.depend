@@ -4729,7 +4729,7 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1417727856 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
+1417730512 source:f:\git\openxcom\src\basescape\craftinfostate.cpp
 	"CraftInfoState.h"
 	"CraftArmorState.h"
 	"CraftEquipmentState.h"
@@ -7469,7 +7469,7 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1417700142 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1417741403 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
 	"Globe.h"
 	"../Engine/Action.h"
@@ -7675,7 +7675,7 @@
 1413136958 f:\git\openxcom\src\geoscape\researchrequiredstate.h
 	"../Engine/State.h"
 
-1413136958 f:\git\openxcom\src\geoscape\ufodetectedstate.h
+1417741737 f:\git\openxcom\src\geoscape\ufodetectedstate.h
 	"../Engine/State.h"
 
 1413136958 f:\git\openxcom\src\geoscape\ufoloststate.h
@@ -8042,7 +8042,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1417725883 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1417741817 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
