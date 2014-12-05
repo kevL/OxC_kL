@@ -2564,7 +2564,7 @@ SavedGame* SavedBattleGame::getGeoscapeSave() const
  * Gets the depth of the battlescape.
  * @return depth.
  */
-int const SavedBattleGame::getDepth() const
+int SavedBattleGame::getDepth() const
 {
 	return _depth;
 }
@@ -2607,7 +2607,7 @@ void SavedBattleGame::setAmbientSound(int sound)
  * Gets the ambient battlescape sound effect.
  * @return the intended sound.
  */
-const int SavedBattleGame::getAmbientSound() const
+int SavedBattleGame::getAmbientSound() const
 {
 	return _ambience;
 }

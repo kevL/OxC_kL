@@ -4638,7 +4638,7 @@
 1417536700 f:\git\openxcom\src\basescape\soldierarmorstate.h
 	"../Engine/State.h"
 
-1416071378 f:\git\openxcom\src\ruleset\armor.h
+1417795659 f:\git\openxcom\src\ruleset\armor.h
 	<string>
 	<vector>
 	<yaml-cpp/yaml.h>
@@ -4708,10 +4708,10 @@
 	<string>
 	<yaml-cpp/yaml.h>
 
-1417006153 f:\git\openxcom\src\savegame\savedbattlegame.h
+1417795521 f:\git\openxcom\src\savegame\savedbattlegame.h
 	"BattleUnit.h"
 
-1417464440 f:\git\openxcom\src\savegame\battleunit.h
+1417795078 f:\git\openxcom\src\savegame\battleunit.h
 	"Soldier.h"
 	"../Battlescape/BattlescapeGame.h"
 	"../Battlescape/Position.h"

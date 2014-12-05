@@ -23,6 +23,7 @@
 //#include <string>
 //#include <vector>
 
+//#include "BattleItem.h"
 #include "Soldier.h"
 
 #include "../Battlescape/BattlescapeGame.h"
@@ -45,6 +46,7 @@ class CivilianBAIState;
 class Language;
 class Node;
 class RuleInventory;
+//class SavedBattleGame;
 class SavedGame;
 class Soldier;
 class Surface;
@@ -358,6 +360,8 @@ class BattleUnit
 {
 
 private:
+//	static const int SPEC_WEAPON_MAX = 3;
+
 	bool
 		_cacheInvalid,
 		_dashing,
@@ -403,6 +407,7 @@ private:
 	size_t _battleOrder;
 
 	BattleAIState* _currentAIState;
+//	BattleItem* _specWeapon[SPEC_WEAPON_MAX];
 	BattlescapeGame* _battleGame;
 	BattleUnit* _charging;
 	Surface* _cache[5];
@@ -483,13 +488,13 @@ private:
 		Position lastCover;
 
 
-		/// Creates a BattleUnit.
+		/// Creates a BattleUnit from a geoscape Soldier.
 		BattleUnit( // xCom operatives
 				Soldier* soldier,
 				const int depth,
 				const int diff, // for VictoryPts value per death.
 				BattlescapeGame* battleGame = NULL); // for playing sound when hit.
-		/// Creates a BattleUnit.
+		/// Creates a BattleUnit from Unit rule.
 		BattleUnit( // aLiens, civies, & Tanks
 				Unit* unit,
 				UnitFaction faction,
@@ -765,6 +770,7 @@ private:
 		const BattleItem* const getGrenade() const;
 		/// Gets the name of a melee weapon this unit may be carrying or that's innate.
 		std::string getMeleeWeapon() const;
+//		BattleItem* getMeleeWeapon(); // kL_note: changed.
 
 		/// Reloads righthand weapon of this unit if needed.
 		bool checkAmmo();
@@ -1033,6 +1039,11 @@ private:
 
 		/// Puts the unit in the corner to think about what he's done.
 		void goToTimeOut();
+
+		/// Creates special weapon for the unit.
+//		void setSpecialWeapon(SavedBattleGame* save, const Ruleset* rule);
+		/// Get special weapon.
+//		BattleItem* getSpecialWeapon(BattleType type) const;
 
 		/// Gets this unit's mission statistics.
 		BattleUnitStatistics* getStatistics() const;

@@ -27,6 +27,7 @@
 
 #include "BattleItem.h"
 #include "SavedGame.h"
+//#include "SavedBattleGame.h"
 #include "Soldier.h"
 #include "Tile.h"
 
@@ -46,6 +47,7 @@
 
 #include "../Ruleset/Armor.h"
 #include "../Ruleset/RuleInventory.h"
+//#include "../Ruleset/Ruleset.h"
 #include "../Ruleset/RuleSoldier.h"
 #include "../Ruleset/Unit.h"
 
@@ -186,6 +188,8 @@ BattleUnit::BattleUnit(
 		_fatalWounds[i] = 0;
 	for (int i = 0; i < 5; ++i)
 		_cache[i] = 0;
+//	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
+//		_specWeapon[i] = 0;
 
 	lastCover = Position(-1,-1,-1);
 
@@ -334,6 +338,8 @@ BattleUnit::BattleUnit(
 		_fatalWounds[i] = 0;
 	for (int i = 0; i < 5; ++i)
 		_cache[i] = 0;
+//	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
+//		_specWeapon[i] = 0;
 
 	lastCover = Position(-1,-1,-1);
 
@@ -2686,6 +2692,25 @@ std::string BattleUnit::getMeleeWeapon() const
 
 	return "";
 }
+/* BattleItem *BattleUnit::getMeleeWeapon()
+{
+	BattleItem *meele = getItem("STR_RIGHT_HAND");
+	if (meele && meele->getRules()->getBattleType() == BT_MELEE)
+	{
+		return meele;
+	}
+	meele = getItem("STR_LEFT_HAND");
+	if (meele && meele->getRules()->getBattleType() == BT_MELEE)
+	{
+		return meele;
+	}
+	meele = getSpecialWeapon(BT_MELEE);
+	if (meele)
+	{
+		return meele;
+	}
+	return 0;
+} */
 
 /**
  * Check if we have ammo and reload if needed (used for the AI).
@@ -4194,6 +4219,64 @@ void BattleUnit::goToTimeOut()
 {
 	_status = STATUS_TIME_OUT;
 }
+
+/**
+ * Helper function used by BattleUnit::setSpecialWeapon().
+ */
+/* static inline BattleItem *createItem(SavedBattleGame *save, BattleUnit *unit, RuleItem *rule)
+{
+	BattleItem *item = new BattleItem(rule, save->getCurrentItemId());
+	item->setOwner(unit);
+	save->removeItem(item); //item outside inventory, deleted when game is shutdown.
+	return item;
+} */
+
+/**
+ * Set special weapon that is handled outside inventory.
+ * @param save
+ */
+/* void BattleUnit::setSpecialWeapon(SavedBattleGame *save, const Ruleset *rule)
+{
+	RuleItem *item = 0;
+	int i = 0;
+
+	if (getUnitRules())
+	{
+		item = rule->getItem(getUnitRules()->getMeleeWeapon());
+		if (item)
+		{
+			_specWeapon[i++] = createItem(save, this, item);
+		}
+	}
+	item = rule->getItem(getArmor()->getSpecialWeapon());
+	if (item)
+	{
+		_specWeapon[i++] = createItem(save, this, item);
+	}
+	if (getBaseStats()->psiSkill > 0 && getFaction() == FACTION_HOSTILE)
+	{
+		item = rule->getItem("ALIEN_PSI_WEAPON");
+		if (item)
+		{
+			_specWeapon[i++] = createItem(save, this, item);
+		}
+	}
+} */
+
+/**
+ * Get special weapon.
+ */
+/* BattleItem *BattleUnit::getSpecialWeapon(BattleType type) const
+{
+	for (int i = 0; i < SPEC_WEAPON_MAX; ++i)
+	{
+		if (_specWeapon[i] && _specWeapon[i]->getRules()->getBattleType() == type)
+		{
+			return _specWeapon[i];
+		}
+	}
+	return 0;
+} */
 
 /**
  * Get the unit's statistics.

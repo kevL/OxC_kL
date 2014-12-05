@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_ARMOR_H
 #define OPENXCOM_ARMOR_H
 
-#include <string>
-#include <vector>
+//#include <string>
+//#include <vector>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "MapData.h"
 #include "Unit.h"
@@ -55,11 +55,12 @@ class Armor
 
 private:
 	std::string
-		_type,
+		_corpseGeo,
+//		_specWeapon,
 		_spriteSheet,
 		_spriteInv,
-		_corpseGeo,
-		_storeItem;
+		_storeItem,
+		_type;
 	bool
 		_canHoldWeapon,
 		_constantAnimation,
@@ -122,6 +123,9 @@ private:
 
 		/// Gets the stores item.
 		std::string getStoreItem() const;
+
+		/// Gets the special weapon type.
+//		std::string getSpecialWeapon() const;
 
 		/// Gets the battlescape drawing routine ID.
 		int getDrawingRoutine() const;

@@ -350,7 +350,7 @@ private:
 		SavedGame* getGeoscapeSave() const;
 
 		/// Gets the depth of the battlescape game.
-		int const getDepth() const;
+		int getDepth() const;
 		/// Sets the depth of the battlescape game.
 		void setDepth(int depth);
 
@@ -360,7 +360,7 @@ private:
 		/// Sets the ambient sound effect;
 		void setAmbientSound(int sound);
 		/// Gets the ambient sound effect;
-		const int getAmbientSound() const;
+		int getAmbientSound() const;
 
 		/// kL. Sets the inventory tile when BattlescapeGenerator runs.
 		void setBattleInventory(Tile* invBattle); // kL

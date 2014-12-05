@@ -390,10 +390,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 		if (action.type == BA_MINDCONTROL
 			|| action.type == BA_PANIC)
 		{
-//			action.weapon = new BattleItem(
-//									_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
-//									_save->getCurrentItemId());
-			//Log(LOG_INFO) << ". . create Psi weapon DONE";
+			//Log(LOG_INFO) << ". . do Psi";
 			action.weapon = _alienPsi; // kL
 			action.TU = unit->getActionTUs(
 										action.type,
@@ -405,7 +402,6 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 											this,
 											action));
 
-			if (action.type == BA_HIT && (!action.weapon || action.weapon->getRules()->getType() != unit->getMeleeWeapon()))
 			if (action.type == BA_HIT)
 			{
 				const std::string meleeWeapon = unit->getMeleeWeapon();
@@ -501,8 +497,7 @@ void BattlescapeGame::handleAI(BattleUnit* unit)
 			}
 			//Log(LOG_INFO) << ". . . success MC Done";
 
-//kL		_save->removeItem(action.weapon); // note: now using perpetual alien-psi-weapon, created in cTor.
-			//Log(LOG_INFO) << ". . . Psi weapon removed.";
+			//Log(LOG_INFO) << ". . . done Psi.";
 		}
 	}
 	//Log(LOG_INFO) << ". . action.type DONE";
@@ -2243,12 +2238,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 			{
 				bool aLienPsi = (_currentAction.weapon == NULL);
 				if (aLienPsi)
-				{
 					_currentAction.weapon = _alienPsi; // kL
-//					_currentAction.weapon = new BattleItem(
-//														_parentState->getGame()->getRuleset()->getItem("ALIEN_PSI_WEAPON"),
-//														_save->getCurrentItemId());
-				}
 
 				_currentAction.target = posTarget;
 				_currentAction.TU = _currentAction.actor->getActionTUs(
@@ -2341,10 +2331,7 @@ void BattlescapeGame::primaryAction(const Position& posTarget)
 
 
 				if (aLienPsi == true)
-				{
-//kL				_save->removeItem(_currentAction.weapon); // now using perpetual alien-psi-weapon, created in cTor.
 					_currentAction.weapon = NULL;
-				}
 			}
 		}
 		else if (Options::battleConfirmFireMode == true
@@ -2554,11 +2541,12 @@ void BattlescapeGame::launchAction()
 void BattlescapeGame::psiButtonAction()
 {
 	//Log(LOG_INFO) << "BattlescapeGame::psiButtonAction()";
-	_currentAction.weapon		= 0;
-	_currentAction.targeting	= true;
-	_currentAction.type			= BA_PANIC;
-	_currentAction.TU			= 25;	// kL_note: this is just a default i guess;
-										// otherwise it should be getActionTUs()
+	_currentAction.weapon = 0;
+	_currentAction.targeting = true;
+	_currentAction.type = BA_PANIC;
+	_currentAction.TU = 25;	// kL_note: this is just a default i guess;
+							// otherwise it should be getActionTUs().
+							// It gets overridden later ...
 	setupCursor();
 }
 
