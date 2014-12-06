@@ -428,6 +428,7 @@ DogfightState::DogfightState(
 	_btnStandoff->onMouseClick((ActionHandler)& DogfightState::btnStandoffPress);
 
 	srf = _game->getResourcePack()->getSurface(getTextureIcon());
+	Log(LOG_INFO) << "cTor. textureIcon = " << getTextureIcon();
 	if (srf != NULL)
 		srf->blit(_texture);
 
@@ -1964,8 +1965,8 @@ void DogfightState::recolor(
 		const bool enabled)
 {
 	const int
-		offset1 = 25,	//kL 24
-		offset2 = 8;	//kL 7
+		offset1 = 25,	// 24
+		offset2 = 8;	// 7
 	InteractiveSurface* weapon = NULL;
 	Text* ammo = NULL;
 	Surface* range = NULL;
@@ -2026,6 +2027,7 @@ void DogfightState::btnMinimizedIconClick(Action*)
 	_texture->clear();
 
 	Surface* const srfTexture = _game->getResourcePack()->getSurface(getTextureIcon());
+	Log(LOG_INFO) << "pop. textureIcon = " << getTextureIcon();
 	if (srfTexture != NULL)
 		srfTexture->blit(_texture);
 
@@ -2054,6 +2056,10 @@ void DogfightState::btnMinimizedIconClick(Action*)
 	_btnMinimizedIcon->setVisible(false);
 	_txtInterceptionNumber->setVisible(false);
 	_preview->setVisible(false);
+
+	// if no interception windows still open
+	// zoom straight out to previous zoomlevel
+	// and reset dfZoom + dfCenter
 }
 
 /**
@@ -2281,12 +2287,12 @@ int DogfightState::getInterceptionNumber() const
 }
 
 /**
- * kL. Gets the globe texture icon to display for the interception.
+ * Gets the globe texture icon to display for the interception.
  * IMPORTANT: This does not return the actual battleField terrain; that is done
  * in ConfirmLandingState. This is merely an indicator .... cf. UfoDetectedState.
  * @return, string for the icon of the texture of the globe's surface under the dogfight ha!
  */
-const std::string DogfightState::getTextureIcon() // kL
+const std::string DogfightState::getTextureIcon()
 {
 	int
 		texture,
@@ -2297,6 +2303,7 @@ const std::string DogfightState::getTextureIcon() // kL
 									&texture,
 									&shade);
 
+	Log(LOG_INFO) << "textureIcon = " << texture;
 	switch (texture)
 	{
 		case 0:		return "FOREST";
@@ -2305,7 +2312,7 @@ const std::string DogfightState::getTextureIcon() // kL
 		case 3:		return "FOREST";
 		case 4:		return "POLAR";
 		case 5:		return "MOUNT";
-		case 6:		return "JUNGLE";
+		case 6:		return "FOREST"; // JUNGLE
 		case 7:		return "DESERT";
 		case 8:		return "DESERT";
 		case 9:		return "POLAR";

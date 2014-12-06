@@ -523,7 +523,7 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 	const size_t row = _lstSoldiers->getSelectedRow();
 	//Log(LOG_INFO) << ". CraftSoldiersState::lstSoldiersClick() row = " << row;
 
-	if (action->getDetails()->button.button == SDL_BUTTON_RIGHT) // NOTE: left & right swapped !
+	if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
 	{
 		Soldier* const soldier = _base->getSoldiers()->at(_lstSoldiers->getSelectedRow());
 
@@ -551,16 +551,14 @@ void CraftSoldiersState::lstSoldiersPress(Action* action)
 
 		_lstSoldiers->setRowColor(row, color);
 
-//		_txtAvailable->setText(tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()));
-//		_txtUsed->setText(tr("STR_SPACE_USED").arg(craft->getSpaceUsed()));
-		_txtSpace->setText(tr("STR_SPACE_USED_FREE_")
+		_txtSpace->setText(tr("STR_SPACE_USED_FREE_") // (tr("STR_SPACE_AVAILABLE").arg(craft->getSpaceAvailable()))
 						.arg(craft->getSpaceUsed())
 						.arg(craft->getSpaceAvailable()));
-		_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_")
+		_txtLoad->setText(tr("STR_LOAD_CAPACITY_FREE_") // (tr("STR_SPACE_USED").arg(craft->getSpaceUsed()))
 						.arg(craft->getLoadCapacity())
 						.arg(craft->getLoadCapacity() - craft->getLoadCurrent()));
 	}
-	else if (action->getDetails()->button.button == SDL_BUTTON_LEFT)
+	else if (action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
 		_base->setCurrentSoldier(_lstSoldiers->getScroll());
 

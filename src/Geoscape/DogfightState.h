@@ -129,8 +129,8 @@ private:
 	/// Ends the dogfight.
 	void endDogfight();
 
-	/// kL. Gets the globe texture icon to display for the interception.
-	const std::string getTextureIcon(); // kL
+	/// Gets the globe texture icon to display for the interception.
+	const std::string getTextureIcon();
 
 	/// kL. Plays a sound effect in stereo.
 	void playSoundFX( // kL

@@ -1866,7 +1866,9 @@ void GeoscapeState::time10Minutes()
 							contact = true;
 						case 1:
 							hyperDet = true;
-							hyperBases.push_back(*b);
+
+							if (hyperDet_pre == false)
+								hyperBases.push_back(*b);
 						break;
 						case 2:
 							contact = true;
@@ -1922,7 +1924,9 @@ void GeoscapeState::time10Minutes()
 							contact = true;
 						case 1:
 							hyperDet = true;
-							hyperBases.push_back(*b);
+
+							if (hyperDet_pre == false)
+								hyperBases.push_back(*b);
 						break;
 						case 2:
 							contact = true;

@@ -195,7 +195,7 @@ void SoldierMemorialState::lstSoldiersPress(Action* action)
 	if (action->getDetails()->button.button == SDL_BUTTON_LEFT
 		|| action->getDetails()->button.button == SDL_BUTTON_RIGHT)
 	{
-		size_t row = _game->getSavedGame()->getDeadSoldiers()->size() - _lstSoldiers->getSelectedRow() - 1;
+		const size_t row = _game->getSavedGame()->getDeadSoldiers()->size() - _lstSoldiers->getSelectedRow() - 1;
 		_game->pushState(new SoldierInfoDeadState(row));
 	}
 }

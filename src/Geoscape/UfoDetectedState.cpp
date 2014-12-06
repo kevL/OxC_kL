@@ -249,7 +249,7 @@ UfoDetectedState::UfoDetectedState(
 					Options::keyOk);
 
 	_btnCancel->setColor(Palette::blockOffset(8)+5);
-	_btnCancel->setText(tr("STR_CANCEL_UC"));
+	_btnCancel->setText(tr("STR_OK_5_SECONDS")); // STR_CANCEL_UC
 	_btnCancel->onMouseClick((ActionHandler)& UfoDetectedState::btnCancelClick);
 	_btnCancel->onKeyboardPress(
 					(ActionHandler)& UfoDetectedState::btnCancelClick,
@@ -278,7 +278,7 @@ UfoDetectedState::UfoDetectedState(
 			case 3:		terrain = "FOREST";	break;
 			case 4:		terrain = "POLAR";	break;
 			case 5:		terrain = "MOUNT";	break;
-			case 6:		terrain = "JUNGLE";	break;
+			case 6:		terrain = "FOREST";	break; // JUNGLE
 			case 7:		terrain = "DESERT";	break;
 			case 8:		terrain = "DESERT";	break;
 			case 9:		terrain = "POLAR";	break;
