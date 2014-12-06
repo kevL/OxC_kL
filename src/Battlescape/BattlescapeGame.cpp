@@ -617,10 +617,10 @@ void BattlescapeGame::endGameTurn()
 	getMap()->getWaypoints()->clear();
 
 	Position pos;
-	for (int
+	for (int // check for hot grenades on the ground
 			i = 0;
 			i < _save->getMapSizeXYZ();
-			++i) // check for hot grenades on the ground
+			++i)
 	{
 		for (std::vector<BattleItem*>::const_iterator
 				j = _save->getTiles()[i]->getInventory()->begin();

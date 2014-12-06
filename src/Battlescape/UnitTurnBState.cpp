@@ -167,7 +167,7 @@ void UnitTurnBState::think()
 	}
 
 	if (tu == 0
-		&& _chargeTUs)
+		&& _chargeTUs == true)
 	{
 		tu = 1;
 	}
@@ -177,14 +177,14 @@ void UnitTurnBState::think()
 		&& _parent->getPanicHandled() == true
 		&& _action.targeting == false
 		&& _parent->checkReservedTU(
-									_unit,
-									tu) == false)
+								_unit,
+								tu) == false)
 	{
 		//Log(LOG_INFO) << "UnitTurnBState::think(), abortTurn() popState()";
 		_unit->setStatus(STATUS_STANDING);
 		_parent->popState();
 	}
-	else if (_unit->spendTimeUnits(tu))
+	else if (_unit->spendTimeUnits(tu) == true)
 	{
 		const size_t unitsSpotted = _unit->getUnitsSpottedThisTurn().size();
 
@@ -215,7 +215,7 @@ void UnitTurnBState::think()
 				&& _action.targeting == true)
 			{
 				//Log(LOG_INFO) << "UnitTurnBState::think(), setStopShot ID = " << _unit->getId();
-				_unit->setStopShot(true);
+				_unit->setStopShot();
 			}
 			// kL_note: Can i pop the state (ProjectileFlyBState) here if we came from
 			// BattlescapeGame::primaryAction() and as such STOP a unit from shooting

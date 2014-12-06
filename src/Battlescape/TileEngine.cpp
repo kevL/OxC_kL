@@ -1646,7 +1646,7 @@ bool TileEngine::reactionShot(
 			}
 		}
 
-		if (action.targeting
+		if (action.targeting == true
 			&& action.actor->spendTimeUnits(action.TU))
 		{
 			//Log(LOG_INFO) << ". . . targeting . . .";

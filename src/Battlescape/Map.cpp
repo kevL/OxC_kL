@@ -2548,7 +2548,7 @@ void Map::getSelectorPosition(Position* pos) const
 /**
  * Calculates the offset of a BattleUnit when it is walking between 2 tiles.
  * @param unit		- pointer to BattleUnit
- * @param offset	- pointer to the offset to return the calculation.
+ * @param offset	- pointer to the offset to return the calculation
  */
 void Map::calculateWalkingOffset(
 		BattleUnit* unit,
@@ -2653,7 +2653,7 @@ void Map::calculateWalkingOffset(
 			|| unit->getArmor()->getDrawingRoutine() == 4
 			|| unit->getArmor()->getDrawingRoutine() == 6
 			|| unit->getArmor()->getDrawingRoutine() == 10) */
-		if (unit->getArmor()->getCanHoldWeapon())
+		if (unit->getArmor()->getCanHoldWeapon() == true)
 		{
 			if (unit->getStatus() == STATUS_AIMING)
 				offset->x = -16;
@@ -2691,7 +2691,7 @@ void Map::calculateWalkingOffset(
 /**
   * Terrainlevel goes from 0 to -24 (bottom to top).
   * For a large sized unit, pick the highest terrain level, which is the lowest number...
-  * @param pos	- Position
+  * @param pos		- Position
   * @param unitSize	- size of the unit to get the level from
   * @return, terrain height
   */
@@ -2777,8 +2777,7 @@ void Map::cacheUnit(BattleUnit* unit)
 											_save->getDepth() != 0);
 	unitSprite->setPalette(this->getPalette());
 
-	const int parts = unit->getArmor()->getSize() * unit->getArmor()->getSize();
-
+	const int unitSize = unit->getArmor()->getSize() * unit->getArmor()->getSize();
 	bool
 		d = false,
 		invalid = false;
@@ -2787,11 +2786,9 @@ void Map::cacheUnit(BattleUnit* unit)
 	if (invalid == true)
 	{
 		//Log(LOG_INFO) << ". (invalid)";
-
-		// 1 or 4 iterations, depending on unit size
-		for (int
+		for (int // 1 or 4 iterations, depending on unit size
 				i = 0;
-				i < parts;
+				i < unitSize;
 				++i)
 		{
 			//Log(LOG_INFO) << ". . i = " << i;
@@ -2814,8 +2811,8 @@ void Map::cacheUnit(BattleUnit* unit)
 
 			//Log(LOG_INFO) << ". . getItem()";
 			BattleItem
-				* rhandItem = unit->getItem("STR_RIGHT_HAND"),
-				* lhandItem = unit->getItem("STR_LEFT_HAND");
+				* const rhandItem = unit->getItem("STR_RIGHT_HAND"),
+				* const lhandItem = unit->getItem("STR_LEFT_HAND");
 			if ((rhandItem == NULL
 					|| rhandItem->getRules()->isFixed() == true)
 				&& (lhandItem == NULL
@@ -2825,13 +2822,13 @@ void Map::cacheUnit(BattleUnit* unit)
 			}
 			else
 			{
-				if (rhandItem)
+				if (rhandItem != NULL)
 //					&& rhandItem->getRules()->isFixed() == false)
 				{
 					unitSprite->setBattleItem(rhandItem);
 				}
 
-				if (lhandItem)
+				if (lhandItem != NULL)
 //					&& lhandItem->getRules()->isFixed() == false)
 				{
 					unitSprite->setBattleItem(lhandItem);

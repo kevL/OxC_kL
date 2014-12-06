@@ -990,7 +990,7 @@ private:
 		void setHealth(int health);
 
 		/// To stop a unit from firing/throwing if it spots a new opponent during turning.
-		void setStopShot(bool stop);
+		void setStopShot(const bool stop = true);
 		/// To stop a unit from firing/throwing if it spots a new opponent during turning.
 		bool getStopShot() const;
 

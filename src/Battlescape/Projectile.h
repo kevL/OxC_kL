@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_PROJECTILE_H
 #define OPENXCOM_PROJECTILE_H
 
-#include <vector>
+//#include <vector>
 
 #include "BattlescapeGame.h"
 #include "Position.h"

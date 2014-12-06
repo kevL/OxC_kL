@@ -95,13 +95,13 @@ ProjectileFlyBState::ProjectileFlyBState(
 			action),
 		_origin(action.actor->getPosition()),
 		_originVoxel(-1,-1,-1), // for BL waypoints
+		_targetVoxel(-1,-1,-1),
 		_unit(NULL),
 		_ammo(NULL),
 		_projectileItem(NULL),
 		_projectileImpact(0),
 		_initialized(false),
-		_targetFloor(false),
-		_targetVoxel(-1,-1,-1)
+		_targetFloor(false)
 {
 	//Log(LOG_INFO) << "Create ProjectileFlyBState[1]: origin = " << _origin;
 }
@@ -316,7 +316,7 @@ void ProjectileFlyBState::init()
 
 
 	if (_action.type == BA_LAUNCH
-		|| (Options::forceFire
+		|| (Options::forceFire == true
 			&& (SDL_GetModState() & KMOD_CTRL) != 0
 			&& _parent->getSave()->getSide() == FACTION_PLAYER)
 		|| _parent->getPanicHandled() == false)
@@ -329,7 +329,7 @@ void ProjectileFlyBState::init()
 
 		if (_action.type == BA_LAUNCH)
 		{
-			if (_targetFloor) // kL_note: was, if(_action.target == _origin)
+			if (_targetFloor == true) // kL_note: was, if(_action.target == _origin)
 				_targetVoxel.z -= 10; // launched missiles with two waypoints placed on the same tile: target the floor.
 			else
 				_targetVoxel.z += 4; // launched missiles go slightly higher than the middle.
@@ -346,7 +346,7 @@ void ProjectileFlyBState::init()
 		// aim at the center of the unit, the object, the walls or the floor (in that priority)
 		// if there is no LOF to the center, try elsewhere (more outward).
 		// Store that target voxel.
-		Tile* targetTile = _parent->getSave()->getTile(_action.target);
+		Tile* const targetTile = _parent->getSave()->getTile(_action.target);
 		Position hitPos;
 
 		Position originVoxel = _parent->getTileEngine()->getOriginVoxel(
@@ -761,7 +761,7 @@ void ProjectileFlyBState::think()
 			}
 
 			if (_parent->getSave()->getSide() == FACTION_PLAYER
-				|| _parent->getSave()->getDebugMode())
+				|| _parent->getSave()->getDebugMode() == true)
 			{
 				_parent->setupCursor();
 			}
@@ -790,14 +790,14 @@ void ProjectileFlyBState::think()
 				pos.y /= 16;
 				pos.z /= 24;
 
-				if (pos.y > _parent->getSave()->getMapSizeY())
-					pos.y--;
-
 				if (pos.x > _parent->getSave()->getMapSizeX())
-					pos.x--;
+					--pos.x;
 
-				BattleItem* item = _parent->getMap()->getProjectile()->getItem();
-				if (Options::battleInstantGrenade
+				if (pos.y > _parent->getSave()->getMapSizeY())
+					--pos.y;
+
+				BattleItem* const item = _parent->getMap()->getProjectile()->getItem();
+				if (Options::battleInstantGrenade == true
 					&& item->getRules()->getBattleType() == BT_GRENADE
 					&& item->getFuseTimer() == 0)
 				{
@@ -840,9 +840,9 @@ void ProjectileFlyBState::think()
 
 				// launch the next projectile in the waypoint cascade
 				ProjectileFlyBState* const nextWaypoint = new ProjectileFlyBState(
-																		_parent,
-																		_action,
-																		_origin);
+																			_parent,
+																			_action,
+																			_origin);
 				nextWaypoint->setOriginVoxel(_parent->getMap()->getProjectile()->getPosition(-1));
 
 				if (_origin == _action.target)
@@ -910,16 +910,16 @@ void ProjectileFlyBState::think()
 							while (i != shot - 1)
 							{
 								Projectile* const proj = new Projectile(
-															_parent->getResourcePack(),
-															_parent->getSave(),
-															_action,
-															_origin,
-															_targetVoxel,
-															_ammo);
+																	_parent->getResourcePack(),
+																	_parent->getSave(),
+																	_action,
+																	_origin,
+																	_targetVoxel,
+																	_ammo);
 
 								_projectileImpact = proj->calculateTrajectory(
 																		std::max(
-																				0.0,
+																				0.,
 																				_unit->getFiringAccuracy(
 																									_action.type,
 																									_action.weapon)
@@ -944,7 +944,7 @@ void ProjectileFlyBState::think()
 //																				NULL);
 									}
 
-									i++;
+									++i;
 								}
 
 								delete proj;
@@ -1007,7 +1007,7 @@ void ProjectileFlyBState::think()
 									if (dist > static_cast<int>(_unit->getFiringAccuracy(
 																				_action.type,
 																				_action.weapon)
-																			* 35.0))
+																			* 35.))
 									{
 										statsUnit->lowAccuracyHitCounter++;
 									}
@@ -1123,17 +1123,17 @@ bool ProjectileFlyBState::validThrowRange(
 							getMaxThrowDistance( // tilespace
 											weight,
 											static_cast<int>(Round(
-												static_cast<double>(action->actor->getBaseStats()->strength) * (action->actor->getAccuracyModifier() / 2.0 + 0.5))),
+												static_cast<double>(action->actor->getBaseStats()->strength) * (action->actor->getAccuracyModifier() / 2. + 0.5))),
 											delta_z)
 										+ 8)
-									/ 16.0;
+									/ 16.;
 	// Throwing Distance was roughly = 2.5 \D7 Strength / Weight
 //	double range = 2.63 * static_cast<double>(action->actor->getBaseStats()->strength / action->weapon->getRules()->getWeight()); // old code.
 
 	const int
 		delta_x = action->actor->getPosition().x - action->target.x,
 		delta_y = action->actor->getPosition().y - action->target.y;
-	const double throwDist = sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
+	const double throwDist = std::sqrt(static_cast<double>((delta_x * delta_x) + (delta_y * delta_y)));
 
 	// throwing off a building of 1 level lets you throw 2 tiles further than normal range,
 	// throwing up the roof of this building lets your throw 2 tiles less further
@@ -1166,30 +1166,30 @@ int ProjectileFlyBState::getMaxThrowDistance(
 	//Log(LOG_INFO) << "ProjectileFlyBState::getMaxThrowDistance()";
 	double
 		curZ = static_cast<double>(level) + 0.5,
-		delta_z = 1.0;
+		delta_z = 1.;
 
 	int dist = 0;
 	while (dist < 4000) // just in case
 	{
 		dist += 8;
 
-		if (delta_z < -1.0)
-			curZ -= 8.0;
+		if (delta_z < -1.)
+			curZ -= 8.;
 		else
-			curZ += delta_z * 8.0;
+			curZ += delta_z * 8.;
 
-		if (curZ < 0.0
-			&& delta_z < 0.0) // roll back
+		if (curZ < 0.
+			&& delta_z < 0.) // roll back
 		{
-			delta_z = std::max(delta_z, -1.0);
+			delta_z = std::max(delta_z, -1.);
 			if (std::abs(delta_z) > 1e-10) // rollback horizontal
 				dist -= static_cast<int>(curZ / delta_z);
 
 			break;
 		}
 
-		delta_z -= static_cast<double>(50 * weight / strength) / 100.0;
-		if (delta_z <= -2.0) // become falling
+		delta_z -= static_cast<double>(50 * weight / strength) / 100.;
+		if (delta_z <= -2.) // become falling
 			break;
 	}
 
@@ -1243,9 +1243,9 @@ void ProjectileFlyBState::performMeleeAttack()
 																	BA_HIT,
 //																	_ammo)			// Ammo is the weapon since (melee==true).
 																	_action.weapon)	// Not necessarily ...
-																* 100.0));
+																* 100.));
 	//Log(LOG_INFO) << ". ID " << _unit->getId() << " weapon " << _action.weapon->getRules()->getType() << " hit percent = " << percent;
-	if (RNG::percent(percent))
+	if (RNG::percent(percent) == true)
 	{
 		//Log(LOG_INFO) << ". success";
 		success = true;

@@ -119,7 +119,7 @@ private:
 				int part = 0);
 		/// Sets the battleitem to be rendered.
 		void setBattleItem(
-				BattleItem* item);
+				BattleItem* const item);
 		/// Sets the animation frame.
 		void setAnimationFrame(
 				int frame);

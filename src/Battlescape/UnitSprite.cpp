@@ -54,6 +54,7 @@ namespace OpenXcom
  * @param height	- height in pixels
  * @param x			- X position in pixels
  * @param y			- Y position in pixels
+ * @param helmet	- true if unit is wearing a helmet (TFTD)
  */
 UnitSprite::UnitSprite(
 		int width,
@@ -127,9 +128,9 @@ void UnitSprite::setBattleUnit(
  * Links this sprite to a BattleItem to get the data for rendering.
  * @param item - pointer to a BattleItem
  */
-void UnitSprite::setBattleItem(BattleItem* item)
+void UnitSprite::setBattleItem(BattleItem* const item)
 {
-	if (item)
+	if (item != NULL)
 	{
 		if (item->getSlot()->getId() == "STR_RIGHT_HAND")
 			_itemA = item;
@@ -701,6 +702,12 @@ void UnitSprite::drawRoutine0()
 
 	if (_unit->getStatus() == STATUS_AIMING)
 	{
+		if (_itemA == NULL // kL: using Universal Fist. so PUNCH!! ( this is so funny )
+			&& _itemB == NULL)
+		{
+			rightArm = _unitSurface->getFrame(rarmShoot + unitDir);
+		}
+
 		torso->setX(offXAiming);
 		legs->setX(offXAiming);
 		leftArm->setX(offXAiming);
@@ -1526,6 +1533,12 @@ void UnitSprite::drawRoutine6()
 
 	if (_unit->getStatus() == STATUS_AIMING)
 	{
+		if (_itemA == NULL // kL: using Universal Fist. so PUNCH!! ( this is so funny )
+			&& _itemB == NULL)
+		{
+			rightArm = _unitSurface->getFrame(rarmShoot + _unit->getDirection());
+		}
+
 		torso->setX(offXAiming);
 		legs->setX(offXAiming);
 		leftArm->setX(offXAiming);
@@ -1902,10 +1915,10 @@ void UnitSprite::drawRoutine21()
  */
 void UnitSprite::sortRifles()
 {
-//kL	if (_itemA && _itemA->getRules()->isTwoHanded())
+//	if (_itemA && _itemA->getRules()->isTwoHanded())
 	if (_itemA) // kL
 	{
-//kL		if (_itemB && _itemB->getRules()->isTwoHanded())
+//		if (_itemB && _itemB->getRules()->isTwoHanded())
 		if (_itemB) // kL
 		{
 			if (_unit->getActiveHand() == "STR_LEFT_HAND")
@@ -1916,7 +1929,7 @@ void UnitSprite::sortRifles()
 		else if (_unit->getStatus() != STATUS_AIMING)
 			_itemB = NULL;
 	}
-//kL	else if (_itemB && _itemB->getRules()->isTwoHanded())
+//	else if (_itemB && _itemB->getRules()->isTwoHanded())
 	else if (_itemB) // kL
 	{
 		if (_unit->getStatus() != STATUS_AIMING)

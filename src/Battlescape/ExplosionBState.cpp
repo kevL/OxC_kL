@@ -590,9 +590,10 @@ void ExplosionBState::explode()
 							false,
 							terrain);
 
-	if (_unit != NULL // if this explosion was caused by a unit shooting, now put the gun down
+
+	if (_unit != NULL // if this hit/explosion was caused by a unit, now put the weapon down
 		&& _unit->isOut() == false
-		&& _lowerWeapon)
+		&& _lowerWeapon == true)
 	{
 		_unit->aim(false);
 		_unit->setCache(NULL);

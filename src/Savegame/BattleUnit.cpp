@@ -1171,12 +1171,12 @@ bool BattleUnit::isFloating() const
  */
 void BattleUnit::aim(bool aim)
 {
-	if (aim)
+	if (aim == true)
 		_status = STATUS_AIMING;
 	else
 		_status = STATUS_STANDING;
 
-	if (_visible
+	if (_visible == true
 		|| _faction == FACTION_PLAYER)
 	{
 		_cacheInvalid = true;
@@ -1194,24 +1194,25 @@ int BattleUnit::directionTo(const Position& point) const
 	if (_pos == point) // kL. safety
 		return 0;
 
-	double offset_x = point.x - _pos.x;
-	double offset_y = point.y - _pos.y;
+	double
+		offset_x = point.x - _pos.x,
+		offset_y = point.y - _pos.y,
 
-	double theta = atan2(-offset_y, offset_x); // radians: + = y > 0; - = y < 0;
+		theta = std::atan2(-offset_y, offset_x), // radians: + = y > 0; - = y < 0;
 
 	// divide the pie in 4 thetas, each at 1/8th before each quarter
-	double m_pi_8 = M_PI / 8.0;			// a circle divided into 16 sections (rads) -> 22.5 deg
-	double d = 0.1;						// kL, a bias toward cardinal directions. (0.1..0.12)
-	double pie[4] =
-	{
-		M_PI - m_pi_8 - d,					// 2.7488935718910690836548129603696	-> 157.5 deg
-		(M_PI * 3.0 / 4.0) - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
-		M_PI_2 - m_pi_8 - d,				// 1.1780972450961724644234912687298	-> 67.5 deg
-		m_pi_8 + d							// 0.39269908169872415480783042290994	-> 22.5 deg
-	};
+		m_pi_8 = M_PI / 8.,					// a circle divided into 16 sections (rads) -> 22.5 deg
+		d = 0.1,							// kL, a bias toward cardinal directions. (0.1..0.12)
+		pie[4] =
+		{
+			M_PI - m_pi_8 - d,				// 2.7488935718910690836548129603696	-> 157.5 deg
+			M_PI * 3. / 4. - m_pi_8 + d,	// 1.9634954084936207740391521145497	-> 112.5 deg
+			M_PI_2 - m_pi_8 - d,			// 1.1780972450961724644234912687298	-> 67.5 deg
+			m_pi_8 + d						// 0.39269908169872415480783042290994	-> 22.5 deg
+		};
 
 	int dir = 2;
-	if (theta > pie[0] || theta < -pie[0])
+	if (pie[0] < theta || theta < -pie[0])
 		dir = 6;
 	else if (theta > pie[1])
 		dir = 7;
@@ -4038,9 +4039,9 @@ void BattleUnit::setHealth(int health)
 
 /**
  * Stops a unit from shooting/throwing if it spots a new opponent while turning.
- * @param stop - true to stop everything and refund TU
+ * @param stop - true to stop everything and refund TU (default true)
  */
-void BattleUnit::setStopShot(bool stop)
+void BattleUnit::setStopShot(const bool stop)
 {
 	_stopShot = stop;
 }
