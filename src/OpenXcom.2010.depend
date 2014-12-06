@@ -5614,8 +5614,7 @@
 	"Position.h"
 	"../Ruleset/RuleItem.h"
 
-1417170708 f:\git\openxcom\src\savegame\battleitem.h
-	<yaml-cpp/yaml.h>
+1417874834 f:\git\openxcom\src\savegame\battleitem.h
 	"../Battlescape/Position.h"
 
 1417562121 f:\git\openxcom\src\savegame\tile.h
@@ -5903,7 +5902,7 @@
 1417390090 f:\git\openxcom\src\battlescape\battlescapemessage.h
 	"../Engine/Surface.h"
 
-1417794453 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
+1417885736 source:f:\git\openxcom\src\battlescape\battlescapestate.cpp
 	"BattlescapeState.h"
 	"AbortMissionState.h"
 	"ActionMenuState.h"
@@ -9269,7 +9268,7 @@
 	"Base.h"
 	"../Ruleset/RuleBaseFacility.h"
 
-1417170708 source:f:\git\openxcom\src\savegame\battleitem.cpp
+1417874834 source:f:\git\openxcom\src\savegame\battleitem.cpp
 	"BattleItem.h"
 	"BattleUnit.h"
 	"Tile.h"
@@ -9484,9 +9483,8 @@
 	<sstream>
 	"../Engine/Language.h"
 
-1417562121 source:f:\git\openxcom\src\savegame\tile.cpp
+1417876678 source:f:\git\openxcom\src\savegame\tile.cpp
 	"Tile.h"
-	<algorithm>
 	"BattleItem.h"
 	"BattleUnit.h"
 	"SerializationHelper.h"

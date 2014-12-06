@@ -19,7 +19,7 @@
 
 #include "Tile.h"
 
-#include <algorithm>
+//#include <algorithm>
 
 #include "BattleItem.h"
 #include "BattleUnit.h"
@@ -113,7 +113,7 @@ Tile::~Tile()
 {
 	_inventory.clear();
 
-	for (std::list<Particle*>::iterator
+	for (std::list<Particle*>::const_iterator
 			i = _particles.begin();
 			i != _particles.end();
 			++i)
@@ -184,14 +184,14 @@ void Tile::loadBinary(
 	_fire		= unserializeInt(&buffer, serKey._fire);
 	_animOffset	= unserializeInt(&buffer, serKey._animOffset);
 
-	Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields));
+	const Uint8 boolFields = static_cast<Uint8>(unserializeInt(&buffer, serKey.boolFields));
 
-	_discovered[0] = (boolFields &1)? true: false;
-	_discovered[1] = (boolFields &2)? true: false;
-	_discovered[2] = (boolFields &4)? true: false;
+	_discovered[0] = (boolFields & 1)? true: false;
+	_discovered[1] = (boolFields & 2)? true: false;
+	_discovered[2] = (boolFields & 4)? true: false;
 
-	_curFrame[1] = (boolFields &8)? 7: 0;
-	_curFrame[2] = (boolFields &0x10)? 7: 0;
+	_curFrame[1] = (boolFields & 8)? 7: 0;
+	_curFrame[2] = (boolFields & 0x10)? 7: 0;
 
 //	if (_fire || _smoke)
 //		_animationOffset = std::rand() %4;
@@ -709,7 +709,7 @@ void Tile::setExplosive(
 		int damageType,
 		bool force)
 {
-	if (force
+	if (force == true
 		|| _explosive < power)
 	{
 		_explosive = power;
@@ -811,10 +811,10 @@ void Tile::ignite(int power)
 {
 	if (_fire == 0)
 	{
-		int fuel = getFuel();
+		const int fuel = getFuel();
 		if (fuel > 0)
 		{
-			int burn = getFlammability(); // <- lower is better :)
+			const int burn = getFlammability(); // <- lower is better :)
 			if (burn < 255)
 			{
 				power -= (burn / 10) - 15;
@@ -982,8 +982,8 @@ void Tile::setSmoke(int smoke)
 }
 
 /**
- * Gets the number of turns left for this tile to smoke. (May include fire?)
- * @return, number of turns left for this tile to smoke (0 = no smoke)
+ * Gets the number of turns left for this tile to smoke (includes fire).
+ * @return, number of turns left for this tile to smoke
  */
 int Tile::getSmoke() const
 {
@@ -1178,9 +1178,9 @@ void Tile::endTileTurn()
 			//Log(LOG_INFO) << "Tile::endTileTurn(), ID " << _unit->getId() << " burn = " << burn;
 			if (RNG::percent(static_cast<int>(Round(40.f * armorVulnerability)))) // try to set the unit on fire. Do damage from fire here, too.
 			{
-				int dur = RNG::generate(
-									0,
-									static_cast<int>(Round(5.f * armorVulnerability)));
+				const int dur = RNG::generate(
+											0,
+											static_cast<int>(Round(5.f * armorVulnerability)));
 				if (dur > _unit->getFire())
 				{
 					//Log(LOG_INFO) << ". dur = " << dur;
@@ -1214,7 +1214,7 @@ void Tile::endTileTurn()
 
 /**
  * Gets the inventory on this tile.
- * @return pointer to a vector of battleitems.
+ * @return, pointer to a vector of pointers to BattleItems
  */
 std::vector<BattleItem*>* Tile::getInventory()
 {
@@ -1223,7 +1223,7 @@ std::vector<BattleItem*>* Tile::getInventory()
 
 /**
  * Sets the marker color on this tile.
- * @param color
+ * @param color - color of marker
  */
 void Tile::setMarkerColor(int color)
 {
@@ -1232,7 +1232,7 @@ void Tile::setMarkerColor(int color)
 
 /**
  * Gets the marker color on this tile.
- * @return color
+ * @return, color of marker
  */
 int Tile::getMarkerColor()
 {

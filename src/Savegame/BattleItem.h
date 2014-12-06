@@ -20,7 +20,7 @@
 #ifndef OPENXCOM_BATTLEITEM_H
 #define OPENXCOM_BATTLEITEM_H
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 #include "../Battlescape/Position.h"
 
@@ -121,7 +121,7 @@ private:
 				int y,
 				BattleItem* item = NULL) const;
 		/// Gets the item's ammo item.
-		BattleItem* getAmmoItem();
+		BattleItem* getAmmoItem() const;
 		/// Determines if this item uses ammo.
 		bool needsAmmo() const;
 		/// Sets the item's ammo item.

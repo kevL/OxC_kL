@@ -394,7 +394,7 @@ bool BattleItem::occupiesSlot(
  *			- NULL if item is ammo or has no ammo loaded
  *			- the weapon itself if weapon is its own ammo
  */
-BattleItem* BattleItem::getAmmoItem()
+BattleItem* BattleItem::getAmmoItem() const
 {
 	return _ammoItem;
 }

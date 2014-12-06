@@ -128,7 +128,7 @@ BattlescapeState::BattlescapeState()
 		_isMouseScrolling(false),
 		_mouseScrollingStartTime(0),
 		_fuseFrame(0),
-		_showConsole(1)
+		_showConsole(2)
 {
 	//Log(LOG_INFO) << "Create BattlescapeState";
 	_savedGame = _game->getSavedGame();
@@ -1141,7 +1141,7 @@ void BattlescapeState::mapOver(Action* action)
 
 		Tile* const tile = _savedBattle->getTile(pos);
 		if (tile != NULL
-			&& tile->isDiscovered(2))
+			&& tile->isDiscovered(2) == true)
 		{
 			if (tile->getInventory()->empty() == false)
 			{
@@ -1149,77 +1149,75 @@ void BattlescapeState::mapOver(Action* action)
 
 				size_t row = 0;
 				std::wostringstream
-					ss,
-					ss1, // Console #1
-					ss2; // Console #2
-//					ss3, // Console #3
-//					ss4; // Console #4
+					woss,	// tst
+					woss1,	// Console #1
+					woss2;	// Console #2
 				std::wstring
-					ws,
+					ws1,
 					ws2,
 					ws3;
 				int qty = 1;
 
 				for (size_t
-						invSize = 0;
-						invSize != tile->getInventory()->size() + 1;
-						++invSize)
+						i = 0;
+						i != tile->getInventory()->size() + 1;
+						++i)
 				{
-					ws = L"> ";
+					ws1 = L"> ";
 
-					if (invSize < tile->getInventory()->size())
+					if (i < tile->getInventory()->size())
 					{
-						BattleItem* const item = tile->getInventory()->at(invSize);
+						const BattleItem* const item = tile->getInventory()->at(i);
 
 						if (item->getUnit() != NULL)
 						{
 							if (item->getUnit()->getType().compare(0, 11, "STR_FLOATER") == 0)
-								ws += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
+								ws1 += tr("STR_FLOATER"); // STR_FLOATER_CORPSE
 							else if (item->getUnit()->getStatus() == STATUS_UNCONSCIOUS)
 							{
-								ws += item->getUnit()->getName(_game->getLanguage());
+								ws1 += item->getUnit()->getName(_game->getLanguage());
 
 								if (item->getUnit()->getOriginalFaction() == FACTION_PLAYER)
-									ws += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun()) + L")";
+									ws1 += L" (" + Text::formatNumber(item->getUnit()->getHealth() - item->getUnit()->getStun()) + L")";
 							}
 							else
-								ws += tr(item->getRules()->getType());
+								ws1 += tr(item->getRules()->getType());
 						}
 						else
 						{
-							ws += tr(item->getRules()->getType());
+							ws1 += tr(item->getRules()->getType());
 
 							if (item->getRules()->getBattleType() == BT_AMMO)
-								ws += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
+								ws1 += L" (" + Text::formatNumber(item->getAmmoQuantity()) + L")";
 							else if (item->getRules()->getBattleType() == BT_FIREARM
-								&& item->getAmmoItem()
+								&& item->getAmmoItem() != NULL
 								&& item->getAmmoItem() != item)
 							{
-								std::wstring s = tr(item->getAmmoItem()->getRules()->getType());
-								ws += L" | " + s + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
+								std::wstring ws = tr(item->getAmmoItem()->getRules()->getType());
+								ws1 += L" | " + ws + L" (" + Text::formatNumber(item->getAmmoItem()->getAmmoQuantity()) + L")";
 							}
 							else if ((item->getRules()->getBattleType() == BT_GRENADE
 									|| item->getRules()->getBattleType() == BT_PROXIMITYGRENADE)
 								&& item->getFuseTimer() > -1)
 							{
-								ws += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
+								ws1 += L" (" + Text::formatNumber(item->getFuseTimer()) + L")";
 							}
 						}
 					}
 
-					if (invSize == 0)
+					if (i == 0)
 					{
-						ws3 = ws2 = ws;
+						ws3 = ws2 = ws1;
 						continue;
 					}
 
-					if (ws == ws3)
+					if (ws1 == ws3)
 					{
-						qty++;
+						++qty;
 						continue;
 					}
 					else
-						ws3 = ws;
+						ws3 = ws1;
 
 					if (qty > 1)
 					{
@@ -1228,81 +1226,79 @@ void BattlescapeState::mapOver(Action* action)
 					}
 
 					ws2 += L"\n";
-					ss << ws2;
-					ws3 = ws2 = ws;
+					woss << ws2;
+					ws3 = ws2 = ws1;
 
 
-					if (row == 24) // Console #1
+					if (row < 26) // Console #1
 					{
-						ss << L"> more >";
-						row++;
+						if (row == 24)
+						{
+							woss << L"> more >";
+							++row;
+						}
+
+						woss1.str(L"");
+						woss1 << woss.str();
+
+						if (row == 25)
+						{
+							/* Log(LOG_INFO) << "row 25";
+							std::string s (ws1.begin(), ws1.end());
+							Log(LOG_INFO) << ". ws1 = " << s;
+							std::string t (ws2.begin(), ws2.end());
+							Log(LOG_INFO) << ". ws2 = " << t;
+							std::string u (ws3.begin(), ws3.end());
+							Log(LOG_INFO) << ". ws3 = " << u;
+							std::wstring wstr1 (woss1.str());
+							std::string v (wstr1.begin(), wstr1.end());
+							Log(LOG_INFO) << ". woss1 = " << v;
+							std::wstring wstr2 (woss.str());
+							std::string w (wstr2.begin(), wstr2.end());
+							Log(LOG_INFO) << ". woss = " << w; */
+
+							if (ws1 == L"> ")
+							{
+								std::wstring wstr = woss1.str();
+								wstr.erase(wstr.length() - 8);
+								woss1.str(L"");
+								woss1 << wstr;
+							}
+
+							if (_showConsole == 1)
+								break;
+
+							woss.str(L"");
+						}
 					}
-					if (row < 26)
+
+					if (row > 26) // Console #2
 					{
-						ss1.str(L"");
-						ss1 << ss.str();
-					}
-					if (row == 25)
-					{
-						if (_showConsole == 1)
+						if (row == 50)
+							woss << L"> more >";
+
+						woss2.str(L"");
+						woss2 << woss.str();
+
+						if (row == 51)
+						{
+							if (ws1 == L"> ")
+							{
+								std::wstring wstr = woss2.str();
+								wstr.erase(wstr.length() - 8);
+								woss2.str(L"");
+								woss2 << wstr;
+							}
+
 							break;
-
-						ss.str(L"");
+						}
 					}
-
-					if (row == 50) // Console #2
-					{
-						ss << L"> more >";
-//						row++;
-					}
-					if (26 < row && row < 52)
-					{
-						ss2.str(L"");
-						ss2 << ss.str();
-					}
-					if (row == 51)
-					{
-//						if (_showConsole == 2)
-						break;
-
-//						ss.str(L"");
-					}
-
-/*					if (row == 76) // Console #3
-					{
-						ss << L"> more >";
-						row++;
-					}
-					if (52 < row && row < 78)
-					{
-						ss3.str(L"");
-						ss3 << ss.str();
-					}
-					if (row == 77)
-					{
-						if (_showConsole == 3)
-							break;
-
-						ss.str(L"");
-					}
-
-					if (row == 102) // Console #4
-						ss << L"> more >";
-					if (78 < row && row < 104)
-					{
-						ss4.str(L"");
-						ss4 << ss.str();
-					}
-					if (row == 102)
-						break; */
 
 					++row;
 				}
 
-				_txtConsole1->setText(ss1.str());
-				_txtConsole2->setText(ss2.str());
-//				_txtConsole3->setText(ss3.str());
-//				_txtConsole4->setText(ss4.str());
+				_txtConsole1->setText(woss1.str());
+				_txtConsole2->setText(woss2.str());
 			}
 			else if (tile->hasNoFloor(_savedBattle->getTile(pos + Position(0, 0,-1))) == false)
 				_txtFloor->setVisible();
@@ -1323,7 +1319,7 @@ void BattlescapeState::mapOver(Action* action)
 void BattlescapeState::mapPress(Action* action)
 {
 	// don't handle mouseclicks over the buttons (it overlaps with map surface)
-	if (_mouseOverIcons)
+	if (_mouseOverIcons == true)
 		return;
 
 	if (action->getDetails()->button.button == Options::battleDragScrollButton)
@@ -1364,7 +1360,7 @@ void BattlescapeState::mapClick(Action* action)
 	// the mouse-release event is missed for any reason.
 	// However if the SDL is also missed the release event, then it is to no avail :(
 	// (this part handles the release if it is missed and now another button is used)
-	if (_isMouseScrolling)
+	if (_isMouseScrolling == true)
 	{
 		if (action->getDetails()->button.button != Options::battleDragScrollButton
 			&& (SDL_GetMouseState(0, 0) & SDL_BUTTON(Options::battleDragScrollButton)) == 0)
@@ -1382,7 +1378,7 @@ void BattlescapeState::mapClick(Action* action)
 		}
 	}
 
-	if (_isMouseScrolling) // DragScroll-Button release: release mouse-scroll-mode
+	if (_isMouseScrolling == true) // DragScroll-Button release: release mouse-scroll-mode
 	{
 		// While scrolling, other buttons are ineffective
 		if (action->getDetails()->button.button == Options::battleDragScrollButton)
@@ -1402,7 +1398,7 @@ void BattlescapeState::mapClick(Action* action)
 			stopScrolling(action); // newScroll
 		}
 
-		if (_isMouseScrolled)
+		if (_isMouseScrolled == true)
 			return;
 	}
 
@@ -1414,12 +1410,12 @@ void BattlescapeState::mapClick(Action* action)
 	}
 
 	// don't handle mouseclicks over the buttons (it overlaps with map surface)
-	if (_mouseOverIcons)
+	if (_mouseOverIcons == true)
 		return;
 
 	// don't accept leftclicks if there is no cursor or there is an action busy
 	if (_map->getCursorType() == CT_NONE
-		|| _battleGame->isBusy())
+		|| _battleGame->isBusy() == true)
 	{
 		return;
 	}
@@ -1427,7 +1423,7 @@ void BattlescapeState::mapClick(Action* action)
 	Position pos;
 	_map->getSelectorPosition(&pos);
 
-	if (_savedBattle->getDebugMode())
+	if (_savedBattle->getDebugMode() == true)
 	{
 		std::wostringstream ss;
 		ss << L"Clicked " << pos;
@@ -1440,9 +1436,9 @@ void BattlescapeState::mapClick(Action* action)
 		if (action->getDetails()->button.button == SDL_BUTTON_RIGHT
 				// kL_ Taking this out so that Alt can be used for forced walking by flying soldiers.
 				// We all have RMBs, it's 2014 a.d. .....
-//kL			|| (action->getDetails()->button.button == SDL_BUTTON_LEFT
-//kL				&& (SDL_GetModState() & KMOD_ALT) != 0))
-			&& playableUnitSelected())
+//			|| (action->getDetails()->button.button == SDL_BUTTON_LEFT
+//				&& (SDL_GetModState() & KMOD_ALT) != 0))
+			&& playableUnitSelected() == true)
 		{
 			_battleGame->secondaryAction(pos);
 		}
@@ -1539,20 +1535,20 @@ inline void BattlescapeState::handle(Action* action)
 		{
 			if (Options::debug)
 			{
-				if (action->getDetails()->key.keysym.sym == SDLK_d		// "ctrl-d" - enable debug mode
+				if (action->getDetails()->key.keysym.sym == SDLK_d			// "ctrl-d" - enable debug mode
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					_savedBattle->setDebugMode();
 					debug(L"Debug Mode");
 				}
-				else if (_savedBattle->getDebugMode()							// "ctrl-v" - reset tile visibility
+				else if (_savedBattle->getDebugMode()						// "ctrl-v" - reset tile visibility
 					&& action->getDetails()->key.keysym.sym == SDLK_v
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
 					debug(L"Resetting tile visibility");
 					_savedBattle->resetTiles();
 				}
-				else if (_savedBattle->getDebugMode()							// "ctrl-k" - kill all aliens
+				else if (_savedBattle->getDebugMode()						// "ctrl-k" - kill all aliens
 					&& action->getDetails()->key.keysym.sym == SDLK_k
 					&& (SDL_GetModState() & KMOD_CTRL) != 0)
 				{
@@ -1578,23 +1574,19 @@ inline void BattlescapeState::handle(Action* action)
 					saveAIMap();
 				}
 			}
-			else if (!_savedGame->isIronman())					// quick save and quick load
+			else if (_savedGame->isIronman() == false)						// quick save and quick load
 			{
 				// not works in debug mode to prevent conflict in hotkeys by default
 				if (action->getDetails()->key.keysym.sym == Options::keyQuickSave)
-				{
 					_game->pushState(new SaveGameState(
 													OPT_BATTLESCAPE,
 													SAVE_QUICK,
 													_palette));
-				}
 				else if (action->getDetails()->key.keysym.sym == Options::keyQuickLoad)
-				{
 					_game->pushState(new LoadGameState(
 													OPT_BATTLESCAPE,
 													SAVE_QUICK,
 													_palette));
-				}
 			}
 
 			if (action->getDetails()->key.keysym.sym == Options::keyBattleVoxelView)
@@ -1609,16 +1601,16 @@ inline void BattlescapeState::handle(Action* action)
  */
 void BattlescapeState::btnUnitUpClick(Action*)
 {
-	if (!playableUnitSelected())
+	if (playableUnitSelected() == false)
 		return;
 
 //	_savedBattle->getPathfinding()->setKneelCheck();
-	int valid = _savedBattle->getPathfinding()->validateUpDown(
-												_savedBattle->getSelectedUnit(),
-												_savedBattle->getSelectedUnit()->getPosition(),
-												Pathfinding::DIR_UP);
+	const int valid = _savedBattle->getPathfinding()->validateUpDown(
+																_savedBattle->getSelectedUnit(),
+																_savedBattle->getSelectedUnit()->getPosition(),
+																Pathfinding::DIR_UP);
 
-	if (valid > 0) // gravLift or flying
+	if (valid > 0)			// gravLift or flying
 	{
 		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(
@@ -1629,7 +1621,7 @@ void BattlescapeState::btnUnitUpClick(Action*)
 		warning("STR_ACTION_NOT_ALLOWED_FLIGHT");
 //	else if (valid == -1)	// kneeling
 //		warning("STR_ACTION_NOT_ALLOWED_KNEEL");
-	else					// valid == 0 : blocked by roof
+	else					// valid==0 : blocked by roof
 		warning("STR_ACTION_NOT_ALLOWED_ROOF");
 }
 
@@ -1639,22 +1631,22 @@ void BattlescapeState::btnUnitUpClick(Action*)
  */
 void BattlescapeState::btnUnitDownClick(Action*)
 {
-	if (!playableUnitSelected())
+	if (playableUnitSelected() == false)
 		return;
 
-	int valid = _savedBattle->getPathfinding()->validateUpDown(
-												_savedBattle->getSelectedUnit(),
-												_savedBattle->getSelectedUnit()->getPosition(),
-												Pathfinding::DIR_DOWN);
+	const int valid = _savedBattle->getPathfinding()->validateUpDown(
+																_savedBattle->getSelectedUnit(),
+																_savedBattle->getSelectedUnit()->getPosition(),
+																Pathfinding::DIR_DOWN);
 
-	if (valid > 0) // gravLift or flying
+	if (valid > 0)	// gravLift or flying
 	{
 		_battleGame->cancelCurrentAction();
 		_battleGame->moveUpDown(
 							_savedBattle->getSelectedUnit(),
 							Pathfinding::DIR_DOWN);
 	}
-	else // blocked, floor
+	else			// blocked, floor
 		warning("STR_ACTION_NOT_ALLOWED_FLOOR");
 }
 
@@ -1665,7 +1657,7 @@ void BattlescapeState::btnUnitDownClick(Action*)
 void BattlescapeState::btnMapUpClick(Action*)
 {
 	if (_savedBattle->getSide() == FACTION_PLAYER
-		|| _savedBattle->getDebugMode())
+		|| _savedBattle->getDebugMode() == true)
 	{
 		_map->getCamera()->up();
 	}
@@ -1678,7 +1670,7 @@ void BattlescapeState::btnMapUpClick(Action*)
 void BattlescapeState::btnMapDownClick(Action*)
 {
 	if (_savedBattle->getSide() == FACTION_PLAYER
-		|| _savedBattle->getDebugMode())
+		|| _savedBattle->getDebugMode() == true)
 	{
 		_map->getCamera()->down();
 	}
@@ -1690,7 +1682,7 @@ void BattlescapeState::btnMapDownClick(Action*)
  */
 void BattlescapeState::btnShowMapClick(Action*)
 {
-	if (allowButtons())
+	if (allowButtons() == true)
 		_game->pushState(new MiniMapState(
 										_map->getCamera(),
 										_savedBattle));
