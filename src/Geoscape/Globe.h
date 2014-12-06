@@ -69,6 +69,7 @@ private:
 
 	bool
 //		_blink, // they typed it to (int)
+		_dfChase,
 		_hover,
 		_isMouseScrolled,
 		_isMouseScrolling,
@@ -265,10 +266,13 @@ private:
 		bool zoomDogfightIn();
 		/// Zooms the globe out for dogfights.
 		bool zoomDogfightOut();
+		/// Sets whether a craft has been minimized and is chasing a UFO.
+		void setChasingUfo(const bool chase = true);
+
 		/// Gets the current zoom.
 		size_t getZoom() const;
-		/// kL. Gets the number of zoom levels available.
-		size_t getZoomLevels() const; // kL
+		/// Gets the number of zoom levels available.
+		size_t getZoomLevels() const;
 
 		/// Centers the globe on a point.
 		void center(

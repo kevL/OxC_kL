@@ -19,23 +19,23 @@
 
 #include "StartState.h"
 
-#include "../version.h"
+//#include "../version.h"
 
 #include "ErrorMessageState.h"
 #include "IntroState.h"
 #include "MainMenuState.h"
 
 #include "../Engine/Action.h"
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
-#include "../Engine/Font.h"
+//#include "../Engine/CrossPlatform.h"
+//#include "../Engine/Exception.h"
+//#include "../Engine/Font.h"
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Logger.h"
+//#include "../Engine/Logger.h"
 #include "../Engine/Music.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
-#include "../Engine/Screen.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
+//#include "../Engine/Screen.h"
 #include "../Engine/Sound.h"
 //kL #include "../Engine/Surface.h"
 #include "../Engine/Timer.h"
@@ -48,8 +48,8 @@
 
 #include "../Ruleset/Ruleset.h"
 
-#include <SDL_mixer.h>
-#include <SDL_thread.h>
+//#include <SDL_mixer.h>
+//#include <SDL_thread.h>
 
 
 namespace OpenXcom
@@ -334,7 +334,7 @@ void StartState::handle(Action* action)
  */
 void StartState::animate()
 {
-	_anim++;
+	++_anim;
 
 	if (_anim %15 == 0) // kL
 		_cursor->setVisible(!_cursor->getVisible());
@@ -492,13 +492,14 @@ void StartState::addLine(const std::wstring& line)
 	_output << L"\n" << line;
 	_text->setText(_output.str());
 
-	const int
+/*	const int
 //kL	y = _text->getTextHeight() - _font->getHeight(),
 //kL	x = _text->getTextWidth(y / _font->getHeight());
 		x = _text->getTextWidth((_text->getTextHeight() - _font->getHeight()) / _font->getHeight()) + 20,	// kL
 		y = _text->getTextHeight() - _font->getHeight() + 20;												// kL
 	_cursor->setX(x);
-	_cursor->setY(y);
+	_cursor->setY(y); */
+	addCursor_kL();
 }
 
 /**

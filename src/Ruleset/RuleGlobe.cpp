@@ -21,16 +21,16 @@
 
 #include "RuleGlobe.h"
 
-#include <cmath>
-#include <fstream>
+//#include <cmath>
+//#include <fstream>
 
-#include <SDL_endian.h>
+//#include <SDL_endian.h>
 
 #include "Polygon.h"
 #include "Polyline.h"
 
-#include "../Engine/CrossPlatform.h"
-#include "../Engine/Exception.h"
+//#include "../Engine/CrossPlatform.h"
+//#include "../Engine/Exception.h"
 
 
 namespace OpenXcom
@@ -48,7 +48,7 @@ RuleGlobe::RuleGlobe()
  */
 RuleGlobe::~RuleGlobe()
 {
-	for (std::list<Polygon*>::iterator
+	for (std::list<Polygon*>::const_iterator
 			i = _polygons.begin();
 			i != _polygons.end();
 			++i)
@@ -56,7 +56,7 @@ RuleGlobe::~RuleGlobe()
 		delete *i;
 	}
 
-	for (std::list<Polyline*>::iterator
+	for (std::list<Polyline*>::const_iterator
 			i = _polylines.begin();
 			i != _polylines.end();
 			++i)
@@ -73,7 +73,7 @@ void RuleGlobe::load(const YAML::Node& node)
 {
 	if (node["data"])
 	{
-		for (std::list<Polygon*>::iterator
+		for (std::list<Polygon*>::const_iterator
 				i = _polygons.begin();
 				i != _polygons.end();
 				++i)
@@ -87,7 +87,7 @@ void RuleGlobe::load(const YAML::Node& node)
 
 	if (node["polygons"])
 	{
-		for (std::list<Polygon*>::iterator
+		for (std::list<Polygon*>::const_iterator
 				i = _polygons.begin();
 				i != _polygons.end();
 				++i)
@@ -109,7 +109,7 @@ void RuleGlobe::load(const YAML::Node& node)
 
 	if (node["polylines"])
 	{
-		for (std::list<Polyline*>::iterator
+		for (std::list<Polyline*>::const_iterator
 				i = _polylines.begin();
 				i != _polylines.end();
 				++i)
@@ -192,15 +192,15 @@ void RuleGlobe::loadDat(const std::string& filename)
 				++i)
 		{
 			// Correct X-Com degrees and convert to radians
-			double lonRad = value[j++] * 0.125f * M_PI / 180.0;
-			double latRad = value[j++] * 0.125f * M_PI / 180.0;
+			double
+				lonRad = value[j++] * 0.125f * M_PI / 180.,
+				latRad = value[j++] * 0.125f * M_PI / 180.;
 
 			poly->setLongitude(i, lonRad);
 			poly->setLatitude(i, latRad);
 		}
 
 		poly->setTexture(value[8]);
-
 		_polygons.push_back(poly);
 	}
 

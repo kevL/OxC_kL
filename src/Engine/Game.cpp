@@ -34,15 +34,15 @@
 //#include "Adlib/adlplayer.h"
 
 #include "Action.h"
-#include "CrossPlatform.h"
-#include "Exception.h"
+//#include "CrossPlatform.h"
+//#include "Exception.h"
 #include "InteractiveSurface.h"
 #include "Language.h"
-#include "Logger.h"
+//#include "Logger.h"
 #include "Music.h"
-#include "Options.h"
-#include "Palette.h"
-#include "Screen.h"
+//#include "Options.h"
+//#include "Palette.h"
+//#include "Screen.h"
 #include "Sound.h"
 #include "State.h"
 
@@ -61,7 +61,7 @@
 namespace OpenXcom
 {
 
-const double Game::VOLUME_GRADIENT = 10.0;
+const double Game::VOLUME_GRADIENT = 10.;
 
 
 /**

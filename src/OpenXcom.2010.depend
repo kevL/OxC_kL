@@ -4515,7 +4515,7 @@
 1416685067 f:\git\openxcom\src\geoscape\buildnewbasestate.h
 	"../Engine/State.h"
 
-1416848725 f:\git\openxcom\src\geoscape\geoscapestate.h
+1417844287 f:\git\openxcom\src\geoscape\geoscapestate.h
 	"../Engine/State.h"
 
 1413136959 f:\git\openxcom\src\menu\errormessagestate.h
@@ -4812,7 +4812,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Ufo.h"
 
-1417184480 f:\git\openxcom\src\geoscape\globe.h
+1417838091 f:\git\openxcom\src\geoscape\globe.h
 	"Cord.h"
 	"../Engine/FastLineClip.h"
 	"../Engine/InteractiveSurface.h"
@@ -6880,20 +6880,14 @@
 	"Logger.h"
 	"Surface.h"
 
-1417704045 source:f:\git\openxcom\src\engine\game.cpp
+1417827612 source:f:\git\openxcom\src\engine\game.cpp
 	"Game.h"
 	<windows.h>
 	<SDL_syswm.h>
 	"Action.h"
-	"CrossPlatform.h"
-	"Exception.h"
 	"InteractiveSurface.h"
 	"Language.h"
-	"Logger.h"
 	"Music.h"
-	"Options.h"
-	"Palette.h"
-	"Screen.h"
 	"Sound.h"
 	"State.h"
 	"../Interface/Cursor.h"
@@ -7466,8 +7460,9 @@
 	"../Resource/XcomResourcePack.h"
 	"../Savegame/SavedGame.h"
 
-1417823013 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
+1417843904 source:f:\git\openxcom\src\geoscape\dogfightstate.cpp
 	"DogfightState.h"
+	"GeoscapeState.h"
 	"Globe.h"
 	"../Engine/Action.h"
 	"../Engine/Game.h"
@@ -7498,7 +7493,7 @@
 	"../Savegame/AlienMission.h"
 	"../Savegame/AlienStrategy.h"
 
-1417821822 f:\git\openxcom\src\geoscape\dogfightstate.h
+1417832442 f:\git\openxcom\src\geoscape\dogfightstate.h
 	"../Engine/State.h"
 
 1417180619 f:\git\openxcom\src\savegame\alienstrategy.h
@@ -7551,7 +7546,7 @@
 1416687846 f:\git\openxcom\src\geoscape\selectdestinationstate.h
 	"../Engine/State.h"
 
-1417701029 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
+1417844494 source:f:\git\openxcom\src\geoscape\geoscapestate.cpp
 	"GeoscapeState.h"
 	"AlienBaseState.h"
 	"AlienTerrorState.h"
@@ -7694,7 +7689,7 @@
 	<string>
 	<vector>
 
-1417189496 source:f:\git\openxcom\src\geoscape\globe.cpp
+1417837961 source:f:\git\openxcom\src\geoscape\globe.cpp
 	"Globe.h"
 	"GeoscapeState.h"
 	"../Engine/Action.h"
@@ -8039,7 +8034,7 @@
 	"../Savegame/SavedGame.h"
 	"../Savegame/Target.h"
 
-1417819748 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
+1417824685 source:f:\git\openxcom\src\geoscape\ufodetectedstate.cpp
 	"UfoDetectedState.h"
 	"GeoscapeState.h"
 	"Globe.h"
@@ -8356,12 +8351,10 @@
 	"../Savegame/TerrorSite.h"
 	"../Savegame/Ufo.h"
 
-1415853535 source:f:\git\openxcom\src\menu\newgamestate.cpp
+1417828161 source:f:\git\openxcom\src\menu\newgamestate.cpp
 	"NewGameState.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
 	"../Interface/Text.h"
 	"../Interface/TextButton.h"
 	"../Interface/ToggleTextButton.h"
@@ -8560,23 +8553,15 @@
 	"../Interface/TextList.h"
 	"../Savegame/SavedGame.h"
 
-1416333405 source:f:\git\openxcom\src\menu\startstate.cpp
+1417834572 source:f:\git\openxcom\src\menu\startstate.cpp
 	"StartState.h"
-	"../version.h"
 	"ErrorMessageState.h"
 	"IntroState.h"
 	"MainMenuState.h"
 	"../Engine/Action.h"
-	"../Engine/CrossPlatform.h"
-	"../Engine/Exception.h"
-	"../Engine/Font.h"
 	"../Engine/Game.h"
 	"../Engine/Language.h"
-	"../Engine/Logger.h"
 	"../Engine/Music.h"
-	"../Engine/Options.h"
-	"../Engine/Palette.h"
-	"../Engine/Screen.h"
 	"../Engine/Sound.h"
 	"../Engine/Timer.h"
 	"../Interface/FpsCounter.h"
@@ -8584,8 +8569,6 @@
 	"../Interface/Text.h"
 	"../Resource/XcomResourcePack.h"
 	"../Ruleset/Ruleset.h"
-	<SDL_mixer.h>
-	<SDL_thread.h>
 
 1413136959 source:f:\git\openxcom\src\menu\teststate.cpp
 	"TestState.h"
@@ -9320,7 +9303,7 @@
 	"../Engine/RNG.h"
 	"../Ruleset/RuleCountry.h"
 
-1417665695 source:f:\git\openxcom\src\savegame\craft.cpp
+1417839062 source:f:\git\openxcom\src\savegame\craft.cpp
 	"Craft.h"
 	"AlienBase.h"
 	"Base.h"
@@ -11885,24 +11868,16 @@
 1413136960 f:\git\openxcom\src\ruleset\polyline.h
 	<yaml-cpp/yaml.h>
 
-1413136961 f:\git\openxcom\src\ruleset\ruleglobe.h
-	<list>
-	<string>
-	<yaml-cpp/yaml.h>
+1417829861 f:\git\openxcom\src\ruleset\ruleglobe.h
 
 1413136960 source:f:\git\openxcom\src\ruleset\polyline.cpp
 	"Polyline.h"
 	<cmath>
 
-1413136961 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
+1417829929 source:f:\git\openxcom\src\ruleset\ruleglobe.cpp
 	"RuleGlobe.h"
-	<cmath>
-	<fstream>
-	<SDL_endian.h>
 	"Polygon.h"
 	"Polyline.h"
-	"../Engine/CrossPlatform.h"
-	"../Engine/Exception.h"
 
 1413136960 source:f:\git\openxcom\src\ruleset\polygon.cpp
 	"Polygon.h"

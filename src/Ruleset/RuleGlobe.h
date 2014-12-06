@@ -20,10 +20,10 @@
 #ifndef OPENXCOM_RULEGLOBE_H
 #define OPENXCOM_RULEGLOBE_H
 
-#include <list>
-#include <string>
+//#include <list>
+//#include <string>
 
-#include <yaml-cpp/yaml.h>
+//#include <yaml-cpp/yaml.h>
 
 
 namespace OpenXcom

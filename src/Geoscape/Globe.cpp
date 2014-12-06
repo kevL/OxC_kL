@@ -116,7 +116,7 @@ struct GlobeStaticData
 	{
 		const double
 			limit = r * r,
-			norm = 1.0 / r;
+			norm = 1. / r;
 
 		Cord ret;
 		ret.x = (x - ox);
@@ -133,9 +133,9 @@ struct GlobeStaticData
 		}
 		else
 		{
-			ret.x = 0.0;
-			ret.y = 0.0;
-			ret.z = 0.0;
+			ret.x = 0.;
+			ret.y = 0.;
+			ret.z = 0.;
 
 			return ret;
 		}
@@ -215,21 +215,21 @@ struct CreateShadow
 		temp.x += temp.z + temp.y;
 		// we have norm of distance between 2 vectors, now stored in 'x'
 
-		temp.x -= 2.0;
-		temp.x *= 125.0;
+		temp.x -= 2.;
+		temp.x *= 125.;
 
-		if (temp.x < -110.0)
-			temp.x = -31.0;
-		else if (temp.x > 120.0)
-			temp.x = 50.0;
+		if (temp.x < -110.)
+			temp.x = -31.;
+		else if (temp.x > 120.)
+			temp.x = 50.;
 		else
 			temp.x = static_data.shade_gradient[static_cast<Sint16>(temp.x) + 120];
 
 		temp.x -= noise;
 
-		if (temp.x > 0.0)
+		if (temp.x > 0.)
 		{
-			const Sint16 val = (temp.x > 31.0)? 31: static_cast<Sint16>(temp.x);
+			const Sint16 val = (temp.x > 31.)? 31: static_cast<Sint16>(temp.x);
 			const int d = static_cast<int>(dest & helper::ColorGroup);
 			if (d == Globe::oceanColor1
 				|| d == Globe::oceanColor2)
@@ -321,6 +321,7 @@ Globe::Globe(
 		_cenX(cenX),
 		_cenY(cenY),
 		_game(game),
+		_rules(game->getRuleset()->getGlobe()),
 		_hover(false),
 		_blink(-1),
 //		_blinkVal(0),
@@ -336,10 +337,9 @@ Globe::Globe(
 		_latBeforeMouseScrolling(0.),
 		_radius(0.),
 		_radiusStep(0.),
-		_debugType(0)
+		_debugType(0),
+		_dfChase(false)
 {
-	_rules = game->getRuleset()->getGlobe();
-
 	if (game->getRuleset()->getInterface("geoscape")
 		&& game->getRuleset()->getInterface("geoscape")->getElement("globe"))
 	{
@@ -592,7 +592,7 @@ bool Globe::pointBack(
 	const double c = std::cos(_cenLat) * std::cos(lat) * std::cos(lon - _cenLon)
 				   + std::sin(_cenLat) * std::sin(lat);
 
-	return (c < 0.0);
+	return (c < 0.);
 }
 
 
@@ -865,7 +865,7 @@ bool Globe::zoomDogfightIn()
 		else
 		{
 			if (radius + _radiusStep >= _zoomRadii[_zoom + 1])
-				_zoom++;
+				++_zoom;
 
 			setZoom(_zoom);
 			_radius = radius + _radiusStep;
@@ -892,7 +892,7 @@ bool Globe::zoomDogfightOut()
 		else
 		{
 			if (radius - _radiusStep <= _zoomRadii[_zoom - 1])
-				_zoom--;
+				--_zoom;
 
 			setZoom(_zoom);
 			_radius = radius - _radiusStep;
@@ -901,9 +901,37 @@ bool Globe::zoomDogfightOut()
 		return false;
 	}
 
-	_dfPreZoom = _zoomRadii.size();
+	if (_dfChase == false)
+		_dfPreZoom = _zoomRadii.size();
 
 	return true;
+}
+
+/**
+ * Sets whether a craft has been minimized and is chasing a UFO.
+ * @param chase - true if chasing UFO (default true)
+ */
+void Globe::setChasingUfo(const bool chase)
+{
+	_dfChase = chase;
+}
+
+/**
+ * Gets the Globe's current zoom level.
+ * @return, zoom level
+ */
+size_t Globe::getZoom() const
+{
+	return _zoom;
+}
+
+/**
+ * Gets the number of zoom levels available.
+ * @return, number of zoom levels
+ */
+size_t Globe::getZoomLevels() const
+{
+	return _zoomRadii.size();
 }
 
 /**
@@ -943,6 +971,7 @@ bool Globe::insideLand(
 	globe->_cenLat = lat; */
 
 	bool ret = false;
+
 	for (std::list<Polygon*>::const_iterator
 			i = _rules->getPolygons()->begin();
 			i != _rules->getPolygons()->end()
@@ -1065,13 +1094,13 @@ std::vector<Target*> Globe::getTargets(
 			// kL: this is a kludge; the UFO should have been deleted before
 			// creating SelectDestinationState, or MultipleTargetsState.
 			// see: GeoscapeState::time5Seconds(), case Ufo::FLYING
-			|| ((*i)->reachedDestination()							// kL
+			|| ((*i)->reachedDestination() == true					// kL
 				&& (*i)->getMissionType() == "STR_ALIEN_TERROR"))	// kL
 		{
 			continue;
 		}
 
-		if (targetNear(*i, x, y))
+		if (targetNear(*i, x, y) == true)
 			targets.push_back(*i);
 	}
 
@@ -1080,7 +1109,7 @@ std::vector<Target*> Globe::getTargets(
 			i != _game->getSavedGame()->getWaypoints()->end();
 			++i)
 	{
-		if (targetNear(*i, x, y))
+		if (targetNear(*i, x, y) == true)
 			targets.push_back(*i);
 	}
 
@@ -1089,7 +1118,7 @@ std::vector<Target*> Globe::getTargets(
 			i != _game->getSavedGame()->getTerrorSites()->end();
 			++i)
 	{
-		if (targetNear(*i, x, y))
+		if (targetNear(*i, x, y) == true)
 			targets.push_back(*i);
 	}
 
@@ -1101,7 +1130,7 @@ std::vector<Target*> Globe::getTargets(
 		if ((*i)->isDiscovered() == false)
 			continue;
 
-		if (targetNear(*i, x, y))
+		if (targetNear(*i, x, y) == true)
 			targets.push_back(*i);
 	}
 
@@ -1488,14 +1517,14 @@ void Globe::XuLine(
 
 	if (y2 < y1)
 		SY = -1;
-	else if (AreSame(delta_y, 0.0))
+	else if (AreSame(delta_y, 0.))
 		SY = 0;
 	else
 		SY = 1;
 
 	if (x2 < x1)
 		SX = -1;
-	else if (AreSame(delta_x, 0.0))
+	else if (AreSame(delta_x, 0.))
 		SX = 0;
 	else
 		SX = 1;
@@ -1503,12 +1532,12 @@ void Globe::XuLine(
 	x0 = x1;
 	y0 = y1;
 
-	if (inv)
+	if (inv == true)
 		SY = (delta_y / len);
 	else
 		SX = (delta_x / len);
 
-	while (len > 0.0)
+	while (len > 0.)
 	{
 //		if (x0 > 0 && y0 > 0 && x0 < surface->getWidth() && y0 < surface->getHeight())
 		tcol = src->getPixelColor(
@@ -1546,7 +1575,7 @@ void Globe::XuLine(
 
 		x0 += SX;
 		y0 += SY;
-		len -= 1.0;
+		len -= 1.;
 	}
 }
 
@@ -1579,7 +1608,7 @@ void Globe::drawRadars()
 				++i)
 		{
 			range = static_cast<double>(_game->getRuleset()->getBaseFacility(*i)->getRadarRange());
-			if (range > 0.0)
+			if (range > 0.)
 			{
 //				range *= (1.0 / 60.0) * (M_PI / 180.0);
 				range *= unitToRads;
@@ -1607,7 +1636,7 @@ void Globe::drawRadars()
 		lon = (*i)->getLongitude();
 
 		if (!
-			(AreSame(lon, 0.0) && AreSame(lat, 0.0)))
+			(AreSame(lon, 0.) && AreSame(lat, 0.)))
 		{
 			polarToCart(
 					lon,
@@ -1623,7 +1652,7 @@ void Globe::drawRadars()
 				if ((*j)->getBuildTime() == 0)
 				{
 					range = static_cast<double>((*j)->getRules()->getRadarRange());
-					if (range > 0.0)
+					if (range > 0.)
 					{
 //						range *= (1.0 / 60.0) * (M_PI / 180.0);
 						range *= unitToRads;
@@ -1646,7 +1675,7 @@ void Globe::drawRadars()
 				continue;
 
 			range = static_cast<double>((*j)->getRules()->getRadarRange());
-			if (range > 0.0)
+			if (range > 0.)
 			{
 				lat = (*j)->getLatitude();
 				lon = (*j)->getLongitude();
@@ -1689,15 +1718,15 @@ void Globe::drawGlobeCircle(
 	double
 		x,
 		y,
-		x2 = 0.0,
-		y2 = 0.0,
+		x2 = 0.,
+		y2 = 0.,
 		lat1,
 		lon1;
 
 	for (double // 48 circle segments
-			az = 0.0;
-			az <= M_PI * 2.0 + 0.01;
-			az += M_PI * 2.0 / static_cast<double>(segments))
+			az = 0.;
+			az <= M_PI * 2. + 0.01;
+			az += M_PI * 2. / static_cast<double>(segments))
 	{
 		// calculating sphere-projected circle
 		lat1 = asin(std::sin(lat) * std::cos(radius) + std::cos(lat) * std::sin(radius) * std::cos(az));
@@ -1711,7 +1740,7 @@ void Globe::drawGlobeCircle(
 				&x,
 				&y);
 
-		if (AreSame(az, 0.0)) // first vertex is for initialization only
+		if (AreSame(az, 0.)) // first vertex is for initialization only
 		{
 			x2 = x;
 			y2 = y;
@@ -1805,17 +1834,17 @@ void Globe::drawVHLine(
 		seg;
 
 	if (sx < 0)
-		sx += 2.0 * M_PI;
+		sx += 2. * M_PI;
 
 	if (std::fabs(sx) < 0.01)
 	{
-		seg = static_cast<int>(std::abs(sy / (2.0 * M_PI) * 48.0));
+		seg = static_cast<int>(std::abs(sy / (2. * M_PI) * 48.));
 		if (seg == 0)
 			++seg;
 	}
 	else
 	{
-		seg = static_cast<int>(std::abs(sx / (2.0 * M_PI) * 96.0));
+		seg = static_cast<int>(std::abs(sx / (2. * M_PI) * 96.));
 		if (seg == 0)
 			++seg;
 	}
@@ -2618,8 +2647,8 @@ void Globe::mouseOver(Action* action, State* state)
 		lat;
 
 	cartToPolar(
-			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
-			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
+			static_cast<Sint16>(std::floor(action->getAbsoluteXMouse())),
+			static_cast<Sint16>(std::floor(action->getAbsoluteYMouse())),
 			&lon,
 			&lat);
 
@@ -2676,16 +2705,18 @@ void Globe::mouseOver(Action* action, State* state)
 
 		if (Options::geoDragScrollInvert) // scroll
 		{
-			double newLon = (static_cast<double>(_totalMouseMoveX) / action->getXScale()) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.0;
-			double newLat = (static_cast<double>(_totalMouseMoveY) / action->getYScale()) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.0;
+			const double
+				newLon = (static_cast<double>(_totalMouseMoveX) / action->getXScale()) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.,
+				newLat = (static_cast<double>(_totalMouseMoveY) / action->getYScale()) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.;
 			center(
 				_lonBeforeMouseScrolling + newLon / static_cast<double>(Options::geoScrollSpeed), //kL / 10.0,
 				_latBeforeMouseScrolling + newLat / static_cast<double>(Options::geoScrollSpeed)); //kL / 10.0);
 		}
 		else
 		{
-			double newLon = static_cast<double>(-action->getDetails()->motion.xrel) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.0;
-			double newLat = static_cast<double>(-action->getDetails()->motion.yrel) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.0;
+			const double
+				newLon = static_cast<double>(-action->getDetails()->motion.xrel) * ROTATE_LONGITUDE / static_cast<double>(_zoom + 1) / 2.,
+				newLat = static_cast<double>(-action->getDetails()->motion.yrel) * ROTATE_LATITUDE / static_cast<double>(_zoom + 1) / 2.;
 			center(
 				_cenLon + newLon / static_cast<double>(Options::geoScrollSpeed), //kL / 10.0,
 				_cenLat + newLat / static_cast<double>(Options::geoScrollSpeed)); //kL / 10.0);
@@ -2735,7 +2766,6 @@ void Globe::mousePress(Action* action, State* state)
 	double
 		lon,
 		lat;
-
 	cartToPolar(
 			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
 			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
@@ -2778,7 +2808,6 @@ void Globe::mouseRelease(Action* action, State* state)
 	double
 		lon,
 		lat;
-
 	cartToPolar(
 			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
 			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
@@ -2811,7 +2840,6 @@ void Globe::mouseClick(Action* action, State* state)
 	double
 		lon,
 		lat;
-
 	cartToPolar(
 			static_cast<Sint16>(floor(action->getAbsoluteXMouse())),
 			static_cast<Sint16>(floor(action->getAbsoluteYMouse())),
@@ -2982,34 +3010,16 @@ void Globe::getPolygonTextureAndShade(
 }
 
 /**
- * Gets the current globeZoom level.
- * @return, Globe zoomLevel
- */
-size_t Globe::getZoom() const
-{
-	return _zoom;
-}
-
-/**
- * kL. Gets the number of zoom levels available.
- */
-size_t Globe::getZoomLevels() const // kL
-{
-	return _zoomRadii.size();
-}
-
-/**
  * Turns Radar lines on or off.
  */
 void Globe::toggleRadarLines()
 {
 	Options::globeRadarLines = !Options::globeRadarLines;
-
 	drawRadars();
 }
 
 /**
- * Resizes the geoscape.
+ * Resizes the Globe.
  */
 void Globe::resize()
 {
@@ -3046,9 +3056,9 @@ void Globe::resize()
 }
 
 /**
- * Set up the Radius of earth at the various zoom levels.
- * @param width the new width of the globe.
- * @param height the new height of the globe.
+ * Sets up the radius of earth at various zoom levels.
+ * @param width		- the new width of the globe
+ * @param height	- the new height of the globe
  */
 void Globe::setupRadii(
 		int width,
@@ -3074,7 +3084,7 @@ void Globe::setupRadii(
 
 	_radius = _zoomRadii[_zoom];
 //kL	_radiusStep = (_zoomRadii[DOGFIGHT_ZOOM] - _zoomRadii[0]) / 10.0;
-	_radiusStep = (_zoomRadii[_zoomRadii.size() - 1] - _zoomRadii[0]) / 10.0; // kL
+	_radiusStep = (_zoomRadii[_zoomRadii.size() - 1] - _zoomRadii[0]) / 10.; // kL
 
 	_earthData.resize(_zoomRadii.size());
 
@@ -3107,7 +3117,7 @@ void Globe::setupRadii(
 }
 
 /**
- * Gets the current debugType for Geoscape message.
+ * Gets the current debugType for Geoscape messages.
  */
 int Globe::getDebugType() const
 {

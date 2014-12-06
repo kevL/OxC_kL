@@ -37,6 +37,7 @@ extern const double
 
 
 class Base;
+class Craft;
 class DogfightState;
 class Globe;
 class ImageButton;
@@ -66,8 +67,8 @@ private:
 		_dogfightEnded,
 		_pause,
 		_startMusic,
-		_zoomInEffectDone,
-		_zoomOutEffectDone;
+		_dfZoomInDone,
+		_dfZoomOutDone;
 	int
 		_day,
 		_month,
@@ -127,9 +128,9 @@ private:
 //		* _sideBottom;
 	Timer
 		* _gameTimer,
-		* _zoomInEffectTimer,
-		* _zoomOutEffectTimer,
-		* _dogfightStartTimer;
+		* _dfZoomInTimer,
+		* _dfZoomOutTimer,
+		* _dfStartTimer;
 
 	std::list<State*> _popups;
 	std::list<DogfightState*>
@@ -231,10 +232,16 @@ private:
 		/// Blit method - renders the state and dogfights.
 		void blit();
 
+		/// Gets the Timer for dogfight zoom-ins.
+		Timer* getDogfightZoomInTimer() const;
+		/// Gets the Timer for dogfight zoom-outs.
+		Timer* getDogfightZoomOutTimer() const;
 		/// Globe zoom in effect for dogfights.
-		void zoomInEffect();
+		void dfZoomIn();
 		/// Globe zoom out effect for dogfights.
-		void zoomOutEffect();
+		void dfZoomOut();
+		/// Sets current dogfight's current Globe coordinates.
+		void setDogfightCoords(Craft* craft);
 
 		/// Multi-dogfights logic handling.
 		void handleDogfights();

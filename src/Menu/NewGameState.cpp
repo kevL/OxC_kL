@@ -21,8 +21,8 @@
 
 #include "../Engine/Game.h"
 #include "../Engine/Language.h"
-#include "../Engine/Options.h"
-#include "../Engine/Palette.h"
+//#include "../Engine/Options.h"
+//#include "../Engine/Palette.h"
 
 #include "../Interface/Text.h"
 #include "../Interface/TextButton.h"
@@ -86,6 +86,7 @@ NewGameState::NewGameState()
 	add(_btnCancel);
 
 	centerAllSurfaces();
+
 
 	_window->setColor(Palette::blockOffset(8)+5);
 	_window->setBackground(_game->getResourcePack()->getSurface("BACK01.SCR"));
@@ -154,32 +155,22 @@ void NewGameState::btnOkClick(Action*)
 	GameDifficulty diff = DIFF_BEGINNER;
 
 	if (_difficulty == _btnBeginner)
-	{
 		diff = DIFF_BEGINNER;
-	}
 	else if (_difficulty == _btnExperienced)
-	{
 		diff = DIFF_EXPERIENCED;
-	}
 	else if (_difficulty == _btnVeteran)
-	{
 		diff = DIFF_VETERAN;
-	}
 	else if (_difficulty == _btnGenius)
-	{
 		diff = DIFF_GENIUS;
-	}
 	else if (_difficulty == _btnSuperhuman)
-	{
 		diff = DIFF_SUPERHUMAN;
-	}
 
-	SavedGame* save = _game->getRuleset()->newSave();
+	SavedGame* const save = _game->getRuleset()->newSave();
 	save->setDifficulty(diff);
 	save->setIronman(_btnIronman->getPressed());
 	_game->setSavedGame(save);
 
-	GeoscapeState* gs = new GeoscapeState();
+	GeoscapeState* const gs = new GeoscapeState();
 	_game->setState(gs);
 	gs->init();
 

@@ -919,13 +919,16 @@ void Craft::checkup()
  */
 bool Craft::detect(Target* target) const
 {
-	const double range = static_cast<double>(_rules->getRadarRange()) * greatCircleConversionFactor;
+	const int radarRange = _rules->getRadarRange();
 
-	if (AreSame(range, 0.))
+	if (radarRange == 0)
 		return false;
 
-	const double dist = getDistance(target) * earthRadius;
-	if (dist < range)
+	const double
+		range = static_cast<double>(radarRange) * greatCircleConversionFactor,
+		dist = getDistance(target) * earthRadius;
+
+	if (range >= dist)
 		return true;
 
 	return false;

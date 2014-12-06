@@ -34,9 +34,11 @@ const int STANDOFF_DIST = 560;
 
 class Craft;
 class CraftWeaponProjectile;
+class GeoscapeState;
 class Globe;
 class ImageButton;
 class InteractiveSurface;
+class SavedGame;
 class Surface;
 class Text;
 class Timer;
@@ -67,6 +69,7 @@ private:
 		_endDogfight,
 		_animatingHit;
 	int
+		_diff,
 		_timeout,
 		_timeScale,
 		_currentDist,
@@ -88,6 +91,7 @@ private:
 	std::vector<CraftWeaponProjectile*> _projectiles;
 
 	Craft* _craft;
+	GeoscapeState* _geo;
 	Globe* _globe;
 	ImageButton
 		* _btnStandoff,
@@ -103,6 +107,7 @@ private:
 		* _weapon1,
 		* _weapon2;
 	InteractiveSurface* _btnMinimizedIcon;
+	SavedGame* _savedGame;
 	Surface
 		* _battle,
 		* _damage,
@@ -132,8 +137,8 @@ private:
 	/// Gets the globe texture icon to display for the interception.
 	const std::string getTextureIcon();
 
-	/// kL. Plays a sound effect in stereo.
-	void playSoundFX( // kL
+	/// Plays a sound effect in stereo.
+	void playSoundFX(
 			const int sound,
 			const bool randAngle = false) const;
 
@@ -143,7 +148,8 @@ private:
 		DogfightState(
 					Globe* globe,
 					Craft* craft,
-					Ufo* ufo);
+					Ufo* ufo,
+					GeoscapeState* geo);
 		/// Cleans up the Dogfight state.
 		~DogfightState();
 
@@ -218,7 +224,7 @@ private:
 		/// Sets interception number.
 		void setInterceptionNumber(const int number);
 		/// Sets interceptions count.
-		void setInterceptionsCount(const size_t count);
+		void setInterceptionsCount(const size_t interceptions);
 
 		/// Calculates window position according to opened interception windows.
 		void calculateWindowPosition();
